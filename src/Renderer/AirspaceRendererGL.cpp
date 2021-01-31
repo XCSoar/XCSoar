@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ Copyright_License {
 #include "AirspaceRenderer.hpp"
 #include "AirspaceRendererSettings.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "MapWindow/MapCanvas.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Airspace/Airspaces.hpp"
@@ -34,7 +34,7 @@ Copyright_License {
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceWarningCopy.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 
 class AirspaceVisitorRenderer final
   : protected MapCanvas
@@ -82,21 +82,21 @@ private:
           class_settings.fill_mode ==
           AirspaceClassRendererSettings::FillMode::ALL) {
         // fill whole circle
-        canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
+        canvas.DrawCircle(screen_center, screen_radius);
       } else {
         // draw a ring inside the circle
         Color color = class_look.fill_color;
         Pen pen_donut(look.thick_pen.GetWidth() / 2, color.WithAlpha(90));
         canvas.SelectHollowBrush();
         canvas.Select(pen_donut);
-        canvas.DrawCircle(screen_center.x, screen_center.y,
+        canvas.DrawCircle(screen_center,
                           screen_radius - look.thick_pen.GetWidth() / 4);
       }
     }
 
     // draw outline
     if (SetupOutline(airspace))
-      canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
+      canvas.DrawCircle(screen_center, screen_radius);
   }
 
   void VisitPolygon(const AirspacePolygon &airspace) {
@@ -240,12 +240,12 @@ private:
 
     if (!warning_manager.IsAcked(airspace) && SetupInterior(airspace)) {
       const GLEnable<GL_BLEND> blend;
-      canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
+      canvas.DrawCircle(screen_center, screen_radius);
     }
 
     // draw outline
     if (SetupOutline(airspace))
-      canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
+      canvas.DrawCircle(screen_center, screen_radius);
   }
 
   void VisitPolygon(const AirspacePolygon &airspace) {

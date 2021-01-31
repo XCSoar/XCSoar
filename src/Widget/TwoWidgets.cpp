@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,12 +24,7 @@ Copyright_License {
 #include "TwoWidgets.hpp"
 
 #include <algorithm>
-
-TwoWidgets::~TwoWidgets()
-{
-  delete second;
-  delete first;
-}
+#include <cassert>
 
 void
 TwoWidgets::UpdateLayout()
@@ -76,10 +71,10 @@ TwoWidgets::CalculateSplit(const PixelRect &rc) const
   const PixelSize max_b = second->GetMaximumSize();
 
   return vertical
-    ? ::CalculateSplit(rc.top, rc.bottom, min_a.cy,
-                       min_b.cy, max_b.cy)
-    : ::CalculateSplit(rc.left, rc.right, min_a.cx,
-                       min_b.cx, max_b.cx);
+    ? ::CalculateSplit(rc.top, rc.bottom, min_a.height,
+                       min_b.height, max_b.height)
+    : ::CalculateSplit(rc.left, rc.right, min_a.width,
+                       min_b.width, max_b.width);
 }
 
 std::pair<PixelRect,PixelRect>
@@ -100,8 +95,8 @@ TwoWidgets::GetMinimumSize() const
   const PixelSize b = second->GetMinimumSize();
 
   return vertical
-    ? PixelSize{ std::max(a.cx, b.cx), a.cy + b.cy }
-    : PixelSize{ a.cx + b.cx, std::max(a.cy, b.cy) };
+    ? PixelSize{ std::max(a.width, b.width), a.height + b.height }
+    : PixelSize{ a.width + b.width, std::max(a.height, b.height) };
 }
 
 PixelSize
@@ -111,8 +106,8 @@ TwoWidgets::GetMaximumSize() const
   const PixelSize b = second->GetMaximumSize();
 
   return vertical
-    ? PixelSize{ std::max(a.cx, b.cx), a.cy + b.cy }
-    : PixelSize{ a.cx + b.cx, std::max(a.cy, b.cy) };
+    ? PixelSize{ std::max(a.width, b.width), a.height + b.height }
+    : PixelSize{ a.width + b.width, std::max(a.height, b.height) };
 }
 
 /**

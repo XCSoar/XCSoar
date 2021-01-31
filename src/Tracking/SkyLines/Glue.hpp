@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TRACKING_SKYLINES_GLUE_HPP
 
 #include "Client.hpp"
-#include "Time/GPSClock.hpp"
+#include "time/GPSClock.hpp"
 
 struct DerivedInfo;
 
@@ -57,7 +57,7 @@ class Glue {
   double last_climb_time = -1;
 
 public:
-  Glue(boost::asio::io_context &io_context, Handler *_handler);
+  Glue(EventLoop &event_loop, Handler *_handler);
   ~Glue();
 
   void SetSettings(const Settings &settings);

@@ -61,10 +61,10 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-/*
- * Memory Allocator
- *
- * $Id$
+
+/*!
+ * @file jas_malloc.h
+ * @brief JasPer Memory Allocator
  */
 
 #ifndef JAS_MALLOC_H
@@ -79,7 +79,7 @@
 
 #include <stdio.h>
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #ifdef __cplusplus
 extern "C" {

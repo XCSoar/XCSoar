@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,10 +25,9 @@ Copyright_License {
 #include "Dialogs/Error.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "UIGlobals.hpp"
-#include "Screen/Bitmap.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Bitmap.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Form/ButtonPanel.hpp"
-#include "Form/ActionListener.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/TextListWidget.hpp"
@@ -39,16 +38,16 @@ Copyright_License {
 #include "Weather/PCMet/Overlays.hpp"
 #include "Interface.hpp"
 #include "LocalPath.hpp"
-#include "OS/Path.hpp"
-#include "OS/FileUtil.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/StringAPI.hxx"
-#include "Util/StringCompare.hxx"
+#include "system/Path.hpp"
+#include "system/FileUtil.hpp"
+#include "util/StaticString.hxx"
+#include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
 
 #include <vector>
 
 class WeatherMapOverlayListWidget final
-  : public TextListWidget, ActionListener {
+  : public TextListWidget {
 
   enum Buttons {
     USE,
@@ -215,17 +214,17 @@ private:
   }
 
   void UpdateClicked();
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
 WeatherMapOverlayListWidget::CreateButtons(ButtonPanel &buttons)
 {
-  use_button = buttons.Add(_("Use"), *this, USE);
-  disable_button = buttons.Add(_("Disable"), *this, DISABLE);
-  update_button = buttons.Add(_("Update"), *this, UPDATE);
+  use_button = buttons.Add(_("Use"), [this](){
+    UseClicked(GetList().GetCursorIndex());
+  });
+
+  disable_button = buttons.Add(_("Disable"), [this](){ DisableClicked(); });
+  update_button = buttons.Add(_("Update"), [this](){ UpdateClicked(); });
 }
 
 void
@@ -410,33 +409,19 @@ WeatherMapOverlayListWidget::UpdateClicked()
   UpdatePreview();
 }
 
-void
-WeatherMapOverlayListWidget::OnAction(int id) noexcept
-{
-  switch ((Buttons)id) {
-  case USE:
-    UseClicked(GetList().GetCursorIndex());
-    break;
-
-  case DISABLE:
-    DisableClicked();
-    break;
-
-  case UPDATE:
-    UpdateClicked();
-    break;
-  }
-}
-
-Widget *
+std::unique_ptr<Widget>
 CreateWeatherMapOverlayWidget()
 {
-  auto *list = new WeatherMapOverlayListWidget();
-  auto *view = new ViewImageWidget();
-  auto *two = new TwoWidgets(list, view, false);
-  auto *buttons = new ButtonPanelWidget(two,
+  auto two = std::make_unique<TwoWidgets>(std::make_unique<WeatherMapOverlayListWidget>(),
+                                          std::make_unique<ViewImageWidget>(),
+                                          false);
+  auto &list = (WeatherMapOverlayListWidget &)two->GetFirst();
+  auto &view = (ViewImageWidget &)two->GetSecond();
+
+  auto buttons =
+    std::make_unique<ButtonPanelWidget>(std::move(two),
                                         ButtonPanelWidget::Alignment::BOTTOM);
-  list->SetPreview(*view);
-  list->SetButtonPanel(*buttons);
+  list.SetPreview(view);
+  list.SetButtonPanel(*buttons);
   return buttons;
 }

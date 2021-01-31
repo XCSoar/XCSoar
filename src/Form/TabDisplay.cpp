@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,9 +24,9 @@ Copyright_License {
 #include "Form/TabDisplay.hpp"
 #include "Widget/TabWidget.hpp"
 #include "Look/DialogLook.hpp"
-#include "Event/KeyCode.hpp"
-#include "Screen/Icon.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/event/KeyCode.hpp"
+#include "ui/canvas/Icon.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
 
@@ -54,16 +54,16 @@ inline unsigned
 TabButton::GetRecommendedWidth(const DialogLook &look) const
 {
   if (icon != nullptr)
-    return icon->GetSize().cx + 2 * Layout::GetTextPadding();
+    return icon->GetSize().width + 2 * Layout::GetTextPadding();
 
-  return look.button.font->TextSize(caption).cx + 2 * Layout::GetTextPadding();
+  return look.button.font->TextSize(caption).width + 2 * Layout::GetTextPadding();
 }
 
 inline unsigned
 TabButton::GetRecommendedHeight(const DialogLook &look) const
 {
   if (icon != nullptr)
-    return icon->GetSize().cy + 2 * Layout::GetTextPadding();
+    return icon->GetSize().height + 2 * Layout::GetTextPadding();
 
   return look.button.font->GetHeight() + 2 * Layout::GetTextPadding();
 }

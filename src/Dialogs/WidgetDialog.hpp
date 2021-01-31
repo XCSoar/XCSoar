@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,6 +28,9 @@ Copyright_License {
 #include "Form/ButtonPanel.hpp"
 #include "Widget/ManagedWidget.hpp"
 
+#include <memory>
+#include <type_traits>
+
 #include <tchar.h>
 
 class Widget;
@@ -46,7 +49,7 @@ class WidgetDialog : public WndForm {
 public:
   explicit WidgetDialog(const DialogLook &look);
 
-  WidgetDialog(SingleWindow &parent, const DialogLook &look,
+  WidgetDialog(UI::SingleWindow &parent, const DialogLook &look,
                const PixelRect &rc, const TCHAR *caption,
                Widget *widget) noexcept;
 
@@ -56,14 +59,14 @@ public:
    * Create a dialog, but do not associate it with a #Widget yet.
    * Call FinishPreliminary() to resume building the dialog.
    */
-  WidgetDialog(Auto, SingleWindow &parent, const DialogLook &look,
+  WidgetDialog(Auto, UI::SingleWindow &parent, const DialogLook &look,
                const TCHAR *caption) noexcept;
 
   /**
    * Create a dialog with an automatic size (by
    * Widget::GetMinimumSize() and Widget::GetMaximumSize()).
    */
-  WidgetDialog(Auto, SingleWindow &parent, const DialogLook &look,
+  WidgetDialog(Auto, UI::SingleWindow &parent, const DialogLook &look,
                const TCHAR *caption, Widget *widget) noexcept;
 
   struct Full {};
@@ -72,13 +75,13 @@ public:
    * Create a dialog, but do not associate it with a #Widget yet.
    * Call FinishPreliminary() to resume building the dialog.
    */
-  WidgetDialog(Full, SingleWindow &parent, const DialogLook &look,
+  WidgetDialog(Full, UI::SingleWindow &parent, const DialogLook &look,
                const TCHAR *caption) noexcept;
 
   /**
    * Create a full-screen dialog.
    */
-  WidgetDialog(Full, SingleWindow &parent, const DialogLook &look,
+  WidgetDialog(Full, UI::SingleWindow &parent, const DialogLook &look,
                const TCHAR *caption, Widget *widget) noexcept;
 
   virtual ~WidgetDialog();
@@ -88,6 +91,7 @@ public:
   }
 
   void FinishPreliminary(Widget *widget);
+  void FinishPreliminary(std::unique_ptr<Widget> widget) noexcept;
 
   bool GetChanged() const {
     return changed;
@@ -111,23 +115,23 @@ public:
     return widget.Steal();
   }
 
-  Button *AddButton(ButtonRenderer *renderer,
-                    ActionListener &listener, int id) {
-    return buttons.Add(renderer, listener, id);
+  Button *AddButton(std::unique_ptr<ButtonRenderer> &&renderer,
+                    Button::Callback callback) noexcept {
+    return buttons.Add(std::move(renderer), std::move(callback));
   }
 
   Button *AddButton(const TCHAR *caption,
-                    ActionListener &listener, int id) {
-    return buttons.Add(caption, listener, id);
+                    Button::Callback callback) noexcept {
+    return buttons.Add(caption, std::move(callback));
   }
 
   Button *AddButton(const TCHAR *caption, int modal_result) {
-    return AddButton(caption, *this, modal_result);
+    return AddButton(caption, MakeModalResultCallback(modal_result));
   }
 
   Button *AddSymbolButton(const TCHAR *caption,
-                          ActionListener &listener, int id) {
-    return buttons.AddSymbol(caption, listener, id);
+                          Button::Callback callback) noexcept {
+    return buttons.AddSymbol(caption, std::move(callback));
   }
 
   void AddButtonKey(unsigned key_code) {
@@ -143,8 +147,8 @@ public:
 
   int ShowModal();
 
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
+  /* virtual methods from class WndForm */
+  void SetModalResult(int id) noexcept override;
 
 private:
   void AutoSize();
@@ -161,6 +165,27 @@ protected:
 };
 
 /**
+ * Helper class for #WidgetDialog which can construct a #Widget of the
+ * given type.
+ */
+template<typename T>
+class TWidgetDialog final : public WidgetDialog {
+  static_assert(std::is_base_of_v<Widget, T>, "Not a Widget");
+
+public:
+  using WidgetDialog::WidgetDialog;
+
+  template<typename... Args>
+  void SetWidget(Args&&... args) {
+    FinishPreliminary(std::make_unique<T>(std::forward<Args>(args)...));
+  }
+
+  auto &GetWidget() noexcept {
+    return static_cast<T &>(WidgetDialog::GetWidget());
+  }
+};
+
+/**
  * Show a #Widget in a dialog, with OK and Cancel buttons.
  *
  * @param widget the #Widget to be displayed; it is not "prepared" and
@@ -169,11 +194,11 @@ protected:
  * @return true if changed data was saved
  */
 bool
-DefaultWidgetDialog(SingleWindow &parent, const DialogLook &look,
+DefaultWidgetDialog(UI::SingleWindow &parent, const DialogLook &look,
                     const TCHAR *caption, const PixelRect &rc, Widget &widget);
 
 bool
-DefaultWidgetDialog(SingleWindow &parent, const DialogLook &look,
+DefaultWidgetDialog(UI::SingleWindow &parent, const DialogLook &look,
                     const TCHAR *caption, Widget &widget);
 
 #endif

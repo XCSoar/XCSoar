@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "XML/Node.hpp"
 #include "XML/Parser.hpp"
-#include "IO/StdioOutputStream.hxx"
-#include "IO/BufferedOutputStream.hxx"
-#include "OS/Args.hpp"
+#include "io/StdioOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
+#include "system/Args.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>

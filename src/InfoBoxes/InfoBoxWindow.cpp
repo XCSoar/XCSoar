@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,8 +29,8 @@ Copyright_License {
 #include "Renderer/GlassRenderer.hpp"
 #include "Renderer/UnitSymbolRenderer.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Canvas.hpp"
-#include "Event/KeyCode.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 
 #include <algorithm>
@@ -77,11 +77,11 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
   PixelSize tsize = canvas.CalcTextSize(data.title);
 
-  int halftextwidth = (title_rect.left + title_rect.right - tsize.cx) / 2;
+  int halftextwidth = (title_rect.left + title_rect.right - tsize.width) / 2;
   int x = std::max(1, title_rect.left + halftextwidth);
   int y = title_rect.top;
 
-  canvas.TextAutoClipped(x, y, data.title);
+  canvas.TextAutoClipped({x, y}, data.title);
 
   if (settings.border_style == InfoBoxSettings::BorderStyle::TAB &&
       halftextwidth > Layout::Scale(3)) {
@@ -124,28 +124,29 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
   int ascent_height = look.value_font.GetAscentHeight();
 
   PixelSize value_size = canvas.CalcTextSize(data.value);
-  if (unsigned(value_size.cx + unit_width) > value_rect.GetWidth()) {
+  if (unsigned(value_size.width + unit_width) > value_rect.GetWidth()) {
     canvas.Select(look.small_value_font);
     ascent_height = look.small_value_font.GetAscentHeight();
     value_size = canvas.CalcTextSize(data.value);
   }
 
-  int x = std::max(0,
-                   (value_rect.left + value_rect.right
-                    - value_size.cx - (int)unit_width) / 2);
+  const PixelSize value_unit_size = value_size + PixelSize{unit_width, 0u};
 
-  int y = (value_rect.top + value_rect.bottom - value_size.cy) / 2;
+  auto value_p = value_rect.CenteredTopLeft(value_unit_size);
+  if (value_p.x < 0)
+    value_p.x = 0;
 
-  canvas.TextAutoClipped(x, y, data.value);
+  canvas.TextAutoClipped(value_p, data.value);
 
   if (unit_width != 0) {
     const int unit_height =
       UnitSymbolRenderer::GetAscentHeight(look.unit_font, data.value_unit);
 
+    const auto unit_p = value_p.At(value_size.width,
+                                   ascent_height - unit_height);
+
     canvas.Select(look.unit_font);
-    UnitSymbolRenderer::Draw(canvas,
-                             { x + value_size.cx,
-                                 y + ascent_height - unit_height },
+    UnitSymbolRenderer::Draw(canvas, unit_p,
                              data.value_unit, look.unit_fraction_pen);
   }
 }
@@ -164,10 +165,10 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
   PixelSize tsize = canvas.CalcTextSize(data.comment);
 
   int x = std::max(1,
-                   (comment_rect.left + comment_rect.right - tsize.cx) / 2);
+                   (comment_rect.left + comment_rect.right - (int)tsize.width) / 2);
   int y = comment_rect.top;
 
-  canvas.TextAutoClipped(x, y, data.comment);
+  canvas.TextAutoClipped({x, y}, data.comment);
 }
 
 void
@@ -201,23 +202,23 @@ InfoBoxWindow::Paint(Canvas &canvas)
   if (border_kind != 0) {
     canvas.Select(look.border_pen);
 
-    const unsigned width = canvas.GetWidth(),
+    const int width = canvas.GetWidth(),
       height = canvas.GetHeight();
 
     if (border_kind & BORDERTOP) {
-      canvas.DrawExactLine(0, 0, width - 1, 0);
+      canvas.DrawExactLine({0, 0}, {width - 1, 0});
     }
 
     if (border_kind & BORDERRIGHT) {
-      canvas.DrawExactLine(width - 1, 0, width - 1, height);
+      canvas.DrawExactLine({width - 1, 0}, {width - 1, height});
     }
 
     if (border_kind & BORDERBOTTOM) {
-      canvas.DrawExactLine(0, height - 1, width - 1, height - 1);
+      canvas.DrawExactLine({0, height - 1}, {width - 1, height - 1});
     }
 
     if (border_kind & BORDERLEFT) {
-      canvas.DrawExactLine(0, 0, 0, height - 1);
+      canvas.DrawExactLine({0, 0}, {0, height - 1});
     }
   }
 }
@@ -259,7 +260,7 @@ InfoBoxWindow::UpdateContent()
 #endif
 
     unit_width = UnitSymbolRenderer::GetSize(look.unit_font,
-                                             data.value_unit).cx;
+                                             data.value_unit).width;
   }
 }
 
@@ -323,8 +324,7 @@ InfoBoxWindow::OnResize(PixelSize new_size)
   title_rect.bottom = rc.top + look.title_font.GetHeight();
 
   comment_rect = rc;
-  comment_rect.bottom -= Layout::Scale(2);
-  comment_rect.top = comment_rect.bottom - (look.title_font.GetHeight() + Layout::Scale(2));
+  comment_rect.top = comment_rect.bottom - look.title_font.GetHeight();
 
   value_rect = rc;
   value_rect.top = title_rect.bottom;

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,11 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_FORM_DIGIT_ENTRY_HPP
 #define XCSOAR_FORM_DIGIT_ENTRY_HPP
 
-#include "Screen/PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 #include "Renderer/ButtonRenderer.hpp"
 
 #include <cassert>
 #include <cstdint>
+#include <functional>
 
 enum class CoordinateFormat : uint8_t;
 class RoughTime;
@@ -116,8 +117,7 @@ class DigitEntry : public PaintWindow {
 
   ButtonFrameRenderer button_renderer;
 
-  ActionListener *action_listener;
-  int action_id;
+  std::function<void()> callback;
 
   /**
    * Total number of columns.
@@ -176,9 +176,8 @@ public:
    * Sets a listener that will be notified when the user "activates"
    * the control (for example by pressing the "enter" key).
    */
-  void SetActionListener(ActionListener &listener, int id) {
-    action_listener = &listener;
-    action_id = id;
+  void SetCallback(std::function<void()> _callback) noexcept {
+    callback = std::move(_callback);
   }
 
   void SetCursor(unsigned cursor);

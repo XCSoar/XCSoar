@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/LargeTextWindow.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Font.hpp"
 
 #include <cassert>
 
@@ -72,7 +72,7 @@ RowFormWidget::Row::GetMinimumHeight(const DialogLook &look,
     return 0;
 
   case Type::WIDGET:
-    return widget->GetMinimumSize().cy;
+    return widget->GetMinimumSize().height;
 
   case Type::GENERIC:
     break;
@@ -102,7 +102,7 @@ RowFormWidget::Row::GetMaximumHeight(const DialogLook &look,
     return 0;
 
   case Type::WIDGET:
-    return widget->GetMaximumSize().cy;
+    return widget->GetMaximumSize().height;
 
   case Type::GENERIC:
     break;
@@ -205,9 +205,7 @@ RowFormWidget::RowFormWidget(const DialogLook &_look, bool _vertical)
 
 RowFormWidget::~RowFormWidget()
 {
-  /* destroy all rows */
-  for (auto &i : rows)
-    i.Delete();
+  rows.clear();
 
   if (IsDefined())
     DeleteWindow();
@@ -238,8 +236,8 @@ RowFormWidget::SetExpertRow(unsigned i)
   row.expert = true;
 }
 
-void
-RowFormWidget::Add(Row::Type type, Window *window)
+Window &
+RowFormWidget::Add(Row::Type type, std::unique_ptr<Window> window) noexcept
 {
   assert(IsDefined());
 #ifndef USE_WINUSER
@@ -249,7 +247,8 @@ RowFormWidget::Add(Row::Type type, Window *window)
   /* cannot append rows after a REMAINING row */
   assert(rows.empty() || rows.back().type != Row::Type::REMAINING);
 
-  rows.push_back(Row(type, window));
+  rows.emplace_back(type, std::move(window));
+  return *rows.back().window;
 }
 
 void
@@ -257,11 +256,11 @@ RowFormWidget::AddSpacer()
 {
   assert(IsDefined());
 
-  HLine *window = new HLine(GetLook());
+  auto window = std::make_unique<HLine>(GetLook());
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
   const PixelRect rc = InitialControlRect(Layout::Scale(3));
   window->Create(panel, rc);
-  Add(window);
+  Add(std::move(window));
 }
 
 void
@@ -281,18 +280,19 @@ RowFormWidget::AddMultiLine(const TCHAR *text)
     style.SunkenEdge();
 
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
-  LargeTextWindow *ltw = new LargeTextWindow();
+  auto ltw = std::make_unique<LargeTextWindow>();
   ltw->Create(panel, rc, style);
   ltw->SetFont(look.text_font);
 
   if (text != nullptr)
     ltw->SetText(text);
 
-  Add(Row::Type::MULTI_LINE, ltw);
+  Add(Row::Type::MULTI_LINE, std::move(ltw));
 }
 
 Button *
-RowFormWidget::AddButton(const TCHAR *label, ActionListener &listener, int id)
+RowFormWidget::AddButton(const TCHAR *label,
+                         std::function<void()> callback) noexcept
 {
   assert(IsDefined());
 
@@ -304,11 +304,10 @@ RowFormWidget::AddButton(const TCHAR *label, ActionListener &listener, int id)
 
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
 
-  Button *button = new Button(panel, look.button, label, button_rc,
-                              button_style, listener, id);
-
-  Add(Row::Type::BUTTON, button);
-  return button;
+  return (Button *)&Add(Row::Type::BUTTON,
+                        std::make_unique<Button>(panel, look.button, label,
+                                                 button_rc, button_style,
+                                                 std::move(callback)));
 }
 
 void
@@ -317,7 +316,7 @@ RowFormWidget::SetMultiLineText(unsigned i, const TCHAR *text)
   assert(text != nullptr);
   assert(rows[i].type == Row::Type::MULTI_LINE);
 
-  LargeTextWindow &ltw = *(LargeTextWindow *)rows[i].window;
+  auto &ltw = (LargeTextWindow &)*rows[i].window;
   ltw.SetText(text);
 }
 
@@ -421,7 +420,7 @@ PixelSize
 RowFormWidget::GetMinimumSize() const
 {
   const unsigned value_width =
-    look.text_font.TextSize(_T("Foo Bar Foo Bar")).cx;
+    look.text_font.TextSize(_T("Foo Bar Foo Bar")).width;
 
   const bool expert = UIGlobals::GetDialogSettings().expert;
 
@@ -432,7 +431,7 @@ RowFormWidget::GetMinimumSize() const
   PixelSize size(edit_width, 0u);
   for (const auto &i : rows)
     if (i.IsAvailable(expert))
-      size.cy += i.GetMinimumHeight(look, vertical);
+      size.height += i.GetMinimumHeight(look, vertical);
 
   return size;
 }
@@ -441,7 +440,7 @@ PixelSize
 RowFormWidget::GetMaximumSize() const
 {
   const unsigned value_width =
-    look.text_font.TextSize(_T("Foo Bar Foo Bar")).cx * 2;
+    look.text_font.TextSize(_T("Foo Bar Foo Bar")).width * 2;
 
   const unsigned edit_width = vertical
     ? std::max(GetRecommendedCaptionWidth(), value_width)
@@ -449,7 +448,7 @@ RowFormWidget::GetMaximumSize() const
 
   PixelSize size(edit_width, 0u);
   for (const auto &i : rows)
-    size.cy += i.GetMaximumHeight(look, vertical);
+    size.height += i.GetMaximumHeight(look, vertical);
 
   return size;
 }
@@ -464,7 +463,7 @@ RowFormWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
   style.ControlParent();
 
-  SetWindow(new PanelControl(parent, look, rc, style));
+  SetWindow(std::make_unique<PanelControl>(parent, look, rc, style));
 }
 
 void

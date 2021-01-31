@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,13 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_FORM_BUTTON_HPP
 #define XCSOAR_FORM_BUTTON_HPP
 
-#include "Screen/PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
+
+#include <functional>
+#include <memory>
 
 #include <tchar.h>
 
 struct ButtonLook;
 class ContainerWindow;
-class ActionListener;
 class ButtonRenderer;
 
 /**
@@ -39,10 +41,13 @@ class ButtonRenderer;
 class Button : public PaintWindow {
   bool dragging, down;
 
-  ButtonRenderer *renderer;
+  std::unique_ptr<ButtonRenderer> renderer;
 
-  ActionListener *listener;
-  int id;
+public:
+  using Callback = std::function<void()>;
+
+private:
+  Callback callback;
 
   /**
    * This flag specifies whether the button is "selected".  The
@@ -55,47 +60,46 @@ class Button : public PaintWindow {
 
 public:
   Button(ContainerWindow &parent, const PixelRect &rc,
-         WindowStyle style, ButtonRenderer *_renderer,
-         ActionListener &_listener, int _id) {
-    Create(parent, rc, style, _renderer, _listener, _id);
-  }
+         WindowStyle style, std::unique_ptr<ButtonRenderer> _renderer,
+         Callback _callback) noexcept;
 
   Button(ContainerWindow &parent, const ButtonLook &look,
          const TCHAR *caption, const PixelRect &rc,
          WindowStyle style,
-         ActionListener &_listener, int _id) {
-    Create(parent, look, caption, rc, style, _listener, _id);
-  }
+         Callback _callback) noexcept;
 
-  Button():listener(nullptr) {}
+  Button();
 
-  virtual ~Button();
+  ~Button() noexcept override;
 
   void Create(ContainerWindow &parent, const PixelRect &rc,
-              WindowStyle style, ButtonRenderer *_renderer);
+              WindowStyle style, std::unique_ptr<ButtonRenderer> _renderer);
 
   void Create(ContainerWindow &parent, const ButtonLook &look,
               const TCHAR *caption, const PixelRect &rc,
               WindowStyle style);
 
   void Create(ContainerWindow &parent, const PixelRect &rc,
-              WindowStyle style, ButtonRenderer *_renderer,
-              ActionListener &listener, int id);
+              WindowStyle style, std::unique_ptr<ButtonRenderer> _renderer,
+              Callback _callback) noexcept;
 
   void Create(ContainerWindow &parent, const ButtonLook &look,
               const TCHAR *caption, const PixelRect &rc,
               WindowStyle style,
-              ActionListener &listener, int id);
+              Callback _callback) noexcept;
 
   /**
    * Set the object that will receive click events.
    */
-  void SetListener(ActionListener &_listener, int _id) {
-    id = _id;
-    listener = &_listener;
+  void SetCallback(Callback _callback) noexcept {
+    callback = std::move(_callback);
   }
 
-  ButtonRenderer &GetRenderer() {
+  ButtonRenderer &GetRenderer() noexcept {
+    return *renderer;
+  }
+
+  const ButtonRenderer &GetRenderer() const noexcept {
     return *renderer;
   }
 
@@ -124,9 +128,7 @@ protected:
    */
   virtual bool OnClicked();
 
-/* virtual methods from class Window */
-  void OnDestroy() override;
-
+  /* virtual methods from class Window */
   bool OnKeyCheck(unsigned key_code) const override;
   bool OnKeyDown(unsigned key_code) override;
   bool OnMouseMove(PixelPoint p, unsigned keys) override;

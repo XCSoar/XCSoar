@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "MapItemListRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "MapWindow/Items/MapItem.hpp"
 #include "MapWindow/Items/OverlayMapItem.hpp"
@@ -41,9 +41,9 @@ Copyright_License {
 #include "Dialogs/Task/dlgTaskHelpers.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringCompare.hxx"
-#include "Util/Macros.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StringCompare.hxx"
+#include "util/Macros.hpp"
+#include "util/StaticString.hxx"
 #include "MapSettings.hpp"
 #include "Math/Screen.hpp"
 #include "Look/FinalGlideBarLook.hpp"
@@ -52,8 +52,8 @@ Copyright_License {
 #include "FLARM/FlarmNetRecord.hpp"
 #include "Weather/Features.hpp"
 #include "FLARM/List.hpp"
-#include "Time/RoughTime.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include "time/RoughTime.hpp"
+#include "time/BrokenDateTime.hpp"
 
 #ifdef HAVE_NOAA
 #include "Renderer/NOAAListRenderer.hpp"

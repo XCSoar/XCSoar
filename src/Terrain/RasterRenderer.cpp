@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,15 +24,15 @@ Copyright_License {
 #include "Terrain/RasterRenderer.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Math/FastMath.hpp"
-#include "Util/Clamp.hpp"
-#include "Screen/Ramp.hpp"
+#include "util/Clamp.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Color.hpp"
-#include "Screen/RawBitmap.hpp"
+#include "ui/canvas/Ramp.hpp"
+#include "ui/canvas/Color.hpp"
+#include "ui/canvas/RawBitmap.hpp"
 #include "Renderer/GeoBitmapRenderer.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Asset.hpp"
-#include "Event/Idle.hpp"
+#include "ui/event/Idle.hpp"
 
 #include <cassert>
 #include <cstdint>
@@ -510,9 +510,8 @@ RasterRenderer::Draw(Canvas &canvas,
                   bounds,
                   projection);
 #else
-  image->StretchTo(height_matrix.GetWidth(), height_matrix.GetHeight(),
-                   canvas, projection.GetScreenWidth(),
-                   projection.GetScreenHeight(),
+  image->StretchTo({height_matrix.GetWidth(), height_matrix.GetHeight()},
+                   canvas, projection.GetScreenSize(),
                    transparent_white);
 #endif
 }

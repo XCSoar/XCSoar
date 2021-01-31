@@ -18,7 +18,7 @@
 #ifndef VLAPIHLP_H
 #define VLAPIHLP_H
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 // some generally needed helper-functions
 

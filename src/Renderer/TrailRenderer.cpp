@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "TrailRenderer.hpp"
 #include "Look/TrailLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "MapSettings.hpp"
@@ -31,7 +31,7 @@ Copyright_License {
 #include "Projection/WindowProjection.hpp"
 #include "Geo/Math.hpp"
 #include "Engine/Contest/ContestTrace.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 #include <algorithm>
 
@@ -172,7 +172,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
              settings.type == TrailSettings::Type::VARIO_DOTS_AND_LINES)) {
           canvas.SelectNullPen();
           canvas.Select(look.trail_brushes[color_index]);
-          canvas.DrawCircle((pt.x + last_point.x) / 2, (pt.y + last_point.y) / 2,
+          canvas.DrawCircle({(pt.x + last_point.x) / 2, (pt.y + last_point.y) / 2},
                             look.trail_widths[color_index]);
         } else {
           // positive vario case
@@ -180,7 +180,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
           if (settings.type == TrailSettings::Type::VARIO_DOTS_AND_LINES) {
             canvas.Select(look.trail_brushes[color_index]);
             canvas.Select(look.trail_pens[color_index]); //fixed-width pen
-            canvas.DrawCircle((pt.x + last_point.x) / 2, (pt.y + last_point.y) / 2,
+            canvas.DrawCircle({(pt.x + last_point.x) / 2, (pt.y + last_point.y) / 2},
                               look.trail_widths[color_index]);
           } else if (scaled_trail)
             // width scaled to vario

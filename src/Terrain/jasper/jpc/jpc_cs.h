@@ -77,7 +77,10 @@
 #include "jasper/jas_stream.h"
 
 #include <assert.h>
+
+#ifdef JAS_ENABLE_DUMP
 #include <stdio.h>
+#endif
 
 /******************************************************************************\
 * Constants and Types.
@@ -728,10 +731,10 @@ typedef struct jpc_msops_s {
 	/* Get the marker segment parameters from a stream. */
 	int (*getparms)(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in);
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 	/* Put the marker segment parameters to a stream. */
 	int (*putparms)(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
-#endif /* ENABLE_JASPER_ENCODE */
+#endif
 
 } jpc_msops_t;
 
@@ -781,8 +784,6 @@ int jpc_putdata(jas_stream_t *out, jas_stream_t *in, long n);
 #ifdef ENABLE_JASPER_DUMP
 /* Dump a marker segment (for debugging). */
 void jpc_ms_dump(jpc_ms_t *ms, FILE *out);
-#else
-#define jpc_ms_dump(ms, out)
 #endif
 
 /* Read a 8-bit unsigned integer from a stream. */

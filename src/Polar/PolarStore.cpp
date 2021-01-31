@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #include "Polar/PolarStore.hpp"
 #include "Polar/Polar.hpp"
 #include "Units/System.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <cassert>
 
@@ -297,7 +297,9 @@ static constexpr PolarStore::Item internal_polars[] =
   // 180
   { _T("Skylark 4"), 395, 0, 78, -0.637, 139, -2, 200, -5.092, 16.1, 0, 0 },
   { _T("PW-6 (PAS)"), 546, 0, 104, -0.847, 152, -1.994, 200, -4.648, 15.3, 0, 86 },
-  
+
+  // Idaflieg measurement, 28.08.2015 at Aalen Elchingen
+  { _T("D-43 18m"), 668, 0, 100, -0.62, 130, -0.863, 170, -1.672, 15.93, 250, 99 },
 };
 
 const PolarStore::Item &

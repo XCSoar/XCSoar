@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,6 +26,9 @@ Copyright_License {
 
 #include "WindowWidget.hpp"
 
+#include <functional>
+#include <memory>
+
 #include <tchar.h>
 
 struct ButtonLook;
@@ -37,22 +40,20 @@ class ActionListener;
  * A #Widget that creates a #Button.
  */
 class ButtonWidget : public WindowWidget {
-  ButtonRenderer *const renderer;
-  ActionListener &listener;
-  int id;
+  std::unique_ptr<ButtonRenderer> renderer;
+  const std::function<void()> callback;
 
 public:
-  ButtonWidget(ButtonRenderer *_renderer, ActionListener &_listener, int _id)
-    :renderer(_renderer), listener(_listener), id(_id) {}
+  ButtonWidget(std::unique_ptr<ButtonRenderer> _renderer,
+               std::function<void()> _callback) noexcept;
 
   ButtonWidget(const ButtonLook &look, const TCHAR *caption,
-               ActionListener &_listener, int _id);
+               std::function<void()> _callback) noexcept;
 
-  virtual ~ButtonWidget();
+  ~ButtonWidget() noexcept override;
 
-  ButtonRenderer &GetRenderer() {
-    return *renderer;
-  }
+  ButtonRenderer &GetRenderer() noexcept;
+  const ButtonRenderer &GetRenderer() const noexcept;
 
   /**
    * Schedule a repaint.

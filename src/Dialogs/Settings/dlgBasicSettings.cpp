@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
-#include "Event/PeriodicTimer.hpp"
+#include "ui/event/PeriodicTimer.hpp"
 
 #include <math.h>
 
@@ -53,14 +53,9 @@ enum ControlIndex {
   Temperature,
 };
 
-enum Actions {
-  DUMP = 100,
-};
-
 class FlightSetupPanel final
-  : public RowFormWidget, DataFieldListener,
-    public ActionListener {
-  PeriodicTimer timer{[this]{ OnTimer(); }};
+  : public RowFormWidget, DataFieldListener {
+  UI::PeriodicTimer timer{[this]{ OnTimer(); }};
 
   Button *dump_button;
 
@@ -120,9 +115,6 @@ public:
     timer.Cancel();
     RowFormWidget::Hide();
   }
-
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
 
 private:
   void OnTimer();
@@ -346,13 +338,6 @@ FlightSetupPanel::Save(bool &changed)
 }
 
 void
-FlightSetupPanel::OnAction(int id) noexcept
-{
-  if (id == DUMP)
-    FlipBallastTimer();
-}
-
-void
 dlgBasicSettingsShowModal()
 {
   FlightSetupPanel *instance = new FlightSetupPanel();
@@ -365,7 +350,10 @@ dlgBasicSettingsShowModal()
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(),
                       caption, instance);
-  instance->SetDumpButton(dialog.AddButton(_("Dump"), *instance, DUMP));
+  instance->SetDumpButton(dialog.AddButton(_("Dump"), [instance](){
+    instance->FlipBallastTimer();
+  }));
+
   dialog.AddButton(_("OK"), mrOK);
 
   dialog.ShowModal();

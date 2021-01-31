@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,44 +26,52 @@ Copyright_License {
 #include "Assemble.hpp"
 #include "Protocol.hpp"
 #include "Import.hpp"
-#include "OS/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 #include "Math/Angle.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Util/CRC.hpp"
-#include "Util/ConstBuffer.hxx"
-#include "IO/Async/AsioUtil.hpp"
-#include "Util/UTF8.hpp"
-#include "Util/ConvertString.hpp"
+#include "util/CRC.hpp"
+#include "util/ConstBuffer.hxx"
+#include "event/Call.hxx"
+#include "net/StaticSocketAddress.hxx"
+#include "util/UTF8.hpp"
+#include "util/ConvertString.hpp"
 
 #include <string>
 
 void
-SkyLinesTracking::Client::Open(boost::asio::ip::udp::resolver::query query)
+SkyLinesTracking::Client::Open(Cares::Channel &cares, const char *server)
 {
-  Close();
+  BlockingCall(GetEventLoop(), [this, &cares, server](){
+    InternalClose();
 
-  const std::lock_guard<Mutex> lock(mutex);
-  resolving = true;
-  resolver.async_resolve(query,
-                         std::bind(&Client::OnResolved, this,
-                                   std::placeholders::_1,
-                                   std::placeholders::_2));
+    Cares::SimpleHandler &resolver_handler = *this;
+    resolver.emplace(cares, resolver_handler, server, GetDefaultPort());
+  });
 }
 
 bool
-SkyLinesTracking::Client::Open(boost::asio::ip::udp::endpoint _endpoint)
+SkyLinesTracking::Client::Open(SocketAddress _address)
 {
+  assert(_address.IsDefined());
+
   Close();
 
-  endpoint = _endpoint;
+  address = _address;
 
-  boost::system::error_code ec;
-  socket.open(endpoint.protocol(), ec);
-  if (ec)
-    return false;
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+    if (!socket.Create(address.GetFamily(), SOCK_DGRAM, 0))
+      return false;
+
+    // TODO: bind?
+  }
 
   if (handler != nullptr) {
-    AsyncReceive();
+    BlockingCall(GetEventLoop(), [this](){
+      socket_event.Open(socket);
+      socket_event.ScheduleRead();
+    });
+
     handler->OnSkyLinesReady();
   }
 
@@ -71,19 +79,19 @@ SkyLinesTracking::Client::Open(boost::asio::ip::udp::endpoint _endpoint)
 }
 
 void
+SkyLinesTracking::Client::InternalClose() noexcept
+{
+  socket.Close();
+  socket_event.Abandon();
+
+  const std::lock_guard<Mutex> lock(mutex);
+  resolver.reset();
+}
+
+void
 SkyLinesTracking::Client::Close()
 {
-  const std::lock_guard<Mutex> lock(mutex);
-
-  if (socket.is_open()) {
-    CancelWait(socket);
-    socket.close();
-  }
-
-  if (resolving) {
-    CancelWait(resolver);
-    resolving = false;
-  }
+  BlockingCall(GetEventLoop(), [this](){ InternalClose(); });
 }
 
 void
@@ -275,57 +283,44 @@ SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
 }
 
 void
-SkyLinesTracking::Client::OnReceive(const boost::system::error_code &ec,
-                                    size_t size)
+SkyLinesTracking::Client::OnSocketReady(unsigned) noexcept
 {
-  if (ec) {
-    if (ec == boost::asio::error::operation_aborted)
-      return;
+  uint8_t buffer[4096];
+  ssize_t nbytes;
+  StaticSocketAddress source_address;
 
-    {
-      const std::lock_guard<Mutex> lock(mutex);
-      socket.close();
-    }
+  while ((nbytes = socket.Read(buffer, sizeof(buffer), source_address)) > 0)
+    if (source_address == address)
+      OnDatagramReceived(buffer, nbytes);
 
-    if (handler != nullptr)
-      handler->OnSkyLinesError(std::make_exception_ptr(boost::system::system_error(ec)));
-    return;
-  }
-
-  if (sender_endpoint == endpoint)
-    OnDatagramReceived(buffer, size);
-
-  AsyncReceive();
+  // TODO check for errors?
 }
 
 void
-SkyLinesTracking::Client::AsyncReceive()
+SkyLinesTracking::Client::OnResolverSuccess(std::forward_list<AllocatedSocketAddress> addresses) noexcept
 {
-  const std::lock_guard<Mutex> lock(mutex);
-  socket.async_receive_from(boost::asio::buffer(buffer, sizeof(buffer)),
-                            sender_endpoint,
-                            std::bind(&Client::OnReceive, this,
-                                      std::placeholders::_1,
-                                      std::placeholders::_2));
-}
-
-void
-SkyLinesTracking::Client::OnResolved(const boost::system::error_code &ec,
-                                     boost::asio::ip::udp::resolver::iterator i)
-{
-  if (ec == boost::asio::error::operation_aborted)
-    return;
-
   {
     const std::lock_guard<Mutex> lock(mutex);
-    resolving = false;
+    resolver.reset();
   }
 
-  if (ec) {
+  if (addresses.empty()) {
     if (handler != nullptr)
-      handler->OnSkyLinesError(std::make_exception_ptr(boost::system::system_error(ec)));
+      handler->OnSkyLinesError(std::make_exception_ptr(std::runtime_error("No address")));
     return;
   }
 
-  Open(*i);
+  Open(addresses.front());
+}
+
+void
+SkyLinesTracking::Client::OnResolverError(std::exception_ptr error) noexcept
+{
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+    resolver.reset();
+  }
+
+  if (handler != nullptr)
+    handler->OnSkyLinesError(std::move(error));
 }

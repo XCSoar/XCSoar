@@ -16,7 +16,7 @@ HOT_SOURCES = \
 	$(SRC)/Terrain/ScanLine.cpp \
 	$(SRC)/Terrain/Intersection.cpp \
 	$(SRC)/Projection/Projection.cpp \
-	$(SRC)/Screen/Memory/Canvas.cpp \
+	$(SRC)/ui/canvas/memory/Canvas.cpp \
 	$(ENGINE_SRC_DIR)/Waypoints/Waypoints.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/Airspaces.cpp \
 	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleArea.cpp \

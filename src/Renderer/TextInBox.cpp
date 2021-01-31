@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,11 +23,11 @@ Copyright_License {
 
 #include "TextInBox.hpp"
 #include "LabelBlock.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 static PixelPoint
@@ -73,25 +73,25 @@ TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
 
 static void
 RenderShadowedText(Canvas &canvas, const TCHAR *text,
-                   int x, int y,
+                   PixelPoint p,
                    bool inverted)
 {
   canvas.SetBackgroundTransparent();
 
   canvas.SetTextColor(inverted ? COLOR_BLACK : COLOR_WHITE);
   const int offset = canvas.GetFontHeight() / 12u;
-  canvas.DrawText(x + offset, y + offset, text);
-  canvas.DrawText(x - offset, y + offset, text);
-  canvas.DrawText(x + offset, y - offset, text);
-  canvas.DrawText(x - offset, y - offset, text);
+  canvas.DrawText({p.x + offset, p.y + offset}, text);
+  canvas.DrawText({p.x - offset, p.y + offset}, text);
+  canvas.DrawText({p.x + offset, p.y - offset}, text);
+  canvas.DrawText({p.x - offset, p.y - offset}, text);
 
   canvas.SetTextColor(inverted ? COLOR_WHITE : COLOR_BLACK);
-  canvas.DrawText(x, y, text);
+  canvas.DrawText(p, text);
 }
 
 // returns true if really wrote something
 bool
-TextInBox(Canvas &canvas, const TCHAR *text, int x, int y,
+TextInBox(Canvas &canvas, const TCHAR *text, PixelPoint p,
           TextInBoxMode mode, const PixelRect &map_rc, LabelBlock *label_block)
 {
   // landable waypoint label inside white box
@@ -99,26 +99,26 @@ TextInBox(Canvas &canvas, const TCHAR *text, int x, int y,
   PixelSize tsize = canvas.CalcTextSize(text);
 
   if (mode.align == TextInBoxMode::Alignment::RIGHT)
-    x -= tsize.cx;
+    p.x -= tsize.width;
   else if (mode.align == TextInBoxMode::Alignment::CENTER)
-    x -= tsize.cx / 2;
+    p.x -= tsize.width / 2;
 
   if (mode.vertical_position == TextInBoxMode::VerticalPosition::ABOVE)
-    y -= tsize.cy;
+    p.y -= tsize.height;
   else if (mode.vertical_position == TextInBoxMode::VerticalPosition::CENTERED)
-    y -= tsize.cy / 2;
+    p.y -= tsize.height / 2;
 
   const unsigned padding = Layout::GetTextPadding();
   PixelRect rc;
-  rc.left = x - padding - 1;
-  rc.right = x + tsize.cx + padding;
-  rc.top = y;
-  rc.bottom = y + tsize.cy + 1;
+  rc.left = p.x - padding - 1;
+  rc.right = p.x + tsize.width + padding;
+  rc.top = p.y;
+  rc.bottom = p.y + tsize.height + 1;
 
   if (mode.move_in_view) {
     auto offset = TextInBoxMoveInView(rc, map_rc);
-    x += offset.x;
-    y += offset.y;
+    p.x += offset.x;
+    p.y += offset.y;
   }
 
   if (label_block != nullptr && !label_block->check(rc))
@@ -139,41 +139,34 @@ TextInBox(Canvas &canvas, const TCHAR *text, int x, int y,
       canvas.SelectWhiteBrush();
 #endif
 
-      canvas.DrawRoundRectangle(rc.left, rc.top, rc.right, rc.bottom,
-                                Layout::VptScale(8), Layout::VptScale(8));
+      canvas.DrawRoundRectangle(rc, PixelSize{Layout::VptScale(8)});
     }
 
     canvas.SetBackgroundTransparent();
     canvas.SetTextColor(COLOR_BLACK);
-    canvas.DrawText(x, y, text);
+    canvas.DrawText(p, text);
   } else if (mode.shape == LabelShape::FILLED) {
     canvas.SetBackgroundColor(COLOR_WHITE);
     canvas.SetTextColor(COLOR_BLACK);
-    canvas.DrawOpaqueText(x, y, rc, text);
+    canvas.DrawOpaqueText(p, rc, text);
   } else if (mode.shape == LabelShape::OUTLINED) {
-    RenderShadowedText(canvas, text, x, y, false);
+    RenderShadowedText(canvas, text, p, false);
   } else if (mode.shape == LabelShape::OUTLINED_INVERTED) {
-    RenderShadowedText(canvas, text, x, y, true);
+    RenderShadowedText(canvas, text, p, true);
   } else {
     canvas.SetBackgroundTransparent();
     canvas.SetTextColor(COLOR_BLACK);
-    canvas.DrawText(x, y, text);
+    canvas.DrawText(p, text);
   }
 
   return true;
 }
 
 bool
-TextInBox(Canvas &canvas, const TCHAR *text, int x, int y,
+TextInBox(Canvas &canvas, const TCHAR *text, PixelPoint p,
           TextInBoxMode mode,
-          unsigned screen_width, unsigned screen_height,
+          PixelSize screen_size,
           LabelBlock *label_block)
 {
-  PixelRect rc;
-  rc.left = 0;
-  rc.top = 0;
-  rc.right = screen_width;
-  rc.bottom = screen_height;
-
-  return TextInBox(canvas, text, x, y, mode, rc, label_block);
+  return TextInBox(canvas, text, p, mode, PixelRect{screen_size}, label_block);
 }

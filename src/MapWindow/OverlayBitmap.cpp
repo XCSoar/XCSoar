@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,17 +22,17 @@ Copyright_License {
 */
 
 #include "OverlayBitmap.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/OpenGL/Texture.hpp"
-#include "Screen/OpenGL/Scope.hpp"
-#include "Screen/OpenGL/ConstantAlpha.hpp"
-#include "Screen/OpenGL/VertexPointer.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/opengl/Texture.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
+#include "ui/canvas/opengl/ConstantAlpha.hpp"
+#include "ui/canvas/opengl/VertexPointer.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Math/Point2D.hpp"
 #include "Math/Quadrilateral.hpp"
 #include "Math/Boost/Point.hpp"
-#include "OS/Path.hpp"
-#include "Util/StaticArray.hxx"
+#include "system/Path.hpp"
+#include "util/StaticArray.hxx"
 
 #include <boost/geometry/geometries/register/ring.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
@@ -143,8 +143,8 @@ MapOverlayBitmap::Draw(Canvas &canvas,
 
   GLTexture &texture = *bitmap.GetNative();
   const PixelSize allocated = texture.GetAllocatedSize();
-  const double x_factor = double(texture.GetWidth()) / allocated.cx;
-  const double y_factor = double(texture.GetHeight()) / allocated.cy;
+  const double x_factor = double(texture.GetWidth()) / allocated.width;
+  const double y_factor = double(texture.GetHeight()) / allocated.height;
 
   Point2D<GLfloat> coord[16];
   BulkPixelPoint vertices[16];

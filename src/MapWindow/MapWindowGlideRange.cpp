@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,13 +27,13 @@ Copyright_License {
 #include "Task/ProtectedRoutePlanner.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
-#include "Screen/OpenGL/VertexPointer.hpp"
-#include "Screen/OpenGL/Triangulate.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
+#include "ui/canvas/opengl/VertexPointer.hpp"
+#include "ui/canvas/opengl/Triangulate.hpp"
 #endif
 
 #include <stdio.h>
-#include "Util/StaticArray.hxx"
+#include "util/StaticArray.hxx"
 
 typedef std::vector<BulkPixelPoint> BulkPixelPointVector;
 
@@ -343,10 +343,8 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
     visitor.fans.DrawFill(buffer);
 
     // Copy everything non-white to the buffer
-    canvas.CopyTransparentWhite(0, 0,
-                                render_projection.GetScreenWidth(),
-                                render_projection.GetScreenHeight(),
-                                buffer, 0, 0);
+    canvas.CopyTransparentWhite({0, 0}, render_projection.GetScreenSize(),
+                                buffer, {0, 0});
 
     /* skip the separate terrain line step below, because we have done
        it already */
@@ -435,10 +433,8 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
   visitor.fans.DrawFill(buffer);
 
   // Copy everything non-white to the buffer
-  canvas.CopyTransparentWhite(0, 0,
-                              render_projection.GetScreenWidth(),
-                              render_projection.GetScreenHeight(),
-                              buffer, 0, 0);
+  canvas.CopyTransparentWhite({0, 0}, render_projection.GetScreenSize(),
+                              buffer, {0, 0});
 
 #endif
   }

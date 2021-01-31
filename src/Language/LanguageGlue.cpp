@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,20 +25,20 @@ Copyright_License {
 #include "LanguageGlue.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
-#include "Util/StringCompare.hxx"
-#include "Util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
+#include "util/StringAPI.hxx"
 
 #ifdef HAVE_NATIVE_GETTEXT
 #include <locale.h>
 #endif
 
 #ifdef ANDROID
-#include "Java/Global.hxx"
-#include "Java/Class.hxx"
-#include "Java/Object.hxx"
+#include "java/Global.hxx"
+#include "java/Class.hxx"
+#include "java/Object.hxx"
 #endif
 
 #ifdef _WIN32

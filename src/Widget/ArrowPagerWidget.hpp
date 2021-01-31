@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,9 +26,10 @@ Copyright_License {
 
 #include "PagerWidget.hpp"
 #include "Form/Button.hpp"
-#include "Form/ActionListener.hpp"
 
 #include <cassert>
+#include <functional>
+#include <memory>
 
 struct ButtonLook;
 
@@ -36,7 +37,7 @@ struct ButtonLook;
  * A wrapper for #PagerWidget that adds arrow buttons on the
  * left/bottom for page navigation.
  */
-class ArrowPagerWidget : public PagerWidget, ActionListener {
+class ArrowPagerWidget : public PagerWidget {
   enum Buttons {
     PREVIOUS,
     NEXT,
@@ -51,26 +52,25 @@ class ArrowPagerWidget : public PagerWidget, ActionListener {
     Layout(PixelRect rc, const Widget *extra);
   };
 
-  ActionListener &action_listener;
   const ButtonLook &look;
+  const std::function<void()> close_callback;
 
   /**
    * An optional #Widget that is shown in the remaining area in the
    * buttons row/column.  This object will be deleted automatically.
    */
-  Widget *const extra;
+  const std::unique_ptr<Widget> extra;
 
   Button previous_button, next_button;
   Button close_button;
 
 public:
-  ArrowPagerWidget(ActionListener &_action_listener,
-                   const ButtonLook &_look,
-                   Widget *const _extra=nullptr)
-    :action_listener(_action_listener), look(_look),
-     extra(_extra) {}
-
-  virtual ~ArrowPagerWidget();
+  ArrowPagerWidget(const ButtonLook &_look,
+                   std::function<void()> _close_callback,
+                   std::unique_ptr<Widget> _extra=nullptr)
+    :look(_look),
+     close_callback(std::move(_close_callback)),
+     extra(std::move(_extra)) {}
 
   Widget &GetExtra() {
     assert(extra != nullptr);
@@ -88,10 +88,6 @@ public:
   void Move(const PixelRect &rc) override;
   bool SetFocus() override;
   bool KeyPress(unsigned key_code) override;
-
-private:
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 #endif

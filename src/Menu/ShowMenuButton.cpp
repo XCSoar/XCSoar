@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,14 +23,14 @@ Copyright_License {
 
 #include "ShowMenuButton.hpp"
 #include "Renderer/ButtonRenderer.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Pen.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Pen.hpp"
 #include "Screen/Layout.hpp"
 #include "Input/InputEvents.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 class ShowMenuButtonRenderer : public ButtonRenderer {
@@ -47,7 +47,8 @@ void
 ShowMenuButton::Create(ContainerWindow &parent, const PixelRect &rc,
                        WindowStyle style)
 {
-  Button::Create(parent, rc, style, new ShowMenuButtonRenderer());
+  Button::Create(parent, rc, style,
+                 std::make_unique<ShowMenuButtonRenderer>());
 }
 
 bool
@@ -66,8 +67,8 @@ ShowMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
   const unsigned padding = Layout::GetTextPadding() + pen_width;
 
   canvas.Select(Pen(pen_width, COLOR_BLACK));
-  canvas.DrawRoundRectangle(rc.left, rc.top, rc.right - 1, rc.bottom - 1,
-                            Layout::VptScale(8), Layout::VptScale(8));
+  canvas.DrawRoundRectangle({rc.left, rc.top, rc.right - 1, rc.bottom - 1},
+                            PixelSize{Layout::VptScale(8u)});
 
   const BulkPixelPoint m[] = {
     BulkPixelPoint(rc.left + padding, rc.bottom - padding),

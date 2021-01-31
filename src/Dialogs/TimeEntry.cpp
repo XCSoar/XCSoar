@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,11 +25,10 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/FixedWindowWidget.hpp"
 #include "Form/DigitEntry.hpp"
-#include "Form/LambdaActionListener.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
-#include "Time/RoughTime.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include "time/RoughTime.hpp"
+#include "time/BrokenDateTime.hpp"
 
 enum {
   CLEAR = 100,
@@ -43,8 +42,9 @@ TimeEntryDialog(const TCHAR *caption, RoughTime &value,
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, caption);
+  TWidgetDialog<FixedWindowWidget> dialog(WidgetDialog::Auto{},
+                                          UIGlobals::GetMainWindow(),
+                                          look, caption);
 
   ContainerWindow &client_area = dialog.GetClientAreaWindow();
 
@@ -54,40 +54,35 @@ TimeEntryDialog(const TCHAR *caption, RoughTime &value,
   control_style.Hide();
   control_style.TabStop();
 
-  DigitEntry entry(look);
-  entry.CreateTime(client_area, client_area.GetClientRect(), control_style);
-  entry.Resize(entry.GetRecommendedSize());
-  entry.SetValue(value + time_zone);
-  entry.SetActionListener(dialog, mrOK);
+  auto entry = std::make_unique<DigitEntry>(look);
+  entry->CreateTime(client_area, client_area.GetClientRect(), control_style);
+  entry->Resize(entry->GetRecommendedSize());
+  entry->SetValue(value + time_zone);
+  entry->SetCallback(dialog.MakeModalResultCallback(mrOK));
 
   /* create buttons */
 
-  dialog.AddButton(_("OK"), dialog, mrOK);
-  dialog.AddButton(_("Cancel"), dialog, mrCancel);
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Cancel"), mrCancel);
 
-  auto now_listener = MakeLambdaActionListener([&entry, time_zone](unsigned){
-      const BrokenTime bt = BrokenDateTime::NowUTC();
-      RoughTime now_utc = RoughTime(bt.hour, bt.minute);
-      entry.SetValue(now_utc + time_zone);
-    });
-  dialog.AddButton(_("Now"), now_listener, 0);
+  dialog.AddButton(_("Now"), [&entry = *entry, time_zone](){
+    const BrokenTime bt = BrokenDateTime::NowUTC();
+    RoughTime now_utc = RoughTime(bt.hour, bt.minute);
+    entry.SetValue(now_utc + time_zone);
+  });
 
-  auto clear_listener = MakeLambdaActionListener([&entry](unsigned){
+  if (nullable)
+    dialog.AddButton(_("Clear"), [&entry=*entry](){
       entry.SetInvalid();
     });
-  if (nullable)
-    dialog.AddButton(_("Clear"), clear_listener, 0);
 
   /* run it */
 
-  FixedWindowWidget widget(&entry);
-  dialog.FinishPreliminary(&widget);
+  dialog.SetWidget(std::move(entry));
 
-  bool result = dialog.ShowModal() == mrOK;
-  dialog.StealWidget();
-  if (!result)
+  if (dialog.ShowModal() != mrOK)
     return false;
 
-  value = entry.GetTimeValue() - time_zone;
+  value = ((DigitEntry &)dialog.GetWidget().GetWindow()).GetTimeValue() - time_zone;
   return true;
 }

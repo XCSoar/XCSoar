@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -35,13 +35,14 @@ Copyright_License {
 #include "Widget/TwoWidgets.hpp"
 #include "Task/TaskStore.hpp"
 #include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
+#include "system/FileUtil.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
+#include "Renderer/TextRowRenderer.hpp"
+#include "Look/DialogLook.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/StringCompare.hxx"
+#include "UIGlobals.hpp"
 
 #include <cassert>
 
@@ -53,20 +54,16 @@ static unsigned task_list_serial;
 #endif
 
 class TaskListPanel final
-  : public ListWidget, private ActionListener {
-  enum Buttons {
-    LOAD = 100,
-    RENAME,
-    DELETE,
-    MORE,
-  };
+  : public ListWidget {
 
   TaskManagerDialog &dialog;
 
-  OrderedTask **active_task;
+  TextRowRenderer row_renderer;
+
+  std::unique_ptr<OrderedTask> &active_task;
   bool *task_modified;
 
-  TaskStore *task_store;
+  TaskStore task_store;
   unsigned serial;
 
   /**
@@ -81,7 +78,7 @@ class TaskListPanel final
 
 public:
   TaskListPanel(TaskManagerDialog &_dialog,
-                OrderedTask **_active_task, bool *_task_modified,
+                std::unique_ptr<OrderedTask> &_active_task, bool *_task_modified,
                 TextWidget &_summary)
     :dialog(_dialog),
      active_task(_active_task), task_modified(_task_modified),
@@ -97,10 +94,10 @@ public:
   }
 
   void CreateButtons(ButtonPanel &buttons) {
-    buttons.Add(_("Load"), *this, LOAD);
-    buttons.Add(_("Rename"), *this, RENAME);
-    buttons.Add(_("Delete"), *this, DELETE);
-    more_button = buttons.Add(_("More"), *this, MORE);
+    buttons.Add(_("Load"), [this](){ LoadTask(); });
+    buttons.Add(_("Rename"), [this](){ RenameTask(); });
+    buttons.Add(_("Delete"), [this](){ DeleteTask(); });
+    more_button = buttons.Add(_("More"), [this](){ OnMoreClicked(); });
   }
 
   void RefreshView();
@@ -112,7 +109,6 @@ public:
   void OnMoreClicked();
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
   void Show(const PixelRect &rc) override;
   void Hide() override;
 
@@ -123,9 +119,6 @@ protected:
   const TCHAR *get_cursor_name();
 
 private:
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
-
   /* virtual methods from class ListControl::Handler */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) noexcept override;
@@ -152,12 +145,12 @@ const OrderedTask *
 TaskListPanel::get_cursor_task()
 {
   const unsigned cursor_index = GetList().GetCursorIndex();
-  if (cursor_index >= task_store->Size())
+  if (cursor_index >= task_store.Size())
     return nullptr;
 
   const OrderedTask *ordered_task =
-    task_store->GetTask(cursor_index,
-                        CommonInterface::GetComputerSettings().task);
+    task_store.GetTask(cursor_index,
+                       CommonInterface::GetComputerSettings().task);
 
   if (ordered_task == nullptr || !ordered_task->CheckTask())
     return nullptr;
@@ -169,50 +162,25 @@ const TCHAR *
 TaskListPanel::get_cursor_name()
 {
   const unsigned cursor_index = GetList().GetCursorIndex();
-  if (cursor_index >= task_store->Size())
+  if (cursor_index >= task_store.Size())
     return _T("");
 
-  return task_store->GetName(cursor_index);
-}
-
-void
-TaskListPanel::OnAction(int id) noexcept
-{
-  switch (id) {
-  case LOAD:
-    LoadTask();
-    break;
-
-  case RENAME:
-    RenameTask();
-    break;
-
-  case DELETE:
-    DeleteTask();
-    break;
-
-  case MORE:
-    OnMoreClicked();
-    break;
-  }
+  return task_store.GetName(cursor_index);
 }
 
 void
 TaskListPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned DrawListIndex) noexcept
 {
-  assert(DrawListIndex <= task_store->Size());
+  assert(DrawListIndex <= task_store.Size());
 
-  const unsigned padding = Layout::GetTextPadding();
-  const TCHAR *name = task_store->GetName(DrawListIndex);
-
-  canvas.DrawText(rc.left + padding, rc.top + padding, name);
+  row_renderer.DrawTextRow(canvas, rc, task_store.GetName(DrawListIndex));
 }
 
 void
 TaskListPanel::RefreshView()
 {
-  GetList().SetLength(task_store->Size());
+  GetList().SetLength(task_store.Size());
 
   dialog.InvalidateTaskView();
 
@@ -247,12 +215,10 @@ TaskListPanel::LoadTask()
     return;
 
   // create new task first to guarantee pointers are different
-  OrderedTask* temptask = orig->Clone(CommonInterface::GetComputerSettings().task);
-  delete *active_task;
-  *active_task = temptask;
+  active_task = orig->Clone(CommonInterface::GetComputerSettings().task);
 
   const unsigned cursor_index = GetList().GetCursorIndex();
-  (*active_task)->SetName(StaticString<64>(task_store->GetName(cursor_index)));
+  active_task->SetName(StaticString<64>(task_store.GetName(cursor_index)));
 
   RefreshView();
   *task_modified = true;
@@ -264,17 +230,17 @@ void
 TaskListPanel::DeleteTask()
 {
   const unsigned cursor_index = GetList().GetCursorIndex();
-  if (cursor_index >= task_store->Size())
+  if (cursor_index >= task_store.Size())
     return;
 
-  const auto path = task_store->GetPath(cursor_index);
+  const auto path = task_store.GetPath(cursor_index);
   if (StringEndsWithIgnoreCase(path.c_str(), _T(".cup"))) {
     ShowMessageBox(_("Can't delete .CUP files"), _("Error"),
                    MB_OK | MB_ICONEXCLAMATION);
     return;
   }
 
-  const TCHAR *fname = task_store->GetName(cursor_index);
+  const TCHAR *fname = task_store.GetName(cursor_index);
 
   StaticString<1024> text;
   text.Format(_T("%s\n(%s)"), _("Delete the selected task?"), fname);
@@ -284,7 +250,7 @@ TaskListPanel::DeleteTask()
 
   File::Delete(path);
 
-  task_store->Scan(more);
+  task_store.Scan(more);
   RefreshView();
 }
 
@@ -308,10 +274,10 @@ void
 TaskListPanel::RenameTask()
 {
   const unsigned cursor_index = GetList().GetCursorIndex();
-  if (cursor_index >= task_store->Size())
+  if (cursor_index >= task_store.Size())
     return;
 
-  const TCHAR *oldname = task_store->GetName(cursor_index);
+  const TCHAR *oldname = task_store.GetName(cursor_index);
   StaticString<40> newname(oldname);
 
   if (ClearSuffix(newname.buffer(), _T(".cup"))) {
@@ -329,10 +295,10 @@ TaskListPanel::RenameTask()
 
   const auto tasks_path = MakeLocalPath(_T("tasks"));
 
-  File::Rename(task_store->GetPath(cursor_index),
+  File::Rename(task_store.GetPath(cursor_index),
                AllocatedPath::Build(tasks_path, newname));
 
-  task_store->Scan(more);
+  task_store.Scan(more);
   RefreshView();
 }
 
@@ -343,30 +309,23 @@ TaskListPanel::OnMoreClicked()
 
   more_button->SetCaption(more ? _("Less") : _("More"));
 
-  task_store->Scan(more);
+  task_store.Scan(more);
   RefreshView();
 }
 
 void
 TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  CreateList(parent, dialog.GetLook(),
-             rc, Layout::GetMinimumControlHeight());
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
+  CreateList(parent, dialog.GetLook(), rc,
+             row_renderer.CalculateLayout(*look.list.font));
 
   CreateButtons(buttons->GetButtonPanel());
-
-  task_store = new TaskStore();
 
   /* mark the new TaskStore as "dirty" until the data directory really
      gets scanned */
   serial = task_list_serial - 1;
-}
-
-void
-TaskListPanel::Unprepare()
-{
-  delete task_store;
-  DeleteWindow();
 }
 
 void
@@ -375,7 +334,7 @@ TaskListPanel::Show(const PixelRect &rc)
   if (serial != task_list_serial) {
     serial = task_list_serial;
     // Scan XCSoarData for available tasks
-    task_store->Scan(more);
+    task_store.Scan(more);
   }
 
   dialog.ShowTaskView(get_cursor_task());
@@ -393,19 +352,24 @@ TaskListPanel::Hide()
   ListWidget::Hide();
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateTaskListPanel(TaskManagerDialog &dialog,
-                    OrderedTask **active_task, bool *task_modified)
+                    std::unique_ptr<OrderedTask> &active_task,
+                    bool *task_modified) noexcept
 {
-  TextWidget *summary = new TextWidget();
-  TaskListPanel *widget = new TaskListPanel(dialog, active_task, task_modified,
-                                            *summary);
-  TwoWidgets *tw = new TwoWidgets(widget, summary);
-  widget->SetTwoWidgets(*tw);
+  auto summary = std::make_unique<TextWidget>();
+  auto widget = std::make_unique<TaskListPanel>(dialog, active_task, task_modified,
+                                                *summary);
+  auto tw = std::make_unique<TwoWidgets>(std::move(widget),
+                                         std::move(summary));
+  auto &list = (TaskListPanel &)tw->GetFirst();
 
-  ButtonPanelWidget *buttons =
-    new ButtonPanelWidget(tw, ButtonPanelWidget::Alignment::BOTTOM);
-  widget->SetButtonPanel(*buttons);
+  list.SetTwoWidgets(*tw);
+
+  auto buttons =
+    std::make_unique<ButtonPanelWidget>(std::move(tw),
+                                        ButtonPanelWidget::Alignment::BOTTOM);
+  list.SetButtonPanel(*buttons);
 
   return buttons;
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 
 class PlaneEditWidget final
-  : public RowFormWidget, DataFieldListener, ActionListener {
+  : public RowFormWidget, DataFieldListener {
   enum Controls {
     REGISTRATION,
     COMPETITION_ID,
@@ -68,9 +68,6 @@ public:
 private:
   /* methods from DataFieldListener */
   virtual void OnModified(DataField &df) override;
-
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -110,7 +107,7 @@ PlaneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   AddText(_("Registration"), nullptr, plane.registration, this);
   AddText(_("Comp. ID"), nullptr, plane.competition_id);
-  AddButton(_("Polar"), *this, POLAR);
+  AddButton(_("Polar"), [this](){ PolarButtonClicked(); });
   AddText(_("Type"), nullptr, plane.type);
   AddInteger(_("Handicap"), nullptr,
              _T("%u %%"), _T("%u"),
@@ -153,16 +150,6 @@ PlaneEditWidget::Save(bool &_changed)
 
   _changed |= changed;
   return true;
-}
-
-void
-PlaneEditWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case POLAR:
-    PolarButtonClicked();
-    break;
-  }
 }
 
 inline void

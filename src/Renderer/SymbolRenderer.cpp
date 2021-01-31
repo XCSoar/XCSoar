@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "SymbolRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 #include <algorithm>
 
@@ -59,14 +59,12 @@ void
 SymbolRenderer::DrawSign(Canvas &canvas, PixelRect rc, bool plus)
 {
   unsigned size = std::min(rc.GetWidth(), rc.GetHeight()) / 5;
-  auto center = rc.GetCenter();
+  const auto r = PixelRect{rc.GetCenter()}.WithMargin({size, size / 3});
 
   // Draw horizontal bar
-  canvas.Rectangle(center.x - size, center.y - size / 3,
-                   center.x + size, center.y + size / 3);
+  canvas.DrawRectangle(r);
 
   if (plus)
     // Draw vertical bar
-    canvas.Rectangle(center.x - size / 3, center.y - size,
-                     center.x + size / 3, center.y + size);
+    canvas.DrawRectangle(r);
 }

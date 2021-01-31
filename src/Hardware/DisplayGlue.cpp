@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,12 +27,12 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
-#include "OS/Path.hpp"
-#include "OS/FileUtil.hpp"
+#include "system/Path.hpp"
+#include "system/FileUtil.hpp"
 
 #ifdef USE_POLL_EVENT
-#include "Event/Globals.hpp"
-#include "Event/Queue.hpp"
+#include "ui/event/Globals.hpp"
+#include "ui/event/Queue.hpp"
 #endif
 
 void
@@ -60,7 +60,7 @@ Display::LoadOrientation(VerboseOperationEnvironment &env)
   }
 
 #ifdef USE_POLL_EVENT
-  event_queue->SetDisplayOrientation(orientation);
+  UI::event_queue->SetDisplayOrientation(orientation);
 #endif
 
   LogFormat("Display rotated");
@@ -87,7 +87,7 @@ Display::RestoreOrientation()
   Display::RotateRestore();
 
 #ifdef USE_POLL_EVENT
-  event_queue->SetDisplayOrientation(DisplayOrientation::DEFAULT);
+  UI::event_queue->SetDisplayOrientation(DisplayOrientation::DEFAULT);
 #endif
 }
 

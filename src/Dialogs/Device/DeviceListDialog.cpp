@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,21 +34,21 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "UIGlobals.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/Macros.hpp"
+#include "util/StaticString.hxx"
+#include "util/Macros.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/Register.hpp"
 #include "Device/Port/Listener.hpp"
 #include "Device/Driver/LX/Internal.hpp"
-#include "Event/Notify.hpp"
+#include "ui/event/Notify.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "Components.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/List.hpp"
 #include "Widget/ListWidget.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
@@ -60,19 +60,15 @@ Copyright_License {
 #include "Interface.hpp"
 
 #ifdef ANDROID
-#include "Java/Global.hxx"
+#include "java/Global.hxx"
 #include "Android/BluetoothHelper.hpp"
 #endif
 
-class DeviceListWidget final
-  : public ListWidget, private ActionListener,
-    NullBlackboardListener, PortListener {
-  enum Buttons {
-    DISABLE,
-    RECONNECT, FLIGHT, EDIT, MANAGE, MONITOR,
-    DEBUG,
-  };
+using namespace UI;
 
+class DeviceListWidget final
+  : public ListWidget,
+    NullBlackboardListener, PortListener {
   const DialogLook &look;
 
   unsigned font_height;
@@ -197,9 +193,6 @@ protected:
 public:
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual void Unprepare() override {
-    DeleteWindow();
-  }
 
   virtual void Show(const PixelRect &rc) override {
     ListWidget::Show(rc);
@@ -224,9 +217,6 @@ public:
   void OnCursorMoved(unsigned index) noexcept override;
 
 private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
-
   /* virtual methods from class BlackboardListener */
   virtual void OnGPSUpdate(const MoreData &basic) override;
 
@@ -282,13 +272,33 @@ DeviceListWidget::RefreshList()
 void
 DeviceListWidget::CreateButtons(WidgetDialog &dialog)
 {
-  edit_button = dialog.AddButton(_("Edit"), *this, EDIT);
-  flight_button = dialog.AddButton(_("Flight download"), *this, FLIGHT);
-  manage_button = dialog.AddButton(_("Manage"), *this, MANAGE);
-  monitor_button = dialog.AddButton(_("Monitor"), *this, MONITOR);
-  reconnect_button = dialog.AddButton(_("Reconnect"), *this, RECONNECT);
-  disable_button = dialog.AddButton(_("Disable"), *this, DISABLE);
-  debug_button = dialog.AddButton(_("Debug"), *this, DEBUG);
+  edit_button = dialog.AddButton(_("Edit"), [this](){
+    EditCurrent();
+  });
+
+  flight_button = dialog.AddButton(_("Flight download"), [this](){
+    DownloadFlightFromCurrent();
+  });
+
+  manage_button = dialog.AddButton(_("Manage"), [this](){
+    ManageCurrent();
+  });
+
+  monitor_button = dialog.AddButton(_("Monitor"), [this](){
+    MonitorCurrent();
+  });
+
+  reconnect_button = dialog.AddButton(_("Reconnect"), [this](){
+    ReconnectCurrent();
+  });
+
+  disable_button = dialog.AddButton(_("Disable"), [this](){
+    EnableDisableCurrent();
+  });
+
+  debug_button = dialog.AddButton(_("Debug"), [this](){
+    DebugCurrent();
+  });
 }
 
 void
@@ -355,7 +365,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
 
   canvas.Select(*look.list.font);
-  canvas.DrawText(rc.left + margin, rc.top + margin, text);
+  canvas.DrawText(rc.GetTopLeft() + PixelSize{margin, margin}, text);
 
   /* show a list of features that are available in the second row */
 
@@ -431,7 +441,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
 
   canvas.Select(look.small_font);
-  canvas.DrawText(rc.left + margin, rc.top + 2 * margin + font_height,
+  canvas.DrawText(rc.GetTopLeft() + PixelSize{margin, 2 * margin + font_height},
                   status);
 }
 
@@ -664,40 +674,6 @@ DeviceListWidget::DebugCurrent()
   msg.Format(_("Communication with this device will be logged for the next %u minutes."),
              MINUTES);
   ShowMessageBox(msg, _("Debug"), MB_OK | MB_ICONINFORMATION);
-}
-
-void
-DeviceListWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case DISABLE:
-    EnableDisableCurrent();
-    break;
-
-  case RECONNECT:
-    ReconnectCurrent();
-    break;
-
-  case FLIGHT:
-    DownloadFlightFromCurrent();
-    break;
-
-  case EDIT:
-    EditCurrent();
-    break;
-
-  case MANAGE:
-    ManageCurrent();
-    break;
-
-  case MONITOR:
-    MonitorCurrent();
-    break;
-
-  case DEBUG:
-    DebugCurrent();
-    break;
-  }
 }
 
 void

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "NativeInputListener.hpp"
-#include "IO/DataHandler.hpp"
-#include "Java/Class.hxx"
+#include "io/DataHandler.hpp"
+#include "java/Class.hxx"
 #include "org_xcsoar_NativeInputListener.h"
 
 #include <cstddef>

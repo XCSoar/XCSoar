@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -73,7 +73,7 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
     for (; panels->load != nullptr; ++panels) {
       assert(panels->name != nullptr);
 
-      Widget *widget = panels->load(id);
+      auto widget = panels->load(id);
 
       if (widget == NULL)
         continue;
@@ -90,30 +90,33 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
         button_rc.bottom = std::max(2u * Layout::GetMinimumControlHeight(),
                                     Layout::GetMaximumControlHeight());
 
-        auto *button = new ButtonWidget(look.button, _("Switch InfoBox"),
-                                        dialog, SWITCH_INFO_BOX);
+        auto button = std::make_unique<ButtonWidget>(look.button,
+                                                     _("Switch InfoBox"),
+                                                     dialog.MakeModalResultCallback(SWITCH_INFO_BOX));
 
-        widget = new TwoWidgets(widget, button, false);
+        widget = std::make_unique<TwoWidgets>(std::move(widget),
+                                              std::move(button),
+                                              false);
       }
 
-      tab_widget.AddTab(widget, gettext(panels->name));
+      tab_widget.AddTab(std::move(widget), gettext(panels->name));
     }
   }
 
   if (!found_setup) {
     /* the InfoBox did not provide a "Setup" tab - create a default
        one that allows switching the contents */
-    Widget *wSwitch = new ActionWidget(dialog, SWITCH_INFO_BOX);
-    tab_widget.AddTab(wSwitch, _("Switch InfoBox"));
+    tab_widget.AddTab(std::make_unique<ActionWidget>(dialog.MakeModalResultCallback(SWITCH_INFO_BOX)),
+                      _("Switch InfoBox"));
   }
 
-  Widget *wClose = new ActionWidget(dialog, mrOK);
-  tab_widget.AddTab(wClose, _("Close"));
+  tab_widget.AddTab(std::make_unique<ActionWidget>(dialog.MakeModalResultCallback(mrOK)),
+                    _("Close"));
 
   const PixelRect client_rc = dialog.GetClientAreaWindow().GetClientRect();
   const PixelSize max_size = tab_widget.GetMaximumSize();
-  if (unsigned(max_size.cy) < client_rc.GetHeight()) {
-    form_rc.top += client_rc.GetHeight() - max_size.cy;
+  if (max_size.height < client_rc.GetHeight()) {
+    form_rc.top += client_rc.GetHeight() - max_size.height;
     dialog.Move(form_rc);
   }
 

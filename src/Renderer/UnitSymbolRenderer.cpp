@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "UnitSymbolRenderer.hpp"
-#include "Screen/Canvas.hpp"
-#include "Util/Macros.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "util/Macros.hpp"
 
 #include <algorithm>
 
@@ -86,11 +86,7 @@ UnitSymbolRenderer::GetSize(const Font &font, const Unit unit) noexcept
   PixelSize size1 = font.TextSize(strings.line1);
   PixelSize size2 = font.TextSize(strings.line2);
 
-  PixelSize size;
-  size.cy = size1.cy + size2.cy;
-  size.cx = std::max(size1.cx, size2.cx);
-
-  return size;
+  return {std::max(size1.width, size2.width), size1.height + size2.height};
 }
 
 PixelSize
@@ -111,11 +107,7 @@ UnitSymbolRenderer::GetSize(const Canvas &canvas, const Unit unit) noexcept
   PixelSize size1 = canvas.CalcTextSize(strings.line1);
   PixelSize size2 = canvas.CalcTextSize(strings.line2);
 
-  PixelSize size;
-  size.cy = size1.cy + size2.cy;
-  size.cx = std::max(size1.cx, size2.cx);
-
-  return size;
+  return {std::max(size1.width, size2.width), size1.height + size2.height};
 }
 
 unsigned
@@ -151,30 +143,32 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
   assert(strings.line2 != nullptr);
 
   if (!strings.line1) {
-    canvas.DrawText(pos.x, pos.y, strings.line2);
+    canvas.DrawText(pos, strings.line2);
     return;
   }
 
   PixelSize size1 = canvas.CalcTextSize(strings.line1);
   PixelSize size2 = canvas.CalcTextSize(strings.line2);
 
-  if (size1.cx > size2.cx) {
+  if (size1.width > size2.width) {
     if (strings.is_fraction) {
       canvas.Select(unit_fraction_pen);
-      canvas.DrawLine(pos.x, pos.y + size1.cy, pos.x + size1.cx, pos.y + size1.cy);
+      canvas.DrawLine(pos.At(0, size1.height),
+                      pos.At(size1.width, size1.height));
     }
 
-    canvas.DrawText(pos.x, pos.y, strings.line1);
-    int x = pos.x + (size1.cx - size2.cx) / 2;
-    canvas.DrawText(x, pos.y + size1.cy, strings.line2);
+    canvas.DrawText(pos, strings.line1);
+    canvas.DrawText(pos.At((size1.width - size2.width) / 2,
+                           size1.height),
+                    strings.line2);
   } else {
     if (strings.is_fraction) {
       canvas.Select(unit_fraction_pen);
-      canvas.DrawLine(pos.x, pos.y + size1.cy, pos.x + size2.cx, pos.y + size1.cy);
+      canvas.DrawLine(pos.At(0, size1.height),
+                      pos.At(size2.width, size1.height));
     }
 
-    int x = pos.x + (size2.cx - size1.cx) / 2;
-    canvas.DrawText(x, pos.y, strings.line1);
-    canvas.DrawText(pos.x, pos.y + size1.cy, strings.line2);
+    canvas.DrawText(pos.At((size2.width - size1.width) / 2, 0), strings.line1);
+    canvas.DrawText(pos.At(0, size1.height), strings.line2);
   }
 }

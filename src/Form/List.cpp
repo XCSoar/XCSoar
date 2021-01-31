@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,15 +23,15 @@ Copyright_License {
 
 #include "Form/List.hpp"
 #include "Look/DialogLook.hpp"
-#include "Screen/Canvas.hpp"
-#include "Event/KeyCode.hpp"
-#include "Screen/Point.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/event/KeyCode.hpp"
+#include "ui/dim/Rect.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scissor.hpp"
+#include "ui/canvas/opengl/Scissor.hpp"
 #elif defined(USE_GDI)
-#include "Screen/WindowCanvas.hpp"
+#include "ui/canvas/WindowCanvas.hpp"
 #endif
 
 #include <cassert>
@@ -113,9 +113,9 @@ ListControl::OnResize(PixelSize new_size)
 {
   PaintWindow::OnResize(new_size);
 
-  items_visible = new_size.cy / item_height;
+  items_visible = new_size.height / item_height;
 
-  if (unsigned(new_size.cy) >= length * item_height) {
+  if (new_size.height >= length * item_height) {
     /* after the resize, there is enough room for all list items -
        scroll back to the top */
     origin = pixel_pan = 0;

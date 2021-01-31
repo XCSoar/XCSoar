@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,24 +22,40 @@ Copyright_License {
 */
 
 #include "UDPPort.hpp"
-#include "IO/Async/AsioUtil.hpp"
+#include "net/IPv4Address.hxx"
+#include "net/UniqueSocketDescriptor.hxx"
+#include "net/SocketError.hxx"
+#include "event/Call.hxx"
 
-UDPPort::UDPPort(boost::asio::io_context &io_context,
+UDPPort::UDPPort(EventLoop &event_loop,
                  unsigned port,
                  PortListener *_listener, DataHandler &_handler)
   :BufferedPort(_listener, _handler),
-   socket(io_context,
-          boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port))
+   socket(event_loop, BIND_THIS_METHOD(OnSocketReady))
 {
-  AsyncRead();
+  const IPv4Address address(port);
+
+  UniqueSocketDescriptor s;
+  if (!s.Create(AF_INET, SOCK_DGRAM, 0))
+    throw MakeSocketError("Failed to create socket");
+
+  if (!s.Bind(address))
+    throw MakeSocketError("Failed to bind socket");
+
+  socket.Open(s.Release());
+
+  BlockingCall(event_loop, [this](){
+    socket.ScheduleRead();
+  });
 }
 
 UDPPort::~UDPPort()
 {
   BufferedPort::BeginClose();
 
-  if (socket.is_open())
-    CancelWait(socket);
+  BlockingCall(GetEventLoop(), [this](){
+    socket.Close();
+  });
 
   BufferedPort::EndClose();
 }
@@ -47,7 +63,7 @@ UDPPort::~UDPPort()
 PortState
 UDPPort::GetState() const
 {
-  if (socket.is_open())
+  if (socket.IsDefined())
     return PortState::READY;
   else
     return PortState::FAILED;
@@ -56,33 +72,34 @@ UDPPort::GetState() const
 size_t
 UDPPort::Write(const void *data, size_t length)
 {
-  if (!socket.is_open())
+  if (!socket.IsDefined())
     return 0;
 
-  boost::system::error_code ec;
-  size_t nbytes = socket.send(boost::asio::buffer(data, length), 0, ec);
-  if (ec)
-    nbytes = 0;
+  ssize_t nbytes = socket.GetSocket().Write(data, length);
+  if (nbytes < 0)
+    // TODO check EAGAIN?
+    return 0;
 
   return nbytes;
 }
 
 void
-UDPPort::OnRead(const boost::system::error_code &ec, size_t nbytes)
-{
-  if (ec == boost::asio::error::operation_aborted)
-    /* this object has already been deleted; bail out quickly without
-       touching anything */
-    return;
+UDPPort::OnSocketReady(unsigned) noexcept
+try {
+  char input[4096];
+  ssize_t nbytes = socket.GetSocket().Read(input, sizeof(input));
+  if (nbytes < 0)
+    throw MakeSocketError("Failed to receive");
 
-  if (ec) {
-    socket.close();
+  if (nbytes == 0) {
+    socket.Close();
     StateChanged();
-    Error(ec.message().c_str());
     return;
   }
 
   DataReceived(input, nbytes);
-
-  AsyncRead();
+} catch (...) {
+  socket.Close();
+  StateChanged();
+  Error(std::current_exception());
 }

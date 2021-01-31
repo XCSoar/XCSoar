@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,26 +22,25 @@ Copyright_License {
 */
 
 #include "Form/CheckBox.hpp"
-#include "Form/ActionListener.hpp"
 #include "Look/DialogLook.hpp"
-#include "Screen/Canvas.hpp"
-#include "Event/KeyCode.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Asset.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 void
 CheckBoxControl::Create(ContainerWindow &parent, const DialogLook &_look,
                         tstring::const_pointer _caption,
                         const PixelRect &rc,
                         const WindowStyle style,
-                        ActionListener &_listener, int _id)
+                        Callback _callback) noexcept
 {
   checked = dragging = pressed = false;
   look = &_look;
   caption = _caption;
 
-  listener = &_listener;
-  id = _id;
+  callback = std::move(_callback);
+
   PaintWindow::Create(parent, rc, style);
 }
 
@@ -68,8 +67,8 @@ CheckBoxControl::SetPressed(bool value)
 bool
 CheckBoxControl::OnClicked()
 {
-  if (listener != nullptr) {
-    listener->OnAction(id);
+  if (callback) {
+    callback(GetState());
     return true;
   }
 
@@ -185,11 +184,12 @@ CheckBoxControl::OnPaint(Canvas &canvas)
           : cb_look.standard))
     : cb_look.disabled;
 
-  unsigned size = canvas.GetHeight() - 4;
+  const unsigned padding = 2;
+  unsigned size = canvas.GetHeight() - 2 * padding;
 
   canvas.Select(state_look.box_brush);
   canvas.Select(state_look.box_pen);
-  canvas.Rectangle(2, 2, size, size);
+  canvas.DrawRectangle(PixelRect{PixelSize{canvas.GetHeight()}}.WithPadding(padding));
 
   if (checked) {
     canvas.Select(state_look.check_brush);
@@ -216,5 +216,5 @@ CheckBoxControl::OnPaint(Canvas &canvas)
   canvas.Select(*cb_look.font);
   canvas.SetTextColor(state_look.text_color);
   canvas.SetBackgroundTransparent();
-  canvas.DrawText(canvas.GetHeight() + 2, 2, caption.c_str());
+  canvas.DrawText({(int)canvas.GetHeight() + 2, 2}, caption.c_str());
 }

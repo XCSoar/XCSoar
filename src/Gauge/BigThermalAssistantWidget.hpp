@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,8 +25,9 @@ Copyright_License {
 #define XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
 
 #include "Widget/ContainerWidget.hpp"
-#include "Form/ActionListener.hpp"
 #include "Blackboard/BlackboardListener.hpp"
+
+#include <memory>
 
 struct AttitudeState;
 class LiveBlackboard;
@@ -36,28 +37,23 @@ class BigThermalAssistantWindow;
 
 class BigThermalAssistantWidget
   : public ContainerWidget,
-    private ActionListener,
     private NullBlackboardListener {
   LiveBlackboard &blackboard;
   const ThermalAssistantLook &look;
 
-  BigThermalAssistantWindow *view;
+  std::unique_ptr<BigThermalAssistantWindow> view;
 
-  enum Action {
-    CLOSE,
-  };
-
-  Button *close_button;
+  std::unique_ptr<Button> close_button;
 
 public:
   BigThermalAssistantWidget(LiveBlackboard &_blackboard,
-                            const ThermalAssistantLook &_look)
-    :blackboard(_blackboard), look(_look) {}
+                            const ThermalAssistantLook &_look) noexcept;
+
+  ~BigThermalAssistantWidget() noexcept;
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-  virtual void Unprepare() override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
   virtual void Move(const PixelRect &rc) override;
@@ -66,9 +62,6 @@ public:
 private:
   void UpdateLayout();
   void Update(const AttitudeState &attitude, const DerivedInfo &calculated);
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 
   /* virtual methods from class BlackboardListener */
   virtual void OnCalculatedUpdate(const MoreData &basic,

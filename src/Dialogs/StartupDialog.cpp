@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Profile/Profile.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
@@ -40,7 +40,7 @@ Copyright_License {
 #include "Gauge/LogoView.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
+#include "system/FileUtil.hpp"
 
 class LogoWindow final : public PaintWindow {
   LogoView logo;
@@ -54,14 +54,14 @@ protected:
 
 class LogoQuitWidget final : public NullWidget {
   const ButtonLook &look;
-  ActionListener &action_listener;
+  WndForm &dialog;
 
   LogoWindow logo;
   Button quit;
 
 public:
-  LogoQuitWidget(const ButtonLook &_look, ActionListener &_action_listener)
-    :look(_look), action_listener(_action_listener) {}
+  LogoQuitWidget(const ButtonLook &_look, WndForm &_dialog) noexcept
+    :look(_look), dialog(_dialog) {}
 
 private:
   PixelRect GetButtonRect(PixelRect rc) {
@@ -91,13 +91,8 @@ public:
     button_style.TabStop();
 
     quit.Create(parent, look, _("Quit"), rc,
-                button_style, action_listener, mrCancel);
+                button_style, dialog.MakeModalResultCallback(mrCancel));
     logo.Create(parent, rc, style);
-  }
-
-  virtual void Unprepare() override {
-    logo.Destroy();
-    quit.Destroy();
   }
 
   virtual void Show(const PixelRect &rc) override {
@@ -122,13 +117,13 @@ class StartupWidget final : public RowFormWidget {
     CONTINUE,
   };
 
-  ActionListener &action_listener;
+  WndForm &dialog;
   DataField *const df;
 
 public:
-  StartupWidget(const DialogLook &look, ActionListener &_action_listener,
+  StartupWidget(const DialogLook &look, WndForm &_dialog,
                 DataField *_df)
-    :RowFormWidget(look), action_listener(_action_listener), df(_df) {}
+    :RowFormWidget(look), dialog(_dialog), df(_df) {}
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
@@ -163,7 +158,7 @@ StartupWidget::Prepare(ContainerWindow &parent,
   auto *pe = Add(_("Profile"), nullptr, df);
   pe->SetEditCallback(SelectProfileCallback);
 
-  AddButton(_("Continue"), action_listener, mrOK);
+  AddButton(_("Continue"), dialog.MakeModalResultCallback(mrOK));
 }
 
 static bool
@@ -241,15 +236,13 @@ dlgStartupShowModal()
 
   /* show the dialog */
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(), nullptr);
-  TwoWidgets widget(new LogoQuitWidget(look.button, dialog),
-                    new StartupWidget(look, dialog, dff));
+  TWidgetDialog<TwoWidgets> dialog(WidgetDialog::Full{},
+                                   UIGlobals::GetMainWindow(),
+                                   UIGlobals::GetDialogLook(),
+                                   nullptr);
 
-  dialog.FinishPreliminary(&widget);
+  dialog.SetWidget(std::make_unique<LogoQuitWidget>(look.button, dialog),
+                   std::make_unique<StartupWidget>(look, dialog, dff));
 
-  const int result = dialog.ShowModal();
-  dialog.StealWidget();
-
-  return result == mrOK;
+  return dialog.ShowModal() == mrOK;
 }

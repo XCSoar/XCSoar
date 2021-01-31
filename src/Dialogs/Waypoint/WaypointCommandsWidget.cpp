@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -40,18 +40,6 @@ Copyright_License {
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Profile/Current.hpp"
 #include "ActionInterface.hpp"
-
-enum Commands {
-  REPLACE_IN_TASK,
-  INSERT_IN_TASK,
-  APPEND_TO_TASK,
-  REMOVE_FROM_TASK,
-  SET_HOME,
-  PAN,
-  SET_ACTIVE_FREQUENCY,
-  SET_STANDBY_FREQUENCY,
-  EDIT,
-};
 
 static bool
 ReplaceInTask(ProtectedTaskManager &task_manager,
@@ -232,54 +220,56 @@ ActivatePan(const Waypoint &waypoint)
 }
 
 void
-WaypointCommandsWidget::OnAction(int id) noexcept
+WaypointCommandsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  MessageOperationEnvironment env;
+  RowFormWidget::Prepare(parent, rc);
 
-  switch (id) {
-  case REPLACE_IN_TASK:
-    if (ReplaceInTask(*task_manager, waypoint) && form != nullptr)
-      form->SetModalResult(mrOK);
-    break;
+  if (task_manager != nullptr) {
+    AddButton(_("Replace in Task"), [this](){
+      if (ReplaceInTask(*task_manager, waypoint) && form != nullptr)
+        form->SetModalResult(mrOK);
+    });
 
-  case INSERT_IN_TASK:
-    if (InsertInTask(*task_manager, waypoint) && form != nullptr)
-      form->SetModalResult(mrOK);
-    break;
+    AddButton(_("Insert in Task"), [this](){
+      if (InsertInTask(*task_manager, waypoint) && form != nullptr)
+        form->SetModalResult(mrOK);
+    });
 
-  case APPEND_TO_TASK:
-    if (AppendToTask(*task_manager, waypoint) && form != nullptr)
-      form->SetModalResult(mrOK);
-    break;
+    AddButton(_("Append to Task"), [this](){
+      if (AppendToTask(*task_manager, waypoint) && form != nullptr)
+        form->SetModalResult(mrOK);
+    });
 
-  case REMOVE_FROM_TASK:
-    if (RemoveFromTask(*task_manager, *waypoint) && form != nullptr)
-      form->SetModalResult(mrOK);
-    break;
+    if (MapTaskManager::GetIndexInTask(*waypoint) >= 0)
+      AddButton(_("Remove from Task"), [this](){
+        if (RemoveFromTask(*task_manager, *waypoint) && form != nullptr)
+          form->SetModalResult(mrOK);
+      });
+  }
 
-  case SET_HOME:
+  AddButton(_("Set as New Home"), [this](){
     SetHome(*waypoint);
     if (form != nullptr)
       form->SetModalResult(mrOK);
-    break;
+  });
 
-  case PAN:
+  AddButton(_("Pan to Waypoint"), [this](){
     if (ActivatePan(*waypoint) && form != nullptr)
       form->SetModalResult(mrOK);
-    break;
+  });
 
-  case SET_ACTIVE_FREQUENCY:
+  AddButton(_("Set Active Frequency"), [this](){
     ActionInterface::SetActiveFrequency(waypoint->radio_frequency,
                                         waypoint->name.c_str());
-    break;
+  });
 
-  case SET_STANDBY_FREQUENCY:
+  AddButton(_("Set Standby Frequency"), [this](){
     ActionInterface::SetStandbyFrequency(waypoint->radio_frequency,
                                          waypoint->name.c_str());
-    break;
+  });
 
-  case EDIT:
-    {
+  if (allow_edit)
+    AddButton(_("Edit"), [this](){
       Waypoint wp_copy = *waypoint;
 
       /* move to user.cup */
@@ -301,30 +291,5 @@ WaypointCommandsWidget::OnAction(int id) noexcept
           ShowError(std::current_exception(), _("Failed to save waypoints"));
         }
       }
-    }
-    break;
-  }
-}
-
-void
-WaypointCommandsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
-{
-  RowFormWidget::Prepare(parent, rc);
-
-  if (task_manager != nullptr) {
-    AddButton(_("Replace in Task"), *this, REPLACE_IN_TASK);
-    AddButton(_("Insert in Task"), *this, INSERT_IN_TASK);
-    AddButton(_("Append to Task"), *this, APPEND_TO_TASK);
-
-    if (MapTaskManager::GetIndexInTask(*waypoint) >= 0)
-      AddButton(_("Remove from Task"), *this, REMOVE_FROM_TASK);
-  }
-
-  AddButton(_("Set as New Home"), *this, SET_HOME);
-  AddButton(_("Pan to Waypoint"), *this, PAN);
-  AddButton(_("Set Active Frequency"), *this, SET_ACTIVE_FREQUENCY);
-  AddButton(_("Set Standby Frequency"), *this, SET_STANDBY_FREQUENCY);
-
-  if (allow_edit)
-    AddButton(_("Edit"), *this, EDIT);
+    });
 }

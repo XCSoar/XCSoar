@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,12 +23,12 @@ Copyright_License {
 
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
-#include "Util/ConvertString.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/TruncateString.hpp"
-#include "Util/Macros.hpp"
-#include "Util/NumberParser.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/ConvertString.hpp"
+#include "util/StaticString.hxx"
+#include "util/TruncateString.hpp"
+#include "util/Macros.hpp"
+#include "util/NumberParser.hpp"
+#include "util/StringCompare.hxx"
 #include "NMEA/Checksum.hpp"
 
 void

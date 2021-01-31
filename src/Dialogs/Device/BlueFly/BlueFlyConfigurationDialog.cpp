@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 
 class BlueFlyConfigurationWidget final
-  : public RowFormWidget, private ActionListener {
+  : public RowFormWidget {
   enum BlueFlyWidgets {
     VOLUME,
     OUTPUT_MODE,
@@ -65,7 +65,10 @@ public:
 
       AddEnum(N_("Output mode"), nullptr, modes);
 
-      AddButton(_("Save"), *this, SAVE);
+      AddButton(_("Save"), [this](){
+        bool _changed = false;
+        dialog.GetWidget().Save(_changed);
+      });
   }
 
   void Show(const PixelRect &rc) override {
@@ -86,18 +89,6 @@ public:
     device.WriteDeviceSettings(params, env);
 
     return true;
-  }
-
-private:
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override {
-    bool _changed = false;
-
-    switch (id) {
-    case SAVE:
-      dialog.GetWidget().Save(_changed);
-      break;
-    }
   }
 };
 

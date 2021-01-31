@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ASYNC_JOB_RUNNER_HPP
 #define XCSOAR_ASYNC_JOB_RUNNER_HPP
 
-#include "Thread/Thread.hpp"
+#include "thread/Thread.hpp"
 
 #include <atomic>
 #include <exception>
@@ -34,7 +34,7 @@ Copyright_License {
 class Job;
 class OperationEnvironment;
 class ThreadedOperationEnvironment;
-class Notify;
+namespace UI { class Notify; }
 
 /**
  * An environment that runs a #Job in another thread.  It does not
@@ -45,7 +45,7 @@ class Notify;
 class AsyncJobRunner final : private Thread {
   Job *job;
   ThreadedOperationEnvironment *env;
-  Notify *notify;
+  UI::Notify *notify;
 
   std::atomic<bool> running;
 
@@ -88,7 +88,7 @@ public:
    * @param notify an optional object that gets notified when the job
    * finishes
    */
-  void Start(Job *job, OperationEnvironment &env, Notify *notify=NULL);
+  void Start(Job *job, OperationEnvironment &env, UI::Notify *notify=nullptr);
 
   /**
    * Cancel the current #Job.  Returns immediately; to wait for the

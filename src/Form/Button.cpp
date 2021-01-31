@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,27 +22,38 @@
 */
 
 #include "Form/Button.hpp"
-#include "Form/ActionListener.hpp"
-#include "Event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Asset.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Hardware/Vibrator.hpp"
 
-Button::~Button() {
-  /* we must override ~Window(), because in ~Window(), our own
-     OnDestroy() method won't be called (during object destruction,
-     this object loses its identity) */
-  Destroy();
+Button::Button(ContainerWindow &parent, const PixelRect &rc,
+               WindowStyle style, std::unique_ptr<ButtonRenderer> _renderer,
+               Callback _callback) noexcept
+{
+  Create(parent, rc, style, std::move(_renderer), std::move(_callback));
 }
+
+Button::Button(ContainerWindow &parent, const ButtonLook &look,
+               const TCHAR *caption, const PixelRect &rc,
+               WindowStyle style,
+               Callback _callback) noexcept
+{
+  Create(parent, look, caption, rc, style, std::move(_callback));
+}
+
+Button::Button() = default;
+
+Button::~Button() noexcept = default;
 
 void
 Button::Create(ContainerWindow &parent,
                const PixelRect &rc,
                WindowStyle style,
-               ButtonRenderer *_renderer)
+               std::unique_ptr<ButtonRenderer> _renderer)
 {
   dragging = down = selected = false;
-  renderer = _renderer;
+  renderer = std::move(_renderer);
 
   PaintWindow::Create(parent, rc, style);
 }
@@ -52,28 +63,27 @@ Button::Create(ContainerWindow &parent, const ButtonLook &look,
                const TCHAR *caption, const PixelRect &rc,
                WindowStyle style)
 {
-  Create(parent, rc, style, new TextButtonRenderer(look, caption));
+  Create(parent, rc, style, std::make_unique<TextButtonRenderer>(look, caption));
 }
 
 void
 Button::Create(ContainerWindow &parent, const PixelRect &rc,
-               WindowStyle style, ButtonRenderer *_renderer,
-               ActionListener &_listener, int _id)
+               WindowStyle style, std::unique_ptr<ButtonRenderer> _renderer,
+               Callback _callback) noexcept
 {
-  listener = &_listener;
-  id = _id;
+  callback = std::move(_callback);
 
-  Create(parent, rc, style, _renderer);
+  Create(parent, rc, style, std::move(_renderer));
 }
 
 void
 Button::Create(ContainerWindow &parent, const ButtonLook &look,
                const TCHAR *caption, const PixelRect &rc,
                WindowStyle style,
-               ActionListener &_listener, int _id) {
+               Callback _callback) noexcept {
   Create(parent, rc, style,
-         new TextButtonRenderer(look, caption),
-         _listener, _id);
+         std::make_unique<TextButtonRenderer>(look, caption),
+         std::move(_callback));
 }
 
 void
@@ -81,7 +91,7 @@ Button::SetCaption(const TCHAR *caption)
 {
   assert(caption != nullptr);
 
-  TextButtonRenderer &r = *(TextButtonRenderer *)renderer;
+  auto &r = (TextButtonRenderer &)*renderer;
   r.SetCaption(caption);
 
   Invalidate();
@@ -120,8 +130,8 @@ Button::SetDown(bool _down)
 bool
 Button::OnClicked()
 {
-  if (listener != nullptr) {
-    listener->OnAction(id);
+  if (callback) {
+    callback();
     return true;
   }
 
@@ -133,16 +143,6 @@ Button::Click()
 {
   SetDown(false);
   OnClicked();
-}
-
-void
-Button::OnDestroy()
-{
-  assert(renderer != nullptr);
-
-  delete renderer;
-
-  PaintWindow::OnDestroy();
 }
 
 bool

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,14 +25,14 @@ Copyright_License {
 #include "Tracking/SkyLines/Features.hpp"
 #include "Tracking/SkyLines/Key.hpp"
 #include "Dialogs/Message.hpp"
-#include "Net/State.hpp"
+#include "net/State.hpp"
 #include "Asset.hpp"
 #include "Interface.hpp"
 #include "Simulator.hpp"
 #include "Language/Language.hpp"
 #include "Profile/Profile.hpp"
 #include "UIGlobals.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 
 void
 CloudEnableDialog()

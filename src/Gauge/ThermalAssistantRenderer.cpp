@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,18 +22,18 @@
 */
 
 #include "ThermalAssistantRenderer.hpp"
-#include "Util/Macros.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Macros.hpp"
+#include "util/Clamp.hpp"
 #include "NMEA/Attitude.hpp"
 #include "NMEA/Derived.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
 #include "Look/ThermalAssistantLook.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 PixelPoint
@@ -112,20 +112,38 @@ ThermalAssistantRenderer::PaintRadarPlane(Canvas &canvas) const
 {
   canvas.Select(look.plane_pen);
 
-  int x = mid.x + (circling.TurningLeft() ? radius : -radius);
+  PixelPoint p = mid.At(circling.TurningLeft() ? (int)radius : (int)-radius,
+                        0);
 
-  canvas.DrawLine(x + Layout::FastScale(small ? 5 : 10),
-              mid.y - Layout::FastScale(small ? 1 : 2),
-              x - Layout::FastScale(small ? 5 : 10),
-              mid.y - Layout::FastScale(small ? 1 : 2));
-  canvas.DrawLine(x,
-              mid.y - Layout::FastScale(small ? 3 : 6),
-              x,
-              mid.y + Layout::FastScale(small ? 3 : 6));
-  canvas.DrawLine(x + Layout::FastScale(small ? 2 : 4),
-              mid.y + Layout::FastScale(small ? 2 : 4),
-              x - Layout::FastScale(small ? 2 : 4),
-              mid.y + Layout::FastScale(small ? 2 : 4));
+  canvas.DrawLine(p.At(+Layout::FastScale(small ? 5 : 10),
+                       -Layout::FastScale(small ? 1 : 2)),
+                  p.At(-Layout::FastScale(small ? 5 : 10),
+                       -Layout::FastScale(small ? 1 : 2)));
+  canvas.DrawLine(p.At(0, -Layout::FastScale(small ? 3 : 6)),
+                  p.At(0, +Layout::FastScale(small ? 3 : 6)));
+  canvas.DrawLine(p.At(+Layout::FastScale(small ? 2 : 4),
+                       +Layout::FastScale(small ? 2 : 4)),
+                  p.At(-Layout::FastScale(small ? 2 : 4),
+                       +Layout::FastScale(small ? 2 : 4)));
+}
+
+static void
+DrawCircleLabel(Canvas &canvas, PixelPoint p,
+                BasicStringView<TCHAR> text) noexcept
+{
+  const auto size = canvas.CalcTextSize(text);
+  p.x -= size.width / 2;
+  p.y -= size.height * 3 / 4;
+
+  canvas.DrawText(p, text);
+}
+
+static void
+DrawCircleLabelVSpeed(Canvas &canvas, PixelPoint p, double value) noexcept
+{
+  TCHAR buffer[10];
+  FormatUserVerticalSpeed(value, buffer, ARRAY_SIZE(buffer));
+  DrawCircleLabel(canvas, p, buffer);
 }
 
 void
@@ -134,9 +152,9 @@ ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, double max_lift) 
   canvas.SelectHollowBrush();
 
   canvas.Select(look.inner_circle_pen);
-  canvas.DrawCircle(mid.x, mid.y, radius / 2);
+  canvas.DrawCircle(mid, radius / 2);
   canvas.Select(look.outer_circle_pen);
-  canvas.DrawCircle(mid.x, mid.y, radius);
+  canvas.DrawCircle(mid, radius);
 
   if (small)
     return;
@@ -146,18 +164,8 @@ ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, double max_lift) 
   canvas.SetBackgroundColor(look.background_color);
   canvas.SetBackgroundOpaque();
 
-  TCHAR lift_string[10];
-  FormatUserVerticalSpeed(max_lift, lift_string, ARRAY_SIZE(lift_string));
-  PixelSize s = canvas.CalcTextSize(lift_string);
-  canvas.DrawText(mid.x - s.cx / 2,
-                  mid.y + radius - s.cy * 0.75,
-                  lift_string);
-
-  FormatUserVerticalSpeed(0, lift_string, ARRAY_SIZE(lift_string));
-  s = canvas.CalcTextSize(lift_string);
-  canvas.DrawText(mid.x - s.cx / 2,
-                  mid.y + radius / 2 - s.cy * 0.75,
-                  lift_string);
+  DrawCircleLabelVSpeed(canvas, mid + PixelSize{0u, radius}, max_lift);
+  DrawCircleLabelVSpeed(canvas, mid + PixelSize{0u, radius / 2}, 0);
 
   canvas.SetBackgroundTransparent();
 }
@@ -192,9 +200,9 @@ ThermalAssistantRenderer::PaintNotCircling(Canvas &canvas) const
 
   const TCHAR* str = _("Not Circling");
   canvas.Select(look.overlay_font);
-  PixelSize ts = canvas.CalcTextSize(str);
   canvas.SetTextColor(look.text_color);
-  canvas.DrawText(mid.x - (ts.cx / 2), mid.y - (radius / 2), str);
+
+  DrawCircleLabel(canvas, mid - PixelSize{0u, radius / 2}, str);
 }
 
 void

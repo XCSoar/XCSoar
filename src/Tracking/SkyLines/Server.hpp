@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_SKYLINES_SERVER_HPP
 #define XCSOAR_TRACKING_SKYLINES_SERVER_HPP
 
-#include <boost/asio/ip/udp.hpp>
+#include "event/SocketEvent.hxx"
+#include "net/StaticSocketAddress.hxx"
+#include "util/ConstBuffer.hxx"
 
 #include <chrono>
 #include <exception>
@@ -42,22 +44,16 @@ namespace SkyLinesTracking {
  * virtual methods.
  */
 class Server {
-  boost::asio::ip::udp::socket socket;
-
-  uint8_t buffer[4096];
+  SocketEvent socket;
 
 public:
   struct Client {
-    boost::asio::ip::udp::endpoint endpoint;
+    StaticSocketAddress address;
     uint64_t key;
   };
 
-private:
-  Client client_buffer;
-
 public:
-  Server(boost::asio::io_context &io_context,
-         boost::asio::ip::udp::endpoint endpoint);
+  Server(EventLoop &event_loop, SocketAddress server_address);
 
   ~Server();
 
@@ -71,19 +67,20 @@ public:
     return "5597";
   }
 
-  void SendBuffer(const boost::asio::ip::udp::endpoint &endpoint,
-                  boost::asio::const_buffer data);
+  auto &GetEventLoop() const noexcept {
+    return socket.GetEventLoop();
+  }
+
+  void SendBuffer(SocketAddress address, ConstBuffer<void> buffer) noexcept;
 
   template<typename P>
-  void SendPacket(const boost::asio::ip::udp::endpoint &endpoint,
-                  const P &packet) {
-    SendBuffer(endpoint, boost::asio::buffer(&packet, sizeof(packet)));
+  void SendPacket(SocketAddress address, const P &packet) noexcept {
+    SendBuffer(address, ConstBuffer<void>{&packet, sizeof(packet)});
   }
 
 private:
   void OnDatagramReceived(Client &&client, void *data, size_t length);
-  void OnReceive(const boost::system::error_code &ec, size_t size);
-  void AsyncReceive();
+  void OnSocketReady(unsigned events) noexcept;
 
 protected:
   virtual void OnPing(const Client &client, unsigned id);
@@ -119,8 +116,8 @@ protected:
    * An error has occurred while sending a response to a client.  This
    * error is non-fatal.
    */
-  virtual void OnSendError(const boost::asio::ip::udp::endpoint &endpoint,
-                           std::exception_ptr e) {}
+  virtual void OnSendError(SocketAddress address,
+                           std::exception_ptr e) noexcept {}
 
   /**
    * An error has occurred, and the SkyLines tracking server is

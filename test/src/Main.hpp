@@ -4,10 +4,10 @@
  *
  */
 
-#include "Util/PrintException.hxx"
+#include "util/PrintException.hxx"
 
 #if defined(ENABLE_CMDLINE) || defined(ENABLE_MAIN_WINDOW)
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 #endif
 
 #if defined(ENABLE_MAIN_WINDOW) && !defined(ENABLE_CMDLINE)
@@ -31,11 +31,10 @@
 #endif
 
 #ifdef ENABLE_MAIN_WINDOW
-#include "Screen/SingleWindow.hpp"
-#include "Form/ActionListener.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "UIGlobals.hpp"
-#include "Util/CharUtil.hxx"
-#include "Util/NumberParser.hpp"
+#include "util/CharUtil.hxx"
+#include "util/NumberParser.hpp"
 #define ENABLE_SCREEN
 #endif
 
@@ -57,8 +56,9 @@
 #endif
 
 #ifdef ENABLE_SCREEN
-#include "Screen/Init.hpp"
+#include "ui/window/Init.hpp"
 #include "Screen/Layout.hpp"
+#include "ui/dim/Size.hpp"
 #include "Fonts.hpp"
 #endif
 
@@ -116,7 +116,7 @@ UIGlobals::GetDialogLook()
 
 #ifdef ENABLE_MAIN_WINDOW
 
-class TestMainWindow : public SingleWindow, public ActionListener {
+class TestMainWindow : public UI::SingleWindow {
   Window *full_window;
 
 #ifdef ENABLE_CLOSE_BUTTON
@@ -139,15 +139,6 @@ public:
     full_window = &w;
   }
 
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case CLOSE:
-      Close();
-      break;
-    }
-  }
-
 protected:
   /* virtual methods from class Window */
   void OnCreate() override {
@@ -157,7 +148,7 @@ protected:
     close_button.Create(*this, *button_look, _T("Close"),
                         GetCloseButtonRect(GetClientRect()),
                         WindowStyle(),
-                        *this, CLOSE);
+                        [this](){ Close(); });
 #endif
   }
 
@@ -184,7 +175,7 @@ protected:
 
 static TestMainWindow main_window;
 
-SingleWindow &
+UI::SingleWindow &
 UIGlobals::GetMainWindow()
 {
   return main_window;
@@ -212,11 +203,11 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   if (a != nullptr && a[0] == '-' && IsDigitASCII(a[1])) {
     args.GetNext();
     char *p;
-    window_size.cx = ParseUnsigned(a + 1, &p);
+    window_size.width = ParseUnsigned(a + 1, &p);
     if (*p != 'x' && *p != 'X')
       args.UsageError();
     a = p;
-    window_size.cy = ParseUnsigned(a + 1, &p);
+    window_size.height = ParseUnsigned(a + 1, &p);
     if (*p != '\0')
       args.UsageError();
   }

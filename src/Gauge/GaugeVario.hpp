@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef GAUGE_VARIO_H
 #define GAUGE_VARIO_H
 
-#include "Screen/AntiFlickerWindow.hpp"
-#include "Screen/BulkPoint.hpp"
+#include "ui/window/AntiFlickerWindow.hpp"
+#include "ui/dim/BulkPoint.hpp"
 #include "Blackboard/FullBlackboard.hpp"
 #include "Math/Point2D.hpp"
 
@@ -75,7 +75,7 @@ class GaugeVario : public AntiFlickerWindow
   struct Geometry {
     unsigned nlength0, nlength1, nwidth, nline;
 
-    IntPoint2D offset;
+    PixelPoint offset;
 
     LabelValueGeometry average, gross, mc;
 

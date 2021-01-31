@@ -339,7 +339,8 @@ int jpc_bitstream_align(jpc_bitstream_t *bitstream)
 	} else if (bitstream->openmode_ & JPC_BITSTREAM_WRITE) {
 		ret = jpc_bitstream_outalign(bitstream, 0);
 	} else {
-		abort();
+		assert(false);
+		JAS_UNREACHABLE();
 	}
 	return ret;
 }

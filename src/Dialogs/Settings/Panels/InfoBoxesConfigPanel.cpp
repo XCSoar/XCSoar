@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,6 @@ Copyright_License {
 #include "Profile/Current.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Form/Button.hpp"
-#include "Form/ActionListener.hpp"
 #include "Interface.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
@@ -37,7 +36,7 @@ Copyright_License {
 #include "Look/Look.hpp"
 
 class InfoBoxesConfigPanel final
-  : public RowFormWidget, public ActionListener {
+  : public RowFormWidget {
 public:
   InfoBoxesConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
@@ -45,7 +44,7 @@ public:
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
   virtual bool Save(bool &changed) override;
-  void OnAction(int id) noexcept override;
+  void OnAction(int id) noexcept;
 };
 
 void
@@ -79,7 +78,7 @@ InfoBoxesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; i++) {
     const InfoBoxSettings::Panel &data = settings.panels[i];
 
-    AddButton(gettext(data.name), *this, i);
+    AddButton(gettext(data.name), [this, i](){ OnAction(i); });
     if (i>2)
       SetExpertRow(i);
   }
@@ -99,8 +98,8 @@ InfoBoxesConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateInfoBoxesConfigPanel()
 {
-  return new InfoBoxesConfigPanel();
+  return std::make_unique<InfoBoxesConfigPanel>();
 }

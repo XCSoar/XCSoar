@@ -16,8 +16,8 @@
 ***********************************************************************/
 
 #include "vlapihlp.h"
-#include "Util/Macros.hpp"
-#include "Util/StringStrip.hxx"
+#include "util/Macros.hpp"
+#include "util/StringStrip.hxx"
 
 #include <string.h>
 #include <stdio.h>

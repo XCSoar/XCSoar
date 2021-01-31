@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,12 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_CHART_RENDERER_HPP
 #define XCSOAR_CHART_RENDERER_HPP
 
-#include "Util/ReusableArray.hpp"
-#include "Screen/Point.hpp"
-#include "Screen/BulkPoint.hpp"
+#include "util/ReusableArray.hpp"
+#include "ui/dim/Rect.hpp"
+#include "ui/dim/BulkPoint.hpp"
 #include "Look/ChartLook.hpp"
 #include "Language/Language.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 #include <vector>

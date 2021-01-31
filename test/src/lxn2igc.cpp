@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,10 +24,10 @@ Copyright_License {
 /* Convert LXN files to IGC */
 
 #include "Device/Driver/LX/Convert.hpp"
-#include "OS/Args.hpp"
-#include "IO/BufferedOutputStream.hxx"
-#include "IO/StdioOutputStream.hxx"
-#include "Util/PrintException.hxx"
+#include "system/Args.hpp"
+#include "io/BufferedOutputStream.hxx"
+#include "io/StdioOutputStream.hxx"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>

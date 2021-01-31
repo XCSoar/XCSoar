@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ClimbPercentRenderer.hpp"
 #include "NMEA/CirclingInfo.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
 #include "Look/ClimbPercentLook.hpp"
@@ -66,5 +66,5 @@ ClimbPercentRenderer::Draw(const CirclingInfo& stats, Canvas &canvas,
   const Pen pen_f(Layout::ScalePenWidth(1), inverse ? COLOR_WHITE : COLOR_BLACK);
   canvas.Select(pen_f);
   canvas.SelectHollowBrush();
-  canvas.DrawCircle(center.x, center.y, radius);
+  canvas.DrawCircle(center, radius);
 }

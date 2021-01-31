@@ -91,7 +91,7 @@ static void jpc_mqdec_bytein(jpc_mqdec_t *mqdec);
 \******************************************************************************/
 
 /* Create a MQ decoder. */
-jpc_mqdec_t *jpc_mqdec_create(int maxctxs, jas_stream_t *in)
+jpc_mqdec_t *jpc_mqdec_create(unsigned maxctxs, jas_stream_t *in)
 {
 	jpc_mqdec_t *mqdec;
 
@@ -146,13 +146,13 @@ void jpc_mqdec_init(jpc_mqdec_t *mqdec)
 {
 	int c;
 
-	mqdec->eof = 0;
+	mqdec->eof = false;
 	mqdec->creg = 0;
 	/* Get the next byte from the input stream. */
 	if ((c = jas_stream_getc(mqdec->in)) == EOF) {
 		/* We have encountered an I/O error or EOF. */
 		c = 0xff;
-		mqdec->eof = 1;
+		mqdec->eof = true;
 	}
 	mqdec->inbuffer = c;
 	mqdec->creg += mqdec->inbuffer << 16;
@@ -171,32 +171,22 @@ void jpc_mqdec_setinput(jpc_mqdec_t *mqdec, jas_stream_t *in)
 
 /* Initialize one or more contexts. */
 
-void jpc_mqdec_setctxs(const jpc_mqdec_t *mqdec, int numctxs, const jpc_mqctx_t *ctxs)
+void jpc_mqdec_setctxs(const jpc_mqdec_t *mqdec, unsigned numctxs, const jpc_mqctx_t *ctxs)
 {
 	const jpc_mqstate_t **ctx;
-	int n;
 
 	ctx = mqdec->ctxs;
-	n = JAS_MIN(mqdec->maxctxs, numctxs);
-	while (--n >= 0) {
+	unsigned n = JAS_MIN(mqdec->maxctxs, numctxs);
+	while (n-- > 0) {
 		*ctx = &jpc_mqstates[2 * ctxs->ind + ctxs->mps];
 		++ctx;
 		++ctxs;
 	}
 	n = mqdec->maxctxs - numctxs;
-	while (--n >= 0) {
+	while (n-- > 0) {
 		*ctx = &jpc_mqstates[0];
 		++ctx;
 	}
-}
-
-/* Initialize a context. */
-
-void jpc_mqdec_setctx(jpc_mqdec_t *mqdec, int ctxno, const jpc_mqctx_t *ctx)
-{
-	const jpc_mqstate_t **ctxi;
-	ctxi = &mqdec->ctxs[ctxno];
-	*ctxi = &jpc_mqstates[2 * ctx->ind + ctx->mps];
 }
 
 /******************************************************************************\
@@ -205,9 +195,9 @@ void jpc_mqdec_setctx(jpc_mqdec_t *mqdec, int ctxno, const jpc_mqctx_t *ctx)
 
 /* Decode a bit. */
 
-int jpc_mqdec_getbit_func(register jpc_mqdec_t *mqdec)
+bool jpc_mqdec_getbit_func(register jpc_mqdec_t *mqdec)
 {
-	int bit;
+	bool bit;
 	JAS_DBGLOG(100, ("jpc_mqdec_getbit_func(%p)\n", mqdec));
 	bit = jpc_mqdec_getbit_macro(mqdec);
 	JAS_DBGLOG(100, ("ctx = %d, decoded %d\n", mqdec->curctx -
@@ -215,25 +205,33 @@ int jpc_mqdec_getbit_func(register jpc_mqdec_t *mqdec)
 	return bit;
 }
 
-/* Apply MPS_EXCHANGE algorithm (with RENORMD). */
-int jpc_mqdec_mpsexchrenormd(register jpc_mqdec_t *mqdec)
+static void jpc_mqdec_renormd(jpc_mqdec_t *mqdec)
 {
-	int ret;
+	do {
+		if (!mqdec->ctreg)
+			jpc_mqdec_bytein(mqdec);
+
+		mqdec->areg <<= 1;
+		mqdec->creg <<= 1;
+		--mqdec->ctreg;
+	} while (!(mqdec->areg & 0x8000));
+}
+
+/* Apply MPS_EXCHANGE algorithm (with RENORMD). */
+bool jpc_mqdec_mpsexchrenormd(register jpc_mqdec_t *mqdec)
+{
 	register const jpc_mqstate_t *state = *mqdec->curctx;
-	jpc_mqdec_mpsexchange(mqdec->areg, state->qeval, mqdec->curctx, ret);
-	jpc_mqdec_renormd(mqdec->areg, mqdec->creg, mqdec->ctreg, mqdec->in,
-	  mqdec->eof, mqdec->inbuffer);
+	bool ret = jpc_mqdec_mpsexchange(mqdec->areg, state->qeval, mqdec->curctx);
+	jpc_mqdec_renormd(mqdec);
 	return ret;
 }
 
 /* Apply LPS_EXCHANGE algorithm (with RENORMD). */
-int jpc_mqdec_lpsexchrenormd(register jpc_mqdec_t *mqdec)
+bool jpc_mqdec_lpsexchrenormd(register jpc_mqdec_t *mqdec)
 {
-	int ret;
 	register const jpc_mqstate_t *state = *mqdec->curctx;
-	jpc_mqdec_lpsexchange(mqdec->areg, state->qeval, mqdec->curctx, ret);
-	jpc_mqdec_renormd(mqdec->areg, mqdec->creg, mqdec->ctreg, mqdec->in,
-	  mqdec->eof, mqdec->inbuffer);
+	bool ret = jpc_mqdec_lpsexchange(&mqdec->areg, state->qeval, mqdec->curctx);
+	jpc_mqdec_renormd(mqdec);
 	return ret;
 }
 
@@ -249,7 +247,7 @@ static void jpc_mqdec_bytein(jpc_mqdec_t *mqdec)
 
 	if (!mqdec->eof) {
 		if ((c = jas_stream_getc(mqdec->in)) == EOF) {
-			mqdec->eof = 1;
+			mqdec->eof = true;
 			c = 0xff;
 		}
 		prevbuf = mqdec->inbuffer;

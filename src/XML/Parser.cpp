@@ -28,11 +28,11 @@
 
 #include "Parser.hpp"
 #include "Node.hpp"
-#include "Util/CharUtil.hxx"
-#include "Util/StringAPI.hxx"
-#include "Util/StringStrip.hxx"
-#include "Util/NumberParser.hpp"
-#include "IO/FileLineReader.hpp"
+#include "util/CharUtil.hxx"
+#include "util/StringAPI.hxx"
+#include "util/StringStrip.hxx"
+#include "util/NumberParser.hpp"
+#include "io/FileLineReader.hpp"
 
 #include <stdexcept>
 

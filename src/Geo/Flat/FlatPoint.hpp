@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 #define FLATPOINT_HPP
 
 #include "Math/Point2D.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 class Angle;
 
@@ -32,21 +32,8 @@ class Angle;
  */
 struct FlatPoint : DoublePoint2D
 {
-  /**
-   * Non-initialising default constructor.
-   */
   FlatPoint() = default;
-
-  /**
-   * Constructor given known location
-   *
-   * @param _x X position
-   * @param _y Y position
-   *
-   * @return Initialised object
-   */
-  constexpr
-  FlatPoint(const double _x, const double _y):DoublePoint2D(_x, _y) {}
+  using DoublePoint2D::DoublePoint2D;
 
   /**
    * Calculate cross product of two points

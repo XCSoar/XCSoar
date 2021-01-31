@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,7 +29,9 @@
 #include "Task/Points/ScoredTaskPoint.hpp"
 #include "Task/ObservationZones/ObservationZoneClient.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
+
+#include <memory>
 
 struct TaskBehaviour;
 struct OrderedTaskSettings;
@@ -102,10 +104,9 @@ public:
    * @param ordered_task_settings Ordered task behaviour of clone
    * @param waypoint Waypoint to shift to (or NULL)
    */
-  gcc_malloc
-  OrderedTaskPoint *Clone(const TaskBehaviour &task_behaviour,
-                          const OrderedTaskSettings &ordered_task_settings,
-                          WaypointPtr &&waypoint=WaypointPtr()) const;
+  std::unique_ptr<OrderedTaskPoint> Clone(const TaskBehaviour &task_behaviour,
+                                          const OrderedTaskSettings &ordered_task_settings,
+                                          WaypointPtr &&waypoint=WaypointPtr()) const;
 
   /**
    * Update observation zone geometry (or other internal data) when

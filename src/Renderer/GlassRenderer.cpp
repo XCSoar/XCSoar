@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,13 +22,13 @@ Copyright_License {
 */
 
 #include "GlassRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 #if defined(EYE_CANDY) && defined(ENABLE_OPENGL)
 
-#include "Screen/OpenGL/Scissor.hpp"
-#include "Screen/OpenGL/VertexPointer.hpp"
-#include "Util/Macros.hpp"
+#include "ui/canvas/opengl/Scissor.hpp"
+#include "ui/canvas/opengl/VertexPointer.hpp"
+#include "util/Macros.hpp"
 
 #include <algorithm>
 
@@ -52,10 +52,10 @@ DrawGlassBackground(Canvas &canvas, const PixelRect &rc, Color color)
   const int size = std::min(rc.GetWidth(), rc.GetHeight()) / 4;
 
   const BulkPixelPoint vertices[] = {
-    { center.x + 1024, center.y - 1024 },
-    { center.x + 1024 + size, center.y - 1024 + size },
-    { center.x - 1024, center.y + 1024 },
-    { center.x - 1024 + size, center.y + 1024 + size },
+    center.At(1024, -1024),
+    center.At(1024 + size, -1024 + size),
+    center.At(-1024, 1024),
+    center.At(-1024 + size, 1024 + size),
   };
 
   const ScopeVertexPointer vp(vertices);

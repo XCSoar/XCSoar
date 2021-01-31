@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_MAP2_HPP
 #define XCSOAR_PROFILE_MAP2_HPP
 
-#include "Util/StringBuffer.hxx"
-#include "Util/Compiler.h"
+#include "util/StringBuffer.hxx"
+#include "util/Compiler.h"
 
 #include <map>
 #include <string>
@@ -38,7 +38,7 @@ class RGB8Color;
 class Path;
 class AllocatedPath;
 template<typename T> class StringPointer;
-template<typename T> class AllocatedString;
+template<typename T> class BasicAllocatedString;
 
 class ProfileMap : public std::map<std::string, std::string> {
   bool modified;
@@ -153,7 +153,7 @@ public:
    * Gets a path from the profile and return its base name only.
    */
 #ifdef _UNICODE
-  AllocatedString<TCHAR> GetPathBase(const char *key) const;
+  BasicAllocatedString<TCHAR> GetPathBase(const char *key) const;
 #else
   gcc_pure
   StringPointer<TCHAR> GetPathBase(const char *key) const;

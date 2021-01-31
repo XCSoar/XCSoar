@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TASK_MAP_BUTTON_RENDERER_HPP
 
 #include "Renderer/ButtonRenderer.hpp"
-#include "Screen/BufferCanvas.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 
 struct MapLook;
 class OrderedTask;
@@ -58,7 +58,7 @@ public:
                   bool enabled, bool focused, bool pressed) const override;
 
   void InvalidateBuffer() {
-    size.cx = 0;
+    size.width = 0;
   }
 
 private:

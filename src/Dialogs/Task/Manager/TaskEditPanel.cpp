@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Interface.hpp"
 #include "Form/Button.hpp"
@@ -46,20 +46,13 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
-#include "Util/Macros.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/Macros.hpp"
+#include "util/StringCompare.hxx"
 #include "UIGlobals.hpp"
 
 #include <cassert>
 
-enum Buttons {
-  EDIT = 100,
-  MUTATE,
-  DOWN,
-  UP,
-  REVERSE,
-  CLEAR_ALL,
-};
+class TaskEditPanel;
 
 /**
  * The bottom panel showing four buttons.  Internally, there are five
@@ -67,7 +60,7 @@ enum Buttons {
  * exclusive.
  */
 class TaskEditButtons final : public NullWidget {
-  ActionListener *listener;
+  TaskEditPanel *edit_panel;
 
   Button edit_button, mutate_button;
   Button down_button, up_button;
@@ -85,10 +78,10 @@ public:
     :visible(false), show_edit(false), show_mutate(false),
      show_down(false), show_up(false), show_reverse(false) {}
 
-  void SetListener(ActionListener &_listener) {
+  void SetEditPanel(TaskEditPanel &_edit_panel) noexcept {
     assert(!visible);
 
-    listener = &_listener;
+    edit_panel = &_edit_panel;
   }
 
   void Update(bool _edit, bool _mutate, bool _down, bool _up, bool _reverse) {
@@ -151,35 +144,7 @@ public:
         ::Layout::GetMaximumControlHeight() };
   }
 
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
-    assert(!visible);
-
-    WindowStyle style;
-    style.Hide();
-    style.TabStop();
-
-    const ButtonLook &look = UIGlobals::GetDialogLook().button;
-
-    const Layout layout = CalculateLayout(rc);
-    edit_button.Create(parent, look, _("Edit Point"),
-                       layout.edit, style,
-                       *listener, EDIT);
-    mutate_button.Create(parent, look, _("Make Finish"),
-                         layout.down, style,
-                         *listener, MUTATE);
-    down_button.Create(parent, layout.down, style,
-                       new SymbolButtonRenderer(look, _T("v")),
-                       *listener, DOWN);
-    up_button.Create(parent, layout.down, style,
-                     new SymbolButtonRenderer(look, _T("^")),
-                     *listener, UP);
-    reverse_button.Create(parent, look, _("Reverse"),
-                          layout.reverse, style,
-                          *listener, REVERSE);
-    clear_all_button.Create(parent, look, _("Clear All"),
-                            layout.clear_all, style,
-                            *listener, CLEAR_ALL);
-  }
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
   void Show(const PixelRect &rc) override {
     assert(!visible);
@@ -207,13 +172,14 @@ public:
 };
 
 class TaskEditPanel
-  : public ListWidget, public ActionListener {
+  : public ListWidget {
   TaskManagerDialog &dialog;
 
   const TaskLook &task_look;
   const AirspaceLook &airspace_look;
 
-  OrderedTask **ordered_task_pointer, *ordered_task;
+  std::unique_ptr<OrderedTask> &ordered_task_pointer;
+  OrderedTask *ordered_task;
   bool *task_modified;
 
   TextWidget &summary;
@@ -226,7 +192,7 @@ class TaskEditPanel
 public:
   TaskEditPanel(TaskManagerDialog &_dialog,
                 const TaskLook &_task_look, const AirspaceLook &_airspace_look,
-                OrderedTask **_active_task, bool *_task_modified,
+                std::unique_ptr<OrderedTask> &_active_task, bool *_task_modified,
                 TextWidget &_summary, TaskEditButtons &_buttons)
     :dialog(_dialog),
      task_look(_task_look), airspace_look(_airspace_look),
@@ -251,10 +217,6 @@ public:
   /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
-  void Unprepare() override {
-    DeleteWindow();
-  }
-
   void ReClick() override;
   void Show(const PixelRect &rc) override;
 
@@ -262,9 +224,6 @@ protected:
   void RefreshView();
 
 private:
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
-
   /* virtual methods from List::Handler */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) noexcept override;
@@ -363,36 +322,6 @@ TaskEditPanel::OnClearAllClicked()
 }
 
 void
-TaskEditPanel::OnAction(int id) noexcept
-{
-  switch (id) {
-  case EDIT:
-    OnEditTurnpointClicked();
-    break;
-
-  case MUTATE:
-    OnMakeFinish();
-    break;
-
-  case UP:
-    MoveUp();
-    break;
-
-  case DOWN:
-    MoveDown();
-    break;
-
-  case REVERSE:
-    ReverseTask();
-    break;
-
-  case CLEAR_ALL:
-    OnClearAllClicked();
-    break;
-  }
-}
-
-void
 TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned DrawListIndex) noexcept
 {
@@ -473,7 +402,6 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
     }
   } else if (!ordered_task->IsFull()) {
 
-    OrderedTaskPoint* point = nullptr;
     AbstractTaskFactory &factory = ordered_task->GetFactory();
     auto way_point =
       ShowWaypointListDialog(ordered_task->TaskSize() > 0
@@ -483,11 +411,9 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
     if (!way_point)
       return;
 
-    if (ItemIndex == 0) {
-      point = factory.CreateStart(std::move(way_point));
-    } else {
-      point = factory.CreateIntermediate(std::move(way_point));
-     }
+    auto point = ItemIndex == 0
+      ? (std::unique_ptr<OrderedTaskPoint>)factory.CreateStart(std::move(way_point))
+      : (std::unique_ptr<OrderedTaskPoint>)factory.CreateIntermediate(std::move(way_point));
     if (point == nullptr)
       return;
 
@@ -497,8 +423,6 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
       ordered_task->UpdateGeometry();
       RefreshView();
     }
-
-    delete point;
   }
 }
 
@@ -569,7 +493,7 @@ TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              row_renderer.CalculateLayout(*look.list.font_bold,
                                           look.small_font));
 
-  ordered_task = *ordered_task_pointer;
+  ordered_task = ordered_task_pointer.get();
 }
 
 void
@@ -581,8 +505,8 @@ TaskEditPanel::ReClick()
 void
 TaskEditPanel::Show(const PixelRect &rc)
 {
-  if (ordered_task != *ordered_task_pointer) {
-    ordered_task = *ordered_task_pointer;
+  if (ordered_task != ordered_task_pointer.get()) {
+    ordered_task = ordered_task_pointer.get();
     GetList().SetCursorIndex(0);
   }
 
@@ -591,20 +515,53 @@ TaskEditPanel::Show(const PixelRect &rc)
   ListWidget::Show(rc);
 }
 
-Widget *
+void
+TaskEditButtons::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  assert(!visible);
+
+  WindowStyle style;
+  style.Hide();
+  style.TabStop();
+
+  const ButtonLook &look = UIGlobals::GetDialogLook().button;
+
+  const Layout layout = CalculateLayout(rc);
+  edit_button.Create(parent, look, _("Edit Point"),
+                     layout.edit, style,
+                     [this](){ edit_panel->OnEditTurnpointClicked(); });
+  mutate_button.Create(parent, look, _("Make Finish"),
+                       layout.down, style,
+                       [this](){ edit_panel->OnMakeFinish(); });
+  down_button.Create(parent, layout.down, style,
+                     std::make_unique<SymbolButtonRenderer>(look, _T("v")),
+                     [this](){ edit_panel->MoveDown(); });
+  up_button.Create(parent, layout.down, style,
+                   std::make_unique<SymbolButtonRenderer>(look, _T("^")),
+                   [this](){ edit_panel->MoveUp(); });
+  reverse_button.Create(parent, look, _("Reverse"),
+                        layout.reverse, style,
+                        [this](){ edit_panel->ReverseTask(); });
+  clear_all_button.Create(parent, look, _("Clear All"),
+                          layout.clear_all, style,
+                          [this](){ edit_panel->OnClearAllClicked(); });
+}
+
+std::unique_ptr<Widget>
 CreateTaskEditPanel(TaskManagerDialog &dialog,
                     const TaskLook &task_look,
                     const AirspaceLook &airspace_look,
-                    OrderedTask **active_task, bool *task_modified)
+                    std::unique_ptr<OrderedTask> &active_task,
+                    bool *task_modified) noexcept
 {
-  TaskEditButtons *buttons = new TaskEditButtons();
-  TextWidget *summary = new TextWidget();
-  TaskEditPanel *widget = new TaskEditPanel(dialog, task_look, airspace_look,
-                                            active_task, task_modified,
-                                            *summary, *buttons);
-  buttons->SetListener(*widget);
-  TwoWidgets *tw1 = new TwoWidgets(widget, summary);
-  widget->SetTwoWidgets(*tw1);
-  TwoWidgets *tw2 = new TwoWidgets(tw1, buttons);
-  return tw2;
+  auto buttons = std::make_unique<TaskEditButtons>();
+  auto summary = std::make_unique<TextWidget>();
+  auto widget = std::make_unique<TaskEditPanel>(dialog, task_look, airspace_look,
+                                                active_task, task_modified,
+                                                *summary, *buttons);
+  buttons->SetEditPanel(*widget);
+  auto tw1 = std::make_unique<TwoWidgets>(std::move(widget),
+                                          std::move(summary));
+  ((TaskEditPanel &)tw1->GetFirst()).SetTwoWidgets(*tw1);
+  return std::make_unique<TwoWidgets>(std::move(tw1), std::move(buttons));
 }

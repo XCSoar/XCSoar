@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@ Copyright_License {
 #include "WindowWidget.hpp"
 
 #include <functional>
+#include <memory>
 
 class WindowStyle;
 
@@ -35,9 +36,9 @@ class WindowStyle;
  * Prepare() and deletes the Window in Unprepare().
  */
 class CreateWindowWidget final : public WindowWidget {
-  typedef std::function<Window *(ContainerWindow &parent,
-                                 const PixelRect &rc,
-                                 WindowStyle style)> CreateFunction;
+  typedef std::function<std::unique_ptr<Window>(ContainerWindow &parent,
+                                                const PixelRect &rc,
+                                                WindowStyle style)> CreateFunction;
 
   CreateFunction create;
 
@@ -47,7 +48,6 @@ public:
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
 };
 
 #endif

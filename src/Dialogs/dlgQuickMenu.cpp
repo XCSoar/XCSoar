@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,14 +31,15 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Input/InputEvents.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Canvas.hpp"
-#include "Event/KeyCode.hpp"
-#include "Util/StaticArray.hxx"
-#include "Util/StaticString.hxx"
-#include "Util/Macros.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/event/KeyCode.hpp"
+#include "util/StaticString.hxx"
+#include "util/Macros.hpp"
 #include "Menu/ButtonLabel.hpp"
 #include "Menu/MenuData.hpp"
 #include "UIGlobals.hpp"
+
+#include <boost/container/static_vector.hpp>
 
 #include <stdio.h>
 
@@ -68,7 +69,7 @@ public:
 unsigned
 QuickMenuButtonRenderer::GetMinimumButtonWidth() const
 {
-  return 2 * Layout::GetTextPadding() + look.button.font->TextSize(caption).cx;
+  return 2 * Layout::GetTextPadding() + look.button.font->TextSize(caption).width;
 }
 
 void
@@ -97,13 +98,11 @@ QuickMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
   text_renderer.Draw(canvas, rc, caption);
 }
 
-class QuickMenu final : public WindowWidget, ActionListener {
+class QuickMenu final : public WindowWidget {
   WndForm &dialog;
   const Menu &menu;
 
-  GridView grid_view;
-
-  StaticArray<Window *, GridView::MAX_ITEMS> buttons;
+  boost::container::static_vector<Button, GridView::MAX_ITEMS> buttons;
 
 public:
   unsigned clicked_event;
@@ -111,18 +110,17 @@ public:
   QuickMenu(WndForm &_dialog, const Menu &_menu)
     :dialog(_dialog), menu(_menu) {}
 
+  auto &GetWindow() noexcept {
+    return (GridView &)WindowWidget::GetWindow();
+  }
+
   void UpdateCaption();
 
 protected:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
   bool SetFocus() override;
   bool KeyPress(unsigned key_code) override;
-
-private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -140,15 +138,15 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
     std::max(2 * (Layout::GetTextPadding() + font.GetHeight()),
              Layout::GetMaximumControlHeight());
 
-  grid_view.Create(parent, dialog_look, rc, grid_view_style,
-                   column_width, row_height);
-  SetWindow(&grid_view);
+  auto grid_view = std::make_unique<GridView>();
+  grid_view->Create(parent, dialog_look, rc, grid_view_style,
+                    column_width, row_height);
 
   WindowStyle buttonStyle;
   buttonStyle.TabStop();
 
   for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
-    if (buttons.full())
+    if (buttons.size() >= buttons.max_size())
       continue;
 
     const auto &menuItem = menu[i];
@@ -166,32 +164,30 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
     button_rc.top = 0;
     button_rc.right = 80;
     button_rc.bottom = 30;
-    auto *button = new Button(grid_view, button_rc, buttonStyle,
-                              new QuickMenuButtonRenderer(dialog_look,
-                                                          expanded.text),
-                              *this, menuItem.event);
-    button->SetEnabled(expanded.enabled);
 
-    buttons.append(button);
-    grid_view.AddItem(*button);
+    auto &button = buttons.emplace_back(*grid_view, button_rc, buttonStyle,
+                                        std::make_unique<QuickMenuButtonRenderer>(dialog_look,
+                                                                                  expanded.text),
+                                        [this, &menuItem](){
+                                          clicked_event = menuItem.event;
+                                          dialog.SetModalResult(mrOK);
+                                        });
+    button.SetEnabled(expanded.enabled);
+
+    grid_view->AddItem(button);
   }
 
-  grid_view.RefreshLayout();
+  grid_view->RefreshLayout();
+  SetWindow(std::move(grid_view));
   UpdateCaption();
-}
-
-void
-QuickMenu::Unprepare()
-{
-  for (auto *button : buttons)
-    delete button;
 }
 
 void
 QuickMenu::UpdateCaption()
 {
+  auto &grid_view = GetWindow();
   StaticString<32> buffer;
-  unsigned pageSize = grid_view.GetNumColumns() * grid_view.GetNumRows();
+  unsigned pageSize = GetWindow().GetNumColumns() * grid_view.GetNumRows();
   unsigned lastPage = buttons.size() / pageSize;
   buffer.Format(_T("Quick Menu  %d/%d"),
                 grid_view.GetCurrentPage() + 1, lastPage + 1);
@@ -201,6 +197,7 @@ QuickMenu::UpdateCaption()
 bool
 QuickMenu::SetFocus()
 {
+  auto &grid_view = GetWindow();
   unsigned numColumns = grid_view.GetNumColumns();
   unsigned pageSize = numColumns * grid_view.GetNumRows();
   unsigned lastPage = buttons.size() / pageSize;
@@ -218,7 +215,7 @@ QuickMenu::SetFocus()
   if (centerPos >= buttons.size())
     return false;
 
-  buttons[centerPos]->SetFocus();
+  buttons[centerPos].SetFocus();
   grid_view.RefreshLayout();
   return true;
 }
@@ -226,6 +223,8 @@ QuickMenu::SetFocus()
 bool
 QuickMenu::KeyPress(unsigned key_code)
 {
+  auto &grid_view = GetWindow();
+
   switch (key_code) {
   case KEY_LEFT:
     grid_view.MoveFocus(GridView::Direction::LEFT);
@@ -256,31 +255,30 @@ QuickMenu::KeyPress(unsigned key_code)
   return true;
 }
 
-void
-QuickMenu::OnAction(int id) noexcept
+static int
+ShowQuickMenu(UI::SingleWindow &parent, const Menu &menu) noexcept
 {
-  clicked_event = id;
-  dialog.SetModalResult(mrOK);
+  const auto &dialog_look = UIGlobals::GetDialogLook();
+
+  TWidgetDialog<QuickMenu> dialog(WidgetDialog::Full{},
+                                  UIGlobals::GetMainWindow(),
+                                  dialog_look, nullptr);
+
+  dialog.SetWidget(dialog, menu);
+  if (dialog.ShowModal() != mrOK)
+    return -1;
+
+  return dialog.GetWidget().clicked_event;
 }
 
 void
-dlgQuickMenuShowModal(SingleWindow &parent)
+dlgQuickMenuShowModal(UI::SingleWindow &parent)
 {
   const auto *menu = InputEvents::GetMenu(_T("RemoteStick"));
   if (menu == nullptr)
     return;
 
-  const auto &dialog_look = UIGlobals::GetDialogLook();
-
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      dialog_look, nullptr);
-  QuickMenu quick_menu(dialog, *menu);
-
-  dialog.FinishPreliminary(&quick_menu);
-
-  const auto result = dialog.ShowModal();
-  dialog.StealWidget();
-
-  if (result == mrOK)
-    InputEvents::ProcessEvent(quick_menu.clicked_event);
+  const int event = ShowQuickMenu(parent, *menu);
+  if (event >= 0)
+    InputEvents::ProcessEvent(event);
 }

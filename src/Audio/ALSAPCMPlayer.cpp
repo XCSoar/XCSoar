@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,23 +22,20 @@ Copyright_License {
 */
 
 #include "ALSAPCMPlayer.hpp"
-
 #include "ALSAEnv.hpp"
 #include "PCMDataSource.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
+#include "event/Call.hxx"
 #include "LogFile.hpp"
 
-#include "IO/Async/AsioUtil.hpp"
-
 #include <alsa/asoundlib.h>
-
 
 static void alsa_error_handler_stub(const char *, int, const char *,
                                     int, const char *, ...) {}
 
 
-ALSAPCMPlayer::ALSAPCMPlayer(boost::asio::io_context &_io_context) :
-  io_context(_io_context)
+ALSAPCMPlayer::ALSAPCMPlayer(EventLoop &_event_loop) noexcept
+  :event_loop(_event_loop)
 {
   snd_lib_error_set_handler(alsa_error_handler_stub);
 }
@@ -116,43 +113,9 @@ ALSAPCMPlayer::WriteFrames(snd_pcm_t &alsa_handle, int16_t *buffer,
 }
 
 void
-ALSAPCMPlayer::StartEventHandling()
-{
-  if (!poll_descs_registered) {
-    for (auto &fd : read_poll_descs) {
-      fd.async_read_some(boost::asio::null_buffers(),
-                          std::bind(&ALSAPCMPlayer::OnReadEvent,
-                                    this,
-                                    std::ref(fd),
-                                    std::placeholders::_1));
-    }
-
-    for (auto &fd : write_poll_descs) {
-      fd.async_write_some(boost::asio::null_buffers(),
-                          std::bind(&ALSAPCMPlayer::OnWriteEvent,
-                                    this,
-                                    std::ref(fd),
-                                    std::placeholders::_1));
-    }
-
-    poll_descs_registered = true;
-  }
-}
-
-void
 ALSAPCMPlayer::StopEventHandling()
 {
-  if (poll_descs_registered) {
-    for (auto &sd : read_poll_descs) {
-      sd.cancel();
-    }
-
-    for (auto &sd : write_poll_descs) {
-      sd.cancel();
-    }
-
-    poll_descs_registered = false;
-  }
+  poll_events.clear();
 }
 
 bool
@@ -180,34 +143,9 @@ ALSAPCMPlayer::OnEvent()
 }
 
 void
-ALSAPCMPlayer::OnReadEvent(boost::asio::posix::stream_descriptor &fd,
-                       const boost::system::error_code &ec) {
-  if (ec == boost::asio::error::operation_aborted)
-    return;
-
-  if (OnEvent())
-    fd.async_read_some(boost::asio::null_buffers(),
-                       std::bind(&ALSAPCMPlayer::OnReadEvent,
-                                 this,
-                                 std::ref(fd),
-                                 std::placeholders::_1));
-  else
-    StopEventHandling();
-}
-
-void
-ALSAPCMPlayer::OnWriteEvent(boost::asio::posix::stream_descriptor &fd,
-                        const boost::system::error_code &ec) {
-  if (ec == boost::asio::error::operation_aborted)
-    return;
-
-  if (OnEvent())
-    fd.async_write_some(boost::asio::null_buffers(),
-                        std::bind(&ALSAPCMPlayer::OnWriteEvent,
-                                  this,
-                                  std::ref(fd),
-                                  std::placeholders::_1));
-  else
+ALSAPCMPlayer::OnSocketReady(unsigned) noexcept
+{
+  if (!OnEvent())
     StopEventHandling();
 }
 
@@ -487,7 +425,7 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
       (source->GetSampleRate() == new_sample_rate)) {
     /* just change the source / resume playback */
     bool success = false;
-    DispatchWait(io_context, [this, &_source, &success]() {
+    BlockingCall(event_loop, [this, &_source, &success]() {
       bool recovered_from_underrun = false;
 
       switch (snd_pcm_state(alsa_handle.get())) {
@@ -519,9 +457,6 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
             return;
           }
         }
-
-        if (success)
-          StartEventHandling();
       }
     });
     if (success)
@@ -569,8 +504,6 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
   buffer_size = static_cast<snd_pcm_uframes_t>(n_available * channels);
   buffer = std::unique_ptr<int16_t[]>(new int16_t[buffer_size]);
 
-  /* Why does Boost.Asio make it so hard to register a set of of standard
-     poll() descriptors (struct pollfd)? */
   int poll_fds_count = snd_pcm_poll_descriptors_count(new_alsa_handle.get());
   if (poll_fds_count < 1) {
     LogFormat("snd_pcm_poll_descriptors_count(0x%p) returned %d",
@@ -581,22 +514,9 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
 
   std::unique_ptr<struct pollfd[]> poll_fds(
       new struct pollfd[poll_fds_count]);
-  BOOST_VERIFY(
-      poll_fds_count ==
-          snd_pcm_poll_descriptors(new_alsa_handle.get(),
-                                   poll_fds.get(),
-                                   static_cast<unsigned>(poll_fds_count)));
-
-  for (int i = 0; i < poll_fds_count; ++i) {
-    if ((poll_fds[i].events & POLLIN) || (poll_fds[i].events & POLLPRI)) {
-      read_poll_descs.emplace_back(
-          boost::asio::posix::stream_descriptor(io_context, poll_fds[i].fd));
-    }
-    if (poll_fds[i].events & POLLOUT) {
-      write_poll_descs.emplace_back(
-          boost::asio::posix::stream_descriptor(io_context, poll_fds[i].fd));
-    }
-  }
+  snd_pcm_poll_descriptors(new_alsa_handle.get(),
+                           poll_fds.get(),
+                           static_cast<unsigned>(poll_fds_count));
 
   source = &_source;
   size_t n_read = FillPCMBuffer(buffer.get(), static_cast<size_t>(n_available));
@@ -613,7 +533,13 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
 
   alsa_handle = std::move(new_alsa_handle);
 
-  StartEventHandling();
+  BlockingCall(event_loop, [this, poll_fds_count, &poll_fds](){
+    for (int i = 0; i < poll_fds_count; ++i) {
+      poll_events.emplace_front(event_loop, BIND_THIS_METHOD(OnSocketReady),
+                                SocketDescriptor(poll_fds[i].fd));
+      poll_events.front().Schedule(poll_fds[i].events);
+    }
+  });
 
   return true;
 }
@@ -621,19 +547,14 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
 void
 ALSAPCMPlayer::Stop()
 {
-  if ((nullptr != alsa_handle) || poll_descs_registered) {
-    DispatchWait(io_context, [&]() {
-      StopEventHandling();
+  BlockingCall(event_loop, [&]() {
+    StopEventHandling();
 
-      if (nullptr != alsa_handle) {
-        BOOST_VERIFY(0 == snd_pcm_drop(alsa_handle.get()));
-        alsa_handle.reset();
-      }
-    });
-  }
-
-  read_poll_descs.clear();
-  write_poll_descs.clear();
+    if (nullptr != alsa_handle) {
+      snd_pcm_drop(alsa_handle.get());
+      alsa_handle.reset();
+    }
+  });
 
   source = nullptr;
 }

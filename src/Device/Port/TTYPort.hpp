@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,8 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_TTY_PORT_HPP
 
 #include "BufferedPort.hpp"
-
-#include <boost/asio/serial_port.hpp>
+#include "event/SocketEvent.hxx"
 
 #include <atomic>
 
@@ -37,7 +36,7 @@ Copyright_License {
  */
 class TTYPort : public BufferedPort
 {
-  boost::asio::serial_port serial_port;
+  SocketEvent socket;
 
   std::atomic<bool> valid;
 
@@ -48,15 +47,20 @@ public:
    * @param _handler the callback object for input received on the
    * port
    */
-  TTYPort(boost::asio::io_context &io_context,
+  TTYPort(EventLoop &event_loop,
           PortListener *_listener, DataHandler &_handler);
   virtual ~TTYPort();
 
+  auto &GetEventLoop() const noexcept {
+    return socket.GetEventLoop();
+  }
+
   /**
    * Opens the serial port
-   * @return True on success, False on failure
+   *
+   * Throws on error.
    */
-  bool Open(const TCHAR *path, unsigned baud_rate);
+  void Open(const TCHAR *path, unsigned baud_rate);
 
   /**
    * Opens this object with a new pseudo-terminal.  This is only used
@@ -77,13 +81,7 @@ public:
   virtual size_t Write(const void *data, size_t length) override;
 
 private:
-  void OnReadReady(const boost::system::error_code &ec);
-
-  void AsyncRead() {
-    serial_port.async_read_some(boost::asio::null_buffers(),
-                                std::bind(&TTYPort::OnReadReady, this,
-                                          std::placeholders::_1));
-  }
+  void OnSocketReady(unsigned events) noexcept;
 };
 
 #endif

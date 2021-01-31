@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,11 +23,13 @@ Copyright_License {
 
 #include "ProgressDialog.hpp"
 #include "Look/DialogLook.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 
 #include <cassert>
+
+using namespace UI;
 
 ProgressDialog::ProgressDialog(SingleWindow &parent,
                                const DialogLook &dialog_look,
@@ -53,17 +55,17 @@ ProgressDialog::AddCancelButton(std::function<void()> &&callback)
 
   cancel_button.Create(client_area, GetLook().button,
                        _("Cancel"), rc, style,
-                       *this, mrCancel);
+                       [this](){ SetModalResult(mrCancel); });
   cancel_button.BringToTop();
 
   cancel_callback = std::move(callback);
 }
 
 void
-ProgressDialog::OnAction(int id) noexcept
+ProgressDialog::SetModalResult(int id) noexcept
 {
   if (id == mrCancel && cancel_callback)
     cancel_callback();
   else
-    WndForm::OnAction(id);
+    WndForm::SetModalResult(id);
 }

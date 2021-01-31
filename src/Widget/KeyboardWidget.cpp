@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "KeyboardWidget.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/StringCompare.hxx"
-#include "Util/CharUtil.hxx"
+#include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
+#include "util/CharUtil.hxx"
 #include "Screen/Layout.hpp"
 
 #include <cassert>
@@ -55,8 +55,8 @@ KeyboardWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     WindowStyle style;
     style.Hide();
     shift_button.Create(parent, { 0, 0, 16, 16 }, style,
-                        new SymbolButtonRenderer(look, _T("v")),
-                        *this, SHIFT);
+                        std::make_unique<SymbolButtonRenderer>(look, _T("v")),
+                        [this](){ OnShiftClicked(); });
   }
   UpdateShiftState();
 }
@@ -203,8 +203,8 @@ void
 KeyboardWidget::PrepareSize(const PixelRect &rc)
 {
   const PixelSize new_size = rc.GetSize();
-  button_width = new_size.cx / 10;
-  button_height = new_size.cy / 5;
+  button_width = new_size.width / 10;
+  button_height = new_size.height / 5;
 }
 
 void
@@ -262,14 +262,4 @@ KeyboardWidget::OnShiftClicked()
 
   shift_state = !shift_state;
   UpdateShiftState();
-}
-
-void
-KeyboardWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case SHIFT:
-    OnShiftClicked();
-    break;
-  }
 }

@@ -29,9 +29,9 @@
 #ifndef XCSOAR_XML_NODE_HPP
 #define XCSOAR_XML_NODE_HPP
 
-#include "Util/NonCopyable.hpp"
-#include "Util/tstring.hpp"
-#include "Util/Compiler.h"
+#include "util/NonCopyable.hpp"
+#include "util/tstring.hpp"
+#include "util/Compiler.h"
 
 #include <list>
 #include <forward_list>

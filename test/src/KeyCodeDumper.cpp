@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,10 +25,9 @@ Copyright_License {
 #define ENABLE_BUTTON_LOOK
 
 #include "Main.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/window/SingleWindow.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Form/Button.hpp"
-#include "Form/ActionListener.hpp"
 
 #include <algorithm>
 
@@ -104,24 +103,20 @@ protected:
     canvas.SetBackgroundTransparent();
     canvas.Select(normal_font);
 
-    unsigned text_height = canvas.CalcTextSize(_T("W")).cy;
+    unsigned text_height = canvas.CalcTextSize(_T("W")).height;
     for (int i = num_events - 1, y = 4; i >= 0; --i, y += text_height) {
       const struct key_event &event = events[i];
       TCHAR buffer[64];
       _stprintf(buffer, _T("key %s = 0x%x"),
                 event.down ? _T("down") : _T("up"), event.code);
-      canvas.DrawText(4, y, buffer);
+      canvas.DrawText({4, y}, buffer);
     }
   }
 };
 
-class TestWindow final : public SingleWindow, ActionListener {
+class TestWindow final : public UI::SingleWindow {
   KeyCodeDumper key_code_dumper;
   Button close_button;
-
-  enum Buttons {
-    CLOSE,
-  };
 
 public:
   void Create(PixelSize size) {
@@ -139,7 +134,7 @@ public:
     close_button.Create(*this, *button_look,
                         _T("Close"), button_rc,
                         WindowStyle(),
-                        *this, CLOSE);
+                        [this](){ Close(); });
 
     key_code_dumper.SetFocus();
   }
@@ -149,19 +144,10 @@ protected:
     SingleWindow::OnResize(new_size);
 
     if (key_code_dumper.IsDefined())
-      key_code_dumper.Move(0, 0, new_size.cx, (new_size.cy + 1) / 2);
+      key_code_dumper.Move(0, 0, new_size.width, (new_size.height + 1) / 2);
 
     if (close_button.IsDefined())
-      close_button.Move(0, (new_size.cy + 1) / 2, new_size.cx, new_size.cy / 2);
-  }
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case CLOSE:
-      Close();
-      break;
-    }
+      close_button.Move(0, (new_size.height + 1) / 2, new_size.width, new_size.height / 2);
   }
 };
 

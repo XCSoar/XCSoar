@@ -111,8 +111,6 @@ TEST_NAMES = \
 	TestAirspaceParser \
 	TestMETARParser \
 	TestIGCParser \
-	TestByteOrder \
-	TestByteOrder2 \
 	TestStrings TestUTF8 \
 	TestCRC \
 	TestUnitsFormatter \
@@ -135,7 +133,7 @@ TEST_HEX_STRING_SOURCES = \
 $(eval $(call link-program,TestHexString,TEST_HEX_STRING))
 
 TEST_CRC_SOURCES = \
-	$(SRC)/Util/CRC.cpp \
+	$(SRC)/util/CRC.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestCRC.cpp
 $(eval $(call link-program,TestCRC,TEST_CRC))
@@ -168,16 +166,6 @@ TEST_IGC_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/TestIGCParser.cpp
 TEST_IGC_PARSER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestIGCParser,TEST_IGC_PARSER))
-
-TEST_BYTE_ORDER_SOURCES = \
-	$(TEST_SRC_DIR)/tap.c \
-	$(TEST_SRC_DIR)/TestByteOrder.cpp
-$(eval $(call link-program,TestByteOrder,TEST_BYTE_ORDER))
-
-TEST_BYTE_ORDER2_SOURCES = \
-	$(TEST_SRC_DIR)/tap.c \
-	$(TEST_SRC_DIR)/TestByteOrder2.cpp
-$(eval $(call link-program,TestByteOrder2,TEST_BYTE_ORDER2))
 
 TEST_METAR_PARSER_SOURCES = \
 	$(SRC)/Weather/METARParser.cpp \
@@ -390,7 +378,7 @@ QUADRILATERAL_ARANGE_DEPENDS = MATH
 $(eval $(call link-program,TestMath,TEST_MATH))
 
 TEST_CSV_LINE_SOURCES = \
-	$(SRC)/IO/CSVLine.cpp \
+	$(SRC)/io/CSVLine.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestCSVLine.cpp
 TEST_CSV_LINE_DEPENDS = MATH
@@ -530,8 +518,8 @@ TEST_GLIDE_POLAR_DEPENDS = GEO MATH IO
 $(eval $(call link-program,TestGlidePolar,TEST_GLIDE_POLAR))
 
 TEST_FILE_UTIL_SOURCES = \
-	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/OS/Path.cpp \
+	$(SRC)/system/FileUtil.cpp \
+	$(SRC)/system/Path.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFileUtil.cpp
 TEST_FILE_UTIL_DEPENDS = UTIL
@@ -582,7 +570,7 @@ TEST_EARTH_DEPENDS = GEO MATH
 $(eval $(call link-program,TestEarth,TEST_EARTH))
 
 TEST_COLOR_RAMP_SOURCES = \
-	$(SRC)/Screen/Ramp.cpp \
+	$(SRC)/ui/canvas/Ramp.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestColorRamp.cpp
 TEST_COLOR_RAMP_CPPFLAGS = $(SCREEN_CPPFLAGS)
@@ -628,7 +616,7 @@ TEST_LOGGER_SOURCES = \
 	$(SRC)/Logger/LoggerFRecord.cpp \
 	$(SRC)/Logger/GRecord.cpp \
 	$(SRC)/Logger/LoggerEPE.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -638,7 +626,7 @@ $(eval $(call link-program,TestLogger,TEST_LOGGER))
 
 TEST_GRECORD_SOURCES = \
 	$(SRC)/Logger/GRecord.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(SRC)/Version.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestGRecord.cpp
@@ -896,9 +884,12 @@ DEBUG_REPLAY_SOURCES = \
 	$(TEST_SRC_DIR)/DebugReplay.cpp
 DEBUG_REPLAY_LDADD = \
 	$(DRIVER_LDADD) \
+	$(ASYNC_LIBS) \
 	$(IO_LIBS) \
+	$(OS_LIBS) \
+	$(LIBNET_LIBS) \
 	$(THREAD_LIBS) \
-	$(OS_LIBS)
+	$(TIME_LIBS)
 
 BENCHMARK_PROJECTION_SOURCES = \
 	$(SRC)/Projection/Projection.cpp \
@@ -974,8 +965,8 @@ $(eval $(call link-program,DownloadFile,DOWNLOAD_FILE))
 
 RUN_DOWNLOAD_TO_FILE_SOURCES = \
 	$(SRC)/Version.cpp \
-	$(SRC)/Util/MD5.cpp \
-	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/util/MD5.cpp \
+	$(SRC)/system/FileUtil.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunDownloadToFile.cpp
@@ -1007,7 +998,7 @@ $(eval $(call link-program,RunNOAADownloader,RUN_NOAA_DOWNLOADER))
 RUN_WPA_SUPPLICANT_SOURCES = \
 	$(SRC)/Kobo/WPASupplicant.cpp \
 	$(TEST_SRC_DIR)/RunWPASupplicant.cpp
-RUN_WPA_SUPPLICANT_DEPENDS = LIBNET OS UTIL
+RUN_WPA_SUPPLICANT_DEPENDS = LIBNET IO OS UTIL
 $(eval $(call link-program,RunWPASupplicant,RUN_WPA_SUPPLICANT))
 
 RUN_SL_TRACKING_SOURCES = \
@@ -1021,7 +1012,7 @@ RUN_SL_TRACKING_SOURCES = \
 	$(SRC)/Tracking/SkyLines/Assemble.cpp \
 	$(TEST_SRC_DIR)/RunSkyLinesTracking.cpp
 RUN_SL_TRACKING_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_SL_TRACKING_DEPENDS = LIBNET OS GEO MATH UTIL TIME
+RUN_SL_TRACKING_DEPENDS = ASYNC GEO MATH UTIL
 $(eval $(call link-program,RunSkyLinesTracking,RUN_SL_TRACKING))
 
 RUN_LIVETRACK24_SOURCES = \
@@ -1034,7 +1025,7 @@ RUN_LIVETRACK24_SOURCES = \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunLiveTrack24.cpp
 RUN_LIVETRACK24_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_LIVETRACK24_DEPENDS = LIBNET GEO MATH UTIL TIME
+RUN_LIVETRACK24_DEPENDS = LIBNET ASYNC GEO MATH UTIL
 $(eval $(call link-program,RunLiveTrack24,RUN_LIVETRACK24))
 
 RUN_REPOSITORY_PARSER_SOURCES = \
@@ -1054,7 +1045,7 @@ $(eval $(call link-program,RunXMLParser,RUN_XML_PARSER))
 
 READ_MO_SOURCES = \
 	$(SRC)/Language/MOFile.cpp \
-	$(SRC)/OS/FileMapping.cpp \
+	$(SRC)/system/FileMapping.cpp \
 	$(TEST_SRC_DIR)/ReadMO.cpp
 READ_MO_DEPENDS = UTIL
 $(eval $(call link-program,ReadMO,READ_MO))
@@ -1076,7 +1067,7 @@ READ_PROFILE_INT_DEPENDS = PROFILE IO OS UTIL
 $(eval $(call link-program,ReadProfileInt,READ_PROFILE_INT))
 
 RUN_MD5_SOURCES = \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(TEST_SRC_DIR)/RunMD5.cpp
 RUN_MD5_DEPENDS = IO OS UTIL
 $(eval $(call link-program,RunMD5,RUN_MD5))
@@ -1088,28 +1079,28 @@ $(eval $(call link-program,RunSHA256,RUN_SHA256))
 
 READ_GRECORD_SOURCES = \
 	$(SRC)/Logger/GRecord.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(TEST_SRC_DIR)/ReadGRecord.cpp
 READ_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,ReadGRecord,READ_GRECORD))
 
 VERIFY_GRECORD_SOURCES = \
 	$(SRC)/Logger/GRecord.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(TEST_SRC_DIR)/VerifyGRecord.cpp
 VERIFY_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,VerifyGRecord,VERIFY_GRECORD))
 
 APPEND_GRECORD_SOURCES = \
 	$(SRC)/Logger/GRecord.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(TEST_SRC_DIR)/AppendGRecord.cpp
 APPEND_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,AppendGRecord,APPEND_GRECORD))
 
 FIX_GRECORD_SOURCES = \
 	$(SRC)/Logger/GRecord.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(TEST_SRC_DIR)/FixGRecord.cpp
 FIX_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,FixGRecord,FIX_GRECORD))
@@ -1127,7 +1118,7 @@ KEY_CODE_DUMPER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/KeyCodeDumper.cpp
 KEY_CODE_DUMPER_LDADD = $(FAKE_LIBS)
-KEY_CODE_DUMPER_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD MATH UTIL
+KEY_CODE_DUMPER_DEPENDS = FORM SCREEN EVENT ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,KeyCodeDumper,KEY_CODE_DUMPER))
 
 LOAD_TOPOGRAPHY_SOURCES = \
@@ -1140,7 +1131,7 @@ LOAD_TOPOGRAPHY_SOURCES = \
 	$(TEST_SRC_DIR)/LoadTopography.cpp
 ifeq ($(OPENGL),y)
 LOAD_TOPOGRAPHY_SOURCES += \
-	$(SCREEN_SRC_DIR)/OpenGL/Triangulate.cpp
+	$(CANVAS_SRC_DIR)/opengl/Triangulate.cpp
 endif
 LOAD_TOPOGRAPHY_DEPENDS = RESOURCE GEO MATH THREAD IO UTIL SHAPELIB ZZIP
 LOAD_TOPOGRAPHY_CPPFLAGS = $(SCREEN_CPPFLAGS)
@@ -1150,7 +1141,7 @@ LOAD_TERRAIN_SOURCES = \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/LoadTerrain.cpp
 LOAD_TERRAIN_CPPFLAGS = $(SCREEN_CPPFLAGS)
-LOAD_TERRAIN_DEPENDS = TERRAIN GEO MATH IO OS ZZIP UTIL
+LOAD_TERRAIN_DEPENDS = TERRAIN GEO MATH OS IO ZZIP UTIL
 $(eval $(call link-program,LoadTerrain,LOAD_TERRAIN))
 
 RUN_HEIGHT_MATRIX_SOURCES = \
@@ -1245,33 +1236,30 @@ $(eval $(call link-program,EnumeratePorts,ENUMERATE_PORTS))
 READ_PORT_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/ReadPort.cpp
-READ_PORT_DEPENDS = PORT ASYNC LIBNET OS THREAD UTIL
+READ_PORT_DEPENDS = PORT ASYNC LIBNET IO OS THREAD TIME UTIL
 $(eval $(call link-program,ReadPort,READ_PORT))
 
 RUN_PORT_HANDLER_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunPortHandler.cpp
-RUN_PORT_HANDLER_DEPENDS = PORT LIBNET OS THREAD UTIL
+RUN_PORT_HANDLER_DEPENDS = PORT ASYNC LIBNET IO OS THREAD TIME UTIL
 $(eval $(call link-program,RunPortHandler,RUN_PORT_HANDLER))
 
 LOG_PORT_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -1279,7 +1267,7 @@ LOG_PORT_SOURCES = \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/LogPort.cpp
-LOG_PORT_DEPENDS = PORT LIBNET OS THREAD UTIL
+LOG_PORT_DEPENDS = PORT ASYNC LIBNET IO OS THREAD TIME UTIL
 $(eval $(call link-program,LogPort,LOG_PORT))
 
 RUN_DEVICE_DRIVER_SOURCES = \
@@ -1336,7 +1324,6 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
-	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
@@ -1350,11 +1337,10 @@ RUN_DECLARE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunDeclare.cpp
-RUN_DECLARE_DEPENDS = DRIVER PORT ASYNC IO LIBNET OS THREAD WAYPOINT GEO TIME MATH UTIL
+RUN_DECLARE_DEPENDS = DRIVER PORT ASYNC LIBNET IO OS THREAD WAYPOINT GEO TIME MATH UTIL
 $(eval $(call link-program,RunDeclare,RUN_DECLARE))
 
 RUN_ENABLE_NMEA_SOURCES = \
-	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
@@ -1385,7 +1371,7 @@ RUN_ENABLE_NMEA_SOURCES = \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunEnableNMEA.cpp
-RUN_ENABLE_NMEA_DEPENDS = DRIVER PORT TIME GEO MATH ASYNC IO LIBNET OS THREAD UTIL
+RUN_ENABLE_NMEA_DEPENDS = DRIVER PORT GEO MATH ASYNC LIBNET IO OS THREAD TIME UTIL
 $(eval $(call link-program,RunEnableNMEA,RUN_ENABLE_NMEA))
 
 RUN_VEGA_SETTINGS_SOURCES = \
@@ -1395,7 +1381,6 @@ RUN_VEGA_SETTINGS_SOURCES = \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
-	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -1403,7 +1388,7 @@ RUN_VEGA_SETTINGS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunVegaSettings.cpp
-RUN_VEGA_SETTINGS_DEPENDS = DRIVER PORT ASYNC IO LIBNET OS THREAD MATH UTIL
+RUN_VEGA_SETTINGS_DEPENDS = DRIVER PORT ASYNC LIBNET IO OS THREAD MATH TIME UTIL
 $(eval $(call link-program,RunVegaSettings,RUN_VEGA_SETTINGS))
 
 RUN_FLARM_UTILS_SOURCES = \
@@ -1412,7 +1397,6 @@ RUN_FLARM_UTILS_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
@@ -1421,7 +1405,7 @@ RUN_FLARM_UTILS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunFlarmUtils.cpp
-RUN_FLARM_UTILS_DEPENDS = DRIVER PORT ASYNC IO LIBNET OS THREAD GEO MATH UTIL
+RUN_FLARM_UTILS_DEPENDS = DRIVER PORT ASYNC LIBNET IO OS THREAD GEO MATH TIME UTIL
 $(eval $(call link-program,RunFlarmUtils,RUN_FLARM_UTILS))
 
 RUN_LX1600_UTILS_SOURCES = \
@@ -1430,7 +1414,6 @@ RUN_LX1600_UTILS_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
@@ -1442,7 +1425,7 @@ RUN_LX1600_UTILS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunLX1600Utils.cpp
-RUN_LX1600_UTILS_DEPENDS = DRIVER PORT ASYNC IO LIBNET OS THREAD GEO MATH UTIL
+RUN_LX1600_UTILS_DEPENDS = DRIVER PORT ASYNC LIBNET IO OS THREAD GEO MATH TIME UTIL
 $(eval $(call link-program,RunLX1600Utils,RUN_LX1600_UTILS))
 
 RUN_FLIGHT_LIST_SOURCES = \
@@ -1463,7 +1446,6 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
-	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
@@ -1476,7 +1458,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunFlightList.cpp
-RUN_FLIGHT_LIST_DEPENDS = DRIVER PORT ASYNC IO LIBNET OS THREAD GEO TIME MATH UTIL
+RUN_FLIGHT_LIST_DEPENDS = DRIVER PORT ASYNC LIBNET IO OS THREAD GEO TIME MATH UTIL
 $(eval $(call link-program,RunFlightList,RUN_FLIGHT_LIST))
 
 RUN_DOWNLOAD_FLIGHT_SOURCES = \
@@ -1497,7 +1479,6 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
-	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
@@ -1510,7 +1491,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunDownloadFlight.cpp
-RUN_DOWNLOAD_FLIGHT_DEPENDS = DRIVER PORT ASYNC IO LIBNET OS THREAD GEO TIME MATH UTIL
+RUN_DOWNLOAD_FLIGHT_DEPENDS = DRIVER PORT ASYNC LIBNET IO OS THREAD GEO TIME MATH UTIL
 $(eval $(call link-program,RunDownloadFlight,RUN_DOWNLOAD_FLIGHT))
 
 CAI302_TOOL_SOURCES = \
@@ -1532,7 +1513,6 @@ CAI302_TOOL_SOURCES = \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
-	$(SRC)/OS/LogError.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
@@ -1567,11 +1547,11 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Logger/LoggerFRecord.cpp \
 	$(SRC)/Logger/GRecord.cpp \
 	$(SRC)/Logger/LoggerEPE.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/RunIGCWriter.cpp
 RUN_IGC_WRITER_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_IGC_WRITER_DEPENDS = GEO MATH UTIL TIME
+RUN_IGC_WRITER_DEPENDS = GEO MATH UTIL
 $(eval $(call link-program,RunIGCWriter,RUN_IGC_WRITER))
 
 RUN_FLIGHT_LOGGER_SOURCES = \
@@ -1590,7 +1570,7 @@ RUN_FLYING_COMPUTER_SOURCES = \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(TEST_SRC_DIR)/RunFlyingComputer.cpp
 RUN_FLYING_COMPUTER_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_FLYING_COMPUTER_DEPENDS = GEO MATH UTIL TIME
+RUN_FLYING_COMPUTER_DEPENDS = GEO MATH UTIL
 $(eval $(call link-program,RunFlyingComputer,RUN_FLYING_COMPUTER))
 
 RUN_CIRCLING_WIND_SOURCES = \
@@ -1600,7 +1580,7 @@ RUN_CIRCLING_WIND_SOURCES = \
 	$(SRC)/Computer/Wind/CirclingWind.cpp \
 	$(TEST_SRC_DIR)/RunCirclingWind.cpp
 RUN_CIRCLING_WIND_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_CIRCLING_WIND_DEPENDS = GEO MATH UTIL TIME
+RUN_CIRCLING_WIND_DEPENDS = GEO MATH UTIL
 $(eval $(call link-program,RunCirclingWind,RUN_CIRCLING_WIND))
 
 RUN_WIND_EKF_SOURCES = \
@@ -1745,7 +1725,7 @@ LOAD_IMAGE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/LoadImage.cpp
 LOAD_IMAGE_LDADD = $(FAKE_LIBS)
-LOAD_IMAGE_DEPENDS = SCREEN RESOURCE EVENT ASYNC OS THREAD MATH UTIL
+LOAD_IMAGE_DEPENDS = SCREEN RESOURCE EVENT ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,LoadImage,LOAD_IMAGE))
 
 VIEW_IMAGE_SOURCES = \
@@ -1755,7 +1735,7 @@ VIEW_IMAGE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/ViewImage.cpp
 VIEW_IMAGE_LDADD = $(FAKE_LIBS)
-VIEW_IMAGE_DEPENDS = SCREEN EVENT ASYNC OS THREAD MATH UTIL
+VIEW_IMAGE_DEPENDS = SCREEN EVENT ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,ViewImage,VIEW_IMAGE))
 
 RUN_CANVAS_SOURCES = \
@@ -1766,7 +1746,7 @@ RUN_CANVAS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/RunCanvas.cpp
 RUN_CANVAS_LDADD = $(FAKE_LIBS)
-RUN_CANVAS_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD MATH UTIL
+RUN_CANVAS_DEPENDS = FORM SCREEN EVENT ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunCanvas,RUN_CANVAS))
 
 RUN_MAP_WINDOW_SOURCES = \
@@ -1859,7 +1839,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
-	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/UISettings.cpp \
 	$(SRC)/Audio/Settings.cpp \
 	$(SRC)/Audio/VarioSettings.cpp \
@@ -1954,7 +1933,7 @@ RUN_MAP_WINDOW_DEPENDS = \
 	SCREEN EVENT \
 	RESOURCE \
 	SHAPELIB \
-	IO ASYNC OS THREAD \
+	ASYNC OS IO THREAD \
 	TASK ROUTE GLIDE WAYPOINT AIRSPACE \
 	JASPER ZZIP UTIL GEO MATH TIME
 $(eval $(call link-program,RunMapWindow,RUN_MAP_WINDOW))
@@ -1969,7 +1948,7 @@ RUN_LIST_CONTROL_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/RunListControl.cpp
-RUN_LIST_CONTROL_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD MATH UTIL
+RUN_LIST_CONTROL_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunListControl,RUN_LIST_CONTROL))
 
 RUN_TEXT_ENTRY_SOURCES = \
@@ -1991,7 +1970,7 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/RunTextEntry.cpp
-RUN_TEXT_ENTRY_DEPENDS = GEO FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO ASYNC OS THREAD MATH UTIL ZLIB TIME
+RUN_TEXT_ENTRY_DEPENDS = GEO FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunTextEntry,RUN_TEXT_ENTRY))
 
 RUN_NUMBER_ENTRY_SOURCES = \
@@ -2012,7 +1991,7 @@ RUN_NUMBER_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/RunNumberEntry.cpp
-RUN_NUMBER_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO ASYNC OS THREAD MATH UTIL ZLIB TIME
+RUN_NUMBER_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC IO OS THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunNumberEntry,RUN_NUMBER_ENTRY))
 
 RUN_TIME_ENTRY_SOURCES = \
@@ -2031,7 +2010,7 @@ RUN_TIME_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/RunTimeEntry.cpp
-RUN_TIME_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO ASYNC OS THREAD MATH UTIL ZLIB TIME
+RUN_TIME_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunTimeEntry,RUN_TIME_ENTRY))
 
 RUN_ANGLE_ENTRY_SOURCES = \
@@ -2050,7 +2029,7 @@ RUN_ANGLE_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/RunAngleEntry.cpp
-RUN_ANGLE_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO ASYNC OS THREAD MATH UTIL ZLIB TIME
+RUN_ANGLE_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunAngleEntry,RUN_ANGLE_ENTRY))
 
 RUN_GEOPOINT_ENTRY_SOURCES = \
@@ -2070,7 +2049,7 @@ RUN_GEOPOINT_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/RunGeoPointEntry.cpp
-RUN_GEOPOINT_ENTRY_DEPENDS = GEO FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO ASYNC OS THREAD MATH UTIL ZLIB GEOPOINT
+RUN_GEOPOINT_ENTRY_DEPENDS = GEO FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL ZLIB GEOPOINT
 $(eval $(call link-program,RunGeoPointEntry,RUN_GEOPOINT_ENTRY))
 
 RUN_TERMINAL_SOURCES = \
@@ -2080,7 +2059,7 @@ RUN_TERMINAL_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunTerminal.cpp
-RUN_TERMINAL_DEPENDS = SCREEN EVENT ASYNC OS THREAD MATH UTIL
+RUN_TERMINAL_DEPENDS = SCREEN EVENT ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunTerminal,RUN_TERMINAL))
 
 RUN_RENDER_OZ_SOURCES = \
@@ -2096,7 +2075,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunRenderOZ.cpp
-RUN_RENDER_OZ_DEPENDS = TASK FORM SCREEN EVENT RESOURCE ASYNC OS THREAD GEO MATH UTIL
+RUN_RENDER_OZ_DEPENDS = TASK FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD GEO MATH UTIL
 $(eval $(call link-program,RunRenderOZ,RUN_RENDER_OZ))
 
 RUN_CHART_RENDERER_SOURCES = \
@@ -2110,7 +2089,7 @@ RUN_CHART_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunChartRenderer.cpp
-RUN_CHART_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD MATH UTIL
+RUN_CHART_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunChartRenderer,RUN_CHART_RENDERER))
 
 RUN_WIND_ARROW_RENDERER_SOURCES = \
@@ -2128,7 +2107,7 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunWindArrowRenderer.cpp
-RUN_WIND_ARROW_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD MATH UTIL
+RUN_WIND_ARROW_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunWindArrowRenderer,RUN_WIND_ARROW_RENDERER))
 
 RUN_HORIZON_RENDERER_SOURCES = \
@@ -2141,7 +2120,7 @@ RUN_HORIZON_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/RunHorizonRenderer.cpp
-RUN_HORIZON_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD MATH UTIL
+RUN_HORIZON_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunHorizonRenderer,RUN_HORIZON_RENDERER))
 
 RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
@@ -2173,7 +2152,7 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunFinalGlideBarRenderer.cpp
-RUN_FINAL_GLIDE_BAR_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD TASK GLIDE GEO MATH UTIL
+RUN_FINAL_GLIDE_BAR_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD TASK GLIDE GEO MATH UTIL
 $(eval $(call link-program,RunFinalGlideBarRenderer,RUN_FINAL_GLIDE_BAR_RENDERER))
 
 RUN_FAI_TRIANGLE_SECTOR_RENDERER_SOURCES = \
@@ -2189,7 +2168,7 @@ RUN_FAI_TRIANGLE_SECTOR_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunFAITriangleSectorRenderer.cpp
-RUN_FAI_TRIANGLE_SECTOR_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD GEO MATH UTIL
+RUN_FAI_TRIANGLE_SECTOR_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD GEO MATH UTIL
 $(eval $(call link-program,RunFAITriangleSectorRenderer,RUN_FAI_TRIANGLE_SECTOR_RENDERER))
 
 RUN_FLIGHT_LIST_RENDERER_SOURCES = \
@@ -2212,7 +2191,7 @@ RUN_PROGRESS_WINDOW_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunProgressWindow.cpp
-RUN_PROGRESS_WINDOW_DEPENDS = SCREEN EVENT RESOURCE ASYNC OS THREAD MATH UTIL
+RUN_PROGRESS_WINDOW_DEPENDS = SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunProgressWindow,RUN_PROGRESS_WINDOW))
 
 RUN_JOB_DIALOG_SOURCES = \
@@ -2233,7 +2212,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunJobDialog.cpp
-RUN_JOB_DIALOG_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD MATH UTIL
+RUN_JOB_DIALOG_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunJobDialog,RUN_JOB_DIALOG))
 
 RUN_ANALYSIS_SOURCES = \
@@ -2289,7 +2268,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(MORE_SCREEN_SOURCES) \
-	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
@@ -2366,7 +2344,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(IO_SRC_DIR)/MapFile.cpp \
-	$(SRC)/IO/ConfiguredFile.cpp \
+	$(SRC)/io/ConfiguredFile.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
@@ -2409,6 +2387,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Look/CheckBoxLook.cpp \
+	$(SRC)/Renderer/TwoTextRowsRenderer.cpp \
 	$(SRC)/Dialogs/Airspace/dlgAirspaceWarnings.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
@@ -2431,7 +2410,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp
 RUN_AIRSPACE_WARNING_DIALOG_LDADD = $(FAKE_LIBS)
-RUN_AIRSPACE_WARNING_DIALOG_DEPENDS = FORM WIDGET DATA_FIELD SCREEN AUDIO EVENT RESOURCE IO ASYNC OS THREAD AIRSPACE ZZIP UTIL GEO MATH TIME
+RUN_AIRSPACE_WARNING_DIALOG_DEPENDS = FORM WIDGET DATA_FIELD SCREEN AUDIO EVENT RESOURCE ASYNC IO OS THREAD AIRSPACE ZZIP UTIL GEO MATH TIME
 $(eval $(call link-program,RunAirspaceWarningDialog,RUN_AIRSPACE_WARNING_DIALOG))
 
 RUN_PROFILE_LIST_DIALOG_SOURCES = \
@@ -2457,20 +2436,20 @@ RUN_PROFILE_LIST_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/RunProfileListDialog.cpp
 RUN_PROFILE_LIST_DIALOG_LDADD = $(FAKE_LIBS)
-RUN_PROFILE_LIST_DIALOG_DEPENDS = PROFILE FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO ASYNC OS THREAD MATH UTIL
+RUN_PROFILE_LIST_DIALOG_DEPENDS = PROFILE FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunProfileListDialog,RUN_PROFILE_LIST_DIALOG))
 
 PLAY_TONE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/PlayTone.cpp
-PLAY_TONE_DEPENDS = AUDIO MATH SCREEN EVENT ASYNC THREAD OS UTIL
+PLAY_TONE_DEPENDS = AUDIO MATH SCREEN EVENT ASYNC THREAD OS IO UTIL
 $(eval $(call link-program,PlayTone,PLAY_TONE))
 
 PLAY_VARIO_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/PlayVario.cpp
-PLAY_VARIO_LDADD = $(filter-out $(THREAD_LIBS),$(filter-out $(OS_LIBS),$(DEBUG_REPLAY_LDADD)))
+PLAY_VARIO_LDADD = $(AUDIO_LDADD) $(SCREEN_LDADD) $(EVENT_LDADD) $(filter-out $(THREAD_LIBS),$(filter-out $(OS_LIBS),$(DEBUG_REPLAY_LDADD)))
 PLAY_VARIO_DEPENDS = AUDIO GEO MATH SCREEN EVENT ASYNC THREAD OS TIME UTIL
 $(eval $(call link-program,PlayVario,PLAY_VARIO))
 
@@ -2531,37 +2510,35 @@ $(eval $(call link-program,RunTaskEditorDialog,RUN_TASK_EDITOR_DIALOG))
 
 TEST_NOTIFY_SOURCES = \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Event/Idle.cpp \
+	$(SRC)/ui/event/Idle.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestNotify.cpp
-TEST_NOTIFY_DEPENDS = EVENT SCREEN MATH ASYNC OS THREAD UTIL
+TEST_NOTIFY_DEPENDS = EVENT SCREEN MATH ASYNC OS IO THREAD UTIL
 $(eval $(call link-program,TestNotify,TEST_NOTIFY))
 
 FEED_NMEA_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/FeedNMEA.cpp
-FEED_NMEA_DEPENDS = PORT ASYNC LIBNET OS THREAD UTIL
+FEED_NMEA_DEPENDS = PORT ASYNC LIBNET IO OS THREAD TIME UTIL
 $(eval $(call link-program,FeedNMEA,FEED_NMEA))
 
 FEED_VEGA_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/FeedVega.cpp
-FEED_VEGA_DEPENDS = PORT ASYNC LIBNET OS THREAD UTIL
+FEED_VEGA_DEPENDS = PORT ASYNC LIBNET IO OS THREAD TIME UTIL
 $(eval $(call link-program,FeedVega,FEED_VEGA))
 
 EMULATE_DEVICE_SOURCES = \
@@ -2574,28 +2551,26 @@ EMULATE_DEVICE_SOURCES = \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
-	$(SRC)/IO/CSVLine.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/io/CSVLine.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/EmulateDevice.cpp
-EMULATE_DEVICE_DEPENDS = PORT ASYNC LIBNET OS THREAD UTIL
+EMULATE_DEVICE_DEPENDS = PORT ASYNC LIBNET IO OS THREAD TIME UTIL
 $(eval $(call link-program,EmulateDevice,EMULATE_DEVICE))
 
 FEED_FLYNET_DATA_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/FeedFlyNetData.cpp
-FEED_FLYNET_DATA_DEPENDS = PORT ASYNC LIBNET OS THREAD UTIL
+FEED_FLYNET_DATA_DEPENDS = PORT ASYNC LIBNET IO OS THREAD TIME UTIL
 
 $(eval $(call link-program,FeedFlyNetData,FEED_FLYNET_DATA))
 

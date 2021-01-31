@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,11 +32,10 @@ Copyright_License {
 #include "Form/TabMenuData.hpp"
 #include "Form/CheckBox.hpp"
 #include "Form/Button.hpp"
-#include "Form/LambdaActionListener.hpp"
 #include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "Panels/ConfigPanel.hpp"
 #include "Panels/PagesConfigPanel.hpp"
 #include "Panels/UnitsConfigPanel.hpp"
@@ -166,12 +165,11 @@ static constexpr TabMenuGroup main_menu_captions[] = {
   { N_("Setup"), setup_pages },
 };
 
-class ConfigurationExtraButtons final
-  : public NullWidget, ActionListener {
-  enum Buttons {
-    EXPERT,
-  };
+static void
+OnUserLevel(bool expert) noexcept;
 
+class ConfigurationExtraButtons final
+  : public NullWidget {
   struct Layout {
     PixelRect expert, button2, button1;
 
@@ -227,7 +225,8 @@ protected:
     style.TabStop();
 
     expert.Create(parent, look, _("Expert"),
-                  layout.expert, style, *this, EXPERT);
+                  layout.expert, style,
+                  [](bool value){ OnUserLevel(value); });
 
     button2.Create(parent, look.button, _T(""), layout.button2, style);
     button1.Create(parent, look.button, _T(""), layout.button1, style);
@@ -262,29 +261,17 @@ protected:
     button2.Move(layout.button2);
     button1.Move(layout.button1);
   }
-
-private:
-  void OnExpertClicked();
-
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case EXPERT:
-      OnExpertClicked();
-      break;
-    }
-  }
 };
 
 void
 ConfigPanel::BorrowExtraButton(unsigned i, const TCHAR *caption,
-                               ActionListener &listener, int id)
+                               std::function<void()> callback) noexcept
 {
   ConfigurationExtraButtons &extra =
     (ConfigurationExtraButtons &)pager->GetExtra();
   Button &button = extra.GetButton(i);
   button.SetCaption(caption);
-  button.SetListener(listener, id);
+  button.SetCallback(std::move(callback));
   button.Show();
 }
 
@@ -298,20 +285,13 @@ ConfigPanel::ReturnExtraButton(unsigned i)
 }
 
 static void
-OnUserLevel(CheckBoxControl &control)
+OnUserLevel(bool expert) noexcept
 {
-  const bool expert = control.GetState();
   CommonInterface::SetUISettings().dialog.expert = expert;
   Profile::Set(ProfileKeys::UserLevel, expert);
 
   /* force layout update */
   pager->PagerWidget::Move(pager->GetPosition());
-}
-
-inline void
-ConfigurationExtraButtons::OnExpertClicked()
-{
-  OnUserLevel(expert);
 }
 
 /**
@@ -344,37 +324,36 @@ void dlgConfigurationShowModal()
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Configuration"));
-  auto on_close = MakeLambdaActionListener([&dialog](unsigned id) {
-      OnCloseClicked(dialog);
-    });
 
-  pager = new ArrowPagerWidget(on_close, look.button,
-                               new ConfigurationExtraButtons(look));
+  pager = new ArrowPagerWidget(look.button,
+                               [&dialog](){ OnCloseClicked(dialog); },
+                               std::make_unique<ConfigurationExtraButtons>(look));
 
-  TabMenuDisplay *menu = new TabMenuDisplay(*pager, look);
-  pager->Add(new CreateWindowWidget([menu](ContainerWindow &parent,
-                                           const PixelRect &rc,
-                                           WindowStyle style) {
-                                      style.TabStop();
-                                      menu->Create(parent, rc, style);
-                                      return menu;
-                                    }));
+  auto _menu = std::make_unique<TabMenuDisplay>(*pager, look);
+  auto &menu = *_menu;
+  pager->Add(std::make_unique<CreateWindowWidget>([&_menu](ContainerWindow &parent,
+                                                           const PixelRect &rc,
+                                                           WindowStyle style) {
+    style.TabStop();
+    _menu->Create(parent, rc, style);
+    return std::move(_menu);
+  }));
 
-  menu->InitMenu(main_menu_captions, ARRAY_SIZE(main_menu_captions));
+  menu.InitMenu(main_menu_captions, ARRAY_SIZE(main_menu_captions));
 
   /* restore last selected menu item */
-  menu->SetCursor(current_page);
+  menu.SetCursor(current_page);
 
-  pager->SetPageFlippedCallback([&dialog, menu](){
-      OnPageFlipped(dialog, *menu);
-    });
+  pager->SetPageFlippedCallback([&dialog, &menu](){
+    OnPageFlipped(dialog, menu);
+  });
 
   dialog.FinishPreliminary(pager);
 
   dialog.ShowModal();
 
   /* save page number for next time this dialog is opened */
-  current_page = menu->GetCursor();
+  current_page = menu.GetCursor();
 
   bool changed = false;
   pager->Save(changed);

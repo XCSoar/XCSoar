@@ -2,6 +2,7 @@ from os.path import abspath
 
 from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
+from build.cmake import CmakeProject
 from build.openssl import OpenSSLProject
 from build.freetype import FreeTypeProject
 from build.curl import CurlProject
@@ -9,24 +10,6 @@ from build.libpng import LibPNGProject
 from build.libstdcxxmuslheaders import LibstdcxxMuslHeadersProject
 from build.sdl2 import SDL2Project
 from build.lua import LuaProject
-
-glibc = AutotoolsProject(
-    'http://mirror.netcologne.de/gnu/libc/glibc-2.23.tar.xz',
-    'http://ftp.gnu.org/gnu/glibc/glibc-2.23.tar.xz',
-    '456995968f3acadbed39f5eba31678df',
-    'include/unistd.h',
-    [
-        '--enable-kernel=2.6.35',
-        '--disable-werror',
-        '--disable-build-nscd',
-        '--disable-nscd',
-    ],
-    patches=abspath('lib/glibc/patches'),
-    shared=True,
-
-    # This is needed so glibc can find its NSS modules
-    make_args=['default-rpath=/opt/xcsoar/lib'],
-)
 
 musl = AutotoolsProject(
     'https://www.musl-libc.org/releases/musl-1.1.18.tar.gz',
@@ -107,9 +90,9 @@ zlib = ZlibProject(
 )
 
 freetype = FreeTypeProject(
-    'http://download.savannah.gnu.org/releases/freetype/freetype-2.9.1.tar.bz2',
-    'http://downloads.sourceforge.net/project/freetype/freetype2/2.9.1/freetype-2.9.1.tar.bz2',
-    'db8d87ea720ea9d5edc5388fc7a0497bb11ba9fe972245e0f7f4c7e8b1e1e84d',
+    'http://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.xz',
+    'http://downloads.sourceforge.net/project/freetype/freetype2/2.10.2/freetype-2.10.2.tar.xz',
+    '1543d61025d2e6312e0a1c563652555f17378a204a61e99928c9fcef030a2d8b',
     'lib/libfreetype.a',
     [
         '--disable-shared', '--enable-static',
@@ -118,26 +101,49 @@ freetype = FreeTypeProject(
     ],
 )
 
-curl = AutotoolsProject(
-    'http://curl.haxx.se/download/curl-7.70.0.tar.xz',
-    'https://github.com/curl/curl/releases/download/curl-7_69_1/curl-7.70.0.tar.xz',
-    '032f43f2674008c761af19bf536374128c16241fb234699a55f9fb603fcfbae7',
+cares = CmakeProject(
+    'https://c-ares.haxx.se/download/c-ares-1.17.1.tar.gz',
+    'https://c-ares.haxx.se/download/c-ares-1.17.1.tar.gz',
+    'd73dd0f6de824afd407ce10750ea081af47eba52b8a6cb307d220131ad93fc40',
+    'lib/libcares.a',
+    [
+        '-DCARES_STATIC=ON',
+        '-DCARES_SHARED=OFF',
+        '-DCARES_STATIC_PIC=ON',
+        '-DCARES_BUILD_TOOLS=OFF',
+    ],
+    patches=abspath('lib/c-ares/patches'),
+    #autogen=True,
+    #subdirs=['include', 'src/lib'],
+)
+
+curl = CmakeProject(
+    'http://curl.haxx.se/download/curl-7.71.1.tar.xz',
+    'https://github.com/curl/curl/releases/download/curl-7_71_1/curl-7.71.1.tar.xz',
+    '40f83eda27cdbeb25cd4da48cefb639af1b9395d6026d2da1825bf059239658c',
     'lib/libcurl.a',
     [
-        '--disable-shared', '--enable-static',
-        '--disable-debug',
-        '--enable-http',
-        '--enable-ipv6',
-        '--enable-ftp', '--disable-file',
-        '--disable-ldap', '--disable-ldaps',
-        '--disable-rtsp', '--disable-proxy', '--disable-dict', '--disable-telnet',
-        '--disable-tftp', '--disable-pop3', '--disable-imap', '--disable-smb',
-        '--disable-smtp',
-        '--disable-gopher',
-        '--disable-manual',
-        '--disable-threaded-resolver', '--disable-verbose', '--disable-sspi',
-        '--disable-crypto-auth', '--disable-ntlm-wb', '--disable-tls-srp', '--disable-cookies',
-        '--with-ssl', '--without-gnutls', '--without-nss', '--without-libssh2',
+        '-DBUILD_CURL_EXE=OFF',
+        '-DBUILD_SHARED_LIBS=OFF',
+        '-DENABLE_ARES=ON',
+        '-DCURL_DISABLE_LDAP=ON',
+        '-DCURL_DISABLE_TELNET=ON',
+        '-DCURL_DISABLE_DICT=ON',
+        '-DCURL_DISABLE_FILE=ON',
+        '-DCURL_DISABLE_TFTP=ON',
+        '-DCURL_DISABLE_LDAPS=ON',
+        '-DCURL_DISABLE_RTSP=ON',
+        '-DCURL_DISABLE_PROXY=ON',
+        '-DCURL_DISABLE_POP3=ON',
+        '-DCURL_DISABLE_IMAP=ON',
+        '-DCURL_DISABLE_SMTP=ON',
+        '-DCURL_DISABLE_GOPHER=ON',
+        '-DCURL_DISABLE_COOKIES=ON',
+        '-DCURL_DISABLE_CRYPTO_AUTH=ON',
+        '-DCURL_DISABLE_IMAP=ON',
+        '-DCMAKE_USE_OPENSSL=ON',
+        '-DCMAKE_USE_LIBSSH2=OFF',
+        '-DBUILD_TESTING=OFF',
     ],
     patches=abspath('lib/curl/patches'),
 )

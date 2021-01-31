@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -41,11 +41,11 @@ Copyright_License {
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Units/Units.hpp"
-#include "Util/TruncateString.hpp"
-#include "Util/StaticArray.hxx"
-#include "Util/Macros.hpp"
+#include "util/TruncateString.hpp"
+#include "util/StaticArray.hxx"
+#include "util/Macros.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Engine/Route/ReachResult.hpp"
@@ -448,7 +448,7 @@ public:
 };
 
 static void
-MapWaypointLabelRender(Canvas &canvas, unsigned width, unsigned height,
+MapWaypointLabelRender(Canvas &canvas, PixelSize clip_size,
                        LabelBlock &label_block,
                        WaypointLabelList &labels,
                        const WaypointLook &look)
@@ -458,8 +458,7 @@ MapWaypointLabelRender(Canvas &canvas, unsigned width, unsigned height,
   for (const auto &l : labels) {
     canvas.Select(l.bold ? *look.bold_font : *look.font);
 
-    TextInBox(canvas, l.Name, l.Pos.x, l.Pos.y, l.Mode,
-              width, height, &label_block);
+    TextInBox(canvas, l.Name, l.Pos, l.Mode, clip_size, &label_block);
   }
 }
 
@@ -500,8 +499,6 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
 
   v.Draw(canvas);
 
-  MapWaypointLabelRender(canvas,
-                         projection.GetScreenWidth(),
-                         projection.GetScreenHeight(),
+  MapWaypointLabelRender(canvas, projection.GetScreenSize(),
                          label_block, v.labels, look);
 }

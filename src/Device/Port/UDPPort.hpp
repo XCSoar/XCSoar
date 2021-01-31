@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,17 +25,14 @@ Copyright_License {
 #define XCSOAR_DEVICE_UDP_PORT_HPP
 
 #include "BufferedPort.hpp"
-
-#include <boost/asio/ip/udp.hpp>
+#include "event/SocketEvent.hxx"
 
 /**
  * A UDP listener port class.
  */
 class UDPPort final : public BufferedPort
 {
-  boost::asio::ip::udp::socket socket;
-
-  char input[4096];
+  SocketEvent socket;
 
 public:
   /**
@@ -44,7 +41,7 @@ public:
    * @param handler the callback object for input received on the
    * port
    */
-  UDPPort(boost::asio::io_context &io_context,
+  UDPPort(EventLoop &event_loop,
           unsigned port,
           PortListener *_listener, DataHandler &_handler);
 
@@ -52,6 +49,10 @@ public:
    * Closes the serial port (Destructor)
    */
   virtual ~UDPPort();
+
+  auto &GetEventLoop() const noexcept {
+    return socket.GetEventLoop();
+  }
 
   /* virtual methods from class Port */
   PortState GetState() const override;
@@ -72,14 +73,7 @@ public:
   size_t Write(const void *data, size_t length) override;
 
 protected:
-  void AsyncRead() {
-    socket.async_receive(boost::asio::buffer(input, sizeof(input)),
-                         std::bind(&UDPPort::OnRead, this,
-                                   std::placeholders::_1,
-                                   std::placeholders::_2));
-  }
-
-  void OnRead(const boost::system::error_code &ec, size_t nbytes);
+  void OnSocketReady(unsigned events) noexcept;
 };
 
 #endif

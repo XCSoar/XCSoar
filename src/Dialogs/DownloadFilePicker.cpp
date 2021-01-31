@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,24 +27,23 @@ Copyright_License {
 #include "Message.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Renderer/TextRowRenderer.hpp"
 #include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
-#include "OS/Path.hpp"
-#include "IO/FileLineReader.hpp"
+#include "system/Path.hpp"
+#include "io/FileLineReader.hpp"
 #include "Repository/Glue.hpp"
 #include "Repository/FileRepository.hpp"
 #include "Repository/Parser.hpp"
-#include "Net/HTTP/Features.hpp"
-#include "Net/HTTP/DownloadManager.hpp"
-#include "Event/Notify.hpp"
-#include "Event/PeriodicTimer.hpp"
-#include "Thread/Mutex.hxx"
+#include "net/http/Features.hpp"
+#include "net/http/DownloadManager.hpp"
+#include "ui/event/Notify.hpp"
+#include "ui/event/PeriodicTimer.hpp"
+#include "thread/Mutex.hxx"
 #include "Operation/ThreadedOperationEnvironment.hpp"
-#include "Util/ConvertString.hpp"
+#include "util/ConvertString.hpp"
 
 #include <vector>
 
@@ -58,9 +57,9 @@ class DownloadProgress final : Net::DownloadListener {
   ThreadedOperationEnvironment env;
   const Path path_relative;
 
-  PeriodicTimer update_timer{[this]{ Net::DownloadManager::Enumerate(*this); }};
+  UI::PeriodicTimer update_timer{[this]{ Net::DownloadManager::Enumerate(*this); }};
 
-  Notify download_complete_notify{[this]{ OnDownloadCompleteNotification(); }};
+  UI::Notify download_complete_notify{[this]{ OnDownloadCompleteNotification(); }};
 
   bool got_size = false, complete = false, success;
 
@@ -136,15 +135,11 @@ DownloadFile(const char *uri, const char *_base)
 
 class DownloadFilePickerWidget final
   : public ListWidget,
-    Net::DownloadListener,
-    ActionListener {
-  enum Buttons {
-    DOWNLOAD,
-  };
+    Net::DownloadListener {
 
   WidgetDialog &dialog;
 
-  Notify download_complete_notify{[this]{ OnDownloadCompleteNotification(); }};
+  UI::Notify download_complete_notify{[this]{ OnDownloadCompleteNotification(); }};
 
   const FileType file_type;
 
@@ -153,6 +148,8 @@ class DownloadFilePickerWidget final
   Button *download_button;
 
   std::vector<AvailableFile> items;
+
+  TextRowRenderer row_renderer;
 
   /**
    * This mutex protects the attribute "repository_modified".
@@ -210,9 +207,6 @@ public:
     Download();
   }
 
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
-
   /* virtual methods from class Net::DownloadListener */
   void OnDownloadAdded(Path path_relative,
                        int64_t size, int64_t position) override;
@@ -225,12 +219,9 @@ void
 DownloadFilePickerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  const unsigned margin = Layout::GetTextPadding();
-  font_height = look.list.font->GetHeight();
 
-  unsigned row_height = std::max(3u * margin + 2u * font_height,
-                                 Layout::GetMaximumControlHeight());
-  CreateList(parent, look, rc, row_height);
+  CreateList(parent, look, rc,
+             row_renderer.CalculateLayout(*look.list.font));
   RefreshList();
 
   Net::DownloadManager::AddListener(*this);
@@ -243,10 +234,6 @@ void
 DownloadFilePickerWidget::Unprepare()
 {
   Net::DownloadManager::RemoveListener(*this);
-
-  download_complete_notify.ClearNotification();
-
-  DeleteWindow();
 }
 
 void
@@ -281,7 +268,7 @@ try {
 void
 DownloadFilePickerWidget::CreateButtons()
 {
-  download_button = dialog.AddButton(_("Download"), *this, DOWNLOAD);
+  download_button = dialog.AddButton(_("Download"), [this](){ Download(); });
 }
 
 void
@@ -290,10 +277,8 @@ DownloadFilePickerWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   const auto &file = items[i];
 
-  const unsigned margin = Layout::GetTextPadding();
-
   const UTF8ToWideConverter name(file.GetName());
-  canvas.DrawText(rc.left + margin, rc.top + margin, name);
+  row_renderer.DrawTextRow(canvas, rc, name);
 }
 
 void
@@ -309,16 +294,6 @@ DownloadFilePickerWidget::Download()
   path = DownloadFile(file.GetURI(), file.GetName());
   if (path.IsNull())
     dialog.SetModalResult(mrOK);
-}
-
-void
-DownloadFilePickerWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case DOWNLOAD:
-    Download();
-    break;
-  }
 }
 
 void

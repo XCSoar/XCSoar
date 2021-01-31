@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,21 +27,14 @@ Copyright_License {
 #include "Screen/TerminalWindow.hpp"
 #include "Widget/WindowWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Form/ActionListener.hpp"
 #include "Device/Descriptor.hpp"
-#include "Util/Macros.hpp"
-#include "Util/StaticFifoBuffer.hxx"
+#include "util/Macros.hpp"
+#include "util/StaticFifoBuffer.hxx"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
-#include "Event/DelayedNotify.hpp"
-#include "Thread/Mutex.hxx"
+#include "ui/event/DelayedNotify.hpp"
+#include "thread/Mutex.hxx"
 #include "UIGlobals.hpp"
-
-enum Buttons {
-  CLEAR = 100,
-  RECONNECT,
-  PAUSE,
-};
 
 /**
  * A bridge between DataHandler and TerminalWindow: copy all data
@@ -52,7 +45,7 @@ class PortTerminalBridge final : public DataHandler {
   Mutex mutex;
   StaticFifoBuffer<char, 1024> buffer;
 
-  DelayedNotify notify{
+  UI::DelayedNotify notify{
     std::chrono::milliseconds(100),
     [this]{ OnNotification(); },
   };
@@ -99,21 +92,23 @@ private:
   }
 };
 
-class PortMonitorWidget final : public WindowWidget, public ActionListener {
+class PortMonitorWidget final : public WindowWidget {
   DeviceDescriptor &device;
-  TerminalWindow terminal;
-  PortTerminalBridge bridge;
+  const TerminalLook &look;
+  std::unique_ptr<PortTerminalBridge> bridge;
 
   Button *pause_button;
   bool paused;
 
 public:
-  PortMonitorWidget(DeviceDescriptor &_device, const TerminalLook &look)
-    :device(_device), terminal(look), bridge(terminal), paused(false) {}
+  PortMonitorWidget(DeviceDescriptor &_device,
+                    const TerminalLook &_look) noexcept
+    :device(_device), look(_look), paused(false) {}
 
   void CreateButtons(WidgetDialog &dialog);
 
   void Clear() {
+    auto &terminal = (TerminalWindow &)GetWindow();
     terminal.Clear();
   }
 
@@ -125,39 +120,27 @@ public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
     WindowStyle style;
     style.Hide();
-    terminal.Create(parent, rc, style);
-    SetWindow(&terminal);
-    device.SetMonitor(&bridge);
+
+    auto w = std::make_unique<TerminalWindow>(look);
+    w->Create(parent, rc, style);
+
+    bridge = std::make_unique<PortTerminalBridge>(*w);
+    device.SetMonitor(bridge.get());
+
+    SetWindow(std::move(w));
   }
 
   void Unprepare() override {
     device.SetMonitor(nullptr);
-  }
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case CLEAR:
-      Clear();
-      break;
-
-    case RECONNECT:
-      Reconnect();
-      break;
-
-    case PAUSE:
-      TogglePause();
-      break;
-    }
   }
 };
 
 void
 PortMonitorWidget::CreateButtons(WidgetDialog &dialog)
 {
-  dialog.AddButton(_("Clear"), *this, CLEAR);
-  dialog.AddButton(_("Reconnect"), *this, RECONNECT);
-  pause_button = dialog.AddButton(_("Pause"), *this, PAUSE);
+  dialog.AddButton(_("Clear"), [this](){ Clear(); });
+  dialog.AddButton(_("Reconnect"), [this](){ Reconnect(); });
+  pause_button = dialog.AddButton(_("Pause"), [this](){ TogglePause(); });
 }
 
 void
@@ -184,7 +167,7 @@ PortMonitorWidget::TogglePause()
     device.SetMonitor(nullptr);
   } else {
     pause_button->SetCaption(_("Pause"));
-    device.SetMonitor(&bridge);
+    device.SetMonitor(bridge.get());
   }
 }
 

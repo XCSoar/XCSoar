@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,14 +27,13 @@ Copyright_License {
 #include "Widget/WindowWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-#include "Screen/Init.hpp"
+#include "ui/window/Init.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "../test/src/Fonts.hpp"
 #include "Language/Language.hpp"
-#include "Form/ActionListener.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/window/SingleWindow.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Kernel.hpp"
 #include "System.hpp"
 #include "NetworkDialog.hpp"
@@ -50,7 +49,7 @@ enum Buttons {
 };
 
 static DialogSettings dialog_settings;
-static SingleWindow *global_main_window;
+static UI::SingleWindow *global_main_window;
 static DialogLook *global_dialog_look;
 
 const DialogSettings &
@@ -59,7 +58,7 @@ UIGlobals::GetDialogSettings()
   return dialog_settings;
 }
 
-SingleWindow &
+UI::SingleWindow &
 UIGlobals::GetMainWindow()
 {
   assert(global_main_window != nullptr);
@@ -75,15 +74,13 @@ UIGlobals::GetDialogLook()
   return *global_dialog_look;
 }
 
-class KoboMenuWidget final : public WindowWidget, ActionListener {
-  ActionListener &dialog;
-  SimulatorPromptWindow w;
+class KoboMenuWidget final : public WindowWidget {
+  WndForm &dialog;
 
 public:
   KoboMenuWidget(const DialogLook &_look,
-                 ActionListener &_dialog)
-    :dialog(_dialog),
-     w(_look, _dialog, false) {}
+                 WndForm &_dialog)
+    :dialog(_dialog) {}
 
   void CreateButtons(WidgetDialog &buttons);
 
@@ -92,20 +89,17 @@ public:
                        const PixelRect &rc) override;
 
   virtual bool KeyPress(unsigned key_code) override;
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
 KoboMenuWidget::CreateButtons(WidgetDialog &buttons)
 {
-  buttons.AddButton(("Nickel"), dialog, LAUNCH_NICKEL)
+  buttons.AddButton(("Nickel"), dialog.MakeModalResultCallback(LAUNCH_NICKEL))
       ->SetEnabled(!IsKoboOTGKernel());
-  buttons.AddButton(("Tools"), *this, TOOLS);
-  buttons.AddButton(_("Network"), *this, NETWORK);
-  buttons.AddButton("System", *this, SYSTEM);
-  buttons.AddButton(("Poweroff"), dialog, POWEROFF);
+  buttons.AddButton(("Tools"), [](){ ShowToolsDialog(); });
+  buttons.AddButton(_("Network"), [](){ ShowNetworkDialog(); });
+  buttons.AddButton("System", [](){ ShowSystemDialog(); });
+  buttons.AddButton(("Poweroff"), dialog.MakeModalResultCallback(POWEROFF));
 }
 
 void
@@ -116,8 +110,12 @@ KoboMenuWidget::Prepare(ContainerWindow &parent,
   style.Hide();
   style.ControlParent();
 
-  w.Create(parent, rc, style);
-  SetWindow(&w);
+  auto w = std::make_unique<SimulatorPromptWindow>(dialog.GetLook(),
+                                                   [this](SimulatorPromptWindow::Result result){
+                                                     dialog.SetModalResult(int(result));
+                                                   }, false);
+  w->Create(parent, rc, style);
+  SetWindow(std::move(w));
 }
 
 bool
@@ -126,7 +124,7 @@ KoboMenuWidget::KeyPress(unsigned key_code)
   switch (key_code) {
 #ifdef KOBO
   case KEY_POWER:
-    dialog.OnAction(POWEROFF);
+    dialog.SetModalResult(POWEROFF);
     return true;
 #endif
 
@@ -135,26 +133,8 @@ KoboMenuWidget::KeyPress(unsigned key_code)
   }
 }
 
-void
-KoboMenuWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case TOOLS:
-    ShowToolsDialog();
-    break;
-
-  case NETWORK:
-    ShowNetworkDialog();
-    break;
-
-  case SYSTEM:
-    ShowSystemDialog();
-    break;
-  }
-}
-
 static int
-Main(SingleWindow &main_window, const DialogLook &dialog_look)
+Main(UI::SingleWindow &main_window, const DialogLook &dialog_look)
 {
   WidgetDialog dialog(WidgetDialog::Full{}, main_window,
                       dialog_look, nullptr);
@@ -179,10 +159,10 @@ Main()
   DialogLook dialog_look;
   dialog_look.Initialise();
 
-  TopWindowStyle main_style;
+  UI::TopWindowStyle main_style;
   main_style.Resizable();
 
-  SingleWindow main_window;
+  UI::SingleWindow main_window;
   main_window.Create(_T("XCSoar/KoboMenu"), {600, 800}, main_style);
   main_window.Show();
 
@@ -208,12 +188,12 @@ int main(int argc, char **argv)
       KoboExecNickel();
       return EXIT_FAILURE;
 
-    case SimulatorPromptWindow::FLY:
+    case int(SimulatorPromptWindow::Result::FLY):
       KoboRunXCSoar("-fly");
       /* return to menu after XCSoar quits */
       break;
 
-    case SimulatorPromptWindow::SIMULATOR:
+    case int(SimulatorPromptWindow::Result::SIMULATOR):
       KoboRunXCSoar("-simulator");
       /* return to menu after XCSoar quits */
       break;

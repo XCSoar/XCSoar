@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "ProgressBar.hpp"
-#include "Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Features.hpp"
 #include "Look/Colors.hpp"
-#include "Thread/Debug.hpp"
+#include "thread/Debug.hpp"
 #include "Asset.hpp"
 
 void
@@ -97,8 +97,7 @@ ProgressBar::OnPaint(Canvas &canvas)
 #ifdef ROUND_PROGRESS_BAR
   canvas.SelectNullPen();
   canvas.SelectWhiteBrush();
-  canvas.DrawRoundRectangle(0, 0, GetWidth(), GetHeight(),
-                            GetHeight(), GetHeight());
+  canvas.DrawRoundRectangle(canvas.GetRect(), PixelSize{GetHeight()});
 
   Brush progress_brush(IsDithered() ? COLOR_BLACK : COLOR_XCSOAR_LIGHT);
   canvas.Select(progress_brush);
@@ -114,11 +113,12 @@ ProgressBar::OnPaint(Canvas &canvas)
     top = margin;
     bottom = GetHeight() - margin;
   }
-  canvas.DrawRoundRectangle(margin, top, margin + position, bottom,
-                            GetHeight(), GetHeight());
+  canvas.DrawRoundRectangle(PixelRect(margin, top, margin + position, bottom),
+                            PixelSize{GetHeight()});
 #else
-  canvas.DrawFilledRectangle(0, 0, position, GetHeight(),
+  canvas.DrawFilledRectangle(PixelRect(0, 0, position, GetHeight()),
                              IsDithered() ? COLOR_BLACK : COLOR_GREEN);
-  canvas.DrawFilledRectangle(position, 0, GetWidth(), GetHeight(), COLOR_WHITE);
+  canvas.DrawFilledRectangle(PixelRect(position, 0, GetWidth(), GetHeight()),
+                             COLOR_WHITE);
 #endif
 }

@@ -27,7 +27,7 @@
  */
 
 #include "Node.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/StringAPI.hxx"
 
 #include <cassert>
 

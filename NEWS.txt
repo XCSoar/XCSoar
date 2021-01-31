@@ -52,6 +52,7 @@ Version 7.0 - not yet released
   - new algorithm, with improved statistics
   - separate active climb and encounter-averaged bands
 * infoboxes
+  - improved formula for the title font size
   - added ":1" unit for gradient type displays
   - new infobox: % time non-circling climb
   - new infobox: % climb chart showing proportions of time spent circling climb (gray), cruise,
@@ -72,6 +73,12 @@ Version 7.0 - not yet released
   - support Kobo Glo HD
 * Raspberry Pi
   - resizable mouse cursor
+
+Version 6.8.17 - 2020/09/22
+* tracking
+  - SkyLines: update tracking IP address
+* terrain
+  - fix several crash bugs (JasPer)
 
 Version 6.8.16 - 2020/07/26
 * input events

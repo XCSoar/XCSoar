@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_DOCK_WINDOW_HPP
 #define XCSOAR_DOCK_WINDOW_HPP
 
-#include "Screen/ContainerWindow.hpp"
+#include "ui/window/ContainerWindow.hpp"
+
+#include <memory>
 
 class Widget;
 
@@ -33,10 +35,14 @@ class Widget;
  * container to place one #Widget on the screen.
  */
 class DockWindow : public ContainerWindow {
-  Widget *widget;
+  std::unique_ptr<Widget> widget;
 
 public:
-  DockWindow():widget(nullptr) {}
+  DockWindow() = default;
+
+  ~DockWindow() noexcept {
+    DeleteWidget();
+  }
 
   /**
    * Show the specified #Widget.
@@ -45,14 +51,14 @@ public:
    *
    * @param widget the new Widget (must not be initialised/prepared)
    */
-  void SetWidget(Widget *widget);
+  void SetWidget(std::unique_ptr<Widget> _widget) noexcept;
 
-  Widget *GetWidget() {
-    return widget;
+  Widget &GetWidget() noexcept {
+    return *widget;
   }
 
-  const Widget *GetWidget() const {
-    return widget;
+  const Widget &GetWidget() const noexcept{
+    return *widget;
   }
 
   /**

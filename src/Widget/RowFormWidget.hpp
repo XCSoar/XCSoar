@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,16 +28,18 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Repository/FileType.hpp"
-#include "Util/StaticArray.hxx"
-#include "Util/EnumCast.hpp"
+#include "util/EnumCast.hpp"
 #include "Units/Group.hpp"
+
+#include <boost/container/static_vector.hpp>
 
 #include <cassert>
 #include <cstdint>
+#include <functional>
+#include <memory>
 
 struct DialogLook;
 struct StaticEnumChoice;
-class ActionListener;
 class Angle;
 class RoughTime;
 class RoughTimeDelta;
@@ -90,7 +92,7 @@ class RowFormWidget : public WindowWidget {
       REMAINING,
     };
 
-    Type type;
+    const Type type;
 
     /**
      * Only used for #type==WIDGET.
@@ -101,7 +103,7 @@ class RowFormWidget : public WindowWidget {
      * Shall this row be available?  If not, it is hidden and no
      * screen space is reserved for it.
      */
-    bool available;
+    bool available = true;
 
     /**
      * Shall this row be visible?  The "expert" flag overrides it in
@@ -112,11 +114,11 @@ class RowFormWidget : public WindowWidget {
     /**
      * If true, then the row is only visible in "expert" mode.
      */
-    bool expert;
+    bool expert = false;
 
-    Widget *widget;
+    std::unique_ptr<Widget> widget;
 
-    Window *window;
+    std::unique_ptr<Window> window;
 
     /**
      * The position determined by RowFormWidget::UpdateLayout().  This
@@ -125,28 +127,41 @@ class RowFormWidget : public WindowWidget {
      */
     PixelRect position;
 
-    Row() = default;
-
     Row(Type _type)
-      :type(_type), available(true), visible(false), expert(false),
-       widget(nullptr), window(nullptr) {
+      :type(_type), visible(false) {
       assert(_type == Type::DUMMY);
     }
 
-    Row(Type _type, Window *_window)
-      :type(_type), available(true), visible(true), expert(false),
-       widget(nullptr), window(_window) {
+    Row(Type _type, std::unique_ptr<Window> &&_window) noexcept
+      :type(_type), visible(true),
+       window(std::move(_window))
+    {
       assert(_type != Type::DUMMY);
-      assert(_window != nullptr);
+      assert(window != nullptr);
     }
 
-    Row(Widget *_widget)
+    Row(std::unique_ptr<Widget> &&_widget) noexcept
       :type(Type::WIDGET),
        initialised(false), prepared(false), shown(false),
-       available(true), visible(true), expert(false),
-       widget(_widget), window(nullptr) {
-      assert(_widget != nullptr);
+       visible(true),
+       widget(std::move(_widget))
+    {
+      assert(widget != nullptr);
     }
+
+    ~Row() noexcept{
+      Unprepare();
+
+      if (type == Type::WIDGET) {
+        assert(widget != nullptr);
+        assert(window == nullptr);
+        assert(!shown);
+        assert(!prepared);
+      }
+    }
+
+    Row(const Row &) = delete;
+    Row &operator=(const Row &) = delete;
 
     /**
      * Determines whether this row is available.  A row that is not
@@ -174,25 +189,6 @@ class RowFormWidget : public WindowWidget {
           prepared = false;
         }
       }
-    }
-
-    /**
-     * Delete the #Widget or #Window object.
-     */
-    void Delete() {
-      Unprepare();
-
-      if (type == Type::WIDGET) {
-        assert(widget != nullptr);
-        assert(window == nullptr);
-        assert(!shown);
-        assert(!prepared);
-
-        delete widget;
-        return;
-      }
-
-      delete window;
     }
 
     gcc_pure
@@ -230,7 +226,7 @@ class RowFormWidget : public WindowWidget {
       assert(type == Type::EDIT);
       assert(window != nullptr);
 
-      return *(WndProperty *)window;
+      return (WndProperty &)*window;
     }
 
     gcc_pure
@@ -238,7 +234,7 @@ class RowFormWidget : public WindowWidget {
       assert(type == Type::EDIT);
       assert(window != nullptr);
 
-      return *(WndProperty *)window;
+      return (WndProperty &)*window;
     }
 
     /**
@@ -279,7 +275,7 @@ class RowFormWidget : public WindowWidget {
    */
   const bool vertical;
 
-  StaticArray<Row, 32u> rows;
+  boost::container::static_vector<Row, 32u> rows;
 
 public:
   RowFormWidget(const DialogLook &look, bool vertical=false);
@@ -290,10 +286,11 @@ protected:
     return look;
   }
 
-  void Add(Row::Type type, Window *window);
+  Window &Add(Row::Type type, std::unique_ptr<Window> window) noexcept;
 
-  WndProperty *CreateEdit(const TCHAR *label, const TCHAR *help=nullptr,
-                          bool read_only=false);
+  std::unique_ptr<WndProperty> CreateEdit(const TCHAR *label,
+                                          const TCHAR *help=nullptr,
+                                          bool read_only=false) noexcept;
 
 public:
   /**
@@ -302,26 +299,28 @@ public:
    * not present in a certain instance of the form.
    */
   void AddDummy() {
-    rows.push_back(Row::Type::DUMMY);
+    rows.emplace_back(Row::Type::DUMMY);
   }
 
   /**
    * Add a #Widget row.  The object will be deleted automatically.
    */
-  void Add(Widget *widget) {
-    rows.push_back(widget);
+  Widget &Add(std::unique_ptr<Widget> widget) noexcept {
+    rows.emplace_back(std::move(widget));
+    return *rows.back().widget;
   }
 
-  void Add(Window *window) {
-    Add(Row::Type::GENERIC, window);
+  Window &Add(std::unique_ptr<Window> window) noexcept {
+    Add(Row::Type::GENERIC, std::move(window));
+    return *rows.back().window;
   }
 
   /**
    * Add a #Window that fills the remaining vertical space at the
    * bottom.  It must be the last row, and there can only be one.
    */
-  void AddRemaining(Window *window) {
-    Add(Row::Type::REMAINING, window);
+  void AddRemaining(std::unique_ptr<Window> window) noexcept {
+    Add(Row::Type::REMAINING, std::move(window));
   }
 
   WndProperty *Add(const TCHAR *label, const TCHAR *help=nullptr,
@@ -437,7 +436,7 @@ public:
    */
   void AddMultiLine(const TCHAR *text=nullptr);
 
-  Button *AddButton(const TCHAR *label, ActionListener &listener, int id);
+  Button *AddButton(const TCHAR *label, std::function<void()> callback) noexcept;
 
   gcc_pure
   Widget &GetRowWidget(unsigned i) {

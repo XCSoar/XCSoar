@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -43,7 +43,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Airspace.hpp"
 #include "InfoBoxes/Content/Radio.hpp"
 
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "Language/Language.hpp"
 
 #include <cstddef>
@@ -1081,6 +1081,14 @@ static constexpr MetaData meta_data[] = {
     N_("Stby Freq"),
     N_("The currently standby Radio Frequency"),
     IBFHelper<InfoBoxContentStandbyRadioFrequency>::Create,
+  },
+
+  // e_Thermal_Time
+  {
+    N_("Thermal time"),
+    N_("TC Time"),
+    N_("The time spend in the current thermal."),
+    UpdateInfoBoxThermalTime,
   },
 
 };

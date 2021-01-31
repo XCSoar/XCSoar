@@ -3,7 +3,7 @@
 
 #include "Geo/GeoVector.hpp"
 #include "Airspace/AirspaceClass.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 #include <vector>

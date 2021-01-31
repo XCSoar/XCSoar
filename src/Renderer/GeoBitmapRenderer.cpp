@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,17 +22,17 @@ Copyright_License {
 */
 
 #include "GeoBitmapRenderer.hpp"
-#include "Screen/RawBitmap.hpp"
+#include "ui/canvas/RawBitmap.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Projection/Projection.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Texture.hpp"
-#include "Screen/OpenGL/Scope.hpp"
-#include "Screen/OpenGL/VertexPointer.hpp"
-#include "Screen/OpenGL/BulkPoint.hpp"
-#include "Screen/OpenGL/Shaders.hpp"
-#include "Screen/OpenGL/Program.hpp"
+#include "ui/canvas/opengl/Texture.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
+#include "ui/canvas/opengl/VertexPointer.hpp"
+#include "ui/canvas/opengl/Shaders.hpp"
+#include "ui/canvas/opengl/Program.hpp"
+#include "ui/dim/BulkPoint.hpp"
 
 void
 DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
@@ -53,13 +53,13 @@ DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
   const GLTexture &texture = bitmap.BindAndGetTexture();
   const PixelSize allocated = texture.GetAllocatedSize();
 
-  const GLfloat src_x = 0, src_y = 0, src_width = bitmap_size.cx,
-    src_height = bitmap_size.cy;
+  const GLfloat src_x = 0, src_y = 0, src_width = bitmap_size.width,
+    src_height = bitmap_size.height;
 
-  GLfloat x0 = src_x / allocated.cx;
-  GLfloat y0 = src_y / allocated.cy;
-  GLfloat x1 = (src_x + src_width) / allocated.cx;
-  GLfloat y1 = (src_y + src_height) / allocated.cy;
+  GLfloat x0 = src_x / allocated.width;
+  GLfloat y0 = src_y / allocated.height;
+  GLfloat x1 = (src_x + src_width) / allocated.width;
+  GLfloat y1 = (src_y + src_height) / allocated.height;
 
   const GLfloat coord[] = {
     x0, y0,

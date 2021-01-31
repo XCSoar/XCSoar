@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,15 +31,15 @@ Copyright_License {
 
 #include "Features.hpp"
 #include "Device/Port/Listener.hpp"
-#include "Thread/Mutex.hxx"
+#include "thread/Mutex.hxx"
 
 #include <array>
 #include <list>
 
 #include <tchar.h>
 
-namespace boost { namespace asio { class io_context; }}
-
+namespace Cares { class Channel; }
+class EventLoop;
 class DeviceDescriptor;
 class DeviceDispatcher;
 struct MoreData;
@@ -59,7 +59,7 @@ class MultipleDevices final : PortListener {
   std::list<PortListener *> listeners;
 
 public:
-  MultipleDevices(boost::asio::io_context &io_context);
+  MultipleDevices(EventLoop &event_loop, Cares::Channel &cares);
   ~MultipleDevices();
 
   DeviceDescriptor &operator[](unsigned i) const {

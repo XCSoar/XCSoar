@@ -45,9 +45,10 @@ In this case you can start XCSoar inside the container and let it be displayed o
 docker run \
     --mount type=bind,source="$(pwd)",target=/opt/xcsoar \
     --volume="$HOME/.Xauthority:/root/.Xauthority:rw" \
+    -v $HOME/.xcsoar/:/root/.xcsoar \
     --env="DISPLAY" --net=host \
     -it xscoar/xcsoar-build /bin/bash
-
+```
 Compile and run the binary (UNIX-SDL target):
 ```
 xcsoar-compile UNIX-SDL

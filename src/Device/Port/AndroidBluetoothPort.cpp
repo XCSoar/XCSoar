@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,11 +24,11 @@ Copyright_License {
 #include "AndroidBluetoothPort.hpp"
 #include "AndroidPort.hpp"
 #include "Android/BluetoothHelper.hpp"
-#include "Java/Global.hxx"
+#include "java/Global.hxx"
 
 #include <cassert>
 
-Port *
+std::unique_ptr<Port>
 OpenAndroidBluetoothPort(const TCHAR *address, PortListener *listener,
                          DataHandler &handler)
 {
@@ -38,15 +38,15 @@ OpenAndroidBluetoothPort(const TCHAR *address, PortListener *listener,
   if (bridge == nullptr)
     return nullptr;
 
-  return new AndroidPort(listener, handler, bridge);
+  return std::make_unique<AndroidPort>(listener, handler, bridge);
 }
 
-Port *
+std::unique_ptr<Port>
 OpenAndroidBluetoothServerPort(PortListener *listener, DataHandler &handler)
 {
   PortBridge *bridge = BluetoothHelper::createServer(Java::GetEnv());
   if (bridge == nullptr)
     return nullptr;
 
-  return new AndroidPort(listener, handler, bridge);
+  return std::make_unique<AndroidPort>(listener, handler, bridge);
 }

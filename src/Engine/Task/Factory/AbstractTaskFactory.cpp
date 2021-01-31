@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -57,9 +57,9 @@ GetOZSize(const ObservationZonePoint &oz)
   }
 }
 
-OrderedTaskPoint*
+std::unique_ptr<OrderedTaskPoint>
 AbstractTaskFactory::CreateMutatedPoint(const OrderedTaskPoint &tp,
-                                        const TaskPointFactoryType newtype) const
+                                        const TaskPointFactoryType newtype) const noexcept
 {
   auto ozsize = GetOZSize(tp.GetObservationZone());
   return CreatePoint(newtype, tp.GetWaypointPtr(), ozsize, ozsize, ozsize);
@@ -94,54 +94,54 @@ AbstractTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
   return newtype;
 }
 
-StartPoint*
+std::unique_ptr<StartPoint>
 AbstractTaskFactory::CreateStart(ObservationZonePoint* oz,
-                                 WaypointPtr wp) const
+                                 WaypointPtr wp) const noexcept
 {
   assert(wp);
 
-  return new StartPoint(oz, std::move(wp), behaviour,
-                        GetOrderedTaskSettings().start_constraints);
+  return std::make_unique<StartPoint>(oz, std::move(wp), behaviour,
+                                      GetOrderedTaskSettings().start_constraints);
 }
 
-FinishPoint*
+std::unique_ptr<FinishPoint>
 AbstractTaskFactory::CreateFinish(ObservationZonePoint* oz,
-                                  WaypointPtr wp) const
+                                  WaypointPtr wp) const noexcept
 {
   assert(wp);
 
-  return new FinishPoint(oz, std::move(wp), behaviour,
-                         GetOrderedTaskSettings().finish_constraints);
+  return std::make_unique<FinishPoint>(oz, std::move(wp), behaviour,
+                                       GetOrderedTaskSettings().finish_constraints);
 }
 
-AATPoint*
+std::unique_ptr<AATPoint>
 AbstractTaskFactory::CreateAATPoint(ObservationZonePoint* oz,
-                                    WaypointPtr wp) const
+                                    WaypointPtr wp) const noexcept
 {
   assert(wp);
 
-  return new AATPoint(oz, std::move(wp), behaviour);
+  return std::make_unique<AATPoint>(oz, std::move(wp), behaviour);
 }
 
-ASTPoint*
+std::unique_ptr<ASTPoint>
 AbstractTaskFactory::CreateASTPoint(ObservationZonePoint* oz,
-                                    WaypointPtr wp) const
+                                    WaypointPtr wp) const noexcept
 {
   assert(wp);
 
-  return new ASTPoint(oz, std::move(wp), behaviour);
+  return std::make_unique<ASTPoint>(oz, std::move(wp), behaviour);
 }
 
-StartPoint* 
-AbstractTaskFactory::CreateStart(WaypointPtr wp) const
+std::unique_ptr<StartPoint>
+AbstractTaskFactory::CreateStart(WaypointPtr wp) const noexcept
 {
   assert(wp);
 
   return CreateStart(GetDefaultStartType(), std::move(wp));
 }
 
-IntermediateTaskPoint* 
-AbstractTaskFactory::CreateIntermediate(WaypointPtr wp) const
+std::unique_ptr<IntermediateTaskPoint>
+AbstractTaskFactory::CreateIntermediate(WaypointPtr wp) const noexcept
 {
   assert(wp);
 
@@ -154,8 +154,8 @@ AbstractTaskFactory::CreateIntermediate(WaypointPtr wp) const
   return CreateIntermediate(GetDefaultIntermediateType(), std::move(wp));
 }
 
-FinishPoint* 
-AbstractTaskFactory::CreateFinish(WaypointPtr wp) const
+std::unique_ptr<FinishPoint>
+AbstractTaskFactory::CreateFinish(WaypointPtr wp) const noexcept
 {
   assert(wp);
 
@@ -277,9 +277,9 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
   gcc_unreachable();
 }
 
-OrderedTaskPoint* 
+std::unique_ptr<OrderedTaskPoint>
 AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
-                                 WaypointPtr wp) const
+                                 WaypointPtr wp) const noexcept
 {
   return CreatePoint(type, std::move(wp), -1, -1, -1);
 }
@@ -302,12 +302,12 @@ AbstractTaskFactory::GetPointDefaultSizes(const TaskPointFactoryType type,
     finish_radius = ob.sector_defaults.finish_radius;
 }
 
-OrderedTaskPoint*
+std::unique_ptr<OrderedTaskPoint>
 AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
                                  WaypointPtr wp,
                                  double start_radius,
                                  double turnpoint_radius,
-                                 double finish_radius) const
+                                 double finish_radius) const noexcept
 {
   assert(wp);
 
@@ -383,9 +383,9 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
   gcc_unreachable();
 }
 
-StartPoint* 
+std::unique_ptr<StartPoint>
 AbstractTaskFactory::CreateStart(const TaskPointFactoryType type,
-                                 WaypointPtr wp) const
+                                 WaypointPtr wp) const noexcept
 {
   assert(wp);
 
@@ -393,31 +393,31 @@ AbstractTaskFactory::CreateStart(const TaskPointFactoryType type,
     // error, invalid type!
     return NULL;
 
-  return (StartPoint *)CreatePoint(type, std::move(wp));
+  return std::unique_ptr<StartPoint>((StartPoint *)CreatePoint(type, std::move(wp)).release());
 }
 
-IntermediateTaskPoint* 
+std::unique_ptr<IntermediateTaskPoint>
 AbstractTaskFactory::CreateIntermediate(const TaskPointFactoryType type,
-                                        WaypointPtr wp) const
+                                        WaypointPtr wp) const noexcept
 {
   assert(wp);
 
   if (!IsValidIntermediateType(type))
     return NULL;
 
-  return (IntermediateTaskPoint *)CreatePoint(type, std::move(wp));
+  return std::unique_ptr<IntermediateTaskPoint>((IntermediateTaskPoint *)CreatePoint(type, std::move(wp)).release());
 }
 
-FinishPoint* 
+std::unique_ptr<FinishPoint>
 AbstractTaskFactory::CreateFinish(const TaskPointFactoryType type,
-                                  WaypointPtr wp) const
+                                  WaypointPtr wp) const noexcept
 {
   assert(wp);
 
   if (!IsValidFinishType(type))
     return NULL;
 
-  return (FinishPoint *)CreatePoint(type, std::move(wp));
+  return std::unique_ptr<FinishPoint>((FinishPoint *)CreatePoint(type, std::move(wp)).release());
 }
 
 bool 
@@ -435,10 +435,7 @@ AbstractTaskFactory::Append(const OrderedTaskPoint &new_tp,
         return task.Append(new_tp);
       } else {
         // candidate must be transformed into a startpoint
-        StartPoint* sp = CreateStart(new_tp.GetWaypointPtr());
-        bool success = task.Append(*sp);
-        delete sp;
-        return success;
+        return task.Append(*CreateStart(new_tp.GetWaypointPtr()));
       }
     }
 
@@ -446,11 +443,10 @@ AbstractTaskFactory::Append(const OrderedTaskPoint &new_tp,
 
     if (task.HasFinish()) {
       // old finish must be mutated into an intermediate point
-      IntermediateTaskPoint* sp =
+      auto sp =
         CreateIntermediate(task.GetTaskPoint(task.TaskSize() - 1).GetWaypointPtr());
 
       task.Replace(*sp, task.TaskSize()-1);
-      delete sp;
     }
 
     if (IsValidType(new_tp, task.TaskSize()))
@@ -458,10 +454,7 @@ AbstractTaskFactory::Append(const OrderedTaskPoint &new_tp,
       return task.Append(new_tp);
 
     // this point must be mutated into a finish
-    FinishPoint* sp = CreateFinish(new_tp.GetWaypointPtr());
-    bool success = task.Append(*sp);
-    delete sp;
-    return success;
+    return task.Append(*CreateFinish(new_tp.GetWaypointPtr()));
   }
 
   return task.Append(new_tp);
@@ -478,7 +471,7 @@ AbstractTaskFactory::Replace(const OrderedTaskPoint &new_tp,
       return task.Replace(new_tp, position);
 
     // will need to convert type of candidate
-    OrderedTaskPoint *tp;
+    std::unique_ptr<OrderedTaskPoint> tp;
     if (position == 0) {
       // candidate must be transformed into a startpoint
       tp = CreateStart(new_tp.GetWaypointPtr());
@@ -491,9 +484,7 @@ AbstractTaskFactory::Replace(const OrderedTaskPoint &new_tp,
       tp = CreateIntermediate(new_tp.GetWaypointPtr());
     }
 
-    bool success = task.Replace(*tp, position);
-    delete tp;
-    return success;
+    return task.Replace(*tp, position);
   }
 
   return task.Replace(new_tp, position);
@@ -511,20 +502,16 @@ AbstractTaskFactory::Insert(const OrderedTaskPoint &new_tp,
     if (position == 0) {
       if (task.HasStart()) {
         // old start must be mutated into an intermediate point
-        IntermediateTaskPoint* sp =
+        auto sp =
           CreateIntermediate(task.GetTaskPoint(0).GetWaypointPtr());
         task.Replace(*sp, 0);
-        delete sp;
       }
 
       if (IsValidType(new_tp, 0)) {
         return task.Insert(new_tp, 0);
       } else {
         // candidate must be transformed into a startpoint
-        StartPoint* sp = CreateStart(new_tp.GetWaypointPtr());
-        bool success = task.Insert(*sp, 0);
-        delete sp;
-        return success;
+        return task.Insert(*CreateStart(new_tp.GetWaypointPtr()), 0);
       }
     } else {
       if (new_tp.IsIntermediatePoint()) {
@@ -532,10 +519,8 @@ AbstractTaskFactory::Insert(const OrderedTaskPoint &new_tp,
         return task.Insert(new_tp, position);
       } else {
         // candidate must be transformed into a intermediatepoint
-        IntermediateTaskPoint* sp = CreateIntermediate(new_tp.GetWaypointPtr());
-        bool success = task.Insert(*sp, position);
-        delete sp;
-        return success;
+        return task.Insert(*CreateIntermediate(new_tp.GetWaypointPtr()),
+                           position);
       }
     }
   }
@@ -557,20 +542,16 @@ AbstractTaskFactory::Remove(const unsigned position,
         return task.Remove(0);
       } else {
         // create new start point from next point
-        StartPoint* sp = CreateStart(task.GetTaskPoint(1).GetWaypointPtr());
-        bool success = task.Remove(0) && task.Replace(*sp, 0);
-        delete sp;
-        return success;
+        auto sp = CreateStart(task.GetTaskPoint(1).GetWaypointPtr());
+        return task.Remove(0) && task.Replace(*sp, 0);
       }
     } else if (IsPositionFinish(position - 1) &&
                position + 1 == task.TaskSize()) {
       // create new finish from previous point
-      FinishPoint *sp =
+      auto sp =
         CreateFinish(task.GetTaskPoint(position - 1).GetWaypointPtr());
-      bool success = task.Remove(position) &&
+      return task.Remove(position) &&
         task.Replace(*sp, position - 1);
-      delete sp;
-      return success;
     } else {
       // intermediate point deleted, nothing special to do
       return task.Remove(position);
@@ -765,11 +746,10 @@ AbstractTaskFactory::CheckAddFinish()
  if (task.HasFinish())
    return false;
 
- FinishPoint *fp = CreateFinish(task.GetPoint(task.TaskSize() - 1).GetWaypointPtr());
+ auto fp = CreateFinish(task.GetPoint(task.TaskSize() - 1).GetWaypointPtr());
  assert(fp);
  Remove(task.TaskSize() - 1, false);
  Append(*fp, false);
- delete fp;
 
  return true;
 }
@@ -1048,31 +1028,26 @@ AbstractTaskFactory::MutateTPsToTaskType()
         if (!IsValidFinishType(newtype))
           newtype = GetDefaultFinishType();
 
-        FinishPoint *fp = (FinishPoint*)CreateMutatedPoint(tp, newtype);
+        auto fp = CreateMutatedPoint(tp, newtype);
         assert(fp);
         if (Replace(*fp, i, true))
           changed = true;
-        delete fp;
-
       } else if (i == 0) {
         if (!IsValidStartType(newtype))
           newtype = GetDefaultStartType();
 
-        StartPoint *sp = (StartPoint*)CreateMutatedPoint(tp, newtype);
+        auto sp = CreateMutatedPoint(tp, newtype);
         assert(sp);
         if (Replace(*sp, i, true))
           changed = true;
-        delete sp;
-
       } else {
 
         if (!IsValidIntermediateType(newtype))
           newtype = GetDefaultIntermediateType();
 
-        OrderedTaskPoint *tpnew = (OrderedTaskPoint*)CreateMutatedPoint(tp, newtype);
+        auto tpnew = CreateMutatedPoint(tp, newtype);
         if (Replace(*tpnew, i, true))
           changed = true;
-        delete tpnew;
       }
     }
   }
@@ -1096,11 +1071,10 @@ AbstractTaskFactory::MutateClosedFinishPerTaskType()
     if (!IsClosed()) {
       const OrderedTaskPoint &tp = task.GetPoint(task.TaskSize() - 1);
       if (tp.GetType() == TaskPointType::FINISH) {
-        FinishPoint *fp = CreateFinish(task.GetPoint(0).GetWaypointPtr());
+        auto fp = CreateFinish(task.GetPoint(0).GetWaypointPtr());
         assert(fp);
         Remove(task.TaskSize() - 1, false);
         Append(*fp, false);
-        delete fp;
         changed = true;
       }
     }
@@ -1111,7 +1085,7 @@ AbstractTaskFactory::MutateClosedFinishPerTaskType()
 bool 
 AbstractTaskFactory::AppendOptionalStart(WaypointPtr wp)
 {
-  OrderedTaskPoint* tp = NULL;
+  std::unique_ptr<OrderedTaskPoint> tp;
   if (task.TaskSize())
     tp = task.GetPoint(0).Clone(behaviour, GetOrderedTaskSettings(),
                                 std::move(wp));
@@ -1121,9 +1095,7 @@ AbstractTaskFactory::AppendOptionalStart(WaypointPtr wp)
   if (!tp)
     return false; // should never happen
 
-  bool success = task.AppendOptionalStart(*tp);
-  delete tp;
-  return success;
+  return task.AppendOptionalStart(*tp);
 }
 
 bool
@@ -1132,10 +1104,8 @@ AbstractTaskFactory::AppendOptionalStart(const OrderedTaskPoint &new_tp,
 {
   if (auto_mutate && !IsValidType(new_tp, 0)) {
     // candidate must be transformed into a startpoint of appropriate type
-    StartPoint* sp = CreateStart(new_tp.GetWaypointPtr());
-    bool success = task.AppendOptionalStart(*sp);
-    delete sp;
-    return success;
+    auto sp = CreateStart(new_tp.GetWaypointPtr());
+    return task.AppendOptionalStart(*sp);
   }
   // ok to add directly
   return task.AppendOptionalStart(new_tp);

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,25 +20,25 @@
 }
 */
 
-#include "Thread/Thread.hpp"
-#include "Event/Notify.hpp"
-#include "Event/Globals.hpp"
-#include "Screen/Init.hpp"
+#include "thread/Thread.hpp"
+#include "ui/event/Notify.hpp"
+#include "ui/event/Globals.hpp"
+#include "ui/window/Init.hpp"
 #include "TestUtil.hpp"
 
 #ifdef ANDROID
-#include "Event/Android/Loop.hpp"
-#include "Event/Shared/Event.hpp"
+#include "ui/event/android/Loop.hpp"
+#include "ui/event/shared/Event.hpp"
 #elif defined(USE_POLL_EVENT)
-#include "Event/Shared/Event.hpp"
-#include "Event/Poll/Loop.hpp"
-#include "Screen/TopWindow.hpp"
+#include "ui/event/shared/Event.hpp"
+#include "ui/event/poll/Loop.hpp"
+#include "ui/window/TopWindow.hpp"
 #elif defined(ENABLE_SDL)
-#include "Event/SDL/Event.hpp"
-#include "Event/SDL/Loop.hpp"
+#include "ui/event/sdl/Event.hpp"
+#include "ui/event/sdl/Loop.hpp"
 #else
-#include "Event/Windows/Event.hpp"
-#include "Event/Windows/Loop.hpp"
+#include "ui/event/windows/Event.hpp"
+#include "ui/event/windows/Loop.hpp"
 #endif
 
 #ifdef USE_FB
@@ -52,6 +52,8 @@ Display::Rotate(DisplayOrientation orientation)
 
 #ifndef KOBO
 
+namespace UI {
+
 #if defined(USE_EGL) || defined(USE_GLX)
 /* avoid TopWindow.cpp from being linked, as it brings some heavy
    dependencies */
@@ -59,18 +61,20 @@ void TopWindow::Refresh() noexcept {}
 #endif
 
 #ifdef USE_POLL_EVENT
-bool TopWindow::OnEvent(const Event &event) { return false; }
+bool TopWindow::OnEvent(const UI::Event &event) { return false; }
 #endif
+
+} // namespace UI
 
 #endif
 
 static bool quit;
 
 class TestThread final : public Thread {
-  Notify &notify;
+  UI::Notify &notify;
 
 public:
-  TestThread(Notify &_notify):notify(_notify) {}
+  explicit TestThread(UI::Notify &_notify):notify(_notify) {}
 
 protected:
   void Run() noexcept override {
@@ -84,10 +88,10 @@ int main(int argc, char **argv)
 
   ScreenGlobalInit screen;
 
-  EventLoop loop(*event_queue);
-  Event event;
+  UI::EventLoop loop(*UI::event_queue);
+  UI::Event event;
 
-  Notify notify{[]{ quit = true; }};
+  UI::Notify notify{[]{ quit = true; }};
   TestThread thread(notify);
   thread.Start();
 

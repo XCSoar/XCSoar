@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@ Copyright_License {
 #include "Dialogs/Error.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "Form/ActionListener.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
@@ -34,14 +33,8 @@ Copyright_License {
 #include "Form/DataField/Float.hpp"
 #include "Language/Language.hpp"
 
-enum Buttons {
-  START,
-  STOP,
-  FAST_FORWARD,
-};
-
 class ReplayControlWidget final
-  : public RowFormWidget, ActionListener, DataFieldListener {
+  : public RowFormWidget, DataFieldListener {
   enum Controls {
     FILE,
     RATE,
@@ -52,9 +45,9 @@ public:
     :RowFormWidget(look) {}
 
   void CreateButtons(WidgetDialog &dialog) {
-    dialog.AddButton(_("Start"), *this, START);
-    dialog.AddButton(_("Stop"), *this, STOP);
-    dialog.AddButton(_T("+10'"), *this, FAST_FORWARD);
+    dialog.AddButton(_("Start"), [this](){ OnStartClicked(); });
+    dialog.AddButton(_("Stop"), [this](){ OnStopClicked(); });
+    dialog.AddButton(_T("+10'"), [this](){ OnFastForwardClicked(); });
   }
 
 private:
@@ -68,9 +61,6 @@ public:
                        const PixelRect &rc) override;
 
 private:
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
-
   /* methods from DataFieldListener */
   virtual void OnModified(DataField &df) override;
 };
@@ -109,24 +99,6 @@ ReplayControlWidget::OnStartClicked()
     replay->Start(path);
   } catch (...) {
     ShowError(std::current_exception(), _("Replay"));
-  }
-}
-
-void
-ReplayControlWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case START:
-    OnStartClicked();
-    break;
-
-  case STOP:
-    OnStopClicked();
-    break;
-
-  case FAST_FORWARD:
-    OnFastForwardClicked();
-    break;
   }
 }
 

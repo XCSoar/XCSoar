@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,14 +27,14 @@ Copyright_License {
 #include "Main.hpp"
 #include "Form/List.hpp"
 #include "Form/Form.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 static void
 PaintItemCallback(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
   TCHAR text[32];
   _stprintf(text, _T("%u"), idx);
-  canvas.DrawText(rc.left + 2, rc.top + 2, text);
+  canvas.DrawText(rc.WithPadding(2).GetTopLeft(), text);
 }
 
 static void

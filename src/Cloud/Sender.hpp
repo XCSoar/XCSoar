@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,15 +26,16 @@ Copyright_License {
 
 #include "Tracking/SkyLines/Server.hpp"
 #include "Tracking/SkyLines/Protocol.hpp"
-#include "OS/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
+#include "net/StaticSocketAddress.hxx"
 
-#include <boost/asio/ip/udp.hpp>
+#include <array>
 
 struct GeoPoint;
 
 class TrafficResponseSender {
   SkyLinesTracking::Server &server;
-  const boost::asio::ip::udp::endpoint &endpoint;
+  const SocketAddress address;
 
   static constexpr size_t MAX_TRAFFIC_SIZE = 1024;
   static constexpr size_t MAX_TRAFFIC =
@@ -49,11 +50,11 @@ class TrafficResponseSender {
 
 public:
   TrafficResponseSender(SkyLinesTracking::Server &_server,
-                        const SkyLinesTracking::Server::Client &client)
-    :server(_server), endpoint(client.endpoint) {
+                        SocketAddress client_address, uint64_t key)
+    :server(_server), address(client_address) {
     data.header.header.magic = ToBE32(SkyLinesTracking::MAGIC);
     data.header.header.type = ToBE16(SkyLinesTracking::Type::TRAFFIC_RESPONSE);
-    data.header.header.key = ToBE64(client.key);
+    data.header.header.key = ToBE64(key);
 
     data.header.reserved = 0;
     data.header.reserved2 = 0;
@@ -67,7 +68,7 @@ public:
 
 class ThermalResponseSender {
   SkyLinesTracking::Server &server;
-  const boost::asio::ip::udp::endpoint &endpoint;
+  const SocketAddress address;
 
   static constexpr size_t MAX_THERMAL_SIZE = 1024;
   static constexpr size_t MAX_THERMAL =
@@ -82,11 +83,11 @@ class ThermalResponseSender {
 
 public:
   ThermalResponseSender(SkyLinesTracking::Server &_server,
-                        const SkyLinesTracking::Server::Client &client)
-    :server(_server), endpoint(client.endpoint) {
+                        SocketAddress client_address, uint64_t key) noexcept
+    :server(_server), address(client_address) {
     data.header.header.magic = ToBE32(SkyLinesTracking::MAGIC);
     data.header.header.type = ToBE16(SkyLinesTracking::Type::THERMAL_RESPONSE);
-    data.header.header.key = ToBE64(client.key);
+    data.header.header.key = ToBE64(key);
 
     data.header.reserved1 = 0;
     data.header.reserved2 = 0;

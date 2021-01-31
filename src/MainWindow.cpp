@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -94,7 +94,7 @@ GetBottomWidgetRect(const PixelRect &rc, const Widget *bottom_widget)
     return result;
   }
 
-  const unsigned requested_height = bottom_widget->GetMinimumSize().cy;
+  const unsigned requested_height = bottom_widget->GetMinimumSize().height;
   unsigned height;
   if (requested_height > 0) {
     const unsigned max_height = rc.GetHeight() / 2;
@@ -130,7 +130,7 @@ MainWindow::~MainWindow()
 }
 
 void
-MainWindow::Create(PixelSize size, TopWindowStyle style)
+MainWindow::Create(PixelSize size, UI::TopWindowStyle style)
 {
   SingleWindow::Create(title, size, style);
 }
@@ -173,6 +173,7 @@ MainWindow::Initialise()
                      CommonInterface::GetUISettings().custom_dpi);
 #ifdef DRAW_MOUSE_CURSOR
   SetCursorSize(CommonInterface::GetDisplaySettings().cursor_size);
+  SetCursorColorsInverted(CommonInterface::GetDisplaySettings().invert_cursor_colors);
 #endif
 
   LogFormat("Initialise fonts");
@@ -204,7 +205,7 @@ MainWindow::InitialiseConfigured()
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
                              Fonts::map, Fonts::map_bold,
-                             ib_layout.control_size.cx);
+                             ib_layout.control_size.width);
 
   InfoBoxManager::Create(*this, ib_layout, look->info_box);
   map_rect = ib_layout.remaining;
@@ -290,8 +291,8 @@ void
 MainWindow::ReinitialiseLayoutTA(PixelRect rc,
                                  const InfoBoxLayout::Layout &layout)
 {
-  unsigned sz = std::min(layout.control_size.cy,
-                         layout.control_size.cx) * 2;
+  unsigned sz = std::min(layout.control_size.height,
+                         layout.control_size.width) * 2;
 
   switch (CommonInterface::GetUISettings().thermal_assistant_position) {
   case (UISettings::ThermalAssistantPosition::BOTTOM_LEFT_AVOID_IB):
@@ -341,7 +342,7 @@ MainWindow::ReinitialiseLayout()
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
 
-  look->ReinitialiseLayout(ib_layout.control_size.cx);
+  look->ReinitialiseLayout(ib_layout.control_size.width);
 
   InfoBoxManager::Create(*this, ib_layout, look->info_box);
   InfoBoxManager::ProcessTimer();
@@ -410,40 +411,40 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
 
   switch (val) {
   case TrafficSettings::GaugeLocation::TopLeft:
-    rc.right = rc.left + ib_layout.control_size.cx * 2;
+    rc.right = rc.left + ib_layout.control_size.width * 2;
     ++rc.left;
-    rc.bottom = rc.top + ib_layout.control_size.cy * 2;
+    rc.bottom = rc.top + ib_layout.control_size.height * 2;
     ++rc.top;
     break;
 
   case TrafficSettings::GaugeLocation::TopRight:
-    rc.left = rc.right - ib_layout.control_size.cx * 2 + 1;
-    rc.bottom = rc.top + ib_layout.control_size.cy * 2;
+    rc.left = rc.right - ib_layout.control_size.width * 2 + 1;
+    rc.bottom = rc.top + ib_layout.control_size.height * 2;
     ++rc.top;
     break;
 
   case TrafficSettings::GaugeLocation::BottomLeft:
-    rc.right = rc.left + ib_layout.control_size.cx * 2;
+    rc.right = rc.left + ib_layout.control_size.width * 2;
     ++rc.left;
-    rc.top = rc.bottom - ib_layout.control_size.cy * 2 + 1;
+    rc.top = rc.bottom - ib_layout.control_size.height * 2 + 1;
     break;
 
   case TrafficSettings::GaugeLocation::CentreTop:
-    rc.left = (rc.left + rc.right) / 2 - ib_layout.control_size.cx;
-    rc.right = rc.left + ib_layout.control_size.cx * 2 - 1;
-    rc.bottom = rc.top + ib_layout.control_size.cy * 2;
+    rc.left = (rc.left + rc.right) / 2 - ib_layout.control_size.width;
+    rc.right = rc.left + ib_layout.control_size.width * 2 - 1;
+    rc.bottom = rc.top + ib_layout.control_size.height * 2;
     ++rc.top;
     break;
 
   case TrafficSettings::GaugeLocation::CentreBottom:
-    rc.left = (rc.left + rc.right) / 2 - ib_layout.control_size.cx;
-    rc.right = rc.left + ib_layout.control_size.cx * 2 - 1;
-    rc.top = rc.bottom - ib_layout.control_size.cy * 2 + 1;
+    rc.left = (rc.left + rc.right) / 2 - ib_layout.control_size.width;
+    rc.right = rc.left + ib_layout.control_size.width * 2 - 1;
+    rc.top = rc.bottom - ib_layout.control_size.height * 2 + 1;
     break;
 
   default:    // aka flBottomRight
-    rc.left = rc.right - ib_layout.control_size.cx * 2 + 1;
-    rc.top = rc.bottom - ib_layout.control_size.cy * 2 + 1;
+    rc.left = rc.right - ib_layout.control_size.width * 2 + 1;
+    rc.top = rc.bottom - ib_layout.control_size.height * 2 + 1;
     break;
   }
 

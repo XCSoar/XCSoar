@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,8 +31,8 @@ Copyright_License {
 #include "Plane/Plane.hpp"
 #include "Plane/PlaneGlue.hpp"
 #include "Plane/PlaneFileGlue.hpp"
-#include "OS/FileUtil.hpp"
-#include "OS/Path.hpp"
+#include "system/FileUtil.hpp"
+#include "system/Path.hpp"
 #include "LocalPath.hpp"
 #include "Components.hpp"
 #include "Profile/Profile.hpp"
@@ -41,7 +41,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/StringAPI.hxx"
 
 #include <vector>
 #include <cassert>
@@ -52,7 +52,7 @@ Copyright_License {
 #endif
 
 class PlaneListWidget final
-  : public ListWidget, private ActionListener {
+  : public ListWidget {
 
   struct ListItem {
     StaticString<32> name;
@@ -78,13 +78,6 @@ class PlaneListWidget final
     }
   };
 
-  enum Buttons {
-    NEW,
-    EDIT,
-    DELETE,
-    LOAD,
-  };
-
   WndForm *form;
   Button *edit_button, *delete_button, *load_button;
 
@@ -108,7 +101,6 @@ private:
 public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
 
 protected:
   /* virtual methods from ListItemRenderer */
@@ -121,10 +113,6 @@ protected:
   }
 
   void OnActivateItem(unsigned index) noexcept override;
-
-private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -155,10 +143,10 @@ PlaneListWidget::CreateButtons(WidgetDialog &dialog)
 {
   form = &dialog;
 
-  dialog.AddButton(_("New"), *this, NEW);
-  edit_button = dialog.AddButton(_("Edit"), *this, EDIT);
-  delete_button = dialog.AddButton(_("Delete"), *this, DELETE);
-  load_button = dialog.AddButton(_("Activate"), *this, LOAD);
+  dialog.AddButton(_("New"), [this](){ NewClicked(); });
+  edit_button = dialog.AddButton(_("Edit"), [this](){ EditClicked(); });
+  delete_button = dialog.AddButton(_("Delete"), [this](){ DeleteClicked(); });
+  load_button = dialog.AddButton(_("Activate"), [this](){ LoadClicked(); });
 }
 
 void
@@ -169,12 +157,6 @@ PlaneListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
              row_renderer.CalculateLayout(*look.list.font_bold,
                                           look.small_font));
   UpdateList();
-}
-
-void
-PlaneListWidget::Unprepare()
-{
-  DeleteWindow();
 }
 
 void
@@ -361,28 +343,6 @@ PlaneListWidget::DeleteClicked()
 
   File::Delete(list[GetList().GetCursorIndex()].path);
   UpdateList();
-}
-
-void
-PlaneListWidget::OnAction(int id) noexcept
-{
-  switch ((Buttons)id) {
-  case NEW:
-    NewClicked();
-    break;
-
-  case EDIT:
-    EditClicked();
-    break;
-
-  case DELETE:
-    DeleteClicked();
-    break;
-
-  case LOAD:
-    LoadClicked();
-    break;
-  }
 }
 
 void

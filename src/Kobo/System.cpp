@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,11 +23,11 @@ Copyright_License {
 
 #include "System.hpp"
 #include "Model.hpp"
-#include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
-#include "OS/Process.hpp"
-#include "OS/Sleep.h"
-#include "Util/StaticString.hxx"
+#include "system/FileUtil.hpp"
+#include "system/PathName.hpp"
+#include "system/Process.hpp"
+#include "system/Sleep.h"
+#include "util/StaticString.hxx"
 
 #include <unistd.h>
 #include <sys/stat.h>

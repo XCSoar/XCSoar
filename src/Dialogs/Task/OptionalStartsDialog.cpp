@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Renderer/TextRowRenderer.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
@@ -38,12 +38,7 @@ Copyright_License {
 
 #include <cassert>
 
-class OptionStartsWidget : public ListWidget, private ActionListener {
-  enum Buttons {
-    RELOCATE,
-    REMOVE,
-  };
-
+class OptionStartsWidget : public ListWidget {
   OrderedTask &task;
   bool modified = false;
 
@@ -56,8 +51,14 @@ public:
     :task(_task) {}
 
   void CreateButtons(WidgetDialog &dialog) {
-    relocate_button = dialog.AddButton(_("Relocate"), *this, RELOCATE);
-    remove_button = dialog.AddButton(_("Remove"), *this, REMOVE);
+    relocate_button = dialog.AddButton(_("Relocate"), [this](){
+      Relocate(GetList().GetCursorIndex());
+    });
+
+    remove_button = dialog.AddButton(_("Remove"), [this](){
+      Remove(GetList().GetCursorIndex());
+    });
+
     dialog.AddButton(_("Close"), mrCancel);
   }
 
@@ -94,9 +95,6 @@ protected:
 public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override {
-    DeleteWindow();
-  }
 
   /* virtual methods from class List::Handler */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -113,9 +111,6 @@ public:
   void OnActivateItem(unsigned index) noexcept override {
     Relocate(index);
   }
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -150,20 +145,6 @@ OptionStartsWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
     assert(tp != nullptr);
 
     row_renderer.DrawTextRow(canvas, rc, tp->GetWaypoint().name.c_str());
-  }
-}
-
-void
-OptionStartsWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case RELOCATE:
-    Relocate(GetList().GetCursorIndex());
-    break;
-
-  case REMOVE:
-    Remove(GetList().GetCursorIndex());
-    break;
   }
 }
 

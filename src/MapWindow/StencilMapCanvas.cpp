@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef ENABLE_OPENGL
 
 #include "StencilMapCanvas.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Geo/SearchPointVector.hpp"
@@ -84,9 +84,9 @@ StencilMapCanvas::DrawSearchPointVector(const SearchPointVector &points)
 void
 StencilMapCanvas::DrawCircle(const PixelPoint &center, unsigned radius)
 {
-  buffer.DrawCircle(center.x, center.y, radius);
+  buffer.DrawCircle(center, radius);
   if (use_stencil)
-    stencil.DrawCircle(center.x, center.y, radius);
+    stencil.DrawCircle(center, radius);
 }
 
 bool
@@ -98,8 +98,7 @@ StencilMapCanvas::Commit()
   buffer_drawn = false;
 
   if (use_stencil) {
-    buffer.CopyOr(0, 0, proj.GetScreenWidth(), proj.GetScreenHeight(),
-                  stencil, 0, 0);
+    buffer.CopyOr({0, 0}, proj.GetScreenSize(), stencil, {0, 0});
   }
 
   return true;

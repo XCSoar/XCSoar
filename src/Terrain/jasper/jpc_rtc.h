@@ -1,7 +1,7 @@
 #ifndef JPC_RTC_H
 #define JPC_RTC_H
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 struct jas_matrix;
 

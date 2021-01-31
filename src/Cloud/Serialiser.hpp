@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_SERIALISER_HPP
 #define XCSOAR_SERIALISER_HPP
 
-#include "IO/BufferedOutputStream.hxx"
-#include "IO/BufferedReader.hxx"
-#include "OS/ByteOrder.hpp"
+#include "io/BufferedOutputStream.hxx"
+#include "io/BufferedReader.hxx"
+#include "util/ByteOrder.hxx"
 
 #include <string>
 #include <chrono>

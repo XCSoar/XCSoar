@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,23 +27,23 @@ Copyright_License {
 #include "Look/TopographyLook.hpp"
 #include "Renderer/LabelBlock.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Features.hpp"
 #include "Screen/Layout.hpp"
 #include "shapelib/mapserver.h"
-#include "Util/AllocatedArray.hxx"
-#include "Util/tstring.hpp"
+#include "util/AllocatedArray.hxx"
+#include "util/tstring.hpp"
 #include "Geo/GeoClip.hpp"
 #include "Geo/FAISphere.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/VertexPointer.hpp"
-#include "Screen/OpenGL/Buffer.hpp"
-#include "Screen/OpenGL/Dynamic.hpp"
-#include "Screen/OpenGL/Geo.hpp"
+#include "ui/canvas/opengl/VertexPointer.hpp"
+#include "ui/canvas/opengl/Buffer.hpp"
+#include "ui/canvas/opengl/Dynamic.hpp"
+#include "ui/canvas/opengl/Geo.hpp"
 
-#include "Screen/OpenGL/Program.hpp"
-#include "Screen/OpenGL/Shaders.hpp"
+#include "ui/canvas/opengl/Program.hpp"
+#include "ui/canvas/opengl/Shaders.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 #endif
@@ -500,9 +500,9 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
       PixelSize tsize = canvas.CalcTextSize(label);
       PixelRect brect;
       brect.left = minx;
-      brect.right = brect.left + tsize.cx;
+      brect.right = brect.left + tsize.width;
       brect.top = miny;
-      brect.bottom = brect.top + tsize.cy;
+      brect.bottom = brect.top + tsize.height;
 
       if (!label_block.check(brect))
         continue;
@@ -510,7 +510,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
       if (!drawn_labels.insert(label).second)
         continue;
 
-      canvas.DrawText(minx, miny, label);
+      canvas.DrawText({minx, miny}, label);
     }
   }
 }

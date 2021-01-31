@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,12 +24,12 @@ Copyright_License {
 
 #include "Gauge/GaugeThermalAssistant.hpp"
 #include "Gauge/ThermalAssistantWindow.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Blackboard/LiveBlackboard.hpp"
 #include "Input/InputEvents.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 class GaugeThermalAssistantWindow : public ThermalAssistantWindow {
@@ -147,16 +147,8 @@ GaugeThermalAssistant::Prepare(ContainerWindow &parent, const PixelRect &rc)
   WindowStyle style;
   style.Hide();
 
-  GaugeThermalAssistantWindow *window =
-    new GaugeThermalAssistantWindow(parent, rc, look, style);
-  SetWindow(window);
-}
-
-void
-GaugeThermalAssistant::Unprepare()
-{
-  DeleteWindow();
-  OverlappedWidget::Unprepare();
+  SetWindow(std::make_unique<GaugeThermalAssistantWindow>(parent, rc,
+                                                          look, style));
 }
 
 void

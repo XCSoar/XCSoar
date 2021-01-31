@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "VarioBarRenderer.hpp"
 #include "TextInBox.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
@@ -31,7 +31,7 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 void
@@ -101,7 +101,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   Offset = Layout::Scale(Offset);
   if (vario_gross <= 0) {
     VarioBar[1].y = Layout::Scale(9);
-    dy_variobar = text_size.cy + 2;
+    dy_variobar = text_size.height + 2;
   } else {
     VarioBar[1].y = -Layout::Scale(9);
     clipping_arrow[1].y = -clipping_arrow[1].y;
@@ -123,7 +123,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   OffsetAvg = Layout::Scale(OffsetAvg);
   if (vario_avg <= 0) {
     VarioBarAvg[1].y = Layout::Scale(9);
-    dy_variobar_av = text_size.cy + 2;
+    dy_variobar_av = text_size.height + 2;
   } else {
     VarioBarAvg[1].y = -Layout::Scale(9);
     clipping_arrow_av[1].y = -clipping_arrow_av[1].y;
@@ -139,7 +139,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   if (mc_val > 5)
     mc_val = 5;
   if (mc_val <= 0) {
-    dy_variobar_mc = text_size.cy + 2;
+    dy_variobar_mc = text_size.height + 2;
   }else{
     dy_variobar_mc = -1;
   }
@@ -228,9 +228,9 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   style.shape = LabelShape::ROUNDED_BLACK;
   style.move_in_view = true;
 
-  if (text_size.cx < Layout::Scale(18)) {
+  if (text_size.width < Layout::Scale(18u)) {
     style.align = TextInBoxMode::Alignment::RIGHT;
-    TextInBox(canvas, Value, rc.right, y0, style, rc);
+    TextInBox(canvas, Value, {rc.right, y0}, style, rc);
   } else
-    TextInBox(canvas, Value, rc.right-Layout::Scale(18), y0, style, rc);
+    TextInBox(canvas, Value, {rc.right - Layout::Scale(18), y0}, style, rc);
 }

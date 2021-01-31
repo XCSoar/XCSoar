@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,6 @@ Copyright_License {
 #include "MatTaskMonitor.hpp"
 #include "PageActions.hpp"
 #include "Widget/QuestionWidget.hpp"
-#include "Form/ActionListener.hpp"
 #include "Language/Language.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
@@ -38,13 +37,9 @@ Copyright_License {
 #include "Interface.hpp"
 
 class MatTaskAddWidget final
-  : public QuestionWidget, private ActionListener {
+  : public QuestionWidget
+{
   MatTaskMonitor &monitor;
-
-  enum Action {
-    DISMISS,
-    ADD,
-  };
 
   const WaypointPtr waypoint;
 
@@ -58,10 +53,15 @@ class MatTaskAddWidget final
 
 public:
   MatTaskAddWidget(MatTaskMonitor &_monitor, WaypointPtr &&_waypoint)
-    :QuestionWidget(MakeMessage(*_waypoint), *this),
+    :QuestionWidget(MakeMessage(*_waypoint)),
      monitor(_monitor), waypoint(std::move(_waypoint)) {
-    AddButton(_("Add"), ADD);
-    AddButton(_("Dismiss"), DISMISS);
+    AddButton(_("Add"), [this](){
+      OnAdd();
+      PageActions::RestoreBottom();
+    });
+    AddButton(_("Dismiss"), [](){
+      PageActions::RestoreBottom();
+    });
   }
 
   ~MatTaskAddWidget() {
@@ -71,9 +71,6 @@ public:
 
 private:
   void OnAdd();
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 inline void
@@ -85,28 +82,12 @@ MatTaskAddWidget::OnAdd()
   AbstractTaskFactory &factory = task_manager->GetFactory();
 
   auto wp = waypoint;
-  IntermediateTaskPoint *tp =
+  auto tp =
     factory.CreateIntermediate(TaskPointFactoryType::MAT_CYLINDER,
                                std::move(wp));
   if (tp != nullptr) {
     factory.Insert(*tp, idx, false);
-    delete tp;
   }
-}
-
-void
-MatTaskAddWidget::OnAction(int id) noexcept
-{
-  switch ((Action)id) {
-  case DISMISS:
-    break;
-
-  case ADD:
-    OnAdd();
-    break;
-  }
-
-  PageActions::RestoreBottom();
 }
 
 /**

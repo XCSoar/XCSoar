@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,20 +31,15 @@ TaskManager::TaskManager(const TaskBehaviour &_task_behaviour,
                          const Waypoints &wps)
   :glide_polar(GlidePolar::Invalid()), safety_polar(GlidePolar::Invalid()),
    task_behaviour(_task_behaviour),
-   ordered_task(new OrderedTask(task_behaviour)),
-   goto_task(new GotoTask(task_behaviour, wps)),
-   abort_task(new AlternateTask(task_behaviour, wps)),
+   ordered_task(std::make_unique<OrderedTask>(task_behaviour)),
+   goto_task(std::make_unique<GotoTask>(task_behaviour, wps)),
+   abort_task(std::make_unique<AlternateTask>(task_behaviour, wps)),
    mode(TaskType::NONE),
    active_task(NULL) {
   null_stats.reset();
 }
 
-TaskManager::~TaskManager()
-{
-  delete abort_task;
-  delete goto_task;
-  delete ordered_task;
-}
+TaskManager::~TaskManager() noexcept = default;
 
 void
 TaskManager::SetTaskEvents(TaskEvents &_task_events)
@@ -77,13 +72,13 @@ TaskManager::SetMode(const TaskType _mode)
 {
   switch(_mode) {
   case TaskType::ABORT:
-    active_task = abort_task;
+    active_task = abort_task.get();
     mode = TaskType::ABORT;
     break;
 
   case TaskType::ORDERED:
     if (ordered_task->TaskSize()) {
-      active_task = ordered_task;
+      active_task = ordered_task.get();
       mode = TaskType::ORDERED;
     }
 
@@ -91,7 +86,7 @@ TaskManager::SetMode(const TaskType _mode)
 
   case TaskType::GOTO:
     if (goto_task->GetActiveTaskPoint()) {
-      active_task = goto_task;
+      active_task = goto_task.get();
       mode = TaskType::GOTO;
     }
 
@@ -287,7 +282,7 @@ TaskManager::Update(const AircraftState &state,
   }
 
   // inform the abort task whether it is running as the task or not
-  abort_task->SetActive(active_task == abort_task);
+  abort_task->SetActive(active_task == abort_task.get());
 
   // and tell it where the task destination is (if any)
   const GeoPoint *destination = &state.location;
@@ -307,8 +302,8 @@ TaskManager::Update(const AircraftState &state,
 
   retval |= abort_task->Update(state, state_last, GetReachPolar());
 
-  if (active_task && active_task != ordered_task &&
-      active_task != abort_task)
+  if (active_task && active_task != ordered_task.get() &&
+      active_task != abort_task.get())
     // update mode task for any that have not yet run
     retval |= active_task->Update(state, state_last, glide_polar);
 
@@ -323,7 +318,7 @@ TaskManager::UpdateIdle(const AircraftState &state)
   bool retval = false;
 
   if (active_task) {
-    const GlidePolar &polar = active_task == abort_task
+    const GlidePolar &polar = active_task == abort_task.get()
       ? GetReachPolar()
       : glide_polar;
 
@@ -414,10 +409,10 @@ TaskManager::TaskSize() const
 GeoPoint
 TaskManager::RandomPointInTask(const unsigned index, const double mag) const
 {
-  if (active_task == ordered_task && ordered_task->IsValidIndex(index))
+  if (active_task == ordered_task.get() && ordered_task->IsValidIndex(index))
     return ordered_task->GetTaskPoint(index).GetRandomPointInSector(mag);
 
-  if (active_task != NULL && index <= active_task->TaskSize())
+  if (active_task && index <= active_task->TaskSize())
     return active_task->GetActiveTaskPoint()->GetLocation();
 
   return GeoPoint::Invalid();
@@ -513,8 +508,8 @@ TaskManager::TargetLock(const unsigned index, bool do_lock)
   return true;
 }
 
-OrderedTask *
-TaskManager::Clone(const TaskBehaviour &tb) const
+std::unique_ptr<OrderedTask>
+TaskManager::Clone(const TaskBehaviour &tb) const noexcept
 {
   return ordered_task->Clone(tb);
 }
@@ -566,7 +561,7 @@ TaskManager::TakeoffAutotask(const GeoPoint &loc, const double terrain_alt)
 void
 TaskManager::ResetTask()
 {
-  if (active_task != nullptr) {
+  if (active_task) {
     active_task->Reset();
     UpdateCommonStatsTask();
   }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,12 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
 #define XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
 
-#include "Screen/ContainerWindow.hpp"
+#include "ui/window/ContainerWindow.hpp"
 #include "Screen/ProgressBar.hpp"
-#include "Screen/Bitmap.hpp"
-#include "Screen/Color.hpp"
+#include "ui/canvas/Bitmap.hpp"
+#include "ui/canvas/Color.hpp"
 #include "Gauge/LogoView.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 /**
  * The XCSoar splash screen with a progress bar.

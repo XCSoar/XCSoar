@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,18 +27,17 @@ Copyright_License {
 #include "Serialiser.hpp"
 #include "Tracking/SkyLines/Server.hpp"
 #include "Tracking/SkyLines/Protocol.hpp"
-#include "OS/ByteOrder.hpp"
-#include "IO/FileOutputStream.hxx"
-#include "IO/FileReader.hxx"
-#include "Util/PrintException.hxx"
-#include "Util/Exception.hxx"
-#include "Util/Compiler.h"
-
-#ifdef __linux__
-#include "IO/Async/SignalListener.hpp"
-#endif
-
-#include <boost/asio/steady_timer.hpp>
+#include "util/ByteOrder.hxx"
+#include "event/Loop.hxx"
+#include "event/TimerEvent.hxx"
+#include "event/SignalMonitor.hxx"
+#include "net/IPv4Address.hxx"
+#include "io/FileOutputStream.hxx"
+#include "io/FileReader.hxx"
+#include "util/PrintException.hxx"
+#include "util/Exception.hxx"
+#include "util/Compiler.h"
+#include "util/ScopeExit.hxx"
 
 #include <array>
 #include <iostream>
@@ -58,32 +57,27 @@ using std::cerr;
 using std::endl;
 
 class CloudServer final
-  : public SkyLinesTracking::Server,
-#ifdef __linux__
-    SignalListener,
-#endif
-    CloudData
+  : public SkyLinesTracking::Server, CloudData
 {
   const AllocatedPath db_path;
 
-  boost::asio::io_context &io_context;
-
-  boost::asio::steady_timer save_timer, expire_timer;
+  TimerEvent save_timer, expire_timer;
 
 public:
-  CloudServer(AllocatedPath &&_db_path, boost::asio::io_context &_io_context,
-              boost::asio::ip::udp::endpoint endpoint)
-    :SkyLinesTracking::Server(_io_context, endpoint),
-#ifdef __linux__
-    SignalListener(_io_context),
-#endif
-    db_path(std::move(_db_path)),
-     io_context(_io_context),
-    save_timer(io_context),
-    expire_timer(io_context)
+  CloudServer(AllocatedPath &&_db_path, EventLoop &event_loop,
+              SocketAddress bind_address)
+    :SkyLinesTracking::Server(event_loop, bind_address),
+     db_path(std::move(_db_path)),
+     save_timer(event_loop, BIND_THIS_METHOD(OnSaveTimer)),
+     expire_timer(event_loop, BIND_THIS_METHOD(OnExpireTimer))
   {
-#ifdef __linux__
-    SignalListener::Create(SIGTERM, SIGINT, SIGHUP, SIGUSR1);
+#ifndef _WIN32
+    SignalMonitorRegister(SIGINT, BIND_THIS_METHOD(OnQuitSignal));
+    SignalMonitorRegister(SIGTERM, BIND_THIS_METHOD(OnQuitSignal));
+    SignalMonitorRegister(SIGQUIT, BIND_THIS_METHOD(OnQuitSignal));
+
+    SignalMonitorRegister(SIGHUP, BIND_THIS_METHOD(OnReloadSignal));
+    SignalMonitorRegister(SIGUSR1, BIND_THIS_METHOD(OnDumpSignal));
 #endif
 
     ScheduleSave();
@@ -93,27 +87,23 @@ public:
   void Save();
 
 private:
-  void ScheduleSave() {
-    save_timer.expires_from_now(std::chrono::minutes(1));
-    save_timer.async_wait([this](const boost::system::error_code &ec){
-        if (ec)
-          return;
+  void OnSaveTimer() noexcept {
+    Save();
+    ScheduleSave();
+  }
 
-        Save();
-        ScheduleSave();
-      });
+  void ScheduleSave() {
+    save_timer.Schedule(std::chrono::minutes(1));
+  }
+
+  void OnExpireTimer() noexcept {
+    clients.Expire(GetEventLoop().SteadyNow() - std::chrono::minutes(10));
+    if (!clients.empty())
+      ScheduleExpire();
   }
 
   void ScheduleExpire() {
-    expire_timer.expires_from_now(std::chrono::minutes(5));
-    expire_timer.async_wait([this](const boost::system::error_code &ec){
-        if (ec)
-          return;
-
-        clients.Expire(expire_timer.expires_at() - std::chrono::minutes(10));
-        if (!clients.empty())
-          ScheduleExpire();
-      });
+    expire_timer.Schedule(std::chrono::minutes(5));
   }
 
 protected:
@@ -142,34 +132,29 @@ protected:
 
   void OnThermalRequest(const Client &client) override;
 
-  void OnSendError(const boost::asio::ip::udp::endpoint &endpoint,
-                   std::exception_ptr e) override {
-    cerr << "Failed to send to " << endpoint
+  void OnSendError(SocketAddress address,
+                   std::exception_ptr e) noexcept override {
+    cerr << "Failed to send to " << address
          << ": " << GetFullMessage(e)
          << endl;
   }
 
   void OnError(std::exception_ptr e) override {
     cerr << GetFullMessage(e) << endl;
-    io_context.stop();
+    GetEventLoop().Break();
   }
 
-#ifdef __linux__
-  /* virtual methods from class SignalListener */
-  void OnSignal(int signo) override {
-    switch (signo) {
-    case SIGHUP:
-      Save();
-      break;
+#ifndef _WIN32
+  void OnQuitSignal() noexcept {
+    GetEventLoop().Break();
+  }
 
-    case SIGUSR1:
-      DumpClients();
-      break;
+  void OnReloadSignal() noexcept {
+    Save();
+  }
 
-    default:
-      io_context.stop();
-      break;
-    }
+  void OnDumpSignal() noexcept {
+    DumpClients();
   }
 #endif
 };
@@ -185,10 +170,10 @@ CloudServer::OnFix(const Client &c,
   if (location.IsValid()) {
     bool was_empty = clients.empty();
 
-    client = &clients.Make(c.endpoint, c.key, location, altitude);
+    client = &clients.Make(c.address, c.key, location, altitude);
 
     cout << "FIX\t"
-         << client->endpoint << '\t'
+         << client->address << '\t'
          << std::hex << client->key << std::dec << '\t'
          << client->id << '\t'
          << client->location << '\t'
@@ -200,7 +185,7 @@ CloudServer::OnFix(const Client &c,
   } else {
     client = clients.Find(c.key);
     if (client != nullptr)
-      clients.Refresh(*client, c.endpoint);
+      clients.Refresh(*client, c.address);
   }
 
   /* send this new traffic location to all interested clients
@@ -216,7 +201,7 @@ CloudServer::OnFix(const Client &c,
       /* not interested (anymore) */
       continue;
 
-    TrafficResponseSender s(*this, {i->endpoint, i->key});
+    TrafficResponseSender s(*this, i->address, i->key);
     s.Add(client->id, 0, //TODO: time?
           client->location, client->altitude);
     s.Flush();
@@ -242,7 +227,7 @@ CloudServer::OnTrafficRequest(const Client &c, bool near)
 
   const auto min_stamp = now - MAX_TRAFFIC_AGE;
 
-  TrafficResponseSender s(*this, c);
+  TrafficResponseSender s(*this, c.address, c.key);
 
   unsigned n = 0;
   for (const auto &traffic : clients.QueryWithinRange(client->location,
@@ -279,7 +264,7 @@ CloudServer::OnWaveSubmit(const Client &c,
     return;
 
   cout << "WAVE\t"
-       << client->endpoint << '\t'
+       << client->address << '\t'
        << std::hex << client->key << std::dec << '\t'
        << client->id << '\t'
        << a << '\t'
@@ -305,7 +290,7 @@ CloudServer::OnThermalSubmit(const Client &c,
     return;
 
   cout << "THERMAL\t"
-       << client->endpoint << '\t'
+       << client->address << '\t'
        << std::hex << client->key << std::dec << '\t'
        << client->id << '\t'
        << top_location << '\t'
@@ -332,7 +317,7 @@ CloudServer::OnThermalSubmit(const Client &c,
       /* not interested (anymore) */
       continue;
 
-    ThermalResponseSender s(*this, {i->endpoint, i->key});
+    ThermalResponseSender s(*this, i->address, i->key);
     s.Add(thermal.Pack());
     s.Flush();
   }
@@ -353,7 +338,7 @@ CloudServer::OnThermalRequest(const Client &c)
 
   const auto min_time = now - MAX_THERMAL_AGE;
 
-  ThermalResponseSender s(*this, c);
+  ThermalResponseSender s(*this, c.address, c.key);
 
   unsigned n = 0;
   for (const auto &thermal : thermals.QueryWithinRange(client->location,
@@ -410,12 +395,12 @@ try {
 
   const Path db_path(argv[1]);
 
-  boost::asio::io_context io_context;
+  EventLoop event_loop;
+  SignalMonitorInit(event_loop);
+  AtScopeExit() { SignalMonitorFinish(); };
 
-  const boost::asio::ip::udp::endpoint endpoint(boost::asio::ip::udp::v4(),
-                                                CloudServer::GetDefaultPort());
-
-  CloudServer server(db_path, io_context, endpoint);
+  CloudServer server(db_path, event_loop,
+                     IPv4Address(CloudServer::GetDefaultPort()));
 
   try {
     server.Load();
@@ -424,7 +409,7 @@ try {
     PrintException(e);
   }
 
-  io_context.run();
+  event_loop.Run();
 
   server.Save();
 

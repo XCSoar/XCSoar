@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,8 +25,8 @@
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Interface.hpp"
-#include "Screen/AntiFlickerWindow.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/window/AntiFlickerWindow.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Renderer/HorizonRenderer.hpp"
 
 /**
@@ -84,15 +84,9 @@ HorizonWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
   style.Disable();
 
-  HorizonWindow *w = new HorizonWindow(look.horizon, look.info_box.inverse);
+  auto w = std::make_unique<HorizonWindow>(look.horizon, look.info_box.inverse);
   w->Create(parent, rc, style);
-  SetWindow(w);
-}
-
-void
-HorizonWidget::Unprepare()
-{
-  DeleteWindow();
+  SetWindow(std::move(w));
 }
 
 void

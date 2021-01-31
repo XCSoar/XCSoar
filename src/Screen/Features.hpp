@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,23 +25,23 @@ Copyright_License {
 #define XCSOAR_SCREEN_FEATURES_HPP
 
 #ifdef ANDROID
-#include "Screen/Android/Features.hpp"
+#include "ui/window/android/Features.hpp"
 #endif
 
 #ifdef USE_MEMORY_CANVAS
-#include "Screen/Memory/Features.hpp"
+#include "ui/canvas/memory/Features.hpp"
 #endif
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Features.hpp"
+#include "ui/opengl/Features.hpp"
 #endif
 
 #ifdef USE_GDI
-#include "Screen/GDI/Features.hpp"
+#include "ui/canvas/gdi/Features.hpp"
 #endif
 
 #ifdef ENABLE_SDL
-#include "Screen/SDL/Features.hpp"
+#include "ui/window/sdl/Features.hpp"
 #endif
 
 /**

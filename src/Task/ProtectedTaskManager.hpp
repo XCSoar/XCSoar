@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,10 +23,12 @@
 #ifndef XCSOAR_PROTECTED_TASK_MANAGER_HPP
 #define XCSOAR_PROTECTED_TASK_MANAGER_HPP
 
-#include "Thread/Guard.hpp"
+#include "thread/Guard.hpp"
 #include "Engine/Task/Unordered/AbortIntersectionTest.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
+
+#include <memory>
 
 struct AGeoPoint;
 struct TaskBehaviour;
@@ -83,8 +85,7 @@ public:
     return DoGoto(WaypointPtr(wp));
   }
 
-  gcc_malloc
-  OrderedTask* TaskClone() const;
+  std::unique_ptr<OrderedTask> TaskClone() const noexcept;
 
   /**
    * Copy task into this task

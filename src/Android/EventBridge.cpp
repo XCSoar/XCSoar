@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,11 +23,13 @@ Copyright_License {
 
 #include "org_xcsoar_EventBridge.h"
 #include "Product.hpp"
-#include "Event/Queue.hpp"
-#include "Event/Idle.hpp"
-#include "Event/Globals.hpp"
-#include "OS/Clock.hpp"
-#include "Util/Compiler.h"
+#include "ui/event/Queue.hpp"
+#include "ui/event/Idle.hpp"
+#include "ui/event/Globals.hpp"
+#include "system/Clock.hpp"
+#include "util/Compiler.h"
+
+using namespace UI;
 
 /**
  * @see http://developer.android.com/reference/android/view/KeyEvent.html

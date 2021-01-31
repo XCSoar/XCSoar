@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 
 #ifndef ENABLE_OPENGL
-#include "Screen/WindowCanvas.hpp"
+#include "ui/canvas/WindowCanvas.hpp"
 #endif
 
 #include "Weather/Features.hpp"
@@ -60,7 +60,7 @@ MapWindow::OnCreate()
   const PixelSize size = GetSize();
   visible_projection.SetScreenSize(size);
   visible_projection.SetMapScale(5000);
-  visible_projection.SetScreenOrigin(size.cx / 2, size.cy / 2);
+  visible_projection.SetScreenOrigin(size.width / 2, size.height / 2);
   visible_projection.UpdateScreenBounds();
 
 #ifndef ENABLE_OPENGL
@@ -104,6 +104,7 @@ MapWindow::OnPaint(Canvas &canvas)
 
     /* do the projection */
 
+    const auto buffer_size = buffer_projection.GetScreenSize();
     const int buffer_width = buffer_projection.GetScreenWidth();
     const int buffer_height = buffer_projection.GetScreenHeight();
 
@@ -133,26 +134,26 @@ MapWindow::OnPaint(Canvas &canvas)
     canvas.SelectWhiteBrush();
 
     if (top_left.x > 0)
-      canvas.Rectangle(0, 0, top_left.x, canvas.GetHeight());
+      canvas.DrawRectangle(PixelRect(0, 0, top_left.x, canvas.GetHeight()));
 
     if (bottom_right.x < (int)canvas.GetWidth())
-      canvas.Rectangle(bottom_right.x, 0,
-                       canvas.GetWidth(), canvas.GetHeight());
+      canvas.DrawRectangle(PixelRect(bottom_right.x, 0,
+                                     canvas.GetWidth(), canvas.GetHeight()));
 
     if (top_left.y > 0)
-      canvas.Rectangle(top_left.x, 0, bottom_right.x, top_left.y);
+      canvas.DrawRectangle({top_left.x, 0, bottom_right.x, top_left.y});
 
     if (bottom_right.y < (int)canvas.GetHeight())
-      canvas.Rectangle(top_left.x, bottom_right.y,
-                       bottom_right.x, canvas.GetHeight());
+      canvas.DrawRectangle(PixelRect(top_left.x, bottom_right.y,
+                                     bottom_right.x, canvas.GetHeight()));
 
     /* now stretch the buffer into the window Canvas */
 
     std::lock_guard<Mutex> lock(DoubleBufferWindow::mutex);
     const Canvas &src = GetVisibleCanvas();
-    canvas.Stretch(top_left.x, top_left.y,
-                   bottom_right.x - top_left.x, bottom_right.y - top_left.y,
-                   src, 0, 0, buffer_width, buffer_height);
+    canvas.Stretch(top_left,
+                   {bottom_right.x - top_left.x, bottom_right.y - top_left.y},
+                   src, {0, 0}, buffer_size);
   } else
     /* the UI has changed since the last DrawThread iteration has
        started: the buffer has invalid data, paint a white window

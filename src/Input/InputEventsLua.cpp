@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,16 +23,16 @@ Copyright_License {
 
 #include "InputEvents.hpp"
 #include "Dialogs/Message.hpp"
-#include "Lua/StartFile.hpp"
+#include "lua/StartFile.hpp"
 #include "Dialogs/Error.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
-#include "OS/Path.hpp"
-#include "OS/FileUtil.hpp"
+#include "system/Path.hpp"
+#include "system/FileUtil.hpp"
 #include "Form/DataField/ComboList.hpp"
-#include "Util/StringFormat.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/StringFormat.hpp"
+#include "util/StringCompare.hxx"
 
 #include <stdexcept>
 

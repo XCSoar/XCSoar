@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@ Copyright_License {
 
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Gauge/LogoView.hpp"
 #include "Screen/Layout.hpp"
 #include "Renderer/BitmapButtonRenderer.hpp"
@@ -47,18 +47,18 @@ SimulatorPromptWindow::OnCreate()
   fly_bitmap.Load(IDB_LAUNCHER1);
   fly_bitmap.EnableInterpolation();
   fly_button.Create(*this, rc, style,
-                    new BitmapButtonRenderer(fly_bitmap),
-                    action_listener, FLY);
+                    std::make_unique<BitmapButtonRenderer>(fly_bitmap),
+                    [this](){ callback(Result::FLY); });
 
   sim_bitmap.Load(IDB_LAUNCHER2);
   sim_bitmap.EnableInterpolation();
   sim_button.Create(*this, rc, style,
-                    new BitmapButtonRenderer(sim_bitmap),
-                    action_listener, SIMULATOR);
+                    std::make_unique<BitmapButtonRenderer>(sim_bitmap),
+                    [this](){ callback(Result::SIMULATOR); });
 
   if (have_quit_button)
     quit_button.Create(*this, look.button, _("Quit"), rc, style,
-                       action_listener, QUIT);
+                       [this](){ callback(Result::QUIT); });
 }
 
 void
@@ -68,7 +68,7 @@ SimulatorPromptWindow::OnResize(PixelSize new_size)
 
   const PixelRect rc = GetClientRect();
 
-  const unsigned h_middle = new_size.cx / 2;
+  const unsigned h_middle = new_size.width / 2;
   const unsigned bottom_padding = Layout::Scale(15);
   const unsigned button_width = Layout::Scale(112);
   const unsigned button_height = Layout::Scale(30);
@@ -109,8 +109,7 @@ SimulatorPromptWindow::OnPaint(Canvas &canvas)
   canvas.Select(look.text_font);
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();
-  canvas.DrawText(label_position.x, label_position.y,
-                  _("What do you want to do?"));
+  canvas.DrawText(label_position, _("What do you want to do?"));
 
   ContainerWindow::OnPaint(canvas);
 }

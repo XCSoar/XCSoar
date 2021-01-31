@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,16 +22,16 @@ Copyright_License {
 */
 
 #include "ChartRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/LeastSquares.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 #include <cassert>
 #include <windef.h> /* for MAX_PATH */
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 void
@@ -179,12 +179,11 @@ ChartRenderer::DrawLabel(const TCHAR *text, const double xv, const double yv)
     const ScopeAlphaBlend alpha_blend;
 #endif
     canvas.Select(look.label_blank_brush);
-    canvas.Rectangle(pt.x - tsize.cx / 2 - padding_text,
-                     pt.y - tsize.cy / 2 - padding_text,
-                     pt.x + tsize.cx / 2 + padding_text,
-                     pt.y + tsize.cy / 2 + padding_text);
+
+    const PixelSize rect_size = tsize + PixelSize{padding_text * 2, padding_text * 2};
+    canvas.DrawRectangle(PixelRect::Centered(pt, rect_size));
   }
-  canvas.DrawText(pt.x - tsize.cx / 2, pt.y - tsize.cy / 2, text);
+  canvas.DrawText(pt + tsize / 2u, text);
 }
 
 void
@@ -193,12 +192,7 @@ ChartRenderer::DrawNoData(const TCHAR *text)
   canvas.Select(look.label_font);
   canvas.SetBackgroundTransparent();
 
-  PixelSize tsize = canvas.CalcTextSize(text);
-
-  int x = (rc.left + rc.right - tsize.cx) / 2;
-  int y = (rc.top + rc.bottom - tsize.cy) / 2;
-
-  canvas.DrawText(x, y, text);
+  canvas.DrawText(rc.CenteredTopLeft(canvas.CalcTextSize(text)), text);
 }
 
 void
@@ -208,10 +202,10 @@ ChartRenderer::DrawXLabel(const TCHAR *text)
   canvas.SetBackgroundTransparent();
 
   PixelSize tsize = canvas.CalcTextSize(text);
-  int x = rc.right - tsize.cx - Layout::GetTextPadding();
-  int y = rc.bottom - tsize.cy - Layout::GetTextPadding();
+  int x = rc.right - tsize.width - Layout::GetTextPadding();
+  int y = rc.bottom - tsize.height - Layout::GetTextPadding();
 
-  canvas.DrawText(x, y, text);
+  canvas.DrawText({x, y}, text);
 }
 
 void
@@ -231,10 +225,7 @@ ChartRenderer::DrawYLabel(const TCHAR *text)
   canvas.Select(look.axis_label_font);
   canvas.SetBackgroundTransparent();
 
-  int x = rc.left + Layout::GetTextPadding();
-  int y = rc.top + Layout::GetTextPadding();
-
-  canvas.DrawText(x, y, text);
+  canvas.DrawText(rc.WithPadding(Layout::GetTextPadding()).GetTopLeft(), text);
 }
 
 void
@@ -337,7 +328,7 @@ ChartRenderer::DrawBarChart(const XYDataStore &lsdata)
     int ymin = ScreenY(y.min);
     int xmax((i + 1.8) * x.scale + rc_chart.left);
     int ymax = ScreenY(slots[i].y);
-    canvas.Rectangle(xmin, ymin, xmax, ymax);
+    canvas.DrawRectangle({xmin, ymin, xmax, ymax});
   }
 }
 
@@ -459,10 +450,10 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step, UnitFormat unit_form
           if (unit_format != UnitFormat::NONE) {
             TCHAR unit_text[MAX_PATH];
             FormatTicText(unit_text, xval * unit_step / tic_step, unit_step, unit_format);
-            const auto w = canvas.CalcTextSize(unit_text).cx;
+            const auto w = canvas.CalcTextSize(unit_text).width;
             xmin -= w/2;
             if ((xmin >= next_text) && ((int)(xmin + Layout::VptScale(30)) < rc_chart.right)) {
-              canvas.DrawText(xmin, y, unit_text);
+              canvas.DrawText({xmin, y}, unit_text);
               next_text = xmin + w + Layout::GetTextPadding();
             }
           }
@@ -520,7 +511,7 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step, UnitFormat unit_form
             TCHAR unit_text[MAX_PATH];
             FormatTicText(unit_text, yval * unit_step / tic_step, unit_step, unit_format);
             const auto c = canvas.CalcTextSize(unit_text);
-            canvas.DrawText(std::max(x-c.cx, rc.left + padding_text), ymin-c.cy/2, unit_text);
+            canvas.DrawText({std::max(x - (int)c.width, rc.left + padding_text), ymin - (int)c.height / 2}, unit_text);
           }
         }
       }
@@ -589,7 +580,7 @@ ChartRenderer::DrawBlankRectangle(double x_min, double y_min,
   if (x.unscaled || y.unscaled)
     return;
   canvas.Select(look.blank_brush);
-  canvas.Rectangle(ScreenX(x_min), ScreenY(y_min), ScreenX(x_max), ScreenY(y_max));
+  canvas.DrawRectangle({ScreenX(x_min), ScreenY(y_min), ScreenX(x_max), ScreenY(y_max)});
 }
 
 void
@@ -623,6 +614,6 @@ ChartRenderer::DrawWeightBarGraph(const XYDataStore &lsdata)
   for (const auto &i : slots) {
     auto pt_base = ToScreen(i.x, y.min);
     auto pt_top = ToScreen(i.x+i.weight, i.y);
-    canvas.Rectangle(pt_base.x, pt_base.y, pt_top.x, pt_top.y);
+    canvas.DrawRectangle({pt_base.x, pt_base.y, pt_top.x, pt_top.y});
   }
 }

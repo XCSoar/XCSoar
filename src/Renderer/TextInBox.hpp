@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,6 +28,8 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct PixelPoint;
+struct PixelSize;
 struct PixelRect;
 class Canvas;
 class LabelBlock;
@@ -52,15 +54,14 @@ struct TextInBoxMode {
 };
 
 bool
-TextInBox(Canvas &canvas, const TCHAR *value,
-          int x, int y,
+TextInBox(Canvas &canvas, const TCHAR *value, PixelPoint p,
           TextInBoxMode mode, const PixelRect &map_rc,
           LabelBlock *label_block=nullptr);
 
 bool
-TextInBox(Canvas &canvas, const TCHAR *value, int x, int y,
+TextInBox(Canvas &canvas, const TCHAR *value, PixelPoint p,
           TextInBoxMode mode,
-          unsigned screen_width, unsigned screen_height,
+          PixelSize screen_size,
           LabelBlock *label_block=nullptr);
 
 #endif

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -86,12 +86,8 @@ GetCylinderRadiusOrMinusOne(const ObservationZoneClient &p)
 
 OrderedTask::OrderedTask(const TaskBehaviour &tb)
   :AbstractTask(TaskType::ORDERED, tb),
-   taskpoint_start(nullptr),
-   taskpoint_finish(nullptr),
    factory_mode(tb.task_type_default),
-   active_factory(nullptr),
-   ordered_settings(tb.ordered_defaults),
-   dijkstra_min(nullptr), dijkstra_max(nullptr)
+   ordered_settings(tb.ordered_defaults)
 {
   ClearName();
   active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
@@ -101,8 +97,6 @@ OrderedTask::OrderedTask(const TaskBehaviour &tb)
 OrderedTask::~OrderedTask()
 {
   RemoveAllPoints();
-
-  delete active_factory;
 
   delete dijkstra_min;
   delete dijkstra_max;
@@ -782,7 +776,7 @@ OrderedTask::Append(const OrderedTaskPoint &new_tp)
     return false;
 
   const unsigned i = task_points.size();
-  task_points.push_back(new_tp.Clone(task_behaviour, ordered_settings));
+  task_points.push_back(new_tp.Clone(task_behaviour, ordered_settings).release());
   if (i > 0)
     SetNeighbours(i - 1);
   else {
@@ -798,7 +792,7 @@ bool
 OrderedTask::AppendOptionalStart(const OrderedTaskPoint &new_tp)
 {
   optional_start_points.push_back(new_tp.Clone(task_behaviour,
-                                               ordered_settings));
+                                               ordered_settings).release());
   if (task_points.size() > 1)
     SetNeighbours(0);
   return true;
@@ -822,7 +816,7 @@ OrderedTask::Insert(const OrderedTaskPoint &new_tp, const unsigned position)
     active_task_point++;
 
   task_points.insert(task_points.begin() + position,
-                     new_tp.Clone(task_behaviour, ordered_settings));
+                     new_tp.Clone(task_behaviour, ordered_settings).release());
 
   if (position)
     SetNeighbours(position - 1);
@@ -849,7 +843,7 @@ OrderedTask::Replace(const OrderedTaskPoint &new_tp, const unsigned position)
     return false;
 
   delete task_points[position];
-  task_points[position] = new_tp.Clone(task_behaviour, ordered_settings);
+  task_points[position] = new_tp.Clone(task_behaviour, ordered_settings).release();
 
   if (position)
     SetNeighbours(position - 1);
@@ -875,7 +869,7 @@ OrderedTask::ReplaceOptionalStart(const OrderedTaskPoint &new_tp,
 
   delete optional_start_points[position];
   optional_start_points[position] = new_tp.Clone(task_behaviour,
-                                                 ordered_settings);
+                                                 ordered_settings).release();
 
   SetNeighbours(0);
   return true;
@@ -1228,10 +1222,10 @@ OrderedTask::HasTargets() const
   return false;
 }
 
-OrderedTask*
-OrderedTask::Clone(const TaskBehaviour &tb) const
+std::unique_ptr<OrderedTask>
+OrderedTask::Clone(const TaskBehaviour &tb) const noexcept
 {
-  OrderedTask* new_task = new OrderedTask(tb);
+  auto new_task = std::make_unique<OrderedTask>(tb);
 
   new_task->SetFactory(factory_mode);
 
@@ -1261,7 +1255,7 @@ OrderedTask::CheckDuplicateWaypoints(Waypoints& waypoints,
     auto wp = waypoints.CheckExistsOrAppend((*i)->GetWaypointPtr());
 
     const OrderedTaskPoint *new_tp =
-      (*i)->Clone(task_behaviour, ordered_settings, std::move(wp));
+      (*i)->Clone(task_behaviour, ordered_settings, std::move(wp)).release();
     if (is_task)
       Replace(*new_tp, std::distance(begin, i));
     else
@@ -1343,11 +1337,11 @@ OrderedTask::RelocateOptionalStart(const unsigned position,
   if (position >= optional_start_points.size())
     return false;
 
-  OrderedTaskPoint *new_tp =
+  auto new_tp =
     optional_start_points[position]->Clone(task_behaviour, ordered_settings,
                                            std::move(waypoint));
   delete optional_start_points[position];
-  optional_start_points[position]= new_tp;
+  optional_start_points[position] = new_tp.release();
   return true;
 }
 
@@ -1357,11 +1351,10 @@ OrderedTask::Relocate(const unsigned position, WaypointPtr &&waypoint)
   if (position >= TaskSize())
     return false;
 
-  OrderedTaskPoint *new_tp = task_points[position]->Clone(task_behaviour,
-                                                          ordered_settings,
-                                                          std::move(waypoint));
+  auto new_tp = task_points[position]->Clone(task_behaviour,
+                                             ordered_settings,
+                                             std::move(waypoint));
   bool success = Replace(*new_tp, position);
-  delete new_tp;
   return success;
 }
 
@@ -1381,7 +1374,6 @@ OrderedTask::SetFactory(const TaskFactoryType the_factory)
   }
   factory_mode = the_factory;
 
-  delete active_factory;
   active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
   active_factory->UpdateOrderedTaskSettings(ordered_settings);
 

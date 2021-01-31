@@ -101,6 +101,6 @@ int jpc_fix_firstone(jpc_fix_t x);
 /* Calculate the integer quantity floor(log2(x)), where x is a positive
   integer. */
 JAS_ATTRIBUTE_CONST
-int jpc_floorlog2(int x);
+unsigned jpc_floorlog2(uint_fast32_t x);
 
 #endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "AirspacePreviewRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Features.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
@@ -134,10 +134,9 @@ DrawShape(Canvas &canvas, AbstractAirspace::Shape shape, const PixelPoint pt,
           unsigned radius, const std::vector<BulkPixelPoint> &pts)
 {
   if (shape == AbstractAirspace::Shape::CIRCLE)
-    canvas.DrawCircle(pt.x, pt.y, radius);
+    canvas.DrawCircle(pt, radius);
   else if (IsAncientHardware())
-    canvas.Rectangle(pt.x - radius, pt.y - radius,
-                     pt.x + radius, pt.y + radius);
+    canvas.DrawRectangle(PixelRect{pt}.WithMargin(radius));
   else
     canvas.DrawPolygon(&pts[0], (unsigned)pts.size());
 }

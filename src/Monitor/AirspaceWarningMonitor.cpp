@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,10 +27,9 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Audio/Sound.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
-#include "Event/Idle.hpp"
+#include "ui/event/Idle.hpp"
 #include "PageActions.hpp"
 #include "Widget/QuestionWidget.hpp"
-#include "Form/ActionListener.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Airspace/AirspaceWarning.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
@@ -39,12 +38,7 @@ Copyright_License {
 #include "Formatter/TimeFormatter.hpp"
 
 class AirspaceWarningWidget final
-  : public QuestionWidget, private ActionListener {
-  enum Action {
-    ACK,
-    ACK_DAY,
-    MORE,
-  };
+  : public QuestionWidget {
 
   AirspaceWarningMonitor &monitor;
   ProtectedAirspaceWarningManager &manager;
@@ -74,12 +68,27 @@ public:
                         const AbstractAirspace &_airspace,
                         AirspaceWarning::State _state,
                         const AirspaceInterceptSolution &solution)
-    :QuestionWidget(MakeMessage(_airspace, _state, solution), *this),
+    :QuestionWidget(MakeMessage(_airspace, _state, solution)),
      monitor(_monitor), manager(_manager),
      airspace(_airspace), state(_state) {
-    AddButton(_("ACK"), ACK);
-    AddButton(_("ACK Day"), ACK_DAY);
-    AddButton(_("More"), MORE);
+    AddButton(_("ACK"), [this](){
+      if (state == AirspaceWarning::WARNING_INSIDE)
+        manager.AcknowledgeInside(airspace);
+      else
+        manager.AcknowledgeWarning(airspace);
+      monitor.Schedule();
+      PageActions::RestoreBottom();
+    });
+
+    AddButton(_("ACK Day"), [this](){
+      manager.AcknowledgeDay(airspace);
+      monitor.Schedule();
+      PageActions::RestoreBottom();
+    });
+
+    AddButton(_("More"), [this](){
+      dlgAirspaceWarningsShowModal(manager);
+    });
   }
 
   ~AirspaceWarningWidget() {
@@ -97,36 +106,7 @@ public:
     SetMessage(MakeMessage(airspace, state, solution));
     return true;
   }
-
-private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
-
-void
-AirspaceWarningWidget::OnAction(int id) noexcept
-{
-  switch ((Action)id) {
-  case ACK:
-    if (state == AirspaceWarning::WARNING_INSIDE)
-      manager.AcknowledgeInside(airspace);
-    else
-      manager.AcknowledgeWarning(airspace);
-    monitor.Schedule();
-    PageActions::RestoreBottom();
-    break;
-
-  case ACK_DAY:
-    manager.AcknowledgeDay(airspace);
-    monitor.Schedule();
-    PageActions::RestoreBottom();
-    break;
-
-  case MORE:
-    dlgAirspaceWarningsShowModal(manager);
-    return;
-  }
-}
 
 void
 AirspaceWarningMonitor::Reset()

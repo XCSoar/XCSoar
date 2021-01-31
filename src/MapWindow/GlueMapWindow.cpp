@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,8 +27,8 @@ Copyright_License {
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Look/Look.hpp"
 #include "Interface.hpp"
-#include "Time/PeriodClock.hpp"
-#include "Event/Idle.hpp"
+#include "time/PeriodClock.hpp"
+#include "ui/event/Idle.hpp"
 #include "Topography/Thread.hpp"
 #include "Terrain/Thread.hpp"
 

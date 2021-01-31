@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,10 +25,12 @@ Copyright_License {
 #define XCSOAR_PAGER_WIDGET_HPP
 
 #include "Widget.hpp"
-#include "Util/StaticArray.hxx"
-#include "Screen/Point.hpp"
+#include "ui/dim/Rect.hpp"
+
+#include <boost/container/static_vector.hpp>
 
 #include <functional>
+#include <memory>
 
 /**
  * A #Widget that host multiple other widgets, displaying one at a
@@ -38,17 +40,16 @@ class PagerWidget : public Widget {
   typedef std::function<void()> PageFlippedCallback;
 
   struct Child {
-    Widget *widget;
+    std::unique_ptr<Widget> widget;
 
     /**
      * Has Widget::Prepare() been called?
      */
-    bool prepared;
+    bool prepared = false;
 
-    Child() = default;
-
-    constexpr
-    Child(Widget *_widget):widget(_widget), prepared(false) {}
+    Child(std::unique_ptr<Widget> &&_widget) noexcept
+      :widget(std::move(_widget)) {}
+    ~Child() noexcept;
   };
 
   bool initialised, prepared, visible;
@@ -57,7 +58,7 @@ class PagerWidget : public Widget {
   PixelRect position;
 
   unsigned current;
-  StaticArray<Child, 32u> children;
+  boost::container::static_vector<Child, 32u> children;
 
   PageFlippedCallback page_flipped_callback;
 
@@ -83,7 +84,7 @@ public:
    * @param w a #Widget that is "uninitialised"; it will be deleted by
    * this class
    */
-  void Add(Widget *w);
+  void Add(std::unique_ptr<Widget> w) noexcept;
 
   /**
    * Delete all widgets.  This may only be called after Unprepare().

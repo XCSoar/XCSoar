@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,12 +23,12 @@ Copyright_License {
 
 #include "ClimbChartRenderer.hpp"
 #include "ChartRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Units/Units.hpp"
 #include "FlightStatistics.hpp"
 #include "Language/Language.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
-#include "Util/StringFormat.hpp"
+#include "util/StringFormat.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Engine/Task/TaskManager.hpp"

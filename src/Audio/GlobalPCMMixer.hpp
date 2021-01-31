@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@ Copyright_License {
 
 #include "Features.hpp"
 
+class EventLoop;
 
 #ifdef HAVE_PCM_MIXER
 class PCMMixer;
@@ -34,13 +35,13 @@ class PCMMixer;
 extern PCMMixer *pcm_mixer;
 
 void
-InitialisePCMMixer();
+InitialisePCMMixer(EventLoop &event_loop);
 
 void
 DeinitialisePCMMixer();
 #else
 static inline void
-InitialisePCMMixer()
+InitialisePCMMixer(EventLoop &)
 {
 }
 
@@ -52,8 +53,8 @@ DeinitialisePCMMixer()
 
 class ScopeGlobalPCMMixer final {
 public:
-  ScopeGlobalPCMMixer() {
-    InitialisePCMMixer();
+  ScopeGlobalPCMMixer(EventLoop &event_loop) {
+    InitialisePCMMixer(event_loop);
   }
 
   ~ScopeGlobalPCMMixer() {

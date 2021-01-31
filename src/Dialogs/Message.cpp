@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,9 +28,10 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Util/StaticArray.hxx"
+#include "ui/window/SingleWindow.hpp"
 #include "UIGlobals.hpp"
+
+#include <boost/container/static_vector.hpp>
 
 #include <cassert>
 
@@ -39,13 +40,12 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
 {
   assert(text != NULL);
 
-  SingleWindow &main_window = UIGlobals::GetMainWindow();
+  auto &main_window = UIGlobals::GetMainWindow();
+  const auto main_rc = main_window.GetClientRect();
 
-  const unsigned dialog_width = Layout::Scale(200u);
-  unsigned dialog_height = Layout::Scale(160u);
+  PixelSize client_area_size(Layout::Scale(200u), Layout::Scale(160u));
 
-  const unsigned button_width = Layout::Scale(60u);
-  const unsigned button_height = Layout::Scale(32u);
+  const auto button_size = Layout::Scale(PixelSize{60u, 32u});
 
   // Create dialog
   WindowStyle style;
@@ -54,102 +54,84 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
-  PixelRect form_rc;
-  form_rc.left = 0;
-  form_rc.top = 0;
-  form_rc.right = dialog_width;
-  form_rc.bottom = dialog_height;
-
-  WndForm wf(main_window, dialog_look, form_rc, caption, style);
+  WndForm wf(main_window, dialog_look, PixelRect{client_area_size},
+             caption, style);
 
   ContainerWindow &client_area = wf.GetClientAreaWindow();
 
   // Create text element
-  WndFrame *text_frame = new WndFrame(client_area, dialog_look, form_rc);
+  WndFrame text_frame(client_area, dialog_look,
+                      client_area.GetClientRect());
 
-  text_frame->SetText(text);
-  text_frame->SetAlignCenter();
+  text_frame.SetText(text);
+  text_frame.SetAlignCenter();
 
-  const unsigned text_height = text_frame->GetTextHeight();
-  text_frame->Resize(dialog_width, text_height + Layout::GetTextPadding());
+  const unsigned text_height = text_frame.GetTextHeight();
+  text_frame.Resize(client_area_size.width,
+                    text_height + Layout::GetTextPadding());
 
-  const PixelSize root_size = main_window.GetSize();
+  client_area_size.height = Layout::Scale(10) + text_height + button_size.height;
 
-  dialog_height = wf.GetTitleHeight() + Layout::Scale(10) + text_height + button_height;
-  const int dialog_x = (root_size.cx - dialog_width) / 2;
-  const int dialog_y = (root_size.cy - dialog_height) / 2;
-  wf.Move(dialog_x, dialog_y, dialog_width, dialog_height);
+  const auto dialog_size = wf.ClientAreaToDialogSize(client_area_size);
+  const auto dialog_position = main_rc.CenteredTopLeft(dialog_size);
 
-  PixelRect button_rc;
-  button_rc.left = 0;
-  button_rc.top = Layout::Scale(6) + text_height;
-  button_rc.right = button_rc.left + button_width;
-  button_rc.bottom = button_rc.top + button_height;
+  const PixelRect dialog_rc(dialog_position, dialog_size);
+  wf.Move(dialog_rc);
+
+  const PixelRect button_rc(PixelPoint(0, Layout::Scale(6u) + text_height),
+                            button_size);
 
   // Create buttons
   WindowStyle button_style;
   button_style.TabStop();
 
-  StaticArray<Button *, 10> buttons;
+  boost::container::static_vector<Button, 10> buttons;
 
   unsigned button_flags = flags & 0x000f;
   if (button_flags == MB_OK ||
       button_flags == MB_OKCANCEL)
-    buttons.append() =
-      new Button(client_area, dialog_look.button, _("OK"), button_rc,
-                 button_style, wf, IDOK);
+    buttons.emplace_back(client_area, dialog_look.button, _("OK"), button_rc,
+                         button_style,
+                         [&wf](){ wf.SetModalResult(IDOK); });
 
   if (button_flags == MB_YESNO ||
       button_flags == MB_YESNOCANCEL) {
-    buttons.append() =
-      new Button(client_area, dialog_look.button, _("Yes"), button_rc,
-                 button_style, wf, IDYES);
-
-    buttons.append() =
-      new Button(client_area, dialog_look.button, _("No"), button_rc,
-                 button_style, wf, IDNO);
+    buttons.emplace_back(client_area, dialog_look.button, _("Yes"), button_rc,
+                         button_style, wf.MakeModalResultCallback(IDYES));
+    buttons.emplace_back(client_area, dialog_look.button, _("No"), button_rc,
+                         button_style, wf.MakeModalResultCallback(IDNO));
   }
 
   if (button_flags == MB_ABORTRETRYIGNORE ||
       button_flags == MB_RETRYCANCEL)
-    buttons.append() =
-      new Button(client_area, dialog_look.button, _("Retry"), button_rc,
-                 button_style, wf, IDRETRY);
+    buttons.emplace_back(client_area, dialog_look.button, _("Retry"), button_rc,
+                         button_style, wf.MakeModalResultCallback(IDRETRY));
 
   if (button_flags == MB_OKCANCEL ||
       button_flags == MB_RETRYCANCEL ||
       button_flags == MB_YESNOCANCEL)
-    buttons.append() =
-      new Button(client_area, dialog_look.button, _("Cancel"), button_rc,
-                 button_style, wf, IDCANCEL);
+    buttons.emplace_back(client_area, dialog_look.button, _("Cancel"), button_rc,
+                         button_style, wf.MakeModalResultCallback(IDCANCEL));
 
   if (button_flags == MB_ABORTRETRYIGNORE) {
-    buttons.append() =
-      new Button(client_area, dialog_look.button, _("Abort"), button_rc,
-                 button_style, wf, IDABORT);
+    buttons.emplace_back(client_area, dialog_look.button, _("Abort"), button_rc,
+                         button_style, wf.MakeModalResultCallback(IDABORT));
 
-    buttons.append() =
-      new Button(client_area, dialog_look.button, _("Ignore"), button_rc,
-                 button_style, wf, IDIGNORE);
+    buttons.emplace_back(client_area, dialog_look.button, _("Ignore"), button_rc,
+                         button_style, wf.MakeModalResultCallback(IDIGNORE));
   }
 
-  const unsigned max_button_width = dialog_width / buttons.size();
-  int button_x = max_button_width / 2 - button_width / 2;
+  const unsigned max_button_width = client_area_size.width / buttons.size();
+  int button_x = max_button_width / 2 - button_size.width / 2;
 
   // Move buttons to the right positions
   for (unsigned i = 0; i < buttons.size(); i++) {
-    buttons[i]->Move(button_x, button_rc.top);
+    buttons[i].Move(button_x, button_rc.top);
     button_x += max_button_width;
   }
 
   // Show MessageBox and save result
   unsigned res = wf.ShowModal();
-
-  delete text_frame;
-  for (unsigned i = 0; i < buttons.size(); ++i)
-    delete buttons[i];
-
-  wf.Destroy();
 
   return res;
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -38,8 +38,8 @@ Copyright_License {
 #include "ActionInterface.hpp"
 
 #ifdef USE_POLL_EVENT
-#include "Event/Globals.hpp"
-#include "Event/Queue.hpp"
+#include "ui/event/Globals.hpp"
+#include "ui/event/Queue.hpp"
 #endif
 
 enum ControlIndex {
@@ -56,6 +56,7 @@ enum ControlIndex {
 #endif
 #ifdef DRAW_MOUSE_CURSOR
   CursorSize,
+  CursorInverted,
 #endif
 };
 
@@ -227,6 +228,8 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 #ifdef DRAW_MOUSE_CURSOR
   AddInteger(_("Cursor zoom"), _("Cursor zoom factor"), _T("%d x"), _T("%d x"), 1, 10, 1,
              (unsigned)ui_settings.display.cursor_size);
+  AddBoolean(_("Invert cursor color"), _("Enable black cursor"),
+             ui_settings.display.invert_cursor_colors);
 #endif
 }
 
@@ -284,6 +287,9 @@ LayoutConfigPanel::Save(bool &_changed)
 #ifdef DRAW_MOUSE_CURSOR
   changed |= SaveValue(CursorSize, ProfileKeys::CursorSize, ui_settings.display.cursor_size);
   CommonInterface::main_window->SetCursorSize(ui_settings.display.cursor_size);
+
+  changed |= SaveValue(CursorInverted, ProfileKeys::CursorColorsInverted, ui_settings.display.invert_cursor_colors);
+  CommonInterface::main_window->SetCursorColorsInverted(ui_settings.display.invert_cursor_colors);
 #endif
 
   if (orientation_changed) {
@@ -297,7 +303,7 @@ LayoutConfigPanel::Save(bool &_changed)
     }
 
 #ifdef USE_POLL_EVENT
-    event_queue->SetDisplayOrientation(ui_settings.display.orientation);
+    UI::event_queue->SetDisplayOrientation(ui_settings.display.orientation);
 #endif
 
     CommonInterface::main_window->CheckResize();
@@ -309,8 +315,8 @@ LayoutConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateLayoutConfigPanel()
 {
-  return new LayoutConfigPanel();
+  return std::make_unique<LayoutConfigPanel>();
 }

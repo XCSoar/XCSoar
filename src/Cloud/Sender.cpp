@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #include "Sender.hpp"
 #include "Tracking/SkyLines/Export.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Util/CRC.hpp"
+#include "util/CRC.hpp"
 
 void
 TrafficResponseSender::Add(uint32_t pilot_id, uint32_t time,
@@ -57,7 +57,7 @@ TrafficResponseSender::Flush()
 
   data.header.header.crc = 0;
   data.header.header.crc = ToBE16(UpdateCRC16CCITT(&data, size, 0));
-  server.SendBuffer(endpoint, boost::asio::const_buffer(&data, size));
+  server.SendBuffer(address, {&data, size});
 }
 
 void
@@ -84,5 +84,5 @@ ThermalResponseSender::Flush()
 
   data.header.header.crc = 0;
   data.header.header.crc = ToBE16(UpdateCRC16CCITT(&data, size, 0));
-  server.SendBuffer(endpoint, boost::asio::const_buffer(&data, size));
+  server.SendBuffer(address, {&data, size});
 }

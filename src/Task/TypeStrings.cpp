@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ Copyright_License {
 #include "Engine/Task/Factory/TaskFactoryType.hpp"
 #include "Engine/Task/Factory/TaskPointFactoryType.hpp"
 #include "Language/Language.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 static const TCHAR *const task_factory_names[] = {
   N_("FAI badges/records"),

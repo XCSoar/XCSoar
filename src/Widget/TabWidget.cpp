@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
 
     if (e != nullptr) {
       auto max_size = e->GetMaximumSize();
-      unsigned extra_height = max_size.cy;
+      unsigned extra_height = max_size.height;
       unsigned max_height = rc.GetHeight() / 2;
       if (extra_height > max_height)
         extra_height = max_height;
@@ -50,7 +50,7 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
 
     if (e != nullptr) {
       auto max_size = e->GetMaximumSize();
-      unsigned extra_width = max_size.cx;
+      unsigned extra_width = max_size.width;
       unsigned max_width = rc.GetWidth() / 3;
       if (extra_width > max_width)
         extra_width = max_width;
@@ -64,7 +64,6 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
 TabWidget::~TabWidget()
 {
   delete tab_display;
-  delete extra;
 }
 
 void
@@ -92,11 +91,11 @@ TabWidget::RestoreExtra()
 }
 
 void
-TabWidget::AddTab(Widget *widget, const TCHAR *caption,
+TabWidget::AddTab(std::unique_ptr<Widget> widget, const TCHAR *caption,
                   const MaskedIcon *icon)
 {
   tab_display->Add(caption, icon);
-  PagerWidget::Add(widget);
+  PagerWidget::Add(std::move(widget));
 }
 
 const TCHAR *
@@ -136,9 +135,9 @@ TabWidget::GetMinimumSize() const
   auto size = PagerWidget::GetMinimumSize();
   if (tab_display != nullptr) {
     if (tab_display->IsVertical())
-      size.cx += tab_display->GetRecommendedColumnWidth();
+      size.width += tab_display->GetRecommendedColumnWidth();
     else
-      size.cy += tab_display->GetRecommendedRowHeight();
+      size.height += tab_display->GetRecommendedRowHeight();
   }
 
   return size;
@@ -150,9 +149,9 @@ TabWidget::GetMaximumSize() const
   auto size = PagerWidget::GetMaximumSize();
   if (tab_display != nullptr) {
     if (tab_display->IsVertical())
-      size.cx += tab_display->GetRecommendedColumnWidth();
+      size.width += tab_display->GetRecommendedColumnWidth();
     else
-      size.cy += tab_display->GetRecommendedRowHeight();
+      size.height += tab_display->GetRecommendedRowHeight();
   }
 
   return size;
@@ -177,7 +176,7 @@ TabWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 void
 TabWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  const Layout layout(orientation, rc, *tab_display, extra);
+  const Layout layout(orientation, rc, *tab_display, extra.get());
 
   tab_display->UpdateLayout(layout.tab_display, layout.vertical);
 
@@ -201,7 +200,7 @@ TabWidget::Unprepare()
 void
 TabWidget::Show(const PixelRect &rc)
 {
-  const Layout layout(orientation, rc, *tab_display, extra);
+  const Layout layout(orientation, rc, *tab_display, extra.get());
 
   tab_display->UpdateLayout(layout.tab_display, layout.vertical);
   tab_display->Show();
@@ -228,7 +227,7 @@ TabWidget::Hide()
 void
 TabWidget::Move(const PixelRect &rc)
 {
-  const Layout layout(orientation, rc, *tab_display, extra);
+  const Layout layout(orientation, rc, *tab_display, extra.get());
 
   tab_display->UpdateLayout(layout.tab_display, layout.vertical);
 

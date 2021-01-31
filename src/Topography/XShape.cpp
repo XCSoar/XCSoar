@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,25 +23,25 @@ Copyright_License {
 
 #include "Topography/XShape.hpp"
 #include "Convert.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/UTF8.hpp"
-#include "Util/StringStrip.hxx"
-#include "Util/ScopeExit.hxx"
+#include "util/StringAPI.hxx"
+#include "util/UTF8.hpp"
+#include "util/StringStrip.hxx"
+#include "util/ScopeExit.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "Projection/Projection.hpp"
-#include "Screen/OpenGL/Triangulate.hpp"
+#include "ui/canvas/opengl/Triangulate.hpp"
 #endif
 
 #ifdef _UNICODE
-#include "Util/ConvertString.hpp"
+#include "util/ConvertString.hpp"
 #endif
 
 #include <algorithm>
 
 #include <tchar.h>
 
-static AllocatedString<TCHAR>
+static BasicAllocatedString<TCHAR>
 ImportLabel(const char *src)
 {
   if (src == nullptr)
@@ -54,12 +54,12 @@ ImportLabel(const char *src)
     return nullptr;
 
 #ifdef _UNICODE
-  return AllocatedString<TCHAR>::Donate(ConvertUTF8ToWide(src));
+  return ConvertUTF8ToWide(src);
 #else
   if (!ValidateUTF8(src))
     return nullptr;
 
-  return AllocatedString<TCHAR>::Duplicate(src);
+  return BasicAllocatedString<TCHAR>(src);
 #endif
 }
 

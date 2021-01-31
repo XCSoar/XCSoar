@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,10 +25,9 @@ Copyright_License {
 #include "WifiDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "UIGlobals.hpp"
-#include "Event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
-#include "Form/ActionListener.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "System.hpp"
 
@@ -40,7 +39,8 @@ GetWifiToggleCaption()
 }
 
 class NetworkWidget final
-  : public RowFormWidget, ActionListener {
+  : public RowFormWidget {
+
   enum Buttons {
     TOGGLE_WIFI,
     WIFI,
@@ -61,9 +61,6 @@ public:
 
 private:
   void ToggleWifi();
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -77,13 +74,13 @@ void
 NetworkWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   toggle_wifi_button = AddButton(GetWifiToggleCaption(),
-                                 *this, TOGGLE_WIFI);
+                                 [this](){ ToggleWifi(); });
 
-  wifi_button = AddButton(_("Wifi"), *this, WIFI);
+  wifi_button = AddButton(_("Wifi"), [](){ ShowWifiDialog(); });
 
-  AddButton(_T("Telnet server"), *this, TELNET);
+  AddButton(_T("Telnet server"), [](){ KoboRunTelnetd(); });
 
-  AddButton(_T("Ftp server"), *this, FTP);
+  AddButton(_T("Ftp server"), [](){ KoboRunFtpd(); });
 
   UpdateButtons();
 }
@@ -98,28 +95,6 @@ NetworkWidget::ToggleWifi()
   }
 
   UpdateButtons();
-}
-
-void
-NetworkWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case TOGGLE_WIFI:
-    ToggleWifi();
-    break;
-
-  case WIFI:
-    ShowWifiDialog();
-    break;
-
-  case TELNET:
-    KoboRunTelnetd();
-    break;
-
-  case FTP:
-    KoboRunFtpd();
-    break;
-  }
 }
 
 void

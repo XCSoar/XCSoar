@@ -3,7 +3,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,9 +24,9 @@ Copyright_License {
 */
 
 #include "PopupMessage.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Look/DialogLook.hpp"
 #include "Audio/Sound.hpp"
 #include "StatusMessage.hpp"
@@ -93,7 +93,7 @@ PopupMessage::Message::AppendTo(StaticString<2000> &buffer,
   return true;
 }
 
-PopupMessage::PopupMessage(SingleWindow &_parent, const DialogLook &_look,
+PopupMessage::PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
                            const UISettings &_settings)
   :parent(_parent), look(_look),
    settings(_settings),
@@ -134,8 +134,7 @@ PopupMessage::OnPaint(Canvas &canvas)
 
   auto rc = GetClientRect();
 #ifndef USE_WINUSER
-  canvas.DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom,
-                              COLOR_BLACK);
+  canvas.DrawOutlineRectangle(rc, COLOR_BLACK);
 #endif
 
   const int padding = Layout::GetTextPadding();

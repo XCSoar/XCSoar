@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "HLine.hpp"
 #include "Look/DialogLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 void
 HLine::OnPaint(Canvas &canvas)
@@ -32,10 +32,10 @@ HLine::OnPaint(Canvas &canvas)
   canvas.Clear(look.background_color);
 #endif
 
-  const unsigned width = canvas.GetWidth();
+  const int width = canvas.GetWidth();
   const unsigned height = canvas.GetHeight();
-  const unsigned middle = height / 2;
+  const int middle = height / 2;
 
   canvas.SelectBlackPen();
-  canvas.DrawLine(0, middle, width, middle);
+  canvas.DrawLine({0, middle}, {width, middle});
 }

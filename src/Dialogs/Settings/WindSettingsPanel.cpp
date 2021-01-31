@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -39,6 +39,14 @@ WindSettingsPanel::WindSettingsPanel(bool _edit_manual_wind,
    clear_manual_button(_clear_manual_button),
    edit_trail_drift(_edit_trail_drift),
    clear_manual_window(nullptr) {}
+
+void
+WindSettingsPanel::ClearManual() noexcept
+{
+  CommonInterface::SetComputerSettings().wind.manual_wind_available.Clear();
+  manual_modified = false;
+  UpdateVector();
+}
 
 void
 WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
@@ -103,7 +111,7 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 
   if (clear_manual_button)
-    AddButton(_("Clear"), *this, CLEAR_MANUAL);
+    AddButton(_("Clear"), [this](){ ClearManual(); });
 
   UpdateVector();
 }
@@ -151,18 +159,6 @@ WindSettingsPanel::Save(bool &_changed)
 
   _changed |= changed;
   return true;
-}
-
-void
-WindSettingsPanel::OnAction(int id) noexcept
-{
-  switch (id) {
-  case CLEAR_MANUAL:
-    CommonInterface::SetComputerSettings().wind.manual_wind_available.Clear();
-    manual_modified = false;
-    UpdateVector();
-    break;
-  }
 }
 
 void

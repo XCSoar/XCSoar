@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,6 +28,7 @@ Copyright_License {
 #include "Renderer/TraceHistoryRenderer.hpp"
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/TaskProgressRenderer.hpp"
+#include "ui/dim/Rect.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
@@ -36,7 +37,7 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"
 
@@ -154,10 +155,10 @@ ShowAnalysisBarograph()
                        terrain, AnalysisPage::BAROGRAPH);
 }
 
-static Widget *
+static std::unique_ptr<Widget>
 LoadAnalysisBarographPanel(unsigned id)
 {
-  return new CallbackWidget(ShowAnalysisBarograph);
+  return std::make_unique<CallbackWidget>(ShowAnalysisBarograph);
 }
 
 static constexpr

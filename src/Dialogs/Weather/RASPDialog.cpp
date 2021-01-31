@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,7 +34,6 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
-#include "Form/ActionListener.hpp"
 #include "Protection.hpp"
 #include "DataGlobals.hpp"
 #include "UIGlobals.hpp"
@@ -42,14 +41,14 @@ Copyright_License {
 #include "ActionInterface.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
-#include "Net/HTTP/Session.hpp"
-#include "Net/HTTP/ToFile.hpp"
-#include "IO/FileTransaction.hpp"
+#include "net/http/Session.hpp"
+#include "net/http/ToFile.hpp"
+#include "io/FileTransaction.hpp"
 
 #include <stdio.h>
 
 class RASPSettingsPanel final
-  : public RowFormWidget, DataFieldListener, ActionListener {
+  : public RowFormWidget, DataFieldListener {
 
   enum Controls {
     ITEM,
@@ -82,15 +81,6 @@ private:
       UpdateTimeControl();
     else if (IsDataField(TIME, df))
       OnTimeModified((const DataFieldEnum &)df);
-  }
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case DOWNLOAD:
-      Download();
-      break;
-    }
   }
 };
 
@@ -226,7 +216,7 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Time"), nullptr, this);
   UpdateTimeControl();
 
-  AddButton(_("Download"), *this, DOWNLOAD);
+  AddButton(_("Download"), [this](){ Download(); });
 }
 
 bool
@@ -242,11 +232,11 @@ RASPSettingsPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateRaspWidget() noexcept
 {
   auto rasp = DataGlobals::GetRasp();
-  return new RASPSettingsPanel(std::move(rasp));
+  return std::make_unique<RASPSettingsPanel>(std::move(rasp));
 }
 
 /*

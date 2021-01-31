@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,9 +26,9 @@ Copyright_License {
 #include "RaspStyle.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Terrain/TerrainSettings.hpp"
-#include "Screen/Ramp.hpp"
+#include "ui/canvas/Ramp.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/StringAPI.hxx"
 
 gcc_pure
 static const RaspStyle &

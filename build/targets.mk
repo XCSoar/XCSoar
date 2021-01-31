@@ -5,7 +5,6 @@ TARGETS = PC WIN64 \
 	ANDROID ANDROID7 ANDROID7NEON ANDROID86 \
 	ANDROIDAARCH64 ANDROIDX64 \
 	ANDROIDFAT \
-	CYGWIN \
 	OSX64 IOS32 IOS64
 
 ifeq ($(TARGET),)
@@ -123,19 +122,6 @@ ifeq ($(TARGET),PC)
   endif
 
   WINVER = 0x0600
-endif
-
-ifeq ($(TARGET),CYGWIN)
-  TCPREFIX :=
-
-  TARGET_ARCH += -march=i586
-
-  WINVER = 0x0600
-
-  HAVE_POSIX := y
-  HAVE_WIN32 := y
-  HAVE_MSVCRT := n
-  HAVE_VASPRINTF := y
 endif
 
 ifeq ($(TARGET),OPT)
@@ -422,9 +408,6 @@ endif
 ifeq ($(HAVE_WIN32),y)
   TARGET_CPPFLAGS += -DWIN32_LEAN_AND_MEAN
   TARGET_CPPFLAGS += -DNOMINMAX
-  ifeq ($(TARGET),CYGWIN)
-  TARGET_CPPFLAGS += -DWIN32
-  endif
 
   # kludge for the CURL build, which fails if _WIN32_WINNT >= 0x0600,
   # due to duplicate struct pollfd definition (winsock2.h and CURL's
@@ -529,10 +512,6 @@ ifeq ($(TARGET),PC)
   TARGET_ARCH += -mwindows -mms-bitfields
 endif
 
-ifeq ($(TARGET),CYGWIN)
-  WINDRESFLAGS += -I./Data
-endif
-
 ####### linker configuration
 
 TARGET_LDFLAGS =
@@ -548,10 +527,8 @@ ifeq ($(TARGET),PC)
 endif
 
 ifeq ($(HAVE_WIN32),y)
-  ifneq ($(TARGET),CYGWIN)
-    # link libstdc++-6.dll statically, so we don't have to distribute it
-    TARGET_LDFLAGS += -static-libstdc++ -static-libgcc
-  endif
+  # link libstdc++-6.dll statically, so we don't have to distribute it
+  TARGET_LDFLAGS += -static-libstdc++ -static-libgcc
 endif
 
 ifeq ($(HAVE_POSIX),y)
@@ -597,16 +574,7 @@ ifeq ($(TARGET),ANDROID)
 endif
 
 ifeq ($(HAVE_WIN32),y)
-  # for boost::asio::ip::tcp::acceptor
-  TARGET_LDLIBS += -lmswsock
-endif
-
-ifneq ($(filter PC CYGWIN,$(TARGET)),)
   TARGET_LDLIBS += -lwinmm
-endif
-
-ifeq ($(TARGET),CYGWIN)
-  TARGET_LDLIBS += -lintl
 endif
 
 ifeq ($(TARGET),UNIX)

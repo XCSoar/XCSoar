@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,9 +25,8 @@ Copyright_License {
 #define ENABLE_CLOSE_BUTTON
 
 #include "Main.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Form/Button.hpp"
-#include "Form/ActionListener.hpp"
 #include "Renderer/FAITriangleAreaRenderer.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Projection/WindowProjection.hpp"
@@ -49,7 +48,7 @@ RenderFAISectorDots(Canvas &canvas, const WindowProjection &projection,
   for (auto *i = geo_points; i != geo_end; ++i) {
     PixelPoint p;
     if (projection.GeoToScreenIfVisible(*i, p))
-      canvas.DrawCircle(p.x, p.y, 2);
+      canvas.DrawCircle(p, 2);
   }
 }
 
@@ -77,7 +76,7 @@ public:
 
 protected:
   void OnResize(PixelSize new_size) override {
-    projection.SetScreenOrigin(new_size.cx / 2, new_size.cy / 2);
+    projection.SetScreenOrigin(new_size.width / 2, new_size.height / 2);
     projection.SetGeoLocation(a.Middle(b));
     projection.SetScreenSize(new_size);
     projection.SetScaleFromRadius(400000);
@@ -142,10 +141,10 @@ protected:
     canvas.SelectHollowBrush();
 
     auto pa = projection.GeoToScreen(a);
-    canvas.DrawCircle(pa.x, pa.y, 4);
+    canvas.DrawCircle(pa, 4);
 
     auto pb = projection.GeoToScreen(b);
-    canvas.DrawCircle(pb.x, pb.y, 4);
+    canvas.DrawCircle(pb, 4);
 
     RenderFAISector(canvas, projection, a, b, false, settings);
     RenderFAISectorDots(canvas, projection, a, b, false, settings);

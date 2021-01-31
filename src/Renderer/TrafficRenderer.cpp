@@ -2,7 +2,7 @@
  Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,13 +22,13 @@
  */
 
 #include "TrafficRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/TrafficLook.hpp"
 #include "FLARM/Traffic.hpp"
 #include "GliderLink/Traffic.hpp"
 #include "Math/Screen.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 void
 TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
@@ -86,7 +86,7 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
   }
 
   canvas.SelectHollowBrush();
-  canvas.DrawCircle(pt.x, pt.y, Layout::FastScale(11));
+  canvas.DrawCircle(pt, Layout::FastScale(11u));
 }
 
 
@@ -119,5 +119,5 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
   canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 
   canvas.SelectHollowBrush();
-  canvas.DrawCircle(pt.x, pt.y, Layout::FastScale(11));
+  canvas.DrawCircle(pt, Layout::FastScale(11u));
 }

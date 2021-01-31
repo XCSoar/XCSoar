@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,13 +30,12 @@ Copyright_License {
 #define ENABLE_DIALOG_LOOK
 
 #include "Main.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Screen/BufferCanvas.hpp"
+#include "ui/window/SingleWindow.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Look/TaskLook.hpp"
 #include "Form/List.hpp"
 #include "Form/Button.hpp"
-#include "Form/ActionListener.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Engine/Task/ObservationZones/LineSectorZone.hpp"
@@ -167,8 +166,8 @@ protected:
 
   virtual void OnResize(PixelSize new_size) override {
     PaintWindow::OnResize(new_size);
-    projection.SetScale(new_size.cx / 21000.);
-    projection.SetScreenOrigin(new_size.cx / 2, new_size.cy / 2);
+    projection.SetScale(new_size.width / 21000.);
+    projection.SetScreenOrigin(new_size.width / 2, new_size.height / 2);
   }
 };
 
@@ -191,21 +190,16 @@ OZWindow::OnPaint(Canvas &canvas)
   const OZBoundary boundary = oz->GetBoundary();
   for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i) {
     auto p = projection.GeoToScreen(*i);
-    canvas.DrawLine(p.x - 3, p.y - 3, p.x + 3, p.y + 3);
-    canvas.DrawLine(p.x + 3, p.y - 3, p.x - 3, p.y + 3);
+    canvas.DrawLine(p.At(-3, -3), p.At(3, 3));
+    canvas.DrawLine(p.At(3, -3), p.At(-3, 3));
   }
 }
 
-class TestWindow : public SingleWindow,
-                   ActionListener,
+class TestWindow : public UI::SingleWindow,
                    ListItemRenderer, ListCursorHandler {
   Button close_button;
   ListControl *type_list;
   OZWindow oz;
-
-  enum Buttons {
-    CLOSE,
-  };
 
 public:
   TestWindow(const TaskLook &task_look, const AirspaceLook &airspace_look)
@@ -240,7 +234,7 @@ public:
     button_rc.top = button_rc.bottom - 30;
     close_button.Create(*this, *button_look, _T("Close"), button_rc,
                         WindowStyle(),
-                        *this, CLOSE);
+                        [this](){ Close(); });
 
     oz.set_shape(ObservationZone::Shape::LINE);
 
@@ -248,19 +242,10 @@ public:
   }
 
 protected:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case CLOSE:
-      Close();
-      break;
-    }
-  }
-
   /* virtual methods from ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) noexcept override {
-    canvas.DrawText(rc.left + 2, rc.top + 2, oz_type_names[idx]);
+    canvas.DrawText(rc.WithPadding(2).GetTopLeft(), oz_type_names[idx]);
   }
 
   /* virtual methods from ListCursorHandler */

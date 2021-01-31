@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,15 +25,15 @@ Copyright_License {
 #include "WidgetDialog.hpp"
 #include "Language/Language.hpp"
 #include "Widget/WindowWidget.hpp"
-#include "Screen/Canvas.hpp"
-#include "Event/KeyCode.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-#include "Util/CharUtil.hxx"
-#include "Util/Macros.hpp"
-#include "Util/StringStrip.hxx"
-#include "Util/TruncateString.hpp"
-#include "Util/TStringView.hxx"
+#include "util/CharUtil.hxx"
+#include "util/Macros.hpp"
+#include "util/StringStrip.hxx"
+#include "util/TruncateString.hpp"
+#include "util/TStringView.hxx"
 
 #include <algorithm>
 
@@ -69,7 +69,7 @@ FindEntryLetter(TCHAR ch)
   return 0;
 }
 
-class KnobTextEntryWindow final : public PaintWindow, public ActionListener {
+class KnobTextEntryWindow final : public PaintWindow {
   const size_t max_width;
 
   unsigned int cursor;
@@ -112,6 +112,7 @@ private:
     UpdateCursor();
   }
 
+public:
   bool MoveCursorLeft() {
     if (cursor < 1)
       return false;
@@ -143,9 +144,6 @@ private:
 protected:
   /* virtual methods from class Window */
   void OnPaint(Canvas &canvas) override;
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -165,13 +163,13 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas)
 
   BulkPixelPoint p[5];
   p[0].x = 10;
-  p[0].y = (rc.GetHeight() - tsize.cy - 5) / 2;
+  p[0].y = (rc.GetHeight() - tsize.height - 5) / 2;
 
-  p[2].x = p[0].x + tsizec.cx;
-  p[2].y = p[0].y + tsize.cy + 5;
+  p[2].x = p[0].x + tsizec.width;
+  p[2].y = p[0].y + tsize.height + 5;
 
-  p[3].x = p[0].x + tsizea.cx;
-  p[3].y = p[0].y + tsize.cy + 5;
+  p[3].x = p[0].x + tsizea.width;
+  p[3].y = p[0].y + tsize.height + 5;
 
   p[1].x = p[2].x;
   p[1].y = p[2].y - 2;
@@ -184,40 +182,23 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas)
 
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_WHITE);
-  canvas.DrawText(p[0].x, p[0].y, buffer);
-}
-
-void
-KnobTextEntryWindow::OnAction(int id) noexcept
-{
-  switch (id) {
-  case DOWN:
-    IncrementLetter();
-    break;
-
-  case UP:
-    DecrementLetter();
-    break;
-
-  case LEFT:
-    MoveCursorLeft();
-    break;
-
-  case RIGHT:
-    MoveCursorRight();
-    break;
-  }
+  canvas.DrawText(p[0], buffer);
 }
 
 class KnobTextEntryWidget final : public WindowWidget {
-  KnobTextEntryWindow window;
+  const TCHAR *const text;
+  const size_t width;
 
 public:
-  KnobTextEntryWidget(const TCHAR *text, size_t width)
-    :window(text, width) {}
+  KnobTextEntryWidget(const TCHAR *_text, size_t _width) noexcept
+    :text(_text), width(_width) {}
+
+  auto &GetWindow() noexcept {
+    return (KnobTextEntryWindow &)WindowWidget::GetWindow();
+  }
 
   TCHAR *GetValue() {
-    return window.GetValue();
+    return GetWindow().GetValue();
   }
 
   void CreateButtons(WidgetDialog &dialog);
@@ -228,28 +209,26 @@ public:
                        const PixelRect &rc) override {
     WindowStyle style;
     style.Hide();
-    window.Create(parent, rc, style);
-    SetWindow(&window);
-  }
 
-  virtual void Unprepare() override {
-    window.Destroy();
+    auto w = std::make_unique<KnobTextEntryWindow>(text, width);
+    w->Create(parent, rc, style);
+    SetWindow(std::move(w));
   }
 };
 
 inline void
 KnobTextEntryWidget::CreateButtons(WidgetDialog &dialog)
 {
-  dialog.AddButton(_T("A+"), window, DOWN);
+  dialog.AddButton(_T("A+"), [this](){ GetWindow().IncrementLetter(); });
   dialog.AddButtonKey(KEY_UP);
 
-  dialog.AddButton(_T("A-"), window, UP);
+  dialog.AddButton(_T("A-"), [this](){ GetWindow().DecrementLetter(); });
   dialog.AddButtonKey(KEY_DOWN);
 
-  dialog.AddSymbolButton(_T("<"), window, LEFT);
+  dialog.AddSymbolButton(_T("<"), [this](){ GetWindow().MoveCursorLeft(); });
   dialog.AddButtonKey(KEY_LEFT);
 
-  dialog.AddSymbolButton(_T(">"), window, RIGHT);
+  dialog.AddSymbolButton(_T(">"), [this](){ GetWindow().MoveCursorRight(); });
   dialog.AddButtonKey(KEY_RIGHT);
 }
 

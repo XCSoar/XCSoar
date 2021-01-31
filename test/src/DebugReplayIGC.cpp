@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "DebugReplayIGC.hpp"
-#include "IO/FileLineReader.hpp"
+#include "io/FileLineReader.hpp"
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCFix.hpp"
 #include "Units/System.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 DebugReplay*
 DebugReplayIGC::Create(Path input_file)

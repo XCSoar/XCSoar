@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@ Copyright_License {
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/DataField/Prefix.hpp"
 #include "Form/DataField/Listener.hpp"
@@ -36,7 +36,7 @@ Copyright_License {
 #include "FLARM/FlarmId.hpp"
 #include "FLARM/Global.hpp"
 #include "FLARM/TrafficDatabases.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
@@ -63,7 +63,7 @@ enum Buttons {
 class TrafficListButtons;
 
 class TrafficListWidget : public ListWidget, public DataFieldListener,
-                          public ActionListener, NullBlackboardListener {
+                          NullBlackboardListener {
   struct Item {
     /**
      * The FLARM traffic id.  If this is "undefined", then this object
@@ -189,7 +189,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
 
   typedef std::vector<Item> ItemList;
 
-  ActionListener &action_listener;
+  WndForm &dialog;
 
   const RowFormWidget *const filter_widget;
 
@@ -206,9 +206,9 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
   TwoTextRowsRenderer row_renderer;
 
 public:
-  TrafficListWidget(ActionListener &_action_listener,
+  TrafficListWidget(WndForm &_dialog,
                     const FlarmId *array, size_t count)
-    :action_listener(_action_listener), filter_widget(nullptr),
+    :dialog(_dialog), filter_widget(nullptr),
      buttons(nullptr) {
     items.reserve(count);
 
@@ -216,10 +216,10 @@ public:
       items.emplace_back(array[i]);
   }
 
-  TrafficListWidget(ActionListener &_action_listener,
+  TrafficListWidget(WndForm &_dialog,
                     const RowFormWidget &_filter_widget,
                     TrafficListButtons &_buttons)
-    :action_listener(_action_listener), filter_widget(&_filter_widget),
+    :dialog(_dialog), filter_widget(&_filter_widget),
      buttons(&_buttons) {
   }
 
@@ -267,16 +267,22 @@ private:
   void UpdateButtons();
 
   void OpenDetails(unsigned index);
+
   void OpenMap(unsigned index);
 
 public:
+  void OpenDetails() noexcept {
+    OpenDetails(GetList().GetCursorIndex());
+  }
+
+  void OpenMap() noexcept {
+    OpenMap(GetList().GetCursorIndex());
+  }
+
   /* virtual methods from class Widget */
 
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-  virtual void Unprepare() override {
-    DeleteWindow();
-  }
 
   virtual void Show(const PixelRect &rc) override {
     ListWidget::Show(rc);
@@ -313,9 +319,6 @@ public:
     UpdateList();
   }
 
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
-
 private:
   /* virtual methods from BlackboardListener */
   virtual void OnGPSUpdate(const MoreData &basic) override {
@@ -342,22 +345,22 @@ public:
 };
 
 class TrafficListButtons : public RowFormWidget {
-  ActionListener &dialog;
-  ActionListener *list;
+  WndForm &dialog;
+  TrafficListWidget *list;
 
 public:
-  TrafficListButtons(const DialogLook &look, ActionListener &_dialog)
+  TrafficListButtons(const DialogLook &look, WndForm &_dialog)
     :RowFormWidget(look), dialog(_dialog) {}
 
-  void SetList(ActionListener *_list) {
+  void SetList(TrafficListWidget *_list) noexcept {
     list = _list;
   }
 
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override {
-    AddButton(_("Details"), *list, DETAILS);
-    AddButton(_("Map"), *list, MAP);
-    AddButton(_("Close"), dialog, mrCancel);
+    AddButton(_("Details"), [this](){ list->OpenDetails(); });
+    AddButton(_("Map"), [this](){ list->OpenMap(); });
+    AddButton(_("Close"), dialog.MakeModalResultCallback(mrCancel));
   }
 };
 
@@ -639,10 +642,7 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
     canvas.SelectHollowBrush();
 
     const PixelSize size = canvas.CalcTextSize(tmp);
-    canvas.Rectangle(rc.left + row_renderer.GetX() - frame_padding,
-                     rc.top + row_renderer.GetFirstY() - frame_padding,
-                     rc.left + row_renderer.GetX() + size.cx + frame_padding,
-                     rc.top + row_renderer.GetFirstY() + size.cy + frame_padding);
+    canvas.DrawRectangle(PixelRect{{rc.left + row_renderer.GetX(), rc.top + row_renderer.GetFirstY()}, size}.WithMargin(frame_padding));
   }
 
   row_renderer.DrawFirstRow(canvas, rc, tmp);
@@ -730,7 +730,7 @@ TrafficListWidget::OpenMap(unsigned index)
     return;
 
   if (PanTo(item.location))
-    action_listener.OnAction(mrCancel);
+    dialog.SetModalResult(mrCancel);
 }
 
 void
@@ -738,23 +738,9 @@ TrafficListWidget::OnActivateItem(unsigned index) noexcept
 {
   if (buttons == nullptr)
     /* it's a traffic picker: finish the dialog */
-    action_listener.OnAction(mrOK);
+    dialog.SetModalResult(mrOK);
   else
     OpenDetails(index);
-}
-
-void
-TrafficListWidget::OnAction(int id) noexcept
-{
-  switch (Buttons(id)) {
-  case DETAILS:
-    OpenDetails(GetList().GetCursorIndex());
-    break;
-
-  case MAP:
-    OpenMap(GetList().GetCursorIndex());
-    break;
-  }
 }
 
 void
@@ -765,22 +751,27 @@ TrafficListDialog()
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Traffic"));
 
-  TrafficFilterWidget *filter_widget = new TrafficFilterWidget(look);
+  auto filter_widget = std::make_unique<TrafficFilterWidget>(look);
 
-  TrafficListButtons *buttons_widget = new TrafficListButtons(look, dialog);
+  auto buttons_widget = std::make_unique<TrafficListButtons>(look, dialog);
 
-  TwoWidgets *left_widget =
-    new TwoWidgets(filter_widget, buttons_widget, true);
+  auto list_widget =
+    std::make_unique<TrafficListWidget>(dialog, *filter_widget,
+                                        *buttons_widget);
 
-  TrafficListWidget *const list_widget =
-    new TrafficListWidget(dialog, *filter_widget, *buttons_widget);
+  filter_widget->SetListener(list_widget.get());
+  buttons_widget->SetList(list_widget.get());
 
-  filter_widget->SetListener(list_widget);
-  buttons_widget->SetList(list_widget);
+  auto left_widget =
+    std::make_unique<TwoWidgets>(std::move(filter_widget),
+                                 std::move(buttons_widget),
+                                 true);
 
-  TwoWidgets *widget = new TwoWidgets(left_widget, list_widget, false);
+  auto widget = std::make_unique<TwoWidgets>(std::move(left_widget),
+                                             std::move(list_widget),
+                                             false);
 
-  dialog.FinishPreliminary(widget);
+  dialog.FinishPreliminary(widget.release());
   dialog.ShowModal();
 }
 

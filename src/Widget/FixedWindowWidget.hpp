@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,12 +25,11 @@ Copyright_License {
 #define XCSOAR_FIXED_WINDOW_WIDGET_HPP
 
 #include "WindowWidget.hpp"
-#include "Screen/Window.hpp"
+#include "ui/window/Window.hpp"
 
 class FixedWindowWidget : public WindowWidget {
 public:
-  FixedWindowWidget() = default;
-  FixedWindowWidget(Window *window):WindowWidget(window) {}
+  using WindowWidget::WindowWidget;
 
   PixelSize GetMinimumSize() const override {
     return GetWindow().GetSize();

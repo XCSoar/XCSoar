@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "AutoFont.hpp"
 #include "FontDescription.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Font.hpp"
 
 #include <algorithm>
 
@@ -43,7 +43,7 @@ AutoSizeFont(FontDescription &d, unsigned width, const TCHAR *text)
   /* double the font size until it is large enough */
 
   PixelSize tsize = font.TextSize(text);
-  while (unsigned(tsize.cx) < width) {
+  while (tsize.width < width) {
     d.SetHeight(d.GetHeight() * 2);
     if (!font.Load(d)) {
       d.SetHeight(d.GetHeight() / 2);
@@ -63,7 +63,7 @@ AutoSizeFont(FontDescription &d, unsigned width, const TCHAR *text)
       break;
 
     tsize = font.TextSize(text);
-  } while ((unsigned)tsize.cx > width);
+  } while (tsize.width > width);
 
   d.SetHeight(d.GetHeight() + 1);
 }

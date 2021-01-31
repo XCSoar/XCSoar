@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,15 +30,15 @@ Copyright_License {
 #endif
 
 #ifdef KOBO
-#include "OS/FileUtil.hpp"
+#include "system/FileUtil.hpp"
 #endif
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Features.hpp"
+#include "ui/opengl/Features.hpp"
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include "UIGlobals.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Screen/OpenGL/Globals.hpp"
+#include "ui/window/SingleWindow.hpp"
+#include "ui/canvas/opengl/Globals.hpp"
 #endif
 #endif
 

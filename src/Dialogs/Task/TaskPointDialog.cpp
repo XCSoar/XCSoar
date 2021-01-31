@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ Copyright_License {
 #include "Widget/DockWindow.hpp"
 #include "Widget/PanelWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Font.hpp"
 #include "Components.hpp"
 #include "Units/Units.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
@@ -44,7 +44,7 @@ Copyright_License {
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/TypeStrings.hpp"
 #include "Gauge/TaskView.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/DialogLook.hpp"
@@ -56,20 +56,12 @@ Copyright_License {
 #include "Widgets/KeyholeZoneEditWidget.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scissor.hpp"
+#include "ui/canvas/opengl/Scissor.hpp"
 #endif
 
 class TaskPointWidget final
   : public NullWidget,
-    ObservationZoneEditWidget::Listener,
-    ActionListener {
-  enum Buttons {
-    PREVIOUS, NEXT,
-    DETAILS, REMOVE, RELOCATE,
-    CHANGE_TYPE,
-    OPTIONAL_STARTS,
-    SCORE_EXIT,
-  };
+    ObservationZoneEditWidget::Listener {
 
   struct Layout {
     PixelRect waypoint_panel;
@@ -119,8 +111,13 @@ public:
   }
 
   void CreateButtons() {
-    previous_button = dialog.AddSymbolButton(_T("<"), *this, PREVIOUS);
-    next_button = dialog.AddSymbolButton(_T(">"), *this, NEXT);
+    previous_button = dialog.AddSymbolButton(_T("<"), [this](){
+      OnPreviousClicked();
+    });
+
+    next_button = dialog.AddSymbolButton(_T(">"), [this](){
+      OnNextClicked();
+    });
   }
 
 private:
@@ -155,10 +152,6 @@ public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
-  void Unprepare() override {
-    properties_dock.DeleteWidget();
-  }
-
   bool Save(bool &changed) override {
     ReadValues();
     changed = task_modified;
@@ -187,9 +180,6 @@ public:
 private:
   /* virtual methods from class ObservationZoneEditWidget::Listener */
   void OnModified(ObservationZoneEditWidget &widget) override;
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 TaskPointWidget::Layout::Layout(PixelRect rc, const DialogLook &look)
@@ -236,7 +226,7 @@ TaskPointWidget::Layout::Layout(PixelRect rc, const DialogLook &look)
 
   type_label = change_type = type_rc;
   type_label.right = change_type.left = type_rc.right
-    - look.button.font->TextSize(_("Change Type")).cx - 3 * padding;
+    - look.button.font->TextSize(_("Change Type")).width - 3 * padding;
 
   PixelRect buttons_rc = tp_rc;
   buttons_rc.top = buttons_rc.bottom - button_height;
@@ -270,20 +260,20 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   waypoint_name.Create(waypoint_panel, layout.waypoint_name);
   waypoint_details.Create(waypoint_panel, look.button, _("Details"),
                           layout.waypoint_details,
-                          button_style, *this, DETAILS);
+                          button_style, [this](){ OnDetailsClicked(); });
   waypoint_remove.Create(waypoint_panel, look.button, _("Remove"),
                          layout.waypoint_remove,
-                         button_style, *this, REMOVE);
+                         button_style, [this](){ OnRemoveClicked(); });
   waypoint_relocate.Create(waypoint_panel, look.button, _("Relocate"),
                            layout.waypoint_relocate,
-                           button_style, *this, RELOCATE);
+                           button_style, [this](){ OnRelocateClicked(); });
 
   tp_panel.Create(parent, look, layout.tp_panel, panel_style);
 
   type_label.Create(tp_panel, layout.type_label);
   change_type.Create(tp_panel, look.button, _("Change Type"),
                      layout.change_type,
-                     button_style, *this, CHANGE_TYPE);
+                     button_style, [this](){ OnTypeClicked(); });
   map.Create(tp_panel, layout.map, WindowStyle(),
              [this](Canvas &canvas, const PixelRect &rc){
                PaintMap(canvas, rc);
@@ -291,65 +281,30 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   properties_dock.Create(tp_panel, layout.properties, dock_style);
   optional_starts.Create(tp_panel, look.button, _("Enable Alternate Starts"),
                          layout.optional_starts, button_style,
-                         *this, OPTIONAL_STARTS);
+                         [this](){ OnOptionalStartsClicked(); });
   score_exit.Create(tp_panel, look, _("Score exit"),
-                    layout.score_exit, button_style,
-                    *this, SCORE_EXIT);
+                    layout.score_exit, button_style, {});
 
   RefreshView();
 }
 
-void
-TaskPointWidget::OnAction(int id) noexcept
-{
-    switch (id) {
-    case PREVIOUS:
-      OnPreviousClicked();
-      break;
-
-    case NEXT:
-      OnNextClicked();
-      break;
-
-    case DETAILS:
-      OnDetailsClicked();
-      break;
-
-    case REMOVE:
-      OnRemoveClicked();
-      break;
-
-    case RELOCATE:
-      OnRelocateClicked();
-      break;
-
-    case CHANGE_TYPE:
-      OnTypeClicked();
-      break;
-
-    case OPTIONAL_STARTS:
-      OnOptionalStartsClicked();
-      break;
-    }
-}
-
-static ObservationZoneEditWidget *
+static std::unique_ptr<ObservationZoneEditWidget>
 CreateObservationZoneEditWidget(ObservationZonePoint &oz, bool is_fai_general)
 {
   switch (oz.GetShape()) {
   case ObservationZone::Shape::SECTOR:
   case ObservationZone::Shape::ANNULAR_SECTOR:
   case ObservationZone::Shape::SYMMETRIC_QUADRANT:
-    return new SectorZoneEditWidget((SectorZone &)oz);
+    return std::make_unique<SectorZoneEditWidget>((SectorZone &)oz);
 
   case ObservationZone::Shape::LINE:
-    return new LineSectorZoneEditWidget((LineSectorZone &)oz, !is_fai_general);
+    return std::make_unique<LineSectorZoneEditWidget>((LineSectorZone &)oz, !is_fai_general);
 
   case ObservationZone::Shape::CYLINDER:
-    return new CylinderZoneEditWidget((CylinderZone &)oz, !is_fai_general);
+    return std::make_unique<CylinderZoneEditWidget>((CylinderZone &)oz, !is_fai_general);
 
   case ObservationZone::Shape::CUSTOM_KEYHOLE:
-    return new KeyholeZoneEditWidget((KeyholeZone &)oz);
+    return std::make_unique<KeyholeZoneEditWidget>((KeyholeZone &)oz);
 
   case ObservationZone::Shape::FAI_SECTOR:
   case ObservationZone::Shape::DAEC_KEYHOLE:
@@ -375,12 +330,12 @@ TaskPointWidget::RefreshView()
   ObservationZonePoint &oz = tp.GetObservationZone();
   const bool is_fai_general =
     ordered_task.GetFactoryType() == TaskFactoryType::FAI_GENERAL;
-  auto *properties_widget = CreateObservationZoneEditWidget(oz, is_fai_general);
+  auto properties_widget = CreateObservationZoneEditWidget(oz, is_fai_general);
   if (properties_widget != nullptr) {
     properties_widget->SetListener(this);
-    properties_dock.SetWidget(properties_widget);
+    properties_dock.SetWidget(std::move(properties_widget));
   } else
-    properties_dock.SetWidget(new PanelWidget());
+    properties_dock.SetWidget(std::make_unique<PanelWidget>());
 
   type_label.SetText(OrderedTaskPointName(ordered_task.GetFactory().GetType(tp)));
 

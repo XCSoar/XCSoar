@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "TwoTextRowsRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 
 #include <algorithm>
@@ -56,7 +56,7 @@ TwoTextRowsRenderer::DrawFirstRow(Canvas &canvas, const PixelRect &rc,
                                   const TCHAR *text) const
 {
   canvas.Select(*first_font);
-  canvas.DrawClippedText(rc.left + x, rc.top + first_y, rc, text);
+  canvas.DrawClippedText({rc.left + x, rc.top + first_y}, rc, text);
 }
 
 void
@@ -64,7 +64,7 @@ TwoTextRowsRenderer::DrawSecondRow(Canvas &canvas, const PixelRect &rc,
                                    const TCHAR *text) const
 {
   canvas.Select(*second_font);
-  canvas.DrawClippedText(rc.left + x, rc.top + second_y, rc, text);
+  canvas.DrawClippedText({rc.left + x, rc.top + second_y}, rc, text);
 }
 
 int
@@ -79,7 +79,7 @@ TwoTextRowsRenderer::DrawRightFirstRow(Canvas &canvas, const PixelRect &rc,
        better we can do?) */
     return rc.right;
 
-  canvas.DrawText(text_x, rc.top + first_y, text);
+  canvas.DrawText({text_x, rc.top + first_y}, text);
   return text_x - x;
 }
 
@@ -95,6 +95,6 @@ TwoTextRowsRenderer::DrawRightSecondRow(Canvas &canvas, const PixelRect &rc,
        better we can do?) */
     return rc.right;
 
-  canvas.DrawText(text_x, rc.top + second_y, text);
+  canvas.DrawText({text_x, rc.top + second_y}, text);
   return text_x - x;
 }

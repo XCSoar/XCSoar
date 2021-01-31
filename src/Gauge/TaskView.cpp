@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@
 */
 
 #include "Gauge/TaskView.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Projection/ChartProjection.hpp"
 #include "Renderer/BackgroundRenderer.hpp"
 #include "Renderer/AirspaceRenderer.hpp"
@@ -39,9 +39,9 @@
 #include "MapSettings.hpp"
 
 #ifndef ENABLE_OPENGL
-#include "Screen/BufferCanvas.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 #else
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 gcc_pure
@@ -188,8 +188,8 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
     auto pt = projection.GeoToScreen(task.GetPoint(highlight_index).
                                      GetLocation());
     canvas.Select(task_look.highlight_pen);
-    canvas.DrawLine(pt.x - 7, pt.y - 7, pt.x + 7, pt.y + 7);
-    canvas.DrawLine(pt.x + 7, pt.y - 7, pt.x - 7, pt.y + 7);
+    canvas.DrawLine(pt.At(-7, -7), pt.At(7, 7));
+    canvas.DrawLine(pt.At(7, -7), pt.At(-7, 7));
   }
 }
 

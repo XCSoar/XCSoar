@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@ Copyright_License {
 #include "Airspace/AirspaceWarningCopy.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "NMEA/Aircraft.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Sizes.h"
 
@@ -125,9 +125,9 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
       PixelSize topSize = canvas.CalcTextSize(topText);
       AirspaceFormatter::FormatAltitudeShort(baseText, label.base, false);
       PixelSize baseSize = canvas.CalcTextSize(baseText);
-      int labelWidth = std::max(topSize.cx, baseSize.cx) +
-                       2 * Layout::GetTextPadding();
-      int labelHeight = topSize.cy + baseSize.cy;
+      const unsigned labelWidth =
+        std::max(topSize.width, baseSize.width) + 2 * Layout::GetTextPadding();
+      const unsigned labelHeight = topSize.height + baseSize.height;
 
       // box
       const auto pos = projection.GeoToScreen(label.pos);
@@ -136,7 +136,7 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
       rect.top = pos.y;
       rect.right = rect.left + labelWidth;
       rect.bottom = rect.top + labelHeight;
-      canvas.Rectangle(rect.left, rect.top, rect.right, rect.bottom);
+      canvas.DrawRectangle(rect);
 
 #ifdef USE_GDI
       canvas.DrawLine(rect.left + Layout::GetTextPadding(),
@@ -150,14 +150,14 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
 #endif
 
       // top text
-      int x = rect.right - Layout::GetTextPadding() - topSize.cx;
-      int y = rect.top;
-      canvas.DrawText(x, y, topText);
+      canvas.DrawText(rect.GetTopRight().At(-int(Layout::GetTextPadding() + topSize.width),
+                                            0),
+                      topText);
 
       // base text
-      x = rect.right - Layout::GetTextPadding() - baseSize.cx;
-      y = rect.bottom - baseSize.cy;
-      canvas.DrawText(x, y, baseText);
+      canvas.DrawText(rect.GetBottomRight().At(-int(Layout::GetTextPadding() + baseSize.width),
+                                               -(int)baseSize.height),
+                      baseText);
     }
   }
 }

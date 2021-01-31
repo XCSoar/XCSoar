@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ Copyright_License {
 #include "NMEA/DeviceInfo.hpp"
 
 class ManageNanoWidget final
-  : public RowFormWidget, private ActionListener {
+  : public RowFormWidget {
   enum Controls {
     SETUP,
   };
@@ -46,10 +46,6 @@ public:
 
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-
-private:
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -81,21 +77,11 @@ ManageNanoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     AddReadOnly(_("Firmware version"), NULL, buffer.c_str());
   }
 
-  AddButton(_("Setup"), *this, SETUP);
-}
-
-void
-ManageNanoWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case SETUP:
-    {
-      NanoConfigWidget widget(GetLook(), device);
-      DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
-                          _T("LXNAV Nano"), widget);
-    }
-    break;
-  }
+  AddButton(_("Setup"), [this](){
+    NanoConfigWidget widget(GetLook(), device);
+    DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
+                        _T("LXNAV Nano"), widget);
+  });
 }
 
 void

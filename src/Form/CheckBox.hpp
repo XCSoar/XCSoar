@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,12 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_FORM_CHECK_BOX_HPP
 #define XCSOAR_FORM_CHECK_BOX_HPP
 
-#include "Screen/PaintWindow.hpp"
-#include "Util/tstring.hpp"
+#include "ui/window/PaintWindow.hpp"
+#include "util/tstring.hpp"
+
+#include <cassert>
+#include <functional>
 
 struct DialogLook;
 class ContainerWindow;
-class ActionListener;
 
 /**
  * This class is used for creating buttons.
@@ -40,23 +42,23 @@ class CheckBoxControl : public PaintWindow {
   const DialogLook *look;
   tstring caption;
 
-  ActionListener *listener;
-  int id;
+  using Callback = std::function<void(bool)>;
+  Callback callback;
 
 public:
   void Create(ContainerWindow &parent, const DialogLook &look,
               tstring::const_pointer caption,
               const PixelRect &rc,
               const WindowStyle style,
-              ActionListener &listener, int id);
+              Callback _callback) noexcept;
 
   /**
-   * Set the object that will receive click events.
+   * Set the function that will receive click events.
    */
-  void SetListener(ActionListener &_listener) {
-    assert(listener == nullptr);
+  void SetCallback(Callback _callback) noexcept {
+    assert(!_callback);
 
-    listener = &_listener;
+    callback = std::move(_callback);
   }
 
   bool GetState() const {

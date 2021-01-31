@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,13 +31,13 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Tracking/TrackingSettings.hpp"
 #include "Tracking/SkyLines/Key.hpp"
-#include "Net/State.hpp"
+#include "net/State.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
-#include "Util/NumberParser.hpp"
+#include "util/NumberParser.hpp"
 
 enum ControlIndex {
 #ifdef HAVE_SKYLINES_TRACKING
@@ -327,8 +327,8 @@ TrackingConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateTrackingConfigPanel()
 {
-  return new TrackingConfigPanel();
+  return std::make_unique<TrackingConfigPanel>();
 }

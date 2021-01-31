@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,13 +26,13 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Dialogs/Dialogs.h"
-#include "Util/StringCompare.hxx"
+#include "util/StringCompare.hxx"
 #include "Interface.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
-#include "OS/Path.hpp"
+#include "system/FileUtil.hpp"
+#include "system/Path.hpp"
 #include "UtilsSettings.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
@@ -277,8 +277,8 @@ InterfaceConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateInterfaceConfigPanel()
 {
-  return new InterfaceConfigPanel();
+  return std::make_unique<InterfaceConfigPanel>();
 }

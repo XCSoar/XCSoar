@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "Form/ScrollBar.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 #include "Asset.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <cassert>
 
@@ -51,10 +51,10 @@ ScrollBar::SetSize(const PixelSize size)
     width = Layout::SmallScale(12);
 
   // Update the coordinates of the scrollbar
-  rc.left = size.cx - width;
+  rc.left = size.width - width;
   rc.top = 0;
-  rc.right = size.cx;
-  rc.bottom = size.cy;
+  rc.right = size.width;
+  rc.bottom = size.height;
 }
 
 void
@@ -126,7 +126,7 @@ ScrollBar::Paint(Canvas &canvas) const
   // draw rectangle around entire scrollbar area
   canvas.SelectBlackPen();
   canvas.SelectHollowBrush();
-  canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
+  canvas.DrawRectangle(rc);
 
   // ###################
   // ####  Buttons  ####
@@ -142,10 +142,10 @@ ScrollBar::Paint(Canvas &canvas) const
   ++down_arrow_rect.left;
   down_arrow_rect.top = down_arrow_rect.bottom - GetWidth();
 
-  canvas.DrawExactLine(up_arrow_rect.left, up_arrow_rect.bottom,
-                       up_arrow_rect.right, up_arrow_rect.bottom);
-  canvas.DrawExactLine(down_arrow_rect.left, down_arrow_rect.top - 1,
-                       down_arrow_rect.right, down_arrow_rect.top - 1);
+  canvas.DrawExactLine(up_arrow_rect.GetBottomLeft(),
+                       up_arrow_rect.GetBottomRight());
+  canvas.DrawExactLine({down_arrow_rect.left, down_arrow_rect.top - 1},
+                       {down_arrow_rect.right, down_arrow_rect.top - 1});
 
   button_renderer.DrawButton(canvas, up_arrow_rect, false, false);
   button_renderer.DrawButton(canvas, down_arrow_rect, false, false);
@@ -179,10 +179,9 @@ ScrollBar::Paint(Canvas &canvas) const
 
   if (rc_slider.top + 4 < rc_slider.bottom) {
     canvas.SelectBlackPen();
-    canvas.DrawExactLine(rc_slider.left, rc_slider.top,
-                         rc_slider.right, rc_slider.top);
-    canvas.DrawExactLine(rc_slider.left, rc_slider.bottom,
-                         rc_slider.right, rc_slider.bottom);
+    canvas.DrawExactLine(rc_slider.GetTopLeft(), rc_slider.GetTopRight());
+    canvas.DrawExactLine(rc_slider.GetBottomLeft(),
+                         rc_slider.GetBottomRight());
 
     PixelRect rc_slider2 = rc_slider;
     ++rc_slider2.left;
@@ -194,13 +193,11 @@ ScrollBar::Paint(Canvas &canvas) const
   const Color background_color = IsDithered() ? COLOR_BLACK : COLOR_GRAY;
 
   if (up_arrow_rect.bottom + 1 < rc_slider.top)
-    canvas.DrawFilledRectangle(rc.left + 1, up_arrow_rect.bottom + 1,
-                               rc.right, rc_slider.top,
+    canvas.DrawFilledRectangle({rc.left + 1, up_arrow_rect.bottom + 1, rc.right, rc_slider.top},
                                background_color);
 
   if (rc_slider.bottom + 1 < down_arrow_rect.top - 1)
-    canvas.DrawFilledRectangle(rc.left + 1, rc_slider.bottom + 1,
-                               rc.right, down_arrow_rect.top - 1,
+    canvas.DrawFilledRectangle({rc.left + 1, rc_slider.bottom + 1, rc.right, down_arrow_rect.top - 1},
                                background_color);
 }
 

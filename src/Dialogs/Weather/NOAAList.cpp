@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -35,20 +35,19 @@ Copyright_License {
 #include "Dialogs/TextEntry.hpp"
 #include "Form/Button.hpp"
 #include "Form/ButtonPanel.hpp"
-#include "Form/ActionListener.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/NOAAUpdater.hpp"
-#include "Util/TrivialArray.hxx"
-#include "Util/StringAPI.hxx"
-#include "Util/Compiler.h"
+#include "util/TrivialArray.hxx"
+#include "util/StringAPI.hxx"
+#include "util/Compiler.h"
 #include "Renderer/NOAAListRenderer.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 
 class NOAAListWidget final
-  : public ListWidget, private ActionListener {
+  : public ListWidget {
   enum Buttons {
     DETAILS,
     ADD,
@@ -94,7 +93,6 @@ public:
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-  virtual void Unprepare() override;
 
 protected:
   /* virtual methods from ListItemRenderer */
@@ -107,19 +105,15 @@ protected:
   }
 
   void OnActivateItem(unsigned index) noexcept override;
-
-private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
 NOAAListWidget::CreateButtons(ButtonPanel &buttons)
 {
-  details_button = buttons.Add(_("Details"), *this, DETAILS);
-  add_button = buttons.Add(_("Add"), *this, ADD);
-  update_button = buttons.Add(_("Update"), *this, UPDATE);
-  remove_button = buttons.Add(_("Remove"), *this, REMOVE);
+  details_button = buttons.Add(_("Details"), [this](){ DetailsClicked(); });
+  add_button = buttons.Add(_("Add"), [this](){ AddClicked(); });
+  update_button = buttons.Add(_("Update"), [this](){ UpdateClicked(); });
+  remove_button = buttons.Add(_("Remove"), [this](){ RemoveClicked(); });
 }
 
 void
@@ -132,12 +126,6 @@ NOAAListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
              row_renderer.CalculateLayout(*look.list.font_bold,
                                           look.small_font));
   UpdateList();
-}
-
-void
-NOAAListWidget::Unprepare()
-{
-  DeleteWindow();
 }
 
 void
@@ -256,35 +244,13 @@ NOAAListWidget::OnActivateItem(unsigned index) noexcept
   OpenDetails(index);
 }
 
-void
-NOAAListWidget::OnAction(int id) noexcept
-{
-  switch ((Buttons)id) {
-  case DETAILS:
-    DetailsClicked();
-    break;
-
-  case ADD:
-    AddClicked();
-    break;
-
-  case UPDATE:
-    UpdateClicked();
-    break;
-
-  case REMOVE:
-    RemoveClicked();
-    break;
-  }
-}
-
-Widget *
+std::unique_ptr<Widget>
 CreateNOAAListWidget()
 {
-  NOAAListWidget *list = new NOAAListWidget();
-  ButtonPanelWidget *buttons =
-    new ButtonPanelWidget(list, ButtonPanelWidget::Alignment::BOTTOM);
-  list->SetButtonPanel(*buttons);
+  auto buttons =
+    std::make_unique<ButtonPanelWidget>(std::make_unique<NOAAListWidget>(),
+                                        ButtonPanelWidget::Alignment::BOTTOM);
+  ((NOAAListWidget &)buttons->GetWidget()).SetButtonPanel(*buttons);
   return buttons;
 }
 

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,18 +27,18 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Units/System.hpp"
 #include "Language/Language.hpp"
-#include "Util/CharUtil.hxx"
-#include "Util/StringAPI.hxx"
-#include "Util/StringParser.hxx"
-#include "Util/Macros.hpp"
+#include "util/CharUtil.hxx"
+#include "util/StringAPI.hxx"
+#include "util/StringParser.hxx"
+#include "util/Macros.hpp"
 #include "Geo/Math.hpp"
-#include "IO/LineReader.hpp"
+#include "io/LineReader.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/StringCompare.hxx"
+#include "util/StaticString.hxx"
+#include "util/StringCompare.hxx"
 
 #include <tchar.h>
 

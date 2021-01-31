@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,15 +25,15 @@ Copyright_License {
 #define XCSOAR_GLIDECOMPUTER_HPP
 
 #include "GlideComputerBlackboard.hpp"
-#include "Time/PeriodClock.hpp"
-#include "Time/DeltaTime.hpp"
+#include "time/PeriodClock.hpp"
+#include "time/DeltaTime.hpp"
 #include "GlideComputerAirData.hpp"
 #include "StatsComputer.hpp"
 #include "TaskComputer.hpp"
 #include "LogComputer.hpp"
 #include "WarningComputer.hpp"
 #include "CuComputer.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 #include "Engine/Contest/Solvers/Retrospective.hpp"
 
 class Waypoints;

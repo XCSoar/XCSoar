@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,10 +25,9 @@ Copyright_License {
 #define ENABLE_CLOSE_BUTTON
 
 #include "Main.hpp"
-#include "Event/PeriodicTimer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/event/PeriodicTimer.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Form/Button.hpp"
-#include "Form/ActionListener.hpp"
 #include "Look/HorizonLook.hpp"
 #include "Renderer/HorizonRenderer.hpp"
 #include "NMEA/Attitude.hpp"
@@ -67,7 +66,7 @@ Main()
   horizon.Create(main_window, main_window.GetClientRect(), with_border);
   main_window.SetFullWindow(horizon);
 
-  PeriodicTimer timer([&horizon](){
+  UI::PeriodicTimer timer([&horizon](){
     AttitudeState attitude;
     attitude.bank_angle_computed = true;
     attitude.pitch_angle_computed = true;

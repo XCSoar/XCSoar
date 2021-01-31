@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,11 +24,11 @@ Copyright_License {
 #include "RasterTerrain.hpp"
 #include "Loader.hpp"
 #include "Profile/Profile.hpp"
-#include "IO/ZipArchive.hpp"
-#include "IO/FileCache.hpp"
-#include "OS/ConvertPathName.hpp"
+#include "io/ZipArchive.hpp"
+#include "io/FileCache.hpp"
+#include "system/ConvertPathName.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/ConvertString.hpp"
+#include "util/ConvertString.hpp"
 
 static const TCHAR *const terrain_cache_name = _T("terrain");
 

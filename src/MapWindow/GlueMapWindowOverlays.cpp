@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "GlueMapWindow.hpp"
 #include "Look/MapLook.hpp"
-#include "Screen/Icon.hpp"
+#include "ui/canvas/Icon.hpp"
 #include "Language/Language.hpp"
 #include "Screen/Layout.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -36,9 +36,9 @@ Copyright_License {
 #include "UIState.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Util/Macros.hpp"
-#include "Util/Clamp.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/Macros.hpp"
+#include "util/Clamp.hpp"
+#include "util/StringAPI.hxx"
 #include "Look/GestureLook.hpp"
 #include "Input/InputEvents.hpp"
 #include "Renderer/MapScaleRenderer.hpp"
@@ -76,10 +76,8 @@ GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
 
   const auto center = render_projection.GetScreenOrigin();
 
-  canvas.DrawLine(center.x + 20, center.y,
-              center.x - 20, center.y);
-  canvas.DrawLine(center.x, center.y + 20,
-              center.x, center.y - 20);
+  canvas.DrawLine(center.At(20, 0), center.At(-20, 0));
+  canvas.DrawLine(center.At(0, 20), center.At(0, -20));
 }
 
 void
@@ -99,13 +97,12 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
 
   unsigned padding = Layout::FastScale(4);
   unsigned height = font.GetHeight();
-  int y = 0 + padding;
-  int x = render_projection.GetScreenWidth() - padding;
+  PixelPoint p(render_projection.GetScreenWidth() - padding, padding);
 
   if (compass_visible)
     /* don't obscure the north arrow */
     /* TODO: obtain offset from CompassRenderer */
-    y += Layout::Scale(19) + Layout::FastScale(13);
+    p.y += Layout::Scale(19) + Layout::FastScale(13);
 
   if (terrain) {
     TerrainHeight elevation = terrain->GetTerrainHeight(location);
@@ -114,11 +111,10 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
       elevation_long = _("Elevation: ");
       elevation_long += FormatUserAltitude(elevation.GetValue());
 
-      TextInBox(canvas, elevation_long, x, y, mode,
-                render_projection.GetScreenWidth(),
-                render_projection.GetScreenHeight());
+      TextInBox(canvas, elevation_long, p, mode,
+                render_projection.GetScreenSize());
 
-      y += height;
+      p.y += height;
     }
   }
 
@@ -131,11 +127,9 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
     if (newline != nullptr)
       *newline = _T('\0');
 
-    TextInBox(canvas, start, x, y, mode,
-              render_projection.GetScreenWidth(),
-              render_projection.GetScreenHeight());
+    TextInBox(canvas, start, p, mode, render_projection.GetScreenSize());
 
-    y += height;
+    p.y += height;
 
     if (newline == nullptr)
       break;
@@ -165,7 +159,7 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
                rc.bottom - Layout::FastScale(35));
   icon->Draw(canvas, p);
 
-  p.x += icon->GetSize().cx + Layout::FastScale(4);
+  p.x += icon->GetSize().width + Layout::FastScale(4);
   p.y = rc.bottom - Layout::FastScale(34);
 
   TextInBoxMode mode;
@@ -173,7 +167,7 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
 
   const Font &font = *look.overlay.overlay_font;
   canvas.Select(font);
-  TextInBox(canvas, txt, p.x, p.y, mode, rc, nullptr);
+  TextInBox(canvas, txt, p, mode, rc, nullptr);
 }
 
 void
@@ -193,11 +187,11 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
   else
     bmp = &look.cruise_mode_icon;
 
-  offset += bmp->GetSize().cx + Layout::Scale(6);
+  offset += bmp->GetSize().width + Layout::Scale(6);
 
   bmp->Draw(canvas,
             PixelPoint(rc.right - offset,
-                       rc.bottom - bmp->GetSize().cy - Layout::Scale(4)));
+                       rc.bottom - bmp->GetSize().height - Layout::Scale(4)));
 
   // draw flarm status
   if (!GetMapSettings().show_flarm_alarm_level)
@@ -222,11 +216,11 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
     break;
   };
 
-  offset += bmp->GetSize().cx + Layout::Scale(6);
+  offset += bmp->GetSize().width + Layout::Scale(6);
 
   bmp->Draw(canvas,
             PixelPoint(rc.right - offset,
-                       rc.bottom - bmp->GetSize().cy - Layout::Scale(2)));
+                       rc.bottom - bmp->GetSize().height - Layout::Scale(2)));
 }
 
 void
@@ -267,27 +261,32 @@ GlueMapWindow::DrawVario(Canvas &canvas, const PixelRect &rc) const
                                 true); //NOTE: AVG enabled for now, make it configurable ;
 }
 
-/*
-    Sets a relative margin at the bottom of the screen where no HUD
-    elements should be drawn
-*/
 void
-GlueMapWindow::SetBottomMargin(unsigned int margin_factor){
+GlueMapWindow::SetBottomMargin(unsigned margin) noexcept
+{
+  if (margin == bottom_margin)
+    /* no change, don't redraw */
+    return;
 
-    if (margin_factor == 0){
-        bottom_margin = 0;
-        QuickRedraw();
-        return;
-    }
+  bottom_margin = margin;
+  QuickRedraw();
+}
 
-    PixelRect map_rect = GetClientRect();
+void
+GlueMapWindow::SetBottomMarginFactor(unsigned margin_factor) noexcept
+{
+  if (margin_factor == 0) {
+    SetBottomMargin(0);
+    return;
+  }
 
-    if (map_rect.GetHeight() > map_rect.GetWidth()){
-        bottom_margin = map_rect.bottom / margin_factor;
-    } else {
-        bottom_margin = 0;
-    }
-    QuickRedraw();
+  PixelRect map_rect = GetClientRect();
+
+  if (map_rect.GetHeight() > map_rect.GetWidth()) {
+    SetBottomMargin(map_rect.bottom / margin_factor);
+  } else {
+    SetBottomMargin(0);
+  }
 }
 
 void
@@ -346,15 +345,14 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
     const Font &font = *look.overlay.overlay_font;
     canvas.Select(font);
-    const unsigned height = font.GetCapitalHeight()
+    const int height = font.GetCapitalHeight()
         + Layout::GetTextPadding();
-    int y = scale_pos.bottom - height;
 
     TextInBoxMode mode;
     mode.vertical_position = TextInBoxMode::VerticalPosition::ABOVE;
     mode.shape = LabelShape::OUTLINED;
 
-    TextInBox(canvas, buffer, 0, y, mode, rc, nullptr);
+    TextInBox(canvas, buffer, {0, scale_pos.bottom - height}, mode, rc, nullptr);
   }
 }
 
@@ -449,7 +447,9 @@ GlueMapWindow::DrawStallRatio(Canvas &canvas, const PixelRect &rc) const
     auto s = Clamp(Basic().stall_ratio, 0., 1.);
     int m = rc.GetHeight() * s * s;
 
+    const auto p = rc.GetBottomRight();
+
     canvas.SelectBlackPen();
-    canvas.DrawLine(rc.right - 1, rc.bottom - m, rc.right - 11, rc.bottom - m);
+    canvas.DrawLine(p.At(-1, -m), p.At(-11, -m));
   }
 }

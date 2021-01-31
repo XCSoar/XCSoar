@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,13 +25,13 @@ Copyright_License {
 #define XCSOAR_CLOUD_CLIENT_HPP
 
 #include "Geo/Boost/GeoPoint.hpp"
+#include "net/AllocatedSocketAddress.hxx"
 
 #include <boost/intrusive/list.hpp>
 #include <boost/intrusive/set.hpp>
 #include <boost/intrusive/unordered_set.hpp>
 #include <boost/geometry/index/rtree.hpp>
 #include <boost/range/iterator_range_core.hpp>
-#include <boost/asio/ip/udp.hpp>
 
 #include <memory>
 #include <chrono>
@@ -51,7 +51,7 @@ struct CloudClient
   /**
    * Last known IP address.
    */
-  boost::asio::ip::udp::endpoint endpoint;
+  AllocatedSocketAddress address;
 
   /**
    * "Internal" id of this client, i.e. the secret key from
@@ -131,16 +131,17 @@ struct CloudClient
     }
   };
 
-  CloudClient(const boost::asio::ip::udp::endpoint &_endpoint, uint64_t _key,
+  template<typename A>
+  CloudClient(A &&_address, uint64_t _key,
               unsigned _id,
               const GeoPoint &_location, int _altitude)
-    :endpoint(_endpoint), key(_key), id(_id),
+    :address(std::forward<A>(_address)), key(_key), id(_id),
      stamp(std::chrono::steady_clock::now()),
      location(_location), altitude(_altitude) {}
 
-  void Refresh(const boost::asio::ip::udp::endpoint &_endpoint) {
-      endpoint = _endpoint;
-      stamp = std::chrono::steady_clock::now();
+  void Refresh(SocketAddress _address) noexcept {
+    address = _address;
+    stamp = std::chrono::steady_clock::now();
   }
 
   void Save(Serialiser &s) const;
@@ -239,14 +240,14 @@ public:
   /**
    * Create a new #CloudClient, or refresh the existing one.
    */
-  CloudClient &Make(const boost::asio::ip::udp::endpoint &endpoint,
+  CloudClient &Make(SocketAddress address,
                     uint64_t key, const GeoPoint &location, int altitude);
 
   void Refresh(CloudClient &client,
-               const boost::asio::ip::udp::endpoint &endpoint);
+               SocketAddress address);
 
   void Refresh(CloudClient &client,
-               const boost::asio::ip::udp::endpoint &endpoint,
+               SocketAddress address,
                const GeoPoint &location, int altitude);
 
   void Insert(CloudClient &client);

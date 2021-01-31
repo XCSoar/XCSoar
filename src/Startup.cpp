@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -56,7 +56,6 @@ Copyright_License {
 #include "Audio/GlobalVolumeController.hpp"
 #include "Audio/VarioGlue.hpp"
 #include "Audio/VolumeController.hpp"
-#include "Screen/Busy.hpp"
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
 #include "Computer/GlideComputer.hpp"
@@ -67,13 +66,13 @@ Copyright_License {
 #include "CalculationThread.hpp"
 #include "Replay/Replay.hpp"
 #include "LocalPath.hpp"
-#include "IO/FileCache.hpp"
-#include "IO/Async/AsioThread.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
-#include "Net/HTTP/DownloadManager.hpp"
+#include "io/FileCache.hpp"
+#include "io/async/AsioThread.hpp"
+#include "io/async/GlobalAsioThread.hpp"
+#include "net/http/DownloadManager.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "Hardware/DisplayGlue.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 #include "NMEA/Aircraft.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointGlue.hpp"
@@ -97,14 +96,14 @@ Copyright_License {
 #include "Tracking/TrackingGlue.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
-#include "Thread/Debug.hpp"
+#include "thread/Debug.hpp"
 
-#include "Lua/StartFile.hpp"
-#include "Lua/Background.hpp"
+#include "lua/StartFile.hpp"
+#include "lua/Background.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Globals.hpp"
-#include "Screen/OpenGL/Dynamic.hpp"
+#include "ui/canvas/opengl/Globals.hpp"
+#include "ui/canvas/opengl/Dynamic.hpp"
 #else
 #include "DrawThread.hpp"
 #endif
@@ -185,7 +184,7 @@ Startup()
 
   // Creates the main window
 
-  TopWindowStyle style;
+  UI::TopWindowStyle style;
   if (CommandLine::full_screen)
     style.FullScreen();
 
@@ -274,7 +273,7 @@ Startup()
 
   // Initialize DeviceBlackboard
   device_blackboard = new DeviceBlackboard();
-  devices = new MultipleDevices(*asio_thread);
+  devices = new MultipleDevices(*asio_thread, *global_cares_channel);
   device_blackboard->SetDevices(*devices);
 
   // Initialize main blackboard data
@@ -475,7 +474,6 @@ void
 Shutdown()
 {
   VerboseOperationEnvironment operation;
-  gcc_unused ScopeBusyIndicator busy;
 
   MainWindow *const main_window = CommonInterface::main_window;
   auto &live_blackboard = CommonInterface::GetLiveBlackboard();

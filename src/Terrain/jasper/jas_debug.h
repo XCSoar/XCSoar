@@ -59,10 +59,9 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-/*
- * Debugging-Related Code
- *
- * $Id$
+/*!
+ * @file jas_debug.h
+ * @brief JasPer Debugging-Related Functionality
  */
 
 #ifndef JAS_DEBUG_H
@@ -106,10 +105,10 @@ JAS_DLLEXPORT int jas_setdbglevel(int dbglevel);
 JAS_DLLEXPORT int jas_eprintf(const char *fmt, ...);
 
 /* Dump memory to a stream. */
-int jas_memdump(FILE *out, void *data, size_t len);
+JAS_DLLEXPORT int jas_memdump(FILE *out, const void *data, size_t len);
 
 /* Warn about use of deprecated functionality. */
-void jas_deprecated(const char *s);
+JAS_DLLEXPORT void jas_deprecated(const char *s);
 #else
 #define jas_getdbglevel() 0
 #define jas_eprintf(...) do {} while (0)

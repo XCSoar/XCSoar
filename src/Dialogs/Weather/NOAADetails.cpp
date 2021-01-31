@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -38,12 +38,7 @@ Copyright_License {
 #include "Weather/NOAAFormatter.hpp"
 #include "UIGlobals.hpp"
 
-class NOAADetailsWidget final : public LargeTextWidget, ActionListener {
-  enum Buttons {
-    UPDATE,
-    REMOVE,
-  };
-
+class NOAADetailsWidget final : public LargeTextWidget {
   WndForm &dialog;
   NOAAStore::iterator station_iterator;
 
@@ -61,16 +56,13 @@ private:
 
   /* virtual methods from class Widget */
   virtual void Show(const PixelRect &rc) override;
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
 NOAADetailsWidget::CreateButtons(WidgetDialog &buttons)
 {
-  buttons.AddButton(_("Update"), *this, UPDATE);
-  buttons.AddButton(_("Remove"), *this, REMOVE);
+  buttons.AddButton(_("Update"), [this](){ UpdateClicked(); });
+  buttons.AddButton(_("Remove"), [this](){ RemoveClicked(); });
 }
 
 void
@@ -126,20 +118,6 @@ NOAADetailsWidget::Show(const PixelRect &rc)
 {
   LargeTextWidget::Show(rc);
   Update();
-}
-
-void
-NOAADetailsWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case UPDATE:
-    UpdateClicked();
-    break;
-
-  case REMOVE:
-    RemoveClicked();
-    break;
-  }
 }
 
 void

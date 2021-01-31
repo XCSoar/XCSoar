@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,18 +30,17 @@ Copyright_License {
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Form/List.hpp"
 #include "Widget/ListWidget.hpp"
-#include "Screen/Canvas.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
-#include "OS/Path.hpp"
-#include "IO/FileLineReader.hpp"
+#include "system/FileUtil.hpp"
+#include "system/Path.hpp"
+#include "io/FileLineReader.hpp"
 #include "Formatter/ByteSizeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
-#include "Time/BrokenDateTime.hpp"
-#include "Net/HTTP/Features.hpp"
-#include "Util/ConvertString.hpp"
-#include "Util/Macros.hpp"
+#include "time/BrokenDateTime.hpp"
+#include "net/http/Features.hpp"
+#include "util/ConvertString.hpp"
+#include "util/Macros.hpp"
 #include "Repository/FileRepository.hpp"
 #include "Repository/Parser.hpp"
 
@@ -49,10 +48,10 @@ Copyright_License {
 #include "Repository/Glue.hpp"
 #include "ListPicker.hpp"
 #include "Form/Button.hpp"
-#include "Net/HTTP/DownloadManager.hpp"
-#include "Event/Notify.hpp"
-#include "Thread/Mutex.hxx"
-#include "Event/PeriodicTimer.hpp"
+#include "net/http/DownloadManager.hpp"
+#include "ui/event/Notify.hpp"
+#include "thread/Mutex.hxx"
+#include "ui/event/PeriodicTimer.hpp"
 
 #include <map>
 #include <set>
@@ -123,18 +122,11 @@ UpdateAvailable(const FileRepository &repository, const TCHAR *name)
 #endif
 
 class ManagedFileListWidget
-  : public ListWidget,
+  : public ListWidget
 #ifdef HAVE_DOWNLOAD_MANAGER
-    private Net::DownloadListener,
+  , private Net::DownloadListener
 #endif
-    private ActionListener {
-  enum Buttons {
-    DOWNLOAD,
-    ADD,
-    CANCEL,
-    UPDATE,
-  };
-
+{
   struct DownloadStatus {
     int64_t size, position;
   };
@@ -211,9 +203,9 @@ class ManagedFileListWidget
    */
   std::set<std::string> failures;
 
-  PeriodicTimer refresh_download_timer{[this]{ OnTimer(); }};
+  UI::PeriodicTimer refresh_download_timer{[this]{ OnTimer(); }};
 
-  Notify download_notify{[this]{ OnDownloadNotification(); }};
+  UI::Notify download_notify{[this]{ OnDownloadNotification(); }};
 
   /**
    * Was the repository file modified, and needs to be reloaded by
@@ -306,9 +298,6 @@ public:
                    unsigned idx) noexcept override;
   void OnCursorMoved(unsigned index) noexcept override;
 
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
-
 #ifdef HAVE_DOWNLOAD_MANAGER
   void OnTimer();
 
@@ -349,15 +338,9 @@ void
 ManagedFileListWidget::Unprepare()
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
-  refresh_download_timer.Cancel();
-
   if (Net::DownloadManager::IsAvailable())
     Net::DownloadManager::RemoveListener(*this);
-
-  download_notify.ClearNotification();
 #endif
-
-  DeleteWindow();
 }
 
 int
@@ -446,10 +429,12 @@ ManagedFileListWidget::CreateButtons(WidgetDialog &dialog)
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (Net::DownloadManager::IsAvailable()) {
-    download_button = dialog.AddButton(_("Download"), *this, DOWNLOAD);
-    add_button = dialog.AddButton(_("Add"), *this, ADD);
-    cancel_button = dialog.AddButton(_("Cancel"), *this, CANCEL);
-    update_button = dialog.AddButton(_("Update all"), *this, UPDATE);
+    download_button = dialog.AddButton(_("Download"), [this](){ Download(); });
+    add_button = dialog.AddButton(_("Add"), [this](){ Add(); });
+    cancel_button = dialog.AddButton(_("Cancel"), [this](){ Cancel(); });
+    update_button = dialog.AddButton(_("Update all"), [this](){
+      UpdateFiles();
+    });
   }
 #endif
 }
@@ -475,10 +460,7 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   const FileItem &file = items[i];
 
-  canvas.Select(row_renderer.GetFirstFont());
   row_renderer.DrawFirstRow(canvas, rc, file.name.c_str());
-
-  canvas.Select(row_renderer.GetSecondFont());
 
   if (file.downloading) {
     StaticString<64> text;
@@ -652,28 +634,6 @@ ManagedFileListWidget::Cancel()
   const FileItem &item = items[current];
   Net::DownloadManager::Cancel(Path(item.name));
 #endif
-}
-
-void
-ManagedFileListWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case DOWNLOAD:
-    Download();
-    break;
-
-  case ADD:
-    Add();
-    break;
-
-  case CANCEL:
-    Cancel();
-    break;
-
-  case UPDATE:
-    UpdateFiles();
-    break;
-  }
 }
 
 #ifdef HAVE_DOWNLOAD_MANAGER

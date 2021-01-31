@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_INTERNAL_SENSORS_HPP
 #define XCSOAR_ANDROID_INTERNAL_SENSORS_HPP
 
-#include "Java/Object.hxx"
-#include "Java/Class.hxx"
-#include "Util/Compiler.h"
+#include "java/Object.hxx"
+#include "java/Class.hxx"
+#include "util/Compiler.h"
 
 #include <jni.h>
 #include <vector>

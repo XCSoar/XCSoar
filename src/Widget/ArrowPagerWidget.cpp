@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ArrowPagerWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
@@ -97,17 +97,12 @@ ArrowPagerWidget::Layout::Layout(PixelRect rc, const Widget *extra_widget)
   }
 }
 
-ArrowPagerWidget::~ArrowPagerWidget()
-{
-  delete extra;
-}
-
 PixelSize
 ArrowPagerWidget::GetMinimumSize() const
 {
   PixelSize result = PagerWidget::GetMinimumSize();
-  result.cx += ::Layout::Scale(50);
-  result.cy += 2 * ::Layout::GetMinimumControlHeight();
+  result.width += ::Layout::Scale(50u);
+  result.height += 2 * ::Layout::GetMinimumControlHeight();
   return result;
 }
 
@@ -115,8 +110,8 @@ PixelSize
 ArrowPagerWidget::GetMaximumSize() const
 {
   PixelSize result = PagerWidget::GetMinimumSize();
-  result.cx += ::Layout::Scale(80);
-  result.cy += 2 * ::Layout::GetMaximumControlHeight();
+  result.width += ::Layout::Scale(80u);
+  result.height += 2 * ::Layout::GetMaximumControlHeight();
   return result;
 }
 
@@ -133,7 +128,7 @@ ArrowPagerWidget::Initialise(ContainerWindow &parent,
 void
 ArrowPagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  const Layout layout(rc, extra);
+  const Layout layout(rc, extra.get());
   PagerWidget::Prepare(parent, layout.main);
 
   if (extra != nullptr)
@@ -144,19 +139,19 @@ ArrowPagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.TabStop();
 
   previous_button.Create(parent, layout.previous_button, style,
-                         new SymbolButtonRenderer(look, _T("<")),
-                         *this, PREVIOUS);
+                         std::make_unique<SymbolButtonRenderer>(look, _T("<")),
+                         [this](){ Previous(false); });
   next_button.Create(parent, layout.next_button, style,
-                     new SymbolButtonRenderer(look, _T(">")),
-                     *this, NEXT);
+                     std::make_unique<SymbolButtonRenderer>(look, _T(">")),
+                     [this](){ Next(false); });
   close_button.Create(parent, look, _("Close"), layout.close_button,
-                      style, action_listener, mrOK);
+                      style, close_callback);
 }
 
 void
 ArrowPagerWidget::Show(const PixelRect &rc)
 {
-  const Layout layout(rc, extra);
+  const Layout layout(rc, extra.get());
   PagerWidget::Show(layout.main);
 
   previous_button.MoveAndShow(layout.previous_button);
@@ -183,7 +178,7 @@ ArrowPagerWidget::Hide()
 void
 ArrowPagerWidget::Move(const PixelRect &rc)
 {
-  const Layout layout(rc, extra);
+  const Layout layout(rc, extra.get());
   PagerWidget::Move(layout.main);
 
   previous_button.Move(layout.previous_button);
@@ -223,19 +218,5 @@ ArrowPagerWidget::KeyPress(unsigned key_code)
 
   default:
     return false;
-  }
-}
-
-void
-ArrowPagerWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case PREVIOUS:
-    Previous(false);
-    break;
-
-  case NEXT:
-    Next(false);
-    break;
   }
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,12 +33,7 @@ Copyright_License {
 #include "NMEA/DeviceInfo.hpp"
 
 class ManageV7Widget final
-  : public RowFormWidget, private ActionListener {
-  enum Controls {
-    SETUP,
-    NANO,
-  };
-
+  : public RowFormWidget {
   LXDevice &device;
   const DeviceInfo info;
   const DeviceInfo secondary_info;
@@ -52,10 +47,6 @@ public:
 
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-
-private:
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -87,34 +78,20 @@ ManageV7Widget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     AddReadOnly(_("Firmware version"), NULL, buffer.c_str());
   }
 
-  AddButton(_("Setup"), *this, SETUP);
+  AddButton(_("Setup"), [this](){
+    V7ConfigWidget widget(GetLook(), device);
+    DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
+                        _T("LXNAV V7"), widget);
+  });
 
   if (device.IsNano())
-    AddButton(_T("LXNAV Nano"), *this, NANO);
-}
-
-void
-ManageV7Widget::OnAction(int id) noexcept
-{
-  MessageOperationEnvironment env;
-
-  switch (id) {
-  case SETUP:
-    {
-      V7ConfigWidget widget(GetLook(), device);
-      DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
-                          _T("LXNAV V7"), widget);
-    }
-    break;
-
-  case NANO:
-    if (device.EnablePassThrough(env)) {
-      ManageNanoDialog(device, secondary_info);
-      device.EnableNMEA(env);
-    }
-
-    break;
-  }
+    AddButton(_T("LXNAV Nano"), [this](){
+      MessageOperationEnvironment env;
+      if (device.EnablePassThrough(env)) {
+        ManageNanoDialog(device, secondary_info);
+        device.EnableNMEA(env);
+      }
+    });
 }
 
 void

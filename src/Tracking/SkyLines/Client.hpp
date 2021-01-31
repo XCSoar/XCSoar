@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,15 +24,21 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 #define XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 
-#include "Thread/Mutex.hxx"
-#include "Util/Compiler.h"
-
-#include <boost/asio/ip/udp.hpp>
+#include "event/SocketEvent.hxx"
+#include "net/AllocatedSocketAddress.hxx"
+#include "net/UniqueSocketDescriptor.hxx"
+#include "event/net/cares/SimpleResolver.hxx"
+#include "thread/Mutex.hxx"
+#include "util/Cancellable.hxx"
+#include "util/Compiler.h"
 
 #include <cstdint>
+#include <optional>
 
 struct NMEAInfo;
 struct GeoPoint;
+
+namespace Cares { class Channel; }
 
 namespace SkyLinesTracking {
 
@@ -42,7 +48,7 @@ struct WaveResponsePacket;
 struct ThermalResponsePacket;
 class Handler;
 
-class Client {
+class Client final : Cares::SimpleHandler {
   Handler *const handler;
 
   /**
@@ -52,29 +58,26 @@ class Client {
 
   uint64_t key = 0;
 
-  bool resolving = false;
+  std::optional<Cares::SimpleResolver> resolver;
 
-  boost::asio::ip::udp::resolver resolver;
-  boost::asio::ip::udp::endpoint endpoint;
-  boost::asio::ip::udp::socket socket;
-
-  uint8_t buffer[4096];
-  boost::asio::ip::udp::endpoint sender_endpoint;
+  AllocatedSocketAddress address;
+  UniqueSocketDescriptor socket;
+  SocketEvent socket_event;
 
 public:
-  explicit Client(boost::asio::io_context &io_context,
+  explicit Client(EventLoop &event_loop,
                   Handler *_handler=nullptr)
-    :handler(_handler), resolver(io_context), socket(io_context) {}
+    :handler(_handler),
+     socket_event(event_loop, BIND_THIS_METHOD(OnSocketReady)) {}
   ~Client() { Close(); }
+
+  auto &GetEventLoop() const noexcept {
+    return socket_event.GetEventLoop();
+  }
 
   constexpr
   static unsigned GetDefaultPort() {
     return 5597;
-  }
-
-  constexpr
-  static const char *GetDefaultPortString() {
-    return "5597";
   }
 
   /**
@@ -86,13 +89,13 @@ public:
 
   bool IsDefined() const {
     const std::lock_guard<Mutex> lock(mutex);
-    return resolving || socket.is_open();
+    return resolver || socket.IsDefined();
   }
 
   gcc_pure
   bool IsConnected() const {
     const std::lock_guard<Mutex> lock(mutex);
-    return socket.is_open();
+    return socket.IsDefined();
   }
 
   uint64_t GetKey() const {
@@ -103,15 +106,14 @@ public:
     key = _key;
   }
 
-  void Open(boost::asio::ip::udp::resolver::query query);
-  bool Open(boost::asio::ip::udp::endpoint _endpoint);
+  void Open(Cares::Channel &cares, const char *server);
+  bool Open(SocketAddress _address);
   void Close();
 
   template<typename P>
-  void SendPacket(const P &packet) {
+  bool SendPacket(const P &packet) {
     const std::lock_guard<Mutex> lock(mutex);
-    socket.send_to(boost::asio::buffer(&packet, sizeof(packet)),
-                   endpoint, 0);
+    return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
   }
 
   void SendFix(const NMEAInfo &basic);
@@ -127,6 +129,8 @@ public:
   void SendUserNameRequest(uint32_t user_id);
 
 private:
+  void InternalClose() noexcept;
+
   void OnTrafficReceived(const TrafficResponsePacket &packet, size_t length);
   void OnUserNameReceived(const UserNameResponsePacket &packet,
                           size_t length);
@@ -134,11 +138,11 @@ private:
   void OnThermalReceived(const ThermalResponsePacket &packet, size_t length);
   void OnDatagramReceived(void *data, size_t length);
 
-  void OnReceive(const boost::system::error_code &ec, size_t size);
-  void AsyncReceive();
+  void OnSocketReady(unsigned events) noexcept;
 
-  void OnResolved(const boost::system::error_code &ec,
-                  boost::asio::ip::udp::resolver::iterator i);
+  /* virtual methods from Cares::SimpleHandler */
+  void OnResolverSuccess(std::forward_list<AllocatedSocketAddress> addresses) noexcept override;
+  void OnResolverError(std::exception_ptr error) noexcept override;
 };
 
 } /* namespace SkyLinesTracking */

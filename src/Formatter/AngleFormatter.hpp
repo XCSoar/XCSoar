@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_ANGLE_FORMATTER_HPP
 #define XCSOAR_ANGLE_FORMATTER_HPP
 
-#include "Util/StringBuffer.hxx"
+#include "util/StringBuffer.hxx"
 #include "Math/Angle.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 #include <cstddef>

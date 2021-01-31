@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,8 +32,8 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Dialogs/Error.hpp"
-#include "Screen/Bitmap.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Bitmap.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/TextListWidget.hpp"
 #include "Widget/ViewImageWidget.hpp"
@@ -157,18 +157,20 @@ protected:
   }
 };
 
-Widget *
+std::unique_ptr<Widget>
 CreatePCMetWidget()
 {
   const auto &settings = CommonInterface::GetComputerSettings().weather.pcmet;
   if (!settings.www_credentials.IsDefined())
-    return new LargeTextWidget(UIGlobals::GetDialogLook(),
-                               _T("No account was configured."));
+    return std::make_unique<LargeTextWidget>(UIGlobals::GetDialogLook(),
+                                             _T("No account was configured."));
 
-  auto *area_widget = new ImageAreaListWidget();
-  auto *type_widget = new ImageTypeListWidget(*area_widget);
+  auto area_widget = std::make_unique<ImageAreaListWidget>();
+  auto type_widget = std::make_unique<ImageTypeListWidget>(*area_widget);
 
-  return new TwoWidgets(type_widget, area_widget, false);
+  return std::make_unique<TwoWidgets>(std::move(type_widget),
+                                      std::move(area_widget),
+                                      false);
 }
 
 #endif

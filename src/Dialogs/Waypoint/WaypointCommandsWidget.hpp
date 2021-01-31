@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_WAYPOINT_COMMANDS_WIDGET_HPP
 
 #include "Widget/RowFormWidget.hpp"
-#include "Form/ActionListener.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
 
 class WndForm;
@@ -35,7 +34,7 @@ class ProtectedTaskManager;
  * A Widget that shows a few commands for a Waypoint.
  */
 class WaypointCommandsWidget final
-  : public RowFormWidget, ActionListener {
+  : public RowFormWidget {
   WndForm *const form;
 
   const WaypointPtr waypoint;
@@ -52,9 +51,6 @@ public:
     :RowFormWidget(look), form(_form),
      waypoint(std::move(_waypoint)), task_manager(_task_manager),
      allow_edit(_allow_edit) {}
-
-  /* methods from ActionListener */
-  void OnAction(int id) noexcept override;
 
   /* methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;

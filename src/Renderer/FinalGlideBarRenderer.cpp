@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "FinalGlideBarRenderer.hpp"
 #include "TextInBox.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "NMEA/Derived.hpp"
 #include "Look/FinalGlideBarLook.hpp"
@@ -31,7 +31,7 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 void
@@ -108,7 +108,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   Offset = Layout::Scale(Offset);
   if (altitude_difference <= 0) {
     GlideBar[1].y = Layout::Scale(9);
-    dy_glidebar = text_size.cy + 2;
+    dy_glidebar = text_size.height + 2;
   } else {
     GlideBar[1].y = -Layout::Scale(9);
     clipping_arrow[1].y = -clipping_arrow[1].y;
@@ -131,7 +131,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   Offset0 = Layout::Scale(Offset0);
   if (altitude_difference0 <= 0) {
     GlideBar0[1].y = Layout::Scale(9);
-    dy_glidebar0 = text_size.cy + 2;
+    dy_glidebar0 = text_size.height + 2;
   } else {
     GlideBar0[1].y = -Layout::Scale(9);
     clipping_arrow0[1].y = -clipping_arrow0[1].y;
@@ -231,10 +231,10 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   if (cross_sign != 0) {
     canvas.Select(task_look.bearing_pen);
-    canvas.DrawLine(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 - 5),
-                Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 + 5));
-    canvas.DrawLine(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 + 5),
-                Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 - 5));
+    canvas.DrawLine({Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 - 5)},
+                    {Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 + 5)});
+    canvas.DrawLine({Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 + 5)},
+                    {Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 - 5)});
   }
 
   canvas.SetTextColor(COLOR_BLACK);
@@ -244,10 +244,10 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   style.shape = LabelShape::ROUNDED_BLACK;
   style.move_in_view = true;
 
-  if (text_size.cx < Layout::Scale(18)) {
+  if (text_size.width < Layout::Scale(18u)) {
     style.align = TextInBoxMode::Alignment::RIGHT;
-    TextInBox(canvas, Value, Layout::Scale(18), y0, style, rc);
+    TextInBox(canvas, Value, {Layout::Scale(18), y0}, style, rc);
   } else
-    TextInBox(canvas, Value, 0, y0, style, rc);
+    TextInBox(canvas, Value, {0, y0}, style, rc);
 
 }

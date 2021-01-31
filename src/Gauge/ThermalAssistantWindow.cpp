@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,10 +23,10 @@
 
 #include "ThermalAssistantWindow.hpp"
 #include "Look/ThermalAssistantLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 ThermalAssistantWindow::ThermalAssistantWindow(const ThermalAssistantLook &_look,
@@ -57,8 +57,7 @@ ThermalAssistantWindow::OnResize(PixelSize new_size)
 void
 ThermalAssistantWindow::DrawCircle(Canvas &canvas)
 {
-  canvas.DrawCircle(renderer.GetMiddle().x, renderer.GetMiddle().y,
-                    renderer.GetRadius());
+  canvas.DrawCircle(renderer.GetMiddle(), renderer.GetRadius());
 }
 
 void

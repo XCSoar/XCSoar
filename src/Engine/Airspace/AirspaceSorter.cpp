@@ -3,7 +3,7 @@
 #include "AbstractAirspace.hpp"
 #include "Predicate/AirspacePredicate.hpp"
 #include "Geo/GeoVector.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/StringAPI.hxx"
 
 #include <algorithm>
 

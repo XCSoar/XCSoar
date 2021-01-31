@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,9 +24,9 @@ Copyright_License {
 #include "Form/ButtonPanel.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
-#include "Screen/ContainerWindow.hpp"
+#include "ui/window/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 
 ButtonPanel::ButtonPanel(ContainerWindow &_parent, const ButtonLook &_look)
   :parent(_parent), look(_look), selected_index(-1) {
@@ -60,11 +60,11 @@ ButtonPanel::UpdateLayout()
 static constexpr PixelRect dummy_rc = { 0, 0, 100, 40 };
 
 Button *
-ButtonPanel::Add(ButtonRenderer *renderer,
-                 ActionListener &listener, int id)
+ButtonPanel::Add(std::unique_ptr<ButtonRenderer> &&renderer,
+                 Button::Callback callback) noexcept
 {
   auto *button = new Button(parent, dummy_rc, style,
-                            renderer, listener, id);
+                            std::move(renderer), std::move(callback));
   keys[buttons.size()] = 0;
   buttons.append(button);
 
@@ -72,16 +72,18 @@ ButtonPanel::Add(ButtonRenderer *renderer,
 }
 
 Button *
-ButtonPanel::Add(const TCHAR *caption, ActionListener &listener, int id)
+ButtonPanel::Add(const TCHAR *caption, Button::Callback callback) noexcept
 {
-  return Add(new TextButtonRenderer(look, caption), listener, id);
+  return Add(std::make_unique<TextButtonRenderer>(look, caption),
+             std::move(callback));
 }
 
 Button *
 ButtonPanel::AddSymbol(const TCHAR *caption,
-                       ActionListener &listener, int id)
+                       Button::Callback callback) noexcept
 {
-  return Add(new SymbolButtonRenderer(look, caption), listener, id);
+  return Add(std::make_unique<SymbolButtonRenderer>(look, caption),
+             std::move(callback));
 }
 
 void

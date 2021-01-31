@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "LogoView.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/FontDescription.hpp"
 #include "Resources.hpp"
@@ -80,23 +80,23 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   // Determine title image size
   PixelSize title_size = bitmap_title.GetSize();
 
-  unsigned spacing = title_size.cy / 2;
+  unsigned spacing = title_size.height / 2;
 
   unsigned estimated_width, estimated_height;
   switch (orientation) {
   case LANDSCAPE:
-    estimated_width = logo_size.cx + spacing + title_size.cx;
-    estimated_height = logo_size.cy;
+    estimated_width = logo_size.width + spacing + title_size.width;
+    estimated_height = logo_size.height;
     break;
 
   case PORTRAIT:
-    estimated_width = title_size.cx;
-    estimated_height = logo_size.cy + spacing + title_size.cy;
+    estimated_width = title_size.width;
+    estimated_height = logo_size.height + spacing + title_size.height;
     break;
 
   case SQUARE:
-    estimated_width = logo_size.cx;
-    estimated_height = logo_size.cy;
+    estimated_width = logo_size.width;
+    estimated_height = logo_size.height;
     break;
   }
 
@@ -105,44 +105,44 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
              (height - 16u) / estimated_height);
 
   if (magnification > 1) {
-    logo_size.cx *= magnification;
-    logo_size.cy *= magnification;
-    title_size.cx *= magnification;
-    title_size.cy *= magnification;
+    logo_size.width *= magnification;
+    logo_size.height *= magnification;
+    title_size.width *= magnification;
+    title_size.height *= magnification;
     spacing *= magnification;
   }
 
-  int logox, logoy, titlex, titley;
+  PixelPoint logo_position, title_position;
 
   // Determine logo and title positions
   switch (orientation) {
   case LANDSCAPE:
-    logox = Center(width, logo_size.cx + spacing + title_size.cx);
-    logoy = Center(height, logo_size.cy);
-    titlex = logox + logo_size.cx + spacing;
-    titley = Center(height, title_size.cy);
+    logo_position.x = Center(width, logo_size.width + spacing + title_size.width);
+    logo_position.y = Center(height, logo_size.height);
+    title_position.x = logo_position.x + logo_size.width + spacing;
+    title_position.y = Center(height, title_size.height);
     break;
   case PORTRAIT:
-    logox = Center(width, logo_size.cx);
-    logoy = Center(height, logo_size.cy + spacing + title_size.cy);
-    titlex = Center(width, title_size.cx);
-    titley = logoy + logo_size.cy + spacing;
+    logo_position.x = Center(width, logo_size.width);
+    logo_position.y = Center(height, logo_size.height + spacing + title_size.height);
+    title_position.x = Center(width, title_size.width);
+    title_position.y = logo_position.y + logo_size.height + spacing;
     break;
   case SQUARE:
-    logox = Center(width, logo_size.cx);
-    logoy = Center(height, logo_size.cy);
+    logo_position.x = Center(width, logo_size.width);
+    logo_position.y = Center(height, logo_size.height);
     // not needed - silence compiler "may be used uninitialized"
-    titlex = 0;
-    titley = 0;
+    title_position.x = 0;
+    title_position.y = 0;
     break;
   }
 
   // Draw 'XCSoar N.N' title
   if (orientation != SQUARE)
-    canvas.Stretch(titlex, titley, title_size.cx, title_size.cy, bitmap_title);
+    canvas.Stretch(title_position, title_size, bitmap_title);
 
   // Draw XCSoar swift logo
-  canvas.Stretch(logox, logoy, logo_size.cx, logo_size.cy, bitmap_logo);
+  canvas.Stretch(logo_position, logo_size, bitmap_logo);
 
   // Draw full XCSoar version number
 
@@ -152,5 +152,5 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
 
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();
-  canvas.DrawText(2, 2, XCSoar_ProductToken);
+  canvas.DrawText({2, 2}, XCSoar_ProductToken);
 }

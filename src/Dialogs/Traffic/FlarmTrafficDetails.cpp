@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -45,9 +45,9 @@
 #include "Components.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AngleFormatter.hpp"
-#include "Util/StringBuilder.hxx"
-#include "Util/StringCompare.hxx"
-#include "Util/Macros.hpp"
+#include "util/StringBuilder.hxx"
+#include "util/StringCompare.hxx"
+#include "util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "Blackboard/LiveBlackboard.hpp"
@@ -55,7 +55,7 @@
 #include "TeamActions.hpp"
 
 class FlarmTrafficDetailsWidget final
-  : public RowFormWidget, ActionListener, NullBlackboardListener {
+  : public RowFormWidget, NullBlackboardListener {
   enum Controls {
     CALLSIGN,
     CHANGE_CALLSIGN_BUTTON,
@@ -68,16 +68,6 @@ class FlarmTrafficDetailsWidget final
     AIRPORT,
     RADIO,
     PLANE,
-  };
-
-  enum Buttons {
-    CHANGE_CALLSIGN,
-    TEAM,
-    CLEAR,
-    GREEN,
-    BLUE,
-    YELLOW,
-    MAGENTA,
   };
 
   WndForm &dialog;
@@ -104,9 +94,6 @@ private:
   void OnTeamClicked();
   void OnFriendColorClicked(FlarmColor color);
 
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
-
   /* virtual methods from BlackboardListener */
   void OnGPSUpdate(const MoreData &basic) override {
     UpdateChanging(basic);
@@ -118,24 +105,24 @@ FlarmTrafficDetailsWidget::CreateButtons(WidgetDialog &buttons)
 {
   const ButtonLook &button_look = buttons.GetButtonLook();
 
-  buttons.AddButton(new ColorButtonRenderer(button_look,
-                                            TrafficLook::team_color_green),
-                    *this, GREEN);
+  buttons.AddButton(std::make_unique<ColorButtonRenderer>(button_look,
+                                                          TrafficLook::team_color_green),
+                    [this](){ OnFriendColorClicked(FlarmColor::GREEN); });
 
-  buttons.AddButton(new ColorButtonRenderer(button_look,
-                                            TrafficLook::team_color_blue),
-                    *this, BLUE);
+  buttons.AddButton(std::make_unique<ColorButtonRenderer>(button_look,
+                                                          TrafficLook::team_color_blue),
+                    [this](){ OnFriendColorClicked(FlarmColor::BLUE); });
 
-  buttons.AddButton(new ColorButtonRenderer(button_look,
-                                            TrafficLook::team_color_yellow),
-                    *this, YELLOW);
+  buttons.AddButton(std::make_unique<ColorButtonRenderer>(button_look,
+                                                          TrafficLook::team_color_yellow),
+                    [this](){ OnFriendColorClicked(FlarmColor::YELLOW); });
 
-  buttons.AddButton(new ColorButtonRenderer(button_look,
-                                            TrafficLook::team_color_magenta),
-                    *this, MAGENTA);
+  buttons.AddButton(std::make_unique<ColorButtonRenderer>(button_look,
+                                                          TrafficLook::team_color_magenta),
+                    [this](){ OnFriendColorClicked(FlarmColor::MAGENTA); });
 
-  buttons.AddButton(_("Clear"), *this, CLEAR);
-  buttons.AddButton(_("Team"), *this, TEAM);
+  buttons.AddButton(_("Clear"), [this](){ OnFriendColorClicked(FlarmColor::NONE); });
+  buttons.AddButton(_("Team"), [this](){ OnTeamClicked(); });
 }
 
 void
@@ -143,7 +130,7 @@ FlarmTrafficDetailsWidget::Prepare(ContainerWindow &parent,
                                    const PixelRect &rc)
 {
   AddReadOnly(_("Callsign"));
-  AddButton(_("Change callsign"), *this, CHANGE_CALLSIGN);
+  AddButton(_("Change callsign"), [this](){ OnCallsignClicked(); });
   AddSpacer();
   AddReadOnly(_("Distance"));
   AddReadOnly(_("Altitude"));
@@ -339,40 +326,6 @@ FlarmTrafficDetailsWidget::OnFriendColorClicked(FlarmColor color)
 {
   FlarmFriends::SetFriendColor(target_id, color);
   dialog.SetModalResult(mrOK);
-}
-
-void
-FlarmTrafficDetailsWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case CHANGE_CALLSIGN:
-    OnCallsignClicked();
-    break;
-
-  case TEAM:
-    OnTeamClicked();
-    break;
-
-  case CLEAR:
-    OnFriendColorClicked(FlarmColor::NONE);
-    break;
-
-  case GREEN:
-    OnFriendColorClicked(FlarmColor::GREEN);
-    break;
-
-  case BLUE:
-    OnFriendColorClicked(FlarmColor::BLUE);
-    break;
-
-  case YELLOW:
-    OnFriendColorClicked(FlarmColor::YELLOW);
-    break;
-
-  case MAGENTA:
-    OnFriendColorClicked(FlarmColor::MAGENTA);
-    break;
-  }
 }
 
 /**

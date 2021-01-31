@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,12 +28,12 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
-#include "Util/StringUtil.hpp"
-#include "Util/StringCompare.hxx"
-#include "Util/StringAPI.hxx"
-#include "Util/tstring.hpp"
-#include "OS/FileUtil.hpp"
-#include "OS/Path.hpp"
+#include "util/StringUtil.hpp"
+#include "util/StringCompare.hxx"
+#include "util/StringAPI.hxx"
+#include "util/tstring.hpp"
+#include "system/FileUtil.hpp"
+#include "system/Path.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 #include <cassert>

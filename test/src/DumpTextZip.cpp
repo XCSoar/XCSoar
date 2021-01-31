@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#include "IO/ZipArchive.hpp"
-#include "IO/ZipLineReader.hpp"
-#include "OS/Args.hpp"
-#include "Util/PrintException.hxx"
+#include "io/ZipArchive.hpp"
+#include "io/ZipLineReader.hpp"
+#include "system/Args.hpp"
+#include "util/PrintException.hxx"
 
 #include <zzip/zzip.h>
 

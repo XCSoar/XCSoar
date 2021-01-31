@@ -77,7 +77,7 @@
 #include "jasper/jas_types.h"
 #include "jasper/jas_stream.h"
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <assert.h>
 #include <stdio.h>

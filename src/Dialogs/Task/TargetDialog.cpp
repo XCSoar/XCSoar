@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
@@ -46,7 +46,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Blackboard/RateLimitedBlackboardListener.hpp"
 #include "Interface.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 class TargetWidget;
 
@@ -71,7 +71,7 @@ protected:
 };
 
 class TargetWidget
-  : public NullWidget, ActionListener,
+  : public NullWidget,
     DataFieldListener,
     NullBlackboardListener {
   enum Buttons {
@@ -93,7 +93,7 @@ class TargetWidget
     explicit Layout(PixelRect rc);
   };
 
-  ActionListener &dialog;
+  WndForm &dialog;
 
   RateLimitedBlackboardListener rate_limited_bl;
 
@@ -117,7 +117,7 @@ class TargetWidget
   bool is_locked;
 
 public:
-  TargetWidget(ActionListener &_dialog,
+  TargetWidget(WndForm &_dialog,
                const DialogLook &dialog_look, const MapLook &map_look)
     :dialog(_dialog),
      rate_limited_bl(*this, std::chrono::milliseconds(1800),
@@ -183,7 +183,7 @@ public:
   void OnPrevClicked();
   void OnNextClicked();
   void OnNameClicked();
-  void OnOptimized();
+  void OnOptimized(bool value) noexcept;
 
   void OnRangeModified(double new_value);
   void OnRadialModified(double new_value);
@@ -255,27 +255,6 @@ public:
   bool KeyPress(unsigned key_code) override;
 
 private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case PREVIOUS:
-      OnPrevClicked();
-      break;
-
-    case NEXT:
-      OnNextClicked();
-      break;
-
-    case NAME:
-      OnNameClicked();
-      break;
-
-    case OPTIMIZED:
-      OnOptimized();
-      break;
-    }
-  }
-
   /* virtual methods from class DataFieldListener */
   void OnModified(DataField &df) override {
     if (&df == range.GetDataField())
@@ -418,15 +397,14 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const auto &button_look = UIGlobals::GetDialogLook().button;
 
   name_button.Create(parent, button_look, _T(""), layout.name_button,
-                     button_style, *this, NAME);
+                     button_style, [this](){ OnNameClicked(); });
 
   previous_button.Create(parent, layout.previous_button, button_style,
-                         new SymbolButtonRenderer(button_look,
-                                                  _T("<")),
-                         *this, PREVIOUS);
+                         std::make_unique<SymbolButtonRenderer>(button_look, _T("<")),
+                         [this](){ OnPrevClicked(); });
   next_button.Create(parent, layout.next_button, button_style,
-                     new SymbolButtonRenderer(button_look, _T(">")),
-                     *this, NEXT);
+                     std::make_unique<SymbolButtonRenderer>(button_look, _T(">")),
+                     [this](){ OnNextClicked(); });
 
   const unsigned caption_width = ::Layout::Scale(50);
 
@@ -462,11 +440,12 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                               speed_remaining, speed_achieved);
 
   optimized.Create(parent, UIGlobals::GetDialogLook(), _("Optimized"),
-                   layout.optimized, button_style, *this, OPTIMIZED);
+                   layout.optimized, button_style,
+                   [this](bool value){ OnOptimized(value); });
 
   close_button.Create(parent, button_look, _("Close"),
                       layout.close_button,
-                      button_style, dialog, mrOK);
+                      button_style, dialog.MakeModalResultCallback(mrOK));
 }
 
 void
@@ -579,9 +558,9 @@ TargetDialogMapWindow::OnTaskModified()
 }
 
 void
-TargetWidget::OnOptimized()
+TargetWidget::OnOptimized(bool value) noexcept
 {
-  is_locked = !optimized.GetState();
+  is_locked = !value;
   protected_task_manager->TargetLock(target_point, is_locked);
   RefreshCalculator();
 }

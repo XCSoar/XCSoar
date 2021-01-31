@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,14 +26,13 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Form/Edit.hpp"
-#include "Form/LambdaActionListener.hpp"
 #include "Widget/KeyboardWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringCompare.hxx"
-#include "Util/TruncateString.hpp"
+#include "util/StringCompare.hxx"
+#include "util/TruncateString.hpp"
 
 #include <algorithm>
 
@@ -203,20 +202,18 @@ TouchTextEntry(TCHAR *text, size_t width,
 
   Button ok_button(client_area, look.button, _("OK"),
                    { ok_left, button_top, ok_right, button_bottom },
-                   button_style, form, mrOK);
+                   button_style, form.MakeModalResultCallback(mrOK));
 
   Button cancel_button(client_area, look.button, _("Cancel"),
                        { cancel_left, button_top,
                            cancel_right, button_bottom },
-                       button_style, form, mrCancel);
+                       button_style, form.MakeModalResultCallback(mrCancel));
 
-  auto clear_listener = MakeLambdaActionListener([](unsigned id){
-      ClearText();
-    });
   Button clear_button(client_area, look.button, _("Clear"),
                       { clear_left, button_top,
                           clear_right, button_bottom },
-                      button_style, clear_listener, 0);
+                      button_style,
+                      [](){ ClearText(); });
 
   KeyboardWidget keyboard(look.button, FormCharacter, !accb,
                           default_shift_state);
@@ -232,13 +229,10 @@ TouchTextEntry(TCHAR *text, size_t width,
 
   kb = &keyboard;
 
-  auto backspace_listener = MakeLambdaActionListener([](unsigned id){
-      OnBackspace();
-    });
   Button backspace_button(client_area, look.button, _T("<-"),
                           { backspace_left, padding, rc.right - padding,
                               editor_bottom },
-                          button_style, backspace_listener, 0);
+                          button_style, [](){ OnBackspace(); });
 
   AllowedCharactersCallback = accb;
 

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,9 +25,9 @@ Copyright_License {
 #define XCSOAR_TRACKING_SKYLINES_TRAFFIC_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Thread/Mutex.hxx"
-#include "Util/tstring.hpp"
-#include "Util/Compiler.h"
+#include "thread/Mutex.hxx"
+#include "util/tstring.hpp"
+#include "util/Compiler.h"
 
 #include <map>
 #include <list>

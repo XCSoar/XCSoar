@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,9 +27,9 @@ Copyright_License {
 #include "Resources.hpp"
 
 #ifdef USE_WINUSER
-#include "Screen/AnyCanvas.hpp"
+#include "ui/canvas/AnyCanvas.hpp"
 #else
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #endif
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent)
@@ -154,9 +154,7 @@ ProgressWindow::OnPaint(Canvas &canvas)
   logo.draw(canvas, logo_position);
 
   // Draw progress bar background
-  canvas.Stretch(bottom_position.left, bottom_position.top,
-                 bottom_position.GetWidth(),
-                 bottom_position.GetHeight(),
+  canvas.Stretch(bottom_position.GetTopLeft(), bottom_position.GetSize(),
                  bitmap_progress_border);
 
 #ifndef USE_WINUSER
@@ -164,9 +162,9 @@ ProgressWindow::OnPaint(Canvas &canvas)
 #endif
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_BLACK);
-  canvas.DrawText((message_position.left + message_position.right
-                   - canvas.CalcTextWidth(message.c_str())) / 2,
-                  message_position.top,
+  canvas.DrawText({(message_position.left + message_position.right
+                    - (int)canvas.CalcTextWidth(message.c_str())) / 2,
+      message_position.top},
                   message.c_str());
 
   ContainerWindow::OnPaint(canvas);

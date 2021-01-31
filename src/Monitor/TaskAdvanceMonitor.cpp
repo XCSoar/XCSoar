@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,6 @@ Copyright_License {
 #include "TaskAdvanceMonitor.hpp"
 #include "PageActions.hpp"
 #include "Widget/QuestionWidget.hpp"
-#include "Form/ActionListener.hpp"
 #include "Language/Language.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
@@ -33,47 +32,34 @@ Copyright_License {
 #include "Interface.hpp"
 
 class TaskAdvanceWidget final
-  : public QuestionWidget, private ActionListener {
+  : public QuestionWidget
+{
   TaskAdvanceMonitor &monitor;
-
-  enum Action {
-    DISMISS,
-    ARM_ADVANCE,
-  };
 
 public:
   TaskAdvanceWidget(TaskAdvanceMonitor &_monitor)
-    :QuestionWidget(_("In sector, arm advance when ready"), *this),
+    :QuestionWidget(_("In sector, arm advance when ready")),
      monitor(_monitor) {
-    AddButton(_("Arm"), ARM_ADVANCE);
-    AddButton(_("Dismiss"), DISMISS);
+    AddButton(_("Arm"), [](){
+      {
+        ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+        TaskAdvance &advance = task_manager->SetTaskAdvance();
+        advance.SetArmed(true);
+      }
+
+      PageActions::RestoreBottom();
+    });
+
+    AddButton(_("Dismiss"), [](){
+      PageActions::RestoreBottom();
+    });
   }
 
   ~TaskAdvanceWidget() {
     assert(monitor.widget == this);
     monitor.widget = nullptr;
   }
-
-private:
-  void OnAction(int id) noexcept override;
 };
-
-void
-TaskAdvanceWidget::OnAction(int id) noexcept
-{
-  switch ((Action)id) {
-  case DISMISS:
-    break;
-
-  case ARM_ADVANCE: {
-    ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-    TaskAdvance &advance = task_manager->SetTaskAdvance();
-    advance.SetArmed(true);
-  }
-  }
-
-  PageActions::RestoreBottom();
-}
 
 void
 TaskAdvanceMonitor::Check()

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,12 +31,13 @@ Copyright_License {
 #ifdef SIMULATOR_AVAILABLE
 
 class SimulatorPromptWidget final : public WindowWidget {
-  SimulatorPromptWindow w;
+  const DialogLook &look;
+  std::function<void(SimulatorPromptWindow::Result)> callback;
 
 public:
   SimulatorPromptWidget(const DialogLook &_look,
-                        ActionListener &_action_listener)
-    :w(_look, _action_listener, true) {}
+                        std::function<void(SimulatorPromptWindow::Result)> _callback) noexcept
+    :look(_look), callback(std::move(_callback)) {}
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
@@ -45,8 +46,10 @@ public:
     style.Hide();
     style.ControlParent();
 
-    w.Create(parent, rc, style);
-    SetWindow(&w);
+    auto w = std::make_unique<SimulatorPromptWindow>(look, std::move(callback),
+                                                     true);
+    w->Create(parent, rc, style);
+    SetWindow(std::move(w));
   }
 };
 
@@ -57,25 +60,32 @@ dlgSimulatorPromptShowModal()
 {
 #ifdef SIMULATOR_AVAILABLE
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, nullptr);
-  SimulatorPromptWidget widget(look, dialog);
+  TWidgetDialog<SimulatorPromptWidget> dialog(WidgetDialog::Full{},
+                                              UIGlobals::GetMainWindow(),
+                                              look, nullptr);
 
-  dialog.FinishPreliminary(&widget);
+  SimulatorPromptResult result = SPR_QUIT;
+  dialog.SetWidget(look, [&](SimulatorPromptWindow::Result r){
+    switch (r) {
+    case SimulatorPromptWindow::Result::FLY:
+      result = SPR_FLY;
+      break;
 
-  const int result = dialog.ShowModal();
-  dialog.StealWidget();
+    case SimulatorPromptWindow::Result::SIMULATOR:
+      result = SPR_SIMULATOR;
+      break;
 
-  switch (result) {
-  case SimulatorPromptWindow::FLY:
-    return SPR_FLY;
+    case SimulatorPromptWindow::Result::QUIT:
+      result = SPR_QUIT;
+      break;
+    }
 
-  case SimulatorPromptWindow::SIMULATOR:
-    return SPR_SIMULATOR;
+    dialog.SetModalResult(mrOK);
+  });
 
-  default:
-    return SPR_QUIT;
-  }
+  dialog.ShowModal();
+
+  return result;
 #else
   return SPR_FLY;
 #endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,18 +25,14 @@ Copyright_License {
 #define XCSOAR_DEVICE_TCP_PORT_HPP
 
 #include "BufferedPort.hpp"
-
-#include <boost/asio/ip/tcp.hpp>
+#include "event/SocketEvent.hxx"
 
 /**
  * A TCP listener port class.
  */
 class TCPPort final : public BufferedPort
 {
-  boost::asio::ip::tcp::acceptor acceptor;
-  boost::asio::ip::tcp::socket connection;
-
-  char input[4096];
+  SocketEvent listener, connection;
 
 public:
   /**
@@ -45,7 +41,7 @@ public:
    * @param handler the callback object for input received on the
    * port
    */
-  TCPPort(boost::asio::io_context &io_context,
+  TCPPort(EventLoop &event_loop,
           unsigned port,
           PortListener *_listener, DataHandler &_handler);
 
@@ -53,6 +49,10 @@ public:
    * Closes the serial port (Destructor)
    */
   virtual ~TCPPort();
+
+  auto &GetEventLoop() const noexcept {
+    return listener.GetEventLoop();
+  }
 
   /* virtual methods from class Port */
   PortState GetState() const override;
@@ -74,21 +74,16 @@ public:
 
 protected:
   void AsyncAccept() {
-    acceptor.async_accept(connection,
-                          std::bind(&TCPPort::OnAccept, this,
-                                    std::placeholders::_1));
+    listener.ScheduleRead();
   }
 
-  void OnAccept(const boost::system::error_code &ec);
+  void OnListenerReady(unsigned events) noexcept;
 
   void AsyncRead() {
-    connection.async_receive(boost::asio::buffer(input, sizeof(input)),
-                             std::bind(&TCPPort::OnRead, this,
-                                       std::placeholders::_1,
-                                       std::placeholders::_2));
+    connection.ScheduleRead();
   }
 
-  void OnRead(const boost::system::error_code &ec, size_t nbytes);
+  void OnConnectionReady(unsigned events) noexcept;
 };
 
 #endif

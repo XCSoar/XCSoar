@@ -61,10 +61,9 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-/*
- * Sequence/Matrix Library
- *
- * $Id$
+/*!
+ * @file jas_seq.h
+ * @brief Sequence/Matrix Library
  */
 
 #ifndef JAS_SEQ_H
@@ -78,10 +77,13 @@
 #include <jasper/jas_config.h> /* IWYU pragma: keep */
 
 #include <jasper/jas_types.h>
+#include <jasper/jas_math.h>
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
+#ifdef JAS_ENABLE_DUMP
 #include <stdio.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -186,6 +188,12 @@ static inline jas_matind_t jas_matrix_size(const jas_matrix_t *matrix)
 	return jas_matrix_numcols(matrix) * jas_matrix_numrows(matrix);
 }
 
+JAS_ATTRIBUTE_PURE
+static inline bool jas_matrix_empty(const jas_matrix_t *matrix)
+{
+	return jas_matrix_numcols(matrix) == 0 || jas_matrix_numrows(matrix) == 0;
+}
+
 /* Get a matrix element. */
 JAS_ATTRIBUTE_PURE
 static inline jas_seqent_t jas_matrix_get(const jas_matrix_t *matrix, jas_matind_t i, jas_matind_t j)
@@ -242,7 +250,7 @@ JAS_DLLEXPORT void jas_matrix_destroy(jas_matrix_t *matrix);
 /* Resize a matrix.  The previous contents of the matrix are lost. */
 JAS_DLLEXPORT int jas_matrix_resize(jas_matrix_t *matrix, jas_matind_t numrows, jas_matind_t numcols);
 
-#if 0
+#ifdef JAS_ENABLE_DUMP
 JAS_DLLEXPORT int jas_matrix_output(jas_matrix_t *matrix, FILE *out);
 #endif
 
@@ -267,13 +275,13 @@ JAS_DLLEXPORT void jas_matrix_clip(jas_matrix_t *matrix, jas_seqent_t minval,
   jas_seqent_t maxval);
 
 /* Arithmetic shift left of all elements in a matrix. */
-JAS_DLLEXPORT void jas_matrix_asl(jas_matrix_t *matrix, int n);
+JAS_DLLEXPORT void jas_matrix_asl(jas_matrix_t *matrix, unsigned n);
 
 /* Arithmetic shift right of all elements in a matrix. */
-JAS_DLLEXPORT void jas_matrix_asr(jas_matrix_t *matrix, int n);
+JAS_DLLEXPORT void jas_matrix_asr(jas_matrix_t *matrix, unsigned n);
 
 /* Almost-but-not-quite arithmetic shift right of all elements in a matrix. */
-JAS_DLLEXPORT void jas_matrix_divpow2(jas_matrix_t *matrix, int n);
+JAS_DLLEXPORT void jas_matrix_divpow2(jas_matrix_t *matrix, unsigned n);
 
 /* Set all elements of a matrix to the specified value. */
 JAS_DLLEXPORT void jas_matrix_setall(jas_matrix_t *matrix, jas_seqent_t val);
@@ -283,8 +291,8 @@ JAS_ATTRIBUTE_PURE
 static inline size_t jas_matrix_rowstep(const jas_matrix_t *matrix)
 {
 	return matrix->numrows_ > 1
-		? matrix->rows_[1] - matrix->rows_[0]
-		: 0;
+		? (size_t)(matrix->rows_[1] - matrix->rows_[0])
+		: 0u;
 }
 
 /* The spacing between columns of a matrix. */
@@ -302,10 +310,25 @@ JAS_DLLEXPORT int jas_matrix_cmp(jas_matrix_t *mat0, jas_matrix_t *mat1);
 gcc_malloc
 JAS_DLLEXPORT jas_matrix_t *jas_matrix_copy(jas_matrix_t *x);
 
-JAS_DLLEXPORT jas_matrix_t *jas_matrix_input(FILE *);
+JAS_ATTRIBUTE_CONST
+static inline jas_seqent_t jas_seqent_asl(jas_seqent_t x, unsigned n)
+{
+#ifdef JAS_ENABLE_32BIT
+	return jas_least32_asl(x, n);
+#else
+	return jas_fast32_asl(x, n);
+#endif
+}
 
-#define jas_seqent_asl jas_fast32_asl
-#define jas_seqent_asr jas_fast32_asr
+JAS_ATTRIBUTE_CONST
+static inline jas_seqent_t jas_seqent_asr(jas_seqent_t x, unsigned n)
+{
+#ifdef JAS_ENABLE_32BIT
+	return jas_least32_asr(x, n);
+#else
+	return jas_fast32_asr(x, n);
+#endif
+}
 
 /******************************************************************************\
 * Functions/macros for 2-D sequence class.
@@ -368,13 +391,13 @@ static inline size_t jas_seq2d_rowstep(const jas_seq2d_t *s)
 JAS_ATTRIBUTE_PURE
 static inline unsigned jas_seq2d_width(const jas_seq2d_t *s)
 {
-	return s->xend_ - s->xstart_;
+	return (unsigned)(s->xend_ - s->xstart_);
 }
 
 JAS_ATTRIBUTE_PURE
 static inline unsigned jas_seq2d_height(const jas_seq2d_t *s)
 {
-	return s->yend_ - s->ystart_;
+	return (unsigned)(s->yend_ - s->ystart_);
 }
 
 static inline void jas_seq2d_setshift(jas_seq2d_t *s, jas_matind_t x, jas_matind_t y)
@@ -389,6 +412,12 @@ JAS_ATTRIBUTE_PURE
 static inline jas_matind_t jas_seq2d_size(const jas_seq2d_t *s)
 {
 	return jas_seq2d_width(s) * jas_seq2d_height(s);
+}
+
+JAS_ATTRIBUTE_PURE
+static inline bool jas_seq2d_empty(const jas_seq2d_t *s)
+{
+	return jas_seq2d_width(s) == 0 || jas_seq2d_height(s) == 0;
 }
 
 JAS_DLLEXPORT int jas_seq2d_bindsub(jas_matrix_t *s, jas_matrix_t *s1, jas_matind_t xstart,

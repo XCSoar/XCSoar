@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,11 +25,11 @@ Copyright_License {
 #define XCSOAR_QUESTION_WIDGET_HPP
 
 #include "SolidWidget.hpp"
-#include "Util/StaticArray.hxx"
+#include "util/StaticArray.hxx"
+
+#include <functional>
 
 #include <tchar.h>
-
-class ActionListener;
 
 /**
  * A #Widget that displays a message and a number of buttons.  It is
@@ -39,22 +39,21 @@ class ActionListener;
 class QuestionWidget : public SolidWidget {
   struct Button {
     const TCHAR *caption;
-    int id;
+    std::function<void()> callback;
   };
 
   const TCHAR *const message;
 
-  ActionListener &listener;
-
   StaticArray<Button, 8> buttons;
 
 public:
-  QuestionWidget(const TCHAR *_message, ActionListener &_listener);
+  explicit QuestionWidget(const TCHAR *_message) noexcept;
 
   void SetMessage(const TCHAR *_message);
 
-  void AddButton(const TCHAR *caption, int id) {
-    buttons.append({caption, id});
+  void AddButton(const TCHAR *caption,
+                 std::function<void()> callback) noexcept {
+    buttons.append({caption, std::move(callback)});
   }
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;

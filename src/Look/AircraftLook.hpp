@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef AIRCRAFT_LOOK_HPP
 #define AIRCRAFT_LOOK_HPP
 
-#include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/canvas/Brush.hpp"
 
 struct AircraftLook {
   Pen aircraft_pen;

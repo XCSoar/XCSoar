@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,45 +22,40 @@ Copyright_License {
 */
 
 #include "Form/Form.hpp"
-#include "Time/PeriodClock.hpp"
+#include "time/PeriodClock.hpp"
 #include "Asset.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
-#include "Util/Macros.hpp"
+#include "ui/event/KeyCode.hpp"
+#include "util/Macros.hpp"
 #include "Look/DialogLook.hpp"
-#include "Event/Globals.hpp"
+#include "ui/event/Globals.hpp"
 
 #ifndef USE_WINUSER
-#include "Screen/Custom/Reference.hpp"
+#include "ui/window/custom/Reference.hpp"
 #endif
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
-#include "Screen/OpenGL/VertexPointer.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
+#include "ui/canvas/opengl/VertexPointer.hpp"
 #endif
 
 #ifdef ANDROID
-#include "Event/Shared/Event.hpp"
-#include "Event/Android/Loop.hpp"
+#include "ui/event/shared/Event.hpp"
+#include "ui/event/android/Loop.hpp"
 #elif defined(ENABLE_SDL)
-#include "Event/SDL/Event.hpp"
-#include "Event/SDL/Loop.hpp"
+#include "ui/event/sdl/Event.hpp"
+#include "ui/event/sdl/Loop.hpp"
 #elif defined(USE_POLL_EVENT)
-#include "Event/Shared/Event.hpp"
-#include "Event/Poll/Loop.hpp"
+#include "ui/event/shared/Event.hpp"
+#include "ui/event/poll/Loop.hpp"
 #elif defined(_WIN32)
-#include "Event/Windows/Event.hpp"
-#include "Event/Windows/Loop.hpp"
+#include "ui/event/windows/Event.hpp"
+#include "ui/event/windows/Loop.hpp"
 #endif
 
-static WindowStyle
-AddBorder(WindowStyle style)
-{
-  style.Border();
-  return style;
-}
+using namespace UI;
 
 WndForm::WndForm(const DialogLook &_look)
   :look(_look)
@@ -92,7 +87,7 @@ WndForm::Create(SingleWindow &main_window, const PixelRect &rc,
   else
     caption.clear();
 
-  ContainerWindow::Create(main_window, rc, AddBorder(style));
+  ContainerWindow::Create(main_window, rc, style);
 
 #if defined(USE_WINUSER) && !defined(NDEBUG)
   ::SetWindowText(hWnd, caption.c_str());
@@ -118,11 +113,24 @@ WndForm::UpdateLayout()
   PixelRect rc = GetClientRect();
 
   title_rect = rc;
+
+  if (!IsMaximised()) {
+    ++title_rect.left;
+    ++title_rect.top;
+    --title_rect.right;
+  }
+
   title_rect.bottom = rc.top +
     (caption.empty() ? 0 : look.caption.font->GetHeight());
 
   client_rect = rc;
   client_rect.top = title_rect.bottom;
+
+  if (!IsMaximised()) {
+    ++client_rect.left;
+    --client_rect.right;
+    --client_rect.bottom;
+  }
 }
 
 void
@@ -488,9 +496,7 @@ WndForm::OnPaint(Canvas &canvas)
   if (!IsMaximised()) {
 #ifndef USE_GDI
     if (IsDithered())
-      canvas.DrawOutlineRectangle(rcClient.left, rcClient.top,
-                                  rcClient.right - 1, rcClient.bottom - 1,
-                                  COLOR_BLACK);
+      canvas.DrawOutlineRectangle(rcClient, COLOR_BLACK);
     else
 #endif
       canvas.DrawRaisedEdge(rcClient);
@@ -508,21 +514,19 @@ WndForm::OnPaint(Canvas &canvas)
 #ifdef EYE_CANDY
     if (!IsDithered() && is_active) {
       canvas.SetBackgroundTransparent();
-      canvas.Stretch(title_rect.left, title_rect.top,
-                     title_rect.GetWidth(),
-                     title_rect.GetHeight(),
+      canvas.Stretch(title_rect.GetTopLeft(), title_rect.GetSize(),
                      look.caption.background_bitmap);
 
       // Draw titlebar text
-      canvas.DrawText(title_rect.left + Layout::GetTextPadding(),
-                      title_rect.top, caption.c_str());
+      canvas.DrawText(title_rect.GetTopLeft().At(Layout::GetTextPadding(), 0),
+                      caption.c_str());
     } else {
 #endif
       canvas.SetBackgroundColor(is_active
                                 ? look.caption.background_color
                                 : look.caption.inactive_background_color);
-      canvas.DrawOpaqueText(title_rect.left + Layout::GetTextPadding(),
-                            title_rect.top, title_rect, caption.c_str());
+      canvas.DrawOpaqueText(title_rect.GetTopLeft().At(Layout::GetTextPadding(), 0),
+                            title_rect, caption.c_str());
 #ifdef EYE_CANDY
     }
 #endif
@@ -531,8 +535,7 @@ WndForm::OnPaint(Canvas &canvas)
   if (dragging) {
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
-    canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
-                               COLOR_YELLOW.WithAlpha(80));
+    canvas.Clear(COLOR_YELLOW.WithAlpha(80));
 #elif defined(USE_GDI)
     canvas.InvertRectangle(title_rect);
 #else

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,43 +25,55 @@ Copyright_License {
 #include "Assemble.hpp"
 #include "Protocol.hpp"
 #include "Import.hpp"
-#include "OS/ByteOrder.hpp"
-#include "Util/CRC.hpp"
+#include "util/ByteOrder.hxx"
+#include "net/SocketError.hxx"
+#include "net/UniqueSocketDescriptor.hxx"
+#include "util/CRC.hpp"
+
+static UniqueSocketDescriptor
+CreateBindUDP(SocketAddress address)
+{
+  UniqueSocketDescriptor s;
+  if (!s.Create(address.GetFamily(), SOCK_DGRAM, 0))
+    throw MakeSocketError("Failed to create socket");
+
+  if (!s.Bind(address))
+    throw MakeSocketError("Failed to connect socket");
+
+  return s;
+}
 
 namespace SkyLinesTracking {
 
-Server::Server(boost::asio::io_context &io_context,
-               boost::asio::ip::udp::endpoint endpoint)
-  :socket(io_context, endpoint)
+Server::Server(EventLoop &event_loop,
+               SocketAddress server_address)
+  :socket(event_loop, BIND_THIS_METHOD(OnSocketReady),
+          CreateBindUDP(server_address).Release())
 {
-  AsyncReceive();
+  socket.ScheduleRead();
 }
 
 Server::~Server()
 {
-  if (socket.is_open()) {
-    socket.cancel();
-    socket.close();
-  }
+  socket.Close();
 }
 
 void
-Server::SendBuffer(const boost::asio::ip::udp::endpoint &endpoint,
-                   boost::asio::const_buffer data)
+Server::SendBuffer(SocketAddress address, ConstBuffer<void> buffer) noexcept
 {
-  // TODO: use async_send_to()?
-
   try {
-    socket.send_to(boost::asio::const_buffers_1(data), endpoint, 0);
+    ssize_t nbytes = socket.GetSocket().Write(buffer.data, buffer.size);
+    if (nbytes < 0)
+      throw MakeSocketError("Failed to send");
   } catch (...) {
-    OnSendError(endpoint, std::current_exception());
+    OnSendError(address, std::current_exception());
   }
 }
 
 void
 Server::OnPing(const Client &client, unsigned id)
 {
-  SendPacket(client.endpoint, MakeAck(client.key, id, 0));
+  SendPacket(client.address, MakeAck(client.key, id, 0));
 }
 
 inline void
@@ -170,33 +182,27 @@ Server::OnDatagramReceived(Client &&client,
 }
 
 void
-Server::OnReceive(const boost::system::error_code &ec, size_t size)
-{
+Server::OnSocketReady(unsigned) noexcept
+try {
   // TODO: use recvmmsg() on Linux
 
-  if (ec) {
-    if (ec == boost::asio::error::operation_aborted)
-      return;
+  Client client;
+  socklen_t address_size = sizeof(client.address);
+  char buffer[4096];
 
-    socket.close();
+  ssize_t nbytes = recvfrom(socket.GetSocket().Get(), buffer, sizeof(buffer),
+                            MSG_DONTWAIT,
+                            client.address, &address_size);
+  if (nbytes < 0)
+    throw MakeSocketError("Failed to receive");
 
-    OnError(std::make_exception_ptr(boost::system::system_error(ec)));
-    return;
-  }
+  client.address.SetSize(address_size);
+  // TODO: set client.key
 
-  OnDatagramReceived(std::move(client_buffer), buffer, size);
-
-  AsyncReceive();
-}
-
-void
-Server::AsyncReceive()
-{
-  socket.async_receive_from(boost::asio::buffer(buffer, sizeof(buffer)),
-                            client_buffer.endpoint,
-                            std::bind(&Server::OnReceive, this,
-                                      std::placeholders::_1,
-                                      std::placeholders::_2));
+  OnDatagramReceived(std::move(client), buffer, nbytes);
+} catch (...) {
+  socket.Close();
+  OnError(std::current_exception());
 }
 
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,22 +33,22 @@ Copyright_License {
 #include "Port/ConfiguredPort.hpp"
 #include "Port/DumpPort.hpp"
 #include "NMEA/Info.hpp"
-#include "Thread/Mutex.hxx"
-#include "Util/StringAPI.hxx"
-#include "Util/ConvertString.hpp"
-#include "Util/Exception.hxx"
+#include "thread/Mutex.hxx"
+#include "util/StringAPI.hxx"
+#include "util/ConvertString.hpp"
+#include "util/Exception.hxx"
 #include "Logger/NMEALogger.hpp"
 #include "Language/Language.hpp"
 #include "Operation/Operation.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 #include "../Simulator.hpp"
 #include "Input/InputQueue.hpp"
 #include "LogFile.hpp"
 #include "Job/Job.hpp"
 
 #ifdef ANDROID
-#include "Java/Object.hxx"
-#include "Java/Global.hxx"
+#include "java/Object.hxx"
+#include "java/Global.hxx"
 #include "Android/InternalSensors.hpp"
 #include "Android/GliderLink.hpp"
 #include "Android/Main.hpp"
@@ -98,10 +98,11 @@ public:
   };
 };
 
-DeviceDescriptor::DeviceDescriptor(boost::asio::io_context &_io_context,
+DeviceDescriptor::DeviceDescriptor(EventLoop &_event_loop,
+                                   Cares::Channel &_cares,
                                    unsigned _index,
                                    PortListener *_port_listener)
-  :io_context(_io_context), index(_index),
+  :event_loop(_event_loop), cares(_cares), index(_index),
    port_listener(_port_listener),
    open_job(nullptr),
    port(nullptr), monitor(nullptr), dispatcher(nullptr),
@@ -124,6 +125,11 @@ DeviceDescriptor::DeviceDescriptor(boost::asio::io_context &_io_context,
   for (unsigned i=0; i<sizeof i2cbaro/sizeof i2cbaro[0]; i++)
     i2cbaro[i] = nullptr;
 #endif
+}
+
+DeviceDescriptor::~DeviceDescriptor() noexcept
+{
+  assert(!IsOccupied());
 }
 
 void
@@ -235,8 +241,8 @@ DeviceDescriptor::CancelAsync()
   open_job = nullptr;
 }
 
-bool
-DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
+inline bool
+DeviceDescriptor::OpenOnPort(std::unique_ptr<DumpPort> &&_port, OperationEnvironment &env)
 {
   assert(port == nullptr);
   assert(device == nullptr);
@@ -257,7 +263,7 @@ DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
   settings_received.Clear();
   was_alive = false;
 
-  port = _port;
+  port = std::move(_port);
 
   parser.Reset();
   parser.SetReal(!StringIsEqual(driver->name, _T("Condor")));
@@ -461,9 +467,9 @@ try {
 
   reopen_clock.Update();
 
-  Port *port;
+  std::unique_ptr<Port> port;
   try {
-    port = OpenPort(io_context, config, this, *this);
+    port = OpenPort(event_loop, cares, config, this, *this);
   } catch (...) {
     const auto e = std::current_exception();
 
@@ -497,14 +503,20 @@ try {
     return false;
   }
 
-  DumpPort *dump_port = new DumpPort(port);
-  dump_port->Disable();
-
-  if (!port->WaitConnected(env) || !OpenOnPort(dump_port, env)) {
+  if (!port->WaitConnected(env)) {
     if (!env.IsCancelled())
       ++n_failures;
 
-    delete dump_port;
+    return false;
+  }
+
+  auto dump_port = std::make_unique<DumpPort>(std::move(port));
+  dump_port->Disable();
+
+  if (!OpenOnPort(std::move(dump_port), env)) {
+    if (!env.IsCancelled())
+      ++n_failures;
+
     return false;
   }
 
@@ -588,9 +600,7 @@ DeviceDescriptor::Close()
   delete second_device;
   second_device = nullptr;
 
-  Port *old_port = port;
-  port = nullptr;
-  delete old_port;
+  port.reset();
 
   ticker = false;
 
@@ -781,7 +791,7 @@ DeviceDescriptor::ForwardLine(const char *line)
      any thread, and if the Port gets closed, bad things happen */
 
   if (IsNMEAOut() && port != nullptr) {
-    Port *p = port;
+    Port *p = port.get();
     p->Write(line);
     p->Write("\r\n");
   }

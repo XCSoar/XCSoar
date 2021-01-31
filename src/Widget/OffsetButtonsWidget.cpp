@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,8 +22,6 @@ Copyright_License {
 */
 
 #include "OffsetButtonsWidget.hpp"
-#include "Form/Button.hpp"
-#include "Util/Macros.hpp"
 #include "Screen/Layout.hpp"
 
 #include <stdio.h>
@@ -42,83 +40,87 @@ OffsetButtonsWidget::GetMaximumSize() const
       Layout::GetMaximumControlHeight() };
 }
 
-static void
-LayoutOffsetButtons(const PixelRect &total_rc, PixelRect buttons[4])
+static constexpr std::array<PixelRect, 4>
+LayoutOffsetButtons(const PixelRect &total_rc) noexcept
 {
   const unsigned total_width = total_rc.GetWidth();
   PixelRect rc = { 0, total_rc.top, total_rc.left, total_rc.bottom };
 
+  std::array<PixelRect, 4> buttons{};
   for (unsigned i = 0; i < 4; ++i) {
     rc.left = rc.right;
     rc.right = total_rc.left + (i + 1) * total_width / 4;
     buttons[i] = rc;
   }
+
+  return buttons;
+}
+
+inline Button
+OffsetButtonsWidget::MakeButton(ContainerWindow &parent, const PixelRect &r,
+                                unsigned i) noexcept
+{
+  TCHAR caption[16];
+  _stprintf(caption, format, offsets[i]);
+
+  WindowStyle style;
+  style.TabStop();
+  style.Hide();
+
+  return Button(parent, look, caption, r, style, [this, i](){
+    OnOffset(offsets[i]);
+  });
+}
+
+inline std::array<Button, 4>
+OffsetButtonsWidget::MakeButtons(ContainerWindow &parent,
+                                 const PixelRect &total) noexcept
+{
+  const auto r = LayoutOffsetButtons(total);
+
+  return {
+    MakeButton(parent, r[0], 0),
+    MakeButton(parent, r[1], 1),
+    MakeButton(parent, r[2], 2),
+    MakeButton(parent, r[3], 3),
+  };
 }
 
 void
 OffsetButtonsWidget::Prepare(ContainerWindow &parent,
                              const PixelRect &total_rc)
 {
-  PixelRect rc[ARRAY_SIZE(buttons)];
-  LayoutOffsetButtons(total_rc, rc);
-
-  WindowStyle style;
-  style.TabStop();
-  style.Hide();
-
-  for (unsigned i = 0; i < ARRAY_SIZE(buttons); ++i) {
-    TCHAR caption[16];
-    _stprintf(caption, format, (double)offsets[i]);
-    buttons[i] = new Button(parent, look, caption, rc[i], style,
-                            *this, i);
-  }
-}
-
-void
-OffsetButtonsWidget::Unprepare()
-{
-  for (unsigned i = 0; i < ARRAY_SIZE(offsets); ++i)
-    delete buttons[i];
+  buttons.reset(new std::array<Button, 4>{MakeButtons(parent, total_rc)});
 }
 
 void
 OffsetButtonsWidget::Show(const PixelRect &total_rc)
 {
-  PixelRect rc[ARRAY_SIZE(buttons)];
-  LayoutOffsetButtons(total_rc, rc);
+  const auto rc = LayoutOffsetButtons(total_rc);
 
-  for (unsigned i = 0; i < ARRAY_SIZE(buttons); ++i)
-    buttons[i]->MoveAndShow(rc[i]);
+  for (unsigned i = 0; i < buttons->size(); ++i)
+    (*buttons)[i].MoveAndShow(rc[i]);
 }
 
 void
 OffsetButtonsWidget::Hide()
 {
-  for (unsigned i = 0; i < ARRAY_SIZE(buttons); ++i)
-    buttons[i]->Hide();
+  for (auto &i : *buttons)
+    i.Hide();
 }
 
 void
 OffsetButtonsWidget::Move(const PixelRect &total_rc)
 {
-  PixelRect rc[ARRAY_SIZE(buttons)];
-  LayoutOffsetButtons(total_rc, rc);
+  const auto rc = LayoutOffsetButtons(total_rc);
 
-  for (unsigned i = 0; i < ARRAY_SIZE(buttons); ++i)
-    buttons[i]->Move(rc[i]);
+  for (unsigned i = 0; i < buttons->size(); ++i)
+    (*buttons)[i].Move(rc[i]);
 }
 
 bool
 OffsetButtonsWidget::SetFocus()
 {
-  buttons[2]->SetFocus();
+  (*buttons)[2].SetFocus();
   return true;
-}
-
-void
-OffsetButtonsWidget::OnAction(int id) noexcept
-{
-  assert(unsigned(id) < ARRAY_SIZE(offsets));
-
-  OnOffset(offsets[id]);
 }

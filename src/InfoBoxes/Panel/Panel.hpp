@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,17 +24,19 @@ Copyright_License {
 #ifndef XCSOAR_INFOBOX_PANEL_HPP
 #define XCSOAR_INFOBOX_PANEL_HPP
 
+#include <memory>
+
 #include <tchar.h>
 
 class Widget;
 
 struct InfoBoxPanel {
   constexpr
-  InfoBoxPanel(const TCHAR *_name, Widget *(*_load)(unsigned id))
+  InfoBoxPanel(const TCHAR *_name, std::unique_ptr<Widget> (*_load)(unsigned id))
     :name(_name), load(_load) {};
 
   const TCHAR *name;
-  Widget *(*load)(unsigned id);
+  std::unique_ptr<Widget> (*load)(unsigned id);
 };
 
 #endif

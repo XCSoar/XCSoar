@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,13 +24,12 @@ Copyright_License {
 #define ENABLE_DIALOG_LOOK
 
 #include "Main.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/window/SingleWindow.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Look/ChartLook.hpp"
 #include "Form/List.hpp"
 #include "Form/Button.hpp"
-#include "Form/ActionListener.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "Renderer/ChartRenderer.hpp"
 
 static const TCHAR *const chart_names[] = {
@@ -104,16 +103,11 @@ ChartWindow::DrawChart(ChartRenderer &renderer)
   }
 }
 
-class TestWindow : public SingleWindow,
-                   ActionListener,
+class TestWindow : public UI::SingleWindow,
                    ListItemRenderer, ListCursorHandler {
   Button close_button;
   ListControl *type_list;
   ChartWindow chart;
-
-  enum Buttons {
-    CLOSE,
-  };
 
 public:
   TestWindow(const ChartLook &chart_look)
@@ -148,27 +142,18 @@ public:
     button_rc.top = button_rc.bottom - 30;
     close_button.Create(*this, *button_look, _T("Close"), button_rc,
                         WindowStyle(),
-                        *this, CLOSE);
+                        [this](){ Close(); });
 
     type_list->SetFocus();
   }
 
 protected:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case CLOSE:
-      Close();
-      break;
-    }
-  }
-
   /* virtual methods from ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) noexcept override {
     assert(idx < ARRAY_SIZE(chart_names));
 
-    canvas.DrawText(rc.left + 2, rc.top + 2, chart_names[idx]);
+    canvas.DrawText(rc.WithPadding(2).GetTopLeft(), chart_names[idx]);
   }
 
   /* virtual methods from ListCursorHandler */

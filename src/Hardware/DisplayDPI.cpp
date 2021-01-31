@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,14 +24,14 @@ Copyright_License {
 #include "DisplayDPI.hpp"
 
 #ifdef _WIN32
-#include "Screen/GDI/RootDC.hpp"
+#include "ui/canvas/gdi/RootDC.hpp"
 
 #include <windows.h>
 #endif
 
 #ifdef USE_X11
-#include "Event/Globals.hpp"
-#include "Event/Queue.hpp"
+#include "ui/event/Globals.hpp"
+#include "ui/event/Queue.hpp"
 
 #define Font X11Font
 #define Window X11Window
@@ -54,6 +54,8 @@ Copyright_License {
 #import <AppKit/AppKit.h>
 #endif
 #endif
+
+#include <cassert>
 
 #ifndef ANDROID
   static unsigned forced_x_dpi = 0;
@@ -132,6 +134,11 @@ void
 Display::ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
                        unsigned width_mm, unsigned height_mm) noexcept
 {
+  assert(width_pixels > 0);
+  assert(height_pixels > 0);
+  assert(width_mm > 0);
+  assert(height_mm > 0);
+
   detected_x_dpi = MMToDPI(width_pixels, width_mm);
   detected_y_dpi = MMToDPI(height_pixels, height_mm);
 }
@@ -159,9 +166,9 @@ Display::GetXDPI(unsigned custom_dpi)
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSX);
 #elif defined(USE_X11)
-  assert(event_queue != nullptr);
+  assert(UI::event_queue != nullptr);
 
-  auto display = event_queue->GetDisplay();
+  auto display = UI::event_queue->GetDisplay();
   assert(display != nullptr);
 
   return MMToDPI(DisplayWidth(display, 0), DisplayWidthMM(display, 0));
@@ -190,9 +197,9 @@ Display::GetYDPI(unsigned custom_dpi)
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSY);
 #elif defined(USE_X11)
-  assert(event_queue != nullptr);
+  assert(UI::event_queue != nullptr);
 
-  auto display = event_queue->GetDisplay();
+  auto display = UI::event_queue->GetDisplay();
   assert(display != nullptr);
 
   return MMToDPI(DisplayHeight(display, 0), DisplayHeightMM(display, 0));

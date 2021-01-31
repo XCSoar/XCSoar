@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,8 +34,8 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "Look/GlobalFonts.hpp"
-#include "Screen/Init.hpp"
-#include "Net/HTTP/Init.hpp"
+#include "ui/window/Init.hpp"
+#include "net/http/Init.hpp"
 #include "UtilsSystem.hpp"
 #include "ResourceLoader.hpp"
 #include "Language/Language.hpp"
@@ -44,8 +44,10 @@ Copyright_License {
 #include "Audio/GlobalPCMMixer.hpp"
 #include "Audio/GlobalPCMResourcePlayer.hpp"
 #include "Audio/GlobalVolumeController.hpp"
-#include "OS/Args.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
+#include "system/Args.hpp"
+#include "io/async/GlobalAsioThread.hpp"
+#include "io/async/AsioThread.hpp"
+#include "util/PrintException.hxx"
 
 #ifdef ENABLE_SDL
 /* this is necessary on Mac OS X, to let libSDL bootstrap Quartz
@@ -108,7 +110,7 @@ Main()
 
   ScopeGlobalAsioThread global_asio_thread;
 
-  ScopeGlobalPCMMixer global_pcm_mixer;
+  ScopeGlobalPCMMixer global_pcm_mixer(asio_thread->GetEventLoop());
   ScopeGlobalPCMResourcePlayer global_pcm_resouce_player;
   ScopeGlobalVolumeController global_volume_controller;
 
@@ -163,7 +165,14 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     CommandLine::Parse(args);
   }
 
-  int ret = Main();
+  int ret;
+
+  try {
+    ret = Main();
+  } catch (...) {
+    PrintException(std::current_exception());
+    ret = EXIT_FAILURE;
+  }
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
   /* For some reason, the app process does not exit on iOS, but a black

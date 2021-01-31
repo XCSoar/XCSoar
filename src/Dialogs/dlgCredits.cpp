@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,13 +29,14 @@ Copyright_License {
 #include "Look/FontDescription.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/Colors.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Bitmap.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Bitmap.hpp"
+#include "ui/canvas/Font.hpp"
 #include "Version.hpp"
 #include "Inflate.hpp"
-#include "Util/ConvertString.hpp"
+#include "util/ConvertString.hpp"
+#include "util/AllocatedString.hxx"
 #include "Resources.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
@@ -63,8 +64,8 @@ LogoPageWindow::OnPaint(Canvas &canvas)
   PixelSize title_size = title.GetSize();
 
   // Draw 'XCSoar N.N' title
-  canvas.Copy(x, y, title_size.cx, title_size.cy, title, 0, 0);
-  y += title_size.cy + Layout::FastScale(20);
+  canvas.Copy({x, y}, title_size, title, {0, 0});
+  y += title_size.height + Layout::FastScale(20);
 
   Font font;
   font.Load(FontDescription(Layout::FontScale(16)));
@@ -72,32 +73,32 @@ LogoPageWindow::OnPaint(Canvas &canvas)
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();
 
-  canvas.DrawText(x, y, _T("version: "));
-  canvas.DrawText(x + Layout::FastScale(80), y, XCSoar_VersionString);
+  canvas.DrawText({x, y}, _T("version: "));
+  canvas.DrawText({x + Layout::FastScale(80), y}, XCSoar_VersionString);
   y += Layout::FastScale(22);
 
-  canvas.DrawText(x, y, _T("date: "));
-  canvas.DrawText(x + Layout::FastScale(80), y, _T(__DATE__));
+  canvas.DrawText({x, y}, _T("date: "));
+  canvas.DrawText({x + Layout::FastScale(80), y}, _T(__DATE__));
 #ifdef GIT_COMMIT_ID
   y += Layout::FastScale(22);
 
-  canvas.DrawText(x, y, _T("git: "));
-  canvas.DrawText(x + Layout::FastScale(80), y, _T(GIT_COMMIT_ID));
+  canvas.DrawText({x, y}, _T("git: "));
+  canvas.DrawText({x + Layout::FastScale(80), y}, _T(GIT_COMMIT_ID));
 #endif
   y += Layout::FastScale(37);
 
-  canvas.DrawText(x, y, _T("more information at"));
+  canvas.DrawText({x, y}, _T("more information at"));
   y += Layout::FastScale(22);
 
   canvas.SetTextColor(COLOR_XCSOAR);
-  canvas.DrawText(x, y, _T("http://www.xcsoar.org"));
+  canvas.DrawText({x, y}, _T("http://www.xcsoar.org"));
 }
 
-static Window *
+static std::unique_ptr<Window>
 CreateLogoPage(ContainerWindow &parent, const PixelRect &rc,
                WindowStyle style)
 {
-  LogoPageWindow *window = new LogoPageWindow();
+  auto window = std::make_unique<LogoPageWindow>();
   window->Create(parent, rc, style);
   return window;
 }
@@ -112,28 +113,25 @@ extern "C"
 }
 
 void
-dlgCreditsShowModal(SingleWindow &parent)
+dlgCreditsShowModal(UI::SingleWindow &parent)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  char *authors = InflateToString(AUTHORS_gz, AUTHORS_gz_size);
-  const UTF8ToWideConverter authors2(authors);
+  const auto authors = InflateToString(AUTHORS_gz, AUTHORS_gz_size);
+  const UTF8ToWideConverter authors2(authors.c_str());
 
-  char *license = InflateToString(COPYING_gz, COPYING_gz_size);
-  const UTF8ToWideConverter license2(license);
+  const auto license = InflateToString(COPYING_gz, COPYING_gz_size);
+  const UTF8ToWideConverter license2(license.c_str());
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Credits"));
 
-  ArrowPagerWidget pager(dialog, look.button);
-  pager.Add(new CreateWindowWidget(CreateLogoPage));
-  pager.Add(new LargeTextWidget(look, authors2));
-  pager.Add(new LargeTextWidget(look, license2));
+  auto pager = std::make_unique<ArrowPagerWidget>(look.button,
+                                                  dialog.MakeModalResultCallback(mrOK));
+  pager->Add(std::make_unique<CreateWindowWidget>(CreateLogoPage));
+  pager->Add(std::make_unique<LargeTextWidget>(look, authors2));
+  pager->Add(std::make_unique<LargeTextWidget>(look, license2));
 
-  dialog.FinishPreliminary(&pager);
+  dialog.FinishPreliminary(std::move(pager));
   dialog.ShowModal();
-  dialog.StealWidget();
-
-  delete[] authors;
-  delete[] license;
 }

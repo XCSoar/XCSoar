@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,11 +29,7 @@ Copyright_License {
 
 #include <cassert>
 
-ButtonPanelWidget::~ButtonPanelWidget()
-{
-  delete buttons;
-  delete widget;
-}
+ButtonPanelWidget::~ButtonPanelWidget() noexcept = default;
 
 PixelRect
 ButtonPanelWidget::UpdateLayout(const PixelRect &rc)
@@ -58,8 +54,8 @@ PixelSize
 ButtonPanelWidget::GetMinimumSize() const
 {
   PixelSize size = widget->GetMinimumSize();
-  if (size.cy > 0)
-    size.cy += Layout::GetMinimumControlHeight();
+  if (size.height > 0)
+    size.height += Layout::GetMinimumControlHeight();
   return size;
 }
 
@@ -67,8 +63,8 @@ PixelSize
 ButtonPanelWidget::GetMaximumSize() const
 {
   PixelSize size = widget->GetMaximumSize();
-  if (size.cy > 0)
-    size.cy += Layout::GetMaximumControlHeight();
+  if (size.height > 0)
+    size.height += Layout::GetMaximumControlHeight();
   return size;
 }
 
@@ -77,7 +73,7 @@ ButtonPanelWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
   assert(buttons == nullptr);
 
-  buttons = new ButtonPanel(parent, UIGlobals::GetDialogLook().button);
+  buttons = std::make_unique<ButtonPanel>(parent, UIGlobals::GetDialogLook().button);
   buttons->SetDefaultHidden();
 
   /* initialise with full dimensions for now, buttons will be added

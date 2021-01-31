@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #include "TaskProgressRenderer.hpp"
 #include "Look/TaskLook.hpp"
 #include "Engine/Task/Stats/TaskSummary.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
 
@@ -52,13 +52,13 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
   const Pen pen_f(Layout::ScalePenWidth(1), inverse ? COLOR_WHITE : COLOR_BLACK);
   canvas.Select(pen_f);
   canvas.SelectHollowBrush();
-  canvas.DrawCircle(center.x, center.y, radius);
+  canvas.DrawCircle(center, radius);
 
   unsigned i = 0;
   for (auto it = summary.pts.begin(); it != summary.pts.end(); ++it, ++i) {
     Angle a = sweep * it->p;
-    int x = center.x + (int)(radius * a.fastsine());
-    int y = center.y - (int)(radius * a.fastcosine());
+    const PixelPoint p(center.x + (int)(radius * a.fastsine()),
+                       center.y - (int)(radius * a.fastcosine()));
     int w;
     if (i == summary.active) {
       if (it->achieved)
@@ -82,7 +82,7 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
 
       w = Layout::Scale(1);
     }
-    
-    canvas.Rectangle(x - w, y - w, x + w, y + w);
+
+    canvas.DrawRectangle(PixelRect{p}.WithMargin(w));
   }
 }

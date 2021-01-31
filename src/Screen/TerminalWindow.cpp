@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "TerminalWindow.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Look/TerminalLook.hpp"
-#include "Util/CharUtil.hxx"
+#include "util/CharUtil.hxx"
 
 void
 TerminalWindow::Write(const char *p, size_t length)
@@ -107,8 +107,8 @@ TerminalWindow::OnResize(PixelSize new_size)
 {
   PaintWindow::OnResize(new_size);
 
-  data.GrowPreserveFill(std::max(1u, unsigned(new_size.cx / cell_size.cx)),
-                        std::max(1u, unsigned(new_size.cy / cell_size.cy)),
+  data.GrowPreserveFill(std::max(1u, new_size.width / cell_size.width),
+                        std::max(1u, new_size.height / cell_size.height),
                         ' ');
   if (cursor_x >= data.GetWidth())
     cursor_x = data.GetWidth() - 1;
@@ -132,30 +132,29 @@ TerminalWindow::OnPaint(Canvas &canvas, const PixelRect &p_dirty)
   canvas.Select(look.font);
 
   const PixelRect cell_dirty = {
-    p_dirty.left / cell_size.cx,
-    p_dirty.top / cell_size.cy,
-    std::min(p_dirty.right / cell_size.cx + 1,
-             int(data.GetWidth())),
-    std::min(p_dirty.bottom / cell_size.cy + 1,
-             int(data.GetHeight())),
+    p_dirty.left / (int)cell_size.width,
+    p_dirty.top / (int)cell_size.height,
+    std::min(p_dirty.right / (int)cell_size.width + 1,
+             (int)data.GetWidth()),
+    std::min(p_dirty.bottom / (int)cell_size.height + 1,
+             (int)data.GetHeight()),
   };
 
-  const int x(cell_dirty.left * cell_size.cx);
+  const int x(cell_dirty.left * cell_size.width);
   const size_t length = cell_dirty.GetWidth();
 
   auto text = data.GetPointerAt(cell_dirty.left, cell_dirty.top);
-  for (int cell_y = cell_dirty.top, p_y = cell_y * cell_size.cy;
+  for (int cell_y = cell_dirty.top, p_y = cell_y * cell_size.height;
        cell_y < cell_dirty.bottom;
-       ++cell_y, p_y += cell_size.cy, text += data.GetWidth()) {
-    canvas.DrawFilledRectangle(p_dirty.left, p_y,
-                          p_dirty.right, p_y + cell_size.cy,
+       ++cell_y, p_y += cell_size.height, text += data.GetWidth()) {
+    canvas.DrawFilledRectangle({p_dirty.left, p_y,
+        p_dirty.right, p_y + (int)cell_size.height},
                           look.background_color);
-    canvas.DrawText(x, p_y, text, length);
+    canvas.DrawText({x, p_y}, {text, length});
   }
 
-  int cell_bottom_y(cell_dirty.bottom * cell_size.cy);
+  int cell_bottom_y(cell_dirty.bottom * cell_size.height);
   if (cell_bottom_y < p_dirty.bottom)
-    canvas.DrawFilledRectangle(p_dirty.left, cell_bottom_y,
-                          p_dirty.right, p_dirty.bottom,
-                          look.background_color);
+    canvas.DrawFilledRectangle({p_dirty.left, cell_bottom_y, p_dirty.right, p_dirty.bottom},
+                               look.background_color);
 }

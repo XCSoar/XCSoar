@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "LocalTimeFormatter.hpp"
 #include "TimeFormatter.hpp"
-#include "Time/LocalTime.hpp"
-#include "Time/RoughTime.hpp"
+#include "time/LocalTime.hpp"
+#include "time/RoughTime.hpp"
 
 void
 FormatLocalTimeHHMM(TCHAR *buffer, int time, RoughTimeDelta utc_offset)

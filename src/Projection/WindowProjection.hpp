@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_WINDOW_PROJECTION_HPP
 #define XCSOAR_WINDOW_PROJECTION_HPP
 
-#include "Screen/Point.hpp"
 #include "Projection.hpp"
+#include "ui/dim/Rect.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Math/Point2D.hpp"
 
@@ -81,11 +81,11 @@ public:
   bool ScreenVisible(const PixelPoint &P) const;
 
   void SetScreenSize(PixelSize new_size) {
-    assert(new_size.cx > 0);
-    assert(new_size.cy > 0);
+    assert(new_size.width > 0);
+    assert(new_size.height > 0);
 
-    screen_size.x = new_size.cx;
-    screen_size.y = new_size.cy;
+    screen_size.x = new_size.width;
+    screen_size.y = new_size.height;
 
 #ifndef NDEBUG
     screen_size_initialised = true;
@@ -104,6 +104,16 @@ public:
    * radius is visible.
    */
   void SetScaleFromRadius(double radius);
+
+  /**
+   * Returns the size of the map area in pixels.
+   */
+  gcc_pure
+  PixelSize GetScreenSize() const noexcept {
+    assert(screen_size_initialised);
+
+    return {screen_size.x, screen_size.y};
+  }
 
   /**
    * Returns the width of the map area in pixels.

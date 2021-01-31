@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -38,15 +38,15 @@ GetTaskBehaviour()
 }
 
 static MapTaskManager::TaskEditResult
-AppendToTask(OrderedTask *task, WaypointPtr &&waypoint)
+AppendToTask(OrderedTask &task, WaypointPtr &&waypoint) noexcept
 {
-  if (task->TaskSize()==0)
+  if (task.TaskSize()==0)
     return MapTaskManager::NOTASK;
 
-  int i = task->TaskSize() - 1;
+  int i = task.TaskSize() - 1;
   // skip all finish points
   while (i >= 0) {
-    const OrderedTaskPoint &tp = task->GetPoint(i);
+    const OrderedTaskPoint &tp = task.GetPoint(i);
     if (tp.IsSuccessorAllowed()) {
       ++i;
       break;
@@ -55,45 +55,38 @@ AppendToTask(OrderedTask *task, WaypointPtr &&waypoint)
     --i;
   }
 
-  const AbstractTaskFactory &factory = task->GetFactory();
-  auto *task_point = factory.CreateIntermediate(std::move(waypoint));
+  const AbstractTaskFactory &factory = task.GetFactory();
+  auto task_point = factory.CreateIntermediate(std::move(waypoint));
   if (task_point == nullptr)
     return MapTaskManager::UNMODIFIED;
 
-  bool success = i >= 0 ? task->Insert(*task_point, i) : task->Append(*task_point);
-  delete task_point;
-
+  bool success = i >= 0 ? task.Insert(*task_point, i) : task.Append(*task_point);
   if (!success)
     return MapTaskManager::UNMODIFIED;
 
-  if (!task->CheckTask())
+  if (!task.CheckTask())
     return MapTaskManager::INVALID;
 
   return MapTaskManager::SUCCESS;
 }
 
 static MapTaskManager::TaskEditResult
-MutateFromGoto(OrderedTask *task, WaypointPtr &&finish_waypoint,
-               WaypointPtr &&start_waypoint)
+MutateFromGoto(OrderedTask &task, WaypointPtr &&finish_waypoint,
+               WaypointPtr &&start_waypoint) noexcept
 {
-  const AbstractTaskFactory &factory = task->GetFactory();
-  auto *start_point = factory.CreateStart(std::move(start_waypoint));
+  const AbstractTaskFactory &factory = task.GetFactory();
+  auto start_point = factory.CreateStart(std::move(start_waypoint));
   if (start_point == nullptr)
     return MapTaskManager::UNMODIFIED;
 
-  bool success = task->Append(*start_point);
-  delete start_point;
-  if (!success)
+  if (!task.Append(*start_point))
     return MapTaskManager::UNMODIFIED;
 
-  auto *finish_point = factory.CreateFinish(std::move(finish_waypoint));
+  auto finish_point = factory.CreateFinish(std::move(finish_waypoint));
   if (finish_point == nullptr)
     return MapTaskManager::UNMODIFIED;
 
-  success = task->Append(*finish_point);
-  delete finish_point;
-
-  if (!success)
+  if (!task.Append(*finish_point))
     return MapTaskManager::UNMODIFIED;
 
   return MapTaskManager::MUTATED_FROM_GOTO;
@@ -106,11 +99,10 @@ MapTaskManager::AppendToTask(WaypointPtr &&waypoint)
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   TaskEditResult result = MapTaskManager::UNMODIFIED;
   if (task_manager->GetOrderedTask().CheckTask()) {
-    OrderedTask *task = task_manager->Clone(GetTaskBehaviour());
-    result = AppendToTask(task, std::move(waypoint));
+    auto task = task_manager->Clone(GetTaskBehaviour());
+    result = AppendToTask(*task, std::move(waypoint));
     if (result == SUCCESS)
       task_manager->Commit(*task);
-    delete task;
   } else { // ordered task invalid
     switch (task_manager->GetMode()) {
     case TaskType::NONE:
@@ -122,17 +114,16 @@ MapTaskManager::AppendToTask(WaypointPtr &&waypoint)
       break;
     case TaskType::GOTO:
     {
-      OrderedTask *task = task_manager->Clone(GetTaskBehaviour());
+      auto task = task_manager->Clone(GetTaskBehaviour());
       const TaskWaypoint *OldGotoTWP = task_manager->GetActiveTaskPoint();
       if (!OldGotoTWP)
         break;
 
       auto OldGotoWp = OldGotoTWP->GetWaypointPtr();
-      result = MutateFromGoto(task, std::move(waypoint), std::move(OldGotoWp));
+      result = MutateFromGoto(*task, std::move(waypoint), std::move(OldGotoWp));
       if (result == MUTATED_FROM_GOTO)
         task_manager->Commit(*task);
 
-      delete task;
       break;
     }
     }
@@ -141,34 +132,32 @@ MapTaskManager::AppendToTask(WaypointPtr &&waypoint)
 }
 
 static MapTaskManager::TaskEditResult
-InsertInTask(OrderedTask *task, WaypointPtr &&waypoint)
+InsertInTask(OrderedTask &task, WaypointPtr &&waypoint) noexcept
 {
-  if (task->TaskSize()==0)
+  if (task.TaskSize()==0)
     return MapTaskManager::NOTASK;
 
-  int i = task->GetActiveIndex();
+  int i = task.GetActiveIndex();
   /* skip all start points */
   while (true) {
-    if (i >= (int)task->TaskSize())
+    if (i >= (int)task.TaskSize())
       return MapTaskManager::UNMODIFIED;
 
-    const OrderedTaskPoint &task_point = task->GetPoint(i);
+    const OrderedTaskPoint &task_point = task.GetPoint(i);
     if (task_point.IsPredecessorAllowed())
       break;
 
     ++i;
   }
 
-  const AbstractTaskFactory &factory = task->GetFactory();
-  auto *task_point = factory.CreateIntermediate(std::move(waypoint));
+  const AbstractTaskFactory &factory = task.GetFactory();
+  auto task_point = factory.CreateIntermediate(std::move(waypoint));
   if (task_point == nullptr)
     return MapTaskManager::UNMODIFIED;
 
-  bool success = task->Insert(*task_point, i);
-  delete task_point;
-  if (!success)
+  if (!task.Insert(*task_point, i))
     return MapTaskManager::UNMODIFIED;
-  if (!task->CheckTask())
+  if (!task.CheckTask())
     return MapTaskManager::INVALID;
   return MapTaskManager::SUCCESS;
 }
@@ -180,12 +169,11 @@ MapTaskManager::InsertInTask(WaypointPtr &&waypoint)
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   TaskEditResult result = MapTaskManager::UNMODIFIED;
   if (task_manager->GetOrderedTask().CheckTask()) {
-    OrderedTask *task = task_manager->Clone(GetTaskBehaviour());
+    auto task = task_manager->Clone(GetTaskBehaviour());
 
-    result = InsertInTask(task, std::move(waypoint));
+    result = InsertInTask(*task, std::move(waypoint));
     if (result == SUCCESS)
       task_manager->Commit(*task);
-    delete task;
   } else { // ordered task invalid
     switch (task_manager->GetMode()) {
     case TaskType::NONE:
@@ -197,15 +185,14 @@ MapTaskManager::InsertInTask(WaypointPtr &&waypoint)
       break;
     case TaskType::GOTO:
     {
-      OrderedTask *task = task_manager->Clone(GetTaskBehaviour());
+      auto task = task_manager->Clone(GetTaskBehaviour());
       const auto OldGotoTWP = task_manager->GetActiveTaskPoint();
       if (!OldGotoTWP)
         break;
       auto OldGotoWp = OldGotoTWP->GetWaypointPtr();
-      result = MutateFromGoto(task, std::move(OldGotoWp), std::move(waypoint));
+      result = MutateFromGoto(*task, std::move(OldGotoWp), std::move(waypoint));
       if (result == MUTATED_FROM_GOTO)
         task_manager->Commit(*task);
-      delete task;
       break;
     }
     }
@@ -214,18 +201,18 @@ MapTaskManager::InsertInTask(WaypointPtr &&waypoint)
 }
 
 static MapTaskManager::TaskEditResult
-ReplaceInTask(OrderedTask *task, WaypointPtr &&waypoint)
+ReplaceInTask(OrderedTask &task, WaypointPtr &&waypoint) noexcept
 {
-  if (task->TaskSize()==0)
+  if (task.TaskSize()==0)
     return MapTaskManager::NOTASK;
 
-  unsigned i = task->GetActiveIndex();
-  if (i >= task->TaskSize())
+  unsigned i = task.GetActiveIndex();
+  if (i >= task.TaskSize())
     return MapTaskManager::UNMODIFIED;
 
-  task->Relocate(i, std::move(waypoint));
+  task.Relocate(i, std::move(waypoint));
 
-  if (!task->CheckTask())
+  if (!task.CheckTask())
     return MapTaskManager::INVALID;
 
   return MapTaskManager::SUCCESS;
@@ -236,13 +223,12 @@ MapTaskManager::ReplaceInTask(WaypointPtr &&waypoint)
 {
   assert(protected_task_manager != nullptr);
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  OrderedTask *task = task_manager->Clone(GetTaskBehaviour());
+  auto task = task_manager->Clone(GetTaskBehaviour());
 
-  TaskEditResult result = ReplaceInTask(task, std::move(waypoint));
+  TaskEditResult result = ReplaceInTask(*task, std::move(waypoint));
   if (result == SUCCESS)
     task_manager->Commit(*task);
 
-  delete task;
   return result;
 }
 
@@ -281,23 +267,23 @@ MapTaskManager::GetIndexInTask(const Waypoint &waypoint)
 }
 
 static MapTaskManager::TaskEditResult
-RemoveFromTask(OrderedTask *task, const Waypoint &waypoint)
+RemoveFromTask(OrderedTask &task, const Waypoint &waypoint)
 {
-  if (task->TaskSize()==0)
+  if (task.TaskSize()==0)
     return MapTaskManager::NOTASK;
 
-  int i = GetIndexInTask(*task, waypoint);
+  int i = GetIndexInTask(task, waypoint);
   if (i >= 0)
-    task->GetFactory().Remove(i);
+    task.GetFactory().Remove(i);
 
   // if finish was removed
-  if (i == (int)task->TaskSize())
-    task->GetFactory().CheckAddFinish();
+  if (i == (int)task.TaskSize())
+    task.GetFactory().CheckAddFinish();
 
   if (i == -1)
     return MapTaskManager::UNMODIFIED;
 
-  if (!task->CheckTask())
+  if (!task.CheckTask())
     return MapTaskManager::INVALID;
 
   return MapTaskManager::SUCCESS;
@@ -308,12 +294,11 @@ MapTaskManager::RemoveFromTask(const Waypoint &wp)
 {
   assert(protected_task_manager != nullptr);
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  OrderedTask *task = task_manager->Clone(GetTaskBehaviour());
+  auto task = task_manager->Clone(GetTaskBehaviour());
 
-  TaskEditResult result = RemoveFromTask(task, wp);
+  TaskEditResult result = RemoveFromTask(*task, wp);
   if (result == SUCCESS)
     task_manager->Commit(*task);
 
-  delete task;
   return result;
 }

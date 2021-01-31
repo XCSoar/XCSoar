@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "SerialPort.hpp"
 #include "Asset.hpp"
-#include "OS/LogError.hpp"
-#include "OS/Sleep.h"
-#include "OS/OverlappedEvent.hpp"
+#include "system/Error.hxx"
+#include "system/Sleep.h"
+#include "system/OverlappedEvent.hpp"
 
 #include <windows.h>
 
@@ -56,7 +56,7 @@ SerialPort::~SerialPort()
   BufferedPort::EndClose();
 }
 
-bool
+void
 SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
 {
   assert(!Thread::IsInside());
@@ -73,10 +73,8 @@ SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
                      nullptr); // Handle to port with attribute to copy
 
   // If it fails to open the port, return false.
-  if (hPort == INVALID_HANDLE_VALUE) {
-    LogLastError(_T("Failed to open port '%s'"), path);
-    return false;
-  }
+  if (hPort == INVALID_HANDLE_VALUE)
+    throw MakeLastError("Failed to open serial port");
 
   baud_rate = _baud_rate;
 
@@ -106,12 +104,8 @@ SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
   PortDCB.EvtChar = '\n';               // wait for end of line
 
   // Configure the port according to the specifications of the DCB structure.
-  if (!SetCommState(hPort, &PortDCB)) {
-    LogLastError(_T("Failed to configure port '%s'"), path);
-    CloseHandle(hPort);
-    hPort = INVALID_HANDLE_VALUE;
-    return false;
-  }
+  if (!SetCommState(hPort, &PortDCB))
+    throw MakeLastError("Failed to configure serial port");
 
   SetupComm(hPort, 1024, 1024);
 
@@ -124,8 +118,6 @@ SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
   StoppableThread::Start();
 
   StateChanged();
-
-  return true;
 }
 
 PortState

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,12 +24,13 @@ Copyright_License {
 #ifndef SHAPE_RENDERER_HPP
 #define SHAPE_RENDERER_HPP
 
-#include "Screen/Pen.hpp"
-#include "Screen/Point.hpp"
-#include "Util/NonCopyable.hpp"
-#include "Util/AllocatedArray.hxx"
-#include "Screen/Canvas.hpp"
-#include "Screen/Brush.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/dim/Point.hpp"
+#include "ui/dim/BulkPoint.hpp"
+#include "util/NonCopyable.hpp"
+#include "util/AllocatedArray.hxx"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Brush.hpp"
 
 #include <cassert>
 

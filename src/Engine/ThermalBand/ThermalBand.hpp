@@ -1,7 +1,7 @@
 /* Copyright_License {
 
    XCSoar Glide Computer - http://www.xcsoar.org/
-   Copyright (C) 2000-2016 The XCSoar Project
+   Copyright (C) 2000-2021 The XCSoar Project
    A detailed list of copyright holders can be found in the file "AUTHORS".
 
    This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@
 #ifndef THERMAL_BAND_HPP
 #define THERMAL_BAND_HPP
 
-#include "Util/TrivialArray.hxx"
+#include "util/TrivialArray.hxx"
 #include "ThermalSlice.hpp"
 #include <type_traits>
 

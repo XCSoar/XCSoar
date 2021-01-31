@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,15 +27,14 @@ Copyright_License {
 #define USAGE "flights.log"
 
 #include "Main.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/window/SingleWindow.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Form/Button.hpp"
-#include "Form/ActionListener.hpp"
 #include "Fonts.hpp"
 #include "Renderer/FlightListRenderer.hpp"
 #include "FlightInfo.hpp"
 #include "Logger/FlightParser.hpp"
-#include "IO/FileLineReader.hpp"
+#include "io/FileLineReader.hpp"
 
 #include <vector>
 
@@ -57,12 +56,8 @@ protected:
   }
 };
 
-class MainWindow final : public SingleWindow, ActionListener
+class MainWindow final : public UI::SingleWindow
 {
-  enum Buttons {
-    CLOSE = 1,
-  };
-
   Button close_button;
   TestWindow test_window;
 
@@ -76,7 +71,7 @@ public:
     const PixelRect rc = GetClientRect();
     close_button.Create(*this, *button_look, _T("Close"), GetButtonRect(rc),
                         WindowStyle(),
-                        *this, CLOSE);
+                        [this](){ Close(); });
     test_window.Create(*this, rc, style);
   }
 
@@ -107,15 +102,6 @@ protected:
   bool OnMouseUp(PixelPoint p) override {
     Close();
     return true;
-  }
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case CLOSE:
-      Close();
-      break;
-    }
   }
 };
 

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 #include "Weather/Features.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 static int weather_page = 0;
 
@@ -54,10 +54,9 @@ ShowWeatherDialog(const TCHAR *page)
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Status"));
 
-  auto *close_button = new ButtonWidget(look.button, _("Close"),
-                                        dialog, mrOK);
-
-  TabWidget widget(TabWidget::Orientation::AUTO, close_button);
+  TabWidget widget(TabWidget::Orientation::AUTO,
+                   std::make_unique<ButtonWidget>(look.button, _("Close"),
+                                                  dialog.MakeModalResultCallback(mrOK)));
   widget.SetPageFlippedCallback([&dialog, &widget]() {
       SetTitle(dialog, widget);
     });

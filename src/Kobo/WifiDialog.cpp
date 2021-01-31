@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,22 +27,17 @@ Copyright_License {
 #include "Dialogs/TextEntry.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Language/Language.hpp"
-#include "Form/ActionListener.hpp"
 #include "Widget/ListWidget.hpp"
 #include "WPASupplicant.hpp"
-#include "Net/IPv4Address.hxx"
-#include "Event/PeriodicTimer.hpp"
+#include "net/IPv4Address.hxx"
+#include "ui/event/PeriodicTimer.hpp"
 
 class WifiListWidget final
-  : public ListWidget, ActionListener {
-  enum Buttons {
-    SCAN,
-    CONNECT,
-  };
+  : public ListWidget {
 
   struct NetworkInfo {
     StaticString<32> bssid;
@@ -64,12 +59,16 @@ class WifiListWidget final
 
   WPASupplicant wpa_supplicant;
 
-  PeriodicTimer update_timer{[this]{ UpdateList(); }};
+  UI::PeriodicTimer update_timer{[this]{ UpdateList(); }};
 
 public:
   void CreateButtons(WidgetDialog &dialog) {
-    dialog.AddButton(_("Scan"), *this, SCAN);
-    connect_button = dialog.AddButton(_("Connect"), *this, CONNECT);
+    dialog.AddButton(_("Scan"), [this](){
+      if (EnsureConnected() && wpa_supplicant.Scan())
+        UpdateList();
+    });
+
+    connect_button = dialog.AddButton(_("Connect"), [this](){ Connect(); });
   }
 
   void UpdateButtons();
@@ -84,11 +83,6 @@ public:
                                             look.small_font));
     UpdateList();
     update_timer.Schedule(std::chrono::seconds(1));
-  }
-
-  virtual void Unprepare() override {
-    update_timer.Cancel();
-    DeleteWindow();
   }
 
   /* virtual methods from class ListItemRenderer */
@@ -128,9 +122,6 @@ private:
   void UpdateList();
 
   void Connect();
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -294,21 +285,6 @@ WifiListWidget::Connect()
   }
 
   UpdateList();
-}
-
-void
-WifiListWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case SCAN:
-    if (EnsureConnected() && wpa_supplicant.Scan())
-      UpdateList();
-    break;
-
-  case CONNECT:
-    Connect();
-    break;
-  }
 }
 
 bool

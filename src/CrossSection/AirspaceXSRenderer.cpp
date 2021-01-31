@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 
 #include "AirspaceXSRenderer.hpp"
 #include "Renderer/ChartRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
@@ -33,7 +33,7 @@
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Geo/GeoVector.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/StringCompare.hxx"
 
 /**
  * Local visitor class used for rendering airspaces in the CrossSectionRenderer
@@ -115,19 +115,19 @@ AirspaceIntersectionVisitorSlice::RenderBox(const PixelRect rc,
       border.Grow(-(int)border_width);
 
       // Left border
-      canvas.Rectangle(rc.left, rc.top, border.left, rc.bottom);
+      canvas.DrawRectangle({rc.left, rc.top, border.left, rc.bottom});
 
       // Right border
-      canvas.Rectangle(border.right, rc.top, rc.right, rc.bottom);
+      canvas.DrawRectangle({border.right, rc.top, rc.right, rc.bottom});
 
       // Bottom border
-      canvas.Rectangle(border.left, border.bottom, border.right, rc.bottom);
+      canvas.DrawRectangle({border.left, border.bottom, border.right, rc.bottom});
 
       // Top border
-      canvas.Rectangle(border.left, rc.top, border.right, border.top);
+      canvas.DrawRectangle({border.left, rc.top, border.right, border.top});
     } else {
       // .. or fill the entire rect if the outlines would overlap
-      canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
+      canvas.DrawRectangle(rc);
     }
 
     AirspacePreviewRenderer::UnprepareFill(canvas);
@@ -136,7 +136,7 @@ AirspaceIntersectionVisitorSlice::RenderBox(const PixelRect rc,
   // Use transparent brush and type-dependent pen for the outlines
   if (AirspacePreviewRenderer::PrepareOutline(canvas, type, airspace_look,
                                               settings))
-    canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
+    canvas.DrawRectangle(rc);
 }
 
 inline void
@@ -196,12 +196,12 @@ AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
     const unsigned max_width = max_x - min_x;
 
     const PixelSize name_size = canvas.CalcTextSize(name);
-    const int x = unsigned(name_size.cx) >= max_width
+    const int x = name_size.width >= max_width
       ? min_x
-      : (min_x + max_x - name_size.cx) / 2;
-    const int y = (rcd.top + rcd.bottom - name_size.cy) / 2;
+      : (min_x + max_x - name_size.width) / 2;
+    const int y = (rcd.top + rcd.bottom - name_size.height) / 2;
 
-    canvas.DrawClippedText(x, y, max_x - x, name);
+    canvas.DrawClippedText({x, y}, max_x - x, name);
   }
 }
 

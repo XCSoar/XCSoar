@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,13 +22,13 @@
 */
 
 #include "Replay/NmeaReplay.hpp"
-#include "IO/LineReader.hpp"
+#include "io/LineReader.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Config.hpp"
 #include "NMEA/Info.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/StringCompare.hxx"
 
 NmeaReplay::NmeaReplay(std::unique_ptr<NLineReader> &&_reader,
                        const DeviceConfig &config)

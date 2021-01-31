@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,10 +27,11 @@
 #include "Task/AbstractTask.hpp"
 #include "SmartTaskAdvance.hpp"
 #include "Waypoint/Ptr.hpp"
-#include "Util/DereferenceIterator.hxx"
-#include "Util/StaticString.hxx"
+#include "util/DereferenceIterator.hxx"
+#include "util/StaticString.hxx"
 
 #include <cassert>
+#include <memory>
 #include <vector>
 
 class SearchPoint;
@@ -72,19 +73,19 @@ private:
   OrderedTaskPointVector task_points;
   OrderedTaskPointVector optional_start_points;
 
-  StartPoint *taskpoint_start;
-  FinishPoint *taskpoint_finish;
+  StartPoint *taskpoint_start = nullptr;
+  FinishPoint *taskpoint_finish = nullptr;
 
   TaskProjection task_projection;
 
   GeoPoint last_min_location;
 
   TaskFactoryType factory_mode;
-  AbstractTaskFactory* active_factory;
+  std::unique_ptr<AbstractTaskFactory> active_factory;
   OrderedTaskSettings ordered_settings;
   SmartTaskAdvance task_advance;
-  TaskDijkstraMin *dijkstra_min;
-  TaskDijkstraMax *dijkstra_max;
+  TaskDijkstraMin *dijkstra_min = nullptr;
+  TaskDijkstraMax *dijkstra_max = nullptr;
 
   StaticString<64> name;
 
@@ -154,8 +155,7 @@ public:
    *
    * @return Initialised object
    */
-  gcc_malloc
-  OrderedTask *Clone(const TaskBehaviour &tb) const;
+  std::unique_ptr<OrderedTask> Clone(const TaskBehaviour &tb) const noexcept;
 
   /**
    * Copy task into this task

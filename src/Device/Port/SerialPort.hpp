@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_SERIAL_PORT_HPP
 #define XCSOAR_DEVICE_SERIAL_PORT_HPP
 
-#include "Thread/StoppableThread.hpp"
+#include "thread/StoppableThread.hpp"
 #include "BufferedPort.hpp"
 
 #include <windef.h>
@@ -56,9 +56,10 @@ public:
 
   /**
    * Opens the serial port
-   * @return True on success, False on failure
+   *
+   * Throws on error.
    */
-  bool Open(const TCHAR *path, unsigned baud_rate);
+  void Open(const TCHAR *path, unsigned baud_rate);
 
 protected:
   bool SetRxTimeout(unsigned Timeout);

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,23 +22,22 @@ Copyright_License {
 */
 
 #include "Inflate.hpp"
+#include "util/AllocatedString.hxx"
 
 #include <zlib.h>
 
 #include <cassert>
-#include <limits.h>
 #include <cstdint>
+#include <memory>
+
+#include <limits.h>
 #include <string.h>
 
-/**
- * Uncompress the given buffer, and return it as a C string.  The
- * caller is responsible for freeing it with delete[].
- */
-char *
-InflateToString(const void *compressed, size_t length)
+AllocatedString
+InflateToString(const void *compressed, size_t length) noexcept
 {
   size_t buffer_size = length * 8;
-  char *buffer = new char[buffer_size];
+  auto buffer = std::make_unique<char[]>(buffer_size);
 
   z_stream strm;
   memset(&strm, 0, sizeof(strm));
@@ -48,24 +47,20 @@ InflateToString(const void *compressed, size_t length)
      1.2.3 headers without ZLIB_CONST support */
   strm.next_in = const_cast<Bytef *>(reinterpret_cast<const Bytef *>(compressed));
   strm.avail_in = length;
-  strm.next_out = reinterpret_cast<Bytef *>(buffer);
+  strm.next_out = reinterpret_cast<Bytef *>(buffer.get());
   strm.avail_out = buffer_size - 1;
 
   int result = inflateInit2(&strm, 16+MAX_WBITS);
-  if (result != Z_OK) {
-    delete[] buffer;
+  if (result != Z_OK)
     return NULL;
-  }
 
   result = inflate(&strm, Z_NO_FLUSH);
   inflateEnd(&strm);
-  if (result != Z_STREAM_END) {
-    delete[] buffer;
+  if (result != Z_STREAM_END)
     return NULL;
-  }
 
   assert((size_t)strm.avail_out < buffer_size);
 
   buffer[buffer_size - 1 - strm.avail_out] = 0;
-  return buffer;
+  return AllocatedString::Donate(buffer.release());
 }

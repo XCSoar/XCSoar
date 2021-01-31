@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,8 @@ Copyright_License {
 #include "Tracking/SkyLines/Protocol.hpp"
 #include "Tracking/SkyLines/Assemble.hpp"
 #include "Tracking/SkyLines/Import.hpp"
+#include "net/AddressInfo.hxx"
+#include "net/Resolver.hxx"
 
 #include <boost/geometry/algorithms/intersection.hpp>
 #include <boost/geometry/strategies/strategies.hpp>
@@ -56,7 +58,7 @@ CloudClientContainer::Find(uint64_t key)
 }
 
 CloudClient &
-CloudClientContainer::Make(const boost::asio::ip::udp::endpoint &endpoint,
+CloudClientContainer::Make(SocketAddress address,
                            uint64_t key,
                            const GeoPoint &location, int altitude)
 {
@@ -64,22 +66,22 @@ CloudClientContainer::Make(const boost::asio::ip::udp::endpoint &endpoint,
   auto result = key_set.insert_check(key, key_set.hash_function(),
                                      key_set.key_eq(), hint);
   if (result.second) {
-    auto client = std::make_shared<CloudClient>(endpoint, key, next_id++,
+    auto client = std::make_shared<CloudClient>(address, key, next_id++,
                                                 location, altitude);
     Insert(*client);
     return *client;
   } else {
     auto &client = *result.first;
-    Refresh(client, endpoint, location, altitude);
+    Refresh(client, address, location, altitude);
     return client;
   }
 }
 
 void
 CloudClientContainer::Refresh(CloudClient &client,
-                              const boost::asio::ip::udp::endpoint &endpoint)
+                              SocketAddress address)
 {
-  client.Refresh(endpoint);
+  client.Refresh(address);
 
   list.erase(list.iterator_to(client));
   list.push_front(client);
@@ -87,10 +89,10 @@ CloudClientContainer::Refresh(CloudClient &client,
 
 void
 CloudClientContainer::Refresh(CloudClient &client,
-                              const boost::asio::ip::udp::endpoint &endpoint,
+                              SocketAddress address,
                               const GeoPoint &location, int altitude)
 {
-  Refresh(client, endpoint);
+  Refresh(client, address);
 
   if (location != client.location) {
     auto ptr = client.shared_from_this();
@@ -135,18 +137,30 @@ CloudClientContainer::QueryWithinRange(GeoPoint location, double range) const
 }
 
 inline Serialiser &
-operator<<(Serialiser &s, const boost::asio::ip::udp::endpoint &endpoint)
+operator<<(Serialiser &s, SocketAddress address)
 {
-  s.WriteString(endpoint.address().to_string());
-  s.Write16(endpoint.port());
+  char host[NI_MAXHOST], serv[NI_MAXSERV];
+  int ret = getnameinfo(address.GetAddress(), address.GetSize(),
+                        host, sizeof(host), serv, sizeof(serv),
+                        NI_NUMERICHOST|NI_NUMERICSERV);
+  s.WriteString(ret == 0 ? host : "unkown");
+  s.Write16(address.GetPort());
   return s;
 }
 
 inline Deserialiser &
-operator>>(Deserialiser &s, boost::asio::ip::udp::endpoint &endpoint)
+operator>>(Deserialiser &s, AllocatedSocketAddress &address)
 {
-  endpoint.address(boost::asio::ip::make_address(s.ReadString()));
-  endpoint.port(s.Read16());
+  static constexpr auto hints =
+    MakeAddrInfo(AI_NUMERICHOST, AF_UNSPEC, SOCK_DGRAM);
+
+  const auto node = s.ReadString();
+  char service[32];
+  snprintf(service, sizeof(service), "%u", s.Read16());
+
+  const auto ai = Resolve(node.c_str(), service, &hints);
+  address = ai.front();
+
   return s;
 }
 
@@ -165,7 +179,7 @@ CloudClient::Save(Serialiser &s) const
                                      location, Angle::Zero(), 0, 0,
                                      altitude, 0, 0));
 
-  s << endpoint;
+  s << address;
 
   s.Write8(0);
 }
@@ -181,12 +195,12 @@ CloudClient::Load(Deserialiser &s)
   SkyLinesTracking::FixPacket fix;
   s.ReadT(fix);
 
-  boost::asio::ip::udp::endpoint endpoint;
-  s >> endpoint;
+  AllocatedSocketAddress address;
+  s >> address;
 
   s.Read8();
 
-  CloudClient client(endpoint, FromBE64(fix.header.key),
+  CloudClient client(std::move(address), FromBE64(fix.header.key),
                      id,
                      SkyLinesTracking::ImportGeoPoint(fix.location),
                      (int16_t)FromBE16(fix.altitude));

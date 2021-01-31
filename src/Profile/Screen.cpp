@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "Map.hpp"
-#include "Screen/PortableColor.hpp"
+#include "ui/canvas/PortableColor.hpp"
 #include "Formatter/HexColor.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 void
 ProfileMap::SetColor(const char *key, const RGB8Color color)

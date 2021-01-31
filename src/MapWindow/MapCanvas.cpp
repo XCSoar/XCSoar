@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "MapCanvas.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
@@ -56,7 +56,7 @@ MapCanvas::DrawCircle(const GeoPoint &center, double radius)
 {
   auto screen_center = projection.GeoToScreen(center);
   unsigned screen_radius = projection.GeoToScreenDistance(radius);
-  canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
+  canvas.DrawCircle(screen_center, screen_radius);
 }
 
 void

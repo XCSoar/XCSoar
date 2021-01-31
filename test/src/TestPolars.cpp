@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,16 +23,16 @@
 #include "TestUtil.hpp"
 
 #include "GlideSolvers/GlidePolar.hpp"
-#include "IO/ConfiguredFile.hpp"
-#include "OS/Path.hpp"
+#include "io/ConfiguredFile.hpp"
+#include "system/Path.hpp"
 #include "Profile/Profile.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/Parser.hpp"
 #include "Polar/PolarFileGlue.hpp"
 #include "Polar/PolarStore.hpp"
-#include "Util/ConvertString.hpp"
-#include "Util/Macros.hpp"
-#include "Util/PrintException.hxx"
+#include "util/ConvertString.hpp"
+#include "util/Macros.hpp"
+#include "util/PrintException.hxx"
 
 #include <stdlib.h>
 #include <stdio.h>

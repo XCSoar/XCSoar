@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Copyright_License {
 #include "Components.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 static void
@@ -72,8 +72,7 @@ TaskMapButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
     buffer.Begin(canvas);
 #endif
 
-    const PixelRect buffer_rc(0, 0, new_size.cx, new_size.cy);
-    DrawTask(buffer, buffer_rc, look, *task);
+    DrawTask(buffer, PixelRect{new_size}, look, *task);
 
 #ifdef ENABLE_OPENGL
     buffer.Commit(canvas);

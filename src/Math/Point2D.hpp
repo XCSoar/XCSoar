@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_POINT2D_HPP
 #define XCSOAR_POINT2D_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <type_traits>
 #include <cmath>
@@ -81,27 +81,24 @@ struct Point2D {
 
 struct UnsignedPoint2D : Point2D<unsigned> {
   UnsignedPoint2D() = default;
+  using Point2D::Point2D;
 
-  constexpr UnsignedPoint2D(unsigned _x, unsigned _y) noexcept
-    :Point2D<unsigned>(_x, _y) {}
+  constexpr UnsignedPoint2D(Point2D<unsigned> src) noexcept
+    :Point2D(src) {}
 };
 
 static_assert(std::is_trivial<UnsignedPoint2D>::value, "type is not trivial");
 
 struct IntPoint2D : Point2D<int> {
   IntPoint2D() = default;
-
-  constexpr IntPoint2D(int _x, int _y) noexcept
-    :Point2D<int>(_x, _y) {}
+  using Point2D::Point2D;
 };
 
 static_assert(std::is_trivial<IntPoint2D>::value, "type is not trivial");
 
 struct DoublePoint2D : Point2D<double> {
   DoublePoint2D() = default;
-
-  constexpr DoublePoint2D(double _x, double _y) noexcept
-    :Point2D<double>(_x, _y) {}
+  using Point2D::Point2D;
 
   gcc_pure
   double Magnitude() const noexcept {
@@ -113,9 +110,7 @@ static_assert(std::is_trivial<DoublePoint2D>::value, "type is not trivial");
 
 struct FloatPoint2D : Point2D<float> {
   FloatPoint2D() = default;
-
-  constexpr FloatPoint2D(float _x, float _y) noexcept
-    :Point2D<float>(_x, _y) {}
+  using Point2D::Point2D;
 
   gcc_pure
   float Magnitude() const noexcept {
@@ -126,16 +121,14 @@ struct FloatPoint2D : Point2D<float> {
 static_assert(std::is_trivial<FloatPoint2D>::value, "type is not trivial");
 
 template<typename P>
-struct IsPoint2D : std::is_base_of<Point2D<typename P::scalar_type,
-                                           typename P::product_type>, P> {
-};
+using IsPoint2D = std::is_base_of<Point2D<typename P::scalar_type,
+                                          typename P::product_type>, P>;
 
 template<typename P>
-struct EnableIfPoint2D : std::enable_if<IsPoint2D<P>::value> {
-};
+using EnableIfPoint2D = std::enable_if_t<IsPoint2D<P>::value>;
 
 template<typename P, typename RT=typename P::product_type,
-         typename=typename EnableIfPoint2D<P>::type>
+         typename=EnableIfPoint2D<P>>
 constexpr P
 operator+(P a, P b) noexcept
 {
@@ -143,7 +136,7 @@ operator+(P a, P b) noexcept
 }
 
 template<typename P, typename RT=typename P::product_type,
-         typename=typename EnableIfPoint2D<P>::type>
+         typename=EnableIfPoint2D<P>>
 constexpr P
 operator-(P a, P b) noexcept
 {
@@ -151,9 +144,9 @@ operator-(P a, P b) noexcept
 }
 
 template<typename P, typename RT=typename P::product_type,
-         typename=typename EnableIfPoint2D<P>::type,
+         typename=EnableIfPoint2D<P>,
          typename Z,
-         typename=typename std::enable_if<std::is_arithmetic<Z>::value>::type>
+         typename=std::enable_if_t<std::is_arithmetic<Z>::value>>
 constexpr P
 operator*(P a, Z z) noexcept
 {
@@ -161,9 +154,9 @@ operator*(P a, Z z) noexcept
 }
 
 template<typename P, typename RT=typename P::product_type,
-         typename=typename EnableIfPoint2D<P>::type,
+         typename=EnableIfPoint2D<P>,
          typename Z,
-         typename=typename std::enable_if<std::is_arithmetic<Z>::value>::type>
+         typename=std::enable_if_t<std::is_arithmetic<Z>::value>>
 constexpr P
 operator/(P a, Z z) noexcept
 {
@@ -171,7 +164,7 @@ operator/(P a, Z z) noexcept
 }
 
 template<typename P, typename RT=typename P::product_type,
-         typename=typename EnableIfPoint2D<P>::type>
+         typename=EnableIfPoint2D<P>>
 constexpr RT
 DotProduct(P a, P b) noexcept
 {
@@ -179,7 +172,7 @@ DotProduct(P a, P b) noexcept
 }
 
 template<typename P, typename RT=typename P::product_type,
-         typename=typename EnableIfPoint2D<P>::type>
+         typename=EnableIfPoint2D<P>>
 constexpr RT
 CrossProduct(P a, P b) noexcept
 {
@@ -190,7 +183,7 @@ CrossProduct(P a, P b) noexcept
  * Calculates the "manhattan distance" or "taxicab distance".
  */
 template<typename P, typename RT=typename P::scalar_type,
-         typename=typename EnableIfPoint2D<P>::type>
+         typename=EnableIfPoint2D<P>>
 constexpr RT
 ManhattanDistance(P a, P b) noexcept
 {

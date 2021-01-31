@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct DialogLook;
-class SingleWindow;
+namespace UI { class SingleWindow; }
 class Job;
 
 /**
@@ -42,18 +42,18 @@ class Job;
  * the job was cancelled by the user
  */
 bool
-JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
+JobDialog(UI::SingleWindow &parent, const DialogLook &dialog_look,
           const TCHAR *caption, Job &job,
           bool cancellable=false);
 
 class DialogJobRunner : public JobRunner {
-  SingleWindow &parent;
+  UI::SingleWindow &parent;
   const DialogLook &dialog_look;
   const TCHAR *caption;
   bool cancellable;
 
 public:
-  DialogJobRunner(SingleWindow &_parent, const DialogLook &_dialog_look,
+  DialogJobRunner(UI::SingleWindow &_parent, const DialogLook &_dialog_look,
                   const TCHAR *_caption, bool _cancellable=false)
     :parent(_parent), dialog_look(_dialog_look),
      caption(_caption), cancellable(_cancellable) {}

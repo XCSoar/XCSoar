@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
 #include "FLARM/FlarmNetReader.hpp"
 #include "FLARM/FlarmNetRecord.hpp"
 #include "FLARM/FlarmId.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 #include "TestUtil.hpp"
 
 int main(int argc, char **argv)

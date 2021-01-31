@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/Frame.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Font.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 
@@ -75,21 +75,6 @@ TaskClosePanel::CommitAndClose()
 }
 
 void
-TaskClosePanel::OnAction(int id) noexcept
-{
-  switch (id) {
-  case CLOSE:
-    CommitAndClose();
-    break;
-
-  case REVERT:
-    dialog.Revert();
-    RefreshStatus();
-    break;
-  }
-}
-
-void
 TaskClosePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const Layout layout(rc, look);
@@ -103,7 +88,7 @@ TaskClosePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   close_button.Create(parent, look.button, _("Close"),
                       layout.close_button, button_style,
-                      *this, CLOSE);
+                      [this](){ CommitAndClose(); });
 
   message.Create(parent, layout.message, style);
   message.SetAlignCenter();
@@ -111,7 +96,10 @@ TaskClosePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   revert_button.Create(parent, look.button, _("Revert Changes"),
                        layout.revert_button, button_style,
-                       *this, REVERT);
+                       [this](){
+                         dialog.Revert();
+                         RefreshStatus();
+                       });
 }
 
 bool

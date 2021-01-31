@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
-#include "Util/NumberParser.hpp"
+#include "util/NumberParser.hpp"
 
 enum ControlIndex {
 #ifdef HAVE_PCMET
@@ -95,8 +95,8 @@ WeatherConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateWeatherConfigPanel()
 {
-  return new WeatherConfigPanel();
+  return std::make_unique<WeatherConfigPanel>();
 }

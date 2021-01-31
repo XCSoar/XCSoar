@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,9 +29,9 @@ Copyright_License {
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Math/SelfTimingKalmanFilter1d.hpp"
-#include "OS/Clock.hpp"
+#include "system/Clock.hpp"
 #include "Geo/Geoid.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 Java::TrivialClass InternalSensors::gps_cls, InternalSensors::sensors_cls;
 jmethodID InternalSensors::gps_ctor_id, InternalSensors::close_method;

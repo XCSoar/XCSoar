@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ class ProgressDialog
   std::function<void()> cancel_callback;
 
 public:
-  ProgressDialog(SingleWindow &parent, const DialogLook &dialog_look,
+  ProgressDialog(UI::SingleWindow &parent, const DialogLook &dialog_look,
                  const TCHAR *caption);
 
   void AddCancelButton(std::function<void()> &&callback);
@@ -59,8 +59,8 @@ public:
     progress.SetValue(position);
   }
 
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
+  /* virtual methods from WndForm */
+  void SetModalResult(int id) noexcept override;
 };
 
 #endif

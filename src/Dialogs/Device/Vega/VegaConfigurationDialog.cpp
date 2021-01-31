@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -81,12 +81,7 @@ static VegaDevice *device;
 static bool changed, dirty;
 
 class VegaConfigurationExtraButtons final
-  : public NullWidget, ActionListener {
-  enum Buttons {
-    DEMO,
-    SAVE,
-  };
-
+  : public NullWidget {
   struct Layout {
     PixelRect demo, save;
 
@@ -121,9 +116,11 @@ protected:
 
     const auto &button_look = dialog.GetLook().button;
     demo_button.Create(parent, button_look, _("Demo"),
-                       layout.demo, style, *this, DEMO);
+                       layout.demo, style,
+                       [this](){ OnDemo(); });
     save_button.Create(parent, button_look, _("Save"),
-                       layout.save, style, *this, SAVE);
+                       layout.save, style,
+                       [this](){ OnSave(); });
   }
 
   void Show(const PixelRect &rc) override {
@@ -146,19 +143,6 @@ protected:
 private:
   void OnDemo();
   void OnSave();
-
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case DEMO:
-      OnDemo();
-      break;
-
-    case SAVE:
-      OnSave();
-      break;
-    }
-  }
 };
 
 static void
@@ -178,6 +162,12 @@ SetParametersScheme(PagerWidget &pager, int schemetype)
     pager.PrepareWidget(4 + i);
     ((VegaAudioParametersWidget &)pager.GetWidget(4 + i)).LoadScheme(scheme.audio[i]);
   }
+}
+
+static auto
+MakeSetParametersScheme(PagerWidget &pager, int schemetype) noexcept
+{
+  return [&pager, schemetype](){ SetParametersScheme(pager, schemetype); };
 }
 
 static void
@@ -212,7 +202,7 @@ VegaConfigurationExtraButtons::OnDemo()
   dlgVegaDemoShowModal();
 }
 
-class VegaSchemeButtonsPage : public RowFormWidget, ActionListener {
+class VegaSchemeButtonsPage : public RowFormWidget {
   PagerWidget &pager;
 
 public:
@@ -223,15 +213,10 @@ public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
     RowFormWidget::Prepare(parent, rc);
 
-    AddButton(_T("Vega"), *this, 0);
-    AddButton(_T("Borgelt"), *this, 1);
-    AddButton(_T("Cambridge"), *this, 2);
-    AddButton(_T("Zander"), *this, 3);
-  }
-
-  /* methods from ActionListener */
-  void OnAction(int id) noexcept override {
-    SetParametersScheme(pager, id);
+    AddButton(_T("Vega"), MakeSetParametersScheme(pager, 0));
+    AddButton(_T("Borgelt"), MakeSetParametersScheme(pager, 1));
+    AddButton(_T("Cambridge"), MakeSetParametersScheme(pager, 2));
+    AddButton(_T("Zander"), MakeSetParametersScheme(pager, 3));
   }
 };
 
@@ -240,31 +225,31 @@ FillPager(PagerWidget &pager)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  pager.Add(new VegaParametersWidget(look, *device, hardware_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, calibration_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, audio_mode_parameters));
-  pager.Add(new VegaParametersWidget(look, *device,
-                                     audio_deadband_parameters));
-  pager.Add(new VegaAudioParametersWidget(look, *device, "CruiseFaster"));
-  pager.Add(new VegaAudioParametersWidget(look, *device, "CruiseSlower"));
-  pager.Add(new VegaAudioParametersWidget(look, *device, "CruiseLift"));
-  pager.Add(new VegaAudioParametersWidget(look, *device,
-                                          "CirclingClimbingHi"));
-  pager.Add(new VegaAudioParametersWidget(look, *device,
-                                          "CirclingClimbingLow"));
-  pager.Add(new VegaAudioParametersWidget(look, *device,
-                                          "CirclingDescending"));
-  pager.Add(new VegaParametersWidget(look, *device, logger_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, mixer_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, flarm_alert_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, flarm_id_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, flarm_repeat_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, alert_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, limit_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, hardware_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, calibration_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, audio_mode_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device,
+                                                   audio_deadband_parameters));
+  pager.Add(std::make_unique<VegaAudioParametersWidget>(look, *device, "CruiseFaster"));
+  pager.Add(std::make_unique<VegaAudioParametersWidget>(look, *device, "CruiseSlower"));
+  pager.Add(std::make_unique<VegaAudioParametersWidget>(look, *device, "CruiseLift"));
+  pager.Add(std::make_unique<VegaAudioParametersWidget>(look, *device,
+                                                        "CirclingClimbingHi"));
+  pager.Add(std::make_unique<VegaAudioParametersWidget>(look, *device,
+                                                        "CirclingClimbingLow"));
+  pager.Add(std::make_unique<VegaAudioParametersWidget>(look, *device,
+                                                        "CirclingDescending"));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, logger_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, mixer_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, flarm_alert_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, flarm_id_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, flarm_repeat_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, alert_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, limit_parameters));
 
-  pager.Add(new VegaSchemeButtonsPage(pager, look));
+  pager.Add(std::make_unique<VegaSchemeButtonsPage>(pager, look));
 
-  pager.Add(new VegaParametersWidget(look, *device, display_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, display_parameters));
 }
 
 bool
@@ -278,8 +263,9 @@ dlgConfigurationVarioShowModal(Device &_device)
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Vario Configuration"));
 
-  ArrowPagerWidget widget(dialog, look.button,
-                          new VegaConfigurationExtraButtons(dialog));
+  ArrowPagerWidget widget(look.button,
+                          dialog.MakeModalResultCallback(mrOK),
+                          std::make_unique<VegaConfigurationExtraButtons>(dialog));
   FillPager(widget);
 
   dialog.FinishPreliminary(&widget);

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,8 +34,10 @@ ShowWindSettingsDialog()
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(),
                       _("Wind Settings"), panel);
-  panel->SetClearManualButton(dialog.AddButton(_("Clear"), *panel,
-                                               WindSettingsPanel::CLEAR_MANUAL));
+  panel->SetClearManualButton(dialog.AddButton(_("Clear"), [panel](){
+    panel->ClearManual();
+  }));
+
   dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
 }

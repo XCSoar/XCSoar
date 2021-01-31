@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,10 +24,11 @@ Copyright_License {
 #include "Async.hpp"
 #include "Job.hpp"
 #include "Operation/ThreadedOperationEnvironment.hpp"
-#include "Event/Notify.hpp"
+#include "ui/event/Notify.hpp"
 
 void
-AsyncJobRunner::Start(Job *_job, OperationEnvironment &_env, Notify *_notify)
+AsyncJobRunner::Start(Job *_job, OperationEnvironment &_env,
+                      UI::Notify *_notify)
 {
   assert(_job != NULL);
   assert(!IsBusy());

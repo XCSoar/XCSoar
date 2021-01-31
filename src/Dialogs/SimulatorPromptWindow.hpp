@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,17 +28,26 @@ Copyright_License {
 
 #ifdef SIMULATOR_AVAILABLE
 
-#include "Screen/ContainerWindow.hpp"
-#include "Screen/Bitmap.hpp"
+#include "ui/window/ContainerWindow.hpp"
+#include "ui/canvas/Bitmap.hpp"
 #include "Gauge/LogoView.hpp"
 #include "Form/Button.hpp"
 
+#include <functional>
+
 struct DialogLook;
-class ActionListener;
 
 class SimulatorPromptWindow final : public ContainerWindow {
+public:
+  enum class Result {
+    FLY = 1000,
+    SIMULATOR,
+    QUIT,
+  };
+
+private:
   const DialogLook &look;
-  ActionListener &action_listener;
+  const std::function<void(Result)> callback;
   const bool have_quit_button;
 
   LogoView logo_view;
@@ -52,16 +61,10 @@ class SimulatorPromptWindow final : public ContainerWindow {
   PixelPoint label_position;
 
 public:
-  enum Buttons {
-    FLY = 1000,
-    SIMULATOR,
-    QUIT,
-  };
-
   SimulatorPromptWindow(const DialogLook &_look,
-                        ActionListener &_action_listener,
+                        std::function<void(Result)> _callback,
                         bool _quit)
-    :look(_look), action_listener(_action_listener),
+    :look(_look), callback(std::move(_callback)),
      have_quit_button(_quit) {}
 
 protected:

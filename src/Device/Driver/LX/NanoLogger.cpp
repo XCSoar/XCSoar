@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,10 +27,10 @@
 #include "Device/Util/NMEAWriter.hpp"
 #include "Device/Util/NMEAReader.hpp"
 #include "Operation/Operation.hpp"
-#include "OS/Path.hpp"
-#include "IO/BufferedOutputStream.hxx"
-#include "IO/FileOutputStream.hxx"
-#include "Time/TimeoutClock.hpp"
+#include "system/Path.hpp"
+#include "io/BufferedOutputStream.hxx"
+#include "io/FileOutputStream.hxx"
+#include "time/TimeoutClock.hpp"
 #include "NMEA/InputLine.hpp"
 
 #include <algorithm>

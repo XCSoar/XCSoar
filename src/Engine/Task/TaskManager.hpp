@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,13 +23,15 @@
 #ifndef TASKMANAGER_H
 #define TASKMANAGER_H
 
-#include "Util/Compiler.h"
-#include "Util/NonCopyable.hpp"
+#include "util/Compiler.h"
+#include "util/NonCopyable.hpp"
 #include "Stats/TaskStats.hpp"
 #include "Stats/CommonStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "TaskBehaviour.hpp"
 #include "Waypoint/Ptr.hpp"
+
+#include <memory>
 
 class AbstractTaskFactory;
 class TaskEvents;
@@ -61,9 +63,9 @@ class TaskManager:
 
   TaskBehaviour task_behaviour;
 
-  OrderedTask *const ordered_task;
-  GotoTask *const goto_task;
-  AlternateTask *const abort_task;
+  const std::unique_ptr<OrderedTask> ordered_task;
+  const std::unique_ptr<GotoTask> goto_task;
+  const std::unique_ptr<AlternateTask> abort_task;
 
   TaskType mode;
   AbstractTask* active_task;
@@ -81,7 +83,7 @@ public:
    * @return Initialised object
    */
   TaskManager(const TaskBehaviour &task_behaviour, const Waypoints &wps);
-  ~TaskManager();
+  ~TaskManager() noexcept;
 
   void SetTaskEvents(TaskEvents &_task_events);
 
@@ -284,8 +286,7 @@ public:
    *
    * @return Initialised object
    */
-  gcc_malloc
-  OrderedTask *Clone(const TaskBehaviour &tb) const;
+  std::unique_ptr<OrderedTask> Clone(const TaskBehaviour &tb) const noexcept;
 
   /**
    * Copy task into this task

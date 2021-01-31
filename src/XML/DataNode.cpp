@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,9 +22,9 @@
 
 #include "DataNode.hpp"
 #include "Math/Angle.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/NumberParser.hpp"
-#include "Time/RoughTime.hpp"
+#include "util/StaticString.hxx"
+#include "util/NumberParser.hpp"
+#include "time/RoughTime.hpp"
 
 ConstDataNode::~ConstDataNode()
 {

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@ Copyright_License {
 #include "PagerWidget.hpp"
 
 #include <cassert>
+#include <memory>
 #include <tchar.h>
 
 class MaskedIcon;
@@ -76,7 +77,7 @@ private:
    * An optional #Widget that is shown at the corner right or below
    * the tabs.
    */
-  Widget *extra;
+  std::unique_ptr<Widget> extra;
 
   PixelRect extra_position;
 
@@ -84,20 +85,20 @@ private:
 
 public:
   explicit TabWidget(Orientation _orientation=Orientation::AUTO,
-                     Widget *_extra=nullptr)
+                     std::unique_ptr<Widget> &&_extra=nullptr)
     :orientation(_orientation), tab_display(nullptr),
-     extra(_extra), large_extra(false) {}
+     extra(std::move(_extra)), large_extra(false) {}
 
   ~TabWidget() override;
 
   /**
    * Must be called before Initialise().
    */
-  void SetExtra(Widget *_extra) {
+  void SetExtra(std::unique_ptr<Widget> &&_extra) noexcept {
     assert(extra == nullptr);
     assert(_extra != nullptr);
 
-    extra = _extra;
+    extra = std::move(_extra);
     large_extra = false;
   }
 
@@ -132,7 +133,7 @@ public:
       LargeExtra();
   }
 
-  void AddTab(Widget *widget, const TCHAR *caption,
+  void AddTab(std::unique_ptr<Widget> widget, const TCHAR *caption,
               const MaskedIcon *icon=nullptr);
 
   gcc_pure

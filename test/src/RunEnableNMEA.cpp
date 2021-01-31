@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,13 +29,13 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Config.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
-#include "IO/Async/AsioThread.hpp"
-#include "IO/NullDataHandler.hpp"
-#include "Util/PrintException.hxx"
+#include "io/async/GlobalAsioThread.hpp"
+#include "io/async/AsioThread.hpp"
+#include "io/NullDataHandler.hpp"
+#include "util/PrintException.hxx"
 
 #define MORE_USAGE
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 
 #include <stdio.h>
 
@@ -87,7 +87,7 @@ try {
   ScopeGlobalAsioThread global_asio_thread;
 
   NullDataHandler handler;
-  auto port = debug_port.Open(*asio_thread, handler);
+  auto port = debug_port.Open(*asio_thread, *global_cares_channel, handler);
 
   const struct DeviceRegister *driver = FindDriverByName(driver_name);
   if (driver == NULL) {

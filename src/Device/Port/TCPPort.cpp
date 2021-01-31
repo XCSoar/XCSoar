@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,31 +22,45 @@ Copyright_License {
 */
 
 #include "TCPPort.hpp"
-#include "Net/Option.hpp"
-#include "IO/Async/AsioUtil.hpp"
+#include "net/IPv4Address.hxx"
+#include "net/SocketError.hxx"
+#include "net/UniqueSocketDescriptor.hxx"
+#include "event/Call.hxx"
 
-TCPPort::TCPPort(boost::asio::io_context &io_context,
+TCPPort::TCPPort(EventLoop &event_loop,
                  unsigned port,
                  PortListener *_listener, DataHandler &_handler)
   :BufferedPort(_listener, _handler),
-   acceptor(io_context,
-            boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)),
-   connection(io_context)
+   listener(event_loop, BIND_THIS_METHOD(OnListenerReady)),
+   connection(event_loop, BIND_THIS_METHOD(OnConnectionReady))
 {
-  acceptor.listen(1);
+  const IPv4Address address(port);
 
-  AsyncAccept();
+  UniqueSocketDescriptor s;
+  if (!s.Create(AF_INET, SOCK_STREAM, 0))
+    throw MakeSocketError("Failed to create socket");
+
+  if (!s.Bind(address))
+    throw MakeSocketError("Failed to bind socket");
+
+  if (!s.Listen(1))
+    throw MakeSocketError("Failed to listen on socket");
+
+  listener.Open(s.Release());
+
+  BlockingCall(event_loop, [this](){
+    listener.ScheduleRead();
+  });
 }
 
 TCPPort::~TCPPort()
 {
   BufferedPort::BeginClose();
 
-  if (connection.is_open())
-    CancelWait(connection);
-
-  if (acceptor.is_open())
-    CancelWait(acceptor);
+  BlockingCall(GetEventLoop(), [this](){
+    connection.Close();
+    listener.Close();
+  });
 
   BufferedPort::EndClose();
 }
@@ -54,9 +68,9 @@ TCPPort::~TCPPort()
 PortState
 TCPPort::GetState() const
 {
-  if (connection.is_open())
+  if (connection.IsDefined())
     return PortState::READY;
-  else if (acceptor.is_open())
+  else if (listener.IsDefined())
     return PortState::LIMBO;
   else
     return PortState::FAILED;
@@ -65,56 +79,58 @@ TCPPort::GetState() const
 size_t
 TCPPort::Write(const void *data, size_t length)
 {
-  if (!connection.is_open())
+  if (!connection.IsDefined())
     return 0;
 
-  boost::system::error_code ec;
-  size_t nbytes = connection.send(boost::asio::buffer(data, length), 0, ec);
-  if (ec)
-    nbytes = 0;
+  ssize_t nbytes = connection.GetSocket().Write(data, length);
+  if (nbytes < 0)
+    // TODO check EAGAIN?
+    return 0;
 
   return nbytes;
 }
 
 void
-TCPPort::OnAccept(const boost::system::error_code &ec)
-{
-  if (ec == boost::asio::error::operation_aborted)
-    /* this object has already been deleted; bail out quickly without
-       touching anything */
-    return;
+TCPPort::OnListenerReady(unsigned) noexcept
+try {
+  SocketDescriptor s = listener.GetSocket().Accept();
+  if (!s.IsDefined())
+    throw MakeSocketError("Failed to accept");
 
-  if (ec) {
-    acceptor.close();
-    StateChanged();
-    Error(ec.message().c_str());
-    return;
-  }
+#ifdef _WIN32
+  const DWORD value = 1000;
+#else
+  const struct timeval value{1, 0};
+#endif
 
+  s.SetOption(SOL_SOCKET, SO_SNDTIMEO, &value, sizeof(value));
+
+  connection.Close();
+  connection.Open(s);
+  connection.ScheduleRead();
+} catch (...) {
+  listener.Close();
   StateChanged();
-
-  connection.set_option(SendTimeoutS(1));
-
-  AsyncRead();
+  Error(std::current_exception());
 }
 
 void
-TCPPort::OnRead(const boost::system::error_code &ec, size_t nbytes)
-{
-  if (ec == boost::asio::error::operation_aborted)
-    /* this object has already been deleted; bail out quickly without
-       touching anything */
-    return;
+TCPPort::OnConnectionReady(unsigned) noexcept
+try {
+  char input[4096];
+  ssize_t nbytes = connection.GetSocket().Read(input, sizeof(input));
+  if (nbytes < 0)
+    throw MakeSocketError("Failed to receive");
 
-  if (ec) {
-    connection.close();
-    AsyncAccept();
+  if (nbytes == 0) {
+    connection.Close();
     StateChanged();
-    Error(ec.message().c_str());
     return;
   }
 
   DataReceived(input, nbytes);
-
-  AsyncRead();
+} catch (...) {
+  connection.Close();
+  StateChanged();
+  Error(std::current_exception());
 }

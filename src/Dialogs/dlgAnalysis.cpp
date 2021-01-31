@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,9 +32,9 @@ Copyright_License {
 #include "CrossSection/CrossSectionRenderer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Computer/Settings.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Look/Look.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Renderer/FlightStatisticsRenderer.hpp"
@@ -51,14 +51,16 @@ Copyright_License {
 #include "Blackboard/FullBlackboard.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Contest/Solvers/Contests.hpp"
-#include "Event/PeriodicTimer.hpp"
-#include "Util/StringCompare.hxx"
+#include "ui/event/PeriodicTimer.hpp"
+#include "util/StringCompare.hxx"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scissor.hpp"
+#include "ui/canvas/opengl/Scissor.hpp"
 #endif
 
 #include <stdio.h>
+
+using namespace UI;
 
 static AnalysisPage page = AnalysisPage::BAROGRAPH;
 
@@ -124,13 +126,7 @@ protected:
   virtual void OnPaint(Canvas &canvas) override;
 };
 
-class AnalysisWidget final : public NullWidget, ActionListener {
-  enum Buttons {
-    PREVIOUS,
-    NEXT,
-    DETAILS,
-  };
-
+class AnalysisWidget final : public NullWidget {
   struct Layout {
     PixelRect info;
     PixelRect details_button, previous_button, next_button, close_button;
@@ -222,24 +218,6 @@ protected:
   }
 
   bool KeyPress(unsigned key_code) override;
-
-private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case PREVIOUS:
-      NextPage(-1);
-      break;
-
-    case NEXT:
-      NextPage(1);
-      break;
-
-    case DETAILS:
-      OnCalcClicked();
-      break;
-    }
-  }
 };
 
 AnalysisWidget::Layout::Layout(const PixelRect rc)
@@ -301,13 +279,13 @@ AnalysisWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   const auto &button_look = dialog.GetLook().button;
   details_button.Create(parent, button_look, _T("Calc"), layout.details_button,
-                        button_style, *this, DETAILS);
+                        button_style, [this](){ OnCalcClicked(); });
   previous_button.Create(parent, button_look, _T("<"), layout.previous_button,
-                         button_style, *this, PREVIOUS);
+                         button_style, [this](){ NextPage(-1); });
   next_button.Create(parent, button_look, _T(">"), layout.next_button,
-                     button_style, *this, NEXT);
+                     button_style, [this](){ NextPage(1); });
   close_button.Create(parent, button_look, _("Close"), layout.close_button,
-                      button_style, dialog, mrOK);
+                      button_style, dialog.MakeModalResultCallback(mrOK));
 
   WindowStyle style;
   style.Hide();
@@ -715,16 +693,14 @@ dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
                      const RasterTerrain *terrain,
                      AnalysisPage _page)
 {
-  WidgetDialog dialog(WidgetDialog::Full{}, parent,
-                      look.dialog, _("Analysis"));
-  AnalysisWidget analysis(dialog, look,
-                          airspaces, terrain,
-                          blackboard, glide_computer);
-  dialog.FinishPreliminary(&analysis);
+  TWidgetDialog<AnalysisWidget> dialog(WidgetDialog::Full{}, parent,
+                                       look.dialog, _("Analysis"));
+  dialog.SetWidget(dialog, look,
+                   airspaces, terrain,
+                   blackboard, glide_computer);
 
   if (_page != AnalysisPage::COUNT)
     page = (AnalysisPage)_page;
 
   dialog.ShowModal();
-  dialog.StealWidget();
 }

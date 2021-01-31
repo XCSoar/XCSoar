@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -37,17 +37,15 @@ Copyright_License {
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/DialogLook.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
-#include "Util/Compiler.h"
-#include "Util/Macros.hpp"
+#include "util/Compiler.h"
+#include "util/Macros.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/StringCompare.hxx"
 
 #include <cassert>
 #include <stdio.h>
@@ -59,15 +57,11 @@ enum Controls {
   TYPE,
 };
 
-enum Buttons {
-  DETAILS,
-};
-
 class AirspaceFilterWidget;
 
 class AirspaceListWidget final
   : public ListWidget, public DataFieldListener,
-    public ActionListener, NullBlackboardListener {
+    NullBlackboardListener {
   AirspaceFilterWidget &filter_widget;
 
   AirspaceSelectInfoVector items;
@@ -82,13 +76,13 @@ public:
   void FilterMode(bool direction);
   void OnAirspaceListEnter(unsigned index);
 
+  void ShowDetails() noexcept {
+    OnAirspaceListEnter(GetList().GetCursorIndex());
+  }
+
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-
-  virtual void Unprepare() override {
-    DeleteWindow();
-  }
 
   virtual void Show(const PixelRect &rc) override {
     ListWidget::Show(rc);
@@ -112,9 +106,6 @@ public:
   }
 
   void OnActivateItem(unsigned index) noexcept override;
-
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
 
   /* virtual methods from DataFieldListener */
   virtual void OnModified(DataField &df) override;
@@ -143,21 +134,24 @@ public:
 };
 
 class AirspaceListButtons final : public RowFormWidget {
-  ActionListener &dialog;
-  ActionListener *list;
+  WndForm &dialog;
+  AirspaceListWidget *list;
 
 public:
-  AirspaceListButtons(const DialogLook &look, ActionListener &_dialog)
+  AirspaceListButtons(const DialogLook &look, WndForm &_dialog) noexcept
     :RowFormWidget(look), dialog(_dialog) {}
 
-  void SetList(ActionListener *_list) {
+  void SetList(AirspaceListWidget *_list) {
     list = _list;
   }
 
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override {
-    AddButton(_("Details"), *list, DETAILS);
-    AddButton(_("Close"), dialog, mrCancel);
+    AddButton(_("Details"), [this](){
+      list->ShowDetails();
+    });
+
+    AddButton(_("Close"), dialog.MakeModalResultCallback(mrCancel));
   }
 };
 
@@ -222,16 +216,6 @@ void
 AirspaceListWidget::OnActivateItem(unsigned index) noexcept
 {
   OnAirspaceListEnter(index);
-}
-
-void
-AirspaceListWidget::OnAction(int id) noexcept
-{
-  switch (Buttons(id)) {
-  case DETAILS:
-    OnAirspaceListEnter(GetList().GetCursorIndex());
-    break;
-  }
 }
 
 void
@@ -317,8 +301,7 @@ AirspaceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   if (items.empty()) {
     assert(i == 0);
 
-    canvas.DrawText(rc.left + Layout::GetTextPadding(),
-                    rc.top + Layout::GetTextPadding(), _("No Match!"));
+    row_renderer.DrawFirstRow(canvas, rc, _("No Match!"));
     return;
   }
 
@@ -454,20 +437,21 @@ ShowAirspaceListDialog(const Airspaces &_airspaces,
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Select Airspace"));
 
-  AirspaceFilterWidget *filter_widget = new AirspaceFilterWidget(look);
+  auto filter_widget = std::make_unique<AirspaceFilterWidget>(look);
 
-  AirspaceListButtons *buttons_widget = new AirspaceListButtons(look, dialog);
+  auto list_widget = std::make_unique<AirspaceListWidget>(*filter_widget);
 
-  TwoWidgets *left_widget =
-    new TwoWidgets(filter_widget, buttons_widget, true);
+  auto buttons_widget = std::make_unique<AirspaceListButtons>(look, dialog);
 
-  AirspaceListWidget *const list_widget =
-    new AirspaceListWidget(*filter_widget);
+  filter_widget->SetListener(list_widget.get());
+  buttons_widget->SetList(list_widget.get());
 
-  filter_widget->SetListener(list_widget);
-  buttons_widget->SetList(list_widget);
+  auto left_widget = std::make_unique<TwoWidgets>(std::move(filter_widget),
+                                                  std::move(buttons_widget),
+                                                  true);
 
-  dialog.FinishPreliminary(new TwoWidgets(left_widget, list_widget, false));
+  dialog.FinishPreliminary(new TwoWidgets(std::move(left_widget),
+                                          std::move(list_widget), false));
   dialog.ShowModal();
 }
 

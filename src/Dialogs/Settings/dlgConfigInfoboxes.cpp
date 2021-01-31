@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Button.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
@@ -37,10 +37,12 @@ Copyright_License {
 #include "InfoBoxes/Content/Factory.hpp"
 #include "Look/InfoBoxLook.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/StaticArray.hxx"
+#include "util/StringAPI.hxx"
+#include "util/StaticArray.hxx"
 
 #include <cassert>
+
+using namespace UI;
 
 static InfoBoxSettings::Panel clipboard;
 static unsigned clipboard_size;
@@ -67,14 +69,10 @@ protected:
 };
 
 class InfoBoxesConfigWidget final
-  : public RowFormWidget, DataFieldListener, ActionListener {
+  : public RowFormWidget, DataFieldListener {
 
   enum Controls {
     NAME, INFOBOX, CONTENT, DESCRIPTION
-  };
-
-  enum Buttons {
-    COPY, PASTE,
   };
 
   struct Layout {
@@ -87,7 +85,7 @@ class InfoBoxesConfigWidget final
     Layout(PixelRect rc, InfoBoxSettings::Geometry geometry);
   };
 
-  ActionListener &dialog;
+  WndForm &dialog;
   const InfoBoxLook &look;
 
   InfoBoxSettings::Panel &data;
@@ -102,7 +100,7 @@ class InfoBoxesConfigWidget final
   Button copy_button, paste_button, close_button;
 
 public:
-  InfoBoxesConfigWidget(ActionListener &_dialog,
+  InfoBoxesConfigWidget(WndForm &_dialog,
                         const DialogLook &dialog_look,
                         const InfoBoxLook &_look,
                         InfoBoxSettings::Panel &_data,
@@ -212,19 +210,6 @@ private:
       RefreshEditContentDescription();
     }
   }
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case COPY:
-      OnCopy();
-      break;
-
-    case PASTE:
-      OnPaste();
-      break;
-    }
-  }
 };
 
 InfoBoxesConfigWidget::Layout::Layout(PixelRect rc,
@@ -276,7 +261,7 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
   Add(_("Content"), nullptr, dfe);
 
   ContainerWindow &form_parent = (ContainerWindow &)RowFormWidget::GetWindow();
-  AddRemaining(new WndFrame(form_parent, GetLook(), rc));
+  AddRemaining(std::make_unique<WndFrame>(form_parent, GetLook(), rc));
 
   WindowStyle button_style;
   button_style.Hide();
@@ -284,11 +269,11 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
 
   const auto &button_look = GetLook().button;
   copy_button.Create(parent, button_look, _("Copy"), layout.copy_button,
-                     button_style, *this, COPY);
+                     button_style, [this](){ OnCopy(); });
   paste_button.Create(parent, button_look, _("Paste"), layout.paste_button,
-                      button_style, *this, PASTE);
+                      button_style, [this](){ OnPaste(); });
   close_button.Create(parent, button_look, _("Close"), layout.close_button,
-                      button_style, dialog, mrOK);
+                      button_style, dialog.MakeModalResultCallback(mrOK));
 
   WindowStyle preview_style;
   preview_style.Hide();
@@ -412,7 +397,7 @@ InfoBoxPreview::OnPaint(Canvas &canvas)
 
   canvas.SelectHollowBrush();
   canvas.SelectBlackPen();
-  canvas.Rectangle(0, 0, canvas.GetWidth() - 1, canvas.GetHeight() - 1);
+  canvas.DrawRectangle(PixelRect{PixelSize{canvas.GetWidth() - 1, canvas.GetHeight() - 1}});
 
   InfoBoxFactory::Type type = parent->GetContents(i);
   const TCHAR *caption = type < InfoBoxFactory::NUM_TYPES
@@ -426,7 +411,7 @@ InfoBoxPreview::OnPaint(Canvas &canvas)
   canvas.Select(parent->GetInfoBoxLook().title_font);
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(is_current ? COLOR_WHITE : COLOR_BLACK);
-  canvas.DrawText(2, 2, caption);
+  canvas.DrawText({2, 2}, caption);
 }
 
 bool
@@ -437,14 +422,11 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
                             InfoBoxSettings::Panel &data_r,
                             bool allow_name_change)
 {
-  WidgetDialog dialog(WidgetDialog::Full{}, parent,
-                      dialog_look, nullptr);
-  InfoBoxesConfigWidget widget(dialog, dialog_look, _look,
-                               data_r, allow_name_change, geometry);
-  dialog.FinishPreliminary(&widget);
+  TWidgetDialog<InfoBoxesConfigWidget> dialog(WidgetDialog::Full{}, parent,
+                                              dialog_look, nullptr);
+  dialog.SetWidget(dialog, dialog_look, _look,
+                   data_r, allow_name_change, geometry);
 
   dialog.ShowModal();
-  dialog.StealWidget();
-
   return dialog.GetChanged();
 }

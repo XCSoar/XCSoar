@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WIDGET_HPP
 #define XCSOAR_WIDGET_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 struct PixelSize;
 struct PixelRect;
@@ -44,7 +44,7 @@ public:
    * A virtual destructor prototype that allows containers to delete
    * Widget pointers.
    */
-  virtual ~Widget();
+  virtual ~Widget() noexcept = default;
 
   /**
    * Estimate the minimum recommended size.  May return zero if the
@@ -160,8 +160,6 @@ public:
  */
 class NullWidget : public Widget {
 public:
-  virtual ~NullWidget();
-
   PixelSize GetMinimumSize() const override;
   PixelSize GetMaximumSize() const override;
   void Initialise(ContainerWindow &parent, const PixelRect &rc) override;

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -57,16 +57,15 @@ dlgStatusShowModal(int start_page)
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Status"));
 
-  auto *close_button = new ButtonWidget(look.button, _("Close"),
-                                        dialog, mrOK);
+  dialog.FinishPreliminary(std::make_unique<TabWidget>(TabWidget::Orientation::AUTO,
+                                                       std::make_unique<ButtonWidget>(look.button, _("Close"),
+                                                                                      dialog.MakeModalResultCallback(mrOK))));
+  dialog.PrepareWidget();
+  auto &widget = (TabWidget &)dialog.GetWidget();
 
-  TabWidget widget(TabWidget::Orientation::AUTO, close_button);
   widget.SetPageFlippedCallback([&dialog, &widget]() {
       SetTitle(dialog, widget);
     });
-
-  dialog.FinishPreliminary(&widget);
-  dialog.PrepareWidget();
 
   const NMEAInfo &basic = CommonInterface::Basic();
   auto nearest_waypoint = basic.location_available
@@ -86,21 +85,21 @@ dlgStatusShowModal(int start_page)
   const auto *RulesIcon = enable_icons ? &icons.hBmpTabRules : nullptr;
   const auto *TimesIcon = enable_icons ? &icons.hBmpTabTimes : nullptr;
 
-  Widget *flight_panel = new FlightStatusPanel(look,
-                                               std::move(nearest_waypoint));
-  widget.AddTab(flight_panel, _("Flight"), FlightIcon);
+  widget.AddTab(std::make_unique<FlightStatusPanel>(look,
+                                                    std::move(nearest_waypoint)),
+                _("Flight"), FlightIcon);
 
-  Widget *system_panel = new SystemStatusPanel(look);
-  widget.AddTab(system_panel, _("System"), SystemIcon);
+  widget.AddTab(std::make_unique<SystemStatusPanel>(look),
+                _("System"), SystemIcon);
 
-  Widget *task_panel = new TaskStatusPanel(look);
-  widget.AddTab(task_panel, _("Task"), TaskIcon);
+  widget.AddTab(std::make_unique<TaskStatusPanel>(look),
+                _("Task"), TaskIcon);
 
-  Widget *rules_panel = new RulesStatusPanel(look);
-  widget.AddTab(rules_panel, _("Rules"), RulesIcon);
+  widget.AddTab(std::make_unique<RulesStatusPanel>(look),
+                _("Rules"), RulesIcon);
 
-  Widget *times_panel = new TimesStatusPanel(look);
-  widget.AddTab(times_panel, _("Times"), TimesIcon);
+  widget.AddTab(std::make_unique<TimesStatusPanel>(look),
+                _("Times"), TimesIcon);
 
   /* restore previous page */
 
@@ -113,7 +112,6 @@ dlgStatusShowModal(int start_page)
   SetTitle(dialog, widget);
 
   dialog.ShowModal();
-  dialog.StealWidget();
 
   /* save page number for next time this dialog is opened */
   status_page = widget.GetCurrentIndex();

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,15 +22,14 @@ Copyright_License {
 */
 
 #include "DigitEntry.hpp"
-#include "ActionListener.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Font.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Point.hpp"
-#include "Event/KeyCode.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/dim/Rect.hpp"
+#include "ui/event/KeyCode.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Look/DialogLook.hpp"
 #include "Units/Descriptor.hpp"
-#include "Time/RoughTime.hpp"
+#include "time/RoughTime.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Util.hpp"
 #include "Renderer/SymbolRenderer.hpp"
@@ -42,8 +41,7 @@ Copyright_License {
 
 DigitEntry::DigitEntry(const DialogLook &_look)
   :look(_look),
-   button_renderer(look.button),
-   action_listener(nullptr)
+   button_renderer(look.button)
 {
 }
 
@@ -248,18 +246,18 @@ DigitEntry::CalculateLayout()
   const unsigned min_value_height = control_height * 3 / 2;
 
   PixelSize digit_size = look.text_font.TextSize(_T("8"));
-  digit_size.cy += 2 * padding;
-  if (digit_size.cy < (int)min_value_height)
-    digit_size.cy = min_value_height;
+  digit_size.height += 2 * padding;
+  if (digit_size.height < min_value_height)
+    digit_size.height = min_value_height;
 
   top = control_height;
-  bottom = top + digit_size.cy;
+  bottom = top + digit_size.height;
 
   unsigned last_right = 0;
   for (unsigned i = 0; i < length; ++i) {
     Column &digit = columns[i];
 
-    unsigned value_width = digit.GetWidth() * digit_size.cx;
+    unsigned value_width = digit.GetWidth() * digit_size.width;
     value_width += 2 * padding;
     if (value_width < control_height)
       value_width = control_height;
@@ -909,8 +907,8 @@ DigitEntry::OnKeyDown(unsigned key_code)
     return true;
 
   case KEY_RETURN:
-    if (action_listener != nullptr) {
-      action_listener->OnAction(action_id);
+    if (callback) {
+      callback();
       return true;
     }
 
@@ -1041,7 +1039,7 @@ DigitEntry::OnPaint(Canvas &canvas)
 
     const int x = (c.left + c.right - canvas.CalcTextWidth(text)) / 2;
 
-    canvas.DrawOpaqueText(x, y, rc, text);
+    canvas.DrawOpaqueText({x, y}, rc, text);
   }
 
   canvas.SetBackgroundTransparent();

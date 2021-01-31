@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "HorizonRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/HorizonLook.hpp"
 #include "NMEA/Attitude.hpp"
 #include "Math/Util.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 #include <algorithm>
 
@@ -80,14 +80,14 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   // draw aircraft symbol
   canvas.Select(look.aircraft_pen);
-  canvas.DrawLine(center.x + radius / 2, center.y, center.x - radius / 2, center.y);
-  canvas.DrawLine(center.x, center.y - radius / 4, center.x, center.y);
+  canvas.DrawLine({center.x + radius / 2, center.y}, {center.x - radius / 2, center.y});
+  canvas.DrawLine({center.x, center.y - radius / 4}, {center.x, center.y});
 
   // draw 45 degree dash marks
   const int rr2p = uround(radius * M_SQRT1_2) + Layout::Scale(1);
   const int rr2n = rr2p - Layout::Scale(2);
-  canvas.DrawLine(center.x + rr2p, center.y - rr2p,
-              center.x + rr2n, center.y - rr2n);
-  canvas.DrawLine(center.x - rr2p, center.y - rr2p,
-              center.x - rr2n, center.y - rr2n);
+  canvas.DrawLine({center.x + rr2p, center.y - rr2p},
+                  {center.x + rr2n, center.y - rr2n});
+  canvas.DrawLine({center.x - rr2p, center.y - rr2p},
+                  {center.x - rr2n, center.y - rr2n});
 }

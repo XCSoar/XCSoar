@@ -26,7 +26,7 @@ while (<>) {
     }
 }
 
-print "#include \"Util/ConstBuffer.hxx\"\n";
+print "#include \"util/ConstBuffer.hxx\"\n";
 print "#include <tchar.h>\n";
 
 print "static constexpr struct {\n";

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,15 +28,15 @@ Copyright_License {
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Math/FastMath.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 #include "Interface.hpp"
 #include "Pan.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 #include "Topography/Thread.hpp"
 
 #ifdef USE_X11
-#include "Event/Globals.hpp"
-#include "Event/Queue.hpp"
+#include "ui/event/Globals.hpp"
+#include "ui/event/Queue.hpp"
 #endif
 
 #ifdef ENABLE_SDL
@@ -132,7 +132,7 @@ IsCtrlKeyPressed()
 #elif defined(USE_WINUSER)
   return GetKeyState(VK_CONTROL) & 0x8000;
 #elif defined(USE_X11)
-  return event_queue->WasCtrlClick();
+  return UI::event_queue->WasCtrlClick();
 #else
   return false;
 #endif

@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -88,14 +88,12 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
   if (IsLoggerActive() || gps_info.gps.replay)
     return;
 
-  OrderedTask* task = protected_task_manager != nullptr
+  auto task = protected_task_manager != nullptr
     ? protected_task_manager->TaskClone()
     : nullptr;
-  const Declaration decl(settings.logger, settings.plane, task);
+  const Declaration decl(settings.logger, settings.plane, task.get());
 
   if (task) {
-    delete task;
-
     if (!noAsk) {
       TCHAR TaskMessage[1024];
       _tcscpy(TaskMessage, _T("Start Logger With Declaration\r\n"));

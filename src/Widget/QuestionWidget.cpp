@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,11 +26,10 @@ Copyright_License {
 #include "TextWidget.hpp"
 #include "Form/ButtonPanel.hpp"
 
-QuestionWidget::QuestionWidget(const TCHAR *_message,
-                               ActionListener &_listener)
-  :SolidWidget(new ButtonPanelWidget(new TextWidget(),
-                                     ButtonPanelWidget::Alignment::BOTTOM)),
-   message(_message), listener(_listener) {}
+QuestionWidget::QuestionWidget(const TCHAR *_message) noexcept
+  :SolidWidget(std::make_unique<ButtonPanelWidget>(std::make_unique<TextWidget>(),
+                                                   ButtonPanelWidget::Alignment::BOTTOM)),
+   message(_message) {}
 
 void
 QuestionWidget::SetMessage(const TCHAR *_message)
@@ -52,7 +51,7 @@ QuestionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   ButtonPanel &panel = bpw.GetButtonPanel();
 
   for (auto button : buttons)
-    panel.Add(button.caption, listener, button.id);
+    panel.Add(button.caption, button.callback);
 }
 
 

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,10 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_POPUP_MESSAGE_H
 #define XCSOAR_POPUP_MESSAGE_H
 
-#include "Screen/PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 #include "Renderer/TextRenderer.hpp"
-#include "Thread/Mutex.hxx"
-#include "Util/StaticString.hxx"
+#include "thread/Mutex.hxx"
+#include "util/StaticString.hxx"
 
 #include <chrono>
 
@@ -35,7 +35,7 @@ Copyright_License {
 
 struct UISettings;
 struct DialogLook;
-class SingleWindow;
+namespace UI { class SingleWindow; }
 
 /**
  * - Single window, created in GUI thread.
@@ -108,7 +108,7 @@ private:
                   std::chrono::steady_clock::time_point now) noexcept;
   };
 
-  SingleWindow &parent;
+  UI::SingleWindow &parent;
   const DialogLook &look;
 
   PixelRect rc; // maximum message size
@@ -126,7 +126,7 @@ private:
   bool enable_sound;
 
 public:
-  PopupMessage(SingleWindow &_parent, const DialogLook &_look,
+  PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
                const UISettings &settings);
 
   void Create(const PixelRect _rc);

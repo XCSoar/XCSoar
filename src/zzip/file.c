@@ -509,23 +509,30 @@ zzip_pread_fallback(ZZIP_FILE *file, void *ptr, zzip_size_t size,
     return zzip_read(file, ptr, size);
 }
 
+#ifdef __linux__
+#define ZZIP_HAVE_PREAD
+#endif
+
 zzip_size_t
 zzip_pread(ZZIP_FILE *file, void *ptr, zzip_size_t size, zzip_off_t offset)
 {
-   if (file->dir == NULL) {
-#ifdef __linux__
-       return pread(file->fd, ptr, size, offset);
-#else
-       return zzip_pread_fallback(file, ptr, size, offset);
+#ifdef ZZIP_HAVE_PREAD
+    if (file->dir == NULL) {
+        /* reading from a regular file */
+        return pread(file->fd, ptr, size, offset);
+    } else if (file->method == 0) {
+        /* uncompressed: can read directly from the ZIP file using
+           pread() */
+        offset += file->dataoffset;
+        return pread(file->dir->fd, ptr, size, offset);
+    } else {
 #endif
-#ifdef __linux__
-   } else if (file->method == 0) {
-       offset += file->dataoffset;
-       return pread(file->dir->fd, ptr, size, offset);
+        /* compressed (or no pread() system call): fall back to
+           zzip_seek() + zzip_read() */
+        return zzip_pread_fallback(file, ptr, size, offset);
+#ifdef ZZIP_HAVE_PREAD
+    }
 #endif
-   } else {
-       return zzip_pread_fallback(file, ptr, size, offset);
-   }
 }
 
 /** => zzip_read

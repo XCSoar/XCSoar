@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "ViewImageWidget.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Bitmap.hpp"
-#include "Screen/PaintWindow.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Bitmap.hpp"
+#include "ui/window/PaintWindow.hpp"
 
 class ViewImageWindow final : public PaintWindow {
   const Bitmap *bitmap;
@@ -56,15 +56,9 @@ ViewImageWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   WindowStyle hidden;
   hidden.Hide();
 
-  auto *w = new ViewImageWindow(bitmap);
+  auto w = std::make_unique<ViewImageWindow>(bitmap);
   w->Create(parent, rc, hidden);
-  SetWindow(w);
-}
-
-void
-ViewImageWidget::Unprepare()
-{
-  DeleteWindow();
+  SetWindow(std::move(w));
 }
 
 void
@@ -79,15 +73,12 @@ ViewImageWindow::OnPaint(Canvas &canvas)
   const PixelRect rc = GetClientRect();
   const PixelSize window_size = rc.GetSize();
 
-  PixelSize fit_size(window_size.cx,
-                     window_size.cx * bitmap_size.cy / bitmap_size.cx);
-  if (fit_size.cy > window_size.cy) {
-    fit_size.cy = window_size.cy;
-    fit_size.cx = window_size.cy * bitmap_size.cx / bitmap_size.cy;
+  PixelSize fit_size(window_size.width,
+                     window_size.width * bitmap_size.height / bitmap_size.width);
+  if (fit_size.height > window_size.height) {
+    fit_size.height = window_size.height;
+    fit_size.width = window_size.height * bitmap_size.width / bitmap_size.height;
   }
 
-  canvas.Stretch((rc.left + rc.right - fit_size.cx) / 2,
-                 (rc.top + rc.bottom - fit_size.cy) / 2,
-                 fit_size.cx, fit_size.cy,
-                 *bitmap);
+  canvas.Stretch(rc.CenteredTopLeft(fit_size), fit_size, *bitmap);
 }

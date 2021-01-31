@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,9 +26,9 @@ Copyright_License {
 #include "ParsedMETAR.hpp"
 #include "Units/System.hpp"
 #include "Atmosphere/Temperature.hpp"
-#include "Util/CharUtil.hxx"
-#include "Util/StringAPI.hxx"
-#include "Util/NumberParser.hpp"
+#include "util/CharUtil.hxx"
+#include "util/StringAPI.hxx"
+#include "util/NumberParser.hpp"
 
 #include <tchar.h>
 #include <cctype>

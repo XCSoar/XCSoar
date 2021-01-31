@@ -2,7 +2,6 @@ JASSRC = $(SRC)/Terrain/jasper
 JASPER_SOURCES = \
 	$(JASSRC)/base/jas_malloc.c \
 	$(JASSRC)/base/jas_seq.c 	$(JASSRC)/base/jas_stream.c \
-	$(JASSRC)/base/jas_string.c 	$(JASSRC)/base/jas_tvp.c \
 	$(JASSRC)/jp2/jp2_cod.c \
 	$(JASSRC)/jpc/jpc_bs.c \
 	$(JASSRC)/jpc/jpc_cs.c 		$(JASSRC)/jpc/jpc_dec.c \
@@ -18,9 +17,7 @@ JASPER_CFLAGS_INTERNAL = -Wno-type-limits
 JASPER_CFLAGS_INTERNAL += -Wno-shift-negative-value -Wno-sign-compare -Wno-tautological-compare
 
 ifneq ($(CLANG),y)
-ifneq ($(TARGET),CYGWIN)
 JASPER_CFLAGS_INTERNAL += -Wno-unused-but-set-parameter -Wno-unused-but-set-variable
-endif
 endif
 
 JASPER_CPPFLAGS = -I$(JASSRC)/..

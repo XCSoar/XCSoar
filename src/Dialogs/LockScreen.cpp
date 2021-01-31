@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "UIGlobals.hpp"
 
 #include <cassert>
@@ -34,7 +34,7 @@ Copyright_License {
 void
 ShowLockBox()
 {
-  SingleWindow &main_window = UIGlobals::GetMainWindow();
+  auto &main_window = UIGlobals::GetMainWindow();
 
   const unsigned button_height = Layout::GetMinimumControlHeight();
   const unsigned button_width = button_height;
@@ -47,8 +47,8 @@ ShowLockBox()
   const PixelSize root_size = main_window.GetSize();
   
   // Position dialog where it shouldn't cover anything important on the screen
-  const int dialog_x = root_size.cx * 0.25 - button_width;
-  const int dialog_y = root_size.cy * 0.75 - button_height;
+  const int dialog_x = root_size.width * 0.25 - button_width;
+  const int dialog_y = root_size.height * 0.75 - button_height;
 
   PixelRect form_rc;
   form_rc.left = dialog_x;
@@ -64,7 +64,8 @@ ShowLockBox()
 
   WindowStyle button_style;
   
-  const Button button(client_area, dialog_look.button, _T("U"), button_rc, button_style, wf, 3);
+  const Button button(client_area, dialog_look.button, _T("U"), button_rc, button_style,
+                      [&wf](){ wf.SetModalResult(mrCancel); });
 
   wf.ShowModal();
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,8 @@ Copyright_License {
 #include "Time.hpp"
 #include "ComboList.hpp"
 #include "Formatter/TimeFormatter.hpp"
-#include "Util/StringFormat.hpp"
-#include "Util/NumberParser.hpp"
+#include "util/StringFormat.hpp"
+#include "util/NumberParser.hpp"
 
 static bool data_field_key_up = false;
 

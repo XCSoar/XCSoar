@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,19 +26,18 @@ Copyright_License {
 
 #include "Main.hpp"
 #include "Math/Angle.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Screen/BufferCanvas.hpp"
+#include "ui/window/SingleWindow.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 #include "Form/Button.hpp"
-#include "Form/ActionListener.hpp"
 #include "Renderer/ButtonRenderer.hpp"
 
 #ifndef ENABLE_OPENGL
-#include "Screen/WindowCanvas.hpp"
+#include "ui/canvas/WindowCanvas.hpp"
 #endif
 
 #include <algorithm>
 
-class TestWindow final : public SingleWindow, ActionListener {
+class TestWindow final : public UI::SingleWindow {
 #ifndef ENABLE_OPENGL
   Button buffer_button;
 #endif
@@ -50,13 +49,6 @@ class TestWindow final : public SingleWindow, ActionListener {
 #endif
 
   ButtonFrameRenderer button_renderer;
-
-  enum Buttons {
-#ifndef ENABLE_OPENGL
-    BUFFER,
-#endif
-    CLOSE
-  };
 
 public:
   TestWindow():page(0)
@@ -80,8 +72,16 @@ public:
     button_rc.right = button_rc.left + 65;
 
     buffer_button.Create(*this, *button_look, _T("Buffer"), button_rc,
-                        WindowStyle(),
-                         *this, BUFFER);
+                         WindowStyle(),
+                         [this](){
+                           buffered = !buffered;
+                           if (buffered) {
+                             WindowCanvas canvas(*this);
+                             buffer.Create(canvas, canvas.GetSize());
+                           } else
+                             buffer.Destroy();
+                           update();
+                         });
 #endif
 
     button_rc.right = rc.right - 5;
@@ -89,7 +89,7 @@ public:
 
     close_button.Create(*this, *button_look, _T("Close"), button_rc,
                         WindowStyle(),
-                        *this, CLOSE);
+                        [this](){ Close(); });
   }
 
 private:
@@ -101,18 +101,16 @@ private:
 
     const PixelRect rc = GetClientRect();
     const int width = rc.GetWidth(), height = rc.GetHeight();
-    const int hmiddle = (rc.left + rc.right) / 2;
-    const int vmiddle = (rc.top + rc.bottom) / 2;
-    const PixelPoint center(hmiddle, vmiddle);
+    const PixelPoint center = rc.GetCenter();
 
     BulkPixelPoint p1[3] = {
-      { -100, vmiddle },
+      { -100, center.y },
       { (width * 2) / 3, -100 },
-      { hmiddle, height * 2 },
+      { center.x, height * 2 },
     };
 
     BulkPixelPoint p2[3] = {
-      { -2000, vmiddle },
+      { -2000, center.y },
       { width * 10, -3000 },
       { width * 5, 3000 },
     };
@@ -136,7 +134,7 @@ private:
       break;
 
     case 2:
-      canvas.DrawCircle(hmiddle, vmiddle,
+      canvas.DrawCircle(center,
                         std::min(width, height) / 3);
       label = _T("circle");
       break;
@@ -144,10 +142,10 @@ private:
     case 3:
     case 4: {
       PixelRect rc;
-      rc.left = hmiddle - 50;
-      rc.top = vmiddle - 20;
-      rc.right = hmiddle + 50;
-      rc.bottom = vmiddle + 20;
+      rc.left = center.x - 50;
+      rc.top = center.y - 20;
+      rc.right = center.x + 50;
+      rc.bottom = center.y + 20;
       button_renderer.DrawButton(canvas, rc, page == 4, page == 4);
       label = page == 4
         ? _T("button down=true") : _T("button down=false");
@@ -170,9 +168,9 @@ private:
     canvas.SetTextColor(Color(0, 0, 128));
     canvas.SetBackgroundTransparent();
     canvas.Select(normal_font);
-    canvas.DrawText(5, 5, label);
+    canvas.DrawText({5, 5}, label);
 #ifndef ENABLE_OPENGL
-    canvas.DrawText(5, 25,
+    canvas.DrawText({5, 25},
                     buffered ? _T("buffered") : _T("not buffered"));
 #endif
   }
@@ -212,27 +210,6 @@ protected:
 #endif
 
     SingleWindow::OnPaint(canvas);
-  }
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case CLOSE:
-      Close();
-      break;
-
-#ifndef ENABLE_OPENGL
-    case BUFFER:
-      buffered = !buffered;
-      if (buffered) {
-        WindowCanvas canvas(*this);
-        buffer.Create(canvas, canvas.GetSize());
-      } else
-        buffer.Destroy();
-      update();
-      break;
-#endif
-    }
   }
 };
 

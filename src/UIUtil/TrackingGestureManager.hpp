@@ -31,8 +31,7 @@
 #define TRACKING_GESTURE_MANAGER_HPP
 
 #include "GestureManager.hpp"
-
-#include "Screen/Point.hpp"
+#include "ui/dim/Point.hpp"
 
 #include <vector>
 

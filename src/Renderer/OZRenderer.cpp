@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ Copyright_License {
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Projection/Projection.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Look/TaskLook.hpp"
 #include "Look/AirspaceLook.hpp"
 
@@ -126,7 +126,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
 
     if (layer != LAYER_INACTIVE) {
       auto p_center = projection.GeoToScreen(oz.GetReference());
-      canvas.DrawCircle(p_center.x, p_center.y,
+      canvas.DrawCircle(p_center,
                     projection.GeoToScreenDistance(oz.GetRadius()));
     }
 

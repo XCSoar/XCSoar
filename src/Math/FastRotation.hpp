@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MATH_FASTROTATION_HPP
 #define XCSOAR_MATH_FASTROTATION_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 #include "Math/Angle.hpp"
 #include "Point2D.hpp"
 
@@ -68,8 +68,9 @@ public:
   gcc_pure
   Point Rotate(double x, double y) const;
 
+  template<typename P, typename=std::enable_if_t<std::is_base_of_v<Point, P>>>
   gcc_pure
-  Point Rotate(Point p) const {
+  P Rotate(P p) const noexcept {
     return Rotate(p.x, p.y);
   }
 };
@@ -111,8 +112,9 @@ public:
   gcc_pure
   Point Rotate(int x, int y) const;
 
+  template<typename P, typename=std::enable_if_t<std::is_base_of_v<Point, P>>>
   gcc_pure
-  Point Rotate(Point p) const {
+  P Rotate(P p) const noexcept {
     return Rotate(p.x, p.y);
   }
 };

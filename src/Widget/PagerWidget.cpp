@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,6 +25,11 @@ Copyright_License {
 
 #include <cassert>
 
+PagerWidget::Child::~Child() noexcept
+{
+  assert(!prepared);
+}
+
 PagerWidget::~PagerWidget()
 {
   assert(!initialised || !prepared);
@@ -33,7 +38,7 @@ PagerWidget::~PagerWidget()
 }
 
 void
-PagerWidget::Add(Widget *w)
+PagerWidget::Add(std::unique_ptr<Widget> w) noexcept
 {
   const bool was_empty = children.empty();
   if (was_empty) {
@@ -42,17 +47,17 @@ PagerWidget::Add(Widget *w)
     assert(current < children.size());
   }
 
-  children.append(w);
+  auto &child = children.emplace_back(std::move(w));
 
   if (initialised) {
-    w->Initialise(*parent, position);
+    child.widget->Initialise(*parent, position);
 
     if (prepared) {
-      children.back().prepared = true;
-      w->Prepare(*parent, position);
+      child.prepared = true;
+      child.widget->Prepare(*parent, position);
 
       if (visible && was_empty)
-        w->Show(position);
+        child.widget->Show(position);
     }
   }
 }
@@ -61,12 +66,6 @@ void
 PagerWidget::Clear()
 {
   assert(!initialised || !prepared);
-
-  for (auto &i : children) {
-    assert(!i.prepared);
-
-    delete i.widget;
-  }
 
   children.clear();
 }
@@ -186,10 +185,10 @@ PagerWidget::GetMinimumSize() const
 
   for (const auto &i : children) {
     PixelSize size = i.widget->GetMinimumSize();
-    if (size.cx > result.cx)
-      result.cx = size.cx;
-    if (size.cy > result.cy)
-      result.cy = size.cy;
+    if (size.width > result.width)
+      result.width = size.width;
+    if (size.height > result.height)
+      result.height = size.height;
   }
 
   return result;
@@ -204,10 +203,10 @@ PagerWidget::GetMaximumSize() const
 
   for (const auto &i : children) {
     PixelSize size = i.widget->GetMaximumSize();
-    if (size.cx > result.cx)
-      result.cx = size.cx;
-    if (size.cy > result.cy)
-      result.cy = size.cy;
+    if (size.width > result.width)
+      result.width = size.width;
+    if (size.height > result.height)
+      result.height = size.height;
   }
 
   return result;

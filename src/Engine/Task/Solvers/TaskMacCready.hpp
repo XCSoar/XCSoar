@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,8 +22,8 @@
 #ifndef TASK_MACCREADY_HPP
 #define TASK_MACCREADY_HPP
 
-#include "Util/NonCopyable.hpp"
-#include "Util/StaticArray.hxx"
+#include "util/NonCopyable.hpp"
+#include "util/StaticArray.hxx"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 

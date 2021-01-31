@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "AirspaceListRenderer.hpp"
 #include "TwoTextRowsRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
@@ -31,7 +31,7 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Geo/GeoVector.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 static void
 Draw(Canvas &canvas, PixelRect rc,

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,17 +24,16 @@ Copyright_License {
 #ifndef XCSOAR_FORM_FORM_HPP
 #define XCSOAR_FORM_FORM_HPP
 
-#include "ActionListener.hpp"
-#include "Screen/ContainerWindow.hpp"
-#include "Screen/SolidContainerWindow.hpp"
-#include "Util/tstring.hpp"
+#include "ui/window/ContainerWindow.hpp"
+#include "ui/window/SolidContainerWindow.hpp"
+#include "util/tstring.hpp"
 
 #include <functional>
 
 #include <tchar.h>
 
 struct DialogLook;
-class SingleWindow;
+namespace UI { class SingleWindow; }
 class PeriodClock;
 
 enum ModalResult {
@@ -45,8 +44,7 @@ enum ModalResult {
 /**
  * A modal dialog.
  */
-class WndForm : public ContainerWindow,
-                public ActionListener
+class WndForm : public ContainerWindow
 {
 public:
   typedef std::function<bool(unsigned)> KeyDownFunction;
@@ -95,7 +93,7 @@ public:
    *
    * @param caption titlebar text of the dialog
    */
-  WndForm(SingleWindow &_main_window, const DialogLook &_look,
+  WndForm(UI::SingleWindow &_main_window, const DialogLook &_look,
           const PixelRect &rc,
           const TCHAR *caption=nullptr,
           const WindowStyle style = WindowStyle());
@@ -103,18 +101,18 @@ public:
   /**
    * Construct a full-screen dialog.
    */
-  WndForm(SingleWindow &_main_window, const DialogLook &_look,
+  WndForm(UI::SingleWindow &_main_window, const DialogLook &_look,
           const TCHAR *caption=nullptr,
           const WindowStyle style={}) noexcept;
 
-  void Create(SingleWindow &main_window, const PixelRect &rc,
+  void Create(UI::SingleWindow &main_window, const PixelRect &rc,
               const TCHAR *caption=nullptr,
               const WindowStyle style=WindowStyle());
 
   /**
    * Create a full-screen dialog.
    */
-  void Create(SingleWindow &main_window,
+  void Create(UI::SingleWindow &main_window,
               const TCHAR *caption=nullptr,
               const WindowStyle style=WindowStyle());
 
@@ -127,7 +125,7 @@ public:
    * when they want to open another dialog.
    */
   gcc_pure
-  SingleWindow &GetMainWindow();
+  UI::SingleWindow &GetMainWindow();
 
   const DialogLook &GetLook() const {
     return look;
@@ -137,21 +135,28 @@ public:
     return client_area;
   }
 
-  unsigned GetTitleHeight() const {
-    return title_rect.GetHeight();
+  /**
+   * Calculate the dialog size from the desired effective client area
+   * size.
+   */
+  PixelSize ClientAreaToDialogSize(PixelSize s) const noexcept {
+    /* the "2" is the 1 pixel border at each side */
+    return PixelSize(s.width + 2,
+                     s.height + title_rect.GetHeight() + 2);
   }
 
   void SetForceOpen(bool _force) {
     force = _force;
   }
 
-  void SetModalResult(int Value) {
+  virtual void SetModalResult(int Value) noexcept {
     modal_result = Value;
   }
 
-  /** inherited from ActionListener */
-  void OnAction(int id) noexcept override {
-    SetModalResult(id);
+  auto MakeModalResultCallback(int value) noexcept {
+    return [this, value](){
+      SetModalResult(value);
+    };
   }
 
   /**

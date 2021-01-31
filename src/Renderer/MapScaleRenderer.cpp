@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,11 +22,11 @@
 */
 
 #include "MapScaleRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Look/OverlayLook.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 #include "Formatter/UserUnits.hpp"
 
 void
@@ -48,28 +48,26 @@ RenderMapScale(Canvas &canvas,
   PixelSize text_size = canvas.CalcTextSize(buffer);
 
   // check if window too small to bother drawing
-  if ((unsigned)text_size.cx*3 > rc.GetWidth())
+  if (text_size.width * 3 > rc.GetWidth())
     return;
 
   const int text_padding_x = Layout::GetTextPadding();
-  const unsigned height = font.GetCapitalHeight()
+  const int height = font.GetCapitalHeight()
       + Layout::GetTextPadding();
 
   int x = rc.left;
   look.map_scale_left_icon.Draw(canvas, PixelPoint(x, rc.bottom - height));
 
-  x += look.map_scale_left_icon.GetSize().cx;
-  canvas.DrawFilledRectangle(x, rc.bottom - height,
-                             x + 2 * text_padding_x + text_size.cx,
-                             rc.bottom, COLOR_WHITE);
+  x += look.map_scale_left_icon.GetSize().width;
+  canvas.DrawFilledRectangle({{x, rc.bottom - height},
+                              {2 * text_padding_x + (int)text_size.width, height}}, COLOR_WHITE);
 
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_BLACK);
   x += text_padding_x;
-  canvas.DrawText(x,
-                  rc.bottom - font.GetAscentHeight() - Layout::Scale(1),
+  canvas.DrawText({x, rc.bottom - (int)(font.GetAscentHeight() + Layout::Scale(1u))},
                   buffer);
 
-  x += text_padding_x + text_size.cx;
+  x += text_padding_x + text_size.width;
   look.map_scale_right_icon.Draw(canvas, PixelPoint(x, rc.bottom - height));
 }

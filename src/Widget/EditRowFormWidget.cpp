@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,17 +33,17 @@ Copyright_License {
 #include "Form/DataField/Password.hpp"
 #include "Form/DataField/Time.hpp"
 #include "Form/DataField/RoughTime.hpp"
-#include "Time/RoughTime.hpp"
+#include "time/RoughTime.hpp"
 #include "Language/Language.hpp"
 #include "Math/Angle.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/TruncateString.hpp"
+#include "util/StringAPI.hxx"
+#include "util/TruncateString.hpp"
 
 #include <cassert>
 
-WndProperty *
+std::unique_ptr<WndProperty>
 RowFormWidget::CreateEdit(const TCHAR *label, const TCHAR *help,
-                          bool read_only)
+                          bool read_only) noexcept
 {
   assert(IsDefined());
 
@@ -55,10 +55,10 @@ RowFormWidget::CreateEdit(const TCHAR *label, const TCHAR *help,
     style.TabStop();
 
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
-  WndProperty *edit =
-    new WndProperty(panel, look, label,
-                    edit_rc, (*label == '\0') ? 0 : 100,
-                    style);
+  auto edit =
+    std::make_unique<WndProperty>(panel, look, label,
+                                  edit_rc, (*label == '\0') ? 0 : 100,
+                                  style);
   edit->SetReadOnly(read_only);
 
   if (help != nullptr)
@@ -70,9 +70,8 @@ RowFormWidget::CreateEdit(const TCHAR *label, const TCHAR *help,
 WndProperty *
 RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
 {
-  WndProperty *edit = CreateEdit(label, help, read_only);
-  Add(Row::Type::EDIT, edit);
-  return edit;
+  return (WndProperty *)&Add(Row::Type::EDIT,
+                             CreateEdit(label, help, read_only));
 }
 
 void

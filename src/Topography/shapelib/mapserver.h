@@ -30,7 +30,7 @@
 #define MAP_H
 
 #include "mapserver-config.h"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <stddef.h>
 #include <stdlib.h>

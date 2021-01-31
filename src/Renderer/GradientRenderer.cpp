@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "GradientRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 #if defined(EYE_CANDY) && defined(ENABLE_OPENGL)
 
-#include "Screen/OpenGL/VertexPointer.hpp"
-#include "Util/Macros.hpp"
+#include "ui/canvas/opengl/VertexPointer.hpp"
+#include "util/Macros.hpp"
 
 #endif
 

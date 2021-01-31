@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,10 +27,10 @@ Copyright_License {
 #include "Widget/LargeTextWidget.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/StringCompare.hxx"
-#include "IO/DataFile.hpp"
-#include "IO/LineReader.hpp"
+#include "util/StaticString.hxx"
+#include "util/StringCompare.hxx"
+#include "io/DataFile.hpp"
+#include "io/LineReader.hpp"
 #include "Language/Language.hpp"
 
 #define XCSCHKLIST  "xcsoar-checklist.txt"
@@ -141,19 +141,19 @@ dlgChecklistShowModal()
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Checklist"));
 
-  ArrowPagerWidget widget(dialog, look.button);
+  auto pager = std::make_unique<ArrowPagerWidget>(look.button,
+                                                   dialog.MakeModalResultCallback(mrOK));
   for (int i = 0; i < nLists; ++i)
-    widget.Add(new LargeTextWidget(look, ChecklistText[i]));
-  widget.SetCurrent(current_page);
+    pager->Add(std::make_unique<LargeTextWidget>(look, ChecklistText[i]));
+  pager->SetCurrent(current_page);
+  pager->SetPageFlippedCallback([&dialog, &pager=*pager](){
+    UpdateCaption(dialog, pager.GetCurrentIndex());
+  });
 
-  dialog.FinishPreliminary(&widget);
+  UpdateCaption(dialog, pager->GetCurrentIndex());
 
-  widget.SetPageFlippedCallback([&dialog, &widget](){
-      UpdateCaption(dialog, widget.GetCurrentIndex());
-    });
-  UpdateCaption(dialog, widget.GetCurrentIndex());
-
+  dialog.FinishPreliminary(std::move(pager));
   dialog.ShowModal();
-  dialog.StealWidget();
-  current_page = widget.GetCurrentIndex();
+
+  current_page = ((ArrowPagerWidget &)dialog.GetWidget()).GetCurrentIndex();
 }

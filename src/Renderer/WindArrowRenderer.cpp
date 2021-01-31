@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,18 +24,18 @@ Copyright_License {
 #include "WindArrowRenderer.hpp"
 #include "TextInBox.hpp"
 #include "Look/WindArrowLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Util.hpp"
 #include "Math/Screen.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units/Units.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <tchar.h>
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 void
@@ -110,7 +110,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   style.vertical_position = TextInBoxMode::VerticalPosition::CENTERED;
   style.shape = LabelShape::OUTLINED;
 
-  TextInBox(canvas, buffer, label[0].x, label[0].y, style, rc);
+  TextInBox(canvas, buffer, label[0], style, rc);
 }
 
 void

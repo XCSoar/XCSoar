@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,11 +32,11 @@ Copyright_License {
 #include "Tracking/SkyLines/Handler.hpp"
 #include "Tracking/SkyLines/Glue.hpp"
 #include "Tracking/SkyLines/Data.hpp"
-#include "Thread/StandbyThread.hpp"
+#include "thread/StandbyThread.hpp"
 #include "Tracking/LiveTrack24.hpp"
-#include "Time/PeriodClock.hpp"
+#include "time/PeriodClock.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include "time/BrokenDateTime.hpp"
 
 struct MoreData;
 struct DerivedInfo;
@@ -83,7 +83,7 @@ class TrackingGlue final
   bool flying = false, last_flying;
 
 public:
-  explicit TrackingGlue(boost::asio::io_context &io_context);
+  explicit TrackingGlue(EventLoop &event_loop);
 
   void StopAsync();
   void WaitStopped();

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -149,14 +149,13 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   if (WaypointFileChanged && protected_task_manager != nullptr) {
     ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
-    OrderedTask *task = lease->Clone(CommonInterface::GetComputerSettings().task);
+    auto task = lease->Clone(CommonInterface::GetComputerSettings().task);
     if (task) {
       // this must be done in thread lock because it potentially changes the
       // waypoints database
       task->CheckDuplicateWaypoints(way_points);
 
       /* XXX shall this task be committed if it has been modified? */
-      delete task;
 
       way_points.Optimise();
     }

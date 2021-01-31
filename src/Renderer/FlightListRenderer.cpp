@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "FlightListRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 void
 FlightListRenderer::AddFlight(const FlightInfo &_flight)
@@ -43,7 +43,7 @@ FlightListRenderer::Draw(Canvas &canvas, PixelRect rc)
     auto center = rc.GetCenter();
     const TCHAR *text = _T("No flights");
     PixelSize size = canvas.CalcTextSize(text);
-    canvas.DrawText(center.x - size.cx / 2, center.y - size.cy / 2, text);
+    canvas.DrawText(center - size / 2u, text);
     return;
   }
 
@@ -72,34 +72,34 @@ FlightListRenderer::Draw(Canvas &canvas, PixelRect rc)
     if (flight.date.IsPlausible()) {
       buffer.UnsafeFormat(_T("%04u-%02u-%02u  "), flight.date.year,
                           flight.date.month, flight.date.day);
-      canvas.DrawText(x, y, buffer);
+      canvas.DrawText({x, y}, buffer);
     } else
-      canvas.DrawText(x, y, _T("____-__-__"));
+      canvas.DrawText({x, y}, _T("____-__-__"));
     x += date_width;
 
     if (flight.start_time.IsPlausible()) {
       buffer.UnsafeFormat(_T("%02u:%02u  "),
                           flight.start_time.hour, flight.start_time.minute);
-      canvas.DrawText(x, y, buffer);
+      canvas.DrawText({x, y}, buffer);
     } else
-      canvas.DrawText(x, y, _T("--:--"));
+      canvas.DrawText({x, y}, _T("--:--"));
     x += time_width;
 
     if (flight.end_time.IsPlausible()) {
       buffer.UnsafeFormat(_T("%02u:%02u"),
                           flight.end_time.hour, flight.end_time.minute);
-      canvas.DrawText(x, y, buffer);
+      canvas.DrawText({x, y}, buffer);
     } else
-      canvas.DrawText(x, y, _T("--:--"));
+      canvas.DrawText({x, y}, _T("--:--"));
     x += time_width;
 
     if (flight.Duration() >= 0) {
       BrokenTime duration = BrokenTime::FromSecondOfDay(flight.Duration());
       buffer.UnsafeFormat(_T("%02u:%02u"),
                           duration.hour, duration.minute);
-      canvas.DrawText(x, y, buffer);
+      canvas.DrawText({x, y}, buffer);
     } else
-      canvas.DrawText(x, y, _T("--:--"));
+      canvas.DrawText({x, y}, _T("--:--"));
     x += time_width;
 
     y -= row_height;
@@ -108,13 +108,13 @@ FlightListRenderer::Draw(Canvas &canvas, PixelRect rc)
 
   {
     int x = rc.left + padding;
-    canvas.DrawText(x, y, _T("Date"));
+    canvas.DrawText({x, y}, _T("Date"));
     x += date_width;
 
-    canvas.DrawText(x, y, _T("Time"));
+    canvas.DrawText({x, y}, _T("Time"));
     x += time_width;
 
     x += time_width;
-    canvas.DrawText(x, y, _T("Duration"));
+    canvas.DrawText({x, y}, _T("Duration"));
   }
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_PASSWORD_DIALOG_HPP
 #define XCSOAR_PROFILE_PASSWORD_DIALOG_HPP
 
-#include "Util/TriState.hpp"
-#include "Util/Compiler.h"
+#include "util/TriState.hpp"
+#include "util/Compiler.h"
 
 #ifdef _WIN32
 #include <windows.h>

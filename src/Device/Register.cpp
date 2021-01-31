@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2021 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -35,6 +35,7 @@ Copyright_License {
 #include "Device/Driver/NmeaOut.hpp"
 #include "Device/Driver/PosiGraph.hpp"
 #include "Device/Driver/BorgeltB50.hpp"
+#include "Device/Driver/XCVario.hpp"
 #include "Device/Driver/Volkslogger.hpp"
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver/LX.hpp"
@@ -61,7 +62,6 @@ Copyright_License {
 #include "Device/Driver/AR62xx.hpp"
 #include "Util/Macros.hpp"
 #include "Util/StringAPI.hxx"
-
 #include <cassert>
 
 /** nullptr terminated array of available device drivers. */
@@ -76,6 +76,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &nmea_out_driver,
   &posigraph_driver,
   &b50_driver,
+  &xcv_driver,
   &volkslogger_driver,
   &ew_microrecorder_driver,
   &lx_driver,
