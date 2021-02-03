@@ -25,8 +25,6 @@
 #include "TaskMacCreadyRemaining.hpp"
 #include "Math/ZeroFinder.hpp"
 
-#include <vector>
-
 class StartPoint;
 
 /**
@@ -61,12 +59,23 @@ public:
    * @param _t_remaining Desired time remaining (s) of task
    * @param _ts StartPoint of task (to initiate scans)
    */
-  TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
+  template<typename T>
+  TaskMinTarget(const T& tps,
                 const unsigned activeTaskPoint,
                 const AircraftState &_aircraft,
                 const GlideSettings &settings, const GlidePolar &_gp,
                 double _t_remaining,
-                StartPoint &_ts) noexcept;
+                StartPoint &_ts) noexcept
+    :ZeroFinder(0, 1, TOLERANCE),
+     tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp,
+        /* ignore the travel to the start point */
+        false),
+     aircraft(_aircraft),
+     t_remaining(_t_remaining),
+     tp_start(_ts),
+     force_current(false)
+  {
+  }
 
 private:
   virtual double f(double p);

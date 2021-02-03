@@ -27,8 +27,6 @@
 #include "Task/Ordered/AATIsolineSegment.hpp"
 #include "Math/ZeroFinder.hpp"
 
-#include <vector>
-
 class StartPoint;
 
 /**
@@ -67,13 +65,24 @@ public:
    * @param _tp_current Active AATPoint
    * @param _ts StartPoint of task (to initiate scans)
    */
-  TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
+  template<typename T>
+  TaskOptTarget(const T &tps,
                 const unsigned activeTaskPoint,
                 const AircraftState &_aircraft,
                 const GlideSettings &settings, const GlidePolar &_gp,
                 AATPoint& _tp_current,
                 const FlatProjection &projection,
-                StartPoint &_ts) noexcept;
+                StartPoint &_ts) noexcept
+    :ZeroFinder(0.02, 0.98, TOLERANCE),
+     tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp,
+        /* ignore the travel to the start point */
+        false),
+     aircraft(_aircraft),
+     tp_start(_ts),
+     tp_current(_tp_current),
+     iso(_tp_current, projection)
+  {
+  }
 
   virtual double f(double p);
 

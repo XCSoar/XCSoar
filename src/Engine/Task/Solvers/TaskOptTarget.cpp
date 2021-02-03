@@ -25,25 +25,6 @@
 #include "Task/Ordered/Points/StartPoint.hpp"
 #include "util/Clamp.hpp"
 
-TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
-                             const unsigned activeTaskPoint,
-                             const AircraftState &_aircraft,
-                             const GlideSettings &settings,
-                             const GlidePolar &_gp,
-                             AATPoint &_tp_current,
-                             const FlatProjection &projection,
-                             StartPoint &_ts) noexcept
-  :ZeroFinder(0.02, 0.98, TOLERANCE),
-   tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp,
-      /* ignore the travel to the start point */
-      false),
-   aircraft(_aircraft),
-   tp_start(_ts),
-   tp_current(_tp_current),
-   iso(_tp_current, projection)
-{
-}
-
 double
 TaskOptTarget::f(const double p)
 {
