@@ -51,13 +51,13 @@ public:
    * @param gp Glide polar to copy for calculations
    */
   template<typename T>
-  TaskGlideRequired(const T &tps,
+  TaskGlideRequired(T &tps,
                     const unsigned activeTaskPoint,
                     const AircraftState &_aircraft,
                     const GlideSettings &settings,
                     const GlidePolar &_gp) noexcept
     :ZeroFinder(-10, 10, TOLERANCE),
-     tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp),
+     tm(tps.begin(), tps.end(), activeTaskPoint, settings, _gp),
      aircraft(_aircraft)
   {
     // Vopt at mc=0

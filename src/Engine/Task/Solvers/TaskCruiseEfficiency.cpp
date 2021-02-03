@@ -22,16 +22,6 @@
 
 #include "TaskCruiseEfficiency.hpp"
 
-TaskCruiseEfficiency::TaskCruiseEfficiency(const std::vector<OrderedTaskPoint *> &tps,
-                                           const unsigned activeTaskPoint,
-                                           const AircraftState &_aircraft,
-                                           const GlideSettings &settings,
-                                           const GlidePolar &gp):
-  TaskSolveTravelled(tps, activeTaskPoint, _aircraft,
-                     settings, gp, 0.1, 2.0)
-{
-}
-
 double
 TaskCruiseEfficiency::f(const double ce)
 {

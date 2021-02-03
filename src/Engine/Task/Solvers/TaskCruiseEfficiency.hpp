@@ -42,10 +42,16 @@ public:
    * @param _aircraft Current aircraft state
    * @param gp Glide polar to copy for calculations
    */
-  TaskCruiseEfficiency(const std::vector<OrderedTaskPoint *> &tps,
+  template<typename T>
+  TaskCruiseEfficiency(const T &tps,
                        const unsigned activeTaskPoint,
                        const AircraftState &_aircraft,
-                       const GlideSettings &settings, const GlidePolar &gp);
+                       const GlideSettings &settings,
+                       const GlidePolar &gp) noexcept
+    :TaskSolveTravelled(tps, activeTaskPoint, _aircraft,
+                        settings, gp, 0.1, 2.0)
+  {
+  }
 
 protected:
   /* virtual methods from class ZeroFinder */

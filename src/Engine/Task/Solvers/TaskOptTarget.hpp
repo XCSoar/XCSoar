@@ -66,7 +66,7 @@ public:
    * @param _ts StartPoint of task (to initiate scans)
    */
   template<typename T>
-  TaskOptTarget(const T &tps,
+  TaskOptTarget(T &tps,
                 const unsigned activeTaskPoint,
                 const AircraftState &_aircraft,
                 const GlideSettings &settings, const GlidePolar &_gp,
@@ -74,7 +74,7 @@ public:
                 const FlatProjection &projection,
                 StartPoint &_ts) noexcept
     :ZeroFinder(0.02, 0.98, TOLERANCE),
-     tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp,
+     tm(tps.begin(), tps.end(), activeTaskPoint, settings, _gp,
         /* ignore the travel to the start point */
         false),
      aircraft(_aircraft),

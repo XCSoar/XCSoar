@@ -43,10 +43,16 @@ class TaskEffectiveMacCready final : public TaskSolveTravelled
    * @param _aircraft Current aircraft state
    * @param gp Glide polar to copy for calculations
    */
-  TaskEffectiveMacCready(const std::vector<OrderedTaskPoint *> &tps,
+  template<typename T>
+  TaskEffectiveMacCready(const T &tps,
                          const unsigned activeTaskPoint,
                          const AircraftState &_aircraft,
-                         const GlideSettings &settings, const GlidePolar &gp);
+                         const GlideSettings &settings,
+                         const GlidePolar &gp) noexcept
+    :TaskSolveTravelled(tps, activeTaskPoint, _aircraft,
+                        settings, gp, 0.001, 10.0)
+  {
+  }
 
 protected:
   /* virtual methods from class ZeroFinder */

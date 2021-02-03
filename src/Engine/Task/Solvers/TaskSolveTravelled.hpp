@@ -25,8 +25,6 @@
 #include "TaskMacCreadyTravelled.hpp"
 #include "Math/ZeroFinder.hpp"
 
-#include <vector>
-
 /**
  *  Abstract class to solve for travelled time.
  */
@@ -51,12 +49,23 @@ public:
    * @param xmin Min value of search parameter
    * @param xmax Max value of search parameter
    */
-  TaskSolveTravelled(const std::vector<OrderedTaskPoint *> &tps,
+  template<typename T, typename A>
+  TaskSolveTravelled(const T &tps,
                      unsigned activeTaskPoint,
-                     const AircraftState &_aircraft,
+                     const A &_aircraft,
                      const GlideSettings &settings, const GlidePolar &gp,
-                     double xmin,
-                     double xmax);
+                     double _xmin, double _xmax) noexcept
+    :ZeroFinder(_xmin, _xmax, TOLERANCE_CRUISE_EFFICIENCY),
+     aircraft(_aircraft),
+     tm(tps.cbegin(), activeTaskPoint, settings, gp)
+  {
+    dt = _aircraft.time - tps[0]->GetEnteredState().time;
+    if (dt > 0) {
+      inv_dt = 1. / dt;
+    } else {
+      inv_dt = 0; // error!
+    }
+  }
 
 protected:
   /**
