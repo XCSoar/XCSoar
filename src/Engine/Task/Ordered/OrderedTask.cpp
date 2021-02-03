@@ -627,7 +627,7 @@ OrderedTask::UpdateIdle(const AircraftState &state,
       // very nasty hack
       TaskOptTarget tot(task_points, active_task_point, state,
                         task_behaviour.glide, glide_polar,
-                        *ap, task_projection, taskpoint_start);
+                        *ap, task_projection, *taskpoint_start);
       tot.search(0.5);
     }
     retval = true;
@@ -1058,7 +1058,7 @@ OrderedTask::CalcMinTarget(const AircraftState &aircraft,
 
     TaskMinTarget bmt(task_points, active_task_point, aircraft,
                       task_behaviour.glide, glide_polar,
-                      t_rem, taskpoint_start);
+                      t_rem, *taskpoint_start);
     auto p = bmt.search(0);
     return p;
   }

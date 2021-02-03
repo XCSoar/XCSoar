@@ -48,7 +48,7 @@ class TaskOptTarget final : public ZeroFinder
   /** Observer */
   const AircraftState &aircraft;
   /** Start of task */
-  StartPoint *tp_start;
+  StartPoint &tp_start;
   /** Active AATPoint */
   AATPoint &tp_current;
   /** Isoline for active AATPoint target */
@@ -71,7 +71,7 @@ public:
                 const GlideSettings &settings, const GlidePolar &_gp,
                 AATPoint& _tp_current,
                 const FlatProjection &projection,
-                StartPoint *_ts);
+                StartPoint &_ts) noexcept;
 
   virtual double f(double p);
 

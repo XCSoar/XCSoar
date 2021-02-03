@@ -33,7 +33,7 @@ TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const GlidePolar &_gp,
                              AATPoint &_tp_current,
                              const FlatProjection &projection,
-                             StartPoint *_ts)
+                             StartPoint &_ts) noexcept
   :ZeroFinder(0.02, 0.98, TOLERANCE_OPT_TARGET),
    tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp,
       /* ignore the travel to the start point */
@@ -90,5 +90,5 @@ TaskOptTarget::SetTarget(const double p)
 {
   const GeoPoint loc = iso.Parametric(Clamp(p, xmin, xmax));
   tp_current.SetTarget(loc);
-  tp_start->ScanDistanceRemaining(aircraft.location);
+  tp_start.ScanDistanceRemaining(aircraft.location);
 }

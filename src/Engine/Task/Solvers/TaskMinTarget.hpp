@@ -45,7 +45,7 @@ class TaskMinTarget final : private ZeroFinder {
   GlideResult res;
   const AircraftState &aircraft;
   const double t_remaining;
-  StartPoint *tp_start;
+  StartPoint &tp_start;
   bool force_current;
 
 public:
@@ -64,7 +64,7 @@ public:
                 const AircraftState &_aircraft,
                 const GlideSettings &settings, const GlidePolar &_gp,
                 double _t_remaining,
-                StartPoint *_ts);
+                StartPoint &_ts) noexcept;
 
 private:
   virtual double f(double p);
