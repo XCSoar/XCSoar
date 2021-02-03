@@ -48,14 +48,16 @@ public:
    *
    * @return Initialised object
    */
-  AATIsolineSegment(const AATPoint &ap, const FlatProjection &projection);
+  AATIsolineSegment(const AATPoint &ap,
+                    const FlatProjection &projection) noexcept;
 
   /**
    * Test whether segment is valid (nonzero length)
    *
    * @return True if segment is valid
    */
-  bool IsValid() const;
+  [[gnu::pure]]
+  bool IsValid() const noexcept;
 
   /**
    * Parametric representation of points on the isoline segment.
@@ -64,7 +66,8 @@ public:
    *
    * @return Location of point on isoline segment
    */
-  GeoPoint Parametric(double t) const;
+  [[gnu::pure]]
+  GeoPoint Parametric(double t) const noexcept;
 };
 
 #endif
