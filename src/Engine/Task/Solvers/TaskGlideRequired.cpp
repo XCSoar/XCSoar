@@ -24,7 +24,7 @@
 #include "Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Util/Tolerances.hpp"
 
-TaskGlideRequired::TaskGlideRequired(TaskPoint* tp,
+TaskGlideRequired::TaskGlideRequired(TaskPoint &tp,
                                      const AircraftState &_aircraft,
                                      const GlideSettings &settings,
                                      const GlidePolar &_gp)

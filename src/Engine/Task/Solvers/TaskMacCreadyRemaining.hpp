@@ -61,7 +61,7 @@ public:
    * @param tp Task point comprising the task
    * @param gp Glide polar to copy for calculations
    */
-  TaskMacCreadyRemaining(TaskPoint* tp,
+  TaskMacCreadyRemaining(TaskPoint &tp,
                          const GlideSettings &settings, const GlidePolar &gp)
     :TaskMacCready(tp, settings, gp),
      include_travel_to_start(true) {}

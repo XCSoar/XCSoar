@@ -103,9 +103,9 @@ public:
    * @param tp Task point comprising the task
    * @param gp Glide polar to copy for calculations
    */
-  TaskMacCready(TaskPoint* tp,
+  TaskMacCready(TaskPoint &tp,
                 const GlideSettings &_settings, const GlidePolar &gp)
-    :points({tp}),
+    :points({&tp}),
      active_index(0),
      settings(_settings),
      glide_polar(gp) {}

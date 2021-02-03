@@ -71,7 +71,7 @@ public:
    * @param _aircraft Current aircraft state
    * @param gp Glide polar to copy for calculations
    */
-  TaskGlideRequired(TaskPoint* tp,
+  TaskGlideRequired(TaskPoint &tp,
                     const AircraftState &_aircraft,
                     const GlideSettings &settings, const GlidePolar &gp);
 

@@ -44,7 +44,7 @@ UnorderedTask::CalcBestMC(const AircraftState &aircraft,
     return false;
   }
 
-  TaskBestMc bmc(tp, aircraft, task_behaviour.glide, glide_polar);
+  TaskBestMc bmc(*tp, aircraft, task_behaviour.glide, glide_polar);
   return bmc.search(glide_polar.GetMC(), best);
 }
 
@@ -77,7 +77,7 @@ UnorderedTask::CalcRequiredGlide(const AircraftState &aircraft,
   if (tp == nullptr || !aircraft.location.IsValid())
     return 0;
 
-  TaskGlideRequired bgr(tp, aircraft, task_behaviour.glide, glide_polar);
+  TaskGlideRequired bgr(*tp, aircraft, task_behaviour.glide, glide_polar);
   return bgr.search(0);
 }
 

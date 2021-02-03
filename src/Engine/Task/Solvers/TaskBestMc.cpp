@@ -27,7 +27,7 @@
 
 // @todo only engage this class if above final glide at mc=0
 
-TaskBestMc::TaskBestMc(TaskPoint *tp,
+TaskBestMc::TaskBestMc(TaskPoint &tp,
                        const AircraftState &_aircraft,
                        const GlideSettings &settings, const GlidePolar &_gp)
   :ZeroFinder(0.1, 10.0, TOLERANCE),

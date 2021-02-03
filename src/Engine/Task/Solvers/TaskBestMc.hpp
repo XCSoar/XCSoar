@@ -70,7 +70,7 @@ public:
    * @param _aircraft Current aircraft state
    * @param _gp Glide polar to copy for calculations
    */
-  TaskBestMc(TaskPoint *tp,
+  TaskBestMc(TaskPoint &tp,
              const AircraftState &_aircraft,
              const GlideSettings &settings, const GlidePolar &_gp);
 
