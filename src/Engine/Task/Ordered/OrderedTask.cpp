@@ -623,9 +623,10 @@ OrderedTask::UpdateIdle(const AircraftState &state,
 
     if (task_behaviour.optimise_targets_bearing &&
         task_points[active_task_point]->GetType() == TaskPointType::AAT) {
+      TaskPointList tps(task_points);
       AATPoint *ap = (AATPoint *)task_points[active_task_point];
       // very nasty hack
-      TaskOptTarget tot(task_points, active_task_point, state,
+      TaskOptTarget tot(tps, active_task_point, state,
                         task_behaviour.glide, glide_polar,
                         *ap, task_projection, *taskpoint_start);
       tot.search(0.5);
@@ -915,7 +916,8 @@ OrderedTask::GlideSolutionRemaining(const AircraftState &aircraft,
     return;
   }
 
-  TaskMacCreadyRemaining tm(task_points.cbegin(), task_points.cend(),
+  TaskPointList tps(task_points);
+  TaskMacCreadyRemaining tm(tps.begin(), tps.end(),
                             active_task_point,
                             task_behaviour.glide, polar);
   total = tm.glide_solution(aircraft);
@@ -934,7 +936,8 @@ OrderedTask::GlideSolutionTravelled(const AircraftState &aircraft,
     return;
   }
 
-  TaskMacCreadyTravelled tm(task_points.cbegin(), active_task_point,
+  TaskPointList tps(task_points);
+  TaskMacCreadyTravelled tm(tps.begin(), active_task_point,
                             task_behaviour.glide, glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();
@@ -958,7 +961,8 @@ OrderedTask::GlideSolutionPlanned(const AircraftState &aircraft,
     return;
   }
 
-  TaskMacCreadyTotal tm(task_points.cbegin(), task_points.cend(),
+  TaskPointList tps(task_points);
+  TaskMacCreadyTotal tm(tps.begin(), tps.end(),
                         active_task_point,
                         task_behaviour.glide, glide_polar);
   total = tm.glide_solution(aircraft);
@@ -981,7 +985,8 @@ double
 OrderedTask::CalcRequiredGlide(const AircraftState &aircraft,
                                const GlidePolar &glide_polar) const
 {
-  TaskGlideRequired bgr(task_points, active_task_point, aircraft,
+  TaskPointList tps(task_points);
+  TaskGlideRequired bgr(tps, active_task_point, aircraft,
                         task_behaviour.glide, glide_polar);
   return bgr.search(0);
 }
@@ -992,7 +997,8 @@ OrderedTask::CalcBestMC(const AircraftState &aircraft,
                         double &best) const
 {
   // note setting of lower limit on mc
-  TaskBestMc bmc(task_points, active_task_point, aircraft,
+  TaskPointList tps(task_points);
+  TaskBestMc bmc(tps, active_task_point, aircraft,
                  task_behaviour.glide, glide_polar);
   return bmc.search(glide_polar.GetMC(), best);
 }
@@ -1020,7 +1026,8 @@ OrderedTask::CalcCruiseEfficiency(const AircraftState &aircraft,
                                   double &val) const
 {
   if (AllowIncrementalBoundaryStats(aircraft)) {
-    TaskCruiseEfficiency bce(task_points, active_task_point, aircraft,
+    TaskPointList tps(task_points);
+    TaskCruiseEfficiency bce(tps, active_task_point, aircraft,
                              task_behaviour.glide, glide_polar);
     val = bce.search(1);
     return true;
@@ -1036,7 +1043,8 @@ OrderedTask::CalcEffectiveMC(const AircraftState &aircraft,
                              double &val) const
 {
   if (AllowIncrementalBoundaryStats(aircraft)) {
-    TaskEffectiveMacCready bce(task_points, active_task_point, aircraft,
+    TaskPointList tps(task_points);
+    TaskEffectiveMacCready bce(tps, active_task_point, aircraft,
                                task_behaviour.glide, glide_polar);
     val = bce.search(glide_polar.GetMC());
     return true;
@@ -1056,7 +1064,8 @@ OrderedTask::CalcMinTarget(const AircraftState &aircraft,
     // only perform scan if modification is possible
     const auto t_rem = fdim(t_target, stats.total.time_elapsed);
 
-    TaskMinTarget bmt(task_points, active_task_point, aircraft,
+    TaskPointList tps(task_points);
+    TaskMinTarget bmt(tps, active_task_point, aircraft,
                       task_behaviour.glide, glide_polar,
                       t_rem, *taskpoint_start);
     auto p = bmt.search(0);

@@ -60,14 +60,14 @@ public:
    * @param _ts StartPoint of task (to initiate scans)
    */
   template<typename T>
-  TaskMinTarget(const T& tps,
+  TaskMinTarget(T &tps,
                 const unsigned activeTaskPoint,
                 const AircraftState &_aircraft,
                 const GlideSettings &settings, const GlidePolar &_gp,
                 double _t_remaining,
                 StartPoint &_ts) noexcept
     :ZeroFinder(0, 1, TOLERANCE),
-     tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp,
+     tm(tps.begin(), tps.end(), activeTaskPoint, settings, _gp,
         /* ignore the travel to the start point */
         false),
      aircraft(_aircraft),

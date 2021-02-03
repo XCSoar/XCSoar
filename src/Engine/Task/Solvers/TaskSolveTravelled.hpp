@@ -50,16 +50,16 @@ public:
    * @param xmax Max value of search parameter
    */
   template<typename T, typename A>
-  TaskSolveTravelled(const T &tps,
+  TaskSolveTravelled(T &tps,
                      unsigned activeTaskPoint,
                      const A &_aircraft,
                      const GlideSettings &settings, const GlidePolar &gp,
                      double _xmin, double _xmax) noexcept
     :ZeroFinder(_xmin, _xmax, TOLERANCE_CRUISE_EFFICIENCY),
      aircraft(_aircraft),
-     tm(tps.cbegin(), activeTaskPoint, settings, gp)
+     tm(tps.begin(), activeTaskPoint, settings, gp)
   {
-    dt = _aircraft.time - tps[0]->GetEnteredState().time;
+    dt = _aircraft.time - tps.begin()->GetEnteredState().time;
     if (dt > 0) {
       inv_dt = 1. / dt;
     } else {

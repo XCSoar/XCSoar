@@ -52,13 +52,13 @@ public:
    * @param _mc_min Minimum legal value of MacCready (m/s) in search
    */
   template<typename T>
-  TaskBestMc(const T &tps,
+  TaskBestMc(T &tps,
              const unsigned activeTaskPoint,
              const AircraftState &_aircraft,
              const GlideSettings &settings, const GlidePolar &_gp,
              double _mc_min=0) noexcept
     :ZeroFinder(_mc_min, 10.0, TOLERANCE),
-     tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp),
+     tm(tps.begin(), tps.end(), activeTaskPoint, settings, _gp),
      aircraft(_aircraft)
   {
   }

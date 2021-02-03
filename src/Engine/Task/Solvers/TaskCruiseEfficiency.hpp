@@ -43,7 +43,7 @@ public:
    * @param gp Glide polar to copy for calculations
    */
   template<typename T>
-  TaskCruiseEfficiency(const T &tps,
+  TaskCruiseEfficiency(T &tps,
                        const unsigned activeTaskPoint,
                        const AircraftState &_aircraft,
                        const GlideSettings &settings,

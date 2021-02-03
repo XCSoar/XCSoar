@@ -44,7 +44,7 @@ class TaskEffectiveMacCready final : public TaskSolveTravelled
    * @param gp Glide polar to copy for calculations
    */
   template<typename T>
-  TaskEffectiveMacCready(const T &tps,
+  TaskEffectiveMacCready(T &tps,
                          const unsigned activeTaskPoint,
                          const AircraftState &_aircraft,
                          const GlideSettings &settings,

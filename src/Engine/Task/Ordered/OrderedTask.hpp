@@ -70,6 +70,10 @@ public:
     DereferenceContainerAdapter<const OrderedTaskPointVector,
                                 const OrderedTaskPoint>;
 
+  using TaskPointList =
+    DereferenceContainerAdapter<const OrderedTaskPointVector,
+                                OrderedTaskPoint>;
+
 private:
   OrderedTaskPointVector task_points;
   OrderedTaskPointVector optional_start_points;
