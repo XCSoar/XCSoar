@@ -37,6 +37,8 @@
  *
  */
 class TaskGlideRequired final : private ZeroFinder {
+  static constexpr double TOLERANCE = 0.001;
+
   TaskMacCreadyRemaining tm;
   GlideResult res;
   const AircraftState &aircraft;

@@ -22,7 +22,6 @@
 
 #include "TaskMinTarget.hpp"
 #include "Task/Ordered/Points/StartPoint.hpp"
-#include "Util/Tolerances.hpp"
 
 TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const unsigned activeTaskPoint,
@@ -31,7 +30,7 @@ TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const GlidePolar &_gp,
                              const double _t_remaining,
                              StartPoint &_ts) noexcept
-  :ZeroFinder(0, 1, TOLERANCE_MIN_TARGET),
+  :ZeroFinder(0, 1, TOLERANCE),
    tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp,
       /* ignore the travel to the start point */
       false),

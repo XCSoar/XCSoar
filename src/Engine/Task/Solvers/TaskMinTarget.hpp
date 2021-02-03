@@ -41,6 +41,8 @@ class StartPoint;
  *   target.
  */
 class TaskMinTarget final : private ZeroFinder {
+  static constexpr double TOLERANCE = 0.002;
+
   TaskMacCreadyRemaining tm;
   GlideResult res;
   const AircraftState &aircraft;

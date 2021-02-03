@@ -37,6 +37,8 @@
  */
 class TaskBestMc final : ZeroFinder
 {
+  static constexpr double TOLERANCE = 0.0001;
+
   TaskMacCreadyRemaining tm;
   GlideResult res;
   const AircraftState &aircraft;

@@ -41,6 +41,8 @@ class StartPoint;
  */
 class TaskOptTarget final : public ZeroFinder
 {
+  static constexpr double TOLERANCE = 0.01;
+
   /** Object to calculate remaining task statistics */
   TaskMacCreadyRemaining tm;
   /** Glide solution used in search */

@@ -23,7 +23,6 @@
 #include "TaskOptTarget.hpp"
 #include "Task/Ordered/Points/AATPoint.hpp"
 #include "Task/Ordered/Points/StartPoint.hpp"
-#include "Util/Tolerances.hpp"
 #include "util/Clamp.hpp"
 
 TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
@@ -34,7 +33,7 @@ TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                              AATPoint &_tp_current,
                              const FlatProjection &projection,
                              StartPoint &_ts) noexcept
-  :ZeroFinder(0.02, 0.98, TOLERANCE_OPT_TARGET),
+  :ZeroFinder(0.02, 0.98, TOLERANCE),
    tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp,
       /* ignore the travel to the start point */
       false),

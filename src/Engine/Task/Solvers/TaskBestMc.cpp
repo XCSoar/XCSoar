@@ -22,7 +22,6 @@
 
 #include "TaskBestMc.hpp"
 #include "Task/Ordered/Points/OrderedTaskPoint.hpp"
-#include "Util/Tolerances.hpp"
 
 #include <algorithm>
 
@@ -33,7 +32,7 @@ TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint *> &tps,
                        const AircraftState &_aircraft,
                        const GlideSettings &settings, const GlidePolar &_gp,
                        const double _mc_min)
-  :ZeroFinder(_mc_min, 10.0, TOLERANCE_BEST_MC),
+  :ZeroFinder(_mc_min, 10.0, TOLERANCE),
    tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp),
    aircraft(_aircraft)
 {
@@ -42,7 +41,7 @@ TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint *> &tps,
 TaskBestMc::TaskBestMc(TaskPoint *tp,
                        const AircraftState &_aircraft,
                        const GlideSettings &settings, const GlidePolar &_gp)
-  :ZeroFinder(0.1, 10.0, TOLERANCE_BEST_MC),
+  :ZeroFinder(0.1, 10.0, TOLERANCE),
    tm(tp, settings, _gp),
    aircraft(_aircraft)
 {
