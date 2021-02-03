@@ -105,7 +105,7 @@ public:
    */
   TaskMacCready(TaskPoint* tp,
                 const GlideSettings &_settings, const GlidePolar &gp)
-    :points(1, tp),
+    :points({tp}),
      active_index(0),
      settings(_settings),
      glide_polar(gp) {}
