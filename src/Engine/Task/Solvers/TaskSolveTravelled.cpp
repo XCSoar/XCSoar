@@ -22,7 +22,6 @@
 
 #include "TaskSolveTravelled.hpp"
 #include "Task/Ordered/Points/OrderedTaskPoint.hpp"
-#include "Util/Tolerances.hpp"
 
 TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint *> &tps,
                                        const unsigned activeTaskPoint,

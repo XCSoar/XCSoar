@@ -31,6 +31,8 @@
  *  Abstract class to solve for travelled time.
  */
 class TaskSolveTravelled : protected ZeroFinder {
+  static constexpr double TOLERANCE_CRUISE_EFFICIENCY = 0.001;
+
   const AircraftState &aircraft;
   double inv_dt;
   double dt;
