@@ -126,38 +126,34 @@ public:
 	using pointer = VT *;
 	using reference = VT &;
 
-	using iterator = DereferenceIterator<typename CT::iterator, VT>;
-	using const_iterator = DereferenceIterator<typename CT::const_iterator, const VT>;
+	using const_iterator = DereferenceIterator<decltype(std::declval<CT>().cbegin()), const VT>;
+	using iterator = DereferenceIterator<decltype(std::declval<CT>().begin()), VT>;
 
 	DereferenceContainerAdapter(CT &_original) noexcept
 		:original(_original) {}
 
-#if 0
 	iterator begin() noexcept {
 		return original.begin();
 	}
-#endif
 
 	const_iterator begin() const noexcept {
-		return original.begin();
+		return original.cbegin();
 	}
 
 	const_iterator cbegin() const noexcept {
-		return original.begin();
+		return original.cbegin();
 	}
 
-#if 0
 	iterator end() noexcept {
 		return original.end();
 	}
-#endif
 
 	const_iterator end() const noexcept {
-		return original.end();
+		return original.cend();
 	}
 
 	const_iterator cend() const noexcept {
-		return original.end();
+		return original.cend();
 	}
 };
 
