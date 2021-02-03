@@ -103,32 +103,6 @@ bool
 AATPoint::CheckTargetOutside(const AircraftState& state)
 {
   return false;
-/*
-  // this is optional, to be replaced!
-  
-  // now uses TaskOptTarget
-
-  if (!GetPrevious()->isInSector(state)) {
-    double b0s = GetPrevious()->get_location_remaining()
-      .bearing(state.Location);
-    GeoVector vst(state.Location,target_location);
-    double da = ::AngleLimit180(b0s-vst.Bearing);
-    if ((fabs(da)>2.0) && (vst.Distance>1.0)) {
-      AATIsolineIntercept ai(*this);
-      AIRCRAFT_STATE si;
-      if (ai.intercept(*this, state, 0.0, si.Location)
-          && isInSector(si)) {
-
-        // Note that this fights with auto-target
-
-        target_location = si.Location;
-
-        return true;
-      }
-    }
-  }
-  return false;
-*/
 }
 
 bool
