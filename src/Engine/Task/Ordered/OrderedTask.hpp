@@ -64,10 +64,11 @@ class OrderedTask final : public AbstractTask
 {
 public:
   /** Storage type of task points */
-  typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector;
+  using OrderedTaskPointVector = std::vector<OrderedTaskPoint*>;
 
-  typedef DereferenceContainerAdapter<const OrderedTaskPointVector,
-                                      const OrderedTaskPoint> ConstTaskPointList;
+  using ConstTaskPointList =
+    DereferenceContainerAdapter<const OrderedTaskPointVector,
+                                const OrderedTaskPoint>;
 
 private:
   OrderedTaskPointVector task_points;

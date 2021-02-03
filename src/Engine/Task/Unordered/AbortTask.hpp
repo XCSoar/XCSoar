@@ -65,7 +65,7 @@ protected:
       :point(std::move(waypoint), tb), solution(_solution) {}
   };
 
-  typedef std::vector<AlternateTaskPoint> AlternateTaskVector;
+  using AlternateTaskVector = std::vector<AlternateTaskPoint>;
   AlternateTaskVector task_points;
 
   /** whether the AbortTask is the master or running in background */

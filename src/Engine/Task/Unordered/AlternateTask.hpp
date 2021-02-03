@@ -43,7 +43,7 @@ public:
       :AlternatePoint(std::move(_waypoint), _solution), delta(_delta) {}
   };
 
-  typedef std::vector<Divert> DivertVector;
+  using DivertVector = std::vector<Divert>;
 
   /// number of alternates
   static constexpr unsigned max_alternates = 6;
