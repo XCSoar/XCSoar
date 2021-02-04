@@ -38,12 +38,12 @@ namespace XML {
   /**
    * Throws on error.
    */
-  XMLNode *ParseString(const TCHAR *xml_string);
+  XMLNode ParseString(const TCHAR *xml_string);
 
   /**
    * Throws on error.
    */
-  XMLNode *ParseFile(Path path);
+  XMLNode ParseFile(Path path);
 }
 
 #endif

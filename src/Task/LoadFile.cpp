@@ -37,10 +37,8 @@ LoadTask(Path path, const TaskBehaviour &task_behaviour,
          const Waypoints *waypoints)
 {
   // Load root node
-  std::unique_ptr<XMLNode> xml_root(XML::ParseFile(path));
-  assert(xml_root);
-
-  const ConstDataNodeXML root(*xml_root);
+  const auto xml_root = XML::ParseFile(path);
+  const ConstDataNodeXML root(xml_root);
 
   // Check if root node is a <Task> node
   if (!StringIsEqual(root.GetName(), _T("Task")))

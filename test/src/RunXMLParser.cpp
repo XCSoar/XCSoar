@@ -37,13 +37,12 @@ try {
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  XMLNode *node = XML::ParseFile(path);
+  const auto node = XML::ParseFile(path);
 
   StdioOutputStream out(stdout);
   BufferedOutputStream bos(out);
-  node->Serialise(bos, true);
+  node.Serialise(bos, true);
   bos.Flush();
-  delete node;
 
   return EXIT_SUCCESS;
 } catch (...) {

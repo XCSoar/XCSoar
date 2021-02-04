@@ -731,7 +731,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
  * @param pResults XMLResult object to write in on error or success
  * @return The main XMLNode or empty XMLNode on error
  */
-XMLNode *
+XMLNode
 XML::ParseString(const TCHAR *xml_string)
 {
   assert(xml_string != nullptr);
@@ -766,7 +766,7 @@ XML::ParseString(const TCHAR *xml_string)
   }
 
   // Return the node (empty, main or child of main that equals tag)
-  return new XMLNode(std::move(xnode));
+  return xnode;
 }
 
 static tstring
@@ -805,7 +805,7 @@ ReadTextFile(Path path)
  * @param tag (?)
  * @return The main XMLNode or an empty node on error
  */
-XMLNode *
+XMLNode
 XML::ParseFile(Path filename)
 {
   const auto buffer = ReadTextFile(filename);
