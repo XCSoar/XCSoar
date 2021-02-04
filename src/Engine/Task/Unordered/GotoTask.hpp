@@ -26,6 +26,8 @@
 #include "UnorderedTask.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
 
+#include <memory>
+
 class Waypoints;
 class UnorderedTaskPoint;
 
@@ -34,7 +36,7 @@ class UnorderedTaskPoint;
  */
 class GotoTask final : public UnorderedTask
 {
-  UnorderedTaskPoint *tp;
+  std::unique_ptr<UnorderedTaskPoint> tp;
   const Waypoints &waypoints;
 
 public:
