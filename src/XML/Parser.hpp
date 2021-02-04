@@ -29,43 +29,21 @@
 #ifndef XCSOAR_XML_PARSER_HPP
 #define XCSOAR_XML_PARSER_HPP
 
-#include "util/Compiler.h"
-
 #include <tchar.h>
 
 class XMLNode;
 class Path;
 
 namespace XML {
-  /** Enumeration for XML parse errors. */
-  enum Error {
-    eXMLErrorNone = 0,
-    eXMLErrorEmpty,
-    eXMLErrorFirstNotStartTag,
-    eXMLErrorMissingTagName,
-    eXMLErrorMissingEndTagName,
-    eXMLErrorNoMatchingQuote,
-    eXMLErrorUnmatchedEndTag,
-    eXMLErrorUnexpectedToken,
-    eXMLErrorInvalidTag,
-    eXMLErrorNoElements,
-    eXMLErrorFileNotFound
-  };
-
-  /** Structure used to obtain error details if the parse fails. */
-  struct Results {
-    enum Error error;
-    unsigned line, column;
-  };
-
-  XMLNode *ParseString(const TCHAR *xml_string, Results *pResults=nullptr);
-  XMLNode *ParseFile(Path path, Results *pResults=nullptr);
+  /**
+   * Throws on error.
+   */
+  XMLNode *ParseString(const TCHAR *xml_string);
 
   /**
-   * Parse XML errors into a user friendly string.
+   * Throws on error.
    */
-  gcc_const
-  const TCHAR *GetErrorMessage(Error error);
+  XMLNode *ParseFile(Path path);
 }
 
 #endif

@@ -33,5 +33,10 @@ TaskFileXCSoar::GetTask(const TaskBehaviour &task_behaviour,
 {
   assert(index == 0);
 
-  return LoadTask(path, task_behaviour, waypoints);
+  try {
+    return LoadTask(path, task_behaviour, waypoints);
+  } catch (...) {
+    // TODO: forward exception to caller
+    return nullptr;
+  }
 }

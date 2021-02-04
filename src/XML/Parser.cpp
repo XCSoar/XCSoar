@@ -43,7 +43,6 @@ namespace XML {
   struct Parser {
     const TCHAR *lpXML;
     unsigned nIndex;
-    Error error;
     const TCHAR *lpEndTag;
     size_t cbEndTag;
     bool nFirst;
@@ -92,7 +91,7 @@ namespace XML {
   static XML::NextToken
   GetNextToken(Parser *pXML);
 
-  static bool
+  static void
   ParseXMLElement(XMLNode &node, Parser *pXML);
 }
 
@@ -415,41 +414,10 @@ XML::GetNextToken(Parser *pXML)
   return result;
 }
 
-const TCHAR *
-XML::GetErrorMessage(Error error)
-{
-  switch (error) {
-  case eXMLErrorNone:
-    return _T("No error");
-  case eXMLErrorEmpty:
-    return _T("No XML data");
-  case eXMLErrorFirstNotStartTag:
-    return _T("First token not start tag");
-  case eXMLErrorMissingTagName:
-    return _T("Missing start tag name");
-  case eXMLErrorMissingEndTagName:
-    return _T("Missing end tag name");
-  case eXMLErrorNoMatchingQuote:
-    return _T("Unmatched quote");
-  case eXMLErrorUnmatchedEndTag:
-    return _T("Unmatched end tag");
-  case eXMLErrorUnexpectedToken:
-    return _T("Unexpected token found");
-  case eXMLErrorInvalidTag:
-    return _T("Invalid tag found");
-  case eXMLErrorNoElements:
-    return _T("No elements found");
-  case eXMLErrorFileNotFound:
-    return _T("File not found");
-  }
-
-  return _T("Unknown");
-}
-
 /**
  * Recursively parse an XML element.
  */
-static bool
+static void
 XML::ParseXMLElement(XMLNode &node, Parser *pXML)
 {
   bool is_declaration;
@@ -478,7 +446,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
     // Obtain the next token
     NextToken token = GetNextToken(pXML);
     if (gcc_unlikely(token.type == eTokenError))
-      return false;
+      return;
 
     // Check the current status
     switch (status) {
@@ -514,10 +482,8 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
 
         // Return an error if we couldn't obtain the next token or
         // it wasnt text
-        if (token.type != eTokenText) {
-          pXML->error = eXMLErrorMissingTagName;
-          return false;
-        }
+        if (token.type != eTokenText)
+          throw std::runtime_error("Missing start tag name");
 
         // If the name of the new element differs from the name of
         // the current element we need to add the new element to
@@ -530,9 +496,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
           // FALSE this means we dont have any more
           // processing to do...
 
-          if (!ParseXMLElement(*pNew, pXML)) {
-            return false;
-          }
+          ParseXMLElement(*pNew, pXML);
 
           // If the call to recurse this function
           // evented in a end tag specified in XML then
@@ -543,10 +507,8 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
           if (pXML->cbEndTag) {
             // If we are back at the root node then we
             // have an unmatched end tag
-            if (node.GetName() == nullptr) {
-              pXML->error = eXMLErrorUnmatchedEndTag;
-              return false;
-            }
+            if (node.GetName() == nullptr)
+              throw std::runtime_error("Unmatched end tag");
 
             // If the end tag matches the name of this
             // element then we only need to unwind
@@ -556,7 +518,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
               pXML->cbEndTag = 0;
             }
 
-            return true;
+            return;
           } else {
             // If we didn't have a new element to create
             break;
@@ -571,10 +533,8 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         if (text != nullptr) {
           size_t length = StripRight(text, token.pStr - text);
           TCHAR *text2 = FromXMLString(text, length);
-          if (text2 == nullptr) {
-            pXML->error = eXMLErrorUnexpectedToken;
-            return false;
-          }
+          if (text2 == nullptr)
+            throw std::runtime_error("Unexpected token found");
 
           node.AddText(text2);
           free(text2);
@@ -585,16 +545,12 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         token = GetNextToken(pXML);
 
         // The end tag should be text
-        if (token.type != eTokenText) {
-          pXML->error = eXMLErrorMissingEndTagName;
-          return false;
-        }
+        if (token.type != eTokenText)
+          throw std::runtime_error("Missing end tag name");
 
         // After the end tag we should find a closing tag
-        if (GetNextToken(pXML).type != eTokenCloseTag) {
-          pXML->error = eXMLErrorMissingEndTagName;
-          return false;
-        }
+        if (GetNextToken(pXML).type != eTokenCloseTag)
+          throw std::runtime_error("Missing end tag name");
 
         // We need to return to the previous caller.  If the name
         // of the tag cannot be found we need to keep returning to
@@ -605,13 +561,12 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         }
 
         // Return to the caller
-        return true;
+        return;
 
         // Errors...
       case eTokenCloseTag: /* '>'         */
       case eTokenShortHandClose: /* '/>'        */
-        pXML->error = eXMLErrorUnexpectedToken;
-        return false;
+        throw std::runtime_error("Unexpected token found");
       default:
         break;
       }
@@ -645,7 +600,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
           // If we found a short hand '/>' closing tag then we can
           // return to the caller
         case eTokenShortHandClose:
-          return true;
+          return;
 
           // Errors...
         case eTokenQuotedText: /* '"SomeText"'   */
@@ -653,8 +608,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         case eTokenTagEnd: /* '</'           */
         case eTokenEquals: /* '='            */
         case eTokenDeclaration: /* '<?'           */
-          pXML->error = eXMLErrorUnexpectedToken;
-          return false;
+          throw std::runtime_error("Unexpected token found");
         default:
           break;
         }
@@ -692,7 +646,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
 
           // If this is the end of the tag then return to the caller
           if (token.type == eTokenShortHandClose)
-            return true;
+            return;
 
           // We are now outside the tag
           status = eOutsideTag;
@@ -711,8 +665,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         case eTokenTagStart: /* 'Attribute <'            */
         case eTokenTagEnd: /* 'Attribute </'           */
         case eTokenDeclaration: /* 'Attribute <?'           */
-          pXML->error = eXMLErrorUnexpectedToken;
-          return false;
+          throw std::runtime_error("Unexpected token found");
         default:
           break;
         }
@@ -743,10 +696,8 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
 
           {
             TCHAR *value = FromXMLString(token.pStr, token.length);
-            if (value == nullptr) {
-              pXML->error = eXMLErrorUnexpectedToken;
-              return false;
-            }
+            if (value == nullptr)
+              throw std::runtime_error("Unexpected token found");
 
             node.AddAttribute(std::move(attribute_name),
                               value, _tcslen(value));
@@ -764,35 +715,12 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         case eTokenShortHandClose: /* "Attr = />"         */
         case eTokenEquals: /* 'Attr = ='          */
         case eTokenDeclaration: /* 'Attr = <?'         */
-          pXML->error = eXMLErrorUnexpectedToken;
-          return false;
+          throw std::runtime_error("Unexpected token found");
         default:
           break;
         }
       }
     }
-  }
-}
-
-/**
- * Count the number of lines and columns in an XML string.
- */
-static void
-CountLinesAndColumns(const TCHAR *lpXML, size_t nUpto, XML::Results *pResults)
-{
-  assert(lpXML);
-  assert(pResults);
-
-  pResults->line = 1;
-  pResults->column = 1;
-  for (size_t n = 0; n < nUpto; n++) {
-    TCHAR ch = lpXML[n];
-    assert(ch);
-    if (ch == _T('\n')) {
-      pResults->line++;
-      pResults->column = 1;
-    } else
-      pResults->column++;
   }
 }
 
@@ -804,35 +732,23 @@ CountLinesAndColumns(const TCHAR *lpXML, size_t nUpto, XML::Results *pResults)
  * @return The main XMLNode or empty XMLNode on error
  */
 XMLNode *
-XML::ParseString(const TCHAR *xml_string, Results *pResults)
+XML::ParseString(const TCHAR *xml_string)
 {
   assert(xml_string != nullptr);
 
-  Error error;
   XMLNode xnode = XMLNode::Null();
-  Parser xml = { nullptr, 0, eXMLErrorNone, nullptr, 0, true, };
+  Parser xml = { nullptr, 0, nullptr, 0, true, };
 
   xml.lpXML = xml_string;
 
   // Fill the XMLNode xnode with the parsed data of xml
   // note: xnode is now the document node, not the main XMLNode
   ParseXMLElement(xnode, &xml);
-  error = xml.error;
 
   // If the document node does not have childnodes
   XMLNode *child = xnode.GetFirstChild();
-  if (child == nullptr) {
-    // If XML::Results object exists
-    if (pResults) {
-      // -> Save the error type
-      pResults->error = eXMLErrorNoElements;
-      pResults->line = 0;
-      pResults->column = 0;
-    }
-
-    // -> Return empty XMLNode
-    return nullptr;
-  }
+  if (child == nullptr)
+    throw std::runtime_error("No elements found");
 
   // Set the document's first childnode as new main node
   xnode = std::move(*child);
@@ -842,72 +758,44 @@ XML::ParseString(const TCHAR *xml_string, Results *pResults)
   if (xnode.IsDeclaration()) {
     // If the declaration does not have childnodes
     child = xnode.GetFirstChild();
-    if (child == nullptr) {
-      // If XML::Results object exists
-      if (pResults) {
-        // -> Save the error type
-        pResults->error = eXMLErrorNoElements;
-        pResults->line = 0;
-        pResults->column = 0;
-      }
-
-      // -> Return empty XMLNode
-      return nullptr;
-    }
+    if (child == nullptr)
+      throw std::runtime_error("No elements found");
 
     // Set the declaration's first childnode as new main node
     xnode = std::move(*child);
   }
 
-  // If an XML::Results object exists
-  // -> save the result (error/success)
-  if (pResults) {
-    pResults->error = error;
-
-    // If we have an error
-    if (error != eXMLErrorNone) {
-      // Find which line and column it starts on and
-      // save it in the XML::Results object
-      CountLinesAndColumns(xml.lpXML, xml.nIndex, pResults);
-    }
-  }
-
-  // If error occurred -> set node to empty
-  if (error != eXMLErrorNone)
-    return nullptr;
-
   // Return the node (empty, main or child of main that equals tag)
   return new XMLNode(std::move(xnode));
 }
 
-static bool
-ReadTextFile(Path path, tstring &buffer)
-try {
+static tstring
+ReadTextFile(Path path)
+{
   /* auto-detect the character encoding, to be able to parse XCSoar
      6.0 task files */
   FileLineReader reader(path, Charset::AUTO);
 
   long size = reader.GetSize();
   if (size > 65536)
-    return false;
+    throw std::runtime_error("File is too large");
   else if (size < 0)
     size = 4096;
 
+  tstring buffer;
   buffer.reserve(size);
 
   const TCHAR *line;
   while ((line = reader.ReadLine()) != nullptr) {
     if (buffer.length() > 65536)
       /* too long */
-      return false;
+      std::runtime_error("File is too large");
 
     buffer.append(line);
     buffer.append(_T("\n"));
   }
 
-  return true;
-} catch (const std::runtime_error &) {
-  return false;
+  return buffer;
 }
 
 /**
@@ -915,29 +803,11 @@ try {
 * (Includes error handling)
  * @param filename Filepath to the XML file to parse
  * @param tag (?)
- * @param pResults Pointer to the XML::Results object to fill on error or success
  * @return The main XMLNode or an empty node on error
  */
 XMLNode *
-XML::ParseFile(Path filename, Results *pResults)
+XML::ParseFile(Path filename)
 {
-  // Open the file for reading
-  tstring buffer;
-
-  // If file can't be read
-  if (!ReadTextFile(filename, buffer)) {
-    // If XML::Results object exists
-    if (pResults) {
-      // -> Save the error type into it
-      pResults->error = eXMLErrorFileNotFound;
-      pResults->line = 0;
-      pResults->column = 0;
-    }
-
-    // -> Return empty XMLNode
-    return nullptr;
-  }
-
-  // Parse the string and get the main XMLNode
-  return ParseString(buffer.c_str(), pResults);
+  const auto buffer = ReadTextFile(filename);
+  return ParseString(buffer.c_str());
 }

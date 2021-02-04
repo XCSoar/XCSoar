@@ -1,6 +1,7 @@
 #include "system/Args.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Task/LoadFile.hpp"
+#include "util/PrintException.hxx"
 
 #include <tchar.h>
 
@@ -38,7 +39,7 @@ Print(const OrderedTask &task)
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "FILE.tsk ...");
   if (args.IsEmpty())
     args.UsageError();
@@ -61,4 +62,7 @@ main(int argc, char **argv)
   } while (!args.IsEmpty());
 
   return result;
+} catch (...) {
+  PrintException(std::current_exception());
+  return EXIT_FAILURE;
 }

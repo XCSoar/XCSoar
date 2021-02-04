@@ -38,14 +38,13 @@ LoadTask(Path path, const TaskBehaviour &task_behaviour,
 {
   // Load root node
   std::unique_ptr<XMLNode> xml_root(XML::ParseFile(path));
-  if (!xml_root)
-    return nullptr;
+  assert(xml_root);
 
   const ConstDataNodeXML root(*xml_root);
 
   // Check if root node is a <Task> node
   if (!StringIsEqual(root.GetName(), _T("Task")))
-    return nullptr;
+    throw std::runtime_error("Invalid task file");
 
   // Create a blank task
   auto task = std::make_unique<OrderedTask>(task_behaviour);
