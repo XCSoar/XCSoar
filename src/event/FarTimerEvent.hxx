@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 CM4all GmbH
+ * Copyright 2007-2021 CM4all GmbH
  * All rights reserved.
  *
  * author: Max Kellermann <mk@cm4all.com>
@@ -32,71 +32,17 @@
 
 #pragma once
 
-#include "Init.hxx"
-#include "event/DeferEvent.hxx"
-#include "event/CoarseTimerEvent.hxx"
-
-#include <ares.h>
-
-#include <forward_list>
-
-class CancellablePointer;
-class SocketDescriptor;
-
-namespace Cares {
-
-class Handler;
+#include "FineTimerEvent.hxx"
 
 /**
- * C++ wrapper for #ares_channel with #EventLoop integration.
+ * A coarse timer event which schedules far into the future.  Use this
+ * when you need a coarse resolution, but the supported time span of
+ * #CoarseTimerEvent is not enough.  For example, a good use case is
+ * timers which fire only every few minutes and do periodic cleanup.
+ *
+ * Right now, this is just an alias for #FineTimerEvent.  This class
+ * supports arbitrary time spans, but uses a high-resolution timer.
+ * Eventually, we may turn this into a timer wheel with minute
+ * resolution.
  */
-class Channel {
-	Init init;
-
-	ares_channel channel;
-
-	DeferEvent defer_process;
-	CoarseTimerEvent timeout_event;
-
-	class Socket;
-
-	std::forward_list<Socket> sockets;
-	fd_set read_ready, write_ready;
-
-	class Request;
-
-public:
-	explicit Channel(EventLoop &event_loop);
-	~Channel() noexcept;
-
-	EventLoop &GetEventLoop() const noexcept {
-		return defer_process.GetEventLoop();
-	}
-
-	/**
-	 * Look up a host name and call a #Handler method upon
-	 * completion.
-	 */
-	void Lookup(const char *name, int family, Handler &handler,
-		    CancellablePointer &cancel_ptr) noexcept;
-
-	/**
-	 * This overload submits two queries: AF_INET and AF_INET6 and
-	 * returns both results to the handler.
-	 */
-	void Lookup(const char *name, Handler &handler,
-		    CancellablePointer &cancel_ptr) noexcept;
-
-private:
-	void UpdateSockets() noexcept;
-	void DeferredProcess() noexcept;
-
-	void ScheduleProcess() noexcept {
-		defer_process.Schedule();
-	}
-
-	void OnSocket(SocketDescriptor fd, unsigned events) noexcept;
-	void OnTimeout() noexcept;
-};
-
-} // namespace Cares
+using FarTimerEvent = FineTimerEvent;

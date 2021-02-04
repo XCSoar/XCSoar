@@ -28,7 +28,7 @@ Copyright_License {
 #include "net/AddressInfo.hxx"
 #include "system/Args.hpp"
 #include "event/Loop.hxx"
-#include "event/TimerEvent.hxx"
+#include "event/FineTimerEvent.hxx"
 #include "util/NumberParser.hpp"
 #include "util/StringUtil.hpp"
 #include "util/PrintException.hxx"
@@ -43,8 +43,8 @@ class Handler : public SkyLinesTracking::Handler {
 
   SkyLinesTracking::Client client;
 
-  TimerEvent stop_timer{event_loop, BIND_THIS_METHOD(OnStopTimer)};
-  TimerEvent next_timer{event_loop, BIND_THIS_METHOD(OnNextTimer)};
+  FineTimerEvent stop_timer{event_loop, BIND_THIS_METHOD(OnStopTimer)};
+  FineTimerEvent next_timer{event_loop, BIND_THIS_METHOD(OnNextTimer)};
 
   std::unique_ptr<DebugReplay> replay;
 

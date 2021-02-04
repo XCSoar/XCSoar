@@ -29,7 +29,7 @@ Copyright_License {
 #include "Tracking/SkyLines/Protocol.hpp"
 #include "util/ByteOrder.hxx"
 #include "event/Loop.hxx"
-#include "event/TimerEvent.hxx"
+#include "event/CoarseTimerEvent.hxx"
 #include "event/SignalMonitor.hxx"
 #include "net/IPv4Address.hxx"
 #include "io/FileOutputStream.hxx"
@@ -61,7 +61,7 @@ class CloudServer final
 {
   const AllocatedPath db_path;
 
-  TimerEvent save_timer, expire_timer;
+  CoarseTimerEvent save_timer, expire_timer;
 
 public:
   CloudServer(AllocatedPath &&_db_path, EventLoop &event_loop,

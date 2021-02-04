@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 CM4all GmbH
+ * Copyright 2007-2021 CM4all GmbH
  * All rights reserved.
  *
  * author: Max Kellermann <mk@cm4all.com>
@@ -32,71 +32,20 @@
 
 #pragma once
 
-#include "Init.hxx"
-#include "event/DeferEvent.hxx"
-#include "event/CoarseTimerEvent.hxx"
-
-#include <ares.h>
-
-#include <forward_list>
-
-class CancellablePointer;
-class SocketDescriptor;
-
-namespace Cares {
-
-class Handler;
+#include "TimerEvent.hxx"
 
 /**
- * C++ wrapper for #ares_channel with #EventLoop integration.
+ * This class invokes a callback function after a certain amount of
+ * time.  Use Schedule() to start the timer or Cancel() to cancel it.
+ *
+ * Unlike #FineTimerEvent, this class has a granularity of about 1
+ * second, and is optimized for timeouts between 1 and 60 seconds
+ * which are often canceled before they expire (i.e. optimized for
+ * fast insertion and deletion, at the cost of granularity).
+ *
+ * This class is not thread-safe, all methods must be called from the
+ * thread that runs the #EventLoop, except where explicitly documented
+ * as thread-safe.
  */
-class Channel {
-	Init init;
-
-	ares_channel channel;
-
-	DeferEvent defer_process;
-	CoarseTimerEvent timeout_event;
-
-	class Socket;
-
-	std::forward_list<Socket> sockets;
-	fd_set read_ready, write_ready;
-
-	class Request;
-
-public:
-	explicit Channel(EventLoop &event_loop);
-	~Channel() noexcept;
-
-	EventLoop &GetEventLoop() const noexcept {
-		return defer_process.GetEventLoop();
-	}
-
-	/**
-	 * Look up a host name and call a #Handler method upon
-	 * completion.
-	 */
-	void Lookup(const char *name, int family, Handler &handler,
-		    CancellablePointer &cancel_ptr) noexcept;
-
-	/**
-	 * This overload submits two queries: AF_INET and AF_INET6 and
-	 * returns both results to the handler.
-	 */
-	void Lookup(const char *name, Handler &handler,
-		    CancellablePointer &cancel_ptr) noexcept;
-
-private:
-	void UpdateSockets() noexcept;
-	void DeferredProcess() noexcept;
-
-	void ScheduleProcess() noexcept {
-		defer_process.Schedule();
-	}
-
-	void OnSocket(SocketDescriptor fd, unsigned events) noexcept;
-	void OnTimeout() noexcept;
-};
-
-} // namespace Cares
+using CoarseTimerEvent = TimerEvent;
+// TODO: implement

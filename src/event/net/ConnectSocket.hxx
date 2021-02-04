@@ -34,7 +34,7 @@
 
 #include "net/UniqueSocketDescriptor.hxx"
 #include "event/SocketEvent.hxx"
-#include "event/TimerEvent.hxx"
+#include "event/CoarseTimerEvent.hxx"
 #include "util/Cancellable.hxx"
 
 #include <exception>
@@ -56,7 +56,7 @@ class ConnectSocket final : public Cancellable {
 	ConnectSocketHandler &handler;
 
 	SocketEvent event;
-	TimerEvent timeout_event;
+	CoarseTimerEvent timeout_event;
 
 public:
 	ConnectSocket(EventLoop &_event_loop,

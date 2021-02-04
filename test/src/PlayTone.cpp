@@ -32,7 +32,7 @@ Copyright_License {
 #include "Audio/ToneSynthesiser.hpp"
 #include "ui/window/Init.hpp"
 #include "event/Loop.hxx"
-#include "event/TimerEvent.hxx"
+#include "event/FineTimerEvent.hxx"
 #include "system/Args.hpp"
 
 #include <stdio.h>
@@ -45,7 +45,7 @@ struct Instance {
 
   std::unique_ptr<PCMPlayer> player{PCMPlayerFactory::CreateInstanceForDirectAccess(event_loop)};
 
-  TimerEvent stop_timer{event_loop, BIND_THIS_METHOD(OnStopTimer)};
+  FineTimerEvent stop_timer{event_loop, BIND_THIS_METHOD(OnStopTimer)};
 
   Instance() noexcept {
     stop_timer.Schedule(std::chrono::seconds(1));
