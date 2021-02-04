@@ -81,7 +81,7 @@ MakeWaypoint(GeoPoint location, const TCHAR *name)
   return WaypointPtr(wp);
 }
 
-OrderedTask*
+std::unique_ptr<OrderedTask>
 TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
                      const Waypoints *waypoints, unsigned index) const
 {
@@ -105,7 +105,7 @@ TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
     return nullptr;
 
   // Create a blank task
-  OrderedTask *task = new OrderedTask(task_behaviour);
+  auto task = std::make_unique<OrderedTask>(task_behaviour);
   AbstractTaskFactory &fact = task->GetFactory();
 
   unsigned i = 0;
@@ -143,7 +143,7 @@ TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
 }
 
 unsigned
-TaskFileIGC::Count()
+TaskFileIGC::Count() noexcept
 try {
   // Open the IGC file
   FileLineReaderA reader(path);

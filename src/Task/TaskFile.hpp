@@ -26,6 +26,8 @@
 #include "system/Path.hpp"
 #include "util/StaticArray.hxx"
 
+#include <memory>
+
 #include <tchar.h>
 
 struct TaskBehaviour;
@@ -50,17 +52,17 @@ public:
    * @param filename The filepath
    * @return TaskFile instance
    */
-  static TaskFile *Create(Path path);
+  static std::unique_ptr<TaskFile> Create(Path path);
 
-  static OrderedTask *GetTask(Path path,
-                              const TaskBehaviour &task_behaviour,
-                              const Waypoints *waypoints,
-                              unsigned index);
+  static std::unique_ptr<OrderedTask> GetTask(Path path,
+                                              const TaskBehaviour &task_behaviour,
+                                              const Waypoints *waypoints,
+                                              unsigned index);
 
-  virtual OrderedTask *GetTask(const TaskBehaviour &task_behaviour,
-                               const Waypoints *waypoints,
-                               unsigned index) const = 0;
-  virtual unsigned Count() = 0;
+  virtual std::unique_ptr<OrderedTask> GetTask(const TaskBehaviour &task_behaviour,
+                                               const Waypoints *waypoints,
+                                               unsigned index) const = 0;
+  virtual unsigned Count() noexcept = 0;
 
   const TCHAR *GetName(unsigned index) const;
 };

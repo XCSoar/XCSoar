@@ -147,8 +147,8 @@ AfterStartup()
     InputEvents::processGlideComputer(GCE_STARTUP_REAL);
   }
 
-  OrderedTask *defaultTask = LoadDefaultTask(CommonInterface::GetComputerSettings().task,
-                                             &way_points);
+  const auto defaultTask = LoadDefaultTask(CommonInterface::GetComputerSettings().task,
+                                           &way_points);
   if (defaultTask) {
     {
       ScopeSuspendAllThreads suspend;
@@ -157,7 +157,6 @@ AfterStartup()
     }
 
     protected_task_manager->TaskCommit(*defaultTask);
-    delete defaultTask;
   }
 
   task_manager->Resume();

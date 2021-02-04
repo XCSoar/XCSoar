@@ -21,13 +21,13 @@ Copyright_License {
 }
 */
 
-#include "Task/TaskFileXCSoar.hpp"
+#include "TaskFileXCSoar.hpp"
 #include "LoadFile.hpp"
-#include "system/Path.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 
 #include <cassert>
 
-OrderedTask* 
+std::unique_ptr<OrderedTask>
 TaskFileXCSoar::GetTask(const TaskBehaviour &task_behaviour,
                         const Waypoints *waypoints, unsigned index) const
 {

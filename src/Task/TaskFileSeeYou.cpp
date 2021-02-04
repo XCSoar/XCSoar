@@ -466,7 +466,7 @@ AdvanceReaderToTask(TLineReader &reader, const unsigned index)
   return line;
 }
 
-OrderedTask*
+std::unique_ptr<OrderedTask>
 TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
                         const Waypoints *waypoints, unsigned index) const
 try {
@@ -515,7 +515,7 @@ try {
 
   ParseCUTaskDetails(reader, &task_info, turnpoint_infos);
 
-  OrderedTask *task = new OrderedTask(task_behaviour);
+  auto task = std::make_unique<OrderedTask>(task_behaviour);
   task->SetFactory(task_info.wp_dis ?
                     TaskFactoryType::RACING : TaskFactoryType::AAT);
   AbstractTaskFactory& fact = task->GetFactory();
@@ -583,7 +583,7 @@ try {
 }
 
 unsigned
-TaskFileSeeYou::Count()
+TaskFileSeeYou::Count() noexcept
 try {
   // Reset internal task name memory
   namesuffixes.clear();

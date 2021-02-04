@@ -42,11 +42,11 @@ public:
    * @param waypoints All waypoints contained in the SeeYou task file.
    * @param index Index into the array of tasks in the SeeYou file, 0....n
    */
-  virtual OrderedTask *GetTask(const TaskBehaviour &task_behaviour,
-                               const Waypoints *waypoints,
-                               unsigned index) const;
+  std::unique_ptr<OrderedTask> GetTask(const TaskBehaviour &task_behaviour,
+                                       const Waypoints *waypoints,
+                                       unsigned index) const override;
 
-  unsigned Count();
+  unsigned Count() noexcept override;
 };
 
 #endif

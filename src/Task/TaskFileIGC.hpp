@@ -31,11 +31,11 @@ class TaskFileIGC: public TaskFile
 public:
   explicit TaskFileIGC(Path _path):TaskFile(_path) {}
 
-  virtual OrderedTask *GetTask(const TaskBehaviour &task_behaviour,
-                               const Waypoints *waypoints,
-                               unsigned index) const;
+  std::unique_ptr<OrderedTask> GetTask(const TaskBehaviour &task_behaviour,
+                                       const Waypoints *waypoints,
+                                       unsigned index) const override;
 
-  unsigned Count();
+  unsigned Count() noexcept override;
 };
 
 #endif

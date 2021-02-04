@@ -30,11 +30,9 @@
 #include "util/StringUtil.hpp"
 #include "util/StringAPI.hxx"
 
-#include <memory>
-
 #include <tchar.h>
 
-OrderedTask *
+std::unique_ptr<OrderedTask>
 LoadTask(Path path, const TaskBehaviour &task_behaviour,
          const Waypoints *waypoints)
 {
@@ -50,7 +48,7 @@ LoadTask(Path path, const TaskBehaviour &task_behaviour,
     return nullptr;
 
   // Create a blank task
-  OrderedTask *task = new OrderedTask(task_behaviour);
+  auto task = std::make_unique<OrderedTask>(task_behaviour);
 
   // Read the task from the XML file
   LoadTask(*task, root, waypoints);

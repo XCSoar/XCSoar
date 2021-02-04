@@ -274,9 +274,9 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
     return;
 
   if (!StringIsEmpty(misc)) {
-    OrderedTask *task = TaskFile::GetTask(LocalPath(misc),
-                                          CommonInterface::GetComputerSettings().task,
-                                          &way_points, 0);
+    const auto task = TaskFile::GetTask(LocalPath(misc),
+                                        CommonInterface::GetComputerSettings().task,
+                                        &way_points, 0);
     if (task) {
       {
         ScopeSuspendAllThreads suspend;
@@ -285,7 +285,6 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
       }
 
       protected_task_manager->TaskCommit(*task);
-      delete task;
     }
   }
 

@@ -26,14 +26,14 @@
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "system/Path.hpp"
 
-OrderedTask *
+std::unique_ptr<OrderedTask>
 LoadDefaultTask(const TaskBehaviour &task_behaviour,
-                const Waypoints *waypoints)
+                const Waypoints *waypoints) noexcept
 {
   const auto path = LocalPath(default_task_path);
-  OrderedTask *task = LoadTask(path, task_behaviour, waypoints);
+  auto task = LoadTask(path, task_behaviour, waypoints);
   if (!task) {
-    task = new OrderedTask(task_behaviour);
+    task = std::make_unique<OrderedTask>(task_behaviour);
     assert(task);
     task->SetFactory(task_behaviour.task_type_default);
   }
