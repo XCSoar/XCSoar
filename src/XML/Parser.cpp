@@ -806,19 +806,7 @@ CountLinesAndColumns(const TCHAR *lpXML, size_t nUpto, XML::Results *pResults)
 XMLNode *
 XML::ParseString(const TCHAR *xml_string, Results *pResults)
 {
-  // If String is empty
-  if (xml_string == nullptr) {
-    // If XML::Results object exists
-    if (pResults) {
-      // -> Save the error type
-      pResults->error = eXMLErrorNoElements;
-      pResults->line = 0;
-      pResults->column = 0;
-    }
-
-    // -> Return empty XMLNode
-    return nullptr;
-  }
+  assert(xml_string != nullptr);
 
   Error error;
   XMLNode xnode = XMLNode::Null();
