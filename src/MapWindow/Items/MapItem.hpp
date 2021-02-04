@@ -156,13 +156,13 @@ struct SelfMapItem: public MapItem
 struct TaskOZMapItem: public MapItem
 {
   int index;
-  const ObservationZonePoint *oz;
+  std::unique_ptr<ObservationZonePoint> oz;
   TaskPointType tp_type;
   WaypointPtr waypoint;
 
   TaskOZMapItem(int _index, const ObservationZonePoint &_oz,
                 TaskPointType _tp_type, WaypointPtr &&_waypoint);
-  virtual ~TaskOZMapItem();
+  ~TaskOZMapItem() noexcept override;
 };
 
 struct AirspaceMapItem: public MapItem

@@ -57,11 +57,13 @@ protected:
      inner_radius(other.inner_radius) {}
 
 public:
-  static KeyholeZone *CreateCustomKeyholeZone(const GeoPoint &reference,
-                                              double radius,
-                                              Angle angle) {
-    return new KeyholeZone(Shape::CUSTOM_KEYHOLE, true, true, reference,
-                           radius, angle);
+  static auto CreateCustomKeyholeZone(const GeoPoint &reference,
+                                      double radius,
+                                      Angle angle) noexcept {
+    return std::unique_ptr<KeyholeZone>{
+      new KeyholeZone(Shape::CUSTOM_KEYHOLE, true, true, reference,
+                      radius, angle)
+    };
   }
 
   /**
@@ -69,30 +71,38 @@ public:
    * incoming/outgoing legs, with 500m cylinder, according to DAeC
    * rules.
    */
-  static KeyholeZone *CreateDAeCKeyholeZone(const GeoPoint &reference) {
-    return new KeyholeZone(Shape::DAEC_KEYHOLE, true, true, reference,
-                           10000,
-                           Angle::QuarterCircle());
+  static auto CreateDAeCKeyholeZone(const GeoPoint &reference) noexcept {
+    return std::unique_ptr<KeyholeZone>{
+      new KeyholeZone(Shape::DAEC_KEYHOLE,
+                      true, true, reference,
+                      10000,
+                      Angle::QuarterCircle())
+    };
   }
 
   /**
    * Create a 90 degree 20km sector centered at the bisector of
    * incoming/outgoing legs, with 500m cylinder.
    */
-  static KeyholeZone *CreateBGAFixedCourseZone(const GeoPoint &reference) {
-    return new KeyholeZone(Shape::BGAFIXEDCOURSE, true, true, reference,
-                           20000,
-                           Angle::QuarterCircle());
+  static auto CreateBGAFixedCourseZone(const GeoPoint &reference) noexcept {
+    return std::unique_ptr<KeyholeZone>{
+      new KeyholeZone(Shape::BGAFIXEDCOURSE,
+                      true, true, reference,
+                      20000,
+                      Angle::QuarterCircle())
+    };
   }
 
   /**
    * Create a 180 degree 10km sector centered at the bisector of
    * incoming/outgoing legs, with 500m cylinder
    */
-  static KeyholeZone *CreateBGAEnhancedOptionZone(const GeoPoint &reference) {
-    return new KeyholeZone(Shape::BGAENHANCEDOPTION, true, true, reference,
-                           10000,
-                           Angle::HalfCircle());
+  static auto CreateBGAEnhancedOptionZone(const GeoPoint &reference) noexcept {
+    return std::unique_ptr<KeyholeZone>{
+      new KeyholeZone(Shape::BGAENHANCEDOPTION, true, true, reference,
+                      10000,
+                      Angle::HalfCircle())
+    };
   }
 
   /**
@@ -112,8 +122,8 @@ public:
   double ScoreAdjustment() const override;
 
   /* virtual methods from class ObservationZonePoint */
-  ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
-    return new KeyholeZone(*this, _reference);
+  std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {
+    return std::unique_ptr<ObservationZonePoint>{new KeyholeZone(*this, _reference)};
   }
 };
 

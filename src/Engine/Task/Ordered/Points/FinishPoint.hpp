@@ -61,7 +61,7 @@ public:
    *
    * @return Partially-initialised object
    */
-  FinishPoint(ObservationZonePoint *_oz, WaypointPtr &&wp,
+  FinishPoint(std::unique_ptr<ObservationZonePoint> &&_oz, WaypointPtr &&wp,
               const TaskBehaviour &tb,
               const FinishConstraints &constraints,
               bool boundary_scored=false);

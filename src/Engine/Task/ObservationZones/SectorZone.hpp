@@ -160,8 +160,8 @@ public:
 
   /* virtual methods from class ObservationZonePoint */
   bool Equals(const ObservationZonePoint &other) const override;
-  ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
-    return new SectorZone(*this, _reference);
+  std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {
+    return std::unique_ptr<ObservationZonePoint>{new SectorZone(*this, _reference)};
   }
 
   /* virtual methods from class CylinderZone */

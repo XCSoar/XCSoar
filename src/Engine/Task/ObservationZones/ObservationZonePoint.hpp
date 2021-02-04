@@ -27,6 +27,8 @@
 #include "ObservationZone.hpp"
 #include "Geo/GeoPoint.hpp"
 
+#include <memory>
+
 /**
  * \todo 
  * - add arc type for future use
@@ -86,9 +88,9 @@ public:
    * @param _location New location, or if NULL, uses object's location
    * @return Cloned object
    */
-  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const = 0;
+  virtual std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept = 0;
 
-  ObservationZonePoint *Clone() const {
+  std::unique_ptr<ObservationZonePoint> Clone() const noexcept {
     return Clone(GetReference());
   }
 

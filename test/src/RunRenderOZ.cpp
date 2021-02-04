@@ -77,36 +77,31 @@ static AirspaceRendererSettings airspace_renderer_settings;
 
 class OZWindow : public PaintWindow {
   OZRenderer roz;
-  ObservationZonePoint *oz;
+  std::unique_ptr<ObservationZonePoint> oz;
   Projection projection;
 
 public:
   OZWindow(const TaskLook &task_look, const AirspaceLook &airspace_look)
-    :roz(task_look, airspace_look, airspace_renderer_settings), oz(NULL) {
+    :roz(task_look, airspace_look, airspace_renderer_settings) {
     projection.SetGeoLocation(location);
     set_shape(ObservationZone::Shape::LINE);
-  }
-
-  ~OZWindow() {
-    delete oz;
   }
 
   void set_shape(ObservationZone::Shape shape) {
     if (oz != NULL && shape == oz->GetShape())
       return;
 
-    delete oz;
-    oz = NULL;
+    oz.reset();
 
     double radius(10000);
 
     switch (shape) {
     case ObservationZone::Shape::LINE:
-      oz = new LineSectorZone(location, 2 * radius);
+      oz = std::make_unique<LineSectorZone>(location, 2 * radius);
       break;
 
     case ObservationZone::Shape::CYLINDER:
-      oz = new CylinderZone(location, radius);
+      oz = std::make_unique<CylinderZone>(location, radius);
       break;
 
     case ObservationZone::Shape::MAT_CYLINDER:
@@ -114,14 +109,16 @@ public:
       break;
 
     case ObservationZone::Shape::SECTOR:
-      oz = new SectorZone(location, radius,
-                          Angle::Degrees(0), Angle::Degrees(70));
+      oz = std::make_unique<SectorZone>(location, radius,
+                                        Angle::Degrees(0),
+                                        Angle::Degrees(70));
       break;
 
     case ObservationZone::Shape::ANNULAR_SECTOR:
-      oz = new AnnularSectorZone(location, radius,
-                                 Angle::Degrees(0), Angle::Degrees(70),
-                                 radius / 2.);
+      oz = std::make_unique<AnnularSectorZone>(location, radius,
+                                               Angle::Degrees(0),
+                                               Angle::Degrees(70),
+                                               radius / 2.);
       break;
 
     case ObservationZone::Shape::FAI_SECTOR:
@@ -150,7 +147,7 @@ public:
       break;
 
     case ObservationZone::Shape::SYMMETRIC_QUADRANT:
-      oz = new SymmetricSectorZone(location);
+      oz = std::make_unique<SymmetricSectorZone>(location);
       break;
     }
 

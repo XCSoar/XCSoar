@@ -26,11 +26,12 @@
 #include <stdlib.h>
 #include <cassert>
 
-FinishPoint::FinishPoint(ObservationZonePoint* _oz, WaypointPtr && wp,
+FinishPoint::FinishPoint(std::unique_ptr<ObservationZonePoint> &&_oz, WaypointPtr && wp,
                          const TaskBehaviour& tb,
                          const FinishConstraints &_constraints,
                          bool boundary_scored)
-  :OrderedTaskPoint(TaskPointType::FINISH, _oz, std::move(wp), boundary_scored),
+  :OrderedTaskPoint(TaskPointType::FINISH, std::move(_oz), std::move(wp),
+                    boundary_scored),
    safety_height(tb.safety_height_arrival),
    constraints(_constraints)
 {

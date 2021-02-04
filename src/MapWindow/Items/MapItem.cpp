@@ -29,7 +29,4 @@ TaskOZMapItem::TaskOZMapItem(int _index, const ObservationZonePoint &_oz,
   :MapItem(TASK_OZ), index(_index), oz(_oz.Clone()),
    tp_type(_tp_type), waypoint(std::move(_waypoint)) {}
 
-TaskOZMapItem::~TaskOZMapItem()
-{
-  delete oz;
-}
+TaskOZMapItem::~TaskOZMapItem() noexcept = default;
