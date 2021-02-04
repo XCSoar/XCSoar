@@ -532,34 +532,34 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
 
           if (!ParseXMLElement(*pNew, pXML)) {
             return false;
-          } else {
-            // If the call to recurse this function
-            // evented in a end tag specified in XML then
-            // we need to unwind the calls to this
-            // function until we find the appropriate node
-            // (the element name and end tag name must
-            // match)
-            if (pXML->cbEndTag) {
-              // If we are back at the root node then we
-              // have an unmatched end tag
-              if (node.GetName() == nullptr) {
-                pXML->error = eXMLErrorUnmatchedEndTag;
-                return false;
-              }
+          }
 
-              // If the end tag matches the name of this
-              // element then we only need to unwind
-              // once more...
-
-              if (CompareTagName(node.GetName(), pXML->lpEndTag)) {
-                pXML->cbEndTag = 0;
-              }
-
-              return true;
-            } else {
-              // If we didn't have a new element to create
-              break;
+          // If the call to recurse this function
+          // evented in a end tag specified in XML then
+          // we need to unwind the calls to this
+          // function until we find the appropriate node
+          // (the element name and end tag name must
+          // match)
+          if (pXML->cbEndTag) {
+            // If we are back at the root node then we
+            // have an unmatched end tag
+            if (node.GetName() == nullptr) {
+              pXML->error = eXMLErrorUnmatchedEndTag;
+              return false;
             }
+
+            // If the end tag matches the name of this
+            // element then we only need to unwind
+            // once more...
+
+            if (CompareTagName(node.GetName(), pXML->lpEndTag)) {
+              pXML->cbEndTag = 0;
+            }
+
+            return true;
+          } else {
+            // If we didn't have a new element to create
+            break;
           }
         }
         break;
@@ -844,10 +844,10 @@ XML::ParseString(const TCHAR *xml_string, Results *pResults)
 
     // -> Return empty XMLNode
     return nullptr;
-  } else {
-    // Set the document's first childnode as new main node
-    xnode = std::move(*child);
   }
+
+  // Set the document's first childnode as new main node
+  xnode = std::move(*child);
 
   // If the new main node is the xml declaration
   // -> try to take the first childnode again
@@ -865,10 +865,10 @@ XML::ParseString(const TCHAR *xml_string, Results *pResults)
 
       // -> Return empty XMLNode
       return nullptr;
-    } else {
-      // Set the declaration's first childnode as new main node
-      xnode = std::move(*child);
     }
+
+    // Set the declaration's first childnode as new main node
+    xnode = std::move(*child);
   }
 
   // If an XML::Results object exists
