@@ -26,6 +26,8 @@ Copyright_License {
 #include "TaskListPanel.hpp"
 #include "Internal.hpp"
 #include "../dlgTaskHelpers.hpp"
+#include "Dialogs/CoDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "Dialogs/Message.hpp"
 #include "Components.hpp"
 #include "Logger/ExternalLogger.hpp"
@@ -37,6 +39,10 @@ Copyright_License {
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "Operation/PluggableOperationEnvironment.hpp"
+#include "net/http/Init.hpp"
+#include "net/client/WeGlide/DownloadTask.hpp"
+#include "co/InvokeTask.hxx"
 
 TaskActionsPanel::TaskActionsPanel(TaskManagerDialog &_dialog,
                                    TaskMiscPanel &_parent,
@@ -102,6 +108,45 @@ TaskActionsPanel::OnDeclareClicked()
   ExternalLogger::Declare(decl, way_points.GetHome().get());
 }
 
+static Co::InvokeTask
+DownloadWeGlideTask(std::unique_ptr<OrderedTask> &task,
+                    CurlGlobal &curl, const WeGlideSettings &settings,
+                    const TaskBehaviour &task_behaviour,
+                    const Waypoints *waypoints,
+                    ProgressListener &progress)
+{
+  task = co_await WeGlide::DownloadDeclaredTask(curl, settings,
+                                                task_behaviour, waypoints,
+                                                progress);
+}
+
+inline void
+TaskActionsPanel::OnDownloadClicked() noexcept
+try {
+  const auto &settings = CommonInterface::GetComputerSettings();
+
+  std::unique_ptr<OrderedTask> task;
+  PluggableOperationEnvironment env;
+  if (!ShowCoDialog(dialog.GetMainWindow(), GetLook(),
+                    _("Download"),
+                    DownloadWeGlideTask(task, *Net::curl, settings.weglide,
+                                        settings.task,
+                                        &way_points, env),
+                    &env))
+    return;
+
+  if (!task)
+    ShowMessageBox(_("No task"), _("Error"), MB_OK|MB_ICONEXCLAMATION);
+
+  active_task = task->Clone(settings.task);
+  *task_modified = true;
+  dialog.ResetTaskView();
+
+  dialog.SwitchToEditTab();
+} catch (const std::runtime_error &e) {
+  ShowError(std::current_exception(), _("Download"));
+}
+
 void
 TaskActionsPanel::ReClick() noexcept
 {
@@ -112,10 +157,16 @@ void
 TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
                           [[maybe_unused]] const PixelRect &rc) noexcept
 {
+  const auto &settings = CommonInterface::GetComputerSettings();
+
   AddButton(_("New Task"), [this](){ OnNewTaskClicked(); });
   AddButton(_("Declare"), [this](){ OnDeclareClicked(); });
   AddButton(_("Browse"), [this](){ OnBrowseClicked(); });
   AddButton(_("Save"), [this](){ SaveTask(); });
+
+  if (settings.weglide.pilot_id != 0)
+    AddButton(_("Download WeGlide task"),
+              [this](){ OnDownloadClicked(); });
 
   if (is_simulator())
     /* cannot communicate with real devices in simulator mode */

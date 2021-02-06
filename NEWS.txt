@@ -5,6 +5,8 @@ Version 7.27 - not yet released
 * weather
   - New Rasp Color schemes for Thermalmap
   - Support 15 minute intervals in RASP files
+* task
+  - add WeGlide declared task download
 * Android
   - allow file explorer to access the XCSoar data files
 

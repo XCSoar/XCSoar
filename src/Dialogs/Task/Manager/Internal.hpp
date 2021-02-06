@@ -56,6 +56,10 @@ public:
     return dialog.GetLook();
   }
 
+  auto &GetMainWindow() const noexcept {
+    return dialog.GetMainWindow();
+  }
+
   void FocusFirstControl() {
     dialog.FocusFirstControl();
   }
