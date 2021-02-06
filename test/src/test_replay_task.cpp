@@ -21,14 +21,13 @@ extern "C" {
 #include "tap.h"
 }
 
-static OrderedTask *
+static std::unique_ptr<OrderedTask>
 task_load(const TaskBehaviour &task_behaviour)
 {
-  auto *task = LoadTask(task_file, task_behaviour);
+  auto task = LoadTask(task_file, task_behaviour);
   if (task != nullptr) {
     task->UpdateStatsGeometry();
     if (!task->CheckTask()) {
-      delete task;
       return nullptr;
     }
   }
@@ -95,10 +94,9 @@ test_replay()
 
   task_manager.SetGlidePolar(glide_polar);
 
-  OrderedTask* t = task_load(task_behaviour);
+  auto t = task_load(task_behaviour);
   if (t) {
     task_manager.Commit(*t);
-    delete t;
     task_manager.Resume();
   } else {
     return false;

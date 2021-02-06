@@ -64,10 +64,15 @@ class OrderedTask final : public AbstractTask
 {
 public:
   /** Storage type of task points */
-  typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector;
+  using OrderedTaskPointVector = std::vector<std::unique_ptr<OrderedTaskPoint>>;
 
-  typedef DereferenceContainerAdapter<const OrderedTaskPointVector,
-                                      const OrderedTaskPoint> ConstTaskPointList;
+  using ConstTaskPointList =
+    DereferenceContainerAdapter<const OrderedTaskPointVector,
+                                const OrderedTaskPoint>;
+
+  using TaskPointList =
+    DereferenceContainerAdapter<const OrderedTaskPointVector,
+                                OrderedTaskPoint>;
 
 private:
   OrderedTaskPointVector task_points;
@@ -84,8 +89,8 @@ private:
   std::unique_ptr<AbstractTaskFactory> active_factory;
   OrderedTaskSettings ordered_settings;
   SmartTaskAdvance task_advance;
-  TaskDijkstraMin *dijkstra_min = nullptr;
-  TaskDijkstraMax *dijkstra_max = nullptr;
+  std::unique_ptr<TaskDijkstraMin> dijkstra_min;
+  std::unique_ptr<TaskDijkstraMax> dijkstra_max;
 
   StaticString<64> name;
 

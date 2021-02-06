@@ -62,7 +62,7 @@ public:
    *
    * @return Partially-initialised object
    */
-  StartPoint(ObservationZonePoint *_oz,
+  StartPoint(std::unique_ptr<ObservationZonePoint> &&_oz,
              WaypointPtr &&wp,
              const TaskBehaviour &tb,
              const StartConstraints &constraints);

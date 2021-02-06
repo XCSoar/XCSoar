@@ -23,7 +23,7 @@
 #ifndef DEFAULT_TASK_HPP
 #define DEFAULT_TASK_HPP
 
-#include "util/Compiler.h"
+#include <memory>
 
 struct TaskBehaviour;
 class OrderedTask;
@@ -41,9 +41,8 @@ class Waypoints;
  * or non-existent, returns empty task with defaults set by
  * config task defaults
  */
-gcc_malloc
-OrderedTask *
+std::unique_ptr<OrderedTask>
 LoadDefaultTask(const TaskBehaviour &task_behaviour,
-                const Waypoints *waypoints);
+                const Waypoints *waypoints) noexcept;
 
 #endif

@@ -34,13 +34,13 @@
 #include <cassert>
 
 OrderedTaskPoint::OrderedTaskPoint(TaskPointType _type,
-                                   ObservationZonePoint *_oz,
+                                   std::unique_ptr<ObservationZonePoint> &&_oz,
                                    WaypointPtr &&wp,
                                    const bool b_scored)
   :TaskLeg(*this),
    TaskWaypoint(_type, std::move(wp)),
    ScoredTaskPoint(GetLocation(), b_scored),
-   ObservationZoneClient(_oz),
+   ObservationZoneClient(std::move(_oz)),
    tp_next(NULL), tp_previous(NULL),
    flat_bb(FlatGeoPoint(0,0),0) // empty, not initialised!
 {

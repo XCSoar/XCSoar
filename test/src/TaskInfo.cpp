@@ -1,13 +1,14 @@
 #include "system/Args.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Task/LoadFile.hpp"
+#include "util/PrintException.hxx"
 
 #include <tchar.h>
 
-static OrderedTask *
+static std::unique_ptr<OrderedTask>
 LoadTask2(Path path, const TaskBehaviour &task_behaviour)
 {
-  OrderedTask *task = LoadTask(path, task_behaviour);
+  auto task = LoadTask(path, task_behaviour);
   if (task == nullptr) {
     fprintf(stderr, "Failed to parse XML\n");
     return nullptr;
@@ -16,7 +17,6 @@ LoadTask2(Path path, const TaskBehaviour &task_behaviour)
   task->UpdateGeometry();
   if (!task->CheckTask()) {
     fprintf(stderr, "Failed to load task from XML\n");
-    delete task;
     return NULL;
   }
 
@@ -39,7 +39,7 @@ Print(const OrderedTask &task)
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "FILE.tsk ...");
   if (args.IsEmpty())
     args.UsageError();
@@ -51,10 +51,9 @@ main(int argc, char **argv)
 
   do {
     const auto path = args.ExpectNextPath();
-    OrderedTask *task = LoadTask2(path, task_behaviour);
+    const auto task = LoadTask2(path, task_behaviour);
     if (task != NULL) {
       Print(*task);
-      delete task;
     } else {
       _ftprintf(stderr, _T("Failed to load %s\n"), path.c_str());
       result = EXIT_FAILURE;
@@ -63,4 +62,7 @@ main(int argc, char **argv)
   } while (!args.IsEmpty());
 
   return result;
+} catch (...) {
+  PrintException(std::current_exception());
+  return EXIT_FAILURE;
 }

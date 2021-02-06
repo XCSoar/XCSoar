@@ -172,12 +172,10 @@ Main()
 
   LoadFiles(airspace_database);
 
-  OrderedTask *task = LoadDefaultTask(blackboard.GetComputerSettings().task,
-                                      &way_points);
-  if (task != nullptr) {
+  auto task = LoadDefaultTask(blackboard.GetComputerSettings().task,
+                              &way_points);
+  if (task)
     protected_task_manager.TaskCommit(*task);
-    delete task;
-  }
 
   GlideComputer glide_computer(blackboard.GetComputerSettings(),
                                way_points, airspace_database,

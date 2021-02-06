@@ -25,8 +25,6 @@
 #include "TaskMacCreadyRemaining.hpp"
 #include "Math/ZeroFinder.hpp"
 
-#include <vector>
-
 /**
  *  Class to solve for virtual sink rate such that pure glide at
  *  block MacCready speeds with this sink rate would result in
@@ -37,6 +35,8 @@
  *
  */
 class TaskGlideRequired final : private ZeroFinder {
+  static constexpr double TOLERANCE = 0.001;
+
   TaskMacCreadyRemaining tm;
   GlideResult res;
   const AircraftState &aircraft;
@@ -50,10 +50,19 @@ public:
    * @param _aircraft Current aircraft state
    * @param gp Glide polar to copy for calculations
    */
-  TaskGlideRequired(const std::vector<OrderedTaskPoint *> &tps,
+  template<typename T>
+  TaskGlideRequired(T &tps,
                     const unsigned activeTaskPoint,
                     const AircraftState &_aircraft,
-                    const GlideSettings &settings, const GlidePolar &gp);
+                    const GlideSettings &settings,
+                    const GlidePolar &_gp) noexcept
+    :ZeroFinder(-10, 10, TOLERANCE),
+     tm(tps.begin(), tps.end(), activeTaskPoint, settings, _gp),
+     aircraft(_aircraft)
+  {
+    // Vopt at mc=0
+    tm.set_mc(0);
+  }
 
   /**
    * Constructor for single task points (non-ordered ones)
@@ -62,7 +71,7 @@ public:
    * @param _aircraft Current aircraft state
    * @param gp Glide polar to copy for calculations
    */
-  TaskGlideRequired(TaskPoint* tp,
+  TaskGlideRequired(TaskPoint &tp,
                     const AircraftState &_aircraft,
                     const GlideSettings &settings, const GlidePolar &gp);
 

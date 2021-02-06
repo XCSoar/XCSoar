@@ -69,13 +69,12 @@ public:
    *
    * @param is_turnpoint Whether the sector is a turnpoint, or start/finish
    */
-  static SymmetricSectorZone *CreateFAISectorZone(const GeoPoint loc,
-                                                  const bool _is_turnpoint = true) {
-    auto *oz =
-      new SymmetricSectorZone(Shape::FAI_SECTOR, true, false, loc,
-                              _is_turnpoint ? 10000 : 1000,
-                              Angle::QuarterCircle());
-      oz->UpdateSector();
+  static auto CreateFAISectorZone(const GeoPoint loc,
+                                  const bool _is_turnpoint = true) noexcept {
+    std::unique_ptr<SymmetricSectorZone> oz(new SymmetricSectorZone(Shape::FAI_SECTOR, true, false, loc,
+                                                                    _is_turnpoint ? 10000 : 1000,
+                                                                    Angle::QuarterCircle()));
+    oz->UpdateSector();
     return oz;
   }
 
@@ -85,13 +84,12 @@ public:
    *
    * @see http://www.gliding.co.uk/forms/competitionrules2010.pdf - page 11
    */
-  static SymmetricSectorZone *CreateBGAStartSectorZone(const GeoPoint &reference) {
-    auto *oz =
-      new SymmetricSectorZone(Shape::BGA_START, true, true, reference,
-                              5000,
-                              Angle::HalfCircle());
-      oz->UpdateSector();
-      return oz;
+  static auto CreateBGAStartSectorZone(const GeoPoint &reference) noexcept {
+    std::unique_ptr<SymmetricSectorZone> oz(new SymmetricSectorZone(Shape::BGA_START, true, true, reference,
+                                                                    5000,
+                                                                    Angle::HalfCircle()));
+    oz->UpdateSector();
+    return oz;
   }
 
   /** 
@@ -113,8 +111,8 @@ public:
   bool Equals(const ObservationZonePoint &other) const override;
 
   /* virtual methods from class ObservationZonePoint */
-  ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
-    return new SymmetricSectorZone(*this, _reference);
+  std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {
+    return std::unique_ptr<ObservationZonePoint>{new SymmetricSectorZone(*this, _reference)};
   }
 };
 

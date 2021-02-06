@@ -25,6 +25,7 @@ Copyright_License {
 #include "Task/TaskFileXCSoar.hpp"
 #include "Task/TaskFileSeeYou.hpp"
 #include "Task/TaskFileIGC.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 
 #include <stdlib.h>
 #include <memory>
@@ -34,30 +35,31 @@ TaskFile::~TaskFile()
   for (unsigned i = 0; i < namesuffixes.size(); i++)
     free ((TCHAR*)namesuffixes[i]);
 }
-TaskFile*
+
+std::unique_ptr<TaskFile>
 TaskFile::Create(Path path)
 {
   // If XCSoar task file -> return new TaskFileXCSoar
   if (path.MatchesExtension(_T(".tsk")))
-    return new TaskFileXCSoar(path);
+    return std::make_unique<TaskFileXCSoar>(path);
 
   // If SeeYou task file -> return new TaskFileSeeYou
   if (path.MatchesExtension(_T(".cup")))
-    return new TaskFileSeeYou(path);
+    return std::make_unique<TaskFileSeeYou>(path);
 
   // If IGC file -> return new TaskFileIGC
   if (path.MatchesExtension(_T(".igc")))
-    return new TaskFileIGC(path);
+    return std::make_unique<TaskFileIGC>(path);
 
   // unknown task file type
   return nullptr;
 }
 
-OrderedTask *
+std::unique_ptr<OrderedTask>
 TaskFile::GetTask(Path path, const TaskBehaviour &task_behaviour,
                   const Waypoints *waypoints, unsigned index)
 {
-  std::unique_ptr<TaskFile> file(TaskFile::Create(path));
+  auto file = TaskFile::Create(path);
   if (!file)
     return nullptr;
 

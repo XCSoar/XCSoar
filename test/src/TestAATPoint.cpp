@@ -69,14 +69,14 @@ static void
 TestAATPoint()
 {
   OrderedTask task(task_behaviour);
-  task.Append(StartPoint(new CylinderZone(wp1->location, 500),
+  task.Append(StartPoint(std::make_unique<CylinderZone>(wp1->location, 500),
                          WaypointPtr(wp1),
                          task_behaviour,
                          ordered_task_settings.start_constraints));
-  task.Append(AATPoint(new CylinderZone(wp2->location, 10000),
+  task.Append(AATPoint(std::make_unique<CylinderZone>(wp2->location, 10000),
                        WaypointPtr(wp2),
                        task_behaviour));
-  task.Append(FinishPoint(new CylinderZone(wp3->location, 500),
+  task.Append(FinishPoint(std::make_unique<CylinderZone>(wp3->location, 500),
                           WaypointPtr(wp3),
                           task_behaviour,
                           ordered_task_settings.finish_constraints));

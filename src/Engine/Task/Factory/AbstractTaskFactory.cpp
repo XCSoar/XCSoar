@@ -95,41 +95,42 @@ AbstractTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
 }
 
 std::unique_ptr<StartPoint>
-AbstractTaskFactory::CreateStart(ObservationZonePoint* oz,
+AbstractTaskFactory::CreateStart(std::unique_ptr<ObservationZonePoint> oz,
                                  WaypointPtr wp) const noexcept
 {
   assert(wp);
 
-  return std::make_unique<StartPoint>(oz, std::move(wp), behaviour,
+  return std::make_unique<StartPoint>(std::move(oz), std::move(wp), behaviour,
                                       GetOrderedTaskSettings().start_constraints);
 }
 
 std::unique_ptr<FinishPoint>
-AbstractTaskFactory::CreateFinish(ObservationZonePoint* oz,
+AbstractTaskFactory::CreateFinish(std::unique_ptr<ObservationZonePoint> oz,
                                   WaypointPtr wp) const noexcept
 {
   assert(wp);
 
-  return std::make_unique<FinishPoint>(oz, std::move(wp), behaviour,
+  return std::make_unique<FinishPoint>(std::move(oz), std::move(wp),
+                                       behaviour,
                                        GetOrderedTaskSettings().finish_constraints);
 }
 
 std::unique_ptr<AATPoint>
-AbstractTaskFactory::CreateAATPoint(ObservationZonePoint* oz,
+AbstractTaskFactory::CreateAATPoint(std::unique_ptr<ObservationZonePoint> oz,
                                     WaypointPtr wp) const noexcept
 {
   assert(wp);
 
-  return std::make_unique<AATPoint>(oz, std::move(wp), behaviour);
+  return std::make_unique<AATPoint>(std::move(oz), std::move(wp), behaviour);
 }
 
 std::unique_ptr<ASTPoint>
-AbstractTaskFactory::CreateASTPoint(ObservationZonePoint* oz,
+AbstractTaskFactory::CreateASTPoint(std::unique_ptr<ObservationZonePoint> oz,
                                     WaypointPtr wp) const noexcept
 {
   assert(wp);
 
-  return std::make_unique<ASTPoint>(oz, std::move(wp), behaviour);
+  return std::make_unique<ASTPoint>(std::move(oz), std::move(wp), behaviour);
 }
 
 std::unique_ptr<StartPoint>
@@ -320,10 +321,10 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
                                                                 false),
                        std::move(wp));
   case TaskPointFactoryType::START_LINE:
-    return CreateStart(new LineSectorZone(location, start_radius),
+    return CreateStart(std::make_unique<LineSectorZone>(location, start_radius),
                        std::move(wp));
   case TaskPointFactoryType::START_CYLINDER:
-    return CreateStart(new CylinderZone(location, start_radius),
+    return CreateStart(std::make_unique<CylinderZone>(location, start_radius),
                        std::move(wp));
   case TaskPointFactoryType::START_BGA:
     return CreateStart(KeyholeZone::CreateBGAStartSectorZone(location),
@@ -333,8 +334,8 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
                                                                    true),
                           std::move(wp));
   case TaskPointFactoryType::SYMMETRIC_QUADRANT:
-    return CreateASTPoint(new SymmetricSectorZone(location,
-                                                  turnpoint_radius),
+    return CreateASTPoint(std::make_unique<SymmetricSectorZone>(location,
+                                                                turnpoint_radius),
                           std::move(wp));
   case TaskPointFactoryType::KEYHOLE_SECTOR:
     return CreateASTPoint(KeyholeZone::CreateDAeCKeyholeZone(location),
@@ -346,19 +347,23 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
     return CreateASTPoint(KeyholeZone::CreateBGAEnhancedOptionZone(location),
                           std::move(wp));
   case TaskPointFactoryType::AST_CYLINDER:
-    return CreateASTPoint(new CylinderZone(location, turnpoint_radius),
+    return CreateASTPoint(std::make_unique<CylinderZone>(location,
+                                                         turnpoint_radius),
                           std::move(wp));
   case TaskPointFactoryType::MAT_CYLINDER:
     return CreateAATPoint(CylinderZone::CreateMatCylinderZone(location),
                           std::move(wp));
   case TaskPointFactoryType::AAT_CYLINDER:
-    return CreateAATPoint(new CylinderZone(location, turnpoint_radius),
+    return CreateAATPoint(std::make_unique<CylinderZone>(location,
+                                                         turnpoint_radius),
                           std::move(wp));
   case TaskPointFactoryType::AAT_SEGMENT:
-    return CreateAATPoint(new SectorZone(location, turnpoint_radius),
+    return CreateAATPoint(std::make_unique<SectorZone>(location,
+                                                       turnpoint_radius),
                           std::move(wp));
   case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
-    return CreateAATPoint(new AnnularSectorZone(location, turnpoint_radius),
+    return CreateAATPoint(std::make_unique<AnnularSectorZone>(location,
+                                                              turnpoint_radius),
                           std::move(wp));
   case TaskPointFactoryType::AAT_KEYHOLE:
     return CreateAATPoint(KeyholeZone::CreateCustomKeyholeZone(location,
@@ -370,10 +375,12 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
                                                                  false),
                         std::move(wp));
   case TaskPointFactoryType::FINISH_LINE:
-    return CreateFinish(new LineSectorZone(location, finish_radius),
+    return CreateFinish(std::make_unique<LineSectorZone>(location,
+                                                         finish_radius),
                         std::move(wp));
   case TaskPointFactoryType::FINISH_CYLINDER:
-    return CreateFinish(new CylinderZone(location, finish_radius),
+    return CreateFinish(std::make_unique<CylinderZone>(location,
+                                                       finish_radius),
                         std::move(wp));
 
   case TaskPointFactoryType::COUNT:

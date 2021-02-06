@@ -28,11 +28,11 @@
 
 #include <cassert>
 
-StartPoint::StartPoint(ObservationZonePoint *_oz,
+StartPoint::StartPoint(std::unique_ptr<ObservationZonePoint> &&_oz,
                        WaypointPtr &&wp,
                        const TaskBehaviour &tb,
                        const StartConstraints &_constraints)
-  :OrderedTaskPoint(TaskPointType::START, _oz, std::move(wp), false),
+  :OrderedTaskPoint(TaskPointType::START, std::move(_oz), std::move(wp), false),
    safety_height(tb.safety_height_arrival),
    margins(tb.start_margins),
    constraints(_constraints)

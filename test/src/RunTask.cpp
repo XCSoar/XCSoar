@@ -129,8 +129,7 @@ int main(int argc, char **argv)
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();
 
-  OrderedTask *task = TaskFile::GetTask(task_path, task_behaviour,
-                                        NULL, 0);
+  auto task = TaskFile::GetTask(task_path, task_behaviour, nullptr, 0);
   if (task == NULL) {
     fprintf(stderr, "Failed to load task\n");
     return EXIT_FAILURE;
@@ -141,7 +140,6 @@ int main(int argc, char **argv)
   const GlidePolar glide_polar(1);
 
   Run(*replay, *task, glide_polar);
-  delete task;
   delete replay;
 
   return EXIT_SUCCESS;

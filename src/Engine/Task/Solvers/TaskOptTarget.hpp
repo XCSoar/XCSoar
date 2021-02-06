@@ -27,8 +27,6 @@
 #include "Task/Ordered/AATIsolineSegment.hpp"
 #include "Math/ZeroFinder.hpp"
 
-#include <vector>
-
 class StartPoint;
 
 /**
@@ -41,6 +39,8 @@ class StartPoint;
  */
 class TaskOptTarget final : public ZeroFinder
 {
+  static constexpr double TOLERANCE = 0.01;
+
   /** Object to calculate remaining task statistics */
   TaskMacCreadyRemaining tm;
   /** Glide solution used in search */
@@ -48,7 +48,7 @@ class TaskOptTarget final : public ZeroFinder
   /** Observer */
   const AircraftState &aircraft;
   /** Start of task */
-  StartPoint *tp_start;
+  StartPoint &tp_start;
   /** Active AATPoint */
   AATPoint &tp_current;
   /** Isoline for active AATPoint target */
@@ -65,13 +65,24 @@ public:
    * @param _tp_current Active AATPoint
    * @param _ts StartPoint of task (to initiate scans)
    */
-  TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
+  template<typename T>
+  TaskOptTarget(T &tps,
                 const unsigned activeTaskPoint,
                 const AircraftState &_aircraft,
                 const GlideSettings &settings, const GlidePolar &_gp,
                 AATPoint& _tp_current,
                 const FlatProjection &projection,
-                StartPoint *_ts);
+                StartPoint &_ts) noexcept
+    :ZeroFinder(0.02, 0.98, TOLERANCE),
+     tm(tps.begin(), tps.end(), activeTaskPoint, settings, _gp,
+        /* ignore the travel to the start point */
+        false),
+     aircraft(_aircraft),
+     tp_start(_ts),
+     tp_current(_tp_current),
+     iso(_tp_current, projection)
+  {
+  }
 
   virtual double f(double p);
 

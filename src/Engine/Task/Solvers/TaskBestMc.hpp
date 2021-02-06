@@ -26,8 +26,6 @@
 #include "TaskMacCreadyRemaining.hpp"
 #include "Math/ZeroFinder.hpp"
 
-#include <vector>
-
 /**
  * Class to solve for MacCready value, being the highest MC value to produce a
  * pure glide solution for the remainder of the task.
@@ -37,6 +35,8 @@
  */
 class TaskBestMc final : ZeroFinder
 {
+  static constexpr double TOLERANCE = 0.0001;
+
   TaskMacCreadyRemaining tm;
   GlideResult res;
   const AircraftState &aircraft;
@@ -51,11 +51,17 @@ public:
    * @param _gp Glide polar to copy for calculations
    * @param _mc_min Minimum legal value of MacCready (m/s) in search
    */
-  TaskBestMc(const std::vector<OrderedTaskPoint *> &tps,
+  template<typename T>
+  TaskBestMc(T &tps,
              const unsigned activeTaskPoint,
              const AircraftState &_aircraft,
              const GlideSettings &settings, const GlidePolar &_gp,
-             double _mc_min=0);
+             double _mc_min=0) noexcept
+    :ZeroFinder(_mc_min, 10.0, TOLERANCE),
+     tm(tps.begin(), tps.end(), activeTaskPoint, settings, _gp),
+     aircraft(_aircraft)
+  {
+  }
 
   /**
    * Constructor for single task points (non-ordered ones)
@@ -64,7 +70,7 @@ public:
    * @param _aircraft Current aircraft state
    * @param _gp Glide polar to copy for calculations
    */
-  TaskBestMc(TaskPoint *tp,
+  TaskBestMc(TaskPoint &tp,
              const AircraftState &_aircraft,
              const GlideSettings &settings, const GlidePolar &_gp);
 

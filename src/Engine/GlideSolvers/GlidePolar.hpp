@@ -57,6 +57,9 @@ struct SpeedVector;
  */
 class GlidePolar
 {
+  static constexpr double TOLERANCE_MIN_SINK = 0.01;
+  static constexpr double TOLERANCE_BEST_LD = 0.000001;
+
   /** MacCready ring setting (m/s) */
   double mc;
   /** Inverse of MC setting (s/m) */

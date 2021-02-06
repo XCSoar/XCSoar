@@ -96,17 +96,13 @@ TaskStore::Scan(bool extra)
   std::sort(store.begin(), store.end());
 }
 
-TaskStore::Item::~Item()
-{
-  if (!filename.IsNull())
-    delete task;
-}
+TaskStore::Item::~Item() noexcept = default;
 
 const OrderedTask *
-TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour)
+TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour) noexcept
 {
   if (task != nullptr)
-    return task;
+    return task.get();
 
   if (valid)
     task = TaskFile::GetTask(filename, task_behaviour,
@@ -117,7 +113,7 @@ TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour)
   else
     task->UpdateGeometry();
 
-  return task;
+  return task.get();
 }
 
 const TCHAR *

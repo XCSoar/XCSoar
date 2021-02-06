@@ -92,10 +92,13 @@ public:
   TaskMacCready(const I tps_begin, const I tps_end,
                 const unsigned _active_index,
                 const GlideSettings &_settings, const GlidePolar &gp)
-    :points(tps_begin, tps_end),
-     active_index(_active_index),
+    :active_index(_active_index),
      settings(_settings),
-     glide_polar(gp) {}
+     glide_polar(gp)
+  {
+    for (I i = tps_begin; i != tps_end; ++i)
+      points.emplace_back(&*i);
+  }
 
   /**
    * Constructor for single task points (non-ordered ones)
@@ -103,9 +106,9 @@ public:
    * @param tp Task point comprising the task
    * @param gp Glide polar to copy for calculations
    */
-  TaskMacCready(TaskPoint* tp,
+  TaskMacCready(TaskPoint &tp,
                 const GlideSettings &_settings, const GlidePolar &gp)
-    :points(1, tp),
+    :points({&tp}),
      active_index(0),
      settings(_settings),
      glide_polar(gp) {}

@@ -22,26 +22,6 @@
 
 #include "TaskSolveTravelled.hpp"
 #include "Task/Ordered/Points/OrderedTaskPoint.hpp"
-#include "Util/Tolerances.hpp"
-
-TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint *> &tps,
-                                       const unsigned activeTaskPoint,
-                                       const AircraftState &_aircraft,
-                                       const GlideSettings &settings,
-                                       const GlidePolar &gp,
-                                       const double _xmin,
-                                       const double _xmax)
-  :ZeroFinder(_xmin, _xmax, TOLERANCE_CRUISE_EFFICIENCY),
-   aircraft(_aircraft),
-   tm(tps.cbegin(), activeTaskPoint, settings, gp)
-{
-  dt = aircraft.time - tps[0]->GetEnteredState().time;
-  if (dt > 0) {
-    inv_dt = 1. / dt;
-  } else {
-    inv_dt = 0; // error!
-  }
-}
 
 #define SOLVE_ZERO
 

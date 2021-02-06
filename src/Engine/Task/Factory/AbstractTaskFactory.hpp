@@ -363,7 +363,7 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
-  std::unique_ptr<StartPoint> CreateStart(ObservationZonePoint *pt,
+  std::unique_ptr<StartPoint> CreateStart(std::unique_ptr<ObservationZonePoint> pt,
                                           WaypointPtr wp) const noexcept;
 
   /**
@@ -400,7 +400,7 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
-  std::unique_ptr<ASTPoint> CreateASTPoint(ObservationZonePoint *pt,
+  std::unique_ptr<ASTPoint> CreateASTPoint(std::unique_ptr<ObservationZonePoint> pt,
                                            WaypointPtr wp) const noexcept;
 
   /**
@@ -411,7 +411,7 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
-  std::unique_ptr<AATPoint> CreateAATPoint(ObservationZonePoint* pt,
+  std::unique_ptr<AATPoint> CreateAATPoint(std::unique_ptr<ObservationZonePoint> pt,
                                            WaypointPtr wp) const noexcept;
 
   /**
@@ -422,7 +422,7 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
-  std::unique_ptr<FinishPoint> CreateFinish(ObservationZonePoint* pt,
+  std::unique_ptr<FinishPoint> CreateFinish(std::unique_ptr<ObservationZonePoint> pt,
                                             WaypointPtr wp) const noexcept;
 
   /**

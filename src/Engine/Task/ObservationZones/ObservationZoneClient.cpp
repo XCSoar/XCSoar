@@ -25,9 +25,10 @@
 #include "Boundary.hpp"
 #include "Task/Points/TaskPoint.hpp"
 
-ObservationZoneClient::~ObservationZoneClient() {
-  delete oz_point;
-}
+ObservationZoneClient::ObservationZoneClient(std::unique_ptr<ObservationZonePoint> _oz_point) noexcept
+  :oz_point(std::move(_oz_point)) {}
+
+ObservationZoneClient::~ObservationZoneClient() noexcept = default;
 
 bool
 ObservationZoneClient::IsInSector(const GeoPoint &location) const

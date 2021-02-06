@@ -49,7 +49,8 @@ public:
    *
    * @return Partially-initialised object
    */
-  IntermediateTaskPoint(TaskPointType _type, ObservationZonePoint *_oz,
+  IntermediateTaskPoint(TaskPointType _type,
+                        std::unique_ptr<ObservationZonePoint> &&_oz,
                         WaypointPtr &&wp,
                         const TaskBehaviour &tb,
                         const bool b_scored = false);

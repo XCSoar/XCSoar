@@ -24,24 +24,11 @@
 #include "Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Util/Tolerances.hpp"
 
-TaskGlideRequired::TaskGlideRequired(const std::vector<OrderedTaskPoint *> &tps,
-                                     const unsigned activeTaskPoint,
+TaskGlideRequired::TaskGlideRequired(TaskPoint &tp,
                                      const AircraftState &_aircraft,
                                      const GlideSettings &settings,
                                      const GlidePolar &_gp)
-  :ZeroFinder(-10, 10, TOLERANCE_GLIDE_REQUIRED),
-   tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp),
-   aircraft(_aircraft)
-{
-  // Vopt at mc=0
-  tm.set_mc(0);
-}
-
-TaskGlideRequired::TaskGlideRequired(TaskPoint* tp,
-                                     const AircraftState &_aircraft,
-                                     const GlideSettings &settings,
-                                     const GlidePolar &_gp)
-  :ZeroFinder(-10, 10, TOLERANCE_GLIDE_REQUIRED),
+  :ZeroFinder(-10, 10, TOLERANCE),
    tm(tp, settings, _gp), // Vopt at mc=0
    aircraft(_aircraft)
 {

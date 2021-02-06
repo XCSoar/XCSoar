@@ -41,7 +41,7 @@ struct TaskSummary {
   /** Index of active taskpoint */
   unsigned active;
 
-  typedef TrivialArray<TaskSummaryPoint, 32u> TaskSummaryPointVector;
+  using TaskSummaryPointVector = TrivialArray<TaskSummaryPoint, 32u>;
 
   /** Vector of turnpoint data */
   TaskSummaryPointVector pts;

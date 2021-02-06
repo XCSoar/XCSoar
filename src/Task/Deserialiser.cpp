@@ -93,7 +93,7 @@ DeserialiseWaypoint(const ConstDataNode &node, const Waypoints *waypoints)
   return WaypointPtr(wp);
 }
 
-static ObservationZonePoint *
+static std::unique_ptr<ObservationZonePoint>
 DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
 {
   const TCHAR *type = node.GetAttribute(_T("type"));
@@ -101,7 +101,7 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
     return nullptr;
 
   if (StringIsEqual(type, _T("Line"))) {
-    LineSectorZone *ls = new LineSectorZone(wp.location);
+    auto ls = std::make_unique<LineSectorZone>(wp.location);
 
     double length;
     if (node.GetAttribute(_T("length"), length) && length > 0)
@@ -109,7 +109,7 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
 
     return ls;
   } else if (StringIsEqual(type, _T("Cylinder"))) {
-    CylinderZone *ls = new CylinderZone(wp.location);
+    auto ls = std::make_unique<CylinderZone>(wp.location);
 
     double radius;
     if (node.GetAttribute(_T("radius"), radius) && radius > 0)
@@ -122,14 +122,14 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
 
     double radius, inner_radius;
     Angle start, end;
-    SectorZone *ls;
+    std::unique_ptr<SectorZone> ls;
 
     if (node.GetAttribute(_T("inner_radius"), inner_radius)) {
-      AnnularSectorZone *als = new AnnularSectorZone(wp.location);
+      auto als = std::make_unique<AnnularSectorZone>(wp.location);
       als->SetInnerRadius(inner_radius);
-      ls = als;
+      ls = std::move(als);
     } else
-      ls = new SectorZone(wp.location);
+      ls = std::make_unique<SectorZone>(wp.location);
 
     if (node.GetAttribute(_T("radius"), radius) && radius > 0)
       ls->SetRadius(radius);
@@ -145,7 +145,7 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
     double radius = 10000;
     node.GetAttribute(_T("radius"), radius);
 
-    return new SymmetricSectorZone(wp.location, radius);
+    return std::make_unique<SymmetricSectorZone>(wp.location, radius);
   } else if (StringIsEqual(type, _T("Keyhole")))
     return KeyholeZone::CreateDAeCKeyholeZone(wp.location);
   else if (StringIsEqual(type, _T("CustomKeyhole"))) {
@@ -156,7 +156,7 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
     node.GetAttribute(_T("inner_radius"), inner_radius);
     node.GetAttribute(_T("angle"), angle);
 
-    KeyholeZone *keyhole =
+    auto keyhole =
       KeyholeZone::CreateCustomKeyholeZone(wp.location, radius, angle);
     keyhole->SetInnerRadius(inner_radius);
     return keyhole;
@@ -190,7 +190,7 @@ DeserialiseTaskpoint(OrderedTask &data, const ConstDataNode &node,
 
   AbstractTaskFactory &fact = data.GetFactory();
 
-  ObservationZonePoint* oz = nullptr;
+  std::unique_ptr<ObservationZonePoint> oz;
   std::unique_ptr<OrderedTaskPoint> pt;
 
   if (oz_node) {
@@ -202,12 +202,12 @@ DeserialiseTaskpoint(OrderedTask &data, const ConstDataNode &node,
 
   if (StringIsEqual(type, _T("Start"))) {
     pt = oz != nullptr
-      ? fact.CreateStart(oz, std::move(wp))
+      ? fact.CreateStart(std::move(oz), std::move(wp))
       : fact.CreateStart(std::move(wp));
 
   } else if (StringIsEqual(type, _T("OptionalStart"))) {
     pt = oz != nullptr
-      ? fact.CreateStart(oz, std::move(wp))
+      ? fact.CreateStart(std::move(oz), std::move(wp))
       : fact.CreateStart(std::move(wp));
     fact.AppendOptionalStart(*pt);
 
@@ -216,17 +216,17 @@ DeserialiseTaskpoint(OrderedTask &data, const ConstDataNode &node,
 
   } else if (StringIsEqual(type, _T("Turn"))) {
     pt = oz != nullptr
-      ? fact.CreateASTPoint(oz, std::move(wp))
+      ? fact.CreateASTPoint(std::move(oz), std::move(wp))
       : fact.CreateIntermediate(std::move(wp));
 
   } else if (StringIsEqual(type, _T("Area"))) {
     pt = oz != nullptr
-      ? fact.CreateAATPoint(oz, std::move(wp))
+      ? fact.CreateAATPoint(std::move(oz), std::move(wp))
       : fact.CreateIntermediate(std::move(wp));
 
   } else if (StringIsEqual(type, _T("Finish"))) {
     pt = oz != nullptr
-      ? fact.CreateFinish(oz, std::move(wp))
+      ? fact.CreateFinish(std::move(oz), std::move(wp))
       : fact.CreateFinish(std::move(wp));
   } 
 

@@ -30,27 +30,22 @@
 #include "util/StringUtil.hpp"
 #include "util/StringAPI.hxx"
 
-#include <memory>
-
 #include <tchar.h>
 
-OrderedTask *
+std::unique_ptr<OrderedTask>
 LoadTask(Path path, const TaskBehaviour &task_behaviour,
          const Waypoints *waypoints)
 {
   // Load root node
-  std::unique_ptr<XMLNode> xml_root(XML::ParseFile(path));
-  if (!xml_root)
-    return nullptr;
-
-  const ConstDataNodeXML root(*xml_root);
+  const auto xml_root = XML::ParseFile(path);
+  const ConstDataNodeXML root(xml_root);
 
   // Check if root node is a <Task> node
   if (!StringIsEqual(root.GetName(), _T("Task")))
-    return nullptr;
+    throw std::runtime_error("Invalid task file");
 
   // Create a blank task
-  OrderedTask *task = new OrderedTask(task_behaviour);
+  auto task = std::make_unique<OrderedTask>(task_behaviour);
 
   // Read the task from the XML file
   LoadTask(*task, root, waypoints);

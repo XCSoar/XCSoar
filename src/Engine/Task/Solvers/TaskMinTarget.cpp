@@ -22,26 +22,6 @@
 
 #include "TaskMinTarget.hpp"
 #include "Task/Ordered/Points/StartPoint.hpp"
-#include "Util/Tolerances.hpp"
-
-TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
-                             const unsigned activeTaskPoint,
-                             const AircraftState &_aircraft,
-                             const GlideSettings &settings,
-                             const GlidePolar &_gp,
-                             const double _t_remaining,
-                             StartPoint *_ts)
-  :ZeroFinder(0, 1, TOLERANCE_MIN_TARGET),
-   tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp,
-      /* ignore the travel to the start point */
-      false),
-   aircraft(_aircraft),
-   t_remaining(_t_remaining),
-   tp_start(_ts),
-   force_current(false)
-{
-
-}
 
 double
 TaskMinTarget::f(const double p)
@@ -83,5 +63,5 @@ void
 TaskMinTarget::set_range(const double p)
 {
   tm.set_range(p, force_current);
-  tp_start->ScanDistanceRemaining(aircraft.location);
+  tp_start.ScanDistanceRemaining(aircraft.location);
 }

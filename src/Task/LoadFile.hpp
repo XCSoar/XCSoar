@@ -23,12 +23,17 @@
 #ifndef TASK_LOAD_FILE_HPP
 #define TASK_LOAD_FILE_HPP
 
+#include <memory>
+
 class Path;
 class OrderedTask;
 class Waypoints;
 struct TaskBehaviour;
 
-OrderedTask *
+/**
+ * Throws on error.
+ */
+std::unique_ptr<OrderedTask>
 LoadTask(Path path, const TaskBehaviour &task_behaviour,
          const Waypoints *waypoints=nullptr);
 

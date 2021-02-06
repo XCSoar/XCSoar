@@ -29,7 +29,6 @@
 GotoTask::GotoTask(const TaskBehaviour &tb,
                    const Waypoints &wps)
   :UnorderedTask(TaskType::GOTO, tb),
-   tp(NULL),
    waypoints(wps)
 {
 }
@@ -45,13 +44,12 @@ GotoTask::SetTaskBehaviour(const TaskBehaviour &tb)
 
 GotoTask::~GotoTask() 
 {
-  delete tp;
 }
 
 TaskWaypoint*
 GotoTask::GetActiveTaskPoint() const
 { 
-  return tp;
+  return tp.get();
 }
 
 bool 
@@ -81,8 +79,7 @@ bool
 GotoTask::DoGoto(WaypointPtr &&wp)
 {
   if (task_behaviour.goto_nonlandable || wp->IsLandable()) {
-    delete tp;
-    tp = new UnorderedTaskPoint(std::move(wp), task_behaviour);
+    tp = std::make_unique<UnorderedTaskPoint>(std::move(wp), task_behaviour);
     stats.start.Reset();
     force_full_update = true;
     return true;
@@ -112,8 +109,8 @@ GotoTask::TakeoffAutotask(const GeoPoint& location, const double terrain_alt)
 
   auto wp = waypoints.GetNearestLandable(location, 5000);
   if (!wp)
-    wp.reset(new Waypoint(waypoints.GenerateTakeoffPoint(location,
-                                                         terrain_alt)));
+    wp = std::make_unique<Waypoint>(waypoints.GenerateTakeoffPoint(location,
+                                                                   terrain_alt));
 
   return DoGoto(std::move(wp));
 }

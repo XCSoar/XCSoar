@@ -25,7 +25,6 @@
 #include "GlidePolar.hpp"
 #include "GlideResult.hpp"
 #include "Math/ZeroFinder.hpp"
-#include "Util/Tolerances.hpp"
 
 #include <cassert>
 
@@ -324,6 +323,8 @@ MacCready::Solve(const GlideState &task) const
  */
 class MacCreadyVopt: public ZeroFinder
 {
+  static constexpr double TOLERANCE_MC_OPT_GLIDE = 0.001;
+
   GlideResult res;
   const GlideState &task;
   const MacCready &mac;

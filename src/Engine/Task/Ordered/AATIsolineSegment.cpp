@@ -25,7 +25,7 @@
 #include "Util/Tolerances.hpp"
 
 AATIsolineSegment::AATIsolineSegment(const AATPoint &ap,
-                                     const FlatProjection &projection)
+                                     const FlatProjection &projection) noexcept
   :AATIsoline(ap, projection)
 {
   IsolineCrossingFinder icf_up(ap, ell, 0, 0.5);
@@ -42,13 +42,13 @@ AATIsolineSegment::AATIsolineSegment(const AATPoint &ap,
 }
 
 bool
-AATIsolineSegment::IsValid() const
+AATIsolineSegment::IsValid() const noexcept
 {
   return t_up > t_down + TOLERANCE_ISOLINE_CROSSING * 2;
 }
 
 GeoPoint
-AATIsolineSegment::Parametric(const double t) const
+AATIsolineSegment::Parametric(const double t) const noexcept
 {
   const auto r = t * (t_up - t_down) + t_down;
   return ell.Parametric(r);

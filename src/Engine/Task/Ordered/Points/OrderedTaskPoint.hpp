@@ -87,7 +87,8 @@ public:
    *
    * @return Partially initialised object
    */
-  OrderedTaskPoint(TaskPointType _type, ObservationZonePoint *_oz,
+  OrderedTaskPoint(TaskPointType _type,
+                   std::unique_ptr<ObservationZonePoint> &&_oz,
                    WaypointPtr &&wp,
                    const bool b_scored);
 

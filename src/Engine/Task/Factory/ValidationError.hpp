@@ -49,6 +49,6 @@ enum class TaskValidationErrorType : uint8_t {
   COUNT
 };
 
-typedef EnumBitSet<TaskValidationErrorType> TaskValidationErrorSet;
+using TaskValidationErrorSet = EnumBitSet<TaskValidationErrorType>;
 
 #endif

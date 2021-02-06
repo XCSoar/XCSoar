@@ -27,6 +27,6 @@ Copyright_License {
 #include "util/EnumBitSet.hpp"
 #include "TaskPointFactoryType.hpp"
 
-typedef EnumBitSet<TaskPointFactoryType> LegalPointSet;
+using LegalPointSet = EnumBitSet<TaskPointFactoryType>;
 
 #endif

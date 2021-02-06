@@ -26,7 +26,6 @@
 #include "Math/ZeroFinder.hpp"
 #include "Math/Quadratic.hpp"
 #include "Math/Util.hpp"
-#include "Util/Tolerances.hpp"
 #include "util/Clamp.hpp"
 #include "Navigation/Aircraft.hpp"
 
@@ -165,7 +164,7 @@ public:
    * @return Initialised object (no search yet)
    */
   GlidePolarVopt(const GlidePolar &_polar, const double vmin, const double vmax)
-    :ZeroFinder(vmin, vmax, TOLERANCE_POLAR_BESTLD),
+    :ZeroFinder(vmin, vmax, TOLERANCE_BEST_LD),
      polar(_polar)
   {
   }
@@ -219,7 +218,7 @@ public:
    * @return Initialised object (no search yet)
    */
   GlidePolarMinSink(const GlidePolar &_polar, const double vmax)
-    :ZeroFinder(1, vmax, TOLERANCE_POLAR_MINSINK),
+    :ZeroFinder(1, vmax, TOLERANCE_MIN_SINK),
      polar(_polar)
   {
   }
@@ -268,6 +267,8 @@ GlidePolar::IsGlidePossible(const GlideState &task) const
  * This finds the speed that maximises the glide angle over the ground
  */
 class GlidePolarSpeedToFly final : public ZeroFinder {
+  static constexpr double TOLERANCE_DOLPHIN = 0.0001;
+
   const GlidePolar &polar;
   const double m_net_sink_rate;
   const double m_head_wind;
@@ -288,7 +289,7 @@ public:
                        const double head_wind, const double vmin,
                        const double vmax) :
     ZeroFinder(std::max(1., vmin - head_wind), vmax - head_wind,
-               TOLERANCE_POLAR_DOLPHIN),
+               TOLERANCE_DOLPHIN),
     polar(_polar),
     m_net_sink_rate(net_sink_rate),
     m_head_wind(head_wind)
