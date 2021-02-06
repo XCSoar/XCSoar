@@ -39,9 +39,9 @@ Copyright_License {
 #include "RadioFrequency.hpp"
 #include "Thread/Cond.hxx"
 #include "Thread/Mutex.hxx"
-#include "Util/CharUtil.hxx"
-#include "Util/StaticFifoBuffer.hxx"
-#include "Util/Compiler.h"
+#include "util/CharUtil.hxx"
+#include "util/StaticFifoBuffer.hxx"
+#include "util/Compiler.h"
 #include "LogFile.hpp"
 
 #include <cstdint>
