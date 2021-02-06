@@ -124,7 +124,7 @@ LoggerConfigPanel::Save(bool &changed) noexcept
 
   changed |= SaveValue(CoPilotName, ProfileKeys::CoPilotName,
                        logger.copilot_name);
-
+                       
   changed |= SaveValue(CrewWeightTemplate, UnitGroup::MASS, ProfileKeys::CrewWeightTemplate,
                        logger.crew_mass_template);
 

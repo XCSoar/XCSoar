@@ -59,7 +59,7 @@ struct LoggerSettings {
   StaticString<64> pilot_name;
 
   StaticString<64> copilot_name;
-
+  
   /** Crew mass template in kg */
   unsigned crew_mass_template;
 

@@ -6,6 +6,8 @@ Version 7.24 - not yet released
   - menu: fix bogus clicks after returning from XCSoar
 * Android
   - add SoftRF Lego into 'white list' of USB devices
+* task
+  - add WeGlide declared task download, task will be stored in weglide folder
 
 Version 7.23 - 2022/02/10
 * user interface
