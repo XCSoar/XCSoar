@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2021-01-26 22:32+0000\n"
+"PO-Revision-Date: 2021-02-07 07:50+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -4916,12 +4916,12 @@ msgstr "Definuje, jak jsou prostory vyplněny a jakou barvou."
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:105
 #: src/Monitor/AirspaceWarningMonitor.cpp:80
 msgid "ACK"
-msgstr "ACK"
+msgstr "Potvrď"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:106
 #: src/Monitor/AirspaceWarningMonitor.cpp:81
 msgid "ACK Day"
-msgstr "Deaktivuj"
+msgstr "Dnes OK"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:325
 msgid "No Warnings"
