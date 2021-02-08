@@ -26,6 +26,7 @@ Copyright_License {
 #include "util/GlobalSliceAllocator.hxx"
 
 #include <algorithm>
+#include <iterator>
 
 Trace::Trace(const unsigned _no_thin_time, const unsigned max_time,
              const unsigned max_size)
