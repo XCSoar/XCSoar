@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2011-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,7 +32,6 @@
 
 #include "Manual.hxx"
 #include "Cast.hxx"
-#include "Compiler.h"
 
 #include <boost/intrusive/list.hpp>
 #include <boost/intrusive/unordered_set.hpp>
@@ -131,7 +130,7 @@ class Cache {
 	struct ItemHash : Hash {
 		using Hash::operator();
 
-		gcc_pure
+		[[gnu::pure]]
 		std::size_t operator()(const Item &a) const noexcept {
 			return Hash::operator()(a.GetKey());
 		}
@@ -140,13 +139,13 @@ class Cache {
 	struct ItemEqual : Equal {
 		using Equal::operator();
 
-		gcc_pure
+		[[gnu::pure]]
 		bool operator()(const Item &a, const Item &b) const noexcept {
 			return Equal::operator()(a.GetKey(), b.GetKey());
 		}
 
 		template<typename A>
-		gcc_pure
+		[[gnu::pure]]
 		bool operator()(A &&a, const Item &b) const noexcept {
 			return Equal::operator()(std::forward<A>(a), b.GetKey());
 		}
@@ -173,7 +172,7 @@ class Cache {
 
 	std::array<Item, max_size> buffer;
 
-	gcc_pure
+	[[gnu::pure]]
 	Item &GetOldest() noexcept {
 		assert(!chronological_list.empty());
 
@@ -266,7 +265,7 @@ public:
 	 * item exists.
 	 */
 	template<typename K>
-	gcc_pure
+	[[gnu::pure]]
 	Data *Get(K &&key) noexcept {
 		auto i = map.find(std::forward<K>(key),
 				  map.hash_function(), map.key_eq());
