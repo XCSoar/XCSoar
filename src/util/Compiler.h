@@ -21,8 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef COMPILER_H
-#define COMPILER_H
+#ifndef UTIL_COMPILER_H
+#define UTIL_COMPILER_H
+
+#ifdef _MSC_VER
+#   include "util/msvc"
+#else  // _MSC_VER
 
 #define GCC_MAKE_VERSION(major, minor, patchlevel) ((major) * 10000 + (minor) * 100 + patchlevel)
 
@@ -141,6 +145,8 @@ Copyright_License {
 
 #endif
 
+#endif  // _MSC_VER
+
 #if CLANG_OR_GCC_VERSION(4,3)
 
 #define gcc_hot __attribute__((hot))
@@ -195,4 +201,4 @@ Copyright_License {
 #define gcc_unreachable()
 #endif
 
-#endif
+#endif  // UTIL_COMPILER_H
