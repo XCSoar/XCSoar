@@ -90,13 +90,13 @@ public:
 	 * Determine the socket type, i.e. SOCK_STREAM, SOCK_DGRAM or
 	 * SOCK_SEQPACKET.  Returns -1 on error.
 	 */
-	gcc_pure
+	[[gnu::pure]]
 	int GetType() const noexcept;
 
 	/**
 	 * Is this a stream socket?
 	 */
-	gcc_pure
+	[[gnu::pure]]
 	bool IsStream() const noexcept;
 
 	using FileDescriptor::Get;
@@ -167,7 +167,7 @@ public:
 	 * Receive peer credentials (SO_PEERCRED).  On error, the pid
 	 * is -1.
 	 */
-	gcc_pure
+	[[gnu::pure]]
 	struct ucred GetPeerCredentials() const noexcept;
 #endif
 
@@ -226,10 +226,10 @@ public:
 
 	bool Connect(SocketAddress address) noexcept;
 
-	gcc_pure
+	[[gnu::pure]]
 	StaticSocketAddress GetLocalAddress() const noexcept;
 
-	gcc_pure
+	[[gnu::pure]]
 	StaticSocketAddress GetPeerAddress() const noexcept;
 
 	ssize_t Read(void *buffer, size_t length) noexcept;

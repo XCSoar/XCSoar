@@ -42,7 +42,7 @@ typedef DWORD socket_error_t;
 typedef int socket_error_t;
 #endif
 
-gcc_pure
+[[gnu::pure]]
 static inline socket_error_t
 GetSocketError() noexcept
 {
