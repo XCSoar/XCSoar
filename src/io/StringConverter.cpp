@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "StringConverter.hpp"
+#include "util/Compiler.h"
 #include "util/UTF8.hpp"
 
 #include <cassert>
