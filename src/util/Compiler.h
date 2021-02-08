@@ -22,6 +22,10 @@ Copyright_License {
 */
 
 #pragma once
+#ifdef _MSC_VER
+# include "msvc/Compiler.h"
+// sollte nie erreicht werden!!!!
+#else  // _MSC_VER
 
 #define GCC_MAKE_VERSION(major, minor, patchlevel) ((major) * 10000 + (minor) * 100 + patchlevel)
 
@@ -68,7 +72,7 @@ Copyright_License {
 #  if GCC_OLDER_THAN(10,0)
 #    error Sorry, your gcc version is too old.  You need at least version 10.
 #  endif
-#else
+#else 
 #  warning Untested compiler.  Use at your own risk!
 #endif
 
@@ -140,6 +144,7 @@ Copyright_License {
 
 #endif
 
+
 #if CLANG_OR_GCC_VERSION(4,3)
 
 #define gcc_hot __attribute__((hot))
@@ -193,3 +198,4 @@ Copyright_License {
 #else
 #define gcc_unreachable()
 #endif
+#endif // _MSC_VER
