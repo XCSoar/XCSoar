@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2021-02-07 07:50+0000\n"
+"PO-Revision-Date: 2021-02-09 02:25+0000\n"
 "Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/xcsoar/"
 "translations/el/>\n"
@@ -2887,7 +2887,7 @@ msgstr "Πληρ/ρίες"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:166
 #, no-c-format
 msgid "Setup"
-msgstr "Ρυθμίσεις"
+msgstr "Ρύθμιση"
 
 #: src/InfoBoxes/Content/Altitude.cpp:70 src/InfoBoxes/Content/Altitude.cpp:128
 #: src/InfoBoxes/Content/Altitude.cpp:194
@@ -3767,11 +3767,11 @@ msgstr ""
 #: src/Dialogs/Message.cpp:105 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:59
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:62
 msgid "Yes"
-msgstr "ΝΑΙ"
+msgstr "Ναι"
 
 #: src/Dialogs/Message.cpp:109
 msgid "No"
-msgstr "ΟΧΙ"
+msgstr "Όχι"
 
 #: src/Dialogs/Message.cpp:116
 msgid "Retry"
@@ -5184,7 +5184,7 @@ msgstr "ΕΝΕΡΓΟ"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:186
 msgid "Active"
-msgstr "ΕΝΕΡΓΟ"
+msgstr "Ενεργό"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:226
 #, c-format
@@ -5322,27 +5322,29 @@ msgstr ""
 
 #: src/Dialogs/ReplayDialog.cpp:90
 msgid "Rate"
-msgstr "Βαθμός"
+msgstr "Βαθμολόγηση"
 
 #: src/Dialogs/ReplayDialog.cpp:91
 msgid ""
 "Time acceleration of replay. Set to 0 for pause, 1 for normal real-time "
 "replay."
 msgstr ""
+"Επιτάχυνση χρόνου επανάληψης. Ορίστε σε 0 για παύση, 1 για κανονική "
+"επανάληψη σε πραγματικό χρόνο."
 
 #: src/Dialogs/ReplayDialog.cpp:111 src/Dialogs/ReplayDialog.cpp:153
 #: Data/Input/default.xci:613
 msgid "Replay"
-msgstr ""
+msgstr "Επανάληψη"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:60 src/Dialogs/StartupDialog.cpp:93
 #: Data/Input/default.xci:914
 msgid "Quit"
-msgstr ""
+msgstr "Έξοδος"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:113
 msgid "What do you want to do?"
-msgstr ""
+msgstr "Τι θέλετε να κάνετε;"
 
 #: src/Dialogs/StartupDialog.cpp:163
 msgid "Profile"
