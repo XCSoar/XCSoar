@@ -41,6 +41,7 @@
 #include "Units/System.hpp"
 
 #include <stdlib.h>
+#include <stdexcept>
 
 struct SeeYouTaskInformation {
   /** True = RT, False = AAT */

@@ -34,6 +34,7 @@ Copyright_License {
 
 #include <list>
 #include <cassert>
+#include <stdexcept>
 
 static bool
 ReadIGCDeclaration(Path path, IGCDeclarationHeader &header,
