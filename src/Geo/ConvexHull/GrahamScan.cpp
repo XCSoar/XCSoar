@@ -22,6 +22,7 @@
 
 #include "GrahamScan.hpp"
 #include "Geo/SearchPointVector.hpp"
+#include <iterator>  // necessary for std::back_inserter
 
 static bool
 sortleft
