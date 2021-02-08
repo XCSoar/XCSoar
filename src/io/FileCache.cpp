@@ -31,12 +31,13 @@ Copyright_License {
 #include <stdexcept>
 
 #include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
-#ifndef HAVE_POSIX
-#include <windows.h>
+#ifdef HAVE_POSIX
+#   include <sys/types.h>
+#   include <sys/stat.h>
+#   include <unistd.h>
+#else
+#   include <windows.h>
 #endif
 
 static constexpr unsigned FILE_CACHE_MAGIC = 0xab352f8a;
