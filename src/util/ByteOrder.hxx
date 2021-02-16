@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2015 Max Kellermann <max.kellermann@gmail.com>,
+ * Copyright 2011-2021 Max Kellermann <max.kellermann@gmail.com>,
  *                    Tobias Bieniek <Tobias.Bieniek@gmx.de>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -346,5 +346,59 @@ public:
 
 static_assert(sizeof(PackedLE16) == sizeof(uint16_t), "Wrong size");
 static_assert(alignof(PackedLE16) == 1, "Wrong alignment");
+
+/**
+ * A packed little-endian 32 bit integer.
+ */
+class PackedLE32 {
+	uint8_t a, b, c, d;
+
+public:
+	PackedLE32() = default;
+
+	constexpr PackedLE32(uint32_t src) noexcept
+		:a(uint8_t(src)),
+		 b(uint8_t(src >> 8)),
+		 c(uint8_t(src >> 16)),
+		 d(uint8_t(src >> 24)) {}
+
+	/**
+	 * Construct an instance from an integer which is already
+	 * little-endian.
+	 */
+	static constexpr auto FromLE(uint32_t src) noexcept {
+		union {
+			uint32_t in;
+			PackedLE32 out;
+		} u{src};
+		return u.out;
+	}
+
+	constexpr operator uint32_t() const noexcept {
+		return uint32_t(a) | (uint32_t(b) << 8) |
+			(uint32_t(c) << 16) | (uint32_t(d) << 24);
+	}
+
+	PackedLE32 &operator=(uint32_t new_value) noexcept {
+		a = uint8_t(new_value);
+		b = uint8_t(new_value >> 8);
+		c = uint8_t(new_value >> 16);
+		d = uint8_t(new_value >> 24);
+		return *this;
+	}
+
+	/**
+	 * Reads the raw, little-endian value.
+	 */
+	constexpr uint32_t raw() const noexcept {
+		uint32_t x = *this;
+		if (IsBigEndian())
+			x = ByteSwap32(x);
+		return x;
+	}
+};
+
+static_assert(sizeof(PackedLE32) == sizeof(uint32_t), "Wrong size");
+static_assert(alignof(PackedLE32) == 1, "Wrong alignment");
 
 #endif
