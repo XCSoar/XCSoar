@@ -25,6 +25,8 @@ Copyright_License {
 #include "Task/RoutePlannerGlue.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Ordered/Points/ASTPoint.hpp"
+#include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Engine/Task/Points/TaskWaypoint.hpp"
 #include "Engine/Route/ReachResult.hpp"
 
@@ -84,11 +86,14 @@ ProtectedTaskManager::IncrementActiveTaskPointArm(int offset)
 {
   ExclusiveLease lease(*this);
   TaskAdvance &advance = lease->SetTaskAdvance();
+  TaskWaypoint *twp = nullptr;
 
   switch (advance.GetState()) {
   case TaskAdvance::MANUAL:
-  case TaskAdvance::AUTO:
-    lease->IncrementActiveTaskPoint(offset);
+  case TaskAdvance::AUTO: {
+      lease->IncrementActiveTaskPoint(offset);
+      twp = lease->GetActiveTaskPoint();
+    }
     break;
   case TaskAdvance::START_DISARMED:
   case TaskAdvance::TURN_DISARMED:
@@ -96,16 +101,34 @@ ProtectedTaskManager::IncrementActiveTaskPointArm(int offset)
       advance.SetArmed(true);
     } else {
       lease->IncrementActiveTaskPoint(offset);
+      twp = lease->GetActiveTaskPoint();
     }
     break;
   case TaskAdvance::START_ARMED:
   case TaskAdvance::TURN_ARMED:
     if (offset>0) {
       lease->IncrementActiveTaskPoint(offset);
+      twp = lease->GetActiveTaskPoint();
     } else {
       advance.SetArmed(false);
     }
     break;
+  }
+  if (twp) {
+    switch (twp->GetType()) {
+    case TaskPointType::AST : {
+      ASTPoint *p = (ASTPoint *)twp;
+      if (p->HasEntered()) p->Reset();
+      }
+      break;
+    case TaskPointType::AAT : {
+      AATPoint *p = (AATPoint *)twp;
+      if (p->HasEntered()) p->Reset();
+      }
+      break;
+    default:
+      break;
+    }
   }
 }
 
