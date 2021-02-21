@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2021-02-07 07:50+0000\n"
+"PO-Revision-Date: 2021-02-22 06:50+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -675,7 +675,7 @@ msgstr "Vário"
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:161
 #: src/Dialogs/Task/TargetDialog.cpp:432
 msgid "Distance"
-msgstr "Vzdálenost"
+msgstr "Vzdál."
 
 #: src/Gauge/BigTrafficWidget.cpp:425 src/Gauge/BigTrafficWidget.cpp:428
 msgid "Rel. Alt."
@@ -1385,7 +1385,7 @@ msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
 "vario total energy vario value if connected to one."
 msgstr ""
-"Aktuální vertikální rychlost dle GPS nebo inteligentního varia (pokud je "
+"Okamžitá vertikální rychlost dle GPS nebo inteligentního varia (pokud je "
 "připojeno)."
 
 #: src/InfoBoxes/Content/Factory.cpp:340
@@ -3847,11 +3847,11 @@ msgstr "Základna mraků"
 
 #: src/Renderer/MacCreadyRenderer.cpp:51 src/Renderer/TaskSpeedRenderer.cpp:49
 msgid "Vave"
-msgstr "Vprům"
+msgstr "V prům"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:52
 msgid "Vest"
-msgstr "Vodh"
+msgstr "V odh"
 
 #: src/UIActions.cpp:52
 msgid "Quit program?"
@@ -5578,7 +5578,7 @@ msgstr ""
 
 #: src/Dialogs/ReplayDialog.cpp:90
 msgid "Rate"
-msgstr "Rychlost"
+msgstr "Tempo"
 
 #: src/Dialogs/ReplayDialog.cpp:91
 msgid ""
@@ -5744,7 +5744,7 @@ msgstr ""
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:164
 #: src/Dialogs/Task/TargetDialog.cpp:454
 msgid "Speed remaining"
-msgstr "Rychlost zbývající"
+msgstr "Rychlost zbytku úlohy"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:167
 msgid "Achieved MacCready"
@@ -8266,7 +8266,7 @@ msgstr "Rychlost úlohy"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:206
 msgid "Units used for task speeds."
-msgstr "Jednotky pro rychlost."
+msgstr "Jednotky rychlosti úlohy."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:217
 msgid "Units used for pressures."
@@ -9017,25 +9017,25 @@ msgid ""
 "plus 5 minutes."
 msgstr ""
 "AAT rozdílový čas. Rozdíl mezi předpokládaným časem úlohy a AAT minimálním "
-"časem. Zbarvený červeně pokud je předpokládaný přílet moc brzy, nebo modře, "
-"pokud jste v AAT oblasti a můžete otočit nyní s předpokládaným časem příletu "
-"v AAT minimálním čase plus 5 minut."
+"časem. Zbarvený červeně pokud je předpokládaný přílet předčasný, nebo modře, "
+"pokud jste v AAT oblasti a můžete provést obrat s předpokládaným časem "
+"příletu v AAT minimálním čase plus 5 minut."
 
 #: src/Dialogs/Task/TargetDialog.cpp:452
 msgid "V rem."
-msgstr "V zbývající"
+msgstr "V zbtk"
 
 #: src/Dialogs/Task/TargetDialog.cpp:456
 msgid "V ach"
-msgstr "V dosaž"
+msgstr "V dos"
 
 #: src/Dialogs/Task/TargetDialog.cpp:458
 msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr ""
-"AA Rychlost - AAT průměrná rychlost dosažitelná kolem cílových bodů v "
-"minimálním AAT čase."
+"AA Rychlost - AAT průměrná rychlost dosažitelná kolem zbývajících cílových "
+"bodů v minimálním AAT čase."
 
 #: src/Dialogs/Task/TargetDialog.cpp:463
 msgid "Optimized"
