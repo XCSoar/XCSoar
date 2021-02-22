@@ -9,16 +9,8 @@ endif()
 
 # organize the files in subdirectories
 
-if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
-if (WIN32 AND MINGW)
+if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows" AND WIN32 AND MINGW)
   find_program(MINGW_APP NAMES mingw32-make REQUIRED)
-
-  include_directories("D:/Programs/MinGW/mgw112/include/c++/11.2.0")  # temporary data!
-  include_directories("D:/Programs/MinGW/mgw112/include/c++/11.2.0/x86_64-w64-mingw32")  # temporary data!
-#  include_directories("D:/Programs/MinGW/mgw122/include/c++/12.2.0")  # temporary data!
-#  include_directories("D:/Programs/MinGW/mgw122/include/c++/12.2.0/x86_64-w64-mingw32")  # temporary data!
-  ### add_compile_definitions(ZZIP_HAVE_STDINT_H=1)  # only MinGW?
-endif()
 endif()
 
 set(SOURCE_FILES )

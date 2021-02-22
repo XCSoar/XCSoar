@@ -22,6 +22,7 @@ set(HEADER_FILES
         ${ZZIP_DIR}/zzip.h
         ${ZZIP_DIR}/zzip32.h
         ${ZZIP_DIR}/_config.h
+        ${ZZIP_DIR}/_msvc.h  # only for windows host
         ${ZZIP_DIR}/__debug.h
         ${ZZIP_DIR}/__hints.h
         ${ZZIP_DIR}/__mmap.h
