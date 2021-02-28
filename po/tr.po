@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-08-28 12:24+0000\n"
-"Last-Translator: leela <53352@protonmail.com>\n"
+"PO-Revision-Date: 2021-03-01 14:50+0000\n"
+"Last-Translator: Tayfur Yünlü <dandikunited@yandex.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/tr/>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.9-dev\n"
+"X-Generator: Weblate 4.5\n"
 "X-Launchpad-Export-Date: 2013-04-09 06:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -217,12 +217,12 @@ msgstr "Bir silindir.  Alandaki herhangi bir nokta merkezden puan aldı."
 #: src/Task/TypeStrings.cpp:88
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "1 millik bir silindir.  Bölgede ulaşılan en uzak noktaya kadar attı."
 
 #: src/Task/TypeStrings.cpp:89
 #, no-c-format
 msgid "A cylinder.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "Bir Silindir.  Bölgede ulaşılan en uzak noktaya kadar attı."
 
 #: src/Task/TypeStrings.cpp:90
 #, no-c-format
@@ -230,6 +230,8 @@ msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area."
 msgstr ""
+"Açı ve yarıçapta değişebilen bir sektör.  Alan içinde ulaşılan en uzak "
+"noktaya kadar attı."
 
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
