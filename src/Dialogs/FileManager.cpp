@@ -734,17 +734,17 @@ ManagedFileListWidget::OnDownloadNotification() noexcept
 static void
 ShowFileManager2()
 {
-  ManagedFileListWidget widget;
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(),
-                      _("File Manager"), &widget);
+  TWidgetDialog<ManagedFileListWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(),
+           _("File Manager"));
+  dialog.SetWidget();
   dialog.AddButton(_("Close"), mrOK);
-  widget.CreateButtons(dialog);
+  dialog.GetWidget().CreateButtons(dialog);
 
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();
-  dialog.StealWidget();
 }
 
 #endif

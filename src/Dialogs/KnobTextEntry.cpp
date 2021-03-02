@@ -239,16 +239,15 @@ KnobTextEntry(TCHAR *text, size_t width,
   if (width == 0)
     width = MAX_TEXTENTRY;
 
-  KnobTextEntryWidget widget(text, width);
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(), caption, &widget);
+  TWidgetDialog<KnobTextEntryWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(), caption);
+  dialog.SetWidget(text, width);
   dialog.AddButton(_("Close"), mrOK);
-  widget.CreateButtons(dialog);
+  dialog.GetWidget().CreateButtons(dialog);
 
   if (dialog.ShowModal() == mrOK) {
-    StripRight(widget.GetValue());
-    CopyTruncateString(text, width, widget.GetValue());
+    StripRight(dialog.GetWidget().GetValue());
+    CopyTruncateString(text, width, dialog.GetWidget().GetValue());
   }
-
-  dialog.StealWidget();
 }
