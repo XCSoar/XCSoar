@@ -51,17 +51,19 @@ ShowWeatherDialog(const TCHAR *page)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("Status"));
+  TWidgetDialog<TabWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look, _("Status"));
 
-  TabWidget widget(TabWidget::Orientation::AUTO,
+  dialog.SetWidget(TabWidget::Orientation::AUTO,
                    std::make_unique<ButtonWidget>(look.button, _("Close"),
                                                   dialog.MakeModalResultCallback(mrOK)));
+
+  auto &widget = dialog.GetWidget();
   widget.SetPageFlippedCallback([&dialog, &widget]() {
       SetTitle(dialog, widget);
     });
 
-  dialog.FinishPreliminary(&widget);
   dialog.PrepareWidget();
 
   int start_page = -1;
@@ -105,7 +107,6 @@ ShowWeatherDialog(const TCHAR *page)
   SetTitle(dialog, widget);
 
   dialog.ShowModal();
-  dialog.StealWidget();
 
   /* save page number for next time this dialog is opened */
   weather_page = widget.GetCurrentIndex();

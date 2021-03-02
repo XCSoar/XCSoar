@@ -44,13 +44,13 @@ Copyright_License {
 static void
 BitmapDialog(const Bitmap &bitmap)
 {
-  ViewImageWidget widget(bitmap);
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(),
-                      _T("pc_met"), &widget);
+  TWidgetDialog<ViewImageWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(),
+           _T("pc_met"));
+  dialog.SetWidget();
   dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
-  dialog.StealWidget();
 }
 
 static void

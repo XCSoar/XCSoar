@@ -124,14 +124,13 @@ void
 dlgNOAADetailsShowModal(NOAAStore::iterator iterator)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("METAR and TAF"));
-  NOAADetailsWidget widget(dialog, iterator);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<NOAADetailsWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look, _("METAR and TAF"));
+  dialog.SetWidget(dialog, iterator);
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrOK);
-  dialog.FinishPreliminary(&widget);
   dialog.ShowModal();
-  dialog.StealWidget();
 }
 
 #else
