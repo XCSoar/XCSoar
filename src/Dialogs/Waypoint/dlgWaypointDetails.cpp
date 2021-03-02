@@ -132,7 +132,7 @@ class WaypointDetailsWidget final
   };
 
   WidgetDialog &dialog;
-  const DialogLook &look;
+  const DialogLook &look{dialog.GetLook()};
 
   const WaypointPtr waypoint;
 
@@ -143,7 +143,7 @@ class WaypointDetailsWidget final
   Button previous_button, next_button;
   Button close_button;
 
-  int page, last_page;
+  int page = 0, last_page = 0;
 
   DockWindow info_dock;
   PanelControl details_panel;
@@ -151,28 +151,24 @@ class WaypointDetailsWidget final
   WndOwnerDrawFrame image_window;
 
 #ifdef HAVE_RUN_FILE
-  ListControl file_list;
-  WaypointExternalFileListHandler file_list_handler;
+  ListControl file_list{look};
+  WaypointExternalFileListHandler file_list_handler{waypoint};
 #endif
 
   LargeTextWindow details_text;
 
   StaticArray<Bitmap, 5> images;
-  int zoom;
+  int zoom = 0;
 
   const bool allow_edit;
 
 public:
   WaypointDetailsWidget(WidgetDialog &_dialog, WaypointPtr _waypoint,
                         ProtectedTaskManager *_task_manager, bool _allow_edit) noexcept
-    :dialog(_dialog), look(dialog.GetLook()),
+    :dialog(_dialog),
      waypoint(std::move(_waypoint)),
      task_manager(_task_manager),
-     page(0), last_page(0),
-#ifdef HAVE_RUN_FILE
-     file_list(look), file_list_handler(waypoint),
-#endif
-     zoom(0), allow_edit(_allow_edit) {}
+     allow_edit(_allow_edit) {}
 
   void UpdatePage();
   void UpdateZoomControls();
@@ -670,7 +666,7 @@ UpdateCaption(WndForm *form, const Waypoint &waypoint)
   form->SetCaption(buffer);
 }
 
-void 
+void
 dlgWaypointDetailsShowModal(WaypointPtr _waypoint,
                             bool allow_navigation, bool allow_edit)
 {
