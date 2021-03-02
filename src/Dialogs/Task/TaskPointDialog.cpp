@@ -30,7 +30,7 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Form/Button.hpp"
 #include "Form/CheckBox.hpp"
-#include "Widget/DockWindow.hpp"
+#include "Widget/ManagedWidget.hpp"
 #include "Widget/PanelWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/canvas/Font.hpp"
@@ -91,7 +91,7 @@ class TaskPointWidget final
   WndFrame type_label;
   Button change_type;
   WndOwnerDrawFrame map;
-  DockWindow properties_dock;
+  ManagedWidget properties_widget{nullptr};
 
   Button optional_starts;
   CheckBoxControl score_exit;
@@ -130,7 +130,7 @@ private:
     type_label.Move(layout.type_label);
     change_type.Move(layout.change_type);
     map.Move(layout.map);
-    properties_dock.Move(layout.properties);
+    properties_widget.Move(layout.properties);
     optional_starts.Move(layout.optional_starts);
     score_exit.Move(layout.score_exit);
   }
@@ -278,7 +278,8 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
              [this](Canvas &canvas, const PixelRect &rc){
                PaintMap(canvas, rc);
              });
-  properties_dock.Create(tp_panel, layout.properties, dock_style);
+
+  properties_widget.Initialise(tp_panel, layout.properties);
   optional_starts.Create(tp_panel, look.button, _("Enable Alternate Starts"),
                          layout.optional_starts, button_style,
                          [this](){ OnOptionalStartsClicked(); });
@@ -325,17 +326,17 @@ TaskPointWidget::RefreshView()
 
   OrderedTaskPoint &tp = ordered_task.GetPoint(active_index);
 
-  properties_dock.DeleteWidget();
+  properties_widget.Clear();
 
   ObservationZonePoint &oz = tp.GetObservationZone();
   const bool is_fai_general =
     ordered_task.GetFactoryType() == TaskFactoryType::FAI_GENERAL;
-  auto properties_widget = CreateObservationZoneEditWidget(oz, is_fai_general);
-  if (properties_widget != nullptr) {
-    properties_widget->SetListener(this);
-    properties_dock.SetWidget(std::move(properties_widget));
+  auto new_properties_widget = CreateObservationZoneEditWidget(oz, is_fai_general);
+  if (new_properties_widget != nullptr) {
+    new_properties_widget->SetListener(this);
+    properties_widget.Set(std::move(new_properties_widget));
   } else
-    properties_dock.SetWidget(std::make_unique<PanelWidget>());
+    properties_widget.Set(std::make_unique<PanelWidget>());
 
   type_label.SetText(OrderedTaskPointName(ordered_task.GetFactory().GetType(tp)));
 
@@ -413,7 +414,7 @@ TaskPointWidget::ReadValues()
     }
   }
 
-  return properties_dock.SaveWidget(task_modified);
+  return properties_widget.Save(task_modified);
 }
 
 void
