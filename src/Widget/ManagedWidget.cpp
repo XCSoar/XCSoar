@@ -57,6 +57,12 @@ ManagedWidget::Set(Widget *_widget) noexcept
 }
 
 void
+ManagedWidget::Set(std::unique_ptr<Widget> _widget) noexcept
+{
+  Set(_widget.release());
+}
+
+void
 ManagedWidget::Move(const PixelRect &_position) noexcept
 {
   position = _position;

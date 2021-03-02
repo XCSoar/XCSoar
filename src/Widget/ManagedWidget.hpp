@@ -27,6 +27,7 @@ Copyright_License {
 #include "ui/dim/Rect.hpp"
 
 #include <cstdint>
+#include <memory>
 
 class ContainerWindow;
 class Widget;
@@ -117,6 +118,7 @@ public:
    * @param widget an uninitialised Widget
    */
   void Set(Widget *widget) noexcept;
+  void Set(std::unique_ptr<Widget> widget) noexcept;
 
   Widget *Get() noexcept {
     return widget;
