@@ -49,13 +49,13 @@ class ManagedWidget {
 #endif
 
 public:
-  ManagedWidget(ContainerWindow &_parent)
+  explicit ManagedWidget(ContainerWindow &_parent) noexcept
     :parent(_parent) {}
 
-  ManagedWidget(ContainerWindow &_parent, Widget *_widget)
+  ManagedWidget(ContainerWindow &_parent, Widget *_widget) noexcept
     :parent(_parent), widget(_widget), prepared(false) {}
 
-  ~ManagedWidget() {
+  ~ManagedWidget() noexcept {
     Clear();
   }
 
@@ -66,21 +66,21 @@ public:
    * Return the Widget object (in the current state), and "forget"
    * about it.
    */
-  Widget *Steal() {
+  Widget *Steal() noexcept {
     Widget *result = widget;
     widget = nullptr;
     return result;
   }
 
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
     return widget != nullptr;
   }
 
-  bool IsPrepared() const {
+  bool IsPrepared() const noexcept {
     return IsDefined() && prepared;
   }
 
-  bool IsVisible() const {
+  bool IsVisible() const noexcept {
     return IsPrepared() && visible;
   }
 
@@ -89,27 +89,27 @@ public:
    */
   void Prepare();
 
-  void Unprepare();
-  void Clear();
+  void Unprepare() noexcept;
+  void Clear() noexcept;
 
   /**
    * @param widget an uninitialised Widget
    */
-  void Set(Widget *widget);
+  void Set(Widget *widget) noexcept;
 
-  Widget *Get() {
+  Widget *Get() noexcept {
     return widget;
   }
 
-  void Move(const PixelRect &position);
+  void Move(const PixelRect &position) noexcept;
 
-  void Show();
-  void Hide();
+  void Show() noexcept;
+  void Hide() noexcept;
 
-  void SetVisible(bool _visible);
+  void SetVisible(bool _visible) noexcept;
 
-  bool SetFocus();
-  bool KeyPress(unsigned key_code);
+  bool SetFocus() noexcept;
+  bool KeyPress(unsigned key_code) noexcept;
 };
 
 #endif

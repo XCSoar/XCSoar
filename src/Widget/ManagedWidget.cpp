@@ -27,7 +27,7 @@ Copyright_License {
 #include <cassert>
 
 void
-ManagedWidget::Unprepare()
+ManagedWidget::Unprepare() noexcept
 {
   Hide();
 
@@ -39,7 +39,7 @@ ManagedWidget::Unprepare()
 }
 
 void
-ManagedWidget::Clear()
+ManagedWidget::Clear() noexcept
 {
   Unprepare();
 
@@ -48,7 +48,7 @@ ManagedWidget::Clear()
 }
 
 void
-ManagedWidget::Set(Widget *_widget)
+ManagedWidget::Set(Widget *_widget) noexcept
 {
   Clear();
 
@@ -57,7 +57,7 @@ ManagedWidget::Set(Widget *_widget)
 }
 
 void
-ManagedWidget::Move(const PixelRect &_position)
+ManagedWidget::Move(const PixelRect &_position) noexcept
 {
   position = _position;
 
@@ -84,7 +84,7 @@ ManagedWidget::Prepare()
 }
 
 void
-ManagedWidget::Show()
+ManagedWidget::Show() noexcept
 {
   assert(have_position);
 
@@ -100,7 +100,7 @@ ManagedWidget::Show()
 }
 
 void
-ManagedWidget::Hide()
+ManagedWidget::Hide() noexcept
 {
   if (widget != nullptr && prepared && visible) {
     widget->Leave();
@@ -110,7 +110,7 @@ ManagedWidget::Hide()
 }
 
 void
-ManagedWidget::SetVisible(bool _visible)
+ManagedWidget::SetVisible(bool _visible) noexcept
 {
   if (!IsPrepared())
     return;
@@ -122,13 +122,13 @@ ManagedWidget::SetVisible(bool _visible)
 }
 
 bool
-ManagedWidget::SetFocus()
+ManagedWidget::SetFocus() noexcept
 {
   return IsVisible() && widget->SetFocus();
 }
 
 bool
-ManagedWidget::KeyPress(unsigned key_code)
+ManagedWidget::KeyPress(unsigned key_code) noexcept
 {
   return IsVisible() && widget->KeyPress(key_code);
 }
