@@ -139,23 +139,24 @@ dlgAlternatesListShowModal()
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
-  AlternatesListWidget widget(dialog_look);
-  if (!widget.Update())
+  auto widget = std::make_unique<AlternatesListWidget>(dialog_look);
+  if (!widget->Update())
     /* no alternates: don't show the dialog */
     return;
 
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      dialog_look, _("Alternates"), &widget);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<AlternatesListWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           dialog_look, _("Alternates"));
+  widget->CreateButtons(dialog);
+  dialog.FinishPreliminary(std::move(widget));
   dialog.EnableCursorSelection();
 
   int i = dialog.ShowModal() == mrOK
-    ? (int)widget.GetCursorIndex()
+    ? (int)dialog.GetWidget().GetCursorIndex()
     : -1;
-  dialog.StealWidget();
 
-  if (i < 0 || (unsigned)i >= widget.alternates.size())
+  if (i < 0 || (unsigned)i >= dialog.GetWidget().alternates.size())
     return;
 
-  dlgWaypointDetailsShowModal(widget.alternates[i].waypoint, false);
+  dlgWaypointDetailsShowModal(dialog.GetWidget().alternates[i].waypoint, false);
 }

@@ -767,12 +767,11 @@ dlgTargetShowModal(int _target_point)
     return;
 
   const Look &look = UIGlobals::GetLook();
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look.dialog, _("Target"));
-  TargetWidget widget(dialog, look.dialog, look.map);
-  dialog.FinishPreliminary(&widget);
+  TWidgetDialog<TargetWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look.dialog, _("Target"));
+  dialog.SetWidget(dialog, look.dialog, look.map);
 
-  if (widget.InitTargetPoints(_target_point))
+  if (dialog.GetWidget().InitTargetPoints(_target_point))
     dialog.ShowModal();
-  dialog.StealWidget();
 }

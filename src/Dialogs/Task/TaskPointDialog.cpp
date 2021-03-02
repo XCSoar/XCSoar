@@ -536,16 +536,14 @@ dlgTaskPointShowModal(OrderedTask &task,
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("Waypoint"));
+  TWidgetDialog<TaskPointWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look, _("Waypoint"));
 
-  TaskPointWidget widget(dialog, task, index);
+  dialog.SetWidget(dialog, task, index);
   dialog.AddButton(_("Close"), mrOK);
-  dialog.FinishPreliminary(&widget);
-  widget.CreateButtons();
+  dialog.GetWidget().CreateButtons();
   dialog.ShowModal();
-  dialog.StealWidget();
 
-  bool task_modified = widget.IsModified();
-  return task_modified;
+  return dialog.GetWidget().IsModified();
 }

@@ -193,15 +193,15 @@ dlgTaskOptionalStarts(OrderedTask &task)
 {
   assert(task.TaskSize() > 0);
 
-  OptionStartsWidget widget(task);
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(),
-                      _("Alternate Start Points"), &widget);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<OptionStartsWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(),
+           _("Alternate Start Points"));
+  dialog.SetWidget(task);
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();
-  dialog.StealWidget();
 
-  return widget.IsModified();
+  return dialog.GetWidget().IsModified();
 }
