@@ -353,14 +353,13 @@ DownloadFilePicker(FileType file_type)
     return nullptr;
   }
 
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(), _("Download"));
-  DownloadFilePickerWidget widget(dialog, file_type);
-  widget.CreateButtons();
+  TWidgetDialog<DownloadFilePickerWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(), _("Download"));
+  dialog.SetWidget(dialog, file_type);
+  dialog.GetWidget().CreateButtons();
   dialog.AddButton(_("Cancel"), mrCancel);
-  dialog.FinishPreliminary(&widget);
   dialog.ShowModal();
-  dialog.StealWidget();
 
-  return widget.GetPath();
+  return dialog.GetWidget().GetPath();
 }
