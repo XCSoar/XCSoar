@@ -37,8 +37,8 @@ NumberEntryDialog(const TCHAR *caption,
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, caption);
+  TWidgetDialog<FixedWindowWidget>
+    dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(), look, caption);
 
   ContainerWindow &client_area = dialog.GetClientAreaWindow();
 
@@ -61,15 +61,13 @@ NumberEntryDialog(const TCHAR *caption,
 
   /* run it */
 
-  FixedWindowWidget widget(std::move(entry));
-  dialog.FinishPreliminary(&widget);
+  dialog.SetWidget(std::move(entry));
 
   bool result = dialog.ShowModal() == mrOK;
-  dialog.StealWidget();
   if (!result)
     return false;
 
-  value = ((DigitEntry &)widget.GetWindow()).GetIntegerValue();
+  value = ((DigitEntry &)dialog.GetWidget().GetWindow()).GetIntegerValue();
   return true;
 }
 
@@ -81,8 +79,8 @@ NumberEntryDialog(const TCHAR *caption,
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, caption);
+  TWidgetDialog<FixedWindowWidget>
+    dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(), look, caption);
 
   ContainerWindow &client_area = dialog.GetClientAreaWindow();
 
@@ -105,15 +103,13 @@ NumberEntryDialog(const TCHAR *caption,
 
   /* run it */
 
-  FixedWindowWidget widget(std::move(entry));
-  dialog.FinishPreliminary(&widget);
+  dialog.SetWidget(std::move(entry));
 
   bool result = dialog.ShowModal() == mrOK;
-  dialog.StealWidget();
   if (!result)
     return false;
 
-  value = ((DigitEntry &)widget.GetWindow()).GetUnsignedValue();
+  value = ((DigitEntry &)dialog.GetWidget().GetWindow()).GetUnsignedValue();
   return true;
 }
 
@@ -124,8 +120,8 @@ AngleEntryDialog(const TCHAR *caption, Angle &value)
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, caption);
+  TWidgetDialog<FixedWindowWidget>
+    dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(), look, caption);
 
   ContainerWindow &client_area = dialog.GetClientAreaWindow();
 
@@ -147,14 +143,12 @@ AngleEntryDialog(const TCHAR *caption, Angle &value)
 
   /* run it */
 
-  FixedWindowWidget widget(std::move(entry));
-  dialog.FinishPreliminary(&widget);
+  dialog.SetWidget(std::move(entry));
 
   bool result = dialog.ShowModal() == mrOK;
-  dialog.StealWidget();
   if (!result)
     return false;
 
-  value = ((DigitEntry &)widget.GetWindow()).GetAngleValue();
+  value = ((DigitEntry &)dialog.GetWidget().GetWindow()).GetAngleValue();
   return true;
 }
