@@ -52,7 +52,7 @@ class PagerWidget : public Widget {
     ~Child() noexcept;
   };
 
-  bool initialised, prepared, visible;
+  bool initialised = false, prepared, visible;
 
   ContainerWindow *parent;
   PixelRect position;
@@ -63,7 +63,6 @@ class PagerWidget : public Widget {
   PageFlippedCallback page_flipped_callback;
 
 public:
-  PagerWidget():initialised(false) {}
   virtual ~PagerWidget();
 
   void SetPageFlippedCallback(PageFlippedCallback &&_page_flipped_callback) {
