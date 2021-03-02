@@ -39,7 +39,7 @@ class Widget;
  * twice.
  */
 class ManagedWidget {
-  ContainerWindow &parent;
+  ContainerWindow *const parent;
   PixelRect position;
 
   Widget *widget = nullptr;
@@ -59,10 +59,10 @@ class ManagedWidget {
 
 public:
   explicit ManagedWidget(ContainerWindow &_parent) noexcept
-    :parent(_parent) {}
+    :parent(&_parent) {}
 
   ManagedWidget(ContainerWindow &_parent, Widget *_widget) noexcept
-    :parent(_parent), widget(_widget), state(State::NONE) {}
+    :parent(&_parent), widget(_widget), state(State::NONE) {}
 
   ~ManagedWidget() noexcept {
     Clear();

@@ -77,8 +77,8 @@ ManagedWidget::Prepare()
   if (widget == nullptr || state >= State::PREPARED)
     return;
 
-  widget->Initialise(parent, position);
-  widget->Prepare(parent, position);
+  widget->Initialise(*parent, position);
+  widget->Prepare(*parent, position);
   state = State::PREPARED;
 }
 
