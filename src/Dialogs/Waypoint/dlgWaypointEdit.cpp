@@ -132,17 +132,17 @@ dlgWaypointEditShowModal(Waypoint &way_point)
   }
 
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WaypointEditWidget widget(look, way_point);
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, _("Waypoint Editor"), &widget);
+  TWidgetDialog<WaypointEditWidget>
+    dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+           look, _("Waypoint Editor"));
+  dialog.SetWidget(look, way_point);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
   const int result = dialog.ShowModal();
-  dialog.StealWidget();
 
   if (result != mrOK || !dialog.GetChanged())
     return false;
 
-  way_point = widget.GetValue();
+  way_point = dialog.GetWidget().GetValue();
   return true;
 }

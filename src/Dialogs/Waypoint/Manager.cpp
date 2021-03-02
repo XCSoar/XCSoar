@@ -289,18 +289,18 @@ void
 dlgConfigWaypointsShowModal()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WaypointManagerWidget widget;
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, _("Waypoints Editor"), &widget);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<WaypointManagerWidget>
+    dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+           look, _("Waypoints Editor"));
+  dialog.SetWidget();
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrCancel);
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();
-  dialog.StealWidget();
 
-  if (widget.IsModified() &&
+  if (dialog.GetWidget().IsModified() &&
       ShowMessageBox(_("Save changes to waypoint file?"), _("Waypoints edited"),
                   MB_YESNO | MB_ICONQUESTION) == IDYES)
-      widget.SaveWaypoints();
+      dialog.GetWidget().SaveWaypoints();
 }

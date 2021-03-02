@@ -673,15 +673,14 @@ dlgWaypointDetailsShowModal(WaypointPtr _waypoint,
   LastUsedWaypoints::Add(*_waypoint);
 
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, nullptr);
-  WaypointDetailsWidget widget(dialog, _waypoint,
-                               allow_navigation ? protected_task_manager : nullptr,
-                               allow_edit);
+  TWidgetDialog<WaypointDetailsWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look, nullptr);
+  dialog.SetWidget(dialog, _waypoint,
+                   allow_navigation ? protected_task_manager : nullptr,
+                   allow_edit);
 
-  dialog.FinishPreliminary(&widget);
   UpdateCaption(&dialog, *_waypoint);
 
   dialog.ShowModal();
-  dialog.StealWidget();
 }
