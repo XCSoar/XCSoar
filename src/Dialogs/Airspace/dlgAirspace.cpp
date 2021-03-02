@@ -158,17 +158,17 @@ AirspaceSettingsListWidget::OnActivateItem(unsigned index) noexcept
 void
 dlgAirspaceShowModal(bool color_mode)
 {
-  AirspaceSettingsListWidget widget(color_mode);
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(),
-                      _("Airspace"), &widget);
+  TWidgetDialog<AirspaceSettingsListWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(),
+           _("Airspace"));
+  dialog.SetWidget(color_mode);
   dialog.AddButton(_("Close"), mrOK);
 
   dialog.ShowModal();
-  dialog.StealWidget();
 
   // now retrieve back the properties...
-  if (widget.IsModified()) {
+  if (dialog.GetWidget().IsModified()) {
     Profile::Save();
   }
 }
