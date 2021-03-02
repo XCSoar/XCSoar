@@ -71,7 +71,7 @@ private:
 
   const Orientation orientation;
 
-  TabDisplay *tab_display;
+  TabDisplay *tab_display = nullptr;
 
   /**
    * An optional #Widget that is shown at the corner right or below
@@ -81,13 +81,13 @@ private:
 
   PixelRect extra_position;
 
-  bool large_extra;
+  bool large_extra = false;
 
 public:
   explicit TabWidget(Orientation _orientation=Orientation::AUTO,
                      std::unique_ptr<Widget> &&_extra=nullptr)
-    :orientation(_orientation), tab_display(nullptr),
-     extra(std::move(_extra)), large_extra(false) {}
+    :orientation(_orientation),
+     extra(std::move(_extra)) {}
 
   ~TabWidget() override;
 
