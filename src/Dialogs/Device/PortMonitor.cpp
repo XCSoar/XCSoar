@@ -181,13 +181,12 @@ ShowPortMonitor(DeviceDescriptor &device)
   caption.Format(_T("%s: %s"), _("Port monitor"),
                  device.GetConfig().GetPortName(buffer, ARRAY_SIZE(buffer)));
 
-  PortMonitorWidget widget(device, look.terminal);
-
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look.dialog, caption, &widget);
+  TWidgetDialog<PortMonitorWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look.dialog, caption);
+  dialog.SetWidget(device, look.terminal);
   dialog.AddButton(_("Close"), mrOK);
-  widget.CreateButtons(dialog);
+  dialog.GetWidget().CreateButtons(dialog);
 
   dialog.ShowModal();
-  dialog.StealWidget();
 }
