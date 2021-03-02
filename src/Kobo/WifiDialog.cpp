@@ -469,11 +469,11 @@ void
 ShowWifiDialog()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WifiListWidget widget;
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("Wifi"), &widget);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<WifiListWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look, _("Wifi"));
+  dialog.SetWidget();
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
-  dialog.StealWidget();
 }

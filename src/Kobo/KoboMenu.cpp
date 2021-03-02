@@ -136,15 +136,13 @@ KoboMenuWidget::KeyPress(unsigned key_code)
 static int
 Main(UI::SingleWindow &main_window, const DialogLook &dialog_look)
 {
-  WidgetDialog dialog(WidgetDialog::Full{}, main_window,
-                      dialog_look, nullptr);
-  KoboMenuWidget widget(dialog_look, dialog);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<KoboMenuWidget>
+    dialog(WidgetDialog::Full{}, main_window,
+           dialog_look, nullptr);
+  dialog.SetWidget(dialog_look, dialog);
+  dialog.GetWidget().CreateButtons(dialog);
 
-  dialog.FinishPreliminary(&widget);
-  const int result = dialog.ShowModal();
-  dialog.StealWidget();
-  return result;
+  return dialog.ShowModal();
 }
 
 static int

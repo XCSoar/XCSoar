@@ -101,10 +101,10 @@ void
 ShowNetworkDialog()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  NetworkWidget widget(look);
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("Network"), &widget);
+  TWidgetDialog<NetworkWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look, _("Network"));
+  dialog.SetWidget(look);
   dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
-  dialog.StealWidget();
 }

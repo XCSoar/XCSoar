@@ -137,10 +137,9 @@ void
 ShowSystemDialog()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  SystemWidget widget(look);
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, "System", &widget);
+  TWidgetDialog<SystemWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(), look, "System");
+  dialog.SetWidget(look);
   dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
-  dialog.StealWidget();
 }
