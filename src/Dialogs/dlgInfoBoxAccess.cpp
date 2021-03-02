@@ -60,12 +60,13 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
 
   PixelRect form_rc = InfoBoxManager::layout.remaining;
 
-  TabWidget tab_widget(TabWidget::Orientation::HORIZONTAL);
-
-  WidgetDialog dialog(UIGlobals::GetMainWindow(), look, form_rc,
-                      gettext(InfoBoxFactory::GetName(old_type)),
-                      &tab_widget);
+  TWidgetDialog<TabWidget>
+    dialog(UIGlobals::GetMainWindow(), look, form_rc,
+           gettext(InfoBoxFactory::GetName(old_type)),
+           nullptr);
+  dialog.SetWidget(TabWidget::Orientation::HORIZONTAL);
   dialog.PrepareWidget();
+  auto &tab_widget = dialog.GetWidget();
 
   bool found_setup = false;
 
@@ -122,8 +123,6 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
 
   dialog.SetModeless();
   int result = dialog.ShowModal();
-
-  dialog.StealWidget();
 
   if (result == SWITCH_INFO_BOX)
     InfoBoxManager::ShowInfoBoxPicker(id);
