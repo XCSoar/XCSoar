@@ -121,12 +121,12 @@ dlgVegaDemoShowModal()
   VarioWriteNMEA(_T("PDVSC,S,DemoMode,3"), env);
 
   const DialogLook &look = UIGlobals::GetDialogLook();
-  VegaDemoWidget widget(look);
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, _("Vario Demo"), &widget);
+  TWidgetDialog<VegaDemoWidget>
+    dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+           look, _("Vario Demo"));
+  dialog.SetWidget(look);
   dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
-  dialog.StealWidget();
 
   // deactivate demo.
   VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);

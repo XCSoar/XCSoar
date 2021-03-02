@@ -260,23 +260,20 @@ dlgConfigurationVarioShowModal(Device &_device)
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("Vario Configuration"));
+  TWidgetDialog<ArrowPagerWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look, _("Vario Configuration"));
+  dialog.SetWidget(look.button,
+                   dialog.MakeModalResultCallback(mrOK),
+                   std::make_unique<VegaConfigurationExtraButtons>(dialog));
+  FillPager(dialog.GetWidget());
 
-  ArrowPagerWidget widget(look.button,
-                          dialog.MakeModalResultCallback(mrOK),
-                          std::make_unique<VegaConfigurationExtraButtons>(dialog));
-  FillPager(widget);
-
-  dialog.FinishPreliminary(&widget);
-
-  widget.SetPageFlippedCallback([&dialog, &widget](){
-      UpdateCaption(dialog, widget.GetCurrentIndex());
-    });
-  UpdateCaption(dialog, widget.GetCurrentIndex());
+  dialog.GetWidget().SetPageFlippedCallback([&dialog](){
+    UpdateCaption(dialog, dialog.GetWidget().GetCurrentIndex());
+  });
+  UpdateCaption(dialog, dialog.GetWidget().GetCurrentIndex());
 
   dialog.ShowModal();
-  dialog.StealWidget();
 
   return changed || dialog.GetChanged();
 }
