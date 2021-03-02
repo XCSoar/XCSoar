@@ -59,6 +59,8 @@ class ManagedWidget {
 #endif
 
 public:
+  ManagedWidget() noexcept = default;
+
   explicit ManagedWidget(ContainerWindow &_parent) noexcept
     :parent(&_parent) {}
 
