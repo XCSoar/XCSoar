@@ -686,15 +686,13 @@ DeviceListWidget::OnGPSUpdate(const MoreData &basic)
 void
 ShowDeviceList()
 {
-  DeviceListWidget widget(UIGlobals::GetDialogLook());
-
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(),
-                      _("Devices"), &widget);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<DeviceListWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(), _("Devices"));
+  dialog.SetWidget(UIGlobals::GetDialogLook());
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrOK);
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();
-  dialog.StealWidget();
 }
