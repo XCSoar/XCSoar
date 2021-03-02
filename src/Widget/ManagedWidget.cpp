@@ -34,7 +34,7 @@ ManagedWidget::Unprepare() noexcept
   if (!IsPrepared())
     return;
 
-  prepared = false;
+  state = State::NONE;
   widget->Unprepare();
 }
 
@@ -53,7 +53,7 @@ ManagedWidget::Set(Widget *_widget) noexcept
   Clear();
 
   widget = _widget;
-  prepared = false;
+  state = State::NONE;
 }
 
 void
@@ -65,7 +65,7 @@ ManagedWidget::Move(const PixelRect &_position) noexcept
   have_position = true;
 #endif
 
-  if (widget != nullptr && prepared && visible)
+  if (IsVisible())
     widget->Move(position);
 }
 
@@ -74,13 +74,12 @@ ManagedWidget::Prepare()
 {
   assert(have_position);
 
-  if (widget == nullptr || prepared)
+  if (widget == nullptr || state >= State::PREPARED)
     return;
 
   widget->Initialise(parent, position);
   widget->Prepare(parent, position);
-  prepared = true;
-  visible = false;
+  state = State::PREPARED;
 }
 
 void
@@ -93,8 +92,8 @@ ManagedWidget::Show() noexcept
 
   Prepare();
 
-  if (!visible) {
-    visible = true;
+  if (state < State::VISIBLE) {
+    state = State::VISIBLE;
     widget->Show(position);
   }
 }
@@ -102,9 +101,9 @@ ManagedWidget::Show() noexcept
 void
 ManagedWidget::Hide() noexcept
 {
-  if (widget != nullptr && prepared && visible) {
+  if (IsVisible()) {
     widget->Leave();
-    visible = false;
+    state = State::PREPARED;
     widget->Hide();
   }
 }

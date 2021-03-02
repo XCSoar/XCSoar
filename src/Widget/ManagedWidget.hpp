@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "ui/dim/Rect.hpp"
 
+#include <cstdint>
+
 class ContainerWindow;
 class Widget;
 
@@ -42,7 +44,14 @@ class ManagedWidget {
 
   Widget *widget = nullptr;
 
-  bool prepared, visible;
+  /**
+   * Only valid if the #widget is set.
+   */
+  enum class State : uint8_t {
+    NONE,
+    PREPARED,
+    VISIBLE,
+  } state;
 
 #ifndef NDEBUG
   bool have_position = false;
@@ -53,7 +62,7 @@ public:
     :parent(_parent) {}
 
   ManagedWidget(ContainerWindow &_parent, Widget *_widget) noexcept
-    :parent(_parent), widget(_widget), prepared(false) {}
+    :parent(_parent), widget(_widget), state(State::NONE) {}
 
   ~ManagedWidget() noexcept {
     Clear();
@@ -77,11 +86,11 @@ public:
   }
 
   bool IsPrepared() const noexcept {
-    return IsDefined() && prepared;
+    return IsDefined() && state >= State::PREPARED;
   }
 
   bool IsVisible() const noexcept {
-    return IsPrepared() && visible;
+    return IsDefined() && state == State::VISIBLE;
   }
 
   /**
