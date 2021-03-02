@@ -79,8 +79,7 @@ void
 ManagedWidget::Initialise(ContainerWindow &_parent, const PixelRect &_position)
 {
   assert(parent == nullptr);
-  assert(widget != nullptr);
-  assert(state == State::NONE);
+  assert(widget == nullptr || state == State::NONE);
 
   parent = &_parent;
   position = _position;
@@ -89,8 +88,10 @@ ManagedWidget::Initialise(ContainerWindow &_parent, const PixelRect &_position)
   have_position = true;
 #endif
 
-  widget->Initialise(*parent, position);
-  state = State::INITIALISED;
+  if (widget != nullptr) {
+    widget->Initialise(*parent, position);
+    state = State::INITIALISED;
+  }
 }
 
 void
