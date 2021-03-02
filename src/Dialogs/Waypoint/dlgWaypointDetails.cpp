@@ -33,7 +33,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "Renderer/TextRowRenderer.hpp"
-#include "Widget/DockWindow.hpp"
+#include "Widget/ManagedWidget.hpp"
 #include "Widget/Widget.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "LocalPath.hpp"
@@ -145,9 +145,9 @@ class WaypointDetailsWidget final
 
   int page = 0, last_page = 0;
 
-  DockWindow info_dock;
+  ManagedWidget info_widget{new WaypointInfoWidget(look, waypoint)};
   PanelControl details_panel;
-  DockWindow commands_dock;
+  ManagedWidget commands_widget;
   WndOwnerDrawFrame image_window;
 
 #ifdef HAVE_RUN_FILE
@@ -160,17 +160,16 @@ class WaypointDetailsWidget final
   StaticArray<Bitmap, 5> images;
   int zoom = 0;
 
-  const bool allow_edit;
-
 public:
   WaypointDetailsWidget(WidgetDialog &_dialog, WaypointPtr _waypoint,
-                        ProtectedTaskManager *_task_manager, bool _allow_edit) noexcept
+                        ProtectedTaskManager *_task_manager, bool allow_edit) noexcept
     :dialog(_dialog),
      waypoint(std::move(_waypoint)),
      task_manager(_task_manager),
-     allow_edit(_allow_edit) {}
+     commands_widget(new WaypointCommandsWidget(look, &dialog, waypoint,
+                                                task_manager, allow_edit)) {}
 
-  void UpdatePage();
+  void UpdatePage() noexcept;
   void UpdateZoomControls();
 
   void NextPage(int step);
@@ -214,7 +213,7 @@ public:
 
     close_button.MoveAndShow(layout.close_button);
 
-    info_dock.Move(layout.main);
+    info_widget.Move(layout.main);
     details_panel.Move(layout.main);
     details_text.Move(layout.details_text);
 #ifdef HAVE_RUN_FILE
@@ -222,7 +221,7 @@ public:
       file_list.Move(layout.file_list);
 #endif
 
-    commands_dock.Move(layout.main);
+    commands_widget.Move(layout.main);
 
     if (!images.empty())
       image_window.Move(layout.main);
@@ -244,9 +243,10 @@ public:
 
     close_button.Hide();
 
-    info_dock.Hide();
+    info_widget.Hide();
+
     details_panel.Hide();
-    commands_dock.Hide();
+    commands_widget.Hide();
 
     if (!images.empty())
       image_window.Hide();
@@ -272,14 +272,14 @@ public:
 
     close_button.Move(layout.close_button);
 
-    info_dock.Move(layout.main);
+    info_widget.Move(layout.main);
     details_panel.Move(layout.main);
     details_text.Move(layout.details_text);
 #ifdef HAVE_RUN_FILE
     if (!waypoint->files_external.empty())
       file_list.Move(layout.file_list);
 #endif
-    commands_dock.Move(layout.main);
+    commands_widget.Move(layout.main);
 
     if (!images.empty())
       image_window.Move(layout.main);
@@ -438,8 +438,8 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   close_button.Create(parent, look.button, _("Close"), layout.close_button,
                       button_style, dialog.MakeModalResultCallback(mrOK));
 
-  info_dock.Create(parent, layout.main, dock_style);
-  info_dock.SetWidget(std::make_unique<WaypointInfoWidget>(look, waypoint));
+  info_widget.Initialise(parent, layout.main);
+  info_widget.Prepare();
 
   details_panel.Create(parent, look, layout.main, dock_style);
   details_text.Create(details_panel, layout.details_text);
@@ -458,8 +458,8 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 #endif
 
-  commands_dock.Create(parent, layout.main, dock_style);
-  commands_dock.SetWidget(std::make_unique<WaypointCommandsWidget>(look, &dialog, waypoint, task_manager, allow_edit));
+  commands_widget.Initialise(parent, layout.main);
+  commands_widget.Prepare();
 
   if (!images.empty())
     image_window.Create(parent, layout.main, dock_style,
@@ -473,16 +473,16 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 WaypointDetailsWidget::Unprepare()
 {
-  info_dock.UnprepareWidget();
-  commands_dock.UnprepareWidget();
+  info_widget.Unprepare();
+  commands_widget.Unprepare();
 }
 
 void
-WaypointDetailsWidget::UpdatePage()
+WaypointDetailsWidget::UpdatePage() noexcept
 {
-  info_dock.SetVisible(page == 0);
+  info_widget.SetVisible(page == 0);
   details_panel.SetVisible(page == 1);
-  commands_dock.SetVisible(page == 2);
+  commands_widget.SetVisible(page == 2);
 
   bool image_page = page >= 3;
   if (!images.empty()) {
