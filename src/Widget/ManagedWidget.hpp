@@ -131,6 +131,7 @@ public:
 
   void SetVisible(bool _visible) noexcept;
 
+  bool Save(bool &changed);
   bool SetFocus() noexcept;
   bool KeyPress(unsigned key_code) noexcept;
 };

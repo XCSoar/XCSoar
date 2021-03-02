@@ -152,6 +152,12 @@ ManagedWidget::SetVisible(bool _visible) noexcept
 }
 
 bool
+ManagedWidget::Save(bool &changed)
+{
+  return !IsPrepared() || widget->Save(changed);
+}
+
+bool
 ManagedWidget::SetFocus() noexcept
 {
   return IsVisible() && widget->SetFocus();
