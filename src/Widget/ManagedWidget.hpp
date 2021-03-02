@@ -39,7 +39,7 @@ class Widget;
  * twice.
  */
 class ManagedWidget {
-  ContainerWindow *const parent;
+  ContainerWindow *parent = nullptr;
   PixelRect position;
 
   Widget *widget = nullptr;
@@ -49,6 +49,7 @@ class ManagedWidget {
    */
   enum class State : uint8_t {
     NONE,
+    INITIALISED,
     PREPARED,
     VISIBLE,
   } state;
@@ -63,6 +64,9 @@ public:
 
   ManagedWidget(ContainerWindow &_parent, Widget *_widget) noexcept
     :parent(&_parent), widget(_widget), state(State::NONE) {}
+
+  explicit ManagedWidget(Widget *_widget) noexcept
+    :widget(_widget), state(State::NONE) {}
 
   ~ManagedWidget() noexcept {
     Clear();
@@ -92,6 +96,12 @@ public:
   bool IsVisible() const noexcept {
     return IsDefined() && state == State::VISIBLE;
   }
+
+  /**
+   * This call is only needed (and allowed) if no parent was passed to
+   * the constructor.
+   */
+  void Initialise(ContainerWindow &_parent, const PixelRect &_position);
 
   /**
    * Ensure that the Widget is prepared.

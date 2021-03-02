@@ -34,7 +34,7 @@ ManagedWidget::Unprepare() noexcept
   if (!IsPrepared())
     return;
 
-  state = State::NONE;
+  state = State::INITIALISED;
   widget->Unprepare();
 }
 
@@ -70,16 +70,41 @@ ManagedWidget::Move(const PixelRect &_position) noexcept
 }
 
 void
-ManagedWidget::Prepare()
+ManagedWidget::Initialise(ContainerWindow &_parent, const PixelRect &_position)
 {
-  assert(have_position);
+  assert(parent == nullptr);
+  assert(widget != nullptr);
+  assert(state == State::NONE);
 
-  if (widget == nullptr || state >= State::PREPARED)
-    return;
+  parent = &_parent;
+  position = _position;
+
+#ifndef NDEBUG
+  have_position = true;
+#endif
 
   widget->Initialise(*parent, position);
-  widget->Prepare(*parent, position);
-  state = State::PREPARED;
+  state = State::INITIALISED;
+}
+
+void
+ManagedWidget::Prepare()
+{
+  assert(parent != nullptr);
+  assert(have_position);
+
+  if (widget == nullptr)
+    return;
+
+  if (state < State::INITIALISED) {
+    state = State::INITIALISED;
+    widget->Initialise(*parent, position);
+  }
+
+  if (state < State::PREPARED) {
+    state = State::PREPARED;
+    widget->Prepare(*parent, position);
+  }
 }
 
 void
