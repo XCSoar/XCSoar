@@ -249,21 +249,18 @@ ShowMapItemListDialog(const MapItemList &list,
                       const FinalGlideBarLook &final_glide_look,
                       const MapSettings &settings)
 {
-  MapItemListWidget widget(list, dialog_look, look,
-                           traffic_look, final_glide_look,
-                           settings);
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      dialog_look, _("Map elements at this location"),
-                      &widget);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<MapItemListWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           dialog_look, _("Map elements at this location"));
+  dialog.SetWidget(list, dialog_look, look,
+                   traffic_look, final_glide_look,
+                   settings);
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.EnableCursorSelection();
 
-  int result = dialog.ShowModal() == mrOK
-    ? (int)widget.GetCursorIndex()
+  return dialog.ShowModal() == mrOK
+    ? (int)dialog.GetWidget().GetCursorIndex()
     : -1;
-  dialog.StealWidget();
-
-  return result;
 }
 
 static void
