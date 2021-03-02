@@ -219,11 +219,11 @@ void
 dlgTeamCodeShowModal()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  TeamCodeWidget widget(look);
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, _("Team Code"), &widget);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<TeamCodeWidget>
+    dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+           look, _("Team Code"));
+  dialog.SetWidget(look);
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
-  dialog.StealWidget();
 }
