@@ -77,7 +77,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
   PixelSize tsize = canvas.CalcTextSize(data.title);
 
-  int halftextwidth = (title_rect.left + title_rect.right - tsize.width) / 2;
+  int halftextwidth = (title_rect.left + title_rect.right - (int)tsize.width) / 2;
   int x = std::max(1, title_rect.left + halftextwidth);
   int y = title_rect.top;
 
