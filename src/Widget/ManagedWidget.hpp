@@ -59,6 +59,9 @@ public:
     Clear();
   }
 
+  ManagedWidget(const ManagedWidget &) = delete;
+  ManagedWidget &operator=(const ManagedWidget &) = delete;
+
   /**
    * Return the Widget object (in the current state), and "forget"
    * about it.
