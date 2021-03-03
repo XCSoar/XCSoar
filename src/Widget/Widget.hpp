@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_WIDGET_HPP
 #define XCSOAR_WIDGET_HPP
 
-#include "util/Compiler.h"
-
 struct PixelSize;
 struct PixelRect;
 class ContainerWindow;
@@ -51,7 +49,7 @@ public:
    * method has no special implementation.  This is called after
    * Prepare().
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual PixelSize GetMinimumSize() const = 0;
 
   /**
@@ -60,7 +58,7 @@ public:
    * has no special implementation.  This is called after
    * Prepare().
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual PixelSize GetMaximumSize() const = 0;
 
   /**

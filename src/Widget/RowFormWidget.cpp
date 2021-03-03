@@ -34,7 +34,7 @@ Copyright_License {
 
 #include <cassert>
 
-gcc_pure
+[[gnu::pure]]
 static unsigned
 GetMinimumHeight(const WndProperty &control, const DialogLook &look,
                  bool vertical)
@@ -51,7 +51,7 @@ GetMinimumHeight(const WndProperty &control, const DialogLook &look,
   return height;
 }
 
-gcc_pure
+[[gnu::pure]]
 static unsigned
 GetMaximumHeight(const WndProperty &control, const DialogLook &look,
                  bool vertical)

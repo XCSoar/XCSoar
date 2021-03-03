@@ -34,7 +34,7 @@ TwoWidgets::UpdateLayout()
   second->Move(layout.second);
 }
 
-gcc_const
+[[gnu::const]]
 static int
 CalculateSplit(int top, int bottom, unsigned min_a,
                unsigned min_b, unsigned max_b)
@@ -115,7 +115,7 @@ TwoWidgets::GetMaximumSize() const
  * TwoWidgets::Initialise() and TwoWidgets::Prepare(), we are not
  * allowed to call Widget::GetMinimumSize() yet.
  */
-gcc_const
+[[gnu::const]]
 static std::pair<PixelRect,PixelRect>
 DummyLayout(const PixelRect rc, bool vertical)
 {

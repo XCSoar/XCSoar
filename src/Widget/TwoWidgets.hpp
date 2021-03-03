@@ -75,10 +75,10 @@ public:
   }
 
 protected:
-  gcc_pure
+  [[gnu::pure]]
   int CalculateSplit(const PixelRect &rc) const;
 
-  gcc_pure
+  [[gnu::pure]]
   std::pair<PixelRect,PixelRect> CalculateLayout(const PixelRect &rc) const;
 
 public:

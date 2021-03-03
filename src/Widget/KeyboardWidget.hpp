@@ -73,7 +73,7 @@ private:
   void PrepareSize(const PixelRect &rc);
   void OnResize(const PixelRect &rc);
 
-  gcc_pure
+  [[gnu::pure]]
   Button *FindButton(unsigned ch);
 
   void MoveButton(unsigned ch, int left, int top);
@@ -85,7 +85,7 @@ private:
                         int offset_left = 0);
   void MoveButtons(const PixelRect &rc);
 
-  gcc_pure
+  [[gnu::pure]]
   static bool IsLandscape(const PixelRect &rc) {
     return rc.GetWidth() >= rc.GetHeight();
   }

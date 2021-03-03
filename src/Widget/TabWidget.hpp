@@ -136,7 +136,7 @@ public:
   void AddTab(std::unique_ptr<Widget> widget, const TCHAR *caption,
               const MaskedIcon *icon=nullptr);
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetButtonCaption(unsigned i) const;
 
   bool ClickPage(unsigned i);

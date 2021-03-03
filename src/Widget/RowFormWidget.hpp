@@ -191,7 +191,7 @@ class RowFormWidget : public WindowWidget {
       }
     }
 
-    gcc_pure
+    [[gnu::pure]]
     Widget &GetWidget() {
       assert(widget != nullptr);
       assert(window == nullptr);
@@ -199,7 +199,7 @@ class RowFormWidget : public WindowWidget {
       return *widget;
     }
 
-    gcc_pure
+    [[gnu::pure]]
     const Widget &GetWidget() const {
       assert(widget != nullptr);
       assert(window == nullptr);
@@ -207,21 +207,21 @@ class RowFormWidget : public WindowWidget {
       return *widget;
     }
 
-    gcc_pure
+    [[gnu::pure]]
     Window &GetWindow() {
       assert(window != nullptr);
 
       return *window;
     }
 
-    gcc_pure
+    [[gnu::pure]]
     const Window &GetWindow() const {
       assert(window != nullptr);
 
       return *window;
     }
 
-    gcc_pure
+    [[gnu::pure]]
     WndProperty &GetControl() {
       assert(type == Type::EDIT);
       assert(window != nullptr);
@@ -229,7 +229,7 @@ class RowFormWidget : public WindowWidget {
       return (WndProperty &)*window;
     }
 
-    gcc_pure
+    [[gnu::pure]]
     const WndProperty &GetControl() const {
       assert(type == Type::EDIT);
       assert(window != nullptr);
@@ -245,10 +245,10 @@ class RowFormWidget : public WindowWidget {
         > GetMinimumHeight(look, vertical);
     }
 
-    gcc_pure
+    [[gnu::pure]]
     unsigned GetMinimumHeight(const DialogLook &look, bool vertical) const;
 
-    gcc_pure
+    [[gnu::pure]]
     unsigned GetMaximumHeight(const DialogLook &look, bool vertical) const;
 
     void UpdateLayout(ContainerWindow &parent, const PixelRect &_position,
@@ -438,17 +438,17 @@ public:
 
   Button *AddButton(const TCHAR *label, std::function<void()> callback) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   Widget &GetRowWidget(unsigned i) {
     return rows[i].GetWidget();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   Window &GetRow(unsigned i) {
     return rows[i].GetWindow();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const Window &GetRow(unsigned i) const {
     return rows[i].GetWindow();
   }
@@ -483,17 +483,17 @@ public:
    */
   void SetExpertRow(unsigned i);
 
-  gcc_pure
+  [[gnu::pure]]
   Window &GetGeneric(unsigned i) {
     return rows[i].GetWindow();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   WndProperty &GetControl(unsigned i) {
     return rows[i].GetControl();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const WndProperty &GetControl(unsigned i) const {
     return rows[i].GetControl();
   }
@@ -518,14 +518,14 @@ public:
    */
   void SetMultiLineText(unsigned i, const TCHAR *text);
 
-  gcc_pure
+  [[gnu::pure]]
   DataField &GetDataField(unsigned i) {
     DataField *df = GetControl(i).GetDataField();
     assert(df != nullptr);
     return *df;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const DataField &GetDataField(unsigned i) const {
     const DataField *df = GetControl(i).GetDataField();
     assert(df != nullptr);
@@ -536,7 +536,7 @@ public:
    * Compare a row's data field with the given reference (by their
    * addresses).
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsDataField(unsigned i, const DataField &df) const {
     return &df == &GetDataField(i);
   }
@@ -572,25 +572,25 @@ public:
     GetControl(i).SetText(_T(""));
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool GetValueBoolean(unsigned i) const;
 
-  gcc_pure
+  [[gnu::pure]]
   int GetValueInteger(unsigned i) const;
 
-  gcc_pure
+  [[gnu::pure]]
   double GetValueFloat(unsigned i) const;
 
-  gcc_pure
+  [[gnu::pure]]
   Angle GetValueAngle(unsigned i) const;
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetValueIntegerAngle(unsigned i) const;
 
-  gcc_pure
+  [[gnu::pure]]
   RoughTime GetValueRoughTime(unsigned i) const;
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetValueString(unsigned i) const {
     return GetDataField(i).GetAsString();
   }
@@ -653,7 +653,7 @@ public:
   bool SaveValueFileReader(unsigned i, const char *profile_key);
 
 protected:
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetRecommendedCaptionWidth() const;
 
   void NextControlRect(PixelRect &rc, unsigned height) {
@@ -663,7 +663,7 @@ protected:
     rc.bottom = rc.top + height;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   PixelRect InitialControlRect(unsigned height) {
     assert(IsDefined());
 

@@ -34,7 +34,7 @@ class TextListWidget : public ListWidget {
 protected:
   TextRowRenderer row_renderer;
 
-  gcc_pure
+  [[gnu::pure]]
   virtual const TCHAR *GetRowText(unsigned i) const noexcept = 0;
 
 public:
