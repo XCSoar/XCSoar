@@ -42,11 +42,13 @@ public:
   /**
    * Constructor. Initializes most class members.
    */
-  HorizonWindow(const HorizonLook &_look, const bool &_inverse):look(_look),inverse(_inverse) {
+  HorizonWindow(const HorizonLook &_look, const bool &_inverse) noexcept
+    :look(_look),inverse(_inverse)
+  {
     attitude.Reset();
   }
 
-  void ReadBlackboard(const AttitudeState _attitude) {
+  void ReadBlackboard(const AttitudeState _attitude) noexcept {
     attitude = _attitude;
     Invalidate();
   }
@@ -68,7 +70,7 @@ protected:
 };
 
 void
-HorizonWidget::Update(const MoreData &basic)
+HorizonWidget::Update(const MoreData &basic) noexcept
 {
   HorizonWindow &w = (HorizonWindow &)GetWindow();
   w.ReadBlackboard(basic.attitude);
@@ -76,7 +78,7 @@ HorizonWidget::Update(const MoreData &basic)
 }
 
 void
-HorizonWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+HorizonWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   const Look &look = UIGlobals::GetLook();
 
@@ -90,7 +92,7 @@ HorizonWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-HorizonWidget::Show(const PixelRect &rc)
+HorizonWidget::Show(const PixelRect &rc) noexcept
 {
   Update(CommonInterface::Basic());
   CommonInterface::GetLiveBlackboard().AddListener(*this);
@@ -99,7 +101,7 @@ HorizonWidget::Show(const PixelRect &rc)
 }
 
 void
-HorizonWidget::Hide()
+HorizonWidget::Hide() noexcept
 {
   WindowWidget::Hide();
 
@@ -107,7 +109,7 @@ HorizonWidget::Hide()
 }
 
 void
-HorizonWidget::OnGPSUpdate(const MoreData &basic)
+HorizonWidget::OnGPSUpdate(const MoreData &basic) noexcept
 {
   Update(basic);
 }

@@ -31,11 +31,12 @@ enum Controls {
   ANGLE,
 };
 
-KeyholeZoneEditWidget::KeyholeZoneEditWidget(KeyholeZone &_oz)
+KeyholeZoneEditWidget::KeyholeZoneEditWidget(KeyholeZone &_oz) noexcept
   :ObservationZoneEditWidget(_oz) {}
 
 void
-KeyholeZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+KeyholeZoneEditWidget::Prepare(ContainerWindow &parent,
+                               const PixelRect &rc) noexcept
 {
   ObservationZoneEditWidget::Prepare(parent, rc);
 
@@ -57,7 +58,7 @@ KeyholeZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-KeyholeZoneEditWidget::Save(bool &_changed)
+KeyholeZoneEditWidget::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

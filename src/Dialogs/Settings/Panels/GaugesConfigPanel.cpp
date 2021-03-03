@@ -76,8 +76,8 @@ public:
   GaugesConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
 private:
   /* methods from DataFieldListener */
@@ -95,7 +95,8 @@ GaugesConfigPanel::OnModified(DataField &df)
 }
 
 void
-GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+GaugesConfigPanel::Prepare(ContainerWindow &parent,
+                           const PixelRect &rc) noexcept
 {
   const UISettings &ui_settings = CommonInterface::GetUISettings();
   const MapSettings &map_settings = CommonInterface::GetMapSettings();
@@ -146,7 +147,7 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-GaugesConfigPanel::Save(bool &_changed)
+GaugesConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

@@ -64,7 +64,7 @@ public:
                    unsigned _row_height,
                    ListItemRenderer &_item_renderer,
                    WndForm &_dialog,
-                   const TCHAR *_caption, const TCHAR *_help_text)
+                   const TCHAR *_caption, const TCHAR *_help_text) noexcept
     :num_items(_num_items), initial_value(_initial_value),
      row_height(_row_height),
      visible(false),
@@ -77,13 +77,13 @@ public:
 
   void EnableItemHelp(ItemHelpCallback_t _item_help_callback,
                       TextWidget &_help_widget,
-                      TwoWidgets &_two_widgets) {
+                      TwoWidgets &_two_widgets) noexcept {
     item_help_callback = _item_help_callback;
     help_widget = &_help_widget;
     two_widgets = &_two_widgets;
   }
 
-  void UpdateHelp(unsigned index) {
+  void UpdateHelp(unsigned index) noexcept {
     if (!visible || item_help_callback == nullptr)
       return;
 
@@ -97,22 +97,22 @@ public:
 
   /* virtual methods from class Widget */
 
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override {
     ListControl &list = CreateList(parent, UIGlobals::GetDialogLook(), rc,
                                    row_height);
     list.SetLength(num_items);
     list.SetCursorIndex(initial_value);
   }
 
-  virtual void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     ListWidget::Show(rc);
 
     visible = true;
     postpone_update_help.Schedule({});
   }
 
-  virtual void Hide() override {
+  void Hide() noexcept override {
     visible = false;
     postpone_update_help.Cancel();
     ListWidget::Hide();

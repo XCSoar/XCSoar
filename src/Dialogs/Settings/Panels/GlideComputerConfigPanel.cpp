@@ -48,12 +48,13 @@ public:
   GlideComputerConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 void
-GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+GlideComputerConfigPanel::Prepare(ContainerWindow &parent,
+                                  const PixelRect &rc) noexcept
 {
   const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
   const TaskBehaviour &task_behaviour = settings_computer.task;
@@ -137,7 +138,7 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-GlideComputerConfigPanel::Save(bool &_changed)
+GlideComputerConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

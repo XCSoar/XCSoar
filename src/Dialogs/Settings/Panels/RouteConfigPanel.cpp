@@ -52,8 +52,8 @@ public:
   void ShowReachControls(bool show);
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
 private:
   /* methods from DataFieldListener */
@@ -91,7 +91,8 @@ RouteConfigPanel::OnModified(DataField &df)
 }
 
 void
-RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+RouteConfigPanel::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
 {
   const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
   const RoutePlannerConfig &route_planner = settings_computer.task.route_planner;
@@ -180,7 +181,7 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-RouteConfigPanel::Save(bool &_changed)
+RouteConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();

@@ -54,12 +54,12 @@ public:
   void AckDayOrEnable() noexcept;
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 };
 
 void
-AirspaceDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+AirspaceDetailsWidget::Prepare(ContainerWindow &parent,
+                               const PixelRect &rc) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   TCHAR buffer[64];

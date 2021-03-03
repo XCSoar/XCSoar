@@ -40,11 +40,12 @@ public:
     :RowFormWidget(look), device(_device), info(info) {}
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept;
 };
 
 void
-ManageLX16xxWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ManageLX16xxWidget::Prepare(ContainerWindow &parent,
+                            const PixelRect &rc) noexcept
 {
   StaticString<64> buffer;
 

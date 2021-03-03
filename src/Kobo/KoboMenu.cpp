@@ -85,10 +85,9 @@ public:
   void CreateButtons(WidgetDialog &buttons);
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-
-  virtual bool KeyPress(unsigned key_code) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+  bool KeyPress(unsigned key_code) noexcept override;
 };
 
 void
@@ -104,7 +103,7 @@ KoboMenuWidget::CreateButtons(WidgetDialog &buttons)
 
 void
 KoboMenuWidget::Prepare(ContainerWindow &parent,
-                        const PixelRect &rc)
+                        const PixelRect &rc) noexcept
 {
   WindowStyle style;
   style.Hide();
@@ -119,7 +118,7 @@ KoboMenuWidget::Prepare(ContainerWindow &parent,
 }
 
 bool
-KoboMenuWidget::KeyPress(unsigned key_code)
+KoboMenuWidget::KeyPress(unsigned key_code) noexcept
 {
   switch (key_code) {
 #ifdef KOBO

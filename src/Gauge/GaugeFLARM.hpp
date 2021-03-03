@@ -39,15 +39,16 @@ class GaugeFLARM final : public OverlappedWidget, NullBlackboardListener {
   const FlarmTrafficLook &look;
 
 public:
-  GaugeFLARM(LiveBlackboard &_blackboard, const FlarmTrafficLook &_look)
+  GaugeFLARM(LiveBlackboard &_blackboard,
+             const FlarmTrafficLook &_look) noexcept
     :blackboard(_blackboard), look(_look) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
 
 private:
-  void Update(const NMEAInfo &basic);
+  void Update(const NMEAInfo &basic) noexcept;
 
   void OnGPSUpdate(const MoreData &basic) override;
 };

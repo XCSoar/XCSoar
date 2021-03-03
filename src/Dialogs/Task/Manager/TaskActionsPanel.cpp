@@ -104,13 +104,14 @@ TaskActionsPanel::OnDeclareClicked()
 }
 
 void
-TaskActionsPanel::ReClick()
+TaskActionsPanel::ReClick() noexcept
 {
   dialog.TaskViewClicked();
 }
 
 void
-TaskActionsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TaskActionsPanel::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
 {
   AddButton(_("New Task"), [this](){ OnNewTaskClicked(); });
   AddButton(_("Declare"), [this](){ OnDeclareClicked(); });

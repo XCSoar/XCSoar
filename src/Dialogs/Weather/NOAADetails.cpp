@@ -55,7 +55,7 @@ private:
   void RemoveClicked();
 
   /* virtual methods from class Widget */
-  virtual void Show(const PixelRect &rc) override;
+  void Show(const PixelRect &rc) noexcept override;
 };
 
 void
@@ -114,7 +114,7 @@ NOAADetailsWidget::RemoveClicked()
 }
 
 void
-NOAADetailsWidget::Show(const PixelRect &rc)
+NOAADetailsWidget::Show(const PixelRect &rc) noexcept
 {
   LargeTextWidget::Show(rc);
   Update();

@@ -191,8 +191,8 @@ protected:
 
 public:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Unprepare() noexcept override;
 
   /* virtual methods from class ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -216,7 +216,8 @@ public:
 };
 
 void
-DownloadFilePickerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+DownloadFilePickerWidget::Prepare(ContainerWindow &parent,
+                                  const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -231,7 +232,7 @@ DownloadFilePickerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-DownloadFilePickerWidget::Unprepare()
+DownloadFilePickerWidget::Unprepare() noexcept
 {
   Net::DownloadManager::RemoveListener(*this);
 }

@@ -48,7 +48,7 @@ public:
     :RowFormWidget(look), dialog(_dialog), device(_device) {}
 
   /* virtual methods from Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
 
       AddFloat(N_("Volume"), nullptr,
              _T("%.2f"),
@@ -71,7 +71,7 @@ public:
       });
   }
 
-  void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     params = device.GetSettings();
 
     LoadValue(VOLUME, params.volume);
@@ -80,7 +80,7 @@ public:
     RowFormWidget::Show(rc);
   }
 
-  bool Save(bool &changed) override {
+  bool Save(bool &changed) noexcept override {
     PopupOperationEnvironment env;
 
     changed |= SaveValue(VOLUME, params.volume);

@@ -59,8 +59,8 @@ public:
 
   /* virtual methods from class Widget */
 
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override {
     const auto &look = UIGlobals::GetDialogLook();
     ListControl &list = CreateList(parent, look, rc,
                                    row_renderer.CalculateLayout(*look.list.font));

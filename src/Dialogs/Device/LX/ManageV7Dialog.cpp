@@ -46,11 +46,11 @@ public:
      secondary_info(secondary_info) {}
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 };
 
 void
-ManageV7Widget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ManageV7Widget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   StaticString<64> buffer;
 

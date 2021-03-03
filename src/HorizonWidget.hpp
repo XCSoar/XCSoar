@@ -29,17 +29,17 @@ Copyright_License {
 
 class HorizonWidget final : public WindowWidget,
                             private NullBlackboardListener {
-  void Update(const MoreData &basic);
+  void Update(const MoreData &basic) noexcept;
 
 public:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Show(const PixelRect &rc) override;
-  void Hide() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
 
 private:
   /* virtual methods from class BlackboardListener */
-  void OnGPSUpdate(const MoreData &basic) override;
+  void OnGPSUpdate(const MoreData &basic) noexcept override;
 };
 
 #endif

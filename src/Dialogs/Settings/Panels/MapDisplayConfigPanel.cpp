@@ -72,8 +72,8 @@ public:
   void UpdateVisibilities();
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
 private:
   /* methods from DataFieldListener */
@@ -101,7 +101,8 @@ MapDisplayConfigPanel::OnModified(DataField &df)
 }
 
 void
-MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+MapDisplayConfigPanel::Prepare(ContainerWindow &parent,
+                               const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 
@@ -152,7 +153,7 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-MapDisplayConfigPanel::Save(bool &_changed)
+MapDisplayConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

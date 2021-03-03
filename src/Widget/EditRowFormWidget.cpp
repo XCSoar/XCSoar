@@ -68,7 +68,8 @@ RowFormWidget::CreateEdit(const TCHAR *label, const TCHAR *help,
 }
 
 WndProperty *
-RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
+RowFormWidget::Add(const TCHAR *label, const TCHAR *help,
+                   bool read_only) noexcept
 {
   return (WndProperty *)&Add(Row::Type::EDIT,
                              CreateEdit(label, help, read_only));
@@ -76,7 +77,7 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
 
 void
 RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
-                           const TCHAR *text)
+                           const TCHAR *text) noexcept
 {
   WndProperty *control = Add(label, help, true);
   if (text != nullptr)
@@ -86,7 +87,7 @@ RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
 void
 RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
                            const TCHAR *display_format,
-                           double value)
+                           double value) noexcept
 {
   WndProperty *edit = Add(label, help, true);
   DataFieldFloat *df = new DataFieldFloat(display_format, display_format,
@@ -96,7 +97,7 @@ RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
 
 void
 RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
-                           bool value)
+                           bool value) noexcept
 {
   WndProperty *edit = Add(label, help, true);
   DataFieldBoolean *df = new DataFieldBoolean(value, _("On"), _("Off"));
@@ -105,7 +106,7 @@ RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
 
 WndProperty *
 RowFormWidget::Add(const TCHAR *label, const TCHAR *help,
-                   DataField *df)
+                   DataField *df) noexcept
 {
   WndProperty *edit = Add(label, help);
   edit->SetDataField(df);
@@ -115,7 +116,7 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help,
 WndProperty *
 RowFormWidget::AddBoolean(const TCHAR *label, const TCHAR *help,
                           bool value,
-                          DataFieldListener *listener)
+                          DataFieldListener *listener) noexcept
 {
   WndProperty *edit = Add(label, help);
   DataFieldBoolean *df = new DataFieldBoolean(value, _("On"), _("Off"),
@@ -129,7 +130,7 @@ RowFormWidget::AddInteger(const TCHAR *label, const TCHAR *help,
                           const TCHAR *display_format,
                           const TCHAR *edit_format,
                           int min_value, int max_value, int step, int value,
-                          DataFieldListener *listener)
+                          DataFieldListener *listener) noexcept
 {
   WndProperty *edit = Add(label, help);
   DataFieldInteger *df = new DataFieldInteger(edit_format, display_format,
@@ -146,7 +147,7 @@ RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
                         double min_value, double max_value,
                         double step, bool fine,
                         double value,
-                        DataFieldListener *listener)
+                        DataFieldListener *listener) noexcept
 {
   WndProperty *edit = Add(label, help);
   DataFieldFloat *df = new DataFieldFloat(edit_format, display_format,
@@ -159,7 +160,7 @@ RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
 WndProperty *
 RowFormWidget::AddAngle(const TCHAR *label, const TCHAR *help,
                         Angle value, unsigned step, bool fine,
-                        DataFieldListener *listener)
+                        DataFieldListener *listener) noexcept
 {
   WndProperty *edit = Add(label, help);
   AngleDataField *df = new AngleDataField(value, step, fine, listener);
@@ -170,7 +171,7 @@ RowFormWidget::AddAngle(const TCHAR *label, const TCHAR *help,
 WndProperty *
 RowFormWidget::AddEnum(const TCHAR *label, const TCHAR *help,
                        const StaticEnumChoice *list, unsigned value,
-                       DataFieldListener *listener)
+                       DataFieldListener *listener) noexcept
 {
   assert(list != nullptr);
 
@@ -189,7 +190,7 @@ RowFormWidget::AddEnum(const TCHAR *label, const TCHAR *help,
 
 WndProperty *
 RowFormWidget::AddEnum(const TCHAR *label, const TCHAR *help,
-                       DataFieldListener *listener)
+                       DataFieldListener *listener) noexcept
 {
   WndProperty *edit = Add(label, help);
   DataFieldEnum *df = new DataFieldEnum(listener);
@@ -201,7 +202,7 @@ RowFormWidget::AddEnum(const TCHAR *label, const TCHAR *help,
 WndProperty *
 RowFormWidget::AddText(const TCHAR *label, const TCHAR *help,
                        const TCHAR *content,
-                       DataFieldListener *listener)
+                       DataFieldListener *listener) noexcept
 {
   WndProperty *edit = Add(label, help);
   DataFieldString *df = new DataFieldString(content, listener);
@@ -212,7 +213,7 @@ RowFormWidget::AddText(const TCHAR *label, const TCHAR *help,
 
 WndProperty *
 RowFormWidget::AddPassword(const TCHAR *label, const TCHAR *help,
-                           const TCHAR *content)
+                           const TCHAR *content) noexcept
 {
   WndProperty *edit = Add(label, help);
   PasswordDataField *df = new PasswordDataField(content);
@@ -225,7 +226,7 @@ WndProperty *
 RowFormWidget::AddTime(const TCHAR *label, const TCHAR *help,
                        int min_value, int max_value, unsigned step,
                        int value, unsigned max_tokens,
-                       DataFieldListener *listener)
+                       DataFieldListener *listener) noexcept
 {
   WndProperty *edit = Add(label, help);
   DataFieldTime *df = new DataFieldTime(min_value, max_value, value,
@@ -238,7 +239,7 @@ RowFormWidget::AddTime(const TCHAR *label, const TCHAR *help,
 WndProperty *
 RowFormWidget::AddRoughTime(const TCHAR *label, const TCHAR *help,
                             RoughTime value, RoughTimeDelta time_zone,
-                            DataFieldListener *listener)
+                            DataFieldListener *listener) noexcept
 {
   WndProperty *edit = Add(label, help);
   RoughTimeDataField *df = new RoughTimeDataField(value, time_zone, listener);
@@ -247,7 +248,7 @@ RowFormWidget::AddRoughTime(const TCHAR *label, const TCHAR *help,
 }
 
 void
-RowFormWidget::LoadValue(unsigned i, int value)
+RowFormWidget::LoadValue(unsigned i, int value) noexcept
 {
   WndProperty &control = GetControl(i);
   DataFieldInteger &df = *(DataFieldInteger *)control.GetDataField();
@@ -257,7 +258,7 @@ RowFormWidget::LoadValue(unsigned i, int value)
 }
 
 void
-RowFormWidget::LoadValue(unsigned i, bool value)
+RowFormWidget::LoadValue(unsigned i, bool value) noexcept
 {
   WndProperty &control = GetControl(i);
   DataFieldBoolean &df = *(DataFieldBoolean *)control.GetDataField();
@@ -267,7 +268,7 @@ RowFormWidget::LoadValue(unsigned i, bool value)
 }
 
 void
-RowFormWidget::LoadValueEnum(unsigned i, unsigned value)
+RowFormWidget::LoadValueEnum(unsigned i, unsigned value) noexcept
 {
   WndProperty &control = GetControl(i);
   DataFieldEnum &df = *(DataFieldEnum *)control.GetDataField();
@@ -277,7 +278,7 @@ RowFormWidget::LoadValueEnum(unsigned i, unsigned value)
 }
 
 void
-RowFormWidget::LoadValue(unsigned i, double value)
+RowFormWidget::LoadValue(unsigned i, double value) noexcept
 {
   WndProperty &control = GetControl(i);
   DataFieldFloat &df = *(DataFieldFloat *)control.GetDataField();
@@ -287,7 +288,7 @@ RowFormWidget::LoadValue(unsigned i, double value)
 }
 
 void
-RowFormWidget::LoadValue(unsigned i, const TCHAR *value)
+RowFormWidget::LoadValue(unsigned i, const TCHAR *value) noexcept
 {
   WndProperty &control = GetControl(i);
   DataFieldString &df = *(DataFieldString *)control.GetDataField();
@@ -298,7 +299,7 @@ RowFormWidget::LoadValue(unsigned i, const TCHAR *value)
 }
 
 void
-RowFormWidget::LoadValue(unsigned i, Angle value)
+RowFormWidget::LoadValue(unsigned i, Angle value) noexcept
 {
   WndProperty &control = GetControl(i);
   AngleDataField &df = *(AngleDataField *)control.GetDataField();
@@ -308,7 +309,7 @@ RowFormWidget::LoadValue(unsigned i, Angle value)
 }
 
 void
-RowFormWidget::LoadValue(unsigned i, RoughTime value)
+RowFormWidget::LoadValue(unsigned i, RoughTime value) noexcept
 {
   WndProperty &control = GetControl(i);
   RoughTimeDataField &df = *(RoughTimeDataField *)control.GetDataField();
@@ -317,7 +318,7 @@ RowFormWidget::LoadValue(unsigned i, RoughTime value)
 }
 
 void
-RowFormWidget::LoadValueTime(unsigned i, int value)
+RowFormWidget::LoadValueTime(unsigned i, int value) noexcept
 {
   WndProperty &control = GetControl(i);
   DataFieldTime &df = *(DataFieldTime *)control.GetDataField();
@@ -327,7 +328,7 @@ RowFormWidget::LoadValueTime(unsigned i, int value)
 }
 
 bool
-RowFormWidget::GetValueBoolean(unsigned i) const
+RowFormWidget::GetValueBoolean(unsigned i) const noexcept
 {
   const DataFieldBoolean &df =
     (const DataFieldBoolean &)GetDataField(i);
@@ -336,13 +337,13 @@ RowFormWidget::GetValueBoolean(unsigned i) const
 }
 
 int
-RowFormWidget::GetValueInteger(unsigned i) const
+RowFormWidget::GetValueInteger(unsigned i) const noexcept
 {
   return GetDataField(i).GetAsInteger();
 }
 
 double
-RowFormWidget::GetValueFloat(unsigned i) const
+RowFormWidget::GetValueFloat(unsigned i) const noexcept
 {
   const DataFieldFloat &df =
     (const DataFieldFloat &)GetDataField(i);
@@ -351,7 +352,7 @@ RowFormWidget::GetValueFloat(unsigned i) const
 }
 
 Angle
-RowFormWidget::GetValueAngle(unsigned i) const
+RowFormWidget::GetValueAngle(unsigned i) const noexcept
 {
   const AngleDataField &df =
     (const AngleDataField &)GetDataField(i);
@@ -360,7 +361,7 @@ RowFormWidget::GetValueAngle(unsigned i) const
 }
 
 unsigned
-RowFormWidget::GetValueIntegerAngle(unsigned i) const
+RowFormWidget::GetValueIntegerAngle(unsigned i) const noexcept
 {
   const AngleDataField &df =
     (const AngleDataField &)GetDataField(i);
@@ -369,7 +370,7 @@ RowFormWidget::GetValueIntegerAngle(unsigned i) const
 }
 
 RoughTime
-RowFormWidget::GetValueRoughTime(unsigned i) const
+RowFormWidget::GetValueRoughTime(unsigned i) const noexcept
 {
   const RoughTimeDataField &df =
     (const RoughTimeDataField &)GetDataField(i);
@@ -378,7 +379,7 @@ RowFormWidget::GetValueRoughTime(unsigned i) const
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, bool &value, bool negated) const
+RowFormWidget::SaveValue(unsigned i, bool &value, bool negated) const noexcept
 {
   bool new_value = GetValueBoolean(i);
   if (negated)
@@ -391,7 +392,7 @@ RowFormWidget::SaveValue(unsigned i, bool &value, bool negated) const
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, int &value) const
+RowFormWidget::SaveValue(unsigned i, int &value) const noexcept
 {
   int new_value = GetValueInteger(i);
   if (new_value == value)
@@ -402,7 +403,7 @@ RowFormWidget::SaveValue(unsigned i, int &value) const
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, uint8_t &value) const
+RowFormWidget::SaveValue(unsigned i, uint8_t &value) const noexcept
 {
   int new_value = GetValueInteger(i);
   if (new_value == value || new_value < 0)
@@ -413,7 +414,7 @@ RowFormWidget::SaveValue(unsigned i, uint8_t &value) const
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, uint16_t &value) const
+RowFormWidget::SaveValue(unsigned i, uint16_t &value) const noexcept
 {
   int new_value = GetValueInteger(i);
   if (new_value == value || new_value < 0)
@@ -424,7 +425,7 @@ RowFormWidget::SaveValue(unsigned i, uint16_t &value) const
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, double &value) const
+RowFormWidget::SaveValue(unsigned i, double &value) const noexcept
 {
   auto new_value = GetValueFloat(i);
   if (new_value == value)
@@ -435,7 +436,7 @@ RowFormWidget::SaveValue(unsigned i, double &value) const
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, Angle &value_r) const
+RowFormWidget::SaveValue(unsigned i, Angle &value_r) const noexcept
 {
   unsigned old_value = AngleDataField::Import(value_r);
   unsigned new_value = GetValueIntegerAngle(i);
@@ -447,7 +448,7 @@ RowFormWidget::SaveValue(unsigned i, Angle &value_r) const
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, RoughTime &value_r) const
+RowFormWidget::SaveValue(unsigned i, RoughTime &value_r) const noexcept
 {
   const auto new_value = GetValueRoughTime(i);
   if (new_value == value_r)
@@ -458,7 +459,8 @@ RowFormWidget::SaveValue(unsigned i, RoughTime &value_r) const
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, TCHAR *string, size_t max_size) const
+RowFormWidget::SaveValue(unsigned i,
+                         TCHAR *string, size_t max_size) const noexcept
 {
   const TCHAR *new_value = GetDataField(i).GetAsString();
   assert(new_value != nullptr);

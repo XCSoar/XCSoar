@@ -68,10 +68,10 @@ private:
   void OnFlarmLockClicked();
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
 
   /* virtual methods from class BlackboardListener */
   virtual void OnCalculatedUpdate(const MoreData &basic,
@@ -88,7 +88,7 @@ TeamCodeWidget::CreateButtons(WidgetDialog &buttons)
 
 void
 TeamCodeWidget::Prepare(ContainerWindow &parent,
-                        const PixelRect &rc)
+                        const PixelRect &rc) noexcept
 {
   AddReadOnly(_("Own code"));
   AddReadOnly(_("Mate code"));
@@ -99,7 +99,7 @@ TeamCodeWidget::Prepare(ContainerWindow &parent,
 }
 
 void
-TeamCodeWidget::Show(const PixelRect &rc)
+TeamCodeWidget::Show(const PixelRect &rc) noexcept
 {
   Update(CommonInterface::Basic(), CommonInterface::Calculated());
   CommonInterface::GetLiveBlackboard().AddListener(*this);
@@ -107,7 +107,7 @@ TeamCodeWidget::Show(const PixelRect &rc)
 }
 
 void
-TeamCodeWidget::Hide()
+TeamCodeWidget::Hide() noexcept
 {
   RowFormWidget::Hide();
   CommonInterface::GetLiveBlackboard().RemoveListener(*this);

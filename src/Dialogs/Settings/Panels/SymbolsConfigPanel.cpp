@@ -54,8 +54,8 @@ public:
   void ShowTrailControls(bool show);
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
 private:
   /* methods from DataFieldListener */
@@ -144,7 +144,8 @@ static constexpr StaticEnumChoice skylines_map_mode_list[] = {
 };
 
 void
-SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+SymbolsConfigPanel::Prepare(ContainerWindow &parent,
+                            const PixelRect &rc) noexcept
 {
   const MapSettings &settings_map = CommonInterface::GetMapSettings();
 
@@ -200,7 +201,7 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-SymbolsConfigPanel::Save(bool &_changed)
+SymbolsConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

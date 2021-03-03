@@ -42,8 +42,9 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
+
   void OnAction(int id) noexcept;
 };
 
@@ -69,7 +70,8 @@ InfoBoxesConfigPanel::OnAction(int id) noexcept
 }
 
 void
-InfoBoxesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+InfoBoxesConfigPanel::Prepare(ContainerWindow &parent,
+                              const PixelRect &rc) noexcept
 {
   const InfoBoxSettings &settings = CommonInterface::GetUISettings().info_boxes;
 
@@ -89,7 +91,7 @@ InfoBoxesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-InfoBoxesConfigPanel::Save(bool &_changed)
+InfoBoxesConfigPanel::Save(bool &_changed) noexcept
 {
   InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
   SaveValue(InfoBoxSettings::MAX_PANELS, ProfileKeys::UseFinalGlideDisplayMode,

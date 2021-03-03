@@ -190,10 +190,10 @@ public:
   void OnImagePaint(Canvas &canvas, const PixelRect &rc);
 
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Unprepare() noexcept override;
 
-  void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     const Layout layout(rc,
 #ifdef HAVE_RUN_FILE
                         file_list_handler.GetRowRenderer(),
@@ -229,7 +229,7 @@ public:
     UpdatePage();
   }
 
-  void Hide() override {
+  void Hide() noexcept override {
     if (task_manager != nullptr)
       goto_button.Hide();
 
@@ -252,7 +252,7 @@ public:
       image_window.Hide();
   }
 
-  void Move(const PixelRect &rc) override {
+  void Move(const PixelRect &rc) noexcept override {
     const Layout layout(rc,
 #ifdef HAVE_RUN_FILE
                         file_list_handler.GetRowRenderer(),
@@ -285,7 +285,7 @@ public:
       image_window.Move(layout.main);
   }
 
-  bool SetFocus() override {
+  bool SetFocus() noexcept override {
     if (task_manager != nullptr) {
       goto_button.SetFocus();
       return true;
@@ -293,7 +293,7 @@ public:
       return false;
   }
 
-  bool KeyPress(unsigned key_code) override;
+  bool KeyPress(unsigned key_code) noexcept override;
 };
 
 WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
@@ -383,7 +383,8 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
 }
 
 void
-WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+WaypointDetailsWidget::Prepare(ContainerWindow &parent,
+                               const PixelRect &rc) noexcept
 {
   for (const auto &i : waypoint->files_embed) {
     if (images.full())
@@ -471,7 +472,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-WaypointDetailsWidget::Unprepare()
+WaypointDetailsWidget::Unprepare() noexcept
 {
   info_widget.Unprepare();
   commands_widget.Unprepare();
@@ -548,7 +549,7 @@ WaypointDetailsWidget::OnShrinkClicked()
 }
 
 bool
-WaypointDetailsWidget::KeyPress(unsigned key_code)
+WaypointDetailsWidget::KeyPress(unsigned key_code) noexcept
 {
   switch (key_code) {
   case KEY_LEFT:

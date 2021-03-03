@@ -38,14 +38,15 @@ class LargeTextWidget : public WindowWidget {
   const TCHAR *text;
 
 public:
-  LargeTextWidget(const DialogLook &_look, const TCHAR *_text=nullptr)
+  explicit LargeTextWidget(const DialogLook &_look,
+                           const TCHAR *_text=nullptr) noexcept
     :look(_look), text(_text) {}
 
-  void SetText(const TCHAR *text);
+  void SetText(const TCHAR *text) noexcept;
 
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  bool KeyPress(unsigned key_code) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool KeyPress(unsigned key_code) noexcept override;
 };
 
 #endif

@@ -27,14 +27,14 @@ Copyright_License {
 #include <stdio.h>
 
 PixelSize
-OffsetButtonsWidget::GetMinimumSize() const
+OffsetButtonsWidget::GetMinimumSize() const noexcept
 {
   return { 4u * Layout::GetMinimumControlHeight(),
       Layout::GetMinimumControlHeight() };
 }
 
 PixelSize
-OffsetButtonsWidget::GetMaximumSize() const
+OffsetButtonsWidget::GetMaximumSize() const noexcept
 {
   return { 4u * Layout::GetMaximumControlHeight(),
       Layout::GetMaximumControlHeight() };
@@ -88,13 +88,13 @@ OffsetButtonsWidget::MakeButtons(ContainerWindow &parent,
 
 void
 OffsetButtonsWidget::Prepare(ContainerWindow &parent,
-                             const PixelRect &total_rc)
+                             const PixelRect &total_rc) noexcept
 {
   buttons.reset(new std::array<Button, 4>{MakeButtons(parent, total_rc)});
 }
 
 void
-OffsetButtonsWidget::Show(const PixelRect &total_rc)
+OffsetButtonsWidget::Show(const PixelRect &total_rc) noexcept
 {
   const auto rc = LayoutOffsetButtons(total_rc);
 
@@ -103,14 +103,14 @@ OffsetButtonsWidget::Show(const PixelRect &total_rc)
 }
 
 void
-OffsetButtonsWidget::Hide()
+OffsetButtonsWidget::Hide() noexcept
 {
   for (auto &i : *buttons)
     i.Hide();
 }
 
 void
-OffsetButtonsWidget::Move(const PixelRect &total_rc)
+OffsetButtonsWidget::Move(const PixelRect &total_rc) noexcept
 {
   const auto rc = LayoutOffsetButtons(total_rc);
 
@@ -119,7 +119,7 @@ OffsetButtonsWidget::Move(const PixelRect &total_rc)
 }
 
 bool
-OffsetButtonsWidget::SetFocus()
+OffsetButtonsWidget::SetFocus() noexcept
 {
   (*buttons)[2].SetFocus();
   return true;

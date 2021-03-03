@@ -95,10 +95,10 @@ public:
   void ShowWarningControls(bool visible);
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
 
 private:
   /* methods from DataFieldListener */
@@ -126,7 +126,7 @@ AirspaceConfigPanel::ShowWarningControls(bool visible)
 }
 
 void
-AirspaceConfigPanel::Show(const PixelRect &rc)
+AirspaceConfigPanel::Show(const PixelRect &rc) noexcept
 {
   ConfigPanel::BorrowExtraButton(1, _("Colours"), [](){
     dlgAirspaceShowModal(true);
@@ -140,7 +140,7 @@ AirspaceConfigPanel::Show(const PixelRect &rc)
 }
 
 void
-AirspaceConfigPanel::Hide()
+AirspaceConfigPanel::Hide() noexcept
 {
   RowFormWidget::Hide();
   ConfigPanel::ReturnExtraButton(1);
@@ -161,7 +161,8 @@ AirspaceConfigPanel::OnModified(DataField &df)
 }
 
 void
-AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+AirspaceConfigPanel::Prepare(ContainerWindow &parent,
+                             const PixelRect &rc) noexcept
 {
   const AirspaceComputerSettings &computer =
     CommonInterface::GetComputerSettings().airspace;
@@ -236,7 +237,7 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
 
 bool
-AirspaceConfigPanel::Save(bool &_changed)
+AirspaceConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

@@ -33,17 +33,17 @@ class SystemStatusPanel final
   RateLimitedBlackboardListener rate_limiter;
 
 public:
-  SystemStatusPanel(const DialogLook &look)
+  explicit SystemStatusPanel(const DialogLook &look) noexcept
     :StatusPanel(look), rate_limiter(*this, std::chrono::seconds(2),
                                      std::chrono::milliseconds(500)) {}
 
   /* virtual methods from class StatusPanel */
-  void Refresh() override;
+  void Refresh() noexcept override;
 
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Show(const PixelRect &rc) override;
-  void Hide() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
 
 private:
   /* virtual methods from class BlackboardListener */

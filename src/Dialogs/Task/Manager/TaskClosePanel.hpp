@@ -39,7 +39,7 @@ class TaskClosePanel final : public NullWidget {
   struct Layout {
     PixelRect close_button, message, revert_button;
 
-    Layout(PixelRect rc, const DialogLook &look);
+    Layout(PixelRect rc, const DialogLook &look) noexcept;
   };
 
 public:
@@ -56,18 +56,18 @@ private:
 
 public:
   TaskClosePanel(TaskManagerDialog &_dialog, bool *_task_modified,
-                 const DialogLook &_look);
+                 const DialogLook &_look) noexcept;
 
-  void CommitAndClose();
-  void RefreshStatus();
+  void CommitAndClose() noexcept;
+  void RefreshStatus() noexcept;
 
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  bool Click() override;
-  void ReClick() override;
-  void Show(const PixelRect &rc) override;
-  void Hide() override;
-  void Move(const PixelRect &rc) override;
-  bool SetFocus() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Click() noexcept override;
+  void ReClick() noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
+  void Move(const PixelRect &rc) noexcept override;
+  bool SetFocus() noexcept override;
 };
 
 #endif

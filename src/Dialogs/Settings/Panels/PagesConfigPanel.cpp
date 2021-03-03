@@ -73,7 +73,7 @@ public:
   void SetValue(const PageLayout &_value);
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
 private:
   /* virtual methods from class DataFieldListener */
@@ -164,10 +164,10 @@ public:
   }
 
   /* virtual methods from class Widget */
-  virtual void Initialise(ContainerWindow &parent,
-                          const PixelRect &rc) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Initialise(ContainerWindow &parent,
+                  const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
   /* virtual methods from class ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -185,7 +185,7 @@ public:
 };
 
 void
-PageLayoutEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+PageLayoutEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   const InfoBoxSettings &info_box_settings =
     CommonInterface::GetUISettings().info_boxes;
@@ -299,7 +299,8 @@ PageLayoutEditWidget::OnModified(DataField &df)
 }
 
 void
-PageListWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
+PageListWidget::Initialise(ContainerWindow &parent,
+                           const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -314,7 +315,7 @@ PageListWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-PageListWidget::Show(const PixelRect &rc)
+PageListWidget::Show(const PixelRect &rc) noexcept
 {
   editor->SetValue(settings.pages[GetList().GetCursorIndex()]);
 
@@ -322,7 +323,7 @@ PageListWidget::Show(const PixelRect &rc)
 }
 
 bool
-PageListWidget::Save(bool &_changed)
+PageListWidget::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

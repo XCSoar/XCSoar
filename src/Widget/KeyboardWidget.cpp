@@ -35,7 +35,7 @@ static constexpr TCHAR keyboard_letters[] =
   _T("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
 void
-KeyboardWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+KeyboardWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   PrepareSize(rc);
 
@@ -62,7 +62,7 @@ KeyboardWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-KeyboardWidget::Show(const PixelRect &rc)
+KeyboardWidget::Show(const PixelRect &rc) noexcept
 {
   OnResize(rc);
 
@@ -74,7 +74,7 @@ KeyboardWidget::Show(const PixelRect &rc)
 }
 
 void
-KeyboardWidget::Hide()
+KeyboardWidget::Hide() noexcept
 {
   for (unsigned i = 0; i < num_buttons; ++i)
     buttons[i].Hide();
@@ -84,7 +84,7 @@ KeyboardWidget::Hide()
 }
 
 void
-KeyboardWidget::Move(const PixelRect &rc)
+KeyboardWidget::Move(const PixelRect &rc) noexcept
 {
   OnResize(rc);
 }

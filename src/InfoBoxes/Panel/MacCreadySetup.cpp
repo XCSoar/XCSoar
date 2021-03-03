@@ -33,18 +33,19 @@ Copyright_License {
 class MacCreadySetupPanel : public WindowWidget {
 public:
   /* virtual methods from class Widget */
-  virtual PixelSize GetMinimumSize() const override {
+  PixelSize GetMinimumSize() const noexcept override {
     return PixelSize{Layout::Scale(80u), Layout::Scale(30u)};
   }
 
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 
-  virtual void Show(const PixelRect &rc) override;
+  void Show(const PixelRect &rc) noexcept override;
 };
 
 void
-MacCreadySetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+MacCreadySetupPanel::Prepare(ContainerWindow &parent,
+                             const PixelRect &rc) noexcept
 {
   WindowStyle style;
   style.Hide();
@@ -60,7 +61,7 @@ MacCreadySetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-MacCreadySetupPanel::Show(const PixelRect &rc)
+MacCreadySetupPanel::Show(const PixelRect &rc) noexcept
 {
   auto &auto_mc = (CheckBoxControl &)GetWindow();
   auto_mc.SetState(CommonInterface::GetComputerSettings().task.auto_mc);

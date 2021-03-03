@@ -39,13 +39,13 @@
 #include <cassert>
 
 PolarShapeEditWidget::PolarShapeEditWidget(const PolarShape &_shape,
-                                           DataFieldListener *_listener)
+                                           DataFieldListener *_listener) noexcept
   :shape(_shape), listener(_listener) {}
 
 PolarShapeEditWidget::~PolarShapeEditWidget() noexcept = default;
 
 static void
-LoadValue(WndProperty &e, double value, UnitGroup unit_group)
+LoadValue(WndProperty &e, double value, UnitGroup unit_group) noexcept
 {
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
 
@@ -58,20 +58,21 @@ LoadValue(WndProperty &e, double value, UnitGroup unit_group)
 }
 
 static void
-LoadPoint(PolarShapeEditWidget::PointEditor &pe, const PolarPoint &point)
+LoadPoint(PolarShapeEditWidget::PointEditor &pe,
+          const PolarPoint &point) noexcept
 {
   LoadValue(*pe.v, point.v, UnitGroup::HORIZONTAL_SPEED);
   LoadValue(*pe.w, point.w, UnitGroup::VERTICAL_SPEED);
 }
 
 static double
-GetValue(WndProperty &e)
+GetValue(WndProperty &e) noexcept
 {
   return ((DataFieldFloat *)e.GetDataField())->GetAsFixed();
 }
 
 static bool
-SaveValue(WndProperty &e, double &value_r, UnitGroup unit_group)
+SaveValue(WndProperty &e, double &value_r, UnitGroup unit_group) noexcept
 {
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
 
@@ -84,7 +85,8 @@ SaveValue(WndProperty &e, double &value_r, UnitGroup unit_group)
 }
 
 static bool
-SavePoint(const PolarShapeEditWidget::PointEditor &pe, PolarPoint &point)
+SavePoint(const PolarShapeEditWidget::PointEditor &pe,
+          PolarPoint &point) noexcept
 {
   bool changed = false;
   changed |= SaveValue(*pe.v, point.v, UnitGroup::HORIZONTAL_SPEED);
@@ -93,7 +95,7 @@ SavePoint(const PolarShapeEditWidget::PointEditor &pe, PolarPoint &point)
 }
 
 void
-PolarShapeEditWidget::SetPolarShape(const PolarShape &_shape)
+PolarShapeEditWidget::SetPolarShape(const PolarShape &_shape) noexcept
 {
   shape = _shape;
 
@@ -102,21 +104,22 @@ PolarShapeEditWidget::SetPolarShape(const PolarShape &_shape)
 }
 
 PixelSize
-PolarShapeEditWidget::GetMinimumSize() const
+PolarShapeEditWidget::GetMinimumSize() const noexcept
 {
   return { Layout::Scale(200u),
       2 * Layout::GetMinimumControlHeight() };
 }
 
 PixelSize
-PolarShapeEditWidget::GetMaximumSize() const
+PolarShapeEditWidget::GetMaximumSize() const noexcept
 {
   return { Layout::Scale(400u),
       2 * Layout::GetMaximumControlHeight() };
 }
 
 void
-PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
+PolarShapeEditWidget::Prepare(ContainerWindow &parent,
+                              const PixelRect &_rc) noexcept
 {
   PanelWidget::Prepare(parent, _rc);
   const DialogLook &look = UIGlobals::GetDialogLook();
@@ -197,7 +200,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 }
 
 bool
-PolarShapeEditWidget::Save(bool &_changed)
+PolarShapeEditWidget::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

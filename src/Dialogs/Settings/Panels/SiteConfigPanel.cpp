@@ -54,12 +54,12 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 void
-SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   WndProperty *wp = Add(_T(""), 0, true);
   wp->SetText(GetPrimaryDataPath().c_str());
@@ -113,7 +113,7 @@ SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-SiteConfigPanel::Save(bool &_changed)
+SiteConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

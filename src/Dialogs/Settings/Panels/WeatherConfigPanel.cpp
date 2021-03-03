@@ -47,12 +47,13 @@ public:
 
 public:
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 void
-WeatherConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+WeatherConfigPanel::Prepare(ContainerWindow &parent,
+                            const PixelRect &rc) noexcept
 {
   const auto &settings = CommonInterface::GetComputerSettings().weather;
 
@@ -70,7 +71,7 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-WeatherConfigPanel::Save(bool &_changed)
+WeatherConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

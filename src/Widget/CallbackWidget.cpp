@@ -24,26 +24,26 @@ Copyright_License {
 #include "CallbackWidget.hpp"
 
 bool
-CallbackWidget::Click()
+CallbackWidget::Click() noexcept
 {
   callback();
   return false;
 }
 
 void
-CallbackWidget::ReClick()
+CallbackWidget::ReClick() noexcept
 {
   callback();
 }
 
 #ifndef HAVE_CLIPPING
 void
-CallbackWidget::Show(const PixelRect &rc)
+CallbackWidget::Show(const PixelRect &rc) noexcept
 {
 }
 
 void
-CallbackWidget::Hide()
+CallbackWidget::Hide() noexcept
 {
 }
 #endif

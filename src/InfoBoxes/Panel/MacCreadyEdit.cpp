@@ -31,16 +31,15 @@ Copyright_License {
 
 class MacCreadyOffsetButtons final : public OffsetButtonsWidget {
 public:
-  template<typename... Args>
-  MacCreadyOffsetButtons(Args&&... args):OffsetButtonsWidget(args...) {}
+  using OffsetButtonsWidget::OffsetButtonsWidget;
 
 protected:
   /* virtual methods from OffsetButtonsWidget */
-  virtual void OnOffset(double offset) override;
+  void OnOffset(double offset) noexcept override;
 };
 
 void
-MacCreadyOffsetButtons::OnOffset(double offset)
+MacCreadyOffsetButtons::OnOffset(double offset) noexcept
 {
   ActionInterface::OffsetManualMacCready(Units::ToSysVSpeed(offset));
 }

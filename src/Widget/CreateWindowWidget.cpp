@@ -26,7 +26,7 @@ Copyright_License {
 
 void
 CreateWindowWidget::Prepare(ContainerWindow &parent,
-                            const PixelRect &rc)
+                            const PixelRect &rc) noexcept
 {
   WindowStyle style;
   style.Hide();

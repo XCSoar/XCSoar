@@ -53,12 +53,13 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 void
-AudioVarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+AudioVarioConfigPanel::Prepare(ContainerWindow &parent,
+                               const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 
@@ -124,7 +125,7 @@ AudioVarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-AudioVarioConfigPanel::Save(bool &changed)
+AudioVarioConfigPanel::Save(bool &changed) noexcept
 {
   if (!AudioVarioGlue::HaveAudioVario())
     return true;

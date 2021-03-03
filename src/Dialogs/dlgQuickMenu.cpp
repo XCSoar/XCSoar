@@ -118,13 +118,13 @@ public:
 
 protected:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  bool SetFocus() override;
-  bool KeyPress(unsigned key_code) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool SetFocus() noexcept override;
+  bool KeyPress(unsigned key_code) noexcept override;
 };
 
 void
-QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
+QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   WindowStyle grid_view_style;
   grid_view_style.ControlParent();
@@ -195,7 +195,7 @@ QuickMenu::UpdateCaption()
 }
 
 bool
-QuickMenu::SetFocus()
+QuickMenu::SetFocus() noexcept
 {
   auto &grid_view = GetWindow();
   unsigned numColumns = grid_view.GetNumColumns();
@@ -221,7 +221,7 @@ QuickMenu::SetFocus()
 }
 
 bool
-QuickMenu::KeyPress(unsigned key_code)
+QuickMenu::KeyPress(unsigned key_code) noexcept
 {
   auto &grid_view = GetWindow();
 

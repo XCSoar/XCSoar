@@ -34,7 +34,7 @@ Copyright_License {
  */
 class PanelWidget : public WindowWidget {
 public:
-  void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 };
 
 #endif

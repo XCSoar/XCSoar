@@ -57,12 +57,12 @@ public:
     :callback(std::move(_callback)) {}
 
 public:
-  bool Click() override;
-  void ReClick() override;
+  bool Click() noexcept override;
+  void ReClick() noexcept override;
 
 #ifndef HAVE_CLIPPING
-  void Show(const PixelRect &rc) override;
-  void Hide() override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
 #endif
 };
 

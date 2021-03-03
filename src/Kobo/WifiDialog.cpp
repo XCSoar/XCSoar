@@ -74,8 +74,8 @@ public:
   void UpdateButtons();
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override {
     const DialogLook &look = UIGlobals::GetDialogLook();
 
     CreateList(parent, look, rc,

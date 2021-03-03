@@ -168,12 +168,13 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 void
-LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+LayoutConfigPanel::Prepare(ContainerWindow &parent,
+                           const PixelRect &rc) noexcept
 {
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
@@ -234,7 +235,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-LayoutConfigPanel::Save(bool &_changed)
+LayoutConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

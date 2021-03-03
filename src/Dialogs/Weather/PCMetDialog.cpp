@@ -123,7 +123,7 @@ public:
     :area_list(_area_list) {}
 
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
       TextListWidget::Prepare(parent, rc);
 
       unsigned n = 0;
@@ -132,7 +132,7 @@ public:
       GetList().SetLength(n);
   }
 
-  void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     TextListWidget::Show(rc);
     area_list.SetType(&PCMet::image_types[GetList().GetCursorIndex()]);
   }

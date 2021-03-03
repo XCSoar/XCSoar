@@ -98,7 +98,8 @@ public:
   }
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) {
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override {
     VegaParametersWidget::Prepare(parent, rc);
 
     sprintf(names[0], "Tone%sBeepType", mode);

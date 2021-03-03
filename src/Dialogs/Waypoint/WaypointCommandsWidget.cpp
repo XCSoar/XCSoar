@@ -220,7 +220,8 @@ ActivatePan(const Waypoint &waypoint)
 }
 
 void
-WaypointCommandsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+WaypointCommandsWidget::Prepare(ContainerWindow &parent,
+                                const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 

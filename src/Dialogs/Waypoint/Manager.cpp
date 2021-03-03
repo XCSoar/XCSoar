@@ -70,9 +70,9 @@ public:
   void SaveWaypoints();
 
   /* virtual methods from Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
-  void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     ListWidget::Show(rc);
     Update();
   }
@@ -158,7 +158,8 @@ WaypointManagerWidget::UpdateList()
 }
 
 void
-WaypointManagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+WaypointManagerWidget::Prepare(ContainerWindow &parent,
+                               const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   CreateList(parent, look, rc,

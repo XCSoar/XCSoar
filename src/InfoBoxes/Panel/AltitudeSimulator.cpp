@@ -33,16 +33,15 @@ Copyright_License {
 
 class AltitudeSimulatorOffsetButtons final : public OffsetButtonsWidget {
 public:
-  template<typename... Args>
-  AltitudeSimulatorOffsetButtons(Args&&... args):OffsetButtonsWidget(args...) {}
+  using OffsetButtonsWidget::OffsetButtonsWidget;
 
 protected:
   /* virtual methods from OffsetButtonsWidget */
-  virtual void OnOffset(double offset) override;
+  void OnOffset(double offset) noexcept override;
 };
 
 void
-AltitudeSimulatorOffsetButtons::OnOffset(const double step)
+AltitudeSimulatorOffsetButtons::OnOffset(const double step) noexcept
 {
   if (!is_simulator())
     return;

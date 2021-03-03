@@ -46,13 +46,13 @@ class AirspaceClassRendererSettingsPanel:
   AirspaceClassRendererSettings settings;
 
 public:
-  AirspaceClassRendererSettingsPanel(AirspaceClass type);
+  explicit AirspaceClassRendererSettingsPanel(AirspaceClass type) noexcept;
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
 private:
-  void FillAirspaceClasses();
+  void FillAirspaceClasses() noexcept;
 };
 
 #endif

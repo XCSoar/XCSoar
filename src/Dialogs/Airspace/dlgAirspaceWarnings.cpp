@@ -121,9 +121,9 @@ public:
   void Enable();
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
 
   /* virtual methods from ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -182,7 +182,7 @@ AirspaceWarningListWidget::UpdateButtons()
 
 void
 AirspaceWarningListWidget::Prepare(ContainerWindow &parent,
-                                   const PixelRect &rc)
+                                   const PixelRect &rc) noexcept
 {
   const auto &look = UIGlobals::GetDialogLook();
 
@@ -201,7 +201,7 @@ AirspaceWarningListWidget::OnCursorMoved(unsigned i) noexcept
 }
 
 void
-AirspaceWarningListWidget::Show(const PixelRect &rc)
+AirspaceWarningListWidget::Show(const PixelRect &rc) noexcept
 {
   sound_interval_counter = 0;
   ListWidget::Show(rc);
@@ -210,7 +210,7 @@ AirspaceWarningListWidget::Show(const PixelRect &rc)
 }
 
 void
-AirspaceWarningListWidget::Hide()
+AirspaceWarningListWidget::Hide() noexcept
 {
   update_list_timer.Cancel();
   ListWidget::Hide();

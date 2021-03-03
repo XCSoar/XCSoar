@@ -47,13 +47,13 @@ public:
   WaypointCommandsWidget(const DialogLook &look, WndForm *_form,
                          WaypointPtr _waypoint,
                          ProtectedTaskManager *_task_manager,
-                         bool _allow_edit)
+                         bool _allow_edit) noexcept
     :RowFormWidget(look), form(_form),
      waypoint(std::move(_waypoint)), task_manager(_task_manager),
      allow_edit(_allow_edit) {}
 
   /* methods from Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 };
 
 #endif

@@ -39,7 +39,7 @@ enum Controls {
 };
 
 void
-FlightStatusPanel::Refresh()
+FlightStatusPanel::Refresh() noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
@@ -73,7 +73,8 @@ FlightStatusPanel::Refresh()
 }
 
 void
-FlightStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+FlightStatusPanel::Prepare(ContainerWindow &parent,
+                           const PixelRect &rc) noexcept
 {
   AddReadOnly(_("Location"));
   AddReadOnly(_("Altitude"));

@@ -50,12 +50,13 @@ public:
   SafetyFactorsConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 void
-SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent,
+                                  const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 
@@ -120,7 +121,7 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-SafetyFactorsConfigPanel::Save(bool &_changed)
+SafetyFactorsConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

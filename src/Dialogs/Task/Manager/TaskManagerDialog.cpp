@@ -57,7 +57,7 @@ TaskManagerDialog::TaskManagerDialog(WndForm &_dialog) noexcept
 TaskManagerDialog::~TaskManagerDialog() noexcept = default;
 
 bool
-TaskManagerDialog::KeyPress(unsigned key_code)
+TaskManagerDialog::KeyPress(unsigned key_code) noexcept
 {
   if (TabWidget::KeyPress(key_code))
     return true;
@@ -83,7 +83,7 @@ TaskManagerDialog::KeyPress(unsigned key_code)
 }
 
 void
-TaskManagerDialog::OnPageFlipped()
+TaskManagerDialog::OnPageFlipped() noexcept
 {
   RestoreTaskView();
   UpdateCaption();
@@ -91,7 +91,8 @@ TaskManagerDialog::OnPageFlipped()
 }
 
 void
-TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
+TaskManagerDialog::Initialise(ContainerWindow &parent,
+                              const PixelRect &rc) noexcept
 {
   task = protected_task_manager->TaskClone();
 
@@ -129,7 +130,7 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-TaskManagerDialog::Show(const PixelRect &rc)
+TaskManagerDialog::Show(const PixelRect &rc) noexcept
 {
   ResetTaskView();
   TabWidget::Show(rc);

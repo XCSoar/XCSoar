@@ -72,7 +72,7 @@ public:
 
 public:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
   /* virtual methods from class List::Handler */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -116,7 +116,8 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
 }
 
 void
-AlternatesListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+AlternatesListWidget::Prepare(ContainerWindow &parent,
+                              const PixelRect &rc) noexcept
 {
   CreateList(parent, dialog_look, rc,
              row_renderer.CalculateLayout(*dialog_look.list.font_bold,

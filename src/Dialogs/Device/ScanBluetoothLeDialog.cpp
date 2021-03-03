@@ -86,7 +86,7 @@ public:
 
 private:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
   /* virtual methods from class ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -145,7 +145,8 @@ private:
 };
 
 void
-ScanBluetoothLeWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ScanBluetoothLeWidget::Prepare(ContainerWindow &parent,
+                               const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 

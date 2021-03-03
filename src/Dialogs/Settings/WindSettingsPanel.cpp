@@ -33,7 +33,7 @@ Copyright_License {
 
 WindSettingsPanel::WindSettingsPanel(bool _edit_manual_wind,
                                      bool _clear_manual_button,
-                                     bool _edit_trail_drift)
+                                     bool _edit_trail_drift) noexcept
   :RowFormWidget(UIGlobals::GetDialogLook()),
    edit_manual_wind(_edit_manual_wind),
    clear_manual_button(_clear_manual_button),
@@ -49,7 +49,8 @@ WindSettingsPanel::ClearManual() noexcept
 }
 
 void
-WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+WindSettingsPanel::Prepare(ContainerWindow &parent,
+                           const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 
@@ -117,7 +118,7 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-WindSettingsPanel::Show(const PixelRect &rc)
+WindSettingsPanel::Show(const PixelRect &rc) noexcept
 {
   if (edit_manual_wind) {
     UpdateVector();
@@ -128,7 +129,7 @@ WindSettingsPanel::Show(const PixelRect &rc)
 }
 
 void
-WindSettingsPanel::Hide()
+WindSettingsPanel::Hide() noexcept
 {
   RowFormWidget::Hide();
 
@@ -137,7 +138,7 @@ WindSettingsPanel::Hide()
 }
 
 bool
-WindSettingsPanel::Save(bool &_changed)
+WindSettingsPanel::Save(bool &_changed) noexcept
 {
   WindSettings &settings = CommonInterface::SetComputerSettings().wind;
   MapSettings &map_settings = CommonInterface::SetMapSettings();
@@ -181,7 +182,7 @@ WindSettingsPanel::OnModified(DataField &df)
 }
 
 void
-WindSettingsPanel::UpdateVector()
+WindSettingsPanel::UpdateVector() noexcept
 {
   if (!edit_manual_wind)
     return;

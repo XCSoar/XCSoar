@@ -134,19 +134,19 @@ private:
 
 public:
   /* virtual methods from Widget */
-  PixelSize GetMinimumSize() const override {
+  PixelSize GetMinimumSize() const noexcept override {
     return { ::Layout::Scale(180u),
         ::Layout::GetMinimumControlHeight() };
   }
 
-  PixelSize GetMaximumSize() const override {
+  PixelSize GetMaximumSize() const noexcept override {
     return { ::Layout::Scale(400u),
         ::Layout::GetMaximumControlHeight() };
   }
 
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
-  void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     assert(!visible);
     visible = true;
 
@@ -154,7 +154,7 @@ public:
     UpdateVisibility();
   }
 
-  void Hide() override {
+  void Hide() noexcept override {
     assert(visible);
     visible = false;
 
@@ -166,7 +166,7 @@ public:
     clear_all_button.Hide();
   }
 
-  void Move(const PixelRect &rc) override {
+  void Move(const PixelRect &rc) noexcept override {
     UpdatePositions(rc);
   }
 };
@@ -215,10 +215,10 @@ public:
   void OnMakeFinish();
 
   /* virtual methods from Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
-  void ReClick() override;
-  void Show(const PixelRect &rc) override;
+  void ReClick() noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
 
 protected:
   void RefreshView();
@@ -485,7 +485,7 @@ TaskEditPanel::MoveDown()
 }
 
 void
-TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -497,13 +497,13 @@ TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-TaskEditPanel::ReClick()
+TaskEditPanel::ReClick() noexcept
 {
   dialog.TaskViewClicked();
 }
 
 void
-TaskEditPanel::Show(const PixelRect &rc)
+TaskEditPanel::Show(const PixelRect &rc) noexcept
 {
   if (ordered_task != ordered_task_pointer.get()) {
     ordered_task = ordered_task_pointer.get();
@@ -516,7 +516,7 @@ TaskEditPanel::Show(const PixelRect &rc)
 }
 
 void
-TaskEditButtons::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TaskEditButtons::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   assert(!visible);
 

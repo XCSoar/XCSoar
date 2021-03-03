@@ -30,7 +30,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 
-TaskClosePanel::Layout::Layout(PixelRect rc, const DialogLook &look)
+TaskClosePanel::Layout::Layout(PixelRect rc, const DialogLook &look) noexcept
 {
   const unsigned padding = ::Layout::GetMinimumControlHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
@@ -53,13 +53,13 @@ TaskClosePanel::Layout::Layout(PixelRect rc, const DialogLook &look)
 
 TaskClosePanel::TaskClosePanel(TaskManagerDialog &_dialog,
                                bool *_task_modified,
-                               const DialogLook &_look)
+                               const DialogLook &_look) noexcept
   :dialog(_dialog), task_modified(_task_modified),
    look(_look),
    message(look) {}
 
 void
-TaskClosePanel::RefreshStatus()
+TaskClosePanel::RefreshStatus() noexcept
 {
   message.SetText(*task_modified ?
                   _("Task has been modified") : _("Task unchanged"));
@@ -68,14 +68,14 @@ TaskClosePanel::RefreshStatus()
 }
 
 void
-TaskClosePanel::CommitAndClose()
+TaskClosePanel::CommitAndClose() noexcept
 {
   if (dialog.Commit())
     dialog.SetModalResult(mrOK);
 }
 
 void
-TaskClosePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TaskClosePanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   const Layout layout(rc, look);
 
@@ -103,7 +103,7 @@ TaskClosePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-TaskClosePanel::Click()
+TaskClosePanel::Click() noexcept
 {
   if (!(*task_modified)) {
     CommitAndClose();
@@ -114,13 +114,13 @@ TaskClosePanel::Click()
 }
 
 void
-TaskClosePanel::ReClick()
+TaskClosePanel::ReClick() noexcept
 {
   CommitAndClose();
 }
 
 void
-TaskClosePanel::Show(const PixelRect &rc)
+TaskClosePanel::Show(const PixelRect &rc) noexcept
 {
   RefreshStatus();
 
@@ -131,7 +131,7 @@ TaskClosePanel::Show(const PixelRect &rc)
 }
 
 void
-TaskClosePanel::Hide()
+TaskClosePanel::Hide() noexcept
 {
   close_button.Hide();
   message.Hide();
@@ -139,7 +139,7 @@ TaskClosePanel::Hide()
 }
 
 void
-TaskClosePanel::Move(const PixelRect &rc)
+TaskClosePanel::Move(const PixelRect &rc) noexcept
 {
   const Layout layout(rc, look);
   close_button.Move(layout.close_button);
@@ -148,7 +148,7 @@ TaskClosePanel::Move(const PixelRect &rc)
 }
 
 bool
-TaskClosePanel::SetFocus()
+TaskClosePanel::SetFocus() noexcept
 {
   close_button.SetFocus();
   return true;

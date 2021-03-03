@@ -150,27 +150,27 @@ private:
 
 public:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
-  bool Save(bool &changed) override {
+  bool Save(bool &changed) noexcept override {
     ReadValues();
     changed = task_modified;
     return true;
   }
 
-  void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     const Layout layout(rc, look);
     waypoint_panel.MoveAndShow(layout.waypoint_panel);
     tp_panel.MoveAndShow(layout.tp_panel);
     MoveChildren(layout);
   }
 
-  void Hide() override {
+  void Hide() noexcept override {
     waypoint_panel.Hide();
     tp_panel.Hide();
   }
 
-  void Move(const PixelRect &rc) override {
+  void Move(const PixelRect &rc) noexcept override {
     const Layout layout(rc, look);
     waypoint_panel.Move(layout.waypoint_panel);
     tp_panel.Move(layout.tp_panel);
@@ -241,7 +241,7 @@ TaskPointWidget::Layout::Layout(PixelRect rc, const DialogLook &look)
 }
 
 void
-TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   const Layout layout(rc, look);
 

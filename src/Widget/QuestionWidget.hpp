@@ -49,14 +49,14 @@ class QuestionWidget : public SolidWidget {
 public:
   explicit QuestionWidget(const TCHAR *_message) noexcept;
 
-  void SetMessage(const TCHAR *_message);
+  void SetMessage(const TCHAR *_message) noexcept;
 
   void AddButton(const TCHAR *caption,
                  std::function<void()> callback) noexcept {
     buttons.append({caption, std::move(callback)});
   }
 
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 };
 
 #endif

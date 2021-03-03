@@ -69,7 +69,7 @@ public:
     :RowFormWidget(_look) {}
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
 private:
   /* methods from DataFieldListener */
@@ -94,7 +94,7 @@ VegaDemoWidget::OnModified(DataField &df)
 }
 
 void
-VegaDemoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+VegaDemoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   AddFloat(_("TE vario"),
            _("This produces a fake TE vario gross vertical velocity.  It can be used when in circling mode to demonstrate the lift tones.  When not in circling mode, set this to a realistic negative value so speed command tones are produced."),

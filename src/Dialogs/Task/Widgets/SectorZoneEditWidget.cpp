@@ -33,11 +33,12 @@ enum Controls {
   INNER_RADIUS,
 };
 
-SectorZoneEditWidget::SectorZoneEditWidget(SectorZone &_oz)
+SectorZoneEditWidget::SectorZoneEditWidget(SectorZone &_oz) noexcept
   :ObservationZoneEditWidget(_oz) {}
 
 void
-SectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+SectorZoneEditWidget::Prepare(ContainerWindow &parent,
+                              const PixelRect &rc) noexcept
 {
   ObservationZoneEditWidget::Prepare(parent, rc);
 
@@ -74,7 +75,7 @@ SectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-SectorZoneEditWidget::Save(bool &_changed)
+SectorZoneEditWidget::Save(bool &_changed) noexcept
 {
   const auto shape = GetObject().GetShape();
   bool changed = false;

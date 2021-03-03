@@ -46,8 +46,8 @@ public:
   void SetLocalTime(RoughTimeDelta utc_offset);
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
 private:
   /* methods from DataFieldListener */
@@ -69,7 +69,7 @@ TimeConfigPanel::OnModified(DataField &df)
 }
 
 void
-TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 
@@ -97,7 +97,7 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-TimeConfigPanel::Save(bool &_changed)
+TimeConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

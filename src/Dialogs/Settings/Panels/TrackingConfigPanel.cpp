@@ -80,8 +80,8 @@ public:
 #endif
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
 private:
   /* methods from DataFieldListener */
@@ -191,7 +191,7 @@ static constexpr StaticEnumChoice vehicle_type_list[] = {
 #endif
 
 void
-TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   const TrackingSettings &settings =
     CommonInterface::GetComputerSettings().tracking;
@@ -270,7 +270,7 @@ SaveKey(const RowFormWidget &form, unsigned idx, const char *profile_key,
 #endif
 
 bool
-TrackingConfigPanel::Save(bool &_changed)
+TrackingConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

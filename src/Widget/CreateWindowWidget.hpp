@@ -43,11 +43,11 @@ class CreateWindowWidget final : public WindowWidget {
   CreateFunction create;
 
 public:
-  CreateWindowWidget(CreateFunction &&_create)
+  explicit CreateWindowWidget(CreateFunction &&_create) noexcept
     :create(std::move(_create)) {}
 
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 };
 
 #endif

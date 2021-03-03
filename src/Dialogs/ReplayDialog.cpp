@@ -57,8 +57,8 @@ private:
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 
 private:
   /* methods from DataFieldListener */
@@ -66,7 +66,8 @@ private:
 };
 
 void
-ReplayControlWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ReplayControlWidget::Prepare(ContainerWindow &parent,
+                             const PixelRect &rc) noexcept
 {
   auto *file =
     AddFile(_("File"),

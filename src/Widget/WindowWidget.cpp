@@ -24,7 +24,7 @@ Copyright_License {
 #include "WindowWidget.hpp"
 #include "ui/window/Window.hpp"
 
-WindowWidget::WindowWidget() = default;
+WindowWidget::WindowWidget() noexcept = default;
 
 WindowWidget::WindowWidget(std::unique_ptr<Window> _window) noexcept
   :window(std::move(_window))
@@ -52,7 +52,7 @@ WindowWidget::SetWindow(std::unique_ptr<Window> &&_window) noexcept
 }
 
 void
-WindowWidget::DeleteWindow()
+WindowWidget::DeleteWindow() noexcept
 {
   assert(window != nullptr);
 
@@ -64,7 +64,7 @@ WindowWidget::DeleteWindow()
 }
 
 void
-WindowWidget::Show(const PixelRect &rc)
+WindowWidget::Show(const PixelRect &rc) noexcept
 {
   assert(window != nullptr);
   assert(window->IsDefined());
@@ -74,7 +74,7 @@ WindowWidget::Show(const PixelRect &rc)
 }
 
 void
-WindowWidget::Hide()
+WindowWidget::Hide() noexcept
 {
   assert(window != nullptr);
   assert(window->IsDefined());
@@ -84,7 +84,7 @@ WindowWidget::Hide()
 }
 
 void
-WindowWidget::Move(const PixelRect &rc)
+WindowWidget::Move(const PixelRect &rc) noexcept
 {
   assert(window != nullptr);
   assert(window->IsDefined());

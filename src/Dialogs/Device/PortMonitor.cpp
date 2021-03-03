@@ -117,7 +117,7 @@ public:
 
   /* virtual methods from class Widget */
 
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
     WindowStyle style;
     style.Hide();
 
@@ -130,7 +130,7 @@ public:
     SetWindow(std::move(w));
   }
 
-  void Unprepare() override {
+  void Unprepare() noexcept override {
     device.SetMonitor(nullptr);
   }
 };

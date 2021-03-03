@@ -40,12 +40,12 @@ class GlueGaugeVario final
   const VarioLook &look;
 
 public:
-  GlueGaugeVario(LiveBlackboard &_blackboard, const VarioLook &_look)
+  GlueGaugeVario(LiveBlackboard &_blackboard, const VarioLook &_look) noexcept
     :blackboard(_blackboard), look(_look) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
 
 private:
   virtual void OnGPSUpdate(const MoreData &basic) override;

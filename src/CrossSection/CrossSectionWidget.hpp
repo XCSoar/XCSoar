@@ -32,14 +32,13 @@ struct MapSettings;
 class CrossSectionWidget : public WindowWidget,
                            private NullBlackboardListener {
   void Update(const MoreData &basic, const DerivedInfo &calculated,
-              const MapSettings &settings);
+              const MapSettings &settings) noexcept;
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
 
 private:
   /* virtual methods from class BlackboardListener */

@@ -41,16 +41,17 @@ class GaugeThermalAssistant final
 
 public:
   GaugeThermalAssistant(LiveBlackboard &_blackboard,
-                        const ThermalAssistantLook &_look)
+                        const ThermalAssistantLook &_look) noexcept
     :blackboard(_blackboard), look(_look) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
-  virtual bool SetFocus() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
+  bool SetFocus() noexcept override;
 
 private:
-  void Update(const AttitudeState &attitude, const DerivedInfo &calculated);
+  void Update(const AttitudeState &attitude,
+              const DerivedInfo &calculated) noexcept;
 
   virtual void OnCalculatedUpdate(const MoreData &basic,
                                   const DerivedInfo &calculated) override;

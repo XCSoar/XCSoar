@@ -60,7 +60,7 @@ TaskStatusPanel::OnModified(DataField &df)
 }
 
 void
-TaskStatusPanel::Refresh()
+TaskStatusPanel::Refresh() noexcept
 {
   if (protected_task_manager == nullptr)
     return;
@@ -135,7 +135,7 @@ TaskStatusPanel::Refresh()
 }
 
 void
-TaskStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TaskStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   AddReadOnly(_("Assigned task time"));
   AddReadOnly(_("Estimated task time"));

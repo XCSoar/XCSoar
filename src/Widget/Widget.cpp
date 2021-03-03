@@ -25,13 +25,13 @@ Copyright_License {
 #include "ui/dim/Size.hpp"
 
 PixelSize
-NullWidget::GetMinimumSize() const
+NullWidget::GetMinimumSize() const noexcept
 {
   return PixelSize{0,0};
 }
 
 PixelSize
-NullWidget::GetMaximumSize() const
+NullWidget::GetMaximumSize() const noexcept
 {
   /* map to GetMinimumSize() by default, so simple derived classes
      need to implement only GetMinimumSize() */
@@ -39,58 +39,58 @@ NullWidget::GetMaximumSize() const
 }
 
 void
-NullWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
+NullWidget::Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
 }
 
 void
-NullWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+NullWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
 }
 
 void
-NullWidget::Unprepare()
+NullWidget::Unprepare() noexcept
 {
 }
 
 bool
-NullWidget::Save(bool &changed)
+NullWidget::Save(bool &changed) noexcept
 {
   return true;
 }
 
 bool
-NullWidget::Click()
+NullWidget::Click() noexcept
 {
   return true;
 }
 
 void
-NullWidget::ReClick()
+NullWidget::ReClick() noexcept
 {
 }
 
 bool
-NullWidget::Leave()
+NullWidget::Leave() noexcept
 {
   return true;
 }
 
 void
-NullWidget::Move(const PixelRect &rc)
+NullWidget::Move(const PixelRect &rc) noexcept
 {
   Hide();
   Show(rc);
 }
 
 bool
-NullWidget::SetFocus()
+NullWidget::SetFocus() noexcept
 {
   return false;
 }
 
 bool
-NullWidget::KeyPress(unsigned key_code)
+NullWidget::KeyPress(unsigned key_code) noexcept
 {
   return false;
 }

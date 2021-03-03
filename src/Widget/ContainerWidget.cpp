@@ -25,7 +25,7 @@ Copyright_License {
 #include "ui/window/ContainerWindow.hpp"
 
 void
-ContainerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ContainerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   WindowStyle style;
   style.Hide();

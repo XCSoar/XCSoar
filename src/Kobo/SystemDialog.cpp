@@ -48,12 +48,12 @@ private:
   void ExportUSBStorage();
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 };
 
 void
-SystemWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+SystemWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   AddButton("Reboot", [](){ KoboReboot(); });
   AddButton(IsKoboOTGKernel() ? "Disable USB-OTG" : "Enable USB-OTG",

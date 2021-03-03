@@ -71,13 +71,12 @@ public:
   ToolsWidget(const DialogLook &look):RowFormWidget(look) {}
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 };
 
-
 void
-ToolsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ToolsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   ScriptFileVisitor sfv(list);
   Directory::VisitFiles(Path(_T("/mnt/onboard/XCSoarData/kobo/scripts")), sfv);

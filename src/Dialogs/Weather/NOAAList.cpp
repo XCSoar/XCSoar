@@ -91,8 +91,8 @@ private:
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 
 protected:
   /* virtual methods from ListItemRenderer */
@@ -117,7 +117,7 @@ NOAAListWidget::CreateButtons(ButtonPanel &buttons)
 }
 
 void
-NOAAListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+NOAAListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   CreateButtons(buttons_widget->GetButtonPanel());
 

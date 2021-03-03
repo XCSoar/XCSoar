@@ -33,10 +33,10 @@ class MapItemListSettingsPanel final : public RowFormWidget {
   };
 
 public:
-  MapItemListSettingsPanel();
+  MapItemListSettingsPanel() noexcept;
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 #endif

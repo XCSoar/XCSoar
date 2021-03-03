@@ -41,18 +41,17 @@ enum Controls {
 
 class ATCReferencePanel : public RowFormWidget {
 public:
-  ATCReferencePanel()
+  ATCReferencePanel() noexcept
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-  void UpdateValues();
+  void UpdateValues() noexcept;
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 };
 
 void
-ATCReferencePanel::UpdateValues()
+ATCReferencePanel::UpdateValues() noexcept
 {
   const GeoPoint &location =
     CommonInterface::GetComputerSettings().poi.atc_reference;
@@ -76,7 +75,8 @@ ATCReferencePanel::UpdateValues()
 }
 
 void
-ATCReferencePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ATCReferencePanel::Prepare(ContainerWindow &parent,
+                           const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 

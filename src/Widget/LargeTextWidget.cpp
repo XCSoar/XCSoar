@@ -27,14 +27,14 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 
 void
-LargeTextWidget::SetText(const TCHAR *text)
+LargeTextWidget::SetText(const TCHAR *text) noexcept
 {
   LargeTextWindow &w = (LargeTextWindow &)GetWindow();
   w.SetText(text);
 }
 
 void
-LargeTextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+LargeTextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   LargeTextWindowStyle style;
   style.Hide();
@@ -50,7 +50,7 @@ LargeTextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-LargeTextWidget::KeyPress(unsigned key_code)
+LargeTextWidget::KeyPress(unsigned key_code) noexcept
 {
   switch (key_code) {
   case KEY_UP:

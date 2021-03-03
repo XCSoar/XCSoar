@@ -105,8 +105,8 @@ private:
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 
 protected:
   /* virtual methods from TextListWidget */
@@ -177,7 +177,8 @@ ProfileListWidget::CreateButtons(WidgetDialog &dialog)
 }
 
 void
-ProfileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ProfileListWidget::Prepare(ContainerWindow &parent,
+                           const PixelRect &rc) noexcept
 {
   TextListWidget::Prepare(parent, rc);
   UpdateList();

@@ -108,9 +108,9 @@ public:
 
   void OnMoreClicked();
 
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Show(const PixelRect &rc) override;
-  void Hide() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
 
 protected:
   const OrderedTask *get_cursor_task();
@@ -314,7 +314,7 @@ TaskListPanel::OnMoreClicked()
 }
 
 void
-TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -329,7 +329,7 @@ TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-TaskListPanel::Show(const PixelRect &rc)
+TaskListPanel::Show(const PixelRect &rc) noexcept
 {
   if (serial != task_list_serial) {
     serial = task_list_serial;
@@ -345,7 +345,7 @@ TaskListPanel::Show(const PixelRect &rc)
 }
 
 void
-TaskListPanel::Hide()
+TaskListPanel::Hide() noexcept
 {
   dialog.ResetTaskView();
 

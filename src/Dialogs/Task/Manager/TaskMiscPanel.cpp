@@ -35,7 +35,7 @@ TaskMiscPanel::TaskMiscPanel(TaskManagerDialog &dialog,
 }
 
 void
-TaskMiscPanel::ReClick()
+TaskMiscPanel::ReClick() noexcept
 {
   if (GetCurrentIndex() > 0)
     SetCurrent(0);
@@ -44,7 +44,7 @@ TaskMiscPanel::ReClick()
 }
 
 void
-TaskMiscPanel::Show(const PixelRect &rc)
+TaskMiscPanel::Show(const PixelRect &rc) noexcept
 {
   SetCurrent(0);
   PagerWidget::Show(rc);

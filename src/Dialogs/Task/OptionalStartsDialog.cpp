@@ -94,7 +94,7 @@ protected:
 
 public:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
   /* virtual methods from class List::Handler */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -114,7 +114,8 @@ public:
 };
 
 void
-OptionStartsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+OptionStartsWidget::Prepare(ContainerWindow &parent,
+                            const PixelRect &rc) noexcept
 {
   CreateList(parent, UIGlobals::GetDialogLook(),
              rc, row_renderer.CalculateLayout(*UIGlobals::GetDialogLook().list.font));

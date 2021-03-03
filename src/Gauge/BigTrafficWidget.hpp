@@ -40,39 +40,39 @@ class TrafficWidget : public ContainerWidget,
   std::unique_ptr<Windows> windows;
 
 public:
-  TrafficWidget();
+  TrafficWidget() noexcept;
   ~TrafficWidget() noexcept;
 
 protected:
-  void UpdateLayout();
-  void UpdateButtons();
+  void UpdateLayout() noexcept;
+  void UpdateButtons() noexcept;
 
 public:
-  void Update();
-  void OpenDetails();
-  void ZoomIn();
-  void ZoomOut();
-  void PreviousTarget();
-  void NextTarget();
-  void SwitchData();
+  void Update() noexcept;
+  void OpenDetails() noexcept;
+  void ZoomIn() noexcept;
+  void ZoomOut() noexcept;
+  void PreviousTarget() noexcept;
+  void NextTarget() noexcept;
+  void SwitchData() noexcept;
 
   gcc_pure
-  bool GetAutoZoom() const;
-  void SetAutoZoom(bool value);
-  void ToggleAutoZoom();
+  bool GetAutoZoom() const noexcept;
+  void SetAutoZoom(bool value) noexcept;
+  void ToggleAutoZoom() noexcept;
 
   gcc_pure
-  bool GetNorthUp() const;
-  void SetNorthUp(bool value);
-  void ToggleNorthUp();
+  bool GetNorthUp() const noexcept;
+  void SetNorthUp(bool value) noexcept;
+  void ToggleNorthUp() noexcept;
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
-  virtual void Move(const PixelRect &rc) override;
-  virtual bool SetFocus() override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
+  void Move(const PixelRect &rc) noexcept override;
+  bool SetFocus() noexcept override;
 
 private:
   /* virtual methods from class BlackboardListener */

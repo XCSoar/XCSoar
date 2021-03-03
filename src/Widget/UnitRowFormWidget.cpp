@@ -33,7 +33,7 @@ Copyright_License {
 void
 RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
                            const TCHAR *display_format,
-                           UnitGroup unit_group, double value)
+                           UnitGroup unit_group, double value) noexcept
 {
   WndProperty *edit = Add(label, help, true);
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
@@ -52,7 +52,7 @@ RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
                         double min_value, double max_value,
                         double step, bool fine,
                         UnitGroup unit_group, double value,
-                        DataFieldListener *listener)
+                        DataFieldListener *listener) noexcept
 {
   WndProperty *edit = Add(label, help);
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
@@ -66,7 +66,8 @@ RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
 }
 
 void
-RowFormWidget::LoadValue(unsigned i, double value, UnitGroup unit_group)
+RowFormWidget::LoadValue(unsigned i, double value,
+                         UnitGroup unit_group) noexcept
 {
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
   WndProperty &control = GetControl(i);
@@ -78,7 +79,8 @@ RowFormWidget::LoadValue(unsigned i, double value, UnitGroup unit_group)
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group, double &value) const
+RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
+                         double &value) const noexcept
 {
   const DataFieldFloat &df =
     (const DataFieldFloat &)GetDataField(i);
@@ -97,7 +99,8 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group, double &value) const
 
 bool
 RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
-                         const char *registry_key, double &value) const
+                         const char *registry_key,
+                         double &value) const noexcept
 {
   const DataFieldFloat &df =
     (const DataFieldFloat &)GetDataField(i);
@@ -117,7 +120,8 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
 
 bool
 RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
-                         const char *registry_key, unsigned int &value) const
+                         const char *registry_key,
+                         unsigned int &value) const noexcept
 {
   const DataFieldFloat &df =
     (const DataFieldFloat &)GetDataField(i);

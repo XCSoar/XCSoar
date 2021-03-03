@@ -32,7 +32,7 @@ WndProperty *
 RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
                        const char *registry_key, const TCHAR *filters,
                        FileType file_type,
-                       bool nullable)
+                       bool nullable) noexcept
 {
   WndProperty *edit = Add(label, help);
   auto *df = new FileDataField();
@@ -57,7 +57,7 @@ RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
 
 bool
 RowFormWidget::SaveValue(unsigned i, const char *registry_key,
-                         TCHAR *string, size_t max_size) const
+                         TCHAR *string, size_t max_size) const noexcept
 {
   if (!SaveValue(i, string, max_size))
     return false;
@@ -68,7 +68,7 @@ RowFormWidget::SaveValue(unsigned i, const char *registry_key,
 
 bool
 RowFormWidget::SaveValue(unsigned i, const char *registry_key,
-                         bool &value, bool negated) const
+                         bool &value, bool negated) const noexcept
 {
   if (!SaveValue(i, value, negated))
     return false;
@@ -79,7 +79,7 @@ RowFormWidget::SaveValue(unsigned i, const char *registry_key,
 
 bool
 RowFormWidget::SaveValue(unsigned i, const char *registry_key,
-                         int &value) const
+                         int &value) const noexcept
 {
   if (!SaveValue(i, value))
     return false;
@@ -90,7 +90,7 @@ RowFormWidget::SaveValue(unsigned i, const char *registry_key,
 
 bool
 RowFormWidget::SaveValue(unsigned i, const char *registry_key,
-                         uint8_t &value) const
+                         uint8_t &value) const noexcept
 {
   if (!SaveValue(i, value))
     return false;
@@ -101,7 +101,7 @@ RowFormWidget::SaveValue(unsigned i, const char *registry_key,
 
 bool
 RowFormWidget::SaveValue(unsigned i, const char *registry_key,
-                         uint16_t &value) const
+                         uint16_t &value) const noexcept
 {
   if (!SaveValue(i, value))
     return false;
@@ -112,7 +112,7 @@ RowFormWidget::SaveValue(unsigned i, const char *registry_key,
 
 bool
 RowFormWidget::SaveValue(unsigned i, const char *registry_key,
-                         double &value) const
+                         double &value) const noexcept
 {
   if (!SaveValue(i, value))
     return false;
@@ -122,7 +122,8 @@ RowFormWidget::SaveValue(unsigned i, const char *registry_key,
 }
 
 bool
-RowFormWidget::SaveValueFileReader(unsigned i, const char *registry_key)
+RowFormWidget::SaveValueFileReader(unsigned i,
+                                   const char *registry_key) noexcept
 {
   const auto *dfe = (const FileDataField *)GetControl(i).GetDataField();
   Path new_value = dfe->GetPathFile();

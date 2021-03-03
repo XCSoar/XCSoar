@@ -174,9 +174,9 @@ private:
 
 protected:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
-  void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     const Layout layout(rc);
 
     info.MoveAndShow(layout.info);
@@ -190,7 +190,7 @@ protected:
     update_timer.Schedule(std::chrono::milliseconds(2500));
   }
 
-  void Hide() override {
+  void Hide() noexcept override {
     update_timer.Cancel();
 
     info.Hide();
@@ -201,7 +201,7 @@ protected:
     chart.Hide();
   }
 
-  void Move(const PixelRect &rc) override {
+  void Move(const PixelRect &rc) noexcept override {
     const Layout layout(rc);
 
     info.Move(layout.info);
@@ -212,12 +212,12 @@ protected:
     chart.Move(layout.main);
   }
 
-  bool SetFocus() override {
+  bool SetFocus() noexcept override {
     close_button.SetFocus();
     return true;
   }
 
-  bool KeyPress(unsigned key_code) override;
+  bool KeyPress(unsigned key_code) noexcept override;
 };
 
 AnalysisWidget::Layout::Layout(const PixelRect rc)
@@ -267,7 +267,7 @@ AnalysisWidget::Layout::Layout(const PixelRect rc)
 }
 
 void
-AnalysisWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+AnalysisWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   const Layout layout(rc);
 
@@ -623,7 +623,7 @@ ChartControl::OnMouseUp(PixelPoint p)
 }
 
 bool
-AnalysisWidget::KeyPress(unsigned key_code)
+AnalysisWidget::KeyPress(unsigned key_code) noexcept
 {
   switch (key_code) {
   case KEY_LEFT:

@@ -100,7 +100,7 @@ private:
 
 public:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
 protected:
   /* virtual methods from ListItemRenderer */
@@ -150,7 +150,7 @@ PlaneListWidget::CreateButtons(WidgetDialog &dialog)
 }
 
 void
-PlaneListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+PlaneListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   CreateList(parent, look, rc,

@@ -222,11 +222,11 @@ class ManagedFileListWidget
   TrivialArray<FileItem, 64u> items;
 
 public:
-  void CreateButtons(WidgetDialog &dialog);
+  void CreateButtons(WidgetDialog &dialog) noexcept;
 
 protected:
   gcc_pure
-  bool IsDownloading(const char *name) const {
+  bool IsDownloading(const char *name) const noexcept {
 #ifdef HAVE_DOWNLOAD_MANAGER
     std::lock_guard<Mutex> lock(mutex);
     return downloads.find(name) != downloads.end();
@@ -236,12 +236,12 @@ protected:
   }
 
   gcc_pure
-  bool IsDownloading(const AvailableFile &file) const {
+  bool IsDownloading(const AvailableFile &file) const noexcept {
     return IsDownloading(file.GetName());
   }
 
-  gcc_pure
-  bool IsDownloading(const char *name, DownloadStatus &status_r) const {
+  bool IsDownloading(const char *name,
+                     DownloadStatus &status_r) const noexcept {
 #ifdef HAVE_DOWNLOAD_MANAGER
     std::lock_guard<Mutex> lock(mutex);
     auto i = downloads.find(name);
@@ -255,14 +255,13 @@ protected:
 #endif
   }
 
-  gcc_pure
   bool IsDownloading(const AvailableFile &file,
-                     DownloadStatus &status_r) const {
+                     DownloadStatus &status_r) const noexcept {
     return IsDownloading(file.GetName(), status_r);
   }
 
   gcc_pure
-  bool HasFailed(const char *name) const {
+  bool HasFailed(const char *name) const noexcept {
 #ifdef HAVE_DOWNLOAD_MANAGER
     std::lock_guard<Mutex> lock(mutex);
     return failures.find(name) != failures.end();
@@ -272,12 +271,12 @@ protected:
   }
 
   gcc_pure
-  bool HasFailed(const AvailableFile &file) const {
+  bool HasFailed(const AvailableFile &file) const noexcept {
     return HasFailed(file.GetName());
   }
 
   gcc_pure
-  int FindItem(const TCHAR *name) const;
+  int FindItem(const TCHAR *name) const noexcept;
 
   void LoadRepositoryFile();
   void RefreshList();
@@ -290,8 +289,8 @@ protected:
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual void Unprepare() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Unprepare() noexcept override;
 
   /* virtual methods from class List::Handler */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -312,7 +311,8 @@ public:
 };
 
 void
-ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ManagedFileListWidget::Prepare(ContainerWindow &parent,
+                               const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -335,7 +335,7 @@ ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-ManagedFileListWidget::Unprepare()
+ManagedFileListWidget::Unprepare() noexcept
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (Net::DownloadManager::IsAvailable())
@@ -344,7 +344,7 @@ ManagedFileListWidget::Unprepare()
 }
 
 int
-ManagedFileListWidget::FindItem(const TCHAR *name) const
+ManagedFileListWidget::FindItem(const TCHAR *name) const noexcept
 {
   for (auto i = items.begin(), end = items.end(); i != end; ++i)
     if (StringIsEqual(i->name, name))
@@ -425,7 +425,7 @@ ManagedFileListWidget::RefreshList()
 }
 
 void
-ManagedFileListWidget::CreateButtons(WidgetDialog &dialog)
+ManagedFileListWidget::CreateButtons(WidgetDialog &dialog) noexcept
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (Net::DownloadManager::IsAvailable()) {

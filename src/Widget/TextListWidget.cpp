@@ -26,7 +26,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 
 void
-TextListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TextListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   ListWidget::Prepare(parent, rc);
 

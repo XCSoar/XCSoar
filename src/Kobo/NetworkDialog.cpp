@@ -56,8 +56,8 @@ public:
   void UpdateButtons();
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 
 private:
   void ToggleWifi();
@@ -71,7 +71,7 @@ NetworkWidget::UpdateButtons()
 }
 
 void
-NetworkWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+NetworkWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   toggle_wifi_button = AddButton(GetWifiToggleCaption(),
                                  [this](){ ToggleWifi(); });

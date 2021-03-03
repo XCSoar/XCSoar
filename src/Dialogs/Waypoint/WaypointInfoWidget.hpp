@@ -34,13 +34,13 @@ struct WaypointInfoWidget : public RowFormWidget {
   const WaypointPtr waypoint;
 
 public:
-  WaypointInfoWidget(const DialogLook &look, WaypointPtr _waypoint)
+  WaypointInfoWidget(const DialogLook &look, WaypointPtr _waypoint) noexcept
     :RowFormWidget(look), waypoint(std::move(_waypoint)) {}
 
-  void AddGlideResult(const TCHAR *label, const GlideResult &result);
+  void AddGlideResult(const TCHAR *label, const GlideResult &result) noexcept;
 
   /* methods from Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 };
 
 #endif

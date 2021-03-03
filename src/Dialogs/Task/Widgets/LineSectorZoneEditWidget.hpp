@@ -32,7 +32,7 @@ class LineSectorZoneEditWidget : public ObservationZoneEditWidget {
   const bool length_editable;
 
 public:
-  LineSectorZoneEditWidget(LineSectorZone &oz, bool length_editable);
+  LineSectorZoneEditWidget(LineSectorZone &oz, bool length_editable) noexcept;
 
 protected:
   const LineSectorZone &GetObject() const {
@@ -45,8 +45,8 @@ protected:
 
 public:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 #endif

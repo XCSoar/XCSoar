@@ -48,22 +48,22 @@ class OffsetButtonsWidget : public NullWidget {
 
 public:
   OffsetButtonsWidget(const ButtonLook &_look, const TCHAR *_format,
-                      double small_offset, double large_offset)
+                      double small_offset, double large_offset) noexcept
     :look(_look), format(_format),
      offsets{-large_offset, -small_offset, small_offset, large_offset} {}
 
 public:
   /* virtual methods from Widget */
-  PixelSize GetMinimumSize() const override;
-  PixelSize GetMaximumSize() const override;
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Show(const PixelRect &rc) override;
-  void Hide() override;
-  void Move(const PixelRect &rc) override;
-  bool SetFocus() override;
+  PixelSize GetMinimumSize() const noexcept override;
+  PixelSize GetMaximumSize() const noexcept override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
+  void Move(const PixelRect &rc) noexcept override;
+  bool SetFocus() noexcept override;
 
 protected:
-  virtual void OnOffset(double offset) = 0;
+  virtual void OnOffset(double offset) noexcept = 0;
 
 private:
   Button MakeButton(ContainerWindow &parent, const PixelRect &r,

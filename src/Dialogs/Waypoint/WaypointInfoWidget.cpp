@@ -41,7 +41,8 @@ Copyright_License {
 
 static const TCHAR *
 FormatGlideResult(TCHAR *buffer, size_t size,
-                  const GlideResult &result, const GlideSettings &settings)
+                  const GlideResult &result,
+                  const GlideSettings &settings) noexcept
 {
   switch (result.validity) {
   case GlideResult::Validity::OK:
@@ -62,7 +63,7 @@ FormatGlideResult(TCHAR *buffer, size_t size,
 
 void
 WaypointInfoWidget::AddGlideResult(const TCHAR *label,
-                                   const GlideResult &result)
+                                   const GlideResult &result) noexcept
 {
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
@@ -74,7 +75,7 @@ WaypointInfoWidget::AddGlideResult(const TCHAR *label,
 
 gcc_const
 static BrokenTime
-BreakHourOfDay(double t)
+BreakHourOfDay(double t) noexcept
 {
   /* depending on the time zone, the SunEphemeris library may return a
      negative time of day; the following check catches this before we
@@ -93,7 +94,8 @@ BreakHourOfDay(double t)
 }
 
 void
-WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+WaypointInfoWidget::Prepare(ContainerWindow &parent,
+                            const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 

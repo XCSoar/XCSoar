@@ -35,7 +35,7 @@ Copyright_License {
 
 #include <cassert>
 
-AirspaceClassRendererSettingsPanel::AirspaceClassRendererSettingsPanel(AirspaceClass _type)
+AirspaceClassRendererSettingsPanel::AirspaceClassRendererSettingsPanel(AirspaceClass _type) noexcept
   :RowFormWidget(UIGlobals::GetDialogLook()), border_color_changed(false),
    fill_color_changed(false), fill_brush_changed(false), type(_type)
 {
@@ -43,7 +43,8 @@ AirspaceClassRendererSettingsPanel::AirspaceClassRendererSettingsPanel(AirspaceC
 }
 
 void
-AirspaceClassRendererSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+AirspaceClassRendererSettingsPanel::Prepare(ContainerWindow &parent,
+                                            const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 
@@ -99,7 +100,7 @@ AirspaceClassRendererSettingsPanel::Prepare(ContainerWindow &parent, const Pixel
 }
 
 bool
-AirspaceClassRendererSettingsPanel::Save(bool &changed)
+AirspaceClassRendererSettingsPanel::Save(bool &changed) noexcept
 {
   if (border_color_changed) {
     Profile::SetAirspaceBorderColor(Profile::map, type, settings.border_color);

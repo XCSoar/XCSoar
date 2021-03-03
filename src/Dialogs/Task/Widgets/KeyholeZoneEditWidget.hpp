@@ -29,21 +29,21 @@
 
 class KeyholeZoneEditWidget : public ObservationZoneEditWidget {
 public:
-  KeyholeZoneEditWidget(KeyholeZone &_oz);
+  explicit KeyholeZoneEditWidget(KeyholeZone &_oz) noexcept;
 
 protected:
-  const KeyholeZone &GetObject() const {
+  const KeyholeZone &GetObject() const noexcept {
     return (const KeyholeZone &)ObservationZoneEditWidget::GetObject();
   }
 
-  KeyholeZone &GetObject() {
+  KeyholeZone &GetObject() noexcept {
     return (KeyholeZone &)ObservationZoneEditWidget::GetObject();
   }
 
 public:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 #endif
