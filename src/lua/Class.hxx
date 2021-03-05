@@ -94,7 +94,7 @@ struct Class {
 	 * Extract the native pointer from the Lua object on the
 	 * stack.  Returns nullptr if the type is wrong.
 	 */
-	gcc_pure
+	[[gnu::pure]]
 	static pointer Check(lua_State *L, int idx) {
 		const ScopeCheckStack check_stack(L);
 
@@ -118,7 +118,7 @@ struct Class {
 	 * Extract the native value from the Lua object on the
 	 * stack.  Raise a Lua error if the type is wrong.
 	 */
-	gcc_pure
+	[[gnu::pure]]
 	static reference Cast(lua_State *L, int idx) {
 		return *(pointer)luaL_checkudata(L, idx, name);
 	}

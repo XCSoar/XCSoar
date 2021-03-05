@@ -168,7 +168,7 @@ private:
     return true;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   static LuaInputEvent &Check(lua_State *L, int idx) {
     auto d = (LuaInputEvent **)luaL_checkudata(L, idx, "xcsoar.input_event");
     luaL_argcheck(L, d != nullptr, idx, "`xcsoar.input_event' expected");

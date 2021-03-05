@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_LUA_GEO_HPP
 #define XCSOAR_LUA_GEO_HPP
 
-#include "util/Compiler.h"
-
 struct lua_State;
 struct GeoPoint;
 class Angle;
@@ -38,11 +36,11 @@ Push(lua_State *L, Angle value);
 void
 Push(lua_State *L, GeoPoint value);
 
-gcc_pure
+[[gnu::pure]]
 Angle
 ToAngle(lua_State *L, int idx);
 
-gcc_pure
+[[gnu::pure]]
 GeoPoint
 ToGeoPoint(lua_State *L, int idx);
 

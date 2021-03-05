@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_LUA_ASSOCIATE_HPP
 #define XCSOAR_LUA_ASSOCIATE_HPP
 
-#include "util/Compiler.h"
-
 struct lua_State;
 
 namespace Lua {
@@ -56,7 +54,7 @@ LookupPointer(lua_State *L, const char *table, void *p);
 /**
  * Check the registry table if there is at least one association.
  */
-gcc_pure
+[[gnu::pure]]
 bool
 HasPointerAssociations(lua_State *L, const char *table,
                        bool (*predicate)(void *key)=nullptr);
