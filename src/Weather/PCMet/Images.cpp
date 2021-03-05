@@ -37,8 +37,7 @@ Copyright_License {
 #include <string.h>
 #include <stdio.h>
 
-//#define PCMET_URI "https://www.flugwetter.de"
-#define PCMET_URI "http://www.flugwetter.de"
+#define PCMET_URI "https://www.flugwetter.de"
 
 static constexpr PCMet::ImageArea rad_lokal_areas[] = {
   { "pro", _T("Prötzel") },
@@ -84,10 +83,21 @@ static constexpr PCMet::ImageArea rad_areas[] = {
 };
 
 static constexpr PCMet::ImageArea sat_areas[] = {
-  { "ceu_hrv", _T("Mitteleuropa HRV") },
-  { "ceu_rgb", _T("Mitteleuropa RGB") },
-  { "dlnw_hrv", _T("Deutschland Nordwest HRV") },
-  { "dlnw_rgb", _T("Deutschland Nordwest RGB") },
+  { "vis_hrv_eu", _T("Mitteleuropa HRV") },
+  { "ir_rgb_eu", _T("Mitteleuropa RGB") },
+  { "ir_108_eu", _T("Mitteleuropa IR") },
+  { "vis_hrv_ce", _T("Mitteleuropa HRV") },
+  { "ir_rgb_ce", _T("Mitteleuropa RGB") },
+  { "ir_108_ce", _T("Mitteleuropa IR") },
+  { "vis_hrv_mdl", _T("Deutschland HRV") },
+  { "ir_rgb_mdl", _T("Deutschland RGB") },
+  { "ir_108_mdl", _T("Deutschland IR") },
+  { "vis_hrv_ndl", _T("Deutschland Nord HRV") },
+  { "ir_rgb_ndl", _T("Deutschland Nord RGB") },
+  { "ir_108_ndl", _T("Deutschland Nord IR") },
+  { "vis_hrv_sdl", _T("Deutschland Süd HRV") },
+  { "ir_rgb_sdl", _T("Deutschland Süd RGB") },
+  { "ir_108_sdl", _T("Deutschland Süd IR") },
   { nullptr, nullptr }
 };
 
@@ -147,6 +157,8 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
                                          UTF8ToWideConverter(name));
 
   if (!File::Exists(path)) {
+    // URI for a single page of a selected 'Satellitenbilder"-page with link
+    // to the latest image and the namelist array of all stored images
     snprintf(url, sizeof(url), PCMET_URI "%s", src);
 
     Net::DownloadToFileJob job2(session, url, path);
