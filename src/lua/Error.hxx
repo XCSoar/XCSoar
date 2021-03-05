@@ -38,7 +38,7 @@ namespace Lua {
 
 class Error : public std::runtime_error {
 public:
-  explicit Error(const char *_msg):std::runtime_error(_msg) {}
+	using std::runtime_error::runtime_error;
 };
 
 /**
