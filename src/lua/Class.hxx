@@ -37,6 +37,7 @@ extern "C" {
 #include <lauxlib.h>
 }
 
+#include <new>
 #include <type_traits>
 
 namespace Lua {
