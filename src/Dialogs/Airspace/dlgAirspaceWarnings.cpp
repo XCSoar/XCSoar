@@ -327,8 +327,8 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   // columns are fixed-width.
   auto [text_altitude_rc, status_rc] =
     paint_rc.VerticalSplit(paint_rc.right - (2 * padding + status_width));
-  auto [text_rc, altitude_rc] =
-    text_altitude_rc.VerticalSplit(text_altitude_rc.right - (padding + altitude_width));
+  auto text_rc =
+    text_altitude_rc.VerticalSplit(text_altitude_rc.right - (padding + altitude_width)).first;
   text_rc.right -= padding;
 
   if (!warning.ack_expired)
