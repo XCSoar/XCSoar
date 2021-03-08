@@ -200,6 +200,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/gdi/Pen.cpp \
 	$(CANVAS_SRC_DIR)/gdi/Brush.cpp \
 	$(CANVAS_SRC_DIR)/gdi/Bitmap.cpp \
+	$(CANVAS_SRC_DIR)/gdi/GdiPlusBitmap.cpp \
 	$(CANVAS_SRC_DIR)/gdi/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/gdi/RawBitmap.cpp \
 	$(CANVAS_SRC_DIR)/gdi/Canvas.cpp \
@@ -207,7 +208,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/gdi/PaintCanvas.cpp
 GDI_CPPFLAGS = -DUSE_GDI
 GDI_CPPFLAGS += -DUSE_WINUSER
-GDI_LDLIBS = -luser32 -lgdi32 -lmsimg32
+GDI_LDLIBS = -luser32 -lgdi32 -lmsimg32 -lgdiplus
 
 ifeq ($(TARGET),PC)
 GDI_LDLIBS += -Wl,-subsystem,windows
