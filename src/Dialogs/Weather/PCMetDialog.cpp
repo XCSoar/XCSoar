@@ -48,8 +48,8 @@ BitmapDialog(const Bitmap &bitmap)
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            UIGlobals::GetDialogLook(),
            _T("pc_met"));
-  dialog.SetWidget();
   dialog.AddButton(_("Close"), mrOK);
+  dialog.SetWidget();
   dialog.ShowModal();
 }
 
