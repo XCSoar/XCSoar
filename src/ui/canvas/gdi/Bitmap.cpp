@@ -22,6 +22,8 @@ Copyright_License {
 */
 
 #include "ui/canvas/Bitmap.hpp"
+#include "ui/canvas/gdi/GdiPlusBitmap.hpp"
+
 #include "Screen/Debug.hpp"
 #include "system/Path.hpp"
 
@@ -36,7 +38,8 @@ Bitmap::Bitmap(Bitmap &&src)
 bool
 Bitmap::LoadFile(Path path)
 {
-  return false;
+  bitmap = GdiLoadImage(path.c_str());
+  return IsDefined();
 }
 
 void
