@@ -50,11 +50,6 @@ class EnumBitSet {
 		return I(1) << unsigned(e);
 	}
 
-	template<typename... Args>
-	static constexpr I ToMask(E e, Args&&... args) noexcept {
-		return ToMask(e) | ToMask(args...);
-	}
-
 	I mask;
 
 	constexpr EnumBitSet(I _mask) noexcept
@@ -67,8 +62,8 @@ public:
 	constexpr EnumBitSet() noexcept:mask(0) {}
 
 	template<typename... Args>
-	constexpr EnumBitSet(E e, Args&&... args) noexcept
-		:mask(ToMask(e, args...)) {}
+	constexpr EnumBitSet(Args&&... args) noexcept
+		:mask((ToMask(args) | ...)) {}
 
 	constexpr EnumBitSet operator|(const EnumBitSet other) const noexcept {
 		return EnumBitSet(mask | other.mask);
