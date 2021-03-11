@@ -173,4 +173,4 @@ CreatePCMetWidget()
                                       false);
 }
 
-#endif
+#endif  // HAVE_PCMET
