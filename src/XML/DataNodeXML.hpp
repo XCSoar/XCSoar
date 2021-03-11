@@ -46,7 +46,7 @@ public:
 
   /* virtual methods from ConstDataNode */
   const TCHAR *GetName() const noexcept override;
-  ConstDataNode *GetChildNamed(const TCHAR *name) const noexcept override;
+  std::unique_ptr<ConstDataNode> GetChildNamed(const TCHAR *name) const noexcept override;
   List ListChildren() const noexcept override;
   List ListChildrenNamed(const TCHAR *name) const noexcept override;
   const TCHAR *GetAttribute(const TCHAR *name) const noexcept override;
@@ -70,7 +70,7 @@ public:
     :node(_node) {}
 
   /* virtual methods from WritableDataNode */
-  WritableDataNode *AppendChild(const TCHAR *name) noexcept override;
+  std::unique_ptr<WritableDataNode> AppendChild(const TCHAR *name) noexcept override;
   void SetAttribute(const TCHAR *name, const TCHAR *value) noexcept override;
 };
 

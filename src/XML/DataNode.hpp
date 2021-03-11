@@ -26,6 +26,7 @@
 #include "util/Compiler.h"
 
 #include <list>
+#include <memory>
 
 #include <tchar.h>
 
@@ -40,7 +41,7 @@ class RoughTimeSpan;
  */
 class ConstDataNode {
 public:
-  typedef std::list<ConstDataNode *> List;
+  using List = std::list<std::unique_ptr<ConstDataNode>>;
 
   ConstDataNode() noexcept = default;
 
@@ -63,7 +64,7 @@ public:
    *
    * @return Pointer to child if found, or nullptr
    */
-  virtual ConstDataNode *GetChildNamed(const TCHAR *name) const noexcept = 0;
+  virtual std::unique_ptr<ConstDataNode> GetChildNamed(const TCHAR *name) const noexcept = 0;
 
   /**
    * Obtains a list of all children.  The caller is responsible for
@@ -156,7 +157,7 @@ public:
    *
    * @return Pointer to new child
    */
-  virtual WritableDataNode *AppendChild(const TCHAR *name) noexcept = 0;
+  virtual std::unique_ptr<WritableDataNode> AppendChild(const TCHAR *name) noexcept = 0;
 
   /**
    * Set named attribute value
