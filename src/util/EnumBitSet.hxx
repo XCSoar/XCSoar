@@ -44,7 +44,7 @@ class EnumBitSet {
 	static_assert(std::is_enum_v<E>,
 		      "Parameter type must be an enum");
 
-	using I = uint32_t;
+	using I = uint_least32_t;
 
 	static constexpr I ToMask(E e) noexcept {
 		return I(1) << unsigned(e);
@@ -62,7 +62,7 @@ class EnumBitSet {
 
 public:
 	static constexpr unsigned N = unsigned(E::COUNT);
-	static_assert(N <= 32, "enum is too large");
+	static_assert(N <= sizeof(I) * 8, "enum is too large");
 
 	constexpr EnumBitSet() noexcept:mask(0) {}
 
