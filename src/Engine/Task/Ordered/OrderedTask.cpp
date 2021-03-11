@@ -84,7 +84,7 @@ GetCylinderRadiusOrMinusOne(const ObservationZoneClient &p)
   return GetCylinderRadiusOrMinusOne(p.GetObservationZone());
 }
 
-OrderedTask::OrderedTask(const TaskBehaviour &tb)
+OrderedTask::OrderedTask(const TaskBehaviour &tb) noexcept
   :AbstractTask(TaskType::ORDERED, tb),
    factory_mode(tb.task_type_default),
    ordered_settings(tb.ordered_defaults)
@@ -94,7 +94,7 @@ OrderedTask::OrderedTask(const TaskBehaviour &tb)
   active_factory->UpdateOrderedTaskSettings(ordered_settings);
 }
 
-OrderedTask::~OrderedTask()
+OrderedTask::~OrderedTask() noexcept
 {
   RemoveAllPoints();
 }
@@ -608,7 +608,7 @@ OrderedTask::CheckTransitionPoint(OrderedTaskPoint &point,
 
 bool
 OrderedTask::UpdateIdle(const AircraftState &state,
-                        const GlidePolar &glide_polar)
+                        const GlidePolar &glide_polar) noexcept
 {
   bool retval = AbstractTask::UpdateIdle(state, glide_polar);
 
@@ -871,7 +871,7 @@ OrderedTask::ReplaceOptionalStart(const OrderedTaskPoint &new_tp,
 
 
 void
-OrderedTask::SetActiveTaskPoint(unsigned index)
+OrderedTask::SetActiveTaskPoint(unsigned index) noexcept
 {
   if (index >= task_points.size() || index == active_task_point)
     return;
@@ -882,7 +882,7 @@ OrderedTask::SetActiveTaskPoint(unsigned index)
 }
 
 TaskWaypoint*
-OrderedTask::GetActiveTaskPoint() const
+OrderedTask::GetActiveTaskPoint() const noexcept
 {
   if (active_task_point < task_points.size())
     return task_points[active_task_point].get();
@@ -891,7 +891,7 @@ OrderedTask::GetActiveTaskPoint() const
 }
 
 bool
-OrderedTask::IsValidTaskPoint(const int index_offset) const
+OrderedTask::IsValidTaskPoint(const int index_offset) const noexcept
 {
   unsigned index = active_task_point + index_offset;
   return (index < task_points.size());

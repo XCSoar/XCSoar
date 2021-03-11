@@ -47,20 +47,20 @@ GotoTask::~GotoTask()
 }
 
 TaskWaypoint*
-GotoTask::GetActiveTaskPoint() const
+GotoTask::GetActiveTaskPoint() const noexcept
 { 
   return tp.get();
 }
 
 bool 
-GotoTask::IsValidTaskPoint(const int index_offset) const
+GotoTask::IsValidTaskPoint(const int index_offset) const noexcept
 {
   return (index_offset == 0 && tp != NULL);
 }
 
 
 void 
-GotoTask::SetActiveTaskPoint(unsigned index)
+GotoTask::SetActiveTaskPoint(unsigned index) noexcept
 {
   // nothing to do
 }
@@ -96,7 +96,7 @@ GotoTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const
 }
 
 unsigned 
-GotoTask::TaskSize() const
+GotoTask::TaskSize() const noexcept
 {
   return tp ? 1 : 0;
 }

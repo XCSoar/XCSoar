@@ -209,10 +209,10 @@ public:
 
 public:
   /* virtual methods from class TaskInterface */
-  virtual unsigned TaskSize() const override;
-  virtual void SetActiveTaskPoint(unsigned index) override;
-  virtual TaskWaypoint *GetActiveTaskPoint() const override;
-  virtual bool IsValidTaskPoint(int index_offset) const override;
+  unsigned TaskSize() const noexcept override;
+  void SetActiveTaskPoint(unsigned index) noexcept override;
+  TaskWaypoint *GetActiveTaskPoint() const noexcept override;
+  bool IsValidTaskPoint(int index_offset) const noexcept override;
 
   /* virtual methods from class AbstractTask */
   virtual void Reset() override;

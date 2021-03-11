@@ -106,7 +106,7 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
 
 bool 
 AbstractTask::UpdateIdle(const AircraftState &state,
-                         const GlidePolar &glide_polar)
+                         const GlidePolar &glide_polar) noexcept
 {
   const bool valid = state.location.IsValid() && glide_polar.IsValid();
 
@@ -237,7 +237,7 @@ AbstractTask::UpdateGlideSolutions(const AircraftState &state,
 bool
 AbstractTask::Update(const AircraftState &state, 
                      const AircraftState &state_last,
-                     const GlidePolar &glide_polar)
+                     const GlidePolar &glide_polar) noexcept
 {
   stats.active_index = GetActiveTaskPointIndex();
   stats.task_valid = !IsError(CheckTask());

@@ -58,7 +58,7 @@ AbortTask::SetTaskBehaviour(const TaskBehaviour &tb)
 }
 
 void 
-AbortTask::SetActiveTaskPoint(unsigned index)
+AbortTask::SetActiveTaskPoint(unsigned index) noexcept
 {
   if (index == active_task_point)
     return;
@@ -72,7 +72,7 @@ AbortTask::SetActiveTaskPoint(unsigned index)
 }
 
 TaskWaypoint*
-AbortTask::GetActiveTaskPoint() const
+AbortTask::GetActiveTaskPoint() const noexcept
 {
   if (active_task_point < task_points.size())
     // XXX eliminate this deconst hack
@@ -82,14 +82,14 @@ AbortTask::GetActiveTaskPoint() const
 }
 
 bool
-AbortTask::IsValidTaskPoint(int index_offset) const
+AbortTask::IsValidTaskPoint(int index_offset) const noexcept
 {
   unsigned index = active_task_point + index_offset;
   return (index < task_points.size());
 }
 
 unsigned
-AbortTask::TaskSize() const
+AbortTask::TaskSize() const noexcept
 {
   return task_points.size();
 }

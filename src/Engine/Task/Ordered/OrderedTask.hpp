@@ -105,8 +105,8 @@ public:
    *
    * @return Initialised object
    */
-  explicit OrderedTask(const TaskBehaviour &tb);
-  ~OrderedTask();
+  explicit OrderedTask(const TaskBehaviour &tb) noexcept;
+  ~OrderedTask() noexcept;
 
   /**
    * Accessor for factory system for constructing tasks
@@ -114,7 +114,7 @@ public:
    * @return Factory
    */
   gcc_pure
-  AbstractTaskFactory& GetFactory() const {
+  AbstractTaskFactory &GetFactory() const noexcept {
     return *active_factory;
   }
 
@@ -681,15 +681,15 @@ public:
 
 public:
   /* virtual methods from class TaskInterface */
-  unsigned TaskSize() const override {
+  unsigned TaskSize() const noexcept override {
     return task_points.size();
   }
 
-  void SetActiveTaskPoint(unsigned desired) override;
-  TaskWaypoint *GetActiveTaskPoint() const override;
-  bool IsValidTaskPoint(const int index_offset=0) const override;
+  void SetActiveTaskPoint(unsigned desired) noexcept override;
+  TaskWaypoint *GetActiveTaskPoint() const noexcept override;
+  bool IsValidTaskPoint(const int index_offset=0) const noexcept override;
   bool UpdateIdle(const AircraftState& state_now,
-                  const GlidePolar &glide_polar) override;
+                  const GlidePolar &glide_polar) noexcept override;
 
   /* virtual methods from class AbstractTask */
   void Reset() override;

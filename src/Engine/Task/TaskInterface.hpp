@@ -42,10 +42,10 @@ class TaskInterface
 
 public:
   constexpr
-  TaskInterface(const TaskType _type):type(_type) {}
+  TaskInterface(const TaskType _type) noexcept:type(_type) {}
 
   constexpr
-  TaskType GetType() const {
+  TaskType GetType() const noexcept {
     return type;
   }
 
@@ -55,7 +55,7 @@ public:
    * @return Number of taskpoints in task
    */
   gcc_pure
-  virtual unsigned TaskSize() const = 0;
+  virtual unsigned TaskSize() const noexcept = 0;
 
   /**
    * Set index in sequence of active task point.  Concrete classes providing
@@ -63,7 +63,7 @@ public:
    *
    * @param new_index Desired sequence index of active task point
    */
-  virtual void SetActiveTaskPoint(unsigned new_index) = 0;
+  virtual void SetActiveTaskPoint(unsigned new_index) noexcept = 0;
 
   /**
    * Accessor for active task point.  Typically could be used
@@ -72,7 +72,7 @@ public:
    * @return Active task point
    */
   gcc_pure
-  virtual TaskWaypoint* GetActiveTaskPoint() const = 0;
+  virtual TaskWaypoint* GetActiveTaskPoint() const noexcept = 0;
 
   /**
    * Determine whether active task point optionally shifted points to
@@ -81,7 +81,7 @@ public:
    * @param index_offset offset (default 0)
    */
   gcc_pure
-  virtual bool IsValidTaskPoint(const int index_offset) const = 0;
+  virtual bool IsValidTaskPoint(const int index_offset) const noexcept = 0;
 
   /**
    * Update internal states as flight progresses.  This may perform
@@ -95,7 +95,7 @@ public:
    */
   virtual bool Update(const AircraftState &state_now,
                       const AircraftState &state_last,
-                      const GlidePolar &glide_polar) = 0;
+                      const GlidePolar &glide_polar) noexcept = 0;
 
   /**
    * Update internal states (non-essential) for housework, or where functions are slow
@@ -106,7 +106,7 @@ public:
    * @return True if internal state changed
    */
   virtual bool UpdateIdle(const AircraftState &state_now,
-                          const GlidePolar &glide_polar) = 0;
+                          const GlidePolar &glide_polar) noexcept = 0;
 };
 
 #endif //TASKINTERFACE_H
