@@ -30,8 +30,6 @@
 #ifndef ENUM_BIT_SET_HXX
 #define ENUM_BIT_SET_HXX
 
-#include "Compiler.h"
-
 #include <cstdint>
 
 /**
@@ -79,7 +77,7 @@ public:
 		return mask == 0;
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	E UncheckedFirst() const {
 		I i = 1;
 
