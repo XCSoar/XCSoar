@@ -43,6 +43,11 @@ enum class TaskValidationErrorType : uint8_t {
   NON_MAT_OZS,
 
   /**
+   * The task doesn't have the required shape, e.g. for FAI triangle.
+   */
+  WRONG_SHAPE,
+
+  /**
    * This special value is used to determine the number of items
    * above.
    */

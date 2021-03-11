@@ -45,5 +45,10 @@ FAITriangleTaskFactory::Validate()
 
   bool valid = FAITaskFactory::Validate();
 
-  return valid && FAITriangleValidator::Validate(task);
+  if (!FAITriangleValidator::Validate(task)) {
+    AddValidationError(TaskValidationErrorType::WRONG_SHAPE);
+    valid = false;
+  }
+
+  return valid;
 }
