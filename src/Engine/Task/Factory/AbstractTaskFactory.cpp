@@ -431,9 +431,6 @@ bool
 AbstractTaskFactory::Append(const OrderedTaskPoint &new_tp,
                             const bool auto_mutate)
 {
-  if (task.IsFull())
-    return false;
-
   if (auto_mutate) {
     if (!task.TaskSize()) {
       // empty task, so add as a start point
