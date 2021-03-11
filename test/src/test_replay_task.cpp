@@ -27,7 +27,7 @@ task_load(const TaskBehaviour &task_behaviour)
   auto task = LoadTask(task_file, task_behaviour);
   if (task != nullptr) {
     task->UpdateStatsGeometry();
-    if (!task->CheckTask()) {
+    if (IsError(task->CheckTask())) {
       return nullptr;
     }
   }

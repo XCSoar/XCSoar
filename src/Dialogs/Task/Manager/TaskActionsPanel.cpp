@@ -54,7 +54,8 @@ TaskActionsPanel::SaveTask()
   if (factory.CheckAddFinish())
     factory.UpdateGeometry();
 
-  if (active_task->CheckTask()) {
+  const auto errors = active_task->CheckTask();
+  if (!IsError(errors)) {
     if (!OrderedTaskSave(*active_task))
       return;
 
@@ -62,8 +63,7 @@ TaskActionsPanel::SaveTask()
     dialog.UpdateCaption();
     DirtyTaskListPanel();
   } else {
-    ShowMessageBox(getTaskValidationErrors(
-        active_task->GetFactory().GetValidationErrors()), _("Task not saved"),
+    ShowMessageBox(getTaskValidationErrors(errors), _("Task not saved"),
         MB_ICONEXCLAMATION);
   }
 }
@@ -90,9 +90,8 @@ TaskActionsPanel::OnNewTaskClicked()
 inline void
 TaskActionsPanel::OnDeclareClicked()
 {
-  if (!active_task->CheckTask()) {
-    const auto errors =
-      active_task->GetFactory().GetValidationErrors();
+  const auto errors = active_task->CheckTask();
+  if (IsError(errors)) {
     ShowMessageBox(getTaskValidationErrors(errors), _("Declare task"),
                 MB_ICONEXCLAMATION);
     return;

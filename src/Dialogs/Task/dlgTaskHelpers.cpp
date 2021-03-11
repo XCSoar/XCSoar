@@ -99,10 +99,10 @@ OrderedTaskSummary(const OrderedTask *task, TCHAR *text, bool linebreaks)
   TCHAR summary_shape[100];
   bool FAIShape = TaskSummaryShape(task, summary_shape);
   if (FAIShape || task->GetFactoryType() == TaskFactoryType::FAI_GENERAL) {
-    if (!task->GetFactory().ValidateFAIOZs()) {
+    const auto errors = task->GetFactory().ValidateFAIOZs();
+    if (!errors.IsEmpty()) {
       _tcscat(summary_shape, _T("/ "));
-      _tcscat(summary_shape, getTaskValidationErrors(
-          task->GetFactory().GetValidationErrors()));
+      _tcscat(summary_shape, getTaskValidationErrors(errors));
     }
   }
 

@@ -54,7 +54,7 @@ MapWindow::DrawTask(Canvas &canvas)
 
   ProtectedTaskManager::Lease task_manager(*task);
   const AbstractTask *task = task_manager->GetActiveTask();
-  if (task && task->CheckTask()) {
+  if (task && !IsError(task->CheckTask())) {
     TaskPointRenderer::TargetVisibility target_visibility =
         IsNearSelf() ? TaskPointRenderer::ACTIVE : TaskPointRenderer::ALL;
 

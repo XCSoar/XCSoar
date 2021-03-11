@@ -694,7 +694,7 @@ public:
   /* virtual methods from class AbstractTask */
   void Reset() override;
   bool TaskStarted(bool soft=false) const override;
-  bool CheckTask() const override;
+  TaskValidationErrorSet CheckTask() const noexcept override;
 
 protected:
   /* virtual methods from class AbstractTask */

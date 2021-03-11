@@ -48,10 +48,15 @@ UnorderedTask::CalcBestMC(const AircraftState &aircraft,
   return bmc.search(glide_polar.GetMC(), best);
 }
 
-bool
-UnorderedTask::CheckTask() const
+TaskValidationErrorSet
+UnorderedTask::CheckTask() const noexcept
 {
-  return (GetActiveTaskPoint()!=NULL);
+  TaskValidationErrorSet errors;
+
+  if (GetActiveTaskPoint() == nullptr)
+    errors |= TaskValidationErrorType::EMPTY_TASK;
+
+  return errors;
 }
 
 bool

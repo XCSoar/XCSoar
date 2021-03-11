@@ -49,7 +49,7 @@ public:
  * 
  * @return True if task is valid according to factory rules
  */
-  bool Validate() override;
+  TaskValidationErrorSet Validate() const noexcept override;
 };
 
 #endif

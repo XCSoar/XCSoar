@@ -85,9 +85,6 @@ protected:
   /** list of valid finish types, for specialisation */
   const LegalPointSet finish_types;
 
-  /** list of errors returned by task validation */
-  TaskValidationErrorSet validation_errors;
-
 protected:
   /**
    * Constructor
@@ -426,32 +423,28 @@ public:
                                             WaypointPtr wp) const noexcept;
 
   /**
-   * Check whether task is complete and valid according to factory rules
-   * Adds error types to validation_errors
-   *
-   * @return True if task is valid according to factory rules
+   * Check whether task is complete and valid according to factory
+   * rules and returns a set of errors.
    */
-  virtual bool Validate();
+  virtual TaskValidationErrorSet Validate() const noexcept;
 
   /**
    * Checks whether shapes of all OZs, start, finish are valid
    * for an FAI badge or record
-   * Appends warning message to validation_errors
    * This is used independently of check_task() validation
    *
    * @return True if all OZs are valid for a FAI badge or record
    */
-  bool ValidateFAIOZs();
+  TaskValidationErrorSet ValidateFAIOZs() const noexcept;
 
   /**
    * Checks whether shapes of all OZs, start, finish are valid
    * for an MAT task
-   * Appends warning message to validation_errors
    * This is used independently of check_task() validation
    *
    * @return True if all OZs are valid for a MAT
    */
-  bool ValidateMATOZs();
+  TaskValidationErrorSet ValidateMATOZs() const noexcept;
 
   gcc_pure
   const OrderedTaskSettings &GetOrderedTaskSettings() const;
@@ -616,15 +609,6 @@ public:
    */
   bool MutateTPsToTaskType();
 
-  /**
-   * Call to validate() populates this vector
-   * @return returns vector of errors for current task
-   */
-  gcc_pure
-  const TaskValidationErrorSet &GetValidationErrors() const {
-    return validation_errors;
-  }
-
 protected:
   /**
    * Test whether a candidate object is of correct type to be added/replaced/etc
@@ -670,15 +654,6 @@ protected:
   gcc_pure
   bool IsPositionFinish(const unsigned position) const;
 
-  /**
-   * Inserts the validation error type into the vector of validation errors
-   *
-   * @param e The validation error type to be added
-   */
-  void AddValidationError(TaskValidationErrorType e) {
-    validation_errors.Add(e);
-  }
-
 private:
   gcc_pure
   TaskPointFactoryType GetDefaultStartType() const;
@@ -699,13 +674,6 @@ private:
    * @return True if task is changed
    */
   bool MutateClosedFinishPerTaskType();
-
-  /**
-   * Clears the vector of validation errors for the current task
-   */
-  void ClearValidationErrors() {
-    validation_errors = TaskValidationErrorSet();
-  }
 };
 
 #endif

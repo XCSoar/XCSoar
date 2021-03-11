@@ -352,7 +352,7 @@ bool
 TaskManager::CheckTask() const
 {
   if (active_task)
-    return active_task->CheckTask();
+    return !IsError(active_task->CheckTask());
 
   return false;
 }
@@ -360,7 +360,7 @@ TaskManager::CheckTask() const
 bool
 TaskManager::CheckOrderedTask() const
 {
-  return ordered_task->CheckTask();
+  return !IsError(ordered_task->CheckTask());
 }
 
 AbstractTaskFactory &

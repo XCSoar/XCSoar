@@ -56,4 +56,23 @@ enum class TaskValidationErrorType : uint8_t {
 
 using TaskValidationErrorSet = EnumBitSet<TaskValidationErrorType>;
 
+/**
+ * Is this an error which is not acceptable?  This ignores warnings.
+ */
+constexpr bool
+IsError(TaskValidationErrorSet set) noexcept
+{
+  /**
+   * These codes are just warnings; they may be displayed, but the
+   * user is allowed to proceed.
+   */
+  constexpr TaskValidationErrorSet warnings{
+    TaskValidationErrorType::TURNPOINTS_NOT_UNIQUE,
+  };
+
+  constexpr TaskValidationErrorSet errors = ~warnings;
+
+  return !(set & errors).IsEmpty();
+}
+
 #endif

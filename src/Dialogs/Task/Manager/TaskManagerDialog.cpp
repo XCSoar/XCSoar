@@ -193,7 +193,8 @@ TaskManagerDialog::Commit()
   modified |= task->GetFactory().CheckAddFinish();
   task->UpdateStatsGeometry();
 
-  if (!task->TaskSize() || task->CheckTask()) {
+  const auto errors = task->CheckTask();
+  if (!task->TaskSize() || !IsError(errors)) {
 
     { // this must be done in thread lock because it potentially changes the
       // waypoints database
@@ -215,7 +216,7 @@ TaskManagerDialog::Commit()
     return true;
   }
 
-  ShowMessageBox(getTaskValidationErrors(task->GetFactory().GetValidationErrors()),
+  ShowMessageBox(getTaskValidationErrors(errors),
     _("Validation Errors"), MB_OK | MB_ICONEXCLAMATION);
 
   return (ShowMessageBox(_("Task not valid. Changes will be lost.\nContinue?"),

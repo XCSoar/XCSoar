@@ -39,7 +39,7 @@ public:
 
 public:
   /* virtual methods from class AbstractTask */
-  virtual bool CheckTask() const override;
+  virtual TaskValidationErrorSet CheckTask() const noexcept override;
   virtual bool CheckTransitions(const AircraftState &state_now,
                                 const AircraftState &state_last) override;
   virtual bool CalcBestMC(const AircraftState &state_now,

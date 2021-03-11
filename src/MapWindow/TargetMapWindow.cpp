@@ -147,7 +147,7 @@ TargetMapWindow::DrawTask(Canvas &canvas)
 
   ProtectedTaskManager::Lease task_manager(*task);
   const AbstractTask *task = task_manager->GetActiveTask();
-  if (task && task->CheckTask()) {
+  if (task && !IsError(task->CheckTask())) {
     OZRenderer ozv(task_look, airspace_renderer.GetLook(),
                    GetMapSettings().airspace);
     TaskPointRenderer tpv(canvas, projection, task_look,

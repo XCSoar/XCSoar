@@ -299,7 +299,7 @@ PrintHelper::orderedtask_print(const OrderedTask &task,
                                const AircraftState &state)
 {
   abstracttask_print(task, state);
-  if (!task.CheckTask())
+  if (IsError(task.CheckTask()))
     return;
 
   std::ofstream fi("output/results/res-isolines.txt");

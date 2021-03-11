@@ -16,10 +16,13 @@ LoadTask2(Path path, const TaskBehaviour &task_behaviour)
   assert(task);
 
   task->UpdateGeometry();
-  if (!task->CheckTask()) {
+
+  const auto errors = task->CheckTask();
+  if (!errors.IsEmpty())
+    _fputts(getTaskValidationErrors(errors), stderr);
+
+  if (IsError(errors)) {
     fprintf(stderr, "Failed to load task from XML\n");
-    _fputts(getTaskValidationErrors(task->GetFactory().GetValidationErrors()),
-            stderr);
     return NULL;
   }
 

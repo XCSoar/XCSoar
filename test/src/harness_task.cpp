@@ -362,7 +362,7 @@ bool test_task_type_manip(TaskManager& task_manager,
     return false;
 
   test_note("# validating task..\n");
-  if (!fact.Validate()) {
+  if (IsError(fact.Validate())) {
     return false;
   }
   test_note("# checking task..\n");
@@ -373,14 +373,14 @@ bool test_task_type_manip(TaskManager& task_manager,
   if (task_manager.GetOrderedTask().GetFactoryType() ==
                                       TaskFactoryType::FAI_GENERAL) {
     test_note("# checking OZs for FAI task..\n");
-    if (!fact.ValidateFAIOZs())
+    if (IsError(fact.ValidateFAIOZs()))
       return false;
   }
 
   if (task_manager.GetOrderedTask().GetFactoryType() ==
                                       TaskFactoryType::MAT) {
     test_note("# checking OZs for MAT task..\n");
-    if (!fact.ValidateMATOZs())
+    if (IsError(fact.ValidateMATOZs()))
       return false;
   }
   return true;
@@ -471,7 +471,7 @@ bool test_task_mixed(TaskManager& task_manager,
   fact.UpdateStatsGeometry();
 
   task_report(task_manager, "# checking task\n");
-  if (!fact.Validate()) {
+  if (IsError(fact.Validate())) {
     return false;
   }
 
@@ -531,7 +531,7 @@ bool test_task_fai(TaskManager& task_manager,
   fact.UpdateStatsGeometry();
 
   task_report(task_manager, "# checking task\n");
-  if (!fact.Validate()) {
+  if (IsError(fact.Validate())) {
     return false;
   }
 
@@ -601,7 +601,7 @@ bool test_task_aat(TaskManager& task_manager,
   fact.UpdateStatsGeometry();
 
   task_report(task_manager, "# checking task..\n");
-  if (!fact.Validate()) {
+  if (IsError(fact.Validate())) {
     return false;
   }
 
@@ -662,7 +662,7 @@ test_task_mat(TaskManager &task_manager, const Waypoints &waypoints)
   fact.UpdateStatsGeometry();
 
   task_report(task_manager, "# checking task..\n");
-  if (!fact.Validate()) {
+  if (IsError(fact.Validate())) {
     return false;
   }
 
@@ -714,7 +714,7 @@ bool test_task_or(TaskManager& task_manager,
   fact.UpdateStatsGeometry();
 
   task_report(task_manager, "# checking task..\n");
-  if (!fact.Validate()) {
+  if (IsError(fact.Validate())) {
     return false;
   }
 
@@ -758,7 +758,7 @@ bool test_task_dash(TaskManager& task_manager,
   fact.UpdateStatsGeometry();
 
   task_report(task_manager, "# checking task..\n");
-  if (!fact.Validate()) {
+  if (IsError(fact.Validate())) {
     return false;
   }
 
@@ -802,7 +802,7 @@ bool test_task_fg(TaskManager& task_manager,
   fact.UpdateStatsGeometry();
 
   task_report(task_manager, "# checking task..\n");
-  if (!fact.Validate()) {
+  if (IsError(fact.Validate())) {
     return false;
   }
 
@@ -884,7 +884,7 @@ bool test_task_random(TaskManager& task_manager,
   fact.UpdateStatsGeometry();
 
   task_report(task_manager, "# validating task..\n");
-  if (!fact.Validate()) {
+  if (IsError(fact.Validate())) {
     return false;
   }
   task_report(task_manager, "# checking task..\n");
@@ -971,14 +971,14 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
   fact.UpdateStatsGeometry();
 
   test_note("# validating task..\n");
-  if (!fact.Validate()) {
+  if (IsError(fact.Validate())) {
     return false;
   }
   if (task_manager.GetOrderedTask().GetFactoryType()
       == TaskFactoryType::FAI_GENERAL)
   {
     test_note("# checking OZs for FAI General..\n");
-    if (!fact.ValidateFAIOZs())
+    if (IsError(fact.ValidateFAIOZs()))
       return false;
   }
 
@@ -986,7 +986,7 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
       == TaskFactoryType::MAT)
   {
     test_note("# checking OZs for MAT General..\n");
-    if (!fact.ValidateMATOZs())
+    if (IsError(fact.ValidateMATOZs()))
       return false;
   }
   task_manager.Resume();

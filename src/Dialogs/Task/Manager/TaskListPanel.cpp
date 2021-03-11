@@ -152,7 +152,7 @@ TaskListPanel::get_cursor_task()
     task_store.GetTask(cursor_index,
                        CommonInterface::GetComputerSettings().task);
 
-  if (ordered_task == nullptr || !ordered_task->CheckTask())
+  if (ordered_task == nullptr || IsError(ordered_task->CheckTask()))
     return nullptr;
 
   return ordered_task;

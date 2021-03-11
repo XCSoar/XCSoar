@@ -51,13 +51,7 @@ public:
 
   void UpdateOrderedTaskSettings(OrderedTaskSettings& to) override;
 
-  /**
-   * Check whether task is complete and valid according to factory rules
-   * Adds error types to validation_errors
-   *
-   * @return True if task is valid according to factory rules
-   */
-  bool Validate() override;
+  TaskValidationErrorSet Validate() const noexcept override;
 
   /**
    * swaps non FAI OZs with either FAI OZs

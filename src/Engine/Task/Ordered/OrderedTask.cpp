@@ -135,7 +135,7 @@ OrderedTask::UpdateStatsGeometry()
 {
   ScanStartFinish();
 
-  stats.task_valid = CheckTask();
+  stats.task_valid = !IsError(CheckTask());
   stats.has_targets = stats.task_valid && HasTargets();
   stats.is_mat = GetFactoryType() == TaskFactoryType::MAT;
   stats.has_optional_starts = stats.task_valid && HasOptionalStarts();
@@ -673,8 +673,8 @@ OrderedTask::SetNeighbours(unsigned position)
   }
 }
 
-bool
-OrderedTask::CheckTask() const
+TaskValidationErrorSet
+OrderedTask::CheckTask() const noexcept
 {
   return this->GetFactory().Validate();
 }

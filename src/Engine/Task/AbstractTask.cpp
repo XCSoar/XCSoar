@@ -240,7 +240,7 @@ AbstractTask::Update(const AircraftState &state,
                      const GlidePolar &glide_polar)
 {
   stats.active_index = GetActiveTaskPointIndex();
-  stats.task_valid = CheckTask();
+  stats.task_valid = !IsError(CheckTask());
 
   const bool full_update = 
     (state.location.IsValid() && state_last.location.IsValid() &&

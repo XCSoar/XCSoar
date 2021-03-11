@@ -258,7 +258,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
     ProtectedTaskManager::Lease task_manager(_task_manager);
     const OrderedTask &task = task_manager->GetOrderedTask();
 
-    if (!task.CheckTask()) {
+    if (IsError(task.CheckTask())) {
       chart.DrawNoData();
       return;
     }

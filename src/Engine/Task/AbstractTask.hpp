@@ -24,6 +24,7 @@
 #define ABSTRACTTASK_H
 
 #include "TaskInterface.hpp"
+#include "Factory/ValidationError.hpp"
 #include "Stats/TaskStats.hpp"
 #include "Computer/TaskStatsComputer.hpp"
 #include "TaskBehaviour.hpp"
@@ -143,12 +144,10 @@ public:
                     double fallback_mc);
 
   /**
-   * Check if task is valid.  Calls task_event methods on failure.
-   *
-   * @return True if task is valid
+   * Check if task is valid.
    */
   gcc_pure
-  virtual bool CheckTask() const = 0;
+  virtual TaskValidationErrorSet CheckTask() const noexcept = 0;
 
 protected:
   /**
