@@ -171,7 +171,7 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
 }
 
 static void
-DeserialiseTaskpoint(OrderedTask &data, const ConstDataNode &node,
+DeserialiseTaskpoint(AbstractTaskFactory &fact, const ConstDataNode &node,
                      const Waypoints *waypoints)
 {
   const TCHAR *type = node.GetAttribute(_T("type"));
@@ -187,8 +187,6 @@ DeserialiseTaskpoint(OrderedTask &data, const ConstDataNode &node,
     return;
 
   std::unique_ptr<ConstDataNode> oz_node(node.GetChildNamed(_T("ObservationZone")));
-
-  AbstractTaskFactory &fact = data.GetFactory();
 
   std::unique_ptr<ObservationZonePoint> oz;
   std::unique_ptr<OrderedTaskPoint> pt;
@@ -316,9 +314,11 @@ LoadTask(OrderedTask &task, const ConstDataNode &node,
   Deserialise(beh, node);
   task.SetOrderedTaskSettings(beh);
 
+  auto &fact = task.GetFactory();
+
   const auto children = node.ListChildrenNamed(_T("Point"));
   for (const auto &i : children) {
     std::unique_ptr<ConstDataNode> point_node(i);
-    DeserialiseTaskpoint(task, *point_node, waypoints);
+    DeserialiseTaskpoint(fact, *point_node, waypoints);
   }
 }
