@@ -1195,7 +1195,7 @@ OrderedTask::SetPointSearchMax(unsigned tp, const SearchPoint &sol)
 bool
 OrderedTask::IsFull() const
 {
-  return TaskSize() == GetFactory().GetConstraints().max_points;
+  return TaskSize() >= GetFactory().GetConstraints().max_points;
 }
 
 inline void
