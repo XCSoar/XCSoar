@@ -25,19 +25,19 @@
 #include "util/StringAPI.hxx"
 
 const TCHAR *
-ConstDataNodeXML::GetName() const
+ConstDataNodeXML::GetName() const noexcept
 {
   return node.GetName();
 }
 
 WritableDataNode*
-WritableDataNodeXML::AppendChild(const TCHAR *name)
+WritableDataNodeXML::AppendChild(const TCHAR *name) noexcept
 {
   return new WritableDataNodeXML(node.AddChild(name, false));
 }
 
 ConstDataNode *
-ConstDataNodeXML::GetChildNamed(const TCHAR *name) const
+ConstDataNodeXML::GetChildNamed(const TCHAR *name) const noexcept
 {
   const XMLNode *child = node.GetChildNode(name);
   if (child == nullptr)
@@ -47,7 +47,7 @@ ConstDataNodeXML::GetChildNamed(const TCHAR *name) const
 }
 
 ConstDataNode::List
-ConstDataNodeXML::ListChildren() const
+ConstDataNodeXML::ListChildren() const noexcept
 {
   List list;
   for (auto i = node.begin(), end = node.end(); i != end; ++i)
@@ -56,7 +56,7 @@ ConstDataNodeXML::ListChildren() const
 }
 
 ConstDataNode::List
-ConstDataNodeXML::ListChildrenNamed(const TCHAR *name) const
+ConstDataNodeXML::ListChildrenNamed(const TCHAR *name) const noexcept
 {
   List list;
   for (auto i = node.begin(), end = node.end(); i != end; ++i)
@@ -66,13 +66,13 @@ ConstDataNodeXML::ListChildrenNamed(const TCHAR *name) const
 }
 
 void
-WritableDataNodeXML::SetAttribute(const TCHAR *name, const TCHAR *value)
+WritableDataNodeXML::SetAttribute(const TCHAR *name, const TCHAR *value) noexcept
 {
   node.AddAttribute(name, value);
 }
 
 const TCHAR *
-ConstDataNodeXML::GetAttribute(const TCHAR *name) const
+ConstDataNodeXML::GetAttribute(const TCHAR *name) const noexcept
 {
   return node.GetAttribute(name);
 }
