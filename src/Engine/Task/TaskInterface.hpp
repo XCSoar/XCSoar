@@ -27,11 +27,6 @@
 #include "util/Compiler.h"
 
 struct AircraftState;
-struct GeoPoint;
-struct GeoVector;
-
-struct TaskBehaviour;
-class TaskStats;
 class TaskWaypoint;
 class TaskPoint;
 class GlidePolar;
