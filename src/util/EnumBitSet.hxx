@@ -31,6 +31,7 @@
 #define ENUM_BIT_SET_HXX
 
 #include <cstdint>
+#include <type_traits>
 
 /**
  * A container that stores each enum value as a bit.
@@ -39,6 +40,10 @@
  */
 template<typename E>
 class EnumBitSet {
+	// TODO: change to std::is_scoped_enum_v (C++23)
+	static_assert(std::is_enum_v<E>,
+		      "Parameter type must be an enum");
+
 	using I = uint32_t;
 
 	static constexpr I ToMask(E e) noexcept {
