@@ -2578,6 +2578,7 @@ TASK_INFO_SOURCES = \
 	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/Task/LoadFile.cpp \
+	$(SRC)/Task/ValidationErrorStrings.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \

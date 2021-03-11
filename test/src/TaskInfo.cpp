@@ -1,6 +1,8 @@
 #include "system/Args.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/LoadFile.hpp"
+#include "Task/ValidationErrorStrings.hpp"
 #include "util/PrintException.hxx"
 
 #include <tchar.h>
@@ -17,6 +19,8 @@ LoadTask2(Path path, const TaskBehaviour &task_behaviour)
   task->UpdateGeometry();
   if (!task->CheckTask()) {
     fprintf(stderr, "Failed to load task from XML\n");
+    _fputts(getTaskValidationErrors(task->GetFactory().GetValidationErrors()),
+            stderr);
     return NULL;
   }
 
