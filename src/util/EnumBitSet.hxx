@@ -41,44 +41,45 @@ template<typename E>
 class EnumBitSet {
 	typedef uint32_t I;
 
-	static constexpr I ToMask(E e) {
+	static constexpr I ToMask(E e) noexcept {
 		return I(1) << unsigned(e);
 	}
 
 	template<typename... Args>
-	static constexpr I ToMask(E e, Args&&... args) {
+	static constexpr I ToMask(E e, Args&&... args) noexcept {
 		return ToMask(e) | ToMask(args...);
 	}
 
 	I mask;
 
-	constexpr EnumBitSet(I _mask):mask(_mask) {}
+	constexpr EnumBitSet(I _mask) noexcept
+		:mask(_mask) {}
 
 public:
 	static constexpr unsigned N = unsigned(E::COUNT);
 	static_assert(N <= 32, "enum is too large");
 
-	constexpr EnumBitSet():mask(0) {}
+	constexpr EnumBitSet() noexcept:mask(0) {}
 
 	template<typename... Args>
-	constexpr EnumBitSet(E e, Args&&... args)
+	constexpr EnumBitSet(E e, Args&&... args) noexcept
 		:mask(ToMask(e, args...)) {}
 
-	constexpr EnumBitSet operator|(const EnumBitSet other) const {
+	constexpr EnumBitSet operator|(const EnumBitSet other) const noexcept {
 		return EnumBitSet(mask | other.mask);
 	}
 
-	EnumBitSet &operator|=(const EnumBitSet &other) {
+	EnumBitSet &operator|=(const EnumBitSet &other) noexcept {
 		mask |= other.mask;
 		return *this;
 	}
 
-	constexpr bool IsEmpty() const {
+	constexpr bool IsEmpty() const noexcept {
 		return mask == 0;
 	}
 
 	[[gnu::pure]]
-	E UncheckedFirst() const {
+	E UncheckedFirst() const noexcept {
 		I i = 1;
 
 		for (unsigned j = 0;; ++j, i <<= 1)
@@ -86,16 +87,16 @@ public:
 				return E(j);
 	}
 
-	void Add(const E e) {
+	void Add(const E e) noexcept {
 		mask |= ToMask(e);
 	}
 
-	constexpr bool Contains(E e) const {
+	constexpr bool Contains(E e) const noexcept {
 		return (mask & ToMask(e)) != 0;
 	}
 
 	template<typename O>
-	void CopyTo(O o) const {
+	void CopyTo(O o) const noexcept {
 		for (unsigned i = 0; i < N; ++i) {
 			const E e = E(i);
 			if (Contains(e))
