@@ -74,6 +74,19 @@ public:
 		return *this;
 	}
 
+	constexpr EnumBitSet operator&(const EnumBitSet other) const noexcept {
+		return EnumBitSet(mask & other.mask);
+	}
+
+	EnumBitSet &operator&=(const EnumBitSet &other) noexcept {
+		mask &= other.mask;
+		return *this;
+	}
+
+	constexpr EnumBitSet operator~() const noexcept {
+		return EnumBitSet(~mask);
+	}
+
 	constexpr bool IsEmpty() const noexcept {
 		return mask == 0;
 	}
