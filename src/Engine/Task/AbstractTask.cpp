@@ -30,14 +30,7 @@
 AbstractTask::AbstractTask(TaskType _type,
                            const TaskBehaviour &tb)
   :TaskInterface(_type),
-   active_task_point(0),
-   task_events(NULL),
-   task_behaviour(tb),
-   force_full_update(true),
-   mc_lpf(8),
-   ce_lpf(60),
-   em_lpf(60),
-   mc_lpf_valid(false)
+   task_behaviour(tb)
 {
    stats.reset();
    stats_computer.Reset(stats);
