@@ -890,6 +890,11 @@ AbstractTaskFactory::Validate()
 
   bool valid = true;
 
+  if (task.TaskSize() == 0) {
+    AddValidationError(TaskValidationErrorType::EMPTY_TASK);
+    valid = false;
+  }
+
   if (!task.HasStart()) {
     AddValidationError(TaskValidationErrorType::NO_VALID_START);
     valid = false;
