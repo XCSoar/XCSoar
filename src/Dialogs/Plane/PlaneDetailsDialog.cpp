@@ -177,9 +177,9 @@ dlgPlaneDetailsShowModal(Plane &_plane)
   TWidgetDialog<PlaneEditWidget>
     dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
            look, _("Plane Details"));
-  dialog.SetWidget(_plane, look, &dialog);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.SetWidget(_plane, look, &dialog);
   const int result = dialog.ShowModal();
 
   if (result != mrOK)
