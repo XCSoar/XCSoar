@@ -39,7 +39,7 @@
  */
 template<typename E>
 class EnumBitSet {
-	typedef uint32_t I;
+	using I = uint32_t;
 
 	static constexpr I ToMask(E e) noexcept {
 		return I(1) << unsigned(e);
