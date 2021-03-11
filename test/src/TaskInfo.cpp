@@ -5,16 +5,15 @@
 #include "Task/ValidationErrorStrings.hpp"
 #include "util/PrintException.hxx"
 
+#include <cassert>
+
 #include <tchar.h>
 
 static std::unique_ptr<OrderedTask>
 LoadTask2(Path path, const TaskBehaviour &task_behaviour)
 {
   auto task = LoadTask(path, task_behaviour);
-  if (task == nullptr) {
-    fprintf(stderr, "Failed to parse XML\n");
-    return nullptr;
-  }
+  assert(task);
 
   task->UpdateGeometry();
   if (!task->CheckTask()) {
