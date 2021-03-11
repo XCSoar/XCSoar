@@ -61,14 +61,6 @@ RTTaskFactory::RTTaskFactory(OrderedTask& _task,
 {
 }
 
-bool 
-RTTaskFactory::Validate()
-{
-  bool valid = AbstractTaskFactory::Validate();
-
-  return valid;
-}
-
 TaskPointFactoryType
 RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
 {

@@ -42,13 +42,6 @@ public:
 
   ~RTTaskFactory() {};
 
-/** 
- * Check whether task is complete and valid according to factory rules
- * 
- * @return True if task is valid according to factory rules
- */
-  virtual bool Validate();
-
   /**
    * swaps AAT OZs for AST_CYLINDERs
    * @param tp
