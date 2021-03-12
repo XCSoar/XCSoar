@@ -141,9 +141,11 @@ curl = CmakeProject(
         '-DCURL_DISABLE_COOKIES=ON',
         '-DCURL_DISABLE_CRYPTO_AUTH=ON',
         '-DCURL_DISABLE_IMAP=ON',
-        '-DCMAKE_USE_OPENSSL=ON',
         '-DCMAKE_USE_LIBSSH2=OFF',
         '-DBUILD_TESTING=OFF',
+    ],
+    windows_configure_args=[
+        '-DCMAKE_USE_SCHANNEL=ON',
     ],
     patches=abspath('lib/curl/patches'),
 )
