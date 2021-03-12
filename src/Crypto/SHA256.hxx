@@ -30,7 +30,6 @@
 #pragma once
 
 #include "util/ConstBuffer.hxx"
-#include "util/Compiler.h"
 
 #include <sodium/crypto_hash_sha256.h>
 
