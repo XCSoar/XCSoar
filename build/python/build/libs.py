@@ -209,20 +209,34 @@ curl = CmakeProject(
     patches=abspath('lib/curl/patches'),
 )
 
+# Needed by proj
+sqlite3 = AutotoolsProject(
+    'https://sqlite.org/2022/sqlite-autoconf-3390200.tar.gz',
+    'https://fossies.org/linux/misc/sqlite-autoconf-3390200.tar.gz',
+    'f00711818d0afc18f4b1b3b7207176f4',
+    'lib/libsqlite3.a',
+    [
+        '--disable-shared', '--enable-static',
+    ],
+)
+
 proj = CmakeProject(
-    'http://download.osgeo.org/proj/proj-5.2.0.tar.gz',
-    'https://fossies.org/linux/privat/proj-5.2.0.tar.gz',
-    'ef919499ffbc62a4aae2659a55e2b25ff09cccbbe230656ba71c6224056c7e60',
+    'http://download.osgeo.org/proj/proj-9.0.1.tar.gz',
+    'https://fossies.org/linux/privat/proj-9.0.1.tar.gz',
+    '737eaacbe7906d0d6ff43f0d9ebedc5c734cccc9e6b8d7beefdec3ab22d9a6a3',
     'lib/libproj.a',
     [
-        '-DPROJ_TESTS=OFF',
+        '-DBUILD_TESTING=OFF',
+        '-DENABLE_TIFF=OFF',
+        '-DENABLE_CURL=OFF',
         '-DBUILD_CCT=OFF',
         '-DBUILD_CS2CS=OFF',
         '-DBUILD_GEOD=OFF',
         '-DBUILD_GIE=OFF',
-        '-DBUILD_NAD2BIN=OFF',
         '-DBUILD_PROJ=OFF',
-        '-DBUILD_LIBPROJ_SHARED=OFF',
+        '-DBUILD_PROJINFO=OFF',
+        '-DBUILD_PROJSYNC=OFF',
+        '-DBUILD_SHARED_LIBS=OFF',
         '-DUSE_THREAD=OFF',
     ],
     patches=abspath('lib/proj/patches'),
@@ -305,9 +319,9 @@ libtiff = CmakeProject(
 )
 
 libgeotiff = CmakeProject(
-    'http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.3.tar.gz',
-    'https://fossies.org/linux/privat/libgeotiff-1.4.3.tar.gz',
-    'b8510d9b968b5ee899282cdd5bef13fd02d5a4c19f664553f81e31127bc47265',
+    'http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.7.1.tar.gz',
+    'https://fossies.org/linux/privat/libgeotiff-1.7.1.tar.gz',
+    '05ab1347aaa471fc97347d8d4269ff0c00f30fa666d956baba37948ec87e55d6',
     'lib/libgeotiff.a',
     [
         '-DWITH_UTILITIES=OFF',
