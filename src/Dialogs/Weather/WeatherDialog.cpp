@@ -25,7 +25,9 @@ Copyright_License {
 #include "NOAAList.hpp"
 #include "RASPDialog.hpp"
 #include "PCMetDialog.hpp"
+#if 0
 #include "MapOverlayWidget.hpp"
+#endif
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/TabWidget.hpp"
 #include "Widget/ButtonWidget.hpp"
@@ -89,7 +91,12 @@ ShowWeatherDialog(const TCHAR *page)
   widget.AddTab(CreatePCMetWidget(), _T("pc_met"));
 #endif
 
-#ifdef ENABLE_OPENGL
+#if 0
+  /* The German DWD has terminated our access to georeferenced images,
+     so this code is disabled for now, but will remain here;
+     eventually, we should refactor the code to be generic, allowing
+     arbitrary georeferenced images */
+
   if (page != nullptr && StringIsEqual(page, _T("overlay")))
     start_page = widget.GetSize();
 
