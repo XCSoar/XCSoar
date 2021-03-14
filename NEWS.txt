@@ -1,3 +1,9 @@
+Version 6.8.18 - not yet released
+* Android
+  - support devices with aspect ratio greater than 16:9
+* Raspberry Pi
+  - autodetect display orientation
+
 Version 6.8.17 - 2020/09/22
 * tracking
   - SkyLines: update tracking IP address
