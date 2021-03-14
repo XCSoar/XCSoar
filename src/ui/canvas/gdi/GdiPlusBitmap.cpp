@@ -58,6 +58,8 @@ GdiLoadImage(const TCHAR* filename)
   HBITMAP result = nullptr;
 #ifdef _UNICODE  // TCHAR has to be WCHAR in GdiPlus
   Gdiplus::Bitmap bitmap(filename, false);
+  if (bitmap.GetLastStatus() != Gdiplus::Ok)
+    return nullptr;
   Gdiplus::Color color = Gdiplus::Color::White;
 #ifndef NDEBUG
   Gdiplus::Status status =
