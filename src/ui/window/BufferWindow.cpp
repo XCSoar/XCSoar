@@ -30,12 +30,14 @@ Copyright_License {
 void
 BufferWindow::OnResize(PixelSize new_size)
 {
+  if (buffer.IsDefined()) {
 #ifdef ENABLE_OPENGL
-  buffer.Destroy();
+    buffer.Destroy();
 #else
-  buffer.Resize(new_size);
-  Invalidate();
+    buffer.Resize(new_size);
+    Invalidate();
 #endif
+  }
 
   PaintWindow::OnResize(new_size);
 }
