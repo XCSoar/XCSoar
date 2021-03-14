@@ -97,10 +97,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "thread/Debug.hpp"
-#if defined(_WIN32) && defined(USE_GDI)
-#  include "ui/canvas/gdi/GdiPlusBitmap.hpp"
-#endif
-
 
 #include "lua/StartFile.hpp"
 #include "lua/Background.hpp"
@@ -461,10 +457,6 @@ Startup()
 #endif
 #endif
 
-#if defined(_WIN32) && defined(USE_GDI)
-  GdiStartup();
-#endif
-
   assert(!global_running);
   global_running = true;
 
@@ -491,9 +483,6 @@ Shutdown()
   // Log shutdown information
   LogFormat("Entering shutdown...");
 
-#if defined(_WIN32) && defined(USE_GDI)
-  GdiShutdown();
-#endif
   main_window->BeginShutdown();
 
   StartupLogFreeRamAndStorage();
