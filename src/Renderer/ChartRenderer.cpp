@@ -27,8 +27,8 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Math/LeastSquares.hpp"
 #include "util/StaticString.hxx"
-#include "util/StringBuffer.hxx"
 #include "util/StringFormat.hpp"
+#include "util/TruncateString.hpp"
 #include "util/ConstBuffer.hxx"
 
 #include <cassert>
@@ -47,12 +47,11 @@ ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
                              const PixelRect &the_rc,
                              const bool has_padding) noexcept
   :look(_look), canvas(the_canvas),
-   rc(the_rc), rc_chart(rc),
+   rc(the_rc),
    minor_tick_size(Layout::VptScale(4))
 {
-  SetPadding(has_padding);
-  if (has_padding)
-    canvas.DrawFilledRectangle(rc_chart, COLOR_WHITE);
+  x_label.clear();
+  y_label.clear();
 }
 
 void
@@ -61,6 +60,76 @@ ChartRenderer::SetPadding(bool do_pad) noexcept
   if (do_pad) {
     rc_chart.left = rc.left+Layout::VptScale(30);
     rc_chart.bottom = rc.bottom-Layout::VptScale(26);
+  }
+}
+
+void
+ChartRenderer::SetXLabel(const TCHAR *text) noexcept
+{
+  CopyTruncateString(x_label.data(), x_label.capacity(), text);
+}
+
+void
+ChartRenderer::SetXLabel(const TCHAR *text, const TCHAR *unit) noexcept
+{
+  StringFormat(x_label.data(), x_label.capacity(),
+               _T("%s [%s]"), text, unit);
+}
+
+void
+ChartRenderer::SetYLabel(const TCHAR *text, const TCHAR *unit) noexcept
+{
+  StringFormat(y_label.data(), y_label.capacity(),
+               _T("%s [%s]"), text, unit);
+}
+
+void
+ChartRenderer::SetYLabel(const TCHAR *text) noexcept
+{
+  CopyTruncateString(y_label.data(), y_label.capacity(), text);
+}
+
+void
+ChartRenderer::Begin() noexcept
+{
+  rc_chart = rc;
+
+  if (!x_label.empty())
+    /* make room for X axis labels below the chart */
+    rc_chart.bottom -= Layout::VptScale(26);
+
+  if (!y_label.empty())
+    /* make room for Y axis labels left of the chart */
+    rc_chart.left += Layout::VptScale(30);
+
+  if (!x_label.empty() || !y_label.empty())
+    canvas.DrawFilledRectangle(rc_chart, COLOR_WHITE);
+}
+
+void
+ChartRenderer::Finish() noexcept
+{
+  if (!x_label.empty()) {
+    /* draw the X axis label */
+
+    canvas.Select(look.axis_label_font);
+    canvas.SetBackgroundTransparent();
+
+    PixelSize tsize = canvas.CalcTextSize(x_label.c_str());
+    int x = rc.right - tsize.width - Layout::GetTextPadding();
+    int y = rc.bottom - tsize.height - Layout::GetTextPadding();
+
+    canvas.DrawText({x, y}, x_label.c_str());
+  }
+
+  if (!y_label.empty()) {
+    /* draw the Y axis label */
+
+    canvas.Select(look.axis_label_font);
+    canvas.SetBackgroundTransparent();
+
+    canvas.DrawText(rc.WithPadding(Layout::GetTextPadding()).GetTopLeft(),
+                    y_label.c_str());
   }
 }
 
@@ -184,50 +253,6 @@ void
 ChartRenderer::DrawNoData() noexcept
 {
   DrawNoData(_("No data"));
-}
-
-void
-ChartRenderer::DrawXLabel(const TCHAR *text) noexcept
-{
-  canvas.Select(look.axis_label_font);
-  canvas.SetBackgroundTransparent();
-
-  PixelSize tsize = canvas.CalcTextSize(text);
-  int x = rc.right - tsize.width - Layout::GetTextPadding();
-  int y = rc.bottom - tsize.height - Layout::GetTextPadding();
-
-  canvas.DrawText({x, y}, text);
-}
-
-void
-ChartRenderer::DrawXLabel(const TCHAR *text, const TCHAR *unit) noexcept
-{
-  assert(text != nullptr);
-  assert(unit != nullptr);
-
-  StaticString<64> buffer;
-  buffer.UnsafeFormat(_T("%s [%s]"), text, unit);
-  DrawXLabel(buffer);
-}
-
-void
-ChartRenderer::DrawYLabel(const TCHAR *text) noexcept
-{
-  canvas.Select(look.axis_label_font);
-  canvas.SetBackgroundTransparent();
-
-  canvas.DrawText(rc.WithPadding(Layout::GetTextPadding()).GetTopLeft(), text);
-}
-
-void
-ChartRenderer::DrawYLabel(const TCHAR *text, const TCHAR *unit) noexcept
-{
-  assert(text != nullptr);
-  assert(unit != nullptr);
-
-  StaticString<64> buffer;
-  buffer.UnsafeFormat(_T("%s [%s]"), text, unit);
-  DrawYLabel(buffer);
 }
 
 void

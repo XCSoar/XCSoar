@@ -63,6 +63,9 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   LeastSquares windstats_mag;
 
   ChartRenderer chart(chart_look, canvas, rc);
+  chart.SetXLabel(_T("w"), Units::GetSpeedName());
+  chart.SetYLabel(_T("h"), Units::GetAltitudeName());
+  chart.Begin();
 
   const auto height =
     fs.altitude_ceiling.GetMaxY() - fs.altitude_ceiling.GetMinY();
@@ -120,6 +123,5 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
     DrawArrow(canvas, point, mag * WINDVECTORMAG, angle);
   }
 
-  chart.DrawXLabel(_T("w"), Units::GetSpeedName());
-  chart.DrawYLabel(_T("h"), Units::GetAltitudeName());
+  chart.Finish();
 }

@@ -64,6 +64,11 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
 {
   ChartRenderer chart(chart_look, canvas, rc);
 
+  chart.SetXLabel(_T("D"), Units::GetDistanceName());
+  chart.SetYLabel(_T("h"), Units::GetAltitudeName());
+
+  chart.Begin();
+
   if (!vec.IsValid() || !start.IsValid()) {
     chart.DrawNoData(_("Not moving"));
     return;
@@ -102,6 +107,8 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
   canvas.Select(*look.grid_font);
 
   PaintGrid(canvas, chart);
+
+  chart.Finish();
 }
 
 void
@@ -199,7 +206,4 @@ CrossSectionRenderer::PaintGrid(Canvas &canvas, ChartRenderer &chart) const
 
   chart.DrawXGrid(Units::ToSysDistance(5),5, ChartRenderer::UnitFormat::NUMERIC);
   chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, ChartRenderer::UnitFormat::NUMERIC);
-
-  chart.DrawXLabel(_T("D"), Units::GetDistanceName());
-  chart.DrawYLabel(_T("h"), Units::GetAltitudeName());
 }

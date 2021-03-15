@@ -243,6 +243,12 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
                                      const OrderedTaskSettings *ordered_props) const
 {
   ChartRenderer chart(chart_look, canvas, rc, !is_map);
+  if (!is_map) {
+    chart.SetXLabel(_T("w"), Units::GetVerticalSpeedName());
+    chart.SetYLabel(_T("h AGL"), Units::GetAltitudeName());
+  }
+
+  chart.Begin();
 
   if (!is_map && (calculated.common_stats.height_max_working <= 0)) {
     // no climbs recorded
@@ -255,9 +261,9 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
   if (!is_map) {
     chart.DrawXGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);
     chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, ChartRenderer::UnitFormat::NUMERIC);
-    chart.DrawXLabel(_T("w"), Units::GetVerticalSpeedName());
-    chart.DrawYLabel(_T("h AGL"), Units::GetAltitudeName());
   }
+
+  chart.Finish();
 }
 
 void
@@ -269,8 +275,12 @@ ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
                                           const TaskBehaviour &task_props) const
 {
   ChartRenderer chart(chart_look, canvas, rc, false);
+  chart.Begin();
+
   _DrawThermalBand(basic, calculated, settings_computer,
                    chart, task_props, true, false, nullptr);
+
+  chart.Finish();
 }
 
 void

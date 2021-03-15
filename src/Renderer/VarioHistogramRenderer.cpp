@@ -44,6 +44,8 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
                      const GlidePolar &glide_polar)
 {
   ChartRenderer chart(chart_look, canvas, rc);
+  chart.SetYLabel(_T("w"), Units::GetVerticalSpeedName());
+  chart.Begin();
 
   const auto acc = std::max(fs.vario_cruise_histogram.GetAccumulator(),
                             fs.vario_circling_histogram.GetAccumulator());
@@ -109,6 +111,5 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   chart.DrawLabel(_T("MC"), tref, mc);
   chart.DrawLabel(_T("S cruise"), tref, s);
 
-  chart.DrawYLabel(_T("w"), Units::GetVerticalSpeedName());
-
+  chart.Finish();
 }

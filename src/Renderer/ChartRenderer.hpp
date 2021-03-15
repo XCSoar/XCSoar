@@ -28,17 +28,23 @@ Copyright_License {
 #include "ui/dim/Rect.hpp"
 #include "ui/dim/BulkPoint.hpp"
 #include "Look/ChartLook.hpp"
+#include "util/StringBuffer.hxx"
 
 #include <tchar.h>
 
 template<typename T> struct ConstBuffer;
-template<typename T, std::size_t CAPACITY> class BasicStringBuffer;
 class XYDataStore;
 class LeastSquares;
 class Canvas;
 class Brush;
 class Pen;
 
+/**
+ * Render a chart.
+ *
+ * How to use: construct, SetXLabel()/SetYLabel(), Begin(), Draw*(),
+ * Finish().
+ */
 class ChartRenderer
 {
   const ChartLook &look;
@@ -46,6 +52,8 @@ class ChartRenderer
   Canvas &canvas;
   PixelRect rc;
   PixelRect rc_chart;
+
+  BasicStringBuffer<TCHAR, 64> x_label, y_label;
 
   ReusableArray<BulkPixelPoint> point_buffer;
 
@@ -72,6 +80,24 @@ public:
   ChartRenderer(const ChartLook &look, Canvas &the_canvas,
                 const PixelRect &the_rc,
                 const bool has_padding=true) noexcept;
+
+  void SetXLabel(const TCHAR *text) noexcept;
+  void SetXLabel(const TCHAR *text, const TCHAR *unit) noexcept;
+
+  void SetYLabel(const TCHAR *text) noexcept;
+  void SetYLabel(const TCHAR *text, const TCHAR *unit) noexcept;
+
+  /**
+   * Prepare for drawing; this method calculates the layout.  Call
+   * this after all setup methods have been called (e.g. SetXLabel()),
+   * and before drawing starts.
+   */
+  void Begin() noexcept;
+
+  /**
+   * Finish drawing.  Call this after drawing is finished.
+   */
+  void Finish() noexcept;
 
   const PixelRect &GetChartRect() const noexcept {
     return rc_chart;
@@ -111,12 +137,6 @@ public:
                  UnitFormat units = UnitFormat::NONE) noexcept;
   void DrawYGrid(double tic_step, double unit_step,
                  UnitFormat units = UnitFormat::NONE) noexcept;
-
-  void DrawXLabel(const TCHAR *text) noexcept;
-  void DrawXLabel(const TCHAR *text, const TCHAR *unit) noexcept;
-
-  void DrawYLabel(const TCHAR *text) noexcept;
-  void DrawYLabel(const TCHAR *text, const TCHAR *unit) noexcept;
 
   void DrawLabel(const TCHAR *text, double xv, double yv) noexcept;
   void DrawNoData(const TCHAR *text) noexcept;
