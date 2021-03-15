@@ -104,7 +104,7 @@ ShowNetworkDialog()
   TWidgetDialog<NetworkWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            look, _("Network"));
-  dialog.SetWidget(look);
   dialog.AddButton(_("Close"), mrOK);
+  dialog.SetWidget(look);
   dialog.ShowModal();
 }

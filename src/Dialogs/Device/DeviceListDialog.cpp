@@ -690,9 +690,9 @@ ShowDeviceList()
   TWidgetDialog<DeviceListWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            UIGlobals::GetDialogLook(), _("Devices"));
+  dialog.AddButton(_("Close"), mrOK);
   dialog.SetWidget(UIGlobals::GetDialogLook());
   dialog.GetWidget().CreateButtons(dialog);
-  dialog.AddButton(_("Close"), mrOK);
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();

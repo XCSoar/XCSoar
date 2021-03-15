@@ -135,9 +135,9 @@ dlgWaypointEditShowModal(Waypoint &way_point)
   TWidgetDialog<WaypointEditWidget>
     dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
            look, _("Waypoint Editor"));
-  dialog.SetWidget(look, way_point);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.SetWidget(look, way_point);
   const int result = dialog.ShowModal();
 
   if (result != mrOK || !dialog.GetChanged())

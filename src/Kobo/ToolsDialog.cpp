@@ -98,7 +98,7 @@ ShowToolsDialog()
   const DialogLook &look = UIGlobals::GetDialogLook();
   TWidgetDialog<ToolsWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(), look, _("Tools"));
-  dialog.SetWidget(look);
   dialog.AddButton(_("Close"), mrOK);
+  dialog.SetWidget(look);
   dialog.ShowModal();
 }

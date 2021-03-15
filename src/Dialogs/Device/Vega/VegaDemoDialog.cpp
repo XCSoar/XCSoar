@@ -124,8 +124,8 @@ dlgVegaDemoShowModal()
   TWidgetDialog<VegaDemoWidget>
     dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
            look, _("Vario Demo"));
-  dialog.SetWidget(look);
   dialog.AddButton(_("Close"), mrOK);
+  dialog.SetWidget(look);
   dialog.ShowModal();
 
   // deactivate demo.

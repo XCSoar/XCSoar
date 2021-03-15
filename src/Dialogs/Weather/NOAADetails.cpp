@@ -127,9 +127,9 @@ dlgNOAADetailsShowModal(NOAAStore::iterator iterator)
   TWidgetDialog<NOAADetailsWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            look, _("METAR and TAF"));
+  dialog.AddButton(_("Close"), mrOK);
   dialog.SetWidget(dialog, iterator);
   dialog.GetWidget().CreateButtons(dialog);
-  dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
 }
 

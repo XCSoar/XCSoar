@@ -255,10 +255,10 @@ dlgPlanePolarShowModal(Plane &_plane)
   const DialogLook &look = UIGlobals::GetDialogLook();
   TWidgetDialog<PlanePolarWidget>
     dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(), look, caption);
-  dialog.SetWidget(_plane, look);
-  dialog.GetWidget().CreateButtons(dialog);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.SetWidget(_plane, look);
+  dialog.GetWidget().CreateButtons(dialog);
   const int result = dialog.ShowModal();
 
   if (result != mrOK)

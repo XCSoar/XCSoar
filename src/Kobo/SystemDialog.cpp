@@ -139,7 +139,7 @@ ShowSystemDialog()
   const DialogLook &look = UIGlobals::GetDialogLook();
   TWidgetDialog<SystemWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(), look, "System");
-  dialog.SetWidget(look);
   dialog.AddButton(_("Close"), mrOK);
+  dialog.SetWidget(look);
   dialog.ShowModal();
 }

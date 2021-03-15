@@ -184,8 +184,8 @@ ShowPortMonitor(DeviceDescriptor &device)
   TWidgetDialog<PortMonitorWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            look.dialog, caption);
-  dialog.SetWidget(device, look.terminal);
   dialog.AddButton(_("Close"), mrOK);
+  dialog.SetWidget(device, look.terminal);
   dialog.GetWidget().CreateButtons(dialog);
 
   dialog.ShowModal();

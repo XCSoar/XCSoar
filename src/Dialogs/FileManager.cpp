@@ -738,8 +738,8 @@ ShowFileManager2()
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            UIGlobals::GetDialogLook(),
            _("File Manager"));
-  dialog.SetWidget();
   dialog.AddButton(_("Close"), mrOK);
+  dialog.SetWidget();
   dialog.GetWidget().CreateButtons(dialog);
 
   dialog.EnableCursorSelection();
