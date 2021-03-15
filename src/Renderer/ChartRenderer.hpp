@@ -65,8 +65,6 @@ class ChartRenderer
     int ToScreen(double value) const noexcept;
   } x, y;
 
-  void SetPadding(bool do_pad) noexcept;
-
   const int minor_tick_size;
 
 public:

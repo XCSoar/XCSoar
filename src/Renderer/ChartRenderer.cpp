@@ -55,15 +55,6 @@ ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
 }
 
 void
-ChartRenderer::SetPadding(bool do_pad) noexcept
-{
-  if (do_pad) {
-    rc_chart.left = rc.left+Layout::VptScale(30);
-    rc_chart.bottom = rc.bottom-Layout::VptScale(26);
-  }
-}
-
-void
 ChartRenderer::SetXLabel(const TCHAR *text) noexcept
 {
   CopyTruncateString(x_label.data(), x_label.capacity(), text);
