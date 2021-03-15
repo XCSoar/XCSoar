@@ -62,8 +62,9 @@ class ChartRenderer
 
   void SetPadding(bool do_pad) noexcept;
 
+  const int padding_text;
+
 public:
-  int padding_text;
   const PixelRect GetChartRect() const noexcept {
     return rc_chart;
   }
