@@ -56,7 +56,7 @@ Font::Load(const FontDescription &d)
 }
 
 void
-Font::Destroy()
+Font::Destroy() noexcept
 {
   assert(!IsDefined() || IsScreenInitialized());
 
@@ -77,7 +77,7 @@ Font::TextSize(TStringView text) const noexcept
 
 int
 Font::TextTextureGL(TStringView text, PixelSize &size,
-                    PixelSize &allocated_size) const
+                    PixelSize &allocated_size) const noexcept
 {
   if (!text_util_object)
     return 0;

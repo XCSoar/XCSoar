@@ -61,7 +61,7 @@ Font::TextSize(TStringView text) const noexcept
 }
 
 void
-Font::CalculateHeights()
+Font::CalculateHeights() noexcept
 {
   AnyCanvas canvas;
   canvas.Select(*this);
@@ -75,7 +75,7 @@ Font::CalculateHeights()
 }
 
 void
-Font::Destroy()
+Font::Destroy() noexcept
 {
   if (font != nullptr) {
     assert(IsScreenInitialized());
