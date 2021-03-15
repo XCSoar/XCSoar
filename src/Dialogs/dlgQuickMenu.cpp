@@ -133,7 +133,14 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   const auto &dialog_look = UIGlobals::GetDialogLook();
 
   const auto &font = *dialog_look.button.font;
-  const unsigned column_width = Layout::Scale(78u);
+
+  const unsigned min_column_width = 2 * Layout::GetMaximumControlHeight();
+  const unsigned min_columns = 3;
+  const unsigned max_column_width = rc.GetWidth() / min_columns;
+  const unsigned desired_column_width = Layout::PtScale(160);
+  const unsigned column_width = std::clamp(desired_column_width,
+                                           min_column_width, max_column_width);
+
   const unsigned row_height =
     std::max(2 * (Layout::GetTextPadding() + font.GetHeight()),
              Layout::GetMaximumControlHeight());
