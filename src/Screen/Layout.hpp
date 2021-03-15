@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_LAYOUT_HPP
 
 #include "ui/dim/Size.hpp"
-#include "Asset.hpp"
 #include "util/Compiler.h"
 
 namespace Layout
@@ -303,9 +302,6 @@ gcc_pure
 static inline unsigned
 GetHitRadius() noexcept
 {
-  if (!HasPointer())
-    return 0;
-
   return hit_radius;
 }
 

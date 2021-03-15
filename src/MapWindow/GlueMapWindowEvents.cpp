@@ -33,6 +33,7 @@ Copyright_License {
 #include "Pan.hpp"
 #include "util/Clamp.hpp"
 #include "Topography/Thread.hpp"
+#include "Asset.hpp"
 
 #ifdef USE_X11
 #include "ui/event/Globals.hpp"

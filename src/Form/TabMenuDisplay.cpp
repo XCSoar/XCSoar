@@ -30,6 +30,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 #include "util/StringFormat.hpp"
+#include "Asset.hpp"
 
 #include <cassert>
 

@@ -32,6 +32,7 @@ Copyright_License {
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
+#include "Asset.hpp"
 
 #include <algorithm>
 

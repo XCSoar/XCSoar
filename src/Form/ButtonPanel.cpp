@@ -27,6 +27,7 @@ Copyright_License {
 #include "ui/window/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "Asset.hpp"
 
 ButtonPanel::ButtonPanel(ContainerWindow &_parent, const ButtonLook &_look)
   :parent(_parent), look(_look), selected_index(-1) {

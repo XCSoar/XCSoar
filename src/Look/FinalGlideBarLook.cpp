@@ -24,6 +24,7 @@ Copyright_License {
 #include "FinalGlideBarLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/Colors.hpp"
+#include "Asset.hpp"
 
 void
 FinalGlideBarLook::Initialise(const Font &_font)

@@ -29,6 +29,7 @@
 #include "GliderLink/Traffic.hpp"
 #include "Math/Screen.hpp"
 #include "util/Macros.hpp"
+#include "Asset.hpp"
 
 void
 TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,

@@ -34,6 +34,7 @@ Copyright_License {
 #include "Math/Util.hpp"
 #include "Renderer/SymbolRenderer.hpp"
 #include "Geo/CoordinateFormat.hpp"
+#include "Asset.hpp"
 
 #include <algorithm>
 

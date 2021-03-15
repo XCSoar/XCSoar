@@ -26,6 +26,7 @@ Copyright_License {
 #include "Colors.hpp"
 #include "Screen/Layout.hpp"
 #include "AutoFont.hpp"
+#include "Asset.hpp"
 
 #ifdef HAVE_TEXT_CACHE
 #include "ui/canvas/custom/Cache.hpp"

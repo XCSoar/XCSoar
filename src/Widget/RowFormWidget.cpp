@@ -31,6 +31,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/LargeTextWindow.hpp"
 #include "ui/canvas/Font.hpp"
+#include "Asset.hpp"
 
 #include <cassert>
 
