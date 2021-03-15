@@ -62,7 +62,9 @@ ChartRenderer::ResetScale() noexcept
 ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
                              const PixelRect the_rc,
                              const bool has_padding) noexcept
-  :look(_look), canvas(the_canvas), rc(the_rc), padding_text(Layout::GetTextPadding())
+  :look(_look), canvas(the_canvas), rc(the_rc),
+   padding_text(Layout::GetTextPadding()),
+   minor_tick_size(Layout::VptScale(4))
 {
   SetPadding(has_padding);
   if (has_padding)
@@ -80,7 +82,6 @@ ChartRenderer::SetPadding(bool do_pad) noexcept
   } else
     rc_chart = rc;
   ResetScale();
-  minor_tick_size = Layout::VptScale(4);
 }
 
 void

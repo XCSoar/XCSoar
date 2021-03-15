@@ -46,7 +46,6 @@ class ChartRenderer
   Canvas &canvas;
   PixelRect rc;
   PixelRect rc_chart;
-  int minor_tick_size;
 
   ReusableArray<BulkPixelPoint> point_buffer;
 
@@ -63,6 +62,8 @@ class ChartRenderer
   void SetPadding(bool do_pad) noexcept;
 
   const int padding_text;
+
+  const int minor_tick_size;
 
 public:
   const PixelRect GetChartRect() const noexcept {
