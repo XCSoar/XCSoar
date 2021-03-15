@@ -69,20 +69,13 @@ namespace OpenGL {
 #endif
 
   /**
-   * Is the extension GL_ARB_framebuffer_object or
-   * GL_OES_framebuffer_object present?
-   */
-  extern bool frame_buffer_object;
-
-  /**
    * Which depth+stencil internalFormat is supported by the
-   * Renderbuffer?  This is only set if frame_buffer_object is true.
+   * Renderbuffer?
    */
   extern GLenum render_buffer_depth_stencil;
 
   /**
    * Which stencil internalFormat is supported by the Renderbuffer?
-   * This is only set if frame_buffer_object is true.
    */
   extern GLenum render_buffer_stencil;
 

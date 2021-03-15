@@ -38,8 +38,6 @@ namespace OpenGL {
   bool mapbuffer;
 #endif
 
-  bool frame_buffer_object;
-
   GLenum render_buffer_depth_stencil, render_buffer_stencil;
 
   UnsignedPoint2D window_size, viewport_size;

@@ -123,15 +123,6 @@ SupportsNonPowerOfTwoTextures()
     (HaveGLES() && SupportsNonPowerOfTwoTexturesGLES());
 }
 
-gcc_pure
-static bool
-CheckFBO()
-{
-  return OpenGL::IsExtensionSupported(HaveGLES()
-                                      ? "GL_OES_framebuffer_object"
-                                      : "GL_EXT_framebuffer_object");
-}
-
 /**
  * Check which depth+stencil internalType is available for a
  * Renderbuffer.  Returns GL_NONE if the Renderbuffer does not support
@@ -252,15 +243,12 @@ OpenGL::SetupContext()
   }
 #endif
 
-  frame_buffer_object = CheckFBO() && FBO::Initialise();
-  if (frame_buffer_object) {
-    render_buffer_depth_stencil = CheckDepthStencil();
+  render_buffer_depth_stencil = CheckDepthStencil();
 
-    render_buffer_stencil = CheckStencil();
-    if (!render_buffer_stencil)
-      /* fall back to a packed depth+stencil format */
-      render_buffer_stencil = render_buffer_depth_stencil;
-  }
+  render_buffer_stencil = CheckStencil();
+  if (!render_buffer_stencil)
+    /* fall back to a packed depth+stencil format */
+    render_buffer_stencil = render_buffer_depth_stencil;
 
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_DITHER);

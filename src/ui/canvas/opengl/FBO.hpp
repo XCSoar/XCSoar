@@ -32,37 +32,6 @@ Copyright_License {
  * Support for OpenGL framebuffer objects (GL_*_framebuffer_object).
  */
 namespace FBO {
-#if defined(HAVE_GLES) && !defined(HAVE_GLES2)
-  /* on GLES, the functions will be looked up dynamically */
-
-  static constexpr GLenum RENDERBUFFER = GL_RENDERBUFFER_OES;
-  static constexpr GLenum FRAMEBUFFER = GL_FRAMEBUFFER_OES;
-  static constexpr GLenum COLOR_ATTACHMENT0 = GL_COLOR_ATTACHMENT0_OES;
-  static constexpr GLenum DEPTH_ATTACHMENT = GL_DEPTH_ATTACHMENT_OES;
-  static constexpr GLenum STENCIL_ATTACHMENT = GL_STENCIL_ATTACHMENT_OES;
-  static constexpr GLenum DEPTH_STENCIL = GL_DEPTH_STENCIL_OES;
-
-  gcc_pure
-  bool Initialise();
-
-  void BindRenderbuffer(GLenum target, GLuint renderbuffer);
-  void DeleteRenderbuffers(GLsizei n, GLuint *renderbuffers);
-  void GenRenderbuffers(GLsizei n, GLuint *renderbuffers);
-  void RenderbufferStorage(GLenum target, GLenum internalformat,
-                           GLsizei width, GLsizei height);
-
-  void BindFramebuffer(GLenum target, GLuint framebuffer);
-  void DeleteFramebuffers(GLsizei n, GLuint *framebuffers);
-  void GenFramebuffers(GLsizei n, GLuint *framebuffers);
-  void FramebufferRenderbuffer(GLenum target, GLenum attachment,
-                               GLenum renderbuffertarget, GLuint renderbuffer);
-  void FramebufferTexture2D(GLenum target, GLenum attachment,
-                            GLenum textarget, GLuint texture,
-                            GLint level);
-
-#else
-  /* on OpenGL, we assume that the extension is built-in */
-
 #ifdef HAVE_GLES2
   static constexpr GLenum RENDERBUFFER = GL_RENDERBUFFER;
   static constexpr GLenum FRAMEBUFFER = GL_FRAMEBUFFER;
@@ -189,7 +158,6 @@ namespace FBO {
     glFramebufferTexture2DEXT(target, attachment, textarget, texture, level);
 #endif
   }
-#endif
 }
 
 #endif

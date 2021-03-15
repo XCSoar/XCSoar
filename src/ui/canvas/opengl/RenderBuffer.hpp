@@ -27,8 +27,7 @@ Copyright_License {
 #include "FBO.hpp"
 
 /**
- * Wrapper for an OpenGL renderbuffer object.  You must check
- * OpenGL::frame_buffer_object before using this class.
+ * Wrapper for an OpenGL renderbuffer object.
  */
 class GLRenderBuffer {
   GLuint id;

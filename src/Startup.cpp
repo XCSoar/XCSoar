@@ -209,7 +209,7 @@ Startup()
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
             "mda=%d "
 #endif
-            "npot=%d fbo=%d stencil=%#x",
+            "npot=%d stencil=%#x",
 #ifdef HAVE_OES_DRAW_TEXTURE
             OpenGL::oes_draw_texture,
 #endif
@@ -217,7 +217,6 @@ Startup()
             GLExt::HaveMultiDrawElements(),
 #endif
              OpenGL::texture_non_power_of_two,
-            OpenGL::frame_buffer_object,
             OpenGL::render_buffer_stencil);
 #endif
 
