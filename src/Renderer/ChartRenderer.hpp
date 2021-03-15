@@ -66,10 +66,6 @@ class ChartRenderer
   const int minor_tick_size;
 
 public:
-  const PixelRect GetChartRect() const noexcept {
-    return rc_chart;
-  }
-
   enum UnitFormat {
     NONE,
     NUMERIC,
@@ -80,6 +76,10 @@ public:
   ChartRenderer(const ChartLook &look, Canvas &the_canvas,
                 const PixelRect the_rc,
                 const bool has_padding=true) noexcept;
+
+  const PixelRect &GetChartRect() const noexcept {
+    return rc_chart;
+  }
 
   void DrawBarChart(const XYDataStore &lsdata) noexcept;
   void DrawFilledLineGraph(const XYDataStore &lsdata, bool swap=false) noexcept;
