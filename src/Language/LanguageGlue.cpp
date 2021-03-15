@@ -69,6 +69,7 @@ static MOLoader *mo_loader;
  */
 enum {
   LANG_NULL,
+  LANG_CATALAN,
   LANG_CHINESE,
   LANG_CHINESE_TRADITIONAL,
   LANG_CZECH,
@@ -95,6 +96,7 @@ enum {
   LANG_SLOVENIAN,
   LANG_SERBIAN,
   LANG_SWEDISH,
+  LANG_TELUGU,
   LANG_TURKISH,
   LANG_UKRAINIAN,
   LANG_VIETNAMESE,
@@ -103,6 +105,8 @@ enum {
 
 extern "C"
 {
+  extern const uint8_t ca_mo[];
+  extern const size_t ca_mo_size;
   extern const uint8_t cs_mo[];
   extern const size_t cs_mo_size;
   extern const uint8_t da_mo[];
@@ -153,6 +157,8 @@ extern "C"
   extern const size_t sr_mo_size;
   extern const uint8_t sv_mo[];
   extern const size_t sv_mo_size;
+  extern const uint8_t te_mo[];
+  extern const size_t te_mo_size;
   extern const uint8_t tr_mo[];
   extern const size_t tr_mo_size;
   extern const uint8_t uk_mo[];
@@ -166,6 +172,7 @@ extern "C"
 }
 
 const BuiltinLanguage language_table[] = {
+  { LANG_CATALAN, ca_mo, ca_mo_size, _T("ca.mo"), _T("Catalan") },
   { LANG_CHINESE, zh_CN_mo, zh_CN_mo_size, _T("zh_CN.mo"), _T("Simplified Chinese") },
   { LANG_CHINESE_TRADITIONAL, zh_Hant_mo, zh_Hant_mo_size, _T("zh_Hant.mo"), _T("Traditional Chinese") },
   { LANG_CZECH, cs_mo, cs_mo_size, _T("cs.mo"), _T("Czech") },
@@ -197,6 +204,7 @@ const BuiltinLanguage language_table[] = {
   { LANG_SLOVENIAN, sl_mo, sl_mo_size, _T("sl.mo"), _T("Slovenian") },
   { LANG_SERBIAN, sr_mo, sr_mo_size, _T("sr.mo"), _T("Serbian") },
   { LANG_SWEDISH, sv_mo, sv_mo_size, _T("sv.mo"), _T("Swedish") },
+  { LANG_TELUGU, te_mo, te_mo_size, _T("te.mo"), _T("Telugu") },
   { LANG_TURKISH, tr_mo, tr_mo_size, _T("tr.mo"), _T("Turkish") },
   { LANG_UKRAINIAN, uk_mo, uk_mo_size, _T("uk.mo"), _T("Ukranian") },
   { LANG_VIETNAMESE, vi_mo, vi_mo_size, _T("vi.mo"), _T("Vietnamese") },
