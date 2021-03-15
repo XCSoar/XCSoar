@@ -59,8 +59,6 @@ class ChartRenderer
 
   void SetPadding(bool do_pad) noexcept;
 
-  const int padding_text;
-
   const int minor_tick_size;
 
 public:

@@ -48,7 +48,6 @@ ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
                              const bool has_padding) noexcept
   :look(_look), canvas(the_canvas),
    rc(the_rc), rc_chart(rc),
-   padding_text(Layout::GetTextPadding()),
    minor_tick_size(Layout::VptScale(4))
 {
   SetPadding(has_padding);
@@ -166,7 +165,7 @@ ChartRenderer::DrawLabel(const TCHAR *text,
 #endif
     canvas.Select(look.label_blank_brush);
 
-    const PixelSize rect_size = tsize + PixelSize{padding_text * 2, padding_text * 2};
+    const PixelSize rect_size = tsize + PixelSize{Layout::GetTextPadding() * 2};
     canvas.DrawRectangle(PixelRect::Centered(pt, rect_size));
   }
   canvas.DrawText(pt + tsize / 2u, text);
@@ -426,7 +425,7 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step,
   line[2].y += minor_tick_size;
   line[3].y -= minor_tick_size;
 
-  const int y = line[1].y + padding_text;
+  const int y = line[1].y + Layout::GetTextPadding();
 
   auto start = (int)(x.min / tic_step) * tic_step;
 
@@ -487,7 +486,7 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step,
   line[2].x += minor_tick_size;
   line[3].x -= minor_tick_size;
 
-  const int x = line[0].x - padding_text;
+  const int x = line[0].x - Layout::GetTextPadding();
 
   auto start = (int)(y.min / tic_step) * tic_step;
 
@@ -514,7 +513,7 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step,
             const auto unit_text = FormatTicText(yval * unit_step / tic_step,
                                                  unit_step, unit_format);
             const auto c = canvas.CalcTextSize(unit_text.c_str());
-            canvas.DrawText({std::max(x - (int)c.width, rc.left + padding_text), ymin - (int)c.height / 2},
+            canvas.DrawText({std::max(x - (int)c.width, rc.left + (int)Layout::GetTextPadding()), ymin - (int)c.height / 2},
                             unit_text.c_str());
           }
         }
