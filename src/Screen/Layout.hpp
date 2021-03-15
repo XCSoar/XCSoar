@@ -44,12 +44,6 @@ extern unsigned min_screen_pixels;
 extern unsigned scale_1024;
 extern unsigned scale;
 
-/**
- * Fixed-point scaling factor for on-screen objects which don't grow
- * linearly with the screen resolution.
- */
-extern unsigned small_scale;
-
 extern unsigned pen_width_scale;
 extern unsigned fine_pen_width_scale;
 
@@ -181,16 +175,6 @@ FastScale(long x) noexcept
     return x;
 
   return x * (long)scale;
-}
-
-gcc_const
-static inline int
-SmallScale(int x) noexcept
-{
-  if constexpr (!ScaleSupported())
-    return x;
-
-  return (x * (int)small_scale) >> 10;
 }
 
 gcc_const
