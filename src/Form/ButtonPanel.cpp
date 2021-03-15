@@ -360,8 +360,10 @@ ButtonPanel::KeyPress(unsigned key_code)
       return true;
     } else if (key_code == KEY_RETURN) {
       auto &button = *buttons[selected_index];
-      if (button.IsVisible() && button.IsEnabled())
+      if (button.IsVisible() && button.IsEnabled()) {
         button.Click();
+        return true;
+      }
     }
   }
 
