@@ -83,7 +83,7 @@ public:
   void Draw(Canvas &canvas, const TraceComputer &trace_computer,
             const WindowProjection &projection, unsigned min_time);
 
-  gcc_malloc
+  [[gnu::malloc]]
   BulkPixelPoint *Prepare(unsigned n);
 
   void DrawPreparedPolyline(Canvas &canvas, unsigned n);

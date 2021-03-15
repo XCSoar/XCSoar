@@ -385,7 +385,7 @@ Draw(Canvas &canvas, PixelRect rc,
 /**
  * Calculate how many minutes have passed since #past_ms.
  */
-gcc_const
+[[gnu::const]]
 static unsigned
 SinceInMinutes(double now_s, uint32_t past_ms)
 {

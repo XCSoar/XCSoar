@@ -68,7 +68,7 @@ public:
     text_renderer.InvalidateLayout();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetMinimumButtonWidth() const override;
 
   void DrawButton(Canvas &canvas, const PixelRect &rc,

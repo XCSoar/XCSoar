@@ -29,7 +29,7 @@ Copyright_License {
 
 static constexpr int WPCIRCLESIZE = 2;
 
-gcc_pure
+[[gnu::pure]]
 static bool
 MapWaypointLabelListCompare(const WaypointLabelList::Label &e1,
                             const WaypointLabelList::Label &e2)

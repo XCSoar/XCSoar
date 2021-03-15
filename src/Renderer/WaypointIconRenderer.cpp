@@ -32,7 +32,7 @@ Copyright_License {
 
 #include <algorithm>
 
-gcc_pure
+[[gnu::pure]]
 static const MaskedIcon &
 GetWaypointIcon(const WaypointLook &look, const Waypoint &wp,
                 bool small_icons, const bool in_task)
