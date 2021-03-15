@@ -158,5 +158,5 @@ ButtonPanelWidget::SetFocus() noexcept
 bool
 ButtonPanelWidget::KeyPress(unsigned key_code) noexcept
 {
-  return widget->KeyPress(key_code) || buttons->KeyPress(key_code);
+  return buttons->KeyPress(key_code) || widget->KeyPress(key_code);
 }
