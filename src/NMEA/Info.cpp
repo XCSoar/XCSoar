@@ -180,6 +180,10 @@ NMEAInfo::Reset()
   device.Clear();
   secondary_device.Clear();
   flarm.Clear();
+
+#ifdef ANDROID
+  glink_data.Clear();
+#endif
 }
 
 void
@@ -201,6 +205,10 @@ NMEAInfo::ExpireWallClock()
     time_available.Clear();
     gps.Reset();
     flarm.Clear();
+
+#ifdef ANDROID
+    glink_data.Clear();
+#endif
   } else {
     time_available.Expire(clock, std::chrono::seconds(10));
   }
