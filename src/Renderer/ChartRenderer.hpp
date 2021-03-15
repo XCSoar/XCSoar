@@ -28,7 +28,6 @@ Copyright_License {
 #include "ui/dim/Rect.hpp"
 #include "ui/dim/BulkPoint.hpp"
 #include "Look/ChartLook.hpp"
-#include "Language/Language.hpp"
 
 #include <tchar.h>
 #include <vector>
@@ -121,7 +120,8 @@ public:
   void DrawYLabel(const TCHAR *text, const TCHAR *unit) noexcept;
 
   void DrawLabel(const TCHAR *text, double xv, double yv) noexcept;
-  void DrawNoData(const TCHAR *text = _("No data")) noexcept;
+  void DrawNoData(const TCHAR *text) noexcept;
+  void DrawNoData() noexcept;
 
   void DrawBlankRectangle(double x_min, double y_min,
                           double x_max, double y_max) noexcept;

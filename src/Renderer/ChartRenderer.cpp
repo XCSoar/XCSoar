@@ -24,6 +24,7 @@ Copyright_License {
 #include "ChartRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "Language/Language.hpp"
 #include "Math/LeastSquares.hpp"
 #include "util/StaticString.hxx"
 
@@ -194,6 +195,12 @@ ChartRenderer::DrawNoData(const TCHAR *text) noexcept
   canvas.SetBackgroundTransparent();
 
   canvas.DrawText(rc.CenteredTopLeft(canvas.CalcTextSize(text)), text);
+}
+
+void
+ChartRenderer::DrawNoData() noexcept
+{
+  DrawNoData(_("No data"));
 }
 
 void
