@@ -146,15 +146,13 @@ public:
     return capital_height;
   }
 
-#if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
   unsigned GetLineSpacing() const noexcept {
-    return height;
-  }
-#elif defined(ANDROID)
-  unsigned GetLineSpacing() const noexcept {
+#ifdef ANDROID
     return line_spacing;
-  }
+#else
+    return height;
 #endif
+  }
 };
 
 #endif
