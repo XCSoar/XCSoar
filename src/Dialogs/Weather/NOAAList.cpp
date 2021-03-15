@@ -114,6 +114,8 @@ NOAAListWidget::CreateButtons(ButtonPanel &buttons)
   add_button = buttons.Add(_("Add"), [this](){ AddClicked(); });
   update_button = buttons.Add(_("Update"), [this](){ UpdateClicked(); });
   remove_button = buttons.Add(_("Remove"), [this](){ RemoveClicked(); });
+
+  buttons.EnableCursorSelection();
 }
 
 void
