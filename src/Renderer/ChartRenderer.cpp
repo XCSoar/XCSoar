@@ -96,11 +96,15 @@ ChartRenderer::Begin() noexcept
 
   if (!x_label.empty())
     /* make room for X axis labels below the chart */
-    rc_chart.bottom -= Layout::VptScale(26);
+    rc_chart.bottom -= look.axis_label_font.GetHeight()
+      + Layout::GetTextPadding() * 2;
 
-  if (!y_label.empty())
+  if (!y_label.empty()) {
     /* make room for Y axis labels left of the chart */
-    rc_chart.left += Layout::VptScale(30);
+    rc_chart.left += std::max(look.axis_label_font.TextSize(y_label.c_str()).width
+                              + Layout::GetTextPadding() * 2,
+                              Layout::VptScale(30));
+  }
 
   if (!x_label.empty() || !y_label.empty())
     canvas.DrawFilledRectangle(rc_chart, COLOR_WHITE);
