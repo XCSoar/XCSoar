@@ -227,6 +227,11 @@ $$(OUT)/$(3)/thirdparty.stamp:
 $$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so: $$(OUT)/$(3)/thirdparty.stamp
 	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
 
+# extract symbolication files for Google Play
+ANDROID_SYMBOLICATION_BUILD += $$(ANDROID_BUILD)/symbols/$(2)/lib$(1).so
+$$(ANDROID_BUILD)/symbols/$(2)/lib$(1).so: $$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1)-ns.so | $$(ANDROID_BUILD)/symbols/$(2)/dirstamp
+	$$(Q)$$(ANDROID_TOOLCHAIN)/bin/llvm-objcopy$$(EXE) --strip-debug $$< $$@
+
 endef
 
 # Example: $(eval $(call generate-abi,xcsoar))
@@ -241,6 +246,11 @@ $(foreach NAME,$(ANDROID_LIB_NAMES),$(eval $(call generate-all-abis,$(NAME))))
 
 .PHONY: libs
 libs: $(ANDROID_THIRDPARTY_STAMPS)
+
+# Generate symbols.zip (symbolication file) for Google Play, which
+# allows Google Play to show symbol names in stack traces.
+$(TARGET_OUTPUT_DIR)/symbols.zip: $(ANDROID_SYMBOLICATION_BUILD)
+	cd $(ANDROID_BUILD)/symbols && zip $(abspath $@) */*.so
 
 else # !FAT_BINARY
 
