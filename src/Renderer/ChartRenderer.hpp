@@ -51,9 +51,7 @@ class ChartRenderer
 
   struct Axis {
     double scale, min, max;
-    bool unscaled;
-
-    void Reset() noexcept;
+    bool unscaled = true;
 
     [[gnu::pure]]
     int ToScreen(double value) const noexcept;
@@ -106,8 +104,6 @@ public:
   void ScaleXFromData(const LeastSquares &lsdata) noexcept;
   void ScaleYFromValue(double val) noexcept;
   void ScaleXFromValue(double val) noexcept;
-
-  void ResetScale() noexcept;
 
   [[gnu::pure]]
   static BasicStringBuffer<TCHAR, 32> FormatTicText(double val, double step,

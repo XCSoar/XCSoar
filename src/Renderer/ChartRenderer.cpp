@@ -37,26 +37,10 @@ Copyright_License {
 #include "ui/canvas/opengl/Scope.hpp"
 #endif
 
-void
-ChartRenderer::Axis::Reset() noexcept
-{
-  unscaled = true;
-  scale = 0;
-  min = 0;
-  max = 0;
-}
-
 int
 ChartRenderer::Axis::ToScreen(double value) const noexcept
 {
   return int((value - min) * scale);
-}
-
-void
-ChartRenderer::ResetScale() noexcept
-{
-  x.Reset();
-  y.Reset();
 }
 
 ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
@@ -81,7 +65,6 @@ ChartRenderer::SetPadding(bool do_pad) noexcept
     rc_chart.bottom = rc.bottom-Layout::VptScale(26);
   } else
     rc_chart = rc;
-  ResetScale();
 }
 
 void

@@ -79,7 +79,6 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
   auto hmin = fdim(nav_altitude, 3300);
   auto hmax = std::max(3300., nav_altitude + 1000.);
 
-  chart.ResetScale();
   chart.ScaleXFromValue(0);
   chart.ScaleXFromValue(vec.distance);
   chart.ScaleYFromValue(hmin);
