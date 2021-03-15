@@ -27,8 +27,9 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
+#include "Renderer/TextButtonRenderer.hpp"
 
-ArrowPagerWidget::Layout::Layout(PixelRect rc,
+ArrowPagerWidget::Layout::Layout(const ButtonLook &look, PixelRect rc,
                                  const Widget *extra_widget) noexcept
   :main(rc)
 {
@@ -40,7 +41,20 @@ ArrowPagerWidget::Layout::Layout(PixelRect rc,
   if (width > height) {
     /* landscape */
 
-    main.left += ::Layout::Scale(70);
+    const unsigned close_button_width =
+      TextButtonRenderer::GetMinimumButtonWidth(look, _("Close"));
+    const unsigned arrow_buttons_width =
+      2 * ::Layout::GetMaximumControlHeight();
+
+    unsigned left_column_width = std::max(close_button_width,
+                                          arrow_buttons_width);
+    if (extra_widget != nullptr) {
+      const auto max_size = extra_widget->GetMaximumSize();
+      if (max_size.width > left_column_width)
+        left_column_width = max_size.width;
+    }
+
+    main.left += left_column_width;
 
     /* close button on the bottom left */
 
@@ -130,7 +144,7 @@ void
 ArrowPagerWidget::Prepare(ContainerWindow &parent,
                           const PixelRect &rc) noexcept
 {
-  const Layout layout(rc, extra.get());
+  const Layout layout(look, rc, extra.get());
   PagerWidget::Prepare(parent, layout.main);
 
   if (extra != nullptr)
@@ -153,7 +167,7 @@ ArrowPagerWidget::Prepare(ContainerWindow &parent,
 void
 ArrowPagerWidget::Show(const PixelRect &rc) noexcept
 {
-  const Layout layout(rc, extra.get());
+  const Layout layout(look, rc, extra.get());
   PagerWidget::Show(layout.main);
 
   previous_button.MoveAndShow(layout.previous_button);
@@ -180,7 +194,7 @@ ArrowPagerWidget::Hide() noexcept
 void
 ArrowPagerWidget::Move(const PixelRect &rc) noexcept
 {
-  const Layout layout(rc, extra.get());
+  const Layout layout(look, rc, extra.get());
   PagerWidget::Move(layout.main);
 
   previous_button.Move(layout.previous_button);

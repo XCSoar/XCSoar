@@ -49,7 +49,8 @@ class ArrowPagerWidget : public PagerWidget {
     PixelRect main;
     PixelRect extra;
 
-    Layout(PixelRect rc, const Widget *extra) noexcept;
+    Layout(const ButtonLook &look, PixelRect rc,
+           const Widget *extra) noexcept;
   };
 
   const ButtonLook &look;
