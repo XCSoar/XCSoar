@@ -139,6 +139,8 @@ TaskEditPanel::CreateButtons(ButtonPanel &buttons) noexcept
                                [this](){ ReverseTask(); });
   clear_all_button = buttons.Add(_("Clear All"),
                                  [this](){ OnClearAllClicked(); });
+
+  buttons.EnableCursorSelection();
 }
 
 void
