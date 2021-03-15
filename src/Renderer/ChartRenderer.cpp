@@ -85,16 +85,21 @@ ChartRenderer::Begin() noexcept
 {
   rc_chart = rc;
 
-  if (!x_label.empty())
+  if (!x_label.empty()) {
     /* make room for X axis labels below the chart */
-    rc_chart.bottom -= look.axis_label_font.GetHeight()
-      + Layout::GetTextPadding() * 2;
+    const auto size = look.axis_label_font.TextSize(x_label.c_str());
+
+    rc_chart.bottom -= size.height + Layout::GetTextPadding() * 2;
+    x_label_left = rc.right - size.width - Layout::GetTextPadding() * 2;
+  }
 
   if (!y_label.empty()) {
     /* make room for Y axis labels left of the chart */
-    rc_chart.left += std::max(look.axis_label_font.TextSize(y_label.c_str()).width
-                              + Layout::GetTextPadding() * 2,
+    const auto size = look.axis_label_font.TextSize(y_label.c_str());
+
+    rc_chart.left += std::max(size.width + Layout::GetTextPadding() * 2,
                               Layout::VptScale(30));
+    y_label_bottom = rc.top - size.height - Layout::GetTextPadding() * 2;
   }
 
   if (!x_label.empty() || !y_label.empty())
@@ -473,7 +478,7 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step,
                                                  unit_step, unit_format);
             const auto w = canvas.CalcTextSize(unit_text.c_str()).width;
             xmin -= w/2;
-            if ((xmin >= next_text) && ((int)(xmin + Layout::VptScale(30)) < rc_chart.right)) {
+            if ((xmin >= next_text) && ((int)(xmin + Layout::VptScale(30)) < x_label_left)) {
               canvas.DrawText({xmin, y}, unit_text.c_str());
               next_text = xmin + w + Layout::GetTextPadding();
             }
@@ -529,7 +534,7 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step,
           }
           canvas.DrawLine(line[0], line[1]);
 
-          if ((unit_format != UnitFormat::NONE) && (ymin > (int)(rc.top + Layout::VptScale(30)))) {
+          if ((unit_format != UnitFormat::NONE) && (ymin > (int)(y_label_bottom + Layout::VptScale(30)))) {
             const auto unit_text = FormatTicText(yval * unit_step / tic_step,
                                                  unit_step, unit_format);
             const auto c = canvas.CalcTextSize(unit_text.c_str());

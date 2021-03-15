@@ -65,6 +65,8 @@ class ChartRenderer
     int ToScreen(double value) const noexcept;
   } x, y;
 
+  int x_label_left, y_label_bottom;
+
   const int minor_tick_size;
 
 public:
