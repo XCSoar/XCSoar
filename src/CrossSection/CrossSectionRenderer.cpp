@@ -39,10 +39,11 @@ CrossSectionRenderer::CrossSectionRenderer(const CrossSectionLook &_look,
                                            const AirspaceLook &_airspace_look,
                                            const ChartLook &_chart_look,
                                            const bool &_inverse)
-    :inverse(_inverse), look(_look), chart_look(_chart_look), airspace_renderer(_airspace_look),
-   terrain_renderer(look), terrain(NULL), airspace_database(NULL),
-   start(GeoPoint::Invalid()),
-   vec(50000, Angle::Zero()) {}
+  :inverse(_inverse), look(_look), chart_look(_chart_look),
+   airspace_renderer(_airspace_look),
+   terrain_renderer(look)
+ {
+ }
 
 void
 CrossSectionRenderer::ReadBlackboard(const MoreData &_gps_info,
