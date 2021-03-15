@@ -60,7 +60,7 @@ ChartRenderer::ResetScale() noexcept
 }
 
 ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
-                             const PixelRect the_rc,
+                             const PixelRect &the_rc,
                              const bool has_padding) noexcept
   :look(_look), canvas(the_canvas), rc(the_rc),
    padding_text(Layout::GetTextPadding()),

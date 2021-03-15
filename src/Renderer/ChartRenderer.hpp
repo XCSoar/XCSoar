@@ -74,7 +74,7 @@ public:
 
 public:
   ChartRenderer(const ChartLook &look, Canvas &the_canvas,
-                const PixelRect the_rc,
+                const PixelRect &the_rc,
                 const bool has_padding=true) noexcept;
 
   const PixelRect &GetChartRect() const noexcept {
