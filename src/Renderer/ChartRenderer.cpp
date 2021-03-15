@@ -27,10 +27,11 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Math/LeastSquares.hpp"
 #include "util/StaticString.hxx"
+#include "util/StringBuffer.hxx"
+#include "util/StringFormat.hpp"
 #include "util/ConstBuffer.hxx"
 
 #include <cassert>
-#include <windef.h> /* for MAX_PATH */
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
@@ -397,21 +398,25 @@ ChartRenderer::DrawLineGraph(const XYDataStore &lsdata,
   DrawLineGraph(lsdata, look.GetPen(style), swap);
 }
 
-void
-ChartRenderer::FormatTicText(TCHAR *text, const double val, const double step,
+BasicStringBuffer<TCHAR, 32>
+ChartRenderer::FormatTicText(const double val, const double step,
                              UnitFormat units) noexcept
 {
+  BasicStringBuffer<TCHAR, 32> buffer;
+
   if (units == UnitFormat::TIME) {
     int hh = (int)(val);
     int mm = (int)((val-hh)*60);
-    _stprintf(text, _T("%02d:%02d"), hh, mm);
+    StringFormat(buffer.data(), buffer.capacity(), _T("%02d:%02d"), hh, mm);
   } else {
     if (step < 1) {
-      _stprintf(text, _T("%.1f"), val);
+      StringFormat(buffer.data(), buffer.capacity(), _T("%.1f"), val);
     } else {
-      _stprintf(text, _T("%.0f"), val);
+      StringFormat(buffer.data(), buffer.capacity(), _T("%.0f"), val);
     }
   }
+
+  return buffer;
 }
 
 void
@@ -463,12 +468,12 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step,
           canvas.DrawLine(line[0], line[1]);
 
           if (unit_format != UnitFormat::NONE) {
-            TCHAR unit_text[MAX_PATH];
-            FormatTicText(unit_text, xval * unit_step / tic_step, unit_step, unit_format);
-            const auto w = canvas.CalcTextSize(unit_text).width;
+            const auto unit_text = FormatTicText(xval * unit_step / tic_step,
+                                                 unit_step, unit_format);
+            const auto w = canvas.CalcTextSize(unit_text.c_str()).width;
             xmin -= w/2;
             if ((xmin >= next_text) && ((int)(xmin + Layout::VptScale(30)) < rc_chart.right)) {
-              canvas.DrawText({xmin, y}, unit_text);
+              canvas.DrawText({xmin, y}, unit_text.c_str());
               next_text = xmin + w + Layout::GetTextPadding();
             }
           }
@@ -524,10 +529,11 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step,
           canvas.DrawLine(line[0], line[1]);
 
           if ((unit_format != UnitFormat::NONE) && (ymin > (int)(rc.top + Layout::VptScale(30)))) {
-            TCHAR unit_text[MAX_PATH];
-            FormatTicText(unit_text, yval * unit_step / tic_step, unit_step, unit_format);
-            const auto c = canvas.CalcTextSize(unit_text);
-            canvas.DrawText({std::max(x - (int)c.width, rc.left + padding_text), ymin - (int)c.height / 2}, unit_text);
+            const auto unit_text = FormatTicText(yval * unit_step / tic_step,
+                                                 unit_step, unit_format);
+            const auto c = canvas.CalcTextSize(unit_text.c_str());
+            canvas.DrawText({std::max(x - (int)c.width, rc.left + padding_text), ymin - (int)c.height / 2},
+                            unit_text.c_str());
           }
         }
       }

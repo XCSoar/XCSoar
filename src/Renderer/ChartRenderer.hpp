@@ -32,6 +32,7 @@ Copyright_License {
 #include <tchar.h>
 
 template<typename T> struct ConstBuffer;
+template<typename T, std::size_t CAPACITY> class BasicStringBuffer;
 class XYDataStore;
 class LeastSquares;
 class Canvas;
@@ -106,8 +107,9 @@ public:
 
   void ResetScale() noexcept;
 
-  static void FormatTicText(TCHAR *text, double val, double step,
-                            UnitFormat units) noexcept;
+  [[gnu::pure]]
+  static BasicStringBuffer<TCHAR, 32> FormatTicText(double val, double step,
+                                                    UnitFormat units) noexcept;
 
   void DrawXGrid(double tic_step, double unit_step,
                  UnitFormat units = UnitFormat::NONE) noexcept;
