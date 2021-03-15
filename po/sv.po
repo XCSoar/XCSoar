@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-08 15:59+0100\n"
-"PO-Revision-Date: 2020-07-25 19:34+0000\n"
+"PO-Revision-Date: 2021-02-09 02:25+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1199,10 +1199,10 @@ msgstr ""
 msgid "Next altitude difference"
 msgstr "Nästa höjdskillnad"
 
-#: src/InfoBoxes/Content/Factory.cpp:236
-#, no-c-format
+#: src/InfoBoxes/Content/Factory.cpp:235
+#, fuzzy, no-c-format
 msgid "WP AltD"
-msgstr ""
+msgstr "WP AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:237
 #, no-c-format
@@ -2602,7 +2602,7 @@ msgstr "Nästa MC0 höjdskillnad"
 #: src/InfoBoxes/Content/Factory.cpp:880
 #, no-c-format
 msgid "WP MC0 AltD"
-msgstr ""
+msgstr "WP MC0 AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:881
 #, no-c-format
@@ -3690,6 +3690,13 @@ msgid ""
 "the mixing results from shear turbulence rather than thermal mixing this "
 "parameter is not useful for glider flying. "
 msgstr ""
+"Blandskiktets topphöjd, vilket för termisk konvektion är medelhöjden för "
+"torrtermik. Över plan terräng kommer max termikhöjd vara lägre pga "
+"farkostens sjunkhastighet och andra faktorer. Vid förekomst av moln (som "
+"innebär ytterligare stig skapat av \"molnsug\") kommer höjden på uppvinden "
+"överstiga denna prognos fastän max kurvhöjd begränsas av molnbasen. Vidare, "
+"när blandning är resultat av turbulens snarare än termisk inblandning är "
+"denna parameter ej användbar för glidflygning. "
 
 #: src/Weather/Rasp/RaspStore.cpp:68
 #, no-c-format
@@ -3708,6 +3715,13 @@ msgid ""
 "the maximum thermalling height may instead be limited by the cloud base.  "
 "Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
+"Denna parameter skattar höjd över mark vid vilken medelstiget för torrtermik "
+"faller under 225 fpm och förväntas ge bättre kvantitativt tal för "
+"blåtermikens maxhöjd jämfört med topphöjd på blandskikt, speciellt när "
+"blandning är orsakad av vertikal vindskjuvning snarare än termik. Notera: "
+"antagandet tenderar underskatta max termikhöjd vid torra förhållanden. Vid "
+"förekomst av moln kan max kurvhöjd istället begränsas av molnbas. Ämnad för "
+"blåtermik tar denna parameter ej hänsyn till molnsug."
 
 #: src/Weather/Rasp/RaspStore.cpp:73
 #, no-c-format
@@ -3724,6 +3738,12 @@ msgid ""
 "humidity within the BL.  The cloud base height is not predicted, but is "
 "expected to be below the BL Top height."
 msgstr ""
+"Denna parameter ger ytterligare sätt att bedöma molnbildning inom "
+"blandningslager och kan användas antingen ihop med eller istället för andra "
+"parametrar för skattning av moln. Den antar ett väldigt enkelt samband "
+"mellan procent molntäckning och maximal relativ fuktighet inom "
+"blandningslagret. Höjd på molnbas förutsägs ej men förväntas vara lägre än "
+"toppen på blandningslagret."
 
 #: src/Weather/Rasp/RaspStore.cpp:78
 #, no-c-format
@@ -3759,6 +3779,13 @@ msgid ""
 "maximum thermalling height may instead be limited by the cloud base.  Being "
 "for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
+"Denna parameter skattar höjd vid vilken medelstiget för torrtermik faller "
+"under 225 fpm och förväntas ge bättre kvantitativt tal för blåtermikens "
+"maxhöjd jämfört med topphöjd på blandskikt, speciellt när blandning är "
+"orsakad av vertikal vindskjuvning snarare än termik. Notera: antagandet "
+"tenderar underskatta max termikhöjd vid torra förhållanden. Vid förekomst av "
+"moln kan max kurvhöjd istället begränsas av molnbas. Ämnad för blåtermik tar "
+"denna parameter ej hänsyn till molnsug."
 
 #: src/Weather/Rasp/RaspStore.cpp:88
 #, no-c-format

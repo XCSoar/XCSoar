@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-08 15:59+0100\n"
-"PO-Revision-Date: 2020-09-11 17:17+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2021-02-13 01:19+0000\n"
+"Last-Translator: Alex <alexandersimm2@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
 "translations/de/>\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -4185,10 +4185,9 @@ msgstr "Fehler"
 msgid "Update available"
 msgstr "Kein TAF verfügbar!"
 
-#: src/Dialogs/FileManager.cpp:770 src/Dialogs/DownloadFilePicker.cpp:364
-#, fuzzy
+#: src/Dialogs/FileManager.cpp:689 src/Dialogs/DownloadFilePicker.cpp:361
 msgid "Failed to download the repository index."
-msgstr "Download des repository index fehlgeschlagen."
+msgstr "Download des Repository-Index fehlgeschlagen."
 
 #: src/Dialogs/FileManager.cpp:780 src/Dialogs/FileManager.cpp:805
 #: src/Dialogs/DownloadFilePicker.cpp:377 Data/Input/default.xci:605

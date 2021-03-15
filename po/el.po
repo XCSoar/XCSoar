@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-08 15:59+0100\n"
-"PO-Revision-Date: 2013-05-01 14:01+0000\n"
-"Last-Translator: Filippos Kolyvas <fkolyvas@gmail.com>\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-02-09 02:25+0000\n"
+"Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/xcsoar/"
+"translations/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Launchpad-Export-Date: 2013-05-02 12:24+0000\n"
-"X-Generator: Launchpad (build 16580)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -2934,7 +2936,7 @@ msgstr "Πληρ/ρίες"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:166
 #, no-c-format
 msgid "Setup"
-msgstr "Ρυθμίσεις"
+msgstr "Ρύθμιση"
 
 #: src/InfoBoxes/Content/Altitude.cpp:70 src/InfoBoxes/Content/Altitude.cpp:128
 #: src/InfoBoxes/Content/Altitude.cpp:194
@@ -3820,11 +3822,11 @@ msgstr ""
 #: src/Dialogs/Message.cpp:107 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:59
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:62
 msgid "Yes"
-msgstr "ΝΑΙ"
+msgstr "Ναι"
 
 #: src/Dialogs/Message.cpp:111
 msgid "No"
-msgstr "ΟΧΙ"
+msgstr "Όχι"
 
 #: src/Dialogs/Message.cpp:118
 msgid "Retry"
@@ -4216,7 +4218,7 @@ msgstr ""
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:72
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:83
 msgid "Reboot"
-msgstr "ΕΠΑΝ/ΝΗΣΗ"
+msgstr "Επανεκκίνηση"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:132
 msgid "Do you really want to delete all flights from the device?"
@@ -5239,7 +5241,7 @@ msgstr "ΕΝΕΡΓΟ"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:188
 msgid "Active"
-msgstr "ΕΝΕΡΓΟ"
+msgstr "Ενεργό"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:228
 #, c-format
@@ -5377,27 +5379,29 @@ msgstr ""
 
 #: src/Dialogs/ReplayDialog.cpp:90
 msgid "Rate"
-msgstr "Βαθμός"
+msgstr "Βαθμολόγηση"
 
 #: src/Dialogs/ReplayDialog.cpp:91
 msgid ""
 "Time acceleration of replay. Set to 0 for pause, 1 for normal real-time "
 "replay."
 msgstr ""
+"Επιτάχυνση χρόνου επανάληψης. Ορίστε σε 0 για παύση, 1 για κανονική "
+"επανάληψη σε πραγματικό χρόνο."
 
 #: src/Dialogs/ReplayDialog.cpp:111 src/Dialogs/ReplayDialog.cpp:153
 #: Data/Input/default.xci:613
 msgid "Replay"
-msgstr ""
+msgstr "Επανάληψη"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:60 src/Dialogs/StartupDialog.cpp:93
 #: Data/Input/default.xci:922
 msgid "Quit"
-msgstr ""
+msgstr "Έξοδος"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:113
 msgid "What do you want to do?"
-msgstr ""
+msgstr "Τι θέλετε να κάνετε;"
 
 #: src/Dialogs/StartupDialog.cpp:163
 msgid "Profile"
