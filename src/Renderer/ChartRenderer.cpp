@@ -27,6 +27,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Math/LeastSquares.hpp"
 #include "util/StaticString.hxx"
+#include "util/ConstBuffer.hxx"
 
 #include <cassert>
 #include <windef.h> /* for MAX_PATH */
@@ -547,15 +548,15 @@ ChartRenderer::ScreenY(double _y) const noexcept
 }
 
 void
-ChartRenderer::DrawFilledY(const std::vector<std::pair<double, double>> &vals,
+ChartRenderer::DrawFilledY(ConstBuffer<std::pair<double, double>> vals,
                            const Brush &brush, const Pen *pen) noexcept
 {
-  if (vals.size()<2)
+  if (vals.size < 2)
     return;
-  const unsigned fsize = vals.size()+2;
+  const unsigned fsize = vals.size + 2;
   auto *line = point_buffer.get(fsize);
 
-  for (unsigned i = 0; i < vals.size(); ++i)
+  for (std::size_t i = 0; i < vals.size; ++i)
     line[i + 2] = ToScreen(vals[i].first, vals[i].second);
 
   line[0].x = rc_chart.left;

@@ -109,9 +109,11 @@ ThermalBandRenderer::DrawThermalProfile(const ThermalBand &thermal_band,
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
 #endif
-    chart.DrawFilledY(thermal_profile, brush, pen);
+    chart.DrawFilledY({thermal_profile.data(), thermal_profile.size()},
+                      brush, pen);
   } else {
-    chart.DrawFilledY(thermal_profile, brush, pen);
+    chart.DrawFilledY({thermal_profile.data(), thermal_profile.size()},
+                      brush, pen);
   }
 }
 

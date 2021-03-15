@@ -30,8 +30,8 @@ Copyright_License {
 #include "Look/ChartLook.hpp"
 
 #include <tchar.h>
-#include <vector>
 
+template<typename T> struct ConstBuffer;
 class XYDataStore;
 class LeastSquares;
 class Canvas;
@@ -91,7 +91,8 @@ public:
   void DrawFilledLine(double xmin, double ymin,
                       double xmax, double ymax,
                       const Brush &brush) noexcept;
-  void DrawFilledY(const std::vector<std::pair<double, double>> &vals, const Brush &brush,
+  void DrawFilledY(ConstBuffer<std::pair<double, double>> vals,
+                   const Brush &brush,
                    const Pen *pen=nullptr) noexcept;
   void DrawDot(double x, double y, const unsigned width) noexcept;
   void DrawImpulseGraph(const XYDataStore &lsdata, const Pen &pen) noexcept;
