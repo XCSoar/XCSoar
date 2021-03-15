@@ -126,8 +126,8 @@ ButtonPanelWidget::Show(const PixelRect &rc) noexcept
 {
   assert(buttons != nullptr);
 
-  widget->Show(UpdateLayout(rc));
   buttons->ShowAll();
+  widget->Show(UpdateLayout(rc));
 }
 
 bool
