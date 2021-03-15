@@ -49,7 +49,7 @@ namespace Layout
  * Is the given pixel size smaller than 5 inch?
  */
 static constexpr bool
-IsSmallScreen(unsigned size, unsigned dpi)
+IsSmallScreen(unsigned size, unsigned dpi) noexcept
 {
   return size < dpi * 5;
 }
@@ -59,7 +59,7 @@ IsSmallScreen(unsigned size, unsigned dpi)
  */
 static constexpr bool
 IsSmallScreen(unsigned width, unsigned height,
-              unsigned x_dpi, unsigned y_dpi)
+              unsigned x_dpi, unsigned y_dpi) noexcept
 {
   return width < height
     ? IsSmallScreen(width, x_dpi)
@@ -71,13 +71,13 @@ IsSmallScreen(unsigned width, unsigned height,
  */
 static constexpr bool
 IsSmallScreen(PixelSize size,
-              unsigned x_dpi, unsigned y_dpi)
+              unsigned x_dpi, unsigned y_dpi) noexcept
 {
   return IsSmallScreen(size.width, size.height, x_dpi, y_dpi);
 }
 
 void
-Layout::Initialize(PixelSize new_size, unsigned ui_scale, unsigned custom_dpi)
+Layout::Initialize(PixelSize new_size, unsigned ui_scale, unsigned custom_dpi) noexcept
 {
   const unsigned width = new_size.width, height = new_size.height;
 
