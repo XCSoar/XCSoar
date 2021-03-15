@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2020-12-06 08:29+0000\n"
+"PO-Revision-Date: 2021-03-15 23:54+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -418,7 +418,7 @@ msgstr "ne-MAT otočné body"
 #: src/Task/ValidationErrorStrings.cpp:43
 #, no-c-format
 msgid "Wrong shape"
-msgstr ""
+msgstr "Špatný tvar"
 
 #: src/Airspace/AirspaceGlue.cpp:84
 msgid "Loading Airspace File..."
@@ -2720,7 +2720,7 @@ msgstr "Efektivita letu v úloze"
 #: src/InfoBoxes/Content/Factory.cpp:930
 #, no-c-format
 msgid "Cruise Eff"
-msgstr "Efektivita"
+msgstr "Ef přeskoku"
 
 #: src/InfoBoxes/Content/Factory.cpp:931
 #, no-c-format
@@ -3047,7 +3047,7 @@ msgstr "Nastav aktivní frekvenci"
 #: src/InfoBoxes/Content/Factory.cpp:1074
 #, no-c-format
 msgid "Act Freq"
-msgstr ""
+msgstr "Akt frekv"
 
 #: src/InfoBoxes/Content/Factory.cpp:1075
 #, fuzzy, no-c-format
@@ -3237,7 +3237,7 @@ msgstr "Kroužení"
 #: src/InfoBoxes/InfoBoxSettings.cpp:80
 #, no-c-format
 msgid "Cruise"
-msgstr "Let"
+msgstr "Přeskok"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:81
 #, no-c-format
@@ -4040,7 +4040,7 @@ msgstr "Vestavěné GPS @ sensory"
 
 #: src/Device/Config.cpp:248
 msgid "GliderLink traffic receiver"
-msgstr ""
+msgstr "GliderLink přijímač"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:93 src/Dialogs/WidgetDialog.cpp:264
@@ -4240,7 +4240,7 @@ msgstr "IP adresa"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I²C bus"
-msgstr ""
+msgstr "I²C bus"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "Select the description or bus number that matches your configuration."
@@ -4248,7 +4248,7 @@ msgstr "Vyberte popis nebo číslo sběrnice, které odpovídá vaší konfigura
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:623
 msgid "I²C addr"
-msgstr ""
+msgstr "I²C adresa"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:623
 #, fuzzy
@@ -4630,7 +4630,7 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:112
 msgid "This forces the variometer into circling or cruise mode"
-msgstr "Přepíná variometr mezi režimy kroužení a přeskokem"
+msgstr "Přepíná variometr mezi režimy kroužení a přeskoku"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:126
 msgid "Vario Demo"
@@ -6301,7 +6301,7 @@ msgstr "Prostory budou vyplněny transparentně."
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:46
 #, no-c-format
 msgid "Disable final glide bar."
-msgstr "Deaktivuj dokluzový indikátor."
+msgstr "Deaktivovat dokluzový indikátor."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:48
 #, no-c-format
@@ -6326,12 +6326,12 @@ msgstr "Vlevo dole"
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:60
 #, no-c-format
 msgid "Show thermal assistant in bottom left."
-msgstr ""
+msgstr "Zobrazit termický asistent vlevo dole."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:62
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom left (avoid infoboxes)"
-msgstr "Auto (u InfoBoxů)"
+msgstr "Vlevo dole (mimo InfoBoxy)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:63
 #, no-c-format
@@ -6339,6 +6339,8 @@ msgid ""
 "Show thermal assistant in bottom left, above/to right of infoboxes (if "
 "there)."
 msgstr ""
+"Zobrazit termický asistent vlevo dole, nad, nebo vpravo od InfoBoxů (pokud "
+"jsou zobrazeny)."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
 #, fuzzy, no-c-format
@@ -6348,18 +6350,20 @@ msgstr "Vpravo dole"
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:66
 #, no-c-format
 msgid "Show thermal assistant in bottom right."
-msgstr ""
+msgstr "Zobrazit termický asistent vpravo dole."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom right (avoid infoboxes)"
-msgstr "Auto (u InfoBoxů)"
+msgstr "Vpravo dole (mimo InfoBoxy)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:69
 #, no-c-format
 msgid ""
 "Show thermal assistant in bottom right above/to left of infoboxes (if there)."
 msgstr ""
+"Zobrazit termický asistent vpravo dole, nad, nebo vlevo od InfoBoxů (pokud "
+"jsou zobrazeny)."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:107
 msgid ""
@@ -6391,6 +6395,8 @@ msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
 "the main screen."
 msgstr ""
+"Aktivace a výběr umístění termického adistenta, zobrazeného jako překryv "
+"hlavní obrazovky."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:121
 msgid "Thermal band"
@@ -6649,23 +6655,24 @@ msgstr "Vlnový asistent"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:123
 msgid "Cruise/Circling period"
-msgstr ""
+msgstr "Přeskok -> kroužení"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:124
 msgid ""
 "How many seconds of turning before changing from cruise to circling mode."
 msgstr ""
+"Po kolika sekundách krouženi dojde ke změně režimu přeskoku na kroužení."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:131
-#, fuzzy
 msgid "Circling/Cruise period"
-msgstr "Orientace v kroužení"
+msgstr "Kroužení -> přeskok"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:132
 msgid ""
 "How many seconds of flying straight before changing from circling to cruise "
 "mode."
 msgstr ""
+"Po kolika sekundách přímého letu dojde ke změně režimu kroužení na přeskok."
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:88
 msgid "Use final glide mode"
@@ -6809,7 +6816,7 @@ msgstr "8 rozděleno"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:83
 #, no-c-format
 msgid "12 Split in 3 rows"
-msgstr ""
+msgstr "12 rozděleno / 3 řady"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:85
 #, no-c-format
@@ -7099,7 +7106,7 @@ msgstr "Jméno pilota"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:74
 msgid "Time step cruise"
-msgstr "Interval záznamu let"
+msgstr "Interval záznamu přeskok"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:75
 msgid "This is the time interval between logged points when not circling."
@@ -7325,8 +7332,8 @@ msgid ""
 "For cruise mode.  Displayed when 'Auto' is selected and ship is below final "
 "glide altitude"
 msgstr ""
-"Pro režim přímého letu. Zobrazí se, pokud je nastaveno na \"Auto\" a letadlo "
-"je pod výškou dokluzu."
+"Pro režim přeskoku. Zobrazí se, pokud je nastaveno na \"Auto\" a letadlo je "
+"pod výškou dokluzu."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:217
 #, no-c-format
@@ -7908,9 +7915,9 @@ msgid "No SkyLines traffic is drawn."
 msgstr "Šipka větru nebude zobrazena."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Symbol"
-msgstr ""
+msgstr "Symbol"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 #, no-c-format
@@ -7920,7 +7927,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
 msgid "Symbol and Name"
-msgstr ""
+msgstr "Symbol a jméno"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
@@ -9603,32 +9610,32 @@ msgstr "Spodní limit pásma ticha v kroužení"
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:56
 #, no-c-format
 msgid "Cruise deadband type"
-msgstr "Typ pásma ticha v přímém letu"
+msgstr "Typ pásma ticha pro přeskok"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:57
 #, no-c-format
 msgid "Type of dead band used in cruise mode."
-msgstr "Typ pásma ticha použité v režimu přímého letu."
+msgstr "Typ pásma ticha použité v režimu přeskoku."
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:61
 #, no-c-format
 msgid "Cruise hi cutoff"
-msgstr "Horní ztlumení v přímém letu"
+msgstr "Horní ztlumení na přeskoku"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:62
 #, no-c-format
 msgid "High limit of cruise dead band"
-msgstr "Horní limit pro pásmo ticha v přímém letu"
+msgstr "Horní limit pro pásmo ticha v režimu přeskoku"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:66
 #, no-c-format
 msgid "Cruise low cutoff"
-msgstr "Spodní ztlumení v přímém letu"
+msgstr "Spodní ztlumení na přeskoku"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:67
 #, no-c-format
 msgid "Low limit of cruise dead band"
-msgstr "Spodní limit pro pásmo ticha v přímém letu"
+msgstr "Spodní limit pro pásmo ticha v režimu přeskoku"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:72
 #, no-c-format
@@ -9685,12 +9692,12 @@ msgstr "Časové měřítko průměrování vária."
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:86
 #, no-c-format
 msgid "Cruise averager scale"
-msgstr "Měřítko pro průměrování v přímém letu"
+msgstr "Měřítko pro průměrování překoku"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:87
 #, no-c-format
 msgid "Time scale used for cruise speed command averager."
-msgstr "Časové měřítko pro průměrování Speed Command."
+msgstr "Časové měřítko pro průměrování Speed Command-u."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:91
 #, no-c-format
@@ -9738,12 +9745,12 @@ msgstr "Časová konstanta Low Pass filtru variometru v režimu kroužení."
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:111
 #, no-c-format
 msgid "Filter cruise"
-msgstr "Filtr let"
+msgstr "Filtr pro přeskok"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:112
 #, no-c-format
 msgid "Variometer low pass filter time constant in cruise mode."
-msgstr "Časová konstanta Low Pass filtru variometru v režimu přímého letu."
+msgstr "Časová konstanta Low Pass filtru variometru v režimu přeskoku."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:116
 #, no-c-format
@@ -10325,6 +10332,8 @@ msgid ""
 "Lock\n"
 "Screen"
 msgstr ""
+"Zamkni\n"
+"obrazovku"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:775
 msgid ""
