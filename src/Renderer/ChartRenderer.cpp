@@ -46,7 +46,8 @@ ChartRenderer::Axis::ToScreen(double value) const noexcept
 ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
                              const PixelRect &the_rc,
                              const bool has_padding) noexcept
-  :look(_look), canvas(the_canvas), rc(the_rc),
+  :look(_look), canvas(the_canvas),
+   rc(the_rc), rc_chart(rc),
    padding_text(Layout::GetTextPadding()),
    minor_tick_size(Layout::VptScale(4))
 {
@@ -60,11 +61,8 @@ ChartRenderer::SetPadding(bool do_pad) noexcept
 {
   if (do_pad) {
     rc_chart.left = rc.left+Layout::VptScale(30);
-    rc_chart.right = rc.right;
-    rc_chart.top = rc.top;
     rc_chart.bottom = rc.bottom-Layout::VptScale(26);
-  } else
-    rc_chart = rc;
+  }
 }
 
 void
