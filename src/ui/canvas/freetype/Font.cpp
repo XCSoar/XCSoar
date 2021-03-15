@@ -69,7 +69,7 @@ static AllocatedPath italic_font_path = nullptr;
 static AllocatedPath bold_italic_font_path = nullptr;
 static AllocatedPath monospace_font_path = nullptr;
 
-gcc_const
+[[gnu::const]]
 static inline bool
 IsMono() noexcept
 {
@@ -94,7 +94,7 @@ FT_CEIL(FT_Long x) noexcept
   return FT_FLOOR(x + 63);
 }
 
-gcc_pure
+[[gnu::pure]]
 static unsigned
 NextChar(TStringView &s) noexcept
 {
@@ -133,7 +133,7 @@ Font::Deinitialise() noexcept
   FreeType::Deinitialise();
 }
 
-gcc_pure
+[[gnu::pure]]
 static unsigned
 GetCapitalHeight(FT_Face face) noexcept
 {

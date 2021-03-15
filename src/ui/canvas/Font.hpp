@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_FONT_HPP
 
 #include "ui/dim/Size.hpp"
-#include "util/Compiler.h"
 
 #if defined(USE_APPKIT) || defined(USE_UIKIT)
 #import <Foundation/Foundation.h>
@@ -112,14 +111,14 @@ public:
   void Destroy() noexcept;
 #endif
 
-  gcc_pure
+  [[gnu::pure]]
   PixelSize TextSize(TStringView text) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   PixelSize TextSize(const TCHAR *text) const noexcept;
 
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
-  gcc_const
+  [[gnu::const]]
   static size_t BufferSize(const PixelSize size) noexcept {
     return size.width * size.height;
   }
