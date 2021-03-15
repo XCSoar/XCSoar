@@ -249,8 +249,6 @@ TaskEditPanel::UpdateButtons()
 void
 TaskEditPanel::RefreshView()
 {
-  UpdateButtons();
-
   dialog.InvalidateTaskView();
 
   unsigned length = ordered_task->TaskSize();
@@ -258,6 +256,8 @@ TaskEditPanel::RefreshView()
     ++length;
   GetList().SetLength(length);
   GetList().Invalidate();
+
+  UpdateButtons();
 
   {
     TCHAR text[300];
