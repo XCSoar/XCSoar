@@ -55,6 +55,10 @@ public:
     text_renderer.SetControl();
   }
 
+  [[gnu::pure]]
+  static unsigned GetMinimumButtonWidth(const ButtonLook &look,
+                                        const TCHAR *caption) noexcept;
+
   const ButtonLook &GetLook() const {
     return frame_renderer.GetLook();
   }

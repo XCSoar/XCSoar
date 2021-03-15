@@ -26,6 +26,14 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Look/ButtonLook.hpp"
 
+unsigned
+TextButtonRenderer::GetMinimumButtonWidth(const ButtonLook &look,
+                                          const TCHAR *caption) noexcept
+{
+  return 2 * (ButtonFrameRenderer::GetMargin() + Layout::GetTextPadding())
+    + look.font->TextSize(caption).width;
+}
+
 inline void
 TextButtonRenderer::DrawCaption(Canvas &canvas, const PixelRect &rc,
                                 bool enabled, bool focused, bool pressed) const
