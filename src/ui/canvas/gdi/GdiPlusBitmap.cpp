@@ -60,12 +60,9 @@ GdiLoadImage(const TCHAR* filename)
   Gdiplus::Bitmap bitmap(filename, false);
   if (bitmap.GetLastStatus() != Gdiplus::Ok)
     return nullptr;
-  Gdiplus::Color color = Gdiplus::Color::White;
-#ifndef NDEBUG
-  Gdiplus::Status status =
-#endif
-    bitmap.GetHBITMAP(color, &result);
-  assert(status == Gdiplus::Status::Ok);
+  const Gdiplus::Color color = Gdiplus::Color::White;
+  if (bitmap.GetHBITMAP(color, &result) != Gdiplus::Ok)
+    return nullptr;
 #endif  // _UNICODE
   return result;
 }
