@@ -216,6 +216,15 @@ public:
 
 protected:
   /* virtual methods from Widget */
+  PixelSize GetMinimumSize() const noexcept override {
+    return {
+      CheckBoxControl::GetMinimumWidth(look,
+                                       ::Layout::GetMaximumControlHeight(),
+                                       _("Expert")),
+      ::Layout::GetMaximumControlHeight() * 3,
+    };
+  }
+
   void Prepare(ContainerWindow &parent,
                const PixelRect &rc) noexcept override {
     Layout layout(rc);
