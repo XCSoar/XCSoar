@@ -52,6 +52,10 @@ public:
               const WindowStyle style,
               Callback _callback) noexcept;
 
+  [[gnu::pure]]
+  static unsigned GetMinimumWidth(const DialogLook &look, unsigned height,
+                                  tstring::const_pointer caption) noexcept;
+
   /**
    * Set the function that will receive click events.
    */
