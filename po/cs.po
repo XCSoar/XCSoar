@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2021-03-15 23:54+0000\n"
+"PO-Revision-Date: 2021-03-16 05:30+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -2375,6 +2375,9 @@ msgid ""
 "set. In case the FL is calculated from the GPS altitude, the FL label is "
 "coloured red."
 msgstr ""
+"Tlaková výška zobrazená jako letová hladina (FL). Pokud není dostupná "
+"barometrická výška, FL je získána z GPS výšky za předpokladu, že je nastaven "
+"správný QNH. Pokud je FL vypočítávána z GPS výšky, je FL zobrazena červeně."
 
 #: src/InfoBoxes/Content/Factory.cpp:782 src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
@@ -6306,7 +6309,7 @@ msgstr "Deaktivovat dokluzový indikátor."
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:48
 #, no-c-format
 msgid "Always show final glide bar."
-msgstr "Vždy zobrazovat dokluzový indikátor."
+msgstr "Vždy zobrazit dokluzový indikátor."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:50
 #, no-c-format
@@ -6314,9 +6317,9 @@ msgid "Show final glide bar if approaching final glide range."
 msgstr "Zobrazit dokluzový indikátor při přiblížení k hranici dokluzu."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:57
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable thermal assistant."
-msgstr "Termický asistent"
+msgstr "Deaktivovat termického asistenta."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:59
 #, fuzzy, no-c-format
@@ -6326,7 +6329,7 @@ msgstr "Vlevo dole"
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:60
 #, no-c-format
 msgid "Show thermal assistant in bottom left."
-msgstr "Zobrazit termický asistent vlevo dole."
+msgstr "Zobrazit termického asistenta vlevo dole."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:62
 #, no-c-format
@@ -6339,8 +6342,8 @@ msgid ""
 "Show thermal assistant in bottom left, above/to right of infoboxes (if "
 "there)."
 msgstr ""
-"Zobrazit termický asistent vlevo dole, nad, nebo vpravo od InfoBoxů (pokud "
-"jsou zobrazeny)."
+"Zobrazit termického asistenta vlevo dole, nad, nebo vpravo od InfoBoxů ("
+"pokud jsou zobrazeny)."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
 #, fuzzy, no-c-format
@@ -6350,7 +6353,7 @@ msgstr "Vpravo dole"
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:66
 #, no-c-format
 msgid "Show thermal assistant in bottom right."
-msgstr "Zobrazit termický asistent vpravo dole."
+msgstr "Zobrazit termického asistenta vpravo dole."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
 #, no-c-format
@@ -6362,8 +6365,8 @@ msgstr "Vpravo dole (mimo InfoBoxy)"
 msgid ""
 "Show thermal assistant in bottom right above/to left of infoboxes (if there)."
 msgstr ""
-"Zobrazit termický asistent vpravo dole, nad, nebo vlevo od InfoBoxů (pokud "
-"jsou zobrazeny)."
+"Zobrazit termického asistenta vpravo dole, nad, nebo vlevo od InfoBoxů ("
+"pokud jsou zobrazeny)."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:107
 msgid ""
@@ -6373,9 +6376,9 @@ msgid ""
 "of the target relative to you. In all modes, the color of the target "
 "indicates the threat level."
 msgstr ""
-"Zapne zobrazení FLARM radaru. Směr letu cíle relativní k letadlu je zobrazen "
-"šipkou a trojúhelník směřující nahoru nebo dolů ukazuje relativní výšku vůči "
-"Vám. Ve všech režimech barva cíle indikuje míru hrozby."
+"Zapne zobrazení FLARM radaru. Směr letu cíle, relativní k vlastnímu letadlu "
+"je zobrazen šipkou, trojúhelník směřující nahoru nebo dolů ukazuje relativní "
+"výšku. Ve všech režimech barva cíle indikuje míru hrozby."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:110
 msgid "Auto close FLARM"
@@ -7080,15 +7083,16 @@ msgstr "Auto. zvětšení"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:230
 msgid "Cursor zoom factor"
-msgstr ""
+msgstr "Faktor zvětšení kurzoru"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:232
 msgid "Invert cursor color"
-msgstr ""
+msgstr "Inverze barvy kurzoru"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:232
+#, fuzzy
 msgid "Enable black cursor"
-msgstr ""
+msgstr "Aktivuje černý kurzor"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:57
 #, no-c-format
@@ -7922,7 +7926,7 @@ msgstr "Symbol"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 #, no-c-format
 msgid "Draws the SkyLines symbol only."
-msgstr ""
+msgstr "Zobrazí pouze symbol SkyLines."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
@@ -7932,7 +7936,7 @@ msgstr "Symbol a jméno"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
 msgid "Draws the SkyLines symbol with name."
-msgstr ""
+msgstr "Zobrazí symbol SkyLines spolu se jménem."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:152
 msgid "Ground track"
@@ -8003,13 +8007,14 @@ msgstr "Určuje způsob, jakým je šipka větru zobrazena na mapě."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:196
 msgid "SkyLines traffic mode"
-msgstr ""
+msgstr "Režim SkyLines provozu"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:197
 msgid ""
 "Show the SkyLines traffic symbols/names on the map, downloaded from the "
 "SkyLines server."
 msgstr ""
+"Zobrazit symboly/jmény provozu SkyLines na mapě, stažená ze serveru SkyLines."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:63
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:231
