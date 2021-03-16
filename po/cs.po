@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2021-03-16 05:30+0000\n"
+"PO-Revision-Date: 2021-03-16 06:02+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -6658,24 +6658,26 @@ msgstr "Vlnový asistent"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:123
 msgid "Cruise/Circling period"
-msgstr "Přeskok -> kroužení"
+msgstr "Přeskok na kroužení"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:124
 msgid ""
 "How many seconds of turning before changing from cruise to circling mode."
 msgstr ""
-"Po kolika sekundách krouženi dojde ke změně režimu přeskoku na kroužení."
+"Nastaveni, po kolika sekundách kroužení dojde ke změně režimu přeskoku na "
+"kroužení."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:131
 msgid "Circling/Cruise period"
-msgstr "Kroužení -> přeskok"
+msgstr "Kroužení na přeskok"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:132
 msgid ""
 "How many seconds of flying straight before changing from circling to cruise "
 "mode."
 msgstr ""
-"Po kolika sekundách přímého letu dojde ke změně režimu kroužení na přeskok."
+"Nastavení, po kolika sekundách přímého letu dojde ke změně režimu kroužení "
+"na přeskok."
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:88
 msgid "Use final glide mode"
@@ -7674,7 +7676,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:68
 msgid "Map database"
-msgstr "Mapový soubor"
+msgstr "Mapová databáze"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:69
 msgid ""
@@ -8007,14 +8009,14 @@ msgstr "Určuje způsob, jakým je šipka větru zobrazena na mapě."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:196
 msgid "SkyLines traffic mode"
-msgstr "Režim SkyLines provozu"
+msgstr "SkyLines provoz"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:197
 msgid ""
 "Show the SkyLines traffic symbols/names on the map, downloaded from the "
 "SkyLines server."
 msgstr ""
-"Zobrazit symboly/jmény provozu SkyLines na mapě, stažená ze serveru SkyLines."
+"Zobrazí na mapě SkyLines symboly/jména provozu, stažená ze serveru SkyLines."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:63
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:231
