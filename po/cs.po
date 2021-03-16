@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2021-03-16 06:02+0000\n"
+"PO-Revision-Date: 2021-03-16 11:59+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -1069,12 +1069,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
 msgid "GR cruise"
-msgstr "Klouzavý poměr v přímém letu"
+msgstr "Klouzavý poměr přeskoku"
 
 #: src/InfoBoxes/Content/Factory.cpp:179
 #, no-c-format
 msgid "GR Cruise"
-msgstr "KP přímý let"
+msgstr "KP přeskok"
 
 #: src/InfoBoxes/Content/Factory.cpp:180
 #, no-c-format
@@ -2272,9 +2272,9 @@ msgstr ""
 "přímém letu. Hodnoty klouzavosti přesahující 200 jsou zobrazeny jako +++. "
 "Dobu průměrování lze nastavit v nastavení systému. Doporučené hodnoty jsou "
 "60, 90 nebo 120. Nižší hodnoty se blíží okamžité klouzavosti (KP nyní), "
-"vyšší hodnoty klouzavosti v přímém letu (KP přímý let). Vzdálenost NENÍ "
-"přímá spojnice mezi původní a současnou polohou, ale skutečně ulétnutá "
-"vzdálenost, včetně odboček. Tato hodnota se nevypočítává v kroužení."
+"vyšší hodnoty klouzavosti v přímém letu (KP přeskok). Vzdálenost NENÍ přímá "
+"spojnice mezi původní a současnou polohou, ale skutečně ulétnutá vzdálenost, "
+"včetně odboček. Tato hodnota se nevypočítává v kroužení."
 
 #: src/InfoBoxes/Content/Factory.cpp:724
 #, no-c-format
@@ -3043,9 +3043,9 @@ msgstr ""
 "není k dispozici, je zobrazeno '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:1073
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Active Radio Frequency"
-msgstr "Nastav aktivní frekvenci"
+msgstr "Aktivní radiofrekvence"
 
 #: src/InfoBoxes/Content/Factory.cpp:1074
 #, no-c-format
@@ -3053,39 +3053,39 @@ msgid "Act Freq"
 msgstr "Akt frekv"
 
 #: src/InfoBoxes/Content/Factory.cpp:1075
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently active Radio Frequency"
-msgstr "Nastav aktivní frekvenci"
+msgstr "Aktivní radiofrekvence"
 
 #: src/InfoBoxes/Content/Factory.cpp:1080
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Standby Radio Frequency"
-msgstr "Nastav záložní frekvenci"
+msgstr "Záložní radiofrekvence"
 
 #: src/InfoBoxes/Content/Factory.cpp:1081
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Stby Freq"
-msgstr "Nastav záložní frekvenci"
+msgstr "Zál frekv"
 
 #: src/InfoBoxes/Content/Factory.cpp:1082
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently standby Radio Frequency"
-msgstr "Nastav záložní frekvenci"
+msgstr "Záložní radiofrekvence"
 
 #: src/InfoBoxes/Content/Factory.cpp:1088
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Thermal time"
-msgstr "Čas poslední termiky"
+msgstr "Čas kroužení"
 
 #: src/InfoBoxes/Content/Factory.cpp:1089
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TC Time"
-msgstr "TL Čas"
+msgstr "TC Čas"
 
 #: src/InfoBoxes/Content/Factory.cpp:1090
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The time spend in the current thermal."
-msgstr "Výška získaná/ztracená v současném stoupavém proudu."
+msgstr "Čas strávený v současném stoupavém proudu."
 
 #: src/InfoBoxes/Content/Alternate.cpp:49
 #: src/Dialogs/Task/AlternatesListDialog.cpp:150 Data/Input/default.xci:388
@@ -3557,7 +3557,7 @@ msgstr "Mapa (celá obrazovka)"
 #: src/Renderer/ChartRenderer.cpp:255
 #: src/Dialogs/Device/DeviceListDialog.cpp:419
 msgid "No data"
-msgstr "Chybí data"
+msgstr "Chybí data z GPS"
 
 #: src/Renderer/MapItemListRenderer.cpp:79
 #: src/Renderer/MapItemListRenderer.cpp:83
@@ -4128,7 +4128,6 @@ msgid "Add"
 msgstr "Přidej"
 
 #: src/Dialogs/FileManager.cpp:435
-#, fuzzy
 msgid "Update all"
 msgstr "Aktualizuj"
 
@@ -4161,9 +4160,8 @@ msgid "Error"
 msgstr "Chyba"
 
 #: src/Dialogs/FileManager.cpp:488
-#, fuzzy
 msgid "Update available"
-msgstr "TAF nedostupný!"
+msgstr "Dostupná aktualizace"
 
 #: src/Dialogs/FileManager.cpp:730 src/Dialogs/DownloadFilePicker.cpp:340
 msgid "Failed to download the repository index."
@@ -4184,9 +4182,9 @@ msgid "IOIO switches and Nunchuk"
 msgstr "IOIO spínače a Nunchuk"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:75
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO I²C pressure sensor"
-msgstr "IOIO i2c tlakový senzor"
+msgstr "IOIO I²C tlakový senzor"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:76
 #, no-c-format
@@ -4202,12 +4200,12 @@ msgstr "TCP klient"
 #. selection UI
 #: src/Dialogs/Device/DeviceEditWidget.cpp:83
 #: src/Dialogs/Device/DeviceEditWidget.cpp:612
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TCP port"
 msgstr "TCP port"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:84
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "UDP port"
 msgstr "UDP Port"
 
@@ -4237,13 +4235,12 @@ msgstr ""
 "Přenosová rychlost k hromadným přenosům (stažení letu, deklarace úlohy)."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:607
-#, fuzzy
 msgid "IP address"
 msgstr "IP adresa"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I²C bus"
-msgstr "I²C bus"
+msgstr "I²C sběrnice"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "Select the description or bus number that matches your configuration."
@@ -4254,14 +4251,13 @@ msgid "I²C addr"
 msgstr "I²C adresa"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:623
-#, fuzzy
 msgid ""
 "The I²C address that matches your configuration. This field is not used when "
 "your selection in the \"I²C bus\" field is not an I²C bus number. Assume "
 "this field is not in use if that doesn't make sense to you."
 msgstr ""
-"Adresa i2c, která odpovídá vaší konfiguraci. Toto pole není použito, když "
-"váš výběr z pole i2c není i2c číslo sběrnice. V případě, že nerozumíte "
+"Adresa I²C, která odpovídá vaší konfiguraci. Toto pole není použito, když "
+"váš výběr z pole I²C není I²C číslo sběrnice. V případě, že nerozumíte "
 "předchozí větě můžete předpokládat, že toto pole není použito."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:631
@@ -4269,7 +4265,6 @@ msgid "Pressure use"
 msgstr "Použitý tlak"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:631
-#, fuzzy
 msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
 "pressure. Here you tell the system what pressure this is and what it should "
@@ -4288,7 +4283,6 @@ msgid "Passthrough device"
 msgstr "Průchozí zařízení"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:649
-#, fuzzy
 msgid "Whether the device has a passed-through device connected."
 msgstr ""
 "Volba umožňuje nastavit, zda má toto zařízení připojeno další průchozí "
@@ -4303,7 +4297,6 @@ msgid "Sync. from device"
 msgstr "Sync. ze zařízení"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:663
-#, fuzzy
 msgid ""
 "Tells XCSoar to use settings like the MacCready value, bugs and ballast from "
 "the device."
@@ -4316,7 +4309,6 @@ msgid "Sync. to device"
 msgstr "Sync. do zařízení"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:669
-#, fuzzy
 msgid ""
 "Tells XCSoar to send settings like the MacCready value, bugs and ballast to "
 "the device."
@@ -4325,7 +4317,6 @@ msgstr ""
 "do externího zařízení."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:675
-#, fuzzy
 msgid "Whether you use a K6Bt to connect the device."
 msgstr "Povolte tuto volbu, pokud používáte K6Bt pro připojení zařízení."
 
@@ -6322,7 +6313,7 @@ msgid "Disable thermal assistant."
 msgstr "Deaktivovat termického asistenta."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:59
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom left"
 msgstr "Vlevo dole"
 
@@ -6346,7 +6337,7 @@ msgstr ""
 "pokud jsou zobrazeny)."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom right"
 msgstr "Vpravo dole"
 
@@ -6465,7 +6456,7 @@ msgid ""
 "Whether to show the average climb rate.  In cruise mode, this switches to "
 "showing the average netto airmass rate."
 msgstr ""
-"Určuje, zda zobrazit průměrnou hodnotu stoupání. V přímém letu dojde k "
+"Určuje, zda zobrazit průměrnou hodnotu stoupání. V režimu přeskoku dojde k "
 "přepnutí na zobrazení průměrného netto stoupání vzdušné hmoty."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:73
@@ -6511,27 +6502,25 @@ msgid ""
 "needle displays the average gross value."
 msgstr ""
 "Pokud je zapnuto, zobrazení variometru bude obsahovat nevyplněný indikátor "
-"průměrovacího vária. V přímém letu indikátor zobrazuje průměrnou netto "
-"hodnotu stoupání (stoupání vzduchové hmoty). V kroužení indikátor zobrazuje "
-"průměrnou brutto hodnotu stoupání."
+"průměrovacího vária. Na přeskoku indikátor zobrazuje průměrnou netto hodnotu "
+"stoupání (vzduchové hmoty). V kroužení indikátor zobrazuje průměrnou brutto "
+"hodnotu stoupání."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:92
-#, fuzzy
 msgid "Thermal Averager needle"
-msgstr "Šipka průměru"
+msgstr "Šipka netto průměru"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:93
-#, fuzzy
 msgid ""
 "If true, the vario gauge will display a thermal averager needle instead of "
 "current climb rate needle.  During cruise, this needle displays the last "
 "thermal average netto value.  During circling, this needle displays the "
 "average net value."
 msgstr ""
-"Pokud aktivní, zobrazení variometru bude obsahovat nevyplněný indikátor "
-"průměrovacího vária. V přímém letu indikátor zobrazuje průměrnou netto "
-"hodnotu stoupání. V kroužení indikátor zobrazuje průměrnou hrubou hodnotu "
-"stoupání."
+"Pokud je zapnuto, zobrazení variometru bude obsahovat indikátor "
+"průměrovacího vária místo okamžitého stoupání. Na přeskoku indikátor "
+"zobrazuje průměrnou netto hodnotu stoupání v posledním stoupavém proudu. V "
+"kroužení indikátor zobrazuje průměrnou netto hodnotu stoupání."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:65
 #, no-c-format
@@ -6587,7 +6576,7 @@ msgid ""
 "is set to the dolphin speed to fly, equivalent to the MacCready speed with "
 "vertical air-mass movement."
 msgstr ""
-"Pokud je zapnuto, je Speed Command v přímém letu vypočítáván dle MacCready "
+"Pokud je zapnuto, je Speed Command na přeskoku vypočítáván dle MacCready "
 "teorie pro ovzduší bez vertikálních pohybů vzdušné hmoty. Pokud je vypnuto, "
 "je Speed Command nastaven na rychlost \"delfínového letu\", odpovídající "
 "MacCready rychlosti pro let v ovzduší s vertikálními pohyby."
@@ -6814,9 +6803,9 @@ msgid "8 Split"
 msgstr "8 rozděleno"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:81
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "10 Split"
-msgstr "8 rozděleno"
+msgstr "10 rozděleno"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:83
 #, no-c-format
@@ -6864,9 +6853,9 @@ msgid "5 Right (Square)"
 msgstr "5 vpravo (čtverec)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:101
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "10 Bottom or Right"
-msgstr "12 dole nebo vpravo"
+msgstr "10 dole nebo vpravo"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:103
 #, no-c-format
@@ -6874,14 +6863,14 @@ msgid "12 Bottom or Right"
 msgstr "12 dole nebo vpravo"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:105
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "10 Top or Left"
-msgstr "12 nahoře nebo dole"
+msgstr "10 nahoře nebo vlevo"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:107
 #, no-c-format
 msgid "12 Top or Left"
-msgstr "12 nahoře nebo dole"
+msgstr "12 nahoře nebo vlevo"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:109
 #, no-c-format
@@ -7079,9 +7068,8 @@ msgid "Show the Menubutton"
 msgstr "Zobrazuje tlačítko Menu"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:230
-#, fuzzy
 msgid "Cursor zoom"
-msgstr "Auto. zvětšení"
+msgstr "Zvětšení kurzoru"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:230
 msgid "Cursor zoom factor"
@@ -7092,7 +7080,6 @@ msgid "Invert cursor color"
 msgstr "Inverze barvy kurzoru"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:232
-#, fuzzy
 msgid "Enable black cursor"
 msgstr "Aktivuje černý kurzor"
 
@@ -7106,9 +7093,8 @@ msgid "Pilot name"
 msgstr "Jméno pilota"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:72
-#, fuzzy
 msgid "CoPilot name"
-msgstr "Jméno pilota"
+msgstr "Jméno kopilota"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:74
 msgid "Time step cruise"
@@ -7120,7 +7106,7 @@ msgstr "Interval mezi body záznamu mimo kroužení."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:79
 msgid "Time step circling"
-msgstr "Interval z. kroužení"
+msgstr "Interval zázn. kroužení"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:80
 msgid "This is the time interval between logged points when circling."
@@ -7243,7 +7229,7 @@ msgstr "Použít současný cílový bod jako základ."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:112
 msgid "Cruise orientation"
-msgstr "Orientace v přímém letu"
+msgstr "Orientace na přeskoku"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:113
 msgid "Determines how the screen is rotated with the glider"
@@ -7750,17 +7736,14 @@ msgstr ""
 "jednotlivých otočných bodech a letištích."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:109
-#, fuzzy
 msgid "FLARM Device Database"
-msgstr "FLARM Detaily provozu"
+msgstr "FLARM databáze"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:110
-#, fuzzy
 msgid ""
 "The name of the file containing information about registered FLARM devices."
 msgstr ""
-"Název souboru (.xcm) obsahující terén, topografii a volitelně otočné body, "
-"jejich detaily a prostory."
+"Název souboru, obsahujícího informace o registrovaných zařízeních FLARM."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:84
 #, no-c-format
@@ -7916,19 +7899,19 @@ msgid "Draws an arrow head with a dashed arrow line."
 msgstr "Zobrazí hlavu šipky s čárkovanou čárou."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:140
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No SkyLines traffic is drawn."
-msgstr "Šipka větru nebude zobrazena."
+msgstr "SkyLines provoz nebude zobrazen."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Symbol"
 msgstr "Symbol"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 #, no-c-format
 msgid "Draws the SkyLines symbol only."
-msgstr "Zobrazí pouze symbol SkyLines."
+msgstr "Zobrazí pouze SkyLines symbol."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
@@ -7938,7 +7921,7 @@ msgstr "Symbol a jméno"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
 msgid "Draws the SkyLines symbol with name."
-msgstr "Zobrazí symbol SkyLines spolu se jménem."
+msgstr "Zobrazí SkyLines symbol spolu se jménem."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:152
 msgid "Ground track"
@@ -8025,7 +8008,6 @@ msgstr "Max. rychost startu"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:63
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:232
-#, fuzzy
 msgid "Maximum speed allowed in start observation zone. Set to 0 for no limit."
 msgstr ""
 "Maximální povolená rychlost v pozorovací oblasti startu. Nastav na 0 pro "
@@ -8688,18 +8670,19 @@ msgstr ""
 "\" v záložce \"Plachtařské výpočty > Trasa\"."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:123
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Required GR & terrain glide"
-msgstr "Přímý dokluz & překážky"
+msgstr "Požadovaný KP & dokluz překážky"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Both Required glide ratio and terrain avoidance height are displayed. "
 "Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings."
 msgstr ""
-"Jsou zobrazeny obě výšky příletu. Vyžaduje nastavení \"Akční rádius: Odbočky"
-"\" v záložce \"Plachtařské výpočty > Trasa\"."
+"Je zobrazen požadovaný klouzavý poměr KP a a výška příletu s vyhýbáním se "
+"terénním překážkám. Vyžaduje nastavení \"Akční rádius: Odbočky\" v záložce "
+"\"Plachtařské výpočty > Trasa\"."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:129
 msgid "Determines how arrival height is displayed in waypoint labels"
@@ -9680,7 +9663,7 @@ msgid ""
 "[NET MC/2] LIFT tone when airmass velocity greater than half MC."
 msgstr ""
 "Komparační metoda, použitá pro generování tónu stoupání na přeskoku.\n"
-"[NENÍ]: Tón STOUPÁNÍ je v přímém letu deaktivován\n"
+"[NENÍ]: Tón STOUPÁNÍ je na přeskoku deaktivován\n"
 "[RELATIVNÍ NULA]: Tón STOUPÁNÍ, když relativní vário > 0.\n"
 "[BRUTTO NULA]: Tón STOUPÁNÍ, když kluzák stoupá.\n"
 "[RELATIVNÍ MC/2]: Tón STOUPÁNÍ, když relativní vário > polovina MC.\n"
@@ -9719,7 +9702,7 @@ msgstr "Střední hlasitost v režimech kroužení."
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:96
 #, no-c-format
 msgid "Cruise volume"
-msgstr "Hlasitost v přímém letu"
+msgstr "Hlasitost na přeskoku"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:97
 #, no-c-format
