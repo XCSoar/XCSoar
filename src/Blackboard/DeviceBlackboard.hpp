@@ -109,6 +109,34 @@ public:
     return per_device_data[i];
   }
 
+  /**
+   * Return a copy of a device's data after updating its clock via
+   * NMEAInfo::UpdateClock().  The method takes care for locking and
+   * unlocking the mutex.
+   */
+  NMEAInfo LockGetDeviceDataUpdateClock(unsigned i) noexcept {
+    assert(i < NUMDEV);
+
+    const std::lock_guard<Mutex> lock(mutex);
+    per_device_data[i].UpdateClock();
+    return per_device_data[i];
+  }
+
+  /**
+   * Overwrites a device's data and schedule the MergeThread.  The
+   * method takes care for locking and unlocking the mutex.
+   */
+  void LockSetDeviceDataScheuduleMerge(unsigned i, const NMEAInfo &src) noexcept {
+    assert(i < NUMDEV);
+
+    {
+      const std::lock_guard<Mutex> lock(mutex);
+      per_device_data[i] = src;
+    }
+
+    ScheduleMerge();
+  }
+
   NMEAInfo &SetSimulatorState() { return simulator_data; }
   NMEAInfo &SetReplayState() { return replay_data; }
 
