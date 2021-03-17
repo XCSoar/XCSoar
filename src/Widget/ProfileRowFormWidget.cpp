@@ -24,9 +24,12 @@ Copyright_License {
 #include "RowFormWidget.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/File.hpp"
+#include "Form/DataField/MultiFile.hpp"
 #include "Profile/Profile.hpp"
 #include "LocalPath.hpp"
 #include "util/ConvertString.hpp"
+#include "util/StringAPI.hxx"
+#include "windef.h"
 
 WndProperty *
 RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
@@ -48,6 +51,35 @@ RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
     const auto path = Profile::GetPath(registry_key);
     if (!path.IsNull())
       df->Lookup(path);
+  }
+
+  edit->RefreshDisplay();
+
+  return edit;
+}
+
+WndProperty *
+RowFormWidget::AddMultipleFiles(const TCHAR *label, const TCHAR *help,
+    const char *registry_key, const TCHAR *filters,
+    FileType file_type,
+    bool nullable){
+
+  WndProperty *edit = Add(label, help);
+  auto *df = new MultiFileDataField();
+  df->SetFileType(file_type);
+  edit->SetDataField(df);
+
+
+  df->ScanMultiplePatterns(filters);
+
+  if (registry_key != nullptr){
+    auto paths = Profile::GetMultiplePaths(registry_key);
+
+    if (!paths.empty()){
+      for (auto const& p : paths){
+	df->Lookup(p);
+      }
+    }
   }
 
   edit->RefreshDisplay();
@@ -140,5 +172,38 @@ RowFormWidget::SaveValueFileReader(unsigned i,
     return false;
 
   Profile::Set(registry_key, new_value2);
+  return true;
+}
+
+bool
+RowFormWidget::SaveValueMultiFileReader(unsigned i, const char *registry_key) noexcept
+{
+  const auto *dfe = (const MultiFileDataField *)GetControl(i).GetDataField();
+
+  std::vector<Path> new_values = dfe->GetPathFiles();
+
+  std::string new_output = "";
+
+  for (auto value : new_values){
+
+    const auto contracted = ContractLocalPath(value);
+    if (contracted != nullptr)
+      value = contracted;
+
+    const WideToUTF8Converter value_to_add(value.c_str());
+    if (!value_to_add.IsValid())
+      continue;
+
+    new_output += value_to_add;
+    new_output += "|";
+
+  }
+
+
+  std::string old_value = Profile::Get(registry_key, "");
+  if (old_value == new_output)
+    return false;
+
+  Profile::Set(registry_key, new_output.c_str());
   return true;
 }

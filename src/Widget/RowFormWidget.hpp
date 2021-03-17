@@ -432,6 +432,11 @@ public:
                    nullable);
   }
 
+  WndProperty *AddMultipleFiles(const TCHAR *label, const TCHAR *help,
+		  				const char *profile_key, const TCHAR *filters,
+						FileType file_type,
+						bool nullable = true);
+
   /**
    * Add a read-only multi-line control.  You can use
    * SetMultiLineText() to update its text.
@@ -656,6 +661,7 @@ public:
   }
 
   bool SaveValueFileReader(unsigned i, const char *profile_key) noexcept;
+  bool SaveValueMultiFileReader(unsigned int i, const char *profile_key) noexcept;
 
 protected:
   [[gnu::pure]]
