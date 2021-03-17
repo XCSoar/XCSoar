@@ -32,6 +32,7 @@ Copyright_License {
 
 #include <cstdint>
 #include <tchar.h>
+#include <vector>
 
 struct GeoPoint;
 class RGB8Color;
@@ -145,6 +146,8 @@ public:
   // path values
 
   AllocatedPath GetPath(const char *key) const;
+
+  std::vector<AllocatedPath> GetMultiplePaths(const char *key) const;
 
   gcc_pure
   bool GetPathIsEqual(const char *key, Path value) const;

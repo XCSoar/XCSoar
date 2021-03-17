@@ -61,6 +61,7 @@ extern const char WaypointFile[];
 extern const char AdditionalWaypointFile[];
 extern const char WatchedWaypointFile[];
 extern const char AirspaceFile[];
+extern const char AirspaceFileList[];
 extern const char AdditionalAirspaceFile[];
 extern const char FlarmFile[];
 extern const char AirfieldFile[];

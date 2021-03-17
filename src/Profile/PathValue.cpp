@@ -29,6 +29,9 @@ Copyright_License {
 #include "util/StringCompare.hxx"
 #include "util/StringPointer.hxx"
 #include "util/Macros.hpp"
+#include "util/StringView.hxx"
+#include "util/IterableSplitString.hxx"
+#include "Language/Language.hpp"
 
 #ifdef _UNICODE
 #include "util/AllocatedString.hxx"
@@ -47,6 +50,43 @@ ProfileMap::GetPath(const char *key) const
     return nullptr;
 
   return ExpandLocalPath(Path(buffer));
+}
+
+std::vector<AllocatedPath>
+ProfileMap::GetMultiplePaths(const char *key) const{
+
+  std::vector<AllocatedPath> paths;
+  TCHAR buffer[MAX_PATH];
+
+  if(!Get(key, buffer, ARRAY_SIZE(buffer)))
+    return paths;
+
+  if (StringIsEmpty(buffer))
+    return paths;
+
+
+  for (auto i : TIterableSplitString(buffer, '|')){
+
+    if (i.empty())
+      continue;
+
+#ifdef _UNICODE
+    std::wstring file_string(i);
+#else
+    std::string file_string(i);
+#endif
+
+    AllocatedPath path(Path(file_string.c_str()));
+
+    if (!path.MatchesExtension(_("txt")) && !path.MatchesExtension(_("air")))
+      continue;
+
+    paths.push_back(ExpandLocalPath(path));
+
+  }
+
+
+  return paths;
 }
 
 bool

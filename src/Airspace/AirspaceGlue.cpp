@@ -86,13 +86,12 @@ ReadAirspace(Airspaces &airspaces,
   bool airspace_ok = false;
 
   // Read the airspace filenames from the registry
-  auto path = Profile::GetPath(ProfileKeys::AirspaceFile);
-  if (!path.IsNull())
-    airspace_ok |= ParseAirspaceFile(airspaces, path, operation);
+  auto paths = Profile::GetMultiplePaths(ProfileKeys::AirspaceFileList);
 
-  path = Profile::GetPath(ProfileKeys::AdditionalAirspaceFile);
-  if (!path.IsNull())
-    airspace_ok |= ParseAirspaceFile(airspaces, path, operation);
+  for (auto it = paths.begin(); it < paths.end(); it++){
+
+	  airspace_ok |= ParseAirspaceFile(airspaces, *it, operation);
+  }
 
   auto archive = OpenMapFile();
   if (archive)

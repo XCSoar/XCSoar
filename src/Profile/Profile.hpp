@@ -31,6 +31,8 @@ Copyright_License {
 
 #include "util/Compiler.h"
 
+#include <vector>
+
 class Path;
 class AllocatedPath;
 
@@ -77,6 +79,8 @@ namespace Profile
    */
   gcc_pure
   AllocatedPath GetPath(const char *key);
+
+  std::vector<AllocatedPath> GetMultiplePaths(const char *key);
 
   void SetPath(const char *key, Path value);
 

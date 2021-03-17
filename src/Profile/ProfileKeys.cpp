@@ -86,6 +86,7 @@ const char RepetitiveSound[] = "RepetitiveSound";
 const char AcknowledgementTime[] = "AcknowledgementTime";
 const char AirfieldFile[] = "AirfieldFile"; // pL
 const char AirspaceFile[] = "AirspaceFile"; // pL
+const char AirspaceFileList[] = "AirspaceFileList";
 const char AdditionalAirspaceFile[] = "AdditionalAirspaceFile"; // pL
 const char FlarmFile[] = "FlarmFile";
 const char PolarFile[] = "PolarFile"; // pL
