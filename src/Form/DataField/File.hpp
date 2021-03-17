@@ -35,10 +35,12 @@ Copyright_License {
 /**
  * #DataField specialisation that supplies options as a list of
  * files matching a suffix.  First entry is always blank for null entry.
- * 
+ *
  */
 class FileDataField final : public DataField {
   typedef StaticArray<StaticString<32>, 8> PatternList;
+
+  //friend class MultiFileDataField;
 
 public:
   /** FileList item */
