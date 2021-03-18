@@ -103,13 +103,14 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
                                             jint xdpi, jint ydpi,
                                             jint sdk_version, jstring product)
 {
+  Java::Init(env);
+
   android_api_level = sdk_version;
 
   InitThreadDebug();
 
   InitialiseAsioThread();
 
-  Java::Init(env);
   Java::Object::Initialise(env);
   Java::File::Initialise(env);
   Java::InputStream::Initialise(env);
