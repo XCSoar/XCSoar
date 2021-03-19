@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2021-03-16 11:59+0000\n"
+"PO-Revision-Date: 2021-03-20 06:18+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -3557,7 +3557,7 @@ msgstr "Mapa (celá obrazovka)"
 #: src/Renderer/ChartRenderer.cpp:255
 #: src/Dialogs/Device/DeviceListDialog.cpp:419
 msgid "No data"
-msgstr "Chybí data z GPS"
+msgstr "Chybí data"
 
 #: src/Renderer/MapItemListRenderer.cpp:79
 #: src/Renderer/MapItemListRenderer.cpp:83
@@ -7098,7 +7098,7 @@ msgstr "Jméno kopilota"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:74
 msgid "Time step cruise"
-msgstr "Interval záznamu přeskok"
+msgstr "Interval zázn. přeskok"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:75
 msgid "This is the time interval between logged points when not circling."
@@ -9374,7 +9374,7 @@ msgstr "Ztiší audio výstup v určeném pásmu v okolí nulového stoupání"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:85
 msgid "Min. Frequency"
-msgstr "Min. frekvence"
+msgstr "Nejnižší tón"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:86
 msgid "The tone frequency that is played at maximum sink rate."
@@ -9382,7 +9382,7 @@ msgstr "Frekvence tónu, která je přehrávána při maximálním klesání."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:91
 msgid "Zero Frequency"
-msgstr "Nulová frekvence"
+msgstr "Tón 0 stoupání"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:92
 msgid "The tone frequency that is played at zero climb rate."
@@ -9390,7 +9390,7 @@ msgstr "Frekvence tónu, která je přehrávána při nulovém stoupání."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:97
 msgid "Max. Frequency"
-msgstr "Max. frekvence"
+msgstr "Nejvyšší tón"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:98
 msgid "The tone frequency that is played at maximum climb rate."
