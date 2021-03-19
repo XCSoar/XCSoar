@@ -43,11 +43,10 @@ MapCanvas::DrawLineWithOffset(GeoPoint a, GeoPoint b)
   if (!clip.ClipLine(a, b))
     return;
 
-  PixelPoint pts[3];
-  pts[0] = projection.GeoToScreen(a);
-  pts[1] = projection.GeoToScreen(b);
-  pts[2] = ScreenClosestPoint(pts[0], pts[1], pts[0], Layout::Scale(20));
-  canvas.DrawLine(pts[2], pts[1]);
+  const auto p_a = projection.GeoToScreen(a);
+  const auto p_b = projection.GeoToScreen(b);
+  const auto p_end = ScreenClosestPoint(p_a, p_b, p_a, Layout::Scale(20));
+  canvas.DrawLine(p_b, p_end);
 }
 
 
