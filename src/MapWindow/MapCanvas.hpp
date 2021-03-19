@@ -86,6 +86,10 @@ public:
       DrawPrepared();
   }
 
+  /**
+   * @return false if it's completely outside the screen (don't call
+   * DrawPrepared())
+   */
   bool PreparePolygon(const SearchPointVector &points) noexcept;
   void DrawPrepared() noexcept;
 };
