@@ -62,8 +62,8 @@ void
 MapCanvas::Project(const Projection &projection,
                    const SearchPointVector &points, BulkPixelPoint *screen)
 {
-  for (auto it = points.begin(); it != points.end(); ++it)
-    *screen++ = projection.GeoToScreen(it->GetLocation());
+  for (const auto i : points)
+    *screen++ = projection.GeoToScreen(i.GetLocation());
 }
 
 bool
