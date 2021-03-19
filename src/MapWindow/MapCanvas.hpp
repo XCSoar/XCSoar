@@ -54,7 +54,6 @@ public:
    */
   AllocatedArray<BulkPixelPoint> raster_points;
   unsigned num_raster_points;
-  unsigned screen_radius;
 
 public:
   MapCanvas(Canvas &_canvas, const Projection &_projection,
