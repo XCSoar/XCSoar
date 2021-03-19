@@ -29,7 +29,7 @@ Copyright_License {
 #include "Geo/SearchPointVector.hpp"
 
 void
-MapCanvas::DrawLine(GeoPoint a, GeoPoint b)
+MapCanvas::DrawLine(GeoPoint a, GeoPoint b) noexcept
 {
   if (!clip.ClipLine(a, b))
     return;
@@ -38,7 +38,7 @@ MapCanvas::DrawLine(GeoPoint a, GeoPoint b)
 }
 
 void
-MapCanvas::DrawLineWithOffset(GeoPoint a, GeoPoint b)
+MapCanvas::DrawLineWithOffset(GeoPoint a, GeoPoint b) noexcept
 {
   if (!clip.ClipLine(a, b))
     return;
@@ -51,7 +51,7 @@ MapCanvas::DrawLineWithOffset(GeoPoint a, GeoPoint b)
 
 
 void
-MapCanvas::DrawCircle(const GeoPoint &center, double radius)
+MapCanvas::DrawCircle(const GeoPoint &center, double radius) noexcept
 {
   auto screen_center = projection.GeoToScreen(center);
   unsigned screen_radius = projection.GeoToScreenDistance(radius);
@@ -60,14 +60,14 @@ MapCanvas::DrawCircle(const GeoPoint &center, double radius)
 
 void
 MapCanvas::Project(const Projection &projection,
-                   const SearchPointVector &points, BulkPixelPoint *screen)
+                   const SearchPointVector &points, BulkPixelPoint *screen) noexcept
 {
   for (const auto i : points)
     *screen++ = projection.GeoToScreen(i.GetLocation());
 }
 
 bool
-MapCanvas::PreparePolygon(const SearchPointVector &points)
+MapCanvas::PreparePolygon(const SearchPointVector &points) noexcept
 {
   unsigned num_points = points.size();
   if (num_points < 3)
@@ -94,7 +94,7 @@ MapCanvas::PreparePolygon(const SearchPointVector &points)
 }
 
 void
-MapCanvas::DrawPrepared()
+MapCanvas::DrawPrepared() noexcept
 {
   /* draw it all */
   canvas.DrawPolygon(raster_points.begin(), num_raster_points);
