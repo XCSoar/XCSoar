@@ -35,7 +35,7 @@
 #define REACH_MAX_VERTICES 2000
 
 static bool
-AlmostTheSame(const FlatGeoPoint p1, const FlatGeoPoint p2)
+AlmostTheSame(const FlatGeoPoint p1, const FlatGeoPoint p2) noexcept
 {
   const FlatGeoPoint k = p1 - p2;
   const int dmax = std::max(abs(k.x), abs(k.y));
@@ -43,7 +43,7 @@ AlmostTheSame(const FlatGeoPoint p1, const FlatGeoPoint p2)
 }
 
 static bool
-TooClose(const FlatGeoPoint p1, const FlatGeoPoint p2)
+TooClose(const FlatGeoPoint p1, const FlatGeoPoint p2) noexcept
 {
   const FlatGeoPoint k = p1 - p2;
   const int dmax = std::max(abs(k.x), abs(k.y));
@@ -51,7 +51,7 @@ TooClose(const FlatGeoPoint p1, const FlatGeoPoint p2)
 }
 
 void
-FlatTriangleFanTree::CalcBB()
+FlatTriangleFanTree::CalcBB() noexcept
 {
   FlatTriangleFan::CalcBoundingBox();
 
@@ -65,7 +65,7 @@ FlatTriangleFanTree::CalcBB()
 
 void
 FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin,
-                               ReachFanParms &parms)
+                               ReachFanParms &parms) noexcept
 {
   gaps_filled = false;
 
@@ -82,7 +82,7 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin,
 }
 
 void
-FlatTriangleFanTree::DummyReach(const AFlatGeoPoint &ao)
+FlatTriangleFanTree::DummyReach(const AFlatGeoPoint &ao) noexcept
 {
   assert(children.empty());
 
@@ -92,7 +92,7 @@ FlatTriangleFanTree::DummyReach(const AFlatGeoPoint &ao)
 
 bool
 FlatTriangleFanTree::FillDepth(const AFlatGeoPoint &origin,
-                               ReachFanParms &parms)
+                               ReachFanParms &parms) noexcept
 {
   if (depth == parms.set_depth) {
     if (gaps_filled)
@@ -116,7 +116,7 @@ FlatTriangleFanTree::FillDepth(const AFlatGeoPoint &origin,
 bool
 FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
                                const int index_high,
-                               const ReachFanParms &parms)
+                               const ReachFanParms &parms) noexcept
 {
   const GeoPoint geo_origin = parms.projection.Unproject(origin);
   height = origin.altitude;
@@ -147,7 +147,8 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
 }
 
 void
-FlatTriangleFanTree::FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms)
+FlatTriangleFanTree::FillGaps(const AFlatGeoPoint &origin,
+                              ReachFanParms &parms) noexcept
 {
   // worth checking for gaps?
   if (vs.size() > 2 && parms.rpolars.IsTurningReachEnabled()) {
@@ -171,7 +172,7 @@ FlatTriangleFanTree::FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms)
 
 void
 FlatTriangleFanTree::UpdateTerrainBase(const FlatGeoPoint o,
-                                       ReachFanParms &parms)
+                                       ReachFanParms &parms) noexcept
 {
   if (!parms.terrain) {
     parms.terrain_base = 0;
@@ -198,7 +199,8 @@ FlatTriangleFanTree::UpdateTerrainBase(const FlatGeoPoint o,
 
 bool
 FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
-                              const RouteLink &e_2, ReachFanParms &parms)
+                              const RouteLink &e_2,
+                              ReachFanParms &parms) noexcept
 {
   const bool side = (e_1.d > e_2.d);
   const RouteLink &e_long = (side ? e_1 : e_2);
@@ -250,7 +252,7 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
 
 int
 FlatTriangleFanTree::DirectArrival(FlatGeoPoint dest,
-                                   const ReachFanParms &parms) const
+                                   const ReachFanParms &parms) const noexcept
 {
   assert(!vs.empty());
   return parms.rpolars.CalcGlideArrival(GetOrigin(), dest, parms.projection);
@@ -259,7 +261,7 @@ FlatTriangleFanTree::DirectArrival(FlatGeoPoint dest,
 bool
 FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint n,
                                          const ReachFanParms &parms,
-                                         int &arrival_height) const
+                                         int &arrival_height) const noexcept
 {
   if (height < arrival_height)
     return false; // can't possibly improve
@@ -290,7 +292,7 @@ FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint n,
 
 void
 FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox &bb,
-                                   FlatTriangleFanVisitor &visitor) const
+                                   FlatTriangleFanVisitor &visitor) const noexcept
 {
   if (!bb.Overlaps(bb_children))
     return;
