@@ -90,9 +90,11 @@ MapWindow::DrawRoute(Canvas &canvas)
 
   const auto r_size = route.size();
   constexpr std::size_t capacity = std::decay_t<decltype(route)>::capacity();
-  BulkPixelPoint p[capacity], *pp = &p[0];
-  for (auto i = route.begin(), end = route.end(); i != end; ++i, ++pp)
-    *pp = render_projection.GeoToScreen(*i);
+  BulkPixelPoint p[capacity];
+  std::transform(route.begin(), route.end(), p,
+                 [this](const auto &i) {
+                   return render_projection.GeoToScreen(i);
+                 });
 
   p[r_size - 1] = ScreenClosestPoint(p[r_size-1], p[r_size-2], p[r_size-1], Layout::Scale(20));
 
