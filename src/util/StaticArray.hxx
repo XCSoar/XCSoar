@@ -36,7 +36,7 @@
  * An array with a maximum size known at compile time.  It keeps track
  * of the actual length at runtime.
  */
-template<class T, size_t max>
+template<class T, std::size_t max>
 class StaticArray: public TrivialArray<T, max> {
 public:
 	constexpr

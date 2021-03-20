@@ -42,7 +42,7 @@
  * of the actual length at runtime. The clear() function needs to be called
  * to initialize the class properly.
  */
-template<class T, size_t max>
+template<class T, std::size_t max>
 class TrivialArray {
 	typedef std::array<T, max> Array;
 
