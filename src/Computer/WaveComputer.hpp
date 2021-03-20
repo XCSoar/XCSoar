@@ -77,29 +77,29 @@ class WaveComputer {
   std::list<WaveInfo> waves;
 
 public:
-  void Reset() {
+  void Reset() noexcept {
     last_enabled = false;
   }
 
   void Compute(const NMEAInfo &basic,
                const FlyingState &flight,
                WaveResult &result,
-               const WaveSettings &settings);
+               const WaveSettings &settings) noexcept;
 
 private:
-  void Initialise();
+  void Initialise() noexcept;
 
   /**
    * Resets the internal state for calculating the current wave.
    */
-  void ResetCurrent();
+  void ResetCurrent() noexcept;
 
   /**
    * Remove old waves.
    */
-  void Decay(double min_time);
+  void Decay(double min_time) noexcept;
 
-  void FoundWave(const WaveInfo &new_wave);
+  void FoundWave(const WaveInfo &new_wave) noexcept;
 };
 
 #endif
