@@ -86,8 +86,7 @@ public:
 		std::move(init.begin(), init.end(), data.begin());
 	}
 
-	constexpr
-	size_type capacity() const noexcept { return max; }
+	static constexpr size_type capacity() noexcept { return max; }
 
 	constexpr
 	size_type max_size() const noexcept {
