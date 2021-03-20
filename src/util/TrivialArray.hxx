@@ -57,13 +57,13 @@ protected:
 	Array data;
 
 	constexpr
-	TrivialArray(size_type _size):the_size(_size) {}
+	TrivialArray(size_type _size) noexcept:the_size(_size) {}
 
 public:
 	/**
 	 * Non-initialising constructor.
 	 */
-	TrivialArray() = default;
+	TrivialArray() noexcept = default;
 
 	TrivialArray(size_type _size, const T &value):the_size(_size) {
 		std::fill(begin(), end(), value);
@@ -87,10 +87,10 @@ public:
 	}
 
 	constexpr
-	size_type capacity() const { return max; }
+	size_type capacity() const noexcept { return max; }
 
 	constexpr
-	size_type max_size() const {
+	size_type max_size() const noexcept {
 		return max;
 	}
 
@@ -98,7 +98,7 @@ public:
 	 * Forcibly set the specified size, without initialising or freeing
 	 * new/excess elements.
 	 */
-	void resize(size_type new_size) {
+	void resize(size_type new_size) noexcept {
 		assert(new_size <= max_size());
 
 		the_size = new_size;
@@ -108,37 +108,37 @@ public:
 	 * Returns the number of allocated elements.
 	 */
 	constexpr
-	size_type size() const {
+	size_type size() const noexcept {
 		return the_size;
 	}
 
-	void shrink(size_type _size) {
+	void shrink(size_type _size) noexcept {
 		assert(_size <= the_size);
 
 		the_size = _size;
 	}
 
 	constexpr
-	bool empty() const {
+	bool empty() const noexcept {
 		return the_size == 0;
 	}
 
 	constexpr
-	bool full() const {
+	bool full() const noexcept {
 		return the_size == max;
 	}
 
 	/**
 	 * Empties this array, but does not destruct its elements.
 	 */
-	void clear() {
+	void clear() noexcept {
 		the_size = 0;
 	}
 
 	/**
 	 * Returns one element.  No bounds checking.
 	 */
-	T &operator[](size_type i) {
+	T &operator[](size_type i) noexcept {
 		assert(i < size());
 
 		return data[i];
@@ -147,48 +147,48 @@ public:
 	/**
 	 * Returns one constant element.  No bounds checking.
 	 */
-	const T &operator[](size_type i) const {
+	const T &operator[](size_type i) const noexcept {
 		assert(i < size());
 
 		return data[i];
 	}
 
-	constexpr iterator begin() {
+	constexpr iterator begin() noexcept {
 		return data.begin();
 	}
 
-	constexpr const_iterator begin() const {
+	constexpr const_iterator begin() const noexcept {
 		return data.begin();
 	}
 
-	constexpr iterator end() {
+	constexpr iterator end() noexcept {
 		return std::next(data.begin(), the_size);
 	}
 
-	constexpr const_iterator end() const {
+	constexpr const_iterator end() const noexcept {
 		return std::next(data.begin(), the_size);
 	}
 
-	T &back() {
+	T &back() noexcept {
 		assert(the_size > 0);
 
 		return data[the_size - 1];
 	}
 
-	const T &back() const {
+	const T &back() const noexcept {
 		assert(the_size > 0);
 
 		return data[the_size - 1];
 	}
 
-	bool contains(const T &value) const {
+	bool contains(const T &value) const noexcept {
 		return std::find(begin(), end(), value) != end();
 	}
 
 	/**
 	 * Return address of start of data segment.
 	 */
-	const T* raw() const {
+	const T* raw() const noexcept {
 		return &data[0];
 	}
 
@@ -206,7 +206,7 @@ public:
 	 * Increase the length by one and return a pointer to the new
 	 * element, to be modified by the caller.  No bounds checking.
 	 */
-	T &append() {
+	T &append() noexcept {
 		assert(!full());
 
 		return data[the_size++];
@@ -227,7 +227,7 @@ public:
 	/**
 	 * Remove the item at the given index.
 	 */
-	void remove(size_type i) {
+	void remove(size_type i) noexcept {
 		assert(i < size());
 
 		std::move(std::next(data.begin(), i + 1),
@@ -240,7 +240,7 @@ public:
 	/**
 	 * Remove an item by copying the last item over it.
 	 */
-	void quick_remove(size_type i) {
+	void quick_remove(size_type i) noexcept {
 		assert(i < size());
 
 		if (i < size() - 1)
@@ -273,13 +273,13 @@ public:
 		append() = T(std::forward<Args>(args)...);
 	}
 
-	T &front() {
+	T &front() noexcept {
 		assert(the_size > 0);
 
 		return data.front();
 	}
 
-	const T &front() const {
+	const T &front() const noexcept {
 		assert(the_size > 0);
 
 		return data.front();

@@ -39,8 +39,7 @@
 template<class T, std::size_t max>
 class StaticArray: public TrivialArray<T, max> {
 public:
-	constexpr
-	StaticArray(): TrivialArray<T, max>(0) {}
+	constexpr StaticArray() noexcept:TrivialArray<T, max>(0) {}
 
 	using TrivialArray<T, max>::TrivialArray;
 };
