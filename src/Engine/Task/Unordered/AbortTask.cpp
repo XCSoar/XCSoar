@@ -29,7 +29,6 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
-#include "util/ReservablePriorityQueue.hpp"
 #include "util/Clamp.hpp"
 
 /** min search range in m */
@@ -116,17 +115,6 @@ AbortTask::IsTaskFull() const
   return task_points.size() >= max_abort;
 }
 
-/** Function object used to rank waypoints by arrival time */
-struct AbortRank
-  : public std::binary_function<AlternatePoint, AlternatePoint, bool>
-{
-  /** Condition, ranks by arrival time */
-  bool operator()(const AlternatePoint &x, const AlternatePoint &y) const {
-    return x.solution.time_elapsed + x.solution.time_virtual >
-           y.solution.time_elapsed + y.solution.time_virtual;
-  }
-};
-
 gcc_pure
 static bool
 IsReachable(const GlideResult &result, bool final_glide)
@@ -148,7 +136,7 @@ AbortTask::FillReachable(const AircraftState &state,
   const AGeoPoint p_start(state.location, state.altitude);
 
   bool found_final_glide = false;
-  reservable_priority_queue<AlternatePoint, AlternateList, AbortRank> q;
+  AlternateList q;
   q.reserve(32);
 
   for (auto v = approx_waypoints.begin(); v != approx_waypoints.end();) {
@@ -173,7 +161,7 @@ AbortTask::FillReachable(const AircraftState &state,
 
       if (!intersects) {
         wp = v->waypoint;
-        q.push(AlternatePoint(std::move(wp), result));
+        q.emplace_back(std::move(wp), result);
         // remove it since it's already in the list now      
         v = approx_waypoints.erase(v);
 
@@ -187,16 +175,21 @@ AbortTask::FillReachable(const AircraftState &state,
     ++v;
   }
 
-  while (!q.empty() && !IsTaskFull()) {
-    auto top = q.top();
+  /* sort by arrival time */
+  std::sort(q.begin(), q.end(), [](const auto &x, const auto &y){
+    return x.solution.time_elapsed + x.solution.time_virtual <
+      y.solution.time_elapsed + y.solution.time_virtual;
+  });
+
+  const auto n = std::min(q.size(), max_abort - task_points.size());
+  for (std::size_t j = 0; j < n; ++j) {
+    auto &top = q[j];
     task_points.emplace_back(std::move(top.waypoint), task_behaviour,
                              top.solution);
 
     const int i = task_points.size() - 1;
     if (task_points[i].point.GetWaypoint().id == active_waypoint)
       active_task_point = i;
-
-    q.pop();
   }
 
   return found_final_glide;

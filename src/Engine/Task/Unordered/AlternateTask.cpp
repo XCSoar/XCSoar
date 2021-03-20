@@ -23,7 +23,6 @@
 #include "AlternateTask.hpp"
 #include "Task/Points/TaskWaypoint.hpp"
 #include "Geo/Math.hpp"
-#include "util/ReservablePriorityQueue.hpp"
 #include "Navigation/Aircraft.hpp"
 
 AlternateTask::AlternateTask(const TaskBehaviour &tb,
@@ -47,22 +46,6 @@ AlternateTask::Clear()
   alternates.clear();
 }
 
-/**
- * Function object used to rank waypoints by arrival time
- */
-struct AlternateRank:
-  public std::binary_function<AlternateTask::Divert,
-                              AlternateTask::Divert, bool>
-{
-  /**
-   * Condition, ranks by distance diversion 
-   */
-  bool operator()(const AlternateTask::Divert& x, 
-                  const AlternateTask::Divert& y) const {
-    return x.delta < y.delta;
-  }
-};
-
 void 
 AlternateTask::ClientUpdate(const AircraftState &state_now,
                              const bool reachable)
@@ -75,7 +58,7 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
   if (!destination.IsValid())
     return;
 
-  reservable_priority_queue<Divert, DivertVector, AlternateRank> q;
+  DivertVector q;
   q.reserve(task_points.size());
 
   const auto straight_distance = state_now.location.Distance(destination);
@@ -88,19 +71,23 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
         ::DoubleDistance(state_now.location, wp->location, destination);
     const auto delta = straight_distance - diversion_distance;
 
-    q.push(Divert(std::move(wp), i.solution, delta));
+    q.emplace_back(std::move(wp), i.solution, delta);
   }
 
+  /* sort by distance diversion */
+  std::sort(q.begin(), q.end(), [](const auto &x, const auto &y){
+    return x.delta > y.delta;
+  });
+
   // now push results onto the list, best first.
-  while (!q.empty() && alternates.size() < max_alternates) {
-    const AlternatePoint &top = q.top();
+  const auto n = std::min(q.size(), max_alternates);
+  for (std::size_t i = 0; i < n; ++i) {
+    const AlternatePoint &top = q[i];
 
     // only add if not already in the list (from previous stage in two
     // stage process)
     if (!IsWaypointInAlternates(*top.waypoint))
       alternates.push_back(top);
-
-    q.pop();
   }
 }
 
