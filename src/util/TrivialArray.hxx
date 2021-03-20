@@ -44,13 +44,13 @@
  */
 template<class T, std::size_t max>
 class TrivialArray {
-	typedef std::array<T, max> Array;
+	using Array = std::array<T, max>;
 
 public:
-	typedef typename Array::size_type size_type;
-	typedef T value_type;
-	typedef typename Array::iterator iterator;
-	typedef typename Array::const_iterator const_iterator;
+	using size_type = typename Array::size_type;
+	using value_type = T;
+	using iterator = typename Array::iterator;
+	using const_iterator =  typename Array::const_iterator;
 
 protected:
 	size_type the_size;
