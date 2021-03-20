@@ -42,15 +42,7 @@ public:
 	constexpr
 	StaticArray(): TrivialArray<T, max>(0) {}
 
-	StaticArray(typename TrivialArray<T, max>::size_type _size, const T &value)
-		:TrivialArray<T, max>(_size, value) {}
-
-	template<typename I>
-	StaticArray(I _begin, I _end)
-		:TrivialArray<T, max>(_begin, _end) {}
-
-	template<typename U>
-	StaticArray(std::initializer_list<U> init):TrivialArray<T, max>(init) {}
+	using TrivialArray<T, max>::TrivialArray;
 };
 
 #endif
