@@ -80,15 +80,15 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
 
   const auto straight_distance = state_now.location.Distance(destination);
 
-  for (auto i = task_points.begin(), end = task_points.end(); i != end; ++i) {
-    const TaskWaypoint &tp = i->point;
+  for (const auto &i : task_points) {
+    const TaskWaypoint &tp = i.point;
     auto wp = tp.GetWaypointPtr();
 
     const auto diversion_distance =
         ::DoubleDistance(state_now.location, wp->location, destination);
     const auto delta = straight_distance - diversion_distance;
 
-    q.push(Divert(std::move(wp), i->solution, delta));
+    q.push(Divert(std::move(wp), i.solution, delta));
   }
 
   // now push results onto the list, best first.
