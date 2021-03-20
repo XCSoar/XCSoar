@@ -58,8 +58,8 @@ public:
   void Visit(const AirspaceWarningManager &awm) {
     serial = awm.GetSerial();
 
-    for (auto i = awm.begin(), end = awm.end(); i != end; ++i)
-      Visit(*i);
+    for (const auto &i : awm)
+      Visit(i);
   }
 
   void Visit(const ProtectedAirspaceWarningManager &awm) {
