@@ -54,14 +54,13 @@ private:
   FlatBoundingBox bb_children;
   LeafVector children;
   const unsigned char depth;
-  bool gaps_filled;
+  bool gaps_filled = false;
 
 public:
   friend class PrintHelper;
 
   FlatTriangleFanTree(const unsigned char _depth = 0)
-    :depth(_depth),
-     gaps_filled(false) {}
+    :depth(_depth) {}
 
   bool IsRoot() const {
     return depth == 0;
