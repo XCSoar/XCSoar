@@ -106,12 +106,7 @@ GetWaveInfo(const LeastSquares &ls, const FlatProjection &projection,
 void
 WaveComputer::Decay(double min_time)
 {
-  for (auto i = waves.begin(), end = waves.end(); i != end;) {
-    if (i->time < min_time)
-      i = waves.erase(i);
-    else
-      ++i;
-  }
+  waves.remove_if([min_time](const auto &i){ return i.time < min_time; });
 }
 
 /**
