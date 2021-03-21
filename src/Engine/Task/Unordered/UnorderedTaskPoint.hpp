@@ -43,7 +43,7 @@ public:
    * @param wp Waypoint to be used as task point origin
    * @param tb Task Behaviour defining options (esp safety heights)
    */
-  UnorderedTaskPoint(WaypointPtr &&wp,
+  UnorderedTaskPoint(WaypointPtr wp,
                      const TaskBehaviour &tb);
 
   void SetTaskBehaviour(const TaskBehaviour &tb);
