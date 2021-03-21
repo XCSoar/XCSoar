@@ -145,8 +145,7 @@ AbortTask::FillReachable(const AircraftState &state,
       continue;
     }
 
-    auto wp = v->waypoint;
-    UnorderedTaskPoint t(std::move(wp), task_behaviour);
+    UnorderedTaskPoint t(v->waypoint, task_behaviour);
     GlideResult result =
         TaskSolution::GlideSolutionRemaining(t, state,
                                              task_behaviour.glide, polar);
@@ -160,8 +159,7 @@ AbortTask::FillReachable(const AircraftState &state,
             AGeoPoint(v->waypoint->location, result.min_arrival_altitude));
 
       if (!intersects) {
-        wp = v->waypoint;
-        q.emplace_back(std::move(wp), result);
+        q.emplace_back(v->waypoint, result);
         // remove it since it's already in the list now      
         v = approx_waypoints.erase(v);
 
