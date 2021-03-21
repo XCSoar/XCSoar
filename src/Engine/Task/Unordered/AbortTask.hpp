@@ -65,6 +65,7 @@ protected:
   using AlternateTaskVector = std::vector<AlternateTaskPoint>;
   AlternateTaskVector task_points;
 
+private:
   /** max number of items in list */
   static constexpr AlternateTaskVector::size_type max_abort = 10;
 
@@ -76,7 +77,6 @@ protected:
   /** Hook for external intersection tests */
   AbortIntersectionTest* intersection_test;
 
-private:
   unsigned active_waypoint;
   bool reachable_landable;
 
