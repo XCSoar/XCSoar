@@ -38,7 +38,7 @@ static constexpr double min_search_range = 50000;
 static constexpr double max_search_range = 100000;
 
 AbortTask::AbortTask(const TaskBehaviour &_task_behaviour,
-                     const Waypoints &wps)
+                     const Waypoints &wps) noexcept
   :UnorderedTask(TaskType::ABORT, _task_behaviour),
    waypoints(wps),
    intersection_test(NULL),
@@ -48,7 +48,7 @@ AbortTask::AbortTask(const TaskBehaviour &_task_behaviour,
 }
 
 void
-AbortTask::SetTaskBehaviour(const TaskBehaviour &tb)
+AbortTask::SetTaskBehaviour(const TaskBehaviour &tb) noexcept
 {
   UnorderedTask::SetTaskBehaviour(tb);
 
@@ -56,7 +56,7 @@ AbortTask::SetTaskBehaviour(const TaskBehaviour &tb)
     tp.point.SetTaskBehaviour(tb);
 }
 
-void 
+void
 AbortTask::SetActiveTaskPoint(unsigned index) noexcept
 {
   if (index == active_task_point)
@@ -70,7 +70,7 @@ AbortTask::SetActiveTaskPoint(unsigned index) noexcept
   }
 }
 
-TaskWaypoint*
+TaskWaypoint *
 AbortTask::GetActiveTaskPoint() const noexcept
 {
   if (active_task_point < task_points.size())
@@ -94,7 +94,7 @@ AbortTask::TaskSize() const noexcept
 }
 
 void
-AbortTask::Clear()
+AbortTask::Clear() noexcept
 {
   task_points.clear();
   reachable_landable = false;
@@ -102,7 +102,7 @@ AbortTask::Clear()
 
 double
 AbortTask::GetAbortRange(const AircraftState &state,
-                         const GlidePolar &glide_polar) const
+                         const GlidePolar &glide_polar) const noexcept
 {
   // always scan at least min range or approx glide range
   return Clamp(state.altitude * glide_polar.GetBestLD(),
@@ -111,7 +111,7 @@ AbortTask::GetAbortRange(const AircraftState &state,
 
 gcc_pure
 static bool
-IsReachable(const GlideResult &result, bool final_glide)
+IsReachable(const GlideResult &result, bool final_glide) noexcept
 {
   return final_glide
     ? result.IsFinalGlide()
@@ -122,7 +122,7 @@ bool
 AbortTask::FillReachable(const AircraftState &state,
                          AlternateList &approx_waypoints,
                          const GlidePolar &polar, bool only_airfield,
-                         bool final_glide, bool safety)
+                         bool final_glide, bool safety) noexcept
 {
   if (IsTaskFull() || approx_waypoints.empty())
     return false;
@@ -216,16 +216,17 @@ public:
   }
 };
 
-void 
-AbortTask::ClientUpdate(const AircraftState &state_now, bool reachable)
+void
+AbortTask::ClientUpdate(const AircraftState &state_now,
+                        bool reachable) noexcept
 {
   // nothing to do here, it's specialisations that may use this
 }
 
-bool 
+bool
 AbortTask::UpdateSample(const AircraftState &state,
                         const GlidePolar &glide_polar,
-                        bool full_update)
+                        bool full_update) noexcept
 {
   assert(state.location.IsValid());
 
@@ -286,28 +287,28 @@ AbortTask::UpdateSample(const AircraftState &state,
   return false; // nothing to do
 }
 
-void 
-AbortTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const
+void
+AbortTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const noexcept
 {
   for (const auto &tp : task_points)
     visitor.Visit(tp.point);
 }
 
 void
-AbortTask::Reset()
+AbortTask::Reset() noexcept
 {
   Clear();
   UnorderedTask::Reset();
 }
 
 WaypointPtr
-AbortTask::GetHome() const
+AbortTask::GetHome() const noexcept
 {
   return waypoints.GetHome();
 }
 
-GeoVector 
-AbortTask::GetHomeVector(const AircraftState &state) const
+GeoVector
+AbortTask::GetHomeVector(const AircraftState &state) const noexcept
 {
   const auto home_waypoint = GetHome();
   if (home_waypoint)

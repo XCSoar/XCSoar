@@ -58,7 +58,7 @@ protected:
     GlideResult solution;
 
     AlternateTaskPoint(WaypointPtr &&waypoint, const TaskBehaviour &tb,
-                       const GlideResult &_solution)
+                       const GlideResult &_solution) noexcept
       :point(std::move(waypoint), tb), solution(_solution) {}
   };
 
@@ -91,11 +91,11 @@ public:
    * @return Initialised object (with nothing in task)
    */
   AbortTask(const TaskBehaviour &tb,
-            const Waypoints &wps);
+            const Waypoints &wps) noexcept;
 
-  void SetTaskBehaviour(const TaskBehaviour &tb);
+  void SetTaskBehaviour(const TaskBehaviour &tb) noexcept;
 
-  const UnorderedTaskPoint &GetAlternate(unsigned i) const {
+  const UnorderedTaskPoint &GetAlternate(unsigned i) const noexcept {
     assert(i < task_points.size());
 
     return task_points[i].point;
@@ -106,7 +106,7 @@ public:
    *
    * @return Index of active task point sequence
    */
-  unsigned GetActiveIndex() const {
+  unsigned GetActiveIndex() const noexcept {
     return active_task_point;
   }
 
@@ -116,7 +116,7 @@ public:
    *
    * @return True if a landable waypoint was found
    */
-  bool HasReachableLandable() const {
+  bool HasReachableLandable() const noexcept {
     return reachable_landable;
   }
 
@@ -126,14 +126,14 @@ public:
    * @param state State of aircraft
    * @return Vector to home waypoint
    */
-  GeoVector GetHomeVector(const AircraftState &state) const;
-  WaypointPtr GetHome() const;
+  GeoVector GetHomeVector(const AircraftState &state) const noexcept;
+  WaypointPtr GetHome() const noexcept;
 
 protected:
   /**
    * Clears task points in list
    */
-  virtual void Clear();
+  virtual void Clear() noexcept;
 
   /**
    * Check whether abort task list is full
@@ -154,7 +154,7 @@ protected:
    */
   gcc_pure
   double GetAbortRange(const AircraftState &state_now,
-                       const GlidePolar &glide_polar) const;
+                       const GlidePolar &glide_polar) const noexcept;
 
   /**
    * Fill abort task list with candidate waypoints given a list of
@@ -173,7 +173,7 @@ protected:
   bool FillReachable(const AircraftState &state,
                      AlternateList &approx_waypoints,
                      const GlidePolar &polar, bool only_airfield,
-                     bool final_glide, bool safety);
+                     bool final_glide, bool safety) noexcept;
 
 protected:
   /**
@@ -182,21 +182,22 @@ protected:
    * It's first called after the reachable scan, then may be called again after scanning
    * for unreachable.
    */
-  virtual void ClientUpdate(const AircraftState &state_now, bool reachable);
+  virtual void ClientUpdate(const AircraftState &state_now,
+                            bool reachable) noexcept;
 
 public:
   /**
    * Specify whether the task is active or not.  If it's active, it will
    * notify the user about the abort task point being changed via the events.
    */
-  void SetActive(bool _active) {
+  void SetActive(bool _active) noexcept {
     is_active = _active;
   }
 
   /**
    * Set external test function to be used for additional intersection tests
    */
-  void SetIntersectionTest(AbortIntersectionTest *test) {
+  void SetIntersectionTest(AbortIntersectionTest *test) noexcept {
     intersection_test = test;
   }
 
@@ -207,7 +208,7 @@ public:
    * @param visitor Visitor to accept
    * @param reverse Visit task points in reverse order
    */
-  void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor) const override;
+  void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor) const noexcept override;
 
 public:
   /* virtual methods from class TaskInterface */
@@ -217,12 +218,12 @@ public:
   bool IsValidTaskPoint(int index_offset) const noexcept override;
 
   /* virtual methods from class AbstractTask */
-  virtual void Reset() override;
+  virtual void Reset() noexcept override;
 
 protected:
   virtual bool UpdateSample(const AircraftState &state_now,
                             const GlidePolar &glide_polar,
-                            bool full_update) override;
+                            bool full_update) noexcept override;
 };
 
 #endif
