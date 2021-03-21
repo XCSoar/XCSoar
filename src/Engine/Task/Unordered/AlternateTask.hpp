@@ -34,7 +34,6 @@
  */
 class AlternateTask final : public AbortTask
 {
-public:
   struct Divert : public AlternatePoint {
     double delta;
 
@@ -48,7 +47,6 @@ public:
   /// number of alternates
   static constexpr DivertVector::size_type max_alternates = 6;
 
-private:
   AlternateList alternates;
   GeoPoint destination;
 
