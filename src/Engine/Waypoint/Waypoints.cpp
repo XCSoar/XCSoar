@@ -72,7 +72,7 @@ struct VisitorAdapter {
   }
 };
 
-WaypointPtr
+inline WaypointPtr
 Waypoints::WaypointNameTree::Get(const TCHAR *name) const
 {
   TCHAR normalized_name[_tcslen(name) + 1];
@@ -80,7 +80,7 @@ Waypoints::WaypointNameTree::Get(const TCHAR *name) const
   return RadixTree<WaypointPtr>::Get(normalized_name, nullptr);
 }
 
-void
+inline void
 Waypoints::WaypointNameTree::VisitNormalisedPrefix(const TCHAR *prefix,
                                                    WaypointVisitor &visitor) const
 {
@@ -100,7 +100,7 @@ Waypoints::WaypointNameTree::SuggestNormalisedPrefix(const TCHAR *prefix,
   return Suggest(normalized, dest, max_length);
 }
 
-void
+inline void
 Waypoints::WaypointNameTree::Add(WaypointPtr wp)
 {
   TCHAR normalized_name[wp->name.length() + 1];
@@ -108,7 +108,7 @@ Waypoints::WaypointNameTree::Add(WaypointPtr wp)
   RadixTree<WaypointPtr>::Add(normalized_name, std::move(wp));
 }
 
-void
+inline void
 Waypoints::WaypointNameTree::Remove(const WaypointPtr &wp)
 {
   TCHAR normalized_name[wp->name.length() + 1];
