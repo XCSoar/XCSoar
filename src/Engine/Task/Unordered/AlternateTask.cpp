@@ -26,21 +26,21 @@
 #include "Navigation/Aircraft.hpp"
 
 AlternateTask::AlternateTask(const TaskBehaviour &tb,
-                             const Waypoints &wps):
-  AbortTask(tb, wps)
+                             const Waypoints &wps) noexcept
+  :AbortTask(tb, wps)
 {
   alternates.reserve(64);
 }
 
 void
-AlternateTask::Reset()
+AlternateTask::Reset() noexcept
 {
   AbortTask::Reset();
   destination.SetInvalid();
 }
 
 void
-AlternateTask::Clear()
+AlternateTask::Clear() noexcept
 {
   AbortTask::Clear();
   alternates.clear();
@@ -48,7 +48,7 @@ AlternateTask::Clear()
 
 void 
 AlternateTask::ClientUpdate(const AircraftState &state_now,
-                             const bool reachable)
+                            const bool reachable) noexcept
 {
   // build a list of alternates, sorted by distance.
   // this is done in separate stages so we can add the reachable ones
@@ -91,14 +91,14 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
   }
 }
 
-void 
-AlternateTask::SetTaskDestination(const GeoPoint &_destination)
+void
+AlternateTask::SetTaskDestination(const GeoPoint &_destination) noexcept
 {
   destination = _destination;
 }
 
 inline bool
-AlternateTask::IsWaypointInAlternates(const Waypoint& waypoint) const
+AlternateTask::IsWaypointInAlternates(const Waypoint& waypoint) const noexcept
 {
   return std::any_of(alternates.begin(), alternates.end(), [&](const auto &i){
     return *i.waypoint == waypoint;

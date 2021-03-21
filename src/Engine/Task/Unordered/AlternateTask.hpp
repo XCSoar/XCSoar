@@ -38,7 +38,7 @@ class AlternateTask final : public AbortTask
     double delta;
 
     Divert(WaypointPtr &&_waypoint, const GlideResult &_solution,
-           double _delta)
+           double _delta) noexcept
       :AlternatePoint(std::move(_waypoint), _solution), delta(_delta) {}
   };
 
@@ -60,13 +60,13 @@ public:
    * @return Initialised object (with nothing in task)
    */
   AlternateTask(const TaskBehaviour &tb,
-                const Waypoints &wps);
+                const Waypoints &wps) noexcept;
 
   /**
    * Sets the target of the task.
    * Must be called before running update_sample!
    */
-  void SetTaskDestination(const GeoPoint &_destination);
+  void SetTaskDestination(const GeoPoint &_destination) noexcept;
 
   /**
    * Retrieve a copy of the task alternates
@@ -75,7 +75,7 @@ public:
    *
    * @return Vector of alternates
    */
-  const AlternateList &GetAlternates() const {
+  const AlternateList &GetAlternates() const noexcept {
     return alternates;
   }
 
@@ -85,17 +85,17 @@ private:
    * alternate list.
    */
   [[gnu::pure]]
-  bool IsWaypointInAlternates(const Waypoint &waypoint) const;
+  bool IsWaypointInAlternates(const Waypoint &waypoint) const noexcept;
 
 public:
   /* virtual methods from class AbstractTask */
-  virtual void Reset() override;
+  virtual void Reset() noexcept override;
 
 protected:
   /* virtual methods from class AbortTask */
-  virtual void Clear() override;
+  virtual void Clear() noexcept override;
   virtual void ClientUpdate(const AircraftState &state_now,
-                            bool reachable) override;
+                            bool reachable) noexcept override;
 };
 
 #endif //ALTERNATETASK_HPP
