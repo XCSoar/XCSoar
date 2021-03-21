@@ -141,7 +141,9 @@ protected:
    * @return True if no more task points can be added
    */
   gcc_pure
-  bool IsTaskFull() const;
+  bool IsTaskFull() const noexcept {
+    return task_points.size() >= max_abort;
+  }
 
   /**
    * Calculate distance to search for landable waypoints for aircraft.
