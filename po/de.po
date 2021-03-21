@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2021-03-20 06:18+0000\n"
+"PO-Revision-Date: 2021-03-21 11:14+0000\n"
 "Last-Translator: Christopher Schenk <christopher_schenk@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
 "translations/de/>\n"
@@ -87,23 +87,23 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
-"FAI Regeln, erlaubt nur FAI Start-, Ziel- und Wendepunkttypen, für Abzeichen "
+"FAI Regeln. Erlaubt nur FAI Start-, Ziel- und Wendepunkttypen für Abzeichen "
 "und Rekorde. Aktiviert die FAI Höhe für die Endanflugsberechnung."
 
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
 msgid "FAI rules, path from a start to two turn points and return."
-msgstr "FAI Regeln, ein Kurs vom Start über zwei Wenden und wieder zurück."
+msgstr "FAI Regeln. Ein Kurs vom Start über zwei Wenden und wieder zurück."
 
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr "FAI Regeln, ein Kurs vom Abflug um eine Wende und wieder zurück."
+msgstr "FAI Regeln. Ein Kurs vom Abflug um eine Wende und wieder zurück."
 
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
 msgid "FAI rules, path from start to a goal destination."
-msgstr "FAI Regeln, Kurs vom Abflug zu einem Zielpunkt."
+msgstr "FAI Regeln. Kurs vom Abflug zu einem Zielpunkt."
 
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
@@ -111,9 +111,8 @@ msgid ""
 "Racing task around turn points.  Can also be used for FAI badge and record "
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
-"Geschwindigkeitsaufgabe um Wendepunkte. Kann für FAI Abzeichen oder auch für "
-"Rekordversuche verwendet werden; alle OZ Typen (Sektor Gebiets Typen) sind "
-"möglich."
+"Geschwindigkeitsaufgabe um Wendepunkte. Kann auch für FAI-Abzeichen und "
+"Rekordaufgaben verwendet werden. Erlaubt alle OZ Typen (Beobachtungsgebiete)."
 
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
