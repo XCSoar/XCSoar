@@ -97,7 +97,7 @@ AlternateTask::SetTaskDestination(const GeoPoint &_destination)
   destination = _destination;
 }
 
-bool 
+inline bool
 AlternateTask::IsWaypointInAlternates(const Waypoint& waypoint) const
 {
   return std::any_of(alternates.begin(), alternates.end(), [&](const auto &i){

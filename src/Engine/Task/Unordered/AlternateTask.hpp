@@ -84,6 +84,7 @@ private:
    * Determine if the candidate waypoint is already in the
    * alternate list.
    */
+  [[gnu::pure]]
   bool IsWaypointInAlternates(const Waypoint &waypoint) const;
 
 public:
