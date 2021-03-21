@@ -52,9 +52,6 @@ class AlternateList;
  */
 class AbortTask: public UnorderedTask
 {
-  /** max number of items in list */
-  static constexpr unsigned max_abort = 10;
-
 protected:
   struct AlternateTaskPoint {
     UnorderedTaskPoint point;
@@ -67,6 +64,9 @@ protected:
 
   using AlternateTaskVector = std::vector<AlternateTaskPoint>;
   AlternateTaskVector task_points;
+
+  /** max number of items in list */
+  static constexpr AlternateTaskVector::size_type max_abort = 10;
 
   /** whether the AbortTask is the master or running in background */
   bool is_active;

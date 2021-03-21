@@ -46,7 +46,7 @@ public:
   using DivertVector = std::vector<Divert>;
 
   /// number of alternates
-  static constexpr unsigned max_alternates = 6;
+  static constexpr DivertVector::size_type max_alternates = 6;
 
 private:
   AlternateList alternates;
