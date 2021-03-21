@@ -100,9 +100,7 @@ AlternateTask::SetTaskDestination(const GeoPoint &_destination)
 bool 
 AlternateTask::IsWaypointInAlternates(const Waypoint& waypoint) const
 {
-  for (auto it = alternates.begin(), end = alternates.end(); it != end; ++it)
-    if (*it->waypoint == waypoint)
-      return true;
-
-  return false;
+  return std::any_of(alternates.begin(), alternates.end(), [&](const auto &i){
+    return *i.waypoint == waypoint;
+  });
 }
