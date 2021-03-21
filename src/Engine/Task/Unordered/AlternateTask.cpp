@@ -82,12 +82,12 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
   // now push results onto the list, best first.
   const auto n = std::min(q.size(), max_alternates);
   for (std::size_t i = 0; i < n; ++i) {
-    const AlternatePoint &top = q[i];
+    AlternatePoint &top = q[i];
 
     // only add if not already in the list (from previous stage in two
     // stage process)
     if (!IsWaypointInAlternates(*top.waypoint))
-      alternates.push_back(top);
+      alternates.emplace_back(std::move(top));
   }
 }
 
