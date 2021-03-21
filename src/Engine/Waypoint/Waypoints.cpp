@@ -21,56 +21,10 @@
  */
 
 #include "Waypoints.hpp"
-#include "WaypointVisitor.hpp"
 #include "util/StringUtil.hpp"
 
 // global, used for test harness
 unsigned n_queries = 0;
-
-/**
- * Container accessor to allow a WaypointVisitor to visit
- * WaypointEnvelopes.
- */
-class WaypointEnvelopeVisitor {
-  WaypointVisitor *const waypoint_visitor;
-
-public:
-  /**
-   * Constructor
-   *
-   * @param wve Contained visitor
-   *
-   * @return Initialised object
-   */
-  WaypointEnvelopeVisitor(WaypointVisitor* wve):waypoint_visitor(wve) {};
-
-  /**
-   * Accessor operator to perform visit
-   */
-  void
-  operator()(const WaypointPtr &wp)
-  {
-    Visit(wp);
-  }
-
-  /**
-   * Visit item inside envelope
-   */
-  void
-  Visit(const WaypointPtr &wp)
-  {
-    waypoint_visitor->Visit(wp);
-  }
-};
-
-struct VisitorAdapter {
-  WaypointVisitor &visitor;
-  VisitorAdapter(WaypointVisitor &_visitor):visitor(_visitor) {}
-
-  void operator()(const WaypointPtr &wp) {
-    visitor.Visit(wp);
-  }
-};
 
 inline WaypointPtr
 Waypoints::WaypointNameTree::Get(const TCHAR *name) const
@@ -82,12 +36,11 @@ Waypoints::WaypointNameTree::Get(const TCHAR *name) const
 
 inline void
 Waypoints::WaypointNameTree::VisitNormalisedPrefix(const TCHAR *prefix,
-                                                   WaypointVisitor &visitor) const
+                                                   const WaypointVisitor &visitor) const
 {
   TCHAR normalized[_tcslen(prefix) + 1];
   NormalizeSearchString(normalized, prefix);
-  VisitorAdapter adapter(visitor);
-  VisitPrefix(normalized, adapter);
+  VisitPrefix(normalized, visitor);
 }
 
 TCHAR *
@@ -272,7 +225,7 @@ Waypoints::LookupId(const unsigned id) const
 
 void
 Waypoints::VisitWithinRange(const GeoPoint &loc, const double range,
-    WaypointVisitor& visitor) const
+                            WaypointVisitor visitor) const
 {
   if (IsEmpty())
     return; // nothing to do
@@ -281,14 +234,12 @@ Waypoints::VisitWithinRange(const GeoPoint &loc, const double range,
   const WaypointTree::Point point(flat_location.x, flat_location.y);
   const unsigned mrange = task_projection.ProjectRangeInteger(loc, range);
 
-  WaypointEnvelopeVisitor wve(&visitor);
-
-  waypoint_tree.VisitWithinRange(point, mrange, wve);
+  waypoint_tree.VisitWithinRange(point, mrange, visitor);
 }
 
 void
 Waypoints::VisitNamePrefix(const TCHAR *prefix,
-                           WaypointVisitor& visitor) const
+                           WaypointVisitor visitor) const
 {
   name_tree.VisitNormalisedPrefix(prefix, visitor);
 }

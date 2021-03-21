@@ -31,7 +31,6 @@ Copyright_License {
 #include "Engine/Util/Gradient.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "Engine/GlideSolvers/GlideState.hpp"
 #include "Engine/GlideSolvers/GlideResult.hpp"
 #include "Engine/GlideSolvers/MacCready.hpp"
@@ -141,7 +140,7 @@ struct VisibleWaypoint {
 };
 
 class WaypointVisitorMap final
-  : public WaypointVisitor, public TaskPointConstVisitor
+  : public TaskPointConstVisitor
 {
   const MapWindowProjection &projection;
   const WaypointRendererSettings &settings;
@@ -178,6 +177,7 @@ public:
   {
     _tcscpy(altitude_unit, Units::GetAltitudeName());
   }
+
 
 protected:
   void FormatTitle(TCHAR *buffer, size_t buffer_size,
@@ -375,7 +375,7 @@ protected:
   }
 
 public:
-  void Visit(const WaypointPtr &way_point) override {
+  void Add(const WaypointPtr &way_point) noexcept {
     AddWaypoint(way_point, false);
   }
 
@@ -493,7 +493,8 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
   }
 
   way_points->VisitWithinRange(projection.GetGeoScreenCenter(),
-                                 projection.GetScreenDistanceMeters(), v);
+                               projection.GetScreenDistanceMeters(),
+                               [&v](const auto &w){ v.Add(w); });
 
   v.Calculate(route_planner, polar_settings, task_behaviour, calculated);
 

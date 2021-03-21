@@ -29,7 +29,9 @@
 #include "Waypoint.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 
-class WaypointVisitor;
+#include <functional>
+
+using WaypointVisitor = std::function<void(const WaypointPtr &)>;
 
 /**
  * Container for waypoints using kd-tree representation internally for
@@ -60,7 +62,7 @@ class Waypoints {
   class WaypointNameTree : public RadixTree<WaypointPtr> {
   public:
     WaypointPtr Get(const TCHAR *name) const;
-    void VisitNormalisedPrefix(const TCHAR *prefix, WaypointVisitor &visitor) const;
+    void VisitNormalisedPrefix(const TCHAR *prefix, const WaypointVisitor &visitor) const;
     TCHAR *SuggestNormalisedPrefix(const TCHAR *prefix,
                                    TCHAR *dest, size_t max_length) const;
     void Add(WaypointPtr wp);
@@ -295,13 +297,13 @@ public:
    * @param visitor Visitor to be called on waypoints within range
    */
   void VisitWithinRange(const GeoPoint &loc, double range,
-                        WaypointVisitor &visitor) const;
+                        WaypointVisitor visitor) const;
 
   /**
    * Call visitor function on waypoints with the specified name
    * prefix.
    */
-  void VisitNamePrefix(const TCHAR *prefix, WaypointVisitor& visitor) const;
+  void VisitNamePrefix(const TCHAR *prefix, WaypointVisitor visitor) const;
 
   /**
    * Returns a set of possible characters following the specified

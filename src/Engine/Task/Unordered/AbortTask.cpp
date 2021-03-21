@@ -28,7 +28,6 @@
 #include "Task/Solvers/TaskSolution.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "Waypoint/WaypointVisitor.hpp"
 #include "util/Clamp.hpp"
 
 /** min search range in m */
@@ -187,35 +186,6 @@ AbortTask::FillReachable(const AircraftState &state,
   return found_final_glide;
 }
 
-/**
- * Class to build vector from visited waypoints.
- * Intended to be used temporarily.
- */
-class WaypointVisitorVector final : public WaypointVisitor
-{
-  AlternateList &vector;
-
-public:
-  /**
-   * Constructor
-   *
-   * @param wpv Vector to add to
-   *
-   * @return Initialised object
-   */
-  WaypointVisitorVector(AlternateList &wpv):vector(wpv) {}
-
-  /**
-   * Visit method, adds result to vector
-   *
-   * @param wp Waypoint that is visited
-   */
-  void Visit(const WaypointPtr &wp) override {
-    if (wp->IsLandable())
-      vector.emplace_back(wp);
-  }
-};
-
 void
 AbortTask::ClientUpdate(const AircraftState &state_now,
                         bool reachable) noexcept
@@ -249,9 +219,11 @@ AbortTask::UpdateSample(const AircraftState &state,
   AlternateList approx_waypoints;
   approx_waypoints.reserve(128);
 
-  WaypointVisitorVector wvv(approx_waypoints);
   waypoints.VisitWithinRange(state.location,
-                             GetAbortRange(state, glide_polar), wvv);
+                             GetAbortRange(state, glide_polar), [&approx_waypoints](const auto &wp){
+                               if (wp->IsLandable())
+                                 approx_waypoints.emplace_back(wp);
+                             });
   if (approx_waypoints.empty()) {
     /** @todo increase range */
     return false;
