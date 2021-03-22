@@ -105,7 +105,7 @@ public:
  * row (y is constant).
  */
 class FastRowRotation {
-  const int cost, sint, y_cost, y_sint;
+  int cost, sint, y_cost, y_sint;
 
 public:
   using Point = IntPoint2D;
