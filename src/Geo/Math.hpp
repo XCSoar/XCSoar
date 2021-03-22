@@ -40,11 +40,11 @@ class Angle;
 [[gnu::pure]]
 double
 ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
-                  const GeoPoint &loc3);
+                  const GeoPoint &loc3) noexcept;
 
 void
 DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
-                double *distance, Angle *bearing);
+                double *distance, Angle *bearing) noexcept;
 
 /**
  * Calculates the distance between two locations
@@ -54,7 +54,7 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
  */
 [[gnu::pure]]
 double
-Distance(const GeoPoint &loc1, const GeoPoint &loc2);
+Distance(const GeoPoint &loc1, const GeoPoint &loc2) noexcept;
 
 /**
  * Calculates the bearing between two locations
@@ -64,7 +64,7 @@ Distance(const GeoPoint &loc1, const GeoPoint &loc2);
  */
 [[gnu::pure]]
 Angle
-Bearing(const GeoPoint &loc1, const GeoPoint &loc2);
+Bearing(const GeoPoint &loc1, const GeoPoint &loc2) noexcept;
 
 /**
  * Finds the point along a distance dthis (m) between p1 and p2, which are
@@ -74,14 +74,15 @@ Bearing(const GeoPoint &loc1, const GeoPoint &loc2);
  */
 [[gnu::pure]]
 GeoPoint
-IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2, double dthis);
+IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
+                  double dthis) noexcept;
 
 /**
  * Find the nearest great-circle middle point between the two.
  */
 [[gnu::pure]]
 GeoPoint
-Middle(const GeoPoint &a, const GeoPoint &b);
+Middle(const GeoPoint &a, const GeoPoint &b) noexcept;
 
 /** 
  * Calculate and add distances between point 1 and 2, and point 2 and 3.
@@ -98,7 +99,7 @@ Middle(const GeoPoint &a, const GeoPoint &b);
 [[gnu::pure]]
 double
 DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
-               const GeoPoint &loc3);
+               const GeoPoint &loc3) noexcept;
 
 /**
  * Calculates the location (loc_out) you would have, after being at
@@ -111,6 +112,6 @@ DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
  */
 [[gnu::pure]]
 GeoPoint FindLatitudeLongitude(const GeoPoint &loc,
-                               Angle bearing, double distance);
+                               Angle bearing, double distance) noexcept;
 
 #endif
