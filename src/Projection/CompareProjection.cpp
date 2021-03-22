@@ -25,11 +25,7 @@ Copyright_License {
 #include "WindowProjection.hpp"
 
 CompareProjection::FourCorners::FourCorners(const WindowProjection &projection) noexcept
-  :GeoQuadrilateral{projection.ScreenToGeo(0, 0),
-  projection.ScreenToGeo(projection.GetScreenWidth(), 0),
-  projection.ScreenToGeo(0, projection.GetScreenHeight()),
-  projection.ScreenToGeo(projection.GetScreenWidth(),
-                         projection.GetScreenHeight())} {}
+  :GeoQuadrilateral(projection.GetGeoQuadrilateral()) {}
 
 [[gnu::pure]]
 static double

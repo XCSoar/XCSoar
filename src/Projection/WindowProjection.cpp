@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "WindowProjection.hpp"
+#include "Geo/Quadrilateral.hpp"
 
 bool
 WindowProjection::GeoVisible(const GeoPoint &loc) const noexcept
@@ -74,6 +75,18 @@ WindowProjection::GetGeoScreenCenter() const noexcept
   return ScreenToGeo(GetScreenWidth() / 2, GetScreenHeight() / 2);
 }
 
+GeoQuadrilateral
+WindowProjection::GetGeoQuadrilateral() const noexcept
+{
+  const auto r = GetScreenRect();
+  return {
+    ScreenToGeo(r.GetTopLeft()),
+    ScreenToGeo(r.GetTopRight()),
+    ScreenToGeo(r.GetBottomLeft()),
+    ScreenToGeo(r.GetBottomRight()),
+  };
+}
+
 void
 WindowProjection::UpdateScreenBounds() noexcept
 {
@@ -82,12 +95,5 @@ WindowProjection::UpdateScreenBounds() noexcept
   if (!IsValid())
     return;
 
-  const auto r = GetScreenRect();
-
-  GeoBounds sb(ScreenToGeo(r.GetTopLeft()));
-  sb.Extend(ScreenToGeo(r.GetTopRight()));
-  sb.Extend(ScreenToGeo(r.GetBottomRight()));
-  sb.Extend(ScreenToGeo(r.GetBottomLeft()));
-
-  screen_bounds = sb;
+  screen_bounds = GetGeoQuadrilateral().GetBounds();
 }

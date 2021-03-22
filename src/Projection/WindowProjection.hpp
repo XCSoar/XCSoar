@@ -33,6 +33,8 @@ Copyright_License {
 #include <cassert>
 #include <optional>
 
+struct GeoQuadrilateral;
+
 class WindowProjection:
   public Projection
 {
@@ -182,6 +184,9 @@ public:
   const GeoBounds &GetScreenBounds() const noexcept {
     return screen_bounds;
   }
+
+  [[gnu::pure]]
+  GeoQuadrilateral GetGeoQuadrilateral() const noexcept;
 
   /** Updates the cached screen_bounds member */
   void UpdateScreenBounds() noexcept;
