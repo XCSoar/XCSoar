@@ -25,14 +25,14 @@ Copyright_License {
 #include "Engine/GlideSolvers/PolarCoefficients.hpp"
 
 PolarCoefficients
-PolarShape::CalculateCoefficients() const
+PolarShape::CalculateCoefficients() const noexcept
 {
   return PolarCoefficients::From3VW(points[0].v, points[1].v, points[2].v,
                                     points[0].w, points[1].w, points[2].w);
 }
 
 bool
-PolarShape::IsValid() const
+PolarShape::IsValid() const noexcept
 {
   return CalculateCoefficients().IsValid();
 }
