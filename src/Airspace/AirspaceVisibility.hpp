@@ -44,6 +44,14 @@ public:
   bool operator()(const AbstractAirspace &airspace) const;
 };
 
-typedef WrappedAirspacePredicate<AirspaceVisibility> AirspaceVisiblePredicate;
+inline auto
+AirspaceVisiblePredicate(const AirspaceComputerSettings &_computer_settings,
+                         const AirspaceRendererSettings &_renderer_settings,
+                         const AltitudeState &_state) noexcept
+{
+  return WrapAirspacePredicate(AirspaceVisibility(_computer_settings,
+                                                  _renderer_settings, _state));
+
+}
 
 #endif

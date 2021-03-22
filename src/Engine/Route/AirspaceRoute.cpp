@@ -201,7 +201,7 @@ AirspaceRoute::Reset()
 
 void
 AirspaceRoute::Synchronise(const Airspaces &master,
-                           const AirspacePredicate &_condition,
+                           AirspacePredicate _condition,
                            const AGeoPoint &origin,
                            const AGeoPoint &destination)
 {
@@ -214,7 +214,7 @@ AirspaceRoute::Synchronise(const Airspaces &master,
   AirspacePredicateHeightRangeExcludeTwo h_condition(h_min, h_max, origin, destination);
 
   const auto and_condition = MakeAndPredicate(h_condition,
-                                              AirspacePredicateRef(_condition));
+                                              std::move(_condition));
   const auto predicate = WrapAirspacePredicate(and_condition);
 
   if (m_airspaces.SynchroniseInRange(master, origin.Middle(destination),

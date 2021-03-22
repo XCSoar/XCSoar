@@ -33,7 +33,7 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "NMEA/Aircraft.hpp"
 
-class AirspaceMapVisible : public AirspacePredicate
+class AirspaceMapVisible
 {
   const AirspaceVisibility visible_predicate;
   const AirspaceWarningCopy &warnings;
@@ -105,7 +105,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
 #ifndef ENABLE_OPENGL
        stencil_canvas,
 #endif
-       projection, settings, awc, AirspacePredicateTrue());
+       projection, settings, awc, [](const auto &){ return true; });
 }
 
 void

@@ -75,7 +75,7 @@ const AbstractAirspace *
 FindSoonestAirspace(const Airspaces &airspaces,
                     const AircraftState &state,
                     const AirspaceAircraftPerformance &perf,
-                    const AirspacePredicate &predicate,
+                    AirspacePredicate predicate,
                     const double max_time)
 {
   const auto &projection = airspaces.GetProjection();

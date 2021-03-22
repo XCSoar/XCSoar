@@ -23,72 +23,30 @@
 #ifndef AIRSPACE_PREDICATE_HPP
 #define AIRSPACE_PREDICATE_HPP
 
+#include <functional>
 #include <utility>
 
 class AbstractAirspace;
-class AirspacePredicateTrue;
-struct AircraftState;
 
-/**
- *  Functor class for conditions to be applied to airspace queries
- */
-class AirspacePredicate
-{
-public:
-  /**
-   * Test condition
-   * @param t Airspace to test
-   * @return True if condition met
-   */
-  [[gnu::pure]]
-  virtual bool operator()(const AbstractAirspace& t) const = 0;
-
-  /** Convenience condition, useful for default conditions */
-  static const AirspacePredicateTrue always_true;
-};
+using AirspacePredicate = std::function<bool(const AbstractAirspace &)>;
 
 /**
  * Convenience predicate for conditions always true
  */
-class AirspacePredicateTrue final : public AirspacePredicate {
-public:
-  bool operator()(const AbstractAirspace &) const override {
-    return true;
-  }
-};
-
-/**
- * A template class that wraps a generic C++ object into an
- * #AirspacePredicate.
- */
-template<typename P>
-class WrappedAirspacePredicate final : public AirspacePredicate, private P {
-public:
-  template<typename... Args>
-  WrappedAirspacePredicate(Args&&... args):P(args...) {}
-
-  bool operator()(const AbstractAirspace& t) const override {
-    return static_cast<const P &>(*this)(t);
-  }
-};
-
-template<typename P>
-static inline WrappedAirspacePredicate<P>
-WrapAirspacePredicate(const P &p)
+constexpr bool
+AirspacePredicateTrue(const AbstractAirspace &) noexcept
 {
-  return WrappedAirspacePredicate<P>(p);
+  return true;
 }
 
-class AirspacePredicateRef {
-  const AirspacePredicate &p;
-
-public:
-  explicit AirspacePredicateRef(const AirspacePredicate &_p):p(_p) {}
-
-  bool operator()(const AbstractAirspace &t) const {
-    return p(t);
-  }
-};
+template<typename P>
+static inline AirspacePredicate
+WrapAirspacePredicate(P &&p)
+{
+  return [q = std::forward<P>(p)](const auto &a){
+    return q(a);
+  };
+}
 
 /**
  * A class that combines two unary functions with logical "and".

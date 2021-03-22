@@ -23,7 +23,6 @@
 #include "Airspaces.hpp"
 #include "AbstractAirspace.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
-#include "Predicate/AirspacePredicate.hpp"
 #include "Navigation/Aircraft.hpp"
 
 #include <boost/geometry/geometries/linestring.hpp>
@@ -234,7 +233,7 @@ bool
 Airspaces::SynchroniseInRange(const Airspaces &master,
                               const GeoPoint &location,
                               const double range,
-                              const AirspacePredicate &condition)
+                              AirspacePredicate condition)
 {
   qnh = master.qnh;
   activity_mask = master.activity_mask;

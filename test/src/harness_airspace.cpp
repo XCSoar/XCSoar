@@ -295,7 +295,7 @@ void scan_airspaces(const AircraftState state,
 
   {
     const auto *as = FindSoonestAirspace(airspaces, state, perf,
-                                         AirspacePredicateTrue());
+                                         [](const auto &){ return true; });
     if (do_report) {
       std::ofstream fout("output/results/res-bb-sortedsoonest.txt");
       if (as) {

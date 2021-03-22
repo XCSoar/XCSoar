@@ -23,6 +23,7 @@
 #ifndef XCSOAR_AIRSPACES_HPP
 #define XCSOAR_AIRSPACES_HPP
 
+#include "Predicate/AirspacePredicate.hpp"
 #include "AirspacesInterface.hpp"
 #include "AirspaceActivity.hpp"
 #include "util/Serial.hpp"
@@ -33,7 +34,6 @@
 
 class RasterTerrain;
 class AirspaceIntersectionVisitor;
-class AirspacePredicate;
 
 /**
  * Container for airspaces using kd-tree representation internally for
@@ -226,7 +226,7 @@ public:
    */
   bool SynchroniseInRange(const Airspaces &master,
                           const GeoPoint &location, double range,
-                          const AirspacePredicate &condition);
+                          AirspacePredicate condition);
 
 private:
   [[gnu::pure]]
