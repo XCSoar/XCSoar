@@ -24,13 +24,14 @@ Copyright_License {
 #include "WindowProjection.hpp"
 
 bool
-WindowProjection::GeoVisible(const GeoPoint &loc) const
+WindowProjection::GeoVisible(const GeoPoint &loc) const noexcept
 {
   return screen_bounds.IsInside(loc);
 }
 
 bool
-WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc, PixelPoint &sc) const
+WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc,
+                                       PixelPoint &sc) const noexcept
 {
   if (GeoVisible(loc)) {
     sc = GeoToScreen(loc);
@@ -41,7 +42,7 @@ WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc, PixelPoint &sc) cons
 }
 
 bool
-WindowProjection::ScreenVisible(const PixelPoint &P) const
+WindowProjection::ScreenVisible(const PixelPoint &P) const noexcept
 {
   assert(screen_size_initialised);
 
@@ -50,31 +51,31 @@ WindowProjection::ScreenVisible(const PixelPoint &P) const
 }
 
 void
-WindowProjection::SetScaleFromRadius(double radius)
+WindowProjection::SetScaleFromRadius(double radius) noexcept
 {
   SetScale(double(GetMinScreenDistance()) / (radius * 2));
 }
 
 double
-WindowProjection::GetMapScale() const
+WindowProjection::GetMapScale() const noexcept
 {
   return DistancePixelsToMeters(GetMapResolutionFactor());
 }
 
 double
-WindowProjection::GetScreenDistanceMeters() const
+WindowProjection::GetScreenDistanceMeters() const noexcept
 {
   return DistancePixelsToMeters(GetScreenDistance());
 }
 
 GeoPoint
-WindowProjection::GetGeoScreenCenter() const
+WindowProjection::GetGeoScreenCenter() const noexcept
 {
   return ScreenToGeo(GetScreenWidth() / 2, GetScreenHeight() / 2);
 }
 
 void
-WindowProjection::UpdateScreenBounds()
+WindowProjection::UpdateScreenBounds() noexcept
 {
   assert(screen_size_initialised);
 

@@ -27,13 +27,13 @@ Copyright_License {
 
 #include <algorithm>
 
-Projection::Projection()
+Projection::Projection() noexcept
 {
   SetScale(1);
 }
 
 GeoPoint
-Projection::ScreenToGeo(int x, int y) const
+Projection::ScreenToGeo(int x, int y) const noexcept
 {
   assert(IsValid());
 
@@ -56,7 +56,7 @@ Projection::ScreenToGeo(int x, int y) const
 }
 
 PixelPoint
-Projection::GeoToScreen(const GeoPoint &g) const
+Projection::GeoToScreen(const GeoPoint &g) const noexcept
 {
   assert(IsValid());
 
@@ -73,8 +73,8 @@ Projection::GeoToScreen(const GeoPoint &g) const
   return sc;
 }
 
-void 
-Projection::SetScale(const double _scale)
+void
+Projection::SetScale(const double _scale) noexcept
 {
   scale = _scale;
 

@@ -24,23 +24,23 @@ Copyright_License {
 #include "CompareProjection.hpp"
 #include "WindowProjection.hpp"
 
-CompareProjection::FourCorners::FourCorners(const WindowProjection &projection)
+CompareProjection::FourCorners::FourCorners(const WindowProjection &projection) noexcept
   :GeoQuadrilateral{projection.ScreenToGeo(0, 0),
-    projection.ScreenToGeo(projection.GetScreenWidth(), 0),
-    projection.ScreenToGeo(0, projection.GetScreenHeight()),
-    projection.ScreenToGeo(projection.GetScreenWidth(),
-                           projection.GetScreenHeight())} {}
+  projection.ScreenToGeo(projection.GetScreenWidth(), 0),
+  projection.ScreenToGeo(0, projection.GetScreenHeight()),
+  projection.ScreenToGeo(projection.GetScreenWidth(),
+                         projection.GetScreenHeight())} {}
 
 gcc_pure
 static double
 SimpleDistance(const GeoPoint &a, const GeoPoint &b,
-               const double latitude_cos)
+               const double latitude_cos) noexcept
 {
   return hypot((a.longitude - b.longitude).AsDelta().Native(),
                (a.latitude - b.latitude).AsDelta().Native() * latitude_cos);
 }
 
-CompareProjection::CompareProjection(const WindowProjection &projection)
+CompareProjection::CompareProjection(const WindowProjection &projection) noexcept
   :corners(projection),
    latitude_cos(corners.top_left.latitude.fastcosine()),
    max_delta(SimpleDistance(corners.top_left, corners.top_right,
@@ -50,7 +50,7 @@ CompareProjection::CompareProjection(const WindowProjection &projection)
 }
 
 bool
-CompareProjection::Compare(const CompareProjection &other) const
+CompareProjection::Compare(const CompareProjection &other) const noexcept
 {
   return max_delta > 0 &&
     SimpleDistance(corners.top_left, other.corners.top_left,
@@ -64,7 +64,7 @@ CompareProjection::Compare(const CompareProjection &other) const
 }
 
 bool
-CompareProjection::CompareAndUpdate(const CompareProjection &other)
+CompareProjection::CompareAndUpdate(const CompareProjection &other) noexcept
 {
   if (Compare(other))
     return true;

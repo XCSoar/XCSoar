@@ -58,7 +58,8 @@ public:
    * @param sc Screen coordinate (output)
    * @return True if the location is within the bounds
    */
-  bool GeoToScreenIfVisible(const GeoPoint &loc, PixelPoint &sc) const;
+  bool GeoToScreenIfVisible(const GeoPoint &loc,
+                            PixelPoint &sc) const noexcept;
 
   /**
    * Checks whether a geographical location is within the visible bounds
@@ -66,7 +67,7 @@ public:
    * @return True if the location is within the bounds
    */
   gcc_pure
-  bool GeoVisible(const GeoPoint &loc) const;
+  bool GeoVisible(const GeoPoint &loc) const noexcept;
 
   /**
    * Checks whether a screen coordinate is within the visible bounds
@@ -74,9 +75,9 @@ public:
    * @return True if the screen coordinate is within the bounds
    */
   gcc_pure
-  bool ScreenVisible(const PixelPoint &P) const;
+  bool ScreenVisible(const PixelPoint &P) const noexcept;
 
-  void SetScreenSize(PixelSize new_size) {
+  void SetScreenSize(PixelSize new_size) noexcept {
     assert(new_size.width > 0);
     assert(new_size.height > 0);
 
@@ -88,18 +89,18 @@ public:
 #endif
   }
 
-  void SetMapRect(const PixelRect &rc) {
+  void SetMapRect(const PixelRect &rc) noexcept {
     SetScreenSize(rc.GetSize());
   }
 
   gcc_pure
-  double GetMapScale() const;
+  double GetMapScale() const noexcept;
 
   /**
    * Configure the scale so a centered circle with the specified
    * radius is visible.
    */
-  void SetScaleFromRadius(double radius);
+  void SetScaleFromRadius(double radius) noexcept;
 
   /**
    * Returns the size of the map area in pixels.
@@ -115,7 +116,7 @@ public:
    * Returns the width of the map area in pixels.
    */
   gcc_pure
-  unsigned GetScreenWidth() const {
+  unsigned GetScreenWidth() const noexcept {
     assert(screen_size_initialised);
 
     return screen_size.x;
@@ -125,7 +126,7 @@ public:
    * Returns the height of the map area in pixels.
    */
   gcc_pure
-  unsigned GetScreenHeight() const {
+  unsigned GetScreenHeight() const noexcept {
     assert(screen_size_initialised);
 
     return screen_size.y;
@@ -135,7 +136,7 @@ public:
    * Returns the raster coordinates at the center of the map.
    */
   gcc_pure
-  PixelPoint GetScreenCenter() const {
+  PixelPoint GetScreenCenter() const noexcept {
     PixelPoint pt;
     pt.x = GetScreenWidth() / 2;
     pt.y = GetScreenHeight() / 2;
@@ -145,14 +146,14 @@ public:
   /**
    * Returns the width of the map area in meters.
    */
-  double GetScreenWidthMeters() const {
+  double GetScreenWidthMeters() const noexcept {
     return DistancePixelsToMeters(GetScreenWidth());
   }
 
   /**
    * Returns the length of the larger edge of the map area in pixels.
    */
-  unsigned GetScreenDistance() const
+  unsigned GetScreenDistance() const noexcept
   {
     return std::max(GetScreenHeight(), GetScreenWidth());
   }
@@ -160,32 +161,32 @@ public:
   /**
    * Returns the length of the smaller edge of the map area in pixels.
    */
-  unsigned GetMinScreenDistance() const
+  unsigned GetMinScreenDistance() const noexcept
   {
     return std::min(GetScreenHeight(), GetScreenWidth());
   }
 
   gcc_pure
-  double GetScreenDistanceMeters() const;
+  double GetScreenDistanceMeters() const noexcept;
 
   /**
    * Returns the GeoPoint at the center of the screen.
    */
   gcc_pure
-  GeoPoint GetGeoScreenCenter() const;
+  GeoPoint GetGeoScreenCenter() const noexcept;
 
   // used by terrain renderer, topography and airspace
   gcc_pure
-  const GeoBounds &GetScreenBounds() const {
+  const GeoBounds &GetScreenBounds() const noexcept {
     return screen_bounds;
   }
 
   /** Updates the cached screen_bounds member */
-  void UpdateScreenBounds();
+  void UpdateScreenBounds() noexcept;
 
 protected:
   gcc_pure
-  int GetMapResolutionFactor() const {
+  int GetMapResolutionFactor() const noexcept {
     return GetMinScreenDistance() / 8;
   }
 };

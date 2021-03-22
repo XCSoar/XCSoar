@@ -37,12 +37,12 @@ public:
    * Sets a map scale which is not affected by the hard-coded scale
    * list.
    */
-  void SetFreeMapScale(double x);
+  void SetFreeMapScale(double x) noexcept;
 
-  void SetMapScale(double x);
+  void SetMapScale(double x) noexcept;
 
 public:
-  bool HaveScaleList() const {
+  bool HaveScaleList() const noexcept {
     return true;
   }
 
@@ -50,19 +50,19 @@ public:
    * Calculates a scale index.
    */
   gcc_pure
-  double CalculateMapScale(unsigned scale) const;
+  double CalculateMapScale(unsigned scale) const noexcept;
 
   gcc_pure
-  double StepMapScale(double scale, int Step) const;
+  double StepMapScale(double scale, int Step) const noexcept;
 
   gcc_pure
-  bool WaypointInScaleFilter(const Waypoint &way_point) const;
+  bool WaypointInScaleFilter(const Waypoint &way_point) const noexcept;
 
 private:
-  double LimitMapScale(double value) const;
+  double LimitMapScale(double value) const noexcept;
 
   gcc_pure
-  unsigned FindMapScale(double Value) const;
+  unsigned FindMapScale(double Value) const noexcept;
 };
 
 #endif
