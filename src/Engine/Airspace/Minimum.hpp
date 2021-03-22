@@ -25,6 +25,7 @@ Copyright_License {
 #define AIRSPACE_MINIMUM_HPP
 
 #include "Airspaces.hpp"
+#include "Predicate/AirspacePredicate.hpp"
 
 template<class Func,
          typename Result=decltype(((Func *)nullptr)->operator()(*(const AbstractAirspace *)nullptr)),
@@ -39,6 +40,9 @@ FindMinimum(const Airspaces &airspaces, const GeoPoint &location, double range,
   Result minimum;
   for (const auto &i : airspaces.QueryWithinRange(location, range)) {
     const AbstractAirspace &aa = i.GetAirspace();
+    if (!predicate(aa))
+      continue;
+
     Result result = func(aa);
     if (cmp(result, minimum))
       minimum = result;
