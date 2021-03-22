@@ -68,7 +68,13 @@ public:
  * Same as #FastRotation, but works with integer coordinates.
  */
 class FastIntegerRotation {
-  int cost = 1024, sint = 0;
+public:
+  static constexpr int SHIFT = 10;
+  static constexpr int ONE = 1 << SHIFT;
+  static constexpr int HALF = ONE / 2;
+
+private:
+  int cost = ONE, sint = 0;
 
   friend class FastRowRotation;
 
@@ -80,6 +86,13 @@ public:
   FastIntegerRotation(Angle angle) noexcept
     :cost(angle.ifastcosine()), sint(angle.ifastsine()) {}
 
+  constexpr Point RotateRaw(Point p) const noexcept {
+    return {
+      p.x * cost - p.y * sint,
+      p.y * cost + p.x * sint,
+    };
+  }
+
   /**
    * Rotates the point (xin, yin).
    *
@@ -88,9 +101,10 @@ public:
    * @return the rotated coordinates
    */
   constexpr Point Rotate(Point p) const noexcept {
+    const auto raw = RotateRaw(p);
     return {
-      (p.x * cost - p.y * sint + 512) >> 10,
-      (p.y * cost + p.x * sint + 512) >> 10,
+      (raw.x + HALF) >> SHIFT,
+      (raw.y + HALF) >> SHIFT,
     };
   }
 
