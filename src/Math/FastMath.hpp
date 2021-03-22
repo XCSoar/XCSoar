@@ -33,14 +33,14 @@ Copyright_License {
  */
 [[gnu::const]]
 int
-compare_squared(int a, int b, int c);
+compare_squared(int a, int b, int c) noexcept;
 
 [[gnu::const]]
 double
-thermal_recency_fn(unsigned x);
+thermal_recency_fn(unsigned x) noexcept;
 
 inline unsigned int
-CombinedDivAndMod(unsigned &lx)
+CombinedDivAndMod(unsigned &lx) noexcept
 {
   unsigned int ox = lx & 0xff;
   // JMW no need to check max since overflow will result in
@@ -51,11 +51,11 @@ CombinedDivAndMod(unsigned &lx)
 
 [[gnu::const]]
 unsigned
-isqrt4(unsigned val);
+isqrt4(unsigned val) noexcept;
 
 [[gnu::const]]
 static inline unsigned
-ihypot(int x, int y)
+ihypot(int x, int y) noexcept
 {
   return isqrt4(x * x + y * y);
 }
