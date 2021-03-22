@@ -105,18 +105,19 @@ public:
  * row (y is constant).
  */
 class FastRowRotation {
-  int cost, sint, y_cost, y_sint;
+  FastIntegerRotation fir;
+  int y_cost, y_sint;
 
 public:
-  using Point = IntPoint2D;
+  using Point = FastIntegerRotation::Point;
 
-  constexpr FastRowRotation(const FastIntegerRotation &fir, int y) noexcept
-    :cost(fir.cost), sint(fir.sint),
-     y_cost(y * cost + 512), y_sint(y * sint - 512) {}
+  constexpr FastRowRotation(const FastIntegerRotation &_fir, int y) noexcept
+    :fir(_fir),
+     y_cost(y * fir.cost + 512), y_sint(y * fir.sint - 512) {}
 
   constexpr Point Rotate(int x) const noexcept {
-    return Point((x * cost - y_sint + 512) >> 10,
-                 (y_cost + x * sint + 512) >> 10);
+    return Point((x * fir.cost - y_sint + 512) >> 10,
+                 (y_cost + x * fir.sint + 512) >> 10);
   }
 };
 
