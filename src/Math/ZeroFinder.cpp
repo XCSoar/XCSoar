@@ -50,12 +50,6 @@ ZeroFinder::tolerance_actual_zero(const double x) const
   return 2 * epsilon * fabs(x) + tolerance / 2;
 }
 
-//#define INSTRUMENT_ZERO
-#ifdef INSTRUMENT_ZERO
-unsigned long zero_skipped = 0;
-unsigned long zero_total = 0;
-#endif
-
 inline bool
 ZeroFinder::solution_within_tolerance(const double x,
                                       const double tol_act)
@@ -134,15 +128,9 @@ ZeroFinder::solution_within_tolerance(const double x,
 double
 ZeroFinder::find_zero(const double xstart)
 {
-#ifdef INSTRUMENT_ZERO
-  zero_total++;
-#endif
   if ((xmin<=xstart) || (xstart<=xmax) ||
       (f(xstart)> sqrt_epsilon))
     return find_zero_actual(xstart);
-#ifdef INSTRUMENT_ZERO
-  zero_skipped++;
-#endif
   return xstart;
 }
 
@@ -315,14 +303,8 @@ ZeroFinder::find_zero_actual(const double xstart)
 double
 ZeroFinder::find_min(const double xstart)
 {
-#ifdef INSTRUMENT_ZERO
-  zero_total++;
-#endif
   if (!solution_within_tolerance(xstart, tolerance_actual_min(xstart)))
     return find_min_actual(xstart);
-#ifdef INSTRUMENT_ZERO
-  zero_skipped++;
-#endif
   return xstart;
 }
 
