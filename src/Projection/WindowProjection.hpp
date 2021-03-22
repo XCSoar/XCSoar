@@ -27,7 +27,6 @@ Copyright_License {
 #include "Projection.hpp"
 #include "ui/dim/Rect.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "Math/Point2D.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -42,7 +41,7 @@ class WindowProjection:
   bool screen_size_initialised = false;
 #endif
 
-  UnsignedPoint2D screen_size;
+  PixelSize screen_size;
 
   /**
    * Geographical representation of the screen boundaries.
@@ -83,8 +82,7 @@ public:
     assert(new_size.width > 0);
     assert(new_size.height > 0);
 
-    screen_size.x = new_size.width;
-    screen_size.y = new_size.height;
+    screen_size = new_size;
 
 #ifndef NDEBUG
     screen_size_initialised = true;
@@ -111,7 +109,7 @@ public:
   PixelSize GetScreenSize() const noexcept {
     assert(screen_size_initialised);
 
-    return {screen_size.x, screen_size.y};
+    return screen_size;
   }
 
   [[gnu::pure]]
