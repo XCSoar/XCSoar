@@ -33,7 +33,7 @@ Copyright_License {
 
 PixelPoint
 ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
-                   const PixelPoint &p3, int offset)
+                   const PixelPoint &p3, int offset) noexcept
 {
   const PixelPoint v12 = p2 - p1;
   const PixelPoint v13 = p3 - p1;
@@ -65,8 +65,8 @@ ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
 /*
  * Divide x by 2^12, rounded to nearest integer.
  */
-static int
-roundshift(int x)
+static constexpr int
+roundshift(int x) noexcept
 {
   if (x > 0) {
     x += 2048;
@@ -82,7 +82,7 @@ PolygonRotateShift(BulkPixelPoint *poly,
                    const PixelPoint shift,
                    Angle angle,
                    int scale,
-                   const bool use_fast_scale)
+                   const bool use_fast_scale) noexcept
 {
   const int xs = shift.x, ys = shift.y;
   if (use_fast_scale)

@@ -33,7 +33,7 @@ class Angle;
 [[gnu::pure]]
 PixelPoint
 ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
-                   const PixelPoint &p3, int offset);
+                   const PixelPoint &p3, int offset) noexcept;
 
 /**
  * Shifts, rotates and scales the given polygon.
@@ -54,6 +54,6 @@ ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
 void
 PolygonRotateShift(BulkPixelPoint *poly, int n, PixelPoint shift,
                    Angle angle, int scale = 100,
-                   bool use_fast_scale = true);
+                   bool use_fast_scale = true) noexcept;
 
 #endif
