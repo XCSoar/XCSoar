@@ -34,7 +34,7 @@ class FastRotation {
   double cost = 1, sint = 0;
 
 public:
-  typedef DoublePoint2D Point;
+  using Point = DoublePoint2D;
 
   FastRotation() noexcept = default;
 
@@ -73,7 +73,7 @@ class FastIntegerRotation {
   friend class FastRowRotation;
 
 public:
-  typedef IntPoint2D Point;
+  using Point = IntPoint2D;
 
   FastIntegerRotation() noexcept = default;
 
@@ -108,7 +108,7 @@ class FastRowRotation {
   const int cost, sint, y_cost, y_sint;
 
 public:
-  typedef IntPoint2D Point;
+  using Point = IntPoint2D;
 
   constexpr FastRowRotation(const FastIntegerRotation &fir, int y) noexcept
     :cost(fir.cost), sint(fir.sint),
