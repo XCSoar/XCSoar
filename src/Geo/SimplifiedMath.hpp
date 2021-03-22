@@ -45,18 +45,19 @@ class Angle;
  */
 void
 DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
-                 Angle *distance, Angle *bearing);
+                 Angle *distance, Angle *bearing) noexcept;
 
 void
 DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
-                 double *distance, Angle *bearing);
+                 double *distance, Angle *bearing) noexcept;
 
 /**
  * @see FindLatitudeLongitude()
  */
 [[gnu::pure]]
 GeoPoint
-FindLatitudeLongitudeS(const GeoPoint &loc, Angle bearing, double distance);
+FindLatitudeLongitudeS(const GeoPoint &loc,
+                       Angle bearing, double distance) noexcept;
 
 /**
  * @see ProjectedDistance()
@@ -64,6 +65,6 @@ FindLatitudeLongitudeS(const GeoPoint &loc, Angle bearing, double distance);
 [[gnu::pure]]
 double
 ProjectedDistanceS(const GeoPoint &loc1, const GeoPoint &loc2,
-                   const GeoPoint &loc3);
+                   const GeoPoint &loc3) noexcept;
 
 #endif
