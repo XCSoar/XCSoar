@@ -112,6 +112,11 @@ public:
     return {screen_size.x, screen_size.y};
   }
 
+  [[gnu::pure]]
+  PixelRect GetScreenRect() const noexcept {
+    return PixelRect{GetScreenSize()};
+  }
+
   /**
    * Returns the width of the map area in pixels.
    */
@@ -137,10 +142,7 @@ public:
    */
   [[gnu::pure]]
   PixelPoint GetScreenCenter() const noexcept {
-    PixelPoint pt;
-    pt.x = GetScreenWidth() / 2;
-    pt.y = GetScreenHeight() / 2;
-    return pt;
+    return GetScreenRect().GetCenter();
   }
 
   /**

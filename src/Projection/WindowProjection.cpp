@@ -47,8 +47,7 @@ WindowProjection::ScreenVisible(const PixelPoint &P) const noexcept
 {
   assert(screen_size_initialised);
 
-  return P.x >= 0 && (unsigned)P.x < screen_size.x &&
-    P.y >= 0 && (unsigned)P.y < screen_size.y;
+  return GetScreenRect().Contains(P);
 }
 
 void
@@ -83,10 +82,12 @@ WindowProjection::UpdateScreenBounds() noexcept
   if (!IsValid())
     return;
 
-  GeoBounds sb(ScreenToGeo(0, 0));
-  sb.Extend(ScreenToGeo(screen_size.x, 0));
-  sb.Extend(ScreenToGeo(screen_size.x, screen_size.y));
-  sb.Extend(ScreenToGeo(0, screen_size.y));
+  const auto r = GetScreenRect();
+
+  GeoBounds sb(ScreenToGeo(r.GetTopLeft()));
+  sb.Extend(ScreenToGeo(r.GetTopRight()));
+  sb.Extend(ScreenToGeo(r.GetBottomRight()));
+  sb.Extend(ScreenToGeo(r.GetBottomLeft()));
 
   screen_bounds = sb;
 }
