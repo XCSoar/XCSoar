@@ -173,7 +173,7 @@ public:
      settings(_settings), look(_look), task_behaviour(_task_behaviour),
      basic(_basic),
      task_valid(false),
-     labels(projection.GetScreenWidth(), projection.GetScreenHeight())
+     labels(projection.GetScreenSize())
   {
     _tcscpy(altitude_unit, Units::GetAltitudeName());
   }

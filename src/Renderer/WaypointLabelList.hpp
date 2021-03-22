@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Renderer/TextInBox.hpp"
 #include "ui/dim/Point.hpp"
+#include "ui/dim/Size.hpp"
 #include "util/NonCopyable.hpp"
 #include "util/StaticArray.hxx"
 #include "Sizes.h" /* for NAME_SIZE */
@@ -47,13 +48,13 @@ public:
   };
 
 protected:
-  const unsigned width, height;
+  const PixelSize size;
 
   StaticArray<Label, 256u> labels;
 
 public:
-  WaypointLabelList(unsigned _width, unsigned _height)
-    :width(_width), height(_height) {}
+  explicit WaypointLabelList(PixelSize _size) noexcept
+    :size(_size) {}
 
   void Add(const TCHAR *name, int x, int y,
            TextInBoxMode Mode, bool bold,
