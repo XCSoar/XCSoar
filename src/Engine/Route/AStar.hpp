@@ -97,7 +97,7 @@ class AStar
 
   struct Rank: public std::binary_function<NodeValue, NodeValue, bool>
   {
-    [[gnu::pure]]
+    constexpr
     bool operator()(const NodeValue &x, const NodeValue &y) const noexcept {
       return x.priority.f() > y.priority.f();
     }
