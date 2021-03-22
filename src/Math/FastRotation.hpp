@@ -31,7 +31,6 @@ Copyright_License {
  * Rotate coordinates around the zero origin.
  */
 class FastRotation {
-  Angle angle = Angle::Zero();
   double cost = 1, sint = 0;
 
 public:
@@ -40,15 +39,10 @@ public:
   FastRotation() noexcept = default;
 
   /**
-   * @param _angle an angle between 0 and 360
+   * @param angle an angle between 0 and 360
    */
-  FastRotation(Angle _angle) noexcept
-    :angle(_angle.AsBearing()),
-     cost(angle.fastcosine()), sint(angle.fastsine()) {}
-
-  Angle GetAngle() const noexcept {
-    return angle;
-  }
+  FastRotation(Angle angle) noexcept
+    :cost(angle.fastcosine()), sint(angle.fastsine()) {}
 
   /**
    * Rotates the point (xin, yin).
@@ -71,7 +65,6 @@ public:
  * Same as #FastRotation, but works with integer coordinates.
  */
 class FastIntegerRotation {
-  Angle angle = Angle::Zero();
   int cost = 1024, sint = 0;
 
   friend class FastRowRotation;
@@ -81,13 +74,8 @@ public:
 
   FastIntegerRotation() noexcept = default;
 
-  FastIntegerRotation(Angle _angle) noexcept
-    :angle(_angle.AsBearing()),
-     cost(angle.ifastcosine()), sint(angle.ifastsine()) {}
-
-  Angle GetAngle() const noexcept {
-    return angle;
-  }
+  FastIntegerRotation(Angle angle) noexcept
+    :cost(angle.ifastcosine()), sint(angle.ifastsine()) {}
 
   /**
    * Rotates the point (xin, yin).

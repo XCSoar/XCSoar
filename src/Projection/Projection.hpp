@@ -65,6 +65,8 @@ class Projection
    */
   PixelPoint screen_origin = {0, 0};
 
+  Angle screen_angle = Angle::Zero();
+
   /**
    * FastIntegerRotation instance for fast
    * rotation in the conversion functions
@@ -210,7 +212,7 @@ public:
    * @return Screen rotation angle
    */
   Angle GetScreenAngle() const noexcept {
-    return screen_rotation.GetAngle();
+    return screen_angle;
   }
 
   /**
@@ -218,7 +220,7 @@ public:
    * @param angle New screen rotation angle
    */
   void SetScreenAngle(Angle angle) noexcept {
-    screen_rotation = angle;
+    screen_rotation = screen_angle = angle;
   }
 
   /**
