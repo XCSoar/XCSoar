@@ -97,7 +97,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
 
   unsigned padding = Layout::FastScale(4);
   unsigned height = font.GetHeight();
-  PixelPoint p(render_projection.GetScreenWidth() - padding, padding);
+  PixelPoint p(render_projection.GetScreenSize().width - padding, padding);
 
   if (compass_visible)
     /* don't obscure the north arrow */

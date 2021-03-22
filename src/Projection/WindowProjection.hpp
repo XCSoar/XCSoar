@@ -120,26 +120,6 @@ public:
   }
 
   /**
-   * Returns the width of the map area in pixels.
-   */
-  [[gnu::pure]]
-  unsigned GetScreenWidth() const noexcept {
-    assert(screen_size_initialised);
-
-    return screen_size.x;
-  }
-
-  /**
-   * Returns the height of the map area in pixels.
-   */
-  [[gnu::pure]]
-  unsigned GetScreenHeight() const noexcept {
-    assert(screen_size_initialised);
-
-    return screen_size.y;
-  }
-
-  /**
    * Returns the raster coordinates at the center of the map.
    */
   [[gnu::pure]]
@@ -151,7 +131,7 @@ public:
    * Returns the width of the map area in meters.
    */
   double GetScreenWidthMeters() const noexcept {
-    return DistancePixelsToMeters(GetScreenWidth());
+    return DistancePixelsToMeters(GetScreenSize().width);
   }
 
   /**
@@ -159,7 +139,7 @@ public:
    */
   unsigned GetScreenDistance() const noexcept
   {
-    return std::max(GetScreenHeight(), GetScreenWidth());
+    return std::max(GetScreenSize().height, GetScreenSize().width);
   }
 
   /**
@@ -167,7 +147,7 @@ public:
    */
   unsigned GetMinScreenDistance() const noexcept
   {
-    return std::min(GetScreenHeight(), GetScreenWidth());
+    return std::min(GetScreenSize().height, GetScreenSize().width);
   }
 
   [[gnu::pure]]

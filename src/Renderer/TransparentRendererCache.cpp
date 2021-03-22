@@ -33,8 +33,7 @@ TransparentRendererCache::Check(const WindowProjection &projection) const
   assert(projection.IsValid());
 
   return buffer.IsDefined() &&
-    buffer.GetWidth() == projection.GetScreenWidth() &&
-    buffer.GetHeight() == projection.GetScreenHeight() &&
+    buffer.GetSize() == projection.GetScreenSize() &&
     compare_projection.Compare(projection);
 }
 
@@ -45,8 +44,7 @@ TransparentRendererCache::Begin(Canvas &canvas,
   assert(canvas.IsDefined());
   assert(projection.IsValid());
 
-  const PixelSize size(projection.GetScreenWidth(),
-                       projection.GetScreenHeight());
+  const auto size = projection.GetScreenSize();
   if (buffer.IsDefined())
     buffer.Resize(size);
   else

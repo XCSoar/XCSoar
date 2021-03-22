@@ -72,7 +72,7 @@ WindowProjection::GetScreenDistanceMeters() const noexcept
 GeoPoint
 WindowProjection::GetGeoScreenCenter() const noexcept
 {
-  return ScreenToGeo(GetScreenWidth() / 2, GetScreenHeight() / 2);
+  return ScreenToGeo(GetScreenCenter());
 }
 
 GeoQuadrilateral

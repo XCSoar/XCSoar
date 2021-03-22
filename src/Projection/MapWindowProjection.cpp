@@ -64,7 +64,7 @@ MapWindowProjection::CalculateMapScale(unsigned scale) const noexcept
 {
   assert(scale < ScaleListCount);
   return double(ScaleList[scale]) *
-    GetMapResolutionFactor() / Layout::Scale(GetScreenWidth());
+    GetMapResolutionFactor() / Layout::Scale(GetScreenSize().width);
 }
 
 double
@@ -84,7 +84,7 @@ MapWindowProjection::StepMapScale(const double scale, int Step) const noexcept
 unsigned
 MapWindowProjection::FindMapScale(const double Value) const noexcept
 {
-  unsigned DesiredScale(Value * Layout::Scale(GetScreenWidth())
+  unsigned DesiredScale(Value * Layout::Scale(GetScreenSize().width)
                         / GetMapResolutionFactor());
 
   unsigned i;

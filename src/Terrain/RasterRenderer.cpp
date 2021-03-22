@@ -188,8 +188,8 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
   bounds.IntersectWith(map.GetBounds());
 
   height_matrix.Fill(map, bounds,
-                     projection.GetScreenWidth() / quantisation_pixels,
-                     projection.GetScreenHeight() / quantisation_pixels,
+                     projection.GetScreenSize().width / quantisation_pixels,
+                     projection.GetScreenSize().height / quantisation_pixels,
                      true);
 
   last_quantisation_pixels = quantisation_pixels;
