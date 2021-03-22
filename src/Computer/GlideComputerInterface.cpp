@@ -27,38 +27,39 @@ Copyright_License {
 #include "Input/InputQueue.hpp"
 
 void
-GlideComputerTaskEvents::SetComputer(GlideComputer &_computer)
+GlideComputerTaskEvents::SetComputer(GlideComputer &_computer) noexcept
 {
   computer = &_computer;
 }
 
 void
-GlideComputerTaskEvents::EnterTransition(const TaskWaypoint &tp)
+GlideComputerTaskEvents::EnterTransition(const TaskWaypoint &tp) noexcept
 {
   computer->OnTransitionEnter();
 }
 
 void
-GlideComputerTaskEvents::RequestArm(const TaskWaypoint &tp)
+GlideComputerTaskEvents::RequestArm(const TaskWaypoint &tp) noexcept
 {
   InputEvents::processGlideComputer(GCE_ARM_READY);
 }
 
 void
-GlideComputerTaskEvents::ActiveAdvanced(const TaskWaypoint &tp, const int i)
+GlideComputerTaskEvents::ActiveAdvanced(const TaskWaypoint &tp,
+                                        const int i) noexcept
 {
   InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
 }
 
 void
-GlideComputerTaskEvents::TaskStart()
+GlideComputerTaskEvents::TaskStart() noexcept
 {
   InputEvents::processGlideComputer(GCE_TASK_START);
   computer->OnStartTask();
 }
 
 void
-GlideComputerTaskEvents::TaskFinish()
+GlideComputerTaskEvents::TaskFinish() noexcept
 {
   InputEvents::processGlideComputer(GCE_TASK_FINISH);
 }

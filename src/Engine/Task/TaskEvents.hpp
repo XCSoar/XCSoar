@@ -39,14 +39,14 @@ public:
    *
    * @param tp The turnpoint entered
    */
-  virtual void EnterTransition([[maybe_unused]] const TaskWaypoint& tp) {}
+  virtual void EnterTransition([[maybe_unused]] const TaskWaypoint &tp) noexcept {}
 
   /**
    * Called when the aircraft exits a turnpoint observation zone
    *
    * @param tp The turnpoint the aircraft has exited
    */
-  virtual void ExitTransition([[maybe_unused]] const TaskWaypoint &tp) {}
+  virtual void ExitTransition([[maybe_unused]] const TaskWaypoint &tp) noexcept {}
 
   /**
    * Called when auto-advance has changed the active
@@ -56,7 +56,7 @@ public:
    * @param i The task sequence number after auto-advance
    */
   virtual void ActiveAdvanced([[maybe_unused]] const TaskWaypoint &tp,
-                              [[maybe_unused]] const int i) {}
+                              [[maybe_unused]] const int i) noexcept {}
 
   /**
    * Called when a task point can be advanced but the advance needs
@@ -64,17 +64,17 @@ public:
    *
    * @param tp The taskpoint waiting to be armed
    */
-  virtual void RequestArm([[maybe_unused]] const TaskWaypoint &tp) {}
+  virtual void RequestArm([[maybe_unused]] const TaskWaypoint &tp) noexcept {}
 
   /**
    * Called when orderd task has started
    */
-  virtual void TaskStart() {}
+  virtual void TaskStart() noexcept {}
 
   /**
    * Called when orderd task has finished
    */
-  virtual void TaskFinish() {}
+  virtual void TaskFinish() noexcept {}
 };
 
 #endif
