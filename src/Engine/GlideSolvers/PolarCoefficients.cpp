@@ -25,7 +25,7 @@ Copyright_License {
 
 PolarCoefficients
 PolarCoefficients::From3VW(double v1, double v2, double v3,
-                           double w1, double w2, double w3)
+                           double w1, double w2, double w3) noexcept
 {
   PolarCoefficients pc;
 
@@ -45,7 +45,7 @@ PolarCoefficients::From3VW(double v1, double v2, double v3,
 }
 
 PolarCoefficients
-PolarCoefficients::From2VW(double v1, double v2, double w1, double w2)
+PolarCoefficients::From2VW(double v1, double v2, double w1, double w2) noexcept
 {
   PolarCoefficients pc;
 
@@ -60,7 +60,7 @@ PolarCoefficients::From2VW(double v1, double v2, double w1, double w2)
 }
 
 bool
-PolarCoefficients::IsValid() const
+PolarCoefficients::IsValid() const noexcept
 {
   return a > 0 && b < 0 && c > 0;
 }
