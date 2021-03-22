@@ -44,13 +44,13 @@ class CompareProjection {
 
   double latitude_cos;
 
-  double max_delta;
+  double max_delta = -1;
 
 public:
   /**
    * Creates a "cleared" object, so that comparisons are always false.
    */
-  CompareProjection():max_delta(-1) {}
+  CompareProjection() noexcept = default;
 
   explicit CompareProjection(const WindowProjection &projection);
 

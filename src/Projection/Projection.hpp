@@ -57,13 +57,13 @@ Copyright_License {
 class Projection
 {
   /** This is the geographical location that the ScreenOrigin is mapped to */
-  GeoPoint geo_location;
+  GeoPoint geo_location = GeoPoint::Invalid();
 
   /**
    * This is the point that the ScreenRotation will rotate around.
    * It is also the point that the GeoLocation points to.
    */
-  PixelPoint screen_origin;
+  PixelPoint screen_origin = {0, 0};
 
   /**
    * FastIntegerRotation instance for fast

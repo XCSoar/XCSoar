@@ -37,7 +37,7 @@ class WindowProjection:
   public Projection
 {
 #ifndef NDEBUG
-  bool screen_size_initialised;
+  bool screen_size_initialised = false;
 #endif
 
   UnsignedPoint2D screen_size;
@@ -51,10 +51,6 @@ class WindowProjection:
   GeoBounds screen_bounds;
 
 public:
-#ifndef NDEBUG
-  WindowProjection():screen_size_initialised(false) {}
-#endif
-
   /**
    * Converts a geographical location to a screen coordinate if the
    * location is within the visible bounds

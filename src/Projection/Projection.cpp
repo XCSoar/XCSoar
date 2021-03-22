@@ -28,12 +28,8 @@ Copyright_License {
 #include <algorithm>
 
 Projection::Projection()
-  :geo_location(GeoPoint::Invalid()),
-   screen_rotation(Angle::Zero())
 {
   SetScale(1);
-  screen_origin.x = 0;
-  screen_origin.y = 0;
 }
 
 GeoPoint
