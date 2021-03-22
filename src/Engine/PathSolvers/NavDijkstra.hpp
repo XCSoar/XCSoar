@@ -45,13 +45,14 @@ protected:
 
   struct DijkstraMap {
     struct Hash {
-      std::size_t operator()(ScanTaskPoint p) const noexcept {
+      constexpr std::size_t operator()(ScanTaskPoint p) const noexcept {
         return p.Key();
       }
     };
 
     struct Equal {
-      std::size_t operator()(ScanTaskPoint a, ScanTaskPoint b) const noexcept {
+      constexpr std::size_t operator()(ScanTaskPoint a,
+                                       ScanTaskPoint b) const noexcept {
         return a.Key() == b.Key();
       }
     };
