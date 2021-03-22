@@ -39,23 +39,15 @@ public:
 
   FastRotation() noexcept = default;
 
+  /**
+   * @param _angle an angle between 0 and 360
+   */
   FastRotation(Angle _angle) noexcept
-    :angle(Angle::Radians(-9999)) { SetAngle(_angle); }
+    :angle(_angle.AsBearing()),
+     cost(angle.fastcosine()), sint(angle.fastsine()) {}
 
   Angle GetAngle() const noexcept {
     return angle;
-  }
-
-  /**
-   * Sets the new angle, and precalculates the sine/cosine values.
-   *
-   * @param _angle an angle between 0 and 360
-   */
-  void SetAngle(Angle _angle) noexcept;
-
-  const FastRotation &operator =(Angle _angle) noexcept {
-    SetAngle(_angle);
-    return *this;
   }
 
   /**
@@ -90,17 +82,11 @@ public:
   FastIntegerRotation() noexcept = default;
 
   FastIntegerRotation(Angle _angle) noexcept
-    :angle(Angle::Radians(-9999)) { SetAngle(_angle); }
+    :angle(_angle.AsBearing()),
+     cost(angle.ifastcosine()), sint(angle.ifastsine()) {}
 
   Angle GetAngle() const noexcept {
     return angle;
-  }
-
-  void SetAngle(Angle _angle) noexcept;
-
-  const FastIntegerRotation &operator =(Angle _angle) noexcept {
-    SetAngle(_angle);
-    return *this;
   }
 
   /**

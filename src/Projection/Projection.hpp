@@ -218,7 +218,7 @@ public:
    * @param angle New screen rotation angle
    */
   void SetScreenAngle(Angle angle) {
-    screen_rotation.SetAngle(angle);
+    screen_rotation = angle;
   }
 
   /**

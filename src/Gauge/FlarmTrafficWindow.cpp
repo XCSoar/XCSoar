@@ -206,8 +206,8 @@ FlarmTrafficWindow::Update(Angle new_direction, const TrafficList &new_data,
 
   data_modified = new_data.modified;
   heading = new_direction;
-  fr.SetAngle(-heading);
-  fir.SetAngle(heading);
+  fr = -heading;
+  fir = heading;
   data = new_data;
   settings = new_settings;
 
