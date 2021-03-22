@@ -23,7 +23,7 @@
 #include "TaskEffectiveMacCready.hpp"
 
 double
-TaskEffectiveMacCready::f(const double mc)
+TaskEffectiveMacCready::f(const double mc) noexcept
 {
   tm.set_mc(mc);
   return time_error();

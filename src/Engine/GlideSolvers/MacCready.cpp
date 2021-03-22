@@ -361,7 +361,7 @@ public:
    * @param V cruise true air speed (m/s)
    * @return Inverse LD
    */
-  double f(const double v) {
+  double f(const double v) noexcept override {
     res = mac.SolveGlide(task, v, allow_partial);
     if (!res.IsOk() || res.vector.distance <= 0)
       /* the solver failed: return a large value that will be

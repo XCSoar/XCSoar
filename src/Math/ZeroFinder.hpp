@@ -48,7 +48,7 @@ public:
    * @param _xmax Maximum allowable value of x
    * @param _tolerance Absolute tolerance of solution (in x)
    */
-  ZeroFinder(const double _xmin, const double _xmax, const double _tolerance)
+  constexpr ZeroFinder(double _xmin, double _xmax, double _tolerance) noexcept
     :xmin(_xmin), xmax(_xmax), tolerance(_tolerance)
   {
     assert(xmin < xmax);
@@ -61,7 +61,7 @@ public:
    *
    * @return f(x)
    */
-  virtual double f(const double x) = 0;
+  virtual double f(const double x) noexcept = 0;
 
   /**
    * Find closest value of x that produces f(x)=0
@@ -73,7 +73,7 @@ public:
    * @return x value of best solution
    */
   [[gnu::pure]]
-  double find_zero(const double xstart);
+  double find_zero(double xstart) noexcept;
 
   /**
    * Find value of x that minimises f(x)
@@ -85,26 +85,26 @@ public:
    * @return x value of best solution
    */
   [[gnu::pure]]
-  double find_min(const double xstart);
+  double find_min(double xstart) noexcept;
 
 private:
   [[gnu::pure]]
-  double find_zero_actual(const double xstart);
+  double find_zero_actual(double xstart) noexcept;
 
   [[gnu::pure]]
-  double find_min_actual(const double xstart);
+  double find_min_actual(double xstart) noexcept;
 
   /**
    * Tolerance in f of minimisation routine at x
    */
   [[gnu::pure]]
-  double tolerance_actual_min(const double x) const;
+  double tolerance_actual_min(double x) const noexcept;
 
   /**
    * Tolerance in f of zero finding routine at x
    */
   [[gnu::pure]]
-  double tolerance_actual_zero(const double x) const;
+  double tolerance_actual_zero(double x) const noexcept;
 
   /**
    * Test whether solution is within tolerance
@@ -115,8 +115,7 @@ private:
    * @return true if no search required (xstart is good)
    */
   [[gnu::pure]]
-  bool solution_within_tolerance(const double xstart,
-                                 const double tol_act);
+  bool solution_within_tolerance(double xstart, double tol_act) noexcept;
 
 };
 

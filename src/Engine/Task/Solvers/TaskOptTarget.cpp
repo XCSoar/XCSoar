@@ -26,7 +26,7 @@
 #include "util/Clamp.hpp"
 
 double
-TaskOptTarget::f(const double p)
+TaskOptTarget::f(const double p) noexcept
 {
   // set task targets
   SetTarget(p);

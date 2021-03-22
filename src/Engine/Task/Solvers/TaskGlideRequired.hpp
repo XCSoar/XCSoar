@@ -87,7 +87,7 @@ public:
 
 private:
   /* virtual methods from class ZeroFinder */
-  virtual double f(double mc) override;
+  double f(double mc) noexcept override;
 };
 
 #endif

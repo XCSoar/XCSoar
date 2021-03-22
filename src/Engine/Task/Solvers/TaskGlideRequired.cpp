@@ -36,7 +36,7 @@ TaskGlideRequired::TaskGlideRequired(TaskPoint &tp,
 }
 
 double
-TaskGlideRequired::f(const double S)
+TaskGlideRequired::f(const double S) noexcept
 {
   res = tm.glide_sink(aircraft, S);
   return res.altitude_difference;
