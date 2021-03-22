@@ -26,6 +26,7 @@ Copyright_License {
 #include "AirspaceInterceptSolution.hpp"
 #include "AirspaceAircraftPerformance.hpp"
 #include "Minimum.hpp"
+#include "Predicate/AirspacePredicate.hpp"
 #include "Navigation/Aircraft.hpp"
 
 struct SoonestAirspace {

@@ -25,15 +25,14 @@ Copyright_License {
 #define AIRSPACE_MINIMUM_HPP
 
 #include "Airspaces.hpp"
-#include "Predicate/AirspacePredicate.hpp"
 
-template<class Func,
+template<typename Predicate, typename Func,
          typename Result=decltype(((Func *)nullptr)->operator()(*(const AbstractAirspace *)nullptr)),
          class Cmp=std::less<Result>>
 [[gnu::pure]]
 static inline Result
 FindMinimum(const Airspaces &airspaces, const GeoPoint &location, double range,
-            const AirspacePredicate &predicate,
+            Predicate &&predicate,
             Func &&func,
             Cmp &&cmp=Cmp())
 {
