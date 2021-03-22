@@ -58,9 +58,8 @@ AirspaceRenderer::DrawIntersections(Canvas &canvas,
                                     const WindowProjection &projection) const
 {
   for (unsigned i = intersections.size(); i--;) {
-    PixelPoint sc;
-    if (projection.GeoToScreenIfVisible(intersections[i], sc))
-      look.intercept_icon.Draw(canvas, sc);
+    if (auto p = projection.GeoToScreenIfVisible(intersections[i]))
+      look.intercept_icon.Draw(canvas, *p);
   }
 }
 

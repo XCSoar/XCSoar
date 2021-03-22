@@ -30,8 +30,8 @@ Copyright_License {
 #include "Math/Point2D.hpp"
 
 #include <algorithm>
-
 #include <cassert>
+#include <optional>
 
 class WindowProjection:
   public Projection
@@ -58,8 +58,8 @@ public:
    * @param sc Screen coordinate (output)
    * @return True if the location is within the bounds
    */
-  bool GeoToScreenIfVisible(const GeoPoint &loc,
-                            PixelPoint &sc) const noexcept;
+  [[gnu::pure]]
+  std::optional<PixelPoint> GeoToScreenIfVisible(const GeoPoint &loc) const noexcept;
 
   /**
    * Checks whether a geographical location is within the visible bounds

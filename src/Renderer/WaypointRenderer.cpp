@@ -366,12 +366,10 @@ protected:
     if (!projection.WaypointInScaleFilter(*way_point) && !in_task)
       return;
 
-    PixelPoint sc;
-    if (!projection.GeoToScreenIfVisible(way_point->location, sc))
-      return;
-
-    VisibleWaypoint &vwp = waypoints.append();
-    vwp.Set(way_point, sc, in_task);
+    if (auto p = projection.GeoToScreenIfVisible(way_point->location)) {
+      VisibleWaypoint &vwp = waypoints.append();
+      vwp.Set(way_point, *p, in_task);
+    }
   }
 
 public:

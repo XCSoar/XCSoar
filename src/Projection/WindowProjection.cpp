@@ -29,16 +29,17 @@ WindowProjection::GeoVisible(const GeoPoint &loc) const noexcept
   return screen_bounds.IsInside(loc);
 }
 
-bool
-WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc,
-                                       PixelPoint &sc) const noexcept
+std::optional<PixelPoint>
+WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc) const noexcept
 {
-  if (GeoVisible(loc)) {
-    sc = GeoToScreen(loc);
-    return ScreenVisible(sc);
-  }
+  if (!GeoVisible(loc))
+    return {};
 
-  return false;
+  auto p = GeoToScreen(loc);
+  if (!ScreenVisible(p))
+    return {};
+
+  return p;
 }
 
 bool

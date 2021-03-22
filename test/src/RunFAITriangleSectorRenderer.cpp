@@ -46,9 +46,8 @@ RenderFAISectorDots(Canvas &canvas, const WindowProjection &projection,
   canvas.SelectHollowBrush();
 
   for (auto *i = geo_points; i != geo_end; ++i) {
-    PixelPoint p;
-    if (projection.GeoToScreenIfVisible(*i, p))
-      canvas.DrawCircle(p, 2);
+    if (auto p = projection.GeoToScreenIfVisible(*i))
+      canvas.DrawCircle(*p, 2);
   }
 }
 

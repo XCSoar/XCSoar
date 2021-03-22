@@ -74,7 +74,9 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     PixelPoint sc, sc_name, sc_av;
 
     // If FLARM target not on the screen, move to the next one
-    if (!projection.GeoToScreenIfVisible(target_loc, sc))
+    if (auto p = projection.GeoToScreenIfVisible(target_loc))
+      sc = *p;
+    else
       continue;
 
     // Draw the name 16 points below the icon
@@ -151,7 +153,9 @@ MapWindow::DrawGLinkTraffic(Canvas &canvas,
     PixelPoint sc, sc_name, sc_av, sc_alt;
 
     // If FLARM target not on the screen, move to the next one
-    if (!projection.GeoToScreenIfVisible(target_loc, sc))
+    if (auto p = projection.GeoToScreenIfVisible(target_loc))
+      sc = *p;
+    else
       continue;
 
     // Draw the callsign above the icon
@@ -216,10 +220,8 @@ MapWindow::DrawTeammate(Canvas &canvas) const
   const TeamInfo &teamcode_info = Calculated();
 
   if (teamcode_info.teammate_available) {
-    PixelPoint sc;
-    if (render_projection.GeoToScreenIfVisible(teamcode_info.teammate_location,
-                                                 sc))
-      traffic_look.teammate_icon.Draw(canvas, sc);
+    if (auto p = render_projection.GeoToScreenIfVisible(teamcode_info.teammate_location))
+      traffic_look.teammate_icon.Draw(canvas, *p);
   }
 }
 
@@ -236,9 +238,8 @@ MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const
 
   std::lock_guard<Mutex> lock(skylines_data->mutex);
   for (auto &i : skylines_data->traffic) {
-    PixelPoint pt;
-    if (render_projection.GeoToScreenIfVisible(i.second.location, pt)) {
-      traffic_look.teammate_icon.Draw(canvas, pt);
+    if (auto p = render_projection.GeoToScreenIfVisible(i.second.location)) {
+      traffic_look.teammate_icon.Draw(canvas, *p);
       if (DisplaySkyLinesTrafficMapMode::SYMBOL_NAME == GetMapSettings().skylines_traffic_map_mode) {
         const auto name_i = skylines_data->user_names.find(i.first);
         const TCHAR *name = name_i != skylines_data->user_names.end()
@@ -252,8 +253,8 @@ MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const
         mode.shape = LabelShape::OUTLINED;
 
         // Draw the name 16 points below the icon
-        pt.y -= Layout::Scale(10);
-        TextInBox(canvas, buffer, pt, mode, GetClientRect());
+        p->y -= Layout::Scale(10);
+        TextInBox(canvas, buffer, *p, mode, GetClientRect());
       }
     }
   }

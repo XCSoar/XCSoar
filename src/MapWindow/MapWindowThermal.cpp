@@ -45,9 +45,8 @@ DrawThermalSources(Canvas &canvas, const MaskedIcon &icon,
       : source.location;
 
     // draw if it is in the field of view
-    PixelPoint pt;
-    if (projection.GeoToScreenIfVisible(location, pt))
-      icon.Draw(canvas, pt);
+    if (auto p = projection.GeoToScreenIfVisible(location))
+      icon.Draw(canvas, *p);
   }
 }
 
@@ -73,9 +72,8 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
     std::lock_guard<Mutex> lock(skylines_data->mutex);
     for (auto &i : skylines_data->thermals) {
       // TODO: apply wind drift
-      PixelPoint pt;
-      if (render_projection.GeoToScreenIfVisible(i.bottom_location, pt))
-        look.thermal_source_icon.Draw(canvas, pt);
+      if (auto p = render_projection.GeoToScreenIfVisible(i.bottom_location))
+        look.thermal_source_icon.Draw(canvas, *p);
     }
   }
 }
