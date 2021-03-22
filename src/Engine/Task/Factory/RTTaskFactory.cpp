@@ -22,6 +22,7 @@
 
 #include "RTTaskFactory.hpp"
 #include "Constraints.hpp"
+#include "util/Compiler.h"
 
 static constexpr TaskFactoryConstraints rt_constraints = {
   true,

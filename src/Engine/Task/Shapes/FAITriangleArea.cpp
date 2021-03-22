@@ -37,7 +37,7 @@ using namespace FAITriangleRules;
 
 static constexpr unsigned STEPS = FAI_TRIANGLE_SECTOR_MAX / 3 / 8;
 
-gcc_const
+[[gnu::const]]
 static Angle
 CalcAlpha(double dist_a, double dist_b, double dist_c)
 {
@@ -46,7 +46,7 @@ CalcAlpha(double dist_a, double dist_b, double dist_c)
     return Angle::acos(cos_alpha);
 }
 
-gcc_const
+[[gnu::const]]
 static Angle
 CalcAngle(Angle angle, double dist_a, double dist_b, double dist_c,
           bool reverse)
@@ -57,7 +57,7 @@ CalcAngle(Angle angle, double dist_a, double dist_b, double dist_c,
     : angle - alpha;
 }
 
-gcc_pure
+[[gnu::pure]]
 static GeoPoint
 CalcGeoPoint(const GeoPoint &origin, Angle angle,
              double dist_a, double dist_b, double dist_c, bool reverse)

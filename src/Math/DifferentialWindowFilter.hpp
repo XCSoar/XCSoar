@@ -24,7 +24,6 @@
 #define XCSOAR_DERIVE_WINDOW_FILTER_HPP
 
 #include "util/OverwritingRingBuffer.hpp"
-#include "util/Compiler.h"
 
 /**
  * A filter that stores a certain amount of samples and calculates the
@@ -87,7 +86,7 @@ public:
    * Does this object have enough data to calculate the derivative of
    * at least the specified delta?
    */
-  gcc_pure
+  [[gnu::pure]]
   bool HasEnoughData(double min_delta_x) const {
     return !IsEmpty() && GetDeltaX() >= min_delta_x;
   }
@@ -96,7 +95,7 @@ public:
    * Calculate the average dy/dx over the whole window.  This may only
    * be called after HasEnoughData() has returned true.
    */
-  gcc_pure
+  [[gnu::pure]]
   double DeriveAverage() const {
     auto delta_x = GetDeltaX();
     auto delta_y = GetDeltaY();

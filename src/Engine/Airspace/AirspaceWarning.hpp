@@ -24,7 +24,6 @@
 #define AIRSPACE_WARNING_HPP
 
 #include "AirspaceInterceptSolution.hpp"
-#include "util/Compiler.h"
 
 #include <cstdint>
 
@@ -95,7 +94,7 @@ public:
    *
    * @param state New warning state
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsStateAccepted(const State _state) const {
     return _state >= state;
   }
@@ -106,7 +105,7 @@ public:
    *
    * @return True if state upgraded/downgraded
    */
-  gcc_pure
+  [[gnu::pure]]
   bool ChangedState() const;
 
   /**
@@ -152,7 +151,7 @@ public:
    *
    * @return True if acknowledgement is expired
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsAckExpired() const;
 
   /**
@@ -160,7 +159,7 @@ public:
    *
    * @return True if acknowledged
    */
-  gcc_pure
+  [[gnu::pure]]
   bool GetAckDay() const {
     return ack_day;
   }
@@ -199,7 +198,7 @@ public:
    *
    * @return True if this is more severe than that
    */
-  gcc_pure
+  [[gnu::pure]]
   bool operator<(const AirspaceWarning &that) const;
 
 #ifdef DO_PRINT

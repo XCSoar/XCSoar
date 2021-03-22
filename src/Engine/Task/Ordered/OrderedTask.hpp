@@ -113,12 +113,12 @@ public:
    *
    * @return Factory
    */
-  gcc_pure
+  [[gnu::pure]]
   AbstractTaskFactory &GetFactory() const noexcept {
     return *active_factory;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const TaskFactoryConstraints &GetFactoryConstraints() const;
 
   /**
@@ -135,7 +135,7 @@ public:
    *
    * @return Vector of factory types
    */
-  gcc_pure
+  [[gnu::pure]]
   std::vector<TaskFactoryType> GetFactoryTypes(bool all = true) const;
 
   void SetTaskBehaviour(const TaskBehaviour &tb);
@@ -176,7 +176,7 @@ public:
    *
    * @return Index of active task point sequence
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetActiveIndex() const {
     return active_task_point;
   }
@@ -188,7 +188,7 @@ public:
    *
    * @return OrderedTaskPoint at index
    */
-  gcc_pure
+  [[gnu::pure]]
   const OrderedTaskPoint &GetTaskPoint(const unsigned index) const {
     assert(index < task_points.size());
 
@@ -200,7 +200,7 @@ public:
    *
    * @return True if task has start
    */
-  gcc_pure
+  [[gnu::pure]]
   bool HasStart() const {
     return taskpoint_start != nullptr;
   }
@@ -210,7 +210,7 @@ public:
    *
    * @return True if task has finish
    */
-  gcc_pure
+  [[gnu::pure]]
   bool HasFinish() const {
     return taskpoint_finish != nullptr;
   }
@@ -224,7 +224,7 @@ public:
   /**
    * Returns true if there are optional start points.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool HasOptionalStarts() const {
     return !optional_start_points.empty();
   }
@@ -340,7 +340,7 @@ public:
   /**
    * Check whether the task point with the specified index exists.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsValidIndex(unsigned i) const {
     return i < task_points.size();
   }
@@ -350,7 +350,7 @@ public:
    *
    * @return True if task is full
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsFull() const;
 
   /**
@@ -360,7 +360,7 @@ public:
    *
    * @return Task global projection
    */
-  gcc_pure
+  [[gnu::pure]]
   const TaskProjection&
   GetTaskProjection() const {
     assert(!IsEmpty());
@@ -489,11 +489,11 @@ private:
   void UpdateStartTransition(const AircraftState &state,
                              OrderedTaskPoint &start);
 
-  gcc_pure
+  [[gnu::pure]]
   bool DistanceIsSignificant(const GeoPoint &location,
                              const GeoPoint &location_last) const;
 
-  gcc_pure
+  [[gnu::pure]]
   bool AllowIncrementalBoundaryStats(const AircraftState &state) const;
 
   bool CheckTransitionPoint(OrderedTaskPoint &point,
@@ -590,7 +590,7 @@ public:
     return task_points;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   OrderedTaskPoint &GetPoint(const unsigned i) {
     assert(i < task_points.size());
     assert(task_points[i] != nullptr);
@@ -598,7 +598,7 @@ public:
     return *task_points[i];
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const OrderedTaskPoint &GetPoint(const unsigned i) const {
     assert(i < task_points.size());
     assert(task_points[i] != nullptr);
@@ -613,7 +613,7 @@ public:
   /**
    * @return number of optional start poitns
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetOptionalStartPointCount() const {
     return optional_start_points.size();
   }
@@ -624,7 +624,7 @@ public:
    * @param pos optional start point index
    * @return nullptr if index out of range, else optional start point
    */
-  gcc_pure
+  [[gnu::pure]]
   const OrderedTaskPoint &GetOptionalStartPoint(unsigned i) const {
     assert(i < optional_start_points.size());
 
@@ -632,7 +632,7 @@ public:
   }
 
   /** Determines whether the task has adjustable targets */
-  gcc_pure
+  [[gnu::pure]]
   bool HasTargets() const;
 
   /**
@@ -640,7 +640,7 @@ public:
    *
    * @return Location of center of task or GeoPoint::Invalid()
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint GetTaskCenter() const noexcept {
     assert(!IsEmpty());
     return task_projection.GetCenter();
@@ -651,7 +651,7 @@ public:
    *
    * @return Radius (m) from center to edge of task
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetTaskRadius() const noexcept {
     assert(!IsEmpty());
     return task_projection.ApproxRadius();
@@ -666,7 +666,7 @@ public:
    */
   unsigned GetLastIntermediateAchieved() const;
 
-  gcc_pure
+  [[gnu::pure]]
   const StaticString<64> &GetName() const {
     return name;
   }

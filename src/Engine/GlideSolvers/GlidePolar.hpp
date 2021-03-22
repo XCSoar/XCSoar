@@ -23,7 +23,6 @@
 #define GLIDEPOLAR_HPP
 
 #include "PolarCoefficients.hpp"
-#include "util/Compiler.h"
 
 #include <type_traits>
 
@@ -124,7 +123,7 @@ public:
   /**
    * Constructs a GlidePolar object that is invalid.
    */
-  gcc_const
+  [[gnu::const]]
   static GlidePolar Invalid() {
     GlidePolar gp(0);
     gp.SetInvalid();
@@ -153,7 +152,7 @@ public:
    *
    * @return Sink rate (m/s, positive down)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetSMin() const {
     assert(IsValid());
     return Smin;
@@ -164,7 +163,7 @@ public:
    *
    * @return Speed (m/s)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetVMin() const {
     assert(IsValid());
     return Vmin;
@@ -177,7 +176,7 @@ public:
    *
    * @return Speed (m/s)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetVMax() const {
     assert(IsValid());
     return Vmax;
@@ -197,7 +196,7 @@ public:
    *
    * @return Sink rate (m/s, positive down)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetSMax() const {
     assert(IsValid());
 
@@ -209,7 +208,7 @@ public:
    *
    * @return Speed of best LD (m/s)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetVBestLD() const {
     assert(IsValid());
 
@@ -221,7 +220,7 @@ public:
    *
    * @return Sink rate at best L/D (m/s)
    */
-  gcc_pure
+  [[gnu::pure]]
   double
   GetSBestLD() const
   {
@@ -235,7 +234,7 @@ public:
    *
    * @return Best L/D ratio
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetBestLD() const
   {
     assert(IsValid());
@@ -247,14 +246,14 @@ public:
    * Calculate the airspeed for the best glide ratio over ground,
    * considering the given head wind.
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetBestGlideRatioSpeed(double head_wind) const;
 
   /**
    * Takeoff speed
    * @return Takeoff speed threshold (m/s)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetVTakeoff() const;
 
   /**
@@ -271,7 +270,7 @@ public:
    *
    * @return Cruise efficiency
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetCruiseEfficiency() const {
     return cruise_efficiency;
   }
@@ -287,7 +286,7 @@ public:
    * Retrieve bugs 
    * @return Cleanliness of glider (0-1]
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetBugs() const {
     return bugs;
   }
@@ -309,7 +308,7 @@ public:
    * Retrieve ballast 
    * @return Proportion of possible ballast [0-1]
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetBallast() const {
     return ballast / (ballast_ratio * reference_mass);
   }
@@ -325,7 +324,7 @@ public:
    * Retrieve ballast in litres
    * @return Ballast (l or kg)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetBallastLitres() const;
 
   /**
@@ -333,7 +332,7 @@ public:
    *
    * @return True if glider can carry ballast
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsBallastable() const;
 
   /**
@@ -349,7 +348,7 @@ public:
    *
    * @return The current MacCready ring setting (m/s)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetMC() const {
     return mc;
   }
@@ -359,7 +358,7 @@ public:
    *
    * @return The inverse of current MacCready ring setting (s/m)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetInvMC() const {
     return inv_mc;
   }
@@ -369,7 +368,7 @@ public:
    *
    * @return Mass (kg) of aircraft including ballast
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetTotalMass() const;
 
   /**
@@ -377,7 +376,7 @@ public:
    *
    * @return Wing loading (all up mass divided by reference area, kg/m^2)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetWingLoading() const;
 
   /**
@@ -387,7 +386,7 @@ public:
    *
    * @return Sink rate (m/s, positive down)
    */
-  gcc_pure
+  [[gnu::pure]]
   double SinkRate(double V) const;
 
   /**
@@ -407,7 +406,7 @@ public:
    *
    * @return Sink rate (m/s, positive down)
    */
-  gcc_pure
+  [[gnu::pure]]
   double SinkRate(double V, double n) const;
 
   /**
@@ -419,7 +418,7 @@ public:
    *
    * @return Sink rate plus MC setting (m/s, positive down)
    */
-  gcc_pure
+  [[gnu::pure]]
   double MSinkRate(double V) const;
 
   /**
@@ -432,7 +431,7 @@ public:
    *
    * @return True if a glide solution is feasible (optimistically)
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsGlidePossible(const GlideState &task) const;
 
   /**
@@ -445,7 +444,7 @@ public:
    *
    * @return Speed to fly (true, m/s)SpeedToFly
    */
-  gcc_pure
+  [[gnu::pure]]
   double SpeedToFly(const AircraftState &state, const GlideResult &solution,
                    const bool block_stf) const;
 
@@ -459,7 +458,7 @@ public:
    *
    * @return Speed to fly (true, m/s)SpeedToFly
    */
-  gcc_pure
+  [[gnu::pure]]
   double SpeedToFly(const double stf_sink_rate_vario, const double head_wind) const;
 
   /**
@@ -472,7 +471,7 @@ public:
    *
    * @return MC value adjusted for risk (m/s)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetRiskMC(double height_fraction, double riskGamma) const;
 
   /**
@@ -482,7 +481,7 @@ public:
    * @param wind the wind vector
    * @return LD ratio (distance travelled per unit height loss)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetLDOverGround(Angle track, SpeedVector wind) const;
 
   /**
@@ -492,7 +491,7 @@ public:
    *
    * @return LD ratio (distance travelled per unit height loss)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetLDOverGround(const AircraftState &state) const;
 
   /**
@@ -505,7 +504,7 @@ public:
    * @return Equivalent thermal strength. Normally a positive value, but in
    * some situations it can be negative.
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetNextLegEqThermal(double current_wind, double next_wind) const;
 
   /** Returns the wing area in m^2 */

@@ -26,7 +26,6 @@ Copyright_License {
 #include "Trig.hpp"
 #include "FastTrig.hpp"
 #include "Constants.hpp"
-#include "util/Compiler.h"
 
 #include <type_traits>
 
@@ -155,7 +154,7 @@ public:
    * @param ss Seconds (pointer)
    * @param east True if East, False if West (pointer)
    */
-  gcc_pure
+  [[gnu::pure]]
   DMS ToDMS() const;
 
   /**
@@ -170,7 +169,7 @@ public:
   void ToDMM(unsigned &dd, unsigned &mm, unsigned &mmm,
              bool &is_positive) const;
 
-  gcc_pure
+  [[gnu::pure]]
   Angle Absolute() const {
     return Angle(fabs(Native()));
   }
@@ -178,7 +177,7 @@ public:
   /**
    * Calculates the tangent of the Angle.
    */
-  gcc_pure
+  [[gnu::pure]]
   inline double tan() const {
     return ::tan(Radians());
   }
@@ -186,12 +185,12 @@ public:
   /**
    * Calculates the sine of the Angle.
    */
-  gcc_pure
+  [[gnu::pure]]
   inline double sin() const {
     return ::sin(Radians());
   }
 
-  gcc_pure
+  [[gnu::pure]]
   inline double accurate_half_sin() const {
     return Half().sin();
   }
@@ -199,7 +198,7 @@ public:
   /**
    * Calculates the cosine of the Angle.
    */
-  gcc_pure
+  [[gnu::pure]]
   inline double cos() const {
     return ::cos(Radians());
   }
@@ -207,7 +206,7 @@ public:
   /**
    * Faster but more inaccurate version of sin()
    */
-  gcc_pure
+  [[gnu::pure]]
   inline double fastsine() const {
     return (::fastsine(Native()));
   }
@@ -215,12 +214,12 @@ public:
   /**
    * Faster but more inaccurate version of cos()
    */
-  gcc_pure
+  [[gnu::pure]]
   inline double fastcosine() const {
     return (::fastcosine(Native()));
   }
 
-  gcc_pure
+  [[gnu::pure]]
   inline double invfastcosine() const {
     return (::invfastcosine(Native()));
   }
@@ -229,7 +228,7 @@ public:
    * Returns the sine of the Angle as an integer
    * in the range between -1024 and 1024.
    */
-  gcc_pure
+  [[gnu::pure]]
   inline int ifastsine() const {
     return (::ifastsine(Native()));
   }
@@ -238,30 +237,30 @@ public:
    * Returns the cosine of the Angle as an integer
    * in the range between -1024 and 1024.
    */
-  gcc_pure
+  [[gnu::pure]]
   inline int ifastcosine() const {
     return (::ifastcosine(Native()));
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsPositive() const {
     return value > 0;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsNegative() const {
     return std::signbit(value);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   std::pair<double, double> SinCos() const {
     return ::sin_cos(Radians());
   }
 
-  gcc_pure
+  [[gnu::pure]]
   double AbsoluteDegrees() const;
 
-  gcc_pure
+  [[gnu::pure]]
   double AbsoluteRadians() const;
 
   void Flip() {
@@ -277,14 +276,14 @@ public:
    * Limits the angle (theta) to -180 - +180 degrees
    * @return Output angle (-180 - +180 degrees)
    */
-  gcc_pure
+  [[gnu::pure]]
   Angle AsDelta() const;
 
   /**
    * Limits the angle (theta) to 0 - 360 degrees
    * @return Output angle (0-360 degrees)
    */
-  gcc_pure
+  [[gnu::pure]]
   Angle AsBearing() const;
 
   /**
@@ -300,10 +299,10 @@ public:
    * Rotate angle by 180 degrees and limit to 0 - 360 degrees
    * @return Output angle (0 - 360 degrees)
    */
-  gcc_pure
+  [[gnu::pure]]
   Angle Reciprocal() const;
 
-  gcc_pure
+  [[gnu::pure]]
   Angle HalfAngle(const Angle end) const;
 
   /**
@@ -312,10 +311,10 @@ public:
    * @param fraction a fraction between 0 and 1
    * @return the resulting Angle, not normalized
    */
-  gcc_pure
+  [[gnu::pure]]
   Angle Fraction(const Angle end, const double fraction) const;
 
-  gcc_pure Angle
+  [[gnu::pure]] Angle
   operator*(const double x) const
   {
     return Angle(value * x);
@@ -335,14 +334,14 @@ public:
     return Angle(value * x);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   Angle
   operator/(const double x) const
   {
     return Angle(value / x);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   double
   operator/(const Angle x) const
   {
@@ -444,7 +443,7 @@ public:
   /**
    * Return the positive difference between two angles.
    */
-  gcc_pure
+  [[gnu::pure]]
   Angle fdim(const Angle x) const {
     return Native(std::fdim(value, x.value));
   }
@@ -453,19 +452,19 @@ public:
    * Is this angle between the other two values?  If "end" is smaller
    * than "start", then wraparound is calculated correctly.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool Between(const Angle start, const Angle end) const;
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, Angle a);
 #endif
 
-  gcc_const
+  [[gnu::const]]
   static Angle asin(double x) {
     return Radians(::asin(x));
   }
 
-  gcc_const
+  [[gnu::const]]
   static Angle acos(double x) {
     return Radians(::acos(x));
   }
@@ -478,7 +477,7 @@ public:
    * @param y y-coordinate
    * @return Counter-clockwise angle between the x-axis and the given coordinate
    */
-  gcc_const
+  [[gnu::const]]
   static Angle FromXY(const double x, const double y) {
     return Angle::Radians(atan2(y,x));
   }
@@ -486,7 +485,7 @@ public:
   /**
    * Check whether the two angles are roughly equal.
    */
-  gcc_const
+  [[gnu::const]]
   bool CompareRoughly(Angle other, Angle threshold = Angle::Degrees(10)) const;
 };
 

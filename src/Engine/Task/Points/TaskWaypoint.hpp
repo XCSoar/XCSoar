@@ -55,7 +55,7 @@ public:
    * Can be used for user feedback (e.g. queries on details of active
    * task point)
    */
-  gcc_pure
+  [[gnu::pure]]
   const Waypoint &GetWaypoint() const {
     return *waypoint;
   }

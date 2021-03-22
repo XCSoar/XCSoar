@@ -35,7 +35,7 @@
 #include <cassert>
 #include <tchar.h>
 
-gcc_const
+[[gnu::const]]
 static const TCHAR *
 GetName(TaskPointType type, bool mode_optional_start)
 {
@@ -59,7 +59,7 @@ GetName(TaskPointType type, bool mode_optional_start)
   gcc_unreachable();
 }
 
-gcc_pure
+[[gnu::pure]]
 static const TCHAR *
 GetName(const OrderedTaskPoint &tp, bool mode_optional_start)
 {
@@ -207,7 +207,7 @@ Serialise(WritableDataNode &node, const OrderedTaskPoint &tp,
   Serialise(node, tp, name);
 }
 
-gcc_const
+[[gnu::const]]
 static const TCHAR *
 GetHeightRef(AltitudeReference height_ref)
 {
@@ -225,7 +225,7 @@ GetHeightRef(AltitudeReference height_ref)
   return nullptr;
 }
 
-gcc_const
+[[gnu::const]]
 static const TCHAR *
 GetTaskFactoryType(TaskFactoryType type)
 {

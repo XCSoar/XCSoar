@@ -85,12 +85,12 @@ public:
    */
   SearchPoint(const FlatGeoPoint &floc, const FlatProjection &tp);
 
-  gcc_const
+  [[gnu::const]]
   static SearchPoint Invalid() {
     return SearchPoint(GeoPoint::Invalid());
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsValid() const {
     return location.IsValid();
   }
@@ -134,7 +134,7 @@ public:
    *
    * @return True if points coincident
    */
-  gcc_pure
+  [[gnu::pure]]
   bool Equals(const SearchPoint& sp) const {
     return sp.location == location;
   }
@@ -146,7 +146,7 @@ public:
    *
    * @return Distance in projected units
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned FlatDistanceTo(const SearchPoint &sp) const {
     return flat_location.Distance(sp.flat_location);
   }
@@ -156,7 +156,7 @@ public:
    * flat_distance(), because it does not need to calculate the square
    * root.
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned FlatSquareDistanceTo(const SearchPoint& sp) const {
     return flat_location.DistanceSquared(sp.flat_location);
   }
@@ -168,7 +168,7 @@ public:
    *
    * @return True if this point is further left (or if equal, lower) than the other
    */
-  gcc_pure
+  [[gnu::pure]]
   bool Sort(const SearchPoint &other) const {
     return location.Sort(other.location);
   }

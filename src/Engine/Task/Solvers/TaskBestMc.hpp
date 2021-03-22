@@ -95,7 +95,7 @@ private:
    *
    * @return True if solution is valid
    */
-  gcc_pure
+  [[gnu::pure]]
   bool valid(double mc) const;
 
   /* virtual methods from class ZeroFinder */

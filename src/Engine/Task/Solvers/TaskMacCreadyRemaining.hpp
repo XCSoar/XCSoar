@@ -79,7 +79,7 @@ public:
    *
    * @return True if adjustable targets
    */
-  gcc_pure
+  [[gnu::pure]]
   bool has_targets() const;
 
   /**
@@ -93,7 +93,7 @@ public:
 
 private:
   /* virtual methods from class TaskMacCready */
-  double get_min_height(gcc_unused const AircraftState &aircraft) const override {
+  double get_min_height([[maybe_unused]] const AircraftState &aircraft) const override {
     return 0;
   }
 

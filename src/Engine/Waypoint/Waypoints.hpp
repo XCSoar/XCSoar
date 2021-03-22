@@ -43,12 +43,12 @@ class Waypoints {
    * QuadTree.
    */
   struct WaypointAccessor {
-    gcc_pure
+    [[gnu::pure]]
     int GetX(const WaypointPtr &wp) const {
       return wp->flat_location.x;
     }
 
-    gcc_pure
+    [[gnu::pure]]
     int GetY(const WaypointPtr &wp) const {
       return wp->flat_location.y;
     }
@@ -186,7 +186,7 @@ public:
    *
    * @return Number of waypoints in tree
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned size() const {
     return waypoint_tree.size();
   }
@@ -196,7 +196,7 @@ public:
    *
    * @return True if no waypoints stored
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsEmpty() const {
     return waypoint_tree.IsEmpty();
   }
@@ -229,7 +229,7 @@ public:
    *
    * @return Pointer to waypoint if found (or nullptr if not)
    */
-  gcc_pure
+  [[gnu::pure]]
   WaypointPtr FindHome();
 
   /**
@@ -247,7 +247,7 @@ public:
    *
    * @return Pointer to waypoint if found (or nullptr if not)
    */
-  gcc_pure
+  [[gnu::pure]]
   WaypointPtr LookupId(const unsigned id) const;
 
   /**
@@ -258,7 +258,7 @@ public:
    *
    * @return Pointer to waypoint if found (or nullptr if none found)
    */
-  gcc_pure
+  [[gnu::pure]]
   WaypointPtr LookupLocation(const GeoPoint &loc,
                              const double range = 0) const;
 
@@ -269,10 +269,10 @@ public:
    *
    * @return Pointer to waypoint if found (or nullptr if not)
    */
-  gcc_pure
+  [[gnu::pure]]
   WaypointPtr LookupName(const TCHAR *name) const;
 
-  gcc_pure
+  [[gnu::pure]]
   WaypointPtr LookupName(const tstring &name) const {
     return LookupName(name.c_str());
   }
@@ -309,7 +309,7 @@ public:
    * Returns a set of possible characters following the specified
    * prefix.
    */
-  gcc_pure
+  [[gnu::pure]]
   TCHAR *SuggestNamePrefix(const TCHAR *prefix,
                            TCHAR *dest, size_t max_length) const {
     return name_tree.SuggestNormalisedPrefix(prefix, dest, max_length);
@@ -324,7 +324,7 @@ public:
    *
    * @return Null if none found, otherwise pointer to nearest
    */
-  gcc_pure
+  [[gnu::pure]]
   WaypointPtr GetNearest(const GeoPoint &loc, double range) const;
 
   /**
@@ -337,7 +337,7 @@ public:
    *
    * @return Null if none found, otherwise pointer to nearest
    */
-  gcc_pure
+  [[gnu::pure]]
   WaypointPtr GetNearestLandable(const GeoPoint &loc, double range) const;
 
   /**
@@ -351,7 +351,7 @@ public:
    *
    * @return Null if none found, otherwise pointer to nearest
    */
-  gcc_pure
+  [[gnu::pure]]
   WaypointPtr GetNearestIf(const GeoPoint &loc, double range,
                            bool (*predicate)(const Waypoint &)) const;
 

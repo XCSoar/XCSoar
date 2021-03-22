@@ -47,7 +47,7 @@ EarthDistance(const double a)
   return Angle::acos(1 - 2 * a);
 }
 
-gcc_const
+[[gnu::const]]
 static double
 CalcUSquare(double cos_sq_alpha)
 {
@@ -61,7 +61,7 @@ CalcUSquare(double cos_sq_alpha)
   return cos_sq_alpha * factor;
 }
 
-gcc_const
+[[gnu::const]]
 static double
 CalcA(double u_sq)
 {
@@ -71,7 +71,7 @@ CalcA(double u_sq)
   return A_16k / 16384;
 }
 
-gcc_const
+[[gnu::const]]
 static double
 CalcB(double u_sq)
 {
@@ -79,7 +79,7 @@ CalcB(double u_sq)
   return B_1k / 1024;
 }
 
-gcc_const
+[[gnu::const]]
 static double
 CalcC(double cos_sq_alpha)
 {
@@ -87,7 +87,7 @@ CalcC(double cos_sq_alpha)
     (4 + FLATTENING * (4 - 3 * cos_sq_alpha));
 }
 
-gcc_pure
+[[gnu::pure]]
 static GeoPoint
 IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
                   Angle dthis, Angle dtotal)

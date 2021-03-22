@@ -49,36 +49,36 @@ public:
 
   void Project(const FlatProjection &tp);
 
-  gcc_pure
+  [[gnu::pure]]
   FlatGeoPoint NearestPoint(const FlatGeoPoint &p) const;
 
   /** Find iterator of nearest point, assuming polygon is convex */
-  gcc_pure
+  [[gnu::pure]]
   const_iterator NearestIndexConvex(const FlatGeoPoint &p) const;
 
-  gcc_pure
+  [[gnu::pure]]
   bool IntersectsWith(const FlatRay &ray) const;
 
-  gcc_pure
+  [[gnu::pure]]
   FlatBoundingBox CalculateBoundingbox() const;
 
-  gcc_pure
+  [[gnu::pure]]
   GeoBounds CalculateGeoBounds() const;
 
   /** increment iterator, wrapping around to start if required */
-  gcc_pure
+  [[gnu::pure]]
   const_iterator NextCircular(const_iterator i) const;
 
   /** decreement iterator, wrapping around to last item if required */
-  gcc_pure
+  [[gnu::pure]]
   const_iterator PreviousCircular(const_iterator i) const;
 
   /** Is the given GeoPoint inside the polygon of SearchPoints? */
-  gcc_pure
+  [[gnu::pure]]
   bool IsInside(const GeoPoint &pt) const;
 
   /** Is the given FlatGeoPoint inside the polygon of SearchPoints? */
-  gcc_pure
+  [[gnu::pure]]
   bool IsInside(const FlatGeoPoint &pt) const;
 };
 

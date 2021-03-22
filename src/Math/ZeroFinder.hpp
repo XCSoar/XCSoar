@@ -23,8 +23,6 @@
 #ifndef ZERO_FINDER_HPP
 #define ZERO_FINDER_HPP
 
-#include "util/Compiler.h"
-
 #include <cassert>
 
 /**
@@ -74,7 +72,7 @@ public:
    *
    * @return x value of best solution
    */
-  gcc_pure
+  [[gnu::pure]]
   double find_zero(const double xstart);
 
   /**
@@ -86,26 +84,26 @@ public:
    *
    * @return x value of best solution
    */
-  gcc_pure
+  [[gnu::pure]]
   double find_min(const double xstart);
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   double find_zero_actual(const double xstart);
 
-  gcc_pure
+  [[gnu::pure]]
   double find_min_actual(const double xstart);
 
   /**
    * Tolerance in f of minimisation routine at x
    */
-  gcc_pure
+  [[gnu::pure]]
   double tolerance_actual_min(const double x) const;
 
   /**
    * Tolerance in f of zero finding routine at x
    */
-  gcc_pure
+  [[gnu::pure]]
   double tolerance_actual_zero(const double x) const;
 
   /**
@@ -116,7 +114,7 @@ private:
    *
    * @return true if no search required (xstart is good)
    */
-  gcc_pure
+  [[gnu::pure]]
   bool solution_within_tolerance(const double xstart,
                                  const double tol_act);
 

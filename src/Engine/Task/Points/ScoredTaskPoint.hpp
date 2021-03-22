@@ -25,7 +25,6 @@
 
 #include "SampledTaskPoint.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "util/Compiler.h"
 
 /**
  * Abstract specialisation of SampledTaskPoint to manage scoring
@@ -111,14 +110,14 @@ public:
                       const FlatProjection &projection);
 
   /** Retrieve location to be used for the scored task. */
-  gcc_pure
+  [[gnu::pure]]
   const GeoPoint &GetLocationScored() const;
 
   /**
    * Retrieve location to be used for the task already travelled.
    * This is always the scored best location for prior-active task points.
    */
-  gcc_pure
+  [[gnu::pure]]
   const GeoPoint &GetLocationTravelled() const {
     return GetLocationMin();
   }
@@ -132,7 +131,7 @@ protected:
    *
    * @return True if aircraft now inside (and was outside)
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual bool CheckEnterTransition(const AircraftState &ref_now,
                                     const AircraftState &ref_last) const = 0;
 
@@ -144,22 +143,22 @@ protected:
    *
    * @return True if aircraft now outside (and was inside)
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual bool CheckExitTransition(const AircraftState &ref_now,
                                    const AircraftState &ref_last) const = 0;
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   virtual bool EntryPrecondition() const {
     return true;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   virtual bool ScoreLastExit() const {
     return false;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   virtual bool ScoreFirstEntry() const {
     return false;
   }

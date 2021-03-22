@@ -47,7 +47,7 @@ struct AngleRange {
   /**
    * Returns the length of the range.
    */
-  gcc_pure
+  [[gnu::pure]]
   Angle GetLength() const {
     return (end - start).AsBearing();
   }
@@ -56,7 +56,7 @@ struct AngleRange {
    * Returns the middle of the range.  The return value is not
    * normalized.
    */
-  gcc_pure
+  [[gnu::pure]]
   Angle GetMiddle() const {
     return start.Fraction(end, 0.5);
   }
@@ -64,7 +64,7 @@ struct AngleRange {
   /**
    * Is the specified value within the range?
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsInside(const Angle value) const {
     return value.Between(start, end);
   }
@@ -72,7 +72,7 @@ struct AngleRange {
   /**
    * Do the two ranges overlap?
    */
-  gcc_pure
+  [[gnu::pure]]
   bool Overlaps(const AngleRange &other) const {
     return IsInside(other.start) || other.IsInside(start);
   }
@@ -80,7 +80,7 @@ struct AngleRange {
   /**
    * Is the specified range within this range?
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsInside(const AngleRange &interior) const {
     return IsInside(interior.start) && IsInside(interior.end);
   }

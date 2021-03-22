@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef UTM_HPP
 #define UTM_HPP
 
-#include "util/Compiler.h"
-
 struct GeoPoint;
 
 struct UTM {
@@ -40,10 +38,10 @@ struct UTM {
     :zone_number(_zone_number), zone_letter(_zone_letter),
      easting(_easting), northing(_northing) {}
 
-  gcc_const
+  [[gnu::const]]
   static UTM FromGeoPoint(GeoPoint p);
 
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint ToGeoPoint() const;
 };
 

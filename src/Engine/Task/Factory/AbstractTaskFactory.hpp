@@ -25,7 +25,6 @@ Copyright_License {
 #define ABSTRACT_TASK_FACTORY_HPP
 
 #include "util/NonCopyable.hpp"
-#include "util/Compiler.h"
 #include "TaskPointFactoryType.hpp"
 #include "ValidationError.hpp"
 #include "LegalPointSet.hpp"
@@ -385,9 +384,8 @@ public:
   * @param tp The tp that exists (from task built using different factory)
   * @return The suggested mutated type for the current factory
   */
-  virtual gcc_pure
-  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const;
-
+  [[gnu::pure]]
+  virtual TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const;
 
   /**
    * Create an AST point given an OZ
@@ -446,7 +444,7 @@ public:
    */
   TaskValidationErrorSet ValidateMATOZs() const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   const OrderedTaskSettings &GetOrderedTaskSettings() const;
 
   /**
@@ -457,7 +455,7 @@ public:
    *
    * @return True if type is valid
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual bool ValidAbstractType(LegalAbstractPointType type,
                                  const unsigned position) const;
 
@@ -468,7 +466,7 @@ public:
    *
    * @return Vector of valid types in position
    */
-  gcc_pure
+  [[gnu::pure]]
   LegalPointSet GetValidIntermediateTypes(unsigned position) const;
 
   /**
@@ -476,7 +474,7 @@ public:
    *
    * @return Vector of valid types in position
    */
-  gcc_pure
+  [[gnu::pure]]
   const LegalPointSet &GetValidStartTypes() const {
     return start_types;
   }
@@ -494,7 +492,7 @@ public:
    *
    * @return Vector of valid types in position
    */
-  gcc_pure
+  [[gnu::pure]]
   const LegalPointSet &GetValidIntermediateTypes() const {
     return intermediate_types;
   }
@@ -504,7 +502,7 @@ public:
    *
    * @return Vector of valid types in position
    */
-  gcc_pure
+  [[gnu::pure]]
   const LegalPointSet &GetValidFinishTypes() const {
     return finish_types;
   }
@@ -516,7 +514,7 @@ public:
    *
    * @return Vector of valid types in position
    */
-  gcc_pure
+  [[gnu::pure]]
   LegalPointSet GetValidTypes(unsigned position) const;
 
   /**
@@ -527,14 +525,14 @@ public:
    * @return Type of supplied point based on the observation zone shape and
    * TaskPoint type
    */
-  gcc_pure
+  [[gnu::pure]]
   TaskPointFactoryType GetType(const OrderedTaskPoint &point) const;
 
   /**
    * Determines whether task is closed (finish same as start)
    * @return true if task is closed
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsClosed() const;
 
   /**
@@ -542,7 +540,7 @@ public:
    * (other than start/finish, no points used more than once)
    * @return true if task is unique
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsUnique() const;
 
   /**
@@ -550,7 +548,7 @@ public:
    *
    * @return true if points are homogeneous
   */
-  gcc_pure
+  [[gnu::pure]]
   bool IsHomogeneous() const;
 
   /**
@@ -560,7 +558,7 @@ public:
    *
    * @return True if type is valid
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsValidFinishType(TaskPointFactoryType type) const {
     return finish_types.Contains(type);
   }
@@ -572,7 +570,7 @@ public:
    *
    * @return True if type is valid
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsValidStartType(TaskPointFactoryType type) const {
     return start_types.Contains(type);
   }
@@ -584,7 +582,7 @@ public:
    *
    * @return True if type is valid
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsValidIntermediateType(TaskPointFactoryType type) const {
     return intermediate_types.Contains(type);
   }
@@ -619,7 +617,7 @@ protected:
    *
    * @return True if candidate is valid at the position
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual bool IsValidType(const OrderedTaskPoint &new_tp,
                            unsigned position) const;
 
@@ -641,7 +639,7 @@ protected:
    * 
    * @return True if possible
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsPositionIntermediate(const unsigned position) const;
 
   /** 
@@ -651,17 +649,17 @@ protected:
    * 
    * @return True if possible
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsPositionFinish(const unsigned position) const;
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   TaskPointFactoryType GetDefaultStartType() const;
 
-  gcc_pure
+  [[gnu::pure]]
   TaskPointFactoryType GetDefaultIntermediateType() const;
 
-  gcc_pure
+  [[gnu::pure]]
   TaskPointFactoryType GetDefaultFinishType() const;
 
   /**

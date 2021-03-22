@@ -61,8 +61,8 @@ public:
    * @param previous Previous task point (origin of inbound leg)
    * @param next Following task point (destination of outbound leg)
    */
-  virtual void SetLegs(gcc_unused const GeoPoint *previous,
-                       gcc_unused const GeoPoint *next) {}
+  virtual void SetLegs([[maybe_unused]] const GeoPoint *previous,
+                       [[maybe_unused]] const GeoPoint *next) {}
 
   /**
    * Test whether an OZ is equivalent to this one

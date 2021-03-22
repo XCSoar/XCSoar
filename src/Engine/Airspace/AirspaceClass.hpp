@@ -23,8 +23,6 @@
 #ifndef AIRSPACE_CLASS_HPP
 #define AIRSPACE_CLASS_HPP
 
-#include "util/Compiler.h"
-
 #include <cstdint>
 
 enum AirspaceClass : uint8_t

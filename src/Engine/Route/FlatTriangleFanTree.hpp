@@ -73,7 +73,7 @@ public:
 
   void CalcBB() noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsInside(FlatGeoPoint p) const noexcept {
     return FlatTriangleFan::IsInside(p, IsRoot());
   }
@@ -86,7 +86,7 @@ public:
    * returns true, then calls to FindPositiveArrival() are supposed to
    * be useless.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsDummy() const noexcept {
     return vs.size() == 1 && children.empty();
   }
@@ -114,7 +114,7 @@ public:
 
   void UpdateTerrainBase(FlatGeoPoint origin, ReachFanParms &parms) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   int DirectArrival(FlatGeoPoint dest,
                     const ReachFanParms &parms) const noexcept;
 };

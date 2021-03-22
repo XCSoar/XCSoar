@@ -23,7 +23,6 @@
 #ifndef TASKMANAGER_H
 #define TASKMANAGER_H
 
-#include "util/Compiler.h"
 #include "util/NonCopyable.hpp"
 #include "Stats/TaskStats.hpp"
 #include "Stats/CommonStats.hpp"
@@ -114,7 +113,7 @@ public:
    *
    * @return Sequence number of task point
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetActiveTaskPointIndex() const;
 
   /**
@@ -122,7 +121,7 @@ public:
    *
    * @return TaskPoint of active task point, and 0 if no active task
    */
-  gcc_pure
+  [[gnu::pure]]
   TaskWaypoint* GetActiveTaskPoint() const;
 
   /**
@@ -143,7 +142,7 @@ public:
    *
    * @return Vector of alternates
    */
-  gcc_const
+  [[gnu::const]]
   const AlternateList &GetAlternates() const;
 
   /** Reset the tasks (as if never flown) */
@@ -209,7 +208,7 @@ public:
    *
    * @return Statistics of active task
    */
-  gcc_pure
+  [[gnu::pure]]
   const TaskStats& GetStats() const;
 
   /**
@@ -217,7 +216,7 @@ public:
    *
    * @return Statistics
    */
-  gcc_pure
+  [[gnu::pure]]
   const CommonStats& GetCommonStats() const {
     return common_stats;
   }
@@ -227,12 +226,12 @@ public:
    *
    * @return True if stats valid
    */
-  gcc_pure
+  [[gnu::pure]]
   bool StatsValid() const {
     return GetStats().task_valid;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const AbstractTask *GetActiveTask() const {
     return active_task;
   }
@@ -242,7 +241,7 @@ public:
    *
    * @return Number of taskpoints in active task
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned TaskSize() const;
 
   /**
@@ -250,7 +249,7 @@ public:
    *
    * @return True if task is valid
    */
-  gcc_pure
+  [[gnu::pure]]
   bool CheckOrderedTask() const;
 
   /**
@@ -258,7 +257,7 @@ public:
    *
    * @return True if task is valid
    */
-  gcc_pure
+  [[gnu::pure]]
   bool CheckTask() const;
 
   /**
@@ -266,7 +265,7 @@ public:
    *
    * @return Factory
    */
-  gcc_pure
+  [[gnu::pure]]
   AbstractTaskFactory &GetFactory() const;
 
   /**
@@ -308,7 +307,7 @@ public:
    *
    * @return Active task mode
    */
-  gcc_pure
+  [[gnu::pure]]
   TaskType GetMode() const {
     return mode;
   }
@@ -320,7 +319,7 @@ public:
    *
    * @return True if modes match
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsMode(const TaskType _mode) const {
     return mode == _mode;
   }
@@ -330,7 +329,7 @@ public:
    *
    * @return Reference to glide polar
    */
-  gcc_pure
+  [[gnu::pure]]
   const GlidePolar &GetGlidePolar() const {
     return glide_polar;
   }
@@ -347,7 +346,7 @@ public:
    *
    * @return Copy of glide polar
    */
-  gcc_pure
+  [[gnu::pure]]
   const GlidePolar &GetSafetyPolar() const {
     return safety_polar;
   }
@@ -356,7 +355,7 @@ public:
    * Return a reference to the polar that should be used for reach
    * calculations.
    */
-  gcc_pure
+  [[gnu::pure]]
   const GlidePolar &GetReachPolar() const {
     switch (task_behaviour.route_planner.reach_polar_mode) {
     case RoutePlannerConfig::Polar::TASK:

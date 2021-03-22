@@ -10,7 +10,7 @@ struct AltitudeState;
 /**
  * Checks the airspace visibility settings that use the airspace type.
  */
-gcc_pure
+[[gnu::pure]]
 bool
 IsAirspaceTypeVisible(const AbstractAirspace &airspace,
                       const AirspaceRendererSettings &renderer_settings);
@@ -19,7 +19,7 @@ IsAirspaceTypeVisible(const AbstractAirspace &airspace,
  * Checks the airspace visibility settings that use the aircraft
  * altitude.
  */
-gcc_pure
+[[gnu::pure]]
 bool
 IsAirspaceAltitudeVisible(const AbstractAirspace &airspace,
                           const AltitudeState &state,
@@ -40,7 +40,7 @@ public:
      renderer_settings(_renderer_settings),
      state(_state) {}
 
-  gcc_pure
+  [[gnu::pure]]
   bool operator()(const AbstractAirspace &airspace) const;
 };
 

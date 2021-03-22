@@ -26,13 +26,11 @@ Copyright_License {
 #ifndef XCSOAR_MATH_SCREEN_HPP
 #define XCSOAR_MATH_SCREEN_HPP
 
-#include "util/Compiler.h"
-
 struct BulkPixelPoint;
 struct PixelPoint;
 class Angle;
 
-gcc_pure
+[[gnu::pure]]
 PixelPoint
 ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
                    const PixelPoint &p3, int offset);

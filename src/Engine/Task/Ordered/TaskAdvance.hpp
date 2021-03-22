@@ -23,8 +23,6 @@
 #ifndef TASKADVANCE_HPP
 #define TASKADVANCE_HPP
 
-#include "util/Compiler.h"
-
 class TaskPoint;
 struct AircraftState;
 
@@ -147,7 +145,7 @@ protected:
    *
    * @return true if this tp is ready to advance
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsStateReady(const TaskPoint &tp,
                     const AircraftState &state,
                     const bool x_enter,

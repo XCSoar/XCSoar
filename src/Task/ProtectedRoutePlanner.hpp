@@ -25,7 +25,6 @@
 
 #include "thread/Guard.hpp"
 #include "Task/RoutePlannerGlue.hpp"
-#include "util/Compiler.h"
 
 struct GlideSettings;
 struct RoutePlannerConfig;
@@ -59,7 +58,7 @@ public:
     lease->ClearReach();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsTerrainReachEmpty() const {
     Lease lease(*this);
     return lease->IsTerrainReachEmpty();
@@ -77,14 +76,14 @@ public:
                   const RoutePlannerConfig &config,
                   const int h_ceiling);
 
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint Intersection(const AGeoPoint &origin,
                         const AGeoPoint &destination) const;
 
   void SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
                   int h_ceiling, bool do_solve);
 
-  gcc_pure
+  [[gnu::pure]]
   const FlatProjection GetTerrainReachProjection() const;
 };
 

@@ -47,7 +47,7 @@ ToKML(BufferedOutputStream &os, const AGeoPoint p)
             p.altitude);
 }
 
-gcc_unused
+[[maybe_unused]]
 static inline void
 ToKML(BufferedOutputStream &os, const GeoPoint p)
 {
@@ -130,7 +130,7 @@ ToKML(BufferedOutputStream &os, const CloudThermalContainer &thermals)
            "</kml>");
 }
 
-gcc_unused
+[[maybe_unused]]
 static void
 ToKML(BufferedOutputStream &os, const CloudData &data)
 {

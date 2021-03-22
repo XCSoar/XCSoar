@@ -36,7 +36,7 @@ public:
   explicit OLCSprint(const Trace &_trace) noexcept;
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   unsigned FindStart() const noexcept;
 
 protected:

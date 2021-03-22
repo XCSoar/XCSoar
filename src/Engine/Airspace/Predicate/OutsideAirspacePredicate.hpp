@@ -24,7 +24,6 @@
 #define XCSOAR_OUTSIDE_AIRSPACE_PREDICATE_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "util/Compiler.h"
 
 class AbstractAirspace;
 
@@ -38,7 +37,7 @@ public:
   constexpr OutsideAirspacePredicate(const AGeoPoint &_location)
     :location(_location) {}
 
-  gcc_pure
+  [[gnu::pure]]
   bool operator()(const AbstractAirspace &airspace) const;
 };
 

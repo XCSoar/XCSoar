@@ -239,7 +239,7 @@ DeserialiseTaskpoint(AbstractTaskFactory &fact, const ConstDataNode &node,
   fact.Append(*pt, false);
 }
 
-gcc_pure
+[[gnu::pure]]
 static AltitudeReference
 GetHeightRef(const ConstDataNode &node, const TCHAR *nodename)
 {

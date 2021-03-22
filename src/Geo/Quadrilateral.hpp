@@ -51,7 +51,7 @@ struct GeoQuadrilateral {
       bottom_left.Check() && bottom_right.Check();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   GeoBounds GetBounds() const;
 };
 

@@ -101,31 +101,31 @@ struct CloudClient
       return key;
     }
 
-    gcc_pure
+    [[gnu::pure]]
     std::size_t operator()(const CloudClient &client) const {
       return client.key;
     }
   };
 
   struct KeyEqual {
-    gcc_pure
+    [[gnu::pure]]
     bool operator()(const CloudClient &a, const CloudClient &b) const {
       return a.key == b.key;
     }
 
-    gcc_pure
+    [[gnu::pure]]
     bool operator()(uint64_t a, const CloudClient &b) const {
       return a == b.key;
     }
   };
 
   struct IdCompare {
-    gcc_pure
+    [[gnu::pure]]
     bool operator()(const CloudClient &a, const CloudClient &b) const {
       return a.id < b.id;
     }
 
-    gcc_pure
+    [[gnu::pure]]
     bool operator()(unsigned a, const CloudClient &b) const {
       return a < b.id;
     }
@@ -156,7 +156,7 @@ using CloudClientPtr = std::shared_ptr<CloudClient>;
 struct CloudClientIndexable {
   typedef GeoPoint result_type;
 
-  gcc_pure
+  [[gnu::pure]]
   result_type operator()(const CloudClientPtr &client) const {
     return client->location;
   }
@@ -234,7 +234,7 @@ public:
    * Look up a client by its secret key.  Note that this does not
    * increment the reference counter.
    */
-  gcc_pure
+  [[gnu::pure]]
   CloudClient *Find(uint64_t key);
 
   /**
@@ -263,7 +263,7 @@ public:
   typedef Tree::const_query_iterator query_iterator;
   typedef boost::iterator_range<query_iterator> query_iterator_range;
 
-  gcc_pure
+  [[gnu::pure]]
   query_iterator_range QueryWithinRange(GeoPoint location, double range) const;
 
   void Save(Serialiser &s) const;

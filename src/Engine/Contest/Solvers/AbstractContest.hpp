@@ -110,16 +110,16 @@ protected:
    */
   virtual bool UpdateScore() noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsFinishAltitudeValid(const TracePoint &start,
                              const TracePoint &finish) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   int GetMaximumStartAltitude(const TracePoint &finish) const noexcept {
     return finish.GetIntegerAltitude() + finish_alt_diff;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   int GetMinimumFinishAltitude(const TracePoint &start) const noexcept {
     return start.GetIntegerAltitude() - finish_alt_diff;
   }
@@ -141,7 +141,7 @@ protected:
    *
    * @return Handicap adjusted score
    */
-  gcc_pure
+  [[gnu::pure]]
   double ApplyHandicap(double unhandicapped_score) const noexcept {
     assert(handicap != 0);
 
@@ -152,7 +152,7 @@ protected:
    * Apply "shifted" handicap, i.e. according to OLC league/sprint
    * rules.
    */
-  gcc_pure
+  [[gnu::pure]]
   double ApplyShiftedHandicap(const double unhandicapped_score) const noexcept {
     assert(handicap != 0);
 

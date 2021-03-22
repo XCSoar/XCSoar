@@ -62,14 +62,14 @@ public:
    * @param closed true if this is a closed shape and the origin is
    * not part of the hull
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsInside(FlatGeoPoint p, bool closed) const;
 
   void Clear() {
     vs.clear();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsEmpty() const {
     return vs.empty();
   }
@@ -84,7 +84,7 @@ public:
    * @param closed true if this is a closed circle and the origin is
    * not part of the hull
    */
-  gcc_pure
+  [[gnu::pure]]
   ConstBuffer<FlatGeoPoint> GetHull(bool closed) const {
     ConstBuffer<FlatGeoPoint> hull(&vs.front(), vs.size());
     if (closed)

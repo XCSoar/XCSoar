@@ -27,7 +27,7 @@
 #include <cassert>
 #include <stdlib.h>
 
-gcc_const
+[[gnu::const]]
 static unsigned
 AngleToIndex(Angle a)
 {
@@ -37,7 +37,7 @@ AngleToIndex(Angle a)
   return uround(i) % ROUTEPOLAR_POINTS;
 }
 
-gcc_const
+[[gnu::const]]
 static unsigned
 XYToIndex(double x, double y)
 {

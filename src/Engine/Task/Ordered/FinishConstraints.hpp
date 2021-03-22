@@ -24,7 +24,6 @@
 #define XCSOAR_FINISH_CONSTRAINTS_HPP
 
 #include "Geo/AltitudeReference.hpp"
-#include "util/Compiler.h"
 
 struct AircraftState;
 
@@ -55,7 +54,7 @@ struct FinishConstraints {
    *
    * @return True if within limits
    */
-  gcc_pure
+  [[gnu::pure]]
   bool CheckHeight(const AircraftState &state,
                    double finish_elevation) const;
 };

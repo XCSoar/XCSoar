@@ -25,7 +25,6 @@
 
 #include "FlatProjection.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "util/Compiler.h"
 
 struct GeoPoint;
 
@@ -81,7 +80,7 @@ public:
    *
    * @return Radius (m) from center to edge
    */
-  gcc_pure
+  [[gnu::pure]]
   double ApproxRadius() const;
 
 #ifdef DO_PRINT

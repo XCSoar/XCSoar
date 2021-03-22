@@ -155,7 +155,6 @@ Angle::Fraction(const Angle end, const double fraction) const
   return Angle(value + diff.value * fraction);
 }
 
-gcc_pure
 bool
 Angle::Between(const Angle start, const Angle end) const
 {

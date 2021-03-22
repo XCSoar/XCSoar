@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_TASK_TYPE_STRINGS_HPP
 #define XCSOAR_TASK_TYPE_STRINGS_HPP
 
-#include "util/Compiler.h"
-
 #include <tchar.h>
 #include <cstdint>
 
@@ -33,19 +31,19 @@ enum class TaskPointType : uint8_t;
 enum class TaskFactoryType : uint8_t;
 enum class TaskPointFactoryType : uint8_t;
 
-gcc_const
+[[gnu::const]]
 const TCHAR *
 OrderedTaskFactoryDescription(TaskFactoryType type);
 
-gcc_const
+[[gnu::const]]
 const TCHAR *
 OrderedTaskFactoryName(TaskFactoryType type);
 
-gcc_const
+[[gnu::const]]
 const TCHAR *
 OrderedTaskPointDescription(TaskPointFactoryType type);
 
-gcc_const
+[[gnu::const]]
 const TCHAR *
 OrderedTaskPointName(TaskPointFactoryType type);
 

@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef LOW_PASS_FILTER_HPP
 #define LOW_PASS_FILTER_HPP
 
-#include "util/Compiler.h"
-
 /**
  * Implements a low-pass filter
  * @see http://en.wikipedia.org/wiki/Low-pass_filter
@@ -34,9 +32,8 @@ Copyright_License {
  * @param fact Smoothing factor (alpha)
  * @return Output value (y)
  */
-gcc_const
-static inline double
-LowPassFilter(double y_last, double x_in, double fact)
+constexpr double
+LowPassFilter(double y_last, double x_in, double fact) noexcept
 {
   return (1. - fact) * y_last + fact * x_in;
 }

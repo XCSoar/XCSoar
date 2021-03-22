@@ -23,8 +23,6 @@
 #ifndef AIRSPACE_PREDICATE_HPP
 #define AIRSPACE_PREDICATE_HPP
 
-#include "util/Compiler.h"
-
 #include <utility>
 
 class AbstractAirspace;
@@ -42,7 +40,7 @@ public:
    * @param t Airspace to test
    * @return True if condition met
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual bool operator()(const AbstractAirspace& t) const = 0;
 
   /** Convenience condition, useful for default conditions */
@@ -54,7 +52,7 @@ public:
  */
 class AirspacePredicateTrue final : public AirspacePredicate {
 public:
-  bool operator()(gcc_unused const AbstractAirspace& t) const override {
+  bool operator()(const AbstractAirspace &) const override {
     return true;
   }
 };
@@ -103,7 +101,7 @@ public:
     :A(std::forward<A_>(a)), B(std::forward<B_>(b)) {}
 
   template<typename T>
-  gcc_pure
+  [[gnu::pure]]
   bool operator()(const T &t) const {
     return A::operator()(t) && B::operator()(t);
   }

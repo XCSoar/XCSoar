@@ -25,7 +25,6 @@
 
 #include "Flat/FlatProjection.hpp"
 #include "Flat/FlatEllipse.hpp"
-#include "util/Compiler.h"
 
 /**
  * Ellipse in geodesic coordinates, defined by two foci and
@@ -56,7 +55,7 @@ public:
    *
    * @return Location of point on ellipse
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint Parametric(double t) const;
 
   /**

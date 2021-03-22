@@ -122,8 +122,8 @@ public:
    *
    * @return True if task has started
    */
-  gcc_pure
-  virtual bool TaskStarted(gcc_unused bool soft = false) const noexcept {
+  [[gnu::pure]]
+  virtual bool TaskStarted([[maybe_unused]] bool soft = false) const noexcept {
     return true;
   }
 
@@ -146,7 +146,7 @@ public:
   /**
    * Check if task is valid.
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual TaskValidationErrorSet CheckTask() const noexcept = 0;
 
 protected:
@@ -215,9 +215,9 @@ protected:
    *
    * @return True if cruise efficiency is updated
    */
-  gcc_pure
-  virtual bool CalcCruiseEfficiency(gcc_unused const AircraftState &state_now,
-                                    gcc_unused const GlidePolar &glide_polar,
+  [[gnu::pure]]
+  virtual bool CalcCruiseEfficiency([[maybe_unused]] const AircraftState &state_now,
+                                    [[maybe_unused]] const GlidePolar &glide_polar,
                                     double &val) const noexcept {
     val = 1;
     return true;
@@ -234,7 +234,7 @@ protected:
    *
    * @return True if cruise efficiency is updated
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual bool CalcEffectiveMC(const AircraftState &state_now,
                                const GlidePolar &glide_polar,
                                double &val) const noexcept;
@@ -247,7 +247,7 @@ protected:
    *
    * @return Gradient angle of remainder of task
    */
-  gcc_pure
+  [[gnu::pure]]
   double CalcLegGradient(const AircraftState &state_now) const noexcept;
 
   /**
@@ -258,7 +258,7 @@ protected:
    *
    * @return Gradient angle of remainder of task
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual double CalcGradient(const AircraftState &state_now) const noexcept = 0;
 
   /**
@@ -384,7 +384,7 @@ protected:
                                     const GlideResult &solution_remaining_leg) noexcept = 0;
 
   /** Determines whether this task is scored */
-  gcc_pure
+  [[gnu::pure]]
   virtual bool IsScored() const noexcept = 0;
 
 protected:

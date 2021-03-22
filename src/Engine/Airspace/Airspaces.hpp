@@ -28,7 +28,6 @@
 #include "util/Serial.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "util/Compiler.h"
 
 #include <deque>
 
@@ -111,7 +110,7 @@ public:
    *
    * @return Number of airspaces in tree
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetSize() const;
 
   /**
@@ -119,7 +118,7 @@ public:
    *
    * @return True if no airspace stored
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsEmpty() const;
 
   /**
@@ -144,7 +143,7 @@ public:
    */
   void SetActivity(const AirspaceActivity mask);
 
-  gcc_pure
+  [[gnu::pure]]
   const_iterator_range QueryAll() const {
     auto predicate = boost::geometry::index::satisfies([](const Airspace &){
         return true;
@@ -158,7 +157,7 @@ public:
    * @param loc location of origin of search
    * @param range distance in meters of search radius
    */
-  gcc_pure
+  [[gnu::pure]]
   const_iterator_range QueryWithinRange(const GeoPoint &location,
                                         double range) const;
 
@@ -166,7 +165,7 @@ public:
    * Query airspaces intersecting the vector (bounding box check
    * only).  The result is in no specific order.
    */
-  gcc_pure
+  [[gnu::pure]]
   const_iterator_range QueryIntersecting(const GeoPoint &a,
                                          const GeoPoint &b) const;
 
@@ -194,7 +193,7 @@ public:
    *
    * @param loc location of origin of search
    */
-  gcc_pure
+  [[gnu::pure]]
   const_iterator_range QueryInside(const GeoPoint &location) const;
 
   /**
@@ -203,7 +202,7 @@ public:
    *
    * @param loc location of origin of search
    */
-  gcc_pure
+  [[gnu::pure]]
   const_iterator_range QueryInside(const AircraftState &aircraft) const;
 
   const FlatProjection &GetProjection() const {
@@ -230,7 +229,7 @@ public:
                           const AirspacePredicate &condition);
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   AirspaceVector AsVector() const;
 };
 

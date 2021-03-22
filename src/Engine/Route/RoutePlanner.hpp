@@ -83,14 +83,14 @@ class GlidePolar;
  */
 class RoutePlanner {
   struct RoutePointHasher : std::unary_function<RoutePoint, size_t> {
-    gcc_const
+    [[gnu::const]]
     result_type operator()(const argument_type p) const {
       return p.x * result_type(104729) + p.y;
     }
   };
 
   struct RouteLinkBaseHasher : std::unary_function<RouteLinkBase, size_t> {
-    gcc_const
+    [[gnu::const]]
     result_type operator()(const argument_type l) const {
       RoutePointHasher p;
       return p(l.first) * result_type(27644437) + p(l.second);
@@ -267,7 +267,7 @@ public:
    * @return location of intersection, or GeoPoint::Invalid() if none
    * was found
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint Intersection(const AGeoPoint &origin,
                         const AGeoPoint &destination) const;
 

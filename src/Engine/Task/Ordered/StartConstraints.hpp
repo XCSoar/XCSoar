@@ -68,7 +68,7 @@ struct StartConstraints {
    *
    * @return True if within limits
    */
-  gcc_pure
+  [[gnu::pure]]
   bool CheckSpeed(double ground_speed,
                   const TaskStartMargins *margins=nullptr) const;
 
@@ -82,7 +82,7 @@ struct StartConstraints {
    *
    * @return True if within limits
    */
-  gcc_pure
+  [[gnu::pure]]
   bool CheckHeight(const AircraftState &state,
                    double start_elevation,
                    const TaskStartMargins *margins=nullptr) const;

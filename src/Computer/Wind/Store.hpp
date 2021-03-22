@@ -66,7 +66,7 @@ public:
    */
   void SlotAltitude(const MoreData &info, DerivedInfo &derived);
 
-  gcc_pure
+  [[gnu::pure]]
   const Vector GetWind(double Time, double h, bool &found) const;
 
 private:

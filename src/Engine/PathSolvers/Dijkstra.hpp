@@ -25,7 +25,6 @@ Copyright_License {
 #define DIJKSTRA_HPP
 
 #include "util/ReservablePriorityQueue.hpp"
-#include "util/Compiler.h"
 
 #define DIJKSTRA_MINMAX_OFFSET 134217727
 
@@ -64,7 +63,7 @@ private:
   };
 
   struct Rank : public std::binary_function<Value, Value, bool> {
-    gcc_pure
+    [[gnu::pure]]
     constexpr bool operator()(const Value &x, const Value &y) const noexcept {
       return x.edge_value > y.edge_value;
     }
@@ -122,7 +121,7 @@ public:
    *
    * @return True if no more nodes to search
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsEmpty() const noexcept {
     return q.empty();
   }
@@ -132,7 +131,7 @@ public:
    *
    * @return Queue size in elements
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetQueueSize() const noexcept {
     return q.size();
   }
@@ -180,7 +179,7 @@ public:
    *
    * @return Predecessor node
    */
-  gcc_pure
+  [[gnu::pure]]
   Node GetPredecessor(const Node node) const noexcept {
     // Try to find the given node in the node_parent_map
     edge_const_iterator it = edges.find(node);

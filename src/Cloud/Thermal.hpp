@@ -65,7 +65,7 @@ struct CloudThermal
      bottom_location(_bottom_location), top_location(_top_location),
      lift(_lift) {}
 
-  gcc_pure
+  [[gnu::pure]]
   SkyLinesTracking::Thermal Pack() const;
 
   void Save(Serialiser &s) const;
@@ -80,7 +80,7 @@ using CloudThermalPtr = std::shared_ptr<CloudThermal>;
 struct CloudThermalIndexable {
   typedef GeoPoint result_type;
 
-  gcc_pure
+  [[gnu::pure]]
   result_type operator()(const CloudThermalPtr &client) const {
     return client->top_location;
   }
@@ -148,7 +148,7 @@ public:
   typedef Tree::const_query_iterator query_iterator;
   typedef boost::iterator_range<query_iterator> query_iterator_range;
 
-  gcc_pure
+  [[gnu::pure]]
   query_iterator_range QueryWithinRange(GeoPoint location, double range) const;
 
   void Save(Serialiser &s) const;

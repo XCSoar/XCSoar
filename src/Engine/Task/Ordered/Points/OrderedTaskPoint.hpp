@@ -29,7 +29,6 @@
 #include "Task/Points/ScoredTaskPoint.hpp"
 #include "Task/ObservationZones/ObservationZoneClient.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
-#include "util/Compiler.h"
 
 #include <memory>
 
@@ -125,8 +124,8 @@ public:
     return GetType() != TaskPointType::FINISH;
   }
 
-  virtual void SetTaskBehaviour(gcc_unused const TaskBehaviour &tb) {}
-  virtual void SetOrderedTaskSettings(gcc_unused const OrderedTaskSettings &otb) {}
+  virtual void SetTaskBehaviour([[maybe_unused]] const TaskBehaviour &tb) {}
+  virtual void SetOrderedTaskSettings([[maybe_unused]] const OrderedTaskSettings &otb) {}
 
   /**
    * Set previous/next task points.
@@ -234,19 +233,19 @@ public:
   /**
    * Test whether a boundingbox overlaps with this oz
    */
-  gcc_pure
+  [[gnu::pure]]
   bool BoundingBoxOverlaps(const FlatBoundingBox &bb) const;
 
-  gcc_pure
+  [[gnu::pure]]
   const SearchPointVector &GetSearchPoints() const;
 
-  gcc_pure
+  [[gnu::pure]]
   bool CheckEnterTransitionMat(const AircraftState &ref_now,
                                const AircraftState &ref_last) const {
     return CheckEnterTransition(ref_now, ref_last);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   virtual bool IsInSector(const AircraftState &ref) const;
 
   /**
@@ -269,8 +268,8 @@ public:
    *
    * @return True if internal state changed
    */
-  virtual bool UpdateSampleFar(gcc_unused const AircraftState &state,
-                               gcc_unused const FlatProjection &projection) {
+  virtual bool UpdateSampleFar([[maybe_unused]] const AircraftState &state,
+                               [[maybe_unused]] const FlatProjection &projection) {
     return false;
   }
 
@@ -285,7 +284,7 @@ protected:
    *
    * @return Distance (m)
    */
-  gcc_pure
+  [[gnu::pure]]
   double DoubleLegDistance(const GeoPoint &ref) const;
 
 public:
@@ -293,7 +292,7 @@ public:
   const GeoPoint &GetLocationRemaining() const override {
     return ScoredTaskPoint::GetLocationRemaining();
   }
-  GeoVector GetVectorRemaining(gcc_unused const GeoPoint &reference) const override {
+  GeoVector GetVectorRemaining(const GeoPoint &) const override {
     return TaskLeg::GetVectorRemaining();
   }
   GeoVector GetNextLegVector() const override;

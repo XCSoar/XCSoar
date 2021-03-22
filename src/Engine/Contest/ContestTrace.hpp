@@ -71,7 +71,7 @@ struct ContestTracePoint {
     return location;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   double DistanceTo(const GeoPoint &other) const noexcept {
     return location.Distance(other);
   }

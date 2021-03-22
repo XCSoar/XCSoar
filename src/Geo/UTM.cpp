@@ -33,7 +33,7 @@ static constexpr double e2 = e * e;
 static constexpr double e3 = e * e;
 static constexpr double e_p2 = e / (1.0 - e);
 
-gcc_const
+[[gnu::const]]
 static char
 CalculateZoneLetter(const Angle latitude)
 {
@@ -42,7 +42,7 @@ CalculateZoneLetter(const Angle latitude)
   return (index < ARRAY_SIZE(letters)) ? letters[index] : '\0';
 }
 
-gcc_const
+[[gnu::const]]
 static unsigned
 CalculateZoneNumber(const GeoPoint &p)
 {
@@ -68,7 +68,7 @@ CalculateZoneNumber(const GeoPoint &p)
   return (int)floor((p.longitude.Degrees() + 180) / 6) + 1;
 }
 
-gcc_const
+[[gnu::const]]
 static Angle
 GetCentralMeridian(unsigned zone_number)
 {

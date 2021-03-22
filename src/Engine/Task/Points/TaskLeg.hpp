@@ -26,7 +26,6 @@
 #include "Geo/GeoVector.hpp"
 #include "Geo/Memento/DistanceMemento.hpp"
 #include "Geo/Memento/GeoVectorMemento.hpp"
-#include "util/Compiler.h"
 
 struct AircraftState;
 
@@ -74,7 +73,7 @@ public:
    *
    * @return Distance (m) of nominal task
    */
-  gcc_pure
+  [[gnu::pure]]
   double ScanDistanceNominal() const;
 
   /**
@@ -84,7 +83,7 @@ public:
    *
    * @return Distance (m) of planned task
    */
-  gcc_pure
+  [[gnu::pure]]
   double ScanDistancePlanned();
 
   /**
@@ -94,7 +93,7 @@ public:
    *
    * @return Distance (m) of maximum achievable task
    */
-  gcc_pure
+  [[gnu::pure]]
   double ScanDistanceMax() const;
 
   /**
@@ -143,7 +142,7 @@ public:
    *
    * @return Distance (m)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetMaximumLegDistance() const;
   
   /**
@@ -151,7 +150,7 @@ public:
    *
    * @return Distance (m)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetMinimumLegDistance() const;
 
   /**
@@ -159,12 +158,12 @@ public:
    *
    * @return Distance (m)
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetNominalLegDistance() const {
     return GetNominalLegVector().distance;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   GeoVector GetNominalLegVector() const;
 
   /**
@@ -189,25 +188,25 @@ public:
   }
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   GeoVector GetPlannedVector() const;
   
-  gcc_pure
+  [[gnu::pure]]
   GeoVector GetTravelledVector(const GeoPoint &ref) const;
   
-  gcc_pure
+  [[gnu::pure]]
   GeoVector GetRemainingVector(const GeoPoint &ref) const;
 
-  gcc_pure
+  [[gnu::pure]]
   double GetScoredDistance(const GeoPoint &ref) const;
 
-  gcc_pure
+  [[gnu::pure]]
   const OrderedTaskPoint *GetOrigin() const;
 
-  gcc_pure
+  [[gnu::pure]]
   const OrderedTaskPoint *GetNext() const;
 
-  gcc_pure
+  [[gnu::pure]]
   OrderedTaskPoint *GetNext();
 };
 

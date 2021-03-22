@@ -108,7 +108,7 @@ AbortTask::GetAbortRange(const AircraftState &state,
                min_search_range, max_search_range);
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 IsReachable(const GlideResult &result, bool final_glide) noexcept
 {

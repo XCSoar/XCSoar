@@ -23,7 +23,6 @@
 #define FLATRAY_HPP
 
 #include "FlatGeoPoint.hpp"
-#include "util/Compiler.h"
 
 #include <utility>
 
@@ -53,7 +52,7 @@ public:
   /**
    * Return the length of the ray.
    */
-  gcc_pure
+  [[gnu::pure]]
   int Magnitude() const;
 
   /**
@@ -63,7 +62,7 @@ public:
    *
    * @return Parameter [0,1] of vector on this ray that intersection occurs (or -1 if fail)
    */
-  gcc_pure
+  [[gnu::pure]]
   double Intersects(const FlatRay &that) const;
 
   /**
@@ -73,13 +72,13 @@ public:
    *
    * @return Location of end point
    */
-  gcc_pure
+  [[gnu::pure]]
   FlatGeoPoint Parametric(const double t) const;
 
   /**
    * Determine if two rays intersect away from their nodes
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IntersectsDistinct(const FlatRay& that) const;
 
   /**
@@ -87,11 +86,11 @@ public:
    * the "t" parameter.  Returns a negative number if the rays to not
    * intersect.
    */
-  gcc_pure
+  [[gnu::pure]]
   double DistinctIntersection(const FlatRay& that) const;
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   std::pair<int, int> IntersectsRatio(const FlatRay &that) const;
 };
 

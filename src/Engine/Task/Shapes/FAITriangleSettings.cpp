@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "FAITriangleSettings.hpp"
 #include "FAITriangleRules.hpp"
+#include "util/Compiler.h"
 
 #include <cassert>
 

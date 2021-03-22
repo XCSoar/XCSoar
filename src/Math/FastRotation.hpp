@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_MATH_FASTROTATION_HPP
 #define XCSOAR_MATH_FASTROTATION_HPP
 
-#include "util/Compiler.h"
 #include "Math/Angle.hpp"
 #include "Point2D.hpp"
 
@@ -65,11 +64,11 @@ public:
    * @param y Y value
    * @return the rotated coordinates
    */
-  gcc_pure
+  [[gnu::pure]]
   Point Rotate(double x, double y) const;
 
   template<typename P, typename=std::enable_if_t<std::is_base_of_v<Point, P>>>
-  gcc_pure
+  [[gnu::pure]]
   P Rotate(P p) const noexcept {
     return Rotate(p.x, p.y);
   }
@@ -109,11 +108,11 @@ public:
    * @param y Y value
    * @return the rotated coordinates
    */
-  gcc_pure
+  [[gnu::pure]]
   Point Rotate(int x, int y) const;
 
   template<typename P, typename=std::enable_if_t<std::is_base_of_v<Point, P>>>
-  gcc_pure
+  [[gnu::pure]]
   P Rotate(P p) const noexcept {
     return Rotate(p.x, p.y);
   }
@@ -133,7 +132,7 @@ public:
     :cost(fir.cost), sint(fir.sint),
      y_cost(y * cost + 512), y_sint(y * sint - 512) {}
 
-  gcc_pure
+  [[gnu::pure]]
   Point Rotate(int x) const {
     return Point((x * cost - y_sint + 512) >> 10,
                  (y_cost + x * sint + 512) >> 10);

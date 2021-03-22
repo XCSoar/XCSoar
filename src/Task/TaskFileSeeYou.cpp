@@ -288,7 +288,7 @@ static bool isBGAEnhancedOptionZone(const SeeYouTurnpointInformation
           fabs(turnpoint_infos.radius2 - 500) < 2);
 }
 
-gcc_pure
+[[gnu::pure]]
 static Angle
 CalcIntermediateAngle(const SeeYouTurnpointInformation &turnpoint_infos,
                       const GeoPoint &location,

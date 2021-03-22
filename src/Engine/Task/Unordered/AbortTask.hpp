@@ -140,7 +140,7 @@ protected:
    *
    * @return True if no more task points can be added
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsTaskFull() const noexcept {
     return task_points.size() >= max_abort;
   }
@@ -152,7 +152,7 @@ protected:
    *
    * @return Distance (m) of approximate glide range of aircraft
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetAbortRange(const AircraftState &state_now,
                        const GlidePolar &glide_polar) const noexcept;
 

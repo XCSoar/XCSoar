@@ -223,7 +223,7 @@ public:
    * @return location of intersection, or GeoPoint::Invalid() if none
    * was found
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint Intersection(const AGeoPoint &origin, const AGeoPoint &destination,
                         const RasterMap *map,
                         const FlatProjection &proj) const;
@@ -243,14 +243,14 @@ public:
     return height_min_working;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   FlatGeoPoint ReachIntercept(int index, const AFlatGeoPoint &flat_origin,
                               const GeoPoint &origin,
                               const RasterMap* map,
                               const FlatProjection &proj) const;
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   FlatGeoPoint MSLIntercept(const int index, const FlatGeoPoint &p,
                             double altitude,
                             const FlatProjection &proj) const;

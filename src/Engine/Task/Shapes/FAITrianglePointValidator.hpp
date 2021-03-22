@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FAI_TRIANGLE_POINT_VALIDATOR_HPP
 #define XCSOAR_FAI_TRIANGLE_POINT_VALIDATOR_HPP
 
-#include "util/Compiler.h"
-
 class OrderedTask;
 struct GeoPoint;
 struct Waypoint;
@@ -57,11 +55,11 @@ public:
    * @param right = 1 if triangle turns are to right, -1 if turns are to left
    * @return True if point would be valid in an FAI Triangle
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsFAITrianglePoint(const Waypoint &wp, bool right) const;
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   static bool TestFAITriangle(double d1, double d2, double d3,
                               const FAITriangleSettings &settings);
 
@@ -75,7 +73,7 @@ private:
    * @returns False if angle from three points is out of possible range for
    * an FAI triangle.
    */
-  gcc_pure
+  [[gnu::pure]]
   static bool IsFAIAngle(const GeoPoint &p0, const GeoPoint &p1,
                          const GeoPoint &p2, bool right);
 

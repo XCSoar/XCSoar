@@ -21,6 +21,7 @@
 */
 
 #include "Math/ZeroFinder.hpp"
+#include "util/Compiler.h"
 #include "TestUtil.hpp"
 
 class ZeroFinderTest: public ZeroFinder

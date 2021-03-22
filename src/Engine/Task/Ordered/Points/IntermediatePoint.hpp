@@ -24,7 +24,6 @@
 #define INTERMEDIATEPOINT_H
 
 #include "OrderedTaskPoint.hpp"
-#include "util/Compiler.h"
 
 /**
  * An IntermediatePoint is an abstract OrderedTaskPoint,
@@ -55,7 +54,7 @@ public:
                         const TaskBehaviour &tb,
                         const bool b_scored = false);
 
-  gcc_pure
+  [[gnu::pure]]
   bool valid() const {
     return GetPrevious() != NULL && GetNext() != NULL;
   }

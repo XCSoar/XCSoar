@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Math/ARange.hpp"
 #include "GeoPoint.hpp"
-#include "util/Compiler.h"
 
 /**
  * A rectangle on earth's surface with very simple semantics.  Similar
@@ -145,7 +144,7 @@ public:
    * Returns the geographic width of the object (west to east) at its
    * center in metres.
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetGeoWidth() const {
     const Angle middle_latitude = latitude.GetMiddle();
     return GeoPoint(GetWest(), middle_latitude)
@@ -156,7 +155,7 @@ public:
    * Returns the geographic height of the object (south to north) in
    * metres.
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetGeoHeight() const {
     return GetNorthWest().Distance(GetSouthWest());
   }
@@ -184,7 +183,7 @@ public:
   /**
    * Does this GeoBounds instance overlap with the specified one?
    */
-  gcc_pure
+  [[gnu::pure]]
   bool Overlaps(const GeoBounds &other) const {
     return longitude.Overlaps(other.longitude) &&
       latitude.Overlaps(other.latitude);
@@ -198,7 +197,7 @@ public:
    */
   bool IntersectWith(const GeoBounds &other);
 
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint GetCenter() const;
 
   /**
@@ -207,7 +206,7 @@ public:
    * @param factor The scaling factor
    * @return A scaled version of the GeoBounds
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoBounds Scale(double factor) const;
 };
 

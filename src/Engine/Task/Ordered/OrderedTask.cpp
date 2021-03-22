@@ -64,7 +64,7 @@ constexpr bool subtract_start_finish_cylinder_radius = true;
  * Determine the cylinder radius if this is a CylinderZone.  If not,
  * return -1.
  */
-gcc_pure
+[[gnu::pure]]
 static double
 GetCylinderRadiusOrMinusOne(const ObservationZone &oz)
 {
@@ -77,7 +77,7 @@ GetCylinderRadiusOrMinusOne(const ObservationZone &oz)
  * Determine the cylinder radius if this is a CylinderZone.  If not,
  * return -1.
  */
-gcc_pure
+[[gnu::pure]]
 static double
 GetCylinderRadiusOrMinusOne(const ObservationZoneClient &p)
 {
@@ -1149,7 +1149,7 @@ OrderedTask::TaskStarted(bool soft) const noexcept
  *
  * @return True if distance is significant
  */
-gcc_pure
+[[gnu::pure]]
 static bool
 DistanceIsSignificant(const SearchPoint &a1, const SearchPoint &a2,
                       const unsigned dist_threshold = 1)

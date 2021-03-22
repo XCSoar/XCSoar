@@ -24,7 +24,6 @@
 #define TASKINTERFACE_H
 
 #include "TaskType.hpp"
-#include "util/Compiler.h"
 
 struct AircraftState;
 class TaskWaypoint;
@@ -54,7 +53,7 @@ public:
    *
    * @return Number of taskpoints in task
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual unsigned TaskSize() const noexcept = 0;
 
   /**
@@ -71,7 +70,7 @@ public:
    *
    * @return Active task point
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual TaskWaypoint* GetActiveTaskPoint() const noexcept = 0;
 
   /**
@@ -80,7 +79,7 @@ public:
    *
    * @param index_offset offset (default 0)
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual bool IsValidTaskPoint(const int index_offset) const noexcept = 0;
 
   /**

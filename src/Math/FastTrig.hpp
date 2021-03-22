@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_MATH_FAST_TRIG_HPP
 
 #include "Constants.hpp"
-#include "util/Compiler.h"
 
 static constexpr unsigned INT_ANGLE_RANGE = 4096;
 static constexpr unsigned INT_ANGLE_MASK = INT_ANGLE_RANGE - 1;
@@ -80,35 +79,35 @@ IntAngleToRadians(unsigned angle)
   return angle / INT_ANGLE_MULT;
 }
 
-gcc_const
+[[gnu::const]]
 static inline double
 invfastcosine(double x)
 {
   return INVCOSINETABLE[NATIVE_TO_INT(x)];
 }
 
-gcc_const
+[[gnu::const]]
 static inline int
 ifastsine(double x)
 {
   return ISINETABLE[NATIVE_TO_INT(x)];
 }
 
-gcc_const
+[[gnu::const]]
 static inline int
 ifastcosine(double x)
 {
   return ISINETABLE[NATIVE_TO_INT_COS(x)];
 }
 
-gcc_const
+[[gnu::const]]
 static inline double
 fastsine(double x)
 {
   return SINETABLE[NATIVE_TO_INT(x)];
 }
 
-gcc_const
+[[gnu::const]]
 static inline double
 fastcosine(double x)
 {

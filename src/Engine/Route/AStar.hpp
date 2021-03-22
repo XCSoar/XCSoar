@@ -25,7 +25,6 @@ Copyright_License {
 #define ASTAR_HPP
 
 #include "util/ReservablePriorityQueue.hpp"
-#include "util/Compiler.h"
 
 #include <unordered_map>
 
@@ -98,7 +97,7 @@ class AStar
 
   struct Rank: public std::binary_function<NodeValue, NodeValue, bool>
   {
-    gcc_pure
+    [[gnu::pure]]
     bool operator()(const NodeValue &x, const NodeValue &y) const {
       return x.priority.f() > y.priority.f();
     }
@@ -174,7 +173,7 @@ public:
    *
    * @return True if no more nodes to search
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsEmpty() const {
     return q.empty();
   }
@@ -184,7 +183,7 @@ public:
    *
    * @return Queue size in elements
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned QueueSize() const {
     return q.size();
   }
@@ -225,7 +224,7 @@ public:
    *
    * @return Predecessor node
    */
-  gcc_pure
+  [[gnu::pure]]
   Node GetPredecessor(const Node &node) const {
     // Try to find the given node in the node_parent_map
     node_parent_const_iterator it = node_parents.find(node);
@@ -249,7 +248,7 @@ public:
    * Obtain the value of this node (accumulated distance to this node)
    * Returns 0 on failure to find the node.
    */
-  gcc_pure
+  [[gnu::pure]]
   AStarPriorityValue GetNodeValue(const Node &node) const {
     node_value_const_iterator it = node_values.find(node);
     if (cur->first == node)

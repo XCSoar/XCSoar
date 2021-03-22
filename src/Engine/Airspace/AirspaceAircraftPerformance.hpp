@@ -26,7 +26,6 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 #include "Util/AircraftStateFilter.hpp"
-#include "util/Compiler.h"
 
 #include <cassert>
 
@@ -187,7 +186,7 @@ public:
    *
    * @return Time to intercept (s) or -1 if failed
    */
-  gcc_pure
+  [[gnu::pure]]
   double SolutionGeneral(double distance, double dh) const;
 
   /**
@@ -221,7 +220,7 @@ public:
                             double &intercept_distance) const;
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   bool SolutionExists(double distance_min, double distance_max,
                       double h_min, double h_max) const;
 };

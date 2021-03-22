@@ -28,7 +28,6 @@ Copyright_License {
 #include "Geo/SearchPoint.hpp"
 #include "Rough/RoughAltitude.hpp"
 #include "Rough/RoughVSpeed.hpp"
-#include "util/Compiler.h"
 
 #include <cassert>
 #include <cstdint>
@@ -93,7 +92,7 @@ public:
    */
   explicit TracePoint(const AircraftState &state);
 
-  gcc_const
+  [[gnu::const]]
   static TracePoint Invalid() {
     TracePoint point;
     point.Clear();

@@ -31,6 +31,7 @@ Copyright_License {
 #include "MatTaskFactory.hpp"
 #include "MixedTaskFactory.hpp"
 #include "TouringTaskFactory.hpp"
+#include "util/Compiler.h"
 
 std::unique_ptr<AbstractTaskFactory>
 CreateTaskFactory(TaskFactoryType type, OrderedTask &task,

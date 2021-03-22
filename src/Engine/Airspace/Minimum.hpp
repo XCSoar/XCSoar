@@ -29,7 +29,7 @@ Copyright_License {
 template<class Func,
          typename Result=decltype(((Func *)nullptr)->operator()(*(const AbstractAirspace *)nullptr)),
          class Cmp=std::less<Result>>
-gcc_pure
+[[gnu::pure]]
 static inline Result
 FindMinimum(const Airspaces &airspaces, const GeoPoint &location, double range,
             const AirspacePredicate &predicate,

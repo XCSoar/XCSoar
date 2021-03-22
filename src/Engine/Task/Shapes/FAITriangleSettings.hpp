@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FAI_TRIANGLE_SETTINGS_HPP
 #define XCSOAR_FAI_TRIANGLE_SETTINGS_HPP
 
-#include "util/Compiler.h"
-
 #include <cstdint>
 
 struct FAITriangleSettings {
@@ -59,7 +57,7 @@ struct FAITriangleSettings {
   /**
    * Returns the threshold for large triangles [m].
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetThreshold() const;
 };
 

@@ -98,22 +98,22 @@ protected:
    */
   bool UpdateTraceTail() noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   const TracePoint &GetPoint(unsigned i) const noexcept {
     assert(i < n_points);
 
     return *trace[i];
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsMasterUpdated(bool continuous) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool CheckMasterSerial() const noexcept {
     return modify_serial != trace_master.GetModifySerial();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsMasterAppended() const noexcept {
     return append_serial == trace_master.GetAppendSerial();
   }

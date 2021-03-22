@@ -31,15 +31,13 @@ Copyright_License {
 #ifndef XCSOAR_GEO_MATH_HPP
 #define XCSOAR_GEO_MATH_HPP
 
-#include "util/Compiler.h"
-
 struct GeoPoint;
 class Angle;
 
 /**
  * Calculates projected distance from P3 along line P1-P2.
  */
-gcc_pure
+[[gnu::pure]]
 double
 ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
                   const GeoPoint &loc3);
@@ -54,7 +52,7 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
  * @param loc2 Location 2
  * @return The distance
  */
-gcc_pure
+[[gnu::pure]]
 double
 Distance(const GeoPoint &loc1, const GeoPoint &loc2);
 
@@ -64,7 +62,7 @@ Distance(const GeoPoint &loc1, const GeoPoint &loc2);
  * @param loc2 Location 2
  * @return The bearing
  */
-gcc_pure
+[[gnu::pure]]
 Angle
 Bearing(const GeoPoint &loc1, const GeoPoint &loc2);
 
@@ -74,14 +72,14 @@ Bearing(const GeoPoint &loc1, const GeoPoint &loc2);
  *
  * This is a slow function.  Adapted from The Aviation Formulary 1.42.
  */
-gcc_pure
+[[gnu::pure]]
 GeoPoint
 IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2, double dthis);
 
 /**
  * Find the nearest great-circle middle point between the two.
  */
-gcc_pure
+[[gnu::pure]]
 GeoPoint
 Middle(const GeoPoint &a, const GeoPoint &b);
 
@@ -97,7 +95,7 @@ Middle(const GeoPoint &a, const GeoPoint &b);
  * 
  * @return Distance 12 plus 23 (m)
  */
-gcc_pure
+[[gnu::pure]]
 double
 DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
                const GeoPoint &loc3);
@@ -111,7 +109,7 @@ DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
  * @param Distance Distance to predict
  * @param loc_out Future location
  */
-gcc_pure
+[[gnu::pure]]
 GeoPoint FindLatitudeLongitude(const GeoPoint &loc,
                                Angle bearing, double distance);
 

@@ -149,7 +149,7 @@ protected:
    *
    * @return True if that is within the start/end radials
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsAngleInSector(const Angle that) const;
 
 public:

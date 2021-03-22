@@ -26,7 +26,6 @@
 
 #include "Type.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "util/Compiler.h"
 
 /**
  * Base class for all task points 
@@ -64,7 +63,7 @@ public:
    *
    * @return Location
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual const GeoPoint &GetLocationRemaining() const {
     return location;
   }
@@ -74,7 +73,7 @@ public:
    *
    * @return Vector for task leg
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const = 0;
 
   /**
@@ -82,7 +81,7 @@ public:
     *
     * @return Vector for task leg or GeoVector::Invalid() if there is no next leg
     */
-  gcc_pure
+  [[gnu::pure]]
   virtual GeoVector GetNextLegVector() const;
 
   /**
@@ -90,7 +89,7 @@ public:
    *
    * @return True if task point has a target (can have range set)
    */
-  gcc_pure
+  [[gnu::pure]]
   bool HasTarget() const {
     return type == TaskPointType::AAT;
   }
@@ -101,7 +100,7 @@ public:
    *
    * @return Minimum allowable elevation of task point
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual double GetElevation() const = 0;
 
   /**

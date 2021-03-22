@@ -58,7 +58,7 @@ struct RouteLinkBase {
    * Return 2d Distance of this link
    * @return distance in FlatGeoPoint units
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned Distance() const {
     return first.Distance(second);
   }
@@ -69,7 +69,7 @@ struct RouteLinkBase {
    *
    * @return true if this link is short
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsShort() const;
 
   /**
@@ -127,7 +127,7 @@ public:
    *
    * @return link equivalent to this link flattened
    */
-  gcc_pure
+  [[gnu::pure]]
   RouteLink Flat() const;
 
 private:
