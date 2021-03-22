@@ -104,12 +104,11 @@ class FastRowRotation {
 public:
   typedef IntPoint2D Point;
 
-  FastRowRotation(const FastIntegerRotation &fir, int y) noexcept
+  constexpr FastRowRotation(const FastIntegerRotation &fir, int y) noexcept
     :cost(fir.cost), sint(fir.sint),
      y_cost(y * cost + 512), y_sint(y * sint - 512) {}
 
-  [[gnu::pure]]
-  Point Rotate(int x) const noexcept {
+  constexpr Point Rotate(int x) const noexcept {
     return Point((x * cost - y_sint + 512) >> 10,
                  (y_cost + x * sint + 512) >> 10);
   }
