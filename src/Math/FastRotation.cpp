@@ -22,16 +22,3 @@ Copyright_License {
 */
 
 #include "Math/FastRotation.hpp"
-
-FastRotation::Point
-FastRotation::Rotate(double x, double y) const noexcept
-{
-  return Point(x * cost - y * sint, y * cost + x * sint);
-}
-
-FastIntegerRotation::Point
-FastIntegerRotation::Rotate(int x, int y) const noexcept
-{
-  return Point((x * cost - y * sint + 512) >> 10,
-               (y * cost + x * sint + 512) >> 10);
-}

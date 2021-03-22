@@ -51,12 +51,15 @@ public:
    * @param y Y value
    * @return the rotated coordinates
    */
-  [[gnu::pure]]
-  Point Rotate(double x, double y) const noexcept;
+  constexpr Point Rotate(double x, double y) const noexcept {
+    return {
+      x * cost - y * sint,
+      y * cost + x * sint,
+    };
+  }
 
   template<typename P, typename=std::enable_if_t<std::is_base_of_v<Point, P>>>
-  [[gnu::pure]]
-  P Rotate(P p) const noexcept {
+  constexpr P Rotate(P p) const noexcept {
     return Rotate(p.x, p.y);
   }
 };
@@ -84,12 +87,15 @@ public:
    * @param y Y value
    * @return the rotated coordinates
    */
-  [[gnu::pure]]
-  Point Rotate(int x, int y) const noexcept;
+  constexpr Point Rotate(int x, int y) const noexcept {
+    return {
+      (x * cost - y * sint + 512) >> 10,
+      (y * cost + x * sint + 512) >> 10,
+    };
+  }
 
   template<typename P, typename=std::enable_if_t<std::is_base_of_v<Point, P>>>
-  [[gnu::pure]]
-  P Rotate(P p) const noexcept {
+  constexpr P Rotate(P p) const noexcept {
     return Rotate(p.x, p.y);
   }
 };
