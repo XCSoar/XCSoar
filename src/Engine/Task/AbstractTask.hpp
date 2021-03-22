@@ -81,25 +81,25 @@ public:
    * 
    * @param tb Global task behaviour settings
    */
-  AbstractTask(TaskType _type, const TaskBehaviour &tb);
+  AbstractTask(TaskType _type, const TaskBehaviour &tb) noexcept;
 
   /**
    * Set the handler for task events.  This method may be called only
    * once.
    */
-  void SetTaskEvents(TaskEvents &_task_events) {
+  void SetTaskEvents(TaskEvents &_task_events) noexcept {
     assert(task_events == NULL);
 
     task_events = &_task_events;
   }
 
   /** Reset the task (as if never flown) */
-  virtual void Reset();
+  virtual void Reset() noexcept;
 
   /** Reset the auto Mc calculator */
-  void ResetAutoMC();
+  void ResetAutoMC() noexcept;
 
-  void SetTaskBehaviour(const TaskBehaviour &tb) {
+  void SetTaskBehaviour(const TaskBehaviour &tb) noexcept {
     task_behaviour = tb;
   }
 
@@ -108,7 +108,7 @@ public:
    * 
    * @return Index of active task point sequence
    */
-  unsigned GetActiveTaskPointIndex() const {
+  unsigned GetActiveTaskPointIndex() const noexcept {
     return active_task_point;
   }
 
@@ -123,11 +123,11 @@ public:
    * @return True if task has started
    */
   gcc_pure
-  virtual bool TaskStarted(gcc_unused bool soft = false) const {
+  virtual bool TaskStarted(gcc_unused bool soft = false) const noexcept {
     return true;
   }
 
-  const TaskStats &GetStats() const {
+  const TaskStats &GetStats() const noexcept {
     return stats;
   }
 
@@ -141,7 +141,7 @@ public:
    * @return True if MC updated
    */
   bool UpdateAutoMC(GlidePolar &glide_polar, const AircraftState &state_now,
-                    double fallback_mc);
+                    double fallback_mc) noexcept;
 
   /**
    * Check if task is valid.
@@ -159,9 +159,9 @@ protected:
    *
    * @return True if internal state changes
    */
-  virtual bool UpdateSample(const AircraftState &state_now, 
+  virtual bool UpdateSample(const AircraftState &state_now,
                             const GlidePolar &glide_polar,
-                            const bool full_update) = 0;
+                            const bool full_update) noexcept = 0;
 
   /**
    * Pure abstract method to be defined for concrete task classes to test
@@ -175,8 +175,8 @@ protected:
    * @return True if transition occurred
    */
   virtual bool CheckTransitions(const AircraftState &state_now,
-                                const AircraftState &state_last) = 0;
-  
+                                const AircraftState &state_last) noexcept = 0;
+
   /**
    * Calculate/search for best MC, being the highest MC value to produce a
    * pure glide solution for the remainder of the task.
@@ -188,7 +188,7 @@ protected:
    */
   virtual bool CalcBestMC(const AircraftState &state_now,
                           const GlidePolar &glide_polar,
-                          double &best) const = 0;
+                          double &best) const noexcept = 0;
 
   /**
    * Calculate virtual sink rate of aircraft that allows a pure glide solution
@@ -200,7 +200,7 @@ protected:
    * @return Sink rate of aircraft (m/s)
    */
   virtual double CalcRequiredGlide(const AircraftState &state_now,
-                                   const GlidePolar &glide_polar) const = 0;
+                                   const GlidePolar &glide_polar) const noexcept = 0;
 
   /**
    * Calculate cruise efficiency for the travelled part of the task.
@@ -218,7 +218,7 @@ protected:
   gcc_pure
   virtual bool CalcCruiseEfficiency(gcc_unused const AircraftState &state_now,
                                     gcc_unused const GlidePolar &glide_polar,
-                                    double &val) const {
+                                    double &val) const noexcept {
     val = 1;
     return true;
   }
@@ -237,7 +237,7 @@ protected:
   gcc_pure
   virtual bool CalcEffectiveMC(const AircraftState &state_now,
                                const GlidePolar &glide_polar,
-                               double &val) const;
+                               double &val) const noexcept;
 
   /**
    * Calculate angle from aircraft to destination of current leg
@@ -248,7 +248,7 @@ protected:
    * @return Gradient angle of remainder of task
    */
   gcc_pure
-  double CalcLegGradient(const AircraftState &state_now) const;
+  double CalcLegGradient(const AircraftState &state_now) const noexcept;
 
   /**
    * Calculate angle from aircraft to remainder of task
@@ -259,7 +259,7 @@ protected:
    * @return Gradient angle of remainder of task
    */
   gcc_pure
-  virtual double CalcGradient(const AircraftState &state_now) const = 0;
+  virtual double CalcGradient(const AircraftState &state_now) const noexcept = 0;
 
   /**
    * Calculate task start time.
@@ -267,7 +267,7 @@ protected:
    *
    * @return Time (s) of start of task or negative value if not available
    */
-  virtual double ScanTotalStartTime() = 0;
+  virtual double ScanTotalStartTime() noexcept = 0;
 
   /**
    * Calculate leg start time.
@@ -275,7 +275,7 @@ protected:
    *
    * @return Time (s) of start of leg or negative value if not available
    */
-  virtual double ScanLegStartTime() = 0;
+  virtual double ScanLegStartTime() noexcept = 0;
 
   /**
    * Calculate distance of nominal task (sum of distances from each
@@ -283,7 +283,7 @@ protected:
    *
    * @return Distance (m) of nominal task
    */
-  virtual double ScanDistanceNominal() = 0;
+  virtual double ScanDistanceNominal() noexcept = 0;
 
   /**
    * Calculate distance of planned task (sum of distances from each leg's
@@ -292,7 +292,7 @@ protected:
    *
    * @return Distance (m) of planned task
    */
-  virtual double ScanDistancePlanned() = 0;
+  virtual double ScanDistancePlanned() noexcept = 0;
 
   /**
    * Calculate distance of planned task (sum of distances from aircraft to
@@ -303,7 +303,7 @@ protected:
    *
    * @return Distance (m) remaining in the planned task
    */
-  virtual double ScanDistanceRemaining(const GeoPoint &ref) = 0;
+  virtual double ScanDistanceRemaining(const GeoPoint &ref) noexcept = 0;
 
   /**
    * Calculate scored distance of achieved part of task.
@@ -312,7 +312,7 @@ protected:
    *
    * @return Distance (m) achieved adjusted for scoring
    */
-  virtual double ScanDistanceScored(const GeoPoint &ref) = 0;
+  virtual double ScanDistanceScored(const GeoPoint &ref) noexcept = 0;
 
   /**
    * Calculate distance of achieved part of task.
@@ -324,7 +324,7 @@ protected:
    *
    * @return Distance (m) achieved
    */
-  virtual double ScanDistanceTravelled(const GeoPoint &ref) = 0;
+  virtual double ScanDistanceTravelled(const GeoPoint &ref) noexcept = 0;
 
   /**
    * Calculate maximum and minimum distances for task, achievable
@@ -336,7 +336,7 @@ protected:
    * @param dmax Maximum distance (m) achievable of task
    */
   virtual void ScanDistanceMinMax(const GeoPoint &ref, bool full,
-                                  double *dmin, double *dmax) = 0;
+                                  double *dmin, double *dmax) noexcept = 0;
 
   /**
    * Calculate glide result for remainder of task
@@ -348,7 +348,7 @@ protected:
    */
   virtual void GlideSolutionRemaining(const AircraftState &state_now,
                                       const GlidePolar &polar,
-                                      GlideResult &total, GlideResult &leg) = 0;
+                                      GlideResult &total, GlideResult &leg) noexcept = 0;
 
   /**
    * Calculate glide result from start of task to current state
@@ -357,9 +357,9 @@ protected:
    * @param total Glide result accumulated for total travelled task
    * @param leg Glide result for current leg of task
    */
-  virtual void GlideSolutionTravelled(const AircraftState &state_now, 
+  virtual void GlideSolutionTravelled(const AircraftState &state_now,
                                       const GlidePolar &glide_polar,
-                                      GlideResult &total, GlideResult &leg) = 0;
+                                      GlideResult &total, GlideResult &leg) noexcept = 0;
 
   /**
    * Calculate glide result from start of task to finish, and from this
@@ -381,11 +381,11 @@ protected:
                                     DistanceStat &total_remaining_effective,
                                     DistanceStat &leg_remaining_effective,
                                     const GlideResult &solution_remaining_total,
-                                    const GlideResult &solution_remaining_leg) = 0;
+                                    const GlideResult &solution_remaining_leg) noexcept = 0;
 
   /** Determines whether this task is scored */
   gcc_pure
-  virtual bool IsScored() const = 0;
+  virtual bool IsScored() const noexcept = 0;
 
 protected:
   /**
@@ -396,20 +396,20 @@ protected:
    * @param location Location of observer
    * @param full_update Whether all calculations or minimal ones to be performed
    */
-  void UpdateStatsDistances(const GeoPoint &location, const bool full_update);
+  void UpdateStatsDistances(const GeoPoint &location, const bool full_update) noexcept;
 
 private:
   void UpdateGlideSolutions(const AircraftState &state,
-                            const GlidePolar &glide_polar);
+                            const GlidePolar &glide_polar) noexcept;
 
   /**
    * @param time monotonic time of day in seconds or -1 if unknown
    */
-  void UpdateStatsTimes(double time);
-  void UpdateStatsSpeeds(double time);
+  void UpdateStatsTimes(double time) noexcept;
+  void UpdateStatsSpeeds(double time) noexcept;
   void UpdateStatsGlide(const AircraftState &state,
-                        const GlidePolar &glide_polar);
-  void UpdateFlightMode();
+                        const GlidePolar &glide_polar) noexcept;
+  void UpdateFlightMode() noexcept;
 
 public:
   /**

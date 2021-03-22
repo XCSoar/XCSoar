@@ -36,7 +36,7 @@ UnorderedTask::UnorderedTask(const TaskType _type,
 bool
 UnorderedTask::CalcBestMC(const AircraftState &aircraft,
                           const GlidePolar &glide_polar,
-                          double& best) const
+                          double& best) const noexcept
 {
   TaskPoint *tp = GetActiveTaskPoint();
   if (tp == nullptr || !aircraft.location.IsValid()) {
@@ -61,7 +61,7 @@ UnorderedTask::CheckTask() const noexcept
 
 bool
 UnorderedTask::CheckTransitions(const AircraftState &state_now,
-                                const AircraftState &state_last)
+                                const AircraftState &state_last) noexcept
 {
   if (!stats.task_valid || !state_now.flying)
     return false;
@@ -76,7 +76,7 @@ UnorderedTask::CheckTransitions(const AircraftState &state_now,
 
 double
 UnorderedTask::CalcRequiredGlide(const AircraftState &aircraft,
-                                 const GlidePolar &glide_polar) const
+                                 const GlidePolar &glide_polar) const noexcept
 {
   TaskPoint *tp = GetActiveTaskPoint();
   if (tp == nullptr || !aircraft.location.IsValid())
@@ -90,7 +90,7 @@ void
 UnorderedTask::GlideSolutionRemaining(const AircraftState &state,
                                       const GlidePolar &polar,
                                       GlideResult &total,
-                                      GlideResult &leg)
+                                      GlideResult &leg) noexcept
 {
   GlideResult res;
 
@@ -110,7 +110,7 @@ void
 UnorderedTask::GlideSolutionTravelled(const AircraftState &state,
                                       const GlidePolar &glide_polar,
                                       GlideResult &total,
-                                      GlideResult &leg)
+                                      GlideResult &leg) noexcept
 {
   GlideResult null_res;
   null_res.Reset();
@@ -126,7 +126,7 @@ UnorderedTask::GlideSolutionPlanned(const AircraftState &state,
                                     DistanceStat &total_remaining_effective,
                                     DistanceStat &leg_remaining_effective,
                                     const GlideResult &solution_remaining_total,
-                                    const GlideResult &solution_remaining_leg)
+                                    const GlideResult &solution_remaining_leg) noexcept
 {
   total = solution_remaining_total;
   leg = solution_remaining_leg;
@@ -143,20 +143,20 @@ UnorderedTask::GlideSolutionPlanned(const AircraftState &state,
 }
 
 double
-UnorderedTask::ScanTotalStartTime()
+UnorderedTask::ScanTotalStartTime() noexcept
 {
   return -1;
 }
 
 double
-UnorderedTask::ScanLegStartTime()
+UnorderedTask::ScanLegStartTime() noexcept
 {
   return -1;
 }
 
 void
 UnorderedTask::ScanDistanceMinMax(const GeoPoint &location, bool full,
-                                  double *dmin, double *dmax)
+                                  double *dmin, double *dmax) noexcept
 {
   *dmin = *dmax = stats.total.remaining.IsDefined()
     ? stats.total.remaining.GetDistance()
@@ -164,7 +164,7 @@ UnorderedTask::ScanDistanceMinMax(const GeoPoint &location, bool full,
 }
 
 double
-UnorderedTask::ScanDistanceNominal()
+UnorderedTask::ScanDistanceNominal() noexcept
 {
   return stats.total.remaining.IsDefined()
     ? stats.total.remaining.GetDistance()
@@ -172,7 +172,7 @@ UnorderedTask::ScanDistanceNominal()
 }
 
 double
-UnorderedTask::ScanDistancePlanned()
+UnorderedTask::ScanDistancePlanned() noexcept
 {
   return stats.total.remaining.IsDefined()
     ? stats.total.remaining.GetDistance()
@@ -180,19 +180,19 @@ UnorderedTask::ScanDistancePlanned()
 }
 
 double
-UnorderedTask::ScanDistanceScored(const GeoPoint &location)
+UnorderedTask::ScanDistanceScored(const GeoPoint &location) noexcept
 {
   return 0;
 }
 
 double
-UnorderedTask::ScanDistanceTravelled(const GeoPoint &location)
+UnorderedTask::ScanDistanceTravelled(const GeoPoint &location) noexcept
 {
   return 0;
 }
 
 double
-UnorderedTask::ScanDistanceRemaining(const GeoPoint &location)
+UnorderedTask::ScanDistanceRemaining(const GeoPoint &location) noexcept
 {
   TaskPoint *tp = GetActiveTaskPoint();
   if (tp == nullptr || !location.IsValid())
@@ -202,7 +202,7 @@ UnorderedTask::ScanDistanceRemaining(const GeoPoint &location)
 }
 
 double
-UnorderedTask::CalcGradient(const AircraftState &state) const
+UnorderedTask::CalcGradient(const AircraftState &state) const noexcept
 {
   return CalcLegGradient(state);
 }

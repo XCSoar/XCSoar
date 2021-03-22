@@ -692,44 +692,44 @@ public:
                   const GlidePolar &glide_polar) noexcept override;
 
   /* virtual methods from class AbstractTask */
-  void Reset() override;
-  bool TaskStarted(bool soft=false) const override;
+  void Reset() noexcept override;
+  bool TaskStarted(bool soft=false) const noexcept override;
   TaskValidationErrorSet CheckTask() const noexcept override;
 
 protected:
   /* virtual methods from class AbstractTask */
   bool UpdateSample(const AircraftState &state_now,
                     const GlidePolar &glide_polar,
-                    const bool full_update) override;
+                    const bool full_update) noexcept override;
   bool CheckTransitions(const AircraftState &state_now,
-                        const AircraftState &state_last) override;
+                        const AircraftState &state_last) noexcept override;
   bool CalcBestMC(const AircraftState &state_now,
                   const GlidePolar &glide_polar,
-                  double &best) const override;
+                  double &best) const noexcept override;
   double CalcRequiredGlide(const AircraftState &state_now,
-                           const GlidePolar &glide_polar) const override;
+                           const GlidePolar &glide_polar) const noexcept override;
   bool CalcCruiseEfficiency(const AircraftState &state_now,
                             const GlidePolar &glide_polar,
-                            double &value) const override;
+                            double &value) const noexcept override;
   bool CalcEffectiveMC(const AircraftState &state_now,
                        const GlidePolar &glide_polar,
-                       double &value) const override;
-  double CalcGradient(const AircraftState &state_now) const override;
-  double ScanTotalStartTime() override;
-  double ScanLegStartTime() override;
-  double ScanDistanceNominal() override;
-  double ScanDistancePlanned() override;
-  double ScanDistanceRemaining(const GeoPoint &ref) override;
-  double ScanDistanceScored(const GeoPoint &ref) override;
-  double ScanDistanceTravelled(const GeoPoint &ref) override;
+                       double &value) const noexcept override;
+  double CalcGradient(const AircraftState &state_now) const noexcept override;
+  double ScanTotalStartTime() noexcept override;
+  double ScanLegStartTime() noexcept override;
+  double ScanDistanceNominal() noexcept override;
+  double ScanDistancePlanned() noexcept override;
+  double ScanDistanceRemaining(const GeoPoint &ref) noexcept override;
+  double ScanDistanceScored(const GeoPoint &ref) noexcept override;
+  double ScanDistanceTravelled(const GeoPoint &ref) noexcept override;
   void ScanDistanceMinMax(const GeoPoint &ref, bool full,
-                          double *dmin, double *dmax) override;
+                          double *dmin, double *dmax) noexcept override;
   void GlideSolutionRemaining(const AircraftState &state_now,
                               const GlidePolar &polar,
-                              GlideResult &total, GlideResult &leg) override;
+                              GlideResult &total, GlideResult &leg) noexcept override;
   void GlideSolutionTravelled(const AircraftState &state_now,
                               const GlidePolar &glide_polar,
-                              GlideResult &total, GlideResult &leg) override;
+                              GlideResult &total, GlideResult &leg) noexcept override;
   void GlideSolutionPlanned(const AircraftState &state_now,
                             const GlidePolar &glide_polar,
                             GlideResult &total,
@@ -737,9 +737,9 @@ protected:
                             DistanceStat &total_remaining_effective,
                             DistanceStat &leg_remaining_effective,
                             const GlideResult &solution_remaining_total,
-                            const GlideResult &solution_remaining_leg) override;
+                            const GlideResult &solution_remaining_leg) noexcept override;
 protected:
-  bool IsScored() const override;
+  bool IsScored() const noexcept override;
 
 public:
   void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor) const override;

@@ -66,10 +66,10 @@ GotoTask::SetActiveTaskPoint(unsigned index) noexcept
 }
 
 
-bool 
+bool
 GotoTask::UpdateSample(gcc_unused const AircraftState &state,
                        gcc_unused const GlidePolar &glide_polar,
-                        gcc_unused const bool full_update)
+                       gcc_unused bool full_update) noexcept
 {
   return false; // nothing to do
 }
@@ -88,8 +88,8 @@ GotoTask::DoGoto(WaypointPtr &&wp)
   }
 }
 
-void 
-GotoTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const
+void
+GotoTask::AcceptTaskPointVisitor(TaskPointConstVisitor &visitor) const
 {
   if (tp)
     visitor.Visit(*tp);
