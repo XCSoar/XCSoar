@@ -89,8 +89,8 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
   auto p = data.begin();
   for (unsigned y = 0; y < screen_size.height;
        y += quantisation_pixels, p += width) {
-    map.ScanLine(projection.ScreenToGeo(0, y),
-                 projection.ScreenToGeo(screen_size.width, y),
+    map.ScanLine(projection.ScreenToGeo({0, (int)y}),
+                 projection.ScreenToGeo({(int)screen_size.width, (int)y}),
                  p, width, interpolate);
   }
 }

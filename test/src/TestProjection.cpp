@@ -25,13 +25,13 @@
 
 static void
 TestGeoScreenCouple(const Projection prj, const GeoPoint geo,
-                    long x, long y)
+                    int x, int y)
 {
   auto tmp_pt = prj.GeoToScreen(geo);
   ok1(tmp_pt.x == x);
   ok1(tmp_pt.y == y);
 
-  GeoPoint tmp_geo = prj.ScreenToGeo(x, y);
+  GeoPoint tmp_geo = prj.ScreenToGeo({x, y});
   ok1(equals(tmp_geo.latitude, geo.latitude));
   ok1(equals(tmp_geo.longitude, geo.longitude));
 }

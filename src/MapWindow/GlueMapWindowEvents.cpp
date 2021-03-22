@@ -441,8 +441,7 @@ GlueMapWindow::OnKineticTimer() noexcept
     return;
   }
 
-  auto location = drag_projection.ScreenToGeo(kinetic_x.GetPosition(),
-                                              kinetic_y.GetPosition());
+  auto location = drag_projection.ScreenToGeo({kinetic_x.GetPosition(), kinetic_y.GetPosition()});
   location = drag_projection.GetGeoLocation() +
     drag_start_geopoint - location;
 

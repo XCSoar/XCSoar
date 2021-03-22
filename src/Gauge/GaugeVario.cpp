@@ -288,18 +288,14 @@ GaugeVario::MakePolygon(const int i) noexcept
 
   const FastIntegerRotation r(Angle::Degrees(i));
 
-  bit[0] = TransformRotatedPoint(r.Rotate(-geometry.offset.x + geometry.nlength0,
-                                          geometry.nwidth),
+  bit[0] = TransformRotatedPoint(r.Rotate({-geometry.offset.x + geometry.nlength0, geometry.nwidth}),
                                  geometry.offset);
-  bit[1] = TransformRotatedPoint(r.Rotate(-geometry.offset.x + geometry.nlength1,
-                                          0),
+  bit[1] = TransformRotatedPoint(r.Rotate({-geometry.offset.x + geometry.nlength1, 0}),
                                  geometry.offset);
-  bit[2] = TransformRotatedPoint(r.Rotate(-geometry.offset.x + geometry.nlength0,
-                                          -geometry.nwidth),
+  bit[2] = TransformRotatedPoint(r.Rotate({-geometry.offset.x + geometry.nlength0, -geometry.nwidth}),
                                  geometry.offset);
 
-  *bline = TransformRotatedPoint(r.Rotate(-geometry.offset.x + geometry.nline,
-                                          0),
+  *bline = TransformRotatedPoint(r.Rotate({-geometry.offset.x + geometry.nline, 0}),
                                  geometry.offset);
 }
 

@@ -107,10 +107,9 @@ MapWindow::OnPaint(Canvas &canvas)
     const auto buffer_size = buffer_projection.GetScreenSize();
 
     const auto top_left =
-      visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(0, 0));
+      visible_projection.GeoToScreen(buffer_projection.ScreenToGeo({0, 0}));
     auto bottom_right =
-      visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(buffer_size.width,
-                                                                   buffer_size.height));
+      visible_projection.GeoToScreen(buffer_projection.ScreenToGeo({(int)buffer_size.width, (int)buffer_size.height}));
 
     /* compensate for rounding errors in destination area */
 

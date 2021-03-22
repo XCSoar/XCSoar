@@ -129,21 +129,9 @@ public:
 
   /**
    * Converts screen coordinates to a GeoPoint
-   * @param x x-Coordinate on the screen
-   * @param y y-Coordinate on the screen
    */
   [[gnu::pure]]
-  GeoPoint ScreenToGeo(int x, int y) const noexcept;
-
-  /**
-   * Converts screen coordinates to a GeoPoint
-   * @param x x-Coordinate on the screen
-   * @param y y-Coordinate on the screen
-   */
-  [[gnu::pure]]
-  GeoPoint ScreenToGeo(const PixelPoint &pt) const noexcept {
-    return ScreenToGeo(pt.x, pt.y);
-  }
+  GeoPoint ScreenToGeo(PixelPoint p) const noexcept;
 
   /**
    * Converts a GeoPoint to screen coordinates
