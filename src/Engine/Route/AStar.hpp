@@ -37,29 +37,29 @@ struct AStarPriorityValue
   /** Heuristic cost to goal */
   unsigned h;
 
-  explicit constexpr AStarPriorityValue(unsigned _g):g(_g), h(0) {}
-  constexpr AStarPriorityValue(const unsigned _g, const unsigned _h)
+  explicit constexpr AStarPriorityValue(unsigned _g) noexcept:g(_g), h(0) {}
+
+  constexpr AStarPriorityValue(const unsigned _g, const unsigned _h) noexcept
     :g(_g), h(_h) {}
 
   template<bool is_min>
   constexpr
-  AStarPriorityValue Adjust() const {
+  AStarPriorityValue Adjust() const noexcept {
     return is_min ? *this : AStarPriorityValue(MINMAX_OFFSET - g,
                                                MINMAX_OFFSET - h);
   }
 
-  constexpr
-  unsigned f() const {
+  constexpr unsigned f() const noexcept {
     return g + h;
   }
 
   constexpr
-  AStarPriorityValue operator+(const AStarPriorityValue& other) const {
+  AStarPriorityValue operator+(const AStarPriorityValue &other) const noexcept {
     return AStarPriorityValue(g + other.g, other.h);
   }
 
   constexpr
-  bool operator>(const AStarPriorityValue& other) const {
+  bool operator>(const AStarPriorityValue &other) const noexcept {
     return g > other.g;
   }
 };
@@ -91,14 +91,14 @@ class AStar
 
     constexpr
     NodeValue(const AStarPriorityValue &_priority,
-              node_value_iterator _iterator)
+              node_value_iterator _iterator) noexcept
       :priority(_priority), iterator(_iterator) {}
   };
 
   struct Rank: public std::binary_function<NodeValue, NodeValue, bool>
   {
     [[gnu::pure]]
-    bool operator()(const NodeValue &x, const NodeValue &y) const {
+    bool operator()(const NodeValue &x, const NodeValue &y) const noexcept {
       return x.priority.f() > y.priority.f();
     }
   };
@@ -130,7 +130,7 @@ public:
    *
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  AStar(unsigned reserve_default = DEFAULT_QUEUE_SIZE)
+  AStar(unsigned reserve_default = DEFAULT_QUEUE_SIZE) noexcept
   {
     Reserve(reserve_default);
   }
@@ -141,7 +141,8 @@ public:
    * @param n Node to start
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  AStar(const Node &node, unsigned reserve_default = DEFAULT_QUEUE_SIZE)
+  AStar(const Node &node,
+        unsigned reserve_default = DEFAULT_QUEUE_SIZE) noexcept
   {
     Reserve(reserve_default);
     Push(node, node, AStarPriorityValue(0));
@@ -152,13 +153,13 @@ public:
    *
    * @param n Node to start
    */
-  void Restart(const Node &node) {
+  void Restart(const Node &node) noexcept {
     Clear();
     Push(node, node, AStarPriorityValue(0));
   }
 
   /** Clears the queues */
-  void Clear() {
+  void Clear() noexcept {
     // Clear the search queue
     q.clear();
 
@@ -174,7 +175,7 @@ public:
    * @return True if no more nodes to search
    */
   [[gnu::pure]]
-  bool IsEmpty() const {
+  bool IsEmpty() const noexcept {
     return q.empty();
   }
 
@@ -184,7 +185,7 @@ public:
    * @return Queue size in elements
    */
   [[gnu::pure]]
-  unsigned QueueSize() const {
+  unsigned QueueSize() const noexcept {
     return q.size();
   }
 
@@ -193,7 +194,7 @@ public:
    *
    * @return Node for processing
    */
-  const Node &Pop() {
+  const Node &Pop() noexcept {
     cur = q.top().iterator;
 
     do { // remove this item
@@ -212,7 +213,7 @@ public:
    * @param e Edge distance
    */
   void Link(const Node &node, const Node &parent,
-            const AStarPriorityValue &edge_value) {
+            const AStarPriorityValue &edge_value) noexcept {
     Push(node, parent, GetNodeValue(parent) + edge_value.Adjust<m_min>());
     // note order of + here is important!
   }
@@ -225,7 +226,7 @@ public:
    * @return Predecessor node
    */
   [[gnu::pure]]
-  Node GetPredecessor(const Node &node) const {
+  Node GetPredecessor(const Node &node) const noexcept {
     // Try to find the given node in the node_parent_map
     node_parent_const_iterator it = node_parents.find(node);
     if (it == node_parents.end())
@@ -240,7 +241,7 @@ public:
   }
 
   /** Reserve queue size (if available) */
-  void Reserve(unsigned size) {
+  void Reserve(unsigned size) noexcept {
     q.reserve(size);
   }
 
@@ -249,7 +250,7 @@ public:
    * Returns 0 on failure to find the node.
    */
   [[gnu::pure]]
-  AStarPriorityValue GetNodeValue(const Node &node) const {
+  AStarPriorityValue GetNodeValue(const Node &node) const noexcept {
     node_value_const_iterator it = node_values.find(node);
     if (cur->first == node)
       return cur->second;
@@ -269,7 +270,7 @@ private:
    * @param e Edge distance (previous to this)
    */
   void Push(const Node &node, const Node &parent,
-            const AStarPriorityValue &edge_value) {
+            const AStarPriorityValue &edge_value) noexcept {
     // Try to find the given node n in the node_value_map
     node_value_iterator it = node_values.find(node);
     if (it == node_values.end()) {
@@ -296,7 +297,7 @@ private:
     q.push(NodeValue(edge_value, it));
   }
 
-  void SetPredecessor(const Node &node, const Node &parent) {
+  void SetPredecessor(const Node &node, const Node &parent) noexcept {
     // Try to find the given node in the node_parent_map
     auto result = node_parents.insert(std::make_pair(node, parent));
     if (!result.second)
