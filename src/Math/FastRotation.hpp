@@ -86,6 +86,11 @@ public:
   FastIntegerRotation(Angle angle) noexcept
     :cost(angle.ifastcosine()), sint(angle.ifastsine()) {}
 
+  void Scale(int multiply, int divide=1) noexcept {
+    cost = cost * multiply / divide;
+    sint = sint * multiply / divide;
+  }
+
   constexpr Point RotateRaw(Point p) const noexcept {
     return {
       p.x * cost - p.y * sint,
