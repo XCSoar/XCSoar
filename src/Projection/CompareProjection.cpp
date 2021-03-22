@@ -31,7 +31,7 @@ CompareProjection::FourCorners::FourCorners(const WindowProjection &projection) 
   projection.ScreenToGeo(projection.GetScreenWidth(),
                          projection.GetScreenHeight())} {}
 
-gcc_pure
+[[gnu::pure]]
 static double
 SimpleDistance(const GeoPoint &a, const GeoPoint &b,
                const double latitude_cos) noexcept

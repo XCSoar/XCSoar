@@ -28,7 +28,6 @@ Copyright_License {
 #include "Math/FastRotation.hpp"
 #include "Math/Util.hpp"
 #include "ui/dim/Point.hpp"
-#include "util/Compiler.h"
 
 #include <cassert>
 
@@ -88,7 +87,7 @@ public:
     return geo_location.IsValid();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   double GetScale() const noexcept {
     return scale;
   }
@@ -102,12 +101,12 @@ public:
   /**
    * Convert a pixel distance to a physical length in meters.
    */
-  gcc_pure
+  [[gnu::pure]]
   double DistancePixelsToMeters(const int x) const noexcept {
     return double(x) / GetScale();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   double DistanceMetersToPixels(const double distance) const noexcept {
     return distance * GetScale();
   }
@@ -115,7 +114,7 @@ public:
   /**
    * Convert a pixel distance to an angle on Earth's surface.
    */
-  gcc_pure
+  [[gnu::pure]]
   Angle PixelsToAngle(int pixels) const noexcept {
     return Angle::Radians(pixels * inv_draw_scale);
   }
@@ -123,7 +122,7 @@ public:
   /**
    * Convert a an angle on Earth's surface to a pixel distance.
    */
-  gcc_pure
+  [[gnu::pure]]
   double AngleToPixels(Angle angle) const noexcept {
     return angle.Radians() * draw_scale;
   }
@@ -133,7 +132,7 @@ public:
    * @param x x-Coordinate on the screen
    * @param y y-Coordinate on the screen
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint ScreenToGeo(int x, int y) const noexcept;
 
   /**
@@ -141,7 +140,7 @@ public:
    * @param x x-Coordinate on the screen
    * @param y y-Coordinate on the screen
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint ScreenToGeo(const PixelPoint &pt) const noexcept {
     return ScreenToGeo(pt.x, pt.y);
   }
@@ -150,7 +149,7 @@ public:
    * Converts a GeoPoint to screen coordinates
    * @param g GeoPoint to convert
    */
-  gcc_pure
+  [[gnu::pure]]
   PixelPoint GeoToScreen(const GeoPoint &g) const noexcept;
 
   /**

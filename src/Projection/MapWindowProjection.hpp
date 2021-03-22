@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_MAPWINDOW_PROJECTION_HPP
 
 #include "WindowProjection.hpp"
-#include "util/Compiler.h"
 
 struct Waypoint;
 
@@ -49,19 +48,19 @@ public:
   /**
    * Calculates a scale index.
    */
-  gcc_pure
+  [[gnu::pure]]
   double CalculateMapScale(unsigned scale) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   double StepMapScale(double scale, int Step) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool WaypointInScaleFilter(const Waypoint &way_point) const noexcept;
 
 private:
   double LimitMapScale(double value) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned FindMapScale(double Value) const noexcept;
 };
 

@@ -66,7 +66,7 @@ public:
    * @param loc Geographical location
    * @return True if the location is within the bounds
    */
-  gcc_pure
+  [[gnu::pure]]
   bool GeoVisible(const GeoPoint &loc) const noexcept;
 
   /**
@@ -74,7 +74,7 @@ public:
    * @param P Screen coordinate
    * @return True if the screen coordinate is within the bounds
    */
-  gcc_pure
+  [[gnu::pure]]
   bool ScreenVisible(const PixelPoint &P) const noexcept;
 
   void SetScreenSize(PixelSize new_size) noexcept {
@@ -93,7 +93,7 @@ public:
     SetScreenSize(rc.GetSize());
   }
 
-  gcc_pure
+  [[gnu::pure]]
   double GetMapScale() const noexcept;
 
   /**
@@ -105,7 +105,7 @@ public:
   /**
    * Returns the size of the map area in pixels.
    */
-  gcc_pure
+  [[gnu::pure]]
   PixelSize GetScreenSize() const noexcept {
     assert(screen_size_initialised);
 
@@ -115,7 +115,7 @@ public:
   /**
    * Returns the width of the map area in pixels.
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetScreenWidth() const noexcept {
     assert(screen_size_initialised);
 
@@ -125,7 +125,7 @@ public:
   /**
    * Returns the height of the map area in pixels.
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetScreenHeight() const noexcept {
     assert(screen_size_initialised);
 
@@ -135,7 +135,7 @@ public:
   /**
    * Returns the raster coordinates at the center of the map.
    */
-  gcc_pure
+  [[gnu::pure]]
   PixelPoint GetScreenCenter() const noexcept {
     PixelPoint pt;
     pt.x = GetScreenWidth() / 2;
@@ -166,17 +166,17 @@ public:
     return std::min(GetScreenHeight(), GetScreenWidth());
   }
 
-  gcc_pure
+  [[gnu::pure]]
   double GetScreenDistanceMeters() const noexcept;
 
   /**
    * Returns the GeoPoint at the center of the screen.
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint GetGeoScreenCenter() const noexcept;
 
   // used by terrain renderer, topography and airspace
-  gcc_pure
+  [[gnu::pure]]
   const GeoBounds &GetScreenBounds() const noexcept {
     return screen_bounds;
   }
@@ -185,7 +185,7 @@ public:
   void UpdateScreenBounds() noexcept;
 
 protected:
-  gcc_pure
+  [[gnu::pure]]
   int GetMapResolutionFactor() const noexcept {
     return GetMinScreenDistance() / 8;
   }
