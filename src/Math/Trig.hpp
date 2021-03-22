@@ -30,7 +30,7 @@ Copyright_License {
 
 [[gnu::const]]
 static inline std::pair<double, double>
-sin_cos(const double thetha)
+sin_cos(const double thetha) noexcept
 {
   double s, c;
 #ifdef __APPLE__

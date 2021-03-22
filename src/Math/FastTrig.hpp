@@ -38,19 +38,19 @@ extern const double INVCOSINETABLE[INT_ANGLE_RANGE];
 extern const short ISINETABLE[INT_ANGLE_RANGE];
 
 constexpr unsigned
-NormalizeIntAngle(unsigned angle)
+NormalizeIntAngle(unsigned angle) noexcept
 {
   return angle & INT_ANGLE_MASK;
 }
 
 constexpr unsigned
-IntAngleForCos(unsigned angle)
+IntAngleForCos(unsigned angle) noexcept
 {
   return NormalizeIntAngle(angle + INT_QUARTER_CIRCLE);
 }
 
 constexpr unsigned
-UnsafeRadiansToIntAngle(double radians)
+UnsafeRadiansToIntAngle(double radians) noexcept
 {
   /* add INT_ANGLE_RANGE to ensure that the result is not negative
      (assuming the parameter is "sane"); the caller will normalise the
@@ -62,54 +62,54 @@ UnsafeRadiansToIntAngle(double radians)
 }
 
 constexpr unsigned
-NATIVE_TO_INT(double x)
+NATIVE_TO_INT(double x) noexcept
 {
   return NormalizeIntAngle(UnsafeRadiansToIntAngle(x));
 }
 
 constexpr unsigned
-NATIVE_TO_INT_COS(double x)
+NATIVE_TO_INT_COS(double x) noexcept
 {
   return IntAngleForCos(UnsafeRadiansToIntAngle(x));
 }
 
 constexpr double
-IntAngleToRadians(unsigned angle)
+IntAngleToRadians(unsigned angle) noexcept
 {
   return angle / INT_ANGLE_MULT;
 }
 
 [[gnu::const]]
 static inline double
-invfastcosine(double x)
+invfastcosine(double x) noexcept
 {
   return INVCOSINETABLE[NATIVE_TO_INT(x)];
 }
 
 [[gnu::const]]
 static inline int
-ifastsine(double x)
+ifastsine(double x) noexcept
 {
   return ISINETABLE[NATIVE_TO_INT(x)];
 }
 
 [[gnu::const]]
 static inline int
-ifastcosine(double x)
+ifastcosine(double x) noexcept
 {
   return ISINETABLE[NATIVE_TO_INT_COS(x)];
 }
 
 [[gnu::const]]
 static inline double
-fastsine(double x)
+fastsine(double x) noexcept
 {
   return SINETABLE[NATIVE_TO_INT(x)];
 }
 
 [[gnu::const]]
 static inline double
-fastcosine(double x)
+fastcosine(double x) noexcept
 {
   return SINETABLE[NATIVE_TO_INT_COS(x)];
 }
