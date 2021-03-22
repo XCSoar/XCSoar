@@ -31,14 +31,14 @@ Copyright_License {
  * Rotate coordinates around the zero origin.
  */
 class FastRotation {
-  Angle angle;
-  double cost, sint;
+  Angle angle = Angle::Zero();
+  double cost = 1, sint = 0;
 
 public:
   typedef DoublePoint2D Point;
 
-  FastRotation() noexcept
-    :angle(Angle::Zero()), cost(1), sint(0) {}
+  FastRotation() noexcept = default;
+
   FastRotation(Angle _angle) noexcept
     :angle(Angle::Radians(-9999)) { SetAngle(_angle); }
 
@@ -79,15 +79,16 @@ public:
  * Same as #FastRotation, but works with integer coordinates.
  */
 class FastIntegerRotation {
-  Angle angle;
-  int cost, sint;
+  Angle angle = Angle::Zero();
+  int cost = 1024, sint = 0;
 
   friend class FastRowRotation;
 
 public:
   typedef IntPoint2D Point;
 
-  FastIntegerRotation() noexcept:angle(Angle::Zero()), cost(1024), sint(0) {}
+  FastIntegerRotation() noexcept = default;
+
   FastIntegerRotation(Angle _angle) noexcept
     :angle(Angle::Radians(-9999)) { SetAngle(_angle); }
 
