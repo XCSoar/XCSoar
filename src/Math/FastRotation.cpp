@@ -24,7 +24,7 @@ Copyright_License {
 #include "Math/FastRotation.hpp"
 
 void
-FastRotation::SetAngle(Angle _angle)
+FastRotation::SetAngle(Angle _angle) noexcept
 {
   _angle = _angle.AsBearing();
   if (_angle == angle)
@@ -36,13 +36,13 @@ FastRotation::SetAngle(Angle _angle)
 }
 
 FastRotation::Point
-FastRotation::Rotate(double x, double y) const
+FastRotation::Rotate(double x, double y) const noexcept
 {
   return Point(x * cost - y * sint, y * cost + x * sint);
 }
 
 void
-FastIntegerRotation::SetAngle(Angle _angle)
+FastIntegerRotation::SetAngle(Angle _angle) noexcept
 {
   _angle = _angle.AsBearing();
   if (_angle == angle)
@@ -54,7 +54,7 @@ FastIntegerRotation::SetAngle(Angle _angle)
 }
 
 FastIntegerRotation::Point
-FastIntegerRotation::Rotate(int x, int y) const
+FastIntegerRotation::Rotate(int x, int y) const noexcept
 {
   return Point((x * cost - y * sint + 512) >> 10,
                (y * cost + x * sint + 512) >> 10);

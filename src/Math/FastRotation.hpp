@@ -37,11 +37,12 @@ class FastRotation {
 public:
   typedef DoublePoint2D Point;
 
-  FastRotation()
+  FastRotation() noexcept
     :angle(Angle::Zero()), cost(1), sint(0) {}
-  FastRotation(Angle _angle):angle(Angle::Radians(-9999)) { SetAngle(_angle); }
+  FastRotation(Angle _angle) noexcept
+    :angle(Angle::Radians(-9999)) { SetAngle(_angle); }
 
-  Angle GetAngle() const {
+  Angle GetAngle() const noexcept {
     return angle;
   }
 
@@ -50,9 +51,9 @@ public:
    *
    * @param _angle an angle between 0 and 360
    */
-  void SetAngle(Angle _angle);
+  void SetAngle(Angle _angle) noexcept;
 
-  const FastRotation &operator =(Angle _angle) {
+  const FastRotation &operator =(Angle _angle) noexcept {
     SetAngle(_angle);
     return *this;
   }
@@ -65,7 +66,7 @@ public:
    * @return the rotated coordinates
    */
   [[gnu::pure]]
-  Point Rotate(double x, double y) const;
+  Point Rotate(double x, double y) const noexcept;
 
   template<typename P, typename=std::enable_if_t<std::is_base_of_v<Point, P>>>
   [[gnu::pure]]
@@ -86,17 +87,17 @@ class FastIntegerRotation {
 public:
   typedef IntPoint2D Point;
 
-  FastIntegerRotation()
- :angle(Angle::Zero()), cost(1024), sint(0) {}
-  FastIntegerRotation(Angle _angle):angle(Angle::Radians(-9999)) { SetAngle(_angle); }
+  FastIntegerRotation() noexcept:angle(Angle::Zero()), cost(1024), sint(0) {}
+  FastIntegerRotation(Angle _angle) noexcept
+    :angle(Angle::Radians(-9999)) { SetAngle(_angle); }
 
-  Angle GetAngle() const {
+  Angle GetAngle() const noexcept {
     return angle;
   }
 
-  void SetAngle(Angle _angle);
+  void SetAngle(Angle _angle) noexcept;
 
-  const FastIntegerRotation &operator =(Angle _angle) {
+  const FastIntegerRotation &operator =(Angle _angle) noexcept {
     SetAngle(_angle);
     return *this;
   }
@@ -109,7 +110,7 @@ public:
    * @return the rotated coordinates
    */
   [[gnu::pure]]
-  Point Rotate(int x, int y) const;
+  Point Rotate(int x, int y) const noexcept;
 
   template<typename P, typename=std::enable_if_t<std::is_base_of_v<Point, P>>>
   [[gnu::pure]]
@@ -128,12 +129,12 @@ class FastRowRotation {
 public:
   typedef IntPoint2D Point;
 
-  FastRowRotation(const FastIntegerRotation &fir, int y)
+  FastRowRotation(const FastIntegerRotation &fir, int y) noexcept
     :cost(fir.cost), sint(fir.sint),
      y_cost(y * cost + 512), y_sint(y * sint - 512) {}
 
   [[gnu::pure]]
-  Point Rotate(int x) const {
+  Point Rotate(int x) const noexcept {
     return Point((x * cost - y_sint + 512) >> 10,
                  (y_cost + x * sint + 512) >> 10);
   }
