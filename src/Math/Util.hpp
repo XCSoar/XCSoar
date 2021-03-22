@@ -30,7 +30,7 @@
  */
 [[gnu::const]]
 static inline int
-iround(double x)
+iround(double x) noexcept
 {
   return (int)lround(x);
 }
@@ -42,21 +42,21 @@ iround(double x)
  * parameter is undefined.
  */
 constexpr unsigned
-uround(const double x)
+uround(const double x) noexcept
 {
   return (unsigned)(x + 0.5);
 }
 
 template<typename T>
 constexpr T
-Square(T a)
+Square(T a) noexcept
 {
   return a * a;
 }
 
 template<typename T>
 constexpr T
-Cubic(T a)
+Cubic(T a) noexcept
 {
   return a * a * a;
 }
@@ -67,7 +67,7 @@ Cubic(T a)
  */
 [[gnu::const]]
 static inline double
-Cathetus(double hypotenuse, double cathetus1)
+Cathetus(double hypotenuse, double cathetus1) noexcept
 {
   return sqrt(Square(hypotenuse) - Square(cathetus1));
 }
@@ -77,7 +77,7 @@ Cathetus(double hypotenuse, double cathetus1)
  */
 [[gnu::const]]
 static inline double
-SpaceDiagonal(double a, double b, double c)
+SpaceDiagonal(double a, double b, double c) noexcept
 {
   return sqrt(Square(a) + Square(b) + Square(c));
 }
@@ -87,7 +87,7 @@ SpaceDiagonal(double a, double b, double c)
  */
 [[gnu::const]]
 static inline double
-Sigmoid(double x)
+Sigmoid(double x) noexcept
 {
   return 2.0 / (1.0 + exp(-x)) - 1.0;
 }
