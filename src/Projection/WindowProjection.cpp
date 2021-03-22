@@ -24,12 +24,6 @@ Copyright_License {
 #include "WindowProjection.hpp"
 #include "Geo/Quadrilateral.hpp"
 
-bool
-WindowProjection::GeoVisible(const GeoPoint &loc) const noexcept
-{
-  return screen_bounds.IsInside(loc);
-}
-
 std::optional<PixelPoint>
 WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc) const noexcept
 {
@@ -41,14 +35,6 @@ WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc) const noexcept
     return {};
 
   return p;
-}
-
-bool
-WindowProjection::ScreenVisible(const PixelPoint &P) const noexcept
-{
-  assert(screen_size_initialised);
-
-  return GetScreenRect().Contains(P);
 }
 
 void

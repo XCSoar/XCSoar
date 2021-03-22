@@ -68,7 +68,9 @@ public:
    * @return True if the location is within the bounds
    */
   [[gnu::pure]]
-  bool GeoVisible(const GeoPoint &loc) const noexcept;
+  bool GeoVisible(const GeoPoint &loc) const noexcept {
+    return screen_bounds.IsInside(loc);
+  }
 
   /**
    * Checks whether a screen coordinate is within the visible bounds
@@ -76,7 +78,11 @@ public:
    * @return True if the screen coordinate is within the bounds
    */
   [[gnu::pure]]
-  bool ScreenVisible(const PixelPoint &P) const noexcept;
+  bool ScreenVisible(const PixelPoint &p) const noexcept {
+    assert(screen_size_initialised);
+
+    return GetScreenRect().Contains(p);
+  }
 
   void SetScreenSize(PixelSize new_size) noexcept {
     assert(new_size.width > 0);
