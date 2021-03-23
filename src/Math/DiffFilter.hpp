@@ -38,14 +38,14 @@ public:
    * Non-initialising default constructor.  To initialise this
    * instance, call Reset().
    */
-  DiffFilter() = default;
+  DiffFilter() noexcept = default;
 
   /**
    * Constructor.  Initialises as if fed x_default continuously.
    *
    * @param x_default Default value of input
    */
-  DiffFilter(const double x_default)
+  DiffFilter(const double x_default) noexcept
   {
     Reset(x_default);
   }
@@ -58,7 +58,7 @@ public:
    *
    * @return Filter output value
    */
-  double Update(double x0);
+  double Update(double x0) noexcept;
 
   /**
    * Resets filter as if fed value to produce y0
@@ -66,7 +66,7 @@ public:
    * @param x0 Steady state value of filter input
    * @param y0 Desired value of differentiated output
    */
-  void Reset(double x0=0, double y0=0);
+  void Reset(double x0=0, double y0=0) noexcept;
 };
 
 
