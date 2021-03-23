@@ -54,7 +54,7 @@ public:
 
 protected:
 	size_type the_size;
-	Array data;
+	Array array;
 
 	constexpr
 	TrivialArray(size_type _size) noexcept:the_size(_size) {}
@@ -83,7 +83,7 @@ public:
 		:the_size(init.size()) {
 		assert(init.size() <= max);
 
-		std::move(init.begin(), init.end(), data.begin());
+		std::move(init.begin(), init.end(), array.begin());
 	}
 
 	static constexpr size_type capacity() noexcept { return max; }
@@ -140,7 +140,7 @@ public:
 	T &operator[](size_type i) noexcept {
 		assert(i < size());
 
-		return data[i];
+		return array[i];
 	}
 
 	/**
@@ -149,35 +149,35 @@ public:
 	const T &operator[](size_type i) const noexcept {
 		assert(i < size());
 
-		return data[i];
+		return array[i];
 	}
 
 	constexpr iterator begin() noexcept {
-		return data.begin();
+		return array.begin();
 	}
 
 	constexpr const_iterator begin() const noexcept {
-		return data.begin();
+		return array.begin();
 	}
 
 	constexpr iterator end() noexcept {
-		return std::next(data.begin(), the_size);
+		return std::next(array.begin(), the_size);
 	}
 
 	constexpr const_iterator end() const noexcept {
-		return std::next(data.begin(), the_size);
+		return std::next(array.begin(), the_size);
 	}
 
 	T &back() noexcept {
 		assert(the_size > 0);
 
-		return data[the_size - 1];
+		return array[the_size - 1];
 	}
 
 	const T &back() const noexcept {
 		assert(the_size > 0);
 
-		return data[the_size - 1];
+		return array[the_size - 1];
 	}
 
 	bool contains(const T &value) const noexcept {
@@ -188,7 +188,7 @@ public:
 	 * Return address of start of data segment.
 	 */
 	const T* raw() const noexcept {
-		return &data[0];
+		return &array[0];
 	}
 
 	/**
@@ -198,7 +198,7 @@ public:
 	void append(const T &value) {
 		assert(!full());
 
-		data[the_size++] = value;
+		array[the_size++] = value;
 	}
 
 	/**
@@ -208,7 +208,7 @@ public:
 	T &append() noexcept {
 		assert(!full());
 
-		return data[the_size++];
+		return array[the_size++];
 	}
 
 	/**
@@ -229,9 +229,9 @@ public:
 	void remove(size_type i) noexcept {
 		assert(i < size());
 
-		std::move(std::next(data.begin(), i + 1),
-			  std::next(data.begin(), size()),
-			  std::next(data.begin(), i));
+		std::move(std::next(array.begin(), i + 1),
+			  std::next(array.begin(), size()),
+			  std::next(array.begin(), i));
 
 		--the_size;
 	}
@@ -243,7 +243,7 @@ public:
 		assert(i < size());
 
 		if (i < size() - 1)
-			data[i] = std::move(data[size() - 1]);
+			array[i] = std::move(array[size() - 1]);
 
 		--the_size;
 	}
@@ -275,13 +275,13 @@ public:
 	T &front() noexcept {
 		assert(the_size > 0);
 
-		return data.front();
+		return array.front();
 	}
 
 	const T &front() const noexcept {
 		assert(the_size > 0);
 
-		return data.front();
+		return array.front();
 	}
 };
 
