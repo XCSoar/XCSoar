@@ -341,13 +341,17 @@ ChartRenderer::DrawBarChart(const XYDataStore &lsdata) noexcept
   canvas.Select(look.bar_brush);
   canvas.SelectNullPen();
 
-  const auto &slots = lsdata.GetSlots();
-  for (unsigned i = 0, n = slots.size(); i != n; i++) {
-    int xmin((i + 1.2) * x.scale + rc_chart.left);
-    int ymin = ScreenY(y.min);
-    int xmax((i + 1.8) * x.scale + rc_chart.left);
-    int ymax = ScreenY(slots[i].y);
-    canvas.DrawRectangle({xmin, ymin, xmax, ymax});
+  double xmin = rc_chart.left + 1.2 * x.scale;
+  double xmax = rc_chart.left + 1.8 * x.scale;
+  const int ymin = ScreenY(y.min);
+
+  for (const auto &i : lsdata.GetSlots()) {
+    int ymax = ScreenY(i.y);
+
+    canvas.DrawRectangle({int(xmin), ymin, int(xmax), ymax});
+
+    xmin += x.scale;
+    xmax += x.scale;
   }
 }
 
