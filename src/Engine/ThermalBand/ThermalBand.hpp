@@ -78,6 +78,10 @@ public:
 
   void Reset();
 
+  static constexpr std::size_t max_size() noexcept {
+    return NUM_SLICES;
+  }
+
   // number of slices in container
   unsigned size() const {
     return slices.size();
