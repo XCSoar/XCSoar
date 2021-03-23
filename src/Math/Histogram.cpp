@@ -24,7 +24,7 @@
 #include "Histogram.hpp"
 #include "Util.hpp"
 
-void
+inline void
 Histogram::IncrementSlot(const unsigned i, const double mag) noexcept
 {
   slots[i].y += mag;
