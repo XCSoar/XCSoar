@@ -83,7 +83,12 @@
 * Function prototypes.
 \******************************************************************************/
 
-#define	ONES(n)	((1 << (n)) - 1)
+static inline uint_fast32_t ones(int n)
+{
+	assert(n >= 0);
+	return (((uint_fast32_t) 1) << n) - 1;
+	//return ((1 << (n)) - 1);
+}
 
 static const jp2_boxinfo_t *jp2_boxinfolookup(int type);
 
@@ -1111,6 +1116,11 @@ static int jp2_getint(jas_stream_t *in, int s, int n, int_fast32_t *val)
 
 	m = (n + 7) / 8;
 
+	if (n < 0 || n > JAS_CAST(int, 8 * sizeof(int_fast32_t))) {
+		jas_eprintf("jp2_getint: invalid integer size (%d bits)\n", n);
+		return -1;
+	}
+
 	v = 0;
 	for (i = 0; i < m; ++i) {
 		if ((c = jas_stream_getc(in)) == EOF) {
@@ -1118,11 +1128,11 @@ static int jp2_getint(jas_stream_t *in, int s, int n, int_fast32_t *val)
 		}
 		v = (v << 8) | c;
 	}
-	v &= ONES(n);
+	v &= ones(n);
 	if (s) {
 		int sb;
-		sb = v & (1 << (8 * m - 1));
-		*val = ((~v) + 1) & ONES(8 * m);
+		sb = v & (JAS_CAST(uint_fast32_t, 1) << (8 * m - 1));
+		*val = ((~v) + 1) & ones(8 * m);
 		if (sb) {
 			*val = -*val;
 		}

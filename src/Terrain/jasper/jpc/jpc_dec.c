@@ -1347,6 +1347,10 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 		cmpt->hsubstep = 0;
 		cmpt->vsubstep = 0;
 
+		if (!cmpt->width || !cmpt->height) {
+			jas_eprintf("image component has no samples\n");
+			return -1;
+		}
 		if (!jas_safe_size_mul(cmpt->width, cmpt->height, &num_samples_delta)) {
 			jas_eprintf("image too large\n");
 			return -1;
