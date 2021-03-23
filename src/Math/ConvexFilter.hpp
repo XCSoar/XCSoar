@@ -42,17 +42,17 @@ public:
    * @param x x-Value of the new data point
    * @param y y-Value of the new data point
    */
-  void UpdateConvexPositive(double x, double y) {
+  void UpdateConvexPositive(double x, double y) noexcept {
     UpdateConvex(x, y, 1);
   }
-  void UpdateConvexNegative(double x, double y) {
+  void UpdateConvexNegative(double x, double y) noexcept {
     UpdateConvex(x, y, -1);
   }
 
-  double GetLastY() const;
+  double GetLastY() const noexcept;
 
 private:
-  void UpdateConvex(double x, double y, int csign);
+  void UpdateConvex(double x, double y, int csign) noexcept;
 };
 
 static_assert(std::is_trivial<ConvexFilter>::value, "type is not trivial");
