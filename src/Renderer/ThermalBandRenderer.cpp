@@ -31,6 +31,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/LeastSquares.hpp"
+#include "util/StaticArray.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
@@ -78,8 +79,7 @@ ThermalBandRenderer::DrawThermalProfile(const ThermalBand &thermal_band,
   const unsigned renderable = thermal_band.size();
   // position of thermal band
 
-  std::vector<std::pair<double, double>> thermal_profile;
-  thermal_profile.reserve(renderable);
+  StaticArray<std::pair<double, double>, ThermalBand::max_size()> thermal_profile;
 
   // add elements, with smoothing filter
   for (unsigned i = 0; i < renderable; ++i) {
