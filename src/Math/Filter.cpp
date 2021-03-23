@@ -48,7 +48,9 @@ Filter::Design(const double cutoff_wavelength, const bool bessel)
   auto f_star = c / (sample_freq * cutoff_wavelength);
 
   if (f_star <= 0 || f_star >= 1. / 8.) {
+#ifndef NDEBUG
     ok = false;
+#endif
     return false;
   }
 
@@ -63,8 +65,10 @@ Filter::Design(const double cutoff_wavelength, const bool bessel)
   b[1] = 1. - (a[0] + a[1] + a[2] + b[0]);
 
   Reset(0);
-  ok = true;
 
+#ifndef NDEBUG
+  ok = true;
+#endif
   return true;
 }
 

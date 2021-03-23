@@ -33,7 +33,11 @@ class Filter {
   double b[2];
   double x[3];
   double y[2];
-  bool ok;
+
+#ifndef NDEBUG
+  /** only used for assert() */
+  bool ok = false;
+#endif
 
 public:
   /**
@@ -79,15 +83,6 @@ public:
    * @return Filter output value
    */
   double Update(double x0);
-
-  /**
-   * Test whether filter design was successful
-   *
-   * @return True if design ok
-   */
-  bool IsValid() const {
-    return ok;
-  }
 };
 
 #endif
