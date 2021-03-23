@@ -77,7 +77,7 @@ return the maximum least squares error:
 */
 
 void
-LeastSquares::Reset()
+LeastSquares::Reset() noexcept
 {
   StoreReset();
   sum_xxw = 0.;
@@ -90,7 +90,7 @@ LeastSquares::Reset()
 }
 
 void
-LeastSquares::Compute()
+LeastSquares::Compute() noexcept
 {
   auto denom = (sum_weights * sum_xxw - sum_xw * sum_xw);
 
@@ -111,13 +111,13 @@ LeastSquares::Compute()
 }
 
 void
-LeastSquares::Update(double y)
+LeastSquares::Update(double y) noexcept
 {
   Update(double(sum_n + 1), y);
 }
 
 void
-LeastSquares::Update(double x, double y, double weight)
+LeastSquares::Update(double x, double y, double weight) noexcept
 {
   // Add new point
   Add(x, y, weight);
@@ -132,13 +132,13 @@ LeastSquares::Update(double x, double y, double weight)
 }
 
 void
-LeastSquares::UpdateError()
+LeastSquares::UpdateError() noexcept
 {
   rms_error = sqrt(sum_error / sum_weights);
 }
 
 void
-LeastSquares::Add(double x, double y, double weight)
+LeastSquares::Add(double x, double y, double weight) noexcept
 {
   StoreAdd(x, y, weight);
 
@@ -164,7 +164,7 @@ LeastSquares::Add(double x, double y, double weight)
 }
 
 void
-LeastSquares::Remove(const unsigned i)
+LeastSquares::Remove(const unsigned i) noexcept
 {
   assert(i< sum_n);
 
@@ -185,7 +185,7 @@ LeastSquares::Remove(const unsigned i)
 }
 
 ErrorEllipse
-LeastSquares::GetErrorEllipse() const
+LeastSquares::GetErrorEllipse() const noexcept
 {
   /*
     A = a b = cov(x,x)   cov(x,y)
