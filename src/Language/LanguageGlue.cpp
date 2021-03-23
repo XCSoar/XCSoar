@@ -69,6 +69,7 @@ static MOLoader *mo_loader;
  */
 enum {
   LANG_NULL,
+  LANG_BULGARIAN,
   LANG_CATALAN,
   LANG_CHINESE,
   LANG_CHINESE_TRADITIONAL,
@@ -105,6 +106,8 @@ enum {
 
 extern "C"
 {
+  extern const uint8_t bg_mo[];
+  extern const size_t bg_mo_size;
   extern const uint8_t ca_mo[];
   extern const size_t ca_mo_size;
   extern const uint8_t cs_mo[];
@@ -172,6 +175,7 @@ extern "C"
 }
 
 const BuiltinLanguage language_table[] = {
+  { LANG_BULGARIAN, bg_mo, bg_mo_size, _T("bg.mo"), _T("Bulgarian") },
   { LANG_CATALAN, ca_mo, ca_mo_size, _T("ca.mo"), _T("Catalan") },
   { LANG_CHINESE, zh_CN_mo, zh_CN_mo_size, _T("zh_CN.mo"), _T("Simplified Chinese") },
   { LANG_CHINESE_TRADITIONAL, zh_Hant_mo, zh_Hant_mo_size, _T("zh_Hant.mo"), _T("Traditional Chinese") },

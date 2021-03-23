@@ -2,7 +2,7 @@ Version 7.0 - not yet released
 * LUA scripting
 * user interface
   - screen layout with 12 infoboxes on the left, vario+3 infoboxes on right
-  - new translations: Catalan, Traditional Chinese, Telugu
+  - new translations: Bulgarian, Catalan, Traditional Chinese, Telugu
   - new Logger-setting "CoPilot"
   - new setting "Thermal Averager needle"
   - select position of Thermal Assistant
