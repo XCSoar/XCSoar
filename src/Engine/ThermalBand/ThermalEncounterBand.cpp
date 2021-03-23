@@ -30,7 +30,7 @@ ThermalEncounterBand::AddSample(const double time, const double height)
   const double time_rel = time - time_start;
 
   // start condition, not initialised or descended through start, or gone back in time
-  if (!size() || height <= h_min || time_rel <= 0.) {
+  if (empty() || height <= h_min || time_rel <= 0.) {
     Start(time, height);
     return;
   }

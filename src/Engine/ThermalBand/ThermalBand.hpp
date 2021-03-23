@@ -83,6 +83,10 @@ public:
     return slices.size();
   }
 
+  unsigned empty() const noexcept {
+    return slices.empty();
+  }
+
   // calculate the maximum number of thermal encounters across all elements
   double GetMaxN() const;
   // calculate the total time elapsed in climb across all elements

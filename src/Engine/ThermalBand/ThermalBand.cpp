@@ -68,7 +68,8 @@ ThermalBand::Update(const unsigned index)
 void
 ThermalBand::CheckExpand(const ThermalBand& tb, bool update)
 {
-  assert(size());
+  assert(!empty());
+
   // check to see if ceiling will fit into range
   while (GetSliceIndex(tb.GetCeiling()) + 1 >= slices.capacity()) {
     Decimate(update);
@@ -78,7 +79,8 @@ ThermalBand::CheckExpand(const ThermalBand& tb, bool update)
 void
 ThermalBand::Decimate(bool update)
 {
-  assert(size());
+  assert(!empty());
+
   dh *= 2;
   const unsigned new_size = (size() + 1) / 2;
   for (unsigned i = 0; i < new_size; ++i) {

@@ -32,7 +32,7 @@ ThermalEncounterCollection::Merge(const ThermalBand& tb)
     return;
   }
 
-  if (!size()) {
+  if (empty()) {
     // accept whole item as direct copy
     Copy(tb);
     UpdateTimes();
@@ -143,7 +143,7 @@ ThermalEncounterCollection::MergeUnsafe(const ThermalBand& o)
 void
 ThermalEncounterCollection::UpdateTimes()
 {
-  assert(size());
+  assert(!empty());
   // update accumulated times below slice height
   double t = slices[0].time = 0;
   for (unsigned i=1; i< size(); ++i) {
