@@ -356,6 +356,44 @@ ChartRenderer::DrawBarChart(const XYDataStore &lsdata) noexcept
   }
 }
 
+template<typename T>
+static BulkPixelPoint *
+PrepareLineGraph(BulkPixelPoint *p, ConstBuffer<T> src,
+                 const ChartRenderer &chart, bool swap) noexcept
+{
+  if (swap) {
+    for (const auto &i : src)
+      *p++ = chart.ToScreen(i.y, i.x);
+  } else {
+    for (const auto &i : src)
+      *p++ = chart.ToScreen(i.x, i.y);
+  }
+
+  return p;
+}
+
+template<typename T>
+static BulkPixelPoint *
+PrepareFilledLineGraph(BulkPixelPoint *p, ConstBuffer<T> src,
+                       const ChartRenderer &chart, bool swap) noexcept
+{
+  const auto &p0 = *p;
+
+  p = PrepareLineGraph(p, src, chart, swap);
+
+  const auto &last = p[-1];
+  const auto &rc_chart = chart.GetChartRect();
+  if (swap) {
+    *p++ = BulkPixelPoint(rc_chart.left, last.y);
+    *p++ = BulkPixelPoint(rc_chart.left, p0.y);
+  } else {
+    *p++ = BulkPixelPoint(last.x, rc_chart.bottom);
+    *p++ = BulkPixelPoint(p0.x, rc_chart.bottom);
+  }
+
+  return p;
+}
+
 void
 ChartRenderer::DrawFilledLineGraph(const XYDataStore &lsdata,
                                    bool swap) noexcept
@@ -366,18 +404,8 @@ ChartRenderer::DrawFilledLineGraph(const XYDataStore &lsdata,
   const unsigned n = slots.size + 2;
   auto *points = point_buffer.get(n);
 
-  auto *p = points;
-  for (const auto &i : slots)
-    *p++ = swap? ToScreen(i.y, i.x) : ToScreen(i.x, i.y);
-  const auto &last = p[-1];
-  if (swap) {
-    *p++ = BulkPixelPoint(rc_chart.left, last.y);
-    *p++ = BulkPixelPoint(rc_chart.left, points[0].y);
-  } else {
-    *p++ = BulkPixelPoint(last.x, rc_chart.bottom);
-    *p++ = BulkPixelPoint(points[0].x, rc_chart.bottom);
-  }
-
+  [[maybe_unused]] auto *p =
+    PrepareFilledLineGraph(points, slots, *this, swap);
   assert(p == points + n);
 
   canvas.DrawPolygon(points, n);
@@ -393,9 +421,8 @@ ChartRenderer::DrawLineGraph(const XYDataStore &lsdata, const Pen &pen,
   const unsigned n = slots.size;
   auto *points = point_buffer.get(n);
 
-  auto *p = points;
-  for (const auto &i : slots)
-    *p++ = swap? ToScreen(i.y, i.x) : ToScreen(i.x, i.y);
+  [[maybe_unused]] auto *p =
+    PrepareLineGraph(points, slots, *this, swap);
   assert(p == points + n);
 
   canvas.Select(pen);
@@ -573,8 +600,7 @@ ChartRenderer::DrawFilledY(ConstBuffer<DoublePoint2D> vals,
   const unsigned fsize = vals.size + 2;
   auto *line = point_buffer.get(fsize);
 
-  for (std::size_t i = 0; i < vals.size; ++i)
-    line[i + 2] = ToScreen(vals[i].x, vals[i].y);
+  PrepareLineGraph(line + 2, vals, *this, false);
 
   line[0].x = rc_chart.left;
   line[0].y = line[fsize-1].y;
