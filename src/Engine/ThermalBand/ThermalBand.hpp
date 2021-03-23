@@ -51,23 +51,31 @@ protected:
 
 public:
   // height of base of this container
-  double GetFloor() const;
+  double GetFloor() const noexcept {
+    return h_min;
+  }
 
   // height of ceiling of this container (including fractional height to top slice)
-  double GetCeiling() const;
+  double GetCeiling() const noexcept {
+    return GetSliceHeight(slices.size());
+  }
 
   // height of ceiling of this container (including fractional height in top slice)
   double GetSliceCenter(const unsigned index) const;
 
   // height of slice at index
-  double GetSliceHeight(const unsigned index) const;
+  double GetSliceHeight(const unsigned index) const noexcept {
+    return h_min + index * dh;
+  }
 
   double GetSpacing() const {
     return dh;
   }
 
   // are statistics valid for use?
-  bool Valid() const;
+  bool Valid() const noexcept {
+    return size() > 1 && slices[size() - 1].time > MIN_VALID_TIME;
+  }
 
   void Reset();
 
@@ -84,13 +92,21 @@ public:
   double GetMaxW() const;
 
   // retrieve slice at index
-  const ThermalSlice &GetSlice(const unsigned index) const;
+  const ThermalSlice &GetSlice(const unsigned index) const noexcept {
+    return slices[index];
+  }
 
   // returns true if occupancy (n) is non-zero
-  bool Occupied(const unsigned index) const;
+  bool Occupied(const unsigned index) const noexcept {
+    if (index >= size())
+      return false;
+    return slices[index].Occupied();
+  }
 
 protected:
-  unsigned GetSliceIndex(const double height) const;
+  unsigned GetSliceIndex(const double height) const noexcept {
+    return (height - h_min) / dh;
+  }
 
   void Update(const unsigned index);
 

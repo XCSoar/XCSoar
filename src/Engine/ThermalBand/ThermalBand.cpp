@@ -45,18 +45,6 @@ ThermalBand::Copy(const ThermalBand& o)
   }
 }
 
-unsigned
-ThermalBand::GetSliceIndex(const double height) const
-{
-  return (height - h_min) / dh;
-}
-
-double
-ThermalBand::GetSliceHeight(const unsigned index) const
-{
-  return h_min + index * dh;
-}
-
 double
 ThermalBand::GetSliceCenter(const unsigned index) const
 {
@@ -65,25 +53,6 @@ ThermalBand::GetSliceCenter(const unsigned index) const
     return GetSliceHeight(index-1) + slices[index].n*dh + dh/2;
   }
   return GetSliceHeight(index) + dh/2;
-}
-
-const ThermalSlice&
-ThermalBand::GetSlice(const unsigned index) const
-{
-  assert(index < size());
-  return slices[index];
-}
-
-double
-ThermalBand::GetCeiling() const
-{
-  return GetSliceHeight(slices.size());
-}
-
-double
-ThermalBand::GetFloor() const
-{
-  return h_min;
 }
 
 void
@@ -159,18 +128,4 @@ ThermalBand::GetMaxW() const
     w = std::max(w, slices[i].w_n);
   }
   return w;
-}
-
-bool
-ThermalBand::Occupied(const unsigned index) const
-{
-  if (index >= size())
-    return false;
-  return slices[index].Occupied();
-}
-
-bool
-ThermalBand::Valid() const
-{
-  return size() > 1 && slices[size() - 1].time > MIN_VALID_TIME;
 }
