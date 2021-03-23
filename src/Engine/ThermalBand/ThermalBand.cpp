@@ -33,17 +33,6 @@ ThermalBand::Reset()
   slices.clear();
 }
 
-void
-ThermalBand::Copy(const ThermalBand& o)
-{
-  h_min = o.h_min;
-  dh = o.dh;
-  slices.resize(o.size());
-  for (unsigned i = 0; i < size(); ++i) {
-    slices[i] = o.slices[i];
-  }
-}
-
 double
 ThermalBand::GetSliceCenter(const unsigned index) const
 {

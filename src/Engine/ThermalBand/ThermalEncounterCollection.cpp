@@ -34,7 +34,8 @@ ThermalEncounterCollection::Merge(const ThermalBand& tb)
 
   if (empty()) {
     // accept whole item as direct copy
-    Copy(tb);
+    ThermalBand &dest = *this;
+    dest = tb;
     UpdateTimes();
     return;
   }

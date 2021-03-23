@@ -115,8 +115,6 @@ protected:
 
   void Decimate(bool update);
   void CheckExpand(const ThermalBand& tb, bool update);
-
-  void Copy(const ThermalBand& o);
 };
 
 static_assert(std::is_trivial<ThermalBand>::value, "type is not trivial");
