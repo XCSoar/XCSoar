@@ -191,6 +191,10 @@ public:
 	/**
 	 * Return address of start of data segment.
 	 */
+	constexpr pointer data() noexcept {
+		return array.data();
+	}
+
 	constexpr const_pointer data() const noexcept {
 		return array.data();
 	}
