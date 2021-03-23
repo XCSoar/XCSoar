@@ -68,7 +68,9 @@ struct ThermalSlice {
   }
 
   // whether this item has data
-  bool Occupied() const;
+  bool Occupied() const noexcept {
+    return n > 0;
+  }
 };
 
 static_assert(std::is_trivial<ThermalSlice>::value, "type is not trivial");

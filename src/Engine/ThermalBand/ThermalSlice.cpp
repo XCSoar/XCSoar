@@ -51,10 +51,3 @@ ThermalSlice::Update(const ThermalSlice &o, const double dh)
   w_t = w_n = (dt != 0) ? dh * n / dt : o.w_n;
   dt = std::fabs(dt);
 }
-
-// whether this item has data
-bool
-ThermalSlice::Occupied() const
-{
-  return n>0;
-}
