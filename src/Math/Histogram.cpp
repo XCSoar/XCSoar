@@ -66,7 +66,7 @@ Histogram::Reset(double minx, double maxx) noexcept
 {
   assert(maxx > minx);
   b = minx;
-  m = NUM_SLOTS/(maxx-minx);
+  m = (NUM_SLOTS - 1) / (maxx - minx);
   StoreReset();
   for (double x = minx; x<= maxx; x+= 1/m) {
     StoreAdd(x, 0);

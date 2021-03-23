@@ -30,7 +30,7 @@ Copyright_License {
 
 class Histogram: public XYDataStore
 {
-  static constexpr std::size_t NUM_SLOTS = 60;
+  static constexpr std::size_t NUM_SLOTS = 61;
   static constexpr double SPREAD = 0.15;
 
   unsigned n_pts;
