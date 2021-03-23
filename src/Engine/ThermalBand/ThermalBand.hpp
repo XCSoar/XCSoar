@@ -22,8 +22,9 @@
 #ifndef THERMAL_BAND_HPP
 #define THERMAL_BAND_HPP
 
-#include "util/TrivialArray.hxx"
 #include "ThermalSlice.hpp"
+#include "util/TrivialArray.hxx"
+
 #include <type_traits>
 
 /*
@@ -35,68 +36,68 @@
    ThermalEncounterCollection (to collect statistics across several climbs).
  */
 class ThermalBand {
-public:
-     // height of base of this container
-     double GetFloor() const;
+  // maximum number of slices in the collection
+  static constexpr unsigned NUM_SLICES = 64;
 
-     // height of ceiling of this container (including fractional height to top slice)
-     double GetCeiling() const;
-
-     // height of ceiling of this container (including fractional height in top slice)
-     double GetSliceCenter(const unsigned index) const;
-
-     // height of slice at index
-     double GetSliceHeight(const unsigned index) const;
-
-     double GetSpacing() const {
-          return dh;
-     }
-
-     // are statistics valid for use?
-     bool Valid() const;
-
-     void Reset();
-
-     // number of slices in container
-     unsigned size() const {
-          return slices.size();
-     }
-
-     // calculate the maximum number of thermal encounters across all elements
-     double GetMaxN() const;
-     // calculate the total time elapsed in climb across all elements
-     double GetTimeElapsed() const;
-     // calculate the maximum climb rate across all elements
-     double GetMaxW() const;
-
-     // retrieve slice at index
-     const ThermalSlice& GetSlice(const unsigned index) const;
-
-     // returns true if occupancy (n) is non-zero
-     bool Occupied(const unsigned index) const;
-
-private:
-     // maximum number of slices in the collection
-     static constexpr unsigned NUM_SLICES = 64;
-
-     // minimum time of activity for this band to be considered valid
-     static constexpr double MIN_VALID_TIME = 30.;
+  // minimum time of activity for this band to be considered valid
+  static constexpr double MIN_VALID_TIME = 30.;
 
 protected:
-     unsigned GetSliceIndex(const double height) const;
+  double h_min;
+  double dh;
+  double time_start;
 
-     void Update(const unsigned index);
+  TrivialArray<ThermalSlice, NUM_SLICES> slices;
 
-     void Decimate(bool update);
-     void CheckExpand(const ThermalBand& tb, bool update);
+public:
+  // height of base of this container
+  double GetFloor() const;
 
-     double h_min;
-     double dh;
-     double time_start;
+  // height of ceiling of this container (including fractional height to top slice)
+  double GetCeiling() const;
 
-     TrivialArray<ThermalSlice, NUM_SLICES> slices;
+  // height of ceiling of this container (including fractional height in top slice)
+  double GetSliceCenter(const unsigned index) const;
 
-     void Copy(const ThermalBand& o);
+  // height of slice at index
+  double GetSliceHeight(const unsigned index) const;
+
+  double GetSpacing() const {
+    return dh;
+  }
+
+  // are statistics valid for use?
+  bool Valid() const;
+
+  void Reset();
+
+  // number of slices in container
+  unsigned size() const {
+    return slices.size();
+  }
+
+  // calculate the maximum number of thermal encounters across all elements
+  double GetMaxN() const;
+  // calculate the total time elapsed in climb across all elements
+  double GetTimeElapsed() const;
+  // calculate the maximum climb rate across all elements
+  double GetMaxW() const;
+
+  // retrieve slice at index
+  const ThermalSlice &GetSlice(const unsigned index) const;
+
+  // returns true if occupancy (n) is non-zero
+  bool Occupied(const unsigned index) const;
+
+protected:
+  unsigned GetSliceIndex(const double height) const;
+
+  void Update(const unsigned index);
+
+  void Decimate(bool update);
+  void CheckExpand(const ThermalBand& tb, bool update);
+
+  void Copy(const ThermalBand& o);
 };
 
 static_assert(std::is_trivial<ThermalBand>::value, "type is not trivial");

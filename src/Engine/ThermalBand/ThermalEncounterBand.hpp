@@ -19,29 +19,31 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
    }
 */
+
 #ifndef THERMAL_ENCOUNTER_BAND_HPP
 #define THERMAL_ENCOUNTER_BAND_HPP
 
 #include "ThermalBand.hpp"
+
 #include <type_traits>
 
-class ThermalEncounterBand: public ThermalBand
+class ThermalEncounterBand : public ThermalBand
 {
-   public:
-     void AddSample(const double time,
-                    const double height);
+public:
+  void AddSample(const double time,
+                 const double height);
 
-   private:
-     unsigned ResizeToHeight(const double height);
+private:
+  unsigned ResizeToHeight(const double height);
 
-     unsigned FindPenultimateFinished(const unsigned index, const double time);
+  unsigned FindPenultimateFinished(const unsigned index, const double time);
 
-     double EstimateTimeStep(const double time,
-                             const double height,
-                             const unsigned index);
+  double EstimateTimeStep(const double time,
+                          const double height,
+                          const unsigned index);
 
-     void Start(const double time,
-                const double height);
+  void Start(const double time,
+             const double height);
 
 };
 
