@@ -105,6 +105,13 @@ public:
   }
 
   void DrawBarChart(const XYDataStore &lsdata) noexcept;
+
+  void DrawFilledLineGraph(ConstBuffer<DoublePoint2D> src, bool swap=false) noexcept;
+  void DrawLineGraph(ConstBuffer<DoublePoint2D> src,
+                     const Pen &pen, bool swap=false) noexcept;
+  void DrawLineGraph(ConstBuffer<DoublePoint2D> src,
+                     ChartLook::Style style, bool swap=false) noexcept;
+
   void DrawFilledLineGraph(const XYDataStore &lsdata, bool swap=false) noexcept;
   void DrawLineGraph(const XYDataStore &lsdata, const Pen &pen, bool swap=false) noexcept;
   void DrawLineGraph(const XYDataStore &lsdata, ChartLook::Style style, bool swap=false) noexcept;

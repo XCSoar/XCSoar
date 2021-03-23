@@ -24,6 +24,8 @@
 #include "Histogram.hpp"
 #include "Util.hpp"
 
+#include <cassert>
+
 inline void
 Histogram::IncrementSlot(const unsigned i, const double mag) noexcept
 {
@@ -34,8 +36,6 @@ Histogram::IncrementSlot(const unsigned i, const double mag) noexcept
 void
 Histogram::UpdateHistogram(double x) noexcept
 {
-  assert(sum_n == NUM_SLOTS);
-
   unsigned i = uround(m * (x - b));
   if (i >= NUM_SLOTS)
     i = NUM_SLOTS - 1;
@@ -67,24 +67,30 @@ Histogram::Reset(double minx, double maxx) noexcept
   assert(maxx > minx);
   b = minx;
   m = (NUM_SLOTS - 1) / (maxx - minx);
-  StoreReset();
-  for (double x = minx; x<= maxx; x+= 1/m) {
-    StoreAdd(x, 0);
+
+  const double delta_x = 1 / m;
+  double x = minx;
+  for (auto &i : slots) {
+    i = {x, 0.};
+    x += delta_x;
   }
+
   n_pts = 0;
   x_min = 0;
   x_max = 0;
+  y_max = 0;
 }
 
 void
 Histogram::Clear() noexcept
 {
-  for (std::size_t i = 0; i < NUM_SLOTS; ++i)
-    slots[i].y = 0;
+  for (auto &i : slots)
+    i.y = 0;
 
   n_pts = 0;
   x_min = 0;
   x_max = 0;
+  y_max = 0;
 }
 
 double

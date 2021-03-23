@@ -86,19 +86,19 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   canvas.SelectNullPen();
   {
     canvas.Select(chart_look.black_brush);
-    chart.DrawFilledLineGraph(fs.vario_circling_histogram, true);
+    chart.DrawFilledLineGraph(fs.vario_circling_histogram.GetSlots(), true);
   }
   {
     canvas.Select(chart_look.blank_brush);
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
 #endif
-    chart.DrawFilledLineGraph(fs.vario_cruise_histogram, true);
+    chart.DrawFilledLineGraph(fs.vario_cruise_histogram.GetSlots(), true);
   }
 
   // draw these after shaded regions, so they overlay
-  chart.DrawLineGraph(fs.vario_cruise_histogram, ChartLook::STYLE_GREEN, true);
-  chart.DrawLineGraph(fs.vario_circling_histogram, ChartLook::STYLE_RED, true);
+  chart.DrawLineGraph(fs.vario_cruise_histogram.GetSlots(), ChartLook::STYLE_GREEN, true);
+  chart.DrawLineGraph(fs.vario_circling_histogram.GetSlots(), ChartLook::STYLE_RED, true);
 
   // draw current MC setting
   chart.DrawLine(0, mc, scale, mc, ChartLook::STYLE_REDTHICKDASH);

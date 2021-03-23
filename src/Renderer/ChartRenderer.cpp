@@ -395,6 +395,44 @@ PrepareFilledLineGraph(BulkPixelPoint *p, ConstBuffer<T> src,
 }
 
 void
+ChartRenderer::DrawFilledLineGraph(ConstBuffer<DoublePoint2D> src,
+                                   bool swap) noexcept
+{
+  const unsigned n = src.size + 2;
+  auto *points = point_buffer.get(n);
+
+  [[maybe_unused]] auto *p =
+    PrepareFilledLineGraph(points, src, *this, swap);
+  assert(p == points + n);
+
+  canvas.DrawPolygon(points, n);
+}
+
+void
+ChartRenderer::DrawLineGraph(ConstBuffer<DoublePoint2D> src,
+                             const Pen &pen, bool swap) noexcept
+{
+  assert(src.size >= 2);
+
+  const unsigned n = src.size;
+  auto *points = point_buffer.get(n);
+
+  [[maybe_unused]] auto *p =
+    PrepareLineGraph(points, src, *this, swap);
+  assert(p == points + n);
+
+  canvas.Select(pen);
+  canvas.DrawPolyline(points, n);
+}
+
+void
+ChartRenderer::DrawLineGraph(ConstBuffer<DoublePoint2D> src,
+                             ChartLook::Style style, bool swap) noexcept
+{
+  DrawLineGraph(src, look.GetPen(style), swap);
+}
+
+void
 ChartRenderer::DrawFilledLineGraph(const XYDataStore &lsdata,
                                    bool swap) noexcept
 {
