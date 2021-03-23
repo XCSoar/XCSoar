@@ -72,7 +72,7 @@ ThermalEncounterBand::ResizeToHeight(const double height)
     slices.resize(index + 1);
   } else {
     while (size() < index + 1) {
-      slices.append();
+      slices.append().Reset();
     }
   }
   return index;
