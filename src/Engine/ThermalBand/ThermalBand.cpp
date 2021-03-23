@@ -135,9 +135,8 @@ double
 ThermalBand::GetMaxN() const
 {
   double n = 0;
-  for (unsigned i = 0; i < size(); ++i) {
-    n = std::max(n, slices[i].n);
-  }
+  for (const auto &i : slices)
+    n = std::max(n, i.n);
   return n;
 }
 
