@@ -52,7 +52,7 @@ ThermalEncounterCollection::Merge(const ThermalBand& tb)
   UpdateTimes();
 }
 
-void
+inline void
 ThermalEncounterCollection::LowerFloor(const double new_floor)
 {
   // floor is already low enough, no action required
@@ -83,7 +83,7 @@ ThermalEncounterCollection::LowerFloor(const double new_floor)
   h_min -= index_move*dh;
 }
 
-void
+inline void
 ThermalEncounterCollection::MergeUnsafe(const ThermalBand& o)
 {
   // Progressively merge in new data, iterating over new data band.
@@ -140,8 +140,7 @@ ThermalEncounterCollection::MergeUnsafe(const ThermalBand& o)
   }
 }
 
-
-void
+inline void
 ThermalEncounterCollection::UpdateTimes()
 {
   assert(!empty());
