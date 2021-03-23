@@ -27,7 +27,7 @@ void
 ConvexFilter::UpdateConvex(double x, double y, int csign) noexcept
 {
   // ignore if coincident or back in time
-  if (x <= x_max)
+  if (!IsEmpty() && x <= x_max)
     return;
 
   Update(x, y, 1);
