@@ -83,12 +83,16 @@
 * Function prototypes.
 \******************************************************************************/
 
+#ifdef JAS_ENABLE_ENCODER
+
 static inline uint_fast32_t ones(int n)
 {
 	assert(n >= 0);
 	return (((uint_fast32_t) 1) << n) - 1;
 	//return ((1 << (n)) - 1);
 }
+
+#endif
 
 static const jp2_boxinfo_t *jp2_boxinfolookup(int type);
 
