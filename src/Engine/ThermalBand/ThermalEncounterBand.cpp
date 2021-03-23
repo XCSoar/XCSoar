@@ -56,8 +56,7 @@ ThermalEncounterBand::AddSample(const double time, const double height)
   Update(next);
 }
 
-
-unsigned
+inline unsigned
 ThermalEncounterBand::ResizeToHeight(const double height)
 {
   unsigned index = GetSliceIndex(height) + 1;
@@ -79,7 +78,7 @@ ThermalEncounterBand::ResizeToHeight(const double height)
   return index;
 }
 
-unsigned
+inline unsigned
 ThermalEncounterBand::FindPenultimateFinished(const unsigned index,
                                               const double time)
 {
@@ -92,7 +91,7 @@ ThermalEncounterBand::FindPenultimateFinished(const unsigned index,
   return prev;
 }
 
-double
+inline double
 ThermalEncounterBand::EstimateTimeStep(const double time,
                                        const double height,
                                        const unsigned index)
@@ -110,7 +109,7 @@ ThermalEncounterBand::EstimateTimeStep(const double time,
   return dt_comp * (dh / dh_comp);
 }
 
-void
+inline void
 ThermalEncounterBand::Start(const double time,
                             const double height)
 {
