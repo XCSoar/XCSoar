@@ -359,10 +359,10 @@ void
 ChartRenderer::DrawFilledLineGraph(const XYDataStore &lsdata,
                                    bool swap) noexcept
 {
-  const auto &slots = lsdata.GetSlots();
-  assert(slots.size() >= 2);
+  const auto slots = lsdata.GetSlots();
+  assert(slots.size >= 2);
 
-  const unsigned n = slots.size() + 2;
+  const unsigned n = slots.size + 2;
   auto *points = point_buffer.get(n);
 
   auto *p = points;
@@ -386,10 +386,10 @@ void
 ChartRenderer::DrawLineGraph(const XYDataStore &lsdata, const Pen &pen,
                              bool swap) noexcept
 {
-  const auto &slots = lsdata.GetSlots();
-  assert(slots.size() >= 2);
+  const auto slots = lsdata.GetSlots();
+  assert(slots.size >= 2);
 
-  const unsigned n = slots.size();
+  const unsigned n = slots.size;
   auto *points = point_buffer.get(n);
 
   auto *p = points;
@@ -620,8 +620,8 @@ void
 ChartRenderer::DrawImpulseGraph(const XYDataStore &lsdata,
                                 const Pen &pen) noexcept
 {
-  const auto &slots = lsdata.GetSlots();
-  assert(slots.size() >= 1);
+  const auto slots = lsdata.GetSlots();
+  assert(slots.size >= 1);
 
   canvas.Select(pen);
   for (const auto &i : slots) {
@@ -641,7 +641,7 @@ ChartRenderer::DrawImpulseGraph(const XYDataStore &lsdata,
 void
 ChartRenderer::DrawWeightBarGraph(const XYDataStore &lsdata) noexcept
 {
-  const auto &slots = lsdata.GetSlots();
+  const auto slots = lsdata.GetSlots();
 
   canvas.SelectNullPen();
 

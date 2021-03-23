@@ -103,7 +103,7 @@ public:
     return y_max;
   }
 
-  constexpr const auto &GetSlots() const noexcept {
+  constexpr ConstBuffer<Slot> GetSlots() const noexcept {
     return slots;
   }
 
