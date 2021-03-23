@@ -26,14 +26,14 @@
 #define SPREAD 0.15
 
 void
-Histogram::IncrementSlot(const unsigned i, const double mag)
+Histogram::IncrementSlot(const unsigned i, const double mag) noexcept
 {
   slots[i].y += mag;
   y_max = std::max(slots[i].y, y_max);
 }
 
 void
-Histogram::UpdateHistogram(double x)
+Histogram::UpdateHistogram(double x) noexcept
 {
   assert(sum_n);
 
@@ -61,7 +61,8 @@ Histogram::UpdateHistogram(double x)
   x_max = std::max(x+1.5/m, x_max);
 }
 
-void Histogram::Reset(double minx, double maxx)
+void
+Histogram::Reset(double minx, double maxx) noexcept
 {
   assert(maxx > minx);
   b = minx;
@@ -75,7 +76,8 @@ void Histogram::Reset(double minx, double maxx)
   x_max = 0;
 }
 
-void Histogram::Clear()
+void
+Histogram::Clear() noexcept
 {
   for (unsigned i=0; i< sum_n; ++i) {
     slots[i].y = 0;
@@ -85,7 +87,8 @@ void Histogram::Clear()
   x_max = 0;
 }
 
-double Histogram::GetPercentile(const double p) const
+double
+Histogram::GetPercentile(const double p) const noexcept
 {
   assert(p>= 0);
   assert(p<= 1);
