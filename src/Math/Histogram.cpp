@@ -20,10 +20,8 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   }
 */
-#include "Math/Histogram.hpp"
 
-#define NUM_SLOTS 60
-#define SPREAD 0.15
+#include "Math/Histogram.hpp"
 
 void
 Histogram::IncrementSlot(const unsigned i, const double mag) noexcept

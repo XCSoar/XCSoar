@@ -24,12 +24,15 @@ Copyright_License {
 #ifndef _HISTOGRAM_H
 #define _HISTOGRAM_H
 
-#include "Math/XYDataStore.hpp"
+#include "XYDataStore.hpp"
 
 #include <type_traits>
 
 class Histogram: public XYDataStore
 {
+  static constexpr std::size_t NUM_SLOTS = 60;
+  static constexpr double SPREAD = 0.15;
+
   unsigned n_pts;
   double m;
   double b;
