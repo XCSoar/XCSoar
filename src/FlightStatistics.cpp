@@ -161,8 +161,12 @@ FlightStatistics::GetMaxWorkingHeight() const
 
   // working height is average ceiling plus one standard deviation, or
   // the maximum encountered if this is lower
-  return std::max(altitude.GetMaxY(),
-                  std::min(altitude_ceiling.GetMaxY(), altitude_ceiling.GetAverageY() + sqrt(altitude_ceiling.GetVarY())));
+  double result = std::min(altitude_ceiling.GetMaxY(),
+                           altitude_ceiling.GetAverageY() + sqrt(altitude_ceiling.GetVarY()));
+  if (!altitude.IsEmpty())
+    result = std::max(altitude.GetMaxY(), result);
+
+  return result;
 }
 
 // percentile to look up to determine max/min value
