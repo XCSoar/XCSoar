@@ -24,7 +24,7 @@ Copyright_License {
 #include "XYDataStore.hpp"
 
 void
-XYDataStore::StoreReset()
+XYDataStore::StoreReset() noexcept
 {
   sum_n = 0;
   sum_xw = 0.;
@@ -34,7 +34,7 @@ XYDataStore::StoreReset()
 }
 
 void
-XYDataStore::StoreAdd(double x, double y, double weight)
+XYDataStore::StoreAdd(double x, double y, double weight) noexcept
 {
   // Update maximum/minimum values
   if (IsEmpty() || y > y_max)
@@ -64,7 +64,7 @@ XYDataStore::StoreAdd(double x, double y, double weight)
 }
 
 void
-XYDataStore::StoreRemove(const unsigned i)
+XYDataStore::StoreRemove(const unsigned i) noexcept
 {
   assert(i< sum_n);
   const auto &pt = slots[i];
