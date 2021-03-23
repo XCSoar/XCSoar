@@ -33,6 +33,7 @@ Copyright_License {
 #include <tchar.h>
 
 template<typename T> struct ConstBuffer;
+struct DoublePoint2D;
 class XYDataStore;
 class LeastSquares;
 class Canvas;
@@ -116,7 +117,7 @@ public:
   void DrawFilledLine(double xmin, double ymin,
                       double xmax, double ymax,
                       const Brush &brush) noexcept;
-  void DrawFilledY(ConstBuffer<std::pair<double, double>> vals,
+  void DrawFilledY(ConstBuffer<DoublePoint2D> vals,
                    const Brush &brush,
                    const Pen *pen=nullptr) noexcept;
   void DrawDot(double x, double y, const unsigned width) noexcept;

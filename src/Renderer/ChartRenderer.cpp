@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "Math/LeastSquares.hpp"
+#include "Math/Point2D.hpp"
 #include "util/StaticString.hxx"
 #include "util/StringFormat.hpp"
 #include "util/TruncateString.hpp"
@@ -564,7 +565,7 @@ ChartRenderer::ScreenY(double _y) const noexcept
 }
 
 void
-ChartRenderer::DrawFilledY(ConstBuffer<std::pair<double, double>> vals,
+ChartRenderer::DrawFilledY(ConstBuffer<DoublePoint2D> vals,
                            const Brush &brush, const Pen *pen) noexcept
 {
   if (vals.size < 2)
@@ -573,7 +574,7 @@ ChartRenderer::DrawFilledY(ConstBuffer<std::pair<double, double>> vals,
   auto *line = point_buffer.get(fsize);
 
   for (std::size_t i = 0; i < vals.size; ++i)
-    line[i + 2] = ToScreen(vals[i].first, vals[i].second);
+    line[i + 2] = ToScreen(vals[i].x, vals[i].y);
 
   line[0].x = rc_chart.left;
   line[0].y = line[fsize-1].y;
