@@ -21,7 +21,8 @@
   }
 */
 
-#include "Math/Histogram.hpp"
+#include "Histogram.hpp"
+#include "Util.hpp"
 
 void
 Histogram::IncrementSlot(const unsigned i, const double mag) noexcept
@@ -35,7 +36,7 @@ Histogram::UpdateHistogram(double x) noexcept
 {
   assert(sum_n);
 
-  unsigned i = (int)(m*(x-b)+0.5);
+  unsigned i = uround(m * (x - b));
   if (i>= sum_n) i = sum_n-1;
 
   double mag = 1;
