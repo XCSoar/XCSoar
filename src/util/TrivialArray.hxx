@@ -187,8 +187,8 @@ public:
 	/**
 	 * Return address of start of data segment.
 	 */
-	const T* raw() const noexcept {
-		return &array[0];
+	constexpr const T *data() const noexcept {
+		return array.data();
 	}
 
 	/**
