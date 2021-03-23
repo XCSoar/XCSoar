@@ -29,7 +29,14 @@
 
 class ThermalEncounterBand : public ThermalBand
 {
+  double time_start;
+
 public:
+  void Reset() noexcept {
+    ThermalBand::Reset();
+    time_start = 0;
+  }
+
   void AddSample(const double time,
                  const double height);
 

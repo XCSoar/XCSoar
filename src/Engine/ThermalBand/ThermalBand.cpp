@@ -30,7 +30,6 @@ ThermalBand::Reset()
 {
   dh = 10;
   h_min = 0;
-  time_start = 0;
   slices.clear();
 }
 

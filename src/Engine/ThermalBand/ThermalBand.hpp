@@ -45,7 +45,6 @@ class ThermalBand {
 protected:
   double h_min;
   double dh;
-  double time_start;
 
   TrivialArray<ThermalSlice, NUM_SLICES> slices;
 
