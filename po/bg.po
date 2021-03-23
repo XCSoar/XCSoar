@@ -8,13 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-03-23 15:43+0000\n"
+"Last-Translator: Веско <v.jeliazkov@jeliazkov.net>\n"
+"Language-Team: Bulgarian <https://hosted.weblate.org/projects/xcsoar/"
+"translations/bg/>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -28,52 +31,52 @@ msgstr ""
 #: Data/Input/default.xci:977 Data/Input/default.xci:1015
 #, no-c-format
 msgid "Task"
-msgstr ""
+msgstr "Задача"
 
 #: src/Task/TypeStrings.cpp:31
 #, no-c-format
 msgid "FAI badges/records"
-msgstr ""
+msgstr "FAI значки/рекорди"
 
 #: src/Task/TypeStrings.cpp:32 src/Dialogs/Task/dlgTaskHelpers.cpp:82
 #, no-c-format
 msgid "FAI triangle"
-msgstr ""
+msgstr "FAI триъгълник"
 
 #: src/Task/TypeStrings.cpp:33
 #, no-c-format
 msgid "FAI out and return"
-msgstr ""
+msgstr "FAI отиване и връщане"
 
 #: src/Task/TypeStrings.cpp:34
 #, no-c-format
 msgid "FAI goal"
-msgstr ""
+msgstr "FAI цел"
 
 #: src/Task/TypeStrings.cpp:35
 #, no-c-format
 msgid "Racing"
-msgstr ""
+msgstr "Състезание"
 
 #: src/Task/TypeStrings.cpp:36
 #, no-c-format
 msgid "AAT"
-msgstr ""
+msgstr "Задача през назначени зони"
 
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr ""
+msgstr "Модифицирана задача през зони"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
 msgid "Mixed"
-msgstr ""
+msgstr "Смесена"
 
 #: src/Task/TypeStrings.cpp:39
 #, no-c-format
 msgid "Touring"
-msgstr ""
+msgstr "Обиколки"
 
 #: src/Task/TypeStrings.cpp:52
 #, no-c-format
@@ -81,21 +84,24 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
+"Правилата на FAI допускат само FAI старт, финал и повратни точки за значки и "
+"рекорди. Активира правилото на FAI за височина над финала при изчислението "
+"на финалната права"
 
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
 msgid "FAI rules, path from a start to two turn points and return."
-msgstr ""
+msgstr "Правило на FAI за маршрут от стартова точка през две повратни и връщане"
 
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr ""
+msgstr "Правило на FAI за маршрут с отиване до точка и връщане"
 
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
 msgid "FAI rules, path from start to a goal destination."
-msgstr ""
+msgstr "Правило на FAI за маршрут със старт и отиване до точка"
 
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
@@ -103,6 +109,8 @@ msgid ""
 "Racing task around turn points.  Can also be used for FAI badge and record "
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
+"Състезателна задача около повратни точки. Може също да се използва за FAI "
+"значки и рекорди. Позволява всички форми на зони за наблюдение"
 
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
@@ -110,6 +118,8 @@ msgid ""
 "Task through assigned areas, minimum task time applies.  Restricted to "
 "cylinder and sector observation zones."
 msgstr ""
+"Задача през назначени зони за минимално време. Ограничена до цилиндрични и "
+"секторни зони зони за наблюдение"
 
 #: src/Task/TypeStrings.cpp:61
 #, no-c-format
@@ -118,6 +128,9 @@ msgid ""
 "mile cylinder.  Pilot can add additional points as needed.  Minimum task "
 "time applies."
 msgstr ""
+"Модифицирана задача през зони. Задача със старт, финал и поне един "
+"предефиниран цилиндър с радиус 1 миля. Пилотът може да добавя допълнителни "
+"точки при нужда. Задача за минимално време."
 
 #: src/Task/TypeStrings.cpp:62
 #, no-c-format
@@ -125,6 +138,8 @@ msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
 "applies."
 msgstr ""
+"Състезателна задача със смесица от назначени зони и повратни точки. Задача "
+"за минимално време."
 
 #: src/Task/TypeStrings.cpp:63
 #, no-c-format
@@ -132,24 +147,28 @@ msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
 msgstr ""
+"Незадължителна задача по маршрут. Използва стартов и финален цилиндър, и "
+"повратни точки с FAI сектор."
 
 #: src/Task/TypeStrings.cpp:76
 #, no-c-format
 msgid ""
 "A 90 degree sector with 1km radius. Cross corner edge from inside area to "
 "start."
-msgstr ""
+msgstr "90 градуса сектор с 1 км радиус. Сектора е от външната страна на ъгъла."
 
 #: src/Task/TypeStrings.cpp:77
 #, no-c-format
 msgid ""
 "A straight line start gate.  Cross start gate from inside area to start."
 msgstr ""
+"Права стартова линия. Старта е пресичане е от вътрешната страна към първата "
+"точка."
 
 #: src/Task/TypeStrings.cpp:78
 #, no-c-format
 msgid "A cylinder.  Exit area to start."
-msgstr ""
+msgstr "Цилиндър. Излизане от цилиндъра за старт."
 
 #: src/Task/TypeStrings.cpp:79
 #, no-c-format
@@ -157,6 +176,7 @@ msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point."
 msgstr ""
+"90 градусов сектор с безкрайни рамене. Сектора е от външната стана на ъгъла."
 
 #: src/Task/TypeStrings.cpp:81
 #, no-c-format
@@ -164,6 +184,8 @@ msgid ""
 "(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"Немски правила - всяка точка до 1/2 км от центъра или на 10 км от 90 "
+"градусов сектор. Центъра се счита за достигнат."
 
 #: src/Task/TypeStrings.cpp:83
 #, no-c-format
@@ -171,6 +193,8 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"Британски правила -всяка точка до 1/2 км от центъра или на 20 км от 90 "
+"градусов сектор. Центъра се счита за достигнат."
 
 #: src/Task/TypeStrings.cpp:85
 #, no-c-format
@@ -178,21 +202,25 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
 "sector.  Scored from center."
 msgstr ""
+"Британски правила - Всяка точка до 1/2 км от центъра или на 10 км от 180-"
+"градусов сектор. Центъра се счита за достигнат."
 
 #: src/Task/TypeStrings.cpp:87
 #, no-c-format
 msgid "A cylinder.  Any point within area scored from center."
-msgstr ""
+msgstr "Цилиндър. За всяка точка в цилиндъра се счита, че е достигнат центъра."
 
 #: src/Task/TypeStrings.cpp:88
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
 msgstr ""
+"Цилиндър 1 радиус 1 миля. Счита се най-далечната точка достигната в "
+"цилиндъра."
 
 #: src/Task/TypeStrings.cpp:89
 #, no-c-format
 msgid "A cylinder.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "Цилиндър. Счита се най-далечната достигната точка."
 
 #: src/Task/TypeStrings.cpp:90
 #, no-c-format
@@ -200,27 +228,31 @@ msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area."
 msgstr ""
+"Сектор, който варира по ъгъл и радиус. Счита се най-далечната точка "
+"достигната във вътрешната област."
 
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
-msgstr ""
+msgstr "90 градусов сектор с 1 км радиус. Външния ъгъл към следващата точка."
 
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
 msgid "Cross finish gate line into area to finish."
-msgstr ""
+msgstr "Права финална линия, която се прелита за финал."
 
 #: src/Task/TypeStrings.cpp:94
 #, no-c-format
 msgid "Enter cylinder to finish."
-msgstr ""
+msgstr "Влизане в цилиндър за финал."
 
 #: src/Task/TypeStrings.cpp:95
 #, no-c-format
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start."
 msgstr ""
+"180 градусов сектор с 5 км радиус. Излизане от цилиндър във всяка посока за "
+"старт."
 
 #: src/Task/TypeStrings.cpp:96
 #, no-c-format
@@ -228,210 +260,212 @@ msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area."
 msgstr ""
+"Сектор, който варира по ъгъл, вътрешен и външен радиус. Счита се най-"
+"далечната точка достигната във вътрешността."
 
 #: src/Task/TypeStrings.cpp:98
 #, no-c-format
 msgid "A symmetric quadrant with a custom radius."
-msgstr ""
+msgstr "Симетричен 90° сектор със зададен радиус."
 
 #: src/Task/TypeStrings.cpp:99
 #, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "Ключова точка. Счета се най-далечната точка достигната в областта."
 
 #: src/Task/TypeStrings.cpp:112
 #, no-c-format
 msgid "FAI start quadrant"
-msgstr ""
+msgstr "Стартов сектор по FAI"
 
 #: src/Task/TypeStrings.cpp:113
 #, no-c-format
 msgid "Start line"
-msgstr ""
+msgstr "Стартова линия"
 
 #: src/Task/TypeStrings.cpp:114
 #, no-c-format
 msgid "Start cylinder"
-msgstr ""
+msgstr "Стартов цилиндър"
 
 #: src/Task/TypeStrings.cpp:115 src/Dialogs/Task/dlgTaskHelpers.cpp:181
 #, no-c-format
 msgid "FAI quadrant"
-msgstr ""
+msgstr "FAI сектор"
 
 #: src/Task/TypeStrings.cpp:116
 #, no-c-format
 msgid "Keyhole sector (DAeC)"
-msgstr ""
+msgstr "Ключов сектор (DAeC)"
 
 #: src/Task/TypeStrings.cpp:117
 #, no-c-format
 msgid "BGA Fixed Course sector"
-msgstr ""
+msgstr "BGA сектор с фиксиран курс"
 
 #: src/Task/TypeStrings.cpp:118
 #, no-c-format
 msgid "BGA Enhanced Option Fixed Course sector"
-msgstr ""
+msgstr "BGA сектор с фиксиран курс, подобрен вариант"
 
 #: src/Task/TypeStrings.cpp:119
 #, no-c-format
 msgid "Turn point cylinder"
-msgstr ""
+msgstr "Повратен цилиндър"
 
 #: src/Task/TypeStrings.cpp:120
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "Цилиндър с 1 миля радиус"
 
 #: src/Task/TypeStrings.cpp:121
 #, no-c-format
 msgid "Area cylinder"
-msgstr ""
+msgstr "Цилиндър - зона"
 
 #: src/Task/TypeStrings.cpp:122
 #, no-c-format
 msgid "Area sector"
-msgstr ""
+msgstr "Сектор - зона"
 
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "FAI finish quadrant"
-msgstr ""
+msgstr "Финален сектор по FAI"
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
 msgid "Finish line"
-msgstr ""
+msgstr "Финална линия"
 
 #: src/Task/TypeStrings.cpp:125
 #, no-c-format
 msgid "Finish cylinder"
-msgstr ""
+msgstr "Финален цилиндър"
 
 #: src/Task/TypeStrings.cpp:126
 #, no-c-format
 msgid "BGA start sector"
-msgstr ""
+msgstr "BGA стартов сектор"
 
 #: src/Task/TypeStrings.cpp:127
 #, no-c-format
 msgid "Area sector with inner radius"
-msgstr ""
+msgstr "Сектор - зона с вътрешен радиус"
 
 #: src/Task/TypeStrings.cpp:128 src/Dialogs/Task/dlgTaskHelpers.cpp:230
 #, no-c-format
 msgid "Symmetric quadrant"
-msgstr ""
+msgstr "Симетричен сектор 90"
 
 #: src/Task/TypeStrings.cpp:129
 #, no-c-format
 msgid "Area keyhole"
-msgstr ""
+msgstr "Ключова зона"
 
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
 msgid "No valid start"
-msgstr ""
+msgstr "Невалиден старт"
 
 #: src/Task/ValidationErrorStrings.cpp:33
 #, no-c-format
 msgid "No valid finish"
-msgstr ""
+msgstr "Невалиден финал"
 
 #: src/Task/ValidationErrorStrings.cpp:34
 #, no-c-format
 msgid "Task not closed"
-msgstr ""
+msgstr "Задачата не е затворена"
 
 #: src/Task/ValidationErrorStrings.cpp:35
 #, no-c-format
 msgid "All turnpoints not the same type"
-msgstr ""
+msgstr "Не всички повратни точки са от един вид"
 
 #: src/Task/ValidationErrorStrings.cpp:36
 #, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr ""
+msgstr "Неправилен брой повратни точки"
 
 #: src/Task/ValidationErrorStrings.cpp:37
 #, no-c-format
 msgid "Too many turnpoints"
-msgstr ""
+msgstr "Твърде много повратни точки"
 
 #: src/Task/ValidationErrorStrings.cpp:38
 #, no-c-format
 msgid "Not enough turnpoints"
-msgstr ""
+msgstr "Не достатъчно повратни точки"
 
 #: src/Task/ValidationErrorStrings.cpp:39
 #, no-c-format
 msgid "Turnpoints not unique"
-msgstr ""
+msgstr "Повратна точка се повтаря"
 
 #: src/Task/ValidationErrorStrings.cpp:40
 #, no-c-format
 msgid "Empty task"
-msgstr ""
+msgstr "Непопълнена задача"
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
 msgid "non-FAI turn points"
-msgstr ""
+msgstr "Повратни точки не по FAI"
 
 #: src/Task/ValidationErrorStrings.cpp:42
 #, no-c-format
 msgid "non-MAT turn points"
-msgstr ""
+msgstr "Повратни точки не по MAT"
 
 #: src/Task/ValidationErrorStrings.cpp:43
 #, no-c-format
 msgid "Wrong shape"
-msgstr ""
+msgstr "Грешна фигура"
 
 #: src/Airspace/AirspaceGlue.cpp:84
 msgid "Loading Airspace File..."
-msgstr ""
+msgstr "Зареждане на файл с въздушно пространство..."
 
 #: src/Airspace/AirspaceParser.cpp:277
 msgid "Parse Error at Line"
-msgstr ""
+msgstr "Синтактична грешка на ред"
 
 #: src/Airspace/AirspaceParser.cpp:892
 msgid "Unknown airspace filetype"
-msgstr ""
+msgstr "Непознат тип файл за въздушно пространство"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp:51
 msgid "Expect early task arrival"
-msgstr ""
+msgstr "Очакване за ранно пристигане"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorSunset.cpp:65
 msgid "Expect arrival past sunset"
-msgstr ""
+msgstr "Очакване за пристигане след залез"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorWind.cpp:54
 msgid "Significant wind change"
-msgstr ""
+msgstr "Значително изменение на вятъра"
 
 #: src/FLARM/Error.cpp:29
 #, no-c-format
 msgid "No error"
-msgstr ""
+msgstr "Без грешки"
 
 #: src/FLARM/Error.cpp:30
 #, no-c-format
 msgid "Information"
-msgstr ""
+msgstr "Информация"
 
 #: src/FLARM/Error.cpp:31
 #, no-c-format
 msgid "Reduced functionality"
-msgstr ""
+msgstr "Ограничена функционалност"
 
 #: src/FLARM/Error.cpp:32
 #, no-c-format
 msgid "Fatal problem"
-msgstr ""
+msgstr "Фатална грешка"
 
 #. valid but unknown number of sats
 #: src/FLARM/Error.cpp:41 src/FLARM/Error.cpp:71
@@ -444,140 +478,142 @@ msgstr ""
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:60
 #, no-c-format
 msgid "Unknown"
-msgstr ""
+msgstr "Непознат"
 
 #: src/FLARM/Error.cpp:48
 #, no-c-format
 msgid "Firmware timeout"
-msgstr ""
+msgstr "Грешка при изчакване на фърмуера"
 
 #: src/FLARM/Error.cpp:49
 #, no-c-format
 msgid "Power"
-msgstr ""
+msgstr "Захранване"
 
 #: src/FLARM/Error.cpp:50
 #, no-c-format
 msgid "GPS communication"
-msgstr ""
+msgstr "GPS връзка"
 
 #: src/FLARM/Error.cpp:51
 #, no-c-format
 msgid "GPS configuration"
-msgstr ""
+msgstr "GPS настройки"
 
 #: src/FLARM/Error.cpp:52
 #, no-c-format
 msgid "RF communication"
-msgstr ""
+msgstr "Радиовръзка"
 
 #: src/FLARM/Error.cpp:53
 #, no-c-format
 msgid "Communication"
-msgstr ""
+msgstr "Свръзка"
 
 #: src/FLARM/Error.cpp:54
 #, no-c-format
 msgid "Flash memory"
-msgstr ""
+msgstr "Енергонезависима памет"
 
 #: src/FLARM/Error.cpp:55
 #, no-c-format
 msgid "Pressure sensor"
-msgstr ""
+msgstr "Датчик налягане"
 
 #: src/FLARM/Error.cpp:56 src/Dialogs/Device/ManageFlarmDialog.cpp:75
 #, no-c-format
 msgid "Obstacle database"
-msgstr ""
+msgstr "База данни препятствия"
 
 #: src/FLARM/Error.cpp:57
 #, no-c-format
 msgid "Flight recorder"
-msgstr ""
+msgstr "Полетен журнал"
 
 #: src/FLARM/Error.cpp:59
 #, no-c-format
 msgid "Transponder receiver"
-msgstr ""
+msgstr "Приемник на транспондер"
 
 #: src/FLARM/Error.cpp:60
 #, no-c-format
 msgid "Other"
-msgstr ""
+msgstr "Други"
 
 #: src/Logger/Logger.cpp:110 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
-msgstr ""
+msgstr "Стартиране на журнал"
 
 #: src/Logger/Logger.cpp:117
 msgid "Logger inactive, insufficient storage!"
-msgstr ""
+msgstr "Журнала не се попълва. Недостатъчно място!"
 
 #: src/Logger/Logger.cpp:118
 msgid "Logger Error"
-msgstr ""
+msgstr "Грешка в журнала"
 
 #: src/Logger/Logger.cpp:146 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
-msgstr ""
+msgstr "Спиране на журнала"
 
 #: src/Logger/ExternalLogger.cpp:84
 msgid "Declare task?"
-msgstr ""
+msgstr "Съставяне на задача?"
 
 #: src/Logger/ExternalLogger.cpp:93 src/Logger/ExternalLogger.cpp:132
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:95
 msgid "Declare task"
-msgstr ""
+msgstr "Съставяне на задача"
 
 #: src/Logger/ExternalLogger.cpp:100
 msgid "Task declared!"
-msgstr ""
+msgstr "Задачата е зададена!"
 
 #: src/Logger/ExternalLogger.cpp:105
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
+"Възникна грешка.\n"
+"Задачата не е зададена!"
 
 #: src/Logger/ExternalLogger.cpp:131
 msgid "No logger connected"
-msgstr ""
+msgstr "Няма включен журнал"
 
 #: src/Logger/ExternalLogger.cpp:269
 msgid "Failed to download flight list."
-msgstr ""
+msgstr "Грешка при изтегляне на списъка с полети."
 
 #: src/Logger/ExternalLogger.cpp:270 src/Logger/ExternalLogger.cpp:281
 #: src/Logger/ExternalLogger.cpp:302 src/Logger/ExternalLogger.cpp:325
 msgid "Download flight"
-msgstr ""
+msgstr "Изтегляне на полет"
 
 #: src/Logger/ExternalLogger.cpp:280
 msgid "Logger is empty."
-msgstr ""
+msgstr "Журнала е празен."
 
 #: src/Logger/ExternalLogger.cpp:301
 msgid "Failed to download flight."
-msgstr ""
+msgstr "Грешка при изтегляне на полет."
 
 #: src/Logger/ExternalLogger.cpp:324
 msgid "Do you want to download another flight?"
-msgstr ""
+msgstr "Желаете ли да изтеглите друг полет?"
 
 #: src/Waypoint/WaypointGlue.cpp:91
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:37
 msgid "Loading Waypoints..."
-msgstr ""
+msgstr "Зареждане на повратни точки..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:73
 msgid "Not moving"
-msgstr ""
+msgstr "Стоене на място"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:201
 msgid "Not Circling"
-msgstr ""
+msgstr "Не се кръжи"
 
 #: src/Gauge/BigThermalAssistantWidget.cpp:76
 #: src/Gauge/BigTrafficWidget.cpp:606 src/Dialogs/FileManager.cpp:741
@@ -615,11 +651,11 @@ msgstr ""
 #: src/Dialogs/Weather/PCMetDialog.cpp:51
 #: src/Dialogs/Weather/NOAADetails.cpp:130
 msgid "Close"
-msgstr ""
+msgstr "Затваряне"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:241
 msgid "No Traffic"
-msgstr ""
+msgstr "Няма трафик"
 
 #: src/Gauge/BigTrafficWidget.cpp:306 src/Gauge/BigTrafficWidget.cpp:307
 #: src/InfoBoxes/Content/Factory.cpp:333 src/InfoBoxes/Content/Factory.cpp:334
@@ -630,7 +666,7 @@ msgstr ""
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:137
 #, no-c-format
 msgid "Vario"
-msgstr ""
+msgstr "Вариометър"
 
 #: src/Gauge/BigTrafficWidget.cpp:386 src/Renderer/MapItemListRenderer.cpp:77
 #: src/Renderer/MapItemListRenderer.cpp:83
@@ -647,11 +683,11 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:162
 #: src/Dialogs/Task/TargetDialog.cpp:411
 msgid "Distance"
-msgstr ""
+msgstr "Разстояние"
 
 #: src/Gauge/BigTrafficWidget.cpp:430 src/Gauge/BigTrafficWidget.cpp:432
 msgid "Rel. Alt."
-msgstr ""
+msgstr "отн. височ."
 
 #: src/Gauge/BigTrafficWidget.cpp:603 src/InfoBoxes/Content/Task.cpp:67
 #: src/Dialogs/MapItemListDialog.cpp:175
@@ -662,111 +698,123 @@ msgstr ""
 #: src/Dialogs/Weather/NOAAList.cpp:113
 #, no-c-format
 msgid "Details"
-msgstr ""
+msgstr "Подробности"
 
 #: src/Waypoint/WaypointDetailsReader.cpp:150
 msgid "Loading Airfield Details File..."
-msgstr ""
+msgstr "Зареждане на файл с карта на летища..."
 
 #: src/Menu/ExpandMacros.cpp:83 src/Menu/ExpandMacros.cpp:116
 #: src/Menu/ExpandMacros.cpp:138
 msgid "Next Turnpoint"
-msgstr ""
+msgstr "Следваща повратна точка"
 
 #: src/Menu/ExpandMacros.cpp:87 src/Menu/ExpandMacros.cpp:124
 #: src/Menu/ExpandMacros.cpp:161
 msgid "Previous Turnpoint"
-msgstr ""
+msgstr "Предишна повратна точка"
 
 #: src/Menu/ExpandMacros.cpp:94
 msgid "Furthest Landpoint"
-msgstr ""
+msgstr "Най-отдалечена точка за приземяване"
 
 #: src/Menu/ExpandMacros.cpp:95
 msgid "Next Landpoint"
-msgstr ""
+msgstr "Следваща точка за приземяване"
 
 #: src/Menu/ExpandMacros.cpp:101
 msgid "Closest Landpoint"
-msgstr ""
+msgstr "Най-близка точка за приземяване"
 
 #: src/Menu/ExpandMacros.cpp:102
 msgid "Previous Landpoint"
-msgstr ""
+msgstr "Предишна точка за приземяване"
 
 #: src/Menu/ExpandMacros.cpp:115 src/Menu/ExpandMacros.cpp:137
 msgid "Finish Turnpoint"
-msgstr ""
+msgstr "Финална повратна точка"
 
 #: src/Menu/ExpandMacros.cpp:119 src/Menu/ExpandMacros.cpp:156
 msgid "Next Startpoint"
-msgstr ""
+msgstr "Следваща стартова точка"
 
 #: src/Menu/ExpandMacros.cpp:123 src/Menu/ExpandMacros.cpp:160
 msgid "Start Turnpoint"
-msgstr ""
+msgstr "Стартова повратна точка"
 
 #: src/Menu/ExpandMacros.cpp:141
 msgid "Arm start"
-msgstr ""
+msgstr "Зареждане старт"
 
 #: src/Menu/ExpandMacros.cpp:144
 msgid "Arm turn"
-msgstr ""
+msgstr "Зареждане поврат"
 
 #: src/Menu/ExpandMacros.cpp:165
 msgid "Disarm start"
-msgstr ""
+msgstr "Изключване на старта"
 
 #: src/Menu/ExpandMacros.cpp:168
 msgid "Disarm turn"
-msgstr ""
+msgstr "Изключване на поврат"
 
 #: src/Menu/ExpandMacros.cpp:177
 msgid ""
 "Advance\n"
 "(manual)"
 msgstr ""
+"Напред\n"
+"(ръчно)"
 
 #: src/Menu/ExpandMacros.cpp:181
 msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
+"Напред\n"
+"(автоматично)"
 
 #: src/Menu/ExpandMacros.cpp:184
 msgid ""
 "Abort\n"
 "Start"
 msgstr ""
+"Прекъсване\n"
+"Старт"
 
 #: src/Menu/ExpandMacros.cpp:187
 msgid ""
 "Arm\n"
 "Start"
 msgstr ""
+"Зареждане\n"
+"Старт"
 
 #: src/Menu/ExpandMacros.cpp:190
 msgid ""
 "Abort\n"
 "Turn"
 msgstr ""
+"Прекъсване\n"
+"Поврат"
 
 #: src/Menu/ExpandMacros.cpp:193
 msgid ""
 "Arm\n"
 "Turn"
 msgstr ""
+"Зареждане\n"
+"Поврат"
 
 #: src/Menu/ExpandMacros.cpp:202 src/Menu/ExpandMacros.cpp:206
 #: src/Dialogs/Device/PortMonitor.cpp:166
 msgid "Resume"
-msgstr ""
+msgstr "Продължаване"
 
 #: src/Menu/ExpandMacros.cpp:203 src/Menu/ExpandMacros.cpp:207
 #: src/Dialogs/Message.cpp:117
 msgid "Abort"
-msgstr ""
+msgstr "Прекъсване"
 
 #: src/Menu/ExpandMacros.cpp:227 src/Menu/ExpandMacros.cpp:359
 #: src/Menu/ExpandMacros.cpp:380 src/Menu/ExpandMacros.cpp:430
@@ -774,7 +822,7 @@ msgstr ""
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:202
 #, no-c-format
 msgid "Manual"
-msgstr ""
+msgstr "Ръчно"
 
 #: src/Menu/ExpandMacros.cpp:227 src/Menu/ExpandMacros.cpp:359
 #: src/Menu/ExpandMacros.cpp:380 src/Menu/ExpandMacros.cpp:430
@@ -788,46 +836,46 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:34
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Автоматично"
 
 #: src/Menu/ExpandMacros.cpp:229
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:44
 #, no-c-format
 msgid "Track up"
-msgstr ""
+msgstr "По курса нагоре"
 
 #: src/Menu/ExpandMacros.cpp:229
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:48
 #, no-c-format
 msgid "North up"
-msgstr ""
+msgstr "Север нагоре"
 
 #: src/Menu/ExpandMacros.cpp:313 src/Dialogs/Settings/dlgBasicSettings.cpp:133
 #: src/Dialogs/ReplayDialog.cpp:49
 msgid "Stop"
-msgstr ""
+msgstr "Спиране"
 
 #: src/Menu/ExpandMacros.cpp:314 src/Dialogs/ReplayDialog.cpp:48
 msgid "Start"
-msgstr ""
+msgstr "Старт"
 
 #: src/Menu/ExpandMacros.cpp:318
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:92
 #, no-c-format
 msgid "Long"
-msgstr ""
+msgstr "Дължина"
 
 #: src/Menu/ExpandMacros.cpp:321
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:93
 #, no-c-format
 msgid "Short"
-msgstr ""
+msgstr "Къс"
 
 #: src/Menu/ExpandMacros.cpp:324
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:94
 #, no-c-format
 msgid "Full"
-msgstr ""
+msgstr "Пълен"
 
 #: src/Menu/ExpandMacros.cpp:327 src/Menu/ExpandMacros.cpp:332
 #: src/Menu/ExpandMacros.cpp:357 src/Menu/ExpandMacros.cpp:362
@@ -850,7 +898,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:32
 #, no-c-format
 msgid "Off"
-msgstr ""
+msgstr "Изкл."
 
 #: src/Menu/ExpandMacros.cpp:332 src/Menu/ExpandMacros.cpp:357
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
@@ -866,35 +914,35 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:33
 #, no-c-format
 msgid "On"
-msgstr ""
+msgstr "Вкл."
 
 #: src/Menu/ExpandMacros.cpp:343
 msgid "Topography On"
-msgstr ""
+msgstr "Топография Вкл."
 
 #: src/Menu/ExpandMacros.cpp:346
 msgid "Terrain On"
-msgstr ""
+msgstr "Топография Вкл."
 
 #: src/Menu/ExpandMacros.cpp:349
 msgid "Terrain + Topography"
-msgstr ""
+msgstr "Релеф + Топография"
 
 #: src/Menu/ExpandMacros.cpp:352
 msgid "Terrain Off"
-msgstr ""
+msgstr "Релеф Изкл."
 
 #: src/Menu/ExpandMacros.cpp:369 src/Input/InputEventsSettings.cpp:313
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:83
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:145
 #, no-c-format
 msgid "All"
-msgstr ""
+msgstr "Всичко"
 
 #: src/Menu/ExpandMacros.cpp:370 src/Input/InputEventsSettings.cpp:314
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "Задача и места за кацане"
 
 #: src/Menu/ExpandMacros.cpp:372 src/Input/InputEventsSettings.cpp:316
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:198
@@ -908,23 +956,23 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:33
 #, no-c-format
 msgid "None"
-msgstr ""
+msgstr "Никакви"
 
 #: src/Menu/ExpandMacros.cpp:373 src/Input/InputEventsSettings.cpp:317
 #, no-c-format
 msgid "Task & Airfields"
-msgstr ""
+msgstr "Задача и летища"
 
 #: src/InfoBoxes/Content/Factory.cpp:136
 #, no-c-format
 msgid "Altitude GPS"
-msgstr ""
+msgstr "Височина по GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:137
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:83
 #, no-c-format
 msgid "Alt GPS"
-msgstr ""
+msgstr "Височ. GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:138
 #, no-c-format
@@ -933,17 +981,20 @@ msgid ""
 "PC only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
+"Това е височината над морското ниво докладвана от GPS-a. Само за сензорен "
+"екран или компютър: В симулационен режим тази стойност се настройва с "
+"клавишите за нагоре, надолу, наляво и надясно за завой на планера."
 
 #: src/InfoBoxes/Content/Factory.cpp:144
 #, no-c-format
 msgid "Height AGL"
-msgstr ""
+msgstr "Височина над земята"
 
 #: src/InfoBoxes/Content/Factory.cpp:145
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:87
 #, no-c-format
 msgid "H AGL"
-msgstr ""
+msgstr "Височ. земя"
 
 #: src/InfoBoxes/Content/Factory.cpp:146
 #, no-c-format
@@ -952,16 +1003,19 @@ msgid ""
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
+"Това е навигационната височина минус височината на релефа получена от файла "
+"на релефа. Стойноста е оцветена в червено, когато планера е под безопасната "
+"за релефа височина."
 
 #: src/InfoBoxes/Content/Factory.cpp:153
 #, no-c-format
 msgid "Thermal climb, last 30 s"
-msgstr ""
+msgstr "Средно термично качване за 30 сек."
 
 #: src/InfoBoxes/Content/Factory.cpp:154
 #, no-c-format
 msgid "TC 30s"
-msgstr ""
+msgstr "ТК 30с"
 
 #: src/InfoBoxes/Content/Factory.cpp:155
 #, no-c-format
@@ -969,18 +1023,20 @@ msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
 "or vario if available."
 msgstr ""
+"Текущо 30 сек. средно термично качване получено от GPS височината или "
+"вариометъра ако е наличен."
 
 #: src/InfoBoxes/Content/Factory.cpp:161
 #, no-c-format
 msgid "Next bearing"
-msgstr ""
+msgstr "Следващ азимут"
 
 #: src/InfoBoxes/Content/Factory.cpp:162
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:96
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:83
 #, no-c-format
 msgid "Bearing"
-msgstr ""
+msgstr "Азимут"
 
 #: src/InfoBoxes/Content/Factory.cpp:163
 #, no-c-format
@@ -988,16 +1044,18 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
+"Истински азимут към следващата повратна точка. За назначена задача в зона "
+"това е истинския азимут към целта в пределите на сектора."
 
 #: src/InfoBoxes/Content/Factory.cpp:170
 #, no-c-format
 msgid "GR instantaneous"
-msgstr ""
+msgstr "Моментно качество на планиране"
 
 #: src/InfoBoxes/Content/Factory.cpp:171
 #, no-c-format
 msgid "GR Inst"
-msgstr ""
+msgstr "Качество"
 
 #: src/InfoBoxes/Content/Factory.cpp:172
 #, no-c-format
@@ -1007,16 +1065,20 @@ msgid ""
 "indicate climbing cruise. If the vertical speed is close to zero, the "
 "displayed value is '---'."
 msgstr ""
+"Моментно качество на планиране над земята изчислено като отношение на "
+"скоростта спрямо земята и вертикалната скорост (по GPS) за последните 20 "
+"сек. Отрицателните стойности показват набор на височина. Ако скоростта е "
+"близко до нула се показва „---“."
 
 #: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
 msgid "GR cruise"
-msgstr ""
+msgstr "Качество по курса"
 
 #: src/InfoBoxes/Content/Factory.cpp:179
 #, no-c-format
 msgid "GR Cruise"
-msgstr ""
+msgstr "Качество по курс"
 
 #: src/InfoBoxes/Content/Factory.cpp:180
 #, no-c-format
@@ -1026,16 +1088,20 @@ msgid ""
 "(height gain since leaving the last thermal). If the vertical speed is close "
 "to zero, the displayed value is '---'."
 msgstr ""
+"Разстоянието от върха на последната термика разделено на загубата на "
+"височина от последната термика. Отрицателни стойности показват възходящи "
+"курсове (набор на височина след напускане на последната термика). Ако "
+"вертикалната скорост е близо да нула се показва „---“."
 
 #: src/InfoBoxes/Content/Factory.cpp:186
 #, no-c-format
 msgid "Speed ground"
-msgstr ""
+msgstr "Скорост спрямо земя"
 
 #: src/InfoBoxes/Content/Factory.cpp:187
 #, no-c-format
 msgid "V GND"
-msgstr ""
+msgstr "V земя"
 
 #: src/InfoBoxes/Content/Factory.cpp:188
 #, no-c-format
@@ -1044,16 +1110,19 @@ msgid ""
 "mode, pressing the up and down arrows adjusts the speed, and left and right "
 "turn the glider."
 msgstr ""
+"Скорост спрямо земята измерина от GPS-a. Ако този индикатор е активен в "
+"симулационен режим с горна и долна стрелка се настройва скоростта, а с лява "
+"и дясна посоката."
 
 #: src/InfoBoxes/Content/Factory.cpp:194
 #, no-c-format
 msgid "Last thermal average"
-msgstr ""
+msgstr "Средно качване в последната термиката"
 
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
 msgid "TL Avg"
-msgstr ""
+msgstr "Средно качване"
 
 #: src/InfoBoxes/Content/Factory.cpp:196
 #, no-c-format
@@ -1061,46 +1130,47 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
+"Пълен набор/загуба на височина разделен на времето прекарано във въртене."
 
 #: src/InfoBoxes/Content/Factory.cpp:202
 #, no-c-format
 msgid "Last thermal gain"
-msgstr ""
+msgstr "Набор в последната термика"
 
 #: src/InfoBoxes/Content/Factory.cpp:203
 #, no-c-format
 msgid "TL Gain"
-msgstr ""
+msgstr "Набор височина"
 
 #: src/InfoBoxes/Content/Factory.cpp:204
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
-msgstr ""
+msgstr "Пълен набор/загуба на височина в последната термика."
 
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
 msgid "Last thermal duration"
-msgstr ""
+msgstr "Времетраене на последната термика"
 
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
 msgid "TL duration"
-msgstr ""
+msgstr "Време в термика"
 
 #: src/InfoBoxes/Content/Factory.cpp:212
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr ""
+msgstr "Време прекарано във въртене на последната термика."
 
 #: src/InfoBoxes/Content/Factory.cpp:218
 #, no-c-format
 msgid "MacCready setting"
-msgstr ""
+msgstr "Мак Рейди настройки"
 
 #: src/InfoBoxes/Content/Factory.cpp:219
 #, no-c-format
 msgid "MC"
-msgstr ""
+msgstr "Мак Рейди"
 
 #: src/InfoBoxes/Content/Factory.cpp:220
 #, no-c-format
@@ -1109,16 +1179,19 @@ msgid ""
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
+"Текущите настройки на Мак Рейди и текущия Мак Рейди режим (автом. или ръчен)"
+". При сензорен екран и компютър ако индикатора е активен за настройка се "
+"използват горна и долна стрелка."
 
 #: src/InfoBoxes/Content/Factory.cpp:226
 #, no-c-format
 msgid "Next distance"
-msgstr ""
+msgstr "Следващо разстояние"
 
 #: src/InfoBoxes/Content/Factory.cpp:227 src/InfoBoxes/Content/Task.cpp:182
 #, no-c-format
 msgid "WP Dist"
-msgstr ""
+msgstr "Разст. ПТ"
 
 #: src/InfoBoxes/Content/Factory.cpp:228
 #, no-c-format
@@ -1126,16 +1199,18 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
+"Разстоянието до активната повратна точка. За задачи с назначени зони това е "
+"разстоянието до целта в сектора."
 
 #: src/InfoBoxes/Content/Factory.cpp:235
 #, no-c-format
 msgid "Next altitude difference"
-msgstr ""
+msgstr "Разлика във височината до следваща точка"
 
 #: src/InfoBoxes/Content/Factory.cpp:236
 #, no-c-format
 msgid "WP AltD"
-msgstr ""
+msgstr "Височ. ПТ"
 
 #: src/InfoBoxes/Content/Factory.cpp:237
 #, no-c-format
@@ -1143,16 +1218,18 @@ msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height. "
 "For AAT tasks, the target within the AAT sector is used."
 msgstr ""
+"Височина на пристигане до следващата повратна точка относно безопасната "
+"височина на пристигане. За задача с назначена зона е относно целта в сектора."
 
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
 msgid "Next altitude required"
-msgstr ""
+msgstr "Нужна височина за следваща повратна точка"
 
 #: src/InfoBoxes/Content/Factory.cpp:245
 #, no-c-format
 msgid "WP AltR"
-msgstr ""
+msgstr "Височ. нужна ПТ"
 
 #: src/InfoBoxes/Content/Factory.cpp:246
 #, no-c-format
@@ -1160,16 +1237,18 @@ msgid ""
 "Additional altitude required to reach the next turn point. For AAT tasks, "
 "the target within the AAT sector is used."
 msgstr ""
+"Допълнителна височина нужна за достигане на следващата повратна точка. За "
+"задача с назначени зони се използва целта в сектора."
 
 #: src/InfoBoxes/Content/Factory.cpp:253
 #, no-c-format
 msgid "Next waypoint"
-msgstr ""
+msgstr "Следваща повратна точка"
 
 #: src/InfoBoxes/Content/Factory.cpp:254
 #, no-c-format
 msgid "Next WP"
-msgstr ""
+msgstr "Следваща ПТ"
 
 #: src/InfoBoxes/Content/Factory.cpp:255
 #, no-c-format
@@ -1179,16 +1258,20 @@ msgid ""
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
+"Името на текущо избраната повратна точка. Когато това поле е активна с горен "
+"и долен клавиш се избира следваща и предишна повратна точка в задачата. При "
+"сензорен екран и компютър с клавиш „Въвеждане“ се показват подробности за "
+"повратната точка."
 
 #: src/InfoBoxes/Content/Factory.cpp:261
 #, no-c-format
 msgid "Final altitude difference"
-msgstr ""
+msgstr "Финална разлика във височината"
 
 #: src/InfoBoxes/Content/Factory.cpp:262
 #, no-c-format
 msgid "Fin AltD"
-msgstr ""
+msgstr "Фин. разлика"
 
 #: src/InfoBoxes/Content/Factory.cpp:263
 #, no-c-format
@@ -1196,31 +1279,33 @@ msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
 msgstr ""
+"Финална височина на пристигане в целта спрямо безопасната височина на "
+"пристигане."
 
 #: src/InfoBoxes/Content/Factory.cpp:269
 #, no-c-format
 msgid "Final altitude required"
-msgstr ""
+msgstr "Необходима финална височина"
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
 msgid "Fin AltR"
-msgstr ""
+msgstr "Необх. фин. височ."
 
 #: src/InfoBoxes/Content/Factory.cpp:271
 #, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr ""
+msgstr "Допълнителна височина необходима за завършване на задачата."
 
 #: src/InfoBoxes/Content/Factory.cpp:277
 #, no-c-format
 msgid "Speed task average"
-msgstr ""
+msgstr "Средна скорост по задача"
 
 #: src/InfoBoxes/Content/Factory.cpp:278
 #, no-c-format
 msgid "V Task Avg"
-msgstr ""
+msgstr "V ср. задача"
 
 #: src/InfoBoxes/Content/Factory.cpp:279
 #, no-c-format
@@ -1228,31 +1313,33 @@ msgid ""
 "Average cross country speed while on current task, not compensated for "
 "altitude."
 msgstr ""
+"Средна скорост по маршрута на текущата задача без компенсация за набрана "
+"височина."
 
 #: src/InfoBoxes/Content/Factory.cpp:285
 #, no-c-format
 msgid "Final distance"
-msgstr ""
+msgstr "Финално разстояние"
 
 #: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
 msgid "Fin Dist"
-msgstr ""
+msgstr "Фин. разст."
 
 #: src/InfoBoxes/Content/Factory.cpp:287
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
-msgstr ""
+msgstr "Разстояние за финиширане през оставащите повратни точки."
 
 #: src/InfoBoxes/Content/Factory.cpp:301
 #, no-c-format
 msgid "Terrain elevation"
-msgstr ""
+msgstr "Височина на релефа"
 
 #: src/InfoBoxes/Content/Factory.cpp:302
 #, no-c-format
 msgid "Terr Elev"
-msgstr ""
+msgstr "Височ. релеф"
 
 #: src/InfoBoxes/Content/Factory.cpp:303
 #, no-c-format
@@ -1260,16 +1347,18 @@ msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
 msgstr ""
+"Това е височината на терена над морското ниво получено то файла за релефа "
+"над текущата GPS позиция."
 
 #: src/InfoBoxes/Content/Factory.cpp:309
 #, no-c-format
 msgid "Thermal average"
-msgstr ""
+msgstr "Средно качване в термика"
 
 #: src/InfoBoxes/Content/Factory.cpp:310
 #, no-c-format
 msgid "TC Avg"
-msgstr ""
+msgstr "Качване ср."
 
 #: src/InfoBoxes/Content/Factory.cpp:311
 #, no-c-format
@@ -1277,16 +1366,18 @@ msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermalling."
 msgstr ""
+"Височина набрана или загубена в текущата термика разделена на времето "
+"прекарано във въртене."
 
 #: src/InfoBoxes/Content/Factory.cpp:317
 #, no-c-format
 msgid "Thermal gain"
-msgstr ""
+msgstr "Набор на височина в термика"
 
 #: src/InfoBoxes/Content/Factory.cpp:318
 #, no-c-format
 msgid "TC Gain"
-msgstr ""
+msgstr "Набор височ."
 
 #: src/InfoBoxes/Content/Factory.cpp:319
 #, no-c-format
