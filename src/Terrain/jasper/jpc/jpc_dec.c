@@ -1935,6 +1935,11 @@ static int jpc_dec_cp_setfromqcx(jpc_dec_cp_t *cp, jpc_dec_ccp_t *ccp,
 	/* Eliminate compiler warnings about unused variables. */
 	(void)cp;
 
+	/* Sanity check to prevent buffer overflow */
+	if (compparms->numstepsizes > (3 * JPC_MAXRLVLS + 1)) {
+		return -1;
+	}
+
 	if ((flags & JPC_QCC) || !(ccp->flags & JPC_QCC)) {
 		ccp->flags |= flags | JPC_QSET;
 		for (bandno = 0; bandno < compparms->numstepsizes; ++bandno) {
