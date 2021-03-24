@@ -65,6 +65,8 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
 
   chart.ScaleYFromValue(fs.vario_cruise_histogram.GetMinX() - y_padding);
   chart.ScaleYFromValue(fs.vario_cruise_histogram.GetMaxX() + y_padding);
+  chart.ScaleYFromValue(fs.vario_circling_histogram.GetMinX() - y_padding);
+  chart.ScaleYFromValue(fs.vario_circling_histogram.GetMaxX() + y_padding);
   chart.ScaleYFromValue(s - y_padding);
   chart.ScaleYFromValue(mc + y_padding);
 
