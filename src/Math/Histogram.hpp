@@ -44,6 +44,9 @@ class Histogram
   std::array<DoublePoint2D, NUM_SLOTS> slots;
 
 public:
+  bool empty() const noexcept {
+    return n_pts == 0;
+  }
 
   /**
    * Add a new data point to the values and convex solution
@@ -61,13 +64,6 @@ public:
    * Clear counters
    */
   void Clear() noexcept;
-
-  /**
-   * Retrieve total number of points accumulated
-   */
-  unsigned GetAccumulator() const noexcept {
-    return n_pts;
-  }
 
   constexpr double GetMinX() const noexcept {
     return x_min;

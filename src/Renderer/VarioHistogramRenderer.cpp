@@ -47,10 +47,8 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   chart.SetYLabel(_T("w"), Units::GetVerticalSpeedName());
   chart.Begin();
 
-  const auto acc = std::max(fs.vario_cruise_histogram.GetAccumulator(),
-                            fs.vario_circling_histogram.GetAccumulator());
-
-  if (!acc) {
+  if (fs.vario_cruise_histogram.empty() &&
+      fs.vario_circling_histogram.empty()) {
     chart.DrawNoData();
     return;
   }
