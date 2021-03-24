@@ -29,7 +29,11 @@
 inline Histogram::size_type
 Histogram::SlotNumber(double x) const noexcept
 {
-  size_type i = uround(m * (x - b));
+  x -= b;
+  if (x <= 0)
+    return 0;
+
+  size_type i = uround(m * x);
   if (i >= NUM_SLOTS)
     i = NUM_SLOTS - 1;
 
