@@ -88,7 +88,7 @@ public:
   }
 
 private:
-    void IncrementSlot(unsigned i, double mag) noexcept;
+  void IncrementSlot(unsigned i, double mag) noexcept;
 };
 
 static_assert(std::is_trivial<Histogram>::value, "type is not trivial");

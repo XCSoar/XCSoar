@@ -42,12 +42,13 @@ Histogram::UpdateHistogram(double x) noexcept
 
   double mag = 1;
 
-  if (i>0) {
-    IncrementSlot(i-1, SPREAD);
+  if (i > 0) {
+    IncrementSlot(i - 1, SPREAD);
     mag -= SPREAD;
   }
+
   if (i < NUM_SLOTS - 1) {
-    IncrementSlot(i+1, SPREAD);
+    IncrementSlot(i + 1, SPREAD);
     mag -= SPREAD;
   }
 
@@ -57,8 +58,8 @@ Histogram::UpdateHistogram(double x) noexcept
   n_pts++;
 
   // update range
-  x_min = std::min(x-1.5/m, x_min);
-  x_max = std::max(x+1.5/m, x_max);
+  x_min = std::min(x - 1.5 / m, x_min);
+  x_max = std::max(x + 1.5 / m, x_max);
 }
 
 void
@@ -103,8 +104,8 @@ Histogram::GetPercentile(const double p) const noexcept
   double acc_n = 0;
   for (unsigned i = 0; i + 1 < NUM_SLOTS; ++i) {
     if (slots[i].y > np - acc_n) {
-      const double residual = (np- acc_n)/slots[i].y;
-      return slots[i+1].x * (residual) + slots[i].x* (1-residual)-0.5/m;
+      const double residual = (np - acc_n) / slots[i].y;
+      return slots[i+1].x * residual + slots[i].x * (1 - residual) - 0.5 / m;
     }
     acc_n += slots[i].y;
   }
