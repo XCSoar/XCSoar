@@ -26,6 +26,16 @@
 
 #include <cassert>
 
+inline Histogram::size_type
+Histogram::SlotNumber(double x) const noexcept
+{
+  size_type i = uround(m * (x - b));
+  if (i >= NUM_SLOTS)
+    i = NUM_SLOTS - 1;
+
+  return i;
+}
+
 inline void
 Histogram::IncrementSlot(const size_type i, const double mag) noexcept
 {
@@ -36,9 +46,7 @@ Histogram::IncrementSlot(const size_type i, const double mag) noexcept
 void
 Histogram::UpdateHistogram(double x) noexcept
 {
-  size_type i = uround(m * (x - b));
-  if (i >= NUM_SLOTS)
-    i = NUM_SLOTS - 1;
+  const size_type i = SlotNumber(x);
 
   double mag = 1;
 

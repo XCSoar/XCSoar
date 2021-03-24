@@ -90,6 +90,9 @@ public:
   }
 
 private:
+  [[gnu::const]]
+  size_type SlotNumber(double x) const noexcept;
+
   void IncrementSlot(size_type i, double mag) noexcept;
 };
 
