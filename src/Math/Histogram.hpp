@@ -43,6 +43,8 @@ class Histogram
 
   std::array<DoublePoint2D, NUM_SLOTS> slots;
 
+  using size_type = decltype(slots)::size_type;
+
 public:
   bool empty() const noexcept {
     return n_pts == 0;
@@ -88,7 +90,7 @@ public:
   }
 
 private:
-  void IncrementSlot(unsigned i, double mag) noexcept;
+  void IncrementSlot(size_type i, double mag) noexcept;
 };
 
 static_assert(std::is_trivial<Histogram>::value, "type is not trivial");

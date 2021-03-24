@@ -27,7 +27,7 @@
 #include <cassert>
 
 inline void
-Histogram::IncrementSlot(const unsigned i, const double mag) noexcept
+Histogram::IncrementSlot(const size_type i, const double mag) noexcept
 {
   slots[i].y += mag;
   y_max = std::max(slots[i].y, y_max);
@@ -36,7 +36,7 @@ Histogram::IncrementSlot(const unsigned i, const double mag) noexcept
 void
 Histogram::UpdateHistogram(double x) noexcept
 {
-  unsigned i = uround(m * (x - b));
+  size_type i = uround(m * (x - b));
   if (i >= NUM_SLOTS)
     i = NUM_SLOTS - 1;
 
