@@ -60,10 +60,13 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
 
   const auto s = -glide_polar.GetSBestLD();
   const auto mc = glide_polar.GetMC();
-  chart.ScaleYFromValue(fs.vario_cruise_histogram.GetMinX());
-  chart.ScaleYFromValue(fs.vario_cruise_histogram.GetMaxX());
-  chart.ScaleYFromValue(s);
-  chart.ScaleYFromValue(mc);
+
+  constexpr double y_padding = 0.5;
+
+  chart.ScaleYFromValue(fs.vario_cruise_histogram.GetMinX() - y_padding);
+  chart.ScaleYFromValue(fs.vario_cruise_histogram.GetMaxX() + y_padding);
+  chart.ScaleYFromValue(s - y_padding);
+  chart.ScaleYFromValue(mc + y_padding);
 
   // draw red area at higher than cruise sink rate, blue area above mc
   {
