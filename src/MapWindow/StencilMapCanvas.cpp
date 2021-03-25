@@ -72,7 +72,7 @@ StencilMapCanvas::DrawSearchPointVector(const SearchPointVector &points)
     return;
 
   /* draw it all */
-  BulkPixelPoint screen[size];
+  BulkPixelPoint *screen = pixel_points_buffer.get(size);
   for (unsigned i = 0; i < size; ++i)
     screen[i] = proj.GeoToScreen(geo_points[i]);
 

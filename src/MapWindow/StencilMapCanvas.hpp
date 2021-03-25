@@ -30,6 +30,7 @@ Copyright_License {
 #include "util/ReusableArray.hpp"
 
 struct PixelPoint;
+struct BulkPixelPoint;
 class Canvas;
 class Projection;
 class WindowProjection;
@@ -47,6 +48,8 @@ class StencilMapCanvas
    * A variable-length buffer for clipped GeoPoints.
    */
   ReusableArray<GeoPoint> geo_points_buffer;
+
+  ReusableArray<BulkPixelPoint> pixel_points_buffer;
 
 public:
   Canvas &buffer;
