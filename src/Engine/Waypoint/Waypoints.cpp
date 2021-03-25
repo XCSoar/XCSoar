@@ -21,7 +21,10 @@
  */
 
 #include "Waypoints.hpp"
+#include "util/AllocatedArray.hxx"
 #include "util/StringUtil.hpp"
+
+static constexpr std::size_t NORMALIZE_BUFFER_SIZE = 4096;
 
 // global, used for test harness
 unsigned n_queries = 0;
@@ -29,7 +32,10 @@ unsigned n_queries = 0;
 inline WaypointPtr
 Waypoints::WaypointNameTree::Get(const TCHAR *name) const
 {
-  TCHAR normalized_name[_tcslen(name) + 1];
+  if (StringLength(name) >= NORMALIZE_BUFFER_SIZE)
+    return {};
+
+  TCHAR normalized_name[NORMALIZE_BUFFER_SIZE];
   NormalizeSearchString(normalized_name, name);
   return RadixTree<WaypointPtr>::Get(normalized_name, nullptr);
 }
@@ -38,7 +44,10 @@ inline void
 Waypoints::WaypointNameTree::VisitNormalisedPrefix(const TCHAR *prefix,
                                                    const WaypointVisitor &visitor) const
 {
-  TCHAR normalized[_tcslen(prefix) + 1];
+  if (StringLength(prefix) >= NORMALIZE_BUFFER_SIZE)
+    return;
+
+  TCHAR normalized[NORMALIZE_BUFFER_SIZE];
   NormalizeSearchString(normalized, prefix);
   VisitPrefix(normalized, visitor);
 }
@@ -48,7 +57,10 @@ Waypoints::WaypointNameTree::SuggestNormalisedPrefix(const TCHAR *prefix,
                                                      TCHAR *dest,
                                                      size_t max_length) const
 {
-  TCHAR normalized[_tcslen(prefix) + 1];
+  if (StringLength(prefix) >= NORMALIZE_BUFFER_SIZE)
+    return nullptr;
+
+  TCHAR normalized[NORMALIZE_BUFFER_SIZE];
   NormalizeSearchString(normalized, prefix);
   return Suggest(normalized, dest, max_length);
 }
@@ -56,17 +68,17 @@ Waypoints::WaypointNameTree::SuggestNormalisedPrefix(const TCHAR *prefix,
 inline void
 Waypoints::WaypointNameTree::Add(WaypointPtr wp)
 {
-  TCHAR normalized_name[wp->name.length() + 1];
-  NormalizeSearchString(normalized_name, wp->name.c_str());
-  RadixTree<WaypointPtr>::Add(normalized_name, std::move(wp));
+  AllocatedArray<TCHAR> buffer(wp->name.length() + 1);
+  NormalizeSearchString(buffer.data(), wp->name.c_str());
+  RadixTree<WaypointPtr>::Add(buffer.data(), std::move(wp));
 }
 
 inline void
 Waypoints::WaypointNameTree::Remove(const WaypointPtr &wp)
 {
-  TCHAR normalized_name[wp->name.length() + 1];
-  NormalizeSearchString(normalized_name, wp->name.c_str());
-  RadixTree<WaypointPtr>::Remove(normalized_name, wp);
+  AllocatedArray<TCHAR> buffer(wp->name.length() + 1);
+  NormalizeSearchString(buffer.data(), wp->name.c_str());
+  RadixTree<WaypointPtr>::Remove(buffer.data(), wp);
 }
 
 Waypoints::Waypoints()
