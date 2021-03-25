@@ -814,7 +814,7 @@ DeviceDescriptor::WriteNMEA(const TCHAR *line, OperationEnvironment &env)
   if (port == nullptr)
     return false;
 
-  char buffer[_tcslen(line) * 4 + 1];
+  char buffer[4096];
   if (::WideCharToMultiByte(CP_ACP, 0, line, -1, buffer, sizeof(buffer),
                             nullptr, nullptr) <= 0)
     return false;

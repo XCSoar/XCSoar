@@ -270,7 +270,7 @@ AltairProDevice::PropertySetGet(TCHAR *s, size_t size,
 {
   assert(s != nullptr);
 
-  char buffer[_tcslen(s) * 4 + 1];
+  char buffer[4096];
   if (::WideCharToMultiByte(CP_ACP, 0, s, -1, buffer, sizeof(buffer),
                                nullptr, nullptr) <= 0)
     return false;

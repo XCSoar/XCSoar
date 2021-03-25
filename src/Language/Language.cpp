@@ -104,8 +104,7 @@ gettext(const TCHAR* text)
     return it->second.c_str();
 
   // Convert the english TCHAR string to char
-  size_t wide_length = _tcslen(text);
-  char original[wide_length * 4 + 1];
+  char original[4096];
 
   // If the conversion failed -> use the english original string
   if (::WideCharToMultiByte(CP_UTF8, 0, text, -1,
@@ -120,7 +119,7 @@ gettext(const TCHAR* text)
     return text;
 
   // Convert the translated char string to TCHAR
-  TCHAR translation2[strlen(translation) + 1];
+  TCHAR translation2[4096];
   if (::MultiByteToWideChar(CP_UTF8, 0, translation, -1, translation2,
                             ARRAY_SIZE(translation2)) <= 0)
     return text;
