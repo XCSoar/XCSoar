@@ -67,8 +67,7 @@ StringConverter::Convert(char *narrow)
   size_t narrow_length = strlen(narrow);
 
   TCHAR *t = tbuffer.get(narrow_length + 1);
-  if (t == nullptr)
-    return nullptr;
+  assert(t != nullptr);
 
   if (narrow_length == 0) {
     t[0] = _T('\0');
