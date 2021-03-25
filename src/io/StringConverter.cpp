@@ -26,8 +26,10 @@ Copyright_License {
 
 #include <cassert>
 #include <cstring>
+#include <stdexcept>
 
 #ifdef _UNICODE
+#include "system/Error.hxx"
 #include <windows.h>
 #endif
 
@@ -83,7 +85,7 @@ StringConverter::Convert(char *narrow)
     int length = MultiByteToWideChar(CP_UTF8, 0, narrow, narrow_length,
                                      t, narrow_length);
     if (length == 0)
-      return nullptr;
+      throw MakeLastError("Failed to convert string");
 
     t[length] = _T('\0');
 
@@ -100,13 +102,14 @@ StringConverter::Convert(char *narrow)
     buffer_size = strlen(narrow) * 2 + 1;
     utf8 = Latin1ToUTF8(narrow, tbuffer.get(buffer_size), buffer_size);
     if (utf8 == nullptr)
-      return narrow;
+      throw std::runtime_error("Latin-1 to UTF-8 conversion failed");
+
     return const_cast<char *>(utf8);
 
   case Charset::UTF8:
     if (!ValidateUTF8(narrow))
       /* abort on invalid UTF-8 sequence */
-      return nullptr;
+      throw std::runtime_error("Invalid UTF-8");
 
     /* fall through ... */
     gcc_fallthrough;

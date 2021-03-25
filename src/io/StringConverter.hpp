@@ -68,7 +68,7 @@ public:
    * pointer or owned by this class and will be invalidated by the
    * next Convert() call.
    *
-   * Returns nullptr on error.
+   * Throws on error.
    */
   TCHAR *Convert(char *src);
 };

@@ -39,6 +39,8 @@ public:
    * is writable, and may be modified by the caller while parsing it.
    * It is Invalidated by the next call.  After the last line has been
    * read, this method returns nullptr.
+   *
+   * Throws on error.
    */
   virtual T *ReadLine() = 0;
 
