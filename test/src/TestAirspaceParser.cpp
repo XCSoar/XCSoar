@@ -47,10 +47,9 @@ ParseFile(Path path, Airspaces &airspaces)
 {
   FileLineReader reader(path, Charset::AUTO);
 
-  AirspaceParser parser(airspaces);
   NullOperationEnvironment operation;
 
-  if (!ok1(parser.Parse(reader, operation)))
+  if (!ok1(ParseAirspaceFile(airspaces, reader, operation)))
     return false;
 
   airspaces.Optimise();

@@ -842,7 +842,8 @@ DetectFileType(const TCHAR *line)
 }
 
 bool
-AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
+ParseAirspaceFile(Airspaces &airspaces,
+                  TLineReader &reader, OperationEnvironment &operation)
 {
   bool ignore = false;
 
