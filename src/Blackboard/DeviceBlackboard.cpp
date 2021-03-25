@@ -33,7 +33,6 @@ Copyright_License {
  * Initializes the DeviceBlackboard
  */
 DeviceBlackboard::DeviceBlackboard()
-  :devices(nullptr)
 {
   // Clear the gps_info and calculated_info
   gps_info.Reset();

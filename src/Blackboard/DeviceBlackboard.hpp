@@ -52,7 +52,7 @@ class DeviceBlackboard
 
   Simulator simulator;
 
-  MultipleDevices *devices;
+  MultipleDevices *devices = nullptr;
 
   /**
    * Data from each physical device.
