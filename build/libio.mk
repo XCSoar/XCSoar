@@ -15,6 +15,7 @@ IO_SOURCES = \
 	$(IO_SRC_DIR)/FileCache.cpp \
 	$(IO_SRC_DIR)/ZipArchive.cpp \
 	$(IO_SRC_DIR)/ZipReader.cpp \
+	$(IO_SRC_DIR)/StringConverter.cpp \
 	$(IO_SRC_DIR)/ConvertLineReader.cpp \
 	$(IO_SRC_DIR)/FileLineReader.cpp \
 	$(IO_SRC_DIR)/KeyValueFileReader.cpp \
