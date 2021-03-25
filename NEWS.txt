@@ -1,4 +1,4 @@
-Version 7.0 - not yet released
+Version 7.0 - 2021/03/25
 * LUA scripting
 * user interface
   - screen layout with 12 infoboxes on the left, vario+3 infoboxes on right
@@ -71,15 +71,11 @@ Version 7.0 - not yet released
   - display rotation
 * Android
   - drop support for ARMv6 and MIPS CPUs
+  - support devices with aspect ratio greater than 16:9
 * Kobo
   - support Kobo Glo HD
 * Raspberry Pi
   - resizable mouse cursor
-
-Version 6.8.18 - not yet released
-* Android
-  - support devices with aspect ratio greater than 16:9
-* Raspberry Pi
   - autodetect display orientation
 
 Version 6.8.17 - 2020/09/22
