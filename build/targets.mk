@@ -487,6 +487,8 @@ ifeq ($(TARGET_IS_KOBO),y)
       -nostdinc++ \
       -isystem $(LIBSTDCXX_HEADERS_DIR) \
       -isystem $(LIBSTDCXX_HEADERS_DIR)/$(ACTUAL_HOST_TRIPLET)
+
+    TARGET_CXXFLAGS += -Wno-psabi
   endif
 endif
 
