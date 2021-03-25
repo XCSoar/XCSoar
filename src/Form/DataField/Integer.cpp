@@ -117,7 +117,7 @@ DataFieldInteger::SpeedUp(bool keyup)
 void
 DataFieldInteger::AppendComboValue(ComboList &combo_list, int value) const
 {
-  TCHAR a[edit_format.capacity()], b[display_format.capacity()];
+  TCHAR a[decltype(edit_format)::capacity()], b[decltype(display_format)::capacity()];
   _stprintf(a, edit_format, value);
   _stprintf(b, display_format, value);
   combo_list.Append(combo_list.size(), a, b);
