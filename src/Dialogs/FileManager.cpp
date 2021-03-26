@@ -301,10 +301,10 @@ public:
   void OnTimer();
 
   /* virtual methods from class Net::DownloadListener */
-  virtual void OnDownloadAdded(Path path_relative,
-                               int64_t size, int64_t position) override;
-  virtual void OnDownloadComplete(Path path_relative,
-                                  bool success) override;
+  void OnDownloadAdded(Path path_relative,
+                       int64_t size, int64_t position) noexcept override;
+  void OnDownloadComplete(Path path_relative,
+                          bool success) noexcept override;
 
   void OnDownloadNotification() noexcept;
 #endif
@@ -658,7 +658,7 @@ ManagedFileListWidget::OnTimer()
 
 void
 ManagedFileListWidget::OnDownloadAdded(Path path_relative,
-                                       int64_t size, int64_t position)
+                                       int64_t size, int64_t position) noexcept
 {
   const auto name = path_relative.GetBase();
   if (name == nullptr)
@@ -681,7 +681,7 @@ ManagedFileListWidget::OnDownloadAdded(Path path_relative,
 
 void
 ManagedFileListWidget::OnDownloadComplete(Path path_relative,
-                                          bool success)
+                                          bool success) noexcept
 {
   const auto name = path_relative.GetBase();
   if (name == nullptr)

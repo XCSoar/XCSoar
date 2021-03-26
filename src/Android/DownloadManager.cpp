@@ -44,7 +44,7 @@ static Java::TrivialClass util_class;
 static jmethodID enumerate_method, enqueue_method, cancel_method;
 
 bool
-AndroidDownloadManager::Initialise(JNIEnv *env)
+AndroidDownloadManager::Initialise(JNIEnv *env) noexcept
 {
   assert(util_class == nullptr);
   assert(env != nullptr);
@@ -67,19 +67,19 @@ AndroidDownloadManager::Initialise(JNIEnv *env)
 }
 
 void
-AndroidDownloadManager::Deinitialise(JNIEnv *env)
+AndroidDownloadManager::Deinitialise(JNIEnv *env) noexcept
 {
   util_class.ClearOptional(env);
 }
 
 bool
-AndroidDownloadManager::IsAvailable()
+AndroidDownloadManager::IsAvailable() noexcept
 {
   return util_class.Get() != nullptr;
 }
 
 AndroidDownloadManager *
-AndroidDownloadManager::Create(JNIEnv *env, Context &context)
+AndroidDownloadManager::Create(JNIEnv *env, Context &context) noexcept
 {
   jobject obj = context.GetSystemService(env, "download");
   if (obj == nullptr)
@@ -91,7 +91,7 @@ AndroidDownloadManager::Create(JNIEnv *env, Context &context)
 }
 
 void
-AndroidDownloadManager::AddListener(Net::DownloadListener &listener)
+AndroidDownloadManager::AddListener(Net::DownloadListener &listener) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
 
@@ -102,7 +102,7 @@ AndroidDownloadManager::AddListener(Net::DownloadListener &listener)
 }
 
 void
-AndroidDownloadManager::RemoveListener(Net::DownloadListener &listener)
+AndroidDownloadManager::RemoveListener(Net::DownloadListener &listener) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
 
@@ -113,16 +113,16 @@ AndroidDownloadManager::RemoveListener(Net::DownloadListener &listener)
 
 void
 AndroidDownloadManager::OnDownloadComplete(Path path_relative,
-                                           bool success)
+                                           bool success) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
   for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
     (*i)->OnDownloadComplete(path_relative, success);
 }
 
-gcc_pure
+[[gnu::pure]]
 static AllocatedPath
-EraseSuffix(Path p, const char *suffix)
+EraseSuffix(Path p, const char *suffix) noexcept
 {
   assert(p != nullptr);
   assert(suffix != nullptr);
@@ -178,7 +178,8 @@ Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, jclass cls,
 }
 
 void
-AndroidDownloadManager::Enumerate(JNIEnv *env, Net::DownloadListener &listener)
+AndroidDownloadManager::Enumerate(JNIEnv *env,
+                                  Net::DownloadListener &listener) noexcept
 {
   assert(env != nullptr);
 
@@ -188,7 +189,7 @@ AndroidDownloadManager::Enumerate(JNIEnv *env, Net::DownloadListener &listener)
 
 void
 AndroidDownloadManager::Enqueue(JNIEnv *env, const char *uri,
-                                Path path_relative)
+                                Path path_relative) noexcept
 {
   assert(env != nullptr);
   assert(uri != nullptr);
@@ -210,7 +211,7 @@ AndroidDownloadManager::Enqueue(JNIEnv *env, const char *uri,
 }
 
 void
-AndroidDownloadManager::Cancel(JNIEnv *env, Path path_relative)
+AndroidDownloadManager::Cancel(JNIEnv *env, Path path_relative) noexcept
 {
   assert(env != nullptr);
   assert(path_relative != nullptr);

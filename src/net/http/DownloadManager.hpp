@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_NET_DOWNLOAD_MANAGER_HPP
 
 #include "Features.hpp"
-#include "util/Compiler.h"
 
 #include <cstdint>
 
@@ -45,10 +44,10 @@ public:
    * the download is queued, but has not been started yet
    */
   virtual void OnDownloadAdded(Path path_relative,
-                               int64_t size, int64_t position) = 0;
+                               int64_t size, int64_t position) noexcept = 0;
 
   virtual void OnDownloadComplete(Path path_relative,
-                                  bool success) = 0;
+                                  bool success) noexcept = 0;
 };
 
 } // namespace Net
@@ -56,32 +55,32 @@ public:
 namespace Net::DownloadManager {
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-bool Initialise();
-void BeginDeinitialise();
-void Deinitialise();
+bool Initialise() noexcept;
+void BeginDeinitialise() noexcept;
+void Deinitialise() noexcept;
 
-gcc_pure
-bool IsAvailable();
+[[gnu::const]]
+bool IsAvailable() noexcept;
 
-void AddListener(DownloadListener &listener);
-void RemoveListener(DownloadListener &listener);
+void AddListener(DownloadListener &listener) noexcept;
+void RemoveListener(DownloadListener &listener) noexcept;
 
 /**
  * Enumerate the download queue, and invoke
  * DownloadListener::OnDownloadAdded() for each one.
  */
-void Enumerate(DownloadListener &listener);
+void Enumerate(DownloadListener &listener) noexcept;
 
-void Enqueue(const char *uri, Path relative_path);
+void Enqueue(const char *uri, Path relative_path) noexcept;
 
 /**
  * Cancel the download.  The download may however be already
  * finished before this function attempts the cancellation.
  */
-void Cancel(Path relative_path);
+void Cancel(Path relative_path) noexcept;
 #else
 
-static inline bool IsAvailable() {
+static constexpr bool IsAvailable() noexcept {
   return false;
 }
 #endif

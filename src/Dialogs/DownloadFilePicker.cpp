@@ -78,7 +78,7 @@ public:
 private:
   /* virtual methods from class Net::DownloadListener */
   void OnDownloadAdded(Path _path_relative,
-                       int64_t size, int64_t position) override {
+                       int64_t size, int64_t position) noexcept override {
     if (!complete && path_relative == _path_relative) {
       if (!got_size && size >= 0) {
         got_size = true;
@@ -91,7 +91,7 @@ private:
   }
 
   void OnDownloadComplete(Path _path_relative,
-                          bool _success) override {
+                          bool _success) noexcept override {
     if (!complete && path_relative == _path_relative) {
       complete = true;
       success = _success;
@@ -209,8 +209,8 @@ public:
 
   /* virtual methods from class Net::DownloadListener */
   void OnDownloadAdded(Path path_relative,
-                       int64_t size, int64_t position) override;
-  void OnDownloadComplete(Path path_relative, bool success) override;
+                       int64_t size, int64_t position) noexcept override;
+  void OnDownloadComplete(Path path_relative, bool success) noexcept override;
 
   void OnDownloadCompleteNotification() noexcept;
 };
@@ -299,13 +299,14 @@ DownloadFilePickerWidget::Download()
 
 void
 DownloadFilePickerWidget::OnDownloadAdded(Path path_relative,
-                                          int64_t size, int64_t position)
+                                          int64_t size,
+                                          int64_t position) noexcept
 {
 }
 
 void
 DownloadFilePickerWidget::OnDownloadComplete(Path path_relative,
-                                             bool success)
+                                             bool success) noexcept
 {
   const auto name = path_relative.GetBase();
   if (name == nullptr)
