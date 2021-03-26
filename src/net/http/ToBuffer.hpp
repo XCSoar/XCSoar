@@ -31,52 +31,54 @@ Copyright_License {
 class OperationEnvironment;
 
 namespace Net {
-  class Session;
 
-  /**
-   * Download a URL into the specified buffer.  If the response is too
-   * long, it is truncated.
-   *
-   * @return the number of bytes written
-   */
-  size_t DownloadToBuffer(Session &session, const char *url,
-                          const char *username, const char *password,
-                          void *buffer, size_t max_length,
-                          OperationEnvironment &env);
+class Session;
 
-  static inline size_t DownloadToBuffer(Session &session, const char *url,
-                                        void *buffer, size_t max_length,
-                                        OperationEnvironment &env) {
-    return DownloadToBuffer(session, url, nullptr, nullptr,
-                            buffer, max_length, env);
+/**
+ * Download a URL into the specified buffer.  If the response is too
+ * long, it is truncated.
+ *
+ * @return the number of bytes written
+ */
+size_t DownloadToBuffer(Session &session, const char *url,
+                        const char *username, const char *password,
+                        void *buffer, size_t max_length,
+                        OperationEnvironment &env);
+
+static inline size_t DownloadToBuffer(Session &session, const char *url,
+                                      void *buffer, size_t max_length,
+                                      OperationEnvironment &env) {
+  return DownloadToBuffer(session, url, nullptr, nullptr,
+                          buffer, max_length, env);
+}
+
+class DownloadToBufferJob : public Job {
+  Session &session;
+  const char *url;
+  const char *username = nullptr, *password = nullptr;
+  void *buffer;
+  size_t max_length;
+  size_t length;
+
+public:
+  DownloadToBufferJob(Session &_session, const char *_url,
+                      void *_buffer, size_t _max_length)
+    :session(_session), url(_url),
+     buffer(_buffer), max_length(_max_length),
+     length(-1) {}
+
+  void SetBasicAuth(const char *_username, const char *_password) {
+    username = _username;
+    password = _password;
   }
 
-  class DownloadToBufferJob : public Job {
-    Session &session;
-    const char *url;
-    const char *username = nullptr, *password = nullptr;
-    void *buffer;
-    size_t max_length;
-    size_t length;
+  size_t GetLength() const {
+    return length;
+  }
 
-  public:
-    DownloadToBufferJob(Session &_session, const char *_url,
-                        void *_buffer, size_t _max_length)
-      :session(_session), url(_url),
-       buffer(_buffer), max_length(_max_length),
-       length(-1) {}
+  virtual void Run(OperationEnvironment &env);
+};
 
-    void SetBasicAuth(const char *_username, const char *_password) {
-      username = _username;
-      password = _password;
-    }
-
-    size_t GetLength() const {
-      return length;
-    }
-
-    virtual void Run(OperationEnvironment &env);
-  };
-}
+} // namespace Net
 
 #endif

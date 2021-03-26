@@ -33,89 +33,91 @@ Copyright_License {
 #include <cstdint>
 
 namespace Net {
-  class Session;
-  class ResponseHandler;
-  class MultiPartFormData;
 
-  class Request {
+class Session;
+class ResponseHandler;
+class MultiPartFormData;
+
+class Request {
 #ifndef _WIN32
-    static constexpr unsigned INFINITE = (unsigned)-1;
+  static constexpr unsigned INFINITE = (unsigned)-1;
 #endif
 
-    Session &session;
+  Session &session;
 
-    CurlEasy handle;
+  CurlEasy handle;
 
-    CurlSlist request_headers;
+  CurlSlist request_headers;
 
-    ResponseHandler &handler;
+  ResponseHandler &handler;
 
-    /**
-     * Was the response metadata already submitted to
-     * ResponseHandler::ResponseReceived().
-     */
-    bool submitted = false;
+  /**
+   * Was the response metadata already submitted to
+   * ResponseHandler::ResponseReceived().
+   */
+  bool submitted = false;
 
-  public:
-    /**
-     * Creates a Request that can be used to get data from a webserver.
-     * @param session Session instance that is used for creating this Request
-     * @param url the absolute URL of the request
-     * @param timeout_ms Timeout used for creating this request
-     */
-    Request(Session &session, ResponseHandler &_handler,
-            const char *url);
+public:
+  /**
+   * Creates a Request that can be used to get data from a webserver.
+   * @param session Session instance that is used for creating this Request
+   * @param url the absolute URL of the request
+   * @param timeout_ms Timeout used for creating this request
+   */
+  Request(Session &session, ResponseHandler &_handler,
+          const char *url);
 
-    ~Request();
+  ~Request();
 
-    void AddHeader(const char *name, const char *value);
+  void AddHeader(const char *name, const char *value);
 
-    void SetBasicAuth(const char *username, const char *password);
+  void SetBasicAuth(const char *username, const char *password);
 
-    /**
-     * Change the method to POST and use the given request body.  It
-     * must not be destructed until Send() returns.
-     */
-    void SetRequestBody(const MultiPartFormData &body);
+  /**
+   * Change the method to POST and use the given request body.  It
+   * must not be destructed until Send() returns.
+   */
+  void SetRequestBody(const MultiPartFormData &body);
 
-    void SetVerifyPeer(bool value) {
-      handle.SetVerifyPeer(value);
-    }
+  void SetVerifyPeer(bool value) {
+    handle.SetVerifyPeer(value);
+  }
 
-    /**
-     * Send the request to the server and receive response headers.
-     * This function fails if the connection could not be established
-     * or if the response status is not successful.
-     *
-     * @param timeout_ms Timeout used for sending the request
-     */
-    void Send(unsigned timeout_ms=INFINITE);
+  /**
+   * Send the request to the server and receive response headers.
+   * This function fails if the connection could not be established
+   * or if the response status is not successful.
+   *
+   * @param timeout_ms Timeout used for sending the request
+   */
+  void Send(unsigned timeout_ms=INFINITE);
 
-    /**
-     * Returns the total length of the response body.  Returns -1 if
-     * the server did not announce a length, or if an error has
-     * occurred.
-     */
-    int64_t GetLength() const;
+  /**
+   * Returns the total length of the response body.  Returns -1 if
+   * the server did not announce a length, or if an error has
+   * occurred.
+   */
+  int64_t GetLength() const;
 
-    /**
-     * Reads a number of bytes from the server.
-     * This function must not be called before Send() !
-     * @param timeout_ms Timeout used for retrieving the data chunk
-     * @return Number of bytes that were read from the server. 0 means
-     * EOF.
-     */
-    size_t Read(void *buffer, size_t buffer_size,
-                unsigned timeout_ms=INFINITE);
+  /**
+   * Reads a number of bytes from the server.
+   * This function must not be called before Send() !
+   * @param timeout_ms Timeout used for retrieving the data chunk
+   * @return Number of bytes that were read from the server. 0 means
+   * EOF.
+   */
+  size_t Read(void *buffer, size_t buffer_size,
+              unsigned timeout_ms=INFINITE);
 
-  private:
-    bool SubmitResponse() noexcept;
+private:
+  bool SubmitResponse() noexcept;
 
-    size_t ResponseData(const uint8_t *ptr, size_t size);
+  size_t ResponseData(const uint8_t *ptr, size_t size);
 
-    static size_t WriteCallback(char *ptr, size_t size, size_t nmemb,
-                                void *userdata);
+  static size_t WriteCallback(char *ptr, size_t size, size_t nmemb,
+                              void *userdata);
 };
-}
+
+} // namespace Net
 
 #endif

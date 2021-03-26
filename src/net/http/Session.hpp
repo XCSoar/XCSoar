@@ -27,32 +27,34 @@ Copyright_License {
 #include "Multi.hpp"
 
 namespace Net {
-  class Session {
-    CurlMulti multi;
 
-  public:
-    /**
-     * Was the session created successfully
-     * @return True if session was created successfully
-     */
-    void Add(CURL *easy) {
-      multi.Add(easy);
-    }
+class Session {
+  CurlMulti multi;
 
-    void Remove(CURL *easy) {
-      multi.Remove(easy);
-    }
+public:
+  /**
+   * Was the session created successfully
+   * @return True if session was created successfully
+   */
+  void Add(CURL *easy) {
+    multi.Add(easy);
+  }
 
-    void Select(int timeout_ms);
+  void Remove(CURL *easy) {
+    multi.Remove(easy);
+  }
 
-    CURLMcode Perform() {
-      return multi.Perform();
-    }
+  void Select(int timeout_ms);
 
-    CURLcode InfoRead(const CURL *easy) {
-      return multi.InfoRead(easy);
-    }
-  };
-}
+  CURLMcode Perform() {
+    return multi.Perform();
+  }
+
+  CURLcode InfoRead(const CURL *easy) {
+    return multi.InfoRead(easy);
+  }
+};
+
+} // namespace Net
 
 #endif

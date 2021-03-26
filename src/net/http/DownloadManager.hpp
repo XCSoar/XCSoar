@@ -32,58 +32,60 @@ Copyright_License {
 class Path;
 
 namespace Net {
-  class DownloadListener {
-  public:
-    /**
-     * This is called by the #DownloadManager when a new download was
-     * added, and when DownloadManager::Enumerate() is called.
-     *
-     * @param size the total size of the file when the download has
-     * been finished; -1 if unknown
-     * @param position the number of bytes already downloaded; -1 if
-     * the download is queued, but has not been started yet
-     */
-    virtual void OnDownloadAdded(Path path_relative,
-                                 int64_t size, int64_t position) = 0;
 
-    virtual void OnDownloadComplete(Path path_relative,
-                                    bool success) = 0;
-  };
-}
+class DownloadListener {
+public:
+  /**
+   * This is called by the #DownloadManager when a new download was
+   * added, and when DownloadManager::Enumerate() is called.
+   *
+   * @param size the total size of the file when the download has
+   * been finished; -1 if unknown
+   * @param position the number of bytes already downloaded; -1 if
+   * the download is queued, but has not been started yet
+   */
+  virtual void OnDownloadAdded(Path path_relative,
+                               int64_t size, int64_t position) = 0;
 
-namespace Net {
-  namespace DownloadManager {
+  virtual void OnDownloadComplete(Path path_relative,
+                                  bool success) = 0;
+};
+
+} // namespace Net
+
+namespace Net::DownloadManager {
+
 #ifdef HAVE_DOWNLOAD_MANAGER
-    bool Initialise();
-    void BeginDeinitialise();
-    void Deinitialise();
+bool Initialise();
+void BeginDeinitialise();
+void Deinitialise();
 
-    gcc_pure
-    bool IsAvailable();
+gcc_pure
+bool IsAvailable();
 
-    void AddListener(DownloadListener &listener);
-    void RemoveListener(DownloadListener &listener);
+void AddListener(DownloadListener &listener);
+void RemoveListener(DownloadListener &listener);
 
-    /**
-     * Enumerate the download queue, and invoke
-     * DownloadListener::OnDownloadAdded() for each one.
-     */
-    void Enumerate(DownloadListener &listener);
+/**
+ * Enumerate the download queue, and invoke
+ * DownloadListener::OnDownloadAdded() for each one.
+ */
+void Enumerate(DownloadListener &listener);
 
-    void Enqueue(const char *uri, Path relative_path);
+void Enqueue(const char *uri, Path relative_path);
 
-    /**
-     * Cancel the download.  The download may however be already
-     * finished before this function attempts the cancellation.
-     */
-    void Cancel(Path relative_path);
+/**
+ * Cancel the download.  The download may however be already
+ * finished before this function attempts the cancellation.
+ */
+void Cancel(Path relative_path);
 #else
 
-    static inline bool IsAvailable() {
-      return false;
-    }
-#endif
-  }
+static inline bool IsAvailable() {
+  return false;
 }
+#endif
+
+} // namespace Net::DownloadManager
 
 #endif

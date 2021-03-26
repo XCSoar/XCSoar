@@ -27,16 +27,22 @@ Copyright_License {
 #include "Features.hpp"
 
 namespace Net {
+
 #if defined(HAVE_HTTP)
-  /**
-   * Global initialisation of the network library.
-   */
-  void Initialise();
-  void Deinitialise();
+
+/**
+ * Global initialisation of the network library.
+ */
+void Initialise();
+void Deinitialise();
+
 #else
-  static inline void Initialise() {}
-  static inline void Deinitialise() {}
+
+static inline void Initialise() {}
+static inline void Deinitialise() {}
+
 #endif
-}
+
+} // namespace Net
 
 #endif

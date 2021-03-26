@@ -32,58 +32,60 @@ Copyright_License {
 #include <curl/curl.h>
 
 namespace Net {
-  /**
-   * Wrapper for a CURLM object.  This class is not thread-safe.
-   */
-  class CurlMulti {
-    CURLM *multi;
 
-    std::map<const CURL *, CURLcode> results;
+/**
+ * Wrapper for a CURLM object.  This class is not thread-safe.
+ */
+class CurlMulti {
+  CURLM *multi;
 
-  public:
-    CurlMulti();
-    CurlMulti(const CurlMulti &other) = delete;
+  std::map<const CURL *, CURLcode> results;
 
-    ~CurlMulti();
+public:
+  CurlMulti();
+  CurlMulti(const CurlMulti &other) = delete;
 
-    CurlMulti &operator=(const CurlMulti &other) = delete;
+  ~CurlMulti();
 
-    bool IsDefined() const {
-      return multi != nullptr;
-    }
+  CurlMulti &operator=(const CurlMulti &other) = delete;
 
-    void Add(CURL *easy) {
-      CURLMcode code = curl_multi_add_handle(multi, easy);
-      if (code != CURLM_OK)
-        throw std::runtime_error(curl_multi_strerror(code));
-    }
+  bool IsDefined() const {
+    return multi != nullptr;
+  }
 
-    void Remove(CURL *easy);
+  void Add(CURL *easy) {
+    CURLMcode code = curl_multi_add_handle(multi, easy);
+    if (code != CURLM_OK)
+      throw std::runtime_error(curl_multi_strerror(code));
+  }
 
-    void FdSet(fd_set *read_fd_set, fd_set *write_fd_set, fd_set *exc_fd_set,
-               int *max_fd) const {
-      CURLMcode code = curl_multi_fdset(multi, read_fd_set, write_fd_set,
-                                        exc_fd_set, max_fd);
-      if (code != CURLM_OK)
-        throw std::runtime_error(curl_multi_strerror(code));
-    }
+  void Remove(CURL *easy);
 
-    gcc_pure
-    long GetTimeout() const {
-      long timeout;
-      return ::curl_multi_timeout(multi, &timeout) == CURLM_OK
-          ? timeout
-          : -1;
-    }
+  void FdSet(fd_set *read_fd_set, fd_set *write_fd_set, fd_set *exc_fd_set,
+             int *max_fd) const {
+    CURLMcode code = curl_multi_fdset(multi, read_fd_set, write_fd_set,
+                                      exc_fd_set, max_fd);
+    if (code != CURLM_OK)
+      throw std::runtime_error(curl_multi_strerror(code));
+  }
 
-    CURLMcode Perform() {
-      int running_handles;
-      return ::curl_multi_perform(multi, &running_handles);
-    }
+  gcc_pure
+  long GetTimeout() const {
+    long timeout;
+    return ::curl_multi_timeout(multi, &timeout) == CURLM_OK
+      ? timeout
+      : -1;
+  }
 
-    gcc_pure
-    CURLcode InfoRead(const CURL *easy);
-  };
-}
+  CURLMcode Perform() {
+    int running_handles;
+    return ::curl_multi_perform(multi, &running_handles);
+  }
+
+  gcc_pure
+  CURLcode InfoRead(const CURL *easy);
+};
+
+} // namespace Net
 
 #endif
