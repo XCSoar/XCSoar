@@ -211,6 +211,20 @@ AndroidDownloadManager::Enqueue(JNIEnv *env, const char *uri,
                             object.Get(), j_uri.Get(),
                             j_path.Get());
 
+  try {
+    /* the method DownloadManager.enqueue() can throw
+       SecurityException if Android doesn't like the destination path
+       ("Unsupported path") */
+    Java::RethrowException(env);
+  } catch (...) {
+    const auto error = std::current_exception();
+
+    std::lock_guard<Mutex> lock(mutex);
+    for (auto *i : listeners)
+      i->OnDownloadError(path_relative, error);
+    return;
+  }
+
   std::lock_guard<Mutex> lock(mutex);
   for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
     (*i)->OnDownloadAdded(path_relative, -1, -1);
