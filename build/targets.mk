@@ -306,7 +306,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r22
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r22b
 
   ANDROID_SDK_PLATFORM = android-29
   ANDROID_NDK_API = 21
