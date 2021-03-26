@@ -27,6 +27,7 @@ Copyright_License {
 #include "Features.hpp"
 
 #include <cstdint>
+#include <exception>
 
 class Path;
 
@@ -46,8 +47,16 @@ public:
   virtual void OnDownloadAdded(Path path_relative,
                                int64_t size, int64_t position) noexcept = 0;
 
-  virtual void OnDownloadComplete(Path path_relative,
-                                  bool success) noexcept = 0;
+  virtual void OnDownloadComplete(Path path_relative) noexcept = 0;
+
+  /**
+   * The download has failed or was canceled.
+   *
+   * @param error error details; may be empty (e.g. if this was due to
+   * cancellation)
+   */
+  virtual void OnDownloadError(Path path_relative,
+                               std::exception_ptr error) noexcept = 0;
 };
 
 } // namespace Net

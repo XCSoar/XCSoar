@@ -303,8 +303,9 @@ public:
   /* virtual methods from class Net::DownloadListener */
   void OnDownloadAdded(Path path_relative,
                        int64_t size, int64_t position) noexcept override;
-  void OnDownloadComplete(Path path_relative,
-                          bool success) noexcept override;
+  void OnDownloadComplete(Path path_relative) noexcept override;
+  void OnDownloadError(Path path_relative,
+                       std::exception_ptr error) noexcept override;
 
   void OnDownloadNotification() noexcept;
 #endif
@@ -680,8 +681,7 @@ ManagedFileListWidget::OnDownloadAdded(Path path_relative,
 }
 
 void
-ManagedFileListWidget::OnDownloadComplete(Path path_relative,
-                                          bool success) noexcept
+ManagedFileListWidget::OnDownloadComplete(Path path_relative) noexcept
 {
   const auto name = path_relative.GetBase();
   if (name == nullptr)
@@ -699,10 +699,37 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative,
     downloads.erase(name3);
 
     if (StringIsEqual(name2, "repository")) {
-      repository_failed = !success;
-      if (success)
-        repository_modified = true;
-    } else if (!success)
+      repository_failed = false;
+      repository_modified = true;
+    }
+  }
+
+  download_notify.SendNotification();
+}
+
+void
+ManagedFileListWidget::OnDownloadError(Path path_relative,
+                                       std::exception_ptr error) noexcept
+{
+  const auto name = path_relative.GetBase();
+  if (name == nullptr)
+    return;
+
+  const WideToUTF8Converter name2(name.c_str());
+  if (!name2.IsValid())
+    return;
+
+  const std::string name3(name2);
+
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+
+    downloads.erase(name3);
+
+    // TODO: store the error
+    if (StringIsEqual(name2, "repository")) {
+      repository_failed = true;
+    } else
       failures.insert(name3);
   }
 

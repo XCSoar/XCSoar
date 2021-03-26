@@ -231,7 +231,7 @@ public:
     }
 
     for (auto *listener : listeners)
-      listener->OnDownloadComplete(relative_path, false);
+      listener->OnDownloadError(relative_path, {});
   }
 
 private:
@@ -281,21 +281,29 @@ DownloadManagerThread::ProcessQueue(Net::Session &session) noexcept
     current_position = 0;
 
     bool success = false;
+    std::exception_ptr error;
+
     try {
       const ScopeUnlock unlock(mutex);
       success = DownloadToFileTransaction(session, item.uri.c_str(),
                                           LocalPath(item.path_relative.c_str()),
                                           nullptr, *this);
     } catch (...) {
-      LogError(std::current_exception());
+      error = std::current_exception();
+      LogError(error);
     }
 
     current_size = current_position = -1;
     const AllocatedPath path_relative(std::move(queue.front().path_relative));
     queue.pop_front();
 
-    for (auto *listener : listeners)
-      listener->OnDownloadComplete(path_relative, success);
+    if (success) {
+      for (auto *listener : listeners)
+        listener->OnDownloadComplete(path_relative);
+    } else {
+      for (auto *listener : listeners)
+        listener->OnDownloadError(path_relative, error);
+    }
   }
 }
 
@@ -307,7 +315,7 @@ DownloadManagerThread::FailQueue() noexcept
     queue.pop_front();
 
     for (auto *listener : listeners)
-      listener->OnDownloadComplete(path_relative, false);
+      listener->OnDownloadError(path_relative, {});
   }
 }
 

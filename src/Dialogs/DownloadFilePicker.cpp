@@ -90,11 +90,20 @@ private:
     }
   }
 
-  void OnDownloadComplete(Path _path_relative,
-                          bool _success) noexcept override {
+  void OnDownloadComplete(Path _path_relative) noexcept override {
     if (!complete && path_relative == _path_relative) {
       complete = true;
-      success = _success;
+      success = true;
+      download_complete_notify.SendNotification();
+    }
+  }
+
+  void OnDownloadError(Path _path_relative,
+                       std::exception_ptr error) noexcept override {
+    if (!complete && path_relative == _path_relative) {
+      complete = true;
+      success = false;
+      // TODO: store the error
       download_complete_notify.SendNotification();
     }
   }
@@ -210,7 +219,9 @@ public:
   /* virtual methods from class Net::DownloadListener */
   void OnDownloadAdded(Path path_relative,
                        int64_t size, int64_t position) noexcept override;
-  void OnDownloadComplete(Path path_relative, bool success) noexcept override;
+  void OnDownloadComplete(Path path_relative) noexcept override;
+  void OnDownloadError(Path path_relative,
+                       std::exception_ptr error) noexcept override;
 
   void OnDownloadCompleteNotification() noexcept;
 };
@@ -305,21 +316,32 @@ DownloadFilePickerWidget::OnDownloadAdded(Path path_relative,
 }
 
 void
-DownloadFilePickerWidget::OnDownloadComplete(Path path_relative,
-                                             bool success) noexcept
+DownloadFilePickerWidget::OnDownloadComplete(Path path_relative) noexcept
 {
   const auto name = path_relative.GetBase();
   if (name == nullptr)
     return;
 
-  {
+  if (name == Path(_T("repository"))) {
     const std::lock_guard<Mutex> lock(mutex);
+    repository_failed = false;
+    repository_modified = true;
+  }
 
-    if (name == Path(_T("repository"))) {
-      repository_failed = !success;
-      if (success)
-        repository_modified = true;
-    }
+  download_complete_notify.SendNotification();
+}
+
+void
+DownloadFilePickerWidget::OnDownloadError(Path path_relative,
+                                          std::exception_ptr error) noexcept
+{
+  const auto name = path_relative.GetBase();
+  if (name == nullptr)
+    return;
+
+  if (name == Path(_T("repository"))) {
+    const std::lock_guard<Mutex> lock(mutex);
+    repository_failed = true;
   }
 
   download_complete_notify.SendNotification();

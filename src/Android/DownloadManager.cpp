@@ -116,8 +116,14 @@ AndroidDownloadManager::OnDownloadComplete(Path path_relative,
                                            bool success) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
-  for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-    (*i)->OnDownloadComplete(path_relative, success);
+
+  if (success)
+    for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
+      (*i)->OnDownloadComplete(path_relative);
+  else
+    for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
+      // TODO obtain error details
+      (*i)->OnDownloadError(path_relative, {});
 }
 
 [[gnu::pure]]
