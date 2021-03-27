@@ -37,26 +37,18 @@ OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
                         const AirspaceRendererSettings &airspace_settings,
                         const AirspaceLook &airspace_look)
 {
-  double scale;
-  GeoPoint center;
+  OZBoundary boundary = oz.GetBoundary();
 
-  if (IsAncientHardware()) {
-    scale = double(radius) / ((const CylinderZone &)oz).GetRadius();
-    center = oz.GetReference();
-  } else {
-    OZBoundary boundary = oz.GetBoundary();
+  GeoBounds bounds = GeoBounds::Invalid();
+  for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i)
+    bounds.Extend(*i);
 
-    GeoBounds bounds = GeoBounds::Invalid();
-    for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i)
-      bounds.Extend(*i);
+  const GeoPoint center = bounds.GetCenter();
 
-    center = bounds.GetCenter();
+  auto geo_width = bounds.GetGeoWidth();
+  auto geo_heigth = bounds.GetGeoHeight();
 
-    auto geo_width = bounds.GetGeoWidth();
-    auto geo_heigth = bounds.GetGeoHeight();
-
-    scale = double(radius * 2) / std::max(geo_heigth, geo_width);
-  }
+  const double scale = double(radius * 2) / std::max(geo_heigth, geo_width);
 
   WindowProjection projection;
   projection.SetScreenSize({radius * 2, radius * 2});
