@@ -61,7 +61,7 @@ public:
 		return *this;
 	}
 
-	bool IsDefined() const {
+	operator bool() const noexcept {
 		return handle != nullptr;
 	}
 
