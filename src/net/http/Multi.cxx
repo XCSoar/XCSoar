@@ -31,12 +31,12 @@
 
 #include <cassert>
 
-Net::CurlMulti::CurlMulti()
+CurlMulti::CurlMulti()
 	:multi(curl_multi_init())
 {
 }
 
-Net::CurlMulti::~CurlMulti()
+CurlMulti::~CurlMulti()
 {
 	assert(results.empty());
 
@@ -45,7 +45,7 @@ Net::CurlMulti::~CurlMulti()
 }
 
 void
-Net::CurlMulti::Remove(CURL *easy)
+CurlMulti::Remove(CURL *easy)
 {
 	auto i = results.find(easy);
 	if (i != results.end())
@@ -55,7 +55,7 @@ Net::CurlMulti::Remove(CURL *easy)
 }
 
 CURLcode
-Net::CurlMulti::InfoRead(const CURL *easy)
+CurlMulti::InfoRead(const CURL *easy)
 {
 	auto i = results.find(easy);
 	if (i != results.end())

@@ -35,8 +35,6 @@
 
 #include <curl/curl.h>
 
-namespace Net {
-
 /**
  * An OO wrapper for a "CURLM*" (a libCURL "multi" handle).
  */
@@ -89,7 +87,5 @@ public:
 	[[gnu::pure]]
 	CURLcode InfoRead(const CURL *easy);
 };
-
-} // namespace Net
 
 #endif
