@@ -32,7 +32,7 @@
 #include <cassert>
 
 CurlMulti::CurlMulti()
-	:multi(curl_multi_init())
+	:handle(curl_multi_init())
 {
 }
 
@@ -40,8 +40,8 @@ CurlMulti::~CurlMulti()
 {
 	assert(results.empty());
 
-	if (multi != nullptr)
-		curl_multi_cleanup(multi);
+	if (handle != nullptr)
+		curl_multi_cleanup(handle);
 }
 
 void
@@ -51,7 +51,7 @@ CurlMulti::Remove(CURL *easy)
 	if (i != results.end())
 		results.erase(i);
 
-	curl_multi_remove_handle(multi, easy);
+	curl_multi_remove_handle(handle, easy);
 }
 
 CURLcode
@@ -63,7 +63,7 @@ CurlMulti::InfoRead(const CURL *easy)
 
 	const CURLMsg *msg;
 	int msgs_in_queue;
-	while ((msg = curl_multi_info_read(multi, &msgs_in_queue)) != nullptr) {
+	while ((msg = curl_multi_info_read(handle, &msgs_in_queue)) != nullptr) {
 		if (msg->msg == CURLMSG_DONE) {
 			if (msg->easy_handle == easy)
 				return msg->data.result;

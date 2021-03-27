@@ -39,7 +39,7 @@
  * An OO wrapper for a "CURLM*" (a libCURL "multi" handle).
  */
 class CurlMulti {
-	CURLM *multi;
+	CURLM *handle = nullptr;
 
 	std::map<const CURL *, CURLcode> results;
 
@@ -52,11 +52,11 @@ public:
 	CurlMulti &operator=(const CurlMulti &other) = delete;
 
 	bool IsDefined() const {
-		return multi != nullptr;
+		return handle != nullptr;
 	}
 
 	void Add(CURL *easy) {
-		CURLMcode code = curl_multi_add_handle(multi, easy);
+		CURLMcode code = curl_multi_add_handle(handle, easy);
 		if (code != CURLM_OK)
 			throw std::runtime_error(curl_multi_strerror(code));
 	}
@@ -65,7 +65,7 @@ public:
 
 	void FdSet(fd_set *read_fd_set, fd_set *write_fd_set, fd_set *exc_fd_set,
 		   int *max_fd) const {
-		CURLMcode code = curl_multi_fdset(multi, read_fd_set, write_fd_set,
+		CURLMcode code = curl_multi_fdset(handle, read_fd_set, write_fd_set,
 						  exc_fd_set, max_fd);
 		if (code != CURLM_OK)
 			throw std::runtime_error(curl_multi_strerror(code));
@@ -74,14 +74,14 @@ public:
 	[[gnu::pure]]
 	long GetTimeout() const {
 		long timeout;
-		return ::curl_multi_timeout(multi, &timeout) == CURLM_OK
+		return ::curl_multi_timeout(handle, &timeout) == CURLM_OK
 			? timeout
 			: -1;
 	}
 
 	CURLMcode Perform() {
 		int running_handles;
-		return ::curl_multi_perform(multi, &running_handles);
+		return ::curl_multi_perform(handle, &running_handles);
 	}
 
 	[[gnu::pure]]
