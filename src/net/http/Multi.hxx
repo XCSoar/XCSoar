@@ -44,6 +44,11 @@ class CurlMulti {
 	std::map<const CURL *, CURLcode> results;
 
 public:
+	/**
+	 * Allocate a new CURLM*.
+	 *
+	 * Throws on error.
+	 */
 	CurlMulti();
 
 	/**
