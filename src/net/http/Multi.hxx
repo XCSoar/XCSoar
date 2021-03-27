@@ -30,10 +30,10 @@
 #ifndef CURL_MULTI_HXX
 #define CURL_MULTI_HXX
 
+#include <curl/curl.h>
+
 #include <map>
 #include <stdexcept>
-
-#include <curl/curl.h>
 
 /**
  * An OO wrapper for a "CURLM*" (a libCURL "multi" handle).
