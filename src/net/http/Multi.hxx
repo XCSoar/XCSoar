@@ -30,8 +30,6 @@
 #ifndef CURL_MULTI_HXX
 #define CURL_MULTI_HXX
 
-#include "util/Compiler.h"
-
 #include <map>
 #include <stdexcept>
 
@@ -75,7 +73,7 @@ public:
 			throw std::runtime_error(curl_multi_strerror(code));
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	long GetTimeout() const {
 		long timeout;
 		return ::curl_multi_timeout(multi, &timeout) == CURLM_OK
@@ -88,7 +86,7 @@ public:
 		return ::curl_multi_perform(multi, &running_handles);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	CURLcode InfoRead(const CURL *easy);
 };
 
