@@ -70,6 +70,13 @@ public:
 		return handle != nullptr;
 	}
 
+	template<typename T>
+	void SetOption(CURLMoption option, T value) {
+		auto code = curl_multi_setopt(handle, option, value);
+		if (code != CURLM_OK)
+			throw std::runtime_error(curl_multi_strerror(code));
+	}
+
 	void Add(CURL *easy) {
 		CURLMcode code = curl_multi_add_handle(handle, easy);
 		if (code != CURLM_OK)
