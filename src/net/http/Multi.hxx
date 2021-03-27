@@ -46,6 +46,11 @@ class CurlMulti {
 public:
 	CurlMulti();
 
+	/**
+	 * Create an empty instance.
+	 */
+	CurlMulti(std::nullptr_t) noexcept:handle(nullptr) {}
+
 	CurlMulti(CurlMulti &&src) noexcept
 		:handle(std::exchange(src.handle, nullptr)) {}
 
