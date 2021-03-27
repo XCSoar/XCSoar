@@ -17,7 +17,7 @@ LIBNET_SOURCES = \
 HAVE_HTTP := y
 
 LIBNET_SOURCES += \
-	$(SRC)/net/http/Multi.cpp \
+	$(SRC)/net/http/Multi.cxx \
 	$(SRC)/net/http/Session.cpp \
 	$(SRC)/net/http/Request.cpp \
 	$(SRC)/net/http/FormData.cpp \

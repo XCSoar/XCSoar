@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef NET_SESSION_HPP
 #define NET_SESSION_HPP
 
-#include "Multi.hpp"
+#include "Multi.hxx"
 
 namespace Net {
 
