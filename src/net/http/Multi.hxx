@@ -45,11 +45,16 @@ class CurlMulti {
 
 public:
 	CurlMulti();
-	CurlMulti(const CurlMulti &other) = delete;
+
+	CurlMulti(CurlMulti &&src) noexcept
+		:handle(std::exchange(src.handle, nullptr)) {}
 
 	~CurlMulti();
 
-	CurlMulti &operator=(const CurlMulti &other) = delete;
+	CurlMulti &operator=(CurlMulti &&src) noexcept {
+		std::swap(handle, src.handle);
+		return *this;
+	}
 
 	bool IsDefined() const {
 		return handle != nullptr;
