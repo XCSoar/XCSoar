@@ -46,7 +46,7 @@ public:
 
   void Select(int timeout_ms);
 
-  CURLMcode Perform() {
+  unsigned Perform() {
     return multi.Perform();
   }
 

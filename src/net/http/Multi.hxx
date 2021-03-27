@@ -79,9 +79,12 @@ public:
 			: -1;
 	}
 
-	CURLMcode Perform() {
+	unsigned Perform() {
 		int running_handles;
-		return ::curl_multi_perform(handle, &running_handles);
+		auto code = curl_multi_perform(handle, &running_handles);
+		if (code != CURLM_OK)
+			throw std::runtime_error(curl_multi_strerror(code));
+		return running_handles;
 	}
 
 	[[gnu::pure]]

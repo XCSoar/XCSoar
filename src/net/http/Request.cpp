@@ -115,9 +115,7 @@ Net::Request::Send(unsigned _timeout_ms)
     if (mcode != CURLM_CALL_MULTI_PERFORM)
       session.Select(timeout_ms);
 
-    mcode = session.Perform();
-    if (mcode != CURLM_OK && mcode != CURLM_CALL_MULTI_PERFORM)
-      throw std::runtime_error(curl_multi_strerror(mcode));
+    session.Perform();
   }
 
   if (!submitted)
