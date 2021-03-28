@@ -66,9 +66,10 @@ extern GLint combine_texture_projection, combine_texture_texture;
  * Throws on error.
  */
 void InitShaders();
-void DeinitShaders();
 
-void UpdateShaderProjectionMatrix();
+void DeinitShaders() noexcept;
+
+void UpdateShaderProjectionMatrix() noexcept;
 
 } // namespace OpenGL
 

@@ -247,14 +247,14 @@ OpenGL::InitShaders()
 }
 
 void
-OpenGL::DeinitShaders()
+OpenGL::DeinitShaders() noexcept
 {
   delete solid_shader;
   solid_shader = nullptr;
 }
 
 void
-OpenGL::UpdateShaderProjectionMatrix()
+OpenGL::UpdateShaderProjectionMatrix() noexcept
 {
   alpha_shader->Use();
   glUniformMatrix4fv(alpha_projection, 1, GL_FALSE,
