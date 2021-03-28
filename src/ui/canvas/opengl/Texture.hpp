@@ -61,7 +61,7 @@ protected:
 public:
 #ifdef ANDROID
   GLTexture(GLuint _id, PixelSize _size, PixelSize _allocated_size,
-            bool _flipped = false)
+            bool _flipped = false) noexcept
     :id(_id), size(_size), allocated_size(_allocated_size), flipped(_flipped) {
 #ifndef NDEBUG
     assert(allocated_size.width >= size.width);
@@ -75,13 +75,13 @@ public:
   /**
    * Create a texture with undefined content.
    */
-  explicit GLTexture(PixelSize _size, bool _flipped = false);
+  explicit GLTexture(PixelSize _size, bool _flipped = false) noexcept;
 
   GLTexture(GLint internal_format, PixelSize _size,
             GLenum format, GLenum type, const GLvoid *data,
-            bool _flipped = false);
+            bool _flipped = false) noexcept;
 
-  ~GLTexture() {
+  ~GLTexture() noexcept {
     glDeleteTextures(1, &id);
 
 #ifndef NDEBUG
@@ -93,28 +93,27 @@ public:
   /**
    * Returns the standard pixel format of the platform.
    */
-  constexpr
-  static GLenum GetType() {
+  static constexpr GLenum GetType() noexcept {
     return HaveGLES()
       ? GL_UNSIGNED_SHORT_5_6_5
       : GL_UNSIGNED_BYTE;
   }
 
-  unsigned GetWidth() const {
+  unsigned GetWidth() const noexcept {
     return size.width;
   }
 
-  unsigned GetHeight() const {
+  unsigned GetHeight() const noexcept {
     return size.height;
   }
 
   gcc_pure
-  const PixelSize &GetSize() const {
+  const PixelSize &GetSize() const noexcept {
     return size;
   }
 
   gcc_pure
-  PixelRect GetRect() const {
+  PixelRect GetRect() const noexcept {
     return PixelRect(GetSize());
   }
 
@@ -122,11 +121,11 @@ public:
    * Returns the physical size of the texture.
    */
   gcc_pure
-  const PixelSize &GetAllocatedSize() const {
+  const PixelSize &GetAllocatedSize() const noexcept {
     return allocated_size;
   }
 
-  bool IsFlipped() const {
+  bool IsFlipped() const noexcept {
     return flipped;
   }
 
@@ -134,36 +133,36 @@ public:
    * Enable interpolation when minifying/magnifying the texture.  The
    * caller must bind the texture prior to calling this method.
    */
-  static void EnableInterpolation();
+  static void EnableInterpolation() noexcept;
 
   /**
    * Change the size of the texture, discarding any previous contents.
    */
-  void ResizeDiscard(PixelSize new_size);
+  void ResizeDiscard(PixelSize new_size) noexcept;
 
 protected:
-  void Initialise();
+  void Initialise() noexcept;
 
-  static void Configure();
+  static void Configure() noexcept;
 
 #ifdef HAVE_OES_DRAW_TEXTURE
 private:
-  void DrawOES(PixelRect dest, PixelRect src) const;
+  void DrawOES(PixelRect dest, PixelRect src) const noexcept;
 #endif
 
 public:
-  void Bind() {
+  void Bind() noexcept {
     glBindTexture(GL_TEXTURE_2D, id);
   }
 
-  void AttachFramebuffer(GLenum attachment) {
+  void AttachFramebuffer(GLenum attachment) noexcept {
     FBO::FramebufferTexture2D(FBO::FRAMEBUFFER, attachment,
                               GL_TEXTURE_2D, id, 0);
   }
 
-  void Draw(PixelRect dest, PixelRect src) const;
+  void Draw(PixelRect dest, PixelRect src) const noexcept;
 
-  void Draw(PixelPoint dest) const {
+  void Draw(PixelPoint dest) const noexcept {
     Draw(PixelRect(dest, GetSize()), GetRect());
   }
 };
