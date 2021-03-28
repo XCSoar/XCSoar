@@ -25,7 +25,7 @@ Copyright_License {
 #include "java/Class.hxx"
 #include "java/String.hxx"
 
-jobject
+Java::LocalObject
 Context::GetSystemService(JNIEnv *env, jstring name)
 {
   assert(env != nullptr);
@@ -36,10 +36,10 @@ Context::GetSystemService(JNIEnv *env, jstring name)
                                       "(Ljava/lang/String;)Ljava/lang/Object;");
   assert(method);
 
-  return env->CallObjectMethod(Get(), method, name);
+  return {env, env->CallObjectMethod(Get(), method, name)};
 }
 
-jobject
+Java::LocalObject
 Context::GetSystemService(JNIEnv *env, const char *name)
 {
   assert(env != nullptr);
@@ -49,7 +49,7 @@ Context::GetSystemService(JNIEnv *env, const char *name)
   return GetSystemService(env, name2);
 }
 
-jobject
+Java::LocalObject
 Context::GetVibrator(JNIEnv *env)
 {
   return GetSystemService(env, "vibrator");

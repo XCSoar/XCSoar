@@ -40,13 +40,11 @@ Vibrator::Initialise(JNIEnv *env)
 Vibrator *
 Vibrator::Create(JNIEnv *env, Context &context)
 {
-  jobject obj = context.GetVibrator(env);
+  const auto obj = context.GetVibrator(env);
   if (obj == nullptr)
     return nullptr;
 
-  Vibrator *vibrator = new Vibrator(env, obj);
-  env->DeleteLocalRef(obj);
-  return vibrator;
+  return new Vibrator(env, obj);
 }
 
 void

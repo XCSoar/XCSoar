@@ -81,13 +81,11 @@ AndroidDownloadManager::IsAvailable() noexcept
 AndroidDownloadManager *
 AndroidDownloadManager::Create(JNIEnv *env, Context &context) noexcept
 {
-  jobject obj = context.GetSystemService(env, "download");
+  const auto obj = context.GetSystemService(env, "download");
   if (obj == nullptr)
     return nullptr;
 
-  instance = new AndroidDownloadManager(env, obj);
-  env->DeleteLocalRef(obj);
-  return instance;
+  return new AndroidDownloadManager(env, obj);
 }
 
 void
