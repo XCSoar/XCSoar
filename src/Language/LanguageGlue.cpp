@@ -28,6 +28,7 @@ Copyright_License {
 #include "system/Path.hpp"
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
+#include "util/ScopeExit.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringAPI.hxx"
 
@@ -39,6 +40,7 @@ Copyright_License {
 #include "java/Global.hxx"
 #include "java/Class.hxx"
 #include "java/Object.hxx"
+#include "java/String.hxx"
 #endif
 
 #ifdef _WIN32
@@ -273,16 +275,18 @@ DetectLanguage()
   cid = env->GetMethodID(cls, "getLanguage", "()Ljava/lang/String;");
   assert(cid != NULL);
 
-  jstring language = (jstring)env->CallObjectMethod(obj, cid);
-  if (language == NULL)
+  Java::String language{env, (jstring)env->CallObjectMethod(obj, cid)};
+  if (language == nullptr)
     return NULL;
 
   // Convert the jstring to a char string
   const char *language2 = env->GetStringUTFChars(language, NULL);
-  if (language2 == NULL) {
-    env->DeleteLocalRef(language);
+  if (language2 == NULL)
     return NULL;
-  }
+
+  AtScopeExit(env, &language, language2) {
+    env->ReleaseStringUTFChars(language, language2);
+  };
 
   /* generate the resource name */
 
@@ -294,10 +298,6 @@ DetectLanguage()
   // Attach .mo to the language identifier
   static char language_buffer[16];
   snprintf(language_buffer, sizeof(language_buffer), "%s.mo", language3);
-
-  // Clean up the memory
-  env->ReleaseStringUTFChars(language, language2);
-  env->DeleteLocalRef(language);
 
   // Return e.g. "de.mo"
   return FindLanguage(language_buffer);
