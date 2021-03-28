@@ -197,10 +197,10 @@ WindowList::FindPreviousChildControl(Window *reference)
 
 gcc_pure
 static bool
-IsFullWindow(const Window &w, int width, int height)
+IsFullWindow(const Window &w, const PixelRect &rc) noexcept
 {
   return w.IsVisible() &&
-    w.GetPosition().Contains(PixelRect(0, 0, width, height));
+    w.GetPosition().Contains(rc);
 }
 
 void
@@ -212,7 +212,7 @@ WindowList::Paint(Canvas &canvas)
      behind it */
   for (auto i = begin; i != end; ++i) {
     Window &child = *i;
-    if (IsFullWindow(child, canvas.GetWidth(), canvas.GetHeight()) &&
+    if (IsFullWindow(child, canvas.GetRect()) &&
         !child.IsTransparent())
       begin = i;
   }
