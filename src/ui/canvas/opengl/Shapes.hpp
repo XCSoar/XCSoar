@@ -33,8 +33,8 @@ static constexpr unsigned SMALL_CIRCLE_SIZE = 8;
 
 extern GLArrayBuffer *circle_buffer, *small_circle_buffer;
 
-void InitShapes();
-void DeinitShapes();
+void InitShapes() noexcept;
+void DeinitShapes() noexcept;
 
 } // namespace OpenGL
 
