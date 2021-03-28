@@ -33,12 +33,16 @@ namespace OpenGL {
 
 /**
  * Initialize our OpenGL library.  Call when XCSoar starts.
+ *
+ * Throws on error.
  */
 void Initialise();
 
 /**
  * Set up our OpenGL library.  Call after the video mode and the
  * OpenGL context have been set up.
+ *
+ * Throws on error.
  */
 void SetupContext();
 

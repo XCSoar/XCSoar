@@ -62,6 +62,9 @@ extern GLint alpha_projection, alpha_texture;
 extern GLProgram *combine_texture_shader;
 extern GLint combine_texture_projection, combine_texture_texture;
 
+/**
+ * Throws on error.
+ */
 void InitShaders();
 void DeinitShaders();
 

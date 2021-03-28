@@ -24,6 +24,7 @@ Copyright_License {
 #include "Shaders.hpp"
 #include "Program.hpp"
 #include "Globals.hpp"
+#include "util/RuntimeError.hxx"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -144,7 +145,7 @@ CompileAttachShader(GLProgram &program, GLenum type, const char *code)
   if (shader.GetCompileStatus() != GL_TRUE) {
     char log[4096];
     shader.GetInfoLog(log, sizeof(log));
-    fprintf(stderr, "Shader compiler failed: %s\n", log);
+    throw FormatRuntimeError("Shader compiler failed: %s", log);
   }
 
   program.AttachShader(shader);
@@ -167,7 +168,7 @@ LinkProgram(GLProgram &program)
   if (program.GetLinkStatus() != GL_TRUE) {
     char log[4096];
     program.GetInfoLog(log, sizeof(log));
-    fprintf(stderr, "Shader linker failed: %s\n", log);
+    throw FormatRuntimeError("Shader linker failed: %s", log);
   }
 }
 
