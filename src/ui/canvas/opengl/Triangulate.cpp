@@ -36,7 +36,7 @@ Copyright_License {
  */
 template <typename PT>
 static inline bool
-PolygonRotatesLeft(const PT *points, unsigned num_points)
+PolygonRotatesLeft(const PT *points, unsigned num_points) noexcept
 {
   typename PT::product_type area = 0;
 
@@ -54,7 +54,7 @@ PolygonRotatesLeft(const PT *points, unsigned num_points)
  */
 template <typename PT>
 static inline typename PT::product_type
-PointLeftOfLine(const PT &p, const PT &a, const PT &b)
+PointLeftOfLine(const PT &p, const PT &a, const PT &b) noexcept
 {
   return Line2D<PT>(a, b).LocatePoint(p);
 }
@@ -65,7 +65,7 @@ PointLeftOfLine(const PT &p, const PT &a, const PT &b)
  */
 template <typename PT>
 static inline bool
-InsideTriangle(const PT &p, const PT &a, const PT &b, const PT &c)
+InsideTriangle(const PT &p, const PT &a, const PT &b, const PT &c) noexcept
 {
   return PointLeftOfLine(p, a, b) > 0 &&
          PointLeftOfLine(p, b, c) > 0 &&
@@ -79,7 +79,7 @@ InsideTriangle(const PT &p, const PT &a, const PT &b, const PT &c)
  */
 template <typename PT>
 static inline typename PT::product_type
-LeftBend(const PT &a, const PT &b, const PT &c)
+LeftBend(const PT &a, const PT &b, const PT &c) noexcept
 {
   const PT ab = b - a;
   const PT bc = c - b;
@@ -92,7 +92,7 @@ LeftBend(const PT &a, const PT &b, const PT &c)
  */
 template <typename PT>
 static inline bool
-TriangleEmpty(const PT &a, const PT &b, const PT &c)
+TriangleEmpty(const PT &a, const PT &b, const PT &c) noexcept
 {
   return LeftBend(a, b, c) == 0;
 }
@@ -101,7 +101,7 @@ TriangleEmpty(const PT &a, const PT &b, const PT &c)
  * Scale vector v to a given length.
  */
 static inline void
-Normalize(PixelPoint *v, float length)
+Normalize(PixelPoint *v, float length) noexcept
 {
   // TODO: optimize!
   double squared_length = v->x * (PixelPoint::product_type)v->x +
@@ -114,7 +114,8 @@ Normalize(PixelPoint *v, float length)
 template <typename PT>
 static unsigned
 _PolygonToTriangles(const PT *points, unsigned num_points,
-                    GLushort *triangles, typename PT::scalar_type min_distance)
+                    GLushort *triangles,
+                    typename PT::scalar_type min_distance) noexcept
 {
   // no redundant start/end please
   if (num_points >= 1 && points[0] == points[num_points - 1])
@@ -262,7 +263,8 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
 
 unsigned
 PolygonToTriangles(const BulkPixelPoint *points, unsigned num_points,
-                   AllocatedArray<GLushort> &triangles, unsigned min_distance)
+                   AllocatedArray<GLushort> &triangles,
+                   unsigned min_distance) noexcept
 {
   triangles.GrowDiscard(3 * (num_points - 2));
   return _PolygonToTriangles(points, num_points, triangles.begin(),
@@ -271,7 +273,7 @@ PolygonToTriangles(const BulkPixelPoint *points, unsigned num_points,
 
 unsigned
 PolygonToTriangles(const FloatPoint2D *points, unsigned num_points,
-                   GLushort *triangles, float min_distance)
+                   GLushort *triangles, float min_distance) noexcept
 {
   return _PolygonToTriangles(points, num_points, triangles, min_distance);
 }
@@ -281,7 +283,7 @@ PolygonToTriangles(const FloatPoint2D *points, unsigned num_points,
  */
 static void
 AddValueCounts(unsigned *counts, unsigned max_value,
-               const GLushort *values, const GLushort *values_end)
+               const GLushort *values, const GLushort *values_end) noexcept
 {
   for (auto i = values; i != values_end; ++i) {
     const unsigned value = *i;
@@ -293,7 +295,7 @@ AddValueCounts(unsigned *counts, unsigned max_value,
 gcc_pure
 static GLushort *
 FindOne(const unsigned *counts, unsigned max_value,
-        GLushort *values, const GLushort *values_end)
+        GLushort *values, const GLushort *values_end) noexcept
 {
   for (auto i = values; i != values_end; ++i) {
     const unsigned value = *i;
@@ -308,7 +310,7 @@ FindOne(const unsigned *counts, unsigned max_value,
 gcc_pure
 static GLushort *
 FindSharedEdge(const unsigned idx1, const unsigned idx2,
-               GLushort *values, const GLushort *values_end)
+               GLushort *values, const GLushort *values_end) noexcept
 {
   for (auto v = values; v < values_end; v += 3)
     if ((idx1 == v[0] || idx1 == v[1] || idx1 == v[2]) &&
@@ -320,7 +322,7 @@ FindSharedEdge(const unsigned idx1, const unsigned idx2,
 
 unsigned
 TriangleToStrip(GLushort *triangles, unsigned index_count,
-                unsigned vertex_count, unsigned polygon_count)
+                unsigned vertex_count, unsigned polygon_count) noexcept
 {
   if (index_count < 3)
     /* bail out, because we didn't get even one triangle; we need to
@@ -455,7 +457,7 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
  * Append a BulkPixelPoint to the end of an array and advance the array pointer
  */
 static void
-AppendPoint(BulkPixelPoint *&strip, int x, int y)
+AppendPoint(BulkPixelPoint *&strip, int x, int y) noexcept
 {
   strip->x = x;
   strip->y = y;
@@ -465,7 +467,7 @@ AppendPoint(BulkPixelPoint *&strip, int x, int y)
 unsigned
 LineToTriangles(const BulkPixelPoint *points, unsigned num_points,
                 AllocatedArray<BulkPixelPoint> &strip,
-                unsigned line_width, bool loop, bool tcap)
+                unsigned line_width, bool loop, bool tcap) noexcept
 {
   // A line has to have at least two points
   if (num_points < 2)
