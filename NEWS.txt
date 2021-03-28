@@ -2,6 +2,7 @@ Version 7.1 - not yet released
 * Android
   - handle DownloadManager errors
   - show early initialisation errors
+  - store the terrain cache in the Android cache directory
 
 Version 7.0 - 2021/03/25
 * LUA scripting

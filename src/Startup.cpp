@@ -108,6 +108,11 @@ Copyright_License {
 #include "DrawThread.hpp"
 #endif
 
+#ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/Context.hpp"
+#endif
+
 static TaskManager *task_manager;
 static GlideComputerEvents *glide_computer_events;
 static AllMonitors *all_monitors;
@@ -263,7 +268,18 @@ Startup()
 
   main_window->InitialiseConfigured();
 
-  file_cache = new FileCache(LocalPath(_T("cache")));
+  {
+#ifdef ANDROID
+    auto cache_path = context->GetExternalCacheDir(Java::GetEnv());
+    if (cache_path == nullptr)
+      throw std::runtime_error("No Android cache directory");
+
+    // TODO: delete the old cache directory in XCSoarData?
+#else
+    auto cache_path = LocalPath(_T("cache"));
+#endif
+    file_cache = new FileCache(std::move(cache_path));
+  }
 
   ReadLanguageFile();
 
