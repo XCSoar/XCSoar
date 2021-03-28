@@ -33,16 +33,16 @@ Copyright_License {
 
 class GLCanvasScissor : public GLEnable<GL_SCISSOR_TEST> {
 public:
-  explicit GLCanvasScissor(const Canvas &canvas) {
+  explicit GLCanvasScissor(const Canvas &canvas) noexcept {
     Scissor(PixelRect(0, 0, canvas.GetWidth(), canvas.GetHeight()));
   }
 
-  explicit GLCanvasScissor(PixelRect rc) {
+  explicit GLCanvasScissor(PixelRect rc) noexcept {
     Scissor(rc);
   }
 
 private:
-  void Scissor(PixelRect rc) {
+  void Scissor(PixelRect rc) noexcept {
     OpenGL::ToViewport(rc);
     ::glScissor(rc.left, rc.top, rc.GetWidth(), rc.GetHeight());
   }
@@ -52,12 +52,12 @@ private:
 
 class GLCanvasScissor : public GLScissor {
 public:
-  GLCanvasScissor(const Canvas &canvas)
+  GLCanvasScissor(const Canvas &canvas) noexcept
     :GLScissor(OpenGL::translate.x,
                OpenGL::viewport_size.y - OpenGL::translate.y - canvas.GetHeight(),
                canvas.GetWidth(), canvas.GetHeight()) {}
 
-  explicit GLCanvasScissor(PixelRect rc)
+  explicit GLCanvasScissor(PixelRect rc) noexcept
     :GLScissor(OpenGL::translate.x + rc.left,
                OpenGL::viewport_size.y - OpenGL::translate.y - rc.bottom,
                rc.GetWidth(), rc.GetHeight()) {}
