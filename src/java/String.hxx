@@ -71,7 +71,7 @@ public:
 	 * nullptr on error
 	 */
 	char *CopyTo(JNIEnv *env,
-		     char *buffer, size_t max_size) noexcept {
+		     char *buffer, size_t max_size) const noexcept {
 		return CopyTo(env, Get(), buffer, max_size);
 	}
 
