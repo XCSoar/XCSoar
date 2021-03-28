@@ -40,6 +40,9 @@ public:
   ~GLEnable() noexcept {
     ::glDisable(cap);
   }
+
+  GLEnable(const GLEnable &) = delete;
+  GLEnable &operator=(const GLEnable &) = delete;
 };
 
 class GLBlend : public GLEnable<GL_BLEND> {
