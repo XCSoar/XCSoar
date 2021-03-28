@@ -1,3 +1,5 @@
+Version 7.2 - not yet released
+
 Version 7.1 - 2021/03/28
 * user interface
   - fix crash when canceling a download
