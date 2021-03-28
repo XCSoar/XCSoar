@@ -25,7 +25,8 @@ Copyright_License {
 #include "Math/FastTrig.hpp"
 
 GLDonutVertices::GLDonutVertices(GLvalue center_x, GLvalue center_y,
-                                 GLvalue radius_inner, GLvalue radius_outer)
+                                 GLvalue radius_inner,
+                                 GLvalue radius_outer) noexcept
 {
   static_assert(INT_ANGLE_RANGE % CIRCLE_SIZE == 0, "Wrong CIRCLE_SIZE");
   auto *p = v, *p2 = v + CIRCLE_SIZE;
