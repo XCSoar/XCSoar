@@ -55,11 +55,11 @@ public:
 						      getAbsolutePath_method);
 	}
 
-	String GetAbsolutePath() noexcept {
+	String GetAbsolutePath() const noexcept {
 		return {GetEnv(), GetAbsolutePath(GetEnv(), Get())};
 	}
 
-	String GetAbsolutePathChecked() noexcept {
+	String GetAbsolutePathChecked() const noexcept {
 		return *this ? GetAbsolutePath() : nullptr;
 	}
 };
