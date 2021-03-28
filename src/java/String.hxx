@@ -46,8 +46,7 @@ namespace Java {
  */
 class String : public LocalRef<jstring> {
 public:
-	String(JNIEnv *env, jstring value) noexcept
-		:LocalRef<jstring>(env, value) {}
+	using LocalRef::LocalRef;
 
 	String(JNIEnv *_env, const char *_value) noexcept
 		:LocalRef<jstring>(_env, _env->NewStringUTF(_value)) {}

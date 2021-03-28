@@ -43,6 +43,8 @@ class File : public LocalObject {
 	static jmethodID getAbsolutePath_method;
 
 public:
+	using LocalObject::LocalObject;
+
 	gcc_nonnull_all
 	static void Initialise(JNIEnv *env) noexcept;
 
