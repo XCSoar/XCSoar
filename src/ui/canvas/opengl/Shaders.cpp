@@ -156,14 +156,6 @@ CompileProgram(const char *vertex_shader, const char *fragment_shader)
   GLProgram *program = new GLProgram();
   CompileAttachShader(*program, GL_VERTEX_SHADER, vertex_shader);
   CompileAttachShader(*program, GL_FRAGMENT_SHADER, fragment_shader);
-  program->Link();
-
-  if (program->GetLinkStatus() != GL_TRUE) {
-    char log[4096];
-    program->GetInfoLog(log, sizeof(log));
-    fprintf(stderr, "Shader linker failed: %s\n", log);
-  }
-
   return program;
 }
 
