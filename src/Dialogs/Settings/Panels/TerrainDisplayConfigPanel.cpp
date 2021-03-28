@@ -166,7 +166,7 @@ TerrainPreviewWindow::OnPaint(Canvas &canvas)
   }
 
   projection.SetScreenSize(canvas.GetSize());
-  projection.SetScreenOrigin(canvas.GetWidth() / 2, canvas.GetHeight() / 2);
+  projection.SetScreenOrigin(canvas.GetRect().GetCenter());
 
   Angle sun_azimuth(Angle::Degrees(-45));
   if (renderer.GetSettings().slope_shading == SlopeShading::SUN &&
