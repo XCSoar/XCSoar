@@ -30,21 +30,23 @@ Copyright_License {
 #include <stdio.h>
 
 namespace OpenGL {
-  GLProgram *solid_shader;
-  GLint solid_projection, solid_modelview;
 
-  GLProgram *texture_shader;
-  GLint texture_projection, texture_texture;
+GLProgram *solid_shader;
+GLint solid_projection, solid_modelview;
 
-  GLProgram *invert_shader;
-  GLint invert_projection, invert_texture;
+GLProgram *texture_shader;
+GLint texture_projection, texture_texture;
 
-  GLProgram *alpha_shader;
-  GLint alpha_projection, alpha_texture;
+GLProgram *invert_shader;
+GLint invert_projection, invert_texture;
 
-  GLProgram *combine_texture_shader;
-  GLint combine_texture_projection, combine_texture_texture;
-}
+GLProgram *alpha_shader;
+GLint alpha_projection, alpha_texture;
+
+GLProgram *combine_texture_shader;
+GLint combine_texture_projection, combine_texture_texture;
+
+} // namespace OpenGL
 
 #ifdef HAVE_GLES
 #define GLSL_VERSION

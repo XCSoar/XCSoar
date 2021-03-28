@@ -29,8 +29,10 @@ Copyright_License {
 #include <cassert>
 
 namespace OpenGL {
-  GLArrayBuffer *circle_buffer, *small_circle_buffer;
-}
+
+GLArrayBuffer *circle_buffer, *small_circle_buffer;
+
+} // namespace OpenGL
 
 static GLArrayBuffer *
 MakeCircleBuffer(unsigned n)

@@ -28,8 +28,10 @@ Copyright_License {
 #include <pthread.h>
 
 namespace OpenGL {
-  extern pthread_t thread;
-};
+
+extern pthread_t thread;
+
+} // namespace OpenGL
 
 #endif
 #endif

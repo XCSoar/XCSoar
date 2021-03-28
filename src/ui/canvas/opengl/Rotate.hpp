@@ -27,10 +27,12 @@ Copyright_License {
 struct PixelRect;
 
 namespace OpenGL {
-  /**
-   * Map the specified rectangle from Canvas to viewport coordinates.
-   */
-  void ToViewport(PixelRect &rc);
-};
+
+/**
+ * Map the specified rectangle from Canvas to viewport coordinates.
+ */
+void ToViewport(PixelRect &rc);
+
+} // namespace OpenGL
 
 #endif
