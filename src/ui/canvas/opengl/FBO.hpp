@@ -60,13 +60,13 @@ static constexpr GLenum DEPTH_STENCIL = GL_DEPTH_STENCIL_OES;
 #endif
 
 static inline bool
-Initialise()
+Initialise() noexcept
 {
   return true;
 }
 
 static inline void
-BindRenderbuffer(GLenum target, GLuint renderbuffer)
+BindRenderbuffer(GLenum target, GLuint renderbuffer) noexcept
 {
 #ifdef HAVE_GLES2
   glBindRenderbuffer(target, renderbuffer);
@@ -76,7 +76,7 @@ BindRenderbuffer(GLenum target, GLuint renderbuffer)
 }
 
 static inline void
-DeleteRenderbuffers(GLsizei n, const GLuint *renderbuffers)
+DeleteRenderbuffers(GLsizei n, const GLuint *renderbuffers) noexcept
 {
 #ifdef HAVE_GLES2
   glDeleteRenderbuffers(n, renderbuffers);
@@ -86,7 +86,7 @@ DeleteRenderbuffers(GLsizei n, const GLuint *renderbuffers)
 }
 
 static inline void
-GenRenderbuffers(GLsizei n, GLuint *renderbuffers)
+GenRenderbuffers(GLsizei n, GLuint *renderbuffers) noexcept
 {
 #ifdef HAVE_GLES2
   glGenRenderbuffers(n, renderbuffers);
@@ -97,7 +97,7 @@ GenRenderbuffers(GLsizei n, GLuint *renderbuffers)
 
 static inline void
 RenderbufferStorage(GLenum target, GLenum internalformat,
-                    GLsizei width, GLsizei height)
+                    GLsizei width, GLsizei height) noexcept
 {
 #ifdef HAVE_GLES2
   glRenderbufferStorage(target, internalformat, width, height);
@@ -107,7 +107,7 @@ RenderbufferStorage(GLenum target, GLenum internalformat,
 }
 
 static inline void
-BindFramebuffer(GLenum target, GLuint framebuffer)
+BindFramebuffer(GLenum target, GLuint framebuffer) noexcept
 {
 #ifdef HAVE_GLES2
   glBindFramebuffer(target, framebuffer);
@@ -117,7 +117,7 @@ BindFramebuffer(GLenum target, GLuint framebuffer)
 }
 
 static inline void
-DeleteFramebuffers(GLsizei n, const GLuint *framebuffers)
+DeleteFramebuffers(GLsizei n, const GLuint *framebuffers) noexcept
 {
 #ifdef HAVE_GLES2
   glDeleteFramebuffers(n, framebuffers);
@@ -127,7 +127,7 @@ DeleteFramebuffers(GLsizei n, const GLuint *framebuffers)
 }
 
 static inline void
-GenFramebuffers(GLsizei n, GLuint *framebuffers)
+GenFramebuffers(GLsizei n, GLuint *framebuffers) noexcept
 {
 #ifdef HAVE_GLES2
   glGenFramebuffers(n, framebuffers);
@@ -138,7 +138,8 @@ GenFramebuffers(GLsizei n, GLuint *framebuffers)
 
 static inline void
 FramebufferRenderbuffer(GLenum target, GLenum attachment,
-                        GLenum renderbuffertarget, GLuint renderbuffer)
+                        GLenum renderbuffertarget,
+                        GLuint renderbuffer) noexcept
 {
 #ifdef HAVE_GLES2
   glFramebufferRenderbuffer(target, attachment,
@@ -151,7 +152,7 @@ FramebufferRenderbuffer(GLenum target, GLenum attachment,
 
 static inline void
 FramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget,
-                     GLuint texture, GLint level)
+                     GLuint texture, GLint level) noexcept
 {
 #ifdef HAVE_GLES2
   glFramebufferTexture2D(target, attachment, textarget, texture, level);
