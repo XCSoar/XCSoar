@@ -32,10 +32,12 @@ class LeScanCallback;
  * Glue code to use the Java class NativeLeScanCallback from C++.
  */
 namespace NativeLeScanCallback {
-  void Initialise(JNIEnv *env);
-  void Deinitialise(JNIEnv *env);
 
-  jobject Create(JNIEnv *env, LeScanCallback &cb);
-}
+void Initialise(JNIEnv *env);
+void Deinitialise(JNIEnv *env);
+
+jobject Create(JNIEnv *env, LeScanCallback &cb);
+
+} // namespace NativeLeScanCallback
 
 #endif

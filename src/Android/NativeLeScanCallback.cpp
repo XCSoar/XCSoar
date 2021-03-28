@@ -29,10 +29,10 @@ Copyright_License {
 #include "org_xcsoar_NativeLeScanCallback.h"
 
 namespace NativeLeScanCallback {
-  static Java::TrivialClass cls;
-  static jmethodID ctor;
-  static jfieldID ptr_field;
-};
+static Java::TrivialClass cls;
+static jmethodID ctor;
+static jfieldID ptr_field;
+} // namespace NativeLeScanCallback
 
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeLeScanCallback_onLeScan(JNIEnv *env, jobject obj,

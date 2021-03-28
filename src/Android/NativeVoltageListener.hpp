@@ -29,10 +29,12 @@ Copyright_License {
 class VoltageListener;
 
 namespace NativeVoltageListener {
-  void Initialise(JNIEnv *env);
-  void Deinitialise(JNIEnv *env);
 
-  jobject Create(JNIEnv *env, VoltageListener &listener);
-}
+void Initialise(JNIEnv *env);
+void Deinitialise(JNIEnv *env);
+
+jobject Create(JNIEnv *env, VoltageListener &listener);
+
+} // namespace NativeVoltageListener
 
 #endif

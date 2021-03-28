@@ -31,10 +31,10 @@ Copyright_License {
 #include <cstddef>
 
 namespace NativeI2CbaroListener {
-  static Java::TrivialClass cls;
-  static jmethodID ctor;
-  static jfieldID ptr_field;
-};
+static Java::TrivialClass cls;
+static jmethodID ctor;
+static jfieldID ptr_field;
+} // namespace NativeI2CbaroListener
 
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeI2CbaroListener_onI2CbaroValues(JNIEnv *env, jobject obj,

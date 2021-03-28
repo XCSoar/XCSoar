@@ -28,10 +28,10 @@ Copyright_License {
 #include "util/StringUtil.hpp"
 
 namespace Environment {
-  static Java::TrivialClass cls;
-  static jmethodID getExternalStorageDirectory_method;
-  static jmethodID getExternalStoragePublicDirectory_method;
-};
+static Java::TrivialClass cls;
+static jmethodID getExternalStorageDirectory_method;
+static jmethodID getExternalStoragePublicDirectory_method;
+} // namespace Environment
 
 void
 Environment::Initialise(JNIEnv *env)

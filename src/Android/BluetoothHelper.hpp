@@ -32,54 +32,56 @@ class LeScanCallback;
 class PortBridge;
 
 namespace BluetoothHelper {
-  /**
-   * Global initialisation.  Looks up the methods of the
-   * BluetoothHelper Java class.
-   */
-  bool Initialise(JNIEnv *env);
-  void Deinitialise(JNIEnv *env);
 
-  /**
-   * Is the default Bluetooth adapter enabled in the Android Bluetooth
-   * settings?
-   */
-  gcc_pure
-  bool isEnabled(JNIEnv *env);
+/**
+ * Global initialisation.  Looks up the methods of the
+ * BluetoothHelper Java class.
+ */
+bool Initialise(JNIEnv *env);
+void Deinitialise(JNIEnv *env);
 
-  gcc_pure
-  const char *GetNameFromAddress(JNIEnv *env, const char *address);
+/**
+ * Is the default Bluetooth adapter enabled in the Android Bluetooth
+ * settings?
+ */
+gcc_pure
+bool isEnabled(JNIEnv *env);
 
-  /**
-   * Returns a list of all bonded devices.
-   */
-  gcc_malloc
-  jobjectArray list(JNIEnv *env);
+gcc_pure
+const char *GetNameFromAddress(JNIEnv *env, const char *address);
 
-  /**
-   * Does the device support Bluetooth LE?
-   */
-  gcc_const
-  bool HasLe(JNIEnv *env);
+/**
+ * Returns a list of all bonded devices.
+ */
+gcc_malloc
+jobjectArray list(JNIEnv *env);
 
-  /**
-   * Start scanning for Bluetooth LE devices.  Call StopLeScan() with
-   * the returned value when you're done.  Returns nullptr on error.
-   */
-  jobject StartLeScan(JNIEnv *env, LeScanCallback &cb);
+/**
+ * Does the device support Bluetooth LE?
+ */
+gcc_const
+bool HasLe(JNIEnv *env);
 
-  /**
-   * Stop scanning for Bluetooth LE devices.
-   *
-   * @param cb the return value of StartLeScan(); the local reference
-   * will be deleted by this function
-   */
-  void StopLeScan(JNIEnv *env, jobject cb);
+/**
+ * Start scanning for Bluetooth LE devices.  Call StopLeScan() with
+ * the returned value when you're done.  Returns nullptr on error.
+ */
+jobject StartLeScan(JNIEnv *env, LeScanCallback &cb);
 
-  gcc_malloc
-  PortBridge *connect(JNIEnv *env, const char *address);
+/**
+ * Stop scanning for Bluetooth LE devices.
+ *
+ * @param cb the return value of StartLeScan(); the local reference
+ * will be deleted by this function
+ */
+void StopLeScan(JNIEnv *env, jobject cb);
 
-  gcc_malloc
-  PortBridge *createServer(JNIEnv *env);
-};
+gcc_malloc
+PortBridge *connect(JNIEnv *env, const char *address);
+
+gcc_malloc
+PortBridge *createServer(JNIEnv *env);
+
+} // namespace BluetoothHelper
 
 #endif

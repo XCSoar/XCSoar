@@ -29,10 +29,12 @@ Copyright_License {
 class I2CbaroListener;
 
 namespace NativeI2CbaroListener {
-  void Initialise(JNIEnv *env);
-  void Deinitialise(JNIEnv *env);
 
-  jobject Create(JNIEnv *env, I2CbaroListener &listener);
-}
+void Initialise(JNIEnv *env);
+void Deinitialise(JNIEnv *env);
+
+jobject Create(JNIEnv *env, I2CbaroListener &listener);
+
+} // namespace NativeI2CbaroListener
 
 #endif

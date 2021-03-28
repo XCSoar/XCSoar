@@ -25,19 +25,22 @@ Copyright_License {
 #define XCSOAR_ANDROID_ENVIRONMENT_HPP
 
 #include <jni.h>
+
 #include <cstddef>
 
 namespace Environment {
-  void Initialise(JNIEnv *env);
-  void Deinitialise(JNIEnv *env);
 
-  /**
-   * Determine the mount point of the external SD card.
-   */
-  char *getExternalStorageDirectory(char *buffer, size_t max_size);
+void Initialise(JNIEnv *env);
+void Deinitialise(JNIEnv *env);
 
-  char *getExternalStoragePublicDirectory(char *buffer, size_t max_size,
-                                          const char *type);
-};
+/**
+ * Determine the mount point of the external SD card.
+ */
+char *getExternalStorageDirectory(char *buffer, size_t max_size);
+
+char *getExternalStoragePublicDirectory(char *buffer, size_t max_size,
+                                        const char *type);
+
+} // namespace Environment
 
 #endif

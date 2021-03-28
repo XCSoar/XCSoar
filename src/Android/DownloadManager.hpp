@@ -31,10 +31,7 @@ Copyright_License {
 
 class Path;
 class Context;
-
-namespace Net {
-  class DownloadListener;
-}
+namespace Net { class DownloadListener; }
 
 class AndroidDownloadManager {
   Java::GlobalObject object;

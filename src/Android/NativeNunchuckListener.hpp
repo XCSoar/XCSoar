@@ -29,10 +29,12 @@ Copyright_License {
 class NunchuckListener;
 
 namespace NativeNunchuckListener {
-  void Initialise(JNIEnv *env);
-  void Deinitialise(JNIEnv *env);
 
-  jobject Create(JNIEnv *env, NunchuckListener &listener);
-}
+void Initialise(JNIEnv *env);
+void Deinitialise(JNIEnv *env);
+
+jobject Create(JNIEnv *env, NunchuckListener &listener);
+
+} // namespace NativeNunchuckListener
 
 #endif
