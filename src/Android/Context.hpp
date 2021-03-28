@@ -26,10 +26,15 @@ Copyright_License {
 
 #include "java/Object.hxx"
 
+class AllocatedPath;
+
 class Context : public Java::GlobalObject {
 public:
   Context(JNIEnv *env, jobject obj):Java::GlobalObject(env, obj) {
   }
+
+  AllocatedPath GetExternalFilesDir(JNIEnv *env) noexcept;
+  AllocatedPath GetExternalCacheDir(JNIEnv *env) noexcept;
 
   Java::LocalObject GetSystemService(JNIEnv *env, jstring name);
   Java::LocalObject GetSystemService(JNIEnv *env, const char *name);
