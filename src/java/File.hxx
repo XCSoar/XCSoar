@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2018 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2010-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -35,22 +35,24 @@
 #include <jni.h>
 
 namespace Java {
-	/**
-	 * Wrapper for a java.io.File object.
-	 */
-	class File : public LocalObject {
-		static jmethodID getAbsolutePath_method;
 
-	public:
-		gcc_nonnull_all
-		static void Initialise(JNIEnv *env) noexcept;
+/**
+ * Wrapper for a java.io.File object.
+ */
+class File : public LocalObject {
+	static jmethodID getAbsolutePath_method;
 
-		gcc_nonnull_all
-		static jstring getAbsolutePath(JNIEnv *env, jobject file) noexcept {
-			return (jstring)env->CallObjectMethod(file,
-							      getAbsolutePath_method);
-		}
-	};
-}
+public:
+	gcc_nonnull_all
+	static void Initialise(JNIEnv *env) noexcept;
+
+	gcc_nonnull_all
+	static jstring getAbsolutePath(JNIEnv *env, jobject file) noexcept {
+		return (jstring)env->CallObjectMethod(file,
+						      getAbsolutePath_method);
+	}
+};
+
+} // namespace Java
 
 #endif
