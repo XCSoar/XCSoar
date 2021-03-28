@@ -713,6 +713,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/java/String.cxx \
 	$(SRC)/java/Exception.cxx \
 	$(SRC)/java/File.cxx \
+	$(SRC)/java/Path.cxx \
 	$(SRC)/java/InputStream.cxx \
 	$(SRC)/java/URL.cxx \
 	$(SRC)/Device/Port/AndroidPort.cpp \
