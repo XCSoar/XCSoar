@@ -28,8 +28,6 @@ Copyright_License {
 
 #include <glm/gtc/type_ptr.hpp>
 
-#include <stdio.h>
-
 namespace OpenGL {
 
 GLProgram *solid_shader;
