@@ -1,6 +1,7 @@
 Version 7.1 - not yet released
 * user interface
   - fix crash when canceling a download
+  - fix crash when repository index download failed
 * Android
   - handle DownloadManager errors
   - show early initialisation errors

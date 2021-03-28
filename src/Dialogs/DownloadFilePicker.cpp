@@ -281,6 +281,8 @@ void
 DownloadFilePickerWidget::CreateButtons()
 {
   download_button = dialog.AddButton(_("Download"), [this](){ Download(); });
+
+  UpdateButtons();
 }
 
 void
