@@ -62,6 +62,8 @@ class DownloadProgress final : Net::DownloadListener {
 
   UI::Notify download_complete_notify{[this]{ OnDownloadCompleteNotification(); }};
 
+  std::exception_ptr error;
+
   bool got_size = false, complete = false, success;
 
 public:
@@ -74,6 +76,11 @@ public:
 
   ~DownloadProgress() {
     Net::DownloadManager::RemoveListener(*this);
+  }
+
+  void Rethrow() const {
+    if (error)
+      std::rethrow_exception(error);
   }
 
 private:
@@ -100,11 +107,11 @@ private:
   }
 
   void OnDownloadError(Path _path_relative,
-                       std::exception_ptr error) noexcept override {
+                       std::exception_ptr _error) noexcept override {
     if (!complete && path_relative == _path_relative) {
       complete = true;
       success = false;
-      // TODO: store the error
+      error = std::move(_error);
       download_complete_notify.SendNotification();
     }
   }
@@ -115,6 +122,9 @@ private:
   }
 };
 
+/**
+ * Throws on error.
+ */
 static AllocatedPath
 DownloadFile(const char *uri, const char *_base)
 {
@@ -137,6 +147,7 @@ DownloadFile(const char *uri, const char *_base)
   int result = dialog.ShowModal();
   if (result != mrOK) {
     Net::DownloadManager::Cancel(Path(base));
+    dp.Rethrow();
     return nullptr;
   }
 
@@ -308,9 +319,13 @@ DownloadFilePickerWidget::Download()
 
   const auto &file = items[current];
 
-  path = DownloadFile(file.GetURI(), file.GetName());
-  if (path.IsNull())
-    dialog.SetModalResult(mrOK);
+  try {
+    path = DownloadFile(file.GetURI(), file.GetName());
+    if (path.IsNull())
+      dialog.SetModalResult(mrOK);
+  } catch (...) {
+    ShowError(std::current_exception(), _("Error"));
+  }
 }
 
 void
