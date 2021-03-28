@@ -44,7 +44,7 @@ extern PFNGLMULTIDRAWARRAYSEXTPROC multi_draw_arrays;
 extern PFNGLMULTIDRAWELEMENTSEXTPROC multi_draw_elements;
 #endif
 
-static inline bool HaveMultiDrawElements() {
+static inline bool HaveMultiDrawElements() noexcept {
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
   return multi_draw_elements != nullptr;
 #else
@@ -53,7 +53,7 @@ static inline bool HaveMultiDrawElements() {
 }
 
 template<typename... Args>
-static inline void MultiDrawElements(Args... args) {
+static inline void MultiDrawElements(Args... args) noexcept {
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
   multi_draw_elements(args...);
 #else
