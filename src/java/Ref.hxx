@@ -86,7 +86,7 @@ public:
 	}
 
 	bool operator==(std::nullptr_t n) const noexcept {
-		return value != n;
+		return value == n;
 	}
 
 	bool operator!=(std::nullptr_t n) const noexcept {
