@@ -33,9 +33,8 @@ Copyright_License {
 
 class GLCanvasScissor : public GLEnable<GL_SCISSOR_TEST> {
 public:
-  explicit GLCanvasScissor(const Canvas &canvas) noexcept {
-    Scissor(PixelRect(0, 0, canvas.GetWidth(), canvas.GetHeight()));
-  }
+  explicit GLCanvasScissor(const Canvas &canvas) noexcept
+    :GLCanvasScissor(canvas.GetRect()) {}
 
   explicit GLCanvasScissor(PixelRect rc) noexcept {
     Scissor(rc);
