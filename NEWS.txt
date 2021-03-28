@@ -1,4 +1,4 @@
-Version 7.1 - not yet released
+Version 7.1 - 2021/03/28
 * user interface
   - fix crash when canceling a download
   - fix crash when repository index download failed
