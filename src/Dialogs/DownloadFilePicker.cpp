@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DownloadFilePicker.hpp"
+#include "Error.hpp"
 #include "WidgetDialog.hpp"
 #include "ProgressDialog.hpp"
 #include "Message.hpp"
@@ -175,6 +176,8 @@ class DownloadFilePickerWidget final
    * Has the repository file download failed?
    */
   bool repository_failed;
+
+  std::exception_ptr repository_error;
 
   AllocatedPath path = AllocatedPath(nullptr);
 
@@ -344,6 +347,7 @@ DownloadFilePickerWidget::OnDownloadError(Path path_relative,
   if (name == Path(_T("repository"))) {
     const std::lock_guard<Mutex> lock(mutex);
     repository_failed = true;
+    repository_error = std::move(error);
   }
 
   download_complete_notify.SendNotification();
@@ -353,14 +357,19 @@ void
 DownloadFilePickerWidget::OnDownloadCompleteNotification() noexcept
 {
   bool repository_modified2, repository_failed2;
+  std::exception_ptr repository_error2;
 
   {
     const std::lock_guard<Mutex> lock(mutex);
     repository_modified2 = std::exchange(repository_modified, false);
     repository_failed2 = std::exchange(repository_failed, false);
+    repository_error2 = std::move(repository_error);
   }
 
-  if (repository_failed2)
+  if (repository_error2)
+    ShowError(std::move(repository_error2),
+              _("Failed to download the repository index."));
+  else if (repository_failed2)
     ShowMessageBox(_("Failed to download the repository index."),
                    _("Error"), MB_OK);
   else if (repository_modified2)
