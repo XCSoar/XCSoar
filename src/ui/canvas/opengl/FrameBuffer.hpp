@@ -33,28 +33,28 @@ class GLFrameBuffer {
   GLuint id;
 
 public:
-  GLFrameBuffer() {
+  GLFrameBuffer() noexcept {
     Gen();
   }
 
-  ~GLFrameBuffer() {
+  ~GLFrameBuffer() noexcept {
     Delete();
   }
 
-  void Bind() {
+  void Bind() noexcept {
     FBO::BindFramebuffer(FBO::FRAMEBUFFER, id);
   }
 
-  static void Unbind() {
+  static void Unbind() noexcept {
     FBO::BindFramebuffer(FBO::FRAMEBUFFER, 0);
   }
 
 protected:
-  void Gen() {
+  void Gen() noexcept {
     FBO::GenFramebuffers(1, &id);
   }
 
-  void Delete() {
+  void Delete() noexcept {
     FBO::DeleteFramebuffers(1, &id);
   }
 };
