@@ -33,19 +33,19 @@ static GLSurfaceListenerList surface_listeners;
 bool surface_valid = true;
 
 void
-AddSurfaceListener(GLSurfaceListener &listener)
+AddSurfaceListener(GLSurfaceListener &listener) noexcept
 {
   surface_listeners.push_back(&listener);
 }
 
 void
-RemoveSurfaceListener(GLSurfaceListener &listener)
+RemoveSurfaceListener(GLSurfaceListener &listener) noexcept
 {
   surface_listeners.remove(&listener);
 }
 
 void
-SurfaceCreated()
+SurfaceCreated() noexcept
 {
   if (surface_valid)
     return;
@@ -58,7 +58,7 @@ SurfaceCreated()
 }
 
 void
-SurfaceDestroyed()
+SurfaceDestroyed() noexcept
 {
   const GLSurfaceListenerList copy(surface_listeners);
   for (GLSurfaceListener *listener : copy)
