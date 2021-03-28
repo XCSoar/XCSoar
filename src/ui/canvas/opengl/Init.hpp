@@ -53,12 +53,12 @@ void SetupContext();
  * @param size the native screen size in pixels
  * @return the logical screen size (after rotation)
  */
-UnsignedPoint2D SetupViewport(UnsignedPoint2D size);
+UnsignedPoint2D SetupViewport(UnsignedPoint2D size) noexcept;
 
 /**
  * Deinitialize our OpenGL library.  Call before shutdown.
  */
-void Deinitialise();
+void Deinitialise() noexcept;
 
 } // namespace OpenGL
 
