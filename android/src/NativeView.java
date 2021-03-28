@@ -314,10 +314,19 @@ class NativeView extends SurfaceView
     android.graphics.Rect r = getHolder().getSurfaceFrame();
     DisplayMetrics metrics = new DisplayMetrics();
     ((Activity)getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
-    if (initializeNative(getContext(), r.width(), r.height(),
-                         (int)metrics.xdpi, (int)metrics.ydpi,
-                         Build.VERSION.SDK_INT, Build.PRODUCT))
+
+    try {
+      if (initializeNative(getContext(), r.width(), r.height(),
+                           (int)metrics.xdpi, (int)metrics.ydpi,
+                           Build.VERSION.SDK_INT, Build.PRODUCT))
         runNative();
+    } catch (Exception e) {
+      Log.e(TAG, "Initialisation error", e);
+      errorHandler.sendMessage(errorHandler.obtainMessage(0, e));
+      deinitEGL();
+      return;
+    }
+
     Log.d(TAG, "deinitializeNative()");
     deinitializeNative();
 

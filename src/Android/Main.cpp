@@ -63,6 +63,7 @@ Copyright_License {
 #include "io/async/GlobalAsioThread.hpp"
 #include "io/async/AsioThread.hpp"
 #include "thread/Debug.hpp"
+#include "util/Exception.hxx"
 
 #include "IOIOHelper.hpp"
 #include "NativeBMP085Listener.hpp"
@@ -102,7 +103,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
                                             jint width, jint height,
                                             jint xdpi, jint ydpi,
                                             jint sdk_version, jstring product)
-{
+try {
   Java::Init(env);
 
   android_api_level = sdk_version;
@@ -175,6 +176,13 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   AllowLanguage();
   InitLanguage();
   return Startup();
+} catch (...) {
+  /* if an error occurs, rethrow the C++ exception as Java exception,
+     to be displayed by the Java glue code */
+  const auto msg = GetFullMessage(std::current_exception());
+  jclass Exception = env->FindClass("java/lang/Exception");
+  env->ThrowNew(Exception, msg.c_str());
+  return false;
 }
 
 gcc_visibility_default
