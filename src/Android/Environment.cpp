@@ -56,23 +56,16 @@ Environment::Deinitialise(JNIEnv *env)
   cls.Clear(env);
 }
 
-static jstring
-ToAbsolutePathChecked(JNIEnv *env, jobject file)
-{
-  if (file == nullptr)
-    return nullptr;
-
-  jstring path = Java::File::getAbsolutePath(env, file);
-  env->DeleteLocalRef(file);
-  return path;
-}
-
-static jstring
+static Java::String
 getExternalStorageDirectory(JNIEnv *env)
 {
-  jobject file = env->CallStaticObjectMethod(Environment::cls,
-                                             Environment::getExternalStorageDirectory_method);
-  return ToAbsolutePathChecked(env, file);
+  Java::File file{
+    env,
+    env->CallStaticObjectMethod(Environment::cls,
+                                Environment::getExternalStorageDirectory_method),
+  };
+
+  return file.GetAbsolutePathChecked();
 }
 
 char *
@@ -80,16 +73,15 @@ Environment::getExternalStorageDirectory(char *buffer, size_t max_size)
 {
   JNIEnv *env = Java::GetEnv();
 
-  jstring value = ::getExternalStorageDirectory(env);
+  auto value = ::getExternalStorageDirectory(env);
   if (value == nullptr)
     return nullptr;
 
-  Java::String value2(env, value);
-  value2.CopyTo(buffer, max_size);
+  value.CopyTo(buffer, max_size);
   return buffer;
 }
 
-static jstring
+static Java::String
 getExternalStoragePublicDirectory(JNIEnv *env, const char *type)
 {
   if (Environment::getExternalStoragePublicDirectory_method == nullptr)
@@ -97,10 +89,10 @@ getExternalStoragePublicDirectory(JNIEnv *env, const char *type)
     return nullptr;
 
   Java::String type2(env, type);
-  jobject file = env->CallStaticObjectMethod(Environment::cls,
-                                             Environment::getExternalStoragePublicDirectory_method,
-                                             type2.Get());
-  return ToAbsolutePathChecked(env, file);
+  Java::File file(env, env->CallStaticObjectMethod(Environment::cls,
+                                                   Environment::getExternalStoragePublicDirectory_method,
+                                                   type2.Get()));
+  return file.GetAbsolutePathChecked();
 }
 
 char *
@@ -108,11 +100,10 @@ Environment::getExternalStoragePublicDirectory(char *buffer, size_t max_size,
                                                const char *type)
 {
   JNIEnv *env = Java::GetEnv();
-  jstring path = ::getExternalStoragePublicDirectory(env, type);
-  if (path == nullptr)
+  const auto value = ::getExternalStoragePublicDirectory(env, type);
+  if (value == nullptr)
     return nullptr;
 
-  Java::String path2(env, path);
-  path2.CopyTo(buffer, max_size);
+  value.CopyTo(buffer, max_size);
   return buffer;
 }
