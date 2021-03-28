@@ -160,8 +160,13 @@ try {
   Vibrator::Initialise(env);
   vibrator = Vibrator::Create(env, *context);
 
-  if (have_ioio)
-    ioio_helper = new IOIOHelper(env);
+  if (have_ioio) {
+    try {
+      ioio_helper = new IOIOHelper(env);
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to initialise IOIO");
+    }
+  }
 
 #ifdef __arm__
   if (IsNookSimpleTouch()) {
