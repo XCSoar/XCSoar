@@ -249,6 +249,14 @@ OpenGL::InitShaders()
 void
 OpenGL::DeinitShaders() noexcept
 {
+  delete combine_texture_shader;
+  combine_texture_shader = nullptr;
+  delete alpha_shader;
+  alpha_shader = nullptr;
+  delete invert_shader;
+  invert_shader = nullptr;
+  delete texture_shader;
+  texture_shader = nullptr;
   delete solid_shader;
   solid_shader = nullptr;
 }
