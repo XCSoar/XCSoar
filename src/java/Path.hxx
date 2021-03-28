@@ -40,7 +40,7 @@ namespace Java {
 AllocatedPath
 ToPath(JNIEnv *env, jstring s) noexcept;
 
-auto
+static inline AllocatedPath
 ToPath(const Java::String &o) noexcept
 {
 	return ToPath(o.GetEnv(), o.Get());

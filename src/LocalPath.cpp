@@ -359,24 +359,23 @@ FindDataPath()
     }
 
     /* try Context.getExternalStoragePublicDirectory() */
-    char buffer[MAX_PATH];
-    if (Environment::getExternalStoragePublicDirectory(buffer, sizeof(buffer),
-                                                       "XCSoarData") != nullptr) {
+    if (auto path = Environment::getExternalStoragePublicDirectory("XCSoarData");
+        path != nullptr) {
       __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                           "Environment.getExternalStoragePublicDirectory()='%s'",
-                          buffer);
-      return Path(buffer);
+                          path.c_str());
+      return path;
     }
 
     /* now try Context.getExternalStorageDirectory(), because
        getExternalStoragePublicDirectory() needs API level 8 */
-    if (Environment::getExternalStorageDirectory(buffer,
-                                                 sizeof(buffer) - 32) != nullptr) {
+    if (auto path = Environment::getExternalStorageDirectory();
+        path != nullptr) {
       __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                           "Environment.getExternalStorageDirectory()='%s'",
-                          buffer);
+                          path.c_str());
 
-      return AllocatedPath::Build(buffer, XCSDATADIR);
+      return AllocatedPath::Build(path, XCSDATADIR);
     }
 
     /* hard-coded path for Android */

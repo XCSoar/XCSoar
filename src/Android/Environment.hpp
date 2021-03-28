@@ -28,6 +28,8 @@ Copyright_License {
 
 #include <cstddef>
 
+class AllocatedPath;
+
 namespace Environment {
 
 void Initialise(JNIEnv *env);
@@ -36,10 +38,9 @@ void Deinitialise(JNIEnv *env);
 /**
  * Determine the mount point of the external SD card.
  */
-char *getExternalStorageDirectory(char *buffer, size_t max_size);
+AllocatedPath getExternalStorageDirectory() noexcept;
 
-char *getExternalStoragePublicDirectory(char *buffer, size_t max_size,
-                                        const char *type);
+AllocatedPath getExternalStoragePublicDirectory(const char *type) noexcept;
 
 } // namespace Environment
 

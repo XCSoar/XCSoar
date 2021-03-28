@@ -25,6 +25,7 @@ Copyright_License {
 #include "java/Class.hxx"
 #include "java/String.hxx"
 #include "java/File.hxx"
+#include "java/Path.hxx"
 #include "util/StringUtil.hpp"
 
 namespace Environment {
@@ -68,17 +69,11 @@ getExternalStorageDirectory(JNIEnv *env)
   return file.GetAbsolutePathChecked();
 }
 
-char *
-Environment::getExternalStorageDirectory(char *buffer, size_t max_size)
+AllocatedPath
+Environment::getExternalStorageDirectory() noexcept
 {
   JNIEnv *env = Java::GetEnv();
-
-  auto value = ::getExternalStorageDirectory(env);
-  if (value == nullptr)
-    return nullptr;
-
-  value.CopyTo(buffer, max_size);
-  return buffer;
+  return Java::ToPathChecked(::getExternalStorageDirectory(env));
 }
 
 static Java::String
@@ -95,15 +90,9 @@ getExternalStoragePublicDirectory(JNIEnv *env, const char *type)
   return file.GetAbsolutePathChecked();
 }
 
-char *
-Environment::getExternalStoragePublicDirectory(char *buffer, size_t max_size,
-                                               const char *type)
+AllocatedPath
+Environment::getExternalStoragePublicDirectory(const char *type) noexcept
 {
   JNIEnv *env = Java::GetEnv();
-  const auto value = ::getExternalStoragePublicDirectory(env, type);
-  if (value == nullptr)
-    return nullptr;
-
-  value.CopyTo(buffer, max_size);
-  return buffer;
+  return Java::ToPathChecked(::getExternalStoragePublicDirectory(env, type));
 }
