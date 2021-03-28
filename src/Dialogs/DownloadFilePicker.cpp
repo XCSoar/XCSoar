@@ -360,13 +360,11 @@ DownloadFilePickerWidget::OnDownloadCompleteNotification() noexcept
     repository_failed2 = std::exchange(repository_failed, false);
   }
 
-  if (repository_modified2) {
-    if (repository_failed2)
-      ShowMessageBox(_("Failed to download the repository index."),
-                     _("Error"), MB_OK);
-    else
-      RefreshList();
-  }
+  if (repository_failed2)
+    ShowMessageBox(_("Failed to download the repository index."),
+                   _("Error"), MB_OK);
+  else if (repository_modified2)
+    RefreshList();
 }
 
 AllocatedPath
