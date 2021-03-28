@@ -127,7 +127,7 @@ DownloadFile(const char *uri, const char *_base)
                         _("Download"));
   dialog.SetText(base);
 
-  dialog.AddCancelButton([&dialog](){ dialog.SetModalResult(mrCancel); });
+  dialog.AddCancelButton();
 
   const DownloadProgress dp(dialog, Path(base));
 

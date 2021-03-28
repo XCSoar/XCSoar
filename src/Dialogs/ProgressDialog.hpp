@@ -43,7 +43,7 @@ public:
   ProgressDialog(UI::SingleWindow &parent, const DialogLook &dialog_look,
                  const TCHAR *caption);
 
-  void AddCancelButton(std::function<void()> &&callback);
+  void AddCancelButton(std::function<void()> &&callback={});
 
   /* virtual methods from class OperationEnvironment */
 
