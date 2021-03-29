@@ -1436,9 +1436,11 @@ static int file_close(jas_stream_obj_t *obj)
 	jas_stream_fileobj_t *fileobj;
 	JAS_DBGLOG(100, ("file_close(%p)\n", obj));
 	fileobj = JAS_CAST(jas_stream_fileobj_t *, obj);
-	ret = close(fileobj->fd);
-	if (fileobj->flags & JAS_STREAM_FILEOBJ_DELONCLOSE) {
-		unlink(fileobj->pathname);
+	if (!(fileobj->flags & JAS_STREAM_FILEOBJ_NOCLOSE)) {
+		ret = close(fileobj->fd);
+		if (fileobj->flags & JAS_STREAM_FILEOBJ_DELONCLOSE) {
+			unlink(fileobj->pathname);
+		}
 	}
 	jas_free(fileobj);
 	return ret;

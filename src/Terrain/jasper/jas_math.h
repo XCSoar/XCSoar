@@ -367,6 +367,25 @@ inline static bool jas_safe_intfast32_add(int_fast32_t x, int_fast32_t y,
 #endif
 }
 
+#if 0
+/*
+This function is potentially useful but not currently used.
+So, it is commented out.
+*/
+inline static bool jas_safe_uint_mul(unsigned x, unsigned y, unsigned *result)
+{
+	/* Check if overflow would occur */
+	if (x && y > UINT_MAX / x) {
+		/* Overflow would occur. */
+		return false;
+	}
+	if (result) {
+		*result = x * y;
+	}
+	return true;
+}
+#endif
+
 #ifdef __cplusplus
 }
 #endif
