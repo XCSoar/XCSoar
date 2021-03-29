@@ -75,6 +75,10 @@ public:
 		return handle != nullptr;
 	}
 
+	CURLM *Get() noexcept {
+		return handle;
+	}
+
 	template<typename T>
 	void SetOption(CURLMoption option, T value) {
 		auto code = curl_multi_setopt(handle, option, value);
