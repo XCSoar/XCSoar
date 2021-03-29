@@ -56,9 +56,7 @@ CurlMulti::InfoRead(const CURL *easy)
 	if (i != results.end())
 		return i->second;
 
-	const CURLMsg *msg;
-	int msgs_in_queue;
-	while ((msg = curl_multi_info_read(handle, &msgs_in_queue)) != nullptr) {
+	while (const CURLMsg *msg = InfoRead()) {
 		if (msg->msg == CURLMSG_DONE) {
 			if (msg->easy_handle == easy)
 				return msg->data.result;

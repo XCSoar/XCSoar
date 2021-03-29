@@ -106,6 +106,11 @@ public:
 			: -1;
 	}
 
+	CURLMsg *InfoRead() noexcept {
+		int msgs_in_queue;
+		return curl_multi_info_read(handle, &msgs_in_queue);
+	}
+
 	unsigned Perform() {
 		int running_handles;
 		auto code = curl_multi_perform(handle, &running_handles);
