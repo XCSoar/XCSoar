@@ -48,8 +48,10 @@ MapVehicleTypeToLivetrack24(LiveTrack24::Settings::VehicleType vt)
   return vehicleTypeMap[vti];
 }
 
-TrackingGlue::TrackingGlue(EventLoop &event_loop)
+TrackingGlue::TrackingGlue(EventLoop &event_loop,
+                           CurlGlobal &curl) noexcept
   :StandbyThread("Tracking"),
+   curl(curl),
    skylines(event_loop, this)
 {
   settings.SetDefaults();
@@ -163,7 +165,8 @@ TrackingGlue::Tick() noexcept
     if (!flying) {
       if (last_flying && state.HasSession()) {
         /* landing: end tracking session */
-        LiveTrack24::EndTracking(state.session_id, state.packet_id, env);
+        LiveTrack24::EndTracking(state.session_id, state.packet_id,
+                                 curl, env);
         state.ResetSession();
         last_timestamp = 0;
       }
@@ -176,7 +179,7 @@ TrackingGlue::Tick() noexcept
 
     if (state.HasSession() && current_timestamp + 60 < last_timestamp) {
       /* time warp: create a new session */
-      LiveTrack24::EndTracking(state.session_id, state.packet_id, env);
+      LiveTrack24::EndTracking(state.session_id, state.packet_id, curl, env);
       state.ResetSession();
     }
 
@@ -185,7 +188,8 @@ TrackingGlue::Tick() noexcept
     if (!state.HasSession()) {
       LiveTrack24::UserID user_id = 0;
       if (!copy.username.empty() && !copy.password.empty())
-        user_id = LiveTrack24::GetUserID(copy.username, copy.password, env);
+        user_id = LiveTrack24::GetUserID(copy.username, copy.password,
+                                         curl, env);
 
       if (user_id == 0) {
         copy.username.clear();
@@ -199,7 +203,7 @@ TrackingGlue::Tick() noexcept
                                       copy.password, tracking_interval,
                                       MapVehicleTypeToLivetrack24(settings.livetrack24.vehicleType),
                                       settings.livetrack24.vehicle_name,
-                                      env)) {
+                                      curl, env)) {
         state.ResetSession();
         return;
       }
@@ -210,7 +214,7 @@ TrackingGlue::Tick() noexcept
     LiveTrack24::SendPosition(state.session_id, state.packet_id++,
                               location, altitude, ground_speed, track,
                               current_timestamp,
-                              env);
+                              curl, env);
   } catch (...) {
     LogError(std::current_exception(), "LiveTrack24 error");
   }

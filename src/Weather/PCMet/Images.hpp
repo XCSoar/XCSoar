@@ -27,6 +27,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct PCMetSettings;
+class CurlGlobal;
 class JobRunner;
 class Bitmap;
 
@@ -49,7 +50,7 @@ extern const ImageType image_types[];
 Bitmap
 DownloadLatestImage(const char *type, const char *area,
                     const PCMetSettings &settings,
-                    JobRunner &runner);
+                    CurlGlobal &curl, JobRunner &runner);
 
 } // namespace PCMet
 

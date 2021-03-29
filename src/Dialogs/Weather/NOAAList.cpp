@@ -40,6 +40,7 @@ Copyright_License {
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/NOAAUpdater.hpp"
+#include "net/http/Init.hpp"
 #include "util/TrivialArray.hxx"
 #include "util/StringAPI.hxx"
 #include "util/Compiler.h"
@@ -191,7 +192,7 @@ NOAAListWidget::AddClicked()
                          UIGlobals::GetDialogLook(),
                          _("Download"), true);
 
-  NOAAUpdater::Update(*i, runner);
+  NOAAUpdater::Update(*i, *Net::curl, runner);
 
   UpdateList();
 }
@@ -202,7 +203,7 @@ NOAAListWidget::UpdateClicked()
   DialogJobRunner runner(UIGlobals::GetMainWindow(),
                          UIGlobals::GetDialogLook(),
                          _("Download"), true);
-  NOAAUpdater::Update(*noaa_store, runner);
+  NOAAUpdater::Update(*noaa_store, *Net::curl, runner);
   UpdateList();
 }
 

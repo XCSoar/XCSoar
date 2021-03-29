@@ -39,6 +39,7 @@ Copyright_License {
 #include "Widget/ViewImageWidget.hpp"
 #include "Widget/LargeTextWidget.hpp"
 #include "Weather/PCMet/Images.hpp"
+#include "net/http/Init.hpp"
 #include "Interface.hpp"
 
 static void
@@ -64,7 +65,7 @@ BitmapDialog(const PCMet::ImageType &type, const PCMet::ImageArea &area)
 
   try {
     Bitmap bitmap = PCMet::DownloadLatestImage(type.uri, area.name,
-                                               settings, runner);
+                                               settings, *Net::curl, runner);
     if (!bitmap.IsDefined()) {
       ShowMessageBox(_("Failed to download file."),
                      _T("pc_met"), MB_OK);

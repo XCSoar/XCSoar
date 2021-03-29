@@ -40,6 +40,7 @@ Copyright_License {
 
 struct MoreData;
 struct DerivedInfo;
+class CurlGlobal;
 
 class TrackingGlue final
   : protected StandbyThread,
@@ -58,6 +59,8 @@ class TrackingGlue final
       return session_id != 0;
     }
   };
+
+  CurlGlobal &curl;
 
   PeriodClock clock;
 
@@ -83,7 +86,7 @@ class TrackingGlue final
   bool flying = false, last_flying;
 
 public:
-  explicit TrackingGlue(EventLoop &event_loop);
+  TrackingGlue(EventLoop &event_loop, CurlGlobal &curl) noexcept;
 
   void StopAsync();
   void WaitStopped();

@@ -41,7 +41,7 @@ Copyright_License {
 #include "ActionInterface.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
-#include "net/http/Session.hpp"
+#include "net/http/Init.hpp"
 #include "net/http/ToFile.hpp"
 #include "io/FileTransaction.hpp"
 
@@ -179,10 +179,8 @@ RASPSettingsPanel::Download() noexcept
                            GetLook(),
                            _("Download"), true);
 
-    Net::Session session;
-
     FileTransaction transaction(path);
-    Net::DownloadToFileJob job(session, url, transaction.GetTemporaryPath());
+    Net::DownloadToFileJob job(*Net::curl, url, transaction.GetTemporaryPath());
     if (!runner.Run(job))
       return;
 

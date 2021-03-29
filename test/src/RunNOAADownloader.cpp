@@ -26,11 +26,13 @@ Copyright_License {
 #include "Weather/NOAAStore.hpp"
 #include "Weather/NOAAUpdater.hpp"
 #include "net/http/Init.hpp"
+#include "io/async/AsioThread.hpp"
 #include "ConsoleJobRunner.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/GeoPointFormatter.hpp"
 #include "util/Macros.hpp"
+#include "util/ScopeExit.hxx"
 
 #include <cstdio>
 
@@ -153,11 +155,14 @@ main(int argc, char *argv[])
     store.AddStation(argv[i]);
   }
 
-  const Net::ScopeInit net_init;
+  AsioThread io_thread;
+  io_thread.Start();
+  AtScopeExit(&) { io_thread.Stop(); };
+  const Net::ScopeInit net_init(io_thread.GetEventLoop());
 
   printf("Updating METAR and TAF ...\n");
   ConsoleJobRunner runner;
-  NOAAUpdater::Update(store, runner);
+  NOAAUpdater::Update(store, *Net::curl, runner);
 
   for (auto i = store.begin(), end = store.end(); i != end; ++i) {
     printf("---\n");

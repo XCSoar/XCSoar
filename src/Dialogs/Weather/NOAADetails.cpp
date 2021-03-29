@@ -36,6 +36,7 @@ Copyright_License {
 #include "Weather/NOAAUpdater.hpp"
 #include "Weather/ParsedMETAR.hpp"
 #include "Weather/NOAAFormatter.hpp"
+#include "net/http/Init.hpp"
 #include "UIGlobals.hpp"
 
 class NOAADetailsWidget final : public LargeTextWidget {
@@ -93,7 +94,7 @@ NOAADetailsWidget::UpdateClicked()
 {
   DialogJobRunner runner(dialog.GetMainWindow(), dialog.GetLook(),
                          _("Download"), true);
-  NOAAUpdater::Update(*station_iterator, runner);
+  NOAAUpdater::Update(*station_iterator, *Net::curl, runner);
   Update();
 }
 

@@ -885,9 +885,9 @@ DEBUG_REPLAY_SOURCES = \
 DEBUG_REPLAY_LDADD = \
 	$(DRIVER_LDADD) \
 	$(ASYNC_LIBS) \
+	$(LIBNET_LIBS) \
 	$(IO_LIBS) \
 	$(OS_LIBS) \
-	$(LIBNET_LIBS) \
 	$(THREAD_LIBS) \
 	$(TIME_LIBS)
 
@@ -960,20 +960,20 @@ $(eval $(call link-program,RunTextWriter,RUN_TEXT_WRITER))
 DOWNLOAD_FILE_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(TEST_SRC_DIR)/DownloadFile.cpp
-DOWNLOAD_FILE_DEPENDS = LIBHTTP THREAD UTIL
+DOWNLOAD_FILE_DEPENDS = LIBHTTP ASYNC OS LIBNET OS IO THREAD UTIL
 $(eval $(call link-program,DownloadFile,DOWNLOAD_FILE))
 
 RUN_DOWNLOAD_TO_FILE_SOURCES = \
+	$(SRC)/net/SocketError.cxx \
 	$(SRC)/Version.cpp \
-	$(SRC)/util/MD5.cpp \
-	$(SRC)/system/FileUtil.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunDownloadToFile.cpp
-RUN_DOWNLOAD_TO_FILE_DEPENDS = LIBHTTP IO OS UTIL
+RUN_DOWNLOAD_TO_FILE_DEPENDS = LIBHTTP ASYNC LIBNET IO OS THREAD UTIL
 $(eval $(call link-program,RunDownloadToFile,RUN_DOWNLOAD_TO_FILE))
 
 RUN_NOAA_DOWNLOADER_SOURCES = \
+	$(SRC)/net/SocketError.cxx \
 	$(SRC)/Version.cpp \
 	$(SRC)/Weather/NOAADownloader.cpp \
 	$(SRC)/Weather/NOAAStore.cpp \
@@ -992,7 +992,7 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunNOAADownloader.cpp
-RUN_NOAA_DOWNLOADER_DEPENDS = GEO MATH LIBHTTP UTIL TIME
+RUN_NOAA_DOWNLOADER_DEPENDS = GEO MATH LIBHTTP ASYNC LIBNET OS IO THREAD UTIL TIME
 $(eval $(call link-program,RunNOAADownloader,RUN_NOAA_DOWNLOADER))
 
 RUN_WPA_SUPPLICANT_SOURCES = \
@@ -1003,6 +1003,7 @@ $(eval $(call link-program,RunWPASupplicant,RUN_WPA_SUPPLICANT))
 
 RUN_SL_TRACKING_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/net/SocketError.cxx \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
@@ -1017,6 +1018,7 @@ $(eval $(call link-program,RunSkyLinesTracking,RUN_SL_TRACKING))
 
 RUN_LIVETRACK24_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/net/SocketError.cxx \
 	$(SRC)/Tracking/LiveTrack24.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/Units/Units.cpp \
@@ -1024,8 +1026,8 @@ RUN_LIVETRACK24_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunLiveTrack24.cpp
-RUN_LIVETRACK24_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_LIVETRACK24_DEPENDS = LIBHTTP GEO MATH UTIL
+RUN_LIVETRACK24_LDADD = $(LIBHTTP_LDADD) $(DEBUG_REPLAY_LDADD)
+RUN_LIVETRACK24_DEPENDS = LIBHTTP ASYNC LIBNET OS IO THREAD GEO MATH UTIL
 $(eval $(call link-program,RunLiveTrack24,RUN_LIVETRACK24))
 
 RUN_REPOSITORY_PARSER_SOURCES = \

@@ -109,7 +109,7 @@ Main()
   InitLanguage();
 
   ScopeGlobalAsioThread global_asio_thread;
-  const Net::ScopeInit net_init;
+  const Net::ScopeInit net_init(asio_thread->GetEventLoop());
 
   ScopeGlobalPCMMixer global_pcm_mixer(asio_thread->GetEventLoop());
   ScopeGlobalPCMResourcePlayer global_pcm_resouce_player;

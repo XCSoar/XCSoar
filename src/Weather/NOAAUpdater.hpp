@@ -27,14 +27,15 @@ Copyright_License {
 #include "NOAAStore.hpp"
 
 class JobRunner;
+class CurlGlobal;
 
 namespace NOAAUpdater {
 
 bool
-Update(NOAAStore &store, JobRunner &runner);
+Update(NOAAStore &store, CurlGlobal &curl, JobRunner &runner);
 
 bool
-Update(NOAAStore::Item &item, JobRunner &runner);
+Update(NOAAStore::Item &item, CurlGlobal &curl, JobRunner &runner);
 
 }
 

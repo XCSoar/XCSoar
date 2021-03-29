@@ -24,7 +24,6 @@ Copyright_License {
 #include "Images.hpp"
 #include "Settings.hpp"
 #include "ui/canvas/Bitmap.hpp"
-#include "net/http/Session.hpp"
 #include "net/http/ToBuffer.hpp"
 #include "net/http/ToFile.hpp"
 #include "Job/Runner.hpp"
@@ -111,7 +110,7 @@ const PCMet::ImageType PCMet::image_types[] = {
 Bitmap
 PCMet::DownloadLatestImage(const char *type, const char *area,
                            const PCMetSettings &settings,
-                           JobRunner &runner)
+                           CurlGlobal &curl, JobRunner &runner)
 {
   const WideToUTF8Converter username(settings.www_credentials.username);
   const WideToUTF8Converter password(settings.www_credentials.password);
@@ -121,11 +120,9 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
            PCMET_URI "/fw/bilder/%s?type=%s",
            type, area);
 
-  Net::Session session;
-
   // download the HTML page
   char buffer[65536];
-  Net::DownloadToBufferJob job(session, url, buffer, sizeof(buffer) - 1);
+  Net::DownloadToBufferJob job(curl, url, buffer, sizeof(buffer) - 1);
   job.SetBasicAuth(username, password);
   if (!runner.Run(job))
     return Bitmap();
@@ -161,7 +158,7 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
     // to the latest image and the namelist array of all stored images
     snprintf(url, sizeof(url), PCMET_URI "%s", src);
 
-    Net::DownloadToFileJob job2(session, url, path);
+    Net::DownloadToFileJob job2(curl, url, path);
     job2.SetBasicAuth(username, password);
     if (!runner.Run(job2))
       return Bitmap();

@@ -144,7 +144,7 @@ NOAADownloader::ParseDecodedDateTime(const char *buffer, BrokenDateTime &dest)
 
 bool
 NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
-                              Net::Session &session, JobRunner &runner)
+                              CurlGlobal &curl, JobRunner &runner)
 {
 #ifndef NDEBUG
   assert(strlen(code) == 4);
@@ -161,7 +161,7 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
 
   // Request the file
   char buffer[4096];
-  Net::DownloadToBufferJob job(session, url, buffer, sizeof(buffer) - 1);
+  Net::DownloadToBufferJob job(curl, url, buffer, sizeof(buffer) - 1);
   if (!runner.Run(job))
     return false;
 
@@ -238,7 +238,7 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
 
 bool
 NOAADownloader::DownloadTAF(const char *code, TAF &taf,
-                            Net::Session &session, JobRunner &runner)
+                            CurlGlobal &curl, JobRunner &runner)
 {
 #ifndef NDEBUG
   assert(strlen(code) == 4);
@@ -255,7 +255,7 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf,
 
   // Request the file
   char buffer[4096];
-  Net::DownloadToBufferJob job(session, url, buffer, sizeof(buffer) - 1);
+  Net::DownloadToBufferJob job(curl, url, buffer, sizeof(buffer) - 1);
   if (!runner.Run(job))
     return false;
 

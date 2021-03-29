@@ -26,27 +26,38 @@ Copyright_License {
 
 #include "Features.hpp"
 
+class EventLoop;
+class CurlGlobal;
+
 namespace Net {
 
 #if defined(HAVE_HTTP)
 
+extern CurlGlobal *curl;
+
 /**
  * Global initialisation of the network library.
  */
-void Initialise();
+void
+Initialise(EventLoop &event_loop);
+
 void Deinitialise();
 
 #else
 
-static inline void Initialise() {}
+static inline void
+Initialise(EventLoop &)
+{
+}
+
 static inline void Deinitialise() {}
 
 #endif
 
 class ScopeInit {
 public:
-  ScopeInit() {
-    Initialise();
+  ScopeInit(EventLoop &event_loop) {
+    Initialise(event_loop);
   }
 
   ~ScopeInit() noexcept {

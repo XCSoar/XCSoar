@@ -29,10 +29,9 @@ Copyright_License {
 #include <cstddef>
 
 class OperationEnvironment;
+class CurlGlobal;
 
 namespace Net {
-
-class Session;
 
 /**
  * Download a URL into the specified buffer.  If the response is too
@@ -40,20 +39,23 @@ class Session;
  *
  * @return the number of bytes written
  */
-size_t DownloadToBuffer(Session &session, const char *url,
-                        const char *username, const char *password,
-                        void *buffer, size_t max_length,
-                        OperationEnvironment &env);
+size_t
+DownloadToBuffer(CurlGlobal &curl, const char *url,
+                 const char *username, const char *password,
+                 void *buffer, size_t max_length,
+                 OperationEnvironment &env);
 
-static inline size_t DownloadToBuffer(Session &session, const char *url,
-                                      void *buffer, size_t max_length,
-                                      OperationEnvironment &env) {
-  return DownloadToBuffer(session, url, nullptr, nullptr,
+static inline size_t
+DownloadToBuffer(CurlGlobal &curl, const char *url,
+                 void *buffer, size_t max_length,
+                 OperationEnvironment &env)
+{
+  return DownloadToBuffer(curl, url, nullptr, nullptr,
                           buffer, max_length, env);
 }
 
 class DownloadToBufferJob : public Job {
-  Session &session;
+  CurlGlobal &curl;
   const char *url;
   const char *username = nullptr, *password = nullptr;
   void *buffer;
@@ -61,9 +63,9 @@ class DownloadToBufferJob : public Job {
   size_t length;
 
 public:
-  DownloadToBufferJob(Session &_session, const char *_url,
+  DownloadToBufferJob(CurlGlobal &_curl, const char *_url,
                       void *_buffer, size_t _max_length)
-    :session(_session), url(_url),
+    :curl(_curl), url(_url),
      buffer(_buffer), max_length(_max_length),
      length(-1) {}
 
@@ -76,7 +78,8 @@ public:
     return length;
   }
 
-  virtual void Run(OperationEnvironment &env);
+  /* virtual methods from class Job */
+  void Run(OperationEnvironment &env) override;
 };
 
 } // namespace Net

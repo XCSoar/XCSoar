@@ -7,9 +7,9 @@ LIBHTTP_SOURCES = \
 	$(SRC)/net/http/ToFile.cpp \
 	$(SRC)/net/http/ToBuffer.cpp \
 	$(SRC)/net/http/Multi.cxx \
-	$(SRC)/net/http/Session.cpp \
-	$(SRC)/net/http/Request.cpp \
 	$(SRC)/net/http/FormData.cpp \
+	$(SRC)/net/http/Request.cxx \
+	$(SRC)/net/http/Global.cxx \
 	$(SRC)/net/http/Init.cpp
 
 ifeq ($(TARGET_IS_OSX),y)

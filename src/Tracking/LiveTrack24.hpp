@@ -10,7 +10,7 @@ Copyright_License {
   as published by the Free Software Foundation; either version 2
   of the License, or (at your option) any later version.
 
-  This program is distributed in the hope that it will be useful,
+  This program is distributed in thenv, that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
@@ -31,6 +31,7 @@ class Angle;
 struct BrokenDateTime;
 struct GeoPoint;
 class OperationEnvironment;
+class CurlGlobal;
 
 /**
  * API for the LiveTrack24.com server.
@@ -94,7 +95,7 @@ typedef uint32_t SessionID;
  */
 UserID
 GetUserID(const TCHAR *username, const TCHAR *password,
-          OperationEnvironment &env);
+          CurlGlobal &curl, OperationEnvironment &env);
 
 /** Generates a random session id */
 SessionID
@@ -109,7 +110,7 @@ bool
 StartTracking(SessionID session, const TCHAR *username,
               const TCHAR *password, unsigned tracking_interval,
               VehicleType vtype, const TCHAR *vname,
-              OperationEnvironment &env);
+              CurlGlobal &curl, OperationEnvironment &env);
 
 /**
  * Sends a "gps point" packet to the tracking server
@@ -120,12 +121,12 @@ bool
 SendPosition(SessionID session, unsigned packet_id,
              GeoPoint position, unsigned altitude, unsigned ground_speed,
              Angle track, int64_t timestamp_utc,
-             OperationEnvironment &env);
+             CurlGlobal &curl, OperationEnvironment &env);
 
 /** Sends the "end of track" packet to the tracking server */
 bool
 EndTracking(SessionID session, unsigned packet_id,
-            OperationEnvironment &env);
+            CurlGlobal &curl, OperationEnvironment &env);
 
 /**
  * Set the tracking server

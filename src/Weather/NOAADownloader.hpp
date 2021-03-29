@@ -27,10 +27,7 @@ Copyright_License {
 struct METAR;
 struct TAF;
 class JobRunner;
-
-namespace Net {
-  class Session;
-}
+class CurlGlobal;
 
 namespace NOAADownloader {
 
@@ -43,7 +40,7 @@ namespace NOAADownloader {
  */
 bool
 DownloadMETAR(const char *code, METAR &metar,
-              Net::Session &session, JobRunner &runner);
+              CurlGlobal &curl, JobRunner &runner);
 
 /**
  * Downloads a METAR from the NOAA server
@@ -54,7 +51,7 @@ DownloadMETAR(const char *code, METAR &metar,
  */
 bool
 DownloadTAF(const char *code, TAF &taf,
-            Net::Session &session, JobRunner &runner);
+            CurlGlobal &curl, JobRunner &runner);
 
 } // namespace NOAADownloader
 

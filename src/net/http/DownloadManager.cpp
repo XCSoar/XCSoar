@@ -105,7 +105,8 @@ Net::DownloadManager::Cancel(Path relative_path) noexcept
 #else /* !ANDROID */
 
 #include "ToFile.hpp"
-#include "Session.hpp"
+#include "Global.hxx"
+#include "Init.hpp"
 #include "thread/StandbyThread.hpp"
 #include "Operation/Operation.hpp"
 #include "LocalPath.hpp"
@@ -242,7 +243,7 @@ public:
   }
 
 private:
-  void ProcessQueue(Net::Session &session) noexcept;
+  void ProcessQueue(CurlGlobal &curl) noexcept;
   void FailQueue() noexcept;
 
 protected:
@@ -273,17 +274,17 @@ private:
 };
 
 static bool
-DownloadToFileTransaction(Net::Session &session,
+DownloadToFileTransaction(CurlGlobal &curl,
                           const char *url, Path path,
                           std::array<std::byte, 32> *sha256, OperationEnvironment &env)
 {
   FileTransaction transaction(path);
-  DownloadToFile(session, url, transaction.GetTemporaryPath(), sha256, env);
+  Net::DownloadToFile(curl, url, transaction.GetTemporaryPath(), sha256, env);
   return transaction.Commit();
 }
 
 inline void
-DownloadManagerThread::ProcessQueue(Net::Session &session) noexcept
+DownloadManagerThread::ProcessQueue(CurlGlobal &curl) noexcept
 {
   while (!queue.empty() && !StandbyThread::IsStopped()) {
     assert(current_size == -1);
@@ -297,7 +298,7 @@ DownloadManagerThread::ProcessQueue(Net::Session &session) noexcept
 
     try {
       const ScopeUnlock unlock(mutex);
-      success = DownloadToFileTransaction(session, item.uri.c_str(),
+      success = DownloadToFileTransaction(curl, item.uri.c_str(),
                                           LocalPath(item.path_relative.c_str()),
                                           nullptr, *this);
     } catch (...) {
@@ -337,8 +338,7 @@ void
 DownloadManagerThread::Tick() noexcept
 {
   try {
-    Net::Session session;
-    ProcessQueue(session);
+    ProcessQueue(*Net::curl);
   } catch (...) {
     LogError(std::current_exception());
     FailQueue();

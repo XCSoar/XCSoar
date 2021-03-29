@@ -69,6 +69,7 @@ Copyright_License {
 #include "io/FileCache.hpp"
 #include "io/async/AsioThread.hpp"
 #include "io/async/GlobalAsioThread.hpp"
+#include "net/http/Init.hpp"
 #include "net/http/DownloadManager.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "Hardware/DisplayGlue.hpp"
@@ -463,7 +464,7 @@ Startup()
   PageActions::Update();
 
 #ifdef HAVE_TRACKING
-  tracking = new TrackingGlue(*asio_thread);
+  tracking = new TrackingGlue(*asio_thread, *Net::curl);
   tracking->SetSettings(computer_settings.tracking);
 
 #ifdef HAVE_SKYLINES_TRACKING
