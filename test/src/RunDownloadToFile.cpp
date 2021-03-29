@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "net/http/ToFile.hpp"
 #include "net/http/Session.hpp"
+#include "net/http/Init.hpp"
 #include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "util/ConstBuffer.hxx"
@@ -50,6 +51,7 @@ try {
 
   ConsoleOperationEnvironment env;
 
+  const Net::ScopeInit net_init;
   Net::Session session;
   Net::DownloadToFile(session, url, path, &hash, env);
 
