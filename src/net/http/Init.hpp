@@ -43,6 +43,20 @@ static inline void Deinitialise() {}
 
 #endif
 
+class ScopeInit {
+public:
+  ScopeInit() {
+    Initialise();
+  }
+
+  ~ScopeInit() noexcept {
+    Deinitialise();
+  }
+
+  ScopeInit(const ScopeInit &) = delete;
+  ScopeInit &operator=(const ScopeInit &) = delete;
+};
+
 } // namespace Net
 
 #endif

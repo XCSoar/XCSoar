@@ -153,7 +153,7 @@ main(int argc, char *argv[])
     store.AddStation(argv[i]);
   }
 
-  Net::Initialise();
+  const Net::ScopeInit net_init;
 
   printf("Updating METAR and TAF ...\n");
   ConsoleJobRunner runner;
@@ -165,8 +165,6 @@ main(int argc, char *argv[])
     DisplayMETAR(*i);
     DisplayTAF(*i);
   }
-
-  Net::Deinitialise();
 
   return 0;
 }

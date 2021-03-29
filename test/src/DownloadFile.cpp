@@ -88,12 +88,10 @@ main(int argc, char *argv[])
   }
 
   try {
-    Net::Initialise();
+    const Net::ScopeInit net_init;
 
     const char *url = argv[1];
     Download(url, argc > 2 ? (Path)PathName(argv[2]) : nullptr);
-
-    Net::Deinitialise();
   } catch (const std::exception &exception) {
     PrintException(exception);
     return EXIT_FAILURE;

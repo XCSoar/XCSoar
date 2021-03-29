@@ -109,12 +109,10 @@ TestTracking(int argc, char *argv[])
 int
 main(int argc, char *argv[])
 {
-  Net::Initialise();
+  const Net::ScopeInit net_init;
 
   LiveTrack24::SetServer(_T("test.livetrack24.com"));
   bool result = TestTracking(argc, argv);
-
-  Net::Deinitialise();
 
   return result ? EXIT_SUCCESS : EXIT_FAILURE;
 }
