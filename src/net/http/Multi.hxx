@@ -49,7 +49,12 @@ public:
 	 *
 	 * Throws on error.
 	 */
-	CurlMulti();
+	CurlMulti()
+		:handle(curl_multi_init())
+	{
+		if (handle == nullptr)
+			throw std::runtime_error("curl_multi_init() failed");
+	}
 
 	/**
 	 * Create an empty instance.

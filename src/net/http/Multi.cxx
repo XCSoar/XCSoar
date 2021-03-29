@@ -31,11 +31,6 @@
 
 #include <cassert>
 
-CurlMulti::CurlMulti()
-	:handle(curl_multi_init())
-{
-}
-
 CurlMulti::~CurlMulti()
 {
 	assert(results.empty());
