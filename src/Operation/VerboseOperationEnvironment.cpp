@@ -25,32 +25,32 @@ Copyright_License {
 #include "ProgressGlue.hpp"
 
 void
-VerboseOperationEnvironment::SetText(const TCHAR *text)
+VerboseOperationEnvironment::SetText(const TCHAR *text) noexcept
 {
   ProgressGlue::Create(text);
 }
 
 void
-VerboseOperationEnvironment::SetProgressRange(unsigned range)
+VerboseOperationEnvironment::SetProgressRange(unsigned range) noexcept
 {
   ProgressGlue::SetRange(range);
 }
 
 void
-VerboseOperationEnvironment::SetProgressPosition(unsigned position)
+VerboseOperationEnvironment::SetProgressPosition(unsigned position) noexcept
 {
   ProgressGlue::SetValue(position);
 }
 
 void
-VerboseOperationEnvironment::UpdateLayout()
+VerboseOperationEnvironment::UpdateLayout() noexcept
 {
   ProgressGlue::Close();
   ProgressGlue::Create(nullptr);
 }
 
 void
-VerboseOperationEnvironment::Hide()
+VerboseOperationEnvironment::Hide() noexcept
 {
   ProgressGlue::Close();
 }

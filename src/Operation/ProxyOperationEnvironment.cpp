@@ -24,7 +24,7 @@ Copyright_License {
 #include "ProxyOperationEnvironment.hpp"
 
 bool
-ProxyOperationEnvironment::IsCancelled() const
+ProxyOperationEnvironment::IsCancelled() const noexcept
 {
   return other.IsCancelled();
 }
@@ -36,25 +36,25 @@ ProxyOperationEnvironment::Sleep(std::chrono::steady_clock::duration duration) n
 }
 
 void
-ProxyOperationEnvironment::SetErrorMessage(const TCHAR *text)
+ProxyOperationEnvironment::SetErrorMessage(const TCHAR *text) noexcept
 {
   other.SetErrorMessage(text);
 }
 
 void
-ProxyOperationEnvironment::SetText(const TCHAR *text)
+ProxyOperationEnvironment::SetText(const TCHAR *text) noexcept
 {
   other.SetText(text);
 }
 
 void
-ProxyOperationEnvironment::SetProgressRange(unsigned range)
+ProxyOperationEnvironment::SetProgressRange(unsigned range) noexcept
 {
   other.SetProgressRange(range);
 }
 
 void
-ProxyOperationEnvironment::SetProgressPosition(unsigned position)
+ProxyOperationEnvironment::SetProgressPosition(unsigned position) noexcept
 {
   other.SetProgressPosition(position);
 }

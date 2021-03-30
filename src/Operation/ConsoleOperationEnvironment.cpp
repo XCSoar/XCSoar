@@ -26,19 +26,19 @@ Copyright_License {
 #include <stdio.h>
 
 void
-ConsoleOperationEnvironment::SetText(const TCHAR *text)
+ConsoleOperationEnvironment::SetText(const TCHAR *text) noexcept
 {
   _tprintf(_T("%s\n"), text);
 }
 
 void
-ConsoleOperationEnvironment::SetProgressRange(unsigned _range)
+ConsoleOperationEnvironment::SetProgressRange(unsigned _range) noexcept
 {
   range = _range;
 }
 
 void
-ConsoleOperationEnvironment::SetProgressPosition(unsigned position)
+ConsoleOperationEnvironment::SetProgressPosition(unsigned position) noexcept
 {
   printf("%4u%%\n", position * 100 / range);
 }

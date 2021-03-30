@@ -25,7 +25,7 @@ Copyright_License {
 #include "Message.hpp"
 
 void
-PopupOperationEnvironment::SetErrorMessage(const TCHAR *text)
+PopupOperationEnvironment::SetErrorMessage(const TCHAR *text) noexcept
 {
   Message::AddMessage(text);
 }
