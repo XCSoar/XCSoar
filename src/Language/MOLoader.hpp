@@ -37,12 +37,13 @@ class MOLoader {
 
 public:
   MOLoader(const void *data, size_t size)
-    :mapping(NULL), file(new MOFile(data, size)) {}
+    :mapping(nullptr), file(new MOFile(data, size)) {}
 
   explicit MOLoader(Path path)
     :mapping(new FileMapping(path)),
      file(mapping->error()
-          ? NULL : new MOFile(mapping->data(), mapping->size())) {
+          ? nullptr
+          : new MOFile(mapping->data(), mapping->size())) {
   }
 
   ~MOLoader() {
@@ -51,7 +52,7 @@ public:
   }
 
   bool error() const {
-    return file == NULL || file->error();
+    return file == nullptr || file->error();
   }
 
   const MOFile &get() const {
