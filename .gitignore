@@ -29,6 +29,10 @@ test/data/private
 massif.out.*
 build/local-config.mk
 
+*.d
+compile_commands.json
+.clangd/
+
 *.pyc
 *.pyo
 *.bak
