@@ -108,13 +108,7 @@ public:
     notify.SendNotification();
   }
 
-  void Cancel() noexcept {
-    const std::lock_guard<Mutex> lock(mutex);
-    if (!cancel_flag) {
-      cancel_flag = true;
-      cancel_cond.notify_one();
-    }
-  }
+  void Cancel() noexcept;
 
 private:
   bool LockSetProgressRange(unsigned range) noexcept {

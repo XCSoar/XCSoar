@@ -28,6 +28,17 @@ ThreadedOperationEnvironment::ThreadedOperationEnvironment(OperationEnvironment 
 {
 }
 
+void
+ThreadedOperationEnvironment::Cancel() noexcept
+{
+  const std::lock_guard<Mutex> lock(mutex);
+  if (cancel_flag)
+    return;
+
+  cancel_flag = true;
+  cancel_cond.notify_one();
+}
+
 bool
 ThreadedOperationEnvironment::IsCancelled() const noexcept
 {
