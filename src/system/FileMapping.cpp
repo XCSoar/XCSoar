@@ -106,7 +106,7 @@ FileMapping::FileMapping(Path path)
 #endif /* !HAVE_POSIX */
 }
 
-FileMapping::~FileMapping()
+FileMapping::~FileMapping() noexcept
 {
 #ifdef HAVE_POSIX
   if (m_data != nullptr)

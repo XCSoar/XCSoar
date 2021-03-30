@@ -49,7 +49,7 @@ public:
    */
   FileMapping(Path path);
 
-  ~FileMapping();
+  ~FileMapping() noexcept;
 
   FileMapping(const FileMapping &) = delete;
   FileMapping &operator=(const FileMapping &) = delete;
@@ -57,22 +57,22 @@ public:
   /**
    * Returns a pointer to the beginning of the mapping.
    */
-  const void *data() const {
+  const void *data() const noexcept {
     return m_data;
   }
 
-  const void *at(size_t offset) const {
+  const void *at(size_t offset) const noexcept {
     return (const char *)data() + offset;
   }
 
-  const void *end() const {
+  const void *end() const noexcept {
     return at(size());
   }
 
   /**
    * Returns the size of the file, in bytes.
    */
-  size_t size() const {
+  size_t size() const noexcept {
     return m_size;
   }
 };
