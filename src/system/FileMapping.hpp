@@ -36,11 +36,11 @@ class Path;
  * Maps a file into the address space of this process.
  */
 class FileMapping {
-  void *m_data;
+  void *m_data = nullptr;
   size_t m_size;
 
 #ifndef HAVE_POSIX
-  HANDLE hFile, hMapping;
+  HANDLE hFile, hMapping = nullptr;
 #endif
 
 public:

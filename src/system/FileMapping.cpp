@@ -34,10 +34,6 @@ Copyright_License {
 #endif
 
 FileMapping::FileMapping(Path path)
-  :m_data(nullptr)
-#ifndef HAVE_POSIX
-  , hMapping(nullptr)
-#endif
 {
 #ifdef HAVE_POSIX
   int flags = O_RDONLY;
