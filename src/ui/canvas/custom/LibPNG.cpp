@@ -29,6 +29,8 @@ Copyright_License {
 #include <png.h>
 
 #include <cassert>
+#include <stdexcept>
+
 #include <string.h>
 
 struct PNGCallbackContext {
@@ -42,6 +44,18 @@ PNGReadCallback(png_structp _ctx, png_bytep area, png_size_t size)
 
   memcpy(area, ctx.data, size);
   ctx.data += size;
+}
+
+[[noreturn]]
+static void
+PNGUserErrorCallback(png_structp, png_const_charp error_msg)
+{
+  throw std::runtime_error(error_msg);
+}
+
+static void
+PNGUserWarningCallback(png_structp, png_const_charp) noexcept
+{
 }
 
 static UncompressedImage::Format
@@ -72,6 +86,8 @@ LoadPNG(png_structp png_ptr, png_infop info_ptr,
   PNGCallbackContext ctx{(const uint8_t *)data};
 
   png_set_read_fn(png_ptr, &ctx, PNGReadCallback);
+  png_set_error_fn(png_ptr, png_get_error_ptr(png_ptr),
+                   PNGUserErrorCallback, PNGUserWarningCallback);
 
   png_read_info(png_ptr, info_ptr);
 

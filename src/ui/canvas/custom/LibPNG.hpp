@@ -29,9 +29,15 @@ Copyright_License {
 class UncompressedImage;
 class Path;
 
+/**
+ * Throws on error.
+ */
 UncompressedImage
 LoadPNG(const void *data, size_t size);
 
+/**
+ * Throws on error.
+ */
 UncompressedImage
 LoadPNG(Path path);
 
