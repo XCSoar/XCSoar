@@ -43,9 +43,7 @@ public:
 
   explicit MOLoader(Path path)
     :mapping(new FileMapping(path)),
-     file(mapping->error()
-          ? nullptr
-          : new MOFile(mapping->data(), mapping->size())) {
+     file(new MOFile(mapping->data(), mapping->size())) {
   }
 
   bool error() const {

@@ -44,18 +44,15 @@ class FileMapping {
 #endif
 
 public:
+  /**
+   * Throws on error.
+   */
   FileMapping(Path path);
+
   ~FileMapping();
 
   FileMapping(const FileMapping &) = delete;
   FileMapping &operator=(const FileMapping &) = delete;
-
-  /**
-   * Has the constructor failed?
-   */
-  bool error() const {
-    return m_data == nullptr;
-  }
 
   /**
    * Returns a pointer to the beginning of the mapping.

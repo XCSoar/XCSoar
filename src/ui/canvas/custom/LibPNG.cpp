@@ -161,9 +161,5 @@ UncompressedImage
 LoadPNG(Path path)
 {
   FileMapping map(path);
-  if (map.error())
-    // TODO let FileMapping() throw a detailed error message
-    throw std::runtime_error("FileMapping failed");
-
   return LoadPNG(map.data(), map.size());
 }

@@ -23,61 +23,86 @@ Copyright_License {
 
 #include "FileMapping.hpp"
 #include "Path.hpp"
+#include "Error.hxx"
+#include "util/RuntimeError.hxx"
 
 #ifdef HAVE_POSIX
 #include "io/UniqueFileDescriptor.hxx"
+#include "io/Open.hxx"
 
 #include <sys/mman.h>
 #include <sys/stat.h>
 #else
+#include "ConvertPathName.hpp"
+
 #include <windows.h>
 #endif
 
 FileMapping::FileMapping(Path path)
 {
 #ifdef HAVE_POSIX
-  UniqueFileDescriptor fd;
-  if (!fd.OpenReadOnly(path.c_str()))
-    return;
+  auto fd = OpenReadOnly(path.c_str());
 
   struct stat st;
-  if (fstat(fd.Get(), &st) < 0 ||
-      /* mapping empty files can't be useful, let's make this a
-         failure */
-      st.st_size <= 0 ||
-      /* file is too large */
-      st.st_size > 1024 * 1024 * 1024) {
-    return;
-  }
+  if (fstat(fd.Get(), &st) < 0)
+    throw FormatErrno("Failed to stat %s", path.c_str());
+
+  /* mapping empty files can't be useful, let's make this a failure */
+  if (st.st_size <= 0)
+    throw FormatRuntimeError("File empty: %s", path.c_str());
+
+  /* file is too large */
+  if (st.st_size > 1024 * 1024 * 1024)
+    throw FormatRuntimeError("File too large: %s", path.c_str());
 
   m_size = (size_t)st.st_size;
 
   m_data = mmap(nullptr, m_size, PROT_READ, MAP_SHARED, fd.Get(), 0);
   if (m_data == nullptr)
-    return;
+    throw FormatErrno("Failed to map %s", path.c_str());
 
   madvise(m_data, m_size, MADV_WILLNEED);
 #else /* !HAVE_POSIX */
   hFile = ::CreateFile(path.c_str(), GENERIC_READ, FILE_SHARE_READ,
                        nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
   if (gcc_unlikely(hFile == INVALID_HANDLE_VALUE))
-    return;
+    throw FormatLastError("Failed to open %s",
+                          (const char *)NarrowPathName(path));
 
   BY_HANDLE_FILE_INFORMATION fi;
-  if (!::GetFileInformationByHandle(hFile, &fi) ||
-      fi.nFileSizeHigh > 0 ||
-      fi.nFileSizeLow > 1024 * 1024 * 1024)
-    return;
+  if (!::GetFileInformationByHandle(hFile, &fi)) {
+    const auto e = GetLastError();
+    ::CloseHandle(hFile);
+    throw FormatLastError(e, "Failed to open %s",
+                          (const char *)NarrowPathName(path));
+  }
+
+  if (fi.nFileSizeHigh > 0 ||
+      fi.nFileSizeLow > 1024 * 1024 * 1024) {
+    ::CloseHandle(hFile);
+    throw FormatRuntimeError("File too large: %s", path.c_str());
+  }
 
   m_size = fi.nFileSizeLow;
 
   hMapping = ::CreateFileMapping(hFile, nullptr, PAGE_READONLY,
                                  fi.nFileSizeHigh, fi.nFileSizeLow,
                                  nullptr);
-  if (gcc_unlikely(hMapping == nullptr))
-    return;
+  if (gcc_unlikely(hMapping == nullptr)) {
+    const auto e = GetLastError();
+    ::CloseHandle(hFile);
+    throw FormatLastError(e, "Failed to map %s",
+                          (const char *)NarrowPathName(path));
+  }
 
   m_data = ::MapViewOfFile(hMapping, FILE_MAP_READ, 0, 0, m_size);
+  if (m_data == nullptr) {
+    const auto e = GetLastError();
+    ::CloseHandle(hMapping);
+    ::CloseHandle(hFile);
+    throw FormatLastError(e, "Failed to map %s",
+                          (const char *)NarrowPathName(path));
+  }
 #endif /* !HAVE_POSIX */
 }
 

@@ -415,11 +415,18 @@ LoadLanguageFile(Path path)
   LogFormat(_T("Language: loading file '%s'"), path.c_str());
 
   delete mo_loader;
-  mo_loader = new MOLoader(path);
-  if (mo_loader->error()) {
-    LogFormat(_T("Language: could not load file '%s'"), path.c_str());
-    delete mo_loader;
-    mo_loader = NULL;
+  mo_loader = nullptr;
+
+  try {
+    mo_loader = new MOLoader(path);
+    if (mo_loader->error()) {
+      LogFormat(_T("Language: could not load file '%s'"), path.c_str());
+      delete mo_loader;
+      mo_loader = NULL;
+      return false;
+    }
+  } catch (...) {
+    LogError(std::current_exception(), "Language: could not load file");
     return false;
   }
 
