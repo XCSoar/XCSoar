@@ -27,9 +27,11 @@ Copyright_License {
 #include "NOAAStore.hpp"
 #include "util/tstring.hpp"
 
-namespace NOAAFormatter
-{
-  void Format(const NOAAStore::Item &station, tstring &output);
-};
+namespace NOAAFormatter {
+
+void
+Format(const NOAAStore::Item &station, tstring &output);
+
+} // namespace NOAAFormatter
 
 #endif

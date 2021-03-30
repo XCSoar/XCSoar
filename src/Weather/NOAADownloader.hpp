@@ -32,27 +32,30 @@ namespace Net {
   class Session;
 }
 
-namespace NOAADownloader
-{
-  /**
-   * Downloads a METAR from the NOAA server
-   * @param code Four letter code of the airport (upper case)
-   * @param metar METAR to write data into
-   * @return True if the METAR was downloaded and parsed successfully,
-   * otherwise False
-   */
-  bool DownloadMETAR(const char *code, METAR &metar,
-                     Net::Session &session, JobRunner &runner);
+namespace NOAADownloader {
 
-  /**
-   * Downloads a METAR from the NOAA server
-   * @param code Four letter code of the airport (upper case)
-   * @param metar METAR to write data into
-   * @return True if the METAR was downloaded and parsed successfully,
-   * otherwise False
-   */
-  bool DownloadTAF(const char *code, TAF &taf,
-                   Net::Session &session, JobRunner &runner);
-};
+/**
+ * Downloads a METAR from the NOAA server
+ * @param code Four letter code of the airport (upper case)
+ * @param metar METAR to write data into
+ * @return True if the METAR was downloaded and parsed successfully,
+ * otherwise False
+ */
+bool
+DownloadMETAR(const char *code, METAR &metar,
+              Net::Session &session, JobRunner &runner);
+
+/**
+ * Downloads a METAR from the NOAA server
+ * @param code Four letter code of the airport (upper case)
+ * @param metar METAR to write data into
+ * @return True if the METAR was downloaded and parsed successfully,
+ * otherwise False
+ */
+bool
+DownloadTAF(const char *code, TAF &taf,
+            Net::Session &session, JobRunner &runner);
+
+} // namespace NOAADownloader
 
 #endif

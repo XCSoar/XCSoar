@@ -27,9 +27,11 @@ Copyright_License {
 struct METAR;
 struct ParsedMETAR;
 
-namespace METARParser
-{
-  bool Parse(const METAR &metar, ParsedMETAR &parsed);
-};
+namespace METARParser {
+
+bool
+Parse(const METAR &metar, ParsedMETAR &parsed);
+
+}
 
 #endif

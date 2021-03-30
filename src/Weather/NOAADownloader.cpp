@@ -30,18 +30,22 @@ Copyright_License {
 
 #include <cstdlib>
 
-namespace NOAADownloader
-{
-  /**
-   * Tries to parse a date and time from the buffer
-   * @param buffer Buffer to parse
-   * @param dest BrokenDateTime to write the parsed results in
-   * @return Same as buffer if parsing failed,
-   * otherwise the pointer to the next character after the parsed string portion
-   */
-  static const char *ParseDateTime(const char *buffer, BrokenDateTime &dest);
-  static bool ParseDecodedDateTime(const char *buffer, BrokenDateTime &dest);
-}
+namespace NOAADownloader {
+
+/**
+ * Tries to parse a date and time from the buffer
+ * @param buffer Buffer to parse
+ * @param dest BrokenDateTime to write the parsed results in
+ * @return Same as buffer if parsing failed,
+ * otherwise the pointer to the next character after the parsed string portion
+ */
+static const char *
+ParseDateTime(const char *buffer, BrokenDateTime &dest);
+
+static bool
+ParseDecodedDateTime(const char *buffer, BrokenDateTime &dest);
+
+} // namespace NOAADownloader
 
 const char *
 NOAADownloader::ParseDateTime(const char *buffer, BrokenDateTime &dest)

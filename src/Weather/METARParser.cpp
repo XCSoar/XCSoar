@@ -33,10 +33,14 @@ Copyright_License {
 #include <tchar.h>
 #include <cctype>
 
-namespace METARParser
-{
-  bool ParseLine(const METAR::ContentString &content, ParsedMETAR &parsed);
-  void ParseDecoded(const METAR::ContentString &decoded, ParsedMETAR &parsed);
+namespace METARParser {
+
+bool
+ParseLine(const METAR::ContentString &content, ParsedMETAR &parsed);
+
+void
+ParseDecoded(const METAR::ContentString &decoded, ParsedMETAR &parsed);
+
 }
 
 class METARLine {

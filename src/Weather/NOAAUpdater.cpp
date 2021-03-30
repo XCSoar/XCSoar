@@ -28,8 +28,11 @@ Copyright_License {
 #include "LogFile.hpp"
 
 namespace NOAAUpdater {
-  static bool Update(NOAAStore::Item &item,
-                     Net::Session &session, JobRunner &runner);
+
+static bool
+Update(NOAAStore::Item &item,
+       Net::Session &session, JobRunner &runner);
+
 }
 
 bool

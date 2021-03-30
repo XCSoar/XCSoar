@@ -28,10 +28,14 @@ Copyright_License {
 
 class JobRunner;
 
-namespace NOAAUpdater
-{
-  bool Update(NOAAStore &store, JobRunner &runner);
-  bool Update(NOAAStore::Item &item, JobRunner &runner);
-};
+namespace NOAAUpdater {
+
+bool
+Update(NOAAStore &store, JobRunner &runner);
+
+bool
+Update(NOAAStore::Item &item, JobRunner &runner);
+
+}
 
 #endif
