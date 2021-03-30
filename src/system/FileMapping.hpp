@@ -47,6 +47,9 @@ public:
   FileMapping(Path path);
   ~FileMapping();
 
+  FileMapping(const FileMapping &) = delete;
+  FileMapping &operator=(const FileMapping &) = delete;
+
   /**
    * Has the constructor failed?
    */
