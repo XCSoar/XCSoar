@@ -38,7 +38,7 @@ struct PNGCallbackContext {
 };
 
 static void
-PNGReadCallback(png_structp _ctx, png_bytep area, png_size_t size)
+PNGReadCallback(png_structp _ctx, png_bytep area, png_size_t size) noexcept
 {
   PNGCallbackContext &ctx = *(PNGCallbackContext *)png_get_io_ptr(_ctx);
 
@@ -58,8 +58,8 @@ PNGUserWarningCallback(png_structp, png_const_charp) noexcept
 {
 }
 
-static UncompressedImage::Format
-ConvertColorType(int color_type)
+static constexpr UncompressedImage::Format
+ConvertColorType(int color_type) noexcept
 {
   switch (color_type) {
   case PNG_COLOR_TYPE_GRAY:
@@ -123,12 +123,7 @@ LoadPNG(png_structp png_ptr, png_infop info_ptr,
   const unsigned pitch = (num_channels * bit_depth) / 8 * width;
 
   std::unique_ptr<uint8_t[]> uncompressed(new uint8_t[pitch * height]);
-  if (uncompressed == nullptr)
-    return UncompressedImage();
-
   png_bytep *rows = new png_bytep[height];
-  if (rows == nullptr)
-    return UncompressedImage();
 
   for (unsigned i = 0; i < height; ++i)
     rows[i] = uncompressed.get() + i * pitch;
