@@ -25,8 +25,8 @@ Copyright_License {
 #include "Path.hpp"
 
 #ifdef HAVE_POSIX
-#include <fcntl.h>
-#include <unistd.h>
+#include "io/UniqueFileDescriptor.hxx"
+
 #include <sys/mman.h>
 #include <sys/stat.h>
 #else
@@ -36,33 +36,23 @@ Copyright_License {
 FileMapping::FileMapping(Path path)
 {
 #ifdef HAVE_POSIX
-  int flags = O_RDONLY;
-#ifdef O_NOCTTY
-  flags |= O_NOCTTY;
-#endif
-#ifdef O_CLOEXEC
-  flags |= O_CLOEXEC;
-#endif
-
-  int fd = open(path.c_str(), flags);
-  if (fd < 0)
+  UniqueFileDescriptor fd;
+  if (!fd.OpenReadOnly(path.c_str()))
     return;
 
   struct stat st;
-  if (fstat(fd, &st) < 0 ||
+  if (fstat(fd.Get(), &st) < 0 ||
       /* mapping empty files can't be useful, let's make this a
          failure */
       st.st_size <= 0 ||
       /* file is too large */
       st.st_size > 1024 * 1024 * 1024) {
-    close(fd);
     return;
   }
 
   m_size = (size_t)st.st_size;
 
-  m_data = mmap(nullptr, m_size, PROT_READ, MAP_SHARED, fd, 0);
-  close(fd);
+  m_data = mmap(nullptr, m_size, PROT_READ, MAP_SHARED, fd.Get(), 0);
   if (m_data == nullptr)
     return;
 

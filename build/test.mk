@@ -1049,7 +1049,7 @@ READ_MO_SOURCES = \
 	$(SRC)/Language/MOFile.cpp \
 	$(SRC)/system/FileMapping.cpp \
 	$(TEST_SRC_DIR)/ReadMO.cpp
-READ_MO_DEPENDS = UTIL
+READ_MO_DEPENDS = IO UTIL
 $(eval $(call link-program,ReadMO,READ_MO))
 
 READ_PROFILE_STRING_SOURCES = \
