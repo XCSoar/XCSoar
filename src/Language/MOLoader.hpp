@@ -28,27 +28,24 @@ Copyright_License {
 #include "system/FileMapping.hpp"
 #include "system/Path.hpp"
 
+#include <memory>
+
 /**
  * Loader for GNU gettext *.mo files.
  */
 class MOLoader {
-  FileMapping *mapping;
-  MOFile *file;
+  std::unique_ptr<FileMapping> mapping;
+  std::unique_ptr<MOFile> file;
 
 public:
   MOLoader(const void *data, size_t size)
-    :mapping(nullptr), file(new MOFile(data, size)) {}
+    :file(new MOFile(data, size)) {}
 
   explicit MOLoader(Path path)
     :mapping(new FileMapping(path)),
      file(mapping->error()
           ? nullptr
           : new MOFile(mapping->data(), mapping->size())) {
-  }
-
-  ~MOLoader() {
-    delete file;
-    delete mapping;
   }
 
   bool error() const {
