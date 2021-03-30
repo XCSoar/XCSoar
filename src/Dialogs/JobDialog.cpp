@@ -59,6 +59,9 @@ JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
 
   int result = form.ShowModal();
 
+  if (thread.IsCancelled() || form.IsCancelled())
+    result = mrCancel;
+
   thread.Cancel();
   thread.Join();
 
