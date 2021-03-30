@@ -115,7 +115,7 @@ LoadPNG(png_structp png_ptr, png_infop info_ptr,
 
   const UncompressedImage::Format format = ConvertColorType(color_type);
   if (format == UncompressedImage::Format::INVALID)
-    return UncompressedImage();
+    throw std::runtime_error("Unsupported PNG color type");
 
   /* allocate memory for the uncompressed pixels */
 
@@ -148,12 +148,12 @@ LoadPNG(const void *data, size_t size)
   png_structp png_ptr =
     png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
   if (png_ptr == nullptr)
-    return UncompressedImage();
+    throw std::runtime_error("png_create_read_struct() failed");
 
   png_infop info_ptr = png_create_info_struct(png_ptr);
   if (info_ptr == nullptr) {
     png_destroy_read_struct(&png_ptr, nullptr, nullptr);
-    return UncompressedImage();
+    throw std::runtime_error("png_create_info_struct() failed");
   }
 
   UncompressedImage result = LoadPNG(png_ptr, info_ptr, data, size);
@@ -167,7 +167,8 @@ LoadPNG(Path path)
 {
   FileMapping map(path);
   if (map.error())
-    return UncompressedImage();
+    // TODO let FileMapping() throw a detailed error message
+    throw std::runtime_error("FileMapping failed");
 
   return LoadPNG(map.data(), map.size());
 }
