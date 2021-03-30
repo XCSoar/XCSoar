@@ -31,6 +31,11 @@ NoCancelOperationEnvironment::IsCancelled() const noexcept
 }
 
 void
+NoCancelOperationEnvironment::SetCancelHandler(std::function<void()>) noexcept
+{
+}
+
+void
 NoCancelOperationEnvironment::Sleep(std::chrono::steady_clock::duration duration) noexcept
 {
   /* some OperationEnvironment implementations may ignore Sleep()

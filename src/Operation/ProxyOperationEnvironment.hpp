@@ -40,6 +40,7 @@ public:
 
   /* virtual methods from class OperationEnvironment */
   bool IsCancelled() const noexcept override;
+  void SetCancelHandler(std::function<void()> handler) noexcept override;
   void Sleep(std::chrono::steady_clock::duration duration) noexcept override;
   void SetErrorMessage(const TCHAR *text) noexcept override;
   void SetText(const TCHAR *text) noexcept override;

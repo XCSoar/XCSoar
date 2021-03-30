@@ -27,6 +27,7 @@ Copyright_License {
 #include "util/NonCopyable.hpp"
 
 #include <chrono>
+#include <functional>
 
 #include <tchar.h>
 
@@ -42,6 +43,13 @@ public:
    */
   [[gnu::pure]]
   virtual bool IsCancelled() const noexcept = 0;
+
+  /**
+   * The caller wants a callback to be invoked when cancellation is
+   * requested.  The callback must be thread-safe.  All
+   * implementations supporting IsCancelled() must support this.
+   */
+  virtual void SetCancelHandler(std::function<void()> handler) noexcept = 0;
 
   /**
    * Sleep for a fixed amount of time.  May return earlier if an event
@@ -79,6 +87,7 @@ class NullOperationEnvironment : public OperationEnvironment {
 public:
   /* virtual methods from class OperationEnvironment */
   bool IsCancelled() const noexcept override;
+  void SetCancelHandler(std::function<void()> handler) noexcept override;
   void Sleep(std::chrono::steady_clock::duration duration) noexcept override;
   void SetErrorMessage(const TCHAR *text) noexcept override;
   void SetText(const TCHAR *text) noexcept override;

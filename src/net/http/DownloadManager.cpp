@@ -149,6 +149,8 @@ class DownloadManagerThread final
 
   std::list<Net::DownloadListener *> listeners;
 
+  std::function<void()> cancel_handler;
+
 public:
   DownloadManagerThread() noexcept
     :StandbyThread("DownloadMgr"),
@@ -220,6 +222,11 @@ public:
          and restart the thread to continue downloading the following
          files */
 
+      if (cancel_handler) {
+        const ScopeUnlock unlock(mutex);
+        cancel_handler();
+      }
+
       StandbyThread::StopAsync();
       StandbyThread::WaitStopped();
 
@@ -247,6 +254,11 @@ private:
   bool IsCancelled() const noexcept override {
     std::lock_guard<Mutex> lock(const_cast<Mutex &>(mutex));
     return StandbyThread::IsStopped();
+  }
+
+  void SetCancelHandler(std::function<void()> handler) noexcept override {
+    std::lock_guard<Mutex> lock(mutex);
+    cancel_handler = std::move(handler);
   }
 
   void SetProgressRange(unsigned range) noexcept override {
@@ -294,6 +306,8 @@ DownloadManagerThread::ProcessQueue(Net::Session &session) noexcept
     }
 
     current_size = current_position = -1;
+    cancel_handler = {};
+
     const AllocatedPath path_relative(std::move(queue.front().path_relative));
     queue.pop_front();
 

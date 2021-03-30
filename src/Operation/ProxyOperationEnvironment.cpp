@@ -30,6 +30,12 @@ ProxyOperationEnvironment::IsCancelled() const noexcept
 }
 
 void
+ProxyOperationEnvironment::SetCancelHandler(std::function<void()> handler) noexcept
+{
+  other.SetCancelHandler(std::move(handler));
+}
+
+void
 ProxyOperationEnvironment::Sleep(std::chrono::steady_clock::duration duration) noexcept
 {
   other.Sleep(duration);

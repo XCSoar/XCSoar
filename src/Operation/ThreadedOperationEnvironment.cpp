@@ -37,6 +37,9 @@ ThreadedOperationEnvironment::Cancel() noexcept
 
   cancel_flag = true;
   cancel_cond.notify_one();
+
+  if (cancel_handler)
+    cancel_handler();
 }
 
 bool
@@ -44,6 +47,16 @@ ThreadedOperationEnvironment::IsCancelled() const noexcept
 {
   const std::lock_guard<Mutex> lock(mutex);
   return cancel_flag;
+}
+
+void
+ThreadedOperationEnvironment::SetCancelHandler(std::function<void()> handler) noexcept
+{
+  const std::lock_guard<Mutex> lock(mutex);
+  cancel_handler = std::move(handler);
+
+  if (cancel_handler && cancel_flag)
+    cancel_handler();
 }
 
 void
