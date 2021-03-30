@@ -33,13 +33,14 @@ Copyright_License {
 #include <cassert>
 #include <cstdlib>
 
-namespace LiveTrack24
-{
-  NarrowString<256> server;
+namespace LiveTrack24 {
 
-  static const char *GetServer();
-  static bool SendRequest(const char *url, OperationEnvironment &env);
-}
+static NarrowString<256> server;
+
+static const char *GetServer();
+static bool SendRequest(const char *url, OperationEnvironment &env);
+
+} // namespace LiveTrack24
 
 LiveTrack24::UserID
 LiveTrack24::GetUserID(const TCHAR *username, const TCHAR *password,

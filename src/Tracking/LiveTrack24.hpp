@@ -50,81 +50,90 @@ class OperationEnvironment;
  *
  * @see http://www.livetrack24.com/wiki/en/Leonardo%20Live%20Tracking%20API
  */
-namespace LiveTrack24
-{
-  enum class VehicleType {
-    PARAGLIDER = 1,
-    FLEX_WING_FAI1 = 2,
-    RIGID_WING_FAI5 = 4,
-    GLIDER = 8,
-    PARAMOTOR = 16,
-    TRIKE = 32,
-    POWERED_AIRCRAFT = 64,
-    HOT_AIR_BALLOON = 128,
+namespace LiveTrack24 {
 
-    WALK = 16385,
-    RUN = 16386,
-    BIKE = 16388,
+enum class VehicleType {
+  PARAGLIDER = 1,
+  FLEX_WING_FAI1 = 2,
+  RIGID_WING_FAI5 = 4,
+  GLIDER = 8,
+  PARAMOTOR = 16,
+  TRIKE = 32,
+  POWERED_AIRCRAFT = 64,
+  HOT_AIR_BALLOON = 128,
 
-    HIKE = 16400,
-    CYCLE = 16401,
-    MOUNTAIN_BIKE = 16402,
-    MOTORCYCLE = 16403,
+  WALK = 16385,
+  RUN = 16386,
+  BIKE = 16388,
 
-    WINDSURF = 16500,
-    KITESURF = 16501,
-    SAILING = 16502,
+  HIKE = 16400,
+  CYCLE = 16401,
+  MOUNTAIN_BIKE = 16402,
+  MOTORCYCLE = 16403,
 
-    SNOWBOARD = 16600,
-    SKI = 16601,
-    SNOWKITE = 16602,
+  WINDSURF = 16500,
+  KITESURF = 16501,
+  SAILING = 16502,
 
-    CAR = 17100,
-    CAR_4X4 = 17101,
-  };
+  SNOWBOARD = 16600,
+  SKI = 16601,
+  SNOWKITE = 16602,
 
-  typedef uint32_t UserID;
-  typedef uint32_t SessionID;
+  CAR = 17100,
+  CAR_4X4 = 17101,
+};
 
-  /**
-   * Queries the server for the user id with the given credentials.
-   * @param username Case-insensitive username
-   * @param password Case-insensitive password
-   * @return 0 if userdata are incorrect, or else the userID of the user
-   */
-  UserID GetUserID(const TCHAR *username, const TCHAR *password,
-                   OperationEnvironment &env);
+typedef uint32_t UserID;
+typedef uint32_t SessionID;
 
-  /** Generates a random session id */
-  SessionID GenerateSessionID();
-  /** Generates a random session id containing the given user id */
-  SessionID GenerateSessionID(UserID user_id);
+/**
+ * Queries the server for the user id with the given credentials.
+ * @param username Case-insensitive username
+ * @param password Case-insensitive password
+ * @return 0 if userdata are incorrect, or else the userID of the user
+ */
+UserID
+GetUserID(const TCHAR *username, const TCHAR *password,
+          OperationEnvironment &env);
 
-  /** Sends the "start of track" packet to the tracking server */
-  bool StartTracking(SessionID session, const TCHAR *username,
-                     const TCHAR *password, unsigned tracking_interval,
-                     VehicleType vtype, const TCHAR *vname,
-                     OperationEnvironment &env);
+/** Generates a random session id */
+SessionID
+GenerateSessionID();
 
-  /**
-   * Sends a "gps point" packet to the tracking server
-   *
-   * @param ground_speed Speed over ground in km/h
-   */
-  bool SendPosition(SessionID session, unsigned packet_id,
-                    GeoPoint position, unsigned altitude, unsigned ground_speed,
-                    Angle track, int64_t timestamp_utc,
-                    OperationEnvironment &env);
+/** Generates a random session id containing the given user id */
+SessionID
+GenerateSessionID(UserID user_id);
 
-  /** Sends the "end of track" packet to the tracking server */
-  bool EndTracking(SessionID session, unsigned packet_id,
-                   OperationEnvironment &env);
+/** Sends the "start of track" packet to the tracking server */
+bool
+StartTracking(SessionID session, const TCHAR *username,
+              const TCHAR *password, unsigned tracking_interval,
+              VehicleType vtype, const TCHAR *vname,
+              OperationEnvironment &env);
 
-  /**
-   * Set the tracking server
-   * @param server e.g. www.livetrack24.com (without http:// prefix)
-   */
-  void SetServer(const TCHAR *server);
-}
+/**
+ * Sends a "gps point" packet to the tracking server
+ *
+ * @param ground_speed Speed over ground in km/h
+ */
+bool
+SendPosition(SessionID session, unsigned packet_id,
+             GeoPoint position, unsigned altitude, unsigned ground_speed,
+             Angle track, int64_t timestamp_utc,
+             OperationEnvironment &env);
+
+/** Sends the "end of track" packet to the tracking server */
+bool
+EndTracking(SessionID session, unsigned packet_id,
+            OperationEnvironment &env);
+
+/**
+ * Set the tracking server
+ * @param server e.g. www.livetrack24.com (without http:// prefix)
+ */
+void
+SetServer(const TCHAR *server);
+
+} // namespace Livetrack24
 
 #endif
