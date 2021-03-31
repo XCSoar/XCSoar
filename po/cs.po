@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2021-03-20 06:18+0000\n"
+"PO-Revision-Date: 2021-04-01 21:50+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -3847,12 +3847,12 @@ msgstr "bodů"
 #: src/Renderer/FlightStatisticsRenderer.cpp:325
 #: src/Renderer/FlightStatisticsRenderer.cpp:336
 msgid "Task to go"
-msgstr "Zbývající čas úlohy"
+msgstr "Čas do cíle"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:316
 #: src/Renderer/FlightStatisticsRenderer.cpp:326
 msgid "AAT to go"
-msgstr "Zbytek AAT úlohy"
+msgstr "AAT čas do cíle"
 
 #. landscape: info above buttons
 #: src/Renderer/FlightStatisticsRenderer.cpp:317
@@ -3860,7 +3860,7 @@ msgstr "Zbytek AAT úlohy"
 #: src/Renderer/FlightStatisticsRenderer.cpp:338
 #: src/Dialogs/dlgAnalysis.cpp:234
 msgid "Distance to go"
-msgstr "Zbývající vzdálenost"
+msgstr "Vzdál. do cíle"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:319
 #: src/Renderer/FlightStatisticsRenderer.cpp:330
@@ -4170,7 +4170,9 @@ msgstr "Nelze stáhnout index úložiště."
 #: src/Dialogs/FileManager.cpp:740 src/Dialogs/FileManager.cpp:765
 #: src/Dialogs/DownloadFilePicker.cpp:353 Data/Input/default.xci:605
 msgid "File Manager"
-msgstr "Správce souborů"
+msgstr ""
+"Správce\n"
+"souborů"
 
 #: src/Dialogs/FileManager.cpp:763 src/Dialogs/DownloadFilePicker.cpp:352
 msgid "The file manager is not available on this device."
@@ -5360,7 +5362,7 @@ msgstr "Nový partner"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:84
 msgid "Set code"
-msgstr "Nastav kód"
+msgstr "Zadej kód"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:85
 msgid "Set WP"
@@ -5401,7 +5403,7 @@ msgstr "Nastav nového partnera"
 #: src/Dialogs/dlgAnalysis.cpp:237 src/Dialogs/dlgAnalysis.cpp:475
 #: src/Dialogs/dlgAnalysis.cpp:538
 msgid "Task Calc"
-msgstr "Úloha"
+msgstr "Nastav úlohu"
 
 #: src/Dialogs/dlgAnalysis.cpp:462
 msgid "Barograph"
@@ -5445,7 +5447,7 @@ msgstr "Rychlost úlohy"
 
 #: src/Dialogs/dlgAnalysis.cpp:547
 msgid "Task calc"
-msgstr "Úloha"
+msgstr "Nastav úlohu"
 
 #: src/Dialogs/dlgAnalysis.cpp:565
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:195
@@ -5772,7 +5774,7 @@ msgstr "Délka úlohy"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:144
 msgid "Remaining distance"
-msgstr "Zbývající vzdálenost"
+msgstr "Vzdálenost do cíle"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:145
 msgid "Speed estimated"
@@ -8254,7 +8256,7 @@ msgstr "Soutěž FFVV NetCoupe \"libre\"."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:120
 msgid "On-Line Contest"
-msgstr "On-Line Contest"
+msgstr "OnLine Contest"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:121
 msgid ""
@@ -8336,7 +8338,7 @@ msgstr "Imhof 12"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:213
 #, no-c-format
 msgid "Imhof Atlas"
-msgstr "Imhof Altals"
+msgstr "Imhof Atlas"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:214
 #, no-c-format
@@ -9862,7 +9864,7 @@ msgstr "Bez oznámení režimu"
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:52
 #, no-c-format
 msgid "No aircraft type"
-msgstr "Není typ letadla"
+msgstr "Bez typu letadla"
 
 #: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:52
 #, no-c-format
@@ -10046,12 +10048,12 @@ msgstr "Ztlumit vário při radiopříjmu"
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:34
 #, no-c-format
 msgid "Vario muting"
-msgstr "Ztišení vária"
+msgstr "Ztlumení vária"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:36
 #, no-c-format
 msgid "Voice muting"
-msgstr "Ztišení při hlase"
+msgstr "Ztlumení při hlase"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:38
 #, no-c-format
@@ -10177,8 +10179,8 @@ msgid ""
 "Waypoint\n"
 "List"
 msgstr ""
-"Posun\n"
-"Vypni"
+"Otočný bod\n"
+"Seznam"
 
 #: Data/Input/default.xci:686
 msgid ""
@@ -10191,8 +10193,8 @@ msgstr ""
 #: Data/Input/default.xci:825
 msgid "Traffic List"
 msgstr ""
-"Okolní\n"
-"provoz"
+"Provoz\n"
+"Seznam"
 
 #: Data/Input/default.xci:867
 msgid ""
@@ -10271,7 +10273,7 @@ msgid ""
 "Off"
 msgstr ""
 "Posun\n"
-"Vypnout"
+"Vyp"
 
 #: Data/Input/default.xci:48
 msgid "Takeoff"
