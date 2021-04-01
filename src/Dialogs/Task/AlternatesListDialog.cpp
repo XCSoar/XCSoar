@@ -159,5 +159,5 @@ dlgAlternatesListShowModal()
   if (i < 0 || (unsigned)i >= dialog.GetWidget().alternates.size())
     return;
 
-  dlgWaypointDetailsShowModal(dialog.GetWidget().alternates[i].waypoint, false);
+  dlgWaypointDetailsShowModal(dialog.GetWidget().alternates[i].waypoint, true);
 }

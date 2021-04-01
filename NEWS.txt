@@ -1,4 +1,6 @@
 Version 7.2 - not yet released
+* user interface
+  - display goto button in wp details when called from alternate
 
 Version 7.1 - 2021/03/28
 * user interface
