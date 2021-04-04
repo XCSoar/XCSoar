@@ -1,5 +1,6 @@
 Version 7.2 - not yet released
 * user interface
+  - fix task point editor
   - display goto button in wp details when called from alternate
 * fix crash when loading broken PNG files
 
