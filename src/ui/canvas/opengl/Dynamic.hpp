@@ -32,34 +32,36 @@ Copyright_License {
 #endif
 
 namespace GLExt {
+
 #ifdef HAVE_DYNAMIC_MAPBUFFER
-  extern PFNGLMAPBUFFEROESPROC map_buffer;
-  extern PFNGLUNMAPBUFFEROESPROC unmap_buffer;
+extern PFNGLMAPBUFFEROESPROC map_buffer;
+extern PFNGLUNMAPBUFFEROESPROC unmap_buffer;
 #endif
 
 #ifdef GL_EXT_multi_draw_arrays
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
-  extern PFNGLMULTIDRAWARRAYSEXTPROC multi_draw_arrays;
-  extern PFNGLMULTIDRAWELEMENTSEXTPROC multi_draw_elements;
+extern PFNGLMULTIDRAWARRAYSEXTPROC multi_draw_arrays;
+extern PFNGLMULTIDRAWELEMENTSEXTPROC multi_draw_elements;
 #endif
 
-  static inline bool HaveMultiDrawElements() {
+static inline bool HaveMultiDrawElements() noexcept {
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
-    return multi_draw_elements != nullptr;
+  return multi_draw_elements != nullptr;
 #else
-    return true;
+  return true;
 #endif
-  }
+}
 
-  template<typename... Args>
-  static inline void MultiDrawElements(Args... args) {
+template<typename... Args>
+static inline void MultiDrawElements(Args... args) noexcept {
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
-    multi_draw_elements(args...);
+  multi_draw_elements(args...);
 #else
-    glMultiDrawElementsEXT(args...);
+  glMultiDrawElementsEXT(args...);
 #endif
-  }
+}
 #endif /* GL_EXT_multi_draw_arrays */
-};
+
+} // namespace GLExt
 
 #endif

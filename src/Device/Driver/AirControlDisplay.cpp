@@ -77,16 +77,19 @@ ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
 
     if (line.ReadChecked(value)) {
       freq.SetKiloHertz(value);
+      info.settings.has_active_frequency.Update(info.clock);
       info.settings.active_frequency = freq;
     }
 
     if (line.ReadChecked(value)) {
       freq.SetKiloHertz(value);
+      info.settings.has_standby_frequency.Update(info.clock);
       info.settings.standby_frequency = freq;
     }
 
-    if (line.ReadChecked(value))
-      info.settings.volume = value;
+    unsigned volume;
+    if (line.ReadChecked(volume))
+      info.settings.ProvideVolume(volume, info.clock);
   } else {
     // ignore responses from XPDR
     return false;

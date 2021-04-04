@@ -72,7 +72,7 @@ OpenGL::Initialise()
  */
 gcc_pure
 static bool
-SupportsNonPowerOfTwoTexturesGLES()
+SupportsNonPowerOfTwoTexturesGLES() noexcept
 {
   /* the Dell Streak Mini announces this extension */
   if (OpenGL::IsExtensionSupported("GL_APPLE_texture_2D_limited_npot"))
@@ -104,7 +104,7 @@ SupportsNonPowerOfTwoTexturesGLES()
 
 gcc_pure
 static bool
-CheckOESDrawTexture()
+CheckOESDrawTexture() noexcept
 {
   return OpenGL::IsExtensionSupported("GL_OES_draw_texture");
 }
@@ -117,19 +117,10 @@ CheckOESDrawTexture()
  */
 gcc_pure
 static bool
-SupportsNonPowerOfTwoTextures()
+SupportsNonPowerOfTwoTextures() noexcept
 {
   return OpenGL::IsExtensionSupported("GL_ARB_texture_non_power_of_two") ||
     (HaveGLES() && SupportsNonPowerOfTwoTexturesGLES());
-}
-
-gcc_pure
-static bool
-CheckFBO()
-{
-  return OpenGL::IsExtensionSupported(HaveGLES()
-                                      ? "GL_OES_framebuffer_object"
-                                      : "GL_EXT_framebuffer_object");
 }
 
 /**
@@ -139,7 +130,7 @@ CheckFBO()
  */
 gcc_pure
 static GLenum
-CheckDepthStencil()
+CheckDepthStencil() noexcept
 {
 #ifdef HAVE_GLES
   if (OpenGL::IsExtensionSupported("GL_OES_packed_depth_stencil"))
@@ -168,7 +159,7 @@ CheckDepthStencil()
  */
 gcc_pure
 static GLenum
-CheckStencil()
+CheckStencil() noexcept
 {
 #ifdef HAVE_GLES
 #if !defined(__APPLE__) || !TARGET_OS_IPHONE
@@ -252,15 +243,12 @@ OpenGL::SetupContext()
   }
 #endif
 
-  frame_buffer_object = CheckFBO() && FBO::Initialise();
-  if (frame_buffer_object) {
-    render_buffer_depth_stencil = CheckDepthStencil();
+  render_buffer_depth_stencil = CheckDepthStencil();
 
-    render_buffer_stencil = CheckStencil();
-    if (!render_buffer_stencil)
-      /* fall back to a packed depth+stencil format */
-      render_buffer_stencil = render_buffer_depth_stencil;
-  }
+  render_buffer_stencil = CheckStencil();
+  if (!render_buffer_stencil)
+    /* fall back to a packed depth+stencil format */
+    render_buffer_stencil = render_buffer_depth_stencil;
 
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_DITHER);
@@ -281,7 +269,7 @@ OpenGL::SetupContext()
  */
 gcc_const
 static GLfloat
-OrientationToRotation(DisplayOrientation orientation)
+OrientationToRotation(DisplayOrientation orientation) noexcept
 {
   switch (orientation) {
   case DisplayOrientation::DEFAULT:
@@ -306,7 +294,7 @@ OrientationToRotation(DisplayOrientation orientation)
  * Swap x and y if the given orientation specifies it.
  */
 static void
-OrientationSwap(UnsignedPoint2D &p, DisplayOrientation orientation)
+OrientationSwap(UnsignedPoint2D &p, DisplayOrientation orientation) noexcept
 {
   if (AreAxesSwapped(orientation))
     std::swap(p.x, p.y);
@@ -315,7 +303,7 @@ OrientationSwap(UnsignedPoint2D &p, DisplayOrientation orientation)
 #endif /* SOFTWARE_ROTATE_DISPLAY */
 
 UnsignedPoint2D
-OpenGL::SetupViewport(UnsignedPoint2D size)
+OpenGL::SetupViewport(UnsignedPoint2D size) noexcept
 {
   window_size = size;
 
@@ -343,7 +331,7 @@ OpenGL::SetupViewport(UnsignedPoint2D size)
 }
 
 void
-OpenGL::Deinitialise()
+OpenGL::Deinitialise() noexcept
 {
   DeinitShaders();
 

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "AirspaceWarning.hpp"
+#include "util/Compiler.h"
 
 #include <algorithm>
 

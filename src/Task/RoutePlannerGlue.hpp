@@ -88,7 +88,7 @@ public:
     planner.AcceptInRange(bounds, visitor, working);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint Intersection(const AGeoPoint &origin,
                         const AGeoPoint &destination) const;
 

@@ -34,6 +34,7 @@ Copyright_License {
 #include "Widget/ButtonPanelWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Task/TaskStore.hpp"
+#include "Task/ValidationErrorStrings.hpp"
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"
 #include "Language/Language.hpp"
@@ -108,9 +109,9 @@ public:
 
   void OnMoreClicked();
 
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Show(const PixelRect &rc) override;
-  void Hide() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
 
 protected:
   const OrderedTask *get_cursor_task();
@@ -152,7 +153,7 @@ TaskListPanel::get_cursor_task()
     task_store.GetTask(cursor_index,
                        CommonInterface::GetComputerSettings().task);
 
-  if (ordered_task == nullptr || !ordered_task->CheckTask())
+  if (ordered_task == nullptr)
     return nullptr;
 
   return ordered_task;
@@ -209,6 +210,11 @@ TaskListPanel::LoadTask()
   StaticString<1024> text;
   text.Format(_T("%s\n(%s)"), _("Load the selected task?"),
               get_cursor_name());
+
+  if (const auto errors = orig->CheckTask(); !errors.IsEmpty()) {
+    text.append(_T("\n"));
+    text.append(getTaskValidationErrors(errors));
+  }
 
   if (ShowMessageBox(text.c_str(), _("Task Browser"),
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
@@ -314,7 +320,7 @@ TaskListPanel::OnMoreClicked()
 }
 
 void
-TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -329,7 +335,7 @@ TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-TaskListPanel::Show(const PixelRect &rc)
+TaskListPanel::Show(const PixelRect &rc) noexcept
 {
   if (serial != task_list_serial) {
     serial = task_list_serial;
@@ -345,7 +351,7 @@ TaskListPanel::Show(const PixelRect &rc)
 }
 
 void
-TaskListPanel::Hide()
+TaskListPanel::Hide() noexcept
 {
   dialog.ResetTaskView();
 

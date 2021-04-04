@@ -40,6 +40,7 @@ Copyright_License {
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/NOAAUpdater.hpp"
+#include "net/http/Init.hpp"
 #include "util/TrivialArray.hxx"
 #include "util/StringAPI.hxx"
 #include "util/Compiler.h"
@@ -91,8 +92,8 @@ private:
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 
 protected:
   /* virtual methods from ListItemRenderer */
@@ -114,10 +115,12 @@ NOAAListWidget::CreateButtons(ButtonPanel &buttons)
   add_button = buttons.Add(_("Add"), [this](){ AddClicked(); });
   update_button = buttons.Add(_("Update"), [this](){ UpdateClicked(); });
   remove_button = buttons.Add(_("Remove"), [this](){ RemoveClicked(); });
+
+  buttons.EnableCursorSelection();
 }
 
 void
-NOAAListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+NOAAListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   CreateButtons(buttons_widget->GetButtonPanel());
 
@@ -189,7 +192,7 @@ NOAAListWidget::AddClicked()
                          UIGlobals::GetDialogLook(),
                          _("Download"), true);
 
-  NOAAUpdater::Update(*i, runner);
+  NOAAUpdater::Update(*i, *Net::curl, runner);
 
   UpdateList();
 }
@@ -200,7 +203,7 @@ NOAAListWidget::UpdateClicked()
   DialogJobRunner runner(UIGlobals::GetMainWindow(),
                          UIGlobals::GetDialogLook(),
                          _("Download"), true);
-  NOAAUpdater::Update(*noaa_store, runner);
+  NOAAUpdater::Update(*noaa_store, *Net::curl, runner);
   UpdateList();
 }
 

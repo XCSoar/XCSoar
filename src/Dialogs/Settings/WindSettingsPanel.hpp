@@ -65,22 +65,22 @@ public:
    * @param clear_manual_button add a "Clear" button
    */
   WindSettingsPanel(bool edit_manual_wind, bool clear_manual_button,
-                    bool edit_trail_drift);
+                    bool edit_trail_drift) noexcept;
 
-  void SetClearManualButton(Button *_button) {
+  void SetClearManualButton(Button *_button) noexcept {
     clear_manual_window = _button;
   }
 
   void ClearManual() noexcept;
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
 
 private:
-  void UpdateVector();
+  void UpdateVector() noexcept;
 
   /* methods from DataFieldListener */
   virtual void OnModified(DataField &df) override;

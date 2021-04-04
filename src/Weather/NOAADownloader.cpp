@@ -30,18 +30,22 @@ Copyright_License {
 
 #include <cstdlib>
 
-namespace NOAADownloader
-{
-  /**
-   * Tries to parse a date and time from the buffer
-   * @param buffer Buffer to parse
-   * @param dest BrokenDateTime to write the parsed results in
-   * @return Same as buffer if parsing failed,
-   * otherwise the pointer to the next character after the parsed string portion
-   */
-  static const char *ParseDateTime(const char *buffer, BrokenDateTime &dest);
-  static bool ParseDecodedDateTime(const char *buffer, BrokenDateTime &dest);
-}
+namespace NOAADownloader {
+
+/**
+ * Tries to parse a date and time from the buffer
+ * @param buffer Buffer to parse
+ * @param dest BrokenDateTime to write the parsed results in
+ * @return Same as buffer if parsing failed,
+ * otherwise the pointer to the next character after the parsed string portion
+ */
+static const char *
+ParseDateTime(const char *buffer, BrokenDateTime &dest);
+
+static bool
+ParseDecodedDateTime(const char *buffer, BrokenDateTime &dest);
+
+} // namespace NOAADownloader
 
 const char *
 NOAADownloader::ParseDateTime(const char *buffer, BrokenDateTime &dest)
@@ -140,7 +144,7 @@ NOAADownloader::ParseDecodedDateTime(const char *buffer, BrokenDateTime &dest)
 
 bool
 NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
-                              Net::Session &session, JobRunner &runner)
+                              CurlGlobal &curl, JobRunner &runner)
 {
 #ifndef NDEBUG
   assert(strlen(code) == 4);
@@ -157,7 +161,7 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
 
   // Request the file
   char buffer[4096];
-  Net::DownloadToBufferJob job(session, url, buffer, sizeof(buffer) - 1);
+  Net::DownloadToBufferJob job(curl, url, buffer, sizeof(buffer) - 1);
   if (!runner.Run(job))
     return false;
 
@@ -234,7 +238,7 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
 
 bool
 NOAADownloader::DownloadTAF(const char *code, TAF &taf,
-                            Net::Session &session, JobRunner &runner)
+                            CurlGlobal &curl, JobRunner &runner)
 {
 #ifndef NDEBUG
   assert(strlen(code) == 4);
@@ -251,7 +255,7 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf,
 
   // Request the file
   char buffer[4096];
-  Net::DownloadToBufferJob job(session, url, buffer, sizeof(buffer) - 1);
+  Net::DownloadToBufferJob job(curl, url, buffer, sizeof(buffer) - 1);
   if (!runner.Run(job))
     return false;
 

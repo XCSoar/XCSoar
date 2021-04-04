@@ -54,7 +54,7 @@ MapWindow::DrawTask(Canvas &canvas)
 
   ProtectedTaskManager::Lease task_manager(*task);
   const AbstractTask *task = task_manager->GetActiveTask();
-  if (task && task->CheckTask()) {
+  if (task && !IsError(task->CheckTask())) {
     TaskPointRenderer::TargetVisibility target_visibility =
         IsNearSelf() ? TaskPointRenderer::ACTIVE : TaskPointRenderer::ALL;
 
@@ -89,9 +89,12 @@ MapWindow::DrawRoute(Canvas &canvas)
   const auto &route = Calculated().planned_route;
 
   const auto r_size = route.size();
-  BulkPixelPoint p[r_size], *pp = &p[0];
-  for (auto i = route.begin(), end = route.end(); i != end; ++i, ++pp)
-    *pp = render_projection.GeoToScreen(*i);
+  constexpr std::size_t capacity = std::decay_t<decltype(route)>::capacity();
+  BulkPixelPoint p[capacity];
+  std::transform(route.begin(), route.end(), p,
+                 [this](const auto &i) {
+                   return render_projection.GeoToScreen(i);
+                 });
 
   p[r_size - 1] = ScreenClosestPoint(p[r_size-1], p[r_size-2], p[r_size-1], Layout::Scale(20));
 

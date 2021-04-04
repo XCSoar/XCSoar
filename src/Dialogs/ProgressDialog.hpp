@@ -43,19 +43,19 @@ public:
   ProgressDialog(UI::SingleWindow &parent, const DialogLook &dialog_look,
                  const TCHAR *caption);
 
-  void AddCancelButton(std::function<void()> &&callback);
+  void AddCancelButton(std::function<void()> &&callback={});
 
   /* virtual methods from class OperationEnvironment */
 
-  void SetText(const TCHAR *text) override {
+  void SetText(const TCHAR *text) noexcept override {
     progress.SetMessage(text);
   }
 
-  void SetProgressRange(unsigned range) override {
+  void SetProgressRange(unsigned range) noexcept override {
     progress.SetRange(0, range);
   }
 
-  void SetProgressPosition(unsigned position) override {
+  void SetProgressPosition(unsigned position) noexcept override {
     progress.SetValue(position);
   }
 

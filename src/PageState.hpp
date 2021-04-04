@@ -48,9 +48,16 @@ struct PageState {
    */
   double circling_scale;
 
+  /**
+   * The last zoom mode on this page. This attribute is only used if
+   * PageSettings::distinct_zoom is enabled.
+   */
+  bool auto_zoom_enabled;
+
   void Clear() {
     cruise_scale = -1;
     circling_scale = -1;
+    auto_zoom_enabled = false;
   }
 };
 

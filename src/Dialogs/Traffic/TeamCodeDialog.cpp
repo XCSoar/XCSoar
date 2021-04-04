@@ -68,10 +68,10 @@ private:
   void OnFlarmLockClicked();
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
 
   /* virtual methods from class BlackboardListener */
   virtual void OnCalculatedUpdate(const MoreData &basic,
@@ -88,7 +88,7 @@ TeamCodeWidget::CreateButtons(WidgetDialog &buttons)
 
 void
 TeamCodeWidget::Prepare(ContainerWindow &parent,
-                        const PixelRect &rc)
+                        const PixelRect &rc) noexcept
 {
   AddReadOnly(_("Own code"));
   AddReadOnly(_("Mate code"));
@@ -99,7 +99,7 @@ TeamCodeWidget::Prepare(ContainerWindow &parent,
 }
 
 void
-TeamCodeWidget::Show(const PixelRect &rc)
+TeamCodeWidget::Show(const PixelRect &rc) noexcept
 {
   Update(CommonInterface::Basic(), CommonInterface::Calculated());
   CommonInterface::GetLiveBlackboard().AddListener(*this);
@@ -107,7 +107,7 @@ TeamCodeWidget::Show(const PixelRect &rc)
 }
 
 void
-TeamCodeWidget::Hide()
+TeamCodeWidget::Hide() noexcept
 {
   RowFormWidget::Hide();
   CommonInterface::GetLiveBlackboard().RemoveListener(*this);
@@ -184,7 +184,7 @@ TeamCodeWidget::OnFlarmLockClicked()
 {
   TeamCodeSettings &settings =
     CommonInterface::SetComputerSettings().team_code;
-  TCHAR newTeamFlarmCNTarget[settings.team_flarm_callsign.capacity()];
+  TCHAR newTeamFlarmCNTarget[decltype(settings.team_flarm_callsign)::capacity()];
   _tcscpy(newTeamFlarmCNTarget, settings.team_flarm_callsign.c_str());
 
   if (!TextEntryDialog(newTeamFlarmCNTarget, 4))
@@ -219,11 +219,11 @@ void
 dlgTeamCodeShowModal()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  TeamCodeWidget widget(look);
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, _("Team Code"), &widget);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<TeamCodeWidget>
+    dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+           look, _("Team Code"));
   dialog.AddButton(_("Close"), mrOK);
+  dialog.SetWidget(look);
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.ShowModal();
-  dialog.StealWidget();
 }

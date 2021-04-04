@@ -108,7 +108,7 @@ private:
       }
     }
 
-    gcc_pure
+    [[gnu::pure]]
     ClosingPair FindRange(const ClosingPair &p) const noexcept {
       for (const auto &i : closing_pairs) {
         if (i.first > p.first)
@@ -161,7 +161,7 @@ private:
     }
 
     // returns the manhatten diagonal of the bounding box
-    gcc_pure
+    [[gnu::pure]]
     unsigned GetDiagnoal() const noexcept {
       return bounding_box.GetWidth() + bounding_box.GetHeight();
     }
@@ -172,13 +172,13 @@ private:
     }
 
     // calculate the minimal distance estimate between two TurnPointRanges
-    gcc_pure
+    [[gnu::pure]]
     unsigned GetMinDistance(const TurnPointRange &tp) const noexcept {
       return bounding_box.Distance(tp.bounding_box);
     }
 
     // calculate maximal distance estimate between two TurnPointRanges
-    gcc_pure
+    [[gnu::pure]]
     unsigned GetMaxDistance(const TurnPointRange &tp) const noexcept {
       const unsigned d_lon = std::max(bounding_box.GetRight() - tp.bounding_box.GetLeft(),
                                       tp.bounding_box.GetRight() - bounding_box.GetLeft());
@@ -234,7 +234,7 @@ private:
      * Use relaxed checks to ensure distance errors due to the flat projection
      * or integer rounding don't invalidate close positives.
      */
-    gcc_pure
+    [[gnu::pure]]
     bool IsFeasible(const OLCTriangleValidator &validator) const noexcept {
       return validator.IsFeasible(df_min, df_max,
                                   shortest_max, longest_min);
@@ -243,7 +243,7 @@ private:
     /* Check if the candidate set is a real fai triangle. Use fast checks on projected
      * distances for certain checks, otherwise real distances for marginal fai triangles.
      */
-    gcc_pure
+    [[gnu::pure]]
     bool IsIntegral(TriangleContest &parent,
                     const OLCTriangleValidator &validator) const noexcept {
       if (!(tp1.GetSize() == 1 && tp2.GetSize() == 1 && tp3.GetSize() == 1))

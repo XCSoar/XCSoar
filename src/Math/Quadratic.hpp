@@ -24,7 +24,6 @@
 #define QUADRATIC_HPP
 
 #include "Util.hpp"
-#include "util/Compiler.h"
 
 #include <cassert>
 
@@ -90,7 +89,7 @@ public:
    *
    * @return smallest x value of solutions
    */
-  gcc_pure
+  [[gnu::pure]]
   double SolutionMin() const noexcept {
     assert(Check());
     return Solution(da <= 0);
@@ -105,7 +104,7 @@ private:
    *
    * @return x value of solution
    */
-  gcc_pure
+  [[gnu::pure]]
   double Solution(const bool positive) const noexcept {
     assert(Check());
     return (-b + (positive ? sqrt(denom) : -sqrt(denom))) / da;

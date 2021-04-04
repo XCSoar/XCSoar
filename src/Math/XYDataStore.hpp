@@ -55,8 +55,7 @@ protected:
 
     Slot() = default;
 
-    constexpr
-    Slot(double _x, double _y, double _weight)
+    constexpr Slot(double _x, double _y, double _weight) noexcept
       :x(_x), y(_y)
 #ifdef LEASTSQS_WEIGHT_STORE
       , weight(_weight)
@@ -67,44 +66,44 @@ protected:
   TrivialArray<Slot, 1000> slots;
 
 public:
-  bool IsEmpty() const {
+  constexpr bool IsEmpty() const noexcept {
     return sum_n == 0;
   }
 
-  bool HasResult() const {
+  constexpr bool HasResult() const noexcept {
     return sum_n >= 2;
   }
 
-  unsigned GetCount() const {
+  constexpr unsigned GetCount() const noexcept {
     return sum_n;
   }
 
   /**
    * Reset the store.
    */
-  void StoreReset();
+  void StoreReset() noexcept;
 
-  double GetMinX() const {
+  constexpr double GetMinX() const noexcept {
     return x_min;
   }
 
-  double GetMaxX() const {
+  constexpr double GetMaxX() const noexcept {
     return x_max;
   }
 
-  double GetMiddleX() const {
+  constexpr double GetMiddleX() const noexcept {
     return (x_min + x_max) / 2.;
   }
 
-  double GetMinY() const {
+  constexpr double GetMinY() const noexcept {
     return y_min;
   }
 
-  double GetMaxY() const {
+  constexpr double GetMaxY() const noexcept {
     return y_max;
   }
 
-  const TrivialArray<Slot, 1000> &GetSlots() const {
+  constexpr ConstBuffer<Slot> GetSlots() const noexcept {
     return slots;
   }
 
@@ -117,13 +116,13 @@ protected:
    * @param y y-Value of the new data point
    * @param weight Weight of the new data point (optional)
    */
-  void StoreAdd(double x, double y, double weight=1);
+  void StoreAdd(double x, double y, double weight=1) noexcept;
 
   /**
    * Remove data point to the values.
    * If weights aren't stored, this assumes weight = 1
    */
-  void StoreRemove(const unsigned i);
+  void StoreRemove(const unsigned i) noexcept;
 
 };
 

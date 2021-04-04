@@ -29,14 +29,16 @@ Copyright_License {
 class PortListener;
 
 namespace NativePortListener {
-  void Initialise(JNIEnv *env);
-  void Deinitialise(JNIEnv *env);
 
-  /**
-   * Create a Java NativePortListener instance.  It is not bound to a
-   * handler yet; call Set() to do this.
-   */
-  jobject Create(JNIEnv *env, PortListener &listener);
-}
+void Initialise(JNIEnv *env);
+void Deinitialise(JNIEnv *env);
+
+/**
+ * Create a Java NativePortListener instance.  It is not bound to a
+ * handler yet; call Set() to do this.
+ */
+jobject Create(JNIEnv *env, PortListener &listener);
+
+} // namespace NativePortListener
 
 #endif

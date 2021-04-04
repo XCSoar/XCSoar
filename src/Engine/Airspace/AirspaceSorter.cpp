@@ -54,7 +54,7 @@ AirspaceFilterData::Match(const GeoPoint &location,
   return true;
 }
 
-class AirspaceFilterPredicate final : public AirspacePredicate {
+class AirspaceFilterPredicate final {
   const GeoPoint location;
   const FlatProjection &projection;
   const AirspaceFilterData &filter;
@@ -65,7 +65,8 @@ public:
                           const AirspaceFilterData &_filter)
     :location(_location), projection(_projection), filter(_filter) {}
 
-  bool operator()(const AbstractAirspace &as) const override {
+  [[gnu::pure]]
+  bool operator()(const AbstractAirspace &as) const noexcept {
     return filter.Match(location, projection, as);
   }
 };

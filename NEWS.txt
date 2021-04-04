@@ -1,15 +1,31 @@
-Version 7.0 - not yet released
+Version 7.2 - not yet released
+* user interface
+  - display goto button in wp details when called from alternate
+* fix crash when loading broken PNG files
+
+Version 7.1 - 2021/03/28
+* user interface
+  - fix crash when canceling a download
+  - fix crash when repository index download failed
+* Android
+  - handle DownloadManager errors
+  - show early initialisation errors
+  - store the terrain cache in the Android cache directory
+
+Version 7.0 - 2021/03/25
 * LUA scripting
 * user interface
   - screen layout with 12 infoboxes on the left, vario+3 infoboxes on right
-  - new translation: Traditional Chinese
+  - new translations: Bulgarian, Catalan, Traditional Chinese, Telugu
   - new Logger-setting "CoPilot"
   - new setting "Thermal Averager needle"
   - select position of Thermal Assistant
+  - new setting "Cruise/Circling mode switch period"
 * data files
   - optimise the terrain loader
   - support runway width in CUP files
 * devices
+  - fix deadlock bug
   - parse wind from standard NMEA sentence WMV
   - driver for XC Tracer Vario
   - driver for KRT2 radio
@@ -48,6 +64,7 @@ Version 7.0 - not yet released
   - glide polar: dolphin speed line drawn on polar
 * map display
   - new display: glide range line drawn to working floor
+  - per page zoom state
 * thermal band
   - new algorithm, with improved statistics
   - separate active climb and encounter-averaged bands
@@ -69,10 +86,12 @@ Version 7.0 - not yet released
   - display rotation
 * Android
   - drop support for ARMv6 and MIPS CPUs
+  - support devices with aspect ratio greater than 16:9
 * Kobo
   - support Kobo Glo HD
 * Raspberry Pi
   - resizable mouse cursor
+  - autodetect display orientation
 
 Version 6.8.17 - 2020/09/22
 * tracking

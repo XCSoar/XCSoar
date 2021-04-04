@@ -23,18 +23,20 @@ Copyright_License {
 
 #include "Tracking/LiveTrack24.hpp"
 #include "net/http/Init.hpp"
+#include "io/async/AsioThread.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "Units/System.hpp"
 #include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "DebugReplay.hpp"
+#include "util/ScopeExit.hxx"
 
 #include <cstdio>
 
 using namespace LiveTrack24;
 
 static bool
-TestTracking(int argc, char *argv[])
+TestTracking(int argc, char *argv[], CurlGlobal &curl)
 {
   Args args(argc, argv, "[DRIVER] FILE [USERNAME [PASSWORD]]");
   DebugReplay *replay = CreateDebugReplay(args);
@@ -54,7 +56,8 @@ TestTracking(int argc, char *argv[])
     username = args.ExpectNextT();
     password = args.IsEmpty() ? _T("") : args.ExpectNextT();
 
-    user_id = LiveTrack24::GetUserID(username.c_str(), password.c_str(), env);
+    user_id = LiveTrack24::GetUserID(username.c_str(), password.c_str(),
+                                     curl, env);
     has_user_id = (user_id != 0);
   }
 
@@ -66,7 +69,7 @@ TestTracking(int argc, char *argv[])
   printf("Starting tracking ... ");
   bool result = StartTracking(session, username.c_str(), password.c_str(), 10,
                               VehicleType::GLIDER, _T("Hornet"),
-                              env);
+                              curl, env);
   printf(result ? "done\n" : "failed\n");
   if (!result)
     return false;
@@ -90,7 +93,7 @@ TestTracking(int argc, char *argv[])
         session, package_id, basic.location, (unsigned)basic.nav_altitude,
         (unsigned)Units::ToUserUnit(basic.ground_speed, Unit::KILOMETER_PER_HOUR),
         basic.track, datetime.ToUnixTimeUTC(),
-        env);
+        curl, env);
 
     if (!result)
       break;
@@ -100,7 +103,7 @@ TestTracking(int argc, char *argv[])
   printf(result ? "done\n" : "failed\n");
 
   printf("Stopping tracking ... ");
-  result = EndTracking(session, package_id, env);
+  result = EndTracking(session, package_id, curl, env);
   printf(result ? "done\n" : "failed\n");
 
   return true;
@@ -109,12 +112,13 @@ TestTracking(int argc, char *argv[])
 int
 main(int argc, char *argv[])
 {
-  Net::Initialise();
+  AsioThread io_thread;
+  io_thread.Start();
+  AtScopeExit(&) { io_thread.Stop(); };
+  const Net::ScopeInit net_init(io_thread.GetEventLoop());
 
   LiveTrack24::SetServer(_T("test.livetrack24.com"));
-  bool result = TestTracking(argc, argv);
-
-  Net::Deinitialise();
+  bool result = TestTracking(argc, argv, *Net::curl);
 
   return result ? EXIT_SUCCESS : EXIT_FAILURE;
 }

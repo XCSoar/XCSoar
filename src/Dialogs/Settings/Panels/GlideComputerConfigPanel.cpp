@@ -39,6 +39,8 @@ enum ControlIndex {
   AverEffTime,
   PredictWindDrift,
   WaveAssistant,
+  CruiseToCirclingModeSwitchThreshold,
+  CirclingToCruiseModeSwitchThreshold,
 };
 
 class GlideComputerConfigPanel final : public RowFormWidget {
@@ -46,12 +48,13 @@ public:
   GlideComputerConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 void
-GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+GlideComputerConfigPanel::Prepare(ContainerWindow &parent,
+                                  const PixelRect &rc) noexcept
 {
   const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
   const TaskBehaviour &task_behaviour = settings_computer.task;
@@ -116,10 +119,26 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddBoolean(_("Wave assistant"), nullptr,
              settings_computer.wave.enabled);
+
+  AddFloat(_("Cruise/Circling period"),
+             _("How many seconds of turning before changing from cruise to circling mode."),
+             _T("%.0f s"), _T("%.0f"),
+             2, 30,
+             1, false,
+             settings_computer.circling.cruise_to_circling_mode_switch_threshold, nullptr);
+  SetExpertRow(CruiseToCirclingModeSwitchThreshold);
+
+  AddFloat(_("Circling/Cruise period"),
+             _("How many seconds of flying straight before changing from circling to cruise mode."),
+             _T("%.0f s"), _T("%.0f"),
+             2, 30,
+             1, false,
+             settings_computer.circling.circling_to_cruise_mode_switch_threshold, nullptr);
+  SetExpertRow(CirclingToCruiseModeSwitchThreshold);
 }
 
 bool
-GlideComputerConfigPanel::Save(bool &_changed)
+GlideComputerConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 
@@ -146,6 +165,12 @@ GlideComputerConfigPanel::Save(bool &_changed)
 
   changed |= SaveValue(WaveAssistant, ProfileKeys::WaveAssistant,
                        settings_computer.wave.enabled);
+
+  changed |= SaveValue(CruiseToCirclingModeSwitchThreshold, ProfileKeys::CruiseToCirclingModeSwitchThreshold,
+                       settings_computer.circling.cruise_to_circling_mode_switch_threshold);
+
+  changed |= SaveValue(CirclingToCruiseModeSwitchThreshold, ProfileKeys::CirclingToCruiseModeSwitchThreshold,
+                       settings_computer.circling.circling_to_cruise_mode_switch_threshold);
 
   _changed |= changed;
 

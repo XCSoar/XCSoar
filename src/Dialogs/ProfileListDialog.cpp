@@ -78,7 +78,7 @@ class ProfileListWidget final
   std::vector<ListItem> list;
 
 public:
-  ProfileListWidget(bool _select=false):select(_select) {}
+  ProfileListWidget(bool _select):select(_select) {}
 
   void CreateButtons(WidgetDialog &dialog);
 
@@ -105,8 +105,8 @@ private:
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 
 protected:
   /* virtual methods from TextListWidget */
@@ -177,7 +177,8 @@ ProfileListWidget::CreateButtons(WidgetDialog &dialog)
 }
 
 void
-ProfileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ProfileListWidget::Prepare(ContainerWindow &parent,
+                           const PixelRect &rc) noexcept
 {
   TextListWidget::Prepare(parent, rc);
   UpdateList();
@@ -330,41 +331,37 @@ ProfileListWidget::DeleteClicked()
 void
 ProfileListDialog()
 {
-  ProfileListWidget widget;
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(),
-                      _("Profiles"), &widget);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<ProfileListWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(), _("Profiles"));
   dialog.AddButton(_("Close"), mrOK);
+  dialog.SetWidget(false);
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();
-  dialog.StealWidget();
 }
 
 AllocatedPath
 SelectProfileDialog(Path selected_path)
 {
-  ProfileListWidget widget(true);
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(),
-                      _("Select profile"), &widget);
+  TWidgetDialog<ProfileListWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(), _("Select profile"));
+  dialog.SetWidget(true);
   dialog.AddButton(_("Select"), mrOK);
-  widget.CreateButtons(dialog);
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.EnableCursorSelection();
 
   if (!selected_path.IsNull()) {
     dialog.PrepareWidget();
-    widget.SelectPath(selected_path);
+    dialog.GetWidget().SelectPath(selected_path);
   }
 
   auto result = dialog.ShowModal();
 
-  selected_path = result == mrOK
-    ? widget.GetSelectedPath()
+  return result == mrOK
+    ? dialog.GetWidget().GetSelectedPath()
     : nullptr;
-  dialog.StealWidget();
-
-  return selected_path;
 }

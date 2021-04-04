@@ -26,7 +26,6 @@ Copyright_License {
 #define XCSOAR_SPEED_VECTOR_HPP
 
 #include "Math/Angle.hpp"
-#include "util/Compiler.h"
 
 /**
  * An object describing the speed vector in a two dimensional surface.
@@ -91,7 +90,7 @@ struct SpeedVector {
   /**
    * Return the vector with the bearing rotated by 180 degrees.
    */
-  gcc_pure
+  [[gnu::pure]]
   SpeedVector Reciprocal() const {
     return SpeedVector(bearing.Reciprocal(), norm);
   }

@@ -29,6 +29,7 @@ Copyright_License {
 #include "ui/event/KeyCode.hpp"
 #include "Screen/Features.hpp"
 #include "Dialogs/DataField.hpp"
+#include "Asset.hpp"
 
 #include <cassert>
 

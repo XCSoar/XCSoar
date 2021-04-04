@@ -43,27 +43,12 @@ AllocatedPath waypoint_file = Path(_T("test/data/waypoints_geo.wpt"));
 AllocatedPath task_file = nullptr;
 double range_threshold = 15000;
 
-#ifdef INSTRUMENT_ZERO
-extern unsigned long zero_skipped;
-extern unsigned long zero_total;
-#endif
-
 void PrintDistanceCounts() {
   if (n_samples) {
     printf("# Instrumentation\n");
     printf("#    (total cycles %d)\n#\n",n_samples);
-#ifdef INSTRUMENT_ZERO
-    if (zero_total) {
-      printf("#    ZeroFinder total %ld\n",zero_total);
-      printf("#    ZeroFinder %%skipped %d\n",(int)(100*zero_skipped/zero_total));
-    }
-#endif
   }
   n_samples = 0;
-#ifdef INSTRUMENT_ZERO
-  zero_skipped = 0;
-  zero_total = 0;
-#endif
 }
 
 /** 

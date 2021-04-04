@@ -27,7 +27,8 @@ Copyright_License {
 #include "Units/Units.hpp"
 
 void
-CAI302UnitsEditor::Prepare(ContainerWindow &parent, const PixelRect &rc)
+CAI302UnitsEditor::Prepare(ContainerWindow &parent,
+                           const PixelRect &rc) noexcept
 {
   static constexpr StaticEnumChoice vario_list[] = {
     { 0, _T("m/s"), },
@@ -89,7 +90,7 @@ CAI302UnitsEditor::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-CAI302UnitsEditor::Save(bool &_changed)
+CAI302UnitsEditor::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

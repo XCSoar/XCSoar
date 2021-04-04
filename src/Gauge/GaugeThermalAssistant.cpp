@@ -39,7 +39,7 @@ public:
   GaugeThermalAssistantWindow(ContainerWindow &parent,
                               PixelRect rc,
                               const ThermalAssistantLook &look,
-                              WindowStyle style=WindowStyle())
+                              WindowStyle style=WindowStyle()) noexcept
     :ThermalAssistantWindow(look, 5, true, true),
      dragging(false), pressed(false)
   {
@@ -47,7 +47,7 @@ public:
   }
 
 private:
-  void SetPressed(bool _pressed) {
+  void SetPressed(bool _pressed) noexcept {
     if (_pressed == pressed)
       return;
 
@@ -142,7 +142,8 @@ GaugeThermalAssistantWindow::OnPaint(Canvas &canvas)
 }
 
 void
-GaugeThermalAssistant::Prepare(ContainerWindow &parent, const PixelRect &rc)
+GaugeThermalAssistant::Prepare(ContainerWindow &parent,
+                               const PixelRect &rc) noexcept
 {
   WindowStyle style;
   style.Hide();
@@ -152,7 +153,7 @@ GaugeThermalAssistant::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-GaugeThermalAssistant::Show(const PixelRect &rc)
+GaugeThermalAssistant::Show(const PixelRect &rc) noexcept
 {
   Update(blackboard.Basic().attitude, blackboard.Calculated());
 
@@ -162,14 +163,14 @@ GaugeThermalAssistant::Show(const PixelRect &rc)
 }
 
 void
-GaugeThermalAssistant::Hide()
+GaugeThermalAssistant::Hide() noexcept
 {
   blackboard.RemoveListener(*this);
   OverlappedWidget::Hide();
 }
 
 bool
-GaugeThermalAssistant::SetFocus()
+GaugeThermalAssistant::SetFocus() noexcept
 {
   return false;
 }
@@ -183,7 +184,7 @@ GaugeThermalAssistant::OnCalculatedUpdate(const MoreData &basic,
 
 void
 GaugeThermalAssistant::Update(const AttitudeState &attitude,
-                              const DerivedInfo &calculated)
+                              const DerivedInfo &calculated) noexcept
 {
   ThermalAssistantWindow &window = (ThermalAssistantWindow &)GetWindow();
   window.Update(attitude, calculated);

@@ -61,7 +61,7 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
   }
 }
 
-TabWidget::~TabWidget()
+TabWidget::~TabWidget() noexcept
 {
   delete tab_display;
 }
@@ -130,7 +130,7 @@ TabWidget::PreviousPage()
 }
 
 PixelSize
-TabWidget::GetMinimumSize() const
+TabWidget::GetMinimumSize() const noexcept
 {
   auto size = PagerWidget::GetMinimumSize();
   if (tab_display != nullptr) {
@@ -144,7 +144,7 @@ TabWidget::GetMinimumSize() const
 }
 
 PixelSize
-TabWidget::GetMaximumSize() const
+TabWidget::GetMaximumSize() const noexcept
 {
   auto size = PagerWidget::GetMaximumSize();
   if (tab_display != nullptr) {
@@ -158,7 +158,7 @@ TabWidget::GetMaximumSize() const
 }
 
 void
-TabWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
+TabWidget::Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   WindowStyle style;
   style.Hide();
@@ -174,7 +174,7 @@ TabWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-TabWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TabWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   const Layout layout(orientation, rc, *tab_display, extra.get());
 
@@ -189,7 +189,7 @@ TabWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-TabWidget::Unprepare()
+TabWidget::Unprepare() noexcept
 {
   if (extra != nullptr)
     extra->Unprepare();
@@ -198,7 +198,7 @@ TabWidget::Unprepare()
 }
 
 void
-TabWidget::Show(const PixelRect &rc)
+TabWidget::Show(const PixelRect &rc) noexcept
 {
   const Layout layout(orientation, rc, *tab_display, extra.get());
 
@@ -214,7 +214,7 @@ TabWidget::Show(const PixelRect &rc)
 }
 
 void
-TabWidget::Hide()
+TabWidget::Hide() noexcept
 {
   PagerWidget::Hide();
 
@@ -225,7 +225,7 @@ TabWidget::Hide()
 }
 
 void
-TabWidget::Move(const PixelRect &rc)
+TabWidget::Move(const PixelRect &rc) noexcept
 {
   const Layout layout(orientation, rc, *tab_display, extra.get());
 
@@ -240,7 +240,7 @@ TabWidget::Move(const PixelRect &rc)
 }
 
 bool
-TabWidget::SetFocus()
+TabWidget::SetFocus() noexcept
 {
   if (!PagerWidget::SetFocus())
     tab_display->SetFocus();
@@ -249,7 +249,7 @@ TabWidget::SetFocus()
 }
 
 bool
-TabWidget::KeyPress(unsigned key_code)
+TabWidget::KeyPress(unsigned key_code) noexcept
 {
   // TODO: implement a few hotkeys
 
@@ -257,7 +257,7 @@ TabWidget::KeyPress(unsigned key_code)
 }
 
 void
-TabWidget::OnPageFlipped()
+TabWidget::OnPageFlipped() noexcept
 {
   tab_display->Invalidate();
   PagerWidget::OnPageFlipped();

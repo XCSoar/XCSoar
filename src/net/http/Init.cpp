@@ -22,17 +22,24 @@ Copyright_License {
 */
 
 #include "Init.hpp"
+#include "Global.hxx"
 
 #include <curl/curl.h>
 
+CurlGlobal *Net::curl;
+
 void
-Net::Initialise()
+Net::Initialise(EventLoop &event_loop)
 {
   curl_global_init(CURL_GLOBAL_WIN32);
+
+  curl = new CurlGlobal(event_loop);
 }
 
 void
 Net::Deinitialise()
 {
+  delete curl;
+
   curl_global_cleanup();
 }

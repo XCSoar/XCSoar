@@ -48,7 +48,7 @@ namespace SunEphemeris
    * @param h UT in decimal hours
    * @return days to J2000
    */
-  gcc_const
+  [[gnu::const]]
   double FNday(const BrokenDateTime &date_time);
 
   /**
@@ -57,7 +57,7 @@ namespace SunEphemeris
    * @param declin Declination
    * @return The hourangle
    */
-  gcc_const
+  [[gnu::const]]
   Angle GetHourAngle(Angle lat, Angle declin);
 
   /**
@@ -66,17 +66,17 @@ namespace SunEphemeris
    * @param declin Declination
    * @return The hourangle for twilight times
    */
-  gcc_const
+  [[gnu::const]]
   Angle GetHourAngleTwilight(Angle lat, Angle declin);
 
   /**
    * Find the ecliptic longitude of the Sun
    * @return The ecliptic longitude of the Sun
    */
-  gcc_pure
+  [[gnu::pure]]
   Angle GetEclipticLongitude(double d, Angle l);
 
-  gcc_pure
+  [[gnu::pure]]
   Angle GetMeanSunLongitude(double d);
 }
 

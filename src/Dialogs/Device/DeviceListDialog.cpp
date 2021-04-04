@@ -192,9 +192,9 @@ protected:
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
-  virtual void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     ListWidget::Show(rc);
 
     devices->AddPortListener(*this);
@@ -204,7 +204,7 @@ public:
     UpdateButtons();
   }
 
-  virtual void Hide() override {
+  void Hide() noexcept override {
     ListWidget::Hide();
 
     CommonInterface::GetLiveBlackboard().RemoveListener(*this);
@@ -227,7 +227,8 @@ private:
 };
 
 void
-DeviceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+DeviceListWidget::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   const unsigned margin = Layout::GetTextPadding();
@@ -686,15 +687,13 @@ DeviceListWidget::OnGPSUpdate(const MoreData &basic)
 void
 ShowDeviceList()
 {
-  DeviceListWidget widget(UIGlobals::GetDialogLook());
-
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(),
-                      _("Devices"), &widget);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<DeviceListWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(), _("Devices"));
   dialog.AddButton(_("Close"), mrOK);
+  dialog.SetWidget(UIGlobals::GetDialogLook());
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();
-  dialog.StealWidget();
 }

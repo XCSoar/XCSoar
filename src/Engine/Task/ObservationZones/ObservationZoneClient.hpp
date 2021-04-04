@@ -23,8 +23,6 @@
 #ifndef OBSERVATIONZONECLIENT_HPP
 #define OBSERVATIONZONECLIENT_HPP
 
-#include "util/Compiler.h"
-
 #include <memory>
 
 class ObservationZonePoint;
@@ -62,21 +60,21 @@ public:
 
   bool IsInSector(const GeoPoint &location) const;
 
-  gcc_pure
+  [[gnu::pure]]
   bool CanStartThroughTop() const;
 
-  gcc_pure
+  [[gnu::pure]]
   bool TransitionConstraint(const GeoPoint &location,
                             const GeoPoint &last_location) const;
 
-  gcc_pure
+  [[gnu::pure]]
   OZBoundary GetBoundary() const;
 
   virtual double ScoreAdjustment() const;
 
   void SetLegs(const TaskPoint *previous, const TaskPoint *next);
 
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint GetRandomPointInSector(double mag) const;
 };
 

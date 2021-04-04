@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_POINT2D_HPP
 #define XCSOAR_POINT2D_HPP
 
-#include "util/Compiler.h"
-
 #include <type_traits>
 #include <cmath>
 #include <cstdlib>
@@ -100,7 +98,7 @@ struct DoublePoint2D : Point2D<double> {
   DoublePoint2D() = default;
   using Point2D::Point2D;
 
-  gcc_pure
+  [[gnu::pure]]
   double Magnitude() const noexcept {
     return hypot(x, y);
   }
@@ -112,7 +110,7 @@ struct FloatPoint2D : Point2D<float> {
   FloatPoint2D() = default;
   using Point2D::Point2D;
 
-  gcc_pure
+  [[gnu::pure]]
   float Magnitude() const noexcept {
     return hypotf(x, y);
   }

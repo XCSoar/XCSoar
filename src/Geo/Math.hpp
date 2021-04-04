@@ -31,22 +31,20 @@ Copyright_License {
 #ifndef XCSOAR_GEO_MATH_HPP
 #define XCSOAR_GEO_MATH_HPP
 
-#include "util/Compiler.h"
-
 struct GeoPoint;
 class Angle;
 
 /**
  * Calculates projected distance from P3 along line P1-P2.
  */
-gcc_pure
+[[gnu::pure]]
 double
 ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
-                  const GeoPoint &loc3);
+                  const GeoPoint &loc3) noexcept;
 
 void
 DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
-                double *distance, Angle *bearing);
+                double *distance, Angle *bearing) noexcept;
 
 /**
  * Calculates the distance between two locations
@@ -54,9 +52,9 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
  * @param loc2 Location 2
  * @return The distance
  */
-gcc_pure
+[[gnu::pure]]
 double
-Distance(const GeoPoint &loc1, const GeoPoint &loc2);
+Distance(const GeoPoint &loc1, const GeoPoint &loc2) noexcept;
 
 /**
  * Calculates the bearing between two locations
@@ -64,9 +62,9 @@ Distance(const GeoPoint &loc1, const GeoPoint &loc2);
  * @param loc2 Location 2
  * @return The bearing
  */
-gcc_pure
+[[gnu::pure]]
 Angle
-Bearing(const GeoPoint &loc1, const GeoPoint &loc2);
+Bearing(const GeoPoint &loc1, const GeoPoint &loc2) noexcept;
 
 /**
  * Finds the point along a distance dthis (m) between p1 and p2, which are
@@ -74,16 +72,17 @@ Bearing(const GeoPoint &loc1, const GeoPoint &loc2);
  *
  * This is a slow function.  Adapted from The Aviation Formulary 1.42.
  */
-gcc_pure
+[[gnu::pure]]
 GeoPoint
-IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2, double dthis);
+IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
+                  double dthis) noexcept;
 
 /**
  * Find the nearest great-circle middle point between the two.
  */
-gcc_pure
+[[gnu::pure]]
 GeoPoint
-Middle(const GeoPoint &a, const GeoPoint &b);
+Middle(const GeoPoint &a, const GeoPoint &b) noexcept;
 
 /** 
  * Calculate and add distances between point 1 and 2, and point 2 and 3.
@@ -97,10 +96,10 @@ Middle(const GeoPoint &a, const GeoPoint &b);
  * 
  * @return Distance 12 plus 23 (m)
  */
-gcc_pure
+[[gnu::pure]]
 double
 DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
-               const GeoPoint &loc3);
+               const GeoPoint &loc3) noexcept;
 
 /**
  * Calculates the location (loc_out) you would have, after being at
@@ -111,8 +110,8 @@ DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
  * @param Distance Distance to predict
  * @param loc_out Future location
  */
-gcc_pure
+[[gnu::pure]]
 GeoPoint FindLatitudeLongitude(const GeoPoint &loc,
-                               Angle bearing, double distance);
+                               Angle bearing, double distance) noexcept;
 
 #endif

@@ -130,10 +130,10 @@ Channel::DeferredProcess() noexcept
 void
 Channel::OnSocket(SocketDescriptor fd, unsigned events) noexcept
 {
-	if (events & SocketEvent::READ)
+	if (events & (SocketEvent::READ|SocketEvent::IMPLICIT_FLAGS))
 		FD_SET(fd.Get(), &read_ready);
 
-	if (events & SocketEvent::WRITE)
+	if (events & (SocketEvent::WRITE|SocketEvent::IMPLICIT_FLAGS))
 		FD_SET(fd.Get(), &write_ready);
 
 	ScheduleProcess();

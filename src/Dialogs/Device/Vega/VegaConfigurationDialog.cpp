@@ -107,7 +107,8 @@ public:
 
 protected:
   /* virtual methods from Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override {
     Layout layout(rc);
 
     WindowStyle style;
@@ -123,18 +124,18 @@ protected:
                        [this](){ OnSave(); });
   }
 
-  void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     Layout layout(rc);
     demo_button.MoveAndShow(layout.demo);
     save_button.MoveAndShow(layout.save);
   }
 
-  void Hide() override {
+  void Hide() noexcept override {
     demo_button.FastHide();
     save_button.FastHide();
   }
 
-  void Move(const PixelRect &rc) override {
+  void Move(const PixelRect &rc) noexcept override {
     Layout layout(rc);
     demo_button.Move(layout.demo);
     save_button.Move(layout.save);
@@ -210,7 +211,7 @@ public:
     :RowFormWidget(look), pager(_pager) {}
 
   /* methods from Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
     RowFormWidget::Prepare(parent, rc);
 
     AddButton(_T("Vega"), MakeSetParametersScheme(pager, 0));
@@ -260,23 +261,20 @@ dlgConfigurationVarioShowModal(Device &_device)
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("Vario Configuration"));
+  TWidgetDialog<ArrowPagerWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look, _("Vario Configuration"));
+  dialog.SetWidget(look.button,
+                   dialog.MakeModalResultCallback(mrOK),
+                   std::make_unique<VegaConfigurationExtraButtons>(dialog));
+  FillPager(dialog.GetWidget());
 
-  ArrowPagerWidget widget(look.button,
-                          dialog.MakeModalResultCallback(mrOK),
-                          std::make_unique<VegaConfigurationExtraButtons>(dialog));
-  FillPager(widget);
-
-  dialog.FinishPreliminary(&widget);
-
-  widget.SetPageFlippedCallback([&dialog, &widget](){
-      UpdateCaption(dialog, widget.GetCurrentIndex());
-    });
-  UpdateCaption(dialog, widget.GetCurrentIndex());
+  dialog.GetWidget().SetPageFlippedCallback([&dialog](){
+    UpdateCaption(dialog, dialog.GetWidget().GetCurrentIndex());
+  });
+  UpdateCaption(dialog, dialog.GetWidget().GetCurrentIndex());
 
   dialog.ShowModal();
-  dialog.StealWidget();
 
   return changed || dialog.GetChanged();
 }

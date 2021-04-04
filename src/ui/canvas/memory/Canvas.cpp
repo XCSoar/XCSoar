@@ -480,18 +480,11 @@ Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 ConstImageBuffer src,
                 PixelPoint src_position, PixelSize src_size) noexcept
 {
-  assert(dest_size.width < 0x4000);
-  assert(dest_size.height < 0x4000);
-
   if (dest_size == src_size) {
     /* fast path: no zooming needed */
     Copy(dest_position, dest_size, src, src_position);
     return;
   }
-
-  if (dest_size.width >= 0x4000 || dest_size.height >= 0x4000)
-    /* paranoid sanity check; shouldn't ever happen */
-    return;
 
   SDLRasterCanvas canvas(buffer);
 

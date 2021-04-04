@@ -21,47 +21,46 @@
  */
 
 #include "TaskEventsPrint.hpp"
-#include "Task/Points/TaskWaypoint.hpp"
 
 #include <stdio.h>
 
 void
-TaskEventsPrint::EnterTransition(const TaskWaypoint& tp)
+TaskEventsPrint::EnterTransition(const TaskWaypoint &tp) noexcept
 {
   if (verbose)
     printf("#- entered sector\n");
 }
 
 void
-TaskEventsPrint::ExitTransition(const TaskWaypoint &tp)
+TaskEventsPrint::ExitTransition(const TaskWaypoint &tp) noexcept
 {
   if (verbose)
     printf("#- exited sector\n");
 }
 
 void
-TaskEventsPrint::RequestArm(const TaskWaypoint &tp)
+TaskEventsPrint::RequestArm(const TaskWaypoint &tp) noexcept
 {
   if (verbose)
     printf("#- ready to advance\n");
 }
 
 void
-TaskEventsPrint::TaskStart()
+TaskEventsPrint::TaskStart() noexcept
 {
   if (verbose)
     printf("#- task started\n");
 }
 
 void
-TaskEventsPrint::TaskFinish()
+TaskEventsPrint::TaskFinish() noexcept
 {
   if (verbose)
     printf("#- task finished\n");
 }
 
 void
-TaskEventsPrint::ActiveAdvanced(const TaskWaypoint &tp, const int i)
+TaskEventsPrint::ActiveAdvanced(const TaskWaypoint &tp, const int i) noexcept
 {
   if (verbose)
     printf("#- advance to sector %d\n", i);

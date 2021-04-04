@@ -117,7 +117,7 @@ public:
 
   /* virtual methods from class Widget */
 
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
     WindowStyle style;
     style.Hide();
 
@@ -130,7 +130,7 @@ public:
     SetWindow(std::move(w));
   }
 
-  void Unprepare() override {
+  void Unprepare() noexcept override {
     device.SetMonitor(nullptr);
   }
 };
@@ -181,13 +181,12 @@ ShowPortMonitor(DeviceDescriptor &device)
   caption.Format(_T("%s: %s"), _("Port monitor"),
                  device.GetConfig().GetPortName(buffer, ARRAY_SIZE(buffer)));
 
-  PortMonitorWidget widget(device, look.terminal);
-
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look.dialog, caption, &widget);
+  TWidgetDialog<PortMonitorWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look.dialog, caption);
   dialog.AddButton(_("Close"), mrOK);
-  widget.CreateButtons(dialog);
+  dialog.SetWidget(device, look.terminal);
+  dialog.GetWidget().CreateButtons(dialog);
 
   dialog.ShowModal();
-  dialog.StealWidget();
 }

@@ -38,12 +38,12 @@ Copyright_License {
 #include <string.h>
 
 static bool
-ParseAirspaceFile(AirspaceParser &parser, Path path,
+ParseAirspaceFile(Airspaces &airspaces, Path path,
                   OperationEnvironment &operation)
 try {
   FileLineReader reader(path, Charset::AUTO);
 
-  if (!parser.Parse(reader, operation)) {
+  if (!ParseAirspaceFile(airspaces, reader, operation)) {
     LogFormat(_T("Failed to parse airspace file: %s"), path.c_str());
     return false;
   }
@@ -56,13 +56,13 @@ try {
 }
 
 static bool
-ParseAirspaceFile(AirspaceParser &parser,
+ParseAirspaceFile(Airspaces &airspaces,
                   struct zzip_dir *dir, const char *path,
                   OperationEnvironment &operation)
 try {
   ZipLineReader reader(dir, path, Charset::AUTO);
 
-  if (!parser.Parse(reader, operation)) {
+  if (!ParseAirspaceFile(airspaces, reader, operation)) {
     LogFormat("Failed to parse airspace file: %s", path);
     return false;
   }
@@ -85,20 +85,18 @@ ReadAirspace(Airspaces &airspaces,
 
   bool airspace_ok = false;
 
-  AirspaceParser parser(airspaces);
-
   // Read the airspace filenames from the registry
   auto path = Profile::GetPath(ProfileKeys::AirspaceFile);
   if (!path.IsNull())
-    airspace_ok |= ParseAirspaceFile(parser, path, operation);
+    airspace_ok |= ParseAirspaceFile(airspaces, path, operation);
 
   path = Profile::GetPath(ProfileKeys::AdditionalAirspaceFile);
   if (!path.IsNull())
-    airspace_ok |= ParseAirspaceFile(parser, path, operation);
+    airspace_ok |= ParseAirspaceFile(airspaces, path, operation);
 
   auto archive = OpenMapFile();
   if (archive)
-    airspace_ok |= ParseAirspaceFile(parser, archive->get(), "airspace.txt",
+    airspace_ok |= ParseAirspaceFile(airspaces, archive->get(), "airspace.txt",
                                      operation);
 
   if (airspace_ok) {

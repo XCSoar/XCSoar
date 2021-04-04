@@ -25,35 +25,37 @@ Copyright_License {
 #define XCSOAR_ANDROID_NOOK_HPP
 
 namespace Nook {
-  /**
-   * initialize USB mode in Nook (must be rooted with USB Kernel)
-   */
-  void InitUsb();
 
-  /**
-   * Enter FastMode to eliminate full refresh of screen
-   * requires Nook kernel rooted to support FastMode
-   *
-   * @return false if the operation has failed, e.g. because the
-   * kernel does not support the mode
-   */
-  bool EnterFastMode();
+/**
+ * initialize USB mode in Nook (must be rooted with USB Kernel)
+ */
+void InitUsb();
 
-  /**
-   * Exit FastMode to restore full (slow) refresh of screen
-   * requires Nook kernel rooted to support FastMode
-   */
-  void ExitFastMode();
+/**
+ * Enter FastMode to eliminate full refresh of screen
+ * requires Nook kernel rooted to support FastMode
+ *
+ * @return false if the operation has failed, e.g. because the
+ * kernel does not support the mode
+ */
+bool EnterFastMode();
 
-  /**
-   * Set Nook regulator's charge rate to 500mA.
-   */
-  void SetCharge500();
+/**
+ * Exit FastMode to restore full (slow) refresh of screen
+ * requires Nook kernel rooted to support FastMode
+ */
+void ExitFastMode();
 
-  /**
-   * Set Nook regulator's charge rate to 100mA.
-   */
-  void SetCharge100();
-}
+/**
+ * Set Nook regulator's charge rate to 500mA.
+ */
+void SetCharge500();
+
+/**
+ * Set Nook regulator's charge rate to 100mA.
+ */
+void SetCharge100();
+
+} // namespace Nook
 
 #endif

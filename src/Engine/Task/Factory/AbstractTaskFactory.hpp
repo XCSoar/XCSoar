@@ -25,7 +25,6 @@ Copyright_License {
 #define ABSTRACT_TASK_FACTORY_HPP
 
 #include "util/NonCopyable.hpp"
-#include "util/Compiler.h"
 #include "TaskPointFactoryType.hpp"
 #include "ValidationError.hpp"
 #include "LegalPointSet.hpp"
@@ -84,9 +83,6 @@ protected:
   const LegalPointSet intermediate_types;
   /** list of valid finish types, for specialisation */
   const LegalPointSet finish_types;
-
-  /** list of errors returned by task validation */
-  TaskValidationErrorSet validation_errors;
 
 protected:
   /**
@@ -388,9 +384,8 @@ public:
   * @param tp The tp that exists (from task built using different factory)
   * @return The suggested mutated type for the current factory
   */
-  virtual gcc_pure
-  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const;
-
+  [[gnu::pure]]
+  virtual TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const;
 
   /**
    * Create an AST point given an OZ
@@ -426,34 +421,30 @@ public:
                                             WaypointPtr wp) const noexcept;
 
   /**
-   * Check whether task is complete and valid according to factory rules
-   * Adds error types to validation_errors
-   *
-   * @return True if task is valid according to factory rules
+   * Check whether task is complete and valid according to factory
+   * rules and returns a set of errors.
    */
-  virtual bool Validate();
+  virtual TaskValidationErrorSet Validate() const noexcept;
 
   /**
    * Checks whether shapes of all OZs, start, finish are valid
    * for an FAI badge or record
-   * Appends warning message to validation_errors
    * This is used independently of check_task() validation
    *
    * @return True if all OZs are valid for a FAI badge or record
    */
-  bool ValidateFAIOZs();
+  TaskValidationErrorSet ValidateFAIOZs() const noexcept;
 
   /**
    * Checks whether shapes of all OZs, start, finish are valid
    * for an MAT task
-   * Appends warning message to validation_errors
    * This is used independently of check_task() validation
    *
    * @return True if all OZs are valid for a MAT
    */
-  bool ValidateMATOZs();
+  TaskValidationErrorSet ValidateMATOZs() const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   const OrderedTaskSettings &GetOrderedTaskSettings() const;
 
   /**
@@ -464,7 +455,7 @@ public:
    *
    * @return True if type is valid
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual bool ValidAbstractType(LegalAbstractPointType type,
                                  const unsigned position) const;
 
@@ -475,7 +466,7 @@ public:
    *
    * @return Vector of valid types in position
    */
-  gcc_pure
+  [[gnu::pure]]
   LegalPointSet GetValidIntermediateTypes(unsigned position) const;
 
   /**
@@ -483,7 +474,7 @@ public:
    *
    * @return Vector of valid types in position
    */
-  gcc_pure
+  [[gnu::pure]]
   const LegalPointSet &GetValidStartTypes() const {
     return start_types;
   }
@@ -501,7 +492,7 @@ public:
    *
    * @return Vector of valid types in position
    */
-  gcc_pure
+  [[gnu::pure]]
   const LegalPointSet &GetValidIntermediateTypes() const {
     return intermediate_types;
   }
@@ -511,7 +502,7 @@ public:
    *
    * @return Vector of valid types in position
    */
-  gcc_pure
+  [[gnu::pure]]
   const LegalPointSet &GetValidFinishTypes() const {
     return finish_types;
   }
@@ -523,7 +514,7 @@ public:
    *
    * @return Vector of valid types in position
    */
-  gcc_pure
+  [[gnu::pure]]
   LegalPointSet GetValidTypes(unsigned position) const;
 
   /**
@@ -534,14 +525,14 @@ public:
    * @return Type of supplied point based on the observation zone shape and
    * TaskPoint type
    */
-  gcc_pure
+  [[gnu::pure]]
   TaskPointFactoryType GetType(const OrderedTaskPoint &point) const;
 
   /**
    * Determines whether task is closed (finish same as start)
    * @return true if task is closed
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsClosed() const;
 
   /**
@@ -549,7 +540,7 @@ public:
    * (other than start/finish, no points used more than once)
    * @return true if task is unique
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsUnique() const;
 
   /**
@@ -557,7 +548,7 @@ public:
    *
    * @return true if points are homogeneous
   */
-  gcc_pure
+  [[gnu::pure]]
   bool IsHomogeneous() const;
 
   /**
@@ -567,7 +558,7 @@ public:
    *
    * @return True if type is valid
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsValidFinishType(TaskPointFactoryType type) const {
     return finish_types.Contains(type);
   }
@@ -579,7 +570,7 @@ public:
    *
    * @return True if type is valid
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsValidStartType(TaskPointFactoryType type) const {
     return start_types.Contains(type);
   }
@@ -591,7 +582,7 @@ public:
    *
    * @return True if type is valid
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsValidIntermediateType(TaskPointFactoryType type) const {
     return intermediate_types.Contains(type);
   }
@@ -616,15 +607,6 @@ public:
    */
   bool MutateTPsToTaskType();
 
-  /**
-   * Call to validate() populates this vector
-   * @return returns vector of errors for current task
-   */
-  gcc_pure
-  const TaskValidationErrorSet &GetValidationErrors() const {
-    return validation_errors;
-  }
-
 protected:
   /**
    * Test whether a candidate object is of correct type to be added/replaced/etc
@@ -635,7 +617,7 @@ protected:
    *
    * @return True if candidate is valid at the position
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual bool IsValidType(const OrderedTaskPoint &new_tp,
                            unsigned position) const;
 
@@ -657,7 +639,7 @@ protected:
    * 
    * @return True if possible
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsPositionIntermediate(const unsigned position) const;
 
   /** 
@@ -667,26 +649,17 @@ protected:
    * 
    * @return True if possible
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsPositionFinish(const unsigned position) const;
 
-  /**
-   * Inserts the validation error type into the vector of validation errors
-   *
-   * @param e The validation error type to be added
-   */
-  void AddValidationError(TaskValidationErrorType e) {
-    validation_errors.Add(e);
-  }
-
 private:
-  gcc_pure
+  [[gnu::pure]]
   TaskPointFactoryType GetDefaultStartType() const;
 
-  gcc_pure
+  [[gnu::pure]]
   TaskPointFactoryType GetDefaultIntermediateType() const;
 
-  gcc_pure
+  [[gnu::pure]]
   TaskPointFactoryType GetDefaultFinishType() const;
 
   /**
@@ -699,13 +672,6 @@ private:
    * @return True if task is changed
    */
   bool MutateClosedFinishPerTaskType();
-
-  /**
-   * Clears the vector of validation errors for the current task
-   */
-  void ClearValidationErrors() {
-    validation_errors = TaskValidationErrorSet();
-  }
 };
 
 #endif

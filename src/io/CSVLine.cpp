@@ -80,10 +80,13 @@ CSVLine::Read(char *dest, size_t size)
 bool
 CSVLine::ReadCompare(const char *value)
 {
-  size_t length = strlen(value);
-  char buffer[length + 2];
-  Read(buffer, length + 2);
-  return StringIsEqual(buffer, value);
+  size_t expected_length = strlen(value);
+
+  const char *src = data;
+  size_t src_length = Skip();
+
+  return src_length == expected_length &&
+    StringIsEqual(value, src, expected_length);
 }
 
 long

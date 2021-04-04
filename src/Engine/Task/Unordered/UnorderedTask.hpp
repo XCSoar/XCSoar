@@ -39,39 +39,39 @@ public:
 
 public:
   /* virtual methods from class AbstractTask */
-  virtual bool CheckTask() const override;
-  virtual bool CheckTransitions(const AircraftState &state_now,
-                                const AircraftState &state_last) override;
-  virtual bool CalcBestMC(const AircraftState &state_now,
-                          const GlidePolar &glide_polar,
-                          double& best) const override;
-  virtual double CalcRequiredGlide(const AircraftState &state_now,
-                                   const GlidePolar &glide_polar) const override;
-  virtual double CalcGradient(const AircraftState &state_now) const override;
-  virtual double ScanTotalStartTime() override;
-  virtual double ScanLegStartTime() override;
-  virtual double ScanDistanceNominal() override;
-  virtual double ScanDistancePlanned() override;
-  virtual double ScanDistanceRemaining(const GeoPoint &ref) override;
-  virtual double ScanDistanceScored(const GeoPoint &ref) override;
-  virtual double ScanDistanceTravelled(const GeoPoint &ref) override;
-  virtual void ScanDistanceMinMax(const GeoPoint &ref, bool full,
-                                  double *dmin, double *dmax) override;
-  virtual void GlideSolutionRemaining(const AircraftState &state_now,
-                                      const GlidePolar &polar,
-                                      GlideResult &total, GlideResult &leg) override;
-  virtual void GlideSolutionTravelled(const AircraftState &state_now,
-                                      const GlidePolar &glide_polar,
-                                      GlideResult &total, GlideResult &leg) override;
-  virtual void GlideSolutionPlanned(const AircraftState &state_now,
-                                    const GlidePolar &glide_polar,
-                                    GlideResult &total,
-                                    GlideResult &leg,
-                                    DistanceStat &total_remaining_effective,
-                                    DistanceStat &leg_remaining_effective,
-                                    const GlideResult &solution_remaining_total,
-                                    const GlideResult &solution_remaining_leg) override;
-  virtual bool IsScored() const override { return false; }
+  TaskValidationErrorSet CheckTask() const noexcept override;
+  bool CheckTransitions(const AircraftState &state_now,
+                        const AircraftState &state_last) noexcept override;
+  bool CalcBestMC(const AircraftState &state_now,
+                  const GlidePolar &glide_polar,
+                  double& best) const noexcept override;
+  double CalcRequiredGlide(const AircraftState &state_now,
+                           const GlidePolar &glide_polar) const noexcept override;
+  double CalcGradient(const AircraftState &state_now) const noexcept override;
+  double ScanTotalStartTime() noexcept override;
+  double ScanLegStartTime() noexcept override;
+  double ScanDistanceNominal() noexcept override;
+  double ScanDistancePlanned() noexcept override;
+  double ScanDistanceRemaining(const GeoPoint &ref) noexcept override;
+  double ScanDistanceScored(const GeoPoint &ref) noexcept override;
+  double ScanDistanceTravelled(const GeoPoint &ref) noexcept override;
+  void ScanDistanceMinMax(const GeoPoint &ref, bool full,
+                          double *dmin, double *dmax) noexcept override;
+  void GlideSolutionRemaining(const AircraftState &state_now,
+                              const GlidePolar &polar,
+                              GlideResult &total, GlideResult &leg) noexcept override;
+  void GlideSolutionTravelled(const AircraftState &state_now,
+                              const GlidePolar &glide_polar,
+                              GlideResult &total, GlideResult &leg) noexcept override;
+  void GlideSolutionPlanned(const AircraftState &state_now,
+                            const GlidePolar &glide_polar,
+                            GlideResult &total,
+                            GlideResult &leg,
+                            DistanceStat &total_remaining_effective,
+                            DistanceStat &leg_remaining_effective,
+                            const GlideResult &solution_remaining_total,
+                            const GlideResult &solution_remaining_leg) noexcept override;
+  bool IsScored() const noexcept override { return false; }
 };
 
 #endif

@@ -30,12 +30,13 @@ enum Controls {
 };
 
 CylinderZoneEditWidget::CylinderZoneEditWidget(CylinderZone &_oz,
-                                               bool _radius_editable)
+                                               bool _radius_editable) noexcept
   :ObservationZoneEditWidget(_oz),
    radius_editable(_radius_editable) {}
 
 void
-CylinderZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+CylinderZoneEditWidget::Prepare(ContainerWindow &parent,
+                                const PixelRect &rc) noexcept
 {
   ObservationZoneEditWidget::Prepare(parent, rc);
 
@@ -48,7 +49,7 @@ CylinderZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-CylinderZoneEditWidget::Save(bool &_changed)
+CylinderZoneEditWidget::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

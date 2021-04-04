@@ -45,19 +45,19 @@ struct PolarPoint {
 struct PolarShape {
   std::array<PolarPoint, 3> points;
 
-  const PolarPoint &operator[](unsigned i) const {
+  const PolarPoint &operator[](unsigned i) const noexcept {
     return points[i];
   }
 
-  PolarPoint &operator[](unsigned i) {
+  PolarPoint &operator[](unsigned i) noexcept {
     return points[i];
   }
 
   gcc_pure
-  PolarCoefficients CalculateCoefficients() const;
+  PolarCoefficients CalculateCoefficients() const noexcept;
 
   gcc_pure
-  bool IsValid() const;
+  bool IsValid() const noexcept;
 };
 
 #endif

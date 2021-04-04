@@ -24,7 +24,6 @@
 #define AV_FILTER_HPP
 
 #include "util/StaticArray.hxx"
-#include "util/Compiler.h"
 
 #include <numeric>
 #include <cassert>
@@ -63,7 +62,7 @@ public:
    *
    * @return Average value in buffer
    */
-  gcc_pure
+  [[gnu::pure]]
   double Average() const {
     assert(!x.empty());
 

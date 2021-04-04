@@ -44,11 +44,11 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
                      const GlidePolar &glide_polar)
 {
   ChartRenderer chart(chart_look, canvas, rc);
+  chart.SetYLabel(_T("w"), Units::GetVerticalSpeedName());
+  chart.Begin();
 
-  const auto acc = std::max(fs.vario_cruise_histogram.GetAccumulator(),
-                            fs.vario_circling_histogram.GetAccumulator());
-
-  if (!acc) {
+  if (fs.vario_cruise_histogram.empty() &&
+      fs.vario_circling_histogram.empty()) {
     chart.DrawNoData();
     return;
   }
@@ -60,10 +60,15 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
 
   const auto s = -glide_polar.GetSBestLD();
   const auto mc = glide_polar.GetMC();
-  chart.ScaleYFromValue(fs.vario_cruise_histogram.GetMinX());
-  chart.ScaleYFromValue(fs.vario_cruise_histogram.GetMaxX());
-  chart.ScaleYFromValue(s);
-  chart.ScaleYFromValue(mc);
+
+  constexpr double y_padding = 0.5;
+
+  chart.ScaleYFromValue(fs.vario_cruise_histogram.GetMinX() - y_padding);
+  chart.ScaleYFromValue(fs.vario_cruise_histogram.GetMaxX() + y_padding);
+  chart.ScaleYFromValue(fs.vario_circling_histogram.GetMinX() - y_padding);
+  chart.ScaleYFromValue(fs.vario_circling_histogram.GetMaxX() + y_padding);
+  chart.ScaleYFromValue(s - y_padding);
+  chart.ScaleYFromValue(mc + y_padding);
 
   // draw red area at higher than cruise sink rate, blue area above mc
   {
@@ -84,19 +89,19 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   canvas.SelectNullPen();
   {
     canvas.Select(chart_look.black_brush);
-    chart.DrawFilledLineGraph(fs.vario_circling_histogram, true);
+    chart.DrawFilledLineGraph(fs.vario_circling_histogram.GetSlots(), true);
   }
   {
     canvas.Select(chart_look.blank_brush);
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
 #endif
-    chart.DrawFilledLineGraph(fs.vario_cruise_histogram, true);
+    chart.DrawFilledLineGraph(fs.vario_cruise_histogram.GetSlots(), true);
   }
 
   // draw these after shaded regions, so they overlay
-  chart.DrawLineGraph(fs.vario_cruise_histogram, ChartLook::STYLE_GREEN, true);
-  chart.DrawLineGraph(fs.vario_circling_histogram, ChartLook::STYLE_RED, true);
+  chart.DrawLineGraph(fs.vario_cruise_histogram.GetSlots(), ChartLook::STYLE_GREEN, true);
+  chart.DrawLineGraph(fs.vario_circling_histogram.GetSlots(), ChartLook::STYLE_RED, true);
 
   // draw current MC setting
   chart.DrawLine(0, mc, scale, mc, ChartLook::STYLE_REDTHICKDASH);
@@ -109,6 +114,5 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   chart.DrawLabel(_T("MC"), tref, mc);
   chart.DrawLabel(_T("S cruise"), tref, s);
 
-  chart.DrawYLabel(_T("w"), Units::GetVerticalSpeedName());
-
+  chart.Finish();
 }

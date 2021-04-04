@@ -27,19 +27,19 @@ Copyright_License {
 #include <cassert>
 
 void
-ManagedWidget::Unprepare()
+ManagedWidget::Unprepare() noexcept
 {
   Hide();
 
   if (!IsPrepared())
     return;
 
-  prepared = false;
+  state = State::INITIALISED;
   widget->Unprepare();
 }
 
 void
-ManagedWidget::Clear()
+ManagedWidget::Clear() noexcept
 {
   Unprepare();
 
@@ -48,16 +48,22 @@ ManagedWidget::Clear()
 }
 
 void
-ManagedWidget::Set(Widget *_widget)
+ManagedWidget::Set(Widget *_widget) noexcept
 {
   Clear();
 
   widget = _widget;
-  prepared = false;
+  state = State::NONE;
 }
 
 void
-ManagedWidget::Move(const PixelRect &_position)
+ManagedWidget::Set(std::unique_ptr<Widget> _widget) noexcept
+{
+  Set(_widget.release());
+}
+
+void
+ManagedWidget::Move(const PixelRect &_position) noexcept
 {
   position = _position;
 
@@ -65,26 +71,51 @@ ManagedWidget::Move(const PixelRect &_position)
   have_position = true;
 #endif
 
-  if (widget != nullptr && prepared && visible)
+  if (IsVisible())
     widget->Move(position);
+}
+
+void
+ManagedWidget::Initialise(ContainerWindow &_parent, const PixelRect &_position)
+{
+  assert(parent == nullptr);
+  assert(widget == nullptr || state == State::NONE);
+
+  parent = &_parent;
+  position = _position;
+
+#ifndef NDEBUG
+  have_position = true;
+#endif
+
+  if (widget != nullptr) {
+    widget->Initialise(*parent, position);
+    state = State::INITIALISED;
+  }
 }
 
 void
 ManagedWidget::Prepare()
 {
+  assert(parent != nullptr);
   assert(have_position);
 
-  if (widget == nullptr || prepared)
+  if (widget == nullptr)
     return;
 
-  widget->Initialise(parent, position);
-  widget->Prepare(parent, position);
-  prepared = true;
-  visible = false;
+  if (state < State::INITIALISED) {
+    state = State::INITIALISED;
+    widget->Initialise(*parent, position);
+  }
+
+  if (state < State::PREPARED) {
+    state = State::PREPARED;
+    widget->Prepare(*parent, position);
+  }
 }
 
 void
-ManagedWidget::Show()
+ManagedWidget::Show() noexcept
 {
   assert(have_position);
 
@@ -93,24 +124,24 @@ ManagedWidget::Show()
 
   Prepare();
 
-  if (!visible) {
-    visible = true;
+  if (state < State::VISIBLE) {
+    state = State::VISIBLE;
     widget->Show(position);
   }
 }
 
 void
-ManagedWidget::Hide()
+ManagedWidget::Hide() noexcept
 {
-  if (widget != nullptr && prepared && visible) {
+  if (IsVisible()) {
     widget->Leave();
-    visible = false;
+    state = State::PREPARED;
     widget->Hide();
   }
 }
 
 void
-ManagedWidget::SetVisible(bool _visible)
+ManagedWidget::SetVisible(bool _visible) noexcept
 {
   if (!IsPrepared())
     return;
@@ -122,13 +153,19 @@ ManagedWidget::SetVisible(bool _visible)
 }
 
 bool
-ManagedWidget::SetFocus()
+ManagedWidget::Save(bool &changed)
+{
+  return !IsPrepared() || widget->Save(changed);
+}
+
+bool
+ManagedWidget::SetFocus() noexcept
 {
   return IsVisible() && widget->SetFocus();
 }
 
 bool
-ManagedWidget::KeyPress(unsigned key_code)
+ManagedWidget::KeyPress(unsigned key_code) noexcept
 {
   return IsVisible() && widget->KeyPress(key_code);
 }

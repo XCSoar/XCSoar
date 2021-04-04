@@ -35,21 +35,21 @@ struct GLSurfaceListener {
 extern bool surface_valid;
 
 void
-AddSurfaceListener(GLSurfaceListener &listener);
+AddSurfaceListener(GLSurfaceListener &listener) noexcept;
 
 void
-RemoveSurfaceListener(GLSurfaceListener &listener);
+RemoveSurfaceListener(GLSurfaceListener &listener) noexcept;
 
 /**
  * Notify all listeners that the OpenGL surface has been created.
  */
 void
-SurfaceCreated();
+SurfaceCreated() noexcept;
 
 /**
  * Notify all listeners that the OpenGL surface has been destroyed.
  */
 void
-SurfaceDestroyed();
+SurfaceDestroyed() noexcept;
 
 #endif

@@ -93,7 +93,8 @@ GetUnsignedValue(const FlarmDevice &device, const char *name,
 }
 
 void
-FLARMConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+FLARMConfigWidget::Prepare(ContainerWindow &parent,
+                           const PixelRect &rc) noexcept
 {
   RequestAllSettings(device);
 
@@ -150,7 +151,7 @@ FLARMConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-FLARMConfigWidget::Save(bool &_changed)
+FLARMConfigWidget::Save(bool &_changed) noexcept
 {
   PopupOperationEnvironment env;
   bool changed = false;

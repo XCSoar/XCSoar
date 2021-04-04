@@ -27,9 +27,9 @@
 #include <cassert>
 #include <stdlib.h>
 
-gcc_const
+[[gnu::const]]
 static unsigned
-AngleToIndex(Angle a)
+AngleToIndex(Angle a) noexcept
 {
   auto i = ROUTEPOLAR_POINTS * (1.25
                                 - a.AsBearing() / Angle::FullCircle());
@@ -37,28 +37,29 @@ AngleToIndex(Angle a)
   return uround(i) % ROUTEPOLAR_POINTS;
 }
 
-gcc_const
+[[gnu::const]]
 static unsigned
-XYToIndex(double x, double y)
+XYToIndex(double x, double y) noexcept
 {
   return AngleToIndex(Angle::FromXY(y, x));
 }
 
-RouteLink::RouteLink (const RouteLinkBase& _link, const FlatProjection &proj)
+RouteLink::RouteLink(const RouteLinkBase& _link,
+                     const FlatProjection &proj) noexcept
   :RouteLinkBase(_link)
 {
   CalcSpeedups(proj);
 }
 
-RouteLink::RouteLink (const RoutePoint& _destination, const RoutePoint& _origin,
-                      const FlatProjection &proj)
+RouteLink::RouteLink(const RoutePoint& _destination, const RoutePoint& _origin,
+                     const FlatProjection &proj) noexcept
   :RouteLinkBase(_destination, _origin)
 {
   CalcSpeedups(proj);
 }
 
 void
-RouteLink::CalcSpeedups(const FlatProjection &proj)
+RouteLink::CalcSpeedups(const FlatProjection &proj) noexcept
 {
   const auto scale = proj.GetApproximateScale();
   const auto dx = first.x - second.x;
@@ -76,7 +77,7 @@ RouteLink::CalcSpeedups(const FlatProjection &proj)
 }
 
 RouteLink
-RouteLink::Flat() const
+RouteLink::Flat() const noexcept
 {
   RouteLink copy(*this);
   copy.second.altitude = copy.first.altitude;
@@ -86,7 +87,7 @@ RouteLink::Flat() const
 #define ROUTE_MIN_STEP 3
 
 bool
-RouteLinkBase::IsShort() const
+RouteLinkBase::IsShort() const noexcept
 {
   return abs(first.x - second.x) < ROUTE_MIN_STEP &&
          abs(first.y - second.y) < ROUTE_MIN_STEP;

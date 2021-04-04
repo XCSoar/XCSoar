@@ -33,7 +33,7 @@
 class DeviceEditWidget : public RowFormWidget, DataFieldListener {
 public:
   struct Listener {
-    virtual void OnModified(DeviceEditWidget &widget) = 0;
+    virtual void OnModified(DeviceEditWidget &widget) noexcept = 0;
   };
 
 private:
@@ -42,30 +42,29 @@ private:
   Listener *listener;
 
 public:
-  DeviceEditWidget(const DeviceConfig &_config);
+  DeviceEditWidget(const DeviceConfig &_config) noexcept;
 
-  void SetListener(Listener *_listener) {
+  void SetListener(Listener *_listener) noexcept {
     assert(listener == NULL);
     assert(_listener != NULL);
 
     listener = _listener;
   }
 
-  const DeviceConfig &GetConfig() const {
+  const DeviceConfig &GetConfig() const noexcept {
     return config;
   }
 
   /**
    * Fill new values into the form.
    */
-  void SetConfig(const DeviceConfig &config);
+  void SetConfig(const DeviceConfig &config) noexcept;
 
-  void UpdateVisibilities();
+  void UpdateVisibilities() noexcept;
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
 private:
   /* virtual methods from DataFieldListener */

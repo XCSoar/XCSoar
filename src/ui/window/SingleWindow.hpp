@@ -55,8 +55,11 @@ public:
   static bool RegisterClass(HINSTANCE hInstance) noexcept;
 #endif
 
+  /**
+   * Throws on error.
+   */
   void Create(const TCHAR *text, PixelSize size,
-              TopWindowStyle style=TopWindowStyle()) noexcept {
+              TopWindowStyle style=TopWindowStyle()) {
 #ifdef USE_WINUSER
     TopWindow::Create(class_name, text, size, style);
 #else

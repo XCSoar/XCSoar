@@ -36,25 +36,7 @@ Copyright_License {
 static WaypointPtr
 FindWaypoint(Waypoints &way_points, const TCHAR *name)
 {
-  auto wp = way_points.LookupName(name);
-  if (wp != nullptr)
-    return wp;
-
-  // TODO: Comments please! What is this supposed to do? Why do we need it?
-  size_t name_length = _tcslen(name);
-  TCHAR buffer[name_length + 4];
-  _tcscpy(buffer, name);
-  _tcscpy(buffer + name_length, _T(" AF"));
-  wp = way_points.LookupName(buffer);
-  if (wp != nullptr)
-    return wp;
-
-  _tcscpy(buffer + name_length, _T(" AD"));
-  wp = way_points.LookupName(buffer);
-  if (wp != nullptr)
-    return wp;
-
-  return nullptr;
+  return way_points.LookupName(name);
 }
 
 static void

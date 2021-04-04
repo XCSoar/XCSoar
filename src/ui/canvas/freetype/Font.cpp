@@ -69,9 +69,9 @@ static AllocatedPath italic_font_path = nullptr;
 static AllocatedPath bold_italic_font_path = nullptr;
 static AllocatedPath monospace_font_path = nullptr;
 
-gcc_const
+[[gnu::const]]
 static inline bool
-IsMono()
+IsMono() noexcept
 {
 #ifdef KOBO
   /* on the Kobo, "mono" mode can be set at runtime; the shutdown
@@ -83,18 +83,18 @@ IsMono()
 }
 
 static constexpr FT_Long
-FT_FLOOR(FT_Long x)
+FT_FLOOR(FT_Long x) noexcept
 {
   return (x & -64) / 64;
 }
 
 static constexpr FT_Long
-FT_CEIL(FT_Long x)
+FT_CEIL(FT_Long x) noexcept
 {
   return FT_FLOOR(x + 63);
 }
 
-gcc_pure
+[[gnu::pure]]
 static unsigned
 NextChar(TStringView &s) noexcept
 {
@@ -128,14 +128,14 @@ Font::Initialise()
 }
 
 void
-Font::Deinitialise()
+Font::Deinitialise() noexcept
 {
   FreeType::Deinitialise();
 }
 
-gcc_pure
+[[gnu::pure]]
 static unsigned
-GetCapitalHeight(FT_Face face)
+GetCapitalHeight(FT_Face face) noexcept
 {
 #ifndef ENABLE_OPENGL
   const std::lock_guard<Mutex> lock(freetype_mutex);
@@ -219,7 +219,7 @@ Font::Load(const FontDescription &d)
 }
 
 void
-Font::Destroy()
+Font::Destroy() noexcept
 {
   if (!IsDefined())
     return;
@@ -248,7 +248,7 @@ ForEachChar(TStringView text, F &&f)
 template<typename T, typename F>
 static void
 ForEachGlyph(const FT_Face face, unsigned ascent_height, T &&text,
-             F &&f)
+             F &&f) noexcept
 {
   const bool use_kerning = FT_HAS_KERNING(face);
 
@@ -312,7 +312,7 @@ Font::TextSize(TStringView text) const noexcept
 }
 
 static void
-MixLine(uint8_t *dest, const uint8_t *src, size_t n)
+MixLine(uint8_t *dest, const uint8_t *src, size_t n) noexcept
 {
   for (size_t i = 0; i != n; ++i)
     /* bit-wise "OR" should be good enough for kerning */
@@ -321,7 +321,7 @@ MixLine(uint8_t *dest, const uint8_t *src, size_t n)
 
 static void
 RenderGlyph(uint8_t *buffer, unsigned buffer_width, unsigned buffer_height,
-            const FT_Bitmap &bitmap, int x, int y)
+            const FT_Bitmap &bitmap, int x, int y) noexcept
 {
   const uint8_t *src = (const uint8_t *)bitmap.buffer;
   int width = bitmap.width, height = bitmap.rows;
@@ -358,7 +358,7 @@ RenderGlyph(uint8_t *buffer, unsigned buffer_width, unsigned buffer_height,
 }
 
 static void
-ConvertMono(unsigned char *dest, const unsigned char *src, unsigned n)
+ConvertMono(unsigned char *dest, const unsigned char *src, unsigned n) noexcept
 {
   for (; n >= 8; n -= 8, ++src) {
     for (unsigned i = 0x80; i != 0; i >>= 1)
@@ -370,7 +370,7 @@ ConvertMono(unsigned char *dest, const unsigned char *src, unsigned n)
 }
 
 static void
-ConvertMono(FT_Bitmap &dest, const FT_Bitmap &src)
+ConvertMono(FT_Bitmap &dest, const FT_Bitmap &src) noexcept
 {
   dest = src;
   dest.pitch = dest.width;
@@ -384,7 +384,7 @@ ConvertMono(FT_Bitmap &dest, const FT_Bitmap &src)
 
 static void
 RenderGlyph(uint8_t *buffer, size_t width, size_t height,
-            FT_GlyphSlot glyph, int x, int y)
+            FT_GlyphSlot glyph, int x, int y) noexcept
 {
   FT_Error error = FT_Render_Glyph(glyph, render_mode);
   if (error)
@@ -402,7 +402,8 @@ RenderGlyph(uint8_t *buffer, size_t width, size_t height,
 }
 
 void
-Font::Render(TStringView text, const PixelSize size, void *_buffer) const
+Font::Render(TStringView text, const PixelSize size,
+             void *_buffer) const noexcept
 {
   uint8_t *buffer = (uint8_t *)_buffer;
   std::fill_n(buffer, BufferSize(size), 0);

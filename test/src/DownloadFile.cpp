@@ -21,12 +21,16 @@ Copyright_License {
 }
 */
 
-#include "net/http/Session.hpp"
-#include "net/http/Request.hpp"
-#include "net/http/Handler.hpp"
 #include "net/http/Init.hpp"
+#include "net/http/Request.hxx"
+#include "net/http/Handler.hxx"
+#include "net/http/Init.hpp"
+#include "io/async/AsioThread.hpp"
 #include "system/ConvertPathName.hpp"
+#include "thread/Mutex.hxx"
+#include "thread/Cond.hxx"
 #include "util/PrintException.hxx"
+#include "util/ScopeExit.hxx"
 
 #include <exception>
 #include <iostream>
@@ -36,41 +40,68 @@ Copyright_License {
 
 using namespace std;
 
-class MyResponseHandler final : public Net::ResponseHandler {
+class MyResponseHandler final : public CurlResponseHandler {
   FILE *const file;
+
+  Mutex mutex;
+  Cond cond;
+
+  std::exception_ptr error;
+
+  bool done;
 
 public:
   explicit MyResponseHandler(FILE *_file):file(_file) {}
 
-  bool ResponseReceived(int64_t content_length) noexcept override {
-    return true;
+  void Wait() noexcept {
+    std::unique_lock<Mutex> lock(mutex);
+    cond.wait(lock, [this]{ return done; });
+
+    if (error)
+      std::rethrow_exception(error);
   }
 
-  bool DataReceived(const void *data, size_t length) noexcept override {
-    fwrite(data, 1, length, stdout);
+  /* virtual methods from class CurlResponseHandler */
+  void OnHeaders(unsigned status,
+                 std::multimap<std::string, std::string> &&headers) override {
+    printf("status: %u\n", status);
 
+    for (const auto &[name, value] : headers)
+      printf("%s: %s\n", name.c_str(), value.c_str());
+
+    printf("\n");
+  }
+
+  void OnData(ConstBuffer<void> data) override {
     if (file != nullptr)
-      fwrite(data, 1, length, file);
+      fwrite(data.data, 1, data.size, file);
+    else
+      fwrite(data.data, 1, data.size, stdout);
+  }
 
-    return true;
+  void OnEnd() override {
+    const std::lock_guard<Mutex> lock(mutex);
+    done = true;
+    cond.notify_one();
+  }
+
+  void OnError(std::exception_ptr e) noexcept override {
+    const std::lock_guard<Mutex> lock(mutex);
+    error = std::move(e);
+    done = true;
+    cond.notify_one();
   }
 };
 
 static void
-Download(const char *url, Path path)
+Download(CurlGlobal &curl, const char *url, Path path)
 {
-  cout << "Creating Session ... ";
-  Net::Session session;
-  cout << "done" << endl;
-
-  cout << "Creating Request ... ";
-
   FILE *file = path != nullptr ? _tfopen(path.c_str(), _T("wb")) : nullptr;
   MyResponseHandler handler(file);
-  Net::Request request(session, handler, url);
-  cout << "done" << endl;
+  CurlRequest request(curl, url, handler);
 
-  request.Send();
+  request.StartIndirect();
+  handler.Wait();
 
   if (file != NULL)
     fclose(file);
@@ -88,12 +119,13 @@ main(int argc, char *argv[])
   }
 
   try {
-    Net::Initialise();
+    AsioThread io_thread;
+    io_thread.Start();
+    AtScopeExit(&) { io_thread.Stop(); };
+    const Net::ScopeInit net_init(io_thread.GetEventLoop());
 
     const char *url = argv[1];
-    Download(url, argc > 2 ? (Path)PathName(argv[2]) : nullptr);
-
-    Net::Deinitialise();
+    Download(*Net::curl, url, argc > 2 ? (Path)PathName(argv[2]) : nullptr);
   } catch (const std::exception &exception) {
     PrintException(exception);
     return EXIT_FAILURE;

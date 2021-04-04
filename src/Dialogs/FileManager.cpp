@@ -222,11 +222,11 @@ class ManagedFileListWidget
   TrivialArray<FileItem, 64u> items;
 
 public:
-  void CreateButtons(WidgetDialog &dialog);
+  void CreateButtons(WidgetDialog &dialog) noexcept;
 
 protected:
   gcc_pure
-  bool IsDownloading(const char *name) const {
+  bool IsDownloading(const char *name) const noexcept {
 #ifdef HAVE_DOWNLOAD_MANAGER
     std::lock_guard<Mutex> lock(mutex);
     return downloads.find(name) != downloads.end();
@@ -236,12 +236,12 @@ protected:
   }
 
   gcc_pure
-  bool IsDownloading(const AvailableFile &file) const {
+  bool IsDownloading(const AvailableFile &file) const noexcept {
     return IsDownloading(file.GetName());
   }
 
-  gcc_pure
-  bool IsDownloading(const char *name, DownloadStatus &status_r) const {
+  bool IsDownloading(const char *name,
+                     DownloadStatus &status_r) const noexcept {
 #ifdef HAVE_DOWNLOAD_MANAGER
     std::lock_guard<Mutex> lock(mutex);
     auto i = downloads.find(name);
@@ -255,14 +255,13 @@ protected:
 #endif
   }
 
-  gcc_pure
   bool IsDownloading(const AvailableFile &file,
-                     DownloadStatus &status_r) const {
+                     DownloadStatus &status_r) const noexcept {
     return IsDownloading(file.GetName(), status_r);
   }
 
   gcc_pure
-  bool HasFailed(const char *name) const {
+  bool HasFailed(const char *name) const noexcept {
 #ifdef HAVE_DOWNLOAD_MANAGER
     std::lock_guard<Mutex> lock(mutex);
     return failures.find(name) != failures.end();
@@ -272,12 +271,12 @@ protected:
   }
 
   gcc_pure
-  bool HasFailed(const AvailableFile &file) const {
+  bool HasFailed(const AvailableFile &file) const noexcept {
     return HasFailed(file.GetName());
   }
 
   gcc_pure
-  int FindItem(const TCHAR *name) const;
+  int FindItem(const TCHAR *name) const noexcept;
 
   void LoadRepositoryFile();
   void RefreshList();
@@ -290,8 +289,8 @@ protected:
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual void Unprepare() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Unprepare() noexcept override;
 
   /* virtual methods from class List::Handler */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -302,17 +301,19 @@ public:
   void OnTimer();
 
   /* virtual methods from class Net::DownloadListener */
-  virtual void OnDownloadAdded(Path path_relative,
-                               int64_t size, int64_t position) override;
-  virtual void OnDownloadComplete(Path path_relative,
-                                  bool success) override;
+  void OnDownloadAdded(Path path_relative,
+                       int64_t size, int64_t position) noexcept override;
+  void OnDownloadComplete(Path path_relative) noexcept override;
+  void OnDownloadError(Path path_relative,
+                       std::exception_ptr error) noexcept override;
 
   void OnDownloadNotification() noexcept;
 #endif
 };
 
 void
-ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ManagedFileListWidget::Prepare(ContainerWindow &parent,
+                               const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -335,7 +336,7 @@ ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-ManagedFileListWidget::Unprepare()
+ManagedFileListWidget::Unprepare() noexcept
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (Net::DownloadManager::IsAvailable())
@@ -344,7 +345,7 @@ ManagedFileListWidget::Unprepare()
 }
 
 int
-ManagedFileListWidget::FindItem(const TCHAR *name) const
+ManagedFileListWidget::FindItem(const TCHAR *name) const noexcept
 {
   for (auto i = items.begin(), end = items.end(); i != end; ++i)
     if (StringIsEqual(i->name, name))
@@ -425,7 +426,7 @@ ManagedFileListWidget::RefreshList()
 }
 
 void
-ManagedFileListWidget::CreateButtons(WidgetDialog &dialog)
+ManagedFileListWidget::CreateButtons(WidgetDialog &dialog) noexcept
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (Net::DownloadManager::IsAvailable()) {
@@ -658,7 +659,7 @@ ManagedFileListWidget::OnTimer()
 
 void
 ManagedFileListWidget::OnDownloadAdded(Path path_relative,
-                                       int64_t size, int64_t position)
+                                       int64_t size, int64_t position) noexcept
 {
   const auto name = path_relative.GetBase();
   if (name == nullptr)
@@ -680,8 +681,7 @@ ManagedFileListWidget::OnDownloadAdded(Path path_relative,
 }
 
 void
-ManagedFileListWidget::OnDownloadComplete(Path path_relative,
-                                          bool success)
+ManagedFileListWidget::OnDownloadComplete(Path path_relative) noexcept
 {
   const auto name = path_relative.GetBase();
   if (name == nullptr)
@@ -699,10 +699,37 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative,
     downloads.erase(name3);
 
     if (StringIsEqual(name2, "repository")) {
-      repository_failed = !success;
-      if (success)
-        repository_modified = true;
-    } else if (!success)
+      repository_failed = false;
+      repository_modified = true;
+    }
+  }
+
+  download_notify.SendNotification();
+}
+
+void
+ManagedFileListWidget::OnDownloadError(Path path_relative,
+                                       std::exception_ptr error) noexcept
+{
+  const auto name = path_relative.GetBase();
+  if (name == nullptr)
+    return;
+
+  const WideToUTF8Converter name2(name.c_str());
+  if (!name2.IsValid())
+    return;
+
+  const std::string name3(name2);
+
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+
+    downloads.erase(name3);
+
+    // TODO: store the error
+    if (StringIsEqual(name2, "repository")) {
+      repository_failed = true;
+    } else
       failures.insert(name3);
   }
 
@@ -734,17 +761,17 @@ ManagedFileListWidget::OnDownloadNotification() noexcept
 static void
 ShowFileManager2()
 {
-  ManagedFileListWidget widget;
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(),
-                      _("File Manager"), &widget);
+  TWidgetDialog<ManagedFileListWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(),
+           _("File Manager"));
   dialog.AddButton(_("Close"), mrOK);
-  widget.CreateButtons(dialog);
+  dialog.SetWidget();
+  dialog.GetWidget().CreateButtons(dialog);
 
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();
-  dialog.StealWidget();
 }
 
 #endif

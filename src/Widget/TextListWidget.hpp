@@ -34,12 +34,12 @@ class TextListWidget : public ListWidget {
 protected:
   TextRowRenderer row_renderer;
 
-  gcc_pure
+  [[gnu::pure]]
   virtual const TCHAR *GetRowText(unsigned i) const noexcept = 0;
 
 public:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
 protected:
   /* virtual methods from ListItemRenderer */

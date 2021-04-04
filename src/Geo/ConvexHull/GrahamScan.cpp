@@ -30,7 +30,7 @@ sortleft
   return sp1.Sort(sp2);
 }
 
-gcc_const
+[[gnu::const]]
 static int
 Sign(double value, double tolerance)
 {

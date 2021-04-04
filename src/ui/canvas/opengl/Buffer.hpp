@@ -51,7 +51,7 @@ class GLBuffer {
 #endif
 
 public:
-  GLBuffer() {
+  GLBuffer() noexcept {
     glGenBuffers(1, &id);
 
 #ifndef NDEBUG
@@ -62,7 +62,7 @@ public:
 
   GLBuffer(const GLBuffer &) = delete;
 
-  ~GLBuffer() {
+  ~GLBuffer() noexcept {
 #ifndef NDEBUG
     assert(p == nullptr);
     assert(num_buffers > 0);
@@ -72,30 +72,30 @@ public:
     glDeleteBuffers(1, &id);
   }
 
-  void Bind() {
+  void Bind() noexcept {
     assert(p == nullptr);
 
     glBindBuffer(target, id);
   }
 
-  static void Unbind() {
+  static void Unbind() noexcept {
     glBindBuffer(target, 0);
   }
 
   /**
    * Allocates and initializes the buffer.
    */
-  static void Data(GLsizeiptr size, const GLvoid *data) {
+  static void Data(GLsizeiptr size, const GLvoid *data) noexcept {
     glBufferData(target, size, data, usage);
   }
 
-  void Load(GLsizeiptr size, const GLvoid *data) {
+  void Load(GLsizeiptr size, const GLvoid *data) noexcept {
     Bind();
     Data(size, data);
     Unbind();
   }
 
-  static void *MapWrite() {
+  static void *MapWrite() noexcept {
 #ifdef HAVE_DYNAMIC_MAPBUFFER
     return GLExt::map_buffer(target, GL_WRITE_ONLY_OES);
 #elif defined(GL_OES_mapbuffer)
@@ -105,7 +105,7 @@ public:
 #endif
   }
 
-  static void Unmap() {
+  static void Unmap() noexcept {
 #ifdef HAVE_DYNAMIC_MAPBUFFER
     GLExt::unmap_buffer(target);
 #elif defined(GL_OES_mapbuffer)
@@ -115,7 +115,7 @@ public:
 #endif
   }
 
-  GLvoid *BeginWrite(size_t size) {
+  GLvoid *BeginWrite(size_t size) noexcept {
     Bind();
 
     void *result;
@@ -133,7 +133,7 @@ public:
     return result;
   }
 
-  void CommitWrite(size_t size, GLvoid *data) {
+  void CommitWrite(size_t size, GLvoid *data) noexcept {
 #ifndef NDEBUG
     assert(data == p);
     p = nullptr;

@@ -50,7 +50,7 @@ public:
    *
    * @return Effective distance remaining (m)
    */
-  gcc_pure
+  [[gnu::pure]]
   double effective_distance(double time_remaining) const;
 
   /**
@@ -62,12 +62,12 @@ public:
    *
    * @return Effective distance remaining (m) for active leg
    */
-  gcc_pure
+  [[gnu::pure]]
   double effective_leg_distance(double time_remaining) const;
 
 private:
   /* virtual methods from class TaskMacCready */
-  double get_min_height(gcc_unused const AircraftState &aircraft) const override {
+  double get_min_height([[maybe_unused]] const AircraftState &aircraft) const override {
     return double(0);
   }
 

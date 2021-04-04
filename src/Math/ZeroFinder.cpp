@@ -32,33 +32,27 @@ static const double sqrt_epsilon = sqrt(epsilon);
 static const double r((3. - sqrt(5.0)) / 2); /* Gold section ratio */
 
 static inline void
-limit_tolerance(double &f, const double tol_act)
+limit_tolerance(double &f, const double tol_act) noexcept
 {
   if (fabs(f) < tol_act)
     f = f > 0 ? tol_act : -tol_act;
 }
 
 inline double
-ZeroFinder::tolerance_actual_min(const double x) const
+ZeroFinder::tolerance_actual_min(const double x) const noexcept
 {
   return sqrt_epsilon * fabs(x) + tolerance / 3;
 }
 
 inline double
-ZeroFinder::tolerance_actual_zero(const double x) const
+ZeroFinder::tolerance_actual_zero(const double x) const noexcept
 {
   return 2 * epsilon * fabs(x) + tolerance / 2;
 }
 
-//#define INSTRUMENT_ZERO
-#ifdef INSTRUMENT_ZERO
-unsigned long zero_skipped = 0;
-unsigned long zero_total = 0;
-#endif
-
 inline bool
 ZeroFinder::solution_within_tolerance(const double x,
-                                      const double tol_act)
+                                      const double tol_act) noexcept
 {
 
   // are we away from the edges? if so, check improved solution
@@ -132,22 +126,16 @@ ZeroFinder::solution_within_tolerance(const double x,
  */
 
 double
-ZeroFinder::find_zero(const double xstart)
+ZeroFinder::find_zero(const double xstart) noexcept
 {
-#ifdef INSTRUMENT_ZERO
-  zero_total++;
-#endif
   if ((xmin<=xstart) || (xstart<=xmax) ||
       (f(xstart)> sqrt_epsilon))
     return find_zero_actual(xstart);
-#ifdef INSTRUMENT_ZERO
-  zero_skipped++;
-#endif
   return xstart;
 }
 
 inline double
-ZeroFinder::find_zero_actual(const double xstart)
+ZeroFinder::find_zero_actual(const double xstart) noexcept
 {
   double a, b, c; // Abscissae, descr. see above
   double fa; // f(a)
@@ -313,21 +301,15 @@ ZeroFinder::find_zero_actual(const double xstart)
  */
 
 double
-ZeroFinder::find_min(const double xstart)
+ZeroFinder::find_min(const double xstart) noexcept
 {
-#ifdef INSTRUMENT_ZERO
-  zero_total++;
-#endif
   if (!solution_within_tolerance(xstart, tolerance_actual_min(xstart)))
     return find_min_actual(xstart);
-#ifdef INSTRUMENT_ZERO
-  zero_skipped++;
-#endif
   return xstart;
 }
 
 inline double
-ZeroFinder::find_min_actual(const double xstart)
+ZeroFinder::find_min_actual(const double xstart) noexcept
 {
   double x, v, w; // Abscissae, descr. see above
   double fx; // f(x)

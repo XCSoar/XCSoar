@@ -24,7 +24,7 @@ Copyright_License {
 #include "Overlays.hpp"
 #include "Settings.hpp"
 #include "ui/canvas/Bitmap.hpp"
-#include "net/http/Session.hpp"
+#include "net/http/Init.hpp"
 #include "net/http/ToBuffer.hpp"
 #include "net/http/ToFile.hpp"
 #include "Job/Runner.hpp"
@@ -156,8 +156,7 @@ PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
     const WideToUTF8Converter username(settings.ftp_credentials.username);
     const WideToUTF8Converter password(settings.ftp_credentials.password);
 
-    Net::Session session;
-    Net::DownloadToFileJob job(session, url, path);
+    Net::DownloadToFileJob job(*Net::curl, url, path);
     job.SetBasicAuth(username, password);
     if (!runner.Run(job))
       return Overlay(BrokenDateTime::Invalid(),

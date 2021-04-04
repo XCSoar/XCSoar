@@ -30,46 +30,47 @@
 
  */
 struct ThermalSlice {
+  // climb rate averaged by time [m/s]
+  double w_t;
 
-     // Set the time of passage through this slice.
-     void SetSample(double _time) {
-          time = _time;
-          n = 1.;
-     }
+  // climb rate averaged by number of encounters [m/s]
+  double w_n;
 
-     // climb rate averaged by time [m/s]
-     double w_t;
+  // number of encounters (passages through this slice).  This is real valued as
+  // fractional values are calculated during merging, and also to track the proportion
+  // of travel to the next (as yet unvisited) slice.
+  double n;
 
-     // climb rate averaged by number of encounters [m/s]
-     double w_n;
+  // Time accumulated climbing up to this slice. [s]
+  double time;
 
-     // number of encounters (passages through this slice).  This is real valued as
-     // fractional values are calculated during merging, and also to track the proportion
-     // of travel to the next (as yet unvisited) slice.
-     double n;
+  // Time to arrive at next slice [s]
+  double dt;
 
-     // Time accumulated climbing up to this slice. [s]
-     double time;
+  // Set the time of passage through this slice.
+  void SetSample(double _time) {
+    time = _time;
+    n = 1.;
+  }
 
-     // Time to arrive at next slice [s]
-     double dt;
+  // combine this slice with the other
+  void Merge(const ThermalSlice& o);
 
-     // combine this slice with the other
-     void Merge(const ThermalSlice& o);
+  // update climb statistics other slice's time and height difference
+  void Update(const ThermalSlice& o, const double dh);
 
-     // update climb statistics other slice's time and height difference
-     void Update(const ThermalSlice& o, const double dh);
+  void Reset() {
+    w_n = 0;
+    w_t = 0;
+    n = 0;
+    time = 0;
+    dt = 0;
+  }
 
-     void Reset() {
-          w_n=0;
-          w_t=0;
-          n=0;
-          time=0;
-          dt=0;
-     }
-
-     // whether this item has data
-     bool Occupied() const;
+  // whether this item has data
+  bool Occupied() const noexcept {
+    return n > 0;
+  }
 };
 
 static_assert(std::is_trivial<ThermalSlice>::value, "type is not trivial");

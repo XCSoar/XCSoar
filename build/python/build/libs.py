@@ -23,9 +23,9 @@ musl = AutotoolsProject(
 )
 
 libstdcxx_musl_headers = LibstdcxxMuslHeadersProject(
-    'https://ftp.gnu.org/gnu/gcc/gcc-8.3.0/gcc-8.3.0.tar.xz',
-    'http://mirrors.ibiblio.org/gnu/ftp/gnu/gcc/gcc-8.3.0/gcc-8.3.0.tar.xz',
-    '64baadfe6cc0f4947a84cb12d7f0dfaf45bb58b7e92461639596c21e02d97d2c',
+    'https://ftp.gnu.org/gnu/gcc/gcc-10.2.0/gcc-10.2.0.tar.xz',
+    'http://mirrors.ibiblio.org/gnu/ftp/gnu/gcc/gcc-10.2.0/gcc-10.2.0.tar.xz',
+    'b8dd4368bb9c7f0b98188317ee0254dd8cc99d1e3a18d0ff146c855fe16c1d8c',
     'include/libstdc++/algorithm',
     [
         '--enable-clocale=generic',
@@ -37,9 +37,9 @@ libstdcxx_musl_headers = LibstdcxxMuslHeadersProject(
 )
 
 openssl = OpenSSLProject(
-    'https://www.openssl.org/source/old/3.0/openssl-3.0.0-alpha4.tar.gz',
-    'ftp://ftp.cert.dfn.de/pub/tools/net/old/3.0/openssl/source/openssl-3.0.0-alpha4.tar.gz',
-    'd930b650e0899f5baca8b80c50e7401620c129fef6c50198400999776a39bd37',
+    'https://www.openssl.org/source/openssl-3.0.0-alpha13.tar.gz',
+    'ftp://ftp.cert.dfn.de/pub/tools/net/openssl/source/openssl-3.0.0-alpha13.tar.gz',
+    'c88cbb9d330b4daa3dbb5af1ed511d5062253291a56e09fd17e9ac013a20f8a3',
     'include/openssl/ossl_typ.h',
 )
 
@@ -118,9 +118,9 @@ cares = CmakeProject(
 )
 
 curl = CmakeProject(
-    'http://curl.haxx.se/download/curl-7.71.1.tar.xz',
-    'https://github.com/curl/curl/releases/download/curl-7_71_1/curl-7.71.1.tar.xz',
-    '40f83eda27cdbeb25cd4da48cefb639af1b9395d6026d2da1825bf059239658c',
+    'https://curl.se/download/curl-7.75.0.tar.xz',
+    'https://github.com/curl/curl/releases/download/curl-7_75_0/curl-7.75.0.tar.xz',
+    'fe0c49d8468249000bda75bcfdf9e30ff7e9a86d35f1a21f428d79c389d55675',
     'lib/libcurl.a',
     [
         '-DBUILD_CURL_EXE=OFF',
@@ -141,9 +141,11 @@ curl = CmakeProject(
         '-DCURL_DISABLE_COOKIES=ON',
         '-DCURL_DISABLE_CRYPTO_AUTH=ON',
         '-DCURL_DISABLE_IMAP=ON',
-        '-DCMAKE_USE_OPENSSL=ON',
         '-DCMAKE_USE_LIBSSH2=OFF',
         '-DBUILD_TESTING=OFF',
+    ],
+    windows_configure_args=[
+        '-DCMAKE_USE_SCHANNEL=ON',
     ],
     patches=abspath('lib/curl/patches'),
 )

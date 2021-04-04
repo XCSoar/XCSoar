@@ -28,31 +28,31 @@ Copyright_License {
 #include <glm/mat4x4.hpp>
 
 namespace OpenGL {
-  bool texture_non_power_of_two;
+
+bool texture_non_power_of_two;
 
 #ifdef HAVE_OES_DRAW_TEXTURE
-  bool oes_draw_texture;
+bool oes_draw_texture;
 #endif
 
 #ifdef HAVE_OES_MAPBUFFER
-  bool mapbuffer;
+bool mapbuffer;
 #endif
 
-  bool frame_buffer_object;
+GLenum render_buffer_depth_stencil, render_buffer_stencil;
 
-  GLenum render_buffer_depth_stencil, render_buffer_stencil;
-
-  UnsignedPoint2D window_size, viewport_size;
+UnsignedPoint2D window_size, viewport_size;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
-  DisplayOrientation display_orientation;
+DisplayOrientation display_orientation;
 #endif
 
-  PixelPoint translate;
+PixelPoint translate;
 
-  glm::mat4 projection_matrix;
+glm::mat4 projection_matrix;
 
 #ifndef NDEBUG
-  pthread_t thread;
+pthread_t thread;
 #endif
-};
+
+} // namespace OpenGL

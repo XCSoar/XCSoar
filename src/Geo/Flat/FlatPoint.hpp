@@ -23,7 +23,6 @@
 #define FLATPOINT_HPP
 
 #include "Math/Point2D.hpp"
-#include "util/Compiler.h"
 
 class Angle;
 
@@ -69,7 +68,7 @@ struct FlatPoint : DoublePoint2D
    *
    * @return Distance
    */
-  gcc_pure
+  [[gnu::pure]]
   double Distance(FlatPoint p) const {
     return (*this - p).Magnitude();
   }
@@ -78,7 +77,7 @@ struct FlatPoint : DoublePoint2D
    * Find sqrt(dx * dx + dy * dy)
    * @return Magnitude
    */
-  gcc_pure
+  [[gnu::pure]]
   double Magnitude() const {
     return hypot(x, y);
   }

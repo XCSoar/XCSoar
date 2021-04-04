@@ -25,7 +25,6 @@
 #include "AirspaceWarning.hpp"
 #include "AirspaceWarningConfig.hpp"
 #include "Util/AircraftStateFilter.hpp"
-#include "util/Compiler.h"
 
 #include <list>
 
@@ -81,7 +80,7 @@ public:
 
   AirspaceWarningManager(const AirspaceWarningManager &) = delete;
 
-  gcc_pure
+  [[gnu::pure]]
   const FlatProjection &GetProjection() const;
 
   const AirspaceWarningConfig &GetConfig() const {
@@ -171,7 +170,7 @@ public:
    *
    * @return True if no warnings in list
    */
-  gcc_pure
+  [[gnu::pure]]
   bool empty() const {
     return warnings.empty();
   }
@@ -198,12 +197,12 @@ public:
     return warnings.size();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const_iterator begin() const {
     return warnings.begin();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const_iterator end() const {
     return warnings.end();
   }
@@ -246,7 +245,7 @@ public:
    *
    * @param airspace The airspace subject
    */
-  gcc_pure
+  [[gnu::pure]]
   bool GetAckDay(const AbstractAirspace& airspace) const;
 
   /**
@@ -257,7 +256,7 @@ public:
    * day" (see GetAckDay()) or airspaces that are inactive or
    * airspaces that are not configured for airspace warnings.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsActive(const AbstractAirspace &airspace) const;
 
 private:

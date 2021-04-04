@@ -37,22 +37,22 @@ class GeoBounds;
 struct GeoQuadrilateral {
   GeoPoint top_left, top_right, bottom_left, bottom_right;
 
-  static constexpr GeoQuadrilateral Undefined() {
+  static constexpr GeoQuadrilateral Undefined() noexcept {
     return {GeoPoint::Invalid(), GeoPoint::Invalid(),
         GeoPoint::Invalid(), GeoPoint::Invalid()};
   }
 
-  constexpr bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
     return top_left.IsValid();
   }
 
-  constexpr bool Check() const {
+  constexpr bool Check() const noexcept {
     return top_left.Check() && top_right.Check() &&
       bottom_left.Check() && bottom_right.Check();
   }
 
-  gcc_pure
-  GeoBounds GetBounds() const;
+  [[gnu::pure]]
+  GeoBounds GetBounds() const noexcept;
 };
 
 #endif

@@ -27,11 +27,12 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 
-MapItemListSettingsPanel::MapItemListSettingsPanel()
+MapItemListSettingsPanel::MapItemListSettingsPanel() noexcept
   :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 void
-MapItemListSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+MapItemListSettingsPanel::Prepare(ContainerWindow &parent,
+                                  const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 
@@ -49,7 +50,7 @@ MapItemListSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-MapItemListSettingsPanel::Save(bool &changed)
+MapItemListSettingsPanel::Save(bool &changed) noexcept
 {
   MapSettings &settings = CommonInterface::SetMapSettings();
 

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TASK_VALIDATION_ERROR_HPP
 #define XCSOAR_TASK_VALIDATION_ERROR_HPP
 
-#include "util/EnumBitSet.hpp"
+#include "util/EnumBitSet.hxx"
 
 #include <cstdint>
 
@@ -43,6 +43,11 @@ enum class TaskValidationErrorType : uint8_t {
   NON_MAT_OZS,
 
   /**
+   * The task doesn't have the required shape, e.g. for FAI triangle.
+   */
+  WRONG_SHAPE,
+
+  /**
    * This special value is used to determine the number of items
    * above.
    */
@@ -50,5 +55,24 @@ enum class TaskValidationErrorType : uint8_t {
 };
 
 using TaskValidationErrorSet = EnumBitSet<TaskValidationErrorType>;
+
+/**
+ * Is this an error which is not acceptable?  This ignores warnings.
+ */
+constexpr bool
+IsError(TaskValidationErrorSet set) noexcept
+{
+  /**
+   * These codes are just warnings; they may be displayed, but the
+   * user is allowed to proceed.
+   */
+  constexpr TaskValidationErrorSet warnings{
+    TaskValidationErrorType::TURNPOINTS_NOT_UNIQUE,
+  };
+
+  constexpr TaskValidationErrorSet errors = ~warnings;
+
+  return !(set & errors).IsEmpty();
+}
 
 #endif

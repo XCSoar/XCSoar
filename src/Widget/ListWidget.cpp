@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 PixelSize
-ListWidget::GetMinimumSize() const
+ListWidget::GetMinimumSize() const noexcept
 {
   return { unsigned(Layout::Scale(200u)),
       /* a list makes only sense when the user sees more than one row
@@ -35,14 +35,14 @@ ListWidget::GetMinimumSize() const
 }
 
 PixelSize
-ListWidget::GetMaximumSize() const
+ListWidget::GetMaximumSize() const noexcept
 {
   return PixelSize { 4096, 4096 };
 }
 
 ListControl &
 ListWidget::CreateList(ContainerWindow &parent, const DialogLook &look,
-                       const PixelRect &rc, unsigned row_height)
+                       const PixelRect &rc, unsigned row_height) noexcept
 {
   WindowStyle list_style;
   list_style.Hide();

@@ -39,7 +39,7 @@ Lua::SetCatchCallback(lua_State *L, CatchCallback callback)
                    Lua::LightUserData((void *)callback));
 }
 
-gcc_pure
+[[gnu::pure]]
 static Lua::CatchCallback
 GetCatchCallback(lua_State *L)
 {

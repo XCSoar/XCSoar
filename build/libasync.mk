@@ -12,7 +12,10 @@ ASYNC_SOURCES = \
 	$(SRC)/event/InjectEvent.cxx \
 	$(SRC)/event/SocketEvent.cxx \
 	$(SRC)/event/SignalMonitor.cxx \
-	$(SRC)/event/TimerEvent.cxx \
+	$(SRC)/event/TimerWheel.cxx \
+	$(SRC)/event/TimerList.cxx \
+	$(SRC)/event/CoarseTimerEvent.cxx \
+	$(SRC)/event/FineTimerEvent.cxx \
 	$(SRC)/event/net/ConnectSocket.cxx \
 	$(SRC)/event/net/cares/Error.cxx \
 	$(SRC)/event/net/cares/Init.cxx \

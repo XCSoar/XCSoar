@@ -20,7 +20,6 @@
 }
 */
 
-#include "Waypoint/WaypointVisitor.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/GeoVector.hpp"
 #include "test_debug.hpp"
@@ -34,7 +33,7 @@ extern "C" {
 #include "tap.h"
 }
 
-class WaypointPredicateCounter: public WaypointVisitor
+class WaypointPredicateCounter
 {
 public:
   typedef std::function<bool(const Waypoint &wp)> Predicate;
@@ -47,7 +46,7 @@ public:
   WaypointPredicateCounter(const Predicate &_predicate)
     :predicate(_predicate), count(0) {}
 
-  void Visit(const WaypointPtr &wp) override {
+  void Visit(const WaypointPtr &wp) noexcept {
     if (predicate(*wp))
       count++;
   }
@@ -143,7 +142,7 @@ TestNamePrefixVisitor(const Waypoints &waypoints, const TCHAR *prefix,
 {
   WaypointPredicateCounter::Predicate predicate = BeginsWith(prefix);
   WaypointPredicateCounter prefix_counter(predicate);
-  waypoints.VisitNamePrefix(prefix, prefix_counter);
+  waypoints.VisitNamePrefix(prefix, [&](const auto &wp){ prefix_counter.Visit(wp); });
   ok1(prefix_counter.GetCounter() == expected_results);
 }
 
@@ -178,7 +177,7 @@ TestRangeVisitor(const Waypoints &waypoints, const GeoPoint &location,
 {
   WaypointPredicateCounter::Predicate predicate = CloserThan(distance, location);
   WaypointPredicateCounter distance_counter(predicate);
-  waypoints.VisitWithinRange(location, distance, distance_counter);
+  waypoints.VisitWithinRange(location, distance, [&](const auto &wp){ distance_counter.Visit(wp); });
   ok1(distance_counter.GetCounter() == expected_results);
 }
 

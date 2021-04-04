@@ -6,6 +6,7 @@ WARNINGS += -Wredundant-decls
 
 CXXFLAGS += $(WARNINGS)
 CXXFLAGS += -Wmissing-noreturn
+CXXFLAGS += -Wvla
 
 # disable some warnings, we're not ready for them yet
 CXXFLAGS += -Wno-unused-parameter

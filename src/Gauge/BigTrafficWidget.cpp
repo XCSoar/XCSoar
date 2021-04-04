@@ -666,37 +666,37 @@ TrafficWidget::Windows::UpdateLayout(const PixelRect &rc) noexcept
   close_button.Move(button_rc);
 }
 
-TrafficWidget::TrafficWidget() = default;
+TrafficWidget::TrafficWidget() noexcept = default;
 TrafficWidget::~TrafficWidget() noexcept = default;
 
 void
-TrafficWidget::OpenDetails()
+TrafficWidget::OpenDetails() noexcept
 {
   windows->view.OpenDetails();
 }
 
 void
-TrafficWidget::ZoomIn()
+TrafficWidget::ZoomIn() noexcept
 {
   windows->view.ZoomIn();
   UpdateButtons();
 }
 
 void
-TrafficWidget::ZoomOut()
+TrafficWidget::ZoomOut() noexcept
 {
   windows->view.ZoomOut();
   UpdateButtons();
 }
 
 void
-TrafficWidget::PreviousTarget()
+TrafficWidget::PreviousTarget() noexcept
 {
   windows->view.PrevTarget();
 }
 
 void
-TrafficWidget::NextTarget()
+TrafficWidget::NextTarget() noexcept
 {
   windows->view.NextTarget();
 }
@@ -713,49 +713,49 @@ FlarmTrafficControl::SwitchData()
 }
 
 void
-TrafficWidget::SwitchData()
+TrafficWidget::SwitchData() noexcept
 {
   windows->view.SwitchData();
 }
 
 bool
-TrafficWidget::GetAutoZoom() const
+TrafficWidget::GetAutoZoom() const noexcept
 {
   return windows->view.GetAutoZoom();
 }
 
 void
-TrafficWidget::SetAutoZoom(bool value)
+TrafficWidget::SetAutoZoom(bool value) noexcept
 {
   windows->view.SetAutoZoom(value);
 }
 
 void
-TrafficWidget::ToggleAutoZoom()
+TrafficWidget::ToggleAutoZoom() noexcept
 {
   windows->view.ToggleAutoZoom();
 }
 
 bool
-TrafficWidget::GetNorthUp() const
+TrafficWidget::GetNorthUp() const noexcept
 {
   return windows->view.GetNorthUp();
 }
 
 void
-TrafficWidget::SetNorthUp(bool value)
+TrafficWidget::SetNorthUp(bool value) noexcept
 {
   windows->view.SetAutoZoom(value);
 }
 
 void
-TrafficWidget::ToggleNorthUp()
+TrafficWidget::ToggleNorthUp() noexcept
 {
   windows->view.ToggleNorthUp();
 }
 
 void
-TrafficWidget::Update()
+TrafficWidget::Update() noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
@@ -888,13 +888,13 @@ FlarmTrafficControl::OnKeyDown(unsigned key_code)
 }
 
 void
-TrafficWidget::UpdateLayout()
+TrafficWidget::UpdateLayout() noexcept
 {
   windows->UpdateLayout(GetContainer().GetClientRect());
 }
 
 void
-TrafficWidget::UpdateButtons()
+TrafficWidget::UpdateButtons() noexcept
 {
   const bool unlocked = !windows->view.WarningMode();
   const TrafficList &traffic = CommonInterface::Basic().flarm.traffic;
@@ -909,7 +909,7 @@ TrafficWidget::UpdateButtons()
 }
 
 void
-TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
+TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc) noexcept
 {
   ContainerWidget::Prepare(parent, _rc);
 
@@ -922,7 +922,7 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 }
 
 void
-TrafficWidget::Show(const PixelRect &rc)
+TrafficWidget::Show(const PixelRect &rc) noexcept
 {
   // Update Radar and Selection for the first time
   Update();
@@ -937,14 +937,14 @@ TrafficWidget::Show(const PixelRect &rc)
 }
 
 void
-TrafficWidget::Hide()
+TrafficWidget::Hide() noexcept
 {
   CommonInterface::GetLiveBlackboard().RemoveListener(*this);
   ContainerWidget::Hide();
 }
 
 void
-TrafficWidget::Move(const PixelRect &rc)
+TrafficWidget::Move(const PixelRect &rc) noexcept
 {
   ContainerWidget::Move(rc);
 
@@ -953,7 +953,7 @@ TrafficWidget::Move(const PixelRect &rc)
 
 
 bool
-TrafficWidget::SetFocus()
+TrafficWidget::SetFocus() noexcept
 {
   windows->view.SetFocus();
   return true;

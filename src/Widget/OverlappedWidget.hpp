@@ -39,10 +39,10 @@ public:
    * Bring this #Widget to the top of the z-order.  This is a hack to
    * allow overlapped widgets.
    */
-  void Raise();
+  void Raise() noexcept;
 
 #ifdef USE_WINUSER
-  void Hide() override;
+  void Hide() noexcept override;
 #endif
 };
 

@@ -24,48 +24,76 @@ Copyright_License {
 #ifndef _HISTOGRAM_H
 #define _HISTOGRAM_H
 
-#include "Math/XYDataStore.hpp"
+#include "Math/Point2D.hpp"
+#include "util/ConstBuffer.hxx"
 
+#include <array>
 #include <type_traits>
 
-class Histogram: public XYDataStore
+class Histogram
 {
+  static constexpr std::size_t NUM_SLOTS = 61;
+  static constexpr double SPREAD = 0.15;
+
   unsigned n_pts;
   double m;
   double b;
-  void IncrementSlot(unsigned i, double mag);
+
+  double x_min, x_max, y_max;
+
+  std::array<DoublePoint2D, NUM_SLOTS> slots;
+
+  using size_type = decltype(slots)::size_type;
 
 public:
+  bool empty() const noexcept {
+    return n_pts == 0;
+  }
 
   /**
    * Add a new data point to the values and convex solution
    *
    * @param x x-Value of the new data point
    */
-  void UpdateHistogram(double x);
+  void UpdateHistogram(double x) noexcept;
 
   /**
    * Initialise the histogram, with specified range
    */
-  void Reset(double smin, double smax);
+  void Reset(double smin, double smax) noexcept;
 
   /**
    * Clear counters
    */
-  void Clear();
+  void Clear() noexcept;
 
-  /**
-   * Retrieve total number of points accumulated
-   */
-  unsigned GetAccumulator() const {
-    return n_pts;
+  constexpr double GetMinX() const noexcept {
+    return x_min;
+  }
+
+  constexpr double GetMaxX() const noexcept {
+    return x_max;
+  }
+
+  constexpr double GetMaxY() const noexcept {
+    return y_max;
   }
 
   /**
    * Return the x value associated with the cumulative percentile value,
    * counted from lowest up.
    */
-  double GetPercentile(const double p) const;
+  double GetPercentile(double p) const noexcept;
+
+  constexpr ConstBuffer<DoublePoint2D> GetSlots() const noexcept {
+    return {slots.data(), slots.size()};
+  }
+
+private:
+  [[gnu::const]]
+  size_type SlotNumber(double x) const noexcept;
+
+  void IncrementSlot(size_type i, double mag) noexcept;
 };
 
 static_assert(std::is_trivial<Histogram>::value, "type is not trivial");

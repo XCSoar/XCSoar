@@ -25,8 +25,7 @@ Copyright_License {
 #define XCSOAR_IO_CONVERT_LINE_READER_HPP
 
 #include "LineReader.hpp"
-#include "Charset.hpp"
-#include "util/ReusableArray.hpp"
+#include "StringConverter.hpp"
 
 #include <memory>
 
@@ -37,9 +36,7 @@ Copyright_License {
 class ConvertLineReader : public TLineReader {
   std::unique_ptr<LineReader<char>> source;
 
-  Charset charset;
-
-  ReusableArray<TCHAR> tbuffer;
+  StringConverter converter;
 
 public:
   ConvertLineReader(std::unique_ptr<LineReader<char>> &&_source,

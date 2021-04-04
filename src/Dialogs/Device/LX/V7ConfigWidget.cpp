@@ -62,7 +62,7 @@ WaitUnsignedValue(LXDevice &device, const char *name,
 }
 
 void
-V7ConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+V7ConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   RequestAllSettings(device);
 
@@ -89,7 +89,7 @@ V7ConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-V7ConfigWidget::Save(bool &_changed)
+V7ConfigWidget::Save(bool &_changed) noexcept
 {
   PopupOperationEnvironment env;
   bool changed = false;

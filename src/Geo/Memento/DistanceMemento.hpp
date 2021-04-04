@@ -24,7 +24,6 @@
 #define DISTANCE_MEMENTO_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "util/Compiler.h"
 
 /** Memento object to store results of previous distance calculations. */
 class DistanceMemento
@@ -46,7 +45,7 @@ public:
    * Returns the distance from the origin to destination in meters, 
    * from previously saved value if input arguments are identical. 
    */
-  gcc_pure
+  [[gnu::pure]]
   double Distance(const GeoPoint& _origin, const GeoPoint& _destination) const;
 };
 

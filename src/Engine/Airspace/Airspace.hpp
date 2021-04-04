@@ -23,7 +23,6 @@
 #define AIRSPACE_HPP
 
 #include "Geo/Flat/FlatBoundingBox.hpp"
-#include "util/Compiler.h"
 
 #ifdef DO_PRINT
 #include <iostream>
@@ -70,7 +69,7 @@ public:
    *
    * @return true if aircraft is inside airspace
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsInside(const AircraftState &loc) const;
 
   /**
@@ -80,7 +79,7 @@ public:
    *
    * @return true if location is inside airspace
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsInside(const GeoPoint &loc) const;
 
   /**
@@ -92,7 +91,7 @@ public:
    *
    * @return true if the line intersects the airspace
    */
-  gcc_pure
+  [[gnu::pure]]
   AirspaceIntersectionVector Intersects(const GeoPoint &g1,
                                         const GeoPoint &end,
                                         const FlatProjection &projection) const;
@@ -125,7 +124,7 @@ public:
   /**
    * Is it necessary to call SetGroundLevel() for this AbstractAirspace?
    */
-  gcc_pure
+  [[gnu::pure]]
   bool NeedGroundLevel() const;
 
   /**

@@ -23,7 +23,6 @@
 #define FLATBOUNDINGBOX_HPP
 
 #include "FlatGeoPoint.hpp"
-#include "util/Compiler.h"
 
 #include <algorithm>
 
@@ -104,7 +103,7 @@ struct FlatBoundingBox
     return GetTop() - GetBottom();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned SquareDistanceTo(FlatGeoPoint p) const;
 
   /**
@@ -114,7 +113,7 @@ struct FlatBoundingBox
    *
    * @return Distance in projected units (or zero if overlapping)
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned Distance(const FlatBoundingBox &f) const;
 
   /**
@@ -124,7 +123,7 @@ struct FlatBoundingBox
    *
    * @return true if loc is inside the bounding box
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsInside(const FlatGeoPoint& loc) const;
 
   /**
@@ -134,7 +133,7 @@ struct FlatBoundingBox
    *
    * @return True if ray intersects with this bounding box
    */
-  gcc_pure
+  [[gnu::pure]]
   bool Intersects(const FlatRay& ray) const;
 
   /**
@@ -142,13 +141,13 @@ struct FlatBoundingBox
    *
    * @return Center in flat coordinates
    */
-  gcc_pure
+  [[gnu::pure]]
   FlatGeoPoint GetCenter() const;
 
   /**
    * Determine whether these bounding boxes overlap
    */
-  gcc_pure
+  [[gnu::pure]]
   bool Overlaps(const FlatBoundingBox& other) const;
 
   /**

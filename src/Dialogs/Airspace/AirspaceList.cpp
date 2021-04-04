@@ -81,16 +81,16 @@ public:
   }
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 
-  virtual void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     ListWidget::Show(rc);
     UpdateList();
     CommonInterface::GetLiveBlackboard().AddListener(*this);
   }
 
-  virtual void Hide() override {
+  void Hide() noexcept override {
     CommonInterface::GetLiveBlackboard().RemoveListener(*this);
 
     ListWidget::Hide();
@@ -129,8 +129,8 @@ public:
   void Update();
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 };
 
 class AirspaceListButtons final : public RowFormWidget {
@@ -145,8 +145,8 @@ public:
     list = _list;
   }
 
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override {
     AddButton(_("Details"), [this](){
       list->ShowDetails();
     });
@@ -249,7 +249,8 @@ AirspaceListWidget::UpdateList()
 }
 
 void
-AirspaceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+AirspaceListWidget::Prepare(ContainerWindow &parent,
+                            const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   CreateList(parent, look, rc,
@@ -416,7 +417,7 @@ CreateDirectionDataField(DataFieldListener *listener)
 
 void
 AirspaceFilterWidget::Prepare(ContainerWindow &parent,
-                              const PixelRect &rc)
+                              const PixelRect &rc) noexcept
 {
   Add(_("Name"), nullptr, CreateNameDataField(listener));
   Add(_("Distance"), nullptr, CreateDistanceDataField(listener));

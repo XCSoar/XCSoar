@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_TEXT_ROW_RENDERER_HPP
 #define XCSOAR_TEXT_ROW_RENDERER_HPP
 
-#include "util/Compiler.h"
-
 #include <tchar.h>
 
 struct PixelRect;
@@ -51,7 +49,7 @@ public:
    * Returns the minimum X coordinate of the column after the given
    * text.
    */
-  gcc_pure
+  [[gnu::pure]]
   int NextColumn(Canvas &canvas, const PixelRect &rc,
                  const TCHAR *text) const;
 
@@ -65,7 +63,7 @@ public:
    * Returns the maximum X coordinate of the column before the given
    * text.
    */
-  gcc_pure
+  [[gnu::pure]]
   int PreviousRightColumn(Canvas &canvas, const PixelRect &rc,
                           const TCHAR *text) const;
 

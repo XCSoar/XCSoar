@@ -100,7 +100,7 @@ private:
 
 public:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
 protected:
   /* virtual methods from ListItemRenderer */
@@ -150,7 +150,7 @@ PlaneListWidget::CreateButtons(WidgetDialog &dialog)
 }
 
 void
-PlaneListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+PlaneListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   CreateList(parent, look, rc,
@@ -361,14 +361,14 @@ PlaneListWidget::OnActivateItem(unsigned i) noexcept
 void
 dlgPlanesShowModal()
 {
-  PlaneListWidget widget;
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(),
-                      _("Planes"), &widget);
+  TWidgetDialog<PlaneListWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(),
+           _("Planes"));
+  dialog.SetWidget();
   dialog.AddButton(_("Close"), mrOK);
-  widget.CreateButtons(dialog);
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();
-  dialog.StealWidget();
 }

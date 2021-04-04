@@ -72,17 +72,17 @@ private:
 
 public:
   /* virtual methods from class Widget */
-  virtual PixelSize GetMinimumSize() const override {
+  PixelSize GetMinimumSize() const noexcept override {
     return { 150, 150 };
   }
 
-  virtual PixelSize GetMaximumSize() const override {
+  PixelSize GetMaximumSize() const noexcept override {
     /* use as much as possible */
     return { 8192, 8192 };
   }
 
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override {
     WindowStyle style;
     style.Hide();
 
@@ -95,17 +95,17 @@ public:
     logo.Create(parent, rc, style);
   }
 
-  virtual void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     quit.MoveAndShow(GetButtonRect(rc));
     logo.MoveAndShow(rc);
   }
 
-  virtual void Hide() override {
+  void Hide() noexcept override {
     quit.FastHide();
     logo.FastHide();
   }
 
-  virtual void Move(const PixelRect &rc) override {
+  void Move(const PixelRect &rc) noexcept override {
     quit.Move(GetButtonRect(rc));
     logo.Move(rc);
   }
@@ -126,11 +126,11 @@ public:
     :RowFormWidget(look), dialog(_dialog), df(_df) {}
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
-  virtual bool SetFocus() override {
+  bool SetFocus() noexcept override {
     /* focus the "Continue" button by default */
     GetRow(CONTINUE).SetFocus();
     return true;
@@ -153,7 +153,7 @@ SelectProfileCallback(const TCHAR *caption, DataField &_df,
 
 void
 StartupWidget::Prepare(ContainerWindow &parent,
-                       const PixelRect &rc)
+                       const PixelRect &rc) noexcept
 {
   auto *pe = Add(_("Profile"), nullptr, df);
   pe->SetEditCallback(SelectProfileCallback);
@@ -184,7 +184,7 @@ SelectProfile(Path path)
 }
 
 bool
-StartupWidget::Save(bool &changed)
+StartupWidget::Save(bool &changed) noexcept
 {
   const auto &dff = (const FileDataField &)GetDataField(PROFILE);
   if (!SelectProfile(dff.GetPathFile()))

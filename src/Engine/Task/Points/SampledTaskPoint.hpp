@@ -24,7 +24,6 @@
 #define SAMPLEDTASKPOINT_H
 
 #include "Geo/SearchPointVector.hpp"
-#include "util/Compiler.h"
 
 class FlatProjection;
 class OZBoundary;
@@ -87,7 +86,7 @@ public:
    *
    * @return Location of max distance node
    */
-  gcc_pure
+  [[gnu::pure]]
   const GeoPoint &GetLocationMax() const {
     assert(search_max.IsValid());
 
@@ -106,7 +105,7 @@ public:
     return search_min.GetLocation();
   };
 
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint InterpolateLocationMinMax(double p) const {
     return GetLocationMin().Interpolate(GetLocationMax(), p);
   }
@@ -134,7 +133,7 @@ public:
    *
    * @return True if sample present
    */
-  gcc_pure
+  [[gnu::pure]]
   bool HasSampled() const {
     return !sampled_points.empty();
   }
@@ -144,7 +143,7 @@ public:
    *
    * @return Vector of sample points representing a closed polygon
    */
-  gcc_pure
+  [[gnu::pure]]
   const SearchPointVector &GetSampledPoints() const {
     return sampled_points;
   }
@@ -202,7 +201,7 @@ public:
    *
    * @return a list of boundary points
    */
-  gcc_pure
+  [[gnu::pure]]
   const SearchPointVector &GetSearchPoints() const;
 
   /**

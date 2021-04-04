@@ -70,9 +70,9 @@ public:
   void SaveWaypoints();
 
   /* virtual methods from Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
-  void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     ListWidget::Show(rc);
     Update();
   }
@@ -158,7 +158,8 @@ WaypointManagerWidget::UpdateList()
 }
 
 void
-WaypointManagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+WaypointManagerWidget::Prepare(ContainerWindow &parent,
+                               const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   CreateList(parent, look, rc,
@@ -289,18 +290,18 @@ void
 dlgConfigWaypointsShowModal()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WaypointManagerWidget widget;
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, _("Waypoints Editor"), &widget);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<WaypointManagerWidget>
+    dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+           look, _("Waypoints Editor"));
   dialog.AddButton(_("Close"), mrCancel);
+  dialog.SetWidget();
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();
-  dialog.StealWidget();
 
-  if (widget.IsModified() &&
+  if (dialog.GetWidget().IsModified() &&
       ShowMessageBox(_("Save changes to waypoint file?"), _("Waypoints edited"),
                   MB_YESNO | MB_ICONQUESTION) == IDYES)
-      widget.SaveWaypoints();
+      dialog.GetWidget().SaveWaypoints();
 }

@@ -30,7 +30,7 @@ PagerWidget::Child::~Child() noexcept
   assert(!prepared);
 }
 
-PagerWidget::~PagerWidget()
+PagerWidget::~PagerWidget() noexcept
 {
   assert(!initialised || !prepared);
 
@@ -63,7 +63,7 @@ PagerWidget::Add(std::unique_ptr<Widget> w) noexcept
 }
 
 void
-PagerWidget::Clear()
+PagerWidget::Clear() noexcept
 {
   assert(!initialised || !prepared);
 
@@ -71,7 +71,7 @@ PagerWidget::Clear()
 }
 
 void
-PagerWidget::PrepareWidget(unsigned i)
+PagerWidget::PrepareWidget(unsigned i) noexcept
 {
   assert(initialised);
   assert(prepared);
@@ -84,7 +84,7 @@ PagerWidget::PrepareWidget(unsigned i)
 }
 
 bool
-PagerWidget::SetCurrent(unsigned i, bool click)
+PagerWidget::SetCurrent(unsigned i, bool click) noexcept
 {
   assert(i < children.size());
 
@@ -139,7 +139,7 @@ PagerWidget::SetCurrent(unsigned i, bool click)
 }
 
 bool
-PagerWidget::Next(bool wrap)
+PagerWidget::Next(bool wrap) noexcept
 {
   if (children.size() < 2)
     return false;
@@ -158,7 +158,7 @@ PagerWidget::Next(bool wrap)
 }
 
 bool
-PagerWidget::Previous(bool wrap)
+PagerWidget::Previous(bool wrap) noexcept
 {
   if (children.size() < 2)
     return false;
@@ -177,7 +177,7 @@ PagerWidget::Previous(bool wrap)
 }
 
 PixelSize
-PagerWidget::GetMinimumSize() const
+PagerWidget::GetMinimumSize() const noexcept
 {
   /* determine the largest "minimum" size of all pages */
 
@@ -195,7 +195,7 @@ PagerWidget::GetMinimumSize() const
 }
 
 PixelSize
-PagerWidget::GetMaximumSize() const
+PagerWidget::GetMaximumSize() const noexcept
 {
   /* determine the largest "maximum" size of all pages */
 
@@ -213,7 +213,7 @@ PagerWidget::GetMaximumSize() const
 }
 
 void
-PagerWidget::Initialise(ContainerWindow &_parent, const PixelRect &rc)
+PagerWidget::Initialise(ContainerWindow &_parent, const PixelRect &rc) noexcept
 {
   assert(!initialised);
 
@@ -227,7 +227,7 @@ PagerWidget::Initialise(ContainerWindow &_parent, const PixelRect &rc)
 }
 
 void
-PagerWidget::Prepare(ContainerWindow &_parent, const PixelRect &rc)
+PagerWidget::Prepare(ContainerWindow &_parent, const PixelRect &rc) noexcept
 {
   assert(initialised);
   assert(!prepared);
@@ -245,7 +245,7 @@ PagerWidget::Prepare(ContainerWindow &_parent, const PixelRect &rc)
 }
 
 void
-PagerWidget::Unprepare()
+PagerWidget::Unprepare() noexcept
 {
   assert(initialised);
   assert(prepared);
@@ -262,7 +262,7 @@ PagerWidget::Unprepare()
 }
 
 bool
-PagerWidget::Save(bool &changed)
+PagerWidget::Save(bool &changed) noexcept
 {
   assert(initialised);
   assert(prepared);
@@ -275,13 +275,13 @@ PagerWidget::Save(bool &changed)
 }
 
 bool
-PagerWidget::Click()
+PagerWidget::Click() noexcept
 {
   return children.empty() || children[current].widget->Click();
 }
 
 void
-PagerWidget::ReClick()
+PagerWidget::ReClick() noexcept
 {
   assert(initialised);
   assert(prepared);
@@ -293,7 +293,7 @@ PagerWidget::ReClick()
 }
 
 void
-PagerWidget::Show(const PixelRect &rc)
+PagerWidget::Show(const PixelRect &rc) noexcept
 {
   assert(initialised);
   assert(prepared);
@@ -318,7 +318,7 @@ PagerWidget::Show(const PixelRect &rc)
 }
 
 void
-PagerWidget::Hide()
+PagerWidget::Hide() noexcept
 {
   assert(initialised);
   assert(prepared);
@@ -331,7 +331,7 @@ PagerWidget::Hide()
 }
 
 bool
-PagerWidget::Leave()
+PagerWidget::Leave() noexcept
 {
   assert(initialised);
   assert(prepared);
@@ -343,7 +343,7 @@ PagerWidget::Leave()
 }
 
 void
-PagerWidget::Move(const PixelRect &rc)
+PagerWidget::Move(const PixelRect &rc) noexcept
 {
   assert(initialised);
   assert(prepared);
@@ -361,7 +361,7 @@ PagerWidget::Move(const PixelRect &rc)
 }
 
 bool
-PagerWidget::SetFocus()
+PagerWidget::SetFocus() noexcept
 {
   assert(initialised);
   assert(prepared);
@@ -373,7 +373,7 @@ PagerWidget::SetFocus()
 }
 
 bool
-PagerWidget::KeyPress(unsigned key_code)
+PagerWidget::KeyPress(unsigned key_code) noexcept
 {
   assert(initialised);
   assert(prepared);
@@ -385,7 +385,7 @@ PagerWidget::KeyPress(unsigned key_code)
 }
 
 void
-PagerWidget::OnPageFlipped()
+PagerWidget::OnPageFlipped() noexcept
 {
   if (page_flipped_callback)
     page_flipped_callback();

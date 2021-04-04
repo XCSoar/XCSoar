@@ -21,50 +21,14 @@ Copyright_License {
 }
 */
 
-#include "Multi.hpp"
+#ifndef XCSOAR_UI_CANVAS_GDI_GDIBITMAP_HPP
+#define XCSOAR_UI_CANVAS_GDI_GDIBITMAP_HPP
 
-#include <cassert>
+#if defined(_WIN32) && defined(USE_GDI)
+#include <windows.h>
+HBITMAP GdiLoadImage(const TCHAR* filename);
+void GdiStartup();
+void GdiShutdown();
+#endif  // _WIN32 && USE_GDI
 
-Net::CurlMulti::CurlMulti()
-  :multi(curl_multi_init())
-{
-}
-
-Net::CurlMulti::~CurlMulti()
-{
-  assert(results.empty());
-
-  if (multi != nullptr)
-    curl_multi_cleanup(multi);
-}
-
-void
-Net::CurlMulti::Remove(CURL *easy)
-{
-  auto i = results.find(easy);
-  if (i != results.end())
-    results.erase(i);
-
-  curl_multi_remove_handle(multi, easy);
-}
-
-CURLcode
-Net::CurlMulti::InfoRead(const CURL *easy)
-{
-  auto i = results.find(easy);
-  if (i != results.end())
-    return i->second;
-
-  const CURLMsg *msg;
-  int msgs_in_queue;
-  while ((msg = curl_multi_info_read(multi, &msgs_in_queue)) != nullptr) {
-    if (msg->msg == CURLMSG_DONE) {
-      if (msg->easy_handle == easy)
-        return msg->data.result;
-
-      results.insert(std::make_pair(easy, msg->data.result));
-    }
-  }
-
-  return CURLE_AGAIN;
-}
+#endif  // XCSOAR_UI_CANVAS_GDI_GDIBITMAP_HPP

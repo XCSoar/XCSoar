@@ -189,9 +189,9 @@ public:
   void OnRadialModified(double new_value);
 
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
-  void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     const Layout layout(rc);
 
     map.MoveAndShow(layout.map);
@@ -213,7 +213,7 @@ public:
     CommonInterface::GetLiveBlackboard().AddListener(rate_limited_bl);
   }
 
-  void Hide() override {
+  void Hide() noexcept override {
     CommonInterface::GetLiveBlackboard().RemoveListener(rate_limited_bl);
 
     map.Hide();
@@ -230,7 +230,7 @@ public:
     close_button.Hide();
   }
 
-  void Move(const PixelRect &rc) override {
+  void Move(const PixelRect &rc) noexcept override {
     const Layout layout(rc);
 
     map.Move(layout.map);
@@ -247,12 +247,12 @@ public:
     close_button.Move(layout.close_button);
   }
 
-  bool SetFocus() override {
+  bool SetFocus() noexcept override {
     name_button.SetFocus();
     return true;
   }
 
-  bool KeyPress(unsigned key_code) override;
+  bool KeyPress(unsigned key_code) noexcept override;
 
 private:
   /* virtual methods from class DataFieldListener */
@@ -381,7 +381,7 @@ UseRecommendedCaptionWidths(Args&&... args)
 }
 
 void
-TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   const Layout layout(rc);
 
@@ -745,7 +745,7 @@ TargetWidget::InitTargetPoints(int _target_point)
 }
 
 bool
-TargetWidget::KeyPress(unsigned key_code)
+TargetWidget::KeyPress(unsigned key_code) noexcept
 {
   switch (key_code) {
   case KEY_LEFT:
@@ -767,12 +767,11 @@ dlgTargetShowModal(int _target_point)
     return;
 
   const Look &look = UIGlobals::GetLook();
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look.dialog, _("Target"));
-  TargetWidget widget(dialog, look.dialog, look.map);
-  dialog.FinishPreliminary(&widget);
+  TWidgetDialog<TargetWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look.dialog, _("Target"));
+  dialog.SetWidget(dialog, look.dialog, look.map);
 
-  if (widget.InitTargetPoints(_target_point))
+  if (dialog.GetWidget().InitTargetPoints(_target_point))
     dialog.ShowModal();
-  dialog.StealWidget();
 }

@@ -49,7 +49,8 @@ class ArrowPagerWidget : public PagerWidget {
     PixelRect main;
     PixelRect extra;
 
-    Layout(PixelRect rc, const Widget *extra);
+    Layout(const ButtonLook &look, PixelRect rc,
+           const Widget *extra) noexcept;
   };
 
   const ButtonLook &look;
@@ -67,27 +68,27 @@ class ArrowPagerWidget : public PagerWidget {
 public:
   ArrowPagerWidget(const ButtonLook &_look,
                    std::function<void()> _close_callback,
-                   std::unique_ptr<Widget> _extra=nullptr)
+                   std::unique_ptr<Widget> _extra=nullptr) noexcept
     :look(_look),
      close_callback(std::move(_close_callback)),
      extra(std::move(_extra)) {}
 
-  Widget &GetExtra() {
+  Widget &GetExtra() noexcept {
     assert(extra != nullptr);
 
     return *extra;
   }
 
   /* virtual methods from Widget */
-  PixelSize GetMinimumSize() const override;
-  PixelSize GetMaximumSize() const override;
-  void Initialise(ContainerWindow &parent, const PixelRect &rc) override;
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Show(const PixelRect &rc) override;
-  void Hide() override;
-  void Move(const PixelRect &rc) override;
-  bool SetFocus() override;
-  bool KeyPress(unsigned key_code) override;
+  PixelSize GetMinimumSize() const noexcept override;
+  PixelSize GetMaximumSize() const noexcept override;
+  void Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
+  void Move(const PixelRect &rc) noexcept override;
+  bool SetFocus() noexcept override;
+  bool KeyPress(unsigned key_code) noexcept override;
 };
 
 #endif

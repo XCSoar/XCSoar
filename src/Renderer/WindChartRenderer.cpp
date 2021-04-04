@@ -37,16 +37,16 @@ DrawArrow(Canvas &canvas, PixelPoint point, const double mag, const Angle angle)
 {
   const FastRotation r(angle);
 
-  auto p = r.Rotate(mag, 0);
+  auto p = r.Rotate({mag, 0});
   canvas.DrawLine(point, point + PixelPoint((int)p.x, (int)p.y));
 
   const int l = Layout::Scale(5);
   const int s = Layout::Scale(3);
 
-  p = r.Rotate(mag - l, -s);
+  p = r.Rotate({mag - l, (double)-s});
   canvas.DrawLine(point, point + PixelPoint((int)p.x, (int)p.y));
 
-  p = r.Rotate(mag - l, s);
+  p = r.Rotate({mag - l, (double)s});
   canvas.DrawLine(point, point + PixelPoint((int)p.x, (int)p.y));
 }
 
@@ -63,6 +63,9 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   LeastSquares windstats_mag;
 
   ChartRenderer chart(chart_look, canvas, rc);
+  chart.SetXLabel(_T("w"), Units::GetSpeedName());
+  chart.SetYLabel(_T("h"), Units::GetAltitudeName());
+  chart.Begin();
 
   const auto height =
     fs.altitude_ceiling.GetMaxY() - fs.altitude_ceiling.GetMinY();
@@ -120,6 +123,5 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
     DrawArrow(canvas, point, mag * WINDVECTORMAG, angle);
   }
 
-  chart.DrawXLabel(_T("w"), Units::GetSpeedName());
-  chart.DrawYLabel(_T("h"), Units::GetAltitudeName());
+  chart.Finish();
 }

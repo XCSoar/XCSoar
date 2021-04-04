@@ -58,13 +58,13 @@ public:
   /**
    * Schedule a repaint.
    */
-  void Invalidate();
+  void Invalidate() noexcept;
 
   /* virtual methods from class Widget */
-  PixelSize GetMinimumSize() const override;
-  PixelSize GetMaximumSize() const override;
-  void Initialise(ContainerWindow &parent, const PixelRect &rc) override;
-  bool SetFocus() override;
+  PixelSize GetMinimumSize() const noexcept override;
+  PixelSize GetMaximumSize() const noexcept override;
+  void Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool SetFocus() noexcept override;
 };
 
 #endif

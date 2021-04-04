@@ -23,16 +23,14 @@
 #ifndef XCSOAR_MATH_UTIL_HPP
 #define XCSOAR_MATH_UTIL_HPP
 
-#include "util/Compiler.h"
-
 #include <math.h>
 
 /**
  * Convert this number to a signed integer, with rounding.
  */
-gcc_const
+[[gnu::const]]
 static inline int
-iround(double x)
+iround(double x) noexcept
 {
   return (int)lround(x);
 }
@@ -44,21 +42,21 @@ iround(double x)
  * parameter is undefined.
  */
 constexpr unsigned
-uround(const double x)
+uround(const double x) noexcept
 {
   return (unsigned)(x + 0.5);
 }
 
 template<typename T>
 constexpr T
-Square(T a)
+Square(T a) noexcept
 {
   return a * a;
 }
 
 template<typename T>
 constexpr T
-Cubic(T a)
+Cubic(T a) noexcept
 {
   return a * a * a;
 }
@@ -67,9 +65,9 @@ Cubic(T a)
  * Calculate the length of the second cathetus, given the length of
  * the hypotenuse and the first cathetus.
  */
-gcc_const
+[[gnu::const]]
 static inline double
-Cathetus(double hypotenuse, double cathetus1)
+Cathetus(double hypotenuse, double cathetus1) noexcept
 {
   return sqrt(Square(hypotenuse) - Square(cathetus1));
 }
@@ -77,9 +75,9 @@ Cathetus(double hypotenuse, double cathetus1)
 /**
  * Calculate the length of the space diagonal of the given cuboid.
  */
-gcc_const
+[[gnu::const]]
 static inline double
-SpaceDiagonal(double a, double b, double c)
+SpaceDiagonal(double a, double b, double c) noexcept
 {
   return sqrt(Square(a) + Square(b) + Square(c));
 }
@@ -87,9 +85,9 @@ SpaceDiagonal(double a, double b, double c)
 /**
  * Implementation of a sigmoid function with a result range of [-1..1].
  */
-gcc_const
+[[gnu::const]]
 static inline double
-Sigmoid(double x)
+Sigmoid(double x) noexcept
 {
   return 2.0 / (1.0 + exp(-x)) - 1.0;
 }

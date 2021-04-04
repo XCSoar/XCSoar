@@ -31,6 +31,10 @@
 struct GliderLinkData {
   GliderLinkTrafficList traffic;
 
+  void Clear() noexcept {
+    traffic.Clear();
+  }
+
   void Complement(const GliderLinkData &add) {
     traffic.Replace(add.traffic);
   }

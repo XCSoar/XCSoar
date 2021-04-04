@@ -150,11 +150,10 @@ MapWindow::RenderNOAAStations(Canvas &canvas)
   if (noaa_store == nullptr)
     return;
 
-  PixelPoint pt;
   for (auto it = noaa_store->begin(), end = noaa_store->end(); it != end; ++it)
-    if (it->parsed_metar_available && it->parsed_metar.location_available &&
-        render_projection.GeoToScreenIfVisible(it->parsed_metar.location, pt))
-      look.noaa.icon.Draw(canvas, pt);
+    if (it->parsed_metar_available && it->parsed_metar.location_available)
+      if (auto pt = render_projection.GeoToScreenIfVisible(it->parsed_metar.location))
+        look.noaa.icon.Draw(canvas, *pt);
 #endif
 }
 

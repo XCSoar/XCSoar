@@ -23,49 +23,32 @@
 #include "AlternateTask.hpp"
 #include "Task/Points/TaskWaypoint.hpp"
 #include "Geo/Math.hpp"
-#include "util/ReservablePriorityQueue.hpp"
 #include "Navigation/Aircraft.hpp"
 
 AlternateTask::AlternateTask(const TaskBehaviour &tb,
-                             const Waypoints &wps):
-  AbortTask(tb, wps)
+                             const Waypoints &wps) noexcept
+  :AbortTask(tb, wps)
 {
   alternates.reserve(64);
 }
 
 void
-AlternateTask::Reset()
+AlternateTask::Reset() noexcept
 {
   AbortTask::Reset();
   destination.SetInvalid();
 }
 
 void
-AlternateTask::Clear()
+AlternateTask::Clear() noexcept
 {
   AbortTask::Clear();
   alternates.clear();
 }
 
-/**
- * Function object used to rank waypoints by arrival time
- */
-struct AlternateRank:
-  public std::binary_function<AlternateTask::Divert,
-                              AlternateTask::Divert, bool>
-{
-  /**
-   * Condition, ranks by distance diversion 
-   */
-  bool operator()(const AlternateTask::Divert& x, 
-                  const AlternateTask::Divert& y) const {
-    return x.delta < y.delta;
-  }
-};
-
 void 
 AlternateTask::ClientUpdate(const AircraftState &state_now,
-                             const bool reachable)
+                            const bool reachable) noexcept
 {
   // build a list of alternates, sorted by distance.
   // this is done in separate stages so we can add the reachable ones
@@ -75,47 +58,49 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
   if (!destination.IsValid())
     return;
 
-  reservable_priority_queue<Divert, DivertVector, AlternateRank> q;
+  DivertVector q;
   q.reserve(task_points.size());
 
   const auto straight_distance = state_now.location.Distance(destination);
 
-  for (auto i = task_points.begin(), end = task_points.end(); i != end; ++i) {
-    const TaskWaypoint &tp = i->point;
+  for (const auto &i : task_points) {
+    const TaskWaypoint &tp = i.point;
     auto wp = tp.GetWaypointPtr();
 
     const auto diversion_distance =
         ::DoubleDistance(state_now.location, wp->location, destination);
     const auto delta = straight_distance - diversion_distance;
 
-    q.push(Divert(std::move(wp), i->solution, delta));
+    q.emplace_back(std::move(wp), i.solution, delta);
   }
 
+  /* sort by distance diversion */
+  std::sort(q.begin(), q.end(), [](const auto &x, const auto &y){
+    return x.delta > y.delta;
+  });
+
   // now push results onto the list, best first.
-  while (!q.empty() && alternates.size() < max_alternates) {
-    const AlternatePoint &top = q.top();
+  const auto n = std::min(q.size(), max_alternates);
+  for (std::size_t i = 0; i < n; ++i) {
+    AlternatePoint &top = q[i];
 
     // only add if not already in the list (from previous stage in two
     // stage process)
     if (!IsWaypointInAlternates(*top.waypoint))
-      alternates.push_back(top);
-
-    q.pop();
+      alternates.emplace_back(std::move(top));
   }
 }
 
-void 
-AlternateTask::SetTaskDestination(const GeoPoint &_destination)
+void
+AlternateTask::SetTaskDestination(const GeoPoint &_destination) noexcept
 {
   destination = _destination;
 }
 
-bool 
-AlternateTask::IsWaypointInAlternates(const Waypoint& waypoint) const
+inline bool
+AlternateTask::IsWaypointInAlternates(const Waypoint& waypoint) const noexcept
 {
-  for (auto it = alternates.begin(), end = alternates.end(); it != end; ++it)
-    if (*it->waypoint == waypoint)
-      return true;
-
-  return false;
+  return std::any_of(alternates.begin(), alternates.end(), [&](const auto &i){
+    return *i.waypoint == waypoint;
+  });
 }

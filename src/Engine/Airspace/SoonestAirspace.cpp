@@ -26,6 +26,7 @@ Copyright_License {
 #include "AirspaceInterceptSolution.hpp"
 #include "AirspaceAircraftPerformance.hpp"
 #include "Minimum.hpp"
+#include "Predicate/AirspacePredicate.hpp"
 #include "Navigation/Aircraft.hpp"
 
 struct SoonestAirspace {
@@ -74,7 +75,7 @@ const AbstractAirspace *
 FindSoonestAirspace(const Airspaces &airspaces,
                     const AircraftState &state,
                     const AirspaceAircraftPerformance &perf,
-                    const AirspacePredicate &predicate,
+                    AirspacePredicate predicate,
                     const double max_time)
 {
   const auto &projection = airspaces.GetProjection();

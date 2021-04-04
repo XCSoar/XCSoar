@@ -37,51 +37,51 @@ class WindowProjection;
 class CompareProjection {
   struct FourCorners : GeoQuadrilateral {
     FourCorners() = default;
-    FourCorners(const WindowProjection &projection);
+    FourCorners(const WindowProjection &projection) noexcept;
   };
 
   FourCorners corners;
 
   double latitude_cos;
 
-  double max_delta;
+  double max_delta = -1;
 
 public:
   /**
    * Creates a "cleared" object, so that comparisons are always false.
    */
-  CompareProjection():max_delta(-1) {}
+  CompareProjection() noexcept = default;
 
-  explicit CompareProjection(const WindowProjection &projection);
+  explicit CompareProjection(const WindowProjection &projection) noexcept;
 
   /**
    * Clears the object, so that comparisons are always false.  Useful
    * to Invalidate a cache.
    */
-  void Clear() {
+  void Clear() noexcept {
     max_delta = -1;
   }
 
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
     return max_delta > 0;
   }
 
-  bool Compare(const CompareProjection &other) const;
+  bool Compare(const CompareProjection &other) const noexcept;
 
   /**
    * Is the new projection close enough to the saved one?
    */
-  bool Compare(const WindowProjection &projection) const {
+  bool Compare(const WindowProjection &projection) const noexcept {
     return Compare(CompareProjection(projection));
   }
 
-  bool CompareAndUpdate(const CompareProjection &other);
+  bool CompareAndUpdate(const CompareProjection &other) noexcept;
 
   /**
    * Is the new projection close enough to the saved one?  If not,
    * then the saved one is updated.
    */
-  bool CompareAndUpdate(const WindowProjection &projection) {
+  bool CompareAndUpdate(const WindowProjection &projection) noexcept {
     return CompareAndUpdate(CompareProjection(projection));
   }
 };

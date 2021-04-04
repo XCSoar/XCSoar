@@ -29,7 +29,7 @@ Copyright_License {
 #include "Geo/SearchPointVector.hpp"
 
 void
-MapCanvas::DrawLine(GeoPoint a, GeoPoint b)
+MapCanvas::DrawLine(GeoPoint a, GeoPoint b) noexcept
 {
   if (!clip.ClipLine(a, b))
     return;
@@ -38,21 +38,20 @@ MapCanvas::DrawLine(GeoPoint a, GeoPoint b)
 }
 
 void
-MapCanvas::DrawLineWithOffset(GeoPoint a, GeoPoint b)
+MapCanvas::DrawLineWithOffset(GeoPoint a, GeoPoint b) noexcept
 {
   if (!clip.ClipLine(a, b))
     return;
 
-  PixelPoint pts[3];
-  pts[0] = projection.GeoToScreen(a);
-  pts[1] = projection.GeoToScreen(b);
-  pts[2] = ScreenClosestPoint(pts[0], pts[1], pts[0], Layout::Scale(20));
-  canvas.DrawLine(pts[2], pts[1]);
+  const auto p_a = projection.GeoToScreen(a);
+  const auto p_b = projection.GeoToScreen(b);
+  const auto p_end = ScreenClosestPoint(p_a, p_b, p_a, Layout::Scale(20));
+  canvas.DrawLine(p_b, p_end);
 }
 
 
 void
-MapCanvas::DrawCircle(const GeoPoint &center, double radius)
+MapCanvas::DrawCircle(const GeoPoint &center, double radius) noexcept
 {
   auto screen_center = projection.GeoToScreen(center);
   unsigned screen_radius = projection.GeoToScreenDistance(radius);
@@ -61,14 +60,14 @@ MapCanvas::DrawCircle(const GeoPoint &center, double radius)
 
 void
 MapCanvas::Project(const Projection &projection,
-                   const SearchPointVector &points, BulkPixelPoint *screen)
+                   const SearchPointVector &points, BulkPixelPoint *screen) noexcept
 {
-  for (auto it = points.begin(); it != points.end(); ++it)
-    *screen++ = projection.GeoToScreen(it->GetLocation());
+  for (const auto i : points)
+    *screen++ = projection.GeoToScreen(i.GetLocation());
 }
 
 bool
-MapCanvas::PreparePolygon(const SearchPointVector &points)
+MapCanvas::PreparePolygon(const SearchPointVector &points) noexcept
 {
   unsigned num_points = points.size();
   if (num_points < 3)
@@ -95,7 +94,7 @@ MapCanvas::PreparePolygon(const SearchPointVector &points)
 }
 
 void
-MapCanvas::DrawPrepared()
+MapCanvas::DrawPrepared() noexcept
 {
   /* draw it all */
   canvas.DrawPolygon(raster_points.begin(), num_raster_points);

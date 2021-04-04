@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "ui/dim/Rect.hpp"
 #include "util/StaticArray.hxx"
-#include "util/Compiler.h"
 
 /**
  * Simple code to prevent text writing over map city names.
@@ -56,7 +55,7 @@ class LabelBlock {
   public:
     void Clear();
 
-    gcc_pure
+    [[gnu::pure]]
     bool Check(const PixelRect rc) const;
 
     void Add(const PixelRect rc) {

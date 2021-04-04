@@ -25,7 +25,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 
 void
-MessageOperationEnvironment::SetErrorMessage(const TCHAR *text)
+MessageOperationEnvironment::SetErrorMessage(const TCHAR *text) noexcept
 {
   ShowMessageBox(text, _T(""), MB_OK|MB_ICONERROR);
 }

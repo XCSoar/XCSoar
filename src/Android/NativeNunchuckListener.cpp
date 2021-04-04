@@ -29,10 +29,10 @@ Copyright_License {
 #include <cstddef>
 
 namespace NativeNunchuckListener {
-  static Java::TrivialClass cls;
-  static jmethodID ctor;
-  static jfieldID ptr_field;
-};
+static Java::TrivialClass cls;
+static jmethodID ctor;
+static jfieldID ptr_field;
+} // namespace NativeNunchuckListener
 
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeNunchuckListener_onNunchuckValues(JNIEnv *env, jobject obj,

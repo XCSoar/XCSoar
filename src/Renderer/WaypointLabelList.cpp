@@ -29,7 +29,7 @@ Copyright_License {
 
 static constexpr int WPCIRCLESIZE = 2;
 
-gcc_pure
+[[gnu::pure]]
 static bool
 MapWaypointLabelListCompare(const WaypointLabelList::Label &e1,
                             const WaypointLabelList::Label &e2)
@@ -73,8 +73,8 @@ WaypointLabelList::Add(const TCHAR *Name, int X, int Y,
                        int AltArivalAGL, bool inTask,
                        bool isLandable, bool isAirport, bool isWatchedWaypoint)
 {
-  if (X < - WPCIRCLESIZE || X > (int)width + WPCIRCLESIZE * 3 ||
-      Y < - WPCIRCLESIZE || Y > (int)height + WPCIRCLESIZE)
+  if (X < - WPCIRCLESIZE || X > (int)size.width + WPCIRCLESIZE * 3 ||
+      Y < - WPCIRCLESIZE || Y > (int)size.height + WPCIRCLESIZE)
     return;
 
   if (labels.full())

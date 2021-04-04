@@ -51,8 +51,8 @@ public:
   void UpdateVisibilities();
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
 private:
   /* methods from DataFieldListener */
@@ -75,7 +75,8 @@ WaypointDisplayConfigPanel::OnModified(DataField &df)
 }
 
 void
-WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent,
+                                    const PixelRect &rc) noexcept
 {
   const WaypointRendererSettings &settings = CommonInterface::GetMapSettings().waypoint;
 
@@ -205,7 +206,7 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
 }
 
 bool
-WaypointDisplayConfigPanel::Save(bool &_changed)
+WaypointDisplayConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

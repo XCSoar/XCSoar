@@ -80,7 +80,7 @@ protected:
    * getLeastImportantItem is called to identify the item that should be
    * removed if the list is too full. Reimplemented from LimitedList.
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned int getLeastImportantItem(unsigned now);
 };
 

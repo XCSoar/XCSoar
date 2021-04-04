@@ -276,8 +276,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   int result = EXIT_SUCCESS;
   try {
     Main();
-  } catch (const std::exception &e) {
-    PrintException(e);
+  } catch (...) {
+    PrintException(std::current_exception());
     result = EXIT_FAILURE;
   }
 

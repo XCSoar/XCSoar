@@ -31,14 +31,14 @@ public:
   /**
    * Call after the main window has been resized.
    */
-  void UpdateLayout();
+  void UpdateLayout() noexcept;
 
-  void Hide();
+  void Hide() noexcept;
 
   /* virtual methods from class OperationEnvironment */
-  void SetText(const TCHAR *text) override;
-  void SetProgressRange(unsigned range) override;
-  void SetProgressPosition(unsigned position) override;
+  void SetText(const TCHAR *text) noexcept override;
+  void SetProgressRange(unsigned range) noexcept override;
+  void SetProgressPosition(unsigned position) noexcept override;
 };
 
 #endif

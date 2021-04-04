@@ -105,7 +105,7 @@ public:
   bool UpdateAutopilot(TaskAccessor &task,
                        const AircraftState &state);
 
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint GetTarget(const TaskAccessor& task) const;
 
   void SetSpeedFactor(double f) {
@@ -116,12 +116,12 @@ private:
   bool DoAdvance(TaskAccessor& task);
   void AdvanceIfRequired(TaskAccessor& task);
 
-  gcc_pure
+  [[gnu::pure]]
   bool HasFinished(const TaskAccessor &task) const;
 
   void GetAWP(const TaskAccessor &task);
 
-  gcc_pure
+  [[gnu::pure]]
   bool HasTarget(const TaskAccessor& task) const;
 
   virtual GeoPoint GetStartLocation(const TaskAccessor& task,

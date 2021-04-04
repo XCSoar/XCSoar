@@ -74,7 +74,8 @@ try {
   HeightMatrix matrix;
 #ifdef ENABLE_OPENGL
   matrix.Fill(map, projection.GetScreenBounds(),
-              projection.GetScreenWidth(), projection.GetScreenHeight(),
+              projection.GetScreenSize().width,
+              projection.GetScreenSize().height,
               false);
 #else
   matrix.Fill(map, projection, 1, false);

@@ -183,7 +183,8 @@ VegaParametersWidget::Revert()
 }
 
 void
-VegaParametersWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+VegaParametersWidget::Prepare(ContainerWindow &parent,
+                              const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 
@@ -193,7 +194,7 @@ VegaParametersWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-VegaParametersWidget::Show(const PixelRect &rc)
+VegaParametersWidget::Show(const PixelRect &rc) noexcept
 {
   RequestAll();
   UpdateUI();
@@ -202,7 +203,7 @@ VegaParametersWidget::Show(const PixelRect &rc)
 }
 
 bool
-VegaParametersWidget::Save(bool &changed_r)
+VegaParametersWidget::Save(bool &changed_r) noexcept
 {
   bool changed = false;
 

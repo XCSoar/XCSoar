@@ -29,13 +29,14 @@ Copyright_License {
 
 class TaskStatusPanel : public StatusPanel, DataFieldListener {
 public:
-  TaskStatusPanel(const DialogLook &look):StatusPanel(look) {}
+  explicit TaskStatusPanel(const DialogLook &look) noexcept
+    :StatusPanel(look) {}
 
   /* virtual methods from class StatusPanel */
-  void Refresh() override;
+  void Refresh() noexcept override;
 
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
 private:
   /* virtual methods from DataFieldListener */

@@ -33,6 +33,7 @@ Copyright_License {
 #include "Pan.hpp"
 #include "util/Clamp.hpp"
 #include "Topography/Thread.hpp"
+#include "Asset.hpp"
 
 #ifdef USE_X11
 #include "ui/event/Globals.hpp"
@@ -440,8 +441,7 @@ GlueMapWindow::OnKineticTimer() noexcept
     return;
   }
 
-  auto location = drag_projection.ScreenToGeo(kinetic_x.GetPosition(),
-                                              kinetic_y.GetPosition());
+  auto location = drag_projection.ScreenToGeo({kinetic_x.GetPosition(), kinetic_y.GetPosition()});
   location = drag_projection.GetGeoLocation() +
     drag_start_geopoint - location;
 

@@ -56,7 +56,7 @@ class TaskEffectiveMacCready final : public TaskSolveTravelled
 
 protected:
   /* virtual methods from class ZeroFinder */
-  virtual double f(const double x) override;
+  double f(double x) noexcept override;
 };
 
 #endif

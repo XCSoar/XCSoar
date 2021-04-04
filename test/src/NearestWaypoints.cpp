@@ -24,7 +24,6 @@ Copyright_License {
 #include "Waypoint/WaypointReader.hpp"
 #include "Waypoint/Factory.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "system/ConvertPathName.hpp"
 #include "system/Args.hpp"
 #include "Operation/Operation.hpp"

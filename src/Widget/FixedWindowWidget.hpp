@@ -31,7 +31,7 @@ class FixedWindowWidget : public WindowWidget {
 public:
   using WindowWidget::WindowWidget;
 
-  PixelSize GetMinimumSize() const override {
+  PixelSize GetMinimumSize() const noexcept override {
     return GetWindow().GetSize();
   }
 };

@@ -24,7 +24,6 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SpeedVector.hpp"
-#include "util/Compiler.h"
 
 #include <type_traits>
 
@@ -161,7 +160,7 @@ struct AircraftState:
    * @param in_time Time step for extrapolation (s)
    * @return Predicted aircraft state in in_time seconds
    */
-  gcc_pure
+  [[gnu::pure]]
   AircraftState GetPredictedState(double in_time) const;
 
   void Reset();

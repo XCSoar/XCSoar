@@ -31,51 +31,53 @@ Copyright_License {
 class Path;
 
 namespace Net {
-  class Session;
-  class ResponseHandler;
 
-  class MultiPartFormData {
-    struct curl_httppost *head = nullptr, *tail = nullptr;
+class Session;
+class ResponseHandler;
 
-  public:
-    MultiPartFormData() = default;
+class MultiPartFormData {
+  struct curl_httppost *head = nullptr, *tail = nullptr;
 
-    MultiPartFormData(MultiPartFormData &&src)
-      :head(src.head), tail(src.tail) {
-      src.head = src.tail = nullptr;
-    }
+public:
+  MultiPartFormData() = default;
 
-    ~MultiPartFormData() {
-      if (head != nullptr)
-        curl_formfree(head);
-    }
+  MultiPartFormData(MultiPartFormData &&src)
+    :head(src.head), tail(src.tail) {
+    src.head = src.tail = nullptr;
+  }
 
-    MultiPartFormData &operator=(MultiPartFormData &&src) {
-      std::swap(head, src.head);
-      std::swap(tail, src.tail);
-      return *this;
-    }
+  ~MultiPartFormData() {
+    if (head != nullptr)
+      curl_formfree(head);
+  }
 
-    const struct curl_httppost *Get() const {
-      return head;
-    }
+  MultiPartFormData &operator=(MultiPartFormData &&src) {
+    std::swap(head, src.head);
+    std::swap(tail, src.tail);
+    return *this;
+  }
 
-    MultiPartFormData &AddString(const char *name, const char *value) {
-      return Add(CURLFORM_COPYNAME, "name",
-                 CURLFORM_COPYCONTENTS, "content");
-    }
+  const struct curl_httppost *Get() const {
+    return head;
+  }
 
-    MultiPartFormData &AddFile(const char *name, Path path);
+  MultiPartFormData &AddString(const char *name, const char *value) {
+    return Add(CURLFORM_COPYNAME, "name",
+               CURLFORM_COPYCONTENTS, "content");
+  }
 
-  private:
-    template<typename... Args>
-    MultiPartFormData &Add(Args&&... args) {
-      curl_formadd(&head, &tail,
-                   std::forward<Args>(args)...,
-                   CURLFORM_END);
-      return *this;
-    }
-  };
-}
+  MultiPartFormData &AddFile(const char *name, Path path);
+
+private:
+  template<typename... Args>
+  MultiPartFormData &Add(Args&&... args) {
+    curl_formadd(&head, &tail,
+                 std::forward<Args>(args)...,
+                 CURLFORM_END);
+    return *this;
+  }
+};
+
+} // namespace Net
 
 #endif

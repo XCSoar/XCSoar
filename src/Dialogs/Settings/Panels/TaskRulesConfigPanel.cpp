@@ -47,12 +47,13 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 void
-TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TaskRulesConfigPanel::Prepare(ContainerWindow &parent,
+                              const PixelRect &rc) noexcept
 {
   const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
   const TaskBehaviour &task_behaviour = settings_computer.task;
@@ -119,7 +120,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
 
 bool
-TaskRulesConfigPanel::Save(bool &_changed)
+TaskRulesConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

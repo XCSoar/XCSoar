@@ -44,7 +44,7 @@ static Java::TrivialClass util_class;
 static jmethodID enumerate_method, enqueue_method, cancel_method;
 
 bool
-AndroidDownloadManager::Initialise(JNIEnv *env)
+AndroidDownloadManager::Initialise(JNIEnv *env) noexcept
 {
   assert(util_class == nullptr);
   assert(env != nullptr);
@@ -67,31 +67,29 @@ AndroidDownloadManager::Initialise(JNIEnv *env)
 }
 
 void
-AndroidDownloadManager::Deinitialise(JNIEnv *env)
+AndroidDownloadManager::Deinitialise(JNIEnv *env) noexcept
 {
   util_class.ClearOptional(env);
 }
 
 bool
-AndroidDownloadManager::IsAvailable()
+AndroidDownloadManager::IsAvailable() noexcept
 {
   return util_class.Get() != nullptr;
 }
 
 AndroidDownloadManager *
-AndroidDownloadManager::Create(JNIEnv *env, Context &context)
+AndroidDownloadManager::Create(JNIEnv *env, Context &context) noexcept
 {
-  jobject obj = context.GetSystemService(env, "download");
+  const auto obj = context.GetSystemService(env, "download");
   if (obj == nullptr)
     return nullptr;
 
-  instance = new AndroidDownloadManager(env, obj);
-  env->DeleteLocalRef(obj);
-  return instance;
+  return new AndroidDownloadManager(env, obj);
 }
 
 void
-AndroidDownloadManager::AddListener(Net::DownloadListener &listener)
+AndroidDownloadManager::AddListener(Net::DownloadListener &listener) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
 
@@ -102,7 +100,7 @@ AndroidDownloadManager::AddListener(Net::DownloadListener &listener)
 }
 
 void
-AndroidDownloadManager::RemoveListener(Net::DownloadListener &listener)
+AndroidDownloadManager::RemoveListener(Net::DownloadListener &listener) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
 
@@ -113,16 +111,22 @@ AndroidDownloadManager::RemoveListener(Net::DownloadListener &listener)
 
 void
 AndroidDownloadManager::OnDownloadComplete(Path path_relative,
-                                           bool success)
+                                           bool success) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
-  for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-    (*i)->OnDownloadComplete(path_relative, success);
+
+  if (success)
+    for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
+      (*i)->OnDownloadComplete(path_relative);
+  else
+    for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
+      // TODO obtain error details
+      (*i)->OnDownloadError(path_relative, {});
 }
 
-gcc_pure
+[[gnu::pure]]
 static AllocatedPath
-EraseSuffix(Path p, const char *suffix)
+EraseSuffix(Path p, const char *suffix) noexcept
 {
   assert(p != nullptr);
   assert(suffix != nullptr);
@@ -178,7 +182,8 @@ Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, jclass cls,
 }
 
 void
-AndroidDownloadManager::Enumerate(JNIEnv *env, Net::DownloadListener &listener)
+AndroidDownloadManager::Enumerate(JNIEnv *env,
+                                  Net::DownloadListener &listener) noexcept
 {
   assert(env != nullptr);
 
@@ -188,7 +193,7 @@ AndroidDownloadManager::Enumerate(JNIEnv *env, Net::DownloadListener &listener)
 
 void
 AndroidDownloadManager::Enqueue(JNIEnv *env, const char *uri,
-                                Path path_relative)
+                                Path path_relative) noexcept
 {
   assert(env != nullptr);
   assert(uri != nullptr);
@@ -204,13 +209,27 @@ AndroidDownloadManager::Enqueue(JNIEnv *env, const char *uri,
                             object.Get(), j_uri.Get(),
                             j_path.Get());
 
+  try {
+    /* the method DownloadManager.enqueue() can throw
+       SecurityException if Android doesn't like the destination path
+       ("Unsupported path") */
+    Java::RethrowException(env);
+  } catch (...) {
+    const auto error = std::current_exception();
+
+    std::lock_guard<Mutex> lock(mutex);
+    for (auto *i : listeners)
+      i->OnDownloadError(path_relative, error);
+    return;
+  }
+
   std::lock_guard<Mutex> lock(mutex);
   for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
     (*i)->OnDownloadAdded(path_relative, -1, -1);
 }
 
 void
-AndroidDownloadManager::Cancel(JNIEnv *env, Path path_relative)
+AndroidDownloadManager::Cancel(JNIEnv *env, Path path_relative) noexcept
 {
   assert(env != nullptr);
   assert(path_relative != nullptr);

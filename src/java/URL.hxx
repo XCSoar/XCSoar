@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2010-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -36,100 +36,102 @@
 #include <cassert>
 
 namespace Java {
-	/**
-	 * Wrapper for a java.net.URL object.
-	 */
-	class URL {
-		static TrivialClass cls;
-		static jmethodID ctor, openConnection_method;
 
-	public:
-		static void Initialise(JNIEnv *env);
-		static void Deinitialise(JNIEnv *env);
+/**
+ * Wrapper for a java.net.URL object.
+ */
+class URL {
+	static TrivialClass cls;
+	static jmethodID ctor, openConnection_method;
 
-		static jobject Create(JNIEnv *env, jstring url) {
-			assert(env != nullptr);
-			assert(url != nullptr);
-			assert(ctor != nullptr);
+public:
+	static void Initialise(JNIEnv *env);
+	static void Deinitialise(JNIEnv *env);
 
-			return env->NewObject(cls, ctor, url);
-		}
+	static jobject Create(JNIEnv *env, jstring url) {
+		assert(env != nullptr);
+		assert(url != nullptr);
+		assert(ctor != nullptr);
 
-		static jobject Create(JNIEnv *env, const char *url);
+		return env->NewObject(cls, ctor, url);
+	}
 
-		static jobject openConnection(JNIEnv *env, jobject url) {
-			assert(env != nullptr);
-			assert(url != nullptr);
-			assert(openConnection_method != nullptr);
+	static jobject Create(JNIEnv *env, const char *url);
 
-			return env->CallObjectMethod(url, openConnection_method);
-		}
+	static jobject openConnection(JNIEnv *env, jobject url) {
+		assert(env != nullptr);
+		assert(url != nullptr);
+		assert(openConnection_method != nullptr);
 
-		static jobject openConnection(JNIEnv *env, const char *url);
-	};
+		return env->CallObjectMethod(url, openConnection_method);
+	}
 
-	/**
-	 * Wrapper for a java.net.URLConnection object.
-	 */
-	class URLConnection {
-		static jmethodID setConnectTimeout_method;
-		static jmethodID setReadTimeout_method;
-		static jmethodID addRequestProperty_method;
-		static jmethodID getContentLength_method;
-		static jmethodID getInputStream_method;
+	static jobject openConnection(JNIEnv *env, const char *url);
+};
 
-	public:
-		static void Initialise(JNIEnv *env);
+/**
+ * Wrapper for a java.net.URLConnection object.
+ */
+class URLConnection {
+	static jmethodID setConnectTimeout_method;
+	static jmethodID setReadTimeout_method;
+	static jmethodID addRequestProperty_method;
+	static jmethodID getContentLength_method;
+	static jmethodID getInputStream_method;
 
-		static void setConnectTimeout(JNIEnv *env, jobject connection,
-					      jint timeout) {
-			assert(env != nullptr);
-			assert(connection != nullptr);
-			assert(setConnectTimeout_method != nullptr);
+public:
+	static void Initialise(JNIEnv *env);
 
-			env->CallVoidMethod(connection,
-					    setConnectTimeout_method, timeout);
-		}
+	static void setConnectTimeout(JNIEnv *env, jobject connection,
+				      jint timeout) {
+		assert(env != nullptr);
+		assert(connection != nullptr);
+		assert(setConnectTimeout_method != nullptr);
 
-		static void setReadTimeout(JNIEnv *env, jobject connection,
-					   jint timeout) {
-			assert(env != nullptr);
-			assert(connection != nullptr);
-			assert(setReadTimeout_method != nullptr);
+		env->CallVoidMethod(connection,
+				    setConnectTimeout_method, timeout);
+	}
 
-			env->CallVoidMethod(connection, setReadTimeout_method,
-					    timeout);
-		}
+	static void setReadTimeout(JNIEnv *env, jobject connection,
+				   jint timeout) {
+		assert(env != nullptr);
+		assert(connection != nullptr);
+		assert(setReadTimeout_method != nullptr);
 
-		static void addRequestProperty(JNIEnv *env, jobject connection,
-					       jstring field, jstring value) {
-			assert(env != nullptr);
-			assert(connection != nullptr);
-			assert(setReadTimeout_method != nullptr);
+		env->CallVoidMethod(connection, setReadTimeout_method,
+				    timeout);
+	}
 
-			env->CallVoidMethod(connection,
-					    addRequestProperty_method,
-					    field, value);
-		}
+	static void addRequestProperty(JNIEnv *env, jobject connection,
+				       jstring field, jstring value) {
+		assert(env != nullptr);
+		assert(connection != nullptr);
+		assert(setReadTimeout_method != nullptr);
 
-		static int getContentLength(JNIEnv *env, jobject connection) {
-			assert(env != nullptr);
-			assert(connection != nullptr);
-			assert(getContentLength_method != nullptr);
+		env->CallVoidMethod(connection,
+				    addRequestProperty_method,
+				    field, value);
+	}
 
-			return env->CallIntMethod(connection,
-						  getContentLength_method);
-		}
+	static int getContentLength(JNIEnv *env, jobject connection) {
+		assert(env != nullptr);
+		assert(connection != nullptr);
+		assert(getContentLength_method != nullptr);
 
-		static jobject getInputStream(JNIEnv *env, jobject connection) {
-			assert(env != nullptr);
-			assert(connection != nullptr);
-			assert(getInputStream_method != nullptr);
+		return env->CallIntMethod(connection,
+					  getContentLength_method);
+	}
 
-			return env->CallObjectMethod(connection,
-						     getInputStream_method);
-		}
-	};
-}
+	static jobject getInputStream(JNIEnv *env, jobject connection) {
+		assert(env != nullptr);
+		assert(connection != nullptr);
+		assert(getInputStream_method != nullptr);
+
+		return env->CallObjectMethod(connection,
+					     getInputStream_method);
+	}
+};
+
+} // namespace Java
 
 #endif

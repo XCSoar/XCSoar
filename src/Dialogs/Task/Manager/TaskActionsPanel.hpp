@@ -57,8 +57,8 @@ private:
   void OnDeclareClicked();
 
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void ReClick() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void ReClick() noexcept override;
 };
 
 #endif

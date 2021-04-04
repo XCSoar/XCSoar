@@ -64,7 +64,7 @@ constexpr bool subtract_start_finish_cylinder_radius = true;
  * Determine the cylinder radius if this is a CylinderZone.  If not,
  * return -1.
  */
-gcc_pure
+[[gnu::pure]]
 static double
 GetCylinderRadiusOrMinusOne(const ObservationZone &oz)
 {
@@ -77,14 +77,14 @@ GetCylinderRadiusOrMinusOne(const ObservationZone &oz)
  * Determine the cylinder radius if this is a CylinderZone.  If not,
  * return -1.
  */
-gcc_pure
+[[gnu::pure]]
 static double
 GetCylinderRadiusOrMinusOne(const ObservationZoneClient &p)
 {
   return GetCylinderRadiusOrMinusOne(p.GetObservationZone());
 }
 
-OrderedTask::OrderedTask(const TaskBehaviour &tb)
+OrderedTask::OrderedTask(const TaskBehaviour &tb) noexcept
   :AbstractTask(TaskType::ORDERED, tb),
    factory_mode(tb.task_type_default),
    ordered_settings(tb.ordered_defaults)
@@ -94,7 +94,7 @@ OrderedTask::OrderedTask(const TaskBehaviour &tb)
   active_factory->UpdateOrderedTaskSettings(ordered_settings);
 }
 
-OrderedTask::~OrderedTask()
+OrderedTask::~OrderedTask() noexcept
 {
   RemoveAllPoints();
 }
@@ -135,7 +135,7 @@ OrderedTask::UpdateStatsGeometry()
 {
   ScanStartFinish();
 
-  stats.task_valid = CheckTask();
+  stats.task_valid = !IsError(CheckTask());
   stats.has_targets = stats.task_valid && HasTargets();
   stats.is_mat = GetFactoryType() == TaskFactoryType::MAT;
   stats.has_optional_starts = stats.task_valid && HasOptionalStarts();
@@ -193,7 +193,7 @@ OrderedTask::UpdateGeometry()
 // TIMES
 
 double
-OrderedTask::ScanTotalStartTime()
+OrderedTask::ScanTotalStartTime() noexcept
 {
   if (task_points.empty())
     return -1;
@@ -202,7 +202,7 @@ OrderedTask::ScanTotalStartTime()
 }
 
 double
-OrderedTask::ScanLegStartTime()
+OrderedTask::ScanLegStartTime() noexcept
 {
   if (active_task_point > 0)
     return task_points[active_task_point-1]->GetEnteredState().time;
@@ -357,7 +357,7 @@ OrderedTask::ScanDistanceMax()
 
 void
 OrderedTask::ScanDistanceMinMax(const GeoPoint &location, bool force,
-                                double *dmin, double *dmax)
+                                double *dmin, double *dmax) noexcept
 {
   if (force)
     *dmax = ScanDistanceMax();
@@ -366,7 +366,7 @@ OrderedTask::ScanDistanceMinMax(const GeoPoint &location, bool force,
 }
 
 double
-OrderedTask::ScanDistanceNominal()
+OrderedTask::ScanDistanceNominal() noexcept
 {
   if (task_points.empty())
     return 0;
@@ -387,7 +387,7 @@ OrderedTask::ScanDistanceNominal()
 }
 
 double
-OrderedTask::ScanDistanceScored(const GeoPoint &location)
+OrderedTask::ScanDistanceScored(const GeoPoint &location) noexcept
 {
   return task_points.empty()
     ? 0
@@ -395,7 +395,7 @@ OrderedTask::ScanDistanceScored(const GeoPoint &location)
 }
 
 double
-OrderedTask::ScanDistanceRemaining(const GeoPoint &location)
+OrderedTask::ScanDistanceRemaining(const GeoPoint &location) noexcept
 {
   return task_points.empty()
     ? 0
@@ -403,7 +403,7 @@ OrderedTask::ScanDistanceRemaining(const GeoPoint &location)
 }
 
 double
-OrderedTask::ScanDistanceTravelled(const GeoPoint &location)
+OrderedTask::ScanDistanceTravelled(const GeoPoint &location) noexcept
 {
   return task_points.empty()
     ? 0
@@ -411,7 +411,7 @@ OrderedTask::ScanDistanceTravelled(const GeoPoint &location)
 }
 
 double
-OrderedTask::ScanDistancePlanned()
+OrderedTask::ScanDistancePlanned() noexcept
 {
   return task_points.empty()
     ? 0
@@ -434,7 +434,7 @@ OrderedTask::GetLastIntermediateAchieved() const
 
 bool
 OrderedTask::CheckTransitions(const AircraftState &state,
-                              const AircraftState &state_last)
+                              const AircraftState &state_last) noexcept
 {
   if (!taskpoint_start)
     return false;
@@ -608,7 +608,7 @@ OrderedTask::CheckTransitionPoint(OrderedTaskPoint &point,
 
 bool
 OrderedTask::UpdateIdle(const AircraftState &state,
-                        const GlidePolar &glide_polar)
+                        const GlidePolar &glide_polar) noexcept
 {
   bool retval = AbstractTask::UpdateIdle(state, glide_polar);
 
@@ -637,7 +637,7 @@ OrderedTask::UpdateIdle(const AircraftState &state,
 bool
 OrderedTask::UpdateSample(const AircraftState &state,
                           gcc_unused const GlidePolar &glide_polar,
-                          gcc_unused const bool full_update)
+                          gcc_unused const bool full_update) noexcept
 {
   assert(state.location.IsValid());
 
@@ -673,8 +673,8 @@ OrderedTask::SetNeighbours(unsigned position)
   }
 }
 
-bool
-OrderedTask::CheckTask() const
+TaskValidationErrorSet
+OrderedTask::CheckTask() const noexcept
 {
   return this->GetFactory().Validate();
 }
@@ -871,7 +871,7 @@ OrderedTask::ReplaceOptionalStart(const OrderedTaskPoint &new_tp,
 
 
 void
-OrderedTask::SetActiveTaskPoint(unsigned index)
+OrderedTask::SetActiveTaskPoint(unsigned index) noexcept
 {
   if (index >= task_points.size() || index == active_task_point)
     return;
@@ -882,7 +882,7 @@ OrderedTask::SetActiveTaskPoint(unsigned index)
 }
 
 TaskWaypoint*
-OrderedTask::GetActiveTaskPoint() const
+OrderedTask::GetActiveTaskPoint() const noexcept
 {
   if (active_task_point < task_points.size())
     return task_points[active_task_point].get();
@@ -891,7 +891,7 @@ OrderedTask::GetActiveTaskPoint() const
 }
 
 bool
-OrderedTask::IsValidTaskPoint(const int index_offset) const
+OrderedTask::IsValidTaskPoint(const int index_offset) const noexcept
 {
   unsigned index = active_task_point + index_offset;
   return (index < task_points.size());
@@ -901,7 +901,7 @@ void
 OrderedTask::GlideSolutionRemaining(const AircraftState &aircraft,
                                     const GlidePolar &polar,
                                     GlideResult &total,
-                                    GlideResult &leg)
+                                    GlideResult &leg) noexcept
 {
   if (!aircraft.location.IsValid() || task_points.empty()) {
     total.Reset();
@@ -921,7 +921,7 @@ void
 OrderedTask::GlideSolutionTravelled(const AircraftState &aircraft,
                                     const GlidePolar &glide_polar,
                                     GlideResult &total,
-                                    GlideResult &leg)
+                                    GlideResult &leg) noexcept
 {
   if (!aircraft.location.IsValid() || task_points.empty()) {
     total.Reset();
@@ -944,7 +944,7 @@ OrderedTask::GlideSolutionPlanned(const AircraftState &aircraft,
                                   DistanceStat &total_remaining_effective,
                                   DistanceStat &leg_remaining_effective,
                                   const GlideResult &solution_remaining_total,
-                                  const GlideResult &solution_remaining_leg)
+                                  const GlideResult &solution_remaining_leg) noexcept
 {
   if (task_points.empty()) {
     total.Reset();
@@ -976,7 +976,7 @@ OrderedTask::GlideSolutionPlanned(const AircraftState &aircraft,
 
 double
 OrderedTask::CalcRequiredGlide(const AircraftState &aircraft,
-                               const GlidePolar &glide_polar) const
+                               const GlidePolar &glide_polar) const noexcept
 {
   TaskPointList tps(task_points);
   TaskGlideRequired bgr(tps, active_task_point, aircraft,
@@ -987,7 +987,7 @@ OrderedTask::CalcRequiredGlide(const AircraftState &aircraft,
 bool
 OrderedTask::CalcBestMC(const AircraftState &aircraft,
                         const GlidePolar &glide_polar,
-                        double &best) const
+                        double &best) const noexcept
 {
   // note setting of lower limit on mc
   TaskPointList tps(task_points);
@@ -1016,7 +1016,7 @@ OrderedTask::AllowIncrementalBoundaryStats(const AircraftState &aircraft) const
 bool
 OrderedTask::CalcCruiseEfficiency(const AircraftState &aircraft,
                                   const GlidePolar &glide_polar,
-                                  double &val) const
+                                  double &val) const noexcept
 {
   if (AllowIncrementalBoundaryStats(aircraft)) {
     TaskPointList tps(task_points);
@@ -1033,7 +1033,7 @@ OrderedTask::CalcCruiseEfficiency(const AircraftState &aircraft,
 bool
 OrderedTask::CalcEffectiveMC(const AircraftState &aircraft,
                              const GlidePolar &glide_polar,
-                             double &val) const
+                             double &val) const noexcept
 {
   if (AllowIncrementalBoundaryStats(aircraft)) {
     TaskPointList tps(task_points);
@@ -1069,7 +1069,7 @@ OrderedTask::CalcMinTarget(const AircraftState &aircraft,
 }
 
 double
-OrderedTask::CalcGradient(const AircraftState &state) const
+OrderedTask::CalcGradient(const AircraftState &state) const noexcept
 {
   if (task_points.empty())
     return 0;
@@ -1109,7 +1109,7 @@ ResetPoints(OrderedTask::OrderedTaskPointVector &points)
 }
 
 void
-OrderedTask::Reset()
+OrderedTask::Reset() noexcept
 {
   /// @todo also reset data in this class e.g. stats?
   ResetPoints(task_points);
@@ -1124,7 +1124,7 @@ OrderedTask::Reset()
 }
 
 bool
-OrderedTask::TaskStarted(bool soft) const
+OrderedTask::TaskStarted(bool soft) const noexcept
 {
   if (taskpoint_start) {
     // have we really started?
@@ -1149,7 +1149,7 @@ OrderedTask::TaskStarted(bool soft) const
  *
  * @return True if distance is significant
  */
-gcc_pure
+[[gnu::pure]]
 static bool
 DistanceIsSignificant(const SearchPoint &a1, const SearchPoint &a2,
                       const unsigned dist_threshold = 1)
@@ -1195,7 +1195,7 @@ OrderedTask::SetPointSearchMax(unsigned tp, const SearchPoint &sol)
 bool
 OrderedTask::IsFull() const
 {
-  return TaskSize() == GetFactory().GetConstraints().max_points;
+  return TaskSize() >= GetFactory().GetConstraints().max_points;
 }
 
 inline void
@@ -1398,7 +1398,7 @@ OrderedTask::PropagateOrderedTaskSettings()
 }
 
 bool
-OrderedTask::IsScored() const
+OrderedTask::IsScored() const noexcept
 {
   return GetFactoryConstraints().task_scored;
 }

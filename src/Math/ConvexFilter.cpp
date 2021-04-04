@@ -20,13 +20,14 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   }
 */
+
 #include "Math/ConvexFilter.hpp"
 
 void
-ConvexFilter::UpdateConvex(double x, double y, int csign)
+ConvexFilter::UpdateConvex(double x, double y, int csign) noexcept
 {
   // ignore if coincident or back in time
-  if (x <= x_max)
+  if (!IsEmpty() && x <= x_max)
     return;
 
   Update(x, y, 1);
@@ -50,7 +51,9 @@ ConvexFilter::UpdateConvex(double x, double y, int csign)
   }
 }
 
-double ConvexFilter::GetLastY() const {
+double
+ConvexFilter::GetLastY() const noexcept
+{
   assert(!IsEmpty());
 
   return slots[sum_n-1].y;

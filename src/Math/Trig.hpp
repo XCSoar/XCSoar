@@ -24,15 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_MATH_TRIG_HPP
 #define XCSOAR_MATH_TRIG_HPP
 
-#include "util/Compiler.h"
-
 #include <utility>
 
 #include <math.h>
 
-gcc_const
+[[gnu::const]]
 static inline std::pair<double, double>
-sin_cos(const double thetha)
+sin_cos(const double thetha) noexcept
 {
   double s, c;
 #ifdef __APPLE__

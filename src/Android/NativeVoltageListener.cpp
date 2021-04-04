@@ -29,10 +29,10 @@ Copyright_License {
 #include <cstddef>
 
 namespace NativeVoltageListener {
-  static Java::TrivialClass cls;
-  static jmethodID ctor;
-  static jfieldID ptr_field;
-};
+static Java::TrivialClass cls;
+static jmethodID ctor;
+static jfieldID ptr_field;
+} // namespace NativeVoltageListener
 
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeVoltageListener_onVoltageValues(JNIEnv *env, jobject obj,

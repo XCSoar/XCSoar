@@ -127,8 +127,7 @@ LoadFiles(PlacesOfInterestSettings &poi_settings,
   auto reader = OpenConfiguredTextFile(ProfileKeys::AirspaceFile,
                                        Charset::AUTO);
   if (reader) {
-    AirspaceParser parser(airspace_database);
-    parser.Parse(*reader, operation);
+    ParseAirspaceFile(airspace_database, *reader, operation);
     airspace_database.Optimise();
   }
 }

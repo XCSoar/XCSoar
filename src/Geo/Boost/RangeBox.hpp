@@ -31,7 +31,7 @@ Copyright_License {
 /**
  * Create a boost::geometry box which covers the given range.
  */
-gcc_const
+[[gnu::const]]
 boost::geometry::model::box<GeoPoint>
 BoostRangeBox(const GeoPoint location, double range);
 

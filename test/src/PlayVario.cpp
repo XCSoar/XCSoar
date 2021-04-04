@@ -27,7 +27,7 @@ Copyright_License {
 #include "ui/window/Init.hpp"
 #include "system/Args.hpp"
 #include "event/Loop.hxx"
-#include "event/TimerEvent.hxx"
+#include "event/FineTimerEvent.hxx"
 #include "DebugReplay.hpp"
 
 #include <stdio.h>
@@ -36,7 +36,7 @@ Copyright_License {
 #include <memory>
 
 class ReplayTimer {
-  TimerEvent timer;
+  FineTimerEvent timer;
   DebugReplay &replay;
   VarioSynthesiser &synthesiser;
 

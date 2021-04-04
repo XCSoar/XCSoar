@@ -3,7 +3,6 @@
 
 #include "Geo/GeoVector.hpp"
 #include "Airspace/AirspaceClass.hpp"
-#include "util/Compiler.h"
 
 #include <tchar.h>
 #include <vector>
@@ -32,7 +31,7 @@ public:
 
   void ResetVector();
 
-  gcc_pure
+  [[gnu::pure]]
   const GeoVector &GetVector(const GeoPoint &location,
                              const FlatProjection &projection) const;
 };
@@ -71,7 +70,7 @@ struct AirspaceFilterData {
     distance = -1;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool Match(const GeoPoint &location,
              const FlatProjection &projection,
              const AbstractAirspace &as) const;
@@ -83,7 +82,7 @@ struct AirspaceFilterData {
  * @param airspaces the airspace database
  * @param location location of aircraft at time of query
  */
-gcc_pure
+[[gnu::pure]]
 AirspaceSelectInfoVector
 FilterAirspaces(const Airspaces &airspaces, const GeoPoint &location,
                 const AirspaceFilterData &filter);

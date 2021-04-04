@@ -113,59 +113,59 @@ public:
   /**
    * Reset the LeastSquares calculator.
    */
-  void Reset();
+  void Reset() noexcept;
 
-  double GetGradient() const {
+  double GetGradient() const noexcept {
     assert(!IsEmpty());
 
     return m;
   }
 
-  double GetAverageY() const {
+  double GetAverageY() const noexcept {
     assert(!IsEmpty());
 
     return y_ave;
   }
 
-  double GetYAt(double x) const {
+  double GetYAt(double x) const noexcept {
     assert(!IsEmpty());
 
     return x * m + b;
   }
 
-  double GetYAtMinX() const {
+  double GetYAtMinX() const noexcept {
     return GetYAt(GetMinX());
   }
 
-  double GetYAtMaxX() const {
+  double GetYAtMaxX() const noexcept {
     return GetYAt(GetMaxX());
   }
 
-  double GetMeanY() const {
+  double GetMeanY() const noexcept {
     assert(!IsEmpty());
 
     return y_mean;
   }
 
-  double GetMeanX() const {
+  double GetMeanX() const noexcept {
     assert(!IsEmpty());
 
     return x_mean;
   }
 
-  double GetVarX() const {
+  double GetVarX() const noexcept {
     assert(!IsEmpty());
 
     return x_var;
   }
 
-  double GetVarY() const {
+  double GetVarY() const noexcept {
     assert(!IsEmpty());
 
     return y_var;
   }
 
-  double GetCovXY() const {
+  double GetCovXY() const noexcept {
     assert(!IsEmpty());
 
     return xy_var;
@@ -177,7 +177,7 @@ public:
    *
    * @param y y-Value of the new data point
    */
-  void Update(double y);
+  void Update(double y) noexcept;
 
   /**
    * Add a new data point to the values and calculate least squares
@@ -187,23 +187,23 @@ public:
    * @param y y-Value of the new data point
    * @param weight Weight of the new data point (optional)
    */
-  void Update(double x, double y, double weight=1);
+  void Update(double x, double y, double weight=1) noexcept;
 
   /**
    * Calculate the 1 std error ellipse fitting the data
    */
-  ErrorEllipse GetErrorEllipse() const;
+  ErrorEllipse GetErrorEllipse() const noexcept;
 
 protected:
   /**
    * Calculate the least squares average.
    */
-  void Compute();
+  void Compute() noexcept;
 
   /**
    * Calculates the LeastSquaresError.
    */
-  void UpdateError();
+  void UpdateError() noexcept;
 
   /**
    * Add a new data point to the values.
@@ -212,14 +212,14 @@ protected:
    * @param y y-Value of the new data point
    * @param weight Weight of the new data point (optional)
    */
-  void Add(double x, double y, double weight=1);
+  void Add(double x, double y, double weight=1) noexcept;
 
   /**
    * Remove data point to the values.
    * This updates the least squares statistics but not x/y min/max.
    * If weights aren't stored, this assumes weight = 1
    */
-  void Remove(const unsigned i);
+  void Remove(unsigned i) noexcept;
 
 };
 

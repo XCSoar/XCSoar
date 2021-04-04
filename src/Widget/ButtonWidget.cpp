@@ -56,7 +56,7 @@ ButtonWidget::GetRenderer() const noexcept
 }
 
 void
-ButtonWidget::Invalidate()
+ButtonWidget::Invalidate() noexcept
 {
   assert(IsDefined());
 
@@ -64,21 +64,21 @@ ButtonWidget::Invalidate()
 }
 
 PixelSize
-ButtonWidget::GetMinimumSize() const
+ButtonWidget::GetMinimumSize() const noexcept
 {
   return PixelSize(GetRenderer().GetMinimumButtonWidth(),
                    Layout::GetMinimumControlHeight());
 }
 
 PixelSize
-ButtonWidget::GetMaximumSize() const
+ButtonWidget::GetMaximumSize() const noexcept
 {
   return PixelSize(GetRenderer().GetMinimumButtonWidth() + Layout::GetMaximumControlHeight(),
                    Layout::GetMaximumControlHeight());
 }
 
 void
-ButtonWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
+ButtonWidget::Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   WindowStyle style;
   style.Hide();
@@ -89,7 +89,7 @@ ButtonWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-ButtonWidget::SetFocus()
+ButtonWidget::SetFocus() noexcept
 {
   GetWindow().SetFocus();
   return true;

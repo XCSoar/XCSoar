@@ -63,16 +63,16 @@ FAITaskFactory::FAITaskFactory(OrderedTask& _task,
 {
 }
 
-bool
-FAITaskFactory::Validate()
+TaskValidationErrorSet
+FAITaskFactory::Validate() const noexcept
 {
-  bool valid = AbstractTaskFactory::Validate();
+  auto errors = AbstractTaskFactory::Validate();
 
   if (!IsUnique()) {
-    AddValidationError(TaskValidationErrorType::TURNPOINTS_NOT_UNIQUE);
+    errors |= TaskValidationErrorType::TURNPOINTS_NOT_UNIQUE;
     // warning only
   }
-  return valid;
+  return errors;
 }
 
 void 

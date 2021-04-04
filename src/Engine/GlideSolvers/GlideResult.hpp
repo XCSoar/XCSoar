@@ -24,7 +24,6 @@
 
 #include "Geo/GeoVector.hpp"
 #include "GlideSettings.hpp"
-#include "util/Compiler.h"
 
 #include <type_traits>
 
@@ -178,7 +177,7 @@ struct GlideResult {
    *
    * @return True if aircraft is at or above final glide
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsFinalGlide() const;
 
   /**
@@ -198,7 +197,7 @@ struct GlideResult {
    *
    * @return True if target is reachable
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsAchievable() const {
     return IsOk();
   }
@@ -207,7 +206,7 @@ struct GlideResult {
    * Altitude required at the start of the task to solve it in
    * pure glide [m MSL].
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetRequiredAltitude() const {
     return pure_glide_min_arrival_altitude + pure_glide_height;
   }
@@ -217,7 +216,7 @@ struct GlideResult {
    * [m MSL], as specified in the MacCready calculation input
    * parameters.
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetStartAltitude() const {
     return GetRequiredAltitude() + altitude_difference;
   }
@@ -229,7 +228,7 @@ struct GlideResult {
    *
    * @param start_altitude the current aircraft altitude
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetArrivalAltitude(double start_altitude) const {
     return start_altitude - pure_glide_height;
   }
@@ -239,7 +238,7 @@ struct GlideResult {
    * this leg, not assuming any climbs [m MSL].  It may be below the
    * safety altitude or even below terrain.
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetArrivalAltitude() const {
     return GetArrivalAltitude(GetStartAltitude());
   }
@@ -249,7 +248,7 @@ struct GlideResult {
    * drift while circling [m MSL].  This is a theoretical value,
    * because this altitude will probably never actually be reached.
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetRequiredAltitudeWithDrift() const {
     return min_arrival_altitude + height_glide;
   }
@@ -260,7 +259,7 @@ struct GlideResult {
    *
    * @param start_altitude the current aircraft altitude
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetArrivalAltitudeWithDrift(double start_altitude) const {
     return start_altitude - height_glide;
   }
@@ -271,12 +270,12 @@ struct GlideResult {
    *
    * @param start_altitude the current aircraft altitude
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetPureGlideAltitudeDifference(double start_altitude) const {
     return start_altitude - GetRequiredAltitude();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   double SelectAltitudeDifference(const GlideSettings &settings) const {
     return settings.predict_wind_drift
       ? altitude_difference
@@ -298,7 +297,7 @@ struct GlideResult {
    *
    * @return Glide gradient (positive down), or inf if no distance to travel.
    */
-  gcc_pure
+  [[gnu::pure]]
   double GlideAngleGround() const;
 
   /**
@@ -307,7 +306,7 @@ struct GlideResult {
    *
    * @return Glide gradient (positive down), or inf if no distance to travel.
    */
-  gcc_pure
+  [[gnu::pure]]
   double DestinationAngleGround() const;
 
   /** Reset/clear the solution */

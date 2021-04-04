@@ -45,12 +45,13 @@ public:
   }
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 void
-AudioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+AudioConfigPanel::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 
@@ -61,7 +62,7 @@ AudioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-AudioConfigPanel::Save(bool &changed)
+AudioConfigPanel::Save(bool &changed) noexcept
 {
   auto &settings = CommonInterface::SetUISettings().sound;
 

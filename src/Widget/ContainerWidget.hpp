@@ -33,12 +33,12 @@ Copyright_License {
  */
 class ContainerWidget : public WindowWidget {
 protected:
-  ContainerWindow &GetContainer() {
+  ContainerWindow &GetContainer() noexcept {
     return (ContainerWindow &)GetWindow();
   }
 
 public:
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 };
 
 #endif

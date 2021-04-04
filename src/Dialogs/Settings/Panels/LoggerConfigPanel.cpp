@@ -48,8 +48,8 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 static constexpr StaticEnumChoice auto_logger_list[] = {
@@ -60,7 +60,8 @@ static constexpr StaticEnumChoice auto_logger_list[] = {
 };
 
 void
-LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+LoggerConfigPanel::Prepare(ContainerWindow &parent,
+                           const PixelRect &rc) noexcept
 {
   const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
   const LoggerSettings &logger = settings_computer.logger;
@@ -101,7 +102,7 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-LoggerConfigPanel::Save(bool &changed)
+LoggerConfigPanel::Save(bool &changed) noexcept
 {
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   LoggerSettings &logger = settings_computer.logger;

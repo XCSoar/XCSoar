@@ -45,7 +45,7 @@ Lua::SetPersistentCallback(lua_State *L, PersistentCallback callback)
                    Lua::LightUserData((void *)callback));
 }
 
-gcc_pure
+[[gnu::pure]]
 static Lua::PersistentCallback
 GetPersistentCallback(lua_State *L)
 {

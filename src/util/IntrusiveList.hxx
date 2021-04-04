@@ -65,19 +65,13 @@ private:
 };
 
 /**
- * A variant of #IntrusiveListHook which auto-unlinks itself from the
- * list upon destruction.  As a side effect, it has an is_linked()
- * method.
+ * A variant of #IntrusiveListHook which keeps track of whether it is
+ * currently in a list.
  */
-class AutoUnlinkIntrusiveListHook : public IntrusiveListHook {
+class SafeLinkIntrusiveListHook : public IntrusiveListHook {
 public:
-	AutoUnlinkIntrusiveListHook() noexcept {
+	SafeLinkIntrusiveListHook() noexcept {
 		siblings.next = nullptr;
-	}
-
-	~AutoUnlinkIntrusiveListHook() noexcept {
-		if (is_linked())
-			unlink();
 	}
 
 	void unlink() noexcept {
@@ -90,30 +84,57 @@ public:
 	}
 };
 
+/**
+ * A variant of #IntrusiveListHook which auto-unlinks itself from the
+ * list upon destruction.  As a side effect, it has an is_linked()
+ * method.
+ */
+class AutoUnlinkIntrusiveListHook : public SafeLinkIntrusiveListHook {
+public:
+	~AutoUnlinkIntrusiveListHook() noexcept {
+		if (is_linked())
+			unlink();
+	}
+};
+
 template<typename T>
 class IntrusiveList {
+	/**
+	 * Detect the hook type; this is important because
+	 * SafeLinkIntrusiveListHook::unlink() needs to clear the
+	 * "next" pointer.  This is a template to postpone the type
+	 * checks, to allow forward-declared types.
+	 */
+	template<typename U>
+	struct HookDetection {
+		static_assert(std::is_base_of_v<IntrusiveListHook, U>);
+
+		using type = std::conditional_t<std::is_base_of_v<SafeLinkIntrusiveListHook, U>,
+						SafeLinkIntrusiveListHook,
+						IntrusiveListHook>;
+	};
+
+	template<typename U>
+	using Hook = typename HookDetection<U>::type;
+
 	IntrusiveListNode head{&head, &head};
 
 	static constexpr T *Cast(IntrusiveListNode *node) noexcept {
-		static_assert(std::is_base_of<IntrusiveListHook, T>::value);
-		auto *hook = &IntrusiveListHook::Cast(*node);
+		auto *hook = &Hook<T>::Cast(*node);
 		return static_cast<T *>(hook);
 	}
 
 	static constexpr const T *Cast(const IntrusiveListNode *node) noexcept {
-		static_assert(std::is_base_of<IntrusiveListHook, T>::value);
-		const auto *hook = &IntrusiveListHook::Cast(*node);
+		const auto *hook = &Hook<T>::Cast(*node);
 		return static_cast<const T *>(hook);
 	}
 
-	static constexpr IntrusiveListHook &ToHook(T &t) noexcept {
-		static_assert(std::is_base_of<IntrusiveListHook, T>::value);
-		return t;
+	static constexpr auto &ToHook(T &t) noexcept {
+		return static_cast<Hook<T> &>(t);
 	}
 
-	static constexpr const IntrusiveListHook &ToHook(const T &t) noexcept {
-		static_assert(std::is_base_of<IntrusiveListHook, T>::value);
-		return t;
+	static constexpr const auto &ToHook(const T &t) noexcept {
+		return static_cast<const Hook<T> &>(t);
 	}
 
 	static constexpr IntrusiveListNode &ToNode(T &t) noexcept {
@@ -125,7 +146,7 @@ class IntrusiveList {
 	}
 
 public:
-	IntrusiveList() = default;
+	constexpr IntrusiveList() noexcept = default;
 
 	IntrusiveList(IntrusiveList &&src) noexcept {
 		if (src.empty())
@@ -140,7 +161,7 @@ public:
 	}
 
 	~IntrusiveList() noexcept {
-		if (std::is_base_of<AutoUnlinkIntrusiveListHook, T>::value)
+		if constexpr (std::is_base_of<SafeLinkIntrusiveListHook, T>::value)
 			clear();
 	}
 
@@ -151,8 +172,8 @@ public:
 	}
 
 	void clear() noexcept {
-		if (std::is_base_of<AutoUnlinkIntrusiveListHook, T>::value) {
-			/* for AutoUnlinkIntrusiveListHook, we need to
+		if constexpr (std::is_base_of<SafeLinkIntrusiveListHook, T>::value) {
+			/* for SafeLinkIntrusiveListHook, we need to
 			   remove each item manually, or else its
 			   is_linked() method will not work */
 			while (!empty())
@@ -226,7 +247,7 @@ public:
 			:cursor(_cursor) {}
 
 	public:
-		iterator() = default;
+		iterator() noexcept = default;
 
 		constexpr bool operator==(const iterator &other) const noexcept {
 			return cursor == other.cursor;
@@ -259,7 +280,7 @@ public:
 	}
 
 	static constexpr iterator iterator_to(T &t) noexcept {
-		return {&t};
+		return {&ToNode(t)};
 	}
 
 	class const_iterator final
@@ -273,7 +294,7 @@ public:
 			:cursor(_cursor) {}
 
 	public:
-		const_iterator() = default;
+		const_iterator() noexcept = default;
 
 		const_iterator(iterator src) noexcept
 			:cursor(src.cursor) {}
@@ -312,19 +333,34 @@ public:
 		return {&t};
 	}
 
+	iterator erase(iterator i) noexcept {
+		auto result = std::next(i);
+		ToHook(*i).unlink();
+		return result;
+	}
+
+	template<typename D>
+	iterator erase_and_dispose(iterator i, D &&disposer) noexcept {
+		auto result = erase(i);
+		disposer(&*i);
+		return result;
+	}
+
 	void push_front(T &t) noexcept {
-		auto &new_node = ToNode(t);
-		head.next->prev = &new_node;
-		new_node.next = head.next;
-		head.next = &new_node;
-		new_node.prev = &head;
+		insert(begin(), t);
 	}
 
 	void push_back(T &t) noexcept {
+		insert(end(), t);
+	}
+
+	void insert(iterator p, T &t) noexcept {
+		auto &existing_node = ToNode(*p);
 		auto &new_node = ToNode(t);
-		head.prev->next = &new_node;
-		new_node.prev = head.prev;
-		head.prev = &new_node;
-		new_node.next = &head;
+
+		existing_node.prev->next = &new_node;
+		new_node.prev = existing_node.prev;
+		existing_node.prev = &new_node;
+		new_node.next = &existing_node;
 	}
 };

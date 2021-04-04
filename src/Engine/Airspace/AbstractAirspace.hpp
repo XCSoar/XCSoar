@@ -29,7 +29,6 @@
 #include "AirspaceActivity.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SearchPointVector.hpp"
-#include "util/Compiler.h"
 
 #ifdef DO_PRINT
 #include <iostream>
@@ -100,10 +99,10 @@ public:
    *
    * @return Enclosing bounding box
    */
-  gcc_pure
+  [[gnu::pure]]
   const FlatBoundingBox GetBoundingBox(const FlatProjection &projection);
 
-  gcc_pure
+  [[gnu::pure]]
   GeoBounds GetGeoBounds() const;
 
   /**
@@ -112,7 +111,7 @@ public:
    *
    * @return Location of reference point
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual const GeoPoint GetReferenceLocation() const = 0;
 
   /**
@@ -120,7 +119,7 @@ public:
    *
    * @return center
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual const GeoPoint GetCenter() const = 0;
 
   /**
@@ -131,13 +130,13 @@ public:
    *
    * @return true if observer is inside airspace boundary
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual bool Inside(const GeoPoint &loc) const = 0;
 
   /**
    * Checks whether an observer is inside the airspace altitude range.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool Inside(const AltitudeState &state) const;
 
   /**
@@ -148,7 +147,7 @@ public:
    *
    * @return true if aircraft is inside airspace boundaries
    */
-  gcc_pure
+  [[gnu::pure]]
   bool Inside(const AircraftState &state) const;
 
   /**
@@ -160,7 +159,7 @@ public:
    *
    * @return Vector of intersection pairs if the line intersects the airspace
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual AirspaceIntersectionVector Intersects(const GeoPoint &g1,
                                                 const GeoPoint &end,
                                                 const FlatProjection &projection) const = 0;
@@ -172,7 +171,7 @@ public:
    *
    * @return Location of closest point of boundary to reference
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual GeoPoint ClosestPoint(const GeoPoint &loc,
                                 const FlatProjection &projection) const = 0;
 
@@ -292,7 +291,7 @@ public:
    * @param loc_end Location of last point on/in airspace to query (if provided)
    * @return True if intercept found
    */
-  gcc_pure
+  [[gnu::pure]]
   AirspaceInterceptSolution Intercept(const AircraftState &state,
                                       const AirspaceAircraftPerformance &perf,
                                       const GeoPoint &loc_start,
@@ -311,7 +310,7 @@ public:
    * @param solution Solution of intercept (set if intercept possible, else untouched)
    * @return True if intercept found
    */
-  gcc_pure
+  [[gnu::pure]]
   AirspaceInterceptSolution Intercept(const AircraftState &state,
                                       const GeoPoint &end,
                                       const FlatProjection &projection,
@@ -322,7 +321,7 @@ public:
                                   const AbstractAirspace &as);
 #endif
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetName() const {
     return name.c_str();
   }
@@ -330,7 +329,7 @@ public:
   /**
    * Returns true if the name begins with the specified string.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool MatchNamePrefix(const TCHAR *prefix) const;
 
   /**
@@ -338,7 +337,7 @@ public:
    *
    * @return Text version of radio frequency
    */
-  gcc_pure
+  [[gnu::pure]]
   const tstring &GetRadioText() const {
     return radio;
   }
@@ -361,11 +360,11 @@ public:
    * and const methods to allow visitors to generate them on demand
    * from within a visit method.
    */
-  gcc_pure
+  [[gnu::pure]]
   const SearchPointVector &GetClearance(const FlatProjection &projection) const;
   void ClearClearance() const;
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsActive() const {
     return active;
   }
@@ -386,7 +385,7 @@ private:
    * @param distance Distance from aircraft to boundary
    * @return Solution of intercept
    */
-  gcc_pure
+  [[gnu::pure]]
   AirspaceInterceptSolution InterceptVertical(const AircraftState &state,
                                               const AirspaceAircraftPerformance &perf,
                                               double distance) const;
@@ -404,7 +403,7 @@ private:
    * @param lower If true, examines lower boundary, otherwise upper boundary
    * @return Solution of intercept
    */
-  gcc_pure
+  [[gnu::pure]]
   AirspaceInterceptSolution InterceptHorizontal(const AircraftState &state,
                                                 const AirspaceAircraftPerformance &perf,
                                                 double distance_start,

@@ -45,67 +45,62 @@ struct UnsignedPoint2D;
 struct PixelPoint;
 
 namespace OpenGL {
-  /**
-   * Is the extension ARB_texture_non_power_of_two present?  If yes,
-   * then textures can have any size, not just power of two.
-   */
-  extern bool texture_non_power_of_two;
+
+/**
+ * Is the extension ARB_texture_non_power_of_two present?  If yes,
+ * then textures can have any size, not just power of two.
+ */
+extern bool texture_non_power_of_two;
 
 #ifdef HAVE_OES_DRAW_TEXTURE
-  /**
-   * Shall we use the OES_draw_texture extension?
-   */
-  extern bool oes_draw_texture;
+/**
+ * Shall we use the OES_draw_texture extension?
+ */
+extern bool oes_draw_texture;
 #endif
 
-  /**
-   * Is glMapBuffer() available?  May be implemented by the extension
-   * GL_OES_mapbuffer.
-   */
+/**
+ * Is glMapBuffer() available?  May be implemented by the extension
+ * GL_OES_mapbuffer.
+ */
 #ifdef HAVE_OES_MAPBUFFER
-  extern bool mapbuffer;
+extern bool mapbuffer;
 #else
-  static constexpr bool mapbuffer = true;
+static constexpr bool mapbuffer = true;
 #endif
 
-  /**
-   * Is the extension GL_ARB_framebuffer_object or
-   * GL_OES_framebuffer_object present?
-   */
-  extern bool frame_buffer_object;
+/**
+ * Which depth+stencil internalFormat is supported by the
+ * Renderbuffer?
+ */
+extern GLenum render_buffer_depth_stencil;
 
-  /**
-   * Which depth+stencil internalFormat is supported by the
-   * Renderbuffer?  This is only set if frame_buffer_object is true.
-   */
-  extern GLenum render_buffer_depth_stencil;
+/**
+ * Which stencil internalFormat is supported by the Renderbuffer?
+ */
+extern GLenum render_buffer_stencil;
 
-  /**
-   * Which stencil internalFormat is supported by the Renderbuffer?
-   * This is only set if frame_buffer_object is true.
-   */
-  extern GLenum render_buffer_stencil;
+/**
+ * The dimensions of the OpenGL window in pixels.
+ */
+extern UnsignedPoint2D window_size;
 
-  /**
-   * The dimensions of the OpenGL window in pixels.
-   */
-  extern UnsignedPoint2D window_size;
-
-  /**
-   * The dimensions of the OpenGL viewport in pixels.
-   */
-  extern UnsignedPoint2D viewport_size;
+/**
+ * The dimensions of the OpenGL viewport in pixels.
+ */
+extern UnsignedPoint2D viewport_size;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
-  extern DisplayOrientation display_orientation;
+extern DisplayOrientation display_orientation;
 #endif
 
-  /**
-   * The current SubCanvas translation in pixels.
-   */
-  extern PixelPoint translate;
+/**
+ * The current SubCanvas translation in pixels.
+ */
+extern PixelPoint translate;
 
-  extern glm::mat4 projection_matrix;
-};
+extern glm::mat4 projection_matrix;
+
+} // namespace OpenGL
 
 #endif

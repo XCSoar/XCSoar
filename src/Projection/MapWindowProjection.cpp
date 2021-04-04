@@ -54,27 +54,27 @@ static constexpr unsigned ScaleList[] = {
 static constexpr unsigned ScaleListCount = ARRAY_SIZE(ScaleList);
 
 bool
-MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
+MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const noexcept
 {
   return (GetMapScale() <= (way_point.IsLandable() ? 20000 : 10000));
 }
 
 double
-MapWindowProjection::CalculateMapScale(unsigned scale) const
+MapWindowProjection::CalculateMapScale(unsigned scale) const noexcept
 {
   assert(scale < ScaleListCount);
   return double(ScaleList[scale]) *
-    GetMapResolutionFactor() / Layout::Scale(GetScreenWidth());
+    GetMapResolutionFactor() / Layout::Scale(GetScreenSize().width);
 }
 
 double
-MapWindowProjection::LimitMapScale(const double value) const
+MapWindowProjection::LimitMapScale(const double value) const noexcept
 {
   return HaveScaleList() ? CalculateMapScale(FindMapScale(value)) : value;
 }
 
 double
-MapWindowProjection::StepMapScale(const double scale, int Step) const
+MapWindowProjection::StepMapScale(const double scale, int Step) const noexcept
 {
   int i = FindMapScale(scale) + Step;
   i = Clamp(i, 0, (int)ScaleListCount - 1);
@@ -82,9 +82,9 @@ MapWindowProjection::StepMapScale(const double scale, int Step) const
 }
 
 unsigned
-MapWindowProjection::FindMapScale(const double Value) const
+MapWindowProjection::FindMapScale(const double Value) const noexcept
 {
-  unsigned DesiredScale(Value * Layout::Scale(GetScreenWidth())
+  unsigned DesiredScale(Value * Layout::Scale(GetScreenSize().width)
                         / GetMapResolutionFactor());
 
   unsigned i;
@@ -101,13 +101,13 @@ MapWindowProjection::FindMapScale(const double Value) const
 }
 
 void
-MapWindowProjection::SetFreeMapScale(const double x)
+MapWindowProjection::SetFreeMapScale(const double x) noexcept
 {
   SetScale(double(GetMapResolutionFactor()) / x);
 }
 
 void
-MapWindowProjection::SetMapScale(const double x)
+MapWindowProjection::SetMapScale(const double x) noexcept
 {
   SetScale(double(GetMapResolutionFactor()) / LimitMapScale(x));
 }

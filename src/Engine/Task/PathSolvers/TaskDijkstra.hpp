@@ -86,7 +86,7 @@ public:
   }
 
 protected:
-  gcc_pure
+  [[gnu::pure]]
   const SearchPoint &GetPoint(ScanTaskPoint sp) const noexcept;
 
   bool Run() noexcept;
@@ -118,7 +118,7 @@ protected:
    * 
    * @return Distance (flat) from origin to destination
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned CalcDistance(const ScanTaskPoint curNode,
                         const SearchPoint &currentLocation) const noexcept {
     /* using expensive floating point formulas here to avoid integer
@@ -138,14 +138,14 @@ protected:
    * 
    * @return Distance (flat) from origin to destination
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned CalcDistance(const ScanTaskPoint s1,
                         const ScanTaskPoint s2) const noexcept {
     return CalcDistance(s1, GetPoint(s2));
   }
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetStageSize(const unsigned stage) const noexcept;
 
 protected:

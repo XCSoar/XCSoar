@@ -25,7 +25,6 @@
 
 #include "FlatPoint.hpp"
 #include "Math/Angle.hpp"
-#include "util/Compiler.h"
 
 class FlatLine;
 
@@ -62,7 +61,7 @@ public:
    *
    * @return Location on ellipse
    */
-  gcc_pure
+  [[gnu::pure]]
   FlatPoint Parametric(double t) const;
 
   /**
@@ -77,12 +76,12 @@ public:
   bool IntersectExtended(const FlatPoint &p, FlatPoint &i1, FlatPoint &i2) const;
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   double ab() const {
     return a / b;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   double ba() const {
     return b / a;
   }

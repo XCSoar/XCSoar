@@ -40,6 +40,9 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
                        const CuSonde &cu_sonde)
 {
   ChartRenderer chart(chart_look, canvas, rc);
+  chart.SetXLabel(_T("T"), Units::GetTemperatureName());
+  chart.SetYLabel(_T("h"), Units::GetAltitudeName());
+  chart.Begin();
 
   int hmin = 10000;
   int hmax = -10000;
@@ -133,8 +136,7 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
     }
   }
 
-  chart.DrawXLabel(_T("T"), Units::GetTemperatureName());
-  chart.DrawYLabel(_T("h"), Units::GetAltitudeName());
+  chart.Finish();
 }
 
 void

@@ -78,7 +78,7 @@ public:
   }
 
 private:
-  virtual double f(double p);
+  double f(double p) noexcept override;
 
   /**
    * Test validity of a solution given search parameter

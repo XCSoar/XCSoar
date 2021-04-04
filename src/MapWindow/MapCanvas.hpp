@@ -54,16 +54,15 @@ public:
    */
   AllocatedArray<BulkPixelPoint> raster_points;
   unsigned num_raster_points;
-  unsigned screen_radius;
 
 public:
   MapCanvas(Canvas &_canvas, const Projection &_projection,
-            const GeoClip &_clip)
+            const GeoClip &_clip) noexcept
     :canvas(_canvas), projection(_projection), clip(_clip) {}
 
-  void DrawLine(GeoPoint a, GeoPoint b);
-  void DrawLineWithOffset(GeoPoint a, GeoPoint b);
-  void DrawCircle(const GeoPoint &center, double radius);
+  void DrawLine(GeoPoint a, GeoPoint b) noexcept;
+  void DrawLineWithOffset(GeoPoint a, GeoPoint b) noexcept;
+  void DrawCircle(const GeoPoint &center, double radius) noexcept;
 
   /**
    * Projects all points of the #SearchPointVector to screen
@@ -74,19 +73,24 @@ public:
    */
   static void Project(const Projection &projection,
                       const SearchPointVector &points,
-                      BulkPixelPoint *screen);
+                      BulkPixelPoint *screen) noexcept;
 
-  void Project(const SearchPointVector &points, BulkPixelPoint *screen) const {
+  void Project(const SearchPointVector &points,
+               BulkPixelPoint *screen) const noexcept {
     Project(projection, points, screen);
   }
 
-  void DrawPolygon(const SearchPointVector &points) {
+  void DrawPolygon(const SearchPointVector &points) noexcept {
     if (PreparePolygon(points))
       DrawPrepared();
   }
 
-  bool PreparePolygon(const SearchPointVector &points);
-  void DrawPrepared();
+  /**
+   * @return false if it's completely outside the screen (don't call
+   * DrawPrepared())
+   */
+  bool PreparePolygon(const SearchPointVector &points) noexcept;
+  void DrawPrepared() noexcept;
 };
 
 #endif

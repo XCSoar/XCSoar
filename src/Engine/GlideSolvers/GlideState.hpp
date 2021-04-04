@@ -24,7 +24,6 @@
 
 #include "Geo/SpeedVector.hpp"
 #include "Geo/GeoVector.hpp"
-#include "util/Compiler.h"
 
 struct AircraftState;
 class TaskPoint;
@@ -72,7 +71,7 @@ public:
   GlideState(const GeoVector &vector, const double htarget,
              double altitude, const SpeedVector wind);
 
-  gcc_pure
+  [[gnu::pure]]
   static GlideState Remaining(const TaskPoint &tp,
                               const AircraftState &aircraft,
                               double min_h);
@@ -93,7 +92,7 @@ public:
    *
    * @return Average cross-country speed (m/s)
    */
-  gcc_pure
+  [[gnu::pure]]
   double CalcAverageSpeed(double v_eff) const;
 
   /**
@@ -104,7 +103,7 @@ public:
    *
    * @return Distance (m) of drift
    */
-  gcc_pure
+  [[gnu::pure]]
   double DriftedDistance(double climb_time) const;
 };
 

@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_FONT_HPP
 
 #include "ui/dim/Size.hpp"
-#include "util/Compiler.h"
 
 #if defined(USE_APPKIT) || defined(USE_UIKIT)
 #import <Foundation/Foundation.h>
@@ -66,13 +65,13 @@ protected:
 
   unsigned height, ascent_height, capital_height;
 
-  void CalculateHeights();
+  void CalculateHeights() noexcept;
 
 public:
-  Font() = default;
+  Font() noexcept = default;
 
 #if !defined(USE_APPKIT) && !defined(USE_UIKIT)
-  ~Font() { Destroy(); }
+  ~Font() noexcept { Destroy(); }
 #endif
 
   Font(const Font &other) = delete;
@@ -83,21 +82,20 @@ public:
    * Perform global font initialisation.
    */
   static void Initialise();
-  static void Deinitialise();
+  static void Deinitialise() noexcept;
 #endif
 
 public:
-  bool
-  IsDefined() const {
+  bool IsDefined() const noexcept {
 #ifdef USE_FREETYPE
     return face != nullptr;
 #elif defined(USE_APPKIT) || defined(USE_UIKIT)
     return nil != draw_attributes;
 #elif defined(ANDROID)
     return text_util_object != nullptr;
-    #else
+#else
     return font != nullptr;
-    #endif
+#endif
   }
 
 #ifdef USE_FREETYPE
@@ -108,52 +106,53 @@ public:
   bool Load(const FontDescription &d);
 
 #if defined(USE_APPKIT) || defined(USE_UIKIT)
-  void Destroy() {}
+  void Destroy() noexcept {}
 #else
-  void Destroy();
+  void Destroy() noexcept;
 #endif
 
-  gcc_pure
+  [[gnu::pure]]
   PixelSize TextSize(TStringView text) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   PixelSize TextSize(const TCHAR *text) const noexcept;
 
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
-  gcc_const
-  static size_t BufferSize(const PixelSize size) {
+  [[gnu::const]]
+  static size_t BufferSize(const PixelSize size) noexcept {
     return size.width * size.height;
   }
 
-  void Render(TStringView text, const PixelSize size, void *buffer) const;
+  void Render(TStringView text, const PixelSize size,
+              void *buffer) const noexcept;
 #elif defined(ANDROID)
   int TextTextureGL(TStringView text, PixelSize &size,
-                    PixelSize &allocated_size) const;
+                    PixelSize &allocated_size) const noexcept;
 #elif defined(USE_GDI)
-  HFONT Native() const {
+  HFONT Native() const noexcept {
     return font;
   }
 #endif
 
-  unsigned GetHeight() const {
+  unsigned GetHeight() const noexcept {
     return height;
   }
-  unsigned GetAscentHeight() const {
+
+  unsigned GetAscentHeight() const noexcept {
     return ascent_height;
   }
-  unsigned GetCapitalHeight() const {
+
+  unsigned GetCapitalHeight() const noexcept {
     return capital_height;
   }
 
-#if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
-  unsigned GetLineSpacing() const {
-    return height;
-  }
-#elif defined(ANDROID)
-  unsigned GetLineSpacing() const {
+  unsigned GetLineSpacing() const noexcept {
+#ifdef ANDROID
     return line_spacing;
-  }
+#else
+    return height;
 #endif
+  }
 };
 
 #endif

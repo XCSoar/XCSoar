@@ -29,10 +29,12 @@ Copyright_License {
 class BMP085Listener;
 
 namespace NativeBMP085Listener {
-  void Initialise(JNIEnv *env);
-  void Deinitialise(JNIEnv *env);
 
-  jobject Create(JNIEnv *env, BMP085Listener &listener);
-}
+void Initialise(JNIEnv *env);
+void Deinitialise(JNIEnv *env);
+
+jobject Create(JNIEnv *env, BMP085Listener &listener);
+
+} // namespace NativeBMP085Listener
 
 #endif

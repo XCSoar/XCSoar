@@ -19,10 +19,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef ROUTEPOLAR_HPP
 #define ROUTEPOLAR_HPP
-
-#include "util/Compiler.h"
 
 class Angle;
 class GlidePolar;
@@ -104,7 +103,7 @@ public:
    * @param dx X distance units
    * @param dy Y distance units
    */
-  gcc_const
+  [[gnu::const]]
   static FlatGeoPoint IndexToDXDY(int index);
 
 private:

@@ -24,7 +24,6 @@
 #define QUADRILATERAL_HPP
 
 #include "Point2D.hpp"
-#include "util/Compiler.h"
 
 constexpr double
 CalcQuadrilateralU(const DoublePoint2D h, DoublePoint2D f,
@@ -43,8 +42,7 @@ CalcQuadrilateralU(const DoublePoint2D h, DoublePoint2D f,
  * Formula from
  * http://www.iquilezles.org/www/articles/ibilinear/ibilinear.htm
  */
-gcc_const
-static DoublePoint2D
+constexpr DoublePoint2D
 MapInQuadrilateral(const DoublePoint2D a, const DoublePoint2D b,
                    const DoublePoint2D c, const DoublePoint2D d,
                    const DoublePoint2D p) noexcept

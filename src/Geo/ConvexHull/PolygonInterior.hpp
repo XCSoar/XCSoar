@@ -23,7 +23,6 @@
 #define POLYGON_INTERIOR_HPP
 
 #include "Geo/SearchPointVector.hpp"
-#include "util/Compiler.h"
 
 struct GeoPoint;
 struct FlatGeoPoint;
@@ -33,12 +32,14 @@ class SearchPoint;
  * Note that this expects the vector to be closed, that is, starting point
  * and ending point are the same
  */
-gcc_pure bool
+[[gnu::pure]]
+bool
 PolygonInterior(const GeoPoint &p,
                 SearchPointVector::const_iterator begin,
                 SearchPointVector::const_iterator end);
 
-gcc_pure bool
+[[gnu::pure]]
+bool
 PolygonInterior(const FlatGeoPoint &p,
                 SearchPointVector::const_iterator begin,
                 SearchPointVector::const_iterator end);

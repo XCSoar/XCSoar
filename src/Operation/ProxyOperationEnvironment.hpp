@@ -35,16 +35,17 @@ protected:
   OperationEnvironment &other;
 
 public:
-  ProxyOperationEnvironment(OperationEnvironment &_other)
+  ProxyOperationEnvironment(OperationEnvironment &_other) noexcept
     :other(_other) {}
 
   /* virtual methods from class OperationEnvironment */
-  bool IsCancelled() const override;
+  bool IsCancelled() const noexcept override;
+  void SetCancelHandler(std::function<void()> handler) noexcept override;
   void Sleep(std::chrono::steady_clock::duration duration) noexcept override;
-  void SetErrorMessage(const TCHAR *text) override;
-  void SetText(const TCHAR *text) override;
-  void SetProgressRange(unsigned range) override;
-  void SetProgressPosition(unsigned position) override;
+  void SetErrorMessage(const TCHAR *text) noexcept override;
+  void SetText(const TCHAR *text) noexcept override;
+  void SetProgressRange(unsigned range) noexcept override;
+  void SetProgressPosition(unsigned position) noexcept override;
 };
 
 #endif

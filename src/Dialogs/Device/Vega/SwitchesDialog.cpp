@@ -120,21 +120,21 @@ public:
   }
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override {
     ((SwitchesLeft &)GetFirst()).Create();
     ((SwitchesRight &)GetSecond()).Create();
 
     TwoWidgets::Prepare(parent, rc);
   }
 
-  virtual void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     Update(CommonInterface::Basic().switch_state);
     TwoWidgets::Show(rc);
     CommonInterface::GetLiveBlackboard().AddListener(*this);
   }
 
-  virtual void Hide() override {
+  void Hide() noexcept override {
     CommonInterface::GetLiveBlackboard().RemoveListener(*this);
     TwoWidgets::Hide();
   }

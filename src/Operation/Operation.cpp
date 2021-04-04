@@ -25,9 +25,15 @@ Copyright_License {
 #include "system/Sleep.h"
 
 bool
-NullOperationEnvironment::IsCancelled() const
+NullOperationEnvironment::IsCancelled() const noexcept
 {
   return false;
+}
+
+void
+NullOperationEnvironment::SetCancelHandler(std::function<void()>) noexcept
+{
+  /* this class doesn't support cancellation, so this is a no-op */
 }
 
 void
@@ -36,22 +42,22 @@ NullOperationEnvironment::Sleep(std::chrono::steady_clock::duration) noexcept
 }
 
 void
-NullOperationEnvironment::SetErrorMessage(const TCHAR *text)
+NullOperationEnvironment::SetErrorMessage(const TCHAR *text) noexcept
 {
 }
 
 void
-NullOperationEnvironment::SetText(const TCHAR *text)
+NullOperationEnvironment::SetText(const TCHAR *text) noexcept
 {
 }
 
 void
-NullOperationEnvironment::SetProgressRange(unsigned range)
+NullOperationEnvironment::SetProgressRange(unsigned range) noexcept
 {
 }
 
 void
-NullOperationEnvironment::SetProgressPosition(unsigned position)
+NullOperationEnvironment::SetProgressPosition(unsigned position) noexcept
 {
 }
 

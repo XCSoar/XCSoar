@@ -122,6 +122,7 @@ include $(topdir)/build/libos.mk
 include $(topdir)/build/libtime.mk
 include $(topdir)/build/libprofile.mk
 include $(topdir)/build/libnet.mk
+include $(topdir)/build/libhttp.mk
 include $(topdir)/build/sdl.mk
 include $(topdir)/build/alsa.mk
 include $(topdir)/build/zlib.mk

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Form/Panel.hpp"
 
 void
-PanelWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+PanelWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   WindowStyle style;
   style.ControlParent();
@@ -38,5 +38,3 @@ PanelWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                                            rc,
                                            style));
 }
-
-

@@ -58,7 +58,7 @@ public:
   }
 };
 
-class AirspaceAtPointPredicate: public AirspacePredicate
+class AirspaceAtPointPredicate
 {
   const AirspaceVisibility visible_predicate;
   const AirspaceWarningList &warnings;

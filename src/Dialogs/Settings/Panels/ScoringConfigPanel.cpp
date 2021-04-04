@@ -51,8 +51,8 @@ protected:
 
 public:
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
 private:
   /* methods from DataFieldListener */
@@ -81,7 +81,8 @@ static constexpr StaticEnumChoice fai_triangle_threshold_list[] = {
 };
 
 void
-ScoringConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ScoringConfigPanel::Prepare(ContainerWindow &parent,
+                            const PixelRect &rc) noexcept
 {
   const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
   const ContestSettings &contest_settings = settings_computer.contest;
@@ -144,7 +145,7 @@ ScoringConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-ScoringConfigPanel::Save(bool &_changed)
+ScoringConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

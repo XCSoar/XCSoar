@@ -47,7 +47,7 @@ public:
    *
    * @return Ground speed during cruise (m/s)
    */
-  gcc_pure
+  [[gnu::pure]]
   double Solve() const {
     if (Check())
       /// @todo check this is correct for all theta

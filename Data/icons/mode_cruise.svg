@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -13,7 +11,7 @@
    width="19"
    height="19"
    id="svg2924"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
    sodipodi:docname="mode_cruise.svg">
   <metadata
      id="metadata2860">
@@ -35,103 +33,50 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="774"
+     inkscape:window-width="1680"
+     inkscape:window-height="1027"
      id="namedview2858"
      showgrid="false"
-     inkscape:zoom="9.4464283"
-     inkscape:cx="1.1300787"
-     inkscape:cy="-3.2583705"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:zoom="3.0532028"
+     inkscape:cx="-64.519194"
+     inkscape:cy="48.226508"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0" />
   <defs
      id="defs2926" />
   <g
      inkscape:groupmode="layer"
      id="layer1"
      inkscape:label="Glider"
-     transform="translate(0,-13)">
+     transform="translate(0,-13)"
+     style="display:inline">
     <g
        inkscape:groupmode="layer"
        id="layer2"
-       inkscape:label="MASK_Background">
-      <rect
-         width="5"
-         height="3"
-         rx="1"
-         ry="0.96534663"
-         x="27"
-         y="-11"
-         id="rect3066-1"
-         style="opacity:0.98999999;fill:#ffffff"
-         transform="matrix(0,1,-1,0,0,0)" />
-      <rect
-         width="7"
-         height="3"
-         rx="1"
-         ry="1.0027739"
-         x="6"
-         y="25"
-         id="rect3066"
-         style="opacity:0.98999999;fill:#ffffff" />
-      <rect
-         width="19"
-         height="3"
-         rx="1"
-         ry="0.96534663"
-         x="0"
-         y="28"
-         id="rect3042"
-         style="opacity:0.98999999;fill:#ffffff" />
-    </g>
+       inkscape:label="MASK_Background" />
     <g
-       transform="translate(0,17)"
-       id="layer1-7">
-      <rect
-         width="17"
-         height="1"
-         rx="1"
-         ry="0.99158424"
-         x="1"
-         y="12"
-         id="rect2867"
-         style="fill:#000000" />
-      <rect
-         width="1"
-         height="2"
-         rx="1"
-         ry="1"
-         x="9"
-         y="9"
-         id="rect2869"
-         style="fill:#000000" />
-      <rect
-         width="5"
-         height="1"
-         rx="1"
-         ry="0.96534663"
-         x="7"
-         y="9"
-         id="rect2871"
-         style="fill:#000000" />
-      <g
-         transform="matrix(1.0402665,0,0,1.0376644,-2.7415989,-1.5753289)"
-         id="g3979"
-         style="opacity:0.98999999">
-        <g
-           id="g4077" />
-      </g>
-      <rect
-         style="fill:#000000;fill-opacity:1;stroke:none"
-         id="rect2823"
-         width="2"
-         height="3"
-         x="8.5"
-         y="11"
-         rx="0.99996716"
-         ry="0.99182087" />
+       id="g1676"
+       transform="translate(731.75293,-377.67021)"
+       style="display:inline">
+      <circle
+         cx="-722.25293"
+         cy="401.18671"
+         id="circle4009"
+         style="display:inline;opacity:0.99;fill:#ffffff;stroke-width:0.952242"
+         r="8.4834995" />
+      <path
+         id="path4013"
+         style="display:inline;opacity:0.99;fill:#000000;stroke-width:0.952233"
+         d="m -728.93359,390.71484 a 7.1440002,7.1440002 0 0 0 13.35937,0.006 z"
+         transform="translate(0,13)" />
+      <path
+         id="rect4025"
+         style="fill:#000000;stroke:#000000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none"
+         d="m -723.875,385.06055 c -0.35813,0 -0.64648,0.20559 -0.64648,0.46093 0,0.25535 0.28835,0.46094 0.64648,0.46094 h 1.19336 v 1.34766 h -6.75 a 0.5,0.5 0 0 0 -0.5,0.5 0.5,0.5 0 0 0 0.5,0.5 h 6.75 v 0.11133 c 0,0.29692 0.20523,0.53515 0.46094,0.53515 0.25571,0 0.46093,-0.23823 0.46093,-0.53515 v -0.11524 l 6.75586,0.004 a 0.5,0.5 0 0 0 0.5,-0.5 0.5,0.5 0 0 0 -0.5,-0.5 l -6.75586,-0.004 v -1.34375 h 1.20899 c 0.35813,0 0.64648,-0.20559 0.64648,-0.46094 0,-0.25534 -0.28835,-0.46093 -0.64648,-0.46093 h -1.66992 z"
+         transform="translate(0,13)" />
     </g>
   </g>
 </svg>

@@ -24,7 +24,6 @@ Copyright_License {
 #include "Images.hpp"
 #include "Settings.hpp"
 #include "ui/canvas/Bitmap.hpp"
-#include "net/http/Session.hpp"
 #include "net/http/ToBuffer.hpp"
 #include "net/http/ToFile.hpp"
 #include "Job/Runner.hpp"
@@ -37,8 +36,7 @@ Copyright_License {
 #include <string.h>
 #include <stdio.h>
 
-//#define PCMET_URI "https://www.flugwetter.de"
-#define PCMET_URI "http://www.flugwetter.de"
+#define PCMET_URI "https://www.flugwetter.de"
 
 static constexpr PCMet::ImageArea rad_lokal_areas[] = {
   { "pro", _T("Prötzel") },
@@ -84,10 +82,21 @@ static constexpr PCMet::ImageArea rad_areas[] = {
 };
 
 static constexpr PCMet::ImageArea sat_areas[] = {
-  { "ceu_hrv", _T("Mitteleuropa HRV") },
-  { "ceu_rgb", _T("Mitteleuropa RGB") },
-  { "dlnw_hrv", _T("Deutschland Nordwest HRV") },
-  { "dlnw_rgb", _T("Deutschland Nordwest RGB") },
+  { "vis_hrv_eu", _T("Mitteleuropa HRV") },
+  { "ir_rgb_eu", _T("Mitteleuropa RGB") },
+  { "ir_108_eu", _T("Mitteleuropa IR") },
+  { "vis_hrv_ce", _T("Mitteleuropa HRV") },
+  { "ir_rgb_ce", _T("Mitteleuropa RGB") },
+  { "ir_108_ce", _T("Mitteleuropa IR") },
+  { "vis_hrv_mdl", _T("Deutschland HRV") },
+  { "ir_rgb_mdl", _T("Deutschland RGB") },
+  { "ir_108_mdl", _T("Deutschland IR") },
+  { "vis_hrv_ndl", _T("Deutschland Nord HRV") },
+  { "ir_rgb_ndl", _T("Deutschland Nord RGB") },
+  { "ir_108_ndl", _T("Deutschland Nord IR") },
+  { "vis_hrv_sdl", _T("Deutschland Süd HRV") },
+  { "ir_rgb_sdl", _T("Deutschland Süd RGB") },
+  { "ir_108_sdl", _T("Deutschland Süd IR") },
   { nullptr, nullptr }
 };
 
@@ -101,7 +110,7 @@ const PCMet::ImageType PCMet::image_types[] = {
 Bitmap
 PCMet::DownloadLatestImage(const char *type, const char *area,
                            const PCMetSettings &settings,
-                           JobRunner &runner)
+                           CurlGlobal &curl, JobRunner &runner)
 {
   const WideToUTF8Converter username(settings.www_credentials.username);
   const WideToUTF8Converter password(settings.www_credentials.password);
@@ -111,11 +120,9 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
            PCMET_URI "/fw/bilder/%s?type=%s",
            type, area);
 
-  Net::Session session;
-
   // download the HTML page
   char buffer[65536];
-  Net::DownloadToBufferJob job(session, url, buffer, sizeof(buffer) - 1);
+  Net::DownloadToBufferJob job(curl, url, buffer, sizeof(buffer) - 1);
   job.SetBasicAuth(username, password);
   if (!runner.Run(job))
     return Bitmap();
@@ -147,9 +154,11 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
                                          UTF8ToWideConverter(name));
 
   if (!File::Exists(path)) {
+    // URI for a single page of a selected 'Satellitenbilder"-page with link
+    // to the latest image and the namelist array of all stored images
     snprintf(url, sizeof(url), PCMET_URI "%s", src);
 
-    Net::DownloadToFileJob job2(session, url, path);
+    Net::DownloadToFileJob job2(curl, url, path);
     job2.SetBasicAuth(username, password);
     if (!runner.Run(job2))
       return Bitmap();

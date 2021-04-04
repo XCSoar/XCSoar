@@ -59,7 +59,6 @@ using NativeFontT =
   UIFont;
 #endif
 
-
 bool
 Font::Load(const FontDescription &d)
 {
@@ -109,7 +108,7 @@ Font::Load(const FontDescription &d)
 }
 
 PixelSize
-Font::TextSize(const TCHAR *text) const
+Font::TextSize(const TCHAR *text) const noexcept
 {
   assert(nil != draw_attributes);
 
@@ -127,7 +126,8 @@ Font::TextSize(const TCHAR *text) const
 }
 
 void
-Font::Render(const TCHAR *text, const PixelSize size, void *buffer) const
+Font::Render(const TCHAR *text, const PixelSize size,
+             void *buffer) const noexcept
 {
   assert(nil != draw_attributes);
 

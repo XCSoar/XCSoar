@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_LAYOUT_HPP
 
 #include "ui/dim/Size.hpp"
-#include "Asset.hpp"
 #include "util/Compiler.h"
 
 namespace Layout
@@ -44,12 +43,6 @@ extern unsigned min_screen_pixels;
  */
 extern unsigned scale_1024;
 extern unsigned scale;
-
-/**
- * Fixed-point scaling factor for on-screen objects which don't grow
- * linearly with the screen resolution.
- */
-extern unsigned small_scale;
 
 extern unsigned pen_width_scale;
 extern unsigned fine_pen_width_scale;
@@ -91,15 +84,15 @@ extern unsigned hit_radius;
  * @param ui_scale the UI scale setting in percent
  * @param custom_dpi user defined DPI setting or 0 for system settings
  */
-void Initialize(PixelSize screen_size, unsigned ui_scale=100,
-                unsigned custom_dpi=0);
+void
+Initialize(PixelSize screen_size, unsigned ui_scale=100,
+           unsigned custom_dpi=0) noexcept;
 
 /**
  * Is scaling supported by this platform?
  */
-gcc_const
-static inline bool
-ScaleSupported()
+static constexpr bool
+ScaleSupported() noexcept
 {
   return true;
 }
@@ -109,16 +102,16 @@ ScaleSupported()
  */
 gcc_const
 static inline bool
-ScaleEnabled()
+ScaleEnabled() noexcept
 {
   return ScaleSupported() && scale_1024 > 1024;
 }
 
 gcc_const
 static inline int
-Scale(int x)
+Scale(int x) noexcept
 {
-  if (!ScaleSupported())
+  if constexpr (!ScaleSupported())
     return x;
 
   return (x * int(scale_1024)) >> 10;
@@ -126,9 +119,9 @@ Scale(int x)
 
 gcc_const
 static inline unsigned
-Scale(unsigned x)
+Scale(unsigned x) noexcept
 {
-  if (!ScaleSupported())
+  if constexpr (!ScaleSupported())
     return x;
 
   return (x * scale_1024) >> 10;
@@ -136,9 +129,9 @@ Scale(unsigned x)
 
 gcc_const
 static inline long
-Scale(long x)
+Scale(long x) noexcept
 {
-  if (!ScaleSupported())
+  if constexpr (!ScaleSupported())
     return x;
 
   return (x * long(scale_1024)) >> 10;
@@ -148,7 +141,7 @@ gcc_const
 static inline PixelSize
 Scale(PixelSize size) noexcept
 {
-  if (!ScaleSupported())
+  if constexpr (!ScaleSupported())
     return size;
 
   return {Scale(size.width), Scale(size.height)};
@@ -156,9 +149,9 @@ Scale(PixelSize size) noexcept
 
 gcc_const
 static inline int
-FastScale(int x)
+FastScale(int x) noexcept
 {
-  if (!ScaleSupported())
+  if constexpr (!ScaleSupported())
     return x;
 
   return x * int(scale);
@@ -166,9 +159,9 @@ FastScale(int x)
 
 gcc_const
 static inline unsigned
-FastScale(unsigned x)
+FastScale(unsigned x) noexcept
 {
-  if (!ScaleSupported())
+  if constexpr (!ScaleSupported())
     return x;
 
   return x * scale;
@@ -176,29 +169,19 @@ FastScale(unsigned x)
 
 gcc_const
 static inline long
-FastScale(long x)
+FastScale(long x) noexcept
 {
-  if (!ScaleSupported())
+  if constexpr (!ScaleSupported())
     return x;
 
   return x * (long)scale;
 }
 
 gcc_const
-static inline int
-SmallScale(int x)
-{
-  if (!ScaleSupported())
-    return x;
-
-  return (x * (int)small_scale) >> 10;
-}
-
-gcc_const
 static inline unsigned
-ScalePenWidth(unsigned width)
+ScalePenWidth(unsigned width) noexcept
 {
-  if (!ScaleSupported())
+  if constexpr (!ScaleSupported())
     return width;
 
   return (width * pen_width_scale) >> 10;
@@ -206,9 +189,9 @@ ScalePenWidth(unsigned width)
 
 gcc_const
 static inline unsigned
-ScaleFinePenWidth(unsigned width)
+ScaleFinePenWidth(unsigned width) noexcept
 {
-  if (!ScaleSupported())
+  if constexpr (!ScaleSupported())
     return width;
 
   return (width * fine_pen_width_scale) >> 10;
@@ -221,7 +204,7 @@ ScaleFinePenWidth(unsigned width)
  */
 gcc_const
 static inline unsigned
-PtScale(unsigned pt)
+PtScale(unsigned pt) noexcept
 {
   return (pt * pt_scale) >> 10;
 }
@@ -235,7 +218,7 @@ PtScale(unsigned pt)
  */
 gcc_const
 static inline unsigned
-VptScale(unsigned pt)
+VptScale(unsigned pt) noexcept
 {
   return (pt * vpt_scale) >> 10;
 }
@@ -247,7 +230,7 @@ VptScale(unsigned pt)
  */
 gcc_const
 static inline unsigned
-FontScale(unsigned spt)
+FontScale(unsigned spt) noexcept
 {
   return (spt * font_scale) >> 10;
 }
@@ -260,16 +243,16 @@ FontScale(unsigned spt)
  */
 gcc_const
 static inline int
-ScaleY(int y)
+ScaleY(int y) noexcept
 {
   return y;
 }
 
 gcc_const
 static inline unsigned
-GetTextPadding()
+GetTextPadding() noexcept
 {
-  if (!ScaleSupported())
+  if constexpr (!ScaleSupported())
     return 2;
 
   return text_padding;
@@ -280,7 +263,7 @@ GetTextPadding()
  */
 gcc_pure
 static inline unsigned
-GetMinimumControlHeight()
+GetMinimumControlHeight() noexcept
 {
   return minimum_control_height;
 }
@@ -290,7 +273,7 @@ GetMinimumControlHeight()
  */
 gcc_pure
 static inline unsigned
-GetMaximumControlHeight()
+GetMaximumControlHeight() noexcept
 {
   return maximum_control_height;
 }
@@ -301,11 +284,8 @@ GetMaximumControlHeight()
  */
 gcc_pure
 static inline unsigned
-GetHitRadius()
+GetHitRadius() noexcept
 {
-  if (!HasPointer())
-    return 0;
-
   return hit_radius;
 }
 

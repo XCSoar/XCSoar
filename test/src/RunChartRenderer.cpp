@@ -70,6 +70,13 @@ ChartWindow::OnPaint(Canvas &canvas)
 void
 ChartWindow::DrawChart(ChartRenderer &renderer)
 {
+  if (chart == 1) {
+    renderer.SetXLabel(_T("VVV"),_T("m/s"));
+    renderer.SetYLabel(_T("AAA"),_T("m/s"));
+  }
+
+  renderer.Begin();
+
   renderer.ScaleXFromValue(0);
   renderer.ScaleXFromValue(100);
 
@@ -98,9 +105,9 @@ ChartWindow::DrawChart(ChartRenderer &renderer)
     renderer.DrawYGrid(20, 20, ChartRenderer::UnitFormat::NUMERIC);
 
     renderer.DrawLabel(_T("hello"), 50, 50);
-    renderer.DrawXLabel(_T("VVV"),_T("m/s"));
-    renderer.DrawYLabel(_T("AAA"),_T("m/s"));
   }
+
+  renderer.Finish();
 }
 
 class TestWindow : public UI::SingleWindow,

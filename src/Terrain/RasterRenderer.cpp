@@ -152,13 +152,11 @@ void
 RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection)
 {
   // Coordinates of the MapWindow center
-  unsigned x = projection.GetScreenWidth() / 2;
-  unsigned y = projection.GetScreenHeight() / 2;
+  const auto p = projection.GetScreenCenter();
   // GeoPoint corresponding to the MapWindow center
-  GeoPoint center = projection.ScreenToGeo(x, y);
+  GeoPoint center = projection.ScreenToGeo(p);
   // GeoPoint "next to" Gmid (depends on terrain resolution)
-  GeoPoint neighbor = projection.ScreenToGeo(x + quantisation_pixels,
-                                             y + quantisation_pixels);
+  GeoPoint neighbor = projection.ScreenToGeo(p + PixelSize{quantisation_pixels});
 
   // Geographical edge length of pixel in the MapWindow center in meters
   pixel_size = M_SQRT1_2 * center.DistanceS(neighbor);
@@ -190,8 +188,8 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
   bounds.IntersectWith(map.GetBounds());
 
   height_matrix.Fill(map, bounds,
-                     projection.GetScreenWidth() / quantisation_pixels,
-                     projection.GetScreenHeight() / quantisation_pixels,
+                     projection.GetScreenSize().width / quantisation_pixels,
+                     projection.GetScreenSize().height / quantisation_pixels,
                      true);
 
   last_quantisation_pixels = quantisation_pixels;

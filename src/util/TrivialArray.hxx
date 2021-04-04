@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2010-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,6 +30,9 @@
 #ifndef TRIVIAL_ARRAY_HXX
 #define TRIVIAL_ARRAY_HXX
 
+#include "ConstBuffer.hxx"
+#include "WritableBuffer.hxx"
+
 #include <array>
 #include <initializer_list>
 #include <algorithm>
@@ -42,30 +45,34 @@
  * of the actual length at runtime. The clear() function needs to be called
  * to initialize the class properly.
  */
-template<class T, size_t max>
+template<class T, std::size_t max>
 class TrivialArray {
-	typedef std::array<T, max> Array;
+	using Array = std::array<T, max>;
 
 public:
-	typedef typename Array::size_type size_type;
-	typedef T value_type;
-	typedef typename Array::iterator iterator;
-	typedef typename Array::const_iterator const_iterator;
+	using size_type = typename Array::size_type;
+	using value_type = T;
+	using iterator = typename Array::iterator;
+	using const_iterator =  typename Array::const_iterator;
+	using reference =  typename Array::reference;
+	using const_reference =  typename Array::const_reference;
+	using pointer =  typename Array::pointer;
+	using const_pointer =  typename Array::const_pointer;
 
 protected:
 	size_type the_size;
-	Array data;
+	Array array;
 
 	constexpr
-	TrivialArray(size_type _size):the_size(_size) {}
+	TrivialArray(size_type _size) noexcept:the_size(_size) {}
 
 public:
 	/**
 	 * Non-initialising constructor.
 	 */
-	TrivialArray() = default;
+	TrivialArray() noexcept = default;
 
-	TrivialArray(size_type _size, const T &value):the_size(_size) {
+	TrivialArray(size_type _size, const_reference value):the_size(_size) {
 		std::fill(begin(), end(), value);
 	}
 
@@ -83,14 +90,13 @@ public:
 		:the_size(init.size()) {
 		assert(init.size() <= max);
 
-		std::move(init.begin(), init.end(), data.begin());
+		std::move(init.begin(), init.end(), array.begin());
 	}
 
-	constexpr
-	size_type capacity() const { return max; }
+	static constexpr size_type capacity() noexcept { return max; }
 
 	constexpr
-	size_type max_size() const {
+	size_type max_size() const noexcept {
 		return max;
 	}
 
@@ -98,7 +104,7 @@ public:
 	 * Forcibly set the specified size, without initialising or freeing
 	 * new/excess elements.
 	 */
-	void resize(size_type new_size) {
+	void resize(size_type new_size) noexcept {
 		assert(new_size <= max_size());
 
 		the_size = new_size;
@@ -108,115 +114,119 @@ public:
 	 * Returns the number of allocated elements.
 	 */
 	constexpr
-	size_type size() const {
+	size_type size() const noexcept {
 		return the_size;
 	}
 
-	void shrink(size_type _size) {
+	void shrink(size_type _size) noexcept {
 		assert(_size <= the_size);
 
 		the_size = _size;
 	}
 
 	constexpr
-	bool empty() const {
+	bool empty() const noexcept {
 		return the_size == 0;
 	}
 
 	constexpr
-	bool full() const {
+	bool full() const noexcept {
 		return the_size == max;
 	}
 
 	/**
 	 * Empties this array, but does not destruct its elements.
 	 */
-	void clear() {
+	void clear() noexcept {
 		the_size = 0;
 	}
 
 	/**
 	 * Returns one element.  No bounds checking.
 	 */
-	T &operator[](size_type i) {
+	reference operator[](size_type i) noexcept {
 		assert(i < size());
 
-		return data[i];
+		return array[i];
 	}
 
 	/**
 	 * Returns one constant element.  No bounds checking.
 	 */
-	const T &operator[](size_type i) const {
+	const_reference operator[](size_type i) const noexcept {
 		assert(i < size());
 
-		return data[i];
+		return array[i];
 	}
 
-	constexpr iterator begin() {
-		return data.begin();
+	constexpr iterator begin() noexcept {
+		return array.begin();
 	}
 
-	constexpr const_iterator begin() const {
-		return data.begin();
+	constexpr const_iterator begin() const noexcept {
+		return array.begin();
 	}
 
-	constexpr iterator end() {
-		return std::next(data.begin(), the_size);
+	constexpr iterator end() noexcept {
+		return std::next(array.begin(), the_size);
 	}
 
-	constexpr const_iterator end() const {
-		return std::next(data.begin(), the_size);
+	constexpr const_iterator end() const noexcept {
+		return std::next(array.begin(), the_size);
 	}
 
-	T &back() {
+	reference back() noexcept {
 		assert(the_size > 0);
 
-		return data[the_size - 1];
+		return array[the_size - 1];
 	}
 
-	const T &back() const {
+	const_reference back() const noexcept {
 		assert(the_size > 0);
 
-		return data[the_size - 1];
+		return array[the_size - 1];
 	}
 
-	bool contains(const T &value) const {
+	bool contains(const_reference value) const noexcept {
 		return std::find(begin(), end(), value) != end();
 	}
 
 	/**
 	 * Return address of start of data segment.
 	 */
-	const T* raw() const {
-		return &data[0];
+	constexpr pointer data() noexcept {
+		return array.data();
+	}
+
+	constexpr const_pointer data() const noexcept {
+		return array.data();
 	}
 
 	/**
 	 * Append an element at the end of the array, increasing the length
 	 * by one.  No bounds checking.
 	 */
-	void append(const T &value) {
+	void append(const_reference value) {
 		assert(!full());
 
-		data[the_size++] = value;
+		array[the_size++] = value;
 	}
 
 	/**
 	 * Increase the length by one and return a pointer to the new
 	 * element, to be modified by the caller.  No bounds checking.
 	 */
-	T &append() {
+	reference append() noexcept {
 		assert(!full());
 
-		return data[the_size++];
+		return array[the_size++];
 	}
 
 	/**
 	 * Like append(), but checks if the array is already full (returns
 	 * false in this case).
 	 */
-	bool checked_append(const T &value) {
+	bool checked_append(const_reference value) {
 		if (full())
 			return false;
 
@@ -227,12 +237,12 @@ public:
 	/**
 	 * Remove the item at the given index.
 	 */
-	void remove(size_type i) {
+	void remove(size_type i) noexcept {
 		assert(i < size());
 
-		std::move(std::next(data.begin(), i + 1),
-			  std::next(data.begin(), size()),
-			  std::next(data.begin(), i));
+		std::move(std::next(array.begin(), i + 1),
+			  std::next(array.begin(), size()),
+			  std::next(array.begin(), i));
 
 		--the_size;
 	}
@@ -240,11 +250,11 @@ public:
 	/**
 	 * Remove an item by copying the last item over it.
 	 */
-	void quick_remove(size_type i) {
+	void quick_remove(size_type i) noexcept {
 		assert(i < size());
 
 		if (i < size() - 1)
-			data[i] = std::move(data[size() - 1]);
+			array[i] = std::move(array[size() - 1]);
 
 		--the_size;
 	}
@@ -264,7 +274,7 @@ public:
 
 	/* STL API emulation */
 
-	void push_back(const T &value) {
+	void push_back(const_reference value) {
 		append(value);
 	}
 
@@ -273,16 +283,24 @@ public:
 		append() = T(std::forward<Args>(args)...);
 	}
 
-	T &front() {
+	reference front() noexcept {
 		assert(the_size > 0);
 
-		return data.front();
+		return array.front();
 	}
 
-	const T &front() const {
+	const_reference front() const noexcept {
 		assert(the_size > 0);
 
-		return data.front();
+		return array.front();
+	}
+
+	constexpr operator WritableBuffer<T>() noexcept {
+		return {data(), size()};
+	}
+
+	constexpr operator ConstBuffer<T>() const noexcept {
+		return {data(), size()};
 	}
 };
 

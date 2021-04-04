@@ -24,20 +24,14 @@ Copyright_License {
 #include "NOAAUpdater.hpp"
 #include "NOAADownloader.hpp"
 #include "METARParser.hpp"
-#include "net/http/Session.hpp"
 #include "LogFile.hpp"
-
-namespace NOAAUpdater {
-  static bool Update(NOAAStore::Item &item,
-                     Net::Session &session, JobRunner &runner);
-}
 
 bool
 NOAAUpdater::Update(NOAAStore::Item &item,
-                    Net::Session &session, JobRunner &runner)
-{
+                    CurlGlobal &curl, JobRunner &runner)
+try {
   bool metar_downloaded = NOAADownloader::DownloadMETAR(item.code, item.metar,
-                                                        session, runner);
+                                                        curl, runner);
   if (metar_downloaded) {
     item.metar_available = true;
 
@@ -46,44 +40,28 @@ NOAAUpdater::Update(NOAAStore::Item &item,
   }
 
   bool taf_downloaded = NOAADownloader::DownloadTAF(item.code, item.taf,
-                                                    session, runner);
+                                                    curl, runner);
   if (taf_downloaded)
     item.taf_available = true;
 
   return metar_downloaded && taf_downloaded;
+} catch (...) {
+  LogError(std::current_exception());
+  return false;
 }
 
 bool
-NOAAUpdater::Update(NOAAStore &store, JobRunner &runner)
+NOAAUpdater::Update(NOAAStore &store, CurlGlobal &curl, JobRunner &runner)
 {
-  try {
-    Net::Session session;
-
-    bool result = true;
-    for (auto &i : store) {
-      try {
-        result = Update(i, session, runner) && result;
-      } catch (...) {
-        LogError(std::current_exception());
-        result = false;
-      }
+  bool result = true;
+  for (auto &i : store) {
+    try {
+      result = Update(i, curl, runner) && result;
+    } catch (...) {
+      LogError(std::current_exception());
+      result = false;
     }
-
-    return result;
-  } catch (...) {
-    LogError(std::current_exception());
-    return false;
   }
-}
 
-bool
-NOAAUpdater::Update(NOAAStore::Item &item, JobRunner &runner)
-{
-  try {
-    Net::Session session;
-    return Update(item, session, runner);
-  } catch (...) {
-    LogError(std::current_exception());
-    return false;
-  }
+  return result;
 }

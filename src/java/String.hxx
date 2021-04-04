@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2019 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2010-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -40,47 +40,47 @@
 struct StringView;
 
 namespace Java {
+
+/**
+ * Wrapper for a local "jstring" reference.
+ */
+class String : public LocalRef<jstring> {
+public:
+	using LocalRef::LocalRef;
+
+	String(JNIEnv *_env, const char *_value) noexcept
+		:LocalRef<jstring>(_env, _env->NewStringUTF(_value)) {}
+
+	String(JNIEnv *_env, StringView _value) noexcept;
+
 	/**
-	 * Wrapper for a local "jstring" reference.
+	 * Copy the value to the specified buffer.  Truncates
+	 * the value if it does not fit into the buffer.
+	 *
+	 * @return a pointer to the terminating null byte,
+	 * nullptr on error
 	 */
-	class String : public LocalRef<jstring> {
-	public:
-		String(JNIEnv *env, jstring value) noexcept
-			:LocalRef<jstring>(env, value) {}
+	static char *CopyTo(JNIEnv *env, jstring value,
+			    char *buffer, size_t max_size) noexcept;
 
-		String(JNIEnv *_env, const char *_value) noexcept
-			:LocalRef<jstring>(_env, _env->NewStringUTF(_value)) {}
+	/**
+	 * Copy the value to the specified buffer.  Truncates
+	 * the value if it does not fit into the buffer.
+	 *
+	 * @return a pointer to the terminating null byte,
+	 * nullptr on error
+	 */
+	char *CopyTo(char *buffer, size_t max_size) const noexcept {
+		return CopyTo(GetEnv(), Get(), buffer, max_size);
+	}
 
-		String(JNIEnv *_env, StringView _value) noexcept;
+	static std::string ToString(JNIEnv *env, jstring s) noexcept;
 
-		/**
-		 * Copy the value to the specified buffer.  Truncates
-		 * the value if it does not fit into the buffer.
-		 *
-		 * @return a pointer to the terminating null byte,
-		 * nullptr on error
-		 */
-		static char *CopyTo(JNIEnv *env, jstring value,
-				    char *buffer, size_t max_size) noexcept;
+	std::string ToString() const noexcept {
+		return ToString(GetEnv(), Get());
+	}
+};
 
-		/**
-		 * Copy the value to the specified buffer.  Truncates
-		 * the value if it does not fit into the buffer.
-		 *
-		 * @return a pointer to the terminating null byte,
-		 * nullptr on error
-		 */
-		char *CopyTo(JNIEnv *env,
-			     char *buffer, size_t max_size) noexcept {
-			return CopyTo(env, Get(), buffer, max_size);
-		}
-
-		static std::string ToString(JNIEnv *env, jstring s) noexcept;
-
-		std::string ToString() const noexcept {
-			return ToString(GetEnv(), Get());
-		}
-	};
-}
+} // namespace Java
 
 #endif

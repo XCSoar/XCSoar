@@ -53,15 +53,16 @@ public:
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
-  virtual void Move(const PixelRect &rc) override;
-  virtual bool SetFocus() override;
+                       const PixelRect &rc) noexcept override;
+  virtual void Show(const PixelRect &rc) noexcept override;
+  virtual void Hide() noexcept override;
+  virtual void Move(const PixelRect &rc) noexcept override;
+  virtual bool SetFocus() noexcept override;
 
 private:
-  void UpdateLayout();
-  void Update(const AttitudeState &attitude, const DerivedInfo &calculated);
+  void UpdateLayout() noexcept;
+  void Update(const AttitudeState &attitude,
+              const DerivedInfo &calculated) noexcept;
 
   /* virtual methods from class BlackboardListener */
   virtual void OnCalculatedUpdate(const MoreData &basic,

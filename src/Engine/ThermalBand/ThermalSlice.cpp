@@ -20,40 +20,34 @@
    }
 */
 #include "ThermalSlice.hpp"
-#include <math.h>
+
 #include <cassert>
+#include <cmath>
 
 void
 ThermalSlice::Merge(const ThermalSlice& o)
 {
-     const double n_new = n + o.n;
-     if (n_new>0) {
-          w_n = (w_n*n + o.w_n*o.n)/n_new;
-     } else {
-          w_n = 0;
-     }
-     n = n_new;
+  const double n_new = n + o.n;
+  if (n_new>0) {
+    w_n = (w_n*n + o.w_n*o.n)/n_new;
+  } else {
+    w_n = 0;
+  }
+  n = n_new;
 
-     const double dt_new = dt + o.dt;
-     if (dt_new>0) {
-          w_t = (w_t*dt + o.w_t*o.dt)/dt_new;
-     } else {
-          w_t = 0;
-     }
-     dt = dt_new;
+  const double dt_new = dt + o.dt;
+  if (dt_new > 0) {
+    w_t = (w_t * dt + o.w_t * o.dt) / dt_new;
+  } else {
+    w_t = 0;
+  }
+  dt = dt_new;
 }
 
 void
-ThermalSlice::Update(const ThermalSlice& o, const double dh)
+ThermalSlice::Update(const ThermalSlice &o, const double dh)
 {
-     dt = (o.time-time)*n;
-     w_t = w_n = (dt != 0) ? dh*n/dt : o.w_n;
-     dt = fabs(dt);
-}
-
-// whether this item has data
-bool
-ThermalSlice::Occupied() const
-{
-     return n>0;
+  dt = (o.time - time) * n;
+  w_t = w_n = (dt != 0) ? dh * n / dt : o.w_n;
+  dt = std::fabs(dt);
 }

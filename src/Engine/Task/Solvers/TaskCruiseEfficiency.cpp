@@ -23,7 +23,7 @@
 #include "TaskCruiseEfficiency.hpp"
 
 double
-TaskCruiseEfficiency::f(const double ce)
+TaskCruiseEfficiency::f(const double ce) noexcept
 {
   tm.set_cruise_efficiency(ce);
   return time_error();

@@ -36,8 +36,8 @@ public:
                 bool *_task_modified) noexcept;
 
   /* virtual methods from class Widget */
-  void ReClick() override;
-  void Show(const PixelRect &rc) override;
+  void ReClick() noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
 };
 
 #endif

@@ -1,7 +1,11 @@
 #include "system/Args.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/LoadFile.hpp"
+#include "Task/ValidationErrorStrings.hpp"
 #include "util/PrintException.hxx"
+
+#include <cassert>
 
 #include <tchar.h>
 
@@ -9,13 +13,15 @@ static std::unique_ptr<OrderedTask>
 LoadTask2(Path path, const TaskBehaviour &task_behaviour)
 {
   auto task = LoadTask(path, task_behaviour);
-  if (task == nullptr) {
-    fprintf(stderr, "Failed to parse XML\n");
-    return nullptr;
-  }
+  assert(task);
 
   task->UpdateGeometry();
-  if (!task->CheckTask()) {
+
+  const auto errors = task->CheckTask();
+  if (!errors.IsEmpty())
+    _fputts(getTaskValidationErrors(errors), stderr);
+
+  if (IsError(errors)) {
     fprintf(stderr, "Failed to load task from XML\n");
     return NULL;
   }

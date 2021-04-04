@@ -29,10 +29,10 @@ Copyright_License {
 #include <cstddef>
 
 namespace NativeInputListener {
-  static Java::TrivialClass cls;
-  static jmethodID ctor;
-  static jfieldID ptr_field;
-};
+static Java::TrivialClass cls;
+static jmethodID ctor;
+static jfieldID ptr_field;
+} // namespace NativeInputListener
 
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeInputListener_dataReceived(JNIEnv *env, jobject obj,

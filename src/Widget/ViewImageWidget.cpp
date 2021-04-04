@@ -51,7 +51,7 @@ ViewImageWidget::SetBitmap(const Bitmap *_bitmap)
 }
 
 void
-ViewImageWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ViewImageWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   WindowStyle hidden;
   hidden.Hide();

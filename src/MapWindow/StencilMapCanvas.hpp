@@ -27,9 +27,10 @@ Copyright_License {
 #ifndef ENABLE_OPENGL
 
 #include "Geo/GeoClip.hpp"
-#include "util/AllocatedArray.hxx"
+#include "util/ReusableArray.hpp"
 
 struct PixelPoint;
+struct BulkPixelPoint;
 class Canvas;
 class Projection;
 class WindowProjection;
@@ -46,7 +47,9 @@ class StencilMapCanvas
   /**
    * A variable-length buffer for clipped GeoPoints.
    */
-  AllocatedArray<GeoPoint> geo_points;
+  ReusableArray<GeoPoint> geo_points_buffer;
+
+  ReusableArray<BulkPixelPoint> pixel_points_buffer;
 
 public:
   Canvas &buffer;

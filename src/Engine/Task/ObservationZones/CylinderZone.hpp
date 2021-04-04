@@ -99,8 +99,8 @@ public:
     return DistanceTo(location) <= radius;
   }
 
-  bool TransitionConstraint(gcc_unused const GeoPoint &location,
-                            gcc_unused const GeoPoint &last_location) const override {
+  bool TransitionConstraint([[maybe_unused]] const GeoPoint &location,
+                            [[maybe_unused]] const GeoPoint &last_location) const override {
     return true;
   }
 

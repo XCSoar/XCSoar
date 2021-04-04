@@ -48,7 +48,7 @@ ScrollBar::SetSize(const PixelSize size)
     width = Layout::GetMinimumControlHeight();
   else
     // thin for devices without touch screen
-    width = Layout::SmallScale(12);
+    width = Layout::VptScale(10);
 
   // Update the coordinates of the scrollbar
   rc.left = size.width - width;

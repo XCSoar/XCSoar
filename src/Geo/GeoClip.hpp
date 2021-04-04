@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_GEO_CLIP_HPP
 
 #include "Geo/GeoBounds.hpp"
-#include "util/Compiler.h"
 
 /**
  * A rectangle on earth's surface with very simple semantics.  Similar
@@ -47,17 +46,17 @@ protected:
    * longitudes used internally in this class are relative to the
    * "west" bound.
    */
-  gcc_pure
+  [[gnu::pure]]
   Angle ImportLongitude(Angle l) const {
     return (l - GetWest()).AsDelta();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint ImportPoint(GeoPoint pt) const {
     return GeoPoint(ImportLongitude(pt.longitude), pt.latitude);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint ExportPoint(GeoPoint pt) const {
     return GeoPoint(pt.longitude + GetWest(), pt.latitude);
   }
@@ -102,9 +101,9 @@ public:
   unsigned ClipPolygon(GeoPoint *dest,
                        const GeoPoint *src, unsigned src_length) const;
 private:
-  gcc_pure unsigned ClipEncodeX(Angle x) const;
-  gcc_pure unsigned ClipEncodeY(Angle y) const;
-  gcc_pure unsigned ClipEncode(GeoPoint pt) const;
+  [[gnu::pure]] unsigned ClipEncodeX(Angle x) const;
+  [[gnu::pure]] unsigned ClipEncodeY(Angle y) const;
+  [[gnu::pure]] unsigned ClipEncode(GeoPoint pt) const;
 
 };
 

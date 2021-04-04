@@ -41,7 +41,7 @@ enum Controls {
 
 gcc_pure
 static const TCHAR *
-GetGPSStatus(const NMEAInfo &basic)
+GetGPSStatus(const NMEAInfo &basic) noexcept
 {
   if (!basic.alive)
     return N_("Disconnected");
@@ -62,13 +62,13 @@ static const TCHAR *const net_state_strings[] = {
 
 gcc_pure
 static const TCHAR *
-ToString(NetState state)
+ToString(NetState state) noexcept
 {
   return gettext(net_state_strings[unsigned(state)]);
 }
 
 void
-SystemStatusPanel::Refresh()
+SystemStatusPanel::Refresh() noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const GPSState &gps = basic.gps;
@@ -125,7 +125,8 @@ SystemStatusPanel::Refresh()
 }
 
 void
-SystemStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+SystemStatusPanel::Prepare(ContainerWindow &parent,
+                           const PixelRect &rc) noexcept
 {
   AddReadOnly(_("GPS lock"));
   AddReadOnly(_("Satellites in view"));
@@ -137,7 +138,7 @@ SystemStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-SystemStatusPanel::Show(const PixelRect &rc)
+SystemStatusPanel::Show(const PixelRect &rc) noexcept
 {
   Refresh();
   CommonInterface::GetLiveBlackboard().AddListener(rate_limiter);
@@ -145,7 +146,7 @@ SystemStatusPanel::Show(const PixelRect &rc)
 }
 
 void
-SystemStatusPanel::Hide()
+SystemStatusPanel::Hide() noexcept
 {
   StatusPanel::Hide();
   CommonInterface::GetLiveBlackboard().RemoveListener(rate_limiter);

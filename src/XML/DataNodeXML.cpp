@@ -25,54 +25,54 @@
 #include "util/StringAPI.hxx"
 
 const TCHAR *
-ConstDataNodeXML::GetName() const
+ConstDataNodeXML::GetName() const noexcept
 {
   return node.GetName();
 }
 
-WritableDataNode*
-WritableDataNodeXML::AppendChild(const TCHAR *name)
+std::unique_ptr<WritableDataNode>
+WritableDataNodeXML::AppendChild(const TCHAR *name) noexcept
 {
-  return new WritableDataNodeXML(node.AddChild(name, false));
+  return std::make_unique<WritableDataNodeXML>(node.AddChild(name, false));
 }
 
-ConstDataNode *
-ConstDataNodeXML::GetChildNamed(const TCHAR *name) const
+std::unique_ptr<ConstDataNode>
+ConstDataNodeXML::GetChildNamed(const TCHAR *name) const noexcept
 {
   const XMLNode *child = node.GetChildNode(name);
   if (child == nullptr)
     return nullptr;
 
-  return new ConstDataNodeXML(*child);
+  return std::make_unique<ConstDataNodeXML>(*child);
 }
 
 ConstDataNode::List
-ConstDataNodeXML::ListChildren() const
+ConstDataNodeXML::ListChildren() const noexcept
 {
   List list;
   for (auto i = node.begin(), end = node.end(); i != end; ++i)
-    list.push_back(new ConstDataNodeXML(*i));
+    list.emplace_back(new ConstDataNodeXML(*i));
   return list;
 }
 
 ConstDataNode::List
-ConstDataNodeXML::ListChildrenNamed(const TCHAR *name) const
+ConstDataNodeXML::ListChildrenNamed(const TCHAR *name) const noexcept
 {
   List list;
   for (auto i = node.begin(), end = node.end(); i != end; ++i)
     if (StringIsEqualIgnoreCase(i->GetName(), name))
-      list.push_back(new ConstDataNodeXML(*i));
+      list.emplace_back(new ConstDataNodeXML(*i));
   return list;
 }
 
 void
-WritableDataNodeXML::SetAttribute(const TCHAR *name, const TCHAR *value)
+WritableDataNodeXML::SetAttribute(const TCHAR *name, const TCHAR *value) noexcept
 {
   node.AddAttribute(name, value);
 }
 
 const TCHAR *
-ConstDataNodeXML::GetAttribute(const TCHAR *name) const
+ConstDataNodeXML::GetAttribute(const TCHAR *name) const noexcept
 {
   return node.GetAttribute(name);
 }

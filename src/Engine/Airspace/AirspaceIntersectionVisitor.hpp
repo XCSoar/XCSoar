@@ -65,7 +65,7 @@ protected:
    *
    * @return Solution if any
    */
-  gcc_pure
+  [[gnu::pure]]
   AirspaceInterceptSolution Intercept(const AbstractAirspace &as,
                                       const AircraftState &state,
                                       const AirspaceAircraftPerformance &perf) const;

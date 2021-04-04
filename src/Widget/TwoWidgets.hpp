@@ -56,47 +56,47 @@ public:
    * change.  This may only be called between Prepare() and
    * Unprepare().
    */
-  void UpdateLayout();
+  void UpdateLayout() noexcept;
 
-  Widget &GetFirst() {
+  Widget &GetFirst() noexcept {
     return *first;
   }
 
-  const Widget &GetFirst() const {
+  const Widget &GetFirst() const noexcept {
     return *first;
   }
 
-  Widget &GetSecond() {
+  Widget &GetSecond() noexcept {
     return *second;
   }
 
-  const Widget &GetSecond() const {
+  const Widget &GetSecond() const noexcept {
     return *second;
   }
 
 protected:
-  gcc_pure
-  int CalculateSplit(const PixelRect &rc) const;
+  [[gnu::pure]]
+  int CalculateSplit(const PixelRect &rc) const noexcept;
 
-  gcc_pure
-  std::pair<PixelRect,PixelRect> CalculateLayout(const PixelRect &rc) const;
+  [[gnu::pure]]
+  std::pair<PixelRect,PixelRect> CalculateLayout(const PixelRect &rc) const noexcept;
 
 public:
   /* virtual methods from Widget */
-  PixelSize GetMinimumSize() const override;
-  PixelSize GetMaximumSize() const override;
-  void Initialise(ContainerWindow &parent, const PixelRect &rc) override;
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
-  bool Save(bool &changed) override;
-  bool Click() override;
-  void ReClick() override;
-  void Show(const PixelRect &rc) override;
-  bool Leave() override;
-  void Hide() override;
-  void Move(const PixelRect &rc) override;
-  bool SetFocus() override;
-  bool KeyPress(unsigned key_code) override;
+  PixelSize GetMinimumSize() const noexcept override;
+  PixelSize GetMaximumSize() const noexcept override;
+  void Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Unprepare() noexcept override;
+  bool Save(bool &changed) noexcept override;
+  bool Click() noexcept override;
+  void ReClick() noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  bool Leave() noexcept override;
+  void Hide() noexcept override;
+  void Move(const PixelRect &rc) noexcept override;
+  bool SetFocus() noexcept override;
+  bool KeyPress(unsigned key_code) noexcept override;
 };
 
 #endif

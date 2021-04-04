@@ -28,8 +28,9 @@ Copyright_License {
 
 #include <cassert>
 
+[[gnu::const]]
 static inline Angle
-EarthDistance(const double a)
+EarthDistance(const double a) noexcept
 {
   if (a <= 0)
     return Angle::Zero();
@@ -39,7 +40,7 @@ EarthDistance(const double a)
 
 void
 DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
-                 Angle *distance, Angle *bearing)
+                 Angle *distance, Angle *bearing) noexcept
 {
   assert(loc1.IsValid());
   assert(loc2.IsValid());
@@ -76,7 +77,7 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
 
 void
 DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
-                 double *distance, Angle *bearing)
+                 double *distance, Angle *bearing) noexcept
 {
   if (distance != nullptr) {
     Angle distance_angle;
@@ -88,7 +89,7 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
 
 GeoPoint
 FindLatitudeLongitudeS(const GeoPoint &loc, const Angle bearing,
-                       double distance)
+                       double distance) noexcept
 {
   assert(loc.IsValid());
   assert(distance >= 0);
@@ -122,7 +123,7 @@ FindLatitudeLongitudeS(const GeoPoint &loc, const Angle bearing,
 
 double
 ProjectedDistanceS(const GeoPoint &loc1, const GeoPoint &loc2,
-                   const GeoPoint &loc3)
+                   const GeoPoint &loc3) noexcept
 {
   Angle dist_AD, crs_AD;
   DistanceBearingS(loc1, loc3, &dist_AD, &crs_AD);

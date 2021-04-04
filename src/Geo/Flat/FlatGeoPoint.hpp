@@ -25,7 +25,6 @@
 
 #include "Math/Util.hpp"
 #include "Math/Point2D.hpp"
-#include "util/Compiler.h"
 
 #include <type_traits>
 
@@ -43,7 +42,7 @@ struct FlatGeoPoint : IntPoint2D {
    *
    * @return Distance in projected units
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned Distance(const FlatGeoPoint &sp) const;
 
   /**
@@ -53,7 +52,7 @@ struct FlatGeoPoint : IntPoint2D {
    *
    * @return Squared distance in projected units
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned DistanceSquared(const FlatGeoPoint &sp) const;
 
   /**
@@ -63,7 +62,7 @@ struct FlatGeoPoint : IntPoint2D {
    *
    * @return Scaled value
    */
-  gcc_pure
+  [[gnu::pure]]
   FlatGeoPoint operator*(const double t) const {
     return FlatGeoPoint(iround(x * t), iround(y * t));
   }
@@ -107,7 +106,7 @@ struct FlatGeoPoint : IntPoint2D {
     return IntPoint2D::operator!=(other);
   };
 
-  gcc_pure
+  [[gnu::pure]]
   bool Sort(const FlatGeoPoint& sp) const {
     if (x < sp.x)
       return false;
@@ -167,7 +166,7 @@ struct AFlatGeoPoint : public FlatGeoPoint {
    *
    * @return true if lexicographically smaller
    */
-  gcc_pure
+  [[gnu::pure]]
   bool Sort(const AFlatGeoPoint &sp) const {
     if (!FlatGeoPoint::Sort(sp))
       return false;

@@ -45,7 +45,7 @@ struct ReachFanParms {
     :rpolars(_rpolars), projection(_projection), terrain(_terrain),
      terrain_base(_terrain_base) {}
 
-  gcc_pure
+  [[gnu::pure]]
   FlatGeoPoint ReachIntercept(int index, const AFlatGeoPoint &flat_origin,
                               const GeoPoint &origin) const {
     return rpolars.ReachIntercept(index, flat_origin, origin,

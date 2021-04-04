@@ -105,20 +105,20 @@ public:
    *
    * @return Initialised object
    */
-  explicit OrderedTask(const TaskBehaviour &tb);
-  ~OrderedTask();
+  explicit OrderedTask(const TaskBehaviour &tb) noexcept;
+  ~OrderedTask() noexcept;
 
   /**
    * Accessor for factory system for constructing tasks
    *
    * @return Factory
    */
-  gcc_pure
-  AbstractTaskFactory& GetFactory() const {
+  [[gnu::pure]]
+  AbstractTaskFactory &GetFactory() const noexcept {
     return *active_factory;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const TaskFactoryConstraints &GetFactoryConstraints() const;
 
   /**
@@ -135,7 +135,7 @@ public:
    *
    * @return Vector of factory types
    */
-  gcc_pure
+  [[gnu::pure]]
   std::vector<TaskFactoryType> GetFactoryTypes(bool all = true) const;
 
   void SetTaskBehaviour(const TaskBehaviour &tb);
@@ -176,7 +176,7 @@ public:
    *
    * @return Index of active task point sequence
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetActiveIndex() const {
     return active_task_point;
   }
@@ -188,7 +188,7 @@ public:
    *
    * @return OrderedTaskPoint at index
    */
-  gcc_pure
+  [[gnu::pure]]
   const OrderedTaskPoint &GetTaskPoint(const unsigned index) const {
     assert(index < task_points.size());
 
@@ -200,7 +200,7 @@ public:
    *
    * @return True if task has start
    */
-  gcc_pure
+  [[gnu::pure]]
   bool HasStart() const {
     return taskpoint_start != nullptr;
   }
@@ -210,7 +210,7 @@ public:
    *
    * @return True if task has finish
    */
-  gcc_pure
+  [[gnu::pure]]
   bool HasFinish() const {
     return taskpoint_finish != nullptr;
   }
@@ -224,7 +224,7 @@ public:
   /**
    * Returns true if there are optional start points.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool HasOptionalStarts() const {
     return !optional_start_points.empty();
   }
@@ -340,7 +340,7 @@ public:
   /**
    * Check whether the task point with the specified index exists.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsValidIndex(unsigned i) const {
     return i < task_points.size();
   }
@@ -350,7 +350,7 @@ public:
    *
    * @return True if task is full
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsFull() const;
 
   /**
@@ -360,7 +360,7 @@ public:
    *
    * @return Task global projection
    */
-  gcc_pure
+  [[gnu::pure]]
   const TaskProjection&
   GetTaskProjection() const {
     assert(!IsEmpty());
@@ -489,11 +489,11 @@ private:
   void UpdateStartTransition(const AircraftState &state,
                              OrderedTaskPoint &start);
 
-  gcc_pure
+  [[gnu::pure]]
   bool DistanceIsSignificant(const GeoPoint &location,
                              const GeoPoint &location_last) const;
 
-  gcc_pure
+  [[gnu::pure]]
   bool AllowIncrementalBoundaryStats(const AircraftState &state) const;
 
   bool CheckTransitionPoint(OrderedTaskPoint &point,
@@ -590,7 +590,7 @@ public:
     return task_points;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   OrderedTaskPoint &GetPoint(const unsigned i) {
     assert(i < task_points.size());
     assert(task_points[i] != nullptr);
@@ -598,7 +598,7 @@ public:
     return *task_points[i];
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const OrderedTaskPoint &GetPoint(const unsigned i) const {
     assert(i < task_points.size());
     assert(task_points[i] != nullptr);
@@ -613,7 +613,7 @@ public:
   /**
    * @return number of optional start poitns
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetOptionalStartPointCount() const {
     return optional_start_points.size();
   }
@@ -624,7 +624,7 @@ public:
    * @param pos optional start point index
    * @return nullptr if index out of range, else optional start point
    */
-  gcc_pure
+  [[gnu::pure]]
   const OrderedTaskPoint &GetOptionalStartPoint(unsigned i) const {
     assert(i < optional_start_points.size());
 
@@ -632,7 +632,7 @@ public:
   }
 
   /** Determines whether the task has adjustable targets */
-  gcc_pure
+  [[gnu::pure]]
   bool HasTargets() const;
 
   /**
@@ -640,7 +640,7 @@ public:
    *
    * @return Location of center of task or GeoPoint::Invalid()
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint GetTaskCenter() const noexcept {
     assert(!IsEmpty());
     return task_projection.GetCenter();
@@ -651,7 +651,7 @@ public:
    *
    * @return Radius (m) from center to edge of task
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetTaskRadius() const noexcept {
     assert(!IsEmpty());
     return task_projection.ApproxRadius();
@@ -666,7 +666,7 @@ public:
    */
   unsigned GetLastIntermediateAchieved() const;
 
-  gcc_pure
+  [[gnu::pure]]
   const StaticString<64> &GetName() const {
     return name;
   }
@@ -681,55 +681,55 @@ public:
 
 public:
   /* virtual methods from class TaskInterface */
-  unsigned TaskSize() const override {
+  unsigned TaskSize() const noexcept override {
     return task_points.size();
   }
 
-  void SetActiveTaskPoint(unsigned desired) override;
-  TaskWaypoint *GetActiveTaskPoint() const override;
-  bool IsValidTaskPoint(const int index_offset=0) const override;
+  void SetActiveTaskPoint(unsigned desired) noexcept override;
+  TaskWaypoint *GetActiveTaskPoint() const noexcept override;
+  bool IsValidTaskPoint(const int index_offset=0) const noexcept override;
   bool UpdateIdle(const AircraftState& state_now,
-                  const GlidePolar &glide_polar) override;
+                  const GlidePolar &glide_polar) noexcept override;
 
   /* virtual methods from class AbstractTask */
-  void Reset() override;
-  bool TaskStarted(bool soft=false) const override;
-  bool CheckTask() const override;
+  void Reset() noexcept override;
+  bool TaskStarted(bool soft=false) const noexcept override;
+  TaskValidationErrorSet CheckTask() const noexcept override;
 
 protected:
   /* virtual methods from class AbstractTask */
   bool UpdateSample(const AircraftState &state_now,
                     const GlidePolar &glide_polar,
-                    const bool full_update) override;
+                    const bool full_update) noexcept override;
   bool CheckTransitions(const AircraftState &state_now,
-                        const AircraftState &state_last) override;
+                        const AircraftState &state_last) noexcept override;
   bool CalcBestMC(const AircraftState &state_now,
                   const GlidePolar &glide_polar,
-                  double &best) const override;
+                  double &best) const noexcept override;
   double CalcRequiredGlide(const AircraftState &state_now,
-                           const GlidePolar &glide_polar) const override;
+                           const GlidePolar &glide_polar) const noexcept override;
   bool CalcCruiseEfficiency(const AircraftState &state_now,
                             const GlidePolar &glide_polar,
-                            double &value) const override;
+                            double &value) const noexcept override;
   bool CalcEffectiveMC(const AircraftState &state_now,
                        const GlidePolar &glide_polar,
-                       double &value) const override;
-  double CalcGradient(const AircraftState &state_now) const override;
-  double ScanTotalStartTime() override;
-  double ScanLegStartTime() override;
-  double ScanDistanceNominal() override;
-  double ScanDistancePlanned() override;
-  double ScanDistanceRemaining(const GeoPoint &ref) override;
-  double ScanDistanceScored(const GeoPoint &ref) override;
-  double ScanDistanceTravelled(const GeoPoint &ref) override;
+                       double &value) const noexcept override;
+  double CalcGradient(const AircraftState &state_now) const noexcept override;
+  double ScanTotalStartTime() noexcept override;
+  double ScanLegStartTime() noexcept override;
+  double ScanDistanceNominal() noexcept override;
+  double ScanDistancePlanned() noexcept override;
+  double ScanDistanceRemaining(const GeoPoint &ref) noexcept override;
+  double ScanDistanceScored(const GeoPoint &ref) noexcept override;
+  double ScanDistanceTravelled(const GeoPoint &ref) noexcept override;
   void ScanDistanceMinMax(const GeoPoint &ref, bool full,
-                          double *dmin, double *dmax) override;
+                          double *dmin, double *dmax) noexcept override;
   void GlideSolutionRemaining(const AircraftState &state_now,
                               const GlidePolar &polar,
-                              GlideResult &total, GlideResult &leg) override;
+                              GlideResult &total, GlideResult &leg) noexcept override;
   void GlideSolutionTravelled(const AircraftState &state_now,
                               const GlidePolar &glide_polar,
-                              GlideResult &total, GlideResult &leg) override;
+                              GlideResult &total, GlideResult &leg) noexcept override;
   void GlideSolutionPlanned(const AircraftState &state_now,
                             const GlidePolar &glide_polar,
                             GlideResult &total,
@@ -737,9 +737,9 @@ protected:
                             DistanceStat &total_remaining_effective,
                             DistanceStat &leg_remaining_effective,
                             const GlideResult &solution_remaining_total,
-                            const GlideResult &solution_remaining_leg) override;
+                            const GlideResult &solution_remaining_leg) noexcept override;
 protected:
-  bool IsScored() const override;
+  bool IsScored() const noexcept override;
 
 public:
   void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor) const override;

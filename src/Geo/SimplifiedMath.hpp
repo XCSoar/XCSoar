@@ -33,8 +33,6 @@ Copyright_License {
 #ifndef XCSOAR_GEO_SIMPLIFIED_MATH_HPP
 #define XCSOAR_GEO_SIMPLIFIED_MATH_HPP
 
-#include "util/Compiler.h"
-
 struct GeoPoint;
 class Angle;
 
@@ -47,25 +45,26 @@ class Angle;
  */
 void
 DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
-                 Angle *distance, Angle *bearing);
+                 Angle *distance, Angle *bearing) noexcept;
 
 void
 DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
-                 double *distance, Angle *bearing);
+                 double *distance, Angle *bearing) noexcept;
 
 /**
  * @see FindLatitudeLongitude()
  */
-gcc_pure
+[[gnu::pure]]
 GeoPoint
-FindLatitudeLongitudeS(const GeoPoint &loc, Angle bearing, double distance);
+FindLatitudeLongitudeS(const GeoPoint &loc,
+                       Angle bearing, double distance) noexcept;
 
 /**
  * @see ProjectedDistance()
  */
-gcc_pure
+[[gnu::pure]]
 double
 ProjectedDistanceS(const GeoPoint &loc1, const GeoPoint &loc2,
-                   const GeoPoint &loc3);
+                   const GeoPoint &loc3) noexcept;
 
 #endif

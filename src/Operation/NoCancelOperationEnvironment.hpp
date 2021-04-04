@@ -32,11 +32,12 @@ Copyright_License {
  */
 class NoCancelOperationEnvironment : public ProxyOperationEnvironment {
 public:
-  NoCancelOperationEnvironment(OperationEnvironment &_other)
+  NoCancelOperationEnvironment(OperationEnvironment &_other) noexcept
     :ProxyOperationEnvironment(_other) {}
 
   /* virtual methods from class OperationEnvironment */
-  bool IsCancelled() const override;
+  bool IsCancelled() const noexcept override;
+  void SetCancelHandler(std::function<void()> handler) noexcept override;
   void Sleep(std::chrono::steady_clock::duration duration) noexcept override;
 };
 

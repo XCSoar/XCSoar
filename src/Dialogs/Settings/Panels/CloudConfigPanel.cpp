@@ -48,8 +48,8 @@ public:
   void SetEnabled(bool enabled);
 
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
 private:
   /* methods from DataFieldListener */
@@ -72,7 +72,8 @@ CloudConfigPanel::OnModified(DataField &df)
 }
 
 void
-CloudConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+CloudConfigPanel::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 
@@ -92,7 +93,7 @@ CloudConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-CloudConfigPanel::Save(bool &_changed)
+CloudConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

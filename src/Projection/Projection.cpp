@@ -27,22 +27,18 @@ Copyright_License {
 
 #include <algorithm>
 
-Projection::Projection()
-  :geo_location(GeoPoint::Invalid()),
-   screen_rotation(Angle::Zero())
+Projection::Projection() noexcept
 {
   SetScale(1);
-  screen_origin.x = 0;
-  screen_origin.y = 0;
 }
 
 GeoPoint
-Projection::ScreenToGeo(int x, int y) const
+Projection::ScreenToGeo(PixelPoint src) const noexcept
 {
   assert(IsValid());
 
   const auto p =
-    screen_rotation.Rotate(x - screen_origin.x, y - screen_origin.y);
+    screen_rotation.Rotate(src - screen_origin);
 
   GeoPoint g(PixelsToAngle(p.x), PixelsToAngle(p.y));
 
@@ -60,16 +56,16 @@ Projection::ScreenToGeo(int x, int y) const
 }
 
 PixelPoint
-Projection::GeoToScreen(const GeoPoint &g) const
+Projection::GeoToScreen(const GeoPoint &g) const noexcept
 {
   assert(IsValid());
 
   const GeoPoint d = geo_location-g;
 
   const auto p =
-    screen_rotation.Rotate(int(g.latitude.fastcosine() *
-                               AngleToPixels(d.longitude)),
-                          (int)AngleToPixels(d.latitude));
+    screen_rotation.Rotate(PixelPoint(int(g.latitude.fastcosine() *
+                                          AngleToPixels(d.longitude)),
+                                      (int)AngleToPixels(d.latitude)));
 
   PixelPoint sc;
   sc.x = screen_origin.x - p.x;
@@ -77,8 +73,8 @@ Projection::GeoToScreen(const GeoPoint &g) const
   return sc;
 }
 
-void 
-Projection::SetScale(const double _scale)
+void
+Projection::SetScale(const double _scale) noexcept
 {
   scale = _scale;
 

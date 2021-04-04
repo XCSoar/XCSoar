@@ -28,18 +28,24 @@ Copyright_License {
 #include "ui/dim/Rect.hpp"
 #include "ui/dim/BulkPoint.hpp"
 #include "Look/ChartLook.hpp"
-#include "Language/Language.hpp"
-#include "util/Compiler.h"
+#include "util/StringBuffer.hxx"
 
 #include <tchar.h>
-#include <vector>
 
+template<typename T> struct ConstBuffer;
+struct DoublePoint2D;
 class XYDataStore;
 class LeastSquares;
 class Canvas;
 class Brush;
 class Pen;
 
+/**
+ * Render a chart.
+ *
+ * How to use: construct, SetXLabel()/SetYLabel(), Begin(), Draw*(),
+ * Finish().
+ */
 class ChartRenderer
 {
   const ChartLook &look;
@@ -47,27 +53,24 @@ class ChartRenderer
   Canvas &canvas;
   PixelRect rc;
   PixelRect rc_chart;
-  int minor_tick_size;
+
+  BasicStringBuffer<TCHAR, 64> x_label, y_label;
 
   ReusableArray<BulkPixelPoint> point_buffer;
 
   struct Axis {
     double scale, min, max;
-    bool unscaled;
+    bool unscaled = true;
 
-    void Reset();
-
-    int ToScreen(double value) const;
+    [[gnu::pure]]
+    int ToScreen(double value) const noexcept;
   } x, y;
 
-  void SetPadding(bool do_pad);
+  int x_label_left, y_label_bottom;
+
+  const int minor_tick_size;
 
 public:
-  int padding_text;
-  const PixelRect GetChartRect() const {
-    return rc_chart;
-  }
-
   enum UnitFormat {
     NONE,
     NUMERIC,
@@ -76,72 +79,99 @@ public:
 
 public:
   ChartRenderer(const ChartLook &look, Canvas &the_canvas,
-                const PixelRect the_rc,
-                const bool has_padding=true);
+                const PixelRect &the_rc,
+                const bool has_padding=true) noexcept;
 
-  void DrawBarChart(const XYDataStore &lsdata);
-  void DrawFilledLineGraph(const XYDataStore &lsdata, bool swap=false);
-  void DrawLineGraph(const XYDataStore &lsdata, const Pen &pen, bool swap=false);
-  void DrawLineGraph(const XYDataStore &lsdata, ChartLook::Style style, bool swap=false);
-  void DrawTrend(const LeastSquares &lsdata, ChartLook::Style style);
-  void DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style);
+  void SetXLabel(const TCHAR *text) noexcept;
+  void SetXLabel(const TCHAR *text, const TCHAR *unit) noexcept;
+
+  void SetYLabel(const TCHAR *text) noexcept;
+  void SetYLabel(const TCHAR *text, const TCHAR *unit) noexcept;
+
+  /**
+   * Prepare for drawing; this method calculates the layout.  Call
+   * this after all setup methods have been called (e.g. SetXLabel()),
+   * and before drawing starts.
+   */
+  void Begin() noexcept;
+
+  /**
+   * Finish drawing.  Call this after drawing is finished.
+   */
+  void Finish() noexcept;
+
+  const PixelRect &GetChartRect() const noexcept {
+    return rc_chart;
+  }
+
+  void DrawBarChart(const XYDataStore &lsdata) noexcept;
+
+  void DrawFilledLineGraph(ConstBuffer<DoublePoint2D> src, bool swap=false) noexcept;
+  void DrawLineGraph(ConstBuffer<DoublePoint2D> src,
+                     const Pen &pen, bool swap=false) noexcept;
+  void DrawLineGraph(ConstBuffer<DoublePoint2D> src,
+                     ChartLook::Style style, bool swap=false) noexcept;
+
+  void DrawFilledLineGraph(const XYDataStore &lsdata, bool swap=false) noexcept;
+  void DrawLineGraph(const XYDataStore &lsdata, const Pen &pen, bool swap=false) noexcept;
+  void DrawLineGraph(const XYDataStore &lsdata, ChartLook::Style style, bool swap=false) noexcept;
+  void DrawTrend(const LeastSquares &lsdata, ChartLook::Style style) noexcept;
+  void DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style) noexcept;
   void DrawLine(double xmin, double ymin,
-                double xmax, double ymax, const Pen &pen);
+                double xmax, double ymax, const Pen &pen) noexcept;
   void DrawLine(double xmin, double ymin,
-                double xmax, double ymax, ChartLook::Style style);
+                double xmax, double ymax, ChartLook::Style style) noexcept;
   void DrawFilledLine(double xmin, double ymin,
                       double xmax, double ymax,
-                      const Brush &brush);
-  void DrawFilledY(const std::vector<std::pair<double, double>> &vals, const Brush &brush,
-                   const Pen *pen=nullptr);
-  void DrawDot(double x, double y, const unsigned width);
-  void DrawImpulseGraph(const XYDataStore &lsdata, const Pen &pen);
-  void DrawImpulseGraph(const XYDataStore &lsdata, ChartLook::Style style);
-  void DrawWeightBarGraph(const XYDataStore &lsdata);
+                      const Brush &brush) noexcept;
+  void DrawFilledY(ConstBuffer<DoublePoint2D> vals,
+                   const Brush &brush,
+                   const Pen *pen=nullptr) noexcept;
+  void DrawDot(double x, double y, const unsigned width) noexcept;
+  void DrawImpulseGraph(const XYDataStore &lsdata, const Pen &pen) noexcept;
+  void DrawImpulseGraph(const XYDataStore &lsdata, ChartLook::Style style) noexcept;
+  void DrawWeightBarGraph(const XYDataStore &lsdata) noexcept;
 
-  void ScaleYFromData(const LeastSquares &lsdata);
-  void ScaleXFromData(const LeastSquares &lsdata);
-  void ScaleYFromValue(double val);
-  void ScaleXFromValue(double val);
+  void ScaleYFromData(const LeastSquares &lsdata) noexcept;
+  void ScaleXFromData(const LeastSquares &lsdata) noexcept;
+  void ScaleYFromValue(double val) noexcept;
+  void ScaleXFromValue(double val) noexcept;
 
-  void ResetScale();
+  [[gnu::pure]]
+  static BasicStringBuffer<TCHAR, 32> FormatTicText(double val, double step,
+                                                    UnitFormat units) noexcept;
 
-  static void FormatTicText(TCHAR *text, double val, double step, UnitFormat units);
+  void DrawXGrid(double tic_step, double unit_step,
+                 UnitFormat units = UnitFormat::NONE) noexcept;
+  void DrawYGrid(double tic_step, double unit_step,
+                 UnitFormat units = UnitFormat::NONE) noexcept;
 
-  void DrawXGrid(double tic_step, double unit_step, UnitFormat units = UnitFormat::NONE);
-  void DrawYGrid(double tic_step, double unit_step, UnitFormat units = UnitFormat::NONE);
-
-  void DrawXLabel(const TCHAR *text);
-  void DrawXLabel(const TCHAR *text, const TCHAR *unit);
-
-  void DrawYLabel(const TCHAR *text);
-  void DrawYLabel(const TCHAR *text, const TCHAR *unit);
-
-  void DrawLabel(const TCHAR *text, double xv, double yv);
-  void DrawNoData(const TCHAR *text = _("No data"));
+  void DrawLabel(const TCHAR *text, double xv, double yv) noexcept;
+  void DrawNoData(const TCHAR *text) noexcept;
+  void DrawNoData() noexcept;
 
   void DrawBlankRectangle(double x_min, double y_min,
-                          double x_max, double y_max);
+                          double x_max, double y_max) noexcept;
 
-  double GetYMin() const { return y.min; }
-  double GetYMax() const { return y.max; }
-  double GetXMin() const { return x.min; }
-  double GetXMax() const { return x.max; }
+  double GetYMin() const noexcept { return y.min; }
+  double GetYMax() const noexcept { return y.max; }
+  double GetXMin() const noexcept { return x.min; }
+  double GetXMax() const noexcept { return x.max; }
 
-  gcc_pure
-  int ScreenX(double x) const;
+  [[gnu::pure]]
+  int ScreenX(double x) const noexcept;
 
-  gcc_pure
-  int ScreenY(double y) const;
+  [[gnu::pure]]
+  int ScreenY(double y) const noexcept;
 
-  gcc_pure
-  PixelPoint ToScreen(double x, double y) const {
+  [[gnu::pure]]
+  PixelPoint ToScreen(double x, double y) const noexcept {
     return PixelPoint{ ScreenX(x), ScreenY(y) };
   }
 
-  Canvas& GetCanvas() { return canvas; }
+  Canvas &GetCanvas() noexcept { return canvas; }
 
-  const ChartLook &GetLook() const {
+  const ChartLook &GetLook() const noexcept {
     return look;
   }
 };

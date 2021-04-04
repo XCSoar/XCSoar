@@ -26,16 +26,16 @@ Copyright_License {
 
 #include "ui/opengl/System.hpp"
 
-namespace OpenGL {
-  /**
-   * GLSL attributes.
-   */
-  namespace Attribute {
-    static constexpr GLuint TRANSLATE = 0;
-    static constexpr GLuint POSITION = 1;
-    static constexpr GLuint TEXCOORD = 2;
-    static constexpr GLuint COLOR = 3;
-  };
-};
+/**
+ * GLSL attributes.
+ */
+namespace OpenGL::Attribute {
+
+static constexpr GLuint TRANSLATE = 0;
+static constexpr GLuint POSITION = 1;
+static constexpr GLuint TEXCOORD = 2;
+static constexpr GLuint COLOR = 3;
+
+} // namespace OpenGL::Attribute
 
 #endif

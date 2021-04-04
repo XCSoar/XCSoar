@@ -28,7 +28,7 @@ Copyright_License {
 void
 ChartProjection::Set(const PixelRect &rc,
                      const TaskProjection &task_projection,
-                     double radius_factor)
+                     double radius_factor) noexcept
 {
   const GeoPoint center = task_projection.GetCenter();
   const auto radius = std::max(double(10000),
@@ -37,14 +37,15 @@ ChartProjection::Set(const PixelRect &rc,
 }
 
 void
-ChartProjection::Set(const PixelRect &rc, const OrderedTask &task)
+ChartProjection::Set(const PixelRect &rc, const OrderedTask &task) noexcept
 {
   const auto radius = std::max(double(10000), task.GetTaskRadius());
   Set(rc, task.GetTaskCenter(), radius);
 }
 
 void
-ChartProjection::Set(const PixelRect &rc, const OrderedTaskPoint &point)
+ChartProjection::Set(const PixelRect &rc,
+                     const OrderedTaskPoint &point) noexcept
 {
   GeoBounds bounds = GeoBounds::Invalid();
   point.ScanBounds(bounds);
@@ -54,7 +55,7 @@ ChartProjection::Set(const PixelRect &rc, const OrderedTaskPoint &point)
 
 void
 ChartProjection::Set(const PixelRect &rc, const GeoPoint &center,
-                     const double radius)
+                     const double radius) noexcept
 {
   SetMapRect(rc);
   SetScaleFromRadius(radius);

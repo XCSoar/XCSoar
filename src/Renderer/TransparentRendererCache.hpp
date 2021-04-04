@@ -95,7 +95,7 @@ public:
    * @return true if the cache is valid for the given projection; the
    * caller may skip to CopyTo()
    */
-  gcc_pure
+  [[gnu::pure]]
   bool Check(const WindowProjection &projection) const;
 
   /**

@@ -30,7 +30,7 @@ Copyright_License {
 #include "Geo/Flat/FlatLine.hpp"
 
 void
-WaveComputer::Initialise()
+WaveComputer::Initialise() noexcept
 {
   delta_time.Reset();
   ResetCurrent();
@@ -38,7 +38,7 @@ WaveComputer::Initialise()
 }
 
 void
-WaveComputer::ResetCurrent()
+WaveComputer::ResetCurrent() noexcept
 {
   last_location_available.Clear();
   last_netto_vario_available.Clear();
@@ -56,7 +56,7 @@ WaveComputer::ResetCurrent()
  */
 gcc_pure
 static Validity
-GetNettoVarioAvailable(const NMEAInfo &basic)
+GetNettoVarioAvailable(const NMEAInfo &basic) noexcept
 {
   if (basic.netto_vario_available)
     return basic.netto_vario_available;
@@ -84,7 +84,7 @@ GetNettoVarioAvailable(const NMEAInfo &basic)
 gcc_pure
 static WaveInfo
 GetWaveInfo(const LeastSquares &ls, const FlatProjection &projection,
-            double time)
+            double time) noexcept
 {
   if (!ls.HasResult())
     return WaveInfo::Undefined();
@@ -104,14 +104,9 @@ GetWaveInfo(const LeastSquares &ls, const FlatProjection &projection,
 }
 
 void
-WaveComputer::Decay(double min_time)
+WaveComputer::Decay(double min_time) noexcept
 {
-  for (auto i = waves.begin(), end = waves.end(); i != end;) {
-    if (i->time < min_time)
-      i = waves.erase(i);
-    else
-      ++i;
-  }
+  waves.remove_if([min_time](const auto &i){ return i.time < min_time; });
 }
 
 /**
@@ -120,7 +115,7 @@ WaveComputer::Decay(double min_time)
  * length.
  */
 static constexpr bool
-IsRatioInRange(double ratio)
+IsRatioInRange(double ratio) noexcept
 {
   return ratio > -0.1 && ratio < 1.1;
 }
@@ -130,7 +125,7 @@ IsRatioInRange(double ratio)
  * [0..1] so the result stays within the [a..b] bounds.
  */
 static constexpr FlatPoint
-InterpolateClip(const FlatLine line, double ratio)
+InterpolateClip(const FlatLine line, double ratio) noexcept
 {
   return ratio <= 0
     ? line.a
@@ -145,7 +140,7 @@ struct RatioAndDistance {
 
 gcc_pure
 static RatioAndDistance
-CalcRatioAndDistance(const FlatLine line, const FlatPoint point)
+CalcRatioAndDistance(const FlatLine line, const FlatPoint point) noexcept
 {
   RatioAndDistance result;
   result.ratio = line.ProjectedRatio(point);
@@ -162,7 +157,7 @@ CalcRatioAndDistance(const FlatLine line, const FlatPoint point)
  * @return true if the lines have been merged into #a
  */
 static bool
-MergeLines(FlatLine &a, const FlatLine b)
+MergeLines(FlatLine &a, const FlatLine b) noexcept
 {
   const double a_sq = a.GetSquaredDistance();
   const double b_sq = b.GetSquaredDistance();
@@ -216,7 +211,7 @@ MergeLines(FlatLine &a, const FlatLine b)
  */
 static bool
 MergeLines(WaveInfo &i, const WaveInfo &new_wave, double new_length,
-           FlatLine new_line, const FlatProjection &projection)
+           FlatLine new_line, const FlatProjection &projection) noexcept
 {
   Angle delta_angle = (new_wave.normal - i.normal).AsDelta();
   if (delta_angle > Angle::QuarterCircle())
@@ -256,7 +251,7 @@ MergeLines(WaveInfo &i, const WaveInfo &new_wave, double new_length,
 }
 
 inline void
-WaveComputer::FoundWave(const WaveInfo &new_wave)
+WaveComputer::FoundWave(const WaveInfo &new_wave) noexcept
 {
   /* check if we can merge the new wave with an existing one to
      unclutter the screen */
@@ -281,7 +276,7 @@ void
 WaveComputer::Compute(const NMEAInfo &basic,
                       const FlyingState &flight,
                       WaveResult &result,
-                      const WaveSettings &settings)
+                      const WaveSettings &settings) noexcept
 {
   const bool new_enabled = settings.enabled;
   if (new_enabled != last_enabled) {

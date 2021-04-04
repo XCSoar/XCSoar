@@ -97,7 +97,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
 
   unsigned padding = Layout::FastScale(4);
   unsigned height = font.GetHeight();
-  PixelPoint p(render_projection.GetScreenWidth() - padding, padding);
+  PixelPoint p(render_projection.GetScreenSize().width - padding, padding);
 
   if (compass_visible)
     /* don't obscure the north arrow */
@@ -364,9 +364,8 @@ GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
     const MapWindowProjection &projection = render_projection;
     const ThermalLocatorInfo &thermal_locator = Calculated().thermal_locator;
     if (thermal_locator.estimate_valid) {
-      PixelPoint sc;
-      if (projection.GeoToScreenIfVisible(thermal_locator.estimate_location, sc)) {
-        look.thermal_source_icon.Draw(canvas, sc);
+      if (auto p = projection.GeoToScreenIfVisible(thermal_locator.estimate_location)) {
+        look.thermal_source_icon.Draw(canvas, *p);
       }
     }
   } else {

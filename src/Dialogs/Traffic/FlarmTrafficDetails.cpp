@@ -82,9 +82,9 @@ public:
   void CreateButtons(WidgetDialog &buttons);
 
   /* virtual methods from Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Show(const PixelRect &rc) override;
-  void Hide() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
 
 private:
   void UpdateChanging(const MoreData &basic);
@@ -127,7 +127,7 @@ FlarmTrafficDetailsWidget::CreateButtons(WidgetDialog &buttons)
 
 void
 FlarmTrafficDetailsWidget::Prepare(ContainerWindow &parent,
-                                   const PixelRect &rc)
+                                   const PixelRect &rc) noexcept
 {
   AddReadOnly(_("Callsign"));
   AddButton(_("Change callsign"), [this](){ OnCallsignClicked(); });
@@ -145,7 +145,7 @@ FlarmTrafficDetailsWidget::Prepare(ContainerWindow &parent,
 }
 
 void
-FlarmTrafficDetailsWidget::Show(const PixelRect &rc)
+FlarmTrafficDetailsWidget::Show(const PixelRect &rc) noexcept
 {
   RowFormWidget::Show(rc);
   Update();
@@ -153,7 +153,7 @@ FlarmTrafficDetailsWidget::Show(const PixelRect &rc)
 }
 
 void
-FlarmTrafficDetailsWidget::Hide()
+FlarmTrafficDetailsWidget::Hide() noexcept
 {
   CommonInterface::GetLiveBlackboard().RemoveListener(*this);
   RowFormWidget::Hide();

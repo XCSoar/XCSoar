@@ -47,12 +47,13 @@ public:
 
 public:
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 void
-WeatherConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+WeatherConfigPanel::Prepare(ContainerWindow &parent,
+                            const PixelRect &rc) noexcept
 {
   const auto &settings = CommonInterface::GetComputerSettings().weather;
 
@@ -63,14 +64,17 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddPassword(_T("pc_met Password"), _T(""),
               settings.pcmet.www_credentials.password);
 
+#if 0
+  // code disabled because DWD has terminated our access */
   AddText(_T("pc_met FTP Username"), _T(""),
           settings.pcmet.ftp_credentials.username);
   AddPassword(_T("pc_met FTP Password"), _T(""),
               settings.pcmet.ftp_credentials.password);
+#endif
 }
 
 bool
-WeatherConfigPanel::Save(bool &_changed)
+WeatherConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 
@@ -83,11 +87,14 @@ WeatherConfigPanel::Save(bool &_changed)
   changed |= SaveValue(PCMET_PASSWORD, ProfileKeys::PCMetPassword,
                        settings.pcmet.www_credentials.password);
 
+#if 0
+  // code disabled because DWD has terminated our access */
   changed |= SaveValue(PCMET_FTP_USER, ProfileKeys::PCMetFtpUsername,
                        settings.pcmet.ftp_credentials.username);
 
   changed |= SaveValue(PCMET_FTP_PASSWORD, ProfileKeys::PCMetFtpPassword,
                        settings.pcmet.ftp_credentials.password);
+#endif
 #endif
 
   _changed |= changed;

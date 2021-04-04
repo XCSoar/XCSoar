@@ -27,27 +27,31 @@ Copyright_License {
 #include <tchar.h>
 
 struct PCMetSettings;
+class CurlGlobal;
 class JobRunner;
 class Bitmap;
 
 namespace PCMet {
-  struct ImageArea {
-    const char *name;
-    const TCHAR *display_name;
-  };
 
-  struct ImageType {
-    const char *uri;
-    const TCHAR *display_name;
-
-    const ImageArea *areas;
-  };
-
-  extern const ImageType image_types[];
-
-  Bitmap DownloadLatestImage(const char *type, const char *area,
-                             const PCMetSettings &settings,
-                             JobRunner &runner);
+struct ImageArea {
+  const char *name;
+  const TCHAR *display_name;
 };
+
+struct ImageType {
+  const char *uri;
+  const TCHAR *display_name;
+
+  const ImageArea *areas;
+};
+
+extern const ImageType image_types[];
+
+Bitmap
+DownloadLatestImage(const char *type, const char *area,
+                    const PCMetSettings &settings,
+                    CurlGlobal &curl, JobRunner &runner);
+
+} // namespace PCMet
 
 #endif

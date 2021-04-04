@@ -40,10 +40,9 @@ try {
   FileLineReader reader(path, Charset::AUTO);
 
   Airspaces airspaces;
-  AirspaceParser parser(airspaces);
 
   NullOperationEnvironment operation;
-  if (!parser.Parse(reader, operation)) {
+  if (!ParseAirspaceFile(airspaces, reader, operation)) {
     fprintf(stderr, "Failed to parse input file\n");
     return 1;
   }

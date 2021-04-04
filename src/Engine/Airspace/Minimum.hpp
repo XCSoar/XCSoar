@@ -26,19 +26,22 @@ Copyright_License {
 
 #include "Airspaces.hpp"
 
-template<class Func,
+template<typename Predicate, typename Func,
          typename Result=decltype(((Func *)nullptr)->operator()(*(const AbstractAirspace *)nullptr)),
          class Cmp=std::less<Result>>
-gcc_pure
+[[gnu::pure]]
 static inline Result
 FindMinimum(const Airspaces &airspaces, const GeoPoint &location, double range,
-            const AirspacePredicate &predicate,
+            Predicate &&predicate,
             Func &&func,
             Cmp &&cmp=Cmp())
 {
   Result minimum;
   for (const auto &i : airspaces.QueryWithinRange(location, range)) {
     const AbstractAirspace &aa = i.GetAirspace();
+    if (!predicate(aa))
+      continue;
+
     Result result = func(aa);
     if (cmp(result, minimum))
       minimum = result;

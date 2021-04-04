@@ -156,7 +156,7 @@ private:
 
 protected:
   /* virtual methods from Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
     CreateButtons(buttons_widget->GetButtonPanel());
     TextListWidget::Prepare(parent, rc);
     UpdateList();
@@ -166,7 +166,7 @@ protected:
       GetList().SetCursorIndex(active_index);
   }
 
-  void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     TextListWidget::Show(rc);
     UpdatePreview();
   }

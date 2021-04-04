@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_WIDGET_HPP
 #define XCSOAR_WIDGET_HPP
 
-#include "util/Compiler.h"
-
 struct PixelSize;
 struct PixelRect;
 class ContainerWindow;
@@ -51,8 +49,8 @@ public:
    * method has no special implementation.  This is called after
    * Prepare().
    */
-  gcc_pure
-  virtual PixelSize GetMinimumSize() const = 0;
+  [[gnu::pure]]
+  virtual PixelSize GetMinimumSize() const noexcept = 0;
 
   /**
    * Estimate the maximum recommended size; the Widget may become
@@ -60,8 +58,8 @@ public:
    * has no special implementation.  This is called after
    * Prepare().
    */
-  gcc_pure
-  virtual PixelSize GetMaximumSize() const = 0;
+  [[gnu::pure]]
+  virtual PixelSize GetMaximumSize() const noexcept = 0;
 
   /**
    * Called as early as possible after the Widget has been added to
@@ -69,21 +67,23 @@ public:
    * create the Window here, but it is suggested to postpone it to
    * Prepare(), if possible.
    */
-  virtual void Initialise(ContainerWindow &parent, const PixelRect &rc) = 0;
+  virtual void Initialise(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept = 0;
 
   /**
    * Called before the Widget is going to be shown for the first time.
    * The class should create the Window here, unless it has been
    * created already in Initialise().
    */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) = 0;
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) noexcept = 0;
 
   /**
    * Called before a Widget is going to be deleted.  Unlike the
    * destructor, this method will only be called if Prepare() has been
    * called previously.
    */
-  virtual void Unprepare() = 0;
+  virtual void Unprepare() noexcept = 0;
 
   /**
    * Save data that was modified by the user.  Will only be called if
@@ -94,7 +94,7 @@ public:
    * @return true on success, false if saving did not succeed (the
    * method should display a message to the user prior to returning)
    */
-  virtual bool Save(bool &changed) = 0;
+  virtual bool Save(bool &changed) noexcept = 0;
 
   /**
    * The user has clicked on the activation area (within the
@@ -105,20 +105,20 @@ public:
    *
    * @return true to continue, false to cancel the "Show" operation
    */
-  virtual bool Click() = 0;
+  virtual bool Click() noexcept = 0;
 
   /**
    * The user has clicked on the activation area while the Widget was
    * already visible.
    */
-  virtual void ReClick() = 0;
+  virtual void ReClick() noexcept = 0;
 
   /**
    * Make the widget visible.  This will only be called after
    * Prepare(), and will not be called again until Hide() has been
    * called.
    */
-  virtual void Show(const PixelRect &rc) = 0;
+  virtual void Show(const PixelRect &rc) noexcept = 0;
 
   /**
    * Perform operations prior to hiding.
@@ -128,30 +128,30 @@ public:
    * @return true if the condition of the widget is in the
    * expected state for Hide().  Else false.
    */
-  virtual bool Leave() = 0;
+  virtual bool Leave() noexcept = 0;
 
   /**
    * Make the widget invisible.  This will only be called when it is
    * visible already.
    */
-  virtual void Hide() = 0;
+  virtual void Hide() noexcept = 0;
 
   /**
    * Move the widget.  This will only be called while it is visible.
    */
-  virtual void Move(const PixelRect &rc) = 0;
+  virtual void Move(const PixelRect &rc) noexcept = 0;
 
   /**
    * Grab keyboard focus.
    *
    * @return false if the Widget is not interested in keyboard focus
    */
-  virtual bool SetFocus() = 0;
+  virtual bool SetFocus() noexcept = 0;
 
   /**
    * Allow the #Widget to handle a key press.
    */
-  virtual bool KeyPress(unsigned key_code) = 0;
+  virtual bool KeyPress(unsigned key_code) noexcept = 0;
 };
 
 /**
@@ -160,18 +160,20 @@ public:
  */
 class NullWidget : public Widget {
 public:
-  PixelSize GetMinimumSize() const override;
-  PixelSize GetMaximumSize() const override;
-  void Initialise(ContainerWindow &parent, const PixelRect &rc) override;
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
-  bool Save(bool &changed) override;
-  bool Click() override;
-  void ReClick() override;
-  bool Leave() override;
-  void Move(const PixelRect &rc) override;
-  bool SetFocus() override;
-  bool KeyPress(unsigned key_code) override;
+  PixelSize GetMinimumSize() const noexcept override;
+  PixelSize GetMaximumSize() const noexcept override;
+  void Initialise(ContainerWindow &parent,
+                  const PixelRect &rc) noexcept override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+  void Unprepare() noexcept override;
+  bool Save(bool &changed) noexcept override;
+  bool Click() noexcept override;
+  void ReClick() noexcept override;
+  bool Leave() noexcept override;
+  void Move(const PixelRect &rc) noexcept override;
+  bool SetFocus() noexcept override;
+  bool KeyPress(unsigned key_code) noexcept override;
 };
 
 #endif

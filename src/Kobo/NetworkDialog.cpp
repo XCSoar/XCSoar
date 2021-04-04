@@ -56,8 +56,8 @@ public:
   void UpdateButtons();
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 
 private:
   void ToggleWifi();
@@ -71,7 +71,7 @@ NetworkWidget::UpdateButtons()
 }
 
 void
-NetworkWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+NetworkWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   toggle_wifi_button = AddButton(GetWifiToggleCaption(),
                                  [this](){ ToggleWifi(); });
@@ -101,10 +101,10 @@ void
 ShowNetworkDialog()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  NetworkWidget widget(look);
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("Network"), &widget);
+  TWidgetDialog<NetworkWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look, _("Network"));
   dialog.AddButton(_("Close"), mrOK);
+  dialog.SetWidget(look);
   dialog.ShowModal();
-  dialog.StealWidget();
 }

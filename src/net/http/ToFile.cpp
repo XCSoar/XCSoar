@@ -22,15 +22,19 @@ Copyright_License {
 */
 
 #include "ToFile.hpp"
-#include "Request.hpp"
-#include "Handler.hpp"
+#include "Request.hxx"
+#include "Handler.hxx"
 #include "Operation/Operation.hpp"
 #include "io/FileOutputStream.hxx"
 #include "Crypto/SHA256.hxx"
+#include "thread/Mutex.hxx"
+#include "thread/Cond.hxx"
+#include "util/NumberParser.hpp"
+#include "util/ScopeExit.hxx"
 
 #include <cassert>
 
-class DownloadToFileHandler final : public Net::ResponseHandler {
+class DownloadToFileHandler final : public CurlResponseHandler {
   OutputStream &out;
 
   SHA256State sha256;
@@ -39,9 +43,14 @@ class DownloadToFileHandler final : public Net::ResponseHandler {
 
   OperationEnvironment &env;
 
+  Mutex mutex;
+  Cond cond;
+
   std::exception_ptr error;
 
   const bool do_sha256;
+
+  bool done = false;
 
 public:
   DownloadToFileHandler(OutputStream &_out, bool _do_sha256,
@@ -50,43 +59,65 @@ public:
   {
   }
 
-  void CheckError() const {
-    if (error)
-      std::rethrow_exception(error);
-  }
-
   auto GetSHA256() noexcept {
     assert(do_sha256);
 
     return sha256.Final();
   }
 
-  bool ResponseReceived(int64_t content_length) noexcept override {
-    if (content_length > 0)
-      env.SetProgressRange(content_length);
-    return true;
-  };
+  void Cancel() noexcept {
+    const std::lock_guard<Mutex> lock(mutex);
+    done = true;
+    cond.notify_one();
+  }
 
-  bool DataReceived(const void *data, size_t length) noexcept override {
+  void Wait() noexcept {
+    std::unique_lock<Mutex> lock(mutex);
+    cond.wait(lock, [this]{ return done; });
+
+    if (error)
+      std::rethrow_exception(error);
+  }
+
+  /* virtual methods from class CurlResponseHandler */
+  void OnHeaders(unsigned status,
+                 std::multimap<std::string, std::string> &&headers) override {
+    if (auto i = headers.find("content-length"); i != headers.end())
+      env.SetProgressRange(ParseUint64(i->second.c_str()));
+  }
+
+  void OnData(ConstBuffer<void> data) override {
     if (do_sha256)
-      sha256.Update({data, length});
+      sha256.Update(data);
 
     try {
-      out.Write(data, length);
+      out.Write(data.data, data.size);
     } catch (...) {
       error = std::current_exception();
-      return false;
+      throw Pause{};
     }
 
-    received += length;
+    received += data.size;
 
     env.SetProgressPosition(received);
-    return true;
+  }
+
+  void OnEnd() override {
+    const std::lock_guard<Mutex> lock(mutex);
+    done = true;
+    cond.notify_one();
+  }
+
+  void OnError(std::exception_ptr e) noexcept override {
+    const std::lock_guard<Mutex> lock(mutex);
+    error = std::move(e);
+    done = true;
+    cond.notify_one();
   }
 };
 
 static void
-DownloadToFile(Net::Session &session, const char *url,
+DownloadToFile(CurlGlobal &curl, const char *url,
                const char *username, const char *password,
                OutputStream &out, std::array<std::byte, 32> *sha256,
                OperationEnvironment &env)
@@ -94,29 +125,32 @@ DownloadToFile(Net::Session &session, const char *url,
   assert(url != nullptr);
 
   DownloadToFileHandler handler(out, sha256 != nullptr, env);
-  Net::Request request(session, handler, url);
+  CurlRequest request(curl, url, handler);
+  AtScopeExit(&request) { request.StopIndirect(); };
+
+  request.SetFailOnError();
+
   if (username != nullptr)
-    request.SetBasicAuth(username, password);
+    request.SetOption(CURLOPT_USERNAME, username);
+  if (password != nullptr)
+    request.SetOption(CURLOPT_PASSWORD, password);
 
-  try {
-    request.Send(10000);
-  } catch (...) {
-    if (env.IsCancelled())
-      /* cancelled by user, not an error: ignore the CURL error */
-      return;
+  env.SetCancelHandler([&]{
+    request.StopIndirect();
+    handler.Cancel();
+  });
 
-    /* see if a pending exception needs to be rethrown */
-    handler.CheckError();
-    /* no - rethrow the original exception we just caught here */
-    throw;
-  }
+  AtScopeExit(&env) { env.SetCancelHandler({}); };
+
+  request.StartIndirect();
+  handler.Wait();
 
   if (sha256 != nullptr)
     *sha256 = handler.GetSHA256();
 }
 
 void
-Net::DownloadToFile(Session &session, const char *url,
+Net::DownloadToFile(CurlGlobal &curl, const char *url,
                     const char *username, const char *password,
                     Path path, std::array<std::byte, 32> *sha256,
                     OperationEnvironment &env)
@@ -125,7 +159,7 @@ Net::DownloadToFile(Session &session, const char *url,
   assert(path != nullptr);
 
   FileOutputStream file(path);
-  ::DownloadToFile(session, url, username, password,
+  ::DownloadToFile(curl, url, username, password,
                    file, sha256, env);
   file.Commit();
 }
@@ -133,5 +167,5 @@ Net::DownloadToFile(Session &session, const char *url,
 void
 Net::DownloadToFileJob::Run(OperationEnvironment &env)
 {
-  DownloadToFile(session, url, username, password, path, &sha256, env);
+  DownloadToFile(curl, url, username, password, path, &sha256, env);
 }

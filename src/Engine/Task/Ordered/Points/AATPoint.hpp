@@ -118,7 +118,7 @@ public:
    * @param &radial returns the bearing in degrees of
    * the target
    */
-  gcc_pure
+  [[gnu::pure]]
   RangeAndRadial GetTargetRangeRadial(double old_range=0) const;
 
   /**
@@ -140,7 +140,7 @@ public:
    * @return True if double leg distance from state is within
    * threshold of target
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsCloseToTarget(const AircraftState& state, double threshold=0) const;
 
   /**

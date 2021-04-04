@@ -47,23 +47,23 @@ class ThreadedOperationEnvironment
     bool update_error;
     bool update_text, update_progress_range, update_progress_position;
 
-    Data()
+    Data() noexcept
       :text(_T("")),
        progress_range(0u), progress_position(0u),
        update_error(false), update_text(false),
        update_progress_range(false), update_progress_position(false) {}
 
-    void SetErrorMessage(const TCHAR *_error) {
+    void SetErrorMessage(const TCHAR *_error) noexcept {
       error = _error;
       update_error = true;
     }
 
-    void SetText(const TCHAR *_text) {
+    void SetText(const TCHAR *_text) noexcept {
       text = _text;
       update_text = true;
     }
 
-    bool SetProgressRange(unsigned range) {
+    bool SetProgressRange(unsigned range) noexcept {
       if (range == progress_range)
         return false;
 
@@ -72,7 +72,7 @@ class ThreadedOperationEnvironment
       return true;
     }
 
-    bool SetProgressPosition(unsigned position) {
+    bool SetProgressPosition(unsigned position) noexcept {
       if (position == progress_position)
         return false;
 
@@ -81,7 +81,7 @@ class ThreadedOperationEnvironment
       return true;
     }
 
-    void ClearUpdate() {
+    void ClearUpdate() noexcept {
       update_error = false;
       update_text = false;
       update_progress_range = update_progress_position = false;
@@ -101,33 +101,29 @@ class ThreadedOperationEnvironment
 
   Data data;
 
+  std::function<void()> cancel_handler;
+
 public:
-  explicit ThreadedOperationEnvironment(OperationEnvironment &_other);
+  explicit ThreadedOperationEnvironment(OperationEnvironment &_other) noexcept;
 
   void SendNotification() noexcept {
     notify.SendNotification();
   }
 
-  void Cancel() {
-    const std::lock_guard<Mutex> lock(mutex);
-    if (!cancel_flag) {
-      cancel_flag = true;
-      cancel_cond.notify_one();
-    }
-  }
+  void Cancel() noexcept;
 
 private:
-  bool LockSetProgressRange(unsigned range) {
+  bool LockSetProgressRange(unsigned range) noexcept {
     const std::lock_guard<Mutex> lock(mutex);
     return data.SetProgressRange(range);
   }
 
-  bool LockSetProgressPosition(unsigned position) {
+  bool LockSetProgressPosition(unsigned position) noexcept {
     const std::lock_guard<Mutex> lock(mutex);
     return data.SetProgressPosition(position);
   }
 
-  Data LockReceiveData() {
+  Data LockReceiveData() noexcept {
     const std::lock_guard<Mutex> lock(mutex);
     Data new_data = data;
     data.ClearUpdate();
@@ -136,12 +132,13 @@ private:
 
 public:
   /* virtual methods from class OperationEnvironment */
-  bool IsCancelled() const override;
+  bool IsCancelled() const noexcept override;
+  void SetCancelHandler(std::function<void()> handler) noexcept override;
   void Sleep(std::chrono::steady_clock::duration duration) noexcept override;
-  void SetErrorMessage(const TCHAR *error) override;
-  void SetText(const TCHAR *text) override;
-  void SetProgressRange(unsigned range) override;
-  void SetProgressPosition(unsigned position) override;
+  void SetErrorMessage(const TCHAR *error) noexcept override;
+  void SetText(const TCHAR *text) noexcept override;
+  void SetProgressRange(unsigned range) noexcept override;
+  void SetProgressPosition(unsigned position) noexcept override;
 
 protected:
   virtual void OnNotification();

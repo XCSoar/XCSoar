@@ -31,10 +31,10 @@ Copyright_License {
 #include <cstddef>
 
 namespace NativeBMP085Listener {
-  static Java::TrivialClass cls;
-  static jmethodID ctor;
-  static jfieldID ptr_field;
-};
+static Java::TrivialClass cls;
+static jmethodID ctor;
+static jfieldID ptr_field;
+} // namespace NativeBMP085Listener
 
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeBMP085Listener_onBMP085Values(JNIEnv *env, jobject obj,

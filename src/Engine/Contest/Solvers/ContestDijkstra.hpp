@@ -98,7 +98,7 @@ protected:
     return incremental;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const TracePoint &GetPoint(const ScanTaskPoint sp) const noexcept {
     return TraceManager::GetPoint(sp.GetPointIndex());
   }
@@ -118,7 +118,7 @@ protected:
    * @param index Index of leg
    * @return Weighting of leg
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetStageWeight(const unsigned index) const noexcept {
     assert(num_stages <= MAX_STAGES);
     assert(index + 1 < num_stages);
@@ -134,7 +134,7 @@ protected:
    *
    * @return Distance (flat) from origin to destination
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned CalcEdgeDistance(const ScanTaskPoint s1,
                             const ScanTaskPoint s2) const noexcept {
     return GetPoint(s1).FlatDistanceTo(GetPoint(s2));

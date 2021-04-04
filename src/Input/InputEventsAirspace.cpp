@@ -108,15 +108,15 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
 
   const AircraftState aircraft_state =
     ToAircraftState(basic, calculated);
-  AirspaceVisiblePredicate visible(settings_computer.airspace,
-                          CommonInterface::GetMapSettings().airspace,
-                          aircraft_state);
+  auto visible = AirspaceVisiblePredicate(settings_computer.airspace,
+                                          CommonInterface::GetMapSettings().airspace,
+                                          aircraft_state);
   GlidePolar polar = settings_computer.polar.glide_polar_task;
   polar.SetMC(std::max(polar.GetMC(), 1.));
   const AirspaceAircraftPerformance perf(polar);
 
   const auto *as = FindSoonestAirspace(airspace_database, aircraft_state, perf,
-                                       visible, 1800);
+                                       std::move(visible), 1800);
   if (!as) {
     return;
   } 

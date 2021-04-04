@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_AIRSPACE_RENDERER_HPP
 #define XCSOAR_AIRSPACE_RENDERER_HPP
 
+#include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "util/StaticArray.hxx"
 #include "Geo/GeoPoint.hpp"
 
@@ -37,7 +38,6 @@ struct DerivedInfo;
 struct AirspaceComputerSettings;
 struct AirspaceRendererSettings;
 class Airspaces;
-class AirspacePredicate;
 class ProtectedAirspaceWarningManager;
 class AirspaceWarningCopy;
 class Canvas;

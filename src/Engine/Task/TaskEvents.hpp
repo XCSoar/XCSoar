@@ -23,8 +23,6 @@
 #ifndef TASKEVENTS_HPP
 #define TASKEVENTS_HPP
 
-#include "util/Compiler.h"
-
 class TaskWaypoint;
 struct Waypoint;
 
@@ -41,14 +39,14 @@ public:
    *
    * @param tp The turnpoint entered
    */
-  virtual void EnterTransition(gcc_unused const TaskWaypoint& tp) {}
+  virtual void EnterTransition([[maybe_unused]] const TaskWaypoint &tp) noexcept {}
 
   /**
    * Called when the aircraft exits a turnpoint observation zone
    *
    * @param tp The turnpoint the aircraft has exited
    */
-  virtual void ExitTransition(gcc_unused const TaskWaypoint &tp) {}
+  virtual void ExitTransition([[maybe_unused]] const TaskWaypoint &tp) noexcept {}
 
   /**
    * Called when auto-advance has changed the active
@@ -57,8 +55,8 @@ public:
    * @param tp The turnpoint that is now active after auto-advance
    * @param i The task sequence number after auto-advance
    */
-  virtual void ActiveAdvanced(gcc_unused const TaskWaypoint &tp,
-                              gcc_unused const int i) {}
+  virtual void ActiveAdvanced([[maybe_unused]] const TaskWaypoint &tp,
+                              [[maybe_unused]] const int i) noexcept {}
 
   /**
    * Called when a task point can be advanced but the advance needs
@@ -66,17 +64,17 @@ public:
    *
    * @param tp The taskpoint waiting to be armed
    */
-  virtual void RequestArm(gcc_unused const TaskWaypoint &tp) {}
+  virtual void RequestArm([[maybe_unused]] const TaskWaypoint &tp) noexcept {}
 
   /**
    * Called when orderd task has started
    */
-  virtual void TaskStart() {}
+  virtual void TaskStart() noexcept {}
 
   /**
    * Called when orderd task has finished
    */
-  virtual void TaskFinish() {}
+  virtual void TaskFinish() noexcept {}
 };
 
 #endif

@@ -45,7 +45,7 @@ enum Controls {
 };
 
 void
-RulesStatusPanel::Refresh()
+RulesStatusPanel::Refresh() noexcept
 {
   TCHAR Temp[80];
 
@@ -96,7 +96,8 @@ RulesStatusPanel::Refresh()
 }
 
 void
-RulesStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+RulesStatusPanel::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
 {
   AddReadOnly(_("Valid start"));
   AddReadOnly(_("Start time"));

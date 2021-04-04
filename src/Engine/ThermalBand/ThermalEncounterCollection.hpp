@@ -24,13 +24,14 @@
 
 #include "ThermalBand.hpp"
 
-class ThermalEncounterCollection: public ThermalBand {
+class ThermalEncounterCollection : public ThermalBand {
 public:
-     void Merge(const ThermalBand& tb);
+  void Merge(const ThermalBand& tb);
+
 private:
-     void MergeUnsafe(const ThermalBand& o);
-     void LowerFloor(const double new_floor);
-     void UpdateTimes();
+  void MergeUnsafe(const ThermalBand& o);
+  void LowerFloor(const double new_floor);
+  void UpdateTimes();
 };
 
 static_assert(std::is_trivial<ThermalEncounterCollection>::value, "type is not trivial");

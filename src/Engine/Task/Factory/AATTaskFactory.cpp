@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "AATTaskFactory.hpp"
 #include "Constraints.hpp"
+#include "util/Compiler.h"
 
 static constexpr TaskFactoryConstraints aat_constraints = {
   true,

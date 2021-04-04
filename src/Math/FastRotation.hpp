@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_MATH_FASTROTATION_HPP
 #define XCSOAR_MATH_FASTROTATION_HPP
 
-#include "util/Compiler.h"
 #include "Math/Angle.hpp"
 #include "Point2D.hpp"
 
@@ -32,31 +31,18 @@ Copyright_License {
  * Rotate coordinates around the zero origin.
  */
 class FastRotation {
-  Angle angle;
-  double cost, sint;
+  double cost = 1, sint = 0;
 
 public:
-  typedef DoublePoint2D Point;
+  using Point = DoublePoint2D;
 
-  FastRotation()
-    :angle(Angle::Zero()), cost(1), sint(0) {}
-  FastRotation(Angle _angle):angle(Angle::Radians(-9999)) { SetAngle(_angle); }
-
-  Angle GetAngle() const {
-    return angle;
-  }
+  FastRotation() noexcept = default;
 
   /**
-   * Sets the new angle, and precalculates the sine/cosine values.
-   *
-   * @param _angle an angle between 0 and 360
+   * @param angle an angle between 0 and 360
    */
-  void SetAngle(Angle _angle);
-
-  const FastRotation &operator =(Angle _angle) {
-    SetAngle(_angle);
-    return *this;
-  }
+  FastRotation(Angle angle) noexcept
+    :cost(angle.fastcosine()), sint(angle.fastsine()) {}
 
   /**
    * Rotates the point (xin, yin).
@@ -65,13 +51,16 @@ public:
    * @param y Y value
    * @return the rotated coordinates
    */
-  gcc_pure
-  Point Rotate(double x, double y) const;
+  constexpr Point Rotate(Point p) const noexcept {
+    return {
+      p.x * cost - p.y * sint,
+      p.y * cost + p.x * sint,
+    };
+  }
 
   template<typename P, typename=std::enable_if_t<std::is_base_of_v<Point, P>>>
-  gcc_pure
-  P Rotate(P p) const noexcept {
-    return Rotate(p.x, p.y);
+  constexpr P Rotate(P p) const noexcept {
+    return Rotate(Point{p});
   }
 };
 
@@ -79,27 +68,34 @@ public:
  * Same as #FastRotation, but works with integer coordinates.
  */
 class FastIntegerRotation {
-  Angle angle;
-  int cost, sint;
+public:
+  static constexpr int SHIFT = 10;
+  static constexpr int ONE = 1 << SHIFT;
+  static constexpr int HALF = ONE / 2;
+
+private:
+  int cost = ONE, sint = 0;
 
   friend class FastRowRotation;
 
 public:
-  typedef IntPoint2D Point;
+  using Point = IntPoint2D;
 
-  FastIntegerRotation()
- :angle(Angle::Zero()), cost(1024), sint(0) {}
-  FastIntegerRotation(Angle _angle):angle(Angle::Radians(-9999)) { SetAngle(_angle); }
+  FastIntegerRotation() noexcept = default;
 
-  Angle GetAngle() const {
-    return angle;
+  FastIntegerRotation(Angle angle) noexcept
+    :cost(angle.ifastcosine()), sint(angle.ifastsine()) {}
+
+  void Scale(int multiply, int divide=1) noexcept {
+    cost = cost * multiply / divide;
+    sint = sint * multiply / divide;
   }
 
-  void SetAngle(Angle _angle);
-
-  const FastIntegerRotation &operator =(Angle _angle) {
-    SetAngle(_angle);
-    return *this;
+  constexpr Point RotateRaw(Point p) const noexcept {
+    return {
+      p.x * cost - p.y * sint,
+      p.y * cost + p.x * sint,
+    };
   }
 
   /**
@@ -109,13 +105,17 @@ public:
    * @param y Y value
    * @return the rotated coordinates
    */
-  gcc_pure
-  Point Rotate(int x, int y) const;
+  constexpr Point Rotate(Point p) const noexcept {
+    const auto raw = RotateRaw(p);
+    return {
+      (raw.x + HALF) >> SHIFT,
+      (raw.y + HALF) >> SHIFT,
+    };
+  }
 
   template<typename P, typename=std::enable_if_t<std::is_base_of_v<Point, P>>>
-  gcc_pure
-  P Rotate(P p) const noexcept {
-    return Rotate(p.x, p.y);
+  constexpr P Rotate(P p) const noexcept {
+    return Rotate(Point{p});
   }
 };
 
@@ -124,19 +124,19 @@ public:
  * row (y is constant).
  */
 class FastRowRotation {
-  const int cost, sint, y_cost, y_sint;
+  FastIntegerRotation fir;
+  int y_cost, y_sint;
 
 public:
-  typedef IntPoint2D Point;
+  using Point = FastIntegerRotation::Point;
 
-  FastRowRotation(const FastIntegerRotation &fir, int y)
-    :cost(fir.cost), sint(fir.sint),
-     y_cost(y * cost + 512), y_sint(y * sint - 512) {}
+  constexpr FastRowRotation(const FastIntegerRotation &_fir, int y) noexcept
+    :fir(_fir),
+     y_cost(y * fir.cost + 512), y_sint(y * fir.sint - 512) {}
 
-  gcc_pure
-  Point Rotate(int x) const {
-    return Point((x * cost - y_sint + 512) >> 10,
-                 (y_cost + x * sint + 512) >> 10);
+  constexpr Point Rotate(int x) const noexcept {
+    return Point((x * fir.cost - y_sint + 512) >> 10,
+                 (y_cost + x * fir.sint + 512) >> 10);
   }
 };
 

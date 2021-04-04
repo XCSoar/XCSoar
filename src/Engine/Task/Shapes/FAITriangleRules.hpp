@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FAI_TRIANGLE_RULES_HPP
 #define XCSOAR_FAI_TRIANGLE_RULES_HPP
 
-#include "util/Compiler.h"
-
 #include <algorithm>
 
 struct GeoPoint;
@@ -110,11 +108,11 @@ constexpr bool CheckLargeTriangle(unsigned a, unsigned b, unsigned c) noexcept
   return shortest * 4 >= total && longest * 20 < total * 9;
 }
 
-gcc_pure
+[[gnu::pure]]
 bool TestDistances(double d1, double d2, double d3,
                    const FAITriangleSettings &settings) noexcept;
 
-gcc_pure
+[[gnu::pure]]
 bool TestDistances(const GeoPoint &a, const GeoPoint &b, const GeoPoint &c,
                    const FAITriangleSettings &settings) noexcept;
 

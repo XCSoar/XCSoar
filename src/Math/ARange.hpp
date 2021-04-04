@@ -35,20 +35,20 @@ Copyright_License {
 struct AngleRange {
   Angle start, end;
 
-  AngleRange() = default;
+  AngleRange() noexcept = default;
 
-  constexpr AngleRange(Angle _start, Angle _end)
+  constexpr AngleRange(Angle _start, Angle _end) noexcept
     :start(_start), end(_end) {}
 
-  constexpr bool IsEmpty() const {
+  constexpr bool IsEmpty() const noexcept {
     return start == end;
   }
 
   /**
    * Returns the length of the range.
    */
-  gcc_pure
-  Angle GetLength() const {
+  [[gnu::pure]]
+  Angle GetLength() const noexcept {
     return (end - start).AsBearing();
   }
 
@@ -56,32 +56,32 @@ struct AngleRange {
    * Returns the middle of the range.  The return value is not
    * normalized.
    */
-  gcc_pure
-  Angle GetMiddle() const {
+  [[gnu::pure]]
+  Angle GetMiddle() const noexcept {
     return start.Fraction(end, 0.5);
   }
 
   /**
    * Is the specified value within the range?
    */
-  gcc_pure
-  bool IsInside(const Angle value) const {
+  [[gnu::pure]]
+  bool IsInside(const Angle value) const noexcept {
     return value.Between(start, end);
   }
 
   /**
    * Do the two ranges overlap?
    */
-  gcc_pure
-  bool Overlaps(const AngleRange &other) const {
+  [[gnu::pure]]
+  bool Overlaps(const AngleRange &other) const noexcept {
     return IsInside(other.start) || other.IsInside(start);
   }
 
   /**
    * Is the specified range within this range?
    */
-  gcc_pure
-  bool IsInside(const AngleRange &interior) const {
+  [[gnu::pure]]
+  bool IsInside(const AngleRange &interior) const noexcept {
     return IsInside(interior.start) && IsInside(interior.end);
   }
 
@@ -90,7 +90,7 @@ struct AngleRange {
    *
    * @return true if the range has been modified
    */
-  bool Extend(Angle value);
+  bool Extend(Angle value) noexcept;
 
   /**
    * Set this object to the intersection of this and the other object.
@@ -98,7 +98,7 @@ struct AngleRange {
    * @return false if the two objects do not overlap; in this case,
    * the object is left in an undefined state
    */
-  bool IntersectWith(const AngleRange &other);
+  bool IntersectWith(const AngleRange &other) noexcept;
 };
 
 static_assert(std::is_trivial<AngleRange>::value, "type is not trivial");

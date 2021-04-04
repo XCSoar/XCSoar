@@ -32,7 +32,7 @@ Copyright_License {
 ButtonPanelWidget::~ButtonPanelWidget() noexcept = default;
 
 PixelRect
-ButtonPanelWidget::UpdateLayout(const PixelRect &rc)
+ButtonPanelWidget::UpdateLayout(const PixelRect &rc) noexcept
 {
   assert(buttons != nullptr);
 
@@ -51,7 +51,7 @@ ButtonPanelWidget::UpdateLayout(const PixelRect &rc)
 }
 
 PixelSize
-ButtonPanelWidget::GetMinimumSize() const
+ButtonPanelWidget::GetMinimumSize() const noexcept
 {
   PixelSize size = widget->GetMinimumSize();
   if (size.height > 0)
@@ -60,7 +60,7 @@ ButtonPanelWidget::GetMinimumSize() const
 }
 
 PixelSize
-ButtonPanelWidget::GetMaximumSize() const
+ButtonPanelWidget::GetMaximumSize() const noexcept
 {
   PixelSize size = widget->GetMaximumSize();
   if (size.height > 0)
@@ -69,7 +69,8 @@ ButtonPanelWidget::GetMaximumSize() const
 }
 
 void
-ButtonPanelWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
+ButtonPanelWidget::Initialise(ContainerWindow &parent,
+                              const PixelRect &rc) noexcept
 {
   assert(buttons == nullptr);
 
@@ -82,7 +83,8 @@ ButtonPanelWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-ButtonPanelWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ButtonPanelWidget::Prepare(ContainerWindow &parent,
+                           const PixelRect &rc) noexcept
 {
   assert(buttons != nullptr);
 
@@ -92,7 +94,7 @@ ButtonPanelWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-ButtonPanelWidget::Unprepare()
+ButtonPanelWidget::Unprepare() noexcept
 {
   assert(buttons != nullptr);
 
@@ -100,19 +102,19 @@ ButtonPanelWidget::Unprepare()
 }
 
 bool
-ButtonPanelWidget::Save(bool &changed)
+ButtonPanelWidget::Save(bool &changed) noexcept
 {
   return widget->Save(changed);
 }
 
 bool
-ButtonPanelWidget::Click()
+ButtonPanelWidget::Click() noexcept
 {
   return widget->Click();
 }
 
 void
-ButtonPanelWidget::ReClick()
+ButtonPanelWidget::ReClick() noexcept
 {
   assert(buttons != nullptr);
 
@@ -120,41 +122,41 @@ ButtonPanelWidget::ReClick()
 }
 
 void
-ButtonPanelWidget::Show(const PixelRect &rc)
+ButtonPanelWidget::Show(const PixelRect &rc) noexcept
 {
   assert(buttons != nullptr);
 
-  widget->Show(UpdateLayout(rc));
   buttons->ShowAll();
+  widget->Show(UpdateLayout(rc));
 }
 
 bool
-ButtonPanelWidget::Leave()
+ButtonPanelWidget::Leave() noexcept
 {
   return widget->Leave();
 }
 
 void
-ButtonPanelWidget::Hide()
+ButtonPanelWidget::Hide() noexcept
 {
   buttons->HideAll();
   widget->Hide();
 }
 
 void
-ButtonPanelWidget::Move(const PixelRect &rc)
+ButtonPanelWidget::Move(const PixelRect &rc) noexcept
 {
   widget->Move(UpdateLayout(rc));
 }
 
 bool
-ButtonPanelWidget::SetFocus()
+ButtonPanelWidget::SetFocus() noexcept
 {
   return widget->SetFocus();
 }
 
 bool
-ButtonPanelWidget::KeyPress(unsigned key_code)
+ButtonPanelWidget::KeyPress(unsigned key_code) noexcept
 {
-  return widget->KeyPress(key_code) || buttons->KeyPress(key_code);
+  return buttons->KeyPress(key_code) || widget->KeyPress(key_code);
 }

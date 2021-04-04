@@ -147,11 +147,11 @@ public:
   }
 
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
-  bool Save(bool &changed) override;
+  bool Save(bool &changed) noexcept override;
 
-  void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     const Layout layout(rc, geometry);
 
     RowFormWidget::Show(layout.form);
@@ -164,7 +164,7 @@ public:
       previews[i].MoveAndShow(layout.info_boxes.positions[i]);
   }
 
-  void Hide() override {
+  void Hide() noexcept override {
     RowFormWidget::Hide();
 
     copy_button.Hide();
@@ -175,7 +175,7 @@ public:
       i.Hide();
   }
 
-  void Move(const PixelRect &rc) override {
+  void Move(const PixelRect &rc) noexcept override {
     const Layout layout(rc, geometry);
 
     RowFormWidget::Move(layout.form);
@@ -185,7 +185,7 @@ public:
     close_button.Move(layout.close_button);
   }
 
-  bool SetFocus() override {
+  bool SetFocus() noexcept override {
     GetGeneric(INFOBOX).SetFocus();
     return true;
   }
@@ -230,7 +230,7 @@ InfoBoxesConfigWidget::Layout::Layout(PixelRect rc,
 
 void
 InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
-                               const PixelRect &rc)
+                               const PixelRect &rc) noexcept
 {
   const Layout layout(rc, geometry);
 
@@ -292,7 +292,7 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
 }
 
 bool
-InfoBoxesConfigWidget::Save(bool &changed_r)
+InfoBoxesConfigWidget::Save(bool &changed_r) noexcept
 {
   if (allow_name_change) {
     const auto *new_name = GetValueString(InfoBoxesConfigWidget::NAME);

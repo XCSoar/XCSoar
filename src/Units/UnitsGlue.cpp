@@ -24,6 +24,7 @@ Copyright_License {
 #include "Units/UnitsGlue.hpp"
 #include "Units/UnitsStore.hpp"
 #include "LogFile.hpp"
+#include "util/ScopeExit.hxx"
 #include "util/StringAPI.hxx"
 
 #include <tchar.h>
@@ -36,6 +37,7 @@ Copyright_License {
 #include "java/Global.hxx"
 #include "java/Class.hxx"
 #include "java/Object.hxx"
+#include "java/String.hxx"
 #endif
 
 struct language_unit_map {
@@ -130,25 +132,20 @@ AutoDetect()
   // Call function Locale.getLanguage() that
   // returns a two-letter language string
 
-  jstring language = Java::Object::toString(env, obj);
+  Java::String language{env, Java::Object::toString(env, obj)};
   if (language == nullptr)
     return 0;
 
   // Convert the jstring to a char string
   const char *language2 = env->GetStringUTFChars(language, nullptr);
-  if (language2 == nullptr) {
-    env->DeleteLocalRef(language);
+  if (language2 == nullptr)
     return 0;
-  }
 
-  unsigned id = FindLanguage(language2);
+  AtScopeExit(env, &language, language2) {
+    env->ReleaseStringUTFChars(language, language2);
+  };
 
-  // Clean up the memory
-  env->ReleaseStringUTFChars(language, language2);
-  env->DeleteLocalRef(language);
-
-  // Return e.g. "de.mo"
-  return id;
+  return FindLanguage(language2);
 
 #else
   // Metric default on Linux

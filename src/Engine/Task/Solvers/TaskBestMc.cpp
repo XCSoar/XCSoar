@@ -39,7 +39,7 @@ TaskBestMc::TaskBestMc(TaskPoint &tp,
 #define TINY 0.001
 
 double
-TaskBestMc::f(const double mc)
+TaskBestMc::f(const double mc) noexcept
 {
   tm.set_mc(std::max(TINY, mc));
   res = tm.glide_solution(aircraft);

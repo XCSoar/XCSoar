@@ -24,7 +24,6 @@
 #define XCSOAR_DERIVE_WINDOW_FILTER_HPP
 
 #include "util/OverwritingRingBuffer.hpp"
-#include "util/Compiler.h"
 
 /**
  * A filter that stores a certain amount of samples and calculates the
@@ -41,19 +40,19 @@ class DifferentialWindowFilter {
   OverwritingRingBuffer<Sample, N> buffer;
 
 public:
-  void Clear() {
+  void Clear() noexcept {
     buffer.clear();
   }
 
-  bool IsEmpty() const {
+  bool IsEmpty() const noexcept {
     return buffer.empty();
   }
 
-  double GetFirstX() const {
+  double GetFirstX() const noexcept {
     return buffer.peek().x;
   }
 
-  double GetLastX() const {
+  double GetLastX() const noexcept {
     return buffer.last().x;
   }
 
@@ -61,25 +60,25 @@ public:
    * Returns the difference between the first and the last X sample.
    * Must not be called on an empty object.
    */
-  double GetDeltaX() const {
+  double GetDeltaX() const noexcept {
     return GetLastX() - GetFirstX();
   }
 
   /**
    * Same as GetDeltaX(), but returns -1 if the object is empty.
    */
-  double GetDeltaXChecked() const {
+  double GetDeltaXChecked() const noexcept {
     return IsEmpty() ? -1. : GetDeltaX();
   }
 
-  double GetDeltaY() const {
+  double GetDeltaY() const noexcept {
     return buffer.last().y - buffer.peek().y;
   }
 
   /**
    * Add a new sample.
    */
-  void Push(double x, double y) {
+  void Push(double x, double y) noexcept {
     buffer.push({x, y});
   }
 
@@ -87,8 +86,8 @@ public:
    * Does this object have enough data to calculate the derivative of
    * at least the specified delta?
    */
-  gcc_pure
-  bool HasEnoughData(double min_delta_x) const {
+  [[gnu::pure]]
+  bool HasEnoughData(double min_delta_x) const noexcept {
     return !IsEmpty() && GetDeltaX() >= min_delta_x;
   }
 
@@ -96,8 +95,8 @@ public:
    * Calculate the average dy/dx over the whole window.  This may only
    * be called after HasEnoughData() has returned true.
    */
-  gcc_pure
-  double DeriveAverage() const {
+  [[gnu::pure]]
+  double DeriveAverage() const noexcept {
     auto delta_x = GetDeltaX();
     auto delta_y = GetDeltaY();
     return delta_y / delta_x;

@@ -55,6 +55,10 @@ public:
     text_renderer.SetControl();
   }
 
+  [[gnu::pure]]
+  static unsigned GetMinimumButtonWidth(const ButtonLook &look,
+                                        const TCHAR *caption) noexcept;
+
   const ButtonLook &GetLook() const {
     return frame_renderer.GetLook();
   }
@@ -68,7 +72,7 @@ public:
     text_renderer.InvalidateLayout();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetMinimumButtonWidth() const override;
 
   void DrawButton(Canvas &canvas, const PixelRect &rc,

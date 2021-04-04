@@ -76,7 +76,8 @@ WaitBoolValue(LXDevice &device, const char *name,
 }
 
 void
-NanoConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+NanoConfigWidget::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
 {
   RequestAllSettings(device);
 
@@ -126,7 +127,7 @@ NanoConfigWidget::SaveSetting(const char *name, unsigned idx,
 }
 
 bool
-NanoConfigWidget::Save(bool &_changed)
+NanoConfigWidget::Save(bool &_changed) noexcept
 {
   PopupOperationEnvironment env;
   bool changed = false;

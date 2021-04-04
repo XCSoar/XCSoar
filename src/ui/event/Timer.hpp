@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_EVENT_TIMER_HPP
 
 #ifdef USE_POLL_EVENT
-#include "event/TimerEvent.hxx"
+#include "event/FineTimerEvent.hxx"
 #endif
 
 #include <chrono>
@@ -44,7 +44,7 @@ namespace UI {
  */
 class Timer final {
 #ifdef USE_POLL_EVENT
-  TimerEvent timer_event;
+  FineTimerEvent timer_event;
 #else
   bool pending = false;
 #endif

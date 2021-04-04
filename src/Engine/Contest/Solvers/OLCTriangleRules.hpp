@@ -24,7 +24,6 @@
 #define OLC_TRIANGLE_RULES_HPP
 
 #include "Engine/Task/Shapes/FAITriangleRules.hpp"
-#include "util/Compiler.h"
 
 #include <algorithm>
 
@@ -48,7 +47,7 @@ public:
    * Use relaxed checks to ensure distance errors due to the flat projection
    * or integer rounding don't invalidate close positives.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsFeasible(unsigned df_min, unsigned df_max,
                   unsigned shortest_max, unsigned longest_min) const noexcept {
     // shortest leg min 28% (here: 27.5%) for small triangle,
@@ -66,7 +65,7 @@ public:
   }
 
   template<typename P, typename GetMaxDistance, typename GetLocation>
-  gcc_pure
+  [[gnu::pure]]
   bool IsIntegral(const P &tp1, const P &tp2, const P &tp3,
                   unsigned shortest_max, unsigned longest_max,
                   GetMaxDistance &&get_max_distance,
@@ -108,7 +107,7 @@ public:
 };
 
 struct OLCTriangleRules : private OLCTriangleConstants {
-  gcc_pure
+  [[gnu::pure]]
   static OLCTriangleValidator MakeValidator(const FlatProjection &projection,
                                             const GeoPoint &reference) noexcept;
 };

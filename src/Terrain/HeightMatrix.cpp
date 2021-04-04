@@ -81,17 +81,16 @@ void
 HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
                    unsigned quantisation_pixels, bool interpolate)
 {
-  const unsigned screen_width = projection.GetScreenWidth();
-  const unsigned screen_height = projection.GetScreenHeight();
+  const auto screen_size = projection.GetScreenSize();
 
-  SetSize((screen_width + quantisation_pixels - 1) / quantisation_pixels,
-          (screen_height + quantisation_pixels - 1) / quantisation_pixels);
+  SetSize((screen_size.width + quantisation_pixels - 1) / quantisation_pixels,
+          (screen_size.height + quantisation_pixels - 1) / quantisation_pixels);
 
   auto p = data.begin();
-  for (unsigned y = 0; y < screen_height;
+  for (unsigned y = 0; y < screen_size.height;
        y += quantisation_pixels, p += width) {
-    map.ScanLine(projection.ScreenToGeo(0, y),
-                 projection.ScreenToGeo(screen_width, y),
+    map.ScanLine(projection.ScreenToGeo({0, (int)y}),
+                 projection.ScreenToGeo({(int)screen_size.width, (int)y}),
                  p, width, interpolate);
   }
 }

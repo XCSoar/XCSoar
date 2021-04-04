@@ -30,8 +30,6 @@ Copyright_License {
 #include "util/Clamp.hpp"
 
 static constexpr Angle MIN_TURN_RATE = Angle::Degrees(4);
-static constexpr double CRUISE_CLIMB_SWITCH(15);
-static constexpr double CLIMB_CRUISE_SWITCH(10);
 
 void
 CirclingComputer::Reset()
@@ -167,7 +165,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
       break;
     }
     if (circling_info.turning || force_circling) {
-      if (((basic.time - turn_start_time) > CRUISE_CLIMB_SWITCH)
+      if (((basic.time - turn_start_time) > settings.cruise_to_circling_mode_switch_threshold)
           || force_circling) {
         // yes, we are certain now that we are circling
         circling_info.circling = true;
@@ -213,7 +211,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     }
 
     if (!circling_info.turning || force_cruise) {
-      if (basic.time - turn_start_time > CLIMB_CRUISE_SWITCH || force_cruise) {
+      if (basic.time - turn_start_time > settings.circling_to_cruise_mode_switch_threshold || force_cruise) {
         // yes, we are certain now that we are cruising again
         circling_info.circling = false;
 

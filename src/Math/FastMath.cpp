@@ -27,7 +27,7 @@ Copyright_License {
 #include <math.h>
 
 int
-compare_squared(int a, int b, int c)
+compare_squared(int a, int b, int c) noexcept
 {
   int a2b2 = a * a + b * b;
   int c2 = c * c;
@@ -46,7 +46,7 @@ compare_squared(int a, int b, int c)
  * @return Rounded square root of val
  */
 unsigned
-isqrt4(unsigned val)
+isqrt4(unsigned val) noexcept
 {
 #if defined(__i386__) || defined(__x86_64__)
   /* x86 FPUs are extremely fast */
@@ -92,7 +92,7 @@ isqrt4(unsigned val)
 }
 
 double
-thermal_recency_fn(unsigned x)
+thermal_recency_fn(unsigned x) noexcept
 {
   return x < THERMALRECENCY_SIZE
     ? THERMALRECENCY[x]

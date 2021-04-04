@@ -71,7 +71,7 @@ private:
 
   const Orientation orientation;
 
-  TabDisplay *tab_display;
+  TabDisplay *tab_display = nullptr;
 
   /**
    * An optional #Widget that is shown at the corner right or below
@@ -81,15 +81,15 @@ private:
 
   PixelRect extra_position;
 
-  bool large_extra;
+  bool large_extra = false;
 
 public:
   explicit TabWidget(Orientation _orientation=Orientation::AUTO,
-                     std::unique_ptr<Widget> &&_extra=nullptr)
-    :orientation(_orientation), tab_display(nullptr),
-     extra(std::move(_extra)), large_extra(false) {}
+                     std::unique_ptr<Widget> &&_extra=nullptr) noexcept
+    :orientation(_orientation),
+     extra(std::move(_extra)) {}
 
-  ~TabWidget() override;
+  ~TabWidget() noexcept override;
 
   /**
    * Must be called before Initialise().
@@ -136,7 +136,7 @@ public:
   void AddTab(std::unique_ptr<Widget> widget, const TCHAR *caption,
               const MaskedIcon *icon=nullptr);
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetButtonCaption(unsigned i) const;
 
   bool ClickPage(unsigned i);
@@ -144,20 +144,20 @@ public:
   bool PreviousPage();
 
   /* virtual methods from class Widget */
-  PixelSize GetMinimumSize() const override;
-  PixelSize GetMaximumSize() const override;
-  void Initialise(ContainerWindow &parent, const PixelRect &rc) override;
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
-  void Show(const PixelRect &rc) override;
-  void Hide() override;
-  void Move(const PixelRect &rc) override;
-  bool SetFocus() override;
-  bool KeyPress(unsigned key_code) override;
+  PixelSize GetMinimumSize() const noexcept override;
+  PixelSize GetMaximumSize() const noexcept override;
+  void Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Unprepare() noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
+  void Move(const PixelRect &rc) noexcept override;
+  bool SetFocus() noexcept override;
+  bool KeyPress(unsigned key_code) noexcept override;
 
 protected:
   /* virtual methods from class PagerWidget */
-  void OnPageFlipped() override;
+  void OnPageFlipped() noexcept override;
 };
 
 #endif

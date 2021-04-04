@@ -27,7 +27,6 @@ Copyright_License {
 #include "Dijkstra.hpp"
 #include "ScanTaskPoint.hpp"
 #include "SolverResult.hpp"
-#include "util/Compiler.h"
 
 #include <unordered_map>
 #include <cassert>
@@ -46,13 +45,14 @@ protected:
 
   struct DijkstraMap {
     struct Hash {
-      std::size_t operator()(ScanTaskPoint p) const noexcept {
+      constexpr std::size_t operator()(ScanTaskPoint p) const noexcept {
         return p.Key();
       }
     };
 
     struct Equal {
-      std::size_t operator()(ScanTaskPoint a, ScanTaskPoint b) const noexcept {
+      constexpr std::size_t operator()(ScanTaskPoint a,
+                                       ScanTaskPoint b) const noexcept {
         return a.Key() == b.Key();
       }
     };
@@ -107,7 +107,7 @@ protected:
    *
    * @return True if this terminal point completes a valid solution
    */
-  bool IsFinishSatisfied(gcc_unused const ScanTaskPoint sp) const noexcept {
+  bool IsFinishSatisfied([[maybe_unused]] const ScanTaskPoint sp) const noexcept {
     return true;
   }
 
@@ -118,7 +118,7 @@ protected:
    */
   virtual void AddEdges(const ScanTaskPoint curNode) noexcept = 0;
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsFinal(unsigned stage_number) const noexcept {
     assert(stage_number < num_stages);
 
@@ -132,7 +132,7 @@ protected:
    *
    * @return True if point is terminal
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsFinal(const ScanTaskPoint sp) const noexcept {
     assert(num_stages <= MAX_STAGES);
 
@@ -187,7 +187,7 @@ protected:
   /**
    * Search the chain for the ScanTaskPoint at the specified stage.
    */
-  gcc_pure
+  [[gnu::pure]]
   ScanTaskPoint FindStage(ScanTaskPoint p,
                           unsigned stage_number) const noexcept {
     assert(stage_number <= p.GetStageNumber());
@@ -206,7 +206,7 @@ protected:
   /**
    * Find the first ScanTaskPoint in the chain.
    */
-  gcc_pure
+  [[gnu::pure]]
   ScanTaskPoint FindStart(ScanTaskPoint p) const noexcept {
     return FindStage(p, 0);
   }

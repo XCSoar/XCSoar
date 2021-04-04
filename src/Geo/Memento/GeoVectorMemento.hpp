@@ -25,7 +25,6 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
-#include "util/Compiler.h"
 
 /** Memento object to store results of previous GeoVector constructors. */
 class GeoVectorMemento 
@@ -48,7 +47,7 @@ public:
    * Returns a GeoVector object from the origin to destination, 
    * from previously saved value if input arguments are identical. 
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoVector calc(const GeoPoint& _origin, const GeoPoint& _destination) const;
 };
 

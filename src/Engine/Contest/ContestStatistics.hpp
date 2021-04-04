@@ -46,12 +46,12 @@ struct ContestStatistics
    *
    * @return Vector of trace points selected for Contest
    */
-  gcc_pure
+  [[gnu::pure]]
   const ContestTraceVector &GetSolution(const int solution_index = -1) const {
     return solution[GetBestIndex(solution_index)];
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const ContestResult &GetResult(const int solution_index = -1) const {
     return result[GetBestIndex(solution_index)];
   }

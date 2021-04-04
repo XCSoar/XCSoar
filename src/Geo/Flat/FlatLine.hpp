@@ -25,7 +25,6 @@
 
 #include "FlatPoint.hpp"
 #include "Math/Line2D.hpp"
-#include "util/Compiler.h"
 
 /**
  * Defines an infinite line in real-valued cartesian coordinates,
@@ -80,7 +79,7 @@ public:
    *
    * @return Angle (deg)
    */
-  gcc_pure
+  [[gnu::pure]]
   Angle GetAngle() const;
 
   using Base::GetSquaredDistance;
@@ -90,7 +89,7 @@ public:
    *
    * @return Length
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetDistance() const {
     return a.Distance(b);
   }

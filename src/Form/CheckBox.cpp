@@ -44,6 +44,14 @@ CheckBoxControl::Create(ContainerWindow &parent, const DialogLook &_look,
   PaintWindow::Create(parent, rc, style);
 }
 
+unsigned
+CheckBoxControl::GetMinimumWidth(const DialogLook &look, unsigned height,
+                                 tstring::const_pointer caption) noexcept
+{
+  // TODO: use Layout::GetTextPadding()?
+  return height + 2 + look.check_box.font->TextSize(caption).width + 4;
+}
+
 void
 CheckBoxControl::SetState(bool value)
 {
@@ -184,6 +192,7 @@ CheckBoxControl::OnPaint(Canvas &canvas)
           : cb_look.standard))
     : cb_look.disabled;
 
+  // TODO: use Layout::GetTextPadding()?
   const unsigned padding = 2;
   unsigned size = canvas.GetHeight() - 2 * padding;
 

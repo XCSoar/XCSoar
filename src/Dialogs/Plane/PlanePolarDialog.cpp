@@ -84,9 +84,9 @@ private:
   void ImportClicked();
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
   /* methods from DataFieldListener */
   virtual void OnModified(DataField &df) override;
@@ -121,7 +121,8 @@ PlanePolarWidget::Update()
 }
 
 void
-PlanePolarWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+PlanePolarWidget::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
 {
   AddReadOnly(_("Name"), nullptr, plane.polar_name);
 
@@ -143,14 +144,14 @@ PlanePolarWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-PlanePolarWidget::Show(const PixelRect &rc)
+PlanePolarWidget::Show(const PixelRect &rc) noexcept
 {
   RowFormWidget::Show(rc);
   UpdateInvalidLabel();
 }
 
 bool
-PlanePolarWidget::Save(bool &_changed)
+PlanePolarWidget::Save(bool &_changed) noexcept
 {
   bool changed = false;
 
@@ -252,18 +253,17 @@ dlgPlanePolarShowModal(Plane &_plane)
   caption.Format(_T("%s: %s"), _("Plane Polar"), _plane.registration.c_str());
 
   const DialogLook &look = UIGlobals::GetDialogLook();
-  PlanePolarWidget widget(_plane, look);
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, caption, &widget);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<PlanePolarWidget>
+    dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(), look, caption);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.SetWidget(_plane, look);
+  dialog.GetWidget().CreateButtons(dialog);
   const int result = dialog.ShowModal();
-  dialog.StealWidget();
 
   if (result != mrOK)
     return false;
 
-  _plane = widget.GetValue();
+  _plane = dialog.GetWidget().GetValue();
   return true;
 }

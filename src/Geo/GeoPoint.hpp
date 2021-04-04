@@ -26,7 +26,6 @@ Copyright_License {
 #define XCSOAR_GeoPoint_HPP
 
 #include "Math/Angle.hpp"
-#include "util/Compiler.h"
 
 #include <type_traits>
 
@@ -135,7 +134,7 @@ struct GeoPoint {
    *
    * @return Location of point
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint Parametric(const GeoPoint &delta, double t) const;
 
   /**
@@ -146,7 +145,7 @@ struct GeoPoint {
    *
    * @return Location of point
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint Interpolate(const GeoPoint &end, double t) const;
 
   /**
@@ -156,7 +155,7 @@ struct GeoPoint {
    *
    * @return Modified point
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint operator* (const double x) const {
     GeoPoint res = *this;
     res.longitude *= x;
@@ -171,7 +170,7 @@ struct GeoPoint {
    *
    * @return Modified point
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint operator+ (const GeoPoint &delta) const {
     GeoPoint res = *this;
     res.longitude += delta.longitude;
@@ -199,7 +198,7 @@ struct GeoPoint {
    *
    * @return Modified point
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint operator- (const GeoPoint &delta) const {
     GeoPoint res = *this;
     res.longitude -= delta.longitude;
@@ -214,7 +213,7 @@ struct GeoPoint {
    *
    * @return Distance (m)
    */
-  gcc_pure
+  [[gnu::pure]]
   double Distance(const GeoPoint &other) const;
 
   /**
@@ -224,34 +223,34 @@ struct GeoPoint {
    *
    * @return Bearing (deg)
    */
-  gcc_pure
+  [[gnu::pure]]
   Angle Bearing(const GeoPoint &other) const;
 
   /**
    * Calculate great circle distance and initial bearing from this to the other
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoVector DistanceBearing(const GeoPoint &other) const;
 
   /**
    * Like Distance(), but use a simplified faster formula that may be
    * less accurate.
    */
-  gcc_pure
+  [[gnu::pure]]
   double DistanceS(const GeoPoint &other) const;
 
   /**
    * Like Bearing(), but use a simplified faster formula that may be
    * less accurate.
    */
-  gcc_pure
+  [[gnu::pure]]
   Angle BearingS(const GeoPoint &other) const;
 
   /**
    * Like DistanceBearing(), but use a simplified faster formula that
    * may be less accurate.
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoVector DistanceBearingS(const GeoPoint &other) const;
 
   /**
@@ -263,7 +262,7 @@ struct GeoPoint {
    *
    * @return Distance (m) along from-to line
    */
-  gcc_pure
+  [[gnu::pure]]
   double ProjectedDistance(const GeoPoint &from, const GeoPoint &to) const;
 
   /**
@@ -275,7 +274,7 @@ struct GeoPoint {
    *
    * @return Location of point
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint IntermediatePoint(const GeoPoint &destination,
                              double distance) const;
 
@@ -283,7 +282,7 @@ struct GeoPoint {
    * Find the nearest great-circle middle point between this point and
    * the specified one.
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint Middle(const GeoPoint &other) const;
 
   /**
@@ -329,7 +328,7 @@ struct GeoPoint {
    *
    * @return True if this point is further left (or if equal, lower) than the other
    */
-  gcc_pure
+  [[gnu::pure]]
   bool Sort(const GeoPoint &other) const;
 };
 

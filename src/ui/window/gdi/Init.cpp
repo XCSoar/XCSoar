@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
+#include "ui/canvas/gdi/GdiPlusBitmap.hpp"
 
 #include <windows.h>
 
@@ -34,6 +35,8 @@ using namespace UI;
 
 ScreenGlobalInit::ScreenGlobalInit()
 {
+  GdiStartup();
+
   event_queue = new EventQueue();
 
   HINSTANCE hInstance = ::GetModuleHandle(nullptr);
@@ -47,6 +50,8 @@ ScreenGlobalInit::~ScreenGlobalInit()
 {
   delete event_queue;
   event_queue = nullptr;
+
+  GdiShutdown();
 
   ScreenDeinitialized();
 }

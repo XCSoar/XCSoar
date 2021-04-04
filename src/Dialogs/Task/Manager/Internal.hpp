@@ -104,13 +104,13 @@ public:
   void Revert();
 
   /* virtual methods from class Widget */
-  void Initialise(ContainerWindow &parent, const PixelRect &rc) override;
-  void Show(const PixelRect &rc) override;
-  bool KeyPress(unsigned key_code) override;
+  void Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  bool KeyPress(unsigned key_code) noexcept override;
 
 protected:
   /* virtual methods from class PagerWidget */
-  void OnPageFlipped() override;
+  void OnPageFlipped() noexcept override;
 };
 
 #endif /* DLGTASKMANAGER_HPP */

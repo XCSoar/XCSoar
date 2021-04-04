@@ -32,7 +32,7 @@ Copyright_License {
 static AndroidDownloadManager *download_manager;
 
 bool
-Net::DownloadManager::Initialise()
+Net::DownloadManager::Initialise() noexcept
 {
   assert(download_manager == nullptr);
 
@@ -44,12 +44,12 @@ Net::DownloadManager::Initialise()
 }
 
 void
-Net::DownloadManager::BeginDeinitialise()
+Net::DownloadManager::BeginDeinitialise() noexcept
 {
 }
 
 void
-Net::DownloadManager::Deinitialise()
+Net::DownloadManager::Deinitialise() noexcept
 {
   delete download_manager;
   download_manager = nullptr;
@@ -57,13 +57,13 @@ Net::DownloadManager::Deinitialise()
 }
 
 bool
-Net::DownloadManager::IsAvailable()
+Net::DownloadManager::IsAvailable() noexcept
 {
   return download_manager != nullptr;
 }
 
 void
-Net::DownloadManager::AddListener(DownloadListener &listener)
+Net::DownloadManager::AddListener(DownloadListener &listener) noexcept
 {
   assert(download_manager != nullptr);
 
@@ -71,7 +71,7 @@ Net::DownloadManager::AddListener(DownloadListener &listener)
 }
 
 void
-Net::DownloadManager::RemoveListener(DownloadListener &listener)
+Net::DownloadManager::RemoveListener(DownloadListener &listener) noexcept
 {
   assert(download_manager != nullptr);
 
@@ -79,7 +79,7 @@ Net::DownloadManager::RemoveListener(DownloadListener &listener)
 }
 
 void
-Net::DownloadManager::Enumerate(DownloadListener &listener)
+Net::DownloadManager::Enumerate(DownloadListener &listener) noexcept
 {
   assert(download_manager != nullptr);
 
@@ -87,7 +87,7 @@ Net::DownloadManager::Enumerate(DownloadListener &listener)
 }
 
 void
-Net::DownloadManager::Enqueue(const char *uri, Path relative_path)
+Net::DownloadManager::Enqueue(const char *uri, Path relative_path) noexcept
 {
   assert(download_manager != nullptr);
 
@@ -95,7 +95,7 @@ Net::DownloadManager::Enqueue(const char *uri, Path relative_path)
 }
 
 void
-Net::DownloadManager::Cancel(Path relative_path)
+Net::DownloadManager::Cancel(Path relative_path) noexcept
 {
   assert(download_manager != nullptr);
 
@@ -105,7 +105,8 @@ Net::DownloadManager::Cancel(Path relative_path)
 #else /* !ANDROID */
 
 #include "ToFile.hpp"
-#include "Session.hpp"
+#include "Global.hxx"
+#include "Init.hpp"
 #include "thread/StandbyThread.hpp"
 #include "Operation/Operation.hpp"
 #include "LocalPath.hpp"
@@ -126,17 +127,15 @@ class DownloadManagerThread final
 
     Item(const Item &other) = delete;
 
-    Item(Item &&other)
-      :uri(std::move(other.uri)),
-       path_relative(std::move(other.path_relative)) {}
+    Item(Item &&other) noexcept = default;
 
-    Item(const char *_uri, Path _path_relative)
+    Item(const char *_uri, Path _path_relative) noexcept
       :uri(_uri), path_relative(_path_relative) {}
 
     Item &operator=(const Item &other) = delete;
 
     gcc_pure
-    bool operator==(Path other) const {
+    bool operator==(Path other) const noexcept {
       return path_relative == other;
     }
   };
@@ -151,22 +150,24 @@ class DownloadManagerThread final
 
   std::list<Net::DownloadListener *> listeners;
 
+  std::function<void()> cancel_handler;
+
 public:
-  DownloadManagerThread()
+  DownloadManagerThread() noexcept
     :StandbyThread("DownloadMgr"),
      current_size(-1), current_position(-1) {}
 
-  void StopAsync() {
+  void StopAsync() noexcept {
     std::lock_guard<Mutex> lock(mutex);
     StandbyThread::StopAsync();
   }
 
-  void WaitStopped() {
+  void WaitStopped() noexcept {
     std::lock_guard<Mutex> lock(mutex);
     StandbyThread::WaitStopped();
   }
 
-  void AddListener(Net::DownloadListener &listener) {
+  void AddListener(Net::DownloadListener &listener) noexcept {
     std::lock_guard<Mutex> lock(mutex);
 
     assert(std::find(listeners.begin(), listeners.end(),
@@ -175,7 +176,7 @@ public:
     listeners.push_back(&listener);
   }
 
-  void RemoveListener(Net::DownloadListener &listener) {
+  void RemoveListener(Net::DownloadListener &listener) noexcept {
     std::lock_guard<Mutex> lock(mutex);
 
     auto i = std::find(listeners.begin(), listeners.end(), &listener);
@@ -183,7 +184,7 @@ public:
     listeners.erase(i);
   }
 
-  void Enumerate(Net::DownloadListener &listener) {
+  void Enumerate(Net::DownloadListener &listener) noexcept {
     std::lock_guard<Mutex> lock(mutex);
 
     for (auto i = queue.begin(), end = queue.end(); i != end; ++i) {
@@ -199,7 +200,7 @@ public:
     }
   }
 
-  void Enqueue(const char *uri, Path path_relative) {
+  void Enqueue(const char *uri, Path path_relative) noexcept {
     std::lock_guard<Mutex> lock(mutex);
     queue.emplace_back(uri, path_relative);
 
@@ -210,7 +211,7 @@ public:
       Trigger();
   }
 
-  void Cancel(Path relative_path) {
+  void Cancel(Path relative_path) noexcept {
     std::lock_guard<Mutex> lock(mutex);
 
     auto i = std::find(queue.begin(), queue.end(), relative_path);
@@ -221,6 +222,11 @@ public:
       /* current download; stop the thread to cancel the current file
          and restart the thread to continue downloading the following
          files */
+
+      if (cancel_handler) {
+        const ScopeUnlock unlock(mutex);
+        cancel_handler();
+      }
 
       StandbyThread::StopAsync();
       StandbyThread::WaitStopped();
@@ -233,12 +239,12 @@ public:
     }
 
     for (auto *listener : listeners)
-      listener->OnDownloadComplete(relative_path, false);
+      listener->OnDownloadError(relative_path, {});
   }
 
 private:
-  void ProcessQueue(Net::Session &session);
-  void FailQueue();
+  void ProcessQueue(CurlGlobal &curl) noexcept;
+  void FailQueue() noexcept;
 
 protected:
   /* methods from class StandbyThread */
@@ -246,34 +252,39 @@ protected:
 
 private:
   /* methods from class OperationEnvironment */
-  bool IsCancelled() const override {
+  bool IsCancelled() const noexcept override {
     std::lock_guard<Mutex> lock(const_cast<Mutex &>(mutex));
     return StandbyThread::IsStopped();
   }
 
-  void SetProgressRange(unsigned range) override {
+  void SetCancelHandler(std::function<void()> handler) noexcept override {
+    std::lock_guard<Mutex> lock(mutex);
+    cancel_handler = std::move(handler);
+  }
+
+  void SetProgressRange(unsigned range) noexcept override {
     std::lock_guard<Mutex> lock(mutex);
     current_size = range;
   }
 
-  void SetProgressPosition(unsigned position) override {
+  void SetProgressPosition(unsigned position) noexcept override {
     std::lock_guard<Mutex> lock(mutex);
     current_position = position;
   }
 };
 
 static bool
-DownloadToFileTransaction(Net::Session &session,
+DownloadToFileTransaction(CurlGlobal &curl,
                           const char *url, Path path,
                           std::array<std::byte, 32> *sha256, OperationEnvironment &env)
 {
   FileTransaction transaction(path);
-  DownloadToFile(session, url, transaction.GetTemporaryPath(), sha256, env);
+  Net::DownloadToFile(curl, url, transaction.GetTemporaryPath(), sha256, env);
   return transaction.Commit();
 }
 
 inline void
-DownloadManagerThread::ProcessQueue(Net::Session &session)
+DownloadManagerThread::ProcessQueue(CurlGlobal &curl) noexcept
 {
   while (!queue.empty() && !StandbyThread::IsStopped()) {
     assert(current_size == -1);
@@ -283,33 +294,43 @@ DownloadManagerThread::ProcessQueue(Net::Session &session)
     current_position = 0;
 
     bool success = false;
+    std::exception_ptr error;
+
     try {
       const ScopeUnlock unlock(mutex);
-      success = DownloadToFileTransaction(session, item.uri.c_str(),
+      success = DownloadToFileTransaction(curl, item.uri.c_str(),
                                           LocalPath(item.path_relative.c_str()),
                                           nullptr, *this);
     } catch (...) {
-      LogError(std::current_exception());
+      error = std::current_exception();
+      LogError(error);
     }
 
     current_size = current_position = -1;
+    cancel_handler = {};
+
     const AllocatedPath path_relative(std::move(queue.front().path_relative));
     queue.pop_front();
 
-    for (auto *listener : listeners)
-      listener->OnDownloadComplete(path_relative, success);
+    if (success) {
+      for (auto *listener : listeners)
+        listener->OnDownloadComplete(path_relative);
+    } else {
+      for (auto *listener : listeners)
+        listener->OnDownloadError(path_relative, error);
+    }
   }
 }
 
 inline void
-DownloadManagerThread::FailQueue()
+DownloadManagerThread::FailQueue() noexcept
 {
   while (!queue.empty() && !StandbyThread::IsStopped()) {
     const AllocatedPath path_relative(std::move(queue.front().path_relative));
     queue.pop_front();
 
     for (auto *listener : listeners)
-      listener->OnDownloadComplete(path_relative, false);
+      listener->OnDownloadError(path_relative, {});
   }
 }
 
@@ -317,8 +338,7 @@ void
 DownloadManagerThread::Tick() noexcept
 {
   try {
-    Net::Session session;
-    ProcessQueue(session);
+    ProcessQueue(*Net::curl);
   } catch (...) {
     LogError(std::current_exception());
     FailQueue();
@@ -328,7 +348,7 @@ DownloadManagerThread::Tick() noexcept
 static DownloadManagerThread *thread;
 
 bool
-Net::DownloadManager::Initialise()
+Net::DownloadManager::Initialise() noexcept
 {
   assert(thread == nullptr);
 
@@ -337,7 +357,7 @@ Net::DownloadManager::Initialise()
 }
 
 void
-Net::DownloadManager::BeginDeinitialise()
+Net::DownloadManager::BeginDeinitialise() noexcept
 {
   assert(thread != nullptr);
 
@@ -345,7 +365,7 @@ Net::DownloadManager::BeginDeinitialise()
 }
 
 void
-Net::DownloadManager::Deinitialise()
+Net::DownloadManager::Deinitialise() noexcept
 {
   assert(thread != nullptr);
 
@@ -354,7 +374,7 @@ Net::DownloadManager::Deinitialise()
 }
 
 bool
-Net::DownloadManager::IsAvailable()
+Net::DownloadManager::IsAvailable() noexcept
 {
   assert(thread != nullptr);
 
@@ -362,7 +382,7 @@ Net::DownloadManager::IsAvailable()
 }
 
 void
-Net::DownloadManager::AddListener(DownloadListener &listener)
+Net::DownloadManager::AddListener(DownloadListener &listener) noexcept
 {
   assert(thread != nullptr);
 
@@ -370,7 +390,7 @@ Net::DownloadManager::AddListener(DownloadListener &listener)
 }
 
 void
-Net::DownloadManager::RemoveListener(DownloadListener &listener)
+Net::DownloadManager::RemoveListener(DownloadListener &listener) noexcept
 {
   assert(thread != nullptr);
 
@@ -378,7 +398,7 @@ Net::DownloadManager::RemoveListener(DownloadListener &listener)
 }
 
 void
-Net::DownloadManager::Enumerate(DownloadListener &listener)
+Net::DownloadManager::Enumerate(DownloadListener &listener) noexcept
 {
   assert(thread != nullptr);
 
@@ -386,7 +406,7 @@ Net::DownloadManager::Enumerate(DownloadListener &listener)
 }
 
 void
-Net::DownloadManager::Enqueue(const char *uri, Path relative_path)
+Net::DownloadManager::Enqueue(const char *uri, Path relative_path) noexcept
 {
   assert(thread != nullptr);
 
@@ -394,7 +414,7 @@ Net::DownloadManager::Enqueue(const char *uri, Path relative_path)
 }
 
 void
-Net::DownloadManager::Cancel(Path relative_path)
+Net::DownloadManager::Cancel(Path relative_path) noexcept
 {
   assert(thread != nullptr);
 

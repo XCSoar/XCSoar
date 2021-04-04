@@ -71,13 +71,12 @@ public:
   ToolsWidget(const DialogLook &look):RowFormWidget(look) {}
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 };
 
-
 void
-ToolsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ToolsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   ScriptFileVisitor sfv(list);
   Directory::VisitFiles(Path(_T("/mnt/onboard/XCSoarData/kobo/scripts")), sfv);
@@ -97,10 +96,9 @@ void
 ShowToolsDialog()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  ToolsWidget widget(look);
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("Tools"), &widget);
+  TWidgetDialog<ToolsWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(), look, _("Tools"));
   dialog.AddButton(_("Close"), mrOK);
+  dialog.SetWidget(look);
   dialog.ShowModal();
-  dialog.StealWidget();
 }

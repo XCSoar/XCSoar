@@ -29,11 +29,13 @@ Copyright_License {
 #include <cassert>
 
 namespace OpenGL {
-  GLArrayBuffer *circle_buffer, *small_circle_buffer;
-}
+
+GLArrayBuffer *circle_buffer, *small_circle_buffer;
+
+} // namespace OpenGL
 
 static GLArrayBuffer *
-MakeCircleBuffer(unsigned n)
+MakeCircleBuffer(unsigned n) noexcept
 {
   assert(INT_ANGLE_RANGE % n == 0);
 
@@ -58,7 +60,7 @@ MakeCircleBuffer(unsigned n)
 }
 
 void
-OpenGL::InitShapes()
+OpenGL::InitShapes() noexcept
 {
   DeinitShapes();
 
@@ -69,7 +71,7 @@ OpenGL::InitShapes()
 }
 
 void
-OpenGL::DeinitShapes()
+OpenGL::DeinitShapes() noexcept
 {
   delete circle_buffer;
   circle_buffer = nullptr;

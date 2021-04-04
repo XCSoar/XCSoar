@@ -77,17 +77,17 @@ public:
 
 public:
   /* virtual methods from class TaskInterface */
-  virtual unsigned TaskSize() const override;
-  virtual TaskWaypoint *GetActiveTaskPoint() const override;
-  virtual void SetActiveTaskPoint(unsigned index) override;
-  virtual bool IsValidTaskPoint(const int index_offset) const override;
+  unsigned TaskSize() const noexcept override;
+  TaskWaypoint *GetActiveTaskPoint() const noexcept override;
+  void SetActiveTaskPoint(unsigned index) noexcept override;
+  bool IsValidTaskPoint(const int index_offset) const noexcept override;
 
 protected:
-  virtual bool UpdateSample(const AircraftState &state_now,
-                            const GlidePolar &glide_polar,
-                            const bool full_update) override;
+  bool UpdateSample(const AircraftState &state_now,
+                    const GlidePolar &glide_polar,
+                    bool full_update) noexcept override;
 public:
-  virtual void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const override;
+  void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const override;
 };
 
 #endif //GOTOTASK_H

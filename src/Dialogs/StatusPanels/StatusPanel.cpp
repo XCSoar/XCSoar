@@ -24,7 +24,7 @@ Copyright_License {
 #include "StatusPanel.hpp"
 
 void
-StatusPanel::Show(const PixelRect &rc)
+StatusPanel::Show(const PixelRect &rc) noexcept
 {
   Refresh();
   RowFormWidget::Show(rc);

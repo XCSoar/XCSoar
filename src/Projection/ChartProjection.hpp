@@ -39,25 +39,27 @@ public:
 
   explicit ChartProjection(const PixelRect &rc,
                            const TaskProjection &task_projection,
-                           double radius_factor=1.1) {
+                           double radius_factor=1.1) noexcept
+  {
     Set(rc, task_projection, radius_factor);
   }
 
-  ChartProjection(const PixelRect &rc, const OrderedTask &task) {
+  ChartProjection(const PixelRect &rc, const OrderedTask &task) noexcept {
     Set(rc, task);
   }
 
-  ChartProjection(const PixelRect &rc, const OrderedTaskPoint &point) {
+  ChartProjection(const PixelRect &rc,
+                  const OrderedTaskPoint &point) noexcept {
     Set(rc, point);
   }
 
   void Set(const PixelRect &rc, const TaskProjection &task_projection,
-           double radius_factor=1.1);
+           double radius_factor=1.1) noexcept;
 
-  void Set(const PixelRect &rc, const OrderedTask &task);
+  void Set(const PixelRect &rc, const OrderedTask &task) noexcept;
 
-  void Set(const PixelRect &rc, const OrderedTaskPoint &point);
+  void Set(const PixelRect &rc, const OrderedTaskPoint &point) noexcept;
 
 private:
-  void Set(const PixelRect &rc, const GeoPoint &center, double radius);
+  void Set(const PixelRect &rc, const GeoPoint &center, double radius) noexcept;
 };

@@ -73,7 +73,7 @@ TargetMapWindow::isClickOnTarget(const PixelPoint pc) const
   if (!t.IsValid())
     return false;
 
-  const GeoPoint gp = projection.ScreenToGeo(pc.x, pc.y);
+  const GeoPoint gp = projection.ScreenToGeo(pc);
   if (projection.GeoToScreenDistance(gp.DistanceS(t)) < Layout::GetHitRadius())
     return true;
 

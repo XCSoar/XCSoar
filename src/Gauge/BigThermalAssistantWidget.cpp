@@ -40,7 +40,7 @@ BigThermalAssistantWidget::BigThermalAssistantWidget(LiveBlackboard &_blackboard
 BigThermalAssistantWidget::~BigThermalAssistantWidget() noexcept = default;
 
 void
-BigThermalAssistantWidget::UpdateLayout()
+BigThermalAssistantWidget::UpdateLayout() noexcept
 {
   const PixelRect rc = GetContainer().GetClientRect();
   view->Move(rc);
@@ -58,14 +58,14 @@ BigThermalAssistantWidget::UpdateLayout()
 
 void
 BigThermalAssistantWidget::Update(const AttitudeState &attitude,
-                                  const DerivedInfo &calculated)
+                                  const DerivedInfo &calculated) noexcept
 {
   view->Update(attitude, calculated);
 }
 
 void
 BigThermalAssistantWidget::Prepare(ContainerWindow &parent,
-                                   const PixelRect &_rc)
+                                   const PixelRect &_rc) noexcept
 {
   ContainerWidget::Prepare(parent, _rc);
 
@@ -82,7 +82,7 @@ BigThermalAssistantWidget::Prepare(ContainerWindow &parent,
 }
 
 void
-BigThermalAssistantWidget::Show(const PixelRect &rc)
+BigThermalAssistantWidget::Show(const PixelRect &rc) noexcept
 {
   Update(blackboard.Basic().attitude, blackboard.Calculated());
 
@@ -96,14 +96,14 @@ BigThermalAssistantWidget::Show(const PixelRect &rc)
 }
 
 void
-BigThermalAssistantWidget::Hide()
+BigThermalAssistantWidget::Hide() noexcept
 {
   blackboard.RemoveListener(*this);
   ContainerWidget::Hide();
 }
 
 void
-BigThermalAssistantWidget::Move(const PixelRect &rc)
+BigThermalAssistantWidget::Move(const PixelRect &rc) noexcept
 {
   ContainerWidget::Move(rc);
 
@@ -111,7 +111,7 @@ BigThermalAssistantWidget::Move(const PixelRect &rc)
 }
 
 bool
-BigThermalAssistantWidget::SetFocus()
+BigThermalAssistantWidget::SetFocus() noexcept
 {
   return false;
 }

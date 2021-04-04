@@ -45,11 +45,11 @@ public:
     :RowFormWidget(look), device(_device), info(info) {}
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 };
 
 void
-ManageNanoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ManageNanoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   StaticString<64> buffer;
 

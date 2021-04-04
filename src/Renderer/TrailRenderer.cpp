@@ -61,7 +61,7 @@ TrailRenderer::LoadTrace(const TraceComputer &trace_computer,
  * @param vario Input value between min_vario and max_vario
  * @return SnailTrail color array index
  */
-gcc_const
+[[gnu::const]]
 static unsigned
 GetSnailColorIndex(double vario, double min_vario, double max_vario)
 {
@@ -71,7 +71,7 @@ GetSnailColorIndex(double vario, double min_vario, double max_vario)
                0, (int)(TrailLook::NUMSNAILCOLORS - 1));
 }
 
-gcc_const
+[[gnu::const]]
 static unsigned
 GetAltitudeColorIndex(double alt, double min_alt, double max_alt)
 {

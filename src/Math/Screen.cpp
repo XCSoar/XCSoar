@@ -24,6 +24,7 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Math/Angle.hpp"
 #include "Math/FastMath.hpp"
+#include "FastRotation.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/dim/Point.hpp"
 #include "ui/dim/BulkPoint.hpp"
@@ -33,7 +34,7 @@ Copyright_License {
 
 PixelPoint
 ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
-                   const PixelPoint &p3, int offset)
+                   const PixelPoint &p3, int offset) noexcept
 {
   const PixelPoint v12 = p2 - p1;
   const PixelPoint v13 = p3 - p1;
@@ -65,15 +66,26 @@ ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
 /*
  * Divide x by 2^12, rounded to nearest integer.
  */
-static int
-roundshift(int x)
+template<int SHIFT>
+static constexpr int
+roundshift(int x) noexcept
 {
+  constexpr int ONE = 1 << SHIFT;
+  constexpr int HALF = ONE / 2;
+
   if (x > 0) {
-    x += 2048;
+    x += HALF;
   } else if (x < 0) {
-    x -= 2048;
+    x -= HALF;
   }
-  return x >> 12;
+  return x >> SHIFT;
+}
+
+template<int SHIFT>
+static constexpr PixelPoint
+roundshift(PixelPoint p) noexcept
+{
+  return {roundshift<SHIFT>(p.x), roundshift<SHIFT>(p.y)};
 }
 
 void
@@ -82,11 +94,14 @@ PolygonRotateShift(BulkPixelPoint *poly,
                    const PixelPoint shift,
                    Angle angle,
                    int scale,
-                   const bool use_fast_scale)
+                   const bool use_fast_scale) noexcept
 {
-  const int xs = shift.x, ys = shift.y;
   if (use_fast_scale)
     scale = Layout::FastScale(scale);
+
+  constexpr int SCALE_SHIFT = 2;
+  constexpr int TOTAL_SHIFT = FastIntegerRotation::SHIFT + SCALE_SHIFT;
+
   /*
    * About the scaling...
    *  - We want to divide the raster points by 100 in order to scale the
@@ -99,17 +114,14 @@ PolygonRotateShift(BulkPixelPoint *poly,
    *    early but outside the loop, and divide by 2^12 late, inside the
    *    loop using roundshift.
    */
-  const int cost = angle.ifastcosine() * scale / 25;
-  const int sint = angle.ifastsine() * scale / 25;
+  FastIntegerRotation fr(angle);
+  fr.Scale(scale / (100 >> SCALE_SHIFT));
 
   BulkPixelPoint *p = poly;
   const BulkPixelPoint *pe = poly + n;
 
   while (p < pe) {
-    int x = p->x;
-    int y = p->y;
-    p->x = roundshift(x * cost - y * sint) + xs;
-    p->y = roundshift(y * cost + x * sint) + ys;
+    *p = roundshift<TOTAL_SHIFT>(fr.RotateRaw(*p)) + shift;
     p++;
   }
 }

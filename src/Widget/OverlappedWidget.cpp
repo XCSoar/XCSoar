@@ -25,7 +25,7 @@ Copyright_License {
 #include "ui/window/Window.hpp"
 
 void
-OverlappedWidget::Raise()
+OverlappedWidget::Raise() noexcept
 {
   assert(IsDefined());
   assert(GetWindow().IsVisible());
@@ -36,7 +36,7 @@ OverlappedWidget::Raise()
 #ifdef USE_WINUSER
 
 void
-OverlappedWidget::Hide()
+OverlappedWidget::Hide() noexcept
 {
   assert(IsDefined());
   assert(GetWindow().IsVisible());

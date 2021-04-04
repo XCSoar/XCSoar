@@ -32,7 +32,7 @@
 void
 CrossSectionWidget::Update(const MoreData &basic,
                            const DerivedInfo &calculated,
-                           const MapSettings &settings)
+                           const MapSettings &settings) noexcept
 {
   CrossSectionWindow &w = (CrossSectionWindow &)GetWindow();
 
@@ -53,7 +53,8 @@ CrossSectionWidget::Update(const MoreData &basic,
 }
 
 void
-CrossSectionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+CrossSectionWidget::Prepare(ContainerWindow &parent,
+                            const PixelRect &rc) noexcept
 {
   const Look &look = UIGlobals::GetLook();
 
@@ -73,7 +74,7 @@ CrossSectionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-CrossSectionWidget::Show(const PixelRect &rc)
+CrossSectionWidget::Show(const PixelRect &rc) noexcept
 {
   Update(CommonInterface::Basic(), CommonInterface::Calculated(),
          CommonInterface::GetMapSettings());
@@ -83,7 +84,7 @@ CrossSectionWidget::Show(const PixelRect &rc)
 }
 
 void
-CrossSectionWidget::Hide()
+CrossSectionWidget::Hide() noexcept
 {
   WindowWidget::Hide();
 

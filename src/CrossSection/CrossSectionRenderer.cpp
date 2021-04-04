@@ -39,10 +39,11 @@ CrossSectionRenderer::CrossSectionRenderer(const CrossSectionLook &_look,
                                            const AirspaceLook &_airspace_look,
                                            const ChartLook &_chart_look,
                                            const bool &_inverse)
-    :inverse(_inverse), look(_look), chart_look(_chart_look), airspace_renderer(_airspace_look),
-   terrain_renderer(look), terrain(NULL), airspace_database(NULL),
-   start(GeoPoint::Invalid()),
-   vec(50000, Angle::Zero()) {}
+  :inverse(_inverse), look(_look), chart_look(_chart_look),
+   airspace_renderer(_airspace_look),
+   terrain_renderer(look)
+ {
+ }
 
 void
 CrossSectionRenderer::ReadBlackboard(const MoreData &_gps_info,
@@ -63,6 +64,11 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
 {
   ChartRenderer chart(chart_look, canvas, rc);
 
+  chart.SetXLabel(_T("D"), Units::GetDistanceName());
+  chart.SetYLabel(_T("h"), Units::GetAltitudeName());
+
+  chart.Begin();
+
   if (!vec.IsValid() || !start.IsValid()) {
     chart.DrawNoData(_("Not moving"));
     return;
@@ -78,7 +84,6 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
   auto hmin = fdim(nav_altitude, 3300);
   auto hmax = std::max(3300., nav_altitude + 1000.);
 
-  chart.ResetScale();
   chart.ScaleXFromValue(0);
   chart.ScaleXFromValue(vec.distance);
   chart.ScaleYFromValue(hmin);
@@ -102,6 +107,8 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
   canvas.Select(*look.grid_font);
 
   PaintGrid(canvas, chart);
+
+  chart.Finish();
 }
 
 void
@@ -199,7 +206,4 @@ CrossSectionRenderer::PaintGrid(Canvas &canvas, ChartRenderer &chart) const
 
   chart.DrawXGrid(Units::ToSysDistance(5),5, ChartRenderer::UnitFormat::NUMERIC);
   chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, ChartRenderer::UnitFormat::NUMERIC);
-
-  chart.DrawXLabel(_T("D"), Units::GetDistanceName());
-  chart.DrawYLabel(_T("h"), Units::GetAltitudeName());
 }

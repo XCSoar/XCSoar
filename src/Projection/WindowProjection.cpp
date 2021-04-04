@@ -22,69 +22,64 @@ Copyright_License {
 */
 
 #include "WindowProjection.hpp"
+#include "Geo/Quadrilateral.hpp"
 
-bool
-WindowProjection::GeoVisible(const GeoPoint &loc) const
+std::optional<PixelPoint>
+WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc) const noexcept
 {
-  return screen_bounds.IsInside(loc);
-}
+  if (!GeoVisible(loc))
+    return {};
 
-bool
-WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc, PixelPoint &sc) const
-{
-  if (GeoVisible(loc)) {
-    sc = GeoToScreen(loc);
-    return ScreenVisible(sc);
-  }
+  auto p = GeoToScreen(loc);
+  if (!ScreenVisible(p))
+    return {};
 
-  return false;
-}
-
-bool
-WindowProjection::ScreenVisible(const PixelPoint &P) const
-{
-  assert(screen_size_initialised);
-
-  return P.x >= 0 && (unsigned)P.x < screen_size.x &&
-    P.y >= 0 && (unsigned)P.y < screen_size.y;
+  return p;
 }
 
 void
-WindowProjection::SetScaleFromRadius(double radius)
+WindowProjection::SetScaleFromRadius(double radius) noexcept
 {
   SetScale(double(GetMinScreenDistance()) / (radius * 2));
 }
 
 double
-WindowProjection::GetMapScale() const
+WindowProjection::GetMapScale() const noexcept
 {
   return DistancePixelsToMeters(GetMapResolutionFactor());
 }
 
 double
-WindowProjection::GetScreenDistanceMeters() const
+WindowProjection::GetScreenDistanceMeters() const noexcept
 {
   return DistancePixelsToMeters(GetScreenDistance());
 }
 
 GeoPoint
-WindowProjection::GetGeoScreenCenter() const
+WindowProjection::GetGeoScreenCenter() const noexcept
 {
-  return ScreenToGeo(GetScreenWidth() / 2, GetScreenHeight() / 2);
+  return ScreenToGeo(GetScreenCenter());
+}
+
+GeoQuadrilateral
+WindowProjection::GetGeoQuadrilateral() const noexcept
+{
+  const auto r = GetScreenRect();
+  return {
+    ScreenToGeo(r.GetTopLeft()),
+    ScreenToGeo(r.GetTopRight()),
+    ScreenToGeo(r.GetBottomLeft()),
+    ScreenToGeo(r.GetBottomRight()),
+  };
 }
 
 void
-WindowProjection::UpdateScreenBounds()
+WindowProjection::UpdateScreenBounds() noexcept
 {
   assert(screen_size_initialised);
 
   if (!IsValid())
     return;
 
-  GeoBounds sb(ScreenToGeo(0, 0));
-  sb.Extend(ScreenToGeo(screen_size.x, 0));
-  sb.Extend(ScreenToGeo(screen_size.x, screen_size.y));
-  sb.Extend(ScreenToGeo(0, screen_size.y));
-
-  screen_bounds = sb;
+  screen_bounds = GetGeoQuadrilateral().GetBounds();
 }

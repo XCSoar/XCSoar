@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef TASK_STORE_HPP
 #define TASK_STORE_HPP
 
-#include "util/Compiler.h"
 #include "system/Path.hpp"
 #include "util/tstring.hpp"
 
@@ -61,19 +60,19 @@ public:
     Item(Item &&) = default;
     Item &operator=(Item &&) = default;
 
-    gcc_pure
+    [[gnu::pure]]
     tstring::const_pointer GetName() const {
       return task_name.c_str();
     }
 
-    gcc_pure
+    [[gnu::pure]]
     Path GetPath() const {
       return filename;
     }
 
     const OrderedTask *GetTask(const TaskBehaviour &task_behaviour) noexcept;
 
-    gcc_pure
+    [[gnu::pure]]
     bool operator<(const TaskStore::Item &other) const {
       return task_name.compare(other.task_name) < 0;
     }
@@ -105,7 +104,7 @@ public:
    * Return the number of tasks in the TaskStore
    * @return The number of tasks in the TaskStore
    */
-  gcc_pure
+  [[gnu::pure]]
   size_t Size() const {
     return store.size();
   }
@@ -116,7 +115,7 @@ public:
    * @param index TaskStore index of the desired Task
    * @return Filename of the task defined by the given index
    */
-  gcc_pure
+  [[gnu::pure]]
   tstring::const_pointer GetName(unsigned index) const;
 
   /**
@@ -125,7 +124,7 @@ public:
    * @param index TaskStore index of the desired Task
    * @return pathname of the task defined by the given index
    */
-  gcc_pure
+  [[gnu::pure]]
   Path GetPath(unsigned index) const;
 
   /**

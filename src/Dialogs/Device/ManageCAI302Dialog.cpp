@@ -47,7 +47,7 @@ public:
     :RowFormWidget(look), device(_device) {}
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 };
 
 static void
@@ -80,7 +80,8 @@ UploadWaypoints(const DialogLook &look, CAI302Device &device)
 }
 
 void
-ManageCAI302Widget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ManageCAI302Widget::Prepare(ContainerWindow &parent,
+                            const PixelRect &rc) noexcept
 {
   AddButton(_("Units"), [this](){
     EditUnits(GetLook(), device);

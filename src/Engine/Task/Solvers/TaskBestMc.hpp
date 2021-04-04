@@ -95,11 +95,11 @@ private:
    *
    * @return True if solution is valid
    */
-  gcc_pure
+  [[gnu::pure]]
   bool valid(double mc) const;
 
   /* virtual methods from class ZeroFinder */
-  virtual double f(double mc) override;
+  virtual double f(double mc) noexcept override;
 };
 
 #endif

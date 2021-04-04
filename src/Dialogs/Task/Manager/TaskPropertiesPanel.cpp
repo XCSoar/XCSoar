@@ -198,7 +198,8 @@ TaskPropertiesPanel::OnModified(DataField &df)
 }
 
 void
-TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TaskPropertiesPanel::Prepare(ContainerWindow &parent,
+                             const PixelRect &rc) noexcept
 {
   DataFieldEnum *dfe = new DataFieldEnum(this);
   dfe->EnableItemHelp(true);
@@ -264,13 +265,13 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-TaskPropertiesPanel::ReClick()
+TaskPropertiesPanel::ReClick() noexcept
 {
   dialog.TaskViewClicked();
 }
 
 void
-TaskPropertiesPanel::Show(const PixelRect &rc)
+TaskPropertiesPanel::Show(const PixelRect &rc) noexcept
 {
   ordered_task = ordered_task_pointer.get();
   orig_taskType = ordered_task->GetFactoryType();
@@ -281,7 +282,7 @@ TaskPropertiesPanel::Show(const PixelRect &rc)
 }
 
 bool
-TaskPropertiesPanel::Leave()
+TaskPropertiesPanel::Leave() noexcept
 {
   ReadValues();
   if (orig_taskType != ordered_task->GetFactoryType()) {

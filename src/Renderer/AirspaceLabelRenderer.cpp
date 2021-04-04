@@ -36,7 +36,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Sizes.h"
 
-class AirspaceMapVisible : public AirspacePredicate
+class AirspaceMapVisible
 {
   const AirspaceVisibility visible_predicate;
   const AirspaceWarningCopy &warnings;
@@ -49,6 +49,7 @@ public:
     :visible_predicate(_computer_settings, _renderer_settings, _state),
      warnings(_warnings) {}
 
+  [[gnu::pure]]
   bool operator()(const AbstractAirspace& airspace) const {
     return visible_predicate(airspace) ||
       warnings.IsInside(airspace) ||
@@ -92,7 +93,7 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
                                     const WindowProjection &projection,
                                     const AirspaceRendererSettings &settings,
                                     const AirspaceWarningCopy &awc,
-                                    const AirspacePredicate &visible,
+                                    AirspacePredicate visible,
                                     const AirspaceWarningConfig &config)
 {
   AirspaceLabelList labels;

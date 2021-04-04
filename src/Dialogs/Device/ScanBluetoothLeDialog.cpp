@@ -86,7 +86,7 @@ public:
 
 private:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
   /* virtual methods from class ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -145,7 +145,8 @@ private:
 };
 
 void
-ScanBluetoothLeWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ScanBluetoothLeWidget::Prepare(ContainerWindow &parent,
+                               const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -169,12 +170,13 @@ ScanBluetoothLeWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 std::string
 ScanBluetoothLeDialog() noexcept
 {
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(), _("Bluetooth LE"));
-  ScanBluetoothLeWidget widget(dialog);
+  TWidgetDialog<ScanBluetoothLeWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(), _("Bluetooth LE"));
+  dialog.SetWidget(dialog);
 
   const auto env = Java::GetEnv();
-  const auto callback = BluetoothHelper::StartLeScan(env, widget);
+  const auto callback = BluetoothHelper::StartLeScan(env, dialog.GetWidget());
   if (callback == nullptr) {
     const TCHAR *message =
       _("Bluetooth LE is not available on this device.");
@@ -182,17 +184,14 @@ ScanBluetoothLeDialog() noexcept
     return {};
   }
 
-  widget.CreateButtons();
+  dialog.GetWidget().CreateButtons();
   dialog.AddButton(_("Cancel"), mrCancel);
-  dialog.FinishPreliminary(&widget);
 
   int result = dialog.ShowModal();
   BluetoothHelper::StopLeScan(env, callback);
 
-  dialog.StealWidget();
-
   if (result != mrOK)
     return {};
 
-  return widget.GetSelectedAddress();
+  return dialog.GetWidget().GetSelectedAddress();
 }

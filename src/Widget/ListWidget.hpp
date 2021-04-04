@@ -39,22 +39,22 @@ class ListWidget
   : public WindowWidget, protected ListItemRenderer,
     protected ListCursorHandler {
 protected:
-  const ListControl &GetList() const {
+  const ListControl &GetList() const noexcept {
     return (const ListControl &)GetWindow();
   }
 
-  ListControl &GetList() {
+  ListControl &GetList() noexcept {
     return (ListControl &)GetWindow();
   }
 
   ListControl &CreateList(ContainerWindow &parent, const DialogLook &look,
-                          const PixelRect &rc, unsigned row_height);
+                          const PixelRect &rc, unsigned row_height) noexcept;
 
 public:
-  PixelSize GetMinimumSize() const override;
-  PixelSize GetMaximumSize() const override;
+  PixelSize GetMinimumSize() const noexcept override;
+  PixelSize GetMaximumSize() const noexcept override;
 
-  bool SetFocus() override {
+  bool SetFocus() noexcept override {
     GetList().SetFocus();
     return true;
   }

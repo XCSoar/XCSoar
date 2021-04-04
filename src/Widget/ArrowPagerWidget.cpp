@@ -27,8 +27,10 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
+#include "Renderer/TextButtonRenderer.hpp"
 
-ArrowPagerWidget::Layout::Layout(PixelRect rc, const Widget *extra_widget)
+ArrowPagerWidget::Layout::Layout(const ButtonLook &look, PixelRect rc,
+                                 const Widget *extra_widget) noexcept
   :main(rc)
 {
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
@@ -39,7 +41,20 @@ ArrowPagerWidget::Layout::Layout(PixelRect rc, const Widget *extra_widget)
   if (width > height) {
     /* landscape */
 
-    main.left += ::Layout::Scale(70);
+    const unsigned close_button_width =
+      TextButtonRenderer::GetMinimumButtonWidth(look, _("Close"));
+    const unsigned arrow_buttons_width =
+      2 * ::Layout::GetMaximumControlHeight();
+
+    unsigned left_column_width = std::max(close_button_width,
+                                          arrow_buttons_width);
+    if (extra_widget != nullptr) {
+      const auto max_size = extra_widget->GetMaximumSize();
+      if (max_size.width > left_column_width)
+        left_column_width = max_size.width;
+    }
+
+    main.left += left_column_width;
 
     /* close button on the bottom left */
 
@@ -98,7 +113,7 @@ ArrowPagerWidget::Layout::Layout(PixelRect rc, const Widget *extra_widget)
 }
 
 PixelSize
-ArrowPagerWidget::GetMinimumSize() const
+ArrowPagerWidget::GetMinimumSize() const noexcept
 {
   PixelSize result = PagerWidget::GetMinimumSize();
   result.width += ::Layout::Scale(50u);
@@ -107,7 +122,7 @@ ArrowPagerWidget::GetMinimumSize() const
 }
 
 PixelSize
-ArrowPagerWidget::GetMaximumSize() const
+ArrowPagerWidget::GetMaximumSize() const noexcept
 {
   PixelSize result = PagerWidget::GetMinimumSize();
   result.width += ::Layout::Scale(80u);
@@ -117,7 +132,7 @@ ArrowPagerWidget::GetMaximumSize() const
 
 void
 ArrowPagerWidget::Initialise(ContainerWindow &parent,
-                             const PixelRect &rc)
+                             const PixelRect &rc) noexcept
 {
   PagerWidget::Initialise(parent, rc);
 
@@ -126,9 +141,10 @@ ArrowPagerWidget::Initialise(ContainerWindow &parent,
 }
 
 void
-ArrowPagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ArrowPagerWidget::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
 {
-  const Layout layout(rc, extra.get());
+  const Layout layout(look, rc, extra.get());
   PagerWidget::Prepare(parent, layout.main);
 
   if (extra != nullptr)
@@ -149,9 +165,9 @@ ArrowPagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-ArrowPagerWidget::Show(const PixelRect &rc)
+ArrowPagerWidget::Show(const PixelRect &rc) noexcept
 {
-  const Layout layout(rc, extra.get());
+  const Layout layout(look, rc, extra.get());
   PagerWidget::Show(layout.main);
 
   previous_button.MoveAndShow(layout.previous_button);
@@ -163,7 +179,7 @@ ArrowPagerWidget::Show(const PixelRect &rc)
 }
 
 void
-ArrowPagerWidget::Hide()
+ArrowPagerWidget::Hide() noexcept
 {
   PagerWidget::Hide();
 
@@ -176,9 +192,9 @@ ArrowPagerWidget::Hide()
 }
 
 void
-ArrowPagerWidget::Move(const PixelRect &rc)
+ArrowPagerWidget::Move(const PixelRect &rc) noexcept
 {
-  const Layout layout(rc, extra.get());
+  const Layout layout(look, rc, extra.get());
   PagerWidget::Move(layout.main);
 
   previous_button.Move(layout.previous_button);
@@ -190,7 +206,7 @@ ArrowPagerWidget::Move(const PixelRect &rc)
 }
 
 bool
-ArrowPagerWidget::SetFocus()
+ArrowPagerWidget::SetFocus() noexcept
 {
   if (!PagerWidget::SetFocus())
     close_button.SetFocus();
@@ -199,7 +215,7 @@ ArrowPagerWidget::SetFocus()
 }
 
 bool
-ArrowPagerWidget::KeyPress(unsigned key_code)
+ArrowPagerWidget::KeyPress(unsigned key_code) noexcept
 {
   if (PagerWidget::KeyPress(key_code))
     return true;

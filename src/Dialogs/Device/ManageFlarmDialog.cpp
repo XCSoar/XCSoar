@@ -47,11 +47,12 @@ public:
     :RowFormWidget(look), device(_device), version(version) {}
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 };
 
 void
-ManageFLARMWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ManageFLARMWidget::Prepare(ContainerWindow &parent,
+                           const PixelRect &rc) noexcept
 {
   if (version.available) {
     StaticString<64> buffer;

@@ -86,7 +86,7 @@ public:
      m_perf(aap), m_distance(distance), m_alt(alt),
      m_h_min(h_min) {}
 
-  double f(const double h) {
+  double f(const double h) noexcept override {
     return m_perf.SolutionGeneral(m_distance, m_alt-h);
   }
 
@@ -158,7 +158,7 @@ public:
     :ZeroFinder(distance_min, distance_max, 1),
      m_perf(aap), m_d_min(distance_min), m_dh(dh) {}
 
-  double f(const double distance) {
+  double f(const double distance) noexcept override {
     return m_perf.SolutionGeneral(distance, m_dh);
   }
 

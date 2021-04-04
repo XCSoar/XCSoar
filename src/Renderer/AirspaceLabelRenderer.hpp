@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_AIRSPACE_LABEL_RENDERER_HPP
 #define XCSOAR_AIRSPACE_LABEL_RENDERER_HPP
 
+#include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "util/StaticArray.hxx"
 #include "Geo/GeoPoint.hpp"
 
@@ -38,7 +39,6 @@ struct AirspaceComputerSettings;
 struct AirspaceRendererSettings;
 struct AirspaceWarningConfig;
 class Airspaces;
-class AirspacePredicate;
 class ProtectedAirspaceWarningManager;
 class AirspaceWarningCopy;
 class Canvas;
@@ -97,7 +97,7 @@ private:
                     const WindowProjection &projection,
                     const AirspaceRendererSettings &settings,
                     const AirspaceWarningCopy &awc,
-                    const AirspacePredicate &visible,
+                    AirspacePredicate visible,
                     const AirspaceWarningConfig &config);
 
 public:

@@ -24,7 +24,7 @@ Copyright_License {
 #include "ARange.hpp"
 
 bool
-AngleRange::Extend(Angle value)
+AngleRange::Extend(Angle value) noexcept
 {
   const Angle length = GetLength();
 
@@ -46,7 +46,8 @@ AngleRange::Extend(Angle value)
 }
 
 bool
-AngleRange:: IntersectWith(const AngleRange &other) {
+AngleRange:: IntersectWith(const AngleRange &other) noexcept
+{
   bool result = false;
 
   if (IsInside(other.start)) {

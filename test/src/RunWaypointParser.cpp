@@ -24,23 +24,11 @@ Copyright_License {
 #include "Waypoint/WaypointReader.hpp"
 #include "Waypoint/Factory.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "system/Args.hpp"
 #include "Operation/Operation.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
-
-class DumpVisitor : public WaypointVisitor {
-public:
-  void Visit(const WaypointPtr &p) override {
-    const auto &wp = *p;
-    _ftprintf(stdout, _T("%s, %f, %f, %.0fm\n"), wp.name.c_str(),
-              (double)wp.location.latitude.Degrees(),
-              (double)wp.location.longitude.Degrees(),
-              (double)wp.elevation);
-  }
-};
 
 int main(int argc, char **argv)
 {
@@ -61,8 +49,13 @@ int main(int argc, char **argv)
   way_points.Optimise();
   printf("Size %d\n", way_points.size());
 
-  DumpVisitor visitor;
-  way_points.VisitNamePrefix(_T(""), visitor);
+  way_points.VisitNamePrefix(_T(""), [](const auto &p){
+    const auto &wp = *p;
+    _ftprintf(stdout, _T("%s, %f, %f, %.0fm\n"), wp.name.c_str(),
+              (double)wp.location.latitude.Degrees(),
+              (double)wp.location.longitude.Degrees(),
+              (double)wp.elevation);
+  });
 
   return EXIT_SUCCESS;
 }

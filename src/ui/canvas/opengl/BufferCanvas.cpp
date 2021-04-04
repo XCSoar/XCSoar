@@ -45,7 +45,7 @@ BufferCanvas::Create(PixelSize new_size)
   Destroy();
   texture = new GLTexture(new_size, true);
 
-  if (OpenGL::frame_buffer_object && OpenGL::render_buffer_stencil) {
+  if (OpenGL::render_buffer_stencil) {
     frame_buffer = new GLFrameBuffer();
 
     stencil_buffer = new GLRenderBuffer();

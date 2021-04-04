@@ -36,6 +36,7 @@ Copyright_License {
 #include "Weather/NOAAUpdater.hpp"
 #include "Weather/ParsedMETAR.hpp"
 #include "Weather/NOAAFormatter.hpp"
+#include "net/http/Init.hpp"
 #include "UIGlobals.hpp"
 
 class NOAADetailsWidget final : public LargeTextWidget {
@@ -55,7 +56,7 @@ private:
   void RemoveClicked();
 
   /* virtual methods from class Widget */
-  virtual void Show(const PixelRect &rc) override;
+  void Show(const PixelRect &rc) noexcept override;
 };
 
 void
@@ -93,7 +94,7 @@ NOAADetailsWidget::UpdateClicked()
 {
   DialogJobRunner runner(dialog.GetMainWindow(), dialog.GetLook(),
                          _("Download"), true);
-  NOAAUpdater::Update(*station_iterator, runner);
+  NOAAUpdater::Update(*station_iterator, *Net::curl, runner);
   Update();
 }
 
@@ -114,7 +115,7 @@ NOAADetailsWidget::RemoveClicked()
 }
 
 void
-NOAADetailsWidget::Show(const PixelRect &rc)
+NOAADetailsWidget::Show(const PixelRect &rc) noexcept
 {
   LargeTextWidget::Show(rc);
   Update();
@@ -124,14 +125,13 @@ void
 dlgNOAADetailsShowModal(NOAAStore::iterator iterator)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("METAR and TAF"));
-  NOAADetailsWidget widget(dialog, iterator);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<NOAADetailsWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look, _("METAR and TAF"));
   dialog.AddButton(_("Close"), mrOK);
-  dialog.FinishPreliminary(&widget);
+  dialog.SetWidget(dialog, iterator);
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.ShowModal();
-  dialog.StealWidget();
 }
 
 #else

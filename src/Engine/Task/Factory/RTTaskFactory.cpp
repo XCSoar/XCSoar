@@ -22,6 +22,7 @@
 
 #include "RTTaskFactory.hpp"
 #include "Constraints.hpp"
+#include "util/Compiler.h"
 
 static constexpr TaskFactoryConstraints rt_constraints = {
   true,
@@ -59,14 +60,6 @@ RTTaskFactory::RTTaskFactory(OrderedTask& _task,
   :AbstractTaskFactory(rt_constraints, _task, tb,
                        rt_start_types, rt_im_types, rt_finish_types)
 {
-}
-
-bool 
-RTTaskFactory::Validate()
-{
-  bool valid = AbstractTaskFactory::Validate();
-
-  return valid;
 }
 
 TaskPointFactoryType

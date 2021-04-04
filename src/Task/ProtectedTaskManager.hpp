@@ -26,7 +26,6 @@
 #include "thread/Guard.hpp"
 #include "Engine/Task/Unordered/AbortIntersectionTest.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
-#include "util/Compiler.h"
 
 #include <memory>
 
@@ -70,10 +69,10 @@ public:
   // common accessors for ui and calc clients
   void SetGlidePolar(const GlidePolar &glide_polar);
 
-  gcc_pure
+  [[gnu::pure]]
   const OrderedTaskSettings GetOrderedTaskSettings() const;
 
-  gcc_pure
+  [[gnu::pure]]
   WaypointPtr GetActiveWaypoint() const;
 
   void IncrementActiveTaskPoint(int offset);

@@ -28,7 +28,6 @@ Copyright_License {
 #include "Math/FastRotation.hpp"
 #include "Math/Util.hpp"
 #include "ui/dim/Point.hpp"
-#include "util/Compiler.h"
 
 #include <cassert>
 
@@ -57,13 +56,15 @@ Copyright_License {
 class Projection
 {
   /** This is the geographical location that the ScreenOrigin is mapped to */
-  GeoPoint geo_location;
+  GeoPoint geo_location = GeoPoint::Invalid();
 
   /**
    * This is the point that the ScreenRotation will rotate around.
    * It is also the point that the GeoLocation points to.
    */
-  PixelPoint screen_origin;
+  PixelPoint screen_origin = {0, 0};
+
+  Angle screen_angle = Angle::Zero();
 
   /**
    * FastIntegerRotation instance for fast
@@ -80,14 +81,14 @@ class Projection
   double scale;
 
 public:
-  Projection();
+  Projection() noexcept;
 
-  bool IsValid() const {
+  bool IsValid() const noexcept {
     return geo_location.IsValid();
   }
 
-  gcc_pure
-  double GetScale() const {
+  [[gnu::pure]]
+  double GetScale() const noexcept {
     return scale;
   }
 
@@ -95,67 +96,55 @@ public:
    * Sets the scaling factor
    * @param _scale New scale in px/m
    */
-  void SetScale(const double _scale);
+  void SetScale(double _scale) noexcept;
 
   /**
    * Convert a pixel distance to a physical length in meters.
    */
-  gcc_pure
-  double DistancePixelsToMeters(const int x) const {
+  [[gnu::pure]]
+  double DistancePixelsToMeters(const int x) const noexcept {
     return double(x) / GetScale();
   }
 
-  gcc_pure
-  double DistanceMetersToPixels(const double distance) const {
+  [[gnu::pure]]
+  double DistanceMetersToPixels(const double distance) const noexcept {
     return distance * GetScale();
   }
 
   /**
    * Convert a pixel distance to an angle on Earth's surface.
    */
-  gcc_pure
-  Angle PixelsToAngle(int pixels) const {
+  [[gnu::pure]]
+  Angle PixelsToAngle(int pixels) const noexcept {
     return Angle::Radians(pixels * inv_draw_scale);
   }
 
   /**
    * Convert a an angle on Earth's surface to a pixel distance.
    */
-  gcc_pure
-  double AngleToPixels(Angle angle) const {
+  [[gnu::pure]]
+  double AngleToPixels(Angle angle) const noexcept {
     return angle.Radians() * draw_scale;
   }
 
   /**
    * Converts screen coordinates to a GeoPoint
-   * @param x x-Coordinate on the screen
-   * @param y y-Coordinate on the screen
    */
-  gcc_pure
-  GeoPoint ScreenToGeo(int x, int y) const;
-
-  /**
-   * Converts screen coordinates to a GeoPoint
-   * @param x x-Coordinate on the screen
-   * @param y y-Coordinate on the screen
-   */
-  gcc_pure
-  GeoPoint ScreenToGeo(const PixelPoint &pt) const {
-    return ScreenToGeo(pt.x, pt.y);
-  }
+  [[gnu::pure]]
+  GeoPoint ScreenToGeo(PixelPoint p) const noexcept;
 
   /**
    * Converts a GeoPoint to screen coordinates
    * @param g GeoPoint to convert
    */
-  gcc_pure
-  PixelPoint GeoToScreen(const GeoPoint &g) const;
+  [[gnu::pure]]
+  PixelPoint GeoToScreen(const GeoPoint &g) const noexcept;
 
   /**
    * Returns the origin/rotation center in screen coordinates
    * @return The origin/rotation center in screen coordinates
    */
-  const PixelPoint &GetScreenOrigin() const {
+  const PixelPoint &GetScreenOrigin() const noexcept {
     return screen_origin;
   }
 
@@ -164,7 +153,7 @@ public:
    * @param x Screen coordinate in x-direction
    * @param y Screen coordinate in y-direction
    */
-  void SetScreenOrigin(int x, int y) {
+  void SetScreenOrigin(int x, int y) noexcept {
     screen_origin.x = x;
     screen_origin.y = y;
   }
@@ -173,7 +162,7 @@ public:
    * Set the origin/rotation center to the given screen coordinates
    * @param pt Screen coordinate
    */
-  void SetScreenOrigin(PixelPoint pt) {
+  void SetScreenOrigin(PixelPoint pt) noexcept {
     screen_origin = pt;
   }
 
@@ -181,7 +170,7 @@ public:
    * Returns the GeoPoint at the ScreenOrigin
    * @return GeoPoint at the ScreenOrigin
    */
-  const GeoPoint &GetGeoLocation() const {
+  const GeoPoint &GetGeoLocation() const noexcept {
     assert(IsValid());
 
     return geo_location;
@@ -191,7 +180,7 @@ public:
    * Set the GeoPoint that relates to the ScreenOrigin
    * @param g The new GeoPoint
    */
-  void SetGeoLocation(GeoPoint g) {
+  void SetGeoLocation(GeoPoint g) noexcept {
     geo_location = g;
     geo_location.Normalize();
   }
@@ -201,7 +190,7 @@ public:
    * @param x A geographical distance (m)
    * @return The converted distance in px
    */
-  unsigned GeoToScreenDistance(const double x) const {
+  unsigned GeoToScreenDistance(const double x) const noexcept {
     return uround(scale * x);
   }
 
@@ -209,23 +198,23 @@ public:
    * Returns the current screen rotation angle
    * @return Screen rotation angle
    */
-  Angle GetScreenAngle() const {
-    return screen_rotation.GetAngle();
+  Angle GetScreenAngle() const noexcept {
+    return screen_angle;
   }
 
   /**
    * Sets the screen rotation angle
    * @param angle New screen rotation angle
    */
-  void SetScreenAngle(Angle angle) {
-    screen_rotation.SetAngle(angle);
+  void SetScreenAngle(Angle angle) noexcept {
+    screen_rotation = screen_angle = angle;
   }
 
   /**
    * Creates a FastRowRotation object base on the current screen
    * rotation angle and the specified screen row.
    */
-  FastRowRotation GetScreenAngleRotation(int y) const {
+  FastRowRotation GetScreenAngleRotation(int y) const noexcept {
     return FastRowRotation(screen_rotation, y);
   }
 };

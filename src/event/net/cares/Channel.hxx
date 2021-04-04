@@ -34,7 +34,7 @@
 
 #include "Init.hxx"
 #include "event/DeferEvent.hxx"
-#include "event/TimerEvent.hxx"
+#include "event/CoarseTimerEvent.hxx"
 
 #include <ares.h>
 
@@ -56,7 +56,7 @@ class Channel {
 	ares_channel channel;
 
 	DeferEvent defer_process;
-	TimerEvent timeout_event;
+	CoarseTimerEvent timeout_event;
 
 	class Socket;
 

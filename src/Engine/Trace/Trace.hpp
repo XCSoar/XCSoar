@@ -29,7 +29,6 @@ Copyright_License {
 #include "util/SliceAllocator.hxx"
 #include "util/Serial.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
-#include "util/Compiler.h"
 
 #include <boost/intrusive/list.hpp>
 #include <boost/intrusive/set.hpp>
@@ -64,7 +63,7 @@ class Trace : private NonCopyable
      * time delta.
      * This is like a modified Douglas-Peuker algorithm
      */
-    gcc_pure
+    [[gnu::pure]]
     static bool DeltaRank(const TraceDelta &x, const TraceDelta &y) {
       // distance is king
       if (x.elim_distance < y.elim_distance)
@@ -91,7 +90,7 @@ class Trace : private NonCopyable
     }
 
     struct DeltaRankOp {
-      gcc_pure
+      [[gnu::pure]]
       bool operator()(const TraceDelta &s1, const TraceDelta &s2) const {
         return DeltaRank(s1, s2);
       }
@@ -240,7 +239,7 @@ protected:
    *
    * @return Recent time
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetRecentTime(const unsigned t) const;
 
   /**
@@ -445,10 +444,10 @@ private:
     return chronological_list.back();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned CalcAverageDeltaDistance(const unsigned no_thin) const;
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned CalcAverageDeltaTime(const unsigned no_thin) const;
 
   static constexpr unsigned null_delta = 0 - 1;
@@ -518,7 +517,7 @@ public:
     return task_projection;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned ProjectRange(const GeoPoint &location, double distance) const {
     return task_projection.ProjectRangeInteger(location, distance);
   }

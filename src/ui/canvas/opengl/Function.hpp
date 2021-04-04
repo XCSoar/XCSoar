@@ -49,21 +49,23 @@ Copyright_License {
 #endif
 
 namespace OpenGL {
-  typedef void (*Function)();
 
-  static inline Function
-  GetProcAddress(const char *name)
-  {
+typedef void (*Function)();
+
+static inline Function
+GetProcAddress(const char *name)
+{
 #ifdef USE_EGL
-    return eglGetProcAddress(name);
+  return eglGetProcAddress(name);
 #elif defined(USE_GLX)
-    return glXGetProcAddressARB((const GLubyte *)name);
+  return glXGetProcAddressARB((const GLubyte *)name);
 #elif defined(ENABLE_SDL)
-    return (Function)SDL_GL_GetProcAddress(name);
+  return (Function)SDL_GL_GetProcAddress(name);
 #else
-    return (Function)dlsym(RTLD_DEFAULT, name);
+  return (Function)dlsym(RTLD_DEFAULT, name);
 #endif
-  }
 }
+
+} // namespace OpenGL
 
 #endif

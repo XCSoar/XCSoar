@@ -26,33 +26,33 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 
-SolidWidget::~SolidWidget()
+SolidWidget::~SolidWidget() noexcept
 {
   widget.reset();
   DeleteWindow();
 }
 
 PixelSize
-SolidWidget::GetMinimumSize() const
+SolidWidget::GetMinimumSize() const noexcept
 {
   return widget->GetMinimumSize();
 }
 
 PixelSize
-SolidWidget::GetMaximumSize() const
+SolidWidget::GetMaximumSize() const noexcept
 {
   return widget->GetMaximumSize();
 }
 
 constexpr
 static PixelRect
-ToOrigin(PixelRect rc)
+ToOrigin(PixelRect rc) noexcept
 {
   return PixelRect(PixelPoint(0, 0), rc.GetSize());
 }
 
 void
-SolidWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
+SolidWidget::Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   WindowStyle style;
   style.ControlParent();
@@ -67,37 +67,37 @@ SolidWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-SolidWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+SolidWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   widget->Prepare((ContainerWindow &)GetWindow(), ToOrigin(rc));
 }
 
 void
-SolidWidget::Unprepare()
+SolidWidget::Unprepare() noexcept
 {
   widget->Unprepare();
 }
 
 bool
-SolidWidget::Save(bool &changed)
+SolidWidget::Save(bool &changed) noexcept
 {
   return widget->Save(changed);
 }
 
 bool
-SolidWidget::Click()
+SolidWidget::Click() noexcept
 {
   return widget->Click();
 }
 
 void
-SolidWidget::ReClick()
+SolidWidget::ReClick() noexcept
 {
   widget->ReClick();
 }
 
 void
-SolidWidget::Show(const PixelRect &rc)
+SolidWidget::Show(const PixelRect &rc) noexcept
 {
   widget->Show(ToOrigin(rc));
 
@@ -105,33 +105,33 @@ SolidWidget::Show(const PixelRect &rc)
 }
 
 bool
-SolidWidget::Leave()
+SolidWidget::Leave() noexcept
 {
   return widget->Leave();
 }
 
 void
-SolidWidget::Hide()
+SolidWidget::Hide() noexcept
 {
   WindowWidget::Hide();
   widget->Hide();
 }
 
 void
-SolidWidget::Move(const PixelRect &rc)
+SolidWidget::Move(const PixelRect &rc) noexcept
 {
   WindowWidget::Move(rc);
   widget->Move(ToOrigin(rc));
 }
 
 bool
-SolidWidget::SetFocus()
+SolidWidget::SetFocus() noexcept
 {
   return widget->SetFocus();
 }
 
 bool
-SolidWidget::KeyPress(unsigned key_code)
+SolidWidget::KeyPress(unsigned key_code) noexcept
 {
   return widget->KeyPress(key_code);
 }

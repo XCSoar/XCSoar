@@ -27,13 +27,15 @@ Copyright_License {
 class GLArrayBuffer;
 
 namespace OpenGL {
-  static constexpr unsigned CIRCLE_SIZE = 32;
-  static constexpr unsigned SMALL_CIRCLE_SIZE = 8;
 
-  extern GLArrayBuffer *circle_buffer, *small_circle_buffer;
+static constexpr unsigned CIRCLE_SIZE = 32;
+static constexpr unsigned SMALL_CIRCLE_SIZE = 8;
 
-  void InitShapes();
-  void DeinitShapes();
-};
+extern GLArrayBuffer *circle_buffer, *small_circle_buffer;
+
+void InitShapes() noexcept;
+void DeinitShapes() noexcept;
+
+} // namespace OpenGL
 
 #endif

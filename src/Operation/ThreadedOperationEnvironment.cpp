@@ -23,16 +23,40 @@ Copyright_License {
 
 #include "ThreadedOperationEnvironment.hpp"
 
-ThreadedOperationEnvironment::ThreadedOperationEnvironment(OperationEnvironment &_other)
+ThreadedOperationEnvironment::ThreadedOperationEnvironment(OperationEnvironment &_other) noexcept
   :other(_other)
 {
 }
 
+void
+ThreadedOperationEnvironment::Cancel() noexcept
+{
+  const std::lock_guard<Mutex> lock(mutex);
+  if (cancel_flag)
+    return;
+
+  cancel_flag = true;
+  cancel_cond.notify_one();
+
+  if (cancel_handler)
+    cancel_handler();
+}
+
 bool
-ThreadedOperationEnvironment::IsCancelled() const
+ThreadedOperationEnvironment::IsCancelled() const noexcept
 {
   const std::lock_guard<Mutex> lock(mutex);
   return cancel_flag;
+}
+
+void
+ThreadedOperationEnvironment::SetCancelHandler(std::function<void()> handler) noexcept
+{
+  const std::lock_guard<Mutex> lock(mutex);
+  cancel_handler = std::move(handler);
+
+  if (cancel_handler && cancel_flag)
+    cancel_handler();
 }
 
 void
@@ -44,7 +68,7 @@ ThreadedOperationEnvironment::Sleep(std::chrono::steady_clock::duration duration
 }
 
 void
-ThreadedOperationEnvironment::SetErrorMessage(const TCHAR *_error)
+ThreadedOperationEnvironment::SetErrorMessage(const TCHAR *_error) noexcept
 {
   {
     const std::lock_guard<Mutex> lock(mutex);
@@ -55,7 +79,7 @@ ThreadedOperationEnvironment::SetErrorMessage(const TCHAR *_error)
 }
 
 void
-ThreadedOperationEnvironment::SetText(const TCHAR *_text)
+ThreadedOperationEnvironment::SetText(const TCHAR *_text) noexcept
 {
   {
     const std::lock_guard<Mutex> lock(mutex);
@@ -66,14 +90,14 @@ ThreadedOperationEnvironment::SetText(const TCHAR *_text)
 }
 
 void
-ThreadedOperationEnvironment::SetProgressRange(unsigned range)
+ThreadedOperationEnvironment::SetProgressRange(unsigned range) noexcept
 {
   if (LockSetProgressRange(range))
     notify.SendNotification();
 }
 
 void
-ThreadedOperationEnvironment::SetProgressPosition(unsigned position)
+ThreadedOperationEnvironment::SetProgressPosition(unsigned position) noexcept
 {
   if (LockSetProgressPosition(position))
     notify.SendNotification();

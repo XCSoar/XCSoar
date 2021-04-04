@@ -24,8 +24,6 @@
 #ifndef OBSERVATIONZONE_HPP
 #define OBSERVATIONZONE_HPP
 
-#include "util/Compiler.h"
-
 #include <cstdint>
 
 struct GeoPoint;
@@ -77,7 +75,7 @@ public:
    *
    * @return True if reference point is inside sector
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual bool IsInSector(const GeoPoint &location) const = 0;
 
   /**
@@ -85,7 +83,7 @@ public:
    *
    * @return True if zone type can have a valid start through top
    */
-  gcc_pure
+  [[gnu::pure]]
   bool CanStartThroughTop() const {
     return can_start_through_top;
   }
@@ -98,7 +96,7 @@ public:
    *
    * @return True if constraints are satisfied
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual bool TransitionConstraint(const GeoPoint &location,
                                     const GeoPoint &last_location) const = 0;
 
@@ -114,7 +112,7 @@ public:
    * TaskDijkstra chooses the outer points only if there is a
    * measurable advantage.
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual OZBoundary GetBoundary() const = 0;
 
   /**
@@ -124,7 +122,7 @@ public:
    *
    * @return Distance (m) to subtract from score
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual double ScoreAdjustment() const = 0;
 };
 

@@ -37,6 +37,7 @@ Copyright_License {
 #include "ui/event/KeyCode.hpp"
 #include "Look/Look.hpp"
 #include "Computer/GlideComputer.hpp"
+#include "Renderer/TextButtonRenderer.hpp"
 #include "Renderer/FlightStatisticsRenderer.hpp"
 #include "Renderer/GlidePolarRenderer.hpp"
 #include "Renderer/BarographRenderer.hpp"
@@ -132,7 +133,7 @@ class AnalysisWidget final : public NullWidget {
     PixelRect details_button, previous_button, next_button, close_button;
     PixelRect main;
 
-    explicit Layout(const PixelRect rc);
+    Layout(const DialogLook &look, const PixelRect &rc) noexcept;
   };
 
   const FullBlackboard &blackboard;
@@ -174,10 +175,10 @@ private:
 
 protected:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
-  void Show(const PixelRect &rc) override {
-    const Layout layout(rc);
+  void Show(const PixelRect &rc) noexcept override {
+    const Layout layout(info.GetLook(), rc);
 
     info.MoveAndShow(layout.info);
     details_button.MoveAndShow(layout.details_button);
@@ -190,7 +191,7 @@ protected:
     update_timer.Schedule(std::chrono::milliseconds(2500));
   }
 
-  void Hide() override {
+  void Hide() noexcept override {
     update_timer.Cancel();
 
     info.Hide();
@@ -201,8 +202,8 @@ protected:
     chart.Hide();
   }
 
-  void Move(const PixelRect &rc) override {
-    const Layout layout(rc);
+  void Move(const PixelRect &rc) noexcept override {
+    const Layout layout(info.GetLook(), rc);
 
     info.Move(layout.info);
     details_button.Move(layout.details_button);
@@ -212,25 +213,33 @@ protected:
     chart.Move(layout.main);
   }
 
-  bool SetFocus() override {
+  bool SetFocus() noexcept override {
     close_button.SetFocus();
     return true;
   }
 
-  bool KeyPress(unsigned key_code) override;
+  bool KeyPress(unsigned key_code) noexcept override;
 };
 
-AnalysisWidget::Layout::Layout(const PixelRect rc)
+AnalysisWidget::Layout::Layout(const DialogLook &look,
+                               const PixelRect &rc) noexcept
 {
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
 
   main = rc;
 
+  const unsigned info_width = width > height
+    /* landscape: info above buttons */
+    ? look.text_font.TextSize(_("Distance to go")).width * 3 / 2
+    /* portrait: info right of buttons */
+    : TextButtonRenderer::GetMinimumButtonWidth(look.button,
+                                                _("Task Calc"));
+
   /* close button on the bottom left */
 
   close_button.left = rc.left;
-  close_button.right = rc.left + ::Layout::Scale(70);
+  close_button.right = rc.left + info_width;
   close_button.bottom = rc.bottom;
   close_button.top = close_button.bottom - button_height;
 
@@ -258,18 +267,21 @@ AnalysisWidget::Layout::Layout(const PixelRect rc)
 
     main.left = close_button.right;
   } else {
-    main.bottom = details_button.top;
+    /* there are at most 5 text lines in the "info" area */
+    const unsigned info_height = 5 * look.text_font.GetLineSpacing();
+
+    main.bottom = rc.bottom - info_height;
     info.left = close_button.right;
     info.right = rc.right;
-    info.top = main.bottom;
+    info.top = rc.bottom - info_height;
     info.bottom = rc.bottom;
   }
 }
 
 void
-AnalysisWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+AnalysisWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
-  const Layout layout(rc);
+  const Layout layout(info.GetLook(), rc);
 
   WindowStyle button_style;
   button_style.Hide();
@@ -623,7 +635,7 @@ ChartControl::OnMouseUp(PixelPoint p)
 }
 
 bool
-AnalysisWidget::KeyPress(unsigned key_code)
+AnalysisWidget::KeyPress(unsigned key_code) noexcept
 {
   switch (key_code) {
   case KEY_LEFT:

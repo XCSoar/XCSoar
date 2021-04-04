@@ -28,10 +28,10 @@ Copyright_License {
 #include "system/Path.hpp"
 
 namespace SoundUtil {
-  static Java::TrivialClass cls;
-  static jmethodID play_method;
-  static jmethodID playExternal_method;
-}
+static Java::TrivialClass cls;
+static jmethodID play_method;
+static jmethodID playExternal_method;
+} // namespace SoundUtil
 
 void
 SoundUtil::Initialise(JNIEnv *env)

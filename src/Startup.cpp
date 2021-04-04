@@ -69,6 +69,7 @@ Copyright_License {
 #include "io/FileCache.hpp"
 #include "io/async/AsioThread.hpp"
 #include "io/async/GlobalAsioThread.hpp"
+#include "net/http/Init.hpp"
 #include "net/http/DownloadManager.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "Hardware/DisplayGlue.hpp"
@@ -106,6 +107,11 @@ Copyright_License {
 #include "ui/canvas/opengl/Dynamic.hpp"
 #else
 #include "DrawThread.hpp"
+#endif
+
+#ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/Context.hpp"
 #endif
 
 static TaskManager *task_manager;
@@ -209,7 +215,7 @@ Startup()
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
             "mda=%d "
 #endif
-            "npot=%d fbo=%d stencil=%#x",
+            "npot=%d stencil=%#x",
 #ifdef HAVE_OES_DRAW_TEXTURE
             OpenGL::oes_draw_texture,
 #endif
@@ -217,7 +223,6 @@ Startup()
             GLExt::HaveMultiDrawElements(),
 #endif
              OpenGL::texture_non_power_of_two,
-            OpenGL::frame_buffer_object,
             OpenGL::render_buffer_stencil);
 #endif
 
@@ -264,7 +269,18 @@ Startup()
 
   main_window->InitialiseConfigured();
 
-  file_cache = new FileCache(LocalPath(_T("cache")));
+  {
+#ifdef ANDROID
+    auto cache_path = context->GetExternalCacheDir(Java::GetEnv());
+    if (cache_path == nullptr)
+      throw std::runtime_error("No Android cache directory");
+
+    // TODO: delete the old cache directory in XCSoarData?
+#else
+    auto cache_path = LocalPath(_T("cache"));
+#endif
+    file_cache = new FileCache(std::move(cache_path));
+  }
 
   ReadLanguageFile();
 
@@ -448,7 +464,7 @@ Startup()
   PageActions::Update();
 
 #ifdef HAVE_TRACKING
-  tracking = new TrackingGlue(*asio_thread);
+  tracking = new TrackingGlue(*asio_thread, *Net::curl);
   tracking->SetSettings(computer_settings.tracking);
 
 #ifdef HAVE_SKYLINES_TRACKING

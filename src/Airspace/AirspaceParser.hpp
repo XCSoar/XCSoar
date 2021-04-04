@@ -28,14 +28,8 @@ class Airspaces;
 class TLineReader;
 class OperationEnvironment;
 
-class AirspaceParser
-{
-  Airspaces &airspaces;
-
-public:
-  AirspaceParser(Airspaces &_airspaces): airspaces(_airspaces) {}
-
-  bool Parse(TLineReader &reader, OperationEnvironment &operation);
-};
+bool
+ParseAirspaceFile(Airspaces &airspaces,
+                  TLineReader &reader, OperationEnvironment &operation);
 
 #endif

@@ -68,6 +68,9 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
                  const TaskManager &task)
 {
   ChartRenderer chart(chart_look, canvas, rc);
+  chart.SetXLabel(_T("t"), _T("hr"));
+  chart.SetYLabel(_T("w"), Units::GetVerticalSpeedName());
+  chart.Begin();
 
   if (fs.thermal_average.IsEmpty()) {
     chart.DrawNoData();
@@ -117,7 +120,5 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
                   chart.GetXMin()*0.9+chart.GetXMax()*0.1,
                   MACCREADY);
 
-  // draw labels and other overlays
-  chart.DrawXLabel(_T("t"), _T("hr"));
-  chart.DrawYLabel(_T("w"), Units::GetVerticalSpeedName());
+  chart.Finish();
 }

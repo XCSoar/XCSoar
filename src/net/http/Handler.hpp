@@ -29,17 +29,19 @@ Copyright_License {
 #include <cstdint>
 
 namespace Net {
-  class ResponseHandler : public DataHandler {
-  public:
-    /**
-     * Response metadata (status and headers) has been received.
-     *
-     * @param content_length the total length of the response body or -1 if
-     * the server did not announce a length
-     * @return false if the handler wishes to receive no more data
-     */
-    virtual bool ResponseReceived(int64_t content_length) noexcept = 0;
-  };
-}
+
+class ResponseHandler : public DataHandler {
+public:
+  /**
+   * Response metadata (status and headers) has been received.
+   *
+   * @param content_length the total length of the response body or -1 if
+   * the server did not announce a length
+   * @return false if the handler wishes to receive no more data
+   */
+  virtual bool ResponseReceived(int64_t content_length) noexcept = 0;
+};
+
+} // namespace Net
 
 #endif

@@ -35,14 +35,14 @@ class Color;
  */
 class TextWidget : public WindowWidget {
 public:
-  void SetText(const TCHAR *text);
-  void SetColor(Color _color);
+  void SetText(const TCHAR *text) noexcept;
+  void SetColor(Color _color) noexcept;
 
   /* virtual methods from class Widget */
-  PixelSize GetMinimumSize() const override;
-  PixelSize GetMaximumSize() const override;
+  PixelSize GetMinimumSize() const noexcept override;
+  PixelSize GetMaximumSize() const noexcept override;
 
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 };
 
 #endif

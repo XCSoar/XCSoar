@@ -48,12 +48,12 @@ private:
   void ExportUSBStorage();
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 };
 
 void
-SystemWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+SystemWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   AddButton("Reboot", [](){ KoboReboot(); });
   AddButton(IsKoboOTGKernel() ? "Disable USB-OTG" : "Enable USB-OTG",
@@ -137,10 +137,9 @@ void
 ShowSystemDialog()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  SystemWidget widget(look);
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, "System", &widget);
+  TWidgetDialog<SystemWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(), look, "System");
   dialog.AddButton(_("Close"), mrOK);
+  dialog.SetWidget(look);
   dialog.ShowModal();
-  dialog.StealWidget();
 }

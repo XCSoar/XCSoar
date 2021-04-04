@@ -98,11 +98,11 @@ public:
   void SetQNH(AtmosphericPressure qnh);
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
-  virtual void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     RowFormWidget::Show(rc);
     timer.Schedule(std::chrono::milliseconds(500));
 
@@ -111,7 +111,7 @@ public:
     SetBallast();
   }
 
-  virtual void Hide() override {
+  void Hide() noexcept override {
     timer.Cancel();
     RowFormWidget::Hide();
   }
@@ -263,7 +263,8 @@ FlightSetupPanel::OnModified(DataField &df)
 }
 
 void
-FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+FlightSetupPanel::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 
@@ -324,7 +325,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-FlightSetupPanel::Save(bool &changed)
+FlightSetupPanel::Save(bool &changed) noexcept
 {
   ComputerSettings &settings = CommonInterface::SetComputerSettings();
 

@@ -105,22 +105,19 @@ MapWindow::OnPaint(Canvas &canvas)
     /* do the projection */
 
     const auto buffer_size = buffer_projection.GetScreenSize();
-    const int buffer_width = buffer_projection.GetScreenWidth();
-    const int buffer_height = buffer_projection.GetScreenHeight();
 
     const auto top_left =
-      visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(0, 0));
+      visible_projection.GeoToScreen(buffer_projection.ScreenToGeo({0, 0}));
     auto bottom_right =
-      visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(buffer_width,
-                                                                   buffer_height));
+      visible_projection.GeoToScreen(buffer_projection.ScreenToGeo({(int)buffer_size.width, (int)buffer_size.height}));
 
     /* compensate for rounding errors in destination area */
 
-    if (abs(buffer_width - (bottom_right.x - top_left.x)) < 5)
-      bottom_right.x = top_left.x + buffer_width;
+    if (abs(int(buffer_size.width) - (bottom_right.x - top_left.x)) < 5)
+      bottom_right.x = top_left.x + int(buffer_size.width);
 
-    if (abs(buffer_height - (bottom_right.y - top_left.y)) < 5)
-      bottom_right.y = top_left.y + buffer_height;
+    if (abs(int(buffer_size.height) - (bottom_right.y - top_left.y)) < 5)
+      bottom_right.y = top_left.y + int(buffer_size.height);
 
     if (top_left.x > bottom_right.x || top_left.y > bottom_right.y) {
       /* paranoid sanity check */

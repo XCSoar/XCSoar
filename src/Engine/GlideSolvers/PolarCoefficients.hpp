@@ -24,46 +24,43 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_COEFF_HPP
 #define XCSOAR_POLAR_COEFF_HPP
 
-#include "util/Compiler.h"
-
 struct PolarCoefficients
 {
   double a, b, c;
 
-  PolarCoefficients() = default;
-  constexpr PolarCoefficients(double _a, double _b, double _c)
+  PolarCoefficients() noexcept = default;
+  constexpr PolarCoefficients(double _a, double _b, double _c) noexcept
     :a(_a), b(_b), c(_c) {}
 
   /**
    * Construct an invalid object.
    */
-  gcc_const
-  static PolarCoefficients Invalid() {
+  static constexpr PolarCoefficients Invalid() noexcept {
     return PolarCoefficients(0, 0, 0);
   }
 
-  void SetInvalid() {
+  void SetInvalid() noexcept {
     a = b = c = 0;
   }
 
-  gcc_pure
-  bool IsValid() const;
+  [[gnu::pure]]
+  bool IsValid() const noexcept;
 
   /**
    * Calculates the three polynomial polar coefficients from
    * three pairs of horizontal vs. vertical speed.
    */
-  gcc_pure
+  [[gnu::pure]]
   static PolarCoefficients From3VW(double v1, double v2, double v3,
-                                   double w1, double w2, double w3);
+                                   double w1, double w2, double w3) noexcept;
 
   /**
    * Calculates the three polynomial polar coefficients from
    * two pairs of horizontal vs. vertical speed. The first pair defines
    * the point where the polar is flat (derivative equals zero)!
    */
-  gcc_pure
-  static PolarCoefficients From2VW(double v1, double v2, double w1, double w2);
+  [[gnu::pure]]
+  static PolarCoefficients From2VW(double v1, double v2, double w1, double w2) noexcept;
 };
 
 #endif

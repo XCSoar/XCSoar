@@ -22,11 +22,10 @@ Copyright_License {
 */
 
 #include "Geo/GeoClip.hpp"
-#include "util/Compiler.h"
 
 #include <cassert>
 
-gcc_const
+[[gnu::const]]
 static GeoPoint
 clip_longitude(const GeoPoint origin, const GeoPoint pt, Angle at)
 {
@@ -39,7 +38,7 @@ clip_longitude(const GeoPoint origin, const GeoPoint pt, Angle at)
   return GeoPoint(at, origin.latitude + ey);
 }
 
-gcc_const
+[[gnu::const]]
 static GeoPoint
 clip_latitude(const GeoPoint origin, const GeoPoint pt, Angle at)
 {

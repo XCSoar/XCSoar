@@ -56,8 +56,8 @@ public:
 
 private:
   /* virtual methods from Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
   /* virtual methods from DataFieldListener */
   void OnModified(gcc_unused DataField &df) override {
@@ -74,7 +74,7 @@ static constexpr StaticEnumChoice waypoint_types[] = {
 
 void
 WaypointEditWidget::Prepare(gcc_unused ContainerWindow &parent,
-                            gcc_unused const PixelRect &rc)
+                            gcc_unused const PixelRect &rc) noexcept
 {
   AddText(_("Name"), nullptr, value.name.c_str(), this);
   AddText(_("Comment"), nullptr, value.comment.c_str(), this);
@@ -92,7 +92,7 @@ WaypointEditWidget::Prepare(gcc_unused ContainerWindow &parent,
 }
 
 bool
-WaypointEditWidget::Save(bool &_changed)
+WaypointEditWidget::Save(bool &_changed) noexcept
 {
   bool changed = modified;
   value.name = GetValueString(NAME);
@@ -132,17 +132,17 @@ dlgWaypointEditShowModal(Waypoint &way_point)
   }
 
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WaypointEditWidget widget(look, way_point);
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, _("Waypoint Editor"), &widget);
+  TWidgetDialog<WaypointEditWidget>
+    dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+           look, _("Waypoint Editor"));
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.SetWidget(look, way_point);
   const int result = dialog.ShowModal();
-  dialog.StealWidget();
 
   if (result != mrOK || !dialog.GetChanged())
     return false;
 
-  way_point = widget.GetValue();
+  way_point = dialog.GetWidget().GetValue();
   return true;
 }

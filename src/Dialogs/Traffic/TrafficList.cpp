@@ -281,10 +281,10 @@ public:
 
   /* virtual methods from class Widget */
 
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 
-  virtual void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     ListWidget::Show(rc);
 
     if (filter_widget != nullptr)
@@ -293,7 +293,7 @@ public:
     CommonInterface::GetLiveBlackboard().AddListener(*this);
   }
 
-  virtual void Hide() override {
+  void Hide() noexcept override {
     CommonInterface::GetLiveBlackboard().RemoveListener(*this);
 
     ListWidget::Hide();
@@ -337,8 +337,8 @@ public:
     listener = _listener;
   }
 
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override {
     PrefixDataField *callsign_df = new PrefixDataField(_T(""), listener);
     Add(_("Competition ID"), nullptr, callsign_df);
   }
@@ -356,8 +356,8 @@ public:
     list = _list;
   }
 
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override {
     AddButton(_("Details"), [this](){ list->OpenDetails(); });
     AddButton(_("Map"), [this](){ list->OpenMap(); });
     AddButton(_("Close"), dialog.MakeModalResultCallback(mrCancel));
@@ -528,7 +528,7 @@ TrafficListWidget::UpdateButtons()
 
 void
 TrafficListWidget::Prepare(ContainerWindow &parent,
-                           const PixelRect &rc)
+                           const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   ListControl &list = CreateList(parent, look, rc,

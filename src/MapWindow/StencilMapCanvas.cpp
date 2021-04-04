@@ -61,18 +61,18 @@ StencilMapCanvas::DrawSearchPointVector(const SearchPointVector &points)
     return;
 
   /* copy all SearchPointVector elements to geo_points */
-  geo_points.GrowDiscard(size * 3);
+  GeoPoint *geo_points = geo_points_buffer.get(size * 3);
   for (unsigned i = 0; i < size; ++i)
     geo_points[i] = points[i].GetLocation();
 
   /* clip them */
-  size = clip.ClipPolygon(geo_points.begin(), geo_points.begin(), size);
+  size = clip.ClipPolygon(geo_points, geo_points, size);
   if (size < 3)
     /* it's completely outside the screen */
     return;
 
   /* draw it all */
-  BulkPixelPoint screen[size];
+  BulkPixelPoint *screen = pixel_points_buffer.get(size);
   for (unsigned i = 0; i < size; ++i)
     screen[i] = proj.GeoToScreen(geo_points[i]);
 

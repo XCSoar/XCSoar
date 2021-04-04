@@ -216,8 +216,17 @@ public:
 
 protected:
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override {
+  PixelSize GetMinimumSize() const noexcept override {
+    return {
+      CheckBoxControl::GetMinimumWidth(look,
+                                       ::Layout::GetMaximumControlHeight(),
+                                       _("Expert")),
+      ::Layout::GetMaximumControlHeight() * 3,
+    };
+  }
+
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override {
     Layout layout(rc);
 
     WindowStyle style;
@@ -232,7 +241,7 @@ protected:
     button1.Create(parent, look.button, _T(""), layout.button1, style);
   }
 
-  virtual void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     Layout layout(rc);
 
     expert.SetState(CommonInterface::GetUISettings().dialog.expert);
@@ -249,13 +258,13 @@ protected:
       button1.Move(layout.button1);
   }
 
-  virtual void Hide() override {
+  void Hide() noexcept override {
     expert.FastHide();
     button2.FastHide();
     button1.FastHide();
   }
 
-  virtual void Move(const PixelRect &rc) override {
+  void Move(const PixelRect &rc) noexcept override {
     Layout layout(rc);
     expert.Move(layout.expert);
     button2.Move(layout.button2);

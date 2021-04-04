@@ -127,9 +127,8 @@ TaskPointRenderer::DrawTarget(const TaskPoint &tp)
   if (!IsTargetVisible(tp))
     return;
 
-  PixelPoint sc;
-  if (m_proj.GeoToScreenIfVisible(tp.GetLocationRemaining(), sc))
-    task_look.target_icon.Draw(canvas, sc);
+  if (auto p = m_proj.GeoToScreenIfVisible(tp.GetLocationRemaining()))
+    task_look.target_icon.Draw(canvas, *p);
 }
 
 void

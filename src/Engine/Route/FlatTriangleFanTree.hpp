@@ -54,41 +54,40 @@ private:
   FlatBoundingBox bb_children;
   LeafVector children;
   const unsigned char depth;
-  bool gaps_filled;
+  bool gaps_filled = false;
 
 public:
   friend class PrintHelper;
 
-  FlatTriangleFanTree(const unsigned char _depth = 0)
-    :depth(_depth),
-     gaps_filled(false) {}
+  FlatTriangleFanTree(const unsigned char _depth = 0) noexcept
+    :depth(_depth) {}
 
-  bool IsRoot() const {
+  bool IsRoot() const noexcept {
     return depth == 0;
   }
 
-  void Clear() {
+  void Clear() noexcept {
     FlatTriangleFan::Clear();
     children.clear();
   }
 
-  void CalcBB();
+  void CalcBB() noexcept;
 
-  gcc_pure
-  bool IsInside(FlatGeoPoint p) const {
+  [[gnu::pure]]
+  bool IsInside(FlatGeoPoint p) const noexcept {
     return FlatTriangleFan::IsInside(p, IsRoot());
   }
 
-  void FillReach(const AFlatGeoPoint &origin, ReachFanParms &parms);
-  void DummyReach(const AFlatGeoPoint &origin);
+  void FillReach(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
+  void DummyReach(const AFlatGeoPoint &origin) noexcept;
 
   /**
    * Basic check for a state created by DummyReach().  If this method
    * returns true, then calls to FindPositiveArrival() are supposed to
    * be useless.
    */
-  gcc_pure
-  bool IsDummy() const {
+  [[gnu::pure]]
+  bool IsDummy() const noexcept {
     return vs.size() == 1 && children.empty();
   }
 
@@ -98,25 +97,26 @@ public:
    */
   bool FillReach(const AFlatGeoPoint &origin,
                  const int index_low, const int index_high,
-                 const ReachFanParms &parms);
+                 const ReachFanParms &parms) noexcept;
 
-  bool FillDepth(const AFlatGeoPoint &origin, ReachFanParms &parms);
-  void FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms);
+  bool FillDepth(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
+  void FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
 
   bool CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
-                const RouteLink &e_2, ReachFanParms &parms);
+                const RouteLink &e_2, ReachFanParms &parms) noexcept;
 
   bool FindPositiveArrival(FlatGeoPoint n,
                            const ReachFanParms &parms,
-                           int &arrival_height) const;
+                           int &arrival_height) const noexcept;
 
   void AcceptInRange(const FlatBoundingBox &bb,
-                     FlatTriangleFanVisitor &visitor) const;
+                     FlatTriangleFanVisitor &visitor) const noexcept;
 
-  void UpdateTerrainBase(FlatGeoPoint origin, ReachFanParms &parms);
+  void UpdateTerrainBase(FlatGeoPoint origin, ReachFanParms &parms) noexcept;
 
-  gcc_pure
-  int DirectArrival(FlatGeoPoint dest, const ReachFanParms &parms) const;
+  [[gnu::pure]]
+  int DirectArrival(FlatGeoPoint dest,
+                    const ReachFanParms &parms) const noexcept;
 };
 
 #endif

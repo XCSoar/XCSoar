@@ -79,21 +79,21 @@ public:
     direction = degrees;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   Angle GetDirection() const {
     assert(IsDirectionDefined());
 
     return Angle::Degrees(direction);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetDirectionDegrees() const {
     assert(IsDirectionDefined());
 
     return direction;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetDirectionName() const {
     assert(IsDirectionDefined());
 
@@ -104,7 +104,7 @@ public:
     length = _length;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetLength() const {
     assert(IsLengthDefined());
 

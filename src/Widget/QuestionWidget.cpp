@@ -32,7 +32,7 @@ QuestionWidget::QuestionWidget(const TCHAR *_message) noexcept
    message(_message) {}
 
 void
-QuestionWidget::SetMessage(const TCHAR *_message)
+QuestionWidget::SetMessage(const TCHAR *_message) noexcept
 {
   auto &bpw = (ButtonPanelWidget &)GetWidget();
   auto &tw = (TextWidget &)bpw.GetWidget();
@@ -40,7 +40,7 @@ QuestionWidget::SetMessage(const TCHAR *_message)
 }
 
 void
-QuestionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+QuestionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   SolidWidget::Prepare(parent, rc);
 

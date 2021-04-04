@@ -35,15 +35,17 @@ Copyright_License {
 #include <stdexcept>
 
 namespace BluetoothHelper {
-  static Java::TrivialClass cls;
-  static jfieldID hasLe_field;
-  static jmethodID isEnabled_method;
-  static jmethodID getNameFromAddress_method;
-  static jmethodID list_method, connect_method, createServer_method;
-  static jmethodID startLeScan_method, stopLeScan_method;
 
-  static std::map<std::string, std::string> address_to_name;
-}
+static Java::TrivialClass cls;
+static jfieldID hasLe_field;
+static jmethodID isEnabled_method;
+static jmethodID getNameFromAddress_method;
+static jmethodID list_method, connect_method, createServer_method;
+static jmethodID startLeScan_method, stopLeScan_method;
+
+static std::map<std::string, std::string> address_to_name;
+
+} // namespace BluetoothHelper
 
 bool
 BluetoothHelper::Initialise(JNIEnv *env)

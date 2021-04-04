@@ -24,7 +24,7 @@
 #include "Task/Ordered/Points/StartPoint.hpp"
 
 double
-TaskMinTarget::f(const double p)
+TaskMinTarget::f(const double p) noexcept
 {
   // set task targets
   set_range(p);

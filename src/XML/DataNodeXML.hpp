@@ -41,15 +41,15 @@ public:
    *
    * @return Initialised object
    */
-  explicit ConstDataNodeXML(const XMLNode &_node)
+  explicit ConstDataNodeXML(const XMLNode &_node) noexcept
     :node(_node) {}
 
   /* virtual methods from ConstDataNode */
-  const TCHAR *GetName() const override;
-  ConstDataNode *GetChildNamed(const TCHAR *name) const override;
-  List ListChildren() const override;
-  List ListChildrenNamed(const TCHAR *name) const override;
-  const TCHAR *GetAttribute(const TCHAR *name) const override;
+  const TCHAR *GetName() const noexcept override;
+  std::unique_ptr<ConstDataNode> GetChildNamed(const TCHAR *name) const noexcept override;
+  List ListChildren() const noexcept override;
+  List ListChildrenNamed(const TCHAR *name) const noexcept override;
+  const TCHAR *GetAttribute(const TCHAR *name) const noexcept override;
 };
 
 /**
@@ -66,12 +66,12 @@ public:
    *
    * @return Initialised object
    */
-  explicit WritableDataNodeXML(XMLNode &_node)
+  explicit WritableDataNodeXML(XMLNode &_node) noexcept
     :node(_node) {}
 
   /* virtual methods from WritableDataNode */
-  WritableDataNode *AppendChild(const TCHAR *name) override;
-  void SetAttribute(const TCHAR *name, const TCHAR *value) override;
+  std::unique_ptr<WritableDataNode> AppendChild(const TCHAR *name) noexcept override;
+  void SetAttribute(const TCHAR *name, const TCHAR *value) noexcept override;
 };
 
 #endif

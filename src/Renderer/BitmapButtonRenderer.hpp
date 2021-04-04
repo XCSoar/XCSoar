@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_BITMAP_BUTTON_RENDERER_HPP
 
 #include "ButtonRenderer.hpp"
-#include "util/Compiler.h"
 
 class Bitmap;
 
@@ -39,7 +38,7 @@ public:
   explicit BitmapButtonRenderer(const Bitmap &_bitmap)
     :bitmap(_bitmap) {}
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetMinimumButtonWidth() const override;
 
   void DrawButton(Canvas &canvas, const PixelRect &rc,

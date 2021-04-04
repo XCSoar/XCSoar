@@ -24,27 +24,28 @@ Copyright_License {
 #include "Shaders.hpp"
 #include "Program.hpp"
 #include "Globals.hpp"
+#include "util/RuntimeError.hxx"
 
 #include <glm/gtc/type_ptr.hpp>
 
-#include <stdio.h>
-
 namespace OpenGL {
-  GLProgram *solid_shader;
-  GLint solid_projection, solid_modelview;
 
-  GLProgram *texture_shader;
-  GLint texture_projection, texture_texture;
+GLProgram *solid_shader;
+GLint solid_projection, solid_modelview;
 
-  GLProgram *invert_shader;
-  GLint invert_projection, invert_texture;
+GLProgram *texture_shader;
+GLint texture_projection, texture_texture;
 
-  GLProgram *alpha_shader;
-  GLint alpha_projection, alpha_texture;
+GLProgram *invert_shader;
+GLint invert_projection, invert_texture;
 
-  GLProgram *combine_texture_shader;
-  GLint combine_texture_projection, combine_texture_texture;
-}
+GLProgram *alpha_shader;
+GLint alpha_projection, alpha_texture;
+
+GLProgram *combine_texture_shader;
+GLint combine_texture_projection, combine_texture_texture;
+
+} // namespace OpenGL
 
 #ifdef HAVE_GLES
 #define GLSL_VERSION
@@ -142,7 +143,7 @@ CompileAttachShader(GLProgram &program, GLenum type, const char *code)
   if (shader.GetCompileStatus() != GL_TRUE) {
     char log[4096];
     shader.GetInfoLog(log, sizeof(log));
-    fprintf(stderr, "Shader compiler failed: %s\n", log);
+    throw FormatRuntimeError("Shader compiler failed: %s", log);
   }
 
   program.AttachShader(shader);
@@ -154,14 +155,6 @@ CompileProgram(const char *vertex_shader, const char *fragment_shader)
   GLProgram *program = new GLProgram();
   CompileAttachShader(*program, GL_VERTEX_SHADER, vertex_shader);
   CompileAttachShader(*program, GL_FRAGMENT_SHADER, fragment_shader);
-  program->Link();
-
-  if (program->GetLinkStatus() != GL_TRUE) {
-    char log[4096];
-    program->GetInfoLog(log, sizeof(log));
-    fprintf(stderr, "Shader linker failed: %s\n", log);
-  }
-
   return program;
 }
 
@@ -173,7 +166,7 @@ LinkProgram(GLProgram &program)
   if (program.GetLinkStatus() != GL_TRUE) {
     char log[4096];
     program.GetInfoLog(log, sizeof(log));
-    fprintf(stderr, "Shader linker failed: %s\n", log);
+    throw FormatRuntimeError("Shader linker failed: %s", log);
   }
 }
 
@@ -252,14 +245,22 @@ OpenGL::InitShaders()
 }
 
 void
-OpenGL::DeinitShaders()
+OpenGL::DeinitShaders() noexcept
 {
+  delete combine_texture_shader;
+  combine_texture_shader = nullptr;
+  delete alpha_shader;
+  alpha_shader = nullptr;
+  delete invert_shader;
+  invert_shader = nullptr;
+  delete texture_shader;
+  texture_shader = nullptr;
   delete solid_shader;
   solid_shader = nullptr;
 }
 
 void
-OpenGL::UpdateShaderProjectionMatrix()
+OpenGL::UpdateShaderProjectionMatrix() noexcept
 {
   alpha_shader->Use();
   glUniformMatrix4fv(alpha_projection, 1, GL_FALSE,

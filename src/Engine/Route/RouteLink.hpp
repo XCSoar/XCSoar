@@ -40,7 +40,8 @@ struct RouteLinkBase {
   /** Origin location */
   RoutePoint second;
 
-  constexpr RouteLinkBase(const RoutePoint _dest, const RoutePoint _origin)
+  constexpr RouteLinkBase(const RoutePoint _dest,
+                          const RoutePoint _origin) noexcept
     :first(_dest), second(_origin) {}
 
   /**
@@ -50,7 +51,7 @@ struct RouteLinkBase {
    *
    * @return true if origins and destinations are equal
    */
-  constexpr bool operator==(const RouteLinkBase o) const {
+  constexpr bool operator==(const RouteLinkBase o) const noexcept {
     return (first == o.first) && (second == o.second);
   }
 
@@ -58,8 +59,8 @@ struct RouteLinkBase {
    * Return 2d Distance of this link
    * @return distance in FlatGeoPoint units
    */
-  gcc_pure
-  unsigned Distance() const {
+  [[gnu::pure]]
+  unsigned Distance() const noexcept {
     return first.Distance(second);
   }
 
@@ -69,8 +70,8 @@ struct RouteLinkBase {
    *
    * @return true if this link is short
    */
-  gcc_pure
-  bool IsShort() const;
+  [[gnu::pure]]
+  bool IsShort() const noexcept;
 
   /**
    * Calculate the dot product of this link with another.
@@ -81,7 +82,7 @@ struct RouteLinkBase {
    *
    * @return dot product of this object with second object
    */
-  constexpr int DotProduct(const RouteLinkBase& o) const {
+  constexpr int DotProduct(const RouteLinkBase& o) const noexcept {
     return o.GetDelta().DotProduct(GetDelta());
   }
 
@@ -93,12 +94,12 @@ struct RouteLinkBase {
    *
    * @return cross product of this object with second object
    */
-  constexpr int CrossProduct(const RouteLinkBase& o) const {
+  constexpr int CrossProduct(const RouteLinkBase &o) const noexcept {
     return o.GetDelta().CrossProduct(GetDelta());
   }
 
 private:
-  constexpr FlatGeoPoint GetDelta() const {
+  constexpr FlatGeoPoint GetDelta() const noexcept {
     return FlatGeoPoint(second) - FlatGeoPoint(first);
   }
 };
@@ -117,9 +118,9 @@ public:
   /** Direction index to be used for RoutePolar lookups */
   unsigned polar_index;
 
-  RouteLink(const RouteLinkBase &link, const FlatProjection &proj);
-  RouteLink (const RoutePoint& _first, const RoutePoint& _second,
-             const FlatProjection &proj);
+  RouteLink(const RouteLinkBase &link, const FlatProjection &proj) noexcept;
+  RouteLink(const RoutePoint &_first, const RoutePoint &_second,
+            const FlatProjection &proj) noexcept;
 
   /**
    * Generate RouteLink projected flat such that the destination altitude equals
@@ -127,11 +128,11 @@ public:
    *
    * @return link equivalent to this link flattened
    */
-  gcc_pure
-  RouteLink Flat() const;
+  [[gnu::pure]]
+  RouteLink Flat() const noexcept;
 
 private:
-  void CalcSpeedups(const FlatProjection &proj);
+  void CalcSpeedups(const FlatProjection &proj) noexcept;
 };
 
 #endif

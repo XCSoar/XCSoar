@@ -41,7 +41,7 @@ Copyright_License {
 #include "ActionInterface.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
-#include "net/http/Session.hpp"
+#include "net/http/Init.hpp"
 #include "net/http/ToFile.hpp"
 #include "io/FileTransaction.hpp"
 
@@ -72,8 +72,8 @@ private:
   void Download() noexcept;
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
   /* virtual methods from DataFieldListener */
   void OnModified(DataField &df) override {
@@ -179,10 +179,8 @@ RASPSettingsPanel::Download() noexcept
                            GetLook(),
                            _("Download"), true);
 
-    Net::Session session;
-
     FileTransaction transaction(path);
-    Net::DownloadToFileJob job(session, url, transaction.GetTemporaryPath());
+    Net::DownloadToFileJob job(*Net::curl, url, transaction.GetTemporaryPath());
     if (!runner.Run(job))
       return;
 
@@ -200,7 +198,8 @@ RASPSettingsPanel::Download() noexcept
 }
 
 void
-RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+RASPSettingsPanel::Prepare(ContainerWindow &parent,
+                           const PixelRect &rc) noexcept
 {
   const WeatherUIState &state = CommonInterface::GetUIState().weather;
   time = state.time;
@@ -220,7 +219,7 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-RASPSettingsPanel::Save(bool &_changed)
+RASPSettingsPanel::Save(bool &_changed) noexcept
 {
   WeatherUIState &state = CommonInterface::SetUIState().weather;
 

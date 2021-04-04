@@ -49,7 +49,7 @@ public:
                                const double _h_max)
     :h_min(_h_min), h_max(_h_max) {}
 
-  gcc_pure
+  [[gnu::pure]]
   bool operator()(const AbstractAirspace &t) const;
 };
 

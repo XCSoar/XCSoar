@@ -39,11 +39,13 @@ FAITriangleTaskFactory::FAITriangleTaskFactory(OrderedTask& _task,
 {
 }
 
-bool 
-FAITriangleTaskFactory::Validate()
+TaskValidationErrorSet
+FAITriangleTaskFactory::Validate() const noexcept
 {
+  auto errors = FAITaskFactory::Validate();
 
-  bool valid = FAITaskFactory::Validate();
+  if (!FAITriangleValidator::Validate(task))
+    errors |= TaskValidationErrorType::WRONG_SHAPE;
 
-  return valid && FAITriangleValidator::Validate(task);
+  return errors;
 }

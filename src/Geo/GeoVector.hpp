@@ -24,7 +24,6 @@
 #define GEO_VECTOR_HPP
 
 #include "Math/Angle.hpp"
-#include "util/Compiler.h"
 
 #include <type_traits>
 
@@ -76,7 +75,7 @@ struct GeoVector {
    * Returns the end point of the geovector projected from the start point.  
    * Assumes constant bearing. 
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint EndPoint(const GeoPoint &source) const;
 
   /**

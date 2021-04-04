@@ -27,7 +27,6 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
 #include "MapWindow/MapCanvas.hpp"
-#include "util/Compiler.h"
 
 class Canvas;
 class WindowProjection;
@@ -124,7 +123,7 @@ private:
     return index == active_index;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsTargetVisible(const TaskPoint &tp) const;
 
   void DrawBearing(const TaskPoint &tp);

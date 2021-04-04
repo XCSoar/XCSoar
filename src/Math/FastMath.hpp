@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_MATH_FASTMATH_HPP
 #define XCSOAR_MATH_FASTMATH_HPP
 
-#include "util/Compiler.h"
-
 /**
  * Compares a^2 + b^2 against c^2
  * Use this instead of hypot when comparing
@@ -33,16 +31,16 @@ Copyright_License {
  *         0 if a^2 + b^2 = c^2,
  *        -1 if a^2 + b^2 < c^2,
  */
-gcc_const
+[[gnu::const]]
 int
-compare_squared(int a, int b, int c);
+compare_squared(int a, int b, int c) noexcept;
 
-gcc_const
+[[gnu::const]]
 double
-thermal_recency_fn(unsigned x);
+thermal_recency_fn(unsigned x) noexcept;
 
 inline unsigned int
-CombinedDivAndMod(unsigned &lx)
+CombinedDivAndMod(unsigned &lx) noexcept
 {
   unsigned int ox = lx & 0xff;
   // JMW no need to check max since overflow will result in
@@ -51,13 +49,13 @@ CombinedDivAndMod(unsigned &lx)
   return ox;
 }
 
-gcc_const
+[[gnu::const]]
 unsigned
-isqrt4(unsigned val);
+isqrt4(unsigned val) noexcept;
 
-gcc_const
+[[gnu::const]]
 static inline unsigned
-ihypot(int x, int y)
+ihypot(int x, int y) noexcept
 {
   return isqrt4(x * x + y * y);
 }

@@ -30,10 +30,10 @@ class StatusPanel : public RowFormWidget {
 public:
   StatusPanel(const DialogLook &look):RowFormWidget(look) {}
 
-  virtual void Refresh() = 0;
+  virtual void Refresh() noexcept = 0;
 
   /* virtual methods from class Widget */
-  void Show(const PixelRect &rc) override;
+  void Show(const PixelRect &rc) noexcept override;
 };
 
 #endif

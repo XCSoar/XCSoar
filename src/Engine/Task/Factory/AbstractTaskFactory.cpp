@@ -431,9 +431,6 @@ bool
 AbstractTaskFactory::Append(const OrderedTaskPoint &new_tp,
                             const bool auto_mutate)
 {
-  if (task.IsFull())
-    return false;
-
   if (auto_mutate) {
     if (!task.TaskSize()) {
       // empty task, so add as a start point
@@ -761,10 +758,9 @@ AbstractTaskFactory::CheckAddFinish()
  return true;
 }
 
-bool
-AbstractTaskFactory::ValidateFAIOZs()
+TaskValidationErrorSet
+AbstractTaskFactory::ValidateFAIOZs() const noexcept
 {
-  ClearValidationErrors();
   bool valid = true;
 
   for (unsigned i = 0; i < task.TaskSize() && valid; i++) {
@@ -826,16 +822,17 @@ AbstractTaskFactory::ValidateFAIOZs()
     }
   }
 
-  if (!valid)
-    AddValidationError(TaskValidationErrorType::NON_FAI_OZS);
+  TaskValidationErrorSet errors;
 
-  return valid;
+  if (!valid)
+    errors |= TaskValidationErrorType::NON_FAI_OZS;
+
+  return errors;
 }
 
-bool
-AbstractTaskFactory::ValidateMATOZs()
+TaskValidationErrorSet
+AbstractTaskFactory::ValidateMATOZs() const noexcept
 {
-  ClearValidationErrors();
   bool valid = true;
 
   for (unsigned i = 0; i < task.TaskSize() && valid; i++) {
@@ -877,55 +874,45 @@ AbstractTaskFactory::ValidateMATOZs()
     }
   }
 
+  TaskValidationErrorSet errors;
   if (!valid)
-    AddValidationError(TaskValidationErrorType::NON_MAT_OZS);
+    errors |= TaskValidationErrorType::NON_MAT_OZS;
 
-  return valid;
+  return errors;
 }
 
-bool
-AbstractTaskFactory::Validate()
+TaskValidationErrorSet
+AbstractTaskFactory::Validate() const noexcept
 {
-  ClearValidationErrors();
+  TaskValidationErrorSet errors;
 
-  bool valid = true;
+  if (task.TaskSize() == 0)
+    errors |= TaskValidationErrorType::EMPTY_TASK;
 
-  if (!task.HasStart()) {
-    AddValidationError(TaskValidationErrorType::NO_VALID_START);
-    valid = false;
-  }
-  if (!task.HasFinish()) {
-    AddValidationError(TaskValidationErrorType::NO_VALID_FINISH);
-    valid = false;
-  }
+  if (!task.HasStart())
+    errors |= TaskValidationErrorType::NO_VALID_START;
 
-  if (constraints.is_closed && !IsClosed()) {
-    AddValidationError(TaskValidationErrorType::TASK_NOT_CLOSED);
-    valid = false;
-  }
+  if (!task.HasFinish())
+    errors |= TaskValidationErrorType::NO_VALID_FINISH;
+
+  if (constraints.is_closed && !IsClosed())
+    errors |= TaskValidationErrorType::TASK_NOT_CLOSED;
 
   if (constraints.IsFixedSize()) {
-    if (task.TaskSize() != constraints.max_points) {
-      AddValidationError(TaskValidationErrorType::INCORRECT_NUMBER_TURNPOINTS);
-      valid = false;
-    }
+    if (task.TaskSize() != constraints.max_points)
+      errors |= TaskValidationErrorType::INCORRECT_NUMBER_TURNPOINTS;
   } else {
-    if (task.TaskSize() < constraints.min_points) {
-      AddValidationError(TaskValidationErrorType::UNDER_MIN_TURNPOINTS);
-      valid = false;
-    }
-    if (task.TaskSize() > constraints.max_points) {
-      AddValidationError(TaskValidationErrorType::EXCEEDS_MAX_TURNPOINTS);
-      valid = false;
-    }
+    if (task.TaskSize() < constraints.min_points)
+      errors |= TaskValidationErrorType::UNDER_MIN_TURNPOINTS;
+
+    if (task.TaskSize() > constraints.max_points)
+      errors |= TaskValidationErrorType::EXCEEDS_MAX_TURNPOINTS;
   }
 
-  if (constraints.homogeneous_tps && !IsHomogeneous()) {
-    AddValidationError(TaskValidationErrorType::TASK_NOT_HOMOGENEOUS);
-    valid = false;
-  }
+  if (constraints.homogeneous_tps && !IsHomogeneous())
+    errors |= TaskValidationErrorType::TASK_NOT_HOMOGENEOUS;
 
-  return valid;
+  return errors;
 }
 
 LegalPointSet

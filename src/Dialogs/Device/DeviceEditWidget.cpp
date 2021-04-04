@@ -92,7 +92,7 @@ static constexpr unsigned num_port_types = ARRAY_SIZE(port_types) - 1;
 static unsigned
 AddPort(DataFieldEnum &df, DeviceConfig::PortType type,
         const TCHAR *text, const TCHAR *display_string=NULL,
-        const TCHAR *help=NULL)
+        const TCHAR *help=NULL) noexcept
 {
   /* the uppper 16 bit is the port type, and the lower 16 bit is a
      serial number to make the enum id unique */
@@ -105,7 +105,7 @@ AddPort(DataFieldEnum &df, DeviceConfig::PortType type,
 #if defined(HAVE_POSIX)
 
 static bool
-DetectSerialPorts(DataFieldEnum &df)
+DetectSerialPorts(DataFieldEnum &df) noexcept
 {
   TTYEnumerator enumerator;
   if (enumerator.HasFailed())
@@ -135,7 +135,7 @@ DetectSerialPorts(DataFieldEnum &df)
 #if defined(_WIN32) && !defined(HAVE_POSIX)
 
 static void
-FillDefaultSerialPorts(DataFieldEnum &df)
+FillDefaultSerialPorts(DataFieldEnum &df) noexcept
 {
   for (unsigned i = 1; i <= 10; ++i) {
     TCHAR buffer[64];
@@ -147,7 +147,7 @@ FillDefaultSerialPorts(DataFieldEnum &df)
 #endif
 
 static void
-FillPortTypes(DataFieldEnum &df, const DeviceConfig &config)
+FillPortTypes(DataFieldEnum &df, const DeviceConfig &config) noexcept
 {
   for (unsigned i = 0; port_types[i].label != NULL; i++) {
     unsigned id = AddPort(df, port_types[i].type, port_types[i].label,
@@ -159,7 +159,8 @@ FillPortTypes(DataFieldEnum &df, const DeviceConfig &config)
 }
 
 static void
-SetPort(DataFieldEnum &df, DeviceConfig::PortType type, const TCHAR *value)
+SetPort(DataFieldEnum &df, DeviceConfig::PortType type,
+        const TCHAR *value) noexcept
 {
   assert(value != NULL);
 
@@ -168,7 +169,7 @@ SetPort(DataFieldEnum &df, DeviceConfig::PortType type, const TCHAR *value)
 }
 
 static void
-FillSerialPorts(DataFieldEnum &df, const DeviceConfig &config)
+FillSerialPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
 {
 #if defined(HAVE_POSIX)
   DetectSerialPorts(df);
@@ -181,7 +182,8 @@ FillSerialPorts(DataFieldEnum &df, const DeviceConfig &config)
 }
 
 static void
-FillAndroidBluetoothPorts(DataFieldEnum &df, const DeviceConfig &config)
+FillAndroidBluetoothPorts(DataFieldEnum &df,
+                          const DeviceConfig &config) noexcept
 {
 #ifdef ANDROID
   JNIEnv *env = Java::GetEnv();
@@ -220,7 +222,7 @@ FillAndroidBluetoothPorts(DataFieldEnum &df, const DeviceConfig &config)
 }
 
 static void
-FillAndroidIOIOPorts(DataFieldEnum &df, const DeviceConfig &config)
+FillAndroidIOIOPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
 {
 #if defined(ANDROID)
   df.EnableItemHelp(true);
@@ -241,7 +243,7 @@ FillAndroidIOIOPorts(DataFieldEnum &df, const DeviceConfig &config)
 }
 
 static void
-FillPorts(DataFieldEnum &df, const DeviceConfig &config)
+FillPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
 {
   FillPortTypes(df, config);
   FillSerialPorts(df, config);
@@ -250,7 +252,7 @@ FillPorts(DataFieldEnum &df, const DeviceConfig &config)
 }
 
 static void
-FillBaudRates(DataFieldEnum &dfe)
+FillBaudRates(DataFieldEnum &dfe) noexcept
 {
   dfe.addEnumText(_T("1200"), 1200);
   dfe.addEnumText(_T("2400"), 2400);
@@ -263,7 +265,7 @@ FillBaudRates(DataFieldEnum &dfe)
 }
 
 static void
-FillTCPPorts(DataFieldEnum &dfe)
+FillTCPPorts(DataFieldEnum &dfe) noexcept
 {
   dfe.addEnumText(_T("4353"), 4353);
   dfe.addEnumText(_T("10110"), 10110);
@@ -276,7 +278,7 @@ FillTCPPorts(DataFieldEnum &dfe)
 }
 
 static void
-FillI2CBus(DataFieldEnum &dfe)
+FillI2CBus(DataFieldEnum &dfe) noexcept
 {
   dfe.addEnumText(_T("0"), 0U);
   dfe.addEnumText(_T("1"), 1U);
@@ -285,7 +287,7 @@ FillI2CBus(DataFieldEnum &dfe)
 
 /* Only lists possible addresses of supported devices */
 static void
-FillI2CAddr(DataFieldEnum &dfe)
+FillI2CAddr(DataFieldEnum &dfe) noexcept
 {
   dfe.addEnumText(_T("0x76 (MS5611)"), 0x76);
   dfe.addEnumText(_T("0x77 (BMP085 and MS5611)"), 0x77);
@@ -295,7 +297,7 @@ FillI2CAddr(DataFieldEnum &dfe)
 }
 
 static void
-FillPress(DataFieldEnum &dfe)
+FillPress(DataFieldEnum &dfe) noexcept
 {
   dfe.addEnumText(_T("Static & Vario"), (unsigned)DeviceConfig::PressureUse::STATIC_WITH_VARIO);
   dfe.addEnumText(_T("Static"), (unsigned)DeviceConfig::PressureUse::STATIC_ONLY);
@@ -305,7 +307,7 @@ FillPress(DataFieldEnum &dfe)
 }
 
 static void
-SetPort(DataFieldEnum &df, const DeviceConfig &config)
+SetPort(DataFieldEnum &df, const DeviceConfig &config) noexcept
 {
   switch (config.port_type) {
   case DeviceConfig::PortType::DISABLED:
@@ -348,7 +350,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config)
 
 static bool
 EditPortCallback(const TCHAR *caption, DataField &_df,
-                 const TCHAR *help_text)
+                 const TCHAR *help_text) noexcept
 {
   DataFieldEnum &df = (DataFieldEnum &)_df;
 
@@ -381,13 +383,12 @@ EditPortCallback(const TCHAR *caption, DataField &_df,
   return true;
 }
 
-DeviceEditWidget::DeviceEditWidget(const DeviceConfig &_config)
+DeviceEditWidget::DeviceEditWidget(const DeviceConfig &_config) noexcept
   :RowFormWidget(UIGlobals::GetDialogLook()),
    config(_config), listener(NULL) {}
 
-
 void
-DeviceEditWidget::SetConfig(const DeviceConfig &_config)
+DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
 {
   config = _config;
 
@@ -470,7 +471,7 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config)
 
 gcc_pure
 static bool
-SupportsBulkBaudRate(const DataField &df)
+SupportsBulkBaudRate(const DataField &df) noexcept
 {
   const TCHAR *driver_name = df.GetAsString();
   if (driver_name == NULL)
@@ -485,7 +486,7 @@ SupportsBulkBaudRate(const DataField &df)
 
 gcc_pure
 static bool
-CanReceiveSettings(const DataField &df)
+CanReceiveSettings(const DataField &df) noexcept
 {
   const TCHAR *driver_name = df.GetAsString();
   if (driver_name == NULL)
@@ -500,7 +501,7 @@ CanReceiveSettings(const DataField &df)
 
 gcc_pure
 static bool
-CanSendSettings(const DataField &df)
+CanSendSettings(const DataField &df) noexcept
 {
   const TCHAR *driver_name = df.GetAsString();
   if (driver_name == NULL)
@@ -515,7 +516,7 @@ CanSendSettings(const DataField &df)
 
 gcc_pure
 static DeviceConfig::PortType
-GetPortType(const DataField &df)
+GetPortType(const DataField &df) noexcept
 {
   const DataFieldEnum &dfe = (const DataFieldEnum &)df;
   const unsigned port = dfe.GetValue();
@@ -528,7 +529,7 @@ GetPortType(const DataField &df)
 
 gcc_pure
 static bool
-CanPassThrough(const DataField &df)
+CanPassThrough(const DataField &df) noexcept
 {
   const TCHAR *driver_name = df.GetAsString();
   if (driver_name == nullptr)
@@ -541,9 +542,8 @@ CanPassThrough(const DataField &df)
   return driver->HasPassThrough();
 }
 
-
 void
-DeviceEditWidget::UpdateVisibilities()
+DeviceEditWidget::UpdateVisibilities() noexcept
 {
   const DeviceConfig::PortType type = GetPortType(GetDataField(Port));
   const bool maybe_bluetooth =
@@ -579,7 +579,8 @@ DeviceEditWidget::UpdateVisibilities()
 }
 
 void
-DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+DeviceEditWidget::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 
@@ -682,7 +683,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
  * @return true if the value has changed
  */
 static bool
-FinishPortField(DeviceConfig &config, const DataFieldEnum &df)
+FinishPortField(DeviceConfig &config, const DataFieldEnum &df) noexcept
 {
   unsigned value = df.GetValue();
 
@@ -748,7 +749,7 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df)
 }
 
 bool
-DeviceEditWidget::Save(bool &_changed)
+DeviceEditWidget::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

@@ -94,7 +94,7 @@ protected:
 
 public:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
   /* virtual methods from class List::Handler */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -114,7 +114,8 @@ public:
 };
 
 void
-OptionStartsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+OptionStartsWidget::Prepare(ContainerWindow &parent,
+                            const PixelRect &rc) noexcept
 {
   CreateList(parent, UIGlobals::GetDialogLook(),
              rc, row_renderer.CalculateLayout(*UIGlobals::GetDialogLook().list.font));
@@ -193,15 +194,15 @@ dlgTaskOptionalStarts(OrderedTask &task)
 {
   assert(task.TaskSize() > 0);
 
-  OptionStartsWidget widget(task);
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(),
-                      _("Alternate Start Points"), &widget);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<OptionStartsWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(),
+           _("Alternate Start Points"));
+  dialog.SetWidget(task);
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();
-  dialog.StealWidget();
 
-  return widget.IsModified();
+  return dialog.GetWidget().IsModified();
 }

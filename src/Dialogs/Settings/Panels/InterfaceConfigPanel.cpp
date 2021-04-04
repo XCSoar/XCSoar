@@ -56,8 +56,8 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 #ifndef HAVE_NATIVE_GETTEXT
@@ -79,7 +79,8 @@ public:
 #endif
 
 void
-InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+InterfaceConfigPanel::Prepare(ContainerWindow &parent,
+                              const PixelRect &rc) noexcept
 {
   const UISettings &settings = CommonInterface::GetUISettings();
 
@@ -198,7 +199,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-InterfaceConfigPanel::Save(bool &_changed)
+InterfaceConfigPanel::Save(bool &_changed) noexcept
 {
   UISettings &settings = CommonInterface::SetUISettings();
   bool changed = false;

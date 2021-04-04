@@ -39,7 +39,7 @@ enum Controls {
 };
 
 void
-TimesStatusPanel::Refresh()
+TimesStatusPanel::Refresh() noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const FlyingState &flight = CommonInterface::Calculated().flight;
@@ -104,7 +104,7 @@ TimesStatusPanel::Refresh()
 }
 
 void
-TimesStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TimesStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   AddReadOnly(_("Local time"));
   AddReadOnly(_("UTC time"));

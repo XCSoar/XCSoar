@@ -37,18 +37,18 @@ public:
                 std::make_unique<RowFormWidget>(look),
                 false) {}
 
-  void Refresh();
+  void Refresh() noexcept;
 
-  virtual void Initialise(ContainerWindow &parent,
-                          const PixelRect &rc) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
+  void Initialise(ContainerWindow &parent,
+                  const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
 
-  virtual void OnGPSUpdate(const MoreData &basic) override;
+  void OnGPSUpdate(const MoreData &basic) override;
 };
 
 void
-AltitudeInfoPanel::Refresh()
+AltitudeInfoPanel::Refresh() noexcept
 {
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const NMEAInfo &basic = CommonInterface::Basic();
@@ -74,7 +74,8 @@ AltitudeInfoPanel::Refresh()
 }
 
 void
-AltitudeInfoPanel::Initialise(ContainerWindow &parent, const PixelRect &rc)
+AltitudeInfoPanel::Initialise(ContainerWindow &parent,
+                              const PixelRect &rc) noexcept
 {
   TwoWidgets::Initialise(parent, rc);
 
@@ -88,7 +89,7 @@ AltitudeInfoPanel::Initialise(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-AltitudeInfoPanel::Show(const PixelRect &rc)
+AltitudeInfoPanel::Show(const PixelRect &rc) noexcept
 {
   Refresh();
   TwoWidgets::Show(rc);
@@ -97,7 +98,7 @@ AltitudeInfoPanel::Show(const PixelRect &rc)
 }
 
 void
-AltitudeInfoPanel::Hide()
+AltitudeInfoPanel::Hide() noexcept
 {
   CommonInterface::GetLiveBlackboard().RemoveListener(*this);
 

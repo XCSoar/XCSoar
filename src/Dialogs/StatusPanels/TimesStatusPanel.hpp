@@ -28,13 +28,14 @@ Copyright_License {
 
 class TimesStatusPanel : public StatusPanel {
 public:
-  TimesStatusPanel(const DialogLook &look):StatusPanel(look) {}
+  explicit TimesStatusPanel(const DialogLook &look) noexcept
+    :StatusPanel(look) {}
 
   /* virtual methods from class StatusPanel */
-  void Refresh() override;
+  void Refresh() noexcept override;
 
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 };
 
 #endif

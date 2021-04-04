@@ -303,7 +303,7 @@ public:
    *
    * @return MacCready-adjusted inverse glide ratio over ground
    */
-  double f(const double V) {
+  double f(const double V) noexcept override {
     return (polar.MSinkRate(V + m_head_wind) + m_net_sink_rate) / V;
   }
 

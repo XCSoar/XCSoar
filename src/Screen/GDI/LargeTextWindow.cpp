@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Screen/LargeTextWindow.hpp"
 
+#include <memory>
+
 #include <tchar.h>
 #include <commctrl.h>
 #include <windowsx.h>
@@ -39,8 +41,10 @@ LargeTextWindow::SetText(const TCHAR *text)
 {
   // Replace \n by \r\r\n to enable usage of line-breaks in edit control
   unsigned size = _tcslen(text);
-  // TODO variable-length arrays are illegal in C++
-  TCHAR buffer[size * sizeof(TCHAR) * 3 + 1];
+
+  const std::unique_ptr<TCHAR[]> allocation(new TCHAR[size * 3 + 1]);
+  TCHAR *buffer = allocation.get();
+
   const TCHAR* p2 = text;
   TCHAR* p3 = buffer;
   for (; *p2 != _T('\0'); p2++) {

@@ -46,10 +46,11 @@ template<class T> class AllocatedArray;
 unsigned
 PolygonToTriangles(const BulkPixelPoint *points, unsigned num_points,
                    AllocatedArray<GLushort> &triangles,
-                   unsigned min_distance=1);
+                   unsigned min_distance=1) noexcept;
+
 unsigned
 PolygonToTriangles(const FloatPoint2D *points, unsigned num_points,
-                   GLushort *triangles, float min_distance=1);
+                   GLushort *triangles, float min_distance=1) noexcept;
 
 /**
  * Pack triangle indices into a triangle strip.
@@ -69,7 +70,7 @@ PolygonToTriangles(const FloatPoint2D *points, unsigned num_points,
  */
 unsigned
 TriangleToStrip(GLushort *triangles, unsigned index_count,
-                unsigned vertex_count, unsigned polygon_count=1);
+                unsigned vertex_count, unsigned polygon_count=1) noexcept;
 
 /**
  * Create a triangle strip representing a thick line.
@@ -86,6 +87,7 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
 unsigned
 LineToTriangles(const BulkPixelPoint *points, unsigned num_points,
                 AllocatedArray<BulkPixelPoint> &strip,
-                unsigned line_width, bool loop=false, bool tcap=false);
+                unsigned line_width,
+                bool loop=false, bool tcap=false) noexcept;
 
 #endif

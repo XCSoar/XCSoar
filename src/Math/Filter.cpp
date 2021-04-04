@@ -27,7 +27,7 @@
 #include <cassert>
 
 bool
-Filter::Design(const double cutoff_wavelength, const bool bessel)
+Filter::Design(const double cutoff_wavelength, const bool bessel) noexcept
 {
   static constexpr unsigned sample_freq = 1;
   static constexpr unsigned n = 1;
@@ -48,7 +48,9 @@ Filter::Design(const double cutoff_wavelength, const bool bessel)
   auto f_star = c / (sample_freq * cutoff_wavelength);
 
   if (f_star <= 0 || f_star >= 1. / 8.) {
+#ifndef NDEBUG
     ok = false;
+#endif
     return false;
   }
 
@@ -63,13 +65,15 @@ Filter::Design(const double cutoff_wavelength, const bool bessel)
   b[1] = 1. - (a[0] + a[1] + a[2] + b[0]);
 
   Reset(0);
-  ok = true;
 
+#ifndef NDEBUG
+  ok = true;
+#endif
   return true;
 }
 
 double
-Filter::Reset(const double _x)
+Filter::Reset(const double _x) noexcept
 {
   x[0] = _x;
   y[0] = _x;
@@ -81,7 +85,7 @@ Filter::Reset(const double _x)
 }
 
 double
-Filter::Update(const double _x)
+Filter::Update(const double _x) noexcept
 {
   assert(ok);
 

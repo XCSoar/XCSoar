@@ -31,54 +31,55 @@ Copyright_License {
 #include <cstddef> // for std::byte
 
 class OperationEnvironment;
+class CurlGlobal;
 
 namespace Net {
-  class Session;
 
-  /**
-   * Download a URL into the specified file.
-   *
-   * Throws on error.
-   *
-   * @param md5_digest an optional buffer with at least 33 characters
-   * which will contain the hex MD5 digest after returning
-   */
-  void DownloadToFile(Session &session, const char *url,
-                      const char *username, const char *password,
-                      Path path, std::array<std::byte, 32> *sha256,
-                      OperationEnvironment &env);
+/**
+ * Download a URL into the specified file.
+ *
+ * Throws on error.
+ *
+ * @param md5_digest an optional buffer with at least 33 characters
+ * which will contain the hex MD5 digest after returning
+ */
+void DownloadToFile(CurlGlobal &curl, const char *url,
+                    const char *username, const char *password,
+                    Path path, std::array<std::byte, 32> *sha256,
+                    OperationEnvironment &env);
 
-  static inline void
-  DownloadToFile(Session &session, const char *url,
-                 Path path, std::array<std::byte, 32> *sha256,
-                 OperationEnvironment &env)
-  {
-    DownloadToFile(session, url, nullptr, nullptr,
-                   path, sha256, env);
+static inline void
+DownloadToFile(CurlGlobal &curl, const char *url,
+               Path path, std::array<std::byte, 32> *sha256,
+               OperationEnvironment &env)
+{
+  DownloadToFile(curl, url, nullptr, nullptr,
+                 path, sha256, env);
+}
+
+class DownloadToFileJob : public Job {
+  CurlGlobal &curl;
+  const char *url;
+  const char *username = nullptr, *password = nullptr;
+  const Path path;
+  std::array<std::byte, 32> sha256;
+
+public:
+  DownloadToFileJob(CurlGlobal &_curl, const char *_url, Path _path)
+    :curl(_curl), url(_url), path(_path) {}
+
+  void SetBasicAuth(const char *_username, const char *_password) {
+    username = _username;
+    password = _password;
   }
 
-  class DownloadToFileJob : public Job {
-    Session &session;
-    const char *url;
-    const char *username = nullptr, *password = nullptr;
-    const Path path;
-    std::array<std::byte, 32> sha256;
+  const auto &GetSHA256() const {
+    return sha256;
+  }
 
-  public:
-    DownloadToFileJob(Session &_session, const char *_url, Path _path)
-      :session(_session), url(_url), path(_path) {}
+  virtual void Run(OperationEnvironment &env);
+};
 
-    void SetBasicAuth(const char *_username, const char *_password) {
-      username = _username;
-      password = _password;
-    }
-
-    const auto &GetSHA256() const {
-      return sha256;
-    }
-
-    virtual void Run(OperationEnvironment &env);
-  };
-}
+} // namespace Net
 
 #endif

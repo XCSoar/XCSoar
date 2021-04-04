@@ -29,21 +29,21 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 
 void
-TextWidget::SetText(const TCHAR *text)
+TextWidget::SetText(const TCHAR *text) noexcept
 {
   WndFrame &w = (WndFrame &)GetWindow();
   w.SetText(text);
 }
 
 void
-TextWidget::SetColor(Color _color)
+TextWidget::SetColor(Color _color) noexcept
 {
   WndFrame &w = (WndFrame &)GetWindow();
   w.SetTextColor(_color);
 }
 
 PixelSize
-TextWidget::GetMinimumSize() const
+TextWidget::GetMinimumSize() const noexcept
 {
   const Font &font = UIGlobals::GetDialogLook().text_font;
   const int height = 2 * Layout::GetTextPadding() + font.GetHeight();
@@ -52,13 +52,13 @@ TextWidget::GetMinimumSize() const
 }
 
 PixelSize
-TextWidget::GetMaximumSize() const
+TextWidget::GetMaximumSize() const noexcept
 {
   PixelSize size = GetMinimumSize();
 
   if (IsDefined()) {
     const WndFrame &w = (const WndFrame &)GetWindow();
-    const unsigned text_height = w.GetTextHeight() + Layout::Scale(4);
+    const unsigned text_height = 2 * Layout::GetTextPadding() + w.GetTextHeight();
     if (text_height > size.height)
       size.height = text_height;
   }
@@ -67,7 +67,7 @@ TextWidget::GetMaximumSize() const
 }
 
 void
-TextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   WindowStyle style;
   style.Hide();

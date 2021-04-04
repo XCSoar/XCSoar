@@ -814,7 +814,7 @@ DeviceDescriptor::WriteNMEA(const TCHAR *line, OperationEnvironment &env)
   if (port == nullptr)
     return false;
 
-  char buffer[_tcslen(line) * 4 + 1];
+  char buffer[4096];
   if (::WideCharToMultiByte(CP_ACP, 0, line, -1, buffer, sizeof(buffer),
                             nullptr, nullptr) <= 0)
     return false;
@@ -1222,17 +1222,17 @@ DeviceDescriptor::DataReceived(const void *data, size_t length) noexcept
 
   // Pass data directly to drivers that use binary data protocols
   if (driver != nullptr && device != nullptr && driver->UsesRawData()) {
-    std::lock_guard<Mutex> lock(device_blackboard->mutex);
-    NMEAInfo &basic = device_blackboard->SetRealState(index);
-    basic.UpdateClock();
+    auto basic = device_blackboard->LockGetDeviceDataUpdateClock(index);
 
     const ExternalSettings old_settings = basic.settings;
 
+    /* call Device::DataReceived() without holding
+       DeviceBlackboard::mutex to avoid blocking all other threads */
     if (device->DataReceived(data, length, basic)) {
       if (!config.sync_from_device)
         basic.settings = old_settings;
 
-      device_blackboard->ScheduleMerge();
+      device_blackboard->LockSetDeviceDataScheuduleMerge(index, basic);
     }
 
     return true;

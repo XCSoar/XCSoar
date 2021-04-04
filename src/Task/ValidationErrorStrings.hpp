@@ -25,11 +25,10 @@ Copyright_License {
 #define XCSOAR_TASK_VALIDATION_ERROR_STRINGS_HPP
 
 #include "Engine/Task/Factory/ValidationError.hpp"
-#include "util/Compiler.h"
 
 #include <tchar.h>
 
-gcc_pure
+[[gnu::const]]
 const TCHAR *
 getTaskValidationErrors(const TaskValidationErrorSet v);
 

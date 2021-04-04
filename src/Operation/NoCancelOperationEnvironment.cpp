@@ -25,9 +25,14 @@ Copyright_License {
 #include "system/Sleep.h"
 
 bool
-NoCancelOperationEnvironment::IsCancelled() const
+NoCancelOperationEnvironment::IsCancelled() const noexcept
 {
   return false;
+}
+
+void
+NoCancelOperationEnvironment::SetCancelHandler(std::function<void()>) noexcept
+{
 }
 
 void

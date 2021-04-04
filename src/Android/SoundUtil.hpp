@@ -27,11 +27,13 @@ Copyright_License {
 #include <jni.h>
 
 namespace SoundUtil {
-  void Initialise(JNIEnv *env);
-  void Deinitialise(JNIEnv *env);
 
-  bool Play(JNIEnv *env, jobject context, const char *name);
-  bool PlayExternal(JNIEnv *env, jobject context, const char *path);
-};
+void Initialise(JNIEnv *env);
+void Deinitialise(JNIEnv *env);
+
+bool Play(JNIEnv *env, jobject context, const char *name);
+bool PlayExternal(JNIEnv *env, jobject context, const char *path);
+
+} // namespace SoundUtil
 
 #endif

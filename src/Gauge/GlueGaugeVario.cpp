@@ -26,7 +26,7 @@ Copyright_License {
 #include "Blackboard/LiveBlackboard.hpp"
 
 void
-GlueGaugeVario::Prepare(ContainerWindow &parent, const PixelRect &rc)
+GlueGaugeVario::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   WindowStyle style;
   style.Hide();
@@ -37,7 +37,7 @@ GlueGaugeVario::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-GlueGaugeVario::Show(const PixelRect &rc)
+GlueGaugeVario::Show(const PixelRect &rc) noexcept
 {
   WindowWidget::Show(rc);
 
@@ -45,7 +45,7 @@ GlueGaugeVario::Show(const PixelRect &rc)
 }
 
 void
-GlueGaugeVario::Hide()
+GlueGaugeVario::Hide() noexcept
 {
   blackboard.RemoveListener(*this);
 

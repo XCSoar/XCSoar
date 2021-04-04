@@ -26,7 +26,6 @@ Copyright_License {
 #include "Airspace/ActivePredicate.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
-#include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicateHeightRange.hpp"
 #include "Engine/Airspace/Predicate/OutsideAirspacePredicate.hpp"
 #include "Engine/Airspace/Minimum.hpp"
@@ -54,14 +53,16 @@ struct CompareNearestAirspace {
   }
 };
 
+template<typename Predicate>
 gcc_pure
 static NearestAirspace
 FindHorizontal(const GeoPoint &location,
                const Airspaces &airspace_database,
-               const AirspacePredicate &predicate)
+               Predicate &&predicate)
 {
   const auto &projection = airspace_database.GetProjection();
-  return FindMinimum(airspace_database, location, 30000, predicate,
+  return FindMinimum(airspace_database, location, 30000,
+                     std::forward<Predicate>(predicate),
                      [&location, &projection](const AbstractAirspace &airspace){
                        return CalculateNearestAirspaceHorizontal(location, projection, airspace);
                      },
@@ -80,23 +81,23 @@ NearestAirspace::FindHorizontal(const MoreData &basic,
 
   /* find the nearest airspace */
   //consider only active airspaces
-  const auto outside_and_active =
+  auto outside_and_active =
     MakeAndPredicate(ActiveAirspacePredicate(&airspace_warnings),
                      OutsideAirspacePredicate(AGeoPoint(basic.location, 0)));
 
   //if altitude is available, filter airspaces in same height as airplane
   if (basic.NavAltitudeAvailable()) {
     /* check altitude; hard-coded margin of 50m (for now) */
-    const auto outside_and_active_and_height =
+    auto outside_and_active_and_height =
       MakeAndPredicate(outside_and_active,
                        AirspacePredicateHeightRange(basic.nav_altitude - 50,
                                                     basic.nav_altitude + 50));
-    const auto predicate = WrapAirspacePredicate(outside_and_active_and_height);
-    return ::FindHorizontal(basic.location, airspace_database, predicate);
+    return ::FindHorizontal(basic.location, airspace_database,
+                            std::move(outside_and_active_and_height));
   } else {
     /* only filter outside and active */
-    const auto predicate = WrapAirspacePredicate(outside_and_active);
-    return ::FindHorizontal(basic.location, airspace_database, predicate);
+    return ::FindHorizontal(basic.location, airspace_database,
+                            std::move(outside_and_active));
   }
 }
 

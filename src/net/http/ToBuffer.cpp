@@ -22,20 +22,31 @@ Copyright_License {
 */
 
 #include "ToBuffer.hpp"
-#include "Request.hpp"
-#include "Handler.hpp"
+#include "Request.hxx"
+#include "Handler.hxx"
 #include "Operation/Operation.hpp"
+#include "thread/Mutex.hxx"
+#include "thread/Cond.hxx"
+#include "util/NumberParser.hpp"
+#include "util/ScopeExit.hxx"
 
 #include <cstdint>
 #include <string.h>
 
-class DownloadToBufferHandler final : public Net::ResponseHandler {
+class DownloadToBufferHandler final : public CurlResponseHandler {
   uint8_t *buffer;
   const size_t max_size;
 
   size_t received = 0;
 
   OperationEnvironment &env;
+
+  Mutex mutex;
+  Cond cond;
+
+  std::exception_ptr error;
+
+  bool done = false;
 
 public:
   DownloadToBufferHandler(void *_buffer, size_t _max_size,
@@ -46,40 +57,81 @@ public:
     return received;
   }
 
-  bool ResponseReceived(int64_t content_length) noexcept override {
-    if (content_length > 0)
-      env.SetProgressRange(content_length);
-    return true;
-  };
+  void Cancel() noexcept {
+    const std::lock_guard<Mutex> lock(mutex);
+    done = true;
+    cond.notify_one();
+  }
 
-  bool DataReceived(const void *data, size_t length) noexcept override {
+  void Wait() noexcept {
+    std::unique_lock<Mutex> lock(mutex);
+    cond.wait(lock, [this]{ return done; });
+
+    if (error)
+      std::rethrow_exception(error);
+  }
+
+  /* virtual methods from class CurlResponseHandler */
+  void OnHeaders(unsigned status,
+                 std::multimap<std::string, std::string> &&headers) override {
+    if (auto i = headers.find("content-length"); i != headers.end())
+      env.SetProgressRange(ParseUint64(i->second.c_str()));
+  }
+
+  void OnData(ConstBuffer<void> data) override {
     size_t remaining = max_size - received;
-    if (remaining == 0 || env.IsCancelled())
-      return false;
+    if (remaining == 0 || done)
+      throw Pause{};
 
-    if (length > remaining)
-      length = remaining;
+    if (data.size > remaining)
+      data.size = remaining;
 
-    memcpy(buffer + received, data, length);
-    received += length;
+    memcpy(buffer + received, data.data, data.size);
+    received += data.size;
 
     env.SetProgressRange(received);
-    return true;
-  };
+  }
+
+  void OnEnd() override {
+    const std::lock_guard<Mutex> lock(mutex);
+    done = true;
+    cond.notify_one();
+  }
+
+  void OnError(std::exception_ptr e) noexcept override {
+    const std::lock_guard<Mutex> lock(mutex);
+    error = std::move(e);
+    done = true;
+    cond.notify_one();
+  }
 };
 
 size_t
-Net::DownloadToBuffer(Session &session, const char *url,
+Net::DownloadToBuffer(CurlGlobal &curl, const char *url,
                       const char *username, const char *password,
                       void *_buffer, size_t max_length,
                       OperationEnvironment &env)
 {
   DownloadToBufferHandler handler(_buffer, max_length, env);
-  Request request(session, handler, url);
-  if (username != nullptr)
-    request.SetBasicAuth(username, password);
+  CurlRequest request(curl, url, handler);
+  AtScopeExit(&request) { request.StopIndirect(); };
 
-  request.Send(10000);
+  request.SetFailOnError();
+
+  if (username != nullptr)
+    request.SetOption(CURLOPT_USERNAME, username);
+  if (password != nullptr)
+    request.SetOption(CURLOPT_PASSWORD, password);
+
+  env.SetCancelHandler([&]{
+    request.StopIndirect();
+    handler.Cancel();
+  });
+
+  AtScopeExit(&env) { env.SetCancelHandler({}); };
+
+  request.StartIndirect();
+  handler.Wait();
 
   if (env.IsCancelled())
     return -1;
@@ -90,6 +142,6 @@ Net::DownloadToBuffer(Session &session, const char *url,
 void
 Net::DownloadToBufferJob::Run(OperationEnvironment &env)
 {
-  length = DownloadToBuffer(session, url, username, password,
+  length = DownloadToBuffer(curl, url, username, password,
                             buffer, max_length, env);
 }

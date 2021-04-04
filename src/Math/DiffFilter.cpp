@@ -24,14 +24,14 @@
 #include "Constants.hpp"
 
 void
-DiffFilter::Reset(const double x0, const double y0)
+DiffFilter::Reset(const double x0, const double y0) noexcept
 {
   for (unsigned i = 0; i < x.size(); i++)
     x[i] = x0 - y0 * i;
 }
 
 double
-DiffFilter::Update(const double x0)
+DiffFilter::Update(const double x0) noexcept
 {
   std::copy_backward(x.cbegin(), std::prev(x.cend()), x.end());
   x.front() = x0;

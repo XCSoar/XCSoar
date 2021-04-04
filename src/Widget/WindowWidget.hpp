@@ -42,7 +42,7 @@ public:
   /**
    * Initialise an empty instance.  Call SetWindow() to finish it.
    */
-  WindowWidget();
+  WindowWidget() noexcept;
 
   /**
    * Initialise an instance with an existing #Window pointer.  It must
@@ -54,7 +54,7 @@ public:
   ~WindowWidget() noexcept override;
 
 protected:
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
     return window != nullptr;
   }
 
@@ -63,23 +63,23 @@ protected:
   /**
    * Deletes the window object
    */
-  void DeleteWindow();
+  void DeleteWindow() noexcept;
 
 public:
-  const Window &GetWindow() const {
+  const Window &GetWindow() const noexcept {
     assert(window != nullptr);
     return *window;
   }
 
-  Window &GetWindow() {
+  Window &GetWindow() noexcept {
     assert(window != nullptr);
     return *window;
   }
 
   /* virtual methods from class Widget */
-  void Show(const PixelRect &rc) override;
-  void Hide() override;
-  void Move(const PixelRect &rc) override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
+  void Move(const PixelRect &rc) noexcept override;
 };
 
 #endif

@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_TEXT_RENDERER_HPP
 #define XCSOAR_TEXT_RENDERER_HPP
 
-#include "util/Compiler.h"
-
 #include <tchar.h>
 
 struct PixelRect;
@@ -59,13 +57,13 @@ public:
 
   void InvalidateLayout() {}
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetHeight(Canvas &canvas, PixelRect rc, const TCHAR *text) const;
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetHeight(Canvas &canvas, unsigned width, const TCHAR *text) const;
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetHeight(const Font &font, unsigned width,
                      const TCHAR *text) const;
 

@@ -36,43 +36,43 @@ class Path;
  * Maps a file into the address space of this process.
  */
 class FileMapping {
-  void *m_data;
+  void *m_data = nullptr;
   size_t m_size;
 
 #ifndef HAVE_POSIX
-  HANDLE hFile, hMapping;
+  HANDLE hFile, hMapping = nullptr;
 #endif
 
 public:
-  FileMapping(Path path);
-  ~FileMapping();
-
   /**
-   * Has the constructor failed?
+   * Throws on error.
    */
-  bool error() const {
-    return m_data == nullptr;
-  }
+  FileMapping(Path path);
+
+  ~FileMapping() noexcept;
+
+  FileMapping(const FileMapping &) = delete;
+  FileMapping &operator=(const FileMapping &) = delete;
 
   /**
    * Returns a pointer to the beginning of the mapping.
    */
-  const void *data() const {
+  const void *data() const noexcept {
     return m_data;
   }
 
-  const void *at(size_t offset) const {
+  const void *at(size_t offset) const noexcept {
     return (const char *)data() + offset;
   }
 
-  const void *end() const {
+  const void *end() const noexcept {
     return at(size());
   }
 
   /**
    * Returns the size of the file, in bytes.
    */
-  size_t size() const {
+  size_t size() const noexcept {
     return m_size;
   }
 };

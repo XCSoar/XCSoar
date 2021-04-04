@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_PROGRAM_HPP
 
 #include "ui/opengl/System.hpp"
-#include "util/Compiler.h"
 
 /**
  * This class represents an OpenGL 3.0 / ES2.0 shader.
@@ -34,40 +33,43 @@ class GLShader {
   const GLuint id;
 
 public:
-  explicit GLShader(GLenum type):id(glCreateShader(type)) {}
+  explicit GLShader(GLenum type) noexcept:id(glCreateShader(type)) {}
 
-  ~GLShader() {
+  GLShader(const GLShader &) = delete;
+  GLShader &operator=(const GLShader &) = delete;
+
+  ~GLShader() noexcept {
     glDeleteShader(id);
   }
 
-  GLuint GetId() const {
+  GLuint GetId() const noexcept {
     return id;
   }
 
-  void Source(const char *_source) {
+  void Source(const char *_source) noexcept {
     const GLchar *source = (const GLchar *)_source;
     glShaderSource(id, 1, &source, nullptr);
   }
 
-  void Compile() {
+  void Compile() noexcept {
     glCompileShader(id);
   }
 
-  gcc_pure
-  GLint GetCompileStatus() const {
+  [[gnu::pure]]
+  GLint GetCompileStatus() const noexcept {
     GLint status;
     glGetShaderiv(id, GL_COMPILE_STATUS, &status);
     return status;
   }
 
-  gcc_pure
-  GLint GetInfoLogLength() const {
+  [[gnu::pure]]
+  GLint GetInfoLogLength() const noexcept {
     GLint length;
     glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
     return length;
   }
 
-  void GetInfoLog(char *buffer, GLsizei max_size) {
+  void GetInfoLog(char *buffer, GLsizei max_size) noexcept {
     glGetShaderInfoLog(id, max_size, nullptr, (GLchar *)buffer);
   }
 };
@@ -79,61 +81,64 @@ class GLProgram {
   const GLuint id;
 
 public:
-  GLProgram():id(glCreateProgram()) {}
+  GLProgram() noexcept:id(glCreateProgram()) {}
 
-  ~GLProgram() {
+  GLProgram(const GLProgram &) = delete;
+  GLProgram &operator=(const GLProgram &) = delete;
+
+  ~GLProgram() noexcept {
     glDeleteProgram(id);
   }
 
-  GLuint GetId() const {
+  GLuint GetId() const noexcept {
     return id;
   }
 
-  void AttachShader(const GLShader &shader) {
+  void AttachShader(const GLShader &shader) noexcept {
     glAttachShader(id, shader.GetId());
   }
 
-  void Link() {
+  void Link() noexcept {
     glLinkProgram(id);
   }
 
-  gcc_pure
-  GLint GetLinkStatus() const {
+  [[gnu::pure]]
+  GLint GetLinkStatus() const noexcept {
     GLint status;
     glGetProgramiv(id, GL_LINK_STATUS, &status);
     return status;
   }
 
-  gcc_pure
-  GLint GetInfoLogLength() const {
+  [[gnu::pure]]
+  GLint GetInfoLogLength() const noexcept {
     GLint length;
     glGetProgramiv(id, GL_INFO_LOG_LENGTH, &length);
     return length;
   }
 
-  void GetInfoLog(char *buffer, GLsizei max_size) {
+  void GetInfoLog(char *buffer, GLsizei max_size) noexcept {
     glGetProgramInfoLog(id, max_size, nullptr, (GLchar *)buffer);
   }
 
-  void Validate() {
+  void Validate() noexcept {
     glValidateProgram(id);
   }
 
-  void Use() {
+  void Use() noexcept {
     glUseProgram(id);
   }
 
-  gcc_pure
-  GLint GetUniformLocation(const char *name) const {
+  [[gnu::pure]]
+  GLint GetUniformLocation(const char *name) const noexcept {
     return glGetUniformLocation(id, (const GLchar *)name);
   }
 
-  gcc_pure
-  GLint GetAttribLocation(const char *name) const {
+  [[gnu::pure]]
+  GLint GetAttribLocation(const char *name) const noexcept {
     return glGetAttribLocation(id, (const GLchar *)name);
   }
 
-  void BindAttribLocation(GLuint index, const char *name) {
+  void BindAttribLocation(GLuint index, const char *name) noexcept {
     glBindAttribLocation(id, index, (const GLchar *)name);
   }
 };

@@ -68,6 +68,7 @@ public:
   void Join();
 
   using ThreadedOperationEnvironment::Cancel;
+  using ThreadedOperationEnvironment::IsCancelled;
 
 protected:
   /* virtual methods from class Thread */

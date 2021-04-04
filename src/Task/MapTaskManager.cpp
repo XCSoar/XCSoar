@@ -64,7 +64,7 @@ AppendToTask(OrderedTask &task, WaypointPtr &&waypoint) noexcept
   if (!success)
     return MapTaskManager::UNMODIFIED;
 
-  if (!task.CheckTask())
+  if (IsError(task.CheckTask()))
     return MapTaskManager::INVALID;
 
   return MapTaskManager::SUCCESS;
@@ -98,7 +98,7 @@ MapTaskManager::AppendToTask(WaypointPtr &&waypoint)
   assert(protected_task_manager != nullptr);
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   TaskEditResult result = MapTaskManager::UNMODIFIED;
-  if (task_manager->GetOrderedTask().CheckTask()) {
+  if (!IsError(task_manager->GetOrderedTask().CheckTask())) {
     auto task = task_manager->Clone(GetTaskBehaviour());
     result = AppendToTask(*task, std::move(waypoint));
     if (result == SUCCESS)
@@ -157,7 +157,7 @@ InsertInTask(OrderedTask &task, WaypointPtr &&waypoint) noexcept
 
   if (!task.Insert(*task_point, i))
     return MapTaskManager::UNMODIFIED;
-  if (!task.CheckTask())
+  if (IsError(task.CheckTask()))
     return MapTaskManager::INVALID;
   return MapTaskManager::SUCCESS;
 }
@@ -168,7 +168,7 @@ MapTaskManager::InsertInTask(WaypointPtr &&waypoint)
   assert(protected_task_manager != nullptr);
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   TaskEditResult result = MapTaskManager::UNMODIFIED;
-  if (task_manager->GetOrderedTask().CheckTask()) {
+  if (!IsError(task_manager->GetOrderedTask().CheckTask())) {
     auto task = task_manager->Clone(GetTaskBehaviour());
 
     result = InsertInTask(*task, std::move(waypoint));
@@ -212,7 +212,7 @@ ReplaceInTask(OrderedTask &task, WaypointPtr &&waypoint) noexcept
 
   task.Relocate(i, std::move(waypoint));
 
-  if (!task.CheckTask())
+  if (IsError(task.CheckTask()))
     return MapTaskManager::INVALID;
 
   return MapTaskManager::SUCCESS;
@@ -283,7 +283,7 @@ RemoveFromTask(OrderedTask &task, const Waypoint &waypoint)
   if (i == -1)
     return MapTaskManager::UNMODIFIED;
 
-  if (!task.CheckTask())
+  if (IsError(task.CheckTask()))
     return MapTaskManager::INVALID;
 
   return MapTaskManager::SUCCESS;

@@ -30,12 +30,12 @@ enum Controls {
 };
 
 LineSectorZoneEditWidget::LineSectorZoneEditWidget(LineSectorZone &_oz,
-                                                   bool _length_editable)
+                                                   bool _length_editable) noexcept
   :ObservationZoneEditWidget(_oz),
    length_editable(_length_editable) {}
 
 void
-LineSectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+LineSectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   ObservationZoneEditWidget::Prepare(parent, rc);
 
@@ -48,7 +48,7 @@ LineSectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-LineSectorZoneEditWidget::Save(bool &_changed)
+LineSectorZoneEditWidget::Save(bool &_changed) noexcept
 {
   bool changed = false;
 

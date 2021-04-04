@@ -82,8 +82,8 @@ public:
   void OnPreviewPaint(Canvas &canvas);
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
 protected:
   void UpdateTerrainPreview();
@@ -166,7 +166,7 @@ TerrainPreviewWindow::OnPaint(Canvas &canvas)
   }
 
   projection.SetScreenSize(canvas.GetSize());
-  projection.SetScreenOrigin(canvas.GetWidth() / 2, canvas.GetHeight() / 2);
+  projection.SetScreenOrigin(canvas.GetRect().GetCenter());
 
   Angle sun_azimuth(Angle::Degrees(-45));
   if (renderer.GetSettings().slope_shading == SlopeShading::SUN &&
@@ -185,7 +185,8 @@ TerrainPreviewWindow::OnPaint(Canvas &canvas)
 }
 
 void
-TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
+                                   const PixelRect &rc) noexcept
 {
   instance = this;
 
@@ -284,7 +285,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-TerrainDisplayConfigPanel::Save(bool &_changed)
+TerrainDisplayConfigPanel::Save(bool &_changed) noexcept
 {
   MapSettings &settings_map = CommonInterface::SetMapSettings();
 

@@ -24,7 +24,6 @@ Copyright_License {
 #include "LiveTrack24.hpp"
 #include "util/StringCompare.hxx"
 #include "util/ConvertString.hpp"
-#include "net/http/Session.hpp"
 #include "net/http/ToBuffer.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "util/StaticString.hxx"
@@ -33,17 +32,19 @@ Copyright_License {
 #include <cassert>
 #include <cstdlib>
 
-namespace LiveTrack24
-{
-  NarrowString<256> server;
+namespace LiveTrack24 {
 
-  static const char *GetServer();
-  static bool SendRequest(const char *url, OperationEnvironment &env);
-}
+static NarrowString<256> server;
+
+static const char *GetServer();
+static bool SendRequest(const char *url,
+                        CurlGlobal &curl, OperationEnvironment &env);
+
+} // namespace LiveTrack24
 
 LiveTrack24::UserID
 LiveTrack24::GetUserID(const TCHAR *username, const TCHAR *password,
-                       OperationEnvironment &env)
+                       CurlGlobal &curl, OperationEnvironment &env)
 {
   // http://www.livetrack24.com/client.php?op=login&user=<username>&pass=<pass>
 
@@ -61,12 +62,9 @@ LiveTrack24::GetUserID(const TCHAR *username, const TCHAR *password,
   url.Format("http://%s/client.php?op=login&user=%s&pass=%s",
              GetServer(), (const char *)username2, (const char *)password);
 
-  // Open download session
-  Net::Session session;
-
   // Request the file
   char buffer[1024];
-  size_t size = Net::DownloadToBuffer(session, url, buffer, sizeof(buffer) - 1,
+  size_t size = Net::DownloadToBuffer(curl, url, buffer, sizeof(buffer) - 1,
                                       env);
   if (size == 0 || size == size_t(-1))
     return 0;
@@ -98,7 +96,7 @@ bool
 LiveTrack24::StartTracking(SessionID session, const TCHAR *username,
                            const TCHAR *password, unsigned tracking_interval,
                            VehicleType vtype, const TCHAR *vname,
-                           OperationEnvironment &env)
+                           CurlGlobal &curl, OperationEnvironment &env)
 {
   // http://www.livetrack24.com/track.php?leolive=2&sid=42664778&pid=1&
   //   client=YourProgramName&v=1&user=yourusername&pass=yourpass&
@@ -124,7 +122,7 @@ LiveTrack24::StartTracking(SessionID session, const TCHAR *username,
              GetServer(), session, 1, "XCSoar", version,
              (const char *)username2, (const char *)password, vtype, vname);
 
-  return SendRequest(url, env);
+  return SendRequest(url, curl, env);
 }
 
 bool
@@ -132,7 +130,7 @@ LiveTrack24::SendPosition(SessionID session, unsigned packet_id,
                           GeoPoint position, unsigned altitude,
                           unsigned ground_speed, Angle track,
                           int64_t timestamp_utc,
-                          OperationEnvironment &env)
+                          CurlGlobal &curl, OperationEnvironment &env)
 {
   // http://www.livetrack24.com/track.php?leolive=4&sid=42664778&pid=321&
   //   lat=22.3&lon=40.2&alt=23&sog=40&cog=160&tm=1241422845
@@ -147,12 +145,12 @@ LiveTrack24::SendPosition(SessionID session, unsigned packet_id,
              (unsigned)track.AsBearing().Degrees(),
              (long long int)timestamp_utc);
 
-  return SendRequest(url, env);
+  return SendRequest(url, curl,env);
 }
 
 bool
 LiveTrack24::EndTracking(SessionID session, unsigned packet_id,
-                         OperationEnvironment &env)
+                         CurlGlobal &curl, OperationEnvironment &env)
 {
   // http://www.livetrack24.com/track.php?leolive=3&sid=42664778&pid=453&prid=0
 
@@ -160,7 +158,7 @@ LiveTrack24::EndTracking(SessionID session, unsigned packet_id,
   url.Format("http://%s/track.php?leolive=3&sid=%u&pid=%u&prid=0",
              GetServer(), session, packet_id);
 
-  return SendRequest(url, env);
+  return SendRequest(url, curl, env);
 }
 
 void
@@ -176,14 +174,12 @@ LiveTrack24::GetServer()
 }
 
 bool
-LiveTrack24::SendRequest(const char *url, OperationEnvironment &env)
+LiveTrack24::SendRequest(const char *url,
+                         CurlGlobal &curl, OperationEnvironment &env)
 {
-  // Open download session
-  Net::Session session;
-
   // Request the file
   char buffer[64];
-  size_t size = Net::DownloadToBuffer(session, url, buffer, sizeof(buffer),
+  size_t size = Net::DownloadToBuffer(curl, url, buffer, sizeof(buffer),
                                       env);
   return size != size_t(-1) && size >= 2 &&
     buffer[0] == 'O' && buffer[1] == 'K';

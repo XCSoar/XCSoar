@@ -25,15 +25,13 @@ Copyright_License {
 #include "org_xcsoar_BatteryReceiver.h"
 #include "util/Compiler.h"
 
-namespace Power {
-  namespace Battery {
-    unsigned RemainingPercent = 0;
-    bool RemainingPercentValid = false;
-  }
+namespace Power::Battery {
+unsigned RemainingPercent = 0;
+bool RemainingPercentValid = false;
+}
 
-  namespace External {
-    externalstatus Status = UNKNOWN;
-  }
+namespace Power::External {
+externalstatus Status = UNKNOWN;
 }
 
 gcc_visibility_default

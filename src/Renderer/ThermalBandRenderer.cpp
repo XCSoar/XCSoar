@@ -31,6 +31,8 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/LeastSquares.hpp"
+#include "Math/Point2D.hpp"
+#include "util/StaticArray.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
@@ -78,8 +80,7 @@ ThermalBandRenderer::DrawThermalProfile(const ThermalBand &thermal_band,
   const unsigned renderable = thermal_band.size();
   // position of thermal band
 
-  std::vector<std::pair<double, double>> thermal_profile;
-  thermal_profile.reserve(renderable);
+  StaticArray<DoublePoint2D, ThermalBand::max_size()> thermal_profile;
 
   // add elements, with smoothing filter
   for (unsigned i = 0; i < renderable; ++i) {
@@ -109,9 +110,11 @@ ThermalBandRenderer::DrawThermalProfile(const ThermalBand &thermal_band,
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
 #endif
-    chart.DrawFilledY(thermal_profile, brush, pen);
+    chart.DrawFilledY({thermal_profile.data(), thermal_profile.size()},
+                      brush, pen);
   } else {
-    chart.DrawFilledY(thermal_profile, brush, pen);
+    chart.DrawFilledY({thermal_profile.data(), thermal_profile.size()},
+                      brush, pen);
   }
 }
 
@@ -241,6 +244,12 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
                                      const OrderedTaskSettings *ordered_props) const
 {
   ChartRenderer chart(chart_look, canvas, rc, !is_map);
+  if (!is_map) {
+    chart.SetXLabel(_T("w"), Units::GetVerticalSpeedName());
+    chart.SetYLabel(_T("h AGL"), Units::GetAltitudeName());
+  }
+
+  chart.Begin();
 
   if (!is_map && (calculated.common_stats.height_max_working <= 0)) {
     // no climbs recorded
@@ -253,9 +262,9 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
   if (!is_map) {
     chart.DrawXGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);
     chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, ChartRenderer::UnitFormat::NUMERIC);
-    chart.DrawXLabel(_T("w"), Units::GetVerticalSpeedName());
-    chart.DrawYLabel(_T("h AGL"), Units::GetAltitudeName());
   }
+
+  chart.Finish();
 }
 
 void
@@ -267,8 +276,12 @@ ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
                                           const TaskBehaviour &task_props) const
 {
   ChartRenderer chart(chart_look, canvas, rc, false);
+  chart.Begin();
+
   _DrawThermalBand(basic, calculated, settings_computer,
                    chart, task_props, true, false, nullptr);
+
+  chart.Finish();
 }
 
 void

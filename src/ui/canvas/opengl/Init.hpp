@@ -30,30 +30,36 @@ struct UnsignedPoint2D;
 enum class DisplayOrientation : uint8_t;
 
 namespace OpenGL {
-  /**
-   * Initialize our OpenGL library.  Call when XCSoar starts.
-   */
-  void Initialise();
 
-  /**
-   * Set up our OpenGL library.  Call after the video mode and the
-   * OpenGL context have been set up.
-   */
-  void SetupContext();
+/**
+ * Initialize our OpenGL library.  Call when XCSoar starts.
+ *
+ * Throws on error.
+ */
+void Initialise();
 
-  /**
-   * Set up the viewport and the matrices for 2D drawing.  Apply the
-   * #DisplayOrientation via glRotatef() (OpenGL projection matrix).
-   *
-   * @param size the native screen size in pixels
-   * @return the logical screen size (after rotation)
-   */
-  UnsignedPoint2D SetupViewport(UnsignedPoint2D size);
+/**
+ * Set up our OpenGL library.  Call after the video mode and the
+ * OpenGL context have been set up.
+ *
+ * Throws on error.
+ */
+void SetupContext();
 
-  /**
-   * Deinitialize our OpenGL library.  Call before shutdown.
-   */
-  void Deinitialise();
-};
+/**
+ * Set up the viewport and the matrices for 2D drawing.  Apply the
+ * #DisplayOrientation via glRotatef() (OpenGL projection matrix).
+ *
+ * @param size the native screen size in pixels
+ * @return the logical screen size (after rotation)
+ */
+UnsignedPoint2D SetupViewport(UnsignedPoint2D size) noexcept;
+
+/**
+ * Deinitialize our OpenGL library.  Call before shutdown.
+ */
+void Deinitialise() noexcept;
+
+} // namespace OpenGL
 
 #endif

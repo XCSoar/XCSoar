@@ -26,13 +26,13 @@ Copyright_License {
 
 #include "Geo/GeoPoint.hpp"
 #include "Engine/Task/Shapes/FAITrianglePointValidator.hpp"
-#include "Engine/Waypoint/WaypointVisitor.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
 
 struct WaypointFilter;
 class WaypointList;
 class Waypoints;
 
-class WaypointListBuilder final : public WaypointVisitor {
+class WaypointListBuilder final {
   const WaypointFilter &filter;
   const GeoPoint location;
   WaypointList &list;
@@ -47,8 +47,7 @@ public:
 
   void Visit(const Waypoints &waypoints);
 
-  /* virtual methods from class WaypointVisitor */
-  void Visit(const WaypointPtr &waypoint) override;
+  void operator()(const WaypointPtr &waypoint) noexcept;
 };
 
 

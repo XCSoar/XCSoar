@@ -190,7 +190,7 @@ TestFlightToFinish(double aircraft_altitude)
   task.SetActiveTaskPoint(1);
   task.UpdateGeometry();
 
-  ok1(task.CheckTask());
+  ok1(!IsError(task.CheckTask()));
 
   AircraftState aircraft;
   aircraft.Reset();
@@ -230,7 +230,7 @@ TestSimpleTask()
   task.Append(tp2);
   task.UpdateGeometry();
 
-  ok1(task.CheckTask());
+  ok1(!IsError(task.CheckTask()));
 
   AircraftState aircraft;
   aircraft.Reset();
@@ -270,7 +270,7 @@ TestHighFinish()
   task.SetActiveTaskPoint(1);
   task.UpdateGeometry();
 
-  ok1(task.CheckTask());
+  ok1(!IsError(task.CheckTask()));
 
   AircraftState aircraft;
   aircraft.Reset();
@@ -315,7 +315,7 @@ TestHighTP()
   task.SetActiveTaskPoint(1);
   task.UpdateGeometry();
 
-  ok1(task.CheckTask());
+  ok1(!IsError(task.CheckTask()));
 
   AircraftState aircraft;
   aircraft.Reset();
@@ -352,7 +352,7 @@ TestHighTPFinal()
   task.SetActiveTaskPoint(1);
   task.UpdateGeometry();
 
-  ok1(task.CheckTask());
+  ok1(!IsError(task.CheckTask()));
 
   AircraftState aircraft;
   aircraft.Reset();
@@ -389,7 +389,7 @@ TestLowTPFinal()
   task.SetActiveTaskPoint(1);
   task.UpdateGeometry();
 
-  ok1(task.CheckTask());
+  ok1(!IsError(task.CheckTask()));
 
   AircraftState aircraft;
   aircraft.Reset();

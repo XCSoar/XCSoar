@@ -64,6 +64,9 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
             const GlidePolar &glide_polar)
 {
   ChartRenderer chart(chart_look, canvas, rc);
+  chart.SetXLabel(_T("t"), _T("hr"));
+  chart.SetYLabel(_T("V"), Units::GetTaskSpeedName());
+  chart.Begin();
 
   if (!fs.task_speed.HasResult() || !task.CheckOrderedTask()) {
     chart.DrawNoData();
@@ -117,6 +120,5 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
                   tref,
                   fs.task_speed.GetYAt(tref));
 
-  chart.DrawXLabel(_T("t"), _T("hr"));
-  chart.DrawYLabel(_T("V"), Units::GetTaskSpeedName());
+  chart.Finish();
 }

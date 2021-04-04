@@ -30,41 +30,47 @@ Copyright_License {
 class GLProgram;
 
 namespace OpenGL {
-  /**
-   * A shader that draws a solid color (#Attribute::COLOR).
-   */
-  extern GLProgram *solid_shader;
-  extern GLint solid_projection, solid_modelview;
 
-  /**
-   * A shader that copies the texture.
-   */
-  extern GLProgram *texture_shader;
-  extern GLint texture_projection, texture_texture;
+/**
+ * A shader that draws a solid color (#Attribute::COLOR).
+ */
+extern GLProgram *solid_shader;
+extern GLint solid_projection, solid_modelview;
 
-  /**
-   * A shader that copies the inverted texture.
-   */
-  extern GLProgram *invert_shader;
-  extern GLint invert_projection, invert_texture;
+/**
+ * A shader that copies the texture.
+ */
+extern GLProgram *texture_shader;
+extern GLint texture_projection, texture_texture;
 
-  /**
-   * A shader that copies the texture's alpha channel, but replaces
-   * the color (#Attribute::COLOR).
-   */
-  extern GLProgram *alpha_shader;
-  extern GLint alpha_projection, alpha_texture;
+/**
+ * A shader that copies the inverted texture.
+ */
+extern GLProgram *invert_shader;
+extern GLint invert_projection, invert_texture;
 
-  /**
-   * A shader that multiplies the texture with #Attribute::COLOR.
-   */
-  extern GLProgram *combine_texture_shader;
-  extern GLint combine_texture_projection, combine_texture_texture;
+/**
+ * A shader that copies the texture's alpha channel, but replaces
+ * the color (#Attribute::COLOR).
+ */
+extern GLProgram *alpha_shader;
+extern GLint alpha_projection, alpha_texture;
 
-  void InitShaders();
-  void DeinitShaders();
+/**
+ * A shader that multiplies the texture with #Attribute::COLOR.
+ */
+extern GLProgram *combine_texture_shader;
+extern GLint combine_texture_projection, combine_texture_texture;
 
-  void UpdateShaderProjectionMatrix();
-};
+/**
+ * Throws on error.
+ */
+void InitShaders();
+
+void DeinitShaders() noexcept;
+
+void UpdateShaderProjectionMatrix() noexcept;
+
+} // namespace OpenGL
 
 #endif

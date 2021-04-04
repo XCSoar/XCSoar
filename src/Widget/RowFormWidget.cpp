@@ -31,13 +31,14 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/LargeTextWindow.hpp"
 #include "ui/canvas/Font.hpp"
+#include "Asset.hpp"
 
 #include <cassert>
 
-gcc_pure
+[[gnu::pure]]
 static unsigned
 GetMinimumHeight(const WndProperty &control, const DialogLook &look,
-                 bool vertical)
+                 bool vertical) noexcept
 {
   const unsigned padding = Layout::GetTextPadding();
   unsigned height = look.text_font.GetHeight();
@@ -51,10 +52,10 @@ GetMinimumHeight(const WndProperty &control, const DialogLook &look,
   return height;
 }
 
-gcc_pure
+[[gnu::pure]]
 static unsigned
 GetMaximumHeight(const WndProperty &control, const DialogLook &look,
-                 bool vertical)
+                 bool vertical) noexcept
 {
   unsigned height = GetMinimumHeight(control, look, vertical);
   if (!control.IsReadOnly() && height < Layout::GetMaximumControlHeight())
@@ -65,7 +66,7 @@ GetMaximumHeight(const WndProperty &control, const DialogLook &look,
 
 unsigned
 RowFormWidget::Row::GetMinimumHeight(const DialogLook &look,
-                                     bool vertical) const
+                                     bool vertical) const noexcept
 {
   switch (type) {
   case Type::DUMMY:
@@ -95,7 +96,7 @@ RowFormWidget::Row::GetMinimumHeight(const DialogLook &look,
 
 unsigned
 RowFormWidget::Row::GetMaximumHeight(const DialogLook &look,
-                                     bool vertical) const
+                                     bool vertical) const noexcept
 {
   switch (type) {
   case Type::DUMMY:
@@ -126,7 +127,7 @@ RowFormWidget::Row::GetMaximumHeight(const DialogLook &look,
 inline void
 RowFormWidget::Row::UpdateLayout(ContainerWindow &parent,
                                  const PixelRect &_position,
-                                 int caption_width)
+                                 int caption_width) noexcept
 {
   assert(type != Type::DUMMY);
 
@@ -152,7 +153,7 @@ RowFormWidget::Row::UpdateLayout(ContainerWindow &parent,
 }
 
 inline void
-RowFormWidget::Row::SetVisible(ContainerWindow &parent, bool _visible)
+RowFormWidget::Row::SetVisible(ContainerWindow &parent, bool _visible) noexcept
 {
   if (_visible == visible)
     return;
@@ -165,7 +166,7 @@ RowFormWidget::Row::SetVisible(ContainerWindow &parent, bool _visible)
 }
 
 void
-RowFormWidget::Row::Show(ContainerWindow &parent)
+RowFormWidget::Row::Show(ContainerWindow &parent) noexcept
 {
   if (type == Type::WIDGET) {
     if (!initialised) {
@@ -187,7 +188,7 @@ RowFormWidget::Row::Show(ContainerWindow &parent)
 }
 
 void
-RowFormWidget::Row::Hide()
+RowFormWidget::Row::Hide() noexcept
 {
   if (type == Type::WIDGET) {
     if (shown) {
@@ -198,12 +199,12 @@ RowFormWidget::Row::Hide()
     window->Hide();
 }
 
-RowFormWidget::RowFormWidget(const DialogLook &_look, bool _vertical)
+RowFormWidget::RowFormWidget(const DialogLook &_look, bool _vertical) noexcept
   :look(_look), vertical(_vertical)
 {
 }
 
-RowFormWidget::~RowFormWidget()
+RowFormWidget::~RowFormWidget() noexcept
 {
   rows.clear();
 
@@ -212,7 +213,7 @@ RowFormWidget::~RowFormWidget()
 }
 
 void
-RowFormWidget::SetRowAvailable(unsigned i, bool available)
+RowFormWidget::SetRowAvailable(unsigned i, bool available) noexcept
 {
   Row &row = rows[i];
   if (available == row.available)
@@ -223,13 +224,13 @@ RowFormWidget::SetRowAvailable(unsigned i, bool available)
 }
 
 void
-RowFormWidget::SetRowVisible(unsigned i, bool visible)
+RowFormWidget::SetRowVisible(unsigned i, bool visible) noexcept
 {
   rows[i].SetVisible((ContainerWindow &)GetWindow(), visible);
 }
 
 void
-RowFormWidget::SetExpertRow(unsigned i)
+RowFormWidget::SetExpertRow(unsigned i) noexcept
 {
   Row &row = rows[i];
   assert(!row.expert);
@@ -252,7 +253,7 @@ RowFormWidget::Add(Row::Type type, std::unique_ptr<Window> window) noexcept
 }
 
 void
-RowFormWidget::AddSpacer()
+RowFormWidget::AddSpacer() noexcept
 {
   assert(IsDefined());
 
@@ -264,7 +265,7 @@ RowFormWidget::AddSpacer()
 }
 
 void
-RowFormWidget::AddMultiLine(const TCHAR *text)
+RowFormWidget::AddMultiLine(const TCHAR *text) noexcept
 {
   assert(IsDefined());
 
@@ -311,7 +312,7 @@ RowFormWidget::AddButton(const TCHAR *label,
 }
 
 void
-RowFormWidget::SetMultiLineText(unsigned i, const TCHAR *text)
+RowFormWidget::SetMultiLineText(unsigned i, const TCHAR *text) noexcept
 {
   assert(text != nullptr);
   assert(rows[i].type == Row::Type::MULTI_LINE);
@@ -321,7 +322,7 @@ RowFormWidget::SetMultiLineText(unsigned i, const TCHAR *text)
 }
 
 unsigned
-RowFormWidget::GetRecommendedCaptionWidth() const
+RowFormWidget::GetRecommendedCaptionWidth() const noexcept
 {
   const bool expert = UIGlobals::GetDialogSettings().expert;
 
@@ -341,7 +342,7 @@ RowFormWidget::GetRecommendedCaptionWidth() const
 }
 
 void
-RowFormWidget::UpdateLayout()
+RowFormWidget::UpdateLayout() noexcept
 {
   PixelRect current_rect = GetWindow().GetClientRect();
   const unsigned total_width = current_rect.GetWidth();
@@ -417,7 +418,7 @@ RowFormWidget::UpdateLayout()
 }
 
 PixelSize
-RowFormWidget::GetMinimumSize() const
+RowFormWidget::GetMinimumSize() const noexcept
 {
   const unsigned value_width =
     look.text_font.TextSize(_T("Foo Bar Foo Bar")).width;
@@ -437,7 +438,7 @@ RowFormWidget::GetMinimumSize() const
 }
 
 PixelSize
-RowFormWidget::GetMaximumSize() const
+RowFormWidget::GetMaximumSize() const noexcept
 {
   const unsigned value_width =
     look.text_font.TextSize(_T("Foo Bar Foo Bar")).width * 2;
@@ -454,7 +455,8 @@ RowFormWidget::GetMaximumSize() const
 }
 
 void
-RowFormWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
+RowFormWidget::Initialise(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
 {
   assert(!IsDefined());
   assert(rows.empty());
@@ -467,7 +469,7 @@ RowFormWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-RowFormWidget::Unprepare()
+RowFormWidget::Unprepare() noexcept
 {
   for (auto &i : rows)
     i.Unprepare();
@@ -476,7 +478,7 @@ RowFormWidget::Unprepare()
 }
 
 void
-RowFormWidget::Show(const PixelRect &rc)
+RowFormWidget::Show(const PixelRect &rc) noexcept
 {
   Window &panel = GetWindow();
   panel.Move(rc);
@@ -487,7 +489,7 @@ RowFormWidget::Show(const PixelRect &rc)
 }
 
 void
-RowFormWidget::Move(const PixelRect &rc)
+RowFormWidget::Move(const PixelRect &rc) noexcept
 {
   WindowWidget::Move(rc);
 
@@ -495,7 +497,7 @@ RowFormWidget::Move(const PixelRect &rc)
 }
 
 bool
-RowFormWidget::SetFocus()
+RowFormWidget::SetFocus() noexcept
 {
   if (rows.empty())
     return false;

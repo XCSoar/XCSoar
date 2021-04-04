@@ -27,7 +27,7 @@ Copyright_License {
 #include <algorithm>
 
 GeoBounds
-GeoQuadrilateral::GetBounds() const
+GeoQuadrilateral::GetBounds() const noexcept
 {
   // TODO: not wraparound-safe
 

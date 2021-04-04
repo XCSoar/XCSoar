@@ -39,18 +39,19 @@ Copyright_License {
 #include "Widget/ViewImageWidget.hpp"
 #include "Widget/LargeTextWidget.hpp"
 #include "Weather/PCMet/Images.hpp"
+#include "net/http/Init.hpp"
 #include "Interface.hpp"
 
 static void
 BitmapDialog(const Bitmap &bitmap)
 {
-  ViewImageWidget widget(bitmap);
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(),
-                      _T("pc_met"), &widget);
+  TWidgetDialog<ViewImageWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(),
+           _T("pc_met"), new ViewImageWidget(bitmap));
   dialog.AddButton(_("Close"), mrOK);
+//  dialog.SetWidget();
   dialog.ShowModal();
-  dialog.StealWidget();
 }
 
 static void
@@ -64,7 +65,7 @@ BitmapDialog(const PCMet::ImageType &type, const PCMet::ImageArea &area)
 
   try {
     Bitmap bitmap = PCMet::DownloadLatestImage(type.uri, area.name,
-                                               settings, runner);
+                                               settings, *Net::curl, runner);
     if (!bitmap.IsDefined()) {
       ShowMessageBox(_("Failed to download file."),
                      _T("pc_met"), MB_OK);
@@ -123,7 +124,7 @@ public:
     :area_list(_area_list) {}
 
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
       TextListWidget::Prepare(parent, rc);
 
       unsigned n = 0;
@@ -132,7 +133,7 @@ public:
       GetList().SetLength(n);
   }
 
-  void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) noexcept override {
     TextListWidget::Show(rc);
     area_list.SetType(&PCMet::image_types[GetList().GetCursorIndex()]);
   }
@@ -173,4 +174,4 @@ CreatePCMetWidget()
                                       false);
 }
 
-#endif
+#endif  // HAVE_PCMET

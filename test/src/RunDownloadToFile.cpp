@@ -22,11 +22,13 @@ Copyright_License {
 */
 
 #include "net/http/ToFile.hpp"
-#include "net/http/Session.hpp"
+#include "net/http/Init.hpp"
 #include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
+#include "io/async/AsioThread.hpp"
 #include "util/ConstBuffer.hxx"
 #include "util/PrintException.hxx"
+#include "util/ScopeExit.hxx"
 
 #include <stdio.h>
 
@@ -48,10 +50,13 @@ try {
 
   std::array<std::byte, 32> hash;
 
-  ConsoleOperationEnvironment env;
+  AsioThread io_thread;
+  io_thread.Start();
+  AtScopeExit(&) { io_thread.Stop(); };
+  const Net::ScopeInit net_init(io_thread.GetEventLoop());
 
-  Net::Session session;
-  Net::DownloadToFile(session, url, path, &hash, env);
+  ConsoleOperationEnvironment env;
+  Net::DownloadToFile(*Net::curl, url, path, &hash, env);
 
   HexPrint({&hash, sizeof(hash)});
   printf("\n");

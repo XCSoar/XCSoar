@@ -39,12 +39,13 @@ class SmallTrafficWindow : public FlarmTrafficWindow {
 public:
   SmallTrafficWindow(ContainerWindow &parent, const PixelRect &rc,
                      const FlarmTrafficLook &look,
-                     const WindowStyle style=WindowStyle());
+                     const WindowStyle style=WindowStyle()) noexcept;
 
-  void Update(const NMEAInfo &gps_info, const TeamCodeSettings &settings);
+  void Update(const NMEAInfo &gps_info,
+              const TeamCodeSettings &settings) noexcept;
 
 private:
-  void SetPressed(bool _pressed) {
+  void SetPressed(bool _pressed) noexcept {
     if (_pressed == pressed)
       return;
 
@@ -63,7 +64,7 @@ protected:
 SmallTrafficWindow::SmallTrafficWindow(ContainerWindow &parent,
                                        const PixelRect &rc,
                                        const FlarmTrafficLook &look,
-                                       const WindowStyle style)
+                                       const WindowStyle style) noexcept
   :FlarmTrafficWindow(look, 1, 1, true),
    dragging(false), pressed(false)
 {
@@ -72,7 +73,7 @@ SmallTrafficWindow::SmallTrafficWindow(ContainerWindow &parent,
 
 void
 SmallTrafficWindow::Update(const NMEAInfo &gps_info,
-                           const TeamCodeSettings &settings)
+                           const TeamCodeSettings &settings) noexcept
 {
   FlarmTrafficWindow::Update(gps_info.track, gps_info.flarm.traffic, settings);
 }
@@ -152,7 +153,7 @@ SmallTrafficWindow::OnPaint(Canvas &canvas)
 }
 
 void
-GaugeFLARM::Prepare(ContainerWindow &parent, const PixelRect &rc)
+GaugeFLARM::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   WindowStyle style;
   style.Hide();
@@ -161,7 +162,7 @@ GaugeFLARM::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-GaugeFLARM::Show(const PixelRect &rc)
+GaugeFLARM::Show(const PixelRect &rc) noexcept
 {
   Update(blackboard.Basic());
 
@@ -171,7 +172,7 @@ GaugeFLARM::Show(const PixelRect &rc)
 }
 
 void
-GaugeFLARM::Hide()
+GaugeFLARM::Hide() noexcept
 {
   blackboard.RemoveListener(*this);
   OverlappedWidget::Hide();
@@ -184,7 +185,7 @@ GaugeFLARM::OnGPSUpdate(const MoreData &basic)
 }
 
 void
-GaugeFLARM::Update(const NMEAInfo &basic)
+GaugeFLARM::Update(const NMEAInfo &basic) noexcept
 {
   SmallTrafficWindow &window = (SmallTrafficWindow &)GetWindow();
   window.Update(basic, blackboard.GetComputerSettings().team_code);

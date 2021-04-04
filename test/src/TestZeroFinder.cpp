@@ -21,6 +21,7 @@
 */
 
 #include "Math/ZeroFinder.hpp"
+#include "util/Compiler.h"
 #include "TestUtil.hpp"
 
 class ZeroFinderTest: public ZeroFinder
@@ -31,11 +32,11 @@ public:
   ZeroFinderTest(double x_min, double x_max, unsigned _func = 0) :
     ZeroFinder(x_min, x_max, 0.0001), func(_func) {}
 
-  double f(const double x);
+  double f(const double x) noexcept override;
 };
 
 double
-ZeroFinderTest::f(const double x)
+ZeroFinderTest::f(const double x) noexcept
 {
   if (func == 0)
     return 2 * x * x - 3 * x - 5;

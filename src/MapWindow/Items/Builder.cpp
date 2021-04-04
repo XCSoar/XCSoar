@@ -28,27 +28,12 @@ Copyright_License {
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
-#include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
 #include "NMEA/Info.hpp"
 #include "Terrain/RasterTerrain.hpp"
-
-class WaypointListBuilderVisitor:
-  public WaypointVisitor
-{
-  MapItemList &list;
-
-public:
-  WaypointListBuilderVisitor(MapItemList &_list):list(_list) {}
-
-  void Visit(const WaypointPtr &waypoint) override {
-    if (!list.full())
-      list.append(new WaypointMapItem(waypoint));
-  }
-};
 
 void
 MapItemListBuilder::AddLocation(const NMEAInfo &basic,
@@ -113,8 +98,10 @@ MapItemListBuilder::AddSelfIfNear(const GeoPoint &self, Angle bearing)
 void
 MapItemListBuilder::AddWaypoints(const Waypoints &waypoints)
 {
-  WaypointListBuilderVisitor waypoint_list_builder(list);
-  waypoints.VisitWithinRange(location, range, waypoint_list_builder);
+  waypoints.VisitWithinRange(location, range, [&list=list](const auto &w){
+    if (!list.full())
+      list.append(new WaypointMapItem(w));
+  });
 }
 
 void

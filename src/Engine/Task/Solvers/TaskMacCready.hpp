@@ -130,7 +130,7 @@ public:
    *
    * @return Glide result for entire task with virtual sink rate
    */
-  gcc_pure
+  [[gnu::pure]]
   GlideResult glide_sink(const AircraftState &aircraft, double S) const;
 
   /**
@@ -158,7 +158,7 @@ public:
    *
    * @return Glide solution of current leg
    */
-  gcc_pure
+  [[gnu::pure]]
   const GlideResult &get_active_solution() const {
     return leg_solutions[active_index];
   }
@@ -175,7 +175,7 @@ private:
    *
    * @return Min height (m) of entire task
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual double get_min_height(const AircraftState &state) const = 0;
 
   /**
@@ -189,7 +189,7 @@ private:
    *
    * @return Glide result for segment
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual GlideResult SolvePoint(const TaskPoint &tp,
                                  const AircraftState &state,
                                  double minH) const = 0;
@@ -203,7 +203,7 @@ private:
    *
    * @return Aircraft state at start of task
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual AircraftState get_aircraft_start(const AircraftState &state) const = 0;
 };
 

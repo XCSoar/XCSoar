@@ -47,29 +47,29 @@ GotoTask::~GotoTask()
 }
 
 TaskWaypoint*
-GotoTask::GetActiveTaskPoint() const
+GotoTask::GetActiveTaskPoint() const noexcept
 { 
   return tp.get();
 }
 
 bool 
-GotoTask::IsValidTaskPoint(const int index_offset) const
+GotoTask::IsValidTaskPoint(const int index_offset) const noexcept
 {
   return (index_offset == 0 && tp != NULL);
 }
 
 
 void 
-GotoTask::SetActiveTaskPoint(unsigned index)
+GotoTask::SetActiveTaskPoint(unsigned index) noexcept
 {
   // nothing to do
 }
 
 
-bool 
+bool
 GotoTask::UpdateSample(gcc_unused const AircraftState &state,
                        gcc_unused const GlidePolar &glide_polar,
-                        gcc_unused const bool full_update)
+                       gcc_unused bool full_update) noexcept
 {
   return false; // nothing to do
 }
@@ -88,15 +88,15 @@ GotoTask::DoGoto(WaypointPtr &&wp)
   }
 }
 
-void 
-GotoTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const
+void
+GotoTask::AcceptTaskPointVisitor(TaskPointConstVisitor &visitor) const
 {
   if (tp)
     visitor.Visit(*tp);
 }
 
 unsigned 
-GotoTask::TaskSize() const
+GotoTask::TaskSize() const noexcept
 {
   return tp ? 1 : 0;
 }

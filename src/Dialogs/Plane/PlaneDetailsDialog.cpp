@@ -62,8 +62,8 @@ public:
   void PolarButtonClicked();
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 
 private:
   /* methods from DataFieldListener */
@@ -103,7 +103,7 @@ PlaneEditWidget::OnModified(DataField &df)
 }
 
 void
-PlaneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+PlaneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   AddText(_("Registration"), nullptr, plane.registration, this);
   AddText(_("Comp. ID"), nullptr, plane.competition_id);
@@ -134,7 +134,7 @@ PlaneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-PlaneEditWidget::Save(bool &_changed)
+PlaneEditWidget::Save(bool &_changed) noexcept
 {
   bool changed = false;
 
@@ -174,18 +174,17 @@ bool
 dlgPlaneDetailsShowModal(Plane &_plane)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, _("Plane Details"));
-  PlaneEditWidget widget(_plane, look, &dialog);
+  TWidgetDialog<PlaneEditWidget>
+    dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+           look, _("Plane Details"));
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
-  dialog.FinishPreliminary(&widget);
+  dialog.SetWidget(_plane, look, &dialog);
   const int result = dialog.ShowModal();
-  dialog.StealWidget();
 
   if (result != mrOK)
     return false;
 
-  _plane = widget.GetValue();
+  _plane = dialog.GetWidget().GetValue();
   return true;
 }

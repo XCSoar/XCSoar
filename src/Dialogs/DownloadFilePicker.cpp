@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DownloadFilePicker.hpp"
+#include "Error.hpp"
 #include "WidgetDialog.hpp"
 #include "ProgressDialog.hpp"
 #include "Message.hpp"
@@ -61,6 +62,8 @@ class DownloadProgress final : Net::DownloadListener {
 
   UI::Notify download_complete_notify{[this]{ OnDownloadCompleteNotification(); }};
 
+  std::exception_ptr error;
+
   bool got_size = false, complete = false, success;
 
 public:
@@ -75,10 +78,15 @@ public:
     Net::DownloadManager::RemoveListener(*this);
   }
 
+  void Rethrow() const {
+    if (error)
+      std::rethrow_exception(error);
+  }
+
 private:
   /* virtual methods from class Net::DownloadListener */
   void OnDownloadAdded(Path _path_relative,
-                       int64_t size, int64_t position) override {
+                       int64_t size, int64_t position) noexcept override {
     if (!complete && path_relative == _path_relative) {
       if (!got_size && size >= 0) {
         got_size = true;
@@ -90,11 +98,20 @@ private:
     }
   }
 
-  void OnDownloadComplete(Path _path_relative,
-                          bool _success) override {
+  void OnDownloadComplete(Path _path_relative) noexcept override {
     if (!complete && path_relative == _path_relative) {
       complete = true;
-      success = _success;
+      success = true;
+      download_complete_notify.SendNotification();
+    }
+  }
+
+  void OnDownloadError(Path _path_relative,
+                       std::exception_ptr _error) noexcept override {
+    if (!complete && path_relative == _path_relative) {
+      complete = true;
+      success = false;
+      error = std::move(_error);
       download_complete_notify.SendNotification();
     }
   }
@@ -105,6 +122,9 @@ private:
   }
 };
 
+/**
+ * Throws on error.
+ */
 static AllocatedPath
 DownloadFile(const char *uri, const char *_base)
 {
@@ -118,7 +138,7 @@ DownloadFile(const char *uri, const char *_base)
                         _("Download"));
   dialog.SetText(base);
 
-  dialog.AddCancelButton([&dialog](){ dialog.SetModalResult(mrCancel); });
+  dialog.AddCancelButton();
 
   const DownloadProgress dp(dialog, Path(base));
 
@@ -127,6 +147,7 @@ DownloadFile(const char *uri, const char *_base)
   int result = dialog.ShowModal();
   if (result != mrOK) {
     Net::DownloadManager::Cancel(Path(base));
+    dp.Rethrow();
     return nullptr;
   }
 
@@ -167,6 +188,8 @@ class DownloadFilePickerWidget final
    */
   bool repository_failed;
 
+  std::exception_ptr repository_error;
+
   AllocatedPath path = AllocatedPath(nullptr);
 
 public:
@@ -191,8 +214,8 @@ protected:
 
 public:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Unprepare() noexcept override;
 
   /* virtual methods from class ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -209,14 +232,17 @@ public:
 
   /* virtual methods from class Net::DownloadListener */
   void OnDownloadAdded(Path path_relative,
-                       int64_t size, int64_t position) override;
-  void OnDownloadComplete(Path path_relative, bool success) override;
+                       int64_t size, int64_t position) noexcept override;
+  void OnDownloadComplete(Path path_relative) noexcept override;
+  void OnDownloadError(Path path_relative,
+                       std::exception_ptr error) noexcept override;
 
   void OnDownloadCompleteNotification() noexcept;
 };
 
 void
-DownloadFilePickerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+DownloadFilePickerWidget::Prepare(ContainerWindow &parent,
+                                  const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -231,7 +257,7 @@ DownloadFilePickerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-DownloadFilePickerWidget::Unprepare()
+DownloadFilePickerWidget::Unprepare() noexcept
 {
   Net::DownloadManager::RemoveListener(*this);
 }
@@ -269,6 +295,8 @@ void
 DownloadFilePickerWidget::CreateButtons()
 {
   download_button = dialog.AddButton(_("Download"), [this](){ Download(); });
+
+  UpdateButtons();
 }
 
 void
@@ -291,33 +319,50 @@ DownloadFilePickerWidget::Download()
 
   const auto &file = items[current];
 
-  path = DownloadFile(file.GetURI(), file.GetName());
-  if (path.IsNull())
-    dialog.SetModalResult(mrOK);
+  try {
+    path = DownloadFile(file.GetURI(), file.GetName());
+    if (path.IsNull())
+      dialog.SetModalResult(mrOK);
+  } catch (...) {
+    ShowError(std::current_exception(), _("Error"));
+  }
 }
 
 void
 DownloadFilePickerWidget::OnDownloadAdded(Path path_relative,
-                                          int64_t size, int64_t position)
+                                          int64_t size,
+                                          int64_t position) noexcept
 {
 }
 
 void
-DownloadFilePickerWidget::OnDownloadComplete(Path path_relative,
-                                             bool success)
+DownloadFilePickerWidget::OnDownloadComplete(Path path_relative) noexcept
 {
   const auto name = path_relative.GetBase();
   if (name == nullptr)
     return;
 
-  {
+  if (name == Path(_T("repository"))) {
     const std::lock_guard<Mutex> lock(mutex);
+    repository_failed = false;
+    repository_modified = true;
+  }
 
-    if (name == Path(_T("repository"))) {
-      repository_failed = !success;
-      if (success)
-        repository_modified = true;
-    }
+  download_complete_notify.SendNotification();
+}
+
+void
+DownloadFilePickerWidget::OnDownloadError(Path path_relative,
+                                          std::exception_ptr error) noexcept
+{
+  const auto name = path_relative.GetBase();
+  if (name == nullptr)
+    return;
+
+  if (name == Path(_T("repository"))) {
+    const std::lock_guard<Mutex> lock(mutex);
+    repository_failed = true;
+    repository_error = std::move(error);
   }
 
   download_complete_notify.SendNotification();
@@ -327,20 +372,23 @@ void
 DownloadFilePickerWidget::OnDownloadCompleteNotification() noexcept
 {
   bool repository_modified2, repository_failed2;
+  std::exception_ptr repository_error2;
 
   {
     const std::lock_guard<Mutex> lock(mutex);
     repository_modified2 = std::exchange(repository_modified, false);
     repository_failed2 = std::exchange(repository_failed, false);
+    repository_error2 = std::move(repository_error);
   }
 
-  if (repository_modified2) {
-    if (repository_failed2)
-      ShowMessageBox(_("Failed to download the repository index."),
-                     _("Error"), MB_OK);
-    else
-      RefreshList();
-  }
+  if (repository_error2)
+    ShowError(std::move(repository_error2),
+              _("Failed to download the repository index."));
+  else if (repository_failed2)
+    ShowMessageBox(_("Failed to download the repository index."),
+                   _("Error"), MB_OK);
+  else if (repository_modified2)
+    RefreshList();
 }
 
 AllocatedPath
@@ -353,14 +401,13 @@ DownloadFilePicker(FileType file_type)
     return nullptr;
   }
 
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(), _("Download"));
-  DownloadFilePickerWidget widget(dialog, file_type);
-  widget.CreateButtons();
+  TWidgetDialog<DownloadFilePickerWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(), _("Download"));
   dialog.AddButton(_("Cancel"), mrCancel);
-  dialog.FinishPreliminary(&widget);
+  dialog.SetWidget(dialog, file_type);
+  dialog.GetWidget().CreateButtons();
   dialog.ShowModal();
-  dialog.StealWidget();
 
-  return widget.GetPath();
+  return dialog.GetWidget().GetPath();
 }

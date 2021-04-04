@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2012 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2010-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -35,32 +35,34 @@
 #include <cstddef>
 
 namespace Java {
-	/**
-	 * Wrapper for a java.io.InputStream object.
-	 */
-	class InputStream {
-		static jmethodID close_method, read_method;
 
-	public:
-		static void Initialise(JNIEnv *env);
+/**
+ * Wrapper for a java.io.InputStream object.
+ */
+class InputStream {
+	static jmethodID close_method, read_method;
 
-		static void close(JNIEnv *env, jobject is) {
-			assert(env != nullptr);
-			assert(is != nullptr);
-			assert(close_method != nullptr);
+public:
+	static void Initialise(JNIEnv *env);
 
-			env->CallVoidMethod(is, close_method);
-		}
+	static void close(JNIEnv *env, jobject is) {
+		assert(env != nullptr);
+		assert(is != nullptr);
+		assert(close_method != nullptr);
 
-		static int read(JNIEnv *env, jobject is, jbyteArray buffer) {
-			assert(env != nullptr);
-			assert(is != nullptr);
-			assert(buffer != nullptr);
-			assert(read_method != nullptr);
+		env->CallVoidMethod(is, close_method);
+	}
 
-			return env->CallIntMethod(is, read_method, buffer);
-		}
-	};
-}
+	static int read(JNIEnv *env, jobject is, jbyteArray buffer) {
+		assert(env != nullptr);
+		assert(is != nullptr);
+		assert(buffer != nullptr);
+		assert(read_method != nullptr);
+
+		return env->CallIntMethod(is, read_method, buffer);
+	}
+};
+
+} // namespace Java
 
 #endif

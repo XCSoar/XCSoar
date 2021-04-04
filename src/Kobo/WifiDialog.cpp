@@ -74,8 +74,8 @@ public:
   void UpdateButtons();
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override {
     const DialogLook &look = UIGlobals::GetDialogLook();
 
     CreateList(parent, look, rc,
@@ -469,11 +469,11 @@ void
 ShowWifiDialog()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WifiListWidget widget;
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("Wifi"), &widget);
-  widget.CreateButtons(dialog);
+  TWidgetDialog<WifiListWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look, _("Wifi"));
   dialog.AddButton(_("Close"), mrOK);
+  dialog.SetWidget();
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.ShowModal();
-  dialog.StealWidget();
 }

@@ -27,35 +27,34 @@ Copyright_License {
 #include "FBO.hpp"
 
 /**
- * Wrapper for an OpenGL framebuffer object.  You must check
- * OpenGL::frame_buffer_object before using this class.
+ * Wrapper for an OpenGL framebuffer object.
  */
 class GLFrameBuffer {
   GLuint id;
 
 public:
-  GLFrameBuffer() {
+  GLFrameBuffer() noexcept {
     Gen();
   }
 
-  ~GLFrameBuffer() {
+  ~GLFrameBuffer() noexcept {
     Delete();
   }
 
-  void Bind() {
+  void Bind() noexcept {
     FBO::BindFramebuffer(FBO::FRAMEBUFFER, id);
   }
 
-  static void Unbind() {
+  static void Unbind() noexcept {
     FBO::BindFramebuffer(FBO::FRAMEBUFFER, 0);
   }
 
 protected:
-  void Gen() {
+  void Gen() noexcept {
     FBO::GenFramebuffers(1, &id);
   }
 
-  void Delete() {
+  void Delete() noexcept {
     FBO::DeleteFramebuffers(1, &id);
   }
 };
