@@ -63,7 +63,7 @@ public:
     cond.notify_one();
   }
 
-  void Wait() noexcept {
+  void Wait() {
     std::unique_lock<Mutex> lock(mutex);
     cond.wait(lock, [this]{ return done; });
 
