@@ -1,6 +1,8 @@
 Version 7.5 - not yet released
 * calculations
   - support for WeGlide distance contests
+* user interface
+  - change selection of airspace files to a list instead of "Airspace File" and "Additional Airspace File"
 
 Version 7.4 - 2021/04/08
 * user interface
