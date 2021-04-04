@@ -253,9 +253,6 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   WindowStyle button_style;
   button_style.TabStop();
 
-  WindowStyle dock_style;
-  dock_style.ControlParent();
-
   waypoint_panel.Create(parent, look, layout.waypoint_panel, panel_style);
   waypoint_name.Create(waypoint_panel, layout.waypoint_name);
   waypoint_details.Create(waypoint_panel, look.button, _("Details"),
