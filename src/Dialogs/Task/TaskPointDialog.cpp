@@ -151,6 +151,7 @@ private:
 public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Unprepare() noexcept override;
 
   bool Save(bool &changed) noexcept override {
     ReadValues();
@@ -286,6 +287,12 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   RefreshView();
 }
 
+void
+TaskPointWidget::Unprepare() noexcept
+{
+  properties_widget.Clear();
+}
+
 static std::unique_ptr<ObservationZoneEditWidget>
 CreateObservationZoneEditWidget(ObservationZonePoint &oz, bool is_fai_general)
 {
@@ -334,6 +341,8 @@ TaskPointWidget::RefreshView()
     properties_widget.Set(std::move(new_properties_widget));
   } else
     properties_widget.Set(std::make_unique<PanelWidget>());
+
+  properties_widget.Show();
 
   type_label.SetText(OrderedTaskPointName(ordered_task.GetFactory().GetType(tp)));
 
