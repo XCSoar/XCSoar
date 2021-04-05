@@ -1,0 +1,23 @@
+on:
+  workflow_dispatch:  
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+     - id: string
+        uses: ASzc/change-string-case-action@v1
+        with:
+          string: ${{ github.repository }}
+    - uses: addnab/docker-run-action@v3
+      with:
+        registry: ghcr.io
+        image: ${{ github.repository }}/xcsoar-build:latest
+        options: -v ${{ github.workspace }}:/opt/xcsoar
+        run: |
+          xcsoar-compile UNIX
