@@ -11,13 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
      - id: string
-        uses: ASzc/change-string-case-action@v1
-        with:
-          string: ${{ github.repository }}
-    - uses: addnab/docker-run-action@v3
-      with:
-        registry: ghcr.io
-        image: ${{ github.repository }}/xcsoar-build:latest
-        options: -v ${{ github.workspace }}:/opt/xcsoar
-        run: |
-          xcsoar-compile UNIX
+       uses: ASzc/change-string-case-action@v1
+       with:
+         string: ${{ github.repository }}
+     - id: XCSoar Compile UNIX 
+       uses: addnab/docker-run-action@v3
+       with:
+         registry: ghcr.io
+         image: ${{ github.repository }}/xcsoar-build:latest
+         options: -v ${{ github.workspace }}:/opt/xcsoar
+         run: |
+           xcsoar-compile UNIX
