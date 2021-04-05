@@ -59,12 +59,16 @@ void
 SymbolRenderer::DrawSign(Canvas &canvas, PixelRect rc, bool plus)
 {
   unsigned size = std::min(rc.GetWidth(), rc.GetHeight()) / 5;
-  const auto r = PixelRect{rc.GetCenter()}.WithMargin({size, size / 3});
+  const auto horizontal_rect = PixelRect{rc.GetCenter()}
+    .WithMargin({size, size / 3});
 
   // Draw horizontal bar
-  canvas.DrawRectangle(r);
+  canvas.DrawRectangle(horizontal_rect);
 
-  if (plus)
+  if (plus) {
     // Draw vertical bar
-    canvas.DrawRectangle(r);
+    const auto vertical_rect = PixelRect{rc.GetCenter()}
+      .WithMargin({size / 3, size});
+    canvas.DrawRectangle(vertical_rect);
+  }
 }
