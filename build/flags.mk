@@ -16,8 +16,13 @@ LDFLAGS += -fPIC -shared
 endif
 
 ifeq ($(ICF),y)
-LDFLAGS += -Wl,--icf=all
-USE_LD = gold
+  LDFLAGS += -Wl,--icf=all
+
+  ifeq ($(CLANG),y)
+    USE_LD = lld
+  else
+    USE_LD = gold
+  endif
 endif
 
 ifneq ($(USE_LD),)
