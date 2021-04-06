@@ -9,7 +9,11 @@ TARGET_CPPFLAGS += -DEYE_CANDY
 WINDRESFLAGS += -DEYE_CANDY
 endif
 
-ICF ?= n
+ifeq ($(DEBUG)$(HAVE_WIN32)$(TARGET_IS_DARWIN),nnn)
+  ICF ?= y
+else
+  ICF ?= n
+endif
 
 # enable gcc/clang sanitizers?
 SANITIZE ?= n
