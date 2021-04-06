@@ -41,11 +41,12 @@ class WaypointListBuilder final {
 public:
   WaypointListBuilder(const WaypointFilter &_filter,
                       GeoPoint _location, WaypointList &_list,
-                      OrderedTask *ordered_task, unsigned ordered_task_index)
+                      OrderedTask *ordered_task,
+                      unsigned ordered_task_index) noexcept
     :filter(_filter), location(_location), list(_list),
      triangle_validator(ordered_task, ordered_task_index) {}
 
-  void Visit(const Waypoints &waypoints);
+  void Visit(const Waypoints &waypoints) noexcept;
 
   void operator()(const WaypointPtr &waypoint) noexcept;
 };

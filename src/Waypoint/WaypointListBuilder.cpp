@@ -26,14 +26,16 @@ Copyright_License {
 #include "WaypointFilter.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
-void WaypointListBuilder::Visit(const Waypoints &waypoints) {
+void
+WaypointListBuilder::Visit(const Waypoints &waypoints) noexcept
+{
   if (filter.distance > 0)
     waypoints.VisitWithinRange(location, filter.distance, *this);
   else
     waypoints.VisitNamePrefix(filter.name, *this);
 }
 
-void
+inline void
 WaypointListBuilder::operator()(const WaypointPtr &waypoint) noexcept
 {
   if (filter.Matches(*waypoint, location, triangle_validator))
