@@ -1,3 +1,5 @@
+Version 7.4 - not yet released
+
 Version 7.3 - 2021/04/07
 * user interface
   - fix crash in waypoint editor
