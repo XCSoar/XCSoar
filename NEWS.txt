@@ -1,5 +1,6 @@
 Version 7.3 - not yet released
-- fix zoom button label in Traffic Radar View
+* user interface
+  - fix zoom button label in Traffic Radar View
 * Android
   - fix download progress
 
