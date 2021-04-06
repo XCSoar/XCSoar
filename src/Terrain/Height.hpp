@@ -45,26 +45,27 @@ class TerrainHeight {
   int16_t value;
 
 public:
-  TerrainHeight() = default;
-  explicit constexpr TerrainHeight(int16_t _value):value(_value) {}
+  TerrainHeight() noexcept = default;
+  explicit constexpr TerrainHeight(int16_t _value) noexcept
+    :value(_value) {}
 
-  static constexpr TerrainHeight Invalid() {
+  static constexpr TerrainHeight Invalid() noexcept {
     return TerrainHeight(INVALID);
   }
 
-  constexpr bool IsInvalid() const {
+  constexpr bool IsInvalid() const noexcept {
     return value == INVALID;
   }
 
-  constexpr bool IsWater() const {
+  constexpr bool IsWater() const noexcept {
     return value <= WATER_THRESHOLD && !IsInvalid();
   }
 
-  constexpr bool IsSpecial() const {
+  constexpr bool IsSpecial() const noexcept {
     return value <= WATER_THRESHOLD;
   }
 
-  constexpr TerrainType GetType() const {
+  constexpr TerrainType GetType() const noexcept {
     return !IsSpecial()
       ? TerrainType::GROUND
       : (IsWater()
@@ -72,7 +73,7 @@ public:
          : TerrainType::UNKNOWN);
   }
 
-  constexpr int16_t GetValue() const {
+  constexpr int16_t GetValue() const noexcept {
     return value;
   }
 
@@ -85,7 +86,7 @@ public:
    * other.  Don't use it for calculations where the altitude matters
    * (e.g. glide path calculations).
    */
-  constexpr int16_t GetValueOr0() const {
+  constexpr int16_t GetValueOr0() const noexcept {
     return !IsSpecial() ? value : 0;
   }
 
@@ -94,7 +95,7 @@ public:
    * converted to the given fallback values.
    */
   constexpr double ToDouble(double invalid_value,
-                            double water_value=0.) const {
+                            double water_value=0.) const noexcept {
     return !IsSpecial()
       ? double(value)
       : (IsInvalid() ? invalid_value : water_value);
