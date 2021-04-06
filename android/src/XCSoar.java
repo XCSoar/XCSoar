@@ -259,6 +259,9 @@ public class XCSoar extends Activity {
   @Override protected void onResume() {
     super.onResume();
 
+    if (!Loader.loaded)
+      return;
+
     try {
       startService(new Intent(this, serviceClass));
     } catch (IllegalStateException e) {
@@ -278,6 +281,11 @@ public class XCSoar extends Activity {
 
   @Override protected void onDestroy()
   {
+    if (!Loader.loaded) {
+      super.onDestroy();
+      return;
+    }
+
     Log.d(TAG, "in onDestroy()");
 
     if (batteryReceiver != null) {
@@ -323,7 +331,8 @@ public class XCSoar extends Activity {
   }
 
   @Override public void onWindowFocusChanged(boolean hasFocus) {
-    enableImmersiveModeIfSupported();
+    if (Loader.loaded)
+      enableImmersiveModeIfSupported();
     super.onWindowFocusChanged(hasFocus);
   }
 
