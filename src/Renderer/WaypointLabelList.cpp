@@ -32,7 +32,7 @@ static constexpr int WPCIRCLESIZE = 2;
 [[gnu::pure]]
 static bool
 MapWaypointLabelListCompare(const WaypointLabelList::Label &e1,
-                            const WaypointLabelList::Label &e2)
+                            const WaypointLabelList::Label &e2) noexcept
 {
   if (e1.inTask && !e2.inTask)
     return true;
@@ -71,7 +71,8 @@ void
 WaypointLabelList::Add(const TCHAR *Name, int X, int Y,
                        TextInBoxMode Mode, bool bold,
                        int AltArivalAGL, bool inTask,
-                       bool isLandable, bool isAirport, bool isWatchedWaypoint)
+                       bool isLandable, bool isAirport,
+                       bool isWatchedWaypoint) noexcept
 {
   if (X < - WPCIRCLESIZE || X > (int)size.width + WPCIRCLESIZE * 3 ||
       Y < - WPCIRCLESIZE || Y > (int)size.height + WPCIRCLESIZE)
@@ -95,7 +96,7 @@ WaypointLabelList::Add(const TCHAR *Name, int X, int Y,
 }
 
 void
-WaypointLabelList::Sort()
+WaypointLabelList::Sort() noexcept
 {
   std::sort(labels.begin(), labels.end(),
             MapWaypointLabelListCompare);

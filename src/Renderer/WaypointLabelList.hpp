@@ -60,14 +60,14 @@ public:
            TextInBoxMode Mode, bool bold,
            int AltArivalAGL,
            bool inTask, bool isLandable, bool isAirport,
-           bool isWatchedWaypoint);
-  void Sort();
+           bool isWatchedWaypoint) noexcept;
+  void Sort() noexcept;
 
-  const Label *begin() const {
+  const Label *begin() const noexcept {
     return labels.begin();
   }
 
-  const Label *end() const {
+  const Label *end() const noexcept {
     return labels.end();
   }
 };
