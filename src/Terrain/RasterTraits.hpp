@@ -49,14 +49,14 @@ constexpr unsigned SUBPIXEL_BITS = 8;
 /**
  * Convert a pixel size to an overview pixel size, rounding down.
  */
-constexpr unsigned ToOverview(unsigned x) {
+constexpr unsigned ToOverview(unsigned x) noexcept {
   return x >> OVERVIEW_BITS;
 }
 
 /**
  * Convert a pixel size to an overview pixel size, rounding up.
  */
-constexpr unsigned ToOverviewCeil(unsigned x) {
+constexpr unsigned ToOverviewCeil(unsigned x) noexcept {
   return ToOverview(x + ~OVERVIEW_MASK);
 }
 
