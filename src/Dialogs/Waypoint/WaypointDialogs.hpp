@@ -39,10 +39,21 @@ ShowWaypointListDialog(const GeoPoint &location,
 void
 dlgConfigWaypointsShowModal();
 
+enum class WaypointEditResult {
+  /** editing was canceled by the user */
+  CANCEL,
+
+  /** the object was modified by the user */
+  MODIFIED,
+
+  /** the user has confirmed, but has not modified anything */
+  UNMODIFIED,
+};
+
 /**
  * @return true if the given #Waypoint was modified
  */
-bool
+WaypointEditResult
 dlgWaypointEditShowModal(Waypoint &way_point);
 
 void

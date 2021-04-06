@@ -120,7 +120,7 @@ WaypointEditWidget::Save(bool &_changed) noexcept
   return true;
 }
 
-bool
+WaypointEditResult
 dlgWaypointEditShowModal(Waypoint &way_point)
 {
   if (UIGlobals::GetFormatSettings().coordinate_format ==
@@ -128,7 +128,7 @@ dlgWaypointEditShowModal(Waypoint &way_point)
     ShowMessageBox(
         _("Sorry, the waypoint editor is not yet available for the UTM coordinate format."),
         _("Waypoint Editor"), MB_OK);
-    return false;
+    return WaypointEditResult::CANCEL;
   }
 
   const DialogLook &look = UIGlobals::GetDialogLook();
@@ -140,9 +140,12 @@ dlgWaypointEditShowModal(Waypoint &way_point)
   dialog.SetWidget(look, way_point);
   const int result = dialog.ShowModal();
 
-  if (result != mrOK || !dialog.GetChanged())
-    return false;
+  if (result != mrOK)
+    return WaypointEditResult::CANCEL;
+
+  if (!dialog.GetChanged())
+    return WaypointEditResult::UNMODIFIED;
 
   way_point = dialog.GetWidget().GetValue();
-  return true;
+  return WaypointEditResult::MODIFIED;
 }
