@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2018-04-23 14:38+0000\n"
-"Last-Translator: Ale-Ma <alemassimiani@gmail.com>\n"
+"PO-Revision-Date: 2021-04-08 12:27+0000\n"
+"Last-Translator: francescoRubini <francesco.rubini@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/it/>\n"
 "Language: it\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.0-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Launchpad-Export-Date: 2015-09-08 16:12+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -423,7 +423,7 @@ msgstr "Boe non di una tema MAT"
 #: src/Task/ValidationErrorStrings.cpp:43
 #, no-c-format
 msgid "Wrong shape"
-msgstr ""
+msgstr "Forma errata"
 
 #: src/Airspace/AirspaceGlue.cpp:84
 msgid "Loading Airspace File..."
@@ -7694,9 +7694,7 @@ msgstr "Semplice"
 msgid ""
 "The alternates will only be sorted by waypoint type (airport/outlanding "
 "field) and arrival height."
-msgstr ""
-"Le alternative saranno ordinate solo per tipo (aeroporti/aviosuperfici) e "
-"altezza di arrivo."
+msgstr "Gli alternati saranno ordinati solo per altezza di arrivo."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:82
 #, no-c-format
