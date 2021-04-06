@@ -1,4 +1,4 @@
-Version 7.3 - not yet released
+Version 7.3 - 2021/04/07
 * user interface
   - fix crash in waypoint editor
   - fix swapped longitude/latitude in waypoint editor
