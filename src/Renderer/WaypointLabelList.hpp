@@ -56,7 +56,7 @@ public:
   explicit WaypointLabelList(PixelSize _size) noexcept
     :size(_size) {}
 
-  void Add(const TCHAR *name, int x, int y,
+  void Add(const TCHAR *name, PixelPoint p,
            TextInBoxMode Mode, bool bold,
            int AltArivalAGL,
            bool inTask, bool isLandable, bool isAirport,

@@ -68,14 +68,14 @@ MapWaypointLabelListCompare(const WaypointLabelList::Label &e1,
 }
 
 void
-WaypointLabelList::Add(const TCHAR *Name, int X, int Y,
+WaypointLabelList::Add(const TCHAR *Name, PixelPoint p,
                        TextInBoxMode Mode, bool bold,
                        int AltArivalAGL, bool inTask,
                        bool isLandable, bool isAirport,
                        bool isWatchedWaypoint) noexcept
 {
-  if (X < - WPCIRCLESIZE || X > (int)size.width + WPCIRCLESIZE * 3 ||
-      Y < - WPCIRCLESIZE || Y > (int)size.height + WPCIRCLESIZE)
+  if (p.x < - WPCIRCLESIZE || p.x > (int)size.width + WPCIRCLESIZE * 3 ||
+      p.y < - WPCIRCLESIZE || p.y > (int)size.height + WPCIRCLESIZE)
     return;
 
   if (labels.full())
@@ -84,8 +84,7 @@ WaypointLabelList::Add(const TCHAR *Name, int X, int Y,
   auto &l = labels.append();
 
   CopyString(l.Name, Name, ARRAY_SIZE(l.Name));
-  l.Pos.x = X;
-  l.Pos.y = Y;
+  l.Pos = p;
   l.Mode = Mode;
   l.AltArivalAGL = AltArivalAGL;
   l.bold = bold;

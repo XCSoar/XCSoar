@@ -350,13 +350,14 @@ protected:
                 way_point, vwp.reachable, vwp.reach);
 
     auto sc = vwp.point;
+    sc.x += 5;
     if ((vwp.IsReachable() &&
          settings.landable_style == WaypointRendererSettings::LandableStyle::PURPLE_CIRCLE) ||
         settings.vector_landable_rendering)
       // make space for the green circle
       sc.x += 5;
 
-    labels.Add(buffer, sc.x + 5, sc.y, text_mode, bold,
+    labels.Add(buffer, sc, text_mode, bold,
                vwp.reachable != WaypointRenderer::Invalid ? vwp.reach.direct : INT_MIN,
                vwp.in_task, way_point.IsLandable(), way_point.IsAirport(),
                watchedWaypoint);
