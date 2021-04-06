@@ -7374,8 +7374,7 @@ msgstr "심플(간단)"
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:80
 #, no-c-format
 msgid ""
-"The alternates will only be sorted by waypoint type (airport/outlanding "
-"field) and arrival height."
+"The alternates will only be sorted by arrival height."
 msgstr ""
 "대체포인트는 웨이포인트(활공장(공항)/외곽착륙장) 및 도달 고도에서 사용한다."
 

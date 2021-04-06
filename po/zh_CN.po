@@ -7303,8 +7303,7 @@ msgstr "简单"
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:80
 #, no-c-format
 msgid ""
-"The alternates will only be sorted by waypoint type (airport/outlanding "
-"field) and arrival height."
+"The alternates will only be sorted by arrival height."
 msgstr "备用地将仅由航点类型（机场/外场着陆区域）和到达高度排序。"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:82

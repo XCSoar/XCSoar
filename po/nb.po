@@ -7454,8 +7454,7 @@ msgstr "Enkel"
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:80
 #, no-c-format
 msgid ""
-"The alternates will only be sorted by waypoint type (airport/outlanding "
-"field) and arrival height."
+"The alternates will only be sorted by arrival height."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:82

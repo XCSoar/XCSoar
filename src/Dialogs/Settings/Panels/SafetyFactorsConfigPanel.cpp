@@ -77,7 +77,7 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent,
 
   static constexpr StaticEnumChoice abort_task_mode_list[] = {
     { (unsigned)AbortTaskMode::SIMPLE, N_("Simple"),
-      N_("The alternates will only be sorted by waypoint type (airport/outlanding field) and arrival height.") },
+      N_("The alternates will only be sorted by arrival height.") },
     { (unsigned)AbortTaskMode::TASK, N_("Task"),
       N_("The sorting will also take the current task direction into account.") },
     { (unsigned)AbortTaskMode::HOME, N_("Home"),

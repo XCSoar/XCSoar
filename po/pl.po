@@ -7682,8 +7682,7 @@ msgstr "Prosty"
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:80
 #, no-c-format
 msgid ""
-"The alternates will only be sorted by waypoint type (airport/outlanding "
-"field) and arrival height."
+"The alternates will only be sorted by arrival height."
 msgstr ""
 "Sortowanie wyłącznie wg. rodzaju lądowiska (lotnisko/teren przygodny) i "
 "wysokości przylotu."
