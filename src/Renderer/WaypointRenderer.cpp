@@ -100,6 +100,8 @@ struct VisibleWaypoint {
     reach.direct = result.pure_glide_altitude_difference;
     if (result.pure_glide_altitude_difference > 0)
       reachable = WaypointRenderer::ReachableTerrain;
+    else
+      reachable = WaypointRenderer::Unreachable;
   }
 
   bool CalculateRouteArrival(const RoutePlannerGlue &route_planner,
