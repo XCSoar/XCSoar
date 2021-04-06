@@ -29,7 +29,7 @@ Copyright_License {
 #include <stdlib.h>
 
 void
-RasterBuffer::Resize(unsigned _width, unsigned _height)
+RasterBuffer::Resize(unsigned _width, unsigned _height) noexcept
 {
   assert(_width > 0 && _height > 0);
 
@@ -38,7 +38,7 @@ RasterBuffer::Resize(unsigned _width, unsigned _height)
 
 TerrainHeight
 RasterBuffer::GetInterpolated(unsigned lx, unsigned ly,
-                               unsigned ix, unsigned iy) const
+                              unsigned ix, unsigned iy) const noexcept
 {
   assert(IsDefined());
   assert(lx < GetWidth());
@@ -65,7 +65,7 @@ RasterBuffer::GetInterpolated(unsigned lx, unsigned ly,
 }
 
 TerrainHeight
-RasterBuffer::GetInterpolated(unsigned lx, unsigned ly) const
+RasterBuffer::GetInterpolated(unsigned lx, unsigned ly) const noexcept
 {
   // check x in range, and decompose fraction part
   const unsigned int ix = CombinedDivAndMod(lx);
@@ -90,14 +90,14 @@ class PixelIterator
   unsigned dest_increment, dest_counter;
 
 public:
-  PixelIterator(unsigned src_size, unsigned dest_size)
+  constexpr PixelIterator(unsigned src_size, unsigned dest_size) noexcept
     :src_increment(dest_size), src_counter(0),
      dest_increment(src_size), dest_counter(0) {}
 
   /**
    * @return the number of source pixels to skip
    */
-  unsigned Next() {
+  constexpr unsigned Next() noexcept {
     if (dest_counter < src_counter) {
       dest_counter += dest_increment;
       return 0;
@@ -120,7 +120,7 @@ public:
 void
 RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
                                  TerrainHeight *gcc_restrict buffer, unsigned size,
-                                 bool interpolate) const
+                                 bool interpolate) const noexcept
 {
   assert(ax < GetFineWidth());
   assert(bx < GetFineWidth());
@@ -186,7 +186,7 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
 void
 RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
                        TerrainHeight *gcc_restrict buffer,
-                       unsigned size, bool interpolate) const
+                       unsigned size, bool interpolate) const noexcept
 {
   assert(ax < GetFineWidth());
   assert(ay < GetFineHeight());
@@ -242,7 +242,7 @@ void
 RasterBuffer::ScanLineChecked(unsigned ax, unsigned ay,
                               unsigned bx, unsigned by,
                               TerrainHeight *buffer, unsigned size,
-                              bool interpolate) const
+                              bool interpolate) const noexcept
 {
   if (ax >= GetFineWidth())
     ax = GetFineWidth() - 1;
@@ -260,7 +260,7 @@ RasterBuffer::ScanLineChecked(unsigned ax, unsigned ay,
 }
 
 TerrainHeight
-RasterBuffer::GetMaximum() const
+RasterBuffer::GetMaximum() const noexcept
 {
   return IsDefined()
     ? *std::max_element(data.begin(), data.end(),

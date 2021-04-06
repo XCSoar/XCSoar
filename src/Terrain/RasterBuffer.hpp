@@ -35,60 +35,60 @@ class RasterBuffer {
   AllocatedGrid<TerrainHeight> data;
 
 public:
-  RasterBuffer() = default;
-  RasterBuffer(unsigned _width, unsigned _height)
+  RasterBuffer() noexcept = default;
+  RasterBuffer(unsigned _width, unsigned _height) noexcept
     :data(_width, _height) {}
 
   RasterBuffer(const RasterBuffer &) = delete;
   RasterBuffer &operator=(const RasterBuffer &) = delete;
 
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
     return data.IsDefined();
   }
 
-  unsigned GetWidth() const {
+  unsigned GetWidth() const noexcept {
     return data.GetWidth();
   }
 
-  unsigned GetHeight() const {
+  unsigned GetHeight() const noexcept {
     return data.GetHeight();
   }
 
-  unsigned GetFineWidth() const {
+  unsigned GetFineWidth() const noexcept {
     return GetWidth() << RasterTraits::SUBPIXEL_BITS;
   }
 
-  unsigned GetFineHeight() const {
+  unsigned GetFineHeight() const noexcept {
     return GetHeight() << RasterTraits::SUBPIXEL_BITS;
   }
 
-  TerrainHeight *GetData() {
+  TerrainHeight *GetData() noexcept {
     return data.begin();
   }
 
-  const TerrainHeight *GetData() const {
+  const TerrainHeight *GetData() const noexcept {
     return data.begin();
   }
 
-  const TerrainHeight *GetDataAt(unsigned x, unsigned y) const {
+  const TerrainHeight *GetDataAt(unsigned x, unsigned y) const noexcept {
     return data.GetPointerAt(x, y);
   }
 
-  void Reset() {
+  void Reset() noexcept {
     data.Reset();
   }
 
-  void Resize(unsigned _width, unsigned _height);
+  void Resize(unsigned _width, unsigned _height) noexcept;
 
   gcc_pure
   TerrainHeight GetInterpolated(unsigned lx, unsigned ly,
-                                unsigned ix, unsigned iy) const;
+                                unsigned ix, unsigned iy) const noexcept;
 
   gcc_pure
-  TerrainHeight GetInterpolated(unsigned lx, unsigned ly) const;
+  TerrainHeight GetInterpolated(unsigned lx, unsigned ly) const noexcept;
 
   gcc_pure
-  TerrainHeight Get(unsigned x, unsigned y) const {
+  TerrainHeight Get(unsigned x, unsigned y) const noexcept {
     return *GetDataAt(x, y);
   }
 
@@ -98,22 +98,22 @@ protected:
    */
   void ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
                           TerrainHeight *buffer, unsigned size,
-                          bool interpolate) const;
+                          bool interpolate) const noexcept;
 
 
 public:
   void ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
-                TerrainHeight *buffer, unsigned size, bool interpolate) const;
+                TerrainHeight *buffer, unsigned size, bool interpolate) const noexcept;
 
   /**
    * Wrapper for ScanLine() with basic range checks.
    */
   void ScanLineChecked(unsigned ax, unsigned ay, unsigned bx, unsigned by,
                        TerrainHeight *buffer, unsigned size,
-                       bool interpolate) const;
+                       bool interpolate) const noexcept;
 
   gcc_pure
-  TerrainHeight GetMaximum() const;
+  TerrainHeight GetMaximum() const noexcept;
 };
 
 #endif
