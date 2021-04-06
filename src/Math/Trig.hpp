@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_MATH_TRIG_HPP
 #define XCSOAR_MATH_TRIG_HPP
 
+#if defined(_MSC_VER)
+# include "util/Compiler.h"
+#endif
+
 #include <utility>
 
 #include <math.h>
@@ -35,6 +39,9 @@ sin_cos(const double thetha) noexcept
   double s, c;
 #ifdef __APPLE__
   __sincos(thetha, &s, &c);
+#elif defined(_MSC_VER)  // STL and MSVC have no sincos...
+  s = sin(thetha);
+  c = cos(thetha);
 #else
   sincos(thetha, &s, &c);
 #endif

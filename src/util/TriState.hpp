@@ -33,6 +33,7 @@
 #include <cstdint>
 
 #ifdef _WIN32
+#include <winsock2.h>
 #include <windows.h>
 #elif defined(__APPLE__)
 #import <Foundation/Foundation.h>
