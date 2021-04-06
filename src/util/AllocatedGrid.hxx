@@ -45,6 +45,7 @@ protected:
 	unsigned width = 0, height = 0;
 
 public:
+	using size_type = typename AllocatedArray<T>::size_type;
 	using reference = typename AllocatedArray<T>::reference;
 	using const_reference = typename AllocatedArray<T>::const_reference;
 	using iterator = typename AllocatedArray<T>::iterator;
@@ -66,8 +67,8 @@ public:
 		return height;
 	}
 
-	constexpr unsigned GetSize() const noexcept {
-		return width * height;
+	constexpr size_type GetSize() const noexcept {
+		return size_type(width) * size_type(height);
 	}
 
 	const_reference Get(unsigned x, unsigned y) const noexcept {
@@ -84,13 +85,13 @@ public:
 		return array[y * width + x];
 	}
 
-	const_reference GetLinear(unsigned i) const noexcept {
+	const_reference GetLinear(size_type i) const noexcept {
 		assert(i < GetSize());
 
 		return array[i];
 	}
 
-	reference GetLinear(unsigned i) noexcept {
+	reference GetLinear(size_type i) noexcept {
 		assert(i < GetSize());
 
 		return array[i];
@@ -155,8 +156,8 @@ public:
 			width = _width;
 		}
 
-		const unsigned h = std::min(height, _height);
-		const unsigned fill_start = h > 0
+		const size_type h = std::min(height, _height);
+		const size_type fill_start = h > 0
 			? (h - 1) * _width + width
 			: 0;
 
@@ -178,7 +179,7 @@ public:
 
 		height = _height;
 
-		unsigned new_size = GetSize();
+		size_type new_size = GetSize();
 		if (fill_start < new_size)
 			std::fill(begin() + fill_start, begin() + new_size, fill);
 	}
