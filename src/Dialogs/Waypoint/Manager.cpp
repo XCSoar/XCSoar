@@ -242,9 +242,13 @@ WaypointManagerWidget::OnWaypointEditClicked(unsigned i)
   if (dlgWaypointEditShowModal(wp_copy)) {
     modified = true;
 
-    ScopeSuspendAllThreads suspend;
-    way_points.Replace(wp, std::move(wp_copy));
-    way_points.Optimise();
+    {
+      ScopeSuspendAllThreads suspend;
+      way_points.Replace(wp, std::move(wp_copy));
+      way_points.Optimise();
+    }
+
+    Update();
   }
 }
 

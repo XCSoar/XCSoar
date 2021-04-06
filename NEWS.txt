@@ -1,5 +1,6 @@
 Version 7.3 - not yet released
 * user interface
+  - fix crash in waypoint editor
   - fix zoom button label in Traffic Radar View
 * Android
   - fix download progress
