@@ -45,10 +45,10 @@ protected:
 	unsigned width = 0, height = 0;
 
 public:
-	typedef typename AllocatedArray<T>::reference reference;
-	typedef typename AllocatedArray<T>::const_reference const_reference;
-	typedef typename AllocatedArray<T>::iterator iterator;
-	typedef typename AllocatedArray<T>::const_iterator const_iterator;
+	using reference = typename AllocatedArray<T>::reference;
+	using const_reference = typename AllocatedArray<T>::const_reference;
+	using iterator = typename AllocatedArray<T>::iterator;
+	using const_iterator = typename AllocatedArray<T>::const_iterator;
 
 	constexpr AllocatedGrid() noexcept = default;
 	AllocatedGrid(unsigned _width, unsigned _height) noexcept
