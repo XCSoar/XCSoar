@@ -3,6 +3,7 @@ Version 7.3 - not yet released
   - fix crash in waypoint editor
   - fix "Import" button in waypoint editor
   - fix zoom button label in Traffic Radar View
+  - fix the vario trace infobox
 * Android
   - fix download progress
 
