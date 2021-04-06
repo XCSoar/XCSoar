@@ -1,5 +1,7 @@
 Version 7.3 - not yet released
 - fix zoom button label in Traffic Radar View
+* Android
+  - fix download progress
 
 Version 7.2 - 2021/04/04
 * user interface

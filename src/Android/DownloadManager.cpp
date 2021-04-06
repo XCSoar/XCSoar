@@ -85,7 +85,7 @@ AndroidDownloadManager::Create(JNIEnv *env, Context &context) noexcept
   if (obj == nullptr)
     return nullptr;
 
-  return new AndroidDownloadManager(env, obj);
+  return instance = new AndroidDownloadManager(env, obj);
 }
 
 void
