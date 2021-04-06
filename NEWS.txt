@@ -1,6 +1,7 @@
 Version 7.3 - not yet released
 * user interface
   - fix crash in waypoint editor
+  - fix swapped longitude/latitude in waypoint editor
   - fix "Import" button in waypoint editor
   - fix zoom button label in Traffic Radar View
   - fix the vario trace infobox
