@@ -354,7 +354,8 @@ protected:
       // make space for the green circle
       sc.x += 5;
 
-    labels.Add(buffer, sc.x + 5, sc.y, text_mode, bold, vwp.reach.direct,
+    labels.Add(buffer, sc.x + 5, sc.y, text_mode, bold,
+               vwp.reachable != WaypointRenderer::Invalid ? vwp.reach.direct : INT_MIN,
                vwp.in_task, way_point.IsLandable(), way_point.IsAirport(),
                watchedWaypoint);
   }
