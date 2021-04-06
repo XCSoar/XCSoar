@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Renderer/TextInBox.hpp"
 #include "ui/dim/Point.hpp"
-#include "ui/dim/Size.hpp"
+#include "ui/dim/Rect.hpp"
 #include "util/NonCopyable.hpp"
 #include "util/StaticArray.hxx"
 #include "Sizes.h" /* for NAME_SIZE */
@@ -34,6 +34,8 @@ Copyright_License {
 #include <tchar.h>
 
 class WaypointLabelList : private NonCopyable {
+  static constexpr int WPCIRCLESIZE = 2;
+
 public:
   struct Label{
     TCHAR Name[NAME_SIZE+1];
@@ -48,13 +50,17 @@ public:
   };
 
 protected:
-  const PixelSize size;
+  PixelRect clip_rect;
 
   StaticArray<Label, 256u> labels;
 
 public:
-  explicit WaypointLabelList(PixelSize _size) noexcept
-    :size(_size) {}
+  explicit WaypointLabelList(PixelRect _rect) noexcept
+    :clip_rect(_rect)
+  {
+    clip_rect.Grow(WPCIRCLESIZE);
+    clip_rect.right += WPCIRCLESIZE * 2;
+  }
 
   void Add(const TCHAR *name, PixelPoint p,
            TextInBoxMode Mode, bool bold,

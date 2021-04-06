@@ -27,8 +27,6 @@ Copyright_License {
 
 #include <algorithm>
 
-static constexpr int WPCIRCLESIZE = 2;
-
 [[gnu::pure]]
 static bool
 MapWaypointLabelListCompare(const WaypointLabelList::Label &e1,
@@ -74,8 +72,7 @@ WaypointLabelList::Add(const TCHAR *Name, PixelPoint p,
                        bool isLandable, bool isAirport,
                        bool isWatchedWaypoint) noexcept
 {
-  if (p.x < - WPCIRCLESIZE || p.x > (int)size.width + WPCIRCLESIZE * 3 ||
-      p.y < - WPCIRCLESIZE || p.y > (int)size.height + WPCIRCLESIZE)
+  if (!clip_rect.Contains(p))
     return;
 
   if (labels.full())
