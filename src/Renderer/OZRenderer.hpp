@@ -30,6 +30,7 @@ class Canvas;
 class Projection;
 struct AirspaceRendererSettings;
 class ObservationZonePoint;
+class GeoBounds;
 
 /** Utility class to render an ObzervationZonePoint to a canvas */
 class OZRenderer {
@@ -56,6 +57,9 @@ public:
 
   void Draw(Canvas &canvas, Layer _layer, const Projection &projection,
             const ObservationZonePoint &oz, int offset) noexcept;
+
+  [[gnu::pure]]
+  static GeoBounds GetGeoBounds(const ObservationZonePoint &oz) noexcept;
 
 private:
   /**

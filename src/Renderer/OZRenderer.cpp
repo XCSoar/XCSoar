@@ -25,7 +25,9 @@ Copyright_License {
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
+#include "Task/ObservationZones/Boundary.hpp"
 #include "Projection/Projection.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Look/TaskLook.hpp"
 #include "Look/AirspaceLook.hpp"
@@ -181,4 +183,14 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
   }
 
   Finish(canvas, layer);
+}
+
+GeoBounds
+OZRenderer::GetGeoBounds(const ObservationZonePoint &oz) noexcept
+{
+  auto bounds = GeoBounds::Invalid();
+  for (const auto &i : oz.GetBoundary())
+    bounds.Extend(i);
+
+  return bounds;
 }
