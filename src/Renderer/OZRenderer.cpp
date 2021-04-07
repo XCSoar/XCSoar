@@ -28,6 +28,7 @@ Copyright_License {
 #include "Task/ObservationZones/Boundary.hpp"
 #include "Projection/Projection.hpp"
 #include "Geo/GeoBounds.hpp"
+#include "Geo/SimplifiedMath.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Look/TaskLook.hpp"
 #include "Look/AirspaceLook.hpp"
@@ -185,12 +186,49 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
   Finish(canvas, layer);
 }
 
+static void
+AddSegment(GeoBounds &bounds, GeoPoint center, double radius,
+           AngleRange range) noexcept
+{
+  /* for what we're doing, only the for extreme points of the segment
+     are relevant; if those angles are inside the segment, we may need
+     to add them to avoid clipping */
+  for (Angle a : {Angle::Zero(), Angle::QuarterCircle(), Angle::HalfCircle(), Angle::QuarterCircle() + Angle::HalfCircle()})
+    if (range.IsInside(a))
+      bounds.Extend(FindLatitudeLongitudeS(center, a, radius));
+}
+
 GeoBounds
 OZRenderer::GetGeoBounds(const ObservationZonePoint &oz) noexcept
 {
   auto bounds = GeoBounds::Invalid();
   for (const auto &i : oz.GetBoundary())
     bounds.Extend(i);
+
+  switch (oz.GetShape()) {
+  case ObservationZone::Shape::LINE:
+  case ObservationZone::Shape::FAI_SECTOR:
+    {
+      /* for these, the segment is not part of the boundary, but it is
+         rendered */
+      const SectorZone &sector = (const SectorZone &)oz;
+      AddSegment(bounds, sector.GetReference(), sector.GetRadius(),
+                 {sector.GetStartRadial(), sector.GetEndRadial()});
+    }
+    break;
+
+  case ObservationZone::Shape::MAT_CYLINDER:
+  case ObservationZone::Shape::CYLINDER:
+  case ObservationZone::Shape::BGA_START:
+  case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+  case ObservationZone::Shape::SECTOR:
+  case ObservationZone::Shape::CUSTOM_KEYHOLE:
+  case ObservationZone::Shape::DAEC_KEYHOLE:
+  case ObservationZone::Shape::BGAFIXEDCOURSE:
+  case ObservationZone::Shape::BGAENHANCEDOPTION:
+  case ObservationZone::Shape::ANNULAR_SECTOR:
+    break;
+  }
 
   return bounds;
 }
