@@ -115,6 +115,13 @@ ScoringConfigPanel::Prepare(ContainerWindow &parent,
           "bounding box part with 1 km = 1.0 point and the additional zick-zack part with 1 km = 0.5 p.") },
     { (unsigned)Contest::NET_COUPE, ContestToString(Contest::NET_COUPE),
       N_("The FFVV NetCoupe \"libre\" competiton.") },
+    { (unsigned)Contest::WEGLIDE_FREE, ContestToString(Contest::WEGLIDE_FREE),
+      N_("WeGlide combines multiple scoring systems in the WeGlide Free contest. The free score is a combination "
+          "of the free distance score and the area bonus. For the area bonus, the scoring program determines the "
+          "largest FAI triangle and the largest Out & Return distance that can be fitted into the flight route.") },
+    { (unsigned)Contest::WEGLIDE_OR, ContestToString(Contest::WEGLIDE_OR),
+      N_("A start point, one turn point and a finish point are chosen from the flight path such that "
+          "the distance between the start point and the turn point is maximized") },
     { 0 }
   };
   AddEnum(_("On-Line Contest"),

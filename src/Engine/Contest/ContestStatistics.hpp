@@ -29,11 +29,11 @@
 
 struct ContestStatistics
 {
-  ContestResult result[3];
-  ContestTraceVector solution[3];
+  ContestResult result[4];
+  ContestTraceVector solution[4];
 
   void Reset() {
-    for (unsigned i = 0; i < 3; ++i) {
+    for (unsigned i = 0; i < 4; ++i) {
       solution[i].clear();
       result[i].Reset();
     }
@@ -63,7 +63,7 @@ struct ContestStatistics
     // Search for best solution by score
     double best = 0;
     int i_best = 0;
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 4; ++i) {
       if (result[i].IsDefined() && (result[i].score > best)) {
         // Better scored solution found
         i_best = i;

@@ -39,7 +39,11 @@ ContestManager::ContestManager(const Contest _contest,
    dhv_xc_free(trace_full, true),
    dhv_xc_triangle(trace_triangle, predict_triangle, true),
    sis_at(trace_full),
-   net_coupe(trace_full)
+   net_coupe(trace_full),
+   weglide_free(),
+   weglide_distance(trace_full),
+   weglide_fai(trace_triangle, predict_triangle),
+   weglide_or(trace_full)
 {
   Reset();
 }
@@ -57,6 +61,9 @@ ContestManager::SetIncremental(bool incremental)
   dhv_xc_triangle.SetIncremental(incremental);
   sis_at.SetIncremental(incremental);
   net_coupe.SetIncremental(incremental);
+  weglide_distance.SetIncremental(incremental);
+  weglide_fai.SetIncremental(incremental);
+  weglide_or.SetIncremental(incremental);
 }
 
 void
@@ -91,6 +98,10 @@ ContestManager::SetHandicap(unsigned handicap)
   dhv_xc_triangle.SetHandicap(handicap);
   sis_at.SetHandicap(handicap);
   net_coupe.SetHandicap(handicap);
+  weglide_free.SetHandicap(handicap);
+  weglide_distance.SetHandicap(handicap);
+  weglide_fai.SetHandicap(handicap);
+  weglide_or.SetHandicap(handicap);
 }
 
 static bool
@@ -196,6 +207,41 @@ ContestManager::UpdateIdle(bool exhaustive)
                         stats.solution[0], exhaustive);
     break;
 
+  case Contest::WEGLIDE_FREE:
+    retval = RunContest(weglide_distance, stats.result[0],
+                        stats.solution[0], exhaustive);
+
+    retval |= RunContest(weglide_fai, stats.result[1],
+                         stats.solution[1], exhaustive);
+
+    retval |= RunContest(weglide_or, stats.result[2],
+                         stats.solution[2], exhaustive);
+
+    if (retval) {
+      weglide_free.Feed(stats.result[0], stats.solution[0],
+                        stats.result[1], stats.solution[1],
+                        stats.result[2], stats.solution[2]);
+
+      RunContest(weglide_free, stats.result[3],
+                 stats.solution[3], exhaustive);
+    }
+    break;
+
+  case Contest::WEGLIDE_DISTANCE:
+    retval = RunContest(weglide_distance, stats.result[0],
+                        stats.solution[0], exhaustive);
+    break;
+
+  case Contest::WEGLIDE_FAI:
+    retval = RunContest(weglide_fai, stats.result[0],
+                        stats.solution[0], exhaustive);
+    break;
+
+  case Contest::WEGLIDE_OR:
+    retval = RunContest(weglide_or, stats.result[0],
+                        stats.solution[0], exhaustive);
+    break;
+
   };
 
   return retval;
@@ -217,6 +263,10 @@ ContestManager::Reset()
   dhv_xc_triangle.Reset();
   sis_at.Reset();
   net_coupe.Reset();
+  weglide_free.Reset();
+  weglide_distance.Reset();
+  weglide_fai.Reset();
+  weglide_or.Reset();
 }
 
 /*

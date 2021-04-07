@@ -162,6 +162,18 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
     DrawContestSolution(canvas, proj, contest, 0);
     DrawContestTriangle(canvas, proj, contest, 1);
     break;
+
+  case Contest::WEGLIDE_FREE:
+    DrawContestSolution(canvas, proj, contest, 0);
+    break;
+
+  case Contest::WEGLIDE_DISTANCE:
+  case Contest::WEGLIDE_FAI:
+
+  case Contest::WEGLIDE_OR:
+    DrawContestSolution(canvas, proj, contest, 0);
+    break;
+
   }
 
   RenderMapScale(canvas, proj, rc_chart, map_look.overlay);

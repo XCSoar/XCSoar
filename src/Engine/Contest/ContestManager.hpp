@@ -34,6 +34,10 @@
 #include "Solvers/XContestTriangle.hpp"
 #include "Solvers/OLCSISAT.hpp"
 #include "Solvers/NetCoupe.hpp"
+#include "Solvers/WeglideFree.hpp"
+#include "Solvers/WeglideDistance.hpp"
+#include "Solvers/WeglideFAI.hpp"
+#include "Solvers/WeglideOR.hpp"
 #include "ContestStatistics.hpp"
 
 class Trace;
@@ -61,6 +65,10 @@ class ContestManager
   XContestTriangle dhv_xc_triangle;
   OLCSISAT sis_at;
   NetCoupe net_coupe;
+  WeglideFree weglide_free;
+  WeglideDistance weglide_distance;
+  WeglideFAI weglide_fai;
+  WeglideOR weglide_or;
 
 public:
   /**
@@ -118,6 +126,8 @@ public:
     olc_fai.SetMaxTreeSize(max_tree_size);
     dhv_xc_triangle.SetMaxIterations(max_iterations);
     dhv_xc_triangle.SetMaxTreeSize(max_tree_size);
+    weglide_fai.SetMaxIterations(max_iterations);
+    weglide_fai.SetMaxTreeSize(max_tree_size);
 
     return SolveExhaustive();
   }

@@ -18,61 +18,23 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
+*/
+
+#ifndef WEGLIDE_FAI_HPP
+#define WEGLIDE_FAI_HPP
+
+#include "TriangleContest.hpp"
+
+/**
+ * Specialisation of Weglide Triangle with Weglide FAI (triangle) rules
  */
+class WeglideFAI : public TriangleContest {
+public:
+  WeglideFAI(const Trace &_trace, bool predict) noexcept;
 
-#ifndef XCSOAR_CONTEST_SETTINGS_HPP
-#define XCSOAR_CONTEST_SETTINGS_HPP
-
-#include <type_traits>
-
-#include <cstdint>
-
-enum class Contest : uint8_t {
-  /**
-   * Deprecated.  Use #OLC_LEAGUE instead.
-   */
-  OLC_SPRINT = 0,
-
-  OLC_FAI,
-  OLC_CLASSIC,
-  OLC_LEAGUE,
-  OLC_PLUS,
-  XCONTEST,
-  DHV_XC,
-  SIS_AT,
-  NET_COUPE,
-
-  /**
-   * Deutsche Meisterschaft im Streckensegelflug (Germany).
-   */
-  DMST,
-
-  WEGLIDE_FREE,
-  WEGLIDE_DISTANCE,
-  WEGLIDE_FAI,
-  WEGLIDE_OR,
-  NONE,
+protected:
+  /* virtual methods from class TriangleContest */
+  ContestResult CalculateResult() const noexcept override;
 };
-
-struct ContestSettings {
-  /** Whether to do online OLC optimisation */
-  bool enable;
-
-  /**
-   * For the contest score, predict that the aircraft will reach the
-   * next turn point?
-   */
-  bool predict;
-
-  /** Rule set to scan for in OLC */
-  Contest contest;
-
-  /** Handicap factor */
-  unsigned handicap;
-
-  void SetDefaults();
-};
-
-static_assert(std::is_trivial<ContestSettings>::value, "type is not trivial");
 
 #endif
