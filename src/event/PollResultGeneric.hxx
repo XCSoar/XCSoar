@@ -23,6 +23,7 @@
 #include <vector>
 
 #ifdef _WIN32
+#include <winsock2.h>
 #include <windows.h>
 /* damn you, windows.h! */
 #ifdef GetObject
