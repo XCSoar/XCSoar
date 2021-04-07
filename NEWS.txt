@@ -1,6 +1,7 @@
 Version 7.4 - not yet released
 * user interface
   - fix overlapping observation zones in the task point list
+  - fix text background in the analysis graphs
 
 Version 7.3 - 2021/04/07
 * user interface
