@@ -32,7 +32,16 @@
 #include <cstddef>
 #include <utility>
 
-#include <unistd.h>
+#ifdef _MSC_VER
+# include <BaseTsd.h>
+# include <stdio.h>
+# include <io.h>
+  typedef SSIZE_T ssize_t;
+  typedef size_t mode_t;
+# define lseek _lseek
+#else
+# include <unistd.h>
+#endif
 #include <sys/types.h>
 
 #ifdef __linux__
