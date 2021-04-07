@@ -52,10 +52,10 @@ protected:
 
 public:
   OZRenderer(const TaskLook &task_look, const AirspaceLook &airspace_look,
-             const AirspaceRendererSettings &_settings);
+             const AirspaceRendererSettings &_settings) noexcept;
 
   void Draw(Canvas &canvas, Layer _layer, const Projection &projection,
-            const ObservationZonePoint &oz, int offset);
+            const ObservationZonePoint &oz, int offset) noexcept;
 
 private:
   /**
@@ -66,13 +66,13 @@ private:
    * means it is a "past" task point
    * @return false if nothing is to be drawn in this layer
    */
-  void Prepare(Canvas &canvas, Layer layer, int offset) const;
+  void Prepare(Canvas &canvas, Layer layer, int offset) const noexcept;
 
   /**
    * Cleans up the settings after drawing has been finished.  This
    * method must be invoked if draw_style() has returned true.
    */
-  void Finish(Canvas &canvas, Layer layer) const;
+  void Finish(Canvas &canvas, Layer layer) const noexcept;
 };
 
 #endif

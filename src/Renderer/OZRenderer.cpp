@@ -36,13 +36,13 @@ Copyright_License {
 
 OZRenderer::OZRenderer(const TaskLook &_task_look,
                        const AirspaceLook &_airspace_look,
-                       const AirspaceRendererSettings &_settings)
+                       const AirspaceRendererSettings &_settings) noexcept
   :task_look(_task_look), airspace_look(_airspace_look), settings(_settings)
 {
 }
 
 void
-OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
+OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const noexcept
 {
   if (layer == LAYER_SHADE) {
     Color color = airspace_look.classes[AATASK].fill_color;
@@ -63,7 +63,6 @@ OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
 #endif /* !GDI */
 
     canvas.SelectNullPen();
-    
     return;
   }
 
@@ -79,7 +78,7 @@ OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
 }
 
 void
-OZRenderer::Finish(Canvas &canvas, Layer layer) const
+OZRenderer::Finish(Canvas &canvas, Layer layer) const noexcept
 {
   if (layer == LAYER_SHADE) {
 #ifdef ENABLE_OPENGL
@@ -92,7 +91,7 @@ OZRenderer::Finish(Canvas &canvas, Layer layer) const
 
 void
 OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
-                 const ObservationZonePoint &_oz, int offset)
+                 const ObservationZonePoint &_oz, int offset) noexcept
 {
   if (layer == LAYER_SHADE && offset < 0)
     return;
