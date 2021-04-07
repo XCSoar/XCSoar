@@ -37,11 +37,9 @@ OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
                         const AirspaceRendererSettings &airspace_settings,
                         const AirspaceLook &airspace_look)
 {
-  OZBoundary boundary = oz.GetBoundary();
-
   GeoBounds bounds = GeoBounds::Invalid();
-  for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i)
-    bounds.Extend(*i);
+  for (const auto &i : oz.GetBoundary())
+    bounds.Extend(i);
 
   const GeoPoint center = bounds.GetCenter();
 
