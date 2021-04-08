@@ -34,7 +34,7 @@
 void
 TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
                       const FlarmTraffic &traffic, const Angle angle,
-                      const FlarmColor color, const PixelPoint pt)
+                      const FlarmColor color, const PixelPoint pt) noexcept
 {
   // Create point array that will form that arrow polygon
   BulkPixelPoint arrow[] = {
@@ -94,7 +94,8 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
 
 void
 TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
-                      const GliderLinkTraffic &traffic, const Angle angle, const PixelPoint pt)
+                      const GliderLinkTraffic &traffic,
+                      const Angle angle, const PixelPoint pt) noexcept
 {
   // Create point array that will form that arrow polygon
   BulkPixelPoint arrow[] = {
