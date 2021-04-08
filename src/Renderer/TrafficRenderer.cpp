@@ -42,7 +42,6 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
     { 0, -8 },
     { 4, 6 },
     { 0, 3 },
-    { -4, 6 },
   };
 
   // Select brush depending on AlarmLevel
@@ -103,7 +102,6 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
     { 0, -8 },
     { 4, 6 },
     { 0, 3 },
-    { -4, 6 },
   };
 
   canvas.Select(traffic_look.safe_brush);
