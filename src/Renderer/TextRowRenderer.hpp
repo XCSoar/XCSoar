@@ -40,10 +40,10 @@ public:
   /**
    * @return the row height (including top and bottom padding)
    */
-  unsigned CalculateLayout(const Font &font);
+  unsigned CalculateLayout(const Font &font) noexcept;
 
   void DrawTextRow(Canvas &canvas, const PixelRect &rc,
-                   const TCHAR *text) const;
+                   const TCHAR *text) const noexcept;
 
   /**
    * Returns the minimum X coordinate of the column after the given
@@ -51,13 +51,13 @@ public:
    */
   [[gnu::pure]]
   int NextColumn(Canvas &canvas, const PixelRect &rc,
-                 const TCHAR *text) const;
+                 const TCHAR *text) const noexcept;
 
   /**
    * Combine DrawTextRow() and NextColumn().
    */
   int DrawColumn(Canvas &canvas, const PixelRect &rc,
-                 const TCHAR *text) const;
+                 const TCHAR *text) const noexcept;
 
   /**
    * Returns the maximum X coordinate of the column before the given
@@ -65,14 +65,14 @@ public:
    */
   [[gnu::pure]]
   int PreviousRightColumn(Canvas &canvas, const PixelRect &rc,
-                          const TCHAR *text) const;
+                          const TCHAR *text) const noexcept;
 
   /**
    * Draws a right-aligned column and returns the new "right"
    * coordinate.
    */
   int DrawRightColumn(Canvas &canvas, const PixelRect &rc,
-                      const TCHAR *text) const;
+                      const TCHAR *text) const noexcept;
 };
 
 #endif
