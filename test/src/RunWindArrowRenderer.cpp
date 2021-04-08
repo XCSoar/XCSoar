@@ -30,6 +30,7 @@ Copyright_License {
 #include "Look/WindArrowLook.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
 #include "Geo/SpeedVector.hpp"
+#include "MapSettings.hpp"
 
 class WindWindow : public PaintWindow
 {

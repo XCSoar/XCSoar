@@ -27,13 +27,13 @@ Copyright_License {
 #include <algorithm>
 
 void
-WaypointListItem::ResetVector()
+WaypointListItem::ResetVector() noexcept
 {
   vec.SetInvalid();
 }
 
 const GeoVector &
-WaypointListItem::GetVector(const GeoPoint &location) const
+WaypointListItem::GetVector(const GeoPoint &location) const noexcept
 {
   if (!vec.IsValid())
     vec = GeoVector(location, waypoint->location);
@@ -46,14 +46,19 @@ class WaypointDistanceCompare
   const GeoPoint &location;
 
 public:
-  WaypointDistanceCompare(const GeoPoint &_location):location(_location) {}
+  explicit WaypointDistanceCompare(const GeoPoint &_location) noexcept
+    :location(_location) {}
 
+
+  [[gnu::pure]]
   bool operator()(const WaypointListItem &a,
-                  const WaypointListItem &b) const {
+                  const WaypointListItem &b) const noexcept {
     return a.GetVector(location).distance < b.GetVector(location).distance;
   }
 };
 
-void WaypointList::SortByDistance(const GeoPoint &location) {
+void
+WaypointList::SortByDistance(const GeoPoint &location) noexcept
+{
   std::sort(begin(), end(), WaypointDistanceCompare(location));
 }

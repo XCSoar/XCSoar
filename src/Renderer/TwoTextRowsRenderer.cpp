@@ -29,7 +29,7 @@ Copyright_License {
 
 unsigned
 TwoTextRowsRenderer::CalculateLayout(const Font &_first_font,
-                                     const Font &_second_font)
+                                     const Font &_second_font) noexcept
 {
   const unsigned first_font_height = _first_font.GetHeight();
   const unsigned second_font_height = _second_font.GetHeight();
@@ -53,7 +53,7 @@ TwoTextRowsRenderer::CalculateLayout(const Font &_first_font,
 
 void
 TwoTextRowsRenderer::DrawFirstRow(Canvas &canvas, const PixelRect &rc,
-                                  const TCHAR *text) const
+                                  const TCHAR *text) const noexcept
 {
   canvas.Select(*first_font);
   canvas.DrawClippedText({rc.left + x, rc.top + first_y}, rc, text);
@@ -61,7 +61,7 @@ TwoTextRowsRenderer::DrawFirstRow(Canvas &canvas, const PixelRect &rc,
 
 void
 TwoTextRowsRenderer::DrawSecondRow(Canvas &canvas, const PixelRect &rc,
-                                   const TCHAR *text) const
+                                   const TCHAR *text) const noexcept
 {
   canvas.Select(*second_font);
   canvas.DrawClippedText({rc.left + x, rc.top + second_y}, rc, text);
@@ -69,7 +69,7 @@ TwoTextRowsRenderer::DrawSecondRow(Canvas &canvas, const PixelRect &rc,
 
 int
 TwoTextRowsRenderer::DrawRightFirstRow(Canvas &canvas, const PixelRect &rc,
-                                       const TCHAR *text) const
+                                       const TCHAR *text) const noexcept
 {
   canvas.Select(*second_font);
   int text_width = canvas.CalcTextWidth(text);
@@ -85,7 +85,7 @@ TwoTextRowsRenderer::DrawRightFirstRow(Canvas &canvas, const PixelRect &rc,
 
 int
 TwoTextRowsRenderer::DrawRightSecondRow(Canvas &canvas, const PixelRect &rc,
-                                        const TCHAR *text) const
+                                        const TCHAR *text) const noexcept
 {
   canvas.Select(*second_font);
   int text_width = canvas.CalcTextWidth(text);

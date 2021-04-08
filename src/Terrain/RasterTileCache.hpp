@@ -91,11 +91,13 @@ protected:
      */
     uint16_t count;
 
-    MarkerSegmentInfo() {}
-    MarkerSegmentInfo(uint32_t _file_offset, int _tile=NO_TILE)
+    MarkerSegmentInfo() noexcept = default;
+
+    constexpr MarkerSegmentInfo(uint32_t _file_offset,
+                                int _tile=NO_TILE) noexcept
       :file_offset(_file_offset), tile(_tile), count(0) {}
 
-    bool IsTileSegment() const {
+    constexpr bool IsTileSegment() const noexcept {
       return tile != NO_TILE;
     }
   };
@@ -138,14 +140,14 @@ protected:
   StaticArray<uint16_t, MAX_RTC_TILES> request_tiles;
 
 public:
-  RasterTileCache() {
+  RasterTileCache() noexcept {
     Reset();
   }
 
   RasterTileCache(const RasterTileCache &) = delete;
   RasterTileCache &operator=(const RasterTileCache &) = delete;
 
-  void SetBounds(const GeoBounds &_bounds) {
+  void SetBounds(const GeoBounds &_bounds) noexcept {
     assert(_bounds.IsValid());
 
     bounds = _bounds;
@@ -154,7 +156,7 @@ public:
 protected:
   void ScanTileLine(GridLocation start, GridLocation end,
                     TerrainHeight *buffer, unsigned size,
-                    bool interpolate) const;
+                    bool interpolate) const noexcept;
 
 public:
   /**
@@ -165,7 +167,7 @@ public:
    * @param y the pixel row within the map; may be out of range
    */
   gcc_pure
-  TerrainHeight GetHeight(unsigned x, unsigned y) const;
+  TerrainHeight GetHeight(unsigned x, unsigned y) const noexcept;
 
   /**
    * Determine the interpolated height at the specified sub-pixel
@@ -176,7 +178,7 @@ public:
    */
   gcc_pure
   TerrainHeight GetInterpolatedHeight(unsigned lx,
-                                      unsigned ly) const;
+                                      unsigned ly) const noexcept;
 
   /**
    * Scan a straight line and fill the buffer with the specified
@@ -186,16 +188,17 @@ public:
    * @param end the sub-pixel end location
    */
   void ScanLine(const RasterLocation start, const RasterLocation end,
-                TerrainHeight *buffer, unsigned size, bool interpolate) const;
+                TerrainHeight *buffer, unsigned size,
+                bool interpolate) const noexcept;
 
   bool FirstIntersection(SignedRasterLocation origin,
                          SignedRasterLocation destination,
                          int h_origin,
                          int h_dest,
-                         const int slope_fact, const int h_ceiling,
-                         const int h_safety,
+                         int slope_fact, int h_ceiling,
+                         int h_safety,
                          RasterLocation &_location, int &h_int,
-                         const bool can_climb) const;
+                         bool can_climb) const noexcept;
 
   /**
    * @return {-1,-1} if no intersection was found
@@ -203,7 +206,7 @@ public:
   gcc_pure SignedRasterLocation
   Intersection(SignedRasterLocation origin, SignedRasterLocation destination,
                int h_origin, const int slope_fact,
-               const int height_floor) const;
+               int height_floor) const noexcept;
 
 private:
   /**
@@ -215,32 +218,33 @@ private:
    * value was loaded from a "fine" tile
    */
   gcc_pure
-  std::pair<TerrainHeight, bool> GetFieldDirect(unsigned px, unsigned py) const;
+  std::pair<TerrainHeight, bool> GetFieldDirect(unsigned px,
+                                                unsigned py) const noexcept;
 
 public:
-  bool SaveCache(FILE *file) const;
-  bool LoadCache(FILE *file);
+  bool SaveCache(FILE *file) const noexcept;
+  bool LoadCache(FILE *file) noexcept;
 
   /**
    * Determines if there are still tiles scheduled to be loaded.  Call
    * this after UpdateTiles() to determine if UpdateTiles() should be
    * called again soon.
    */
-  bool IsDirty() const {
+  bool IsDirty() const noexcept {
     return dirty;
   }
 
-  bool IsValid() const {
+  bool IsValid() const noexcept {
     return bounds.IsValid();
   }
 
-  const Serial &GetSerial() const {
+  const Serial &GetSerial() const noexcept {
     return serial;
   }
 
-  void Reset();
+  void Reset() noexcept;
 
-  const GeoBounds &GetBounds() const {
+  const GeoBounds &GetBounds() const noexcept {
     assert(bounds.IsValid());
 
     return bounds;
@@ -251,12 +255,12 @@ public:
 
   gcc_pure
   const MarkerSegmentInfo *
-  FindMarkerSegment(uint32_t file_offset) const;
+  FindMarkerSegment(uint32_t file_offset) const noexcept;
 
-  long SkipMarkerSegment(long file_offset) const;
-  void MarkerSegment(long file_offset, unsigned id);
+  long SkipMarkerSegment(long file_offset) const noexcept;
+  void MarkerSegment(long file_offset, unsigned id) noexcept;
 
-  void StartTile(unsigned index) {
+  void StartTile(unsigned index) noexcept {
     if (!segments.empty() && !segments.back().IsTileSegment())
       /* link current marker segment with this tile */
       segments.back().tile = index;
@@ -264,51 +268,51 @@ public:
 
   void SetSize(unsigned width, unsigned height,
                unsigned tile_width, unsigned tile_height,
-               unsigned tile_columns, unsigned tile_rows);
+               unsigned tile_columns, unsigned tile_rows) noexcept;
 
   void SetLatLonBounds(double lon_min, double lon_max,
-                       double lat_min, double lat_max);
+                       double lat_min, double lat_max) noexcept;
 
   void PutOverviewTile(unsigned index,
                        unsigned start_x, unsigned start_y,
                        unsigned end_x, unsigned end_y,
-                       const struct jas_matrix &m);
+                       const struct jas_matrix &m) noexcept;
 
-  bool PollTiles(int x, int y, unsigned radius);
+  bool PollTiles(int x, int y, unsigned radius) noexcept;
 
-  void PutTileData(unsigned index, const struct jas_matrix &m);
+  void PutTileData(unsigned index, const struct jas_matrix &m) noexcept;
 
-  void FinishTileUpdate();
+  void FinishTileUpdate() noexcept;
 
 public:
-  TerrainHeight GetMaxElevation() const {
+  TerrainHeight GetMaxElevation() const noexcept {
     return overview.GetMaximum();
   }
 
   /**
    * Is the given point inside the map?
    */
-  bool IsInside(RasterLocation p) const {
+  bool IsInside(RasterLocation p) const noexcept {
     return p.x < width && p.y < height;
   }
 
-  unsigned int GetWidth() const { return width; }
-  unsigned int GetHeight() const { return height; }
+  unsigned int GetWidth() const noexcept { return width; }
+  unsigned int GetHeight() const noexcept { return height; }
 
-  unsigned GetFineWidth() const {
+  unsigned GetFineWidth() const noexcept {
     return width << RasterTraits::SUBPIXEL_BITS;
   }
 
-  unsigned GetFineHeight() const {
+  unsigned GetFineHeight() const noexcept {
     return height << RasterTraits::SUBPIXEL_BITS;
   }
 
 private:
-  unsigned GetFineTileWidth() const {
+  unsigned GetFineTileWidth() const noexcept {
     return tile_width << RasterTraits::SUBPIXEL_BITS;
   }
 
-  unsigned GetFineTileHeight() const {
+  unsigned GetFineTileHeight() const noexcept {
     return tile_height << RasterTraits::SUBPIXEL_BITS;
   }
 };

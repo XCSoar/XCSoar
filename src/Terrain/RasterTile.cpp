@@ -30,7 +30,7 @@ Copyright_License {
 #include <stdlib.h>
 
 bool
-RasterTile::SaveCache(FILE *file) const
+RasterTile::SaveCache(FILE *file) const noexcept
 {
   MetaData data;
   data.xstart = xstart;
@@ -42,7 +42,7 @@ RasterTile::SaveCache(FILE *file) const
 }
 
 bool
-RasterTile::LoadCache(FILE *file)
+RasterTile::LoadCache(FILE *file) noexcept
 {
   MetaData data;
   if (fread(&data, sizeof(data), 1, file) != 1)
@@ -53,7 +53,7 @@ RasterTile::LoadCache(FILE *file)
 }
 
 void
-RasterTile::CopyFrom(const struct jas_matrix &m)
+RasterTile::CopyFrom(const struct jas_matrix &m) noexcept
 {
   if (!IsDefined())
     return;
@@ -74,7 +74,7 @@ RasterTile::CopyFrom(const struct jas_matrix &m)
 }
 
 TerrainHeight
-RasterTile::GetHeight(unsigned x, unsigned y) const
+RasterTile::GetHeight(unsigned x, unsigned y) const noexcept
 {
   assert(IsEnabled());
 
@@ -89,7 +89,7 @@ RasterTile::GetHeight(unsigned x, unsigned y) const
 
 TerrainHeight
 RasterTile::GetInterpolatedHeight(unsigned lx, unsigned ly,
-                                  unsigned ix, unsigned iy) const
+                                  unsigned ix, unsigned iy) const noexcept
 {
   assert(IsEnabled());
 
@@ -108,7 +108,7 @@ RasterTile::GetInterpolatedHeight(unsigned lx, unsigned ly,
 }
 
 inline unsigned
-RasterTile::CalcDistanceTo(int x, int y) const
+RasterTile::CalcDistanceTo(int x, int y) const noexcept
 {
   const unsigned int dx1 = abs(x - (int)xstart);
   const unsigned int dx2 = abs((int)xend - x);
@@ -119,7 +119,8 @@ RasterTile::CalcDistanceTo(int x, int y) const
 }
 
 inline bool
-RasterTile::CheckTileVisibility(int view_x, int view_y, unsigned view_radius)
+RasterTile::CheckTileVisibility(int view_x, int view_y,
+                                unsigned view_radius) noexcept
 {
   if (!IsDefined()) {
     assert(!IsEnabled());
@@ -131,7 +132,8 @@ RasterTile::CheckTileVisibility(int view_x, int view_y, unsigned view_radius)
 }
 
 bool
-RasterTile::VisibilityChanged(int view_x, int view_y, unsigned view_radius)
+RasterTile::VisibilityChanged(int view_x, int view_y,
+                              unsigned view_radius) noexcept
 {
   request = false;
   return CheckTileVisibility(view_x, view_y, view_radius);

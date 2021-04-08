@@ -27,12 +27,10 @@ Copyright_License {
 
 #include <algorithm>
 
-static constexpr int WPCIRCLESIZE = 2;
-
 [[gnu::pure]]
 static bool
 MapWaypointLabelListCompare(const WaypointLabelList::Label &e1,
-                            const WaypointLabelList::Label &e2)
+                            const WaypointLabelList::Label &e2) noexcept
 {
   if (e1.inTask && !e2.inTask)
     return true;
@@ -68,13 +66,13 @@ MapWaypointLabelListCompare(const WaypointLabelList::Label &e1,
 }
 
 void
-WaypointLabelList::Add(const TCHAR *Name, int X, int Y,
+WaypointLabelList::Add(const TCHAR *Name, PixelPoint p,
                        TextInBoxMode Mode, bool bold,
                        int AltArivalAGL, bool inTask,
-                       bool isLandable, bool isAirport, bool isWatchedWaypoint)
+                       bool isLandable, bool isAirport,
+                       bool isWatchedWaypoint) noexcept
 {
-  if (X < - WPCIRCLESIZE || X > (int)size.width + WPCIRCLESIZE * 3 ||
-      Y < - WPCIRCLESIZE || Y > (int)size.height + WPCIRCLESIZE)
+  if (!clip_rect.Contains(p))
     return;
 
   if (labels.full())
@@ -83,8 +81,7 @@ WaypointLabelList::Add(const TCHAR *Name, int X, int Y,
   auto &l = labels.append();
 
   CopyString(l.Name, Name, ARRAY_SIZE(l.Name));
-  l.Pos.x = X;
-  l.Pos.y = Y;
+  l.Pos = p;
   l.Mode = Mode;
   l.AltArivalAGL = AltArivalAGL;
   l.bold = bold;
@@ -95,7 +92,7 @@ WaypointLabelList::Add(const TCHAR *Name, int X, int Y,
 }
 
 void
-WaypointLabelList::Sort()
+WaypointLabelList::Sort() noexcept
 {
   std::sort(labels.begin(), labels.end(),
             MapWaypointLabelListCompare);

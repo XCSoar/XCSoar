@@ -195,7 +195,7 @@ OUTPUTS += $(ANDROID_BIN)/XCSoar-debug.apk
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
-OUTPUTS += $(KOBO_MENU_BIN)
+OUTPUTS += $(KOBO_MENU_BIN) $(KOBO_POWER_OFF_BIN)
 endif
 
 ifeq ($(HAVE_WIN32),y)

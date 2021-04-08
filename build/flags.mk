@@ -16,8 +16,18 @@ LDFLAGS += -fPIC -shared
 endif
 
 ifeq ($(ICF),y)
-LDFLAGS += -Wl,--icf=all
-USE_LD = gold
+  LDFLAGS += -Wl,--icf=all
+
+  ifeq ($(CLANG),y)
+    USE_LD = lld
+  else
+    USE_LD = gold
+  endif
+
+  # Hide all symbols from static libraries we link with; this has a
+  # huge effect on Android where libc++'s symbols are exported by
+  # default.
+  LDFLAGS += -Wl,--exclude-libs,ALL
 endif
 
 ifneq ($(USE_LD),)

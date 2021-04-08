@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WIND_ARROW_RENDERER_HPP
 #define XCSOAR_WIND_ARROW_RENDERER_HPP
 
-#include "MapSettings.hpp"
+#include <cstdint>
 
 class Canvas;
 class Angle;
@@ -33,23 +33,26 @@ struct PixelRect;
 struct WindArrowLook;
 struct SpeedVector;
 struct DerivedInfo;
+struct MapSettings;
+enum class WindArrowStyle : uint8_t;
 
 class WindArrowRenderer {
   const WindArrowLook &look;
 
 public:
-  WindArrowRenderer(const WindArrowLook &_look):look(_look) {}
+  explicit WindArrowRenderer(const WindArrowLook &_look) noexcept
+    :look(_look) {}
 
   void Draw(Canvas &canvas, Angle screen_angle, SpeedVector wind,
-            PixelPoint pos, const PixelRect rc, WindArrowStyle arrow_style);
+            PixelPoint pos, const PixelRect &rc, WindArrowStyle arrow_style) noexcept;
 
   void Draw(Canvas &canvas, Angle screen_angle, PixelPoint pos,
-            PixelRect rc, const DerivedInfo &calculated,
-            const MapSettings &settings);
+            const PixelRect &rc, const DerivedInfo &calculated,
+            const MapSettings &settings) noexcept;
 
   void DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
                  unsigned length, WindArrowStyle arrow_style,
-                 int offset = 23);
+                 int offset = 23) noexcept;
 };
 
 #endif

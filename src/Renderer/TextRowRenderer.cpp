@@ -28,7 +28,7 @@ Copyright_License {
 #include <algorithm>
 
 unsigned
-TextRowRenderer::CalculateLayout(const Font &font)
+TextRowRenderer::CalculateLayout(const Font &font) noexcept
 {
   const unsigned font_height = font.GetHeight();
   const unsigned text_padding = Layout::GetTextPadding();
@@ -44,7 +44,7 @@ TextRowRenderer::CalculateLayout(const Font &font)
 
 void
 TextRowRenderer::DrawTextRow(Canvas &canvas, const PixelRect &rc,
-                             const TCHAR *text) const
+                             const TCHAR *text) const noexcept
 {
   canvas.DrawClippedText(rc.GetTopLeft() + PixelSize{left_padding, top_padding},
                          rc, text);
@@ -52,7 +52,7 @@ TextRowRenderer::DrawTextRow(Canvas &canvas, const PixelRect &rc,
 
 int
 TextRowRenderer::NextColumn(Canvas &canvas, const PixelRect &rc,
-                            const TCHAR *text) const
+                            const TCHAR *text) const noexcept
 {
   return std::min<int>(rc.left + int(2 * left_padding + canvas.CalcTextWidth(text)),
                        rc.right);
@@ -60,7 +60,7 @@ TextRowRenderer::NextColumn(Canvas &canvas, const PixelRect &rc,
 
 int
 TextRowRenderer::DrawColumn(Canvas &canvas, const PixelRect &rc,
-                            const TCHAR *text) const
+                            const TCHAR *text) const noexcept
 {
   DrawTextRow(canvas, rc, text);
   return NextColumn(canvas, rc, text);
@@ -68,7 +68,7 @@ TextRowRenderer::DrawColumn(Canvas &canvas, const PixelRect &rc,
 
 int
 TextRowRenderer::PreviousRightColumn(Canvas &canvas, const PixelRect &rc,
-                                     const TCHAR *text) const
+                                     const TCHAR *text) const noexcept
 {
   int text_width = canvas.CalcTextWidth(text);
   int x = rc.right - int(left_padding + text_width);
@@ -82,7 +82,7 @@ TextRowRenderer::PreviousRightColumn(Canvas &canvas, const PixelRect &rc,
 
 int
 TextRowRenderer::DrawRightColumn(Canvas &canvas, const PixelRect &rc,
-                                 const TCHAR *text) const
+                                 const TCHAR *text) const noexcept
 {
   int text_width = canvas.CalcTextWidth(text);
   int x = rc.right - int(left_padding + text_width);

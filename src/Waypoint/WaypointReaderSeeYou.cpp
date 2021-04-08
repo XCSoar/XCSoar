@@ -170,6 +170,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
     iStyle = 6,
     iRWDir = 7,
     iRWLen = 8,
+    iRWWidth = 9,
   };
 
   // If (end-of-file or comment)
@@ -201,7 +202,8 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
        * If the first line doesn't begin with a quotation mark, it
        * doesn't describe a waypoint. It probably contains field names.
        */
-      if (StringIsEqual(params[9], _T("rwwidth"))) {
+      if (iRWWidth < n_params &&
+          StringIsEqual(params[iRWWidth], _T("rwwidth"))) {
         /*
          * The name of the 10th field is "rwwidth" (runway width).
          * This field doesn't exist in "typical" SeeYou (*.cup) waypoint

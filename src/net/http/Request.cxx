@@ -68,6 +68,13 @@ CurlRequest::CurlRequest(CurlGlobal &_global,
 	easy.SetNoSignal();
 	easy.SetConnectTimeout(10);
 	easy.SetOption(CURLOPT_HTTPAUTH, (long) CURLAUTH_ANY);
+
+#ifdef ANDROID
+	/* this is disabled until we figure out how to use Android's
+	   CA certificates with libcurl */
+	easy.SetVerifyHost(false);
+	easy.SetVerifyPeer(false);
+#endif
 }
 
 CurlRequest::~CurlRequest() noexcept

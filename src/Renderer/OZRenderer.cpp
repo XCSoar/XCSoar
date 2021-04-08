@@ -25,7 +25,10 @@ Copyright_License {
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
+#include "Task/ObservationZones/Boundary.hpp"
 #include "Projection/Projection.hpp"
+#include "Geo/GeoBounds.hpp"
+#include "Geo/SimplifiedMath.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Look/TaskLook.hpp"
 #include "Look/AirspaceLook.hpp"
@@ -36,13 +39,13 @@ Copyright_License {
 
 OZRenderer::OZRenderer(const TaskLook &_task_look,
                        const AirspaceLook &_airspace_look,
-                       const AirspaceRendererSettings &_settings)
+                       const AirspaceRendererSettings &_settings) noexcept
   :task_look(_task_look), airspace_look(_airspace_look), settings(_settings)
 {
 }
 
 void
-OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
+OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const noexcept
 {
   if (layer == LAYER_SHADE) {
     Color color = airspace_look.classes[AATASK].fill_color;
@@ -63,7 +66,6 @@ OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
 #endif /* !GDI */
 
     canvas.SelectNullPen();
-    
     return;
   }
 
@@ -79,7 +81,7 @@ OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
 }
 
 void
-OZRenderer::Finish(Canvas &canvas, Layer layer) const
+OZRenderer::Finish(Canvas &canvas, Layer layer) const noexcept
 {
   if (layer == LAYER_SHADE) {
 #ifdef ENABLE_OPENGL
@@ -92,7 +94,7 @@ OZRenderer::Finish(Canvas &canvas, Layer layer) const
 
 void
 OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
-                 const ObservationZonePoint &_oz, int offset)
+                 const ObservationZonePoint &_oz, int offset) noexcept
 {
   if (layer == LAYER_SHADE && offset < 0)
     return;
@@ -182,4 +184,51 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
   }
 
   Finish(canvas, layer);
+}
+
+static void
+AddSegment(GeoBounds &bounds, GeoPoint center, double radius,
+           AngleRange range) noexcept
+{
+  /* for what we're doing, only the for extreme points of the segment
+     are relevant; if those angles are inside the segment, we may need
+     to add them to avoid clipping */
+  for (Angle a : {Angle::Zero(), Angle::QuarterCircle(), Angle::HalfCircle(), Angle::QuarterCircle() + Angle::HalfCircle()})
+    if (range.IsInside(a))
+      bounds.Extend(FindLatitudeLongitudeS(center, a, radius));
+}
+
+GeoBounds
+OZRenderer::GetGeoBounds(const ObservationZonePoint &oz) noexcept
+{
+  auto bounds = GeoBounds::Invalid();
+  for (const auto &i : oz.GetBoundary())
+    bounds.Extend(i);
+
+  switch (oz.GetShape()) {
+  case ObservationZone::Shape::LINE:
+  case ObservationZone::Shape::FAI_SECTOR:
+    {
+      /* for these, the segment is not part of the boundary, but it is
+         rendered */
+      const SectorZone &sector = (const SectorZone &)oz;
+      AddSegment(bounds, sector.GetReference(), sector.GetRadius(),
+                 {sector.GetStartRadial(), sector.GetEndRadial()});
+    }
+    break;
+
+  case ObservationZone::Shape::MAT_CYLINDER:
+  case ObservationZone::Shape::CYLINDER:
+  case ObservationZone::Shape::BGA_START:
+  case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+  case ObservationZone::Shape::SECTOR:
+  case ObservationZone::Shape::CUSTOM_KEYHOLE:
+  case ObservationZone::Shape::DAEC_KEYHOLE:
+  case ObservationZone::Shape::BGAFIXEDCOURSE:
+  case ObservationZone::Shape::BGAENHANCEDOPTION:
+  case ObservationZone::Shape::ANNULAR_SECTOR:
+    break;
+  }
+
+  return bounds;
 }

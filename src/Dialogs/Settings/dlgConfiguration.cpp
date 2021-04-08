@@ -364,9 +364,7 @@ void dlgConfigurationShowModal()
   /* save page number for next time this dialog is opened */
   current_page = menu.GetCursor();
 
-  bool changed = false;
-  pager->Save(changed);
-  if (changed) {
+  if (dialog.GetChanged()) {
     Profile::Save();
     LogDebug(_T("Configuration: Changes saved"));
     if (require_restart)

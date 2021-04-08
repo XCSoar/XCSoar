@@ -30,8 +30,6 @@
 #ifndef SOCKET_ERROR_HXX
 #define SOCKET_ERROR_HXX
 
-#include "util/Compiler.h"
-
 #ifdef _WIN32
 #include "util/RuntimeError.hxx"
 #include <winsock2.h>
@@ -170,7 +168,7 @@ public:
 	}
 };
 
-gcc_const
+[[gnu::pure]]
 static inline auto
 MakeSocketError(socket_error_t code, const char *msg) noexcept
 {
@@ -184,7 +182,7 @@ MakeSocketError(socket_error_t code, const char *msg) noexcept
 #endif
 }
 
-gcc_pure
+[[gnu::pure]]
 static inline auto
 MakeSocketError(const char *msg) noexcept
 {

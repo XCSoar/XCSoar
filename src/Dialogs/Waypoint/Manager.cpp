@@ -195,7 +195,7 @@ WaypointManagerWidget::OnWaypointNewClicked()
     ? CommonInterface::Calculated().terrain_altitude
     : CommonInterface::Basic().nav_altitude;
 
-  if (dlgWaypointEditShowModal(edit_waypoint) &&
+  if (dlgWaypointEditShowModal(edit_waypoint) == WaypointEditResult::MODIFIED &&
       edit_waypoint.name.size()) {
     modified = true;
 
@@ -220,7 +220,7 @@ WaypointManagerWidget::OnWaypointImportClicked()
     /* move to user.cup */
     wp_copy.origin = WaypointOrigin::USER;
 
-    if (dlgWaypointEditShowModal(wp_copy)) {
+    if (dlgWaypointEditShowModal(wp_copy) != WaypointEditResult::CANCEL) {
       modified = true;
 
       {
@@ -239,12 +239,16 @@ WaypointManagerWidget::OnWaypointEditClicked(unsigned i)
 {
   const WaypointPtr &wp = items[i].waypoint;
   Waypoint wp_copy = *wp;
-  if (dlgWaypointEditShowModal(wp_copy)) {
+  if (dlgWaypointEditShowModal(wp_copy) == WaypointEditResult::MODIFIED) {
     modified = true;
 
-    ScopeSuspendAllThreads suspend;
-    way_points.Replace(wp, std::move(wp_copy));
-    way_points.Optimise();
+    {
+      ScopeSuspendAllThreads suspend;
+      way_points.Replace(wp, std::move(wp_copy));
+      way_points.Optimise();
+    }
+
+    Update();
   }
 }
 

@@ -34,7 +34,7 @@ extern "C" {
 
 static void
 CopyOverviewRow(TerrainHeight *gcc_restrict dest, const jas_seqent_t *gcc_restrict src,
-                unsigned width, unsigned skip)
+                unsigned width, unsigned skip) noexcept
 {
   /* note: this loop rounds up */
   for (unsigned x = 0; x < width; ++x, src += skip)
@@ -45,7 +45,7 @@ void
 RasterTileCache::PutOverviewTile(unsigned index,
                                  unsigned start_x, unsigned start_y,
                                  unsigned end_x, unsigned end_y,
-                                 const struct jas_matrix &m)
+                                 const struct jas_matrix &m) noexcept
 {
   tiles.GetLinear(index).Set(start_x, start_y, end_x, end_y);
 
@@ -76,7 +76,7 @@ RasterTileCache::PutOverviewTile(unsigned index,
 
 void
 RasterTileCache::PutTileData(unsigned index,
-                             const struct jas_matrix &m)
+                             const struct jas_matrix &m) noexcept
 {
   auto &tile = tiles.GetLinear(index);
   if (!tile.IsRequested())
@@ -88,9 +88,10 @@ RasterTileCache::PutTileData(unsigned index,
 struct RTDistanceSort {
   const RasterTileCache &rtc;
 
-  RTDistanceSort(RasterTileCache &_rtc):rtc(_rtc) {}
+  constexpr RTDistanceSort(RasterTileCache &_rtc) noexcept:rtc(_rtc) {}
 
-  bool operator()(unsigned short ai, unsigned short bi) const {
+  [[gnu::pure]]
+  bool operator()(unsigned short ai, unsigned short bi) const noexcept {
     const RasterTile &a = rtc.tiles.GetLinear(ai);
     const RasterTile &b = rtc.tiles.GetLinear(bi);
 
@@ -99,7 +100,7 @@ struct RTDistanceSort {
 };
 
 bool
-RasterTileCache::PollTiles(int x, int y, unsigned radius)
+RasterTileCache::PollTiles(int x, int y, unsigned radius) noexcept
 {
   /* tiles are usually 256 pixels wide; with a radius smaller than
      that, the (optimized) tile distance calculations may fail;
@@ -161,7 +162,7 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius)
 }
 
 TerrainHeight
-RasterTileCache::GetHeight(unsigned px, unsigned py) const
+RasterTileCache::GetHeight(unsigned px, unsigned py) const noexcept
 {
   if (px >= width || py >= height)
     // outside overall bounds
@@ -177,7 +178,7 @@ RasterTileCache::GetHeight(unsigned px, unsigned py) const
 }
 
 TerrainHeight
-RasterTileCache::GetInterpolatedHeight(unsigned int lx, unsigned int ly) const
+RasterTileCache::GetInterpolatedHeight(unsigned lx, unsigned ly) const noexcept
 {
   if ((lx >= overview_width_fine) || (ly >= overview_height_fine))
     // outside overall bounds
@@ -199,7 +200,7 @@ RasterTileCache::GetInterpolatedHeight(unsigned int lx, unsigned int ly) const
 void
 RasterTileCache::SetSize(unsigned _width, unsigned _height,
                          unsigned _tile_width, unsigned _tile_height,
-                         unsigned tile_columns, unsigned tile_rows)
+                         unsigned tile_columns, unsigned tile_rows) noexcept
 {
   width = _width;
   height = _height;
@@ -218,7 +219,7 @@ RasterTileCache::SetSize(unsigned _width, unsigned _height,
 
 void
 RasterTileCache::SetLatLonBounds(double _lon_min, double _lon_max,
-                                 double _lat_min, double _lat_max)
+                                 double _lat_min, double _lat_max) noexcept
 {
   const Angle lon_min(Angle::Degrees(_lon_min));
   const Angle lon_max(Angle::Degrees(_lon_max));
@@ -232,7 +233,7 @@ RasterTileCache::SetLatLonBounds(double _lon_min, double _lon_max,
 }
 
 void
-RasterTileCache::Reset()
+RasterTileCache::Reset() noexcept
 {
   width = 0;
   height = 0;
@@ -246,7 +247,7 @@ RasterTileCache::Reset()
 }
 
 const RasterTileCache::MarkerSegmentInfo *
-RasterTileCache::FindMarkerSegment(uint32_t file_offset) const
+RasterTileCache::FindMarkerSegment(uint32_t file_offset) const noexcept
 {
   for (const auto &s : segments)
     if (s.file_offset >= file_offset)
@@ -256,7 +257,7 @@ RasterTileCache::FindMarkerSegment(uint32_t file_offset) const
 }
 
 void
-RasterTileCache::FinishTileUpdate()
+RasterTileCache::FinishTileUpdate() noexcept
 {
   /* permanently disable the requested tiles which are still not
      loaded, to prevent trying to reload them over and over in a busy
@@ -272,7 +273,7 @@ RasterTileCache::FinishTileUpdate()
 }
 
 bool
-RasterTileCache::SaveCache(FILE *file) const
+RasterTileCache::SaveCache(FILE *file) const noexcept
 {
   if (!IsValid())
     return false;
@@ -323,7 +324,7 @@ RasterTileCache::SaveCache(FILE *file) const
 }
 
 bool
-RasterTileCache::LoadCache(FILE *file)
+RasterTileCache::LoadCache(FILE *file) noexcept
 {
   Reset();
 

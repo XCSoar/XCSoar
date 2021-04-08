@@ -53,12 +53,14 @@ class LabelBlock {
     BlockArray blocks;
 
   public:
-    void Clear();
+    void Clear() noexcept {
+      blocks.clear();
+    }
 
     [[gnu::pure]]
-    bool Check(const PixelRect rc) const;
+    bool Check(const PixelRect rc) const noexcept;
 
-    void Add(const PixelRect rc) {
+    void Add(const PixelRect rc) noexcept {
       if (!blocks.full())
         blocks.append(rc);
     }
@@ -67,8 +69,8 @@ class LabelBlock {
   Bucket buckets[BUCKET_COUNT];
 
 public:
-  bool check(const PixelRect rc);
-  void reset();
+  bool check(const PixelRect rc) noexcept;
+  void reset() noexcept;
 };
 
 #endif

@@ -121,6 +121,8 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
                                   const double min) const
 {
   ChartRenderer chart(chart_look, canvas, rc, false);
+  chart.Begin();
+
   ScaleChart(chart, var, max, min, centered);
   chart.ScaleYFromValue(mc);
 
@@ -133,4 +135,6 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
 
   render_filled_posneg(chart, var);
   RenderAxis(chart, var);
+
+  chart.Finish();
 }

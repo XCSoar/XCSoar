@@ -238,7 +238,7 @@ ChartRenderer::DrawLabel(const TCHAR *text,
     const PixelSize rect_size = tsize + PixelSize{Layout::GetTextPadding() * 2};
     canvas.DrawRectangle(PixelRect::Centered(pt, rect_size));
   }
-  canvas.DrawText(pt + tsize / 2u, text);
+  canvas.DrawText(pt - tsize / 2u, text);
 }
 
 void

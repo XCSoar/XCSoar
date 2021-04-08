@@ -42,17 +42,19 @@ private:
 
 public:
   template<typename W>
-  explicit WaypointListItem(W &&_waypoint):
-    waypoint(std::forward<W>(_waypoint)) {}
+  explicit WaypointListItem(W &&_waypoint) noexcept
+    :waypoint(std::forward<W>(_waypoint)) {}
 
-  void ResetVector();
-  const GeoVector &GetVector(const GeoPoint &location) const;
+  void ResetVector() noexcept;
+
+  [[gnu::pure]]
+  const GeoVector &GetVector(const GeoPoint &location) const noexcept;
 };
 
 class WaypointList: public std::vector<WaypointListItem>
 {
 public:
-  void SortByDistance(const GeoPoint &location);
+  void SortByDistance(const GeoPoint &location) noexcept;
 };
 
 #endif

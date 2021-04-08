@@ -276,7 +276,7 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent,
       /* move to user.cup */
       wp_copy.origin = WaypointOrigin::USER;
 
-      if (dlgWaypointEditShowModal(wp_copy)) {
+      if (dlgWaypointEditShowModal(wp_copy) == WaypointEditResult::MODIFIED) {
         // TODO: refresh data instead of closing dialog?
         form->SetModalResult(mrOK);
 

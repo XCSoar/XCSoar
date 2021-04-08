@@ -23,14 +23,8 @@ Copyright_License {
 
 #include "LabelBlock.hpp"
 
-void
-LabelBlock::Bucket::Clear()
-{
-  blocks.clear();
-}
-
-bool
-LabelBlock::Bucket::Check(const PixelRect rc) const
+inline bool
+LabelBlock::Bucket::Check(const PixelRect rc) const noexcept
 {
   for (auto i = blocks.begin(), end = blocks.end(); i != end; ++i)
     if (i->OverlapsWith(rc))
@@ -39,13 +33,15 @@ LabelBlock::Bucket::Check(const PixelRect rc) const
   return true;
 }
 
-void LabelBlock::reset()
+void
+LabelBlock::reset() noexcept
 {
-  for (unsigned i = 0; i < BUCKET_COUNT; ++i)
-    buckets[i].Clear();
+  for (auto &i : buckets)
+    i.Clear();
 }
 
-bool LabelBlock::check(const PixelRect rc)
+bool
+LabelBlock::check(const PixelRect rc) noexcept
 {
   unsigned top = rc.top >> BUCKET_SHIFT;
   unsigned bottom = rc.bottom >> BUCKET_SHIFT;

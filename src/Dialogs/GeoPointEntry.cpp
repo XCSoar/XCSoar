@@ -91,8 +91,8 @@ GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
   if (dialog.ShowModal() != mrOK)
     return false;
 
-  auto &lo_entry = (DigitEntry &)((FixedWindowWidget &)dialog.GetWidget().GetFirst()).GetWindow();
-  auto &la_entry = (DigitEntry &)((FixedWindowWidget &)dialog.GetWidget().GetSecond()).GetWindow();
+  auto &la_entry = (DigitEntry &)((FixedWindowWidget &)dialog.GetWidget().GetFirst()).GetWindow();
+  auto &lo_entry = (DigitEntry &)((FixedWindowWidget &)dialog.GetWidget().GetSecond()).GetWindow();
 
   value = GeoPoint(lo_entry.GetLongitude(format),
                    la_entry.GetLatitude(format));

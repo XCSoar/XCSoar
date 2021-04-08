@@ -29,35 +29,37 @@ Copyright_License {
  * in XCSoar.
  */
 namespace RasterTraits {
-  /**
-   * The width and height of the terrain bitmap is shifted by this
-   * number of bits to determine the overview size.
-   */
-  constexpr unsigned OVERVIEW_BITS = 4;
 
-  constexpr unsigned OVERVIEW_MASK = (~0u) << OVERVIEW_BITS;
+/**
+ * The width and height of the terrain bitmap is shifted by this
+ * number of bits to determine the overview size.
+ */
+constexpr unsigned OVERVIEW_BITS = 4;
 
-  /**
-   * The fixed-point fractional part of sub-pixel coordinates.
-   *
-   * Do not edit!  There are still some hard-coded code sections left,
-   * e.g. CombinedDivAndMod().
-   */
-  constexpr unsigned SUBPIXEL_BITS = 8;
+constexpr unsigned OVERVIEW_MASK = (~0u) << OVERVIEW_BITS;
 
-  /**
-   * Convert a pixel size to an overview pixel size, rounding down.
-   */
-  constexpr unsigned ToOverview(unsigned x) {
-    return x >> OVERVIEW_BITS;
-  }
+/**
+ * The fixed-point fractional part of sub-pixel coordinates.
+ *
+ * Do not edit!  There are still some hard-coded code sections left,
+ * e.g. CombinedDivAndMod().
+ */
+constexpr unsigned SUBPIXEL_BITS = 8;
 
-  /**
-   * Convert a pixel size to an overview pixel size, rounding up.
-   */
-  constexpr unsigned ToOverviewCeil(unsigned x) {
-    return ToOverview(x + ~OVERVIEW_MASK);
-  }
+/**
+ * Convert a pixel size to an overview pixel size, rounding down.
+ */
+constexpr unsigned ToOverview(unsigned x) noexcept {
+  return x >> OVERVIEW_BITS;
 }
+
+/**
+ * Convert a pixel size to an overview pixel size, rounding up.
+ */
+constexpr unsigned ToOverviewCeil(unsigned x) noexcept {
+  return ToOverview(x + ~OVERVIEW_MASK);
+}
+
+} // namespace RasterTraits
 
 #endif

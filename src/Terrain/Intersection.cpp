@@ -40,7 +40,7 @@ RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
                                    const int slope_fact, const int h_ceiling,
                                    const int h_safety,
                                    RasterLocation &_location, int &_h,
-                                   const bool can_climb) const
+                                   const bool can_climb) const noexcept
 {
   RasterLocation location = origin;
   if (!IsInside(location))
@@ -225,7 +225,8 @@ RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
 }
 
 inline std::pair<TerrainHeight, bool>
-RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py) const
+RasterTileCache::GetFieldDirect(const unsigned px,
+                                const unsigned py) const noexcept
 {
   assert(px < width);
   assert(py < height);
@@ -256,7 +257,7 @@ RasterTileCache::Intersection(const SignedRasterLocation origin,
                               const SignedRasterLocation destination,
                               const int h_origin,
                               const int slope_fact,
-                              const int height_floor) const
+                              const int height_floor) const noexcept
 {
   SignedRasterLocation location = origin;
 

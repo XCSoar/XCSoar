@@ -151,6 +151,7 @@ private:
 public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Unprepare() noexcept override;
 
   bool Save(bool &changed) noexcept override {
     ReadValues();
@@ -253,9 +254,6 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   WindowStyle button_style;
   button_style.TabStop();
 
-  WindowStyle dock_style;
-  dock_style.ControlParent();
-
   waypoint_panel.Create(parent, look, layout.waypoint_panel, panel_style);
   waypoint_name.Create(waypoint_panel, layout.waypoint_name);
   waypoint_details.Create(waypoint_panel, look.button, _("Details"),
@@ -287,6 +285,12 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
                     layout.score_exit, button_style, {});
 
   RefreshView();
+}
+
+void
+TaskPointWidget::Unprepare() noexcept
+{
+  properties_widget.Clear();
 }
 
 static std::unique_ptr<ObservationZoneEditWidget>
@@ -337,6 +341,8 @@ TaskPointWidget::RefreshView()
     properties_widget.Set(std::move(new_properties_widget));
   } else
     properties_widget.Set(std::make_unique<PanelWidget>());
+
+  properties_widget.Show();
 
   type_label.SetText(OrderedTaskPointName(ordered_task.GetFactory().GetType(tp)));
 

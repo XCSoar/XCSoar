@@ -100,6 +100,8 @@ struct VisibleWaypoint {
     reach.direct = result.pure_glide_altitude_difference;
     if (result.pure_glide_altitude_difference > 0)
       reachable = WaypointRenderer::ReachableTerrain;
+    else
+      reachable = WaypointRenderer::Unreachable;
   }
 
   bool CalculateRouteArrival(const RoutePlannerGlue &route_planner,
@@ -173,7 +175,7 @@ public:
      settings(_settings), look(_look), task_behaviour(_task_behaviour),
      basic(_basic),
      task_valid(false),
-     labels(projection.GetScreenSize())
+     labels(projection.GetScreenRect())
   {
     _tcscpy(altitude_unit, Units::GetAltitudeName());
   }
@@ -348,13 +350,15 @@ protected:
                 way_point, vwp.reachable, vwp.reach);
 
     auto sc = vwp.point;
+    sc.x += 5;
     if ((vwp.IsReachable() &&
          settings.landable_style == WaypointRendererSettings::LandableStyle::PURPLE_CIRCLE) ||
         settings.vector_landable_rendering)
       // make space for the green circle
       sc.x += 5;
 
-    labels.Add(buffer, sc.x + 5, sc.y, text_mode, bold, vwp.reach.direct,
+    labels.Add(buffer, sc, text_mode, bold,
+               vwp.reachable != WaypointRenderer::Invalid ? vwp.reach.direct : INT_MIN,
                vwp.in_task, way_point.IsLandable(), way_point.IsAirport(),
                watchedWaypoint);
   }

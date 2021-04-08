@@ -31,9 +31,9 @@ struct GridLocation : public RasterLocation {
   unsigned remainder_x, remainder_y;
   unsigned index;
 
-  GridLocation(const RasterLocation &other,
-               unsigned tile_width, unsigned tile_height,
-               unsigned _index)
+  constexpr GridLocation(const RasterLocation &other,
+                         unsigned tile_width, unsigned tile_height,
+                         unsigned _index) noexcept
     :RasterLocation(other),
      tile_x(other.x / tile_width), tile_y(other.y / tile_height),
      remainder_x(other.x % tile_width),
@@ -50,9 +50,9 @@ struct GridRay {
 
   unsigned size;
 
-  GridRay(unsigned _tile_width, unsigned _tile_height,
-          const RasterLocation &_start, const RasterLocation &_end,
-          unsigned _size)
+  constexpr GridRay(unsigned _tile_width, unsigned _tile_height,
+                    const RasterLocation &_start, const RasterLocation &_end,
+                    unsigned _size) noexcept
     :tile_width(_tile_width), tile_height(_tile_height),
      start(_start, tile_width, tile_height, 0),
      end(_end, tile_width, tile_height, _size),
@@ -62,7 +62,7 @@ struct GridRay {
 
 gcc_pure
 static int
-ScaleX(const GridRay &ray, int x, int range)
+ScaleX(const GridRay &ray, int x, int range) noexcept
 {
   assert(ray.delta_x != 0);
 
@@ -71,7 +71,7 @@ ScaleX(const GridRay &ray, int x, int range)
 
 gcc_pure
 static int
-YAtX(const GridRay &ray, int x)
+YAtX(const GridRay &ray, int x) noexcept
 {
   assert(ray.delta_x != 0);
 
@@ -80,7 +80,7 @@ YAtX(const GridRay &ray, int x)
 
 gcc_pure
 static unsigned
-IndexAtX(const GridRay &ray, int x)
+IndexAtX(const GridRay &ray, int x) noexcept
 {
   assert(ray.delta_x != 0);
 
@@ -90,7 +90,7 @@ IndexAtX(const GridRay &ray, int x)
 gcc_pure
 static GridLocation
 NextRightGridIntersection(const GridRay &ray,
-                          const GridLocation &current)
+                          const GridLocation &current) noexcept
 {
   assert(ray.delta_x > 0);
 
@@ -111,7 +111,7 @@ NextRightGridIntersection(const GridRay &ray,
 
 gcc_pure
 static GridLocation
-NextLeftGridIntersection(const GridRay &ray, GridLocation current)
+NextLeftGridIntersection(const GridRay &ray, GridLocation current) noexcept
 {
   assert(ray.delta_x < 0);
 
@@ -140,7 +140,7 @@ NextLeftGridIntersection(const GridRay &ray, GridLocation current)
 gcc_pure
 static GridLocation
 NextHorizontalGridIntersection(const GridRay &ray,
-                               const GridLocation &current)
+                               const GridLocation &current) noexcept
 {
   if (ray.delta_x > 0)
     return NextRightGridIntersection(ray, current);
@@ -152,7 +152,7 @@ NextHorizontalGridIntersection(const GridRay &ray,
 
 gcc_pure
 static int
-ScaleY(const GridRay &ray, int y, int range)
+ScaleY(const GridRay &ray, int y, int range) noexcept
 {
   assert(ray.delta_y != 0);
 
@@ -161,7 +161,7 @@ ScaleY(const GridRay &ray, int y, int range)
 
 gcc_pure
 static int
-XAtY(const GridRay &ray, int y)
+XAtY(const GridRay &ray, int y) noexcept
 {
   assert(ray.delta_y != 0);
 
@@ -170,7 +170,7 @@ XAtY(const GridRay &ray, int y)
 
 gcc_pure
 static unsigned
-IndexAtY(const GridRay &ray, int y)
+IndexAtY(const GridRay &ray, int y) noexcept
 {
   assert(ray.delta_y != 0);
 
@@ -180,7 +180,7 @@ IndexAtY(const GridRay &ray, int y)
 gcc_pure
 static GridLocation
 NextBottomGridIntersection(const GridRay &ray,
-                           const GridLocation &current)
+                           const GridLocation &current) noexcept
 {
   assert(ray.delta_y > 0);
 
@@ -201,7 +201,7 @@ NextBottomGridIntersection(const GridRay &ray,
 
 gcc_pure
 static GridLocation
-NextTopGridIntersection(const GridRay &ray, GridLocation current)
+NextTopGridIntersection(const GridRay &ray, GridLocation current) noexcept
 {
   assert(ray.delta_y < 0);
 
@@ -230,7 +230,7 @@ NextTopGridIntersection(const GridRay &ray, GridLocation current)
 gcc_pure
 static GridLocation
 NextVerticalGridIntersection(const GridRay &ray,
-                             const GridLocation &current)
+                             const GridLocation &current) noexcept
 {
   assert(ray.start.index == 0);
   assert(ray.end.index == ray.size);
@@ -246,7 +246,7 @@ NextVerticalGridIntersection(const GridRay &ray,
 gcc_pure
 static GridLocation
 NextGridIntersection(const GridRay &ray,
-                     const GridLocation &current)
+                     const GridLocation &current) noexcept
 {
   assert(ray.start.index == 0);
   assert(ray.end.index > 0);
@@ -262,7 +262,7 @@ NextGridIntersection(const GridRay &ray,
 inline void
 RasterTileCache::ScanTileLine(GridLocation start, GridLocation end,
                               TerrainHeight *buffer, unsigned size,
-                              bool interpolate) const
+                              bool interpolate) const noexcept
 {
   assert(end.index >= start.index);
   assert(end.index <= size);
@@ -316,7 +316,7 @@ void
 RasterTileCache::ScanLine(const RasterLocation _start,
                           const RasterLocation _end,
                           TerrainHeight *buffer, unsigned size,
-                          bool interpolate) const
+                          bool interpolate) const noexcept
 {
   assert(_start.x < GetFineWidth());
   assert(_start.y < GetFineHeight());

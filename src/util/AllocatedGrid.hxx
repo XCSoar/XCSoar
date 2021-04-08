@@ -45,93 +45,94 @@ protected:
 	unsigned width = 0, height = 0;
 
 public:
-	typedef typename AllocatedArray<T>::reference reference;
-	typedef typename AllocatedArray<T>::const_reference const_reference;
-	typedef typename AllocatedArray<T>::iterator iterator;
-	typedef typename AllocatedArray<T>::const_iterator const_iterator;
+	using size_type = typename AllocatedArray<T>::size_type;
+	using reference = typename AllocatedArray<T>::reference;
+	using const_reference = typename AllocatedArray<T>::const_reference;
+	using iterator = typename AllocatedArray<T>::iterator;
+	using const_iterator = typename AllocatedArray<T>::const_iterator;
 
-	constexpr AllocatedGrid() = default;
-	AllocatedGrid(unsigned _width, unsigned _height)
+	constexpr AllocatedGrid() noexcept = default;
+	AllocatedGrid(unsigned _width, unsigned _height) noexcept
 		:array(_width * _height), width(_width), height(_height) {}
 
-	constexpr bool IsDefined() const {
+	constexpr bool IsDefined() const noexcept {
 		return array.size() > 0;
 	}
 
-	constexpr unsigned GetWidth() const {
+	constexpr unsigned GetWidth() const noexcept {
 		return width;
 	}
 
-	constexpr unsigned GetHeight() const {
+	constexpr unsigned GetHeight() const noexcept {
 		return height;
 	}
 
-	constexpr unsigned GetSize() const {
-		return width * height;
+	constexpr size_type GetSize() const noexcept {
+		return size_type(width) * size_type(height);
 	}
 
-	const_reference Get(unsigned x, unsigned y) const {
+	const_reference Get(unsigned x, unsigned y) const noexcept {
 		assert(x < width);
 		assert(y < height);
 
 		return array[y * width + x];
 	}
 
-	reference Get(unsigned x, unsigned y) {
+	reference Get(unsigned x, unsigned y) noexcept {
 		assert(x < width);
 		assert(y < height);
 
 		return array[y * width + x];
 	}
 
-	const_reference GetLinear(unsigned i) const {
+	const_reference GetLinear(size_type i) const noexcept {
 		assert(i < GetSize());
 
 		return array[i];
 	}
 
-	reference GetLinear(unsigned i) {
+	reference GetLinear(size_type i) noexcept {
 		assert(i < GetSize());
 
 		return array[i];
 	}
 
-	iterator begin() {
+	iterator begin() noexcept {
 		return array.begin();
 	}
 
-	constexpr const_iterator begin() const {
+	constexpr const_iterator begin() const noexcept {
 		return array.begin();
 	}
 
-	iterator end() {
+	iterator end() noexcept {
 		return begin() + GetSize();
 	}
 
-	constexpr const_iterator end() const {
+	constexpr const_iterator end() const noexcept {
 		return begin() + GetSize();
 	}
 
-	iterator GetPointerAt(unsigned x, unsigned y) {
+	iterator GetPointerAt(unsigned x, unsigned y) noexcept {
 		assert(x < width);
 		assert(y < height);
 
 		return begin() + y * width + x;
 	}
 
-	const_iterator GetPointerAt(unsigned x, unsigned y) const {
+	const_iterator GetPointerAt(unsigned x, unsigned y) const noexcept {
 		assert(x < width);
 		assert(y < height);
 
 		return begin() + y * width + x;
 	}
 
-	void Reset() {
+	void Reset() noexcept {
 		width = height = 0;
 		array.ResizeDiscard(0);
 	}
 
-	void GrowDiscard(unsigned _width, unsigned _height) {
+	void GrowDiscard(unsigned _width, unsigned _height) noexcept {
 		array.GrowDiscard(_width * _height);
 		width = _width;
 		height = _height;
@@ -142,7 +143,7 @@ public:
 	 * new dimensions, and fill newly allocated array slots.
 	 */
 	void GrowPreserveFill(unsigned _width, unsigned _height,
-			      const_reference fill=T()) {
+			      const_reference fill=T()) noexcept {
 		if (_width < width) {
 			const unsigned h = std::min(height, _height);
 			const auto end = array.begin() + h * width;
@@ -155,8 +156,8 @@ public:
 			width = _width;
 		}
 
-		const unsigned h = std::min(height, _height);
-		const unsigned fill_start = h > 0
+		const size_type h = std::min(height, _height);
+		const size_type fill_start = h > 0
 			? (h - 1) * _width + width
 			: 0;
 
@@ -178,7 +179,7 @@ public:
 
 		height = _height;
 
-		unsigned new_size = GetSize();
+		size_type new_size = GetSize();
 		if (fill_start < new_size)
 			std::fill(begin() + fill_start, begin() + new_size, fill);
 	}
