@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "LabelBlock.hpp"
 
-bool
+inline bool
 LabelBlock::Bucket::Check(const PixelRect rc) const noexcept
 {
   for (auto i = blocks.begin(), end = blocks.end(); i != end; ++i)
