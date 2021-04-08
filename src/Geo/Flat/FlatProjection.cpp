@@ -41,6 +41,14 @@ FlatProjection::SetCenter(const GeoPoint &_center)
   center = _center;
 
   cos = center.latitude.fastcosine() * fixed_scale;
+
+  if (cos < 0.01)
+    /* when approaching the north/south pole, the cosine of the
+       latitude converges towards zero, which makes the inverse
+       extremely large (converging to infinity as we divide by zero);
+       here we apply a lower limit to avoid this */
+    cos = 0.01;
+
   r_cos = 1. / cos;
   approx_scale = Unproject(FlatGeoPoint(0,-1)).DistanceS(Unproject(FlatGeoPoint(0,1))) / 2;
 }
