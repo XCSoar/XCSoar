@@ -28,7 +28,6 @@ Copyright_License {
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 
 #include <stdlib.h>
-#include <memory>
 
 std::unique_ptr<TaskFile>
 TaskFile::Create(Path path)

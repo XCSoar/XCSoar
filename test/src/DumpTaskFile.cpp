@@ -2,8 +2,6 @@
 #include "Task/TaskFile.hpp"
 #include "util/PrintException.hxx"
 
-#include <memory>
-
 int
 main(int argc, char **argv)
 try {
@@ -11,7 +9,7 @@ try {
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  std::unique_ptr<TaskFile> file(TaskFile::Create(path));
+  const auto file = TaskFile::Create(path);
   if (!file) {
     fprintf(stderr, "TaskFile::Create() failed\n");
     return EXIT_FAILURE;

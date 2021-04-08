@@ -47,7 +47,7 @@ public:
   try {
     // Create a TaskFile instance to determine how many
     // tasks are inside of this task file
-    std::unique_ptr<TaskFile> task_file(TaskFile::Create(path));
+    const auto task_file = TaskFile::Create(path);
     if (!task_file)
       return;
 
