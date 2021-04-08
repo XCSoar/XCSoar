@@ -40,11 +40,10 @@ protected:
   AllocatedPath path;
   StaticArray<TCHAR *, 64> namesuffixes;
 
-protected:
-  TaskFile(Path _path)
+public:
+  explicit TaskFile(Path _path) noexcept
     :path(_path) {}
 
-public:
   virtual ~TaskFile();
 
   /**

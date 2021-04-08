@@ -34,7 +34,7 @@
 class TaskFileSeeYou: public TaskFile
 {
 public:
-  explicit TaskFileSeeYou(Path _path):TaskFile(_path) {}
+  using TaskFile::TaskFile;
 
   /**
    * Give the task produced by parsing the SeeYou file.

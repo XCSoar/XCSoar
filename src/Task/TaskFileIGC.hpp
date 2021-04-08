@@ -29,7 +29,7 @@
 class TaskFileIGC: public TaskFile
 {
 public:
-  explicit TaskFileIGC(Path _path):TaskFile(_path) {}
+  using TaskFile::TaskFile;
 
   std::unique_ptr<OrderedTask> GetTask(const TaskBehaviour &task_behaviour,
                                        const Waypoints *waypoints,
