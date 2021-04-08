@@ -44,10 +44,10 @@ public:
     :look(_look) {}
 
   void Draw(Canvas &canvas, Angle screen_angle, SpeedVector wind,
-            PixelPoint pos, const PixelRect rc, WindArrowStyle arrow_style) noexcept;
+            PixelPoint pos, const PixelRect &rc, WindArrowStyle arrow_style) noexcept;
 
   void Draw(Canvas &canvas, Angle screen_angle, PixelPoint pos,
-            PixelRect rc, const DerivedInfo &calculated,
+            const PixelRect &rc, const DerivedInfo &calculated,
             const MapSettings &settings) noexcept;
 
   void DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,

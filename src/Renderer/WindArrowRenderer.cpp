@@ -84,7 +84,7 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
 void
 WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const SpeedVector wind, const PixelPoint pos,
-                        const PixelRect rc,
+                        const PixelRect &rc,
                         WindArrowStyle arrow_style) noexcept
 {
   // Draw arrow (and tail)
@@ -117,7 +117,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 
 void
 WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
-                        const PixelPoint pos, const PixelRect rc,
+                        const PixelPoint pos, const PixelRect &rc,
                         const DerivedInfo &calculated,
                         const MapSettings &settings) noexcept
 {
