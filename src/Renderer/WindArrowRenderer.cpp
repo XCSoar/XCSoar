@@ -41,7 +41,7 @@ Copyright_License {
 void
 WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
                              unsigned length, WindArrowStyle arrow_style,
-                             int offset)
+                             int offset) noexcept
 {
   // Draw arrow
 
@@ -83,7 +83,8 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
 void
 WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const SpeedVector wind, const PixelPoint pos,
-                        const PixelRect rc, WindArrowStyle arrow_style)
+                        const PixelRect rc,
+                        WindArrowStyle arrow_style) noexcept
 {
   // Draw arrow (and tail)
 
@@ -117,7 +118,7 @@ void
 WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const PixelPoint pos, const PixelRect rc,
                         const DerivedInfo &calculated,
-                        const MapSettings &settings)
+                        const MapSettings &settings) noexcept
 {
   if (!calculated.wind_available ||
       settings.wind_arrow_style == WindArrowStyle::NO_ARROW)
