@@ -36,8 +36,8 @@ LabelBlock::Bucket::Check(const PixelRect rc) const noexcept
 void
 LabelBlock::reset() noexcept
 {
-  for (unsigned i = 0; i < BUCKET_COUNT; ++i)
-    buckets[i].Clear();
+  for (auto &i : buckets)
+    i.Clear();
 }
 
 bool
