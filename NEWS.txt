@@ -1,4 +1,4 @@
-Version 7.4 - not yet released
+Version 7.4 - 2021/04/08
 * user interface
   - properly save and apply updated settings in the configuration dialog
   - fix overlapping observation zones in the task point list
