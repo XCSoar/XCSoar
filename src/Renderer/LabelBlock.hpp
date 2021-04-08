@@ -53,7 +53,9 @@ class LabelBlock {
     BlockArray blocks;
 
   public:
-    void Clear() noexcept;
+    void Clear() noexcept {
+      blocks.clear();
+    }
 
     [[gnu::pure]]
     bool Check(const PixelRect rc) const noexcept;

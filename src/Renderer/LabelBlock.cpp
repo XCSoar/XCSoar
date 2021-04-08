@@ -23,12 +23,6 @@ Copyright_License {
 
 #include "LabelBlock.hpp"
 
-void
-LabelBlock::Bucket::Clear() noexcept
-{
-  blocks.clear();
-}
-
 bool
 LabelBlock::Bucket::Check(const PixelRect rc) const noexcept
 {
