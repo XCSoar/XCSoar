@@ -41,7 +41,11 @@ ifeq ($(LTO),y)
     # default
     OPTIMIZE += -flto=8
   else
-    OPTIMIZE += -flto
+    ifeq ($(THIN_LTO),y)
+      OPTIMIZE += -flto=thin
+    else
+      OPTIMIZE += -flto
+    endif
   endif
 endif
 

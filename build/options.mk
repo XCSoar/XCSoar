@@ -1,6 +1,7 @@
 LLVM ?= n
-CLANG ?= $(LLVM)
-LTO ?= n
+THIN_LTO ?= n
+CLANG ?= $(call bool_or,$(LLVM),$(THIN_LTO))
+LTO ?= $(THIN_LTO)
 IWYU ?= n
 FUZZER ?= n
 

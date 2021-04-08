@@ -42,6 +42,8 @@
 #   LTO         "y" enables gcc's link-time optimization flag (experimental,
 #               requires gcc 4.5)
 #
+#   THIN_LTO    "y" enables ThinLTO (https://clang.llvm.org/docs/ThinLTO.html)
+#
 #   CLANG       "y" to use clang instead of gcc
 #
 #   ANALYZER    "y" to support the clang analyzer
