@@ -72,7 +72,9 @@ Copyright_License {
 #include "io/FileCache.hpp"
 #include "io/async/AsioThread.hpp"
 #include "io/async/GlobalAsioThread.hpp"
+// #ifdef HAVE_TRACKING
 #include "net/http/Init.hpp"
+// #endif
 #include "net/http/DownloadManager.hpp"
 #include "net/client/tim/Glue.hpp"
 #include "Hardware/DisplayDPI.hpp"
@@ -101,7 +103,9 @@ Copyright_License {
 #include "Weather/NOAAStore.hpp"
 #include "Plane/PlaneGlue.hpp"
 #include "UIState.hpp"
+// #ifdef HAVE_TRACKING
 #include "Tracking/TrackingGlue.hpp"
+// #endif
 #include "Units/Units.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "thread/Debug.hpp"
