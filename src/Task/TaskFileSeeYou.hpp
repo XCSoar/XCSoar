@@ -36,11 +36,10 @@ class TaskFileSeeYou: public TaskFile
 public:
   using TaskFile::TaskFile;
 
+  std::vector<tstring> GetList() const override;
   std::unique_ptr<OrderedTask> GetTask(const TaskBehaviour &task_behaviour,
                                        const Waypoints *waypoints,
                                        unsigned index) const override;
-
-  unsigned Count() noexcept override;
 };
 
 #endif

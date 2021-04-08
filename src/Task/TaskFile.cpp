@@ -30,12 +30,6 @@ Copyright_License {
 #include <stdlib.h>
 #include <memory>
 
-TaskFile::~TaskFile()
-{
-  for (unsigned i = 0; i < namesuffixes.size(); i++)
-    free ((TCHAR*)namesuffixes[i]);
-}
-
 std::unique_ptr<TaskFile>
 TaskFile::Create(Path path)
 {
@@ -64,13 +58,4 @@ TaskFile::GetTask(Path path, const TaskBehaviour &task_behaviour,
     return nullptr;
 
   return file->GetTask(task_behaviour, waypoints, index);
-}
-
-const TCHAR *
-TaskFile::GetName(unsigned index) const
-{
-  if (index >= namesuffixes.size())
-    return nullptr;
-
-  return namesuffixes[index];
 }

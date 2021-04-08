@@ -24,9 +24,10 @@
 #define XCSOAR_TASK_FILE_HPP
 
 #include "system/Path.hpp"
-#include "util/StaticArray.hxx"
+#include "util/tstring.hpp"
 
 #include <memory>
+#include <vector>
 
 #include <tchar.h>
 
@@ -38,13 +39,12 @@ class TaskFile
 {
 protected:
   AllocatedPath path;
-  StaticArray<TCHAR *, 64> namesuffixes;
 
 public:
   explicit TaskFile(Path _path) noexcept
     :path(_path) {}
 
-  virtual ~TaskFile();
+  virtual ~TaskFile() noexcept = default;
 
   /**
    * Creates a TaskFile instance according to the extension
@@ -58,12 +58,14 @@ public:
                                               const Waypoints *waypoints,
                                               unsigned index);
 
+  /**
+   * Throws on error.
+   */
+  virtual std::vector<tstring> GetList() const = 0;
+
   virtual std::unique_ptr<OrderedTask> GetTask(const TaskBehaviour &task_behaviour,
                                                const Waypoints *waypoints,
                                                unsigned index) const = 0;
-  virtual unsigned Count() noexcept = 0;
-
-  const TCHAR *GetName(unsigned index) const;
 };
 
 #endif
