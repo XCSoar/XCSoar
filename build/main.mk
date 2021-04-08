@@ -749,11 +749,6 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/IOIOHelper.cpp \
 	$(SRC)/Android/Main.cpp
 
-ifeq ($(DEBUG),y)
-XCSOAR_SOURCES += \
-	$(SRC)/Android/Assert.cpp
-endif
-
 else
 XCSOAR_SOURCES += \
 	$(SRC)/CommandLine.cpp \
