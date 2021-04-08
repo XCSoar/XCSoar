@@ -31,7 +31,7 @@ Copyright_License {
 #endif
 
 static PixelPoint
-TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
+TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc) noexcept
 {
   PixelPoint offset(0, 0);
 
@@ -74,7 +74,7 @@ TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
 static void
 RenderShadowedText(Canvas &canvas, const TCHAR *text,
                    PixelPoint p,
-                   bool inverted)
+                   bool inverted) noexcept
 {
   canvas.SetBackgroundTransparent();
 
@@ -92,7 +92,8 @@ RenderShadowedText(Canvas &canvas, const TCHAR *text,
 // returns true if really wrote something
 bool
 TextInBox(Canvas &canvas, const TCHAR *text, PixelPoint p,
-          TextInBoxMode mode, const PixelRect &map_rc, LabelBlock *label_block)
+          TextInBoxMode mode, const PixelRect &map_rc,
+          LabelBlock *label_block) noexcept
 {
   // landable waypoint label inside white box
 
@@ -166,7 +167,7 @@ bool
 TextInBox(Canvas &canvas, const TCHAR *text, PixelPoint p,
           TextInBoxMode mode,
           PixelSize screen_size,
-          LabelBlock *label_block)
+          LabelBlock *label_block) noexcept
 {
   return TextInBox(canvas, text, p, mode, PixelRect{screen_size}, label_block);
 }
