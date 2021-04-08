@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WIND_ARROW_RENDERER_HPP
 #define XCSOAR_WIND_ARROW_RENDERER_HPP
 
-#include "MapSettings.hpp"
+#include <cstdint>
 
 class Canvas;
 class Angle;
@@ -33,6 +33,8 @@ struct PixelRect;
 struct WindArrowLook;
 struct SpeedVector;
 struct DerivedInfo;
+struct MapSettings;
+enum class WindArrowStyle : uint8_t;
 
 class WindArrowRenderer {
   const WindArrowLook &look;

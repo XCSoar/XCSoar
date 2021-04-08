@@ -31,6 +31,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Units/Units.hpp"
 #include "util/Macros.hpp"
+#include "MapSettings.hpp"
 
 #include <tchar.h>
 
