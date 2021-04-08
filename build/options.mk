@@ -1,5 +1,6 @@
 LLVM ?= n
 CLANG ?= $(LLVM)
+LTO ?= n
 IWYU ?= n
 FUZZER ?= n
 
