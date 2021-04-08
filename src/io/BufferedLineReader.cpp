@@ -21,16 +21,10 @@ Copyright_License {
 }
 */
 
-#include "ZipLineReader.hpp"
+#include "BufferedLineReader.hpp"
 
-long
-ZipLineReaderA::GetSize() const
+char *
+BufferedLineReader::ReadLine()
 {
-  return zip.GetSize();
-}
-
-long
-ZipLineReaderA::Tell() const
-{
-  return zip.GetPosition();
+  return buffered.ReadLine();
 }

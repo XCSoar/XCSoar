@@ -21,16 +21,25 @@ Copyright_License {
 }
 */
 
-#include "ZipLineReader.hpp"
+#ifndef XCSOAR_IO_BUFFERED_LINE_READER_HPP
+#define XCSOAR_IO_BUFFERED_LINE_READER_HPP
 
-long
-ZipLineReaderA::GetSize() const
-{
-  return zip.GetSize();
-}
+#include "LineReader.hpp"
+#include "BufferedReader.hxx"
 
-long
-ZipLineReaderA::Tell() const
-{
-  return zip.GetPosition();
-}
+/**
+ * Adapter between #Reader and #NLineReader.
+ */
+class BufferedLineReader : public NLineReader {
+  BufferedReader buffered;
+
+public:
+  explicit BufferedLineReader(Reader &reader) noexcept
+    :buffered(reader) {}
+
+public:
+  /* virtual methods from class NLineReader */
+  char *ReadLine() override;
+};
+
+#endif

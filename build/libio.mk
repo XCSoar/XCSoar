@@ -6,6 +6,7 @@ IO_SOURCES = \
 	$(IO_SRC_DIR)/Open.cxx \
 	$(IO_SRC_DIR)/MemoryReader.cxx \
 	$(IO_SRC_DIR)/BufferedReader.cxx \
+	$(IO_SRC_DIR)/BufferedLineReader.cpp \
 	$(IO_SRC_DIR)/FileDescriptor.cxx \
 	$(IO_SRC_DIR)/FileReader.cxx \
 	$(IO_SRC_DIR)/BufferedOutputStream.cxx \
