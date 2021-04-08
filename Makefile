@@ -160,14 +160,21 @@ include $(topdir)/build/libterrain.mk
 include $(topdir)/build/lua.mk
 include $(topdir)/build/harness.mk
 
+ifeq ($(FUZZER),y)
+include $(topdir)/build/fuzzer.mk
+else
 include $(topdir)/build/vali.mk
 include $(topdir)/build/main.mk
 include $(topdir)/build/cloud.mk
 include $(topdir)/build/kobo.mk
 include $(topdir)/build/test.mk
+endif
+
 include $(topdir)/build/hot.mk
 
+ifeq ($(FUZZER),n)
 include $(topdir)/build/python.mk
+endif
 
 # Load local-config a second time
 # to set (override) choices for GXX and friends.
@@ -175,8 +182,10 @@ include $(topdir)/build/python.mk
 
 ######## output files
 
+ifeq ($(FUZZER),n)
 include $(topdir)/build/dist.mk
 include $(topdir)/build/install.mk
+endif
 
 ######## compiler flags
 
@@ -185,6 +194,8 @@ INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR)
 ####### sources
 
 include $(topdir)/build/gettext.mk
+
+ifeq ($(FUZZER),n)
 
 ifeq ($(FAT_BINARY),n)
 OUTPUTS := $(XCSOAR_BIN) $(VALI_XCS_BIN)
@@ -200,6 +211,8 @@ endif
 
 ifeq ($(HAVE_WIN32),y)
 OUTPUTS += $(LAUNCH_XCSOAR_BIN)
+endif
+
 endif
 
 all: $(OUTPUTS)

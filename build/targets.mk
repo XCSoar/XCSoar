@@ -1,6 +1,7 @@
 TARGETS = PC WIN64 \
 	UNIX UNIX32 UNIX64 OPT \
 	WAYLAND \
+	FUZZER \
 	PI PI2 CUBIE KOBO NEON \
 	ANDROID ANDROID7 ANDROID7NEON ANDROID86 \
 	ANDROIDAARCH64 ANDROIDX64 \
@@ -133,6 +134,15 @@ ifeq ($(TARGET),WAYLAND)
   # experimental target for the Wayland display server
   override TARGET = UNIX
   USE_WAYLAND = y
+endif
+
+ifeq ($(TARGET),FUZZER)
+  # this target builds fuzzers using libfuzzer (https://llvm.org/docs/LibFuzzer.html)
+  override TARGET = UNIX
+
+  FUZZER = y
+  CLANG = y
+  HEADLESS = y
 endif
 
 ifeq ($(TARGET),UNIX)
@@ -400,6 +410,11 @@ TARGET_INCLUDES =
 TARGET_CXXFLAGS =
 TARGET_CPPFLAGS = -I$(TARGET_OUTPUT_DIR)/include
 
+ifeq ($(FUZZER),y)
+  FUZZER_FLAGS = -fsanitize=fuzzer,address
+  TARGET_CXXFLAGS += $(FUZZER_FLAGS)
+endif
+
 ifneq ($(WINVER),)
   TARGET_CPPFLAGS += -DWINVER=$(WINVER) -D_WIN32_WINDOWS=$(WINVER)
   TARGET_CPPFLAGS += -D_WIN32_WINNT=$(WINVER) -D_WIN32_IE=$(WINVER)
@@ -519,6 +534,10 @@ endif
 TARGET_LDFLAGS =
 TARGET_LDLIBS =
 TARGET_LDADD =
+
+ifeq ($(FUZZER),y)
+  TARGET_LDFLAGS += $(FUZZER_FLAGS)
+endif
 
 ifeq ($(TARGET),PC)
   TARGET_LDFLAGS += -Wl,--major-subsystem-version=5

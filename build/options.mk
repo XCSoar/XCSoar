@@ -1,6 +1,7 @@
 LLVM ?= n
 CLANG ?= $(LLVM)
 IWYU ?= n
+FUZZER ?= n
 
 # shall we paint with some eye candy?
 EYE_CANDY ?= $(call bool_not,$(TARGET_IS_KOBO))
