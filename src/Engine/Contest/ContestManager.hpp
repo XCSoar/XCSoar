@@ -89,20 +89,20 @@ public:
                  const Trace &trace_full,
                  const Trace &trace_triangle,
                  const Trace &trace_sprint,
-                 bool predict_triangle=false);
+                 bool predict_triangle=false) noexcept;
 
-  void SetIncremental(bool incremental);
+  void SetIncremental(bool incremental) noexcept;
 
   /**
    * @see ContestDijkstra::SetPredicted()
    */
-  void SetPredicted(const TracePoint &predicted);
+  void SetPredicted(const TracePoint &predicted) noexcept;
 
-  void SetContest(Contest _contest) {
+  void SetContest(Contest _contest) noexcept {
     contest = _contest;
   }
 
-  void SetHandicap(unsigned handicap);
+  void SetHandicap(unsigned handicap) noexcept;
 
   /**
    * Update internal states (non-essential) for housework,
@@ -112,16 +112,17 @@ public:
    * after a number of iterations (incremental search)
    * @return True if internal state changed
    */
-  bool UpdateIdle(bool exhaustive = false);
+  bool UpdateIdle(bool exhaustive = false) noexcept;
 
-  bool SolveExhaustive() {
+  bool SolveExhaustive() noexcept {
     return UpdateIdle(true);
   }
 
   /**
    * Solve exhaustive with custom computational limits for the triangle solver.
    */
-  bool SolveExhaustive(unsigned max_iterations, unsigned max_tree_size) {
+  bool SolveExhaustive(unsigned max_iterations,
+                       unsigned max_tree_size) noexcept {
     olc_fai.SetMaxIterations(max_iterations);
     olc_fai.SetMaxTreeSize(max_tree_size);
     dhv_xc_triangle.SetMaxIterations(max_iterations);
@@ -135,9 +136,9 @@ public:
   /**
    * Reset the task (as if never flown)
    */
-  void Reset();
+  void Reset() noexcept;
 
-  const ContestStatistics &GetStats() const {
+  const ContestStatistics &GetStats() const noexcept {
     return stats;
   }
 };

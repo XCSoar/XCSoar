@@ -26,7 +26,7 @@ ContestManager::ContestManager(const Contest _contest,
                                const Trace &trace_full,
                                const Trace &trace_triangle,
                                const Trace &trace_sprint,
-                               bool predict_triangle)
+                               bool predict_triangle) noexcept
   :contest(_contest),
    olc_sprint(trace_sprint),
    olc_fai(trace_triangle, predict_triangle),
@@ -47,7 +47,7 @@ ContestManager::ContestManager(const Contest _contest,
 }
 
 void
-ContestManager::SetIncremental(bool incremental)
+ContestManager::SetIncremental(bool incremental) noexcept
 {
   olc_sprint.SetIncremental(incremental);
   olc_fai.SetIncremental(incremental);
@@ -65,7 +65,7 @@ ContestManager::SetIncremental(bool incremental)
 }
 
 void
-ContestManager::SetPredicted(const TracePoint &predicted)
+ContestManager::SetPredicted(const TracePoint &predicted) noexcept
 {
   if (olc_classic.SetPredicted(predicted)) {
     olc_league.Reset();
@@ -82,7 +82,7 @@ ContestManager::SetPredicted(const TracePoint &predicted)
 }
 
 void
-ContestManager::SetHandicap(unsigned handicap)
+ContestManager::SetHandicap(unsigned handicap) noexcept
 {
   olc_sprint.SetHandicap(handicap);
   olc_fai.SetHandicap(handicap);
@@ -105,7 +105,7 @@ ContestManager::SetHandicap(unsigned handicap)
 static bool
 RunContest(AbstractContest &_contest,
            ContestResult &result, ContestTraceVector &solution,
-           bool exhaustive)
+           bool exhaustive) noexcept
 {
   // run solver, return immediately if further processing is required
   // by subsequent calls
@@ -126,7 +126,7 @@ RunContest(AbstractContest &_contest,
 }
 
 bool
-ContestManager::UpdateIdle(bool exhaustive)
+ContestManager::UpdateIdle(bool exhaustive) noexcept
 {
   bool retval = false;
 
@@ -246,7 +246,7 @@ ContestManager::UpdateIdle(bool exhaustive)
 }
 
 void
-ContestManager::Reset()
+ContestManager::Reset() noexcept
 {
   stats.Reset();
   olc_sprint.Reset();
