@@ -63,6 +63,11 @@ private:
     if (solution_index >= 0)
       return solution_index;
 
+    return GetBestIndex();
+  }
+
+  [[gnu::pure]]
+  std::size_t GetBestIndex() const noexcept {
     // Search for best solution by score
     double best = 0;
     std::size_t i_best = 0;
@@ -77,6 +82,7 @@ private:
     // Return index to the best solution
     return i_best;
   }
+
 };
 
 static_assert(is_trivial_ndebug<ContestStatistics>::value, "type is not trivial");
