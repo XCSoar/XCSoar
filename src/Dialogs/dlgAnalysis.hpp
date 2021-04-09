@@ -42,7 +42,7 @@ enum class AnalysisPage {
   MACCREADY,
   TEMPTRACE,
   TASK,
-  OLC,
+  CONTEST,
   AIRSPACE,
   COUNT
 };

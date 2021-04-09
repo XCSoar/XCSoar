@@ -150,7 +150,7 @@ namespace InfoBoxFactory
     CIRCLE_DIAMETER,
 
     TAKEOFF_DISTANCE,
-    OLC_SPEED,
+    CONTEST_SPEED,
 
     FIN_MC0_ALTD,
 

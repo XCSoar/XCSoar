@@ -27,9 +27,9 @@
 
 struct ContestResult
 {
-  /** Score (pts) according to OLC rule */
+  /** Score (pts) according to contest rule */
   double score;
-  /** Optimum distance (m) travelled according to OLC rule */
+  /** Optimum distance (m) travelled according to contest rule */
   double distance;
   /** Time (s) of optimised OLC path */
   double time;

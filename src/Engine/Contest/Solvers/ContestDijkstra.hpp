@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef OLC_DIJKSTRA_HPP
-#define OLC_DIJKSTRA_HPP
+#ifndef CONTEST_DIJKSTRA_HPP
+#define CONTEST_DIJKSTRA_HPP
 
 #include "AbstractContest.hpp"
 #include "PathSolvers/NavDijkstra.hpp"

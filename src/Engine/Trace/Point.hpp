@@ -36,7 +36,7 @@ struct MoreData;
 struct AircraftState;
 
 /**
- * Class for points used in traces (snail trail, OLC scans)
+ * Class for points used in traces (snail trail, contest scans)
  * Internally, keeps track of predecessors as a kind of a linked-list
  */
 class TracePoint : public SearchPoint

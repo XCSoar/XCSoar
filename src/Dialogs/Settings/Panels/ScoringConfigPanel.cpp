@@ -90,7 +90,7 @@ ScoringConfigPanel::Prepare(ContainerWindow &parent,
 
   const StaticEnumChoice contests_list[] = {
     { (unsigned)Contest::NONE, ContestToString(Contest::NONE),
-      N_("Disable OLC Calculations") },
+      N_("Disable contest calculations") },
     { (unsigned)Contest::OLC_FAI, ContestToString(Contest::OLC_FAI),
       N_("Conforms to FAI triangle rules. Three turns and common start and finish. No leg less than 28% "
           "of total except for tasks longer than 500km: No leg less than 25% or larger than 45%.") },
@@ -124,9 +124,8 @@ ScoringConfigPanel::Prepare(ContainerWindow &parent,
           "the distance between the start point and the turn point is maximized") },
     { 0 }
   };
-  AddEnum(_("On-Line Contest"),
-      _("Select the rules used for calculating optimal points for the On-Line Contest. "
-          "The implementation  conforms to the official release 2010, Sept.23."),
+  AddEnum(_("Contest"),
+      _("Select the rules used for calculating optimal points for a contest."),
           contests_list, (unsigned)contest_settings.contest);
 
   AddBoolean(_("Predict Contest"),

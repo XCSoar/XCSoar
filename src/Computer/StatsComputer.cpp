@@ -67,7 +67,7 @@ StatsComputer::DoLogging(const MoreData &basic,
     ? basic.location : GeoPoint::Invalid();
 
   if (location_jump || !basic.location_available)
-    // prevent bad fixes from being logged or added to OLC store
+    // prevent bad fixes from being logged or added to contest store
     return false;
 
   if (calculated.flight.flying &&

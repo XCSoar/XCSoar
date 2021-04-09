@@ -40,7 +40,7 @@ ShowAnalysis8()
                        UIGlobals::GetLook(),
                        CommonInterface::Full(), *glide_computer,
                        &airspace_database,
-                       terrain, AnalysisPage::OLC);
+                       terrain, AnalysisPage::CONTEST);
 }
 
 static std::unique_ptr<Widget>
@@ -56,13 +56,13 @@ InfoBoxPanel analysis8_infobox_panels[] = {
 };
 
 const InfoBoxPanel *
-InfoBoxContentOLC::GetDialogContent()
+InfoBoxContentContest::GetDialogContent()
 {
   return analysis8_infobox_panels;
 }
 
 void
-InfoBoxContentOLC::Update(InfoBoxData &data)
+InfoBoxContentContest::Update(InfoBoxData &data)
 {
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
@@ -75,28 +75,28 @@ InfoBoxContentOLC::Update(InfoBoxData &data)
   int result_index =
     (settings_computer.contest.contest == Contest::OLC_LEAGUE) ? 0 : -1;
 
-  const ContestResult& result_olc =
+  const ContestResult& result_contest =
     CommonInterface::Calculated().contest_stats.GetResult(result_index);
 
-  if (result_olc.score < 1) {
+  if (result_contest.score < 1) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  data.SetValueFromDistance(result_olc.distance);
+  data.SetValueFromDistance(result_contest.distance);
 
-  data.UnsafeFormatComment(_T("%.1f pts"), (double)result_olc.score);
+  data.UnsafeFormatComment(_T("%.1f pts"), (double)result_contest.score);
 }
 
 const InfoBoxPanel *
-InfoBoxContentOLCSpeed::GetDialogContent()
+InfoBoxContentContestSpeed::GetDialogContent()
 {
   return analysis8_infobox_panels;
 }
 
 void
-InfoBoxContentOLCSpeed::Update(InfoBoxData &data)
+InfoBoxContentContestSpeed::Update(InfoBoxData &data)
 {
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
@@ -109,16 +109,16 @@ InfoBoxContentOLCSpeed::Update(InfoBoxData &data)
   int result_index =
     (settings_computer.contest.contest == Contest::OLC_LEAGUE) ? 0 : -1;
 
-  const ContestResult& result_olc =
+  const ContestResult& result_contest =
     CommonInterface::Calculated().contest_stats.GetResult(result_index);
 
-  if (result_olc.score < 1) {
+  if (result_contest.score < 1) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  data.SetValueFromTaskSpeed(result_olc.GetSpeed());
+  data.SetValueFromTaskSpeed(result_contest.GetSpeed());
 
-  data.UnsafeFormatComment(_T("%.1f pts"), (double)result_olc.score);
+  data.UnsafeFormatComment(_T("%.1f pts"), (double)result_contest.score);
 }

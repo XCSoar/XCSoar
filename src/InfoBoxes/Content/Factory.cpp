@@ -729,10 +729,10 @@ static constexpr MetaData meta_data[] = {
 
   // e_OC_Distance
   {
-    N_("On-Line Contest distance"),
-    N_("OLC Dist"),
-    N_("Instantaneous evaluation of the flown distance according to the configured On-Line Contest rule set."),
-    IBFHelper<InfoBoxContentOLC>::Create,
+    N_("Contest distance"),
+    N_("Cont Dist"),
+    N_("Instantaneous evaluation of the flown distance according to the configured Contest rule set."),
+    IBFHelper<InfoBoxContentContest>::Create,
   },
 
   // e_Experimental2
@@ -1008,12 +1008,12 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxTakeoffDistance,
   },
 
-  // OLC_SPEED
+  // CONTEST_SPEED
   {
-    N_("On-Line Contest speed"),
-    N_("OLC Speed"),
-    N_("Instantaneous evaluation of the flown speed according to the configured On-Line Contest rule set."),
-    IBFHelper<InfoBoxContentOLCSpeed>::Create,
+    N_("Contest speed"),
+    N_("Ćont Speed"),
+    N_("Instantaneous evaluation of the flown speed according to the configured Contest rule set."),
+    IBFHelper<InfoBoxContentContestSpeed>::Create,
   },
 
   {
