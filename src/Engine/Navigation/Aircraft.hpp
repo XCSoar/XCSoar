@@ -61,7 +61,7 @@ struct SpeedState
    */
   double true_airspeed;
 
-  void Reset() {
+  void Reset() noexcept {
     ground_speed = true_airspeed = 0;
   }
 };
@@ -84,7 +84,7 @@ struct AltitudeState
   /** Altitude over terrain */
   double altitude_agl;
 
-  void Reset();
+  void Reset() noexcept;
 };
 
 /**
@@ -104,7 +104,7 @@ struct VarioState
    */
   double netto_vario;
 
-  void Reset(){
+  void Reset() noexcept {
     vario = netto_vario = 0;
   }
 };
@@ -161,9 +161,9 @@ struct AircraftState:
    * @return Predicted aircraft state in in_time seconds
    */
   [[gnu::pure]]
-  AircraftState GetPredictedState(double in_time) const;
+  AircraftState GetPredictedState(double in_time) const noexcept;
 
-  void Reset();
+  void Reset() noexcept;
 };
 
 static_assert(std::is_trivial<AircraftState>::value, "type is not trivial");
