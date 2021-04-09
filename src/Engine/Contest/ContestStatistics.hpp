@@ -27,10 +27,14 @@
 #include "ContestTrace.hpp"
 #include "util/TypeTraits.hpp"
 
+#include <array>
+
 struct ContestStatistics
 {
-  ContestResult result[4];
-  ContestTraceVector solution[4];
+  static constexpr std::size_t N = 4;
+
+  std::array<ContestResult, N> result;
+  std::array<ContestTraceVector, N> solution;
 
   void Reset() noexcept {
     for (auto &i : result)
@@ -71,7 +75,7 @@ private:
     // Search for best solution by score
     double best = 0;
     std::size_t i_best = 0;
-    for (std::size_t i = 0; i < 4; ++i) {
+    for (std::size_t i = 0; i < result.size(); ++i) {
       if (result[i].IsDefined() && (result[i].score > best)) {
         // Better scored solution found
         i_best = i;
