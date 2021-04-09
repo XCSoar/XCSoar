@@ -59,14 +59,14 @@ struct ContestStatistics
 
 private:
   [[gnu::pure]]
-  int GetBestIndex(const int solution_index) const noexcept {
+  std::size_t GetBestIndex(const int solution_index) const noexcept {
     if (solution_index >= 0)
       return solution_index;
 
     // Search for best solution by score
     double best = 0;
-    int i_best = 0;
-    for (int i = 0; i < 4; ++i) {
+    std::size_t i_best = 0;
+    for (std::size_t i = 0; i < 4; ++i) {
       if (result[i].IsDefined() && (result[i].score > best)) {
         // Better scored solution found
         i_best = i;
