@@ -23,7 +23,7 @@
 #include "Settings.hpp"
 
 void
-ContestSettings::SetDefaults()
+ContestSettings::SetDefaults() noexcept
 {
   enable = true;
   predict = false;

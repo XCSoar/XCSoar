@@ -70,7 +70,7 @@ struct ContestSettings {
   /** Handicap factor */
   unsigned handicap;
 
-  void SetDefaults();
+  void SetDefaults() noexcept;
 };
 
 static_assert(std::is_trivial<ContestSettings>::value, "type is not trivial");
