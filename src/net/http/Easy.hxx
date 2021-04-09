@@ -127,6 +127,13 @@ public:
 		SetOption(CURLOPT_NOPROGRESS, (long)value);
 	}
 
+	void SetXferInfoFunction(curl_xferinfo_callback function,
+				 void *data) {
+		SetOption(CURLOPT_XFERINFOFUNCTION, function);
+		SetOption(CURLOPT_XFERINFODATA, data);
+		SetNoProgress(false);
+	}
+
 	void SetNoSignal(bool value=true) {
 		SetOption(CURLOPT_NOSIGNAL, (long)value);
 	}
