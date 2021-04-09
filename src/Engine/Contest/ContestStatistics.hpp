@@ -56,6 +56,7 @@ struct ContestStatistics
     return result[GetBestIndex(solution_index)];
   }
 
+private:
   [[gnu::pure]]
   int GetBestIndex(const int solution_index) const noexcept {
     if (solution_index >= 0)
