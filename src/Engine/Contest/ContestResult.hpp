@@ -34,13 +34,13 @@ struct ContestResult
   /** Time (s) of optimised OLC path */
   double time;
 
-  void Reset() {
+  constexpr void Reset() noexcept {
     score = 0;
     distance = 0;
     time = 0;
   }
 
-  constexpr bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
     return score > 0;
   }
 
@@ -48,7 +48,7 @@ struct ContestResult
    * Returns the average speed on the optimised path [m/s].  Returns
    * zero if the result is invalid.
    */
-  constexpr double GetSpeed() const {
+  constexpr double GetSpeed() const noexcept {
     return time > 0
       ? distance / time
       : 0.;
