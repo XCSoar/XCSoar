@@ -53,13 +53,13 @@ public:
                            const MapLook &_map_look);
 
 public:
-  void RenderOLC(Canvas &canvas, const PixelRect rc,
-                 const NMEAInfo &nmea_info,
-                 const ComputerSettings &settings_computer,
-                 const MapSettings &settings_map,
-                 const ContestStatistics &contest,
-                 const TraceComputer &trace_computer,
-                 const Retrospective &retrospective) const;
+  void RenderContest(Canvas &canvas, const PixelRect rc,
+                     const NMEAInfo &nmea_info,
+                     const ComputerSettings &settings_computer,
+                     const MapSettings &settings_map,
+                     const ContestStatistics &contest,
+                     const TraceComputer &trace_computer,
+                     const Retrospective &retrospective) const;
 
   void RenderTask(Canvas &canvas, const PixelRect rc,
                   const NMEAInfo &nmea_info,
@@ -69,8 +69,8 @@ public:
                   const TraceComputer *trace_computer) const;
 
   static void CaptionTask(TCHAR *sTmp, const DerivedInfo &derived);
-  static void CaptionOLC(TCHAR *sTmp, const ContestSettings &settings,
-                         const DerivedInfo &derived);
+  static void CaptionContest(TCHAR *sTmp, const ContestSettings &settings,
+                             const DerivedInfo &derived);
 
 private:
   void DrawContestSolution(Canvas &canvas, const Projection &projection,

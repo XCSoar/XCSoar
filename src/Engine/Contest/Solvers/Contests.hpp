@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef OLC_RULES_HPP
-#define OLC_RULES_HPP
+#ifndef CONTEST_RULES_HPP
+#define CONTEST_RULES_HPP
 
 #include <cstdint>
 #include <tchar.h>

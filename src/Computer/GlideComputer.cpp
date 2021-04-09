@@ -162,7 +162,7 @@ GlideComputer::ProcessIdle(bool exhaustive)
   DerivedInfo &calculated = SetCalculated();
 
   // Log GPS fixes for internal usage
-  // (snail trail, stats, olc, ...)
+  // (snail trail, stats, contest, ...)
   stats_computer.DoLogging(basic, calculated);
   log_computer.Run(basic, calculated, GetComputerSettings().logger);
 

@@ -64,7 +64,7 @@ static ContestManager weglide_free(Contest::WEGLIDE_FREE,
                                full_trace, triangle_trace, sprint_trace);
 
 static int
-TestOLC(DebugReplay &replay)
+TestContest(DebugReplay &replay)
 {
   bool released = false;
 
@@ -176,7 +176,7 @@ int main(int argc, char **argv)
 
   args.ExpectEnd();
 
-  int result = TestOLC(*replay);
+  int result = TestContest(*replay);
   delete replay;
   return result;
 }

@@ -723,7 +723,7 @@ DEBUG_PROGRAM_NAMES = \
 	TestTrace \
 	FlightTable \
 	RunTrace \
-	RunOLCAnalysis \
+	RunContestAnalysis \
 	RunWaveComputer \
 	FlightPath \
 	BenchmarkProjection \
@@ -1659,7 +1659,7 @@ RUN_TRACE_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_TRACE_DEPENDS = UTIL GEO MATH TIME
 $(eval $(call link-program,RunTrace,RUN_TRACE))
 
-RUN_OLC_SOURCES = \
+RUN_CONTEST_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
@@ -1668,10 +1668,10 @@ RUN_OLC_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/ContestPrinting.cpp \
-	$(TEST_SRC_DIR)/RunOLCAnalysis.cpp
-RUN_OLC_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_OLC_DEPENDS = CONTEST UTIL GEO MATH TIME
-$(eval $(call link-program,RunOLCAnalysis,RUN_OLC))
+	$(TEST_SRC_DIR)/RunContestAnalysis.cpp
+RUN_CONTEST_LDADD = $(DEBUG_REPLAY_LDADD)
+RUN_CONTEST_DEPENDS = CONTEST UTIL GEO MATH TIME
+$(eval $(call link-program,RunContestAnalysis,RUN_CONTEST))
 
 RUN_WAVE_COMPUTER_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \

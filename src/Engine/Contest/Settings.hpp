@@ -55,7 +55,7 @@ enum class Contest : uint8_t {
 };
 
 struct ContestSettings {
-  /** Whether to do online OLC optimisation */
+  /** Whether to do online contest optimisation */
   bool enable;
 
   /**
@@ -64,7 +64,7 @@ struct ContestSettings {
    */
   bool predict;
 
-  /** Rule set to scan for in OLC */
+  /** Rule set to scan for in contest */
   Contest contest;
 
   /** Handicap factor */
