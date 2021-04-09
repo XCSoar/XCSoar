@@ -25,7 +25,7 @@
 
 #include <cassert>
 
-AircraftStateFilter::AircraftStateFilter(const double cutoff_wavelength)
+AircraftStateFilter::AircraftStateFilter(const double cutoff_wavelength) noexcept
   :x_diff_filter(0), y_diff_filter(0),
    alt_diff_filter(0),
    x_low_pass(cutoff_wavelength), y_low_pass(cutoff_wavelength),
@@ -33,7 +33,7 @@ AircraftStateFilter::AircraftStateFilter(const double cutoff_wavelength)
    x(0), y(0) {}
 
 void
-AircraftStateFilter::Reset(const AircraftState &state)
+AircraftStateFilter::Reset(const AircraftState &state) noexcept
 {
   last_state = state;
 
@@ -53,7 +53,7 @@ AircraftStateFilter::Reset(const AircraftState &state)
 }
 
 void
-AircraftStateFilter::Update(const AircraftState &state)
+AircraftStateFilter::Update(const AircraftState &state) noexcept
 {
   auto dt = state.time - last_state.time;
 
@@ -84,19 +84,19 @@ AircraftStateFilter::Update(const AircraftState &state)
 }
 
 double
-AircraftStateFilter::GetSpeed() const
+AircraftStateFilter::GetSpeed() const noexcept
 {
   return hypot(v_x, v_y);
 }
 
 Angle
-AircraftStateFilter::GetBearing() const
+AircraftStateFilter::GetBearing() const noexcept
 {
   return Angle::FromXY(v_y, v_x).AsBearing();
 }
 
 bool
-AircraftStateFilter::Design(const double cutoff_wavelength)
+AircraftStateFilter::Design(const double cutoff_wavelength) noexcept
 {
   bool ok = true;
   ok &= x_low_pass.Design(cutoff_wavelength);
@@ -107,7 +107,7 @@ AircraftStateFilter::Design(const double cutoff_wavelength)
 }
 
 AircraftState
-AircraftStateFilter::GetPredictedState(const double in_time) const
+AircraftStateFilter::GetPredictedState(const double in_time) const noexcept
 {
   AircraftState state_next = last_state;
   state_next.ground_speed = GetSpeed();
