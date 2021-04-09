@@ -25,9 +25,9 @@
 
 #include "ContestResult.hpp"
 #include "ContestTrace.hpp"
-#include "util/TypeTraits.hpp"
 
 #include <array>
+#include <type_traits>
 
 struct ContestStatistics
 {
@@ -89,6 +89,6 @@ private:
 
 };
 
-static_assert(is_trivial_ndebug<ContestStatistics>::value, "type is not trivial");
+static_assert(std::is_trivial_v<ContestStatistics>, "type is not trivial");
 
 #endif
