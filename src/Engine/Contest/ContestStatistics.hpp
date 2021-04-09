@@ -32,7 +32,7 @@ struct ContestStatistics
   ContestResult result[4];
   ContestTraceVector solution[4];
 
-  void Reset() {
+  void Reset() noexcept {
     for (unsigned i = 0; i < 4; ++i) {
       solution[i].clear();
       result[i].Reset();
@@ -47,16 +47,17 @@ struct ContestStatistics
    * @return Vector of trace points selected for Contest
    */
   [[gnu::pure]]
-  const ContestTraceVector &GetSolution(const int solution_index = -1) const {
+  const ContestTraceVector &GetSolution(const int solution_index = -1) const noexcept {
     return solution[GetBestIndex(solution_index)];
   }
 
   [[gnu::pure]]
-  const ContestResult &GetResult(const int solution_index = -1) const {
+  const ContestResult &GetResult(const int solution_index = -1) const noexcept {
     return result[GetBestIndex(solution_index)];
   }
 
-  int GetBestIndex(const int solution_index) const {
+  [[gnu::pure]]
+  int GetBestIndex(const int solution_index) const noexcept {
     if (solution_index >= 0)
       return solution_index;
 
