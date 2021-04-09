@@ -33,10 +33,11 @@ struct ContestStatistics
   ContestTraceVector solution[4];
 
   void Reset() noexcept {
-    for (unsigned i = 0; i < 4; ++i) {
-      solution[i].clear();
-      result[i].Reset();
-    }
+    for (auto &i : result)
+      i.Reset();
+
+    for (auto &i : solution)
+      i.clear();
   }
 
   /**
