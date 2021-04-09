@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2011-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,13 +37,11 @@
  * default constructor.
  */
 template<typename T>
-struct has_trivial_copy_and_destructor
-  : public std::integral_constant<bool,
-                                  std::is_trivially_copy_constructible<T>::value &&
-                                  std::is_trivially_copy_assignable<T>::value &&
-                                  std::is_trivially_destructible<T>::value>
-{
-};
+using has_trivial_copy_and_destructor =
+	std::integral_constant<bool,
+			       std::is_trivially_copy_constructible_v<T> &&
+			       std::is_trivially_copy_assignable_v<T> &&
+			       std::is_trivially_destructible_v<T>>;
 
 /**
  * Check if the specified type is "trivial" in the non-debug build,
@@ -52,17 +50,10 @@ struct has_trivial_copy_and_destructor
  */
 #ifdef NDEBUG
 template<typename T>
-struct is_trivial_ndebug
-  : public std::integral_constant<bool, std::is_trivial<T>::value>
-{
-};
+using is_trivial_ndebug = std::is_trivial<T>;
 #else
 template<typename T>
-struct is_trivial_ndebug
-  : public std::integral_constant<bool,
-                                  has_trivial_copy_and_destructor<T>::value>
-{
-};
+using is_trivial_ndebug = has_trivial_copy_and_destructor<T>;
 #endif
 
 #endif
