@@ -33,7 +33,7 @@
  */
 [[gnu::const]]
 double
-AngleToGradient(const double d);
+AngleToGradient(const double d) noexcept;
 
 /**
  * Determines whether gradient is error value (999)
@@ -44,6 +44,6 @@ AngleToGradient(const double d);
  */
 [[gnu::const]]
 bool
-GradientValid(const double d);
+GradientValid(const double d) noexcept;
 
 #endif
