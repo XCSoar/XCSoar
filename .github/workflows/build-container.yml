@@ -2,8 +2,9 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - ./ide/docker/
-      - ./ide/provisioning/
+      - 'ide/docker/**'
+      - 'ide/provisioning/**'
+      - '.github/workflows/build-container.yml'
 
 jobs:
  xcsoar-docker-env:
