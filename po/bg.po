@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2021-04-05 06:29+0000\n"
+"PO-Revision-Date: 2021-04-11 16:26+0000\n"
 "Last-Translator: Веско <v.jeliazkov@jeliazkov.net>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/bg/>\n"
@@ -4012,7 +4012,7 @@ msgstr "Нисък заряд на батерията"
 
 #: src/Startup.cpp:257
 msgid "Initialising"
-msgstr "Инициализация"
+msgstr "Начално зареждане"
 
 #. Start the device thread(s)
 #: src/Startup.cpp:375
@@ -4027,7 +4027,7 @@ msgstr "Включване на устройства"
 #.
 #: src/Startup.cpp:385
 msgid "Initialising display"
-msgstr "Инициализация на екрана"
+msgstr "Инициализиране на екрана"
 
 #. Show progress dialog
 #: src/Startup.cpp:481 src/Startup.cpp:523 src/Startup.cpp:588
@@ -4042,7 +4042,7 @@ msgstr "Изключване, запазване на журнални файл�
 #. Save settings to profile
 #: src/Startup.cpp:520
 msgid "Shutdown, saving profile..."
-msgstr "Изключване, запазване на настройки..."
+msgstr "Изключване, запазване на профил..."
 
 #. Save the task for the next time
 #: src/Startup.cpp:574
@@ -4139,7 +4139,7 @@ msgstr "Отмяна"
 
 #: src/Dialogs/Message.cpp:120
 msgid "Ignore"
-msgstr "Пренебрегвам"
+msgstr "Пренебрегване"
 
 #: src/Dialogs/ListPicker.cpp:173 src/Dialogs/HelpDialog.cpp:38
 msgid "Help"
@@ -4478,7 +4478,7 @@ msgstr "Комуникацията с този уред ще се записва
 #: src/Dialogs/Device/DeviceListDialog.cpp:692 Data/Input/default.xci:555
 #: Data/Input/default.xci:1151
 msgid "Devices"
-msgstr "Уреди"
+msgstr "Устройства"
 
 #: src/Dialogs/Device/PortMonitor.cpp:143
 #: src/Dialogs/Device/PortMonitor.cpp:169
@@ -4919,7 +4919,7 @@ msgstr "Избор на цвят"
 #: src/Dialogs/Airspace/dlgAirspace.cpp:113 Data/Input/default.xci:436
 #: Data/Input/default.xci:484 Data/Input/default.xci:885
 msgid "Display"
-msgstr "Изобразяване"
+msgstr "Екран"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:116
 #: src/Dialogs/Airspace/dlgAirspace.cpp:117
@@ -5194,7 +5194,7 @@ msgstr "Настройки на полета"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:159
 #, no-c-format
 msgid "Site Files"
-msgstr "Файл на местността"
+msgstr "Файлове с данни"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:98
 #, no-c-format
@@ -5215,7 +5215,7 @@ msgstr "Фактор за безопасност"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:161
 #, no-c-format
 msgid "Glide Computer"
-msgstr "Полетен компютър"
+msgstr "Навигация"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:110
 #, no-c-format
@@ -5230,7 +5230,7 @@ msgstr "Точкуване"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:116
 #, no-c-format
 msgid "FLARM, Other"
-msgstr "FLARM, друг"
+msgstr "FLARM и други"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:119
 #, no-c-format
@@ -5292,12 +5292,12 @@ msgstr "Карта"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:162
 #, no-c-format
 msgid "Gauges"
-msgstr "Датчици"
+msgstr "Бордни уреди"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:163
 #, no-c-format
 msgid "Task Defaults"
-msgstr "Задача по предварителни настройки"
+msgstr "Настройки на задачи"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:164
 #, no-c-format
@@ -5307,12 +5307,12 @@ msgstr "Изглед"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:223
 #: src/Dialogs/Settings/dlgConfiguration.cpp:236
 msgid "Expert"
-msgstr "Експерт"
+msgstr "Разширени"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:326
 #: src/Dialogs/Settings/dlgConfiguration.cpp:335
 msgid "Configuration"
-msgstr "Конфигурация"
+msgstr "Настройки"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:373
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
@@ -5391,7 +5391,7 @@ msgstr "Радиочестота"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:142 Data/Input/default.xci:547
 msgid "Plane"
-msgstr "Самолет"
+msgstr "Планер"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:230
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:340
@@ -6325,7 +6325,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:218
 msgid "Use black outline"
-msgstr "Използване на черен контур"
+msgstr "Черен контур"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:219
 msgid ""
@@ -8735,7 +8735,7 @@ msgid ""
 "\" in \"Glide Computer > Route\" settings."
 msgstr ""
 "Височина на пристигане при съобразяване с релефа. Изисква задаване на „Режим "
-"на долитане: заобикаляне“ в менюто „Изчисляване на прелитане->Маршрут“."
+"на долитане: заобикаляне“ в менюто „Навигация->Маршрут“."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:117
 #, no-c-format
@@ -8749,7 +8749,7 @@ msgid ""
 "\"Glide Computer > Route\" settings."
 msgstr ""
 "Показват се двете височини на пристигане. Изисква задаване на „Режим на "
-"долитане: заобикаляне“ в менюто „Изчисление на прелитане->Маршрут“."
+"долитане: заобикаляне“ в менюто „Навигация->Маршрут“."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:123
 #, no-c-format
@@ -8763,8 +8763,7 @@ msgid ""
 "Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings."
 msgstr ""
 "Показват се двете: нужно качество и височина за избягване на терена. Изисква "
-"задаване на „Режим на долитане: заобикаляне“ в менюто „Изчисляване на "
-"прелитане->Маршрут“."
+"задаване на „Режим на долитане: заобикаляне“ в менюто „Навигация->Маршрут“."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:129
 msgid "Determines how arrival height is displayed in waypoint labels"
