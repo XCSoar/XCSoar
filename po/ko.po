@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2020-02-24 14:32+0000\n"
+"PO-Revision-Date: 2021-04-11 16:26+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -413,7 +413,7 @@ msgstr "MAT 턴포인트가 아님"
 #: src/Task/ValidationErrorStrings.cpp:43
 #, no-c-format
 msgid "Wrong shape"
-msgstr ""
+msgstr "잘못된 모양"
 
 #: src/Airspace/AirspaceGlue.cpp:84
 msgid "Loading Airspace File..."
@@ -2331,7 +2331,7 @@ msgid ""
 "available, FL is calculated from GPS altitude, given that the correct QNH is "
 "set. In case the FL is calculated from the GPS altitude, the FL label is "
 "coloured red."
-msgstr ""
+msgstr "Flight Level. QNH를 설정할 경우 올바른 FL이 계산된다. GPS고도로 계산된 FL은 빨간색으로 표시된다."
 
 #: src/InfoBoxes/Content/Factory.cpp:782 src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
@@ -2958,17 +2958,17 @@ msgid ""
 msgstr "접속한 GPS위성수. 없으면 '---'로 표시된다."
 
 #: src/InfoBoxes/Content/Factory.cpp:1073
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Active Radio Frequency"
 msgstr "활동주파수 설정"
 
 #: src/InfoBoxes/Content/Factory.cpp:1074
 #, no-c-format
 msgid "Act Freq"
-msgstr ""
+msgstr "활동주파수"
 
 #: src/InfoBoxes/Content/Factory.cpp:1075
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently active Radio Frequency"
 msgstr "활동주파수 설정"
 
@@ -2978,9 +2978,9 @@ msgid "Standby Radio Frequency"
 msgstr "대기주파수 설정"
 
 #: src/InfoBoxes/Content/Factory.cpp:1081
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Stby Freq"
-msgstr "대기주파수 설정"
+msgstr "대기주파수"
 
 #: src/InfoBoxes/Content/Factory.cpp:1082
 #, fuzzy, no-c-format
@@ -3921,7 +3921,7 @@ msgstr "내장GPS&센서"
 
 #: src/Device/Config.cpp:248
 msgid "GliderLink traffic receiver"
-msgstr ""
+msgstr "GliderLink 트래픽 수신기"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:93 src/Dialogs/WidgetDialog.cpp:264
@@ -4120,7 +4120,7 @@ msgstr "IP 주소"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I²C bus"
-msgstr ""
+msgstr "I²C bus"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "Select the description or bus number that matches your configuration."
@@ -4128,7 +4128,7 @@ msgstr "설정에 적합한 포트를 선택하시오."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:623
 msgid "I²C addr"
-msgstr ""
+msgstr "I²C addr"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:623
 #, fuzzy
@@ -6179,7 +6179,7 @@ msgstr "좌측 하단"
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:60
 #, no-c-format
 msgid "Show thermal assistant in bottom left."
-msgstr ""
+msgstr "왼쪽 아래에 써멀레이더 표시."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:62
 #, fuzzy, no-c-format
@@ -6191,7 +6191,7 @@ msgstr "자동"
 msgid ""
 "Show thermal assistant in bottom left, above/to right of infoboxes (if "
 "there)."
-msgstr ""
+msgstr "써멀 레이더를 왼쪽 하단에 표시, 정보창이 있는 경우 오른쪽에 열 지원을 표시한다."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
 #, fuzzy, no-c-format
@@ -6201,7 +6201,7 @@ msgstr "우측 하단"
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:66
 #, no-c-format
 msgid "Show thermal assistant in bottom right."
-msgstr ""
+msgstr "오른쪽 아래에 써멀레이더 표시."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
 #, fuzzy, no-c-format
@@ -6212,7 +6212,7 @@ msgstr "자동"
 #, no-c-format
 msgid ""
 "Show thermal assistant in bottom right above/to left of infoboxes (if there)."
-msgstr ""
+msgstr "써멀 레이더를 오른쪽 하단에 표시, 정보창이 있는 경우 왼쪽에 열 지원을 표시한다."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:107
 msgid ""
@@ -6238,10 +6238,11 @@ msgstr ""
 "택하면 항상 표시된다."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:116
+#, fuzzy
 msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
 "the main screen."
-msgstr ""
+msgstr "메인 화면에 써멀 레이더가 겹쳐진 경우, 써멀레이더의 화면겹침을 허용한다."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:121
 msgid "Thermal band"
@@ -6354,20 +6355,18 @@ msgstr ""
 "중의 평균 상승률을 표시, 써클링 중일경우 써멀의 평균 상승률이 표시된다."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:92
-#, fuzzy
 msgid "Thermal Averager needle"
-msgstr "평균 표시 화살표"
+msgstr "평균 표시 막대"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:93
-#, fuzzy
 msgid ""
 "If true, the vario gauge will display a thermal averager needle instead of "
 "current climb rate needle.  During cruise, this needle displays the last "
 "thermal average netto value.  During circling, this needle displays the "
 "average net value."
 msgstr ""
-"바리오 평균 표시 화살표: 아날로그바리오에 < 마크로 표시 - 순항중일 경우 활공"
-"중의 평균 상승률을 표시, 써클링 중일경우 써멀의 평균 상승률이 표시된다."
+"바리오 평균 표시 막대: 아날로그바리오에 < 마크로 표시 - 순항중일 경우 활공중의 평균 상승률을 표시, 써클링 중일경우 써멀의 평균 "
+"상승률이 표시된다."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:65
 #, no-c-format
@@ -6488,23 +6487,22 @@ msgstr "웨이브 보조"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:123
 msgid "Cruise/Circling period"
-msgstr ""
+msgstr "순항/써클링 대기시간"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:124
 msgid ""
 "How many seconds of turning before changing from cruise to circling mode."
-msgstr ""
+msgstr "순항 모드에서 써클링 모드로 변경하기 전에 몇 초간 대기."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:131
-#, fuzzy
 msgid "Circling/Cruise period"
-msgstr "써클링지도방향"
+msgstr "써클링/순항 대기시간"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:132
 msgid ""
 "How many seconds of flying straight before changing from circling to cruise "
 "mode."
-msgstr ""
+msgstr "써클링 모드에서 순항 모드로 변경하기 전에 몇 초간 대기."
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:88
 msgid "Use final glide mode"
@@ -6637,7 +6635,7 @@ msgstr "정보창 8개 (위아래 4개 혹은 좌우 4개)"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:83
 #, no-c-format
 msgid "12 Split in 3 rows"
-msgstr ""
+msgstr "정보창 12개 (좌우 나눠 3줄)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:85
 #, no-c-format
@@ -6897,15 +6895,15 @@ msgstr "자동 줌 켜기"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:230
 msgid "Cursor zoom factor"
-msgstr ""
+msgstr "커서 확대/축소 비율"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:232
 msgid "Invert cursor color"
-msgstr ""
+msgstr "커서 색상 반전"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:232
 msgid "Enable black cursor"
-msgstr ""
+msgstr "검정 커서 허용"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:57
 #, no-c-format
@@ -7530,9 +7528,8 @@ msgstr ""
 "수 있다."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:109
-#, fuzzy
 msgid "FLARM Device Database"
-msgstr "FLARM 트래픽(상세)"
+msgstr "FLARM 장비 데이터베이스"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:110
 #, fuzzy
@@ -7700,22 +7697,22 @@ msgstr "풍향을 표시하지 않는다."
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 #, no-c-format
 msgid "Symbol"
-msgstr ""
+msgstr "심볼"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 #, no-c-format
 msgid "Draws the SkyLines symbol only."
-msgstr ""
+msgstr "스카이라인 기호만 그린다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
 msgid "Symbol and Name"
-msgstr ""
+msgstr "심볼과 이름"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
 msgid "Draws the SkyLines symbol with name."
-msgstr ""
+msgstr "스카이라인 기호와 이름을 표시한다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:152
 msgid "Ground track"
@@ -7785,13 +7782,13 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:196
 msgid "SkyLines traffic mode"
-msgstr ""
+msgstr "스카이라인 트래픽 모드"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:197
 msgid ""
 "Show the SkyLines traffic symbols/names on the map, downloaded from the "
 "SkyLines server."
-msgstr ""
+msgstr "스카이라인 서버에서 다운로드 한 교통기호/이름을 표시한다."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:63
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:231
@@ -7912,7 +7909,7 @@ msgstr "게이트 폭"
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:208
 #, no-c-format
 msgid "Radius"
-msgstr "타스크 반경"
+msgstr "반경"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:145
 msgid "Default start type for new tasks you create."
@@ -10071,6 +10068,8 @@ msgid ""
 "Lock\n"
 "Screen"
 msgstr ""
+"화면\n"
+"잠금"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:775
 msgid ""
