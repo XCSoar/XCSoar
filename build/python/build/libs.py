@@ -3,7 +3,7 @@ from os.path import abspath
 from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
 from build.cmake import CmakeProject
-from build.openssl import OpenSSLProject
+from build.import OpenSSLProject
 from build.freetype import FreeTypeProject
 from build.curl import CurlProject
 from build.libpng import LibPNGProject
@@ -37,9 +37,8 @@ libstdcxx_musl_headers = LibstdcxxMuslHeadersProject(
 )
 
 openssl = OpenSSLProject(
-    'https://www.openssl.org/source/openssl-3.0.0-alpha13.tar.gz',
-    'ftp://ftp.cert.dfn.de/pub/tools/net/openssl/source/openssl-3.0.0-alpha13.tar.gz',
     'https://github.com/openssl/openssl/archive/refs/tags/openssl-3.0.0-alpha13.tar.gz',
+    'ftp://ftp.cert.dfn.de/pub/tools/net/openssl/source/openssl-3.0.0-alpha13.tar.gz',
     'c88cbb9d330b4daa3dbb5af1ed511d5062253291a56e09fd17e9ac013a20f8a3',
     'include/openssl/ossl_typ.h',
 )
