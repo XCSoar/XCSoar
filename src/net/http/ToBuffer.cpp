@@ -89,6 +89,7 @@ public:
     memcpy(buffer + received, data.data, data.size);
     received += data.size;
 
+    buffer[received] = 0;  // end of (string) buffer!
     env.SetProgressRange(received);
   }
 

@@ -98,7 +98,7 @@ LogFormat(const char *fmt, ...) noexcept
   va_list ap;
 
   va_start(ap, fmt);
-  vsprintf(buf, fmt, ap);
+  vsnprintf(buf, sizeof(buf) - 1, fmt, ap);
   va_end(ap);
 
   LogString(buf);
