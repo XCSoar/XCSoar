@@ -35,10 +35,12 @@ TrafficLook::Initialise(const Font &_font)
 {
   safe_color = Color(0x1d,0x9b,0xc5);
   warning_color = Color(0xfe,0x84,0x38);
+  warning_in_altitude_range_color = Color(0xff,0x00,0xff);
   alarm_color = Color(0xfb,0x35,0x2f);
 
   safe_brush.Create(safe_color);
   warning_brush.Create(warning_color);
+  warning_in_altitude_range_brush.Create(warning_in_altitude_range_color);
   alarm_brush.Create(alarm_color);
 
   unsigned width = Layout::ScalePenWidth(2);

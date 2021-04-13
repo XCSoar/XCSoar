@@ -34,10 +34,12 @@ class Font;
 struct TrafficLook {
   Color safe_color;
   Color warning_color;
+  Color warning_in_altitude_range_color;
   Color alarm_color;
 
   Brush safe_brush;
   Brush warning_brush;
+  Brush warning_in_altitude_range_brush;
   Brush alarm_brush;
 
   static constexpr Color team_color_green = Color(0x74, 0xff, 0);
