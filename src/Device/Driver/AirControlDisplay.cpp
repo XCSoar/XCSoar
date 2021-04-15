@@ -162,6 +162,8 @@ public:
   bool PutStandbyFrequency(RadioFrequency frequency,
                            const TCHAR *name,
                            OperationEnvironment &env) override;
+  bool ExchangeRadioFrequencies(OperationEnvironment &env,
+                                NMEAInfo &info) override;
   bool PutTransponderCode(TransponderCode code, OperationEnvironment &env) override;
   void OnCalculatedUpdate(const MoreData &basic,
                           [[maybe_unused]] const DerivedInfo &calculated) override;
@@ -204,6 +206,15 @@ ACDDevice::PutTransponderCode(TransponderCode code, OperationEnvironment &env)
   char buffer[100];
   sprintf(buffer, "PAAVC,S,XPDR,SQUAWK,%04o", code.GetCode());
   PortWriteNMEA(port, buffer, env);
+  return true;
+}
+
+bool
+ACDDevice::ExchangeRadioFrequencies(OperationEnvironment &env,
+                                    [[maybe_unused]] NMEAInfo &info)
+{
+  const char *sentence = "PAAVX,COM,XCHN";
+  PortWriteNMEA(port, sentence, env);
   return true;
 }
 
