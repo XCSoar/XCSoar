@@ -130,6 +130,14 @@ public:
                                    OperationEnvironment &env) = 0;
 
   /**
+   * Swap active and standby radio frequency.
+   *
+   * @return true on success
+   */
+  virtual bool ExchangeRadioFrequencies(OperationEnvironment &env,
+                                        struct NMEAInfo &info) = 0;
+
+  /**
    * Set a new transponder transponder code.
    *
    * @param TransponderCode code
@@ -254,6 +262,8 @@ public:
   bool PutStandbyFrequency(RadioFrequency frequency,
                            const TCHAR *name,
                            OperationEnvironment &env) override;
+  bool ExchangeRadioFrequencies(OperationEnvironment &env,
+                                NMEAInfo &info) override;
 
   bool PutTransponderCode(TransponderCode code, OperationEnvironment &env) override;
 

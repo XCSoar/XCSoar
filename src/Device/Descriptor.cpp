@@ -956,6 +956,30 @@ DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
 }
 
 bool
+DeviceDescriptor::ExchangeRadioFrequencies(OperationEnvironment &env,
+                                           NMEAInfo &info) noexcept
+{
+  assert(InMainThread());
+
+  if (device == nullptr || !config.sync_to_device)
+    return true;
+
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  try {
+    ScopeReturnDevice restore(*this, env);
+    return device->ExchangeRadioFrequencies(env, info);
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    LogError(std::current_exception(), "ExchangeRadioFrequencies() failed");
+    return false;
+  }
+}
+
+bool
 DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
                                       const TCHAR *name,
                                       OperationEnvironment &env) noexcept
