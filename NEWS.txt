@@ -1,4 +1,6 @@
 Version 7.5 - not yet released
+* user interface
+  - use different colors to indicate relative traffic altitude
 * calculations
   - support for WeGlide distance contests
 * Kobo
