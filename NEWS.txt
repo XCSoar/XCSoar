@@ -47,6 +47,8 @@ Version 7.5 - 2021/04/30
   - use different colors to indicate relative traffic altitude
 * calculations
   - support for WeGlide distance contests
+* devices
+  - AirControlDisplay: allow frequency swap via xci-event if radio is connected
 * Kobo
   - fix touch screen
 

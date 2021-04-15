@@ -112,6 +112,7 @@ public:
   bool PutStandbyFrequency(RadioFrequency frequency,
                            const TCHAR *name,
                            OperationEnvironment &env) override;
+  bool ExchangeRadioFrequencies(OperationEnvironment &env) override;
 };
 
 bool
@@ -140,6 +141,14 @@ ACDDevice::PutStandbyFrequency(RadioFrequency frequency,
   unsigned freq = frequency.GetKiloHertz();
   sprintf(buffer, "PAAVC,S,COM,CHN2,%u", freq);
   return PortWriteNMEA(port, buffer, env);
+}
+
+bool
+ACDDevice::ExchangeRadioFrequencies(OperationEnvironment &env)
+{
+  const char *sentence = "PAAVX,COM,XCHN";
+
+  return PortWriteNMEA(port, sentence, env);
 }
 
 bool
