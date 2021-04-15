@@ -27,10 +27,7 @@ Copyright_License {
 void
 GestureLook::Initialise()
 {
-  color = COLOR_RED;
   pen.Create(Layout::ScalePenWidth(5), color);
-
-  invalid_color = LightColor(color);
   invalid_pen.Create(Layout::ScalePenWidth(5), invalid_color);
 }
 
