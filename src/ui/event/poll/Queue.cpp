@@ -28,7 +28,6 @@ Copyright_License {
 namespace UI {
 
 EventQueue::EventQueue()
-  :quit(false)
 {
   SignalMonitorInit(event_loop);
   SignalMonitorRegister(SIGINT, BIND_THIS_METHOD(Quit));

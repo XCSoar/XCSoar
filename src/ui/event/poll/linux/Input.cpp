@@ -192,6 +192,8 @@ LinuxInputDevice::Read()
           merge.MoveWheel(rel_wheel);
           rel_wheel = 0;
         }
+
+        queue.WakeUp();
       }
 
       break;
