@@ -149,6 +149,13 @@ public:
                                    OperationEnvironment &env) = 0;
 
   /**
+   * Swap active and standby radio frequency.
+   *
+   * @return true on success
+   */
+  virtual bool ExchangeRadioFrequencies(OperationEnvironment &env) = 0;
+
+  /**
    * Enable pass-through mode.  This may be used to communicate
    * directly with the device that is "behind" this one (e.g. a LX1600
    * connected to a FLARM).
@@ -258,6 +265,7 @@ public:
   bool PutStandbyFrequency(RadioFrequency frequency,
                            const TCHAR *name,
                            OperationEnvironment &env) override;
+  bool ExchangeRadioFrequencies(OperationEnvironment &env) override;
 
   bool EnablePassThrough(OperationEnvironment &env) override;
 

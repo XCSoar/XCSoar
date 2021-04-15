@@ -114,6 +114,14 @@ MultipleDevices::PutStandbyFrequency(RadioFrequency frequency,
 }
 
 void
+MultipleDevices::ExchangeRadioFrequencies(OperationEnvironment &env)
+{
+  for (DeviceDescriptor *i : devices)
+    i->ExchangeRadioFrequencies(env);
+}
+
+
+void
 MultipleDevices::PutQNH(const AtmosphericPressure &pres,
                         OperationEnvironment &env)
 {

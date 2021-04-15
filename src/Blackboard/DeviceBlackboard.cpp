@@ -303,3 +303,10 @@ DeviceBlackboard::SetStandbyFrequency(RadioFrequency frequency,
   if (devices != nullptr)
     devices->PutStandbyFrequency(frequency, name, env);
 }
+
+void
+DeviceBlackboard::ExchangeRadioFrequencies(OperationEnvironment &env)
+{
+  if (devices != nullptr)
+    devices->ExchangeRadioFrequencies(env);
+}

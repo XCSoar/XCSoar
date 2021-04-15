@@ -100,6 +100,12 @@ AbstractDevice::PutStandbyFrequency(RadioFrequency frequency,
 }
 
 bool
+AbstractDevice::ExchangeRadioFrequencies(OperationEnvironment &env)
+{
+  return true;
+}
+
+bool
 AbstractDevice::EnablePassThrough(OperationEnvironment &env)
 {
   return true;

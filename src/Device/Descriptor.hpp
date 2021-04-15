@@ -502,6 +502,7 @@ public:
   bool PutStandbyFrequency(RadioFrequency frequency,
                            const TCHAR *name,
                            OperationEnvironment &env);
+  bool ExchangeRadioFrequencies(OperationEnvironment &env);
   bool PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env);
 
   /**

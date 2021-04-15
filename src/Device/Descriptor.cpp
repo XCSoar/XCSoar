@@ -975,6 +975,22 @@ DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
 }
 
 bool
+DeviceDescriptor::ExchangeRadioFrequencies(OperationEnvironment &env)
+{
+  assert(InMainThread());
+
+  if (device == nullptr || !config.sync_to_device)
+    return true;
+
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  ScopeReturnDevice restore(*this, env);
+  return device->ExchangeRadioFrequencies(env);
+}
+
+bool
 DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
                          OperationEnvironment &env)
 {
