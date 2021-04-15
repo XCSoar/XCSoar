@@ -62,7 +62,7 @@ class EventQueue final {
 
   InjectEvent wake_event{event_loop, BIND_THIS_METHOD(OnWakeUp)};
 
-  bool quit;
+  bool quit = false;
 
 public:
   EventQueue();
