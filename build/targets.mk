@@ -575,6 +575,13 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
   TARGET_LDFLAGS += --static
+
+  # Dirty workaround for a musl/libstdc++ problem: libstdc++ imports
+  # these symbols "weakly", and apparently the linker then doesn't
+  # pick up libc.a(pthread_cond_*.o); these linker options force the
+  # linker to use them.  This needs a proper solution!
+  TARGET_LDFLAGS += -Wl,-u,pthread_cond_signal -Wl,-u,pthread_cond_broadcast -Wl,-u,pthread_cond_wait
+
   ifeq ($(USE_CROSSTOOL_NG),y)
     ifeq ($(CLANG),y)
      TARGET_LDFLAGS += -B$(KOBO_TOOLCHAIN)
