@@ -170,6 +170,11 @@ public:
   void Purge(Event::Callback callback, void *ctx);
 
 private:
+  void OnQuitSignal() noexcept {
+    Quit();
+    WakeUp();
+  }
+
   void OnWakeUp() noexcept {
     event_loop.Break();
   }
