@@ -29,7 +29,4 @@ void
 TerminalLook::Initialise()
 {
   font.Load(FontDescription(Layout::FontScale(11), false, false, true));
-
-  background_color = COLOR_BLACK;
-  text_color = COLOR_WHITE;
 }
