@@ -33,12 +33,6 @@ constexpr Color TrafficLook::team_color_yellow;
 void
 TrafficLook::Initialise(const Font &_font)
 {
-  safe_above_color = Color(0x1d,0x9b,0xc5);
-  safe_below_color = Color(0x1d,0xc5,0x10);
-  warning_color = Color(0xfe,0x84,0x38);
-  warning_in_altitude_range_color = Color(0xff,0x00,0xff);
-  alarm_color = Color(0xfb,0x35,0x2f);
-
   safe_above_brush.Create(safe_above_color);
   safe_below_brush.Create(safe_below_color);
   warning_brush.Create(warning_color);
