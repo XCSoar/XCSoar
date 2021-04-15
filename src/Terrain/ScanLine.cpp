@@ -26,9 +26,25 @@ Copyright_License {
 
 #include <stdlib.h>
 
+/**
+ * A #RasterLocation with some cached computations.  The
+ * #RasterLocation base holds the linear subpixel coordinates within
+ * the #RasterMap.
+ */
 struct GridLocation : public RasterLocation {
+  /**
+   * The #RasterTile within the #RasterMap.
+   */
   unsigned short tile_x, tile_y;
+
+  /**
+   * The position within the #RasterTile.
+   */
   unsigned remainder_x, remainder_y;
+
+  /**
+   * The index in the destination buffer which is about to be filled.
+   */
   unsigned index;
 
   constexpr GridLocation(const RasterLocation &other,
@@ -42,12 +58,25 @@ struct GridLocation : public RasterLocation {
 };
 
 struct GridRay {
+  /**
+   * The dimensions of one tile (in subpixels).
+   */
   unsigned tile_width, tile_height;
 
+  /**
+   * Start and end of the ray.
+   */
   GridLocation start, end;
 
+  /**
+   * The difference vector between "start" and "end" (in subpixels).
+   */
   int delta_x, delta_y;
 
+  /**
+   * The size (number of #TerrainHeight elements) of the destination
+   * buffer which is about to be filled.
+   */
   unsigned size;
 
   constexpr GridRay(unsigned _tile_width, unsigned _tile_height,
