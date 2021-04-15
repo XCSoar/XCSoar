@@ -22,15 +22,16 @@ Copyright_License {
 */
 
 #include "Terrain/RasterTile.hpp"
-
 #include "jasper/jas_seq.h"
+#include "io/BufferedOutputStream.hxx"
+#include "io/BufferedReader.hxx"
 
 #include <algorithm>
 
 #include <stdlib.h>
 
-bool
-RasterTile::SaveCache(FILE *file) const noexcept
+void
+RasterTile::SaveCache(BufferedOutputStream &os) const
 {
   MetaData data;
   data.xstart = xstart;
@@ -38,18 +39,15 @@ RasterTile::SaveCache(FILE *file) const noexcept
   data.xend = xend;
   data.yend = yend;
 
-  return fwrite(&data, sizeof(data), 1, file) == 1;
+  os.Write(&data, sizeof(data));
 }
 
-bool
-RasterTile::LoadCache(FILE *file) noexcept
+void
+RasterTile::LoadCache(BufferedReader &r)
 {
   MetaData data;
-  if (fread(&data, sizeof(data), 1, file) != 1)
-    return false;
-
+  r.ReadFull({&data, sizeof(data)});
   Set(data.xstart, data.ystart, data.xend, data.yend);
-  return true;
 }
 
 void

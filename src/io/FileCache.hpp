@@ -26,8 +26,13 @@ Copyright_License {
 
 #include "system/Path.hpp"
 
+#include <memory>
+
 #include <stdio.h>
 #include <tchar.h>
+
+class Reader;
+class FileOutputStream;
 
 class FileCache {
   AllocatedPath cache_path;
@@ -43,11 +48,16 @@ protected:
 
 public:
   void Flush(const TCHAR *name);
-  FILE *Load(const TCHAR *name, Path original_path);
 
-  FILE *Save(const TCHAR *name, Path original_path);
-  bool Commit(const TCHAR *name, FILE *file);
-  void Cancel(const TCHAR *name, FILE *file);
+  /**
+   * Returns nullptr on error.
+   */
+  std::unique_ptr<Reader> Load(const TCHAR *name, Path original_path) noexcept;
+
+  /**
+   * Throws on error.
+   */
+  std::unique_ptr<FileOutputStream> Save(const TCHAR *name, Path original_path);
 };
 
 #endif

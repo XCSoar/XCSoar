@@ -36,14 +36,11 @@ RasterMap::UpdateProjection()
                  raster_tile_cache.GetFineHeight());
 }
 
-bool
-RasterMap::LoadCache(FILE *file)
+void
+RasterMap::LoadCache(BufferedReader &r)
 {
-  bool success = raster_tile_cache.LoadCache(file);
-  if (success)
-    UpdateProjection();
-
-  return success;
+  raster_tile_cache.LoadCache(r);
+  UpdateProjection();
 }
 
 TerrainHeight

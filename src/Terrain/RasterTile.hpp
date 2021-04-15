@@ -27,9 +27,9 @@ Copyright_License {
 #include "RasterTraits.hpp"
 #include "RasterBuffer.hpp"
 
-#include <stdio.h>
-
 struct jas_matrix;
+class BufferedOutputStream;
+class BufferedReader;
 
 class RasterTile {
   struct MetaData {
@@ -94,8 +94,8 @@ public:
     request = false;
   }
 
-  bool SaveCache(FILE *file) const noexcept;
-  bool LoadCache(FILE *file) noexcept;
+  void SaveCache(BufferedOutputStream &os) const;
+  void LoadCache(BufferedReader &r);
 
   gcc_pure
   unsigned CalcDistanceTo(int x, int y) const noexcept;

@@ -47,11 +47,17 @@ public:
 
   void UpdateProjection();
 
-  bool SaveCache(FILE *file) const {
-    return raster_tile_cache.SaveCache(file);
+  /**
+   * Throws on error.
+   */
+  void SaveCache(BufferedOutputStream &os) const {
+    raster_tile_cache.SaveCache(os);
   }
 
-  bool LoadCache(FILE *file);
+  /**
+   * Throws on error.
+   */
+  void LoadCache(BufferedReader &r);
 
   bool IsDefined() const {
     return raster_tile_cache.IsValid();

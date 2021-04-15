@@ -24,10 +24,14 @@ Copyright_License {
 #include "RasterTileCache.hpp"
 #include "Math/Angle.hpp"
 #include "Math/FastMath.hpp"
+#include "io/BufferedOutputStream.hxx"
+#include "io/BufferedReader.hxx"
 
 extern "C" {
 #include "jasper/jas_seq.h"
 }
+
+#include <stdexcept>
 
 #include <string.h>
 #include <algorithm>
@@ -272,11 +276,11 @@ RasterTileCache::FinishTileUpdate() noexcept
   ++serial;
 }
 
-bool
-RasterTileCache::SaveCache(FILE *file) const noexcept
+void
+RasterTileCache::SaveCache(BufferedOutputStream &os) const
 {
   if (!IsValid())
-    return false;
+    throw std::runtime_error("Terrain invalid");
 
   assert(bounds.IsValid());
 
@@ -296,42 +300,35 @@ RasterTileCache::SaveCache(FILE *file) const noexcept
   header.num_marker_segments = segments.size();
   header.bounds = bounds;
 
-  if (fwrite(&header, sizeof(header), 1, file) != 1 ||
-      /* .. and segments */
-      fwrite(segments.begin(), sizeof(*segments.begin()), segments.size(), file) != segments.size())
-    return false;
+  os.Write(&header, sizeof(header));
+  os.Write(segments.begin(), sizeof(*segments.begin()) * segments.size());
 
   /* save tiles */
   unsigned i;
   for (i = 0; i < tiles.GetSize(); ++i)
-    if (tiles.GetLinear(i).IsDefined() &&
-        (fwrite(&i, sizeof(i), 1, file) != 1 ||
-         !tiles.GetLinear(i).SaveCache(file)))
-      return false;
+    if (tiles.GetLinear(i).IsDefined()) {
+      os.Write(&i, sizeof(i));
+      tiles.GetLinear(i).SaveCache(os);
+    }
 
   i = -1;
-  if (fwrite(&i, sizeof(i), 1, file) != 1)
-    return false;
+  os.Write(&i, sizeof(i));
 
   /* save overview */
   size_t overview_size = overview.GetWidth() * overview.GetHeight();
-  if (fwrite(overview.GetData(), sizeof(*overview.GetData()),
-             overview_size, file) != overview_size)
-    return false;
-
-  /* done */
-  return true;
+  os.Write(overview.GetData(), sizeof(*overview.GetData()) * overview_size);
 }
 
-bool
-RasterTileCache::LoadCache(FILE *file) noexcept
+void
+RasterTileCache::LoadCache(BufferedReader &r)
 {
   Reset();
 
   /* load metadata */
   CacheHeader header;
-  if (fread(&header, sizeof(header), 1, file) != 1 ||
-      header.version != CacheHeader::VERSION ||
+  r.ReadFull({&header, sizeof(header)});
+
+  if (header.version != CacheHeader::VERSION ||
       header.width < 1024 || header.width > 1024 * 1024 ||
       header.height < 1024 || header.height > 1024 * 1024 ||
       header.tile_width < 16 || header.tile_width > 16 * 1024 ||
@@ -341,43 +338,39 @@ RasterTileCache::LoadCache(FILE *file) noexcept
       header.num_marker_segments < 4 ||
       header.num_marker_segments > segments.capacity() ||
       header.bounds.IsEmpty())
-    return false;
+    throw std::runtime_error("Malformed terrain cache header");
 
   SetSize(header.width, header.height,
           header.tile_width, header.tile_height,
           header.tile_columns, header.tile_rows);
   bounds = header.bounds;
   if (!bounds.IsValid())
-    return false;
+    throw std::runtime_error("Malformed terrain cache bounds");
 
   /* load segments */
   for (unsigned i = 0; i < header.num_marker_segments; ++i) {
     MarkerSegmentInfo &segment = segments.append();
-    if (fread(&segment, sizeof(segment), 1, file) != 1)
-      return false;
+    r.ReadFull({&segment, sizeof(segment)});
   }
 
   /* load tiles */
   unsigned i;
   while (true) {
-    if (fread(&i, sizeof(i), 1, file) != 1)
-      return false;
+    r.ReadFull({&i, sizeof(i)});
 
     if (i == (unsigned)-1)
       break;
 
     if (i >= tiles.GetSize())
-      return false;
+      throw std::runtime_error("Bad tile index");
 
-    if (!tiles.GetLinear(i).LoadCache(file))
-      return false;
+    tiles.GetLinear(i).LoadCache(r);
   }
 
   /* load overview */
   size_t overview_size = overview.GetWidth() * overview.GetHeight();
-  if (fread(overview.GetData(), sizeof(*overview.GetData()),
-            overview_size, file) != overview_size)
-    return false;
-
-  return true;
+  r.ReadFull({
+      overview.GetData(),
+      sizeof(*overview.GetData()) * overview_size,
+    });
 }

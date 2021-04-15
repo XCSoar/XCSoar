@@ -32,13 +32,14 @@ Copyright_License {
 #include "util/Serial.hpp"
 
 #include <cassert>
-#include <stdio.h>
 #include <cstdint>
 
 #define RASTER_SLOPE_FACT 12
 
 struct jas_matrix;
 struct GridLocation;
+class BufferedOutputStream;
+class BufferedReader;
 
 class RasterTileCache {
   static constexpr unsigned MAX_RTC_TILES = 4096;
@@ -222,8 +223,15 @@ private:
                                                 unsigned py) const noexcept;
 
 public:
-  bool SaveCache(FILE *file) const noexcept;
-  bool LoadCache(FILE *file) noexcept;
+  /**
+   * Throws on error.
+   */
+  void SaveCache(BufferedOutputStream &os) const;
+
+  /**
+   * Throws on error.
+   */
+  void LoadCache(BufferedReader &r);
 
   /**
    * Determines if there are still tiles scheduled to be loaded.  Call
