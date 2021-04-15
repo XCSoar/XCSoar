@@ -4,6 +4,8 @@
 #include "MultipleDevices.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Descriptor.hpp"
+#include "NMEA/Info.hpp"
+#include "Device/DataEditor.hpp"
 #include "Dispatcher.hpp"
 
 #include <algorithm> // for std::any_of()
@@ -11,6 +13,7 @@
 MultipleDevices::MultipleDevices(DeviceBlackboard &blackboard,
                                  NMEALogger *nmea_logger,
                                  DeviceFactory &factory) noexcept
+  : blackboard(blackboard)
 {
   for (unsigned i = 0; i < NUMDEV; ++i) {
     DeviceDispatcher *dispatcher = dispatchers[i] =
@@ -128,6 +131,17 @@ MultipleDevices::PutStandbyFrequency(RadioFrequency frequency,
 {
   for (DeviceDescriptor *i : devices)
     i->PutStandbyFrequency(frequency, name, env);
+}
+
+void
+MultipleDevices::ExchangeRadioFrequencies(OperationEnvironment &env) noexcept
+{
+  for (DeviceDescriptor *i : devices) {
+    NMEAInfo basic = i->GetData();
+    if (i->ExchangeRadioFrequencies(env, basic)) {
+      blackboard.LockSetDeviceDataScheduleMerge(i->GetIndex(), basic);
+    }
+  }
 }
 
 void
