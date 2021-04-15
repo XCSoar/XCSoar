@@ -32,12 +32,14 @@
 class Font;
 
 struct TrafficLook {
-  Color safe_color;
+  Color safe_above_color;
+  Color safe_below_color;
   Color warning_color;
   Color warning_in_altitude_range_color;
   Color alarm_color;
 
-  Brush safe_brush;
+  Brush safe_above_brush;
+  Brush safe_below_brush;
   Brush warning_brush;
   Brush warning_in_altitude_range_brush;
   Brush alarm_brush;
