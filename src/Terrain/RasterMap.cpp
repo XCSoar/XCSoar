@@ -45,14 +45,14 @@ TerrainHeight
 RasterMap::GetHeight(const GeoPoint &location) const
 {
   const auto pt = projection.ProjectCoarse(location);
-  return raster_tile_cache.GetHeight(pt.x, pt.y);
+  return raster_tile_cache.GetHeight(pt);
 }
 
 TerrainHeight
 RasterMap::GetInterpolatedHeight(const GeoPoint &location) const
 {
   const auto pt = projection.ProjectFine(location);
-  return raster_tile_cache.GetInterpolatedHeight(pt.x, pt.y);
+  return raster_tile_cache.GetInterpolatedHeight(pt);
 }
 
 void

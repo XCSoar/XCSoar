@@ -310,16 +310,14 @@ RasterTileCache::ScanTileLine(GridLocation start, GridLocation end,
 
   const RasterTile &tile = tiles.Get(start.tile.x, start.tile.y);
   if (tile.IsEnabled())
-    tile.ScanLine(start.x, start.y, end.x, end.y,
+    tile.ScanLine(start, end,
                   buffer + start.index, end.index - start.index,
                   interpolate);
   else
     /* need range checking in the overview buffer because its size may
        be rounded down, and then the "fine" location may exceed its
        bounds */
-    overview.ScanLineChecked(start.x >> OVERVIEW_BITS,
-                             start.y >> OVERVIEW_BITS,
-                             end.x >> OVERVIEW_BITS, end.y >> OVERVIEW_BITS,
+    overview.ScanLineChecked(start >> OVERVIEW_BITS, end >> OVERVIEW_BITS,
                              buffer + start.index, end.index - start.index,
                              interpolate);
 }

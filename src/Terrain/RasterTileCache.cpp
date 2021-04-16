@@ -52,20 +52,20 @@ RasterTileCache::PutOverviewTile(unsigned index,
 {
   tiles.GetLinear(index).Set(start, end);
 
-  const unsigned dest_pitch = overview.GetWidth();
+  const unsigned dest_pitch = overview.GetSize().x;
 
   start.x = RasterTraits::ToOverview(start.x);
   start.y = RasterTraits::ToOverview(start.y);
 
-  if (start.x >= overview.GetWidth() || start.y >= overview.GetHeight())
+  if (start.x >= overview.GetSize().x || start.y >= overview.GetSize().y)
     return;
 
   unsigned width = RasterTraits::ToOverviewCeil(m.numcols_);
-  if (start.x + width > overview.GetWidth())
-    width = overview.GetWidth() - start.x;
+  if (start.x + width > overview.GetSize().x)
+    width = overview.GetSize().x - start.x;
   unsigned height = RasterTraits::ToOverviewCeil(m.numrows_);
-  if (start.y + height > overview.GetHeight())
-    height = overview.GetHeight() - start.y;
+  if (start.y + height > overview.GetSize().y)
+    height = overview.GetSize().y - start.y;
 
   const unsigned skip = 1 << OVERVIEW_BITS;
 
@@ -165,29 +165,28 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius) noexcept
 }
 
 TerrainHeight
-RasterTileCache::GetHeight(unsigned px, unsigned py) const noexcept
+RasterTileCache::GetHeight(RasterLocation p) const noexcept
 {
-  if (px >= size.x || py >= size.y)
+  if (p.x >= size.x || p.y >= size.y)
     // outside overall bounds
     return TerrainHeight::Invalid();
 
-  const RasterTile &tile = tiles.Get(px / tile_size.x, py / tile_size.y);
+  const RasterTile &tile = tiles.Get(p.x / tile_size.x, p.y / tile_size.y);
   if (tile.IsEnabled())
-    return tile.GetHeight(px, py);
+    return tile.GetHeight(p);
 
   // still not found, so go to overview
-  return overview.GetInterpolated(px << (RasterTraits::SUBPIXEL_BITS - RasterTraits::OVERVIEW_BITS),
-                                  py << (RasterTraits::SUBPIXEL_BITS - RasterTraits::OVERVIEW_BITS));
+  return overview.GetInterpolated(p << (RasterTraits::SUBPIXEL_BITS - RasterTraits::OVERVIEW_BITS));
 }
 
 TerrainHeight
-RasterTileCache::GetInterpolatedHeight(unsigned lx, unsigned ly) const noexcept
+RasterTileCache::GetInterpolatedHeight(RasterLocation l) const noexcept
 {
-  if (lx >= overview_size_fine.x || ly >= overview_size_fine.y)
+  if (l.x >= overview_size_fine.x || l.y >= overview_size_fine.y)
     // outside overall bounds
     return TerrainHeight::Invalid();
 
-  unsigned px = lx, py = ly;
+  unsigned px = l.x, py = l.y;
   const unsigned int ix = CombinedDivAndMod(px);
   const unsigned int iy = CombinedDivAndMod(py);
 
@@ -196,8 +195,7 @@ RasterTileCache::GetInterpolatedHeight(unsigned lx, unsigned ly) const noexcept
     return tile.GetInterpolatedHeight(px, py, ix, iy);
 
   // still not found, so go to overview
-  return overview.GetInterpolated(RasterTraits::ToOverview(lx),
-                                  RasterTraits::ToOverview(ly));
+  return overview.GetInterpolated({RasterTraits::ToOverview(l.x), RasterTraits::ToOverview(l.y)});
 }
 
 void
@@ -210,8 +208,7 @@ RasterTileCache::SetSize(UnsignedPoint2D _size,
 
   /* round the overview size up, because PutOverviewTile() does the
      same */
-  overview.Resize(RasterTraits::ToOverviewCeil(size.x),
-                  RasterTraits::ToOverviewCeil(size.y));
+  overview.Resize({RasterTraits::ToOverviewCeil(size.x), RasterTraits::ToOverviewCeil(size.y)});
   overview_size_fine = size << RasterTraits::SUBPIXEL_BITS;
 
   tiles.GrowDiscard(_n_tiles.x, _n_tiles.y);
@@ -307,7 +304,7 @@ RasterTileCache::SaveCache(BufferedOutputStream &os) const
   os.Write(&i, sizeof(i));
 
   /* save overview */
-  size_t overview_size = overview.GetWidth() * overview.GetHeight();
+  size_t overview_size = overview.GetSize().Area();
   os.Write(overview.GetData(), sizeof(*overview.GetData()) * overview_size);
 }
 
@@ -358,7 +355,7 @@ RasterTileCache::LoadCache(BufferedReader &r)
   }
 
   /* load overview */
-  size_t overview_size = overview.GetWidth() * overview.GetHeight();
+  size_t overview_size = overview.GetSize().Area();
   r.ReadFull({
       overview.GetData(),
       sizeof(*overview.GetData()) * overview_size,

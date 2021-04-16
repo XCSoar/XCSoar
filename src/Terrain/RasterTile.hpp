@@ -120,7 +120,7 @@ public:
    * @param y the pixel row within the tile; may be out of range
    */
   gcc_pure
-  TerrainHeight GetHeight(unsigned x, unsigned y) const noexcept;
+  TerrainHeight GetHeight(RasterLocation p) const noexcept;
 
   /**
    * Determine the interpolated height at the specified sub-pixel
@@ -137,13 +137,11 @@ public:
 
   bool VisibilityChanged(IntPoint2D view, unsigned view_radius) noexcept;
 
-  void ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
+  void ScanLine(RasterLocation a, RasterLocation b,
                 TerrainHeight *dest, unsigned dest_size,
                 bool interpolate) const noexcept {
-    buffer.ScanLine(ax - (start.x << RasterTraits::SUBPIXEL_BITS),
-                    ay - (start.y << RasterTraits::SUBPIXEL_BITS),
-                    bx - (start.x << RasterTraits::SUBPIXEL_BITS),
-                    by - (start.y << RasterTraits::SUBPIXEL_BITS),
+    buffer.ScanLine(a - (start << RasterTraits::SUBPIXEL_BITS),
+                    b - (start << RasterTraits::SUBPIXEL_BITS),
                     dest, dest_size, interpolate);
   }
 };

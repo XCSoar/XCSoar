@@ -164,22 +164,19 @@ public:
    * Determine the non-interpolated height at the specified pixel
    * location.
    *
-   * @param x the pixel column within the map; may be out of range
-   * @param y the pixel row within the map; may be out of range
+   * @param x the pixel position within the map; may be out of range
    */
   gcc_pure
-  TerrainHeight GetHeight(unsigned x, unsigned y) const noexcept;
+  TerrainHeight GetHeight(RasterLocation p) const noexcept;
 
   /**
    * Determine the interpolated height at the specified sub-pixel
    * location.
    *
-   * @param lx the sub-pixel column within the map; may be out of range
-   * @param ly the sub-pixel row within the map; may be out of range
+   * @param p the sub-pixel position within the map; may be out of range
    */
   gcc_pure
-  TerrainHeight GetInterpolatedHeight(unsigned lx,
-                                      unsigned ly) const noexcept;
+  TerrainHeight GetInterpolatedHeight(RasterLocation p) const noexcept;
 
   /**
    * Scan a straight line and fill the buffer with the specified
@@ -212,15 +209,13 @@ public:
 private:
   /**
    * Get field (not interpolated) directly, without bringing tiles to front.
-   * @param px X position/256
-   * @param px Y position/256
+   * @param p position/256
    * @param tile_index Remember position of active tile, or -1 for overview
    * @return the terrain altitude and a flag that is true when the
    * value was loaded from a "fine" tile
    */
   gcc_pure
-  std::pair<TerrainHeight, bool> GetFieldDirect(unsigned px,
-                                                unsigned py) const noexcept;
+  std::pair<TerrainHeight, bool> GetFieldDirect(RasterLocation p) const noexcept;
 
 public:
   /**

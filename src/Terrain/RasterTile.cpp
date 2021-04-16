@@ -54,7 +54,7 @@ RasterTile::CopyFrom(const struct jas_matrix &m) noexcept
   if (!IsDefined())
     return;
 
-  buffer.Resize(size.x, size.y);
+  buffer.Resize(size);
 
   auto *gcc_restrict dest = buffer.GetData();
   assert(dest != nullptr);
@@ -70,17 +70,16 @@ RasterTile::CopyFrom(const struct jas_matrix &m) noexcept
 }
 
 TerrainHeight
-RasterTile::GetHeight(unsigned x, unsigned y) const noexcept
+RasterTile::GetHeight(RasterLocation p) const noexcept
 {
   assert(IsEnabled());
 
-  x -= start.x;
-  y -= start.y;
+  p -= start;
 
-  assert(x < size.x);
-  assert(y < size.y);
+  assert(p.x < size.x);
+  assert(p.y < size.y);
 
-  return buffer.Get(x, y);
+  return buffer.Get(p);
 }
 
 TerrainHeight
