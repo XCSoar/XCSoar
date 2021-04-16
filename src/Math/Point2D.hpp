@@ -71,6 +71,10 @@ struct Point2D {
     return *this;
   }
 
+  constexpr product_type Area() const noexcept {
+    return product_type(x) * product_type(y);
+  }
+
   constexpr product_type MagnitudeSquared() const noexcept {
     return PT(x) * PT(x) + PT(y) * PT(y);
   }
