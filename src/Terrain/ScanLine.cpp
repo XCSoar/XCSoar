@@ -24,8 +24,6 @@ Copyright_License {
 #include "Terrain/RasterTileCache.hpp"
 #include "Terrain/RasterLocation.hpp"
 
-#include <stdlib.h>
-
 /**
  * A #RasterLocation with some cached computations.  The
  * #RasterLocation base holds the linear subpixel coordinates within
@@ -259,8 +257,7 @@ NextVerticalGridIntersection(const GridRay &ray,
     return ray.end;
 }
 
-gcc_pure
-static GridLocation
+static constexpr GridLocation
 NextGridIntersection(const GridRay &ray,
                      const GridLocation &current) noexcept
 {
@@ -270,8 +267,7 @@ NextGridIntersection(const GridRay &ray,
   GridLocation h = NextHorizontalGridIntersection(ray, current);
   GridLocation v = NextVerticalGridIntersection(ray, current);
 
-  return abs((int)(h.x - ray.start.x)) + abs((int)(h.y - ray.start.y)) <
-    abs((int)(v.x - ray.start.x)) + abs((int)(v.y - ray.start.y))
+  return ManhattanDistance(h, ray.start) < ManhattanDistance(v, ray.start)
     ? h : v;
 }
 
