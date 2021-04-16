@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2021-04-09 19:26+0000\n"
+"PO-Revision-Date: 2021-04-17 10:26+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -7522,7 +7522,7 @@ msgstr "Zobrazí přerušovanou čáru na hranici pracovního pásma."
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:169
 #, no-c-format
 msgid "Working line, terrain line"
-msgstr "Linie pracovního pásma, terénní linie"
+msgstr "Linie pracovního pásma, linie terénu"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:170
 #, no-c-format
