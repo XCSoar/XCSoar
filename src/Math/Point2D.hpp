@@ -26,7 +26,6 @@ Copyright_License {
 
 #include <type_traits>
 #include <cmath>
-#include <cstdlib>
 
 template<typename T, typename PT=T>
 struct Point2D {
@@ -185,7 +184,13 @@ template<typename P, typename RT=typename P::scalar_type,
 constexpr RT
 ManhattanDistance(P a, P b) noexcept
 {
-  return std::abs(a.x - b.x) + std::abs(a.y - b.y);
+  /* this function is similar to std::abs(), but is constexpr and
+     works with unsigned types */
+  auto AbsoluteDifference = [](RT a, RT b) -> RT {
+    return a < b ? b - a : a - b;
+  };
+
+  return AbsoluteDifference(a.x, b.x) + AbsoluteDifference(a.y, b.y);
 }
 
 #endif
