@@ -29,12 +29,12 @@ Copyright_License {
 
 template<typename T, typename PT=T>
 struct Point2D {
-  typedef T scalar_type;
+  using scalar_type = T;
 
   /**
    * Type to be used by vector math.
    */
-  typedef PT product_type;
+  using product_type = PT;
 
   scalar_type x, y;
 
