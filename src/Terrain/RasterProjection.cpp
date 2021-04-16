@@ -30,12 +30,12 @@ Copyright_License {
 
 void
 RasterProjection::Set(const GeoBounds &bounds,
-                      unsigned width, unsigned height)
+                      UnsignedPoint2D size) noexcept
 {
-  x_scale = double(width) / bounds.GetWidth().Native();
+  x_scale = double(size.x) / bounds.GetWidth().Native();
   left = AngleToWidth(bounds.GetWest());
 
-  y_scale = double(height) / bounds.GetHeight().Native();
+  y_scale = double(size.y) / bounds.GetHeight().Native();
   top = AngleToHeight(bounds.GetNorth());
 }
 

@@ -228,10 +228,10 @@ inline std::pair<TerrainHeight, bool>
 RasterTileCache::GetFieldDirect(const unsigned px,
                                 const unsigned py) const noexcept
 {
-  assert(px < width);
-  assert(py < height);
+  assert(px < size.x);
+  assert(py < size.y);
 
-  const RasterTile &tile = tiles.Get(px / tile_width, py / tile_height);
+  const RasterTile &tile = tiles.Get(px / tile_size.x, py / tile_size.y);
   if (tile.IsEnabled())
     return std::make_pair(tile.GetHeight(px, py), true);
 

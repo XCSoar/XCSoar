@@ -63,7 +63,7 @@ try {
   SharedMutex mutex;
   do {
     UpdateTerrainTiles(archive.get(), rtc, mutex,
-                       rtc.GetWidth() / 2, rtc.GetHeight() / 2, 1000);
+                       rtc.GetSize().x / 2, rtc.GetSize().y / 2, 1000);
   } while (rtc.IsDirty());
 
   return EXIT_SUCCESS;

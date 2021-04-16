@@ -107,9 +107,9 @@ protected:
     static constexpr unsigned VERSION = 0xb;
 
     unsigned version;
-    unsigned width, height;
-    unsigned short tile_width, tile_height;
-    unsigned tile_columns, tile_rows;
+    UnsignedPoint2D size;
+    Point2D<uint_least16_t> tile_size;
+    UnsignedPoint2D n_tiles;
     unsigned num_marker_segments;
     GeoBounds bounds;
   };
@@ -123,11 +123,11 @@ protected:
   Serial serial;
 
   AllocatedGrid<RasterTile> tiles;
-  unsigned short tile_width, tile_height;
+  Point2D<uint_least16_t> tile_size;
 
   RasterBuffer overview;
-  unsigned int width, height;
-  unsigned int overview_width_fine, overview_height_fine;
+  RasterLocation size;
+  RasterLocation overview_size_fine;
 
   GeoBounds bounds;
 
@@ -274,9 +274,9 @@ public:
       segments.back().tile = index;
   }
 
-  void SetSize(unsigned width, unsigned height,
-               unsigned tile_width, unsigned tile_height,
-               unsigned tile_columns, unsigned tile_rows) noexcept;
+  void SetSize(UnsignedPoint2D size,
+               Point2D<uint_least16_t> tile_size,
+               UnsignedPoint2D n_tiles) noexcept;
 
   void SetLatLonBounds(double lon_min, double lon_max,
                        double lat_min, double lat_max) noexcept;
@@ -301,27 +301,23 @@ public:
    * Is the given point inside the map?
    */
   bool IsInside(RasterLocation p) const noexcept {
-    return p.x < width && p.y < height;
+    return p.x < size.x && p.y < size.y;
   }
 
-  unsigned int GetWidth() const noexcept { return width; }
-  unsigned int GetHeight() const noexcept { return height; }
-
-  unsigned GetFineWidth() const noexcept {
-    return width << RasterTraits::SUBPIXEL_BITS;
+  const auto &GetSize() const noexcept {
+    return size;
   }
 
-  unsigned GetFineHeight() const noexcept {
-    return height << RasterTraits::SUBPIXEL_BITS;
+  RasterLocation GetFineSize() const noexcept {
+    return size << RasterTraits::SUBPIXEL_BITS;
   }
 
 private:
-  unsigned GetFineTileWidth() const noexcept {
-    return tile_width << RasterTraits::SUBPIXEL_BITS;
-  }
-
-  unsigned GetFineTileHeight() const noexcept {
-    return tile_height << RasterTraits::SUBPIXEL_BITS;
+  RasterLocation GetFineTileSize() const noexcept {
+    return {
+      unsigned(tile_size.x) << RasterTraits::SUBPIXEL_BITS,
+      unsigned(tile_size.y) << RasterTraits::SUBPIXEL_BITS,
+    };
   }
 };
 

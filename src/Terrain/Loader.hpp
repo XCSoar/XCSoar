@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "thread/SharedMutex.hpp"
 
+#include <cstdint>
+
 struct zzip_dir;
 struct GeoPoint;
 class RasterTileCache;
@@ -70,7 +72,7 @@ public:
   void StartTile(unsigned index);
 
   void SetSize(unsigned width, unsigned height,
-               unsigned tile_width, unsigned tile_height,
+               uint_least16_t tile_width, uint_least16_t tile_height,
                unsigned tile_columns, unsigned tile_rows);
 
   void PutTileData(unsigned index,

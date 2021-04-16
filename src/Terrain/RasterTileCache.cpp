@@ -168,11 +168,11 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius) noexcept
 TerrainHeight
 RasterTileCache::GetHeight(unsigned px, unsigned py) const noexcept
 {
-  if (px >= width || py >= height)
+  if (px >= size.x || py >= size.y)
     // outside overall bounds
     return TerrainHeight::Invalid();
 
-  const RasterTile &tile = tiles.Get(px / tile_width, py / tile_height);
+  const RasterTile &tile = tiles.Get(px / tile_size.x, py / tile_size.y);
   if (tile.IsEnabled())
     return tile.GetHeight(px, py);
 
@@ -184,7 +184,7 @@ RasterTileCache::GetHeight(unsigned px, unsigned py) const noexcept
 TerrainHeight
 RasterTileCache::GetInterpolatedHeight(unsigned lx, unsigned ly) const noexcept
 {
-  if ((lx >= overview_width_fine) || (ly >= overview_height_fine))
+  if (lx >= overview_size_fine.x || ly >= overview_size_fine.y)
     // outside overall bounds
     return TerrainHeight::Invalid();
 
@@ -192,7 +192,7 @@ RasterTileCache::GetInterpolatedHeight(unsigned lx, unsigned ly) const noexcept
   const unsigned int ix = CombinedDivAndMod(px);
   const unsigned int iy = CombinedDivAndMod(py);
 
-  const RasterTile &tile = tiles.Get(px / tile_width, py / tile_height);
+  const RasterTile &tile = tiles.Get(px / tile_size.x, py / tile_size.y);
   if (tile.IsEnabled())
     return tile.GetInterpolatedHeight(px, py, ix, iy);
 
@@ -202,23 +202,20 @@ RasterTileCache::GetInterpolatedHeight(unsigned lx, unsigned ly) const noexcept
 }
 
 void
-RasterTileCache::SetSize(unsigned _width, unsigned _height,
-                         unsigned _tile_width, unsigned _tile_height,
-                         unsigned tile_columns, unsigned tile_rows) noexcept
+RasterTileCache::SetSize(UnsignedPoint2D _size,
+                         Point2D<uint_least16_t> _tile_size,
+                         UnsignedPoint2D _n_tiles) noexcept
 {
-  width = _width;
-  height = _height;
-  tile_width = _tile_width;
-  tile_height = _tile_height;
+  size = _size;
+  tile_size = _tile_size;
 
   /* round the overview size up, because PutOverviewTile() does the
      same */
-  overview.Resize(RasterTraits::ToOverviewCeil(width),
-                  RasterTraits::ToOverviewCeil(height));
-  overview_width_fine = width << RasterTraits::SUBPIXEL_BITS;
-  overview_height_fine = height << RasterTraits::SUBPIXEL_BITS;
+  overview.Resize(RasterTraits::ToOverviewCeil(size.x),
+                  RasterTraits::ToOverviewCeil(size.y));
+  overview_size_fine = size << RasterTraits::SUBPIXEL_BITS;
 
-  tiles.GrowDiscard(tile_columns, tile_rows);
+  tiles.GrowDiscard(_n_tiles.x, _n_tiles.y);
 }
 
 void
@@ -239,8 +236,7 @@ RasterTileCache::SetLatLonBounds(double _lon_min, double _lon_max,
 void
 RasterTileCache::Reset() noexcept
 {
-  width = 0;
-  height = 0;
+  size = {0, 0};
   bounds.SetInvalid();
   segments.clear();
 
@@ -291,12 +287,9 @@ RasterTileCache::SaveCache(BufferedOutputStream &os) const
   memset(&header, 0, sizeof(header));
 
   header.version = CacheHeader::VERSION;
-  header.width = width;
-  header.height = height;
-  header.tile_width = tile_width;
-  header.tile_height = tile_height;
-  header.tile_columns = tiles.GetWidth();
-  header.tile_rows = tiles.GetHeight();
+  header.size = size;
+  header.tile_size = tile_size;
+  header.n_tiles = {tiles.GetWidth(), tiles.GetHeight()};
   header.num_marker_segments = segments.size();
   header.bounds = bounds;
 
@@ -329,20 +322,18 @@ RasterTileCache::LoadCache(BufferedReader &r)
   r.ReadFull({&header, sizeof(header)});
 
   if (header.version != CacheHeader::VERSION ||
-      header.width < 1024 || header.width > 1024 * 1024 ||
-      header.height < 1024 || header.height > 1024 * 1024 ||
-      header.tile_width < 16 || header.tile_width > 16 * 1024 ||
-      header.tile_height < 16 || header.tile_height > 16 * 1024 ||
-      header.tile_columns < 1 || header.tile_columns > 1024 ||
-      header.tile_rows < 1 || header.tile_rows > 1024 ||
+      header.size.x < 1024 || header.size.x > 1024 * 1024 ||
+      header.size.y < 1024 || header.size.y > 1024 * 1024 ||
+      header.tile_size.x < 16 || header.tile_size.x > 16 * 1024 ||
+      header.tile_size.y < 16 || header.tile_size.y > 16 * 1024 ||
+      header.n_tiles.x < 1 || header.n_tiles.x > 1024 ||
+      header.n_tiles.y < 1 || header.n_tiles.y > 1024 ||
       header.num_marker_segments < 4 ||
       header.num_marker_segments > segments.capacity() ||
       header.bounds.IsEmpty())
     throw std::runtime_error("Malformed terrain cache header");
 
-  SetSize(header.width, header.height,
-          header.tile_width, header.tile_height,
-          header.tile_columns, header.tile_rows);
+  SetSize(header.size, header.tile_size, header.n_tiles);
   bounds = header.bounds;
   if (!bounds.IsValid())
     throw std::runtime_error("Malformed terrain cache bounds");

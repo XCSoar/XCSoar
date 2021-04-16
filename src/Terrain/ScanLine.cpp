@@ -330,14 +330,13 @@ RasterTileCache::ScanLine(const RasterLocation _start,
                           TerrainHeight *buffer, unsigned size,
                           bool interpolate) const noexcept
 {
-  assert(_start.x < GetFineWidth());
-  assert(_start.y < GetFineHeight());
-  assert(_end.x < GetFineWidth());
-  assert(_end.y < GetFineHeight());
+  assert(_start.x < GetFineSize().x);
+  assert(_start.y < GetFineSize().y);
+  assert(_end.x < GetFineSize().x);
+  assert(_end.y < GetFineSize().y);
   assert(size >= 2);
 
-  const GridRay ray({GetFineTileWidth(), GetFineTileHeight()},
-                    _start, _end, size);
+  const GridRay ray(GetFineTileSize(), _start, _end, size);
   assert(ray.size == size);
   assert(ray.start.index == 0);
   assert(ray.end.index == size);
