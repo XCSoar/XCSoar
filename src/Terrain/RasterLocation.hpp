@@ -30,8 +30,8 @@ Copyright_License {
 /**
  * A point within a RasterMap.
  */
-struct RasterLocation : Point2D<unsigned> {
-  using Point2D::Point2D;
+struct RasterLocation : UnsignedPoint2D {
+  using UnsignedPoint2D::UnsignedPoint2D;
 
   constexpr RasterLocation operator>>(unsigned bits) const {
     return RasterLocation(x >> bits, y >> bits);
@@ -47,11 +47,11 @@ struct RasterLocation : Point2D<unsigned> {
   }
 };
 
-struct SignedRasterLocation : Point2D<int> {
-  using Point2D::Point2D;
+struct SignedRasterLocation : IntPoint2D {
+  using IntPoint2D::IntPoint2D;
 
   constexpr SignedRasterLocation(RasterLocation other)
-    :Point2D(other.x, other.y) {}
+    :IntPoint2D(other.x, other.y) {}
 
   constexpr operator RasterLocation() const {
     return RasterLocation(x, y);
