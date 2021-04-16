@@ -47,31 +47,30 @@ CopyOverviewRow(TerrainHeight *gcc_restrict dest, const jas_seqent_t *gcc_restri
 
 void
 RasterTileCache::PutOverviewTile(unsigned index,
-                                 unsigned start_x, unsigned start_y,
-                                 unsigned end_x, unsigned end_y,
+                                 RasterLocation start, RasterLocation end,
                                  const struct jas_matrix &m) noexcept
 {
-  tiles.GetLinear(index).Set(start_x, start_y, end_x, end_y);
+  tiles.GetLinear(index).Set(start, end);
 
   const unsigned dest_pitch = overview.GetWidth();
 
-  start_x = RasterTraits::ToOverview(start_x);
-  start_y = RasterTraits::ToOverview(start_y);
+  start.x = RasterTraits::ToOverview(start.x);
+  start.y = RasterTraits::ToOverview(start.y);
 
-  if (start_x >= overview.GetWidth() || start_y >= overview.GetHeight())
+  if (start.x >= overview.GetWidth() || start.y >= overview.GetHeight())
     return;
 
   unsigned width = RasterTraits::ToOverviewCeil(m.numcols_);
-  if (start_x + width > overview.GetWidth())
-    width = overview.GetWidth() - start_x;
+  if (start.x + width > overview.GetWidth())
+    width = overview.GetWidth() - start.x;
   unsigned height = RasterTraits::ToOverviewCeil(m.numrows_);
-  if (start_y + height > overview.GetHeight())
-    height = overview.GetHeight() - start_y;
+  if (start.y + height > overview.GetHeight())
+    height = overview.GetHeight() - start.y;
 
   const unsigned skip = 1 << OVERVIEW_BITS;
 
   auto *gcc_restrict dest = overview.GetData()
-    + start_y * dest_pitch + start_x;
+    + start.y * dest_pitch + start.x;
 
   /* note: this loop rounds up */
   for (unsigned i = 0, y = 0; i < height; ++i, y += skip, dest += dest_pitch)
@@ -125,7 +124,7 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius) noexcept
 
   request_tiles.clear();
   for (int i = tiles.GetSize() - 1; i >= 0 && !request_tiles.full(); --i)
-    if (tiles.GetLinear(i).VisibilityChanged(x, y, radius))
+    if (tiles.GetLinear(i).VisibilityChanged({x, y}, radius))
       request_tiles.append(i);
 
   /* reduce if there are too many */

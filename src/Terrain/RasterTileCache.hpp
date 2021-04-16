@@ -282,8 +282,7 @@ public:
                        double lat_min, double lat_max) noexcept;
 
   void PutOverviewTile(unsigned index,
-                       unsigned start_x, unsigned start_y,
-                       unsigned end_x, unsigned end_y,
+                       RasterLocation start, RasterLocation end,
                        const struct jas_matrix &m) noexcept;
 
   bool PollTiles(int x, int y, unsigned radius) noexcept;

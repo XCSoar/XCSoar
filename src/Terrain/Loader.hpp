@@ -30,6 +30,7 @@ Copyright_License {
 
 struct zzip_dir;
 struct GeoPoint;
+struct RasterLocation;
 class RasterTileCache;
 class RasterProjection;
 class OperationEnvironment;
@@ -76,8 +77,7 @@ public:
                unsigned tile_columns, unsigned tile_rows);
 
   void PutTileData(unsigned index,
-                   unsigned start_x, unsigned start_y,
-                   unsigned end_x, unsigned end_y,
+                   RasterLocation start, RasterLocation end,
                    const struct jas_matrix &m);
 
 private:

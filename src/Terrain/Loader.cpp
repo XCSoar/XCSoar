@@ -170,13 +170,11 @@ TerrainLoader::SetSize(unsigned _width, unsigned _height,
 
 void
 TerrainLoader::PutTileData(unsigned index,
-                           unsigned start_x, unsigned start_y,
-                           unsigned end_x, unsigned end_y,
+                           RasterLocation start, RasterLocation end,
                            const struct jas_matrix &m)
 {
   if (scan_overview)
-    raster_tile_cache.PutOverviewTile(index, start_x, start_y,
-                                      end_x, end_y, m);
+    raster_tile_cache.PutOverviewTile(index, start, end, m);
 
   if (scan_tiles) {
     const std::lock_guard<SharedMutex> lock(mutex);

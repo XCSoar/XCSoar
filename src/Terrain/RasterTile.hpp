@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_RASTERTILE_HPP
 
 #include "RasterTraits.hpp"
+#include "RasterLocation.hpp"
 #include "RasterBuffer.hpp"
 
 struct jas_matrix;
@@ -33,12 +34,11 @@ class BufferedReader;
 
 class RasterTile {
   struct MetaData {
-    unsigned int xstart, ystart, xend, yend;
+    RasterLocation start, end;
   };
 
 public:
-  unsigned xstart = 0, ystart = 0, xend = 0, yend = 0;
-  unsigned width = 0, height = 0;
+  RasterLocation start{0, 0}, end, size;
 
   /**
    * The distance of this tile to the center of the screen.  This
@@ -56,26 +56,22 @@ public:
   RasterTile(const RasterTile &) = delete;
   RasterTile &operator=(const RasterTile &) = delete;
 
-  void Set(unsigned _xstart, unsigned _ystart,
-           unsigned _xend, unsigned _yend) noexcept {
-    xstart = _xstart;
-    ystart = _ystart;
-    xend = _xend;
-    yend = _yend;
-    width = xend - xstart;
-    height = yend - ystart;
+  void Set(RasterLocation _start, RasterLocation _end) noexcept {
+    start = _start;
+    end = _end;
+    size = end - start;
   }
 
   /**
    * Permanently disable this tile after a failure.
    */
   void Clear() noexcept {
-    width = height = 0;
+    size = {0, 0};
     request = false;
   }
 
   bool IsDefined() const noexcept {
-    return width > 0 && height > 0;
+    return size.x > 0 && size.y > 0;
   }
 
   int GetDistance() const noexcept {
@@ -98,9 +94,9 @@ public:
   void LoadCache(BufferedReader &r);
 
   gcc_pure
-  unsigned CalcDistanceTo(int x, int y) const noexcept;
+  unsigned CalcDistanceTo(IntPoint2D p) const noexcept;
 
-  bool CheckTileVisibility(int view_x, int view_y, unsigned view_radius) noexcept;
+  bool CheckTileVisibility(IntPoint2D view, unsigned view_radius) noexcept;
 
   void Disable() noexcept {
     buffer.Reset();
@@ -139,16 +135,16 @@ public:
   TerrainHeight GetInterpolatedHeight(unsigned x, unsigned y,
                                       unsigned ix, unsigned iy) const noexcept;
 
-  bool VisibilityChanged(int view_x, int view_y, unsigned view_radius) noexcept;
+  bool VisibilityChanged(IntPoint2D view, unsigned view_radius) noexcept;
 
   void ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
-                TerrainHeight *dest, unsigned size,
+                TerrainHeight *dest, unsigned dest_size,
                 bool interpolate) const noexcept {
-    buffer.ScanLine(ax - (xstart << RasterTraits::SUBPIXEL_BITS),
-                    ay - (ystart << RasterTraits::SUBPIXEL_BITS),
-                    bx - (xstart << RasterTraits::SUBPIXEL_BITS),
-                    by - (ystart << RasterTraits::SUBPIXEL_BITS),
-                    dest, size, interpolate);
+    buffer.ScanLine(ax - (start.x << RasterTraits::SUBPIXEL_BITS),
+                    ay - (start.y << RasterTraits::SUBPIXEL_BITS),
+                    bx - (start.x << RasterTraits::SUBPIXEL_BITS),
+                    by - (start.y << RasterTraits::SUBPIXEL_BITS),
+                    dest, dest_size, interpolate);
   }
 };
 
