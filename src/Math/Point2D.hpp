@@ -43,6 +43,17 @@ struct Point2D {
   constexpr Point2D(scalar_type _x, scalar_type _y) noexcept
     :x(_x), y(_y) {}
 
+  constexpr Point2D(const Point2D &) noexcept = default;
+
+  /**
+   * This constructor allows casting from a different Point2D
+   * template instantiation.
+   */
+  template<typename OT, typename OPT>
+  explicit constexpr Point2D(const Point2D<OT, OPT> &src) noexcept
+    :x(static_cast<scalar_type>(src.x)),
+     y(static_cast<scalar_type>(src.y)) {}
+
   constexpr bool operator==(const Point2D<T, PT> &other) const noexcept {
     return x == other.x && y == other.y;
   }
