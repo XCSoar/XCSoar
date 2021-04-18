@@ -1,0 +1,56 @@
+on:
+  workflow_dispatch:  
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+env:
+  TARGET: WIN64
+jobs:
+  compile-xcsoar-win64:
+    runs-on: ubuntu-latest
+    steps:
+     - id: checkout 
+       uses: actions/checkout@v2 
+       with:
+         submodules: True
+     - id: cache-ccache
+       uses: hendrikmuhs/ccache-action@v1
+       with:
+         key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}
+     - id: repository
+       uses: ASzc/change-string-case-action@v1
+       with:
+         string: ${{ github.repository }}
+     - name: XCSoar Compile WIN64 
+       uses: addnab/docker-run-action@v3
+       with:
+         image: ghcr.io/${{ steps.repository.outputs.lowercase }}/xcsoar-build:latest
+         options: -v ${{ github.workspace }}:/opt/xcsoar -v /home/runner/work/XCSoar/XCSoar/.ccache:/root/.ccache
+         run: | 
+           cd /opt/xcsoar
+           xcsoar-compile ${{ env.TARGET }} USE_CCACHE=y V=2 everything
+     - name: store checks and compile artefacts
+       uses: actions/upload-artifact@v2
+       with:
+         name: xcsoar-${{ env.TARGET }}-artifact
+         path: |
+           ${{ github.workspace }}/output/${{ env.TARGET }}
+  xcsoar-run-checks-win64:
+     runs-on: windows-latest
+     needs: compile-xcsoar-win64
+     steps:
+     - id: checkout 
+       uses: actions/checkout@v2
+       with:
+         submodules: True
+     - name: fetch artifacts
+       uses: actions/download-artifact@v2
+       with:
+         name: xcsoar-${{ env.TARGET }}-artifact
+         path: ${{ github.workspace }}/output/${{ env.TARGET }}
+     - name: XCSoar run checks on ${{ env.TARGET }} 
+       run: make check
+       working-directory: ${{ github.workspace }}
