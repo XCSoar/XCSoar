@@ -30,6 +30,8 @@
 #include "util/StringUtil.hpp"
 #include "util/StringAPI.hxx"
 
+#include <stdexcept>
+
 #include <tchar.h>
 
 std::unique_ptr<OrderedTask>
