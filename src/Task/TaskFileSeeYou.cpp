@@ -578,7 +578,7 @@ try {
       fact.Append(*pt, false);
   }
   return task;
-} catch (const std::runtime_error &e) {
+} catch (...) {
   return nullptr;
 }
 

@@ -64,7 +64,7 @@ try {
   }
 
   return header_found;
-} catch (const std::runtime_error &) {
+} catch (...) {
   return false;
 }
 
