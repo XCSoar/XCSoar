@@ -287,7 +287,8 @@ RasterTileCache::SaveCache(BufferedOutputStream &os) const
   header.bounds = bounds;
 
   os.Write(&header, sizeof(header));
-  os.Write(segments.begin(), sizeof(*segments.begin()) * segments.size());
+  // TODO(August2111): error MSVC!
+  os.Write(&(*segments.begin()), sizeof(*segments.begin()) * segments.size());
 
   /* save tiles */
   unsigned i;
