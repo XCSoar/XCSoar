@@ -145,11 +145,6 @@ protected:
 
   static void Configure() noexcept;
 
-#ifdef HAVE_OES_DRAW_TEXTURE
-private:
-  void DrawOES(PixelRect dest, PixelRect src) const noexcept;
-#endif
-
 public:
   void Bind() noexcept {
     glBindTexture(GL_TEXTURE_2D, id);

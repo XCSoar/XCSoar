@@ -52,13 +52,6 @@ namespace OpenGL {
  */
 extern bool texture_non_power_of_two;
 
-#ifdef HAVE_OES_DRAW_TEXTURE
-/**
- * Shall we use the OES_draw_texture extension?
- */
-extern bool oes_draw_texture;
-#endif
-
 /**
  * Is glMapBuffer() available?  May be implemented by the extension
  * GL_OES_mapbuffer.

@@ -34,10 +34,6 @@ Copyright_License {
 
 #include <glm/gtc/type_ptr.hpp>
 
-#ifdef HAVE_OES_DRAW_TEXTURE
-#include <GLES/glext.h>
-#endif
-
 #ifdef ENABLE_SDL
 #include <SDL.h>
 #endif
@@ -167,39 +163,9 @@ GLTexture::EnableInterpolation() noexcept
   }
 }
 
-#ifdef HAVE_OES_DRAW_TEXTURE
-
-inline void
-GLTexture::DrawOES(PixelRect dest, PixelRect src) const noexcept
-{
-  const GLint rect[4] = {
-    src.left,
-    flipped ? src.top : src.bottom,
-    GLint(src.GetWidth()),
-    flipped ? (GLint)src.GetHeight() : -(GLint)src.GetHeight()
-  };
-
-  glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, rect);
-
-  /* glDrawTexiOES() circumvents the projection settings, thus we must
-     roll our own translation */
-  glDrawTexiOES(OpenGL::translate.x + dest.left,
-                OpenGL::viewport_size.y - OpenGL::translate.y - dest.bottom,
-                0, dest.GetWidth(), dest.GetHeight());
-}
-
-#endif
-
 void
 GLTexture::Draw(PixelRect dest, PixelRect src) const noexcept
 {
-#ifdef HAVE_OES_DRAW_TEXTURE
-  if (OpenGL::oes_draw_texture) {
-    DrawOES(dest, src);
-    return;
-  }
-#endif
-
   const BulkPixelPoint vertices[] = {
     dest.GetTopLeft(),
     dest.GetTopRight(),

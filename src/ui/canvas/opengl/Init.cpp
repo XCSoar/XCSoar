@@ -66,17 +66,6 @@ OpenGL::Initialise()
 #endif
 }
 
-#ifdef HAVE_OES_DRAW_TEXTURE
-
-gcc_pure
-static bool
-CheckOESDrawTexture() noexcept
-{
-  return OpenGL::IsExtensionSupported("GL_OES_draw_texture");
-}
-
-#endif
-
 /**
  * Does the current OpenGL context support textures with dimensions
  * other than power-of-two?
@@ -174,10 +163,6 @@ void
 OpenGL::SetupContext()
 {
   texture_non_power_of_two = SupportsNonPowerOfTwoTextures();
-
-#ifdef HAVE_OES_DRAW_TEXTURE
-  oes_draw_texture = CheckOESDrawTexture();
-#endif
 
 #ifdef ANDROID
   native_view->SetTexturePowerOfTwo(texture_non_power_of_two);
