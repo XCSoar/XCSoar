@@ -394,7 +394,7 @@ endif()
   #==========================================================
   #==========================================================
 
-set(SCRIPT_FILES
+list(APPEND SCRIPT_FILES
     CMakeSource.cmake
     VERSION.txt
     NEWS.txt
