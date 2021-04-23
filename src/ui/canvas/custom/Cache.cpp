@@ -58,7 +58,7 @@ struct TextCacheKey {
 
   TextCacheKey(const TextCacheKey &other) = delete;
 
-  TextCacheKey(TextCacheKey &&other)
+  TextCacheKey(TextCacheKey &&other) noexcept
     :font(other.font),
      text(other.text), allocated(other.allocated) {
     other.allocated = nullptr;
@@ -67,7 +67,7 @@ struct TextCacheKey {
   TextCacheKey(const Font &_font, StringView _text) noexcept
     :font(&_font), text(_text), allocated(nullptr) {}
 
-  ~TextCacheKey() {
+  ~TextCacheKey() noexcept {
     free(allocated);
   }
 
@@ -75,7 +75,7 @@ struct TextCacheKey {
    * Copy the "text" attribute.  This must be called before inserting
    * this key into the #Cache.
    */
-  void Allocate() {
+  void Allocate() noexcept {
     assert(allocated == nullptr);
 
     text.data = allocated = strndup(text.data, text.size);
@@ -83,7 +83,7 @@ struct TextCacheKey {
 
   TextCacheKey &operator=(const TextCacheKey &other) = delete;
 
-  TextCacheKey &operator=(TextCacheKey &&other) {
+  TextCacheKey &operator=(TextCacheKey &&other) noexcept {
     font = other.font;
     text = other.text;
     std::swap(allocated, other.allocated);
@@ -91,14 +91,14 @@ struct TextCacheKey {
   }
 
   gcc_pure
-  bool operator==(const TextCacheKey &other) const {
+  bool operator==(const TextCacheKey &other) const noexcept {
     return font == other.font &&
       text.Equals(other.text);
   }
 
   struct StringHash {
     gcc_pure
-    size_t operator()(StringView s) const {
+    size_t operator()(StringView s) const noexcept {
       /* code copied from libstdc++ backward/hash_fun.h */
       unsigned long __h = 0;
       for (const auto ch : s)
@@ -111,7 +111,7 @@ struct TextCacheKey {
     StringHash string_hash;
 
     gcc_pure
-    size_t operator()(const TextCacheKey &key) const {
+    size_t operator()(const TextCacheKey &key) const noexcept {
       return (size_t)(const void *)key.font
         ^ string_hash(key.text);
     }
@@ -129,13 +129,14 @@ struct RenderedText {
   RenderedText(const RenderedText &other) = delete;
 
 #ifdef ENABLE_OPENGL
-  RenderedText(RenderedText &&other)
+  RenderedText(RenderedText &&other) noexcept
     :texture(other.texture) {
     other.texture = nullptr;
   }
 
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
-  RenderedText(unsigned width, unsigned height, const uint8_t *buffer) {
+  RenderedText(unsigned width, unsigned height,
+               const uint8_t *buffer) noexcept {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     texture = new GLTexture(GL_ALPHA, PixelSize(width, height),
                             GL_ALPHA, GL_UNSIGNED_BYTE,
@@ -143,21 +144,21 @@ struct RenderedText {
   }
 #elif defined(ANDROID)
   RenderedText(int id, unsigned width, unsigned height,
-               unsigned allocated_width, unsigned allocated_height)
+               unsigned allocated_width, unsigned allocated_height) noexcept
     :texture(new GLTexture(id, PixelSize(width, height),
                            PixelSize(allocated_width, allocated_height))) {}
 #endif
 #else
-  RenderedText(RenderedText &&other)
+  RenderedText(RenderedText &&other) noexcept
     :data(other.data), width(other.width), height(other.height) {
     other.data = nullptr;
   }
 
-  RenderedText(unsigned _width, unsigned _height, uint8_t *_data)
+  RenderedText(unsigned _width, unsigned _height, uint8_t *_data) noexcept
     :data(_data), width(_width), height(_height) {}
 #endif
 
-  ~RenderedText() {
+  ~RenderedText() noexcept {
 #ifdef ENABLE_OPENGL
     delete texture;
 #else
@@ -167,7 +168,7 @@ struct RenderedText {
 
   RenderedText &operator=(const RenderedText &other) = delete;
 
-  RenderedText &operator=(RenderedText &&other) {
+  RenderedText &operator=(RenderedText &&other) noexcept {
 #ifdef ENABLE_OPENGL
     std::swap(texture, other.texture);
 #else
@@ -178,7 +179,7 @@ struct RenderedText {
     return *this;
   }
 
-  operator TextCache::Result() const {
+  operator TextCache::Result() const noexcept {
 #ifdef ENABLE_OPENGL
     return texture;
 #else
@@ -328,7 +329,7 @@ TextCache::Get(const Font &font, StringView text) noexcept
 }
 
 void
-TextCache::Flush()
+TextCache::Flush() noexcept
 {
 #ifdef ENABLE_OPENGL
   assert(pthread_equal(pthread_self(), OpenGL::thread));

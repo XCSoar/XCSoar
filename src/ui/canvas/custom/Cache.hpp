@@ -42,7 +42,7 @@ namespace TextCache {
     const void *data;
     unsigned pitch, width, height;
 
-    static constexpr Result Null() {
+    static constexpr Result Null() noexcept {
       return { nullptr, 0, 0, 0 };
     }
   };
@@ -57,7 +57,7 @@ namespace TextCache {
   gcc_pure
   Result Get(const Font &font, StringView text) noexcept;
 
-  void Flush();
+  void Flush() noexcept;
 };
 
 #endif
