@@ -93,11 +93,7 @@ CheckDepthStencil() noexcept
     return GL_DEPTH24_STENCIL8_OES;
 
   /* not supported */
-#ifdef HAVE_GLES2
   return GL_NONE;
-#else
-  return GL_NONE_OES;
-#endif
 
 #else
 
@@ -127,19 +123,11 @@ CheckStencil() noexcept
 #endif
 
   if (OpenGL::IsExtensionSupported("GL_OES_stencil8")) {
-#ifdef HAVE_GLES2
     return GL_STENCIL_INDEX8;
-#else
-    return GL_STENCIL_INDEX8_OES;
-#endif
   }
 
   /* not supported */
-#ifdef HAVE_GLES2
   return GL_NONE;
-#else
-  return GL_NONE_OES;
-#endif
 
 #else
 

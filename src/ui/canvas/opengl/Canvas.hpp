@@ -221,11 +221,7 @@ public:
 
   void DrawOutlineRectangle(PixelRect r, Color color) noexcept {
     color.Bind();
-#if defined(HAVE_GLES) && !defined(HAVE_GLES2)
-    glLineWidthx(1 << 16);
-#else
     glLineWidth(1);
-#endif
 
     DrawOutlineRectangleGL(r);
   }

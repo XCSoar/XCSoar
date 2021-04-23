@@ -99,7 +99,6 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/opengl/Geo.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Globals.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Extension.cpp \
-	$(CANVAS_SRC_DIR)/opengl/FBO.cpp \
 	$(CANVAS_SRC_DIR)/opengl/VertexArray.cpp \
 	$(CANVAS_SRC_DIR)/opengl/ConstantAlpha.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Bitmap.cpp \
