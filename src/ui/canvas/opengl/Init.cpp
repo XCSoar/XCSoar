@@ -66,17 +66,6 @@ OpenGL::Initialise()
 #endif
 }
 
-/**
- * Does the current GLES context support textures with dimensions
- * other than power-of-two?
- */
-gcc_pure
-static bool
-SupportsNonPowerOfTwoTexturesGLES() noexcept
-{
-  return OpenGL::IsExtensionSupported("GL_OES_texture_npot");
-}
-
 #ifdef HAVE_OES_DRAW_TEXTURE
 
 gcc_pure
@@ -96,8 +85,9 @@ gcc_pure
 static bool
 SupportsNonPowerOfTwoTextures() noexcept
 {
-  return OpenGL::IsExtensionSupported("GL_ARB_texture_non_power_of_two") ||
-    (HaveGLES() && SupportsNonPowerOfTwoTexturesGLES());
+  return OpenGL::IsExtensionSupported(HaveGLES()
+                                      ? "GL_OES_texture_npot"
+                                      : "GL_ARB_texture_non_power_of_two");
 }
 
 /**
