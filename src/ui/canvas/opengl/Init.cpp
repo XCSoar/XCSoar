@@ -74,10 +74,6 @@ gcc_pure
 static bool
 SupportsNonPowerOfTwoTexturesGLES() noexcept
 {
-  /* the Dell Streak Mini announces this extension */
-  if (OpenGL::IsExtensionSupported("GL_APPLE_texture_2D_limited_npot"))
-    return true;
-
   /* this extension is announced by all modern Android 2.2 handsets,
      however the HTC Desire HD (Adreno 205 GPU) is unable to create
      such textures - not a reliable indicator, it seems */
