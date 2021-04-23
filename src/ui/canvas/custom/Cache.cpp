@@ -41,6 +41,7 @@ Copyright_License {
 #endif
 
 #include <cassert>
+#include <memory>
 
 /**
  * A key type for the Cache template class.  It can be operated in two
@@ -119,66 +120,42 @@ struct TextCacheKey {
 
 struct RenderedText {
 #ifdef ENABLE_OPENGL
-  GLTexture *texture;
+  std::unique_ptr<GLTexture> texture;
 #else
-  uint8_t *data;
+  std::unique_ptr<uint8_t[]> data;
   PixelSize size;
 #endif
 
   RenderedText(const RenderedText &other) = delete;
 
 #ifdef ENABLE_OPENGL
-  RenderedText(RenderedText &&other) noexcept
-    :texture(other.texture) {
-    other.texture = nullptr;
-  }
-
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
-  RenderedText(PixelSize size, const uint8_t *buffer) noexcept {
+  RenderedText(PixelSize size, const uint8_t *buffer) noexcept
+    :texture(new GLTexture(GL_ALPHA, size,
+                           GL_ALPHA, GL_UNSIGNED_BYTE,
+                           buffer))
+  {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    texture = new GLTexture(GL_ALPHA, size,
-                            GL_ALPHA, GL_UNSIGNED_BYTE,
-                            buffer);
   }
 #elif defined(ANDROID)
   RenderedText(int id, PixelSize size, PixelSize allocated_size) noexcept
     :texture(new GLTexture(id, size, allocated_size)) {}
 #endif
 #else
-  RenderedText(RenderedText &&other) noexcept
-    :data(other.data), size(other.size) {
-    other.data = nullptr;
-  }
-
-  RenderedText(PixelSize _size, uint8_t *_data) noexcept
-    :data(_data), size(_size) {}
+  RenderedText(PixelSize _size, std::unique_ptr<uint8_t[]> &&_data) noexcept
+    :data(std::move(_data)), size(_size) {}
 #endif
-
-  ~RenderedText() noexcept {
-#ifdef ENABLE_OPENGL
-    delete texture;
-#else
-    delete[] data;
-#endif
-  }
 
   RenderedText &operator=(const RenderedText &other) = delete;
 
-  RenderedText &operator=(RenderedText &&other) noexcept {
-#ifdef ENABLE_OPENGL
-    std::swap(texture, other.texture);
-#else
-    std::swap(data, other.data);
-    size = other.size;
-#endif
-    return *this;
-  }
+  RenderedText(RenderedText &&other) noexcept = default;
+  RenderedText &operator=(RenderedText &&other) noexcept = default;
 
   operator TextCache::Result() const noexcept {
 #ifdef ENABLE_OPENGL
-    return texture;
+    return texture.get();
 #else
-    return { data, size.width, size };
+    return { data.get(), size.width, size };
 #endif
   }
 
@@ -280,13 +257,15 @@ TextCache::Get(const Font &font, StringView text) noexcept
   if (buffer_size == 0)
     return nullptr;
 
-  uint8_t *buffer = new uint8_t[buffer_size];
+  std::unique_ptr<uint8_t[]> buffer{new uint8_t[buffer_size]};
 
-  font.Render(text2, size, buffer);
-  RenderedText rt(size, buffer);
+  font.Render(text2, size, buffer.get());
 #ifdef ENABLE_OPENGL
-  delete[] buffer;
+  RenderedText rt(size, buffer.get());
+#else
+  RenderedText rt(size, std::move(buffer));
 #endif
+
 #elif defined(ANDROID)
   PixelSize size, allocated_size;
   int texture_id = font.TextTextureGL(text, size, allocated_size);
