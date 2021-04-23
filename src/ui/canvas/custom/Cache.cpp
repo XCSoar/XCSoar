@@ -291,13 +291,6 @@ TextCache::Get(const Font &font, StringView text) noexcept
   }
 
   uint8_t *buffer = new uint8_t[buffer_size];
-  if (buffer == nullptr) {
-#ifdef ENABLE_OPENGL
-    return nullptr;
-#else
-    return Result::Null();
-#endif
-  }
 
   font.Render(text2, size, buffer);
   RenderedText rt(size, buffer);
