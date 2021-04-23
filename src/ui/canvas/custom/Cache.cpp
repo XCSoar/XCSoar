@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Cache.hpp"
-#include "ui/dim/Size.hpp"
 #include "ui/canvas/Font.hpp"
 #include "util/Cache.hxx"
 #include "util/StringCompare.hxx"
@@ -123,7 +122,7 @@ struct RenderedText {
   GLTexture *texture;
 #else
   uint8_t *data;
-  unsigned width, height;
+  PixelSize size;
 #endif
 
   RenderedText(const RenderedText &other) = delete;
@@ -135,27 +134,24 @@ struct RenderedText {
   }
 
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
-  RenderedText(unsigned width, unsigned height,
-               const uint8_t *buffer) noexcept {
+  RenderedText(PixelSize size, const uint8_t *buffer) noexcept {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    texture = new GLTexture(GL_ALPHA, PixelSize(width, height),
+    texture = new GLTexture(GL_ALPHA, size,
                             GL_ALPHA, GL_UNSIGNED_BYTE,
                             buffer);
   }
 #elif defined(ANDROID)
-  RenderedText(int id, unsigned width, unsigned height,
-               unsigned allocated_width, unsigned allocated_height) noexcept
-    :texture(new GLTexture(id, PixelSize(width, height),
-                           PixelSize(allocated_width, allocated_height))) {}
+  RenderedText(int id, PixelSize size, PixelSize allocated_size) noexcept
+    :texture(new GLTexture(id, size, allocated_size)) {}
 #endif
 #else
   RenderedText(RenderedText &&other) noexcept
-    :data(other.data), width(other.width), height(other.height) {
+    :data(other.data), size(other.size) {
     other.data = nullptr;
   }
 
-  RenderedText(unsigned _width, unsigned _height, uint8_t *_data) noexcept
-    :data(_data), width(_width), height(_height) {}
+  RenderedText(PixelSize _size, uint8_t *_data) noexcept
+    :data(_data), size(_size) {}
 #endif
 
   ~RenderedText() noexcept {
@@ -173,8 +169,7 @@ struct RenderedText {
     std::swap(texture, other.texture);
 #else
     std::swap(data, other.data);
-    width = other.width;
-    height = other.height;
+    size = other.size;
 #endif
     return *this;
   }
@@ -183,7 +178,7 @@ struct RenderedText {
 #ifdef ENABLE_OPENGL
     return texture;
 #else
-    return { data, width, width, height };
+    return { data, size.width, size };
 #endif
   }
 };
@@ -242,7 +237,7 @@ TextCache::LookupSize(const Font &font, StringView text) noexcept
 #ifdef ENABLE_OPENGL
   return cached->texture->GetSize();
 #else
-  return { cached->width, cached->height };
+  return cached->size;
 #endif
 }
 
@@ -302,7 +297,7 @@ TextCache::Get(const Font &font, StringView text) noexcept
   }
 
   font.Render(text2, size, buffer);
-  RenderedText rt(size.width, size.height, buffer);
+  RenderedText rt(size, buffer);
 #ifdef ENABLE_OPENGL
   delete[] buffer;
 #endif
@@ -312,8 +307,7 @@ TextCache::Get(const Font &font, StringView text) noexcept
   if (texture_id == 0)
     return nullptr;
 
-  RenderedText rt(texture_id, size.width, size.height,
-                  allocated_size.width, allocated_size.height);
+  RenderedText rt(texture_id, size, allocated_size);
 #else
 #error No font renderer
 #endif

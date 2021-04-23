@@ -303,7 +303,7 @@ Canvas::DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
     return;
 
   SDLRasterCanvas canvas(buffer);
-  CopyTextRectangle(canvas, p.x, p.y, s.width, s.height, s,
+  CopyTextRectangle(canvas, p.x, p.y, s.size.width, s.size.height, s,
                     text_color, background_color,
                     background_mode == OPAQUE);
 }
@@ -323,7 +323,7 @@ Canvas::DrawTransparentText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
   SDLRasterCanvas canvas(buffer);
   ColoredAlphaPixelOperations<ActivePixelTraits, GreyscalePixelTraits>
     transparent(canvas.Import(text_color));
-  CopyTextRectangle(canvas, p.x, p.y, s.width, s.height, transparent, s);
+  CopyTextRectangle(canvas, p.x, p.y, s.size.width, s.size.height, transparent, s);
 }
 
 void
@@ -348,11 +348,11 @@ Canvas::DrawClippedText(PixelPoint p, unsigned width,
   if (s.data == nullptr)
     return;
 
-  if (width > s.width)
-    width = s.width;
+  if (width > s.size.width)
+    width = s.size.width;
 
   SDLRasterCanvas canvas(buffer);
-  CopyTextRectangle(canvas, p.x, p.y, width, s.height, s,
+  CopyTextRectangle(canvas, p.x, p.y, width, s.size.height, s,
                     text_color, background_color,
                     background_mode == OPAQUE);
 

@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_CACHE_HPP
 #define XCSOAR_SCREEN_OPENGL_CACHE_HPP
 
+#include "ui/dim/Size.hpp"
 #include "util/Compiler.h"
 
-struct PixelSize;
 struct StringView;
 class Font;
 
@@ -40,10 +40,11 @@ namespace TextCache {
 #else
   struct Result {
     const void *data;
-    unsigned pitch, width, height;
+    unsigned pitch;
+    PixelSize size;
 
     static constexpr Result Null() noexcept {
-      return { nullptr, 0, 0, 0 };
+      return { nullptr, 0, {} };
     }
   };
 #endif
