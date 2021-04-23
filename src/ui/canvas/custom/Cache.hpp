@@ -35,30 +35,36 @@ class GLTexture;
 #endif
 
 namespace TextCache {
-#ifdef ENABLE_OPENGL
-  typedef GLTexture *Result;
-#else
-  struct Result {
-    const void *data;
-    unsigned pitch;
-    PixelSize size;
 
-    static constexpr Result Null() noexcept {
-      return { nullptr, 0, {} };
-    }
-  };
+#ifdef ENABLE_OPENGL
+typedef GLTexture *Result;
+#else
+struct Result {
+  const void *data;
+  unsigned pitch;
+  PixelSize size;
+
+  static constexpr Result Null() noexcept {
+    return { nullptr, 0, {} };
+  }
+};
 #endif
 
-  gcc_pure
-  PixelSize GetSize(const Font &font, StringView text) noexcept;
+gcc_pure
+PixelSize
+GetSize(const Font &font, StringView text) noexcept;
 
-  gcc_pure
-  PixelSize LookupSize(const Font &font, StringView text) noexcept;
+gcc_pure
+PixelSize
+LookupSize(const Font &font, StringView text) noexcept;
 
-  gcc_pure
-  Result Get(const Font &font, StringView text) noexcept;
+gcc_pure
+Result
+Get(const Font &font, StringView text) noexcept;
 
-  void Flush() noexcept;
-};
+void
+Flush() noexcept;
+
+} //namespace TextCache
 
 #endif
