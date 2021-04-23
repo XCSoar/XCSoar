@@ -213,7 +213,7 @@ TextCache::GetSize(const Font &font, StringView text) noexcept
 #endif
 
   key.Allocate();
-  size_cache.Put(std::move(key), std::move(size));
+  size_cache.Put(std::move(key), size);
   return size;
 }
 
@@ -224,15 +224,13 @@ TextCache::LookupSize(const Font &font, StringView text) noexcept
   const std::lock_guard<Mutex> lock(text_cache_mutex);
 #endif
 
-  PixelSize size = { 0, 0 };
-
   if (text.empty())
-    return size;
+    return {};
 
   TextCacheKey key(font, text);
   const RenderedText *cached = text_cache.Get(key);
   if (cached == nullptr)
-    return size;
+    return {};
 
 #ifdef ENABLE_OPENGL
   return cached->texture->GetSize();
