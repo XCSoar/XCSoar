@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_CACHE_HPP
 
 #include "ui/dim/Size.hpp"
-#include "util/Compiler.h"
 
 struct StringView;
 class Font;
@@ -50,15 +49,15 @@ struct Result {
 };
 #endif
 
-gcc_pure
+[[gnu::pure]]
 PixelSize
 GetSize(const Font &font, StringView text) noexcept;
 
-gcc_pure
+[[gnu::pure]]
 PixelSize
 LookupSize(const Font &font, StringView text) noexcept;
 
-gcc_pure
+[[gnu::pure]]
 Result
 Get(const Font &font, StringView text) noexcept;
 

@@ -89,14 +89,14 @@ struct TextCacheKey {
     return *this;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool operator==(const TextCacheKey &other) const noexcept {
     return font == other.font &&
       text.Equals(other.text);
   }
 
   struct StringHash {
-    gcc_pure
+    [[gnu::pure]]
     size_t operator()(StringView s) const noexcept {
       /* code copied from libstdc++ backward/hash_fun.h */
       unsigned long __h = 0;
@@ -109,7 +109,7 @@ struct TextCacheKey {
   struct Hash {
     StringHash string_hash;
 
-    gcc_pure
+    [[gnu::pure]]
     size_t operator()(const TextCacheKey &key) const noexcept {
       return (size_t)(const void *)key.font
         ^ string_hash(key.text);
