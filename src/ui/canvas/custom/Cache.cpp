@@ -181,6 +181,15 @@ struct RenderedText {
     return { data, size.width, size };
 #endif
   }
+
+  [[gnu::pure]]
+  PixelSize GetSize() const noexcept {
+#ifdef ENABLE_OPENGL
+    return texture->GetSize();
+#else
+    return size;
+#endif
+  }
 };
 
 #ifndef ENABLE_OPENGL
@@ -232,11 +241,7 @@ TextCache::LookupSize(const Font &font, StringView text) noexcept
   if (cached == nullptr)
     return {};
 
-#ifdef ENABLE_OPENGL
-  return cached->texture->GetSize();
-#else
-  return cached->size;
-#endif
+  return cached->GetSize();
 }
 
 TextCache::Result
