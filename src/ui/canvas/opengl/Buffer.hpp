@@ -61,6 +61,7 @@ public:
   }
 
   GLBuffer(const GLBuffer &) = delete;
+  GLBuffer &operator=(const GLBuffer &) = delete;
 
   ~GLBuffer() noexcept {
 #ifndef NDEBUG
