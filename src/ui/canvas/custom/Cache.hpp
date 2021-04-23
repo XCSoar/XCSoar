@@ -43,8 +43,14 @@ struct Result {
   unsigned pitch;
   PixelSize size;
 
-  static constexpr Result Null() noexcept {
-    return { nullptr, 0, {} };
+  constexpr Result(const void *_data, unsigned _pitch, PixelSize _size) noexcept
+    :data(_data), pitch(_pitch), size(_size) {}
+
+  constexpr Result(std::nullptr_t) noexcept
+    :data{}, pitch{}, size{} {}
+
+  constexpr operator bool() const noexcept {
+    return data != nullptr;
   }
 };
 #endif

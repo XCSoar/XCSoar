@@ -247,7 +247,7 @@ static TextCache::Result
 RenderText(const Font *font, BasicStringView<TCHAR> text) noexcept
 {
   if (font == nullptr)
-    return TextCache::Result::Null();
+    return nullptr;
 
   assert(font->IsDefined());
 
@@ -299,7 +299,7 @@ Canvas::DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
 #endif
 
   auto s = RenderText(font, text);
-  if (s.data == nullptr)
+  if (!s)
     return;
 
   SDLRasterCanvas canvas(buffer);

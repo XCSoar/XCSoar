@@ -252,13 +252,8 @@ TextCache::Get(const Font &font, StringView text) noexcept
 #endif
   assert(font.IsDefined());
 
-  if (text.empty()) {
-#ifdef ENABLE_OPENGL
+  if (text.empty())
     return nullptr;
-#else
-    return Result::Null();
-#endif
-  }
 
   TextCacheKey key(font, text);
 
@@ -282,13 +277,8 @@ TextCache::Get(const Font &font, StringView text) noexcept
 #endif
   PixelSize size = font.TextSize(text2);
   size_t buffer_size = font.BufferSize(size);
-  if (buffer_size == 0) {
-#ifdef ENABLE_OPENGL
+  if (buffer_size == 0)
     return nullptr;
-#else
-    return Result::Null();
-#endif
-  }
 
   uint8_t *buffer = new uint8_t[buffer_size];
 
