@@ -25,7 +25,8 @@ Copyright_License {
 #include "Globals.hpp"
 #include "Shaders.hpp"
 
-SubCanvas::SubCanvas(Canvas &canvas, PixelPoint _offset, PixelSize _size)
+SubCanvas::SubCanvas(Canvas &canvas,
+                     PixelPoint _offset, PixelSize _size) noexcept
   :relative(_offset)
 {
   assert(canvas.offset == OpenGL::translate);
@@ -40,7 +41,7 @@ SubCanvas::SubCanvas(Canvas &canvas, PixelPoint _offset, PixelSize _size)
   }
 }
 
-SubCanvas::~SubCanvas()
+SubCanvas::~SubCanvas() noexcept
 {
   assert(offset == OpenGL::translate);
 

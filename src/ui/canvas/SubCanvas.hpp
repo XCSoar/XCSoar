@@ -40,10 +40,10 @@ class SubCanvas : public Canvas {
 #endif
 
 public:
-  SubCanvas(Canvas &canvas, PixelPoint _offset, PixelSize _size);
+  SubCanvas(Canvas &canvas, PixelPoint _offset, PixelSize _size) noexcept;
 
 #ifdef ENABLE_OPENGL
-  ~SubCanvas();
+  ~SubCanvas() noexcept;
 #endif
 };
 
