@@ -35,9 +35,7 @@ SubCanvas::SubCanvas(Canvas &canvas,
 
   if (relative.x != 0 || relative.y != 0) {
     OpenGL::translate += _offset;
-
-    glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
-                     OpenGL::translate.x, OpenGL::translate.y, 0, 0);
+    OpenGL::UpdateShaderTranslate();
   }
 }
 
@@ -47,8 +45,6 @@ SubCanvas::~SubCanvas() noexcept
 
   if (relative.x != 0 || relative.y != 0) {
     OpenGL::translate -= relative;
-
-    glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
-                     OpenGL::translate.x, OpenGL::translate.y, 0, 0);
+    OpenGL::UpdateShaderTranslate();
   }
 }

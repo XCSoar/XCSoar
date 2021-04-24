@@ -149,8 +149,7 @@ BufferCanvas::Begin(Canvas &other)
     OpenGL::SetupViewport({GetWidth(), GetHeight()});
     OpenGL::translate = {0, 0};
 
-    glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
-                     OpenGL::translate.x, OpenGL::translate.y, 0, 0);
+    OpenGL::UpdateShaderTranslate();
   } else {
     offset = other.offset;
   }
@@ -192,8 +191,7 @@ BufferCanvas::Commit(Canvas &other)
     OpenGL::translate = old_translate;
     OpenGL::viewport_size = old_size;
 
-    glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
-                     OpenGL::translate.x, OpenGL::translate.y, 0, 0);
+    OpenGL::UpdateShaderTranslate();
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
     OpenGL::display_orientation = old_orientation;
