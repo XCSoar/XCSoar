@@ -103,7 +103,7 @@ struct RTDistanceSort {
 };
 
 bool
-RasterTileCache::PollTiles(int x, int y, unsigned radius) noexcept
+RasterTileCache::PollTiles(SignedRasterLocation p, unsigned radius) noexcept
 {
   /* tiles are usually 256 pixels wide; with a radius smaller than
      that, the (optimized) tile distance calculations may fail;
@@ -124,7 +124,7 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius) noexcept
 
   request_tiles.clear();
   for (int i = tiles.GetSize() - 1; i >= 0 && !request_tiles.full(); --i)
-    if (tiles.GetLinear(i).VisibilityChanged({x, y}, radius))
+    if (tiles.GetLinear(i).VisibilityChanged(p, radius))
       request_tiles.append(i);
 
   /* reduce if there are too many */

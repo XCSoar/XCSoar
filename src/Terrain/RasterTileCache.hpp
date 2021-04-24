@@ -280,7 +280,7 @@ public:
                        RasterLocation start, RasterLocation end,
                        const struct jas_matrix &m) noexcept;
 
-  bool PollTiles(int x, int y, unsigned radius) noexcept;
+  bool PollTiles(SignedRasterLocation p, unsigned radius) noexcept;
 
   void PutTileData(unsigned index, const struct jas_matrix &m) noexcept;
 

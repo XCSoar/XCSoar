@@ -309,11 +309,11 @@ LoadTerrainOverview(struct zzip_dir *dir,
 
 inline bool
 TerrainLoader::UpdateTiles(struct zzip_dir *dir, const char *path,
-                           int x, int y, unsigned radius)
+                           SignedRasterLocation p, unsigned radius)
 {
   assert(!scan_overview);
 
-  if (!raster_tile_cache.PollTiles(x, y, radius))
+  if (!raster_tile_cache.PollTiles(p, radius))
     /* nothing to do */
     return true;
 
@@ -325,14 +325,14 @@ TerrainLoader::UpdateTiles(struct zzip_dir *dir, const char *path,
 bool
 UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
                    RasterTileCache &raster_tile_cache, SharedMutex &mutex,
-                   int x, int y, unsigned radius)
+                   SignedRasterLocation p, unsigned radius)
 {
   if (!raster_tile_cache.IsValid())
     return false;
 
   NullOperationEnvironment env;
   TerrainLoader loader(mutex, raster_tile_cache, false, true, env);
-  return loader.UpdateTiles(dir, path, x, y, radius);
+  return loader.UpdateTiles(dir, path, p, radius);
 }
 
 bool
@@ -344,6 +344,6 @@ UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
   const auto raster_location = projection.ProjectCoarse(location);
 
   return UpdateTerrainTiles(dir, path, raster_tile_cache, mutex,
-                            raster_location.x, raster_location.y,
+                            raster_location,
                             projection.DistancePixelsCoarse(radius));
 }

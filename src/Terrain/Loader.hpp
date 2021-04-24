@@ -24,13 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_LOADER_HPP
 #define XCSOAR_TERRAIN_LOADER_HPP
 
+#include "RasterLocation.hpp"
 #include "thread/SharedMutex.hpp"
 
 #include <cstdint>
 
 struct zzip_dir;
 struct GeoPoint;
-struct RasterLocation;
 class RasterTileCache;
 class RasterProjection;
 class OperationEnvironment;
@@ -61,7 +61,7 @@ public:
   bool LoadOverview(struct zzip_dir *dir,
                     const char *path, const char *world_file);
   bool UpdateTiles(struct zzip_dir *dir, const char *path,
-                   int x, int y, unsigned radius);
+                   SignedRasterLocation p, unsigned radius);
 
   /* callback methods for libjasper (via jas_rtc.cpp) */
 
@@ -109,15 +109,15 @@ LoadTerrainOverview(struct zzip_dir *dir,
 bool
 UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
                    RasterTileCache &raster_tile_cache, SharedMutex &mutex,
-                   int x, int y, unsigned radius);
+                   SignedRasterLocation p, unsigned radius);
 
 static inline bool
 UpdateTerrainTiles(struct zzip_dir *dir,
                    RasterTileCache &tile_cache, SharedMutex &mutex,
-                   int x, int y, unsigned radius)
+                   SignedRasterLocation p, unsigned radius)
 {
   return UpdateTerrainTiles(dir, "terrain.jp2", tile_cache, mutex,
-                            x, y, radius);
+                            p, radius);
 }
 
 bool
