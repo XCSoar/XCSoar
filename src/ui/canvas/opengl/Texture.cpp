@@ -29,8 +29,6 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Scope.hpp"
 #include "util/Compiler.h"
-#include "Shaders.hpp"
-#include "Program.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -195,5 +193,4 @@ GLTexture::Draw(PixelRect dest, PixelRect src) const noexcept
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
-  OpenGL::solid_shader->Use();
 }
