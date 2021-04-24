@@ -57,81 +57,95 @@ GLint combine_texture_projection, combine_texture_texture;
 
 static constexpr char solid_vertex_shader[] =
   GLSL_VERSION
-  "uniform mat4 projection;"
-  "uniform mat4 modelview;"
-  "attribute vec4 translate;"
-  "attribute vec4 position;"
-  "attribute vec4 color;"
-  "varying vec4 colorvar;"
-  "void main() {"
-  "  gl_Position = projection * (modelview * position + translate);"
-  "  colorvar = color;"
-  "}";
+  R"glsl(
+    uniform mat4 projection;
+    uniform mat4 modelview;
+    attribute vec4 translate;
+    attribute vec4 position;
+    attribute vec4 color;
+    varying vec4 colorvar;
+    void main() {
+      gl_Position = projection * (modelview * position + translate);
+      colorvar = color;
+    }
+)glsl";
 
 static constexpr char solid_fragment_shader[] =
   GLSL_VERSION
   GLSL_PRECISION
-  "varying vec4 colorvar;"
-  "void main() {"
-  "  gl_FragColor = colorvar;"
-  "}";
+  R"glsl(
+    varying vec4 colorvar;
+    void main() {
+      gl_FragColor = colorvar;
+    }
+)glsl";
 
 static constexpr char texture_vertex_shader[] =
   GLSL_VERSION
-  "uniform mat4 projection;"
-  "attribute vec4 translate;"
-  "attribute vec4 position;"
-  "attribute vec2 texcoord;"
-  "varying vec2 texcoordvar;"
-  "attribute vec4 color;"
-  "varying vec4 colorvar;"
-  "void main() {"
-  "  gl_Position = projection * (position + translate);"
-  "  texcoordvar = texcoord;"
-  "  colorvar = color;"
-  "}";
+  R"glsl(
+    uniform mat4 projection;
+    attribute vec4 translate;
+    attribute vec4 position;
+    attribute vec2 texcoord;
+    varying vec2 texcoordvar;
+    attribute vec4 color;
+    varying vec4 colorvar;
+    void main() {
+      gl_Position = projection * (position + translate);
+      texcoordvar = texcoord;
+      colorvar = color;
+    }
+)glsl";
 
 static constexpr char texture_fragment_shader[] =
   GLSL_VERSION
   GLSL_PRECISION
-  "uniform sampler2D texture;"
-  "varying vec2 texcoordvar;"
-  "void main() {"
-  "  gl_FragColor = texture2D(texture, texcoordvar);"
-  "}";
+  R"glsl(
+    uniform sampler2D texture;
+    varying vec2 texcoordvar;
+    void main() {
+      gl_FragColor = texture2D(texture, texcoordvar);
+    }
+)glsl";
 
 static const char *const invert_vertex_shader = texture_vertex_shader;
 static constexpr char invert_fragment_shader[] =
   GLSL_VERSION
   GLSL_PRECISION
-  "uniform sampler2D texture;"
-  "varying vec2 texcoordvar;"
-  "void main() {"
-  "  vec4 color = texture2D(texture, texcoordvar);"
-  "  gl_FragColor = vec4(vec3(1) - color.rgb, color.a);"
-  "}";
+  R"glsl(
+    uniform sampler2D texture;
+    varying vec2 texcoordvar;
+    void main() {
+      vec4 color = texture2D(texture, texcoordvar);
+      gl_FragColor = vec4(vec3(1) - color.rgb, color.a);
+    }
+)glsl";
 
 static const char *const alpha_vertex_shader = texture_vertex_shader;
 static constexpr char alpha_fragment_shader[] =
   GLSL_VERSION
   GLSL_PRECISION
-  "uniform sampler2D texture;"
-  "varying vec4 colorvar;"
-  "varying vec2 texcoordvar;"
-  "void main() {"
-  "  gl_FragColor = vec4(colorvar.rgb, texture2D(texture, texcoordvar).a);"
-  "}";
+  R"glsl(
+    uniform sampler2D texture;
+    varying vec4 colorvar;
+    varying vec2 texcoordvar;
+    void main() {
+      gl_FragColor = vec4(colorvar.rgb, texture2D(texture, texcoordvar).a);
+    }
+)glsl";
 
 static const char *const combine_texture_vertex_shader = texture_vertex_shader;
 static constexpr char combine_texture_fragment_shader[] =
   GLSL_VERSION
   GLSL_PRECISION
-  "uniform sampler2D texture;"
-  "varying vec4 colorvar;"
-  "varying vec2 texcoordvar;"
-  "void main() {"
-  "  gl_FragColor = colorvar * texture2D(texture, texcoordvar);"
-  "}";
+  R"glsl(
+    uniform sampler2D texture;
+    varying vec4 colorvar;
+    varying vec2 texcoordvar;
+    void main() {
+      gl_FragColor = colorvar * texture2D(texture, texcoordvar);
+    }
+)glsl";
 
 static void
 CompileAttachShader(GLProgram &program, GLenum type, const char *code)
