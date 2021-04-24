@@ -49,18 +49,18 @@ class WindowList {
   List list;
 
 public:
-  ~WindowList() {
+  ~WindowList() noexcept {
     assert(list.empty());
   }
 
 public:
-  void Add(Window &w) {
+  void Add(Window &w) noexcept {
     assert(!Contains(w));
 
     list.push_back(w);
   }
 
-  void Remove(Window &w) {
+  void Remove(Window &w) noexcept {
     assert(Contains(w));
 
     list.erase(list.iterator_to(w));
@@ -69,46 +69,46 @@ public:
   /**
    * Remove and destroy all contained windows.
    */
-  void Clear();
+  void Clear() noexcept;
 
   gcc_pure
-  bool Contains(const Window &w) const;
+  bool Contains(const Window &w) const noexcept;
 
   /**
    * Is this window covered by a sibling?
    */
   gcc_pure
-  bool IsCovered(const Window &w) const;
+  bool IsCovered(const Window &w) const noexcept;
 
-  void BringToTop(Window &w);
-  void BringToBottom(Window &w);
+  void BringToTop(Window &w) noexcept;
+  void BringToBottom(Window &w) noexcept;
 
   /**
    * Locate a window by its relative coordinates.
    */
   gcc_pure
-  Window *FindAt(PixelPoint p);
+  Window *FindAt(PixelPoint p) noexcept;
 
   gcc_pure
-  static Window *FindControl(List::iterator i, List::iterator end);
+  static Window *FindControl(List::iterator i, List::iterator end) noexcept;
 
   gcc_pure
   static Window *FindControl(List::reverse_iterator i,
-                             List::reverse_iterator end);
+                             List::reverse_iterator end) noexcept;
 
   gcc_pure
-  Window *FindFirstControl();
+  Window *FindFirstControl() noexcept;
 
   gcc_pure
-  Window *FindLastControl();
+  Window *FindLastControl() noexcept;
 
   gcc_pure
-  Window *FindNextChildControl(Window *reference);
+  Window *FindNextChildControl(Window *reference) noexcept;
 
   gcc_pure
-  Window *FindPreviousChildControl(Window *reference);
+  Window *FindPreviousChildControl(Window *reference) noexcept;
 
-  void Paint(Canvas &canvas);
+  void Paint(Canvas &canvas) noexcept;
 };
 
 #endif

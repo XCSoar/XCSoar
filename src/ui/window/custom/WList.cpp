@@ -28,7 +28,7 @@ Copyright_License {
 #include <iterator>
 
 void
-WindowList::Clear()
+WindowList::Clear() noexcept
 {
   /* destroy all child windows */
   List::iterator i;
@@ -43,7 +43,7 @@ WindowList::Clear()
 }
 
 bool
-WindowList::Contains(const Window &w) const
+WindowList::Contains(const Window &w) const noexcept
 {
   for (const auto &i : list)
     if (&i == &w)
@@ -53,7 +53,7 @@ WindowList::Contains(const Window &w) const
 }
 
 bool
-WindowList::IsCovered(const Window &w) const
+WindowList::IsCovered(const Window &w) const noexcept
 {
   const PixelRect rc = w.GetPosition();
 
@@ -75,7 +75,7 @@ WindowList::IsCovered(const Window &w) const
 }
 
 void
-WindowList::BringToTop(Window &w)
+WindowList::BringToTop(Window &w) noexcept
 {
   assert(Contains(w));
 
@@ -84,7 +84,7 @@ WindowList::BringToTop(Window &w)
 }
 
 void
-WindowList::BringToBottom(Window &w)
+WindowList::BringToBottom(Window &w) noexcept
 {
   assert(Contains(w));
 
@@ -94,13 +94,13 @@ WindowList::BringToBottom(Window &w)
 
 gcc_pure
 static bool
-IsAt(Window &w, PixelPoint p)
+IsAt(Window &w, PixelPoint p) noexcept
 {
   return w.IsVisible() && w.GetPosition().Contains(p);
 }
 
 Window *
-WindowList::FindAt(PixelPoint p)
+WindowList::FindAt(PixelPoint p) noexcept
 {
   for (Window &w : list)
     if (w.IsEnabled() && IsAt(w, p))
@@ -111,7 +111,8 @@ WindowList::FindAt(PixelPoint p)
 
 gcc_pure
 Window *
-WindowList::FindControl(List::iterator i, WindowList::List::iterator end)
+WindowList::FindControl(List::iterator i,
+                        WindowList::List::iterator end) noexcept
 {
   for (; i != end; ++i) {
     Window &child = *i;
@@ -135,7 +136,7 @@ WindowList::FindControl(List::iterator i, WindowList::List::iterator end)
 gcc_pure
 Window *
 WindowList::FindControl(WindowList::List::reverse_iterator i,
-                        WindowList::List::reverse_iterator end)
+                        WindowList::List::reverse_iterator end) noexcept
 {
   for (; i != end; ++i) {
     Window &child = *i;
@@ -157,19 +158,19 @@ WindowList::FindControl(WindowList::List::reverse_iterator i,
 }
 
 Window *
-WindowList::FindFirstControl()
+WindowList::FindFirstControl() noexcept
 {
   return FindControl(list.begin(), list.end());
 }
 
 Window *
-WindowList::FindLastControl()
+WindowList::FindLastControl() noexcept
 {
   return FindControl(list.rbegin(), list.rend());
 }
 
 Window *
-WindowList::FindNextChildControl(Window *reference)
+WindowList::FindNextChildControl(Window *reference) noexcept
 {
   assert(reference != nullptr);
   assert(Contains(*reference));
@@ -181,7 +182,7 @@ WindowList::FindNextChildControl(Window *reference)
 }
 
 Window *
-WindowList::FindPreviousChildControl(Window *reference)
+WindowList::FindPreviousChildControl(Window *reference) noexcept
 {
   assert(reference != nullptr);
   assert(Contains(*reference));
@@ -204,7 +205,7 @@ IsFullWindow(const Window &w, const PixelRect &rc) noexcept
 }
 
 void
-WindowList::Paint(Canvas &canvas)
+WindowList::Paint(Canvas &canvas) noexcept
 {
   auto begin = list.rbegin(), end = list.rend();
 
