@@ -28,7 +28,7 @@ Copyright_License {
 #include <string.h>
 
 bool
-OpenGL::IsExtensionSupported(const char *extension)
+OpenGL::IsExtensionSupported(const char *extension) noexcept
 {
   /* this code is copied from
      http://www.opengl.org/resources/features/OGLextensions/ */
