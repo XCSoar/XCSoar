@@ -52,7 +52,7 @@ public:
    * Reset the object, discard any previous click it may have
    * remembered.
    */
-  void Reset() {
+  void Reset() noexcept {
     clock.Reset();
   }
 
@@ -60,7 +60,7 @@ public:
    * Call this in the "mouse up" handler.  It will take care for
    * resetting this object when the mouse/finger has moved too much.
    */
-  void Moved(PixelPoint _location) {
+  void Moved(PixelPoint _location) noexcept {
     if (clock.IsDefined() &&
         (unsigned)ManhattanDistance(location, _location) > MAX_DISTANCE_PX)
       Reset();
@@ -71,7 +71,7 @@ public:
    *
    * @return true if a double click was detected
    */
-  bool Check(PixelPoint _location) {
+  bool Check(PixelPoint _location) noexcept {
     const bool result = !clock.CheckAlwaysUpdate(INTERVAL) &&
       (unsigned)ManhattanDistance(location, _location) <= MAX_DISTANCE_PX;
 
