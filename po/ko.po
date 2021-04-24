@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2021-04-24 02:21+0000\n"
+"PO-Revision-Date: 2021-04-25 02:32+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -1371,7 +1371,7 @@ msgstr "현재 써멀에서 획득/손실된 고도를 보여준다."
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:59
 #, no-c-format
 msgid "Track"
-msgstr "나침반(방위각)"
+msgstr "나침반-방위각"
 
 #: src/InfoBoxes/Content/Factory.cpp:327
 #, no-c-format
@@ -6178,7 +6178,7 @@ msgstr "좌측 하단 (정보창 옆)"
 msgid ""
 "Show thermal assistant in bottom left, above/to right of infoboxes (if "
 "there)."
-msgstr "써멀 레이더를 왼쪽 하단에 표시, 정보창이 있는 경우 오른쪽에 열 지원을 표시한다."
+msgstr "써멀 레이더를 왼쪽 하단에 표시, 정보창이 있는 경우 옆에 써멀레이더를 표시한다."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
 #, no-c-format
@@ -6199,7 +6199,7 @@ msgstr "우측 하단 (정보창 옆)"
 #, no-c-format
 msgid ""
 "Show thermal assistant in bottom right above/to left of infoboxes (if there)."
-msgstr "써멀 레이더를 오른쪽 하단에 표시, 정보창이 있는 경우 왼쪽에 열 지원을 표시한다."
+msgstr "써멀 레이더를 오른쪽 하단에 표시, 정보창이 있는 경우 옆에 써멀레이더를 표시한다."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:107
 msgid ""
