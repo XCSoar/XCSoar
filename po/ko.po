@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2021-04-11 16:26+0000\n"
+"PO-Revision-Date: 2021-04-24 02:21+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -164,7 +164,7 @@ msgstr "직선출발게이트. \r코스 안에서 밖을 향해 스타트 라인
 #: src/Task/TypeStrings.cpp:78
 #, no-c-format
 msgid "A cylinder.  Exit area to start."
-msgstr "실린더. 실린더 밖을 나올때 스타트 한다."
+msgstr "실린더. 실린더 밖으로 나갈때 스타트 한다."
 
 #: src/Task/TypeStrings.cpp:79
 #, no-c-format
@@ -2973,7 +2973,7 @@ msgid "The currently active Radio Frequency"
 msgstr "활동주파수 설정"
 
 #: src/InfoBoxes/Content/Factory.cpp:1080
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Standby Radio Frequency"
 msgstr "대기주파수 설정"
 
@@ -2983,24 +2983,24 @@ msgid "Stby Freq"
 msgstr "대기주파수"
 
 #: src/InfoBoxes/Content/Factory.cpp:1082
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently standby Radio Frequency"
 msgstr "대기주파수 설정"
 
 #: src/InfoBoxes/Content/Factory.cpp:1088
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Thermal time"
 msgstr "써멀(최근 써멀에서 선회한 시간)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1089
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TC Time"
 msgstr "최근써멀시간"
 
 #: src/InfoBoxes/Content/Factory.cpp:1090
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The time spend in the current thermal."
-msgstr "현재 써멀에서 획득/손실된 고도를 보여준다."
+msgstr "현재 써멀에서의 시간을 보여준다."
 
 #: src/InfoBoxes/Content/Alternate.cpp:49
 #: src/Dialogs/Task/AlternatesListDialog.cpp:150 Data/Input/default.xci:388
@@ -4006,9 +4006,8 @@ msgid "Add"
 msgstr "추가"
 
 #: src/Dialogs/FileManager.cpp:435
-#, fuzzy
 msgid "Update all"
-msgstr "업데이트"
+msgstr "모두 업데이트"
 
 #: src/Dialogs/FileManager.cpp:468
 msgid "Queued"
@@ -4039,9 +4038,8 @@ msgid "Error"
 msgstr "오류"
 
 #: src/Dialogs/FileManager.cpp:488
-#, fuzzy
 msgid "Update available"
-msgstr "TAF를 다운로드 할 수 없음!"
+msgstr "업데이트 가능함"
 
 #: src/Dialogs/FileManager.cpp:730 src/Dialogs/DownloadFilePicker.cpp:340
 msgid "Failed to download the repository index."
@@ -4062,7 +4060,7 @@ msgid "IOIO switches and Nunchuk"
 msgstr "IOIO 스위치와 눈처크"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:75
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO I²C pressure sensor"
 msgstr "IOIO i2c 압력센서"
 
@@ -4080,12 +4078,12 @@ msgstr "TCP 클라이언트"
 #. selection UI
 #: src/Dialogs/Device/DeviceEditWidget.cpp:83
 #: src/Dialogs/Device/DeviceEditWidget.cpp:612
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TCP port"
 msgstr "TCP포트"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:84
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "UDP port"
 msgstr "UDP포트"
 
@@ -4114,13 +4112,12 @@ msgid ""
 msgstr "데이터 전송에 사용하는 포트의 통신속도, 타스크 선언 데이터에 사용한다."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:607
-#, fuzzy
 msgid "IP address"
 msgstr "IP 주소"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I²C bus"
-msgstr "I²C bus"
+msgstr "I²C 버스"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "Select the description or bus number that matches your configuration."
@@ -4128,10 +4125,9 @@ msgstr "설정에 적합한 포트를 선택하시오."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:623
 msgid "I²C addr"
-msgstr "I²C addr"
+msgstr "I²C 주소"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:623
-#, fuzzy
 msgid ""
 "The I²C address that matches your configuration. This field is not used when "
 "your selection in the \"I²C bus\" field is not an I²C bus number. Assume "
@@ -4143,12 +4139,11 @@ msgid "Pressure use"
 msgstr "압력계용도"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:631
-#, fuzzy
 msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
 "pressure. Here you tell the system what pressure this is and what it should "
 "be used for."
-msgstr "기압센서의 용도를 선택하시오, 어떤 값에 사용할지 설정한다."
+msgstr "기압센서의 용도를 선택하시오, 어떤 수치에 적용할지 설정한다."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:645
 msgid "Driver"
@@ -4160,7 +4155,6 @@ msgid "Passthrough device"
 msgstr "장치 무시"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:649
-#, fuzzy
 msgid "Whether the device has a passed-through device connected."
 msgstr "장치가 연결되어도, 기기에서 연결무시."
 
@@ -4173,29 +4167,22 @@ msgid "Sync. from device"
 msgstr "장치로 싱크 (데이터취득)"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:663
-#, fuzzy
 msgid ""
 "Tells XCSoar to use settings like the MacCready value, bugs and ballast from "
 "the device."
-msgstr ""
-"이 옵션은 XCSoar가 기기의 MacCready값, 노후도 및 밸러스트와 같은 설정을 장비"
-"에서 받을수 있도록 설정한다."
+msgstr "이 옵션은 XCSoar가 기기의 MacCready값, 노후도 및 밸러스트와 같은 설정을 장비에서 받을수 있도록 설정한다."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:668
 msgid "Sync. to device"
 msgstr "장치에 싱크 (데이터저장)"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:669
-#, fuzzy
 msgid ""
 "Tells XCSoar to send settings like the MacCready value, bugs and ballast to "
 "the device."
-msgstr ""
-"이 옵션은 XCSoar가 기기의 MacCready값, 노후도 및 밸러스트와 같은 설정을 장비"
-"로 보낼 수 있도록 설정한다."
+msgstr "이 옵션은 XCSoar가 기기의 MacCready값, 노후도 및 밸러스트와 같은 설정을 장비로 보낼 수 있도록 설정한다."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:675
-#, fuzzy
 msgid "Whether you use a K6Bt to connect the device."
 msgstr "K6Bt로 연결하는 경우 설정을 켠다."
 
@@ -6167,12 +6154,12 @@ msgid "Show final glide bar if approaching final glide range."
 msgstr "결승점(Goal)이 목표가 되면 골 러시 바를 표시."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:57
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable thermal assistant."
-msgstr "써멀레이더"
+msgstr "써멀레이더 끄기."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:59
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom left"
 msgstr "좌측 하단"
 
@@ -6182,9 +6169,9 @@ msgid "Show thermal assistant in bottom left."
 msgstr "왼쪽 아래에 써멀레이더 표시."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:62
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom left (avoid infoboxes)"
-msgstr "자동"
+msgstr "좌측 하단 (정보창 옆)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:63
 #, no-c-format
@@ -6194,7 +6181,7 @@ msgid ""
 msgstr "써멀 레이더를 왼쪽 하단에 표시, 정보창이 있는 경우 오른쪽에 열 지원을 표시한다."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom right"
 msgstr "우측 하단"
 
@@ -6204,9 +6191,9 @@ msgid "Show thermal assistant in bottom right."
 msgstr "오른쪽 아래에 써멀레이더 표시."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom right (avoid infoboxes)"
-msgstr "자동"
+msgstr "우측 하단 (정보창 옆)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:69
 #, no-c-format
@@ -6238,7 +6225,6 @@ msgstr ""
 "택하면 항상 표시된다."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:116
-#, fuzzy
 msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
 "the main screen."
@@ -6628,9 +6614,9 @@ msgid "8 Split"
 msgstr "정보창 8개 (위아래 4개 혹은 좌우 4개)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:81
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "10 Split"
-msgstr "정보창 8개 (위아래 4개 혹은 좌우 4개)"
+msgstr "정보창 10개 (5개씩 분할)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:83
 #, no-c-format
@@ -6678,9 +6664,9 @@ msgid "5 Right (Square)"
 msgstr "정보창 5개"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:101
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "10 Bottom or Right"
-msgstr "정보창 12개 (아래 혹은 오른쪽)"
+msgstr "정보창 10개 (아래 혹은 오른쪽)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:103
 #, no-c-format
@@ -6688,9 +6674,9 @@ msgid "12 Bottom or Right"
 msgstr "정보창 12개 (아래 혹은 오른쪽)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:105
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "10 Top or Left"
-msgstr "정보창 12개 (위쪽 혹은 왼쪽)"
+msgstr "정보창 10개 (위쪽 혹은 왼쪽)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:107
 #, no-c-format
@@ -6889,9 +6875,8 @@ msgid "Show the Menubutton"
 msgstr "메뉴버튼보기: 나침반이 가려질 수 있음"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:230
-#, fuzzy
 msgid "Cursor zoom"
-msgstr "자동 줌 켜기"
+msgstr "커서 줌"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:230
 msgid "Cursor zoom factor"
@@ -6915,9 +6900,8 @@ msgid "Pilot name"
 msgstr "파일럿 이름"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:72
-#, fuzzy
 msgid "CoPilot name"
-msgstr "파일럿 이름"
+msgstr "보조파일럿 이름"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:74
 msgid "Time step cruise"
@@ -7532,11 +7516,9 @@ msgid "FLARM Device Database"
 msgstr "FLARM 장비 데이터베이스"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:110
-#, fuzzy
 msgid ""
 "The name of the file containing information about registered FLARM devices."
-msgstr ""
-"지도파일(.xcm)을 선택하시오. 지형도와 지역이름에 대한 정보가 포함되어 있음."
+msgstr "등록 된 FLARM 장치에 대한 정보가 포함 된 파일의 이름."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:84
 #, no-c-format
@@ -7690,9 +7672,9 @@ msgid "Draws an arrow head with a dashed arrow line."
 msgstr "화살표를 모두 표시한다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:140
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No SkyLines traffic is drawn."
-msgstr "풍향을 표시하지 않는다."
+msgstr "스카이라인 트래픽을 표시하지 않음."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 #, no-c-format
@@ -7797,11 +7779,8 @@ msgstr "스타트 최대속도"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:63
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:232
-#, fuzzy
 msgid "Maximum speed allowed in start observation zone. Set to 0 for no limit."
-msgstr ""
-"스타트 영역내에서 최고 속도 제한이 있는 경우 설정: 제한이 없는 경우 0 로 설정"
-"한다."
+msgstr "스타트 영역내에서 최고 속도 제한이 있는 경우 설정: 제한이 없는 경우 0 로 설정한다."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:68
 msgid "Start max. speed margin"
@@ -8447,18 +8426,16 @@ msgstr ""
 "달범위 모드 -> 선회\" 설정이 필요하다."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:123
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Required GR & terrain glide"
-msgstr "직선활공 & 지형비행"
+msgstr "필요 GR & 지형비행"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Both Required glide ratio and terrain avoidance height are displayed. "
 "Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings."
-msgstr ""
-"직선활공과 지형비행의 도착고도를 동시에 표시: \"글라이더 컴퓨터 -> 경로 -> 도"
-"달범위 모드 -> 선회\" 설정이 필요하다."
+msgstr "필요 활공비와 지형회피 높이를 동시에 표시: \"글라이더 컴퓨터 -> 경로 -> 도달범위 모드 -> 선회\" 설정이 필요하다."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:129
 msgid "Determines how arrival height is displayed in waypoint labels"
