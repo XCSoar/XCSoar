@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_SHADERS_HPP
 
 #include "ui/opengl/System.hpp"
-#include "Attribute.hpp"
 
 class GLProgram;
 

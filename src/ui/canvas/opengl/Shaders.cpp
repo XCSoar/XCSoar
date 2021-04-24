@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Shaders.hpp"
 #include "Program.hpp"
+#include "Attribute.hpp"
 #include "Globals.hpp"
 #include "ui/dim/Point.hpp"
 #include "util/RuntimeError.hxx"

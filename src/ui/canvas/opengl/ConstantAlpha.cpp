@@ -24,6 +24,7 @@ Copyright_License {
 #include "ConstantAlpha.hpp"
 #include "Shaders.hpp"
 #include "Program.hpp"
+#include "Attribute.hpp"
 #include "ui/opengl/System.hpp"
 
 /**
