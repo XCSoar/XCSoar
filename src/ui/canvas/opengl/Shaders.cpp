@@ -62,12 +62,14 @@ static constexpr char solid_vertex_shader[] =
   R"glsl(
     uniform mat4 projection;
     uniform mat4 modelview;
-    uniform vec4 translate;
+    uniform vec2 translate;
     attribute vec4 position;
     attribute vec4 color;
     varying vec4 colorvar;
     void main() {
-      gl_Position = projection * (modelview * position + translate);
+      gl_Position = modelview * position;
+      gl_Position.xy += translate;
+      gl_Position = projection * gl_Position;
       colorvar = color;
     }
 )glsl";
@@ -86,14 +88,16 @@ static constexpr char texture_vertex_shader[] =
   GLSL_VERSION
   R"glsl(
     uniform mat4 projection;
-    uniform vec4 translate;
+    uniform vec2 translate;
     attribute vec4 position;
     attribute vec2 texcoord;
     varying vec2 texcoordvar;
     attribute vec4 color;
     varying vec4 colorvar;
     void main() {
-      gl_Position = projection * (position + translate);
+      gl_Position = position;
+      gl_Position.xy += translate;
+      gl_Position = projection * gl_Position;
       texcoordvar = texcoord;
       colorvar = color;
     }
@@ -304,17 +308,17 @@ OpenGL::UpdateShaderTranslate() noexcept
   const FloatPoint2D t(translate);
 
   solid_shader->Use();
-  glUniform4f(solid_translate, t.x, t.y, 0, 0);
+  glUniform2f(solid_translate, t.x, t.y);
 
   texture_shader->Use();
-  glUniform4f(texture_translate, t.x, t.y, 0, 0);
+  glUniform2f(texture_translate, t.x, t.y);
 
   invert_shader->Use();
-  glUniform4f(invert_translate, t.x, t.y, 0, 0);
+  glUniform2f(invert_translate, t.x, t.y);
 
   alpha_shader->Use();
-  glUniform4f(alpha_translate, t.x, t.y, 0, 0);
+  glUniform2f(alpha_translate, t.x, t.y);
 
   combine_texture_shader->Use();
-  glUniform4f(combine_texture_translate, t.x, t.y, 0, 0);
+  glUniform2f(combine_texture_translate, t.x, t.y);
 }
