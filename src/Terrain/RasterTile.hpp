@@ -106,10 +106,6 @@ public:
     return buffer.IsDefined();
   }
 
-  bool IsDisabled() const noexcept {
-    return !buffer.IsDefined();
-  }
-
   void CopyFrom(const struct jas_matrix &m) noexcept;
 
   /**
