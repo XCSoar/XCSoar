@@ -231,7 +231,7 @@ RasterTileCache::GetFieldDirect(RasterLocation p) const noexcept
   assert(p.y < size.y);
 
   const RasterTile &tile = tiles.Get(p.x / tile_size.x, p.y / tile_size.y);
-  if (tile.IsEnabled())
+  if (tile.IsLoaded())
     return std::make_pair(tile.GetHeight(p), true);
 
   // still not found, so go to overview

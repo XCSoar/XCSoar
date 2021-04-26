@@ -137,7 +137,7 @@ RasterTileCache::PollTiles(SignedRasterLocation p, unsigned radius) noexcept
     /* dispose all tiles which are out of range */
     for (unsigned i = MAX_ACTIVE_TILES; i < request_tiles.size(); ++i) {
       RasterTile &tile = tiles.GetLinear(request_tiles[i]);
-      tile.Disable();
+      tile.Unload();
     }
 
     request_tiles.shrink(MAX_ACTIVE_TILES);
@@ -150,7 +150,7 @@ RasterTileCache::PollTiles(SignedRasterLocation p, unsigned radius) noexcept
   unsigned num_activate = 0;
   for (unsigned i = 0; i < request_tiles.size(); ++i) {
     RasterTile &tile = tiles.GetLinear(request_tiles[i]);
-    if (tile.IsEnabled())
+    if (tile.IsLoaded())
       continue;
 
     if (++num_activate <= MAX_ACTIVATE)
@@ -172,7 +172,7 @@ RasterTileCache::GetHeight(RasterLocation p) const noexcept
     return TerrainHeight::Invalid();
 
   const RasterTile &tile = tiles.Get(p.x / tile_size.x, p.y / tile_size.y);
-  if (tile.IsEnabled())
+  if (tile.IsLoaded())
     return tile.GetHeight(p);
 
   // still not found, so go to overview
@@ -191,7 +191,7 @@ RasterTileCache::GetInterpolatedHeight(RasterLocation l) const noexcept
   const unsigned int iy = CombinedDivAndMod(py);
 
   const RasterTile &tile = tiles.Get(px / tile_size.x, py / tile_size.y);
-  if (tile.IsEnabled())
+  if (tile.IsLoaded())
     return tile.GetInterpolatedHeight(px, py, ix, iy);
 
   // still not found, so go to overview
@@ -239,7 +239,7 @@ RasterTileCache::Reset() noexcept
   overview.Reset();
 
   for (auto &i : tiles)
-    i.Disable();
+    i.Unload();
 }
 
 const RasterTileCache::MarkerSegmentInfo *
@@ -260,7 +260,7 @@ RasterTileCache::FinishTileUpdate() noexcept
      loop */
   for (std::size_t i : request_tiles) {
     RasterTile &tile = tiles.GetLinear(i);
-    if (tile.IsRequested() && !tile.IsEnabled())
+    if (tile.IsRequested() && !tile.IsLoaded())
       tile.Clear();
   }
 

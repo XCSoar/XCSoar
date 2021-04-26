@@ -98,11 +98,11 @@ public:
 
   bool CheckTileVisibility(IntPoint2D view, unsigned view_radius) noexcept;
 
-  void Disable() noexcept {
+  void Unload() noexcept {
     buffer.Reset();
   }
 
-  bool IsEnabled() const noexcept {
+  bool IsLoaded() const noexcept {
     return buffer.IsDefined();
   }
 

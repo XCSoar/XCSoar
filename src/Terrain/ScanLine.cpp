@@ -309,7 +309,7 @@ RasterTileCache::ScanTileLine(GridLocation start, GridLocation end,
   }
 
   const RasterTile &tile = tiles.Get(start.tile.x, start.tile.y);
-  if (tile.IsEnabled())
+  if (tile.IsLoaded())
     tile.ScanLine(start, end,
                   buffer + start.index, end.index - start.index,
                   interpolate);

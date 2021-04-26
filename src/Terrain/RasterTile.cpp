@@ -72,7 +72,7 @@ RasterTile::CopyFrom(const struct jas_matrix &m) noexcept
 TerrainHeight
 RasterTile::GetHeight(RasterLocation p) const noexcept
 {
-  assert(IsEnabled());
+  assert(IsLoaded());
 
   p -= start;
 
@@ -86,7 +86,7 @@ TerrainHeight
 RasterTile::GetInterpolatedHeight(unsigned lx, unsigned ly,
                                   unsigned ix, unsigned iy) const noexcept
 {
-  assert(IsEnabled());
+  assert(IsLoaded());
 
   // we want to exit out of this function as soon as possible
   // if we have the wrong tile
@@ -118,12 +118,12 @@ RasterTile::CheckTileVisibility(IntPoint2D view,
                                 unsigned view_radius) noexcept
 {
   if (!IsDefined()) {
-    assert(!IsEnabled());
+    assert(!IsLoaded());
     return false;
   }
 
   distance = CalcDistanceTo(view);
-  return distance <= view_radius || IsEnabled();
+  return distance <= view_radius || IsLoaded();
 }
 
 bool
