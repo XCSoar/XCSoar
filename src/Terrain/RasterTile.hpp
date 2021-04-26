@@ -38,7 +38,7 @@ class RasterTile {
   };
 
 public:
-  RasterLocation start{0, 0}, end, size;
+  RasterLocation start{0, 0}, end, size{0, 0};
 
   /**
    * The distance of this tile to the center of the screen.  This
