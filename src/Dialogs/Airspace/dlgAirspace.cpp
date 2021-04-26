@@ -28,7 +28,6 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Profile/AirspaceConfig.hpp"
 #include "ui/canvas/Canvas.hpp"
-#include "Screen/Features.hpp"
 #include "Screen/Layout.hpp"
 #include "Renderer/TextRowRenderer.hpp"
 #include "MainWindow.hpp"

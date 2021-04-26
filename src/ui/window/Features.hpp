@@ -21,39 +21,15 @@ Copyright_License {
 }
 */
 
-#include "../SingleWindow.hpp"
-#include "../Features.hpp"
-#include "ui/event/sdl/Event.hpp"
+#ifndef XCSOAR_SCREEN_FEATURES_HPP
+#define XCSOAR_SCREEN_FEATURES_HPP
 
-#include <SDL_events.h>
-
-#include <cassert>
-
-namespace UI {
-
-bool
-SingleWindow::FilterEvent(const UI::Event &_event, Window *allowed) const noexcept
-{
-  assert(allowed != nullptr);
-
-  const SDL_Event &event = _event.event;
-
-  switch (event.type) {
-  case SDL_MOUSEMOTION:
-  case SDL_MOUSEBUTTONDOWN:
-  case SDL_MOUSEBUTTONUP:
-#ifdef HAVE_HIGHDPI_SUPPORT
-    {
-      return FilterMouseEvent(PointToReal(PixelPoint(event.button.x, event.button.y)), allowed);
-    }
-#else
-    return FilterMouseEvent(PixelPoint(event.button.x, event.button.y),
-                            allowed);
+#ifdef ANDROID
+#include "android/Features.hpp"
 #endif
 
-  default:
-    return true;
-  }
-}
+#ifdef ENABLE_SDL
+#include "sdl/Features.hpp"
+#endif
 
-} // namespace UI
+#endif

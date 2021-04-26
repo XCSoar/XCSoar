@@ -27,7 +27,7 @@ Copyright_License {
 #include "ui/canvas/Pen.hpp"
 #include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Icon.hpp"
-#include "Screen/Features.hpp"
+#include "ui/canvas/Features.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 
 #define NUMAIRSPACECOLORS 16

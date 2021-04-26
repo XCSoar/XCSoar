@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BRUSH_HPP
 #define XCSOAR_SCREEN_BRUSH_HPP
 
-#include "ui/canvas/Color.hpp"
-#include "Screen/Features.hpp"
+#include "Color.hpp"
+#include "Features.hpp"
 #include "Screen/Debug.hpp"
 #include "util/Compiler.h"
 

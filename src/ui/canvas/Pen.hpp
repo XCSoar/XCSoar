@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_PEN_HPP
 
 #include "ui/canvas/Color.hpp"
-#include "Screen/Features.hpp"
+#include "ui/canvas/Features.hpp"
 #include "Screen/Debug.hpp"
 
 #include <cassert>

@@ -37,7 +37,7 @@ Copyright_License {
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Pen.hpp"
 #include "ui/canvas/Brush.hpp"
-#include "Screen/Features.hpp"
+#include "ui/canvas/Features.hpp"
 #include "Weather/Features.hpp"
 
 #ifdef HAVE_NOAA

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_PANEL_HPP
 #define XCSOAR_FORM_PANEL_HPP
 
-#include "Screen/Features.hpp"
+#include "ui/canvas/Features.hpp"
 
 #ifdef HAVE_CLIPPING
 #include "ui/window/SolidContainerWindow.hpp"

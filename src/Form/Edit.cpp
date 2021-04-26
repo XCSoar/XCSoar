@@ -25,9 +25,9 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "DataField/Base.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Features.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
-#include "Screen/Features.hpp"
 #include "Dialogs/DataField.hpp"
 #include "Asset.hpp"
 

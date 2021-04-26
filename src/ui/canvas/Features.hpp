@@ -21,15 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_FEATURES_HPP
-#define XCSOAR_SCREEN_FEATURES_HPP
-
-#ifdef ANDROID
-#include "ui/window/android/Features.hpp"
-#endif
+#ifndef XCSOAR_UI_CANVAS_FEATURES_HPP
+#define XCSOAR_UI_CANVAS_FEATURES_HPP
 
 #ifdef USE_MEMORY_CANVAS
-#include "ui/canvas/memory/Features.hpp"
+#include "memory/Features.hpp"
 #endif
 
 #ifdef ENABLE_OPENGL
@@ -37,11 +33,7 @@ Copyright_License {
 #endif
 
 #ifdef USE_GDI
-#include "ui/canvas/gdi/Features.hpp"
-#endif
-
-#ifdef ENABLE_SDL
-#include "ui/window/sdl/Features.hpp"
+#include "gdi/Features.hpp"
 #endif
 
 /**

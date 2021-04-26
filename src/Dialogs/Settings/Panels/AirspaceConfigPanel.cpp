@@ -32,10 +32,10 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
+#include "ui/canvas/Features.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
-#include "Screen/Features.hpp"
 
 enum ControlIndex {
   AirspaceDisplay,

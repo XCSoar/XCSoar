@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ui/canvas/custom/TopCanvas.hpp"
-#include "Screen/Features.hpp"
+#include "ui/canvas/Features.hpp"
 #include "ui/dim/Size.hpp"
 #include "util/RuntimeError.hxx"
 #include "Asset.hpp"

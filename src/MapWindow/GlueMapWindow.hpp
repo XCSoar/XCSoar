@@ -33,7 +33,7 @@ Copyright_License {
 #include "Renderer/VarioBarRenderer.hpp"
 #include "ui/event/Timer.hpp"
 #include "ui/event/Notify.hpp"
-#include "Screen/Features.hpp"
+#include "ui/window/Features.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/event/PeriodicTimer.hpp"

@@ -25,7 +25,7 @@ Copyright_License {
 
 #ifndef ENABLE_OPENGL
 #include "Projection/WindowProjection.hpp"
-#include "Screen/Features.hpp"
+#include "ui/canvas/Features.hpp"
 
 bool
 TransparentRendererCache::Check(const WindowProjection &projection) const

@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_AIRSPACE_RENDERER_SETTINGS_HPP
 
 #include "Airspace/AirspaceClass.hpp"
-#include "Screen/Features.hpp"
 #include "ui/canvas/PortableColor.hpp"
+#include "ui/canvas/Features.hpp"
 
 #include <cstdint>
 
