@@ -56,7 +56,7 @@ Dither::DitherGreyscale(const uint8_t *gcc_restrict src,
       uint8_t color = 0;
       if (bwPix >= 128) {
         --color;
-	bwPix -= 255;
+        bwPix -= 255;
       }
 
       dest[column] = color;
