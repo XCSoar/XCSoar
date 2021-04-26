@@ -238,8 +238,8 @@ RasterTileCache::Reset() noexcept
 
   overview.Reset();
 
-  for (auto it = tiles.begin(), end = tiles.end(); it != end; ++it)
-    it->Disable();
+  for (auto &i : tiles)
+    i.Disable();
 }
 
 const RasterTileCache::MarkerSegmentInfo *
@@ -258,9 +258,8 @@ RasterTileCache::FinishTileUpdate() noexcept
   /* permanently disable the requested tiles which are still not
      loaded, to prevent trying to reload them over and over in a busy
      loop */
-  for (auto it = request_tiles.begin(), end = request_tiles.end();
-      it != end; ++it) {
-    RasterTile &tile = tiles.GetLinear(*it);
+  for (std::size_t i : request_tiles) {
+    RasterTile &tile = tiles.GetLinear(i);
     if (tile.IsRequested() && !tile.IsEnabled())
       tile.Clear();
   }
