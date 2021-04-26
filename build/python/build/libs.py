@@ -37,9 +37,9 @@ libstdcxx_musl_headers = LibstdcxxMuslHeadersProject(
 )
 
 openssl = OpenSSLProject(
-    'https://www.openssl.org/source/openssl-3.0.0-alpha14.tar.gz',
-    'ftp://ftp.cert.dfn.de/pub/tools/net/openssl/source/openssl-3.0.0-alpha14.tar.gz',
-    '78a935e1d314d66cccaa68931702a52d42015b47c3c44bec631de9f5705cb6c0',
+    'https://www.openssl.org/source/openssl-3.0.0-alpha15.tar.gz',
+    'ftp://ftp.cert.dfn.de/pub/tools/net/openssl/source/openssl-3.0.0-alpha15.tar.gz',
+    '7ebc12910a19d94c13ce589024c5ab655a81152823fe37a3b5753436f3706831',
     'include/openssl/ossl_typ.h',
 )
 
