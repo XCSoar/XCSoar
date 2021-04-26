@@ -31,7 +31,7 @@ struct RGBPixelReader {
   const uint8_t *p;
 
   template<typename PixelTraits>
-  typename PixelTraits::color_type Read(PixelTraits) {
+  typename PixelTraits::color_type Read(PixelTraits) noexcept {
     const uint8_t r = *p++, g = *p++, b = *p++;
     return typename PixelTraits::color_type(r, g, b);
   }
@@ -41,7 +41,7 @@ struct GrayPixelReader {
   const uint8_t *p;
 
   template<typename PixelTraits>
-  typename PixelTraits::color_type Read(PixelTraits) {
+  typename PixelTraits::color_type Read(PixelTraits) noexcept {
     const uint8_t l = *p++;
     return typename PixelTraits::color_type(l, l, l);
   }
@@ -49,7 +49,8 @@ struct GrayPixelReader {
 
 template<typename PixelTraits, typename Reader>
 static inline void
-ConvertLine(typename PixelTraits::rpointer dest, Reader src, unsigned n)
+ConvertLine(typename PixelTraits::rpointer dest, Reader src,
+            unsigned n) noexcept
 {
   for (unsigned i = 0; i < n; ++i, dest = PixelTraits::Next(dest, 1))
     PixelTraits::WritePixel(dest, src.Read(PixelTraits()));
@@ -58,7 +59,7 @@ ConvertLine(typename PixelTraits::rpointer dest, Reader src, unsigned n)
 template<typename PixelTraits, typename Format>
 static inline void
 ConvertImage(WritableImageBuffer<PixelTraits> buffer,
-             const uint8_t *src, int src_pitch, bool flipped)
+             const uint8_t *src, int src_pitch, bool flipped) noexcept
 {
   typename PixelTraits::rpointer dest = buffer.data;
 
@@ -81,7 +82,7 @@ ConvertImage(WritableImageBuffer<PixelTraits> buffer,
 template<typename PixelTraits>
 static inline void
 ImportSurface(WritableImageBuffer<PixelTraits> &buffer,
-              const UncompressedImage &uncompressed)
+              const UncompressedImage &uncompressed) noexcept
 {
   buffer.Allocate(uncompressed.GetWidth(), uncompressed.GetHeight());
 

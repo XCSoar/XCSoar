@@ -56,15 +56,15 @@ struct MurphyIterator {
 
 public:
   MurphyIterator(Canvas &_canvas, typename Canvas::color_type _color,
-                 unsigned _line_mask, unsigned _line_mask_position)
+                 unsigned _line_mask, unsigned _line_mask_position) noexcept
     :canvas(_canvas), color(_color), line_mask(_line_mask),
      line_mask_position(_line_mask_position) {}
 
-  unsigned GetLineMaskPosition() const {
+  unsigned GetLineMaskPosition() const noexcept {
     return line_mask_position + u;
   }
 
-  void Paraline(int x, int y, int d1) {
+  void Paraline(int x, int y, int d1) noexcept {
     d1 = -d1;
 
     unsigned lmp = line_mask_position;
@@ -100,7 +100,7 @@ public:
                  unsigned ml1bx, unsigned ml1by,
                  unsigned ml2bx, unsigned ml2by,
                  unsigned ml1x, unsigned ml1y,
-                 unsigned ml2x, unsigned ml2y) {
+                 unsigned ml2x, unsigned ml2y) noexcept {
     if (miter > 1 && first1x != -32768) {
       const int fix = (first1x + first2x) / 2;
       const int fiy = (first1y + first2y) / 2;
@@ -191,7 +191,8 @@ public:
     first2y = ml2by;
   }
 
-  void Wideline(int x1, int y1, int x2, int y2, uint8_t width, uint8_t miter) {
+  void Wideline(int x1, int y1, int x2, int y2,
+                uint8_t width, uint8_t miter) noexcept {
     assert(x1 != x2 || y1 != y2);
 
     float offset = (float)width / 2.f;
