@@ -29,7 +29,7 @@ Copyright_License {
 #include "Dialogs/DialogSettings.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/LargeTextWindow.hpp"
+#include "ui/control/LargeTextWindow.hpp"
 #include "ui/canvas/Font.hpp"
 #include "Asset.hpp"
 

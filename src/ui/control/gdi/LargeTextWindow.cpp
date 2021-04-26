@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Screen/LargeTextWindow.hpp"
+#include "../LargeTextWindow.hpp"
 
 #include <memory>
 

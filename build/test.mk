@@ -2056,7 +2056,7 @@ $(eval $(call link-program,RunGeoPointEntry,RUN_GEOPOINT_ENTRY))
 
 RUN_TERMINAL_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
-	$(SRC)/Screen/TerminalWindow.cpp \
+	$(SRC)/ui/control/TerminalWindow.cpp \
 	$(SRC)/Look/TerminalLook.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \

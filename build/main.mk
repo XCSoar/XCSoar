@@ -646,7 +646,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Math/SunEphemeris.cpp \
 	\
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/TerminalWindow.cpp \
+	$(SRC)/ui/control/TerminalWindow.cpp \
 	\
 	$(SRC)/Look/FontDescription.cpp \
 	$(SRC)/Look/GlobalFonts.cpp \
