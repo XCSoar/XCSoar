@@ -294,11 +294,13 @@ RasterTileCache::SaveCache(BufferedOutputStream &os) const
 
   /* save tiles */
   unsigned i;
-  for (i = 0; i < tiles.GetSize(); ++i)
-    if (tiles.GetLinear(i).IsDefined()) {
+  for (i = 0; i < tiles.GetSize(); ++i) {
+    const auto &tile = tiles.GetLinear(i);
+    if (tile.IsDefined()) {
       os.Write(&i, sizeof(i));
-      tiles.GetLinear(i).SaveCache(os);
+      tile.SaveCache(os);
     }
+  }
 
   i = -1;
   os.Write(&i, sizeof(i));
