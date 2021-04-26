@@ -343,8 +343,8 @@ RasterTileCache::LoadCache(BufferedReader &r)
   }
 
   /* load tiles */
-  unsigned i;
   while (true) {
+    unsigned i;
     r.ReadFull({&i, sizeof(i)});
 
     if (i == (unsigned)-1)
