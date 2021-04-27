@@ -345,15 +345,10 @@ ActionInterface::OffsetStandbyFrequency(double offset_khz,
 void
 ActionInterface::ExchangeRadioFrequencies(bool to_devices) noexcept
 {
-  const auto radio_settings = SetComputerSettings().radio;
-
-  if(radio_settings.active_frequency.IsDefined() &&
-     radio_settings.standby_frequency.IsDefined()) {
-    const auto old_active_freq = radio_settings.active_frequency;
-    const auto old_active_freq_name = radio_settings.active_name;
-
-    ActionInterface::SetActiveFrequency(radio_settings.standby_frequency, radio_settings.standby_name, to_devices);
-    ActionInterface::SetStandbyFrequency(old_active_freq, old_active_freq_name, to_devices);
+  /* send to external devices */
+  if (to_devices && backend_components->devices) {
+    MessageOperationEnvironment env;
+    backend_components->devices->ExchangeRadioFrequencies(env);
   }
 }
 
