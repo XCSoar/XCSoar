@@ -208,6 +208,7 @@ void eventFileManager(const TCHAR *misc);
 void eventRunLuaFile(const TCHAR *misc);
 void eventResetTask(const TCHAR *misc);
 void eventLockScreen(const TCHAR *misc);
+void eventExchangeFrequencies(const TCHAR *misc);
 // -------
 
 } // namespace InputEvents
