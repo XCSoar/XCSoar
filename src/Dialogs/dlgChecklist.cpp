@@ -84,7 +84,7 @@ try {
   auto reader = OpenDataTextFile(_T(XCSCHKLIST));
 
   StaticString<MAXDETAILS> Details;
-  TCHAR Name[100];
+  TCHAR Name[MAXTITLE];
   bool inDetails = false;
   int i;
 
