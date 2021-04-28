@@ -70,6 +70,7 @@ public:
     :qnh(AtmosphericPressure::Zero()), owns_children(_owns_children) {}
 
   Airspaces(const Airspaces &) = delete;
+  Airspaces &operator=(const Airspaces &) = delete;
 
   /**
    * Destructor.
