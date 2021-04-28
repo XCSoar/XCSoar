@@ -38,7 +38,7 @@ class LogoView {
 #endif
 
 public:
-  LogoView();
+  LogoView() noexcept;
 
   /**
    * Draws the XCSoar logo and the version number into the Canvas, with
@@ -47,7 +47,7 @@ public:
    * @param canvas the Canvas to draw on
    * @param rc the region within the Canvas to draw into
    */
-  void draw(Canvas &canvas, const PixelRect &rc);
+  void draw(Canvas &canvas, const PixelRect &rc) noexcept;
 };
 
 #endif
