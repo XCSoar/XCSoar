@@ -51,6 +51,10 @@ try {
     printf("file '%s' '%s' area='%s' type=%u\n",
            file.GetName(), file.GetURI(), file.GetArea(),
            (unsigned)file.type);
+
+    if (file.update_date.IsPlausible())
+      printf("  updated %04u-%02u-%02u\n", file.update_date.year,
+             file.update_date.month, file.update_date.day);
   }
 
   return EXIT_SUCCESS;
