@@ -32,7 +32,7 @@ Copyright_License {
 #include "ui/canvas/Canvas.hpp"
 #endif
 
-ProgressWindow::ProgressWindow(ContainerWindow &parent)
+ProgressWindow::ProgressWindow(ContainerWindow &parent) noexcept
   :background_color(COLOR_WHITE)
 {
   message.clear();
@@ -70,7 +70,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 }
 
 void
-ProgressWindow::UpdateLayout(PixelRect rc)
+ProgressWindow::UpdateLayout(PixelRect rc) noexcept
 {
   const unsigned height = rc.GetHeight();
 
@@ -96,7 +96,7 @@ ProgressWindow::UpdateLayout(PixelRect rc)
 }
 
 void
-ProgressWindow::SetMessage(const TCHAR *text)
+ProgressWindow::SetMessage(const TCHAR *text) noexcept
 {
   AssertThread();
 
@@ -108,19 +108,19 @@ ProgressWindow::SetMessage(const TCHAR *text)
 }
 
 void
-ProgressWindow::SetRange(unsigned min_value, unsigned max_value)
+ProgressWindow::SetRange(unsigned min_value, unsigned max_value) noexcept
 {
   progress_bar.SetRange(min_value, max_value);
 }
 
 void
-ProgressWindow::SetStep(unsigned size)
+ProgressWindow::SetStep(unsigned size) noexcept
 {
   progress_bar.SetStep(size);
 }
 
 void
-ProgressWindow::SetValue(unsigned value)
+ProgressWindow::SetValue(unsigned value) noexcept
 {
   AssertThread();
 
@@ -128,7 +128,7 @@ ProgressWindow::SetValue(unsigned value)
 }
 
 void
-ProgressWindow::Step()
+ProgressWindow::Step() noexcept
 {
   progress_bar.Step();
 }
