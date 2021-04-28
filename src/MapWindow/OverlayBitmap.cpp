@@ -109,7 +109,14 @@ Clip(const GeoQuadrilateral &_geo, const GeoBounds &_bounds) noexcept
   const auto bounds = ToBox(_bounds);
 
   ClippedMultiPolygon clipped;
-  boost::geometry::intersection(geo, bounds, clipped);
+
+  try {
+    boost::geometry::intersection(geo, bounds, clipped);
+  } catch (const boost::geometry::exception &) {
+    /* this can (theoretically) occur with self-intersecting
+       geometries; in that case, return an empty polygon */
+  }
+
   return clipped;
 }
 
