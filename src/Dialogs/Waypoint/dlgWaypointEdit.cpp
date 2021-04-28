@@ -47,7 +47,7 @@ class WaypointEditWidget final : public RowFormWidget, DataFieldListener {
   bool modified;
 
 public:
-  WaypointEditWidget(const DialogLook &look, Waypoint _value)
+  WaypointEditWidget(const DialogLook &look, const Waypoint &_value) noexcept
     :RowFormWidget(look), value(_value), modified(false) {}
 
   const Waypoint &GetValue() const {
