@@ -35,7 +35,7 @@ static ProgressWindow *global_progress_window;
 static PeriodClock throttle_clock;
 
 void
-ProgressGlue::Create(const TCHAR *text)
+ProgressGlue::Create(const TCHAR *text) noexcept
 {
   UIGlobals::GetMainWindow().RefreshSize();
 
@@ -50,7 +50,7 @@ ProgressGlue::Create(const TCHAR *text)
 }
 
 void
-ProgressGlue::Move(const PixelRect &rc)
+ProgressGlue::Move(const PixelRect &rc) noexcept
 {
   if (global_progress_window == nullptr)
     return;
@@ -60,14 +60,14 @@ ProgressGlue::Move(const PixelRect &rc)
 }
 
 void
-ProgressGlue::Close()
+ProgressGlue::Close() noexcept
 {
   delete global_progress_window;
   global_progress_window = nullptr;
 }
 
 void
-ProgressGlue::Step()
+ProgressGlue::Step() noexcept
 {
   if (global_progress_window == nullptr)
     return;
@@ -81,7 +81,7 @@ ProgressGlue::Step()
 }
 
 void
-ProgressGlue::SetValue(unsigned value)
+ProgressGlue::SetValue(unsigned value) noexcept
 {
   if (global_progress_window == nullptr)
     return;
@@ -95,7 +95,7 @@ ProgressGlue::SetValue(unsigned value)
 }
 
 void
-ProgressGlue::SetRange(unsigned value)
+ProgressGlue::SetRange(unsigned value) noexcept
 {
   if (global_progress_window == nullptr)
     return;
@@ -105,7 +105,7 @@ ProgressGlue::SetRange(unsigned value)
 }
 
 void
-ProgressGlue::SetStep(int step)
+ProgressGlue::SetStep(int step) noexcept
 {
   if (global_progress_window == nullptr)
     return;
