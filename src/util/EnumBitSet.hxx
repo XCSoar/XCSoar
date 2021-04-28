@@ -65,6 +65,12 @@ public:
 	constexpr EnumBitSet(Args&&... args) noexcept
 		:mask((ToMask(args) | ...)) {}
 
+	constexpr EnumBitSet(const EnumBitSet &) noexcept = default;
+	constexpr EnumBitSet(EnumBitSet &) noexcept = default;
+	constexpr EnumBitSet(EnumBitSet &&) noexcept = default;
+
+	constexpr EnumBitSet &operator=(const EnumBitSet &) noexcept = default;
+
 	constexpr EnumBitSet operator|(const EnumBitSet other) const noexcept {
 		return EnumBitSet(mask | other.mask);
 	}
