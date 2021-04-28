@@ -23,8 +23,8 @@
 #include "Airspaces.hpp"
 #include "Terrain/RasterTerrain.hpp"
 
-void 
-Airspaces::SetGroundLevels(const RasterTerrain &terrain)
+void
+Airspaces::SetGroundLevels(const RasterTerrain &terrain) noexcept
 {
   for (auto &v : QueryAll()) {
     // If we don't need the ground level we don't have to calculate it
