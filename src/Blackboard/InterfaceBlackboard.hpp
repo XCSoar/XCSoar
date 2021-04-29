@@ -30,29 +30,29 @@ Copyright_License {
 class InterfaceBlackboard : public LiveBlackboard
 {
 public:
-  void ReadBlackboardBasic(const MoreData &nmea_info);
-  void ReadBlackboardCalculated(const DerivedInfo &derived_info);
+  void ReadBlackboardBasic(const MoreData &nmea_info) noexcept;
+  void ReadBlackboardCalculated(const DerivedInfo &derived_info) noexcept;
 
   gcc_const
-  SystemSettings &SetSystemSettings() {
+  SystemSettings &SetSystemSettings() noexcept {
     return system_settings;
   }
 
   gcc_const
-  ComputerSettings& SetComputerSettings() {
+  ComputerSettings& SetComputerSettings() noexcept {
     return computer_settings;
   }
 
   gcc_const
-  UISettings &SetUISettings() {
+  UISettings &SetUISettings() noexcept {
     return ui_settings;
   }
 
-  inline void ReadCommonStats(const CommonStats &common_stats) {
+  inline void ReadCommonStats(const CommonStats &common_stats) noexcept {
     calculated_info.common_stats = common_stats;
   }
 
-  void ReadComputerSettings(const ComputerSettings &settings);
+  void ReadComputerSettings(const ComputerSettings &settings) noexcept;
 };
 
 #endif

@@ -20,23 +20,23 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "InterfaceBlackboard.hpp"
 
 void
-InterfaceBlackboard::ReadBlackboardCalculated(const DerivedInfo &derived_info)
+InterfaceBlackboard::ReadBlackboardCalculated(const DerivedInfo &derived_info) noexcept
 {
   calculated_info = derived_info;
 }
 
 void
-InterfaceBlackboard::ReadBlackboardBasic(const MoreData &nmea_info)
+InterfaceBlackboard::ReadBlackboardBasic(const MoreData &nmea_info) noexcept
 {
   gps_info = nmea_info;
 }
 
 void
-InterfaceBlackboard::ReadComputerSettings(const ComputerSettings
-					  &settings)
+InterfaceBlackboard::ReadComputerSettings(const ComputerSettings &settings) noexcept
 {
   computer_settings = settings;
 }
