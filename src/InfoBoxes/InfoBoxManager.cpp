@@ -34,19 +34,20 @@ Copyright_License {
 #include "Interface.hpp"
 #include "UIState.hpp"
 
-namespace InfoBoxManager
-{
-  InfoBoxLayout::Layout layout;
+namespace InfoBoxManager {
 
-  /**
-   * Is this the initial DisplayInfoBox() call?  If yes, then all
-   * content objects need to be created.
-   */
-  static bool first;
+InfoBoxLayout::Layout layout;
 
-  static void DisplayInfoBox();
-  static void InfoBoxDrawIfDirty();
-}
+/**
+ * Is this the initial DisplayInfoBox() call?  If yes, then all
+ * content objects need to be created.
+ */
+static bool first;
+
+static void DisplayInfoBox();
+static void InfoBoxDrawIfDirty();
+
+} // namespace InfoBoxManager
 
 static bool infoboxes_dirty = false;
 static bool infoboxes_hidden = false;

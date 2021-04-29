@@ -39,16 +39,17 @@ static constexpr unsigned char geometry_counts[] = {
   12, // 3 rows X 4 boxes
 };
 
-namespace InfoBoxLayout
-{
-  gcc_const
-  static InfoBoxSettings::Geometry
-  ValidateGeometry(InfoBoxSettings::Geometry geometry, PixelSize screen_size);
+namespace InfoBoxLayout {
 
-  static void
-  CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
-                   InfoBoxSettings::Geometry geometry);
-}
+gcc_const
+static InfoBoxSettings::Geometry
+ValidateGeometry(InfoBoxSettings::Geometry geometry, PixelSize screen_size);
+
+static void
+CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
+                 InfoBoxSettings::Geometry geometry);
+
+} // namespace InfoBoxLayout
 
 static int
 MakeTopRow(const InfoBoxLayout::Layout &layout,
