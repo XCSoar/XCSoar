@@ -118,6 +118,7 @@ public:
   }
 };
 
+[[gnu::hot]]
 void
 RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
                                  TerrainHeight *gcc_restrict buffer, unsigned size,
@@ -188,6 +189,7 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
   }
 }
 
+[[gnu::hot]]
 void
 RasterBuffer::ScanLine(RasterLocation a, RasterLocation b,
                        TerrainHeight *gcc_restrict buffer,
