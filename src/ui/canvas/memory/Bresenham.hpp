@@ -37,9 +37,9 @@ public:
   int x, y;
   unsigned count;
 
-  BresenhamIterator() = default;
+  BresenhamIterator() noexcept = default;
 
-  BresenhamIterator(int x1, int y1, int x2, int y2)
+  BresenhamIterator(int x1, int y1, int x2, int y2) noexcept
     :dx(x2 - x1), dy(y2 - y1), x_e(x2), y_e(y2), x(x1), y(y1) {
     if (dx != 0) {
       if (dx < 0) {
@@ -76,7 +76,7 @@ public:
     dx <<= 1;
   }
 
-  bool Next() {
+  bool Next() noexcept {
     /* last point check */
     if (count == 0)
       return false;
@@ -101,7 +101,7 @@ public:
     return count > 0;
   }
 
-  bool AdvanceTo(const int y_t) {
+  bool AdvanceTo(const int y_t) noexcept {
     if (count == 0)
       return false; // past end point
 
@@ -145,24 +145,24 @@ public:
     return count == 0;
   }
 
-  static bool CompareHorizontal(const BresenhamIterator& i1,
-                                const BresenhamIterator& i2) {
+  static bool CompareHorizontal(const BresenhamIterator &i1,
+                                const BresenhamIterator &i2) noexcept {
     if ((i2.count>0) && (i1.count==0))
       return true; // shift finished lines to left
     if ((i1.count>0) && (i2.count==0))
       return false; // shift finished lines to left
-    
+
     if (i1.x < i2.x)
       return true;
     if (i2.x < i1.x)
       return false;
-    
+
     return false; // TODO slope difference
   }
 
-  static bool CompareVerticalHorizontal(const BresenhamIterator& i1,
-                                        const BresenhamIterator& i2) {
-    if (i1.y < i2.y) 
+  static bool CompareVerticalHorizontal(const BresenhamIterator &i1,
+                                        const BresenhamIterator &i2) noexcept {
+    if (i1.y < i2.y)
       return true;
     if (i1.y > i2.y)
       return false;
