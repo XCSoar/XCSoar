@@ -163,7 +163,7 @@ WindSettingsPanel::Save(bool &_changed) noexcept
 }
 
 void
-WindSettingsPanel::OnModified(DataField &df)
+WindSettingsPanel::OnModified(DataField &df) noexcept
 {
   if (!edit_manual_wind)
     return;

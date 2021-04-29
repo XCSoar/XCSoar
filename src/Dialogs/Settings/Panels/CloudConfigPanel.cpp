@@ -53,7 +53,7 @@ public:
 
 private:
   /* methods from DataFieldListener */
-  void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 };
 
 void
@@ -63,7 +63,7 @@ CloudConfigPanel::SetEnabled(bool enabled)
 }
 
 void
-CloudConfigPanel::OnModified(DataField &df)
+CloudConfigPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(ENABLED, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;

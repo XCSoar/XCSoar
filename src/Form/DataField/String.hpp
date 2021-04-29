@@ -35,18 +35,19 @@ class DataFieldString: public DataField
 
 protected:
   DataFieldString(Type _type, const TCHAR *_value,
-                  DataFieldListener *listener=nullptr)
+                  DataFieldListener *listener=nullptr) noexcept
     :DataField(_type, false, listener), mValue(_value) {}
 
 public:
-  DataFieldString(const TCHAR *_value, DataFieldListener *listener=nullptr)
+  DataFieldString(const TCHAR *_value,
+                  DataFieldListener *listener=nullptr) noexcept
     :DataField(Type::STRING, false, listener), mValue(_value) {}
 
-  void Set(const TCHAR *Value);
+  void Set(const TCHAR *Value) noexcept;
 
   /* virtual methods from class DataField */
-  const TCHAR *GetAsString() const override;
-  void SetAsString(const TCHAR *Value) override;
+  const TCHAR *GetAsString() const noexcept override;
+  void SetAsString(const TCHAR *Value) noexcept override;
 };
 
 #endif

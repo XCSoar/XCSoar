@@ -120,7 +120,7 @@ private:
   void OnTimer();
 
   /* virtual methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 };
 
 void
@@ -248,7 +248,7 @@ FlightSetupPanel::OnTimer()
 }
 
 void
-FlightSetupPanel::OnModified(DataField &df)
+FlightSetupPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(Ballast, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;

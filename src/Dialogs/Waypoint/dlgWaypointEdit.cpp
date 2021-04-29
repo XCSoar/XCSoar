@@ -60,7 +60,7 @@ private:
   bool Save(bool &changed) noexcept override;
 
   /* virtual methods from DataFieldListener */
-  void OnModified(gcc_unused DataField &df) override {
+  void OnModified(gcc_unused DataField &df) noexcept override {
     modified = true;
   }
 };

@@ -24,7 +24,7 @@ Copyright_License {
 #include "String.hpp"
 
 void
-DataFieldString::SetAsString(const TCHAR *Value)
+DataFieldString::SetAsString(const TCHAR *Value) noexcept
 {
   if (mValue == Value)
     return;
@@ -34,13 +34,13 @@ DataFieldString::SetAsString(const TCHAR *Value)
 }
 
 void
-DataFieldString::Set(const TCHAR *Value)
+DataFieldString::Set(const TCHAR *Value) noexcept
 {
   mValue = Value;
 }
 
 const TCHAR *
-DataFieldString::GetAsString() const
+DataFieldString::GetAsString() const noexcept
 {
   return mValue;
 }

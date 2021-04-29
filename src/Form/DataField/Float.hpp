@@ -41,61 +41,61 @@ class DataFieldFloat final : public NumberDataField {
   mutable TCHAR mOutBuf[OUTBUFFERSIZE+1];
 
 protected:
-  double SpeedUp(bool keyup);
+  double SpeedUp(bool keyup) noexcept;
 
 public:
   DataFieldFloat(const TCHAR *edit_format, const TCHAR *display_format,
                  double _min, double _max, double _value,
                  double _step, bool _fine,
-                 DataFieldListener *listener=nullptr)
+                 DataFieldListener *listener=nullptr) noexcept
     :NumberDataField(Type::REAL, true, edit_format, display_format, listener),
      mValue(_value), mMin(_min), mMax(_max), mStep(_step),
      mSpeedup(0), mFine(_fine),
      unit(_T("")) {}
 
-  void SetUnits(const TCHAR *text) {
+  void SetUnits(const TCHAR *text) noexcept {
     unit = text;
   }
 
-  void Set(double _value) {
+  void Set(double _value) noexcept {
     mValue = _value;
   }
 
-  double GetAsFixed() const {
+  double GetAsFixed() const noexcept {
     return mValue;
   }
 
-  void SetMin(double v) {
+  void SetMin(double v) noexcept {
     mMin = v;
   }
 
-  void SetMax(double v) {
+  void SetMax(double v) noexcept {
     mMax = v;
   }
 
-  void SetStep(double v) {
+  void SetStep(double v) noexcept {
     mStep = v;
   }
 
-  double GetStep() const {
+  double GetStep() const noexcept {
     return mStep;
   }
 
-  void SetAsFloat(double Value);
+  void SetAsFloat(double Value) noexcept;
 
   /* virtual methods from class DataField */
-  void Inc() override;
-  void Dec() override;
-  int GetAsInteger() const override;
-  const TCHAR *GetAsString() const override;
-  const TCHAR *GetAsDisplayString() const override;
-  void SetAsInteger(int value) override;
-  void SetAsString(const TCHAR *value) override;
-  ComboList CreateComboList(const TCHAR *reference) const override;
-  void SetFromCombo(int iDataFieldIndex, const TCHAR *sValue) override;
+  void Inc() noexcept override;
+  void Dec() noexcept override;
+  int GetAsInteger() const noexcept override;
+  const TCHAR *GetAsString() const noexcept override;
+  const TCHAR *GetAsDisplayString() const noexcept override;
+  void SetAsInteger(int value) noexcept override;
+  void SetAsString(const TCHAR *value) noexcept override;
+  ComboList CreateComboList(const TCHAR *reference) const noexcept override;
+  void SetFromCombo(int iDataFieldIndex, const TCHAR *sValue) noexcept override;
 
 protected:
-  void AppendComboValue(ComboList &combo_list, double value) const;
+  void AppendComboValue(ComboList &combo_list, double value) const noexcept;
 };
 
 #endif

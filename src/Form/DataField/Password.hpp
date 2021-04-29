@@ -33,11 +33,11 @@ Copyright_License {
 class PasswordDataField final : public DataFieldString {
 public:
   PasswordDataField(const TCHAR *initial_value,
-                    DataFieldListener *listener=nullptr)
+                    DataFieldListener *listener=nullptr) noexcept
     :DataFieldString(initial_value, listener) {}
 
   /* virtual methods from class DataField */
-  const TCHAR *GetAsDisplayString() const override;
+  const TCHAR *GetAsDisplayString() const noexcept override;
 };
 
 #endif

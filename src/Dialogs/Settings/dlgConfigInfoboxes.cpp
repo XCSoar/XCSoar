@@ -193,7 +193,7 @@ public:
 private:
   /* virtual methods from class DataFieldListener */
 
-  void OnModified(DataField &df) override {
+  void OnModified(DataField &df) noexcept override {
     if (IsDataField(INFOBOX, df)) {
       const DataFieldEnum &dfe = (const DataFieldEnum &)df;
       SetCurrentInfoBox(dfe.GetValue());

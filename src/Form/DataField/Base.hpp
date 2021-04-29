@@ -65,43 +65,42 @@ protected:
 
 protected:
   DataField(Type type, bool supports_combolist,
-            DataFieldListener *listener);
+            DataFieldListener *listener) noexcept;
 
 public:
-  virtual ~DataField() {}
+  virtual ~DataField() noexcept = default;
 
-  void SetListener(DataFieldListener *_listener) {
+  void SetListener(DataFieldListener *_listener) noexcept {
     assert(listener == nullptr);
     assert(_listener != nullptr);
 
     listener = _listener;
   }
 
-  Type GetType() const {
+  Type GetType() const noexcept {
     return type;
   }
 
-  bool SupportsCombolist() const {
+  bool SupportsCombolist() const noexcept {
     return supports_combolist;
   }
 
-  virtual void Inc();
-  virtual void Dec();
+  virtual void Inc() noexcept;
+  virtual void Dec() noexcept;
 
   gcc_pure
-  virtual int GetAsInteger() const;
+  virtual int GetAsInteger() const noexcept;
 
   gcc_pure
-  virtual const TCHAR *GetAsString() const;
+  virtual const TCHAR *GetAsString() const noexcept;
 
   gcc_pure
-  virtual const TCHAR *GetAsDisplayString() const;
+  virtual const TCHAR *GetAsDisplayString() const noexcept;
 
-  virtual void SetAsInteger(int value);
-  virtual void SetAsString(const TCHAR *value);
+  virtual void SetAsInteger(int value) noexcept;
+  virtual void SetAsString(const TCHAR *value) noexcept;
 
-  virtual void EnableItemHelp(gcc_unused bool value) {};
-
+  virtual void EnableItemHelp(gcc_unused bool value) noexcept {};
 
   /**
    * Create a #ComboList that allows the user to choose a value.
@@ -111,15 +110,15 @@ public:
    * "default" reference
    */
   gcc_pure
-  virtual ComboList CreateComboList(const TCHAR *reference) const;
+  virtual ComboList CreateComboList(const TCHAR *reference) const noexcept;
 
   virtual void SetFromCombo(int iDataFieldIndex,
-                            gcc_unused const TCHAR *sValue)
+                            gcc_unused const TCHAR *sValue) noexcept
   {
     SetAsInteger(iDataFieldIndex);
   }
 
-  bool GetItemHelpEnabled() {
+  bool GetItemHelpEnabled() noexcept {
     return item_help_enabled;
   }
 
@@ -128,7 +127,7 @@ protected:
    * Notify interested parties that the value of this object has
    * been modified.
    */
-  void Modified();
+  void Modified() noexcept;
 };
 
 #endif

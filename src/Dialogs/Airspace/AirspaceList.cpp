@@ -108,7 +108,7 @@ public:
   void OnActivateItem(unsigned index) noexcept override;
 
   /* virtual methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 
 private:
   /* virtual methods from BlackboardListener */
@@ -274,7 +274,7 @@ AirspaceListWidget::FilterMode(bool direction)
 }
 
 void
-AirspaceListWidget::OnModified(DataField &df)
+AirspaceListWidget::OnModified(DataField &df) noexcept
 {
   if (filter_widget.IsDataField(DISTANCE, df)) {
     DataFieldEnum &dfe = (DataFieldEnum &)df;

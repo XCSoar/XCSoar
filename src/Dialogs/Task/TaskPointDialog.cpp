@@ -180,7 +180,7 @@ public:
 
 private:
   /* virtual methods from class ObservationZoneEditWidget::Listener */
-  void OnModified(ObservationZoneEditWidget &widget) override;
+  void OnModified(ObservationZoneEditWidget &widget) noexcept override;
 };
 
 TaskPointWidget::Layout::Layout(PixelRect rc, const DialogLook &look)
@@ -531,7 +531,7 @@ TaskPointWidget::OnOptionalStartsClicked()
 }
 
 void
-TaskPointWidget::OnModified(ObservationZoneEditWidget &widget)
+TaskPointWidget::OnModified(ObservationZoneEditWidget &widget) noexcept
 {
   ReadValues();
   map.Invalidate();

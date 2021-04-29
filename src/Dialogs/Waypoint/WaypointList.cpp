@@ -184,7 +184,7 @@ public:
   void OnActivateItem(unsigned index) noexcept override;
 
   /* virtual methods from DataFieldListener */
-  void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 
 private:
   /* virtual methods from BlackboardListener */
@@ -409,7 +409,7 @@ WaypointFilterWidget::Prepare(ContainerWindow &parent,
 }
 
 void
-WaypointListWidget::OnModified(DataField &df)
+WaypointListWidget::OnModified(DataField &df) noexcept
 {
   if (filter_widget.IsDataField(NAME, df)) {
     dialog_state.name = df.GetAsString();

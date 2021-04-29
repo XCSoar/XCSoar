@@ -85,7 +85,7 @@ public:
 
 private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 };
 
 #ifdef HAVE_SKYLINES_TRACKING
@@ -121,7 +121,7 @@ TrackingConfigPanel::SetLiveTrack24Enabled(bool enabled)
 #endif
 
 void
-TrackingConfigPanel::OnModified(DataField &df)
+TrackingConfigPanel::OnModified(DataField &df) noexcept
 {
 #ifdef HAVE_SKYLINES_TRACKING
   if (IsDataField(SL_ENABLED, df)) {

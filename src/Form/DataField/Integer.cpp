@@ -31,33 +31,33 @@ static bool datafield_key_up = false;
 
 gcc_pure
 static int
-ParseString(const TCHAR *s)
+ParseString(const TCHAR *s) noexcept
 {
   return ParseInt(s);
 }
 
 int
-DataFieldInteger::GetAsInteger() const
+DataFieldInteger::GetAsInteger() const noexcept
 {
   return value;
 }
 
 const TCHAR *
-DataFieldInteger::GetAsString() const
+DataFieldInteger::GetAsString() const noexcept
 {
   _stprintf(output_buffer, edit_format, value);
   return output_buffer;
 }
 
 const TCHAR *
-DataFieldInteger::GetAsDisplayString() const
+DataFieldInteger::GetAsDisplayString() const noexcept
 {
   _stprintf(output_buffer, display_format, value);
   return output_buffer;
 }
 
 void
-DataFieldInteger::SetAsInteger(int _value)
+DataFieldInteger::SetAsInteger(int _value) noexcept
 {
   if (_value < min)
     _value = min;
@@ -70,25 +70,25 @@ DataFieldInteger::SetAsInteger(int _value)
 }
 
 void
-DataFieldInteger::SetAsString(const TCHAR *_value)
+DataFieldInteger::SetAsString(const TCHAR *_value) noexcept
 {
   SetAsInteger(ParseString(_value));
 }
 
 void
-DataFieldInteger::Inc()
+DataFieldInteger::Inc() noexcept
 {
   SetAsInteger(value + step * SpeedUp(true));
 }
 
 void
-DataFieldInteger::Dec()
+DataFieldInteger::Dec() noexcept
 {
   SetAsInteger(value - step * SpeedUp(false));
 }
 
 int
-DataFieldInteger::SpeedUp(bool keyup)
+DataFieldInteger::SpeedUp(bool keyup) noexcept
 {
   int res = 1;
 
@@ -115,7 +115,8 @@ DataFieldInteger::SpeedUp(bool keyup)
 }
 
 void
-DataFieldInteger::AppendComboValue(ComboList &combo_list, int value) const
+DataFieldInteger::AppendComboValue(ComboList &combo_list,
+                                   int value) const noexcept
 {
   TCHAR a[decltype(edit_format)::capacity()], b[decltype(display_format)::capacity()];
   _stprintf(a, edit_format, value);
@@ -124,7 +125,7 @@ DataFieldInteger::AppendComboValue(ComboList &combo_list, int value) const
 }
 
 ComboList
-DataFieldInteger::CreateComboList(const TCHAR *reference_string) const
+DataFieldInteger::CreateComboList(const TCHAR *reference_string) const noexcept
 {
   const int reference = reference_string != nullptr
     ? ParseString(reference_string)
@@ -177,7 +178,8 @@ DataFieldInteger::CreateComboList(const TCHAR *reference_string) const
 }
 
 void
-DataFieldInteger::SetFromCombo(gcc_unused int index, const TCHAR *value)
+DataFieldInteger::SetFromCombo(gcc_unused int index,
+                               const TCHAR *value) noexcept
 {
   SetAsString(value);
 }

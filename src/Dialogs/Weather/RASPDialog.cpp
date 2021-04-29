@@ -76,7 +76,7 @@ private:
   bool Save(bool &changed) noexcept override;
 
   /* virtual methods from DataFieldListener */
-  void OnModified(DataField &df) override {
+  void OnModified(DataField &df) noexcept override {
     if (IsDataField(ITEM, df))
       UpdateTimeControl();
     else if (IsDataField(TIME, df))

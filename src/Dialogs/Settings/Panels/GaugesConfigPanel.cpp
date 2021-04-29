@@ -81,11 +81,11 @@ public:
 
 private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 };
 
 void
-GaugesConfigPanel::OnModified(DataField &df)
+GaugesConfigPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(FinalGlideBarDisplayModeControl, df)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;

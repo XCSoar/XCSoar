@@ -43,71 +43,70 @@ class AngleDataField final : public DataField {
 
 public:
   AngleDataField(unsigned _value, unsigned _step, bool _fine,
-                 DataFieldListener *listener=nullptr)
+                 DataFieldListener *listener=nullptr) noexcept
     :DataField(Type::ANGLE, true, listener),
      value(Import(_value)), step(_step), fine(_fine) {}
 
   AngleDataField(int _value, unsigned _step, bool _fine,
-                 DataFieldListener *listener=nullptr)
+                 DataFieldListener *listener=nullptr) noexcept
     :DataField(Type::ANGLE, true, listener),
      value(Import(_value)), step(_step), fine(_fine) {}
 
   AngleDataField(Angle _value, unsigned _step, bool _fine,
-                 DataFieldListener *listener=nullptr)
+                 DataFieldListener *listener=nullptr) noexcept
     :DataField(Type::ANGLE, true, listener),
      value(Import(_value)), step(_step), fine(_fine) {}
 
-  constexpr
-  static unsigned Import(unsigned value) {
+  static constexpr unsigned Import(unsigned value) noexcept {
     return value % MAX;
   }
 
   gcc_const
-  static unsigned Import(int value);
+  static unsigned Import(int value) noexcept;
 
   gcc_const
-  static unsigned Import(Angle value) {
+  static unsigned Import(Angle value) noexcept {
     return lround(value.AsBearing().Degrees()) % 360u;
   }
 
-  Angle GetValue() const {
+  Angle GetValue() const noexcept {
     return Angle::Degrees(value);
   }
 
-  unsigned GetIntegerValue() const {
+  unsigned GetIntegerValue() const noexcept {
     return value;
   }
 
-  void SetValue(unsigned _value) {
+  void SetValue(unsigned _value) noexcept {
     value = Import(_value);
   }
 
-  void SetValue(int _value) {
+  void SetValue(int _value) noexcept {
     value = Import(_value);
   }
 
-  void SetValue(Angle _value) {
+  void SetValue(Angle _value) noexcept {
     value = Import(_value);
   }
 
-  void ModifyValue(unsigned _value);
+  void ModifyValue(unsigned _value) noexcept;
 
-  void ModifyValue(int _value);
-  void ModifyValue(Angle _value);
+  void ModifyValue(int _value) noexcept;
+  void ModifyValue(Angle _value) noexcept;
 
   /* virtual methods from class DataField */
-  int GetAsInteger() const override;
-  const TCHAR *GetAsString() const override;
-  const TCHAR *GetAsDisplayString() const override;
+  int GetAsInteger() const noexcept override;
+  const TCHAR *GetAsString() const noexcept override;
+  const TCHAR *GetAsDisplayString() const noexcept override;
 
-  void SetAsInteger(int value) override;
-  void SetAsString(const TCHAR *value) override;
+  void SetAsInteger(int value) noexcept override;
+  void SetAsString(const TCHAR *value) noexcept override;
 
-  void Inc() override;
-  void Dec() override;
+  void Inc() noexcept override;
+  void Dec() noexcept override;
 
-  ComboList CreateComboList(const TCHAR *reference) const override;
-  void SetFromCombo(int i, const TCHAR *s) override;
+  ComboList CreateComboList(const TCHAR *reference) const noexcept override;
+  void SetFromCombo(int i, const TCHAR *s) noexcept override;
 };
 
 #endif

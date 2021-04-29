@@ -29,7 +29,7 @@ Copyright_License {
 static TCHAR buffer[6];
 
 void
-RoughTimeDataField::ModifyValue(RoughTime _value)
+RoughTimeDataField::ModifyValue(RoughTime _value) noexcept
 {
   if (_value == value)
     return;
@@ -39,7 +39,7 @@ RoughTimeDataField::ModifyValue(RoughTime _value)
 }
 
 int
-RoughTimeDataField::GetAsInteger() const
+RoughTimeDataField::GetAsInteger() const noexcept
 {
   return value.IsValid()
     ? value.GetMinuteOfDay()
@@ -47,7 +47,7 @@ RoughTimeDataField::GetAsInteger() const
 }
 
 const TCHAR *
-RoughTimeDataField::GetAsString() const
+RoughTimeDataField::GetAsString() const noexcept
 {
   if (!value.IsValid())
     return _T("");
@@ -57,7 +57,7 @@ RoughTimeDataField::GetAsString() const
 }
 
 const TCHAR *
-RoughTimeDataField::GetAsDisplayString() const
+RoughTimeDataField::GetAsDisplayString() const noexcept
 {
   if (!value.IsValid())
     return _T("");
@@ -69,7 +69,7 @@ RoughTimeDataField::GetAsDisplayString() const
 }
 
 void
-RoughTimeDataField::Inc()
+RoughTimeDataField::Inc() noexcept
 {
   RoughTime new_value = value;
   if (new_value.IsValid())
@@ -83,7 +83,7 @@ RoughTimeDataField::Inc()
 }
 
 void
-RoughTimeDataField::Dec()
+RoughTimeDataField::Dec() noexcept
 {
   RoughTime new_value = value;
   if (new_value.IsValid())

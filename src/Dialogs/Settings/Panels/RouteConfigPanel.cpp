@@ -57,7 +57,7 @@ public:
 
 private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 };
 
 void
@@ -75,7 +75,7 @@ RouteConfigPanel::ShowReachControls(bool show)
 }
 
 void
-RouteConfigPanel::OnModified(DataField &df)
+RouteConfigPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(RoutePlannerMode, df)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;

@@ -48,22 +48,24 @@ public:
     /** Path including Filename */
     AllocatedPath path;
 
-    Item():filename(nullptr), path(nullptr) {}
+    Item() noexcept:filename(nullptr), path(nullptr) {}
 
-    Item(Item &&src):filename(src.filename), path(std::move(src.path)) {
+    Item(Item &&src) noexcept
+      :filename(src.filename), path(std::move(src.path))
+    {
       src.filename = nullptr;
       src.path = nullptr;
     }
 
     Item(const Item &) = delete;
 
-    Item &operator=(Item &&src) {
+    Item &operator=(Item &&src) noexcept {
       std::swap(filename, src.filename);
       std::swap(path, src.path);
       return *this;
     }
 
-    void Set(Path _path);
+    void Set(Path _path) noexcept;
   };
 
 private:
@@ -104,35 +106,35 @@ public:
    * Constructor of the FileDataField class
    * @param OnDataAccess
    */
-  FileDataField(DataFieldListener *listener=nullptr);
+  explicit FileDataField(DataFieldListener *listener=nullptr) noexcept;
 
-  FileType GetFileType() const {
+  FileType GetFileType() const noexcept {
     return file_type;
   }
 
-  void SetFileType(FileType _file_type) {
+  void SetFileType(FileType _file_type) noexcept {
     file_type = _file_type;
   }
 
   /**
    * Adds a filename/filepath couple to the filelist
    */
-  void AddFile(Path path);
+  void AddFile(Path path) noexcept;
 
   /**
    * Adds an empty row to the filelist
    */
-  void AddNull();
+  void AddNull() noexcept;
 
   /**
    * Returns the number of files in the list
    * @return The number of files in the list
    */
   gcc_pure
-  unsigned GetNumFiles() const;
+  unsigned GetNumFiles() const noexcept;
 
   gcc_pure
-  int Find(Path path) const;
+  int Find(Path path) const noexcept;
 
   /**
    * Iterates through the file list and tries to find an item where the path
@@ -140,61 +142,61 @@ public:
    * that item
    * @param text PathFile to search for
    */
-  void Lookup(Path text);
+  void Lookup(Path text) noexcept;
 
   /**
    * Force the value to the given path.  If the path is not in the
    * file list, add it.  This method does not check whether the file
    * really exists.
    */
-  void ForceModify(Path path);
+  void ForceModify(Path path) noexcept;
 
   /**
    * Returns the PathFile of the currently selected item
    * @return The PathFile of the currently selected item
    */
   gcc_pure
-  Path GetPathFile() const;
+  Path GetPathFile() const noexcept;
 
   /**
    * Sets the selection to the given index
    * @param Value The array index to select
    */
-  void Set(unsigned new_value);
+  void Set(unsigned new_value) noexcept;
 
   /** Sorts the filelist by filenames */
-  void Sort();
-  void ScanDirectoryTop(const TCHAR *filter);
+  void Sort() noexcept;
+  void ScanDirectoryTop(const TCHAR *filter) noexcept;
 
   /**
    * Scan multiple shell patterns.  Each pattern is terminated by a
    * null byte, and the list ends with an empty pattern.
    */
-  void ScanMultiplePatterns(const TCHAR *patterns);
+  void ScanMultiplePatterns(const TCHAR *patterns) noexcept;
 
   /** For use by other classes */
   gcc_pure
-  unsigned size() const;
+  unsigned size() const noexcept;
 
   gcc_pure
-  Path GetItem(unsigned index) const;
+  Path GetItem(unsigned index) const noexcept;
 
   /* virtual methods from class DataField */
-  void Inc() override;
-  void Dec() override;
-  int GetAsInteger() const override;
-  const TCHAR *GetAsString() const override;
-  const TCHAR *GetAsDisplayString() const override;
-  void SetAsInteger(int value) override;
-  ComboList CreateComboList(const TCHAR *reference) const override;
+  void Inc() noexcept override;
+  void Dec() noexcept override;
+  int GetAsInteger() const noexcept override;
+  const TCHAR *GetAsString() const noexcept override;
+  const TCHAR *GetAsDisplayString() const noexcept override;
+  void SetAsInteger(int value) noexcept override;
+  ComboList CreateComboList(const TCHAR *reference) const noexcept override;
 
 protected:
-  void EnsureLoaded();
+  void EnsureLoaded() noexcept;
 
   /**
    * Hack for our "const" methods, to allow them to load on demand.
    */
-  void EnsureLoadedDeconst() const {
+  void EnsureLoadedDeconst() const noexcept {
     const_cast<FileDataField *>(this)->EnsureLoaded();
   }
 };

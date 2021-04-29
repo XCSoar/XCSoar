@@ -102,7 +102,7 @@ public:
 
 private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 };
 
 void
@@ -148,7 +148,7 @@ AirspaceConfigPanel::Hide() noexcept
 }
 
 void
-AirspaceConfigPanel::OnModified(DataField &df)
+AirspaceConfigPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(AirspaceDisplay, df)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;

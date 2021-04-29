@@ -799,7 +799,7 @@ DeviceEditWidget::Save(bool &_changed) noexcept
 }
 
 void
-DeviceEditWidget::OnModified(DataField &df)
+DeviceEditWidget::OnModified(DataField &df) noexcept
 {
   if (IsDataField(Port, df) || IsDataField(Driver, df) ||
       IsDataField(UseSecondDriver, df) || IsDataField(K6Bt, df))

@@ -189,7 +189,7 @@ TaskPropertiesPanel::OnTaskTypeChange(DataFieldEnum &df)
 }
 
 void
-TaskPropertiesPanel::OnModified(DataField &df)
+TaskPropertiesPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(FAI_FINISH_HEIGHT, df))
     OnFAIFinishHeightChange((DataFieldBoolean &)df);
