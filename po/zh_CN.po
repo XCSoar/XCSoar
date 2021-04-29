@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2020-09-11 17:17+0000\n"
-"Last-Translator: flypluswangzhe <216188@qq.com>\n"
+"PO-Revision-Date: 2021-04-30 03:32+0000\n"
+"Last-Translator: 山岭野兔 <bd8bin@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "xcsoar/translations/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Launchpad-Export-Date: 2016-03-01 23:01+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -395,7 +395,7 @@ msgstr "非MAT转弯点"
 #: src/Task/ValidationErrorStrings.cpp:43
 #, no-c-format
 msgid "Wrong shape"
-msgstr ""
+msgstr "错误形状"
 
 #: src/Airspace/AirspaceGlue.cpp:84
 msgid "Loading Airspace File..."
@@ -2277,6 +2277,7 @@ msgid ""
 "set. In case the FL is calculated from the GPS altitude, the FL label is "
 "coloured red."
 msgstr ""
+"气压高度作为飞行高度。 如果气压高度不可用，则在设置了正确的QNH的情况下，根据GPS高度计算FL。 如果根据GPS高度计算FL，则FL标签会显示为红色。"
 
 #: src/InfoBoxes/Content/Factory.cpp:782 src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
@@ -2895,49 +2896,49 @@ msgid ""
 msgstr "GPS模块实际使用的（可见）卫星数。如果此信息不可用，则显示的值为“---”。"
 
 #: src/InfoBoxes/Content/Factory.cpp:1073
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Active Radio Frequency"
-msgstr "设置有效频率"
+msgstr "当前有效频率"
 
 #: src/InfoBoxes/Content/Factory.cpp:1074
 #, no-c-format
 msgid "Act Freq"
-msgstr ""
+msgstr "当前频率"
 
 #: src/InfoBoxes/Content/Factory.cpp:1075
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently active Radio Frequency"
-msgstr "设置有效频率"
+msgstr "当前有效频率"
 
 #: src/InfoBoxes/Content/Factory.cpp:1080
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Standby Radio Frequency"
-msgstr "设置待机频率"
+msgstr "待机频率"
 
 #: src/InfoBoxes/Content/Factory.cpp:1081
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Stby Freq"
-msgstr "设置待机频率"
+msgstr "待机频率"
 
 #: src/InfoBoxes/Content/Factory.cpp:1082
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently standby Radio Frequency"
-msgstr "设置待机频率"
+msgstr "当前待机频率"
 
 #: src/InfoBoxes/Content/Factory.cpp:1088
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Thermal time"
-msgstr "热气流获得高度"
+msgstr "热气流持续时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:1089
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TC Time"
-msgstr "AAT时间"
+msgstr "TC时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:1090
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The time spend in the current thermal."
-msgstr "在当前热气流中获得/损失的高度。"
+msgstr "在当前热气流中飞行时间。"
 
 #: src/InfoBoxes/Content/Alternate.cpp:49
 #: src/Dialogs/Task/AlternatesListDialog.cpp:150 Data/Input/default.xci:388
@@ -3868,7 +3869,7 @@ msgstr "内置GPS和传感器"
 
 #: src/Device/Config.cpp:248
 msgid "GliderLink traffic receiver"
-msgstr ""
+msgstr "空中交通信息接收器"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:93 src/Dialogs/WidgetDialog.cpp:264
@@ -3953,9 +3954,8 @@ msgid "Add"
 msgstr "加"
 
 #: src/Dialogs/FileManager.cpp:435
-#, fuzzy
 msgid "Update all"
-msgstr "更新"
+msgstr "完全更新"
 
 #: src/Dialogs/FileManager.cpp:468
 msgid "Queued"
@@ -3986,9 +3986,8 @@ msgid "Error"
 msgstr "错误"
 
 #: src/Dialogs/FileManager.cpp:488
-#, fuzzy
 msgid "Update available"
-msgstr "无METAR可用！"
+msgstr "可用更新"
 
 #: src/Dialogs/FileManager.cpp:730 src/Dialogs/DownloadFilePicker.cpp:340
 msgid "Failed to download the repository index."
@@ -4009,9 +4008,9 @@ msgid "IOIO switches and Nunchuk"
 msgstr "IOIO 交换机和Nunchuk"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:75
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO I²C pressure sensor"
-msgstr "IOIO i2c压力传感器"
+msgstr "IOIO i2c气压传感器"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:76
 #, no-c-format
@@ -4027,12 +4026,12 @@ msgstr "TCP客户端"
 #. selection UI
 #: src/Dialogs/Device/DeviceEditWidget.cpp:83
 #: src/Dialogs/Device/DeviceEditWidget.cpp:612
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TCP port"
 msgstr "TCP端口"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:84
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "UDP port"
 msgstr "UDP端口"
 
@@ -4061,13 +4060,12 @@ msgid ""
 msgstr "用于批量传输的波特率，如任务申报或下载飞行。"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:607
-#, fuzzy
 msgid "IP address"
 msgstr "IP地址"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I²C bus"
-msgstr ""
+msgstr "I²C总线"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "Select the description or bus number that matches your configuration."
@@ -4075,31 +4073,25 @@ msgstr "选择与您的配置相匹配的说明或总线号。"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:623
 msgid "I²C addr"
-msgstr ""
+msgstr "I²C地址"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:623
-#, fuzzy
 msgid ""
 "The I²C address that matches your configuration. This field is not used when "
 "your selection in the \"I²C bus\" field is not an I²C bus number. Assume "
 "this field is not in use if that doesn't make sense to you."
-msgstr ""
-"I2C地址要匹配您的配置。当您选择的I2C总线字段不是I2C总线号是不能被使用。万一你"
-"不理解前面的句子这样做,你可以假设这个字段没被用过。"
+msgstr "I2C地址要匹配您的配置。当您选择的I2C总线字段不是I2C总线号是不能被使用。万一你不理解前面的句子这样做,你可以假设这个字段没被用过。"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:631
 msgid "Pressure use"
 msgstr "使用压力"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:631
-#, fuzzy
 msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
 "pressure. Here you tell the system what pressure this is and what it should "
 "be used for."
-msgstr ""
-"选择此压力传感器的用途。这个传感器测量一些压力。这里告诉系统这是什么压力以及"
-"它应该被怎么使用。"
+msgstr "选择此气压传感器的用途。这个传感器测量一些气压。这里告诉系统这是什么气压以及它应该被怎么使用。"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:645
 msgid "Driver"
@@ -4111,7 +4103,6 @@ msgid "Passthrough device"
 msgstr "设备通过"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:649
-#, fuzzy
 msgid "Whether the device has a passed-through device connected."
 msgstr "此选项允许您配置此设备是否通过此设备连接。"
 
@@ -4124,27 +4115,22 @@ msgid "Sync. from device"
 msgstr "从设备同步"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:663
-#, fuzzy
 msgid ""
 "Tells XCSoar to use settings like the MacCready value, bugs and ballast from "
 "the device."
-msgstr ""
-"此选项允许您配置XCSoar是否应该从设备使用类似MacCready值、缺陷、配重的设置。"
+msgstr "此选项允许您配置XCSoar是否应该从设备使用类似MacCready值、虫子、配重的设置。"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:668
 msgid "Sync. to device"
 msgstr "同步到设备"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:669
-#, fuzzy
 msgid ""
 "Tells XCSoar to send settings like the MacCready value, bugs and ballast to "
 "the device."
-msgstr ""
-"此选项允许您配置XCSoar是否应该发送类似MacCready值、缺陷、配重的设置到设备。"
+msgstr "此选项允许您配置XCSoar是否应该发送类似MacCready值、虫子、配重的设置到设备。"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:675
-#, fuzzy
 msgid "Whether you use a K6Bt to connect the device."
 msgstr "如果您使用K6BT连接该设备，请启用此操作。"
 
@@ -6101,52 +6087,52 @@ msgid "Show final glide bar if approaching final glide range."
 msgstr "总是显示滑翔条。"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:57
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable thermal assistant."
-msgstr "热气流辅助"
+msgstr "禁用热气流辅助"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:59
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom left"
-msgstr "底部左边"
+msgstr "左下角"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:60
 #, no-c-format
 msgid "Show thermal assistant in bottom left."
-msgstr ""
+msgstr "在左下角显示热气流辅助."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:62
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom left (avoid infoboxes)"
-msgstr "自动（跟随信息框）"
+msgstr "左下角（跟随信息框）"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:63
 #, no-c-format
 msgid ""
 "Show thermal assistant in bottom left, above/to right of infoboxes (if "
 "there)."
-msgstr ""
+msgstr "在信息框的左下角，右上角显示热气流辅助（如果有）."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom right"
-msgstr "底部右边"
+msgstr "右下角"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:66
 #, no-c-format
 msgid "Show thermal assistant in bottom right."
-msgstr ""
+msgstr "在右下角显示热气流辅助."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom right (avoid infoboxes)"
-msgstr "自动（跟随信息框）"
+msgstr "右下角（跟随信息框）"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:69
 #, no-c-format
 msgid ""
 "Show thermal assistant in bottom right above/to left of infoboxes (if there)."
-msgstr ""
+msgstr "在左边信息框右下角显示热气流辅助（如果有）."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:107
 msgid ""
@@ -6176,7 +6162,7 @@ msgstr ""
 msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
 "the main screen."
-msgstr ""
+msgstr "叠加在主屏幕上时，启用并选择热气流辅助的位置."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:121
 msgid "Thermal band"
@@ -6289,20 +6275,17 @@ msgstr ""
 "转过程中，该指针显示平均总值。"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:92
-#, fuzzy
 msgid "Thermal Averager needle"
-msgstr "平均指针"
+msgstr "平均热气流指针"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:93
-#, fuzzy
 msgid ""
 "If true, the vario gauge will display a thermal averager needle instead of "
 "current climb rate needle.  During cruise, this needle displays the last "
 "thermal average netto value.  During circling, this needle displays the "
 "average net value."
 msgstr ""
-"如果是正值，高度表将显示空心平均指针。在巡航期间，该指针显示平均NETTO值。在盘"
-"转过程中，该指针显示平均总值。"
+"如果为是，则升降仪表将显示热平均指针，而不是当前的爬升率指针。 在巡航过程中，该指针显示最后的热平均内托值。 在盘旋过程中，该指针显示平均净值。"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:65
 #, no-c-format
@@ -6421,23 +6404,22 @@ msgstr "波辅助器"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:123
 msgid "Cruise/Circling period"
-msgstr ""
+msgstr "巡航/盘旋周期"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:124
 msgid ""
 "How many seconds of turning before changing from cruise to circling mode."
-msgstr ""
+msgstr "从巡航模式切换为盘旋模式之前要转多少秒。"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:131
-#, fuzzy
 msgid "Circling/Cruise period"
-msgstr "盘转定向"
+msgstr "巡航/盘转定向"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:132
 msgid ""
 "How many seconds of flying straight before changing from circling to cruise "
 "mode."
-msgstr ""
+msgstr "从盘旋模式更改为巡航模式之前，要直飞多少秒。"
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:88
 msgid "Use final glide mode"
@@ -6567,14 +6549,14 @@ msgid "8 Split"
 msgstr "8个分格"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:81
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "10 Split"
-msgstr "8个分格"
+msgstr "10个分格"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:83
 #, no-c-format
 msgid "12 Split in 3 rows"
-msgstr ""
+msgstr "3列12格"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:85
 #, no-c-format
@@ -6617,9 +6599,9 @@ msgid "5 Right (Square)"
 msgstr "5个右边(正方形)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:101
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "10 Bottom or Right"
-msgstr "12个底部或右边分格"
+msgstr "10个底部或右边分格"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:103
 #, no-c-format
@@ -6627,9 +6609,9 @@ msgid "12 Bottom or Right"
 msgstr "12个底部或右边分格"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:105
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "10 Top or Left"
-msgstr "12个顶部或左边分格"
+msgstr "10个顶部或左边分格"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:107
 #, no-c-format
@@ -6829,19 +6811,19 @@ msgstr "显示菜单按钮"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:230
 msgid "Cursor zoom"
-msgstr ""
+msgstr "光标缩放"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:230
 msgid "Cursor zoom factor"
-msgstr ""
+msgstr "光标缩放系数"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:232
 msgid "Invert cursor color"
-msgstr ""
+msgstr "反转光标颜色"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:232
 msgid "Enable black cursor"
-msgstr ""
+msgstr "打开黑色光标"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:57
 #, no-c-format
@@ -6853,9 +6835,8 @@ msgid "Pilot name"
 msgstr "飞行员姓名"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:72
-#, fuzzy
 msgid "CoPilot name"
-msgstr "飞行员姓名"
+msgstr "Co飞行员姓名"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:74
 msgid "Time step cruise"
@@ -7448,15 +7429,13 @@ msgid ""
 msgstr "该文件可包含来自航路补给物或其他有关航点和机场的其他信息摘录。"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:109
-#, fuzzy
 msgid "FLARM Device Database"
-msgstr "FLARM交通细节"
+msgstr "FLARM设备数据"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:110
-#, fuzzy
 msgid ""
 "The name of the file containing information about registered FLARM devices."
-msgstr "文件的名称（.xcm）包含地形、地貌和可选的航点、及它们的细节和空域。"
+msgstr "包含有关已注册的FLARM设备的信息的文件名。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:84
 #, no-c-format
@@ -7607,29 +7586,29 @@ msgid "Draws an arrow head with a dashed arrow line."
 msgstr "用虚线绘制箭头。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:140
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No SkyLines traffic is drawn."
-msgstr "没有画出风向箭头。"
+msgstr "不绘制SkyLines交通。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 #, no-c-format
 msgid "Symbol"
-msgstr ""
+msgstr "图标"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 #, no-c-format
 msgid "Draws the SkyLines symbol only."
-msgstr ""
+msgstr "仅显示“SkyLines”符号。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
 msgid "Symbol and Name"
-msgstr ""
+msgstr "图标和名称"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
 msgid "Draws the SkyLines symbol with name."
-msgstr ""
+msgstr "显示SkyLines图标和名称。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:152
 msgid "Ground track"
@@ -7697,13 +7676,13 @@ msgstr "确定风况箭头绘制在地图上的方式。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:196
 msgid "SkyLines traffic mode"
-msgstr ""
+msgstr "SkyLine交通模式"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:197
 msgid ""
 "Show the SkyLines traffic symbols/names on the map, downloaded from the "
 "SkyLines server."
-msgstr ""
+msgstr "在地图上显示从SkyLines服务器下载的SkyLines交通符号/名称。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:63
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:231
@@ -7712,9 +7691,8 @@ msgstr "最大开始速度"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:63
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:232
-#, fuzzy
 msgid "Maximum speed allowed in start observation zone. Set to 0 for no limit."
-msgstr "开始观测区域允许的最大速度。  设置为0，无限制。"
+msgstr "开始观察区允许的最大速度。 无限制地设置为0。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:68
 msgid "Start max. speed margin"
@@ -8334,16 +8312,16 @@ msgid ""
 msgstr "两个到达高度都显示出来。需要到达模式：在滑翔计算机中旋转>路由设置。"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:123
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Required GR & terrain glide"
-msgstr "直线和地形滑翔"
+msgstr "所需的GR和地形滑行"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Both Required glide ratio and terrain avoidance height are displayed. "
 "Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings."
-msgstr "两个到达高度都显示出来。需要到达模式：在滑翔计算机中旋转>路由设置。"
+msgstr "同时显示所需的滑行率和避免地形的高度。 需要“滑行计算机>路线”设置中的“到达模式：转向”。"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:129
 msgid "Determines how arrival height is displayed in waypoint labels"
@@ -9946,6 +9924,8 @@ msgid ""
 "Lock\n"
 "Screen"
 msgstr ""
+"屏幕\n"
+"锁定"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:775
 msgid ""
@@ -9982,7 +9962,7 @@ msgid ""
 "list"
 msgstr ""
 "检查\n"
-"表"
+"清单"
 
 #~ msgid ""
 #~ "Pressure Altitude given as Flight Level. Only available if barometric "
