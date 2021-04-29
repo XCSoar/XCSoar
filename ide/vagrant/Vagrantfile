@@ -27,6 +27,9 @@ Vagrant.configure("2") do |config|
 
     config.vm.synced_folder "../..", "/xcsoar-host-src"
 
+    config.vm.define "XCSoarDevEnv"
+    config.vm.hostname = "XCSoarDevEnv"
+
     config.vm.provider "virtualbox" do |v|
         host = RbConfig::CONFIG['host_os']
 
