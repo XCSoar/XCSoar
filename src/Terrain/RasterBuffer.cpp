@@ -169,10 +169,8 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
 
     PixelIterator iterator(dx >> RasterTraits::SUBPIXEL_BITS, size);
     TerrainHeight *gcc_restrict end = buffer + size;
-    while (true) {
+    while (buffer != end) {
       *buffer++ = *src;
-      if (buffer >= end)
-        break;
       src += iterator.Next();
     }
   } else {
