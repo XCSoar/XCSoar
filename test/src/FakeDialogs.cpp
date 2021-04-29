@@ -25,7 +25,8 @@ Copyright_License {
 #include "Dialogs/DataField.hpp"
 
 int
-ShowMessageBox(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
+ShowMessageBox(const TCHAR *lpText, const TCHAR *lpCaption,
+               unsigned uType) noexcept
 {
   return -1;
 }

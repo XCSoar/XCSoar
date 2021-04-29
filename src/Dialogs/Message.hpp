@@ -64,6 +64,7 @@ enum {
  * @return
  */
 int
-ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags);
+ShowMessageBox(const TCHAR *text, const TCHAR *caption,
+               unsigned flags) noexcept;
 
 #endif
