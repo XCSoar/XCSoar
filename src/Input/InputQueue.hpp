@@ -28,14 +28,15 @@ Copyright_License {
 
 typedef void (*pt2Event)(const TCHAR *);
 
-namespace InputEvents
-{
-  void ClearQueues();
-  bool processNmea(unsigned key);
-  bool processGlideComputer(unsigned gce_id);
+namespace InputEvents {
 
-  void DoQueuedEvents();
-};
+void ClearQueues();
+bool processNmea(unsigned key);
+bool processGlideComputer(unsigned gce_id);
+
+void DoQueuedEvents();
+
+} // namespace InputEvents
 
 // GCE = Glide Computer Event
 enum {

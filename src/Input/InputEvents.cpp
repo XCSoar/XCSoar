@@ -72,38 +72,39 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include <stdio.h>
 #include <memory>
 
-namespace InputEvents
-{
-  static const TCHAR *flavour;
+namespace InputEvents {
 
-  static Mode current_mode = InputEvents::MODE_DEFAULT;
+static const TCHAR *flavour;
 
-  /**
-   * A mode that overrides the #current_mode.  Only if a value does
-   * not exist in this mode, it will be taken from the #current_mode.
-   * The special value #MODE_DEFAULT means there is no overlay mode.
-   */
-  static Mode overlay_mode = MODE_DEFAULT;
+static Mode current_mode = InputEvents::MODE_DEFAULT;
 
-  static unsigned MenuTimeOut = 0;
+/**
+ * A mode that overrides the #current_mode.  Only if a value does
+ * not exist in this mode, it will be taken from the #current_mode.
+ * The special value #MODE_DEFAULT means there is no overlay mode.
+ */
+static Mode overlay_mode = MODE_DEFAULT;
 
-  gcc_pure
-  static Mode getModeID();
+static unsigned MenuTimeOut = 0;
 
-  static void UpdateOverlayMode();
+gcc_pure
+static Mode getModeID();
 
-  gcc_pure
-  static unsigned gesture_to_event(const TCHAR *data);
+static void UpdateOverlayMode();
 
-  /**
-   * @param full if false, update only the dynamic labels
-   */
-  static void drawButtons(Mode mode, bool full=false);
+gcc_pure
+static unsigned gesture_to_event(const TCHAR *data);
 
-  static void ProcessMenuTimer();
+/**
+ * @param full if false, update only the dynamic labels
+ */
+static void drawButtons(Mode mode, bool full=false);
 
-  static void processGo(unsigned event_id);
-};
+static void ProcessMenuTimer();
+
+static void processGo(unsigned event_id);
+
+} // namespace InputEvents
 
 static InputConfig input_config;
 

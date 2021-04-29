@@ -30,16 +30,17 @@ Copyright_License {
 
 typedef void (*pt2Event)(const TCHAR *);
 
-namespace InputEvents
-{
-  gcc_pure
-  int findGCE(const TCHAR *data);
+namespace InputEvents {
 
-  gcc_pure
-  int findNE(const TCHAR *data);
+gcc_pure
+int findGCE(const TCHAR *data);
 
-  gcc_pure
-  pt2Event findEvent(const TCHAR *);
-};
+gcc_pure
+int findNE(const TCHAR *data);
+
+gcc_pure
+pt2Event findEvent(const TCHAR *);
+
+} // namespace InputEvents
 
 #endif
