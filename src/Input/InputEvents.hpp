@@ -42,10 +42,17 @@ enum Mode {
   MODE_MENU
 };
 
-void ProcessTimer();
-void ShowMenu();
-void HideMenu();
-Menu *GetMenu(const TCHAR *mode);
+void
+ProcessTimer() noexcept;
+
+void
+ShowMenu() noexcept;
+
+void
+HideMenu() noexcept;
+
+Menu *
+GetMenu(const TCHAR *mode) noexcept;
 
 /**
  * Load the default input file (Data/Input/default.xci).
@@ -53,13 +60,18 @@ Menu *GetMenu(const TCHAR *mode);
 void LoadDefaults(InputConfig &input_config);
 
 void readFile();
-void setMode(Mode mode);
-void setMode(const TCHAR *mode);
+
+void
+setMode(Mode mode) noexcept;
+
+void
+setMode(const TCHAR *mode) noexcept;
 
 /**
  * Update the menu after pan mode has been enabled or disabled.
  */
-void UpdatePan();
+void
+UpdatePan() noexcept;
 
 /**
  * Set the "flavour" of the current mode.  It is an optional string
@@ -69,7 +81,8 @@ void UpdatePan();
  *
  * @param flavour the new flavour name; may be NULL
  */
-void SetFlavour(const TCHAR *flavour);
+void
+SetFlavour(const TCHAR *flavour) noexcept;
 
 /**
  * Is the specified flavour currently active?
@@ -77,30 +90,42 @@ void SetFlavour(const TCHAR *flavour);
  * @return the current flavour mode; may be NULL
  */
 gcc_pure
-bool IsFlavour(const TCHAR *flavour);
+bool
+IsFlavour(const TCHAR *flavour) noexcept;
 
 /**
  * @return: true if current mode is MODE_DEFAULT
  */
 gcc_pure
-bool IsDefault();
+bool
+IsDefault() noexcept;
 
 /**
  * Process an event chain.
  */
-void ProcessEvent(unsigned event_id);
+void
+ProcessEvent(unsigned event_id) noexcept;
 
 /**
  * Process a hot key for the specified mode.
  */
-bool ProcessKey(Mode mode, unsigned key_code);
+bool
+ProcessKey(Mode mode, unsigned key_code) noexcept;
 
-bool processKey(unsigned key);
-bool processGesture(const TCHAR *data);
-bool IsGesture(const TCHAR *data);
+bool
+processKey(unsigned key) noexcept;
 
-bool processNmea_real(unsigned key);
-bool processGlideComputer_real(unsigned gce_id);
+bool
+processGesture(const TCHAR *data) noexcept;
+
+bool
+IsGesture(const TCHAR *data) noexcept;
+
+bool
+processNmea_real(unsigned key) noexcept;
+
+bool
+processGlideComputer_real(unsigned gce_id) noexcept;
 
 // helpers (temporary)
 
