@@ -1,4 +1,5 @@
 Version 7.5 - not yet released
+* fix paths with backslashes
 * user interface
   - use different colors to indicate relative traffic altitude
 * calculations
