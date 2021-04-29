@@ -27,7 +27,7 @@ Copyright_License {
 #include <cassert>
 
 void
-LiveBlackboard::AddListener(BlackboardListener &listener)
+LiveBlackboard::AddListener(BlackboardListener &listener) noexcept
 {
   assert(!calling_listeners);
   /* must not be registered already */
@@ -38,7 +38,7 @@ LiveBlackboard::AddListener(BlackboardListener &listener)
 }
 
 void
-LiveBlackboard::RemoveListener(BlackboardListener &listener)
+LiveBlackboard::RemoveListener(BlackboardListener &listener) noexcept
 {
   assert(!calling_listeners);
 
@@ -49,7 +49,7 @@ LiveBlackboard::RemoveListener(BlackboardListener &listener)
 }
 
 void
-LiveBlackboard::BroadcastGPSUpdate()
+LiveBlackboard::BroadcastGPSUpdate() noexcept
 {
 #ifndef NDEBUG
   calling_listeners = true;
@@ -64,7 +64,7 @@ LiveBlackboard::BroadcastGPSUpdate()
 }
 
 void
-LiveBlackboard::BroadcastCalculatedUpdate()
+LiveBlackboard::BroadcastCalculatedUpdate() noexcept
 {
 #ifndef NDEBUG
   calling_listeners = true;
@@ -79,7 +79,7 @@ LiveBlackboard::BroadcastCalculatedUpdate()
 }
 
 void
-LiveBlackboard::BroadcastComputerSettingsUpdate()
+LiveBlackboard::BroadcastComputerSettingsUpdate() noexcept
 {
 #ifndef NDEBUG
   calling_listeners = true;
@@ -94,7 +94,7 @@ LiveBlackboard::BroadcastComputerSettingsUpdate()
 }
 
 void
-LiveBlackboard::BroadcastUISettingsUpdate()
+LiveBlackboard::BroadcastUISettingsUpdate() noexcept
 {
 #ifndef NDEBUG
   calling_listeners = true;

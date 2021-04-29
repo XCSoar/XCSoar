@@ -37,21 +37,17 @@ class LiveBlackboard : public FullBlackboard {
   std::list<BlackboardListener *> listeners;
 
 #ifndef NDEBUG
-  bool calling_listeners;
+  bool calling_listeners = false;
 #endif
 
 public:
-#ifndef NDEBUG
-  LiveBlackboard():calling_listeners(false) {}
-#endif
+  void AddListener(BlackboardListener &listener) noexcept;
+  void RemoveListener(BlackboardListener &listener) noexcept;
 
-  void AddListener(BlackboardListener &listener);
-  void RemoveListener(BlackboardListener &listener);
-
-  void BroadcastGPSUpdate();
-  void BroadcastCalculatedUpdate();
-  void BroadcastComputerSettingsUpdate();
-  void BroadcastUISettingsUpdate();
+  void BroadcastGPSUpdate() noexcept;
+  void BroadcastCalculatedUpdate() noexcept;
+  void BroadcastComputerSettingsUpdate() noexcept;
+  void BroadcastUISettingsUpdate() noexcept;
 };
 
 #endif
