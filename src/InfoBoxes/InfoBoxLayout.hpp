@@ -44,22 +44,23 @@ struct Layout {
 
   PixelRect remaining;
 
-  bool HasVario() const {
+  constexpr bool HasVario() const noexcept {
     return vario.right > vario.left && vario.bottom > vario.top;
   }
 
-  void ClearVario() {
+  void ClearVario() noexcept {
     vario.left = vario.top = vario.right = vario.bottom = 0;
   }
 };
 
 gcc_pure
 Layout
-Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry);
+Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry) noexcept;
 
 gcc_const
 int
-GetBorder(InfoBoxSettings::Geometry geometry, bool landscape, unsigned i);
+GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
+          unsigned i) noexcept;
 
 } // namespace InfoBoxLayout
 

@@ -43,17 +43,18 @@ namespace InfoBoxLayout {
 
 gcc_const
 static InfoBoxSettings::Geometry
-ValidateGeometry(InfoBoxSettings::Geometry geometry, PixelSize screen_size);
+ValidateGeometry(InfoBoxSettings::Geometry geometry,
+                 PixelSize screen_size) noexcept;
 
 static void
 CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
-                 InfoBoxSettings::Geometry geometry);
+                 InfoBoxSettings::Geometry geometry) noexcept;
 
 } // namespace InfoBoxLayout
 
 static int
 MakeTopRow(const InfoBoxLayout::Layout &layout,
-           PixelRect *p, unsigned n, int left, int right, int top)
+           PixelRect *p, unsigned n, int left, int right, int top) noexcept
 {
   PixelRect *const end = p + n;
   const int bottom = top + layout.control_size.height;
@@ -75,7 +76,8 @@ MakeTopRow(const InfoBoxLayout::Layout &layout,
 
 static int
 MakeBottomRow(const InfoBoxLayout::Layout &layout,
-              PixelRect *p, unsigned n, int left, int right, int bottom)
+              PixelRect *p, unsigned n,
+              int left, int right, int bottom) noexcept
 {
   int top = bottom - layout.control_size.height;
   MakeTopRow(layout, p, n, left, right, top);
@@ -84,7 +86,8 @@ MakeBottomRow(const InfoBoxLayout::Layout &layout,
 
 static int
 MakeLeftColumn(const InfoBoxLayout::Layout &layout,
-               PixelRect *p, unsigned n, int left, int top, int bottom)
+               PixelRect *p, unsigned n,
+               int left, int top, int bottom) noexcept
 {
   PixelRect *const end = p + n;
   const int right = left + layout.control_size.width;
@@ -106,7 +109,8 @@ MakeLeftColumn(const InfoBoxLayout::Layout &layout,
 
 static int
 MakeRightColumn(const InfoBoxLayout::Layout &layout,
-                PixelRect *p, unsigned n, int right, int top, int bottom)
+                PixelRect *p, unsigned n,
+                int right, int top, int bottom) noexcept
 {
   int left = right - layout.control_size.width;
   MakeLeftColumn(layout, p, n, left, top, bottom);
@@ -114,7 +118,7 @@ MakeRightColumn(const InfoBoxLayout::Layout &layout,
 }
 
 InfoBoxLayout::Layout
-InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
+InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry) noexcept
 {
   const PixelSize screen_size = rc.GetSize();
 
@@ -385,7 +389,7 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
 
 static InfoBoxSettings::Geometry
 InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
-                                PixelSize screen_size)
+                                PixelSize screen_size) noexcept
 {
   if ((unsigned)geometry >= ARRAY_SIZE(geometry_counts))
     /* out of range */
@@ -481,7 +485,8 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
 }
 
 static constexpr unsigned
-CalculateInfoBoxRowHeight(unsigned screen_height, unsigned control_width)
+CalculateInfoBoxRowHeight(unsigned screen_height,
+                          unsigned control_width) noexcept
 {
   return Clamp(unsigned(screen_height / CONTROLHEIGHTRATIO),
                control_width * 5 / 7,
@@ -489,7 +494,8 @@ CalculateInfoBoxRowHeight(unsigned screen_height, unsigned control_width)
 }
 
 static constexpr unsigned
-CalculateInfoBoxColumnWidth(unsigned screen_width, unsigned control_height)
+CalculateInfoBoxColumnWidth(unsigned screen_width,
+                            unsigned control_height) noexcept
 {
   return Clamp(unsigned(screen_width / CONTROLHEIGHTRATIO * 1.3),
                control_height,
@@ -498,7 +504,7 @@ CalculateInfoBoxColumnWidth(unsigned screen_width, unsigned control_height)
 
 void
 InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
-                                InfoBoxSettings::Geometry geometry)
+                                InfoBoxSettings::Geometry geometry) noexcept
 {
   const bool landscape = screen_size.width > screen_size.height;
 
@@ -607,7 +613,7 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
 
 int
 InfoBoxLayout::GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
-                         unsigned i)
+                         unsigned i) noexcept
 {
   unsigned border = 0;
 

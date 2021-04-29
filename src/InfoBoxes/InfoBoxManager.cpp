@@ -44,8 +44,11 @@ InfoBoxLayout::Layout layout;
  */
 static bool first;
 
-static void DisplayInfoBox();
-static void InfoBoxDrawIfDirty();
+static void
+DisplayInfoBox() noexcept;
+
+static void
+InfoBoxDrawIfDirty() noexcept;
 
 } // namespace InfoBoxManager
 
@@ -56,7 +59,7 @@ static InfoBoxWindow *infoboxes[InfoBoxSettings::Panel::MAX_CONTENTS];
 
 // TODO locking
 void
-InfoBoxManager::Hide()
+InfoBoxManager::Hide() noexcept
 {
   if (infoboxes_hidden)
     return;
@@ -68,7 +71,7 @@ InfoBoxManager::Hide()
 }
 
 void
-InfoBoxManager::Show()
+InfoBoxManager::Show() noexcept
 {
   if (!infoboxes_hidden)
     return;
@@ -82,7 +85,7 @@ InfoBoxManager::Show()
 }
 
 void
-InfoBoxManager::DisplayInfoBox()
+InfoBoxManager::DisplayInfoBox() noexcept
 {
   static int DisplayTypeLast[InfoBoxSettings::Panel::MAX_CONTENTS];
 
@@ -117,7 +120,7 @@ InfoBoxManager::DisplayInfoBox()
 }
 
 void
-InfoBoxManager::InfoBoxDrawIfDirty()
+InfoBoxManager::InfoBoxDrawIfDirty() noexcept
 {
   // No need to redraw map or infoboxes if screen is blanked.
   // This should save lots of battery power due to CPU usage
@@ -131,13 +134,13 @@ InfoBoxManager::InfoBoxDrawIfDirty()
 }
 
 void
-InfoBoxManager::SetDirty()
+InfoBoxManager::SetDirty() noexcept
 {
   infoboxes_dirty = true;
 }
 
 void
-InfoBoxManager::ProcessTimer()
+InfoBoxManager::ProcessTimer() noexcept
 {
   InfoBoxDrawIfDirty();
 }
@@ -145,7 +148,7 @@ InfoBoxManager::ProcessTimer()
 void
 InfoBoxManager::Create(ContainerWindow &parent,
                        const InfoBoxLayout::Layout &_layout,
-                       const InfoBoxLook &look)
+                       const InfoBoxLook &look) noexcept
 {
   const InfoBoxSettings &settings =
     CommonInterface::GetUISettings().info_boxes;
@@ -175,7 +178,7 @@ InfoBoxManager::Create(ContainerWindow &parent,
 }
 
 void
-InfoBoxManager::Destroy()
+InfoBoxManager::Destroy() noexcept
 {
   for (unsigned i = 0; i < layout.count; i++) {
     delete infoboxes[i];
@@ -184,7 +187,7 @@ InfoBoxManager::Destroy()
 }
 
 void
-InfoBoxManager::ShowInfoBoxPicker(const int i)
+InfoBoxManager::ShowInfoBoxPicker(const int i) noexcept
 {
   InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
   const unsigned panel_index = CommonInterface::GetUIState().panel_index;
