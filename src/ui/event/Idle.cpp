@@ -27,7 +27,7 @@ Copyright_License {
 static PeriodClock user_idle_clock;
 
 bool
-IsUserIdle(unsigned duration_ms)
+IsUserIdle(unsigned duration_ms) noexcept
 {
   return user_idle_clock.Check(std::chrono::milliseconds(duration_ms));
 }
@@ -36,7 +36,7 @@ IsUserIdle(unsigned duration_ms)
  * Acts as if the user had just interacted with XCSoar.
  */
 void
-ResetUserIdle()
+ResetUserIdle() noexcept
 {
   user_idle_clock.Update();
 }
