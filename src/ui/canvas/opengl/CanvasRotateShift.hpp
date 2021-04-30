@@ -43,7 +43,7 @@ class CanvasRotateShift
 {
 public:
   CanvasRotateShift(const PixelPoint pos, Angle angle,
-                    const int scale = 100) {
+                    const int scale = 100) noexcept {
     glm::mat4 matrix = glm::rotate(glm::translate(glm::mat4(1),
                                                   glm::vec3(pos.x, pos.y, 0)),
                                    GLfloat(angle.Radians()),
@@ -56,7 +56,7 @@ public:
                        glm::value_ptr(matrix));
   };
 
-  ~CanvasRotateShift() {
+  ~CanvasRotateShift() noexcept {
     glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                        glm::value_ptr(glm::mat4(1)));
   }
