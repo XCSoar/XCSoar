@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2021-04-17 10:26+0000\n"
+"PO-Revision-Date: 2021-05-01 21:32+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -5403,7 +5403,9 @@ msgstr "Nastav nového partnera"
 #: src/Dialogs/dlgAnalysis.cpp:237 src/Dialogs/dlgAnalysis.cpp:475
 #: src/Dialogs/dlgAnalysis.cpp:538
 msgid "Task Calc"
-msgstr "Nastav úlohu"
+msgstr ""
+"Výpočet\n"
+"úlohy"
 
 #: src/Dialogs/dlgAnalysis.cpp:462
 msgid "Barograph"
@@ -5427,7 +5429,9 @@ msgstr "Výškový profil větru"
 
 #: src/Dialogs/dlgAnalysis.cpp:500
 msgid "Set Wind"
-msgstr "Nastav vítr"
+msgstr ""
+"Nastav\n"
+"vítr"
 
 #: src/Dialogs/dlgAnalysis.cpp:505
 msgid "Glide Polar"
@@ -5447,7 +5451,9 @@ msgstr "Rychlost úlohy"
 
 #: src/Dialogs/dlgAnalysis.cpp:547
 msgid "Task calc"
-msgstr "Nastav úlohu"
+msgstr ""
+"Výpočet\n"
+"úlohy"
 
 #: src/Dialogs/dlgAnalysis.cpp:565
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:195
