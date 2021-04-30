@@ -62,5 +62,8 @@ set(BASIC_SOURCES
 )
 
 set(SOURCE_FILES ${BASIC_SOURCES} )
+set(SCRIPT_FILES CMakeSource.cmake
+  ../ide/xcsoar.natvis
+)
 
 file(GLOB ICON_FILES  ${PROJECTGROUP_SOURCE_DIR}/Data/icons/*.svg)

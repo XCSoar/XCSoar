@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- XCSoar visualizers for Visual Studio 2012 and later -->
+<!-- Put them into My Documents/Visual Studio 20XX/Visualizers/ -->
+
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+    <Type Name="StaticStringBase&lt;*, *&gt;">
+        <DisplayString>{the_data._Elems, na}</DisplayString>
+        <StringView>the_data._Elems</StringView>
+        <Expand>
+            <Item Name="array">((std::array&lt;$T1,$T2&gt;)the_data)</Item>
+            <Item Name="text">the_data._Elems, na</Item>
+            <Item Name="size">$T2</Item>
+        </Expand>
+    </Type>
+
+    <Type Name="BasicStringView&lt;* &gt;">
+        <DisplayString>{data, na}</DisplayString>
+        <Expand>
+            <Item Name="data">data, na</Item>
+            <Item Name="size">size</Item>
+        </Expand>
+    </Type>
+
+    <Type Name="ScreenGlobalInit">
+        <DisplayString>ScreenGlobalInit!</DisplayString>
+    </Type>
+</AutoVisualizer>
+
