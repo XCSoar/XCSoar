@@ -1,4 +1,6 @@
 Version 7.6 - not yet released
+* user interface
+  - fix disappearing aircraft symbol
 
 Version 7.5 - 2021/04/30
 * fix crash bug in terrain loader

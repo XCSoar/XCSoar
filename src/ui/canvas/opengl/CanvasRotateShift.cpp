@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "CanvasRotateShift.hpp"
 #include "Shaders.hpp"
+#include "Program.hpp"
 #include "Math/Angle.hpp"
 #include "ui/dim/Point.hpp"
 #include "ui/opengl/System.hpp"
@@ -42,6 +43,8 @@ CanvasRotateShift::CanvasRotateShift(const PixelPoint pos, Angle angle,
   if (Layout::ScaleSupported())
     gl_scale *= Layout::scale_1024 / 1024.f;
   matrix = glm::scale(matrix, glm::vec3(gl_scale));
+
+  OpenGL::solid_shader->Use();
   glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                      glm::value_ptr(matrix));
 }
