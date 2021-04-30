@@ -70,7 +70,7 @@ public:
 	/**
 	 * Non-initialising constructor.
 	 */
-	TrivialArray() noexcept = default;
+	TrivialArray() = default;
 
 	TrivialArray(size_type _size, const_reference value):the_size(_size) {
 		std::fill(begin(), end(), value);
