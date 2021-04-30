@@ -313,9 +313,15 @@ TerrainLoader::UpdateTiles(struct zzip_dir *dir, const char *path,
 {
   assert(!scan_overview);
 
-  if (!raster_tile_cache.PollTiles(p, radius))
-    /* nothing to do */
-    return true;
+  {
+    /* this write lock is necessary because
+       RasterTileCache::PollTiles() calls RasterTile::Unload() */
+    const std::lock_guard<SharedMutex> lock(mutex);
+
+    if (!raster_tile_cache.PollTiles(p, radius))
+      /* nothing to do */
+      return true;
+  }
 
   bool success = LoadJPG2000(dir, path);
   raster_tile_cache.FinishTileUpdate();
