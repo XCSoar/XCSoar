@@ -1,4 +1,4 @@
-Version 7.5 - not yet released
+Version 7.5 - 2021/04/30
 * fix crash bug in terrain loader
 * fix paths with backslashes
 * user interface
