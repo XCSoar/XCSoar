@@ -61,7 +61,7 @@ private:
   std::vector<Item> items;
 
 public:
-  ComboList() noexcept = default;
+  ComboList() = default;
 
   ComboList(ComboList &&other) = default;
 
