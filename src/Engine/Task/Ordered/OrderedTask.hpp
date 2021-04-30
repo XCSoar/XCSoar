@@ -614,7 +614,7 @@ public:
    * @return number of optional start poitns
    */
   [[gnu::pure]]
-  unsigned GetOptionalStartPointCount() const {
+  std::size_t GetOptionalStartPointCount() const noexcept {
     return optional_start_points.size();
   }
 
