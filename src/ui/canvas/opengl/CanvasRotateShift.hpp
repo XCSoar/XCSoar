@@ -40,6 +40,9 @@ public:
                     int scale = 100) noexcept;
 
   ~CanvasRotateShift() noexcept;
+
+  CanvasRotateShift(const CanvasRotateShift &) = delete;
+  CanvasRotateShift &operator=(const CanvasRotateShift &) = delete;
 };
 
 #endif
