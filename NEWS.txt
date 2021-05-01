@@ -1,4 +1,4 @@
-Version 7.6 - not yet released
+Version 7.6 - 2021/05/01
 * user interface
   - fix disappearing aircraft symbol
   - fix crash bug in task editor
