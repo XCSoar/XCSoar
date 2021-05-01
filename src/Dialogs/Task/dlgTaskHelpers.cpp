@@ -134,7 +134,7 @@ OrderedTaskSummary(const OrderedTask *task, TCHAR *text, bool linebreaks)
                          Units::GetDistanceName(),
                          OrderedTaskFactoryName(task->GetFactoryType()));
     else
-      StringFormatUnsafe(text, _T("%s%s%s %.0f %s (%s)"),
+      StringFormatUnsafe(text, _T("%s%s%s%s%s %.0f %s (%s)"),
                          summary_shape,
                          validation_errors.IsEmpty() ? _T("") : _T(" / "),
                          validation_errors.IsEmpty() ? _T("") : getTaskValidationErrors(validation_errors),
