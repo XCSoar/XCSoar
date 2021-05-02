@@ -20,9 +20,8 @@ from build.dirs import tarball_path, src_path
 target_output_dir = os.path.abspath(target_output_dir)
 
 lib_path = os.path.join(target_output_dir, 'lib')
-arch_path = os.path.join(lib_path, actual_host_triplet)
-build_path = os.path.join(arch_path, 'build')
-install_prefix = os.path.join(arch_path, 'root')
+build_path = os.path.join(lib_path, 'build')
+install_prefix = os.path.join(lib_path, actual_host_triplet)
 
 if 'MAKEFLAGS' in os.environ:
     # build/make.mk adds "--no-builtin-rules --no-builtin-variables",
