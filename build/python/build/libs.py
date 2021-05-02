@@ -7,7 +7,7 @@ from build.openssl import OpenSSLProject
 from build.freetype import FreeTypeProject
 from build.curl import CurlProject
 from build.libpng import LibPNGProject
-from build.libstdcxxmuslheaders import LibstdcxxMuslHeadersProject
+from build.gcc import LibstdcxxMuslHeadersProject
 from build.sdl2 import SDL2Project
 from build.lua import LuaProject
 
