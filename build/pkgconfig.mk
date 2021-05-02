@@ -30,7 +30,13 @@ define assign-check-error
 $(1) = $$($(2))$$(if $$(filter ERROR,$$($(2))),$$(error $(3)))
 endef
 
+ifeq ($(TARGET_IS_KOBO),y)
+# No -isystem on the Kobo because it may break our Musl sysroot
+pkg-config-cppflags-filter = $(1)
+else
 pkg-config-cppflags-filter = $(patsubst -I%,-isystem %,$(1))
+endif
+
 pkg-config-ldlibs-filter = $(1)
 
 # Generates a pkg-config lookup for a library.

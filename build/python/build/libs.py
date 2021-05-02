@@ -7,9 +7,83 @@ from build.openssl import OpenSSLProject
 from build.freetype import FreeTypeProject
 from build.curl import CurlProject
 from build.libpng import LibPNGProject
-from build.gcc import LibstdcxxMuslHeadersProject
+from build.gcc import BinutilsProject, GccProject, GccBootstrapProject
+from build.linux import SabotageLinuxHeadersProject
 from build.sdl2 import SDL2Project
 from build.lua import LuaProject
+
+binutils = BinutilsProject(
+    'https://ftp.gnu.org/gnu/binutils/binutils-2.36.1.tar.xz',
+    'http://mirrors.ibiblio.org/gnu/ftp/gnu/binutils/binutils-2.36.1.tar.xz',
+    'e81d9edf373f193af428a0f256674aea62a9d74dfe93f65192d4eae030b0f3b0',
+    'bin/as',
+    [
+        '--with-system-zlib',
+        '--enable-gold',
+        '--disable-ld',
+        '--disable-libquadmath',
+        '--disable-lto',
+    ],
+    use_actual_arch=True,
+)
+
+linux_headers = SabotageLinuxHeadersProject(
+    'http://ftp.barfooze.de/pub/sabotage/tarballs/linux-headers-4.19.88.tar.xz',
+    'http://foss.aueb.gr/mirrors/linux/sabotage/tarballs/linux-headers-4.19.88.tar.xz',
+    '5a975ba49b577869f2338aa80f44efd4e94f76e5b4bda11a6a1761a6d646848fdeaad7c820339b2c1c20d55f9bbf0e686121d621ac1cfa1dfc6cd71a166ade3a',
+    'include/linux/input.h',
+)
+
+gcc = GccProject(
+    'https://ftp.gnu.org/gnu/gcc/gcc-11.1.0/gcc-11.1.0.tar.xz',
+    'http://mirrors.ibiblio.org/gnu/ftp/gnu/gcc/gcc-11.1.0/gcc-11.1.0.tar.xz',
+    '4c4a6fb8a8396059241c2e674b85b351c26a5d678274007f076957afa1cc9ddf',
+    'lib/libstdc++.a',
+    [
+        # GCC fails to build if we disable the shared libstdc++
+        #'--disable-shared', '--enable-static',
+
+        '--with-gcc',
+        '--with-gnu-ld',
+        '--with-gnu-as',
+        '--disable-nls',
+        '--disable-lto',
+        '--enable-clocale=generic',
+        '--enable-languages=c,c++',
+        '--disable-bootstrap',
+        '--disable-multilib',
+        '--without-newlib',
+
+        '--disable-wchar_t',
+        '--disable-symvers',
+
+        '--disable-decimal-float',
+        '--disable-libatomic',
+        '--disable-libgomp', '--disable-libmpx', '--disable-libquadmath',
+        '--disable-libssp', '--disable-libvtv',
+        '--disable-libsanitizer',
+
+        '--disable-libstdcxx-verbose',
+        '--disable-libstdcxx-dual-abi',
+        '--disable-libstdcxx-filesystem-ts',
+
+        # TODO: don't hard-code Kobo settings
+        '--with-arch=armv7-a+vfpv3',
+        '--with-fpu=neon',
+        '--with-float=hard',
+    ],
+    use_actual_arch=True,
+)
+
+gcc_bootstrap = GccBootstrapProject(
+    gcc.url,
+    gcc.alternative_url,
+    gcc.md5,
+    '../bin/armv7a-a8neon-linux-musleabihf-g++',
+    gcc.configure_args,
+    install_target='install-gcc',
+    use_actual_arch=True,
+)
 
 musl = AutotoolsProject(
     'https://www.musl-libc.org/releases/musl-1.1.18.tar.gz',
@@ -20,20 +94,6 @@ musl = AutotoolsProject(
         '--disable-shared',
     ],
     patches=abspath('lib/musl/patches'),
-)
-
-libstdcxx_musl_headers = LibstdcxxMuslHeadersProject(
-    'https://ftp.gnu.org/gnu/gcc/gcc-10.2.0/gcc-10.2.0.tar.xz',
-    'http://mirrors.ibiblio.org/gnu/ftp/gnu/gcc/gcc-10.2.0/gcc-10.2.0.tar.xz',
-    'b8dd4368bb9c7f0b98188317ee0254dd8cc99d1e3a18d0ff146c855fe16c1d8c',
-    'include/libstdc++/algorithm',
-    [
-        '--enable-clocale=generic',
-        '--disable-shared',
-        '--disable-multilib',
-    ],
-    config_script='libstdc++-v3/configure',
-    use_actual_arch=True,
 )
 
 openssl = OpenSSLProject(

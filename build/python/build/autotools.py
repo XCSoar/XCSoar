@@ -38,7 +38,7 @@ class AutotoolsProject(MakeProject):
                 flags = flags.replace(' ' + f + ' ', ' ')
         return flags
 
-    def configure(self, toolchain, src=None, build=None):
+    def configure(self, toolchain, src=None, build=None, target_toolchain=None):
         if src is None:
             src = self.unpack(toolchain)
 
@@ -80,10 +80,20 @@ class AutotoolsProject(MakeProject):
             'ARFLAGS=' + toolchain.arflags,
             'RANLIB=' + toolchain.ranlib,
             'STRIP=' + toolchain.strip,
-            '--host=' + (toolchain.actual_arch if self.use_actual_arch else toolchain.toolchain_arch),
             '--prefix=' + install_prefix,
             '--enable-silent-rules',
-        ] + self.configure_args
+        ]
+
+        arch = toolchain.actual_arch if self.use_actual_arch else toolchain.toolchain_arch
+        if arch is not None:
+            configure.append('--host=' + arch)
+
+        if target_toolchain is not None:
+            arch = target_toolchain.actual_arch if self.use_actual_arch else target_toolchain.toolchain_arch
+            if arch is not None:
+                configure.append('--target=' + arch)
+
+        configure += self.configure_args
 
         subprocess.check_call(configure, cwd=build, env=toolchain.env)
         return build
@@ -97,8 +107,8 @@ class AutotoolsProject(MakeProject):
             args += ['DESTDIR=' + toolchain.install_prefix]
         return args
 
-    def build(self, toolchain):
-        build = self.configure(toolchain)
+    def build(self, toolchain, target_toolchain=None):
+        build = self.configure(toolchain, target_toolchain=target_toolchain)
         if self.subdirs is not None:
             for subdir in self.subdirs:
                 MakeProject.build(self, toolchain, os.path.join(build, subdir))
