@@ -30,7 +30,7 @@ Copyright_License {
 #include "util/AllocatedArray.hxx"
 #include "util/IntrusiveForwardList.hxx"
 #include "util/Serial.hpp"
-#include "ui/canvas/Color.hpp"
+#include "ui/canvas/PortableColor.hpp"
 #include "ResourceId.hpp"
 #include "thread/Mutex.hxx"
 
@@ -119,7 +119,7 @@ class TopographyFile {
 
   const unsigned pen_width;
 
-  const Color color;
+  const BGRA8Color color;
 
   /**
    * The threshold value for the visibility check. If the current scale
@@ -203,7 +203,7 @@ public:
   TopographyFile(zzip_dir *dir, const char *shpname,
                  double threshold, double label_threshold,
                  double important_label_threshold,
-                 const Color color,
+                 const BGRA8Color color,
                  int label_field=-1,
                  ResourceId icon=ResourceId::Null(),
                  ResourceId big_icon=ResourceId::Null(),
@@ -266,7 +266,7 @@ public:
     return big_icon;
   }
 
-  Color GetColor() const noexcept {
+  const auto &GetColor() const noexcept {
     return color;
   }
 

@@ -57,7 +57,7 @@ TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
                                double _threshold,
                                double _label_threshold,
                                double _important_label_threshold,
-                               const Color _color,
+                               const BGRA8Color _color,
                                int _label_field,
                                ResourceId _icon, ResourceId _big_icon,
                                unsigned _pen_width)

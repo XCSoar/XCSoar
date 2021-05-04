@@ -196,11 +196,7 @@ ParseTopographyIndexLine(const char *line) noexcept
       p = endptr;
     }
 
-#ifdef ENABLE_OPENGL
     entry.color = {red, green, blue, alpha};
-#else
-    entry.color = {red, green, blue};
-#endif
 
     return entry;
 }

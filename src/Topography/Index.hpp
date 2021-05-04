@@ -23,12 +23,7 @@ Copyright_License {
 
 #pragma once
 
-#ifdef FUZZER
 #include "ui/canvas/PortableColor.hpp"
-#else
-#include "ui/canvas/Color.hpp"
-#endif
-
 #include "ResourceId.hpp"
 
 #include <optional>
@@ -43,11 +38,7 @@ struct TopographyIndexEntry {
 
   long shape_field;
 
-#ifdef FUZZER
   BGRA8Color color;
-#else
-  Color color;
-#endif
 
   unsigned pen_width = 1;
 };
