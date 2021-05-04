@@ -142,7 +142,7 @@ ifeq ($(TARGET),FUZZER)
 
   FUZZER = y
   CLANG = y
-  HEADLESS = y
+  VFB = y
 endif
 
 ifeq ($(TARGET),UNIX)
