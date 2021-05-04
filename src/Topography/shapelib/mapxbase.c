@@ -321,7 +321,7 @@ void  msDBFClose(DBFHandle psDBF)
   /* -------------------------------------------------------------------- */
   /*      Close, and free resources.                                      */
   /* -------------------------------------------------------------------- */
-  zzip_file_close( psDBF->fp );
+  zzip_close( psDBF->fp );
 
   if( psDBF->panFieldOffset != NULL ) {
     free( psDBF->panFieldOffset );

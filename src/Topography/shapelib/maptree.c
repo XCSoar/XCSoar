@@ -217,7 +217,7 @@ SHPTreeHandle msSHPDiskTreeOpen(struct zzip_dir *zdir, const char * pszTree,
 
 void msSHPDiskTreeClose(SHPTreeHandle disktree)
 {
-  zzip_file_close( disktree->fp );
+  zzip_close( disktree->fp );
   free( disktree );
 }
 
