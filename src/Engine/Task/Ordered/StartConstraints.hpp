@@ -57,6 +57,17 @@ struct StartConstraints {
    */
   bool fai_finish;
 
+  /**
+   * Wait time in minutes after Pilot Event (PEV) and start gate open time.
+   */
+  unsigned pev_start_wait_time;
+
+  /**
+   * Time in minutes start gate remains open after Pilot Event and PEV Wait
+   * Time.
+   */
+  unsigned pev_start_window;
+
   void SetDefaults();
 
   /**

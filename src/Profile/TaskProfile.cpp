@@ -66,6 +66,8 @@ Profile::Load(const ProfileMap &map, StartConstraints &constraints)
   map.GetEnum(ProfileKeys::StartHeightRef, constraints.max_height_ref);
   map.Get(ProfileKeys::StartMaxHeight, constraints.max_height);
   map.Get(ProfileKeys::StartMaxSpeed, constraints.max_speed);
+  map.Get(ProfileKeys::PEVStartWaitTime, constraints.pev_start_wait_time);
+  map.Get(ProfileKeys::PEVStartWindow, constraints.pev_start_window);
 }
 
 void
