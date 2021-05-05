@@ -1,7 +1,8 @@
 JSON_SOURCES = \
 	$(SRC)/json/Serialize.cxx \
-	$(SRC)/json/ParserOutputStream.cxx \
-	$(SRC)/json/Boost.cxx
+	$(SRC)/json/Boost.cxx \
+	$(SRC)/json/ParserOutputStream.cxx
+
 JSON_CPPFLAGS = -DBOOST_JSON_STANDALONE
 
 ifeq ($(CLANG),y)
