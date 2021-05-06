@@ -82,6 +82,8 @@ Copyright_License {
 #include "Panels/WeatherConfigPanel.hpp"
 #endif
 
+#include "Panels/WeGlideConfigPanel.hpp"
+
 #include <cassert>
 
 static unsigned current_page;
@@ -149,6 +151,7 @@ static constexpr TabMenuPage setup_pages[] = {
 #ifdef HAVE_PCMET
   { _T("Weather"), CreateWeatherConfigPanel },
 #endif
+  { _T("WeGlide"), CreateWeGlideConfigPanel },
 #ifdef HAVE_VOLUME_CONTROLLER
   { N_("Audio"), CreateAudioConfigPanel },
 #endif
