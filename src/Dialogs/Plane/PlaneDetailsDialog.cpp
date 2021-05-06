@@ -28,6 +28,8 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "Plane/Plane.hpp"
 #include "Language/Language.hpp"
+#include "Interface.hpp"
+#include "Computer/Settings.hpp"
 #include "UIGlobals.hpp"
 
 class PlaneEditWidget final
@@ -42,6 +44,7 @@ class PlaneEditWidget final
     MAX_BALLAST,
     DUMP_TIME,
     MAX_SPEED,
+    WEGLIDE_ID,
   };
 
   WndForm *dialog;
@@ -129,6 +132,14 @@ PlaneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
            _T("%.0f %s"), _T("%.0f"), 0, 300, 5,
            false, UnitGroup::HORIZONTAL_SPEED, plane.max_speed);
 
+  /* TODO: this should be a select list from
+     https://api.weglide.org/v1/aircraft */
+  if (CommonInterface::GetComputerSettings().weglide.enabled)
+    AddInteger(_("WeGlide Type"), nullptr, _T("%d"), _T("%d"), 1, 999,
+               1, plane.weglide_glider_type);
+  else
+    AddDummy();
+
   UpdateCaption();
   UpdatePolarButton();
 }
@@ -147,6 +158,9 @@ PlaneEditWidget::Save(bool &_changed) noexcept
   changed |= SaveValue(DUMP_TIME, plane.dump_time);
   changed |= SaveValue(MAX_SPEED, UnitGroup::HORIZONTAL_SPEED,
                        plane.max_speed);
+
+  if (CommonInterface::GetComputerSettings().weglide.enabled)
+    changed |= SaveValue(WEGLIDE_ID, plane.weglide_glider_type);
 
   _changed |= changed;
   return true;
