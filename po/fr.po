@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2020-09-14 17:36+0000\n"
-"Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
+"PO-Revision-Date: 2021-05-07 10:32+0000\n"
+"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -191,7 +191,7 @@ msgid ""
 "sector.  Scored from center."
 msgstr ""
 "(Règles allemandes) Passage valable si dans un cercle de 0.5 km autour du "
-"point de virage ou dans un secteur de 90° et 10 Km de rayon. Calcul des "
+"point de virage ou dans un secteur de 90° et 10 km de rayon. Calcul des "
 "points fait à partir du centre du secteur."
 
 #: src/Task/TypeStrings.cpp:83
@@ -211,7 +211,7 @@ msgid ""
 "sector.  Scored from center."
 msgstr ""
 "(Règles britanniques)  Passage valable si dans un cercle de 0.5 km autour du "
-"point de virage ou dans un secteur de 180° et 10 Km de rayon. Calcul des "
+"point de virage ou dans un secteur de 180° et 10 km de rayon. Calcul des "
 "points fait à partir du centre du secteur."
 
 #: src/Task/TypeStrings.cpp:87
@@ -432,9 +432,9 @@ msgid "non-MAT turn points"
 msgstr "Point de virage non-MAT"
 
 #: src/Task/ValidationErrorStrings.cpp:43
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Wrong shape"
-msgstr ""
+msgstr "Mauvaise forme"
 
 #: src/Airspace/AirspaceGlue.cpp:84
 msgid "Loading Airspace File..."
@@ -1194,10 +1194,10 @@ msgid ""
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
-"Le réglage MacReady actuel et le mode MacReady actuel (manuel/auto).\r\n"
+"Le réglage MacReady actuel et le mode MacReady actuel (manuel/auto).\n"
 "Pour les terminaux à écran tactile et pour PC seulement: utilisé aussi pour "
-"pour le réglage du MacReady si l'InfoBox est active, en utilisant les "
-"boutons Haut/Bas."
+"le réglage du MacReady si l'InfoBox est active, en utilisant les boutons "
+"Haut/Bas."
 
 #: src/InfoBoxes/Content/Factory.cpp:226
 #, no-c-format
@@ -1227,7 +1227,7 @@ msgstr "Différence d'altitude prochain waypoint"
 #: src/InfoBoxes/Content/Factory.cpp:236
 #, no-c-format
 msgid "WP AltD"
-msgstr "WP AltD"
+msgstr "DAlt WP"
 
 #: src/InfoBoxes/Content/Factory.cpp:237
 #, no-c-format
@@ -1290,7 +1290,7 @@ msgstr "Différence d'altitude en arrivée"
 #: src/InfoBoxes/Content/Factory.cpp:262
 #, no-c-format
 msgid "Fin AltD"
-msgstr "Fin AltD"
+msgstr "DAlt Arr"
 
 #: src/InfoBoxes/Content/Factory.cpp:263
 #, no-c-format
@@ -2429,6 +2429,10 @@ msgid ""
 "set. In case the FL is calculated from the GPS altitude, the FL label is "
 "coloured red."
 msgstr ""
+"Altitude pression donnée comme niveau de vol (FL). Si l'altitude "
+"barométrique n'est pas disponible, le FL est calculé à partir de l'altitude "
+"GPS, étant donné que le QNH correct est défini. Dans le cas où le FL est "
+"calculé à partir de l'altitude GPS, l'étiquette FL est de couleur rouge."
 
 #: src/InfoBoxes/Content/Factory.cpp:782 src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
@@ -2654,7 +2658,7 @@ msgstr "Différence d'altitude prochain point de virage à MC0"
 #: src/InfoBoxes/Content/Factory.cpp:880
 #, no-c-format
 msgid "WP MC0 AltD"
-msgstr "WPT MC0 AltD"
+msgstr "DAlt WP MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:881
 #, no-c-format
@@ -2956,7 +2960,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1005
 #, no-c-format
 msgid "Distance takeoff"
-msgstr "Distance de décollage"
+msgstr "Distance du pt de décollage"
 
 #: src/InfoBoxes/Content/Factory.cpp:1006
 #, no-c-format
@@ -3104,32 +3108,32 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1073
 #, fuzzy, no-c-format
 msgid "Active Radio Frequency"
-msgstr "Sélectionner la fréquence active"
+msgstr "Fréquence radio active"
 
 #: src/InfoBoxes/Content/Factory.cpp:1074
 #, no-c-format
 msgid "Act Freq"
-msgstr ""
+msgstr "Fréq Act"
 
 #: src/InfoBoxes/Content/Factory.cpp:1075
 #, fuzzy, no-c-format
 msgid "The currently active Radio Frequency"
-msgstr "Sélectionner la fréquence active"
+msgstr "La fréquence radio active actuelle"
 
 #: src/InfoBoxes/Content/Factory.cpp:1080
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Standby Radio Frequency"
-msgstr "Sélectionner la fréquence Standby"
+msgstr "Fréquence radio Standby"
 
 #: src/InfoBoxes/Content/Factory.cpp:1081
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Stby Freq"
-msgstr "Sélectionner la fréquence Standby"
+msgstr "Fréq. Standby"
 
 #: src/InfoBoxes/Content/Factory.cpp:1082
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently standby Radio Frequency"
-msgstr "Sélectionner la fréquence Standby"
+msgstr "La fréquence radio standby actuelle"
 
 #: src/InfoBoxes/Content/Factory.cpp:1088
 #, fuzzy, no-c-format
@@ -3142,9 +3146,9 @@ msgid "TC Time"
 msgstr "Th Durée"
 
 #: src/InfoBoxes/Content/Factory.cpp:1090
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The time spend in the current thermal."
-msgstr "Altitude gagnée/perdue dans le thermique actuel."
+msgstr "Durée passée dans le thermique actuel."
 
 #: src/InfoBoxes/Content/Alternate.cpp:49
 #: src/Dialogs/Task/AlternatesListDialog.cpp:150 Data/Input/default.xci:388
@@ -4101,7 +4105,7 @@ msgstr "GPS intégré et senseurs"
 
 #: src/Device/Config.cpp:248
 msgid "GliderLink traffic receiver"
-msgstr ""
+msgstr "Récepteur de trafic GliderLink"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:93 src/Dialogs/WidgetDialog.cpp:264
@@ -4242,9 +4246,9 @@ msgid "IOIO switches and Nunchuk"
 msgstr "Boutons IOIO et Nunchuk"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:75
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO I²C pressure sensor"
-msgstr "Capteur de pression IOIO i2c"
+msgstr "Capteur de pression IOIO I²C"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:76
 #, no-c-format
@@ -4302,7 +4306,7 @@ msgstr "Adresse IP"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I²C bus"
-msgstr ""
+msgstr "Bus I²C"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "Select the description or bus number that matches your configuration."
@@ -4312,17 +4316,16 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:623
 msgid "I²C addr"
-msgstr ""
+msgstr "Adresse I²C"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:623
-#, fuzzy
 msgid ""
 "The I²C address that matches your configuration. This field is not used when "
 "your selection in the \"I²C bus\" field is not an I²C bus number. Assume "
 "this field is not in use if that doesn't make sense to you."
 msgstr ""
-"L'adresse I2C correspondant à votre configuration. Ce champ n'est pas "
-"utilisé lorsque votre choix dans le champ \"BUS I2C\" n'est pas un chiffre. "
+"L'adresse I²C correspondant à votre configuration. Ce champ n'est pas "
+"utilisé lorsque votre choix dans le champ \"BUS I²C\" n'est pas un chiffre. "
 "Si vous ne comprenez pas la phrase précédente, faites comme si ce champ "
 "n'est pas utilisé."
 
@@ -6413,7 +6416,7 @@ msgstr "En bas à gauche"
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:60
 #, no-c-format
 msgid "Show thermal assistant in bottom left."
-msgstr ""
+msgstr "Afficher l'assistant thermique en bas à gauche."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:62
 #, fuzzy, no-c-format
@@ -6426,6 +6429,8 @@ msgid ""
 "Show thermal assistant in bottom left, above/to right of infoboxes (if "
 "there)."
 msgstr ""
+"Afficher l'assistant thermique en bas à gauche, au-dessus / à droite des "
+"infoboxes (le cas échéant)."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
 #, fuzzy, no-c-format
@@ -6435,7 +6440,7 @@ msgstr "En bas à droite"
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:66
 #, no-c-format
 msgid "Show thermal assistant in bottom right."
-msgstr ""
+msgstr "Afficher l'assistant thermique en bas à droite."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
 #, fuzzy, no-c-format
@@ -6447,6 +6452,8 @@ msgstr "Auto (suit les InfoBoxes)"
 msgid ""
 "Show thermal assistant in bottom right above/to left of infoboxes (if there)."
 msgstr ""
+"Afficher l'assistant thermique en bas à droite au-dessus / à gauche des "
+"infoboxes (le cas échéant)."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:107
 msgid ""
@@ -6479,6 +6486,8 @@ msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
 "the main screen."
 msgstr ""
+"Activez et sélectionnez la position de l'assistant thermique lorsqu'il est "
+"superposé sur l'écran principal."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:121
 msgid "Thermal band"
@@ -6739,23 +6748,26 @@ msgstr "Assistant en onde"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:123
 msgid "Cruise/Circling period"
-msgstr ""
+msgstr "Période de croisière / spirale"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:124
 msgid ""
 "How many seconds of turning before changing from cruise to circling mode."
 msgstr ""
+"Combien de secondes de virage avant de passer du mode croisière au mode "
+"spirale."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:131
-#, fuzzy
 msgid "Circling/Cruise period"
-msgstr "Orientation en spirale"
+msgstr "Période de spirale / croisière"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:132
 msgid ""
 "How many seconds of flying straight before changing from circling to cruise "
 "mode."
 msgstr ""
+"Combien de secondes de vol direct avant de passer du mode spirale au mode "
+"croisière."
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:88
 msgid "Use final glide mode"
@@ -6892,14 +6904,14 @@ msgid "8 Split"
 msgstr "8 séparées"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:81
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "10 Split"
-msgstr "8 séparées"
+msgstr "10 séparées"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:83
 #, no-c-format
 msgid "12 Split in 3 rows"
-msgstr ""
+msgstr "12 séparées sur 3 lignes"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:85
 #, no-c-format
@@ -6942,9 +6954,9 @@ msgid "5 Right (Square)"
 msgstr "5 Droite (Carré)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:101
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "10 Bottom or Right"
-msgstr "12 en bas ou à droite"
+msgstr "10 en bas ou à droite"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:103
 #, no-c-format
@@ -7164,15 +7176,15 @@ msgstr "Zoom auto"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:230
 msgid "Cursor zoom factor"
-msgstr ""
+msgstr "Facteur de zoom du curseur"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:232
 msgid "Invert cursor color"
-msgstr ""
+msgstr "Inverser la couleur du curseur"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:232
 msgid "Enable black cursor"
-msgstr ""
+msgstr "Activer le curseur noir"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:57
 #, no-c-format
@@ -8015,22 +8027,22 @@ msgstr "La flèche de vent n'est pas dessinée."
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 #, no-c-format
 msgid "Symbol"
-msgstr ""
+msgstr "Symbole"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 #, no-c-format
 msgid "Draws the SkyLines symbol only."
-msgstr ""
+msgstr "Dessine uniquement le symbole SkyLines."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
 msgid "Symbol and Name"
-msgstr ""
+msgstr "Symbole et nom"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
 msgid "Draws the SkyLines symbol with name."
-msgstr ""
+msgstr "Dessine le symbole SkyLines avec le nom."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:152
 msgid "Ground track"
@@ -8106,13 +8118,15 @@ msgstr "Détermine la façon dont la flèche du vent est affiché sur la carte."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:196
 msgid "SkyLines traffic mode"
-msgstr ""
+msgstr "Mode trafic SkyLines"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:197
 msgid ""
 "Show the SkyLines traffic symbols/names on the map, downloaded from the "
 "SkyLines server."
 msgstr ""
+"Afficher les symboles / noms de trafic SkyLines sur la carte, téléchargés à "
+"partir du serveur SkyLines."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:63
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:231
@@ -10463,6 +10477,8 @@ msgid ""
 "Lock\n"
 "Screen"
 msgstr ""
+"Verr.\n"
+"Ecran"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:775
 msgid ""
