@@ -2,6 +2,8 @@ Version 7.6 - 2021/05/01
 * user interface
   - fix disappearing aircraft symbol
   - fix crash bug in task editor
+* devices
+  - add "Radio" indicator to device list
 
 Version 7.5 - 2021/04/30
 * fix crash bug in terrain loader
