@@ -84,6 +84,7 @@ FileReader::Close() noexcept
 	assert(IsDefined());
 
 	CloseHandle(handle);
+	handle = INVALID_HANDLE_VALUE;
 }
 
 #else
