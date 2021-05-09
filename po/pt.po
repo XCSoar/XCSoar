@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-15 21:27+0100\n"
-"PO-Revision-Date: 2020-10-13 14:26+0000\n"
+"PO-Revision-Date: 2021-05-10 16:33+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/xcsoar/"
 "translations/pt/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Launchpad-Export-Date: 2012-12-05 23:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -603,7 +603,7 @@ msgstr "Falha ao descarregar o vôo."
 
 #: src/Logger/ExternalLogger.cpp:324
 msgid "Do you want to download another flight?"
-msgstr "Você gostaria de fazer o download de outro voo?"
+msgstr "Gostaria de descarregar outro voo?"
 
 #: src/Waypoint/WaypointGlue.cpp:91
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:37
@@ -1598,8 +1598,8 @@ msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
 "starting the task."
 msgstr ""
-"Porcentagem do tempo girando térmicas. Essa estatística é zerada quando "
-"começa a prova."
+"Percentagem do tempo girando térmicas. Essa estatística é redefinida quando "
+"começar a tarefa."
 
 #: src/InfoBoxes/Content/Factory.cpp:432
 #, no-c-format
@@ -3686,9 +3686,8 @@ msgstr ""
 "quando as misturas resultam de um cisalhamento vertical do vento ao invés de "
 "térmicas. (Nota: as premissas adotadas tendem a subestimar a máxima altura "
 "de termalização para condições secas). Na presença de nuvens, a altura "
-"máxima de termalização pode ao invés ser limitada pela base das nuvens. "
-"Sendo para térmicas \"secas\", este parâmetro omite o efeito de \"chupadeira "
-"de nuvem\"."
+"máxima de termalização pode ao invés ser limitada pela base das nuvens. Para "
+"térmicas \"secas\", este parâmetro omite o efeito de \"chupadeira de nuvem\"."
 
 #: src/Weather/Rasp/RaspStore.cpp:73
 #, no-c-format
@@ -3708,7 +3707,7 @@ msgstr ""
 "Este parâmetro fornece um significado adicional para avaliar a formação de "
 "nuvens dentro da CL (camada limite) e deve ser usado junto, ou ao invés, dos "
 "outros parâmetros de previsão de nuvens. Este assume uma relação bem simples "
-"entre a porcentagem de cobertura de nuvem e a máxima humidade relativa "
+"entre a percentagem de cobertura de nuvem e a máxima humidade relativa "
 "dentro da CL. A altura da base da nuvem não é prevista, mas espera-se que "
 "seja abaixo da Altura do Topo da CL."
 
@@ -3754,8 +3753,8 @@ msgstr ""
 "resultados do cisalhamento vertical do vento ao invés de térmicas. (Nota: as "
 "premissas adotadas tendem a subestimar a altura máxima de termalização para "
 "condições secas.) Na presença de nuvens, a altura máxima de termalização "
-"pode ao invés ser limitada pela base das nuvens. Sendo para térmicas \"secas"
-"\", este parâmetro omite os efeitos da \"chupadeira de nuvens\"."
+"pode ao invés ser limitada pela base das nuvens. Para térmicas \"secas\", "
+"este parâmetro omite os efeitos da \"chupadeira de nuvens\"."
 
 #: src/Weather/Rasp/RaspStore.cpp:88
 #, no-c-format
@@ -4128,7 +4127,7 @@ msgstr ""
 #: src/Dialogs/FileManager.cpp:740 src/Dialogs/FileManager.cpp:765
 #: src/Dialogs/DownloadFilePicker.cpp:353 Data/Input/default.xci:605
 msgid "File Manager"
-msgstr "Gerenciador de ficheiros"
+msgstr "Gestor de ficheiros"
 
 #: src/Dialogs/FileManager.cpp:763 src/Dialogs/DownloadFilePicker.cpp:352
 msgid "The file manager is not available on this device."
@@ -4191,7 +4190,7 @@ msgid ""
 "download."
 msgstr ""
 "A baudrate usada para transferências em massa, como declaração de provas ou "
-"download de voos."
+"descarrega de voos."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:607
 msgid "IP address"
@@ -4288,7 +4287,7 @@ msgstr "Descarregar voo"
 #: src/Dialogs/Device/PortMonitor.cpp:150
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:122
 msgid "Manage"
-msgstr "Gerenciar"
+msgstr "Gerir"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:288
 msgid "Monitor"
@@ -6432,7 +6431,7 @@ msgstr "Mostrar erros"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:76
 msgid "Whether to show the bugs percentage."
-msgstr "Para mostrar a porcentagem de erros."
+msgstr "Para mostrar a percentagem de erros."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:79
 msgid "Show ballast"
@@ -6440,7 +6439,7 @@ msgstr "Mostrar lastro"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:79
 msgid "Whether to show the ballast percentage."
-msgstr "Para mostrar a porcentagem de lastro."
+msgstr "Para mostrar a percentagem de lastro."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:82
 msgid "Show gross"
@@ -7937,8 +7936,8 @@ msgid ""
 msgstr ""
 "Se o rumo da aeronave desviar do waypoint atual, serão exibidos marcadores "
 "em pontos em frente à aeronave. O valor para cada marcador é a distância "
-"extra requerida para alcançar aquele ponto como uma porcentagem da distância "
-"em linha reta para o waypoint."
+"adicional requerida para alcançar aquele ponto como uma percentagem da "
+"distância em linha reta para o waypoint."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:188
 msgid "Aircraft symbol"
@@ -8760,7 +8759,7 @@ msgstr "Tamanho pousável"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:195
 msgid "A percentage to select the size landables are displayed on the map."
 msgstr ""
-"Uma porcentagem para selecionar o tamanho que serão exibidos waypoints "
+"Uma percentagem para selecionar o tamanho que serão exibidos waypoints "
 "pousáveis no mapa."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:199
