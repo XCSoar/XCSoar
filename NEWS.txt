@@ -6,6 +6,7 @@ Version 7.9 - not yet released
 * user interface
   - support for Pilot Event (PEV) start procedure
   - properly update device status in device list dialog
+  - add alternate 2 glide ratio infobox
 * devices
   - TCP Client: fix automatic reconnect after connection loss
   - GliderLink: fix disappearing configuration

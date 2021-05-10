@@ -1091,6 +1091,14 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxThermalTime,
   },
 
+  // e_Alternate_2_GR
+  {
+    N_("Alternate 2 GR"),
+    N_("Altn2 GR"),
+    N_("Geometric gradient to the arrival height above the second alternate. This is not adjusted for total energy."),
+    IBFHelperInt<InfoBoxContentAlternateGR, 1>::Create,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
