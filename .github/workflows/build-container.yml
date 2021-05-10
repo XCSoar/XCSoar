@@ -5,7 +5,11 @@ on:
       - 'ide/docker/**'
       - 'ide/provisioning/**'
       - '.github/workflows/build-container.yml'
-
+  pull_request:
+    paths:
+      - 'ide/docker/**'
+      - 'ide/provisioning/**'
+      - '.github/workflows/build-container.yml'
 jobs:
  xcsoar-docker-env:
     runs-on: ubuntu-latest
