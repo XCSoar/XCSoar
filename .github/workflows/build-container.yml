@@ -37,7 +37,7 @@ jobs:
           context: ./ide
           file: ./ide/docker/Dockerfile
           tags: ghcr.io/${{ steps.string.outputs.lowercase }}/xcsoar-build:latest
-          cache-from: type=registry,ref=ghcr.io/${{ steps.string.outputs.lowercase }}
+          cache-from: type=registry,ref=ghcr.io/${{ steps.string.outputs.lowercase }}/xcsoar-build:latest
           cache-to: type=inline
           secrets: |
             GIT_AUTH_TOKEN=${{ github.token }}
