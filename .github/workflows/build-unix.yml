@@ -2,15 +2,15 @@ on:
   workflow_dispatch:  
   push:
     paths-ignore:
-      - 'ide/docker/**'
-      - 'ide/provisioning/**'
+      - 'doc/**'
+      - 'ide/**'
       - '.github/workflows/build-container.yml'
     branches:
       - master
   pull_request:
     paths-ignore:
-      - 'ide/docker/**'
-      - 'ide/provisioning/**'
+      - 'doc/**'
+      - 'ide/**'
       - '.github/workflows/build-container.yml'
     branches:
       - master
