@@ -29,6 +29,7 @@
 #ifdef ANDROID
 #include "ui/event/android/Loop.hpp"
 #include "ui/event/shared/Event.hpp"
+#include "ui/window/TopWindow.hpp"
 #elif defined(USE_POLL_EVENT)
 #include "ui/event/shared/Event.hpp"
 #include "ui/event/poll/Loop.hpp"
