@@ -97,9 +97,9 @@ musl = AutotoolsProject(
 )
 
 openssl = OpenSSLProject(
-    'https://www.openssl.org/source/openssl-3.0.0-alpha15.tar.gz',
-    'ftp://ftp.cert.dfn.de/pub/tools/net/openssl/source/openssl-3.0.0-alpha15.tar.gz',
-    '7ebc12910a19d94c13ce589024c5ab655a81152823fe37a3b5753436f3706831',
+    'https://www.openssl.org/source/openssl-3.0.0-alpha16.tar.gz',
+    'ftp://ftp.cert.dfn.de/pub/tools/net/openssl/source/openssl-3.0.0-alpha16.tar.gz',
+    '08ce8244b59d75f40f91170dfcb012bf25309cdcb1fef9502e39d694f883d1d1',
     'include/openssl/ossl_typ.h',
 )
 
