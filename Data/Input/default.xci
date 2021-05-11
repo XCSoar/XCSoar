@@ -300,6 +300,12 @@ event=Analysis
 
 mode=default
 type=gesture
+data=LDR
+event=Checklist
+
+
+mode=default
+type=gesture
 data=URDL
 event=Pan on
 
