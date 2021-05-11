@@ -539,10 +539,10 @@ NMEAParser::HDM(NMEAInputLine &line, NMEAInfo &info)
   bool heading_available = ReadBearing(line, heading);
 
   if (!heading_available)
-    info.heading_available.Clear();
+    info.attitude.heading_available.Clear();
   else if (heading_available) {
-    info.heading = heading;
-    info.heading_available.Update(info.clock);
+    info.attitude.heading = heading;
+    info.attitude.heading_available.Update(info.clock);
   }
 
   return true;
