@@ -3,6 +3,7 @@ Version 7.6 - 2021/05/01
   - fix dialog labels
   - fix disappearing aircraft symbol
   - fix crash bug in task editor
+  - fix freeze bug in waypoint/airspace list dialog
 * devices
   - add "Radio" indicator to device list
 

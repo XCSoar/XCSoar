@@ -97,6 +97,12 @@ CreateCalculationThread()
   merge_thread = new MergeThread(*device_blackboard);
   merge_thread->FirstRun();
 
+  /* copy the MergeThead::FirstRun() results to the
+     InterfaceBlackboard because nothing else will initalise some
+     important fallback values set by BasicComputer
+     (e.g. AttitudeState::heading) */
+  CommonInterface::ReadBlackboardBasic(device_blackboard->Basic());
+
   /* initialise the GlideComputer and run the first iteration */
   glide_computer->ReadBlackboard(device_blackboard->Basic());
   glide_computer->ReadComputerSettings(device_blackboard->GetComputerSettings());
