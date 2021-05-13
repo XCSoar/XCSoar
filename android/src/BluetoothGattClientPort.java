@@ -139,6 +139,7 @@ public class BluetoothGattClientPort
       if (!gatt.writeCharacteristic(dataCharacteristic)) {
         Log.e(TAG, "GATT characteristic write request failed");
         lastChunkWriteError = true;
+        pendingWriteChunks = null;
         writeChunksSync.notifyAll();
         return false;
       }
@@ -216,11 +217,7 @@ public class BluetoothGattClientPort
   public void onCharacteristicRead(BluetoothGatt gatt,
       BluetoothGattCharacteristic characteristic, int status) {
     Log.e(TAG, "GATT characteristic read");
-    synchronized (writeChunksSync) {
-      if ((pendingWriteChunks != null) && !beginWriteNextChunk()) {
-        pendingWriteChunks = null;
-      }
-    }
+    beginWriteNextChunk();
   }
 
   @Override
@@ -228,9 +225,7 @@ public class BluetoothGattClientPort
       BluetoothGattCharacteristic characteristic, int status) {
     synchronized (writeChunksSync) {
       if (BluetoothGatt.GATT_SUCCESS == status) {
-        if (!beginWriteNextChunk()) {
-          pendingWriteChunks = null;
-        }
+        beginWriteNextChunk();
       } else {
         Log.e(TAG, "GATT characteristic write failed");
         lastChunkWriteError = true;
