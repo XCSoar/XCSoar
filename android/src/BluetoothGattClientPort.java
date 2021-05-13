@@ -66,7 +66,7 @@ public class BluetoothGattClientPort
   private PortListener portListener;
   private volatile InputListener listener;
 
-  private BluetoothDevice device;
+  private final BluetoothDevice device;
   private BluetoothGatt gatt;
   private BluetoothGattCharacteristic dataCharacteristic;
   private BluetoothGattCharacteristic deviceNameCharacteristic;
