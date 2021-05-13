@@ -346,6 +346,8 @@ public class BluetoothGattClientPort
       try {
         writeChunksSync.wait();
       } catch (InterruptedException e) {
+        /* cancel the write on interruption */
+        pendingWriteChunks = null;
         return 0;
       }
 
