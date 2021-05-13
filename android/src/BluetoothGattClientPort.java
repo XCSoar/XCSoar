@@ -312,9 +312,10 @@ public class BluetoothGattClientPort
 
   @Override
   public int write(byte[] data, int length) {
+    if (0 == length)
+      return 0;
+
     synchronized (writeChunksSync) {
-      if (0 == length)
-        return 0;
       if ((dataCharacteristic == null) || (deviceNameCharacteristic == null))
         return 0;
       if ((pendingWriteChunks != null) && !drain())
