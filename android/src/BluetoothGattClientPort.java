@@ -134,7 +134,6 @@ public class BluetoothGattClientPort
   private boolean beginWriteNextChunk() {
     synchronized (writeChunksSync) {
       if ((pendingWriteChunks == null)
-          || (nextWriteChunkIdx < 0)
           || (pendingWriteChunks.length <= nextWriteChunkIdx)) return false;
       dataCharacteristic.setValue(pendingWriteChunks[nextWriteChunkIdx]);
       ++nextWriteChunkIdx;
