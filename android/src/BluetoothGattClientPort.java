@@ -137,14 +137,14 @@ public class BluetoothGattClientPort
           || (pendingWriteChunks.length <= nextWriteChunkIdx)) return false;
       dataCharacteristic.setValue(pendingWriteChunks[nextWriteChunkIdx]);
       ++nextWriteChunkIdx;
-      if (gatt.writeCharacteristic(dataCharacteristic)) {
-        return true;
-      } else {
+      if (!gatt.writeCharacteristic(dataCharacteristic)) {
         Log.e(TAG, "GATT characteristic write request failed");
         lastChunkWriteError = true;
         writeChunksSync.notifyAll();
         return false;
       }
+
+      return true;
     }
   }
 
