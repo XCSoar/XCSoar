@@ -93,42 +93,31 @@ public class BluetoothGattClientPort
       throw new IOException("Bluetooth GATT connect failed");
   }
 
-  private boolean findCharacteristics() {
-    try {
-      dataCharacteristic = null;
-      deviceNameCharacteristic = null;
+  private void findCharacteristics() throws Error {
+    dataCharacteristic = null;
+    deviceNameCharacteristic = null;
 
-      List<BluetoothGattService> services = gatt.getServices();
-      if (services != null) {
-        for (BluetoothGattService gattService : services) {
-          for (BluetoothGattCharacteristic characteristic :
-              gattService.getCharacteristics()) {
-            if (RX_TX_CHARACTERISTIC_UUID.equals(
-                characteristic.getUuid())) {
-              dataCharacteristic = characteristic;
-            } else if (DEVICE_NAME_CHARACTERISTIC_UUID.equals(
-                characteristic.getUuid())) {
-              deviceNameCharacteristic = characteristic;
-            }
+    List<BluetoothGattService> services = gatt.getServices();
+    if (services != null) {
+      for (BluetoothGattService gattService : services) {
+        for (BluetoothGattCharacteristic characteristic :
+               gattService.getCharacteristics()) {
+          if (RX_TX_CHARACTERISTIC_UUID.equals(
+                                               characteristic.getUuid())) {
+            dataCharacteristic = characteristic;
+          } else if (DEVICE_NAME_CHARACTERISTIC_UUID.equals(
+                                                            characteristic.getUuid())) {
+            deviceNameCharacteristic = characteristic;
           }
         }
       }
-
-      if (dataCharacteristic == null) {
-        Log.e(TAG, "GATT data characteristic not found");
-        return false;
-      }
-
-      if (deviceNameCharacteristic == null) {
-        Log.e(TAG, "GATT device name characteristic not found");
-        return false;
-      }
-
-      return true;
-    } catch (Exception e) {
-      Log.e(TAG, "GATT characteristics lookup failed", e);
-      return false;
     }
+
+    if (dataCharacteristic == null)
+      throw new Error("GATT data characteristic not found");
+
+    if (deviceNameCharacteristic == null)
+      throw new Error("GATT device name characteristic not found");
   }
 
   private boolean beginWriteNextChunk() {
@@ -191,26 +180,26 @@ public class BluetoothGattClientPort
   @Override
   public void onServicesDiscovered(BluetoothGatt gatt,
                                    int status) {
-    if (BluetoothGatt.GATT_SUCCESS == status) {
-      if (findCharacteristics()) {
-        if (gatt.setCharacteristicNotification(dataCharacteristic, true)) {
-          BluetoothGattDescriptor descriptor =
-            dataCharacteristic.getDescriptor(RX_TX_DESCRIPTOR_UUID);
-          descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-          gatt.writeDescriptor(descriptor);
-          portState = STATE_READY;
-        } else {
-          Log.e(TAG, "Could not enable GATT characteristic notification");
-          portState = STATE_FAILED;
-        }
-      } else {
-        portState = STATE_FAILED;
-      }
-    } else {
-      Log.e(TAG, "Discovering GATT services failed");
+    try {
+      if (BluetoothGatt.GATT_SUCCESS != status)
+        throw new Error("Discovering GATT services failed");
+
+      findCharacteristics();
+
+      if (!gatt.setCharacteristicNotification(dataCharacteristic, true))
+        throw new Error("Could not enable GATT characteristic notification");
+
+      BluetoothGattDescriptor descriptor =
+        dataCharacteristic.getDescriptor(RX_TX_DESCRIPTOR_UUID);
+      descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+      gatt.writeDescriptor(descriptor);
+      portState = STATE_READY;
+    } catch (Error e) {
+      error(e.getMessage());
       portState = STATE_FAILED;
+    } finally {
+      stateChanged();
     }
-    stateChanged();
   }
 
   @Override
@@ -361,5 +350,21 @@ public class BluetoothGattClientPort
     PortListener portListener = this.portListener;
     if (portListener != null)
       portListener.portStateChanged();
+  }
+
+  protected void error(String msg) {
+    PortListener portListener = this.portListener;
+    if (portListener != null)
+      portListener.portError(msg);
+  }
+
+  static class Error extends Exception {
+    public Error(String message) {
+      super(message);
+    }
+
+    public Error(String message, Throwable cause) {
+      super(message, cause);
+    }
   }
 }
