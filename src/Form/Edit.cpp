@@ -301,12 +301,15 @@ WndProperty::OnPaint(Canvas &canvas)
     PixelSize tsize = canvas.CalcTextSize(caption.c_str());
 
     PixelPoint org;
+    unsigned clip_width;
     if (caption_width < 0) {
       org.x = edit_rc.left;
       org.y = edit_rc.top - tsize.height;
+      clip_width = canvas.GetWidth();
     } else {
       org.x = caption_width - tsize.width - Layout::GetTextPadding();
       org.y = (GetHeight() - tsize.height) / 2;
+      clip_width = caption_width;
     }
 
     if (org.x < 1)
@@ -315,7 +318,7 @@ WndProperty::OnPaint(Canvas &canvas)
     if (HaveClipping())
       canvas.DrawText(org, caption.c_str());
     else
-      canvas.DrawClippedText(org, caption_width - org.x,
+      canvas.DrawClippedText(org, clip_width - org.x,
                              caption.c_str());
   }
 

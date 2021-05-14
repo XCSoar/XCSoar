@@ -1,13 +1,20 @@
-Devel
+Version 7.8 - not yet released
 * infoboxes
   - add alternate 2 glide ratio infobox (#616)
+
+Version 7.7 - 2021/05/14
+* user interface
+  - fix dialog labels
+  - fix freeze bug in waypoint/airspace list dialog
+* devices
+  - add "Radio" indicator to device list
+* Android
+  - writing to port times out after 5 seconds (to avoid locking up XCSoar)
 
 Version 7.6 - 2021/05/01
 * user interface
   - fix disappearing aircraft symbol
   - fix crash bug in task editor
-* devices
-  - add "Radio" indicator to device list
 
 Version 7.5 - 2021/04/30
 * fix crash bug in terrain loader

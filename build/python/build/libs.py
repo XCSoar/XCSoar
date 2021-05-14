@@ -97,9 +97,9 @@ musl = AutotoolsProject(
 )
 
 openssl = OpenSSLProject(
-    'https://www.openssl.org/source/openssl-3.0.0-alpha15.tar.gz',
-    'ftp://ftp.cert.dfn.de/pub/tools/net/openssl/source/openssl-3.0.0-alpha15.tar.gz',
-    '7ebc12910a19d94c13ce589024c5ab655a81152823fe37a3b5753436f3706831',
+    'https://www.openssl.org/source/openssl-3.0.0-alpha16.tar.gz',
+    'ftp://ftp.cert.dfn.de/pub/tools/net/openssl/source/openssl-3.0.0-alpha16.tar.gz',
+    '08ce8244b59d75f40f91170dfcb012bf25309cdcb1fef9502e39d694f883d1d1',
     'include/openssl/ossl_typ.h',
 )
 
@@ -150,9 +150,9 @@ zlib = ZlibProject(
 )
 
 freetype = FreeTypeProject(
-    'http://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.xz',
-    'http://downloads.sourceforge.net/project/freetype/freetype2/2.10.2/freetype-2.10.2.tar.xz',
-    '1543d61025d2e6312e0a1c563652555f17378a204a61e99928c9fcef030a2d8b',
+    'http://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.xz',
+    'http://downloads.sourceforge.net/project/freetype/freetype2/2.10.4/freetype-2.10.4.tar.xz',
+    '86a854d8905b19698bbc8f23b860bc104246ce4854dcea8e3b0fb21284f75784',
     'lib/libfreetype.a',
     [
         '--disable-shared', '--enable-static',
@@ -178,9 +178,9 @@ cares = CmakeProject(
 )
 
 curl = CmakeProject(
-    'https://curl.se/download/curl-7.75.0.tar.xz',
-    'https://github.com/curl/curl/releases/download/curl-7_75_0/curl-7.75.0.tar.xz',
-    'fe0c49d8468249000bda75bcfdf9e30ff7e9a86d35f1a21f428d79c389d55675',
+    'https://curl.se/download/curl-7.76.1.tar.xz',
+    'https://github.com/curl/curl/releases/download/curl-7_76_1/curl-7.76.1.tar.xz',
+    '64bb5288c39f0840c07d077e30d9052e1cbb9fa6c2dc52523824cc859e679145',
     'lib/libcurl.a',
     [
         '-DBUILD_CURL_EXE=OFF',
