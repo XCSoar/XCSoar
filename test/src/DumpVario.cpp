@@ -28,7 +28,11 @@ Copyright_License {
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+#if defined(_WIN32)
+# include <windows.h>
+#else
+# include <unistd.h>
+#endif
 
 int
 main(int argc, char **argv)
