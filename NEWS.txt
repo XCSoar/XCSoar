@@ -6,6 +6,8 @@ Version 7.6 - 2021/05/01
   - fix freeze bug in waypoint/airspace list dialog
 * devices
   - add "Radio" indicator to device list
+* Android
+  - writing to port times out after 5 seconds (to avoid locking up XCSoar)
 
 Version 7.5 - 2021/04/30
 * fix crash bug in terrain loader

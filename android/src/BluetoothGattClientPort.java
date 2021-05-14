@@ -278,10 +278,17 @@ public class BluetoothGattClientPort
 
   @Override
   public boolean drain() {
+    final long TIMEOUT = 5000;
+    final long waitUntil = System.currentTimeMillis() + TIMEOUT;
+
     synchronized (writeChunksSync) {
       while (pendingWriteChunks != null) {
+        final long timeToWait = waitUntil - System.currentTimeMillis();
+        if (timeToWait <= 0)
+          return false;
+
         try {
-          writeChunksSync.wait();
+          writeChunksSync.wait(timeToWait);
         } catch (InterruptedException e) {
           return false;
         }
@@ -302,6 +309,8 @@ public class BluetoothGattClientPort
 
   @Override
   public int write(byte[] data, int length) {
+    final long TIMEOUT = 5000;
+
     if (0 == length)
       return 0;
 
@@ -335,9 +344,15 @@ public class BluetoothGattClientPort
       }
 
       try {
-        writeChunksSync.wait();
+        writeChunksSync.wait(TIMEOUT);
       } catch (InterruptedException e) {
         /* cancel the write on interruption */
+        pendingWriteChunks = null;
+        return 0;
+      }
+
+      if (pendingWriteChunks != null && nextWriteChunkIdx == 0) {
+        /* timeout */
         pendingWriteChunks = null;
         return 0;
       }
