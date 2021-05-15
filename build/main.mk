@@ -735,7 +735,6 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/NativeLeScanCallback.cpp \
 	$(SRC)/Android/Battery.cpp \
 	$(SRC)/Android/GliderLink.cpp \
-	$(SRC)/Android/DownloadManager.cpp \
 	$(SRC)/Android/Vibrator.cpp \
 	$(SRC)/Android/Context.cpp \
 	$(SRC)/Android/NativeBMP085Listener.cpp \
