@@ -40,6 +40,7 @@ Copyright_License {
 #include "Wind/Settings.hpp"
 #include "WaveSettings.hpp"
 #include "RadioFrequency.hpp"
+#include "Cloud/weglide/WeGlideSettings.hpp"
 
 #include <cstdint>
 #include <type_traits>
@@ -226,6 +227,8 @@ struct ComputerSettings {
   ContestSettings contest;
 
   LoggerSettings logger;
+
+  WeGlideSettings weglide;
 
 #ifdef HAVE_TRACKING
   TrackingSettings tracking;
