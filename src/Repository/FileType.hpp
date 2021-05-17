@@ -33,6 +33,7 @@ enum class FileType : uint8_t {
   WAYPOINTDETAILS,
   MAP,
   FLARMNET,
+  IGC,
 };
 
 #endif
