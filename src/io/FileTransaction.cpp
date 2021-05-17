@@ -29,7 +29,7 @@ Copyright_License {
 #include <cassert>
 
 static AllocatedPath
-MakeTemporaryPath(Path path)
+MakeTemporaryPath(Path path) noexcept
 {
   assert(path != nullptr);
 
@@ -40,14 +40,14 @@ MakeTemporaryPath(Path path)
 #endif
 }
 
-FileTransaction::FileTransaction(Path _path)
+FileTransaction::FileTransaction(Path _path) noexcept
   :final_path(_path), temporary_path(MakeTemporaryPath(_path))
 {
   /* ensure the temporary file doesn't exist already */
   File::Delete(temporary_path);
 }
 
-FileTransaction::~FileTransaction()
+FileTransaction::~FileTransaction() noexcept
 {
   if (!temporary_path.IsNull())
     /* cancel the transaction */
@@ -74,7 +74,7 @@ FileTransaction::Commit()
 }
 
 void
-FileTransaction::Abandon()
+FileTransaction::Abandon() noexcept
 {
   assert(!temporary_path.IsNull());
 
