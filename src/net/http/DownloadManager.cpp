@@ -273,14 +273,14 @@ private:
   }
 };
 
-static bool
+static void
 DownloadToFileTransaction(CurlGlobal &curl,
                           const char *url, Path path,
                           std::array<std::byte, 32> *sha256, OperationEnvironment &env)
 {
   FileTransaction transaction(path);
   Net::DownloadToFile(curl, url, transaction.GetTemporaryPath(), sha256, env);
-  return transaction.Commit();
+  transaction.Commit();
 }
 
 inline void
@@ -298,9 +298,10 @@ DownloadManagerThread::ProcessQueue(CurlGlobal &curl) noexcept
 
     try {
       const ScopeUnlock unlock(mutex);
-      success = DownloadToFileTransaction(curl, item.uri.c_str(),
-                                          LocalPath(item.path_relative.c_str()),
-                                          nullptr, *this);
+      DownloadToFileTransaction(curl, item.uri.c_str(),
+                                LocalPath(item.path_relative.c_str()),
+                                nullptr, *this);
+      success = true;
     } catch (...) {
       error = std::current_exception();
       LogError(error);

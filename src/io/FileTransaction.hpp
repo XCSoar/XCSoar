@@ -67,9 +67,9 @@ public:
   /**
    * Replace the file with the contents of the temporary file.
    *
-   * @return true on success
+   * Throws on error.
    */
-  bool Commit();
+  void Commit();
 
   /**
    * Abandon the transaction, i.e. close it, but don't clean up the

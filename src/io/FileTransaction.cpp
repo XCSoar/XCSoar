@@ -22,6 +22,8 @@ Copyright_License {
 */
 
 #include "FileTransaction.hpp"
+#include "system/ConvertPathName.hpp"
+#include "system/Error.hxx"
 #include "system/FileUtil.hpp"
 
 #include <cassert>
@@ -52,18 +54,23 @@ FileTransaction::~FileTransaction()
     File::Delete(temporary_path);
 }
 
-bool
+void
 FileTransaction::Commit()
 {
   assert(!temporary_path.IsNull());
 
-  bool success = File::Replace(temporary_path, final_path);
-  if (success)
-    /* mark the transaction as "finished" to avoid deletion in the
-       destructor */
-    temporary_path = nullptr;
+  if (!File::Replace(temporary_path, final_path)) {
+#ifdef HAVE_POSIX
+    throw FormatErrno("Failed to commit %s", temporary_path.c_str());
+#else
+    throw FormatLastError("Failed to commit %s",
+                          (const char *)NarrowPathName(temporary_path));
+#endif
+  }
 
-  return success;
+  /* mark the transaction as "finished" to avoid deletion in the
+     destructor */
+  temporary_path = nullptr;
 }
 
 void
