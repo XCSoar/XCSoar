@@ -142,9 +142,6 @@ namespace File
 
   /**
    * Atomically rename a file, optionally replacing an existing file.
-   *
-   * Due to API limitations, this operation is not atomic on Windows
-   * CE.
    */
   static inline bool
   Replace(Path oldpath, Path newpath)
