@@ -44,7 +44,7 @@ Copyright_License {
 #endif
 
 void
-Directory::Create(Path path)
+Directory::Create(Path path) noexcept
 {
 #ifdef HAVE_POSIX
   mkdir(path.c_str(), 0777);
@@ -54,7 +54,7 @@ Directory::Create(Path path)
 }
 
 bool
-Directory::Exists(Path path)
+Directory::Exists(Path path) noexcept
 {
 #ifdef HAVE_POSIX
   struct stat st;
@@ -76,15 +76,17 @@ Directory::Exists(Path path)
  */
 #ifndef HAVE_POSIX
 static bool
-IsDots(const TCHAR* str)
+IsDots(const TCHAR *str) noexcept
 {
   return StringIsEqual(str, _T(".")) || StringIsEqual(str, _T(".."));
 }
 #endif
 
 #ifndef HAVE_POSIX /* we use fnmatch() on POSIX */
+
+[[gnu::pure]]
 static bool
-checkFilter(const TCHAR *filename, const TCHAR *filter)
+checkFilter(const TCHAR *filename, const TCHAR *filter) noexcept
 {
   // filter = e.g. "*.igc" or "config/*.prf"
   // todo: make filters like "config/*.prf" work
@@ -279,7 +281,7 @@ Directory::VisitSpecificFiles(Path path, const TCHAR* filter,
 }
 
 bool
-File::ExistsAny(Path path)
+File::ExistsAny(Path path) noexcept
 {
 #ifdef HAVE_POSIX
   struct stat st;
@@ -290,7 +292,7 @@ File::ExistsAny(Path path)
 }
 
 bool
-File::Exists(Path path)
+File::Exists(Path path) noexcept
 {
 #ifdef HAVE_POSIX
   struct stat st;
@@ -308,7 +310,7 @@ File::Exists(Path path)
 #if defined(_WIN32) && defined(UNICODE)
 
 bool
-File::Exists(const char *path)
+File::Exists(const char *path) noexcept
 {
   DWORD attributes = GetFileAttributesA(path);
   return attributes != INVALID_FILE_ATTRIBUTES &&
@@ -318,7 +320,7 @@ File::Exists(const char *path)
 #endif
 
 uint64_t
-File::GetSize(Path path)
+File::GetSize(Path path) noexcept
 {
 #ifdef HAVE_POSIX
   struct stat st;
@@ -338,7 +340,7 @@ File::GetSize(Path path)
 }
 
 uint64_t
-File::GetLastModification(Path path)
+File::GetLastModification(Path path) noexcept
 {
 #ifdef HAVE_POSIX
   struct stat st;
@@ -359,9 +361,8 @@ File::GetLastModification(Path path)
 
 #ifndef HAVE_POSIX
 
-constexpr
-static uint64_t
-FileTimeToInteger(FILETIME ft)
+static constexpr uint64_t
+FileTimeToInteger(FILETIME ft) noexcept
 {
   return ft.dwLowDateTime | ((uint64_t)ft.dwHighDateTime << 32);
 }
@@ -369,7 +370,7 @@ FileTimeToInteger(FILETIME ft)
 #endif
 
 uint64_t
-File::Now()
+File::Now() noexcept
 {
 #ifdef HAVE_POSIX
   return time(nullptr);
@@ -385,7 +386,7 @@ File::Now()
 }
 
 bool
-File::Touch(Path path)
+File::Touch(Path path) noexcept
 {
 #ifdef HAVE_POSIX
   return utime(path.c_str(), nullptr) == 0;
@@ -418,7 +419,7 @@ File::Touch(Path path)
 }
 
 bool
-File::ReadString(Path path, char *buffer, size_t size)
+File::ReadString(Path path, char *buffer, size_t size) noexcept
 {
   assert(path != nullptr);
   assert(buffer != nullptr);
@@ -446,7 +447,7 @@ File::ReadString(Path path, char *buffer, size_t size)
 }
 
 bool
-File::WriteExisting(Path path, const char *value)
+File::WriteExisting(Path path, const char *value) noexcept
 {
   assert(path != nullptr);
   assert(value != nullptr);
@@ -469,7 +470,7 @@ File::WriteExisting(Path path, const char *value)
 }
 
 bool
-File::CreateExclusive(Path path)
+File::CreateExclusive(Path path) noexcept
 {
   assert(path != nullptr);
 

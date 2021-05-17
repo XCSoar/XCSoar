@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_OS_FILEUTIL_HPP
 #define XCSOAR_OS_FILEUTIL_HPP
 
-#include "util/Compiler.h"
 #include "Path.hpp"
 
 #include <cstdint>
@@ -61,16 +60,16 @@ namespace Directory {
  * @param path File system path to check
  * @return True if the folder exists
  */
-gcc_pure
+[[gnu::pure]]
 bool
-Exists(Path path);
+Exists(Path path) noexcept;
 
 /**
  * Creates a new folder at the given path
  * @param path Path to the folder that should be created
  */
 void
-Create(Path path);
+Create(Path path) noexcept;
 
 /**
  * Visit all the files of a specific directory with the given visitor
@@ -102,23 +101,23 @@ namespace File {
  * Returns whether a file or directory or any other directory entry
  * with the specified name exists.
  */
-gcc_pure
+[[gnu::pure]]
 bool
-ExistsAny(Path path);
+ExistsAny(Path path) noexcept;
 
 /**
  * Returns whether the given file exists and is a file (not a folder)
  * @param path File system path to check
  * @return True if the file exists
  */
-gcc_pure
+[[gnu::pure]]
 bool
-Exists(Path path);
+Exists(Path path) noexcept;
 
 #if defined(_WIN32) && defined(UNICODE)
-gcc_pure
+[[gnu::pure]]
 bool
-Exists(const char *path);
+Exists(const char *path) noexcept;
 #endif
 
 /**
@@ -127,7 +126,7 @@ Exists(const char *path);
  * @return True if the file was successfully deleted
  */
 static inline bool
-Delete(Path path)
+Delete(Path path) noexcept
 {
 #ifdef HAVE_POSIX
   return unlink(path.c_str()) == 0;
@@ -137,7 +136,7 @@ Delete(Path path)
 }
 
 static inline bool
-Rename(Path oldpath, Path newpath)
+Rename(Path oldpath, Path newpath) noexcept
 {
 #ifdef HAVE_POSIX
   /* XXX handle EXDEV; cross-filesystem moves are not supported by
@@ -152,7 +151,7 @@ Rename(Path oldpath, Path newpath)
  * Atomically rename a file, optionally replacing an existing file.
  */
 static inline bool
-Replace(Path oldpath, Path newpath)
+Replace(Path oldpath, Path newpath) noexcept
 {
 #ifdef HAVE_POSIX
   return rename(oldpath.c_str(), newpath.c_str()) == 0;
@@ -165,9 +164,9 @@ Replace(Path oldpath, Path newpath)
 /**
  * Returns the size of a regular file in bytes.
  */
-gcc_pure
+[[gnu::pure]]
 uint64_t
-GetSize(Path path);
+GetSize(Path path) noexcept;
 
 /**
  * Get a timestamp of last modification that can be used to compare
@@ -175,17 +174,17 @@ GetSize(Path path);
  * @param path Path to the file
  * @return 0 in case of failure or a timestamp for comparison
  */
-gcc_pure
+[[gnu::pure]]
 uint64_t
-GetLastModification(Path path);
+GetLastModification(Path path) noexcept;
 
 /**
  * Get a timestamp that can be used to compare to file timestamps
  * @return a timestamp for comparison
  */
-gcc_pure
+[[gnu::pure]]
 uint64_t
-Now();
+Now() noexcept;
 
 /**
  * Sets the modification timestamp of the file to the current system time
@@ -193,7 +192,7 @@ Now();
  * @return True in case of success, False otherwise
  */
 bool
-Touch(Path path);
+Touch(Path path) noexcept;
 
 /**
  * Read data from a file and null-terminate it.
@@ -203,7 +202,7 @@ Touch(Path path);
  * @return false on error
  */
 bool
-ReadString(Path path, char *buffer, size_t size);
+ReadString(Path path, char *buffer, size_t size) noexcept;
 
 /**
  * Write a string to an existing file.  It will never create a new
@@ -211,7 +210,7 @@ ReadString(Path path, char *buffer, size_t size);
  * for writing sysfs files.
  */
 bool
-WriteExisting(Path path, const char *value);
+WriteExisting(Path path, const char *value) noexcept;
 
 /**
  * Create a file with the given name, and leave it empty.
@@ -220,7 +219,7 @@ WriteExisting(Path path, const char *value);
  * exists
  */
 bool
-CreateExclusive(Path path);
+CreateExclusive(Path path) noexcept;
 
 } // namespace File
 
