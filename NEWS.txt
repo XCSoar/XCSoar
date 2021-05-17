@@ -9,6 +9,18 @@ Version 7.23 - not yet released
   - fix broken button text background
   - add OTG support (serial, sound, net) for Clara HD
   - fix "Network failure" in Wifi dialog
+* user interface
+  - add a simple date picker for date of birth selection
+  - add a integer selection picker for large numbers
+  - new Settings "WeGlide PilotID, DayOfBirth"
+  - new Glider setting "WeGlide GliderID"
+* cloud server
+  - upload igcfiles to a cloud server (starting with WeGlide)
+* logger
+  - automatic upload after downloading flight from logger (setable)
+    with pilot (id and birthdate in Profile setting) and glider (id in Airplane setting)
+* internet
+  - add functionality for uploading igcfiles
 
 Version 7.22 - 2022/01/14
 * user interface
