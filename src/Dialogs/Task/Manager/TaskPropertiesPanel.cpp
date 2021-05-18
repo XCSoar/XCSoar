@@ -43,6 +43,8 @@ enum Controls {
   START_HEIGHT_REF,
   FINISH_MIN_HEIGHT,
   FINISH_HEIGHT_REF,
+  PEV_START_WAIT_TIME,
+  PEV_START_WINDOW,
   FAI_FINISH_HEIGHT,
 };
 
@@ -94,6 +96,13 @@ TaskPropertiesPanel::RefreshView()
   LoadValue(FAI_FINISH_HEIGHT, fai_start_finish);
 
   LoadValueEnum(TASK_TYPE, ftype);
+
+  SetRowVisible(PEV_START_WAIT_TIME, !fai_start_finish);
+  LoadValueTime(PEV_START_WAIT_TIME,
+                p.start_constraints.pev_start_wait_time);
+  SetRowVisible(PEV_START_WINDOW, !fai_start_finish);
+  LoadValueTime(PEV_START_WINDOW,
+                p.start_constraints.pev_start_window);
 
   dialog.InvalidateTaskView();
 
@@ -153,6 +162,11 @@ TaskPropertiesPanel::ReadValues()
 
   changed |= SaveValueEnum(FINISH_HEIGHT_REF,
                            p.finish_constraints.min_height_ref);
+
+  changed |= SaveValue(PEV_START_WAIT_TIME,
+                       p.start_constraints.pev_start_wait_time);
+  changed |= SaveValue(PEV_START_WINDOW,
+                       p.start_constraints.pev_start_window);
 
   if (changed)
     ordered_task->SetOrderedTaskSettings(p);
@@ -258,6 +272,15 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent,
   AddEnum(_("Finish height ref."),
           _("Reference used for finish min height rule."),
           altitude_reference_list);
+
+  AddTime(_("PEV start wait time"),
+          _("Wait time in minutes after Pilot Event and before start gate opens. "
+            "0 means start opens immediately."),
+          0, 30*60, 60, 0);
+  AddTime(_("PEV start window"),
+          _("Number of minutes start remains open after Pilot Event and PEV wait time."
+            "0 means start will never close after it opens."),
+          0, 30*60, 60, 0);
 
   AddBoolean(_("FAI start / finish rules"),
              _("If enabled, has no max start height or max start speed and requires the minimum height above ground for finish to be greater than 1000m below the start height."),
