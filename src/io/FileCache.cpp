@@ -37,7 +37,7 @@ Copyright_License {
 #   include <sys/stat.h>
 #   include <unistd.h>
 #else
-#   include <windows.h>
+#   include <fileapi.h>
 #endif
 
 static constexpr unsigned FILE_CACHE_MAGIC = 0xab352f8a;

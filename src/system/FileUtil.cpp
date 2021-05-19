@@ -39,8 +39,6 @@ Copyright_License {
 #include <fnmatch.h>
 #include <utime.h>
 #include <time.h>
-#else
-#include <windows.h>
 #endif
 
 void

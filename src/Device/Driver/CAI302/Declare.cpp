@@ -30,7 +30,7 @@ Copyright_License {
 #include <stdio.h>
 
 #ifdef _UNICODE
-#include <windows.h>
+#include <stringapiset.h>
 #endif
 
 static void

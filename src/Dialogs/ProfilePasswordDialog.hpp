@@ -28,7 +28,8 @@ Copyright_License {
 #include "util/Compiler.h"
 
 #ifdef _WIN32
-#include <windows.h>
+#include <windef.h> // for POINT (needed by wingdi.h)
+#include <wingdi.h>
 #ifdef ERROR
 #undef ERROR
 #endif

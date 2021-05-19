@@ -25,10 +25,6 @@ Copyright_License {
 
 #include <stdio.h>
 
-#ifdef _UNICODE
-#include <windows.h>
-#endif
-
 bool
 FlarmDevice::SendSetting(const char *name, const char *value,
                          OperationEnvironment &env)

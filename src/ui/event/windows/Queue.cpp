@@ -26,6 +26,8 @@ Copyright_License {
 #include "../Timer.hpp"
 #include "thread/Debug.hpp"
 
+#include <winbase.h> // for INFINITE
+
 namespace UI {
 
 EventQueue::EventQueue()

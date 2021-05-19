@@ -64,6 +64,10 @@ Copyright_License {
 #include "Apple/InternalSensors.hpp"
 #endif
 
+#ifdef _UNICODE
+#include <stringapiset.h> // for WideCharToMultiByte()
+#endif
+
 #include <cassert>
 
 /**

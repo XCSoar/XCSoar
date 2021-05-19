@@ -24,9 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_TRIGGER_HXX
 #define XCSOAR_THREAD_TRIGGER_HXX
 
-#include "util/Compiler.h"
-
-#include <windows.h>
+#include <synchapi.h>
 
 /**
  * This class wraps an OS specific trigger.  It is an object which one
@@ -70,7 +68,7 @@ public:
    * Checks if this object is triggered.
    * @return true if this object was triggered, false if not
    */
-  gcc_pure
+  [[gnu::pure]]
   bool Test() const {
     return ::WaitForSingleObject(handle, 0) == WAIT_OBJECT_0;
   }

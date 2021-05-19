@@ -29,7 +29,7 @@ Copyright_License {
 #include "ui/event/Queue.hpp"
 #include "ui/canvas/gdi/GdiPlusBitmap.hpp"
 
-#include <windows.h>
+#include <libloaderapi.h>
 
 using namespace UI;
 

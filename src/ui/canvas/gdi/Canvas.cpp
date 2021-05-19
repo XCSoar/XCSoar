@@ -24,7 +24,6 @@ Copyright_License {
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Util.hpp"
-#include "Compatibility/gdi.h"
 #include "Asset.hpp" /* for needclipping */
 #include "AlphaBlend.hpp"
 #include "Math/Angle.hpp"

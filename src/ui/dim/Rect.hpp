@@ -30,7 +30,7 @@ Copyright_License {
 #include <utility>
 
 #ifdef USE_WINUSER
-#include <windows.h>
+#include <windef.h>
 #endif
 
 /**

@@ -25,7 +25,8 @@
 
 #ifdef _WIN32
 
-#include <windows.h>
+#include <processthreadsapi.h>
+#include <sysinfoapi.h>
 #include <tlhelp32.h>
 #include <stdio.h>
 #include <cstdint>

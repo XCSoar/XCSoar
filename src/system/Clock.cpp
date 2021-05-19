@@ -31,7 +31,9 @@ Copyright_License {
 #include <sys/time.h>
 #endif
 #else /* !HAVE_POSIX */
-#include <windows.h>
+#include <profileapi.h>
+#include <sysinfoapi.h>
+#include <timezoneapi.h>
 #endif /* !HAVE_POSIX */
 
 unsigned

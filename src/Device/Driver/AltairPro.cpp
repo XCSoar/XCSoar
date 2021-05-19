@@ -40,7 +40,7 @@ Copyright_License {
 #include <cassert>
 #include <tchar.h>
 #ifdef _UNICODE
-#include <windows.h>
+#include <stringapiset.h>
 #endif
 
 #define DECELWPNAMESIZE   24                        // max size of taskpoint name

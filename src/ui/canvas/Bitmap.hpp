@@ -40,7 +40,7 @@ Copyright_License {
 #endif
 
 #ifdef USE_GDI
-#include <windows.h>
+#include <windef.h>
 #endif
 
 #include <cassert>

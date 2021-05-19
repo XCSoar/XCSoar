@@ -28,7 +28,8 @@ Copyright_License {
 #include <time.h>
 
 #ifndef HAVE_POSIX
-#include <windows.h>
+#include <sysinfoapi.h>
+#include <timezoneapi.h>
 #endif
 
 #ifdef HAVE_POSIX

@@ -29,7 +29,7 @@ Copyright_License {
 #ifdef _UNICODE
 #include "util/Macros.hpp"
 
-#include <windows.h>
+#include <stringapiset.h>
 #endif
 
 bool

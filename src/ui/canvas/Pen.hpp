@@ -30,6 +30,10 @@ Copyright_License {
 
 #include <cassert>
 
+#ifdef USE_GDI
+#include <wingdi.h>
+#endif
+
 /**
  * A pen draws lines and borders.
  */

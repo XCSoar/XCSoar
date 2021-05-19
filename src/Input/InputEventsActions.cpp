@@ -95,6 +95,11 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include <TargetConditionals.h>
 #endif
 
+#ifdef _WIN32
+#include <processthreadsapi.h> // for CreateProcess()
+#include <winbase.h> // for INFINITE
+#endif
+
 /**
  * Determine the reference location of the current map display.
  */

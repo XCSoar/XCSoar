@@ -30,7 +30,7 @@ Copyright_License {
 
 #ifdef _UNICODE
 #include "system/Error.hxx"
-#include <windows.h>
+#include <stringapiset.h>
 #endif
 
 #ifdef _UNICODE

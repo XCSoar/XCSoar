@@ -24,8 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_WINDOWS_EVENT_HPP
 #define XCSOAR_EVENT_WINDOWS_EVENT_HPP
 
-#include <windows.h>
 #include <cassert>
+
+#include <windef.h> // for HWND (needed by winuser.h)
+#include <winuser.h>
 
 namespace UI {
 

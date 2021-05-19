@@ -34,12 +34,13 @@
 #include "system/Path.hpp"
 #include "util/Compiler.h"
 
-#ifndef _WIN32
-#include "UniqueFileDescriptor.hxx"
-#endif
-
 #ifdef _WIN32
-#include <windows.h>
+#include <fileapi.h>
+#include <handleapi.h> // for INVALID_HANDLE_VALUE
+#include <windef.h> // for HWND (needed by winbase.h)
+#include <winbase.h> // for FILE_CURRENT
+#else
+#include "io/UniqueFileDescriptor.hxx"
 #endif
 
 class Path;

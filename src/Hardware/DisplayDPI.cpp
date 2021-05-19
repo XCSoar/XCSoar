@@ -26,7 +26,7 @@ Copyright_License {
 #ifdef _WIN32
 #include "ui/canvas/gdi/RootDC.hpp"
 
-#include <windows.h>
+#include <wingdi.h>
 #endif
 
 #ifdef USE_X11

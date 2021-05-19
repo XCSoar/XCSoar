@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "ui/dim/Point.hpp"
 
-#include <windows.h>
+#include <windef.h>
 
 /**
  * A point structure to be used in arrays.

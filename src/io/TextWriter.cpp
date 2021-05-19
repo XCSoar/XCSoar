@@ -26,7 +26,8 @@ Copyright_License {
 
 #ifdef _UNICODE
 #include "util/StringAPI.hxx"
-#include <windows.h>
+#include <stringapiset.h>
+#include <stdarg.h>
 #endif
 
 #include <tchar.h>

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 
 #ifdef _UNICODE
-#include <windows.h>
+#include <stringapiset.h>
 #endif
 
 #define IMI_SECONDS_IN_MINUTE       (60)

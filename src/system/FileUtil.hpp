@@ -33,7 +33,9 @@ Copyright_License {
 #include <unistd.h>
 #include <stdio.h>
 #else
-#include <windows.h>
+#include <fileapi.h>
+#include <windef.h> // for HWND (needed by winbase.h)
+#include <winbase.h>
 #endif
 
 namespace File {

@@ -26,8 +26,10 @@ Copyright_License {
 
 #include "ui/canvas/PortableColor.hpp"
 
-#include <windows.h>
 #include <cstdint>
+
+#include <windef.h>
+#include <wingdi.h>
 
 /**
  * This class represents a color in the RGB color space.  This is used

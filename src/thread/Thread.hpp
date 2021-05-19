@@ -29,7 +29,9 @@ Copyright_License {
 #ifdef HAVE_POSIX
 #include <pthread.h>
 #else
-#include <windows.h>
+#include <processthreadsapi.h>
+#include <windef.h> // for HWND (needed by winbase.h)
+#include <winbase.h> // for THREAD_PRIORITY_BELOW_NORMAL
 #endif
 
 #include <cassert>

@@ -28,10 +28,6 @@ Copyright_License {
 
 #include <stdio.h>
 
-#ifdef _UNICODE
-#include <windows.h>
-#endif
-
 bool
 VegaDevice::SendSetting(const char *name, int value, OperationEnvironment &env)
 {

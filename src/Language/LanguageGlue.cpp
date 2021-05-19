@@ -44,7 +44,7 @@ Copyright_License {
 #endif
 
 #ifdef _WIN32
-#include <windows.h>
+#include <winnls.h>
 #endif
 
 #ifdef __APPLE__

@@ -27,7 +27,7 @@ Copyright_License {
 #include "system/Sleep.h"
 #include "system/OverlappedEvent.hpp"
 
-#include <windows.h>
+#include <fileapi.h>
 
 #include <algorithm>
 #include <cassert>

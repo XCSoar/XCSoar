@@ -33,7 +33,7 @@ Copyright_License {
 #include <cstddef>
 
 #ifdef _WIN32
-#include <windows.h>
+#include <windef.h>
 #endif
 
 #include <tchar.h>

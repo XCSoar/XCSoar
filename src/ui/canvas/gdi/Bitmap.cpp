@@ -29,6 +29,9 @@ Copyright_License {
 
 #include <cassert>
 
+#include <wingdi.h>
+#include <winuser.h>
+
 Bitmap::Bitmap(Bitmap &&src)
   :bitmap(src.bitmap)
 {

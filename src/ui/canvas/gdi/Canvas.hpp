@@ -34,8 +34,11 @@ Copyright_License {
 #include "util/StringView.hxx"
 
 #include <cassert>
-#include <windows.h>
+
+#include <handleapi.h> // for INVALID_HANDLE_VALUE
 #include <tchar.h>
+#include <wingdi.h>
+#include <winuser.h>
 
 class Angle;
 

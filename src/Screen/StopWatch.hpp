@@ -33,7 +33,8 @@ Copyright_License {
 #include <time.h>
 #include <cstdint>
 #else /* !HAVE_POSIX */
-#include <windows.h>
+#include <processthreadsapi.h>
+#include <profileapi.h>
 #endif /* !HAVE_POSIX */
 
 #endif /* STOP_WATCH */

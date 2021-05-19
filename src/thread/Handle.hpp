@@ -29,7 +29,7 @@ Copyright_License {
 #ifdef HAVE_POSIX
 #include <pthread.h>
 #else
-#include <windows.h>
+#include <processthreadsapi.h>
 #endif
 
 /**
