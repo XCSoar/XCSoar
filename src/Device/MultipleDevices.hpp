@@ -86,6 +86,7 @@ public:
   void PutBugs(double bugs, OperationEnvironment &env);
   void PutBallast(double fraction, double overload, OperationEnvironment &env);
   void PutVolume(unsigned volume, OperationEnvironment &env);
+  void PutPilotEvent(OperationEnvironment &env);
   void PutActiveFrequency(RadioFrequency frequency, const TCHAR *name,
                           OperationEnvironment &env);
   void PutStandbyFrequency(RadioFrequency frequency, const TCHAR *name,

@@ -89,6 +89,13 @@ MultipleDevices::PutVolume(unsigned volume, OperationEnvironment &env)
 }
 
 void
+MultipleDevices::PutPilotEvent(OperationEnvironment &env)
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutPilotEvent(env);
+}
+
+void
 MultipleDevices::PutActiveFrequency(RadioFrequency frequency,
                                     const TCHAR *name,
                                     OperationEnvironment &env)

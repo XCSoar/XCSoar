@@ -921,6 +921,22 @@ DeviceDescriptor::PutVolume(unsigned volume, OperationEnvironment &env)
 }
 
 bool
+DeviceDescriptor::PutPilotEvent(OperationEnvironment &env)
+{
+  assert(InMainThread());
+
+  if (device == nullptr || !config.sync_to_device)
+    return true;
+
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  ScopeReturnDevice restore(*this, env);
+  return device->PutPilotEvent(env);
+}
+
+bool
 DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
                                      const TCHAR *name,
                                      OperationEnvironment &env)

@@ -495,6 +495,7 @@ public:
   bool PutBallast(double fraction, double overload,
                   OperationEnvironment &env);
   bool PutVolume(unsigned volume, OperationEnvironment &env);
+  bool PutPilotEvent(OperationEnvironment &env);
   bool PutActiveFrequency(RadioFrequency frequency,
                           const TCHAR *name,
                           OperationEnvironment &env);

@@ -76,6 +76,13 @@ AbstractDevice::PutVolume(unsigned volume, OperationEnvironment &env)
   return true;
 }
 
+
+bool
+AbstractDevice::PutPilotEvent(OperationEnvironment &env)
+{
+  return true;
+}
+
 bool
 AbstractDevice::PutActiveFrequency(RadioFrequency frequency,
                                    const TCHAR *name,
