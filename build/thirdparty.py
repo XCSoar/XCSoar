@@ -20,14 +20,45 @@ from build.dirs import tarball_path, src_path
 target_output_dir = os.path.abspath(target_output_dir)
 
 lib_path = os.path.join(target_output_dir, 'lib')
-arch_path = os.path.join(lib_path, actual_host_triplet)
-build_path = os.path.join(arch_path, 'build')
-install_prefix = os.path.join(arch_path, 'root')
+build_path = os.path.join(lib_path, 'build')
+install_prefix = os.path.join(lib_path, actual_host_triplet)
 
 if 'MAKEFLAGS' in os.environ:
     # build/make.mk adds "--no-builtin-rules --no-builtin-variables",
     # which breaks the zlib Makefile (and maybe others)
     del os.environ['MAKEFLAGS']
+
+class NativeToolchain:
+    """A toolchain for building native binaries, e.g. to be run on the
+    build host."""
+
+    def __init__(self, other):
+        self.native = self
+
+        self.tarball_path = other.tarball_path
+        self.src_path = other.src_path
+        self.build_path = other.build_path
+        self.install_prefix = lib_path
+        self.toolchain_arch = None
+        self.actual_arch = None
+        self.is_windows = None
+
+        self.cc = 'ccache gcc'
+        self.cxx = 'ccache g++'
+        self.ar = 'ar'
+        self.arflags = ''
+        self.ranlib = 'ranlib'
+        self.strip = 'strip'
+        self.windres = None
+
+        common_flags = '-Os -ffunction-sections -fdata-sections -fvisibility=hidden'
+        self.cflags = common_flags
+        self.cxxflags = common_flags
+        self.cppflags = '-DNDEBUG'
+        self.ldflags = ''
+        self.libs = ''
+
+        self.env = dict(os.environ)
 
 class Toolchain:
     def __init__(self, tarball_path, src_path, build_path, install_prefix,
@@ -71,6 +102,8 @@ class Toolchain:
         self.env['QEMU_CPU'] = 'Deep Thought'
         self.env['QEMU_GUEST_BASE'] = '42'
 
+        self.native = NativeToolchain(self)
+
 # a list of third-party libraries to be used by XCSoar
 from build.libs import *
 
@@ -105,6 +138,8 @@ elif re.match('(arm.*|aarch64)-apple-darwin', actual_host_triplet) is not None:
 elif 'apple-darwin' in actual_host_triplet:
     thirdparty_libs = [
         libsodium,
+        cares,
+        curl,
         lua,
         proj,
         libtiff,
@@ -139,8 +174,11 @@ elif toolchain_host_triplet.endswith('-musleabihf'):
     ]
 else:
     thirdparty_libs = [
+        binutils,
+        linux_headers,
+        gcc_bootstrap,
         musl,
-        libstdcxx_musl_headers,
+        gcc,
         zlib,
         libsodium,
         freetype,

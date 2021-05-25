@@ -62,7 +62,7 @@ class EventQueue final {
 
   InjectEvent wake_event{event_loop, BIND_THIS_METHOD(OnWakeUp)};
 
-  bool quit;
+  bool quit = false;
 
 public:
   EventQueue();
@@ -170,6 +170,11 @@ public:
   void Purge(Event::Callback callback, void *ctx);
 
 private:
+  void OnQuitSignal() noexcept {
+    Quit();
+    WakeUp();
+  }
+
   void OnWakeUp() noexcept {
     event_loop.Break();
   }

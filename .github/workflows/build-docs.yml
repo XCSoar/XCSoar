@@ -1,0 +1,34 @@
+on:
+  workflow_dispatch:  
+  push:
+    paths:
+      - 'doc/**'
+      - '.github/workflows/build-docs.yml'
+    branches:
+      - master
+  pull_request:
+    paths:
+      - 'doc/**'
+      - '.github/workflows/build-docs.yml'
+    branches:
+      - master
+jobs:
+  xcsoar-compile:
+    runs-on: ubuntu-latest
+    steps:
+     - id: checkout 
+       uses: actions/checkout@v2
+       with:
+         submodules: True
+     - id: repository
+       uses: ASzc/change-string-case-action@v1
+       with:
+         string: ${{ github.repository }}
+     - name: XCSoar generate Docs
+       uses: addnab/docker-run-action@v3
+       with:
+         image: ghcr.io/${{ steps.repository.outputs.lowercase }}/xcsoar-build:latest
+         options: -v ${{ github.workspace }}:/opt/xcsoar 
+         run: | 
+           cd /opt/xcsoar
+           make manual V=2 

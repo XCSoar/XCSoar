@@ -45,13 +45,13 @@ public:
    * Returns a human-readable name for this overlay.
    */
   gcc_pure
-  virtual const TCHAR *GetLabel() const = 0;
+  virtual const TCHAR *GetLabel() const noexcept = 0;
 
   /**
    * Check whether the given location is inside the overlay.
    */
   gcc_pure
-  virtual bool IsInside(GeoPoint p) const = 0;
+  virtual bool IsInside(GeoPoint p) const noexcept = 0;
 
   /**
    * Draw the overlay to the given #Canvas.

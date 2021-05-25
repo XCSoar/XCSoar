@@ -26,26 +26,28 @@ ContestManager::ContestManager(const Contest _contest,
                                const Trace &trace_full,
                                const Trace &trace_triangle,
                                const Trace &trace_sprint,
-                               bool predict_triangle)
+                               bool predict_triangle) noexcept
   :contest(_contest),
    olc_sprint(trace_sprint),
    olc_fai(trace_triangle, predict_triangle),
    olc_classic(trace_full),
    olc_league(trace_sprint),
-   olc_plus(),
    dmst_quad(trace_full),
    xcontest_free(trace_full, false),
    xcontest_triangle(trace_triangle, predict_triangle, false),
    dhv_xc_free(trace_full, true),
    dhv_xc_triangle(trace_triangle, predict_triangle, true),
    sis_at(trace_full),
-   net_coupe(trace_full)
+   net_coupe(trace_full),
+   weglide_distance(trace_full),
+   weglide_fai(trace_triangle, predict_triangle),
+   weglide_or(trace_full)
 {
   Reset();
 }
 
 void
-ContestManager::SetIncremental(bool incremental)
+ContestManager::SetIncremental(bool incremental) noexcept
 {
   olc_sprint.SetIncremental(incremental);
   olc_fai.SetIncremental(incremental);
@@ -57,10 +59,13 @@ ContestManager::SetIncremental(bool incremental)
   dhv_xc_triangle.SetIncremental(incremental);
   sis_at.SetIncremental(incremental);
   net_coupe.SetIncremental(incremental);
+  weglide_distance.SetIncremental(incremental);
+  weglide_fai.SetIncremental(incremental);
+  weglide_or.SetIncremental(incremental);
 }
 
 void
-ContestManager::SetPredicted(const TracePoint &predicted)
+ContestManager::SetPredicted(const TracePoint &predicted) noexcept
 {
   if (olc_classic.SetPredicted(predicted)) {
     olc_league.Reset();
@@ -77,7 +82,7 @@ ContestManager::SetPredicted(const TracePoint &predicted)
 }
 
 void
-ContestManager::SetHandicap(unsigned handicap)
+ContestManager::SetHandicap(unsigned handicap) noexcept
 {
   olc_sprint.SetHandicap(handicap);
   olc_fai.SetHandicap(handicap);
@@ -91,12 +96,16 @@ ContestManager::SetHandicap(unsigned handicap)
   dhv_xc_triangle.SetHandicap(handicap);
   sis_at.SetHandicap(handicap);
   net_coupe.SetHandicap(handicap);
+  weglide_free.SetHandicap(handicap);
+  weglide_distance.SetHandicap(handicap);
+  weglide_fai.SetHandicap(handicap);
+  weglide_or.SetHandicap(handicap);
 }
 
 static bool
 RunContest(AbstractContest &_contest,
            ContestResult &result, ContestTraceVector &solution,
-           bool exhaustive)
+           bool exhaustive) noexcept
 {
   // run solver, return immediately if further processing is required
   // by subsequent calls
@@ -117,7 +126,7 @@ RunContest(AbstractContest &_contest,
 }
 
 bool
-ContestManager::UpdateIdle(bool exhaustive)
+ContestManager::UpdateIdle(bool exhaustive) noexcept
 {
   bool retval = false;
 
@@ -196,13 +205,48 @@ ContestManager::UpdateIdle(bool exhaustive)
                         stats.solution[0], exhaustive);
     break;
 
+  case Contest::WEGLIDE_FREE:
+    retval = RunContest(weglide_distance, stats.result[0],
+                        stats.solution[0], exhaustive);
+
+    retval |= RunContest(weglide_fai, stats.result[1],
+                         stats.solution[1], exhaustive);
+
+    retval |= RunContest(weglide_or, stats.result[2],
+                         stats.solution[2], exhaustive);
+
+    if (retval) {
+      weglide_free.Feed(stats.result[0], stats.solution[0],
+                        stats.result[1], stats.solution[1],
+                        stats.result[2], stats.solution[2]);
+
+      RunContest(weglide_free, stats.result[3],
+                 stats.solution[3], exhaustive);
+    }
+    break;
+
+  case Contest::WEGLIDE_DISTANCE:
+    retval = RunContest(weglide_distance, stats.result[0],
+                        stats.solution[0], exhaustive);
+    break;
+
+  case Contest::WEGLIDE_FAI:
+    retval = RunContest(weglide_fai, stats.result[0],
+                        stats.solution[0], exhaustive);
+    break;
+
+  case Contest::WEGLIDE_OR:
+    retval = RunContest(weglide_or, stats.result[0],
+                        stats.solution[0], exhaustive);
+    break;
+
   };
 
   return retval;
 }
 
 void
-ContestManager::Reset()
+ContestManager::Reset() noexcept
 {
   stats.Reset();
   olc_sprint.Reset();
@@ -217,6 +261,10 @@ ContestManager::Reset()
   dhv_xc_triangle.Reset();
   sis_at.Reset();
   net_coupe.Reset();
+  weglide_free.Reset();
+  weglide_distance.Reset();
+  weglide_fai.Reset();
+  weglide_or.Reset();
 }
 
 /*

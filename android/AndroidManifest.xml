@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.xcsoar"
           android:installLocation="auto"
-          android:versionCode="125"
-          android:versionName="7.4">
+          android:versionCode="129"
+          android:versionName="7.8">
   <application
       android:requestLegacyExternalStorage="true"
       android:icon="@drawable/icon"

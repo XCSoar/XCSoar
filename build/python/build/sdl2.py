@@ -3,7 +3,7 @@ import os.path, fileinput, re, shutil, subprocess
 from build.autotools import AutotoolsProject
 
 class SDL2Project(AutotoolsProject):
-    def configure(self, toolchain):
+    def configure(self, toolchain, *args, **kwargs):
         if re.match('(arm.*|aarch64)-apple-darwin', toolchain.actual_arch) is not None:
             # for building SDL2 with autotools, several workarounds are
             # required:
@@ -35,4 +35,4 @@ class SDL2Project(AutotoolsProject):
             return src
 
         else:
-            return AutotoolsProject.configure(self, toolchain)
+            return AutotoolsProject.configure(self, toolchain, *args, **kwargs)

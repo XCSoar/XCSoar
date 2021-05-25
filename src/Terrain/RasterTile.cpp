@@ -22,34 +22,30 @@ Copyright_License {
 */
 
 #include "Terrain/RasterTile.hpp"
-
 #include "jasper/jas_seq.h"
+#include "io/BufferedOutputStream.hxx"
+#include "io/BufferedReader.hxx"
 
 #include <algorithm>
 
 #include <stdlib.h>
 
-bool
-RasterTile::SaveCache(FILE *file) const noexcept
+void
+RasterTile::SaveCache(BufferedOutputStream &os) const
 {
   MetaData data;
-  data.xstart = xstart;
-  data.ystart = ystart;
-  data.xend = xend;
-  data.yend = yend;
+  data.start = start;
+  data.end = end;
 
-  return fwrite(&data, sizeof(data), 1, file) == 1;
+  os.Write(&data, sizeof(data));
 }
 
-bool
-RasterTile::LoadCache(FILE *file) noexcept
+void
+RasterTile::LoadCache(BufferedReader &r)
 {
   MetaData data;
-  if (fread(&data, sizeof(data), 1, file) != 1)
-    return false;
-
-  Set(data.xstart, data.ystart, data.xend, data.yend);
-  return true;
+  r.ReadFull({&data, sizeof(data)});
+  Set(data.start, data.end);
 }
 
 void
@@ -58,7 +54,7 @@ RasterTile::CopyFrom(const struct jas_matrix &m) noexcept
   if (!IsDefined())
     return;
 
-  buffer.Resize(width, height);
+  buffer.Resize(size);
 
   auto *gcc_restrict dest = buffer.GetData();
   assert(dest != nullptr);
@@ -74,67 +70,66 @@ RasterTile::CopyFrom(const struct jas_matrix &m) noexcept
 }
 
 TerrainHeight
-RasterTile::GetHeight(unsigned x, unsigned y) const noexcept
+RasterTile::GetHeight(RasterLocation p) const noexcept
 {
-  assert(IsEnabled());
+  assert(IsLoaded());
 
-  x -= xstart;
-  y -= ystart;
+  p -= start;
 
-  assert(x < width);
-  assert(y < height);
+  assert(p.x < size.x);
+  assert(p.y < size.y);
 
-  return buffer.Get(x, y);
+  return buffer.Get(p);
 }
 
 TerrainHeight
 RasterTile::GetInterpolatedHeight(unsigned lx, unsigned ly,
                                   unsigned ix, unsigned iy) const noexcept
 {
-  assert(IsEnabled());
+  assert(IsLoaded());
 
   // we want to exit out of this function as soon as possible
   // if we have the wrong tile
 
   // check x in range
-  if ((lx -= xstart) >= width)
+  if ((lx -= start.x) >= size.x)
     return TerrainHeight::Invalid();
 
   // check y in range
-  if ((ly -= ystart) >= height)
+  if ((ly -= start.y) >= size.y)
     return TerrainHeight::Invalid();
 
   return buffer.GetInterpolated(lx, ly, ix, iy);
 }
 
 inline unsigned
-RasterTile::CalcDistanceTo(int x, int y) const noexcept
+RasterTile::CalcDistanceTo(IntPoint2D p) const noexcept
 {
-  const unsigned int dx1 = abs(x - (int)xstart);
-  const unsigned int dx2 = abs((int)xend - x);
-  const unsigned int dy1 = abs(y - (int)ystart);
-  const unsigned int dy2 = abs((int)yend - y);
+  const unsigned int dx1 = abs(p.x - (int)start.x);
+  const unsigned int dx2 = abs((int)end.x - p.x);
+  const unsigned int dy1 = abs(p.y - (int)start.y);
+  const unsigned int dy2 = abs((int)end.y - p.y);
 
   return std::max(std::min(dx1, dx2), std::min(dy1, dy2));
 }
 
 inline bool
-RasterTile::CheckTileVisibility(int view_x, int view_y,
+RasterTile::CheckTileVisibility(IntPoint2D view,
                                 unsigned view_radius) noexcept
 {
   if (!IsDefined()) {
-    assert(!IsEnabled());
+    assert(!IsLoaded());
     return false;
   }
 
-  distance = CalcDistanceTo(view_x, view_y);
-  return distance <= view_radius || IsEnabled();
+  distance = CalcDistanceTo(view);
+  return distance <= view_radius || IsLoaded();
 }
 
 bool
-RasterTile::VisibilityChanged(int view_x, int view_y,
+RasterTile::VisibilityChanged(IntPoint2D view,
                               unsigned view_radius) noexcept
 {
   request = false;
-  return CheckTileVisibility(view_x, view_y, view_radius);
+  return CheckTileVisibility(view, view_radius);
 }

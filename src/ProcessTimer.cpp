@@ -43,7 +43,7 @@ Copyright_License {
 #include "Dialogs/Tracking/CloudEnableDialog.hpp"
 
 static void
-MessageProcessTimer()
+MessageProcessTimer() noexcept
 {
   // don't display messages if airspace warning dialog is active
   if (CommonInterface::main_window->popup != nullptr &&
@@ -57,7 +57,7 @@ MessageProcessTimer()
  * defined in settings
  */
 static void
-SystemClockTimer()
+SystemClockTimer() noexcept
 {
 #ifdef _WIN32
   const NMEAInfo &basic = CommonInterface::Basic();
@@ -96,20 +96,20 @@ SystemClockTimer()
 }
 
 static void
-SystemProcessTimer()
+SystemProcessTimer() noexcept
 {
   SystemClockTimer();
 }
 
 static void
-BlackboardProcessTimer()
+BlackboardProcessTimer() noexcept
 {
   device_blackboard->ExpireWallClock();
   XCSoarInterface::ExchangeBlackboard();
 }
 
 static void
-BallastDumpProcessTimer()
+BallastDumpProcessTimer() noexcept
 {
   ComputerSettings &settings_computer =
     CommonInterface::SetComputerSettings();
@@ -134,7 +134,7 @@ BallastDumpProcessTimer()
 }
 
 static void
-ProcessAutoBugs()
+ProcessAutoBugs() noexcept
 {
   /**
    * Increase the bugs value every hour.
@@ -174,7 +174,7 @@ ProcessAutoBugs()
 }
 
 static void
-SettingsProcessTimer()
+SettingsProcessTimer() noexcept
 {
   CloudEnableDialog();
   BallastDumpProcessTimer();
@@ -182,7 +182,7 @@ SettingsProcessTimer()
 }
 
 static void
-CommonProcessTimer()
+CommonProcessTimer() noexcept
 {
   BlackboardProcessTimer();
 
@@ -196,7 +196,7 @@ CommonProcessTimer()
 }
 
 static void
-ConnectionProcessTimer()
+ConnectionProcessTimer() noexcept
 {
   if (devices == nullptr)
     return;
@@ -234,7 +234,7 @@ ConnectionProcessTimer()
 }
 
 void
-ProcessTimer()
+ProcessTimer() noexcept
 {
   CommonProcessTimer();
 

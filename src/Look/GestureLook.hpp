@@ -29,7 +29,9 @@ Copyright_License {
 
 struct GestureLook
 {
-  Color color, invalid_color;
+  static constexpr Color color = COLOR_RED;
+  static constexpr Color invalid_color = LightColor(color);
+
   Pen pen, invalid_pen;
 
   void Initialise();

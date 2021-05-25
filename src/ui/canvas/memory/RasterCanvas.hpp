@@ -67,19 +67,19 @@ private:
 
 public:
   RasterCanvas(WritableImageBuffer<PixelTraits> _buffer,
-               PixelTraits _traits=PixelTraits())
+               PixelTraits _traits=PixelTraits()) noexcept
     :PixelTraits(_traits), buffer(_buffer) {}
 
 protected:
-  PixelTraits &GetPixelTraits() {
+  PixelTraits &GetPixelTraits() noexcept {
     return *this;
   }
 
-  constexpr bool Check(unsigned x, unsigned y) const {
+  constexpr bool Check(unsigned x, unsigned y) const noexcept {
     return buffer.Check(x, y);
   }
 
-  pointer At(unsigned x, unsigned y) {
+  pointer At(unsigned x, unsigned y) noexcept {
     assert(x < buffer.width);
     assert(y < buffer.height);
 
@@ -87,7 +87,7 @@ protected:
   }
 
   static bool ClipAxis(int &position, unsigned &length, unsigned max,
-                       unsigned &src_position) {
+                       unsigned &src_position) noexcept {
     if (position < 0) {
       if (length <= unsigned(-position))
         return false;
@@ -108,7 +108,8 @@ protected:
 
   static bool ClipScaleAxis(int &dest_position, unsigned &dest_length,
                             unsigned dest_max,
-                            unsigned &src_position, unsigned &src_length) {
+                            unsigned &src_position,
+                            unsigned &src_length) noexcept {
     if (dest_position < 0) {
       if (dest_length <= unsigned(-dest_position))
         return false;
@@ -140,20 +141,20 @@ protected:
   static constexpr unsigned CLIP_BOTTOM_EDGE = 0x4;
   static constexpr unsigned CLIP_TOP_EDGE = 0x8;
 
-  static constexpr bool CLIP_INSIDE(unsigned a) {
+  static constexpr bool CLIP_INSIDE(unsigned a) noexcept {
     return !a;
   }
 
-  static constexpr bool CLIP_REJECT(unsigned a, unsigned b) {
+  static constexpr bool CLIP_REJECT(unsigned a, unsigned b) noexcept {
     return a & b;
   }
 
-  static constexpr bool CLIP_ACCEPT(unsigned a, unsigned b) {
+  static constexpr bool CLIP_ACCEPT(unsigned a, unsigned b) noexcept {
     return !(a | b);
   }
 
   gcc_pure
-  unsigned ClipEncodeX(int x) const {
+  unsigned ClipEncodeX(int x) const noexcept {
     if (unsigned(x)< buffer.width)
       return 0;
     if (x<0)
@@ -162,7 +163,7 @@ protected:
   }
 
   gcc_pure
-  unsigned ClipEncodeY(int y) const {
+  unsigned ClipEncodeY(int y) const noexcept {
     if (unsigned(y)< buffer.height)
       return 0;
     if (y<0)
@@ -171,13 +172,12 @@ protected:
   }
 
   gcc_pure
-  unsigned ClipEncode(int x, int y) const {
+  unsigned ClipEncode(int x, int y) const noexcept {
     return ClipEncodeX(x) | ClipEncodeY(y);
   }
 
   bool ClipIncremental(int &x1, int &y1, int &x2, int &y2,
-                       unsigned& code1, unsigned& code2) const {
-
+                       unsigned& code1, unsigned& code2) const noexcept {
     bool swapped = false;
 
     while (true) {
@@ -191,7 +191,7 @@ protected:
       }
 
       if (CLIP_REJECT(code1, code2))
-	return false;
+        return false;
 
       if (CLIP_INSIDE(code1)) {
         swapped = !swapped;
@@ -201,46 +201,46 @@ protected:
       }
 
       if (code1 & CLIP_LEFT_EDGE) {
-	if ((y2 != y1) && (x1 != x2)) {
-	  const float m = float(y2 - y1) / float(x2 - x1);
-	  y1 -= int(x1 * m);
-	  code1 = ClipEncodeY(y1);
-	} else {
-	  code1 &= ~CLIP_LEFT_EDGE;
-	}
+        if ((y2 != y1) && (x1 != x2)) {
+          const float m = float(y2 - y1) / float(x2 - x1);
+          y1 -= int(x1 * m);
+          code1 = ClipEncodeY(y1);
+        } else {
+          code1 &= ~CLIP_LEFT_EDGE;
+        }
         x1 = 0;
       } else if (code1 & CLIP_RIGHT_EDGE) {
-	if ((y2 != y1) && (x1 != x2)) {
-	  const float m = float(y2 - y1) / float(x2 - x1);
-	  y1 -= int((x1 - (buffer.width - 1)) * m);
-	  code1 = ClipEncodeY(y1);
-	} else {
-	  code1 &= ~CLIP_RIGHT_EDGE;
-	}
+        if ((y2 != y1) && (x1 != x2)) {
+          const float m = float(y2 - y1) / float(x2 - x1);
+          y1 -= int((x1 - (buffer.width - 1)) * m);
+          code1 = ClipEncodeY(y1);
+        } else {
+          code1 &= ~CLIP_RIGHT_EDGE;
+        }
         x1 = buffer.width - 1;
       } else if (code1 & CLIP_BOTTOM_EDGE) {
-	if ((y2 != y1) && (x1 != x2)) {
-	  const float m = float(x2 - x1) / float(y2 - y1);
+        if ((y2 != y1) && (x1 != x2)) {
+          const float m = float(x2 - x1) / float(y2 - y1);
           x1 -= int((y1 - (buffer.height - 1)) * m);
-	  code1 = ClipEncodeX(x1);
-	} else {
-	  code1 &= ~CLIP_BOTTOM_EDGE;
-	}
+          code1 = ClipEncodeX(x1);
+        } else {
+          code1 &= ~CLIP_BOTTOM_EDGE;
+        }
         y1 = buffer.height - 1;
       } else if (code1 & CLIP_TOP_EDGE) {
-	if ((y2 != y1) && (x1 != x2)) {
-	  const float m = float(x2 - x1) / float(y2 - y1);
+        if ((y2 != y1) && (x1 != x2)) {
+          const float m = float(x2 - x1) / float(y2 - y1);
           x1 -= int(y1 * m);
-	  code1 = ClipEncodeX(x1);
-	} else {
-	  code1 &= ~CLIP_TOP_EDGE;
-	}
+          code1 = ClipEncodeX(x1);
+        } else {
+          code1 &= ~CLIP_TOP_EDGE;
+        }
         y1 = 0;
       }
     }
   }
 
-  bool ClipLine(int &x1, int &y1, int &x2, int &y2) const {
+  bool ClipLine(int &x1, int &y1, int &x2, int &y2) const noexcept {
     unsigned code1 = ClipEncode(x1, y1);
     unsigned code2 = ClipEncode(x2, y2);
     return ClipIncremental(x1, y1, x2, y2, code1, code2);
@@ -248,18 +248,19 @@ protected:
 
 public:
   template<typename PixelOperations>
-  void DrawPixel(int x, int y, color_type c, PixelOperations operations) {
+  void DrawPixel(int x, int y, color_type c,
+                 PixelOperations operations) noexcept {
     if (Check(x, y))
       PixelTraits::WritePixel(At(x, y), c);
   }
 
-  void DrawPixel(int x, int y, color_type c) {
+  void DrawPixel(int x, int y, color_type c) noexcept {
     DrawPixel(x, y, c, GetPixelTraits());
   }
 
   template<typename PixelOperations>
   void FillRectangle(int x1, int y1, int x2, int y2, color_type c,
-                     PixelOperations operations) {
+                     PixelOperations operations) noexcept {
     if (x1 < 0)
       x1 = 0;
 
@@ -283,13 +284,13 @@ public:
       });
   }
 
-  void FillRectangle(int x1, int y1, int x2, int y2, color_type c) {
+  void FillRectangle(int x1, int y1, int x2, int y2, color_type c) noexcept {
     FillRectangle<PixelTraits>(x1, y1, x2, y2, c, GetPixelTraits());
   }
 
   template<typename PixelOperations>
   void DrawHLine(int x1, int x2, int y, color_type c,
-                 PixelOperations operations) {
+                 PixelOperations operations) noexcept {
     if (y < 0 || unsigned(y) >= buffer.height)
       return;
 
@@ -306,14 +307,14 @@ public:
     operations.FillPixels(p, x2 - x1, c);
   }
 
-  void DrawHLine(int x1, int x2, int y, color_type c) {
+  void DrawHLine(int x1, int x2, int y, color_type c) noexcept {
     DrawHLine(x1, x2, y, c,
               GetPixelTraits());
   }
 
   template<typename PixelOperations>
   void DrawVLine(int x, int y1, int y2, color_type c,
-                 PixelOperations operations) {
+                 PixelOperations operations) noexcept {
     if (x < 0 || unsigned(x) >= buffer.width)
       return;
 
@@ -334,20 +335,21 @@ public:
 
   template<typename PixelOperations>
   void DrawRectangle(int x1, int y1, int x2, int y2, color_type c,
-                     PixelOperations operations) {
+                     PixelOperations operations) noexcept {
     DrawHLine(x1, x2, y1, c, operations);
     DrawHLine(x1, x2, y2 - 1, c, operations);
     DrawVLine(x1, y1 + 1, y2 - 1, c, operations);
     DrawVLine(x2 - 1, y1 + 1, y2 - 1, c, operations);
   }
 
-  void DrawRectangle(int x1, int y1, int x2, int y2, color_type c) {
+  void DrawRectangle(int x1, int y1, int x2, int y2, color_type c) noexcept {
     DrawRectangle(x1, y1, x2, y2, c, GetPixelTraits());
   }
 
   void DrawLineDirect(const int x1, const int y1, const int x2, const int y2,
                       color_type c,
-                      unsigned line_mask, unsigned &line_mask_position) {
+                      unsigned line_mask,
+                      unsigned &line_mask_position) noexcept {
     /* optimised Bresenham algorithm */
 
     int dx = x2 - x1;
@@ -385,7 +387,7 @@ public:
   }
 
   void DrawLine(int x1, int y1, int x2, int y2, color_type c,
-                unsigned line_mask=-1) {
+                unsigned line_mask=-1) noexcept {
     /* optimised Bresenham algorithm */
 
     if (!ClipLine(x1, y1, x2, y2))
@@ -397,7 +399,8 @@ public:
 
   void DrawThickLine(int x1, int y1, int x2, int y2,
                      unsigned thickness, color_type c,
-                     unsigned line_mask, unsigned &line_mask_position) {
+                     unsigned line_mask,
+                     unsigned &line_mask_position) noexcept {
     if (thickness == 0)
       return;
 
@@ -418,8 +421,7 @@ public:
   void DrawPolyline(const PixelPoint *points, unsigned n, bool loop,
                     color_type color,
                     unsigned thickness,
-                    unsigned line_mask=-1) {
-
+                    unsigned line_mask=-1) noexcept {
     auto p_last = points[loop? n-1 : 0];
     unsigned code2_orig;
     unsigned code2;
@@ -467,13 +469,11 @@ public:
         p_last = points[i];
       }
     }
-
   }
 
   template<typename PixelOperations>
   void FillPolygonFast(const PixelPoint *points, unsigned n, color_type color,
-                       PixelOperations operations) {
-
+                       PixelOperations operations) noexcept {
     assert(points != nullptr);
 
     if (n < 3)
@@ -571,7 +571,7 @@ public:
 
   template<typename PixelOperations>
   void FillPolygon(const PixelPoint *points, unsigned n, color_type color,
-                   PixelOperations operations) {
+                   PixelOperations operations) noexcept {
     assert(points != nullptr);
 
     if (n < 3)
@@ -637,7 +637,8 @@ public:
     }
   }
 
-  void FillPolygon(const PixelPoint *points, unsigned n, color_type color) {
+  void FillPolygon(const PixelPoint *points, unsigned n,
+                   color_type color) noexcept {
     FillPolygonFast(points, n, color,
                     GetPixelTraits());
 //    FillPolygon(points, n, color,
@@ -646,7 +647,7 @@ public:
 
   template<typename PixelOperations>
   void DrawCircle(int x, int y, unsigned rad, color_type color,
-                  PixelOperations operations) {
+                  PixelOperations operations) noexcept {
     // Special case for rad=0 - draw a point
     if (rad == 0) {
       DrawPixel(x, y, color, operations);
@@ -721,14 +722,14 @@ public:
     } while (cx <= cy);
   }
 
-  void DrawCircle(int x, int y, unsigned rad, color_type color) {
+  void DrawCircle(int x, int y, unsigned rad, color_type color) noexcept {
     DrawCircle(x, y, rad, color,
                GetPixelTraits());
   }
 
   template<typename PixelOperations>
   void FillCircle(int x, int y, unsigned rad, color_type color,
-                  PixelOperations operations) {
+                  PixelOperations operations) noexcept {
     // Special case for rad=0 - draw a point
     if (rad == 0) {
       DrawPixel(x, y, color, operations);
@@ -805,7 +806,7 @@ public:
     } while (cx <= cy);
   }
 
-  void FillCircle(int x, int y, unsigned rad, color_type color) {
+  void FillCircle(int x, int y, unsigned rad, color_type color) noexcept {
     FillCircle(x, y, rad, color,
                GetPixelTraits());
   }
@@ -816,7 +817,7 @@ public:
 #endif
   void CopyRectangle(int x, int y, unsigned w, unsigned h,
                      typename SPT::const_rpointer src, unsigned src_pitch,
-                     PixelOperations operations) {
+                     PixelOperations operations) noexcept {
     unsigned src_x = 0, src_y = 0;
     if (!ClipAxis(x, w, buffer.width, src_x) ||
         !ClipAxis(y, h, buffer.height, src_y))
@@ -831,7 +832,7 @@ public:
   }
 
   void CopyRectangle(int x, int y, unsigned w, unsigned h,
-                     const_pointer src, unsigned src_pitch) {
+                     const_pointer src, unsigned src_pitch) noexcept {
     CopyRectangle(x, y, w, h, src, src_pitch,
                   GetPixelTraits());
   }
@@ -872,7 +873,7 @@ public:
   void ScaleRectangle(PixelPoint dest_position, PixelSize dest_size,
                       typename SPT::const_rpointer src, unsigned src_pitch,
                       PixelSize src_size,
-                      PixelOperations operations) {
+                      PixelOperations operations) noexcept {
     unsigned src_x = 0, src_y = 0;
     if (!ClipScaleAxis(dest_position.x, dest_size.width, buffer.width, src_x, src_size.width) ||
         !ClipScaleAxis(dest_position.y, dest_size.height, buffer.height, src_y, src_size.height))

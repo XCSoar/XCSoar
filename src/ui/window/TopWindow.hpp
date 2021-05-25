@@ -31,7 +31,7 @@ Copyright_License {
 #endif
 
 #ifdef ENABLE_OPENGL
-#include "Screen/Features.hpp"
+#include "ui/opengl/Features.hpp"
 #endif
 
 #ifdef ANDROID

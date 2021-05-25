@@ -29,7 +29,7 @@ Copyright_License {
 ComboList::Item::Item(int _int_value,
                       const TCHAR *_string_value,
                       const TCHAR *_display_string,
-                      const TCHAR *_help_text)
+                      const TCHAR *_help_text) noexcept
   :int_value(_int_value),
    string_value(_string_value),
    display_string(_display_string),
@@ -40,7 +40,7 @@ ComboList::Item::Item(int _int_value,
 }
 
 void
-ComboList::Sort()
+ComboList::Sort() noexcept
 {
   std::sort(items.begin(), items.end(), [](const Item &a, const Item &b){
       return StringCollate(a.display_string.c_str(),
@@ -49,7 +49,7 @@ ComboList::Sort()
 }
 
 unsigned
-ComboList::LookUp(int int_value)
+ComboList::LookUp(int int_value) noexcept
 {
   for (unsigned i = 0; i < items.size(); i++)
     if (items[i].int_value == int_value)

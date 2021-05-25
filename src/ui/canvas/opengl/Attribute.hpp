@@ -31,7 +31,6 @@ Copyright_License {
  */
 namespace OpenGL::Attribute {
 
-static constexpr GLuint TRANSLATE = 0;
 static constexpr GLuint POSITION = 1;
 static constexpr GLuint TEXCOORD = 2;
 static constexpr GLuint COLOR = 3;

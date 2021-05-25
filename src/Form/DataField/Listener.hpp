@@ -28,7 +28,7 @@ class DataField;
 
 class DataFieldListener {
 public:
-  virtual void OnModified(DataField &df) = 0;
+  virtual void OnModified(DataField &df) noexcept = 0;
 };
 
 #endif

@@ -64,7 +64,7 @@ try {
   }
 
   return header_found;
-} catch (const std::runtime_error &) {
+} catch (...) {
   return false;
 }
 
@@ -142,9 +142,9 @@ TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
   return task;
 }
 
-unsigned
-TaskFileIGC::Count() noexcept
-try {
+std::vector<tstring>
+TaskFileIGC::GetList() const
+{
   // Open the IGC file
   FileLineReaderA reader(path);
 
@@ -158,7 +158,9 @@ try {
 
     if (!IGCParseDeclarationHeader(line, header) ||
         header.num_turnpoints == 0)
-      return 0;
+      return {};
+
+    std::vector<tstring> result;
 
     if (!header.task_name.empty() &&
         !StringIsEqual(header.task_name, "Task")) {
@@ -166,13 +168,11 @@ try {
       StaticString<256> task_name;
       task_name.clear();
       task_name.UnsafeAppendASCII(header.task_name.c_str());
-      namesuffixes.append(_tcsdup(task_name.c_str()));
+      result.emplace_back(task_name.c_str());
     }
 
-    return 1;
+    return result;
   }
 
-  return 0;
-} catch (const std::runtime_error &e) {
-  return 0;
+  return {};
 }

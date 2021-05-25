@@ -30,8 +30,13 @@ TESTSLOW = \
 	test_highterrain \
 	test_randomtask \
 	test_flight \
-	test_aat \
+	test_aat
+
+ifeq ($(TARGET_IS_ANDROID),n)
+# These programs are broken on Android because they require Java code
+TESTSLOW += \
 	test_replay_olc
+endif
 
 HARNESS_PROGRAMS = $(TESTFAST) $(TESTSLOW)
 
@@ -93,10 +98,10 @@ TEST_NAMES = \
 	TestMathTables \
 	TestAngle TestARange \
 	TestUnits TestEarth TestSunEphemeris \
-	TestValidity TestUTM TestProfile \
+	TestValidity TestUTM \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
-	TestLogger TestGRecord TestDriver TestClimbAvCalc \
+	TestLogger TestGRecord TestClimbAvCalc \
 	TestWaypointReader TestThermalBase \
 	TestFlarmNet \
 	TestColorRamp TestGeoPoint TestDiffFilter \
@@ -124,6 +129,12 @@ TEST_NAMES = \
 	TestHexString \
 	TestThermalBand
 
+ifeq ($(TARGET_IS_ANDROID),n)
+# These programs are broken on Android because they require Java code
+TEST_NAMES += \
+	TestProfile \
+	TestDriver
+endif
 
 TESTS = $(call name-to-bin,$(TEST_NAMES))
 
@@ -722,32 +733,43 @@ DEBUG_PROGRAM_NAMES = \
 	test_troute \
 	TestTrace \
 	FlightTable \
-	RunTrace \
-	RunOLCAnalysis \
-	RunWaveComputer \
-	FlightPath \
 	BenchmarkProjection \
 	BenchmarkFAITriangleSector \
 	DumpTextFile DumpTextZip DumpTextInflate WriteTextFile RunTextWriter \
 	DumpHexColor \
 	RunXMLParser \
 	ReadMO \
-	ReadProfileString ReadProfileInt \
 	RunMD5 RunSHA256 \
 	ReadGRecord VerifyGRecord AppendGRecord FixGRecord \
 	AddChecksum \
-	KeyCodeDumper \
 	LoadTopography LoadTerrain \
 	RunHeightMatrix \
 	RunInputParser \
 	RunWaypointParser RunAirspaceParser \
 	RunFlightParser \
 	EnumeratePorts \
+	lxn2igc \
+	DebugDisplay \
+	TaskInfo DumpTaskFile \
+	DumpFlarmNet \
+	RunRepositoryParser \
+	NearestWaypoints \
+	RunKalmanFilter1d \
+	ArcApprox
+
+ifeq ($(TARGET_IS_ANDROID),n)
+# These programs are broken on Android because they require Java code
+DEBUG_PROGRAM_NAMES += \
+	RunTrace \
+	RunContestAnalysis \
+	RunWaveComputer \
+	FlightPath \
+	ReadProfileString ReadProfileInt \
+	KeyCodeDumper \
 	ReadPort RunPortHandler LogPort \
 	RunDeviceDriver RunDeclare RunFlightList RunDownloadFlight \
 	RunEnableNMEA \
 	CAI302Tool \
-	lxn2igc \
 	RunIGCWriter \
 	RunFlightLogger RunFlyingComputer \
 	RunCirclingWind RunWindEKF RunWindComputer \
@@ -774,17 +796,11 @@ DEBUG_PROGRAM_NAMES = \
 	TestNotify \
 	FeedNMEA \
 	FeedVega EmulateDevice \
-	DebugDisplay \
 	RunVegaSettings \
 	RunFlarmUtils \
 	RunLX1600Utils \
-	TaskInfo DumpTaskFile \
-	DumpFlarmNet \
-	RunRepositoryParser \
-	IGC2NMEA \
-	NearestWaypoints \
-	RunKalmanFilter1d \
-	ArcApprox
+	IGC2NMEA
+endif
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += \
@@ -797,7 +813,7 @@ DEBUG_PROGRAM_NAMES += \
   FeedFlyNetData
 endif
 
-ifeq ($(HAVE_HTTP),y)
+ifeq ($(HAVE_HTTP)$(TARGET_IS_ANDROID),yn)
 DEBUG_PROGRAM_NAMES += DownloadFile RunDownloadToFile RunNOAADownloader RunSkyLinesTracking RunLiveTrack24
 endif
 
@@ -805,7 +821,7 @@ ifeq ($(TARGET_IS_LINUX),y)
 DEBUG_PROGRAM_NAMES += RunWPASupplicant
 endif
 
-ifeq ($(HAVE_PCM_PLAYER),y)
+ifeq ($(HAVE_PCM_PLAYER)$(TARGET_IS_ANDROID),yn)
 DEBUG_PROGRAM_NAMES += PlayTone PlayVario DumpVario
 endif
 
@@ -1659,7 +1675,7 @@ RUN_TRACE_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_TRACE_DEPENDS = UTIL GEO MATH TIME
 $(eval $(call link-program,RunTrace,RUN_TRACE))
 
-RUN_OLC_SOURCES = \
+RUN_CONTEST_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
@@ -1668,10 +1684,10 @@ RUN_OLC_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/ContestPrinting.cpp \
-	$(TEST_SRC_DIR)/RunOLCAnalysis.cpp
-RUN_OLC_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_OLC_DEPENDS = CONTEST UTIL GEO MATH TIME
-$(eval $(call link-program,RunOLCAnalysis,RUN_OLC))
+	$(TEST_SRC_DIR)/RunContestAnalysis.cpp
+RUN_CONTEST_LDADD = $(DEBUG_REPLAY_LDADD)
+RUN_CONTEST_DEPENDS = CONTEST UTIL GEO MATH TIME
+$(eval $(call link-program,RunContestAnalysis,RUN_CONTEST))
 
 RUN_WAVE_COMPUTER_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
@@ -2056,7 +2072,7 @@ $(eval $(call link-program,RunGeoPointEntry,RUN_GEOPOINT_ENTRY))
 
 RUN_TERMINAL_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
-	$(SRC)/Screen/TerminalWindow.cpp \
+	$(SRC)/ui/control/TerminalWindow.cpp \
 	$(SRC)/Look/TerminalLook.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \

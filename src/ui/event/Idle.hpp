@@ -38,12 +38,12 @@ Copyright_License {
  */
 gcc_pure
 bool
-IsUserIdle(unsigned duration_ms);
+IsUserIdle(unsigned duration_ms) noexcept;
 
 /**
  * Acts as if the user had just interacted with XCSoar.
  */
 void
-ResetUserIdle();
+ResetUserIdle() noexcept;
 
 #endif

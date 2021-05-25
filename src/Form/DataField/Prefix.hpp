@@ -38,26 +38,26 @@ private:
 public:
   PrefixDataField(const TCHAR *value,
                   AllowedCharactersFunction _allowed_characters,
-                  DataFieldListener *listener=nullptr)
+                  DataFieldListener *listener=nullptr) noexcept
     :DataFieldString(Type::PREFIX, value, listener),
      allowed_characters(_allowed_characters) {}
 
   PrefixDataField(const TCHAR *value=_T(""),
-                  DataFieldListener *listener=nullptr)
+                  DataFieldListener *listener=nullptr) noexcept
     :DataFieldString(Type::PREFIX, value, listener) {}
 
-  const AllowedCharactersFunction &GetAllowedCharactersFunction() const {
+  const AllowedCharactersFunction &GetAllowedCharactersFunction() const noexcept {
     return allowed_characters;
   }
 
   /* virtual methods from class DataField */
-  void Inc() override;
-  void Dec() override;
-  const TCHAR *GetAsDisplayString() const override;
+  void Inc() noexcept override;
+  void Dec() noexcept override;
+  const TCHAR *GetAsDisplayString() const noexcept override;
 
 protected:
   gcc_pure
-  const TCHAR *GetAllowedCharacters() const {
+  const TCHAR *GetAllowedCharacters() const noexcept {
     return allowed_characters
       ? allowed_characters(_T(""))
       : _T("ABCDEFGHIJKLMNOPQRSTUVWXYZ");

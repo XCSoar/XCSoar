@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2021 The XCSoar Project
@@ -21,41 +20,19 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_FEATURES_HPP
-#define XCSOAR_SCREEN_FEATURES_HPP
+#include "WeglideFAI.hpp"
 
-#ifdef ANDROID
-#include "ui/window/android/Features.hpp"
-#endif
-
-#ifdef USE_MEMORY_CANVAS
-#include "ui/canvas/memory/Features.hpp"
-#endif
-
-#ifdef ENABLE_OPENGL
-#include "ui/opengl/Features.hpp"
-#endif
-
-#ifdef USE_GDI
-#include "ui/canvas/gdi/Features.hpp"
-#endif
-
-#ifdef ENABLE_SDL
-#include "ui/window/sdl/Features.hpp"
-#endif
-
-/**
- * Return true when the Canvas implements clipping against its
- * siblings and children.
- */
-constexpr bool
-HaveClipping()
+WeglideFAI::WeglideFAI(const Trace &_trace, bool predict) noexcept
+  :TriangleContest(_trace, predict, 1000)
 {
-#ifdef HAVE_CLIPPING
-  return true;
-#else
-  return false;
-#endif
 }
 
-#endif
+ContestResult
+WeglideFAI::CalculateResult() const noexcept
+{
+  ContestResult result = TriangleContest::CalculateResult();
+  // 1 point per km 
+  result.score = ApplyHandicap(result.distance * 0.001);
+
+  return result;
+}

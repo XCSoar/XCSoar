@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Cache.hpp"
-#include "ui/dim/Size.hpp"
 #include "ui/canvas/Font.hpp"
 #include "util/Cache.hxx"
 #include "util/StringCompare.hxx"
@@ -42,6 +41,7 @@ Copyright_License {
 #endif
 
 #include <cassert>
+#include <memory>
 
 /**
  * A key type for the Cache template class.  It can be operated in two
@@ -58,7 +58,7 @@ struct TextCacheKey {
 
   TextCacheKey(const TextCacheKey &other) = delete;
 
-  TextCacheKey(TextCacheKey &&other)
+  TextCacheKey(TextCacheKey &&other) noexcept
     :font(other.font),
      text(other.text), allocated(other.allocated) {
     other.allocated = nullptr;
@@ -67,7 +67,7 @@ struct TextCacheKey {
   TextCacheKey(const Font &_font, StringView _text) noexcept
     :font(&_font), text(_text), allocated(nullptr) {}
 
-  ~TextCacheKey() {
+  ~TextCacheKey() noexcept {
     free(allocated);
   }
 
@@ -75,7 +75,7 @@ struct TextCacheKey {
    * Copy the "text" attribute.  This must be called before inserting
    * this key into the #Cache.
    */
-  void Allocate() {
+  void Allocate() noexcept {
     assert(allocated == nullptr);
 
     text.data = allocated = strndup(text.data, text.size);
@@ -83,22 +83,22 @@ struct TextCacheKey {
 
   TextCacheKey &operator=(const TextCacheKey &other) = delete;
 
-  TextCacheKey &operator=(TextCacheKey &&other) {
+  TextCacheKey &operator=(TextCacheKey &&other) noexcept {
     font = other.font;
     text = other.text;
     std::swap(allocated, other.allocated);
     return *this;
   }
 
-  gcc_pure
-  bool operator==(const TextCacheKey &other) const {
+  [[gnu::pure]]
+  bool operator==(const TextCacheKey &other) const noexcept {
     return font == other.font &&
       text.Equals(other.text);
   }
 
   struct StringHash {
-    gcc_pure
-    size_t operator()(StringView s) const {
+    [[gnu::pure]]
+    size_t operator()(StringView s) const noexcept {
       /* code copied from libstdc++ backward/hash_fun.h */
       unsigned long __h = 0;
       for (const auto ch : s)
@@ -110,8 +110,8 @@ struct TextCacheKey {
   struct Hash {
     StringHash string_hash;
 
-    gcc_pure
-    size_t operator()(const TextCacheKey &key) const {
+    [[gnu::pure]]
+    size_t operator()(const TextCacheKey &key) const noexcept {
       return (size_t)(const void *)key.font
         ^ string_hash(key.text);
     }
@@ -120,69 +120,51 @@ struct TextCacheKey {
 
 struct RenderedText {
 #ifdef ENABLE_OPENGL
-  GLTexture *texture;
+  std::unique_ptr<GLTexture> texture;
 #else
-  uint8_t *data;
-  unsigned width, height;
+  std::unique_ptr<uint8_t[]> data;
+  PixelSize size;
 #endif
 
   RenderedText(const RenderedText &other) = delete;
 
 #ifdef ENABLE_OPENGL
-  RenderedText(RenderedText &&other)
-    :texture(other.texture) {
-    other.texture = nullptr;
-  }
-
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
-  RenderedText(unsigned width, unsigned height, const uint8_t *buffer) {
+  RenderedText(PixelSize size, const uint8_t *buffer) noexcept
+    :texture(new GLTexture(GL_ALPHA, size,
+                           GL_ALPHA, GL_UNSIGNED_BYTE,
+                           buffer))
+  {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    texture = new GLTexture(GL_ALPHA, PixelSize(width, height),
-                            GL_ALPHA, GL_UNSIGNED_BYTE,
-                            buffer);
   }
 #elif defined(ANDROID)
-  RenderedText(int id, unsigned width, unsigned height,
-               unsigned allocated_width, unsigned allocated_height)
-    :texture(new GLTexture(id, PixelSize(width, height),
-                           PixelSize(allocated_width, allocated_height))) {}
+  RenderedText(int id, PixelSize size, PixelSize allocated_size) noexcept
+    :texture(new GLTexture(id, size, allocated_size)) {}
 #endif
 #else
-  RenderedText(RenderedText &&other)
-    :data(other.data), width(other.width), height(other.height) {
-    other.data = nullptr;
-  }
-
-  RenderedText(unsigned _width, unsigned _height, uint8_t *_data)
-    :data(_data), width(_width), height(_height) {}
+  RenderedText(PixelSize _size, std::unique_ptr<uint8_t[]> &&_data) noexcept
+    :data(std::move(_data)), size(_size) {}
 #endif
-
-  ~RenderedText() {
-#ifdef ENABLE_OPENGL
-    delete texture;
-#else
-    delete[] data;
-#endif
-  }
 
   RenderedText &operator=(const RenderedText &other) = delete;
 
-  RenderedText &operator=(RenderedText &&other) {
+  RenderedText(RenderedText &&other) noexcept = default;
+  RenderedText &operator=(RenderedText &&other) noexcept = default;
+
+  operator TextCache::Result() const noexcept {
 #ifdef ENABLE_OPENGL
-    std::swap(texture, other.texture);
+    return texture.get();
 #else
-    std::swap(data, other.data);
-    width = other.width;
-    height = other.height;
+    return { data.get(), size.width, size };
 #endif
-    return *this;
   }
 
-  operator TextCache::Result() const {
+  [[gnu::pure]]
+  PixelSize GetSize() const noexcept {
 #ifdef ENABLE_OPENGL
-    return texture;
+    return texture->GetSize();
 #else
-    return { data, width, width, height };
+    return size;
 #endif
   }
 };
@@ -217,7 +199,7 @@ TextCache::GetSize(const Font &font, StringView text) noexcept
 #endif
 
   key.Allocate();
-  size_cache.Put(std::move(key), std::move(size));
+  size_cache.Put(std::move(key), size);
   return size;
 }
 
@@ -228,21 +210,15 @@ TextCache::LookupSize(const Font &font, StringView text) noexcept
   const std::lock_guard<Mutex> lock(text_cache_mutex);
 #endif
 
-  PixelSize size = { 0, 0 };
-
   if (text.empty())
-    return size;
+    return {};
 
   TextCacheKey key(font, text);
   const RenderedText *cached = text_cache.Get(key);
   if (cached == nullptr)
-    return size;
+    return {};
 
-#ifdef ENABLE_OPENGL
-  return cached->texture->GetSize();
-#else
-  return { cached->width, cached->height };
-#endif
+  return cached->GetSize();
 }
 
 TextCache::Result
@@ -253,13 +229,8 @@ TextCache::Get(const Font &font, StringView text) noexcept
 #endif
   assert(font.IsDefined());
 
-  if (text.empty()) {
-#ifdef ENABLE_OPENGL
+  if (text.empty())
     return nullptr;
-#else
-    return Result::Null();
-#endif
-  }
 
   TextCacheKey key(font, text);
 
@@ -283,36 +254,25 @@ TextCache::Get(const Font &font, StringView text) noexcept
 #endif
   PixelSize size = font.TextSize(text2);
   size_t buffer_size = font.BufferSize(size);
-  if (buffer_size == 0) {
-#ifdef ENABLE_OPENGL
+  if (buffer_size == 0)
     return nullptr;
-#else
-    return Result::Null();
-#endif
-  }
 
-  uint8_t *buffer = new uint8_t[buffer_size];
-  if (buffer == nullptr) {
-#ifdef ENABLE_OPENGL
-    return nullptr;
-#else
-    return Result::Null();
-#endif
-  }
+  std::unique_ptr<uint8_t[]> buffer{new uint8_t[buffer_size]};
 
-  font.Render(text2, size, buffer);
-  RenderedText rt(size.width, size.height, buffer);
+  font.Render(text2, size, buffer.get());
 #ifdef ENABLE_OPENGL
-  delete[] buffer;
+  RenderedText rt(size, buffer.get());
+#else
+  RenderedText rt(size, std::move(buffer));
 #endif
+
 #elif defined(ANDROID)
   PixelSize size, allocated_size;
   int texture_id = font.TextTextureGL(text, size, allocated_size);
   if (texture_id == 0)
     return nullptr;
 
-  RenderedText rt(texture_id, size.width, size.height,
-                  allocated_size.width, allocated_size.height);
+  RenderedText rt(texture_id, size, allocated_size);
 #else
 #error No font renderer
 #endif
@@ -328,7 +288,7 @@ TextCache::Get(const Font &font, StringView text) noexcept
 }
 
 void
-TextCache::Flush()
+TextCache::Flush() noexcept
 {
 #ifdef ENABLE_OPENGL
   assert(pthread_equal(pthread_self(), OpenGL::thread));

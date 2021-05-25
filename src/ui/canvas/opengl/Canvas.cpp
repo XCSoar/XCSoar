@@ -763,8 +763,7 @@ Canvas::StretchMono(PixelPoint dest_position, PixelSize dest_size,
      implementation will be faster when erasing the background
      again */
 
-  OpenGL::alpha_shader->Use();
-  fg_color.Bind();
+  PrepareColoredAlphaTexture(fg_color);
 
   const ScopeAlphaBlend alpha_blend;
 

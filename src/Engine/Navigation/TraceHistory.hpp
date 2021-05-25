@@ -37,8 +37,8 @@ public:
   TraceVariableHistory NettoVario;
   TraceVariableHistory CirclingAverage;
 
-  void append(const MoreData &basic);
-  void clear();
+  void append(const MoreData &basic) noexcept;
+  void clear() noexcept;
 };
 
 static_assert(std::is_trivial<TraceHistory>::value, "type is not trivial");

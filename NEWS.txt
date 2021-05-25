@@ -1,4 +1,30 @@
-Version 7.4 - not yet released
+Version 7.8 - not yet released
+
+Version 7.7 - 2021/05/14
+* user interface
+  - fix dialog labels
+  - fix freeze bug in waypoint/airspace list dialog
+* devices
+  - add "Radio" indicator to device list
+* Android
+  - writing to port times out after 5 seconds (to avoid locking up XCSoar)
+
+Version 7.6 - 2021/05/01
+* user interface
+  - fix disappearing aircraft symbol
+  - fix crash bug in task editor
+
+Version 7.5 - 2021/04/30
+* fix crash bug in terrain loader
+* fix paths with backslashes
+* user interface
+  - use different colors to indicate relative traffic altitude
+* calculations
+  - support for WeGlide distance contests
+* Kobo
+  - fix touch screen
+
+Version 7.4 - 2021/04/08
 * user interface
   - properly save and apply updated settings in the configuration dialog
   - fix overlapping observation zones in the task point list

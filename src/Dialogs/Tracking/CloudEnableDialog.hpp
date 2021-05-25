@@ -29,6 +29,6 @@ Copyright_License {
  * ask the user.
  */
 void
-CloudEnableDialog();
+CloudEnableDialog() noexcept;
 
 #endif

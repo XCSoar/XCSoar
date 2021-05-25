@@ -563,8 +563,8 @@ rules. \label{conf:taskrules}
   (AGL or MSL) while finishing the task.  Set to 0 for no limit.
 \item[Finish height ref.*]  Reference used for finish min.\ height rule,
   correspondingly to the start rule height reference.
-\item[On-Line Contest]  Determines the rules used to optimise On-Line Contest 
-  paths.  The implementation  conforms to the official release 2010, Sept. 23. \\
+\item[Contest]  Determines the rules used to optimise for the selected contest 
+  paths. \\
   {\bf OLC FAI}: Conforms to FAI triangle rule. Three turns and common start and 
   finish.  For tasks longer than
   500~km, no leg less than 25\% or larger than 45\%; otherwise no leg less than 28\%
@@ -581,10 +581,11 @@ rules. \label{conf:taskrules}
   {\bf DHV-XC}: \todonum{tbd.} \\
   {\bf SIS-AT}: \todonum{tbd.} \\
   {\bf FFVV NetCoupe}: The FFVV NetCoupe `{\it libre}' competition.
+  {\bf WeGlide FREE}: WeGlide combines multiple scoring systems in the WeGlide Free contest. The free score is a combination of the free distance score and the area bonus. For the area bonus, the scoring program determines the largest FAI triangle and the largest Out I\& Return distance that can be fitted into the flight route. \\
+  {\bf WeGlide O\&R}: A start point, one turn point and a finish point are chosen from the flight path such that the distance between the start point and the turn point is maximized. \\
 \item[Predict Contest]  If enabled, then the next task point is included in the 
   score calculation, assuming that you will reach it.
 \end{description}
-
 
 %%%%%%%%%%%%%%%%%%
 \section{Task Defaults / Turnpoint Types}

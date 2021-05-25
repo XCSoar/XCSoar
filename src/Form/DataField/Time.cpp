@@ -30,33 +30,33 @@ Copyright_License {
 static bool data_field_key_up = false;
 
 const TCHAR *
-DataFieldTime::GetAsString() const
+DataFieldTime::GetAsString() const noexcept
 {
   StringFormatUnsafe(string_buffer, _T("%d"), value);
   return string_buffer;
 }
 
 const TCHAR *
-DataFieldTime::GetAsDisplayString() const
+DataFieldTime::GetAsDisplayString() const noexcept
 {
   FormatTimespanSmart(string_buffer, value, max_tokens);
   return string_buffer;
 }
 
 void
-DataFieldTime::Inc()
+DataFieldTime::Inc() noexcept
 {
   SetValue(value + step * SpeedUp(true));
 }
 
 void
-DataFieldTime::Dec()
+DataFieldTime::Dec() noexcept
 {
   SetValue(value - step * SpeedUp(false));
 }
 
 int
-DataFieldTime::SpeedUp(bool key_up)
+DataFieldTime::SpeedUp(bool key_up) noexcept
 {
   if (key_up != data_field_key_up) {
     speedup = 0;
@@ -81,13 +81,14 @@ DataFieldTime::SpeedUp(bool key_up)
 
 void
 DataFieldTime::SetFromCombo(int data_field_index,
-                            gcc_unused const TCHAR *value_string)
+                            gcc_unused const TCHAR *value_string) noexcept
 {
   SetValue(data_field_index);
 }
 
 void
-DataFieldTime::AppendComboValue(ComboList &combo_list, int value) const
+DataFieldTime::AppendComboValue(ComboList &combo_list,
+                                int value) const noexcept
 {
   TCHAR buffer2[32];
   StringFormatUnsafe(buffer2, _T("%d"), value);
@@ -95,7 +96,7 @@ DataFieldTime::AppendComboValue(ComboList &combo_list, int value) const
 }
 
 ComboList
-DataFieldTime::CreateComboList(const TCHAR *reference_string) const
+DataFieldTime::CreateComboList(const TCHAR *reference_string) const noexcept
 {
   const int reference = reference_string != nullptr
     ? ParseInt(reference_string)

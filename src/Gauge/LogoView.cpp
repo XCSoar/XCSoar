@@ -30,7 +30,7 @@ Copyright_License {
 
 #include <algorithm>
 
-LogoView::LogoView()
+LogoView::LogoView() noexcept try
   :logo(IDB_LOGO), big_logo(IDB_LOGO_HD),
    title(IDB_TITLE), big_title(IDB_TITLE_HD)
 {
@@ -40,6 +40,8 @@ LogoView::LogoView()
 
   big_logo.EnableInterpolation();
   big_title.EnableInterpolation();
+} catch (...) {
+  /* ignore Bitmap/Font loader exceptions */
 }
 
 static int
@@ -51,8 +53,11 @@ Center(unsigned canvas_size, unsigned element_size)
 }
 
 void
-LogoView::draw(Canvas &canvas, const PixelRect &rc)
+LogoView::draw(Canvas &canvas, const PixelRect &rc) noexcept
 {
+  if (!big_logo.IsDefined() || !big_title.IsDefined())
+    return;
+
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
 
   enum {
@@ -147,6 +152,9 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   // Draw full XCSoar version number
 
 #ifndef USE_GDI
+  if (!font.IsDefined())
+    return;
+
   canvas.Select(font);
 #endif
 

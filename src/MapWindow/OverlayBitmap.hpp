@@ -76,7 +76,7 @@ public:
      label(_label) {}
 
   template<typename T>
-  void SetLabel(T &&_label) {
+  void SetLabel(T &&_label) noexcept {
     label = std::forward<T>(_label);
   }
 
@@ -84,23 +84,23 @@ public:
    * By default, this class uses the bitmap's alpha channel.  This
    * method disables the alpha channel.
    */
-  void IgnoreBitmapAlpha() {
+  void IgnoreBitmapAlpha() noexcept {
     use_bitmap_alpha = false;
   }
 
   /**
    * Apply a constant alpha value.
    */
-  void SetAlpha(float _alpha) {
+  void SetAlpha(float _alpha) noexcept {
     alpha = _alpha;
   }
 
   /* virtual methods from class MapOverlay */
-  const TCHAR *GetLabel() const override {
+  const TCHAR *GetLabel() const noexcept override {
     return label.c_str();
   }
 
-  bool IsInside(GeoPoint p) const override;
+  bool IsInside(GeoPoint p) const noexcept override;
   void Draw(Canvas &canvas,
             const WindowProjection &projection) noexcept override;
 };

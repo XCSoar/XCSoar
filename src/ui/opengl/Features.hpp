@@ -30,17 +30,6 @@ Copyright_License {
 
 #define HAVE_TEXT_CACHE
 
-#ifdef ANDROID
-
-/**
- * The OES_draw_texture extension is available.
- */
-#ifndef HAVE_GLES2
-#define HAVE_OES_DRAW_TEXTURE
-#endif
-
-#endif
-
 #ifdef HAVE_GLES
 #define HAVE_OES_MAPBUFFER
 #endif

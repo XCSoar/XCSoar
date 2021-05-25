@@ -44,24 +44,24 @@ protected:
   PixelPoint origin;
 
 public:
-  const PixelSize &GetSize() const {
+  const PixelSize &GetSize() const noexcept {
     return size;
   }
 
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
     return bitmap.IsDefined();
   }
 
   void LoadResource(ResourceId id, ResourceId big_id = ResourceId::Null(),
                     bool center=true);
 
-  void Reset() {
+  void Reset() noexcept {
     bitmap.Reset();
   }
 
-  void Draw(Canvas &canvas, PixelPoint p) const;
+  void Draw(Canvas &canvas, PixelPoint p) const noexcept;
 
-  void Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const;
+  void Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const noexcept;
 };
 
 #endif

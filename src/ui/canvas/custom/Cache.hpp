@@ -24,9 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_CACHE_HPP
 #define XCSOAR_SCREEN_OPENGL_CACHE_HPP
 
-#include "util/Compiler.h"
+#include "ui/dim/Size.hpp"
 
-struct PixelSize;
 struct StringView;
 class Font;
 
@@ -35,29 +34,42 @@ class GLTexture;
 #endif
 
 namespace TextCache {
-#ifdef ENABLE_OPENGL
-  typedef GLTexture *Result;
-#else
-  struct Result {
-    const void *data;
-    unsigned pitch, width, height;
 
-    static constexpr Result Null() {
-      return { nullptr, 0, 0, 0 };
-    }
-  };
+#ifdef ENABLE_OPENGL
+typedef GLTexture *Result;
+#else
+struct Result {
+  const void *data;
+  unsigned pitch;
+  PixelSize size;
+
+  constexpr Result(const void *_data, unsigned _pitch, PixelSize _size) noexcept
+    :data(_data), pitch(_pitch), size(_size) {}
+
+  constexpr Result(std::nullptr_t) noexcept
+    :data{}, pitch{}, size{} {}
+
+  constexpr operator bool() const noexcept {
+    return data != nullptr;
+  }
+};
 #endif
 
-  gcc_pure
-  PixelSize GetSize(const Font &font, StringView text) noexcept;
+[[gnu::pure]]
+PixelSize
+GetSize(const Font &font, StringView text) noexcept;
 
-  gcc_pure
-  PixelSize LookupSize(const Font &font, StringView text) noexcept;
+[[gnu::pure]]
+PixelSize
+LookupSize(const Font &font, StringView text) noexcept;
 
-  gcc_pure
-  Result Get(const Font &font, StringView text) noexcept;
+[[gnu::pure]]
+Result
+Get(const Font &font, StringView text) noexcept;
 
-  void Flush();
-};
+void
+Flush() noexcept;
+
+} //namespace TextCache
 
 #endif

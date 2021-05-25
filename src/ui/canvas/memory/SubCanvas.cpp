@@ -26,12 +26,14 @@ Copyright_License {
 #include <algorithm>
 
 static unsigned
-ClipMax(unsigned limit, int offset, unsigned size) {
+ClipMax(unsigned limit, int offset, unsigned size) noexcept
+{
   return std::min(unsigned(size),
                   unsigned(std::max(int(limit - offset), 0)));
 }
 
-SubCanvas::SubCanvas(Canvas &canvas, PixelPoint _offset, PixelSize _size)
+SubCanvas::SubCanvas(Canvas &canvas,
+                     PixelPoint _offset, PixelSize _size) noexcept
 {
   buffer = canvas.buffer;
   buffer.data = buffer.At(_offset.x, _offset.y);

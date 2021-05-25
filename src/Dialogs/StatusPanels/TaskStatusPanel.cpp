@@ -49,7 +49,7 @@ enum Controls {
 };
 
 void
-TaskStatusPanel::OnModified(DataField &df)
+TaskStatusPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(MC, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;

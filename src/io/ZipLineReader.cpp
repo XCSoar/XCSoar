@@ -23,12 +23,6 @@ Copyright_License {
 
 #include "ZipLineReader.hpp"
 
-char *
-ZipLineReaderA::ReadLine()
-{
-  return buffered.ReadLine();
-}
-
 long
 ZipLineReaderA::GetSize() const
 {

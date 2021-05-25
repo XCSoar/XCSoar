@@ -24,7 +24,7 @@ Copyright_License {
 #include "PortMonitor.hpp"
 #include "Dialogs/Message.hpp"
 #include "Look/Look.hpp"
-#include "Screen/TerminalWindow.hpp"
+#include "ui/control/TerminalWindow.hpp"
 #include "Widget/WindowWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Device/Descriptor.hpp"

@@ -30,11 +30,11 @@
 #include "ui/canvas/Font.hpp"
 
 struct ThermalAssistantLook {
-  Color background_color;
-  Color circle_color;
-  Color text_color;
-  Color polygon_fill_color;
-  Color polygon_border_color;
+  static constexpr Color background_color = COLOR_WHITE;
+  static constexpr Color circle_color{0xB0, 0xB0, 0xB0};
+  static constexpr Color text_color = COLOR_BLACK;
+  static constexpr Color polygon_fill_color{0xCC, 0xCC, 0xFF};
+  static constexpr Color polygon_border_color = COLOR_BLUE;
 
   Brush polygon_brush;
 

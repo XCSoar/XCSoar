@@ -22,12 +22,14 @@ Copyright_License {
 */
 
 #include "FileTransaction.hpp"
+#include "system/ConvertPathName.hpp"
+#include "system/Error.hxx"
 #include "system/FileUtil.hpp"
 
 #include <cassert>
 
 static AllocatedPath
-MakeTemporaryPath(Path path)
+MakeTemporaryPath(Path path) noexcept
 {
   assert(path != nullptr);
 
@@ -38,36 +40,41 @@ MakeTemporaryPath(Path path)
 #endif
 }
 
-FileTransaction::FileTransaction(Path _path)
+FileTransaction::FileTransaction(Path _path) noexcept
   :final_path(_path), temporary_path(MakeTemporaryPath(_path))
 {
   /* ensure the temporary file doesn't exist already */
   File::Delete(temporary_path);
 }
 
-FileTransaction::~FileTransaction()
+FileTransaction::~FileTransaction() noexcept
 {
   if (!temporary_path.IsNull())
     /* cancel the transaction */
     File::Delete(temporary_path);
 }
 
-bool
+void
 FileTransaction::Commit()
 {
   assert(!temporary_path.IsNull());
 
-  bool success = File::Replace(temporary_path, final_path);
-  if (success)
-    /* mark the transaction as "finished" to avoid deletion in the
-       destructor */
-    temporary_path = nullptr;
+  if (!File::Replace(temporary_path, final_path)) {
+#ifdef HAVE_POSIX
+    throw FormatErrno("Failed to commit %s", temporary_path.c_str());
+#else
+    throw FormatLastError("Failed to commit %s",
+                          (const char *)NarrowPathName(temporary_path));
+#endif
+  }
 
-  return success;
+  /* mark the transaction as "finished" to avoid deletion in the
+     destructor */
+  temporary_path = nullptr;
 }
 
 void
-FileTransaction::Abandon()
+FileTransaction::Abandon() noexcept
 {
   assert(!temporary_path.IsNull());
 

@@ -26,14 +26,14 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Base.hpp"
 
-class InfoBoxContentOLC: public InfoBoxContent
+class InfoBoxContentContest: public InfoBoxContent
 {
 public:
   virtual const InfoBoxPanel *GetDialogContent() override;
   virtual void Update(InfoBoxData &data) override;
 };
 
-class InfoBoxContentOLCSpeed: public InfoBoxContent
+class InfoBoxContentContestSpeed: public InfoBoxContent
 {
 public:
   virtual const InfoBoxPanel *GetDialogContent() override;

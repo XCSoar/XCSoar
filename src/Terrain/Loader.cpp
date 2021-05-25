@@ -160,23 +160,21 @@ TerrainLoader::StartTile(unsigned index)
 
 void
 TerrainLoader::SetSize(unsigned _width, unsigned _height,
-                       unsigned _tile_width, unsigned _tile_height,
+                       uint_least16_t _tile_width, uint_least16_t _tile_height,
                        unsigned tile_columns, unsigned tile_rows)
 {
   if (scan_overview)
-    raster_tile_cache.SetSize(_width, _height, _tile_width, _tile_height,
-                              tile_columns, tile_rows);
+    raster_tile_cache.SetSize({_width, _height}, {_tile_width, _tile_height},
+                              {tile_columns, tile_rows});
 }
 
 void
 TerrainLoader::PutTileData(unsigned index,
-                           unsigned start_x, unsigned start_y,
-                           unsigned end_x, unsigned end_y,
+                           RasterLocation start, RasterLocation end,
                            const struct jas_matrix &m)
 {
   if (scan_overview)
-    raster_tile_cache.PutOverviewTile(index, start_x, start_y,
-                                      end_x, end_y, m);
+    raster_tile_cache.PutOverviewTile(index, start, end, m);
 
   if (scan_tiles) {
     const std::lock_guard<SharedMutex> lock(mutex);
@@ -263,8 +261,8 @@ LoadWorldFile(RasterTileCache &tile_cache,
   if (path == nullptr)
     return false;
 
-  const auto new_bounds = LoadWorldFile(dir, path, tile_cache.GetWidth(),
-                                        tile_cache.GetHeight());
+  const auto new_bounds = LoadWorldFile(dir, path, tile_cache.GetSize().x,
+                                        tile_cache.GetSize().y);
   bool success = new_bounds.IsValid();
   if (success)
     tile_cache.SetBounds(new_bounds);
@@ -311,13 +309,19 @@ LoadTerrainOverview(struct zzip_dir *dir,
 
 inline bool
 TerrainLoader::UpdateTiles(struct zzip_dir *dir, const char *path,
-                           int x, int y, unsigned radius)
+                           SignedRasterLocation p, unsigned radius)
 {
   assert(!scan_overview);
 
-  if (!raster_tile_cache.PollTiles(x, y, radius))
-    /* nothing to do */
-    return true;
+  {
+    /* this write lock is necessary because
+       RasterTileCache::PollTiles() calls RasterTile::Unload() */
+    const std::lock_guard<SharedMutex> lock(mutex);
+
+    if (!raster_tile_cache.PollTiles(p, radius))
+      /* nothing to do */
+      return true;
+  }
 
   bool success = LoadJPG2000(dir, path);
   raster_tile_cache.FinishTileUpdate();
@@ -327,14 +331,14 @@ TerrainLoader::UpdateTiles(struct zzip_dir *dir, const char *path,
 bool
 UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
                    RasterTileCache &raster_tile_cache, SharedMutex &mutex,
-                   int x, int y, unsigned radius)
+                   SignedRasterLocation p, unsigned radius)
 {
   if (!raster_tile_cache.IsValid())
     return false;
 
   NullOperationEnvironment env;
   TerrainLoader loader(mutex, raster_tile_cache, false, true, env);
-  return loader.UpdateTiles(dir, path, x, y, radius);
+  return loader.UpdateTiles(dir, path, p, radius);
 }
 
 bool
@@ -346,6 +350,6 @@ UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
   const auto raster_location = projection.ProjectCoarse(location);
 
   return UpdateTerrainTiles(dir, path, raster_tile_cache, mutex,
-                            raster_location.x, raster_location.y,
+                            raster_location,
                             projection.DistancePixelsCoarse(radius));
 }

@@ -291,7 +291,7 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
     psSHP->fpSHX = zzip_open_rb(zdir, pszFullname);
   }
   if( psSHP->fpSHX == NULL ) {
-    zzip_file_close(psSHP->fpSHP);
+    zzip_close(psSHP->fpSHP);
     msFree(pszBasename);
     msFree(pszFullname);
     msFree(psSHP);
@@ -306,8 +306,8 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
   /* -------------------------------------------------------------------- */
   pabyBuf = (uchar *) msSmallMalloc(100);
   if(1 != zzip_fread( pabyBuf, 100, 1, psSHP->fpSHP )) {
-    zzip_file_close( psSHP->fpSHP );
-    zzip_file_close( psSHP->fpSHX );
+    zzip_close( psSHP->fpSHP );
+    zzip_close( psSHP->fpSHX );
     free( psSHP );
     free(pabyBuf);
     return( NULL );
@@ -323,8 +323,8 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
   /* -------------------------------------------------------------------- */
   if(1 != zzip_fread( pabyBuf, 100, 1, psSHP->fpSHX )) {
     msSetError(MS_SHPERR, "Corrupted .shx file", "msSHPOpen()");
-    zzip_file_close( psSHP->fpSHP );
-    zzip_file_close( psSHP->fpSHX );
+    zzip_close( psSHP->fpSHP );
+    zzip_close( psSHP->fpSHX );
     free( psSHP );
     free(pabyBuf);
     return( NULL );
@@ -332,8 +332,8 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
 
   if( pabyBuf[0] != 0 || pabyBuf[1] != 0 || pabyBuf[2] != 0x27  || (pabyBuf[3] != 0x0a && pabyBuf[3] != 0x0d) ) {
     msSetError(MS_SHPERR, "Corrupted .shp file", "msSHPOpen()");
-    zzip_file_close( psSHP->fpSHP );
-    zzip_file_close( psSHP->fpSHX );
+    zzip_close( psSHP->fpSHP );
+    zzip_close( psSHP->fpSHX );
     free( psSHP );
     free(pabyBuf);
 
@@ -347,8 +347,8 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
   if( psSHP->nRecords < 0 || psSHP->nRecords > 256000000 ) {
     msSetError(MS_SHPERR, "Corrupted .shp file : nRecords = %d.", "msSHPOpen()",
                psSHP->nRecords);
-    zzip_file_close( psSHP->fpSHP );
-    zzip_file_close( psSHP->fpSHX );
+    zzip_close( psSHP->fpSHP );
+    zzip_close( psSHP->fpSHX );
     free( psSHP );
     free(pabyBuf);
     return( NULL );
@@ -411,8 +411,8 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
     free(psSHP->panRecOffset);
     free(psSHP->panRecSize);
     free(psSHP->panRecLoaded);
-    zzip_file_close( psSHP->fpSHP );
-    zzip_file_close( psSHP->fpSHX );
+    zzip_close( psSHP->fpSHP );
+    zzip_close( psSHP->fpSHX );
     free( psSHP );
     msSetError(MS_MEMERR, "Out of memory", "msSHPOpen()");
     return( NULL );
@@ -449,9 +449,9 @@ void msSHPClose(SHPHandle psSHP )
   free(psSHP->panParts);
 
   if (psSHP->fpSHX)
-    zzip_file_close( psSHP->fpSHX );
+    zzip_close( psSHP->fpSHX );
   if (psSHP->fpSHP)
-    zzip_file_close( psSHP->fpSHP );
+    zzip_close( psSHP->fpSHP );
 
   free( psSHP );
 }
@@ -1752,6 +1752,14 @@ int msShapefileOpen(shapefileObj *shpfile, const char *mode, struct zzip_dir *zd
 
   /* load some information about this shapefile */
   msSHPGetInfo( shpfile->hSHP, &shpfile->numshapes, &shpfile->type);
+
+  if( shpfile->numshapes < 0 || shpfile->numshapes > 256000000 ) {
+    msSetError(MS_SHPERR, "Corrupted .shp file : numshapes = %d.",
+               "msShapefileOpen()", shpfile->numshapes);
+    msSHPClose(shpfile->hSHP);
+    return -1;
+  }
+
   msSHPReadBounds( shpfile->hSHP, -1, &(shpfile->bounds));
 
   bufferSize = strlen(filename)+5;
@@ -1775,6 +1783,7 @@ int msShapefileOpen(shapefileObj *shpfile, const char *mode, struct zzip_dir *zd
     if( log_failures )
       msSetError(MS_IOERR, "(%s)", "msShapefileOpen()", dbfFilename);
     free(dbfFilename);
+    msSHPClose(shpfile->hSHP);
     return(-1);
   }
   free(dbfFilename);

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "AirspacePreviewRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
-#include "Screen/Features.hpp"
+#include "ui/canvas/Features.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Look/AirspaceLook.hpp"

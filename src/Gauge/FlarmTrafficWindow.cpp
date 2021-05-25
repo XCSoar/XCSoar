@@ -383,7 +383,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   }
 
   // Create an arrow polygon
-  BulkPixelPoint Arrow[5];
+  BulkPixelPoint Arrow[4];
   if (small) {
     Arrow[0].x = -3;
     Arrow[0].y = 4;
@@ -393,8 +393,6 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     Arrow[2].y = 4;
     Arrow[3].x = 0;
     Arrow[3].y = 2;
-    Arrow[4].x = -3;
-    Arrow[4].y = 4;
   } else {
     Arrow[0].x = -6;
     Arrow[0].y = 8;
@@ -404,12 +402,10 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     Arrow[2].y = 8;
     Arrow[3].x = 0;
     Arrow[3].y = 5;
-    Arrow[4].x = -6;
-    Arrow[4].y = 8;
   }
 
   // Rotate and shift the arrow
-  PolygonRotateShift(Arrow, 5, sc[i],
+  PolygonRotateShift(Arrow, 4, sc[i],
                      traffic.track - (enable_north_up ?
                                              Angle::Zero() : heading));
 
@@ -421,7 +417,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     canvas.Select(*target_brush);
 
   // Draw the polygon
-  canvas.DrawPolygon(Arrow, 5);
+  canvas.DrawPolygon(Arrow, 4);
 
   if (small) {
     if (!WarningMode() || traffic.HasAlarm())

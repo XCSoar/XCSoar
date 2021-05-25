@@ -32,13 +32,14 @@ Copyright_License {
 #include "util/Serial.hpp"
 
 #include <cassert>
-#include <stdio.h>
 #include <cstdint>
 
 #define RASTER_SLOPE_FACT 12
 
 struct jas_matrix;
 struct GridLocation;
+class BufferedOutputStream;
+class BufferedReader;
 
 class RasterTileCache {
   static constexpr unsigned MAX_RTC_TILES = 4096;
@@ -106,9 +107,9 @@ protected:
     static constexpr unsigned VERSION = 0xb;
 
     unsigned version;
-    unsigned width, height;
-    unsigned short tile_width, tile_height;
-    unsigned tile_columns, tile_rows;
+    UnsignedPoint2D size;
+    Point2D<uint_least16_t> tile_size;
+    UnsignedPoint2D n_tiles;
     unsigned num_marker_segments;
     GeoBounds bounds;
   };
@@ -122,11 +123,11 @@ protected:
   Serial serial;
 
   AllocatedGrid<RasterTile> tiles;
-  unsigned short tile_width, tile_height;
+  Point2D<uint_least16_t> tile_size;
 
   RasterBuffer overview;
-  unsigned int width, height;
-  unsigned int overview_width_fine, overview_height_fine;
+  RasterLocation size;
+  RasterLocation overview_size_fine;
 
   GeoBounds bounds;
 
@@ -163,22 +164,19 @@ public:
    * Determine the non-interpolated height at the specified pixel
    * location.
    *
-   * @param x the pixel column within the map; may be out of range
-   * @param y the pixel row within the map; may be out of range
+   * @param x the pixel position within the map; may be out of range
    */
   gcc_pure
-  TerrainHeight GetHeight(unsigned x, unsigned y) const noexcept;
+  TerrainHeight GetHeight(RasterLocation p) const noexcept;
 
   /**
    * Determine the interpolated height at the specified sub-pixel
    * location.
    *
-   * @param lx the sub-pixel column within the map; may be out of range
-   * @param ly the sub-pixel row within the map; may be out of range
+   * @param p the sub-pixel position within the map; may be out of range
    */
   gcc_pure
-  TerrainHeight GetInterpolatedHeight(unsigned lx,
-                                      unsigned ly) const noexcept;
+  TerrainHeight GetInterpolatedHeight(RasterLocation p) const noexcept;
 
   /**
    * Scan a straight line and fill the buffer with the specified
@@ -211,19 +209,24 @@ public:
 private:
   /**
    * Get field (not interpolated) directly, without bringing tiles to front.
-   * @param px X position/256
-   * @param px Y position/256
+   * @param p position/256
    * @param tile_index Remember position of active tile, or -1 for overview
    * @return the terrain altitude and a flag that is true when the
    * value was loaded from a "fine" tile
    */
   gcc_pure
-  std::pair<TerrainHeight, bool> GetFieldDirect(unsigned px,
-                                                unsigned py) const noexcept;
+  std::pair<TerrainHeight, bool> GetFieldDirect(RasterLocation p) const noexcept;
 
 public:
-  bool SaveCache(FILE *file) const noexcept;
-  bool LoadCache(FILE *file) noexcept;
+  /**
+   * Throws on error.
+   */
+  void SaveCache(BufferedOutputStream &os) const;
+
+  /**
+   * Throws on error.
+   */
+  void LoadCache(BufferedReader &r);
 
   /**
    * Determines if there are still tiles scheduled to be loaded.  Call
@@ -266,19 +269,18 @@ public:
       segments.back().tile = index;
   }
 
-  void SetSize(unsigned width, unsigned height,
-               unsigned tile_width, unsigned tile_height,
-               unsigned tile_columns, unsigned tile_rows) noexcept;
+  void SetSize(UnsignedPoint2D size,
+               Point2D<uint_least16_t> tile_size,
+               UnsignedPoint2D n_tiles) noexcept;
 
   void SetLatLonBounds(double lon_min, double lon_max,
                        double lat_min, double lat_max) noexcept;
 
   void PutOverviewTile(unsigned index,
-                       unsigned start_x, unsigned start_y,
-                       unsigned end_x, unsigned end_y,
+                       RasterLocation start, RasterLocation end,
                        const struct jas_matrix &m) noexcept;
 
-  bool PollTiles(int x, int y, unsigned radius) noexcept;
+  bool PollTiles(SignedRasterLocation p, unsigned radius) noexcept;
 
   void PutTileData(unsigned index, const struct jas_matrix &m) noexcept;
 
@@ -293,27 +295,23 @@ public:
    * Is the given point inside the map?
    */
   bool IsInside(RasterLocation p) const noexcept {
-    return p.x < width && p.y < height;
+    return p.x < size.x && p.y < size.y;
   }
 
-  unsigned int GetWidth() const noexcept { return width; }
-  unsigned int GetHeight() const noexcept { return height; }
-
-  unsigned GetFineWidth() const noexcept {
-    return width << RasterTraits::SUBPIXEL_BITS;
+  const auto &GetSize() const noexcept {
+    return size;
   }
 
-  unsigned GetFineHeight() const noexcept {
-    return height << RasterTraits::SUBPIXEL_BITS;
+  RasterLocation GetFineSize() const noexcept {
+    return size << RasterTraits::SUBPIXEL_BITS;
   }
 
 private:
-  unsigned GetFineTileWidth() const noexcept {
-    return tile_width << RasterTraits::SUBPIXEL_BITS;
-  }
-
-  unsigned GetFineTileHeight() const noexcept {
-    return tile_height << RasterTraits::SUBPIXEL_BITS;
+  RasterLocation GetFineTileSize() const noexcept {
+    return {
+      unsigned(tile_size.x) << RasterTraits::SUBPIXEL_BITS,
+      unsigned(tile_size.y) << RasterTraits::SUBPIXEL_BITS,
+    };
   }
 };
 

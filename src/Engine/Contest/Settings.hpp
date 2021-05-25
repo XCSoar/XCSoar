@@ -47,11 +47,15 @@ enum class Contest : uint8_t {
    */
   DMST,
 
+  WEGLIDE_FREE,
+  WEGLIDE_DISTANCE,
+  WEGLIDE_FAI,
+  WEGLIDE_OR,
   NONE,
 };
 
 struct ContestSettings {
-  /** Whether to do online OLC optimisation */
+  /** Whether to do online contest optimisation */
   bool enable;
 
   /**
@@ -60,13 +64,13 @@ struct ContestSettings {
    */
   bool predict;
 
-  /** Rule set to scan for in OLC */
+  /** Rule set to scan for in contest */
   Contest contest;
 
   /** Handicap factor */
   unsigned handicap;
 
-  void SetDefaults();
+  void SetDefaults() noexcept;
 };
 
 static_assert(std::is_trivial<ContestSettings>::value, "type is not trivial");

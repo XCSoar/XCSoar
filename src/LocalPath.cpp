@@ -162,9 +162,9 @@ ExpandLocalPath(Path src)
 
 #ifndef _WIN32
   // Convert backslashes to slashes on platforms where it matters
-  tstring src2(src.c_str());
+  tstring src2(ptr);
   std::replace(src2.begin(), src2.end(), '\\', '/');
-  src = Path(src2.c_str());
+  ptr = src2.c_str();
 #endif
 
   // Replace the code "%LOCAL_PATH%\\" by the full local path (output)

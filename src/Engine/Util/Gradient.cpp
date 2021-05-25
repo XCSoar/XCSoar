@@ -26,7 +26,7 @@
 #include <math.h>
 
 double
-AngleToGradient(const double d)
+AngleToGradient(const double d) noexcept
 {
   if (d != 0) {
     return Clamp(1. / d, -999., 999.);
@@ -36,7 +36,7 @@ AngleToGradient(const double d)
 }
 
 bool
-GradientValid(const double d)
+GradientValid(const double d) noexcept
 {
   return fabs(d) < 999;
 }

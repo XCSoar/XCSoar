@@ -646,7 +646,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Math/SunEphemeris.cpp \
 	\
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/TerminalWindow.cpp \
+	$(SRC)/ui/control/TerminalWindow.cpp \
 	\
 	$(SRC)/Look/FontDescription.cpp \
 	$(SRC)/Look/GlobalFonts.cpp \
@@ -748,11 +748,6 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/VoltageDevice.cpp \
 	$(SRC)/Android/IOIOHelper.cpp \
 	$(SRC)/Android/Main.cpp
-
-ifeq ($(DEBUG),y)
-XCSOAR_SOURCES += \
-	$(SRC)/Android/Assert.cpp
-endif
 
 else
 XCSOAR_SOURCES += \

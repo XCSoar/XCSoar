@@ -24,10 +24,14 @@ Copyright_License {
 #include "RasterTileCache.hpp"
 #include "Math/Angle.hpp"
 #include "Math/FastMath.hpp"
+#include "io/BufferedOutputStream.hxx"
+#include "io/BufferedReader.hxx"
 
 extern "C" {
 #include "jasper/jas_seq.h"
 }
+
+#include <stdexcept>
 
 #include <string.h>
 #include <algorithm>
@@ -43,31 +47,30 @@ CopyOverviewRow(TerrainHeight *gcc_restrict dest, const jas_seqent_t *gcc_restri
 
 void
 RasterTileCache::PutOverviewTile(unsigned index,
-                                 unsigned start_x, unsigned start_y,
-                                 unsigned end_x, unsigned end_y,
+                                 RasterLocation start, RasterLocation end,
                                  const struct jas_matrix &m) noexcept
 {
-  tiles.GetLinear(index).Set(start_x, start_y, end_x, end_y);
+  tiles.GetLinear(index).Set(start, end);
 
-  const unsigned dest_pitch = overview.GetWidth();
+  const unsigned dest_pitch = overview.GetSize().x;
 
-  start_x = RasterTraits::ToOverview(start_x);
-  start_y = RasterTraits::ToOverview(start_y);
+  start.x = RasterTraits::ToOverview(start.x);
+  start.y = RasterTraits::ToOverview(start.y);
 
-  if (start_x >= overview.GetWidth() || start_y >= overview.GetHeight())
+  if (start.x >= overview.GetSize().x || start.y >= overview.GetSize().y)
     return;
 
   unsigned width = RasterTraits::ToOverviewCeil(m.numcols_);
-  if (start_x + width > overview.GetWidth())
-    width = overview.GetWidth() - start_x;
+  if (start.x + width > overview.GetSize().x)
+    width = overview.GetSize().x - start.x;
   unsigned height = RasterTraits::ToOverviewCeil(m.numrows_);
-  if (start_y + height > overview.GetHeight())
-    height = overview.GetHeight() - start_y;
+  if (start.y + height > overview.GetSize().y)
+    height = overview.GetSize().y - start.y;
 
   const unsigned skip = 1 << OVERVIEW_BITS;
 
   auto *gcc_restrict dest = overview.GetData()
-    + start_y * dest_pitch + start_x;
+    + start.y * dest_pitch + start.x;
 
   /* note: this loop rounds up */
   for (unsigned i = 0, y = 0; i < height; ++i, y += skip, dest += dest_pitch)
@@ -100,7 +103,7 @@ struct RTDistanceSort {
 };
 
 bool
-RasterTileCache::PollTiles(int x, int y, unsigned radius) noexcept
+RasterTileCache::PollTiles(SignedRasterLocation p, unsigned radius) noexcept
 {
   /* tiles are usually 256 pixels wide; with a radius smaller than
      that, the (optimized) tile distance calculations may fail;
@@ -121,7 +124,7 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius) noexcept
 
   request_tiles.clear();
   for (int i = tiles.GetSize() - 1; i >= 0 && !request_tiles.full(); --i)
-    if (tiles.GetLinear(i).VisibilityChanged(x, y, radius))
+    if (tiles.GetLinear(i).VisibilityChanged(p, radius))
       request_tiles.append(i);
 
   /* reduce if there are too many */
@@ -134,7 +137,7 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius) noexcept
     /* dispose all tiles which are out of range */
     for (unsigned i = MAX_ACTIVE_TILES; i < request_tiles.size(); ++i) {
       RasterTile &tile = tiles.GetLinear(request_tiles[i]);
-      tile.Disable();
+      tile.Unload();
     }
 
     request_tiles.shrink(MAX_ACTIVE_TILES);
@@ -147,7 +150,7 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius) noexcept
   unsigned num_activate = 0;
   for (unsigned i = 0; i < request_tiles.size(); ++i) {
     RasterTile &tile = tiles.GetLinear(request_tiles[i]);
-    if (tile.IsEnabled())
+    if (tile.IsLoaded())
       continue;
 
     if (++num_activate <= MAX_ACTIVATE)
@@ -162,59 +165,53 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius) noexcept
 }
 
 TerrainHeight
-RasterTileCache::GetHeight(unsigned px, unsigned py) const noexcept
+RasterTileCache::GetHeight(RasterLocation p) const noexcept
 {
-  if (px >= width || py >= height)
+  if (p.x >= size.x || p.y >= size.y)
     // outside overall bounds
     return TerrainHeight::Invalid();
 
-  const RasterTile &tile = tiles.Get(px / tile_width, py / tile_height);
-  if (tile.IsEnabled())
-    return tile.GetHeight(px, py);
+  const RasterTile &tile = tiles.Get(p.x / tile_size.x, p.y / tile_size.y);
+  if (tile.IsLoaded())
+    return tile.GetHeight(p);
 
   // still not found, so go to overview
-  return overview.GetInterpolated(px << (RasterTraits::SUBPIXEL_BITS - RasterTraits::OVERVIEW_BITS),
-                                  py << (RasterTraits::SUBPIXEL_BITS - RasterTraits::OVERVIEW_BITS));
+  return overview.GetInterpolated(p << (RasterTraits::SUBPIXEL_BITS - RasterTraits::OVERVIEW_BITS));
 }
 
 TerrainHeight
-RasterTileCache::GetInterpolatedHeight(unsigned lx, unsigned ly) const noexcept
+RasterTileCache::GetInterpolatedHeight(RasterLocation l) const noexcept
 {
-  if ((lx >= overview_width_fine) || (ly >= overview_height_fine))
+  if (l.x >= overview_size_fine.x || l.y >= overview_size_fine.y)
     // outside overall bounds
     return TerrainHeight::Invalid();
 
-  unsigned px = lx, py = ly;
+  unsigned px = l.x, py = l.y;
   const unsigned int ix = CombinedDivAndMod(px);
   const unsigned int iy = CombinedDivAndMod(py);
 
-  const RasterTile &tile = tiles.Get(px / tile_width, py / tile_height);
-  if (tile.IsEnabled())
+  const RasterTile &tile = tiles.Get(px / tile_size.x, py / tile_size.y);
+  if (tile.IsLoaded())
     return tile.GetInterpolatedHeight(px, py, ix, iy);
 
   // still not found, so go to overview
-  return overview.GetInterpolated(RasterTraits::ToOverview(lx),
-                                  RasterTraits::ToOverview(ly));
+  return overview.GetInterpolated({RasterTraits::ToOverview(l.x), RasterTraits::ToOverview(l.y)});
 }
 
 void
-RasterTileCache::SetSize(unsigned _width, unsigned _height,
-                         unsigned _tile_width, unsigned _tile_height,
-                         unsigned tile_columns, unsigned tile_rows) noexcept
+RasterTileCache::SetSize(UnsignedPoint2D _size,
+                         Point2D<uint_least16_t> _tile_size,
+                         UnsignedPoint2D _n_tiles) noexcept
 {
-  width = _width;
-  height = _height;
-  tile_width = _tile_width;
-  tile_height = _tile_height;
+  size = _size;
+  tile_size = _tile_size;
 
   /* round the overview size up, because PutOverviewTile() does the
      same */
-  overview.Resize(RasterTraits::ToOverviewCeil(width),
-                  RasterTraits::ToOverviewCeil(height));
-  overview_width_fine = width << RasterTraits::SUBPIXEL_BITS;
-  overview_height_fine = height << RasterTraits::SUBPIXEL_BITS;
+  overview.Resize({RasterTraits::ToOverviewCeil(size.x), RasterTraits::ToOverviewCeil(size.y)});
+  overview_size_fine = size << RasterTraits::SUBPIXEL_BITS;
 
-  tiles.GrowDiscard(tile_columns, tile_rows);
+  tiles.GrowDiscard(_n_tiles.x, _n_tiles.y);
 }
 
 void
@@ -235,15 +232,14 @@ RasterTileCache::SetLatLonBounds(double _lon_min, double _lon_max,
 void
 RasterTileCache::Reset() noexcept
 {
-  width = 0;
-  height = 0;
+  size = {0, 0};
   bounds.SetInvalid();
   segments.clear();
 
   overview.Reset();
 
-  for (auto it = tiles.begin(), end = tiles.end(); it != end; ++it)
-    it->Disable();
+  for (auto &i : tiles)
+    i.Unload();
 }
 
 const RasterTileCache::MarkerSegmentInfo *
@@ -262,21 +258,20 @@ RasterTileCache::FinishTileUpdate() noexcept
   /* permanently disable the requested tiles which are still not
      loaded, to prevent trying to reload them over and over in a busy
      loop */
-  for (auto it = request_tiles.begin(), end = request_tiles.end();
-      it != end; ++it) {
-    RasterTile &tile = tiles.GetLinear(*it);
-    if (tile.IsRequested() && !tile.IsEnabled())
+  for (std::size_t i : request_tiles) {
+    RasterTile &tile = tiles.GetLinear(i);
+    if (tile.IsRequested() && !tile.IsLoaded())
       tile.Clear();
   }
 
   ++serial;
 }
 
-bool
-RasterTileCache::SaveCache(FILE *file) const noexcept
+void
+RasterTileCache::SaveCache(BufferedOutputStream &os) const
 {
   if (!IsValid())
-    return false;
+    throw std::runtime_error("Terrain invalid");
 
   assert(bounds.IsValid());
 
@@ -287,97 +282,83 @@ RasterTileCache::SaveCache(FILE *file) const noexcept
   memset(&header, 0, sizeof(header));
 
   header.version = CacheHeader::VERSION;
-  header.width = width;
-  header.height = height;
-  header.tile_width = tile_width;
-  header.tile_height = tile_height;
-  header.tile_columns = tiles.GetWidth();
-  header.tile_rows = tiles.GetHeight();
+  header.size = size;
+  header.tile_size = tile_size;
+  header.n_tiles = {tiles.GetWidth(), tiles.GetHeight()};
   header.num_marker_segments = segments.size();
   header.bounds = bounds;
 
-  if (fwrite(&header, sizeof(header), 1, file) != 1 ||
-      /* .. and segments */
-      fwrite(segments.begin(), sizeof(*segments.begin()), segments.size(), file) != segments.size())
-    return false;
+  os.Write(&header, sizeof(header));
+  os.Write(segments.begin(), sizeof(*segments.begin()) * segments.size());
 
   /* save tiles */
   unsigned i;
-  for (i = 0; i < tiles.GetSize(); ++i)
-    if (tiles.GetLinear(i).IsDefined() &&
-        (fwrite(&i, sizeof(i), 1, file) != 1 ||
-         !tiles.GetLinear(i).SaveCache(file)))
-      return false;
+  for (i = 0; i < tiles.GetSize(); ++i) {
+    const auto &tile = tiles.GetLinear(i);
+    if (tile.IsDefined()) {
+      os.Write(&i, sizeof(i));
+      tile.SaveCache(os);
+    }
+  }
 
   i = -1;
-  if (fwrite(&i, sizeof(i), 1, file) != 1)
-    return false;
+  os.Write(&i, sizeof(i));
 
   /* save overview */
-  size_t overview_size = overview.GetWidth() * overview.GetHeight();
-  if (fwrite(overview.GetData(), sizeof(*overview.GetData()),
-             overview_size, file) != overview_size)
-    return false;
-
-  /* done */
-  return true;
+  size_t overview_size = overview.GetSize().Area();
+  os.Write(overview.GetData(), sizeof(*overview.GetData()) * overview_size);
 }
 
-bool
-RasterTileCache::LoadCache(FILE *file) noexcept
+void
+RasterTileCache::LoadCache(BufferedReader &r)
 {
   Reset();
 
   /* load metadata */
   CacheHeader header;
-  if (fread(&header, sizeof(header), 1, file) != 1 ||
-      header.version != CacheHeader::VERSION ||
-      header.width < 1024 || header.width > 1024 * 1024 ||
-      header.height < 1024 || header.height > 1024 * 1024 ||
-      header.tile_width < 16 || header.tile_width > 16 * 1024 ||
-      header.tile_height < 16 || header.tile_height > 16 * 1024 ||
-      header.tile_columns < 1 || header.tile_columns > 1024 ||
-      header.tile_rows < 1 || header.tile_rows > 1024 ||
+  r.ReadFull({&header, sizeof(header)});
+
+  if (header.version != CacheHeader::VERSION ||
+      header.size.x < 1024 || header.size.x > 1024 * 1024 ||
+      header.size.y < 1024 || header.size.y > 1024 * 1024 ||
+      header.tile_size.x < 16 || header.tile_size.x > 16 * 1024 ||
+      header.tile_size.y < 16 || header.tile_size.y > 16 * 1024 ||
+      header.n_tiles.x < 1 || header.n_tiles.x > 1024 ||
+      header.n_tiles.y < 1 || header.n_tiles.y > 1024 ||
       header.num_marker_segments < 4 ||
       header.num_marker_segments > segments.capacity() ||
       header.bounds.IsEmpty())
-    return false;
+    throw std::runtime_error("Malformed terrain cache header");
 
-  SetSize(header.width, header.height,
-          header.tile_width, header.tile_height,
-          header.tile_columns, header.tile_rows);
+  SetSize(header.size, header.tile_size, header.n_tiles);
   bounds = header.bounds;
   if (!bounds.IsValid())
-    return false;
+    throw std::runtime_error("Malformed terrain cache bounds");
 
   /* load segments */
   for (unsigned i = 0; i < header.num_marker_segments; ++i) {
     MarkerSegmentInfo &segment = segments.append();
-    if (fread(&segment, sizeof(segment), 1, file) != 1)
-      return false;
+    r.ReadFull({&segment, sizeof(segment)});
   }
 
   /* load tiles */
-  unsigned i;
   while (true) {
-    if (fread(&i, sizeof(i), 1, file) != 1)
-      return false;
+    unsigned i;
+    r.ReadFull({&i, sizeof(i)});
 
     if (i == (unsigned)-1)
       break;
 
     if (i >= tiles.GetSize())
-      return false;
+      throw std::runtime_error("Bad tile index");
 
-    if (!tiles.GetLinear(i).LoadCache(file))
-      return false;
+    tiles.GetLinear(i).LoadCache(r);
   }
 
   /* load overview */
-  size_t overview_size = overview.GetWidth() * overview.GetHeight();
-  if (fread(overview.GetData(), sizeof(*overview.GetData()),
-            overview_size, file) != overview_size)
-    return false;
-
-  return true;
+  size_t overview_size = overview.GetSize().Area();
+  r.ReadFull({
+      overview.GetData(),
+      sizeof(*overview.GetData()) * overview_size,
+    });
 }

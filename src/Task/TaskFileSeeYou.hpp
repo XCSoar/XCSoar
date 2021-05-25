@@ -34,19 +34,12 @@
 class TaskFileSeeYou: public TaskFile
 {
 public:
-  explicit TaskFileSeeYou(Path _path):TaskFile(_path) {}
+  using TaskFile::TaskFile;
 
-  /**
-   * Give the task produced by parsing the SeeYou file.
-   * @param task_behaviour The type of the task.
-   * @param waypoints All waypoints contained in the SeeYou task file.
-   * @param index Index into the array of tasks in the SeeYou file, 0....n
-   */
+  std::vector<tstring> GetList() const override;
   std::unique_ptr<OrderedTask> GetTask(const TaskBehaviour &task_behaviour,
                                        const Waypoints *waypoints,
                                        unsigned index) const override;
-
-  unsigned Count() noexcept override;
 };
 
 #endif

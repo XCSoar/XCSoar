@@ -209,16 +209,10 @@ Startup()
 
 #ifdef ENABLE_OPENGL
   LogFormat("OpenGL: "
-#ifdef HAVE_OES_DRAW_TEXTURE
-            "oesdt=%d "
-#endif
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
             "mda=%d "
 #endif
             "npot=%d stencil=%#x",
-#ifdef HAVE_OES_DRAW_TEXTURE
-            OpenGL::oes_draw_texture,
-#endif
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
             GLExt::HaveMultiDrawElements(),
 #endif

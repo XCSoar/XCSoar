@@ -21,5 +21,9 @@ CONTEST_SOURCES = \
 	$(CONTEST_SRC_DIR)/Solvers/OLCSISAT.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/NetCoupe.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/Retrospective.cpp \
+	$(CONTEST_SRC_DIR)/Solvers/WeglideFree.cpp \
+	$(CONTEST_SRC_DIR)/Solvers/WeglideDistance.cpp \
+	$(CONTEST_SRC_DIR)/Solvers/WeglideFAI.cpp \
+	$(CONTEST_SRC_DIR)/Solvers/WeglideOR.cpp \
 
 $(eval $(call link-library,libcontest,CONTEST))

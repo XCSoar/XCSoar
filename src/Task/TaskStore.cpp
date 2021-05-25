@@ -29,6 +29,7 @@ Copyright_License {
 #include "system/Path.hpp"
 #include "LocalPath.hpp"
 #include "Language/Language.hpp"
+#include "LogFile.hpp"
 
 #include <algorithm>
 #include <memory>
@@ -42,25 +43,28 @@ public:
   TaskFileVisitor(TaskStore::ItemVector &_store):
     store(_store) {}
 
-  void Visit(Path path, Path base_name) override {
+  void Visit(Path path, Path base_name) override
+  try {
     // Create a TaskFile instance to determine how many
     // tasks are inside of this task file
-    std::unique_ptr<TaskFile> task_file(TaskFile::Create(path));
+    const auto task_file = TaskFile::Create(path);
     if (!task_file)
       return;
 
+    const auto list = task_file->GetList();
+
     // Count the tasks in the task file
-    unsigned count = task_file->Count();
+    unsigned count = list.size();
     // For each task in the task file
     for (unsigned i = 0; i < count; i++) {
       // Copy base name of the file into task name
       StaticString<256> name(base_name.c_str());
 
       // If the task file holds more than one task
-      const TCHAR *saved_name = task_file->GetName(i);
-      if (saved_name != nullptr) {
+      const auto &saved_name = list[i];
+      if (!saved_name.empty()) {
         name += _T(": ");
-        name += saved_name;
+        name += saved_name.c_str();
       } else if (count > 1) {
         // .. append " - Task #[n]" suffix to the task name
         name.AppendFormat(_T(": %s #%d"), _("Task"), i + 1);
@@ -69,6 +73,8 @@ public:
       // Add the task to the TaskStore
       store.emplace_back(path, name.empty() ? path.c_str() : name, i);
     }
+  } catch (...) {
+    LogError(std::current_exception());
   }
 };
 

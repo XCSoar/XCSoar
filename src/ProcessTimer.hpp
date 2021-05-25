@@ -24,6 +24,6 @@ Copyright_License {
 #define XCSOAR_PROCESS_TIMER_H
 
 void
-ProcessTimer();
+ProcessTimer() noexcept;
 
 #endif

@@ -50,7 +50,6 @@ BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
     {  6, -62 },
     {  1, -62 },
     {  1, -40 },
-    { -1, -40 },
   };
 
   PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos,

@@ -41,7 +41,7 @@ Copyright_License {
 #include "ui/canvas/Bitmap.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
-#include "Screen/LargeTextWindow.hpp"
+#include "ui/control/LargeTextWindow.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"

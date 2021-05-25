@@ -79,6 +79,7 @@ class DeviceListWidget final
     bool alive:1, location:1, gps:1, baro:1, airspeed:1, vario:1, traffic:1;
     bool temperature:1;
     bool humidity:1;
+    bool radio:1;
     bool debug:1;
 
     void Set(const DeviceConfig &config, const DeviceDescriptor &device,
@@ -117,6 +118,9 @@ class DeviceListWidget final
       temperature = basic.temperature_available;
       humidity = basic.humidity_available;
       debug = device.IsDumpEnabled();
+      radio = basic.settings.has_active_frequency || 
+        basic.settings.has_standby_frequency;
+      
     }
   };
 
@@ -403,6 +407,11 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     if (flags.temperature || flags.humidity) {
       buffer.append(_T("; "));
       buffer.append(_T("Environment"));
+    }
+
+    if (flags.radio) {
+      buffer.append(_T("; "));
+      buffer.append(_T("Radio"));
     }
 
     if (flags.debug) {

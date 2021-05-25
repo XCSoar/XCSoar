@@ -56,11 +56,11 @@ public:
 
 private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 };
 
 void
-ScoringConfigPanel::OnModified(DataField &df)
+ScoringConfigPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(SHOW_FAI_TRIANGLE_AREAS, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
@@ -90,7 +90,7 @@ ScoringConfigPanel::Prepare(ContainerWindow &parent,
 
   const StaticEnumChoice contests_list[] = {
     { (unsigned)Contest::NONE, ContestToString(Contest::NONE),
-      N_("Disable OLC Calculations") },
+      N_("Disable contest calculations") },
     { (unsigned)Contest::OLC_FAI, ContestToString(Contest::OLC_FAI),
       N_("Conforms to FAI triangle rules. Three turns and common start and finish. No leg less than 28% "
           "of total except for tasks longer than 500km: No leg less than 25% or larger than 45%.") },
@@ -115,11 +115,17 @@ ScoringConfigPanel::Prepare(ContainerWindow &parent,
           "bounding box part with 1 km = 1.0 point and the additional zick-zack part with 1 km = 0.5 p.") },
     { (unsigned)Contest::NET_COUPE, ContestToString(Contest::NET_COUPE),
       N_("The FFVV NetCoupe \"libre\" competiton.") },
+    { (unsigned)Contest::WEGLIDE_FREE, ContestToString(Contest::WEGLIDE_FREE),
+      N_("WeGlide combines multiple scoring systems in the WeGlide Free contest. The free score is a combination "
+          "of the free distance score and the area bonus. For the area bonus, the scoring program determines the "
+          "largest FAI triangle and the largest Out & Return distance that can be fitted into the flight route.") },
+    { (unsigned)Contest::WEGLIDE_OR, ContestToString(Contest::WEGLIDE_OR),
+      N_("A start point, one turn point and a finish point are chosen from the flight path such that "
+          "the distance between the start point and the turn point is maximized") },
     { 0 }
   };
-  AddEnum(_("On-Line Contest"),
-      _("Select the rules used for calculating optimal points for the On-Line Contest. "
-          "The implementation  conforms to the official release 2010, Sept.23."),
+  AddEnum(_("Contest"),
+      _("Select the rules used for calculating optimal points for a contest."),
           contests_list, (unsigned)contest_settings.contest);
 
   AddBoolean(_("Predict Contest"),

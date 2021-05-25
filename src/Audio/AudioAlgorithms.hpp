@@ -28,6 +28,7 @@ Copyright_License {
 #include "util/ByteOrder.hxx"
 
 #include <algorithm>
+#include <limits>
 #include <type_traits>
 
 #include <cassert>

@@ -66,20 +66,21 @@ public:
    *
    * @return empty Airspaces class.
    */
-  Airspaces(bool _owns_children=true)
+  Airspaces(bool _owns_children=true) noexcept
     :qnh(AtmosphericPressure::Zero()), owns_children(_owns_children) {}
 
   Airspaces(const Airspaces &) = delete;
+  Airspaces &operator=(const Airspaces &) = delete;
 
   /**
    * Destructor.
    * This also destroys Airspace objects contained in the tree or temporary buffer
    */
-  ~Airspaces() {
+  ~Airspaces() noexcept {
     Clear();
   }
 
-  const Serial &GetSerial() const {
+  const Serial &GetSerial() const noexcept {
     return serial;
   }
 
@@ -90,19 +91,19 @@ public:
    *
    * @param asp New airspace to be added.
    */
-  void Add(AbstractAirspace *asp);
+  void Add(AbstractAirspace *asp) noexcept;
 
   /**
    * Re-organise the internal airspace tree after inserting/deleting.
    * Should be called after inserting/deleting airspaces prior to performing
    * any searches, but can be done once after a batch insert/delete.
    */
-  void Optimise();
+  void Optimise() noexcept;
 
   /**
    * Clear the airspace store, deleting airspace objects if m_owner is true
    */
-  void Clear();
+  void Clear() noexcept;
 
   /**
    * Size of airspace (in tree, not in temporary store) ---
@@ -111,7 +112,7 @@ public:
    * @return Number of airspaces in tree
    */
   [[gnu::pure]]
-  unsigned GetSize() const;
+  unsigned GetSize() const noexcept;
 
   /**
    * Whether airspace store is empty
@@ -119,14 +120,14 @@ public:
    * @return True if no airspace stored
    */
   [[gnu::pure]]
-  bool IsEmpty() const;
+  bool IsEmpty() const noexcept;
 
   /**
    * Set terrain altitude for all AGL-referenced airspace altitudes
    *
    * @param terrain Terrain model for lookup
    */
-  void SetGroundLevels(const RasterTerrain &terrain);
+  void SetGroundLevels(const RasterTerrain &terrain) noexcept;
 
   /**
    * Set QNH pressure for all FL-referenced airspace altitudes.
@@ -134,17 +135,17 @@ public:
    *
    * @param press Atmospheric pressure model and QNH
    */
-  void SetFlightLevels(const AtmosphericPressure &press);
+  void SetFlightLevels(const AtmosphericPressure &press) noexcept;
 
   /**
    * Set activity based on day mask
    *
    * @param days Mask of activity (a particular or range of days matching this day)
    */
-  void SetActivity(const AirspaceActivity mask);
+  void SetActivity(const AirspaceActivity mask) noexcept;
 
   [[gnu::pure]]
-  const_iterator_range QueryAll() const {
+  const_iterator_range QueryAll() const noexcept {
     auto predicate = boost::geometry::index::satisfies([](const Airspace &){
         return true;
       });
@@ -159,7 +160,7 @@ public:
    */
   [[gnu::pure]]
   const_iterator_range QueryWithinRange(const GeoPoint &location,
-                                        double range) const;
+                                        double range) const noexcept;
 
   /**
    * Query airspaces intersecting the vector (bounding box check
@@ -167,7 +168,7 @@ public:
    */
   [[gnu::pure]]
   const_iterator_range QueryIntersecting(const GeoPoint &a,
-                                         const GeoPoint &b) const;
+                                         const GeoPoint &b) const noexcept;
 
   /**
    * Call visitor class on airspaces intersected by vector.
@@ -181,10 +182,10 @@ public:
    */
   void VisitIntersecting(const GeoPoint &location, const GeoPoint &end,
                          bool include_inside,
-                         AirspaceIntersectionVisitor &visitor) const;
+                         AirspaceIntersectionVisitor &visitor) const noexcept;
 
   void VisitIntersecting(const GeoPoint &location, const GeoPoint &end,
-                         AirspaceIntersectionVisitor &visitor) const {
+                         AirspaceIntersectionVisitor &visitor) const noexcept {
     VisitIntersecting(location, end, false, visitor);
   }
 
@@ -194,7 +195,7 @@ public:
    * @param loc location of origin of search
    */
   [[gnu::pure]]
-  const_iterator_range QueryInside(const GeoPoint &location) const;
+  const_iterator_range QueryInside(const GeoPoint &location) const noexcept;
 
   /**
    * Query airspaces the aircraft is inside (taking altitude into
@@ -203,16 +204,16 @@ public:
    * @param loc location of origin of search
    */
   [[gnu::pure]]
-  const_iterator_range QueryInside(const AircraftState &aircraft) const;
+  const_iterator_range QueryInside(const AircraftState &aircraft) const noexcept;
 
-  const FlatProjection &GetProjection() const {
+  const FlatProjection &GetProjection() const noexcept {
     return task_projection;
   }
 
   /**
    * Empty clearance polygons of all airspaces in this database
    */
-  void ClearClearances();
+  void ClearClearances() noexcept;
 
   /**
    * Copy/delete objects in this database based on query of master
@@ -226,11 +227,11 @@ public:
    */
   bool SynchroniseInRange(const Airspaces &master,
                           const GeoPoint &location, double range,
-                          AirspacePredicate condition);
+                          AirspacePredicate condition) noexcept;
 
 private:
   [[gnu::pure]]
-  AirspaceVector AsVector() const;
+  AirspaceVector AsVector() const noexcept;
 };
 
 #endif

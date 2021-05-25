@@ -689,3 +689,9 @@ InputEvents::eventFileManager(const TCHAR *misc)
 {
   ShowFileManager();
 }
+
+void
+InputEvents::eventExchangeFrequencies(const TCHAR *misc)
+{
+  XCSoarInterface::ExchangeRadioFrequencies(true);
+}

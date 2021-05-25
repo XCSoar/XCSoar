@@ -31,7 +31,7 @@ Copyright_License {
 static TCHAR buffer[16];
 
 unsigned
-AngleDataField::Import(int value)
+AngleDataField::Import(int value) noexcept
 {
   assert(value >= -int(MAX));
   if (value < 0)
@@ -41,7 +41,7 @@ AngleDataField::Import(int value)
 }
 
 void
-AngleDataField::ModifyValue(unsigned _value)
+AngleDataField::ModifyValue(unsigned _value) noexcept
 {
   unsigned value2 = Import(_value);
   if (value2 == value)
@@ -52,7 +52,7 @@ AngleDataField::ModifyValue(unsigned _value)
 }
 
 void
-AngleDataField::ModifyValue(int _value)
+AngleDataField::ModifyValue(int _value) noexcept
 {
   unsigned value2 = Import(_value);
   if (value2 == value)
@@ -63,7 +63,7 @@ AngleDataField::ModifyValue(int _value)
 }
 
 void
-AngleDataField::ModifyValue(Angle _value)
+AngleDataField::ModifyValue(Angle _value) noexcept
 {
   unsigned value2 = Import(_value);
   if (value2 == value)
@@ -74,51 +74,51 @@ AngleDataField::ModifyValue(Angle _value)
 }
 
 int
-AngleDataField::GetAsInteger() const
+AngleDataField::GetAsInteger() const noexcept
 {
   return GetIntegerValue();
 }
 
 const TCHAR *
-AngleDataField::GetAsString() const
+AngleDataField::GetAsString() const noexcept
 {
   _stprintf(buffer, _T("%u"), GetIntegerValue());
   return buffer;
 }
 
 const TCHAR *
-AngleDataField::GetAsDisplayString() const
+AngleDataField::GetAsDisplayString() const noexcept
 {
   _stprintf(buffer, _T("%u°"), GetIntegerValue());
   return buffer;
 }
 
 void
-AngleDataField::SetAsInteger(int _value)
+AngleDataField::SetAsInteger(int _value) noexcept
 {
   ModifyValue(_value);
 }
 
 void
-AngleDataField::SetAsString(const TCHAR *_value)
+AngleDataField::SetAsString(const TCHAR *_value) noexcept
 {
   ModifyValue(Angle::Degrees(ParseDouble(_value)));
 }
 
 void
-AngleDataField::Inc()
+AngleDataField::Inc() noexcept
 {
   ModifyValue(value + step);
 }
 
 void
-AngleDataField::Dec()
+AngleDataField::Dec() noexcept
 {
   ModifyValue(MAX + value - step);
 }
 
 void
-AngleDataField::SetFromCombo(int i, gcc_unused const TCHAR *s)
+AngleDataField::SetFromCombo(int i, gcc_unused const TCHAR *s) noexcept
 {
   assert(i >= 0);
   assert(unsigned(i) < MAX);
@@ -127,7 +127,7 @@ AngleDataField::SetFromCombo(int i, gcc_unused const TCHAR *s)
 }
 
 static void
-AppendComboValue(ComboList &combo_list, unsigned value)
+AppendComboValue(ComboList &combo_list, unsigned value) noexcept
 {
   TCHAR buffer1[ARRAY_SIZE(buffer)], buffer2[ARRAY_SIZE(buffer)];
   _stprintf(buffer1, _T("%u"), value);
@@ -136,7 +136,7 @@ AppendComboValue(ComboList &combo_list, unsigned value)
 }
 
 ComboList
-AngleDataField::CreateComboList(const TCHAR *reference) const
+AngleDataField::CreateComboList(const TCHAR *reference) const noexcept
 {
   ComboList combo_list;
 

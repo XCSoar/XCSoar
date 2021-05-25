@@ -26,16 +26,15 @@ Copyright_License {
 
 #include <type_traits>
 #include <cmath>
-#include <cstdlib>
 
 template<typename T, typename PT=T>
 struct Point2D {
-  typedef T scalar_type;
+  using scalar_type = T;
 
   /**
    * Type to be used by vector math.
    */
-  typedef PT product_type;
+  using product_type = PT;
 
   scalar_type x, y;
 
@@ -43,6 +42,17 @@ struct Point2D {
 
   constexpr Point2D(scalar_type _x, scalar_type _y) noexcept
     :x(_x), y(_y) {}
+
+  constexpr Point2D(const Point2D &) noexcept = default;
+
+  /**
+   * This constructor allows casting from a different Point2D
+   * template instantiation.
+   */
+  template<typename OT, typename OPT>
+  explicit constexpr Point2D(const Point2D<OT, OPT> &src) noexcept
+    :x(static_cast<scalar_type>(src.x)),
+     y(static_cast<scalar_type>(src.y)) {}
 
   constexpr bool operator==(const Point2D<T, PT> &other) const noexcept {
     return x == other.x && y == other.y;
@@ -70,6 +80,10 @@ struct Point2D {
     x -= other.x;
     y -= other.y;
     return *this;
+  }
+
+  constexpr product_type Area() const noexcept {
+    return product_type(x) * product_type(y);
   }
 
   constexpr product_type MagnitudeSquared() const noexcept {
@@ -185,7 +199,13 @@ template<typename P, typename RT=typename P::scalar_type,
 constexpr RT
 ManhattanDistance(P a, P b) noexcept
 {
-  return std::abs(a.x - b.x) + std::abs(a.y - b.y);
+  /* this function is similar to std::abs(), but is constexpr and
+     works with unsigned types */
+  auto AbsoluteDifference = [](RT a, RT b) -> RT {
+    return a < b ? b - a : a - b;
+  };
+
+  return AbsoluteDifference(a.x, b.x) + AbsoluteDifference(a.y, b.y);
 }
 
 #endif

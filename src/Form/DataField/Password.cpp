@@ -26,7 +26,7 @@ Copyright_License {
 #include <algorithm>
 
 const TCHAR *
-PasswordDataField::GetAsDisplayString() const
+PasswordDataField::GetAsDisplayString() const noexcept
 {
   const TCHAR *obfuscated = _T("********************************");
   const size_t obfuscated_length = _tcslen(obfuscated);

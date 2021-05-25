@@ -33,6 +33,6 @@ class WindowProjection;
 
 gcc_pure
 glm::mat4
-ToGLM(const WindowProjection &projection, const GeoPoint &reference);
+ToGLM(const WindowProjection &projection, const GeoPoint &reference) noexcept;
 
 #endif

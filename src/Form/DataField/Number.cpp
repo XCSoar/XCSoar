@@ -26,14 +26,14 @@ Copyright_License {
 NumberDataField::NumberDataField(Type type, bool support_combo,
                                  const TCHAR *_edit_format,
                                  const TCHAR *_display_format,
-                                 DataFieldListener *listener)
+                                 DataFieldListener *listener) noexcept
   :DataField(type, support_combo, listener),
    edit_format(_edit_format), display_format(_display_format)
 {
 }
 
 void
-NumberDataField::SetFormat(const TCHAR *text)
+NumberDataField::SetFormat(const TCHAR *text) noexcept
 {
   edit_format = text;
   display_format = text;

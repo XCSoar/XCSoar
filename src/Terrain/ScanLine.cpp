@@ -24,227 +24,240 @@ Copyright_License {
 #include "Terrain/RasterTileCache.hpp"
 #include "Terrain/RasterLocation.hpp"
 
-#include <stdlib.h>
-
+/**
+ * A #RasterLocation with some cached computations.  The
+ * #RasterLocation base holds the linear subpixel coordinates within
+ * the #RasterMap.
+ */
 struct GridLocation : public RasterLocation {
-  unsigned short tile_x, tile_y;
-  unsigned remainder_x, remainder_y;
+  /**
+   * The #RasterTile within the #RasterMap.
+   */
+  Point2D<uint_least16_t> tile;
+
+  /**
+   * The position within the #RasterTile.
+   */
+  UnsignedPoint2D remainder;
+
+  /**
+   * The index in the destination buffer which is about to be filled.
+   */
   unsigned index;
 
   constexpr GridLocation(const RasterLocation &other,
-                         unsigned tile_width, unsigned tile_height,
+                         UnsignedPoint2D tile_size,
                          unsigned _index) noexcept
     :RasterLocation(other),
-     tile_x(other.x / tile_width), tile_y(other.y / tile_height),
-     remainder_x(other.x % tile_width),
-     remainder_y(other.y % tile_height),
+     tile(other.x / tile_size.x, other.y / tile_size.y),
+     remainder{other.x % tile_size.x, other.y % tile_size.y},
      index(_index) {}
 };
 
 struct GridRay {
-  unsigned tile_width, tile_height;
+  /**
+   * The dimensions of one tile (in subpixels).
+   */
+  UnsignedPoint2D tile_size;
 
+  /**
+   * Start and end of the ray.
+   */
   GridLocation start, end;
 
-  int delta_x, delta_y;
+  /**
+   * The difference vector between "start" and "end" (in subpixels).
+   */
+  IntPoint2D delta;
 
+  /**
+   * The size (number of #TerrainHeight elements) of the destination
+   * buffer which is about to be filled.
+   */
   unsigned size;
 
-  constexpr GridRay(unsigned _tile_width, unsigned _tile_height,
+  constexpr GridRay(UnsignedPoint2D _tile_size,
                     const RasterLocation &_start, const RasterLocation &_end,
                     unsigned _size) noexcept
-    :tile_width(_tile_width), tile_height(_tile_height),
-     start(_start, tile_width, tile_height, 0),
-     end(_end, tile_width, tile_height, _size),
-     delta_x(end.x - start.x), delta_y(end.y - start.y),
+    :tile_size(_tile_size),
+     start(_start, tile_size, 0),
+     end(_end, tile_size, _size),
+     delta(end.x - start.x, end.y - start.y),
      size(_size) {}
 };
 
-gcc_pure
-static int
+static constexpr int
 ScaleX(const GridRay &ray, int x, int range) noexcept
 {
-  assert(ray.delta_x != 0);
+  assert(ray.delta.x != 0);
 
-  return (int64_t)(x - (int)ray.start.x) * (int64_t)range / ray.delta_x;
+  return (int64_t)(x - (int)ray.start.x) * (int64_t)range / ray.delta.x;
 }
 
-gcc_pure
-static int
+static constexpr int
 YAtX(const GridRay &ray, int x) noexcept
 {
-  assert(ray.delta_x != 0);
+  assert(ray.delta.x != 0);
 
-  return (int)ray.start.y + ScaleX(ray, x, ray.delta_y);
+  return (int)ray.start.y + ScaleX(ray, x, ray.delta.y);
 }
 
-gcc_pure
-static unsigned
+static constexpr unsigned
 IndexAtX(const GridRay &ray, int x) noexcept
 {
-  assert(ray.delta_x != 0);
+  assert(ray.delta.x != 0);
 
   return ScaleX(ray, x, ray.size);
 }
 
-gcc_pure
-static GridLocation
+static constexpr GridLocation
 NextRightGridIntersection(const GridRay &ray,
                           const GridLocation &current) noexcept
 {
-  assert(ray.delta_x > 0);
+  assert(ray.delta.x > 0);
 
-  if (current.tile_x == ray.end.tile_x)
+  if (current.tile.x == ray.end.tile.x)
     return ray.end;
 
-  assert(current.tile_x < ray.end.tile_x);
+  assert(current.tile.x < ray.end.tile.x);
   assert(current.x < ray.end.x);
 
-  int x = (current.tile_x + 1) * ray.tile_width;
+  int x = (current.tile.x + 1) * ray.tile_size.x;
   int y = YAtX(ray, x);
   assert(y >= 0);
 
   return GridLocation(RasterLocation(x, y),
-                      ray.tile_width, ray.tile_height,
+                      ray.tile_size,
                       IndexAtX(ray, x));
 }
 
-gcc_pure
-static GridLocation
+static constexpr GridLocation
 NextLeftGridIntersection(const GridRay &ray, GridLocation current) noexcept
 {
-  assert(ray.delta_x < 0);
+  assert(ray.delta.x < 0);
 
-  if (current.tile_x == ray.end.tile_x)
+  if (current.tile.x == ray.end.tile.x)
     return ray.end;
 
-  assert(current.tile_x > ray.end.tile_x);
+  assert(current.tile.x > ray.end.tile.x);
   assert(current.x > ray.end.x);
 
-  unsigned tile_x = current.tile_x;
-  if (current.remainder_x == 0) {
+  unsigned tile_x = current.tile.x;
+  if (current.remainder.x == 0) {
     --tile_x;
-    if (tile_x == ray.end.tile_x)
+    if (tile_x == ray.end.tile.x)
       return ray.end;
   }
 
-  int x = tile_x * ray.tile_width;
+  int x = tile_x * ray.tile_size.x;
   int y = YAtX(ray, x);
   assert(y >= 0);
 
   return GridLocation(RasterLocation(x, y),
-                      ray.tile_width, ray.tile_height,
+                      ray.tile_size,
                       IndexAtX(ray, x));
 }
 
-gcc_pure
-static GridLocation
+static constexpr GridLocation
 NextHorizontalGridIntersection(const GridRay &ray,
                                const GridLocation &current) noexcept
 {
-  if (ray.delta_x > 0)
+  if (ray.delta.x > 0)
     return NextRightGridIntersection(ray, current);
-  else if (ray.delta_x < 0)
+  else if (ray.delta.x < 0)
     return NextLeftGridIntersection(ray, current);
   else
     return ray.end;
 }
 
-gcc_pure
-static int
+static constexpr int
 ScaleY(const GridRay &ray, int y, int range) noexcept
 {
-  assert(ray.delta_y != 0);
+  assert(ray.delta.y != 0);
 
-  return (int64_t)(y - (int)ray.start.y) * (int64_t)range / ray.delta_y;
+  return (int64_t)(y - (int)ray.start.y) * (int64_t)range / ray.delta.y;
 }
 
-gcc_pure
-static int
+static constexpr int
 XAtY(const GridRay &ray, int y) noexcept
 {
-  assert(ray.delta_y != 0);
+  assert(ray.delta.y != 0);
 
-  return (int)ray.start.x + ScaleY(ray, y, ray.delta_x);
+  return (int)ray.start.x + ScaleY(ray, y, ray.delta.x);
 }
 
-gcc_pure
-static unsigned
+static constexpr unsigned
 IndexAtY(const GridRay &ray, int y) noexcept
 {
-  assert(ray.delta_y != 0);
+  assert(ray.delta.y != 0);
 
   return ScaleY(ray, y, ray.size);
 }
 
-gcc_pure
-static GridLocation
+static constexpr GridLocation
 NextBottomGridIntersection(const GridRay &ray,
                            const GridLocation &current) noexcept
 {
-  assert(ray.delta_y > 0);
+  assert(ray.delta.y > 0);
 
-  if (current.tile_y == ray.end.tile_y)
+  if (current.tile.y == ray.end.tile.y)
     return ray.end;
 
-  assert(current.tile_y < ray.end.tile_y);
+  assert(current.tile.y < ray.end.tile.y);
   assert(current.y < ray.end.y);
 
-  int y = (current.tile_y + 1) * ray.tile_height;
+  int y = (current.tile.y + 1) * ray.tile_size.y;
   int x = XAtY(ray, y);
   assert(x >= 0);
 
   return GridLocation(RasterLocation(x, y),
-                      ray.tile_width, ray.tile_height,
+                      ray.tile_size,
                       IndexAtY(ray, y));
 }
 
-gcc_pure
-static GridLocation
+static constexpr GridLocation
 NextTopGridIntersection(const GridRay &ray, GridLocation current) noexcept
 {
-  assert(ray.delta_y < 0);
+  assert(ray.delta.y < 0);
 
-  if (current.tile_y == ray.end.tile_y)
+  if (current.tile.y == ray.end.tile.y)
     return ray.end;
 
-  assert(current.tile_y > ray.end.tile_y);
+  assert(current.tile.y > ray.end.tile.y);
   assert(current.y > ray.end.y);
 
-  unsigned tile_y = current.tile_y;
-  if (current.remainder_y == 0) {
+  unsigned tile_y = current.tile.y;
+  if (current.remainder.y == 0) {
     --tile_y;
-    if (tile_y == ray.end.tile_y)
+    if (tile_y == ray.end.tile.y)
       return ray.end;
   }
 
-  int y = tile_y * ray.tile_height;
+  int y = tile_y * ray.tile_size.y;
   int x = XAtY(ray, y);
   assert(x >= 0);
 
   return GridLocation(RasterLocation(x, y),
-                      ray.tile_width, ray.tile_height,
+                      ray.tile_size,
                       IndexAtY(ray, y));
 }
 
-gcc_pure
-static GridLocation
+static constexpr GridLocation
 NextVerticalGridIntersection(const GridRay &ray,
                              const GridLocation &current) noexcept
 {
   assert(ray.start.index == 0);
   assert(ray.end.index == ray.size);
 
-  if (ray.delta_y > 0)
+  if (ray.delta.y > 0)
     return NextBottomGridIntersection(ray, current);
-  else if (ray.delta_y < 0)
+  else if (ray.delta.y < 0)
     return NextTopGridIntersection(ray, current);
   else
     return ray.end;
 }
 
-gcc_pure
-static GridLocation
+static constexpr GridLocation
 NextGridIntersection(const GridRay &ray,
                      const GridLocation &current) noexcept
 {
@@ -254,8 +267,7 @@ NextGridIntersection(const GridRay &ray,
   GridLocation h = NextHorizontalGridIntersection(ray, current);
   GridLocation v = NextVerticalGridIntersection(ray, current);
 
-  return abs((int)(h.x - ray.start.x)) + abs((int)(h.y - ray.start.y)) <
-    abs((int)(v.x - ray.start.x)) + abs((int)(v.y - ray.start.y))
+  return ManhattanDistance(h, ray.start) < ManhattanDistance(v, ray.start)
     ? h : v;
 }
 
@@ -270,44 +282,42 @@ RasterTileCache::ScanTileLine(GridLocation start, GridLocation end,
   if (start.index == end.index)
     return;
 
-  if (start.tile_x < end.tile_x) {
-    assert(end.tile_x == start.tile_x + 1);
-    assert(end.remainder_x == 0);
+  if (start.tile.x < end.tile.x) {
+    assert(end.tile.x == start.tile.x + 1);
+    assert(end.remainder.x == 0);
 
     --end.x;
-  } else if (start.tile_x > end.tile_x) {
-    assert(start.tile_x == end.tile_x + 1);
-    assert(start.remainder_x == 0);
+  } else if (start.tile.x > end.tile.x) {
+    assert(start.tile.x == end.tile.x + 1);
+    assert(start.remainder.x == 0);
 
     --start.x;
-    --start.tile_x;
+    --start.tile.x;
   }
 
-  if (start.tile_y < end.tile_y) {
-    assert(end.tile_y == start.tile_y + 1);
-    assert(end.remainder_y == 0);
+  if (start.tile.y < end.tile.y) {
+    assert(end.tile.y == start.tile.y + 1);
+    assert(end.remainder.y == 0);
 
     --end.y;
-  } else if (start.tile_y > end.tile_y) {
-    assert(start.tile_y == end.tile_y + 1);
-    assert(start.remainder_y == 0);
+  } else if (start.tile.y > end.tile.y) {
+    assert(start.tile.y == end.tile.y + 1);
+    assert(start.remainder.y == 0);
 
     --start.y;
-    --start.tile_y;
+    --start.tile.y;
   }
 
-  const RasterTile &tile = tiles.Get(start.tile_x, start.tile_y);
-  if (tile.IsEnabled())
-    tile.ScanLine(start.x, start.y, end.x, end.y,
+  const RasterTile &tile = tiles.Get(start.tile.x, start.tile.y);
+  if (tile.IsLoaded())
+    tile.ScanLine(start, end,
                   buffer + start.index, end.index - start.index,
                   interpolate);
   else
     /* need range checking in the overview buffer because its size may
        be rounded down, and then the "fine" location may exceed its
        bounds */
-    overview.ScanLineChecked(start.x >> OVERVIEW_BITS,
-                             start.y >> OVERVIEW_BITS,
-                             end.x >> OVERVIEW_BITS, end.y >> OVERVIEW_BITS,
+    overview.ScanLineChecked(start >> OVERVIEW_BITS, end >> OVERVIEW_BITS,
                              buffer + start.index, end.index - start.index,
                              interpolate);
 }
@@ -318,14 +328,13 @@ RasterTileCache::ScanLine(const RasterLocation _start,
                           TerrainHeight *buffer, unsigned size,
                           bool interpolate) const noexcept
 {
-  assert(_start.x < GetFineWidth());
-  assert(_start.y < GetFineHeight());
-  assert(_end.x < GetFineWidth());
-  assert(_end.y < GetFineHeight());
+  assert(_start.x < GetFineSize().x);
+  assert(_start.y < GetFineSize().y);
+  assert(_end.x < GetFineSize().x);
+  assert(_end.y < GetFineSize().y);
   assert(size >= 2);
 
-  const GridRay ray(GetFineTileWidth(), GetFineTileHeight(),
-                    _start, _end, size);
+  const GridRay ray(GetFineTileSize(), _start, _end, size);
   assert(ray.size == size);
   assert(ray.start.index == 0);
   assert(ray.end.index == size);

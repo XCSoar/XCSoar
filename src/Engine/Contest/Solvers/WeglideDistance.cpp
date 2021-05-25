@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2021 The XCSoar Project
@@ -19,27 +18,9 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
-#include "LogFile.hpp"
-#include "util/Compiler.h"
+#include "WeglideDistance.hpp"
 
-#include <cassert>
-#include <stdlib.h>
-#include <android/log.h>
-
-/**
- * Override bionic's assertion failure handler and print the message
- * to the Android log instead of stderr.
- */
-gcc_noreturn
-void
-__assert2(const char *file, int line, const char *func, const char *failedexpr)
-{
-  __android_log_print(ANDROID_LOG_FATAL, "XCSoar",
-                      "assertion \"%s\" failed: file \"%s\", line %d, function \"%s\"",
-                      failedexpr, file, line, func);
-
-  abort();
-  /* unreachable */
-}
+WeglideDistance::WeglideDistance(const Trace &_trace) noexcept
+  :ContestDijkstra(_trace, true, 6, 1000) {}

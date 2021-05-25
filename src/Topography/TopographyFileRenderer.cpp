@@ -28,7 +28,7 @@ Copyright_License {
 #include "Renderer/LabelBlock.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "ui/canvas/Canvas.hpp"
-#include "Screen/Features.hpp"
+#include "ui/canvas/Features.hpp"
 #include "Screen/Layout.hpp"
 #include "shapelib/mapserver.h"
 #include "util/AllocatedArray.hxx"

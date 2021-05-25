@@ -32,10 +32,10 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
+#include "ui/canvas/Features.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
-#include "Screen/Features.hpp"
 
 enum ControlIndex {
   AirspaceDisplay,
@@ -102,7 +102,7 @@ public:
 
 private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 };
 
 void
@@ -148,7 +148,7 @@ AirspaceConfigPanel::Hide() noexcept
 }
 
 void
-AirspaceConfigPanel::OnModified(DataField &df)
+AirspaceConfigPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(AirspaceDisplay, df)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;

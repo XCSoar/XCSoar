@@ -30,7 +30,7 @@ Copyright_License {
 #include <glm/gtc/matrix_transform.hpp>
 
 glm::mat4
-ToGLM(const WindowProjection &projection, const GeoPoint &reference)
+ToGLM(const WindowProjection &projection, const GeoPoint &reference) noexcept
 {
   auto angle = projection.GetScreenAngle().Radians();
   auto scale = projection.GetScale();

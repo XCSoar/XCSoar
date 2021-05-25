@@ -4,8 +4,8 @@ import re
 from build.autotools import AutotoolsProject
 
 class FreeTypeProject(AutotoolsProject):
-    def configure(self, toolchain):
-        build = AutotoolsProject.configure(self, toolchain)
+    def configure(self, *args, **kwargs):
+        build = AutotoolsProject.configure(self, *args, **kwargs)
 
         comment_re = re.compile(r'^\w+_MODULES\s*\+=\s*(?:type1|cff|cid|pfr|type42|winfonts|pcf|bdf|lzw|bzip2|psaux|psnames)\s*$')
         modules_cfg = os.path.join(build, 'modules.cfg')

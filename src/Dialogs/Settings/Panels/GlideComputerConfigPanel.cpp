@@ -63,7 +63,7 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent,
 
   static constexpr StaticEnumChoice auto_mc_list[] = {
     { (unsigned)TaskBehaviour::AutoMCMode::FINALGLIDE, N_("Final glide"),
-      N_("Adjusts MC for fastest arrival.  For OLC sprint tasks, the MacCready is adjusted in "
+      N_("Adjusts MC for fastest arrival.  For contest sprint tasks, the MacCready is adjusted in "
           "order to cover the greatest distance in the remaining time and reach the finish height.") },
     { (unsigned)TaskBehaviour::AutoMCMode::CLIMBAVERAGE, N_("Trending average climb"),
       N_("Sets MC to the trending average climb rate based on all climbs.") },

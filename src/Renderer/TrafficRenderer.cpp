@@ -34,7 +34,7 @@
 void
 TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
                       const FlarmTraffic &traffic, const Angle angle,
-                      const FlarmColor color, const PixelPoint pt)
+                      const FlarmColor color, const PixelPoint pt) noexcept
 {
   // Create point array that will form that arrow polygon
   BulkPixelPoint arrow[] = {
@@ -42,7 +42,6 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
     { 0, -8 },
     { 4, 6 },
     { 0, 3 },
-    { -4, 6 },
   };
 
   // Select brush depending on AlarmLevel
@@ -56,7 +55,13 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
     canvas.Select(traffic_look.alarm_brush);
     break;
   case FlarmTraffic::AlarmType::NONE:
-    canvas.Select(traffic_look.safe_brush);
+    if (traffic.relative_altitude > (const RoughAltitude)50) {
+      canvas.Select(traffic_look.safe_above_brush);
+    } else if (traffic.relative_altitude > (const RoughAltitude)-50) {
+      canvas.Select(traffic_look.warning_in_altitude_range_brush);
+    } else {
+      canvas.Select(traffic_look.safe_below_brush);
+    }
     break;
   }
 
@@ -94,7 +99,8 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
 
 void
 TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
-                      const GliderLinkTraffic &traffic, const Angle angle, const PixelPoint pt)
+                      const GliderLinkTraffic &traffic,
+                      const Angle angle, const PixelPoint pt) noexcept
 {
   // Create point array that will form that arrow polygon
   BulkPixelPoint arrow[] = {
@@ -102,10 +108,9 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
     { 0, -8 },
     { 4, 6 },
     { 0, 3 },
-    { -4, 6 },
   };
 
-  canvas.Select(traffic_look.safe_brush);
+  canvas.Select(traffic_look.safe_above_brush);
 
   // Select black pen
   if (IsDithered())

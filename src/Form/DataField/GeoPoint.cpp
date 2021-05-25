@@ -26,7 +26,7 @@ Copyright_License {
 #include "util/Macros.hpp"
 
 void
-GeoPointDataField::ModifyValue(GeoPoint _value)
+GeoPointDataField::ModifyValue(GeoPoint _value) noexcept
 {
   if (_value == value)
     return;
@@ -36,7 +36,7 @@ GeoPointDataField::ModifyValue(GeoPoint _value)
 }
 
 const TCHAR *
-GeoPointDataField::GetAsString() const
+GeoPointDataField::GetAsString() const noexcept
 {
   if (!value.IsValid())
     return _T("");

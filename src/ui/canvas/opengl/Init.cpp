@@ -67,51 +67,6 @@ OpenGL::Initialise()
 }
 
 /**
- * Does the current GLES context support textures with dimensions
- * other than power-of-two?
- */
-gcc_pure
-static bool
-SupportsNonPowerOfTwoTexturesGLES() noexcept
-{
-  /* the Dell Streak Mini announces this extension */
-  if (OpenGL::IsExtensionSupported("GL_APPLE_texture_2D_limited_npot"))
-    return true;
-
-  /* this extension is announced by all modern Android 2.2 handsets,
-     however the HTC Desire HD (Adreno 205 GPU) is unable to create
-     such textures - not a reliable indicator, it seems */
-  if (OpenGL::IsExtensionSupported("GL_OES_texture_npot")) {
-    /* flush previous errors */
-    while (glGetError() != GL_NO_ERROR) {}
-
-    /* attempt to create an odd texture */
-    GLuint id;
-    glGenTextures(1, &id);
-    glBindTexture(GL_TEXTURE_2D, id);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 11, 11, 0,
-                 GL_RGB, GL_UNSIGNED_SHORT_5_6_5, nullptr);
-    glDeleteTextures(1, &id);
-
-    /* see if there is a complaint */
-    return glGetError() == GL_NO_ERROR;
-  }
-
-  return false;
-}
-
-#ifdef HAVE_OES_DRAW_TEXTURE
-
-gcc_pure
-static bool
-CheckOESDrawTexture() noexcept
-{
-  return OpenGL::IsExtensionSupported("GL_OES_draw_texture");
-}
-
-#endif
-
-/**
  * Does the current OpenGL context support textures with dimensions
  * other than power-of-two?
  */
@@ -119,8 +74,9 @@ gcc_pure
 static bool
 SupportsNonPowerOfTwoTextures() noexcept
 {
-  return OpenGL::IsExtensionSupported("GL_ARB_texture_non_power_of_two") ||
-    (HaveGLES() && SupportsNonPowerOfTwoTexturesGLES());
+  return OpenGL::IsExtensionSupported(HaveGLES()
+                                      ? "GL_OES_texture_npot"
+                                      : "GL_ARB_texture_non_power_of_two");
 }
 
 /**
@@ -137,11 +93,7 @@ CheckDepthStencil() noexcept
     return GL_DEPTH24_STENCIL8_OES;
 
   /* not supported */
-#ifdef HAVE_GLES2
   return GL_NONE;
-#else
-  return GL_NONE_OES;
-#endif
 
 #else
 
@@ -171,19 +123,11 @@ CheckStencil() noexcept
 #endif
 
   if (OpenGL::IsExtensionSupported("GL_OES_stencil8")) {
-#ifdef HAVE_GLES2
     return GL_STENCIL_INDEX8;
-#else
-    return GL_STENCIL_INDEX8_OES;
-#endif
   }
 
   /* not supported */
-#ifdef HAVE_GLES2
   return GL_NONE;
-#else
-  return GL_NONE_OES;
-#endif
 
 #else
 
@@ -207,10 +151,6 @@ void
 OpenGL::SetupContext()
 {
   texture_non_power_of_two = SupportsNonPowerOfTwoTextures();
-
-#ifdef HAVE_OES_DRAW_TEXTURE
-  oes_draw_texture = CheckOESDrawTexture();
-#endif
 
 #ifdef ANDROID
   native_view->SetTexturePowerOfTwo(texture_non_power_of_two);

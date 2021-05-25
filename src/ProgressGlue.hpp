@@ -29,27 +29,29 @@ Copyright_License {
 struct PixelRect;
 
 namespace ProgressGlue {
-  /**
-   * Creates or updates the ProgressWindow
-   * @param text the text inside the progress bar
-   */
-  void Create(const TCHAR *text);
 
-  void Move(const PixelRect &rc);
+/**
+ * Creates or updates the ProgressWindow
+ * @param text the text inside the progress bar
+ */
+void Create(const TCHAR *text) noexcept;
 
-  /**
-   * Closes the ProgressWindow
-   */
-  void Close();
+void Move(const PixelRect &rc) noexcept;
 
-  /**
-   * Updates the ProgressWindow to go up one step
-   */
-  void Step();
+/**
+ * Closes the ProgressWindow
+ */
+void Close() noexcept;
 
-  void SetValue(unsigned value);
-  void SetRange(unsigned value);
-  void SetStep(int step);
-}
+/**
+ * Updates the ProgressWindow to go up one step
+ */
+void Step() noexcept;
+
+void SetValue(unsigned value) noexcept;
+void SetRange(unsigned value) noexcept;
+void SetStep(int step) noexcept;
+
+} // namespace ProgressGlue
 
 #endif

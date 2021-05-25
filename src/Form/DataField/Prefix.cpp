@@ -26,7 +26,7 @@ Copyright_License {
 #include "util/StringCompare.hxx"
 
 const TCHAR *
-PrefixDataField::GetAsDisplayString() const
+PrefixDataField::GetAsDisplayString() const noexcept
 {
   const TCHAR *s = DataFieldString::GetAsDisplayString();
   if (StringIsEmpty(s))
@@ -35,7 +35,7 @@ PrefixDataField::GetAsDisplayString() const
 }
 
 void
-PrefixDataField::Inc()
+PrefixDataField::Inc() noexcept
 {
   const TCHAR *chars = GetAllowedCharacters();
   if (StringIsEmpty(chars))
@@ -57,7 +57,7 @@ PrefixDataField::Inc()
 }
 
 void
-PrefixDataField::Dec()
+PrefixDataField::Dec() noexcept
 {
   const TCHAR *chars = GetAllowedCharacters();
   if (StringIsEmpty(chars))

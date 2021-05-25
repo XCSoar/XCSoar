@@ -27,7 +27,6 @@ Copyright_License {
 #include <type_traits>
 
 #include <cstdint>
-#include <math.h>
 
 enum class TerrainType : uint8_t {
   UNKNOWN, GROUND, WATER

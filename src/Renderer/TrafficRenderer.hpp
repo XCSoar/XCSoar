@@ -38,11 +38,11 @@ namespace TrafficRenderer
 void
 Draw(Canvas &canvas, const TrafficLook &traffic_look,
      const FlarmTraffic &traffic, Angle angle,
-     FlarmColor color, PixelPoint pt);
+     FlarmColor color, PixelPoint pt) noexcept;
 
 void
 Draw(Canvas &canvas, const TrafficLook &traffic_look,
-     const GliderLinkTraffic &traffic, Angle angle, PixelPoint pt);
+     const GliderLinkTraffic &traffic, Angle angle, PixelPoint pt) noexcept;
 }
 
 #endif

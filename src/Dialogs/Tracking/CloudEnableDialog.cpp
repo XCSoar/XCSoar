@@ -35,7 +35,7 @@ Copyright_License {
 #include "ui/window/SingleWindow.hpp"
 
 void
-CloudEnableDialog()
+CloudEnableDialog() noexcept
 {
 #ifdef HAVE_SKYLINES_TRACKING
   if (!IsAndroid() && !IsDebug())

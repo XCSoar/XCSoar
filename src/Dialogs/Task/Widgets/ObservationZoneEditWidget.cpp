@@ -29,7 +29,7 @@ ObservationZoneEditWidget::ObservationZoneEditWidget(ObservationZone &_oz)
    oz(_oz), listener(nullptr) {}
 
 void
-ObservationZoneEditWidget::OnModified(DataField &df)
+ObservationZoneEditWidget::OnModified(DataField &df) noexcept
 {
   if (listener != nullptr)
     listener->OnModified(*this);

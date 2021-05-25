@@ -49,7 +49,7 @@ class PageLayoutEditWidget final
 public:
   class Listener {
   public:
-    virtual void OnModified(const PageLayout &new_value) = 0;
+    virtual void OnModified(const PageLayout &new_value) noexcept = 0;
   };
 
 private:
@@ -77,7 +77,7 @@ public:
 
 private:
   /* virtual methods from class DataFieldListener */
-  virtual void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 };
 
 class PageListWidget
@@ -181,7 +181,7 @@ public:
   void OnActivateItem(unsigned index) noexcept override;
 
   /* virtual methods from class PageLayoutEditWidget::Listener */
-  virtual void OnModified(const PageLayout &new_value) override;
+  void OnModified(const PageLayout &new_value) noexcept override;
 };
 
 void
@@ -269,7 +269,7 @@ PageLayoutEditWidget::SetValue(const PageLayout &_value)
 }
 
 void
-PageLayoutEditWidget::OnModified(DataField &df)
+PageLayoutEditWidget::OnModified(DataField &df) noexcept
 {
   if (&df == &GetDataField(MAIN)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
@@ -426,7 +426,7 @@ PageListWidget::OnActivateItem(unsigned idx) noexcept
 }
 
 void
-PageListWidget::OnModified(const PageLayout &new_value)
+PageListWidget::OnModified(const PageLayout &new_value) noexcept
 {
   unsigned i = GetList().GetCursorIndex();
   assert(i < PageSettings::MAX_PAGES);

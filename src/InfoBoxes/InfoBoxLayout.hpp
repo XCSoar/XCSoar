@@ -28,38 +28,40 @@ Copyright_License {
 #include "ui/dim/Rect.hpp"
 #include "util/Compiler.h"
 
-namespace InfoBoxLayout
-{
-  struct Layout {
-    InfoBoxSettings::Geometry geometry;
+namespace InfoBoxLayout {
 
-    bool landscape;
+struct Layout {
+  InfoBoxSettings::Geometry geometry;
 
-    PixelSize control_size;
+  bool landscape;
 
-    unsigned count;
-    PixelRect positions[InfoBoxSettings::Panel::MAX_CONTENTS];
+  PixelSize control_size;
 
-    PixelRect vario;
+  unsigned count;
+  PixelRect positions[InfoBoxSettings::Panel::MAX_CONTENTS];
 
-    PixelRect remaining;
+  PixelRect vario;
 
-    bool HasVario() const {
-      return vario.right > vario.left && vario.bottom > vario.top;
-    }
+  PixelRect remaining;
 
-    void ClearVario() {
-      vario.left = vario.top = vario.right = vario.bottom = 0;
-    }
-  };
+  constexpr bool HasVario() const noexcept {
+    return vario.right > vario.left && vario.bottom > vario.top;
+  }
 
-  gcc_pure
-  Layout
-  Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry);
-
-  gcc_const
-  int
-  GetBorder(InfoBoxSettings::Geometry geometry, bool landscape, unsigned i);
+  void ClearVario() noexcept {
+    vario.left = vario.top = vario.right = vario.bottom = 0;
+  }
 };
+
+gcc_pure
+Layout
+Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry) noexcept;
+
+gcc_const
+int
+GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
+          unsigned i) noexcept;
+
+} // namespace InfoBoxLayout
 
 #endif

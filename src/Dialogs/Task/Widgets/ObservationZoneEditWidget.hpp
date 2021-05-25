@@ -36,7 +36,7 @@ class ObservationZoneEditWidget
 
 public:
   struct Listener {
-    virtual void OnModified(ObservationZoneEditWidget &widget) = 0;
+    virtual void OnModified(ObservationZoneEditWidget &widget) noexcept = 0;
   };
 
 private:
@@ -65,7 +65,7 @@ protected:
 
 private:
   /* virtual methods from DataFieldListener */
-  void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 };
 
 #endif

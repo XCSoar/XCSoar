@@ -83,13 +83,22 @@ public:
   bool UpdateTiles(const GeoPoint &location, double radius);
 
 private:
+  /**
+   * Throws on error.
+   */
   bool LoadCache(FileCache &cache, Path path);
 
+  /**
+   * Throws on error.
+   */
   bool LoadCache(FileCache *cache, Path path) {
     return cache != nullptr && LoadCache(*cache, path);
   }
 
-  bool SaveCache(FileCache &cache, Path path) const;
+  /**
+   * Throws on error.
+   */
+  void SaveCache(FileCache &cache, Path path) const;
 
   bool Load(Path path, FileCache *cache,
             OperationEnvironment &operation);

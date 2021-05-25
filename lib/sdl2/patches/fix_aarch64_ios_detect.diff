@@ -11,8 +11,8 @@ diff -Nuar SDL2-2.0.8.orig/configure SDL2-2.0.8/configure
  
          CheckVisibilityHidden
 diff -Nuar SDL2-2.0.8.orig/configure.in SDL2-2.0.8/configure.in
---- SDL2-2.0.8.orig/configure.in	2018-03-01 17:34:41.000000000 +0100
-+++ SDL2-2.0.8/configure.in	2018-03-17 17:32:09.000000000 +0100
+--- SDL2-2.0.8.orig/configure.ac	2018-03-01 17:34:41.000000000 +0100
++++ SDL2-2.0.8/configure.ac	2018-03-17 17:32:09.000000000 +0100
 @@ -3673,7 +3673,7 @@
          #  other spins, like x86-64, use a more standard "libstdc++.so.*"
          AC_CHECK_FILE("/boot/system/lib/libstdc++.r4.so", EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lstdc++.r4", EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lstdc++")

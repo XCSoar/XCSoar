@@ -2,8 +2,9 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - ./ide/docker/
-      - ./ide/provisioning/
+      - 'ide/docker/**'
+      - 'ide/provisioning/**'
+      - '.github/workflows/build-container.yml'
 
 jobs:
  xcsoar-docker-env:
@@ -28,9 +29,11 @@ jobs:
       - name: build and push
         uses: docker/build-push-action@v2
         with:
-          push: true
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
           context: ./ide
           file: ./ide/docker/Dockerfile
           tags: ghcr.io/${{ steps.string.outputs.lowercase }}/xcsoar-build:latest
+          cache-from: type=registry,ref=ghcr.io/${{ steps.string.outputs.lowercase }}/xcsoar-build:latest
+          cache-to: type=inline
           secrets: |
             GIT_AUTH_TOKEN=${{ github.token }}

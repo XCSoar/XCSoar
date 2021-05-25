@@ -31,33 +31,28 @@ Copyright_License {
 void
 RasterMap::UpdateProjection()
 {
-  projection.Set(GetBounds(),
-                 raster_tile_cache.GetFineWidth(),
-                 raster_tile_cache.GetFineHeight());
+  projection.Set(GetBounds(), raster_tile_cache.GetFineSize());
 }
 
-bool
-RasterMap::LoadCache(FILE *file)
+void
+RasterMap::LoadCache(BufferedReader &r)
 {
-  bool success = raster_tile_cache.LoadCache(file);
-  if (success)
-    UpdateProjection();
-
-  return success;
+  raster_tile_cache.LoadCache(r);
+  UpdateProjection();
 }
 
 TerrainHeight
 RasterMap::GetHeight(const GeoPoint &location) const
 {
   const auto pt = projection.ProjectCoarse(location);
-  return raster_tile_cache.GetHeight(pt.x, pt.y);
+  return raster_tile_cache.GetHeight(pt);
 }
 
 TerrainHeight
 RasterMap::GetInterpolatedHeight(const GeoPoint &location) const
 {
   const auto pt = projection.ProjectFine(location);
-  return raster_tile_cache.GetInterpolatedHeight(pt.x, pt.y);
+  return raster_tile_cache.GetInterpolatedHeight(pt);
 }
 
 void
@@ -113,20 +108,19 @@ RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
 
   /* now scan the middle part which is within the map */
 
-  const unsigned max_x = raster_tile_cache.GetFineWidth();
-  const unsigned max_y = raster_tile_cache.GetFineHeight();
+  const auto fine_size = raster_tile_cache.GetFineSize();
 
   RasterLocation raster_start = projection.ProjectFine(clipped_start);
-  if (raster_start.x >= max_x)
-    raster_start.x = max_x - 1;
-  if (raster_start.y >= max_y)
-    raster_start.y = max_y - 1;
+  if (raster_start.x >= fine_size.x)
+    raster_start.x = fine_size.x - 1;
+  if (raster_start.y >= fine_size.y)
+    raster_start.y = fine_size.y - 1;
 
   RasterLocation raster_end = projection.ProjectFine(clipped_end);
-  if (raster_end.x >= max_x)
-    raster_end.x = max_x - 1;
-  if (raster_end.y >= max_y)
-    raster_end.y = max_y - 1;
+  if (raster_end.x >= fine_size.x)
+    raster_end.x = fine_size.x - 1;
+  if (raster_end.y >= fine_size.y)
+    raster_end.y = fine_size.y - 1;
 
   raster_tile_cache.ScanLine(raster_start, raster_end,
                              buffer + clipped_start_offset,

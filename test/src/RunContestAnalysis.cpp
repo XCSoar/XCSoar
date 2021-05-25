@@ -60,9 +60,11 @@ static ContestManager sis_at(Contest::SIS_AT,
                              full_trace, triangle_trace, sprint_trace);
 static ContestManager olc_netcoupe(Contest::NET_COUPE,
                                    full_trace, triangle_trace, sprint_trace);
+static ContestManager weglide_free(Contest::WEGLIDE_FREE,
+                               full_trace, triangle_trace, sprint_trace);
 
 static int
-TestOLC(DebugReplay &replay)
+TestContest(DebugReplay &replay)
 {
   bool released = false;
 
@@ -102,6 +104,7 @@ TestOLC(DebugReplay &replay)
   xcontest.SolveExhaustive();
   sis_at.SolveExhaustive();
   olc_netcoupe.SolveExhaustive();
+  weglide_free.SolveExhaustive();
 
   putchar('\n');
 
@@ -139,6 +142,16 @@ TestOLC(DebugReplay &replay)
   std::cout << "netcoupe\n";
   PrintHelper::print(olc_netcoupe.GetStats().GetResult());
 
+  std::cout << "weglide\n";
+  std::cout << "# distance\n";
+  PrintHelper::print(weglide_free.GetStats().GetResult(0));
+  std::cout << "# fai\n";
+  PrintHelper::print(weglide_free.GetStats().GetResult(1));
+  std::cout << "# out and return\n";
+  PrintHelper::print(weglide_free.GetStats().GetResult(2));
+  std::cout << "# free\n";
+  PrintHelper::print(weglide_free.GetStats().GetResult(3));
+
   olc_classic.Reset();
   olc_fai.Reset();
   olc_sprint.Reset();
@@ -146,6 +159,7 @@ TestOLC(DebugReplay &replay)
   olc_plus.Reset();
   dmst.Reset();
   olc_netcoupe.Reset();
+  weglide_free.Reset();
   full_trace.clear();
   sprint_trace.clear();
 
@@ -162,7 +176,7 @@ int main(int argc, char **argv)
 
   args.ExpectEnd();
 
-  int result = TestOLC(*replay);
+  int result = TestContest(*replay);
   delete replay;
   return result;
 }

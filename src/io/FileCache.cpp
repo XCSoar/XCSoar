@@ -22,17 +22,22 @@ Copyright_License {
 */
 
 #include "FileCache.hpp"
+#include "FileReader.hxx"
+#include "FileOutputStream.hxx"
 #include "system/FileUtil.hpp"
 #include "util/Compiler.h"
 
 #include <cstdint>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
+#include <stdexcept>
 
-#ifndef HAVE_POSIX
-#include <windows.h>
+#include <string.h>
+
+#ifdef HAVE_POSIX
+#   include <sys/types.h>
+#   include <sys/stat.h>
+#   include <unistd.h>
+#else
+#   include <windows.h>
 #endif
 
 static constexpr unsigned FILE_CACHE_MAGIC = 0xab352f8a;
@@ -103,8 +108,8 @@ FileCache::Flush(const TCHAR *name)
   File::Delete(MakeCachePath(name));
 }
 
-FILE *
-FileCache::Load(const TCHAR *name, Path original_path)
+std::unique_ptr<Reader>
+FileCache::Load(const TCHAR *name, Path original_path) noexcept
 {
   FileInfo original_info;
   if (!GetRegularFileInfo(original_path, original_info))
@@ -124,65 +129,41 @@ FileCache::Load(const TCHAR *name, Path original_path)
     return nullptr;
   }
 
-  FILE *file = _tfopen(path.c_str(), _T("rb"));
-  if (file == nullptr)
-    return nullptr;
+  try {
+    auto r = std::make_unique<FileReader>(path);
 
-  unsigned magic;
-  struct FileInfo old_info;
-  if (fread(&magic, sizeof(magic), 1, file) != 1 ||
-      magic != FILE_CACHE_MAGIC ||
-      fread(&old_info, sizeof(old_info), 1, file) != 1 ||
-      old_info != original_info) {
-    fclose(file);
-    File::Delete(path);
-    return nullptr;
+    unsigned magic;
+    struct FileInfo old_info;
+
+    r->Read(&magic, sizeof(magic));
+    r->Read(&old_info, sizeof(old_info));
+
+    if (magic == FILE_CACHE_MAGIC &&
+        old_info == original_info)
+      return r;
+  } catch (...) {
   }
 
-  return file;
+  File::Delete(path);
+  return nullptr;
 }
 
-FILE *
+std::unique_ptr<FileOutputStream>
 FileCache::Save(const TCHAR *name, Path original_path)
 {
   FileInfo original_info;
   if (!GetRegularFileInfo(original_path, original_info))
-    return nullptr;
+    // TODO: proper error message (GetRegularFileInfo() should throw)
+    throw std::runtime_error("Cannot access cached file");
 
   Directory::Create(cache_path);
 
   const auto path = MakeCachePath(name);
 
   File::Delete(path);
-  FILE *file = _tfopen(path.c_str(), _T("wb"));
-  if (file == nullptr)
-    return nullptr;
 
-  if (fwrite(&FILE_CACHE_MAGIC, sizeof(FILE_CACHE_MAGIC), 1, file) != 1 ||
-      fwrite(&original_info, sizeof(original_info), 1, file) != 1) {
-    fclose(file);
-    File::Delete(path);
-    return nullptr;
-  }
-
-  return file;
-}
-
-bool
-FileCache::Commit(const TCHAR *name, FILE *file)
-{
-  if (fclose(file) != 0) {
-    File::Delete(MakeCachePath(name));
-    return false;
-  }
-
-  return true;
-}
-
-void
-FileCache::Cancel(const TCHAR *name, FILE *file)
-{
-  fclose(file);
-
-  File::Delete(MakeCachePath(name));
+  auto os = std::make_unique<FileOutputStream>(path);
+  os->Write(&FILE_CACHE_MAGIC, sizeof(FILE_CACHE_MAGIC));
+  os->Write(&original_info, sizeof(original_info));
+  return os;
 }

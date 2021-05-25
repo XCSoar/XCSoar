@@ -39,6 +39,7 @@ Copyright_License {
 #include <stdio.h>
 #include <string.h>
 #include <cassert>
+#include <iterator>
 
 #ifdef MORE_USAGE
 extern void PrintMoreUsage();

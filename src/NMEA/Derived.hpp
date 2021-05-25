@@ -45,7 +45,8 @@ Copyright_License {
 #include "Atmosphere/Pressure.hpp"
 #include "Engine/Route/Route.hpp"
 #include "Computer/WaveResult.hpp"
-#include "util/TypeTraits.hpp"
+
+#include <type_traits>
 
 /** Derived terrain altitude information, including glide range */
 struct TerrainInfo
@@ -288,7 +289,7 @@ struct DerivedInfo:
   double CalculateWorkingFraction(const double h, const double safety_height) const;
 };
 
-static_assert(is_trivial_ndebug<DerivedInfo>::value, "type is not trivial");
+static_assert(std::is_trivial_v<DerivedInfo>, "type is not trivial");
 
 #endif
 

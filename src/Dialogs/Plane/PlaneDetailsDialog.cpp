@@ -57,9 +57,9 @@ public:
     return plane;
   }
 
-  void UpdateCaption();
-  void UpdatePolarButton();
-  void PolarButtonClicked();
+  void UpdateCaption() noexcept;
+  void UpdatePolarButton() noexcept;
+  void PolarButtonClicked() noexcept;
 
   /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -67,11 +67,11 @@ public:
 
 private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 };
 
 void
-PlaneEditWidget::UpdateCaption()
+PlaneEditWidget::UpdateCaption() noexcept
 {
   if (dialog == nullptr)
     return;
@@ -82,7 +82,7 @@ PlaneEditWidget::UpdateCaption()
 }
 
 void
-PlaneEditWidget::UpdatePolarButton()
+PlaneEditWidget::UpdatePolarButton() noexcept
 {
   const TCHAR *caption = _("Polar");
   StaticString<64> buffer;
@@ -96,7 +96,7 @@ PlaneEditWidget::UpdatePolarButton()
 }
 
 void
-PlaneEditWidget::OnModified(DataField &df)
+PlaneEditWidget::OnModified(DataField &df) noexcept
 {
   if (IsDataField(REGISTRATION, df))
     UpdateCaption();
@@ -153,7 +153,7 @@ PlaneEditWidget::Save(bool &_changed) noexcept
 }
 
 inline void
-PlaneEditWidget::PolarButtonClicked()
+PlaneEditWidget::PolarButtonClicked() noexcept
 {
   bool changed = false;
   if (!Save(changed))

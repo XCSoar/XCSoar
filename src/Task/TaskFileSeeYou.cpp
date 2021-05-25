@@ -578,20 +578,18 @@ try {
       fact.Append(*pt, false);
   }
   return task;
-} catch (const std::runtime_error &e) {
+} catch (...) {
   return nullptr;
 }
 
-unsigned
-TaskFileSeeYou::Count() noexcept
-try {
-  // Reset internal task name memory
-  namesuffixes.clear();
+std::vector<tstring>
+TaskFileSeeYou::GetList() const
+{
+  std::vector<tstring> result;
 
   // Open the CUP file
   FileLineReader reader(path, Charset::AUTO);
 
-  unsigned count = 0;
   bool in_task_section = false;
   TCHAR *line;
   while ((line = reader.ReadLine()) != nullptr) {
@@ -599,34 +597,25 @@ try {
       // If the line starts with a string or "nothing" followed
       // by a comma it is a new task definition line
       if (line[0] == _T('\"') || line[0] == _T(',')) {
-        // If we still have space in the task name list
-        if (count < namesuffixes.capacity()) {
-          // If the task doesn't have a name inside the file
-          if (line[0] == _T(','))
-            namesuffixes.append(nullptr);
-          else {
-            // Ignore starting quote (")
+        // If the task doesn't have a name inside the file
+        if (line[0] == _T(','))
+          result.emplace_back();
+        else {
+          // Ignore starting quote (")
+          line++;
+
+          // Save pointer to first character
+          TCHAR *name = line;
+          // Skip characters until next quote (") or end of string
+          while (line[0] != _T('\"') && line[0] != _T('\0'))
             line++;
 
-            // Save pointer to first character
-            TCHAR *name = line;
-            // Skip characters until next quote (") or end of string
-            while (line[0] != _T('\"') && line[0] != _T('\0'))
-              line++;
+          // Replace quote (") by end of string (null)
+          line[0] = _T('\0');
 
-            // Replace quote (") by end of string (null)
-            line[0] = _T('\0');
-
-            // Append task name to the list
-            if (_tcslen(name) > 0)
-              namesuffixes.append(_tcsdup(name));
-            else
-              namesuffixes.append(nullptr);
-          }
+          // Append task name to the list
+          result.emplace_back(name);
         }
-
-        // Increase the task counter
-        count++;
       }
     } else if (StringIsEqualIgnoreCase(line, _T("-----Related Tasks-----"))) {
       // Found the marker -> all following lines are task lines
@@ -634,8 +623,5 @@ try {
     }
   }
 
-  // Return number of tasks found in the CUP file
-  return count;
-} catch (const std::runtime_error &e) {
-  return 0;
+  return result;
 }

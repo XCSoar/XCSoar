@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "ui/opengl/Features.hpp"
 #include "ui/opengl/SystemExt.hpp"
-#include "util/Compiler.h"
 
 /**
  * Support for OpenGL framebuffer objects (GL_*_framebuffer_object).
@@ -58,12 +57,6 @@ static constexpr GLenum DEPTH_STENCIL = GL_DEPTH_STENCIL_OES;
 #else
 #error No GL_DEPTH_STENCIL found
 #endif
-
-static inline bool
-Initialise() noexcept
-{
-  return true;
-}
 
 static inline void
 BindRenderbuffer(GLenum target, GLuint renderbuffer) noexcept

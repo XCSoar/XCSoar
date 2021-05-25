@@ -47,7 +47,7 @@ class WaypointEditWidget final : public RowFormWidget, DataFieldListener {
   bool modified;
 
 public:
-  WaypointEditWidget(const DialogLook &look, Waypoint _value)
+  WaypointEditWidget(const DialogLook &look, const Waypoint &_value) noexcept
     :RowFormWidget(look), value(_value), modified(false) {}
 
   const Waypoint &GetValue() const {
@@ -60,7 +60,7 @@ private:
   bool Save(bool &changed) noexcept override;
 
   /* virtual methods from DataFieldListener */
-  void OnModified(gcc_unused DataField &df) override {
+  void OnModified(gcc_unused DataField &df) noexcept override {
     modified = true;
   }
 };

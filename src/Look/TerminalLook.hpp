@@ -28,7 +28,8 @@ Copyright_License {
 #include "ui/canvas/Font.hpp"
 
 struct TerminalLook {
-  Color background_color, text_color;
+  static constexpr Color background_color = COLOR_BLACK;
+  static constexpr Color text_color = COLOR_WHITE;
 
   Font font;
 

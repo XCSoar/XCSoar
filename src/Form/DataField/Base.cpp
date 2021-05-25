@@ -29,7 +29,7 @@ Copyright_License {
 #include <math.h>
 
 DataField::DataField(Type _type, bool _supports_combolist,
-                     DataFieldListener *_listener)
+                     DataFieldListener *_listener) noexcept
   :listener(_listener),
    supports_combolist(_supports_combolist), type(_type),
    item_help_enabled(false)
@@ -37,52 +37,52 @@ DataField::DataField(Type _type, bool _supports_combolist,
 }
 
 void
-DataField::Modified()
+DataField::Modified() noexcept
 {
   if (listener != nullptr)
     listener->OnModified(*this);
 }
 
 void
-DataField::Inc()
+DataField::Inc() noexcept
 {
 }
 
 void
-DataField::Dec()
+DataField::Dec() noexcept
 {
 }
 
 int
-DataField::GetAsInteger() const
+DataField::GetAsInteger() const noexcept
 {
   return 0;
 }
 
 const TCHAR *
-DataField::GetAsString() const
+DataField::GetAsString() const noexcept
 {
   return nullptr;
 }
 
 const TCHAR *
-DataField::GetAsDisplayString() const
+DataField::GetAsDisplayString() const noexcept
 {
   return GetAsString();
 }
 
 void
-DataField::SetAsInteger(gcc_unused int value)
+DataField::SetAsInteger(gcc_unused int value) noexcept
 {
 }
 
 void
-DataField::SetAsString(gcc_unused const TCHAR *value)
+DataField::SetAsString(gcc_unused const TCHAR *value) noexcept
 {
 }
 
 ComboList
-DataField::CreateComboList(const TCHAR *reference) const
+DataField::CreateComboList(const TCHAR *reference) const noexcept
 {
   return ComboList();
 }

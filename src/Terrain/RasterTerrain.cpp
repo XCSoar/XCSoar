@@ -26,57 +26,62 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "io/ZipArchive.hpp"
 #include "io/FileCache.hpp"
+#include "io/FileOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
+#include "io/Reader.hxx"
+#include "io/BufferedReader.hxx"
 #include "system/ConvertPathName.hpp"
 #include "Operation/Operation.hpp"
 #include "util/ConvertString.hpp"
+#include "LogFile.hpp"
 
 static const TCHAR *const terrain_cache_name = _T("terrain");
 
 inline bool
 RasterTerrain::LoadCache(FileCache &cache, Path path)
 {
-  bool success = false;
+  auto r = cache.Load(terrain_cache_name, path);
+  if (!r)
+    return false;
 
-  FILE *file = cache.Load(terrain_cache_name, path);
-  if (file != nullptr) {
-    success = map.LoadCache(file);
-    fclose(file);
-  }
-
-  return success;
+  BufferedReader br(*r);
+  map.LoadCache(br);
+  return true;
 }
 
-inline bool
+inline void
 RasterTerrain::SaveCache(FileCache &cache, Path path) const
 {
-  bool success = false;
-
-  FILE *file = cache.Save(terrain_cache_name, path);
-  if (file != nullptr) {
-    success = map.SaveCache(file);
-    if (success)
-      cache.Commit(terrain_cache_name, file);
-    else
-      cache.Cancel(terrain_cache_name, file);
-  }
-
-  return success;
+  auto os = cache.Save(terrain_cache_name, path);
+  BufferedOutputStream bos(*os);
+  map.SaveCache(bos);
+  bos.Flush();
+  os->Commit();
 }
 
 inline bool
 RasterTerrain::Load(Path path, FileCache *cache,
                     OperationEnvironment &operation)
 {
-  if (LoadCache(cache, path))
-    return true;
+  try {
+    if (LoadCache(cache, path))
+      return true;
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to load terrain cache");
+  }
 
   if (!LoadTerrainOverview(archive.get(), map.GetTileCache(), operation))
     return false;
 
   map.UpdateProjection();
 
-  if (cache != nullptr)
-    SaveCache(*cache, path);
+  if (cache != nullptr) {
+    try {
+      SaveCache(*cache, path);
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to save terrain cache");
+    }
+  }
 
   return true;
 }

@@ -1,0 +1,187 @@
+INCLUDE=YES
+
+# Airspace to test radio frequency
+TITLE=Radio-Test
+TYPE=C
+RADIO=130.125 MHz
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test circle parsing
+# and coordinate format 1
+TYPE=C
+TITLE=Circle-Test
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test polygon point parsing
+# and coordinate format 2
+TYPE=C
+TITLE=Polygon-Test
+BASE=1000 ft
+TOPS=2000 ft
+POINT=N013030 W0013030
+POINT=N013030 E0013030
+POINT=S013030 E0013030
+POINT=S013030 W0013030
+
+# Airspace to test INCLUDE=NO
+INCLUDE=NO
+TITLE=Include-Test
+TYPE=C
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+INCLUDE=YES
+
+# Airspace to test airspace class A
+TYPE=
+TITLE=Class-A-Test
+CLASS=A
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace class B
+TITLE=Class-B-Test
+CLASS=B
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace class C
+TITLE=Class-C-Test
+CLASS=C
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace class D
+TITLE=Class-D-Test
+CLASS=D
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace class E
+TITLE=Class-E-Test
+CLASS=E
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace class F
+TITLE=Class-F-Test
+CLASS=F
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace class G
+TITLE=Class-G-Test
+CLASS=G
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace class CTR
+TYPE=C
+TITLE=Class-CTR-Test
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace class R
+TYPE=R
+TITLE=Class-R-Test
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace class Q
+TYPE=D
+TITLE=Class-Q-Test
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace class P
+TYPE=P
+TITLE=Class-P-Test
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace class W
+TYPE=G
+TITLE=Class-W-Test
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace class TMZ
+TYPE=TMZ
+TITLE=Class-TMZ-Test
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace class CLASS C
+TYPE=CLASS C
+TITLE=Class-CLASS-C-Test
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace class MATZ
+TYPE=MATZ
+TITLE=Class-MATZ-Test
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace heights
+TYPE=C
+TITLE=Height-Test-1
+BASE=SFC
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace heights
+TYPE=C
+TITLE=Height-Test-2
+BASE=0
+TOPS=FL 65
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace heights
+TYPE=C
+TITLE=Height-Test-3
+BASE=100 Agl
+TOPS=UNLIM
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace heights
+TYPE=C
+TITLE=Height-Test-4
+BASE=100m 
+TOPS=UNLIMITED
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace heights
+TYPE=C
+TITLE=Height-Test-5
+BASE=100m GND
+TOPS=450m
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+# Airspace to test airspace heights
+TYPE=C
+TITLE=Height-Test-6
+BASE=50 GND
+TOPS=5000 STD
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
+END

@@ -27,7 +27,6 @@ Copyright_License {
 #include "ui/canvas/Pen.hpp"
 #include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Icon.hpp"
-#include "Screen/Features.hpp"
 
 struct ClimbPercentLook {
   Brush brush_circling_climb;

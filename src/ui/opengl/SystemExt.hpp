@@ -29,8 +29,6 @@ Copyright_License {
 #ifndef ENABLE_SDL
 #ifdef HAVE_GLES2
 #include <GLES2/gl2ext.h>
-#elif defined(HAVE_GLES)
-#include <GLES/glext.h>
 #else
 #include <GL/glext.h>
 #endif

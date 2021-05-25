@@ -23,8 +23,8 @@
 #include "Navigation/Aircraft.hpp"
 #include "Geo/GeoVector.hpp"
 
-AircraftState 
-AircraftState::GetPredictedState(double in_time) const
+AircraftState
+AircraftState::GetPredictedState(double in_time) const noexcept
 {
   AircraftState state_next = *this;
   GeoVector vec(ground_speed * in_time, track);
@@ -34,7 +34,7 @@ AircraftState::GetPredictedState(double in_time) const
 }
 
 void
-AircraftState::Reset()
+AircraftState::Reset() noexcept
 {
   AltitudeState::Reset();
   SpeedState::Reset();
@@ -49,7 +49,7 @@ AircraftState::Reset()
 }
 
 void
-AltitudeState::Reset()
+AltitudeState::Reset() noexcept
 {
   altitude = 0;
   working_band_fraction = 0;

@@ -256,7 +256,7 @@ public:
 
 private:
   /* virtual methods from class DataFieldListener */
-  void OnModified(DataField &df) override {
+  void OnModified(DataField &df) noexcept override {
     if (&df == range.GetDataField())
       OnRangeModified(((DataFieldFloat &)df).GetAsFixed());
     else if (&df == radial.GetDataField())

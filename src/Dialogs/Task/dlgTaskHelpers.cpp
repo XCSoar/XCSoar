@@ -98,14 +98,9 @@ OrderedTaskSummary(const OrderedTask *task, TCHAR *text, bool linebreaks)
   const TaskStats &stats = task->GetStats();
   TCHAR summary_shape[100];
   bool FAIShape = TaskSummaryShape(task, summary_shape);
-  if (FAIShape || task->GetFactoryType() == TaskFactoryType::FAI_GENERAL) {
-    const auto errors = task->GetFactory().ValidateFAIOZs();
-    if (!errors.IsEmpty()) {
-      _tcscat(summary_shape, _T("/ "));
-      _tcscat(summary_shape, getTaskValidationErrors(errors));
-    }
-  }
-
+  TaskValidationErrorSet validation_errors;
+  if (FAIShape || task->GetFactoryType() == TaskFactoryType::FAI_GENERAL)
+    validation_errors = task->GetFactory().ValidateFAIOZs();
 
   TCHAR linebreak[3];
   if (linebreaks) {
@@ -122,8 +117,10 @@ OrderedTaskSummary(const OrderedTask *task, TCHAR *text, bool linebreaks)
                        OrderedTaskFactoryName(task->GetFactoryType()));
   } else {
     if (task->HasTargets())
-      StringFormatUnsafe(text, _T("%s%s%.0f %s%s%s %.0f %s%s%s %.0f %s (%s)"),
+      StringFormatUnsafe(text, _T("%s%s%s%s%.0f %s%s%s %.0f %s%s%s %.0f %s (%s)"),
                          summary_shape,
+                         validation_errors.IsEmpty() ? _T("") : _T(" / "),
+                         validation_errors.IsEmpty() ? _T("") : getTaskValidationErrors(validation_errors),
                          linebreak,
                          (double)Units::ToUserDistance(stats.distance_nominal),
                          Units::GetDistanceName(),
@@ -137,8 +134,10 @@ OrderedTaskSummary(const OrderedTask *task, TCHAR *text, bool linebreaks)
                          Units::GetDistanceName(),
                          OrderedTaskFactoryName(task->GetFactoryType()));
     else
-      StringFormatUnsafe(text, _T("%s%s%s %.0f %s (%s)"),
+      StringFormatUnsafe(text, _T("%s%s%s%s%s %.0f %s (%s)"),
                          summary_shape,
+                         validation_errors.IsEmpty() ? _T("") : _T(" / "),
+                         validation_errors.IsEmpty() ? _T("") : getTaskValidationErrors(validation_errors),
                          linebreak,
                          _("dist."),
                          (double)Units::ToUserDistance(stats.distance_nominal),

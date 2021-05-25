@@ -24,8 +24,9 @@
 #define XCSOAR_CONTEST_TRACE_HPP
 
 #include "util/TrivialArray.hxx"
-#include "util/TypeTraits.hpp"
 #include "Geo/GeoPoint.hpp"
+
+#include <type_traits>
 
 class TracePoint;
 
@@ -79,6 +80,6 @@ struct ContestTracePoint {
 
 class ContestTraceVector : public TrivialArray<ContestTracePoint, 10> {};
 
-static_assert(is_trivial_ndebug<ContestTraceVector>::value, "type is not trivial");
+static_assert(std::is_trivial_v<ContestTraceVector>, "type is not trivial");
 
 #endif

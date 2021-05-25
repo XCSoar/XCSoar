@@ -119,8 +119,8 @@ TestGeneric()
 
   /* Magnetic Heading ok */
   ok1(parser.ParseLine("$HCHDM,182.7,M*25", nmea_info));
-  ok1(nmea_info.heading_available);
-  ok1(equals(nmea_info.heading, 182.7));
+  ok1(nmea_info.attitude.heading_available);
+  ok1(equals(nmea_info.attitude.heading, 182.7));
 
   /* Magnetic Heading bad char */
   ok1(!parser.ParseLine("$HCHDM,1x2.7,M*25", nmea_info));

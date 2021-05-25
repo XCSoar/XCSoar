@@ -480,7 +480,8 @@ try {
 
     StaticString<256> msg;
 
-    const UTF8ToWideConverter what(GetFullMessage(e).c_str());
+    const auto _msg = GetFullMessage(e);
+    const UTF8ToWideConverter what(_msg.c_str());
     if (what.IsValid()) {
       std::lock_guard<Mutex> lock(mutex);
       error_message = what;
@@ -523,7 +524,8 @@ try {
   ResetFailureCounter();
   return true;
 } catch (...) {
-  const UTF8ToWideConverter msg(GetFullMessage(std::current_exception()).c_str());
+  const auto _msg = GetFullMessage(std::current_exception());
+  const UTF8ToWideConverter msg(_msg.c_str());
   env.SetErrorMessage(msg);
   return false;
 }

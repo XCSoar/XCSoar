@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_CALLBACK_WIDGET_HPP
 #define XCSOAR_CALLBACK_WIDGET_HPP
 
-#include "Screen/Features.hpp"
+#include "ui/canvas/Features.hpp"
 
 #ifdef HAVE_CLIPPING
 #include "PanelWidget.hpp"

@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "util/Compiler.h"
 
 /**
  * Base class for blackboards, providing read access to NMEA_INFO and DERIVED_INFO
@@ -39,13 +38,11 @@ protected:
 
 public:
   // all blackboards can be read as const
-  gcc_pure
-  const MoreData &Basic() const {
+  constexpr const MoreData &Basic() const noexcept {
     return gps_info;
   }
 
-  gcc_pure
-  const DerivedInfo& Calculated() const {
+  constexpr const DerivedInfo& Calculated() const noexcept {
     return calculated_info;
   }
 };

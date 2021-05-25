@@ -23,6 +23,7 @@
 
 #include "Logger/ExternalLogger.hpp"
 #include "Form/DataField/ComboList.hpp"
+#include "Dialogs/Error.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Language/Language.hpp"
@@ -319,7 +320,12 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
                           header.flight);
 
     transaction.SetPath(AllocatedPath::Build(logs_path, name));
-    transaction.Commit();
+
+    try {
+      transaction.Commit();
+    } catch (...) {
+      ShowError(std::current_exception(), _("Download flight"));
+    }
 
     if (ShowMessageBox(_("Do you want to download another flight?"),
                     _("Download flight"), MB_YESNO | MB_ICONQUESTION) != IDYES)

@@ -40,17 +40,17 @@ private:
   mutable TCHAR string_buffer[OUTBUFFERSIZE + 1];
 
 protected:
-  int SpeedUp(bool keyup);
+  int SpeedUp(bool keyup) noexcept;
 
 public:
   DataFieldTime(int _min, int _max, int _value, unsigned _step,
-                DataFieldListener *listener)
+                DataFieldListener *listener) noexcept
     :DataField(Type::TIME, true, listener),
      value(_value), min(_min), max(_max), step(_step), max_tokens(2),
      speedup(0) {}
 
 protected:
-  void SetValue(int _value) {
+  void SetValue(int _value) noexcept {
     if (_value == value)
       return;
 
@@ -59,47 +59,47 @@ protected:
   }
 
 public:
-  void SetMin(int _min) {
+  void SetMin(int _min) noexcept {
     min = _min;
   }
 
-  void SetMax(int _max) {
+  void SetMax(int _max) noexcept {
     max = _max;
   }
 
-  void SetStep(unsigned _step) {
+  void SetStep(unsigned _step) noexcept {
     step = _step;
   }
 
-  void SetMaxTokenNumber(unsigned _max_tokens) {
+  void SetMaxTokenNumber(unsigned _max_tokens) noexcept {
     assert(max_tokens > 0 && max_tokens <= 4);
     max_tokens = _max_tokens;
   }
 
-  void Set(int _value) {
+  void Set(int _value) noexcept {
     value = _value;
   }
 
   /* virtual methods from class DataField */
-  void Inc() override;
-  void Dec() override;
+  void Inc() noexcept override;
+  void Dec() noexcept override;
 
-  int GetAsInteger() const override {
+  int GetAsInteger() const noexcept override {
     return value;
   }
 
-  const TCHAR *GetAsString() const override;
-  const TCHAR *GetAsDisplayString() const override;
+  const TCHAR *GetAsString() const noexcept override;
+  const TCHAR *GetAsDisplayString() const noexcept override;
 
-  void SetAsInteger(int _value) override {
+  void SetAsInteger(int _value) noexcept override {
     SetValue(_value);
   }
 
-  ComboList CreateComboList(const TCHAR *reference) const override;
-  void SetFromCombo(int data_field_index, const TCHAR *value_string) override;
+  ComboList CreateComboList(const TCHAR *reference) const noexcept override;
+  void SetFromCombo(int data_field_index, const TCHAR *value_string) noexcept override;
 
 protected:
-  void AppendComboValue(ComboList &combo_list, int value) const;
+  void AppendComboValue(ComboList &combo_list, int value) const noexcept;
 };
 
 #endif

@@ -37,7 +37,7 @@ Copyright_License {
 
 gcc_const
 static unsigned
-IconStretchFixed10(unsigned source_dpi)
+IconStretchFixed10(unsigned source_dpi) noexcept
 {
   /* the icons were designed for PDAs at short eye distance; the 3/2
      factor reverses the 2/3 factor applied by Layout::Initialize()
@@ -49,7 +49,7 @@ IconStretchFixed10(unsigned source_dpi)
 
 gcc_const
 static unsigned
-IconStretchInteger(unsigned source_dpi)
+IconStretchInteger(unsigned source_dpi) noexcept
 {
   return std::max((IconStretchFixed10(source_dpi) + 512) >> 10,
                   1u);
@@ -103,7 +103,7 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId big_id, bool center)
 }
 
 void
-MaskedIcon::Draw(Canvas &canvas, PixelPoint p) const
+MaskedIcon::Draw(Canvas &canvas, PixelPoint p) const noexcept
 {
   assert(IsDefined());
 
@@ -132,7 +132,7 @@ MaskedIcon::Draw(Canvas &canvas, PixelPoint p) const
 }
 
 void
-MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const
+MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const noexcept
 {
   const PixelPoint position = rc.CenteredTopLeft(size);
 

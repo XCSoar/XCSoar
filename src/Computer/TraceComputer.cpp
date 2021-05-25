@@ -92,7 +92,7 @@ TraceComputer::Update(const ComputerSettings &settings_computer,
     full.push_back(point);
   }
 
-  // only olc requires trace_sprint
+  // only contest requires trace_sprint
   if (settings_computer.contest.enable) {
     sprint.push_back(point);
     contest.push_back(point);

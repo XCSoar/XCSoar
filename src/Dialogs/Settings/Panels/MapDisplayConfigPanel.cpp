@@ -77,7 +77,7 @@ public:
 
 private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 };
 
 void
@@ -91,7 +91,7 @@ MapDisplayConfigPanel::UpdateVisibilities()
 }
 
 void
-MapDisplayConfigPanel::OnModified(DataField &df)
+MapDisplayConfigPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(OrientationCruise, df) ||
       IsDataField(OrientationCircling, df) ||

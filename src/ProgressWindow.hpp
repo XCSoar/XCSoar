@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
 
 #include "ui/window/ContainerWindow.hpp"
-#include "Screen/ProgressBar.hpp"
+#include "ui/control/ProgressBar.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Color.hpp"
 #include "Gauge/LogoView.hpp"
@@ -55,17 +55,17 @@ class ProgressWindow : public ContainerWindow {
   PixelRect bottom_position, progress_bar_position;
 
 public:
-  explicit ProgressWindow(ContainerWindow &parent);
+  explicit ProgressWindow(ContainerWindow &parent) noexcept;
 
-  void SetMessage(const TCHAR *text);
+  void SetMessage(const TCHAR *text) noexcept;
 
-  void SetRange(unsigned min_value, unsigned max_value);
-  void SetStep(unsigned size);
-  void SetValue(unsigned value);
-  void Step();
+  void SetRange(unsigned min_value, unsigned max_value) noexcept;
+  void SetStep(unsigned size) noexcept;
+  void SetValue(unsigned value) noexcept;
+  void Step() noexcept;
 
 private:
-  void UpdateLayout(PixelRect rc);
+  void UpdateLayout(PixelRect rc) noexcept;
 
 protected:
   virtual void OnResize(PixelSize new_size) override;

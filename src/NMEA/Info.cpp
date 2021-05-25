@@ -128,8 +128,6 @@ NMEAInfo::Reset()
   track = Angle::Zero();
   track_available.Clear();
 
-  heading_available.Clear();
-
   variation_available.Clear();
 
   ground_speed_available.Clear();
@@ -335,11 +333,6 @@ NMEAInfo::Complement(const NMEAInfo &add)
   if (!temperature_available && add.temperature_available) {
     temperature = add.temperature;
     temperature_available = add.temperature_available;
-  }
-
-  if (!heading_available && add.heading_available) {
-    heading = add.heading;
-    heading_available = add.heading_available;
   }
 
    if (!variation_available && add.variation_available) {

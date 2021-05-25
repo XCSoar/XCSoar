@@ -44,11 +44,11 @@ public:
                const PixelRect &rc) noexcept override;
 
 private:
-  virtual void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 };
 
 void
-AltitudeSetupPanel::OnModified(DataField &_df)
+AltitudeSetupPanel::OnModified(DataField &_df) noexcept
 {
   DataFieldFloat &df = (DataFieldFloat &)_df;
   ComputerSettings &settings =

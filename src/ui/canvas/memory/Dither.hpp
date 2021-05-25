@@ -39,7 +39,7 @@ public:
                        unsigned src_pitch,
                        uint8_t *gcc_restrict dest,
                        unsigned dest_pitch,
-                       unsigned width, unsigned height);
+                       unsigned width, unsigned height) noexcept;
 };
 
 #endif

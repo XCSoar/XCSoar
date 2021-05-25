@@ -43,38 +43,38 @@ class RoughTimeDataField final : public DataField {
 
 public:
   RoughTimeDataField(RoughTime _value, RoughTimeDelta _time_zone,
-                     DataFieldListener *listener=nullptr)
+                     DataFieldListener *listener=nullptr) noexcept
     :DataField(Type::ROUGH_TIME, false, listener),
      value(_value), time_zone(_time_zone) {}
 
-  RoughTimeDelta GetTimeZone() const {
+  RoughTimeDelta GetTimeZone() const noexcept {
     return time_zone;
   }
 
-  void SetTimeZone(RoughTimeDelta _time_zone) {
+  void SetTimeZone(RoughTimeDelta _time_zone) noexcept {
     time_zone = _time_zone;
   }
 
-  RoughTime GetValue() const {
+  RoughTime GetValue() const noexcept {
     return value;
   }
 
-  void SetValue(RoughTime _value) {
+  void SetValue(RoughTime _value) noexcept {
     value = _value;
   }
 
-  RoughTime GetLocalValue() const {
+  RoughTime GetLocalValue() const noexcept {
     return value + time_zone;
   }
 
-  void ModifyValue(RoughTime _value);
+  void ModifyValue(RoughTime _value) noexcept;
 
   /* virtual methods from class DataField */
-  void Inc() override;
-  void Dec() override;
-  int GetAsInteger() const override;
-  const TCHAR *GetAsString() const override;
-  const TCHAR *GetAsDisplayString() const override;
+  void Inc() noexcept override;
+  void Dec() noexcept override;
+  int GetAsInteger() const noexcept override;
+  const TCHAR *GetAsString() const noexcept override;
+  const TCHAR *GetAsDisplayString() const noexcept override;
 };
 
 #endif

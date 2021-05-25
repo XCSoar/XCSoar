@@ -26,7 +26,7 @@
 #include "ContestDijkstra.hpp"
 
 /**
- * Specialisation of OLC Dijkstra for FFVV NetCoupe rules
+ * Specialisation of Contest Dijkstra for FFVV NetCoupe rules
  */
 class NetCoupe : public ContestDijkstra {
 public:

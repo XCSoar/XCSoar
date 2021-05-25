@@ -1860,6 +1860,7 @@ void msCopyTextPath(textPathObj *dst, textPathObj *src);
 void freeTextPath(textPathObj *tp);
 void initTextSymbol(textSymbolObj *ts);
 void freeTextSymbol(textSymbolObj *ts);
+void copyLabelBounds(label_bounds *dst, label_bounds *src);
 void msCopyTextSymbol(textSymbolObj *dst, textSymbolObj *src);
 void msPopulateTextSymbolForLabelAndString(textSymbolObj *ts, labelObj *l, char *string, double scalefactor, double resolutionfactor, label_cache_mode cache);
 #endif /* SWIG */
@@ -1919,6 +1920,10 @@ void msPopulateTextSymbolForLabelAndString(textSymbolObj *ts, labelObj *l, char 
 
     char *shapepath; /* where are the shape files located */
     char *mappath; /* path of the mapfile, all path are relative to this path */
+    char *sldurl; // URL of SLD document as specified with "&SLD=..."
+                  // WMS parameter.  Currently this reference is used
+                  // only in mapogcsld.c and has a NULL value
+                  // outside that context.
 
 #ifndef SWIG
     paletteObj palette; /* holds a map palette */
@@ -2176,7 +2181,9 @@ void msPopulateTextSymbolForLabelAndString(textSymbolObj *ts, labelObj *l, char 
   MS_DLL_EXPORT char *msWriteReferenceMapToString(referenceMapObj *ref);
   MS_DLL_EXPORT char *msWriteLegendToString(legendObj *legend);
   MS_DLL_EXPORT char *msWriteClusterToString(clusterObj *cluster);
+  MS_DLL_EXPORT int msIsValidRegex(const char* e);
   MS_DLL_EXPORT int msEvalRegex(const char *e, const char *s);
+  MS_DLL_EXPORT int msCaseEvalRegex(const char *e, const char *s);
 #endif /* SHAPELIB_DISABLED */
 #ifdef USE_MSFREE
   MS_DLL_EXPORT void msFree(void *p);

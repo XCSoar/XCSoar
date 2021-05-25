@@ -24,14 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_CANVAS_ROTATE_SHIFT_HPP
 #define XCSOAR_SCREEN_OPENGL_CANVAS_ROTATE_SHIFT_HPP
 
-#include "Math/Angle.hpp"
-#include "ui/dim/Point.hpp"
-#include "ui/opengl/System.hpp"
-#include "Screen/Layout.hpp"
-#include "Shaders.hpp"
-
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+struct PixelPoint;
+class Angle;
 
 /**
  * Temporarily changes the transformation matrix. Meant as replacement
@@ -42,24 +36,13 @@ Copyright_License {
 class CanvasRotateShift
 {
 public:
-  CanvasRotateShift(const PixelPoint pos, Angle angle,
-                    const int scale = 100) {
-    glm::mat4 matrix = glm::rotate(glm::translate(glm::mat4(1),
-                                                  glm::vec3(pos.x, pos.y, 0)),
-                                   GLfloat(angle.Radians()),
-                                   glm::vec3(0, 0, 1));
-    float gl_scale = scale / 100.f;
-    if (Layout::ScaleSupported())
-      gl_scale *= Layout::scale_1024 / 1024.f;
-    matrix = glm::scale(matrix, glm::vec3(gl_scale));
-    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
-                       glm::value_ptr(matrix));
-  };
+  CanvasRotateShift(PixelPoint pos, Angle angle,
+                    int scale = 100) noexcept;
 
-  ~CanvasRotateShift() {
-    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
-                       glm::value_ptr(glm::mat4(1)));
-  }
+  ~CanvasRotateShift() noexcept;
+
+  CanvasRotateShift(const CanvasRotateShift &) = delete;
+  CanvasRotateShift &operator=(const CanvasRotateShift &) = delete;
 };
 
 #endif

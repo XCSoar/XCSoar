@@ -43,7 +43,8 @@ public:
     tstring help_text;
 
     Item(int _int_value, const TCHAR *_string_value,
-         const TCHAR *_display_string, const TCHAR *_help_text = nullptr);
+         const TCHAR *_display_string,
+         const TCHAR *_help_text = nullptr) noexcept;
 
     Item(const Item &other) = delete;
     Item &operator=(const Item &other) = delete;
@@ -54,40 +55,39 @@ public:
 
   static constexpr unsigned MAX_SIZE = 512;
 
-  int current_index;
+  int current_index = 0;
 
 private:
   std::vector<Item> items;
 
 public:
-  ComboList()
-    :current_index(0) {}
+  ComboList() = default;
 
   ComboList(ComboList &&other) = default;
 
   ComboList(const ComboList &other) = delete;
   ComboList &operator=(const ComboList &other) = delete;
 
-  bool empty() const {
+  bool empty() const noexcept {
     return items.empty();
   }
 
-  unsigned size() const {
+  unsigned size() const noexcept {
     return items.size();
   }
 
-  const Item& operator[](unsigned i) const {
+  const Item &operator[](unsigned i) const noexcept {
     return items[i];
   }
 
-  void Clear() {
+  void Clear() noexcept {
     items.clear();
   }
 
   unsigned Append(int int_value,
                   const TCHAR *string_value,
                   const TCHAR *display_string,
-                  const TCHAR *help_text = nullptr) {
+                  const TCHAR *help_text = nullptr) noexcept {
     unsigned i = items.size();
     items.emplace_back(int_value,
                        string_value, display_string, help_text);
@@ -96,20 +96,20 @@ public:
 
   unsigned Append(const TCHAR *string_value,
                   const TCHAR *display_string,
-                  const TCHAR *help_text = nullptr) {
+                  const TCHAR *help_text = nullptr) noexcept {
     return Append(items.size(), string_value, display_string, help_text);
   }
 
-  unsigned Append(int int_value, const TCHAR *string_value) {
+  unsigned Append(int int_value, const TCHAR *string_value) noexcept {
     return Append(int_value, string_value, string_value);
   }
 
-  unsigned Append(const TCHAR *string_value) {
+  unsigned Append(const TCHAR *string_value) noexcept {
     return Append(string_value, string_value);
   }
 
-  void Sort();
-  unsigned LookUp(int int_value);
+  void Sort() noexcept;
+  unsigned LookUp(int int_value) noexcept;
 };
 
 #endif

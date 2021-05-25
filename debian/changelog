@@ -1,8 +1,32 @@
-xcsoar (7.4) unstable; urgency=medium
+xcsoar (7.8) unstable; urgency=medium
 
   * new release
 
  --
+
+xcsoar (7.7) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Fri, 14 May 2021 19:30:48 +0200
+
+xcsoar (7.6) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Sat, 01 May 2021 15:35:13 +0200
+
+xcsoar (7.5) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Fri, 30 Apr 2021 09:02:01 +0200
+
+xcsoar (7.4) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Thu, 08 Apr 2021 20:41:23 +0200
 
 xcsoar (7.3) unstable; urgency=medium
 

@@ -9,7 +9,6 @@ EOF
 
 sudo apt-get update
 
-sudo /xcsoar-host-src/ide/provisioning/add-debian-unstable.sh
 sudo /xcsoar-host-src/ide/provisioning/install-debian-packages.sh
 /xcsoar-host-src/ide/provisioning/install-android-tools.sh
 
@@ -26,6 +25,9 @@ Vagrant.configure("2") do |config|
     config.vm.box = "generic/debian10"
 
     config.vm.synced_folder "../..", "/xcsoar-host-src"
+
+    config.vm.define "XCSoarDevEnv"
+    config.vm.hostname = "XCSoarDevEnv"
 
     config.vm.provider "virtualbox" do |v|
         host = RbConfig::CONFIG['host_os']

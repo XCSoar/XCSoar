@@ -45,7 +45,7 @@ ZipReader::ZipReader(struct zzip_dir *dir, const char *path)
 ZipReader::~ZipReader()
 {
   if (file != nullptr)
-    zzip_file_close(file);
+    zzip_close(file);
 }
 
 uint64_t

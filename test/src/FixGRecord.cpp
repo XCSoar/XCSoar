@@ -107,10 +107,7 @@ try {
     FixGRecord(reader, transaction.GetTemporaryPath());
   }
 
-  if (!transaction.Commit()) {
-    fprintf(stderr, "Failed to commit output file\n");
-    return EXIT_FAILURE;
-  }
+  transaction.Commit();
 
   printf("New G record written\n");
   return EXIT_SUCCESS;

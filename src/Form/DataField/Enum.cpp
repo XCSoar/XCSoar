@@ -30,7 +30,7 @@ Copyright_License {
 
 #include <stdlib.h>
 
-DataFieldEnum::Entry::~Entry()
+DataFieldEnum::Entry::~Entry() noexcept
 {
   free(string);
 
@@ -41,7 +41,7 @@ DataFieldEnum::Entry::~Entry()
 }
 
 void
-DataFieldEnum::Entry::SetString(const TCHAR *_string)
+DataFieldEnum::Entry::SetString(const TCHAR *_string) noexcept
 {
   free(string);
   if (display_string != string)
@@ -53,7 +53,7 @@ DataFieldEnum::Entry::SetString(const TCHAR *_string)
 void
 DataFieldEnum::Entry::Set(unsigned _id, const TCHAR *_string,
                           const TCHAR *_display_string,
-                          const TCHAR *_help)
+                          const TCHAR *_help) noexcept
 {
   id = _id;
   SetString(_string);
@@ -66,14 +66,14 @@ DataFieldEnum::Entry::Set(unsigned _id, const TCHAR *_string,
 }
 
 unsigned
-DataFieldEnum::GetValue() const
+DataFieldEnum::GetValue() const noexcept
 {
   assert(value < entries.size());
   return entries[value].GetId();
 }
 
 int
-DataFieldEnum::GetAsInteger() const
+DataFieldEnum::GetAsInteger() const noexcept
 {
   if (entries.empty()) {
     assert(value == 0);
@@ -85,7 +85,7 @@ DataFieldEnum::GetAsInteger() const
 }
 
 void
-DataFieldEnum::replaceEnumText(unsigned int i, const TCHAR *Text)
+DataFieldEnum::replaceEnumText(unsigned int i, const TCHAR *Text) noexcept
 {
   if (i <= entries.size())
     entries[i].SetString(Text);
@@ -93,7 +93,8 @@ DataFieldEnum::replaceEnumText(unsigned int i, const TCHAR *Text)
 
 bool
 DataFieldEnum::AddChoice(unsigned id, const TCHAR *text,
-                         const TCHAR *display_string, const TCHAR *help)
+                         const TCHAR *display_string,
+                         const TCHAR *help) noexcept
 {
   if (entries.full())
     return false;
@@ -104,7 +105,7 @@ DataFieldEnum::AddChoice(unsigned id, const TCHAR *text,
 }
 
 void
-DataFieldEnum::AddChoices(const StaticEnumChoice *p)
+DataFieldEnum::AddChoices(const StaticEnumChoice *p) noexcept
 {
   while (p->display_string != nullptr) {
     const TCHAR *help = p->help;
@@ -118,7 +119,7 @@ DataFieldEnum::AddChoices(const StaticEnumChoice *p)
 
 unsigned
 DataFieldEnum::addEnumText(const TCHAR *Text, const TCHAR *display_string,
-                           const TCHAR *_help)
+                           const TCHAR *_help) noexcept
 {
   if (entries.full())
     return 0;
@@ -130,14 +131,14 @@ DataFieldEnum::addEnumText(const TCHAR *Text, const TCHAR *display_string,
 }
 
 void
-DataFieldEnum::addEnumTexts(const TCHAR *const*list)
+DataFieldEnum::addEnumTexts(const TCHAR *const*list) noexcept
 {
   while (*list != nullptr)
     addEnumText(*list++);
 }
 
 const TCHAR *
-DataFieldEnum::GetAsString() const
+DataFieldEnum::GetAsString() const noexcept
 {
   if (entries.empty()) {
     assert(value == 0);
@@ -149,7 +150,7 @@ DataFieldEnum::GetAsString() const
 }
 
 const TCHAR *
-DataFieldEnum::GetAsDisplayString() const
+DataFieldEnum::GetAsDisplayString() const noexcept
 {
   if (entries.empty()) {
     assert(value == 0);
@@ -161,7 +162,7 @@ DataFieldEnum::GetAsDisplayString() const
 }
 
 const TCHAR *
-DataFieldEnum::GetHelp() const
+DataFieldEnum::GetHelp() const noexcept
 {
   if (entries.empty()) {
     return nullptr;
@@ -172,7 +173,7 @@ DataFieldEnum::GetHelp() const
 }
 
 void
-DataFieldEnum::Set(unsigned Value)
+DataFieldEnum::Set(unsigned Value) noexcept
 {
   int i = Find(Value);
   if (i >= 0)
@@ -180,7 +181,7 @@ DataFieldEnum::Set(unsigned Value)
 }
 
 bool
-DataFieldEnum::Set(const TCHAR *text)
+DataFieldEnum::Set(const TCHAR *text) noexcept
 {
   int i = Find(text);
   if (i < 0)
@@ -191,7 +192,7 @@ DataFieldEnum::Set(const TCHAR *text)
 }
 
 int
-DataFieldEnum::SetStringAutoAdd(const TCHAR *text)
+DataFieldEnum::SetStringAutoAdd(const TCHAR *text) noexcept
 {
   int index = Find(text);
   if (index >= 0) {
@@ -206,7 +207,7 @@ DataFieldEnum::SetStringAutoAdd(const TCHAR *text)
 }
 
 void
-DataFieldEnum::SetAsInteger(int Value)
+DataFieldEnum::SetAsInteger(int Value) noexcept
 {
   int i = Find(Value);
   if (i >= 0)
@@ -214,7 +215,7 @@ DataFieldEnum::SetAsInteger(int Value)
 }
 
 void
-DataFieldEnum::SetAsString(const TCHAR *Value)
+DataFieldEnum::SetAsString(const TCHAR *Value) noexcept
 {
   int i = Find(Value);
   if (i >= 0)
@@ -222,7 +223,7 @@ DataFieldEnum::SetAsString(const TCHAR *Value)
 }
 
 void
-DataFieldEnum::Inc()
+DataFieldEnum::Inc() noexcept
 {
   if (entries.empty()) {
     assert(value == 0);
@@ -238,7 +239,7 @@ DataFieldEnum::Inc()
 }
 
 void
-DataFieldEnum::Dec()
+DataFieldEnum::Dec() noexcept
 {
   if (entries.empty()) {
     assert(value == 0);
@@ -254,7 +255,7 @@ DataFieldEnum::Dec()
 }
 
 void
-DataFieldEnum::Sort(unsigned startindex)
+DataFieldEnum::Sort(unsigned startindex) noexcept
 {
   std::sort(entries.begin() + startindex, entries.end(),
             [](const DataFieldEnum::Entry &a, const DataFieldEnum::Entry &b) {
@@ -264,7 +265,7 @@ DataFieldEnum::Sort(unsigned startindex)
 }
 
 ComboList
-DataFieldEnum::CreateComboList(const TCHAR *reference_string) const
+DataFieldEnum::CreateComboList(const TCHAR *reference_string) const noexcept
 {
   ComboList combo_list;
 
@@ -277,7 +278,7 @@ DataFieldEnum::CreateComboList(const TCHAR *reference_string) const
 }
 
 int
-DataFieldEnum::Find(const TCHAR *text) const
+DataFieldEnum::Find(const TCHAR *text) const noexcept
 {
   assert(text != nullptr);
 
@@ -289,7 +290,7 @@ DataFieldEnum::Find(const TCHAR *text) const
 }
 
 int
-DataFieldEnum::Find(unsigned id) const
+DataFieldEnum::Find(unsigned id) const noexcept
 {
   for (unsigned i = 0; i < entries.size(); i++)
     if (entries[i].GetId() == id)
@@ -299,7 +300,7 @@ DataFieldEnum::Find(unsigned id) const
 }
 
 void
-DataFieldEnum::SetIndex(unsigned new_value, bool invoke_callback)
+DataFieldEnum::SetIndex(unsigned new_value, bool invoke_callback) noexcept
 {
   assert(new_value < entries.size());
 
@@ -313,7 +314,7 @@ DataFieldEnum::SetIndex(unsigned new_value, bool invoke_callback)
 }
 
 unsigned
-DataFieldEnum::getItem(unsigned index) const
+DataFieldEnum::getItem(unsigned index) const noexcept
 {
   return entries[index].GetId();
 }

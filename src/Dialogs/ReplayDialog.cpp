@@ -62,7 +62,7 @@ public:
 
 private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
+  void OnModified(DataField &df) noexcept override;
 };
 
 void
@@ -110,7 +110,7 @@ ReplayControlWidget::OnFastForwardClicked()
 }
 
 void
-ReplayControlWidget::OnModified(DataField &_df)
+ReplayControlWidget::OnModified(DataField &_df) noexcept
 {
   const DataFieldFloat &df = (const DataFieldFloat &)_df;
 

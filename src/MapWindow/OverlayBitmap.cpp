@@ -61,7 +61,7 @@ MapOverlayBitmap::MapOverlayBitmap(Path path)
  * is flawed in many ways, but good enough for clipping polygons.
  */
 static constexpr DoublePoint2D
-GeoTo2D(GeoPoint p)
+GeoTo2D(GeoPoint p) noexcept
 {
   return {p.longitude.Native(), p.latitude.Native()};
 }
@@ -70,7 +70,7 @@ GeoTo2D(GeoPoint p)
  * Inverse of GeoTo2D().
  */
 static constexpr GeoPoint
-GeoFrom2D(DoublePoint2D p)
+GeoFrom2D(DoublePoint2D p) noexcept
 {
   return {Angle::Native(p.x), Angle::Native(p.y)};
 }
@@ -80,7 +80,7 @@ GeoFrom2D(DoublePoint2D p)
  */
 gcc_const
 static boost::geometry::model::box<DoublePoint2D>
-ToBox(const GeoBounds b)
+ToBox(const GeoBounds b) noexcept
 {
   return {GeoTo2D(b.GetSouthWest()), GeoTo2D(b.GetNorthEast())};
 }
@@ -90,7 +90,7 @@ ToBox(const GeoBounds b)
  */
 gcc_const
 static ArrayQuadrilateral
-ToArrayQuadrilateral(const GeoQuadrilateral q)
+ToArrayQuadrilateral(const GeoQuadrilateral q) noexcept
 {
   return {GeoTo2D(q.top_left), GeoTo2D(q.top_right),
       GeoTo2D(q.bottom_right), GeoTo2D(q.bottom_left),
@@ -103,19 +103,26 @@ ToArrayQuadrilateral(const GeoQuadrilateral q)
  */
 gcc_pure
 static ClippedMultiPolygon
-Clip(const GeoQuadrilateral &_geo, const GeoBounds &_bounds)
+Clip(const GeoQuadrilateral &_geo, const GeoBounds &_bounds) noexcept
 {
   const auto geo = ToArrayQuadrilateral(_geo);
   const auto bounds = ToBox(_bounds);
 
   ClippedMultiPolygon clipped;
-  boost::geometry::intersection(geo, bounds, clipped);
+
+  try {
+    boost::geometry::intersection(geo, bounds, clipped);
+  } catch (const boost::geometry::exception &) {
+    /* this can (theoretically) occur with self-intersecting
+       geometries; in that case, return an empty polygon */
+  }
+
   return clipped;
 }
 
 gcc_pure
 static DoublePoint2D
-MapInQuadrilateral(const GeoQuadrilateral &q, const GeoPoint p)
+MapInQuadrilateral(const GeoQuadrilateral &q, const GeoPoint p) noexcept
 {
   return MapInQuadrilateral(GeoTo2D(q.top_left), GeoTo2D(q.top_right),
                             GeoTo2D(q.bottom_right), GeoTo2D(q.bottom_left),
@@ -123,7 +130,7 @@ MapInQuadrilateral(const GeoQuadrilateral &q, const GeoPoint p)
 }
 
 bool
-MapOverlayBitmap::IsInside(GeoPoint p) const
+MapOverlayBitmap::IsInside(GeoPoint p) const noexcept
 {
   return simple_bounds.IsInside(p) &&
     boost::geometry::covered_by(GeoTo2D(p), ToArrayQuadrilateral(bounds));

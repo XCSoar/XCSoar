@@ -1,5 +1,6 @@
 #include "jasper/jpc_rtc.h"
 #include "Terrain/Loader.hpp"
+#include "Terrain/RasterLocation.hpp"
 
 extern "C" {
 
@@ -29,7 +30,7 @@ extern "C" {
                            unsigned end_x, unsigned end_y,
                            const struct jas_matrix *data) {
     auto &loader = *(TerrainLoader *)_loader;
-    loader.PutTileData(index, start_x, start_y, end_x, end_y,
+    loader.PutTileData(index, {start_x, start_y}, {end_x, end_y},
                                      *data);
   }
 

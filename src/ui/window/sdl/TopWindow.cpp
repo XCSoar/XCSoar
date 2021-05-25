@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "../TopWindow.hpp"
-#include "Screen/Features.hpp"
+#include "../Features.hpp"
 #include "ui/event/sdl/Event.hpp"
 #include "ui/event/sdl/Loop.hpp"
 #include "ui/event/Globals.hpp"

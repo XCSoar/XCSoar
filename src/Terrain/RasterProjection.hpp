@@ -47,7 +47,7 @@ public:
    * @param width the sub-pixel ("fine)" width of the map file
    * @param height the sub-pixel ("fine)" height of the map file
    */
-  void Set(const GeoBounds &bounds, unsigned width, unsigned height);
+  void Set(const GeoBounds &bounds, UnsignedPoint2D size) noexcept;
 
   constexpr Angle WidthToAngle(double pixels) const {
     return Angle::Native(pixels / x_scale);

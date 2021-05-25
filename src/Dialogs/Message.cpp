@@ -36,7 +36,8 @@ Copyright_License {
 #include <cassert>
 
 int
-ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
+ShowMessageBox(const TCHAR *text, const TCHAR *caption,
+               unsigned flags) noexcept
 {
   assert(text != NULL);
 

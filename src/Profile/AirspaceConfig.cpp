@@ -24,7 +24,7 @@ Copyright_License {
 #include "AirspaceConfig.hpp"
 #include "Map.hpp"
 #include "ProfileKeys.hpp"
-#include "Screen/Features.hpp"
+#include "ui/canvas/Features.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"

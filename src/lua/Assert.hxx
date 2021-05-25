@@ -50,17 +50,17 @@ class ScopeCheckStack {
 	const int expected_top;
 
 public:
-	explicit ScopeCheckStack(lua_State *_L, int offset = 0)
+	explicit ScopeCheckStack(lua_State *_L, int offset = 0) noexcept
 		:L(_L), expected_top(lua_gettop(L) + offset) {}
 
-	~ScopeCheckStack() {
+	~ScopeCheckStack() noexcept {
 		assert(lua_gettop(L) == expected_top);
 	}
 
 #else
 public:
-	explicit ScopeCheckStack(lua_State *) {}
-	ScopeCheckStack(lua_State *, int) {}
+	explicit constexpr ScopeCheckStack(lua_State *) noexcept {}
+	constexpr ScopeCheckStack(lua_State *, int) noexcept {}
 #endif
 
 	ScopeCheckStack(const ScopeCheckStack &) = delete;

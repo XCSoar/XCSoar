@@ -29,7 +29,8 @@ Copyright_License {
 namespace OpenGL {
 
 gcc_pure
-bool IsExtensionSupported(const char *name);
+bool
+IsExtensionSupported(const char *name) noexcept;
 
 } // namespace OpenGL
 

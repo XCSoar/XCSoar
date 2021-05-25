@@ -37,15 +37,15 @@ protected:
   UISettings ui_settings;
 
 public:
-  const SystemSettings &GetSystemSettings() const {
+  constexpr const SystemSettings &GetSystemSettings() const noexcept {
     return system_settings;
   }
 
-  const UISettings &GetUISettings() const {
+  constexpr const UISettings &GetUISettings() const noexcept {
     return ui_settings;
   }
 
-  const MapSettings &GetMapSettings() const {
+  constexpr const MapSettings &GetMapSettings() const noexcept {
     return ui_settings.map;
   }
 };

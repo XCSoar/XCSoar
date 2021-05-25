@@ -33,7 +33,7 @@ Dither::DitherGreyscale(const uint8_t *gcc_restrict src,
                         unsigned src_pitch,
                         uint8_t *gcc_restrict dest,
                         unsigned dest_pitch,
-                        unsigned width, unsigned height)
+                        unsigned width, unsigned height) noexcept
 {
   const unsigned width_2 = width + 2;
   allocated_error_dist_buffer.GrowDiscard(width_2 * 2u);
@@ -56,7 +56,7 @@ Dither::DitherGreyscale(const uint8_t *gcc_restrict src,
       uint8_t color = 0;
       if (bwPix >= 128) {
         --color;
-	bwPix -= 255;
+        bwPix -= 255;
       }
 
       dest[column] = color;

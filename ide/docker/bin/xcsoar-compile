@@ -3,32 +3,34 @@
 CPUS=$(lscpu -p | tail -n1 | cut -f1 -d,)
 (( CPUS++ ))
 cd /opt/xcsoar || exit 1
-read -ra ARGS "${@}"
-unset "${ARGS[0]}"
+
+ARGS=($@)
+TARGET=${ARGS[0]}
+unset "ARGS[0]"
 
 case "${TARGET}" in
       "ANDROID")
-        make TARGET="${TARGET}" -j "${CPUS}" "$@"
+        make TARGET="${TARGET}" -j "${CPUS}" ${ARGS[@]}
       ;;
       "DOCS")
-        make manual -j "${CPUS}"
+        make manual -j "${CPUS}" ${ARGS[@]}
       ;;
       "KOBO")
         make TARGET="${TARGET}" -j"${CPUS}" libs
-        make TARGET="${TARGET}" -j"${CPUS}" "$@"
+        make TARGET="${TARGET}" -j"${CPUS}"  ${ARGS[@]}
         make TARGET="${TARGET}" -j"${CPUS}" output/KOBO/KoboRoot.tgz
       ;;
       "UNIX")
-        make TARGET="${TARGET}" -j"${CPUS}" "$@"
+        make TARGET="${TARGET}" -j"${CPUS}" ${ARGS[@]}
       ;;
       "UNIX-SDL")
-        make TARGET="UNIX" -j"${CPUS}" "$@" OPENGL=n ENABLE_SDL=y USE_SDL2=y
+        make TARGET="UNIX" -j"${CPUS}" OPENGL=n ENABLE_SDL=y USE_SDL2=y ${ARGS[@]}
       ;;
       "PC")
-        make TARGET="${TARGET}" -j"${CPUS}" "$@"
+        make TARGET="${TARGET}" -j"${CPUS}" ${ARGS[@]}
       ;;
       "WIN64")
-        make TARGET="${TARGET}" -j"${CPUS}" "$@"
+        make TARGET="${TARGET}" -j"${CPUS}" ${ARGS[@]}
       ;;
       *)
         echo "No target specified. Valid targets: ANDROID DOCS KOBO UNIX UNIX-SDL PC WIN64"

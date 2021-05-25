@@ -43,16 +43,16 @@ class FileTransaction {
   AllocatedPath temporary_path;
 
 public:
-  FileTransaction(Path _path);
+  FileTransaction(Path _path) noexcept;
 
   /**
    * The destructor auto-rolls back the transaction (i.e. deletes the
    * temporary file) unless Commit() has been called.
    */
-  ~FileTransaction();
+  ~FileTransaction() noexcept;
 
   template<typename P>
-  void SetPath(P &&_path) {
+  void SetPath(P &&_path) noexcept {
     final_path = std::forward<P>(_path);
   }
 
@@ -60,22 +60,22 @@ public:
    * Returns the temporary path.  This is the path that shall be used
    * by the caller to write the file.
    */
-  Path GetTemporaryPath() const {
+  Path GetTemporaryPath() const noexcept {
     return temporary_path;
   }
 
   /**
    * Replace the file with the contents of the temporary file.
    *
-   * @return true on success
+   * Throws on error.
    */
-  bool Commit();
+  void Commit();
 
   /**
    * Abandon the transaction, i.e. close it, but don't clean up the
    * temporary file.
    */
-  void Abandon();
+  void Abandon() noexcept;
 };
 
 #endif
