@@ -40,9 +40,11 @@ final class DownloadUtil extends BroadcastReceiver {
   private static DownloadUtil instance;
 
   final Context context;
+  final DownloadManager dm;
 
   DownloadUtil(Context context) {
     this.context = context;
+    dm = (DownloadManager)context.getSystemService(Context.DOWNLOAD_SERVICE);
     context.registerReceiver(this,
                              new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
   }
@@ -223,8 +225,6 @@ final class DownloadUtil extends BroadcastReceiver {
 
   @Override public void onReceive(Context context, Intent intent) {
     if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction())) {
-      final DownloadManager dm = (DownloadManager)
-        context.getSystemService(Context.DOWNLOAD_SERVICE);
       checkComplete(dm);
     }
   }
