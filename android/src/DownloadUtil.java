@@ -39,12 +39,15 @@ import android.net.Uri;
 final class DownloadUtil extends BroadcastReceiver {
   private static DownloadUtil instance;
 
+  final Context context;
+
   DownloadUtil(Context context) {
+    this.context = context;
     context.registerReceiver(this,
                              new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
   }
 
-  void close(Context context) {
+  void close() {
       try {
         context.unregisterReceiver(this);
       } catch (IllegalArgumentException e) {
@@ -59,9 +62,9 @@ final class DownloadUtil extends BroadcastReceiver {
     instance = new DownloadUtil(context);
   }
 
-  static void Deinitialise(Context context) {
+  static void Deinitialise() {
     if (instance != null) {
-      instance.close(context);
+      instance.close();
       instance = null;
     }
   }

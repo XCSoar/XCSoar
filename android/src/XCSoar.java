@@ -293,7 +293,7 @@ public class XCSoar extends Activity {
       batteryReceiver = null;
     }
 
-    DownloadUtil.Deinitialise(this);
+    DownloadUtil.Deinitialise();
 
     if (nativeView != null) {
       nativeView.exitApp();
