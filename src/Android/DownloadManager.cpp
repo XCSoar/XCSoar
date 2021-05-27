@@ -29,7 +29,7 @@ Copyright_License {
 #include "java/Path.hxx"
 #include "java/String.hxx"
 #include "LocalPath.hpp"
-#include "system/FileUtil.hpp"
+#include "io/CopyFile.hxx"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
 #include "org_xcsoar_DownloadUtil.h"
@@ -134,59 +134,40 @@ AndroidDownloadManager::OnDownloadComplete(Path path_relative,
       (*i)->OnDownloadError(path_relative, {});
 }
 
-[[gnu::pure]]
-static AllocatedPath
-EraseSuffix(Path p, const char *suffix) noexcept
-{
-  assert(p != nullptr);
-  assert(suffix != nullptr);
-
-  const auto current_suffix = p.GetExtension();
-  return current_suffix != nullptr && StringIsEqual(suffix, current_suffix)
-    ? AllocatedPath(p.c_str(), current_suffix)
-    : nullptr;
-}
-
 JNIEXPORT void JNICALL
 Java_org_xcsoar_DownloadUtil_onDownloadAdded(JNIEnv *env, jobject obj,
                                              jlong j_handler, jstring j_path,
                                              jlong size, jlong position)
 {
-  const auto tmp_path = Java::ToPath(env, j_path);
-
-  const auto final_path = EraseSuffix(tmp_path, ".tmp");
-  if (final_path == nullptr)
-    return;
-
-  const auto relative = RelativePath(final_path);
-  if (relative == nullptr)
-    return;
+  const auto relative_path = Java::ToPath(env, j_path);
 
   Net::DownloadListener &handler = *(Net::DownloadListener *)(size_t)j_handler;
-  handler.OnDownloadAdded(relative, size, position);
+  handler.OnDownloadAdded(relative_path, size, position);
 }
 
 JNIEXPORT void JNICALL
 Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, jobject obj,
                                                 jlong ptr,
-                                                jstring j_path,
+                                                jstring j_tmp_path,
+                                                jstring j_relative_path,
                                                 jboolean success)
 {
   auto &dm = *(AndroidDownloadManager *)(size_t)ptr;
 
-  const auto tmp_path = Java::ToPath(env, j_path);
+  const auto tmp_path = Java::ToPath(env, j_tmp_path);
+  const auto relative_path = Java::ToPath(env, j_relative_path);
 
-  const auto final_path = EraseSuffix(tmp_path, ".tmp");
-  if (final_path == nullptr)
-    return;
+  const auto final_path = LocalPath(relative_path);
 
-  const auto relative = RelativePath(final_path);
-  if (relative == nullptr)
-    return;
+  if (success) {
+    try {
+      MoveOrCopyFile(tmp_path, final_path);
+    } catch (...) {
+      success = false;
+    }
+  }
 
-  success = success && File::Replace(tmp_path, final_path);
-
-  dm.OnDownloadComplete(relative, success);
+  dm.OnDownloadComplete(relative_path, success);
 }
 
 void
@@ -207,11 +188,8 @@ AndroidDownloadManager::Enqueue(JNIEnv *env, const char *uri,
   assert(uri != nullptr);
   assert(path_relative != nullptr);
 
-  const auto tmp_absolute = LocalPath(path_relative) + ".tmp";
-  File::Delete(tmp_absolute);
-
   Java::String j_uri(env, uri);
-  Java::String j_path(env, tmp_absolute.c_str());
+  Java::String j_path(env, path_relative.c_str());
 
   env->CallLongMethod(util, enqueue_method,
                       j_uri.Get(), j_path.Get());
@@ -241,8 +219,6 @@ AndroidDownloadManager::Cancel(JNIEnv *env, Path path_relative) noexcept
   assert(env != nullptr);
   assert(path_relative != nullptr);
 
-  const auto tmp_absolute = LocalPath(path_relative) + ".tmp";
-
-  Java::String j_path(env, tmp_absolute.c_str());
+  Java::String j_path(env, path_relative.c_str());
   env->CallVoidMethod(util, cancel_method, j_path.Get());
 }
