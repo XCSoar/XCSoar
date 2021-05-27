@@ -32,7 +32,7 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 
-class DownloadUtil extends BroadcastReceiver {
+final class DownloadUtil extends BroadcastReceiver {
   private static DownloadUtil instance;
 
   static void Initialise(Context context) {
