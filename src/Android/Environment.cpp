@@ -46,9 +46,6 @@ Environment::Initialise(JNIEnv *env)
   getExternalStoragePublicDirectory_method =
     env->GetStaticMethodID(cls, "getExternalStoragePublicDirectory",
                            "(Ljava/lang/String;)Ljava/io/File;");
-  if (getExternalStoragePublicDirectory_method == nullptr)
-    /* needs API level 8 */
-    env->ExceptionClear();
 }
 
 void
@@ -79,10 +76,6 @@ Environment::getExternalStorageDirectory() noexcept
 static Java::String
 getExternalStoragePublicDirectory(JNIEnv *env, const char *type)
 {
-  if (Environment::getExternalStoragePublicDirectory_method == nullptr)
-    /* needs API level 8 */
-    return nullptr;
-
   Java::String type2(env, type);
   Java::File file(env, env->CallStaticObjectMethod(Environment::cls,
                                                    Environment::getExternalStoragePublicDirectory_method,
