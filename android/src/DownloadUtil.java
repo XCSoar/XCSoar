@@ -39,24 +39,30 @@ import android.net.Uri;
 final class DownloadUtil extends BroadcastReceiver {
   private static DownloadUtil instance;
 
-  static void Initialise(Context context) {
-    instance = new DownloadUtil();
-    context.registerReceiver(instance,
+  DownloadUtil(Context context) {
+    context.registerReceiver(this,
                              new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
   }
 
-  static void Deinitialise(Context context) {
-    if (instance != null) {
+  void close(Context context) {
       try {
-        context.unregisterReceiver(instance);
+        context.unregisterReceiver(this);
       } catch (IllegalArgumentException e) {
         /* according to Google Play crash reports, this exception gets
            thrown spuriously with an empty message, and I have no idea
            how this can happen and how to dig deeper; to avoid
            spamming the crash reports, let's just ignore it */
-      } finally {
-        instance = null;
       }
+  }
+
+  static void Initialise(Context context) {
+    instance = new DownloadUtil(context);
+  }
+
+  static void Deinitialise(Context context) {
+    if (instance != null) {
+      instance.close(context);
+      instance = null;
     }
   }
 
