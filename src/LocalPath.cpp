@@ -292,17 +292,6 @@ FindDataPath()
       return path;
     }
 
-    /* now try Context.getExternalStorageDirectory(), because
-       getExternalStoragePublicDirectory() needs API level 8 */
-    if (auto path = Environment::getExternalStorageDirectory();
-        path != nullptr) {
-      __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
-                          "Environment.getExternalStorageDirectory()='%s'",
-                          path.c_str());
-
-      return AllocatedPath::Build(path, XCSDATADIR);
-    }
-
     /* hard-coded path for Android */
     __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                         "Fallback " XCSDATADIR " in " ANDROID_SDCARD);

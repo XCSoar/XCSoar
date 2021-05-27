@@ -30,7 +30,6 @@ Copyright_License {
 
 namespace Environment {
 static Java::TrivialClass cls;
-static jmethodID getExternalStorageDirectory_method;
 static jmethodID getExternalStoragePublicDirectory_method;
 } // namespace Environment
 
@@ -38,10 +37,6 @@ void
 Environment::Initialise(JNIEnv *env)
 {
   cls.Find(env, "android/os/Environment");
-
-  getExternalStorageDirectory_method =
-    env->GetStaticMethodID(cls, "getExternalStorageDirectory",
-                           "()Ljava/io/File;");
 
   getExternalStoragePublicDirectory_method =
     env->GetStaticMethodID(cls, "getExternalStoragePublicDirectory",
@@ -52,25 +47,6 @@ void
 Environment::Deinitialise(JNIEnv *env)
 {
   cls.Clear(env);
-}
-
-static Java::String
-getExternalStorageDirectory(JNIEnv *env)
-{
-  Java::File file{
-    env,
-    env->CallStaticObjectMethod(Environment::cls,
-                                Environment::getExternalStorageDirectory_method),
-  };
-
-  return file.GetAbsolutePathChecked();
-}
-
-AllocatedPath
-Environment::getExternalStorageDirectory() noexcept
-{
-  JNIEnv *env = Java::GetEnv();
-  return Java::ToPathChecked(::getExternalStorageDirectory(env));
 }
 
 static Java::String

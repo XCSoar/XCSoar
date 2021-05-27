@@ -35,11 +35,6 @@ namespace Environment {
 void Initialise(JNIEnv *env);
 void Deinitialise(JNIEnv *env);
 
-/**
- * Determine the mount point of the external SD card.
- */
-AllocatedPath getExternalStorageDirectory() noexcept;
-
 AllocatedPath getExternalStoragePublicDirectory(const char *type) noexcept;
 
 } // namespace Environment
