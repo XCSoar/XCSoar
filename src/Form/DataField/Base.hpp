@@ -50,6 +50,7 @@ public:
     TIME,
     PREFIX,
     GEOPOINT,
+    DATE,
   };
 
 private:
