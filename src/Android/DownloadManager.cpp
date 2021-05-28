@@ -43,6 +43,12 @@ static Java::TrivialClass util_class;
 
 static jmethodID ctor, close_method, enumerate_method, enqueue_method, cancel_method;
 
+AndroidDownloadManager::AndroidDownloadManager(JNIEnv *env,
+                                               jobject _util) noexcept
+  :util(env, _util)
+{
+}
+
 AndroidDownloadManager::~AndroidDownloadManager() noexcept
 {
   Java::GetEnv()->CallVoidMethod(util, close_method);

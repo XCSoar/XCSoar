@@ -43,8 +43,7 @@ class AndroidDownloadManager {
 
   std::list<Net::DownloadListener *> listeners;
 
-  AndroidDownloadManager(JNIEnv *env, jobject _util) noexcept
-    :util(env, _util) {}
+  AndroidDownloadManager(JNIEnv *env, jobject _util) noexcept;
 
 public:
   ~AndroidDownloadManager() noexcept;
