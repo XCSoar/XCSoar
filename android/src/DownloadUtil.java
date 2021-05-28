@@ -73,13 +73,23 @@ final class DownloadUtil extends BroadcastReceiver {
    * Check if this local URI is within the XCSoarData directory, and
    * returns the absolute path.  Returns null on mismatch.
    */
-  static String matchPath(String uri) {
+  static String matchPath(Uri uri) {
     /* XXX this check is a kludge to identify downloads started
        by XCSoar */
-    return uri != null && uri.startsWith("file:///") &&
-      uri.indexOf("/XCSoarData/") > 0
-      /* strip the "file://" */
-      ? uri.substring(7)
+
+    if (!uri.getScheme().equals("file"))
+      return null;
+
+    String path = uri.getPath();
+    if (path.indexOf("/XCSoarData/") < 0)
+      return null;
+
+    return path;
+  }
+
+  static String matchPath(String uri) {
+    return uri != null
+      ? matchPath(Uri.parse(uri))
       : null;
   }
 
