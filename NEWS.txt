@@ -1,6 +1,7 @@
 Version 7.8 - not yet released
 * Android
   - fix downloads on Android 10 and later
+  - fix logging while in background on Android 10 and later
 
 Version 7.7 - 2021/05/14
 * user interface

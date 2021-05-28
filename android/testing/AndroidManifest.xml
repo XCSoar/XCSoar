@@ -31,7 +31,7 @@
                  android:value="2.1"/>
     </activity>
 
-    <service android:name=".MyService"/>
+    <service android:name=".MyService" android:foregroundServiceType="location"/>
   </application>
 
   <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="29"/>
@@ -46,6 +46,9 @@
 
   <!-- required since Android 9 / targetSdkVersion 28 -->
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+  <!-- required since Android 10 / targetSdkVersion 29 -->
+  <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
   <!-- XCSoar renders maps and the UI with GLES 2.0 -->
   <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
