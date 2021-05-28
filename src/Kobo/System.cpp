@@ -144,6 +144,14 @@ KoboExportUSBStorage()
                     "file=/dev/mmcblk0p3", "stall=0", "removable=1",
                     "product_id=Kobo");
     break;
+  case KoboModel::NIA:
+    InsMod("/drivers/mx6ull-ntx/usb/gadget/configfs.ko");
+    InsMod("/drivers/mx6ull-ntx/usb/gadget/libcomposite.ko");
+    InsMod("/drivers/mx6ull-ntx/usb/gadget/usb_f_mass_storage.ko");
+    result = InsMod("/drivers/mx6ull-ntx/usb/gadget/g_file_storage.ko",
+                    "file=/dev/mmcblk0p3", "stall=0", "removable=1",
+                    "product_id=Kobo");
+    break;
   }
   return result;
 #else
@@ -196,6 +204,11 @@ KoboWifiOn()
   case KoboModel::AURA2:
     InsMod("/drivers/mx6sl-ntx/wifi/sdio_wifi_pwr.ko");
     InsMod("/drivers/mx6sl-ntx/wifi/8189fs.ko");
+    break;
+
+  case KoboModel::NIA:
+    InsMod("/drivers/mx6ull-ntx/wifi/sdio_wifi_pwr.ko");
+    InsMod("/drivers/mx6ull-ntx/wifi/8189fs.ko");
     break;
   }
 
