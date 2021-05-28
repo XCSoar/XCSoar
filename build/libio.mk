@@ -3,6 +3,7 @@
 IO_SRC_DIR = $(SRC)/io
 
 IO_SOURCES = \
+	$(IO_SRC_DIR)/CopyFile.cxx \
 	$(IO_SRC_DIR)/Open.cxx \
 	$(IO_SRC_DIR)/MemoryReader.cxx \
 	$(IO_SRC_DIR)/BufferedReader.cxx \
