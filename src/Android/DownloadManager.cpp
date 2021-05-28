@@ -26,6 +26,7 @@ Copyright_License {
 #include "net/http/DownloadManager.hpp"
 #include "Context.hpp"
 #include "java/Class.hxx"
+#include "java/Path.hxx"
 #include "java/String.hxx"
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"
@@ -34,8 +35,6 @@ Copyright_License {
 #include "org_xcsoar_DownloadUtil.h"
 
 #include <algorithm>
-
-#include <windef.h> /* for MAX_PATH */
 
 static Java::TrivialClass util_class;
 
@@ -153,10 +152,9 @@ Java_org_xcsoar_DownloadUtil_onDownloadAdded(JNIEnv *env, jobject obj,
                                              jlong j_handler, jstring j_path,
                                              jlong size, jlong position)
 {
-  char tmp_path[MAX_PATH];
-  Java::String::CopyTo(env, j_path, tmp_path, ARRAY_SIZE(tmp_path));
+  const auto tmp_path = Java::ToPath(env, j_path);
 
-  const auto final_path = EraseSuffix(Path(tmp_path), ".tmp");
+  const auto final_path = EraseSuffix(tmp_path, ".tmp");
   if (final_path == nullptr)
     return;
 
@@ -176,10 +174,9 @@ Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, jobject obj,
 {
   auto &dm = *(AndroidDownloadManager *)(size_t)ptr;
 
-  char tmp_path[MAX_PATH];
-  Java::String::CopyTo(env, j_path, tmp_path, ARRAY_SIZE(tmp_path));
+  const auto tmp_path = Java::ToPath(env, j_path);
 
-  const auto final_path = EraseSuffix(Path(tmp_path), ".tmp");
+  const auto final_path = EraseSuffix(tmp_path, ".tmp");
   if (final_path == nullptr)
     return;
 
@@ -187,7 +184,7 @@ Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, jobject obj,
   if (relative == nullptr)
     return;
 
-  success = success && File::Replace(Path(tmp_path), final_path);
+  success = success && File::Replace(tmp_path, final_path);
 
   dm.OnDownloadComplete(relative, success);
 }
