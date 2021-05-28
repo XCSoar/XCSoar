@@ -150,10 +150,10 @@ final class DownloadUtil extends BroadcastReceiver {
   }
 
   /**
-   * Find a download with the specified name.  Returns -1 if none was
+   * Find a download with the specified URI.  Returns -1 if none was
    * found.
    */
-  long findPath(String path) {
+  long findUri(String _uri) {
     DownloadManager.Query query = new DownloadManager.Query();
     query.setFilterByStatus(DownloadManager.STATUS_PAUSED |
                             DownloadManager.STATUS_PENDING |
@@ -170,7 +170,7 @@ final class DownloadUtil extends BroadcastReceiver {
 
     do {
       final String uri = c.getString(columnLocalURI);
-      if (uri != null && uri.endsWith(path))
+      if (uri != null && uri.equals(_uri))
         return c.getLong(columnID);
     } while (c.moveToNext());
 
@@ -178,7 +178,7 @@ final class DownloadUtil extends BroadcastReceiver {
   }
 
   void cancel(String path) {
-    long id = findPath(path);
+    long id = findUri(Uri.fromFile(new File(path)).toString());
     if (id >= 0) {
       dm.remove(id);
       onDownloadComplete(ptr, path, false);
