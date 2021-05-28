@@ -148,7 +148,7 @@ EraseSuffix(Path p, const char *suffix) noexcept
 }
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_DownloadUtil_onDownloadAdded(JNIEnv *env, jclass cls,
+Java_org_xcsoar_DownloadUtil_onDownloadAdded(JNIEnv *env, jobject obj,
                                              jlong j_handler, jstring j_path,
                                              jlong size, jlong position)
 {
@@ -168,7 +168,7 @@ Java_org_xcsoar_DownloadUtil_onDownloadAdded(JNIEnv *env, jclass cls,
 }
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, jclass cls,
+Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, jobject obj,
                                                 jstring j_path,
                                                 jboolean success)
 {

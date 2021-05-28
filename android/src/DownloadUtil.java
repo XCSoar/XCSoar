@@ -169,9 +169,9 @@ final class DownloadUtil extends BroadcastReceiver {
     }
   }
 
-  static native void onDownloadAdded(long handler, String path,
-                                     long size, long position);
-  static native void onDownloadComplete(String path, boolean success);
+  native void onDownloadAdded(long handler, String path,
+                              long size, long position);
+  native void onDownloadComplete(String path, boolean success);
 
   void checkComplete() {
     DownloadManager.Query query = new DownloadManager.Query();
