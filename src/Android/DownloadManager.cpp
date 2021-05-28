@@ -43,6 +43,14 @@ static Java::TrivialClass util_class;
 
 static jmethodID ctor, close_method, enumerate_method, enqueue_method, cancel_method;
 
+static Java::LocalObject
+NewDownloadUtil(JNIEnv *env, Context &context)
+{
+  auto obj = env->NewObject(util_class, ctor, context.Get());
+  Java::RethrowException(env);
+  return {env, obj};
+}
+
 AndroidDownloadManager::AndroidDownloadManager(JNIEnv *env,
                                                jobject _util) noexcept
   :util(env, _util)
@@ -94,14 +102,12 @@ AndroidDownloadManager::IsAvailable() noexcept
 AndroidDownloadManager *
 AndroidDownloadManager::Create(JNIEnv *env, Context &context) noexcept
 {
-  jobject util = env->NewObject(util_class, ctor, context.Get());
-  if (Java::DiscardException(env))
-    /* this can happen if the DownloadManager is not available */
+  try {
+    auto util = NewDownloadUtil(env, context);
+    return instance = new AndroidDownloadManager(env, util);
+  } catch (...) {
     return nullptr;
-
-  assert(util != nullptr);
-
-  return instance = new AndroidDownloadManager(env, util);
+  }
 }
 
 void
