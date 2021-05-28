@@ -39,8 +39,12 @@ Net::DownloadManager::Initialise() noexcept
   if (!AndroidDownloadManager::Initialise(Java::GetEnv()))
     return false;
 
-  download_manager = AndroidDownloadManager::Create(Java::GetEnv(), *context);
-  return download_manager != nullptr;
+  try {
+    download_manager = new AndroidDownloadManager(Java::GetEnv(), *context);
+    return true;
+  } catch (...) {
+    return false;
+  }
 }
 
 void

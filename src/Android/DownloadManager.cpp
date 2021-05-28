@@ -52,9 +52,10 @@ NewDownloadUtil(JNIEnv *env, Context &context)
 }
 
 AndroidDownloadManager::AndroidDownloadManager(JNIEnv *env,
-                                               jobject _util) noexcept
-  :util(env, _util)
+                                               Context &context)
+  :util(env, NewDownloadUtil(env, context))
 {
+  instance = this;
 }
 
 AndroidDownloadManager::~AndroidDownloadManager() noexcept
@@ -97,17 +98,6 @@ bool
 AndroidDownloadManager::IsAvailable() noexcept
 {
   return util_class.Get() != nullptr;
-}
-
-AndroidDownloadManager *
-AndroidDownloadManager::Create(JNIEnv *env, Context &context) noexcept
-{
-  try {
-    auto util = NewDownloadUtil(env, context);
-    return instance = new AndroidDownloadManager(env, util);
-  } catch (...) {
-    return nullptr;
-  }
 }
 
 void

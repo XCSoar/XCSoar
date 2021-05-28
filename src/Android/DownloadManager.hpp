@@ -43,9 +43,12 @@ class AndroidDownloadManager {
 
   std::list<Net::DownloadListener *> listeners;
 
-  AndroidDownloadManager(JNIEnv *env, jobject _util) noexcept;
-
 public:
+  /**
+   * Throws on error.
+   */
+  AndroidDownloadManager(JNIEnv *env, Context &context);
+
   ~AndroidDownloadManager() noexcept;
 
   static bool Initialise(JNIEnv *env) noexcept;
@@ -53,9 +56,6 @@ public:
 
   [[gnu::pure]]
   static bool IsAvailable() noexcept;
-
-  static AndroidDownloadManager *Create(JNIEnv *env,
-                                        Context &context) noexcept;
 
   void AddListener(Net::DownloadListener &listener) noexcept;
   void RemoveListener(Net::DownloadListener &listener) noexcept;
