@@ -88,10 +88,6 @@ AndroidDownloadManager::IsAvailable() noexcept
 AndroidDownloadManager *
 AndroidDownloadManager::Create(JNIEnv *env, Context &context) noexcept
 {
-  const auto obj = context.GetSystemService(env, "download");
-  if (obj == nullptr)
-    return nullptr;
-
   jobject util = env->NewObject(util_class, ctor, context.Get());
   if (Java::DiscardException(env))
     /* this can happen if the DownloadManager is not available */
@@ -99,7 +95,7 @@ AndroidDownloadManager::Create(JNIEnv *env, Context &context) noexcept
 
   assert(util != nullptr);
 
-  return instance = new AndroidDownloadManager(env, util, obj);
+  return instance = new AndroidDownloadManager(env, util);
 }
 
 void

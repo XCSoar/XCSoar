@@ -35,7 +35,6 @@ namespace Net { class DownloadListener; }
 
 class AndroidDownloadManager {
   Java::GlobalObject util;
-  Java::GlobalObject object;
 
   /**
    * Protects the #listeners attribute.
@@ -44,8 +43,8 @@ class AndroidDownloadManager {
 
   std::list<Net::DownloadListener *> listeners;
 
-  AndroidDownloadManager(JNIEnv *env, jobject _util, jobject obj) noexcept
-    :util(env, _util), object(env, obj) {}
+  AndroidDownloadManager(JNIEnv *env, jobject _util) noexcept
+    :util(env, _util) {}
 
 public:
   ~AndroidDownloadManager() noexcept;
