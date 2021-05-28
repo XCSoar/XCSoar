@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "DownloadManager.hpp"
 #include "system/Path.hpp"
+#include "LogFile.hpp"
 
 #ifdef ANDROID
 
@@ -43,6 +44,8 @@ Net::DownloadManager::Initialise() noexcept
     download_manager = new AndroidDownloadManager(Java::GetEnv(), *context);
     return true;
   } catch (...) {
+    LogError(std::current_exception(),
+             "Failed to initialise the DownloadManager");
     return false;
   }
 }
@@ -115,7 +118,6 @@ Net::DownloadManager::Cancel(Path relative_path) noexcept
 #include "Operation/Operation.hpp"
 #include "LocalPath.hpp"
 #include "io/FileTransaction.hpp"
-#include "LogFile.hpp"
 
 #include <string>
 #include <list>
