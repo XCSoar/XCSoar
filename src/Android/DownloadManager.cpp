@@ -97,8 +97,7 @@ AndroidDownloadManager::Create(JNIEnv *env, Context &context) noexcept
 
   jobject util = env->NewObject(util_class, ctor, context.Get());
   if (Java::DiscardException(env))
-    /* the DownloadUtil constructor does not throw ... but just in
-       case */
+    /* this can happen if the DownloadManager is not available */
     return nullptr;
 
   assert(util != nullptr);

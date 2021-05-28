@@ -42,7 +42,12 @@ final class DownloadUtil extends BroadcastReceiver {
 
   DownloadUtil(Context context) {
     this.context = context;
+
     dm = (DownloadManager)context.getSystemService(Context.DOWNLOAD_SERVICE);
+    if (dm == null)
+      /* can this really happen? */
+      throw new IllegalStateException("No DownloadManager");
+
     context.registerReceiver(this,
                              new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
   }
