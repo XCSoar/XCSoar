@@ -27,6 +27,7 @@ Copyright_License {
 #include "WindowWidget.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Base.hpp"
+#include "time/BrokenDate.hpp"
 #include "Repository/FileType.hpp"
 #include "util/EnumCast.hpp"
 #include "Units/Group.hpp"
@@ -414,6 +415,10 @@ public:
                        int value, unsigned max_tokens = 2,
                        DataFieldListener *listener=nullptr) noexcept;
 
+  WndProperty *AddDate(const TCHAR *label, const TCHAR *help,
+                       BrokenDate date,
+                       DataFieldListener *listener=nullptr) noexcept;
+
   WndProperty *AddRoughTime(const TCHAR *label, const TCHAR *help,
                             RoughTime value, RoughTimeDelta time_zone,
                             DataFieldListener *listener=nullptr) noexcept;
@@ -630,6 +635,7 @@ public:
   bool SaveValue(unsigned i, const char *profile_key, uint8_t &value) const noexcept;
   bool SaveValue(unsigned i, const char *profile_key, uint16_t &value) const noexcept;
   bool SaveValue(unsigned i, const char *profile_key, double &value) const noexcept;
+  bool SaveValue(unsigned i, const char *profile_key, BrokenDate &value) const noexcept;
 
   bool SaveValue(unsigned i, const char *registry_key,
                  unsigned &value) const noexcept {
