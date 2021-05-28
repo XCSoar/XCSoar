@@ -37,25 +37,24 @@ Copyright_License {
 
 #include <windef.h> /* for MAX_PATH */
 
-static AndroidDownloadManager *instance;
-
 static Java::TrivialClass util_class;
 
 static jmethodID ctor, close_method, enumerate_method, enqueue_method, cancel_method;
 
 static Java::LocalObject
-NewDownloadUtil(JNIEnv *env, Context &context)
+NewDownloadUtil(JNIEnv *env, AndroidDownloadManager &instance, Context &context)
 {
-  auto obj = env->NewObject(util_class, ctor, context.Get());
+  auto obj = env->NewObject(util_class, ctor,
+                            (jlong)(std::size_t)&instance,
+                            context.Get());
   Java::RethrowException(env);
   return {env, obj};
 }
 
 AndroidDownloadManager::AndroidDownloadManager(JNIEnv *env,
                                                Context &context)
-  :util(env, NewDownloadUtil(env, context))
+  :util(env, NewDownloadUtil(env, *this, context))
 {
-  instance = this;
 }
 
 AndroidDownloadManager::~AndroidDownloadManager() noexcept
@@ -73,7 +72,7 @@ AndroidDownloadManager::Initialise(JNIEnv *env) noexcept
     return false;
 
   ctor = env->GetMethodID(util_class, "<init>",
-                          "(Landroid/content/Context;)V");
+                          "(JLandroid/content/Context;)V");
 
   close_method = env->GetMethodID(util_class, "close", "()V");
 
@@ -171,11 +170,11 @@ Java_org_xcsoar_DownloadUtil_onDownloadAdded(JNIEnv *env, jobject obj,
 
 JNIEXPORT void JNICALL
 Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, jobject obj,
+                                                jlong ptr,
                                                 jstring j_path,
                                                 jboolean success)
 {
-  if (instance == nullptr)
-    return;
+  auto &dm = *(AndroidDownloadManager *)(size_t)ptr;
 
   char tmp_path[MAX_PATH];
   Java::String::CopyTo(env, j_path, tmp_path, ARRAY_SIZE(tmp_path));
@@ -190,7 +189,7 @@ Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, jobject obj,
 
   success = success && File::Replace(Path(tmp_path), final_path);
 
-  instance->OnDownloadComplete(relative, success);
+  dm.OnDownloadComplete(relative, success);
 }
 
 void

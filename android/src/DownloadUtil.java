@@ -37,10 +37,16 @@ import android.net.Uri;
  * provides a simpler API, only exposing the features used by XCSoar.
  */
 final class DownloadUtil extends BroadcastReceiver {
+  /**
+   * A native pointer to the C++ #AndroidDownloadManager instance.
+   */
+  final long ptr;
+
   final Context context;
   final DownloadManager dm;
 
-  DownloadUtil(Context context) {
+  DownloadUtil(long ptr, Context context) {
+    this.ptr = ptr;
     this.context = context;
 
     dm = (DownloadManager)context.getSystemService(Context.DOWNLOAD_SERVICE);
@@ -165,13 +171,13 @@ final class DownloadUtil extends BroadcastReceiver {
     long id = findPath(path);
     if (id >= 0) {
       dm.remove(id);
-      onDownloadComplete(path, false);
+      onDownloadComplete(ptr, path, false);
     }
   }
 
   native void onDownloadAdded(long handler, String path,
                               long size, long position);
-  native void onDownloadComplete(String path, boolean success);
+  native void onDownloadComplete(long ptr, String path, boolean success);
 
   void checkComplete() {
     DownloadManager.Query query = new DownloadManager.Query();
@@ -208,7 +214,7 @@ final class DownloadUtil extends BroadcastReceiver {
 
       final int status = c.getInt(columnStatus);
       final boolean success = status == DownloadManager.STATUS_SUCCESSFUL;
-      onDownloadComplete(path, success);
+      onDownloadComplete(ptr, path, success);
 
       final long id = c.getLong(columnId);
       dm.remove(id);
