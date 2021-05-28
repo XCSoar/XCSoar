@@ -45,6 +45,13 @@ if [ -f /mnt/onboard/.kobo/Kobo.tgz -o -f /mnt/onboard/.kobo/KoboRoot.tgz \
     exec /etc/init.d/rcS
 fi
 
+# Figure out our platform.
+PLATFORM=freescale
+if [ `dd if=/dev/mmcblk0 bs=512 skip=1024 count=1 | grep -c "HW CONFIG"` == 1 ]; then
+	CPU=`ntx_hwconfig -s -p /dev/mmcblk0 CPU`
+	PLATFORM=$CPU-ntx
+fi
+
 # prepare file system
 
 /bin/mkdir -p /proc /dev /root /tmp /sys /var/lib /var/log /var/run
@@ -62,8 +69,19 @@ fi
 /bin/mknod /dev/null c 1 3
 /bin/chmod 666 /dev/null
 
-/sbin/udevd --daemon
-/sbin/udevadm trigger
+# udev doesn't create all /dev/ entries on some platforms (e.g. Nia),
+# we preserve and re-create /dev entries on those like the original
+# start-up script.
+[ "$(ls -s /etc/udev.tgz | awk '{print $1}')" == 0 ] && rm -rf /etc/udev.tgz
+if [ $PLATFORM == freescale ] || [ ! -e /etc/udev.tgz ]; then
+	/sbin/udevadm control --env=STARTUP=1
+	/sbin/udevadm trigger
+	/sbin/udevadm settle --timeout=2
+	/sbin/udevadm control --env=STARTUP=
+	[ $PLATFORM != freescale ] && tar cpzf /etc/udev.tgz /dev &
+else
+	tar zxf /etc/udev.tgz -C /
+fi
 
 /sbin/hwclock -s -u
 
@@ -93,7 +111,7 @@ if [ `dd if=/dev/mmcblk0 bs=8 count=1 skip=64` = "SN-N905B" ]; then
 fi
 
 # WORKAROUND: USB devices which require USB mode switching might not
-# suffesscully switched, if simple_modeswitch was called too early (before the
+# successfully switched, if simple_modeswitch was called too early (before the
 # USB device files were created). Call it again to make sure.
 /opt/xcsoar/bin/simple_usbmodeswitch
 
