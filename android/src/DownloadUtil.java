@@ -32,6 +32,10 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 
+/**
+ * A helper class for using #DownloadManager from C++ via JNI.  It
+ * provides a simpler API, only exposing the features used by XCSoar.
+ */
 final class DownloadUtil extends BroadcastReceiver {
   private static DownloadUtil instance;
 
