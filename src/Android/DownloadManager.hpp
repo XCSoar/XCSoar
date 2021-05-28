@@ -34,6 +34,7 @@ class Context;
 namespace Net { class DownloadListener; }
 
 class AndroidDownloadManager {
+  Java::GlobalObject util;
   Java::GlobalObject object;
 
   /**
@@ -43,9 +44,12 @@ class AndroidDownloadManager {
 
   std::list<Net::DownloadListener *> listeners;
 
-  AndroidDownloadManager(JNIEnv *env, jobject obj) noexcept:object(env, obj) {}
+  AndroidDownloadManager(JNIEnv *env, jobject _util, jobject obj) noexcept
+    :util(env, _util), object(env, obj) {}
 
 public:
+  ~AndroidDownloadManager() noexcept;
+
   static bool Initialise(JNIEnv *env) noexcept;
   static void Deinitialise(JNIEnv *env) noexcept;
 

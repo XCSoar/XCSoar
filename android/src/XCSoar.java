@@ -98,8 +98,6 @@ public class XCSoar extends Activity {
 
     BluetoothHelper.Initialize(this);
 
-    DownloadUtil.Initialise(this);
-
     // fullscreen mode
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|
@@ -292,8 +290,6 @@ public class XCSoar extends Activity {
       unregisterReceiver(batteryReceiver);
       batteryReceiver = null;
     }
-
-    DownloadUtil.Deinitialise();
 
     if (nativeView != null) {
       nativeView.exitApp();

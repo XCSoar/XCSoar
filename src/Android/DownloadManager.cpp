@@ -41,7 +41,12 @@ static AndroidDownloadManager *instance;
 
 static Java::TrivialClass util_class;
 
-static jmethodID enumerate_method, enqueue_method, cancel_method;
+static jmethodID ctor, close_method, enumerate_method, enqueue_method, cancel_method;
+
+AndroidDownloadManager::~AndroidDownloadManager() noexcept
+{
+  Java::GetEnv()->CallVoidMethod(util, close_method);
+}
 
 bool
 AndroidDownloadManager::Initialise(JNIEnv *env) noexcept
@@ -51,6 +56,11 @@ AndroidDownloadManager::Initialise(JNIEnv *env) noexcept
 
   if (!util_class.FindOptional(env, "org/xcsoar/DownloadUtil"))
     return false;
+
+  ctor = env->GetMethodID(util_class, "<init>",
+                          "(Landroid/content/Context;)V");
+
+  close_method = env->GetMethodID(util_class, "close", "()V");
 
   enumerate_method = env->GetStaticMethodID(util_class, "enumerate",
                                             "(Landroid/app/DownloadManager;J)V");
@@ -85,7 +95,15 @@ AndroidDownloadManager::Create(JNIEnv *env, Context &context) noexcept
   if (obj == nullptr)
     return nullptr;
 
-  return instance = new AndroidDownloadManager(env, obj);
+  jobject util = env->NewObject(util_class, ctor, context.Get());
+  if (Java::DiscardException(env))
+    /* the DownloadUtil constructor does not throw ... but just in
+       case */
+    return nullptr;
+
+  assert(util != nullptr);
+
+  return instance = new AndroidDownloadManager(env, util, obj);
 }
 
 void

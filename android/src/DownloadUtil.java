@@ -37,8 +37,6 @@ import android.net.Uri;
  * provides a simpler API, only exposing the features used by XCSoar.
  */
 final class DownloadUtil extends BroadcastReceiver {
-  private static DownloadUtil instance;
-
   final Context context;
   final DownloadManager dm;
 
@@ -58,17 +56,6 @@ final class DownloadUtil extends BroadcastReceiver {
            how this can happen and how to dig deeper; to avoid
            spamming the crash reports, let's just ignore it */
       }
-  }
-
-  static void Initialise(Context context) {
-    instance = new DownloadUtil(context);
-  }
-
-  static void Deinitialise() {
-    if (instance != null) {
-      instance.close();
-      instance = null;
-    }
   }
 
   /**
