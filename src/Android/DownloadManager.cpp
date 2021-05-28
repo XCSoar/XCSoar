@@ -62,16 +62,13 @@ AndroidDownloadManager::Initialise(JNIEnv *env) noexcept
 
   close_method = env->GetMethodID(util_class, "close", "()V");
 
-  enumerate_method = env->GetStaticMethodID(util_class, "enumerate",
-                                            "(Landroid/app/DownloadManager;J)V");
+  enumerate_method = env->GetMethodID(util_class, "enumerate", "(J)V");
 
-  enqueue_method = env->GetStaticMethodID(util_class, "enqueue",
-                                          "(Landroid/app/DownloadManager;"
-                                          "Ljava/lang/String;Ljava/lang/String;)J");
+  enqueue_method = env->GetMethodID(util_class, "enqueue",
+                                    "(Ljava/lang/String;Ljava/lang/String;)J");
 
-  cancel_method = env->GetStaticMethodID(util_class, "cancel",
-                                         "(Landroid/app/DownloadManager;"
-                                         "Ljava/lang/String;)V");
+  cancel_method = env->GetMethodID(util_class, "cancel",
+                                   "(Ljava/lang/String;)V");
 
   return true;
 }
@@ -204,8 +201,8 @@ AndroidDownloadManager::Enumerate(JNIEnv *env,
 {
   assert(env != nullptr);
 
-  env->CallStaticVoidMethod(util_class, enumerate_method,
-                            object.Get(), (jlong)(size_t)&listener);
+  env->CallVoidMethod(util, enumerate_method,
+                      (jlong)(size_t)&listener);
 }
 
 void
@@ -222,9 +219,8 @@ AndroidDownloadManager::Enqueue(JNIEnv *env, const char *uri,
   Java::String j_uri(env, uri);
   Java::String j_path(env, tmp_absolute.c_str());
 
-  env->CallStaticLongMethod(util_class, enqueue_method,
-                            object.Get(), j_uri.Get(),
-                            j_path.Get());
+  env->CallLongMethod(util, enqueue_method,
+                      j_uri.Get(), j_path.Get());
 
   try {
     /* the method DownloadManager.enqueue() can throw
@@ -254,6 +250,5 @@ AndroidDownloadManager::Cancel(JNIEnv *env, Path path_relative) noexcept
   const auto tmp_absolute = LocalPath(path_relative) + ".tmp";
 
   Java::String j_path(env, tmp_absolute.c_str());
-  env->CallStaticVoidMethod(util_class, cancel_method,
-                            object.Get(), j_path.Get());
+  env->CallVoidMethod(util, cancel_method, j_path.Get());
 }

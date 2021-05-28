@@ -77,7 +77,7 @@ final class DownloadUtil extends BroadcastReceiver {
       : null;
   }
 
-  static void enumerate(DownloadManager dm, long handler) {
+  void enumerate(long handler) {
     DownloadManager.Query query = new DownloadManager.Query();
     query.setFilterByStatus(DownloadManager.STATUS_PAUSED |
                             DownloadManager.STATUS_PENDING |
@@ -116,7 +116,7 @@ final class DownloadUtil extends BroadcastReceiver {
   /**
    * @param path the absolute destination path
    */
-  static long enqueue(DownloadManager dm, String uri, String path) {
+  long enqueue(String uri, String path) {
     DownloadManager.Request request =
       new DownloadManager.Request(Uri.parse(uri));
 
@@ -137,7 +137,7 @@ final class DownloadUtil extends BroadcastReceiver {
    * Find a download with the specified name.  Returns -1 if none was
    * found.
    */
-  static long findPath(DownloadManager dm, String path) {
+  long findPath(String path) {
     DownloadManager.Query query = new DownloadManager.Query();
     query.setFilterByStatus(DownloadManager.STATUS_PAUSED |
                             DownloadManager.STATUS_PENDING |
@@ -161,8 +161,8 @@ final class DownloadUtil extends BroadcastReceiver {
     return -1;
   }
 
-  static void cancel(DownloadManager dm, String path) {
-    long id = findPath(dm, path);
+  void cancel(String path) {
+    long id = findPath(path);
     if (id >= 0) {
       dm.remove(id);
       onDownloadComplete(path, false);
@@ -173,7 +173,7 @@ final class DownloadUtil extends BroadcastReceiver {
                                      long size, long position);
   static native void onDownloadComplete(String path, boolean success);
 
-  static void checkComplete(DownloadManager dm) {
+  void checkComplete() {
     DownloadManager.Query query = new DownloadManager.Query();
     query.setFilterByStatus(DownloadManager.STATUS_FAILED |
                             DownloadManager.STATUS_SUCCESSFUL);
@@ -217,7 +217,7 @@ final class DownloadUtil extends BroadcastReceiver {
 
   @Override public void onReceive(Context context, Intent intent) {
     if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction())) {
-      checkComplete(dm);
+      checkComplete();
     }
   }
 }
