@@ -45,8 +45,12 @@ if [ -f /mnt/onboard/.kobo/Kobo.tgz -o -f /mnt/onboard/.kobo/KoboRoot.tgz \
     exec /etc/init.d/rcS
 fi
 
-# Figure out our platform.
+# Figure out our platform. Older devices do not have ntx_hwconfig
+# (https://github.com/koreader/koreader/issues/421#issuecomment-46861530),
+# so we default to generic "freescale" for those.
 PLATFORM=freescale
+# If we have "HW CONFIG" block in our image, we can use ntx_hwconfig
+# to get actual CPU architecture.
 if [ `dd if=/dev/mmcblk0 bs=512 skip=1024 count=1 | grep -c "HW CONFIG"` == 1 ]; then
 	CPU=`ntx_hwconfig -s -p /dev/mmcblk0 CPU`
 	PLATFORM=$CPU-ntx
@@ -69,15 +73,18 @@ fi
 /bin/mknod /dev/null c 1 3
 /bin/chmod 666 /dev/null
 
-# udev doesn't create all /dev/ entries on some platforms (e.g. Nia),
-# we preserve and re-create /dev entries on those like the original
-# start-up script.
+# Make sure our /dev/ backup is valid (has a non-zero size).
 [ "$(ls -s /etc/udev.tgz | awk '{print $1}')" == 0 ] && rm -rf /etc/udev.tgz
+# If we don't know our specific platform, we rely on udev to create
+# /dev/ entries. Otherwise we use the /dev tree backup if it
+# exist. This is required for platforms that don't appear to have
+# complete udev support and ship a device tree instead (such as Nia).
 if [ $PLATFORM == freescale ] || [ ! -e /etc/udev.tgz ]; then
 	/sbin/udevadm control --env=STARTUP=1
 	/sbin/udevadm trigger
 	/sbin/udevadm settle --timeout=2
 	/sbin/udevadm control --env=STARTUP=
+	# Create a /dev/ tree backup to restore next time around.
 	[ $PLATFORM != freescale ] && tar cpzf /etc/udev.tgz /dev &
 else
 	tar zxf /etc/udev.tgz -C /
