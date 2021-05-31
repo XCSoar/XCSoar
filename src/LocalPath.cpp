@@ -147,7 +147,7 @@ ExpandLocalPath(Path src)
   // Get the relative file name and location (ptr)
   const TCHAR *ptr = AfterLocalPathCode(src.c_str());
   if (ptr == nullptr)
-    return Path(src);
+    return src;
 
 #ifndef _WIN32
   // Convert backslashes to slashes on platforms where it matters
