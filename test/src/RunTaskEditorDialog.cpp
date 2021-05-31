@@ -24,7 +24,6 @@ Copyright_License {
 #include "ui/window/SingleWindow.hpp"
 #include "ui/window/Init.hpp"
 #include "Dialogs/Dialogs.h"
-#include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "WayPointParser.h"
 #include "Airspace/AirspaceClientUI.hpp"

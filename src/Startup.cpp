@@ -138,8 +138,6 @@ LoadProfile()
 static void
 AfterStartup()
 {
-  StartupLogFreeRamAndStorage();
-
   try {
     const auto lua_path = LocalPath(_T("lua"));
     Lua::StartFile(AllocatedPath::Build(lua_path, _T("init.lua")));
@@ -495,8 +493,6 @@ Shutdown()
 
   main_window->BeginShutdown();
 
-  StartupLogFreeRamAndStorage();
-
   Lua::StopAllBackground();
 
   // Turn off all displays
@@ -671,8 +667,6 @@ Shutdown()
   CloseLanguageFile();
 
   Display::RestoreOrientation();
-
-  StartupLogFreeRamAndStorage();
 
   LogFormat("Finished shutdown");
 }

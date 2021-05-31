@@ -29,8 +29,6 @@ struct PixelSize;
 
 unsigned long FindFreeSpace(const TCHAR *path);
 
-void StartupLogFreeRamAndStorage();
-
 PixelSize
 SystemWindowSize();
 

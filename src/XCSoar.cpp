@@ -36,7 +36,6 @@ Copyright_License {
 #include "Look/GlobalFonts.hpp"
 #include "ui/window/Init.hpp"
 #include "net/http/Init.hpp"
-#include "UtilsSystem.hpp"
 #include "ResourceLoader.hpp"
 #include "Language/Language.hpp"
 #include "Language/LanguageGlue.hpp"
@@ -148,7 +147,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   InitialiseDataPath();
-  StartupLogFreeRamAndStorage();
 
   // Write startup note + version to logfile
   LogFormat(_T("Starting XCSoar %s"), XCSoar_ProductToken);

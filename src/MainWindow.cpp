@@ -41,7 +41,6 @@ Copyright_License {
 #include "Gauge/GlueGaugeVario.hpp"
 #include "Form/Form.hpp"
 #include "Widget/Widget.hpp"
-#include "UtilsSystem.hpp"
 #include "Look/GlobalFonts.hpp"
 #include "Look/DefaultFonts.hpp"
 #include "Look/Look.hpp"

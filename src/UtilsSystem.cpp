@@ -24,7 +24,6 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "CommandLine.hpp"
 #include "LocalPath.hpp"
-#include "LogFile.hpp"
 #include "ui/dim/Size.hpp"
 #include "system/Path.hpp"
 
@@ -77,13 +76,6 @@ unsigned long FindFreeSpace(const TCHAR *path) {
   } else
     return 0;
 #endif /* !HAVE_POSIX */
-}
-
-void
-StartupLogFreeRamAndStorage()
-{
-  unsigned long freestorage = FindFreeSpace(GetPrimaryDataPath().c_str());
-  LogFormat("Free storage %lu KB", freestorage);
 }
 
 /**
