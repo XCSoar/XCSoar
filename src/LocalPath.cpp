@@ -60,11 +60,6 @@ Copyright_License {
 #define XCSDATADIR "XCSoarData"
 
 /**
- * The default mount point of the SD card on Android.
- */
-#define ANDROID_SDCARD "/sdcard"
-
-/**
  * This is the partition that the Kobo software mounts on PCs
  */
 #define KOBO_USER_DATA "/mnt/onboard"
@@ -284,12 +279,7 @@ FindDataPath() noexcept
                           path.c_str());
       return path;
     }
-
-    /* hard-coded path for Android */
-    __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
-                        "Fallback " XCSDATADIR " in " ANDROID_SDCARD);
 #endif
-    return Path(_T(ANDROID_SDCARD "/" XCSDATADIR));
   }
 
 #ifdef _WIN32
