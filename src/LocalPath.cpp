@@ -194,10 +194,6 @@ FindDataPathAtModule(HMODULE hModule)
     : nullptr;
 }
 
-#endif
-
-#ifdef _WIN32
-
 static const TCHAR *
 ModuleInFlash(HMODULE module, TCHAR *buffer)
 {
@@ -215,7 +211,7 @@ ModuleInFlash(HMODULE module, TCHAR *buffer)
   return buffer;
 }
 
-#endif
+#endif /* _WIN32 */
 
 /**
  * Returns the location of XCSoarData in the user's home directory.
