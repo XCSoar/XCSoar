@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:23+0200\n"
+"POT-Creation-Date: 2021-05-31 13:24+0200\n"
 "PO-Revision-Date: 2017-09-27 04:48+0000\n"
 "Last-Translator: Costel Alexandru Pavelescu <pavelescu.alexandru@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/xcsoar/"
@@ -549,19 +549,11 @@ msgstr "Receptor transponder"
 msgid "Other"
 msgstr "Altele"
 
-#: src/Logger/Logger.cpp:110 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr "Start înregistrare"
 
-#: src/Logger/Logger.cpp:117
-msgid "Logger inactive, insufficient storage!"
-msgstr "Înregistrator inactiv, spațiu insuficient"
-
-#: src/Logger/Logger.cpp:118
-msgid "Logger Error"
-msgstr "Eroare de înregistrator de zbor"
-
-#: src/Logger/Logger.cpp:146 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr "Oprește înregistratorul"
 
@@ -9855,6 +9847,12 @@ msgstr ""
 #: Data/Input/default.xci:1159
 msgid "Setup Plane"
 msgstr ""
+
+#~ msgid "Logger inactive, insufficient storage!"
+#~ msgstr "Înregistrator inactiv, spațiu insuficient"
+
+#~ msgid "Logger Error"
+#~ msgstr "Eroare de înregistrator de zbor"
 
 #~ msgid "Battery voltage"
 #~ msgstr "Voltaj baterie"

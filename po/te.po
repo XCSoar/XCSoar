@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:23+0200\n"
+"POT-Creation-Date: 2021-05-31 13:24+0200\n"
 "PO-Revision-Date: 2019-08-11 09:23+0000\n"
 "Last-Translator: sai sushanth <nsaisushanth@gmail.com>\n"
 "Language-Team: Telugu <https://hosted.weblate.org/projects/xcsoar/"
@@ -509,19 +509,11 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: src/Logger/Logger.cpp:110 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr ""
 
-#: src/Logger/Logger.cpp:117
-msgid "Logger inactive, insufficient storage!"
-msgstr ""
-
-#: src/Logger/Logger.cpp:118
-msgid "Logger Error"
-msgstr ""
-
-#: src/Logger/Logger.cpp:146 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr ""
 

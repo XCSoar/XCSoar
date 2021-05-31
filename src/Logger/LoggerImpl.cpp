@@ -31,7 +31,6 @@
 #include "system/FileUtil.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "Interface.hpp"
-#include "IGCFileCleanup.hpp"
 #include "IGC/IGCWriter.hpp"
 #include "util/CharUtil.hxx"
 
@@ -105,10 +104,6 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   // Logger off
   delete writer;
   writer = nullptr;
-
-  // Make space for logger file, if unsuccessful -> cancel
-  if (gps_info.gps.real && gps_info.date_time_utc.IsDatePlausible())
-    IGCFileCleanup(gps_info.date_time_utc.year);
 
   pre_takeoff_buffer.clear();
 }

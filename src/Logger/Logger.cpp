@@ -31,7 +31,6 @@
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Asset.hpp"
 #include "Computer/Settings.hpp"
-#include "IGCFileCleanup.hpp"
 
 void
 Logger::LogPoint(const NMEAInfo &gps_info)
@@ -73,12 +72,6 @@ Logger::IsLoggerActive() const
   return logger.IsActive();
 }
 
-bool
-Logger::LoggerClearFreeSpace(unsigned current_year)
-{
-  return IGCFileCleanup(current_year);
-}
-
 void
 Logger::GUIStartLogger(const NMEAInfo& gps_info,
                     const ComputerSettings& settings,
@@ -111,13 +104,6 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
                       MB_YESNO | MB_ICONQUESTION) != IDYES)
         return;
     }
-  }
-
-  if (!LoggerClearFreeSpace(gps_info.date_time_utc.year)) {
-    ShowMessageBox(_("Logger inactive, insufficient storage!"),
-                _("Logger Error"), MB_OK| MB_ICONERROR);
-    LogFormat("Logger not started: Insufficient Storage");
-    return;
   }
 
   const std::lock_guard<SharedMutex> protect(lock);

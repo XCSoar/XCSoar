@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:23+0200\n"
+"POT-Creation-Date: 2021-05-31 13:24+0200\n"
 "PO-Revision-Date: 2019-02-18 19:18+0000\n"
 "Last-Translator: Mário Machado <mario.spm@mail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -543,19 +543,11 @@ msgstr "Receptor transponder"
 msgid "Other"
 msgstr "Outro"
 
-#: src/Logger/Logger.cpp:110 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr "Iniciar logger"
 
-#: src/Logger/Logger.cpp:117
-msgid "Logger inactive, insufficient storage!"
-msgstr "Logger inativo, armazenagem insuficiente!"
-
-#: src/Logger/Logger.cpp:118
-msgid "Logger Error"
-msgstr "Erro Logger"
-
-#: src/Logger/Logger.cpp:146 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr "Parar logger"
 
@@ -10268,6 +10260,12 @@ msgstr ""
 #: Data/Input/default.xci:1159
 msgid "Setup Plane"
 msgstr "Conf. Planador"
+
+#~ msgid "Logger inactive, insufficient storage!"
+#~ msgstr "Logger inativo, armazenagem insuficiente!"
+
+#~ msgid "Logger Error"
+#~ msgstr "Erro Logger"
 
 #, no-c-format
 #~ msgid "OLC Dist"

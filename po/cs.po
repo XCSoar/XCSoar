@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:23+0200\n"
+"POT-Creation-Date: 2021-05-31 13:24+0200\n"
 "PO-Revision-Date: 2021-05-01 21:32+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
@@ -537,19 +537,11 @@ msgstr "Příjímač odpovídače"
 msgid "Other"
 msgstr "Další"
 
-#: src/Logger/Logger.cpp:110 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr "Zapnutí záznamu"
 
-#: src/Logger/Logger.cpp:117
-msgid "Logger inactive, insufficient storage!"
-msgstr "Záznam vypnut, nedostatek místa!"
-
-#: src/Logger/Logger.cpp:118
-msgid "Logger Error"
-msgstr "Chyba záznamu"
-
-#: src/Logger/Logger.cpp:146 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr "Záznam ukončen"
 
@@ -10390,6 +10382,12 @@ msgid "Setup Plane"
 msgstr ""
 "Nastavení\n"
 "Letadlo"
+
+#~ msgid "Logger inactive, insufficient storage!"
+#~ msgstr "Záznam vypnut, nedostatek místa!"
+
+#~ msgid "Logger Error"
+#~ msgstr "Chyba záznamu"
 
 #, no-c-format
 #~ msgid "OLC Dist"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:23+0200\n"
+"POT-Creation-Date: 2021-05-31 13:24+0200\n"
 "PO-Revision-Date: 2019-12-23 01:21+0000\n"
 "Last-Translator: Jozef Chrastina <jozino.ch@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/xcsoar/"
@@ -544,19 +544,11 @@ msgstr "Prijímač odpovedača"
 msgid "Other"
 msgstr "Iné"
 
-#: src/Logger/Logger.cpp:110 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr "Zapnúť logger"
 
-#: src/Logger/Logger.cpp:117
-msgid "Logger inactive, insufficient storage!"
-msgstr "Logger neaktívny, nedostatok miesta!"
-
-#: src/Logger/Logger.cpp:118
-msgid "Logger Error"
-msgstr "Chyba loggeru"
-
-#: src/Logger/Logger.cpp:146 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr "Ukončiť logger"
 
@@ -10387,6 +10379,12 @@ msgstr "Uložiť do EEPROM"
 #: Data/Input/default.xci:1159
 msgid "Setup Plane"
 msgstr "Nastavenie lietadla"
+
+#~ msgid "Logger inactive, insufficient storage!"
+#~ msgstr "Logger neaktívny, nedostatok miesta!"
+
+#~ msgid "Logger Error"
+#~ msgstr "Chyba loggeru"
 
 #, no-c-format
 #~ msgid "OLC Dist"

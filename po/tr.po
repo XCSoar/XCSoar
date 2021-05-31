@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:23+0200\n"
+"POT-Creation-Date: 2021-05-31 13:24+0200\n"
 "PO-Revision-Date: 2021-03-01 14:50+0000\n"
 "Last-Translator: Tayfur Yünlü <dandikunited@yandex.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/xcsoar/"
@@ -538,19 +538,11 @@ msgstr ""
 msgid "Other"
 msgstr "Diğer"
 
-#: src/Logger/Logger.cpp:110 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr "Kaydı Başlat"
 
-#: src/Logger/Logger.cpp:117
-msgid "Logger inactive, insufficient storage!"
-msgstr "Kayıt Devredışı ,Yetersiz Deoplama Alanı"
-
-#: src/Logger/Logger.cpp:118
-msgid "Logger Error"
-msgstr "Kayıt hatası"
-
-#: src/Logger/Logger.cpp:146 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr "Kaydı Durdur"
 
@@ -9740,6 +9732,12 @@ msgstr ""
 #: Data/Input/default.xci:1159
 msgid "Setup Plane"
 msgstr ""
+
+#~ msgid "Logger inactive, insufficient storage!"
+#~ msgstr "Kayıt Devredışı ,Yetersiz Deoplama Alanı"
+
+#~ msgid "Logger Error"
+#~ msgstr "Kayıt hatası"
 
 #~ msgid ""
 #~ "METAR\n"

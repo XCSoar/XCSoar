@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:23+0200\n"
+"POT-Creation-Date: 2021-05-31 13:24+0200\n"
 "PO-Revision-Date: 2013-07-28 16:54+0000\n"
 "Last-Translator: Joel Päkkilä <joel.pakkila@gmail.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -515,19 +515,11 @@ msgstr "Transponderi"
 msgid "Other"
 msgstr "Muu"
 
-#: src/Logger/Logger.cpp:110 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr "Käynnistä loggeri"
 
-#: src/Logger/Logger.cpp:117
-msgid "Logger inactive, insufficient storage!"
-msgstr "Loggeri pois käytöstä, tallennustila lopussa!"
-
-#: src/Logger/Logger.cpp:118
-msgid "Logger Error"
-msgstr "Loggeri-virhe"
-
-#: src/Logger/Logger.cpp:146 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr "Pysäytä loggeri"
 
@@ -9820,6 +9812,12 @@ msgstr ""
 #: Data/Input/default.xci:1159
 msgid "Setup Plane"
 msgstr "Koneen asetukset"
+
+#~ msgid "Logger inactive, insufficient storage!"
+#~ msgstr "Loggeri pois käytöstä, tallennustila lopussa!"
+
+#~ msgid "Logger Error"
+#~ msgstr "Loggeri-virhe"
 
 #, fuzzy, no-c-format
 #~ msgid "OLC Speed"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:23+0200\n"
+"POT-Creation-Date: 2021-05-31 13:24+0200\n"
 "PO-Revision-Date: 2021-04-30 03:32+0000\n"
 "Last-Translator: 山岭野兔 <bd8bin@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -514,19 +514,11 @@ msgstr "应答器接收机"
 msgid "Other"
 msgstr "其他"
 
-#: src/Logger/Logger.cpp:110 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr "开始记录"
 
-#: src/Logger/Logger.cpp:117
-msgid "Logger inactive, insufficient storage!"
-msgstr "记录器不活动，存储不足！"
-
-#: src/Logger/Logger.cpp:118
-msgid "Logger Error"
-msgstr "记录器错误"
-
-#: src/Logger/Logger.cpp:146 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr "停止记录"
 
@@ -9994,6 +9986,12 @@ msgstr "存储到EEPROM中"
 #: Data/Input/default.xci:1159
 msgid "Setup Plane"
 msgstr "设置飞机"
+
+#~ msgid "Logger inactive, insufficient storage!"
+#~ msgstr "记录器不活动，存储不足！"
+
+#~ msgid "Logger Error"
+#~ msgstr "记录器错误"
 
 #, no-c-format
 #~ msgid "OLC Dist"

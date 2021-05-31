@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:23+0200\n"
+"POT-Creation-Date: 2021-05-31 13:24+0200\n"
 "PO-Revision-Date: 2019-08-28 12:24+0000\n"
 "Last-Translator: leela <53352@protonmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/xcsoar/"
@@ -537,19 +537,11 @@ msgstr "Transzponder vevő"
 msgid "Other"
 msgstr "Egyéb"
 
-#: src/Logger/Logger.cpp:110 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr "Logger indul"
 
-#: src/Logger/Logger.cpp:117
-msgid "Logger inactive, insufficient storage!"
-msgstr "A logger áll, mert kevés a tárolóhely!"
-
-#: src/Logger/Logger.cpp:118
-msgid "Logger Error"
-msgstr "Logger hiba"
-
-#: src/Logger/Logger.cpp:146 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr "Loggert leállítsam"
 
@@ -10356,6 +10348,12 @@ msgstr "EEPROMban tárolva"
 #: Data/Input/default.xci:1159
 msgid "Setup Plane"
 msgstr "Repülőgép beállítás"
+
+#~ msgid "Logger inactive, insufficient storage!"
+#~ msgstr "A logger áll, mert kevés a tárolóhely!"
+
+#~ msgid "Logger Error"
+#~ msgstr "Logger hiba"
 
 #, fuzzy, no-c-format
 #~ msgid "OLC Dist"

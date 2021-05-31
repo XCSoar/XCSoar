@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:23+0200\n"
+"POT-Creation-Date: 2021-05-31 13:24+0200\n"
 "PO-Revision-Date: 2021-04-11 16:26+0000\n"
 "Last-Translator: Веско <v.jeliazkov@jeliazkov.net>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/xcsoar/"
@@ -542,19 +542,11 @@ msgstr "Приемник на транспондер"
 msgid "Other"
 msgstr "Други"
 
-#: src/Logger/Logger.cpp:110 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr "Стартиране на журнал"
 
-#: src/Logger/Logger.cpp:117
-msgid "Logger inactive, insufficient storage!"
-msgstr "Журнала не се попълва. Недостатъчно място!"
-
-#: src/Logger/Logger.cpp:118
-msgid "Logger Error"
-msgstr "Грешка в журнала"
-
-#: src/Logger/Logger.cpp:146 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr "Спиране на журнала"
 
@@ -10482,6 +10474,12 @@ msgstr "Запазено в EEPROM"
 #: Data/Input/default.xci:1159
 msgid "Setup Plane"
 msgstr "Настройки на планера"
+
+#~ msgid "Logger inactive, insufficient storage!"
+#~ msgstr "Журнала не се попълва. Недостатъчно място!"
+
+#~ msgid "Logger Error"
+#~ msgstr "Грешка в журнала"
 
 #, no-c-format
 #~ msgid "OLC Dist"

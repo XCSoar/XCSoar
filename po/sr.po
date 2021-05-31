@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:23+0200\n"
+"POT-Creation-Date: 2021-05-31 13:24+0200\n"
 "PO-Revision-Date: 2013-10-24 08:51+0000\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: none\n"
@@ -508,19 +508,11 @@ msgstr ""
 msgid "Other"
 msgstr "Ostali"
 
-#: src/Logger/Logger.cpp:110 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr "Start Dnevnika"
 
-#: src/Logger/Logger.cpp:117
-msgid "Logger inactive, insufficient storage!"
-msgstr "Dnevnik neaktivan, nedovoljno prostora na mediju!"
-
-#: src/Logger/Logger.cpp:118
-msgid "Logger Error"
-msgstr "Greška u LOG upisu"
-
-#: src/Logger/Logger.cpp:146 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr "Stop Dnevnika"
 
@@ -9709,6 +9701,12 @@ msgstr ""
 #: Data/Input/default.xci:1159
 msgid "Setup Plane"
 msgstr ""
+
+#~ msgid "Logger inactive, insufficient storage!"
+#~ msgstr "Dnevnik neaktivan, nedovoljno prostora na mediju!"
+
+#~ msgid "Logger Error"
+#~ msgstr "Greška u LOG upisu"
 
 #~ msgid "Battery voltage"
 #~ msgstr "Napon baterije"

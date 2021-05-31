@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:23+0200\n"
+"POT-Creation-Date: 2021-05-31 13:24+0200\n"
 "PO-Revision-Date: 2021-01-11 15:32+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/xcsoar/"
@@ -545,19 +545,11 @@ msgstr "Transpondermottaker"
 msgid "Other"
 msgstr "Andre"
 
-#: src/Logger/Logger.cpp:110 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr "Start Logger"
 
-#: src/Logger/Logger.cpp:117
-msgid "Logger inactive, insufficient storage!"
-msgstr "Logger er av, for lite minne!"
-
-#: src/Logger/Logger.cpp:118
-msgid "Logger Error"
-msgstr "Logger Feil"
-
-#: src/Logger/Logger.cpp:146 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr "Stopp Logger"
 
@@ -10184,6 +10176,12 @@ msgstr "Lagret i EEPROM"
 #: Data/Input/default.xci:1159
 msgid "Setup Plane"
 msgstr "Farkost Oppsett"
+
+#~ msgid "Logger inactive, insufficient storage!"
+#~ msgstr "Logger er av, for lite minne!"
+
+#~ msgid "Logger Error"
+#~ msgstr "Logger Feil"
 
 #, no-c-format
 #~ msgid "OLC Dist"

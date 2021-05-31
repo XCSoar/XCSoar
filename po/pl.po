@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:23+0200\n"
+"POT-Creation-Date: 2021-05-31 13:24+0200\n"
 "PO-Revision-Date: 2019-08-28 12:24+0000\n"
 "Last-Translator: leela <53352@protonmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/xcsoar/"
@@ -547,19 +547,11 @@ msgstr "Odbiornik Transpondera"
 msgid "Other"
 msgstr "Inne"
 
-#: src/Logger/Logger.cpp:110 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr "Start Rejestratora"
 
-#: src/Logger/Logger.cpp:117
-msgid "Logger inactive, insufficient storage!"
-msgstr "Rejestrator wył., zbyt mało pamięci!"
-
-#: src/Logger/Logger.cpp:118
-msgid "Logger Error"
-msgstr "Błąd Rejestratora"
-
-#: src/Logger/Logger.cpp:146 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr "Stop Rejestratora"
 
@@ -10492,6 +10484,12 @@ msgstr "Zapisane w EEPROM."
 #: Data/Input/default.xci:1159
 msgid "Setup Plane"
 msgstr "Ustawienia szybowca"
+
+#~ msgid "Logger inactive, insufficient storage!"
+#~ msgstr "Rejestrator wył., zbyt mało pamięci!"
+
+#~ msgid "Logger Error"
+#~ msgstr "Błąd Rejestratora"
 
 #, no-c-format
 #~ msgid "OLC Dist"

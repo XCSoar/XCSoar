@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:23+0200\n"
+"POT-Creation-Date: 2021-05-31 13:24+0200\n"
 "PO-Revision-Date: 2021-05-07 10:32+0000\n"
 "Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
@@ -553,19 +553,11 @@ msgstr "Récepteur transpondeur"
 msgid "Other"
 msgstr "Autres"
 
-#: src/Logger/Logger.cpp:110 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr "Logger ON"
 
-#: src/Logger/Logger.cpp:117
-msgid "Logger inactive, insufficient storage!"
-msgstr "Enregistrement désactivé, espace de stockage insuffisant !"
-
-#: src/Logger/Logger.cpp:118
-msgid "Logger Error"
-msgstr "Erreur d'enregistrement"
-
-#: src/Logger/Logger.cpp:146 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr "Arrêter l'enregistreur"
 
@@ -10535,6 +10527,12 @@ msgstr "Enregistré dans l'EEPROM"
 #: Data/Input/default.xci:1159
 msgid "Setup Plane"
 msgstr "Config. planeur"
+
+#~ msgid "Logger inactive, insufficient storage!"
+#~ msgstr "Enregistrement désactivé, espace de stockage insuffisant !"
+
+#~ msgid "Logger Error"
+#~ msgstr "Erreur d'enregistrement"
 
 #, no-c-format
 #~ msgid "OLC Dist"
