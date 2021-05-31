@@ -58,6 +58,9 @@ public:
 		   better solution? */
 	}
 
+	CurlSocket(const CurlSocket &) = delete;
+	CurlSocket &operator=(const CurlSocket &) = delete;
+
 	[[nodiscard]] auto &GetEventLoop() const noexcept {
 		return socket_event.GetEventLoop();
 	}
