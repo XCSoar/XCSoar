@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_LOCAL_PATH_HPP
 #define XCSOAR_LOCAL_PATH_HPP
 
-#include "util/Compiler.h"
-
 #include <tchar.h>
 
 class Path;
@@ -91,7 +89,7 @@ MakeLocalPath(const TCHAR *name);
  * primary data path.  Returns nullptr on failure (if the path is not
  * inside the primary data path).
  */
-gcc_pure
+[[gnu::pure]]
 Path
 RelativePath(Path path) noexcept;
 
@@ -100,7 +98,7 @@ RelativePath(Path path) noexcept;
  * the XCSoarData folder
  * @param filein Pointer to the string to convert
  */
-gcc_pure
+[[gnu::pure]]
 AllocatedPath
 ExpandLocalPath(Path src) noexcept;
 
@@ -110,7 +108,7 @@ ExpandLocalPath(Path src) noexcept;
  * @param filein Pointer to the string to convert
  * @return the new path or nullptr if the given path cannot be contracted
  */
-gcc_pure
+[[gnu::pure]]
 AllocatedPath
 ContractLocalPath(Path src) noexcept;
 

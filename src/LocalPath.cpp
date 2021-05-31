@@ -124,7 +124,7 @@ RelativePath(Path path) noexcept
 
 static constexpr TCHAR local_path_code[] = _T("%LOCAL_PATH%\\");
 
-gcc_pure
+[[gnu::pure]]
 static const TCHAR *
 AfterLocalPathCode(const TCHAR *p) noexcept
 {
