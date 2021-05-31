@@ -46,9 +46,9 @@ Copyright_License {
 
 #include <cassert>
 #include <stdlib.h>
-#include <windef.h> // for MAX_PATH
 #ifdef _WIN32
 #include <shlobj.h>
+#include <windef.h> // for MAX_PATH
 #endif
 
 #ifdef ANDROID
