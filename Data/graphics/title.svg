@@ -9,11 +9,11 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="110"
+   width="90"
    height="15"
    id="svg3040"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    sodipodi:docname="title.svg">
   <defs
      id="defs3042" />
@@ -30,10 +30,10 @@
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1169"
-     inkscape:window-height="573"
-     inkscape:window-x="22"
-     inkscape:window-y="29"
+     inkscape:window-width="453"
+     inkscape:window-height="741"
+     inkscape:window-x="655"
+     inkscape:window-y="25"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata3045">
@@ -54,7 +54,7 @@
      transform="translate(0,-1037.3622)">
     <text
        xml:space="preserve"
-       style="font-size:15.12335205px;font-style:normal;font-weight:normal;fill:#3f76a8;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:Arial;fill:#3f76a8;fill-opacity:1;stroke:none"
        x="0.15871964"
        y="1051.1925"
        id="text9393-9-1"
@@ -66,7 +66,7 @@
          id="tspan9395-4-7"
          x="0.15871964"
          y="1051.1925"
-         style="font-size:17.93197632px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#3f76a8;fill-opacity:1;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans Bold"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.93197632px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans Bold';fill:#3f76a8;fill-opacity:1"><tspan
            style="fill:#000000"
            id="tspan11171-4">XCSoar</tspan></tspan></text>
   </g>
@@ -77,7 +77,7 @@
      transform="translate(0,1)">
     <text
        xml:space="preserve"
-       style="font-size:15.12335205px;font-style:normal;font-weight:normal;fill:#3f76a8;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:Arial;fill:#3f76a8;fill-opacity:1;stroke:none"
        x="77.828217"
        y="13.240745"
        id="versionno"
@@ -90,6 +90,6 @@
          id="tspan9395-4-7-2"
          x="77.828217"
          y="13.240745"
-         style="font-size:17.93197632px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#3f76a8;fill-opacity:1;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans Bold">7</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.93197632px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans Bold';fill:#3f76a8;fill-opacity:1">7</tspan></text>
   </g>
 </svg>
