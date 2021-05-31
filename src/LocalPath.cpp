@@ -321,11 +321,9 @@ VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
   const auto data_path = GetPrimaryDataPath();
   Directory::VisitSpecificFiles(data_path, filter, visitor, true);
 
-  {
-    const auto home_path = GetHomeDataPath();
-    if (home_path != nullptr && data_path != home_path)
-      Directory::VisitSpecificFiles(home_path, filter, visitor, true);
-  }
+  if (const auto home_path = GetHomeDataPath();
+      home_path != nullptr && data_path != home_path)
+    Directory::VisitSpecificFiles(home_path, filter, visitor, true);
 }
 
 bool
