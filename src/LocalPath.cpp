@@ -75,7 +75,7 @@ Copyright_License {
 static AllocatedPath data_path = AllocatedPath(nullptr);
 
 Path
-GetPrimaryDataPath()
+GetPrimaryDataPath() noexcept
 {
   assert(!data_path.IsNull());
 
@@ -83,7 +83,7 @@ GetPrimaryDataPath()
 }
 
 void
-SetPrimaryDataPath(Path path)
+SetPrimaryDataPath(Path path) noexcept
 {
   assert(!path.IsNull());
   assert(!path.IsEmpty());
@@ -92,7 +92,7 @@ SetPrimaryDataPath(Path path)
 }
 
 AllocatedPath
-LocalPath(Path file)
+LocalPath(Path file) noexcept
 {
   assert(!data_path.IsNull());
   assert(!file.IsNull());
@@ -101,7 +101,7 @@ LocalPath(Path file)
 }
 
 AllocatedPath
-LocalPath(const TCHAR *file)
+LocalPath(const TCHAR *file) noexcept
 {
   return LocalPath(Path(file));
 }
@@ -115,7 +115,7 @@ MakeLocalPath(const TCHAR *name)
 }
 
 Path
-RelativePath(Path path)
+RelativePath(Path path) noexcept
 {
   assert(!data_path.IsNull());
 
@@ -126,7 +126,7 @@ static constexpr TCHAR local_path_code[] = _T("%LOCAL_PATH%\\");
 
 gcc_pure
 static const TCHAR *
-AfterLocalPathCode(const TCHAR *p)
+AfterLocalPathCode(const TCHAR *p) noexcept
 {
   p = StringAfterPrefix(p, local_path_code);
   if (p == nullptr)
@@ -142,7 +142,7 @@ AfterLocalPathCode(const TCHAR *p)
 }
 
 AllocatedPath
-ExpandLocalPath(Path src)
+ExpandLocalPath(Path src) noexcept
 {
   // Get the relative file name and location (ptr)
   const TCHAR *ptr = AfterLocalPathCode(src.c_str());
@@ -161,7 +161,7 @@ ExpandLocalPath(Path src)
 }
 
 AllocatedPath
-ContractLocalPath(Path src)
+ContractLocalPath(Path src) noexcept
 {
   // Get the relative file name and location (ptr)
   const Path relative = RelativePath(src);
@@ -177,8 +177,9 @@ ContractLocalPath(Path src)
 /**
  * Find a XCSoarData folder in the same location as the executable.
  */
+[[gnu::pure]]
 static AllocatedPath
-FindDataPathAtModule(HMODULE hModule)
+FindDataPathAtModule(HMODULE hModule) noexcept
 {
   TCHAR buffer[MAX_PATH];
   if (GetModuleFileName(hModule, buffer, MAX_PATH) <= 0)
@@ -191,7 +192,7 @@ FindDataPathAtModule(HMODULE hModule)
 }
 
 static const TCHAR *
-ModuleInFlash(HMODULE module, TCHAR *buffer)
+ModuleInFlash(HMODULE module, TCHAR *buffer) noexcept
 {
   if (GetModuleFileName(module, buffer, MAX_PATH) <= 0)
     return nullptr;
@@ -216,7 +217,7 @@ ModuleInFlash(HMODULE module, TCHAR *buffer)
  * @return a buffer which may be used to build the path
  */
 static AllocatedPath
-GetHomeDataPath(bool create=false)
+GetHomeDataPath(bool create=false) noexcept
 {
   if (IsAndroid() || IsKobo())
     /* hard-coded path for Android */
@@ -260,7 +261,7 @@ GetHomeDataPath(bool create=false)
 }
 
 static AllocatedPath
-FindDataPath()
+FindDataPath() noexcept
 {
 #ifdef _WIN32
   {
@@ -338,7 +339,7 @@ InitialiseDataPath()
 }
 
 void
-DeinitialiseDataPath()
+DeinitialiseDataPath() noexcept
 {
   data_path = nullptr;
 }

@@ -47,7 +47,7 @@ InitialiseDataPath();
  * Release resources obtained by InitialiseDataPath().
  */
 void
-DeinitialiseDataPath();
+DeinitialiseDataPath() noexcept;
 
 /**
  * Create the primary data path;
@@ -59,13 +59,13 @@ CreateDataPath();
  * Overrides the detected primary data path.
  */
 void
-SetPrimaryDataPath(Path path);
+SetPrimaryDataPath(Path path) noexcept;
 
 /**
  * Returns the absolute path of the primary data directory.
  */
 Path
-GetPrimaryDataPath();
+GetPrimaryDataPath() noexcept;
 
 /**
  * Gives the position of an XCSoar data file within the particular file
@@ -75,10 +75,10 @@ GetPrimaryDataPath();
  * @return The fully qualified path of file.
  */
 AllocatedPath
-LocalPath(Path file);
+LocalPath(Path file) noexcept;
 
 AllocatedPath
-LocalPath(const TCHAR *file);
+LocalPath(const TCHAR *file) noexcept;
 
 /**
  * Create a subdirectory of XCSoarData and return its absolute path.
@@ -93,7 +93,7 @@ MakeLocalPath(const TCHAR *name);
  */
 gcc_pure
 Path
-RelativePath(Path path);
+RelativePath(Path path) noexcept;
 
 /**
  * Converts a file path by replacing %LOCAL_PATH% with the full pathname to
@@ -102,7 +102,7 @@ RelativePath(Path path);
  */
 gcc_pure
 AllocatedPath
-ExpandLocalPath(Path src);
+ExpandLocalPath(Path src) noexcept;
 
 /**
  * Converts a file path from full pathname to a shorter version with the
@@ -112,7 +112,7 @@ ExpandLocalPath(Path src);
  */
 gcc_pure
 AllocatedPath
-ContractLocalPath(Path src);
+ContractLocalPath(Path src) noexcept;
 
 void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor);
 
