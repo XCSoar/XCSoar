@@ -335,38 +335,12 @@ VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
   }
 }
 
-#ifdef ANDROID
-/**
- * Resolve all symlinks in the specified (allocated) string, and
- * returns a newly allocated string.  The specified string is freed by
- * this function.
- */
-static AllocatedPath
-RealPath(Path path)
-{
-  char buffer[4096];
-  char *result = realpath(path.c_str(), buffer);
-  return AllocatedPath(result);
-}
-#endif
-
 bool
 InitialiseDataPath()
 {
   data_path = FindDataPath();
   if (data_path == nullptr)
     return false;
-
-#ifdef ANDROID
-  /* on some Android devices, /sdcard or /sdcard/external_sd are
-     symlinks, and on some devices (Samsung phones), the Android
-     DownloadManager does not allow destination paths pointing inside
-     these symlinks; to avoid problems with this restriction, all
-     symlinks on the way must be resolved by RealPath(): */
-  auto rp = RealPath(data_path);
-  if (rp != nullptr)
-    data_path = std::move(rp);
-#endif
 
   return true;
 }
