@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-15 21:27+0100\n"
+"POT-Creation-Date: 2021-05-31 13:23+0200\n"
 "PO-Revision-Date: 2020-11-29 21:29+0000\n"
 "Last-Translator: Martin Peters <twinpiloot@hotmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/xcsoar/"
@@ -24,7 +24,7 @@ msgstr ""
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
-#: src/Task/TaskStore.cpp:66 src/Menu/ExpandMacros.cpp:371
+#: src/Task/TaskStore.cpp:70 src/Menu/ExpandMacros.cpp:371
 #: src/Input/InputEventsSettings.cpp:315 src/Dialogs/dlgAnalysis.cpp:543
 #: src/Dialogs/dlgStatus.cpp:96
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:148
@@ -292,7 +292,7 @@ msgstr "Startlijn"
 msgid "Start cylinder"
 msgstr "Start cilinder"
 
-#: src/Task/TypeStrings.cpp:115 src/Dialogs/Task/dlgTaskHelpers.cpp:181
+#: src/Task/TypeStrings.cpp:115 src/Dialogs/Task/dlgTaskHelpers.cpp:180
 #, no-c-format
 msgid "FAI quadrant"
 msgstr "FAI quadrant"
@@ -357,7 +357,7 @@ msgstr "BGA start sector"
 msgid "Area sector with inner radius"
 msgstr "Gebied sector met binnen straal"
 
-#: src/Task/TypeStrings.cpp:128 src/Dialogs/Task/dlgTaskHelpers.cpp:230
+#: src/Task/TypeStrings.cpp:128 src/Dialogs/Task/dlgTaskHelpers.cpp:229
 #, no-c-format
 msgid "Symmetric quadrant"
 msgstr "Symetrisch kwadrant"
@@ -435,7 +435,7 @@ msgstr "Luchtruimbestand laden..."
 msgid "Parse Error at Line"
 msgstr "Parse error op Regel"
 
-#: src/Airspace/AirspaceParser.cpp:892
+#: src/Airspace/AirspaceParser.cpp:893
 msgid "Unknown airspace filetype"
 msgstr "Onbekend luchtruim-bestandsformaat"
 
@@ -560,20 +560,20 @@ msgstr "Loggerfout"
 msgid "Stop Logger"
 msgstr "Stop Logger"
 
-#: src/Logger/ExternalLogger.cpp:84
+#: src/Logger/ExternalLogger.cpp:85
 msgid "Declare task?"
 msgstr "Declareer opdracht?"
 
-#: src/Logger/ExternalLogger.cpp:93 src/Logger/ExternalLogger.cpp:132
+#: src/Logger/ExternalLogger.cpp:94 src/Logger/ExternalLogger.cpp:133
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:95
 msgid "Declare task"
 msgstr "Declareer opdracht"
 
-#: src/Logger/ExternalLogger.cpp:100
+#: src/Logger/ExternalLogger.cpp:101
 msgid "Task declared!"
 msgstr "Opdracht gedeclareerd!"
 
-#: src/Logger/ExternalLogger.cpp:105
+#: src/Logger/ExternalLogger.cpp:106
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
@@ -581,28 +581,29 @@ msgstr ""
 "Foutmelding,\n"
 "Opdracht NIET gedeclareerd!"
 
-#: src/Logger/ExternalLogger.cpp:131
+#: src/Logger/ExternalLogger.cpp:132
 msgid "No logger connected"
 msgstr "Geen logger aangesloten"
 
-#: src/Logger/ExternalLogger.cpp:269
+#: src/Logger/ExternalLogger.cpp:270
 msgid "Failed to download flight list."
 msgstr "Logboek download mislukt."
 
-#: src/Logger/ExternalLogger.cpp:270 src/Logger/ExternalLogger.cpp:281
-#: src/Logger/ExternalLogger.cpp:302 src/Logger/ExternalLogger.cpp:325
+#: src/Logger/ExternalLogger.cpp:271 src/Logger/ExternalLogger.cpp:282
+#: src/Logger/ExternalLogger.cpp:303 src/Logger/ExternalLogger.cpp:327
+#: src/Logger/ExternalLogger.cpp:331
 msgid "Download flight"
 msgstr "Download vlucht"
 
-#: src/Logger/ExternalLogger.cpp:280
+#: src/Logger/ExternalLogger.cpp:281
 msgid "Logger is empty."
 msgstr "Geen logger-bestanden."
 
-#: src/Logger/ExternalLogger.cpp:301
+#: src/Logger/ExternalLogger.cpp:302
 msgid "Failed to download flight."
 msgstr "Vlucht download mislukt."
 
-#: src/Logger/ExternalLogger.cpp:324
+#: src/Logger/ExternalLogger.cpp:330
 msgid "Do you want to download another flight?"
 msgstr "Wilt u een andere vlucht te downloaden?"
 
@@ -620,8 +621,8 @@ msgid "Not Circling"
 msgstr "Niet Thermieken"
 
 #: src/Gauge/BigThermalAssistantWidget.cpp:76
-#: src/Gauge/BigTrafficWidget.cpp:606 src/Dialogs/FileManager.cpp:741
-#: src/Dialogs/Device/DeviceListDialog.cpp:693
+#: src/Gauge/BigTrafficWidget.cpp:604 src/Dialogs/FileManager.cpp:768
+#: src/Dialogs/Device/DeviceListDialog.cpp:702
 #: src/Dialogs/Device/PortMonitor.cpp:187
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:127
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:99
@@ -631,7 +632,7 @@ msgstr "Niet Thermieken"
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:127
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:156
 #: src/Dialogs/MapItemListDialog.cpp:176
-#: src/Dialogs/Airspace/dlgAirspace.cpp:165
+#: src/Dialogs/Airspace/dlgAirspace.cpp:164
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:110
 #: src/Dialogs/Airspace/AirspaceList.cpp:154
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:502
@@ -644,16 +645,16 @@ msgstr "Niet Thermieken"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:369 src/Dialogs/HelpDialog.cpp:50
 #: src/Dialogs/dlgInfoBoxAccess.cpp:115 src/Dialogs/ReplayDialog.cpp:128
 #: src/Dialogs/dlgStatus.cpp:61 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:439
-#: src/Dialogs/Waypoint/Manager.cpp:296
+#: src/Dialogs/Waypoint/Manager.cpp:300
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:127
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:89
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:62
-#: src/Dialogs/Task/TaskPointDialog.cpp:545
+#: src/Dialogs/Task/TaskPointDialog.cpp:551
 #: src/Dialogs/Task/TargetDialog.cpp:446
 #: src/Dialogs/Task/AlternatesListDialog.cpp:115
 #: src/Dialogs/KnobTextEntry.cpp:246 src/Dialogs/Weather/WeatherDialog.cpp:61
-#: src/Dialogs/Weather/PCMetDialog.cpp:51
-#: src/Dialogs/Weather/NOAADetails.cpp:130
+#: src/Dialogs/Weather/PCMetDialog.cpp:52
+#: src/Dialogs/Weather/NOAADetails.cpp:131
 msgid "Close"
 msgstr "Sluiten"
 
@@ -661,10 +662,10 @@ msgstr "Sluiten"
 msgid "No Traffic"
 msgstr "Geen Vliegverkeer"
 
-#: src/Gauge/BigTrafficWidget.cpp:306 src/Gauge/BigTrafficWidget.cpp:307
+#: src/Gauge/BigTrafficWidget.cpp:304 src/Gauge/BigTrafficWidget.cpp:305
 #: src/InfoBoxes/Content/Factory.cpp:333 src/InfoBoxes/Content/Factory.cpp:334
 #: src/Renderer/MapItemListRenderer.cpp:376
-#: src/Dialogs/Device/DeviceListDialog.cpp:397
+#: src/Dialogs/Device/DeviceListDialog.cpp:401
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:38
 #: src/Dialogs/Settings/dlgConfiguration.cpp:117
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:137
@@ -672,12 +673,12 @@ msgstr "Geen Vliegverkeer"
 msgid "Vario"
 msgstr "Vario"
 
-#: src/Gauge/BigTrafficWidget.cpp:386 src/Renderer/MapItemListRenderer.cpp:77
+#: src/Gauge/BigTrafficWidget.cpp:384 src/Renderer/MapItemListRenderer.cpp:77
 #: src/Renderer/MapItemListRenderer.cpp:83
 #: src/Renderer/WaypointListRenderer.cpp:144
-#: src/Renderer/FlightStatisticsRenderer.cpp:191
-#: src/Renderer/FlightStatisticsRenderer.cpp:210
-#: src/Renderer/FlightStatisticsRenderer.cpp:237
+#: src/Renderer/FlightStatisticsRenderer.cpp:203
+#: src/Renderer/FlightStatisticsRenderer.cpp:222
+#: src/Renderer/FlightStatisticsRenderer.cpp:249
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:71
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:86
 #: src/Dialogs/Airspace/AirspaceList.cpp:423
@@ -689,22 +690,22 @@ msgstr "Vario"
 msgid "Distance"
 msgstr "Afstand"
 
-#: src/Gauge/BigTrafficWidget.cpp:430 src/Gauge/BigTrafficWidget.cpp:432
+#: src/Gauge/BigTrafficWidget.cpp:428 src/Gauge/BigTrafficWidget.cpp:430
 msgid "Rel. Alt."
 msgstr "Rel. Hgt."
 
-#: src/Gauge/BigTrafficWidget.cpp:603 src/InfoBoxes/Content/Task.cpp:67
+#: src/Gauge/BigTrafficWidget.cpp:601 src/InfoBoxes/Content/Task.cpp:67
 #: src/Dialogs/MapItemListDialog.cpp:175
 #: src/Dialogs/Airspace/AirspaceList.cpp:150
 #: src/Dialogs/Traffic/TrafficList.cpp:361
-#: src/Dialogs/Task/TaskPointDialog.cpp:261
+#: src/Dialogs/Task/TaskPointDialog.cpp:259
 #: src/Dialogs/Task/AlternatesListDialog.cpp:114
-#: src/Dialogs/Weather/NOAAList.cpp:113
+#: src/Dialogs/Weather/NOAAList.cpp:114
 #, no-c-format
 msgid "Details"
 msgstr "Details"
 
-#: src/Waypoint/WaypointDetailsReader.cpp:150
+#: src/Waypoint/WaypointDetailsReader.cpp:132
 msgid "Loading Airfield Details File..."
 msgstr "Vliegveld Informatie-bestand laden..."
 
@@ -816,7 +817,7 @@ msgid "Resume"
 msgstr "Hervatten"
 
 #: src/Menu/ExpandMacros.cpp:203 src/Menu/ExpandMacros.cpp:207
-#: src/Dialogs/Message.cpp:117
+#: src/Dialogs/Message.cpp:118
 msgid "Abort"
 msgstr "Afbreken"
 
@@ -2333,20 +2334,20 @@ msgid "Exp1"
 msgstr "Exp1"
 
 #: src/InfoBoxes/Content/Factory.cpp:732
-#, no-c-format
-msgid "On-Line Contest distance"
+#, fuzzy, no-c-format
+msgid "Contest distance"
 msgstr "OLC afstand"
 
 #: src/InfoBoxes/Content/Factory.cpp:733
-#, no-c-format
-msgid "OLC Dist"
-msgstr "OLC Afst"
+#, fuzzy, no-c-format
+msgid "Cont Dist"
+msgstr "Fin Afst"
 
 #: src/InfoBoxes/Content/Factory.cpp:734
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
-"On-Line Contest rule set."
+"Contest rule set."
 msgstr ""
 "Actuele beoordeling van de gevlogen afstand volgens de geconfigureerde "
 "OnLine Contest regels."
@@ -2961,20 +2962,20 @@ msgid "Distance to where take-off was detected."
 msgstr "Afstand sinds de gedetecteerde start."
 
 #: src/InfoBoxes/Content/Factory.cpp:1013
-#, no-c-format
-msgid "On-Line Contest speed"
+#, fuzzy, no-c-format
+msgid "Contest speed"
 msgstr "OLC Snelheid"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
-#, no-c-format
-msgid "OLC Speed"
-msgstr "V OLC"
+#, fuzzy, no-c-format
+msgid "Ćont Speed"
+msgstr "Snelheid"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Instantaneous evaluation of the flown speed according to the configured On-"
-"Line Contest rule set."
+"Instantaneous evaluation of the flown speed according to the configured "
+"Contest rule set."
 msgstr ""
 "Actuele berekening van de gevlogen afstand volgens de geconfigureerde OLC "
 "regels."
@@ -3180,7 +3181,7 @@ msgstr "Geen QNH"
 
 #: src/InfoBoxes/Content/MacCready.cpp:50 src/InfoBoxes/Content/Weather.cpp:106
 #: src/InfoBoxes/Content/Radio.cpp:53 src/InfoBoxes/Content/Radio.cpp:58
-#: src/Dialogs/Device/DeviceListDialog.cpp:276
+#: src/Dialogs/Device/DeviceListDialog.cpp:280
 #: src/Dialogs/Plane/PlaneListDialog.cpp:147
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:273
 #: src/Dialogs/Waypoint/Manager.cpp:119
@@ -3299,7 +3300,7 @@ msgstr "Steken"
 msgid "FinalGlide"
 msgstr "FinalGlide"
 
-#: src/InfoBoxes/InfoBoxManager.cpp:208
+#: src/InfoBoxes/InfoBoxManager.cpp:212
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:248
 msgid "InfoBox"
 msgstr "InfoBox"
@@ -3308,7 +3309,7 @@ msgstr "InfoBox"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:65
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:69
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:73
-#: src/Dialogs/Device/DeviceListDialog.cpp:417
+#: src/Dialogs/Device/DeviceListDialog.cpp:426
 msgid "N/A"
 msgstr "N/B"
 
@@ -3336,7 +3337,7 @@ msgstr ""
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:83
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:630
-#: src/Dialogs/Task/TaskPointDialog.cpp:542
+#: src/Dialogs/Task/TaskPointDialog.cpp:548
 msgid "Waypoint"
 msgstr "Keerpunt"
 
@@ -3349,7 +3350,7 @@ msgstr "Locatie"
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:86
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:54
-#: src/Dialogs/Task/TaskPointDialog.cpp:267
+#: src/Dialogs/Task/TaskPointDialog.cpp:265
 msgid "Relocate"
 msgstr "Verplaatsen"
 
@@ -3365,7 +3366,7 @@ msgstr "Wis"
 
 #: src/Input/InputEventsActions.cpp:147
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:292
-#: src/Dialogs/Waypoint/Manager.cpp:258
+#: src/Dialogs/Waypoint/Manager.cpp:262
 msgid "Failed to save waypoints"
 msgstr "Wissen van keerpunten mislukt"
 
@@ -3405,7 +3406,7 @@ msgstr "Logger UIT"
 msgid "Auto. zoom on"
 msgstr "Auto zoom AAN"
 
-#: src/Input/InputEventsMap.cpp:72 src/Input/InputEventsMap.cpp:206
+#: src/Input/InputEventsMap.cpp:72 src/Input/InputEventsMap.cpp:207
 msgid "Auto. zoom off"
 msgstr "Auto zoom UIT"
 
@@ -3474,7 +3475,7 @@ msgid "Ordered task"
 msgstr "Geordende opdracht"
 
 #: src/Input/InputEventsTask.cpp:238
-#: src/Renderer/FlightStatisticsRenderer.cpp:305
+#: src/Renderer/FlightStatisticsRenderer.cpp:317
 msgid "No task"
 msgstr "Geen opdracht"
 
@@ -3491,9 +3492,9 @@ msgid "Altitude"
 msgstr "Hoogte"
 
 #: src/Input/InputEventsTask.cpp:323
-#: src/Renderer/FlightStatisticsRenderer.cpp:197
-#: src/Renderer/FlightStatisticsRenderer.cpp:216
-#: src/Renderer/FlightStatisticsRenderer.cpp:242
+#: src/Renderer/FlightStatisticsRenderer.cpp:209
+#: src/Renderer/FlightStatisticsRenderer.cpp:228
+#: src/Renderer/FlightStatisticsRenderer.cpp:254
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:80
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:95
 msgid "Speed"
@@ -3503,11 +3504,11 @@ msgstr "Snelheid"
 #. unit-dependent because they will be saved after their units may have changed.
 #. ToDo: implement API that controls order in which pages are saved
 #: src/Input/InputEventsTask.cpp:325
-#: src/Renderer/FlightStatisticsRenderer.cpp:195
-#: src/Renderer/FlightStatisticsRenderer.cpp:214
-#: src/Renderer/FlightStatisticsRenderer.cpp:240
+#: src/Renderer/FlightStatisticsRenderer.cpp:207
+#: src/Renderer/FlightStatisticsRenderer.cpp:226
+#: src/Renderer/FlightStatisticsRenderer.cpp:252
 #: src/Dialogs/Settings/dlgConfiguration.cpp:144
-#: src/Dialogs/Weather/RASPDialog.cpp:217
+#: src/Dialogs/Weather/RASPDialog.cpp:215
 #, no-c-format
 msgid "Time"
 msgstr "Tijd"
@@ -3582,7 +3583,7 @@ msgstr "Topografie/Terrein"
 msgid "Not found"
 msgstr "Niet gevonden"
 
-#: src/Input/InputEventsLua.cpp:65 src/Dialogs/FileManager.cpp:583
+#: src/Input/InputEventsLua.cpp:65 src/Dialogs/FileManager.cpp:584
 msgid "Select a file"
 msgstr "Kies een bestand"
 
@@ -3606,8 +3607,8 @@ msgstr "Info Verbergen"
 msgid "Map (Full screen)"
 msgstr "Kaart (Volledig scherm)"
 
-#: src/Renderer/ChartRenderer.cpp:255
-#: src/Dialogs/Device/DeviceListDialog.cpp:419
+#: src/Renderer/ChartRenderer.cpp:256
+#: src/Dialogs/Device/DeviceListDialog.cpp:428
 msgid "No data"
 msgstr "Geen data"
 
@@ -3886,39 +3887,39 @@ msgstr "blcwbase"
 msgid "Loading Topography File..."
 msgstr "Topografiebestand laden..."
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:194
-#: src/Renderer/FlightStatisticsRenderer.cpp:213
-#: src/Renderer/FlightStatisticsRenderer.cpp:239
+#: src/Renderer/FlightStatisticsRenderer.cpp:206
+#: src/Renderer/FlightStatisticsRenderer.cpp:225
+#: src/Renderer/FlightStatisticsRenderer.cpp:251
 msgid "Score"
 msgstr "Score"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:194
-#: src/Renderer/FlightStatisticsRenderer.cpp:213
-#: src/Renderer/FlightStatisticsRenderer.cpp:239
+#: src/Renderer/FlightStatisticsRenderer.cpp:206
+#: src/Renderer/FlightStatisticsRenderer.cpp:225
+#: src/Renderer/FlightStatisticsRenderer.cpp:251
 msgid "pts"
 msgstr "ptn"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:315
-#: src/Renderer/FlightStatisticsRenderer.cpp:325
-#: src/Renderer/FlightStatisticsRenderer.cpp:336
+#: src/Renderer/FlightStatisticsRenderer.cpp:327
+#: src/Renderer/FlightStatisticsRenderer.cpp:337
+#: src/Renderer/FlightStatisticsRenderer.cpp:348
 msgid "Task to go"
 msgstr "Opdracht resterend"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:316
-#: src/Renderer/FlightStatisticsRenderer.cpp:326
+#: src/Renderer/FlightStatisticsRenderer.cpp:328
+#: src/Renderer/FlightStatisticsRenderer.cpp:338
 msgid "AAT to go"
 msgstr "AAT resterend"
 
 #. landscape: info above buttons
-#: src/Renderer/FlightStatisticsRenderer.cpp:317
-#: src/Renderer/FlightStatisticsRenderer.cpp:327
-#: src/Renderer/FlightStatisticsRenderer.cpp:338
+#: src/Renderer/FlightStatisticsRenderer.cpp:329
+#: src/Renderer/FlightStatisticsRenderer.cpp:339
+#: src/Renderer/FlightStatisticsRenderer.cpp:350
 #: src/Dialogs/dlgAnalysis.cpp:234
 msgid "Distance to go"
 msgstr "Afstand resterend"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:319
-#: src/Renderer/FlightStatisticsRenderer.cpp:330
+#: src/Renderer/FlightStatisticsRenderer.cpp:331
+#: src/Renderer/FlightStatisticsRenderer.cpp:342
 msgid "Target speed"
 msgstr "Streefsnelheid"
 
@@ -3999,7 +4000,7 @@ msgid "Australian"
 msgstr "Australisch"
 
 #. Read the terrain file
-#: src/UtilsSettings.cpp:124 src/Startup.cpp:288
+#: src/UtilsSettings.cpp:124 src/Startup.cpp:296
 msgid "Loading Terrain File..."
 msgstr "Terreinbestand laden..."
 
@@ -4020,12 +4021,12 @@ msgstr "Waarschuwing"
 msgid "Battery low"
 msgstr "Accu bijna leeg"
 
-#: src/Startup.cpp:257
+#: src/Startup.cpp:254
 msgid "Initialising"
 msgstr "Initialiseren"
 
 #. Start the device thread(s)
-#: src/Startup.cpp:375
+#: src/Startup.cpp:383
 msgid "Starting devices"
 msgstr "Apparaten opstarten"
 
@@ -4035,48 +4036,48 @@ msgstr "Apparaten opstarten"
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Startup.cpp:385
+#: src/Startup.cpp:393
 msgid "Initialising display"
 msgstr "Initialiseren scherm"
 
 #. Show progress dialog
-#: src/Startup.cpp:481 src/Startup.cpp:523 src/Startup.cpp:588
+#: src/Startup.cpp:489 src/Startup.cpp:529 src/Startup.cpp:594
 msgid "Shutdown, please wait..."
 msgstr "Afsluiten, een moment geduld..."
 
 #. Stop logger and save igc file
-#: src/Startup.cpp:501
+#: src/Startup.cpp:507
 msgid "Shutdown, saving logs..."
 msgstr "Afsluiten, logs opslaan..."
 
 #. Save settings to profile
-#: src/Startup.cpp:520
+#: src/Startup.cpp:526
 msgid "Shutdown, saving profile..."
 msgstr "Afsluiten, profiel opslaan..."
 
 #. Save the task for the next time
-#: src/Startup.cpp:574
+#: src/Startup.cpp:580
 msgid "Shutdown, saving task..."
 msgstr "Afsluiten, opdracht opslaan..."
 
-#: src/Device/Descriptor.cpp:489 src/Device/Descriptor.cpp:501
+#: src/Device/Descriptor.cpp:490 src/Device/Descriptor.cpp:502
 msgid "Unable to open port"
 msgstr "Kan poort niet openen"
 
-#: src/Device/Descriptor.cpp:1011 src/Device/Descriptor.cpp:1017
+#: src/Device/Descriptor.cpp:1013 src/Device/Descriptor.cpp:1019
 msgid "Sending declaration"
 msgstr "Verzenden van declaratie"
 
-#: src/Device/Descriptor.cpp:1064 src/Device/Descriptor.cpp:1071
+#: src/Device/Descriptor.cpp:1066 src/Device/Descriptor.cpp:1073
 msgid "Reading flight list"
 msgstr "Vluchtlijst lezen"
 
-#: src/Device/Descriptor.cpp:1095 src/Device/Descriptor.cpp:1102
+#: src/Device/Descriptor.cpp:1097 src/Device/Descriptor.cpp:1104
 msgid "Downloading flight log"
 msgstr "Logboek downloaden"
 
 #: src/Device/Config.cpp:204 src/Dialogs/Device/DeviceEditWidget.cpp:64
-#: src/Dialogs/Device/DeviceListDialog.cpp:415
+#: src/Dialogs/Device/DeviceListDialog.cpp:424
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:40
 #, no-c-format
 msgid "Disabled"
@@ -4101,7 +4102,7 @@ msgid "GliderLink traffic receiver"
 msgstr ""
 
 #. create buttons
-#: src/Dialogs/Message.cpp:93 src/Dialogs/WidgetDialog.cpp:264
+#: src/Dialogs/Message.cpp:94 src/Dialogs/WidgetDialog.cpp:264
 #: src/Dialogs/WidgetDialog.cpp:280
 #: src/Dialogs/MapItemListSettingsDialog.cpp:37
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:37
@@ -4115,22 +4116,22 @@ msgstr ""
 msgid "OK"
 msgstr "OK"
 
-#: src/Dialogs/Message.cpp:99 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:59
+#: src/Dialogs/Message.cpp:100 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:59
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:62
 msgid "Yes"
 msgstr "Ja"
 
-#: src/Dialogs/Message.cpp:101
+#: src/Dialogs/Message.cpp:102
 msgid "No"
 msgstr "Nee"
 
-#: src/Dialogs/Message.cpp:107
+#: src/Dialogs/Message.cpp:108
 msgid "Retry"
 msgstr "Probeer opnieuw"
 
-#: src/Dialogs/Message.cpp:113 src/Dialogs/ListPicker.cpp:183
+#: src/Dialogs/Message.cpp:114 src/Dialogs/ListPicker.cpp:183
 #: src/Dialogs/ProgressDialog.cpp:57 src/Dialogs/WidgetDialog.cpp:265
-#: src/Dialogs/WidgetDialog.cpp:281 src/Dialogs/FileManager.cpp:434
+#: src/Dialogs/WidgetDialog.cpp:281 src/Dialogs/FileManager.cpp:435
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:125
 #: src/Dialogs/MapItemListSettingsDialog.cpp:38
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:38
@@ -4142,12 +4143,12 @@ msgstr "Probeer opnieuw"
 #: src/Dialogs/Waypoint/WaypointList.cpp:232 src/Dialogs/NumberEntry.cpp:60
 #: src/Dialogs/NumberEntry.cpp:102 src/Dialogs/NumberEntry.cpp:142
 #: src/Dialogs/TouchTextEntry.cpp:207 src/Dialogs/TimeEntry.cpp:66
-#: src/Dialogs/GeoPointEntry.cpp:77 src/Dialogs/DownloadFilePicker.cpp:360
+#: src/Dialogs/GeoPointEntry.cpp:77 src/Dialogs/DownloadFilePicker.cpp:407
 #: Data/Input/default.xci:914
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: src/Dialogs/Message.cpp:120
+#: src/Dialogs/Message.cpp:121
 msgid "Ignore"
 msgstr "Negeer"
 
@@ -4161,42 +4162,42 @@ msgstr "Help"
 msgid "Select"
 msgstr "Selecteer"
 
-#: src/Dialogs/FileManager.cpp:432 src/Dialogs/FilePicker.cpp:48
+#: src/Dialogs/FileManager.cpp:433 src/Dialogs/FilePicker.cpp:48
 #: src/Dialogs/Weather/RASPDialog.cpp:169
 #: src/Dialogs/Weather/RASPDialog.cpp:180
-#: src/Dialogs/Weather/RASPDialog.cpp:191
-#: src/Dialogs/Weather/RASPDialog.cpp:220
-#: src/Dialogs/Weather/PCMetDialog.cpp:63 src/Dialogs/Weather/NOAAList.cpp:190
-#: src/Dialogs/Weather/NOAAList.cpp:202 src/Dialogs/Weather/NOAADetails.cpp:95
+#: src/Dialogs/Weather/RASPDialog.cpp:189
+#: src/Dialogs/Weather/RASPDialog.cpp:218
+#: src/Dialogs/Weather/PCMetDialog.cpp:64 src/Dialogs/Weather/NOAAList.cpp:193
+#: src/Dialogs/Weather/NOAAList.cpp:205 src/Dialogs/Weather/NOAADetails.cpp:96
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:368
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:391
-#: src/Dialogs/DownloadFilePicker.cpp:118
-#: src/Dialogs/DownloadFilePicker.cpp:272
-#: src/Dialogs/DownloadFilePicker.cpp:359
+#: src/Dialogs/DownloadFilePicker.cpp:138
+#: src/Dialogs/DownloadFilePicker.cpp:297
+#: src/Dialogs/DownloadFilePicker.cpp:406
 msgid "Download"
 msgstr "Download"
 
-#: src/Dialogs/FileManager.cpp:433
+#: src/Dialogs/FileManager.cpp:434
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:112
-#: src/Dialogs/Weather/NOAAList.cpp:114 src/Monitor/MatTaskMonitor.cpp:58
+#: src/Dialogs/Weather/NOAAList.cpp:115 src/Monitor/MatTaskMonitor.cpp:58
 msgid "Add"
 msgstr "Toevoegen"
 
-#: src/Dialogs/FileManager.cpp:435
+#: src/Dialogs/FileManager.cpp:436
 #, fuzzy
 msgid "Update all"
 msgstr "Bijwerken"
 
-#: src/Dialogs/FileManager.cpp:468
+#: src/Dialogs/FileManager.cpp:469
 msgid "Queued"
 msgstr "Wachtrij"
 
-#: src/Dialogs/FileManager.cpp:470 src/Dialogs/FileManager.cpp:476
+#: src/Dialogs/FileManager.cpp:471 src/Dialogs/FileManager.cpp:477
 msgid "Downloading"
 msgstr "Aan het downloaden"
 
-#: src/Dialogs/FileManager.cpp:481 src/Dialogs/FileManager.cpp:731
-#: src/Dialogs/Device/DeviceListDialog.cpp:437
+#: src/Dialogs/FileManager.cpp:482 src/Dialogs/FileManager.cpp:758
+#: src/Dialogs/Device/DeviceListDialog.cpp:446
 #: src/Dialogs/Plane/PlaneListDialog.cpp:208
 #: src/Dialogs/Plane/PlaneListDialog.cpp:233
 #: src/Dialogs/Plane/PlaneListDialog.cpp:278
@@ -4209,27 +4210,29 @@ msgstr "Aan het downloaden"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:178
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:188
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:244
-#: src/Dialogs/Weather/NOAAList.cpp:175 src/Dialogs/Weather/NOAAList.cpp:181
-#: src/Dialogs/Weather/NOAADetails.cpp:144
-#: src/Dialogs/DownloadFilePicker.cpp:341
+#: src/Dialogs/Weather/NOAAList.cpp:178 src/Dialogs/Weather/NOAAList.cpp:184
+#: src/Dialogs/Weather/NOAADetails.cpp:145
+#: src/Dialogs/DownloadFilePicker.cpp:327
+#: src/Dialogs/DownloadFilePicker.cpp:389
 msgid "Error"
 msgstr "FOUT"
 
-#: src/Dialogs/FileManager.cpp:488
+#: src/Dialogs/FileManager.cpp:489
 #, fuzzy
 msgid "Update available"
 msgstr "Geen TAF beschikbaar!"
 
-#: src/Dialogs/FileManager.cpp:730 src/Dialogs/DownloadFilePicker.cpp:340
+#: src/Dialogs/FileManager.cpp:757 src/Dialogs/DownloadFilePicker.cpp:386
+#: src/Dialogs/DownloadFilePicker.cpp:388
 msgid "Failed to download the repository index."
 msgstr "Repository-index download mislukt."
 
-#: src/Dialogs/FileManager.cpp:740 src/Dialogs/FileManager.cpp:765
-#: src/Dialogs/DownloadFilePicker.cpp:353 Data/Input/default.xci:605
+#: src/Dialogs/FileManager.cpp:767 src/Dialogs/FileManager.cpp:792
+#: src/Dialogs/DownloadFilePicker.cpp:400 Data/Input/default.xci:605
 msgid "File Manager"
 msgstr "Bestanden Manager"
 
-#: src/Dialogs/FileManager.cpp:763 src/Dialogs/DownloadFilePicker.cpp:352
+#: src/Dialogs/FileManager.cpp:790 src/Dialogs/DownloadFilePicker.cpp:399
 msgid "The file manager is not available on this device."
 msgstr "Er is geen bestanden manager aanwezig op dit apparaat."
 
@@ -4389,65 +4392,65 @@ msgid "Whether you use a K6Bt to connect the device."
 msgstr ""
 "Schakel in indien een K6Bt wordt gebruikt om te verbinden met het apparaat."
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:280
+#: src/Dialogs/Device/DeviceListDialog.cpp:284
 msgid "Flight download"
 msgstr "Vlucht downloaden"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:284
-#: src/Dialogs/Device/DeviceListDialog.cpp:530
-#: src/Dialogs/Device/DeviceListDialog.cpp:536
-#: src/Dialogs/Device/DeviceListDialog.cpp:592
-#: src/Dialogs/Device/DeviceListDialog.cpp:598
+#: src/Dialogs/Device/DeviceListDialog.cpp:288
+#: src/Dialogs/Device/DeviceListDialog.cpp:539
+#: src/Dialogs/Device/DeviceListDialog.cpp:545
+#: src/Dialogs/Device/DeviceListDialog.cpp:601
+#: src/Dialogs/Device/DeviceListDialog.cpp:607
 #: src/Dialogs/Device/PortMonitor.cpp:150
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:122
 msgid "Manage"
 msgstr "Beheren"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:288
+#: src/Dialogs/Device/DeviceListDialog.cpp:292
 msgid "Monitor"
 msgstr "Controleren"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:292
-#: src/Dialogs/Device/DeviceListDialog.cpp:499
-#: src/Dialogs/Device/DeviceListDialog.cpp:507
+#: src/Dialogs/Device/DeviceListDialog.cpp:296
+#: src/Dialogs/Device/DeviceListDialog.cpp:508
+#: src/Dialogs/Device/DeviceListDialog.cpp:516
 #: src/Dialogs/Device/PortMonitor.cpp:142
 msgid "Reconnect"
 msgstr "Opnieuw verbinden"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:296
-#: src/Dialogs/Device/DeviceListDialog.cpp:315
+#: src/Dialogs/Device/DeviceListDialog.cpp:300
+#: src/Dialogs/Device/DeviceListDialog.cpp:319
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:226
 msgid "Disable"
 msgstr "Uitzetten"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:300
-#: src/Dialogs/Device/DeviceListDialog.cpp:410
-#: src/Dialogs/Device/DeviceListDialog.cpp:423
-#: src/Dialogs/Device/DeviceListDialog.cpp:677
+#: src/Dialogs/Device/DeviceListDialog.cpp:304
+#: src/Dialogs/Device/DeviceListDialog.cpp:419
+#: src/Dialogs/Device/DeviceListDialog.cpp:432
+#: src/Dialogs/Device/DeviceListDialog.cpp:686
 msgid "Debug"
 msgstr "Debug"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:315
+#: src/Dialogs/Device/DeviceListDialog.cpp:319
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:115
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:106
 msgid "Enable"
 msgstr "Aanzetten"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:363
+#: src/Dialogs/Device/DeviceListDialog.cpp:367
 #, c-format
 msgid "%s on %s"
 msgstr "%s op %s"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:377
+#: src/Dialogs/Device/DeviceListDialog.cpp:381
 msgid "GPS fix"
 msgstr "GPS fix"
 
 #. device sends GPGGA, but no valid location
-#: src/Dialogs/Device/DeviceListDialog.cpp:380
+#: src/Dialogs/Device/DeviceListDialog.cpp:384
 msgid "Bad GPS"
 msgstr "Slechte GPS ontvangst"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:382
+#: src/Dialogs/Device/DeviceListDialog.cpp:386
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:59
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:91
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:94
@@ -4455,50 +4458,50 @@ msgstr "Slechte GPS ontvangst"
 msgid "Connected"
 msgstr "Verbonden"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:387
+#: src/Dialogs/Device/DeviceListDialog.cpp:391
 msgid "Baro"
 msgstr "Baro"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:392
+#: src/Dialogs/Device/DeviceListDialog.cpp:396
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
 msgid "Airspeed"
 msgstr "Vliegsnelheid"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:431
-#: src/Dialogs/Device/DeviceListDialog.cpp:499
+#: src/Dialogs/Device/DeviceListDialog.cpp:440
+#: src/Dialogs/Device/DeviceListDialog.cpp:508
 msgid "Bluetooth is disabled"
 msgstr "Bluetooth is uitgeschakeld"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:434
+#: src/Dialogs/Device/DeviceListDialog.cpp:443
 msgid "Duplicate"
 msgstr "Dubbele"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:441
+#: src/Dialogs/Device/DeviceListDialog.cpp:450
 msgid "Not connected"
 msgstr "Niet verbonden"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:507
-#: src/Dialogs/Device/DeviceListDialog.cpp:536
-#: src/Dialogs/Device/DeviceListDialog.cpp:598
+#: src/Dialogs/Device/DeviceListDialog.cpp:516
+#: src/Dialogs/Device/DeviceListDialog.cpp:545
+#: src/Dialogs/Device/DeviceListDialog.cpp:607
 #: src/Dialogs/Device/PortMonitor.cpp:150
 msgid "Device is occupied"
 msgstr "Apparaat is bezig"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:530
-#: src/Dialogs/Device/DeviceListDialog.cpp:592
+#: src/Dialogs/Device/DeviceListDialog.cpp:539
+#: src/Dialogs/Device/DeviceListDialog.cpp:601
 msgid "Device is not connected"
 msgstr "Apparaat is niet aangesloten"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:556
+#: src/Dialogs/Device/DeviceListDialog.cpp:565
 msgid "Edit device"
 msgstr "Bewerk apparaat"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:675
+#: src/Dialogs/Device/DeviceListDialog.cpp:684
 #, c-format
 msgid "Communication with this device will be logged for the next %u minutes."
 msgstr "Communicatie met dit apparaat wordt de komende %u minuten gelogd."
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:692 Data/Input/default.xci:555
+#: src/Dialogs/Device/DeviceListDialog.cpp:701 Data/Input/default.xci:555
 #: Data/Input/default.xci:1151
 msgid "Devices"
 msgstr "Apparaten"
@@ -4936,18 +4939,18 @@ msgstr "Laat regel voor de aankomst hoogte van de lokatie zien."
 msgid "Select Color"
 msgstr "Selecteer Kleur"
 
-#: src/Dialogs/Airspace/dlgAirspace.cpp:112
-#: src/Dialogs/Airspace/dlgAirspace.cpp:113 Data/Input/default.xci:436
+#: src/Dialogs/Airspace/dlgAirspace.cpp:111
+#: src/Dialogs/Airspace/dlgAirspace.cpp:112 Data/Input/default.xci:436
 #: Data/Input/default.xci:484 Data/Input/default.xci:885
 msgid "Display"
 msgstr "Weergave"
 
+#: src/Dialogs/Airspace/dlgAirspace.cpp:115
 #: src/Dialogs/Airspace/dlgAirspace.cpp:116
-#: src/Dialogs/Airspace/dlgAirspace.cpp:117
 msgid "Warn"
 msgstr "Waarschuw"
 
-#: src/Dialogs/Airspace/dlgAirspace.cpp:164
+#: src/Dialogs/Airspace/dlgAirspace.cpp:163
 #: src/Dialogs/Settings/dlgConfiguration.cpp:102
 #: src/Dialogs/dlgAnalysis.cpp:562
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:107
@@ -5338,7 +5341,7 @@ msgstr "Expert"
 msgid "Configuration"
 msgstr "Configuratie"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:373
+#: src/Dialogs/Settings/dlgConfiguration.cpp:371
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
 "Veranderingen in configuratie opgeslagen. Herstart XCSoar om veranderingen "
@@ -5934,7 +5937,7 @@ msgstr "Start H"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:105
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:144
-#: src/Dialogs/Task/TaskPointDialog.cpp:367
+#: src/Dialogs/Task/TaskPointDialog.cpp:373
 msgid "Start point"
 msgstr "Startpunt"
 
@@ -6097,19 +6100,19 @@ msgstr "Instellen Standby Frequentie"
 msgid "GoTo"
 msgstr "Ga naar"
 
-#: src/Dialogs/Waypoint/Manager.cpp:275
+#: src/Dialogs/Waypoint/Manager.cpp:279
 msgid "Delete waypoint?"
 msgstr "Verwijder keerpunt?"
 
-#: src/Dialogs/Waypoint/Manager.cpp:295 Data/Input/default.xci:597
+#: src/Dialogs/Waypoint/Manager.cpp:299 Data/Input/default.xci:597
 msgid "Waypoints Editor"
 msgstr "Keerpunt Editor"
 
-#: src/Dialogs/Waypoint/Manager.cpp:304
+#: src/Dialogs/Waypoint/Manager.cpp:308
 msgid "Save changes to waypoint file?"
 msgstr "Wijzigingen in keerpuntbestand opslaan?"
 
-#: src/Dialogs/Waypoint/Manager.cpp:304
+#: src/Dialogs/Waypoint/Manager.cpp:308
 msgid "Waypoints edited"
 msgstr "Keerpunten gewijzigd"
 
@@ -6608,9 +6611,9 @@ msgid "Final glide"
 msgstr "Final glide"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:66
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Adjusts MC for fastest arrival.  For OLC sprint tasks, the MacCready is "
+"Adjusts MC for fastest arrival.  For contest sprint tasks, the MacCready is "
 "adjusted in order to cover the greatest distance in the remaining time and "
 "reach the finish height."
 msgstr ""
@@ -8208,7 +8211,7 @@ msgstr "Referentie die gebruikt wordt voor de minimale finish hoogte regel."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:79
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:192
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:191
 #, no-c-format
 msgid "Gate width"
 msgstr "Startlijn breedte"
@@ -8217,9 +8220,9 @@ msgstr "Startlijn breedte"
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:43
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:47
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:43
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:186
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:198
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:208
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:185
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:197
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:207
 #, no-c-format
 msgid "Radius"
 msgstr "Straal"
@@ -8235,7 +8238,7 @@ msgstr ""
 "opdrachten."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:156
-#: src/Dialogs/Task/TaskPointDialog.cpp:382
+#: src/Dialogs/Task/TaskPointDialog.cpp:388
 msgid "Finish point"
 msgstr "Finish punt"
 
@@ -8288,8 +8291,8 @@ msgstr ""
 "taak uit te voeren in de minimale tijd plus deze marge tijd."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:93
-#, no-c-format
-msgid "Disable OLC Calculations"
+#, fuzzy, no-c-format
+msgid "Disable contest calculations"
 msgstr "OLC berekeningen uitzetten"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:95
@@ -8362,24 +8365,42 @@ msgstr ""
 msgid "The FFVV NetCoupe \"libre\" competiton."
 msgstr "De FFVV NetCoupe \"libre\" wedstrijd."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:120
-msgid "On-Line Contest"
-msgstr "OLC"
-
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:121
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:119
+#, no-c-format
 msgid ""
-"Select the rules used for calculating optimal points for the On-Line "
-"Contest. The implementation  conforms to the official release 2010, Sept.23."
+"WeGlide combines multiple scoring systems in the WeGlide Free contest. The "
+"free score is a combination of the free distance score and the area bonus. "
+"For the area bonus, the scoring program determines the largest FAI triangle "
+"and the largest Out & Return distance that can be fitted into the flight "
+"route."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:123
+#, no-c-format
+msgid ""
+"A start point, one turn point and a finish point are chosen from the flight "
+"path such that the distance between the start point and the turn point is "
+"maximized"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
+#, fuzzy
+msgid "Contest"
+msgstr "Inhoud"
+
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:128
+#, fuzzy
+msgid "Select the rules used for calculating optimal points for a contest."
 msgstr ""
 "Selecteer de regels die worden gebruikt voor de berekening van optimale "
 "punten voor de On-Line Contest. De uitvoering voldoet aan de officiële "
 "release 2010, Sept.23."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:125
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:131
 msgid "Predict Contest"
 msgstr "Voorspel Contest"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:126
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:132
 msgid ""
 "If enabled, then the next task point is included in the score calculation, "
 "assuming that you will reach it."
@@ -8387,19 +8408,19 @@ msgstr ""
 "Indien ingeschakeld zal het volgende opdracht punt bij de score berekening "
 "worden meegenomen, ervanuitgaande dat deze zal worden gehaald."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:133
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:139
 msgid "FAI triangle areas"
 msgstr "FAI driehoek gebieden"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:134
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:140
 msgid "Show FAI triangle areas on the map."
 msgstr "Geef FAI driehoek gebieden weer op de kaart."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:138
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:144
 msgid "FAI triangle threshold"
 msgstr "FAI driehoek drempel"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:139
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:145
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
 msgstr ""
 "Specificeer welke drempel gebruikt wordt voor \"grote\" FAI driehoeken."
@@ -9097,33 +9118,33 @@ msgstr "Opdracht ongewijzigd"
 msgid "Revert Changes"
 msgstr "Maak Veranderingen Ongedaan"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:314
-msgid "Clear all points?"
-msgstr "Alle punten wissen?"
-
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:314
-msgid "Task edit"
-msgstr "Bewerk opdracht"
-
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:337
-msgid "Add Turnpoint"
-msgstr "Keerpunt toevoegen"
-
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:530
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:130
 msgid "Edit Point"
 msgstr "Punt Aanpassen"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:533
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:132
 msgid "Make Finish"
 msgstr "Maak Finish"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:542
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:138
 msgid "Reverse"
 msgstr "Omkeren"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:545
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:140
 msgid "Clear All"
 msgstr "Wis Alle"
+
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:225
+msgid "Clear all points?"
+msgstr "Alle punten wissen?"
+
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:225
+msgid "Task edit"
+msgstr "Bewerk opdracht"
+
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:248
+msgid "Add Turnpoint"
+msgstr "Keerpunt toevoegen"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:215
 msgid "Task type"
@@ -9235,10 +9256,10 @@ msgid "Less"
 msgstr "Minder"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:58
-#: src/Dialogs/Task/TaskPointDialog.cpp:264
-#: src/Dialogs/Weather/NOAAList.cpp:116 src/Dialogs/Weather/NOAAList.cpp:217
-#: src/Dialogs/Weather/NOAADetails.cpp:65
-#: src/Dialogs/Weather/NOAADetails.cpp:107
+#: src/Dialogs/Task/TaskPointDialog.cpp:262
+#: src/Dialogs/Weather/NOAAList.cpp:117 src/Dialogs/Weather/NOAAList.cpp:220
+#: src/Dialogs/Weather/NOAADetails.cpp:66
+#: src/Dialogs/Weather/NOAADetails.cpp:108
 msgid "Remove"
 msgstr "Verwijder"
 
@@ -9250,34 +9271,34 @@ msgstr "(Voeg Alternatieve Start toe)"
 msgid "Alternate Start Points"
 msgstr "Alternatieve startpunten"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:229
-#: src/Dialogs/Task/TaskPointDialog.cpp:274
+#: src/Dialogs/Task/TaskPointDialog.cpp:230
+#: src/Dialogs/Task/TaskPointDialog.cpp:272
 msgid "Change Type"
 msgstr "Verander Type"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:283
-#: src/Dialogs/Task/TaskPointDialog.cpp:348
+#: src/Dialogs/Task/TaskPointDialog.cpp:281
+#: src/Dialogs/Task/TaskPointDialog.cpp:354
 msgid "Enable Alternate Starts"
 msgstr "Schakel Alternatieve Startpunten in"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:286
+#: src/Dialogs/Task/TaskPointDialog.cpp:284
 msgid "Score exit"
 msgstr "Score verlaten"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:351
+#: src/Dialogs/Task/TaskPointDialog.cpp:357
 msgid "Edit Alternates"
 msgstr "Pas Alternatieven aan"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:372
-#: src/Dialogs/Task/TaskPointDialog.cpp:443
+#: src/Dialogs/Task/TaskPointDialog.cpp:378
+#: src/Dialogs/Task/TaskPointDialog.cpp:449
 msgid "Task point"
 msgstr "Opdrachtpunt"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:377
+#: src/Dialogs/Task/TaskPointDialog.cpp:383
 msgid "Assigned area point"
 msgstr "Assigned area punt"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:443
+#: src/Dialogs/Task/TaskPointDialog.cpp:449
 msgid "Remove task point?"
 msgstr "Verwijder uit opdracht?"
 
@@ -9310,60 +9331,60 @@ msgstr "niet-FAI driehoek"
 msgid "%d legs"
 msgstr "%d benen"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:121
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:116
 #, c-format
 msgid "Task is empty (%s)"
 msgstr "Opdracht is leeg (%s)"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:131
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:128
 msgid "max."
 msgstr "max."
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:135
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:132
 msgid "min."
 msgstr "min."
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:143
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:142
 msgid "dist."
 msgstr "afst."
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:186
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:185
 msgid "Sector"
 msgstr "Sector"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:192
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:191
 msgid "Line"
 msgstr "Lijn"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:198
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:197
 msgid "Cylinder"
 msgstr "Cilinder"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:204
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:203
 msgid "MAT cylinder"
 msgstr "MAT cilinder"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:208
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:207
 msgid "Keyhole"
 msgstr "Sleutelgat"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:214
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:213
 msgid "DAeC Keyhole"
 msgstr "DAeC Sleutelgat"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:218
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:217
 msgid "BGA Fixed Course"
 msgstr "BGA Vaste Route"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:222
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:221
 msgid "BGA Enhanced Option"
 msgstr "BGA Verbeterde Optie"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:226
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:225
 msgid "BGA Start Sector"
 msgstr "BGA Start Sector"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:242
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:241
 msgid "Enter a task name"
 msgstr "Kies opdrachtnaam"
 
@@ -9463,12 +9484,12 @@ msgid "Weather"
 msgstr "Weer"
 
 #: src/Dialogs/Weather/WeatherDialog.cpp:79
-#: src/Dialogs/Weather/NOAADetails.cpp:78
-#: src/Dialogs/Weather/NOAADetails.cpp:129
+#: src/Dialogs/Weather/NOAADetails.cpp:79
+#: src/Dialogs/Weather/NOAADetails.cpp:130
 msgid "METAR and TAF"
 msgstr "METAR en TAF"
 
-#: src/Dialogs/Weather/RASPDialog.cpp:211
+#: src/Dialogs/Weather/RASPDialog.cpp:209
 msgid "Field"
 msgstr "Veld"
 
@@ -9548,35 +9569,35 @@ msgstr ""
 msgid "Master Volume"
 msgstr "Hoofd Volume"
 
-#: src/Dialogs/Weather/PCMetDialog.cpp:69
+#: src/Dialogs/Weather/PCMetDialog.cpp:70
 msgid "Failed to download file."
 msgstr "Bestand opslaan mislukt."
 
-#: src/Dialogs/Weather/NOAAList.cpp:115 src/Dialogs/Weather/NOAADetails.cpp:64
+#: src/Dialogs/Weather/NOAAList.cpp:116 src/Dialogs/Weather/NOAADetails.cpp:65
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:227
 msgid "Update"
 msgstr "Bijwerken"
 
-#: src/Dialogs/Weather/NOAAList.cpp:170
+#: src/Dialogs/Weather/NOAAList.cpp:173
 msgid "Airport ICAO code"
 msgstr "Vliegveld ICAO code"
 
-#: src/Dialogs/Weather/NOAAList.cpp:174
+#: src/Dialogs/Weather/NOAAList.cpp:177
 msgid "Please enter the FOUR letter code of the desired station."
 msgstr "Vul de 4 letter code in van het gewenste station."
 
-#: src/Dialogs/Weather/NOAAList.cpp:180
+#: src/Dialogs/Weather/NOAAList.cpp:183
 msgid ""
 "Please don't use special characters in the four letter code of the desired "
 "station."
 msgstr "Gebruik geen speciale karakters in de 4 letter code."
 
-#: src/Dialogs/Weather/NOAAList.cpp:214 src/Dialogs/Weather/NOAADetails.cpp:104
+#: src/Dialogs/Weather/NOAAList.cpp:217 src/Dialogs/Weather/NOAADetails.cpp:105
 #, c-format
 msgid "Do you want to remove station %s?"
 msgstr "Station %s verwijderen?"
 
-#: src/Dialogs/Weather/NOAADetails.cpp:143
+#: src/Dialogs/Weather/NOAADetails.cpp:144
 msgid "This function is not available on your platform yet."
 msgstr "Deze functie is helaas nog niet op het huidige platform beschikbaar."
 
@@ -10177,55 +10198,6 @@ msgstr "Headset drempel"
 msgid "Urgent min. volume"
 msgstr "Dringend min. volume"
 
-#: Data/Input/default.xci:128 Data/Input/default.xci:444
-#: Data/Input/default.xci:937
-msgid ""
-"Zoom\n"
-"In"
-msgstr ""
-"Zoom\n"
-"In"
-
-#: Data/Input/default.xci:1182
-msgid ""
-"Nearest\n"
-"Airspace"
-msgstr ""
-"Dichtsbijzijnde\n"
-"Luchtruim"
-
-#: Data/Input/default.xci:727
-msgid "Store"
-msgstr "Opslaan"
-
-#: Data/Input/default.xci:734
-msgid ""
-"Cruise\n"
-"Demo"
-msgstr ""
-"Steek\n"
-"Demo"
-
-#: Data/Input/default.xci:638 Data/Input/default.xci:1143
-msgid "Raw Logger"
-msgstr "Raw Logger"
-
-#: Data/Input/default.xci:719
-msgid ""
-"Accel\n"
-"Zero"
-msgstr ""
-"Versnell\n"
-"Nul"
-
-#: Data/Input/default.xci:741
-msgid ""
-"Climb\n"
-"Demo"
-msgstr ""
-"Klimmen\n"
-"Demo"
-
 #: Data/Input/default.xci:1112
 msgid ""
 "Setup\n"
@@ -10234,34 +10206,11 @@ msgstr ""
 "Wind\n"
 "Instelling"
 
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "Final Glide door terrein"
-
-#: Data/Input/default.xci:1120
+#: Data/Input/default.xci:907
 msgid ""
-"Setup\n"
-"System"
+"Lock\n"
+"Screen"
 msgstr ""
-"Syteem\n"
-"Instelling"
-
-#: Data/Input/default.xci:833 Data/Input/default.xci:1214
-msgid "Thermal Assistant"
-msgstr "Thermiek Assistent"
-
-#: Data/Input/default.xci:459 Data/Input/default.xci:951
-#: Data/Input/default.xci:1040
-msgid "Zoom"
-msgstr "Zoom"
-
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "Onder Final Glide"
-
-#: Data/Input/default.xci:711
-msgid "Vario ASI zeroed"
-msgstr "Vario ASI op 0 gesteld"
 
 #: Data/Input/default.xci:1128
 msgid ""
@@ -10271,13 +10220,17 @@ msgstr ""
 "Luchtruim\n"
 "Instelling"
 
-#: Data/Input/default.xci:693
-msgid "Accel"
-msgstr "Versnel"
+#: Data/Input/default.xci:500 Data/Input/default.xci:1073
+msgid "Trail"
+msgstr "Spoor"
 
-#: Data/Input/default.xci:646
-msgid "Lua"
-msgstr ""
+#: Data/Input/default.xci:965
+msgid "AVG/ALT"
+msgstr "AVG/ALT"
+
+#: Data/Input/default.xci:711
+msgid "Vario ASI zeroed"
+msgstr "Vario ASI op 0 gesteld"
 
 #: Data/Input/default.xci:380 Data/Input/default.xci:999
 msgid ""
@@ -10287,50 +10240,26 @@ msgstr ""
 "Keerpunten\n"
 "Lijst"
 
-#: Data/Input/default.xci:686
+#: Data/Input/default.xci:1120
 msgid ""
 "Setup\n"
-"Stall"
+"System"
 msgstr ""
-"Overtrek\n"
+"Syteem\n"
 "Instelling"
 
-#: Data/Input/default.xci:825
-msgid "Traffic List"
-msgstr "Lijst met Vliegtuigen"
-
-#: Data/Input/default.xci:867
+#: Data/Input/default.xci:734
 msgid ""
-"Message\n"
-"Repeat"
+"Cruise\n"
+"Demo"
 msgstr ""
-"Bericht\n"
-"Herhalen"
-
-#: Data/Input/default.xci:473 Data/Input/default.xci:1057
-msgid ""
-"Pan\n"
-"On"
-msgstr ""
-"Start\n"
-"Verplaatsen"
-
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "Boven Final Glide"
-
-#: Data/Input/default.xci:759 Data/Input/default.xci:1166
-msgid "FLARM Radar"
-msgstr "FLARM Radar"
+"Steek\n"
+"Demo"
 
 #: Data/Input/default.xci:653 Data/Input/default.xci:664
 #: Data/Input/default.xci:704
 msgid "Vega"
 msgstr "Vega"
-
-#: Data/Input/default.xci:1159
-msgid "Setup Plane"
-msgstr "Vliegtuig Instelling"
 
 #: Data/Input/default.xci:817
 msgid ""
@@ -10339,24 +10268,6 @@ msgid ""
 msgstr ""
 "Team\n"
 "Code"
-
-#: Data/Input/default.xci:350 Data/Input/default.xci:399
-#: Data/Input/default.xci:878
-msgid "Nav"
-msgstr "Nav"
-
-#: Data/Input/default.xci:718
-msgid "Accelerometer leveled"
-msgstr "Versnellingsmeter geijkt"
-
-#: Data/Input/default.xci:135 Data/Input/default.xci:451
-#: Data/Input/default.xci:944
-msgid ""
-"Zoom\n"
-"Out"
-msgstr ""
-"Zoom\n"
-"Uit"
 
 # Context
 #: Data/Input/default.xci:672
@@ -10367,41 +10278,57 @@ msgstr ""
 "Casco\n"
 "Schakelaars"
 
-#: Data/Input/default.xci:121
+#: Data/Input/default.xci:473 Data/Input/default.xci:1057
 msgid ""
 "Pan\n"
-"Off"
+"On"
 msgstr ""
-"Stop\n"
+"Start\n"
 "Verplaatsen"
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "Final Glide door terrein"
 
 #: Data/Input/default.xci:48
 msgid "Takeoff"
 msgstr "Starttijd (Vlucht)"
 
-#: Data/Input/default.xci:965
-msgid "AVG/ALT"
-msgstr "AVG/ALT"
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "Onder Final Glide"
 
-#: Data/Input/default.xci:492 Data/Input/default.xci:1065
-msgid "Labels"
-msgstr "Labels"
+#: Data/Input/default.xci:350 Data/Input/default.xci:399
+#: Data/Input/default.xci:878
+msgid "Nav"
+msgstr "Nav"
 
-#: Data/Input/default.xci:726
-msgid "Stored to EEPROM"
-msgstr "Op EEPROM opgeslagen"
+#: Data/Input/default.xci:825
+msgid "Traffic List"
+msgstr "Lijst met Vliegtuigen"
 
-#: Data/Input/default.xci:414 Data/Input/default.xci:1047
-msgid "Dropped marker"
-msgstr "Gedropte markering"
-
-#: Data/Input/default.xci:712
+#: Data/Input/default.xci:128 Data/Input/default.xci:444
+#: Data/Input/default.xci:937
 msgid ""
-"ASI\n"
-"Zero"
+"Zoom\n"
+"In"
 msgstr ""
-"ASI\n"
-"op 0 gesteld"
+"Zoom\n"
+"In"
+
+#: Data/Input/default.xci:135 Data/Input/default.xci:451
+#: Data/Input/default.xci:944
+msgid ""
+"Zoom\n"
+"Out"
+msgstr ""
+"Zoom\n"
+"Uit"
+
+#: Data/Input/default.xci:459 Data/Input/default.xci:951
+#: Data/Input/default.xci:1040
+msgid "Zoom"
+msgstr "Zoom"
 
 #: Data/Input/default.xci:1104
 msgid ""
@@ -10411,27 +10338,39 @@ msgstr ""
 "Vlucht\n"
 "Instelling"
 
-#: Data/Input/default.xci:500 Data/Input/default.xci:1073
-msgid "Trail"
-msgstr "Spoor"
+#: Data/Input/default.xci:718
+msgid "Accelerometer leveled"
+msgstr "Versnellingsmeter geijkt"
 
-#: Data/Input/default.xci:514 Data/Input/default.xci:1087
-msgid "Topo."
-msgstr "Topografie"
-
-#: Data/Input/default.xci:907
+#: Data/Input/default.xci:1182
 msgid ""
-"Lock\n"
-"Screen"
+"Nearest\n"
+"Airspace"
 msgstr ""
+"Dichtsbijzijnde\n"
+"Luchtruim"
 
-#: Data/Input/default.xci:142 Data/Input/default.xci:775
+#: Data/Input/default.xci:712
 msgid ""
-"What's\n"
-"here?"
+"ASI\n"
+"Zero"
 msgstr ""
-"POI in \n"
-"de buurt?"
+"ASI\n"
+"op 0 gesteld"
+
+#: Data/Input/default.xci:867
+msgid ""
+"Message\n"
+"Repeat"
+msgstr ""
+"Bericht\n"
+"Herhalen"
+
+#: Data/Input/default.xci:783 Data/Input/default.xci:1190
+msgid ""
+"Check\n"
+"list"
+msgstr "Checklist"
 
 #: Data/Input/default.xci:679
 msgid ""
@@ -10441,10 +10380,17 @@ msgstr ""
 "Handmatig\n"
 "Demo"
 
-#: Data/Input/default.xci:531 Data/Input/default.xci:581
-#: Data/Input/default.xci:623 Data/Input/default.xci:892
-msgid "Config"
-msgstr "Instelling"
+#: Data/Input/default.xci:686
+msgid ""
+"Setup\n"
+"Stall"
+msgstr ""
+"Overtrek\n"
+"Instelling"
+
+#: Data/Input/default.xci:833 Data/Input/default.xci:1214
+msgid "Thermal Assistant"
+msgstr "Thermiek Assistent"
 
 #: Data/Input/default.xci:417 Data/Input/default.xci:1050
 msgid ""
@@ -10454,11 +10400,97 @@ msgstr ""
 "Plaats\n"
 "Markering"
 
-#: Data/Input/default.xci:783 Data/Input/default.xci:1190
+#: Data/Input/default.xci:492 Data/Input/default.xci:1065
+msgid "Labels"
+msgstr "Labels"
+
+#: Data/Input/default.xci:414 Data/Input/default.xci:1047
+msgid "Dropped marker"
+msgstr "Gedropte markering"
+
+#: Data/Input/default.xci:514 Data/Input/default.xci:1087
+msgid "Topo."
+msgstr "Topografie"
+
+#: Data/Input/default.xci:638 Data/Input/default.xci:1143
+msgid "Raw Logger"
+msgstr "Raw Logger"
+
+#: Data/Input/default.xci:741
 msgid ""
-"Check\n"
-"list"
-msgstr "Checklist"
+"Climb\n"
+"Demo"
+msgstr ""
+"Klimmen\n"
+"Demo"
+
+#: Data/Input/default.xci:142 Data/Input/default.xci:775
+msgid ""
+"What's\n"
+"here?"
+msgstr ""
+"POI in \n"
+"de buurt?"
+
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "Boven Final Glide"
+
+#: Data/Input/default.xci:759 Data/Input/default.xci:1166
+msgid "FLARM Radar"
+msgstr "FLARM Radar"
+
+#: Data/Input/default.xci:727
+msgid "Store"
+msgstr "Opslaan"
+
+#: Data/Input/default.xci:646
+msgid "Lua"
+msgstr ""
+
+#: Data/Input/default.xci:693
+msgid "Accel"
+msgstr "Versnel"
+
+#: Data/Input/default.xci:121
+msgid ""
+"Pan\n"
+"Off"
+msgstr ""
+"Stop\n"
+"Verplaatsen"
+
+#: Data/Input/default.xci:719
+msgid ""
+"Accel\n"
+"Zero"
+msgstr ""
+"Versnell\n"
+"Nul"
+
+#: Data/Input/default.xci:531 Data/Input/default.xci:581
+#: Data/Input/default.xci:623 Data/Input/default.xci:892
+msgid "Config"
+msgstr "Instelling"
+
+#: Data/Input/default.xci:726
+msgid "Stored to EEPROM"
+msgstr "Op EEPROM opgeslagen"
+
+#: Data/Input/default.xci:1159
+msgid "Setup Plane"
+msgstr "Vliegtuig Instelling"
+
+#, no-c-format
+#~ msgid "OLC Dist"
+#~ msgstr "OLC Afst"
+
+#, no-c-format
+#~ msgid "OLC Speed"
+#~ msgstr "V OLC"
+
+#~ msgid "On-Line Contest"
+#~ msgstr "OLC"
 
 #~ msgid ""
 #~ "Pressure Altitude given as Flight Level. Only available if barometric "

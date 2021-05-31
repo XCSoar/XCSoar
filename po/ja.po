@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-15 21:27+0100\n"
+"POT-Creation-Date: 2021-05-31 13:23+0200\n"
 "PO-Revision-Date: 2018-04-02 22:38+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/xcsoar/"
@@ -22,7 +22,7 @@ msgstr ""
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
-#: src/Task/TaskStore.cpp:66 src/Menu/ExpandMacros.cpp:371
+#: src/Task/TaskStore.cpp:70 src/Menu/ExpandMacros.cpp:371
 #: src/Input/InputEventsSettings.cpp:315 src/Dialogs/dlgAnalysis.cpp:543
 #: src/Dialogs/dlgStatus.cpp:96
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:148
@@ -287,7 +287,7 @@ msgstr "スタート ライン"
 msgid "Start cylinder"
 msgstr "スタート　シリンダー"
 
-#: src/Task/TypeStrings.cpp:115 src/Dialogs/Task/dlgTaskHelpers.cpp:181
+#: src/Task/TypeStrings.cpp:115 src/Dialogs/Task/dlgTaskHelpers.cpp:180
 #, no-c-format
 msgid "FAI quadrant"
 msgstr "FAI90度セクター"
@@ -352,7 +352,7 @@ msgstr "英国グライダー協会　スタートセクター"
 msgid "Area sector with inner radius"
 msgstr "シリンダー＆　エリアセクター"
 
-#: src/Task/TypeStrings.cpp:128 src/Dialogs/Task/dlgTaskHelpers.cpp:230
+#: src/Task/TypeStrings.cpp:128 src/Dialogs/Task/dlgTaskHelpers.cpp:229
 #, no-c-format
 msgid "Symmetric quadrant"
 msgstr "左右対称な四角形"
@@ -430,7 +430,7 @@ msgstr "空域ファイルをロード中..."
 msgid "Parse Error at Line"
 msgstr "通信エラー"
 
-#: src/Airspace/AirspaceParser.cpp:892
+#: src/Airspace/AirspaceParser.cpp:893
 msgid "Unknown airspace filetype"
 msgstr "空域ファイル形式が不適当です"
 
@@ -555,20 +555,20 @@ msgstr "ロガーエラー"
 msgid "Stop Logger"
 msgstr "ロガー停止"
 
-#: src/Logger/ExternalLogger.cpp:84
+#: src/Logger/ExternalLogger.cpp:85
 msgid "Declare task?"
 msgstr "タスクを宣言しますか？"
 
-#: src/Logger/ExternalLogger.cpp:93 src/Logger/ExternalLogger.cpp:132
+#: src/Logger/ExternalLogger.cpp:94 src/Logger/ExternalLogger.cpp:133
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:95
 msgid "Declare task"
 msgstr "タスクを宣言してください"
 
-#: src/Logger/ExternalLogger.cpp:100
+#: src/Logger/ExternalLogger.cpp:101
 msgid "Task declared!"
 msgstr "タスクを設定しました！"
 
-#: src/Logger/ExternalLogger.cpp:105
+#: src/Logger/ExternalLogger.cpp:106
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
@@ -576,28 +576,29 @@ msgstr ""
 "エラーが起こりました。\n"
 "タスクが設定されていません。"
 
-#: src/Logger/ExternalLogger.cpp:131
+#: src/Logger/ExternalLogger.cpp:132
 msgid "No logger connected"
 msgstr "ロガーが未接続です"
 
-#: src/Logger/ExternalLogger.cpp:269
+#: src/Logger/ExternalLogger.cpp:270
 msgid "Failed to download flight list."
 msgstr "フライト　ファイルの読み込みに失敗しました"
 
-#: src/Logger/ExternalLogger.cpp:270 src/Logger/ExternalLogger.cpp:281
-#: src/Logger/ExternalLogger.cpp:302 src/Logger/ExternalLogger.cpp:325
+#: src/Logger/ExternalLogger.cpp:271 src/Logger/ExternalLogger.cpp:282
+#: src/Logger/ExternalLogger.cpp:303 src/Logger/ExternalLogger.cpp:327
+#: src/Logger/ExternalLogger.cpp:331
 msgid "Download flight"
 msgstr "ファイルをダウンロード"
 
-#: src/Logger/ExternalLogger.cpp:280
+#: src/Logger/ExternalLogger.cpp:281
 msgid "Logger is empty."
 msgstr "航跡がありません"
 
-#: src/Logger/ExternalLogger.cpp:301
+#: src/Logger/ExternalLogger.cpp:302
 msgid "Failed to download flight."
 msgstr "航跡ダウンロード失敗"
 
-#: src/Logger/ExternalLogger.cpp:324
+#: src/Logger/ExternalLogger.cpp:330
 msgid "Do you want to download another flight?"
 msgstr "他のフライトログをダウンロードしますか？"
 
@@ -615,8 +616,8 @@ msgid "Not Circling"
 msgstr "旋回していません"
 
 #: src/Gauge/BigThermalAssistantWidget.cpp:76
-#: src/Gauge/BigTrafficWidget.cpp:606 src/Dialogs/FileManager.cpp:741
-#: src/Dialogs/Device/DeviceListDialog.cpp:693
+#: src/Gauge/BigTrafficWidget.cpp:604 src/Dialogs/FileManager.cpp:768
+#: src/Dialogs/Device/DeviceListDialog.cpp:702
 #: src/Dialogs/Device/PortMonitor.cpp:187
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:127
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:99
@@ -626,7 +627,7 @@ msgstr "旋回していません"
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:127
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:156
 #: src/Dialogs/MapItemListDialog.cpp:176
-#: src/Dialogs/Airspace/dlgAirspace.cpp:165
+#: src/Dialogs/Airspace/dlgAirspace.cpp:164
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:110
 #: src/Dialogs/Airspace/AirspaceList.cpp:154
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:502
@@ -639,16 +640,16 @@ msgstr "旋回していません"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:369 src/Dialogs/HelpDialog.cpp:50
 #: src/Dialogs/dlgInfoBoxAccess.cpp:115 src/Dialogs/ReplayDialog.cpp:128
 #: src/Dialogs/dlgStatus.cpp:61 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:439
-#: src/Dialogs/Waypoint/Manager.cpp:296
+#: src/Dialogs/Waypoint/Manager.cpp:300
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:127
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:89
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:62
-#: src/Dialogs/Task/TaskPointDialog.cpp:545
+#: src/Dialogs/Task/TaskPointDialog.cpp:551
 #: src/Dialogs/Task/TargetDialog.cpp:446
 #: src/Dialogs/Task/AlternatesListDialog.cpp:115
 #: src/Dialogs/KnobTextEntry.cpp:246 src/Dialogs/Weather/WeatherDialog.cpp:61
-#: src/Dialogs/Weather/PCMetDialog.cpp:51
-#: src/Dialogs/Weather/NOAADetails.cpp:130
+#: src/Dialogs/Weather/PCMetDialog.cpp:52
+#: src/Dialogs/Weather/NOAADetails.cpp:131
 msgid "Close"
 msgstr "閉じる"
 
@@ -656,10 +657,10 @@ msgstr "閉じる"
 msgid "No Traffic"
 msgstr "トラフィックなし"
 
-#: src/Gauge/BigTrafficWidget.cpp:306 src/Gauge/BigTrafficWidget.cpp:307
+#: src/Gauge/BigTrafficWidget.cpp:304 src/Gauge/BigTrafficWidget.cpp:305
 #: src/InfoBoxes/Content/Factory.cpp:333 src/InfoBoxes/Content/Factory.cpp:334
 #: src/Renderer/MapItemListRenderer.cpp:376
-#: src/Dialogs/Device/DeviceListDialog.cpp:397
+#: src/Dialogs/Device/DeviceListDialog.cpp:401
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:38
 #: src/Dialogs/Settings/dlgConfiguration.cpp:117
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:137
@@ -667,12 +668,12 @@ msgstr "トラフィックなし"
 msgid "Vario"
 msgstr "バリオ"
 
-#: src/Gauge/BigTrafficWidget.cpp:386 src/Renderer/MapItemListRenderer.cpp:77
+#: src/Gauge/BigTrafficWidget.cpp:384 src/Renderer/MapItemListRenderer.cpp:77
 #: src/Renderer/MapItemListRenderer.cpp:83
 #: src/Renderer/WaypointListRenderer.cpp:144
-#: src/Renderer/FlightStatisticsRenderer.cpp:191
-#: src/Renderer/FlightStatisticsRenderer.cpp:210
-#: src/Renderer/FlightStatisticsRenderer.cpp:237
+#: src/Renderer/FlightStatisticsRenderer.cpp:203
+#: src/Renderer/FlightStatisticsRenderer.cpp:222
+#: src/Renderer/FlightStatisticsRenderer.cpp:249
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:71
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:86
 #: src/Dialogs/Airspace/AirspaceList.cpp:423
@@ -684,22 +685,22 @@ msgstr "バリオ"
 msgid "Distance"
 msgstr "距離"
 
-#: src/Gauge/BigTrafficWidget.cpp:430 src/Gauge/BigTrafficWidget.cpp:432
+#: src/Gauge/BigTrafficWidget.cpp:428 src/Gauge/BigTrafficWidget.cpp:430
 msgid "Rel. Alt."
 msgstr "高度差"
 
-#: src/Gauge/BigTrafficWidget.cpp:603 src/InfoBoxes/Content/Task.cpp:67
+#: src/Gauge/BigTrafficWidget.cpp:601 src/InfoBoxes/Content/Task.cpp:67
 #: src/Dialogs/MapItemListDialog.cpp:175
 #: src/Dialogs/Airspace/AirspaceList.cpp:150
 #: src/Dialogs/Traffic/TrafficList.cpp:361
-#: src/Dialogs/Task/TaskPointDialog.cpp:261
+#: src/Dialogs/Task/TaskPointDialog.cpp:259
 #: src/Dialogs/Task/AlternatesListDialog.cpp:114
-#: src/Dialogs/Weather/NOAAList.cpp:113
+#: src/Dialogs/Weather/NOAAList.cpp:114
 #, no-c-format
 msgid "Details"
 msgstr "詳細"
 
-#: src/Waypoint/WaypointDetailsReader.cpp:150
+#: src/Waypoint/WaypointDetailsReader.cpp:132
 msgid "Loading Airfield Details File..."
 msgstr "詳細な空域ファイルをロード中..."
 
@@ -807,7 +808,7 @@ msgid "Resume"
 msgstr "再開する"
 
 #: src/Menu/ExpandMacros.cpp:203 src/Menu/ExpandMacros.cpp:207
-#: src/Dialogs/Message.cpp:117
+#: src/Dialogs/Message.cpp:118
 msgid "Abort"
 msgstr "中止"
 
@@ -2311,20 +2312,20 @@ msgid "Exp1"
 msgstr "ユーザー設定１"
 
 #: src/InfoBoxes/Content/Factory.cpp:732
-#, no-c-format
-msgid "On-Line Contest distance"
+#, fuzzy, no-c-format
+msgid "Contest distance"
 msgstr "OLC　距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:733
-#, no-c-format
-msgid "OLC Dist"
-msgstr "OLC  距離"
+#, fuzzy, no-c-format
+msgid "Cont Dist"
+msgstr "Fin　距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:734
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
-"On-Line Contest rule set."
+"Contest rule set."
 msgstr "OLCルールにより計算した飛行距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:740
@@ -2928,20 +2929,20 @@ msgid "Distance to where take-off was detected."
 msgstr "離陸が検出された地点からの距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:1013
-#, no-c-format
-msgid "On-Line Contest speed"
+#, fuzzy, no-c-format
+msgid "Contest speed"
 msgstr "オンラインコンテスト　速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
-#, no-c-format
-msgid "OLC Speed"
-msgstr "OLS　速度"
+#, fuzzy, no-c-format
+msgid "Ćont Speed"
+msgstr "速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Instantaneous evaluation of the flown speed according to the configured On-"
-"Line Contest rule set."
+"Instantaneous evaluation of the flown speed according to the configured "
+"Contest rule set."
 msgstr "オンライン　コンテスト規則によって算出された　現時点までの平均飛行速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
@@ -3135,7 +3136,7 @@ msgstr "QNHではない"
 
 #: src/InfoBoxes/Content/MacCready.cpp:50 src/InfoBoxes/Content/Weather.cpp:106
 #: src/InfoBoxes/Content/Radio.cpp:53 src/InfoBoxes/Content/Radio.cpp:58
-#: src/Dialogs/Device/DeviceListDialog.cpp:276
+#: src/Dialogs/Device/DeviceListDialog.cpp:280
 #: src/Dialogs/Plane/PlaneListDialog.cpp:147
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:273
 #: src/Dialogs/Waypoint/Manager.cpp:119
@@ -3254,7 +3255,7 @@ msgstr "巡航"
 msgid "FinalGlide"
 msgstr "ファイナルグライド"
 
-#: src/InfoBoxes/InfoBoxManager.cpp:208
+#: src/InfoBoxes/InfoBoxManager.cpp:212
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:248
 msgid "InfoBox"
 msgstr "情報ボックス"
@@ -3263,7 +3264,7 @@ msgstr "情報ボックス"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:65
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:69
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:73
-#: src/Dialogs/Device/DeviceListDialog.cpp:417
+#: src/Dialogs/Device/DeviceListDialog.cpp:426
 msgid "N/A"
 msgstr "設定無し"
 
@@ -3291,7 +3292,7 @@ msgstr ""
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:83
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:630
-#: src/Dialogs/Task/TaskPointDialog.cpp:542
+#: src/Dialogs/Task/TaskPointDialog.cpp:548
 msgid "Waypoint"
 msgstr "ウエイポイント"
 
@@ -3304,7 +3305,7 @@ msgstr "位置"
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:86
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:54
-#: src/Dialogs/Task/TaskPointDialog.cpp:267
+#: src/Dialogs/Task/TaskPointDialog.cpp:265
 msgid "Relocate"
 msgstr "再配置"
 
@@ -3320,7 +3321,7 @@ msgstr "消去"
 
 #: src/Input/InputEventsActions.cpp:147
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:292
-#: src/Dialogs/Waypoint/Manager.cpp:258
+#: src/Dialogs/Waypoint/Manager.cpp:262
 msgid "Failed to save waypoints"
 msgstr "ウエイポイントの保存失敗"
 
@@ -3360,7 +3361,7 @@ msgstr "ロガー オフ"
 msgid "Auto. zoom on"
 msgstr "自動ズーム オン"
 
-#: src/Input/InputEventsMap.cpp:72 src/Input/InputEventsMap.cpp:206
+#: src/Input/InputEventsMap.cpp:72 src/Input/InputEventsMap.cpp:207
 msgid "Auto. zoom off"
 msgstr "自動ズーム オフ"
 
@@ -3429,7 +3430,7 @@ msgid "Ordered task"
 msgstr "指示タスク"
 
 #: src/Input/InputEventsTask.cpp:238
-#: src/Renderer/FlightStatisticsRenderer.cpp:305
+#: src/Renderer/FlightStatisticsRenderer.cpp:317
 msgid "No task"
 msgstr "タスクなし"
 
@@ -3446,9 +3447,9 @@ msgid "Altitude"
 msgstr "高度"
 
 #: src/Input/InputEventsTask.cpp:323
-#: src/Renderer/FlightStatisticsRenderer.cpp:197
-#: src/Renderer/FlightStatisticsRenderer.cpp:216
-#: src/Renderer/FlightStatisticsRenderer.cpp:242
+#: src/Renderer/FlightStatisticsRenderer.cpp:209
+#: src/Renderer/FlightStatisticsRenderer.cpp:228
+#: src/Renderer/FlightStatisticsRenderer.cpp:254
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:80
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:95
 msgid "Speed"
@@ -3458,11 +3459,11 @@ msgstr "速度"
 #. unit-dependent because they will be saved after their units may have changed.
 #. ToDo: implement API that controls order in which pages are saved
 #: src/Input/InputEventsTask.cpp:325
-#: src/Renderer/FlightStatisticsRenderer.cpp:195
-#: src/Renderer/FlightStatisticsRenderer.cpp:214
-#: src/Renderer/FlightStatisticsRenderer.cpp:240
+#: src/Renderer/FlightStatisticsRenderer.cpp:207
+#: src/Renderer/FlightStatisticsRenderer.cpp:226
+#: src/Renderer/FlightStatisticsRenderer.cpp:252
 #: src/Dialogs/Settings/dlgConfiguration.cpp:144
-#: src/Dialogs/Weather/RASPDialog.cpp:217
+#: src/Dialogs/Weather/RASPDialog.cpp:215
 #, no-c-format
 msgid "Time"
 msgstr "時間"
@@ -3537,7 +3538,7 @@ msgstr "地勢図/地形図"
 msgid "Not found"
 msgstr "見つかりませんでした"
 
-#: src/Input/InputEventsLua.cpp:65 src/Dialogs/FileManager.cpp:583
+#: src/Input/InputEventsLua.cpp:65 src/Dialogs/FileManager.cpp:584
 msgid "Select a file"
 msgstr "ファイルを選択してください"
 
@@ -3561,8 +3562,8 @@ msgstr "情報表示　隠す"
 msgid "Map (Full screen)"
 msgstr "地図（全画面表示）"
 
-#: src/Renderer/ChartRenderer.cpp:255
-#: src/Dialogs/Device/DeviceListDialog.cpp:419
+#: src/Renderer/ChartRenderer.cpp:256
+#: src/Dialogs/Device/DeviceListDialog.cpp:428
 msgid "No data"
 msgstr "データがありません"
 
@@ -3820,39 +3821,39 @@ msgstr "積雲雲低高さ予想"
 msgid "Loading Topography File..."
 msgstr "地勢図ファイルをロード中..."
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:194
-#: src/Renderer/FlightStatisticsRenderer.cpp:213
-#: src/Renderer/FlightStatisticsRenderer.cpp:239
+#: src/Renderer/FlightStatisticsRenderer.cpp:206
+#: src/Renderer/FlightStatisticsRenderer.cpp:225
+#: src/Renderer/FlightStatisticsRenderer.cpp:251
 msgid "Score"
 msgstr "得点"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:194
-#: src/Renderer/FlightStatisticsRenderer.cpp:213
-#: src/Renderer/FlightStatisticsRenderer.cpp:239
+#: src/Renderer/FlightStatisticsRenderer.cpp:206
+#: src/Renderer/FlightStatisticsRenderer.cpp:225
+#: src/Renderer/FlightStatisticsRenderer.cpp:251
 msgid "pts"
 msgstr "ポイント"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:315
-#: src/Renderer/FlightStatisticsRenderer.cpp:325
-#: src/Renderer/FlightStatisticsRenderer.cpp:336
+#: src/Renderer/FlightStatisticsRenderer.cpp:327
+#: src/Renderer/FlightStatisticsRenderer.cpp:337
+#: src/Renderer/FlightStatisticsRenderer.cpp:348
 msgid "Task to go"
 msgstr "現在のタスク"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:316
-#: src/Renderer/FlightStatisticsRenderer.cpp:326
+#: src/Renderer/FlightStatisticsRenderer.cpp:328
+#: src/Renderer/FlightStatisticsRenderer.cpp:338
 msgid "AAT to go"
 msgstr "現在のAATタスク"
 
 #. landscape: info above buttons
-#: src/Renderer/FlightStatisticsRenderer.cpp:317
-#: src/Renderer/FlightStatisticsRenderer.cpp:327
-#: src/Renderer/FlightStatisticsRenderer.cpp:338
+#: src/Renderer/FlightStatisticsRenderer.cpp:329
+#: src/Renderer/FlightStatisticsRenderer.cpp:339
+#: src/Renderer/FlightStatisticsRenderer.cpp:350
 #: src/Dialogs/dlgAnalysis.cpp:234
 msgid "Distance to go"
 msgstr "残り距離"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:319
-#: src/Renderer/FlightStatisticsRenderer.cpp:330
+#: src/Renderer/FlightStatisticsRenderer.cpp:331
+#: src/Renderer/FlightStatisticsRenderer.cpp:342
 msgid "Target speed"
 msgstr "目標速度"
 
@@ -3933,7 +3934,7 @@ msgid "Australian"
 msgstr "オーストラリア"
 
 #. Read the terrain file
-#: src/UtilsSettings.cpp:124 src/Startup.cpp:288
+#: src/UtilsSettings.cpp:124 src/Startup.cpp:296
 msgid "Loading Terrain File..."
 msgstr "地形ファイルをロード中..."
 
@@ -3954,12 +3955,12 @@ msgstr "警告"
 msgid "Battery low"
 msgstr "バッテリー残量が低下しています"
 
-#: src/Startup.cpp:257
+#: src/Startup.cpp:254
 msgid "Initialising"
 msgstr "初期化中"
 
 #. Start the device thread(s)
-#: src/Startup.cpp:375
+#: src/Startup.cpp:383
 msgid "Starting devices"
 msgstr "デバイスを起動しています"
 
@@ -3969,48 +3970,48 @@ msgstr "デバイスを起動しています"
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Startup.cpp:385
+#: src/Startup.cpp:393
 msgid "Initialising display"
 msgstr "画面を初期化しています"
 
 #. Show progress dialog
-#: src/Startup.cpp:481 src/Startup.cpp:523 src/Startup.cpp:588
+#: src/Startup.cpp:489 src/Startup.cpp:529 src/Startup.cpp:594
 msgid "Shutdown, please wait..."
 msgstr "終了中です。そのままお待ちください。"
 
 #. Stop logger and save igc file
-#: src/Startup.cpp:501
+#: src/Startup.cpp:507
 msgid "Shutdown, saving logs..."
 msgstr "終了中です。ログを保存しています。"
 
 #. Save settings to profile
-#: src/Startup.cpp:520
+#: src/Startup.cpp:526
 msgid "Shutdown, saving profile..."
 msgstr "終了中です。プロファイルを保存しています。"
 
 #. Save the task for the next time
-#: src/Startup.cpp:574
+#: src/Startup.cpp:580
 msgid "Shutdown, saving task..."
 msgstr "終了中です。タスクを保存しています。"
 
-#: src/Device/Descriptor.cpp:489 src/Device/Descriptor.cpp:501
+#: src/Device/Descriptor.cpp:490 src/Device/Descriptor.cpp:502
 msgid "Unable to open port"
 msgstr "ポートが開けません"
 
-#: src/Device/Descriptor.cpp:1011 src/Device/Descriptor.cpp:1017
+#: src/Device/Descriptor.cpp:1013 src/Device/Descriptor.cpp:1019
 msgid "Sending declaration"
 msgstr "宣言を送ります"
 
-#: src/Device/Descriptor.cpp:1064 src/Device/Descriptor.cpp:1071
+#: src/Device/Descriptor.cpp:1066 src/Device/Descriptor.cpp:1073
 msgid "Reading flight list"
 msgstr "フライト　読み込み中"
 
-#: src/Device/Descriptor.cpp:1095 src/Device/Descriptor.cpp:1102
+#: src/Device/Descriptor.cpp:1097 src/Device/Descriptor.cpp:1104
 msgid "Downloading flight log"
 msgstr "フライトログをダウンロード中"
 
 #: src/Device/Config.cpp:204 src/Dialogs/Device/DeviceEditWidget.cpp:64
-#: src/Dialogs/Device/DeviceListDialog.cpp:415
+#: src/Dialogs/Device/DeviceListDialog.cpp:424
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:40
 #, no-c-format
 msgid "Disabled"
@@ -4035,7 +4036,7 @@ msgid "GliderLink traffic receiver"
 msgstr ""
 
 #. create buttons
-#: src/Dialogs/Message.cpp:93 src/Dialogs/WidgetDialog.cpp:264
+#: src/Dialogs/Message.cpp:94 src/Dialogs/WidgetDialog.cpp:264
 #: src/Dialogs/WidgetDialog.cpp:280
 #: src/Dialogs/MapItemListSettingsDialog.cpp:37
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:37
@@ -4049,22 +4050,22 @@ msgstr ""
 msgid "OK"
 msgstr "はい"
 
-#: src/Dialogs/Message.cpp:99 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:59
+#: src/Dialogs/Message.cpp:100 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:59
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:62
 msgid "Yes"
 msgstr "はい"
 
-#: src/Dialogs/Message.cpp:101
+#: src/Dialogs/Message.cpp:102
 msgid "No"
 msgstr "いいえ"
 
-#: src/Dialogs/Message.cpp:107
+#: src/Dialogs/Message.cpp:108
 msgid "Retry"
 msgstr "再試行"
 
-#: src/Dialogs/Message.cpp:113 src/Dialogs/ListPicker.cpp:183
+#: src/Dialogs/Message.cpp:114 src/Dialogs/ListPicker.cpp:183
 #: src/Dialogs/ProgressDialog.cpp:57 src/Dialogs/WidgetDialog.cpp:265
-#: src/Dialogs/WidgetDialog.cpp:281 src/Dialogs/FileManager.cpp:434
+#: src/Dialogs/WidgetDialog.cpp:281 src/Dialogs/FileManager.cpp:435
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:125
 #: src/Dialogs/MapItemListSettingsDialog.cpp:38
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:38
@@ -4076,12 +4077,12 @@ msgstr "再試行"
 #: src/Dialogs/Waypoint/WaypointList.cpp:232 src/Dialogs/NumberEntry.cpp:60
 #: src/Dialogs/NumberEntry.cpp:102 src/Dialogs/NumberEntry.cpp:142
 #: src/Dialogs/TouchTextEntry.cpp:207 src/Dialogs/TimeEntry.cpp:66
-#: src/Dialogs/GeoPointEntry.cpp:77 src/Dialogs/DownloadFilePicker.cpp:360
+#: src/Dialogs/GeoPointEntry.cpp:77 src/Dialogs/DownloadFilePicker.cpp:407
 #: Data/Input/default.xci:914
 msgid "Cancel"
 msgstr "取消"
 
-#: src/Dialogs/Message.cpp:120
+#: src/Dialogs/Message.cpp:121
 msgid "Ignore"
 msgstr "無視"
 
@@ -4095,42 +4096,42 @@ msgstr "ヘルプ"
 msgid "Select"
 msgstr "選択"
 
-#: src/Dialogs/FileManager.cpp:432 src/Dialogs/FilePicker.cpp:48
+#: src/Dialogs/FileManager.cpp:433 src/Dialogs/FilePicker.cpp:48
 #: src/Dialogs/Weather/RASPDialog.cpp:169
 #: src/Dialogs/Weather/RASPDialog.cpp:180
-#: src/Dialogs/Weather/RASPDialog.cpp:191
-#: src/Dialogs/Weather/RASPDialog.cpp:220
-#: src/Dialogs/Weather/PCMetDialog.cpp:63 src/Dialogs/Weather/NOAAList.cpp:190
-#: src/Dialogs/Weather/NOAAList.cpp:202 src/Dialogs/Weather/NOAADetails.cpp:95
+#: src/Dialogs/Weather/RASPDialog.cpp:189
+#: src/Dialogs/Weather/RASPDialog.cpp:218
+#: src/Dialogs/Weather/PCMetDialog.cpp:64 src/Dialogs/Weather/NOAAList.cpp:193
+#: src/Dialogs/Weather/NOAAList.cpp:205 src/Dialogs/Weather/NOAADetails.cpp:96
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:368
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:391
-#: src/Dialogs/DownloadFilePicker.cpp:118
-#: src/Dialogs/DownloadFilePicker.cpp:272
-#: src/Dialogs/DownloadFilePicker.cpp:359
+#: src/Dialogs/DownloadFilePicker.cpp:138
+#: src/Dialogs/DownloadFilePicker.cpp:297
+#: src/Dialogs/DownloadFilePicker.cpp:406
 msgid "Download"
 msgstr "ダウンロード"
 
-#: src/Dialogs/FileManager.cpp:433
+#: src/Dialogs/FileManager.cpp:434
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:112
-#: src/Dialogs/Weather/NOAAList.cpp:114 src/Monitor/MatTaskMonitor.cpp:58
+#: src/Dialogs/Weather/NOAAList.cpp:115 src/Monitor/MatTaskMonitor.cpp:58
 msgid "Add"
 msgstr "追加"
 
-#: src/Dialogs/FileManager.cpp:435
+#: src/Dialogs/FileManager.cpp:436
 #, fuzzy
 msgid "Update all"
 msgstr "アップデート"
 
-#: src/Dialogs/FileManager.cpp:468
+#: src/Dialogs/FileManager.cpp:469
 msgid "Queued"
 msgstr "待機中"
 
-#: src/Dialogs/FileManager.cpp:470 src/Dialogs/FileManager.cpp:476
+#: src/Dialogs/FileManager.cpp:471 src/Dialogs/FileManager.cpp:477
 msgid "Downloading"
 msgstr "ダウンロード中"
 
-#: src/Dialogs/FileManager.cpp:481 src/Dialogs/FileManager.cpp:731
-#: src/Dialogs/Device/DeviceListDialog.cpp:437
+#: src/Dialogs/FileManager.cpp:482 src/Dialogs/FileManager.cpp:758
+#: src/Dialogs/Device/DeviceListDialog.cpp:446
 #: src/Dialogs/Plane/PlaneListDialog.cpp:208
 #: src/Dialogs/Plane/PlaneListDialog.cpp:233
 #: src/Dialogs/Plane/PlaneListDialog.cpp:278
@@ -4143,27 +4144,29 @@ msgstr "ダウンロード中"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:178
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:188
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:244
-#: src/Dialogs/Weather/NOAAList.cpp:175 src/Dialogs/Weather/NOAAList.cpp:181
-#: src/Dialogs/Weather/NOAADetails.cpp:144
-#: src/Dialogs/DownloadFilePicker.cpp:341
+#: src/Dialogs/Weather/NOAAList.cpp:178 src/Dialogs/Weather/NOAAList.cpp:184
+#: src/Dialogs/Weather/NOAADetails.cpp:145
+#: src/Dialogs/DownloadFilePicker.cpp:327
+#: src/Dialogs/DownloadFilePicker.cpp:389
 msgid "Error"
 msgstr "エラー"
 
-#: src/Dialogs/FileManager.cpp:488
+#: src/Dialogs/FileManager.cpp:489
 #, fuzzy
 msgid "Update available"
 msgstr "TAF　使用不可"
 
-#: src/Dialogs/FileManager.cpp:730 src/Dialogs/DownloadFilePicker.cpp:340
+#: src/Dialogs/FileManager.cpp:757 src/Dialogs/DownloadFilePicker.cpp:386
+#: src/Dialogs/DownloadFilePicker.cpp:388
 msgid "Failed to download the repository index."
 msgstr "インデックスの読み込み失敗"
 
-#: src/Dialogs/FileManager.cpp:740 src/Dialogs/FileManager.cpp:765
-#: src/Dialogs/DownloadFilePicker.cpp:353 Data/Input/default.xci:605
+#: src/Dialogs/FileManager.cpp:767 src/Dialogs/FileManager.cpp:792
+#: src/Dialogs/DownloadFilePicker.cpp:400 Data/Input/default.xci:605
 msgid "File Manager"
 msgstr "ファイルマネージャー"
 
-#: src/Dialogs/FileManager.cpp:763 src/Dialogs/DownloadFilePicker.cpp:352
+#: src/Dialogs/FileManager.cpp:790 src/Dialogs/DownloadFilePicker.cpp:399
 msgid "The file manager is not available on this device."
 msgstr "このファイルマネージャーはこの装置では使用できません"
 
@@ -4311,65 +4314,65 @@ msgstr "XCSOARの現在の設定　マクレディ値などの情報"
 msgid "Whether you use a K6Bt to connect the device."
 msgstr "K6Bなどに接続する場合　この設定ON にする"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:280
+#: src/Dialogs/Device/DeviceListDialog.cpp:284
 msgid "Flight download"
 msgstr "フライトログ　ダウンロード"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:284
-#: src/Dialogs/Device/DeviceListDialog.cpp:530
-#: src/Dialogs/Device/DeviceListDialog.cpp:536
-#: src/Dialogs/Device/DeviceListDialog.cpp:592
-#: src/Dialogs/Device/DeviceListDialog.cpp:598
+#: src/Dialogs/Device/DeviceListDialog.cpp:288
+#: src/Dialogs/Device/DeviceListDialog.cpp:539
+#: src/Dialogs/Device/DeviceListDialog.cpp:545
+#: src/Dialogs/Device/DeviceListDialog.cpp:601
+#: src/Dialogs/Device/DeviceListDialog.cpp:607
 #: src/Dialogs/Device/PortMonitor.cpp:150
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:122
 msgid "Manage"
 msgstr "設定"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:288
+#: src/Dialogs/Device/DeviceListDialog.cpp:292
 msgid "Monitor"
 msgstr "表示項目"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:292
-#: src/Dialogs/Device/DeviceListDialog.cpp:499
-#: src/Dialogs/Device/DeviceListDialog.cpp:507
+#: src/Dialogs/Device/DeviceListDialog.cpp:296
+#: src/Dialogs/Device/DeviceListDialog.cpp:508
+#: src/Dialogs/Device/DeviceListDialog.cpp:516
 #: src/Dialogs/Device/PortMonitor.cpp:142
 msgid "Reconnect"
 msgstr "再接続"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:296
-#: src/Dialogs/Device/DeviceListDialog.cpp:315
+#: src/Dialogs/Device/DeviceListDialog.cpp:300
+#: src/Dialogs/Device/DeviceListDialog.cpp:319
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:226
 msgid "Disable"
 msgstr "無効にする"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:300
-#: src/Dialogs/Device/DeviceListDialog.cpp:410
-#: src/Dialogs/Device/DeviceListDialog.cpp:423
-#: src/Dialogs/Device/DeviceListDialog.cpp:677
+#: src/Dialogs/Device/DeviceListDialog.cpp:304
+#: src/Dialogs/Device/DeviceListDialog.cpp:419
+#: src/Dialogs/Device/DeviceListDialog.cpp:432
+#: src/Dialogs/Device/DeviceListDialog.cpp:686
 msgid "Debug"
 msgstr "デバッグ"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:315
+#: src/Dialogs/Device/DeviceListDialog.cpp:319
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:115
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:106
 msgid "Enable"
 msgstr "有効"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:363
+#: src/Dialogs/Device/DeviceListDialog.cpp:367
 #, c-format
 msgid "%s on %s"
 msgstr "%s 内蔵GPSオン %s"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:377
+#: src/Dialogs/Device/DeviceListDialog.cpp:381
 msgid "GPS fix"
 msgstr "GPS　信号捕捉"
 
 #. device sends GPGGA, but no valid location
-#: src/Dialogs/Device/DeviceListDialog.cpp:380
+#: src/Dialogs/Device/DeviceListDialog.cpp:384
 msgid "Bad GPS"
 msgstr "GPS 信号無し"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:382
+#: src/Dialogs/Device/DeviceListDialog.cpp:386
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:59
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:91
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:94
@@ -4377,50 +4380,50 @@ msgstr "GPS 信号無し"
 msgid "Connected"
 msgstr "接続しました"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:387
+#: src/Dialogs/Device/DeviceListDialog.cpp:391
 msgid "Baro"
 msgstr "気圧"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:392
+#: src/Dialogs/Device/DeviceListDialog.cpp:396
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
 msgid "Airspeed"
 msgstr "対気速度"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:431
-#: src/Dialogs/Device/DeviceListDialog.cpp:499
+#: src/Dialogs/Device/DeviceListDialog.cpp:440
+#: src/Dialogs/Device/DeviceListDialog.cpp:508
 msgid "Bluetooth is disabled"
 msgstr "Bluetooth は無効"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:434
+#: src/Dialogs/Device/DeviceListDialog.cpp:443
 msgid "Duplicate"
 msgstr "コピー"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:441
+#: src/Dialogs/Device/DeviceListDialog.cpp:450
 msgid "Not connected"
 msgstr "未接続"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:507
-#: src/Dialogs/Device/DeviceListDialog.cpp:536
-#: src/Dialogs/Device/DeviceListDialog.cpp:598
+#: src/Dialogs/Device/DeviceListDialog.cpp:516
+#: src/Dialogs/Device/DeviceListDialog.cpp:545
+#: src/Dialogs/Device/DeviceListDialog.cpp:607
 #: src/Dialogs/Device/PortMonitor.cpp:150
 msgid "Device is occupied"
 msgstr "デバイスは　使用中"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:530
-#: src/Dialogs/Device/DeviceListDialog.cpp:592
+#: src/Dialogs/Device/DeviceListDialog.cpp:539
+#: src/Dialogs/Device/DeviceListDialog.cpp:601
 msgid "Device is not connected"
 msgstr "Bluetooth は接続されていません"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:556
+#: src/Dialogs/Device/DeviceListDialog.cpp:565
 msgid "Edit device"
 msgstr "デバイスを設定"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:675
+#: src/Dialogs/Device/DeviceListDialog.cpp:684
 #, c-format
 msgid "Communication with this device will be logged for the next %u minutes."
 msgstr "このデバイスとの通信は次の %u 分間記録される"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:692 Data/Input/default.xci:555
+#: src/Dialogs/Device/DeviceListDialog.cpp:701 Data/Input/default.xci:555
 #: Data/Input/default.xci:1151
 msgid "Devices"
 msgstr "デバイス"
@@ -4861,18 +4864,18 @@ msgstr ""
 msgid "Select Color"
 msgstr "色の選択"
 
-#: src/Dialogs/Airspace/dlgAirspace.cpp:112
-#: src/Dialogs/Airspace/dlgAirspace.cpp:113 Data/Input/default.xci:436
+#: src/Dialogs/Airspace/dlgAirspace.cpp:111
+#: src/Dialogs/Airspace/dlgAirspace.cpp:112 Data/Input/default.xci:436
 #: Data/Input/default.xci:484 Data/Input/default.xci:885
 msgid "Display"
 msgstr "表示"
 
+#: src/Dialogs/Airspace/dlgAirspace.cpp:115
 #: src/Dialogs/Airspace/dlgAirspace.cpp:116
-#: src/Dialogs/Airspace/dlgAirspace.cpp:117
 msgid "Warn"
 msgstr "警告"
 
-#: src/Dialogs/Airspace/dlgAirspace.cpp:164
+#: src/Dialogs/Airspace/dlgAirspace.cpp:163
 #: src/Dialogs/Settings/dlgConfiguration.cpp:102
 #: src/Dialogs/dlgAnalysis.cpp:562
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:107
@@ -5254,7 +5257,7 @@ msgstr "上級"
 msgid "Configuration"
 msgstr "設定"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:373
+#: src/Dialogs/Settings/dlgConfiguration.cpp:371
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr "設定を変更するには　XCSOARを再起動してください"
 
@@ -5844,7 +5847,7 @@ msgstr "スタート高度"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:105
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:144
-#: src/Dialogs/Task/TaskPointDialog.cpp:367
+#: src/Dialogs/Task/TaskPointDialog.cpp:373
 msgid "Start point"
 msgstr "スタート地点"
 
@@ -6007,19 +6010,19 @@ msgstr "スタンバイ周波数を設定"
 msgid "GoTo"
 msgstr "GoToポイントに行く"
 
-#: src/Dialogs/Waypoint/Manager.cpp:275
+#: src/Dialogs/Waypoint/Manager.cpp:279
 msgid "Delete waypoint?"
 msgstr "ウエイポイントを削除しますか？"
 
-#: src/Dialogs/Waypoint/Manager.cpp:295 Data/Input/default.xci:597
+#: src/Dialogs/Waypoint/Manager.cpp:299 Data/Input/default.xci:597
 msgid "Waypoints Editor"
 msgstr "ウエイポイント編集"
 
-#: src/Dialogs/Waypoint/Manager.cpp:304
+#: src/Dialogs/Waypoint/Manager.cpp:308
 msgid "Save changes to waypoint file?"
 msgstr "ウェイポイントファイルに変更を保存しますか？"
 
-#: src/Dialogs/Waypoint/Manager.cpp:304
+#: src/Dialogs/Waypoint/Manager.cpp:308
 msgid "Waypoints edited"
 msgstr "ウエイポイント編集しました"
 
@@ -6515,9 +6518,9 @@ msgid "Final glide"
 msgstr "ファイナル　グライド"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:66
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Adjusts MC for fastest arrival.  For OLC sprint tasks, the MacCready is "
+"Adjusts MC for fastest arrival.  For contest sprint tasks, the MacCready is "
 "adjusted in order to cover the greatest distance in the remaining time and "
 "reach the finish height."
 msgstr ""
@@ -8063,7 +8066,7 @@ msgstr "最低フィニッシュ高度の値"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:79
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:192
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:191
 #, no-c-format
 msgid "Gate width"
 msgstr "ゲート幅"
@@ -8072,9 +8075,9 @@ msgstr "ゲート幅"
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:43
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:47
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:43
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:186
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:198
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:208
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:185
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:197
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:207
 #, no-c-format
 msgid "Radius"
 msgstr "半径"
@@ -8088,7 +8091,7 @@ msgid "Default radius or gate width of the start zone for new tasks."
 msgstr "ゲート半径　または幅　標準設定"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:156
-#: src/Dialogs/Task/TaskPointDialog.cpp:382
+#: src/Dialogs/Task/TaskPointDialog.cpp:388
 msgid "Finish point"
 msgstr "フィニッシュ地点"
 
@@ -8138,8 +8141,8 @@ msgstr ""
 "最適タスクは最小時間＋マージン時間"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:93
-#, no-c-format
-msgid "Disable OLC Calculations"
+#, fuzzy, no-c-format
+msgid "Disable contest calculations"
 msgstr "OLC計算をしない"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:95
@@ -8213,23 +8216,41 @@ msgstr ""
 msgid "The FFVV NetCoupe \"libre\" competiton."
 msgstr "FFVV　ネットカップ　\"lible\"競技"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:120
-msgid "On-Line Contest"
-msgstr "オンラインコンテスト"
-
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:121
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:119
+#, no-c-format
 msgid ""
-"Select the rules used for calculating optimal points for the On-Line "
-"Contest. The implementation  conforms to the official release 2010, Sept.23."
+"WeGlide combines multiple scoring systems in the WeGlide Free contest. The "
+"free score is a combination of the free distance score and the area bonus. "
+"For the area bonus, the scoring program determines the largest FAI triangle "
+"and the largest Out & Return distance that can be fitted into the flight "
+"route."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:123
+#, no-c-format
+msgid ""
+"A start point, one turn point and a finish point are chosen from the flight "
+"path such that the distance between the start point and the turn point is "
+"maximized"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
+#, fuzzy
+msgid "Contest"
+msgstr "目次"
+
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:128
+#, fuzzy
+msgid "Select the rules used for calculating optimal points for a contest."
 msgstr ""
 "オンラインコンテストのオプション　点数計算方法の選択\r\n"
 "2010年9月23日版のルール"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:125
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:131
 msgid "Predict Contest"
 msgstr "Predict　コンテスト"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:126
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:132
 msgid ""
 "If enabled, then the next task point is included in the score calculation, "
 "assuming that you will reach it."
@@ -8237,19 +8258,19 @@ msgstr ""
 "設定した場合　次のタスクポイントまで到着したことを推定したスコアーが計算され"
 "る"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:133
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:139
 msgid "FAI triangle areas"
 msgstr "FAI三角コース"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:134
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:140
 msgid "Show FAI triangle areas on the map."
 msgstr "FAI三角コースを地図上に表示する"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:138
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:144
 msgid "FAI triangle threshold"
 msgstr "FAI三角コース制限事項"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:139
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:145
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
 msgstr "FAI三角コースの設定時にどの制限事項を採用するか"
 
@@ -8927,33 +8948,33 @@ msgstr "タスクは変更されません"
 msgid "Revert Changes"
 msgstr "変更を元に戻す"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:314
-msgid "Clear all points?"
-msgstr "すべてのポイントを削除？"
-
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:314
-msgid "Task edit"
-msgstr "タスク編集"
-
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:337
-msgid "Add Turnpoint"
-msgstr "旋回点の追加"
-
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:530
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:130
 msgid "Edit Point"
 msgstr "ポイントを編集"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:533
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:132
 msgid "Make Finish"
 msgstr "フィニッシュする"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:542
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:138
 msgid "Reverse"
 msgstr "逆"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:545
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:140
 msgid "Clear All"
 msgstr "すべて消去"
+
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:225
+msgid "Clear all points?"
+msgstr "すべてのポイントを削除？"
+
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:225
+msgid "Task edit"
+msgstr "タスク編集"
+
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:248
+msgid "Add Turnpoint"
+msgstr "旋回点の追加"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:215
 msgid "Task type"
@@ -9064,10 +9085,10 @@ msgid "Less"
 msgstr "少なく"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:58
-#: src/Dialogs/Task/TaskPointDialog.cpp:264
-#: src/Dialogs/Weather/NOAAList.cpp:116 src/Dialogs/Weather/NOAAList.cpp:217
-#: src/Dialogs/Weather/NOAADetails.cpp:65
-#: src/Dialogs/Weather/NOAADetails.cpp:107
+#: src/Dialogs/Task/TaskPointDialog.cpp:262
+#: src/Dialogs/Weather/NOAAList.cpp:117 src/Dialogs/Weather/NOAAList.cpp:220
+#: src/Dialogs/Weather/NOAADetails.cpp:66
+#: src/Dialogs/Weather/NOAADetails.cpp:108
 msgid "Remove"
 msgstr "削除"
 
@@ -9079,34 +9100,34 @@ msgstr "（再スタート）"
 msgid "Alternate Start Points"
 msgstr "スタートポイント　変更"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:229
-#: src/Dialogs/Task/TaskPointDialog.cpp:274
+#: src/Dialogs/Task/TaskPointDialog.cpp:230
+#: src/Dialogs/Task/TaskPointDialog.cpp:272
 msgid "Change Type"
 msgstr "タイプの変更"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:283
-#: src/Dialogs/Task/TaskPointDialog.cpp:348
+#: src/Dialogs/Task/TaskPointDialog.cpp:281
+#: src/Dialogs/Task/TaskPointDialog.cpp:354
 msgid "Enable Alternate Starts"
 msgstr "再スタート"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:286
+#: src/Dialogs/Task/TaskPointDialog.cpp:284
 msgid "Score exit"
 msgstr "スコアー"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:351
+#: src/Dialogs/Task/TaskPointDialog.cpp:357
 msgid "Edit Alternates"
 msgstr "代替飛行場の編集"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:372
-#: src/Dialogs/Task/TaskPointDialog.cpp:443
+#: src/Dialogs/Task/TaskPointDialog.cpp:378
+#: src/Dialogs/Task/TaskPointDialog.cpp:449
 msgid "Task point"
 msgstr "タスク　ポイント"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:377
+#: src/Dialogs/Task/TaskPointDialog.cpp:383
 msgid "Assigned area point"
 msgstr "アサインド　タスク　エリアポイント"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:443
+#: src/Dialogs/Task/TaskPointDialog.cpp:449
 msgid "Remove task point?"
 msgstr "リモート　タスク　ポイントですか？"
 
@@ -9139,60 +9160,60 @@ msgstr "非FAI三角コース"
 msgid "%d legs"
 msgstr "%d レッグ"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:121
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:116
 #, c-format
 msgid "Task is empty (%s)"
 msgstr "タスクがありません(%s)"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:131
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:128
 msgid "max."
 msgstr "最大"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:135
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:132
 msgid "min."
 msgstr "最小"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:143
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:142
 msgid "dist."
 msgstr "距離"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:186
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:185
 msgid "Sector"
 msgstr "セクター"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:192
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:191
 msgid "Line"
 msgstr "ライン"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:198
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:197
 msgid "Cylinder"
 msgstr "シリンダー"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:204
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:203
 msgid "MAT cylinder"
 msgstr "MAT　シリンダー"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:208
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:207
 msgid "Keyhole"
 msgstr "キーホール"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:214
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:213
 msgid "DAeC Keyhole"
 msgstr "ドイツエアロクラブ　Keyhole"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:218
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:217
 msgid "BGA Fixed Course"
 msgstr "BGA　固定コース"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:222
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:221
 msgid "BGA Enhanced Option"
 msgstr "英国グライダー協会　オプション"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:226
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:225
 msgid "BGA Start Sector"
 msgstr "英国グライダー協会　スタートセクター"
 
-#: src/Dialogs/Task/dlgTaskHelpers.cpp:242
+#: src/Dialogs/Task/dlgTaskHelpers.cpp:241
 msgid "Enter a task name"
 msgstr "タスクの名称を入力"
 
@@ -9286,12 +9307,12 @@ msgid "Weather"
 msgstr "天気"
 
 #: src/Dialogs/Weather/WeatherDialog.cpp:79
-#: src/Dialogs/Weather/NOAADetails.cpp:78
-#: src/Dialogs/Weather/NOAADetails.cpp:129
+#: src/Dialogs/Weather/NOAADetails.cpp:79
+#: src/Dialogs/Weather/NOAADetails.cpp:130
 msgid "METAR and TAF"
 msgstr "METAR　および　TAF"
 
-#: src/Dialogs/Weather/RASPDialog.cpp:211
+#: src/Dialogs/Weather/RASPDialog.cpp:209
 msgid "Field"
 msgstr "項目"
 
@@ -9365,35 +9386,35 @@ msgstr "制限空域を設定している場合　その高度以上では　バ
 msgid "Master Volume"
 msgstr "主音量"
 
-#: src/Dialogs/Weather/PCMetDialog.cpp:69
+#: src/Dialogs/Weather/PCMetDialog.cpp:70
 msgid "Failed to download file."
 msgstr "ファイルの読み込み失敗"
 
-#: src/Dialogs/Weather/NOAAList.cpp:115 src/Dialogs/Weather/NOAADetails.cpp:64
+#: src/Dialogs/Weather/NOAAList.cpp:116 src/Dialogs/Weather/NOAADetails.cpp:65
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:227
 msgid "Update"
 msgstr "アップデート"
 
-#: src/Dialogs/Weather/NOAAList.cpp:170
+#: src/Dialogs/Weather/NOAAList.cpp:173
 msgid "Airport ICAO code"
 msgstr "空港ICAOコード"
 
-#: src/Dialogs/Weather/NOAAList.cpp:174
+#: src/Dialogs/Weather/NOAAList.cpp:177
 msgid "Please enter the FOUR letter code of the desired station."
 msgstr "４桁のコードを入力してください"
 
-#: src/Dialogs/Weather/NOAAList.cpp:180
+#: src/Dialogs/Weather/NOAAList.cpp:183
 msgid ""
 "Please don't use special characters in the four letter code of the desired "
 "station."
 msgstr "レター　コードには特殊文字を使用しないでください"
 
-#: src/Dialogs/Weather/NOAAList.cpp:214 src/Dialogs/Weather/NOAADetails.cpp:104
+#: src/Dialogs/Weather/NOAAList.cpp:217 src/Dialogs/Weather/NOAADetails.cpp:105
 #, c-format
 msgid "Do you want to remove station %s?"
 msgstr "この場所%sを削除しますか？"
 
-#: src/Dialogs/Weather/NOAADetails.cpp:143
+#: src/Dialogs/Weather/NOAADetails.cpp:144
 msgid "This function is not available on your platform yet."
 msgstr "この機能はあなたのシステムでは使用できません"
 
@@ -10011,55 +10032,6 @@ msgstr "ヘッドセット　音量"
 msgid "Urgent min. volume"
 msgstr "緊急　最小ボリューム"
 
-#: Data/Input/default.xci:128 Data/Input/default.xci:444
-#: Data/Input/default.xci:937
-msgid ""
-"Zoom\n"
-"In"
-msgstr ""
-"ズーム\n"
-"イン"
-
-#: Data/Input/default.xci:1182
-msgid ""
-"Nearest\n"
-"Airspace"
-msgstr ""
-"一番近い\n"
-"空域"
-
-#: Data/Input/default.xci:727
-msgid "Store"
-msgstr "保存"
-
-#: Data/Input/default.xci:734
-msgid ""
-"Cruise\n"
-"Demo"
-msgstr ""
-"巡航\n"
-"デモ"
-
-#: Data/Input/default.xci:638 Data/Input/default.xci:1143
-msgid "Raw Logger"
-msgstr "ロガー"
-
-#: Data/Input/default.xci:719
-msgid ""
-"Accel\n"
-"Zero"
-msgstr ""
-"アクセル\n"
-"ゼロ"
-
-#: Data/Input/default.xci:741
-msgid ""
-"Climb\n"
-"Demo"
-msgstr ""
-"クライム\n"
-"デモ"
-
 #: Data/Input/default.xci:1112
 msgid ""
 "Setup\n"
@@ -10068,34 +10040,11 @@ msgstr ""
 "セットアップ\n"
 "風"
 
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "地形ごしのファイナルグライド"
-
-#: Data/Input/default.xci:1120
+#: Data/Input/default.xci:907
 msgid ""
-"Setup\n"
-"System"
+"Lock\n"
+"Screen"
 msgstr ""
-"セットアップ\n"
-"システム"
-
-#: Data/Input/default.xci:833 Data/Input/default.xci:1214
-msgid "Thermal Assistant"
-msgstr "サーマルアシスト"
-
-#: Data/Input/default.xci:459 Data/Input/default.xci:951
-#: Data/Input/default.xci:1040
-msgid "Zoom"
-msgstr "ズーム"
-
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "ファイナルグライド　ライン下"
-
-#: Data/Input/default.xci:711
-msgid "Vario ASI zeroed"
-msgstr "バリオ　速度0設定"
 
 #: Data/Input/default.xci:1128
 msgid ""
@@ -10105,13 +10054,17 @@ msgstr ""
 "設定\n"
 "空域"
 
-#: Data/Input/default.xci:693
-msgid "Accel"
-msgstr "アクセラレータ"
+#: Data/Input/default.xci:500 Data/Input/default.xci:1073
+msgid "Trail"
+msgstr "航跡"
 
-#: Data/Input/default.xci:646
-msgid "Lua"
-msgstr "ルア"
+#: Data/Input/default.xci:965
+msgid "AVG/ALT"
+msgstr "平均高度"
+
+#: Data/Input/default.xci:711
+msgid "Vario ASI zeroed"
+msgstr "バリオ　速度0設定"
 
 #: Data/Input/default.xci:380 Data/Input/default.xci:999
 msgid ""
@@ -10121,50 +10074,26 @@ msgstr ""
 "ウエイポイント\n"
 "リスト"
 
-#: Data/Input/default.xci:686
+#: Data/Input/default.xci:1120
 msgid ""
 "Setup\n"
-"Stall"
+"System"
 msgstr ""
 "セットアップ\n"
-"ストール"
+"システム"
 
-#: Data/Input/default.xci:825
-msgid "Traffic List"
-msgstr "他機一覧"
-
-#: Data/Input/default.xci:867
+#: Data/Input/default.xci:734
 msgid ""
-"Message\n"
-"Repeat"
+"Cruise\n"
+"Demo"
 msgstr ""
-"メッセージ\n"
-"繰り返し"
-
-#: Data/Input/default.xci:473 Data/Input/default.xci:1057
-msgid ""
-"Pan\n"
-"On"
-msgstr ""
-"パン\n"
-"オン"
-
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "ファイナル　グライド　ライン上"
-
-#: Data/Input/default.xci:759 Data/Input/default.xci:1166
-msgid "FLARM Radar"
-msgstr "FLARM　レーダー"
+"巡航\n"
+"デモ"
 
 #: Data/Input/default.xci:653 Data/Input/default.xci:664
 #: Data/Input/default.xci:704
 msgid "Vega"
 msgstr "ベガ (Vega)"
-
-#: Data/Input/default.xci:1159
-msgid "Setup Plane"
-msgstr "機体設定"
 
 #: Data/Input/default.xci:817
 msgid ""
@@ -10174,14 +10103,51 @@ msgstr ""
 "チーム\n"
 "コード"
 
+#: Data/Input/default.xci:672
+msgid ""
+"Airframe\n"
+"Switches"
+msgstr ""
+"エアフレーム\n"
+"スイッチ"
+
+#: Data/Input/default.xci:473 Data/Input/default.xci:1057
+msgid ""
+"Pan\n"
+"On"
+msgstr ""
+"パン\n"
+"オン"
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "地形ごしのファイナルグライド"
+
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "離陸"
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "ファイナルグライド　ライン下"
+
 #: Data/Input/default.xci:350 Data/Input/default.xci:399
 #: Data/Input/default.xci:878
 msgid "Nav"
 msgstr "ナビゲーション"
 
-#: Data/Input/default.xci:718
-msgid "Accelerometer leveled"
-msgstr "アクセラレーター　レベル"
+#: Data/Input/default.xci:825
+msgid "Traffic List"
+msgstr "他機一覧"
+
+#: Data/Input/default.xci:128 Data/Input/default.xci:444
+#: Data/Input/default.xci:937
+msgid ""
+"Zoom\n"
+"In"
+msgstr ""
+"ズーム\n"
+"イン"
 
 #: Data/Input/default.xci:135 Data/Input/default.xci:451
 #: Data/Input/default.xci:944
@@ -10192,49 +10158,10 @@ msgstr ""
 "ズーム\n"
 "アウト"
 
-#: Data/Input/default.xci:672
-msgid ""
-"Airframe\n"
-"Switches"
-msgstr ""
-"エアフレーム\n"
-"スイッチ"
-
-#: Data/Input/default.xci:121
-msgid ""
-"Pan\n"
-"Off"
-msgstr ""
-"パン\n"
-"オフ"
-
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "離陸"
-
-#: Data/Input/default.xci:965
-msgid "AVG/ALT"
-msgstr "平均高度"
-
-#: Data/Input/default.xci:492 Data/Input/default.xci:1065
-msgid "Labels"
-msgstr "ラベル"
-
-#: Data/Input/default.xci:726
-msgid "Stored to EEPROM"
-msgstr "EEPROM　に記録"
-
-#: Data/Input/default.xci:414 Data/Input/default.xci:1047
-msgid "Dropped marker"
-msgstr "マーカーを設置"
-
-#: Data/Input/default.xci:712
-msgid ""
-"ASI\n"
-"Zero"
-msgstr ""
-"ASI\n"
-"ゼロ"
+#: Data/Input/default.xci:459 Data/Input/default.xci:951
+#: Data/Input/default.xci:1040
+msgid "Zoom"
+msgstr "ズーム"
 
 #: Data/Input/default.xci:1104
 msgid ""
@@ -10244,25 +10171,41 @@ msgstr ""
 "フライト\n"
 "セットアップ"
 
-#: Data/Input/default.xci:500 Data/Input/default.xci:1073
-msgid "Trail"
-msgstr "航跡"
+#: Data/Input/default.xci:718
+msgid "Accelerometer leveled"
+msgstr "アクセラレーター　レベル"
 
-#: Data/Input/default.xci:514 Data/Input/default.xci:1087
-msgid "Topo."
-msgstr "地勢"
-
-#: Data/Input/default.xci:907
+#: Data/Input/default.xci:1182
 msgid ""
-"Lock\n"
-"Screen"
+"Nearest\n"
+"Airspace"
 msgstr ""
+"一番近い\n"
+"空域"
 
-#: Data/Input/default.xci:142 Data/Input/default.xci:775
+#: Data/Input/default.xci:712
 msgid ""
-"What's\n"
-"here?"
-msgstr "現在位置は何処？"
+"ASI\n"
+"Zero"
+msgstr ""
+"ASI\n"
+"ゼロ"
+
+#: Data/Input/default.xci:867
+msgid ""
+"Message\n"
+"Repeat"
+msgstr ""
+"メッセージ\n"
+"繰り返し"
+
+#: Data/Input/default.xci:783 Data/Input/default.xci:1190
+msgid ""
+"Check\n"
+"list"
+msgstr ""
+"チェック\n"
+"リスト"
 
 #: Data/Input/default.xci:679
 msgid ""
@@ -10272,10 +10215,17 @@ msgstr ""
 "マニュアル\n"
 "デモ"
 
-#: Data/Input/default.xci:531 Data/Input/default.xci:581
-#: Data/Input/default.xci:623 Data/Input/default.xci:892
-msgid "Config"
-msgstr "設定"
+#: Data/Input/default.xci:686
+msgid ""
+"Setup\n"
+"Stall"
+msgstr ""
+"セットアップ\n"
+"ストール"
+
+#: Data/Input/default.xci:833 Data/Input/default.xci:1214
+msgid "Thermal Assistant"
+msgstr "サーマルアシスト"
 
 #: Data/Input/default.xci:417 Data/Input/default.xci:1050
 msgid ""
@@ -10285,13 +10235,95 @@ msgstr ""
 "マーク\n"
 "設置"
 
-#: Data/Input/default.xci:783 Data/Input/default.xci:1190
+#: Data/Input/default.xci:492 Data/Input/default.xci:1065
+msgid "Labels"
+msgstr "ラベル"
+
+#: Data/Input/default.xci:414 Data/Input/default.xci:1047
+msgid "Dropped marker"
+msgstr "マーカーを設置"
+
+#: Data/Input/default.xci:514 Data/Input/default.xci:1087
+msgid "Topo."
+msgstr "地勢"
+
+#: Data/Input/default.xci:638 Data/Input/default.xci:1143
+msgid "Raw Logger"
+msgstr "ロガー"
+
+#: Data/Input/default.xci:741
 msgid ""
-"Check\n"
-"list"
+"Climb\n"
+"Demo"
 msgstr ""
-"チェック\n"
-"リスト"
+"クライム\n"
+"デモ"
+
+#: Data/Input/default.xci:142 Data/Input/default.xci:775
+msgid ""
+"What's\n"
+"here?"
+msgstr "現在位置は何処？"
+
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "ファイナル　グライド　ライン上"
+
+#: Data/Input/default.xci:759 Data/Input/default.xci:1166
+msgid "FLARM Radar"
+msgstr "FLARM　レーダー"
+
+#: Data/Input/default.xci:727
+msgid "Store"
+msgstr "保存"
+
+#: Data/Input/default.xci:646
+msgid "Lua"
+msgstr "ルア"
+
+#: Data/Input/default.xci:693
+msgid "Accel"
+msgstr "アクセラレータ"
+
+#: Data/Input/default.xci:121
+msgid ""
+"Pan\n"
+"Off"
+msgstr ""
+"パン\n"
+"オフ"
+
+#: Data/Input/default.xci:719
+msgid ""
+"Accel\n"
+"Zero"
+msgstr ""
+"アクセル\n"
+"ゼロ"
+
+#: Data/Input/default.xci:531 Data/Input/default.xci:581
+#: Data/Input/default.xci:623 Data/Input/default.xci:892
+msgid "Config"
+msgstr "設定"
+
+#: Data/Input/default.xci:726
+msgid "Stored to EEPROM"
+msgstr "EEPROM　に記録"
+
+#: Data/Input/default.xci:1159
+msgid "Setup Plane"
+msgstr "機体設定"
+
+#, no-c-format
+#~ msgid "OLC Dist"
+#~ msgstr "OLC  距離"
+
+#, no-c-format
+#~ msgid "OLC Speed"
+#~ msgstr "OLS　速度"
+
+#~ msgid "On-Line Contest"
+#~ msgstr "オンラインコンテスト"
 
 #~ msgid ""
 #~ "Pressure Altitude given as Flight Level. Only available if barometric "
