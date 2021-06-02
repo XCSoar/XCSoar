@@ -42,14 +42,14 @@ TextUtil::Initialise(JNIEnv *_env) noexcept
 {
   env = _env;
 
-  cls.Find(env, "org/xcsoar/TextUtil");
+  cls.Find(_env, "org/xcsoar/TextUtil");
 
-  midTextUtil = env->GetMethodID(cls, "<init>", "(IIIZ)V");
-  midGetFontMetrics = env->GetMethodID(cls, "getFontMetrics", "([I)V");
-  midGetTextBounds = env->GetMethodID(cls, "getTextBounds",
-                                      "(Ljava/lang/String;)[I");
-  midGetTextTextureGL = env->GetMethodID(cls, "getTextTextureGL",
-                                         "(Ljava/lang/String;)[I");
+  midTextUtil = _env->GetMethodID(cls, "<init>", "(IIIZ)V");
+  midGetFontMetrics = _env->GetMethodID(cls, "getFontMetrics", "([I)V");
+  midGetTextBounds = _env->GetMethodID(cls, "getTextBounds",
+                                       "(Ljava/lang/String;)[I");
+  midGetTextTextureGL = _env->GetMethodID(cls, "getTextTextureGL",
+                                          "(Ljava/lang/String;)[I");
 }
 
 void
@@ -62,11 +62,14 @@ TextUtil::TextUtil(jobject _obj) noexcept
   :Java::GlobalObject(env, _obj) {
   // get height, ascent_height and capital_height
   assert(midGetFontMetrics);
-  jintArray metricsArray = env->NewIntArray(5);
-  env->CallVoidMethod(Get(), midGetFontMetrics, metricsArray);
+
+  auto &e = *env;
+
+  jintArray metricsArray = e.NewIntArray(5);
+  e.CallVoidMethod(Get(), midGetFontMetrics, metricsArray);
 
   jint metrics[5];
-  env->GetIntArrayRegion(metricsArray, 0, 5, metrics);
+  e.GetIntArrayRegion(metricsArray, 0, 5, metrics);
   height = metrics[0];
   style = metrics[1];
   ascent_height = metrics[2];
@@ -74,13 +77,12 @@ TextUtil::TextUtil(jobject _obj) noexcept
   line_spacing = metrics[4];
 
   // free local references
-  env->DeleteLocalRef(metricsArray);
+  e.DeleteLocalRef(metricsArray);
 }
 
 TextUtil *
 TextUtil::create(const FontDescription &d) noexcept
 {
-  jobject localObject;
   jint paramStyle, paramTextSize;
 
   paramStyle = 0;
@@ -96,15 +98,16 @@ TextUtil::create(const FontDescription &d) noexcept
     paint_flags |= 1;
 
   // construct org.xcsoar.TextUtil object
-  localObject = env->NewObject(cls, midTextUtil,
-                               paramStyle, paramTextSize,
-                               paint_flags, d.IsMonospace());
+  auto &e = *env;
+  jobject localObject = e.NewObject(cls, midTextUtil,
+                                    paramStyle, paramTextSize,
+                                    paint_flags, d.IsMonospace());
   if (!localObject)
     return nullptr;
 
   TextUtil *tu = new TextUtil(localObject);
 
-  env->DeleteLocalRef(localObject);
+  e.DeleteLocalRef(localObject);
 
   return tu;
 }
@@ -114,13 +117,13 @@ TextUtil::getTextBounds(StringView text) const noexcept
 {
   jint extent[2];
 
-  Java::String text2(env, text);
+  auto &e = *env;
+  Java::String text2(&e, text);
   jintArray paramExtent = (jintArray)
-    env->CallObjectMethod(Get(), midGetTextBounds,
-                          text2.Get());
-  if (!Java::DiscardException(env)) {
-    env->GetIntArrayRegion(paramExtent, 0, 2, extent);
-    env->DeleteLocalRef(paramExtent);
+    e.CallObjectMethod(Get(), midGetTextBounds, text2.Get());
+  if (!Java::DiscardException(&e)) {
+    e.GetIntArrayRegion(paramExtent, 0, 2, extent);
+    e.DeleteLocalRef(paramExtent);
   } else {
     /* Java exception has occurred; return zeroes */
     extent[0] = 0;
@@ -133,14 +136,15 @@ TextUtil::getTextBounds(StringView text) const noexcept
 TextUtil::Texture
 TextUtil::getTextTextureGL(StringView text) const noexcept
 {
-  Java::String text2(env, text);
+  auto &e = *env;
+  Java::String text2(&e, text);
   jintArray jresult = (jintArray)
-    env->CallObjectMethod(Get(), midGetTextTextureGL,
+    e.CallObjectMethod(Get(), midGetTextTextureGL,
                           text2.Get());
   jint result[5];
-  if (!Java::DiscardException(env) && jresult != nullptr) {
-    env->GetIntArrayRegion(jresult, 0, 5, result);
-    env->DeleteLocalRef(jresult);
+  if (!Java::DiscardException(&e) && jresult != nullptr) {
+    e.GetIntArrayRegion(jresult, 0, 5, result);
+    e.DeleteLocalRef(jresult);
   } else {
     result[0] = result[1] = result[2] = result[3] = result[4] = 0;
   }
