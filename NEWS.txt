@@ -1,5 +1,7 @@
 Version 7.8 - not yet released
 * don't delete old IGC files automatically
+* devices
+  - TCP: fix error "Address already in use" on reconnect
 * Android
   - fix downloads on Android 10 and later
   - fix logging while in background on Android 10 and later
