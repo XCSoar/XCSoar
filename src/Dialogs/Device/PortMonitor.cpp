@@ -147,7 +147,8 @@ void
 PortMonitorWidget::Reconnect()
 {
   if (device.IsOccupied()) {
-    ShowMessageBox(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
+    ShowMessageBox(_("Device is occupied"), _("Reconnect"),
+                   MB_OK | MB_ICONERROR);
     return;
   }
 
