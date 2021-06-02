@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-31 13:24+0200\n"
-"PO-Revision-Date: 2021-04-08 12:27+0000\n"
+"PO-Revision-Date: 2021-06-01 07:34+0000\n"
 "Last-Translator: francescoRubini <francesco.rubini@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/it/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Launchpad-Export-Date: 2015-09-08 16:12+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -2336,13 +2336,13 @@ msgid "Cont Dist"
 msgstr "Fin Dist"
 
 #: src/InfoBoxes/Content/Factory.cpp:734
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
 "Contest rule set."
 msgstr ""
-"Valutazione istantanea della distanza percorsa in base alle regole per l'On-"
-"Line Contest impostate."
+"Valutazione istantanea della distanza percorsa in base alle regole impostate "
+"per la gara."
 
 #: src/InfoBoxes/Content/Factory.cpp:740
 #, no-c-format
