@@ -113,6 +113,8 @@ include $(topdir)/build/manual.mk
 include $(topdir)/build/libboost.mk
 INCLUDES += $(BOOST_CPPFLAGS)
 
+include $(topdir)/build/libjson.mk
+
 # Create libraries for zzip, jasper and compatibility stuff
 include $(topdir)/build/libresource.mk
 include $(topdir)/build/liblook.mk

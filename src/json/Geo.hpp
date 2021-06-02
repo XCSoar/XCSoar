@@ -21,36 +21,28 @@ Copyright_License {
 }
  */
 
-#ifndef XCSOAR_JSON_GEO_WRITER_HPP
-#define XCSOAR_JSON_GEO_WRITER_HPP
+#ifndef XCSOAR_JSON_GEO_HPP
+#define XCSOAR_JSON_GEO_HPP
 
-#include "Writer.hpp"
 #include "Geo/GeoPoint.hpp"
 
-namespace JSON {
-  /**
-   * Writer for a JSON floating point value.
-   */
-  static inline void WriteDouble(BufferedOutputStream &writer, double value) {
-    writer.Format("%f", (double)value);
-  }
+#include <boost/json/value_from.hpp>
 
-  static inline void WriteAngle(BufferedOutputStream &writer, Angle value) {
-    WriteDouble(writer, value.Degrees());
-  }
+inline void
+tag_invoke(boost::json::value_from_tag, boost::json::value &jv,
+           const Angle &request) noexcept
+{
+  jv = request.Degrees();
+}
 
-  static inline void WriteGeoPointAttributes(JSON::ObjectWriter &object,
-                                             const ::GeoPoint &value) {
-    object.WriteElement("longitude", WriteAngle, value.longitude);
-    object.WriteElement("latitude", WriteAngle, value.latitude);
-  }
-
-  static inline void WriteGeoPoint(BufferedOutputStream &writer,
-                                   const ::GeoPoint &value) {
-    ObjectWriter object(writer);
-    WriteGeoPointAttributes(object, value);
-  }
-};
+inline void
+tag_invoke(boost::json::value_from_tag, boost::json::value &jv,
+           const GeoPoint &request) noexcept
+{
+  jv = {
+    {"longitude", request.longitude},
+    {"latitude", request.latitude},
+  };
+}
 
 #endif
-

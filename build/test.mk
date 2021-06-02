@@ -1704,7 +1704,6 @@ $(eval $(call link-program,RunWaveComputer,RUN_WAVE_COMPUTER))
 ANALYSE_FLIGHT_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/NMEA/Aircraft.cpp \
-	$(SRC)/JSON/Writer.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
@@ -1720,7 +1719,7 @@ ANALYSE_FLIGHT_SOURCES = \
 	$(TEST_SRC_DIR)/FlightPhaseDetector.cpp \
 	$(TEST_SRC_DIR)/AnalyseFlight.cpp
 ANALYSE_FLIGHT_LDADD = $(DEBUG_REPLAY_LDADD)
-ANALYSE_FLIGHT_DEPENDS = CONTEST UTIL GEO MATH TIME
+ANALYSE_FLIGHT_DEPENDS = CONTEST JSON UTIL GEO MATH TIME
 $(eval $(call link-program,AnalyseFlight,ANALYSE_FLIGHT))
 
 FLIGHT_PATH_SOURCES = \
