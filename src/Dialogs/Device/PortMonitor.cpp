@@ -146,7 +146,7 @@ PortMonitorWidget::CreateButtons(WidgetDialog &dialog)
 void
 PortMonitorWidget::Reconnect()
 {
-  if (device.IsOccupied()) {
+  if (device.IsBorrowed()) {
     ShowMessageBox(_("Device is occupied"), _("Reconnect"),
                    MB_OK | MB_ICONERROR);
     return;
