@@ -87,6 +87,11 @@ static Mode overlay_mode = MODE_DEFAULT;
 
 static unsigned MenuTimeOut = 0;
 
+/**
+ * True if a full menu update was postponed by drawButtons().
+ */
+static bool menu_dirty = false;
+
 gcc_pure
 static Mode
 getModeID() noexcept;
@@ -199,6 +204,17 @@ InputEvents::drawButtons(Mode mode, bool full) noexcept
 {
   if (!global_running)
     return;
+
+  if (CommonInterface::main_window->HasDialog()) {
+    /* don't activate the menu if a modal dialog is visible; the menu
+       buttons would be put above the dialog, but would not be
+       accessible; instead, postpone */
+    if (full)
+      menu_dirty = true;
+    return;
+  }
+
+  full |= std::exchange(menu_dirty, false);
 
   const Menu &menu = input_config.menus[mode];
   const Menu *const overlay_menu = overlay_mode != MODE_DEFAULT
