@@ -91,7 +91,7 @@ ClipText(TStringView text, int x, unsigned canvas_width) noexcept
   unsigned max_width = canvas_width - x;
   unsigned max_chars = max_width / 8u; // TODO: use real font width?
 
-  text.size = TruncateStringUTF8(text.data, max_chars, text.size);
+  text.size = TruncateStringUTF8(text, max_chars);
   return text;
 }
 

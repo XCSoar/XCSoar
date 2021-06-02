@@ -488,6 +488,25 @@ CropIncompleteUTF8(char *const p) noexcept
 }
 
 size_t
+TruncateStringUTF8(StringView s, size_t max_chars) noexcept
+{
+  assert(ValidateUTF8(s));
+
+  size_t result = 0;
+  while (!s.empty() && max_chars > 0) {
+    size_t sequence = SequenceLengthUTF8(s.front());
+    if (sequence > s.size)
+      break;
+
+    result += sequence;
+    s.skip_front(sequence);
+    --max_chars;
+  }
+
+  return result;
+}
+
+size_t
 TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes) noexcept
 {
 #if !CLANG_CHECK_VERSION(3,6)

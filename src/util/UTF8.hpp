@@ -119,6 +119,16 @@ CropIncompleteUTF8(char *p) noexcept;
 
 /**
  * Return the number of bytes representing the first #max_chars
+ * characters of a string.  If the string has fewer
+ * characters, the string length (in bytes) is returned.  No partial
+ * multi-byte sequence will be considered.
+ */
+gcc_pure
+size_t
+TruncateStringUTF8(StringView s, size_t max_chars) noexcept;
+
+/**
+ * Return the number of bytes representing the first #max_chars
  * characters of a null-terminated string.  If the string has fewer
  * characters, the string length (in bytes) is returned.  No partial
  * multi-byte sequence will be considered.
