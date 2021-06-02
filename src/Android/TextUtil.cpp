@@ -38,7 +38,7 @@ jmethodID TextUtil::midGetTextBounds;
 jmethodID TextUtil::midGetTextTextureGL;
 
 void
-TextUtil::Initialise(JNIEnv *_env)
+TextUtil::Initialise(JNIEnv *_env) noexcept
 {
   env = _env;
 
@@ -53,12 +53,12 @@ TextUtil::Initialise(JNIEnv *_env)
 }
 
 void
-TextUtil::Deinitialise(JNIEnv *env)
+TextUtil::Deinitialise(JNIEnv *env) noexcept
 {
   cls.Clear(env);
 }
 
-TextUtil::TextUtil(jobject _obj)
+TextUtil::TextUtil(jobject _obj) noexcept
   :Java::GlobalObject(env, _obj) {
   // get height, ascent_height and capital_height
   assert(midGetFontMetrics);
@@ -78,7 +78,7 @@ TextUtil::TextUtil(jobject _obj)
 }
 
 TextUtil *
-TextUtil::create(const FontDescription &d)
+TextUtil::create(const FontDescription &d) noexcept
 {
   jobject localObject;
   jint paramStyle, paramTextSize;
@@ -110,7 +110,7 @@ TextUtil::create(const FontDescription &d)
 }
 
 PixelSize
-TextUtil::getTextBounds(StringView text) const
+TextUtil::getTextBounds(StringView text) const noexcept
 {
   jint extent[2];
 
@@ -131,7 +131,7 @@ TextUtil::getTextBounds(StringView text) const
 }
 
 TextUtil::Texture
-TextUtil::getTextTextureGL(StringView text) const
+TextUtil::getTextTextureGL(StringView text) const noexcept
 {
   Java::String text2(env, text);
   jintArray jresult = (jintArray)
