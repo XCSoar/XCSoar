@@ -1,3 +1,5 @@
+Version 7.9 - not yet released
+
 Version 7.8 - 2021/06/02
 * don't delete old IGC files automatically
 * devices
