@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-31 13:24+0200\n"
-"PO-Revision-Date: 2021-05-01 21:32+0000\n"
+"PO-Revision-Date: 2021-06-04 07:58+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -539,11 +539,11 @@ msgstr "Další"
 
 #: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
-msgstr "Zapnutí záznamu"
+msgstr "Zapnout logger"
 
 #: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
-msgstr "Záznam ukončen"
+msgstr "Ukončit logger"
 
 #: src/Logger/ExternalLogger.cpp:85
 msgid "Declare task?"
@@ -2280,21 +2280,22 @@ msgid "Exp1"
 msgstr "Exp1"
 
 #: src/InfoBoxes/Content/Factory.cpp:732
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Contest distance"
-msgstr "OLC vzdálenost"
+msgstr "Soutěžní vzdálenost"
 
 #: src/InfoBoxes/Content/Factory.cpp:733
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cont Dist"
-msgstr "Cíl vzdál"
+msgstr "Soutěž vzdál"
 
 #: src/InfoBoxes/Content/Factory.cpp:734
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
 "Contest rule set."
-msgstr "Okamžitá hodnota uletěné vzdálenosti dle nastavených OLC pravidel."
+msgstr ""
+"Okamžité vyhodnocení uletěné vzdálenosti dle nastavených pravidel soutěže."
 
 #: src/InfoBoxes/Content/Factory.cpp:740
 #, no-c-format
@@ -2905,23 +2906,22 @@ msgid "Distance to where take-off was detected."
 msgstr "Vzdálenost k detekovanému bodu vzletu."
 
 #: src/InfoBoxes/Content/Factory.cpp:1013
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Contest speed"
-msgstr "OLC rychlost"
+msgstr "Soutěžní rychlost"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Ćont Speed"
-msgstr "Rychlost"
+msgstr "Soutěž rychl"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown speed according to the configured "
 "Contest rule set."
 msgstr ""
-"Okamžité vyhodnocení dosažené rychlosti dle nastavených pravidel On-Line "
-"Contest."
+"Okamžité vyhodnocení dosažené rychlosti dle nastavených pravidel soutěže."
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
@@ -3336,11 +3336,11 @@ msgstr "NMEA Log Vyp"
 
 #: src/Input/InputEventsActions.cpp:444
 msgid "Logger on"
-msgstr "Záznam Zap"
+msgstr "Logger Zap"
 
 #: src/Input/InputEventsActions.cpp:446
 msgid "Logger off"
-msgstr "Záznam Vyp"
+msgstr "Logger Vyp"
 
 #: src/Input/InputEventsMap.cpp:70
 msgid "Auto. zoom on"
@@ -6531,15 +6531,15 @@ msgid "Final glide"
 msgstr "Dokluz"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:66
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Adjusts MC for fastest arrival.  For contest sprint tasks, the MacCready is "
 "adjusted in order to cover the greatest distance in the remaining time and "
 "reach the finish height."
 msgstr ""
-"Nastaví MC pro nejrychlejší přílet. Pro sprinty OLC je MacCready nastaven "
-"tak, aby pokryl co největší vzdálenost ve zbývajícím čase a dosáhl cílové "
-"výšky."
+"Nastaví MC pro nejrychlejší přílet. Pro soutěžní sprinty je MacCready "
+"nastaven tak, aby pokryl co největší vzdálenost ve zbývajícím čase a dosáhl "
+"cílové výšky."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:68
 #, no-c-format
@@ -7124,8 +7124,8 @@ msgid ""
 "Enables the automatic starting and stopping of logger on takeoff and landing "
 "respectively. Disable when flying paragliders."
 msgstr ""
-"Zapne automatický start a zastavení záznamu při vzletu a přistání. Vypněte, "
-"pokud létáte s paraglidem."
+"Zapne automatický start a zastavení záznamu loggeru při vzletu a přistání. "
+"Vypněte, pokud létáte s paraglidem."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:90
 msgid "NMEA logger"
@@ -8181,9 +8181,9 @@ msgstr ""
 "rezerva."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable contest calculations"
-msgstr "Zakaž OLC výpočty"
+msgstr "Zakaž soutěžní výpočty"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:95
 #, no-c-format
@@ -8264,6 +8264,10 @@ msgid ""
 "and the largest Out & Return distance that can be fitted into the flight "
 "route."
 msgstr ""
+"WeGlide kombinuje v soutěži WeGlide Free několik systémů bodování. Bodování "
+"kombinuje body za volnou vzdálenost a bonus za prostory. Pro bonus za "
+"prostory bodovací program určí největší FAI trojúhelník a nejdelší "
+"návratovou vzdálenost, které je možné umístit do záznamu letu."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:123
 #, no-c-format
@@ -8272,18 +8276,17 @@ msgid ""
 "path such that the distance between the start point and the turn point is "
 "maximized"
 msgstr ""
+"Ze záznamu letu je vybrán startovní bod, jeden otočný bod a koncový bod tak, "
+"aby byla maximalizována vzdálenost mezi startem a otočným bodem"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
-#, fuzzy
 msgid "Contest"
-msgstr "Obsah"
+msgstr "Soutěž"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:128
-#, fuzzy
 msgid "Select the rules used for calculating optimal points for a contest."
 msgstr ""
-"Vybírá pravidla použitá pro kalkulaci optimálního bodového zisku pro On-Line "
-"Contest. Implementace odpovídá oficiálním pravidlům ze dne 23. září 2010."
+"Vybírá pravidla použitá pro kalkulaci optimálního bodového zisku v soutěži."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:131
 msgid "Predict Contest"
@@ -10312,7 +10315,7 @@ msgstr "Topo"
 msgid "Raw Logger"
 msgstr ""
 "NMEA\n"
-"záznam"
+"logger"
 
 #: Data/Input/default.xci:741
 msgid ""
