@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-31 13:24+0200\n"
-"PO-Revision-Date: 2021-06-04 07:58+0000\n"
+"PO-Revision-Date: 2021-06-05 08:33+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -543,7 +543,7 @@ msgstr "Zapnout logger"
 
 #: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
-msgstr "Ukončit logger"
+msgstr "Zastavit logger"
 
 #: src/Logger/ExternalLogger.cpp:85
 msgid "Declare task?"
