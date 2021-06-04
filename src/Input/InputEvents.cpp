@@ -390,18 +390,23 @@ InputEvents::IsGesture(const TCHAR *data) noexcept
 bool
 InputEvents::processGesture(const TCHAR *data) noexcept
 {
-  // get current mode
-  unsigned event_id = gesture_to_event(data);
-  if (event_id)
-  {
-    InputEvents::processGo(event_id);
-    return true;
+  // start with lua event if available!
+  bool result = Lua::FireGesture(data);
+  if (!result) {
+    // get current mode
+    unsigned event_id = gesture_to_event(data);
+    if (event_id)
+    {
+      InputEvents::processGo(event_id);
+      result = true;
+    }
   }
-  return Lua::FireGesture(data);
+
+  return result;
 }
 
 /*
-  InputEvent::processNmea(TCHAR* data)
+  InputEvent::processNmea(TCHAR *data)
   Take hard coded inputs from NMEA processor.
   Return = TRUE if we have a valid key match
 */
