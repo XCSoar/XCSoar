@@ -47,7 +47,7 @@ docker run \
     --volume="$HOME/.Xauthority:/root/.Xauthority:rw" \
     -v $HOME/.xcsoar/:/root/.xcsoar \
     --env="DISPLAY" --net=host \
-    -it ghcr.io/xscoar/xcsoar/xcsoar-build:latest /bin/bash
+    -it ghcr.io/xcsoar/xcsoar/xcsoar-build:latest /bin/bash
 ```
 Compile and run the binary (UNIX-SDL target):
 ```bash
