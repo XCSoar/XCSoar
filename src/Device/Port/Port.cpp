@@ -129,7 +129,7 @@ Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
   char *p = (char *)buffer, *end = p + length;
 
   size_t nbytes = WaitAndRead(buffer, length, env, first_timeout);
-  if (nbytes <= 0)
+  if (nbytes == 0)
     return false;
 
   p += nbytes;
