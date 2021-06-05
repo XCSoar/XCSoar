@@ -219,9 +219,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
   }
 
   // Check if the basic fields are provided
-  if (iName >= n_params ||
-      iLatitude >= n_params ||
-      iLongitude >= n_params)
+  if (n_params <= iLatitude)
     return false;
 
   GeoPoint location;
