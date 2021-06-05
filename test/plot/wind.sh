@@ -16,4 +16,4 @@ fi
 ./output/UNIX/bin/RunWindEKF "$@" |grep -v '^#' |cut -d' ' -f1,2,3 >ekf.dat
 ./output/UNIX/bin/RunCirclingWind "$@" |grep -v '^#' |cut -d' ' -f1,3,4 >circling.dat
 ./output/UNIX/bin/RunExternalWind "$@" |grep -v '^#' |cut -d' ' -f1,2,3 >external.dat
-gnuplot `dirname $0`/wind.gnuplot
+gnuplot $(dirname $0)/wind.gnuplot
