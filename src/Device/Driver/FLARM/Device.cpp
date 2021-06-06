@@ -38,6 +38,12 @@ FlarmDevice::LinkTimeout()
 }
 
 bool
+FlarmDevice::PutPilotEvent(OperationEnvironment &env)
+{
+  return Send("PFLAI,PILOTEVENT*", env);
+}
+
+bool
 FlarmDevice::GetStealthMode(bool &enabled, OperationEnvironment &env)
 {
   char buffer[2];

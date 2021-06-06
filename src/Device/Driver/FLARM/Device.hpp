@@ -105,6 +105,7 @@ public:
 
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env) override;
+  bool PutPilotEvent(OperationEnvironment &env) override;
 
   bool GetPilot(TCHAR *buffer, size_t length, OperationEnvironment &env);
   bool SetPilot(const TCHAR *pilot_name, OperationEnvironment &env);
