@@ -409,6 +409,33 @@ simple way of showing all thermals encountered.
 Markers are not preserved after XCSoar is exited, however the location
 of all marks are appended to the file \verb|xcsoar-marks.txt|.
 
+\section{Pilot Event}\label{sec:pilotevent}
+
+A Pilot Event (PEV) system allows pilots to mark particular times during a
+flight, such when inside a Turn Point Observation Zone (TP OZ). Also, when
+configured, it allows to initiate a special \emph{Pilot Event} task start
+protocol\footnote{PEV start procedure may be used in competitions to reduce
+mass starts, gaggles and following.}.
+
+\menulabel{\bmenug{Nav 2}\blink\bmenut{Pilot}{Event}}
+
+When pressed, the task start window will be automatically set according to
+configuration defined in Task Rules (See \ref{sec:task-type-racing}): start
+window will open after \emph{PEV start wait time} \config{taskrules} minutes
+and will be open for \emph{PEV start window} minutes.  Also, \emph
+{Pilot Event} will be announced to connected devices, allowing loggers to
+register it without pilot pressing the physical button on the logger device
+itself. This might be useful when logger is located outside of pilot reach
+(e.g. behind the panel).
+
+In order to start a task when \emph{Pilot Event Start} is used, press the \emph
+{Pilot Event} button, wait for \emph{PEV start wait time} and then cross the
+start line within \emph{PEV start window} minutes.
+
+\tip It may be useful to have \emph{Start open} and/or \emph{Start reach}
+ infoboxes visible to effectively use the \emph{PEV Start} procedure.
+
+
 \section{Thermals}
 
 While climbing in thermals, a marker is automatically generated showing the
