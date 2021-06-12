@@ -84,6 +84,8 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Simulator.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "Operation/MessageOperationEnvironment.hpp"
+#include "Device/MultipleDevices.hpp"
 
 #include <cassert>
 #include <tchar.h>
@@ -191,6 +193,43 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
   }
 
   trigger_redraw();
+}
+
+void
+InputEvents::eventPilotEvent(const TCHAR *misc)
+{
+  // Configure start window
+  const OrderedTaskSettings &ots =
+  	protected_task_manager->GetOrderedTaskSettings();
+  const StartConstraints &start = ots.start_constraints;
+
+  const BrokenTime bt = BrokenDateTime::NowUTC();
+  RoughTime new_start = RoughTime(bt.hour, bt.minute);
+  RoughTime new_end = RoughTime::Invalid();
+
+  if (start.pev_start_wait_time > 0) {
+  // Set start time to the next full minute after wait time.
+  // This way we make sure wait time is passed before xcsoar opens the start.
+  bool round = bt.second == 0;
+    auto delta = RoughTimeDelta::FromMinutes(
+      start.pev_start_wait_time / 60 + !round);
+    new_start = new_start + delta;
+  }
+
+  if (start.pev_start_window > 0) {
+    new_end = new_start + RoughTimeDelta::FromMinutes(
+      start.pev_start_window / 60);
+  }
+  const RoughTimeSpan ts = RoughTimeSpan(new_start, new_end);
+
+  protected_task_manager->SetStartTimeSpan(ts);
+
+  // Log pilot event
+  logger->LogPilotEvent(CommonInterface::Basic());
+
+  // Let devices know the pilot event was pressed
+  MessageOperationEnvironment env;
+  devices->PutPilotEvent(env);
 }
 
 void
