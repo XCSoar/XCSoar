@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-31 13:24+0200\n"
-"PO-Revision-Date: 2021-06-01 07:34+0000\n"
-"Last-Translator: francescoRubini <francesco.rubini@gmail.com>\n"
+"PO-Revision-Date: 2021-06-16 14:34+0000\n"
+"Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/it/>\n"
 "Language: it\n"
@@ -4229,11 +4229,11 @@ msgstr "Impossibile scaricare l'indice di posizionamento."
 #: src/Dialogs/FileManager.cpp:767 src/Dialogs/FileManager.cpp:792
 #: src/Dialogs/DownloadFilePicker.cpp:400 Data/Input/default.xci:605
 msgid "File Manager"
-msgstr "File Manager"
+msgstr "Gestore di file"
 
 #: src/Dialogs/FileManager.cpp:790 src/Dialogs/DownloadFilePicker.cpp:399
 msgid "The file manager is not available on this device."
-msgstr "Il file manager non è disponibile in questo dispositivo."
+msgstr "Il gestore di file non è disponibile in questo dispositivo."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:73
 #, no-c-format
@@ -4241,9 +4241,9 @@ msgid "IOIO switches and Nunchuk"
 msgstr "interruttori IOIO e Nunchuk"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:75
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO I²C pressure sensor"
-msgstr "Sensore di pressione IOIO I2C"
+msgstr "Sensore di pressione IOIO I²C"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:76
 #, no-c-format
