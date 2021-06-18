@@ -1,4 +1,6 @@
 Version 7.9 - not yet released
+* settings
+  - allow LiveTrack24 tracking intervals smaller than 5 seconds
 
 Version 7.8 - 2021/06/02
 * don't delete old IGC files automatically
