@@ -58,7 +58,7 @@ Entscheidend hierbei ist, daß lediglich eine Person die Aufgabe eingeben muß u
 
 \section{Wegpunkt Info und Details }\index{Wegpunkte!Details}
 
-Der Wegpunkt-Info-Dialog beschreibt die Details der Wegpunkte  und bietet Navigations-Optionen wie zum Beispiel \textsf{Ziele auf}, \textsf{Einfügen} oder \textsf{Anhängen} an einer Aufgabe. Weiterhin kann über diesen Dialog ein Wegpunkt als Heimatflughafen eingegeben werden.
+Der Wegpunkt-Info-Dialog beschreibt die Details der Wegpunkte  und bietet Navigations-Optionen wie zum Beispiel ''Ziele auf'', ''Einfügen'' oder ''Anhängen'' an einer Aufgabe. Weiterhin kann über diesen Dialog ein Wegpunkt als Heimatflughafen eingegeben werden.
 
 Die Anwahl  kann über mehrere Wege erfolgen:
 \begin{itemize}\itemsep=1em
@@ -66,7 +66,7 @@ Die Anwahl  kann über mehrere Wege erfolgen:
 Über die Karte, wenn der Wegpunkt sichtbar ist: \\
 Ein \textit{einfacher} Klick öffnet das "Kartenelemente an diesem Ort''-Fenster.
 
-Anschließend auf \button{Details} drücken.
+Anschließend auf \button{Details} drücken - oder in der Liste auf den bereits hervorgehobenen Wegpunkteintrag.
 %
 %
 \item
@@ -84,21 +84,22 @@ Anschließend auf \button{Details} drücken.
 %
 \item%[\Large{$\bullet$}]
 Vom Wegpunkt-Auswahlmenü \button{Nav}\blink\button{Wegpunkt Liste} und \button{Auswählen}
-(Hier kann mittels eines einiger Filters besonders schnell und elegant jeder beliebige Wegpunkt auf schnellstmögliche Weise ausgewählt werden. Sehr effektiv, wenn man nicht nur den nächst möglichen Wegpunkt anwählen will.)
+(Hier kann mittels einiger Filter besonders schnell und elegant jeder beliebige Wegpunkt auf schnellstmögliche Weise ausgewählt werden. Sehr effektiv, wenn man nicht nur den nächst möglichen Wegpunkt anwählen will.)
 %
 %
 \end{itemize}
 
-Der Wegpunktdetail-Dialog enthält zwei maßgebliche Seiten, welche über \button{$>$} und  \button{$<$} weiterschaltbar sind. Je nach dem, ob noch weitere Informationen zum Wegpunkt vorliegen, erscheinen Seiten mit weitere Details hierzu.
+Der Wegpunktdetail-Dialog enthält zwei Basis-Seiten, welche über \button{$>$} und  \button{$<$} weiterschaltbar sind. Je nach dem, ob noch weitere Informationen zum Wegpunkt vorliegen (z.B. Text oder Bilder aus einer evtl. vorhandenen Wegpunkt/Flugplatz-Detail Datei, näheres weiter unten), erscheinen weitere Seiten mit Details hierzu.
 
-Auf dieser Seite werden Details zum Wegpunkt wie z.B.\ Funkfrequenz, Länge der Bahn, Höhe, Art der Bahn, Namen, Peilung (Bearing), Sonnenuntergang Entfernung zum Wegpunkt. etc.\ angegeben.
+Auf der ersten Seite werden Informationen (aus der Wegpunkt.cup Datei) angezeigt, wie z.B. Beschreibung, Richtung und Länge der Piste/Landefeld, Koordinaten, Höhe, Richtung und Distanz zum Wegpunkt etc.
 
-Zusätzlich befindet sich ein Button \button{Fliege Zu} um direkt zu diesem Punkt zu navigieren.  Dieser Button brichtt die aktuelle Aufgabe, sofern vorhanden, ab.
+Zusätzlich befindet sich unten ein Button \button{Fliege Zu} um direkt zu diesem Punkt zu navigieren.  Dieser Button bricht die aktuelle Aufgabe, sofern vorhanden, ab.
 
 \sketch{{figures/dialog-waypointdetails0.png}}
-Wie bereits oben erwähnt, zeigt der Wegpunkt-Info-Dialog drei Höhendifferenz-Angaben zum Erreichen des Wegpunktes, welche hier unten beschrieben werden:
+Wie bereits oben erwähnt, zeigt der Wegpunkt-Info-Dialog auch drei Höhendifferenz-Angaben zum Erreichen des Wegpunktes, welche hier beschrieben werden:
 
 \begin{description}
+\item[\p{Startbahn}] Landerichtung und Länge 
 \item[\p{Ortskoordinaten}] Die Koordinaten des Punktes in Grad, Minuten und Sekunden
 \item[\p{Höhe}] Die Höhe (MSL) des Punktes
 \item[\p{Tageslichtzeiten}] Sonnenauf- und Untergang
@@ -108,18 +109,26 @@ Wie bereits oben erwähnt, zeigt der Wegpunkt-Info-Dialog drei Höhendifferenz-A
 \item[\p{H Diff MC aktuell}] Benötigte Höhe bei  aktuell eingestellten MacCready Wert
 \end{description}
 
-Über die Buttons \button{$<$} und \button{$>$} in der linken unteren Ecke des Fensters können weitere Seiten mit Informationen über den aktuellen Wegpunkt angewählt werden. Weiterhin wird damit ein Menü geöffnet, auf dem z.B. dieser Wegpunkt als Ziel, Heimat oder Aufgabenwegpunkt eingefügt werden kann.
+Über die Buttons \button{$<$} und \button{$>$} am unteren Rand des Fensters können weitere Seiten mit Informationen über den aktuellen Wegpunkt angewählt werden. Weiterhin wird damit ein Menü geöffnet, auf dem z.B. dieser Wegpunkt als Ziel, Heimat oder Aufgabenwegpunkt eingefügt werden kann.
+
+REM: (Frage: ist der folgende Punkt noch aktuell?  REM: Sonst streichen/löschen!)
+
+REM: \subsection*{Flugplatz Informationen}
+REM: Diese Seite kann -sofern Daten zum Flugplatz REM: vorhanden- etliche Hinweise und Details zu 
+REM: Flugplätzen enthalten. \sketchREM: {figures/dialog-REM waypointdetails1.png}
+REM: Insbesondere sind hier enthalten Details zur REM: Landebahn, Landebahnrichtung, Höhe, Frequenz REM: usw.
+
+\subsection*{Anzeige von Bildern etc.}
+Sofern vorhanden, können auf den weiteren Seiten Bilder angezeigt werden, z.B. eine Grafik mit Anflugbeschreibung, Foto einer Landewiese usw. Näheres hierzu siehe auch Kap.~\ref{sec:airfield-details} 
+
+Das Bild kann mit den Buttons + und - oben auf der Seite gezoomt werden, allerdings nur in zentraler Richtung.
+
+Es gibt noch eine weitere Möglichkeit unterschiedlichste Mediendateien (beispielsweise .pdf, .jpg, .bmp, tif, mp4, etc.) mit einem default viewer/Programm anzuzeigen, das dann auch meist beliebig zoombar/ schwenkbar ist. Näheres hierzu ebenfalls im Kap.~\ref{sec:airfield-details} 
 
 
-\subsection*{Flugplatz Informationen}
-Diese Seite kann -sofern Daten zum Flugplatz vorhanden- etliche Hinweise und Details zu Flugplätzen enthalten. \sketch{figures/dialog-waypointdetails1.png}
-Insbesondere sind hier enthalten Details zur Landebahn, Landebahnrichtung, Höhe, Frequenz usw.
-
-
-\subsection*{Satelliten Photo}
-Sofern vorhanden, kann hier z.B.\ ein Foto des Flugplatzes eingefügt und angezeigt werden. 
-Näheres hierzu siehe Kap.~\ref{sec:airfield-details} 
-
+################################################
+################################################
+################################################
 
 \section{Wegpunkt-Auswahl-Dialog}\label{sec:waypoint-selector-dialog}
 Der Wegpunkt-Auswahl-Dialog ist \textsl{der} Dialog, von dem aus Wendepunkte die in einer Datenbank (Datei) \menulabel{\bmenut{Nav}{1/2}\blink\bmenut{Wegpunkt}{Liste}}enthalten sind, ausgewählt werden kann.
