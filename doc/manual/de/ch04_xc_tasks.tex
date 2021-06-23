@@ -58,7 +58,7 @@ Entscheidend hierbei ist, daß lediglich eine Person die Aufgabe eingeben muß u
 
 \section{Wegpunkt Info und Details }\index{Wegpunkte!Details}
 
-Der Wegpunkt-Info-Dialog beschreibt die Details der Wegpunkte  und bietet Navigations-Optionen wie zum Beispiel ''Ziele auf'', ''Einfügen'' oder ''Anhängen'' an einer Aufgabe. Weiterhin kann über diesen Dialog ein Wegpunkt als Heimatflughafen eingegeben werden.
+Der Wegpunkt-Info-Dialog beschreibt die Wegpunkte und bietet Navigations-Optionen wie zum Beispiel ''Ziele auf'', ''Einfügen'' oder ''Anhängen'' an einer Aufgabe. Weiterhin kann über diesen Dialog ein Wegpunkt als Heimatflughafen eingegeben werden.
 
 Die Anwahl  kann über mehrere Wege erfolgen:
 \begin{itemize}\itemsep=1em
@@ -89,15 +89,15 @@ Vom Wegpunkt-Auswahlmenü \button{Nav}\blink\button{Wegpunkt Liste} und \button{
 %
 \end{itemize}
 
-Der Wegpunktdetail-Dialog enthält zwei Basis-Seiten, welche über \button{$>$} und  \button{$<$} weiterschaltbar sind. Je nach dem, ob noch weitere Informationen zum Wegpunkt vorliegen (z.B. Text oder Bilder aus einer evtl. vorhandenen Wegpunkt/Flugplatz-Detail Datei, näheres weiter unten), erscheinen weitere Seiten mit Details hierzu.
+Der Wegpunkt-Info-Dialog enthält mehrere Seiten, welche über \button{$>$} und  \button{$<$} am unteren Bildschirmrand weiterschaltbar sind. Zusätzlich befindet sich unten eine Schaltfläche \button{Fliege Zu} um zu diesem Punkt zu navigieren. Diese Schaltfläche bricht die aktuelle Aufgabe, sofern vorhanden, ab.
 
-Auf der ersten Seite werden Informationen (aus der Wegpunkt.cup Datei) angezeigt, wie z.B. Beschreibung, Richtung und Länge der Piste/Landefeld, Koordinaten, Höhe, Richtung und Distanz zum Wegpunkt etc.
+Je nach dem, ob noch weitere Informationen zum Wegpunkt vorliegen, z.B. Text oder Bilder aus der evtl. vorhandenen Wegpunkt-Detail Datei (.txt), erscheinen weitere Seiten mit Informationen (näheres dazu weiter unten bzw. im Kapitel Daten-Files).
 
-Zusätzlich befindet sich unten ein Button \button{Fliege Zu} um direkt zu diesem Punkt zu navigieren.  Dieser Button bricht die aktuelle Aufgabe, sofern vorhanden, ab.
+Auf der ersten Seite werden immer die Informationen aus der (Wegpunkt).cup Datei angezeigt, wie z.B. Text-Beschreibung, Ausrichtung und Länge der Piste oder dem Landefeld, Koordinaten, Höhe, Peilung (Bearing) und Distanz zum Wegpunkt.
 
-\sketch{{figures/dialog-waypointdetails0.png}}
-Wie bereits oben erwähnt, zeigt der Wegpunkt-Info-Dialog auch drei Höhendifferenz-Angaben zum Erreichen des Wegpunktes, welche hier beschrieben werden:
+Weiterhin werden hier drei berechnete Höhendifferenz-Angaben zum Ereichen des Wegpunktes ausgegeben, sowie die benötigte Gleitzahl.
 
+\sketch{{figures/dialog-waypointdetails3.png}}
 \begin{description}
 \item[\p{Startbahn}] Landerichtung und Länge 
 \item[\p{Ortskoordinaten}] Die Koordinaten des Punktes in Grad, Minuten und Sekunden
@@ -106,31 +106,27 @@ Wie bereits oben erwähnt, zeigt der Wegpunkt-Info-Dialog auch drei Höhendiffer
 \item[\p{Peilung und Distanz}] Richtung und Entfernung zum Punkt
 \item[\p{H Diff MC 0}] Benötigte Höhe bei MacCready Null
 \item[\p{H Diff MC sicher}] Benötigte Höhe bei Sicherheits MacCready (s. Kap~\ref{sec:safety-factor})
-\item[\p{H Diff MC aktuell}] Benötigte Höhe bei  aktuell eingestellten MacCready Wert
+\item[\p{H Diff MC aktuell}] Benötigte Höhe bei aktuell eingestellten MacCready Wert
+\item[\p{Benötigte Gleitzahl}] Gleitzahl die mindestens benötigt wird, um den Wegpunkt zu erreichen
 \end{description}
 
-Über die Buttons \button{$<$} und \button{$>$} am unteren Rand des Fensters können weitere Seiten mit Informationen über den aktuellen Wegpunkt angewählt werden. Weiterhin wird damit ein Menü geöffnet, auf dem z.B. dieser Wegpunkt als Ziel, Heimat oder Aufgabenwegpunkt eingefügt werden kann.
+Über die Schaltflächen \button{$<$} und \button{$>$} am unteren Rand des Fensters können noch weitere Seiten mit Informationen über den aktuellen Wegpunkt abgerufen werden (aus der Wegpunkt-Detail Datei -.txt), es können über Schaltflächen Befehle zur Aufgabe ausgeführt und Bilder bzw. Mediendateien angezeigt werden, wie nachfolgend beschrieben:
 
-% Der folgende Punkt scheint nicht mehr aktuell zu sein:  
-%
-% >>
-% \subsection*{Flugplatz Informationen}
-% Diese Seite kann -sofern Daten zum Flugplatz 
-% vorhanden- etliche Hinweise und Details zu 
-% Flugplätzen enthalten. \sketch
-% {figures/dialog-REM waypointdetails1.png}
-% Insbesondere sind hier enthalten Details zur 
-% Landebahn, Landebahnrichtung, Höhe, Frequenz usw.
-% <<
-%
-% streichen?
+\subsection*{Zusätzliche Wegpunkt-Details}
+Diese Seite kann - sofern weitere Daten zum Wegpunkt vorhanden sind - zusätzliche Hinweise und Informationen 
+zum Wegpunkt in Text und Bild enthalten. 
+
+\sketch{figures/dialog-waypointdetails4.png}
+Insbesondere sind hier aber auch Verknüpfungen zu anderen Mediendateien möglich. Falls eingerichtet können mit einem Default-Viewer, der auf dem Gerät installiert ist, Bilder frei zoombar angezeigt werden. Über diesen Weg können unterschiedlichste Mediendateien (beispielsweise mehrseitige .pdf, .bmp, tif, mp4 Dateien u.a.) aus XCSoar heraus genutzt werden. Details zur Einrichtung sind im Kap.~\ref{sec:airfield-details} beschrieben.
+
+
+\sketch{figures/dialog-waypointdetails7.png}
+Auf der Befehle-Seite kann der Wegpunkt u.a. als Aufgabenwegpunkt, Heimat oder Ziel eingefügt werden.
 
 \subsection*{Anzeige von Bildern etc.}
-Auf den weiteren Seiten können eigene Bilder angezeigt werden, z.B. eine Grafik mit Anflugbeschreibung, Foto einer Landewiese usw. Näheres hierzu siehe auch Kap.~\ref{sec:airfield-details} 
-Das Bild kann dabei mit den Buttons + und - oben auf der Seite gezoomt werden, allerdings nur in zentraler Richtung.
-\sketch{figures/dialog-picture-int.png}
+\sketch{figures/dialog-waypointdetails2.png}
+Sofern in der Wegpunkt-Detail Datei eingerichtet, können auf den weiteren Seiten eigene Bilder auch direkt angezeigt werden, z.B. eine Grafik mit Anflugbeschreibung, Foto einer Landewiese usw. Das Bild kann dabei mit den Buttons + und - oben auf der Seite zwar gezoomt werden, allerdings nur in zentraler Richtung. (Insofern ist das weiter oben beschriebene Verfahren zur Medienanzeige mit Default Viewer flexibler)
 
-Falls eingerichtet können mit einem Default-Viewer, der auf dem Gerät installiert sein muss, Bilder frei zoombar angezeigt werden. Über diesen Weg können auch unterschiedlichste Mediendateien (beispielsweise mehrseitige .pdf, .bmp, tif, mp4 Dateien u.v.m.) direkt aus XCSoar heraus genutzt werden. Details dazu sind im Kap.~\ref{sec:airfield-details} beschrieben.
 
 \section{Wegpunkt-Auswahl-Dialog}\label{sec:waypoint-selector-dialog}
 Der Wegpunkt-Auswahl-Dialog ist \textsl{der} Dialog, von dem aus Wendepunkte die in einer Datenbank (Datei) \menulabel{\bmenut{Nav}{1/2}\blink\bmenut{Wegpunkt}{Liste}}enthalten sind, ausgewählt werden kann.
