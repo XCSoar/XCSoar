@@ -1011,7 +1011,7 @@ static constexpr MetaData meta_data[] = {
   // CONTEST_SPEED
   {
     N_("Contest speed"),
-    N_("Ćont Speed"),
+    N_("Cont Speed"),
     N_("Instantaneous evaluation of the flown speed according to the configured Contest rule set."),
     IBFHelper<InfoBoxContentContestSpeed>::Create,
   },

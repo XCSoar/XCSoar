@@ -2989,7 +2989,7 @@ msgstr "OLC Prędk.: prędkość wg zasad OLC"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, fuzzy, no-c-format
-msgid "Ćont Speed"
+msgid "Cont Speed"
 msgstr "Prędkość wiatru"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015

@@ -2725,7 +2725,7 @@ msgstr "On-Line Contest"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, fuzzy, no-c-format
-msgid "Ćont Speed"
+msgid "Cont Speed"
 msgstr "Nopeus"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015

@@ -2966,7 +2966,7 @@ msgstr "velocità del contest On-Line"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, fuzzy, no-c-format
-msgid "Ćont Speed"
+msgid "Cont Speed"
 msgstr "Velocità"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015

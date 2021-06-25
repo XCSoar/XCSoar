@@ -2840,7 +2840,7 @@ msgstr "속도(온라인 컨테스트(On-Line Contest)속도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, fuzzy, no-c-format
-msgid "Ćont Speed"
+msgid "Cont Speed"
 msgstr "속도"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015

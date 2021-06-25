@@ -2912,7 +2912,7 @@ msgstr "Soutěžní rychlost"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, no-c-format
-msgid "Ćont Speed"
+msgid "Cont Speed"
 msgstr "Soutěž rychl"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015

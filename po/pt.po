@@ -2874,7 +2874,7 @@ msgstr "Velocidade Start"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, fuzzy, no-c-format
-msgid "Ćont Speed"
+msgid "Cont Speed"
 msgstr "Velocid."
 
 #: src/InfoBoxes/Content/Factory.cpp:1015

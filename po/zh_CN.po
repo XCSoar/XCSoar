@@ -2777,7 +2777,7 @@ msgstr "在线竞赛速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, fuzzy, no-c-format
-msgid "Ćont Speed"
+msgid "Cont Speed"
 msgstr "速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015

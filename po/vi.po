@@ -2692,7 +2692,7 @@ msgstr "Tốc độ xuất phát"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, fuzzy, no-c-format
-msgid "Ćont Speed"
+msgid "Cont Speed"
 msgstr "Tốc độ"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015
