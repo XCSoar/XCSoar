@@ -81,8 +81,8 @@ In diesem Kapitel wird behandelt, {\sl wie} die Software heruntergeladen und ins
 
 \subsection*{Betriebssystem Android}\index{Installation!unter Android}
 
-Suche nach {\textsf  XCSoar} in Googles Android-Marktplatz (PlayGround), oder installiere das \verb|apk|-
-File manuell.  Kopiere diese Datei auf eine SD-Karte in das Verzeichnis \verb|XCSoarData|.
+Suche nach {\textsf  XCSoar} in Googles Android-Marktplatz (PlayStore), oder installiere das \verb|apk|-
+File manuell.
 
 \subsection*{Auf einem Windows PC}\index{Installation!unter Windows}
   
@@ -129,12 +129,13 @@ Daten-File suchen muß:
 \item[Unix/Linux]
 Das Verzeichnis heißt \verb|.xcsoar| und befindet sich im \verb|home| - Verzeichnis des Users. 
 \item[Android Geräte]
-\texttt{XCSoarData} befindet sich auf der SD-Karte.
+\texttt{XCSoarData} befindet sich in \texttt{Interner Speicher}
+Hinweis: Bei älteren Android Versionen (z.B. Android 6) hieß dieser Ort auch \texttt{Gerätespeicher} oder ganz früher \texttt{SD-Karte} (emuliert) bzw. \texttt{storage/emulated/0}). Die Bezeichnung \texttt{SD-Karte} führte bei den alten Geräten oft zu Missverständnissen,  denn damit war NICHT eine zusätzliche MicroSD Karte gemeint war, sondern eine ''virtuelle'', die im Arbeitsspeicher des Smartphones emuliert wurde. Bei neueren Geräten ist dies verständlicher bezeichnet. 
 \end{description}
 
 
 {\textsf  XCSoar} wird während der Laufzeit einige zusätzliche Files, wie z.B.\ eine Datei mit sämtlichen Konfigurationsdetails erzeugen.
-Diese werden ebenfalls im \texttt{XCSoarData} Verzeichnis (Windows PC und Windows Mobile Geräte), oder aber im \texttt{.xcsoar} 
+Diese werden ebenfalls im \texttt{XCSoarData} Verzeichnis (Windows PC, Android und Windows Mobile Geräte), oder aber im \texttt{.xcsoar} 
 Verzeichnis(Unix/LinuxPC) abgelegt. 
 
 Beim ersten Start wird {\textsf  XCSoar}  folgende Files erzeugen und anlegen: 
@@ -145,13 +146,15 @@ Beim ersten Start wird {\textsf  XCSoar}  folgende Files erzeugen und anlegen:
 
 Weiterhin werden drei Verzeichnisse angelegt: \texttt{cache}, \texttt{config} und \texttt{logs}.  
 
-Während des Laufes von {\textsf  XCSoar} können (und werden) weitere Files angelegt wie z.B.\  Aufgaben-Files (\texttt{*.tsk}) 
-und Flugaufzeichnungen (evtl.\ (\texttt{*.igc})
+Während des Laufes von {\textsf  XCSoar} werden bei der ersten Nutzung weitere Files angelegt wie z.B.\  Aufgaben-Files (\texttt{*.tsk}) 
+und Flugaufzeichnungen \ (\texttt{*.igc})
+
+Vom Nutzer selbst können Wegpunkt-Dateien (z.B. als \texttt{.cup} Datei), detaillierte Beschreibungen zu den Wegpunkten (\texttt{.txt}),  Luftraumdateien (\texttt{.txt}) sowie Checklisten importiert, angepasst oder auch selbst neu angelegt werden. Näheres dazu weiter unten bzw. in Kap.~\ref{cha:data-files}.
 
 
 \section{Betrieb von {\textsf  XCSoar}}
 
-{\textsf  XCSoar} wird kann in zwei Modi ausgeführt werden:
+{\textsf  XCSoar} kann in zwei Modi ausgeführt werden:
 \begin{description}
 \item[FLY] Dies ist der ''echte'' Flugmodus. Alle Ein - und Ausgänge betr.\ Signalaustausch sind aktiv
 \item[SIM] Dies ist der Simulator-Modus. Keine Kommunikation mit externen Geräten per serieller Schnittstelle möglich. 
@@ -181,10 +184,14 @@ Starte \verb|xcsoar| von der Kommandozeile oder aber erzeuge einen Link auf dem 
 
 Der Ort, an dem sich die ausführbare Datei befindet,  kann mit \verb|which xcsoar| herausgefunden werden.
 Nicht alle Optionen wie bei der PC- Version sind hierbei nun möglich.
+
+\subsection*{{\textsf  XCSoar} Android-Version}
+Tippen auf das {\textsf  XCSoar} Icon auf dem Startbildschirm startet {\textsf  XCSoar}. 
+
  
 \subsection*{Nachladen von Daten-Files}
 Das erste Mal, wenn {\textsf  XCSoar} gestartet wird, werden {\sl noch nicht} automatisch die Files nachgeladen, welche im 
-angegebenen \verb|XCSoarData| abgespeichert wurden. Die kann erst geschehen, wenn {\textsf  XCSoar} das Konfigurationsfeile erstellt hat - also nach dem ersten Start.
+angegebenen \verb|XCSoarData| abgespeichert wurden. Dies kann erst geschehen, wenn {\textsf  XCSoar} das Konfigurationsfile erstellt hat - also nach dem ersten Start.
 
 
 Um {\textsf  XCSoar} kenntlich zu machen, wo sich die entsprechenden Files befinden, mache einen kurzen Doppelklick irgendwo auf die nackte Bildschirmfläche 
@@ -197,26 +204,26 @@ und wähle dann
 und damit für die dritte Seite des Konfigurations-Menüs}
 
 Auf dieser allerersten Konfigurationseite kannst Du nun unter dem Punkt ''Standortdatei''  die Kartendatenbank, ein Luftraum- sowie ein Wegpunkt-File angeben.
-Damit ist {\textsf  XCSoar} bis auf weitere sofort einsetzbar.
-viele (wirklich viele\dots) andere Details können anschließend unter \bmenut{System}{Einstellung} an Deine Vorlieben und Bedürfnisse angepaßt werden. 
-Die Konfiguration  ist aujsführlich beschrieben in Kap.\ref{cha:configuration} und unbedingt lesenswert. 
+Damit ist {\textsf  XCSoar} bis auf weiteres sofort einsetzbar.
+Viele (wirklich viele\dots) andere Details können anschließend unter \bmenut{System}{Einstellung} an Deine Vorlieben und Bedürfnisse angepaßt werden. 
+Die Konfiguration  ist ausführlich beschrieben in Kap.\ref{cha:configuration} und unbedingt lesenswert. 
 
-Nachdem diese Files hier einmal eingestellt wurden, werde sie bei jedem Start (es sei denn, Änderungen und/oder Neuinstallationen werden vorganommen)
+Nachdem diese Files hier einmal eingestellt wurden, werden sie bei jedem Start (es sei denn, Änderungen und/oder Neuinstallationen werden vorgenommen)
 automatisch wieder geladen.
 
 \subsection*{Start-Up und Benutzer Profile}\index{Benutzerprofile}
-Beim Start von {\textsf  XCSoar} wird automatisch nach einem Benutzerprofil gesucht. Wenn mehrere vorhanden sind, wird in einem Fenster ganz unten am rande nachgefragt, welcghes file benutzt werden soll.
+Beim Start von {\textsf  XCSoar} wird automatisch nach einem Benutzerprofil gesucht. Wenn mehrere vorhanden sind, wird in einem Fenster ganz unten am Rande nachgefragt, welches file benutzt werden soll.
 Aus diesem Grunde macht (wirklich) es Sinn, den einzelnen Benutzerprofilen eindringliche, wiedererkennbare Namen zu geben, 
 um diese schnell und eindeutig unterscheiden zu können. 
 
-Wenn kein Profil explizit ausgewählt und geladen wird, wird automatisch das Profile des letzten Startes benutzt. 
+Wenn kein Profil explizit ausgewählt und geladen wird, wird automatisch das Profil des letzten Startes benutzt. 
 
 Profile können sehr sinnvoll sein z.B. für  
 
 \begin{itemize}
 \item verschiedene Piloten
 \item eines für Wettbewerbe, eines für Lustflug
-\item Fliegen an unterschiedlichen Plätzen (zu Hause, Fliegerlager, Namibia\dots )
+\item fliegen an unterschiedlichen Plätzen (zu Hause, Fliegerlager, Namibia\dots )
 \end{itemize}
 
 
