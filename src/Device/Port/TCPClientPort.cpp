@@ -81,6 +81,7 @@ try {
   DataReceived(input, nbytes);
 } catch (...) {
   socket.Close();
+  state = PortState::FAILED;
   StateChanged();
   Error(std::current_exception());
 }
