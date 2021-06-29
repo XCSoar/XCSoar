@@ -553,6 +553,8 @@ DeviceDescriptor::Open(OperationEnvironment &env)
 
   open_job = new OpenDeviceJob(*this);
   async.Start(open_job, env, &job_finished_notify);
+
+  PortStateChanged();
 }
 
 void
@@ -1202,6 +1204,8 @@ DeviceDescriptor::OnJobFinished() noexcept
 
   delete open_job;
   open_job = nullptr;
+
+  PortStateChanged();
 }
 
 void
