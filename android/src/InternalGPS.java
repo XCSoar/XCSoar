@@ -78,10 +78,8 @@ public class InternalGPS
     safeDestruct.beginShutdown();
 
     handler.removeCallbacks(this);
-    handler.post(new Runnable() {
-        @Override public void run() {
-          locationManager.removeUpdates(InternalGPS.this);
-        }
+    handler.post(() -> {
+        locationManager.removeUpdates(InternalGPS.this);
       });
 
     safeDestruct.finishShutdown();

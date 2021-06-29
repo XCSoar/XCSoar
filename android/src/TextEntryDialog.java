@@ -51,19 +51,13 @@ final class TextEntryDialog
 
   @Override
   public void run() {
-    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-          onResult(ptr, input.getText().toString());
-          dialog.dismiss();
-        }
+    builder.setPositiveButton("OK", (DialogInterface dialog, int which) -> {
+        onResult(ptr, input.getText().toString());
+        dialog.dismiss();
       });
 
-    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-          dialog.cancel();
-        }
+    builder.setNegativeButton("Cancel", (DialogInterface dialog, int which) -> {
+        dialog.cancel();
       });
 
     dialog = builder.create();
