@@ -237,7 +237,7 @@ RasterBuffer::ScanLine(RasterLocation a, RasterLocation b,
       const RasterLocation c(a.x + (i * d.x) / (int)size,
                              a.y + (i * d.y) / (int)size);
 
-      *buffer++ = Get(c);
+      *buffer++ = Get(c >> RasterTraits::SUBPIXEL_BITS);
     }
   }
 }

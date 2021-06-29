@@ -1,4 +1,5 @@
 Version 7.9 - not yet released
+* fix crash bug in terrain renderer
 * settings
   - allow LiveTrack24 tracking intervals smaller than 5 seconds
 * user interface
