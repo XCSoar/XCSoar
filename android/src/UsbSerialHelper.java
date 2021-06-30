@@ -47,7 +47,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
 
   private static UsbSerialHelper _instance;
 
-  private final Context _Context;
+  private final Context context;
   private final UsbManager usbmanager;
 
   private HashMap<String, UsbDevice> _AvailableDevices = new HashMap<>();
@@ -167,7 +167,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
 
   private UsbSerialHelper(Context context) {
     Log.v(TAG, "onCreate()");
-    _Context = context;
+    this.context = context;
     usbmanager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
     if(usbmanager != null) {
       try {
@@ -192,11 +192,11 @@ public class UsbSerialHelper extends BroadcastReceiver {
     IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
     filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
     filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
-    _Context.registerReceiver(this, filter);
+    context.registerReceiver(this, filter);
   }
 
   private void unregisterReceiver() {
-    _Context.unregisterReceiver(this);
+    context.unregisterReceiver(this);
   }
 
   private AndroidPort connectDevice (String name , int baud) {
@@ -214,7 +214,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
         } else {
           _PendingConnection.put(device, port);
 
-          PendingIntent pi = PendingIntent.getBroadcast(_Context, 0, new Intent(UsbSerialHelper.ACTION_USB_PERMISSION), 0);
+          PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(UsbSerialHelper.ACTION_USB_PERMISSION), 0);
 
           usbmanager.requestPermission(device, pi);
 
