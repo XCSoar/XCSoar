@@ -153,7 +153,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
 
   private UsbDevice GetAvailable(String name) {
     for (Map.Entry<String, UsbDevice> entry : _AvailableDevices.entrySet()) {
-      if(name.contentEquals(getDeviceName(entry.getValue()))) {
+      if(name.contentEquals(getDeviceId(entry.getValue()))) {
         return entry.getValue();
       }
     }
@@ -230,12 +230,12 @@ public class UsbSerialHelper extends BroadcastReceiver {
     int n = 0;
     for (Map.Entry<String, UsbDevice> entry : _AvailableDevices.entrySet()) {
       UsbDevice device = entry.getValue();
-      device_names[n++] = getDeviceName(device);
+      device_names[n++] = getDeviceId(device);
     }
     return device_names;
   }
 
-  static String getDeviceName(UsbDevice device) {
+  static String getDeviceId(UsbDevice device) {
     return String.format("%04X:%04X", device.getVendorId(), device.getProductId());
   }
 }
