@@ -48,6 +48,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
   private static UsbSerialHelper _instance;
 
   private final Context _Context;
+  private final UsbManager usbmanager;
 
   private HashMap<String, UsbDevice> _AvailableDevices = new HashMap<>();
   private HashMap<UsbDevice, UsbSerialPort> _PendingConnection = new HashMap<>();
@@ -128,11 +129,8 @@ public class UsbSerialHelper extends BroadcastReceiver {
 
           UsbSerialPort port = _PendingConnection.get(device);
           _PendingConnection.remove(device);
-          if (port != null) {
-            UsbManager usbmanager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
-            if (usbmanager != null) {
-              port.open(usbmanager);
-            }
+          if (port != null && usbmanager != null) {
+            port.open(usbmanager);
           }
         }
       }
@@ -170,7 +168,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
   private UsbSerialHelper(Context context) {
     Log.v(TAG, "onCreate()");
     _Context = context;
-    UsbManager usbmanager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
+    usbmanager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
     if(usbmanager != null) {
       try {
         HashMap<String, UsbDevice> devices = usbmanager.getDeviceList();
@@ -203,7 +201,6 @@ public class UsbSerialHelper extends BroadcastReceiver {
 
   private AndroidPort connectDevice (String name , int baud) {
 
-    UsbManager usbmanager = (UsbManager) _Context.getSystemService(Context.USB_SERVICE);
     UsbSerialPort port = null;
 
     if(usbmanager != null) {
