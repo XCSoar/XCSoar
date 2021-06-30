@@ -43,7 +43,7 @@ import java.util.Map;
 public class UsbSerialHelper extends BroadcastReceiver {
 
   private static final String TAG = "UsbSerialHelper";
-  public static final String ACTION_USB_PERMISSION = "org.LK8000.otg.action.USB_PERMISSION";
+  public static final String ACTION_USB_PERMISSION = "org.xcsoar.otg.action.USB_PERMISSION";
 
   private static UsbSerialHelper _instance;
 
