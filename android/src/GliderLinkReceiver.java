@@ -38,6 +38,8 @@ class GliderLinkReceiver extends BroadcastReceiver {
   private static final String TAG = "XCSoar";
   public static final String ACTION = "link.glider.gliderlink.target_position";
 
+  private final Context context;
+
   /**
    * Index of this device in the global list. This value is extracted directly
    * from this object by the C++ wrapper code.
@@ -45,7 +47,6 @@ class GliderLinkReceiver extends BroadcastReceiver {
   private final int index;
 
   private static Handler handler;
-  private Context context;
 
   /**
    * Global initialization of the class.  Must be called from the main
@@ -57,8 +58,8 @@ class GliderLinkReceiver extends BroadcastReceiver {
   }
 
   public GliderLinkReceiver(final Context context, int index) {
-    this.index = index;
     this.context = context;
+    this.index = index;
 
     handler.post(new Runnable() {
       @Override
