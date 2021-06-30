@@ -127,6 +127,9 @@ public final class UsbSerialPort implements AndroidPort {
   private UsbSerialInterface.UsbReadCallback _ReadCallback = new UsbSerialInterface.UsbReadCallback() {
       @Override
       public void onReceivedData(byte[] arg0) {
+        if (arg0.length == 0)
+          return;
+
         InputListener listner = inputListener;
         if(listner != null) {
           listner.dataReceived(arg0, arg0.length);
