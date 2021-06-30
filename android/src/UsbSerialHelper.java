@@ -47,14 +47,13 @@ public class UsbSerialHelper extends BroadcastReceiver {
 
   private static UsbSerialHelper _instance;
 
-  private Context _Context;
+  private final Context _Context;
 
   private HashMap<String, UsbDevice> _AvailableDevices = new HashMap<>();
   private HashMap<UsbDevice, UsbSerialPort> _PendingConnection = new HashMap<>();
 
   static synchronized void Initialise(Context context) {
-    _instance = new UsbSerialHelper();
-    _instance.onCreate(context);
+    _instance = new UsbSerialHelper(context);
   }
 
   static synchronized void Deinitialise(Context context) {
@@ -168,7 +167,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
     _AvailableDevices.remove(device.getDeviceName());
   }
 
-  private void onCreate(Context context) {
+  private UsbSerialHelper(Context context) {
     Log.v(TAG, "onCreate()");
     _Context = context;
     UsbManager usbmanager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
