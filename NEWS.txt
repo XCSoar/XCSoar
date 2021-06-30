@@ -8,6 +8,8 @@ Version 7.9 - not yet released
 * devices
   - TCP Client: fix automatic reconnect after connection loss
   - GliderLink: fix disappearing configuration
+* Android
+  - support USB serial adapters
 
 Version 7.8 - 2021/06/02
 * don't delete old IGC files automatically

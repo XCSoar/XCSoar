@@ -33,6 +33,7 @@ Copyright_License {
 #ifdef ANDROID
 #include "AndroidBluetoothPort.hpp"
 #include "AndroidIOIOUartPort.hpp"
+#include "AndroidUsbSerialPort.hpp"
 #endif
 
 #if defined(HAVE_POSIX)
@@ -187,6 +188,17 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     throw std::runtime_error("Pty not available");
 #endif
   }
+
+  case DeviceConfig::PortType::ANDROID_USB_SERIAL:
+#ifdef ANDROID
+    if (config.path.empty())
+      throw std::runtime_error("No name configured");
+
+    return OpenAndroidUsbSerialPort(config.path.c_str(), config.baud_rate,
+                                    listener, handler);
+#else
+    throw std::runtime_error("Android USB serial not available");
+#endif
   }
 
   if (path == nullptr)

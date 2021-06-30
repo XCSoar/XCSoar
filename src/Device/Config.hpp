@@ -107,6 +107,11 @@ struct DeviceConfig {
      * A GliderLink broadcast receiver. Available on Android only
      */
     GLIDER_LINK,
+
+    /**
+     * USB serial port on Android.
+     */
+    ANDROID_USB_SERIAL,
   };
 
   /**
@@ -235,6 +240,7 @@ struct DeviceConfig {
    */
   static bool UsesSpeed(PortType port_type) {
     return port_type == PortType::SERIAL || port_type == PortType::AUTO ||
+      port_type == PortType::ANDROID_USB_SERIAL ||
       port_type == PortType::IOIOUART;
   }
 
@@ -298,6 +304,7 @@ struct DeviceConfig {
     case PortType::IOIOUART:
     case PortType::PTY:
     case PortType::UDP_LISTENER:
+    case PortType::ANDROID_USB_SERIAL:
       return true;
     }
 
