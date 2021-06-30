@@ -226,16 +226,29 @@ public class UsbSerialHelper extends BroadcastReceiver {
 
   public String[] listDevices() {
 
-    String[] device_names = new String[_AvailableDevices.size()];
+    String[] device_names = new String[_AvailableDevices.size() * 2];
     int n = 0;
     for (Map.Entry<String, UsbDevice> entry : _AvailableDevices.entrySet()) {
       UsbDevice device = entry.getValue();
       device_names[n++] = getDeviceId(device);
+      device_names[n++] = getDeviceDisplayName(device);
     }
     return device_names;
   }
 
   static String getDeviceId(UsbDevice device) {
     return String.format("%04X:%04X", device.getVendorId(), device.getProductId());
+  }
+
+  static String getDeviceDisplayName(UsbDevice device) {
+    String name = device.getProductName();
+    if (name == null)
+      name = getDeviceId(device);
+
+    String manufacturer = device.getManufacturerName();
+    if (manufacturer != null)
+      name += " (" + manufacturer + ")";
+
+    return name;
   }
 }

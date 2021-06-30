@@ -234,12 +234,17 @@ FillAndroidUsbSerialPorts(DataFieldEnum &df,
   if (!list)
     return;
 
-  jsize n = env->GetArrayLength(list);
+  jsize n = env->GetArrayLength(list) / 2;
   for (jsize i = 0; i < n; ++i) {
-    Java::String j_name{env, (jstring)env->GetObjectArrayElement(list, i)};
+    Java::String j_id{env, (jstring)env->GetObjectArrayElement(list, i * 2)};
+    if (!j_id)
+      continue;
+
+    Java::String j_name{env, (jstring)env->GetObjectArrayElement(list, i * 2 + 1)};
     if (!j_name)
       continue;
 
+    const auto id = j_id.ToString();
     const auto name = j_name.ToString();
 
     char display_string[256];
@@ -247,7 +252,7 @@ FillAndroidUsbSerialPorts(DataFieldEnum &df,
                  "USB: %s", name.c_str());
 
     AddPort(df, DeviceConfig::PortType::ANDROID_USB_SERIAL,
-            name.c_str(), display_string);
+            id.c_str(), display_string);
   }
 
   if (config.port_type == DeviceConfig::PortType::ANDROID_USB_SERIAL &&
