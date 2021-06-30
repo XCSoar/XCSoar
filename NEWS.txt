@@ -7,6 +7,7 @@ Version 7.9 - not yet released
   - properly update device status in device list dialog
 * devices
   - TCP Client: fix automatic reconnect after connection loss
+  - GliderLink: fix disappearing configuration
 
 Version 7.8 - 2021/06/02
 * don't delete old IGC files automatically
