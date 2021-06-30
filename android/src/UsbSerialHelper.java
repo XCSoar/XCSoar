@@ -58,7 +58,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
 
   static synchronized void Deinitialise(Context context) {
     if (_instance != null) {
-      _instance.onDestroy();
+      _instance.close();
       _instance = null;
     }
   }
@@ -185,7 +185,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
     registerReceiver();
   }
 
-  private void onDestroy() {
+  private void close() {
     Log.v(TAG, "onDestroy()");
     unregisterReceiver();
   }
