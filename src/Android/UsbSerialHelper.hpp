@@ -34,26 +34,26 @@ namespace UsbSerialHelper {
  * UsbSerialHelper Java class.
  */
 bool
-Initialise(JNIEnv *env);
+Initialise(JNIEnv *env) noexcept;
 
 void
-Deinitialise(JNIEnv *env);
+Deinitialise(JNIEnv *env) noexcept;
 
 /**
  * Is the Usb Host available
  */
 [[gnu::pure]]
 bool
-isEnabled(JNIEnv *env);
+isEnabled(JNIEnv *env) noexcept;
 
 /**
  * Returns a list of connected usb devices.
  */
 jobjectArray
-list(JNIEnv *env);
+list(JNIEnv *env) noexcept;
 
 PortBridge *
-connectDevice(JNIEnv *env, const char *name, unsigned baud);
+connectDevice(JNIEnv *env, const char *name, unsigned baud) noexcept;
 
 };
 

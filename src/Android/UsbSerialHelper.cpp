@@ -33,7 +33,7 @@ static jmethodID list_method;
 static jmethodID connect_method;
 
 bool
-Initialise(JNIEnv *env)
+Initialise(JNIEnv *env) noexcept
 {
   assert(!cls.IsDefined());
   assert(env != nullptr);
@@ -52,20 +52,20 @@ Initialise(JNIEnv *env)
 }
 
 void
-Deinitialise(JNIEnv *env)
+Deinitialise(JNIEnv *env) noexcept
 {
   cls.ClearOptional(env);
 }
 
 bool
-isEnabled(JNIEnv *env)
+isEnabled(JNIEnv *env) noexcept
 {
   return cls.IsDefined() &&
     env->CallStaticBooleanMethod(cls, isEnabled_method);
 }
 
 PortBridge *
-connectDevice(JNIEnv *env, const char *name, unsigned baud)
+connectDevice(JNIEnv *env, const char *name, unsigned baud) noexcept
 {
   if (!cls.IsDefined())
     return nullptr;
@@ -82,7 +82,7 @@ connectDevice(JNIEnv *env, const char *name, unsigned baud)
 }
 
 jobjectArray
-list(JNIEnv *env)
+list(JNIEnv *env) noexcept
 {
   if (!cls.IsDefined())
     return nullptr;
