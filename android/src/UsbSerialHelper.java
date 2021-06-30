@@ -78,7 +78,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
     return _instance.listDevices();
   }
 
-  private static long[] supported_ids = createTable(
+  private static final long[] supported_ids = createTable(
     createDevice(0x16D0, 0x0BA9), // GPSBip
     createDevice(0x0403, 0x6015), // Digifly AIR (FT X-Series)
     createDevice(0x0483, 0x5740), // SoftRF Dongle
