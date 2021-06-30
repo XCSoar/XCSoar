@@ -200,27 +200,22 @@ public class UsbSerialHelper extends BroadcastReceiver {
   }
 
   private AndroidPort connectDevice (String name , int baud) {
+    if (usbmanager == null)
+      return null;
 
-    UsbSerialPort port = null;
+    UsbDevice device = GetAvailable(name);
+    if (device == null)
+      return null;
 
-    if(usbmanager != null) {
-
-      UsbDevice device = GetAvailable(name);
-      if (device != null) {
-        port = new UsbSerialPort(device,baud);
-        if (usbmanager.hasPermission(device)) {
-          port.open(usbmanager);
-
-        } else {
-          _PendingConnection.put(device, port);
-
-          PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(UsbSerialHelper.ACTION_USB_PERMISSION), 0);
-
-          usbmanager.requestPermission(device, pi);
-
-        }
-      }
+    UsbSerialPort port = new UsbSerialPort(device,baud);
+    if (usbmanager.hasPermission(device)) {
+      port.open(usbmanager);
+    } else {
+      _PendingConnection.put(device, port);
+      PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(UsbSerialHelper.ACTION_USB_PERMISSION), 0);
+      usbmanager.requestPermission(device, pi);
     }
+
     return port;
   }
 
