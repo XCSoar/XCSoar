@@ -27,6 +27,8 @@
 #include "util/PrintException.hxx"
 #include "TestUtil.hpp"
 
+#include <memory>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -116,26 +118,24 @@ CompareFiles()
     return false;
   }
 
-  void *in_data = malloc(in_size);
-  size_t in_n = fread(in_data, 1, in_size, igc_in_file);
+  const auto in_data = std::make_unique<std::byte[]>(in_size);
+  size_t in_n = fread(in_data.get(), 1, in_size, igc_in_file);
   fclose(igc_in_file);
   if (in_n != (size_t)in_size) {
-    free(in_data);
     fprintf(stderr, "Failed to read from file %s\n", igc_in_path);
     fclose(igc_out_file);
     return false;
   }
 
-  void *out_data = malloc(out_size);
-  size_t out_n = fread(out_data, 1, out_size, igc_out_file);
+  const auto out_data = std::make_unique<std::byte[]>(out_size);
+  size_t out_n = fread(out_data.get(), 1, out_size, igc_out_file);
   fclose(igc_out_file);
   if (out_n != (size_t)in_size) {
-    free(out_data);
     fprintf(stderr, "Failed to read from file %s\n", igc_out_path);
     return false;
   }
 
-  return memcmp(in_data, out_data, in_size) == 0;
+  return memcmp(in_data.get(), out_data.get(), in_size) == 0;
 }
 
 int main(int argc, char **argv)
