@@ -161,6 +161,9 @@ IGCParseExtensions(const char *buffer, IGCExtensions &extensions)
     if (!CheckThreeAlphaNumeric(buffer))
       return false;
 
+    if (extensions.full())
+      return false;
+
     IGCExtension &x = extensions.append();
     x.start = start;
     x.finish = finish;
