@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Point.hpp"
 #include "util/NonCopyable.hpp"
+#include "util/Sanitizer.hxx"
 #include "util/SliceAllocator.hxx"
 #include "util/Serial.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
@@ -34,8 +35,9 @@ Copyright_License {
 #include <boost/intrusive/set.hpp>
 
 #include <algorithm>
-
 #include <cassert>
+#include <type_traits>
+
 #include <stdlib.h>
 
 class TracePointVector;
@@ -176,7 +178,18 @@ class Trace : private NonCopyable
   typedef boost::intrusive::list<TraceDelta,
                                  boost::intrusive::constant_time_size<false>> ChronologicalList;
 
-  SliceAllocator<TraceDelta, 128u> allocator;
+  /**
+   * Use a SliceAllocator for allocating TraceDelta instances.  This
+   * reduces a lot of allocation overhead (both CPU and memory),
+   * because there will be lots of these objects.  Fall back to
+   * std::allocator when compiled with AddressSanitizer, because that
+   * avoids hiding memory errors.
+   */
+  using Allocator = std::conditional_t<HaveAddressSanitizer(),
+                                       std::allocator<TraceDelta>,
+                                       SliceAllocator<TraceDelta, 128u>>;
+
+  Allocator allocator;
 
   DeltaList delta_list;
   ChronologicalList chronological_list;
