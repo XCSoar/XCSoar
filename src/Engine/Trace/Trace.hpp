@@ -511,7 +511,7 @@ public:
         if (*this == end)
           return *this;
 
-        const TraceDelta &td = (const TraceDelta &)**this;
+        const TraceDelta &td = ChronologicalList::const_iterator::operator*();
         if (td.point.FlatSquareDistanceTo(previous) >= sq_resolution)
           return *this;
       }
