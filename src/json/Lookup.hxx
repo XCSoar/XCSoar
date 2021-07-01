@@ -73,6 +73,8 @@ Lookup(const boost::json::value &v, std::size_t i) noexcept
 		: nullptr;
 }
 
+#if !defined(_MSC_VER) && !defined(__GNUC__)  
+// nothing of this compilers can work with this doubled auto?
 template<typename J, typename K, typename... Args>
 [[gnu::pure]]
 static inline const auto *
@@ -83,6 +85,7 @@ Lookup(const J &j, K &&key, Args&&... args)
 		? Lookup(*l, std::forward<Args>(args)...)
 		: nullptr;
 }
+#endif  // !defined(_MSC_VER) && !defined(__GNUC__)  
 
 template<typename... Args>
 [[gnu::pure]]
