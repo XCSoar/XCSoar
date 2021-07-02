@@ -140,7 +140,7 @@ class DownloadManagerThread final
 
     Item &operator=(const Item &other) = delete;
 
-    gcc_pure
+    [[gnu::pure]]
     bool operator==(Path other) const noexcept {
       return path_relative == other;
     }
