@@ -24,10 +24,16 @@ Copyright_License {
 #pragma once
 
 class CurlGlobal;
+class CurlEasy;
 class OutputStream;
 class OperationEnvironment;
 
 namespace Net {
+
+void
+DownloadToStream(CurlGlobal &curl, CurlEasy easy,
+                 OutputStream &out,
+                 OperationEnvironment &env);
 
 void
 DownloadToStream(CurlGlobal &curl, const char *url,

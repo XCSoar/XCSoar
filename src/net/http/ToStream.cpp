@@ -47,23 +47,17 @@ public:
 } // anonymous namespace
 
 void
-DownloadToStream(CurlGlobal &curl, const char *url,
-                 const char *username, const char *password,
+DownloadToStream(CurlGlobal &curl, CurlEasy easy,
                  OutputStream &out,
                  OperationEnvironment &env)
 {
-  assert(url != nullptr);
+  assert(easy);
+
+  const Net::ProgressAdapter progress(easy, env);
 
   DownloadToStreamHandler handler(out);
-  CurlRequest request(curl, url, handler);
+  CurlRequest request(curl, std::move(easy), handler);
   AtScopeExit(&request) { request.StopIndirect(); };
-
-  request.SetFailOnError();
-
-  if (username != nullptr)
-    request.SetOption(CURLOPT_USERNAME, username);
-  if (password != nullptr)
-    request.SetOption(CURLOPT_PASSWORD, password);
 
   env.SetCancelHandler([&]{
     request.StopIndirect();
@@ -72,10 +66,27 @@ DownloadToStream(CurlGlobal &curl, const char *url,
 
   AtScopeExit(&env) { env.SetCancelHandler({}); };
 
-  const Net::ProgressAdapter progress(request.GetEasy(), env);
-
   request.StartIndirect();
   handler.Wait();
+}
+
+void
+DownloadToStream(CurlGlobal &curl, const char *url,
+                 const char *username, const char *password,
+                 OutputStream &out,
+                 OperationEnvironment &env)
+{
+  assert(url != nullptr);
+
+  CurlEasy easy;
+  easy.SetFailOnError();
+
+  if (username != nullptr)
+    easy.SetOption(CURLOPT_USERNAME, username);
+  if (password != nullptr)
+    easy.SetOption(CURLOPT_PASSWORD, password);
+
+  DownloadToStream(curl, std::move(easy), out, env);
 }
 
 } // namespace Net
