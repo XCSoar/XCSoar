@@ -40,7 +40,8 @@
 
 template<typename... Args>
 static inline int
-StringFormat(wchar_t *buffer, size_t size, const wchar_t *fmt, Args&&... args)
+StringFormat(wchar_t *buffer, size_t size, const wchar_t *fmt,
+	     Args&&... args) noexcept
 {
   /* unlike snprintf(), _sntprintf() does not guarantee that the
      destination buffer is terminated */
@@ -63,7 +64,8 @@ StringFormat(wchar_t *buffer, size_t size, const wchar_t *fmt, Args&&... args)
 
 template<typename... Args>
 static inline int
-StringFormatUnsafe(wchar_t *buffer, const wchar_t *fmt, Args&&... args)
+StringFormatUnsafe(wchar_t *buffer, const wchar_t *fmt,
+		   Args&&... args) noexcept
 {
   /* work around a problem in mingw-w64/libstdc++: libstdc++ defines
      __USE_MINGW_ANSI_STDIO=1 and forces mingw to expose the
