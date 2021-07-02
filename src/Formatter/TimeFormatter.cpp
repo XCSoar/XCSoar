@@ -31,6 +31,22 @@ Copyright_License {
 #include <stdlib.h>
 
 void
+FormatISO8601(char *buffer, const BrokenDate &date) noexcept
+{
+  sprintf(buffer, "%04u-%02u-%02u",
+          date.year, date.month, date.day);
+}
+
+#ifdef _UNICODE
+void
+FormatISO8601(TCHAR *buffer, const BrokenDate &date) noexcept
+{
+  _stprintf(buffer, _T("%04u-%02u-%02u"),
+            date.year, date.month, date.day);
+}
+#endif
+
+void
 FormatISO8601(char *buffer, const BrokenDateTime &stamp) noexcept
 {
   sprintf(buffer, "%04u-%02u-%02uT%02u:%02u:%02uZ",
