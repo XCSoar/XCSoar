@@ -201,10 +201,7 @@ CurlRequest::Done(CURLcode result) noexcept
 static bool
 IsResponseBoundaryHeader(StringView s) noexcept
 {
-	return s.size > 5 && (s.StartsWith("HTTP/") ||
-			      /* the proprietary "ICY 200 OK" is
-				 emitted by Shoutcast */
-			      s.StartsWith("ICY 2"));
+	return s.size > 5 && s.StartsWith("HTTP/");
 }
 
 inline void
