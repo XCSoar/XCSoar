@@ -61,7 +61,7 @@ try {
   HexPrint({&hash, sizeof(hash)});
   printf("\n");
   return EXIT_SUCCESS;
-} catch (const std::exception &exception) {
-  PrintException(exception);
+} catch (...) {
+  PrintException(std::current_exception());
   return EXIT_FAILURE;
 }
