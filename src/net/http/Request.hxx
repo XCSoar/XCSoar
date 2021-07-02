@@ -40,6 +40,9 @@ class CurlGlobal;
 class CurlResponseHandler;
 
 /**
+ * A non-blocking HTTP request integrated via #CurlGlobal into the
+ * #EventLoop.
+ *
  * To start sending the request, call Start().
  */
 class CurlRequest final {
