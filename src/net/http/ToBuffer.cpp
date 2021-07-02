@@ -128,9 +128,6 @@ Net::DownloadToBuffer(CurlGlobal &curl, const char *url,
   request.StartIndirect();
   handler.Wait();
 
-  if (env.IsCancelled())
-    return -1;
-
   return handler.GetReceived();
 }
 

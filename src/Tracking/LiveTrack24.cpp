@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "LiveTrack24.hpp"
+#include "Operation/Operation.hpp"
 #include "util/StringCompare.hxx"
 #include "util/ConvertString.hpp"
 #include "net/http/ToBuffer.hpp"
@@ -66,7 +67,7 @@ LiveTrack24::GetUserID(const TCHAR *username, const TCHAR *password,
   char buffer[1024];
   size_t size = Net::DownloadToBuffer(curl, url, buffer, sizeof(buffer) - 1,
                                       env);
-  if (size == 0 || size == size_t(-1))
+  if (env.IsCancelled() || size == 0)
     return 0;
 
   buffer[size] = 0;
@@ -181,6 +182,6 @@ LiveTrack24::SendRequest(const char *url,
   char buffer[64];
   size_t size = Net::DownloadToBuffer(curl, url, buffer, sizeof(buffer),
                                       env);
-  return size != size_t(-1) && size >= 2 &&
+  return !env.IsCancelled() && size >= 2 &&
     buffer[0] == 'O' && buffer[1] == 'K';
 }
