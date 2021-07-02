@@ -30,8 +30,6 @@
 #ifndef WSTRING_FORMAT_HPP
 #define WSTRING_FORMAT_HPP
 
-#include "Compiler.h"
-
 #include <stdio.h>
 
 #ifdef _WIN32
