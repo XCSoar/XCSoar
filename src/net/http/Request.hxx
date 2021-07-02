@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2018 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2008-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -165,6 +165,8 @@ public:
 	void Done(CURLcode result) noexcept;
 
 private:
+	void SetupEasy();
+
 	/**
 	 * Frees the current "libcurl easy" handle, and everything
 	 * associated with it.
