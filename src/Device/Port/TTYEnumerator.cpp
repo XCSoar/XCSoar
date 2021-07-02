@@ -34,6 +34,10 @@ CheckTTYName(const char *name) noexcept
 {
   /* filter "/dev/tty*" */
   if (const char *t = StringAfterPrefix(name, "tty"); t != nullptr) {
+    if (*t == 0)
+      /* ignore /dev/tty */
+      return false;
+
     /* ignore virtual internal ports on Mac OS X (and probably other
        BSDs) */
     if (*t >= 'p' && *t <= 'w')
