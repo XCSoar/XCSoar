@@ -28,50 +28,32 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "io/FileOutputStream.hxx"
 #include "Crypto/SHA256.hxx"
+#include "Crypto/DigestOutputStream.hxx"
 #include "thread/AsyncWaiter.hxx"
 #include "util/ScopeExit.hxx"
 
 #include <cassert>
+#include <optional>
 
 class DownloadToFileHandler final : public OutputStreamCurlResponseHandler {
-  SHA256State sha256;
-
-  const bool do_sha256;
-
 public:
-  DownloadToFileHandler(OutputStream &_out, bool _do_sha256) noexcept
-    :OutputStreamCurlResponseHandler(_out), do_sha256(_do_sha256)
-  {
-  }
-
-  auto GetSHA256() noexcept {
-    assert(do_sha256);
-
-    return sha256.Final();
-  }
+  using OutputStreamCurlResponseHandler::OutputStreamCurlResponseHandler;
 
   /* virtual methods from class CurlResponseHandler */
   void OnHeaders(unsigned status,
                  std::multimap<std::string, std::string> &&headers) override {
-  }
-
-  void OnData(ConstBuffer<void> data) override {
-    if (do_sha256)
-      sha256.Update(data);
-
-    OutputStreamCurlResponseHandler::OnData(data);
   }
 };
 
 static void
 DownloadToFile(CurlGlobal &curl, const char *url,
                const char *username, const char *password,
-               OutputStream &out, std::array<std::byte, 32> *sha256,
+               OutputStream &out,
                OperationEnvironment &env)
 {
   assert(url != nullptr);
 
-  DownloadToFileHandler handler(out, sha256 != nullptr);
+  DownloadToFileHandler handler(out);
   CurlRequest request(curl, url, handler);
   AtScopeExit(&request) { request.StopIndirect(); };
 
@@ -93,9 +75,6 @@ DownloadToFile(CurlGlobal &curl, const char *url,
 
   request.StartIndirect();
   handler.Wait();
-
-  if (sha256 != nullptr)
-    *sha256 = handler.GetSHA256();
 }
 
 void
@@ -108,13 +87,22 @@ Net::DownloadToFile(CurlGlobal &curl, const char *url,
   assert(path != nullptr);
 
   FileOutputStream file(path);
+  OutputStream *os = &file;
+
+  std::optional<DigestOutputStream<SHA256State>> digest;
+  if (sha256 != nullptr)
+    os = &digest.emplace(*os);
+
   ::DownloadToFile(curl, url, username, password,
-                   file, sha256, env);
+                   *os, env);
   file.Commit();
+
+  if (sha256 != nullptr)
+    digest->Final(sha256);
 }
 
 void
 Net::DownloadToFileJob::Run(OperationEnvironment &env)
 {
-  DownloadToFile(curl, url, username, password, path, &sha256, env);
+  DownloadToFile(curl, url, username, password, path, nullptr, env);
 }

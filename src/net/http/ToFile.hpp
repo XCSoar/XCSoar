@@ -62,7 +62,6 @@ class DownloadToFileJob : public Job {
   const char *url;
   const char *username = nullptr, *password = nullptr;
   const Path path;
-  std::array<std::byte, 32> sha256;
 
 public:
   DownloadToFileJob(CurlGlobal &_curl, const char *_url, Path _path)
@@ -71,10 +70,6 @@ public:
   void SetBasicAuth(const char *_username, const char *_password) {
     username = _username;
     password = _password;
-  }
-
-  const auto &GetSHA256() const {
-    return sha256;
   }
 
   virtual void Run(OperationEnvironment &env);
