@@ -24,12 +24,12 @@ Copyright_License {
 #include "ToFile.hpp"
 #include "Request.hxx"
 #include "Handler.hxx"
+#include "Progress.hpp"
 #include "Operation/Operation.hpp"
 #include "io/FileOutputStream.hxx"
 #include "Crypto/SHA256.hxx"
 #include "thread/Mutex.hxx"
 #include "thread/Cond.hxx"
-#include "util/NumberParser.hpp"
 #include "util/ScopeExit.hxx"
 
 #include <cassert>
@@ -38,10 +38,6 @@ class DownloadToFileHandler final : public CurlResponseHandler {
   OutputStream &out;
 
   SHA256State sha256;
-
-  size_t received = 0;
-
-  OperationEnvironment &env;
 
   Mutex mutex;
   Cond cond;
@@ -53,9 +49,8 @@ class DownloadToFileHandler final : public CurlResponseHandler {
   bool done = false;
 
 public:
-  DownloadToFileHandler(OutputStream &_out, bool _do_sha256,
-                        OperationEnvironment &_env) noexcept
-    :out(_out), env(_env), do_sha256(_do_sha256)
+  DownloadToFileHandler(OutputStream &_out, bool _do_sha256) noexcept
+    :out(_out), do_sha256(_do_sha256)
   {
   }
 
@@ -82,8 +77,6 @@ public:
   /* virtual methods from class CurlResponseHandler */
   void OnHeaders(unsigned status,
                  std::multimap<std::string, std::string> &&headers) override {
-    if (auto i = headers.find("content-length"); i != headers.end())
-      env.SetProgressRange(ParseUint64(i->second.c_str()));
   }
 
   void OnData(ConstBuffer<void> data) override {
@@ -96,10 +89,6 @@ public:
       error = std::current_exception();
       throw Pause{};
     }
-
-    received += data.size;
-
-    env.SetProgressPosition(received);
   }
 
   void OnEnd() override {
@@ -124,7 +113,7 @@ DownloadToFile(CurlGlobal &curl, const char *url,
 {
   assert(url != nullptr);
 
-  DownloadToFileHandler handler(out, sha256 != nullptr, env);
+  DownloadToFileHandler handler(out, sha256 != nullptr);
   CurlRequest request(curl, url, handler);
   AtScopeExit(&request) { request.StopIndirect(); };
 
@@ -141,6 +130,8 @@ DownloadToFile(CurlGlobal &curl, const char *url,
   });
 
   AtScopeExit(&env) { env.SetCancelHandler({}); };
+
+  const Net::ProgressAdapter progress(request.GetEasy(), env);
 
   request.StartIndirect();
   handler.Wait();
