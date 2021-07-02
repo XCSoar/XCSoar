@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "TTYEnumerator.hpp"
+#include "util/CharUtil.hxx"
 #include "util/StringCompare.hxx"
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 
 [[gnu::pure]]
@@ -40,9 +40,10 @@ CheckTTYName(const char *name) noexcept
       return false;
 
     /* filter out "/dev/tty0", ... (valid integer after "tty") */
-    char *endptr;
-    strtoul(t, &endptr, 10);
-    return *endptr != 0;
+    if (IsDigitASCII(*t))
+      return false;
+
+    return true;
   } else if (StringStartsWith(name, "rfcomm"))
     return true;
   else
