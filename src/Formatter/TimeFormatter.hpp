@@ -35,32 +35,33 @@ struct BrokenDateTime;
  * Format a UTC time stamp in ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ).
  */
 void
-FormatISO8601(char *buffer, const BrokenDateTime &stamp);
+FormatISO8601(char *buffer, const BrokenDateTime &stamp) noexcept;
 
 #ifdef _UNICODE
 /**
  * Format a UTC time stamp in ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ).
  */
 void
-FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp);
+FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp) noexcept;
 #endif
 
 void
-FormatTime(TCHAR *buffer, double time);
+FormatTime(TCHAR *buffer, double time) noexcept;
 
 void
-FormatTimeLong(TCHAR *buffer, double time);
+FormatTimeLong(TCHAR *buffer, double time) noexcept;
 
 /**
  * precedes with "-" if time is negative
  * @param buffer returns HHMM
  * @param time input seconds
  */
-void FormatSignedTimeHHMM(TCHAR* buffer, int time);
+void
+FormatSignedTimeHHMM(TCHAR* buffer, int time) noexcept;
 
 gcc_const
 static inline BasicStringBuffer<TCHAR, 8>
-FormatSignedTimeHHMM(int time)
+FormatSignedTimeHHMM(int time) noexcept
 {
   BasicStringBuffer<TCHAR, 8> buffer;
   FormatSignedTimeHHMM(buffer.data(), time);
@@ -73,16 +74,18 @@ FormatSignedTimeHHMM(int time)
  * if hours == 0, returns MMSS in buffer1 and "" in buffer2
  * @param d input seconds
  */
-void FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, int time);
+void
+FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, int time) noexcept;
 
-void FormatTimespanSmart(TCHAR *buffer, int timespan,
-                         unsigned max_tokens = 1,
-                         const TCHAR *separator = _T(" "));
+void
+FormatTimespanSmart(TCHAR *buffer, int timespan,
+                    unsigned max_tokens = 1,
+                    const TCHAR *separator = _T(" ")) noexcept;
 
 gcc_const
 static inline BasicStringBuffer<TCHAR, 64>
 FormatTimespanSmart(int timespan, unsigned max_tokens = 1,
-                    const TCHAR *separator = _T(" "))
+                    const TCHAR *separator = _T(" ")) noexcept
 {
   BasicStringBuffer<TCHAR, 64> buffer;
   FormatTimespanSmart(buffer.data(), timespan, max_tokens, separator);
