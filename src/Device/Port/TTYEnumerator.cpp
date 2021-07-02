@@ -33,15 +33,15 @@ static bool
 CheckTTYName(const char *name) noexcept
 {
   /* filter "/dev/tty*" */
-  if (StringStartsWith(name, "tty")) {
+  if (const char *t = StringAfterPrefix(name, "tty"); t != nullptr) {
     /* ignore virtual internal ports on Mac OS X (and probably other
        BSDs) */
-    if (name[3] >= 'p' && name[3] <= 'w')
+    if (*t >= 'p' && *t <= 'w')
       return false;
 
     /* filter out "/dev/tty0", ... (valid integer after "tty") */
     char *endptr;
-    strtoul(name + 3, &endptr, 10);
+    strtoul(t, &endptr, 10);
     return *endptr != 0;
   } else if (StringStartsWith(name, "rfcomm"))
     return true;
