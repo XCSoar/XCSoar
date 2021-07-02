@@ -75,7 +75,15 @@ public:
 
   void OnData(ConstBuffer<void> data) override {
     size_t remaining = max_size - received;
-    if (remaining == 0 || done)
+    if (remaining == 0) {
+      /* buffer is full - stop here */
+      const std::lock_guard<Mutex> lock(mutex);
+      done = true;
+      cond.notify_one();
+      throw Pause{};
+    }
+
+    if (done)
       throw Pause{};
 
     if (data.size > remaining)
