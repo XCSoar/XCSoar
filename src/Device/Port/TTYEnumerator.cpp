@@ -22,14 +22,13 @@ Copyright_License {
 */
 
 #include "TTYEnumerator.hpp"
-#include "util/Compiler.h"
 
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-gcc_pure
+[[gnu::pure]]
 static bool
 CheckTTYName(const char *name)
 {
