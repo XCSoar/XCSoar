@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ToFile.hpp"
 #include "Request.hxx"
-#include "Handler.hxx"
+#include "OutputStreamHandler.hxx"
 #include "Progress.hpp"
 #include "Operation/Operation.hpp"
 #include "io/FileOutputStream.hxx"
@@ -33,18 +33,14 @@ Copyright_License {
 
 #include <cassert>
 
-class DownloadToFileHandler final : public CurlResponseHandler {
-  OutputStream &out;
-
+class DownloadToFileHandler final : public OutputStreamCurlResponseHandler {
   SHA256State sha256;
-
-  AsyncWaiter waiter;
 
   const bool do_sha256;
 
 public:
   DownloadToFileHandler(OutputStream &_out, bool _do_sha256) noexcept
-    :out(_out), do_sha256(_do_sha256)
+    :OutputStreamCurlResponseHandler(_out), do_sha256(_do_sha256)
   {
   }
 
@@ -52,14 +48,6 @@ public:
     assert(do_sha256);
 
     return sha256.Final();
-  }
-
-  void Cancel() noexcept {
-    waiter.SetDone();
-  }
-
-  void Wait() {
-    waiter.Wait();
   }
 
   /* virtual methods from class CurlResponseHandler */
@@ -71,20 +59,7 @@ public:
     if (do_sha256)
       sha256.Update(data);
 
-    try {
-      out.Write(data.data, data.size);
-    } catch (...) {
-      waiter.SetError(std::current_exception());
-      throw Pause{};
-    }
-  }
-
-  void OnEnd() override {
-    waiter.SetDone();
-  }
-
-  void OnError(std::exception_ptr e) noexcept override {
-    waiter.SetError(std::move(e));
+    OutputStreamCurlResponseHandler::OnData(data);
   }
 };
 
