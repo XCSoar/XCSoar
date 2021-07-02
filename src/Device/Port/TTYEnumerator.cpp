@@ -30,7 +30,7 @@ Copyright_License {
 
 [[gnu::pure]]
 static bool
-CheckTTYName(const char *name)
+CheckTTYName(const char *name) noexcept
 {
   /* filter "/dev/tty*" */
   if (memcmp(name, "tty", 3) == 0) {
@@ -50,7 +50,7 @@ CheckTTYName(const char *name)
 }
 
 const char *
-TTYEnumerator::Next()
+TTYEnumerator::Next() noexcept
 {
   struct dirent *ent;
   while ((ent = readdir(dir)) != nullptr) {
