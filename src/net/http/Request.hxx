@@ -68,6 +68,9 @@ class CurlRequest final {
 	bool registered = false;
 
 public:
+	CurlRequest(CurlGlobal &_global, CurlEasy easy,
+		    CurlResponseHandler &_handler);
+
 	CurlRequest(CurlGlobal &_global,
 		    CurlResponseHandler &_handler);
 
