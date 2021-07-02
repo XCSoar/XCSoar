@@ -86,7 +86,7 @@ public:
     try {
       out.Write(data.data, data.size);
     } catch (...) {
-      error = std::current_exception();
+      OnError(std::current_exception());
       throw Pause{};
     }
   }
