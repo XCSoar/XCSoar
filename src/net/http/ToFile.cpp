@@ -22,60 +22,13 @@ Copyright_License {
 */
 
 #include "ToFile.hpp"
-#include "Request.hxx"
-#include "OutputStreamHandler.hxx"
-#include "Progress.hpp"
-#include "Operation/Operation.hpp"
+#include "ToStream.hpp"
 #include "io/FileOutputStream.hxx"
 #include "Crypto/SHA256.hxx"
 #include "Crypto/DigestOutputStream.hxx"
-#include "thread/AsyncWaiter.hxx"
-#include "util/ScopeExit.hxx"
 
 #include <cassert>
 #include <optional>
-
-class DownloadToFileHandler final : public OutputStreamCurlResponseHandler {
-public:
-  using OutputStreamCurlResponseHandler::OutputStreamCurlResponseHandler;
-
-  /* virtual methods from class CurlResponseHandler */
-  void OnHeaders(unsigned status,
-                 std::multimap<std::string, std::string> &&headers) override {
-  }
-};
-
-static void
-DownloadToFile(CurlGlobal &curl, const char *url,
-               const char *username, const char *password,
-               OutputStream &out,
-               OperationEnvironment &env)
-{
-  assert(url != nullptr);
-
-  DownloadToFileHandler handler(out);
-  CurlRequest request(curl, url, handler);
-  AtScopeExit(&request) { request.StopIndirect(); };
-
-  request.SetFailOnError();
-
-  if (username != nullptr)
-    request.SetOption(CURLOPT_USERNAME, username);
-  if (password != nullptr)
-    request.SetOption(CURLOPT_PASSWORD, password);
-
-  env.SetCancelHandler([&]{
-    request.StopIndirect();
-    handler.Cancel();
-  });
-
-  AtScopeExit(&env) { env.SetCancelHandler({}); };
-
-  const Net::ProgressAdapter progress(request.GetEasy(), env);
-
-  request.StartIndirect();
-  handler.Wait();
-}
 
 void
 Net::DownloadToFile(CurlGlobal &curl, const char *url,
@@ -93,7 +46,7 @@ Net::DownloadToFile(CurlGlobal &curl, const char *url,
   if (sha256 != nullptr)
     os = &digest.emplace(*os);
 
-  ::DownloadToFile(curl, url, username, password,
+  DownloadToStream(curl, url, username, password,
                    *os, env);
   file.Commit();
 
