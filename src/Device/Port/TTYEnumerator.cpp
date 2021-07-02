@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "TTYEnumerator.hpp"
+#include "util/StringCompare.hxx"
 
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -33,7 +33,7 @@ static bool
 CheckTTYName(const char *name) noexcept
 {
   /* filter "/dev/tty*" */
-  if (memcmp(name, "tty", 3) == 0) {
+  if (StringStartsWith(name, "tty")) {
     /* ignore virtual internal ports on Mac OS X (and probably other
        BSDs) */
     if (name[3] >= 'p' && name[3] <= 'w')
@@ -43,7 +43,7 @@ CheckTTYName(const char *name) noexcept
     char *endptr;
     strtoul(name + 3, &endptr, 10);
     return *endptr != 0;
-  } else if (memcmp(name, "rfcomm", 6) == 0)
+  } else if (StringStartsWith(name, "rfcomm"))
     return true;
   else
     return false;
