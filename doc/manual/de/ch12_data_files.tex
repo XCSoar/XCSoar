@@ -32,22 +32,37 @@ allemal. Sei jedem überlassen wie er/sie will).
 Viele PDA's haben ein eingebautes RAM, welches auch bei Batterieausfall nicht verloren geht, aus diesem
 Grunde ist empfohlen, genau dies RAM zu benutzen.
 
-
 Wie auch immer, \xc greift permanent auf derartige Daten zu und es ist empfohlen, diese Daten und
 Files auf schnellen Datenträgern zu speichern.
 
 Bei neuen Geräten wie z.B. ANDROID-Geräten spielt dies nicht mehr die große Rolle, da durch den
-gewaltigen Fortschritt der letzten 10 Jahre inzwischen alle  Speicherkarten schnell genug sind und den
-Anforderungen locker genügen. Hier kann problemlos die höchste Auflösung der Karte benutzt werden.
+gewaltigen Fortschritt der letzten 10 Jahre inzwischen alle Speicher und Speicherkarten schnell genug sind und den Anforderungen locker genügen. Hier kann problemlos die höchste Auflösung der Karte benutzt werden.
 Benutzer wie z.B.\ mich mit den "alten Gurken" sollten dennoch eine fixe SD-Karte benutzen (Class 6
 aufwärts\dots)
 
-Um Streß bei der Installation und Benutzung zu vermeiden, sollten alles Files und Daten bzgl. \xc  genau in
+
+Um Streß bei der Installation und Benutzung zu vermeiden, sollten alle Files und Daten bzgl. \xc  genau in
 diesem Verzeichnis stehen:
 
 \begin{verbatim}
 My Documents/XCSoarData
 \end{verbatim}
+
+bzw.bei neueren Geräten
+
+\begin{verbatim}
+InternerSpeicher/XCSoarData
+\end{verbatim}
+
+(Nur als Hinweis: In XCSoar mit Android wird im Konfigurationsmenü bei der Auswahl der Standortdateien dann
+\begin{verbatim}
+storage/emulated/0/XCSoarData 
+\end{verbatim} 
+als Pfad am oberen Rand des Bildschirms angezeigt.)
+
+Wenn man vorhat mehrere Wegpunktdateien, Luftraumdateien, Karten etc. einzupflegen, kann man zur besseren persönlichen Übersicht im /XCSoarData Ordner auch Unterordner anlegen z.B. für Wegpunkte, Lufträume, Maps etc. 
+XCSoar findet die Dateien dann anhand ihrer extension und bietet sie in den entsprechenden SKonfigurationsfeldern zur Auswahl an. Voraussetzung: Die Unterordner befinden sich alle in /XCSoarData !
+
 
 Auf PDA's können und sollten die Daten auch im Geräte internen Speicher abgelegt werden, genauso wie in
 SD-Karten oder Compact-Flash-Karten. Immer aber muß der Ordner direkt im Hauptverzeichniß stehen und
@@ -65,9 +80,9 @@ Verzeichnisse von sich aus an.
 
 \section{Karten Datenbank}\label{sec:map}
 
-Ein Kartendatenbank-File (Endung \verb|.xcm|) beinhaltet das Gelände, die Topologie, Topgraphie und
+Ein Kartendatenbank-File (Endung \verb|.xcm|) beinhaltet das Gelände, die Topologie, Topographie und
 weitere Geländemerkmale wie Türme, Auffälligkeiten sowie Wegpunkte und evtl. Lufträume.  Das
-Gelände ist abgebildet als ein Höhenmodell über einem Raste aus Längen- und Breitengraden. Das interne
+Gelände ist abgebildet als ein Höhenmodell über einem Raster aus Längen- und Breitengraden. Das interne
 File-Format ist GeoJPEG2000
 
 Die Topographie wie z.B.\ Straßen, Eisenbahnlinien, größere Städte, etc. sind als Vektordaten abgebildet.
@@ -79,22 +94,21 @@ Die Karten können von der  \xc - Hompage heruntergeladen werden:
 
 Um eine den eigenen Bedürfnissen angepasste Kartendatenbank herunterzuladen (z.B. andere Auflösung,
 anderer Kartenausschnitt o.ä.), kann unter \url{http://mapgen.xcsoar.org/}  der \xc-Karten-Generator
-angeworfen werden, welche das entsprechend File erzeugt und zum Download
+angeworfen werden, welcher das entsprechende File erzeugt und zum Download
 anbietet.
 
-Soweit Wegpunkte und/oder Lufträume in der Kartendatenbank (z.B.\ verb''GER-High.xcm'' o.ä.) enthalten sind,
+Soweit Wegpunkte und/oder Lufträume in der Kartendatenbank (z.B.\verb''GER-High.xcm'' o.ä.) enthalten sind,
 werden diese benutzt.
 
-Wenn aber separate oder eine alternative Datenbanken für Wegpunkte und/oder Lufträume angegeben
+Wenn aber separate oder eine alternative Datenbank für Wegpunkte und/oder Lufträume angegeben
 wird, so werden alle Wegpunkte der Kartendatenbank (\verb".xcm") ignoriert und durch die separaten
 Daten ersetzt.
 
-Ein \xc angegebenes, separates angegebenes Wegpunkt-File wird alle in der Kartendatenbank enthaltenen
-Wegpunkte ignorieren und nur die im separaten File enthaltenen Wegpunkte benutzen.
+Ein in \textsf{XCSoar} separat angegebenes Wegpunkt-File hat immer Priorität. \textsf{XCSoar} wird dann alle in der Kartendatenbank enthaltenen Wegpunkte ignorieren und nur die im separaten File enthaltenen Wegpunkte benutzen.
 
 
 \section{Wegpunkte}
-\xc  versteht verschiedene Wegpunkt-Formate:
+ \textsf{XCSoar} versteht verschiedene Wegpunkt-Formate:
 
 \begin{itemize}
 \item WinPilot/Cambridge (\verb|.dat|)
@@ -105,7 +119,7 @@ Wegpunkte ignorieren und nur die im separaten File enthaltenen Wegpunkte benutze
 \end{itemize}
 
 Diese Files sind z.B. auf dem Server \footnote{Es existieren einige andere gespiegelte Seiten, falls die
-Originalseite nicht erhältlich ist, einfach mal Googlen ...}:
+Originalseite nicht erhältlich ist, einfach mal Googeln ...}:
 \begin{center}
 \url{http://soaringweb.org/TP}
 \end{center}
@@ -113,13 +127,13 @@ erhältlich. Es gibt zahlreiche kommerzielle und frei verfügbare Software um di
 konvertieren.
 
 \achtung \textsl{Wenn die Höhe eines Wegpunktes als "Null" innerhalb eines Wegpunktfiles angegeben
-wird, dann wird  \xc  die Höhe aus der Kartendatenbank gemäß des Höhenmmodelles entnehmen und die
+wird, dann wird \textsf{XCSoar} die Höhe aus der Kartendatenbank gemäß des Höhenmmodelles entnehmen und die
 Höhe demgemäß darstellen.}
 
 
 \section{Lufträume}\index{File-Format!Luftraum}
 
-\xc unterstützt Luftraum Files (extension \verb|.txt|) wobei ein Teil der Syntax
+\textsf{XCSoar} unterstützt Luftraum Files (extension \verb|.txt|) wobei ein Teil der Syntax
 des weitverbreiteten OpenAir-Formates benutzt wird. Weiterhin wird das ''Tim Newport-Pearce file format''
 (extension \verb|.sua|) unterstützt.
 
@@ -137,32 +151,120 @@ aktualisiert:
 \end{center}
 
 Hier sind ebenfalls die exakten Daten der deutschen Grenze sowie aller deutschen Fallschirmsprungzonen
-erhältlich. Folgende Lufträume werden von \xc bislang unterstützt und demgemäß zur Auswahl angeboten:
+erhältlich. Folgende Lufträume werden von \textsf{XCSoar} bislang unterstützt und demgemäß zur Auswahl angeboten:
 
 Klasse A-G, Sperrgebiete, Gefahrengebiete, AAT-Gebiete, Segelflugsektoren, Wellenfenster, TMZ, und
 ''andere''.  Alle anderen Gebiete werden als ''andere'' dargestellt.
 
 In Ergänzung zum OpenAIR Format wird ebenfalls die Platzfrequenz mit angegeben (sofern vorhanden).
+%
+%
+%
+%
+%
+%
+%
+%
+%
+
+\section{Wegpunktdetails}\label{sec:airfield-details}\index{File-Format!Flugplatz-File}
+
+% Wird damit der Name des Unterkapitels im Inhaltsverzeichnis korrekt dargestellt??? 
+% Statt Flugplatz-Details -> Wegpunktdetails!
+% Und bleibt die Zuordnung bzw. bleiben die Verweise in anderen Kapiteln zu diesem Unterkapitel korrekt erhalten??? 
+%
+%
+%
+
+Das Wegpunktdetails-File (extension \verb|.txt|) ist ein optionales, einfaches Text-File. Für jeden Wegpunkt, der in einer der verwendeten Wegpunktdateien (extension \verb|.cup| bzw. \verb|.dat| usw.) eingetragen ist, KÖNNEN hier weitere Details als zusätzliche Information angegeben werden, müssen aber nicht. 
+
+Diese zusätzlichen Details werden dann im Wegpunkt-Dialog unter ''Details'' auf einer oder auch mehreren Seiten angezeigt.
+
+Mit dieser Datei können neben Textinformationen auch Bilder (.jpg, .bmp, .png, ...) oder andere Mediendateien zur Ansicht gebracht werden. Welche Files unterstützt werden, hängt auch vom Betriebssystem ab, und auch, welche Programme/Apps in Betrieb sind. \textcolor{blue}{Dies ist derzeit unter Windows nicht unterstützt.} 
+
+Beispiel für einen einfachen Wegpunkt-Deatail Text-Eintrag für ein Segelfluggelände und ein
+Aussenlandefeld:
+
+\begin{verbatim}
+[UNTERWOESSEN]
+Segelfluggelände
+RWY: 60/240 Länge 800m
+ALT: 555m
+Freq: 131.115
+Segelflugschule DASSU 
+F-Schlepp, Windenstart, kein Eigenstart!
 
 
-\section{Flugplatz Details}\label{sec:airfield-details}\index{File-Format!Flugplatz-File}
+[B19KRUEN)
+RWY: 310, Länge 300m
+ALT: 876m
+Mehrere Felder. Geeignetes auswählen, je nach Bewuchs oder Vieh. Auf Hochspannungsleitung achten von SSW nach NNO! Teilweise Zaunbegrenzung der Felder.
+\end{verbatim}
 
-Das Flugplatz-Detail-File  (extension \verb|.txt|) ist ein einfaches Text-File mit einem Eintrag für jeden
-Flugplatz. Einträge werden in eckigen Klammern gemacht, gefolgt von den Einträgen für den jeweiligen
-Flugplatz/Flugfeld. Der Text sollte nicht zu lang sein, da das Textfeld in  \xc bislang (V6.6) keinen Zeilenumbruch
-erlaubt.
 
-Der Text darf auch Bilder des entsprechenden Flugplatzes enthalten, um ein Bild direkt in \xc einzufügen,
-muß  \verb|image=| gefolgt vom Namen des Files eingefügt werden. \textcolor{blue}{Dies ist derzeit unter Windows nicht unterstützt.} 
 
-\achtung {\sl Es ist sicherzustellen, daß keinerlei Leerzeichen in den Filenamen nach  \verb|image=|
+Der Namen des Wegpunktes muss in eckige Klammern gesetzt werden und muss in der Schreibweise exakt dem Namen im Wegpunktfile (.cup etc.) entsprechen, einzige Ausnahme ist, daß Groß-und Kleinschreibung nicht unterschieden wird.
+In der nächsten Zeile können dann beliebige Texteinträge erfolgen - bis zum nächsten Wegpunkteintrag (nächster Name in eckigen Klammern).
+
+Die Länge des Textes sollte nicht zuu lang sein, denn im Moment (Version 7.8) gibt es keinen Seitenumbruch oder ein scrollen des Textfeldes nach unten. Der verfügbare Platz für die Anzeige hängt deshalb wesentlich von der Auflösung des Bildschirms ab, zu langer Text wird je nach Gerät evtl. über den unteren Rand hinausgehen - und dann nicht angezeigt.
+
+Für die Anzeige von Mediendateien (Bildern etc.) gibt es zwei Möglichkeiten/Befehle:
+
+\begin{itemize}
+\item Anzeige innerhalb von XCSoar mit dem Befehl \verb|image=| gefolgt von Pfad und Namen des Files
+\item Anzeige mit einem (Default-) Viewer des Geräts durch den Befehl \verb|file=| gefolgt von Pfad und Namen des Files
+\end{itemize}
+
+Die zweite Möglichkeit ist die flexiblere, es sind damit je nach Gerät und installiertem Viewer verschiedenste Formate wie .pdf oder .mp4 anzeigbar, vor allem aber funktioniert damit die von Android gewohnte Zoom und Pan-Funktion mit zwei Fingern, je nach Viewer, ganz wie gewohnt. 
+
+Die Zoom-Funktion beim internen Viewer (Befehl ''image='') funktioniert nur auf die Mitte des Bildes bezogen, es ist damit kein paning möglich. 
+
+%
+% FOLGENDEN ABSATZ STREICHEN,  SOBALD DER BUG BESEITIGT WERDEN KONNTE!!!
+%
+Hinweis: 
+Leider funktioniert der flexiblere Befehl ''file='' bei den neueren XCSoar-Versionen wegen eines Bugs z.Zt. nur bis einschließlich Android-Version 6.x . Wer diese Funktion also mit neueren Android-Geräten Nutzen möchte, sollte z.Zt. noch bei der XCSoar Version 6.8.11 oder früher verbleiben. Denn ab Version 6.8.12 (bis 7.8 - und evtl. auch noch länger) taucht dieser Bug bei Geräten ab Android 7 auf.
+% 
+% VORHERIGEN ABSATZ STREICHEN,  SOBALD DER BUG BESEITIGT WERDEN KONNTE!!!
+% 
+
+\textcolor{blue}{Außerdem ist die Bildanzeigefunktion derzeit (XCSoar 7.8) unter Windows nicht unterstützt.} 
+
+
+\achtung {\sl Es ist sicherzustellen, daß keinerlei Leerzeichen in den Filenamen nach  \verb|image=| oder \verb|file=|
 auftauchen!!!}
 
 Welche Files unterstützt werden, hängt auch vom Betriebssystem ab, und auch, welche Programme/Apps
-in Betrieb sind. ANDROID unterstützt z.B.  JPEG, andere Betriebssysteme benutzen meist BMP-Files
+in Betrieb sind. ANDROID unterstützt z.B. beim Befehl \verb|image=| die Formate JPEG, png und bmp, beim Befehl \verb|file=| je nach installiertem Viewer auch pdf oder sogar mp4.
+Andere Betriebssysteme können evtl. weniger oder auch andere Formate darstellen.
 
-Die Namen der Flugplätze in diesen Files müssen exakt den Namen in den Wegpunkt-Files entsprechen,
-einzige Ausnahme ist, daß Groß-und Kleinschreibung nicht unterschieden wird.
+Die Bilder oder Mediendateien sollten sich am besten in einem Unterordner des Ordners \verb|XCSoarData| befinden, z.B. innerhalb eines selbst angelegten Wegpunkt-Ordners.
+
+Hier nun ein Beispiel für den Einsatz von Bildern mit den beiden oben genannten Befehlen - und gleich mal in Kombination. Die Bilder befinden sich dabei (Android) in: \verb|XCSoarData\WP\MyPic\Mypicture.jpg| 
+
+\begin{verbatim}
+[A18Pullach]
+file=/WP/MyPic/A18Pullach_01-Uebersicht.jpg
+file=/WP/MyPic/A18Pullach_02-Anflug1.jpg
+file=/WP/MyPic/A18Pullach_05-Loecher.JPG
+image=/WP/MyPic/A18Pullach_01-Uebersicht.jpg
+image=/WP/MyPic/A18Pullach_02-Anflug1.jpg
+image=/WP/MyPic/A18Pullach_05-Loecher.JPG
+
+RWY: 100, Länge 300m, Breite 80m
+ALT: 480m
+----------
+Landerichtung nur OST, wegen erhöhter Straße und Bäumen am Ostrand des Feldes. Querweg als Schwelle nehmen (zur Not überrollbar) und Baum rechts des Feldes beachten. Sonst Freier Anflug. Teilweise etwas tiefere Löcher vorhanden.
+Bei starkem Westwind, hohem Bewuchs oder wenn Feld überschwemmt sein sollte, anderes Feld wählen. Dann aber ACHTUNG auf die vielen Telefon- und Stromleitungen, vor allem im nördlichen Bereich des Gebietes. Bei Westwind wären die westlich angrenzenden Felder gut, die haben jedoch ebenfalls etwas tiefere Löcher. (Stand 2018_05) 
+\end{verbatim}
+
+%  SCREEENSHOTS noch einfügen !!!!!!
+%  ##########################################################################
+%  ##########################################################################
+%  ##########################################################################
+%  ##########################################################################
+%  ##########################################################################
+
 
 Auf der \xc Website werden Dateien für Flugplätze diverser Länder zu Herunterladen angeboten
 
