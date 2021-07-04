@@ -79,6 +79,7 @@ DownloadToStream(CurlGlobal &curl, const char *url,
   assert(url != nullptr);
 
   CurlEasy easy;
+  easy.SetURL(url);
   easy.SetFailOnError();
 
   if (username != nullptr)
