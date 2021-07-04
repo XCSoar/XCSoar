@@ -97,6 +97,7 @@ TEST_NAMES = \
 	TestMath \
 	TestMathTables \
 	TestAngle TestARange \
+	TestGrahamScan \
 	TestUnits TestEarth TestSunEphemeris \
 	TestValidity TestUTM \
 	TestAllocatedGrid \
@@ -387,6 +388,12 @@ TEST_MATH_SOURCES = \
 	$(TEST_SRC_DIR)/TestMath.cpp
 QUADRILATERAL_ARANGE_DEPENDS = MATH
 $(eval $(call link-program,TestMath,TEST_MATH))
+
+TEST_GRAHAM_SCAN_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestGrahamScan.cpp
+TEST_GRAHAM_SCAN_DEPENDS = GEO MATH
+$(eval $(call link-program,TestGrahamScan,TEST_GRAHAM_SCAN))
 
 TEST_CSV_LINE_SOURCES = \
 	$(SRC)/io/CSVLine.cpp \
