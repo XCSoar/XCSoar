@@ -23,13 +23,6 @@
 #include "GrahamScan.hpp"
 #include "Geo/SearchPointVector.hpp"
 
-static bool
-sortleft
-(const SearchPoint& sp1, const SearchPoint& sp2)
-{ 
-  return sp1.Sort(sp2);
-}
-
 [[gnu::const]]
 static int
 Sign(double value, double tolerance)
@@ -97,7 +90,16 @@ GrahamScan::PartitionPoints()
   //
   // Step one in partitioning the points is to sort the raw data
   //
-  raw_points.sort(sortleft);
+  raw_points.sort([](const SearchPoint &sp1, const SearchPoint &sp2){
+    const auto &gp1 = sp1.GetLocation();
+    const auto &gp2 = sp2.GetLocation();
+    if (gp1.longitude < gp2.longitude)
+      return false;
+    else if (gp1.longitude == gp2.longitude)
+      return gp1.latitude > gp2.latitude;
+    else
+      return true;
+  });
 
   //
   // The the far left and far right points, remove them from the
