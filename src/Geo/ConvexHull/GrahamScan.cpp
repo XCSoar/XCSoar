@@ -221,7 +221,7 @@ GrahamScan::PruneInterior()
   for (unsigned i = 0; i + 1 < lower_hull.size(); i++)
     res.push_back(*lower_hull[i]);
 
-  for (int i = upper_hull.size() - 1; i >= 0; i--)
+  for (unsigned i = upper_hull.size() - 1; i >= 1; i--)
     res.push_back(*upper_hull[i]);
 
   if (res.size() == size)
