@@ -10,6 +10,8 @@ Version 7.9 - not yet released
 * devices
   - TCP Client: fix automatic reconnect after connection loss
   - GliderLink: fix disappearing configuration
+* calculations
+  - fix AAT task optimization bug
 * Android
   - support USB serial adapters
 

@@ -94,11 +94,11 @@ GrahamScan::PartitionPoints()
     const auto &gp1 = sp1.GetLocation();
     const auto &gp2 = sp2.GetLocation();
     if (gp1.longitude < gp2.longitude)
-      return false;
-    else if (gp1.longitude == gp2.longitude)
-      return gp1.latitude > gp2.latitude;
-    else
       return true;
+    else if (gp1.longitude == gp2.longitude)
+      return gp1.latitude < gp2.latitude;
+    else
+      return false;
   });
 
   //
