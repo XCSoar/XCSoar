@@ -106,14 +106,17 @@ GrahamScan::PartitionPoints()
   // sorted sequence and store them in special members
   //
 
-  left = &raw_points.front();
-  right = &raw_points.back();
+  left = raw_points.front();
+  right = raw_points.back();
+
+  raw_points.pop_front();
+  raw_points.pop_back();
 
   //
   // Now put the remaining points in one of the two output sequences
   //
 
-  GeoPoint loclast = left->GetLocation();
+  GeoPoint loclast = left.GetLocation();
 
   upper_partition_points.reserve(size);
   lower_partition_points.reserve(size);
@@ -123,7 +126,7 @@ GrahamScan::PartitionPoints()
         loclast.latitude != i.GetLocation().latitude) {
       loclast = i.GetLocation();
 
-      int dir = Direction(left->GetLocation(), right->GetLocation(),
+      int dir = Direction(left.GetLocation(), right.GetLocation(),
                           i.GetLocation(), tolerance);
       if (dir < 0)
         upper_partition_points.push_back(&i);
@@ -174,8 +177,8 @@ GrahamScan::BuildHalfHull(std::vector<SearchPoint*> input,
   // first point in the output sequence, and make sure the right point
   // is the last point in the input sequence.
   //
-  input.push_back(right);
-  output.push_back(left);
+  input.push_back(&right);
+  output.push_back(&left);
 
   //
   // The construction loop runs until the input is exhausted
