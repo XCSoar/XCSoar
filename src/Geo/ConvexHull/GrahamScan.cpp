@@ -218,16 +218,15 @@ GrahamScan::PruneInterior()
   BuildHull();
 
   SearchPointVector res;
-
-  /* the result is usually one more than the input vector - is that a
-   bug? */
-  res.reserve(size + 1);
+  res.reserve(size);
 
   for (unsigned i = 0; i + 1 < lower_hull.size(); i++)
     res.push_back(*lower_hull[i]);
 
   for (unsigned i = upper_hull.size() - 1; i >= 1; i--)
     res.push_back(*upper_hull[i]);
+
+  assert(res.size() <= size);
 
   if (res.size() == size)
     return false;
