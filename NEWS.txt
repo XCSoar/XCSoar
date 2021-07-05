@@ -1,4 +1,4 @@
-Version 7.9 - not yet released
+Version 7.9 - 2021/07/05
 * fix crash bug in terrain renderer
 * fix crash bug in IGC file parser
 * settings
