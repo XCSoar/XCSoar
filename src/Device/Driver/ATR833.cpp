@@ -30,6 +30,7 @@ static constexpr uint8_t STX = 0x02;
 static constexpr uint8_t SYNC = 'r';
 
 class ATR833Device final : public AbstractDevice {
+  static constexpr uint8_t EXCHANGE = 0x11;
   static constexpr uint8_t SETSTANDBY = 0x12;
   static constexpr uint8_t SETACTIVE = 0x13;
 
@@ -46,6 +47,7 @@ public:
   bool PutStandbyFrequency(RadioFrequency frequency,
                            const TCHAR *name,
                            OperationEnvironment &env) override;
+  bool ExchangeRadioFrequencies(OperationEnvironment &env) override;
 };
 
 class ATRBuffer {
@@ -107,6 +109,13 @@ ATR833Device::PutStandbyFrequency(RadioFrequency frequency,
   return buffer.Send(port, env);
 }
 
+bool
+ATR833Device::ExchangeRadioFrequencies(OperationEnvironment &env)
+{
+  ATRBuffer buffer(EXCHANGE);
+
+  return buffer.Send(port, env);
+}
 
 static Device *
 ATR833CreateOnPort(const DeviceConfig &config, Port &com_port)
