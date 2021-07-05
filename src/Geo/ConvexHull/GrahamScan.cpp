@@ -89,9 +89,20 @@ Sorted(std::vector<SearchPoint> v) noexcept
   return v;
 }
 
-void
-GrahamScan::PartitionPoints()
+struct GrahamPartitions {
+  SearchPoint left, right;
+  std::vector<SearchPoint> upper;
+  std::vector<SearchPoint> lower;
+};
+
+[[gnu::pure]]
+static GrahamPartitions
+PartitionPoints(const std::vector<SearchPoint> &src, double tolerance) noexcept
 {
+  GrahamPartitions result;
+  result.upper.reserve(src.size());
+  result.lower.reserve(src.size());
+
   //
   // The initial array of points is stored in vector raw_points. I first
   // sort it, which gives me the far left and far right points of the
@@ -110,15 +121,15 @@ GrahamScan::PartitionPoints()
   //
   // Step one in partitioning the points is to sort the raw data
   //
-  const auto raw_points = Sorted(raw_vector);
+  const auto raw_points = Sorted(src);
 
   //
   // The the far left and far right points, remove them from the
   // sorted sequence and store them in special members
   //
 
-  left = raw_points.front();
-  right = raw_points.back();
+  result.left = raw_points.front();
+  result.right = raw_points.back();
 
   const auto begin = std::next(raw_points.cbegin());
   const auto end = std::prev(raw_points.cend());
@@ -127,10 +138,7 @@ GrahamScan::PartitionPoints()
   // Now put the remaining points in one of the two output sequences
   //
 
-  GeoPoint loclast = left.GetLocation();
-
-  upper_partition_points.reserve(size);
-  lower_partition_points.reserve(size);
+  GeoPoint loclast = result.left.GetLocation();
 
   for (auto j = begin; j != end; ++j) {
     const auto &i = *j;
@@ -139,19 +147,21 @@ GrahamScan::PartitionPoints()
         loclast.latitude != i.GetLocation().latitude) {
       loclast = i.GetLocation();
 
-      int dir = Direction(left.GetLocation(), right.GetLocation(),
+      int dir = Direction(result.left.GetLocation(),
+                          result.right.GetLocation(),
                           i.GetLocation(), tolerance);
       if (dir < 0)
-        upper_partition_points.push_back(i);
+        result.upper.push_back(i);
       else
-        lower_partition_points.push_back(i);
+        result.lower.push_back(i);
     }
   };
 
+  return result;
 }
 
 bool
-GrahamScan::BuildHull()
+GrahamScan::BuildHull(GrahamPartitions &&partitions) noexcept
 {
   //
   // Building the hull consists of two procedures: building the lower
@@ -165,16 +175,19 @@ GrahamScan::BuildHull()
   // or 1.
   //
 
-  bool lower_pruned = BuildHalfHull(std::move(lower_partition_points),
+  bool lower_pruned = BuildHalfHull(partitions.left, partitions.right,
+                                    std::move(partitions.lower),
                                     lower_hull, 1);
-  bool upper_pruned = BuildHalfHull(std::move(upper_partition_points),
+  bool upper_pruned = BuildHalfHull(partitions.left, partitions.right,
+                                    std::move(partitions.upper),
                                     upper_hull, -1);
 
   return lower_pruned || upper_pruned;
 }
 
 bool
-GrahamScan::BuildHalfHull(std::vector<SearchPoint> &&input,
+GrahamScan::BuildHalfHull(const SearchPoint &left, const SearchPoint &right,
+                          std::vector<SearchPoint> &&input,
                           std::vector<SearchPoint> &output, int factor)
 {
   //
@@ -236,9 +249,7 @@ GrahamScan::PruneInterior()
     // nothing to do
   }
 
-  PartitionPoints();
-
-  if (!BuildHull())
+  if (!BuildHull(PartitionPoints(raw_vector, tolerance)))
     /* nothing was pruned */
     return false;
 

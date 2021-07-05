@@ -31,6 +31,7 @@
 class SearchPointVector;
 class SearchPoint;
 struct GeoPoint;
+struct GrahamPartitions;
 
 /**
  * Class used to build convex hulls from vector.  This may prune
@@ -69,9 +70,9 @@ public:
   bool PruneInterior();
 
 private:
-  void PartitionPoints();
-  bool BuildHull();
-  bool BuildHalfHull(std::vector<SearchPoint> &&input,
+  bool BuildHull(GrahamPartitions &&partitions) noexcept;
+  bool BuildHalfHull(const SearchPoint &left, const SearchPoint &right,
+                     std::vector<SearchPoint> &&input,
                      std::vector<SearchPoint> &output, int factor);
 };
 
