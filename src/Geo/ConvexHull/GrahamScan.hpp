@@ -73,7 +73,7 @@ public:
 private:
   void PartitionPoints();
   bool BuildHull();
-  bool BuildHalfHull(std::vector<SearchPoint*> input,
+  bool BuildHalfHull(std::vector<SearchPoint*> &&input,
                      std::vector<SearchPoint*> &output, int factor);
 };
 

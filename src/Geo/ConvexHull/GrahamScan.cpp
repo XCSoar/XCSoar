@@ -152,14 +152,16 @@ GrahamScan::BuildHull()
   // or 1.
   //
 
-  bool lower_pruned = BuildHalfHull(lower_partition_points, lower_hull, 1);
-  bool upper_pruned = BuildHalfHull(upper_partition_points, upper_hull, -1);
+  bool lower_pruned = BuildHalfHull(std::move(lower_partition_points),
+                                    lower_hull, 1);
+  bool upper_pruned = BuildHalfHull(std::move(upper_partition_points),
+                                    upper_hull, -1);
 
   return lower_pruned || upper_pruned;
 }
 
 bool
-GrahamScan::BuildHalfHull(std::vector<SearchPoint*> input,
+GrahamScan::BuildHalfHull(std::vector<SearchPoint*> &&input,
                           std::vector<SearchPoint*> &output, int factor)
 {
   //
