@@ -14,6 +14,7 @@ Version 7.9 - not yet released
   - fix AAT task optimization bug
 * Android
   - support USB serial adapters
+  - auto-reconnect to IOIO UARTs
 
 Version 7.8 - 2021/06/02
 * don't delete old IGC files automatically
