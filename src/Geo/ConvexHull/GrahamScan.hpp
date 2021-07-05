@@ -26,7 +26,6 @@
 #include "Geo/SearchPoint.hpp"
 #include "util/NonCopyable.hpp"
 
-#include <list>
 #include <vector>
 
 class SearchPointVector;
@@ -41,7 +40,6 @@ struct GeoPoint;
  */
 class GrahamScan: private NonCopyable
 {
-  std::list<SearchPoint> raw_points;
   SearchPoint left;
   SearchPoint right;
   std::vector<SearchPoint> upper_partition_points;

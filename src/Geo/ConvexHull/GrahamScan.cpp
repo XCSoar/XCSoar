@@ -23,6 +23,8 @@
 #include "GrahamScan.hpp"
 #include "Geo/SearchPointVector.hpp"
 
+#include <list>
+
 [[gnu::const]]
 static int
 Sign(double value, double tolerance)
@@ -63,9 +65,9 @@ Direction(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
   return Sign(a - b, tolerance);
 }
 
-GrahamScan::GrahamScan(SearchPointVector& sps, const double sign_tolerance):
-  raw_points(sps.begin(), sps.end()), raw_vector(sps), size(sps.size()),
-  tolerance(sign_tolerance)
+GrahamScan::GrahamScan(SearchPointVector &sps, double sign_tolerance)
+  :raw_vector(sps), size(sps.size()),
+   tolerance(sign_tolerance)
 {
 }
 
@@ -90,6 +92,7 @@ GrahamScan::PartitionPoints()
   //
   // Step one in partitioning the points is to sort the raw data
   //
+  std::list<SearchPoint> raw_points{raw_vector.begin(), raw_vector.end()};
   raw_points.sort([](const SearchPoint &sp1, const SearchPoint &sp2){
     const auto &gp1 = sp1.GetLocation();
     const auto &gp2 = sp2.GetLocation();
