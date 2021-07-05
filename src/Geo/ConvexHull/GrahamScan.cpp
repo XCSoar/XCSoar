@@ -121,7 +121,7 @@ GrahamScan::PartitionPoints()
   upper_partition_points.reserve(size);
   lower_partition_points.reserve(size);
 
-  for (auto &i : raw_points) {
+  for (const auto &i : raw_points) {
     if (loclast.longitude != i.GetLocation().longitude ||
         loclast.latitude != i.GetLocation().latitude) {
       loclast = i.GetLocation();
@@ -129,9 +129,9 @@ GrahamScan::PartitionPoints()
       int dir = Direction(left.GetLocation(), right.GetLocation(),
                           i.GetLocation(), tolerance);
       if (dir < 0)
-        upper_partition_points.push_back(&i);
+        upper_partition_points.push_back(i);
       else
-        lower_partition_points.push_back(&i);
+        lower_partition_points.push_back(i);
     }
   };
 
@@ -161,8 +161,8 @@ GrahamScan::BuildHull()
 }
 
 bool
-GrahamScan::BuildHalfHull(std::vector<SearchPoint*> &&input,
-                          std::vector<SearchPoint*> &output, int factor)
+GrahamScan::BuildHalfHull(std::vector<SearchPoint> &&input,
+                          std::vector<SearchPoint> &output, int factor)
 {
   //
   // This is the method that builds either the upper or the lower half convex
@@ -181,8 +181,8 @@ GrahamScan::BuildHalfHull(std::vector<SearchPoint*> &&input,
   // first point in the output sequence, and make sure the right point
   // is the last point in the input sequence.
   //
-  input.push_back(&right);
-  output.push_back(&left);
+  input.push_back(right);
+  output.push_back(left);
 
   bool pruned = false;
 
@@ -201,9 +201,9 @@ GrahamScan::BuildHalfHull(std::vector<SearchPoint*> &&input,
     while (output.size() >= 3) {
       const auto end = output.size() - 1;
 
-      if (factor * Direction(output[end - 2]->GetLocation(),
-                             output[end]->GetLocation(),
-                             output[end - 1]->GetLocation(),
+      if (factor * Direction(output[end - 2].GetLocation(),
+                             output[end].GetLocation(),
+                             output[end - 1].GetLocation(),
                              tolerance) > 0)
         break;
 
@@ -233,10 +233,10 @@ GrahamScan::PruneInterior()
   res.reserve(size);
 
   for (unsigned i = 0; i + 1 < lower_hull.size(); i++)
-    res.push_back(*lower_hull[i]);
+    res.push_back(lower_hull[i]);
 
   for (unsigned i = upper_hull.size() - 1; i >= 1; i--)
-    res.push_back(*upper_hull[i]);
+    res.push_back(upper_hull[i]);
 
   assert(res.size() <= size);
   raw_vector.swap(res);

@@ -44,10 +44,10 @@ class GrahamScan: private NonCopyable
   std::list<SearchPoint> raw_points;
   SearchPoint left;
   SearchPoint right;
-  std::vector<SearchPoint*> upper_partition_points;
-  std::vector<SearchPoint*> lower_partition_points;
-  std::vector<SearchPoint*> lower_hull;
-  std::vector<SearchPoint*> upper_hull;
+  std::vector<SearchPoint> upper_partition_points;
+  std::vector<SearchPoint> lower_partition_points;
+  std::vector<SearchPoint> lower_hull;
+  std::vector<SearchPoint> upper_hull;
   SearchPointVector &raw_vector;
   const unsigned size;
   const double tolerance;
@@ -73,8 +73,8 @@ public:
 private:
   void PartitionPoints();
   bool BuildHull();
-  bool BuildHalfHull(std::vector<SearchPoint*> &&input,
-                     std::vector<SearchPoint*> &output, int factor);
+  bool BuildHalfHull(std::vector<SearchPoint> &&input,
+                     std::vector<SearchPoint> &output, int factor);
 };
 
 
