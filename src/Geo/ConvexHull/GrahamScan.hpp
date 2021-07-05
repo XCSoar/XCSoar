@@ -34,8 +34,8 @@ class SearchPoint;
 struct GeoPoint;
 
 /**
- * Class used to build convex hulls from vector.  This ensures
- * the returned vector is closed, and may prune points.
+ * Class used to build convex hulls from vector.  This may prune
+ * points.
  *
  * @author http://www.drdobbs.com/cpp/201806315?pgno=4
  */
