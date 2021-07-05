@@ -112,8 +112,8 @@ GrahamScan::PartitionPoints()
   left = raw_points.front();
   right = raw_points.back();
 
-  raw_points.pop_front();
-  raw_points.pop_back();
+  const auto begin = std::next(raw_points.cbegin());
+  const auto end = std::prev(raw_points.cend());
 
   //
   // Now put the remaining points in one of the two output sequences
@@ -124,7 +124,9 @@ GrahamScan::PartitionPoints()
   upper_partition_points.reserve(size);
   lower_partition_points.reserve(size);
 
-  for (const auto &i : raw_points) {
+  for (auto j = begin; j != end; ++j) {
+    const auto &i = *j;
+
     if (loclast.longitude != i.GetLocation().longitude ||
         loclast.latitude != i.GetLocation().latitude) {
       loclast = i.GetLocation();
