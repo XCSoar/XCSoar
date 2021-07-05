@@ -222,20 +222,23 @@ GrahamScan::BuildHalfHull(const SearchPoint &left, const SearchPoint &right,
     // by removing the next-to-last point in the output sequence until
     // convexity is restored.
     //
-    output.push_back(i);
 
-    while (output.size() >= 3) {
+    /* remove all trailing points which would violate convexity with
+       the point to be added */
+    while (output.size() >= 2) {
       const auto end = output.size() - 1;
 
-      if (factor * Direction(output[end - 2].GetLocation(),
+      if (factor * Direction(output[end - 1].GetLocation(),
+                             i.GetLocation(),
                              output[end].GetLocation(),
-                             output[end - 1].GetLocation(),
                              tolerance) > 0)
         break;
 
-      output.erase(output.begin() + end - 1);
+      output.pop_back();
       pruned = true;
     }
+
+    output.push_back(i);
   }
 
   return pruned;
