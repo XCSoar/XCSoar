@@ -226,11 +226,11 @@ GrahamScan::BuildHalfHull(const SearchPoint &left, const SearchPoint &right,
     /* remove all trailing points which would violate convexity with
        the point to be added */
     while (output.size() >= 2) {
-      const auto end = output.size() - 1;
+      const auto last = std::prev(output.end());
 
-      if (factor * Direction(output[end - 1].GetLocation(),
+      if (factor * Direction(std::prev(last)->GetLocation(),
                              i.GetLocation(),
-                             output[end].GetLocation(),
+                             last->GetLocation(),
                              tolerance) > 0)
         break;
 
