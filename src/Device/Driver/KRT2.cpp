@@ -165,6 +165,14 @@ public:
                                    const TCHAR *name,
                                    OperationEnvironment &env) override;
   /**
+   * Exchanges active and standby frequencies on the radio.
+   */
+  virtual bool ExchangeRadioFrequencies(OperationEnvironment &env,
+                                        NMEAInfo &info) override;
+
+  static void UpdateRadioFrequencies(NMEAInfo &basic);
+
+  /**
    * Receives and handles data from the radio.
    *
    * The function parses messages send by the radio.
@@ -319,7 +327,13 @@ KRT2Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
     return src.size() < 6 ? 0 : 6;
 
   case EXCHANGE_FREQUENCIES:
-    info.settings.swap_frequencies.Update(info.clock);
+    /**
+     * Optimistic update: KRT2 doesn't send frequencies back after
+     * exchange command, so we update state immediately. If the device
+     * sends an unsolicited EXCHANGE_FREQUENCIES message later, it will
+     * be handled by HandleSTX which also calls UpdateRadioFrequencies.
+     */
+    UpdateRadioFrequencies(info);
     return 2;
 
   case UNKNOWN1:
@@ -404,6 +418,35 @@ KRT2Device::PutStandbyFrequency(RadioFrequency frequency,
                                 OperationEnvironment &env)
 {
   return PutFrequency(STANDBY_FREQUENCY, frequency, name, env);
+}
+
+bool
+KRT2Device::ExchangeRadioFrequencies(OperationEnvironment &env,
+                                     NMEAInfo &info)
+{
+  const std::byte msg[] = {STX, EXCHANGE_FREQUENCIES};
+  if (Send(msg, env)) {
+    UpdateRadioFrequencies(info);
+
+    return true;
+  }
+
+  return false;
+}
+
+void
+KRT2Device::UpdateRadioFrequencies(NMEAInfo &info)
+{
+  auto &settings = info.settings;
+  const auto old_freq = settings.active_frequency;
+  const auto old_freq_name = settings.active_freq_name;
+  settings.active_frequency = settings.standby_frequency;
+  settings.active_freq_name = settings.standby_freq_name;
+  settings.standby_frequency = old_freq;
+  settings.standby_freq_name = old_freq_name;
+  settings.has_active_frequency.Update(info.clock);
+  settings.has_standby_frequency.Update(info.clock);
+  settings.swap_frequencies.Update(info.clock);
 }
 
 static Device *
