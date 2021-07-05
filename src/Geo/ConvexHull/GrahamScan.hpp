@@ -67,9 +67,6 @@ public:
 
 private:
   bool BuildHull(GrahamPartitions &&partitions) noexcept;
-  bool BuildHalfHull(const SearchPoint &left, const SearchPoint &right,
-                     std::vector<SearchPoint> &&input,
-                     std::vector<SearchPoint> &output, int factor);
 };
 
 

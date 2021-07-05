@@ -160,35 +160,11 @@ PartitionPoints(const std::vector<SearchPoint> &src, double tolerance) noexcept
   return result;
 }
 
-bool
-GrahamScan::BuildHull(GrahamPartitions &&partitions) noexcept
-{
-  //
-  // Building the hull consists of two procedures: building the lower
-  // and then the upper hull. The two procedures are nearly identical -
-  // the main difference between the two is the test for convexity. When
-  // building the upper hull, our rull is that the middle point must
-  // always be *above* the line formed by its two closest
-  // neighbors. When building the lower hull, the rule is that point
-  // must be *below* its two closest neighbors. We pass this information
-  // to the building routine as the last parameter, which is either -1
-  // or 1.
-  //
-
-  bool lower_pruned = BuildHalfHull(partitions.left, partitions.right,
-                                    std::move(partitions.lower),
-                                    lower_hull, 1);
-  bool upper_pruned = BuildHalfHull(partitions.left, partitions.right,
-                                    std::move(partitions.upper),
-                                    upper_hull, -1);
-
-  return lower_pruned || upper_pruned;
-}
-
-bool
-GrahamScan::BuildHalfHull(const SearchPoint &left, const SearchPoint &right,
-                          std::vector<SearchPoint> &&input,
-                          std::vector<SearchPoint> &output, int factor)
+static bool
+BuildHalfHull(const SearchPoint &left, const SearchPoint &right,
+              std::vector<SearchPoint> &&input,
+              std::vector<SearchPoint> &output,
+              double tolerance, int factor) noexcept
 {
   //
   // This is the method that builds either the upper or the lower half convex
@@ -242,6 +218,31 @@ GrahamScan::BuildHalfHull(const SearchPoint &left, const SearchPoint &right,
   }
 
   return pruned;
+}
+
+bool
+GrahamScan::BuildHull(GrahamPartitions &&partitions) noexcept
+{
+  //
+  // Building the hull consists of two procedures: building the lower
+  // and then the upper hull. The two procedures are nearly identical -
+  // the main difference between the two is the test for convexity. When
+  // building the upper hull, our rull is that the middle point must
+  // always be *above* the line formed by its two closest
+  // neighbors. When building the lower hull, the rule is that point
+  // must be *below* its two closest neighbors. We pass this information
+  // to the building routine as the last parameter, which is either -1
+  // or 1.
+  //
+
+  bool lower_pruned = BuildHalfHull(partitions.left, partitions.right,
+                                    std::move(partitions.lower),
+                                    lower_hull, tolerance, 1);
+  bool upper_pruned = BuildHalfHull(partitions.left, partitions.right,
+                                    std::move(partitions.upper),
+                                    upper_hull, tolerance, -1);
+
+  return lower_pruned || upper_pruned;
 }
 
 bool
