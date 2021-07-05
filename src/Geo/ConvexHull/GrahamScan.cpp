@@ -25,9 +25,8 @@
 
 #include <algorithm>
 
-[[gnu::const]]
-static int
-Sign(double value, double tolerance)
+static constexpr int
+Sign(double value, double tolerance) noexcept
 {
   if (value > tolerance)
     return 1;
@@ -37,9 +36,10 @@ Sign(double value, double tolerance)
   return 0;
 }
 
+[[gnu::pure]]
 static int
 Direction(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
-          double tolerance)
+          double tolerance) noexcept
 {
   //
   // In this program we frequently want to look at three consecutive
