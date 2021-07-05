@@ -137,7 +137,7 @@ GrahamScan::PartitionPoints()
 
 }
 
-void
+bool
 GrahamScan::BuildHull()
 {
   //
@@ -152,11 +152,13 @@ GrahamScan::BuildHull()
   // or 1.
   //
 
-  BuildHalfHull(lower_partition_points, lower_hull, 1);
-  BuildHalfHull(upper_partition_points, upper_hull, -1);
+  bool lower_pruned = BuildHalfHull(lower_partition_points, lower_hull, 1);
+  bool upper_pruned = BuildHalfHull(upper_partition_points, upper_hull, -1);
+
+  return lower_pruned || upper_pruned;
 }
 
-void
+bool
 GrahamScan::BuildHalfHull(std::vector<SearchPoint*> input,
                           std::vector<SearchPoint*> &output, int factor)
 {
@@ -180,6 +182,8 @@ GrahamScan::BuildHalfHull(std::vector<SearchPoint*> input,
   input.push_back(&right);
   output.push_back(&left);
 
+  bool pruned = false;
+
   //
   // The construction loop runs until the input is exhausted
   //
@@ -202,8 +206,11 @@ GrahamScan::BuildHalfHull(std::vector<SearchPoint*> input,
         break;
 
       output.erase(output.begin() + end - 1);
+      pruned = true;
     }
   }
+
+  return pruned;
 }
 
 bool
@@ -215,7 +222,10 @@ GrahamScan::PruneInterior()
   }
 
   PartitionPoints();
-  BuildHull();
+
+  if (!BuildHull())
+    /* nothing was pruned */
+    return false;
 
   SearchPointVector res;
   res.reserve(size);
@@ -227,10 +237,6 @@ GrahamScan::PruneInterior()
     res.push_back(*upper_hull[i]);
 
   assert(res.size() <= size);
-
-  if (res.size() == size)
-    return false;
-
   raw_vector.swap(res);
   return true;
 }
