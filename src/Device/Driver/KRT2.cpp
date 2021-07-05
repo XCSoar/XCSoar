@@ -152,6 +152,11 @@ public:
                                    const TCHAR *name,
                                    OperationEnvironment &env) override;
   /**
+   * Exchanges active and standby frequencies on the radio.
+   */
+  virtual bool ExchangeRadioFrequencies(OperationEnvironment &env) override;
+
+  /**
    * Receives and handles data from the radio.
    *
    * The function parses messages send by the radio.
@@ -474,6 +479,15 @@ KRT2Device::PutStandbyFrequency(RadioFrequency frequency,
                                 OperationEnvironment &env)
 {
   return PutFrequency('R', frequency, name, env);
+}
+
+bool
+KRT2Device::ExchangeRadioFrequencies(OperationEnvironment &env)
+{
+  stx_msg msg;
+  msg.command = 'C';
+
+  return Send((uint8_t *) &msg, sizeof(msg), env);
 }
 
 static Device *
