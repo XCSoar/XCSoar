@@ -71,6 +71,24 @@ GrahamScan::GrahamScan(SearchPointVector &sps, double sign_tolerance)
 {
 }
 
+[[gnu::pure]]
+static auto
+Sorted(std::vector<SearchPoint> v) noexcept
+{
+  std::sort(v.begin(), v.end(), [](const SearchPoint &sp1, const SearchPoint &sp2){
+    const auto &gp1 = sp1.GetLocation();
+    const auto &gp2 = sp2.GetLocation();
+    if (gp1.longitude < gp2.longitude)
+      return true;
+    else if (gp1.longitude == gp2.longitude)
+      return gp1.latitude < gp2.latitude;
+    else
+      return false;
+  });
+
+  return v;
+}
+
 void
 GrahamScan::PartitionPoints()
 {
@@ -92,17 +110,7 @@ GrahamScan::PartitionPoints()
   //
   // Step one in partitioning the points is to sort the raw data
   //
-  std::vector<SearchPoint> raw_points{raw_vector};
-  std::sort(raw_points.begin(), raw_points.end(), [](const SearchPoint &sp1, const SearchPoint &sp2){
-    const auto &gp1 = sp1.GetLocation();
-    const auto &gp2 = sp2.GetLocation();
-    if (gp1.longitude < gp2.longitude)
-      return true;
-    else if (gp1.longitude == gp2.longitude)
-      return gp1.latitude < gp2.latitude;
-    else
-      return false;
-  });
+  const auto raw_points = Sorted(raw_vector);
 
   //
   // The the far left and far right points, remove them from the
