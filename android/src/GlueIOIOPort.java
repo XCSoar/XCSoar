@@ -128,14 +128,12 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
   }
 
   @Override public int getState() {
-    boolean ready;
     synchronized(this) {
-      ready = connected && !constructing;
+      if (!connected || constructing)
+        return STATE_LIMBO;
     }
 
-    return ready
-      ? super.getState()
-      : STATE_LIMBO;
+    return super.getState();
   }
 
   @Override public int getBaudRate() {
