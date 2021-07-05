@@ -21,7 +21,6 @@ Copyright_License {
 }
 */
 
-#include "Geo/ConvexHull/GrahamScan.hpp"
 #include "Geo/SearchPointVector.hpp"
 #include "TestUtil.hpp"
 
@@ -56,8 +55,7 @@ TestNotPruned()
   v.emplace_back(SP(105, 105));
   v.emplace_back(SP(105, 100));
 
-  GrahamScan g(v);
-  ok1(!g.PruneInterior());
+  ok1(!v.PruneInterior());
   ok1(v.size() == 4);
 }
 
@@ -71,8 +69,7 @@ TestPruned1()
   v.emplace_back(SP(105, 100));
   v.emplace_back(SP(102, 104));
 
-  GrahamScan g(v);
-  ok1(g.PruneInterior());
+  ok1(v.PruneInterior());
   ok1(v.size() == 4);
   ok1(!Contains(v, SP(102, 104)));
 }
@@ -90,8 +87,7 @@ TestPruned2()
   v.emplace_back(SP(40, 17));
   v.emplace_back(SP(154, 149));
 
-  GrahamScan g(v);
-  ok1(!g.PruneInterior());
+  ok1(!v.PruneInterior());
 }
 
 int

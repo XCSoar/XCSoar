@@ -65,12 +65,6 @@ Direction(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
   return Sign(a - b, tolerance);
 }
 
-GrahamScan::GrahamScan(SearchPointVector &sps, double sign_tolerance)
-  :raw_vector(sps), size(sps.size()),
-   tolerance(sign_tolerance)
-{
-}
-
 [[gnu::pure]]
 static auto
 Sorted(std::vector<SearchPoint> v) noexcept
@@ -257,9 +251,9 @@ BuildHull(GrahamPartitions &&partitions, double tolerance) noexcept
 }
 
 bool
-GrahamScan::PruneInterior()
+PruneInterior(SearchPointVector &raw_vector, double tolerance) noexcept
 {
-  if (size < 3) {
+  if (raw_vector.size() < 3) {
     return false;
     // nothing to do
   }
@@ -271,7 +265,7 @@ GrahamScan::PruneInterior()
     return false;
 
   SearchPointVector res;
-  res.reserve(size);
+  res.reserve(raw_vector.size());
 
   for (unsigned i = 0; i + 1 < hull.lower.size(); i++)
     res.push_back(hull.lower[i]);
@@ -279,7 +273,7 @@ GrahamScan::PruneInterior()
   for (unsigned i = hull.upper.size() - 1; i >= 1; i--)
     res.push_back(hull.upper[i]);
 
-  assert(res.size() <= size);
+  assert(res.size() <= raw_vector.size());
   raw_vector.swap(res);
   return true;
 }

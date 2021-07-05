@@ -30,8 +30,7 @@
 bool 
 SearchPointVector::PruneInterior()
 {
-  GrahamScan gs(*this);
-  return gs.PruneInterior();
+  return ::PruneInterior(*this);
 }
 
 bool
@@ -41,8 +40,7 @@ SearchPointVector::ThinToSize(const unsigned max_size)
   unsigned i = 2;
   bool retval = false;
   while (size() > max_size) {
-    GrahamScan gs(*this, tolerance * i);
-    retval |= gs.PruneInterior();
+    retval |= ::PruneInterior(*this, tolerance * i);
     i *= i;
   }
   return retval;
