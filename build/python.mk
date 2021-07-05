@@ -31,6 +31,7 @@ PYTHON_SOURCES = \
 	$(PYTHON_SRC)/Util.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskBehaviour.cpp \
 	$(SRC)/Logger/Settings.cpp \
+	$(SRC)/Cloud/weglide/WeGlideSettings.cpp \
 	$(SRC)/TeamCode/Settings.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
