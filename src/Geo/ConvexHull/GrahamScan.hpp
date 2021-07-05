@@ -23,15 +23,9 @@
 #ifndef GRAHAM_SCAN_HPP
 #define GRAHAM_SCAN_HPP
 
-#include "Geo/SearchPoint.hpp"
 #include "util/NonCopyable.hpp"
 
-#include <vector>
-
 class SearchPointVector;
-class SearchPoint;
-struct GeoPoint;
-struct GrahamPartitions;
 
 /**
  * Class used to build convex hulls from vector.  This may prune
@@ -41,8 +35,6 @@ struct GrahamPartitions;
  */
 class GrahamScan: private NonCopyable
 {
-  std::vector<SearchPoint> lower_hull;
-  std::vector<SearchPoint> upper_hull;
   SearchPointVector &raw_vector;
   const unsigned size;
   const double tolerance;
@@ -64,10 +56,6 @@ public:
    * @return changed Return status as to whether input vector was altered (pruned) or not
    */
   bool PruneInterior();
-
-private:
-  bool BuildHull(GrahamPartitions &&partitions) noexcept;
 };
-
 
 #endif

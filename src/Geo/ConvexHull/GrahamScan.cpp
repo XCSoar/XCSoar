@@ -220,8 +220,15 @@ BuildHalfHull(const SearchPoint &left, const SearchPoint &right,
   return pruned;
 }
 
-bool
-GrahamScan::BuildHull(GrahamPartitions &&partitions) noexcept
+struct GrahamHull {
+  std::vector<SearchPoint> lower;
+  std::vector<SearchPoint> upper;
+  bool pruned;
+};
+
+[[gnu::pure]]
+static GrahamHull
+BuildHull(GrahamPartitions &&partitions, double tolerance) noexcept
 {
   //
   // Building the hull consists of two procedures: building the lower
@@ -235,14 +242,18 @@ GrahamScan::BuildHull(GrahamPartitions &&partitions) noexcept
   // or 1.
   //
 
+  GrahamHull hull;
+
   bool lower_pruned = BuildHalfHull(partitions.left, partitions.right,
                                     std::move(partitions.lower),
-                                    lower_hull, tolerance, 1);
+                                    hull.lower, tolerance, 1);
   bool upper_pruned = BuildHalfHull(partitions.left, partitions.right,
                                     std::move(partitions.upper),
-                                    upper_hull, tolerance, -1);
+                                    hull.upper, tolerance, -1);
 
-  return lower_pruned || upper_pruned;
+  hull.pruned = lower_pruned || upper_pruned;
+
+  return hull;
 }
 
 bool
@@ -253,18 +264,20 @@ GrahamScan::PruneInterior()
     // nothing to do
   }
 
-  if (!BuildHull(PartitionPoints(raw_vector, tolerance)))
+  const auto hull = BuildHull(PartitionPoints(raw_vector, tolerance),
+                              tolerance);
+  if (!hull.pruned)
     /* nothing was pruned */
     return false;
 
   SearchPointVector res;
   res.reserve(size);
 
-  for (unsigned i = 0; i + 1 < lower_hull.size(); i++)
-    res.push_back(lower_hull[i]);
+  for (unsigned i = 0; i + 1 < hull.lower.size(); i++)
+    res.push_back(hull.lower[i]);
 
-  for (unsigned i = upper_hull.size() - 1; i >= 1; i--)
-    res.push_back(upper_hull[i]);
+  for (unsigned i = hull.upper.size() - 1; i >= 1; i--)
+    res.push_back(hull.upper[i]);
 
   assert(res.size() <= size);
   raw_vector.swap(res);
