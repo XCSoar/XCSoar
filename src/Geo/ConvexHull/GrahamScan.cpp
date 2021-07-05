@@ -209,12 +209,6 @@ GrahamScan::BuildHalfHull(std::vector<SearchPoint*> input,
 bool
 GrahamScan::PruneInterior()
 {
-  SearchPointVector res;
-
-  /* the result is usually one more than the input vector - is that a
-   bug? */
-  res.reserve(size + 1);
-
   if (size < 3) {
     return false;
     // nothing to do
@@ -222,6 +216,12 @@ GrahamScan::PruneInterior()
 
   PartitionPoints();
   BuildHull();
+
+  SearchPointVector res;
+
+  /* the result is usually one more than the input vector - is that a
+   bug? */
+  res.reserve(size + 1);
 
   for (unsigned i = 0; i + 1 < lower_hull.size(); i++)
     res.push_back(*lower_hull[i]);
