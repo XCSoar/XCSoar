@@ -23,7 +23,7 @@
 #include "GrahamScan.hpp"
 #include "Geo/SearchPointVector.hpp"
 
-#include <list>
+#include <algorithm>
 
 [[gnu::const]]
 static int
@@ -92,8 +92,8 @@ GrahamScan::PartitionPoints()
   //
   // Step one in partitioning the points is to sort the raw data
   //
-  std::list<SearchPoint> raw_points{raw_vector.begin(), raw_vector.end()};
-  raw_points.sort([](const SearchPoint &sp1, const SearchPoint &sp2){
+  std::vector<SearchPoint> raw_points{raw_vector};
+  std::sort(raw_points.begin(), raw_points.end(), [](const SearchPoint &sp1, const SearchPoint &sp2){
     const auto &gp1 = sp1.GetLocation();
     const auto &gp2 = sp2.GetLocation();
     if (gp1.longitude < gp2.longitude)
