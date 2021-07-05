@@ -41,10 +41,6 @@ struct GrahamPartitions;
  */
 class GrahamScan: private NonCopyable
 {
-  SearchPoint left;
-  SearchPoint right;
-  std::vector<SearchPoint> upper_partition_points;
-  std::vector<SearchPoint> lower_partition_points;
   std::vector<SearchPoint> lower_hull;
   std::vector<SearchPoint> upper_hull;
   SearchPointVector &raw_vector;
