@@ -27,6 +27,8 @@ Copyright_License {
 #include <tchar.h>
 #include <string.h>
 
+#include <array>
+
 /**
  * Data of an item in the mode menu.
  */
@@ -65,7 +67,7 @@ public:
   };
 
 protected:
-  MenuItem items[MAX_ITEMS];
+  std::array<MenuItem, MAX_ITEMS> items;
 
 public:
   void Clear() noexcept;

@@ -33,7 +33,7 @@ Menu::Clear() noexcept
 void
 Menu::Add(const TCHAR *label, unsigned location, unsigned event_id) noexcept
 {
-  if (location >= MAX_ITEMS)
+  if (location >= items.size())
     return;
 
   MenuItem &item = items[location];
@@ -45,7 +45,7 @@ Menu::Add(const TCHAR *label, unsigned location, unsigned event_id) noexcept
 int
 Menu::FindByEvent(unsigned event) const noexcept
 {
-  for (unsigned i = 0; i < MAX_ITEMS; ++i)
+  for (std::size_t i = 0; i < items.size(); ++i)
     if (items[i].event == event)
       return i;
 
