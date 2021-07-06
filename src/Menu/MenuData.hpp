@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_MENU_DATA_HPP
 #define XCSOAR_MENU_DATA_HPP
 
-#include "util/Compiler.h"
-
 #include <tchar.h>
 #include <string.h>
 
@@ -51,7 +49,7 @@ public:
    * often, because the variables that the label depends on may change
    * at any time.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsDynamic() const noexcept {
     return label != nullptr && _tcsstr(label, _T("$(")) != nullptr;
   }
@@ -78,7 +76,7 @@ public:
 
   void Add(const TCHAR *label, unsigned location, unsigned event_id) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   int FindByEvent(unsigned event) const noexcept;
 };
 

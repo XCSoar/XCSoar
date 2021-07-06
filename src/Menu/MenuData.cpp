@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "MenuData.hpp"
 
-#include <cassert>
-
 void
 Menu::Clear() noexcept
 {
