@@ -62,9 +62,7 @@ public:
  */
 class Menu {
 public:
-  enum {
-    MAX_ITEMS = 32,
-  };
+  static constexpr std::size_t MAX_ITEMS = 32;
 
 protected:
   std::array<MenuItem, MAX_ITEMS> items;
