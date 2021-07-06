@@ -34,10 +34,6 @@ Copyright_License {
 #include <cassert>
 #include <tchar.h>
 
-#ifdef ENABLE_SDL
-#include <SDL_keycode.h>
-#endif
-
 struct InputConfig {
   // Sensible maximums
 
@@ -147,57 +143,10 @@ struct InputConfig {
   }
 
   [[gnu::pure]]
-  unsigned GetKeyEvent(unsigned mode, unsigned key_code) const noexcept {
-    assert(mode < MAX_MODE);
-
-    unsigned key_code_idx = key_code;
-    auto key_2_event = Key2Event;
-#ifdef ENABLE_SDL
-    if (key_code & SDLK_SCANCODE_MASK) {
-      key_code_idx = key_code & ~SDLK_SCANCODE_MASK;
-      key_2_event = Key2EventNonChar;
-    }
-#endif
-
-#ifdef USE_X11
-    if (key_code_idx >= 0xff00) {
-      key_code_idx -= 0xff00;
-      key_2_event = Key2EventFF00;
-    }
-#endif
-
-    if (key_code_idx >= MAX_KEY)
-      return 0;
-
-    if (mode > 0 && key_2_event[mode][key_code_idx] != 0)
-      return key_2_event[mode][key_code_idx];
-
-    /* fall back to the default mode */
-    return key_2_event[0][key_code_idx];
-  }
+  unsigned GetKeyEvent(unsigned mode, unsigned key_code) const noexcept;
 
   void SetKeyEvent(unsigned mode, unsigned key_code,
-                   unsigned event_id) noexcept {
-    assert(mode < MAX_MODE);
-
-    auto key_2_event = Key2Event;
-#ifdef ENABLE_SDL
-    if (key_code & SDLK_SCANCODE_MASK) {
-      key_2_event = Key2EventNonChar;
-      key_code &= ~SDLK_SCANCODE_MASK;
-    }
-#endif
-
-#ifdef USE_X11
-    if (key_code >= 0xff00) {
-      key_code -= 0xff00;
-      key_2_event = Key2EventFF00;
-    }
-#endif
-
-    if (key_code < MAX_KEY)
-      key_2_event[mode][key_code] = event_id;
-  }
+                   unsigned event_id) noexcept;
 
   [[gnu::pure]]
   const MenuItem &GetMenuItem(unsigned mode,
