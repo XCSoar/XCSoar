@@ -31,7 +31,9 @@ Copyright_License {
 #include "util/TrivialArray.hxx"
 #include "util/TStringView.hxx"
 
+#include <array>
 #include <cassert>
+
 #include <tchar.h>
 
 struct InputConfig {
@@ -85,14 +87,14 @@ struct InputConfig {
   RadixTree<unsigned> Gesture2Event;
 
   // Glide Computer Events
-  unsigned short GC2Event[GCE_COUNT];
+  std::array<short, GCE_COUNT> GC2Event;
 
   // NMEA Triggered Events
-  unsigned short N2Event[NE_COUNT];
+  std::array<short, NE_COUNT> N2Event;
 
   TrivialArray<Event, MAX_EVENTS> events;
 
-  Menu menus[MAX_MODE];
+  std::array<Menu, MAX_MODE> menus;
 
   void SetDefaults() noexcept;
 

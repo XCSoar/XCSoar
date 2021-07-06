@@ -49,15 +49,15 @@ InputConfig::SetDefaults() noexcept
 
   Gesture2Event.Clear();
 
-  std::fill_n(&GC2Event[0], ARRAY_SIZE(GC2Event), 0);
-  std::fill_n(&N2Event[0], ARRAY_SIZE(N2Event), 0);
+  std::fill(GC2Event.begin(), GC2Event.end(), 0);
+  std::fill(N2Event.begin(), N2Event.end(), 0);
 
   /* This is initialized with 1 because event 0 is reserved - it
      stands for "no event" */
   events.resize(1);
 
-  for (auto i = menus, end = menus + MAX_MODE; i != end; ++i)
-    i->Clear();
+  for (auto &i : menus)
+    i.Clear();
 }
 
 unsigned
