@@ -27,7 +27,7 @@ Copyright_License {
 #include <algorithm>
 
 void
-InputConfig::SetDefaults()
+InputConfig::SetDefaults() noexcept
 {
   modes.resize(4);
   modes[0] = _T("default");

@@ -98,7 +98,7 @@ struct InputConfig {
 
   Menu menus[MAX_MODE];
 
-  void SetDefaults();
+  void SetDefaults() noexcept;
 
   gcc_pure
   int LookupMode(TStringView name) const noexcept {
@@ -109,7 +109,7 @@ struct InputConfig {
     return -1;
   }
 
-  int AppendMode(TStringView name) {
+  int AppendMode(TStringView name) noexcept {
     if (modes.full())
       return -1;
 
@@ -118,7 +118,7 @@ struct InputConfig {
   }
 
   gcc_pure
-  int MakeMode(TStringView name) {
+  int MakeMode(TStringView name) noexcept {
     int mode = LookupMode(name);
     if (mode < 0)
       mode = AppendMode(name);
@@ -127,7 +127,7 @@ struct InputConfig {
   }
 
   unsigned AppendEvent(pt2Event handler, const TCHAR *misc,
-                       unsigned next) {
+                       unsigned next) noexcept {
     if (events.full())
       return 0;
 
@@ -140,14 +140,14 @@ struct InputConfig {
   }
 
   void AppendMenu(unsigned mode_id, const TCHAR* label,
-                  unsigned location, unsigned event_id) {
+                  unsigned location, unsigned event_id) noexcept {
     assert(mode_id < MAX_MODE);
 
     menus[mode_id].Add(label, location, event_id);
   }
 
   gcc_pure
-  unsigned GetKeyEvent(unsigned mode, unsigned key_code) const {
+  unsigned GetKeyEvent(unsigned mode, unsigned key_code) const noexcept {
     assert(mode < MAX_MODE);
 
     unsigned key_code_idx = key_code;
@@ -176,7 +176,8 @@ struct InputConfig {
     return key_2_event[0][key_code_idx];
   }
 
-  void SetKeyEvent(unsigned mode, unsigned key_code, unsigned event_id) {
+  void SetKeyEvent(unsigned mode, unsigned key_code,
+                   unsigned event_id) noexcept {
     assert(mode < MAX_MODE);
 
     auto key_2_event = Key2Event;
@@ -199,7 +200,8 @@ struct InputConfig {
   }
 
   gcc_pure
-  const MenuItem &GetMenuItem(unsigned mode, unsigned location) const {
+  const MenuItem &GetMenuItem(unsigned mode,
+                              unsigned location) const noexcept {
     assert(mode < MAX_MODE);
     assert(location < Menu::MAX_ITEMS);
 
