@@ -221,6 +221,7 @@ public:
               OperationEnvironment &env) override;
 
   bool PutVolume(unsigned volume, OperationEnvironment &env) override;
+  bool PutPilotEvent(OperationEnvironment &env) override;
 
   bool EnablePassThrough(OperationEnvironment &env) override;
 

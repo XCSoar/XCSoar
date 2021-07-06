@@ -118,6 +118,18 @@ namespace V7 {
     sprintf(buffer, "PLXV0,QNH,W,%u", QNHinPascal); 
     return PortWriteNMEA(port, buffer, env);
   }
+
+  /**
+   * Send pilotevent to V7 vario 
+   * (needs S10x/S8x firmware 8.01 or newer)
+   */
+  static inline bool
+  PutPilotEvent(OperationEnvironment &env, Port &port)
+  {
+    const char *sentence = "PFLAI,PILOTEVENT";
+
+    return PortWriteNMEA(port, sentence, env);
+  }
 }
 
 #endif

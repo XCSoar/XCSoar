@@ -201,3 +201,12 @@ LXDevice::PutVolume(unsigned volume, OperationEnvironment &env)
 
   return LX1600::SetVolume(port, env, volume);
 }
+
+bool
+LXDevice::PutPilotEvent(OperationEnvironment &env)
+{
+  if (!IsV7())
+    return false;
+
+  return V7::PutPilotEvent(env, port);
+}
