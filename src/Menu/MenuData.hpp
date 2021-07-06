@@ -37,13 +37,12 @@ public:
   const TCHAR *label;
   unsigned event;
 
-  void Clear() {
+  void Clear() noexcept {
     label = NULL;
     event = 0;
   }
 
-  constexpr
-  bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
     return event > 0;
   }
 
@@ -53,7 +52,7 @@ public:
    * at any time.
    */
   gcc_pure
-  bool IsDynamic() const {
+  bool IsDynamic() const noexcept {
     return label != NULL && _tcsstr(label, _T("$(")) != NULL;
   }
 };
@@ -71,16 +70,16 @@ protected:
   MenuItem items[MAX_ITEMS];
 
 public:
-  void Clear();
+  void Clear() noexcept;
 
-  const MenuItem &operator[](unsigned i) const {
+  const MenuItem &operator[](unsigned i) const noexcept {
     return items[i];
   }
 
-  void Add(const TCHAR *label, unsigned location, unsigned event_id);
+  void Add(const TCHAR *label, unsigned location, unsigned event_id) noexcept;
 
   gcc_pure
-  int FindByEvent(unsigned event) const;
+  int FindByEvent(unsigned event) const noexcept;
 };
 
 #endif
