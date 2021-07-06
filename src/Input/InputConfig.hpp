@@ -100,7 +100,7 @@ struct InputConfig {
 
   void SetDefaults() noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   int LookupMode(TStringView name) const noexcept {
     for (unsigned i = 0, size = modes.size(); i < size; ++i)
       if (name.Equals(modes[i].c_str()))
@@ -117,7 +117,7 @@ struct InputConfig {
     return modes.size() - 1;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   int MakeMode(TStringView name) noexcept {
     int mode = LookupMode(name);
     if (mode < 0)
@@ -146,7 +146,7 @@ struct InputConfig {
     menus[mode_id].Add(label, location, event_id);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetKeyEvent(unsigned mode, unsigned key_code) const noexcept {
     assert(mode < MAX_MODE);
 
@@ -199,7 +199,7 @@ struct InputConfig {
       key_2_event[mode][key_code] = event_id;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const MenuItem &GetMenuItem(unsigned mode,
                               unsigned location) const noexcept {
     assert(mode < MAX_MODE);
