@@ -169,7 +169,7 @@ In Ergänzung zum OpenAIR Format wird ebenfalls die Platzfrequenz mit angegeben 
 
 \section{Wegpunktdetails}\label{sec:airfield-details}\index{File-Format!Flugplatz-File}
 
-% Wird damit der Name des Unterkapitels im Inhaltsverzeichnis korrekt dargestellt??? 
+% Wird mit dieser Zeile der Name des Unterkapitels im Inhaltsverzeichnis korrekt dargestellt??? 
 % Statt Flugplatz-Details -> Wegpunktdetails!
 % Und bleibt die Zuordnung bzw. bleiben die Verweise in anderen Kapiteln zu diesem Unterkapitel korrekt erhalten??? 
 %
@@ -182,7 +182,7 @@ Diese zusätzlichen Details werden dann im Wegpunkt-Dialog unter ''Details'' auf
 
 Mit dieser Datei können neben Textinformationen auch Bilder (.jpg, .bmp, .png, ...) oder andere Mediendateien zur Ansicht gebracht werden. Welche Files unterstützt werden, hängt auch vom Betriebssystem ab, und auch, welche Programme/Apps in Betrieb sind. \textcolor{blue}{Dies ist derzeit unter Windows nicht unterstützt.} 
 
-Beispiel für einen einfachen Wegpunkt-Deatail Text-Eintrag für ein Segelfluggelände und ein
+Hier ein Beispiel für einen einfachen Wegpunkt-Deatail Text-Eintrag für ein Segelfluggelände und ein
 Aussenlandefeld:
 
 \begin{verbatim}
@@ -212,51 +212,100 @@ Für die Anzeige von Mediendateien (Bildern etc.) gibt es zwei Möglichkeiten/Be
 
 \begin{itemize}
 \item Anzeige innerhalb von XCSoar mit dem Befehl \verb|image=| gefolgt von Pfad und Namen des Files
-\item Anzeige mit einem (Default-) Viewer des Geräts durch den Befehl \verb|file=| gefolgt von Pfad und Namen des Files
+\item Anzeige mit einem (Default-) Viewer des Geräts durch den Befehl \verb|.cup| gefolgt von Pfad und Namen des Files
 \end{itemize}
 
-Die zweite Möglichkeit ist die flexiblere, es sind damit je nach Gerät und installiertem Viewer verschiedenste Formate wie .pdf oder .mp4 anzeigbar, vor allem aber funktioniert damit die von Android gewohnte Zoom und Pan-Funktion mit zwei Fingern, je nach Viewer, ganz wie gewohnt. 
 
-Die Zoom-Funktion beim internen Viewer (Befehl ''image='') funktioniert nur auf die Mitte des Bildes bezogen, es ist damit kein paning möglich. 
+\achtung {\sl Es ist sicherzustellen, daß keinerlei Leerzeichen in den Filenamen nach \verb|image=| oder \verb|file=|
+auftauchen!!!}
 
-%
+Die zweite Möglichkeit \verb|file=| (ist die flexiblere, es sind damit je nach Gerät und installiertem Viewer verschiedenste Formate wie .pdf oder .mp4 darstellbar, vor allem aber funktioniert damit die von Android gewohnte Zoom und Pan-Funktion mit zwei Fingern, je nach Viewer, ganz wie gewohnt. 
+
+Die Zoom-Funktion beim internen Viewer (Befehl \verb|image=|) funktioniert über zwei Felder (plus / minus) am linken und rechten oberen Bildrand - aber nur auf die Mitte des Bildes bezogen, denn es ist kein paning möglich. Außerdem sollte bei Verwendung des Befehls \verb|image=| die Auflösung der Bilder nicht zu groß sein. 
+Sollte eine Bild trotz korrektem Pfad und Namen einmal nicht angezeigt werden, könnte das auch an der zu hohen Auflösung liegen. Bis ca. 2000x1500 Pixel dürften jedoch keine Probleme auftreten. Mit dem Befehl \verb|file=| hat man hier weniger Einschränkungen. 
+
 % FOLGENDEN ABSATZ STREICHEN,  SOBALD DER BUG BESEITIGT WERDEN KONNTE!!!
 %
 Hinweis: 
-Leider funktioniert der flexiblere Befehl ''file='' bei den neueren XCSoar-Versionen wegen eines Bugs z.Zt. nur bis einschließlich Android-Version 6.x . Wer diese Funktion also mit neueren Android-Geräten Nutzen möchte, sollte z.Zt. noch bei der XCSoar Version 6.8.11 oder früher verbleiben. Denn ab Version 6.8.12 (bis 7.8 - und evtl. auch noch länger) taucht dieser Bug bei Geräten ab Android 7 auf.
+Leider funktioniert der flexiblere Befehl ''file='' bei den neueren XCSoar-Versionen wegen eines Bugs z.Zt. nur bis einschließlich Android-Version 6.x . Wer diese Funktion also mit neueren Android-Gerätennutzen möchte, sollte z.Zt. noch bei der XCSoar Version 6.8.11 oder früher bleiben. Denn ab Version 6.8.12 (bis 7.8 - und evtl. auch noch länger) taucht dieser Bug bei Geräten ab Android 7 auf.
 % 
 % VORHERIGEN ABSATZ STREICHEN,  SOBALD DER BUG BESEITIGT WERDEN KONNTE!!!
 % 
 
-\textcolor{blue}{Außerdem ist die Bildanzeigefunktion derzeit (XCSoar 7.8) unter Windows nicht unterstützt.} 
+\textcolor{blue}{Zu beachten ist, dass die Bildanzeigefunktion derzeit (XCSoar 7.8) unter Windows nicht unterstützt wird.} 
 
-
-\achtung {\sl Es ist sicherzustellen, daß keinerlei Leerzeichen in den Filenamen nach  \verb|image=| oder \verb|file=|
-auftauchen!!!}
 
 Welche Files unterstützt werden, hängt auch vom Betriebssystem ab, und auch, welche Programme/Apps
 in Betrieb sind. ANDROID unterstützt z.B. beim Befehl \verb|image=| die Formate JPEG, png und bmp, beim Befehl \verb|file=| je nach installiertem Viewer auch pdf oder sogar mp4.
 Andere Betriebssysteme können evtl. weniger oder auch andere Formate darstellen.
 
-Die Bilder oder Mediendateien sollten sich am besten in einem Unterordner des Ordners \verb|XCSoarData| befinden, z.B. innerhalb eines selbst angelegten Wegpunkt-Ordners.
+Die Bilder oder Mediendateien sollten sich zur besseren Übersicht in einem Unterordner des Ordners \verb|XCSoarData| befinden, z.B. innerhalb eines selbst angelegten Wegpunkt-Ordners.
 
-Hier nun ein Beispiel für den Einsatz von Bildern mit den beiden oben genannten Befehlen - und gleich mal in Kombination. Die Bilder befinden sich dabei (Android) in: \verb|XCSoarData\WP\MyPic\Mypicture.jpg| 
+
+
+Im Folgenden wird eine Aussen-Landewiese beschrieben unter Nutzung beider Befehle. Es werden dabei drei Bilder bereitgestellt, wahlweise durch direkte Anwahl aus dem Wegpunkt-Detail Feld oder aber durch Weiterblättern über die Schaltflächen \button{$<$} und \button{$>$} am unteren Rand des Fensters. 
+
+Die Bilder selbst befinden sich bei diesem (Android-) Beispiel in: \verb|XCSoarData\WP\MyPic\Mypicture.jpg| 
+
+Der Eintrag im .cup Wegpunkt-File (CUP_Test_01.cup) sieht folgendermaßen aus:
+
+\begin{verbatim}
+"A18Pullach",PULL4546,DE,4750.084N,01200.583E,470m,3,100,300.0m,000.000,"Mehrere Felder, je nach Bewuchs und Windrichtung auswählen.(Die Wiesen nördlich dieses Bereichs haben viele Telefonleitungen im Anflug!)"
+\end{verbatim}
+
+Der damit korrespondierende, ergänzende Eintrag im .txt Wegpunktdetails-File (DESC_Test_01.txt) mit den Bildeinträgen:
 
 \begin{verbatim}
 [A18Pullach]
 file=/WP/MyPic/A18Pullach_01-Uebersicht.jpg
 file=/WP/MyPic/A18Pullach_02-Anflug1.jpg
 file=/WP/MyPic/A18Pullach_05-Loecher.JPG
-image=/WP/MyPic/A18Pullach_01-Uebersicht.jpg
-image=/WP/MyPic/A18Pullach_02-Anflug1.jpg
 image=/WP/MyPic/A18Pullach_05-Loecher.JPG
+image=/WP/MyPic/A18Pullach_02-Anflug1.jpg
+image=/WP/MyPic/A18Pullach_01-Uebersicht.jpg
 
 RWY: 100, Länge 300m, Breite 80m
 ALT: 480m
 ----------
 Landerichtung nur OST, wegen erhöhter Straße und Bäumen am Ostrand des Feldes. Querweg als Schwelle nehmen (zur Not überrollbar) und Baum rechts des Feldes beachten. Sonst Freier Anflug. Teilweise etwas tiefere Löcher vorhanden.
-Bei starkem Westwind, hohem Bewuchs oder wenn Feld überschwemmt sein sollte, anderes Feld wählen. Dann aber ACHTUNG auf die vielen Telefon- und Stromleitungen, vor allem im nördlichen Bereich des Gebietes. Bei Westwind wären die westlich angrenzenden Felder gut, die haben jedoch ebenfalls etwas tiefere Löcher. (Stand 2018_05) 
+Bei starkem Westwind, hohem Bewuchs oder wenn Feld überschwemmt sein sollte, anderes Feld wählen. Dann aber ACHTUNG auf die vielen Telefon- und Stromleitungen, vor allem im nördlichen Bereich des Gebietes. Bei Westwind sind die westlich angrenzenden Felder gut, die haben jedoch ebenfalls etwas tiefere Löcher. (Stand 2018_05) 
 \end{verbatim}
+
+Das lässt sich dann so abrufen:
+
+1. Landewiese in der Karte antippen
+
+ \sketch{figures/dialog-waypointdetails4.png}
+
+2. Auf der sich öffnenden Seite \button{Details} antippen (links unten) - oder einfach auf den blau hervorgehobenen Landewiesennamen tippen.
+
+ \sketch{figures/dialog-waypointdetails4.png}
+
+Es öffnet sich die Seite mit den Basis-Informationen zum Wegpunkt, die im \verb|.cup| file hinterlegt sind.
+
+ \sketch{figures/dialog-waypointdetails4.png}
+
+3. Die Tasten \button{$<$} und \button{$>$} ermöglichen nun das Blättern in den ergänzendenInformationen und in den Bildern.
+
+Über den rechten Pfeil-Button \button{$>$} am unteren Fensterrand blättert man direkt zur nächsten Seite, um die Text-Informationen aus dem Wegpunktdetails .txt file zu erhalten.  
+
+ \sketch{figures/dialog-waypointdetails4.png}
+
+Die mit dem \verb|file=| eingebunden Bilder kann man auf dieser Seite direkt auswählen. Durch Tippen auf den entsprechenden Bild-Link wird der zum Format passende, installierte Viewer gestartet und das Bild/die pdf-Datei angezeigt, frei zoombar inclusive panning.
+
+ \sketch{figures/dialog-waypointdetails4.png}
+ \sketch{figures/dialog-waypointdetails4.png}
+
+Alternativ kann man aber auch über den linken Pfeil-Button \button{$<$} direkt die Bilder erreichen, die über den Befehl \verb|image=| eingebunden sind. Hier wird dann zunächst das letzte Bild der Liste angezeigt, deshalb positioniert man sinnvollerweise die \verb|image=| -Bilder hier in der entsprechenden Anflug-Reihenfolge von hinten. Durch weiteres Blättern nach links werden dann die anderen Bilder angezeigt. (Wie oben erwähnt nicht schwenkbar, aber zoombar zur Mitte hin).
+
+ \sketch{figures/dialog-waypointdetails4.png}
+
+Einmal richtig konfiguriert habe ich damit im Flug in wenigen Sekunden den direkten Zugriff auf notwendige (Aussenlande-) Informationen, ohne lange in eine Katalog blättern zu müssen, um die richtige Seite zu finden.   
+
+
+
+
+
 
 %  SCREEENSHOTS noch einfügen !!!!!!
 %  ##########################################################################
