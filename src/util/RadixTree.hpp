@@ -58,7 +58,8 @@ class RadixTree {
 		V &visitor;
 		const TCHAR *key;
 
-		KeyVisitorAdapter(V &_visitor, const TCHAR *_key)
+		constexpr KeyVisitorAdapter(V &_visitor,
+					    const TCHAR *_key) noexcept
 			:visitor(_visitor), key(_key) {}
 
 		void operator()(const T &value) const {
@@ -74,7 +75,7 @@ class RadixTree {
 		Leaf *next;
 		T value;
 
-		Leaf(Leaf *_next, const T &_value)
+		constexpr Leaf(Leaf *_next, const T &_value) noexcept
 			:next(_next), value(_value) {}
 	};
 
@@ -82,12 +83,9 @@ class RadixTree {
 	 * A linked list of Leaf objects.
 	 */
 	struct LeafList {
-		Leaf *head;
+		Leaf *head = nullptr;
 
-		constexpr
-		LeafList():head(nullptr) {}
-
-		~LeafList() {
+		~LeafList() noexcept {
 			Leaf *next = head;
 			while (next != nullptr) {
 				Leaf *leaf = next;
@@ -97,7 +95,7 @@ class RadixTree {
 			}
 		}
 
-		void Clear() {
+		void Clear() noexcept {
 			Leaf *next = head;
 			while (next != nullptr) {
 				Leaf *leaf = next;
@@ -109,7 +107,7 @@ class RadixTree {
 			head = nullptr;
 		}
 
-		void Swap(LeafList &other) {
+		void Swap(LeafList &other) noexcept {
 			std::swap(head, other.head);
 		}
 
@@ -117,7 +115,7 @@ class RadixTree {
 			head = new Leaf(head, value);
 		}
 
-		bool Remove(const T &value) {
+		bool Remove(const T &value) noexcept {
 			Leaf **leaf_r = &head;
 
 			while (*leaf_r != nullptr) {
@@ -135,20 +133,21 @@ class RadixTree {
 			return false;
 		}
 
-		T *GetFirstPointer() {
+		T *GetFirstPointer() noexcept {
 			return head != nullptr
 				? &head->value
 				: nullptr;
 		}
 
-		const T *GetFirstPointer() const {
+		const T *GetFirstPointer() const noexcept {
 			return head != nullptr
 				? &head->value
 				: nullptr;
 		}
 
 		template<class P>
-		T *GetIf(const P &predicate) {
+		[[gnu::pure]]
+		T *GetIf(const P &predicate) noexcept {
 			for (Leaf *leaf = head; leaf != nullptr; leaf = leaf->next)
 				if (predicate(leaf->value))
 					return &leaf->value;
@@ -157,7 +156,8 @@ class RadixTree {
 		}
 
 		template<class P>
-		const T *GetIf(const P &predicate) const {
+		[[gnu::pure]]
+		const T *GetIf(const P &predicate) const noexcept {
 			for (Leaf *leaf = head; leaf != nullptr; leaf = leaf->next)
 				if (predicate(leaf->value))
 					return &leaf->value;
@@ -188,17 +188,15 @@ class RadixTree {
 	 */
 	struct Node {
 		StaticString<8> label;
-		Node *next_sibling, *children;
+		Node *next_sibling = nullptr, *children = nullptr;
 		LeafList leaves;
 
-		constexpr
-		Node(const TCHAR *_label)
-			:label(_label),
-			 next_sibling(nullptr), children(nullptr) {}
+		constexpr Node(const TCHAR *_label) noexcept
+			:label(_label) {}
 
 		Node(const Node &) = delete;
 
-		~Node() {
+		~Node() noexcept {
 			delete next_sibling;
 			delete children;
 		}
@@ -225,7 +223,7 @@ class RadixTree {
 			return top;
 		}
 
-		void Clear() {
+		void Clear() noexcept {
 			delete children;
 			children = nullptr;
 			leaves.Clear();
@@ -237,7 +235,8 @@ class RadixTree {
 		 * Returns the end of the string if there is a full
 		 * match (even if the node's label is longer).
 		 */
-		const TCHAR *MatchKey(const TCHAR *key) const {
+		[[gnu::pure]]
+		const TCHAR *MatchKey(const TCHAR *key) const noexcept {
 			const TCHAR *l = label.c_str();
 
 			while (!StringIsEmpty(key) && *key == *l) {
@@ -258,7 +257,8 @@ class RadixTree {
 		 * character which is outside of the label's scope.
 		 * Returns nullptr if there is a mismatch.
 		 */
-		const TCHAR *MatchPrefix(const TCHAR *prefix) const {
+		[[gnu::pure]]
+		const TCHAR *MatchPrefix(const TCHAR *prefix) const noexcept {
 			const TCHAR *l = label.c_str();
 
 			while (!StringIsEmpty(prefix) && !StringIsEmpty(l)) {
@@ -272,7 +272,8 @@ class RadixTree {
 			return prefix;
 		}
 
-		T *Get(const TCHAR *key) {
+		[[gnu::pure]]
+		T *Get(const TCHAR *key) noexcept {
 			if (StringIsEmpty(key))
 				/* found */
 				return leaves.GetFirstPointer();
@@ -283,7 +284,8 @@ class RadixTree {
 				: nullptr;
 		}
 
-		const T *Get(const TCHAR *key) const {
+		[[gnu::pure]]
+		const T *Get(const TCHAR *key) const noexcept {
 			if (StringIsEmpty(key))
 				/* found */
 				return leaves.GetFirstPointer();
@@ -295,7 +297,8 @@ class RadixTree {
 		}
 
 		template<class P>
-		T *GetIf(const TCHAR *key, const P &predicate) {
+		[[gnu::pure]]
+		T *GetIf(const TCHAR *key, const P &predicate) noexcept {
 			if (StringIsEmpty(key))
 				/* found */
 				return leaves.GetIf(predicate);
@@ -307,7 +310,9 @@ class RadixTree {
 		}
 
 		template<class P>
-		const T *GetIf(const TCHAR *key, const P &predicate) const {
+		[[gnu::pure]]
+		const T *GetIf(const TCHAR *key,
+			       const P &predicate) const noexcept {
 			if (StringIsEmpty(key))
 				/* found */
 				return leaves.GetIf(predicate);
@@ -318,7 +323,9 @@ class RadixTree {
 				: nullptr;
 		}
 
-		TCHAR *Suggest(const TCHAR *prefix, TCHAR *dest, size_t max_length) const {
+		[[gnu::pure]]
+		TCHAR *Suggest(const TCHAR *prefix, TCHAR *dest,
+			       size_t max_length) const noexcept {
 			if (StringIsEmpty(prefix)) {
 				/* exact match - return the first character of all child
 				   nodes */
@@ -352,7 +359,7 @@ class RadixTree {
 		 * creating a new child node which becomes the parent
 		 * of all this node's children and values.
 		 */
-		void Split(size_t length) {
+		void Split(size_t length) noexcept {
 			assert(length > 0);
 			assert(length < label.length());
 
@@ -376,7 +383,7 @@ class RadixTree {
 		/**
 		 * Remove all values of this node.
 		 */
-		void RemoveValues() {
+		void RemoveValues() noexcept {
 			leaves.Clear();
 		}
 
@@ -386,14 +393,14 @@ class RadixTree {
 		 *
 		 * @return true if a value was found and removed
 		 */
-		bool RemoveValue(const T &value) {
+		bool RemoveValue(const T &value) noexcept {
 			return leaves.Remove(value);
 		}
 
 		/**
 		 * Remove all values with the specified key.
 		 */
-		void RemoveValues(const TCHAR *key) {
+		void RemoveValues(const TCHAR *key) noexcept {
 			assert(key != nullptr);
 
 			if (StringIsEmpty(key)) {
@@ -412,7 +419,7 @@ class RadixTree {
 		 *
 		 * @return true if a value was found and removed
 		 */
-		bool RemoveValue(const TCHAR *key, const T &value) {
+		bool RemoveValue(const TCHAR *key, const T &value) noexcept {
 			assert(key != nullptr);
 
 			if (StringIsEmpty(key)) {
@@ -618,10 +625,12 @@ class RadixTree {
 			Node *node;
 			const TCHAR *key;
 
-			Match(Node *_node, const TCHAR *_key)
+			constexpr Match(Node *_node,
+					const TCHAR *_key) noexcept
 				:node(_node), key(_key) {}
 
-			bool IsFullMatch(const TCHAR *key) const {
+			[[gnu::pure]]
+			bool IsFullMatch(const TCHAR *key) const noexcept {
 				return this->key != key && this->key >= key + node->label.length();
 			}
 		};
@@ -632,7 +641,8 @@ class RadixTree {
 		 * node has no children), and a pointer to the portion
 		 * of the key which was not used yet.
 		 */
-		struct Match FindChild(const TCHAR *key) const {
+		[[gnu::pure]]
+		struct Match FindChild(const TCHAR *key) const noexcept {
 			Node *node = children, *prev = nullptr;
 			while (node != nullptr) {
 				const TCHAR *label = node->label.c_str();
@@ -725,15 +735,15 @@ class RadixTree {
 	Node root;
 
 public:
-	constexpr
-	RadixTree():root(_T("")) {}
+	constexpr RadixTree() noexcept:root(_T("")) {}
 
 	/**
 	 * Gets a value for the specified key.  Returns the parameter
 	 * default_value if the specified key is not present.  If there are
 	 * multiple values, any one is returned.
 	 */
-	T &Get(const TCHAR *key, T &default_value) {
+	[[gnu::pure]]
+	T &Get(const TCHAR *key, T &default_value) noexcept {
 		T *value = root.get(key);
 		return value != nullptr
 			? *value
@@ -745,7 +755,8 @@ public:
 	 * default_value if the specified key is not present.  If there are
 	 * multiple values, any one is returned.
 	 */
-	const T &Get(const TCHAR *key, const T &default_value) const {
+	[[gnu::pure]]
+	const T &Get(const TCHAR *key, const T &default_value) const noexcept {
 		const T *value = root.Get(key);
 		return value != nullptr
 			? *value
@@ -753,7 +764,8 @@ public:
 	}
 
 	template<class P>
-	T &GetIf(const TCHAR *key, T &default_value, const P &predicate) {
+	[[gnu::pure]]
+	T &GetIf(const TCHAR *key, T &default_value, const P &predicate) noexcept {
 		const T *value = root.GetIf(key, predicate);
 		return value != nullptr
 			? *value
@@ -761,8 +773,9 @@ public:
 	}
 
 	template<class P>
+	[[gnu::pure]]
 	const T &GetIf(const TCHAR *key, const T &default_value,
-		       const P &predicate) const {
+		       const P &predicate) const noexcept {
 		const T *value = root.GetIf(key, predicate);
 		return value != nullptr
 			? *value
@@ -782,11 +795,13 @@ public:
 	 * @return the destination buffer, or nullptr if the prefix does not
 	 * occur in the tree
 	 */
-	TCHAR *Suggest(const TCHAR *prefix, TCHAR *dest, size_t max_length) const {
+	[[gnu::pure]]
+	TCHAR *Suggest(const TCHAR *prefix, TCHAR *dest,
+		       size_t max_length) const noexcept {
 		return root.Suggest(prefix, dest, max_length);
 	}
 
-	void Clear() {
+	void Clear() noexcept {
 		root.Clear();
 	}
 
@@ -801,7 +816,7 @@ public:
 	/**
 	 * Remove all values with the specified key.
 	 */
-	void Remove(const TCHAR *key) {
+	void Remove(const TCHAR *key) noexcept {
 		assert(key != nullptr);
 
 		root.RemoveValues(key);
@@ -812,7 +827,7 @@ public:
 	 *
 	 * @return true if a value was found and removed
 	 */
-	bool Remove(const TCHAR *key, const T &value) {
+	bool Remove(const TCHAR *key, const T &value) noexcept {
 		assert(key != nullptr);
 
 		return root.RemoveValue(key, value);
