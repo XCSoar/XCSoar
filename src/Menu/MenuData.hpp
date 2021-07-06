@@ -38,7 +38,7 @@ public:
   unsigned event;
 
   void Clear() noexcept {
-    label = NULL;
+    label = nullptr;
     event = 0;
   }
 
@@ -53,7 +53,7 @@ public:
    */
   gcc_pure
   bool IsDynamic() const noexcept {
-    return label != NULL && _tcsstr(label, _T("$(")) != NULL;
+    return label != nullptr && _tcsstr(label, _T("$(")) != nullptr;
   }
 };
 
