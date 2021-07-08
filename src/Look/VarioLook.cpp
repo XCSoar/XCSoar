@@ -53,13 +53,13 @@ VarioLook::Initialise(bool _inverse, bool _colors,
   sink_brush.Create(sink_color);
   lift_brush.Create(lift_color);
 
+  arc_pen.Create(Layout::ScalePenWidth(2), text_color);
+  tick_pen.Create(Layout::ScalePenWidth(1), text_color);
+  arc_label_font.Load(FontDescription{Layout::FontScale(14), true});
+
   thick_background_pen.Create(Layout::Scale(5), background_color);
   thick_sink_pen.Create(Layout::Scale(5), sink_color);
   thick_lift_pen.Create(Layout::Scale(5), lift_color);
-
-  background_bitmap.Load(Units::GetUserVerticalSpeedUnit() == Unit::KNOTS
-                         ? IDB_VARIOSCALEC : IDB_VARIOSCALEA);
-  background_x = inverse ? 58 : 0;
 
   climb_bitmap.Load(inverse ? IDB_CLIMBSMALLINV : IDB_CLIMBSMALL);
 

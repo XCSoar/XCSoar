@@ -1,4 +1,6 @@
 Version 7.11 - not yet released
+* user interface
+  - new vario gauge background
 
 Version 7.10 - 2021/07/09
 * weather
