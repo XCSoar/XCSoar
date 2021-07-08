@@ -169,6 +169,7 @@ protected:
   virtual void OnPaintBuffer(Canvas &canvas) override;
 
 private:
+  void RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept;
   void RenderZero(Canvas &canvas) noexcept;
   void RenderValue(Canvas &canvas, const LabelValueGeometry &g,
                    LabelValueDrawInfo &di,

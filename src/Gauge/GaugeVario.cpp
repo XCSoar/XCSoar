@@ -173,16 +173,21 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
   Create(parent, rc, style);
 }
 
+inline void
+GaugeVario::RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept
+{
+  canvas.Stretch(rc.GetTopLeft(), rc.GetSize(),
+                 look.background_bitmap,
+                 {(int)look.background_x, 0}, {58, 120});
+}
+
 void
 GaugeVario::OnPaintBuffer(Canvas &canvas)
 {
   const PixelRect rc = GetClientRect();
 
   if (!IsPersistent() || background_dirty) {
-    canvas.Stretch(rc.GetTopLeft(), rc.GetSize(),
-                   look.background_bitmap,
-                   {(int)look.background_x, 0}, {58, 120});
-
+    RenderBackground(canvas, rc);
     background_dirty = false;
   }
 
