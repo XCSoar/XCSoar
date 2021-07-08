@@ -92,7 +92,11 @@ public:
   }
 
   bool HasPointer() const noexcept {
-    return n_pointers > 0;
+    /* in libinput, touch screens don't have
+       LIBINPUT_DEVICE_CAP_POINTER, only LIBINPUT_DEVICE_CAP_TOUCH,
+       but for XCSoar, HasPointer() is a superset of
+       HasTouchScreen() */
+    return (n_pointers + n_touch_screens) > 0;
   }
 
   bool HasTouchScreen() const noexcept {
