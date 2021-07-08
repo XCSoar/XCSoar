@@ -1,4 +1,6 @@
 Version 7.10 - not yet released
+* weather
+  - work around connection problems to NOAA server (for METAR/TAF)
 
 Version 7.9 - 2021/07/05
 * fix crash bug in terrain renderer
