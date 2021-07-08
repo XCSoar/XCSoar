@@ -34,7 +34,7 @@ Copyright_License {
 TCHAR asset_number[100] = _T(""); //4G17DW31L0HY");
 
 void
-ReadAssetNumber()
+ReadAssetNumber() noexcept
 {
   _tcscpy(asset_number, _T("AAA"));
 }
@@ -42,7 +42,7 @@ ReadAssetNumber()
 #if defined(USE_CONSOLE) && !defined(KOBO)
 
 bool
-HasPointer()
+HasPointer() noexcept
 {
   return UI::event_queue->HasPointer();
 }
@@ -52,13 +52,13 @@ HasPointer()
 #ifdef USE_LIBINPUT
 
 bool
-HasTouchScreen()
+HasTouchScreen() noexcept
 {
   return UI::event_queue->HasTouchScreen();
 }
 
 bool
-HasKeyboard()
+HasKeyboard() noexcept
 {
   return UI::event_queue->HasKeyboard();
 }
