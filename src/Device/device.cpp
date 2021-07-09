@@ -37,13 +37,7 @@ static void
 devInitOne(DeviceDescriptor &device, const DeviceConfig &config)
 {
   device.SetConfig(config);
-
-  /* this OperationEnvironment instance must be persistent, because
-     DeviceDescriptor::Open() is asynchronous */
-  static PopupOperationEnvironment env;
-
   device.ResetFailureCounter();
-  device.Open(env);
 }
 
 /**
@@ -187,4 +181,9 @@ devRestart()
   devShutdown();
 
   devStartup();
+
+  /* this OperationEnvironment instance must be persistent, because
+     DeviceDescriptor::Open() is asynchronous */
+  static PopupOperationEnvironment env;
+  devices->Open(env);
 }

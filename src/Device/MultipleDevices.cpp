@@ -53,6 +53,13 @@ MultipleDevices::Tick()
 }
 
 void
+MultipleDevices::Open(OperationEnvironment &env) noexcept
+{
+  for (DeviceDescriptor *i : devices)
+    i->Open(env);
+}
+
+void
 MultipleDevices::AutoReopen(OperationEnvironment &env)
 {
   for (DeviceDescriptor *i : devices)

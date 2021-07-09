@@ -3,6 +3,8 @@ Version 7.10 - not yet released
   - work around connection problems to NOAA server (for METAR/TAF)
 * Raspberry Pi
   - fix text input with touch screen
+* Android
+  - fix crash with reconnected USB serial adapter
 
 Version 7.9 - 2021/07/05
 * fix crash bug in terrain renderer
