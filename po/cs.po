@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-31 13:24+0200\n"
-"PO-Revision-Date: 2021-07-06 22:34+0000\n"
+"PO-Revision-Date: 2021-07-09 20:20+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -8418,7 +8418,7 @@ msgstr "Definuje barevnou paletu používanou při zobrazení terénu."
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:233
 #, no-c-format
 msgid "Fixed"
-msgstr "Pevné"
+msgstr "Statické"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:234
 #, no-c-format
@@ -8435,7 +8435,7 @@ msgid ""
 "sun position or a fixed shading from North-West."
 msgstr ""
 "Terén může být stínovaný podél svahů pro indikaci směru větru, pozici slunce "
-"nebo pevně nastavený na stínování ze severozápadu."
+"nebo pevně nastavený na statické stínování ze severozápadu."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:245
 msgid "Terrain contrast"
