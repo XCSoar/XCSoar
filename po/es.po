@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-31 13:24+0200\n"
-"PO-Revision-Date: 2021-07-09 21:27+0000\n"
+"PO-Revision-Date: 2021-07-09 22:27+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -77,7 +77,7 @@ msgstr "Mixto"
 #: src/Task/TypeStrings.cpp:39
 #, no-c-format
 msgid "Touring"
-msgstr "Touring"
+msgstr "Turismo"
 
 #: src/Task/TypeStrings.cpp:52
 #, no-c-format
@@ -92,7 +92,8 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
 msgid "FAI rules, path from a start to two turn points and return."
-msgstr "Reglas FAI, trayecto desde la partida hacia dos vértices y retorno"
+msgstr ""
+"Reglas FAI, trayecto desde un inicio hasta dos puntos de giro y regreso."
 
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
@@ -739,7 +740,7 @@ msgstr "Siguiente Punto de Partida"
 
 #: src/Menu/ExpandMacros.cpp:123 src/Menu/ExpandMacros.cpp:160
 msgid "Start Turnpoint"
-msgstr "Punto de  Viraje de Partida"
+msgstr "Punto de  Viraje de salida"
 
 #: src/Menu/ExpandMacros.cpp:141
 msgid "Arm start"
@@ -3018,13 +3019,13 @@ msgid ""
 msgstr ""
 "Flecha que señala el punto de viraje seleccionado, su nombre y distancia. La "
 "posición utilizada es la posición optimizada del punto de viraje activo en "
-"la tarea, el centro de un GOTO seleccionado o el objetivo dentro del sector "
+"la tarea, el centro de un GOTO seleccionado o el destino dentro del sector "
 "AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, no-c-format
 msgid "Next waypoint arrival time (ground speed)"
-msgstr "Hora de llegada siguiente del waypoint (velocidad del suelo)"
+msgstr "Hora de llegada al siguiente waypoint (velocidad respecto al suelo)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
 #, no-c-format
@@ -3037,7 +3038,7 @@ msgid ""
 "Estimated arrival time at next waypoint, assuming current ground speed is "
 "maintained."
 msgstr ""
-"Tiempo estimado para llegar al siguiente WP, si se mantiene la velocidad "
+"Hora de llegada estimada al siguiente waypoint si se mantiene la velocidad "
 "sobre el terreno."
 
 #: src/InfoBoxes/Content/Factory.cpp:1049
@@ -3341,7 +3342,7 @@ msgstr ""
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:630
 #: src/Dialogs/Task/TaskPointDialog.cpp:548
 msgid "Waypoint"
-msgstr "Punto de Ruta"
+msgstr "Waypoint"
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:84
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:79
@@ -3370,7 +3371,7 @@ msgstr "Borrar"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:292
 #: src/Dialogs/Waypoint/Manager.cpp:262
 msgid "Failed to save waypoints"
-msgstr "Error al guardar puntos de referencia"
+msgstr "No se guardaron los waypoints"
 
 #: src/Input/InputEventsActions.cpp:222
 msgid "Screen Mode Full"
@@ -3386,7 +3387,7 @@ msgstr "InfoBoxes por defecto"
 
 #: src/Input/InputEventsActions.cpp:334
 msgid "No active waypoint!"
-msgstr "¡No hay punto de ruta activo!"
+msgstr "¡No hay ningún waypoint activo!"
 
 #: src/Input/InputEventsActions.cpp:438
 msgid "NMEA log on"
@@ -3575,7 +3576,7 @@ msgstr "Error al guardar el archivo."
 
 #: src/Input/InputEventsSettings.cpp:336
 msgid "Waypoint labels"
-msgstr "Etiquetas de puntos de ruta"
+msgstr "Etiquetas de waypoint"
 
 #: src/Input/InputEventsSettings.cpp:463
 msgid "Topography/Terrain"
@@ -4526,7 +4527,7 @@ msgstr "Unidades"
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:73
 #, no-c-format
 msgid "Waypoints"
-msgstr "Puntos de ruta"
+msgstr "Waypoints"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:104
 msgid "Delete all flights"
@@ -4566,15 +4567,15 @@ msgstr "Error al cargar el archivo."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:46
 msgid "Too many waypoints."
-msgstr "Demasiados puntos de ruta."
+msgstr "Demasiados waypoints."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:50
 msgid "Uploading Waypoints"
-msgstr "Cargando Puntos De Ruta"
+msgstr "Cargando Waypoints"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:56
 msgid "Failed to erase waypoints."
-msgstr "Error al borrar puntos de ruta."
+msgstr "No se borraron los waypoints."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:62
 msgid "Failed to switch baud rate."
@@ -4582,7 +4583,7 @@ msgstr "No se pudo cambiar la velocidad de transmisión."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:75
 msgid "Failed to write waypoint."
-msgstr "No se pudo escribir el punto de ruta."
+msgstr "No se pudo escribir el waypoint."
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:63
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:72
@@ -6721,9 +6722,9 @@ msgid ""
 "If set to ON the final glide bar will show a second arrow indicating the "
 "required height to reach the final waypoint at MC zero."
 msgstr ""
-"Si se establece en ON, la barra de deslizamiento final mostrará una segunda "
-"flecha que indica la altura requerida para alcanzar el punto de referencia "
-"final en MC cero."
+"Si se establece en ON, la barra de planeo final mostrará una segunda flecha "
+"que indica la altura necesaria para alcanzar el punto de referencia final "
+"con MC 0."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:142
 #, fuzzy
@@ -7364,7 +7365,7 @@ msgid ""
 "If true, certain InfoBoxes will have coloured text.  For example, the active "
 "waypoint InfoBox will be blue when the glider is above final glide."
 msgstr ""
-"Si es afirmativo, ciertos InfoBoxes tendrán texto en color.  Por ejemplo, el "
+"Si está activo, algunos InfoBoxes tendrán texto en color. Por ejemplo, el "
 "InfoBox del waypoint activo será azul cuando el planeador esté por encima "
 "del planeo final."
 
@@ -7904,8 +7905,8 @@ msgid ""
 "The alternates will only be sorted by waypoint type (airport/outlanding "
 "field) and arrival height."
 msgstr ""
-"Las alternativas solo se ordenarán por tipo de punto de ruta (aeropuerto / "
-"campo externo) y altura de llegada."
+"Los alternativos solo se ordenarán por tipo de waypoint (aeropuerto/zona "
+"aterrizable) y altura de llegada."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:82
 #, no-c-format
@@ -7925,7 +7926,7 @@ msgid ""
 "configured home waypoint."
 msgstr ""
 "La clasificación intentará encontrar opciones de aterrizaje en la dirección "
-"actual al waypoint de inicio configurado."
+"actual al waypoint de inicio."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:88
 msgid "Alternates mode"
@@ -7993,7 +7994,7 @@ msgid ""
 "waypoints, their details and airspaces."
 msgstr ""
 "El nombre del archivo (.xcm) que contiene el terreno, la topografía y, "
-"opcionalmente, los puntos de referencia, sus detalles y espacios aéreos."
+"opcionalmente, waypoint, sus detalles y los espacios aéreos."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:74
 msgid ""
@@ -8003,19 +8004,19 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:79
 msgid "More waypoints"
-msgstr "Más puntos de referencia"
+msgstr "Más waypoints"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:80
 msgid ""
 "Secondary waypoints file.  This may be used to add waypoints for a "
 "competition."
 msgstr ""
-"Archivo de waypoints secundarios.  Esto se puede usar para agregar puntos de "
-"referencia para una competencia."
+"Archivo de waypoints secundarios. Se puede usar para agregar puntos de "
+"referencia para una competición."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:85
 msgid "Watched waypoints"
-msgstr "Puntos de referencia vigilados"
+msgstr "Waypoints observados"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:86
 msgid ""
@@ -8053,7 +8054,7 @@ msgid ""
 "information about individual waypoints and airfields."
 msgstr ""
 "El archivo puede contener extractos de suplementos en ruta u otra "
-"información aportada acerca de puntos de ruta y aeródromos individuales."
+"información aportada acerca de waypoints y aeródromos individuales."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:109
 #, fuzzy
@@ -8811,8 +8812,8 @@ msgstr ""
 msgid ""
 "Units used for horizontal distances e.g. range to waypoint, distance to go."
 msgstr ""
-"Unidades utilizadas para distancias horizontales, p. ej. rango al punto de "
-"referencia, distancia a recorrer."
+"Unidades utilizadas para distancias horizontales, p. ej. alcance hacia un "
+"waypoint, distancia a recorrer."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:175
 #, fuzzy
@@ -8904,7 +8905,7 @@ msgstr "Nombre completo"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:88
 #, no-c-format
 msgid "The full name of each waypoint is displayed."
-msgstr "El nombre completo de cada punto de la ruta es visualizado."
+msgstr "Se muestra el nombre completo de cada waypoint."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:90
 #, no-c-format
@@ -8924,8 +8925,7 @@ msgstr "Las primeras 3 letras"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:94
 #, no-c-format
 msgid "The first 3 letters of the waypoint name are displayed."
-msgstr ""
-"Las 3 primeras letras del nombre del punto de referencia son mostradas."
+msgstr "Se muestran las 3 primeras letras del nombre del waypoint."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:96
 #, no-c-format
@@ -8940,7 +8940,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:99
 #, no-c-format
 msgid "No waypoint name is displayed."
-msgstr "No se muestra ningún nombre del punto de referencia."
+msgstr "No se muestra ningún nombre de waypoint."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:102
 msgid "Label format"
@@ -8948,7 +8948,7 @@ msgstr "Formato de la etiqueta"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:102
 msgid "Determines how labels are displayed with each waypoint"
-msgstr "Determina cómo se muestran las etiquetas con cada punto de referencia"
+msgstr "Determina cómo se muestran las etiquetas de cada punto de referencia"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:108
 #, no-c-format
@@ -9005,7 +9005,7 @@ msgstr ""
 msgid "Determines how arrival height is displayed in waypoint labels"
 msgstr ""
 "Determina cómo se muestra la altura de llegada en las etiquetas de los "
-"puntos de referencia"
+"waypoints"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:134
 #, no-c-format
@@ -9024,14 +9024,14 @@ msgstr "Estilo de la etiqueta"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:147
 #, no-c-format
 msgid "Task waypoints & airfields"
-msgstr "Tareas de los puntos de referencia y aeródromos"
+msgstr "Waypoints de la tarea y aeródromos"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:148
 #, no-c-format
 msgid "All waypoints part of a task and all airfields will be displayed."
 msgstr ""
-"Todos los puntos de referencia forman parte de una tarea y se mostrarán "
-"todos los aeródromos."
+"Se mostrarán todos los waypoints que formen parte de una tarea y todos los "
+"aeródromos."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:150
 #, no-c-format
@@ -9042,13 +9042,13 @@ msgstr ""
 #, no-c-format
 msgid "All waypoints part of a task and all landables will be displayed."
 msgstr ""
-"Todos los puntos de referencia forman parte de una tarea y se mostrarán "
-"todos los aterrizables."
+"Se mostrarán todos los waypoints que formen parte de una tarea y todos los "
+"aterrizajes."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:153
 #, no-c-format
 msgid "Task waypoints"
-msgstr "Puntos de referencia de las misiones"
+msgstr "Waypoints de la tarea"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:154
 #, no-c-format
@@ -9068,10 +9068,10 @@ msgid ""
 "If the waypoint is blocked by a mountain the green circle will be red "
 "instead."
 msgstr ""
-"Los aeropuertos y los campos exteriores se muestran como círculos púrpuras. "
-"Si se puede alcanzar el punto de referencia, se agrega un círculo verde más "
-"grande detrás del púrpura. Si el punto de referencia está bloqueado por una "
-"montaña, el círculo verde será -en su lugar- rojo."
+"Los aeropuertos y las zonas aterrizables se muestran como círculos púrpuras. "
+"Si se puede alcanzar el waypoint, se agrega un círculo verde más grande por "
+"detrás del púrpura. Si el waypoint está bloqueado por una montaña, el "
+"círculo será verde en lugar de rojo."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:172
 #, no-c-format
@@ -9111,8 +9111,8 @@ msgid ""
 msgstr ""
 "Hay tres estilos disponibles: círculos púrpuras (estilo WinPilot), un estilo "
 "de alto contraste (monocromo) o naranja. La representación difiere sea para "
-"un campo aterrizable o un aeropuerto. Todos los estilos marcan los puntos de "
-"referencia a su alcance en verde."
+"un campo aterrizable o un aeropuerto. Todos los estilos marcan los waypoint "
+"al alcance en verde."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:188
 msgid "Detailed landables"
