@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-31 13:24+0200\n"
-"PO-Revision-Date: 2021-07-09 20:20+0000\n"
+"PO-Revision-Date: 2021-07-09 21:27+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -1044,8 +1044,8 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
-"Verdadero rumbo del siguiente punto de ruta. Para las AAT, ésta es el "
-"verdadero rumbo al objetivo dentro del área."
+"Rumbo verdadero al siguiente waypoint. Para las AAT, rumbo verdadero al "
+"destino dentro del área."
 
 #: src/InfoBoxes/Content/Factory.cpp:170
 #, no-c-format
@@ -1202,8 +1202,8 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
-"La distancia al punto de ruta seleccionado actualmente. Para las AAT, ésta "
-"es la distancia al objetivo dentro del área."
+"Distancia al waypoint seleccionado. Para las AAT, distancia al destino "
+"dentro del área."
 
 #: src/InfoBoxes/Content/Factory.cpp:235
 #, no-c-format
@@ -1221,9 +1221,8 @@ msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height. "
 "For AAT tasks, the target within the AAT sector is used."
 msgstr ""
-"Altitud de llegada en el siguiente punto de ruta en relación con la altura "
-"de llegada de seguridad. Para las AAT, se utiliza el objetivo dentro del "
-"área."
+"Altitud de llegada en el siguiente waypoint respecto a la altura de llegada "
+"de seguridad. Para las AAT, se utiliza el destino dentro del área."
 
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
@@ -1247,7 +1246,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:253
 #, no-c-format
 msgid "Next waypoint"
-msgstr "Siguiente punto de ruta"
+msgstr "Siguiente waypoint"
 
 #: src/InfoBoxes/Content/Factory.cpp:254
 #, no-c-format
@@ -1262,11 +1261,10 @@ msgid ""
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
-"El nombre del punto de viraje seleccionado actualmente. Cuando este InfoBox "
-"está activo, el uso de las teclas de cursor arriba / abajo selecciona el "
-"punto de ruta siguiente / anterior en la tarea. (Pantalla táctil / PC "
-"solamente) Al presionar la tecla Entrar se muestran los detalles del punto "
-"de ruta."
+"El nombre del punto de viraje seleccionado. Cuando este InfoBox está activo, "
+"usando las teclas de cursor arriba/abajo se selecciona el waypoint siguiente/"
+"anterior en la tarea. (Pantalla táctil / PC solamente) Al presionar la tecla "
+"Entrar se muestran los detalles del waypoint."
 
 #: src/InfoBoxes/Content/Factory.cpp:261
 #, no-c-format
@@ -1596,8 +1594,8 @@ msgid ""
 "cruise flight mode, this speed-to-fly is calculated for maintaining "
 "altitude. In final glide mode, this speed-to-fly is calculated for descent."
 msgstr ""
-"La velocidad de vuelo de MacCready para un vuelo óptimo al siguiente punto "
-"de ruta. En el modo de planeo, esta velocidad de vuelo se calcula para "
+"La velocidad de vuelo de MacCready para un vuelo óptimo al siguiente "
+"waypoint. En el modo de planeo, esta velocidad de vuelo se calcula para "
 "mantener la altitud. En el modo de planeo final, esta velocidad de vuelo se "
 "calcula para el descenso."
 
@@ -1671,9 +1669,9 @@ msgid ""
 "the distance to next waypoint divided by the height required to arrive at "
 "the safety arrival height."
 msgstr ""
-"Relación de planeo requerida para alcanzar el siguiente punto de viraje, "
-"dada por la distancia al siguiente punto de viraje dividida por la altura "
-"requerida para llegar a la altura de llegada de seguridad."
+"Relación de planeo necesaria para alcanzar el siguiente waypoint, dada por "
+"la distancia al waypoint dividida por la altura necesaria para llegar a la "
+"altura de llegada de seguridad."
 
 #: src/InfoBoxes/Content/Factory.cpp:457
 #, no-c-format
@@ -1735,8 +1733,8 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
-"Tiempo estimado requerido para alcanzar el siguiente punto de ruta, "
-"suponiendo un rendimiento MacCready ideal del ciclo de planeo / ascenso."
+"Tiempo estimado necesariopara alcanzar el siguiente waypoint, suponiendo un "
+"rendimiento MacCready ideal del ciclo planeo/ascenso."
 
 #: src/InfoBoxes/Content/Factory.cpp:490
 #, no-c-format
@@ -1826,8 +1824,8 @@ msgid ""
 "Estimated arrival local time at next waypoint, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
-"Hora local estimada de llegada al siguiente punto de ruta, suponiendo un "
-"rendimiento MacCready ideal del ciclo de crucero / ascenso."
+"Hora local estimada de llegada al siguiente waypoint, suponiendo un "
+"rendimiento MacCready ideal del ciclo planeo/ascenso."
 
 #: src/InfoBoxes/Content/Factory.cpp:523
 #, no-c-format
@@ -1851,14 +1849,13 @@ msgid ""
 "good is pointing directly at the next waypoint. This bearing takes into "
 "account the curvature of the Earth."
 msgstr ""
-"La diferencia entre el rumbo del planeador, el rumbo del siguiente punto de "
-"ruta, o para tareas AAT, al rumbo al objetivo dentro del área. La navegación "
-"GPS se basa en el rumbo con respecto al suelo, y este rumbo puede diferir "
-"del rumbo del planeador cuando hay viento presente. Los galones apuntan a la "
+"La diferencia entre el rumbo del planeador y el rumbo del siguiente waypoint "
+"o, para tareas AAT, al rumbo al destino dentro del área. La navegación GPS "
+"se basa en el rumbo con respecto al suelo, y este rumbo puede diferir del "
+"rumbo del planeador cuando hay viento presente. Las flechas apuntan en la "
 "dirección que el planeador necesita para corregir la diferencia de rumbo, es "
-"decir, para que el rumbo del planeador sea apuntado directamente al "
-"siguiente punto de ruta. Este rumbo tiene en cuenta la curvatura de la "
-"Tierra."
+"decir, para que el rumbo corregido del planeador apunte directamente al "
+"siguiente waypoint. Este rumbo tiene en cuenta la curvatura de la Tierra."
 
 #: src/InfoBoxes/Content/Factory.cpp:531
 #, no-c-format
@@ -2103,7 +2100,7 @@ msgstr "Home Dist"
 #: src/InfoBoxes/Content/Factory.cpp:629
 #, no-c-format
 msgid "Distance to home waypoint (if defined)."
-msgstr "Distancia al punto de ruta local (si está definido)."
+msgstr "Distancia al waypoint local (si está definido)."
 
 #: src/InfoBoxes/Content/Factory.cpp:635
 #, no-c-format
@@ -2393,8 +2390,8 @@ msgid ""
 "Absolute arrival altitude at the next waypoint in final glide.  For AAT "
 "tasks, the target within the AAT sector is used."
 msgstr ""
-"Altitud de llegada absoluta en el siguiente punto de ruta en el planeo "
-"final. Para las tareas AAT, se utiliza el objetivo dentro del sector AAT."
+"Altitud de llegada absoluta en el siguiente waypoint en planeo final. Para "
+"las tareas AAT, se utiliza el destino dentro del sector AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:765 src/InfoBoxes/Content/Factory.cpp:766
 #, no-c-format
@@ -2586,8 +2583,8 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming current ground "
 "speed is maintained."
 msgstr ""
-"Tiempo estimado requerido para alcanzar el siguiente punto de ruta, "
-"suponiendo que se mantenga la velocidad ground actual."
+"Tiempo estimado necesario para alcanzar el siguiente waypoint, suponiendo "
+"que se mantenga la velocidad relativa al suelo actual."
 
 #: src/InfoBoxes/Content/Factory.cpp:855
 #, no-c-format
@@ -2663,9 +2660,9 @@ msgid ""
 "safety arrival height.  For AAT tasks, the target within the AAT sector is "
 "used."
 msgstr ""
-"Altitud de llegada en el siguiente punto de referencia con el ajuste MC 0 en "
-"relación con la altura de llegada de seguridad. Para las tareas AAT, se "
-"utiliza el objetivo dentro del sector AAT."
+"Altitud de llegada en el siguiente waypoint con el MC a 0, relativa a la "
+"altura de llegada de seguridad. Para las tareas AAT, se utiliza el destino "
+"dentro del sector AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:888
 #, no-c-format
@@ -2880,7 +2877,7 @@ msgstr "Radial"
 #: src/InfoBoxes/Content/Factory.cpp:968
 #, no-c-format
 msgid "True bearing from the next waypoint to your position."
-msgstr "Rumbo verdadero desde el siguiente punto de viraje a tu posición."
+msgstr "Rumbo verdadero desde el siguiente waypoint a tu posición."
 
 #: src/InfoBoxes/Content/Factory.cpp:974 src/InfoBoxes/Content/Factory.cpp:975
 #, no-c-format
@@ -2931,8 +2928,7 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the origin of the AAT sector."
 msgstr ""
-"Distancia al punto de viraje seleccionado. En AAT, la distancia al centro "
-"del área."
+"Distancia al waypoint seleccionado. En AAT, la distancia al centro del área."
 
 #: src/InfoBoxes/Content/Factory.cpp:998
 #, no-c-format
@@ -3003,8 +2999,8 @@ msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
-"Altitud de llegada al punto de viraje final con MC 0  relativo a la altura "
-"de llegada de seguridad."
+"Altitud de llegada al waypoint final con MC 0 relativo a la altura de "
+"llegada de seguridad."
 
 #: src/InfoBoxes/Content/Factory.cpp:1028
 #: src/InfoBoxes/Content/Factory.cpp:1029 src/InfoBoxes/Content/Task.cpp:904
