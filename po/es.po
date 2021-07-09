@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-31 13:24+0200\n"
-"PO-Revision-Date: 2021-07-09 22:53+0000\n"
+"PO-Revision-Date: 2021-07-09 22:59+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -4925,18 +4925,16 @@ msgstr ""
 "distancia y el rumbo al punto, y la elevación."
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:46
-#, fuzzy
 msgid "Show Arrival Altitude"
-msgstr "Mostrar altitud de arrivo"
+msgstr "Mostrar altitud de llegada"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:47
-#, fuzzy
 msgid ""
 "If enabled a row at the top will be added showing you the arrival altitude "
 "at the location."
 msgstr ""
-"Al habilitarse, una columna en la parte superior sera añadida mostrando la "
-"altura de llegada en la ubicacion."
+"Si se activa, una fila en la parte superior sera añadida mostrando la altura "
+"de llegada al punto."
 
 #: src/Dialogs/ColorListDialog.cpp:74
 msgid "Select Color"
