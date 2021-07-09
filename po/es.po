@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-31 13:24+0200\n"
-"PO-Revision-Date: 2021-07-09 22:27+0000\n"
+"PO-Revision-Date: 2021-07-09 22:53+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -4263,12 +4263,12 @@ msgstr "Cliente TCP"
 #. selection UI
 #: src/Dialogs/Device/DeviceEditWidget.cpp:83
 #: src/Dialogs/Device/DeviceEditWidget.cpp:612
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TCP port"
 msgstr "Puerto TCP"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:84
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "UDP port"
 msgstr "Puerto UDP"
 
@@ -4299,7 +4299,6 @@ msgstr ""
 "declaración de tarea o la descarga de vuelo."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:607
-#, fuzzy
 msgid "IP address"
 msgstr "Dirección IP"
 
@@ -4638,32 +4637,26 @@ msgid "PDA baud rate"
 msgstr "Velocidad de transferencia con la PDA"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:98
-#, fuzzy
 msgid "Auto off"
 msgstr "Apagado automático"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:101
-#, fuzzy
 msgid "Auto finish flight"
 msgstr "Finalizar el vuelo automaticamente"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:104
-#, fuzzy
 msgid "Always run"
 msgstr "Siempre encendido"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:107
-#, fuzzy
 msgid "Enable NMEA"
 msgstr "Habilitar NMEA"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:110
-#, fuzzy
 msgid "Recording interval"
 msgstr "Intervalo de grabacion"
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:119
-#, fuzzy
 msgid "Demo"
 msgstr "Demo"
 
@@ -4673,9 +4666,8 @@ msgstr ""
 "¿Establecer un nuevo esquema de audio? Se perderán los valores anteriores."
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:266
-#, fuzzy
 msgid "Vario Configuration"
-msgstr "Configuración del Vario"
+msgstr "Configuración del vario"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:99
 msgid "TE vario"
@@ -4782,54 +4774,49 @@ msgid "Switch"
 msgstr "Cambiar"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:100
-#, fuzzy
 msgid "Vario circling"
-msgstr "Vario circling"
+msgstr "Vario en vuelo circular"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:154
-#, fuzzy
 msgid "Switches"
 msgstr "Interruptores"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:119
-#, fuzzy
 msgid "Stealth mode"
 msgstr "Modo oculto"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:120
-#, fuzzy
 msgid "Threshold"
 msgstr "Umbral"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:121
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:95
-#, fuzzy
 msgid "Range"
-msgstr "Rango"
+msgstr "Alcance"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:124
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Unkown"
 msgstr "Desconocido"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:125
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:182
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Glider"
 msgstr "Planeador"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:126
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tow plane"
-msgstr "Remolque"
+msgstr "Remolcadora"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:127
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Helicopter"
 msgstr "Helicóptero"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:128
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Parachute"
 msgstr "Paracaidas"
 
@@ -4839,26 +4826,26 @@ msgid "Drop plane"
 msgstr "Avión en caída"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:130
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Hang glider"
-msgstr "Aladelta"
+msgstr "Ala delta"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:131
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:183
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Paraglider"
 msgstr "Parapente"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:133
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:184
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Powered aircraft"
-msgstr "Avión propulsado"
+msgstr "Avión de motor"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:134
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Jet aircraft"
-msgstr "Jet aircraft"
+msgstr "Avión de turbina"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:136
 #, no-c-format
@@ -4866,22 +4853,22 @@ msgid "Flying saucer"
 msgstr "Platillo volador"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:137
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Balloon"
 msgstr "Globo"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:138
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Airship"
 msgstr "Aeronave"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:140
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Unmanned aerial vehicle"
 msgstr "Vehículo aéreo no tripulado"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:142
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Static object"
 msgstr "Objeto estatico"
 
@@ -4891,13 +4878,12 @@ msgstr "Objeto estatico"
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:111
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:89
 #: src/Dialogs/Waypoint/WaypointList.cpp:408
-#, fuzzy
 msgid "Type"
 msgstr "Tipo"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:147
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:40
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Logger interval"
 msgstr "Intervalo de grabacion"
 
@@ -4908,13 +4894,11 @@ msgstr "Sin modalidad de seguimiento"
 #: src/Dialogs/MapItemListDialog.cpp:163 src/Dialogs/dlgAnalysis.cpp:466
 #: src/Dialogs/dlgAnalysis.cpp:510 src/Dialogs/dlgAnalysis.cpp:519
 #: src/Dialogs/dlgAnalysis.cpp:528
-#, fuzzy
 msgid "Settings"
 msgstr "Ajustes"
 
 #: src/Dialogs/MapItemListDialog.cpp:167
 #: src/Dialogs/Task/AlternatesListDialog.cpp:103
-#, fuzzy
 msgid "Goto"
 msgstr "Ir a"
 
@@ -4929,9 +4913,8 @@ msgid "Map Item List Settings"
 msgstr ""
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:41
-#, fuzzy
 msgid "Show Location row"
-msgstr "Mostrar filas de localizacion"
+msgstr "Mostrar fila de localización"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:42
 msgid ""
@@ -4939,7 +4922,7 @@ msgid ""
 "bearing to the location and the elevation."
 msgstr ""
 "Si está activada, se añadirá una fila en la parte superior que muestra la "
-"distancia y el rumbo a la ubicación y la elevación."
+"distancia y el rumbo al punto, y la elevación."
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:46
 #, fuzzy
@@ -4956,20 +4939,17 @@ msgstr ""
 "altura de llegada en la ubicacion."
 
 #: src/Dialogs/ColorListDialog.cpp:74
-#, fuzzy
 msgid "Select Color"
 msgstr "Seleccionar Color"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:111
 #: src/Dialogs/Airspace/dlgAirspace.cpp:112 Data/Input/default.xci:436
 #: Data/Input/default.xci:484 Data/Input/default.xci:885
-#, fuzzy
 msgid "Display"
 msgstr "Pantalla"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:115
 #: src/Dialogs/Airspace/dlgAirspace.cpp:116
-#, fuzzy
 msgid "Warn"
 msgstr "Advertencia"
 
@@ -4978,117 +4958,100 @@ msgstr "Advertencia"
 #: src/Dialogs/dlgAnalysis.cpp:562
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:107
 #: Data/Input/default.xci:521
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Airspace"
 msgstr "Espacio aéreo"
 
 #: src/Dialogs/Airspace/dlgAirspacePatterns.cpp:64
-#, fuzzy
 msgid "Select Pattern"
 msgstr "Seleccionar patrón"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:70
-#, fuzzy
 msgid "Radio"
 msgstr "Radio"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:75
-#, fuzzy
 msgid "Top"
 msgstr "Superior"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:78
-#, fuzzy
 msgid "Base"
 msgstr "Base"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:109
-#, fuzzy
 msgid "Airspace Details"
 msgstr "Detalles del Espacio Aéreo"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:305
 #: src/Dialogs/Waypoint/WaypointList.cpp:448
-#, fuzzy
 msgid "No Match!"
 msgstr "No hay resultados!"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:328
-#, fuzzy
 msgid "Heading"
-msgstr "Título"
+msgstr "Rumbo"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:422
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:237
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:127
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:79
 #: src/Dialogs/Waypoint/WaypointList.cpp:405
-#, fuzzy
 msgid "Name"
 msgstr "Nombre"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:439
-#, fuzzy
 msgid "Select Airspace"
 msgstr "Seleccionar Espacio Aéreo"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:35
-#, fuzzy
 msgid "Airspace Renderer Settings"
-msgstr "Ajustes del Renderizado de Espacio Aéreo"
+msgstr "Ajustes de visualización del Espacio Aéreo"
 
 #. Add controls
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:55
-#, fuzzy
 msgid "Change Border Color"
 msgstr "Cambiar el color del borde"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:59
-#, fuzzy
 msgid "Change Fill Color"
-msgstr "Cambiar color de relleno"
+msgstr "Cambiar el color del relleno"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:68
-#, fuzzy
 msgid "Change Fill Brush"
-msgstr "Cambiar paleta de relleno"
+msgstr "Cambiar la paleta del relleno"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:85
-#, fuzzy
 msgid "Border Width"
 msgstr "Ancho del borde"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:86
-#, fuzzy
 msgid ""
 "The width of the border drawn around each airspace. Set this value to zero "
 "to hide the border."
 msgstr "El ancho del borde de cada espacio aereo. Cero para ocultar el borde."
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:91
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Filled"
 msgstr "Relleno"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:92
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Only padding"
 msgstr "Solo relleno"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not filled"
 msgstr "Sin relleno"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:97
-#, fuzzy
 msgid "Fill Mode"
 msgstr "Modo de relleno"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:98
-#, fuzzy
 msgid "Defines how the airspace is filled with the configured color."
-msgstr "Define cómo se llena el espacio aéreo con el color configurado."
+msgstr "Define cómo se rellena el espacio aéreo con el color elegido."
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:104
 #: src/Monitor/AirspaceWarningMonitor.cpp:74
