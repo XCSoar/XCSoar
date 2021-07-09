@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-31 13:24+0200\n"
-"PO-Revision-Date: 2021-07-09 19:46+0000\n"
+"PO-Revision-Date: 2021-07-09 20:20+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -604,7 +604,7 @@ msgstr "¿Quieres descargar otro vuelo?"
 #: src/Waypoint/WaypointGlue.cpp:91
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:37
 msgid "Loading Waypoints..."
-msgstr "Cargando puntos de ruta..."
+msgstr "Cargando Waypoint..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:73
 msgid "Not moving"
@@ -4690,8 +4690,8 @@ msgid ""
 "in circling mode to demonstrate the lift tones.  When not in circling mode, "
 "set this to a realistic negative value so speed command tones are produced."
 msgstr ""
-"Esto crea un Vario de Energía Total aproximado. Puede ser usado para probar "
-"el sonido del vario volando en térmica. En transición ajústelo a un valor "
+"Crea un valor de Vario de Energía Total falso. Puede ser usado para probar "
+"el sonido del vario en modo Ascenso. En otros modos, ajústelo a un valor "
 "realista negativo para reproducir los sonidos del Calculador de velocidad de "
 "vuelo."
 
@@ -4700,94 +4700,87 @@ msgid ""
 "This produces a fake airspeed.  It can be used when not in circling mode to "
 "demonstrate the speed command tones."
 msgstr ""
-"Esto produce un falso velocidad. Puede ser utilizado cuando no se rodeando "
-"el modo de demostrar la velocidad de comando de tonos."
+"Esto produce un valor falso de velocidad. Puede ser utilizado fuera del modo "
+"Ascenso para probar los tonos del Calculador de velocidad de vuelo."
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:112
 msgid "This forces the variometer into circling or cruise mode"
-msgstr "Esto fuerza al variómetro a circular o en modo crucero"
+msgstr "Alterna el variómetro entre los modos Ascenso y Planeo"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:126
 msgid "Vario Demo"
 msgstr "Demo del vario"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Positive"
 msgstr "Positivo"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:37
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Neutral"
-msgstr "Neutral"
+msgstr "Neutro"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Negative"
 msgstr "Negativo"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:39 Data/Input/default.xci:53
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Landing"
 msgstr "Aterrizaje"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:45
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Up"
-msgstr "Subir"
+msgstr "Arriba"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:46
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Middle"
 msgstr "Medio"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:47
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Down"
-msgstr "Bajar"
+msgstr "Bajo"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Locked"
 msgstr "Bloqueado"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not locked"
-msgstr "No esta bloqueado"
+msgstr "No bloqueado"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:72
-#, fuzzy
 msgid "Airbrake locked"
 msgstr "Aerofreno bloqueado"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:73
-#, fuzzy
 msgid "Flaps"
 msgstr "Flaps"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:74
-#, fuzzy
 msgid "Gear down"
-msgstr "Treb afuera"
+msgstr "Tren abajo"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:75
-#, fuzzy
 msgid "Acknowledge"
-msgstr "Reconocer"
+msgstr "Reconocimiento"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:76
-#, fuzzy
 msgid "Repeat"
 msgstr "Repetir"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:77
-#, fuzzy
 msgid "Speed command"
-msgstr "Comando de velocidad"
+msgstr "Calculador de velocidad de vuelo"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:99
-#, fuzzy
 msgid "Switch"
 msgstr "Cambiar"
 
