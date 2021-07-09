@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-31 13:24+0200\n"
-"PO-Revision-Date: 2021-07-08 16:05+0000\n"
+"PO-Revision-Date: 2021-07-09 19:46+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -994,7 +994,7 @@ msgstr "Altura AGL"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:87
 #, no-c-format
 msgid "H AGL"
-msgstr ""
+msgstr "h AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:146
 #, no-c-format
@@ -1005,7 +1005,7 @@ msgid ""
 msgstr ""
 "Esta es la altitud de navegación menos la elevación del terreno obtenida del "
 "archivo de terreno. El valor es de color rojo cuando el planeador está por "
-"debajo de la altura de espacio libre de seguridad del terreno."
+"debajo de la altura de mínima de seguridad del terreno."
 
 #: src/InfoBoxes/Content/Factory.cpp:153
 #, no-c-format
@@ -1055,7 +1055,7 @@ msgstr "RP instantánea"
 #: src/InfoBoxes/Content/Factory.cpp:171
 #, no-c-format
 msgid "GR Inst"
-msgstr ""
+msgstr "RP Inst"
 
 #: src/InfoBoxes/Content/Factory.cpp:172
 #, no-c-format
@@ -2334,23 +2334,23 @@ msgid "Exp1"
 msgstr "Exp1"
 
 #: src/InfoBoxes/Content/Factory.cpp:732
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Contest distance"
-msgstr "Distancia OLC"
+msgstr "Longitud de la tarea"
 
 #: src/InfoBoxes/Content/Factory.cpp:733
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cont Dist"
-msgstr "Fin Dist"
+msgstr "Dist Comp"
 
 #: src/InfoBoxes/Content/Factory.cpp:734
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
 "Contest rule set."
 msgstr ""
 "Evaluación instantánea de la distancia recorrida de acuerdo con el conjunto "
-"de reglas OLC configuradas."
+"de reglas de la competición."
 
 #: src/InfoBoxes/Content/Factory.cpp:740
 #, no-c-format
@@ -2424,6 +2424,9 @@ msgid ""
 "set. In case the FL is calculated from the GPS altitude, the FL label is "
 "coloured red."
 msgstr ""
+"Altitud de Presón expresada como Nivel de Vuelo. Si no se dispone de altitud "
+"barométrica, el FL se deriva de la altitud GPS, suponiendo que se ha "
+"ajustado el QNH correctamente. En este caso la etiqueta del FL es roja."
 
 #: src/InfoBoxes/Content/Factory.cpp:782 src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
@@ -2968,21 +2971,21 @@ msgid "Distance to where take-off was detected."
 msgstr "Distancia al lugar dónde se detectó el decolaje."
 
 #: src/InfoBoxes/Content/Factory.cpp:1013
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Contest speed"
-msgstr "Velocidad OLC"
+msgstr "Velocidad de tarea"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Ćont Speed"
-msgstr "Velocidad"
+msgstr "V Tarea"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown speed according to the configured "
 "Contest rule set."
-msgstr "Velocidad instantánea de acuerdo a las reglas de la OLC."
+msgstr "Velocidad instantánea conforme con las reglas de la tarea."
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
@@ -3071,12 +3074,12 @@ msgid "Climb %"
 msgstr "% Ascenso"
 
 #: src/InfoBoxes/Content/Factory.cpp:1059
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Pie chart of time circling and climbing, circling and descending, and "
 "climbing non-circling."
 msgstr ""
-"Gráfica circular compuesta con tiempo virando en ascenso, virando en "
+"Gráfica circular compuesta con el tiempo virando en ascenso, virando en "
 "descenso y ascendiendo sin virar"
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
@@ -3099,49 +3102,49 @@ msgstr ""
 "esta información no está disponible, el valor mostrado será '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:1073
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Active Radio Frequency"
-msgstr "Cambiar frecuencia activa"
+msgstr "Frecuencia de radio activa"
 
 #: src/InfoBoxes/Content/Factory.cpp:1074
 #, no-c-format
 msgid "Act Freq"
-msgstr ""
+msgstr "Frec Act"
 
 #: src/InfoBoxes/Content/Factory.cpp:1075
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently active Radio Frequency"
-msgstr "Cambiar frecuencia activa"
+msgstr "Frecuencia de radio activa"
 
 #: src/InfoBoxes/Content/Factory.cpp:1080
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Standby Radio Frequency"
-msgstr "Cambiar frecuencia de stand-by"
+msgstr "Frecuencia de radio alternativa"
 
 #: src/InfoBoxes/Content/Factory.cpp:1081
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Stby Freq"
-msgstr "Cambiar frecuencia de stand-by"
+msgstr "Frec Alt"
 
 #: src/InfoBoxes/Content/Factory.cpp:1082
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently standby Radio Frequency"
-msgstr "Cambiar frecuencia de stand-by"
+msgstr "Frecuencia de radio alternativa actual"
 
 #: src/InfoBoxes/Content/Factory.cpp:1088
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Thermal time"
-msgstr "Tiempo en la última térmica"
+msgstr "Tiempo en la térmica actual"
 
 #: src/InfoBoxes/Content/Factory.cpp:1089
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TC Time"
-msgstr "TL Time"
+msgstr "Tiempo Term"
 
 #: src/InfoBoxes/Content/Factory.cpp:1090
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The time spend in the current thermal."
-msgstr "La altitud ganada / perdida en la térmica actual."
+msgstr "El tiempo gastado en la térmica actual."
 
 #: src/InfoBoxes/Content/Alternate.cpp:49
 #: src/Dialogs/Task/AlternatesListDialog.cpp:150 Data/Input/default.xci:388
@@ -4189,9 +4192,8 @@ msgid "Add"
 msgstr "Añadir"
 
 #: src/Dialogs/FileManager.cpp:436
-#, fuzzy
 msgid "Update all"
-msgstr "Actualizar"
+msgstr "Actualizar todo"
 
 #: src/Dialogs/FileManager.cpp:469
 msgid "Queued"
@@ -4223,9 +4225,8 @@ msgid "Error"
 msgstr "Error"
 
 #: src/Dialogs/FileManager.cpp:489
-#, fuzzy
 msgid "Update available"
-msgstr "Sin TAF disponible!"
+msgstr "Actualización disponible"
 
 #: src/Dialogs/FileManager.cpp:757 src/Dialogs/DownloadFilePicker.cpp:386
 #: src/Dialogs/DownloadFilePicker.cpp:388
@@ -4336,15 +4337,14 @@ msgid "Pressure use"
 msgstr "Uso de presión"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:631
-#, fuzzy
 msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
 "pressure. Here you tell the system what pressure this is and what it should "
 "be used for."
 msgstr ""
-"Seleccione el propósito de este sensor de presión. Este sensor mide algo de "
-"presión. Aquí le dice al sistema qué presión tiene y para qué se debe "
-"utilizar."
+"Seleccione el propósito de este sensor de presión. Este sensor mide algun "
+"tipo presión. Aquí le dice al sistema qué tipo de presión debe usar y para "
+"qué se debe utilizar."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:645
 msgid "Driver"
@@ -4356,11 +4356,8 @@ msgid "Passthrough device"
 msgstr "Dispositivo de paso"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:649
-#, fuzzy
 msgid "Whether the device has a passed-through device connected."
-msgstr ""
-"Esta opción le permite configurar si este dispositivo tiene un dispositivo "
-"de paso conectado."
+msgstr "Si este dispositivo tiene un dispositivo de paso conectado."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:660
 msgid "Second Driver"
@@ -4371,31 +4368,28 @@ msgid "Sync. from device"
 msgstr "Sincronizar desde dispositivo"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:663
-#, fuzzy
 msgid ""
 "Tells XCSoar to use settings like the MacCready value, bugs and ballast from "
 "the device."
 msgstr ""
-"Esta opción le permite configurar si XCSoar debe usar configuraciones como "
-"el valor MacCready, insectos y lastre desde el dispositivo."
+"Esta opción le permite configurar XCSoar para que use los valores como "
+"MacCready, insectos y lastre del dispositivo."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:668
 msgid "Sync. to device"
 msgstr "Sincronizar hacia el dispositivo"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:669
-#, fuzzy
 msgid ""
 "Tells XCSoar to send settings like the MacCready value, bugs and ballast to "
 "the device."
 msgstr ""
-"Esta opción le permite configurar si XCSoar debe enviar configuraciones "
-"tales como el valor MacCready, errores y balasto al dispositivo."
+"Esta opción le permite enviar valores como el valor MacCready, insectos y "
+"lastre desde XCSoar al dispositivo."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:675
-#, fuzzy
 msgid "Whether you use a K6Bt to connect the device."
-msgstr "Habilítelo si usa un K6Bt para conectar el dispositivo."
+msgstr "Si usa un K6Bt para conectar el dispositivo."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:284
 msgid "Flight download"
@@ -4639,14 +4633,12 @@ msgid "Serial"
 msgstr "Número de serie"
 
 #: src/Dialogs/Device/LX/V7ConfigWidget.cpp:87
-#, fuzzy
 msgid "GPS baud rate"
-msgstr "Velocidad de transmisión del GPS"
+msgstr "Velocidad de transferencia con el GPS"
 
 #: src/Dialogs/Device/LX/V7ConfigWidget.cpp:88
-#, fuzzy
 msgid "PDA baud rate"
-msgstr "Velocidad de transferencia con el PDA"
+msgstr "Velocidad de transferencia con la PDA"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:98
 #, fuzzy
@@ -4679,9 +4671,9 @@ msgid "Demo"
 msgstr "Demo"
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:152
-#, fuzzy
 msgid "Set new audio scheme?  Old values will be lost."
-msgstr "¿Establecer nuevo esquema de audio? Se perderán los viejos valores."
+msgstr ""
+"¿Establecer un nuevo esquema de audio? Se perderán los valores anteriores."
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:266
 #, fuzzy
@@ -4689,9 +4681,8 @@ msgid "Vario Configuration"
 msgstr "Configuración del Vario"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:99
-#, fuzzy
 msgid "TE vario"
-msgstr "TE vario"
+msgstr "Vario ET"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:100
 msgid ""
@@ -4699,6 +4690,10 @@ msgid ""
 "in circling mode to demonstrate the lift tones.  When not in circling mode, "
 "set this to a realistic negative value so speed command tones are produced."
 msgstr ""
+"Esto crea un Vario de Energía Total aproximado. Puede ser usado para probar "
+"el sonido del vario volando en térmica. En transición ajústelo a un valor "
+"realista negativo para reproducir los sonidos del Calculador de velocidad de "
+"vuelo."
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:107
 msgid ""
@@ -4713,9 +4708,8 @@ msgid "This forces the variometer into circling or cruise mode"
 msgstr "Esto fuerza al variómetro a circular o en modo crucero"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:126
-#, fuzzy
 msgid "Vario Demo"
-msgstr "Vario Demo"
+msgstr "Demo del vario"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:36
 #, fuzzy, no-c-format
