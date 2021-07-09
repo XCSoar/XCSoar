@@ -1,4 +1,4 @@
-Version 7.10 - not yet released
+Version 7.10 - 2021/07/09
 * weather
   - work around connection problems to NOAA server (for METAR/TAF)
 * Raspberry Pi
