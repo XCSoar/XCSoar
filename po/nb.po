@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:24+0200\n"
+"POT-Creation-Date: 2021-07-10 09:50+0200\n"
 "PO-Revision-Date: 2021-01-11 15:32+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/xcsoar/"
@@ -31,8 +31,8 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:148
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:81
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:178
-#: Data/Input/default.xci:358 Data/Input/default.xci:407
-#: Data/Input/default.xci:977 Data/Input/default.xci:1015
+#: Data/Input/default.xci:364 Data/Input/default.xci:413
+#: Data/Input/default.xci:993 Data/Input/default.xci:1031
 #, no-c-format
 msgid "Task"
 msgstr "Oppgave"
@@ -545,11 +545,11 @@ msgstr "Transpondermottaker"
 msgid "Other"
 msgstr "Andre"
 
-#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:109 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr "Start Logger"
 
-#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:138 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr "Stopp Logger"
 
@@ -616,7 +616,7 @@ msgstr "Sirkler ikke"
 #: src/Gauge/BigThermalAssistantWidget.cpp:76
 #: src/Gauge/BigTrafficWidget.cpp:604 src/Dialogs/FileManager.cpp:768
 #: src/Dialogs/Device/DeviceListDialog.cpp:702
-#: src/Dialogs/Device/PortMonitor.cpp:187
+#: src/Dialogs/Device/PortMonitor.cpp:188
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:127
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:99
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:107
@@ -805,7 +805,7 @@ msgstr ""
 "Sving"
 
 #: src/Menu/ExpandMacros.cpp:202 src/Menu/ExpandMacros.cpp:206
-#: src/Dialogs/Device/PortMonitor.cpp:166
+#: src/Dialogs/Device/PortMonitor.cpp:167
 msgid "Resume"
 msgstr "Fortsett"
 
@@ -2685,7 +2685,7 @@ msgstr "Vindpil"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:109
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:235
 #: src/Weather/NOAAFormatter.cpp:98 src/Weather/NOAAFormatter.cpp:105
-#: Data/Input/default.xci:571
+#: Data/Input/default.xci:587
 #, no-c-format
 msgid "Wind"
 msgstr "Vind"
@@ -3005,9 +3005,28 @@ msgstr "TL Tid"
 msgid "The time spend in the current thermal."
 msgstr "Høydeendring i aktuell boble."
 
+#: src/InfoBoxes/Content/Factory.cpp:1096
+#, fuzzy, no-c-format
+msgid "Alternate 2 GR"
+msgstr "Alt. landing 1 GR"
+
+#: src/InfoBoxes/Content/Factory.cpp:1097
+#, fuzzy, no-c-format
+msgid "Altn2 GR"
+msgstr "Alt.L1 GR"
+
+#: src/InfoBoxes/Content/Factory.cpp:1098
+#, fuzzy, no-c-format
+msgid ""
+"Geometric gradient to the arrival height above the second alternate. This is "
+"not adjusted for total energy."
+msgstr ""
+"Geometrisk gradient mot ankomstpunktet over beste alternative landing, ikke "
+"kompensert for farkostens overskuddsenergi."
+
 #: src/InfoBoxes/Content/Alternate.cpp:49
-#: src/Dialogs/Task/AlternatesListDialog.cpp:150 Data/Input/default.xci:388
-#: Data/Input/default.xci:1007
+#: src/Dialogs/Task/AlternatesListDialog.cpp:150 Data/Input/default.xci:394
+#: Data/Input/default.xci:1023
 #, no-c-format
 msgid "Alternates"
 msgstr "Altern. landinger"
@@ -3024,8 +3043,8 @@ msgid "Simulator"
 msgstr "Simulator"
 
 #: src/InfoBoxes/Content/Altitude.cpp:51 src/PageSettings.cpp:60
-#: Data/Input/default.xci:751 Data/Input/default.xci:801
-#: Data/Input/default.xci:843 Data/Input/default.xci:899
+#: Data/Input/default.xci:767 Data/Input/default.xci:817
+#: Data/Input/default.xci:859 Data/Input/default.xci:915
 #, no-c-format
 msgid "Info"
 msgstr "Info"
@@ -3142,8 +3161,8 @@ msgstr ""
 #: src/Dialogs/dlgAnalysis.cpp:514 src/Dialogs/dlgAnalysis.cpp:523
 #: src/Dialogs/dlgAnalysis.cpp:532 src/Dialogs/dlgAnalysis.cpp:542
 #: src/Dialogs/dlgAnalysis.cpp:551 src/Dialogs/dlgAnalysis.cpp:561
-#: src/Dialogs/dlgAnalysis.cpp:709 Data/Input/default.xci:791
-#: Data/Input/default.xci:1198
+#: src/Dialogs/dlgAnalysis.cpp:709 Data/Input/default.xci:807
+#: Data/Input/default.xci:1214
 #, no-c-format
 msgid "Analysis"
 msgstr "Analyse"
@@ -3182,7 +3201,7 @@ msgstr "–"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:88
 #: src/Dialogs/Settings/dlgConfiguration.cpp:101
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:105
-#: Data/Input/default.xci:507 Data/Input/default.xci:1080
+#: Data/Input/default.xci:523 Data/Input/default.xci:1096
 #, no-c-format
 msgid "Terrain"
 msgstr "Terreng"
@@ -3230,42 +3249,42 @@ msgstr "Omplasser"
 msgid "Clear"
 msgstr "Tøm"
 
-#: src/Input/InputEventsActions.cpp:147
+#: src/Input/InputEventsActions.cpp:149
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:292
 #: src/Dialogs/Waypoint/Manager.cpp:262
 #, fuzzy
 msgid "Failed to save waypoints"
 msgstr "Kunne ikke laste ned flytur."
 
-#: src/Input/InputEventsActions.cpp:222
+#: src/Input/InputEventsActions.cpp:261
 msgid "Screen Mode Full"
 msgstr "Helskjerm-modus"
 
-#: src/Input/InputEventsActions.cpp:224
+#: src/Input/InputEventsActions.cpp:263
 msgid "Auxiliary InfoBoxes"
 msgstr "Ekstra InfoBokser"
 
-#: src/Input/InputEventsActions.cpp:226
+#: src/Input/InputEventsActions.cpp:265
 msgid "Default InfoBoxes"
 msgstr "Standard InfoBokser"
 
-#: src/Input/InputEventsActions.cpp:334
+#: src/Input/InputEventsActions.cpp:373
 msgid "No active waypoint!"
 msgstr "Ingen vendepunkt aktiv!"
 
-#: src/Input/InputEventsActions.cpp:438
+#: src/Input/InputEventsActions.cpp:477
 msgid "NMEA log on"
 msgstr "NMEA logger på"
 
-#: src/Input/InputEventsActions.cpp:440
+#: src/Input/InputEventsActions.cpp:479
 msgid "NMEA log off"
 msgstr "NMEA logger av"
 
-#: src/Input/InputEventsActions.cpp:444
+#: src/Input/InputEventsActions.cpp:483
 msgid "Logger on"
 msgstr "Logger på"
 
-#: src/Input/InputEventsActions.cpp:446
+#: src/Input/InputEventsActions.cpp:485
 msgid "Logger off"
 msgstr "Logger av"
 
@@ -3496,16 +3515,16 @@ msgstr "Forhøyning"
 
 #: src/Renderer/MapItemListRenderer.cpp:151
 #: src/Renderer/MapItemListRenderer.cpp:174
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:91
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:242
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:94
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:256
 #, no-c-format
 msgid "AGL"
 msgstr "Over bakken"
 
 #: src/Renderer/MapItemListRenderer.cpp:156
 #: src/Renderer/MapItemListRenderer.cpp:179
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:93
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:244
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:96
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:258
 #, no-c-format
 msgid "MSL"
 msgstr "MSL"
@@ -3920,40 +3939,40 @@ msgstr "Avslutter, lagrer oppgaven..."
 msgid "Unable to open port"
 msgstr "Kan ikke åpne porten"
 
-#: src/Device/Descriptor.cpp:1013 src/Device/Descriptor.cpp:1019
+#: src/Device/Descriptor.cpp:1031 src/Device/Descriptor.cpp:1037
 msgid "Sending declaration"
 msgstr "Sender deklarasjonen"
 
-#: src/Device/Descriptor.cpp:1066 src/Device/Descriptor.cpp:1073
+#: src/Device/Descriptor.cpp:1084 src/Device/Descriptor.cpp:1091
 msgid "Reading flight list"
 msgstr "Leser flyturliste"
 
-#: src/Device/Descriptor.cpp:1097 src/Device/Descriptor.cpp:1104
+#: src/Device/Descriptor.cpp:1115 src/Device/Descriptor.cpp:1122
 msgid "Downloading flight log"
 msgstr "Laster ned tracklog"
 
-#: src/Device/Config.cpp:204 src/Dialogs/Device/DeviceEditWidget.cpp:64
+#: src/Device/Config.cpp:206 src/Dialogs/Device/DeviceEditWidget.cpp:67
 #: src/Dialogs/Device/DeviceListDialog.cpp:424
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:40
 #, no-c-format
 msgid "Disabled"
 msgstr "Deaktivert"
 
-#: src/Device/Config.cpp:223 src/Dialogs/Device/DeviceEditWidget.cpp:69
+#: src/Device/Config.cpp:225 src/Dialogs/Device/DeviceEditWidget.cpp:72
 #, no-c-format
 msgid "Bluetooth server"
 msgstr ""
 
-#: src/Device/Config.cpp:242
+#: src/Device/Config.cpp:244
 msgid "GPS Intermediate Driver"
 msgstr "GPS mellomdriver"
 
-#: src/Device/Config.cpp:245 src/Dialogs/Device/DeviceEditWidget.cpp:66
+#: src/Device/Config.cpp:247 src/Dialogs/Device/DeviceEditWidget.cpp:69
 #, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Innebygd GPS og sensorer"
 
-#: src/Device/Config.cpp:248
+#: src/Device/Config.cpp:250
 msgid "GliderLink traffic receiver"
 msgstr ""
 
@@ -4000,7 +4019,7 @@ msgstr "Prøv igjen"
 #: src/Dialogs/NumberEntry.cpp:102 src/Dialogs/NumberEntry.cpp:142
 #: src/Dialogs/TouchTextEntry.cpp:207 src/Dialogs/TimeEntry.cpp:66
 #: src/Dialogs/GeoPointEntry.cpp:77 src/Dialogs/DownloadFilePicker.cpp:407
-#: Data/Input/default.xci:914
+#: Data/Input/default.xci:930
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -4084,7 +4103,7 @@ msgid "Failed to download the repository index."
 msgstr ""
 
 #: src/Dialogs/FileManager.cpp:767 src/Dialogs/FileManager.cpp:792
-#: src/Dialogs/DownloadFilePicker.cpp:400 Data/Input/default.xci:605
+#: src/Dialogs/DownloadFilePicker.cpp:400 Data/Input/default.xci:621
 msgid "File Manager"
 msgstr "Filbehandler"
 
@@ -4092,58 +4111,58 @@ msgstr "Filbehandler"
 msgid "The file manager is not available on this device."
 msgstr "Filbehandler er ikke tilgjengelig på denne enheten."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:73
+#: src/Dialogs/Device/DeviceEditWidget.cpp:76
 #, no-c-format
 msgid "IOIO switches and Nunchuk"
 msgstr ""
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:75
+#: src/Dialogs/Device/DeviceEditWidget.cpp:78
 #, fuzzy, no-c-format
 msgid "IOIO I²C pressure sensor"
 msgstr "Trykksensor"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:76
+#: src/Dialogs/Device/DeviceEditWidget.cpp:79
 #, no-c-format
 msgid "IOIO voltage sensor"
 msgstr ""
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:79
+#: src/Dialogs/Device/DeviceEditWidget.cpp:82
 #, no-c-format
 msgid "TCP client"
 msgstr "TCP-klient"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
-#: src/Dialogs/Device/DeviceEditWidget.cpp:83
-#: src/Dialogs/Device/DeviceEditWidget.cpp:612
+#: src/Dialogs/Device/DeviceEditWidget.cpp:86
+#: src/Dialogs/Device/DeviceEditWidget.cpp:654
 #, fuzzy, no-c-format
 msgid "TCP port"
 msgstr "TCP Port"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:84
+#: src/Dialogs/Device/DeviceEditWidget.cpp:87
 #, fuzzy, no-c-format
 msgid "UDP port"
 msgstr "UDP-port"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:362
+#: src/Dialogs/Device/DeviceEditWidget.cpp:404
 msgid "Bluetooth LE"
 msgstr "Lavenergi-Blåtann"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:589
+#: src/Dialogs/Device/DeviceEditWidget.cpp:631
 msgid "Port"
 msgstr "Port"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:595
+#: src/Dialogs/Device/DeviceEditWidget.cpp:637
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:95
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:118
 msgid "Baud rate"
 msgstr "Baudrate"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:601
+#: src/Dialogs/Device/DeviceEditWidget.cpp:643
 msgid "Bulk baud rate"
 msgstr "Bulk baud rate"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:602
+#: src/Dialogs/Device/DeviceEditWidget.cpp:644
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
@@ -4151,24 +4170,24 @@ msgstr ""
 "Baud rate som brukes ved overføring av større mengder med data, som "
 "oppgavedeklarasjoner og flyturer."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:607
+#: src/Dialogs/Device/DeviceEditWidget.cpp:649
 #, fuzzy
 msgid "IP address"
 msgstr "IP-adresse"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:617
+#: src/Dialogs/Device/DeviceEditWidget.cpp:659
 msgid "I²C bus"
 msgstr ""
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:617
+#: src/Dialogs/Device/DeviceEditWidget.cpp:659
 msgid "Select the description or bus number that matches your configuration."
 msgstr ""
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:623
+#: src/Dialogs/Device/DeviceEditWidget.cpp:665
 msgid "I²C addr"
 msgstr ""
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:623
+#: src/Dialogs/Device/DeviceEditWidget.cpp:665
 #, fuzzy
 msgid ""
 "The I²C address that matches your configuration. This field is not used when "
@@ -4179,40 +4198,40 @@ msgstr ""
 "valg i «I²C-buss»-feltet ikke er et I²C-bussnummer. I fall du ikke forstår "
 "forrige setning, kan du anta at dette feltet ikke er i bruk."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:631
+#: src/Dialogs/Device/DeviceEditWidget.cpp:673
 msgid "Pressure use"
 msgstr ""
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:631
+#: src/Dialogs/Device/DeviceEditWidget.cpp:673
 msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
 "pressure. Here you tell the system what pressure this is and what it should "
 "be used for."
 msgstr ""
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:645
+#: src/Dialogs/Device/DeviceEditWidget.cpp:687
 msgid "Driver"
 msgstr "Driver"
 
 #. for a passthrough device, offer additional driver
-#: src/Dialogs/Device/DeviceEditWidget.cpp:648
+#: src/Dialogs/Device/DeviceEditWidget.cpp:690
 msgid "Passthrough device"
 msgstr ""
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:649
+#: src/Dialogs/Device/DeviceEditWidget.cpp:691
 msgid "Whether the device has a passed-through device connected."
 msgstr ""
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:660
+#: src/Dialogs/Device/DeviceEditWidget.cpp:702
 #, fuzzy
 msgid "Second Driver"
 msgstr "Driver"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:662
+#: src/Dialogs/Device/DeviceEditWidget.cpp:704
 msgid "Sync. from device"
 msgstr "Synk. fra enhet"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:663
+#: src/Dialogs/Device/DeviceEditWidget.cpp:705
 #, fuzzy
 msgid ""
 "Tells XCSoar to use settings like the MacCready value, bugs and ballast from "
@@ -4221,11 +4240,11 @@ msgstr ""
 "Denne valget lar deg styre om XCSoar skal bruke innstillinger som McCready-"
 "verdier, urenheter, ballast, osv fra enheten."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:668
+#: src/Dialogs/Device/DeviceEditWidget.cpp:710
 msgid "Sync. to device"
 msgstr "Synk. til enhet"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:669
+#: src/Dialogs/Device/DeviceEditWidget.cpp:711
 #, fuzzy
 msgid ""
 "Tells XCSoar to send settings like the MacCready value, bugs and ballast to "
@@ -4234,7 +4253,7 @@ msgstr ""
 "Dette valget lar deg styre om XCSoar skal overføre innstillinger som "
 "McCready-verdier, urenheter, ballast, osv til enheten."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:675
+#: src/Dialogs/Device/DeviceEditWidget.cpp:717
 msgid "Whether you use a K6Bt to connect the device."
 msgstr ""
 
@@ -4247,7 +4266,6 @@ msgstr "Last ned flytur"
 #: src/Dialogs/Device/DeviceListDialog.cpp:545
 #: src/Dialogs/Device/DeviceListDialog.cpp:601
 #: src/Dialogs/Device/DeviceListDialog.cpp:607
-#: src/Dialogs/Device/PortMonitor.cpp:150
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:122
 msgid "Manage"
 msgstr "Administrer"
@@ -4260,6 +4278,7 @@ msgstr "Monitor"
 #: src/Dialogs/Device/DeviceListDialog.cpp:508
 #: src/Dialogs/Device/DeviceListDialog.cpp:516
 #: src/Dialogs/Device/PortMonitor.cpp:142
+#: src/Dialogs/Device/PortMonitor.cpp:150
 msgid "Reconnect"
 msgstr "Koble til igjen"
 
@@ -4347,17 +4366,17 @@ msgstr "Rediger enhet"
 msgid "Communication with this device will be logged for the next %u minutes."
 msgstr ""
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:701 Data/Input/default.xci:555
-#: Data/Input/default.xci:1151
+#: src/Dialogs/Device/DeviceListDialog.cpp:701 Data/Input/default.xci:571
+#: Data/Input/default.xci:1167
 msgid "Devices"
 msgstr "Enheter"
 
 #: src/Dialogs/Device/PortMonitor.cpp:143
-#: src/Dialogs/Device/PortMonitor.cpp:169
+#: src/Dialogs/Device/PortMonitor.cpp:170
 msgid "Pause"
 msgstr "Pause"
 
-#: src/Dialogs/Device/PortMonitor.cpp:181
+#: src/Dialogs/Device/PortMonitor.cpp:182
 msgid "Port monitor"
 msgstr "Port monitor"
 
@@ -4647,7 +4666,7 @@ msgid "Unkown"
 msgstr "Ukjent"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:125
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:182
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:188
 #, no-c-format
 msgid "Glider"
 msgstr ""
@@ -4678,13 +4697,13 @@ msgid "Hang glider"
 msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:131
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:183
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:189
 #, no-c-format
 msgid "Paraglider"
 msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:133
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:184
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:190
 #, no-c-format
 msgid "Powered aircraft"
 msgstr ""
@@ -4783,8 +4802,8 @@ msgid "Select Color"
 msgstr "Velg farge"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:111
-#: src/Dialogs/Airspace/dlgAirspace.cpp:112 Data/Input/default.xci:436
-#: Data/Input/default.xci:484 Data/Input/default.xci:885
+#: src/Dialogs/Airspace/dlgAirspace.cpp:112 Data/Input/default.xci:452
+#: Data/Input/default.xci:500 Data/Input/default.xci:901
 msgid "Display"
 msgstr "Vis"
 
@@ -4797,7 +4816,7 @@ msgstr "Advar"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:102
 #: src/Dialogs/dlgAnalysis.cpp:562
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:107
-#: Data/Input/default.xci:521
+#: Data/Input/default.xci:537
 #, no-c-format
 msgid "Airspace"
 msgstr "Luftrom"
@@ -5132,7 +5151,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:139
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:135
-#: Data/Input/default.xci:631 Data/Input/default.xci:1136
+#: Data/Input/default.xci:647 Data/Input/default.xci:1152
 #, no-c-format
 msgid "Logger"
 msgstr "Logger"
@@ -5252,7 +5271,7 @@ msgstr "Flyplass"
 msgid "Radio frequency"
 msgstr "Radiofrekvens"
 
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:142 Data/Input/default.xci:547
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:142 Data/Input/default.xci:563
 msgid "Plane"
 msgstr "Fly"
 
@@ -5386,7 +5405,7 @@ msgstr "Ny"
 
 #: src/Dialogs/ProfileListDialog.cpp:174 src/Dialogs/ProfileListDialog.cpp:323
 #: src/Dialogs/StartupDialog.cpp:171 src/Dialogs/ProfilePasswordDialog.cpp:88
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:244
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:251
 msgid "Password"
 msgstr "Passord"
 
@@ -5413,7 +5432,7 @@ msgstr ""
 msgid "Delete \"%s\"?"
 msgstr "Slett «%s»?"
 
-#: src/Dialogs/ProfileListDialog.cpp:336 Data/Input/default.xci:589
+#: src/Dialogs/ProfileListDialog.cpp:336 Data/Input/default.xci:605
 #, fuzzy
 msgid "Profiles"
 msgstr "Profil"
@@ -5579,12 +5598,12 @@ msgstr ""
 "høyere verdier for raskere avspilling."
 
 #: src/Dialogs/ReplayDialog.cpp:102 src/Dialogs/ReplayDialog.cpp:126
-#: Data/Input/default.xci:613
+#: Data/Input/default.xci:629
 msgid "Replay"
 msgstr "Spill av"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:60 src/Dialogs/StartupDialog.cpp:93
-#: Data/Input/default.xci:922
+#: Data/Input/default.xci:938
 msgid "Quit"
 msgstr "Avslutt"
 
@@ -5614,16 +5633,16 @@ msgid "Enter a new password"
 msgstr "Skriv inn et nytt passord"
 
 #: src/Dialogs/dlgStatus.cpp:47 src/Dialogs/dlgStatus.cpp:58
-#: src/Dialogs/Weather/WeatherDialog.cpp:58 Data/Input/default.xci:809
-#: Data/Input/default.xci:1206
+#: src/Dialogs/Weather/WeatherDialog.cpp:58 Data/Input/default.xci:825
+#: Data/Input/default.xci:1222
 msgid "Status"
 msgstr "Status"
 
-#: src/Dialogs/dlgStatus.cpp:90 Data/Input/default.xci:563
+#: src/Dialogs/dlgStatus.cpp:90 Data/Input/default.xci:579
 msgid "Flight"
 msgstr ""
 
-#: src/Dialogs/dlgStatus.cpp:93 Data/Input/default.xci:539
+#: src/Dialogs/dlgStatus.cpp:93 Data/Input/default.xci:555
 msgid "System"
 msgstr "System"
 
@@ -5935,7 +5954,7 @@ msgstr "Sett aktiv frekvens"
 msgid "Set Standby Frequency"
 msgstr "Radiofrekvens"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:419 Data/Input/default.xci:1023
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:419 Data/Input/default.xci:1039
 msgid "GoTo"
 msgstr "Gå til"
 
@@ -5943,7 +5962,7 @@ msgstr "Gå til"
 msgid "Delete waypoint?"
 msgstr ""
 
-#: src/Dialogs/Waypoint/Manager.cpp:299 Data/Input/default.xci:597
+#: src/Dialogs/Waypoint/Manager.cpp:299 Data/Input/default.xci:613
 msgid "Waypoints Editor"
 msgstr "Vendepunktsredigering"
 
@@ -7103,8 +7122,8 @@ msgid "Use a recent average of the ground track as basis."
 msgstr "Bruk en fersk gjennomsnittsverdi av bakkesporet som utgangspunkt."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:61
-#: src/Dialogs/Task/TargetDialog.cpp:772 Data/Input/default.xci:425
-#: Data/Input/default.xci:1031
+#: src/Dialogs/Task/TargetDialog.cpp:772 Data/Input/default.xci:441
+#: Data/Input/default.xci:1047
 #, no-c-format
 msgid "Target"
 msgstr "Mål"
@@ -7579,7 +7598,7 @@ msgstr ""
 "fungerer (kraftverk, fjelltopper, osv.)"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:93
-#: Data/Input/default.xci:860
+#: Data/Input/default.xci:876
 msgid "Airspaces"
 msgstr "Luftrom"
 
@@ -7865,24 +7884,24 @@ msgid ""
 "SkyLines server."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:63
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:231
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:66
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:245
 msgid "Start max. speed"
 msgstr "Start maks. hastighet"
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:63
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:232
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:66
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:246
 #, fuzzy
 msgid "Maximum speed allowed in start observation zone. Set to 0 for no limit."
 msgstr ""
 "Maksimalhastighet tillatt i start observasjonssone. Sett til 0 for ingen "
 "begrensning."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:68
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:71
 msgid "Start max. speed margin"
 msgstr "Start maks. hastighetsmargin"
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:69
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:72
 msgid ""
 "Maximum speed above maximum start speed to tolerate.  Set to 0 for no "
 "tolerance."
@@ -7890,13 +7909,13 @@ msgstr ""
 "Maksimum hastighet over maks. starthastighet som er tillatt. Sett til 0 "
 "dersom overskridelse ikke er tillatt."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:77
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:236
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:80
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:250
 msgid "Start max. height"
 msgstr "Start maks. høyde"
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:78
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:237
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:81
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:251
 msgid ""
 "Maximum height based on start height reference (AGL or MSL) while starting "
 "the task.  Set to 0 for no limit."
@@ -7904,11 +7923,11 @@ msgstr ""
 "Maksimalhøyden basert på starthøydereferansen (AGL eller MSL) når oppgaven "
 "starter. Sett til 0 for ubegrenset."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:84
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:87
 msgid "Start max. height margin"
 msgstr "Start maks. høyde margin"
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:85
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:88
 msgid ""
 "Maximum height above maximum start height to tolerate.  Set to 0 for no "
 "tolerance."
@@ -7916,35 +7935,35 @@ msgstr ""
 "Maksimalhøyde over maksimal starthøyde som er tillatt. Sett til 0 dersom "
 "maks. starthøyde ikke kan overskrides."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:92
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:243
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:95
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:257
 #, no-c-format
 msgid "Reference is the height above the task point."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:94
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:245
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:259
 #, no-c-format
 msgid "Reference is altitude above mean sea level."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:249
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:101
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:263
 msgid "Start height ref."
 msgstr "Starthøyderef."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:99
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:250
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:102
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:264
 msgid "Reference used for start max height rule."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:107
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:253
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:110
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:267
 msgid "Finish min. height"
 msgstr "Mål min. høyde"
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:108
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:254
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:111
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:268
 msgid ""
 "Minimum height based on finish height reference (AGL or MSL) while finishing "
 "the task.  Set to 0 for no limit."
@@ -7952,14 +7971,39 @@ msgstr ""
 "Minimalhøyden basert på målhøydereferansen (AGL eller MSL) når oppgaven "
 "avsluttes. Sett til 0 for ubegrenset."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:114
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:258
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:117
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:272
 msgid "Finish height ref."
 msgstr "Målhøyderef."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:115
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:259
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:118
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:273
 msgid "Reference used for finish min height rule."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:126
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:276
+#, fuzzy
+msgid "PEV start wait time"
+msgstr "Beregnet oppgavetid"
+
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:127
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:277
+msgid ""
+"Wait time in minutes after Pilot Event and before start gate opens. 0 means "
+"start opens immediately."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:133
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:280
+msgid "PEV start window"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:134
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:281
+msgid ""
+"Number of minutes start remains open after Pilot Event and PEV wait time.0 "
+"means start will never close after it opens."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:79
@@ -8018,7 +8062,7 @@ msgid "Default task type for new tasks you create."
 msgstr "Forvalgt oppgavetype for opprettede oppgaver."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:195
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:217
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:231
 msgid "AAT min. time"
 msgstr "AAT min. tid"
 
@@ -8687,61 +8731,61 @@ msgstr ""
 "[Av] Vis flystriper med fast lengde.\n"
 "[På] Skaler vist flystripe i forhold til virkelig lengde."
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:185
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:191
 #, no-c-format
 msgid "Hot-air balloon"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:186
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:192
 #, no-c-format
 msgid "Hangglider (Flex/FAI1)"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:187
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:193
 #, no-c-format
 msgid "Hangglider (Rigid/FAI5)"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:206
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:232
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:212
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:238
 msgid "Tracking Interval"
 msgstr "Tracking intervall"
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:209
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:215
 msgid "Track friends"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:210
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:216
 msgid "Download the position of your friends live from the SkyLines server."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:219
 #, fuzzy
 msgid "Show nearby traffic"
 msgstr "Sporminne Kort"
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:214
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:220
 msgid ""
 "Download the position of your nearby traffic live from the SkyLines server."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:234
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:241
 msgid "Vehicle Type"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:234
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:241
 msgid "Type of vehicle used."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:236
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:243
 msgid "Vehicle Name"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:239
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:246
 msgid "Server"
 msgstr "Tjener"
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:243
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
 msgid "Username"
 msgstr "Brukernavn"
 
@@ -8861,39 +8905,39 @@ msgstr "Endre oppgave"
 msgid "Add Turnpoint"
 msgstr "Legg til Vendepunkt"
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:215
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:229
 msgid "Task type"
 msgstr "Oppgavetype"
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:215
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:229
 msgid "Sets the behaviour for the current task."
 msgstr "Velg hvordan gjeldende oppgave planlegges."
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:217
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:231
 msgid "Minimum AAT task time in minutes."
 msgstr "Minimum AAT oppgavetid i minutter."
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:220
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:234
 msgid "Arm start manually"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:221
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:235
 msgid "Configure whether the start must be armed manually or automatically."
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:226
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:240
 msgid "Start open time"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:228
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:242
 msgid "Start close time"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:262
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:285
 msgid "FAI start / finish rules"
 msgstr "FAI start / mål regler"
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:263
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:286
 msgid ""
 "If enabled, has no max start height or max start speed and requires the "
 "minimum height above ground for finish to be greater than 1000m below the "
@@ -9183,8 +9227,8 @@ msgstr ""
 
 #: src/Dialogs/Weather/WeatherDialog.cpp:46
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:336
-#: src/Weather/NOAAFormatter.cpp:200 Data/Input/default.xci:767
-#: Data/Input/default.xci:1174
+#: src/Weather/NOAAFormatter.cpp:200 Data/Input/default.xci:783
+#: Data/Input/default.xci:1190
 msgid "Weather"
 msgstr "Været"
 
@@ -9198,7 +9242,7 @@ msgstr "METAR og TAF"
 msgid "Field"
 msgstr "Felt"
 
-#: src/Dialogs/dlgCredits.cpp:127 Data/Input/default.xci:852
+#: src/Dialogs/dlgCredits.cpp:127 Data/Input/default.xci:868
 msgid "Credits"
 msgstr "Bidragsytere"
 
@@ -9895,125 +9939,8 @@ msgstr ""
 msgid "Urgent min. volume"
 msgstr ""
 
-#: Data/Input/default.xci:1112
-msgid ""
-"Setup\n"
-"Wind"
-msgstr ""
-"Oppsett\n"
-"Vind"
-
-#: Data/Input/default.xci:907
-msgid ""
-"Lock\n"
-"Screen"
-msgstr ""
-
-#: Data/Input/default.xci:1128
-msgid ""
-"Settings\n"
-"Airspace"
-msgstr ""
-"Innstillinger\n"
-"Luftrom"
-
-#: Data/Input/default.xci:500 Data/Input/default.xci:1073
-msgid "Trail"
-msgstr "Spor"
-
-#: Data/Input/default.xci:965
-msgid "AVG/ALT"
-msgstr "AVG/ALT"
-
-#: Data/Input/default.xci:711
-msgid "Vario ASI zeroed"
-msgstr "Vario ASI nullstillt"
-
-#: Data/Input/default.xci:380 Data/Input/default.xci:999
-msgid ""
-"Waypoint\n"
-"List"
-msgstr ""
-"Vendep.\n"
-"Liste"
-
-#: Data/Input/default.xci:1120
-msgid ""
-"Setup\n"
-"System"
-msgstr ""
-"Oppsett\n"
-"System"
-
-#: Data/Input/default.xci:734
-msgid ""
-"Cruise\n"
-"Demo"
-msgstr ""
-"Strekkfl.\n"
-"Demo"
-
-#: Data/Input/default.xci:653 Data/Input/default.xci:664
-#: Data/Input/default.xci:704
-msgid "Vega"
-msgstr "Vega"
-
-#: Data/Input/default.xci:817
-msgid ""
-"Team\n"
-"Code"
-msgstr ""
-"Lag\n"
-"ID"
-
-#: Data/Input/default.xci:672
-msgid ""
-"Airframe\n"
-"Switches"
-msgstr ""
-"Farkost\n"
-"Brytere"
-
-#: Data/Input/default.xci:473 Data/Input/default.xci:1057
-msgid ""
-"Pan\n"
-"On"
-msgstr ""
-"Flytt\n"
-"På"
-
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "Målglidestrekk gjennom terrenget"
-
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "Start flytur"
-
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "Lavere enn målstrekkgl."
-
-#: Data/Input/default.xci:350 Data/Input/default.xci:399
-#: Data/Input/default.xci:878
-msgid "Nav"
-msgstr "Nav"
-
-#: Data/Input/default.xci:825
-msgid "Traffic List"
-msgstr ""
-
-#: Data/Input/default.xci:128 Data/Input/default.xci:444
-#: Data/Input/default.xci:937
-msgid ""
-"Zoom\n"
-"In"
-msgstr ""
-"Zoom\n"
-"Inn"
-
-#: Data/Input/default.xci:135 Data/Input/default.xci:451
-#: Data/Input/default.xci:944
+#: Data/Input/default.xci:135 Data/Input/default.xci:467
+#: Data/Input/default.xci:960
 msgid ""
 "Zoom\n"
 "Out"
@@ -10021,56 +9948,11 @@ msgstr ""
 "Zoom\n"
 "Ut"
 
-#: Data/Input/default.xci:459 Data/Input/default.xci:951
-#: Data/Input/default.xci:1040
-msgid "Zoom"
-msgstr "Zoom"
-
-#: Data/Input/default.xci:1104
-msgid ""
-"Flight\n"
-"Setup"
+#: Data/Input/default.xci:662
+msgid "Lua"
 msgstr ""
-"Flytur\n"
-"Oppsett"
 
-#: Data/Input/default.xci:718
-msgid "Accelerometer leveled"
-msgstr "G-måler nullstillt"
-
-#: Data/Input/default.xci:1182
-msgid ""
-"Nearest\n"
-"Airspace"
-msgstr ""
-"Luftrom\n"
-"Nærmest"
-
-#: Data/Input/default.xci:712
-msgid ""
-"ASI\n"
-"Zero"
-msgstr ""
-"ASI\n"
-"Nullstill"
-
-#: Data/Input/default.xci:867
-msgid ""
-"Message\n"
-"Repeat"
-msgstr ""
-"Siste\n"
-"Beskjed"
-
-#: Data/Input/default.xci:783 Data/Input/default.xci:1190
-msgid ""
-"Check\n"
-"list"
-msgstr ""
-"Sjekk\n"
-"liste"
-
-#: Data/Input/default.xci:679
+#: Data/Input/default.xci:695
 msgid ""
 "Manual\n"
 "Demo"
@@ -10078,7 +9960,86 @@ msgstr ""
 "Man\n"
 "Demo"
 
-#: Data/Input/default.xci:686
+#: Data/Input/default.xci:981
+msgid "AVG/ALT"
+msgstr "AVG/ALT"
+
+#: Data/Input/default.xci:734
+msgid "Accelerometer leveled"
+msgstr "G-måler nullstillt"
+
+#: Data/Input/default.xci:547 Data/Input/default.xci:597
+#: Data/Input/default.xci:639 Data/Input/default.xci:908
+msgid "Config"
+msgstr "Innstilling"
+
+#: Data/Input/default.xci:516 Data/Input/default.xci:1089
+msgid "Trail"
+msgstr "Spor"
+
+#: Data/Input/default.xci:688
+msgid ""
+"Airframe\n"
+"Switches"
+msgstr ""
+"Farkost\n"
+"Brytere"
+
+#: Data/Input/default.xci:386 Data/Input/default.xci:1015
+msgid ""
+"Waypoint\n"
+"List"
+msgstr ""
+"Vendep.\n"
+"Liste"
+
+#: Data/Input/default.xci:833
+msgid ""
+"Team\n"
+"Code"
+msgstr ""
+"Lag\n"
+"ID"
+
+#: Data/Input/default.xci:750
+msgid ""
+"Cruise\n"
+"Demo"
+msgstr ""
+"Strekkfl.\n"
+"Demo"
+
+#: Data/Input/default.xci:841
+msgid "Traffic List"
+msgstr ""
+
+#: Data/Input/default.xci:883
+msgid ""
+"Message\n"
+"Repeat"
+msgstr ""
+"Siste\n"
+"Beskjed"
+
+#: Data/Input/default.xci:430
+msgid "Pilot event announced"
+msgstr ""
+
+#: Data/Input/default.xci:923
+msgid ""
+"Lock\n"
+"Screen"
+msgstr ""
+
+#: Data/Input/default.xci:727
+msgid "Vario ASI zeroed"
+msgstr "Vario ASI nullstillt"
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "Lavere enn målstrekkgl."
+
+#: Data/Input/default.xci:702
 msgid ""
 "Setup\n"
 "Stall"
@@ -10086,67 +10047,21 @@ msgstr ""
 "Oppsett\n"
 "Steil"
 
-#: Data/Input/default.xci:833 Data/Input/default.xci:1214
-msgid "Thermal Assistant"
-msgstr "Termikk Hjelp"
-
-#: Data/Input/default.xci:417 Data/Input/default.xci:1050
+#: Data/Input/default.xci:1120
 msgid ""
-"Mark\n"
-"Drop"
-msgstr "Marker"
-
-#: Data/Input/default.xci:492 Data/Input/default.xci:1065
-msgid "Labels"
-msgstr "Etiketter"
-
-#: Data/Input/default.xci:414 Data/Input/default.xci:1047
-msgid "Dropped marker"
-msgstr "Markert"
-
-#: Data/Input/default.xci:514 Data/Input/default.xci:1087
-msgid "Topo."
-msgstr "Topo."
-
-#: Data/Input/default.xci:638 Data/Input/default.xci:1143
-msgid "Raw Logger"
-msgstr "Rå Logger"
-
-#: Data/Input/default.xci:741
-msgid ""
-"Climb\n"
-"Demo"
+"Flight\n"
+"Setup"
 msgstr ""
-"Stig\n"
-"Demo"
+"Flytur\n"
+"Oppsett"
 
-#: Data/Input/default.xci:142 Data/Input/default.xci:775
-msgid ""
-"What's\n"
-"here?"
-msgstr ""
-"Hva finns\n"
-"her?"
-
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "Høyere enn Målglidestrekkshøyde"
-
-#: Data/Input/default.xci:759 Data/Input/default.xci:1166
-msgid "FLARM Radar"
-msgstr "FLARM Radar"
-
-#: Data/Input/default.xci:727
-msgid "Store"
-msgstr "Lagre"
-
-#: Data/Input/default.xci:646
-msgid "Lua"
-msgstr ""
-
-#: Data/Input/default.xci:693
+#: Data/Input/default.xci:709
 msgid "Accel"
 msgstr "Aksell."
+
+#: Data/Input/default.xci:743
+msgid "Store"
+msgstr "Lagre"
 
 #: Data/Input/default.xci:121
 msgid ""
@@ -10156,7 +10071,76 @@ msgstr ""
 "Flytt\n"
 "Av"
 
-#: Data/Input/default.xci:719
+#: Data/Input/default.xci:530 Data/Input/default.xci:1103
+msgid "Topo."
+msgstr "Topo."
+
+#: Data/Input/default.xci:669 Data/Input/default.xci:680
+#: Data/Input/default.xci:720
+msgid "Vega"
+msgstr "Vega"
+
+#: Data/Input/default.xci:742
+msgid "Stored to EEPROM"
+msgstr "Lagret i EEPROM"
+
+#: Data/Input/default.xci:420 Data/Input/default.xci:1063
+msgid "Dropped marker"
+msgstr "Markert"
+
+#: Data/Input/default.xci:433
+#, fuzzy
+msgid ""
+"Pilot\n"
+"Event"
+msgstr "Pilot"
+
+#: Data/Input/default.xci:775 Data/Input/default.xci:1182
+msgid "FLARM Radar"
+msgstr "FLARM Radar"
+
+#: Data/Input/default.xci:1136
+msgid ""
+"Setup\n"
+"System"
+msgstr ""
+"Oppsett\n"
+"System"
+
+#: Data/Input/default.xci:142 Data/Input/default.xci:791
+msgid ""
+"What's\n"
+"here?"
+msgstr ""
+"Hva finns\n"
+"her?"
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "Målglidestrekk gjennom terrenget"
+
+#: Data/Input/default.xci:799 Data/Input/default.xci:1206
+msgid ""
+"Check\n"
+"list"
+msgstr ""
+"Sjekk\n"
+"liste"
+
+#: Data/Input/default.xci:489 Data/Input/default.xci:1073
+msgid ""
+"Pan\n"
+"On"
+msgstr ""
+"Flytt\n"
+"På"
+
+#: Data/Input/default.xci:356 Data/Input/default.xci:405
+#: Data/Input/default.xci:894
+msgid "Nav"
+msgstr "Nav"
+
+#: Data/Input/default.xci:735
 msgid ""
 "Accel\n"
 "Zero"
@@ -10164,18 +10148,89 @@ msgstr ""
 "G-måler\n"
 "Nullst."
 
-#: Data/Input/default.xci:531 Data/Input/default.xci:581
-#: Data/Input/default.xci:623 Data/Input/default.xci:892
-msgid "Config"
-msgstr "Innstilling"
-
-#: Data/Input/default.xci:726
-msgid "Stored to EEPROM"
-msgstr "Lagret i EEPROM"
-
-#: Data/Input/default.xci:1159
+#: Data/Input/default.xci:1175
 msgid "Setup Plane"
 msgstr "Farkost Oppsett"
+
+#: Data/Input/default.xci:1144
+msgid ""
+"Settings\n"
+"Airspace"
+msgstr ""
+"Innstillinger\n"
+"Luftrom"
+
+#: Data/Input/default.xci:1198
+msgid ""
+"Nearest\n"
+"Airspace"
+msgstr ""
+"Luftrom\n"
+"Nærmest"
+
+#: Data/Input/default.xci:728
+msgid ""
+"ASI\n"
+"Zero"
+msgstr ""
+"ASI\n"
+"Nullstill"
+
+#: Data/Input/default.xci:757
+msgid ""
+"Climb\n"
+"Demo"
+msgstr ""
+"Stig\n"
+"Demo"
+
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "Start flytur"
+
+#: Data/Input/default.xci:423 Data/Input/default.xci:1066
+msgid ""
+"Mark\n"
+"Drop"
+msgstr "Marker"
+
+#: Data/Input/default.xci:128 Data/Input/default.xci:460
+#: Data/Input/default.xci:953
+msgid ""
+"Zoom\n"
+"In"
+msgstr ""
+"Zoom\n"
+"Inn"
+
+#: Data/Input/default.xci:508 Data/Input/default.xci:1081
+msgid "Labels"
+msgstr "Etiketter"
+
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "Høyere enn Målglidestrekkshøyde"
+
+#: Data/Input/default.xci:654 Data/Input/default.xci:1159
+msgid "Raw Logger"
+msgstr "Rå Logger"
+
+#: Data/Input/default.xci:849 Data/Input/default.xci:1230
+msgid "Thermal Assistant"
+msgstr "Termikk Hjelp"
+
+#: Data/Input/default.xci:475 Data/Input/default.xci:967
+#: Data/Input/default.xci:1056
+msgid "Zoom"
+msgstr "Zoom"
+
+#: Data/Input/default.xci:1128
+msgid ""
+"Setup\n"
+"Wind"
+msgstr ""
+"Oppsett\n"
+"Vind"
 
 #~ msgid "Logger inactive, insufficient storage!"
 #~ msgstr "Logger er av, for lite minne!"
