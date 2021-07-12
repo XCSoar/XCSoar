@@ -32,6 +32,8 @@ Copyright_License {
 #include "io/UniqueFileDescriptor.hxx"
 #include "util/Exception.hxx"
 
+#include <cwchar>
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <windef.h> // for MAX_PATH
@@ -125,7 +127,7 @@ LogFormat(const wchar_t *Str, ...) noexcept
   va_list ap;
 
   va_start(ap, Str);
-  vswprintf(buf, Str, ap);
+  std::vswprintf(buf, std::size(buf), Str, ap);
   va_end(ap);
 
   LogString(buf);
