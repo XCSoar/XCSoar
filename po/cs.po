@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-10 09:50+0200\n"
-"PO-Revision-Date: 2021-07-13 06:35+0000\n"
+"PO-Revision-Date: 2021-07-20 10:35+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -3081,23 +3081,23 @@ msgid "The time spend in the current thermal."
 msgstr "Čas strávený v současném stoupavém proudu."
 
 #: src/InfoBoxes/Content/Factory.cpp:1096
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alternate 2 GR"
-msgstr "Alternativa 1 klouzavý poměr"
+msgstr "Alternativa 2 KP"
 
 #: src/InfoBoxes/Content/Factory.cpp:1097
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Altn2 GR"
-msgstr "Altn1 KP"
+msgstr "Altn2 KP"
 
 #: src/InfoBoxes/Content/Factory.cpp:1098
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Geometric gradient to the arrival height above the second alternate. This is "
 "not adjusted for total energy."
 msgstr ""
-"Geometrický gradient do výšky příletu k nejvhodnějšímu náhradnímu místu "
-"přistání. Není kompenzováno na celkovou energii TE."
+"Geometrický gradient do výšky příletu k druhému nejvhodnějšímu náhradnímu "
+"místu přistání. Není kompenzováno na celkovou energii TE."
 
 #: src/InfoBoxes/Content/Alternate.cpp:49
 #: src/Dialogs/Task/AlternatesListDialog.cpp:150 Data/Input/default.xci:394
