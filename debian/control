@@ -26,7 +26,7 @@ Build-Depends-Indep:  texlive, texlive-latex-extra,
  texlive-latex-recommended, texlive-pictures,
  liblocale-po-perl, libio-captureoutput-perl
 Standards-Version: 3.9.1.0
-Homepage: http://www.xcsoar.org/
+Homepage: https://xcsoar.org/
 
 Package: xcsoar
 Architecture: any
