@@ -56,6 +56,7 @@ echo Installing dependencies for creating Debian package
     debhelper \
     texlive-lang-english \
     libio-captureoutput-perl \
+    build-essential 
 echo
 
 echo Installing dependencies for compiling with LLVM / Clang...
