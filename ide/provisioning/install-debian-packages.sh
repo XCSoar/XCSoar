@@ -51,6 +51,13 @@ apt-get install ${APTOPTS[*]} make g++ \
   xz-utils
 echo
 
+echo Installing dependencies for creating Debian package
+  apt-get install ${APTOPTS[*]} dpkg-dev \
+    debhelper \
+    texlive-lang-english \
+    libio-captureoutput-perl \
+echo
+
 echo Installing dependencies for compiling with LLVM / Clang...
 apt-get install ${APTOPTS[*]} llvm clang libc++-dev
 echo
