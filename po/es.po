@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-10 09:50+0200\n"
-"PO-Revision-Date: 2021-07-16 19:31+0000\n"
+"PO-Revision-Date: 2021-07-17 11:25+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -57,17 +57,17 @@ msgstr "Meta FAI"
 #: src/Task/TypeStrings.cpp:35
 #, no-c-format
 msgid "Racing"
-msgstr "Carrera (AST)"
+msgstr "Carrera"
 
 #: src/Task/TypeStrings.cpp:36
 #, no-c-format
 msgid "AAT"
-msgstr "AAT"
+msgstr "TAA"
 
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr "Tarea de área modificable (MAT)"
+msgstr "Tarea de área modificable (TAM)"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
@@ -85,25 +85,25 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
-"Reglas FAI, permitir solo partidas FAI, llegada y tipos de vértices, para "
-"insignias y records. Habilitada altura de llegada FAI para cálculo del "
+"Reglas FAI, sólo permite salida, llegada y puntos de giro FAI, para "
+"insignias y récords. Habilita la altura de llegada FAI para el cálculo del "
 "planeo final."
 
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
 msgid "FAI rules, path from a start to two turn points and return."
 msgstr ""
-"Reglas FAI, trayecto desde un inicio hasta dos puntos de giro y regreso."
+"Reglas FAI, trayecto desde la salida hasta dos puntos de giro y regreso."
 
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr "Reglas FAI, trayecto desde la partida hacia un vértice y retorno."
+msgstr "Reglas FAI, trayecto desde la salida hacia un punto de giro y retorno."
 
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
 msgid "FAI rules, path from start to a goal destination."
-msgstr "Reglas FAI, trayecto desde la partida hacia una meta."
+msgstr "Reglas FAI, trayecto desde la salida hacia una meta."
 
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
@@ -111,8 +111,9 @@ msgid ""
 "Racing task around turn points.  Can also be used for FAI badge and record "
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
-"Tarea de carrera en vértices. También se puede utilizar para tareas de  "
-"insignias y records FAI. Permitidas toda forma de zona de obsevación."
+"Tarea de carrera recorriendo puntos de giro. También se puede utilizar para "
+"las tareas de insignia y records de la FAI. Permite todas las formas de "
+"zonas de observación."
 
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
@@ -130,8 +131,8 @@ msgid ""
 "mile cylinder.  Pilot can add additional points as needed.  Minimum task "
 "time applies."
 msgstr ""
-"Tareas de  área modificada. Tarea con inicio, final y al menos un cilindro "
-"de 1-milla predefinido. El piloto puede añadir puntos adicionales si es "
+"Tarea de área modificada. Tarea con salida, llegada y al menos un cilindro "
+"de 1 milla predefinido. El piloto puede añadir puntos adicionales si es "
 "necesario. Se aplica el tiempo mínimo de tarea."
 
 #: src/Task/TypeStrings.cpp:62
@@ -140,8 +141,8 @@ msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
 "applies."
 msgstr ""
-"Tarea de carreras con una combinación de áreas asignadas y vértices, se "
-"aplica el tiempo mínimo de tarea."
+"Tarea de velocidad con una combinación de áreas asignadas y puntos de giro, "
+"se aplica el tiempo mínimo de tarea."
 
 #: src/Task/TypeStrings.cpp:63
 #, no-c-format
@@ -149,8 +150,8 @@ msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
 msgstr ""
-"Tarea de recorrido casual, utiliza cilindros de inicio y finalización y "
-"puntos de viraje de sector FAI."
+"Tarea de recorrido casual, utiliza cilindros de salida y llegada y puntos de "
+"giro de sector FAI."
 
 #: src/Task/TypeStrings.cpp:76
 #, no-c-format
@@ -166,13 +167,13 @@ msgstr ""
 msgid ""
 "A straight line start gate.  Cross start gate from inside area to start."
 msgstr ""
-"Una puerta de inicio en línea recta. Cruce la puerta de partida desde el "
-"área interior para comenzar."
+"Una puerta de inicio en línea recta. Cruce la puerta de salida desde el área "
+"interior para comenzar."
 
 #: src/Task/TypeStrings.cpp:78
 #, no-c-format
 msgid "A cylinder.  Exit area to start."
-msgstr "Un cilindro.  Salga del área para comenzar."
+msgstr "Un cilindro. Salga del área para comenzar."
 
 #: src/Task/TypeStrings.cpp:79
 #, no-c-format
@@ -214,7 +215,7 @@ msgstr ""
 #, no-c-format
 msgid "A cylinder.  Any point within area scored from center."
 msgstr ""
-"Un cilindro Cualquier punto dentro del área, se computa desde el centro."
+"Un cilindro. Cualquier punto dentro del área, se computa desde el centro."
 
 #: src/Task/TypeStrings.cpp:88
 #, no-c-format
@@ -245,12 +246,12 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
 msgid "Cross finish gate line into area to finish."
-msgstr "Cruce la línea de la puerta de llegada al área para terminar."
+msgstr "Cruce la línea de puerta de llegada al área para terminar."
 
 #: src/Task/TypeStrings.cpp:94
 #, no-c-format
 msgid "Enter cylinder to finish."
-msgstr "Ingrese el cilindro para terminar."
+msgstr "Entre en el cilindro para terminar."
 
 #: src/Task/TypeStrings.cpp:95
 #, no-c-format
@@ -283,17 +284,17 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:112
 #, no-c-format
 msgid "FAI start quadrant"
-msgstr "Cuadrante de partida FAI"
+msgstr "Cuadrante de salida FAI"
 
 #: src/Task/TypeStrings.cpp:113
 #, no-c-format
 msgid "Start line"
-msgstr "Linea de partida"
+msgstr "Línea de salida"
 
 #: src/Task/TypeStrings.cpp:114
 #, no-c-format
 msgid "Start cylinder"
-msgstr "Cilindro de partida"
+msgstr "Cilindro de salida"
 
 #: src/Task/TypeStrings.cpp:115 src/Dialogs/Task/dlgTaskHelpers.cpp:180
 #, no-c-format
@@ -308,12 +309,12 @@ msgstr "Sector de ojo de cerradura (DAeC)"
 #: src/Task/TypeStrings.cpp:117
 #, no-c-format
 msgid "BGA Fixed Course sector"
-msgstr "Sector de curso fijo BGA"
+msgstr "Sector de rumbo fijo BGA"
 
 #: src/Task/TypeStrings.cpp:118
 #, no-c-format
 msgid "BGA Enhanced Option Fixed Course sector"
-msgstr "Sector de curso fijo de opción mejorada BGA"
+msgstr "Sector de rumbo fijo de opción mejorada BGA"
 
 #: src/Task/TypeStrings.cpp:119
 #, no-c-format
@@ -343,7 +344,7 @@ msgstr "Cuadrante de llegada FAI"
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
 msgid "Finish line"
-msgstr "Linea de llegada"
+msgstr "Línea de llegada"
 
 #: src/Task/TypeStrings.cpp:125
 #, no-c-format
@@ -353,7 +354,7 @@ msgstr "Cilindro de llegada"
 #: src/Task/TypeStrings.cpp:126
 #, no-c-format
 msgid "BGA start sector"
-msgstr "Sector de partida BGA"
+msgstr "Sector de salida BGA"
 
 #: src/Task/TypeStrings.cpp:127
 #, no-c-format
@@ -373,7 +374,7 @@ msgstr "Área de ojo de cerradura"
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
 msgid "No valid start"
-msgstr "No hay partida válido"
+msgstr "No hay salida válida"
 
 #: src/Task/ValidationErrorStrings.cpp:33
 #, no-c-format
@@ -418,12 +419,12 @@ msgstr "Tarea vacía"
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
 msgid "non-FAI turn points"
-msgstr "puntos de viraje no FAI"
+msgstr "Puntos de viraje no FAI"
 
 #: src/Task/ValidationErrorStrings.cpp:42
 #, no-c-format
 msgid "non-MAT turn points"
-msgstr "puntos de viraje no MAT"
+msgstr "Puntos de viraje no TAM"
 
 #: src/Task/ValidationErrorStrings.cpp:43
 #, no-c-format
@@ -444,11 +445,11 @@ msgstr "Tipo de archivo de espacio aéreo desconocido"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp:51
 msgid "Expect early task arrival"
-msgstr "Espere llegada demasiado pronto"
+msgstr "Espere el final de tarea demasiado pronto"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorSunset.cpp:65
 msgid "Expect arrival past sunset"
-msgstr "Espere llegada después del atardecer"
+msgstr "Espere la llegada después del atardecer"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorWind.cpp:54
 msgid "Significant wind change"
@@ -549,7 +550,7 @@ msgstr "Otro"
 
 #: src/Logger/Logger.cpp:109 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
-msgstr "Iniciar registrador"
+msgstr "Iniciar Registrador"
 
 #: src/Logger/Logger.cpp:138 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
@@ -613,7 +614,7 @@ msgstr "No se mueve"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:201
 msgid "Not Circling"
-msgstr "No está Virando"
+msgstr "No está virando"
 
 #: src/Gauge/BigThermalAssistantWidget.cpp:76
 #: src/Gauge/BigTrafficWidget.cpp:604 src/Dialogs/FileManager.cpp:768
@@ -736,7 +737,7 @@ msgstr "Punto de Viraje de Llegada"
 
 #: src/Menu/ExpandMacros.cpp:119 src/Menu/ExpandMacros.cpp:156
 msgid "Next Startpoint"
-msgstr "Siguiente Punto de Partida"
+msgstr "Siguiente Punto de Salida"
 
 #: src/Menu/ExpandMacros.cpp:123 src/Menu/ExpandMacros.cpp:160
 msgid "Start Turnpoint"
@@ -744,19 +745,19 @@ msgstr "Punto de Viraje de salida"
 
 #: src/Menu/ExpandMacros.cpp:141
 msgid "Arm start"
-msgstr "Armar Partida"
+msgstr "Establecer Salida"
 
 #: src/Menu/ExpandMacros.cpp:144
 msgid "Arm turn"
-msgstr "Bloquear Área"
+msgstr "Establecer giro"
 
 #: src/Menu/ExpandMacros.cpp:165
 msgid "Disarm start"
-msgstr "Desarmar Partida"
+msgstr "Anular Salida"
 
 #: src/Menu/ExpandMacros.cpp:168
 msgid "Disarm turn"
-msgstr "Deshacer Bloqueo de Área"
+msgstr "Anular giro"
 
 #: src/Menu/ExpandMacros.cpp:177
 msgid ""
@@ -780,15 +781,15 @@ msgid ""
 "Start"
 msgstr ""
 "Abortar\n"
-"Partida"
+"Salida"
 
 #: src/Menu/ExpandMacros.cpp:187
 msgid ""
 "Arm\n"
 "Start"
 msgstr ""
-"Armar\n"
-"Partida"
+"Establecer\n"
+"Salida"
 
 #: src/Menu/ExpandMacros.cpp:190
 msgid ""
@@ -796,15 +797,15 @@ msgid ""
 "Turn"
 msgstr ""
 "Abortar\n"
-"Bloqueo de Área"
+"Giro"
 
 #: src/Menu/ExpandMacros.cpp:193
 msgid ""
 "Arm\n"
 "Turn"
 msgstr ""
-"Bloquear\n"
-"Área"
+"Establecer\n"
+"Giro"
 
 #: src/Menu/ExpandMacros.cpp:202 src/Menu/ExpandMacros.cpp:206
 #: src/Dialogs/Device/PortMonitor.cpp:167
@@ -842,7 +843,7 @@ msgstr "Automático"
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:44
 #, no-c-format
 msgid "Track up"
-msgstr "Curso arriba"
+msgstr "Derrota arriba"
 
 #: src/Menu/ExpandMacros.cpp:229
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:48
@@ -1045,7 +1046,7 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
-"Rumbo verdadero al siguiente waypoint. Para las AAT, rumbo verdadero al "
+"Rumbo verdadero al siguiente waypoint. Para las TAA, rumbo verdadero al "
 "destino dentro del área."
 
 #: src/InfoBoxes/Content/Factory.cpp:170
@@ -1203,7 +1204,7 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
-"Distancia al waypoint seleccionado. Para las AAT, distancia al destino "
+"Distancia al waypoint seleccionado. Para las TAA, distancia al destino "
 "dentro del área."
 
 #: src/InfoBoxes/Content/Factory.cpp:235
@@ -1223,7 +1224,7 @@ msgid ""
 "For AAT tasks, the target within the AAT sector is used."
 msgstr ""
 "Altitud de llegada en el siguiente waypoint respecto a la altura de llegada "
-"de seguridad. Para las AAT, se utiliza el destino dentro del área."
+"de seguridad. Para las TAA, se utiliza el destino dentro del área."
 
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
@@ -1242,7 +1243,7 @@ msgid ""
 "the target within the AAT sector is used."
 msgstr ""
 "Altitud adicional necesaria para alcanzar el siguiente punto de viraje. Para "
-"las AAT, se utiliza el destino dentro del área."
+"las TAA, se utiliza el destino dentro del área."
 
 #: src/InfoBoxes/Content/Factory.cpp:253
 #, no-c-format
@@ -1390,7 +1391,7 @@ msgstr "La altitud ganada / perdida en la térmica actual."
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:59
 #, no-c-format
 msgid "Track"
-msgstr "Curso"
+msgstr "Rumbo"
 
 #: src/InfoBoxes/Content/Factory.cpp:327
 #, no-c-format
@@ -1399,9 +1400,9 @@ msgid ""
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
-"Curso magnético informado por el GPS. (Pantalla táctil / PC solamente) Si "
+"Rumbo magnético informado por el GPS. (Pantalla táctil / PC solamente) Si "
 "este InfoBox está activo en el modo de simulación, al presionar las flechas "
-"hacia arriba y hacia abajo se ajusta el curso."
+"hacia arriba y hacia abajo se ajusta el rumbo."
 
 #: src/InfoBoxes/Content/Factory.cpp:335
 #, no-c-format
@@ -1459,59 +1460,59 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:359
 #, no-c-format
 msgid "AAT time"
-msgstr "Tiempo AAT"
+msgstr "Tiempo TAA"
 
 #: src/InfoBoxes/Content/Factory.cpp:360
 #, no-c-format
 msgid "AAT Time"
-msgstr "Tiempo AAT"
+msgstr "Tiempo TAA"
 
 #: src/InfoBoxes/Content/Factory.cpp:361
 #, no-c-format
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
 msgstr ""
-"Tiempo restante en AAT. Se pone rojo cuando el tiempo restante ha expirado."
+"Tiempo restante en TAA. Se pone rojo cuando el tiempo restante ha expirado."
 
 #: src/InfoBoxes/Content/Factory.cpp:367
 #, no-c-format
 msgid "AAT max. distance "
-msgstr "Distancia máxima AAT "
+msgstr "Distancia máxima TAA "
 
 #: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
 msgid "AAT Dmax"
-msgstr "AAT Dmax"
+msgstr "TAA Dmax"
 
 #: src/InfoBoxes/Content/Factory.cpp:369
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
-msgstr "Distancia máxima posible AAT para el resto de la tarea."
+msgstr "Distancia máxima posible TAA para el resto de la tarea."
 
 #: src/InfoBoxes/Content/Factory.cpp:375
 #, no-c-format
 msgid "AAT min. distance"
-msgstr "Distancia mínima AAT"
+msgstr "Distancia mínima TAA"
 
 #: src/InfoBoxes/Content/Factory.cpp:376
 #, no-c-format
 msgid "AAT Dmin"
-msgstr "AAT Dmin"
+msgstr "TAA Dmin"
 
 #: src/InfoBoxes/Content/Factory.cpp:377
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
-msgstr "Distancia mínima posible AAT para el resto de la tarea."
+msgstr "Distancia mínima posible TAA para el resto de la tarea."
 
 #: src/InfoBoxes/Content/Factory.cpp:383
 #, no-c-format
 msgid "AAT speed max. distance"
-msgstr "Velocidad AAT máxima distancia"
+msgstr "Velocidad TAA máxima distancia"
 
 #: src/InfoBoxes/Content/Factory.cpp:384
 #, no-c-format
 msgid "AAT Vmax"
-msgstr "AAT Vmax"
+msgstr "TAA Vmax"
 
 #: src/InfoBoxes/Content/Factory.cpp:385
 #, no-c-format
@@ -1520,17 +1521,17 @@ msgid ""
 "distance remaining in minimum AAT time."
 msgstr ""
 "Velocidad promedio alcanzable si se vuela la máxima distancia posible "
-"restante en el tiempo mínimo de AAT."
+"restante en el tiempo mínimo de TAA."
 
 #: src/InfoBoxes/Content/Factory.cpp:391
 #, no-c-format
 msgid "AAT speed min. distance"
-msgstr "Velocidad AAT mínima distancia"
+msgstr "Velocidad TAA mínima distancia"
 
 #: src/InfoBoxes/Content/Factory.cpp:392
 #, no-c-format
 msgid "AAT Vmin"
-msgstr "AAT Vmin"
+msgstr "TAA Vmin"
 
 #: src/InfoBoxes/Content/Factory.cpp:393
 #, no-c-format
@@ -1539,7 +1540,7 @@ msgid ""
 "distance remaining in minimum AAT time."
 msgstr ""
 "Velocidad promedio alcanzable si se vuela la mínima distancia posible "
-"restante en el tiempo mínimo de AAT."
+"restante en el tiempo mínimo de TAA."
 
 #: src/InfoBoxes/Content/Factory.cpp:399
 #, no-c-format
@@ -1714,7 +1715,7 @@ msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
-"Tiempo estimado requerido para completar la tarea, suponiendo un rendimiento "
+"Tiempo estimado necesario para completar la tarea, suponiendo un rendimiento "
 "MacCready ideal del ciclo de planeo / ascenso."
 
 #: src/InfoBoxes/Content/Factory.cpp:481
@@ -1850,7 +1851,7 @@ msgid ""
 "account the curvature of the Earth."
 msgstr ""
 "La diferencia entre el rumbo del planeador y el rumbo del siguiente waypoint "
-"o, para tareas AAT, al rumbo al destino dentro del área. La navegación GPS "
+"o, para tareas TAA, al rumbo al destino dentro del área. La navegación GPS "
 "se basa en el rumbo con respecto al suelo, y este rumbo puede diferir del "
 "rumbo del planeador cuando hay viento presente. Las flechas apuntan en la "
 "dirección que el planeador necesita para corregir la diferencia de rumbo, es "
@@ -1922,28 +1923,28 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:555
 #, no-c-format
 msgid "AAT distance around target"
-msgstr "Distancia AAT por los puntos"
+msgstr "Distancia TAA por los puntos"
 
 #: src/InfoBoxes/Content/Factory.cpp:556
 #, no-c-format
 msgid "AAT Dtgt"
-msgstr "AAT Dpt"
+msgstr "TAA Dpt"
 
 #: src/InfoBoxes/Content/Factory.cpp:557
 #, no-c-format
 msgid "Assigned Area Task distance around target points for remainder of task."
 msgstr ""
-"Distancia AAT pasando por los puntos de viraje hasta el final de la tarea."
+"Distancia TAA pasando por los puntos de viraje hasta el final de la tarea."
 
 #: src/InfoBoxes/Content/Factory.cpp:563
 #, no-c-format
 msgid "AAT speed around target"
-msgstr "Velocidad AAT por los puntos"
+msgstr "Velocidad TAA por los puntos"
 
 #: src/InfoBoxes/Content/Factory.cpp:564
 #, no-c-format
 msgid "AAT Vtgt"
-msgstr "AAT Vpt"
+msgstr "TAA Vpt"
 
 #: src/InfoBoxes/Content/Factory.cpp:565
 #, no-c-format
@@ -1952,7 +1953,7 @@ msgid ""
 "in minimum AAT time."
 msgstr ""
 "Velocidad promedio alcanzable alrededor de los puntos objetivo restantes en "
-"el tiempo mínimo de AAT."
+"el tiempo mínimo de TAA."
 
 #: src/InfoBoxes/Content/Factory.cpp:571
 #, no-c-format
@@ -2124,12 +2125,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:643
 #, no-c-format
 msgid "AAT delta time"
-msgstr "Tiempo delta AAT"
+msgstr "Tiempo delta TAA"
 
 #: src/InfoBoxes/Content/Factory.cpp:644
 #, no-c-format
 msgid "AAT dT"
-msgstr "AAT dT"
+msgstr "TAA dT"
 
 #: src/InfoBoxes/Content/Factory.cpp:645
 #, no-c-format
@@ -2138,10 +2139,10 @@ msgid ""
 "negative (expected arrival too early), or blue if in sector and can turn now "
 "with estimated arrival time greater than AAT time plus 5 minutes."
 msgstr ""
-"Diferencia entre el tiempo estimado de la tarea y el tiempo mínimo de AAT. "
+"Diferencia entre el tiempo estimado de la tarea y el tiempo mínimo de TAA. "
 "Color rojo si es negativo (llegada prevista demasiado pronto), o azul si "
 "está en el sector y puede virar ahora con un tiempo estimado de llegada "
-"mayor que el tiempo AAT más 5 minutos."
+"mayor que el tiempo TAA más 5 minutos."
 
 #: src/InfoBoxes/Content/Factory.cpp:651
 #, no-c-format
@@ -2391,7 +2392,7 @@ msgid ""
 "tasks, the target within the AAT sector is used."
 msgstr ""
 "Altitud de llegada absoluta en el siguiente waypoint en planeo final. Para "
-"las tareas AAT, se utiliza el destino dentro del sector AAT."
+"las tareas TAA, se utiliza el destino dentro del sector TAA."
 
 #: src/InfoBoxes/Content/Factory.cpp:765 src/InfoBoxes/Content/Factory.cpp:766
 #, no-c-format
@@ -2538,7 +2539,7 @@ msgstr "Tiempo bajo max. altura de inicio"
 #: src/InfoBoxes/Content/Factory.cpp:831
 #, no-c-format
 msgid "Start Height"
-msgstr "Altura de Partida"
+msgstr "Altura de Salida"
 
 #: src/InfoBoxes/Content/Factory.cpp:832
 #, no-c-format
@@ -2546,7 +2547,7 @@ msgid ""
 "The contiguous period the ship has been below the task start max. height."
 msgstr ""
 "El período contiguo en el que la aeronave ha estado por debajo de la altura "
-"máxima de partida de la tarea."
+"máxima de salida de la tarea."
 
 #: src/InfoBoxes/Content/Factory.cpp:838
 #, no-c-format
@@ -2564,7 +2565,7 @@ msgid ""
 "Estimated time required to complete task, assuming current ground speed is "
 "maintained."
 msgstr ""
-"Tiempo estimado requerido para completar la tarea, suponiendo que se "
+"Tiempo estimado necesario para completar la tarea, suponiendo que se "
 "mantenga la velocidad de avance actual."
 
 #: src/InfoBoxes/Content/Factory.cpp:846
@@ -2661,8 +2662,8 @@ msgid ""
 "used."
 msgstr ""
 "Altitud de llegada en el siguiente waypoint con el MC a 0, relativa a la "
-"altura de llegada de seguridad. Para las tareas AAT, se utiliza el destino "
-"dentro del sector AAT."
+"altura de llegada de seguridad. Para las tareas TAA, se utiliza el destino "
+"dentro del sector TAA."
 
 #: src/InfoBoxes/Content/Factory.cpp:888
 #, no-c-format
@@ -2836,7 +2837,7 @@ msgstr "Cuenta atrás al inicio/cierre"
 #: src/InfoBoxes/Content/Factory.cpp:953
 #, no-c-format
 msgid "Start open"
-msgstr "Partida abierta"
+msgstr "Salida abierta"
 
 #: src/InfoBoxes/Content/Factory.cpp:954
 #, no-c-format
@@ -2928,7 +2929,7 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the origin of the AAT sector."
 msgstr ""
-"Distancia al waypoint seleccionado. En AAT, la distancia al centro del área."
+"Distancia al waypoint seleccionado. En TAA, la distancia al centro del área."
 
 #: src/InfoBoxes/Content/Factory.cpp:998
 #, no-c-format
@@ -3019,7 +3020,7 @@ msgstr ""
 "Flecha que señala el punto de viraje seleccionado, su nombre y distancia. La "
 "posición utilizada es la posición optimizada del punto de viraje activo en "
 "la tarea, el centro de un GOTO seleccionado o el destino dentro del sector "
-"AAT."
+"TAA."
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, no-c-format
@@ -3461,7 +3462,7 @@ msgstr "Listo para comenzar"
 
 #: src/Input/InputEventsTask.cpp:89
 msgid "Hold start"
-msgstr "Mantener partida"
+msgstr "Mantener salida"
 
 #: src/Input/InputEventsTask.cpp:92
 msgid "Ready to turn"
@@ -3737,8 +3738,8 @@ msgstr ""
 "lectura de vario promedio para las térmicas sin nubes. Las corrientes "
 "ascendentes serán más fuertes que este pronóstico si hay nubes convectivas, "
 "ya que la condensación de las nubes agrega flotabilidad en el aire (es "
-"decir, esto ignora la “cloudsuck”). W * depende tanto del calentamiento de "
-"la superficie como de la profundidad BL."
+"decir, esto ignora la “succión de nube”). W * depende tanto del "
+"calentamiento de la superficie como de la profundidad BL."
 
 #: src/Weather/Rasp/RaspStore.cpp:58
 #, no-c-format
@@ -3778,8 +3779,8 @@ msgstr ""
 "de térmicas serán más bajas debido a la tasa de descenso del planeador y a "
 "otros factores. En presencia de nubes (que pueden provocar mayor empuje "
 "arriba, causando una \"succión de nube\") el techo de la corriente de aire "
-"ascendente estará por encima de este pronóstico, pero la altura máxima de "
-"térmica entonces estará limitada a la base de la nube. Además, cuando la "
+"ascendente estará por encima de este pronóstico, pero entonces la altura "
+"máxima de térmica estará limitada a la base de la nube. Además, cuando la "
 "combinación es por turbulencia en vez de mezcla térmica, este parámetro no "
 "es útil para vuelo en planeador. "
 
@@ -3929,7 +3930,7 @@ msgstr "Tarea restante"
 #: src/Renderer/FlightStatisticsRenderer.cpp:328
 #: src/Renderer/FlightStatisticsRenderer.cpp:338
 msgid "AAT to go"
-msgstr "AAT restante"
+msgstr "TAA restante"
 
 #. landscape: info above buttons
 #: src/Renderer/FlightStatisticsRenderer.cpp:329
@@ -5375,7 +5376,7 @@ msgstr "Sobrescribir?"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:338
 msgid "InfoBox paste"
-msgstr "Pegado a InfoBox"
+msgstr "InfoBox Pegada"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:407
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:108
@@ -5883,7 +5884,7 @@ msgstr ""
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:159
 msgid "AAT range"
-msgstr "Alcance AAT"
+msgstr "Alcance TAA"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:161
 #, no-c-format
@@ -5893,10 +5894,10 @@ msgid ""
 "indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% "
 "is maximum AAT distance."
 msgstr ""
-"Para las tareas AAT, este valor indica hasta qué punto, en función de los "
+"Para las tareas TAA, este valor indica hasta qué punto, en función de los "
 "destinos de la tarea, volará en relación con las tareas mínimas y máximas "
-"posibles. -100% indica la distancia AAT mínima. 0% es la distancia AAT "
-"nominal. +100% es la distancia AAT máxima."
+"posibles. -100% indica la distancia TAA mínima. 0% es la distancia TAA "
+"nominal. +100% es la distancia TAA máxima."
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:164
 #: src/Dialogs/Task/TargetDialog.cpp:433
@@ -6232,7 +6233,7 @@ msgstr "Relleno acolchado"
 msgid ""
 "Draws a solid outline with a half transparent border around the airspace."
 msgstr ""
-"Dibuja una linea solida con un borde semi transparente alrededor del espacio "
+"Dibuja una línea solida con un borde semi transparente alrededor del espacio "
 "aéreo."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:75
@@ -6371,7 +6372,7 @@ msgstr "Emplear línea negra"
 msgid ""
 "Draw a black outline around each airspace rather than the airspace color."
 msgstr ""
-"Dibuja una linea negra alrededor de cada espacio aereo en lugar del color "
+"Dibuja una línea negra alrededor de cada espacio aereo en lugar del color "
 "del espacio."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:223
@@ -6393,12 +6394,12 @@ msgstr "Si se habilita, los espacios aereos se rellenan con transparencia."
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:46
 #, no-c-format
 msgid "Disable final glide bar."
-msgstr "Desactivar la barra de deslizamiento final."
+msgstr "Desactivar la barra de planeo final."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:48
 #, no-c-format
 msgid "Always show final glide bar."
-msgstr "Mostrar siempre la barra de deslizamiento final."
+msgstr "Mostrar siempre la barra de planeo final."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:50
 #, no-c-format
@@ -6424,7 +6425,7 @@ msgstr "Mostrar el asistente de térmicas en la parte inferior izquierda."
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:62
 #, no-c-format
 msgid "Bottom left (avoid infoboxes)"
-msgstr "Abajo izquierda (evitar los cuadros de información)"
+msgstr "Abajo izquierda (evitar las infoboxes)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:63
 #, no-c-format
@@ -6448,7 +6449,7 @@ msgstr "Muestra el asistente de térmicas en la parte inferior derecha."
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
 #, no-c-format
 msgid "Bottom right (avoid infoboxes)"
-msgstr "Abajo derecha (evitar los cuadros de información)"
+msgstr "Abajo derecha (evitar las infoboxes)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:69
 #, no-c-format
@@ -6520,7 +6521,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:132
 msgid "Final glide bar MC0"
-msgstr "Barra de deslizamiento final MC0"
+msgstr "Barra de planeo final MC0"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:133
 msgid ""
@@ -6787,8 +6788,8 @@ msgid ""
 "Controls whether the \"final glide\" InfoBox mode should be used on \"auto\" "
 "pages."
 msgstr ""
-"Controla si el modo InfoBox de \"deslizamiento final\" debe usarse en "
-"páginas \"automáticas\"."
+"Controla si el modo de InfoBox \"planeo final\" debe usarse en páginas "
+"\"automáticas\"."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:89
 msgid "Text size"
@@ -7148,7 +7149,7 @@ msgstr "Visualización de mensajes"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:206
 msgid "Inverse InfoBoxes"
-msgstr "Cuadros de información inversos"
+msgstr "Infoboxes inversos"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:206
 msgid "If true, the InfoBoxes are white on black, otherwise black on white."
@@ -7158,7 +7159,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:211
 msgid "Colored InfoBoxes"
-msgstr "Cajas de información coloreadas"
+msgstr "Infoboxes coloreadas"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:212
 msgid ""
@@ -7293,7 +7294,7 @@ msgid ""
 "glider icon will be rotated to show its course."
 msgstr ""
 "La visualización del mapa en movimiento siempre estará orientada de norte a "
-"sur y el icono del planeador se rotará para mostrar su curso."
+"sur y el icono del planeador se rotará para mostrar su rumbo."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:50
 #, no-c-format
@@ -7321,7 +7322,7 @@ msgid ""
 "down. (can be useful for wave flying)"
 msgstr ""
 "La visualización del mapa en movimiento se rotará para que el viento esté "
-"siempre orientado de arriba abajo. (puede ser útil para vuelo ondulatorio)"
+"siempre orientado de arriba abajo. (puede ser útil para vuelo en onda)"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
@@ -7431,7 +7432,7 @@ msgstr "Mostrar a pantalla completa (sin InfoBoxes)"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:211
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:388
 msgid "InfoBoxes"
-msgstr "Paneles informativos"
+msgstr "Infoboxes"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:212
 msgid "Specifies which InfoBoxes should be displayed on this page."
@@ -7460,8 +7461,8 @@ msgid ""
 "For final glide mode.  Displayed when 'Auto' is selected and ship is above "
 "final glide altitude"
 msgstr ""
-"Para el modo de deslizamiento final.  Se muestra cuando se selecciona 'Auto' "
-"y la nave está por encima de la altitud final del deslizamiento"
+"Para el modo de planeo final. Se muestra cuando se selecciona 'Auto' y la "
+"nave está por encima de la altitud de planeo final"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:220
 #, no-c-format
@@ -7502,12 +7503,12 @@ msgstr "Las rutas evitarán el terreno."
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:108
 #, no-c-format
 msgid "Routes will avoid airspace."
-msgstr "Las rutas evitarán el espacio aéreo."
+msgstr "Las rutas evitarán los espacios aéreos."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:110
 #, no-c-format
 msgid "Routes will avoid airspace and terrain."
-msgstr "Las rutas evitarán el espacio aéreo y el terreno."
+msgstr "Las rutas evitarán el espacios aéreos y el terreno."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:114
 msgid "Route mode"
@@ -7570,7 +7571,7 @@ msgstr ""
 #. Spacer
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:142
 msgid "Reach mode"
-msgstr "Modo alcance"
+msgstr "Modo de alcance"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:143
 msgid ""
@@ -8087,7 +8088,7 @@ msgstr "Determina si se dibuja el rastro del planeador y su duración."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:172
 msgid "Trail type"
-msgstr "Tipo de sendero"
+msgstr "Tipo de rastro"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:173
 msgid "Sets the type of the snail trail display."
@@ -8106,7 +8107,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:181
 msgid "Detour cost markers"
-msgstr "Marcadores de costo de desvío"
+msgstr "Indicadores de costo de desvío"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:182
 msgid ""
@@ -8332,7 +8333,7 @@ msgstr "Tiempo mínimo en TAA"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:195
 msgid "Default AAT min. time for new AAT tasks."
-msgstr "Tiempo mínimo AAT por defecto para nuevas tareas AAT."
+msgstr "Tiempo mínimo TAA por defecto para nuevas tareas TAA."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:198
 msgid "Optimisation margin"
@@ -8343,7 +8344,7 @@ msgid ""
 "Safety margin for AAT task optimisation.  Optimisation seeks to complete the "
 "task at the minimum time plus this margin time."
 msgstr ""
-"Margen de seguridad para optimización de tareas AAT. La optimización busca "
+"Margen de seguridad para optimización de tareas TAA. La optimización busca "
 "completar la tarea en el tiempo mínimo más este margen de tiempo."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:93
@@ -8374,7 +8375,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:101
 #, no-c-format
 msgid "The most recent contest with Sprint task rules."
-msgstr "El concurso más reciente con las reglas de tareas Sprint."
+msgstr "El concurso más reciente con reglas de tarea de velocidad."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:103
 #, no-c-format
@@ -8471,7 +8472,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:139
 msgid "FAI triangle areas"
-msgstr "Áreas triangulares FAI"
+msgstr "Áreas en triangulo FAI"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:140
 msgid "Show FAI triangle areas on the map."
@@ -8830,7 +8831,7 @@ msgstr "No se muestra la altura de llegada."
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:110
 #, no-c-format
 msgid "Straight glide"
-msgstr "Deslizamiento recto"
+msgstr "Planeo recto"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:111
 #, no-c-format
@@ -8840,7 +8841,7 @@ msgstr "Altura de llegada en planeo recto (no se considera el terreno)."
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:113
 #, no-c-format
 msgid "Terrain avoidance glide"
-msgstr "Deslizamiento para evitar el terreno"
+msgstr "Planeo evitando el terreno"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:114
 #, no-c-format
@@ -8854,7 +8855,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:117
 #, no-c-format
 msgid "Straight & terrain glide"
-msgstr "Recto y deslizamiento del terreno"
+msgstr "Planeo recto y del terreno"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:118
 #, no-c-format
@@ -8971,7 +8972,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:177
 #, no-c-format
 msgid "Traffic lights"
-msgstr "Luces de tráfico"
+msgstr "Semáforo"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:178
 #, no-c-format
@@ -9225,15 +9226,15 @@ msgstr "Establece el comportamiento de la misión actual."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:231
 msgid "Minimum AAT task time in minutes."
-msgstr "Tiempo mínimo de tarea AAT en minutos."
+msgstr "Tiempo mínimo de tarea TAA en minutos."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:234
 msgid "Arm start manually"
-msgstr "Armado de salida manual"
+msgstr "Establecer la salida manualmente"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:235
 msgid "Configure whether the start must be armed manually or automatically."
-msgstr "Configura si la salida debe armarse de forma manual o automática."
+msgstr "Configura si la salida debe establecerse de forma manual o automática."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:240
 msgid "Start open time"
@@ -9431,12 +9432,11 @@ msgstr "Cilindro"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:203
 msgid "MAT cylinder"
-msgstr "Cilindro MAT"
+msgstr "Cilindro TAM"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:207
-#, fuzzy
 msgid "Keyhole"
-msgstr "Sector FAI + cilindro"
+msgstr "Ojo de cerradura"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:213
 msgid "DAeC Keyhole"
@@ -9465,8 +9465,8 @@ msgid ""
 "task distances, smaller values move the target points to produce smaller "
 "task distances."
 msgstr ""
-"En tareas AAT, este valor puede usarse para ajustar los puntos de destino "
-"dentro de los sectores AAT. Valores mas altos mueven los puntos para generar "
+"En tareas TAA, este valor puede usarse para ajustar los puntos de destino "
+"dentro de los sectores TAA. Valores mas altos mueven los puntos para generar "
 "distancias de tarea mas grandes, valores mas bajos mueven los puntos para "
 "generar distancias de tarea mas pequeñas."
 
@@ -9476,8 +9476,8 @@ msgid ""
 "the AAT sectors.  Positive values rotate the range line clockwise, negative "
 "values rotate the range line counterclockwise."
 msgstr ""
-"Para las tareas AAT, se puede usar esta configuración para ajustar los "
-"puntos de destino dentro de los sectores AAT. Los valores positivos giran la "
+"Para las tareas TAA, se puede usar esta configuración para ajustar los "
+"puntos de destino dentro de los sectores TAA. Los valores positivos giran la "
 "línea de alcance en el sentido de las agujas del reloj, los valores "
 "negativos giran la línea de alcance en el sentido contrario."
 
@@ -9487,7 +9487,7 @@ msgstr "ETE"
 
 #: src/Dialogs/Task/TargetDialog.cpp:425
 msgid "Estimated time en-route to the next AAT target."
-msgstr "Tiempo estimado en ruta hacia el próximo destino AAT."
+msgstr "Tiempo estimado en ruta hacia el próximo destino TAA."
 
 #: src/Dialogs/Task/TargetDialog.cpp:427
 msgid "Delta T"
@@ -9500,10 +9500,10 @@ msgid ""
 "sector and can turn now with estimated arrival time greater than AAT time "
 "plus 5 minutes."
 msgstr ""
-"Tiempo Delta AAT - Diferencia entre el tiempo estimado de la tarea y el "
-"tiempo mínimo AAT. Coloreado en rojo si es negativo (llegada prevista "
+"Tiempo Delta TAA - Diferencia entre el tiempo estimado de la tarea y el "
+"tiempo mínimo TAA. Coloreado en rojo si es negativo (llegada prevista "
 "demasiado pronto), o en azul si está en el sector y puede girar ahora con un "
-"tiempo de llegada estimado mayor que el tiempo AAT más 5 minutos."
+"tiempo de llegada estimado mayor que el tiempo TAA más 5 minutos."
 
 #: src/Dialogs/Task/TargetDialog.cpp:431
 msgid "V rem."
@@ -9518,8 +9518,8 @@ msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr ""
-"Velocidad AAT - Velocidad media de la Tarea de Área Asignada alcanzable a lo "
-"largo de los restantes puntos en el tiempo mínimo AAT."
+"Velocidad TAA - Velocidad media de la Tarea de Área Asignada alcanzable a lo "
+"largo de los restantes puntos en el tiempo mínimo TAA."
 
 #: src/Dialogs/Task/TargetDialog.cpp:442
 msgid "Optimized"
@@ -9687,11 +9687,11 @@ msgstr "Se ha superado la velocidad máxima de salida"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:41
 msgid "In sector, arm advance when ready"
-msgstr "En el sector, armar avance cuando esté listo"
+msgstr "En el sector, establecer avance cuando esté listo"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:43
 msgid "Arm"
-msgstr "Brazo"
+msgstr "Establecer"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:53 src/Monitor/MatTaskMonitor.cpp:62
 msgid "Dismiss"
@@ -9966,7 +9966,7 @@ msgstr "Filtro de crucero"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:112
 #, no-c-format
 msgid "Variometer low pass filter time constant in cruise mode."
-msgstr "Constante de tiempo del filtro paso bajo del Vario."
+msgstr "Constante de tiempo del filtro paso bajo del vario."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:116
 #, no-c-format
@@ -10121,7 +10121,7 @@ msgstr "Intervalo; advertencia"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
 msgid "TE port"
-msgstr "Puerto TE"
+msgstr "Puerto ET"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
@@ -10394,7 +10394,7 @@ msgid ""
 "Lock\n"
 "Screen"
 msgstr ""
-"Bloqueo\n"
+"Bloquear\n"
 "Pantalla"
 
 #: Data/Input/default.xci:727
@@ -10500,7 +10500,7 @@ msgid ""
 "On"
 msgstr ""
 "Activar\n"
-"Despl."
+"Despl"
 
 #: Data/Input/default.xci:356 Data/Input/default.xci:405
 #: Data/Input/default.xci:894
@@ -10512,7 +10512,7 @@ msgid ""
 "Accel\n"
 "Zero"
 msgstr ""
-"Accel\n"
+"Acel\n"
 "Cero"
 
 #: Data/Input/default.xci:1175
