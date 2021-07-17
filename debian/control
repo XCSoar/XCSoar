@@ -23,7 +23,7 @@ Build-Depends-Indep:  texlive, texlive-latex-extra,
  texlive-lang-english | texlive-lang-ukenglish,
  texlive-lang-german, texlive-lang-french,
  texlive-lang-polish, texlive-lang-portuguese,
- latex-xcolor, pgf,
+ texlive-latex-recommended, texlive-pictures,
  liblocale-po-perl, libio-captureoutput-perl
 Standards-Version: 3.9.1.0
 Homepage: http://www.xcsoar.org/
