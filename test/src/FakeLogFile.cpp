@@ -43,12 +43,12 @@ LogFormat(const char *fmt, ...) noexcept
 #ifdef _UNICODE
 
 void
-LogFormat(const TCHAR *fmt, ...) noexcept
+LogFormat(const wchar_t *fmt, ...) noexcept
 {
   va_list ap;
 
   va_start(ap, fmt);
-  _vftprintf(stderr, fmt, ap);
+  vfwprintf(stderr, fmt, ap);
   va_end(ap);
 
   fputc('\n', stderr);

@@ -107,25 +107,25 @@ LogFormat(const char *fmt, ...) noexcept
 #ifdef _UNICODE
 
 static void
-LogString(const TCHAR *p) noexcept
+LogString(const wchar_t *p) noexcept
 {
   TextWriter writer(OpenLog());
   if (!writer.IsOpen())
     return;
 
-  TCHAR time_buffer[32];
+  wchar_t time_buffer[32];
   FormatISO8601(time_buffer, BrokenDateTime::NowUTC());
-  writer.FormatLine(_T("[%s] %s"), time_buffer, p);
+  writer.FormatLine(L"[%s] %s", time_buffer, p);
 }
 
 void
-LogFormat(const TCHAR *Str, ...) noexcept
+LogFormat(const wchar_t *Str, ...) noexcept
 {
-  TCHAR buf[MAX_PATH];
+  wchar_t buf[MAX_PATH];
   va_list ap;
 
   va_start(ap, Str);
-  _vstprintf(buf, Str, ap);
+  vswprintf(buf, Str, ap);
   va_end(ap);
 
   LogString(buf);
