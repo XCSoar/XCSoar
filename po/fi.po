@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-10 09:50+0200\n"
-"PO-Revision-Date: 2013-07-28 16:54+0000\n"
-"Last-Translator: Joel Päkkilä <joel.pakkila@gmail.com>\n"
-"Language-Team: Finnish <fi@li.org>\n"
+"PO-Revision-Date: 2021-07-20 10:35+0000\n"
+"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/xcsoar/"
+"translations/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 "X-Launchpad-Export-Date: 2013-08-10 17:36+0000\n"
-"X-Generator: Launchpad (build 16723)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -2883,9 +2885,9 @@ msgid "The time spend in the current thermal."
 msgstr "Nykyisessä nostossa saavutettu/menetetty korkeus."
 
 #: src/InfoBoxes/Content/Factory.cpp:1096
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alternate 2 GR"
-msgstr "Vaihtoehto 1 GR"
+msgstr "Vaihtoehto 2 GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:1097
 #, no-c-format
