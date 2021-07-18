@@ -72,7 +72,7 @@ public:
     password = _password;
   }
 
-  virtual void Run(OperationEnvironment &env);
+  void Run(OperationEnvironment &env) override;
 };
 
 } // namespace Net

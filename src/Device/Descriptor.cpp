@@ -93,7 +93,7 @@ public:
   OpenDeviceJob(DeviceDescriptor &_device):device(_device) {}
 
   /* virtual methods from class Job */
-  virtual void Run(OperationEnvironment &env) {
+  void Run(OperationEnvironment &env) override {
     device.DoOpen(env);
   };
 };
