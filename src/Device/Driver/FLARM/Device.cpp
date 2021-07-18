@@ -40,7 +40,7 @@ FlarmDevice::LinkTimeout()
 bool
 FlarmDevice::PutPilotEvent(OperationEnvironment &env)
 {
-  return Send("PFLAI,PILOTEVENT*", env);
+  return Send("PFLAI,PILOTEVENT", env);
 }
 
 bool
