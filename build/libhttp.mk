@@ -11,6 +11,7 @@ LIBHTTP_SOURCES = \
 	$(SRC)/net/http/ToBuffer.cpp \
 	$(SRC)/net/http/Multi.cxx \
 	$(SRC)/net/http/FormData.cpp \
+	$(SRC)/net/http/Adapter.cxx \
 	$(SRC)/net/http/Request.cxx \
 	$(SRC)/net/http/Global.cxx \
 	$(SRC)/net/http/Init.cpp
