@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-10 09:50+0200\n"
-"PO-Revision-Date: 2021-07-09 20:20+0000\n"
+"PO-Revision-Date: 2021-07-13 06:35+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -8121,9 +8121,8 @@ msgstr "Reference použitá pro pravidlo minimální výšky."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:126
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:276
-#, fuzzy
 msgid "PEV start wait time"
-msgstr "Očekávaná doba úlohy"
+msgstr "Prodleva po pilotní značce"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:127
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:277
@@ -8131,11 +8130,13 @@ msgid ""
 "Wait time in minutes after Pilot Event and before start gate opens. 0 means "
 "start opens immediately."
 msgstr ""
+"Doba prodlevy v minutách po označení pilotní značkou a před otevřením "
+"startovní brány. 0 znamená, že se startovní brána otevírá okamžitě."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:133
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:280
 msgid "PEV start window"
-msgstr ""
+msgstr "Startovní brána pilot. značky"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:134
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:281
@@ -8143,6 +8144,9 @@ msgid ""
 "Number of minutes start remains open after Pilot Event and PEV wait time.0 "
 "means start will never close after it opens."
 msgstr ""
+"Počet minut, kdy startovní brána zůstává otevřená, po označení pilotní "
+"značkou a uplynutí prodlevy. 0 znamená, že se startovní brána po otevření "
+"nikdy neuzavře."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:79
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -10222,7 +10226,7 @@ msgstr ""
 
 #: Data/Input/default.xci:430
 msgid "Pilot event announced"
-msgstr ""
+msgstr "Pilotní značka označena"
 
 #: Data/Input/default.xci:923
 msgid ""
@@ -10287,14 +10291,15 @@ msgstr "Uložit do EEPROM"
 
 #: Data/Input/default.xci:420 Data/Input/default.xci:1063
 msgid "Dropped marker"
-msgstr "Značka vytvořena"
+msgstr "Marker vytvořen"
 
 #: Data/Input/default.xci:433
-#, fuzzy
 msgid ""
 "Pilot\n"
 "Event"
-msgstr "Pilot"
+msgstr ""
+"Pilotní\n"
+"značka"
 
 #: Data/Input/default.xci:775 Data/Input/default.xci:1182
 msgid "FLARM Radar"
@@ -10399,7 +10404,7 @@ msgid ""
 "Drop"
 msgstr ""
 "Vytvoř\n"
-"značku"
+"marker"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:460
 #: Data/Input/default.xci:953
