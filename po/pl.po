@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-10 09:50+0200\n"
-"PO-Revision-Date: 2019-08-28 12:24+0000\n"
-"Last-Translator: leela <53352@protonmail.com>\n"
+"PO-Revision-Date: 2021-07-20 10:35+0000\n"
+"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/pl/>\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.9-dev\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -3161,9 +3161,9 @@ msgstr ""
 "WAR dHKom: Wysokość uzyskana/stracona w aktualnie wykorzystywanym kominie"
 
 #: src/InfoBoxes/Content/Factory.cpp:1096
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alternate 2 GR"
-msgstr "Ląd.1 GR: gradient geom. do Lądowiska 1"
+msgstr "Ląd.2 GR: gradient geom. do Lądowiska 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:1097
 #, fuzzy, no-c-format
