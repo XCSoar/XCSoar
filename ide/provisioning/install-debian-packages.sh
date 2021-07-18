@@ -17,7 +17,7 @@ apt-get install ${APTOPTS[*]} make \
   git quilt zip \
   m4 automake wget \
   ttf-bitstream-vera fakeroot \
-  pkg-config cmake ninja-build
+  pkg-config cmake ninja-build ccache
 echo
 
 echo Installing Manual dependencies...
