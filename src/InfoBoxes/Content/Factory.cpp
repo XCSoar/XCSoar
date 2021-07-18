@@ -1011,7 +1011,7 @@ static constexpr MetaData meta_data[] = {
   // CONTEST_SPEED
   {
     N_("Contest speed"),
-    N_("Ćont Speed"),
+    N_("Cont Speed"),
     N_("Instantaneous evaluation of the flown speed according to the configured Contest rule set."),
     IBFHelper<InfoBoxContentContestSpeed>::Create,
   },
@@ -1089,6 +1089,14 @@ static constexpr MetaData meta_data[] = {
     N_("TC Time"),
     N_("The time spend in the current thermal."),
     UpdateInfoBoxThermalTime,
+  },
+
+  // e_Alternate_2_GR
+  {
+    N_("Alternate 2 GR"),
+    N_("Altn2 GR"),
+    N_("Geometric gradient to the arrival height above the second alternate. This is not adjusted for total energy."),
+    IBFHelperInt<InfoBoxContentAlternateGR, 1>::Create,
   },
 
 };

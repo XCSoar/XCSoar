@@ -93,7 +93,7 @@ public:
   OpenDeviceJob(DeviceDescriptor &_device):device(_device) {}
 
   /* virtual methods from class Job */
-  virtual void Run(OperationEnvironment &env) {
+  void Run(OperationEnvironment &env) override {
     device.DoOpen(env);
   };
 };
@@ -553,6 +553,8 @@ DeviceDescriptor::Open(OperationEnvironment &env)
 
   open_job = new OpenDeviceJob(*this);
   async.Start(open_job, env, &job_finished_notify);
+
+  PortStateChanged();
 }
 
 void
@@ -921,6 +923,22 @@ DeviceDescriptor::PutVolume(unsigned volume, OperationEnvironment &env)
 }
 
 bool
+DeviceDescriptor::PutPilotEvent(OperationEnvironment &env)
+{
+  assert(InMainThread());
+
+  if (device == nullptr || !config.sync_to_device)
+    return true;
+
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  ScopeReturnDevice restore(*this, env);
+  return device->PutPilotEvent(env);
+}
+
+bool
 DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
                                      const TCHAR *name,
                                      OperationEnvironment &env)
@@ -1186,6 +1204,8 @@ DeviceDescriptor::OnJobFinished() noexcept
 
   delete open_job;
   open_job = nullptr;
+
+  PortStateChanged();
 }
 
 void

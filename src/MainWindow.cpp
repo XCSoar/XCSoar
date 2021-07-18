@@ -44,6 +44,8 @@ Copyright_License {
 #include "Look/GlobalFonts.hpp"
 #include "Look/DefaultFonts.hpp"
 #include "Look/Look.hpp"
+#include "Operation/PopupOperationEnvironment.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "ProgressGlue.hpp"
 #include "UIState.hpp"
 #include "DrawThread.hpp"
@@ -630,9 +632,33 @@ MainWindow::OnKeyDown(unsigned key_code)
     SingleWindow::OnKeyDown(key_code);
 }
 
+inline void
+MainWindow::LateInitialise() noexcept
+{
+  if (late_initialised)
+    return;
+
+  late_initialised = true;
+
+  if (devices != nullptr) {
+    /* this OperationEnvironment instance must be persistent, because
+       DeviceDescriptor::Open() is asynchronous */
+    static PopupOperationEnvironment env;
+
+    /* opening all devices needs to be postponed to here because
+       during early initialisation (before the main event loop runs),
+       opening some devices may be intercepted by Android which pauses
+       XCSoar in order to ask the user for permission; pausing works
+       properly only if the main event loop runs */
+    devices->Open(env);
+  }
+}
+
 void
 MainWindow::RunTimer() noexcept
 {
+  LateInitialise();
+
   ProcessTimer();
 
   UpdateGaugeVisibility();

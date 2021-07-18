@@ -37,13 +37,7 @@ static void
 devInitOne(DeviceDescriptor &device, const DeviceConfig &config)
 {
   device.SetConfig(config);
-
-  /* this OperationEnvironment instance must be persistent, because
-     DeviceDescriptor::Open() is asynchronous */
-  static PopupOperationEnvironment env;
-
   device.ResetFailureCounter();
-  device.Open(env);
 }
 
 /**
@@ -61,6 +55,7 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
   switch (a.port_type) {
   case DeviceConfig::PortType::SERIAL:
   case DeviceConfig::PortType::PTY:
+  case DeviceConfig::PortType::ANDROID_USB_SERIAL:
     return a.path.equals(b.path);
 
   case DeviceConfig::PortType::RFCOMM:
@@ -186,4 +181,9 @@ devRestart()
   devShutdown();
 
   devStartup();
+
+  /* this OperationEnvironment instance must be persistent, because
+     DeviceDescriptor::Open() is asynchronous */
+  static PopupOperationEnvironment env;
+  devices->Open(env);
 }

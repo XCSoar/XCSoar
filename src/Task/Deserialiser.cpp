@@ -269,6 +269,11 @@ Deserialise(OrderedTaskSettings &data, const ConstDataNode &node)
     GetHeightRef(node, _T("finish_min_height_ref"));
   node.GetAttribute(_T("fai_finish"), data.finish_constraints.fai_finish);
   data.start_constraints.fai_finish = data.finish_constraints.fai_finish;
+  node.GetAttribute(_T("pev_start_wait_time"),
+                    data.start_constraints.pev_start_wait_time);
+  node.GetAttribute(_T("pev_start_window"),
+                    data.start_constraints.pev_start_window);
+
 }
 
 static TaskFactoryType

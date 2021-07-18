@@ -44,6 +44,7 @@ public:
   void LogPoint(const NMEAInfo &gps_info);
   void LogStartEvent(const NMEAInfo &gps_info);
   void LogFinishEvent(const NMEAInfo &gps_info);
+  void LogPilotEvent(const NMEAInfo &gps_info);
 
   gcc_pure
   bool IsLoggerActive() const;

@@ -50,6 +50,8 @@ static const char *const port_type_strings[] = {
   "tcp_listener",
   "udp_listener",
   "pty",
+  "glider_link",
+  "android_usb_serial",
   NULL
 };
 
@@ -145,6 +147,7 @@ Profile::GetDeviceConfig(const ProfileMap &map, unsigned n,
 
   config.path.clear();
   if ((!have_port_type ||
+       config.port_type == DeviceConfig::PortType::ANDROID_USB_SERIAL ||
        config.port_type == DeviceConfig::PortType::SERIAL) &&
       !LoadPath(map, config, n) && LoadPortIndex(map, config, n))
     config.port_type = DeviceConfig::PortType::SERIAL;

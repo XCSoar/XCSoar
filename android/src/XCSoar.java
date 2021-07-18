@@ -97,6 +97,7 @@ public class XCSoar extends Activity {
     IOIOHelper.onCreateContext(this);
 
     BluetoothHelper.Initialize(this);
+    UsbSerialHelper.Initialise(this);
 
     // fullscreen mode
     requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -285,6 +286,8 @@ public class XCSoar extends Activity {
     }
 
     Log.d(TAG, "in onDestroy()");
+
+    UsbSerialHelper.Deinitialise(this);
 
     if (batteryReceiver != null) {
       unregisterReceiver(batteryReceiver);

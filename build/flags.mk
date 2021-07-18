@@ -24,10 +24,17 @@ ifeq ($(ICF),y)
     USE_LD = gold
   endif
 
-  # Hide all symbols from static libraries we link with; this has a
-  # huge effect on Android where libc++'s symbols are exported by
-  # default.
-  LDFLAGS += -Wl,--exclude-libs,ALL
+  ifneq ($(TARGET_IS_PI)$(TARGET_IS_PI4),yn)
+    # Hide all symbols from static libraries we link with; this has a
+    # huge effect on Android where libc++'s symbols are exported by
+    # default.
+    LDFLAGS += -Wl,--exclude-libs,ALL
+
+    # Note that the above "ifneq" exclude the Raspberry Pi 1-3 from
+    # this because the Broadcom VideoCore library apparently needs to
+    # export symbols from the static library to libEGL; hiding those
+    # symbols would break rendering.
+  endif
 endif
 
 ifneq ($(USE_LD),)

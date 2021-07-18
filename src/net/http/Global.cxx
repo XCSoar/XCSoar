@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2020 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2008-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,6 +31,7 @@
 #include "Request.hxx"
 #include "event/Loop.hxx"
 #include "event/SocketEvent.hxx"
+#include "util/Compiler.h"
 
 #include <cassert>
 
@@ -81,7 +82,7 @@ private:
 			(flags & SocketEvent::ERROR ? CURL_CSELECT_ERR : 0);
 	}
 
-	gcc_const
+	[[gnu::const]]
 	static unsigned CurlPollToFlags(int action) noexcept {
 		switch (action) {
 		case CURL_POLL_NONE:
@@ -169,7 +170,7 @@ CurlGlobal::Remove(CurlRequest &r) noexcept
 /**
  * Find a request by its CURL "easy" handle.
  */
-gcc_pure
+[[gnu::pure]]
 static CurlRequest *
 ToRequest(CURL *easy) noexcept
 {

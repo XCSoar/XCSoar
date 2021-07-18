@@ -75,15 +75,13 @@ try {
   if (nbytes < 0)
     throw MakeSocketError("Failed to receive");
 
-  if (nbytes == 0) {
-    socket.Close();
-    StateChanged();
-    return;
-  }
+  if (nbytes == 0)
+    throw std::runtime_error("Connection closed by peer");
 
   DataReceived(input, nbytes);
 } catch (...) {
   socket.Close();
+  state = PortState::FAILED;
   StateChanged();
   Error(std::current_exception());
 }

@@ -274,6 +274,10 @@ Serialise(WritableDataNode &node, const OrderedTaskSettings &data)
   node.SetAttribute(_T("finish_min_height_ref"),
                     GetHeightRef(data.finish_constraints.min_height_ref));
   node.SetAttribute(_T("fai_finish"), data.finish_constraints.fai_finish);
+  node.SetAttribute(_T("pev_start_wait_time"),
+                    data.start_constraints.pev_start_wait_time);
+  node.SetAttribute(_T("pev_start_window"),
+                    data.start_constraints.pev_start_window);
 }
 
 void

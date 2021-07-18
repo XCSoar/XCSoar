@@ -65,6 +65,12 @@ Logger::LogFinishEvent(const NMEAInfo &gps_info)
   LogEvent(gps_info, "FIN");
 }
 
+void
+Logger::LogPilotEvent(const NMEAInfo &gps_info)
+{
+  LogEvent(gps_info, "PEV");
+}
+
 bool
 Logger::IsLoggerActive() const
 {

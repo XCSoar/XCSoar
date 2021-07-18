@@ -22,36 +22,40 @@ Copyright_License {
 */
 
 #include "TTYEnumerator.hpp"
-#include "util/Compiler.h"
+#include "util/CharUtil.hxx"
+#include "util/StringCompare.hxx"
 
-#include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 
-gcc_pure
+[[gnu::pure]]
 static bool
-CheckTTYName(const char *name)
+CheckTTYName(const char *name) noexcept
 {
   /* filter "/dev/tty*" */
-  if (memcmp(name, "tty", 3) == 0) {
+  if (const char *t = StringAfterPrefix(name, "tty"); t != nullptr) {
+    if (*t == 0)
+      /* ignore /dev/tty */
+      return false;
+
     /* ignore virtual internal ports on Mac OS X (and probably other
        BSDs) */
-    if (name[3] >= 'p' && name[3] <= 'w')
+    if (*t >= 'p' && *t <= 'w')
       return false;
 
     /* filter out "/dev/tty0", ... (valid integer after "tty") */
-    char *endptr;
-    strtoul(name + 3, &endptr, 10);
-    return *endptr != 0;
-  } else if (memcmp(name, "rfcomm", 6) == 0)
+    if (IsDigitASCII(*t))
+      return false;
+
+    return true;
+  } else if (StringStartsWith(name, "rfcomm"))
     return true;
   else
     return false;
 }
 
 const char *
-TTYEnumerator::Next()
+TTYEnumerator::Next() noexcept
 {
   struct dirent *ent;
   while ((ent = readdir(dir)) != nullptr) {

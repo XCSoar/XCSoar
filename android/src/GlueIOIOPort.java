@@ -48,6 +48,8 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
 
   private boolean constructing;
 
+  private boolean failed;
+
   private final int inPin;
   private final int outPin;
   private int baudrate = 0;
@@ -85,6 +87,7 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
       synchronized(this) {
         connected = true;
         constructing = true;
+        failed = false;
       }
 
       stateChanged();
@@ -111,6 +114,7 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
 
   @Override public void onIOIODisconnect(IOIO ioio) {
     connected = false;
+    failed = true;
     stateChanged();
 
     super.close();
@@ -128,14 +132,15 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
   }
 
   @Override public int getState() {
-    boolean ready;
     synchronized(this) {
-      ready = connected && !constructing;
+      if (failed)
+        return STATE_FAILED;
+
+      if (!connected || constructing)
+        return STATE_LIMBO;
     }
 
-    return ready
-      ? super.getState()
-      : STATE_LIMBO;
+    return super.getState();
   }
 
   @Override public int getBaudRate() {

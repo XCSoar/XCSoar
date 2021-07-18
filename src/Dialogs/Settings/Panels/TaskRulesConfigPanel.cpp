@@ -39,6 +39,9 @@ enum ControlIndex {
   spacer_2,
   FinishMinHeight,
   FinishHeightRef,
+  spacer_3,
+  PEVStartWaitTime,
+  PEVStartWindow,
 };
 
 class TaskRulesConfigPanel final : public RowFormWidget {
@@ -116,6 +119,24 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent,
           altitude_reference_list,
           (unsigned)task_behaviour.ordered_defaults.finish_constraints.min_height_ref);
   SetExpertRow(FinishHeightRef);
+
+  AddSpacer();
+  SetExpertRow(spacer_3);
+
+  AddTime(_("PEV start wait time"),
+          _("Wait time in minutes after Pilot Event and before start gate opens. "
+            "0 means start opens immediately."),
+          0, 30*60, 60,
+          task_behaviour.ordered_defaults.start_constraints.pev_start_wait_time);
+  SetExpertRow(PEVStartWaitTime);
+
+  AddTime(_("PEV start window"),
+          _("Number of minutes start remains open after Pilot Event and PEV wait time."
+            "0 means start will never close after it opens."),
+          0, 30*60, 60,
+          task_behaviour.ordered_defaults.start_constraints.pev_start_window);
+  SetExpertRow(PEVStartWindow);
+
 }
 
 
@@ -151,6 +172,14 @@ TaskRulesConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValueEnum(FinishHeightRef, ProfileKeys::FinishHeightRef,
                            otb.finish_constraints.min_height_ref);
+
+  changed |= SaveValue(PEVStartWaitTime,
+                       ProfileKeys::PEVStartWaitTime,
+                       otb.start_constraints.pev_start_wait_time);
+
+  changed |= SaveValue(PEVStartWindow,
+                       ProfileKeys::PEVStartWindow,
+                       otb.start_constraints.pev_start_window);
 
   _changed |= changed;
 

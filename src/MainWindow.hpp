@@ -124,6 +124,13 @@ private:
 
   bool restore_page_pending = false;
 
+  /**
+   * Has "late" initialization been done already?  Those are things
+   * that must be run from inside the main event loop.  It will be
+   * checked and set by OnTimer().
+   */
+  bool late_initialised = false;
+
 public:
   virtual ~MainWindow();
 
@@ -341,6 +348,8 @@ private:
   void UpdateTrafficGaugeVisibility();
 
   void StopDragging();
+
+  void LateInitialise() noexcept;
 
   void RunTimer() noexcept;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2018 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2008-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -45,9 +45,27 @@
 
 #include <string.h>
 
+CurlRequest::CurlRequest(CurlGlobal &_global, CurlEasy _easy,
+			 CurlResponseHandler &_handler)
+	:global(_global), handler(_handler), easy(std::move(_easy))
+{
+	SetupEasy();
+}
+
 CurlRequest::CurlRequest(CurlGlobal &_global,
 			 CurlResponseHandler &_handler)
 	:global(_global), handler(_handler)
+{
+	SetupEasy();
+}
+
+CurlRequest::~CurlRequest() noexcept
+{
+	FreeEasy();
+}
+
+void
+CurlRequest::SetupEasy()
 {
 	error_buffer[0] = 0;
 
@@ -64,7 +82,6 @@ CurlRequest::CurlRequest(CurlGlobal &_global,
 	easy.SetOption(CURLOPT_NETRC, 1L);
 #endif
 	easy.SetErrorBuffer(error_buffer);
-	easy.SetNoProgress();
 	easy.SetNoSignal();
 	easy.SetConnectTimeout(10);
 	easy.SetOption(CURLOPT_HTTPAUTH, (long) CURLAUTH_ANY);
@@ -75,11 +92,6 @@ CurlRequest::CurlRequest(CurlGlobal &_global,
 	easy.SetVerifyHost(false);
 	easy.SetVerifyPeer(false);
 #endif
-}
-
-CurlRequest::~CurlRequest() noexcept
-{
-	FreeEasy();
 }
 
 void
@@ -184,14 +196,11 @@ CurlRequest::Done(CURLcode result) noexcept
 	}
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 IsResponseBoundaryHeader(StringView s) noexcept
 {
-	return s.size > 5 && (s.StartsWith("HTTP/") ||
-			      /* the proprietary "ICY 200 OK" is
-				 emitted by Shoutcast */
-			      s.StartsWith("ICY 2"));
+	return s.size > 5 && s.StartsWith("HTTP/");
 }
 
 inline void
@@ -230,8 +239,8 @@ CurlRequest::HeaderFunction(StringView s) noexcept
 	headers.emplace(std::move(name), std::string(value, end));
 }
 
-size_t
-CurlRequest::_HeaderFunction(char *ptr, size_t size, size_t nmemb,
+std::size_t
+CurlRequest::_HeaderFunction(char *ptr, std::size_t size, std::size_t nmemb,
 			     void *stream) noexcept
 {
 	CurlRequest &c = *(CurlRequest *)stream;
@@ -242,8 +251,8 @@ CurlRequest::_HeaderFunction(char *ptr, size_t size, size_t nmemb,
 	return size;
 }
 
-inline size_t
-CurlRequest::DataReceived(const void *ptr, size_t received_size) noexcept
+inline std::size_t
+CurlRequest::DataReceived(const void *ptr, std::size_t received_size) noexcept
 {
 	assert(received_size > 0);
 
@@ -257,8 +266,8 @@ CurlRequest::DataReceived(const void *ptr, size_t received_size) noexcept
 
 }
 
-size_t
-CurlRequest::WriteFunction(char *ptr, size_t size, size_t nmemb,
+std::size_t
+CurlRequest::WriteFunction(char *ptr, std::size_t size, std::size_t nmemb,
 			   void *stream) noexcept
 {
 	CurlRequest &c = *(CurlRequest *)stream;

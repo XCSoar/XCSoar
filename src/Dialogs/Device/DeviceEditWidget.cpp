@@ -43,7 +43,10 @@
 
 #ifdef ANDROID
 #include "java/Global.hxx"
+#include "java/Ref.hxx"
+#include "java/String.hxx"
 #include "Android/BluetoothHelper.hpp"
+#include "Android/UsbSerialHelper.hpp"
 #include "Device/Port/AndroidIOIOUartPort.hpp"
 #include "ScanBluetoothLeDialog.hpp"
 #endif
@@ -222,6 +225,43 @@ FillAndroidBluetoothPorts(DataFieldEnum &df,
 }
 
 static void
+FillAndroidUsbSerialPorts(DataFieldEnum &df,
+                          const DeviceConfig &config) noexcept
+{
+#ifdef ANDROID
+  JNIEnv *env = Java::GetEnv();
+  Java::LocalRef<jobjectArray> list{env, UsbSerialHelper::list(env)};
+  if (!list)
+    return;
+
+  jsize n = env->GetArrayLength(list) / 2;
+  for (jsize i = 0; i < n; ++i) {
+    Java::String j_id{env, (jstring)env->GetObjectArrayElement(list, i * 2)};
+    if (!j_id)
+      continue;
+
+    Java::String j_name{env, (jstring)env->GetObjectArrayElement(list, i * 2 + 1)};
+    if (!j_name)
+      continue;
+
+    const auto id = j_id.ToString();
+    const auto name = j_name.ToString();
+
+    char display_string[256];
+    StringFormat(display_string, sizeof(display_string),
+                 "USB: %s", name.c_str());
+
+    AddPort(df, DeviceConfig::PortType::ANDROID_USB_SERIAL,
+            id.c_str(), display_string);
+  }
+
+  if (config.port_type == DeviceConfig::PortType::ANDROID_USB_SERIAL &&
+      !config.path.empty())
+    SetPort(df, DeviceConfig::PortType::ANDROID_USB_SERIAL, config.path);
+#endif
+}
+
+static void
 FillAndroidIOIOPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
 {
 #if defined(ANDROID)
@@ -248,6 +288,7 @@ FillPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
   FillPortTypes(df, config);
   FillSerialPorts(df, config);
   FillAndroidBluetoothPorts(df, config);
+  FillAndroidUsbSerialPorts(df, config);
   FillAndroidIOIOPorts(df, config);
 }
 
@@ -326,6 +367,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config) noexcept
     break;
 
   case DeviceConfig::PortType::SERIAL:
+  case DeviceConfig::PortType::ANDROID_USB_SERIAL:
     SetPort(df, config.port_type, config.path);
     return;
 
@@ -713,6 +755,7 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df) noexcept
 
   case DeviceConfig::PortType::SERIAL:
   case DeviceConfig::PortType::PTY:
+  case DeviceConfig::PortType::ANDROID_USB_SERIAL:
     /* Serial Port */
     if (new_type == config.port_type &&
         StringIsEqual(config.path, df.GetAsString()))

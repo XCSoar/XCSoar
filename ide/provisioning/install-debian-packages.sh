@@ -60,7 +60,9 @@ apt-get install ${APTOPTS[*]} libinput-dev libgbm-dev
 echo
 
 echo Installing dependencies for ARM Linux targets...
-apt-get install ${APTOPTS[*]} g++-arm-linux-gnueabihf
+apt-get install ${APTOPTS[*]} g++-arm-linux-gnueabihf \
+  libmpc-dev \
+  gmpc-dev
 echo
 
 echo Installing PC/WIN64 dependencies...

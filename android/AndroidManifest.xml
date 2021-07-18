@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.xcsoar"
           android:installLocation="auto"
-          android:versionCode="130"
-          android:versionName="7.9">
+          android:versionCode="132"
+          android:versionName="7.11">
   <application
       android:requestLegacyExternalStorage="true"
       android:icon="@drawable/icon"
@@ -15,6 +15,14 @@
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+
+      <intent-filter>
+        <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+      </intent-filter>
+
+      <intent-filter>
+        <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
       </intent-filter>
 
       <intent-filter>

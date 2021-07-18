@@ -320,16 +320,6 @@ struct GeoPoint {
   bool operator !=(const GeoPoint &other) const {
     return !Equals(other);
   }
-  
-  /**
-   * Rank two points according to longitude, then latitude
-   *
-   * @param other Point to compare to
-   *
-   * @return True if this point is further left (or if equal, lower) than the other
-   */
-  [[gnu::pure]]
-  bool Sort(const GeoPoint &other) const;
 };
 
 static_assert(std::is_trivial<GeoPoint>::value, "type is not trivial");

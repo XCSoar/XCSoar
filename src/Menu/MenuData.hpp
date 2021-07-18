@@ -24,10 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_MENU_DATA_HPP
 #define XCSOAR_MENU_DATA_HPP
 
-#include "util/Compiler.h"
-
 #include <tchar.h>
 #include <string.h>
+
+#include <array>
 
 /**
  * Data of an item in the mode menu.
@@ -37,13 +37,12 @@ public:
   const TCHAR *label;
   unsigned event;
 
-  void Clear() {
-    label = NULL;
+  void Clear() noexcept {
+    label = nullptr;
     event = 0;
   }
 
-  constexpr
-  bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
     return event > 0;
   }
 
@@ -52,9 +51,9 @@ public:
    * often, because the variables that the label depends on may change
    * at any time.
    */
-  gcc_pure
-  bool IsDynamic() const {
-    return label != NULL && _tcsstr(label, _T("$(")) != NULL;
+  [[gnu::pure]]
+  bool IsDynamic() const noexcept {
+    return label != nullptr && _tcsstr(label, _T("$(")) != nullptr;
   }
 };
 
@@ -63,24 +62,22 @@ public:
  */
 class Menu {
 public:
-  enum {
-    MAX_ITEMS = 32,
-  };
+  static constexpr std::size_t MAX_ITEMS = 32;
 
 protected:
-  MenuItem items[MAX_ITEMS];
+  std::array<MenuItem, MAX_ITEMS> items;
 
 public:
-  void Clear();
+  void Clear() noexcept;
 
-  const MenuItem &operator[](unsigned i) const {
+  const MenuItem &operator[](unsigned i) const noexcept {
     return items[i];
   }
 
-  void Add(const TCHAR *label, unsigned location, unsigned event_id);
+  void Add(const TCHAR *label, unsigned location, unsigned event_id) noexcept;
 
-  gcc_pure
-  int FindByEvent(unsigned event) const;
+  [[gnu::pure]]
+  int FindByEvent(unsigned event) const noexcept;
 };
 
 #endif

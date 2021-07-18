@@ -172,6 +172,8 @@ const char FinishRadius[] = "FinishRadius";
 const char TaskType[] = "TaskType";
 const char AATMinTime[] = "AATMinTime";
 const char AATTimeMargin[] = "AATTimeMargin";
+const char PEVStartWaitTime[] = "PEVStartWaitTime";
+const char PEVStartWindow[] = "PEVStartWindow";
 
 const char EnableNavBaroAltitude[] = "EnableNavBaroAltitude";
 

@@ -43,7 +43,7 @@ LibInputHandler::LibInputHandler(EventQueue &_queue) noexcept
    fd(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady)) {}
 
 bool
-LibInputHandler::Open()
+LibInputHandler::Open() noexcept
 {
   if ((nullptr != udev_context)
       || (nullptr != li_if)
@@ -87,7 +87,7 @@ LibInputHandler::Open()
 }
 
 void
-LibInputHandler::Close()
+LibInputHandler::Close() noexcept
 {
   fd.ReleaseSocket();
 
@@ -104,7 +104,7 @@ LibInputHandler::Close()
 }
 
 int
-LibInputHandler::OpenDevice(const char *path, int flags)
+LibInputHandler::OpenDevice(const char *path, int flags) noexcept
 {
   int fd = open(path, flags);
   if (fd < 0)
@@ -114,13 +114,13 @@ LibInputHandler::OpenDevice(const char *path, int flags)
 }
 
 void
-LibInputHandler::CloseDevice(int fd)
+LibInputHandler::CloseDevice(int fd) noexcept
 {
   close(fd);
 }
 
 inline void
-LibInputHandler::HandleEvent(struct libinput_event *li_event)
+LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
 {
   int type = libinput_event_get_type(li_event);
   switch (type) {
@@ -252,7 +252,7 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
 }
 
 inline void
-LibInputHandler::HandlePendingEvents()
+LibInputHandler::HandlePendingEvents() noexcept
 {
   libinput_dispatch(li);
   for (libinput_event *li_event = libinput_get_event(li);

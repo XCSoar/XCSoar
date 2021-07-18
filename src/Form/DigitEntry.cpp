@@ -30,10 +30,12 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Units/Descriptor.hpp"
 #include "time/RoughTime.hpp"
+#include "time/BrokenDate.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Util.hpp"
 #include "Renderer/SymbolRenderer.hpp"
 #include "Geo/CoordinateFormat.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "Asset.hpp"
 
 #include <algorithm>
@@ -239,6 +241,22 @@ DigitEntry::CreateTime(ContainerWindow &parent, const PixelRect &rc,
 }
 
 void
+DigitEntry::CreateDate(ContainerWindow &parent, const PixelRect &rc,
+                       const WindowStyle style)
+{
+  Create(parent, rc, style, 5);
+
+  columns[0].type = Column::Type::YEAR;
+  columns[1].type = Column::Type::COLON;
+  columns[2].type = Column::Type::MONTH;
+  columns[3].type = Column::Type::COLON;
+  columns[4].type = Column::Type::DAY;
+  cursor = 0;
+
+  CalculateLayout();
+}
+
+void
 DigitEntry::CalculateLayout()
 {
   const unsigned control_height = Layout::GetMaximumControlHeight();
@@ -431,6 +449,21 @@ DigitEntry::SetValue(Angle value)
   Invalidate();
 }
 
+void
+DigitEntry::SetValue(BrokenDate value)
+{
+  assert(length == 5);
+  assert(columns[0].type == Column::Type::YEAR);
+  assert(columns[2].type == Column::Type::MONTH);
+  assert(columns[4].type == Column::Type::DAY);
+
+  columns[0].value = value.year - 1900;
+  columns[2].value = value.month - 1;
+  columns[4].value = value.day - 1;
+
+  Invalidate();
+}
+
 unsigned
 DigitEntry::GetPositiveInteger() const
 {
@@ -489,6 +522,24 @@ DigitEntry::GetTimeValue() const
 
   return RoughTime(columns[0].value,
                    columns[2].value * 10 + columns[3].value);
+}
+
+BrokenDate
+DigitEntry::GetDateValue() const
+{
+  assert(length == 5);
+  assert(columns[0].type == Column::Type::YEAR);
+  assert(columns[1].type == Column::Type::COLON);
+  assert(columns[2].type == Column::Type::MONTH);
+  assert(columns[3].type == Column::Type::COLON);
+  assert(columns[4].type == Column::Type::DAY);
+
+  if (!valid)
+    return BrokenDate::Invalid();
+
+  return BrokenDate(columns[0].value + 1900,
+                    columns[2].value + 1,
+                    columns[4].value + 1);
 }
 
 void
@@ -764,11 +815,14 @@ DigitEntry::IncrementColumn(unsigned i)
     if (c.value < c.GetMaxNumber())
       ++c.value;
     else {
-      c.value = 0;
-
-      int previous = FindNumberLeft(i - 1);
-      if (previous >= 0)
-        IncrementColumn(previous);
+      if (c.NoOverflow()) {
+        c.value = c.GetMaxNumber();
+      } else {
+        c.value = 0;
+        int previous = FindNumberLeft(i - 1);
+        if (previous >= 0)
+          IncrementColumn(previous);
+      }
     }
   } else if (c.IsSign()) {
     c.value = !c.value;
@@ -789,11 +843,14 @@ DigitEntry::DecrementColumn(unsigned i)
     if (c.value > 0)
       --c.value;
     else {
-      c.value = c.GetMaxNumber();
-
-      int previous = FindNumberLeft(i - 1);
-      if (previous >= 0)
-        DecrementColumn(previous);
+      if (c.NoOverflow()) {
+        c.value = 0;
+      } else {
+        c.value = c.GetMaxNumber();
+        int previous = FindNumberLeft(i - 1);
+        if (previous >= 0)
+          DecrementColumn(previous);
+      }
     }
   } else if (c.IsSign()) {
     c.value = !c.value;
@@ -953,7 +1010,7 @@ DigitEntry::OnPaint(Canvas &canvas)
   rc.top = top;
   rc.bottom = bottom;
 
-  TCHAR buffer[4];
+  TCHAR buffer[5];
 
   for (unsigned i = 0; i < length; ++i) {
     const Column &c = columns[i];
@@ -1027,6 +1084,16 @@ DigitEntry::OnPaint(Canvas &canvas)
 
     case Column::Type::QUOTE:
       text = _T("\"");
+      break;
+
+    case Column::Type::DAY:
+      _stprintf(buffer, _T("%02u"), c.value + 1);
+      break;
+    case Column::Type::MONTH:
+      _stprintf(buffer, _T("%02u"), c.value + 1);
+      break;
+    case Column::Type::YEAR:
+      _stprintf(buffer, _T("%04u"), c.value + 1900);
       break;
 
     case Column::Type::UNIT:

@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2018 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2008-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,6 +32,7 @@
 
 #include "Easy.hxx"
 
+#include <cstddef>
 #include <map>
 #include <string>
 
@@ -39,6 +40,12 @@ struct StringView;
 class CurlGlobal;
 class CurlResponseHandler;
 
+/**
+ * A non-blocking HTTP request integrated via #CurlGlobal into the
+ * #EventLoop.
+ *
+ * To start sending the request, call Start().
+ */
 class CurlRequest final {
 	CurlGlobal &global;
 
@@ -61,9 +68,9 @@ class CurlRequest final {
 	bool registered = false;
 
 public:
-	/**
-	 * To start sending the request, call Start().
-	 */
+	CurlRequest(CurlGlobal &_global, CurlEasy easy,
+		    CurlResponseHandler &_handler);
+
 	CurlRequest(CurlGlobal &_global,
 		    CurlResponseHandler &_handler);
 
@@ -107,6 +114,15 @@ public:
 		return easy.Get();
 	}
 
+	/**
+	 * Provide access to the underlying #CurlEasy instance, which
+	 * allows the caller to configure options prior to submitting
+	 * this request.
+	 */
+	auto &GetEasy() noexcept {
+		return easy;
+	}
+
 	template<typename T>
 	void SetOption(CURLoption option, T value) {
 		easy.SetOption(option, value);
@@ -140,7 +156,7 @@ public:
 		easy.SetPost(value);
 	}
 
-	void SetRequestBody(const void *data, size_t size) {
+	void SetRequestBody(const void *data, std::size_t size) {
 		easy.SetRequestBody(data, size);
 	}
 
@@ -152,6 +168,8 @@ public:
 	void Done(CURLcode result) noexcept;
 
 private:
+	void SetupEasy();
+
 	/**
 	 * Frees the current "libcurl easy" handle, and everything
 	 * associated with it.
@@ -161,17 +179,17 @@ private:
 	void FinishHeaders();
 	void FinishBody();
 
-	size_t DataReceived(const void *ptr, size_t size) noexcept;
+	std::size_t DataReceived(const void *ptr, std::size_t size) noexcept;
 
 	void HeaderFunction(StringView s) noexcept;
 
 	/** called by curl when new data is available */
-	static size_t _HeaderFunction(char *ptr, size_t size, size_t nmemb,
-				      void *stream) noexcept;
+	static std::size_t _HeaderFunction(char *ptr, std::size_t size, std::size_t nmemb,
+					   void *stream) noexcept;
 
 	/** called by curl when new data is available */
-	static size_t WriteFunction(char *ptr, size_t size, size_t nmemb,
-				    void *stream) noexcept;
+	static std::size_t WriteFunction(char *ptr, std::size_t size, std::size_t nmemb,
+					 void *stream) noexcept;
 };
 
 #endif

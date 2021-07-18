@@ -24,9 +24,11 @@ Copyright_License {
 #include "RowFormWidget.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/File.hpp"
+#include "Form/DataField/Date.hpp"
 #include "Profile/Profile.hpp"
 #include "LocalPath.hpp"
 #include "util/ConvertString.hpp"
+#include "Formatter/TimeFormatter.hpp"
 
 WndProperty *
 RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
@@ -140,5 +142,28 @@ RowFormWidget::SaveValueFileReader(unsigned i,
     return false;
 
   Profile::Set(registry_key, new_value2);
+  return true;
+}
+
+bool
+RowFormWidget::SaveValue(unsigned i,
+                         const char *registry_key,
+                         BrokenDate &value) const noexcept
+{
+  const auto &df = (const DataFieldDate &)GetDataField(i);
+  assert(df.GetType() == DataField::Type::DATE);
+
+  const auto new_value = df.GetValue();
+
+  if (!new_value.IsPlausible())
+    return false;
+
+  if (new_value == value)
+    return false;
+
+  TCHAR buffer[0x10];
+  FormatISO8601(buffer, new_value);
+  Profile::Set(registry_key, buffer);
+  value = new_value;
   return true;
 }

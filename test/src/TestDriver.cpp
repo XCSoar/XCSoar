@@ -258,7 +258,7 @@ static void
 TestAltairRU()
 {
   NullPort null;
-  Device *device = altair_pro_driver.CreateOnPort(dummy_config, null);
+  std::unique_ptr<Device> device{altair_pro_driver.CreateOnPort(dummy_config, null)};
   ok1(device != NULL);
 
   NMEAInfo nmea_info;

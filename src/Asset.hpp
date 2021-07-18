@@ -41,14 +41,15 @@ extern TCHAR asset_number[];
 /**
  * Finds the unique ID of this PDA
  */
-void ReadAssetNumber();
+void
+ReadAssetNumber() noexcept;
 
 /**
  * Returns whether this is a debug build.
  */
 constexpr
 static inline bool
-IsDebug()
+IsDebug() noexcept
 {
 #ifdef NDEBUG
   return false;
@@ -63,7 +64,7 @@ IsDebug()
  */
 constexpr
 static inline bool
-IsAncientHardware()
+IsAncientHardware() noexcept
 {
   return false;
 }
@@ -73,7 +74,7 @@ IsAncientHardware()
  */
 constexpr
 static inline bool
-IsAndroid()
+IsAndroid() noexcept
 {
 #if defined(ANDROID)
   return true;
@@ -87,7 +88,7 @@ IsAndroid()
  */
 constexpr
 static inline bool
-IsApple()
+IsApple() noexcept
 {
 #if defined(__APPLE__)
   return true;
@@ -101,7 +102,7 @@ IsApple()
  */
 constexpr
 static inline bool
-IsMacOSX()
+IsMacOSX() noexcept
 {
 #if defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE
   return true;
@@ -115,7 +116,7 @@ IsMacOSX()
  */
 constexpr
 static inline bool
-IsIOS()
+IsIOS() noexcept
 {
 #if defined(__APPLE__) && TARGET_OS_IPHONE
   return true;
@@ -129,7 +130,7 @@ IsIOS()
  */
 constexpr
 static inline bool
-IsKobo()
+IsKobo() noexcept
 {
 #ifdef KOBO
   return true;
@@ -144,7 +145,7 @@ IsKobo()
  */
 constexpr
 static inline bool
-IsEmbedded()
+IsEmbedded() noexcept
 {
   return IsAndroid() || IsKobo() || IsIOS();
 }
@@ -155,7 +156,7 @@ IsEmbedded()
  */
 constexpr
 static inline bool
-HasLittleMemory()
+HasLittleMemory() noexcept
 {
   return IsAncientHardware();
 }
@@ -165,7 +166,7 @@ HasLittleMemory()
  */
 constexpr
 static inline bool
-HasIOIOLib()
+HasIOIOLib() noexcept
 {
 #ifdef ANDROID
   return true;
@@ -182,11 +183,11 @@ HasIOIOLib()
 #if defined(USE_CONSOLE) && !defined(KOBO)
 gcc_pure
 bool
-HasPointer();
+HasPointer() noexcept;
 #else
 constexpr
 static inline bool
-HasPointer()
+HasPointer() noexcept
 {
   return true;
 }
@@ -200,11 +201,11 @@ HasPointer()
 #ifdef USE_LIBINPUT
 gcc_pure
 bool
-HasTouchScreen();
+HasTouchScreen() noexcept;
 #else
 constexpr
 static inline bool
-HasTouchScreen()
+HasTouchScreen() noexcept
 {
   return IsAndroid() || IsKobo() || IsIOS();
 }
@@ -218,11 +219,11 @@ HasTouchScreen()
 #ifdef USE_LIBINPUT
 gcc_pure
 bool
-HasKeyboard();
+HasKeyboard() noexcept;
 #else
 constexpr
 static inline bool
-HasKeyboard()
+HasKeyboard() noexcept
 {
   return !IsEmbedded();
 }
@@ -237,7 +238,7 @@ HasKeyboard()
 constexpr
 #endif
 static inline bool
-HasCursorKeys()
+HasCursorKeys() noexcept
 {
   /* we assume that all Windows (CE) devices have cursor keys; some do
      not, but that's hard to detect */
@@ -258,7 +259,7 @@ gcc_const
 constexpr
 #endif
 static inline bool
-HasColors()
+HasColors() noexcept
 {
 #ifdef ANDROID
   return !IsNookSimpleTouch();
@@ -278,7 +279,7 @@ gcc_const
 constexpr
 #endif
 static inline bool
-IsDithered()
+IsDithered() noexcept
 {
 #ifdef DITHER
   return true;
@@ -301,7 +302,7 @@ gcc_const
 constexpr
 #endif
 static inline bool
-HasEPaper()
+HasEPaper() noexcept
 {
 #if defined(ANDROID) && defined(__arm__)
   return IsNookSimpleTouch();

@@ -38,14 +38,15 @@
 
 template<typename... Args>
 static inline int
-StringFormat(char *buffer, size_t size, const char *fmt, Args&&... args)
+StringFormat(char *buffer, size_t size, const char *fmt,
+	     Args&&... args) noexcept
 {
   return snprintf(buffer, size, fmt, args...);
 }
 
 template<typename... Args>
 static inline int
-StringFormatUnsafe(char *buffer, const char *fmt, Args&&... args)
+StringFormatUnsafe(char *buffer, const char *fmt, Args&&... args) noexcept
 {
   return sprintf(buffer, fmt, args...);
 }

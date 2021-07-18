@@ -24,10 +24,9 @@ Copyright_License {
 #include "ToBuffer.hpp"
 #include "Request.hxx"
 #include "Handler.hxx"
+#include "Progress.hpp"
 #include "Operation/Operation.hpp"
-#include "thread/Mutex.hxx"
-#include "thread/Cond.hxx"
-#include "util/NumberParser.hpp"
+#include "thread/AsyncWaiter.hxx"
 #include "util/ScopeExit.hxx"
 
 #include <cstdint>
@@ -39,48 +38,38 @@ class DownloadToBufferHandler final : public CurlResponseHandler {
 
   size_t received = 0;
 
-  OperationEnvironment &env;
-
-  Mutex mutex;
-  Cond cond;
-
-  std::exception_ptr error;
-
-  bool done = false;
+  AsyncWaiter waiter;
 
 public:
-  DownloadToBufferHandler(void *_buffer, size_t _max_size,
-                          OperationEnvironment &_env)
-    :buffer((uint8_t *)_buffer), max_size(_max_size), env(_env) {}
+  DownloadToBufferHandler(void *_buffer, size_t _max_size)
+    :buffer((uint8_t *)_buffer), max_size(_max_size) {}
 
   size_t GetReceived() const {
     return received;
   }
 
   void Cancel() noexcept {
-    const std::lock_guard<Mutex> lock(mutex);
-    done = true;
-    cond.notify_one();
+    waiter.SetDone();
   }
 
   void Wait() {
-    std::unique_lock<Mutex> lock(mutex);
-    cond.wait(lock, [this]{ return done; });
-
-    if (error)
-      std::rethrow_exception(error);
+    waiter.Wait();
   }
 
   /* virtual methods from class CurlResponseHandler */
   void OnHeaders(unsigned status,
                  std::multimap<std::string, std::string> &&headers) override {
-    if (auto i = headers.find("content-length"); i != headers.end())
-      env.SetProgressRange(ParseUint64(i->second.c_str()));
   }
 
   void OnData(ConstBuffer<void> data) override {
     size_t remaining = max_size - received;
-    if (remaining == 0 || done)
+    if (remaining == 0) {
+      /* buffer is full - stop here */
+      waiter.SetDone();
+      throw Pause{};
+    }
+
+    if (waiter.IsDone())
       throw Pause{};
 
     if (data.size > remaining)
@@ -88,21 +77,14 @@ public:
 
     memcpy(buffer + received, data.data, data.size);
     received += data.size;
-
-    env.SetProgressRange(received);
   }
 
   void OnEnd() override {
-    const std::lock_guard<Mutex> lock(mutex);
-    done = true;
-    cond.notify_one();
+    waiter.SetDone();
   }
 
   void OnError(std::exception_ptr e) noexcept override {
-    const std::lock_guard<Mutex> lock(mutex);
-    error = std::move(e);
-    done = true;
-    cond.notify_one();
+    waiter.SetError(std::move(e));
   }
 };
 
@@ -112,7 +94,7 @@ Net::DownloadToBuffer(CurlGlobal &curl, const char *url,
                       void *_buffer, size_t max_length,
                       OperationEnvironment &env)
 {
-  DownloadToBufferHandler handler(_buffer, max_length, env);
+  DownloadToBufferHandler handler(_buffer, max_length);
   CurlRequest request(curl, url, handler);
   AtScopeExit(&request) { request.StopIndirect(); };
 
@@ -130,11 +112,10 @@ Net::DownloadToBuffer(CurlGlobal &curl, const char *url,
 
   AtScopeExit(&env) { env.SetCancelHandler({}); };
 
+  const Net::ProgressAdapter progress(request.GetEasy(), env);
+
   request.StartIndirect();
   handler.Wait();
-
-  if (env.IsCancelled())
-    return -1;
 
   return handler.GetReceived();
 }
@@ -144,4 +125,5 @@ Net::DownloadToBufferJob::Run(OperationEnvironment &env)
 {
   length = DownloadToBuffer(curl, url, username, password,
                             buffer, max_length, env);
+
 }

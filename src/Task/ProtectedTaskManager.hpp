@@ -24,6 +24,7 @@
 #define XCSOAR_PROTECTED_TASK_MANAGER_HPP
 
 #include "thread/Guard.hpp"
+#include "time/RoughTime.hpp"
 #include "Engine/Task/Unordered/AbortIntersectionTest.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
 
@@ -71,6 +72,8 @@ public:
 
   [[gnu::pure]]
   const OrderedTaskSettings GetOrderedTaskSettings() const;
+
+  void SetStartTimeSpan(const RoughTimeSpan &open_time_span);
 
   [[gnu::pure]]
   WaypointPtr GetActiveWaypoint() const;

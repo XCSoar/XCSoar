@@ -120,6 +120,13 @@ public:
   virtual bool PutVolume(unsigned volume, OperationEnvironment &env) = 0;
 
   /**
+   * Declare pilot event
+   *
+   * @return true on success
+   */
+  virtual bool PutPilotEvent(OperationEnvironment &env) = 0;
+
+  /**
    * Set a new radio frequency.
    *
    * @param frequency the new frequency
@@ -244,6 +251,7 @@ public:
   bool PutQNH(const AtmosphericPressure &pres,
               OperationEnvironment &env) override;
   bool PutVolume(unsigned volume, OperationEnvironment &env) override;
+  bool PutPilotEvent(OperationEnvironment &env) override;
   bool PutActiveFrequency(RadioFrequency frequency,
                           const TCHAR *name,
                           OperationEnvironment &env) override;

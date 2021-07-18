@@ -32,6 +32,7 @@ Copyright_License {
 #include "GliderLink.hpp"
 #include "PortBridge.hpp"
 #include "BluetoothHelper.hpp"
+#include "UsbSerialHelper.hpp"
 #include "NativeLeScanCallback.hpp"
 #include "NativePortListener.hpp"
 #include "NativeInputListener.hpp"
@@ -129,6 +130,7 @@ try {
   NativeInputListener::Initialise(env);
   PortBridge::Initialise(env);
   BluetoothHelper::Initialise(env);
+  UsbSerialHelper::Initialise(env);
   NativeLeScanCallback::Initialise(env);
   const bool have_ioio = IOIOHelper::Initialise(env);
   NativeBMP085Listener::Initialise(env);
@@ -254,6 +256,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   NativeVoltageListener::Deinitialise(env);
   IOIOHelper::Deinitialise(env);
   NativeLeScanCallback::Deinitialise(env);
+  UsbSerialHelper::Deinitialise(env);
   BluetoothHelper::Deinitialise(env);
   NativeInputListener::Deinitialise(env);
   NativePortListener::Deinitialise(env);

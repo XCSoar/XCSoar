@@ -48,6 +48,15 @@ ProtectedTaskManager::SetGlidePolar(const GlidePolar &glide_polar)
   lease->SetGlidePolar(glide_polar);
 }
 
+void
+ProtectedTaskManager::SetStartTimeSpan(const RoughTimeSpan &open_time_span)
+{
+  ExclusiveLease lease(*this);
+  OrderedTaskSettings otb = lease->GetOrderedTask().GetOrderedTaskSettings();
+  otb.start_constraints.open_time_span = open_time_span;
+  lease->SetOrderedTaskSettings(otb);
+}
+
 const OrderedTaskSettings
 ProtectedTaskManager::GetOrderedTaskSettings() const
 {

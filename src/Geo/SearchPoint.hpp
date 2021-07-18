@@ -162,18 +162,6 @@ public:
   }
 
   /**
-   * Rank two points according to longitude, then latitude
-   *
-   * @param other Point to compare to
-   *
-   * @return True if this point is further left (or if equal, lower) than the other
-   */
-  [[gnu::pure]]
-  bool Sort(const SearchPoint &other) const {
-    return location.Sort(other.location);
-  }
-
-  /**
    * distance from this to the reference
    */
   double DistanceTo(const GeoPoint &ref) const {

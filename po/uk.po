@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 13:24+0200\n"
+"POT-Creation-Date: 2021-07-10 09:50+0200\n"
 "PO-Revision-Date: 2019-09-03 17:24+0000\n"
 "Last-Translator: Prof Genius <prohfesor@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/xcsoar/"
@@ -29,8 +29,8 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:148
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:81
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:178
-#: Data/Input/default.xci:358 Data/Input/default.xci:407
-#: Data/Input/default.xci:977 Data/Input/default.xci:1015
+#: Data/Input/default.xci:364 Data/Input/default.xci:413
+#: Data/Input/default.xci:993 Data/Input/default.xci:1031
 #, no-c-format
 msgid "Task"
 msgstr "Завдання"
@@ -545,11 +545,11 @@ msgstr "Приймач відповідача"
 msgid "Other"
 msgstr "Інші"
 
-#: src/Logger/Logger.cpp:103 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
+#: src/Logger/Logger.cpp:109 src/Dialogs/Device/ManageCAI302Dialog.cpp:94
 msgid "Start Logger"
 msgstr "Запустити Логгер"
 
-#: src/Logger/Logger.cpp:132 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
+#: src/Logger/Logger.cpp:138 src/Dialogs/Device/ManageCAI302Dialog.cpp:99
 msgid "Stop Logger"
 msgstr "Зупинити Логгер"
 
@@ -616,7 +616,7 @@ msgstr "Немає спіралі"
 #: src/Gauge/BigThermalAssistantWidget.cpp:76
 #: src/Gauge/BigTrafficWidget.cpp:604 src/Dialogs/FileManager.cpp:768
 #: src/Dialogs/Device/DeviceListDialog.cpp:702
-#: src/Dialogs/Device/PortMonitor.cpp:187
+#: src/Dialogs/Device/PortMonitor.cpp:188
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:127
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:99
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:107
@@ -805,7 +805,7 @@ msgstr ""
 "повороту"
 
 #: src/Menu/ExpandMacros.cpp:202 src/Menu/ExpandMacros.cpp:206
-#: src/Dialogs/Device/PortMonitor.cpp:166
+#: src/Dialogs/Device/PortMonitor.cpp:167
 msgid "Resume"
 msgstr "Резюме"
 
@@ -2771,7 +2771,7 @@ msgstr "Стрілка вітру"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:109
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:235
 #: src/Weather/NOAAFormatter.cpp:98 src/Weather/NOAAFormatter.cpp:105
-#: Data/Input/default.xci:571
+#: Data/Input/default.xci:587
 #, no-c-format
 msgid "Wind"
 msgstr "Вітер"
@@ -2942,7 +2942,7 @@ msgstr "Швидкість OLC"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, fuzzy, no-c-format
-msgid "Ćont Speed"
+msgid "Cont Speed"
 msgstr "Швидкість"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015
@@ -3103,9 +3103,28 @@ msgstr "TL  час"
 msgid "The time spend in the current thermal."
 msgstr "Висота, набрана/втрачена в цьому терміку."
 
+#: src/InfoBoxes/Content/Factory.cpp:1096
+#, fuzzy, no-c-format
+msgid "Alternate 2 GR"
+msgstr "Запасний 1 GR"
+
+#: src/InfoBoxes/Content/Factory.cpp:1097
+#, fuzzy, no-c-format
+msgid "Altn2 GR"
+msgstr "Запас 1 GR"
+
+#: src/InfoBoxes/Content/Factory.cpp:1098
+#, fuzzy, no-c-format
+msgid ""
+"Geometric gradient to the arrival height above the second alternate. This is "
+"not adjusted for total energy."
+msgstr ""
+"Геометричний градієнт для висоти прибуття над місцем найкращої запасної "
+"посадки. Не враховано повну енергію."
+
 #: src/InfoBoxes/Content/Alternate.cpp:49
-#: src/Dialogs/Task/AlternatesListDialog.cpp:150 Data/Input/default.xci:388
-#: Data/Input/default.xci:1007
+#: src/Dialogs/Task/AlternatesListDialog.cpp:150 Data/Input/default.xci:394
+#: Data/Input/default.xci:1023
 #, no-c-format
 msgid "Alternates"
 msgstr "Запасні"
@@ -3122,8 +3141,8 @@ msgid "Simulator"
 msgstr "Імітатор"
 
 #: src/InfoBoxes/Content/Altitude.cpp:51 src/PageSettings.cpp:60
-#: Data/Input/default.xci:751 Data/Input/default.xci:801
-#: Data/Input/default.xci:843 Data/Input/default.xci:899
+#: Data/Input/default.xci:767 Data/Input/default.xci:817
+#: Data/Input/default.xci:859 Data/Input/default.xci:915
 #, no-c-format
 msgid "Info"
 msgstr "Інфо"
@@ -3239,8 +3258,8 @@ msgstr "Відносно"
 #: src/Dialogs/dlgAnalysis.cpp:514 src/Dialogs/dlgAnalysis.cpp:523
 #: src/Dialogs/dlgAnalysis.cpp:532 src/Dialogs/dlgAnalysis.cpp:542
 #: src/Dialogs/dlgAnalysis.cpp:551 src/Dialogs/dlgAnalysis.cpp:561
-#: src/Dialogs/dlgAnalysis.cpp:709 Data/Input/default.xci:791
-#: Data/Input/default.xci:1198
+#: src/Dialogs/dlgAnalysis.cpp:709 Data/Input/default.xci:807
+#: Data/Input/default.xci:1214
 #, no-c-format
 msgid "Analysis"
 msgstr "Аналіз"
@@ -3279,7 +3298,7 @@ msgstr "н/д"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:88
 #: src/Dialogs/Settings/dlgConfiguration.cpp:101
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:105
-#: Data/Input/default.xci:507 Data/Input/default.xci:1080
+#: Data/Input/default.xci:523 Data/Input/default.xci:1096
 #, no-c-format
 msgid "Terrain"
 msgstr "Ландшафт"
@@ -3327,41 +3346,41 @@ msgstr "Змінити розташування"
 msgid "Clear"
 msgstr "Очистити"
 
-#: src/Input/InputEventsActions.cpp:147
+#: src/Input/InputEventsActions.cpp:149
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:292
 #: src/Dialogs/Waypoint/Manager.cpp:262
 msgid "Failed to save waypoints"
 msgstr "Помилка збереження маршрутних точок"
 
-#: src/Input/InputEventsActions.cpp:222
+#: src/Input/InputEventsActions.cpp:261
 msgid "Screen Mode Full"
 msgstr "Режим на весь екран"
 
-#: src/Input/InputEventsActions.cpp:224
+#: src/Input/InputEventsActions.cpp:263
 msgid "Auxiliary InfoBoxes"
 msgstr "Допоміжні Інфобокси"
 
-#: src/Input/InputEventsActions.cpp:226
+#: src/Input/InputEventsActions.cpp:265
 msgid "Default InfoBoxes"
 msgstr "Інфобокси за замовчуванням"
 
-#: src/Input/InputEventsActions.cpp:334
+#: src/Input/InputEventsActions.cpp:373
 msgid "No active waypoint!"
 msgstr "Нема активних маршрутних точок!"
 
-#: src/Input/InputEventsActions.cpp:438
+#: src/Input/InputEventsActions.cpp:477
 msgid "NMEA log on"
 msgstr "NMEA  лог вкл"
 
-#: src/Input/InputEventsActions.cpp:440
+#: src/Input/InputEventsActions.cpp:479
 msgid "NMEA log off"
 msgstr "NMEA  лог вимкн"
 
-#: src/Input/InputEventsActions.cpp:444
+#: src/Input/InputEventsActions.cpp:483
 msgid "Logger on"
 msgstr "Логгер вкл"
 
-#: src/Input/InputEventsActions.cpp:446
+#: src/Input/InputEventsActions.cpp:485
 msgid "Logger off"
 msgstr "Логгер вимкн"
 
@@ -3593,16 +3612,16 @@ msgstr "Висота"
 
 #: src/Renderer/MapItemListRenderer.cpp:151
 #: src/Renderer/MapItemListRenderer.cpp:174
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:91
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:242
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:94
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:256
 #, no-c-format
 msgid "AGL"
 msgstr "AGL"
 
 #: src/Renderer/MapItemListRenderer.cpp:156
 #: src/Renderer/MapItemListRenderer.cpp:179
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:93
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:244
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:96
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:258
 #, no-c-format
 msgid "MSL"
 msgstr "MSL"
@@ -3979,40 +3998,40 @@ msgstr "Вимкнення, збереження завдання..."
 msgid "Unable to open port"
 msgstr "Неможливо відкрити порт"
 
-#: src/Device/Descriptor.cpp:1013 src/Device/Descriptor.cpp:1019
+#: src/Device/Descriptor.cpp:1031 src/Device/Descriptor.cpp:1037
 msgid "Sending declaration"
 msgstr ""
 
-#: src/Device/Descriptor.cpp:1066 src/Device/Descriptor.cpp:1073
+#: src/Device/Descriptor.cpp:1084 src/Device/Descriptor.cpp:1091
 msgid "Reading flight list"
 msgstr ""
 
-#: src/Device/Descriptor.cpp:1097 src/Device/Descriptor.cpp:1104
+#: src/Device/Descriptor.cpp:1115 src/Device/Descriptor.cpp:1122
 msgid "Downloading flight log"
 msgstr "Завантаження логу польоту"
 
-#: src/Device/Config.cpp:204 src/Dialogs/Device/DeviceEditWidget.cpp:64
+#: src/Device/Config.cpp:206 src/Dialogs/Device/DeviceEditWidget.cpp:67
 #: src/Dialogs/Device/DeviceListDialog.cpp:424
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:40
 #, no-c-format
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: src/Device/Config.cpp:223 src/Dialogs/Device/DeviceEditWidget.cpp:69
+#: src/Device/Config.cpp:225 src/Dialogs/Device/DeviceEditWidget.cpp:72
 #, no-c-format
 msgid "Bluetooth server"
 msgstr "Сервер Bluetooth"
 
-#: src/Device/Config.cpp:242
+#: src/Device/Config.cpp:244
 msgid "GPS Intermediate Driver"
 msgstr "Драйвер GPS"
 
-#: src/Device/Config.cpp:245 src/Dialogs/Device/DeviceEditWidget.cpp:66
+#: src/Device/Config.cpp:247 src/Dialogs/Device/DeviceEditWidget.cpp:69
 #, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Вбудований GPS і датчики"
 
-#: src/Device/Config.cpp:248
+#: src/Device/Config.cpp:250
 msgid "GliderLink traffic receiver"
 msgstr ""
 
@@ -4059,7 +4078,7 @@ msgstr "Повтор"
 #: src/Dialogs/NumberEntry.cpp:102 src/Dialogs/NumberEntry.cpp:142
 #: src/Dialogs/TouchTextEntry.cpp:207 src/Dialogs/TimeEntry.cpp:66
 #: src/Dialogs/GeoPointEntry.cpp:77 src/Dialogs/DownloadFilePicker.cpp:407
-#: Data/Input/default.xci:914
+#: Data/Input/default.xci:930
 msgid "Cancel"
 msgstr "Скасувати"
 
@@ -4143,7 +4162,7 @@ msgid "Failed to download the repository index."
 msgstr "Помилка при завантаженні індексу архіву бази даних."
 
 #: src/Dialogs/FileManager.cpp:767 src/Dialogs/FileManager.cpp:792
-#: src/Dialogs/DownloadFilePicker.cpp:400 Data/Input/default.xci:605
+#: src/Dialogs/DownloadFilePicker.cpp:400 Data/Input/default.xci:621
 msgid "File Manager"
 msgstr "Файловий менеджер"
 
@@ -4151,58 +4170,58 @@ msgstr "Файловий менеджер"
 msgid "The file manager is not available on this device."
 msgstr "Файловий менеджер не доступний на цьому пристрої."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:73
+#: src/Dialogs/Device/DeviceEditWidget.cpp:76
 #, no-c-format
 msgid "IOIO switches and Nunchuk"
 msgstr "Ключі IOIO і Nunchuk"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:75
+#: src/Dialogs/Device/DeviceEditWidget.cpp:78
 #, fuzzy, no-c-format
 msgid "IOIO I²C pressure sensor"
 msgstr "Датчик тиску з i2c до IOIO"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:76
+#: src/Dialogs/Device/DeviceEditWidget.cpp:79
 #, no-c-format
 msgid "IOIO voltage sensor"
 msgstr "Датчик напруги IOIO"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:79
+#: src/Dialogs/Device/DeviceEditWidget.cpp:82
 #, no-c-format
 msgid "TCP client"
 msgstr "Клієнт ТСР"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
-#: src/Dialogs/Device/DeviceEditWidget.cpp:83
-#: src/Dialogs/Device/DeviceEditWidget.cpp:612
+#: src/Dialogs/Device/DeviceEditWidget.cpp:86
+#: src/Dialogs/Device/DeviceEditWidget.cpp:654
 #, fuzzy, no-c-format
 msgid "TCP port"
 msgstr "Порт TCP"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:84
+#: src/Dialogs/Device/DeviceEditWidget.cpp:87
 #, fuzzy, no-c-format
 msgid "UDP port"
 msgstr "Порт UDP"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:362
+#: src/Dialogs/Device/DeviceEditWidget.cpp:404
 msgid "Bluetooth LE"
 msgstr "Bluetooth LE"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:589
+#: src/Dialogs/Device/DeviceEditWidget.cpp:631
 msgid "Port"
 msgstr "Порт"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:595
+#: src/Dialogs/Device/DeviceEditWidget.cpp:637
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:95
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:118
 msgid "Baud rate"
 msgstr "Швидкість передачі даних"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:601
+#: src/Dialogs/Device/DeviceEditWidget.cpp:643
 msgid "Bulk baud rate"
 msgstr "Швидкість передачі масивів даних"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:602
+#: src/Dialogs/Device/DeviceEditWidget.cpp:644
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
@@ -4210,24 +4229,24 @@ msgstr ""
 "Швидкість передачі, що використовується для передачі великих масивів даних, "
 "таких як декларація завдання чи завантаження польоту."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:607
+#: src/Dialogs/Device/DeviceEditWidget.cpp:649
 #, fuzzy
 msgid "IP address"
 msgstr "Адреса ІР"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:617
+#: src/Dialogs/Device/DeviceEditWidget.cpp:659
 msgid "I²C bus"
 msgstr ""
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:617
+#: src/Dialogs/Device/DeviceEditWidget.cpp:659
 msgid "Select the description or bus number that matches your configuration."
 msgstr "Виберіть опис або номер шини, що підходить конфігурації."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:623
+#: src/Dialogs/Device/DeviceEditWidget.cpp:665
 msgid "I²C addr"
 msgstr ""
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:623
+#: src/Dialogs/Device/DeviceEditWidget.cpp:665
 #, fuzzy
 msgid ""
 "The I²C address that matches your configuration. This field is not used when "
@@ -4238,11 +4257,11 @@ msgstr ""
 "виборі в полі «Шина I2C» іншого ніж номер шини i2c. Якщо ви не зрозуміли про "
 "що йдеться вище, можете вважати, що це поле не використовується."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:631
+#: src/Dialogs/Device/DeviceEditWidget.cpp:673
 msgid "Pressure use"
 msgstr "Використання датчика тиску"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:631
+#: src/Dialogs/Device/DeviceEditWidget.cpp:673
 #, fuzzy
 msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
@@ -4253,29 +4272,29 @@ msgstr ""
 "Тут ви повідомляєте системі, що це за тиск і для чого його слід "
 "використовувати."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:645
+#: src/Dialogs/Device/DeviceEditWidget.cpp:687
 msgid "Driver"
 msgstr "Драйвер"
 
 #. for a passthrough device, offer additional driver
-#: src/Dialogs/Device/DeviceEditWidget.cpp:648
+#: src/Dialogs/Device/DeviceEditWidget.cpp:690
 msgid "Passthrough device"
 msgstr ""
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:649
+#: src/Dialogs/Device/DeviceEditWidget.cpp:691
 #, fuzzy
 msgid "Whether the device has a passed-through device connected."
 msgstr "Чи підключено до порту статичного ттиску."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:660
+#: src/Dialogs/Device/DeviceEditWidget.cpp:702
 msgid "Second Driver"
 msgstr "2й Драйвер"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:662
+#: src/Dialogs/Device/DeviceEditWidget.cpp:704
 msgid "Sync. from device"
 msgstr "Синхр. від пристрою"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:663
+#: src/Dialogs/Device/DeviceEditWidget.cpp:705
 #, fuzzy
 msgid ""
 "Tells XCSoar to use settings like the MacCready value, bugs and ballast from "
@@ -4284,11 +4303,11 @@ msgstr ""
 "Ця опція дозволяє здійснити конфігурацію, якщо XCSoar повинна отримати такі "
 "налаштування, як значення MacCready, вплив жучків і баласту від пристрою."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:668
+#: src/Dialogs/Device/DeviceEditWidget.cpp:710
 msgid "Sync. to device"
 msgstr "Синхр. до пристрою"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:669
+#: src/Dialogs/Device/DeviceEditWidget.cpp:711
 #, fuzzy
 msgid ""
 "Tells XCSoar to send settings like the MacCready value, bugs and ballast to "
@@ -4297,7 +4316,7 @@ msgstr ""
 "Ця опція дозволяє здійснити конфігурацію, якщо XCSoar повинна надіслатитакі "
 "налаштування, як значення MacCready, вплив жучків і баласту до пристрою."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:675
+#: src/Dialogs/Device/DeviceEditWidget.cpp:717
 #, fuzzy
 msgid "Whether you use a K6Bt to connect the device."
 msgstr "Увімкніть, якщо ви  використовуєте K6Bt, щоб підключитись до пристрою."
@@ -4311,7 +4330,6 @@ msgstr "Завантажити політ"
 #: src/Dialogs/Device/DeviceListDialog.cpp:545
 #: src/Dialogs/Device/DeviceListDialog.cpp:601
 #: src/Dialogs/Device/DeviceListDialog.cpp:607
-#: src/Dialogs/Device/PortMonitor.cpp:150
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:122
 msgid "Manage"
 msgstr "Управління"
@@ -4324,6 +4342,7 @@ msgstr "Монітор"
 #: src/Dialogs/Device/DeviceListDialog.cpp:508
 #: src/Dialogs/Device/DeviceListDialog.cpp:516
 #: src/Dialogs/Device/PortMonitor.cpp:142
+#: src/Dialogs/Device/PortMonitor.cpp:150
 msgid "Reconnect"
 msgstr "З'єднати знову"
 
@@ -4413,17 +4432,17 @@ msgstr ""
 "Обмін даними з цим пристроєм буде записано до журналу протягом наступних %u "
 "хвилин."
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:701 Data/Input/default.xci:555
-#: Data/Input/default.xci:1151
+#: src/Dialogs/Device/DeviceListDialog.cpp:701 Data/Input/default.xci:571
+#: Data/Input/default.xci:1167
 msgid "Devices"
 msgstr "Пристрої"
 
 #: src/Dialogs/Device/PortMonitor.cpp:143
-#: src/Dialogs/Device/PortMonitor.cpp:169
+#: src/Dialogs/Device/PortMonitor.cpp:170
 msgid "Pause"
 msgstr "Пауза"
 
-#: src/Dialogs/Device/PortMonitor.cpp:181
+#: src/Dialogs/Device/PortMonitor.cpp:182
 msgid "Port monitor"
 msgstr "Монітор порту"
 
@@ -4715,7 +4734,7 @@ msgid "Unkown"
 msgstr "Невідомо"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:125
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:182
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:188
 #, no-c-format
 msgid "Glider"
 msgstr "Планер"
@@ -4746,13 +4765,13 @@ msgid "Hang glider"
 msgstr "Дельтаплан"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:131
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:183
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:189
 #, no-c-format
 msgid "Paraglider"
 msgstr "Параплан"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:133
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:184
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:190
 #, no-c-format
 msgid "Powered aircraft"
 msgstr "Моторне ПС"
@@ -4855,8 +4874,8 @@ msgid "Select Color"
 msgstr "Обрати колір"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:111
-#: src/Dialogs/Airspace/dlgAirspace.cpp:112 Data/Input/default.xci:436
-#: Data/Input/default.xci:484 Data/Input/default.xci:885
+#: src/Dialogs/Airspace/dlgAirspace.cpp:112 Data/Input/default.xci:452
+#: Data/Input/default.xci:500 Data/Input/default.xci:901
 msgid "Display"
 msgstr "Показати"
 
@@ -4869,7 +4888,7 @@ msgstr "Попередити"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:102
 #: src/Dialogs/dlgAnalysis.cpp:562
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:107
-#: Data/Input/default.xci:521
+#: Data/Input/default.xci:537
 #, no-c-format
 msgid "Airspace"
 msgstr "Повітряний простір"
@@ -5210,7 +5229,7 @@ msgstr "Налаштування ІнфоБоксів"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:139
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:135
-#: Data/Input/default.xci:631 Data/Input/default.xci:1136
+#: Data/Input/default.xci:647 Data/Input/default.xci:1152
 #, no-c-format
 msgid "Logger"
 msgstr "Журнал"
@@ -5330,7 +5349,7 @@ msgstr "Аеропорт"
 msgid "Radio frequency"
 msgstr "Частота радіо"
 
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:142 Data/Input/default.xci:547
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:142 Data/Input/default.xci:563
 msgid "Plane"
 msgstr "Планер"
 
@@ -5465,7 +5484,7 @@ msgstr "Новий"
 
 #: src/Dialogs/ProfileListDialog.cpp:174 src/Dialogs/ProfileListDialog.cpp:323
 #: src/Dialogs/StartupDialog.cpp:171 src/Dialogs/ProfilePasswordDialog.cpp:88
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:244
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:251
 msgid "Password"
 msgstr "Пароль"
 
@@ -5492,7 +5511,7 @@ msgstr ""
 msgid "Delete \"%s\"?"
 msgstr "Вилучити \"%s\"?"
 
-#: src/Dialogs/ProfileListDialog.cpp:336 Data/Input/default.xci:589
+#: src/Dialogs/ProfileListDialog.cpp:336 Data/Input/default.xci:605
 msgid "Profiles"
 msgstr "Профілі"
 
@@ -5658,12 +5677,12 @@ msgstr ""
 "режимі реального часу."
 
 #: src/Dialogs/ReplayDialog.cpp:102 src/Dialogs/ReplayDialog.cpp:126
-#: Data/Input/default.xci:613
+#: Data/Input/default.xci:629
 msgid "Replay"
 msgstr "Відтворення"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:60 src/Dialogs/StartupDialog.cpp:93
-#: Data/Input/default.xci:922
+#: Data/Input/default.xci:938
 msgid "Quit"
 msgstr "Вийти"
 
@@ -5692,16 +5711,16 @@ msgid "Enter a new password"
 msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:47 src/Dialogs/dlgStatus.cpp:58
-#: src/Dialogs/Weather/WeatherDialog.cpp:58 Data/Input/default.xci:809
-#: Data/Input/default.xci:1206
+#: src/Dialogs/Weather/WeatherDialog.cpp:58 Data/Input/default.xci:825
+#: Data/Input/default.xci:1222
 msgid "Status"
 msgstr "Статус"
 
-#: src/Dialogs/dlgStatus.cpp:90 Data/Input/default.xci:563
+#: src/Dialogs/dlgStatus.cpp:90 Data/Input/default.xci:579
 msgid "Flight"
 msgstr "Політ"
 
-#: src/Dialogs/dlgStatus.cpp:93 Data/Input/default.xci:539
+#: src/Dialogs/dlgStatus.cpp:93 Data/Input/default.xci:555
 msgid "System"
 msgstr "Система"
 
@@ -6009,7 +6028,7 @@ msgstr "Активна частота"
 msgid "Set Standby Frequency"
 msgstr "Standby частота"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:419 Data/Input/default.xci:1023
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:419 Data/Input/default.xci:1039
 msgid "GoTo"
 msgstr ""
 
@@ -6017,7 +6036,7 @@ msgstr ""
 msgid "Delete waypoint?"
 msgstr "Видалити ППМ?"
 
-#: src/Dialogs/Waypoint/Manager.cpp:299 Data/Input/default.xci:597
+#: src/Dialogs/Waypoint/Manager.cpp:299 Data/Input/default.xci:613
 msgid "Waypoints Editor"
 msgstr "Редактор шляхових точок"
 
@@ -7213,8 +7232,8 @@ msgid "Use a recent average of the ground track as basis."
 msgstr "Взяти за основу нещодавнє середнє наземного треку."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:61
-#: src/Dialogs/Task/TargetDialog.cpp:772 Data/Input/default.xci:425
-#: Data/Input/default.xci:1031
+#: src/Dialogs/Task/TargetDialog.cpp:772 Data/Input/default.xci:441
+#: Data/Input/default.xci:1047
 #, no-c-format
 msgid "Target"
 msgstr "Ціль"
@@ -7702,7 +7721,7 @@ msgstr ""
 "джерела терміків чи перевали в горах."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:93
-#: Data/Input/default.xci:860
+#: Data/Input/default.xci:876
 msgid "Airspaces"
 msgstr "Повітряний простір"
 
@@ -8001,24 +8020,24 @@ msgid ""
 "SkyLines server."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:63
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:231
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:66
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:245
 msgid "Start max. speed"
 msgstr "Макс. швидкість на старті"
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:63
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:232
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:66
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:246
 #, fuzzy
 msgid "Maximum speed allowed in start observation zone. Set to 0 for no limit."
 msgstr ""
 "Максимальна швидкість, яка дозволена на старті в зоні спостереження. "
 "Встановіть 0, щоб не було обмежень."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:68
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:71
 msgid "Start max. speed margin"
 msgstr "Допуск макс. швидкісті на старті"
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:69
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:72
 msgid ""
 "Maximum speed above maximum start speed to tolerate.  Set to 0 for no "
 "tolerance."
@@ -8026,13 +8045,13 @@ msgstr ""
 "Допустима максимальна швидкість понад максимальну стартову швидкість. "
 "Встановіть 0 для відсутності допуску."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:77
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:236
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:80
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:250
 msgid "Start max. height"
 msgstr "Макс. висота на старті"
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:78
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:237
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:81
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:251
 msgid ""
 "Maximum height based on start height reference (AGL or MSL) while starting "
 "the task.  Set to 0 for no limit."
@@ -8040,11 +8059,11 @@ msgstr ""
 "Максимальна висота, що базується на прив'язці висоти старту (AGL чи MSL), в "
 "момент початку виконання завдання. Встановіть 0 для зняття обмежень."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:84
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:87
 msgid "Start max. height margin"
 msgstr "Допуск макс. висоти на старті"
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:85
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:88
 msgid ""
 "Maximum height above maximum start height to tolerate.  Set to 0 for no "
 "tolerance."
@@ -8052,35 +8071,35 @@ msgstr ""
 "Допустима максимальна висота понад максимальну стартову висоту. Встановіть 0 "
 "для відсутності допуску."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:92
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:243
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:95
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:257
 #, no-c-format
 msgid "Reference is the height above the task point."
 msgstr "Прив'язка до висоти над точкою завдання."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:94
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:245
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:259
 #, no-c-format
 msgid "Reference is altitude above mean sea level."
 msgstr "Прив'язка висоти до середнього рівня моря."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:249
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:101
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:263
 msgid "Start height ref."
 msgstr "Прив'язка висоти старту"
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:99
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:250
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:102
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:264
 msgid "Reference used for start max height rule."
 msgstr "Прив'язка, що використовується в правилах макс. висоти старту."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:107
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:253
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:110
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:267
 msgid "Finish min. height"
 msgstr "Мін. висота на фініші"
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:108
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:254
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:111
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:268
 msgid ""
 "Minimum height based on finish height reference (AGL or MSL) while finishing "
 "the task.  Set to 0 for no limit."
@@ -8088,15 +8107,40 @@ msgstr ""
 "Мінімальна висота, що базується на прив'язці висоти фінішу (AGL чи MSL) в "
 "момент фінішування. Встановіть 0  для зняття обмежень."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:114
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:258
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:117
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:272
 msgid "Finish height ref."
 msgstr "Прив'язка вис. фінішу"
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:115
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:259
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:118
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:273
 msgid "Reference used for finish min height rule."
 msgstr "Прив'язка, що використовується для правил щодо мін. висоти на фініші."
+
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:126
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:276
+#, fuzzy
+msgid "PEV start wait time"
+msgstr "Розрахунковий час до завершення завдання"
+
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:127
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:277
+msgid ""
+"Wait time in minutes after Pilot Event and before start gate opens. 0 means "
+"start opens immediately."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:133
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:280
+msgid "PEV start window"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:134
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:281
+msgid ""
+"Number of minutes start remains open after Pilot Event and PEV wait time.0 "
+"means start will never close after it opens."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:79
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -8160,7 +8204,7 @@ msgid "Default task type for new tasks you create."
 msgstr "Для нового завдання створено тип завдання за замовчуванням."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:195
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:217
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:231
 msgid "AAT min. time"
 msgstr "Мін. час ААТ"
 
@@ -8851,60 +8895,60 @@ msgstr ""
 "[Вимкн.] Показана фіксована довжина посадочної смуги.\n"
 "[Вкл.] Довжина смуги  в масштабі до реальної довжини."
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:185
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:191
 #, no-c-format
 msgid "Hot-air balloon"
 msgstr "Повітряна куля"
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:186
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:192
 #, no-c-format
 msgid "Hangglider (Flex/FAI1)"
 msgstr "Дельтаплан (Flex/FAI1)"
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:187
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:193
 #, no-c-format
 msgid "Hangglider (Rigid/FAI5)"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:206
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:232
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:212
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:238
 msgid "Tracking Interval"
 msgstr "Інтервал запису треку"
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:209
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:215
 msgid "Track friends"
 msgstr "Трек друзів"
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:210
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:216
 msgid "Download the position of your friends live from the SkyLines server."
 msgstr "Завантажити місцезнаходження друзів наживо через сервер SkyLines."
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:219
 msgid "Show nearby traffic"
 msgstr "Показати сусідній трафік"
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:214
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:220
 msgid ""
 "Download the position of your nearby traffic live from the SkyLines server."
 msgstr "Завантажити місцезнаходження трафіку наживо через сервер SkyLines."
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:234
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:241
 msgid "Vehicle Type"
 msgstr "Тип ПС"
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:234
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:241
 msgid "Type of vehicle used."
 msgstr "Тип ПС, що використовується."
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:236
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:243
 msgid "Vehicle Name"
 msgstr "Ім'я ПС"
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:239
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:246
 msgid "Server"
 msgstr "Сервер"
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:243
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
 msgid "Username"
 msgstr "Ім'я користувача"
 
@@ -9024,39 +9068,39 @@ msgstr "Редагувати завдання"
 msgid "Add Turnpoint"
 msgstr "Додати ППМ"
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:215
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:229
 msgid "Task type"
 msgstr "Тип завдання"
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:215
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:229
 msgid "Sets the behaviour for the current task."
 msgstr "Налаштування поведінки поточного завдання."
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:217
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:231
 msgid "Minimum AAT task time in minutes."
 msgstr "Мінімильний час ААТ в хвилинах."
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:220
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:234
 msgid "Arm start manually"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:221
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:235
 msgid "Configure whether the start must be armed manually or automatically."
 msgstr "Конфігурація ручної чи автоматичної активації старту."
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:226
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:240
 msgid "Start open time"
 msgstr "Час відкриття старту"
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:228
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:242
 msgid "Start close time"
 msgstr "Час закриття старту"
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:262
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:285
 msgid "FAI start / finish rules"
 msgstr "Правила ФАІ для старту/фінішу"
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:263
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:286
 msgid ""
 "If enabled, has no max start height or max start speed and requires the "
 "minimum height above ground for finish to be greater than 1000m below the "
@@ -9343,8 +9387,8 @@ msgstr "Тепер"
 
 #: src/Dialogs/Weather/WeatherDialog.cpp:46
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:336
-#: src/Weather/NOAAFormatter.cpp:200 Data/Input/default.xci:767
-#: Data/Input/default.xci:1174
+#: src/Weather/NOAAFormatter.cpp:200 Data/Input/default.xci:783
+#: Data/Input/default.xci:1190
 msgid "Weather"
 msgstr "Погода"
 
@@ -9358,7 +9402,7 @@ msgstr "METAR і TAF"
 msgid "Field"
 msgstr "Поле"
 
-#: src/Dialogs/dlgCredits.cpp:127 Data/Input/default.xci:852
+#: src/Dialogs/dlgCredits.cpp:127 Data/Input/default.xci:868
 msgid "Credits"
 msgstr ""
 
@@ -10100,119 +10144,8 @@ msgstr "Поріг гарнітури"
 msgid "Urgent min. volume"
 msgstr ""
 
-#: Data/Input/default.xci:1112
-msgid ""
-"Setup\n"
-"Wind"
-msgstr ""
-"Встановити \n"
-"Вітер"
-
-#: Data/Input/default.xci:907
-msgid ""
-"Lock\n"
-"Screen"
-msgstr ""
-
-#: Data/Input/default.xci:1128
-msgid ""
-"Settings\n"
-"Airspace"
-msgstr ""
-"Налашт\n"
-"Пов. прост"
-
-#: Data/Input/default.xci:500 Data/Input/default.xci:1073
-msgid "Trail"
-msgstr "Слід"
-
-#: Data/Input/default.xci:965
-msgid "AVG/ALT"
-msgstr ""
-
-#: Data/Input/default.xci:711
-msgid "Vario ASI zeroed"
-msgstr ""
-
-#: Data/Input/default.xci:380 Data/Input/default.xci:999
-msgid ""
-"Waypoint\n"
-"List"
-msgstr ""
-"Шл. точки\n"
-"Перелік"
-
-#: Data/Input/default.xci:1120
-msgid ""
-"Setup\n"
-"System"
-msgstr ""
-"Налашт \n"
-"Системи"
-
-#: Data/Input/default.xci:734
-msgid ""
-"Cruise\n"
-"Demo"
-msgstr ""
-"Перехід\n"
-"Демо"
-
-#: Data/Input/default.xci:653 Data/Input/default.xci:664
-#: Data/Input/default.xci:704
-msgid "Vega"
-msgstr "Вега"
-
-#: Data/Input/default.xci:817
-msgid ""
-"Team\n"
-"Code"
-msgstr ""
-
-#: Data/Input/default.xci:672
-msgid ""
-"Airframe\n"
-"Switches"
-msgstr ""
-
-#: Data/Input/default.xci:473 Data/Input/default.xci:1057
-msgid ""
-"Pan\n"
-"On"
-msgstr ""
-
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "Доліт над ландшафтом"
-
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "Злет"
-
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "Нижче глісади дольоту"
-
-#: Data/Input/default.xci:350 Data/Input/default.xci:399
-#: Data/Input/default.xci:878
-msgid "Nav"
-msgstr "Навігація"
-
-#: Data/Input/default.xci:825
-msgid "Traffic List"
-msgstr "Список трафіку"
-
-#: Data/Input/default.xci:128 Data/Input/default.xci:444
-#: Data/Input/default.xci:937
-msgid ""
-"Zoom\n"
-"In"
-msgstr ""
-"Зум \n"
-"плюс"
-
-#: Data/Input/default.xci:135 Data/Input/default.xci:451
-#: Data/Input/default.xci:944
+#: Data/Input/default.xci:135 Data/Input/default.xci:467
+#: Data/Input/default.xci:960
 msgid ""
 "Zoom\n"
 "Out"
@@ -10220,56 +10153,11 @@ msgstr ""
 "Зум\n"
 "мінус"
 
-#: Data/Input/default.xci:459 Data/Input/default.xci:951
-#: Data/Input/default.xci:1040
-msgid "Zoom"
-msgstr "Масштаб"
-
-#: Data/Input/default.xci:1104
-msgid ""
-"Flight\n"
-"Setup"
+#: Data/Input/default.xci:662
+msgid "Lua"
 msgstr ""
-"Політ\n"
-"Налашт"
 
-#: Data/Input/default.xci:718
-msgid "Accelerometer leveled"
-msgstr "Акселерометр вирівняно"
-
-#: Data/Input/default.xci:1182
-msgid ""
-"Nearest\n"
-"Airspace"
-msgstr ""
-"Найближчий \n"
-"Повітряний простір"
-
-#: Data/Input/default.xci:712
-msgid ""
-"ASI\n"
-"Zero"
-msgstr ""
-"ASI\n"
-"нуль"
-
-#: Data/Input/default.xci:867
-msgid ""
-"Message\n"
-"Repeat"
-msgstr ""
-"Повідом\n"
-"Повтор"
-
-#: Data/Input/default.xci:783 Data/Input/default.xci:1190
-msgid ""
-"Check\n"
-"list"
-msgstr ""
-"Чек\n"
-"Лист"
-
-#: Data/Input/default.xci:679
+#: Data/Input/default.xci:695
 msgid ""
 "Manual\n"
 "Demo"
@@ -10277,7 +10165,82 @@ msgstr ""
 "Вручну\n"
 "Демо"
 
-#: Data/Input/default.xci:686
+#: Data/Input/default.xci:981
+msgid "AVG/ALT"
+msgstr ""
+
+#: Data/Input/default.xci:734
+msgid "Accelerometer leveled"
+msgstr "Акселерометр вирівняно"
+
+#: Data/Input/default.xci:547 Data/Input/default.xci:597
+#: Data/Input/default.xci:639 Data/Input/default.xci:908
+msgid "Config"
+msgstr "Конфіг"
+
+#: Data/Input/default.xci:516 Data/Input/default.xci:1089
+msgid "Trail"
+msgstr "Слід"
+
+#: Data/Input/default.xci:688
+msgid ""
+"Airframe\n"
+"Switches"
+msgstr ""
+
+#: Data/Input/default.xci:386 Data/Input/default.xci:1015
+msgid ""
+"Waypoint\n"
+"List"
+msgstr ""
+"Шл. точки\n"
+"Перелік"
+
+#: Data/Input/default.xci:833
+msgid ""
+"Team\n"
+"Code"
+msgstr ""
+
+#: Data/Input/default.xci:750
+msgid ""
+"Cruise\n"
+"Demo"
+msgstr ""
+"Перехід\n"
+"Демо"
+
+#: Data/Input/default.xci:841
+msgid "Traffic List"
+msgstr "Список трафіку"
+
+#: Data/Input/default.xci:883
+msgid ""
+"Message\n"
+"Repeat"
+msgstr ""
+"Повідом\n"
+"Повтор"
+
+#: Data/Input/default.xci:430
+msgid "Pilot event announced"
+msgstr ""
+
+#: Data/Input/default.xci:923
+msgid ""
+"Lock\n"
+"Screen"
+msgstr ""
+
+#: Data/Input/default.xci:727
+msgid "Vario ASI zeroed"
+msgstr ""
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "Нижче глісади дольоту"
+
+#: Data/Input/default.xci:702
 msgid ""
 "Setup\n"
 "Stall"
@@ -10285,69 +10248,21 @@ msgstr ""
 "Налаштувати\n"
 "Зрив потоку"
 
-#: Data/Input/default.xci:833 Data/Input/default.xci:1214
-msgid "Thermal Assistant"
-msgstr "Термік-асистент"
-
-#: Data/Input/default.xci:417 Data/Input/default.xci:1050
+#: Data/Input/default.xci:1120
 msgid ""
-"Mark\n"
-"Drop"
+"Flight\n"
+"Setup"
 msgstr ""
-"Мітка\n"
-"постав."
+"Політ\n"
+"Налашт"
 
-#: Data/Input/default.xci:492 Data/Input/default.xci:1065
-msgid "Labels"
-msgstr "Мітки"
-
-#: Data/Input/default.xci:414 Data/Input/default.xci:1047
-msgid "Dropped marker"
-msgstr ""
-
-#: Data/Input/default.xci:514 Data/Input/default.xci:1087
-msgid "Topo."
-msgstr "Топо."
-
-#: Data/Input/default.xci:638 Data/Input/default.xci:1143
-msgid "Raw Logger"
-msgstr "Raw  Логер"
-
-#: Data/Input/default.xci:741
-msgid ""
-"Climb\n"
-"Demo"
-msgstr ""
-"Набір \n"
-"Демо"
-
-#: Data/Input/default.xci:142 Data/Input/default.xci:775
-msgid ""
-"What's\n"
-"here?"
-msgstr ""
-"Що \n"
-"тут?"
-
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "Вище глісади дольоту"
-
-#: Data/Input/default.xci:759 Data/Input/default.xci:1166
-msgid "FLARM Radar"
-msgstr "Радар FLARM"
-
-#: Data/Input/default.xci:727
-msgid "Store"
-msgstr ""
-
-#: Data/Input/default.xci:646
-msgid "Lua"
-msgstr ""
-
-#: Data/Input/default.xci:693
+#: Data/Input/default.xci:709
 msgid "Accel"
 msgstr "Аксел"
+
+#: Data/Input/default.xci:743
+msgid "Store"
+msgstr ""
 
 #: Data/Input/default.xci:121
 msgid ""
@@ -10355,24 +10270,164 @@ msgid ""
 "Off"
 msgstr ""
 
-#: Data/Input/default.xci:719
+#: Data/Input/default.xci:530 Data/Input/default.xci:1103
+msgid "Topo."
+msgstr "Топо."
+
+#: Data/Input/default.xci:669 Data/Input/default.xci:680
+#: Data/Input/default.xci:720
+msgid "Vega"
+msgstr "Вега"
+
+#: Data/Input/default.xci:742
+msgid "Stored to EEPROM"
+msgstr "Збережено до EEPROM"
+
+#: Data/Input/default.xci:420 Data/Input/default.xci:1063
+msgid "Dropped marker"
+msgstr ""
+
+#: Data/Input/default.xci:433
+#, fuzzy
+msgid ""
+"Pilot\n"
+"Event"
+msgstr "Пілот"
+
+#: Data/Input/default.xci:775 Data/Input/default.xci:1182
+msgid "FLARM Radar"
+msgstr "Радар FLARM"
+
+#: Data/Input/default.xci:1136
+msgid ""
+"Setup\n"
+"System"
+msgstr ""
+"Налашт \n"
+"Системи"
+
+#: Data/Input/default.xci:142 Data/Input/default.xci:791
+msgid ""
+"What's\n"
+"here?"
+msgstr ""
+"Що \n"
+"тут?"
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "Доліт над ландшафтом"
+
+#: Data/Input/default.xci:799 Data/Input/default.xci:1206
+msgid ""
+"Check\n"
+"list"
+msgstr ""
+"Чек\n"
+"Лист"
+
+#: Data/Input/default.xci:489 Data/Input/default.xci:1073
+msgid ""
+"Pan\n"
+"On"
+msgstr ""
+
+#: Data/Input/default.xci:356 Data/Input/default.xci:405
+#: Data/Input/default.xci:894
+msgid "Nav"
+msgstr "Навігація"
+
+#: Data/Input/default.xci:735
 msgid ""
 "Accel\n"
 "Zero"
 msgstr ""
 
-#: Data/Input/default.xci:531 Data/Input/default.xci:581
-#: Data/Input/default.xci:623 Data/Input/default.xci:892
-msgid "Config"
-msgstr "Конфіг"
-
-#: Data/Input/default.xci:726
-msgid "Stored to EEPROM"
-msgstr "Збережено до EEPROM"
-
-#: Data/Input/default.xci:1159
+#: Data/Input/default.xci:1175
 msgid "Setup Plane"
 msgstr "Налаштування планера"
+
+#: Data/Input/default.xci:1144
+msgid ""
+"Settings\n"
+"Airspace"
+msgstr ""
+"Налашт\n"
+"Пов. прост"
+
+#: Data/Input/default.xci:1198
+msgid ""
+"Nearest\n"
+"Airspace"
+msgstr ""
+"Найближчий \n"
+"Повітряний простір"
+
+#: Data/Input/default.xci:728
+msgid ""
+"ASI\n"
+"Zero"
+msgstr ""
+"ASI\n"
+"нуль"
+
+#: Data/Input/default.xci:757
+msgid ""
+"Climb\n"
+"Demo"
+msgstr ""
+"Набір \n"
+"Демо"
+
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "Злет"
+
+#: Data/Input/default.xci:423 Data/Input/default.xci:1066
+msgid ""
+"Mark\n"
+"Drop"
+msgstr ""
+"Мітка\n"
+"постав."
+
+#: Data/Input/default.xci:128 Data/Input/default.xci:460
+#: Data/Input/default.xci:953
+msgid ""
+"Zoom\n"
+"In"
+msgstr ""
+"Зум \n"
+"плюс"
+
+#: Data/Input/default.xci:508 Data/Input/default.xci:1081
+msgid "Labels"
+msgstr "Мітки"
+
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "Вище глісади дольоту"
+
+#: Data/Input/default.xci:654 Data/Input/default.xci:1159
+msgid "Raw Logger"
+msgstr "Raw  Логер"
+
+#: Data/Input/default.xci:849 Data/Input/default.xci:1230
+msgid "Thermal Assistant"
+msgstr "Термік-асистент"
+
+#: Data/Input/default.xci:475 Data/Input/default.xci:967
+#: Data/Input/default.xci:1056
+msgid "Zoom"
+msgstr "Масштаб"
+
+#: Data/Input/default.xci:1128
+msgid ""
+"Setup\n"
+"Wind"
+msgstr ""
+"Встановити \n"
+"Вітер"
 
 #~ msgid "Logger inactive, insufficient storage!"
 #~ msgstr "Логгер не активний, недостатньо пам'яті!"

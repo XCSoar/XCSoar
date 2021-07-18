@@ -31,9 +31,11 @@ Copyright_License {
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/String.hpp"
 #include "Form/DataField/Password.hpp"
+#include "Form/DataField/Date.hpp"
 #include "Form/DataField/Time.hpp"
 #include "Form/DataField/RoughTime.hpp"
 #include "time/RoughTime.hpp"
+#include "time/BrokenDate.hpp"
 #include "Language/Language.hpp"
 #include "Math/Angle.hpp"
 #include "util/StringAPI.hxx"
@@ -232,6 +234,17 @@ RowFormWidget::AddTime(const TCHAR *label, const TCHAR *help,
   DataFieldTime *df = new DataFieldTime(min_value, max_value, value,
                                         step, listener);
   df->SetMaxTokenNumber(max_tokens);
+  edit->SetDataField(df);
+  return edit;
+}
+
+WndProperty *
+RowFormWidget::AddDate(const TCHAR *label, const TCHAR *help,
+                       BrokenDate date,
+                       DataFieldListener *listener) noexcept
+{
+  WndProperty *edit = Add(label, help);
+  DataFieldDate *df = new DataFieldDate(date, listener);
   edit->SetDataField(df);
   return edit;
 }

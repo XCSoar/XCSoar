@@ -31,7 +31,23 @@ Copyright_License {
 #include <stdlib.h>
 
 void
-FormatISO8601(char *buffer, const BrokenDateTime &stamp)
+FormatISO8601(char *buffer, const BrokenDate &date) noexcept
+{
+  sprintf(buffer, "%04u-%02u-%02u",
+          date.year, date.month, date.day);
+}
+
+#ifdef _UNICODE
+void
+FormatISO8601(TCHAR *buffer, const BrokenDate &date) noexcept
+{
+  _stprintf(buffer, _T("%04u-%02u-%02u"),
+            date.year, date.month, date.day);
+}
+#endif
+
+void
+FormatISO8601(char *buffer, const BrokenDateTime &stamp) noexcept
 {
   sprintf(buffer, "%04u-%02u-%02uT%02u:%02u:%02uZ",
           stamp.year, stamp.month, stamp.day,
@@ -40,7 +56,7 @@ FormatISO8601(char *buffer, const BrokenDateTime &stamp)
 
 #ifdef _UNICODE
 void
-FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp)
+FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp) noexcept
 {
   _stprintf(buffer, _T("%04u-%02u-%02uT%02u:%02u:%02uZ"),
             stamp.year, stamp.month, stamp.day,
@@ -49,7 +65,7 @@ FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp)
 #endif
 
 void
-FormatTime(TCHAR* buffer, double _time)
+FormatTime(TCHAR *buffer, double _time) noexcept
 {
   if (_time < 0) {
     *buffer++ = _T('-');
@@ -62,7 +78,7 @@ FormatTime(TCHAR* buffer, double _time)
 }
 
 void
-FormatTimeLong(TCHAR* buffer, double _time)
+FormatTimeLong(TCHAR *buffer, double _time) noexcept
 {
   if (_time < 0) {
     *buffer++ = _T('-');
@@ -78,7 +94,7 @@ FormatTimeLong(TCHAR* buffer, double _time)
 }
 
 void
-FormatSignedTimeHHMM(TCHAR* buffer, int _time)
+FormatSignedTimeHHMM(TCHAR *buffer, int _time) noexcept
 {
   if (_time < 0) {
     *buffer++ = _T('-');
@@ -90,7 +106,7 @@ FormatSignedTimeHHMM(TCHAR* buffer, int _time)
 }
 
 void
-FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, int _time)
+FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, int _time) noexcept
 {
   if (_time >= 24 * 3600) {
     _tcscpy(buffer1, _T(">24h"));
@@ -121,7 +137,7 @@ FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, int _time)
 
 static void
 CalculateTimespanComponents(unsigned timespan, unsigned &days, unsigned &hours,
-                            unsigned &minutes, unsigned &seconds)
+                            unsigned &minutes, unsigned &seconds) noexcept
 {
   if (timespan >= 24u * 60u * 60u) {
     days = timespan / (24u * 60u * 60u);
@@ -146,7 +162,7 @@ CalculateTimespanComponents(unsigned timespan, unsigned &days, unsigned &hours,
 
 void
 FormatTimespanSmart(TCHAR *buffer, int timespan, unsigned max_tokens,
-                    const TCHAR *separator)
+                    const TCHAR *separator) noexcept
 {
   assert(max_tokens > 0 && max_tokens <= 4);
 

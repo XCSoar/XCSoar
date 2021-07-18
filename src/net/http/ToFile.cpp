@@ -22,132 +22,13 @@ Copyright_License {
 */
 
 #include "ToFile.hpp"
-#include "Request.hxx"
-#include "Handler.hxx"
-#include "Operation/Operation.hpp"
+#include "ToStream.hpp"
 #include "io/FileOutputStream.hxx"
 #include "Crypto/SHA256.hxx"
-#include "thread/Mutex.hxx"
-#include "thread/Cond.hxx"
-#include "util/NumberParser.hpp"
-#include "util/ScopeExit.hxx"
+#include "Crypto/DigestOutputStream.hxx"
 
 #include <cassert>
-
-class DownloadToFileHandler final : public CurlResponseHandler {
-  OutputStream &out;
-
-  SHA256State sha256;
-
-  size_t received = 0;
-
-  OperationEnvironment &env;
-
-  Mutex mutex;
-  Cond cond;
-
-  std::exception_ptr error;
-
-  const bool do_sha256;
-
-  bool done = false;
-
-public:
-  DownloadToFileHandler(OutputStream &_out, bool _do_sha256,
-                        OperationEnvironment &_env) noexcept
-    :out(_out), env(_env), do_sha256(_do_sha256)
-  {
-  }
-
-  auto GetSHA256() noexcept {
-    assert(do_sha256);
-
-    return sha256.Final();
-  }
-
-  void Cancel() noexcept {
-    const std::lock_guard<Mutex> lock(mutex);
-    done = true;
-    cond.notify_one();
-  }
-
-  void Wait() {
-    std::unique_lock<Mutex> lock(mutex);
-    cond.wait(lock, [this]{ return done; });
-
-    if (error)
-      std::rethrow_exception(error);
-  }
-
-  /* virtual methods from class CurlResponseHandler */
-  void OnHeaders(unsigned status,
-                 std::multimap<std::string, std::string> &&headers) override {
-    if (auto i = headers.find("content-length"); i != headers.end())
-      env.SetProgressRange(ParseUint64(i->second.c_str()));
-  }
-
-  void OnData(ConstBuffer<void> data) override {
-    if (do_sha256)
-      sha256.Update(data);
-
-    try {
-      out.Write(data.data, data.size);
-    } catch (...) {
-      error = std::current_exception();
-      throw Pause{};
-    }
-
-    received += data.size;
-
-    env.SetProgressPosition(received);
-  }
-
-  void OnEnd() override {
-    const std::lock_guard<Mutex> lock(mutex);
-    done = true;
-    cond.notify_one();
-  }
-
-  void OnError(std::exception_ptr e) noexcept override {
-    const std::lock_guard<Mutex> lock(mutex);
-    error = std::move(e);
-    done = true;
-    cond.notify_one();
-  }
-};
-
-static void
-DownloadToFile(CurlGlobal &curl, const char *url,
-               const char *username, const char *password,
-               OutputStream &out, std::array<std::byte, 32> *sha256,
-               OperationEnvironment &env)
-{
-  assert(url != nullptr);
-
-  DownloadToFileHandler handler(out, sha256 != nullptr, env);
-  CurlRequest request(curl, url, handler);
-  AtScopeExit(&request) { request.StopIndirect(); };
-
-  request.SetFailOnError();
-
-  if (username != nullptr)
-    request.SetOption(CURLOPT_USERNAME, username);
-  if (password != nullptr)
-    request.SetOption(CURLOPT_PASSWORD, password);
-
-  env.SetCancelHandler([&]{
-    request.StopIndirect();
-    handler.Cancel();
-  });
-
-  AtScopeExit(&env) { env.SetCancelHandler({}); };
-
-  request.StartIndirect();
-  handler.Wait();
-
-  if (sha256 != nullptr)
-    *sha256 = handler.GetSHA256();
-}
+#include <optional>
 
 void
 Net::DownloadToFile(CurlGlobal &curl, const char *url,
@@ -159,13 +40,22 @@ Net::DownloadToFile(CurlGlobal &curl, const char *url,
   assert(path != nullptr);
 
   FileOutputStream file(path);
-  ::DownloadToFile(curl, url, username, password,
-                   file, sha256, env);
+  OutputStream *os = &file;
+
+  std::optional<DigestOutputStream<SHA256State>> digest;
+  if (sha256 != nullptr)
+    os = &digest.emplace(*os);
+
+  DownloadToStream(curl, url, username, password,
+                   *os, env);
   file.Commit();
+
+  if (sha256 != nullptr)
+    digest->Final(sha256);
 }
 
 void
 Net::DownloadToFileJob::Run(OperationEnvironment &env)
 {
-  DownloadToFile(curl, url, username, password, path, &sha256, env);
+  DownloadToFile(curl, url, username, password, path, nullptr, env);
 }

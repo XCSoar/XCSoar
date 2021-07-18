@@ -94,17 +94,6 @@ GeoPoint::Middle(const GeoPoint &other) const
   return ::Middle(*this, other);
 }
 
-bool 
-GeoPoint::Sort(const GeoPoint &sp) const
-{
-  if (longitude < sp.longitude)
-    return false;
-  else if (longitude == sp.longitude)
-    return latitude > sp.latitude;
-  else
-    return true;
-}
-
 GeoPoint 
 GeoPoint::IntermediatePoint(const GeoPoint &destination, 
                             const double distance) const

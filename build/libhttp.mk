@@ -4,6 +4,9 @@ HAVE_HTTP := y
 
 LIBHTTP_SOURCES = \
 	$(SRC)/net/http/DownloadManager.cpp \
+	$(SRC)/net/http/Progress.cpp \
+	$(SRC)/net/http/OutputStreamHandler.cxx \
+	$(SRC)/net/http/ToStream.cpp \
 	$(SRC)/net/http/ToFile.cpp \
 	$(SRC)/net/http/ToBuffer.cpp \
 	$(SRC)/net/http/Multi.cxx \

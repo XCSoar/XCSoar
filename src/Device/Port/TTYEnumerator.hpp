@@ -42,14 +42,14 @@ public:
   /* but use /dev because there is no noticable downside, and it
    * allows for custom port mapping using udev file
    */
-  TTYEnumerator()
+  TTYEnumerator() noexcept
     :dir(opendir("/dev")) {}
 #else
-  TTYEnumerator()
+  TTYEnumerator() noexcept
     :dir(opendir("/dev")) {}
 #endif
 
-  ~TTYEnumerator() {
+  ~TTYEnumerator() noexcept {
     if (dir != nullptr)
       closedir(dir);
   }
@@ -57,7 +57,7 @@ public:
   /**
    * Has the constructor failed?
    */
-  bool HasFailed() const {
+  bool HasFailed() const noexcept {
     return dir == nullptr;
   }
 
@@ -68,7 +68,7 @@ public:
    * @return the absolute path of the device, or nullptr if there are
    * no more devices
    */
-  const char *Next();
+  const char *Next() noexcept;
 };
 
 #endif

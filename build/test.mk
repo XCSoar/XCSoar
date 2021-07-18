@@ -97,6 +97,7 @@ TEST_NAMES = \
 	TestMath \
 	TestMathTables \
 	TestAngle TestARange \
+	TestGrahamScan \
 	TestUnits TestEarth TestSunEphemeris \
 	TestValidity TestUTM \
 	TestAllocatedGrid \
@@ -387,6 +388,12 @@ TEST_MATH_SOURCES = \
 	$(TEST_SRC_DIR)/TestMath.cpp
 QUADRILATERAL_ARANGE_DEPENDS = MATH
 $(eval $(call link-program,TestMath,TEST_MATH))
+
+TEST_GRAHAM_SCAN_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestGrahamScan.cpp
+TEST_GRAHAM_SCAN_DEPENDS = GEO MATH
+$(eval $(call link-program,TestGrahamScan,TEST_GRAHAM_SCAN))
 
 TEST_CSV_LINE_SOURCES = \
 	$(SRC)/io/CSVLine.cpp \
@@ -778,7 +785,7 @@ DEBUG_PROGRAM_NAMES += \
 	LoadImage ViewImage \
 	RunCanvas RunMapWindow \
 	RunListControl \
-	RunTextEntry RunNumberEntry RunTimeEntry RunAngleEntry \
+	RunTextEntry RunNumberEntry RunDateEntry RunTimeEntry RunAngleEntry \
 	RunGeoPointEntry \
 	RunTerminal \
 	RunRenderOZ \
@@ -814,7 +821,10 @@ DEBUG_PROGRAM_NAMES += \
 endif
 
 ifeq ($(HAVE_HTTP)$(TARGET_IS_ANDROID),yn)
-DEBUG_PROGRAM_NAMES += DownloadFile RunDownloadToFile RunNOAADownloader RunSkyLinesTracking RunLiveTrack24
+DEBUG_PROGRAM_NAMES += DownloadFile \
+	RunDownloadToFile \
+	UploadFile \
+	RunNOAADownloader RunSkyLinesTracking RunLiveTrack24
 endif
 
 ifeq ($(TARGET_IS_LINUX),y)
@@ -987,6 +997,14 @@ RUN_DOWNLOAD_TO_FILE_SOURCES = \
 	$(TEST_SRC_DIR)/RunDownloadToFile.cpp
 RUN_DOWNLOAD_TO_FILE_DEPENDS = LIBHTTP ASYNC LIBNET IO OS THREAD UTIL
 $(eval $(call link-program,RunDownloadToFile,RUN_DOWNLOAD_TO_FILE))
+
+UPLOAD_FILE_SOURCES = \
+	$(SRC)/Version.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(TEST_SRC_DIR)/UploadFile.cpp
+UPLOAD_FILE_DEPENDS = LIBHTTP ASYNC OS LIBNET OS IO THREAD UTIL
+$(eval $(call link-program,UploadFile,UPLOAD_FILE))
 
 RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/net/SocketError.cxx \
@@ -2010,6 +2028,25 @@ RUN_NUMBER_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/RunNumberEntry.cpp
 RUN_NUMBER_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC IO OS THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunNumberEntry,RUN_NUMBER_ENTRY))
+
+RUN_DATE_ENTRY_SOURCES = \
+	$(SRC)/Dialogs/DateEntry.cpp \
+	$(SRC)/Dialogs/DialogSettings.cpp \
+	$(SRC)/Dialogs/WidgetDialog.cpp \
+	$(MORE_SCREEN_SOURCES) \
+	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Formatter/HexColor.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeListPicker.cpp \
+	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
+	$(TEST_SRC_DIR)/RunDateEntry.cpp
+RUN_DATE_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL ZLIB TIME
+$(eval $(call link-program,RunDateEntry,RUN_DATE_ENTRY))
 
 RUN_TIME_ENTRY_SOURCES = \
 	$(SRC)/Dialogs/TimeEntry.cpp \

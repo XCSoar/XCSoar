@@ -1,0 +1,12 @@
+diff --git a/lib/vtls/openssl.c b/lib/vtls/openssl.c
+index 1d09cadca..52ed46daf 100644
+--- a/lib/vtls/openssl.c
++++ b/lib/vtls/openssl.c
+@@ -2536,6 +2536,7 @@ static CURLcode ossl_connect_step1(struct connectdata *conn, int sockindex)
+   */
+ 
+   ctx_options = SSL_OP_ALL;
++  ctx_options |= SSL_OP_LEGACY_SERVER_CONNECT;
+ 
+ #ifdef SSL_OP_NO_TICKET
+   ctx_options |= SSL_OP_NO_TICKET;
