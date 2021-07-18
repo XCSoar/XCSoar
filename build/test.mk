@@ -821,7 +821,10 @@ DEBUG_PROGRAM_NAMES += \
 endif
 
 ifeq ($(HAVE_HTTP)$(TARGET_IS_ANDROID),yn)
-DEBUG_PROGRAM_NAMES += DownloadFile RunDownloadToFile RunNOAADownloader RunSkyLinesTracking RunLiveTrack24
+DEBUG_PROGRAM_NAMES += DownloadFile \
+	RunDownloadToFile \
+	UploadFile \
+	RunNOAADownloader RunSkyLinesTracking RunLiveTrack24
 endif
 
 ifeq ($(TARGET_IS_LINUX),y)
@@ -994,6 +997,14 @@ RUN_DOWNLOAD_TO_FILE_SOURCES = \
 	$(TEST_SRC_DIR)/RunDownloadToFile.cpp
 RUN_DOWNLOAD_TO_FILE_DEPENDS = LIBHTTP ASYNC LIBNET IO OS THREAD UTIL
 $(eval $(call link-program,RunDownloadToFile,RUN_DOWNLOAD_TO_FILE))
+
+UPLOAD_FILE_SOURCES = \
+	$(SRC)/Version.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(TEST_SRC_DIR)/UploadFile.cpp
+UPLOAD_FILE_DEPENDS = LIBHTTP ASYNC OS LIBNET OS IO THREAD UTIL
+$(eval $(call link-program,UploadFile,UPLOAD_FILE))
 
 RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/net/SocketError.cxx \

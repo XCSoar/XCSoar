@@ -198,6 +198,10 @@ public:
 		SetOption(CURLOPT_HTTPPOST, post);
 	}
 
+	void SetMimePost(const curl_mime *mime) {
+		SetOption(CURLOPT_MIMEPOST, mime);
+	}
+
 	template<typename T>
 	bool GetInfo(CURLINFO info, T value_r) const noexcept {
 		return ::curl_easy_getinfo(handle, info, value_r) == CURLE_OK;
