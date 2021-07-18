@@ -82,7 +82,6 @@ CurlRequest::SetupEasy()
 	easy.SetOption(CURLOPT_NETRC, 1L);
 #endif
 	easy.SetErrorBuffer(error_buffer);
-	easy.SetNoProgress();
 	easy.SetNoSignal();
 	easy.SetConnectTimeout(10);
 	easy.SetOption(CURLOPT_HTTPAUTH, (long) CURLAUTH_ANY);
