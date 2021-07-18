@@ -21,43 +21,19 @@ Copyright_License {
 }
 */
 
-#include "lua/Basic.hpp"
-#include "lua/Log.hpp"
-#include "lua/Http.hpp"
-#include "lua/RunFile.hxx"
-#include "lua/Ptr.hpp"
-#include "system/Args.hpp"
-#include "util/PrintException.hxx"
+#ifndef XCSOAR_LUA_HTTP_HPP
+#define XCSOAR_LUA_HTTP_HPP
 
-extern "C" {
-#include <lua.h>
+struct lua_State;
+
+namespace Lua {
+
+/**
+ * Provide the Lua class "http.request".
+ */
+void
+InitHttp(lua_State *L);
+
 }
 
-#include <stdio.h>
-
-static int
-l_alert(lua_State *L)
-{
-  fprintf(stderr, "%s\n", lua_tostring(L, 1));
-  return 0;
-}
-
-int main(int argc, char **argv)
-try {
-  Args args(argc, argv, "FILE.lua");
-  const auto path = args.ExpectNextPath();
-  args.ExpectEnd();
-
-  Lua::StatePtr state(Lua::NewBasicState());
-  Lua::InitLog(state.get());
-  Lua::InitHttp(state.get());
-
-  lua_register(state.get(), "alert", l_alert);
-
-  Lua::RunFile(state.get(), path);
-
-  return EXIT_SUCCESS;
-} catch (...) {
-  PrintException(std::current_exception());
-  return EXIT_FAILURE;
-}
+#endif

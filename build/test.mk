@@ -846,7 +846,7 @@ RUN_LUA_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunLua.cpp
-RUN_LUA_DEPENDS = LUA LIBLUA IO OS UTIL
+RUN_LUA_DEPENDS = LUA LIBLUA LIBHTTP IO OS UTIL
 $(eval $(call link-program,RunLua,RUN_LUA))
 endif
 
