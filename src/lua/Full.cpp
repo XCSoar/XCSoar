@@ -26,6 +26,7 @@ Copyright_License {
 #include "Util.hxx"
 #include "Log.hpp"
 #include "Persistent.hpp"
+#include "Http.hpp"
 #include "Timer.hpp"
 #include "Map.hpp"
 #include "Blackboard.hpp"
@@ -51,6 +52,7 @@ Lua::NewFullState()
 
   InitLog(L);
   InitPersistent(L);
+  InitHttp(L);
   InitTimer(L);
   InitMap(L);
   InitBlackboard(L);
