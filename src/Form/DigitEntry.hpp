@@ -87,10 +87,22 @@ class DigitEntry : public PaintWindow {
     }
 
     constexpr unsigned GetMaxNumber() const {
-      return type == Type::DIGIT6 ? 5 :
-             type == Type::HOUR ? 23 :
-             type == Type::DIGIT19 ? 18 :
-             type == Type::DIGIT36 ? 35 : 9;
+      switch (type) {
+      case Type::HOUR:
+        return 23;
+
+      case Type::DIGIT6:
+        return 5;
+
+      case Type::DIGIT19:
+        return 18;
+
+      case Type::DIGIT36:
+        return 35;
+
+      default:
+        return 9;
+      }
     }
 
     constexpr bool IsEditable() const {
@@ -108,8 +120,18 @@ class DigitEntry : public PaintWindow {
      * Used for calculating the pixel-based width of the column.
      */
     constexpr unsigned GetWidth() const {
-      return type == Type::UNIT ? 4 :
-             type == Type::HOUR || type == Type::DIGIT19 || type == Type::DIGIT36 ? 2 : 1;
+      switch (type) {
+      case Type::UNIT:
+        return 4;
+
+      case Type::HOUR:
+      case Type::DIGIT19:
+      case Type::DIGIT36:
+        return 2;
+
+      default:
+        return 1;
+      }
     }
   };
 
