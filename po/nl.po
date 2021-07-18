@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-10 09:50+0200\n"
-"PO-Revision-Date: 2020-11-29 21:29+0000\n"
-"Last-Translator: Martin Peters <twinpiloot@hotmail.com>\n"
+"PO-Revision-Date: 2021-07-20 10:35+0000\n"
+"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/xcsoar/"
 "translations/nl/>\n"
 "Language: nl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 "X-Launchpad-Export-Date: 2013-05-22 09:28+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -3133,9 +3133,9 @@ msgid "The time spend in the current thermal."
 msgstr "De hoogte gewonnen/verloren in de huidige bel."
 
 #: src/InfoBoxes/Content/Factory.cpp:1096
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alternate 2 GR"
-msgstr "Alternatief 1 GH"
+msgstr "Alternatief 2 GH"
 
 #: src/InfoBoxes/Content/Factory.cpp:1097
 #, fuzzy, no-c-format
