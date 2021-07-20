@@ -159,13 +159,16 @@ Lua::InitHttp(lua_State *L)
 {
   const Lua::ScopeCheckStack check_stack(L);
 
+  lua_getglobal(L, "xcsoar");
+
   /* create the "http" namespace */
   lua_newtable(L);
 
   luaL_newlib(L, http_request_funcs); // create 'request'
   lua_setfield(L, -2, "request"); // http.request = request
 
-  lua_setglobal(L, "http");
+  lua_setfield(L, -2, "http"); // xcsoar.http = http
+  lua_pop(L, 1); // pop global "xcsoar"
 
   CreateHttpRequestMetatable(L);
 }
