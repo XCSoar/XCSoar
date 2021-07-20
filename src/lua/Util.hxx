@@ -31,6 +31,7 @@
 #define LUA_UTIL_HXX
 
 #include "Assert.hxx"
+#include "StackIndex.hxx"
 #include "util/Compiler.h"
 
 extern "C" {
@@ -41,16 +42,6 @@ extern "C" {
 #include <string_view>
 
 namespace Lua {
-
-/**
- * This type represents an index on the Lua stack.
- */
-struct StackIndex {
-	int idx;
-
-	explicit constexpr StackIndex(int _idx) noexcept
-		:idx(_idx) {}
-};
 
 struct LightUserData {
 	void *value;
