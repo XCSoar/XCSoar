@@ -183,7 +183,7 @@ Lua::InitWind(lua_State *L)
   lua_newtable(L);
 
   lua_newtable(L);
-  SetField(L, -2, "__index", l_wind_index);
+  SetField(L, RelativeStackIndex{-1}, "__index", l_wind_index);
   lua_setmetatable(L, -2);
 
   luaL_setfuncs(L, settings_funcs, 0);

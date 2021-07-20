@@ -247,7 +247,7 @@ Lua::InitMap(lua_State *L)
   lua_newtable(L);
 
   lua_newtable(L);
-  SetField(L, -2, "__index", l_map_index);
+  SetField(L, RelativeStackIndex{-1}, "__index", l_map_index);
   lua_setmetatable(L, -2);
 
   luaL_setfuncs(L, map_funcs, 0);

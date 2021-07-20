@@ -54,11 +54,11 @@ void Push(lua_State *L, GeoPoint value) {
     lua_newtable(L);
 
     lua_newtable(L);
-    SetField(L, -2, "__tostring", l_GeoPoint_tostring);
+    SetField(L, RelativeStackIndex{-1}, "__tostring", l_GeoPoint_tostring);
     lua_setmetatable(L, -2);
 
-    SetField(L, -2, "longitude", value.longitude);
-    SetField(L, -2, "latitude", value.latitude);
+    SetField(L, RelativeStackIndex{-1}, "longitude", value.longitude);
+    SetField(L, RelativeStackIndex{-1}, "latitude", value.latitude);
   } else
     lua_pushnil(L);
 }

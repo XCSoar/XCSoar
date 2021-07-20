@@ -126,6 +126,7 @@ GetTable(lua_State *L, I idx, K &&key) noexcept
 	const ScopeCheckStack check_stack(L, 1);
 
 	Push(L, std::forward<K>(key));
+	StackPushed(idx);
 	lua_gettable(L, StackIndex{idx}.idx);
 }
 
@@ -136,7 +137,9 @@ SetTable(lua_State *L, I idx, K &&key, V &&value) noexcept
 	const ScopeCheckStack check_stack(L);
 
 	Push(L, std::forward<K>(key));
+	StackPushed(value);
 	Push(L, std::forward<V>(value));
+	StackPushed(idx, 2);
 	lua_settable(L, StackIndex{idx}.idx);
 }
 
@@ -147,6 +150,7 @@ SetField(lua_State *L, I idx, const char *name, V &&value) noexcept
 	const ScopeCheckStack check_stack(L);
 
 	Push(L, std::forward<V>(value));
+	StackPushed(idx);
 	lua_setfield(L, StackIndex{idx}.idx, name);
 }
 
@@ -176,7 +180,8 @@ SetField(lua_State *L, const char *package,
 	const ScopeCheckStack check_stack(L);
 
 	lua_getglobal(L, package);
-	SetField(L, -2, name, std::forward<V>(value));
+	StackPushed(value);
+	SetField(L, RelativeStackIndex{-1}, name, std::forward<V>(value));
 	lua_pop(L, 1);
 }
 

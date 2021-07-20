@@ -113,6 +113,8 @@ LuaHttpRequest::l_new(lua_State *L)
 int
 LuaHttpRequest::Perform(lua_State *L)
 {
+  using namespace Lua;
+
   easy.Perform();
 
   // TODO: yield to the main event loop until the request is done
@@ -121,15 +123,15 @@ LuaHttpRequest::Perform(lua_State *L)
     Lua::Raise(L, std::move(error));
 
   lua_newtable(L);
-  Lua::SetTable(L, -3, "status", status);
+  SetTable(L, RelativeStackIndex{-1}, "status", status);
 
   lua_pushstring(L, "headers");
   lua_newtable(L);
   for (const auto &i : response_headers)
-    Lua::SetTable(L, -3, i.first, i.second);
+    SetTable(L, RelativeStackIndex{-1}, i.first, i.second);
   lua_settable(L, -3);
 
-  Lua::SetTable(L, -3, "body", response_body);
+  SetTable(L, RelativeStackIndex{-1}, "body", response_body);
 
   return 1;
 }

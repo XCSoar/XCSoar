@@ -64,7 +64,7 @@ struct Class {
 		/* let Lua's garbage collector call the destructor
 		   (but only if there is one) */
 		if (!std::is_trivially_destructible<T>::value)
-			SetField(L, -2, "__gc", l_gc);
+			SetField(L, RelativeStackIndex{-1}, "__gc", l_gc);
 	}
 
 	/**

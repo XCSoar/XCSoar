@@ -63,7 +63,8 @@ Lua::NewBasicState()
   /* create the "xcsoar" namespace */
   lua_newtable(L);
 
-  SetField(L, -2, "VERSION", WideToUTF8Converter(XCSoar_Version));
+  SetField(L, RelativeStackIndex{-1},
+           "VERSION", WideToUTF8Converter(XCSoar_Version));
 
   lua_setglobal(L, "xcsoar");
 

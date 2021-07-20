@@ -54,6 +54,7 @@ void
 Lua::InitLegacy(lua_State *L)
 {
   lua_getglobal(L, "xcsoar");
-  SetField(L, -2, "fire_legacy_event", l_fire_legacy_event);
+  SetField(L, RelativeStackIndex{-1},
+           "fire_legacy_event", l_fire_legacy_event);
   lua_pop(L, 1);
 }

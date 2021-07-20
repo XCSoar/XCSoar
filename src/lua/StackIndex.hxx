@@ -43,6 +43,30 @@ struct StackIndex {
 		:idx(_idx) {}
 };
 
+/**
+ * Same as #StackIndex, but is automatically adjusted by this C++
+ * wrapper library (by calling StackPushed).
+ */
+struct RelativeStackIndex : StackIndex {
+	using StackIndex::StackIndex;
+};
+
+template<typename T>
+void
+StackPushed(T &, int=1) noexcept
+{
+}
+
+/**
+ * Adjust the #RelativeStackIndex after pushing to the Lua stack.  For
+ * all types but #RelativeStackIndex, this is a no-op.
+ */
+inline void
+StackPushed(RelativeStackIndex &idx, int n=1) noexcept
+{
+	idx.idx -= n;
+}
+
 } // namespace Lua
 
 #endif

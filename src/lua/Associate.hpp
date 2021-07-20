@@ -28,6 +28,8 @@ struct lua_State;
 
 namespace Lua {
 
+struct RelativeStackIndex;
+
 void
 InitAssociatePointer(lua_State *L, const char *table);
 
@@ -36,7 +38,7 @@ InitAssociatePointer(lua_State *L, const char *table);
  */
 void
 AssociatePointer(lua_State *L, const char *table,
-                 void *p, int value_idx);
+                 void *p, RelativeStackIndex value_idx);
 
 /**
  * Remove the given pointer from the registry table.

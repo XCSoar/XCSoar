@@ -76,7 +76,7 @@ Lua::InitAirspace(lua_State *L)
   lua_newtable(L);
 
   lua_newtable(L);
-  SetField(L, -2, "__index", l_airspace_index);
+  SetField(L, RelativeStackIndex{-1}, "__index", l_airspace_index);
   lua_setmetatable(L, -2);
 
   lua_setfield(L, -2, "airspace");
