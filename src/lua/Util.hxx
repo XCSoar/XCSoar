@@ -39,7 +39,6 @@ extern "C" {
 
 #include <cstddef>
 #include <string_view>
-#include <tuple>
 
 namespace Lua {
 
@@ -59,20 +58,6 @@ struct LightUserData {
 	explicit constexpr LightUserData(void *_value) noexcept
 		:value(_value) {}
 };
-
-template<typename... T>
-struct CClosure {
-	lua_CFunction fn;
-
-	std::tuple<T...> values;
-};
-
-template<typename... T>
-CClosure<T...>
-MakeCClosure(lua_CFunction fn, T&&... values)
-{
-	return {fn, std::make_tuple(std::forward<T>(values)...)};
-}
 
 static inline void
 Push(lua_State *L, std::nullptr_t) noexcept
@@ -121,32 +106,11 @@ Push(lua_State *L, double value) noexcept
 	lua_pushnumber(L, value);
 }
 
-template<typename... T>
-gcc_nonnull_all
-void
-Push(lua_State *L, const std::tuple<T...> &t)
-{
-	const ScopeCheckStack check_stack(L, sizeof...(T));
-
-	std::apply([L](const T&... args){
-		(Push(L, args), ...);
-	}, t);
-}
-
 gcc_nonnull_all
 static inline void
 Push(lua_State *L, lua_CFunction value) noexcept
 {
 	lua_pushcfunction(L, value);
-}
-
-template<typename... T>
-gcc_nonnull_all
-void
-Push(lua_State *L, const CClosure<T...> &value) noexcept
-{
-	Push(L, value.values);
-	lua_pushcclosure(L, value.fn, sizeof...(T));
 }
 
 gcc_nonnull_all
