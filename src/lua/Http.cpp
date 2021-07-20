@@ -94,19 +94,19 @@ static constexpr struct luaL_Reg http_request_methods[] = {
   {nullptr, nullptr}
 };
 
-static constexpr char lua_http_request_class[] = "http.request";
+static constexpr char lua_http_request_class[] = "http.Request";
 using LuaHttpRequestClass = Lua::Class<LuaHttpRequest, lua_http_request_class>;
 
 int
 LuaHttpRequest::l_new(lua_State *L)
 {
-  if (lua_gettop(L) != 1)
+  if (lua_gettop(L) != 2)
     return luaL_error(L, "Invalid parameters");
 
-  if (!lua_isstring(L, 1))
-    luaL_argerror(L, 1, "URL expected");
+  if (!lua_isstring(L, 2))
+    luaL_argerror(L, 2, "URL expected");
 
-  LuaHttpRequestClass::New(L, lua_tostring(L, 1));
+  LuaHttpRequestClass::New(L, lua_tostring(L, 2));
   return 1;
 }
 
@@ -165,7 +165,7 @@ Lua::InitHttp(lua_State *L)
   lua_newtable(L);
 
   luaL_newlib(L, http_request_funcs); // create 'request'
-  lua_setfield(L, -2, "request"); // http.request = request
+  lua_setfield(L, -2, "Request"); // http.Request = request
 
   lua_setfield(L, -2, "http"); // xcsoar.http = http
   lua_pop(L, 1); // pop global "xcsoar"

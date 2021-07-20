@@ -651,11 +651,11 @@ The following methods are available in ``xcsoar.timer``:
 HTTP Client
 -----------
 
-The class ``xcsoar.http.request`` can be used to send HTTP requests.
+The class ``xcsoar.http.Request`` can be used to send HTTP requests.
 
 .. code-block:: lua
 
-  request = xcsoar.http.request.new(
+  request = xcsoar.http.Request:new(
       "https://download.xcsoar.org/repository")
   response = request:perform()
   print("status", response.status)
@@ -664,7 +664,7 @@ The class ``xcsoar.http.request`` can be used to send HTTP requests.
   end
   print("body", response.body)
 
-The ``xcsoar.http.request`` interface:
+The ``xcsoar.http.Request`` interface:
 
 .. list-table::
  :widths: 20 80
