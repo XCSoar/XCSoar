@@ -157,3 +157,9 @@ MapWindow::SetRasp(const std::shared_ptr<RaspStore> &_rasp_store) noexcept
   rasp_renderer.reset();
   rasp_store = _rasp_store;
 }
+
+void
+MapWindow::SetSkysight(const std::shared_ptr<Skysight> &_skysight) noexcept
+{
+  skysight = _skysight;
+}

@@ -627,7 +627,10 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/NOAAFormatter.cpp \
 	$(SRC)/Weather/NOAADownloader.cpp \
 	$(SRC)/Weather/NOAAStore.cpp \
-	$(SRC)/Weather/NOAAUpdater.cpp
+	$(SRC)/Weather/NOAAUpdater.cpp \
+	$(SRC)/Weather/Skysight/Skysight.cpp \
+	$(SRC)/Weather/Skysight/SkysightAPI.cpp \
+	$(SRC)/Weather/Skysight/SkysightRegions.cpp
 
 XCSOAR_SOURCES += \
 	$(SRC)/Tracking/LiveTrack24/SessionID.cpp \

@@ -268,6 +268,10 @@ constexpr std::string_view PCMetPassword = "PCMetPassword";
 constexpr std::string_view PCMetFtpUsername = "PCMetFtpUsername";
 constexpr std::string_view PCMetFtpPassword = "PCMetFtpPassword";
 
+constexpr std::string_view SkysightEmail = "SkysightEmail";
+constexpr std::string_view SkysightPassword = "SkysightPassword";
+constexpr std::string_view SkysightRegion = "SkysightRegion";
+
 constexpr std::string_view EnableThermalInformationMap = "EnableThermalInformationMap";
 
 constexpr std::string_view EnableLocationMapItem = "EnableLocationMapItem";
