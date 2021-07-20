@@ -96,7 +96,7 @@ XCSoar enables the following Lua standard libraries:
 
 -  ``math``
 
-Lua’s ``print()`` function writes to the  log file
+Lua’s ``print()`` function writes to the XCSoar log file
 (:file:`XCSoarData/xcsoar.log`).
 
 The ``error()`` function aborts the Lua script and reports the specified
@@ -111,8 +111,8 @@ it, as it may annoy the user.
 XCSoar's Lua API
 ================
 
-The package/namespace ``xcsoar`` provides access to . It contains the
-following names:
+The package/namespace ``xcsoar`` provides access to XCSoar. It
+contains the following names:
 
 .. list-table::
  :widths: 20 80
