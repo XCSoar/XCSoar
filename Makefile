@@ -109,6 +109,7 @@ include $(topdir)/build/osx.mk
 include $(topdir)/build/generate.mk
 include $(topdir)/build/doxygen.mk
 include $(topdir)/build/manual.mk
+include $(topdir)/build/sphinx.mk
 
 include $(topdir)/build/libboost.mk
 INCLUDES += $(BOOST_CPPFLAGS)
