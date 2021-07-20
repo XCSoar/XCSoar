@@ -60,7 +60,7 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
     gdf.ModifyValue(value);
     return true;
   } else if (df.GetType() == DataField::Type::DATE) {
-    auto &dfd = (DataFieldDate &)df;
+    auto &dfd = static_cast<DataFieldDate &>(df);
     BrokenDate date = dfd.GetValue();
     if (!DateEntryDialog(caption, date, true))
       return false;
