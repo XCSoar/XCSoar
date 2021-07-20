@@ -43,9 +43,9 @@ class LuaHttpRequest final : CurlResponseHandler {
   CurlResponseHandlerAdapter adapter;
 
   int status;
-  std::multimap<std::string, std::string> headers;
+  std::multimap<std::string, std::string> response_headers;
 
-  std::string body;
+  std::string response_body;
 
   std::exception_ptr error;
 
@@ -68,12 +68,12 @@ private:
   void OnHeaders(unsigned _status,
                  std::multimap<std::string, std::string> &&_headers) override {
     status = _status;
-    headers = std::move(_headers);
+    response_headers = std::move(_headers);
   }
 
   void OnData(ConstBuffer<void> data) override {
     // TODO size check
-    body.append((const char *)data.data, data.size);
+    response_body.append((const char *)data.data, data.size);
   }
 
   void OnEnd() override {
@@ -125,11 +125,11 @@ LuaHttpRequest::Perform(lua_State *L)
 
   lua_pushstring(L, "headers");
   lua_newtable(L);
-  for (const auto &i : headers)
+  for (const auto &i : response_headers)
     Lua::SetTable(L, -3, i.first, i.second);
   lua_settable(L, -3);
 
-  Lua::SetTable(L, -3, "body", body);
+  Lua::SetTable(L, -3, "body", response_body);
 
   return 1;
 }
