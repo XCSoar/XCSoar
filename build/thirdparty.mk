@@ -1,7 +1,3 @@
-ifeq ($(MAKECMDGOALS),kobo-libs) # kludge to allow bootstrapping kobo-libs
-$(error Target "kobo-libs" is obsolete, please use "libs" instead)
-endif
-
 ifeq ($(TARGET_IS_KOBO),y)
 USE_THIRDPARTY_LIBS = y
 else ifeq ($(TARGET),PC)
