@@ -67,7 +67,8 @@ The directory :file:`XCSoarData/lua/` may contain Lua scripts (:file:`*.lua`).
 The directory :file:`XCSoarData/lua/lib/` may contain Lua libraries to be
 loaded with ``require``.
 
-After startup,  starts the script :file:`init.lua` (if it exists).
+After startup, XCSoar starts the script :file:`init.lua` (if it
+exists).
 
 The *InputEvent* ``RunLuaFile`` can be used to start additional
 scripts. If no parameter is given, the user is asked to choose a file.
@@ -138,6 +139,8 @@ contains the following names:
    - Access to tracking settings.  See :ref:`lua.tracking`.
  * - ``timer``
    - Class for scheduling periodic callbacks.  See :ref:`lua.timer`.
+ * - ``http``
+   - HTTP client.  See :ref:`lua.http`.
 
 .. _lua.blackboard:
 
@@ -642,6 +645,53 @@ The following methods are available in ``xcsoar.timer``:
    - Cancel the timer.
  * - ``schedule(period)``
    - Reschedule the timer.
+
+.. _lua.http:
+
+HTTP Client
+-----------
+
+The class ``xcsoar.http.request`` can be used to send HTTP requests.
+
+.. code-block:: lua
+
+  request = xcsoar.http.request.new(
+      "https://download.xcsoar.org/repository")
+  response = request:perform()
+  print("status", response.status)
+  for name, value in pairs(response.headers) do
+      print("header", name, ":", value)
+  end
+  print("body", response.body)
+
+The ``xcsoar.http.request`` interface:
+
+.. list-table::
+ :widths: 20 80
+ :header-rows: 1
+
+ * - Name
+   - Description
+ * - ``new(URL)``
+   - Creates a new instance.  One instance can only be used once.
+ * - ``perform()``
+   - Sends the request and waits for the response.  Returns a response
+     object.
+
+The response interface:
+
+.. list-table::
+ :widths: 20 80
+ :header-rows: 1
+
+ * - Name
+   - Description
+ * - ``status``
+   - The numeric HTTP status code.
+ * - ``headers``
+   - A table of response headers.
+ * - ``body``
+   - The response body (as string).
 
 .. _lua.legacy:
 
