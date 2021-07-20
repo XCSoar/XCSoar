@@ -64,6 +64,14 @@ public:
     max = _max;
   }
 
+  int GetMin() const noexcept {
+    return min;
+  }
+
+  int GetMax() const noexcept {
+    return max;
+  }
+
   /* virtual methods from class DataField */
   void Inc() noexcept override;
   void Dec() noexcept override;
