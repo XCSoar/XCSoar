@@ -79,7 +79,7 @@ static LuaEventRegistry<unsigned> event_store_enum;
 static LuaEventRegistry<const tstring> event_store_gesture;
 static LuaEventRegistry<unsigned> event_store_key;
 
-static const char* event_enum_names[] = {
+static constexpr const char* event_enum_names[] = {
   "nil",
 #include "InputEvents_Char2GCE.cpp"
 #include "InputEvents_Char2NE.cpp"
