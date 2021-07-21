@@ -844,9 +844,10 @@ DEBUG_PROGRAMS = $(call name-to-bin,$(DEBUG_PROGRAM_NAMES))
 ifeq ($(LUA),y)
 RUN_LUA_SOURCES = \
 	$(SRC)/Version.cpp \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunLua.cpp
-RUN_LUA_DEPENDS = LUA LIBLUA LIBHTTP IO OS UTIL
+RUN_LUA_DEPENDS = LUA LIBLUA LIBHTTP IO OS GEO MATH UTIL
 $(eval $(call link-program,RunLua,RUN_LUA))
 endif
 
