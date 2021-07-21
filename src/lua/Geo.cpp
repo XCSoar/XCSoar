@@ -28,8 +28,10 @@ Copyright_License {
 #include "util/ConvertString.hpp"
 
 extern "C" {
-#include <lua.h>
+#include <lauxlib.h>
 }
+
+static constexpr auto geo_point_meta_table = "xcsoar.GeoPoint";
 
 static int
 l_GeoPoint_tostring(lua_State *L)
@@ -40,6 +42,14 @@ l_GeoPoint_tostring(lua_State *L)
 }
 
 namespace Lua {
+
+void
+InitGeo(lua_State *L) noexcept
+{
+  luaL_newmetatable(L, geo_point_meta_table);
+  SetField(L, RelativeStackIndex{-1}, "__tostring", l_GeoPoint_tostring);
+  lua_pop(L, 1);
+}
 
 void Push(lua_State *L, Angle value) {
   Push(L, value.Degrees());
@@ -53,8 +63,7 @@ void Push(lua_State *L, GeoPoint value) {
   if (value.IsValid()) {
     lua_newtable(L);
 
-    lua_newtable(L);
-    SetField(L, RelativeStackIndex{-1}, "__tostring", l_GeoPoint_tostring);
+    luaL_getmetatable(L, geo_point_meta_table);
     lua_setmetatable(L, -2);
 
     SetField(L, RelativeStackIndex{-1}, "longitude", value.longitude);
