@@ -84,6 +84,22 @@ that case, the Lua script stays resident until it unregisters all
 callbacks (or until XCSoar quits or the user stops the script
 explicitly).
 
+Running Lua on the Command Line
+-------------------------------
+
+You can experiment with XCSoar Lua scripts with the :program:`RunLua`
+command-line tool, e.g.::
+
+  make output/UNIX/bin/RunLua
+  ./output/UNIX/bin/RunLua test/lua/geo.lua
+
+Most libraries are missing here (everything specific to a full
+XCSoar), but some very basic things can be tested here, for example
+the HTTP client and the geo library (class ``GeoPoint``).  Being a
+small non-interactive command-line program, it is also easy to debug
+with :program:`gdb` and :program:`valgrind`.
+
+
 Lua Standard Libraries
 ======================
 
