@@ -35,6 +35,7 @@ import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
 /**
@@ -88,7 +89,12 @@ public class BluetoothGattClientPort
 
   public void startConnect(Context context) throws IOException {
     shutdown = false;
-    gatt = device.connectGatt(context, false, this);
+
+    if (Build.VERSION.SDK_INT >= 23)
+      gatt = device.connectGatt(context, false, this, BluetoothDevice.TRANSPORT_LE);
+    else
+      gatt = device.connectGatt(context, false, this);
+
     if (gatt == null)
       throw new IOException("Bluetooth GATT connect failed");
   }
