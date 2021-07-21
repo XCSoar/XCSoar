@@ -123,6 +123,8 @@ contains the following names:
    - Description
  * - ``VERSION``
    - The XCSoar version number, for example ``7.0``.
+ * - ``GeoPoint``
+   - A class which describes a geodetic location on earth's surface.
  * - ``blackboard``
    - Access to sensor data.  See :ref:`lua.blackboard`.
  * - ``map``
