@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Map.hpp"
 #include "Geo.hpp"
+#include "MetaTable.hxx"
 #include "Util.hxx"
 #include "util/StringAPI.hxx"
 #include "UIGlobals.hpp"
@@ -246,9 +247,7 @@ Lua::InitMap(lua_State *L)
 
   lua_newtable(L);
 
-  lua_newtable(L);
-  SetField(L, RelativeStackIndex{-1}, "__index", l_map_index);
-  lua_setmetatable(L, -2);
+  MakeIndexMetaTableFor(L, RelativeStackIndex{-1}, l_map_index);
 
   luaL_setfuncs(L, map_funcs, 0);
 

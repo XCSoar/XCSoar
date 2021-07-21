@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Replay.hpp"
+#include "MetaTable.hxx"
 #include "Util.hxx"
 #include "system/Path.hpp"
 #include "Components.hpp"
@@ -113,9 +114,7 @@ Lua::InitReplay(lua_State *L)
 
   lua_newtable(L);
 
-  lua_newtable(L);
-  SetField(L, RelativeStackIndex{-1}, "__index", l_replay_index);
-  lua_setmetatable(L, -2);
+  MakeIndexMetaTableFor(L, RelativeStackIndex{-1}, l_replay_index);
 
   luaL_setfuncs(L, settings_funcs, 0);
 

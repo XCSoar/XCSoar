@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Blackboard.hpp"
 #include "Geo.hpp"
+#include "MetaTable.hxx"
 #include "Util.hxx"
 #include "util/StringAPI.hxx"
 #include "Interface.hpp"
@@ -99,9 +100,7 @@ Lua::InitBlackboard(lua_State *L)
 
   lua_newtable(L);
 
-  lua_newtable(L);
-  SetField(L, -2, "__index", l_blackboard_index);
-  lua_setmetatable(L, -2);
+  MakeIndexMetaTableFor(L, RelativeStackIndex{-1}, l_blackboard_index);
 
   lua_setfield(L, -2, "blackboard");
 

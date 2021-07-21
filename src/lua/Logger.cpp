@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Logger.hpp"
+#include "MetaTable.hxx"
 #include "Util.hxx"
 #include "Interface.hpp"
 
@@ -210,9 +211,7 @@ Lua::InitLogger(lua_State *L)
 
   lua_newtable(L);
 
-  lua_newtable(L);
-  SetField(L, -2, "__index", l_logger_index);
-  lua_setmetatable(L, -2);
+  MakeIndexMetaTableFor(L, RelativeStackIndex{-1}, l_logger_index);
 
   luaL_setfuncs(L, settings_funcs, 0);
 

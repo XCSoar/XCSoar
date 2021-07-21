@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Task.hpp"
+#include "MetaTable.hxx"
 #include "Geo.hpp"
 #include "Util.hxx"
 #include "util/StringAPI.hxx"
@@ -389,9 +390,7 @@ Lua::InitTask(lua_State *L)
 
   lua_newtable(L);
 
-  lua_newtable(L);
-  SetField(L, RelativeStackIndex{-1}, "__index", l_task_index);
-  lua_setmetatable(L, -2);
+  MakeIndexMetaTableFor(L, RelativeStackIndex{-1}, l_task_index);
 
   lua_setfield(L, -2, "task");
 
