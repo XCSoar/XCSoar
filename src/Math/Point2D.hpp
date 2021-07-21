@@ -101,12 +101,7 @@ struct UnsignedPoint2D : Point2D<unsigned> {
 
 static_assert(std::is_trivial<UnsignedPoint2D>::value, "type is not trivial");
 
-struct IntPoint2D : Point2D<int> {
-  IntPoint2D() = default;
-  using Point2D::Point2D;
-};
-
-static_assert(std::is_trivial<IntPoint2D>::value, "type is not trivial");
+using IntPoint2D = Point2D<int>;
 
 struct DoublePoint2D : Point2D<double> {
   DoublePoint2D() = default;
