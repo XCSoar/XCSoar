@@ -121,7 +121,7 @@ public:
 
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
   static constexpr std::size_t BufferSize(const PixelSize size) noexcept {
-    return size.width * size.height;
+    return std::size_t(size.width) * std::size_t(size.height);
   }
 
   void Render(TStringView text, const PixelSize size,
