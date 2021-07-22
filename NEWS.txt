@@ -1,6 +1,7 @@
 Version 7.11 - not yet released
 * user interface
   - new vario gauge background
+  - fix truncated labels in many dialogs
 * Android
   - fix reconnect to Bluetooth LE devices
 
