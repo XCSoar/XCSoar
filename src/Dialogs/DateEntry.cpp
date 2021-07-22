@@ -52,16 +52,17 @@ DateEntryDialog(const TCHAR *caption, BrokenDate &value,
   auto entry = std::make_unique<DigitEntry>(look);
   entry->CreateDate(client_area, client_area.GetClientRect(), control_style);
   entry->Resize(entry->GetRecommendedSize());
+  if (!value.IsPlausible())
+    value = BrokenDate(1990, 1, 1);
   entry->SetValue(value);
   entry->SetCallback(dialog.MakeModalResultCallback(mrOK));
 
   /* create buttons */
-
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
 
-  dialog.AddButton(_("Reset"), [&entry = *entry](){
-    entry.SetValue(BrokenDate(1990, 1, 1));  // or the start value
+  dialog.AddButton(_("Reset"), [&entry = *entry, start_value = value](){
+    entry.SetValue(start_value);  // the start value
   });
 
   if (nullable)
