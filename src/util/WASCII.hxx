@@ -30,33 +30,31 @@
 #ifndef WASCII_HXX
 #define WASCII_HXX
 
-#include "Compiler.h"
-
 #include <cstddef>
 #include <wchar.h>
 
-gcc_nonnull_all
+[[gnu::nonnull]]
 void
 CopyASCII(wchar_t *dest, const wchar_t *src);
 
-gcc_nonnull_all
+[[gnu::nonnull]]
 wchar_t *
 CopyASCII(wchar_t *dest, size_t dest_size,
 	  const wchar_t *src, const wchar_t *src_end);
 
-gcc_nonnull_all
+[[gnu::nonnull]]
 void
 CopyASCII(wchar_t *dest, const char *src);
 
-gcc_nonnull_all
+[[gnu::nonnull]]
 wchar_t *
 CopyASCII(wchar_t *dest, size_t dest_size, const char *src, const char *src_end);
 
-gcc_nonnull_all
+[[gnu::nonnull]]
 char *
 CopyASCII(char *dest, size_t dest_size, const wchar_t *src, const wchar_t *src_end);
 
-gcc_nonnull_all
+[[gnu::nonnull]]
 void
 CopyASCIIUpper(char *dest, const wchar_t *src);
 
