@@ -125,6 +125,12 @@ class NativeView extends SurfaceView
       EGL10.EGL_RED_SIZE, 4,
       EGL10.EGL_GREEN_SIZE, 4,
       EGL10.EGL_BLUE_SIZE, 4,
+
+      EGL10.EGL_SURFACE_TYPE, EGL10.EGL_WINDOW_BIT,
+
+       /* 4 = EGL_OPENGL_ES2_BIT; not exported by Android API */
+      EGL10.EGL_RENDERABLE_TYPE, 4,
+
       EGL10.EGL_NONE
     };
 
