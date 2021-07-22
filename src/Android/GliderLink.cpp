@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "GliderLink.hpp"
 #include "org_xcsoar_GliderLinkReceiver.h"
+#include "java/String.hxx"
 #include "util/Compiler.h"
 #include "Components.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
@@ -112,9 +113,7 @@ Java_org_xcsoar_GliderLinkReceiver_setGliderLinkInfo(
     traffic_list.new_traffic.Update(basic.clock);
   }
 
-  const char *nativeString = env->GetStringUTFChars(callsign, JNI_FALSE);
-  traffic->name.SetASCII(nativeString);
-  env->ReleaseStringUTFChars(callsign, nativeString);
+  traffic->name.SetASCII(Java::String::GetUTFChars(env, callsign).c_str());
 
   traffic->location = GeoPoint(Angle::Degrees(longitude),
                               Angle::Degrees(latitude));

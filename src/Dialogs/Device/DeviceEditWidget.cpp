@@ -205,30 +205,20 @@ FillAndroidBluetoothPorts(DataFieldEnum &df,
     if (address == NULL)
       continue;
 
-    const char *address2 = env->GetStringUTFChars(address, NULL);
-    if (address2 == NULL)
-      continue;
+    const auto address2 = Java::String::GetUTFChars(env, address);
 
     jstring name = (jstring)env->GetObjectArrayElement(bonded, i * BLUETOOTH_LIST_STRIDE + 1);
-    const char *name2 = name != NULL
-      ? env->GetStringUTFChars(name, NULL)
-      : NULL;
+    const auto name2 = name != nullptr
+      ? Java::String::GetUTFChars(env, name)
+      : nullptr;
 
     jstring devType = (jstring)env->GetObjectArrayElement(bonded, i * BLUETOOTH_LIST_STRIDE + 2);
-    const char *devType2 = devType != NULL
-      ? env->GetStringUTFChars(devType, NULL)
-      : NULL;
 
-    const DeviceConfig::PortType portType = strcmp("BLE",devType2) == 0
+    const DeviceConfig::PortType portType = devType != nullptr &&
+      strcmp("BLE", Java::String::GetUTFChars(env, devType).c_str()) == 0
       ? DeviceConfig::PortType::BLE_HM10
       : DeviceConfig::PortType::RFCOMM;
-    AddPort(df, portType, address2, name2);
-
-    env->ReleaseStringUTFChars(address, address2);
-    if (name2 != NULL)
-      env->ReleaseStringUTFChars(name, name2);
-    if (devType2 != NULL)
-      env->ReleaseStringUTFChars(devType, devType2);
+    AddPort(df, portType, address2.c_str(), name2.c_str());
   }
 
   env->DeleteLocalRef(bonded);

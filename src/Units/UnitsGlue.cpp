@@ -137,15 +137,7 @@ AutoDetect()
     return 0;
 
   // Convert the jstring to a char string
-  const char *language2 = env->GetStringUTFChars(language, nullptr);
-  if (language2 == nullptr)
-    return 0;
-
-  AtScopeExit(env, &language, language2) {
-    env->ReleaseStringUTFChars(language, language2);
-  };
-
-  return FindLanguage(language2);
+  return FindLanguage(language.GetUTFChars().c_str());
 
 #else
   // Metric default on Linux
