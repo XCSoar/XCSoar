@@ -28,7 +28,7 @@ import android.graphics.Paint;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-import static android.opengl.GLES11.*;
+import static android.opengl.GLES20.*;
 import android.opengl.GLUtils;
 
 /**
