@@ -36,29 +36,29 @@
 
 [[gnu::nonnull]]
 void
-CopyASCII(wchar_t *dest, const wchar_t *src);
+CopyASCII(wchar_t *dest, const wchar_t *src) noexcept;
 
 [[gnu::nonnull]]
 wchar_t *
 CopyASCII(wchar_t *dest, std::size_t dest_size,
-	  const wchar_t *src, const wchar_t *src_end);
+	  const wchar_t *src, const wchar_t *src_end) noexcept;
 
 [[gnu::nonnull]]
 void
-CopyASCII(wchar_t *dest, const char *src);
+CopyASCII(wchar_t *dest, const char *src) noexcept;
 
 [[gnu::nonnull]]
 wchar_t *
 CopyASCII(wchar_t *dest, std::size_t dest_size,
-	  const char *src, const char *src_end);
+	  const char *src, const char *src_end) noexcept;
 
 [[gnu::nonnull]]
 char *
 CopyASCII(char *dest, std::size_t dest_size,
-	  const wchar_t *src, const wchar_t *src_end);
+	  const wchar_t *src, const wchar_t *src_end) noexcept;
 
 [[gnu::nonnull]]
 void
-CopyASCIIUpper(char *dest, const wchar_t *src);
+CopyASCIIUpper(char *dest, const wchar_t *src) noexcept;
 
 #endif
