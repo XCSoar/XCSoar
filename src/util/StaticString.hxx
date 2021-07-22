@@ -141,12 +141,12 @@ public:
 		return StringIsEqual(c_str(), other);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool StartsWith(const_pointer prefix) const {
 		return StringStartsWith(c_str(), prefix);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool Contains(const_pointer needle) const {
 		return StringFind(c_str(), needle) != nullptr;
 	}
