@@ -30,15 +30,17 @@ Copyright_License {
 #import <Foundation/Foundation.h>
 #endif
 
-#ifdef USE_FREETYPE
-typedef struct FT_FaceRec_ *FT_Face;
-#endif
+#include <cstddef>
 
 #ifdef _WIN32
 #include <windows.h>
 #endif
 
 #include <tchar.h>
+
+#ifdef USE_FREETYPE
+typedef struct FT_FaceRec_ *FT_Face;
+#endif
 
 class FontDescription;
 class TextUtil;
@@ -119,7 +121,7 @@ public:
 
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
   [[gnu::const]]
-  static size_t BufferSize(const PixelSize size) noexcept {
+  static std::size_t BufferSize(const PixelSize size) noexcept {
     return size.width * size.height;
   }
 
