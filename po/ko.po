@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-10 09:50+0200\n"
-"PO-Revision-Date: 2021-04-25 02:32+0000\n"
-"Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
+"PO-Revision-Date: 2021-07-20 10:35+0000\n"
+"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
 "Language: ko\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -2998,9 +2998,9 @@ msgid "The time spend in the current thermal."
 msgstr "현재 써멀에서의 시간을 보여준다."
 
 #: src/InfoBoxes/Content/Factory.cpp:1096
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alternate 2 GR"
-msgstr "활공비(예비착륙장1 활공비)"
+msgstr "활공비(예비착륙장2 활공비)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1097
 #, fuzzy, no-c-format
