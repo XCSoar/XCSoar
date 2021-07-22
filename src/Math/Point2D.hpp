@@ -43,8 +43,6 @@ struct Point2D {
   constexpr Point2D(scalar_type _x, scalar_type _y) noexcept
     :x(_x), y(_y) {}
 
-  constexpr Point2D(const Point2D &) noexcept = default;
-
   /**
    * This constructor allows casting from a different Point2D
    * template instantiation.

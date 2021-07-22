@@ -374,7 +374,6 @@ public:
 
   PointerIterator() = default;
   explicit PointerIterator(I _i):i(_i) {}
-  PointerIterator<I> &operator=(const PointerIterator<I> &other) = default;
 
   PointerIterator<I> &operator--() {
     --i;
