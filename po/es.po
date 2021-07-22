@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-10 09:50+0200\n"
-"PO-Revision-Date: 2021-07-21 23:01+0000\n"
+"PO-Revision-Date: 2021-07-23 13:33+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -3571,7 +3571,7 @@ msgstr "Rastro de caracol completo"
 
 #: src/Input/InputEventsSettings.cpp:203
 msgid "Bugs performance"
-msgstr "Rendimiento por insectos"
+msgstr "Rendimiento por bichos"
 
 #: src/Input/InputEventsSettings.cpp:246
 #, no-c-format
@@ -4382,7 +4382,7 @@ msgid ""
 "the device."
 msgstr ""
 "Esta opción le permite configurar XCSoar para que use los valores como "
-"MacCready, insectos y lastre del dispositivo."
+"MacCready, bichos y lastre del dispositivo."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:710
 msgid "Sync. to device"
@@ -4393,7 +4393,7 @@ msgid ""
 "Tells XCSoar to send settings like the MacCready value, bugs and ballast to "
 "the device."
 msgstr ""
-"Esta opción le permite enviar valores como el valor MacCready, insectos y "
+"Esta opción le permite enviar valores como el valor MacCready, bichos y "
 "lastre desde XCSoar al dispositivo."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:717
@@ -5205,7 +5205,7 @@ msgid ""
 "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."
 msgstr ""
 "Limpieza del planeador. Ajuste a 0% si está completamente limpio y una cifra "
-"mayor a medida que las alas recogen insectos o se mojan. 50% indica que la "
+"mayor a medida que las alas recogen bichos o se mojan. 50% indica que la "
 "Tasa de descenso del planeador se duplica."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:313
@@ -6575,11 +6575,11 @@ msgstr "Si se debe mostrar la configuración de MacCready."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:76
 msgid "Show bugs"
-msgstr "Mostrar errores"
+msgstr "Mostrar bichos"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:76
 msgid "Whether to show the bugs percentage."
-msgstr "Si se debe mostrar el porcentaje de errores."
+msgstr "Si se debe mostrar el porcentaje de bichos."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:79
 msgid "Show ballast"
@@ -7758,8 +7758,8 @@ msgstr "Bichos automáticos"
 msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
 msgstr ""
-"Si está habilitado, agrega 1% a la configuración de errores después de cada "
-"hora completada mientras vuela."
+"Si está habilitado, agrega 1% a la configuración de bichos después de cada "
+"hora de vuelo completada."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:107
 msgid ""
