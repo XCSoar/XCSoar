@@ -256,7 +256,7 @@ struct DeviceConfig {
   /**
    * Checks if the specified DeviceConfig is available on this platform.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsAvailable() const;
 
   /**
@@ -264,13 +264,13 @@ struct DeviceConfig {
    * a certain amount of time?  Some ports need this to recover from
    * errors.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool ShouldReopenOnTimeout() const;
 
-  gcc_pure
+  [[gnu::pure]]
   static bool MaybeBluetooth(PortType port_type, const TCHAR *path);
 
-  gcc_pure
+  [[gnu::pure]]
   bool MaybeBluetooth() const;
 
   /**
@@ -278,7 +278,7 @@ struct DeviceConfig {
    * prefix.  Returns false on mismatch or if the name could not be
    * determined or if this is not a Bluetooth device.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool BluetoothNameStartsWith(const char *prefix) const;
 
   bool UsesSpeed() const {
@@ -314,7 +314,8 @@ struct DeviceConfig {
       return true;
     }
 
-    gcc_unreachable();
+    /* unreachable */
+    return false;
   }
 
   bool UsesDriver() const {
@@ -400,7 +401,7 @@ struct DeviceConfig {
   /**
    * Generates a human-readable (localised) port name.
    */
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetPortName(TCHAR *buffer, size_t max_size) const;
 };
 

@@ -24,6 +24,7 @@ Copyright_License {
 #include "Config.hpp"
 #include "Asset.hpp"
 #include "Language/Language.hpp"
+#include "util/Compiler.h"
 #include "util/StringCompare.hxx"
 
 #ifdef ANDROID
