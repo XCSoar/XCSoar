@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_BLUETOOTH_HELPER_HPP
 #define XCSOAR_ANDROID_BLUETOOTH_HELPER_HPP
 
+#include "java/Object.hxx"
 #include "util/Compiler.h"
 
 #include <jni.h>
@@ -53,8 +54,8 @@ const char *GetNameFromAddress(JNIEnv *env, const char *address);
 /**
  * Returns a list of all bonded devices.
  */
-gcc_malloc
-jobjectArray list(JNIEnv *env);
+Java::LocalRef<jobjectArray>
+list(JNIEnv *env) noexcept;
 
 /**
  * Does the device support Bluetooth LE?
@@ -66,7 +67,8 @@ bool HasLe(JNIEnv *env);
  * Start scanning for Bluetooth LE devices.  Call StopLeScan() with
  * the returned value when you're done.  Returns nullptr on error.
  */
-jobject StartLeScan(JNIEnv *env, LeScanCallback &cb);
+Java::LocalObject
+StartLeScan(JNIEnv *env, LeScanCallback &cb) noexcept;
 
 /**
  * Stop scanning for Bluetooth LE devices.

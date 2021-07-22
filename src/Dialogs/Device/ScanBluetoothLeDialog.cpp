@@ -177,7 +177,7 @@ ScanBluetoothLeDialog() noexcept
 
   const auto env = Java::GetEnv();
   const auto callback = BluetoothHelper::StartLeScan(env, dialog.GetWidget());
-  if (callback == nullptr) {
+  if (!callback) {
     const TCHAR *message =
       _("Bluetooth LE is not available on this device.");
     ShowMessageBox(message, _("Bluetooth LE"), MB_OK);

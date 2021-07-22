@@ -73,12 +73,12 @@ NativeLeScanCallback::Deinitialise(JNIEnv *env)
   cls.ClearOptional(env);
 }
 
-jobject
-NativeLeScanCallback::Create(JNIEnv *env, LeScanCallback &cb)
+Java::LocalObject
+NativeLeScanCallback::Create(JNIEnv *env, LeScanCallback &cb) noexcept
 {
   if (!cls.IsDefined())
     /* Bluetooth LE not supported on this Android version */
-    return nullptr;
+    return {};
 
-  return env->NewObject(cls, ctor, (jlong)&cb);
+  return {env, env->NewObject(cls, ctor, (jlong)&cb)};
 }

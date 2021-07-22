@@ -195,7 +195,7 @@ FillAndroidBluetoothPorts(DataFieldEnum &df,
   //   name
   //   type - either "BLE" or "CLASSIC"
   static constexpr jsize BLUETOOTH_LIST_STRIDE = 3;
-  Java::LocalRef bonded{env, BluetoothHelper::list(env)};
+  const auto bonded = BluetoothHelper::list(env);
   if (!bonded)
     return;
 

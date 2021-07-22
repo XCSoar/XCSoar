@@ -122,15 +122,15 @@ BluetoothHelper::GetNameFromAddress(JNIEnv *env, const char *address)
   return j.first->second.c_str();
 }
 
-jobjectArray
-BluetoothHelper::list(JNIEnv *env)
+Java::LocalRef<jobjectArray>
+BluetoothHelper::list(JNIEnv *env) noexcept
 {
   if (!cls.IsDefined())
     return nullptr;
 
   /* call BluetoothHelper.connect() */
 
-  return (jobjectArray)env->CallStaticObjectMethod(cls, list_method);
+  return {env, (jobjectArray)env->CallStaticObjectMethod(cls, list_method)};
 }
 
 bool
@@ -139,20 +139,19 @@ BluetoothHelper::HasLe(JNIEnv *env)
   return cls.IsDefined() && env->GetStaticBooleanField(cls, hasLe_field);
 }
 
-jobject
-BluetoothHelper::StartLeScan(JNIEnv *env, LeScanCallback &_cb)
+Java::LocalObject
+BluetoothHelper::StartLeScan(JNIEnv *env, LeScanCallback &_cb) noexcept
 {
   assert(HasLe(env));
 
-  jobject cb = NativeLeScanCallback::Create(env, _cb);
-  if (cb == nullptr) {
+  auto cb = NativeLeScanCallback::Create(env, _cb);
+  if (!cb) {
     env->ExceptionClear();
     return nullptr;
   }
 
-  if (!env->CallStaticBooleanMethod(cls, startLeScan_method, cb)) {
+  if (!env->CallStaticBooleanMethod(cls, startLeScan_method, cb.Get())) {
     env->ExceptionClear();
-    env->DeleteLocalRef(cb);
     return nullptr;
   }
 
@@ -165,7 +164,6 @@ BluetoothHelper::StopLeScan(JNIEnv *env, jobject cb)
   assert(HasLe(env));
 
   env->CallStaticVoidMethod(cls, stopLeScan_method, cb);
-  env->DeleteLocalRef(cb);
 }
 
 PortBridge *
