@@ -45,7 +45,16 @@ class EGLUtil {
   static int attribDistance(EGL10 egl, EGLDisplay display, EGLConfig config,
                             int attribute, int want) {
     int value = getConfigAttrib(egl, display, config, attribute, 0);
-    return Math.abs(value - want);
+    int distance = Math.abs(value - want);
+    if (want > 0 && value == 0)
+      /* big penalty if this attribute if zero, but XCSoar prefers it
+         to be non-zero */
+      distance += 100;
+    else if (want == 0 && value > 0)
+      /* small penalty if this attribute is non-zero, but XCSoar
+         prefers it to be zero */
+      distance += 10;
+    return distance;
   }
 
   static int configDistance(EGL10 egl, EGLDisplay display, EGLConfig config,
