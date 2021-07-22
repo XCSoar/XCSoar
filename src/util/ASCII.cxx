@@ -42,7 +42,8 @@ CopyASCII(char *dest, const char *src)
 }
 
 char *
-CopyASCII(char *dest, size_t dest_size, const char *src, const char *src_end)
+CopyASCII(char *dest, std::size_t dest_size,
+	  const char *src, const char *src_end)
 {
 	assert(dest_size > 0);
 	assert(src_end >= src);

@@ -57,7 +57,8 @@ CopyASCII(char *dest, const char *src);
  */
 [[gnu::nonnull]]
 char *
-CopyASCII(char *dest, size_t dest_size, const char *src, const char *src_end);
+CopyASCII(char *dest, std::size_t dest_size,
+	  const char *src, const char *src_end);
 
 /**
  * Like CopyUpper(), but convert all letters to upper-case.

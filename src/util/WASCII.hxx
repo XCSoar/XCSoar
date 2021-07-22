@@ -31,6 +31,7 @@
 #define WASCII_HXX
 
 #include <cstddef>
+
 #include <wchar.h>
 
 [[gnu::nonnull]]
@@ -39,7 +40,7 @@ CopyASCII(wchar_t *dest, const wchar_t *src);
 
 [[gnu::nonnull]]
 wchar_t *
-CopyASCII(wchar_t *dest, size_t dest_size,
+CopyASCII(wchar_t *dest, std::size_t dest_size,
 	  const wchar_t *src, const wchar_t *src_end);
 
 [[gnu::nonnull]]
@@ -48,11 +49,13 @@ CopyASCII(wchar_t *dest, const char *src);
 
 [[gnu::nonnull]]
 wchar_t *
-CopyASCII(wchar_t *dest, size_t dest_size, const char *src, const char *src_end);
+CopyASCII(wchar_t *dest, std::size_t dest_size,
+	  const char *src, const char *src_end);
 
 [[gnu::nonnull]]
 char *
-CopyASCII(char *dest, size_t dest_size, const wchar_t *src, const wchar_t *src_end);
+CopyASCII(char *dest, std::size_t dest_size,
+	  const wchar_t *src, const wchar_t *src_end);
 
 [[gnu::nonnull]]
 void

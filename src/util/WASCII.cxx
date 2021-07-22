@@ -42,7 +42,7 @@ CopyASCII(wchar_t *dest, const wchar_t *src)
 }
 
 wchar_t *
-CopyASCII(wchar_t *dest, size_t dest_size,
+CopyASCII(wchar_t *dest, std::size_t dest_size,
 	  const wchar_t *src, const wchar_t *src_end)
 {
 	assert(dest != nullptr);
@@ -70,7 +70,7 @@ CopyASCII(wchar_t *dest, const char *src)
 
 template<typename D, typename S>
 static D *
-TemplateCopyASCII(D *dest, size_t dest_size, const S *src, const S *src_end)
+TemplateCopyASCII(D *dest, std::size_t dest_size, const S *src, const S *src_end)
 {
 	assert(dest != nullptr);
 	assert(dest_size > 0);
@@ -87,13 +87,15 @@ TemplateCopyASCII(D *dest, size_t dest_size, const S *src, const S *src_end)
 }
 
 wchar_t *
-CopyASCII(wchar_t *dest, size_t dest_size, const char *src, const char *src_end)
+CopyASCII(wchar_t *dest, std::size_t dest_size,
+	  const char *src, const char *src_end)
 {
 	return TemplateCopyASCII(dest, dest_size, src, src_end);
 }
 
 char *
-CopyASCII(char *dest, size_t dest_size, const wchar_t *src, const wchar_t *src_end)
+CopyASCII(char *dest, std::size_t dest_size,
+	  const wchar_t *src, const wchar_t *src_end)
 {
 	return TemplateCopyASCII(dest, dest_size, src, src_end);
 }
