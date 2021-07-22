@@ -243,13 +243,13 @@ struct DeviceConfig {
   /**
    * Does this port type use a baud rate?
    */
-  static bool UsesSpeed(PortType port_type) {
+  static constexpr bool UsesSpeed(PortType port_type) noexcept {
     return port_type == PortType::SERIAL || port_type == PortType::AUTO ||
       port_type == PortType::ANDROID_USB_SERIAL ||
       port_type == PortType::IOIOUART;
   }
 
-  bool IsDisabled() const {
+  constexpr bool IsDisabled() const noexcept {
     return !enabled || port_type == PortType::DISABLED;
   }
 
@@ -257,7 +257,7 @@ struct DeviceConfig {
    * Checks if the specified DeviceConfig is available on this platform.
    */
   [[gnu::pure]]
-  bool IsAvailable() const;
+  bool IsAvailable() const noexcept;
 
   /**
    * Should this device be reopened when no data has been received for
@@ -265,13 +265,13 @@ struct DeviceConfig {
    * errors.
    */
   [[gnu::pure]]
-  bool ShouldReopenOnTimeout() const;
+  bool ShouldReopenOnTimeout() const noexcept;
 
   [[gnu::pure]]
-  static bool MaybeBluetooth(PortType port_type, const TCHAR *path);
+  static bool MaybeBluetooth(PortType port_type, const TCHAR *path) noexcept;
 
   [[gnu::pure]]
-  bool MaybeBluetooth() const;
+  bool MaybeBluetooth() const noexcept;
 
   /**
    * Check whether the Bluetooth device name starts with the specified
@@ -279,9 +279,9 @@ struct DeviceConfig {
    * determined or if this is not a Bluetooth device.
    */
   [[gnu::pure]]
-  bool BluetoothNameStartsWith(const char *prefix) const;
+  bool BluetoothNameStartsWith(const char *prefix) const noexcept;
 
-  bool UsesSpeed() const {
+  bool UsesSpeed() const noexcept {
     return UsesSpeed(port_type) ||
       (MaybeBluetooth() && k6bt);
   }
@@ -289,7 +289,7 @@ struct DeviceConfig {
   /**
    * Does this port type use a driver?
    */
-  static bool UsesDriver(PortType port_type) {
+  static constexpr bool UsesDriver(PortType port_type) noexcept {
     switch (port_type) {
     case PortType::DISABLED:
     case PortType::GLIDER_LINK:
@@ -318,43 +318,43 @@ struct DeviceConfig {
     return false;
   }
 
-  bool UsesDriver() const {
+  constexpr bool UsesDriver() const noexcept {
     return UsesDriver(port_type);
   }
 
   /**
    * Does this port type use a tcp host?
    */
-  static bool UsesIPAddress(PortType port_type) {
+  static constexpr bool UsesIPAddress(PortType port_type) noexcept {
     return port_type == PortType::TCP_CLIENT;
   }
 
-  bool UsesIPAddress() const {
+  constexpr bool UsesIPAddress() const noexcept {
     return UsesIPAddress(port_type);
   }
 
   /**
    * Does this port type use a tcp port?
    */
-  static bool UsesTCPPort(PortType port_type) {
+  static constexpr bool UsesTCPPort(PortType port_type) noexcept {
     return port_type == PortType::TCP_LISTENER ||
       port_type == PortType::TCP_CLIENT ||
       port_type == PortType::UDP_LISTENER;
   }
 
-  bool UsesTCPPort() const {
+  constexpr bool UsesTCPPort() const noexcept {
     return UsesTCPPort(port_type);
   }
 
-  bool IsDriver(const TCHAR *name) const {
+  constexpr bool IsDriver(const TCHAR *name) const noexcept {
     return UsesDriver() && driver_name.equals(name);
   }
 
-  bool IsVega() const {
+  bool IsVega() const noexcept {
     return IsDriver(_T("Vega"));
   }
 
-  bool IsAndroidInternalGPS() const {
+  constexpr bool IsAndroidInternalGPS() const noexcept {
 #ifdef ANDROID
     return port_type == PortType::INTERNAL;
 #else
@@ -362,47 +362,47 @@ struct DeviceConfig {
 #endif
   }
 
-  static bool UsesPort(PortType port_type) {
+  static constexpr bool UsesPort(PortType port_type) noexcept {
     return UsesDriver(port_type);
   }
 
-  bool UsesPort() const {
+  constexpr bool UsesPort() const noexcept {
     return UsesPort(port_type);
   }
 
-  static bool IsPressureSensor(PortType port_type) {
+  static constexpr bool IsPressureSensor(PortType port_type) noexcept {
     return port_type == PortType::I2CPRESSURESENSOR;
   }
 
-  bool IsPressureSensor() const {
+  constexpr bool IsPressureSensor() const noexcept {
     return IsPressureSensor(port_type);
   }
 
-  static bool UsesI2C(PortType port_type) {
+  static constexpr bool UsesI2C(PortType port_type) noexcept {
     return port_type == PortType::NUNCHUCK ||
            port_type == PortType::I2CPRESSURESENSOR;
   }
 
-  bool UsesI2C() const {
+  constexpr bool UsesI2C() const noexcept {
     return UsesI2C(port_type);
   }
 
-  static bool UsesCalibration(PortType port_type) {
+  static constexpr bool UsesCalibration(PortType port_type) noexcept {
     return port_type == PortType::I2CPRESSURESENSOR ||
            port_type == PortType::DROIDSOAR_V2;
   }
 
-  bool UsesCalibration() const {
+  constexpr bool UsesCalibration() const noexcept {
     return UsesCalibration(port_type);
   }
 
-  void Clear();
+  void Clear() noexcept;
 
   /**
    * Generates a human-readable (localised) port name.
    */
   [[gnu::pure]]
-  const TCHAR *GetPortName(TCHAR *buffer, size_t max_size) const;
+  const TCHAR *GetPortName(TCHAR *buffer, size_t max_size) const noexcept;
 };
 
 #endif

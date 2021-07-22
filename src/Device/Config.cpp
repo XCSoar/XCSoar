@@ -33,7 +33,7 @@ Copyright_License {
 #endif
 
 bool
-DeviceConfig::IsAvailable() const
+DeviceConfig::IsAvailable() const noexcept
 {
   if (!enabled)
     return false;
@@ -85,7 +85,7 @@ DeviceConfig::IsAvailable() const
 }
 
 bool
-DeviceConfig::ShouldReopenOnTimeout() const
+DeviceConfig::ShouldReopenOnTimeout() const noexcept
 {
   switch (port_type) {
   case PortType::DISABLED:
@@ -129,7 +129,7 @@ DeviceConfig::ShouldReopenOnTimeout() const
 }
 
 bool
-DeviceConfig::MaybeBluetooth(PortType port_type, const TCHAR *path)
+DeviceConfig::MaybeBluetooth(PortType port_type, const TCHAR *path) noexcept
 {
   /* note: RFCOMM_SERVER is not considered here because this
      function is used to check for the K6-Bt protocol, but the K6-Bt
@@ -147,7 +147,7 @@ DeviceConfig::MaybeBluetooth(PortType port_type, const TCHAR *path)
 }
 
 bool
-DeviceConfig::MaybeBluetooth() const
+DeviceConfig::MaybeBluetooth() const noexcept
 {
   /* note: RFCOMM_SERVER is not considered here because this
      function is used to check for the K6-Bt protocol, but the K6-Bt
@@ -165,7 +165,7 @@ DeviceConfig::MaybeBluetooth() const
 }
 
 bool
-DeviceConfig::BluetoothNameStartsWith(const char *prefix) const
+DeviceConfig::BluetoothNameStartsWith(const char *prefix) const noexcept
 {
 #ifdef ANDROID
   if (port_type != PortType::RFCOMM)
@@ -180,7 +180,7 @@ DeviceConfig::BluetoothNameStartsWith(const char *prefix) const
 }
 
 void
-DeviceConfig::Clear()
+DeviceConfig::Clear() noexcept
 {
   port_type = PortType::DISABLED;
   baud_rate = 4800u;
@@ -202,7 +202,7 @@ DeviceConfig::Clear()
 }
 
 const TCHAR *
-DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
+DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const noexcept
 {
   switch (port_type) {
   case PortType::DISABLED:
