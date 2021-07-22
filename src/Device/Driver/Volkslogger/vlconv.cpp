@@ -1051,8 +1051,6 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
   char pilot4[17];
   memset(&de, 0, sizeof(de));
 
-  size_t nbytes = 0;
-
   while (p < end) {
     Haupttyp = (p[0] & rectyp_msk);
     switch (Haupttyp) {
@@ -1230,7 +1228,6 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
       return false;
     };
     p += l;
-    nbytes += l;
   }
   return true;
 }
