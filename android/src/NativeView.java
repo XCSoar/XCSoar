@@ -125,8 +125,6 @@ class NativeView extends SurfaceView
       EGL10.EGL_RED_SIZE, 4,
       EGL10.EGL_GREEN_SIZE, 4,
       EGL10.EGL_BLUE_SIZE, 4,
-      EGL10.EGL_ALPHA_SIZE, 0,
-      EGL10.EGL_DEPTH_SIZE, 0,
       EGL10.EGL_NONE
     };
 
