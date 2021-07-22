@@ -48,7 +48,7 @@ ValidateUTF8(StringView p) noexcept;
  * character, or 0 if the character is not a valid start byte
  */
 [[gnu::const]]
-size_t
+std::size_t
 SequenceLengthUTF8(char ch) noexcept;
 
 /**
@@ -56,7 +56,7 @@ SequenceLengthUTF8(char ch) noexcept;
  * if the sequence is malformed
  */
 [[gnu::pure]]
-size_t
+std::size_t
 SequenceLengthUTF8(const char *p) noexcept;
 
 /**
@@ -68,7 +68,7 @@ SequenceLengthUTF8(const char *p) noexcept;
  */
 [[gnu::pure]]  [[gnu::nonnull]]
 const char *
-Latin1ToUTF8(const char *src, char *buffer, size_t buffer_size) noexcept;
+Latin1ToUTF8(const char *src, char *buffer, std::size_t buffer_size) noexcept;
 
 /**
  * Convert the specified character from ISO-8859-1 to UTF-8 and write
@@ -95,7 +95,7 @@ UnicodeToUTF8(unsigned ch, char *buffer) noexcept;
  * from strlen(), which counts the number of bytes.
  */
 [[gnu::pure]] [[gnu::nonnull]]
-size_t
+std::size_t
 LengthUTF8(const char *p) noexcept;
 
 /**
@@ -121,8 +121,8 @@ CropIncompleteUTF8(char *p) noexcept;
  * multi-byte sequence will be considered.
  */
 [[gnu::pure]]
-size_t
-TruncateStringUTF8(StringView s, size_t max_chars) noexcept;
+std::size_t
+TruncateStringUTF8(StringView s, std::size_t max_chars) noexcept;
 
 /**
  * Return the number of bytes representing the first #max_chars
@@ -131,8 +131,9 @@ TruncateStringUTF8(StringView s, size_t max_chars) noexcept;
  * multi-byte sequence will be considered.
  */
 [[gnu::pure]] [[gnu::nonnull]]
-size_t
-TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes) noexcept;
+std::size_t
+TruncateStringUTF8(const char *p,
+                   std::size_t max_chars, std::size_t max_bytes) noexcept;
 
 /**
  * Copy a string to a buffer, truncating it if the buffer is not large
@@ -146,8 +147,8 @@ TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes) noexcept;
  * @return a pointer to the end of the destination string
  */
 char *
-CopyTruncateStringUTF8(char *dest, size_t dest_size,
-                       const char *src, size_t truncate) noexcept;
+CopyTruncateStringUTF8(char *dest, std::size_t dest_size,
+                       const char *src, std::size_t truncate) noexcept;
 
 /**
  * Decode the next UNICODE character.
