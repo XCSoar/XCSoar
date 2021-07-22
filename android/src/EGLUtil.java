@@ -81,12 +81,24 @@ class EGLUtil {
    * debug log messages).
    */
   static String toString(EGL10 egl, EGLDisplay display, EGLConfig config) {
-    return "{rgba=" + getConfigAttrib(egl, display, config, EGL10.EGL_RED_SIZE, 0) +
-      "/" + getConfigAttrib(egl, display, config, EGL10.EGL_GREEN_SIZE, 0) +
-      "/" + getConfigAttrib(egl, display, config, EGL10.EGL_BLUE_SIZE, 0) +
-      "/" + getConfigAttrib(egl, display, config, EGL10.EGL_ALPHA_SIZE, 0) +
-      "; depth=" + getConfigAttrib(egl, display, config, EGL10.EGL_DEPTH_SIZE, 0) +
-      "; stencil=" + getConfigAttrib(egl, display, config, EGL10.EGL_STENCIL_SIZE, 0) +
-      "}";
+    String s = "{";
+
+    int luminance = getConfigAttrib(egl, display, config,
+                                    EGL10.EGL_LUMINANCE_SIZE, 0);
+    if (luminance > 0)
+      s += "la=" + luminance;
+    else
+      s += "rgba=" + getConfigAttrib(egl, display, config, EGL10.EGL_RED_SIZE, 0) +
+        "/" + getConfigAttrib(egl, display, config, EGL10.EGL_GREEN_SIZE, 0) +
+        "/" + getConfigAttrib(egl, display, config, EGL10.EGL_BLUE_SIZE, 0);
+
+    s += "/" + getConfigAttrib(egl, display, config, EGL10.EGL_ALPHA_SIZE, 0);
+
+    s += "; depth=" + getConfigAttrib(egl, display, config, EGL10.EGL_DEPTH_SIZE, 0) +
+      "; stencil=" + getConfigAttrib(egl, display, config, EGL10.EGL_STENCIL_SIZE, 0);
+
+    s += "}";
+
+    return s;
   }
 }
