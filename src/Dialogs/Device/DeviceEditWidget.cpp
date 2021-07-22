@@ -195,33 +195,30 @@ FillAndroidBluetoothPorts(DataFieldEnum &df,
   //   name
   //   type - either "BLE" or "CLASSIC"
   static constexpr jsize BLUETOOTH_LIST_STRIDE = 3;
-  jobjectArray bonded = BluetoothHelper::list(env);
-  if (bonded == NULL)
+  Java::LocalRef bonded{env, BluetoothHelper::list(env)};
+  if (!bonded)
     return;
 
   jsize n = env->GetArrayLength(bonded) / BLUETOOTH_LIST_STRIDE;
   for (jsize i = 0; i < n; ++i) {
-    jstring address = (jstring)env->GetObjectArrayElement(bonded, i * BLUETOOTH_LIST_STRIDE);
-    if (address == NULL)
+    Java::String address{env, (jstring)env->GetObjectArrayElement(bonded, i * BLUETOOTH_LIST_STRIDE)};
+    if (!address)
       continue;
 
     const auto address2 = Java::String::GetUTFChars(env, address);
 
-    jstring name = (jstring)env->GetObjectArrayElement(bonded, i * BLUETOOTH_LIST_STRIDE + 1);
-    const auto name2 = name != nullptr
-      ? Java::String::GetUTFChars(env, name)
+    Java::String name{env, (jstring)env->GetObjectArrayElement(bonded, i * BLUETOOTH_LIST_STRIDE + 1)};
+    const auto name2 = name
+      ? name.GetUTFChars()
       : nullptr;
 
-    jstring devType = (jstring)env->GetObjectArrayElement(bonded, i * BLUETOOTH_LIST_STRIDE + 2);
-
+    Java::String devType{env, (jstring)env->GetObjectArrayElement(bonded, i * BLUETOOTH_LIST_STRIDE + 2)};
     const DeviceConfig::PortType portType = devType != nullptr &&
       strcmp("BLE", Java::String::GetUTFChars(env, devType).c_str()) == 0
       ? DeviceConfig::PortType::BLE_HM10
       : DeviceConfig::PortType::RFCOMM;
     AddPort(df, portType, address2.c_str(), name2.c_str());
   }
-
-  env->DeleteLocalRef(bonded);
 
   if ((config.port_type == DeviceConfig::PortType::RFCOMM ||
       config.port_type == DeviceConfig::PortType::BLE_HM10) &&
