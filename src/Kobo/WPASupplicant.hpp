@@ -66,7 +66,7 @@ public:
     Close();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsConnected() const {
     // TODO: what if the socket is broken?
     return fd.IsDefined();
