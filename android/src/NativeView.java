@@ -44,6 +44,7 @@ import android.content.Intent;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.Configuration;
+import android.opengl.EGL14;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.webkit.MimeTypeMap;
@@ -127,9 +128,7 @@ class NativeView extends SurfaceView
       EGL10.EGL_BLUE_SIZE, 4,
 
       EGL10.EGL_SURFACE_TYPE, EGL10.EGL_WINDOW_BIT,
-
-       /* 4 = EGL_OPENGL_ES2_BIT; not exported by Android API */
-      EGL10.EGL_RENDERABLE_TYPE, 4,
+      EGL10.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT,
 
       EGL10.EGL_NONE
     };
@@ -186,10 +185,9 @@ class NativeView extends SurfaceView
     /* initialize context and surface */
 
     if (context == EGL10.EGL_NO_CONTEXT) {
-      final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
       final int contextClientVersion = 2;
       final int[] contextAttribList = new int[]{
-        EGL_CONTEXT_CLIENT_VERSION, contextClientVersion,
+        EGL14.EGL_CONTEXT_CLIENT_VERSION, contextClientVersion,
         EGL10.EGL_NONE
       };
 
