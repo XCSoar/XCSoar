@@ -54,14 +54,14 @@ bzw.bei neueren Geräten
 InternerSpeicher/XCSoarData
 \end{verbatim}
 
-(Nur als Hinweis: In XCSoar mit Android wird im Konfigurationsmenü bei der Auswahl der Standortdateien dann
+(Nur als Hinweis: Bei Android wird im Konfigurationsmenü von XCSoar bei der Auswahl der Standortdateien dann
 \begin{verbatim}
 storage/emulated/0/XCSoarData 
 \end{verbatim} 
 als Pfad am oberen Rand des Bildschirms angezeigt.)
 
-Wenn man vorhat mehrere Wegpunktdateien, Luftraumdateien, Karten etc. einzupflegen, kann man zur besseren persönlichen Übersicht im /XCSoarData Ordner auch Unterordner anlegen z.B. für Wegpunkte, Lufträume, Maps etc. 
-XCSoar findet die Dateien dann anhand ihrer extension und bietet sie in den entsprechenden Konfigurationsfeldern zur Auswahl an. Voraussetzung: Die Unterordner befinden sich alle in /XCSoarData !
+Wenn man vorhat mehrere Wegpunktdateien, Luftraumdateien, Karten etc. einzupflegen, kann man zur besseren persönlichen Übersicht im \verb|XCSoarData| Ordner auch Unterordner anlegen z.B. für Wegpunkte, Lufträume, Maps etc. 
+XCSoar findet die Dateien dann anhand ihrer extension und bietet sie in den entsprechenden Konfigurationsfeldern zur Auswahl an. Voraussetzung: Die Unterordner befinden sich alle im Ordner \verb|XCSoarData| !
 
 
 Auf PDA's können und sollten die Daten auch im Geräte internen Speicher abgelegt werden, genauso wie in
@@ -97,12 +97,10 @@ anderer Kartenausschnitt o.ä.), kann unter \url{http://mapgen.xcsoar.org/}  der
 angeworfen werden, welcher das entsprechende File erzeugt und zum Download
 anbietet.
 
-Soweit Wegpunkte und/oder Lufträume in der Kartendatenbank (z.B.\verb''GER-High.xcm'' o.ä.) enthalten sind,
+Soweit Wegpunkte und/oder Lufträume nur in der Kartendatenbank (z.B.\verb''GER-High.xcm'' o.ä.) enthalten sind,
 werden diese benutzt.
 
-Wenn aber separate oder eine alternative Datenbank für Wegpunkte und/oder Lufträume angegeben
-wird, so werden alle Wegpunkte der Kartendatenbank (\verb".xcm") ignoriert und durch die separaten
-Daten ersetzt.
+Wenn aber separate oder eine alternative Datenbank für Wegpunkte und/oder Lufträume angegeben wird, so werden alle Wegpunkte der Kartendatenbank (\verb".xcm") ignoriert und durch die separaten Daten ersetzt.
 
 Ein in \textsf{XCSoar} separat angegebenes Wegpunkt-File hat immer Priorität. \textsf{XCSoar} wird dann alle in der Kartendatenbank enthaltenen Wegpunkte ignorieren und nur die im separaten File enthaltenen Wegpunkte benutzen.
 
@@ -131,6 +129,7 @@ wird, dann wird \textsf{XCSoar} die Höhe aus der Kartendatenbank gemäß des H�
 Höhe demgemäß darstellen.}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Lufträume}\index{File-Format!Luftraum}
 
 \textsf{XCSoar} unterstützt Luftraum Files (extension \verb|.txt|) wobei ein Teil der Syntax
@@ -157,16 +156,9 @@ Klasse A-G, Sperrgebiete, Gefahrengebiete, AAT-Gebiete, Segelflugsektoren, Welle
 ''andere''.  Alle anderen Gebiete werden als ''andere'' dargestellt.
 
 In Ergänzung zum OpenAIR Format wird ebenfalls die Platzfrequenz mit angegeben (sofern vorhanden).
-%
-%
-%
-%
-%
-%
-%
-%
-%
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Wegpunktdetails}\label{sec:airfield-details}\index{File-Format!Flugplatz-File}
 
 % Wird mit dieser Zeile der Name des Unterkapitels im Inhaltsverzeichnis korrekt dargestellt??? 
@@ -180,7 +172,7 @@ Das Wegpunktdetails-File (extension \verb|.txt|) ist ein optionales, einfaches T
 
 Diese zusätzlichen Details werden dann im Wegpunkt-Dialog unter \button{Details} auf einer oder auch mehreren Seiten angezeigt.
 
-Mit dieser Datei können neben Textinformationen auch Bilder (.jpg, .bmp, .png, ...) oder andere Mediendateien zur Ansicht gebracht werden. Welche Files unterstützt werden, hängt auch vom Betriebssystem ab, und auch, welche Programme/Apps in Betrieb sind. \textcolor{blue}{Dies ist derzeit unter Windows nicht unterstützt.} 
+Mit dieser Datei können neben Textinformationen auch Bilder (.jpg, .bmp, .png, ...) oder andere Mediendateien zur Ansicht gebracht werden. Welche Files unterstützt werden, hängt auch vom Betriebssystem ab, und auch, welche Programme/Apps installiert sind. \textcolor{blue}{Dies ist derzeit unter Windows nicht unterstützt.} 
 
 Hier ein Beispiel für einen einfachen Wegpunkt-Detail Text-Eintrag für ein Segelfluggelände und ein
 Aussenlandefeld:
@@ -203,15 +195,15 @@ Mehrere Felder. Geeignetes auswählen, je nach Bewuchs oder Vieh. Auf Hochspannu
 
 
 
-Der Namen des Wegpunktes muss in eckige Klammern gesetzt werden und muss in der Schreibweise exakt dem Namen im Wegpunktfile (.cup etc.) entsprechen, einzige Ausnahme ist, dass Groß-und Kleinschreibung nicht unterschieden wird.
+Der Namen des Wegpunktes muss in eckige Klammern gesetzt werden und muss in der Schreibweise exakt dem Namen in den Basis-Wegpunktfiles (\verb|.cup| etc.) entsprechen, einzige Ausnahme ist, dass Groß-und Kleinschreibung nicht unterschieden wird.
 In der nächsten Zeile können dann beliebige Texteinträge erfolgen - bis zum nächsten Wegpunkteintrag (nächster Name in eckigen Klammern).
 
-Die Länge des Textes sollte nicht zu lang sein, denn im Moment (Version 7.8) gibt es keinen Seitenumbruch oder ein scrollen des Textfeldes nach unten. Der verfügbare Platz für die Anzeige hängt deshalb wesentlich von der Auflösung des Bildschirms ab, zu langer Text wird je nach Gerät evtl. über den unteren Rand hinausgehen - und dann nicht angezeigt.
+Die Länge des Textes sollte nicht zu lang sein, denn im Moment (Version 7.10) gibt es keinen Seitenumbruch oder ein scrollen des Textfeldes nach unten. Der verfügbare Platz für die Anzeige hängt deshalb wesentlich von der Auflösung des Bildschirms ab, zu langer Text wird je nach Gerät evtl. über den unteren Rand hinausgehen - und dann nicht angezeigt.
 
 Für die Anzeige von Mediendateien (Bildern etc.) gibt es zwei Möglichkeiten/Befehle:
 
 \begin{itemize}
-\item Anzeige mit einem (Default-) Viewer des Geräts durch den Befehl \verb|.file| gefolgt von Pfad und Namen des Files
+\item Anzeige mit einem (Default-) Viewer des Geräts durch den Befehl \verb|file=| gefolgt von Pfad und Namen des Files
 \item Anzeige innerhalb von XCSoar mit dem Befehl \verb|image=| gefolgt von Pfad und Namen des Files
 \end{itemize}
 
@@ -219,10 +211,10 @@ Für die Anzeige von Mediendateien (Bildern etc.) gibt es zwei Möglichkeiten/Be
 \achtung {\sl Es ist sicherzustellen, daß keinerlei Leerzeichen in den Filenamen nach \verb|image=| oder \verb|file=|
 auftauchen!!!}
 
-Die erste Möglichkeit ( \verb|file=| ) ist die flexiblere, es sind damit je nach Gerät und installiertem Viewer verschiedenste Formate wie .pdf oder .mp4 darstellbar, vor allem aber funktioniert damit die von Android gewohnte Zoom und Pan-Funktion mit zwei Fingern, je nach Viewer, ganz wie gewohnt. 
+Die erste Möglichkeit ( \verb|file=| ) ist die flexiblere, es sind damit je nach Gerät und installiertem Viewer verschiedenste Formate wie .pdf (auch mehrseitig) oder .mp4 darstellbar, vor allem aber funktioniert damit die von Android gewohnte Zoom- und Pan-Funktion mit zwei Fingern, je nach Viewer, ganz wie gewohnt. 
 
 Die Zoom-Funktion beim internen Viewer (Befehl \verb|image=|) funktioniert über zwei Felder (plus / minus) am linken und rechten oberen Bildrand - aber nur auf die Mitte des Bildes bezogen, denn es ist kein paning möglich. Außerdem sollte bei Verwendung des Befehls \verb|image=| die Auflösung der Bilder nicht zu groß sein. 
-Sollte eine Bild trotz korrektem Pfad und Namen einmal nicht angezeigt werden, könnte das beim Befehl \verb|image=| auch an der zu hohen Auflösung liegen. Bis ca. 2000x1500 Pixel dürften jedoch keine Probleme auftreten. Mit dem Befehl \verb|file=| hat man hier weniger Einschränkungen. 
+Sollte eine Bild trotz korrektem Pfad und Namen einmal nicht angezeigt werden, könnte das beim Befehl \verb|image=| auch an der zu hohen Auflösung liegen. Bis ca. 2500 Pixel pro Seite dürften jedoch keine Probleme auftreten. Mit dem Befehl \verb|file=| hat man hier weniger Einschränkungen. 
 
 % FOLGENDEN ABSATZ STREICHEN,  SOBALD DER BUG BESEITIGT WERDEN KONNTE!!!
 %
@@ -232,33 +224,33 @@ Leider funktioniert der flexiblere Befehl \verb|file=| bei den neueren XCSoar-Ve
 % VORHERIGEN ABSATZ STREICHEN,  SOBALD DER BUG BESEITIGT WERDEN KONNTE!!!
 % 
 
-Welche Files unterstützt werden, hängt auch vom Betriebssystem ab, und auch, welche Programme/Apps
-in Betrieb sind. ANDROID unterstützt z.B. beim Befehl \verb|image=| die Formate JPEG, png und bmp, beim Befehl \verb|file=| je nach installiertem Viewer auch pdf oder sogar mp4.
+Welche Files unterstützt werden, hängt auch vom Betriebssystem ab, und auch, welche Programme/Apps installiert sind. ANDROID unterstützt z.B. beim Befehl \verb|image=| die Formate jpeg, png und bmp, beim Befehl \verb|file=| je nach installiertem Viewer auch pdf oder mp4 und weitere.
+
 Andere Betriebssysteme können evtl. weniger oder auch andere Formate darstellen.
-\textcolor{blue}{Zu beachten ist, dass die Bildanzeigefunktion derzeit (XCSoar 7.8) unter Windows nicht unterstützt wird.} 
+\textcolor{blue}{Zu beachten ist, dass die Bildanzeigefunktion derzeit (XCSoar 7.10) unter Windows nicht unterstützt wird.} 
 
 Die Bilder oder Mediendateien können sich zur besseren Übersicht auch in einem Unterordner des Ordners \verb|XCSoarData| befinden, z.B. innerhalb eines selbst angelegten Wegpunkt-Ordners.
 
 
 
-Im Folgenden wird eine Außen-Landewiese beschrieben, unter Nutzung beider Befehle. Es werden dabei drei Bilder zur Anzeige bereitgestellt, wahlweise auf zwei unterschiedlichen Wegen, nämlich durch direkte Anwahl aus dem Wegpunkt-Detail Feld oder aber durch Weiterblättern über die Schaltflächen \button{$<$} und \button{$>$} am unteren Rand des Fensters. (Selbstverständlich kann man auch nur einen der beiden Befehle nutzen, je nachdem welche Darstellungsart einem sinnvoller erscheint.)
+Im Folgenden wird eine Außen-Landewiese beschrieben, unter Nutzung beider Befehle. Es werden dabei drei Bilder zur Anzeige bereitgestellt, wahlweise auf zwei unterschiedlichen Wegen, nämlich durch direkte Anwahl aus dem Wegpunkt-Detail Feld oder aber durch Weiterblättern über die Schaltflächen \button{$<$} und \button{$>$} am unteren Rand des Fensters. (Selbstverständlich kann man auch nur einen der beiden Befehle nutzen, je nachdem welche Darstellungsart bzw. welche Bedienung einem sinnvoller erscheint.)
 
 Die Bilder selbst befinden sich bei diesem (Android-) Beispiel in: \verb|XCSoarData\WP\MyPic\Mypicture.jpg| 
 
-Der Eintrag im .cup Wegpunkt-File (CUP_Test_01.cup) sieht folgendermaßen aus:
+Der Eintrag im Basis-Wegpunktfile (\verb|CUP_Test_01.cup|) sieht dabei folgendermaßen aus:
 
 \begin{verbatim}
-"A18Pullach",PULL4546,DE,4750.084N,01200.583E,470m,3,100,300.0m,000.000,"Mehrere Felder, je nach Bewuchs und Windrichtung auswählen.(Die Wiesen nördlich dieses Bereichs haben viele Telefonleitungen im Anflug!)"
+"A18Pullach",PULL4546,DE,4750.084N,01200.583E,470m,3,100,300.0m,000.000,"Mehrere Felder, je nach Bewuchs und Windrichtung auswählen. (Die Wiesen nördlich dieses Bereichs haben viele Telefonleitungen im Anflug!)"
 \end{verbatim}
 
-Der damit korrespondierende, ergänzende Eintrag im .txt Wegpunktdetails-File (DESC_Test_01.txt) mit den Bildeinträgen:
+Der damit korrespondierende, ergänzende Eintrag im Wegpunktdetails-File (\verb|DESC_Test_01.txt|) mit den Bildeinträgen:
 
 \begin{verbatim}
 [A18Pullach]
 file=/WP/MyPic/A18Pullach_01-Uebersicht.jpg
 file=/WP/MyPic/A18Pullach_02-Anflug1.jpg
-file=/WP/MyPic/A18Pullach_05-Loecher.JPG
-image=/WP/MyPic/A18Pullach_05-Loecher.JPG
+file=/WP/MyPic/A18Pullach_05-Loecher.jpg
+image=/WP/MyPic/A18Pullach_05-Loecher.jpg
 image=/WP/MyPic/A18Pullach_02-Anflug1.jpg
 image=/WP/MyPic/A18Pullach_01-Uebersicht.jpg
 
@@ -279,11 +271,11 @@ Das lässt sich dann so abrufen:
 
  \sketch{figures/dialog-waypointdetailsDetails.png}
 
-Es öffnet sich die Seite mit den Basis-Informationen zum Wegpunkt, die im \verb|.cup| file hinterlegt sind.
+Es öffnet sich die Seite mit den Basis-Informationen zum Wegpunkt, die im \verb|CUP_Test_01.cup| file hinterlegt sind.
 
  \sketch{figures/dialog-waypointdetailsCUP.png}
 
-3. Die Tasten \button{$<$} und \button{$>$} ermöglichen nun das Blättern in den ergänzenden Informationen und in den Bildern. Über den rechten Pfeil-Button \button{$>$} am unteren Fensterrand blättert man direkt zur nächsten Seite, um die Text-Informationen aus dem Wegpunktdetails \verb|.txt| file zu erhalten.  
+3. Die Tasten \button{$<$} und \button{$>$} ermöglichen nun das Blättern in den ergänzenden Informationen und in den Bildern. Über den rechten Pfeil-Button \button{$>$} am unteren Fensterrand blättert man direkt zur nächsten Seite, um die Text-Informationen aus dem Wegpunktdetails-File \verb|DESC_Test_01.txt| zu erhalten.  
 Die mit dem Befehl \verb|file=| eingebunden Bilder kann man auf dieser Seite dann direkt auswählen. 
 
  \sketch{figures/dialog-waypointdetailsFile01.png}
@@ -297,12 +289,12 @@ Durch tippen auf den entsprechenden Bild-Link wird automatisch der zum Format pa
  \sketch{figures/dialog-waypointdetailsFileZoom.png}
 
 
-Da in diesem Beispiel beide Befehle \verb|file=| und \verb|image=|genutzt werden, besteht alternativ die Möglichkeit über den linken Pfeil-Button \button{$<$} direkt die Bilder zu erreichen, die über den Befehl \verb|image=| zur Anzeige im internen Viewer eingebunden wurden. 
+Da in diesem Beispiel beide Befehle \verb|file=| und \verb|image=|genutzt werden, besteht alternativ die Möglichkeit über den linken (oder auch rechten) Pfeil-Button \button{$<$} direkt die Bilder zu erreichen, die über den Befehl \verb|image=| zur Anzeige im internen Viewer eingebunden wurden. 
 \sketch{figures/dialog-waypointdetailsImageUebersicht.png
 
-Hier wird dann zunächst das letzte Bild der Liste angezeigt, deshalb positioniert man sinnvollerweise die \verb|image=| -Bilder in der umgekehrten Anflug-Reihenfolge. (Wer nur mit der rechten Pfeiltaste blättern will, macht es besser in der korrekten Anflugreihenfolge, wie bei dem Befehl \verb|file=| - aber ganz nach belieben). 
+Mit dem linken Pfeil-Button wird dann zunächst das letzte Bild der Liste angezeigt, deshalb positioniert man sinnvollerweise die \verb|image=| -Bilder in der umgekehrten Anflug-Reihenfolge. (Wer nur mit der rechten Pfeiltaste blättern will, macht es besser in der korrekten Anflugreihenfolge, wie bei dem Befehl \verb|file=| - aber ganz nach belieben). 
 
-Durch weiteres Blättern nach links werden dann die weiteren Bilder angezeigt (wie oben erwähnt nicht schwenkbar, aber über die Tasten zoombar zur Mitte hin).
+Durch weiteres Blättern nach links werden dann direkt die weiteren Bilder angezeigt (wie oben erwähnt nicht schwenkbar, aber über die Tasten zoombar zur Mitte hin).
 
 \sketch{figures/dialog-waypointdetailsImageAnflug.png
 \sketch{figures/dialog-waypointdetailsImageLoecher.png
@@ -313,19 +305,7 @@ wieder bei der Basis-Seite - und alles beginnt wieder bei 3. von vorne.
 Einmal richtig konfiguriert hat man mit diesen Möglichkeiten in wenigen Sekunden den direkten Zugriff auf die notwendigen (Außenlande-) Informationen, ohne lange in einem Papier-Katalog blättern zu müssen.    
 
 
-
-
-
-
-%  SCREEENSHOTS noch einfügen !!!!!!
-%  ##########################################################################
-%  ##########################################################################
-%  ##########################################################################
-%  ##########################################################################
-%  ##########################################################################
-
-
-Auf der \xc Website werden Dateien für Flugplätze diverser Länder zu Herunterladen angeboten
+Auf der \xc Website werden Dateien für Flugplätze und Wegpunkte diverser Länder zum Herunterladen angeboten.
 
 
 Die \xc-Homepage enthält Files für viele Länder und bietet Programme (und links), um die
@@ -361,6 +341,8 @@ Blah blah blah blah
 \end{verbatim}
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Polare}\label{sec:glide-polar}\index{Polare!File-Format}
 
 Viele Polaren bekannter Flugzeuge sind bereits in \xc integriert.  Wenn Dein Flugzeug  hier nicht
