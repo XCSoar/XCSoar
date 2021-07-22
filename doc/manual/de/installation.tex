@@ -122,15 +122,12 @@ Daten-File suchen muß:
 \texttt{XCSoarData} befindet sich im Persönlichen Verzeichnis (''\texttt{Eigene Dateien}'')
 \item[Windows Mobile PDA/PNA]
 - Wenn ein Verzeichnis \texttt{XCSoarData} im gleichen Verzeichnis wie {\textsf  XCSoar} existiert, dann wird dies benutzt.  
-
-
 - \texttt{XCSoarData} befindet sich auf der SD-Karte.  Wenn keine SD-Karte vorhanden ist, dann schaut {\textsf  XCSoar} in \texttt{Eigene Dateien} nach diesen Files
-
 \item[Unix/Linux]
-Das Verzeichnis heißt \verb|.xcsoar| und befindet sich im \verb|home| - Verzeichnis des Users. 
+Das Verzeichnis heißt \verb|.xcsoar| und befindet sich im \verb|home| - Verzeichnis des Users.
 \item[Android Geräte]
 \texttt{XCSoarData} befindet sich in \texttt{Interner Speicher} bzw. \texttt{storage/emulated/0}
-Hinweis: Bei älteren Android Versionen (z.B. Android 6) hieß dieser Ort auch \texttt{Gerätespeicher} oder ganz früher \texttt{SD-Karte} (emuliert). Die Bezeichnung \texttt{SD-Karte} führte bei den alten Geräten oft zu Missverständnissen,  denn damit war NICHT eine zusätzliche MicroSD Karte gemeint, sondern eine ''virtuelle'', die im Arbeitsspeicher des Smartphones emuliert wird. Bei neueren Geräten ist dies im Dateimanager i.d.R. verständlicher bezeichnet. Der in {\textsf  XCSoar} angezeigte Pfad lautet i.d.R. \texttt{storage/emulated/0} .
+(Hinweis: Bei älteren Android Versionen, z.B. vor Android 7, hieß dieser Ort auch \texttt{Gerätespeicher} oder ganz früher \texttt{SD-Karte} (emuliert). Die Bezeichnung \texttt{SD-Karte} führte bei den alten Geräten oft zu Missverständnissen beim Benutzer,  denn damit war NICHT eine zusätzliche Hardware-SD-Karte gemeint, sondern nur eine ''virtuelle'' SD-Karte, die im Arbeitsspeicher des Smartphones quasi''sumuliert'' wird. Bei neueren Geräten ist dies im Dateimanager i.d.R. verständlicher bezeichnet. Der in {\textsf  XCSoar} angezeigte Pfad lautet i.d.R.  \texttt{storage/emulated/0} .)
 \end{description}
 
 
@@ -149,7 +146,7 @@ Weiterhin werden drei Verzeichnisse angelegt: \texttt{cache}, \texttt{config} un
 Während des Laufes von {\textsf  XCSoar} werden bei der ersten Nutzung weitere Files angelegt wie z.B.\  Aufgaben-Files (\texttt{*.tsk}) 
 und Flugaufzeichnungen \ (\texttt{*.igc})
 
-Vom Nutzer selbst können Wegpunkt-Dateien (z.B. als \texttt{.cup} Datei), detaillierte Beschreibungen zu den Wegpunkten (\texttt{.txt}),  Luftraumdateien (\texttt{.txt}) sowie Checklisten importiert, angepasst oder auch selbst neu angelegt werden. Näheres dazu weiter unten bzw. in Kap.~\ref{cha:data-files}.
+Vom Nutzer selbst können Wegpunkt-Dateien (z.B. als \texttt{.cup} Datei), detaillierte Beschreibungen zu den Wegpunkten in einer Wegpunktdetails-Datei (\texttt{.txt}),  Luftraumdateien (\texttt{.txt}) sowie Checklisten importiert, angepasst oder auch selbst neu angelegt werden. Näheres dazu weiter unten bzw. in Kap.~\ref{cha:data-files}.
 
 
 \section{Betrieb von {\textsf  XCSoar}}
