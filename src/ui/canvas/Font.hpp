@@ -120,8 +120,7 @@ public:
   PixelSize TextSize(const TCHAR *text) const noexcept;
 
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
-  [[gnu::const]]
-  static std::size_t BufferSize(const PixelSize size) noexcept {
+  static constexpr std::size_t BufferSize(const PixelSize size) noexcept {
     return size.width * size.height;
   }
 
