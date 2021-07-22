@@ -42,9 +42,11 @@
  * macOS) - undefine */
 #ifdef TRUE
 #undef TRUE
+static constexpr bool TRUE = true;
 #endif
 #ifdef FALSE
 #undef FALSE
+static constexpr bool FALSE = false;
 #endif
 
 /**
