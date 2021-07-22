@@ -24,25 +24,22 @@ Copyright_License {
 #ifndef XCSOAR_UTIL_UTF8_HPP
 #define XCSOAR_UTIL_UTF8_HPP
 
-#include "Compiler.h"
-
-#include <utility>
-
 #include <cstddef>
+#include <utility>
 
 struct StringView;
 
 /**
  * Is this a valid UTF-8 string?
  */
-gcc_pure  gcc_nonnull_all
+[[gnu::pure]]  [[gnu::nonnull]]
 bool
 ValidateUTF8(const char *p) noexcept;
 
 /**
  * Is this a valid UTF-8 string?
  */
-gcc_pure
+[[gnu::pure]]
 bool
 ValidateUTF8(StringView p) noexcept;
 
@@ -50,7 +47,7 @@ ValidateUTF8(StringView p) noexcept;
  * @return the number of the sequence beginning with the given
  * character, or 0 if the character is not a valid start byte
  */
-gcc_const
+[[gnu::const]]
 size_t
 SequenceLengthUTF8(char ch) noexcept;
 
@@ -58,7 +55,7 @@ SequenceLengthUTF8(char ch) noexcept;
  * @return the number of the first sequence in the given string, or 0
  * if the sequence is malformed
  */
-gcc_pure
+[[gnu::pure]]
 size_t
 SequenceLengthUTF8(const char *p) noexcept;
 
@@ -69,7 +66,7 @@ SequenceLengthUTF8(const char *p) noexcept;
  * there are no non-ASCII characters; returns nullptr if the destination
  * buffer is too small
  */
-gcc_pure  gcc_nonnull_all
+[[gnu::pure]]  [[gnu::nonnull]]
 const char *
 Latin1ToUTF8(const char *src, char *buffer, size_t buffer_size) noexcept;
 
@@ -79,7 +76,7 @@ Latin1ToUTF8(const char *src, char *buffer, size_t buffer_size) noexcept;
  *
  * @return a pointer to the buffer plus the added bytes(s)
  */
-gcc_nonnull_all
+[[gnu::nonnull]]
 char *
 Latin1ToUTF8(unsigned char ch, char *buffer) noexcept;
 
@@ -89,7 +86,7 @@ Latin1ToUTF8(unsigned char ch, char *buffer) noexcept;
  *
  * @return a pointer to the buffer plus the added bytes(s)
  */
-gcc_nonnull_all
+[[gnu::nonnull]]
 char *
 UnicodeToUTF8(unsigned ch, char *buffer) noexcept;
 
@@ -97,7 +94,7 @@ UnicodeToUTF8(unsigned ch, char *buffer) noexcept;
  * Returns the number of characters in the string.  This is different
  * from strlen(), which counts the number of bytes.
  */
-gcc_pure gcc_nonnull_all
+[[gnu::pure]] [[gnu::nonnull]]
 size_t
 LengthUTF8(const char *p) noexcept;
 
@@ -113,7 +110,7 @@ LengthUTF8(const char *p) noexcept;
  *
  * @return a pointer to the new null terminator
  */
-gcc_nonnull_all
+[[gnu::nonnull]]
 char *
 CropIncompleteUTF8(char *p) noexcept;
 
@@ -123,7 +120,7 @@ CropIncompleteUTF8(char *p) noexcept;
  * characters, the string length (in bytes) is returned.  No partial
  * multi-byte sequence will be considered.
  */
-gcc_pure
+[[gnu::pure]]
 size_t
 TruncateStringUTF8(StringView s, size_t max_chars) noexcept;
 
@@ -133,7 +130,7 @@ TruncateStringUTF8(StringView s, size_t max_chars) noexcept;
  * characters, the string length (in bytes) is returned.  No partial
  * multi-byte sequence will be considered.
  */
-gcc_pure gcc_nonnull_all
+[[gnu::pure]] [[gnu::nonnull]]
 size_t
 TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes) noexcept;
 
@@ -160,7 +157,7 @@ CopyTruncateStringUTF8(char *dest, size_t dest_size,
  * pointer to the first byte of the following character or 0 if
  * already at the end of the string
  */
-gcc_pure gcc_nonnull_all
+[[gnu::pure]] [[gnu::nonnull]]
 std::pair<unsigned, const char *>
 NextUTF8(const char *p) noexcept;
 

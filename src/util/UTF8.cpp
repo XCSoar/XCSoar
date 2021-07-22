@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "UTF8.hpp"
 #include "CharUtil.hxx"
+#include "Compiler.h"
 #include "StringView.hxx"
 
 #include <algorithm>
@@ -236,7 +237,7 @@ SequenceLengthUTF8(char ch) noexcept
 
 template<size_t L>
 struct CheckSequenceUTF8 {
-  gcc_pure
+  [[gnu::pure]]
   bool operator()(const char *p) const noexcept {
     return IsContinuation(*p) && CheckSequenceUTF8<L-1>()(p + 1);
   }
@@ -244,13 +245,13 @@ struct CheckSequenceUTF8 {
 
 template<>
 struct CheckSequenceUTF8<0u> {
-  constexpr bool operator()(gcc_unused const char *p) const noexcept {
+  constexpr bool operator()(const char *) const noexcept {
     return true;
   }
 };
 
 template<size_t L>
-gcc_pure
+[[gnu::pure]]
 static size_t
 InnerSequenceLengthUTF8(const char *p) noexcept
 {
@@ -401,7 +402,7 @@ LengthUTF8(const char *p) noexcept
 /**
  * Find the null terminator.
  */
-gcc_pure
+[[gnu::pure]]
 static char *
 FindTerminator(char *p) noexcept
 {
@@ -416,9 +417,9 @@ FindTerminator(char *p) noexcept
 /**
  * Find the leading byte for the given continuation byte.
  */
-gcc_pure
+[[gnu::pure]]
 static char *
-FindLeading(gcc_unused char *const begin, char *i) noexcept
+FindLeading([[maybe_unused]] char *const begin, char *i) noexcept
 {
   assert(i > begin);
   assert(IsContinuation(*i));
