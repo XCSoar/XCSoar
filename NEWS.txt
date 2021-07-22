@@ -1,6 +1,7 @@
 Version 7.12 - not yet released
 * devices
   - send Pilot Event (PEV) to LXNAV S10x/S8x devices (requires firmware 8.01 or newer)
+  - correct Pilot Event (PEV) message for PowerFLARM devices
 
 Version 7.11 - 2021/07/30
 * fix crash bug in pc_met viewer
