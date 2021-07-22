@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_STRING_UTIL_HPP
 #define XCSOAR_STRING_UTIL_HPP
 
-#include "Compiler.h"
-
 #include <cstddef>
 
 #ifdef _UNICODE
@@ -40,7 +38,7 @@ Copyright_License {
  * terminator)
  * @return a pointer to the null terminator
  */
-gcc_nonnull_all
+[[gnu::nonnull]]
 char *
 CopyString(char *dest, const char *src, size_t size);
 
@@ -54,7 +52,7 @@ CopyString(char *dest, const char *src, size_t size);
  * @param src the source string
  * @return the destination buffer
  */
-gcc_nonnull_all
+[[gnu::nonnull]]
 char *
 NormalizeSearchString(char *dest, const char *src);
 

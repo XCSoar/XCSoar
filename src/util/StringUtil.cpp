@@ -24,6 +24,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "StringCompare.hxx"
 #include "CharUtil.hxx"
+#include "Compiler.h"
 
 #include <algorithm>
 
