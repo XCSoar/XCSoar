@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_ANDROID_BLUETOOTH_HELPER_HPP
 
 #include "java/Object.hxx"
-#include "util/Compiler.h"
 
 #include <jni.h>
 
@@ -45,10 +44,10 @@ void Deinitialise(JNIEnv *env);
  * Is the default Bluetooth adapter enabled in the Android Bluetooth
  * settings?
  */
-gcc_pure
+[[gnu::pure]]
 bool isEnabled(JNIEnv *env);
 
-gcc_pure
+[[gnu::pure]]
 const char *GetNameFromAddress(JNIEnv *env, const char *address);
 
 /**
@@ -60,7 +59,7 @@ list(JNIEnv *env) noexcept;
 /**
  * Does the device support Bluetooth LE?
  */
-gcc_const
+[[gnu::const]]
 bool HasLe(JNIEnv *env);
 
 /**
@@ -78,13 +77,10 @@ StartLeScan(JNIEnv *env, LeScanCallback &cb) noexcept;
  */
 void StopLeScan(JNIEnv *env, jobject cb);
 
-gcc_malloc
 PortBridge *connect(JNIEnv *env, const char *address);
 
-gcc_malloc
 PortBridge *connectHM10(JNIEnv *env, const char *address);
 
-gcc_malloc
 PortBridge *createServer(JNIEnv *env);
 
 } // namespace BluetoothHelper
