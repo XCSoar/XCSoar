@@ -23,7 +23,6 @@
 package org.xcsoar;
 
 import java.util.List;
-import java.util.UUID;
 import java.io.IOException;
 
 import android.bluetooth.BluetoothDevice;
@@ -45,17 +44,6 @@ public class HM10Port
     extends BluetoothGattCallback
     implements AndroidPort  {
   private static final String TAG = "XCSoar";
-
-  /**
-   * The HM-10 and compatible bluetooth modules use a GATT characteristic
-   * with this UUID for sending and receiving data.
-   */
-  private static final UUID RX_TX_CHARACTERISTIC_UUID =
-      UUID.fromString("0000FFE1-0000-1000-8000-00805F9B34FB");
-  private static final UUID DEVICE_NAME_CHARACTERISTIC_UUID =
-      UUID.fromString("00002A00-0000-1000-8000-00805F9B34FB");
-  private static final UUID RX_TX_DESCRIPTOR_UUID =
-      UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
 
   private static final int MAX_WRITE_CHUNK_SIZE = 20;
 
@@ -99,11 +87,9 @@ public class HM10Port
       for (BluetoothGattService gattService : services) {
         for (BluetoothGattCharacteristic characteristic :
                gattService.getCharacteristics()) {
-          if (RX_TX_CHARACTERISTIC_UUID.equals(
-                                               characteristic.getUuid())) {
+          if (BluetoothUuids.HM10_RX_TX_CHARACTERISTIC.equals(characteristic.getUuid())) {
             dataCharacteristic = characteristic;
-          } else if (DEVICE_NAME_CHARACTERISTIC_UUID.equals(
-                                                            characteristic.getUuid())) {
+          } else if (BluetoothUuids.DEVICE_NAME_CHARACTERISTIC.equals(characteristic.getUuid())) {
             deviceNameCharacteristic = characteristic;
           }
         }
@@ -160,7 +146,7 @@ public class HM10Port
         throw new Error("Could not enable GATT characteristic notification");
 
       BluetoothGattDescriptor descriptor =
-        dataCharacteristic.getDescriptor(RX_TX_DESCRIPTOR_UUID);
+        dataCharacteristic.getDescriptor(BluetoothUuids.CLIENT_CHARACTERISTIC_CONFIGURATION);
       descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
       gatt.writeDescriptor(descriptor);
       portState = STATE_READY;
