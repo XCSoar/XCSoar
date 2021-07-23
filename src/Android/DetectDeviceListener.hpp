@@ -38,6 +38,9 @@ public:
     BLUETOOTH_LE = 3,
   };
 
+  static constexpr uint64_t FEATURE_HM10 = 0x1;
+  static constexpr uint64_t FEATURE_HEART_RATE = 0x2;
+
   /**
    * A new device was detected or new information about a device
    * became available.

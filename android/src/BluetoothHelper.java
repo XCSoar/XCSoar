@@ -27,6 +27,8 @@ import java.util.UUID;
 import java.util.Set;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.TreeMap;
 import java.io.IOException;
 
 import android.util.Log;
@@ -43,7 +45,8 @@ import android.content.pm.PackageManager;
  * A library that constructs Bluetooth ports.  It is called by C++
  * code.
  */
-final class BluetoothHelper implements BluetoothAdapter.LeScanCallback {
+final class BluetoothHelper implements BluetoothAdapter.LeScanCallback,
+                                       BluetoothIdentify.Listener {
   private static final String TAG = "XCSoar";
   private static final UUID THE_UUID =
         UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -59,6 +62,9 @@ final class BluetoothHelper implements BluetoothAdapter.LeScanCallback {
 
   private final Collection<DetectDeviceListener> detectListeners =
     new LinkedList<DetectDeviceListener>();
+
+  private final Map<String, BluetoothIdentify> identify =
+    new TreeMap<String, BluetoothIdentify>();
 
   BluetoothHelper(Context context) throws Exception {
     this.context = context;
@@ -141,8 +147,15 @@ final class BluetoothHelper implements BluetoothAdapter.LeScanCallback {
   public synchronized void removeDetectDeviceListener(DetectDeviceListener l) {
     detectListeners.remove(l);
 
-    if (detectListeners.isEmpty() && hasLe)
+    if (!detectListeners.isEmpty())
+      return;
+
+    if (hasLe)
       adapter.stopLeScan(this);
+
+    for (BluetoothIdentify i : identify.values())
+      i.close();
+    identify.clear();
   }
 
   public AndroidPort connectHM10(String address)
@@ -177,9 +190,26 @@ final class BluetoothHelper implements BluetoothAdapter.LeScanCallback {
   @Override
   public synchronized void onLeScan(BluetoothDevice device, int rssi,
                                     byte[] scanRecord) {
+    if (!identify.containsKey(device.getAddress()))
+      identify.put(device.getAddress(),
+                   new BluetoothIdentify(context, device, this));
+
     for (DetectDeviceListener l : detectListeners)
       l.onDeviceDetected(DetectDeviceListener.TYPE_BLUETOOTH_LE,
                          device.getAddress(), device.getName(),
                          0);
+  }
+
+  public synchronized void onBluetoothIdentifySuccess(BluetoothDevice device,
+                                                      long features) {
+    for (DetectDeviceListener l : detectListeners)
+      l.onDeviceDetected(DetectDeviceListener.TYPE_BLUETOOTH_LE,
+                         device.getAddress(), device.getName(),
+                         features);
+  }
+
+  public synchronized void onBluetoothIdentifyError(BluetoothDevice device,
+                                                    String msg) {
+    // TODO: report to DetectDeviceListener
   }
 }

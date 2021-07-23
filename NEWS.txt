@@ -6,6 +6,7 @@ Version 7.11 - not yet released
   - add HTTP client
   - prefer Lua gesture handlers
 * Android
+  - show Bluetooth LE device features
   - fix reconnect to Bluetooth LE devices
   - fix distorted colors on some devices
 

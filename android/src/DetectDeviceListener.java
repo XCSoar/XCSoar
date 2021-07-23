@@ -32,6 +32,9 @@ interface DetectDeviceListener {
   static final int TYPE_BLUETOOTH_CLASSIC = 2;
   static final int TYPE_BLUETOOTH_LE = 3;
 
+  static final long FEATURE_HM10 = 0x1;
+  static final long FEATURE_HEART_RATE = 0x2;
+
   /**
    * A new device was detected or new information about a device
    * became available.

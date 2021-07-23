@@ -46,8 +46,7 @@ class ScanBluetoothLeWidget final
     std::string address;
     std::string name;
 
-    Item(const char *_address, const char *_name)
-      :address(_address), name(_name) {}
+    uint64_t features = 0;
 
     bool IsSame(const Item &other) const noexcept {
       return address == other.address;
@@ -56,6 +55,8 @@ class ScanBluetoothLeWidget final
     void Update(Item &&src) noexcept {
       if (name.empty())
         name = std::move(src.name);
+
+      features |= src.features;
     }
   };
 
@@ -122,7 +123,7 @@ private:
   void OnDeviceDetected(Type type, const char *address,
                         const char *name,
                         uint64_t features) noexcept override {
-    Item item{address, name};
+    Item item{address, name, features};
 
     {
       const std::lock_guard<Mutex> lock(mutex);
@@ -178,6 +179,14 @@ ScanBluetoothLeWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     name = item.address.c_str();
 
   row_renderer.DrawTextRow(canvas, rc, name);
+
+  // TODO: properly render this, consider all feature flags
+  if (item.features & DetectDeviceListener::FEATURE_HM10)
+    row_renderer.DrawRightColumn(canvas, rc, _T("HM10"));
+  else if (item.features & DetectDeviceListener::FEATURE_HEART_RATE)
+    row_renderer.DrawRightColumn(canvas, rc, _T("HR"));
+  else
+    row_renderer.DrawRightColumn(canvas, rc, _("Unsupported"));
 }
 
 std::string
