@@ -22,7 +22,6 @@
 
 package org.xcsoar;
 
-import java.util.List;
 import java.io.IOException;
 
 import android.bluetooth.BluetoothDevice;
@@ -82,18 +81,14 @@ public class HM10Port
     dataCharacteristic = null;
     deviceNameCharacteristic = null;
 
-    List<BluetoothGattService> services = gatt.getServices();
-    if (services != null) {
-      for (BluetoothGattService gattService : services) {
-        for (BluetoothGattCharacteristic characteristic :
-               gattService.getCharacteristics()) {
-          if (BluetoothUuids.HM10_RX_TX_CHARACTERISTIC.equals(characteristic.getUuid())) {
-            dataCharacteristic = characteristic;
-          } else if (BluetoothUuids.DEVICE_NAME_CHARACTERISTIC.equals(characteristic.getUuid())) {
-            deviceNameCharacteristic = characteristic;
-          }
-        }
-      }
+    BluetoothGattService service = gatt.getService(BluetoothUuids.HM10_SERVICE);
+    if (service != null) {
+      dataCharacteristic = service.getCharacteristic(BluetoothUuids.HM10_RX_TX_CHARACTERISTIC);
+    }
+
+    service = gatt.getService(BluetoothUuids.GENERIC_ACCESS_SERVICE);
+    if (service != null) {
+      deviceNameCharacteristic = service.getCharacteristic(BluetoothUuids.DEVICE_NAME_CHARACTERISTIC);
     }
 
     if (dataCharacteristic == null)

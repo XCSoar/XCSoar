@@ -28,11 +28,17 @@ import java.util.UUID;
  * Various Bluetooth service/characteristic UUIDs.
  */
 public interface BluetoothUuids {
+  UUID GENERIC_ACCESS_SERVICE =
+    UUID.fromString("00001800-0000-1000-8000-00805F9B34FB");
+
   UUID CLIENT_CHARACTERISTIC_CONFIGURATION =
     UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
 
   UUID DEVICE_NAME_CHARACTERISTIC =
     UUID.fromString("00002A00-0000-1000-8000-00805F9B34FB");
+
+  UUID HM10_SERVICE =
+    UUID.fromString("0000FFE0-0000-1000-8000-00805F9B34FB");
 
   /**
    * The HM-10 and compatible bluetooth modules use a GATT characteristic
