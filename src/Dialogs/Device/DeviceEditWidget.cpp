@@ -45,6 +45,7 @@
 #include "java/Global.hxx"
 #include "java/Ref.hxx"
 #include "java/String.hxx"
+#include "Android/Main.hpp"
 #include "Android/BluetoothHelper.hpp"
 #include "Android/UsbSerialHelper.hpp"
 #include "Device/Port/AndroidIOIOUartPort.hpp"
@@ -189,13 +190,16 @@ FillAndroidBluetoothPorts(DataFieldEnum &df,
                           const DeviceConfig &config) noexcept
 {
 #ifdef ANDROID
+  if (bluetooth_helper != nullptr)
+    return;
+
   JNIEnv *env = Java::GetEnv();
   // list() returns an array of strings, 3 for each device, giving
   //   mac address
   //   name
   //   type - either "BLE" or "CLASSIC"
   static constexpr jsize BLUETOOTH_LIST_STRIDE = 3;
-  const auto bonded = BluetoothHelper::list(env);
+  const auto bonded = bluetooth_helper->GetBondedList(env);
   if (!bonded)
     return;
 
@@ -407,7 +411,8 @@ EditPortCallback(const TCHAR *caption, DataField &_df,
 
 #ifdef ANDROID
   static constexpr int SCAN_BLUETOOTH_LE = -1;
-  if (BluetoothHelper::HasLe(Java::GetEnv()))
+  if (bluetooth_helper != nullptr &&
+      bluetooth_helper->HasLe(Java::GetEnv()))
     combo_list.Append(SCAN_BLUETOOTH_LE, _("Bluetooth LE"));
 #endif
 
@@ -419,7 +424,7 @@ EditPortCallback(const TCHAR *caption, DataField &_df,
 
 #ifdef ANDROID
   if (item.int_value == SCAN_BLUETOOTH_LE) {
-    auto address = ScanBluetoothLeDialog();
+    auto address = ScanBluetoothLeDialog(*bluetooth_helper);
     if (address.empty())
         return false;
 

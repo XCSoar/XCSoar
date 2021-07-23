@@ -168,7 +168,7 @@ ScanBluetoothLeWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 }
 
 std::string
-ScanBluetoothLeDialog() noexcept
+ScanBluetoothLeDialog(BluetoothHelper &bluetooth_helper) noexcept
 {
   TWidgetDialog<ScanBluetoothLeWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
@@ -176,7 +176,7 @@ ScanBluetoothLeDialog() noexcept
   dialog.SetWidget(dialog);
 
   const auto env = Java::GetEnv();
-  const auto callback = BluetoothHelper::StartLeScan(env, dialog.GetWidget());
+  const auto callback = bluetooth_helper.StartLeScan(env, dialog.GetWidget());
   if (!callback) {
     const TCHAR *message =
       _("Bluetooth LE is not available on this device.");
@@ -188,7 +188,7 @@ ScanBluetoothLeDialog() noexcept
   dialog.AddButton(_("Cancel"), mrCancel);
 
   int result = dialog.ShowModal();
-  BluetoothHelper::StopLeScan(env, callback);
+  bluetooth_helper.StopLeScan(env, callback);
 
   if (result != mrOK)
     return {};

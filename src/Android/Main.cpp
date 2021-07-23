@@ -96,6 +96,7 @@ NativeView *native_view;
 Vibrator *vibrator;
 bool os_haptic_feedback_enabled;
 
+BluetoothHelper *bluetooth_helper;
 IOIOHelper *ioio_helper;
 
 gcc_visibility_default
@@ -129,7 +130,7 @@ try {
   NativePortListener::Initialise(env);
   NativeInputListener::Initialise(env);
   PortBridge::Initialise(env);
-  BluetoothHelper::Initialise(env);
+  const bool have_bluetooth = BluetoothHelper::Initialise(env);
   UsbSerialHelper::Initialise(env);
   NativeLeScanCallback::Initialise(env);
   const bool have_ioio = IOIOHelper::Initialise(env);
@@ -163,6 +164,14 @@ try {
   SoundUtil::Initialise(env);
   Vibrator::Initialise(env);
   vibrator = Vibrator::Create(env, *context);
+
+  if (have_bluetooth) {
+    try {
+      bluetooth_helper = new BluetoothHelper(env, *context);
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to initialise Bluetooth");
+    }
+  }
 
   if (have_ioio) {
     try {
@@ -228,6 +237,9 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 
   delete ioio_helper;
   ioio_helper = nullptr;
+
+  delete bluetooth_helper;
+  bluetooth_helper = nullptr;
 
   delete vibrator;
   vibrator = nullptr;

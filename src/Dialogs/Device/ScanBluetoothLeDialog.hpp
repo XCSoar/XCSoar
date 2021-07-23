@@ -26,11 +26,13 @@
 
 #include <string>
 
+class BluetoothHelper;
+
 /**
  * @return the selected address or an empty string if the user has
  * canceled the dialog
  */
 std::string
-ScanBluetoothLeDialog() noexcept;
+ScanBluetoothLeDialog(BluetoothHelper &bluetooth_helper) noexcept;
 
 #endif

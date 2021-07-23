@@ -61,6 +61,7 @@ Copyright_License {
 
 #ifdef ANDROID
 #include "java/Global.hxx"
+#include "Android/Main.hpp"
 #include "Android/BluetoothHelper.hpp"
 #endif
 
@@ -437,7 +438,8 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   } else if ((config.port_type == DeviceConfig::PortType::RFCOMM ||
               config.port_type == DeviceConfig::PortType::BLE_HM10 ||
               config.port_type == DeviceConfig::PortType::RFCOMM_SERVER) &&
-             !BluetoothHelper::isEnabled(Java::GetEnv())) {
+             bluetooth_helper != nullptr &&
+             !bluetooth_helper->IsEnabled(Java::GetEnv())) {
     status = _("Bluetooth is disabled");
 #endif
   } else if (flags.duplicate) {
@@ -506,7 +508,8 @@ DeviceListWidget::ReconnectCurrent()
   if ((config.port_type == DeviceConfig::PortType::RFCOMM ||
        config.port_type == DeviceConfig::PortType::BLE_HM10 ||
        config.port_type == DeviceConfig::PortType::RFCOMM_SERVER) &&
-      !BluetoothHelper::isEnabled(Java::GetEnv())) {
+      bluetooth_helper != nullptr &&
+      !bluetooth_helper->IsEnabled(Java::GetEnv())) {
     ShowMessageBox(_("Bluetooth is disabled"), _("Reconnect"),
                    MB_OK | MB_ICONERROR);
     return;

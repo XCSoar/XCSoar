@@ -96,7 +96,6 @@ public class XCSoar extends Activity {
 
     IOIOHelper.onCreateContext(this);
 
-    BluetoothHelper.Initialize(this);
     UsbSerialHelper.Initialise(this);
 
     // fullscreen mode

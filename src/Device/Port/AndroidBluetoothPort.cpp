@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "AndroidBluetoothPort.hpp"
 #include "AndroidPort.hpp"
+#include "Android/Main.hpp"
 #include "Android/BluetoothHelper.hpp"
 #include "java/Global.hxx"
 
@@ -34,7 +35,10 @@ OpenAndroidBluetoothPort(const TCHAR *address, PortListener *listener,
 {
   assert(address != nullptr);
 
-  PortBridge *bridge = BluetoothHelper::connect(Java::GetEnv(), address);
+  if (bluetooth_helper == nullptr)
+    throw std::runtime_error("Bluetooth not available");
+
+  PortBridge *bridge = bluetooth_helper->connect(Java::GetEnv(), address);
   assert(bridge != nullptr);
   return std::make_unique<AndroidPort>(listener, handler, bridge);
 }
@@ -42,7 +46,10 @@ OpenAndroidBluetoothPort(const TCHAR *address, PortListener *listener,
 std::unique_ptr<Port>
 OpenAndroidBluetoothServerPort(PortListener *listener, DataHandler &handler)
 {
-  PortBridge *bridge = BluetoothHelper::createServer(Java::GetEnv());
+  if (bluetooth_helper == nullptr)
+    throw std::runtime_error("Bluetooth not available");
+
+  PortBridge *bridge = bluetooth_helper->createServer(Java::GetEnv());
   assert(bridge != nullptr);
   return std::make_unique<AndroidPort>(listener, handler, bridge);
 }
@@ -53,7 +60,10 @@ OpenAndroidBleHm10Port(const TCHAR *address, PortListener *listener,
 {
   assert(address != nullptr);
 
-  PortBridge *bridge = BluetoothHelper::connectHM10(Java::GetEnv(), address);
+  if (bluetooth_helper == nullptr)
+    throw std::runtime_error("Bluetooth not available");
+
+  PortBridge *bridge = bluetooth_helper->connectHM10(Java::GetEnv(), address);
   assert(bridge != nullptr);
   return std::make_unique<AndroidPort>(listener, handler, bridge);
 }

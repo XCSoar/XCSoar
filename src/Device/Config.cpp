@@ -28,6 +28,7 @@ Copyright_License {
 #include "util/StringCompare.hxx"
 
 #ifdef ANDROID
+#include "Android/Main.hpp"
 #include "Android/BluetoothHelper.hpp"
 #include "java/Global.hxx"
 #endif
@@ -173,8 +174,12 @@ DeviceConfig::BluetoothNameStartsWith(const char *prefix) const noexcept
   if (port_type != PortType::RFCOMM)
     return false;
 
+  if (bluetooth_helper == nullptr)
+    return false;
+
   const char *name =
-    BluetoothHelper::GetNameFromAddress(Java::GetEnv(), bluetooth_mac.c_str());
+    bluetooth_helper->GetNameFromAddress(Java::GetEnv(),
+                                         bluetooth_mac.c_str());
   return name != nullptr && StringStartsWith(name, prefix);
 #else
   return false;
@@ -216,10 +221,12 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const noexcept
   case PortType::BLE_SENSOR: {
     const TCHAR *name = bluetooth_mac.c_str();
 #ifdef ANDROID
-    const char *name2 =
-      BluetoothHelper::GetNameFromAddress(Java::GetEnv(), name);
-    if (name2 != nullptr)
-      name = name2;
+    if (bluetooth_helper != nullptr) {
+      const char *name2 =
+        bluetooth_helper->GetNameFromAddress(Java::GetEnv(), name);
+      if (name2 != nullptr)
+        name = name2;
+    }
 #endif
 
     StringFormat(buffer, max_size, _T("BLE %s"), name);
@@ -229,10 +236,12 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const noexcept
   case PortType::BLE_HM10: {
     const TCHAR *name = bluetooth_mac.c_str();
 #ifdef ANDROID
-    const char *name2 =
-      BluetoothHelper::GetNameFromAddress(Java::GetEnv(), name);
-    if (name2 != nullptr)
-      name = name2;
+    if (bluetooth_helper != nullptr) {
+      const char *name2 =
+        bluetooth_helper->GetNameFromAddress(Java::GetEnv(), name);
+      if (name2 != nullptr)
+        name = name2;
+    }
 #endif
 
     StringFormat(buffer, max_size, _T("HM10 %s"), name);
@@ -242,10 +251,12 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const noexcept
   case PortType::RFCOMM: {
     const TCHAR *name = bluetooth_mac.c_str();
 #ifdef ANDROID
-    const char *name2 =
-      BluetoothHelper::GetNameFromAddress(Java::GetEnv(), name);
-    if (name2 != nullptr)
-      name = name2;
+    if (bluetooth_helper != nullptr) {
+      const char *name2 =
+        bluetooth_helper->GetNameFromAddress(Java::GetEnv(), name);
+      if (name2 != nullptr)
+        name = name2;
+    }
 #endif
 
     StringFormat(buffer, max_size, _T("Bluetooth %s"), name);

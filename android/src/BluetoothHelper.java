@@ -45,32 +45,23 @@ final class BluetoothHelper {
   private static final UUID THE_UUID =
         UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-  private static final BluetoothAdapter adapter;
+  private final BluetoothAdapter adapter;
 
   /**
    * Does this device support Bluetooth Low Energy?
    */
-  private static boolean hasLe;
+  private final boolean hasLe;
 
-  static {
-    BluetoothAdapter _adapter;
-    try {
-      _adapter = BluetoothAdapter.getDefaultAdapter();
-    } catch (Exception e) {
-      Log.e(TAG, "BluetoothAdapter.getDefaultAdapter() failed", e);
-      _adapter = null;
-    }
+  BluetoothHelper(Context context) throws Exception {
+    adapter = BluetoothAdapter.getDefaultAdapter();
+    if (adapter == null)
+      throw new Exception("No Bluetooth adapter found");
 
-    adapter = _adapter;
+    hasLe = context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
   }
 
-  public static void Initialize(Context context) {
-    hasLe = adapter != null &&
-      context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
-  }
-
-  public static boolean isEnabled() {
-    return adapter != null && adapter.isEnabled();
+  public boolean isEnabled() {
+    return adapter.isEnabled();
   }
 
   /**
@@ -90,10 +81,7 @@ final class BluetoothHelper {
     return getDisplayString(socket.getRemoteDevice());
   }
 
-  public static String getNameFromAddress(String address) {
-    if (adapter == null)
-      return null;
-
+  public String getNameFromAddress(String address) {
     try {
       return adapter.getRemoteDevice(address).getName();
     } catch (Exception e) {
@@ -102,10 +90,7 @@ final class BluetoothHelper {
     }
   }
 
-  public static String[] list() {
-    if (adapter == null)
-      return null;
-
+  public String[] list() {
     Set<BluetoothDevice> devices = adapter.getBondedDevices();
     if (devices == null)
       return null;
@@ -121,18 +106,18 @@ final class BluetoothHelper {
     return addresses;
   }
 
-  public static boolean startLeScan(BluetoothAdapter.LeScanCallback cb) {
+  public boolean startLeScan(BluetoothAdapter.LeScanCallback cb) {
     return hasLe && adapter.startLeScan(cb);
   }
 
-  public static void stopLeScan(BluetoothAdapter.LeScanCallback cb) {
+  public void stopLeScan(BluetoothAdapter.LeScanCallback cb) {
     if (hasLe)
       adapter.stopLeScan(cb);
   }
 
-  public static AndroidPort connectHM10(Context context, String address)
+  public AndroidPort connectHM10(Context context, String address)
     throws IOException {
-    if (adapter == null || !hasLe)
+    if (!hasLe)
       throw new IOException("No Bluetooth adapter found");
 
     BluetoothDevice device = adapter.getRemoteDevice(address);
@@ -144,11 +129,8 @@ final class BluetoothHelper {
     return new HM10Port(context, device);
   }
 
-  public static AndroidPort connect(Context context, String address)
+  public AndroidPort connect(Context context, String address)
     throws IOException {
-    if (adapter == null)
-      throw new IOException("No Bluetooth adapter found");
-
     BluetoothDevice device = adapter.getRemoteDevice(address);
     if (device == null)
       throw new IOException("Bluetooth device not found");
@@ -158,10 +140,7 @@ final class BluetoothHelper {
     return new BluetoothClientPort(socket);
   }
 
-  public static AndroidPort createServer() throws IOException {
-    if (adapter == null)
-      throw new IOException("No Bluetooth adapter found");
-
+  public AndroidPort createServer() throws IOException {
     return new BluetoothServerPort(adapter, THE_UUID);
   }
 }
