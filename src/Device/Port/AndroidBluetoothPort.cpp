@@ -35,9 +35,7 @@ OpenAndroidBluetoothPort(const TCHAR *address, PortListener *listener,
   assert(address != nullptr);
 
   PortBridge *bridge = BluetoothHelper::connect(Java::GetEnv(), address);
-  if (bridge == nullptr)
-    return nullptr;
-
+  assert(bridge != nullptr);
   return std::make_unique<AndroidPort>(listener, handler, bridge);
 }
 
@@ -45,9 +43,7 @@ std::unique_ptr<Port>
 OpenAndroidBluetoothServerPort(PortListener *listener, DataHandler &handler)
 {
   PortBridge *bridge = BluetoothHelper::createServer(Java::GetEnv());
-  if (bridge == nullptr)
-    return nullptr;
-
+  assert(bridge != nullptr);
   return std::make_unique<AndroidPort>(listener, handler, bridge);
 }
 
@@ -58,8 +54,6 @@ OpenAndroidBleHm10Port(const TCHAR *address, PortListener *listener,
   assert(address != nullptr);
 
   PortBridge *bridge = BluetoothHelper::connectHM10(Java::GetEnv(), address);
-  if (bridge == nullptr)
-    return nullptr;
-
+  assert(bridge != nullptr);
   return std::make_unique<AndroidPort>(listener, handler, bridge);
 }

@@ -109,8 +109,7 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
 
     return OpenAndroidBleHm10Port(config.bluetooth_mac, listener, handler);
 #else
-    LogFormat("Bluetooth not available on this platform");
-    return nullptr;
+    throw std::runtime_error("Bluetooth not available");
 #endif
 
   case DeviceConfig::PortType::RFCOMM:

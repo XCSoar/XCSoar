@@ -133,11 +133,11 @@ final class BluetoothHelper {
   public static AndroidPort connectHM10(Context context, String address)
     throws IOException {
     if (adapter == null || !hasLe)
-      return null;
+      throw new IOException("No Bluetooth adapter found");
 
     BluetoothDevice device = adapter.getRemoteDevice(address);
     if (device == null)
-      return null;
+      throw new IOException("Bluetooth device not found");
 
     Log.d(TAG, String.format("Bluetooth device \"%s\" (%s) is a LE device, trying to connect using GATT...",
                              device.getName(), device.getAddress()));
@@ -147,11 +147,11 @@ final class BluetoothHelper {
   public static AndroidPort connect(Context context, String address)
     throws IOException {
     if (adapter == null)
-      return null;
+      throw new IOException("No Bluetooth adapter found");
 
     BluetoothDevice device = adapter.getRemoteDevice(address);
     if (device == null)
-      return null;
+      throw new IOException("Bluetooth device not found");
 
     BluetoothSocket socket =
       device.createRfcommSocketToServiceRecord(THE_UUID);
@@ -160,7 +160,7 @@ final class BluetoothHelper {
 
   public static AndroidPort createServer() throws IOException {
     if (adapter == null)
-      return null;
+      throw new IOException("No Bluetooth adapter found");
 
     return new BluetoothServerPort(adapter, THE_UUID);
   }

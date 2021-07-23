@@ -177,8 +177,7 @@ BluetoothHelper::connect(JNIEnv *env, const char *address)
   const Java::String address2(env, address);
   auto obj = Java::CallStaticObjectMethodRethrow(env, cls, connect_method,
                                                  context->Get(), address2.Get());
-  if (obj == nullptr)
-    return nullptr;
+  assert(obj);
 
   return new PortBridge(env, obj);
 }
@@ -190,8 +189,7 @@ BluetoothHelper::createServer(JNIEnv *env)
     throw std::runtime_error("Bluetooth not available");
 
   auto obj = Java::CallStaticObjectMethodRethrow(env, cls, createServer_method);
-  if (obj == nullptr)
-    return nullptr;
+  assert(obj);
 
   return new PortBridge(env, obj);
 }
@@ -200,15 +198,14 @@ PortBridge *
 BluetoothHelper::connectHM10(JNIEnv *env, const char *address)
 {
   if (!cls.IsDefined())
-    return nullptr;
+    throw std::runtime_error("Bluetooth LE not available");
 
   /* call BluetoothHelper.connectHM10() */
 
   const Java::String address2(env, address);
   auto obj = Java::CallStaticObjectMethodRethrow(env, cls, hm10connect_method,
                                                  context->Get(), address2.Get());
-  if (obj == nullptr)
-    return nullptr;
+  assert(obj);
 
   return new PortBridge(env, obj);
 }
