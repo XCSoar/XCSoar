@@ -2,6 +2,9 @@ Version 7.11 - not yet released
 * user interface
   - new vario gauge background
   - fix truncated labels in many dialogs
+* Lua scripting
+  - add HTTP client
+  - prefer Lua gesture handlers
 * Android
   - fix reconnect to Bluetooth LE devices
   - fix distorted colors on some devices
