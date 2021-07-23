@@ -141,7 +141,7 @@ final class BluetoothHelper {
 
     Log.d(TAG, String.format("Bluetooth device \"%s\" (%s) is a LE device, trying to connect using GATT...",
                              device.getName(), device.getAddress()));
-    return new BluetoothGattClientPort(context, device);
+    return new HM10Port(context, device);
   }
 
   public static AndroidPort connect(Context context, String address)

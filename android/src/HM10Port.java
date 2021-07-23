@@ -38,10 +38,10 @@ import android.os.Build;
 import android.util.Log;
 
 /**
- * AndroidPort implementation for Bluetooth Low Energy devices using the
- * GATT protocol.
+ * An #AndroidPort implementation for connecting to a HM-10 (Bluetooth
+ * LE).
  */
-public class BluetoothGattClientPort
+public class HM10Port
     extends BluetoothGattCallback
     implements AndroidPort  {
   private static final String TAG = "XCSoar";
@@ -78,7 +78,7 @@ public class BluetoothGattClientPort
   private final Object gattStateSync = new Object();
   private int gattState = BluetoothGatt.STATE_DISCONNECTED;
 
-  public BluetoothGattClientPort(Context context, BluetoothDevice device)
+  public HM10Port(Context context, BluetoothDevice device)
     throws IOException
   {
     if (Build.VERSION.SDK_INT >= 23)
