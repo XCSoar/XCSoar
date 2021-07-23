@@ -92,7 +92,7 @@ public class HM10Port
     }
 
     if (dataCharacteristic == null)
-      throw new Error("GATT data characteristic not found");
+      throw new Error("HM10 data characteristic not found");
 
     if (deviceNameCharacteristic == null)
       throw new Error("GATT device name characteristic not found");
