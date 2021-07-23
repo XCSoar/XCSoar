@@ -28,6 +28,7 @@ import java.util.Set;
 import java.io.IOException;
 
 import android.util.Log;
+import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -53,7 +54,12 @@ final class BluetoothHelper {
   private final boolean hasLe;
 
   BluetoothHelper(Context context) throws Exception {
-    adapter = BluetoothAdapter.getDefaultAdapter();
+    BluetoothManager manager = (BluetoothManager)
+      context.getSystemService(Context.BLUETOOTH_SERVICE);
+    if (manager == null)
+      throw new Exception("No Bluetooth manager");
+
+    adapter = manager.getAdapter();
     if (adapter == null)
       throw new Exception("No Bluetooth adapter found");
 
