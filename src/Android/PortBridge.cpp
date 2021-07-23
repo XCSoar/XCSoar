@@ -55,8 +55,9 @@ PortBridge::Initialise(JNIEnv *env)
 }
 
 PortBridge::PortBridge(JNIEnv *env, jobject obj)
-  :Java::GlobalObject(env, obj) {
-  write_buffer.Set(env, env->NewByteArray(write_buffer_size));
+  :Java::GlobalObject(env, obj),
+   write_buffer(env, env->NewByteArray(write_buffer_size))
+{
 }
 
 void
