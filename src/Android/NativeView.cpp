@@ -109,14 +109,16 @@ ConvertABGRToARGB(UncompressedImage &image)
   }
 }
 
-jobject NativeView::loadFileTiff(Path path)
+Java::LocalObject
+NativeView::loadFileTiff(Path path)
 {
   UncompressedImage image = LoadTiff(path);
 
   // create a Bitmap.Config enum
   Java::String config_name(env, "ARGB_8888");
-  jobject bitmap_config = env->CallStaticObjectMethod(
-    clsBitmapConfig, bitmapConfigValueOf_method, config_name.Get());
+  Java::LocalObject bitmap_config{env,
+    env->CallStaticObjectMethod(clsBitmapConfig, bitmapConfigValueOf_method,
+                                config_name.Get())};
 
   // convert ABGR to ARGB
   // TODO: I am not sure if this conversion depends on endianess. So
@@ -125,22 +127,20 @@ jobject NativeView::loadFileTiff(Path path)
 
   // create int array
   unsigned size = image.GetWidth() * image.GetHeight();
-  jintArray intArray = env->NewIntArray(size);
+  Java::LocalRef<jintArray> intArray{env, env->NewIntArray(size)};
   env->SetIntArrayRegion(intArray, 0, size, static_cast<const jint*>(image.GetData()));
 
   // call Bitmap.createBitmap()
-  jobject bitmap = env->CallStaticObjectMethod(
-    clsBitmap, createBitmap_method,
-    intArray, image.GetWidth(), image.GetHeight(),
-    bitmap_config);
-
-  env->DeleteLocalRef(intArray);
-  env->DeleteLocalRef(bitmap_config);
-  return bitmap;
+  return {env,
+    env->CallStaticObjectMethod(clsBitmap, createBitmap_method,
+                                intArray.Get(),
+                                image.GetWidth(), image.GetHeight(),
+                                bitmap_config.Get())};
 }
 
-jobject NativeView::loadFileBitmap(Path path)
+Java::LocalObject
+NativeView::loadFileBitmap(Path path)
 {
   Java::String path2(env, path.c_str());
-  return env->CallObjectMethod(obj, loadFileBitmap_method, path2.Get());
+  return {env, env->CallObjectMethod(obj, loadFileBitmap_method, path2.Get())};
 }

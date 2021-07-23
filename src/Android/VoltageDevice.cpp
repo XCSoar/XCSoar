@@ -49,18 +49,17 @@ VoltageDevice::Deinitialise(JNIEnv *env)
   voltage_class.Clear(env);
 }
 
-static jobject
+static Java::LocalObject
 CreateVoltageDevice(JNIEnv *env, jobject holder,
                    unsigned sample_rate,
                    VoltageListener &listener)
 {
-  jobject listener2 = NativeVoltageListener::Create(env, listener);
-  jobject device = env->NewObject(voltage_class, voltage_ctor, holder,
-                                  sample_rate,
-                                  listener2);
-  env->DeleteLocalRef(listener2);
-
-  return device;
+  Java::LocalObject listener2{env,
+    NativeVoltageListener::Create(env, listener)};
+  return {env,
+    env->NewObject(voltage_class, voltage_ctor, holder,
+                   sample_rate,
+                   listener2.Get())};
 }
 
 VoltageDevice::VoltageDevice(unsigned _index,
@@ -68,9 +67,9 @@ VoltageDevice::VoltageDevice(unsigned _index,
                              double _offset, double _factor,
                              unsigned sample_rate)
   :index(_index),
-   obj(env, CreateVoltageDevice(env, holder,
-                               sample_rate,
-                               *this)),
+   obj(CreateVoltageDevice(env, holder,
+                           sample_rate,
+                           *this)),
    offset(_offset),
    factor(_factor)
 {

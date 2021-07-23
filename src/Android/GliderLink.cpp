@@ -59,14 +59,11 @@ GliderLink* GliderLink::create(JNIEnv* env, Context* context,
   assert(gl_cls != nullptr);
 
   // Construct GliderLinkReceiver object.
-  jobject obj =
-    env->NewObject(gl_cls, gl_ctor_id, context->Get(), index);
+  Java::LocalObject obj{env,
+    env->NewObject(gl_cls, gl_ctor_id, context->Get(), index)};
   assert(obj != nullptr);
 
-  GliderLink *glider_link = new GliderLink(env, obj);
-  env->DeleteLocalRef(obj);
-
-  return glider_link;
+  return new GliderLink(env, obj);
 }
 
 GliderLink::GliderLink(JNIEnv* env, jobject obj)

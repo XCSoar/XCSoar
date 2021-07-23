@@ -48,18 +48,17 @@ I2CbaroDevice::Deinitialise(JNIEnv *env)
   i2cbaro_class.Clear(env);
 }
 
-static jobject
+static Java::LocalObject
 CreateI2CbaroDevice(JNIEnv *env, jobject holder,
                    unsigned twi_num, unsigned i2c_addr, unsigned sample_rate, unsigned flags,
                    I2CbaroListener &listener)
 {
-  jobject listener2 = NativeI2CbaroListener::Create(env, listener);
-  jobject device = env->NewObject(i2cbaro_class, i2cbaro_ctor, holder,
-                                  twi_num, i2c_addr, sample_rate, flags,
-                                  listener2);
-  env->DeleteLocalRef(listener2);
-
-  return device;
+  Java::LocalObject listener2{env,
+    NativeI2CbaroListener::Create(env, listener)};
+  return {env,
+    env->NewObject(i2cbaro_class, i2cbaro_ctor, holder,
+                   twi_num, i2c_addr, sample_rate, flags,
+                   listener2.Get())};
 }
 
 I2CbaroDevice::I2CbaroDevice(unsigned _index,
@@ -67,9 +66,9 @@ I2CbaroDevice::I2CbaroDevice(unsigned _index,
                            DeviceConfig::PressureUse use,
                            double offset, unsigned twi_num, unsigned i2c_addr, unsigned sample_rate, unsigned flags)
   :index(_index),
-   obj(env, CreateI2CbaroDevice(env, holder,
-                               twi_num, i2c_addr, sample_rate, flags,
-                               *this)),
+   obj(CreateI2CbaroDevice(env, holder,
+                           twi_num, i2c_addr, sample_rate, flags,
+                           *this)),
    press_use(use),
    pitot_offset(offset),
    kalman_filter(5, 0.3)

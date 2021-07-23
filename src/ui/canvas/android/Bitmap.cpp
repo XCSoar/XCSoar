@@ -64,7 +64,7 @@ find_resource_name(unsigned id)
   return nullptr;
 }
 
-static jobject
+static Java::LocalObject
 LoadResourceBitmap(ResourceId id)
 {
   const char *name = find_resource_name((unsigned)id);
@@ -81,7 +81,6 @@ Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type, bool flipped)
   assert(_bmp != nullptr);
 
   bmp = env->NewGlobalRef(_bmp);
-  env->DeleteLocalRef(_bmp);
 
   type = _type;
 
@@ -124,11 +123,11 @@ Bitmap::Load(ResourceId id, Type _type)
 
   Reset();
 
-  auto *new_bmp = LoadResourceBitmap(id);
+  auto new_bmp = LoadResourceBitmap(id);
   if (new_bmp == nullptr)
     return false;
 
-  return Set(Java::GetEnv(), new_bmp, _type);
+  return Set(new_bmp.GetEnv(), new_bmp, _type);
 }
 
 bool
@@ -138,7 +137,7 @@ Bitmap::LoadFile(Path path)
 
   Reset();
 
-  jobject new_bmp;
+  Java::LocalObject new_bmp;
   bool flipped = false;
   if (path.MatchesExtension(_T(".tif")) || path.MatchesExtension(_T(".tiff"))) {
     new_bmp = native_view->loadFileTiff(path);

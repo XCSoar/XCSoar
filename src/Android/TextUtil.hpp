@@ -41,7 +41,7 @@ class TextUtil : protected Java::GlobalObject {
   unsigned height, ascent_height, capital_height;
   unsigned line_spacing, style;
 
-  TextUtil(jobject _obj) noexcept;
+  TextUtil(const Java::LocalObject &_obj) noexcept;
 
 public:
   static void Initialise(JNIEnv *env) noexcept;

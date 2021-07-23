@@ -54,13 +54,10 @@ CreateNunchuckDevice(JNIEnv *env, jobject holder,
                    unsigned twi_num, unsigned sample_rate,
                    NunchuckListener &listener)
 {
-  jobject listener2 = NativeNunchuckListener::Create(env, listener);
-  jobject device = env->NewObject(nunchuck_class, nunchuck_ctor, holder,
-                                  twi_num, sample_rate,
-                                  listener2);
-  env->DeleteLocalRef(listener2);
-
-  return device;
+  Java::LocalRef listener2{env, NativeNunchuckListener::Create(env, listener)};
+  return env->NewObject(nunchuck_class, nunchuck_ctor, holder,
+                        twi_num, sample_rate,
+                        listener2.Get());
 }
 
 NunchuckDevice::NunchuckDevice(unsigned _index,

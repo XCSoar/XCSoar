@@ -110,24 +110,23 @@ public:
     return env->CallBooleanMethod(obj, setRequestedOrientationID, (jint)so);
   }
 
-  jobject loadResourceBitmap(const char *name) {
+  Java::LocalObject loadResourceBitmap(const char *name) {
     Java::String name2(env, name);
-    return env->CallObjectMethod(obj, loadResourceBitmap_method, name2.Get());
+    return {env,
+      env->CallObjectMethod(obj, loadResourceBitmap_method, name2.Get())};
   }
 
-  jobject loadFileTiff(Path path);
+  Java::LocalObject loadFileTiff(Path path);
 
-  jobject loadFileBitmap(Path path);
+  Java::LocalObject loadFileBitmap(Path path);
 
   bool bitmapToTexture(jobject bmp, bool alpha, jint *result) {
-    jintArray result2 = env->NewIntArray(5);
+    Java::LocalRef<jintArray> result2{env, env->NewIntArray(5)};
 
     bool success = env->CallBooleanMethod(obj, bitmapToTexture_method,
-                                          bmp, alpha, result2);
+                                          bmp, alpha, result2.Get());
     if (success)
       env->GetIntArrayRegion(result2, 0, 5, result);
-
-    env->DeleteLocalRef(result2);
 
     return success;
   }

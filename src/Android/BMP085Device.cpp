@@ -54,18 +54,17 @@ BMP085Device::Deinitialise(JNIEnv *env)
   bmp085_class.Clear(env);
 }
 
-static jobject
+static Java::LocalObject
 CreateBMP085Device(JNIEnv *env, jobject holder,
                    unsigned twi_num, unsigned eoc_pin,
                    unsigned oversampling,
                    BMP085Listener &listener)
 {
-  jobject listener2 = NativeBMP085Listener::Create(env, listener);
-  jobject device = env->NewObject(bmp085_class, bmp085_ctor, holder,
-                                  twi_num, eoc_pin, oversampling,
-                                  listener2);
-  env->DeleteLocalRef(listener2);
-  return device;
+  Java::LocalRef listener2{env, NativeBMP085Listener::Create(env, listener)};
+  return {env,
+    env->NewObject(bmp085_class, bmp085_ctor, holder,
+                   twi_num, eoc_pin, oversampling,
+                   listener2.Get())};
 }
 
 BMP085Device::BMP085Device(unsigned _index,
@@ -73,9 +72,9 @@ BMP085Device::BMP085Device(unsigned _index,
                            unsigned twi_num, unsigned eoc_pin,
                            unsigned oversampling)
   :index(_index),
-   obj(env, CreateBMP085Device(env, holder,
-                               twi_num, eoc_pin, oversampling,
-                               *this)),
+   obj(CreateBMP085Device(env, holder,
+                          twi_num, eoc_pin, oversampling,
+                          *this)),
    kalman_filter(10, 0.0075)
 {
 }

@@ -58,15 +58,15 @@ TextUtil::Deinitialise(JNIEnv *env) noexcept
   cls.Clear(env);
 }
 
-TextUtil::TextUtil(jobject _obj) noexcept
-  :Java::GlobalObject(env, _obj) {
+TextUtil::TextUtil(const Java::LocalObject &_obj) noexcept
+  :Java::GlobalObject(_obj) {
   // get height, ascent_height and capital_height
   assert(midGetFontMetrics);
 
-  auto &e = *env;
+  auto &e = *_obj.GetEnv();
 
-  jintArray metricsArray = e.NewIntArray(5);
-  e.CallVoidMethod(Get(), midGetFontMetrics, metricsArray);
+  Java::LocalRef<jintArray> metricsArray{&e, e.NewIntArray(5)};
+  e.CallVoidMethod(Get(), midGetFontMetrics, metricsArray.Get());
 
   jint metrics[5];
   e.GetIntArrayRegion(metricsArray, 0, 5, metrics);
@@ -75,9 +75,6 @@ TextUtil::TextUtil(jobject _obj) noexcept
   ascent_height = metrics[2];
   capital_height = metrics[3];
   line_spacing = metrics[4];
-
-  // free local references
-  e.DeleteLocalRef(metricsArray);
 }
 
 TextUtil *
@@ -99,17 +96,14 @@ TextUtil::create(const FontDescription &d) noexcept
 
   // construct org.xcsoar.TextUtil object
   auto &e = *env;
-  jobject localObject = e.NewObject(cls, midTextUtil,
-                                    paramStyle, paramTextSize,
-                                    paint_flags, d.IsMonospace());
+  Java::LocalObject localObject{&e,
+    e.NewObject(cls, midTextUtil,
+                paramStyle, paramTextSize,
+                paint_flags, d.IsMonospace())};
   if (!localObject)
     return nullptr;
 
-  TextUtil *tu = new TextUtil(localObject);
-
-  e.DeleteLocalRef(localObject);
-
-  return tu;
+  return new TextUtil(localObject);
 }
 
 PixelSize
@@ -119,11 +113,10 @@ TextUtil::getTextBounds(StringView text) const noexcept
 
   auto &e = *env;
   Java::String text2(&e, text);
-  jintArray paramExtent = (jintArray)
-    e.CallObjectMethod(Get(), midGetTextBounds, text2.Get());
+  Java::LocalRef<jintArray> paramExtent{env,
+    (jintArray)e.CallObjectMethod(Get(), midGetTextBounds, text2.Get())};
   if (!Java::DiscardException(&e)) {
     e.GetIntArrayRegion(paramExtent, 0, 2, extent);
-    e.DeleteLocalRef(paramExtent);
   } else {
     /* Java exception has occurred; return zeroes */
     extent[0] = 0;
@@ -138,13 +131,12 @@ TextUtil::getTextTextureGL(StringView text) const noexcept
 {
   auto &e = *env;
   Java::String text2(&e, text);
-  jintArray jresult = (jintArray)
-    e.CallObjectMethod(Get(), midGetTextTextureGL,
-                          text2.Get());
+  Java::LocalRef<jintArray> jresult{env,
+    (jintArray)e.CallObjectMethod(Get(), midGetTextTextureGL,
+                                  text2.Get())};
   jint result[5];
   if (!Java::DiscardException(&e) && jresult != nullptr) {
     e.GetIntArrayRegion(jresult, 0, 5, result);
-    e.DeleteLocalRef(jresult);
   } else {
     result[0] = result[1] = result[2] = result[3] = result[4] = 0;
   }
