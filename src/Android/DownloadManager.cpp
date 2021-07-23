@@ -26,6 +26,7 @@ Copyright_License {
 #include "net/http/DownloadManager.hpp"
 #include "Context.hpp"
 #include "java/Class.hxx"
+#include "java/Env.hxx"
 #include "java/Path.hxx"
 #include "java/String.hxx"
 #include "LocalPath.hpp"
@@ -43,11 +44,9 @@ static jmethodID ctor, close_method, enumerate_method, enqueue_method, cancel_me
 static Java::LocalObject
 NewDownloadUtil(JNIEnv *env, AndroidDownloadManager &instance, Context &context)
 {
-  auto obj = env->NewObject(util_class, ctor,
-                            (jlong)(std::size_t)&instance,
-                            context.Get());
-  Java::RethrowException(env);
-  return {env, obj};
+  return Java::NewObjectRethrow(env, util_class, ctor,
+                                (jlong)(std::size_t)&instance,
+                                context.Get());
 }
 
 AndroidDownloadManager::AndroidDownloadManager(JNIEnv *env,

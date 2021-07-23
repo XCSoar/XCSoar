@@ -26,9 +26,9 @@ Copyright_License {
 #include "Main.hpp"
 #include "NativeLeScanCallback.hpp"
 #include "PortBridge.hpp"
+#include "java/Env.hxx"
 #include "java/String.hxx"
 #include "java/Class.hxx"
-#include "java/Exception.hxx"
 
 #include <map>
 #include <string>
@@ -175,16 +175,12 @@ BluetoothHelper::connect(JNIEnv *env, const char *address)
   /* call BluetoothHelper.connect() */
 
   const Java::String address2(env, address);
-  jobject obj = env->CallStaticObjectMethod(cls, connect_method,
-                                            context->Get(), address2.Get());
-  Java::RethrowException(env);
+  auto obj = Java::CallStaticObjectMethodRethrow(env, cls, connect_method,
+                                                 context->Get(), address2.Get());
   if (obj == nullptr)
     return nullptr;
 
-  PortBridge *helper = new PortBridge(env, obj);
-  env->DeleteLocalRef(obj);
-
-  return helper;
+  return new PortBridge(env, obj);
 }
 
 PortBridge *
@@ -193,15 +189,11 @@ BluetoothHelper::createServer(JNIEnv *env)
   if (!cls.IsDefined())
     throw std::runtime_error("Bluetooth not available");
 
-  jobject obj = env->CallStaticObjectMethod(cls, createServer_method);
-  Java::RethrowException(env);
+  auto obj = Java::CallStaticObjectMethodRethrow(env, cls, createServer_method);
   if (obj == nullptr)
     return nullptr;
 
-  PortBridge *helper = new PortBridge(env, obj);
-  env->DeleteLocalRef(obj);
-
-  return helper;
+  return new PortBridge(env, obj);
 }
 
 PortBridge *
@@ -213,14 +205,10 @@ BluetoothHelper::connectHM10(JNIEnv *env, const char *address)
   /* call BluetoothHelper.connectHM10() */
 
   const Java::String address2(env, address);
-  jobject obj = env->CallStaticObjectMethod(cls, hm10connect_method,
-                                            context->Get(), address2.Get());
-  Java::RethrowException(env);
+  auto obj = Java::CallStaticObjectMethodRethrow(env, cls, hm10connect_method,
+                                                 context->Get(), address2.Get());
   if (obj == nullptr)
     return nullptr;
 
-  PortBridge *helper = new PortBridge(env, obj);
-  env->DeleteLocalRef(obj);
-
-  return helper;
+  return new PortBridge(env, obj);
 }

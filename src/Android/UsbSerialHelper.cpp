@@ -23,6 +23,7 @@
 #include "UsbSerialHelper.hpp"
 #include "PortBridge.hpp"
 #include "java/Class.hxx"
+#include "java/Env.hxx"
 #include "java/String.hxx"
 
 namespace UsbSerialHelper {
@@ -71,14 +72,12 @@ connectDevice(JNIEnv *env, const char *name, unsigned baud) noexcept
     return nullptr;
 
   Java::String name2(env, name);
-  jobject obj = env->CallStaticObjectMethod(cls, connect_method, name2.Get(), (int)baud);
-  Java::RethrowException(env);
+  auto obj = Java::CallStaticObjectMethodRethrow(env, cls, connect_method,
+                                                 name2.Get(), (int)baud);
   if (obj == nullptr)
     return nullptr;
 
-  PortBridge *bridge = new PortBridge(env, obj);
-  env->DeleteLocalRef(obj);
-  return bridge;
+  return new PortBridge(env, obj);
 }
 
 jobjectArray

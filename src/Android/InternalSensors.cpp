@@ -31,6 +31,7 @@ Copyright_License {
 #include "Math/SelfTimingKalmanFilter1d.hpp"
 #include "system/Clock.hpp"
 #include "Geo/Geoid.hpp"
+#include "java/Env.hxx"
 #include "util/Compiler.h"
 
 Java::TrivialClass InternalSensors::gps_cls, InternalSensors::sensors_cls;
@@ -87,13 +88,13 @@ InternalSensors::Deinitialise(JNIEnv *env)
   sensors_cls.Clear(env);
 }
 
-InternalSensors::InternalSensors(JNIEnv *env, jobject gps_obj,
-                                 jobject sensors_obj)
-    :obj_InternalGPS_(env, gps_obj),
-     obj_NonGPSSensors_(env, sensors_obj)
+InternalSensors::InternalSensors(const Java::LocalObject &gps_obj,
+                                 const Java::LocalObject &sensors_obj) noexcept
+  :obj_InternalGPS_(std::move(gps_obj)),
+   obj_NonGPSSensors_(std::move(sensors_obj))
 {
   // Import the list of subscribable sensors from the NonGPSSensors object.
-  getSubscribableSensors(env, sensors_obj);
+  getSubscribableSensors(gps_obj.GetEnv(), gps_obj);
 }
 
 InternalSensors::~InternalSensors()
@@ -144,22 +145,17 @@ InternalSensors::create(JNIEnv *env, Context *context, unsigned int index)
   assert(gps_cls != nullptr);
 
   // Construct InternalGPS object.
-  jobject gps_obj =
-    env->NewObject(gps_cls, gps_ctor_id, context->Get(), index);
-  Java::RethrowException(env);
+  auto gps_obj = Java::NewObjectRethrow(env, gps_cls, gps_ctor_id,
+                                        context->Get(), index);
   assert(gps_obj != nullptr);
 
   // Construct NonGPSSensors object.
-  jobject sensors_obj =
-      env->NewObject(sensors_cls, sensors_ctor_id, context->Get(), index);
+  auto sensors_obj =
+    Java::NewObjectRethrow(env, sensors_cls, sensors_ctor_id,
+                           context->Get(), index);
   assert(sensors_obj != nullptr);
 
-  InternalSensors *internal_sensors =
-      new InternalSensors(env, gps_obj, sensors_obj);
-  env->DeleteLocalRef(gps_obj);
-  env->DeleteLocalRef(sensors_obj);
-
-  return internal_sensors;
+  return new InternalSensors(std::move(gps_obj), std::move(sensors_obj));
 }
 
 // Helper for retrieving the set of sensors to which we can subscribe.

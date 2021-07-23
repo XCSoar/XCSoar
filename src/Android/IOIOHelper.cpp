@@ -24,7 +24,7 @@ Copyright_License {
 #include "IOIOHelper.hpp"
 #include "PortBridge.hpp"
 #include "java/Class.hxx"
-#include "java/Exception.hxx"
+#include "java/Env.hxx"
 
 Java::TrivialClass IOIOHelper::cls;
 jmethodID IOIOHelper::ctor,
@@ -57,8 +57,8 @@ IOIOHelper::Deinitialise(JNIEnv *env)
 PortBridge *
 IOIOHelper::openUart(JNIEnv *env, unsigned ID, unsigned baud)
 {
-  jobject obj = env->CallObjectMethod(Get(), openUart_method, ID, (int)baud);
-  Java::RethrowException(env);
+  auto obj = Java::CallObjectMethodRethrow(env, Get(), openUart_method,
+                                           ID, (int)baud);
   if (obj == nullptr)
     return nullptr;
 
@@ -68,13 +68,6 @@ IOIOHelper::openUart(JNIEnv *env, unsigned ID, unsigned baud)
 }
 
 IOIOHelper::IOIOHelper(JNIEnv *env)
+  :Java::GlobalObject(Java::NewObjectRethrow(env, cls, ctor))
 {
-  jobject obj = env->NewObject(cls, ctor);
-  Java::RethrowException(env);
-
-  assert(obj != nullptr);
-
-  Set(env, obj);
-
-  env->DeleteLocalRef(obj);
 }

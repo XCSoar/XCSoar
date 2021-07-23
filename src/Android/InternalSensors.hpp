@@ -62,7 +62,8 @@ public:
   Java::GlobalObject obj_NonGPSSensors_;
   std::vector<int> subscribable_sensors_;
 
-  InternalSensors(JNIEnv* env, jobject gps_obj, jobject sensors_obj);
+  InternalSensors(const Java::LocalObject &gps_obj,
+                  const Java::LocalObject &sensors_obj) noexcept;
   void getSubscribableSensors(JNIEnv* env, jobject sensors_obj);
  public:
   ~InternalSensors();
