@@ -66,8 +66,7 @@ public class BluetoothGattClientPort
   private PortListener portListener;
   private volatile InputListener listener;
 
-  private final BluetoothDevice device;
-  private BluetoothGatt gatt;
+  private final BluetoothGatt gatt;
   private BluetoothGattCharacteristic dataCharacteristic;
   private BluetoothGattCharacteristic deviceNameCharacteristic;
   private volatile boolean shutdown = false;
@@ -79,13 +78,9 @@ public class BluetoothGattClientPort
   private final Object gattStateSync = new Object();
   private int gattState = BluetoothGatt.STATE_DISCONNECTED;
 
-  public BluetoothGattClientPort(BluetoothDevice _device) {
-    device = _device;
-  }
-
-  public void startConnect(Context context) throws IOException {
-    shutdown = false;
-
+  public BluetoothGattClientPort(Context context, BluetoothDevice device)
+    throws IOException
+  {
     if (Build.VERSION.SDK_INT >= 23)
       gatt = device.connectGatt(context, false, this, BluetoothDevice.TRANSPORT_LE);
     else
