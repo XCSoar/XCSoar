@@ -212,6 +212,7 @@ FillAndroidBluetoothPorts(DataFieldEnum &df,
       ? name.GetUTFChars()
       : nullptr;
 
+    // TODO PortType::BLE_SENSOR?
     Java::String devType{env, (jstring)env->GetObjectArrayElement(bonded, i * BLUETOOTH_LIST_STRIDE + 2)};
     const DeviceConfig::PortType portType = devType != nullptr &&
       strcmp("BLE", Java::String::GetUTFChars(env, devType).c_str()) == 0
@@ -221,7 +222,8 @@ FillAndroidBluetoothPorts(DataFieldEnum &df,
   }
 
   if ((config.port_type == DeviceConfig::PortType::RFCOMM ||
-      config.port_type == DeviceConfig::PortType::BLE_HM10) &&
+       config.port_type == DeviceConfig::PortType::BLE_SENSOR ||
+       config.port_type == DeviceConfig::PortType::BLE_HM10) &&
       !config.bluetooth_mac.empty())
     SetPort(df, config.port_type, config.bluetooth_mac);
 #endif
@@ -374,6 +376,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config) noexcept
     SetPort(df, config.port_type, config.path);
     return;
 
+  case DeviceConfig::PortType::BLE_SENSOR:
   case DeviceConfig::PortType::BLE_HM10:
   case DeviceConfig::PortType::RFCOMM:
     SetPort(df, config.port_type, config.bluetooth_mac);
@@ -420,6 +423,7 @@ EditPortCallback(const TCHAR *caption, DataField &_df,
     if (address.empty())
         return false;
 
+    // TODO PortType::BLE_SENSOR?
     SetPort(df, DeviceConfig::PortType::BLE_HM10, address.c_str());
     return true;
   }
@@ -771,6 +775,7 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df) noexcept
 
   case DeviceConfig::PortType::RFCOMM:
   case DeviceConfig::PortType::BLE_HM10:
+  case DeviceConfig::PortType::BLE_SENSOR:
     /* Bluetooth */
     if (new_type == config.port_type &&
         StringIsEqual(config.bluetooth_mac, df.GetAsString()))

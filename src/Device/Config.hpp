@@ -104,7 +104,14 @@ struct DeviceConfig {
     PTY,
 
     /**
-     * Bluetooth Low Energy HM10 protocol to a paired device.
+     * Bluetooth Low Energy sensor.
+     */
+    BLE_SENSOR,
+
+    /**
+     * Bluetooth Low Energy HM10 protocol to a paired device.  Unlike
+     * #BLE_SENSOR, this provides a bidirectional data stream and
+     * XCSoar accesses it through the #Port interface.
      */
     BLE_HM10,
 
@@ -292,6 +299,7 @@ struct DeviceConfig {
   static constexpr bool UsesDriver(PortType port_type) noexcept {
     switch (port_type) {
     case PortType::DISABLED:
+    case PortType::BLE_SENSOR:
     case PortType::GLIDER_LINK:
     case PortType::DROIDSOAR_V2:
     case PortType::NUNCHUCK:
