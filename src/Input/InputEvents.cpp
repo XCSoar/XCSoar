@@ -391,18 +391,17 @@ bool
 InputEvents::processGesture(const TCHAR *data) noexcept
 {
   // start with lua event if available!
-  bool result = Lua::FireGesture(data);
-  if (!result) {
-    // get current mode
-    unsigned event_id = gesture_to_event(data);
-    if (event_id)
-    {
-      InputEvents::processGo(event_id);
-      result = true;
-    }
+  if (Lua::FireGesture(data))
+    return true;
+
+  // get current mode
+  unsigned event_id = gesture_to_event(data);
+  if (event_id) {
+    InputEvents::processGo(event_id);
+    return true;
   }
 
-  return result;
+  return false;
 }
 
 /*
