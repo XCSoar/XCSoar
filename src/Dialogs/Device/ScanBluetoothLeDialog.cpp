@@ -143,6 +143,7 @@ private:
     }
 
     GetList().SetLength(items.size());
+    GetList().Invalidate();
 
     if (was_empty)
       /* the list has just become non-empty, so allow pressing the
