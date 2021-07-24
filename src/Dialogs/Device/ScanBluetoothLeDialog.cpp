@@ -52,6 +52,11 @@ class ScanBluetoothLeWidget final
     bool IsSame(const Item &other) const noexcept {
       return address == other.address;
     }
+
+    void Update(Item &&src) noexcept {
+      if (name.empty())
+        name = std::move(src.name);
+    }
   };
 
   WidgetDialog &dialog;
@@ -89,7 +94,7 @@ private:
   void UpdateItem(std::vector<Item> &v, Item &&new_item) noexcept {
     for (auto &i : v) {
       if (i.IsSame(new_item)) {
-        i = std::move(new_item);
+        i.Update(std::move(new_item));
         return;
       }
     }
