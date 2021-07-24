@@ -42,16 +42,13 @@ Java_org_xcsoar_NativeLeScanCallback_onLeScan(JNIEnv *env, jobject obj,
   if (ptr == 0)
     return;
 
-  const auto address_chars = Java::String::GetUTFChars(env, _address);
-  const auto name_chars = _name != nullptr
+  const auto address = Java::String::GetUTFChars(env, _address);
+  const auto name = _name != nullptr
     ? Java::String::GetUTFChars(env, _name)
     : Java::StringUTFChars{};
 
-  const char *address = address_chars.c_str();
-  const char *name = name_chars ? name_chars.c_str() : address;
-
   LeScanCallback &cb = *(LeScanCallback *)(void *)ptr;
-  cb.OnLeScan(address, name);
+  cb.OnLeScan(address.c_str(), name.c_str());
 }
 
 void

@@ -112,6 +112,9 @@ private:
       addresses.emplace(std::move(address2));
     }
 
+    if (name == nullptr)
+      name = address;
+
     {
       const std::lock_guard<Mutex> lock(mutex);
       new_items.emplace_front(address, name);
