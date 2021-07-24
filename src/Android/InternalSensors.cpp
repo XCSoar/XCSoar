@@ -25,13 +25,10 @@ Copyright_License {
 #include "NativeSensorListener.hpp"
 #include "Context.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "org_xcsoar_InternalGPS.h"
-#include "org_xcsoar_NonGPSSensors.h"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "system/Clock.hpp"
 #include "java/Env.hxx"
-#include "util/Compiler.h"
 
 Java::TrivialClass InternalSensors::gps_cls, InternalSensors::sensors_cls;
 jmethodID InternalSensors::gps_ctor_id, InternalSensors::close_method;
