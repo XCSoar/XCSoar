@@ -43,6 +43,7 @@ Copyright_License {
 
 #ifdef ANDROID
 #include "Android/SensorListener.hpp"
+#include "Math/SelfTimingKalmanFilter1d.hpp"
 #endif
 
 #include <chrono>
@@ -184,6 +185,22 @@ class DeviceDescriptor final
   NunchuckDevice *nunchuck;
   VoltageDevice *voltage;
   GliderLink *glider_link;
+
+  /* We use a Kalman filter to smooth Android device pressure sensor
+     noise.  The filter requires two parameters: the first is the
+     variance of the distribution of second derivatives of pressure
+     values that we expect to see in flight, and the second is the
+     maximum time between pressure sensor updates in seconds before
+     the filter gives up on smoothing and uses the raw value.
+     The pressure acceleration variance used here is actually wider
+     than the maximum likelihood variance observed in the data: it
+     turns out that the distribution is more heavy-tailed than a
+     normal distribution, probably because glider pilots usually
+     experience fairly constant pressure change most of the time. */
+  static constexpr double KF_VAR_ACCEL = 0.0075;
+  static constexpr double KF_MAX_DT = 60;
+
+  SelfTimingKalmanFilter1d kalman_filter{KF_MAX_DT, KF_VAR_ACCEL};
 #endif
 
   /**
