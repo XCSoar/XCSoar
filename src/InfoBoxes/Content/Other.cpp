@@ -34,6 +34,19 @@ Copyright_License {
 #include <tchar.h>
 
 void
+UpdateInfoBoxHeartRate(InfoBoxData &data)
+{
+  const auto &basic = CommonInterface::Basic();
+
+  if (!basic.heart_rate_available) {
+    data.SetInvalid();
+    return;
+  }
+
+  data.FormatValue(_T("%u"), basic.heart_rate);
+}
+
+void
 UpdateInfoBoxGLoad(InfoBoxData &data)
 {
   if (!CommonInterface::Basic().acceleration.available) {

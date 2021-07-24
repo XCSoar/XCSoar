@@ -171,6 +171,8 @@ namespace InfoBoxFactory
 
     e_Alternate_2_GR, /* Geometric gradient to the arrival height above the second alternate. This is not adjusted for total energy */
 
+    e_HeartRate,
+
     e_NUM_TYPES /* Last item */
   };
 

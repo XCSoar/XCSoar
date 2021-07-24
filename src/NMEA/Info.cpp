@@ -164,6 +164,8 @@ NMEAInfo::Reset()
   temperature_available = false;
   humidity_available = false;
 
+  heart_rate_available.Clear();
+
   engine_noise_level_available.Clear();
 
   voltage_available.Clear();
@@ -241,6 +243,7 @@ NMEAInfo::Expire()
   netto_vario_available.Expire(clock, std::chrono::seconds(5));
   settings.Expire(clock);
   external_wind_available.Expire(clock, std::chrono::minutes(10));
+  heart_rate_available.Expire(clock, std::chrono::seconds(10));
   engine_noise_level_available.Expire(clock, std::chrono::seconds(30));
   voltage_available.Expire(clock, std::chrono::minutes(5));
   battery_level_available.Expire(clock, std::chrono::minutes(5));
@@ -344,6 +347,9 @@ NMEAInfo::Complement(const NMEAInfo &add)
     humidity = add.humidity;
     humidity_available = add.humidity_available;
   }
+
+  if (heart_rate_available.Complement(add.heart_rate_available))
+    heart_rate = add.heart_rate;
 
   if (engine_noise_level_available.Complement(add.engine_noise_level_available))
     engine_noise_level = add.engine_noise_level;

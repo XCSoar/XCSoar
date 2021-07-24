@@ -1099,6 +1099,14 @@ static constexpr MetaData meta_data[] = {
     IBFHelperInt<InfoBoxContentAlternateGR, 1>::Create,
   },
 
+  // e_HeartRate
+  {
+    N_("Heart Rate"),
+    N_("Heart"),
+    N_("Heart rate in beats per minute."),
+    UpdateInfoBoxHeartRate,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

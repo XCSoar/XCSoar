@@ -324,6 +324,9 @@ struct NMEAInfo {
   //   Other
   //###########
 
+  Validity heart_rate_available;
+  unsigned heart_rate;
+
   Validity engine_noise_level_available;
   unsigned engine_noise_level;
 

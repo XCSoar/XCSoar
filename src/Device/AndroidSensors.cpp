@@ -188,5 +188,13 @@ DeviceDescriptor::OnBarometricPressureSensor(float pressure,
 void
 DeviceDescriptor::OnHeartRateSensor(unsigned bpm) noexcept
 {
-  // TODO
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+  basic.heart_rate = bpm;
+  basic.heart_rate_available.Update(basic.clock);
+
+  e.Commit();
 }
