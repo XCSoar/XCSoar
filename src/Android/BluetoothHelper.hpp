@@ -29,6 +29,7 @@ Copyright_License {
 #include <jni.h>
 
 class Context;
+class SensorListener;
 class DetectDeviceListener;
 class PortBridge;
 
@@ -79,6 +80,9 @@ public:
    * @param l the return value of AddDetectDeviceListener()
    */
   void RemoveDetectDeviceListener(JNIEnv *env, jobject l) noexcept;
+
+  Java::LocalObject connectSensor(JNIEnv *env, const char *address,
+                                  SensorListener &listener);
 
   PortBridge *connect(JNIEnv *env, const char *address);
 

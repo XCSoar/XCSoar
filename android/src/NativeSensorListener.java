@@ -53,4 +53,5 @@ public class NativeSensorListener implements SensorListener {
   public native void onMagneticFieldSensor(float h_x, float h_y, float h_z);
   public native void onBarometricPressureSensor(float pressure,
                                                 float sensor_noise_variance);
+  public native void onHeartRateSensor(int bpm);
 }

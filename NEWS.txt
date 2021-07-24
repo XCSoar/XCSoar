@@ -7,6 +7,7 @@ Version 7.11 - not yet released
   - prefer Lua gesture handlers
 * Android
   - show Bluetooth LE device features
+  - support Bluetooth LE heart rate sensors
   - fix reconnect to Bluetooth LE devices
   - fix distorted colors on some devices
 

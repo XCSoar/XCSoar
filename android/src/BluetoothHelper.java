@@ -158,6 +158,19 @@ final class BluetoothHelper implements BluetoothAdapter.LeScanCallback,
     identify.clear();
   }
 
+  public BluetoothSensor connectSensor(String address, SensorListener listener)
+    throws IOException
+  {
+    if (!hasLe)
+      throw new IOException("No Bluetooth LE support");
+
+    BluetoothDevice device = adapter.getRemoteDevice(address);
+    if (device == null)
+      throw new IOException("Bluetooth device not found");
+
+    return new BluetoothSensor(context, device, listener);
+  }
+
   public AndroidPort connectHM10(String address)
     throws IOException {
     if (!hasLe)

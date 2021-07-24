@@ -46,4 +46,5 @@ public:
   virtual void OnMagneticFieldSensor(float h_x, float h_y, float h_z) noexcept = 0;
   virtual void OnBarometricPressureSensor(float pressure,
                                           float sensor_noise_variance) noexcept = 0;
+  virtual void OnHeartRateSensor(unsigned bpm) noexcept = 0;
 };

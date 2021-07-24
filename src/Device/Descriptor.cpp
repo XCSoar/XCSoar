@@ -49,7 +49,9 @@ Copyright_License {
 
 #ifdef ANDROID
 #include "java/Object.hxx"
+#include "java/Closeable.hxx"
 #include "java/Global.hxx"
+#include "Android/BluetoothHelper.hpp"
 #include "Android/InternalSensors.hpp"
 #include "Android/GliderLink.hpp"
 #include "Android/Main.hpp"
@@ -173,6 +175,9 @@ DeviceDescriptor::GetState() const
     return PortState::READY;
 
   if (glider_link != nullptr)
+    return PortState::READY;
+
+  if (java_sensor != nullptr)
     return PortState::READY;
 #endif
 
@@ -422,6 +427,24 @@ DeviceDescriptor::OpenGliderLink()
 #endif
 }
 
+inline bool
+DeviceDescriptor::OpenBluetoothSensor()
+{
+#ifdef ANDROID
+  if (is_simulator())
+    return true;
+
+  if (config.bluetooth_mac.empty())
+    throw std::runtime_error("No Bluetooth MAC configured");
+
+  java_sensor = new Java::GlobalCloseable(bluetooth_helper->connectSensor(Java::GetEnv(),
+                                                                          config.bluetooth_mac,
+                                                                          *this));
+  return true;
+#else
+  return false;
+#endif
+}
 
 bool
 DeviceDescriptor::DoOpen(OperationEnvironment &env) noexcept
@@ -450,6 +473,9 @@ try {
 
   if (config.port_type == DeviceConfig::PortType::GLIDER_LINK)
     return OpenGliderLink();
+
+  if (config.port_type == DeviceConfig::PortType::BLE_SENSOR)
+    return OpenBluetoothSensor();
 
   reopen_clock.Update();
 
@@ -572,6 +598,9 @@ DeviceDescriptor::Close()
 
   delete glider_link;
   glider_link = nullptr;
+
+  delete java_sensor;
+  java_sensor = nullptr;
 #endif
 
   /* safely delete the Device object */

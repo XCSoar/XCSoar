@@ -24,6 +24,7 @@ Copyright_License {
 #include "BluetoothHelper.hpp"
 #include "Context.hpp"
 #include "NativeDetectDeviceListener.hpp"
+#include "NativeSensorListener.hpp"
 #include "PortBridge.hpp"
 #include "java/Env.hxx"
 #include "java/String.hxx"
@@ -40,6 +41,7 @@ static jmethodID isEnabled_method;
 static jmethodID getNameFromAddress_method;
 static jmethodID list_method, connect_method, createServer_method;
 static jmethodID hm10connect_method;
+static jmethodID connectSensor_method;
 static jmethodID addDetectDeviceListener_method;
 static jmethodID removeDetectDeviceListener_method;
 
@@ -62,6 +64,9 @@ BluetoothHelper::Initialise(JNIEnv *env) noexcept
   getNameFromAddress_method = env->GetMethodID(cls, "getNameFromAddress",
                                                "(Ljava/lang/String;)Ljava/lang/String;");
   list_method = env->GetMethodID(cls, "list", "()[Ljava/lang/String;");
+  connectSensor_method = env->GetMethodID(cls, "connectSensor",
+                                          "(Ljava/lang/String;Lorg/xcsoar/SensorListener;)"
+                                          "Lorg/xcsoar/BluetoothSensor;");
   connect_method = env->GetMethodID(cls, "connect",
                                     "(Ljava/lang/String;)"
                                     "Lorg/xcsoar/AndroidPort;");
@@ -152,6 +157,16 @@ void
 BluetoothHelper::RemoveDetectDeviceListener(JNIEnv *env, jobject l) noexcept
 {
   env->CallVoidMethod(Get(), removeDetectDeviceListener_method, l);
+}
+
+Java::LocalObject
+BluetoothHelper::connectSensor(JNIEnv *env, const char *_address,
+                               SensorListener &_listener)
+{
+  const Java::String address{env, _address};
+  auto listener = NativeSensorListener::Create(env, _listener);
+  return Java::CallObjectMethodRethrow(env, Get(), connectSensor_method,
+                                       address.Get(), listener.Get());
 }
 
 PortBridge *

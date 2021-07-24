@@ -184,3 +184,9 @@ DeviceDescriptor::OnBarometricPressureSensor(float pressure,
 
   e.Commit();
 }
+
+void
+DeviceDescriptor::OnHeartRateSensor(unsigned bpm) noexcept
+{
+  // TODO
+}

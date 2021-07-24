@@ -54,6 +54,7 @@ Copyright_License {
 #include <stdio.h>
 
 namespace Cares { class Channel; }
+namespace Java { class GlobalCloseable; }
 class EventLoop;
 struct NMEAInfo;
 struct MoreData;
@@ -184,6 +185,7 @@ class DeviceDescriptor final
   NunchuckDevice *nunchuck = nullptr;
   VoltageDevice *voltage = nullptr;
   GliderLink *glider_link = nullptr;
+  Java::GlobalCloseable *java_sensor = nullptr;
 
   /* We use a Kalman filter to smooth Android device pressure sensor
      noise.  The filter requires two parameters: the first is the
@@ -374,6 +376,9 @@ private:
   bool OpenVoltage();
 
   bool OpenGliderLink();
+
+  bool OpenBluetoothSensor();
+
 public:
   /**
    * To be used by OpenDeviceJob, don't call directly.
@@ -597,6 +602,7 @@ private:
   void OnMagneticFieldSensor(float h_x, float h_y, float h_z) noexcept override;
   void OnBarometricPressureSensor(float pressure,
                                   float sensor_noise_variance) noexcept override;
+  void OnHeartRateSensor(unsigned bpm) noexcept override;
 #endif // ANDROID
 };
 
