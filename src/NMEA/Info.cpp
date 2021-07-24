@@ -345,6 +345,9 @@ NMEAInfo::Complement(const NMEAInfo &add)
     humidity_available = add.humidity_available;
   }
 
+  if (engine_noise_level_available.Complement(add.engine_noise_level_available))
+    engine_noise_level = add.engine_noise_level;
+
   if (voltage_available.Complement(add.voltage_available))
     voltage = add.voltage;
 
