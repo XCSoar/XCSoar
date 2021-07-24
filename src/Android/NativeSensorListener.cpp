@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "NativeSensorListener.hpp"
 #include "SensorListener.hpp"
-#include "Main.hpp"
 #include "java/Class.hxx"
 #include "java/String.hxx"
 #include "org_xcsoar_NativeSensorListener.h"
