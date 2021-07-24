@@ -424,12 +424,16 @@ EditPortCallback(const TCHAR *caption, DataField &_df,
 
 #ifdef ANDROID
   if (item.int_value == SCAN_BLUETOOTH_LE) {
-    auto address = ScanBluetoothLeDialog(*bluetooth_helper);
+    auto [address, is_hm10] = ScanBluetoothLeDialog(*bluetooth_helper);
     if (address.empty())
         return false;
 
+    const auto type = is_hm10
+      ? DeviceConfig::PortType::BLE_HM10
+      : DeviceConfig::PortType::BLE_SENSOR;
+
     // TODO PortType::BLE_SENSOR?
-    SetPort(df, DeviceConfig::PortType::BLE_HM10, address.c_str());
+    SetPort(df, type, address.c_str());
     return true;
   }
 #endif

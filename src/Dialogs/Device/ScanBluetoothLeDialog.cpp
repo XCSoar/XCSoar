@@ -77,9 +77,11 @@ public:
   explicit ScanBluetoothLeWidget(WidgetDialog &_dialog)
     :dialog(_dialog) {}
 
-  gcc_pure
-  const auto &GetSelectedAddress() const {
-    return items[GetList().GetCursorIndex()].address;
+  [[gnu::pure]]
+  std::pair<std::string, bool> GetResult() && {
+    auto &i = items[GetList().GetCursorIndex()];
+    const bool is_hm10 = (i.features & DetectDeviceListener::FEATURE_HM10) != 0;
+    return {std::move(i.address), is_hm10};
   }
 
   void CreateButtons() {
@@ -189,7 +191,7 @@ ScanBluetoothLeWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     row_renderer.DrawRightColumn(canvas, rc, _("Unsupported"));
 }
 
-std::string
+std::pair<std::string, bool>
 ScanBluetoothLeDialog(BluetoothHelper &bluetooth_helper) noexcept
 {
   TWidgetDialog<ScanBluetoothLeWidget>
@@ -208,7 +210,7 @@ ScanBluetoothLeDialog(BluetoothHelper &bluetooth_helper) noexcept
   bluetooth_helper.RemoveDetectDeviceListener(env, listener);
 
   if (result != mrOK)
-    return {};
+    return {{}, false};
 
-  return dialog.GetWidget().GetSelectedAddress();
+  return std::move(dialog.GetWidget()).GetResult();
 }

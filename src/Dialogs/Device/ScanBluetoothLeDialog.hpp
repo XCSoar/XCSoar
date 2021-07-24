@@ -25,14 +25,16 @@
 #define XCSOAR_SCAN_BLUETOOTH_LE_DIALOG_HPP
 
 #include <string>
+#include <utility>
 
 class BluetoothHelper;
 
 /**
  * @return the selected address or an empty string if the user has
- * canceled the dialog
+ * canceled the dialog; the second value is true when the device
+ * supports the HM10 protocol (i.e. a #Port with a driver can be used)
  */
-std::string
+std::pair<std::string, bool>
 ScanBluetoothLeDialog(BluetoothHelper &bluetooth_helper) noexcept;
 
 #endif
