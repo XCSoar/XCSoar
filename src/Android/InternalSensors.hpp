@@ -32,6 +32,7 @@ Copyright_License {
 #include <vector>
 
 class Context;
+class SensorListener;
 
 /**
  * Consolidated class for handling Java objects that work with Android GPS
@@ -89,7 +90,7 @@ public:
 
   gcc_malloc
   static InternalSensors *create(JNIEnv* env, Context* native_view,
-                                 unsigned int index);
+                                 SensorListener &listener);
 };
 
 #endif

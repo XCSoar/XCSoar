@@ -717,6 +717,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/java/Path.cxx \
 	$(SRC)/java/InputStream.cxx \
 	$(SRC)/java/URL.cxx \
+	$(SRC)/Device/AndroidSensors.cpp \
 	$(SRC)/Device/Port/AndroidPort.cpp \
 	$(SRC)/Device/Port/AndroidBluetoothPort.cpp \
 	$(SRC)/Device/Port/AndroidIOIOUartPort.cpp \
@@ -735,6 +736,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/PortBridge.cpp \
 	$(SRC)/Android/BluetoothHelper.cpp \
 	$(SRC)/Android/NativeDetectDeviceListener.cpp \
+	$(SRC)/Android/NativeSensorListener.cpp \
 	$(SRC)/Android/Battery.cpp \
 	$(SRC)/Android/GliderLink.cpp \
 	$(SRC)/Android/DownloadManager.cpp \

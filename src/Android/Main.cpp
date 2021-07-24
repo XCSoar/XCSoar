@@ -36,6 +36,7 @@ Copyright_License {
 #include "NativeDetectDeviceListener.hpp"
 #include "NativePortListener.hpp"
 #include "NativeInputListener.hpp"
+#include "NativeSensorListener.hpp"
 #include "TextUtil.hpp"
 #include "Product.hpp"
 #include "Nook.hpp"
@@ -125,6 +126,7 @@ try {
   NativeView::Initialise(env);
   Environment::Initialise(env);
   AndroidBitmap::Initialise(env);
+  NativeSensorListener::Initialise(env);
   InternalSensors::Initialise(env);
   GliderLink::Initialise(env);
   NativePortListener::Initialise(env);
@@ -273,6 +275,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   NativeInputListener::Deinitialise(env);
   NativePortListener::Deinitialise(env);
   InternalSensors::Deinitialise(env);
+  NativeSensorListener::Deinitialise(env);
   GliderLink::Deinitialise(env);
   AndroidBitmap::Deinitialise(env);
   Environment::Deinitialise(env);

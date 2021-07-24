@@ -51,6 +51,8 @@ public class InternalGPS
 
   private static Handler handler;
 
+  private final SensorListener listener;
+
   /**
    * Global initialization of the class.  Must be called from the main
    * event thread, because the Handler object must be bound to that
@@ -59,9 +61,6 @@ public class InternalGPS
   public static void Initialize() {
     handler = new Handler();
   }
-
-  /** the index of this device in the global list */
-  private final int index;
 
   /** the name of the currently selected location provider */
   String locationProvider = LocationManager.GPS_PROVIDER;
@@ -76,8 +75,8 @@ public class InternalGPS
 
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
-  InternalGPS(Context context, int _index) {
-    index = _index;
+  InternalGPS(Context context, SensorListener listener) {
+    this.listener = listener;
 
     locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
     if (locationManager == null ||
@@ -157,26 +156,17 @@ public class InternalGPS
     safeDestruct.finishShutdown();
   }
 
-  private native void setConnected(int connected);
-  private native void setLocation(long time, int n_satellites,
-                                  double longitude, double latitude,
-                                  boolean hasAltitude, double altitude,
-                                  boolean hasBearing, double bearing,
-                                  boolean hasSpeed, double speed,
-                                  boolean hasAccuracy, double accuracy,
-                                  boolean hasAcceleration, double acceleration);
-
   private void sendLocation(Location location) {
     Bundle extras = location.getExtras();
 
-    setLocation(location.getTime(),
-                extras != null ? extras.getInt("satellites", -1) : -1,
-                location.getLongitude(), location.getLatitude(),
-                location.hasAltitude(), location.getAltitude(),
-                location.hasBearing(), location.getBearing(),
-                location.hasSpeed(), location.getSpeed(),
-                location.hasAccuracy(), location.getAccuracy(),
-                true, acceleration);
+    listener.onLocationSensor(location.getTime(),
+                              extras != null ? extras.getInt("satellites", -1) : -1,
+                              location.getLongitude(), location.getLatitude(),
+                              location.hasAltitude(), location.getAltitude(),
+                              location.hasBearing(), location.getBearing(),
+                              location.hasSpeed(), location.getSpeed(),
+                              location.hasAccuracy(), location.getAccuracy(),
+                              true, acceleration);
   }
 
   private void setConnectedSafe(int connected) {
@@ -184,7 +174,7 @@ public class InternalGPS
       return;
 
     try {
-      setConnected(connected);
+      listener.onConnected(connected);
     } finally {
       safeDestruct.Decrement();
     }
@@ -196,7 +186,7 @@ public class InternalGPS
       return;
 
     try {
-      setConnected(2); // fix found
+      listener.onConnected(2); // fix found
       sendLocation(newLocation);
     } finally {
       safeDestruct.Decrement();

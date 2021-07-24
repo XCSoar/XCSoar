@@ -41,6 +41,10 @@ Copyright_License {
 #include "util/StaticFifoBuffer.hxx"
 #include "Android/GliderLink.hpp"
 
+#ifdef ANDROID
+#include "Android/SensorListener.hpp"
+#endif
+
 #include <chrono>
 #include <memory>
 
@@ -72,7 +76,12 @@ class OperationEnvironment;
 class OpenDeviceJob;
 class DeviceDataEditor;
 
-class DeviceDescriptor final : PortListener, PortLineSplitter {
+class DeviceDescriptor final
+  : PortListener,
+#ifdef ANDROID
+    SensorListener,
+#endif
+    PortLineSplitter {
   /**
    * The #EventLoop instance used by #Port instances.
    */
@@ -550,6 +559,26 @@ private:
 
   /* virtual methods from PortLineHandler */
   bool LineReceived(const char *line) noexcept override;
+
+#ifdef ANDROID
+  /* methods from SensorListener */
+  void OnConnected(int connected) noexcept override;
+  void OnLocationSensor(long time, int n_satellites,
+                        double longitude, double latitude,
+                        bool hasAltitude, double altitude,
+                        bool hasBearing, double bearing,
+                        bool hasSpeed, double speed,
+                        bool hasAccuracy, double accuracy,
+                        bool hasAcceleration,
+                        double acceleration) noexcept override;
+  void OnAccelerationSensor(float ddx, float ddy,
+                            float ddz) noexcept override;
+  void OnRotationSensor(float dtheta_x, float dtheta_y,
+                        float dtheta_z) noexcept override;
+  void OnMagneticFieldSensor(float h_x, float h_y, float h_z) noexcept override;
+  void OnBarometricPressureSensor(float pressure,
+                                  float sensor_noise_variance) noexcept override;
+#endif // ANDROID
 };
 
 #endif

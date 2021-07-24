@@ -104,16 +104,12 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
   // Handler for non-GPS sensor reading.
   private static Handler handler_;
 
+  private final SensorListener listener;
+
   // Noise variance we'll use for the pressure sensor in this device.
   private float kf_sensor_noise_variance_;
 
   private final SafeDestruct safeDestruct = new SafeDestruct();
-
-  /**
-   * Index of this device in the global list. This value is extracted directly
-   * from this object by the C++ wrapper code.
-   */
-  private final int index;
 
   /**
    * Global initialization of the class.  Must be called from the main
@@ -124,8 +120,8 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
     handler_ = new Handler();
   }
 
-  NonGPSSensors(Context context, int _index) {
-    index = _index;
+  NonGPSSensors(Context context, SensorListener listener) {
+    this.listener = listener;
     default_sensors_ = new Sensor[SENSOR_TYPE_ID_UPPER_BOUND];
     enabled_sensors_ = new boolean[SENSOR_TYPE_ID_UPPER_BOUND];
 
@@ -264,26 +260,24 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
     try {
       switch (event.sensor.getType()) {
       case Sensor.TYPE_ACCELEROMETER:
-        setAcceleration(event.values[0], event.values[1], event.values[2]);
+        listener.onAccelerationSensor(event.values[0], event.values[1],
+                                      event.values[2]);
         break;
       case Sensor.TYPE_GYROSCOPE:
-        setRotation(event.values[0], event.values[1], event.values[2]);
+        listener.onRotationSensor(event.values[0], event.values[1],
+                                  event.values[2]);
         break;
       case Sensor.TYPE_MAGNETIC_FIELD:
-        setMagneticField(event.values[0], event.values[1], event.values[2]);
+        listener.onMagneticFieldSensor(event.values[0], event.values[1],
+                                       event.values[2]);
         break;
       case Sensor.TYPE_PRESSURE:
-        setBarometricPressure(event.values[0], kf_sensor_noise_variance_);
+        listener.onBarometricPressureSensor(event.values[0],
+                                            kf_sensor_noise_variance_);
         break;
       }
     } finally {
       safeDestruct.Decrement();
     }
   }
-
-  // Native methods for reporting sensor values to XCSoar's native C++ code.
-  private native void setAcceleration(float ddx, float ddy, float ddz);
-  private native void setRotation(float dtheta_x, float dtheta_y, float dtheta_z);
-  private native void setMagneticField(float h_x, float h_y, float h_z);
-  private native void setBarometricPressure(float pressure, float sensor_noise_variance);
 }
