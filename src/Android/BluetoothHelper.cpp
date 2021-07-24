@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "BluetoothHelper.hpp"
 #include "Context.hpp"
-#include "Main.hpp"
 #include "NativeDetectDeviceListener.hpp"
 #include "PortBridge.hpp"
 #include "java/Env.hxx"
@@ -64,15 +63,13 @@ BluetoothHelper::Initialise(JNIEnv *env) noexcept
                                                "(Ljava/lang/String;)Ljava/lang/String;");
   list_method = env->GetMethodID(cls, "list", "()[Ljava/lang/String;");
   connect_method = env->GetMethodID(cls, "connect",
-                                    "(Landroid/content/Context;"
-                                    "Ljava/lang/String;)"
+                                    "(Ljava/lang/String;)"
                                     "Lorg/xcsoar/AndroidPort;");
   createServer_method = env->GetMethodID(cls, "createServer",
                                          "()Lorg/xcsoar/AndroidPort;");
 
   hm10connect_method = env->GetMethodID(cls, "connectHM10",
-                                        "(Landroid/content/Context;"
-                                        "Ljava/lang/String;)"
+                                        "(Ljava/lang/String;)"
                                         "Lorg/xcsoar/AndroidPort;");
   addDetectDeviceListener_method =
     env->GetMethodID(cls, "addDetectDeviceListener",
@@ -164,7 +161,7 @@ BluetoothHelper::connect(JNIEnv *env, const char *address)
 
   const Java::String address2(env, address);
   auto obj = Java::CallObjectMethodRethrow(env, Get(), connect_method,
-                                           context->Get(), address2.Get());
+                                           address2.Get());
   assert(obj);
 
   return new PortBridge(env, obj);
@@ -186,7 +183,7 @@ BluetoothHelper::connectHM10(JNIEnv *env, const char *address)
 
   const Java::String address2(env, address);
   auto obj = Java::CallObjectMethodRethrow(env, Get(), hm10connect_method,
-                                           context->Get(), address2.Get());
+                                           address2.Get());
   assert(obj);
 
   return new PortBridge(env, obj);

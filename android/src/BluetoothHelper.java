@@ -48,6 +48,8 @@ final class BluetoothHelper implements BluetoothAdapter.LeScanCallback {
   private static final UUID THE_UUID =
         UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
+  private final Context context;
+
   private final BluetoothAdapter adapter;
 
   /**
@@ -59,6 +61,8 @@ final class BluetoothHelper implements BluetoothAdapter.LeScanCallback {
     new LinkedList<DetectDeviceListener>();
 
   BluetoothHelper(Context context) throws Exception {
+    this.context = context;
+
     BluetoothManager manager = (BluetoothManager)
       context.getSystemService(Context.BLUETOOTH_SERVICE);
     if (manager == null)
@@ -141,7 +145,7 @@ final class BluetoothHelper implements BluetoothAdapter.LeScanCallback {
       adapter.stopLeScan(this);
   }
 
-  public AndroidPort connectHM10(Context context, String address)
+  public AndroidPort connectHM10(String address)
     throws IOException {
     if (!hasLe)
       throw new IOException("No Bluetooth adapter found");
@@ -155,7 +159,7 @@ final class BluetoothHelper implements BluetoothAdapter.LeScanCallback {
     return new HM10Port(context, device);
   }
 
-  public AndroidPort connect(Context context, String address)
+  public AndroidPort connect(String address)
     throws IOException {
     BluetoothDevice device = adapter.getRemoteDevice(address);
     if (device == null)
