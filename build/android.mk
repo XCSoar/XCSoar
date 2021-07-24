@@ -48,7 +48,7 @@ NATIVE_CLASSES := \
 	BatteryReceiver \
 	GliderLinkReceiver \
 	NativePortListener \
-	NativeLeScanCallback \
+	NativeDetectDeviceListener \
 	NativeBMP085Listener \
 	NativeI2CbaroListener \
 	NativeNunchuckListener \

@@ -29,7 +29,7 @@ Copyright_License {
 #include <jni.h>
 
 class Context;
-class LeScanCallback;
+class DetectDeviceListener;
 class PortBridge;
 
 class BluetoothHelper final : protected Java::GlobalObject {
@@ -66,18 +66,19 @@ public:
   bool HasLe(JNIEnv *env) const noexcept;
 
   /**
-   * Start scanning for Bluetooth LE devices.  Call StopLeScan() with
-   * the returned value when you're done.  Returns nullptr on error.
+   * Start scanning for Bluetooth devices.  Call
+   * RemoveDetectDeviceListener() with the returned value when you're
+   * done.
    */
-  Java::LocalObject StartLeScan(JNIEnv *env, LeScanCallback &cb) noexcept;
+  Java::LocalObject AddDetectDeviceListener(JNIEnv *env,
+                                            DetectDeviceListener &l) noexcept;
 
   /**
-   * Stop scanning for Bluetooth LE devices.
+   * Stop scanning for Bluetooth devices.
    *
-   * @param cb the return value of StartLeScan(); the local reference
-   * will be deleted by this function
+   * @param l the return value of AddDetectDeviceListener()
    */
-  void StopLeScan(JNIEnv *env, jobject cb)noexcept;
+  void RemoveDetectDeviceListener(JNIEnv *env, jobject l) noexcept;
 
   PortBridge *connect(JNIEnv *env, const char *address);
 

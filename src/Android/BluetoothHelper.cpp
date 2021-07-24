@@ -24,7 +24,7 @@ Copyright_License {
 #include "BluetoothHelper.hpp"
 #include "Context.hpp"
 #include "Main.hpp"
-#include "NativeLeScanCallback.hpp"
+#include "NativeDetectDeviceListener.hpp"
 #include "PortBridge.hpp"
 #include "java/Env.hxx"
 #include "java/String.hxx"
@@ -40,7 +40,9 @@ static jfieldID hasLe_field;
 static jmethodID isEnabled_method;
 static jmethodID getNameFromAddress_method;
 static jmethodID list_method, connect_method, createServer_method;
-static jmethodID hm10connect_method, startLeScan_method, stopLeScan_method;
+static jmethodID hm10connect_method;
+static jmethodID addDetectDeviceListener_method;
+static jmethodID removeDetectDeviceListener_method;
 
 static std::map<std::string, std::string> address_to_name;
 
@@ -72,10 +74,12 @@ BluetoothHelper::Initialise(JNIEnv *env) noexcept
                                         "(Landroid/content/Context;"
                                         "Ljava/lang/String;)"
                                         "Lorg/xcsoar/AndroidPort;");
-  startLeScan_method = env->GetMethodID(cls, "startLeScan",
-                                        "(Landroid/bluetooth/BluetoothAdapter$LeScanCallback;)Z");
-  stopLeScan_method = env->GetMethodID(cls, "stopLeScan",
-                                       "(Landroid/bluetooth/BluetoothAdapter$LeScanCallback;)V");
+  addDetectDeviceListener_method =
+    env->GetMethodID(cls, "addDetectDeviceListener",
+                     "(Lorg/xcsoar/DetectDeviceListener;)V");
+  removeDetectDeviceListener_method =
+    env->GetMethodID(cls, "removeDetectDeviceListener",
+                     "(Lorg/xcsoar/DetectDeviceListener;)V");
 
   return true;
 }
@@ -139,30 +143,18 @@ BluetoothHelper::HasLe(JNIEnv *env) const noexcept
 }
 
 Java::LocalObject
-BluetoothHelper::StartLeScan(JNIEnv *env, LeScanCallback &_cb) noexcept
+BluetoothHelper::AddDetectDeviceListener(JNIEnv *env,
+                                         DetectDeviceListener &_l) noexcept
 {
-  assert(HasLe(env));
-
-  auto cb = NativeLeScanCallback::Create(env, _cb);
-  if (!cb) {
-    env->ExceptionClear();
-    return nullptr;
-  }
-
-  if (!env->CallBooleanMethod(Get(), startLeScan_method, cb.Get())) {
-    env->ExceptionClear();
-    return nullptr;
-  }
-
-  return cb;
+  auto l = NativeDetectDeviceListener::Create(env, _l);
+  env->CallVoidMethod(Get(), addDetectDeviceListener_method, l.Get());
+  return l;
 }
 
 void
-BluetoothHelper::StopLeScan(JNIEnv *env, jobject cb) noexcept
+BluetoothHelper::RemoveDetectDeviceListener(JNIEnv *env, jobject l) noexcept
 {
-  assert(HasLe(env));
-
-  env->CallVoidMethod(Get(), stopLeScan_method, cb);
+  env->CallVoidMethod(Get(), removeDetectDeviceListener_method, l);
 }
 
 PortBridge *

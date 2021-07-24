@@ -21,24 +21,27 @@ Copyright_License {
 }
 */
 
-#include "NativeLeScanCallback.hpp"
-#include "LeScanCallback.hpp"
+#include "NativeDetectDeviceListener.hpp"
+#include "DetectDeviceListener.hpp"
 #include "Main.hpp"
 #include "java/Class.hxx"
 #include "java/String.hxx"
-#include "org_xcsoar_NativeLeScanCallback.h"
+#include "org_xcsoar_NativeDetectDeviceListener.h"
 
-namespace NativeLeScanCallback {
+namespace NativeDetectDeviceListener {
 static Java::TrivialClass cls;
 static jmethodID ctor;
 static jfieldID ptr_field;
-} // namespace NativeLeScanCallback
+} // namespace NativeDetectDeviceListener
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeLeScanCallback_onLeScan(JNIEnv *env, jobject obj,
-                                              jstring _address, jstring _name)
+Java_org_xcsoar_NativeDetectDeviceListener_onDeviceDetected(JNIEnv *env, jobject obj,
+                                                            jint type,
+                                                            jstring _address,
+                                                            jstring _name,
+                                                            jlong features)
 {
-  jlong ptr = env->GetLongField(obj, NativeLeScanCallback::ptr_field);
+  jlong ptr = env->GetLongField(obj, NativeDetectDeviceListener::ptr_field);
   if (ptr == 0)
     return;
 
@@ -47,33 +50,29 @@ Java_org_xcsoar_NativeLeScanCallback_onLeScan(JNIEnv *env, jobject obj,
     ? Java::String::GetUTFChars(env, _name)
     : Java::StringUTFChars{};
 
-  LeScanCallback &cb = *(LeScanCallback *)(void *)ptr;
-  cb.OnLeScan(address.c_str(), name.c_str());
+  DetectDeviceListener &cb = *(DetectDeviceListener *)(void *)ptr;
+  cb.OnDeviceDetected(DetectDeviceListener::Type{type},
+                      address.c_str(), name.c_str(),
+                      features);
 }
 
 void
-NativeLeScanCallback::Initialise(JNIEnv *env)
+NativeDetectDeviceListener::Initialise(JNIEnv *env) noexcept
 {
-  if (!cls.FindOptional(env, "org/xcsoar/NativeLeScanCallback"))
-    /* Bluetooth LE not supported on this Android version */
-    return;
-
+  cls.Find(env, "org/xcsoar/NativeDetectDeviceListener");
   ctor = env->GetMethodID(cls, "<init>", "(J)V");
   ptr_field = env->GetFieldID(cls, "ptr", "J");
 }
 
 void
-NativeLeScanCallback::Deinitialise(JNIEnv *env)
+NativeDetectDeviceListener::Deinitialise(JNIEnv *env) noexcept
 {
   cls.ClearOptional(env);
 }
 
 Java::LocalObject
-NativeLeScanCallback::Create(JNIEnv *env, LeScanCallback &cb) noexcept
+NativeDetectDeviceListener::Create(JNIEnv *env,
+                                   DetectDeviceListener &cb) noexcept
 {
-  if (!cls.IsDefined())
-    /* Bluetooth LE not supported on this Android version */
-    return {};
-
   return {env, env->NewObject(cls, ctor, (jlong)&cb)};
 }

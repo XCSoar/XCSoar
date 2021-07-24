@@ -33,7 +33,7 @@ Copyright_License {
 #include "PortBridge.hpp"
 #include "BluetoothHelper.hpp"
 #include "UsbSerialHelper.hpp"
-#include "NativeLeScanCallback.hpp"
+#include "NativeDetectDeviceListener.hpp"
 #include "NativePortListener.hpp"
 #include "NativeInputListener.hpp"
 #include "TextUtil.hpp"
@@ -132,7 +132,7 @@ try {
   PortBridge::Initialise(env);
   const bool have_bluetooth = BluetoothHelper::Initialise(env);
   UsbSerialHelper::Initialise(env);
-  NativeLeScanCallback::Initialise(env);
+  NativeDetectDeviceListener::Initialise(env);
   const bool have_ioio = IOIOHelper::Initialise(env);
   NativeBMP085Listener::Initialise(env);
   BMP085Device::Initialise(env);
@@ -267,7 +267,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   VoltageDevice::Deinitialise(env);
   NativeVoltageListener::Deinitialise(env);
   IOIOHelper::Deinitialise(env);
-  NativeLeScanCallback::Deinitialise(env);
+  NativeDetectDeviceListener::Deinitialise(env);
   UsbSerialHelper::Deinitialise(env);
   BluetoothHelper::Deinitialise(env);
   NativeInputListener::Deinitialise(env);

@@ -21,24 +21,24 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_NATIVE_LE_SCAN_CALLBACK_HPP
-#define XCSOAR_ANDROID_NATIVE_LE_SCAN_CALLBACK_HPP
+#pragma once
 
 #include "java/Object.hxx"
 
-class LeScanCallback;
+class DetectDeviceListener;
 
 /**
- * Glue code to use the Java class NativeLeScanCallback from C++.
+ * Glue code to use the Java class NativeDetectDeviceListener from C++.
  */
-namespace NativeLeScanCallback {
+namespace NativeDetectDeviceListener {
 
-void Initialise(JNIEnv *env);
-void Deinitialise(JNIEnv *env);
+void
+Initialise(JNIEnv *env) noexcept;
+
+void
+Deinitialise(JNIEnv *env) noexcept;
 
 Java::LocalObject
-Create(JNIEnv *env, LeScanCallback &cb) noexcept;
+Create(JNIEnv *env, DetectDeviceListener &cb) noexcept;
 
-} // namespace NativeLeScanCallback
-
-#endif
+} // namespace NativeDetectDeviceListener

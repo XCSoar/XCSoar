@@ -30,7 +30,7 @@
 #include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
 #include "java/Global.hxx"
-#include "Android/LeScanCallback.hpp"
+#include "Android/DetectDeviceListener.hpp"
 #include "Android/BluetoothHelper.hpp"
 #include "Language/Language.hpp"
 #include "thread/Mutex.hxx"
@@ -42,7 +42,7 @@
 #include <set>
 
 class ScanBluetoothLeWidget final
-  : public ListWidget, public LeScanCallback {
+  : public ListWidget, public DetectDeviceListener {
 
   struct Item {
     std::string address;
@@ -101,8 +101,10 @@ private:
     dialog.SetModalResult(mrOK);
   }
 
-  /* virtual methods from class LeScanCallback */
-  void OnLeScan(const char *address, const char *name) override {
+  /* virtual methods from class DetectDeviceListener */
+  void OnDeviceDetected(Type type, const char *address,
+                        const char *name,
+                        uint64_t features) noexcept override {
     {
       std::string address2(address);
       if (addresses.find(address2) != addresses.end())
@@ -179,19 +181,14 @@ ScanBluetoothLeDialog(BluetoothHelper &bluetooth_helper) noexcept
   dialog.SetWidget(dialog);
 
   const auto env = Java::GetEnv();
-  const auto callback = bluetooth_helper.StartLeScan(env, dialog.GetWidget());
-  if (!callback) {
-    const TCHAR *message =
-      _("Bluetooth LE is not available on this device.");
-    ShowMessageBox(message, _("Bluetooth LE"), MB_OK);
-    return {};
-  }
+  const auto listener =
+    bluetooth_helper.AddDetectDeviceListener(env, dialog.GetWidget());
 
   dialog.GetWidget().CreateButtons();
   dialog.AddButton(_("Cancel"), mrCancel);
 
   int result = dialog.ShowModal();
-  bluetooth_helper.StopLeScan(env, callback);
+  bluetooth_helper.RemoveDetectDeviceListener(env, listener);
 
   if (result != mrOK)
     return {};

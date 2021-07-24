@@ -25,6 +25,8 @@ package org.xcsoar;
 
 import java.util.UUID;
 import java.util.Set;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.io.IOException;
 
 import android.util.Log;
@@ -41,7 +43,7 @@ import android.content.pm.PackageManager;
  * A library that constructs Bluetooth ports.  It is called by C++
  * code.
  */
-final class BluetoothHelper {
+final class BluetoothHelper implements BluetoothAdapter.LeScanCallback {
   private static final String TAG = "XCSoar";
   private static final UUID THE_UUID =
         UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -52,6 +54,9 @@ final class BluetoothHelper {
    * Does this device support Bluetooth Low Energy?
    */
   private final boolean hasLe;
+
+  private final Collection<DetectDeviceListener> detectListeners =
+    new LinkedList<DetectDeviceListener>();
 
   BluetoothHelper(Context context) throws Exception {
     BluetoothManager manager = (BluetoothManager)
@@ -112,13 +117,28 @@ final class BluetoothHelper {
     return addresses;
   }
 
-  public boolean startLeScan(BluetoothAdapter.LeScanCallback cb) {
-    return hasLe && adapter.startLeScan(cb);
+  public synchronized void addDetectDeviceListener(DetectDeviceListener l) {
+    boolean wasEmpty = detectListeners.isEmpty();
+    detectListeners.add(l);
+
+    /* TODO: remove list() and enable this code:
+    Set<BluetoothDevice> devices = adapter.getBondedDevices();
+    if (devices != null)
+      for (BluetoothDevice device : devices)
+        l.onDeviceDetected(DetectDeviceListener.TYPE_BLUETOOTH_CLASSIC,
+                           device.getAddress(), device.getName(),
+                           0);
+    */
+
+    if (wasEmpty && hasLe)
+      adapter.startLeScan(this);
   }
 
-  public void stopLeScan(BluetoothAdapter.LeScanCallback cb) {
-    if (hasLe)
-      adapter.stopLeScan(cb);
+  public synchronized void removeDetectDeviceListener(DetectDeviceListener l) {
+    detectListeners.remove(l);
+
+    if (detectListeners.isEmpty() && hasLe)
+      adapter.stopLeScan(this);
   }
 
   public AndroidPort connectHM10(Context context, String address)
@@ -148,5 +168,14 @@ final class BluetoothHelper {
 
   public AndroidPort createServer() throws IOException {
     return new BluetoothServerPort(adapter, THE_UUID);
+  }
+
+  @Override
+  public synchronized void onLeScan(BluetoothDevice device, int rssi,
+                                    byte[] scanRecord) {
+    for (DetectDeviceListener l : detectListeners)
+      l.onDeviceDetected(DetectDeviceListener.TYPE_BLUETOOTH_LE,
+                         device.getAddress(), device.getName(),
+                         0);
   }
 }

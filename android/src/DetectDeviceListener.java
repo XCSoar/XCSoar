@@ -21,15 +21,28 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_LE_SCAN_CALLBACK_HPP
-#define XCSOAR_ANDROID_LE_SCAN_CALLBACK_HPP
+package org.xcsoar;
 
 /**
- * C++ wrapper for the Java class BluetoothAdapter.LeScanCallback.
+ * Continuously receives callbacks about detected or updated devices.
  */
-class LeScanCallback {
-public:
-  virtual void OnLeScan(const char *address, const char *name) = 0;
-};
+interface DetectDeviceListener {
+  /* keep this in sync with src/Android/DetectDeviceListener.hpp */
+  static final int TYPE_IOIO = 1;
+  static final int TYPE_BLUETOOTH_CLASSIC = 2;
+  static final int TYPE_BLUETOOTH_LE = 3;
 
-#endif
+  /**
+   * A new device was detected or new information about a device
+   * became available.
+   *
+   * @param type the type of device
+   * @param address a type-specific address, probably not
+   * human-readable (e.g. Bluetooth MAC)
+   * @param name a human-readable name; may be null if this is not
+   * (yet) known
+   * @param features a (type-specific) bit mask of detected features
+   */
+  void onDeviceDetected(int type, String address,
+                        String name, long features);
+}
