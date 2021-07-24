@@ -717,6 +717,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/java/Path.cxx \
 	$(SRC)/java/InputStream.cxx \
 	$(SRC)/java/URL.cxx \
+	$(SRC)/java/Closeable.cxx \
 	$(SRC)/Device/AndroidSensors.cpp \
 	$(SRC)/Device/Port/AndroidPort.cpp \
 	$(SRC)/Device/Port/AndroidBluetoothPort.cpp \

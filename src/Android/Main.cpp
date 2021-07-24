@@ -60,6 +60,7 @@ Copyright_License {
 #include "java/File.hxx"
 #include "java/InputStream.hxx"
 #include "java/URL.hxx"
+#include "java/Closeable.hxx"
 #include "util/Compiler.h"
 #include "org_xcsoar_NativeView.h"
 #include "io/async/GlobalAsioThread.hpp"
@@ -120,6 +121,7 @@ try {
   Java::Object::Initialise(env);
   Java::File::Initialise(env);
   Java::InputStream::Initialise(env);
+  Java::InitialiseCloseable(env);
   Java::URL::Initialise(env);
   Java::URLConnection::Initialise(env);
 
