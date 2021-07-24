@@ -124,7 +124,7 @@ class DeviceDescriptor final
    * The #Job that currently opens the device.  nullptr if the device is
    * not currently being opened.
    */
-  OpenDeviceJob *open_job;
+  OpenDeviceJob *open_job = nullptr;
 
   /**
    * The #Port used by this device.  This is not applicable to some
@@ -136,18 +136,18 @@ class DeviceDescriptor final
    * A handler that will receive all data, to display it on the
    * screen.  Can be set with SetMonitor().
    */
-  DataHandler  *monitor;
+  DataHandler *monitor = nullptr;
 
   /**
    * A handler that will receive all NMEA lines, to dispatch it to
    * other devices.
    */
-  PortLineHandler *dispatcher;
+  PortLineHandler *dispatcher = nullptr;
 
   /**
    * The device driver used to handle data to/from the device.
    */
-  const DeviceRegister *driver;
+  const DeviceRegister *driver = nullptr;
 
   /**
    * An instance of the driver.
@@ -158,33 +158,32 @@ class DeviceDescriptor final
    * device was borrowed with the method Borrow().  The latter,
    * however, is only possible from the main thread.
    */
-  Device *device;
+  Device *device = nullptr;
 
   /**
    * The second device driver for a passed through device.
    */
-  const DeviceRegister *second_driver;
+  const DeviceRegister *second_driver = nullptr;
 
   /**
    * An instance of the passed through driver, if available.
    */
-  Device *second_device;
-
+  Device *second_device = nullptr;
 
 #ifdef HAVE_INTERNAL_GPS
   /**
    * A pointer to the Java object managing all Android sensors (GPS,
    * baro sensor and others).
    */
-  InternalSensors *internal_sensors;
+  InternalSensors *internal_sensors = nullptr;
 #endif
 
 #ifdef ANDROID
-  BMP085Device *droidsoar_v2;
-  I2CbaroDevice *i2cbaro[3]; // static, pitot, tek; in any order
-  NunchuckDevice *nunchuck;
-  VoltageDevice *voltage;
-  GliderLink *glider_link;
+  BMP085Device *droidsoar_v2 = nullptr;
+  I2CbaroDevice *i2cbaro[3]{nullptr, nullptr, nullptr}; // static, pitot, tek; in any order
+  NunchuckDevice *nunchuck = nullptr;
+  VoltageDevice *voltage = nullptr;
+  GliderLink *glider_link = nullptr;
 
   /* We use a Kalman filter to smooth Android device pressure sensor
      noise.  The filter requires two parameters: the first is the
@@ -245,7 +244,7 @@ class DeviceDescriptor final
    *
    * @param see ResetFailureCounter()
    */
-  unsigned n_failures;
+  unsigned n_failures = 0;
 
   /**
    * Internal flag for OnSysTicker() for detecting link timeout.
@@ -256,7 +255,7 @@ class DeviceDescriptor final
    * Internal flag for OnSysTicker() for calling Device::OnSysTicker()
    * only every other time.
    */
-  bool ticker;
+  bool ticker = false;
 
   /**
    * True when somebody has "borrowed" the device.  Link timeouts are
@@ -266,7 +265,7 @@ class DeviceDescriptor final
    *
    * @see CanBorrow(), Borrow()
    */
-  bool borrowed;
+  bool borrowed = false;
 
 public:
   DeviceDescriptor(EventLoop &_event_loop, Cares::Channel &_cares,

@@ -108,28 +108,9 @@ DeviceDescriptor::DeviceDescriptor(EventLoop &_event_loop,
                                    unsigned _index,
                                    PortListener *_port_listener)
   :event_loop(_event_loop), cares(_cares), index(_index),
-   port_listener(_port_listener),
-   open_job(nullptr),
-   port(nullptr), monitor(nullptr), dispatcher(nullptr),
-   driver(nullptr), device(nullptr), second_device(nullptr),
-#ifdef HAVE_INTERNAL_GPS
-   internal_sensors(nullptr),
-#endif
-#ifdef ANDROID
-   droidsoar_v2(nullptr),
-   nunchuck(nullptr),
-   voltage(nullptr),
-   glider_link(nullptr),
-#endif
-   n_failures(0u),
-   ticker(false), borrowed(false)
+   port_listener(_port_listener)
 {
   config.Clear();
-
-#ifdef ANDROID
-  for (unsigned i=0; i<sizeof i2cbaro/sizeof i2cbaro[0]; i++)
-    i2cbaro[i] = nullptr;
-#endif
 }
 
 DeviceDescriptor::~DeviceDescriptor() noexcept
