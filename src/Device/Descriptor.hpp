@@ -495,6 +495,9 @@ public:
   gcc_pure
   bool IsAlive() const;
 
+  [[gnu::pure]]
+  double GetClock() const noexcept;
+
   DeviceDataEditor BeginEdit() noexcept;
 
 private:

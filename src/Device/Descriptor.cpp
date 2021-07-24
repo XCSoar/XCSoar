@@ -756,6 +756,14 @@ DeviceDescriptor::IsAlive() const
   return device_blackboard->RealState(index).alive;
 }
 
+double
+DeviceDescriptor::GetClock() const noexcept
+{
+  const std::lock_guard<Mutex> lock(device_blackboard->mutex);
+  const NMEAInfo &basic = device_blackboard->RealState(index);
+  return basic.clock;
+}
+
 DeviceDataEditor
 DeviceDescriptor::BeginEdit() noexcept
 {
@@ -855,10 +863,8 @@ DeviceDescriptor::PutMacCready(double value, OperationEnvironment &env)
   if (!device->PutMacCready(value, env))
     return false;
 
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
-  NMEAInfo &basic = device_blackboard->SetRealState(index);
   settings_sent.mac_cready = value;
-  settings_sent.mac_cready_available.Update(basic.clock);
+  settings_sent.mac_cready_available.Update(GetClock());
 
   return true;
 }
@@ -880,10 +886,8 @@ DeviceDescriptor::PutBugs(double value, OperationEnvironment &env)
   if (!device->PutBugs(value, env))
     return false;
 
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
-  NMEAInfo &basic = device_blackboard->SetRealState(index);
   settings_sent.bugs = value;
-  settings_sent.bugs_available.Update(basic.clock);
+  settings_sent.bugs_available.Update(GetClock());
 
   return true;
 }
@@ -907,12 +911,11 @@ DeviceDescriptor::PutBallast(double fraction, double overload,
   if (!device->PutBallast(fraction, overload, env))
     return false;
 
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
-  NMEAInfo &basic = device_blackboard->SetRealState(index);
+  const auto clock = GetClock();
   settings_sent.ballast_fraction = fraction;
-  settings_sent.ballast_fraction_available.Update(basic.clock);
+  settings_sent.ballast_fraction_available.Update(clock);
   settings_sent.ballast_overload = overload;
-  settings_sent.ballast_overload_available.Update(basic.clock);
+  settings_sent.ballast_overload_available.Update(clock);
 
   return true;
 }
@@ -1003,10 +1006,8 @@ DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
   if (!device->PutQNH(value, env))
     return false;
 
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
-  NMEAInfo &basic = device_blackboard->SetRealState(index);
   settings_sent.qnh = value;
-  settings_sent.qnh_available.Update(basic.clock);
+  settings_sent.qnh_available.Update(GetClock());
 
   return true;
 }
