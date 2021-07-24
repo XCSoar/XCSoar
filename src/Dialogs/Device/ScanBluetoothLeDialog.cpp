@@ -38,8 +38,6 @@
 #include "util/StringCompare.hxx"
 
 #include <vector>
-#include <forward_list>
-#include <set>
 
 class ScanBluetoothLeWidget final
   : public ListWidget, public DetectDeviceListener {
@@ -50,6 +48,10 @@ class ScanBluetoothLeWidget final
 
     Item(const char *_address, const char *_name)
       :address(_address), name(_name) {}
+
+    bool IsSame(const Item &other) const noexcept {
+      return address == other.address;
+    }
   };
 
   WidgetDialog &dialog;
@@ -61,8 +63,7 @@ class ScanBluetoothLeWidget final
   TextRowRenderer row_renderer;
 
   Mutex mutex;
-  std::set<std::string> addresses;
-  std::forward_list<Item> new_items;
+  std::vector<Item> new_items;
 
   Button *select_button;
 
@@ -85,6 +86,17 @@ public:
   }
 
 private:
+  void UpdateItem(std::vector<Item> &v, Item &&new_item) noexcept {
+    for (auto &i : v) {
+      if (i.IsSame(new_item)) {
+        i = std::move(new_item);
+        return;
+      }
+    }
+
+    v.emplace_back(std::move(new_item));
+  }
+
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
@@ -105,21 +117,11 @@ private:
   void OnDeviceDetected(Type type, const char *address,
                         const char *name,
                         uint64_t features) noexcept override {
-    {
-      std::string address2(address);
-      if (addresses.find(address2) != addresses.end())
-        /* already in the list */
-        return;
-
-      addresses.emplace(std::move(address2));
-    }
-
-    if (name == nullptr)
-      name = address;
+    Item item{address, name};
 
     {
       const std::lock_guard<Mutex> lock(mutex);
-      new_items.emplace_front(address, name);
+      UpdateItem(new_items, std::move(item));
     }
 
     le_scan_notify.SendNotification();
@@ -134,10 +136,10 @@ private:
       if (new_items.empty())
         return;
 
-      do {
-        items.emplace_back(std::move(new_items.front()));
-        new_items.pop_front();
-      } while (!new_items.empty());
+      for (auto &i : new_items)
+        UpdateItem(items, std::move(i));
+
+      new_items.clear();
     }
 
     GetList().SetLength(items.size());
