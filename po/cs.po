@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-10 09:50+0200\n"
-"PO-Revision-Date: 2021-07-20 10:35+0000\n"
+"PO-Revision-Date: 2021-07-25 06:33+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -2184,7 +2184,7 @@ msgstr "Altn 1"
 #: src/InfoBoxes/Content/Factory.cpp:685
 #, no-c-format
 msgid "Displays name and bearing to the best alternate landing location."
-msgstr "Zobrazí název a kurz nejvhodnějšího náhradního místa přistání."
+msgstr "Zobrazí název a kurz k nejvhodnějšímu záložnímu místu přistání."
 
 #: src/InfoBoxes/Content/Factory.cpp:691
 #, no-c-format
@@ -2199,12 +2199,12 @@ msgstr "Altn 2"
 #: src/InfoBoxes/Content/Factory.cpp:693
 #, no-c-format
 msgid "Displays name and bearing to the second alternate landing location."
-msgstr "Zobrazí název a kurz k druhému náhradnímu místu přistání."
+msgstr "Zobrazí název a kurz k druhému záložnímu místu přistání."
 
 #: src/InfoBoxes/Content/Factory.cpp:699
 #, no-c-format
 msgid "Alternate 1 GR"
-msgstr "Alternativa 1 klouzavý poměr"
+msgstr "Alternativa 1 - klouzavý poměr"
 
 #: src/InfoBoxes/Content/Factory.cpp:700
 #, no-c-format
@@ -2217,7 +2217,7 @@ msgid ""
 "Geometric gradient to the arrival height above the best alternate. This is "
 "not adjusted for total energy."
 msgstr ""
-"Geometrický gradient do výšky příletu k nejvhodnějšímu náhradnímu místu "
+"Geometrický gradient do výšky příletu k nejvhodnějšímu záložnímu místu "
 "přistání. Není kompenzováno na celkovou energii TE."
 
 #: src/InfoBoxes/Content/Factory.cpp:707
@@ -2786,7 +2786,7 @@ msgstr "Ukazuje zbývající čas do otevření nebo uzavření pásky."
 #: src/InfoBoxes/Content/Factory.cpp:959
 #, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr "Odp. otevř./uzavření pásky při dosažení"
+msgstr "Odpočet ot./uzavření pásky při dosažení"
 
 #: src/InfoBoxes/Content/Factory.cpp:960
 #, no-c-format
@@ -3083,7 +3083,7 @@ msgstr "Čas strávený v současném stoupavém proudu."
 #: src/InfoBoxes/Content/Factory.cpp:1096
 #, no-c-format
 msgid "Alternate 2 GR"
-msgstr "Alternativa 2 KP"
+msgstr "Alternativa 2 - klouzavý poměr"
 
 #: src/InfoBoxes/Content/Factory.cpp:1097
 #, no-c-format
@@ -3096,7 +3096,7 @@ msgid ""
 "Geometric gradient to the arrival height above the second alternate. This is "
 "not adjusted for total energy."
 msgstr ""
-"Geometrický gradient do výšky příletu k druhému nejvhodnějšímu náhradnímu "
+"Geometrický gradient do výšky příletu k druhému nejvhodnějšímu záložnímu "
 "místu přistání. Není kompenzováno na celkovou energii TE."
 
 #: src/InfoBoxes/Content/Alternate.cpp:49
@@ -9195,11 +9195,11 @@ msgstr "Smaž"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:137
 msgid "(Add Alternate Start)"
-msgstr "(Přidá alternativní start)"
+msgstr "(Přidej alternativní start)"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:200
 msgid "Alternate Start Points"
-msgstr "Alternativní místa startu"
+msgstr "Alternativní startovní body"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:230
 #: src/Dialogs/Task/TaskPointDialog.cpp:272
@@ -9217,7 +9217,7 @@ msgstr "Boduj opuštění sektoru"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:357
 msgid "Edit Alternates"
-msgstr "Upravit alternativy"
+msgstr "Uprav alternativy"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:378
 #: src/Dialogs/Task/TaskPointDialog.cpp:449
