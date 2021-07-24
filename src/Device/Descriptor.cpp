@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Descriptor.hpp"
+#include "DataEditor.hpp"
 #include "Driver.hpp"
 #include "Parser.hpp"
 #include "Util/NMEAWriter.hpp"
@@ -258,9 +259,9 @@ DeviceDescriptor::OpenOnPort(std::unique_ptr<DumpPort> &&_port, OperationEnviron
   reopen_clock.Update();
 
   {
-    const std::lock_guard<Mutex> lock(device_blackboard->mutex);
-    device_blackboard->SetRealState(index).Reset();
-    device_blackboard->ScheduleMerge();
+    const auto e = BeginEdit();
+    e->Reset();
+    e.Commit();
   }
 
   settings_sent.Clear();
@@ -613,9 +614,9 @@ DeviceDescriptor::Close()
   ticker = false;
 
   {
-    const std::lock_guard<Mutex> lock(device_blackboard->mutex);
-    device_blackboard->SetRealState(index).Reset();
-    device_blackboard->ScheduleMerge();
+    const auto e = BeginEdit();
+    e->Reset();
+    e.Commit();
   }
 
   settings_sent.Clear();
@@ -753,6 +754,12 @@ DeviceDescriptor::IsAlive() const
 {
   std::lock_guard<Mutex> lock(device_blackboard->mutex);
   return device_blackboard->RealState(index).alive;
+}
+
+DeviceDataEditor
+DeviceDescriptor::BeginEdit() noexcept
+{
+  return {*device_blackboard, index};
 }
 
 bool
@@ -1183,15 +1190,6 @@ DeviceDescriptor::OnCalculatedUpdate(const MoreData &basic,
     device->OnCalculatedUpdate(basic, calculated);
 }
 
-bool
-DeviceDescriptor::ParseLine(const char *line)
-{
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
-  NMEAInfo &basic = device_blackboard->SetRealState(index);
-  basic.UpdateClock();
-  return ParseNMEA(line, basic);
-}
-
 void
 DeviceDescriptor::OnJobFinished() noexcept
 {
@@ -1278,8 +1276,10 @@ DeviceDescriptor::LineReceived(const char *line) noexcept
   if (dispatcher != nullptr)
     dispatcher->LineReceived(line);
 
-  if (ParseLine(line))
-    device_blackboard->ScheduleMerge();
+  const auto e = BeginEdit();
+  e->UpdateClock();
+  ParseNMEA(line, *e);
+  e.Commit();
 
   return true;
 }

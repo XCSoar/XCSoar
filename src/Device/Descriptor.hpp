@@ -70,6 +70,7 @@ class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
 class OpenDeviceJob;
+class DeviceDataEditor;
 
 class DeviceDescriptor final : PortListener, PortLineSplitter {
   /**
@@ -468,6 +469,8 @@ public:
   gcc_pure
   bool IsAlive() const;
 
+  DeviceDataEditor BeginEdit() noexcept;
+
 private:
   bool ParseNMEA(const char *line, struct NMEAInfo &info);
 
@@ -536,8 +539,6 @@ public:
                           const DerivedInfo &calculated);
 
 private:
-  bool ParseLine(const char *line);
-
   void OnJobFinished() noexcept;
 
   /* virtual methods from class PortListener */
