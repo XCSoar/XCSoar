@@ -6,6 +6,7 @@ on:
       - 'doc/**'
       - 'ide/**'
       - '.github/workflows/build-container.yml'
+      - '.github/workflows/build-android.yml'
     branches:
       - master
   pull_request:
@@ -13,6 +14,7 @@ on:
       - 'doc/**'
       - 'ide/**'
       - '.github/workflows/build-container.yml'
+      - '.github/workflows/build-android.yml'
     branches:
       - master
 env:
@@ -62,9 +64,9 @@ jobs:
         with:
           image: ghcr.io/${{ steps.repository.outputs.lowercase }}/xcsoar-build:latest
           options: -v ${{ github.workspace }}:/opt/xcsoar -v /home/runner/work/XCSoar/XCSoar/.ccache:/root/.ccache
-        run: |
-           cd /opt/xcsoar
-           xcsoar-compile ${{ env.TARGET }} V=2 check
+          run: |
+            cd /opt/xcsoar
+            xcsoar-compile ${{ env.TARGET }} V=2 check
       - name: upload artifact
         uses: actions/upload-artifact@v2
         with:
