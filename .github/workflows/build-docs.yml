@@ -1,5 +1,6 @@
+---
 on:
-  workflow_dispatch:  
+  workflow_dispatch:
   push:
     paths:
       - 'doc/**'
@@ -12,23 +13,35 @@ on:
       - '.github/workflows/build-docs.yml'
     branches:
       - master
+env:
+  TARGET: manual
+  TARGET_FINAL: XCSoar-docs
+  TARGET_EXT: pdf
 jobs:
   xcsoar-compile:
     runs-on: ubuntu-latest
     steps:
-     - id: checkout 
+     - id: checkout
        uses: actions/checkout@v2
        with:
-         submodules: True
+         submodules: false
      - id: repository
        uses: ASzc/change-string-case-action@v1
        with:
          string: ${{ github.repository }}
+     - name: find githash
+       run: |
+         echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
      - name: XCSoar generate Docs
        uses: addnab/docker-run-action@v3
        with:
          image: ghcr.io/${{ steps.repository.outputs.lowercase }}/xcsoar-build:latest
-         options: -v ${{ github.workspace }}:/opt/xcsoar 
-         run: | 
+         options: -v ${{ github.workspace }}:/opt/xcsoar
+         run: |
            cd /opt/xcsoar
-           make manual V=2 
+           make manual V=2
+     - name: upload artifact
+       uses: actions/upload-artifact@v2
+       with:
+         name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}
+         path: output/${{ env.TARGET }}/*.${{ env.TARGET_EXT }}
