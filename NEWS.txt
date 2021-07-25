@@ -8,6 +8,7 @@ Version 7.11 - not yet released
 * Android
   - show Bluetooth LE device features
   - support Bluetooth LE heart rate sensors
+  - support the Flytec Sensbox
   - fix reconnect to Bluetooth LE devices
   - fix distorted colors on some devices
 

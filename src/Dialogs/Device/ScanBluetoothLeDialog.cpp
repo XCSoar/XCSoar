@@ -187,6 +187,8 @@ ScanBluetoothLeWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     row_renderer.DrawRightColumn(canvas, rc, _T("HM10"));
   else if (item.features & DetectDeviceListener::FEATURE_HEART_RATE)
     row_renderer.DrawRightColumn(canvas, rc, _T("HR"));
+  else if (item.features & DetectDeviceListener::FEATURE_FLYTEC_SENSBOX)
+    row_renderer.DrawRightColumn(canvas, rc, _T("Sensbox"));
   else
     row_renderer.DrawRightColumn(canvas, rc, _("Unsupported"));
 }

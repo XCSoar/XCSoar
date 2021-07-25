@@ -125,6 +125,11 @@ public class BluetoothIdentify extends BluetoothGattCallback {
         service.getCharacteristic(BluetoothUuids.HEART_RATE_MEASUREMENT_CHARACTERISTIC) != null)
       features |= DetectDeviceListener.FEATURE_HEART_RATE;
 
+    service = gatt.getService(BluetoothUuids.FLYTEC_SENSBOX_SERVICE);
+    if (service != null &&
+        service.getCharacteristic(BluetoothUuids.FLYTEC_SENSBOX_NAVIGATION_SENSOR_CHARACTERISTIC) != null)
+      features |= DetectDeviceListener.FEATURE_FLYTEC_SENSBOX;
+
     submitSuccess(features);
   }
 }

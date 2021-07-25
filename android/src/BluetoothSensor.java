@@ -106,6 +106,25 @@ public final class BluetoothSensor
           readHeartRateMeasurement(c);
         }
       }
+
+      if (BluetoothUuids.FLYTEC_SENSBOX_SERVICE.equals(c.getService().getUuid())) {
+        if (BluetoothUuids.FLYTEC_SENSBOX_NAVIGATION_SENSOR_CHARACTERISTIC.equals(c.getUuid())) {
+          listener.onLocationSensor(c.getIntValue(c.FORMAT_UINT32, 0),
+                                    -1,
+                                    c.getIntValue(c.FORMAT_SINT32, 8) / 10000000.,
+                                    c.getIntValue(c.FORMAT_SINT32, 4) / 10000000.,
+                                    false, 0,
+                                    false, 0,
+                                    false, 0,
+                                    false, 0,
+                                    false, 0);
+
+          listener.onPressureAltitudeSensor(c.getIntValue(c.FORMAT_SINT16, 12));
+          listener.onVarioSensor(c.getIntValue(c.FORMAT_SINT16, 16) / 10.f);
+
+          //c.getIntValue(c.FORMAT_SINT16, 14), // ??
+        }
+      }
     } catch (NullPointerException e) {
       /* probably caused by a malformed value - ignore */
     }
@@ -137,6 +156,19 @@ public final class BluetoothSensor
     if (service != null) {
       BluetoothGattCharacteristic c =
         service.getCharacteristic(BluetoothUuids.HEART_RATE_MEASUREMENT_CHARACTERISTIC);
+      if (c != null)
+        enableNotification(c);
+    }
+
+    /* enable notifications for Flytec Sensbox */
+    service = gatt.getService(BluetoothUuids.FLYTEC_SENSBOX_SERVICE);
+    if (service != null) {
+      BluetoothGattCharacteristic c =
+        service.getCharacteristic(BluetoothUuids.FLYTEC_SENSBOX_NAVIGATION_SENSOR_CHARACTERISTIC);
+      if (c != null)
+        enableNotification(c);
+
+      c = service.getCharacteristic(BluetoothUuids.FLYTEC_SENSBOX_MOVEMENT_SENSOR_CHARACTERISTIC);
       if (c != null)
         enableNotification(c);
     }
