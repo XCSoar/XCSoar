@@ -300,6 +300,11 @@ static constexpr PolarStore::Item internal_polars[] =
 
   // Idaflieg measurement, 28.08.2015 at Aalen Elchingen
   { _T("D-43 18m"), 668, 0, 100, -0.62, 130, -0.863, 170, -1.672, 15.93, 250, 99 },
+  
+  // from factory polar.
+  // flight manual http://www.issoire-aviation.fr/doc_avia_gen/MdV_WA26P_R2.pdf
+  // Contest handicap reference: http://docplayer.fr/79733029-Handicaps-planeurs-ffvv.html
+  { _T("WA 26 P Squale"),  330, 0, 80, -0.61, 152, -2, 174, -3.0, 12.6, 225, 86 },
 };
 
 const PolarStore::Item &
