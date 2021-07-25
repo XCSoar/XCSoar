@@ -98,7 +98,7 @@ AddPort(DataFieldEnum &df, DeviceConfig::PortType type,
         const TCHAR *text, const TCHAR *display_string=NULL,
         const TCHAR *help=NULL) noexcept
 {
-  /* the uppper 16 bit is the port type, and the lower 16 bit is a
+  /* the upper 16 bit is the port type, and the lower 16 bit is a
      serial number to make the enum id unique */
 
   unsigned id = ((unsigned)type << 16) + df.Count();
