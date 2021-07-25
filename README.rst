@@ -1,5 +1,8 @@
 XCSoar
 ======
+[![.github/workflows/build-android.yml](https://github.com/XCSoar/XCSoar/actions/workflows/build-android.yml/badge.svg)](https://github.com/XCSoar/XCSoar/actions/workflows/build-android.yml)
+[![.github/workflows/build-unix.yml](https://github.com/XCSoar/XCSoar/actions/workflows/build-unix.yml/badge.svg)](https://github.com/XCSoar/XCSoar/actions/workflows/build-unix.yml)
+[![.github/workflows/build-docs.yml](https://github.com/XCSoar/XCSoar/actions/workflows/build-docs.yml/badge.svg)](https://github.com/XCSoar/XCSoar/actions/workflows/build-docs.yml)
 
 XCSoar is a tactical glide computer for Android, Linux, Mac OS X,
 and Windows.
