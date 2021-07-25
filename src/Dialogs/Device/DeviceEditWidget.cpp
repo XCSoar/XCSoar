@@ -190,7 +190,7 @@ FillAndroidBluetoothPorts(DataFieldEnum &df,
                           const DeviceConfig &config) noexcept
 {
 #ifdef ANDROID
-  if (bluetooth_helper != nullptr)
+  if (bluetooth_helper == nullptr)
     return;
 
   JNIEnv *env = Java::GetEnv();
