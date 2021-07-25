@@ -150,6 +150,34 @@ Java_org_xcsoar_NativeSensorListener_onBarometricPressureSensor(JNIEnv *env,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeSensorListener_onPressureAltitudeSensor(JNIEnv *env,
+                                                                jobject obj,
+                                                                jfloat altitude)
+{
+  jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
+  if (ptr == 0)
+    return;
+
+  auto &listener = *(SensorListener *)ptr;
+  listener.OnPressureAltitudeSensor(altitude);
+}
+
+gcc_visibility_default
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeSensorListener_onVarioSensor(JNIEnv *env,
+                                                   jobject obj,
+                                                   jfloat vario)
+{
+  jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
+  if (ptr == 0)
+    return;
+
+  auto &listener = *(SensorListener *)ptr;
+  listener.OnVarioSensor(vario);
+}
+
+gcc_visibility_default
+JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeSensorListener_onHeartRateSensor(JNIEnv *env,
                                                        jobject obj,
                                                        jint bpm)

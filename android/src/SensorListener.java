@@ -40,5 +40,7 @@ public interface SensorListener {
   void onRotationSensor(float dtheta_x, float dtheta_y, float dtheta_z);
   void onMagneticFieldSensor(float h_x, float h_y, float h_z);
   void onBarometricPressureSensor(float pressure, float sensor_noise_variance);
+  void onPressureAltitudeSensor(float altitude);
+  void onVarioSensor(float vario);
   void onHeartRateSensor(int bpm);
 }

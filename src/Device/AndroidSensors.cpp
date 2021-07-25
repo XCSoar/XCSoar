@@ -186,6 +186,32 @@ DeviceDescriptor::OnBarometricPressureSensor(float pressure,
 }
 
 void
+DeviceDescriptor::OnPressureAltitudeSensor(float altitude) noexcept
+{
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+  basic.ProvidePressureAltitude(altitude);
+
+  e.Commit();
+}
+
+void
+DeviceDescriptor::OnVarioSensor(float vario) noexcept
+{
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+  basic.ProvideNoncompVario(vario);
+
+  e.Commit();
+}
+
+void
 DeviceDescriptor::OnHeartRateSensor(unsigned bpm) noexcept
 {
   const auto e = BeginEdit();

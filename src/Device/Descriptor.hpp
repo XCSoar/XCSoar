@@ -602,6 +602,8 @@ private:
   void OnMagneticFieldSensor(float h_x, float h_y, float h_z) noexcept override;
   void OnBarometricPressureSensor(float pressure,
                                   float sensor_noise_variance) noexcept override;
+  void OnPressureAltitudeSensor(float altitude) noexcept override;
+  void OnVarioSensor(float vario) noexcept override;
   void OnHeartRateSensor(unsigned bpm) noexcept override;
 #endif // ANDROID
 };
