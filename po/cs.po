@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-10 09:50+0200\n"
-"PO-Revision-Date: 2021-07-25 09:04+0000\n"
+"PO-Revision-Date: 2021-07-26 16:34+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -1004,7 +1004,7 @@ msgstr "Stoupání, posledních 30 s"
 #: src/InfoBoxes/Content/Factory.cpp:154
 #, no-c-format
 msgid "TC 30s"
-msgstr "ST 30s"
+msgstr "STS 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:155
 #, no-c-format
@@ -1025,7 +1025,7 @@ msgstr "Následující kurz"
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:83
 #, no-c-format
 msgid "Bearing"
-msgstr "Kurz"
+msgstr "Kurz OB"
 
 #: src/InfoBoxes/Content/Factory.cpp:163
 #, no-c-format
@@ -1109,7 +1109,7 @@ msgstr "Průměrné st. v minulém st. proudu"
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
 msgid "TL Avg"
-msgstr "STP prům"
+msgstr "STM prům"
 
 #: src/InfoBoxes/Content/Factory.cpp:196
 #, no-c-format
@@ -1117,38 +1117,37 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
-"Celkový zisk/ztráta výšky v posledním stoupavém proudu, dělená časem "
-"kroužení."
+"Celkový zisk/ztráta výšky v minulém stoupavém proudu, dělená časem kroužení."
 
 #: src/InfoBoxes/Content/Factory.cpp:202
 #, no-c-format
 msgid "Last thermal gain"
-msgstr "Zisk výšky v posledním st. proudu"
+msgstr "Zisk výšky v minulém st. proudu"
 
 #: src/InfoBoxes/Content/Factory.cpp:203
 #, no-c-format
 msgid "TL Gain"
-msgstr "STP zisk"
+msgstr "STM zisk"
 
 #: src/InfoBoxes/Content/Factory.cpp:204
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
-msgstr "Celkový zisk/ztráta výšky v posledním stoupavém proudu."
+msgstr "Celkový zisk/ztráta výšky v minulém stoupavém proudu."
 
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
 msgid "Last thermal duration"
-msgstr "Doba trvání posledního st. proudu"
+msgstr "Doba trvání minulého st. proudu"
 
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
 msgid "TL duration"
-msgstr "STP čas"
+msgstr "STM čas"
 
 #: src/InfoBoxes/Content/Factory.cpp:212
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr "Doba strávená kroužením v posledním stoupavém proudu."
+msgstr "Doba strávená kroužením v minulém stoupavém proudu."
 
 #: src/InfoBoxes/Content/Factory.cpp:218
 #, no-c-format
@@ -1167,8 +1166,8 @@ msgid ""
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
-"Aktuální nastavení MacCready a režim (MANUÁL/AUTO). Pokud je InfoBox "
-"aktivní, klávesy nahoru /dolů mění nastavení (Pouze doteková obrazovka/PC)."
+"Aktuální nastavení MacCready a režim (MAN/AUTO). Pokud je InfoBox aktivní, "
+"klávesy nahoru /dolů mění nastavení (Pouze doteková obrazovka/PC)."
 
 #: src/InfoBoxes/Content/Factory.cpp:226
 #, no-c-format
@@ -1197,7 +1196,7 @@ msgstr "Rozdílová výška nad dalším bodem"
 #: src/InfoBoxes/Content/Factory.cpp:236
 #, no-c-format
 msgid "WP AltD"
-msgstr "OB r výšek"
+msgstr "OB AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:237
 #, no-c-format
@@ -1216,7 +1215,7 @@ msgstr "Příští OB - požadovaná výška"
 #: src/InfoBoxes/Content/Factory.cpp:245
 #, no-c-format
 msgid "WP AltR"
-msgstr "OB p výška"
+msgstr "OB AltR"
 
 #: src/InfoBoxes/Content/Factory.cpp:246
 #, no-c-format
@@ -1257,7 +1256,7 @@ msgstr "Rozdíl výšek pro cíl"
 #: src/InfoBoxes/Content/Factory.cpp:262
 #, no-c-format
 msgid "Fin AltD"
-msgstr "Cíl r výšek"
+msgstr "Cíl AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:263
 #, no-c-format
@@ -1270,12 +1269,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:269
 #, no-c-format
 msgid "Final altitude required"
-msgstr "Výška požadovaná do cíle"
+msgstr "Výška potřebná pro dosažení cíle"
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
 msgid "Fin AltR"
-msgstr "Cíl p výška"
+msgstr "Cíl AltR"
 
 #: src/InfoBoxes/Content/Factory.cpp:271
 #, no-c-format
@@ -1336,7 +1335,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:309
 #, no-c-format
 msgid "Thermal average"
-msgstr "Průměrné stoupání"
+msgstr "Současné průměrné stoupání"
 
 #: src/InfoBoxes/Content/Factory.cpp:310
 #, no-c-format
@@ -1370,7 +1369,7 @@ msgstr "Výška získaná/ztracená v současném stoupavém proudu."
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:59
 #, no-c-format
 msgid "Track"
-msgstr "Kurz"
+msgstr "Trasa"
 
 #: src/InfoBoxes/Content/Factory.cpp:327
 #, no-c-format
@@ -1656,7 +1655,7 @@ msgstr "Místní čas"
 #: src/InfoBoxes/Content/Factory.cpp:458
 #, no-c-format
 msgid "Time loc"
-msgstr "Čas lok"
+msgstr "Čas místní"
 
 #: src/InfoBoxes/Content/Factory.cpp:459
 #, no-c-format
@@ -1676,7 +1675,7 @@ msgstr "Čas GPS vyjádřený v UTC."
 #: src/InfoBoxes/Content/Factory.cpp:473
 #, no-c-format
 msgid "Task time to go"
-msgstr "Doba do cíle úlohy"
+msgstr "Doba letu do cíle úlohy"
 
 #: src/InfoBoxes/Content/Factory.cpp:474
 #, no-c-format
@@ -1807,7 +1806,7 @@ msgstr "Rozdíl kurzů"
 #: src/InfoBoxes/Content/Factory.cpp:524
 #, no-c-format
 msgid "Brng D"
-msgstr "Kurz r"
+msgstr "ΔKurzů"
 
 #: src/InfoBoxes/Content/Factory.cpp:525
 #, no-c-format
@@ -1821,7 +1820,7 @@ msgid ""
 "good is pointing directly at the next waypoint. This bearing takes into "
 "account the curvature of the Earth."
 msgstr ""
-"Rozdíl mezi aktuálním kurem a kurzem k dalšímu otočnému bodu (v úloze AAT k "
+"Rozdíl mezi aktuálním kurzem a kurzem k dalšímu otočnému bodu (v úloze AAT k "
 "cílovému bodu uvnitř AAT oblasti). Při větru se vlivem snosu tento kurz liší "
 "od skutečného směru pohybu kluzáku. Šipky ukazují směr, kterým je potřeba "
 "kurz upravit tak, aby se shodoval s kurzem k dalšímu otočnému bodu. Výpočet "
@@ -1835,7 +1834,7 @@ msgstr "Venkovní teplota vzduchu"
 #: src/InfoBoxes/Content/Factory.cpp:532
 #, no-c-format
 msgid "OAT"
-msgstr "Tepl. OAT"
+msgstr "Tepl OAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:533
 #, no-c-format
@@ -1970,7 +1969,7 @@ msgstr "Týmový kód"
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:224
 #, no-c-format
 msgid "Team Code"
-msgstr "Týmový kód"
+msgstr "Tým kód"
 
 #: src/InfoBoxes/Content/Factory.cpp:589
 #, no-c-format
@@ -1989,7 +1988,7 @@ msgstr "Kurz k týmu"
 #: src/InfoBoxes/Content/Factory.cpp:596
 #, no-c-format
 msgid "Team Brng"
-msgstr "Tým kurz"
+msgstr "Kurz tým"
 
 #: src/InfoBoxes/Content/Factory.cpp:597
 #, no-c-format
@@ -2004,7 +2003,7 @@ msgstr "Rozdíl kurzů týmu"
 #: src/InfoBoxes/Content/Factory.cpp:604
 #, no-c-format
 msgid "Team BrngD"
-msgstr "Tým r kurzů"
+msgstr "Tým Δkurz"
 
 #: src/InfoBoxes/Content/Factory.cpp:605
 #, no-c-format
@@ -2070,7 +2069,7 @@ msgstr "Rychlost úlohy dosažená"
 #: src/InfoBoxes/Content/Factory.cpp:636
 #, no-c-format
 msgid "V Task Ach"
-msgstr "V úlohy dos"
+msgstr "V úl dos"
 
 #: src/InfoBoxes/Content/Factory.cpp:637
 #, no-c-format
@@ -2089,7 +2088,7 @@ msgstr "AAT rozdíl časů"
 #: src/InfoBoxes/Content/Factory.cpp:644
 #, no-c-format
 msgid "AAT dT"
-msgstr "AAT r časů"
+msgstr "AAT Δčas"
 
 #: src/InfoBoxes/Content/Factory.cpp:645
 #, no-c-format
@@ -2230,7 +2229,7 @@ msgstr "Výška nad bodem vzletu"
 #: src/InfoBoxes/Content/Factory.cpp:708
 #, no-c-format
 msgid "H T/O"
-msgstr "H start"
+msgstr "Výška T/O"
 
 #: src/InfoBoxes/Content/Factory.cpp:709
 #, no-c-format
@@ -2289,7 +2288,7 @@ msgstr "Soutěžní vzdálenost"
 #: src/InfoBoxes/Content/Factory.cpp:733
 #, no-c-format
 msgid "Cont Dist"
-msgstr "Soutěž vzdál"
+msgstr "Cont vzdál"
 
 #: src/InfoBoxes/Content/Factory.cpp:734
 #, no-c-format
@@ -2426,12 +2425,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:806
 #, no-c-format
 msgid "Thermal climb trace"
-msgstr "Záznam stoupání"
+msgstr "Záznam současného stoupání"
 
 #: src/InfoBoxes/Content/Factory.cpp:807
 #, no-c-format
 msgid "TC Trace"
-msgstr "ST záznam"
+msgstr "STS záznam"
 
 #: src/InfoBoxes/Content/Factory.cpp:808
 #, no-c-format
@@ -2488,7 +2487,7 @@ msgstr "Čas pod max. startovní výškou"
 #: src/InfoBoxes/Content/Factory.cpp:831
 #, no-c-format
 msgid "Start Height"
-msgstr "Čas pod Hstart"
+msgstr "T pod start H"
 
 #: src/InfoBoxes/Content/Factory.cpp:832
 #, no-c-format
@@ -2504,7 +2503,7 @@ msgstr "Čas do konce úlohy (rychlost vůči zemi)"
 #: src/InfoBoxes/Content/Factory.cpp:839
 #, no-c-format
 msgid "Fin ETE VMG"
-msgstr "Cíl ETE VMG"
+msgstr "Cíl ETE GS"
 
 #: src/InfoBoxes/Content/Factory.cpp:840
 #, no-c-format
@@ -2523,7 +2522,7 @@ msgstr "Čas k OB (rychlost vůči zemi)"
 #: src/InfoBoxes/Content/Factory.cpp:847
 #, no-c-format
 msgid "WP ETE VMG"
-msgstr "OB ETE VMG"
+msgstr "OB ETE GS"
 
 #: src/InfoBoxes/Content/Factory.cpp:848
 #, no-c-format
@@ -2563,7 +2562,7 @@ msgstr "Nejbližší prostor horizontálně"
 #: src/InfoBoxes/Content/Factory.cpp:864
 #, no-c-format
 msgid "Near AS H"
-msgstr "Prostor horiz"
+msgstr "Prostr horiz"
 
 #: src/InfoBoxes/Content/Factory.cpp:865
 #, no-c-format
@@ -2578,7 +2577,7 @@ msgstr "Nejbližší prostor vertikálně"
 #: src/InfoBoxes/Content/Factory.cpp:872
 #, no-c-format
 msgid "Near AS V"
-msgstr "Prostor vert"
+msgstr "Prostr vert"
 
 #: src/InfoBoxes/Content/Factory.cpp:873
 #, no-c-format
@@ -2639,7 +2638,7 @@ msgstr "Terén kolize"
 #: src/InfoBoxes/Content/Factory.cpp:898
 #, no-c-format
 msgid "Terr Coll"
-msgstr "Terén kolize"
+msgstr "Terén střet"
 
 #: src/InfoBoxes/Content/Factory.cpp:899
 #, no-c-format
@@ -2648,7 +2647,7 @@ msgid ""
 "this location, the altitude will be below the configured terrain clearance "
 "altitude."
 msgstr ""
-"Vzdálenost k nejbližší terénní překážce, podél aktuálního ramene trasy. V "
+"Vzdálenost k místu střetu s terénem ve směru aktuálního ramene trasy. V "
 "tomto bodě bude výška pod výškou, nastavenou pro překonání terénu."
 
 #: src/InfoBoxes/Content/Factory.cpp:904
@@ -2679,7 +2678,7 @@ msgstr "Rychlost stoupání pro příští rameno trati"
 #: src/InfoBoxes/Content/Factory.cpp:914
 #, no-c-format
 msgid "T Next Leg"
-msgstr "ST příští rameno"
+msgstr "ST př rameno"
 
 #: src/InfoBoxes/Content/Factory.cpp:915
 #, no-c-format
@@ -2719,7 +2718,7 @@ msgstr "Efektivita letu v úloze"
 #: src/InfoBoxes/Content/Factory.cpp:930
 #, no-c-format
 msgid "Cruise Eff"
-msgstr "Ef přeskoku"
+msgstr "Ef letu"
 
 #: src/InfoBoxes/Content/Factory.cpp:931
 #, no-c-format
@@ -2778,7 +2777,7 @@ msgstr "Odpočet otevření/uzavření pásky"
 #: src/InfoBoxes/Content/Factory.cpp:953
 #, no-c-format
 msgid "Start open"
-msgstr "Start otevřen"
+msgstr "Strt otevřn"
 
 #: src/InfoBoxes/Content/Factory.cpp:954
 #, no-c-format
@@ -2788,12 +2787,12 @@ msgstr "Ukazuje zbývající čas do otevření nebo uzavření pásky."
 #: src/InfoBoxes/Content/Factory.cpp:959
 #, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr "Odpočet ot./uzavření pásky při dosažení"
+msgstr "Odpočet ot./uzavření pásky při protnutí"
 
 #: src/InfoBoxes/Content/Factory.cpp:960
 #, no-c-format
 msgid "Start reach"
-msgstr "Start dosažen"
+msgstr "Strt dosažn"
 
 #: src/InfoBoxes/Content/Factory.cpp:961
 #, no-c-format
@@ -2802,17 +2801,17 @@ msgid ""
 "calculated time to reach it."
 msgstr ""
 "Zobrazí zbývající čas do otevření nebo uzavření pásky ve srovnání s "
-"vypočteným časem pro dosažení pásky."
+"vypočteným časem protnutí pásky."
 
 #: src/InfoBoxes/Content/Factory.cpp:966
 #, no-c-format
 msgid "Next radial"
-msgstr "Příští OB - radiála"
+msgstr "Radiála k dalšímu bodu"
 
 #: src/InfoBoxes/Content/Factory.cpp:967 src/Dialogs/Task/TargetDialog.cpp:417
 #, no-c-format
 msgid "Radial"
-msgstr "Radiála"
+msgstr "OB radiála"
 
 #: src/InfoBoxes/Content/Factory.cpp:968
 #, no-c-format
@@ -2841,7 +2840,7 @@ msgstr "Rychlost úlohy za poslední hodinu"
 #: src/InfoBoxes/Content/Factory.cpp:983
 #, no-c-format
 msgid "V Task H"
-msgstr "V úlohy 1hod"
+msgstr "V úl 1hod"
 
 #: src/InfoBoxes/Content/Factory.cpp:984
 #, no-c-format
@@ -2860,7 +2859,7 @@ msgstr "Příští OB - vzdálenost (nominální)"
 #: src/InfoBoxes/Content/Factory.cpp:991
 #, no-c-format
 msgid "WP Dist-N"
-msgstr "OB vzdál nom"
+msgstr "OB vzdál-N"
 
 #: src/InfoBoxes/Content/Factory.cpp:992
 #, no-c-format
@@ -2900,7 +2899,7 @@ msgstr "Vzdálenost ke vzletu"
 #: src/InfoBoxes/Content/Factory.cpp:1006
 #, no-c-format
 msgid "Takeoff Dist"
-msgstr "Start vzdál"
+msgstr "Vzlet vzdál"
 
 #: src/InfoBoxes/Content/Factory.cpp:1007
 #, no-c-format
@@ -2915,7 +2914,7 @@ msgstr "Soutěžní rychlost"
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, no-c-format
 msgid "Cont Speed"
-msgstr "Soutěž rychl"
+msgstr "Cont rychl"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015
 #, no-c-format
@@ -2933,7 +2932,7 @@ msgstr "Rozdíl výšek dokluzu při MC0"
 #: src/InfoBoxes/Content/Factory.cpp:1021
 #, no-c-format
 msgid "Fin MC0 AltD"
-msgstr "Cíl MC0"
+msgstr "Cíl MC0 AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:1022
 #, no-c-format
@@ -2969,7 +2968,7 @@ msgstr "Čas příletu na příští otočný bod (rychlost vůči zemi)"
 #: src/InfoBoxes/Content/Factory.cpp:1041
 #, no-c-format
 msgid "WP ETA VMG"
-msgstr "OB ETA VMG"
+msgstr "OB ETA GS"
 
 #: src/InfoBoxes/Content/Factory.cpp:1042
 #, no-c-format
@@ -3075,7 +3074,7 @@ msgstr "Čas kroužení"
 #: src/InfoBoxes/Content/Factory.cpp:1089
 #, no-c-format
 msgid "TC Time"
-msgstr "TC Čas"
+msgstr "STS Čas"
 
 #: src/InfoBoxes/Content/Factory.cpp:1090
 #, no-c-format
@@ -3156,7 +3155,7 @@ msgstr "MC AUTO"
 
 #: src/InfoBoxes/Content/MacCready.cpp:70
 msgid "MC MANUAL"
-msgstr "MC MANUÁL"
+msgstr "MC MAN"
 
 #: src/InfoBoxes/Content/Other.cpp:57 src/InfoBoxes/Content/Other.cpp:60
 msgid "AC Off"
@@ -3401,7 +3400,7 @@ msgstr "Připraven ke startu"
 
 #: src/Input/InputEventsTask.cpp:89
 msgid "Hold start"
-msgstr "Pozdržet start"
+msgstr "Pozdrž start"
 
 #: src/Input/InputEventsTask.cpp:92
 msgid "Ready to turn"
@@ -3409,7 +3408,7 @@ msgstr "Připraven k obratu"
 
 #: src/Input/InputEventsTask.cpp:95
 msgid "Hold turn"
-msgstr "Pozdržet obrat"
+msgstr "Pozdrž obrat"
 
 #: src/Input/InputEventsTask.cpp:161
 msgid "Auto. MacCready on"
@@ -3429,7 +3428,7 @@ msgstr "Úloha zrušena"
 
 #: src/Input/InputEventsTask.cpp:232
 msgid "Go to target"
-msgstr "Letět k cíli"
+msgstr "Leť k cíli"
 
 #: src/Input/InputEventsTask.cpp:235
 msgid "Ordered task"
@@ -4934,7 +4933,7 @@ msgstr "Žádná shoda!"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:328
 msgid "Heading"
-msgstr "Záhlaví"
+msgstr "Kurz"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:422
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:237
@@ -6543,7 +6542,7 @@ msgid ""
 msgstr ""
 "Pokud je zapnuto, zobrazení variometru bude obsahovat indikátor "
 "průměrovacího vária místo okamžitého stoupání. Na přeskoku indikátor "
-"zobrazuje průměrnou netto hodnotu stoupání v posledním stoupavém proudu. V "
+"zobrazuje průměrnou netto hodnotu stoupání v minulém stoupavém proudu. V "
 "kroužení indikátor zobrazuje průměrnou netto hodnotu stoupání."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:65
