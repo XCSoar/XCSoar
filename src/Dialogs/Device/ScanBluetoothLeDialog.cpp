@@ -125,6 +125,9 @@ private:
   void OnDeviceDetected(Type type, const char *address,
                         const char *name,
                         uint64_t features) noexcept override {
+    if (name == nullptr)
+      name = address;
+
     Item item{address, name, features};
 
     {
