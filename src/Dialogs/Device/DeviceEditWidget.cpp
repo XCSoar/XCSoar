@@ -200,29 +200,28 @@ FillAndroidBluetoothPorts(DataFieldEnum &df,
   //   type - either "BLE" or "CLASSIC"
   static constexpr jsize BLUETOOTH_LIST_STRIDE = 3;
   const auto bonded = bluetooth_helper->GetBondedList(env);
-  if (!bonded)
-    return;
+  if (bonded) {
+    jsize n = env->GetArrayLength(bonded) / BLUETOOTH_LIST_STRIDE;
+    for (jsize i = 0; i < n; ++i) {
+      Java::String address{env, (jstring)env->GetObjectArrayElement(bonded, i * BLUETOOTH_LIST_STRIDE)};
+      if (!address)
+        continue;
 
-  jsize n = env->GetArrayLength(bonded) / BLUETOOTH_LIST_STRIDE;
-  for (jsize i = 0; i < n; ++i) {
-    Java::String address{env, (jstring)env->GetObjectArrayElement(bonded, i * BLUETOOTH_LIST_STRIDE)};
-    if (!address)
-      continue;
+      const auto address2 = Java::String::GetUTFChars(env, address);
 
-    const auto address2 = Java::String::GetUTFChars(env, address);
+      Java::String name{env, (jstring)env->GetObjectArrayElement(bonded, i * BLUETOOTH_LIST_STRIDE + 1)};
+      const auto name2 = name
+        ? name.GetUTFChars()
+        : nullptr;
 
-    Java::String name{env, (jstring)env->GetObjectArrayElement(bonded, i * BLUETOOTH_LIST_STRIDE + 1)};
-    const auto name2 = name
-      ? name.GetUTFChars()
-      : nullptr;
-
-    // TODO PortType::BLE_SENSOR?
-    Java::String devType{env, (jstring)env->GetObjectArrayElement(bonded, i * BLUETOOTH_LIST_STRIDE + 2)};
-    const DeviceConfig::PortType portType = devType != nullptr &&
-      strcmp("BLE", Java::String::GetUTFChars(env, devType).c_str()) == 0
-      ? DeviceConfig::PortType::BLE_HM10
-      : DeviceConfig::PortType::RFCOMM;
-    AddPort(df, portType, address2.c_str(), name2.c_str());
+      // TODO PortType::BLE_SENSOR?
+      Java::String devType{env, (jstring)env->GetObjectArrayElement(bonded, i * BLUETOOTH_LIST_STRIDE + 2)};
+      const DeviceConfig::PortType portType = devType != nullptr &&
+        strcmp("BLE", Java::String::GetUTFChars(env, devType).c_str()) == 0
+        ? DeviceConfig::PortType::BLE_HM10
+        : DeviceConfig::PortType::RFCOMM;
+      AddPort(df, portType, address2.c_str(), name2.c_str());
+    }
   }
 
   if ((config.port_type == DeviceConfig::PortType::RFCOMM ||
