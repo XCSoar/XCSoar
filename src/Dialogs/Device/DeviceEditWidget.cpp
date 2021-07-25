@@ -432,7 +432,6 @@ EditPortCallback(const TCHAR *caption, DataField &_df,
       ? DeviceConfig::PortType::BLE_HM10
       : DeviceConfig::PortType::BLE_SENSOR;
 
-    // TODO PortType::BLE_SENSOR?
     SetPort(df, type, address.c_str());
     return true;
   }
