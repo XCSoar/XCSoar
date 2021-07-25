@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-10 09:50+0200\n"
-"PO-Revision-Date: 2021-07-25 06:33+0000\n"
+"PO-Revision-Date: 2021-07-25 09:04+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -1109,14 +1109,16 @@ msgstr "Průměrné st. v minulém st. proudu"
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
 msgid "TL Avg"
-msgstr "ST prům posl"
+msgstr "STP prům"
 
 #: src/InfoBoxes/Content/Factory.cpp:196
 #, no-c-format
 msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
-msgstr "Celkový zisk/ztráta výšky dělená časem stráveným kroužením."
+msgstr ""
+"Celkový zisk/ztráta výšky v posledním stoupavém proudu, dělená časem "
+"kroužení."
 
 #: src/InfoBoxes/Content/Factory.cpp:202
 #, no-c-format
@@ -1126,7 +1128,7 @@ msgstr "Zisk výšky v posledním st. proudu"
 #: src/InfoBoxes/Content/Factory.cpp:203
 #, no-c-format
 msgid "TL Gain"
-msgstr "ST zisk posl"
+msgstr "STP zisk"
 
 #: src/InfoBoxes/Content/Factory.cpp:204
 #, no-c-format
@@ -1141,7 +1143,7 @@ msgstr "Doba trvání posledního st. proudu"
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
 msgid "TL duration"
-msgstr "ST čas posl"
+msgstr "STP čas"
 
 #: src/InfoBoxes/Content/Factory.cpp:212
 #, no-c-format
@@ -1195,7 +1197,7 @@ msgstr "Rozdílová výška nad dalším bodem"
 #: src/InfoBoxes/Content/Factory.cpp:236
 #, no-c-format
 msgid "WP AltD"
-msgstr "OB rozd výška"
+msgstr "OB r výšek"
 
 #: src/InfoBoxes/Content/Factory.cpp:237
 #, no-c-format
@@ -1214,7 +1216,7 @@ msgstr "Příští OB - požadovaná výška"
 #: src/InfoBoxes/Content/Factory.cpp:245
 #, no-c-format
 msgid "WP AltR"
-msgstr "OB pož výška"
+msgstr "OB p výška"
 
 #: src/InfoBoxes/Content/Factory.cpp:246
 #, no-c-format
@@ -1255,7 +1257,7 @@ msgstr "Rozdíl výšek pro cíl"
 #: src/InfoBoxes/Content/Factory.cpp:262
 #, no-c-format
 msgid "Fin AltD"
-msgstr "Cíl rozd výška"
+msgstr "Cíl r výšek"
 
 #: src/InfoBoxes/Content/Factory.cpp:263
 #, no-c-format
@@ -1273,7 +1275,7 @@ msgstr "Výška požadovaná do cíle"
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
 msgid "Fin AltR"
-msgstr "Cíl pož výška"
+msgstr "Cíl p výška"
 
 #: src/InfoBoxes/Content/Factory.cpp:271
 #, no-c-format
@@ -1288,7 +1290,7 @@ msgstr "Rychlost úlohy průměrná"
 #: src/InfoBoxes/Content/Factory.cpp:278
 #, no-c-format
 msgid "V Task Avg"
-msgstr "V úlohy prům"
+msgstr "V úl prům"
 
 #: src/InfoBoxes/Content/Factory.cpp:279
 #, no-c-format
@@ -1320,7 +1322,7 @@ msgstr "Výška terénu"
 #: src/InfoBoxes/Content/Factory.cpp:302
 #, no-c-format
 msgid "Terr Elev"
-msgstr "Výška terénu"
+msgstr "Výška ter"
 
 #: src/InfoBoxes/Content/Factory.cpp:303
 #, no-c-format
@@ -1339,7 +1341,7 @@ msgstr "Průměrné stoupání"
 #: src/InfoBoxes/Content/Factory.cpp:310
 #, no-c-format
 msgid "TC Avg"
-msgstr "ST prům nyní"
+msgstr "STS prům"
 
 #: src/InfoBoxes/Content/Factory.cpp:311
 #, no-c-format
@@ -1357,7 +1359,7 @@ msgstr "Zisk ve stoupání"
 #: src/InfoBoxes/Content/Factory.cpp:318
 #, no-c-format
 msgid "TC Gain"
-msgstr "ST zisk nyní"
+msgstr "STS zisk"
 
 #: src/InfoBoxes/Content/Factory.cpp:319
 #, no-c-format
@@ -1805,7 +1807,7 @@ msgstr "Rozdíl kurzů"
 #: src/InfoBoxes/Content/Factory.cpp:524
 #, no-c-format
 msgid "Brng D"
-msgstr "Rozdíl kurzů"
+msgstr "Kurz r"
 
 #: src/InfoBoxes/Content/Factory.cpp:525
 #, no-c-format
@@ -1833,7 +1835,7 @@ msgstr "Venkovní teplota vzduchu"
 #: src/InfoBoxes/Content/Factory.cpp:532
 #, no-c-format
 msgid "OAT"
-msgstr "Tepl. vnější"
+msgstr "Tepl. OAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:533
 #, no-c-format
@@ -2002,7 +2004,7 @@ msgstr "Rozdíl kurzů týmu"
 #: src/InfoBoxes/Content/Factory.cpp:604
 #, no-c-format
 msgid "Team BrngD"
-msgstr "Tým rozdíl kurzů"
+msgstr "Tým r kurzů"
 
 #: src/InfoBoxes/Content/Factory.cpp:605
 #, no-c-format
@@ -2034,7 +2036,7 @@ msgstr "Rychlost v úloze okamžitá"
 #: src/InfoBoxes/Content/Factory.cpp:620
 #, no-c-format
 msgid "V Task Inst"
-msgstr "V úlohy nyní"
+msgstr "V Pirker"
 
 #: src/InfoBoxes/Content/Factory.cpp:621
 #, no-c-format
@@ -2087,7 +2089,7 @@ msgstr "AAT rozdíl časů"
 #: src/InfoBoxes/Content/Factory.cpp:644
 #, no-c-format
 msgid "AAT dT"
-msgstr "AAT čas rozd"
+msgstr "AAT r časů"
 
 #: src/InfoBoxes/Content/Factory.cpp:645
 #, no-c-format
@@ -2109,7 +2111,7 @@ msgstr "Průměrné st. ve všech st. proudech"
 #: src/InfoBoxes/Content/Factory.cpp:652
 #, no-c-format
 msgid "T Avg"
-msgstr "ST prům všech"
+msgstr "ST prům"
 
 #: src/InfoBoxes/Content/Factory.cpp:653
 #, no-c-format
@@ -2877,7 +2879,7 @@ msgstr "Průměr kruhu v kroužení"
 #: src/InfoBoxes/Content/Factory.cpp:999
 #, no-c-format
 msgid "Circle D"
-msgstr "Průměr krouž"
+msgstr "Prům kruhu"
 
 #: src/InfoBoxes/Content/Factory.cpp:1000
 #, no-c-format
@@ -2926,12 +2928,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "Rozdíl výšek dokluzu MC0"
+msgstr "Rozdíl výšek dokluzu při MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1021
 #, no-c-format
 msgid "Fin MC0 AltD"
-msgstr "Cíl MC0 AltD"
+msgstr "Cíl MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1022
 #, no-c-format
@@ -5947,15 +5949,15 @@ msgstr "Směr a vzdálenost"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:176
 msgid "Alt. diff. MC 0"
-msgstr "Rozdíl výšek MC0"
+msgstr "R výšek MC0"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:180
 msgid "Alt. diff. MC safety"
-msgstr "Rozdíl výšek MC bezp"
+msgstr "R výšek MC bezp"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:185
 msgid "Alt. diff. MC current"
-msgstr "Rozdíl výšek MC akt"
+msgstr "R výšek MC akt"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:203
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:121
