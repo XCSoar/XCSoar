@@ -85,9 +85,7 @@ ComputeNoncompVario(const double pressure, const double d_pressure) noexcept
   return FACTOR * pow(pressure, EXPONENT) * d_pressure;
 }
 
-/*
- * TODO: use ProvidePitotPressure() and get rid of this static variable static_p.
- */
+// TODO: eliminate this variable after moving sensor calibration somewhere else
 static AtmosphericPressure static_p = AtmosphericPressure::Zero();
 
 void
@@ -133,13 +131,7 @@ I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
       break;
 
     case DeviceConfig::PressureUse::PITOT:
-      if (static_p.IsPlausible()) {
-        auto dyn = pressure - static_p - pitot_offset;
-        if (dyn < AtmosphericPressure::HectoPascal(0.31))
-          // suppress speeds below ~25 km/h
-          dyn = AtmosphericPressure::Zero();
-        basic.ProvideDynamicPressure(dyn);
-      }
+      basic.ProvidePitotPressure(pressure - pitot_offset);
       break;
 
     case DeviceConfig::PressureUse::PITOT_ZERO:

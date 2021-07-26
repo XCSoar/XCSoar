@@ -187,7 +187,8 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
       available = true;
     } else if (basic.pitot_pressure_available && basic.static_pressure_available) {
       dyn = basic.pitot_pressure.GetHectoPascal() - basic.static_pressure.GetHectoPascal();
-      available = true;
+      // suppress speeds below ~25 km/h
+      available = dyn >= 0.31;
     }
     if (available) {
       basic.indicated_airspeed = sqrt(double(163.2653061) * dyn);
