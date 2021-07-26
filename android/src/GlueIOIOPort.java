@@ -96,8 +96,8 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
       try {
         uart = ioio.openUart(inPin, outPin, baudrate, Uart.Parity.NONE,
                              Uart.StopBits.ONE);
-      } catch (IllegalArgumentException e) {
-        Log.w(TAG, "IOIO.openUart() failed", e);
+      } catch (Exception e) {
+        submitError(e.getMessage());
         return;
       }
 
