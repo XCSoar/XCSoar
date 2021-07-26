@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_ATMOSPHERE_PRESSURE_H
 #define XCSOAR_ATMOSPHERE_PRESSURE_H
 
-#include "util/Compiler.h"
-
 /**
  * ICAO Standard Atmosphere calculations (valid in Troposphere, alt<11000m)
  *
@@ -105,7 +103,7 @@ public:
    * @param pressure Current pressure
    * @param alt_known Altitude of a known location (m)
    */
-  gcc_const
+  [[gnu::const]]
   static AtmosphericPressure FindQNHFromPressure(AtmosphericPressure pressure,
                                                  double alt_known);
 
@@ -114,7 +112,7 @@ public:
    * @param alt 1013.25-based altitude (m)
    * @return QNH-based altitude (m)
    */
-  gcc_pure
+  [[gnu::pure]]
   double PressureAltitudeToQNHAltitude(double alt) const;
 
   /**
@@ -122,7 +120,7 @@ public:
    * @param alt QNH-based altitude(m)
    * @return pressure altitude (m)
    */
-  gcc_pure
+  [[gnu::pure]]
   double QNHAltitudeToPressureAltitude(double alt) const;
 
   /**
@@ -136,7 +134,7 @@ public:
    * @param ps Air pressure
    * @return Altitude over QNH-based zero (m)
    */
-  gcc_pure
+  [[gnu::pure]]
   double StaticPressureToQNHAltitude(const AtmosphericPressure ps) const;
 
   /**
@@ -150,7 +148,7 @@ public:
    * @param alt Altitude over QNH-based zero (m)
    * @return Air pressure at given altitude
    */
-  gcc_pure
+  [[gnu::pure]]
   AtmosphericPressure QNHAltitudeToStaticPressure(double alt) const;
 
   /**
@@ -158,7 +156,7 @@ public:
    * @param ps Air pressure
    * @return pressure altitude (m)
    */
-  gcc_const
+  [[gnu::const]]
   static double StaticPressureToPressureAltitude(const AtmosphericPressure ps);
 
   /**
@@ -168,7 +166,7 @@ public:
    * @param alt Altitude over 1013.25 hPa based zero(m)
    * @return Air pressure at given altitude
    */
-  gcc_const
+  [[gnu::const]]
   static AtmosphericPressure PressureAltitudeToStaticPressure(double alt);
 };
 
