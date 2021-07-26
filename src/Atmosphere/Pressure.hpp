@@ -83,6 +83,10 @@ public:
     return value > 100 && value < 1200;
   }
 
+  constexpr bool IsPositive() const noexcept {
+    return value > 0;
+  }
+
   double GetPascal() const noexcept {
     return GetHectoPascal() * 100;
   }
