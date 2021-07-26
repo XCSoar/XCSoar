@@ -33,7 +33,7 @@ static Java::TrivialClass i2cbaro_class;
 static jmethodID i2cbaro_ctor;
 
 void
-I2CbaroDevice::Initialise(JNIEnv *env)
+I2CbaroDevice::Initialise(JNIEnv *env) noexcept
 {
   i2cbaro_class.Find(env, "org/xcsoar/GlueI2Cbaro");
 
@@ -42,7 +42,7 @@ I2CbaroDevice::Initialise(JNIEnv *env)
 }
 
 void
-I2CbaroDevice::Deinitialise(JNIEnv *env)
+I2CbaroDevice::Deinitialise(JNIEnv *env) noexcept
 {
   i2cbaro_class.Clear(env);
 }
@@ -76,7 +76,7 @@ I2CbaroDevice::I2CbaroDevice(unsigned _index,
 
 gcc_pure
 static inline double
-ComputeNoncompVario(const double pressure, const double d_pressure)
+ComputeNoncompVario(const double pressure, const double d_pressure) noexcept
 {
   static constexpr double FACTOR(-2260.389548275485);
   static constexpr double EXPONENT(-0.8097374740609689);

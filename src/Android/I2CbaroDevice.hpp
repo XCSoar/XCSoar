@@ -43,8 +43,8 @@ class I2CbaroDevice final : private I2CbaroListener {
   SelfTimingKalmanFilter1d kalman_filter;
 
 public:
-  static void Initialise(JNIEnv *env);
-  static void Deinitialise(JNIEnv *env);
+  static void Initialise(JNIEnv *env) noexcept;
+  static void Deinitialise(JNIEnv *env) noexcept;
 
   I2CbaroDevice(unsigned index,
                JNIEnv *env, jobject holder,
