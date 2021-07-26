@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_DOWNLOAD_MANAGER_HPP
 #define XCSOAR_ANDROID_DOWNLOAD_MANAGER_HPP
 
-#include "java/Object.hxx"
+#include "java/Closeable.hxx"
 #include "thread/Mutex.hxx"
 
 #include <list>
@@ -34,7 +34,7 @@ class Context;
 namespace Net { class DownloadListener; }
 
 class AndroidDownloadManager {
-  Java::GlobalObject util;
+  Java::GlobalCloseable util;
 
   /**
    * Protects the #listeners attribute.
@@ -48,8 +48,6 @@ public:
    * Throws on error.
    */
   AndroidDownloadManager(JNIEnv *env, Context &context);
-
-  ~AndroidDownloadManager() noexcept;
 
   static bool Initialise(JNIEnv *env) noexcept;
   static void Deinitialise(JNIEnv *env) noexcept;

@@ -23,6 +23,7 @@ Copyright_License {
 
 package org.xcsoar;
 
+import java.io.Closeable;
 import java.io.File;
 import android.app.DownloadManager;
 import android.content.Context;
@@ -37,7 +38,7 @@ import android.os.Environment;
  * A helper class for using #DownloadManager from C++ via JNI.  It
  * provides a simpler API, only exposing the features used by XCSoar.
  */
-final class DownloadUtil extends BroadcastReceiver {
+final class DownloadUtil extends BroadcastReceiver implements Closeable {
   /**
    * A native pointer to the C++ #AndroidDownloadManager instance.
    */
@@ -66,7 +67,8 @@ final class DownloadUtil extends BroadcastReceiver {
     downloadDirectory = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
   }
 
-  void close() {
+  @Override
+  public void close() {
       try {
         context.unregisterReceiver(this);
       } catch (IllegalArgumentException e) {

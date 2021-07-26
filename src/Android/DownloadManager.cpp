@@ -39,7 +39,7 @@ Copyright_License {
 
 static Java::TrivialClass util_class;
 
-static jmethodID ctor, close_method, enumerate_method, enqueue_method, cancel_method;
+static jmethodID ctor, enumerate_method, enqueue_method, cancel_method;
 
 static Java::LocalObject
 NewDownloadUtil(JNIEnv *env, AndroidDownloadManager &instance, Context &context)
@@ -55,11 +55,6 @@ AndroidDownloadManager::AndroidDownloadManager(JNIEnv *env,
 {
 }
 
-AndroidDownloadManager::~AndroidDownloadManager() noexcept
-{
-  Java::GetEnv()->CallVoidMethod(util, close_method);
-}
-
 bool
 AndroidDownloadManager::Initialise(JNIEnv *env) noexcept
 {
@@ -71,8 +66,6 @@ AndroidDownloadManager::Initialise(JNIEnv *env) noexcept
 
   ctor = env->GetMethodID(util_class, "<init>",
                           "(JLandroid/content/Context;)V");
-
-  close_method = env->GetMethodID(util_class, "close", "()V");
 
   enumerate_method = env->GetMethodID(util_class, "enumerate", "(J)V");
 
