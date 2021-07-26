@@ -36,7 +36,7 @@ Copyright_License {
 #endif
 
 static Java::TrivialClass bmp085_class;
-static jmethodID bmp085_ctor, close_method;
+static jmethodID bmp085_ctor;
 
 void
 BMP085Device::Initialise(JNIEnv *env)
@@ -45,7 +45,6 @@ BMP085Device::Initialise(JNIEnv *env)
 
   bmp085_ctor = env->GetMethodID(bmp085_class, "<init>",
                                  "(Lorg/xcsoar/IOIOConnectionHolder;IIILorg/xcsoar/BMP085$Listener;)V");
-  close_method = env->GetMethodID(bmp085_class, "close", "()V");
 }
 
 void
@@ -77,12 +76,6 @@ BMP085Device::BMP085Device(unsigned _index,
                           *this)),
    kalman_filter(10, 0.0075)
 {
-}
-
-BMP085Device::~BMP085Device()
-{
-  JNIEnv *env = Java::GetEnv();
-  env->CallVoidMethod(obj.Get(), close_method);
 }
 
 gcc_pure

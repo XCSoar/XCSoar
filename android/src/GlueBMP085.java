@@ -23,13 +23,15 @@
 
 package org.xcsoar;
 
+import java.io.Closeable;
+
 import ioio.lib.api.IOIO;
 import ioio.lib.api.exception.ConnectionLostException;
 
 /**
  * A driver for the BMP085 pressure sensor, connected via IOIO.
  */
-final class GlueBMP085 implements IOIOConnectionListener {
+final class GlueBMP085 implements IOIOConnectionListener, Closeable {
   private IOIOConnectionHolder holder;
   private final int twiNum, eocPin, oversampling;
   private final BMP085.Listener listener;
@@ -48,6 +50,7 @@ final class GlueBMP085 implements IOIOConnectionListener {
     _holder.addListener(this);
   }
 
+  @Override
   public void close() {
     IOIOConnectionHolder holder;
     synchronized(this) {

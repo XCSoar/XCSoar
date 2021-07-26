@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_ANDROID_BMP085_DEVICE_HPP
 
 #include "BMP085Listener.hpp"
-#include "java/Object.hxx"
+#include "java/Closeable.hxx"
 #include "Math/SelfTimingKalmanFilter1d.hpp"
 #include "util/Compiler.h"
 
@@ -33,7 +33,7 @@ Copyright_License {
 
 class BMP085Device final : private BMP085Listener {
   unsigned index;
-  Java::GlobalObject obj;
+  Java::GlobalCloseable obj;
 
   /**
    * This Kalman filter is used to smooth the pressure input.
@@ -48,8 +48,6 @@ public:
                JNIEnv *env, jobject holder,
                unsigned twi_num, unsigned eoc_pin,
                unsigned oversampling);
-
-  ~BMP085Device();
 
 private:
   /* virtual methods from class BMP085Listener */
