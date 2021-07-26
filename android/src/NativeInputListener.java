@@ -27,7 +27,7 @@ package org.xcsoar;
  * An #InputListener implementation that passes method calls to native
  * code.
  */
-class NativeInputListener implements InputListener {
+final class NativeInputListener implements InputListener {
   /**
    * A native pointer.
    */
