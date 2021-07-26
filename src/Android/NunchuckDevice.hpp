@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "NunchuckListener.hpp"
 #include "java/Object.hxx"
-#include "Math/SelfTimingKalmanFilter1d.hpp"
 #include "util/Compiler.h"
 
 #include <jni.h>
@@ -34,11 +33,6 @@ Copyright_License {
 class NunchuckDevice final : private NunchuckListener {
   unsigned index;
   Java::GlobalObject obj;
-
-  /**
-   * Kept as sample, not used.
-   */
-  SelfTimingKalmanFilter1d kalman_filter;
 
 public:
   static void Initialise(JNIEnv *env);

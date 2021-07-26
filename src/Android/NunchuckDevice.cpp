@@ -66,8 +66,7 @@ NunchuckDevice::NunchuckDevice(unsigned _index,
   :index(_index),
    obj(env, CreateNunchuckDevice(env, holder,
                                twi_num, sample_rate,
-                               *this)),
-   kalman_filter(10, 0.3)
+                               *this))
 {
 }
 
