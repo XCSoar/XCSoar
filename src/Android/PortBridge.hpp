@@ -24,15 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_PORT_BRIDGE_HPP
 #define XCSOAR_ANDROID_PORT_BRIDGE_HPP
 
-#include "java/Object.hxx"
+#include "java/Closeable.hxx"
 
 #include <cstddef>
 
 class PortListener;
 class DataHandler;
 
-class PortBridge : protected Java::GlobalObject {
-  static jmethodID close_method;
+class PortBridge : protected Java::GlobalCloseable {
   static jmethodID setListener_method;
   static jmethodID setInputListener_method;
   static jmethodID getState_method;
@@ -51,14 +50,6 @@ public:
   static void Initialise(JNIEnv *env);
 
   PortBridge(JNIEnv *env, jobject obj);
-
-  ~PortBridge() {
-    close(Java::GetEnv());
-  }
-
-  void close(JNIEnv *env) {
-    env->CallVoidMethod(Get(), close_method);
-  }
 
   void setListener(JNIEnv *env, PortListener *listener);
   void setInputListener(JNIEnv *env, DataHandler *handler);

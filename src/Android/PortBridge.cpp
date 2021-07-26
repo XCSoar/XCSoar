@@ -28,7 +28,6 @@ Copyright_License {
 
 #include <string.h>
 
-jmethodID PortBridge::close_method;
 jmethodID PortBridge::setListener_method;
 jmethodID PortBridge::setInputListener_method;
 jmethodID PortBridge::getState_method;
@@ -42,7 +41,6 @@ PortBridge::Initialise(JNIEnv *env)
 {
   Java::Class cls(env, "org/xcsoar/AndroidPort");
 
-  close_method = env->GetMethodID(cls, "close", "()V");
   setListener_method = env->GetMethodID(cls, "setListener",
                                         "(Lorg/xcsoar/PortListener;)V");
   setInputListener_method = env->GetMethodID(cls, "setInputListener",
@@ -55,7 +53,7 @@ PortBridge::Initialise(JNIEnv *env)
 }
 
 PortBridge::PortBridge(JNIEnv *env, jobject obj)
-  :Java::GlobalObject(env, obj),
+  :Java::GlobalCloseable(env, obj),
    write_buffer(env, env->NewByteArray(write_buffer_size))
 {
 }

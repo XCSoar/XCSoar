@@ -23,10 +23,12 @@ Copyright_License {
 
 package org.xcsoar;
 
+import java.io.Closeable;
+
 /**
  * The Java interface of the C++ AndroidPort class.
  */
-interface AndroidPort {
+interface AndroidPort extends Closeable {
   int STATE_READY = 0;
   int STATE_FAILED = 1;
   int STATE_LIMBO = 2;
@@ -34,8 +36,6 @@ interface AndroidPort {
   void setListener(PortListener listener);
 
   void setInputListener(InputListener listener);
-
-  void close();
 
   int getState();
 
