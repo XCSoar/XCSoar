@@ -25,10 +25,10 @@ Copyright_License {
 
 #include <math.h>
 
-#define k1 0.190263
-#define inv_k1 1.0 / 0.190263
-#define k2 8.417286e-5
-#define inv_k2 1.0 / 8.417286e-5
+static constexpr double k1 = 0.190263;
+static constexpr double inv_k1 = 1.0 / k1;
+static constexpr double k2 = 8.417286e-5;
+static constexpr double inv_k2 = 1.0 / k2;
 
 AtmosphericPressure
 AtmosphericPressure::QNHAltitudeToStaticPressure(const double alt) const noexcept
