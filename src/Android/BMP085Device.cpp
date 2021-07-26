@@ -24,6 +24,7 @@ Copyright_License {
 #include "BMP085Device.hpp"
 #include "NativeSensorListener.hpp"
 #include "java/Class.hxx"
+#include "java/Env.hxx"
 
 static Java::TrivialClass bmp085_class;
 static jmethodID bmp085_ctor;
@@ -50,10 +51,10 @@ CreateBMP085Device(JNIEnv *env, jobject holder,
                    SensorListener &_listener) noexcept
 {
   const auto listener = NativeSensorListener::Create(env, _listener);
-  return {env,
-    env->NewObject(bmp085_class, bmp085_ctor, holder,
-                   twi_num, eoc_pin, oversampling,
-                   listener.Get())};
+  return Java::NewObjectRethrow(env, bmp085_class, bmp085_ctor,
+                                holder,
+                                twi_num, eoc_pin, oversampling,
+                                listener.Get());
 }
 
 BMP085Device::BMP085Device(JNIEnv *env, jobject holder,

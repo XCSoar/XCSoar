@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "GliderLink.hpp"
 #include "org_xcsoar_GliderLinkReceiver.h"
+#include "java/Env.hxx"
 #include "java/String.hxx"
 #include "util/Compiler.h"
 #include "Components.hpp"
@@ -50,22 +51,9 @@ GliderLink::Deinitialise(JNIEnv *env) noexcept
   gl_cls.Clear(env);
 }
 
-GliderLink *
-GliderLink::create(JNIEnv *env, Context *context,
-                   unsigned index) noexcept
+GliderLink::GliderLink(JNIEnv *env, Context &context, unsigned index) noexcept
+  :obj(Java::NewObjectRethrow(env, gl_cls, gl_ctor_id, context.Get(), index))
 {
-  assert(gl_cls != nullptr);
-
-  // Construct GliderLinkReceiver object.
-  Java::LocalObject obj{env,
-    env->NewObject(gl_cls, gl_ctor_id, context->Get(), index)};
-  assert(obj != nullptr);
-
-  return new GliderLink(env, obj);
-}
-
-GliderLink::GliderLink(JNIEnv* env, jobject obj) noexcept
-    : obj(env, obj) {
 }
 
 gcc_visibility_default

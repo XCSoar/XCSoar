@@ -24,6 +24,7 @@ Copyright_License {
 #include "I2CbaroDevice.hpp"
 #include "NativeI2CbaroListener.hpp"
 #include "java/Class.hxx"
+#include "java/Env.hxx"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
@@ -47,17 +48,17 @@ I2CbaroDevice::Deinitialise(JNIEnv *env) noexcept
   i2cbaro_class.Clear(env);
 }
 
-static Java::LocalObject
+static auto
 CreateI2CbaroDevice(JNIEnv *env, jobject holder,
                    unsigned twi_num, unsigned i2c_addr, unsigned sample_rate, unsigned flags,
                    I2CbaroListener &listener)
 {
   Java::LocalObject listener2{env,
     NativeI2CbaroListener::Create(env, listener)};
-  return {env,
-    env->NewObject(i2cbaro_class, i2cbaro_ctor, holder,
-                   twi_num, i2c_addr, sample_rate, flags,
-                   listener2.Get())};
+  return Java::NewObjectRethrow(env, i2cbaro_class, i2cbaro_ctor,
+                                holder,
+                                twi_num, i2c_addr, sample_rate, flags,
+                                listener2.Get());
 }
 
 I2CbaroDevice::I2CbaroDevice(unsigned _index,

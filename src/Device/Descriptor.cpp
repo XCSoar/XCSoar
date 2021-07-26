@@ -423,7 +423,7 @@ DeviceDescriptor::OpenGliderLink()
   if (is_simulator())
     return true;
 
-  glider_link = GliderLink::create(Java::GetEnv(), context, GetIndex());
+  glider_link = new GliderLink(Java::GetEnv(), *context, GetIndex());
 
   return true;
 #else

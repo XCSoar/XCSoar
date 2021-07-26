@@ -24,6 +24,7 @@ Copyright_License {
 #include "VoltageDevice.hpp"
 #include "NativeVoltageListener.hpp"
 #include "java/Class.hxx"
+#include "java/Env.hxx"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Atmosphere/Temperature.hpp"
@@ -48,17 +49,17 @@ VoltageDevice::Deinitialise(JNIEnv *env)
   voltage_class.Clear(env);
 }
 
-static Java::LocalObject
+static auto
 CreateVoltageDevice(JNIEnv *env, jobject holder,
                    unsigned sample_rate,
                    VoltageListener &listener)
 {
   Java::LocalObject listener2{env,
     NativeVoltageListener::Create(env, listener)};
-  return {env,
-    env->NewObject(voltage_class, voltage_ctor, holder,
-                   sample_rate,
-                   listener2.Get())};
+  return Java::NewObjectRethrow(env, voltage_class, voltage_ctor,
+                                holder,
+                                sample_rate,
+                                listener2.Get());
 }
 
 VoltageDevice::VoltageDevice(unsigned _index,

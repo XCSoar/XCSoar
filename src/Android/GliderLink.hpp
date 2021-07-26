@@ -45,11 +45,7 @@ public:
   static void Initialise(JNIEnv *env) noexcept;
   static void Deinitialise(JNIEnv *env) noexcept;
 
-  GliderLink(JNIEnv *env, jobject obj) noexcept;
-
-  [[gnu::malloc]]
-  static GliderLink *create(JNIEnv *env, Context *native_view,
-                            unsigned int index) noexcept;
+  GliderLink(JNIEnv *env, Context &context, unsigned index) noexcept;
 };
 
 #endif

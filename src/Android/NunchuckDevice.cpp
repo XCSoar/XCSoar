@@ -24,6 +24,7 @@ Copyright_License {
 #include "NunchuckDevice.hpp"
 #include "NativeSensorListener.hpp"
 #include "java/Class.hxx"
+#include "java/Env.hxx"
 
 static Java::TrivialClass nunchuck_class;
 static jmethodID nunchuck_ctor;
@@ -43,22 +44,23 @@ NunchuckDevice::Deinitialise(JNIEnv *env) noexcept
   nunchuck_class.Clear(env);
 }
 
-static jobject
+static auto
 CreateNunchuckDevice(JNIEnv *env, jobject holder,
                      unsigned twi_num, unsigned sample_rate,
                      SensorListener &_listener)
 {
   const auto listener = NativeSensorListener::Create(env, _listener);
-  return env->NewObject(nunchuck_class, nunchuck_ctor, holder,
-                        twi_num, sample_rate,
-                        listener.Get());
+  return Java::NewObjectRethrow(env, nunchuck_class, nunchuck_ctor,
+                                holder,
+                                twi_num, sample_rate,
+                                listener.Get());
 }
 
 NunchuckDevice::NunchuckDevice(JNIEnv *env, jobject holder,
                                unsigned twi_num, unsigned sample_rate,
                                SensorListener &listener)
-  :obj(env, CreateNunchuckDevice(env, holder,
-                                 twi_num, sample_rate,
-                                 listener))
+  :obj(CreateNunchuckDevice(env, holder,
+                            twi_num, sample_rate,
+                            listener))
 {
 }
