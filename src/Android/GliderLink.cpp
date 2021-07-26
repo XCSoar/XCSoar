@@ -30,8 +30,7 @@ Copyright_License {
 #include "Context.hpp"
 
 Java::TrivialClass GliderLink::gl_cls;
-jmethodID GliderLink::gl_ctor_id, GliderLink::close_method;
-
+jmethodID GliderLink::gl_ctor_id;
 
 bool
 GliderLink::Initialise(JNIEnv *env)
@@ -43,7 +42,6 @@ GliderLink::Initialise(JNIEnv *env)
 
   gl_ctor_id = env->GetMethodID(gl_cls, "<init>",
                                  "(Landroid/content/Context;I)V");
-  close_method = env->GetMethodID(gl_cls, "close", "()V");
 
   return true;
 }
@@ -68,11 +66,6 @@ GliderLink* GliderLink::create(JNIEnv* env, Context* context,
 
 GliderLink::GliderLink(JNIEnv* env, jobject obj)
     : obj(env, obj) {
-}
-
-GliderLink::~GliderLink() {
-  JNIEnv *env = Java::GetEnv();
-  env->CallVoidMethod(obj.Get(), close_method);
 }
 
 gcc_visibility_default
