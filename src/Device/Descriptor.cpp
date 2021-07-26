@@ -570,6 +570,10 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   TCHAR buffer[64];
   LogFormat(_T("Opening device %s"), config.GetPortName(buffer, 64));
 
+#ifdef ANDROID
+  kalman_filter.Reset();
+#endif
+
   open_job = new OpenDeviceJob(*this);
   async.Start(open_job, env, &job_finished_notify);
 
