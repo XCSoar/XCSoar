@@ -31,7 +31,7 @@ Copyright_License {
 #include <stdlib.h>
 
 static Java::TrivialClass voltage_class;
-static jmethodID voltage_ctor, close_method;
+static jmethodID voltage_ctor;
 
 void
 VoltageDevice::Initialise(JNIEnv *env)
@@ -40,7 +40,6 @@ VoltageDevice::Initialise(JNIEnv *env)
 
   voltage_ctor = env->GetMethodID(voltage_class, "<init>",
                                  "(Lorg/xcsoar/IOIOConnectionHolder;ILorg/xcsoar/Voltage$Listener;)V");
-  close_method = env->GetMethodID(voltage_class, "close", "()V");
 }
 
 void
@@ -73,12 +72,6 @@ VoltageDevice::VoltageDevice(unsigned _index,
    offset(_offset),
    factor(_factor)
 {
-}
-
-VoltageDevice::~VoltageDevice()
-{
-  JNIEnv *env = Java::GetEnv();
-  env->CallVoidMethod(obj.Get(), close_method);
 }
 
 void

@@ -25,8 +25,7 @@ Copyright_License {
 #define XCSOAR_ANDROID_VOLTAGE_DEVICE_HPP
 
 #include "VoltageListener.hpp"
-#include "java/Object.hxx"
-#include "util/Compiler.h"
+#include "java/Closeable.hxx"
 #include "Math/WindowFilter.hpp"
 
 #include <jni.h>
@@ -35,7 +34,7 @@ Copyright_License {
 
 class VoltageDevice final : private VoltageListener {
   unsigned index;
-  Java::GlobalObject obj;
+  Java::GlobalCloseable obj;
   double offset;
   double factor;
   WindowFilter<16> voltage_filter[NUMBER_OF_VOLTAGES];
@@ -48,8 +47,6 @@ public:
   VoltageDevice(unsigned index,
                JNIEnv *env, jobject holder,
                double _offset, double _factor, unsigned sample_rate);
-
-  ~VoltageDevice();
 
 private:
   /* virtual methods from class VoltageListener */
