@@ -352,7 +352,6 @@ FillPress(DataFieldEnum &dfe) noexcept
   dfe.addEnumText(_T("Static"), (unsigned)DeviceConfig::PressureUse::STATIC_ONLY);
   dfe.addEnumText(_T("TE probe (compensated vario)"), (unsigned)DeviceConfig::PressureUse::TEK_PRESSURE);
   dfe.addEnumText(_T("Pitot (airspeed)"), (unsigned)DeviceConfig::PressureUse::PITOT);
-  dfe.addEnumText(_T("Pitot zero calibration"), (unsigned)DeviceConfig::PressureUse::PITOT_ZERO);
 }
 
 static void

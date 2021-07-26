@@ -25,6 +25,7 @@ Copyright_License {
 #include "DeviceEditWidget.hpp"
 #include "Vega/VegaDialogs.hpp"
 #include "BlueFly/BlueFlyDialogs.hpp"
+#include "ManageI2CPitotDialog.hpp"
 #include "ManageCAI302Dialog.hpp"
 #include "ManageFlarmDialog.hpp"
 #include "LX/ManageV7Dialog.hpp"
@@ -607,6 +608,16 @@ DeviceListWidget::ManageCurrent()
   DeviceDescriptor &descriptor = (*devices)[current];
   if (!descriptor.IsManageable())
     return;
+
+#ifdef ANDROID
+  const auto &config = descriptor.GetConfig();
+  if (config.port_type == DeviceConfig::PortType::DROIDSOAR_V2 ||
+      (config.port_type == DeviceConfig::PortType::I2CPRESSURESENSOR &&
+       config.press_use == DeviceConfig::PressureUse::PITOT)) {
+    ManageI2CPitotDialog(UIGlobals::GetMainWindow(), look, descriptor);
+    return;
+  }
+#endif
 
   if (descriptor.GetState() != PortState::READY) {
     ShowMessageBox(_("Device is not connected"), _("Manage"),

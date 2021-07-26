@@ -9,6 +9,7 @@ Version 7.11 - not yet released
   - show Bluetooth LE device features
   - support Bluetooth LE heart rate sensors
   - support the Flytec Sensbox
+  - add DroidSoar/I2C calibration dialog
   - fix reconnect to Bluetooth LE devices
   - fix distorted colors on some devices
 * Polars

@@ -133,11 +133,6 @@ I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
     case DeviceConfig::PressureUse::PITOT:
       basic.ProvidePitotPressure(pressure - pitot_offset);
       break;
-
-    case DeviceConfig::PressureUse::PITOT_ZERO:
-      pitot_offset = AtmosphericPressure::HectoPascal(kalman_filter.GetXAbs()) - static_p;
-      basic.ProvideSensorCalibration(1, pitot_offset.GetHectoPascal());
-      break;
     }
   }
 

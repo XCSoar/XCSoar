@@ -333,10 +333,7 @@ DeviceDescriptor::OpenDroidSoarV2()
 
   i2cbaro[1] = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
                                  ioio_helper->GetHolder(),
-                                 // needs calibration ?
-                                 config.sensor_factor == 0
-                                 ? DeviceConfig::PressureUse::PITOT_ZERO
-                                 : DeviceConfig::PressureUse::PITOT,
+                                 DeviceConfig::PressureUse::PITOT,
                                  AtmosphericPressure::HectoPascal(config.sensor_offset),
                                  1 + (0x77 << 8) + (46 << 16), 0 ,
                                  5,
@@ -359,10 +356,7 @@ DeviceDescriptor::OpenI2Cbaro()
 
   i2cbaro.front() = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
                                       ioio_helper->GetHolder(),
-                                      // needs calibration ?
-                                      config.sensor_factor == 0 && config.press_use == DeviceConfig::PressureUse::PITOT
-                                      ? DeviceConfig::PressureUse::PITOT_ZERO
-                                      : config.press_use,
+config.press_use,
                                       AtmosphericPressure::HectoPascal(config.sensor_offset),
                                       config.i2c_bus, config.i2c_addr,
                                       config.press_use == DeviceConfig::PressureUse::TEK_PRESSURE ? 20 : 5,
@@ -743,6 +737,14 @@ DeviceDescriptor::IsManageable() const
       return lx.IsV7() || lx.IsNano() || lx.IsLX16xx();
     }
   }
+
+#ifdef ANDROID
+  if (config.port_type == DeviceConfig::PortType::I2CPRESSURESENSOR)
+      return config.press_use == DeviceConfig::PressureUse::PITOT;
+
+  if (config.port_type == DeviceConfig::PortType::DROIDSOAR_V2)
+    return true;
+#endif
 
   return false;
 }
