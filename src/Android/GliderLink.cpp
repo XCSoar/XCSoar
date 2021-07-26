@@ -32,8 +32,8 @@ Copyright_License {
 Java::TrivialClass GliderLink::gl_cls;
 jmethodID GliderLink::gl_ctor_id;
 
-bool
-GliderLink::Initialise(JNIEnv *env)
+void
+GliderLink::Initialise(JNIEnv *env) noexcept
 {
   assert(!gl_cls.IsDefined());
   assert(env != nullptr);
@@ -42,18 +42,18 @@ GliderLink::Initialise(JNIEnv *env)
 
   gl_ctor_id = env->GetMethodID(gl_cls, "<init>",
                                  "(Landroid/content/Context;I)V");
-
-  return true;
 }
 
 void
-GliderLink::Deinitialise(JNIEnv *env)
+GliderLink::Deinitialise(JNIEnv *env) noexcept
 {
   gl_cls.Clear(env);
 }
 
-GliderLink* GliderLink::create(JNIEnv* env, Context* context,
-                                         unsigned index) {
+GliderLink *
+GliderLink::create(JNIEnv *env, Context *context,
+                   unsigned index) noexcept
+{
   assert(gl_cls != nullptr);
 
   // Construct GliderLinkReceiver object.
@@ -64,7 +64,7 @@ GliderLink* GliderLink::create(JNIEnv* env, Context* context,
   return new GliderLink(env, obj);
 }
 
-GliderLink::GliderLink(JNIEnv* env, jobject obj)
+GliderLink::GliderLink(JNIEnv* env, jobject obj) noexcept
     : obj(env, obj) {
 }
 

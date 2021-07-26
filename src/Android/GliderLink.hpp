@@ -42,14 +42,14 @@ class GliderLink {
   Java::GlobalCloseable obj;
 
 public:
-  static bool Initialise(JNIEnv *env);
-  static void Deinitialise(JNIEnv *env);
+  static void Initialise(JNIEnv *env) noexcept;
+  static void Deinitialise(JNIEnv *env) noexcept;
 
-  GliderLink(JNIEnv *env, jobject obj);
+  GliderLink(JNIEnv *env, jobject obj) noexcept;
 
   [[gnu::malloc]]
-  static GliderLink *create(JNIEnv* env, Context* native_view,
-                                 unsigned int index);
+  static GliderLink *create(JNIEnv *env, Context *native_view,
+                            unsigned int index) noexcept;
 };
 
 #endif
