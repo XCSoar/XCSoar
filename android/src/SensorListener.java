@@ -44,6 +44,10 @@ public interface SensorListener {
   void onVarioSensor(float vario);
   void onHeartRateSensor(int bpm);
 
+  void onNunchukValues(int joy_x, int joy_y,
+                       int accel_x, int accel_y, int accel_z,
+                       int switches);
+
   /**
    * An error has occurred, and the sensor is now defunct.
    *

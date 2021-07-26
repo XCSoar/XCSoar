@@ -22,13 +22,8 @@ Copyright_License {
 */
 
 #include "NunchuckDevice.hpp"
-#include "NativeNunchuckListener.hpp"
+#include "NativeSensorListener.hpp"
 #include "java/Class.hxx"
-#include "Blackboard/DeviceBlackboard.hpp"
-#include "Components.hpp"
-#include "LogFile.hpp"
-
-#include <stdlib.h>
 
 static Java::TrivialClass nunchuck_class;
 static jmethodID nunchuck_ctor, close_method;
@@ -39,7 +34,7 @@ NunchuckDevice::Initialise(JNIEnv *env)
   nunchuck_class.Find(env, "org/xcsoar/GlueNunchuck");
 
   nunchuck_ctor = env->GetMethodID(nunchuck_class, "<init>",
-                                 "(Lorg/xcsoar/IOIOConnectionHolder;IILorg/xcsoar/Nunchuck$Listener;)V");
+                                 "(Lorg/xcsoar/IOIOConnectionHolder;IILorg/xcsoar/SensorListener;)V");
   close_method = env->GetMethodID(nunchuck_class, "close", "()V");
 }
 
@@ -51,22 +46,21 @@ NunchuckDevice::Deinitialise(JNIEnv *env)
 
 static jobject
 CreateNunchuckDevice(JNIEnv *env, jobject holder,
-                   unsigned twi_num, unsigned sample_rate,
-                   NunchuckListener &listener)
+                     unsigned twi_num, unsigned sample_rate,
+                     SensorListener &_listener)
 {
-  Java::LocalRef listener2{env, NativeNunchuckListener::Create(env, listener)};
+  const auto listener = NativeSensorListener::Create(env, _listener);
   return env->NewObject(nunchuck_class, nunchuck_ctor, holder,
                         twi_num, sample_rate,
-                        listener2.Get());
+                        listener.Get());
 }
 
-NunchuckDevice::NunchuckDevice(unsigned _index,
-                           JNIEnv *env, jobject holder,
-                           unsigned twi_num, unsigned sample_rate)
-  :index(_index),
-   obj(env, CreateNunchuckDevice(env, holder,
-                               twi_num, sample_rate,
-                               *this))
+NunchuckDevice::NunchuckDevice(JNIEnv *env, jobject holder,
+                               unsigned twi_num, unsigned sample_rate,
+                               SensorListener &listener)
+  :obj(env, CreateNunchuckDevice(env, holder,
+                                 twi_num, sample_rate,
+                                 listener))
 {
 }
 
@@ -74,65 +68,4 @@ NunchuckDevice::~NunchuckDevice()
 {
   JNIEnv *env = Java::GetEnv();
   env->CallVoidMethod(obj.Get(), close_method);
-}
-
-void
-NunchuckDevice::onNunchuckValues(int joy_x, int joy_y, int acc_x, int acc_y, int acc_z, int switches)
-{
-  static int joy_state_x, joy_state_y;
-
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
-  NMEAInfo &basic = device_blackboard->SetRealState(index);
-  basic.UpdateClock();
-  basic.alive.Update(basic.clock);
-
-  // Nunchuck really connected  ?
-  if (joy_x < 1000) {
-
-    basic.acceleration.ProvideGLoad(acc_z / 1000., true);
-
-    device_blackboard->ScheduleMerge();
-
-    int new_joy_state_x = 0, new_joy_state_y = 0; 
-    if (joy_x < -50) new_joy_state_x = -1; else if (joy_x > 50) new_joy_state_x = 1;
-    if (joy_y < -50) new_joy_state_y = -1; else if (joy_y > 50) new_joy_state_y = 1;
-
-    if (new_joy_state_x && new_joy_state_x != joy_state_x) {
-      if (new_joy_state_x < 0) {
-        // generate event
-      } else {
-        // generate event
-      }
-    }
-    joy_state_x = new_joy_state_x;
-
-    if (new_joy_state_y && new_joy_state_y != joy_state_y) {
-      if (new_joy_state_y < 0) {
-        // generate event
-      } else {
-        // generate event
-      }
-    }
-    joy_state_y = new_joy_state_y;
-  }
-
-  // Kludge: some IOIO digital inputs can be used without a Nunchuck.
-  for (int i=0; i<8; i++) {
-    if (switches & (1<<i)) {
-      // generate event
-    }
-  }
-
-  device_blackboard->ScheduleMerge();
-}
-
-void
-NunchuckDevice::onNunchuckError()
-{
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
-  NMEAInfo &basic = device_blackboard->SetRealState(index);
-
-  basic.acceleration.Reset();
-
-  device_blackboard->ScheduleMerge();
 }

@@ -192,6 +192,22 @@ Java_org_xcsoar_NativeSensorListener_onHeartRateSensor(JNIEnv *env,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeSensorListener_onNunchuckValues(JNIEnv *env, jobject obj,
+                                                      jint joy_x, jint joy_y,
+                                                      jint acc_x, jint acc_y,
+                                                      jint acc_z,
+                                                      jint switches)
+ {
+  jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
+  if (ptr == 0)
+    return;
+
+  auto &listener = *(SensorListener *)ptr;
+  listener.OnNunchukValues(joy_x, joy_y, acc_x, acc_y, acc_z, switches);
+}
+
+gcc_visibility_default
+JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeSensorListener_onSensorError(JNIEnv *env,
                                                    jobject obj,
                                                    jstring msg)

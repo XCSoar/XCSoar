@@ -226,6 +226,52 @@ DeviceDescriptor::OnHeartRateSensor(unsigned bpm) noexcept
 }
 
 void
+DeviceDescriptor::OnNunchukValues(int joy_x, int joy_y,
+                                  int acc_x, int acc_y, int acc_z,
+                                  int switches) noexcept
+{
+  // Nunchuk really connected  ?
+  if (joy_x < 1000) {
+    {
+      const auto e = BeginEdit();
+      NMEAInfo &basic = *e;
+      basic.UpdateClock();
+      basic.acceleration.ProvideGLoad(acc_z / 1000., true);
+      e.Commit();
+    }
+
+    int new_joy_state_x = 0, new_joy_state_y = 0;
+    if (joy_x < -50) new_joy_state_x = -1; else if (joy_x > 50) new_joy_state_x = 1;
+    if (joy_y < -50) new_joy_state_y = -1; else if (joy_y > 50) new_joy_state_y = 1;
+
+    if (new_joy_state_x && new_joy_state_x != joy_state_x) {
+      if (new_joy_state_x < 0) {
+        // generate event
+      } else {
+        // generate event
+      }
+    }
+    joy_state_x = new_joy_state_x;
+
+    if (new_joy_state_y && new_joy_state_y != joy_state_y) {
+      if (new_joy_state_y < 0) {
+        // generate event
+      } else {
+        // generate event
+      }
+    }
+    joy_state_y = new_joy_state_y;
+  }
+
+  // Kludge: some IOIO digital inputs can be used without a Nunchuk.
+  for (int i=0; i<8; i++) {
+    if (switches & (1<<i)) {
+      // generate event
+    }
+  }
+}
+
+void
 DeviceDescriptor::OnSensorError(const char *msg) noexcept
 {
   PortError(msg);

@@ -50,5 +50,9 @@ public:
   virtual void OnVarioSensor(float vario) noexcept = 0;
   virtual void OnHeartRateSensor(unsigned bpm) noexcept = 0;
 
+  virtual void OnNunchukValues(int joy_x, int joy_y,
+                               int acc_x, int acc_y, int acc_z,
+                               int switches) noexcept = 0;
+
   virtual void OnSensorError(const char *msg) noexcept = 0;
 };

@@ -24,31 +24,25 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_NUNCHUCK_DEVICE_HPP
 #define XCSOAR_ANDROID_NUNCHUCK_DEVICE_HPP
 
-#include "NunchuckListener.hpp"
 #include "java/Object.hxx"
 #include "util/Compiler.h"
 
 #include <jni.h>
 
-class NunchuckDevice final : private NunchuckListener {
-  unsigned index;
+class SensorListener;
+
+class NunchuckDevice final {
   Java::GlobalObject obj;
 
 public:
   static void Initialise(JNIEnv *env);
   static void Deinitialise(JNIEnv *env);
 
-  NunchuckDevice(unsigned index,
-               JNIEnv *env, jobject holder,
-               unsigned twi_num, unsigned sample_rate);
+  NunchuckDevice(JNIEnv *env, jobject holder,
+                 unsigned twi_num, unsigned sample_rate,
+                 SensorListener &listener);
 
   ~NunchuckDevice();
-
-private:
-  /* virtual methods from class NunchuckListener */
-  virtual void onNunchuckValues(int joy_x, int joy_y,
-                                int acc_x, int acc_y, int acc_z, int switches) override;
-  virtual void onNunchuckError() override;
 };
 
 #endif

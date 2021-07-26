@@ -203,6 +203,11 @@ class DeviceDescriptor final
   static constexpr double KF_MAX_DT = 60;
 
   SelfTimingKalmanFilter1d kalman_filter{KF_MAX_DT, KF_VAR_ACCEL};
+
+  /**
+   * State for Nunchuk.
+   */
+  int joy_state_x, joy_state_y;
 #endif
 
   /**
@@ -612,6 +617,9 @@ private:
   void OnPressureAltitudeSensor(float altitude) noexcept override;
   void OnVarioSensor(float vario) noexcept override;
   void OnHeartRateSensor(unsigned bpm) noexcept override;
+  void OnNunchukValues(int joy_x, int joy_y,
+                       int acc_x, int acc_y, int acc_z,
+                       int switches) noexcept final;
   void OnSensorError(const char *msg) noexcept override;
 #endif // ANDROID
 };

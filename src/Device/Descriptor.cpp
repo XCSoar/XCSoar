@@ -386,9 +386,10 @@ DeviceDescriptor::OpenNunchuck()
   if (ioio_helper == nullptr)
     return false;
 
-  nunchuck = new NunchuckDevice(GetIndex(), Java::GetEnv(),
-                                  ioio_helper->GetHolder(),
-                                  config.i2c_bus, 5); // twi, sample_rate
+  nunchuck = new NunchuckDevice(Java::GetEnv(),
+                                ioio_helper->GetHolder(),
+                                config.i2c_bus, 5, // twi, sample_rate
+                                *this);
   return true;
 #else
   return false;

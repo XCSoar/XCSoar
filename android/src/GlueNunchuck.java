@@ -32,13 +32,13 @@ import ioio.lib.api.exception.ConnectionLostException;
 final class GlueNunchuck implements IOIOConnectionListener {
   private IOIOConnectionHolder holder;
   private final int twiNum, sample_rate;
-  private final Nunchuck.Listener listener;
+  private final SensorListener listener;
 
   private Nunchuck instance;
 
   GlueNunchuck(IOIOConnectionHolder _holder,
-              int _twiNum, int _sample_rate,
-             Nunchuck.Listener _listener) {
+               int _twiNum, int _sample_rate,
+               SensorListener _listener) {
     twiNum = _twiNum;
     sample_rate = _sample_rate;
     listener = _listener;
