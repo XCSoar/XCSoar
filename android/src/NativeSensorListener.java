@@ -71,4 +71,7 @@ final class NativeSensorListener implements SensorListener {
 
   @Override
   public native void onHeartRateSensor(int bpm);
+
+  @Override
+  public native void onSensorError(String msg);
 }

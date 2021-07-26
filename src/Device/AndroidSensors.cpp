@@ -224,3 +224,10 @@ DeviceDescriptor::OnHeartRateSensor(unsigned bpm) noexcept
 
   e.Commit();
 }
+
+void
+DeviceDescriptor::OnSensorError(const char *msg) noexcept
+{
+  PortError(msg);
+  PortStateChanged();
+}

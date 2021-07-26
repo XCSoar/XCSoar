@@ -43,4 +43,11 @@ public interface SensorListener {
   void onPressureAltitudeSensor(float altitude);
   void onVarioSensor(float vario);
   void onHeartRateSensor(int bpm);
+
+  /**
+   * An error has occurred, and the sensor is now defunct.
+   *
+   * @param msg a human-readable error message
+   */
+  void onSensorError(String msg);
 }

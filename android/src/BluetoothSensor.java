@@ -70,7 +70,7 @@ public final class BluetoothSensor
   }
 
   private void submitError(String msg) {
-    // TODO
+    listener.onSensorError(msg);
   }
 
   private void enableNotification(BluetoothGattCharacteristic c) {

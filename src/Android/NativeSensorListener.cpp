@@ -189,3 +189,17 @@ Java_org_xcsoar_NativeSensorListener_onHeartRateSensor(JNIEnv *env,
   auto &listener = *(SensorListener *)ptr;
   listener.OnHeartRateSensor(bpm);
 }
+
+gcc_visibility_default
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeSensorListener_onSensorError(JNIEnv *env,
+                                                   jobject obj,
+                                                   jstring msg)
+{
+  jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
+  if (ptr == 0)
+    return;
+
+  auto &listener = *(SensorListener *)ptr;
+  listener.OnSensorError(Java::String::GetUTFChars(env, msg).c_str());
+}

@@ -49,4 +49,6 @@ public:
   virtual void OnPressureAltitudeSensor(float altitude) noexcept = 0;
   virtual void OnVarioSensor(float vario) noexcept = 0;
   virtual void OnHeartRateSensor(unsigned bpm) noexcept = 0;
+
+  virtual void OnSensorError(const char *msg) noexcept = 0;
 };

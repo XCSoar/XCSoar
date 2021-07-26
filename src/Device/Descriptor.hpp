@@ -612,6 +612,7 @@ private:
   void OnPressureAltitudeSensor(float altitude) noexcept override;
   void OnVarioSensor(float vario) noexcept override;
   void OnHeartRateSensor(unsigned bpm) noexcept override;
+  void OnSensorError(const char *msg) noexcept override;
 #endif // ANDROID
 };
 
