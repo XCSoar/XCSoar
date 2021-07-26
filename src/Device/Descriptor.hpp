@@ -46,6 +46,7 @@ Copyright_License {
 #include "Math/SelfTimingKalmanFilter1d.hpp"
 #endif
 
+#include <atomic>
 #include <chrono>
 #include <memory>
 
@@ -247,6 +248,12 @@ class DeviceDescriptor final
    * @param see ResetFailureCounter()
    */
   unsigned n_failures = 0;
+
+  /**
+   * True when a sensor has failed and the device should be closed in
+   * the next OnSysTicker() call.
+   */
+  std::atomic_bool has_failed{false};
 
   /**
    * Internal flag for OnSysTicker() for detecting link timeout.

@@ -150,6 +150,9 @@ DeviceDescriptor::ClearConfig()
 PortState
 DeviceDescriptor::GetState() const
 {
+  if (has_failed)
+    return PortState::FAILED;
+
   if (open_job != nullptr)
     return PortState::LIMBO;
 
@@ -549,6 +552,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   assert(port == nullptr);
   assert(device == nullptr);
   assert(second_device == nullptr);
+  assert(!has_failed);
   assert(!ticker);
   assert(!IsBorrowed());
 
@@ -621,6 +625,7 @@ DeviceDescriptor::Close()
 
   port.reset();
 
+  has_failed = false;
   ticker = false;
 
   {
@@ -1154,7 +1159,10 @@ DeviceDescriptor::OnSysTicker()
 {
   assert(InMainThread());
 
-  if (port != nullptr && port->GetState() == PortState::FAILED && !IsOccupied())
+  if (port != nullptr && port->GetState() == PortState::FAILED)
+    has_failed = true;
+
+  if (has_failed && !IsOccupied())
     Close();
 
   if (device == nullptr)
@@ -1244,6 +1252,8 @@ DeviceDescriptor::PortError(const char *msg) noexcept
       error_message = tmsg;
     }
   }
+
+  has_failed = true;
 
   if (port_listener != nullptr)
     port_listener->PortError(msg);
