@@ -39,7 +39,7 @@ static Java::TrivialClass bmp085_class;
 static jmethodID bmp085_ctor;
 
 void
-BMP085Device::Initialise(JNIEnv *env)
+BMP085Device::Initialise(JNIEnv *env) noexcept
 {
   bmp085_class.Find(env, "org/xcsoar/GlueBMP085");
 
@@ -48,7 +48,7 @@ BMP085Device::Initialise(JNIEnv *env)
 }
 
 void
-BMP085Device::Deinitialise(JNIEnv *env)
+BMP085Device::Deinitialise(JNIEnv *env) noexcept
 {
   bmp085_class.Clear(env);
 }
@@ -57,7 +57,7 @@ static Java::LocalObject
 CreateBMP085Device(JNIEnv *env, jobject holder,
                    unsigned twi_num, unsigned eoc_pin,
                    unsigned oversampling,
-                   BMP085Listener &listener)
+                   BMP085Listener &listener) noexcept
 {
   Java::LocalRef listener2{env, NativeBMP085Listener::Create(env, listener)};
   return {env,
@@ -69,7 +69,7 @@ CreateBMP085Device(JNIEnv *env, jobject holder,
 BMP085Device::BMP085Device(unsigned _index,
                            JNIEnv *env, jobject holder,
                            unsigned twi_num, unsigned eoc_pin,
-                           unsigned oversampling)
+                           unsigned oversampling) noexcept
   :index(_index),
    obj(CreateBMP085Device(env, holder,
                           twi_num, eoc_pin, oversampling,
@@ -80,7 +80,7 @@ BMP085Device::BMP085Device(unsigned _index,
 
 gcc_pure
 static inline double
-ComputeNoncompVario(const double pressure, const double d_pressure)
+ComputeNoncompVario(const double pressure, const double d_pressure) noexcept
 {
   static constexpr double FACTOR(-2260.389548275485);
   static constexpr double EXPONENT(-0.8097374740609689);

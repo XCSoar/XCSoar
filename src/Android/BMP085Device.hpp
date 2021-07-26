@@ -41,13 +41,13 @@ class BMP085Device final : private BMP085Listener {
   SelfTimingKalmanFilter1d kalman_filter;
 
 public:
-  static void Initialise(JNIEnv *env);
-  static void Deinitialise(JNIEnv *env);
+  static void Initialise(JNIEnv *env) noexcept;
+  static void Deinitialise(JNIEnv *env) noexcept;
 
   BMP085Device(unsigned index,
                JNIEnv *env, jobject holder,
                unsigned twi_num, unsigned eoc_pin,
-               unsigned oversampling);
+               unsigned oversampling) noexcept;
 
 private:
   /* virtual methods from class BMP085Listener */
