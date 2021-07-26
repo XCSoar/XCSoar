@@ -110,7 +110,7 @@ final class Nunchuck extends Thread {
   }
 
   private int nunchuckDecodeByte (byte x) {
-    return (int)((x ^ 0x17) + 0x17) & 0xff;
+    return (((int)x ^ 0x17) + 0x17) & 0xff;
   }
 
   private boolean setup()
