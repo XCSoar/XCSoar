@@ -64,7 +64,8 @@ CreateI2CbaroDevice(JNIEnv *env, jobject holder,
 I2CbaroDevice::I2CbaroDevice(unsigned _index,
                            JNIEnv *env, jobject holder,
                            DeviceConfig::PressureUse use,
-                           double offset, unsigned twi_num, unsigned i2c_addr, unsigned sample_rate, unsigned flags)
+                             AtmosphericPressure offset,
+                             unsigned twi_num, unsigned i2c_addr, unsigned sample_rate, unsigned flags)
   :index(_index),
    obj(CreateI2CbaroDevice(env, holder,
                            twi_num, i2c_addr, sample_rate, flags,
@@ -87,7 +88,7 @@ ComputeNoncompVario(const double pressure, const double d_pressure) noexcept
 /*
  * TODO: use ProvidePitotPressure() and get rid of this static variable static_p.
  */
-static double static_p = 0;
+static AtmosphericPressure static_p = AtmosphericPressure::Zero();
 
 void
 I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
@@ -102,7 +103,8 @@ I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
 
     // Set filter properties depending on sensor type
     if (sensor == 85 && press_use == DeviceConfig::PressureUse::STATIC_WITH_VARIO) {
-      if (static_p == 0) kalman_filter.SetAccelerationVariance(0.0075);
+      if (!static_p.IsPlausible())
+        kalman_filter.SetAccelerationVariance(0.0075);
       param = 0.05;
     } else {
       param = 0.5;
@@ -115,14 +117,14 @@ I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
       break;
 
     case DeviceConfig::PressureUse::STATIC_ONLY:
-      static_p = kalman_filter.GetXAbs();
-      basic.ProvideStaticPressure(AtmosphericPressure::HectoPascal(static_p));
+      static_p = AtmosphericPressure::HectoPascal(kalman_filter.GetXAbs());
+      basic.ProvideStaticPressure(static_p);
       break;
 
     case DeviceConfig::PressureUse::STATIC_WITH_VARIO:
-      static_p = pressure.GetHectoPascal();
+      static_p = pressure;
       basic.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(), kalman_filter.GetXVel()));
-      basic.ProvideStaticPressure(AtmosphericPressure::HectoPascal(static_p));
+      basic.ProvideStaticPressure(static_p);
       break;
 
     case DeviceConfig::PressureUse::TEK_PRESSURE:
@@ -131,18 +133,18 @@ I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
       break;
 
     case DeviceConfig::PressureUse::PITOT:
-      if (static_p != 0) {
-        auto dyn = pressure.GetHectoPascal() - static_p - pitot_offset;
-        if (dyn < 0.31)
+      if (static_p.IsPlausible()) {
+        auto dyn = pressure - static_p - pitot_offset;
+        if (dyn < AtmosphericPressure::HectoPascal(0.31))
           // suppress speeds below ~25 km/h
-          dyn = 0;
-        basic.ProvideDynamicPressure(AtmosphericPressure::HectoPascal(dyn));
+          dyn = AtmosphericPressure::Zero();
+        basic.ProvideDynamicPressure(dyn);
       }
       break;
 
     case DeviceConfig::PressureUse::PITOT_ZERO:
-      pitot_offset = kalman_filter.GetXAbs() - static_p;
-      basic.ProvideSensorCalibration(1, pitot_offset);
+      pitot_offset = AtmosphericPressure::HectoPascal(kalman_filter.GetXAbs()) - static_p;
+      basic.ProvideSensorCalibration(1, pitot_offset.GetHectoPascal());
       break;
     }
   }
