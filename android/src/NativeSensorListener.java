@@ -73,6 +73,10 @@ final class NativeSensorListener implements SensorListener {
   public native void onHeartRateSensor(int bpm);
 
   @Override
+  public native void onVoltageValues(int temp_adc, int voltage_index,
+                                     int volt_adc);
+
+  @Override
   public native void onNunchukValues(int joy_x, int joy_y,
                                      int acc_x, int acc_y, int acc_z,
                                      int switches);

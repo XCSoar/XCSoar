@@ -408,10 +408,17 @@ DeviceDescriptor::OpenVoltage()
   if (ioio_helper == nullptr)
     return false;
 
-  voltage = new VoltageDevice(GetIndex(), Java::GetEnv(),
-                                  ioio_helper->GetHolder(),
-                                  config.sensor_offset, config.sensor_factor,
-                                  60); // sample_rate per minute
+  voltage_offset = config.sensor_offset;
+  voltage_factor = config.sensor_factor;
+
+  for (auto &i : voltage_filter)
+    i.Reset();
+  temperature_filter.Reset();
+
+  voltage = new VoltageDevice(Java::GetEnv(),
+                              ioio_helper->GetHolder(),
+                              60, // sample_rate per minute
+                              *this);
   return true;
 #else
   return false;

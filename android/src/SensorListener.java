@@ -44,6 +44,8 @@ public interface SensorListener {
   void onVarioSensor(float vario);
   void onHeartRateSensor(int bpm);
 
+  void onVoltageValues(int temp_adc, int voltage_index, int volt_adc);
+
   void onNunchukValues(int joy_x, int joy_y,
                        int accel_x, int accel_y, int accel_z,
                        int switches);

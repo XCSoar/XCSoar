@@ -228,6 +228,45 @@ DeviceDescriptor::OnHeartRateSensor(unsigned bpm) noexcept
 }
 
 void
+DeviceDescriptor::OnVoltageValues(int temp_adc, unsigned voltage_index,
+                                  int volt_adc) noexcept
+{
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+
+  // When no calibration data present, use defaults
+  if (voltage_factor == 0) {
+    // Set default for temp sensor only when sensor present.
+    if (temp_adc >= 0 && voltage_offset == 0)
+      voltage_offset = -130;
+    voltage_factor = 0.01599561738;
+    basic.ProvideSensorCalibration(voltage_factor, voltage_offset);
+  }
+
+  if (temp_adc >= 0) {
+    auto v = Temperature::FromCelsius(voltage_offset + temp_adc);
+    if (temperature_filter.Update(v.ToNative()))
+      v = Temperature::FromNative(temperature_filter.Average());
+    basic.temperature = v;
+    basic.temperature_available = true;
+  } else {
+    basic.temperature_available = false;
+  }
+
+  if (voltage_index < voltage_filter.size()) {
+    auto v = voltage_factor * volt_adc;
+    if (voltage_filter[voltage_index].Update(v))
+      v = voltage_filter[voltage_index].Average();
+    basic.voltage = v;
+    basic.voltage_available.Update(basic.clock);
+  }
+
+  e.Commit();
+}
+
+void
 DeviceDescriptor::OnNunchukValues(int joy_x, int joy_y,
                                   int acc_x, int acc_y, int acc_z,
                                   int switches) noexcept

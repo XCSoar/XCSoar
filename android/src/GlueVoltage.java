@@ -32,12 +32,12 @@ import ioio.lib.api.exception.ConnectionLostException;
  */
 final class GlueVoltage implements Closeable, IOIOConnectionListener {
   private IOIOConnectionHolder holder;
-  private final Voltage.Listener listener;
+  private final SensorListener listener;
   int sample_rate;
   private Voltage instance;
 
   GlueVoltage(IOIOConnectionHolder _holder, int _sample_rate,
-             Voltage.Listener _listener) {
+              SensorListener _listener) {
     listener = _listener;
     sample_rate = _sample_rate;
     holder = _holder;
@@ -58,7 +58,11 @@ final class GlueVoltage implements Closeable, IOIOConnectionListener {
 
   @Override public void onIOIOConnect(IOIO ioio)
     throws ConnectionLostException, InterruptedException {
-    instance = new Voltage(ioio, sample_rate, listener);
+    try {
+      instance = new Voltage(ioio, sample_rate, listener);
+    } catch (Exception e) {
+      listener.onSensorError(e.getMessage());
+    }
   }
 
   @Override public void onIOIODisconnect(IOIO ioio) {

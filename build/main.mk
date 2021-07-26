@@ -747,7 +747,6 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/NativeI2CbaroListener.cpp \
 	$(SRC)/Android/I2CbaroDevice.cpp \
 	$(SRC)/Android/NunchuckDevice.cpp \
-	$(SRC)/Android/NativeVoltageListener.cpp \
 	$(SRC)/Android/VoltageDevice.cpp \
 	$(SRC)/Android/IOIOHelper.cpp \
 	$(SRC)/Android/UsbSerialHelper.cpp \

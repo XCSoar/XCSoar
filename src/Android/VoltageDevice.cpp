@@ -22,14 +22,9 @@ Copyright_License {
 */
 
 #include "VoltageDevice.hpp"
-#include "NativeVoltageListener.hpp"
+#include "NativeSensorListener.hpp"
 #include "java/Class.hxx"
 #include "java/Env.hxx"
-#include "Blackboard/DeviceBlackboard.hpp"
-#include "Components.hpp"
-#include "Atmosphere/Temperature.hpp"
-
-#include <stdlib.h>
 
 static Java::TrivialClass voltage_class;
 static jmethodID voltage_ctor;
@@ -40,7 +35,7 @@ VoltageDevice::Initialise(JNIEnv *env)
   voltage_class.Find(env, "org/xcsoar/GlueVoltage");
 
   voltage_ctor = env->GetMethodID(voltage_class, "<init>",
-                                 "(Lorg/xcsoar/IOIOConnectionHolder;ILorg/xcsoar/Voltage$Listener;)V");
+                                 "(Lorg/xcsoar/IOIOConnectionHolder;ILorg/xcsoar/SensorListener;)V");
 }
 
 void
@@ -51,79 +46,21 @@ VoltageDevice::Deinitialise(JNIEnv *env)
 
 static auto
 CreateVoltageDevice(JNIEnv *env, jobject holder,
-                   unsigned sample_rate,
-                   VoltageListener &listener)
+                    unsigned sample_rate,
+                    SensorListener &_listener)
 {
-  Java::LocalObject listener2{env,
-    NativeVoltageListener::Create(env, listener)};
+  const auto listener = NativeSensorListener::Create(env, _listener);
   return Java::NewObjectRethrow(env, voltage_class, voltage_ctor,
                                 holder,
                                 sample_rate,
-                                listener2.Get());
+                                listener.Get());
 }
 
-VoltageDevice::VoltageDevice(unsigned _index,
-                             JNIEnv *env, jobject holder,
-                             double _offset, double _factor,
-                             unsigned sample_rate)
-  :index(_index),
-   obj(CreateVoltageDevice(env, holder,
+VoltageDevice::VoltageDevice(JNIEnv *env, jobject holder,
+                             unsigned sample_rate,
+                             SensorListener &listener)
+  :obj(CreateVoltageDevice(env, holder,
                            sample_rate,
-                           *this)),
-   offset(_offset),
-   factor(_factor)
+                           listener))
 {
-}
-
-void
-VoltageDevice::onVoltageValues(int temp_adc, int voltage_index, int volt_adc)
-{
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
-  NMEAInfo &basic = device_blackboard->SetRealState(index);
-  basic.UpdateClock();
-  basic.alive.Update(basic.clock);
-
-  // When no calibration data present, use defaults
-  if (factor == 0) {
-    // Set default for temp sensor only when sensor present.
-    if (temp_adc >= 0 && offset == 0)
-      offset = -130;
-    factor = 0.01599561738;
-    basic.ProvideSensorCalibration(factor, offset);
-  }
-
-  if (temp_adc >= 0) {
-    auto v = Temperature::FromCelsius(offset + temp_adc);
-    if (temperature_filter.Update(v.ToNative()))
-      v = Temperature::FromNative(temperature_filter.Average());
-    basic.temperature = v;
-    basic.temperature_available = true;
-  } else {
-    basic.temperature_available = false;
-  }
-
-  if ((unsigned)voltage_index < NUMBER_OF_VOLTAGES) {
-    auto v = factor * volt_adc;
-    if (voltage_filter[voltage_index].Update(v))
-      v = voltage_filter[voltage_index].Average();
-    basic.voltage = v;
-    basic.voltage_available.Update(basic.clock);
-  }
-
-  device_blackboard->ScheduleMerge();
-}
-
-void
-VoltageDevice::onVoltageError()
-{
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
-  NMEAInfo &basic = device_blackboard->SetRealState(index);
-
-  basic.temperature_available = false;
-  temperature_filter.Reset();
-  basic.voltage_available.Clear();
-  for (unsigned i=0; i<NUMBER_OF_VOLTAGES; i++)
-    voltage_filter[i].Reset();
-
-  device_blackboard->ScheduleMerge();
 }
