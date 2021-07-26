@@ -28,10 +28,8 @@ Copyright_License {
 
 #include "java/Class.hxx"
 #include "java/Closeable.hxx"
-#include "util/Compiler.h"
 
 #include <jni.h>
-#include <vector>
 
 class Context;
 
@@ -49,7 +47,7 @@ public:
 
   GliderLink(JNIEnv *env, jobject obj);
 
-  gcc_malloc
+  [[gnu::malloc]]
   static GliderLink *create(JNIEnv* env, Context* native_view,
                                  unsigned int index);
 };
