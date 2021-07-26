@@ -34,13 +34,13 @@ import ioio.lib.api.exception.ConnectionLostException;
 final class GlueBMP085 implements IOIOConnectionListener, Closeable {
   private IOIOConnectionHolder holder;
   private final int twiNum, eocPin, oversampling;
-  private final BMP085.Listener listener;
+  private final SensorListener listener;
 
   private BMP085 instance;
 
   GlueBMP085(IOIOConnectionHolder _holder,
              int _twiNum, int _eocPin, int _oversampling,
-             BMP085.Listener _listener) {
+             SensorListener _listener) {
     twiNum = _twiNum;
     eocPin = _eocPin;
     oversampling = _oversampling;

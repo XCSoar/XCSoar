@@ -35,14 +35,6 @@ import ioio.lib.api.exception.ConnectionLostException;
  * @see http://www.bosch-sensortec.com/content/language1/html/3477.htm
  */
 final class BMP085 extends Thread {
-  interface Listener {
-    /**
-     * @param pressure the pressure [Pa]
-     */
-    void onBMP085Values(double temperature, int pressure);
-    void onBMP085Error();
-  };
-
   private static final String TAG = "XCSoar";
 
   static final byte BMP085_DEVICE_ID = 0x77;
@@ -89,7 +81,7 @@ final class BMP085 extends Thread {
   private TwiMaster twi;
   private DigitalInput eoc;
   private final int oversampling;
-  private final Listener listener;
+  private final SensorListener listener;
 
   /**
    * Pressure calibration coefficients.
@@ -102,7 +94,7 @@ final class BMP085 extends Thread {
   private int ac5, ac6, mc, md;
 
   public BMP085(IOIO ioio, int twiNum, int eocPin, int _oversampling,
-                Listener _listener)
+                SensorListener _listener)
     throws ConnectionLostException {
     super("BMP085");
 
@@ -247,7 +239,12 @@ final class BMP085 extends Thread {
     int up = readU24BE(response, 0) >> (8 - oversampling);
     int pressure_pa = getPressure(up, b5);
 
-    listener.onBMP085Values(temperature_c, pressure_pa);
+    /* ignoring the temperature, because it is measured inside the
+       IOIO box, and NMEAInfo's temperature setting is expected to be
+       "outside air temperature" - maybe someday, somebody builds a
+       IOIO adapter with a real outside air temperature sensor? */
+
+    listener.onBarometricPressureSensor(pressure_pa, 0.05f);
   }
 
   @Override public void run() {
@@ -257,13 +254,9 @@ final class BMP085 extends Thread {
 
       while (true)
         loop();
-    } catch (ConnectionLostException e) {
-      Log.d(TAG, "BMP085.run() failed", e);
-    } catch (IllegalStateException e) {
-      Log.d(TAG, "BMP085.run() failed", e);
     } catch (InterruptedException e) {
-    } finally {
-      listener.onBMP085Error();
+    } catch (Exception e) {
+      listener.onSensorError(e.getMessage());
     }
   }
 }

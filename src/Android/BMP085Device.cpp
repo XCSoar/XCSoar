@@ -22,18 +22,8 @@ Copyright_License {
 */
 
 #include "BMP085Device.hpp"
-#include "NativeBMP085Listener.hpp"
+#include "NativeSensorListener.hpp"
 #include "java/Class.hxx"
-#include "Blackboard/DeviceBlackboard.hpp"
-#include "Components.hpp"
-
-/* ignoring the temperature, because it is measured inside the IOIO
-   box, and NMEAInfo's temperature setting is expected to be "outside
-   air temperature" - maybe someday, somebody builds a IOIO adapter
-   with a real outside air temperature sensor? */
-#if 0
-#define USE_TEMPERATURE
-#endif
 
 static Java::TrivialClass bmp085_class;
 static jmethodID bmp085_ctor;
@@ -44,7 +34,7 @@ BMP085Device::Initialise(JNIEnv *env) noexcept
   bmp085_class.Find(env, "org/xcsoar/GlueBMP085");
 
   bmp085_ctor = env->GetMethodID(bmp085_class, "<init>",
-                                 "(Lorg/xcsoar/IOIOConnectionHolder;IIILorg/xcsoar/BMP085$Listener;)V");
+                                 "(Lorg/xcsoar/IOIOConnectionHolder;IIILorg/xcsoar/SensorListener;)V");
 }
 
 void
@@ -57,71 +47,21 @@ static Java::LocalObject
 CreateBMP085Device(JNIEnv *env, jobject holder,
                    unsigned twi_num, unsigned eoc_pin,
                    unsigned oversampling,
-                   BMP085Listener &listener) noexcept
+                   SensorListener &_listener) noexcept
 {
-  Java::LocalRef listener2{env, NativeBMP085Listener::Create(env, listener)};
+  const auto listener = NativeSensorListener::Create(env, _listener);
   return {env,
     env->NewObject(bmp085_class, bmp085_ctor, holder,
                    twi_num, eoc_pin, oversampling,
-                   listener2.Get())};
+                   listener.Get())};
 }
 
-BMP085Device::BMP085Device(unsigned _index,
-                           JNIEnv *env, jobject holder,
+BMP085Device::BMP085Device(JNIEnv *env, jobject holder,
                            unsigned twi_num, unsigned eoc_pin,
-                           unsigned oversampling) noexcept
-  :index(_index),
-   obj(CreateBMP085Device(env, holder,
+                           unsigned oversampling,
+                           SensorListener &listener) noexcept
+  :obj(CreateBMP085Device(env, holder,
                           twi_num, eoc_pin, oversampling,
-                          *this)),
-   kalman_filter(10, 0.0075)
+                          listener))
 {
-}
-
-gcc_pure
-static inline double
-ComputeNoncompVario(const double pressure, const double d_pressure) noexcept
-{
-  static constexpr double FACTOR(-2260.389548275485);
-  static constexpr double EXPONENT(-0.8097374740609689);
-  return FACTOR * pow(pressure, EXPONENT) * d_pressure;
-}
-
-void
-BMP085Device::onBMP085Values(double temperature,
-                             AtmosphericPressure pressure)
-{
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
-  NMEAInfo &basic = device_blackboard->SetRealState(index);
-  basic.UpdateClock();
-  basic.alive.Update(basic.clock);
-
-#ifdef USE_TEMPERATURE
-  basic.temperature = temperature;
-  basic.temperature_available = true;
-#endif
-
-  kalman_filter.Update(pressure.GetHectoPascal(), 0.05);
-
-  basic.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
-                                                kalman_filter.GetXVel()));
-  basic.ProvideStaticPressure(AtmosphericPressure::HectoPascal(kalman_filter.GetXAbs()));
-
-  device_blackboard->ScheduleMerge();
-}
-
-void
-BMP085Device::onBMP085Error()
-{
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
-  NMEAInfo &basic = device_blackboard->SetRealState(index);
-
-#ifdef USE_TEMPERATURE
-  basic.temperature_available = false;
-#endif
-
-  basic.static_pressure_available.Clear();
-  basic.noncomp_vario_available.Clear();
-
-  device_blackboard->ScheduleMerge();
 }
