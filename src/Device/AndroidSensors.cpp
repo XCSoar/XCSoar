@@ -32,6 +32,7 @@ DeviceDescriptor::OnConnected(int connected) noexcept
 {
   const auto e = BeginEdit();
   NMEAInfo &basic = *e;
+  basic.UpdateClock();
 
   switch (connected) {
   case 0: /* not connected */
@@ -177,6 +178,7 @@ DeviceDescriptor::OnBarometricPressureSensor(float pressure,
   const auto e = BeginEdit();
   NMEAInfo &basic = *e;
 
+  basic.UpdateClock();
   basic.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
                                                 kalman_filter.GetXVel()));
   basic.ProvideStaticPressure(
