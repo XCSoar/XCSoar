@@ -790,6 +790,13 @@ DeviceDescriptor::GetClock() const noexcept
   return basic.clock;
 }
 
+NMEAInfo
+DeviceDescriptor::GetData() const noexcept
+{
+  const std::lock_guard<Mutex> lock(device_blackboard->mutex);
+  return device_blackboard->RealState(index);
+}
+
 DeviceDataEditor
 DeviceDescriptor::BeginEdit() noexcept
 {

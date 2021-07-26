@@ -521,6 +521,12 @@ public:
   [[gnu::pure]]
   double GetClock() const noexcept;
 
+  /**
+   * Return a copy of the device's current data.
+   */
+  [[gnu::pure]]
+  NMEAInfo GetData() const noexcept;
+
   DeviceDataEditor BeginEdit() noexcept;
 
 private:
