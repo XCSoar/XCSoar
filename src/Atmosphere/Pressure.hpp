@@ -100,6 +100,30 @@ public:
     return value;
   }
 
+  constexpr bool operator<(AtmosphericPressure other) const noexcept {
+    return value < other.value;
+  }
+
+  constexpr bool operator<=(AtmosphericPressure other) const noexcept {
+    return value <= other.value;
+  }
+
+  constexpr bool operator>(AtmosphericPressure other) const noexcept {
+    return value > other.value;
+  }
+
+  constexpr bool operator>=(AtmosphericPressure other) const noexcept {
+    return value >= other.value;
+  }
+
+  constexpr auto operator+(AtmosphericPressure other) const noexcept {
+    return AtmosphericPressure{value + other.value};
+  }
+
+  constexpr auto operator-(AtmosphericPressure other) const noexcept {
+    return AtmosphericPressure{value - other.value};
+  }
+
   /**
    * Calculates the current QNH by comparing a pressure value to a
    * known altitude of a certain location
