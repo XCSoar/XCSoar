@@ -37,7 +37,7 @@ class AtmosphericPressure
    * @param value the pressure in hPa
    */
   explicit constexpr
-  AtmosphericPressure(double _value):value(_value) {}
+  AtmosphericPressure(double _value) noexcept:value(_value) {}
 
 public:
   /**
@@ -52,7 +52,7 @@ public:
    * "invalid" (IsPlausible() returns false).
    */
   static constexpr
-  AtmosphericPressure Zero() {
+  AtmosphericPressure Zero() noexcept {
     return AtmosphericPressure(0);
   }
 
@@ -61,17 +61,17 @@ public:
    * hPa).
    */
   static constexpr
-  AtmosphericPressure Standard() {
+  AtmosphericPressure Standard() noexcept {
     return AtmosphericPressure(1013.25);
   }
 
   static constexpr
-  AtmosphericPressure Pascal(double value) {
+  AtmosphericPressure Pascal(double value) noexcept {
     return AtmosphericPressure(value / 100);
   }
 
   static constexpr
-  AtmosphericPressure HectoPascal(double value) {
+  AtmosphericPressure HectoPascal(double value) noexcept {
     return AtmosphericPressure(value);
   }
 
@@ -79,11 +79,11 @@ public:
    * Is this a plausible value?
    */
   constexpr
-  bool IsPlausible() const {
+  bool IsPlausible() const noexcept {
     return value > 100 && value < 1200;
   }
 
-  double GetPascal() const {
+  double GetPascal() const noexcept {
     return GetHectoPascal() * 100;
   }
 
@@ -92,7 +92,7 @@ public:
    *
    * @return QNH value (hPa)
    */
-  double GetHectoPascal() const {
+  double GetHectoPascal() const noexcept {
     return value;
   }
 
@@ -105,7 +105,7 @@ public:
    */
   [[gnu::const]]
   static AtmosphericPressure FindQNHFromPressure(AtmosphericPressure pressure,
-                                                 double alt_known);
+                                                 double alt_known) noexcept;
 
   /**
    * Converts altitude with QNH=1013.25 reference to QNH adjusted altitude
@@ -113,7 +113,7 @@ public:
    * @return QNH-based altitude (m)
    */
   [[gnu::pure]]
-  double PressureAltitudeToQNHAltitude(double alt) const;
+  double PressureAltitudeToQNHAltitude(double alt) const noexcept;
 
   /**
    * Converts QNH adjusted altitude to pressure altitude (with QNH=1013.25 as reference)
@@ -121,7 +121,7 @@ public:
    * @return pressure altitude (m)
    */
   [[gnu::pure]]
-  double QNHAltitudeToPressureAltitude(double alt) const;
+  double QNHAltitudeToPressureAltitude(double alt) const noexcept;
 
   /**
    * Converts a pressure value to the corresponding QNH-based altitude
@@ -135,7 +135,7 @@ public:
    * @return Altitude over QNH-based zero (m)
    */
   [[gnu::pure]]
-  double StaticPressureToQNHAltitude(const AtmosphericPressure ps) const;
+  double StaticPressureToQNHAltitude(const AtmosphericPressure ps) const noexcept;
 
   /**
    * Converts a QNH-based altitude to the corresponding pressure
@@ -149,7 +149,7 @@ public:
    * @return Air pressure at given altitude
    */
   [[gnu::pure]]
-  AtmosphericPressure QNHAltitudeToStaticPressure(double alt) const;
+  AtmosphericPressure QNHAltitudeToStaticPressure(double alt) const noexcept;
 
   /**
    * Converts a pressure value to pressure altitude (with QNH=1013.25 as reference)
@@ -157,7 +157,7 @@ public:
    * @return pressure altitude (m)
    */
   [[gnu::const]]
-  static double StaticPressureToPressureAltitude(const AtmosphericPressure ps);
+  static double StaticPressureToPressureAltitude(const AtmosphericPressure ps) noexcept;
 
   /**
    * Converts a 1013.25 hPa based altitude to the corresponding pressure
@@ -167,7 +167,7 @@ public:
    * @return Air pressure at given altitude
    */
   [[gnu::const]]
-  static AtmosphericPressure PressureAltitudeToStaticPressure(double alt);
+  static AtmosphericPressure PressureAltitudeToStaticPressure(double alt) noexcept;
 };
 
 #endif

@@ -31,45 +31,45 @@ Copyright_License {
 #define inv_k2 1.0 / 8.417286e-5
 
 AtmosphericPressure
-AtmosphericPressure::QNHAltitudeToStaticPressure(const double alt) const
+AtmosphericPressure::QNHAltitudeToStaticPressure(const double alt) const noexcept
 {
   return HectoPascal(pow((pow(GetHectoPascal(), k1) - k2 * alt), inv_k1));
 }
 
 AtmosphericPressure
-AtmosphericPressure::PressureAltitudeToStaticPressure(const double alt)
+AtmosphericPressure::PressureAltitudeToStaticPressure(const double alt) noexcept
 {
   return Standard().QNHAltitudeToStaticPressure(alt);
 }
 
 
 double
-AtmosphericPressure::StaticPressureToQNHAltitude(const AtmosphericPressure ps) const
+AtmosphericPressure::StaticPressureToQNHAltitude(const AtmosphericPressure ps) const noexcept
 {
   return (pow(GetHectoPascal(), k1) - pow(ps.GetHectoPascal(), k1)) * inv_k2;
 }
 
 double
-AtmosphericPressure::PressureAltitudeToQNHAltitude(const double alt) const
+AtmosphericPressure::PressureAltitudeToQNHAltitude(const double alt) const noexcept
 {
   return StaticPressureToQNHAltitude(PressureAltitudeToStaticPressure(alt));
 }
 
 double
-AtmosphericPressure::QNHAltitudeToPressureAltitude(const double alt) const
+AtmosphericPressure::QNHAltitudeToPressureAltitude(const double alt) const noexcept
 {
   return StaticPressureToPressureAltitude(QNHAltitudeToStaticPressure(alt));
 }
 
 double
-AtmosphericPressure::StaticPressureToPressureAltitude(const AtmosphericPressure ps)
+AtmosphericPressure::StaticPressureToPressureAltitude(const AtmosphericPressure ps) noexcept
 {
   return Standard().StaticPressureToQNHAltitude(ps);
 }
 
 AtmosphericPressure
 AtmosphericPressure::FindQNHFromPressure(const AtmosphericPressure pressure,
-                                         const double alt_known)
+                                         const double alt_known) noexcept
 {
   return pressure.QNHAltitudeToStaticPressure(-alt_known);
 }
