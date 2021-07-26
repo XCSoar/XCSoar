@@ -31,7 +31,7 @@ Copyright_License {
 #include "java/Env.hxx"
 
 Java::TrivialClass InternalSensors::gps_cls, InternalSensors::sensors_cls;
-jmethodID InternalSensors::gps_ctor_id, InternalSensors::close_method;
+jmethodID InternalSensors::gps_ctor_id;
 jmethodID InternalSensors::sensors_ctor_id;
 jmethodID InternalSensors::mid_sensors_getSubscribableSensors;
 jmethodID InternalSensors::mid_sensors_subscribeToSensor_;
@@ -50,7 +50,6 @@ InternalSensors::Initialise(JNIEnv *env)
 
   gps_ctor_id = env->GetMethodID(gps_cls, "<init>",
                                  "(Landroid/content/Context;Lorg/xcsoar/SensorListener;)V");
-  close_method = env->GetMethodID(gps_cls, "close", "()V");
 
   sensors_cls.Find(env, "org/xcsoar/NonGPSSensors");
 
@@ -86,7 +85,7 @@ InternalSensors::Deinitialise(JNIEnv *env)
 
 InternalSensors::InternalSensors(const Java::LocalObject &gps_obj,
                                  const Java::LocalObject &sensors_obj) noexcept
-  :obj_InternalGPS_(std::move(gps_obj)),
+  :internal_gps(std::move(gps_obj)),
    obj_NonGPSSensors_(std::move(sensors_obj))
 {
   // Import the list of subscribable sensors from the NonGPSSensors object.
@@ -97,8 +96,6 @@ InternalSensors::~InternalSensors()
 {
   // Unsubscribe from sensors and the GPS.
   cancelAllSensorSubscriptions();
-  JNIEnv *env = Java::GetEnv();
-  env->CallVoidMethod(obj_InternalGPS_.Get(), close_method);
 }
 
 bool

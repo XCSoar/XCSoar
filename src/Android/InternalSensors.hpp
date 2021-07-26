@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "java/Object.hxx"
 #include "java/Class.hxx"
+#include "java/Closeable.hxx"
 #include "util/Compiler.h"
 
 #include <jni.h>
@@ -59,7 +60,7 @@ public:
 
  private:
   // Java objects working with the GPS and the other sensors respectively.
-  Java::GlobalObject obj_InternalGPS_;
+  Java::GlobalCloseable internal_gps;
   Java::GlobalObject obj_NonGPSSensors_;
   std::vector<int> subscribable_sensors_;
 
