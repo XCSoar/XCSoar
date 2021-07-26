@@ -26,7 +26,7 @@ package org.xcsoar;
  * An #SensorListener implementation that passes method calls to
  * native code.
  */
-public class NativeSensorListener implements SensorListener {
+final class NativeSensorListener implements SensorListener {
   /**
    * A native pointer.
    */
