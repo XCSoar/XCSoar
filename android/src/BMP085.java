@@ -23,7 +23,8 @@
 
 package org.xcsoar;
 
-import android.util.Log;
+import java.io.IOException;
+
 import ioio.lib.api.IOIO;
 import ioio.lib.api.TwiMaster;
 import ioio.lib.api.DigitalInput;
@@ -35,8 +36,6 @@ import ioio.lib.api.exception.ConnectionLostException;
  * @see http://www.bosch-sensortec.com/content/language1/html/3477.htm
  */
 final class BMP085 extends Thread {
-  private static final String TAG = "XCSoar";
-
   static final byte BMP085_DEVICE_ID = 0x77;
   static final byte BMP085_CHIP_ID = 0x55;
   static final byte BMP085_CALIBRATION_DATA_START = (byte)0xaa;
@@ -137,18 +136,16 @@ final class BMP085 extends Thread {
       | (data[offset + 2] & 0xff);
   }
 
-  private boolean setup()
-    throws ConnectionLostException, InterruptedException {
+  private void setup()
+    throws ConnectionLostException, IOException, InterruptedException {
     /* is it a BMP085 sensor? */
     byte[] responseChipID = new byte[1];
     twi.writeRead(BMP085_DEVICE_ID, false,
                   requestChipID, requestChipID.length,
                   responseChipID, responseChipID.length);
-    if (responseChipID[0] != BMP085_CHIP_ID) {
-      Log.e(TAG, "Not a BMP085: "
-            + Integer.toHexString(responseChipID[0] & 0xff));
-      return false;
-    }
+    if (responseChipID[0] != BMP085_CHIP_ID)
+      throw new IOException("Not a BMP085: "
+                            + Integer.toHexString(responseChipID[0] & 0xff));
 
     /* read the calibration coefficients */
     twi.writeRead(BMP085_DEVICE_ID, false,
@@ -165,8 +162,6 @@ final class BMP085 extends Thread {
     b2 = readS16BE(responseParameters, 14);
     mc = readS16BE(responseParameters, 18);
     md = readS16BE(responseParameters, 20);
-
-    return true;
   }
 
   private void readSensor(byte[] request, byte[] response, int responseLength)
@@ -249,8 +244,7 @@ final class BMP085 extends Thread {
 
   @Override public void run() {
     try {
-      if (!setup())
-        return;
+      setup();
 
       while (true)
         loop();
