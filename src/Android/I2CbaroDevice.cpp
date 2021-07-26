@@ -85,9 +85,6 @@ ComputeNoncompVario(const double pressure, const double d_pressure) noexcept
   return FACTOR * pow(pressure, EXPONENT) * d_pressure;
 }
 
-// TODO: eliminate this variable after moving sensor calibration somewhere else
-static AtmosphericPressure static_p = AtmosphericPressure::Zero();
-
 void
 I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
 {
@@ -101,10 +98,10 @@ I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
 
     // Set filter properties depending on sensor type
     if (sensor == 85 && press_use == DeviceConfig::PressureUse::STATIC_WITH_VARIO) {
-      if (!static_p.IsPlausible())
-        kalman_filter.SetAccelerationVariance(0.0075);
+      kalman_filter.SetAccelerationVariance(0.0075);
       param = 0.05;
     } else {
+      kalman_filter.SetAccelerationVariance(0.3);
       param = 0.5;
     }
 
@@ -115,14 +112,12 @@ I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
       break;
 
     case DeviceConfig::PressureUse::STATIC_ONLY:
-      static_p = AtmosphericPressure::HectoPascal(kalman_filter.GetXAbs());
-      basic.ProvideStaticPressure(static_p);
+      basic.ProvideStaticPressure(AtmosphericPressure::HectoPascal(kalman_filter.GetXAbs()));
       break;
 
     case DeviceConfig::PressureUse::STATIC_WITH_VARIO:
-      static_p = pressure;
       basic.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(), kalman_filter.GetXVel()));
-      basic.ProvideStaticPressure(static_p);
+      basic.ProvideStaticPressure(pressure);
       break;
 
     case DeviceConfig::PressureUse::TEK_PRESSURE:
