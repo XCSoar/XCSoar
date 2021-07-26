@@ -168,7 +168,7 @@ DeviceDescriptor::GetState() const
   if (droidsoar_v2 != nullptr)
     return PortState::READY;
 
-  if (i2cbaro[0] != nullptr)
+  if (i2cbaro.front() != nullptr)
     return PortState::READY;
 
   if (nunchuck != nullptr)
@@ -357,9 +357,9 @@ DeviceDescriptor::OpenI2Cbaro()
   if (ioio_helper == nullptr)
     return false;
 
-  for (unsigned i=0; i<sizeof i2cbaro/sizeof i2cbaro[0]; i++) {
-    if (i2cbaro[i] == nullptr) {
-      i2cbaro[i] = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
+  for (auto &i : i2cbaro) {
+    if (i == nullptr) {
+      i = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
                        ioio_helper->GetHolder(),
                        // needs calibration ?
                        config.sensor_factor == 0 && config.press_use == DeviceConfig::PressureUse::PITOT
@@ -604,9 +604,9 @@ DeviceDescriptor::Close()
   delete droidsoar_v2;
   droidsoar_v2 = nullptr;
 
-  for (unsigned i=0; i<sizeof i2cbaro/sizeof i2cbaro[0]; i++) {
-    delete i2cbaro[i];
-    i2cbaro[i] = nullptr;
+  for (auto &i : i2cbaro) {
+    delete i;
+    i = nullptr;
   }
   delete nunchuck;
   nunchuck = nullptr;

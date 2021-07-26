@@ -184,7 +184,7 @@ class DeviceDescriptor final
 
 #ifdef ANDROID
   BMP085Device *droidsoar_v2 = nullptr;
-  I2CbaroDevice *i2cbaro[3]{nullptr, nullptr, nullptr}; // static, pitot, tek; in any order
+  std::array<I2CbaroDevice *, 3> i2cbaro{nullptr, nullptr, nullptr}; // static, pitot, tek; in any order
   NunchuckDevice *nunchuck = nullptr;
   VoltageDevice *voltage = nullptr;
   GliderLink *glider_link = nullptr;
