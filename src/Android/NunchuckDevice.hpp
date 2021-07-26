@@ -35,8 +35,8 @@ class NunchuckDevice final {
   Java::GlobalCloseable obj;
 
 public:
-  static void Initialise(JNIEnv *env);
-  static void Deinitialise(JNIEnv *env);
+  static void Initialise(JNIEnv *env) noexcept;
+  static void Deinitialise(JNIEnv *env) noexcept;
 
   NunchuckDevice(JNIEnv *env, jobject holder,
                  unsigned twi_num, unsigned sample_rate,

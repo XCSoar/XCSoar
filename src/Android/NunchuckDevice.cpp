@@ -29,7 +29,7 @@ static Java::TrivialClass nunchuck_class;
 static jmethodID nunchuck_ctor;
 
 void
-NunchuckDevice::Initialise(JNIEnv *env)
+NunchuckDevice::Initialise(JNIEnv *env) noexcept
 {
   nunchuck_class.Find(env, "org/xcsoar/GlueNunchuck");
 
@@ -38,7 +38,7 @@ NunchuckDevice::Initialise(JNIEnv *env)
 }
 
 void
-NunchuckDevice::Deinitialise(JNIEnv *env)
+NunchuckDevice::Deinitialise(JNIEnv *env) noexcept
 {
   nunchuck_class.Clear(env);
 }
