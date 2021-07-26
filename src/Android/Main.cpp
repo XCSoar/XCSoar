@@ -71,7 +71,6 @@ Copyright_License {
 
 #include "IOIOHelper.hpp"
 #include "BMP085Device.hpp"
-#include "NativeI2CbaroListener.hpp"
 #include "I2CbaroDevice.hpp"
 #include "NunchuckDevice.hpp"
 #include "VoltageDevice.hpp"
@@ -136,7 +135,6 @@ try {
   NativeDetectDeviceListener::Initialise(env);
   const bool have_ioio = IOIOHelper::Initialise(env);
   BMP085Device::Initialise(env);
-  NativeI2CbaroListener::Initialise(env);
   I2CbaroDevice::Initialise(env);
   NunchuckDevice::Initialise(env);
   VoltageDevice::Initialise(env);
@@ -258,7 +256,6 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 
   BMP085Device::Deinitialise(env);
   I2CbaroDevice::Deinitialise(env);
-  NativeI2CbaroListener::Deinitialise(env);
   NunchuckDevice::Deinitialise(env);
   VoltageDevice::Deinitialise(env);
   IOIOHelper::Deinitialise(env);

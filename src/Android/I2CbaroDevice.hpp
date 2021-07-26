@@ -24,39 +24,26 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_I2CBARO_DEVICE_HPP
 #define XCSOAR_ANDROID_I2CBARO_DEVICE_HPP
 
-#include "I2CbaroListener.hpp"
 #include "java/Closeable.hxx"
 #include "Atmosphere/Pressure.hpp"
 #include "Math/SelfTimingKalmanFilter1d.hpp"
-#include "util/Compiler.h"
-#include "Device/Config.hpp"
 
 #include <jni.h>
 
-class I2CbaroDevice final : private I2CbaroListener {
-  unsigned index;
+class SensorListener;
+
+class I2CbaroDevice final {
   Java::GlobalCloseable obj;
-  DeviceConfig::PressureUse press_use;
-  AtmosphericPressure pitot_offset;
-  /**
-   * This Kalman filter is used to smooth the pressure input.
-   */
-  SelfTimingKalmanFilter1d kalman_filter;
 
 public:
   static void Initialise(JNIEnv *env) noexcept;
   static void Deinitialise(JNIEnv *env) noexcept;
 
-  I2CbaroDevice(unsigned index,
-               JNIEnv *env, jobject holder,
-               DeviceConfig::PressureUse press_use,
-               AtmosphericPressure pitot_offset,
-               unsigned twi_num, unsigned i2c_addr, unsigned sample_rate, unsigned flags);
-
-private:
-  /* virtual methods from class I2CbaroListener */
-  virtual void onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure) override;
-  virtual void onI2CbaroError() override;
+  I2CbaroDevice(JNIEnv *env, jobject holder,
+                unsigned index,
+                unsigned twi_num, unsigned i2c_addr,
+                unsigned sample_rate, unsigned flags,
+                SensorListener &listener);
 };
 
 #endif

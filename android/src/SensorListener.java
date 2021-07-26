@@ -41,6 +41,7 @@ public interface SensorListener {
   void onMagneticFieldSensor(float h_x, float h_y, float h_z);
   void onBarometricPressureSensor(float pressure, float sensor_noise_variance);
   void onPressureAltitudeSensor(float altitude);
+  void onI2CbaroSensor(int index, int sensorType, int pressure);
   void onVarioSensor(float vario);
   void onHeartRateSensor(int bpm);
 

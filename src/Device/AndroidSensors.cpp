@@ -201,6 +201,76 @@ DeviceDescriptor::OnPressureAltitudeSensor(float altitude) noexcept
 }
 
 void
+DeviceDescriptor::OnI2CbaroSensor(int index, int sensorType,
+                                  AtmosphericPressure pressure) noexcept
+{
+  if (!pressure.IsPlausible())
+    return;
+
+  DeviceConfig::PressureUse press_use;
+  switch (config.port_type) {
+  case DeviceConfig::PortType::I2CPRESSURESENSOR:
+    assert(index == 0);
+    press_use = config.press_use;
+    break;
+
+  case DeviceConfig::PortType::DROIDSOAR_V2:
+    assert(index < 2);
+    press_use = index == 0
+      ? DeviceConfig::PressureUse::STATIC_WITH_VARIO
+      : DeviceConfig::PressureUse::PITOT;
+    break;
+
+  default:
+    return;
+  }
+
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+
+  double param;
+
+  // Set filter properties depending on sensor type
+  if (sensorType == 85 && press_use == DeviceConfig::PressureUse::STATIC_WITH_VARIO) {
+    kalman_filter.SetAccelerationVariance(KF_I2C_VAR_ACCEL_85);
+    param = 0.05;
+  } else {
+    kalman_filter.SetAccelerationVariance(KF_I2C_VAR_ACCEL);
+    param = 0.5;
+  }
+
+  kalman_filter.Update(pressure.GetHectoPascal(), param);
+
+  switch (press_use) {
+  case DeviceConfig::PressureUse::NONE:
+    break;
+
+  case DeviceConfig::PressureUse::STATIC_ONLY:
+    basic.ProvideStaticPressure(AtmosphericPressure::HectoPascal(kalman_filter.GetXAbs()));
+    break;
+
+  case DeviceConfig::PressureUse::STATIC_WITH_VARIO:
+    basic.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
+                                                  kalman_filter.GetXVel()));
+    basic.ProvideStaticPressure(pressure);
+    break;
+
+  case DeviceConfig::PressureUse::TEK_PRESSURE:
+    basic.ProvideTotalEnergyVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
+                                                      kalman_filter.GetXVel()));
+    break;
+
+  case DeviceConfig::PressureUse::PITOT:
+    basic.ProvidePitotPressure(pressure - AtmosphericPressure::HectoPascal(config.sensor_offset));
+    break;
+  }
+
+  e.Commit();
+}
+
+void
 DeviceDescriptor::OnVarioSensor(float vario) noexcept
 {
   const auto e = BeginEdit();

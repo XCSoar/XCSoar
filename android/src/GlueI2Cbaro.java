@@ -32,14 +32,16 @@ import ioio.lib.api.exception.ConnectionLostException;
  */
 final class GlueI2Cbaro implements Closeable, IOIOConnectionListener {
   private IOIOConnectionHolder holder;
+  private final int index;
   private final int twiNum, i2c_addr, sample_rate, flags;
-  private final I2Cbaro.Listener listener;
+  private final SensorListener listener;
 
   private I2Cbaro instance;
 
-  GlueI2Cbaro(IOIOConnectionHolder _holder,
+  GlueI2Cbaro(IOIOConnectionHolder _holder, int index,
               int _twiNum, int _i2c_addr, int _sample_rate, int _flags,
-             I2Cbaro.Listener _listener) {
+              SensorListener _listener) {
+    this.index = index;
     twiNum = _twiNum;
     i2c_addr = _i2c_addr;
     sample_rate = _sample_rate;
@@ -64,7 +66,12 @@ final class GlueI2Cbaro implements Closeable, IOIOConnectionListener {
 
   @Override public void onIOIOConnect(IOIO ioio)
     throws ConnectionLostException, InterruptedException {
-    instance = new I2Cbaro(ioio, twiNum, i2c_addr, sample_rate, flags, listener);
+    try {
+      instance = new I2Cbaro(ioio, index, twiNum, i2c_addr, sample_rate, flags,
+                             listener);
+    } catch (Exception e) {
+      listener.onSensorError(e.getMessage());
+    }
   }
 
   @Override public void onIOIODisconnect(IOIO ioio) {

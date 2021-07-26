@@ -40,14 +40,6 @@ import ioio.lib.api.exception.ConnectionLostException;
  *
  */
 final class I2Cbaro extends Thread {
-  interface Listener {
-    /**
-     * @param pressure the pressure [Pa]
-     */
-    void onI2CbaroValues(int sensor, int pressure);
-    void onI2CbaroError();
-  };
-
   private static final String TAG = "XCSoar";
 
   private int type = 0;
@@ -128,9 +120,10 @@ final class I2Cbaro extends Thread {
   static final byte oversampling5611 = CMD5611_ADC_4096;	// I see no reason to use anything else.
 
   private TwiMaster h_twi;
+  private final int index;
   private byte i2c_addr;
   private int flags;
-  private final Listener listener;
+  private final SensorListener listener;
 
   private byte[] request5611Caldata = new byte[1];
 
@@ -166,10 +159,13 @@ final class I2Cbaro extends Thread {
   private byte[] dummy = new byte [0];
 
 
-  public I2Cbaro(IOIO ioio, int twiNum, int _i2c_addr, int _sample_rate, int _flags,
-                Listener _listener)
+  public I2Cbaro(IOIO ioio, int index, int twiNum, int _i2c_addr,
+                 int _sample_rate, int _flags,
+                 SensorListener _listener)
     throws ConnectionLostException {
     super("I2Cbaro");
+
+    this.index = index;
 
     h_twi = ioio.openTwiMaster(twiNum & 0xff, TwiMaster.Rate.RATE_100KHz, false);
     listener = _listener;
@@ -363,7 +359,7 @@ final class I2Cbaro extends Thread {
     int up = readU24BE(response085, 0) >> (8 - oversampling085);
     int pressure_pa = get085Pressure(up, b5_085);
 
-    listener.onI2CbaroValues(85, pressure_pa);
+    listener.onI2CbaroSensor(index, 85, pressure_pa);
     loop_count085++;
     sleep(sleep_time);
   }
@@ -420,7 +416,7 @@ final class I2Cbaro extends Thread {
     SENS -= sens2;
     P = (int)(((D1 * SENS) / 2097152L /* 2^21 */ - OFF) / 32768L /* 2^15 */);
 
-    listener.onI2CbaroValues(5611, P);
+    listener.onI2CbaroSensor(index, 5611, P);
 
     loop_count5611++;
 
@@ -454,13 +450,9 @@ final class I2Cbaro extends Thread {
           loop085();
       }
 
-    } catch (ConnectionLostException e) {
-      Log.d(TAG, "I2Cbaro.run() failed", e);
-    } catch (IllegalStateException e) {
-      Log.d(TAG, "I2Cbaro.run() failed", e);
     } catch (InterruptedException e) {
-    } finally {
-      listener.onI2CbaroError();
+    } catch (Exception e) {
+      listener.onSensorError(e.getMessage());
     }
   }
 }

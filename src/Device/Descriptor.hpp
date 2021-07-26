@@ -204,6 +204,10 @@ class DeviceDescriptor final
   static constexpr double KF_VAR_ACCEL = 0.0075;
   static constexpr double KF_MAX_DT = 60;
 
+  static constexpr double KF_I2C_MAX_DT = 5;
+  static constexpr double KF_I2C_VAR_ACCEL = 0.3;
+  static constexpr double KF_I2C_VAR_ACCEL_85 = KF_VAR_ACCEL;
+
   SelfTimingKalmanFilter1d kalman_filter{KF_MAX_DT, KF_VAR_ACCEL};
 
   double voltage_offset;
@@ -628,6 +632,8 @@ private:
   void OnBarometricPressureSensor(float pressure,
                                   float sensor_noise_variance) noexcept override;
   void OnPressureAltitudeSensor(float altitude) noexcept override;
+  void OnI2CbaroSensor(int index, int sensorType,
+                       AtmosphericPressure pressure) noexcept override;
   void OnVarioSensor(float vario) noexcept override;
   void OnHeartRateSensor(unsigned bpm) noexcept override;
   void OnVoltageValues(int temp_adc, unsigned voltage_index,

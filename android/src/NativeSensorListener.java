@@ -67,6 +67,9 @@ final class NativeSensorListener implements SensorListener {
   public native void onPressureAltitudeSensor(float altitude);
 
   @Override
+  public native void onI2CbaroSensor(int index, int sensorType, int pressure);
+
+  @Override
   public native void onVarioSensor(float vario);
 
   @Override

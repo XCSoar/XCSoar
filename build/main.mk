@@ -745,7 +745,6 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/Vibrator.cpp \
 	$(SRC)/Android/Context.cpp \
 	$(SRC)/Android/BMP085Device.cpp \
-	$(SRC)/Android/NativeI2CbaroListener.cpp \
 	$(SRC)/Android/I2CbaroDevice.cpp \
 	$(SRC)/Android/NunchuckDevice.cpp \
 	$(SRC)/Android/VoltageDevice.cpp \

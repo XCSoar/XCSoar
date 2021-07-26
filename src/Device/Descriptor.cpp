@@ -323,21 +323,24 @@ DeviceDescriptor::OpenDroidSoarV2()
   if (ioio_helper == nullptr)
     return false;
 
-  i2cbaro[0] = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
+  /* we use different values for the I2C Kalman filter */
+  kalman_filter = {KF_I2C_MAX_DT, KF_I2C_VAR_ACCEL};
+
+  i2cbaro[0] = new I2CbaroDevice(Java::GetEnv(),
                                  ioio_helper->GetHolder(),
-                                 DeviceConfig::PressureUse::STATIC_WITH_VARIO,
-                                 AtmosphericPressure::HectoPascal(config.sensor_offset),
+                                 0,
                                  2 + (0x77 << 8) + (27 << 16), 0,	// bus, address
                                  5,                               // update freq.
-                                 0);                              // flags
+                                 0,                               // flags
+                                 *this);
 
-  i2cbaro[1] = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
+  i2cbaro[1] = new I2CbaroDevice(Java::GetEnv(),
                                  ioio_helper->GetHolder(),
-                                 DeviceConfig::PressureUse::PITOT,
-                                 AtmosphericPressure::HectoPascal(config.sensor_offset),
+                                 1,
                                  1 + (0x77 << 8) + (46 << 16), 0 ,
                                  5,
-                                 0);
+                                 0,
+                                 *this);
   return true;
 #else
   return false;
@@ -354,13 +357,16 @@ DeviceDescriptor::OpenI2Cbaro()
   if (ioio_helper == nullptr)
     return false;
 
-  i2cbaro.front() = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
+  /* we use different values for the I2C Kalman filter */
+  kalman_filter = {KF_I2C_MAX_DT, KF_I2C_VAR_ACCEL};
+
+  i2cbaro.front() = new I2CbaroDevice(Java::GetEnv(),
                                       ioio_helper->GetHolder(),
-config.press_use,
-                                      AtmosphericPressure::HectoPascal(config.sensor_offset),
+                                      0,
                                       config.i2c_bus, config.i2c_addr,
                                       config.press_use == DeviceConfig::PressureUse::TEK_PRESSURE ? 20 : 5,
-                                      0); // called flags, actually reserved for future use.
+                                      0, // called flags, actually reserved for future use.
+                                      *this);
   return true;
 #else
   return false;
@@ -569,7 +575,8 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   LogFormat(_T("Opening device %s"), config.GetPortName(buffer, 64));
 
 #ifdef ANDROID
-  kalman_filter.Reset();
+  /* reset the Kalman filter */
+  kalman_filter = {KF_MAX_DT, KF_VAR_ACCEL};
 #endif
 
   open_job = new OpenDeviceJob(*this);

@@ -28,7 +28,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "NMEA/Info.hpp"
 #include "Device/Descriptor.hpp"
-#include "Operation/MessageOperationEnvironment.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/DeviceConfig.hpp"
@@ -117,11 +116,6 @@ ManageI2CPitotWidget::Calibrate() noexcept
   Profile::Save();
 
   device.SetConfig(config);
-
-  /* this OperationEnvironment instance must be persistent, because
-     DeviceDescriptor::Open() is asynchronous */
-  static MessageOperationEnvironment env;
-  device.Reopen(env);
 
   LoadValue(OFFSET, config.sensor_offset,
             UnitGroup::PRESSURE);

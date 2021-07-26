@@ -23,6 +23,8 @@ Copyright_License {
 
 #pragma once
 
+class AtmosphericPressure;
+
 /**
  * C++ wrapper for the Java interface SensorListener.
  */
@@ -47,6 +49,8 @@ public:
   virtual void OnBarometricPressureSensor(float pressure,
                                           float sensor_noise_variance) noexcept = 0;
   virtual void OnPressureAltitudeSensor(float altitude) noexcept = 0;
+  virtual void OnI2CbaroSensor(int index, int sensorType,
+                               AtmosphericPressure pressure) noexcept = 0;
   virtual void OnVarioSensor(float vario) noexcept = 0;
   virtual void OnHeartRateSensor(unsigned bpm) noexcept = 0;
 

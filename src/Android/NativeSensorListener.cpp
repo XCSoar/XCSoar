@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "NativeSensorListener.hpp"
 #include "SensorListener.hpp"
+#include "Atmosphere/Pressure.hpp"
 #include "java/Class.hxx"
 #include "java/String.hxx"
 #include "org_xcsoar_NativeSensorListener.h"
@@ -160,6 +161,21 @@ Java_org_xcsoar_NativeSensorListener_onPressureAltitudeSensor(JNIEnv *env,
 
   auto &listener = *(SensorListener *)ptr;
   listener.OnPressureAltitudeSensor(altitude);
+}
+
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeSensorListener_onI2CbaroSensor(JNIEnv *env, jobject obj,
+                                                     jint index,
+                                                     jint sensorType,
+                                                     jint pressure)
+ {
+  jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
+  if (ptr == 0)
+    return;
+
+  auto &listener = *(SensorListener *)ptr;
+  listener.OnI2CbaroSensor(index, sensorType,
+                           AtmosphericPressure::Pascal(pressure));
 }
 
 gcc_visibility_default
