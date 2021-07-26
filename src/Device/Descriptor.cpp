@@ -386,6 +386,8 @@ DeviceDescriptor::OpenNunchuck()
   if (ioio_helper == nullptr)
     return false;
 
+  joy_state_x = joy_state_y = 0;
+
   nunchuck = new NunchuckDevice(Java::GetEnv(),
                                 ioio_helper->GetHolder(),
                                 config.i2c_bus, 5, // twi, sample_rate
