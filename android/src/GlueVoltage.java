@@ -33,7 +33,7 @@ import ioio.lib.api.exception.ConnectionLostException;
 final class GlueVoltage implements Closeable, IOIOConnectionListener {
   private IOIOConnectionHolder holder;
   private final SensorListener listener;
-  int sample_rate;
+  private final int sample_rate;
   private Voltage instance;
 
   GlueVoltage(IOIOConnectionHolder _holder, int _sample_rate,
