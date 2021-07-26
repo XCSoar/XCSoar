@@ -260,6 +260,8 @@ public class HM10Port
   }
 
   static class Error extends Exception {
+    private static final long serialVersionUID = -2699261433374751557L;
+
     public Error(String message) {
       super(message);
     }

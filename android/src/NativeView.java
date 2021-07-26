@@ -50,6 +50,8 @@ import android.graphics.BitmapFactory;
 import android.webkit.MimeTypeMap;
 
 class EGLException extends Exception {
+  private static final long serialVersionUID = 5928634879321047581L;
+
   public EGLException(String _msg) {
     super(_msg);
   }
