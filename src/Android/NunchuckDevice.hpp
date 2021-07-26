@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_NUNCHUCK_DEVICE_HPP
 #define XCSOAR_ANDROID_NUNCHUCK_DEVICE_HPP
 
-#include "java/Object.hxx"
+#include "java/Closeable.hxx"
 #include "util/Compiler.h"
 
 #include <jni.h>
@@ -32,7 +32,7 @@ Copyright_License {
 class SensorListener;
 
 class NunchuckDevice final {
-  Java::GlobalObject obj;
+  Java::GlobalCloseable obj;
 
 public:
   static void Initialise(JNIEnv *env);
@@ -41,8 +41,6 @@ public:
   NunchuckDevice(JNIEnv *env, jobject holder,
                  unsigned twi_num, unsigned sample_rate,
                  SensorListener &listener);
-
-  ~NunchuckDevice();
 };
 
 #endif

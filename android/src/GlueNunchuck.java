@@ -23,13 +23,15 @@
 
 package org.xcsoar;
 
+import java.io.Closeable;
+
 import ioio.lib.api.IOIO;
 import ioio.lib.api.exception.ConnectionLostException;
 
 /**
  * A driver for the Nintendo Nunchuck, connected via IOIO.
  */
-final class GlueNunchuck implements IOIOConnectionListener {
+final class GlueNunchuck implements Closeable, IOIOConnectionListener {
   private IOIOConnectionHolder holder;
   private final int twiNum, sample_rate;
   private final SensorListener listener;
@@ -47,6 +49,7 @@ final class GlueNunchuck implements IOIOConnectionListener {
     _holder.addListener(this);
   }
 
+  @Override
   public void close() {
     IOIOConnectionHolder holder;
     synchronized(this) {

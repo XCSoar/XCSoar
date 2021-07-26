@@ -26,7 +26,7 @@ Copyright_License {
 #include "java/Class.hxx"
 
 static Java::TrivialClass nunchuck_class;
-static jmethodID nunchuck_ctor, close_method;
+static jmethodID nunchuck_ctor;
 
 void
 NunchuckDevice::Initialise(JNIEnv *env)
@@ -35,7 +35,6 @@ NunchuckDevice::Initialise(JNIEnv *env)
 
   nunchuck_ctor = env->GetMethodID(nunchuck_class, "<init>",
                                  "(Lorg/xcsoar/IOIOConnectionHolder;IILorg/xcsoar/SensorListener;)V");
-  close_method = env->GetMethodID(nunchuck_class, "close", "()V");
 }
 
 void
@@ -62,10 +61,4 @@ NunchuckDevice::NunchuckDevice(JNIEnv *env, jobject holder,
                                  twi_num, sample_rate,
                                  listener))
 {
-}
-
-NunchuckDevice::~NunchuckDevice()
-{
-  JNIEnv *env = Java::GetEnv();
-  env->CallVoidMethod(obj.Get(), close_method);
 }
