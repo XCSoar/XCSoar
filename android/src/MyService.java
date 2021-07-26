@@ -58,7 +58,7 @@ public class MyService extends Service {
    * Hack: this is set by onCreate(), to support the "testing"
    * package.
    */
-  protected static Class mainActivityClass;
+  protected static Class<?> mainActivityClass;
 
   private NotificationManager notificationManager;
 
