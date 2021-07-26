@@ -102,48 +102,48 @@ I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
 
     // Set filter properties depending on sensor type
     if (sensor == 85 && press_use == DeviceConfig::PressureUse::STATIC_WITH_VARIO) {
-       if (static_p == 0) kalman_filter.SetAccelerationVariance(0.0075);
-       param = 0.05;
+      if (static_p == 0) kalman_filter.SetAccelerationVariance(0.0075);
+      param = 0.05;
     } else {
-       param = 0.5;
+      param = 0.5;
     }
 
     kalman_filter.Update(pressure.GetHectoPascal(), param);
 
     switch (press_use) {
-      case DeviceConfig::PressureUse::NONE:
-        break;
+    case DeviceConfig::PressureUse::NONE:
+      break;
 
-      case DeviceConfig::PressureUse::STATIC_ONLY:
-        static_p = kalman_filter.GetXAbs();
-        basic.ProvideStaticPressure(AtmosphericPressure::HectoPascal(static_p));
-        break;
+    case DeviceConfig::PressureUse::STATIC_ONLY:
+      static_p = kalman_filter.GetXAbs();
+      basic.ProvideStaticPressure(AtmosphericPressure::HectoPascal(static_p));
+      break;
 
-      case DeviceConfig::PressureUse::STATIC_WITH_VARIO:
-        static_p = pressure.GetHectoPascal();
-        basic.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(), kalman_filter.GetXVel()));
-        basic.ProvideStaticPressure(AtmosphericPressure::HectoPascal(static_p));
-        break;
+    case DeviceConfig::PressureUse::STATIC_WITH_VARIO:
+      static_p = pressure.GetHectoPascal();
+      basic.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(), kalman_filter.GetXVel()));
+      basic.ProvideStaticPressure(AtmosphericPressure::HectoPascal(static_p));
+      break;
 
-      case DeviceConfig::PressureUse::TEK_PRESSURE:
-        basic.ProvideTotalEnergyVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
-                                                    kalman_filter.GetXVel()));
-        break;
+    case DeviceConfig::PressureUse::TEK_PRESSURE:
+      basic.ProvideTotalEnergyVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
+                                                        kalman_filter.GetXVel()));
+      break;
 
-      case DeviceConfig::PressureUse::PITOT:
-        if (static_p != 0) {
-          auto dyn = pressure.GetHectoPascal() - static_p - pitot_offset;
-          if (dyn < 0.31)
-            // suppress speeds below ~25 km/h
-            dyn = 0;
-          basic.ProvideDynamicPressure(AtmosphericPressure::HectoPascal(dyn));
-        }
-        break;
+    case DeviceConfig::PressureUse::PITOT:
+      if (static_p != 0) {
+        auto dyn = pressure.GetHectoPascal() - static_p - pitot_offset;
+        if (dyn < 0.31)
+          // suppress speeds below ~25 km/h
+          dyn = 0;
+        basic.ProvideDynamicPressure(AtmosphericPressure::HectoPascal(dyn));
+      }
+      break;
 
-      case DeviceConfig::PressureUse::PITOT_ZERO:
-        pitot_offset = kalman_filter.GetXAbs() - static_p;
-        basic.ProvideSensorCalibration(1, pitot_offset);
-        break;
+    case DeviceConfig::PressureUse::PITOT_ZERO:
+      pitot_offset = kalman_filter.GetXAbs() - static_p;
+      basic.ProvideSensorCalibration(1, pitot_offset);
+      break;
     }
   }
 
