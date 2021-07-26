@@ -77,7 +77,7 @@ class DeviceListWidget final
   struct Flags {
     bool duplicate:1;
     bool open:1, error:1;
-    bool alive:1, location:1, gps:1, baro:1, airspeed:1, vario:1, traffic:1;
+    bool alive:1, location:1, gps:1, baro:1, pitot:1, airspeed:1, vario:1, traffic:1;
     bool temperature:1;
     bool humidity:1;
     bool radio:1;
@@ -113,6 +113,7 @@ class DeviceListWidget final
       baro = basic.baro_altitude_available ||
         basic.pressure_altitude_available ||
         basic.static_pressure_available;
+      pitot = basic.pitot_pressure_available;
       airspeed = basic.airspeed_available;
       vario = basic.total_energy_vario_available;
       traffic = basic.flarm.IsDetected();
@@ -390,6 +391,11 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     if (flags.baro) {
       buffer.append(_T("; "));
       buffer.append(_("Baro"));
+    }
+
+    if (flags.pitot) {
+      buffer.append(_T("; "));
+      buffer.append(_("Pitot"));
     }
 
     if (flags.airspeed) {
