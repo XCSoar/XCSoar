@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_ANDROID_I2CBARO_DEVICE_HPP
 
 #include "I2CbaroListener.hpp"
-#include "java/Object.hxx"
+#include "java/Closeable.hxx"
 #include "Math/SelfTimingKalmanFilter1d.hpp"
 #include "util/Compiler.h"
 #include "Device/Config.hpp"
@@ -34,7 +34,7 @@ Copyright_License {
 
 class I2CbaroDevice final : private I2CbaroListener {
   unsigned index;
-  Java::GlobalObject obj;
+  Java::GlobalCloseable obj;
   DeviceConfig::PressureUse press_use;
   double pitot_offset;
   /**
@@ -51,8 +51,6 @@ public:
                DeviceConfig::PressureUse press_use,
                double pitot_offset,
                unsigned twi_num, unsigned i2c_addr, unsigned sample_rate, unsigned flags);
-
-  ~I2CbaroDevice();
 
 private:
   /* virtual methods from class I2CbaroListener */

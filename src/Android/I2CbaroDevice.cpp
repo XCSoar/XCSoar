@@ -30,7 +30,7 @@ Copyright_License {
 #include "LogFile.hpp"
 
 static Java::TrivialClass i2cbaro_class;
-static jmethodID i2cbaro_ctor, close_method;
+static jmethodID i2cbaro_ctor;
 
 void
 I2CbaroDevice::Initialise(JNIEnv *env)
@@ -39,7 +39,6 @@ I2CbaroDevice::Initialise(JNIEnv *env)
 
   i2cbaro_ctor = env->GetMethodID(i2cbaro_class, "<init>",
                                  "(Lorg/xcsoar/IOIOConnectionHolder;IIIILorg/xcsoar/I2Cbaro$Listener;)V");
-  close_method = env->GetMethodID(i2cbaro_class, "close", "()V");
 }
 
 void
@@ -73,12 +72,6 @@ I2CbaroDevice::I2CbaroDevice(unsigned _index,
    pitot_offset(offset),
    kalman_filter(5, 0.3)
 {
-}
-
-I2CbaroDevice::~I2CbaroDevice()
-{
-  JNIEnv *env = Java::GetEnv();
-  env->CallVoidMethod(obj.Get(), close_method);
 }
 
 gcc_pure

@@ -23,13 +23,14 @@
 
 package org.xcsoar;
 
+import java.io.Closeable;
 import ioio.lib.api.IOIO;
 import ioio.lib.api.exception.ConnectionLostException;
 
 /**
  * A driver for the I2C pressure sensors, connected via IOIO.
  */
-final class GlueI2Cbaro implements IOIOConnectionListener {
+final class GlueI2Cbaro implements Closeable, IOIOConnectionListener {
   private IOIOConnectionHolder holder;
   private final int twiNum, i2c_addr, sample_rate, flags;
   private final I2Cbaro.Listener listener;
@@ -49,6 +50,7 @@ final class GlueI2Cbaro implements IOIOConnectionListener {
     _holder.addListener(this);
   }
 
+  @Override
   public void close() {
     IOIOConnectionHolder holder;
     synchronized(this) {
