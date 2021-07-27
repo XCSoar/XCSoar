@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.io.IOException;
 
+import android.os.ParcelUuid;
 import android.util.Log;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothAdapter;
@@ -42,6 +43,7 @@ import android.bluetooth.BluetoothSocket;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanRecord;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
@@ -51,7 +53,6 @@ import android.content.pm.PackageManager;
  */
 final class BluetoothHelper
   extends ScanCallback
-  implements BluetoothIdentify.Listener
 {
   private static final String TAG = "XCSoar";
   private static final UUID THE_UUID =
@@ -70,9 +71,6 @@ final class BluetoothHelper
 
   private final Collection<DetectDeviceListener> detectListeners =
     new LinkedList<DetectDeviceListener>();
-
-  private final Map<String, BluetoothIdentify> identify =
-    new TreeMap<String, BluetoothIdentify>();
 
   BluetoothHelper(Context context) throws Exception {
     this.context = context;
@@ -169,10 +167,6 @@ final class BluetoothHelper
       scanner.stopScan(this);
       scanner = null;
     }
-
-    for (BluetoothIdentify i : identify.values())
-      i.close();
-    identify.clear();
   }
 
   public BluetoothSensor connectSensor(String address, SensorListener listener)
@@ -217,17 +211,41 @@ final class BluetoothHelper
     return new BluetoothServerPort(adapter, THE_UUID);
   }
 
+  /**
+   * Identify the detected service UUIDs and convert it to a feature
+   * flag bit set.
+   */
+  private static long getFeatures(ScanRecord record) {
+    long features = 0;
+
+    for (ParcelUuid puuid : record.getServiceUuids()) {
+      UUID uuid = puuid.getUuid();
+      if (BluetoothUuids.HM10_SERVICE.equals(uuid))
+        features |= DetectDeviceListener.FEATURE_HM10;
+      else if (BluetoothUuids.HEART_RATE_SERVICE.equals(uuid))
+        features |= DetectDeviceListener.FEATURE_HEART_RATE;
+      else if (BluetoothUuids.FLYTEC_SENSBOX_SERVICE.equals(uuid))
+        features |= DetectDeviceListener.FEATURE_FLYTEC_SENSBOX;
+    }
+
+    return features;
+  }
+
+  private static long getFeatures(ScanResult result) {
+    ScanRecord record = result.getScanRecord();
+    return record != null
+      ? getFeatures(record)
+      : 0;
+  }
+
   private void broadcastScanResult(ScanResult result) {
     BluetoothDevice device = result.getDevice();
-
-    if (!identify.containsKey(device.getAddress()))
-      identify.put(device.getAddress(),
-                   new BluetoothIdentify(context, device, this));
+    long features = getFeatures(result);
 
     for (DetectDeviceListener l : detectListeners)
       l.onDeviceDetected(DetectDeviceListener.TYPE_BLUETOOTH_LE,
                          device.getAddress(), device.getName(),
-                         0);
+                         features);
   }
 
   @Override
@@ -244,20 +262,5 @@ final class BluetoothHelper
   @Override
   public void onScanFailed(int errorCode) {
     Log.e(TAG, "Bluetooth LE scan failed with error code " + errorCode);
-  }
-
-  @Override
-  public synchronized void onBluetoothIdentifySuccess(BluetoothDevice device,
-                                                      long features) {
-    for (DetectDeviceListener l : detectListeners)
-      l.onDeviceDetected(DetectDeviceListener.TYPE_BLUETOOTH_LE,
-                         device.getAddress(), device.getName(),
-                         features);
-  }
-
-  @Override
-  public synchronized void onBluetoothIdentifyError(BluetoothDevice device,
-                                                    String msg) {
-    // TODO: report to DetectDeviceListener
   }
 }
