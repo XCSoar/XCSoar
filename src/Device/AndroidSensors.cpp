@@ -265,7 +265,7 @@ DeviceDescriptor::OnI2CbaroSensor(int index, int sensorType,
     break;
 
   case DeviceConfig::PressureUse::PITOT:
-    basic.ProvidePitotPressure(pressure - AtmosphericPressure::HectoPascal(config.sensor_offset));
+    basic.ProvidePitotPressure(filtered_pressure - AtmosphericPressure::HectoPascal(config.sensor_offset));
     break;
   }
 
