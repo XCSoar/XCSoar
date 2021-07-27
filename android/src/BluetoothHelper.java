@@ -213,6 +213,7 @@ final class BluetoothHelper implements BluetoothAdapter.LeScanCallback,
                          0);
   }
 
+  @Override
   public synchronized void onBluetoothIdentifySuccess(BluetoothDevice device,
                                                       long features) {
     for (DetectDeviceListener l : detectListeners)
@@ -221,6 +222,7 @@ final class BluetoothHelper implements BluetoothAdapter.LeScanCallback,
                          features);
   }
 
+  @Override
   public synchronized void onBluetoothIdentifyError(BluetoothDevice device,
                                                     String msg) {
     // TODO: report to DetectDeviceListener
