@@ -215,10 +215,10 @@ final class BluetoothHelper
    * Identify the detected service UUIDs and convert it to a feature
    * flag bit set.
    */
-  private static long getFeatures(ScanRecord record) {
+  private static long getFeatures(Collection<ParcelUuid> serviceUuids) {
     long features = 0;
 
-    for (ParcelUuid puuid : record.getServiceUuids()) {
+    for (ParcelUuid puuid : serviceUuids) {
       UUID uuid = puuid.getUuid();
       if (BluetoothUuids.HM10_SERVICE.equals(uuid))
         features |= DetectDeviceListener.FEATURE_HM10;
@@ -229,6 +229,13 @@ final class BluetoothHelper
     }
 
     return features;
+  }
+
+  private static long getFeatures(ScanRecord record) {
+    Collection<ParcelUuid> serviceUuids = record.getServiceUuids();
+    return serviceUuids != null
+      ? getFeatures(serviceUuids)
+      : 0;
   }
 
   private static long getFeatures(ScanResult result) {
