@@ -254,7 +254,7 @@ DeviceDescriptor::OnI2CbaroSensor(int index, int sensorType,
   case DeviceConfig::PressureUse::STATIC_WITH_VARIO:
     basic.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
                                                   kalman_filter.GetXVel()));
-    basic.ProvideStaticPressure(pressure);
+    basic.ProvideStaticPressure(AtmosphericPressure::HectoPascal(kalman_filter.GetXAbs()));
     break;
 
   case DeviceConfig::PressureUse::TEK_PRESSURE:
