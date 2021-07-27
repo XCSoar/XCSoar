@@ -242,19 +242,21 @@ DeviceDescriptor::OnI2CbaroSensor(int index, int sensorType,
   }
 
   kalman_filter.Update(pressure.GetHectoPascal(), param);
+  const auto filtered_pressure =
+    AtmosphericPressure::HectoPascal(kalman_filter.GetXAbs());
 
   switch (press_use) {
   case DeviceConfig::PressureUse::NONE:
     break;
 
   case DeviceConfig::PressureUse::STATIC_ONLY:
-    basic.ProvideStaticPressure(AtmosphericPressure::HectoPascal(kalman_filter.GetXAbs()));
+    basic.ProvideStaticPressure(filtered_pressure);
     break;
 
   case DeviceConfig::PressureUse::STATIC_WITH_VARIO:
     basic.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
                                                   kalman_filter.GetXVel()));
-    basic.ProvideStaticPressure(AtmosphericPressure::HectoPascal(kalman_filter.GetXAbs()));
+    basic.ProvideStaticPressure(filtered_pressure);
     break;
 
   case DeviceConfig::PressureUse::TEK_PRESSURE:
