@@ -36,6 +36,7 @@ public:
     IOIO = 1,
     BLUETOOTH_CLASSIC = 2,
     BLUETOOTH_LE = 3,
+    USB_SERIAL = 4,
   };
 
   static constexpr uint64_t FEATURE_HM10 = 0x1;

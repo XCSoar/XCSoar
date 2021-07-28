@@ -195,28 +195,6 @@ FillAndroidUsbSerialPorts(DataFieldEnum &df,
                           const DeviceConfig &config) noexcept
 {
 #ifdef ANDROID
-  if (usb_serial_helper == nullptr)
-    return;
-
-  JNIEnv *env = Java::GetEnv();
-  Java::LocalRef<jobjectArray> list{env, usb_serial_helper->List(env)};
-  if (!list)
-    return;
-
-  jsize n = env->GetArrayLength(list) / 2;
-  for (jsize i = 0; i < n; ++i) {
-    Java::String j_id{env, (jstring)env->GetObjectArrayElement(list, i * 2)};
-    if (!j_id)
-      continue;
-
-    Java::String j_name{env, (jstring)env->GetObjectArrayElement(list, i * 2 + 1)};
-    if (!j_name)
-      continue;
-
-    AddPort(df, DeviceConfig::PortType::ANDROID_USB_SERIAL,
-            j_id.GetUTFChars().c_str(), j_name.GetUTFChars().c_str());
-  }
-
   if (config.port_type == DeviceConfig::PortType::ANDROID_USB_SERIAL &&
       !config.path.empty())
     SetPort(df, DeviceConfig::PortType::ANDROID_USB_SERIAL, config.path);

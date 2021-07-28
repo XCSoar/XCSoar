@@ -27,6 +27,7 @@
 
 class Context;
 class PortBridge;
+class DetectDeviceListener;
 
 class UsbSerialHelper final : protected Java::GlobalObject {
 public:
@@ -41,9 +42,19 @@ public:
   ~UsbSerialHelper() noexcept;
 
   /**
-   * Returns a list of connected usb devices.
+   * Start scanning for USB serial devices.  Call
+   * RemoveDetectDeviceListener() with the returned value when you're
+   * done.
    */
-  jobjectArray List(JNIEnv *env) noexcept;
+  Java::LocalObject AddDetectDeviceListener(JNIEnv *env,
+                                            DetectDeviceListener &l) noexcept;
+
+  /**
+   * Stop scanning for USB serial devices.
+   *
+   * @param l the return value of AddDetectDeviceListener()
+   */
+  void RemoveDetectDeviceListener(JNIEnv *env, jobject l) noexcept;
 
   PortBridge *Connect(JNIEnv *env, const char *name, unsigned baud);
 };

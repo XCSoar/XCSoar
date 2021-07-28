@@ -39,6 +39,7 @@
 #include "java/Global.hxx"
 #include "Android/Main.hpp"
 #include "Android/BluetoothHelper.hpp"
+#include "Android/UsbSerialHelper.hpp"
 #include "Android/DetectDeviceListener.hpp"
 #include "thread/Mutex.hxx"
 #include <list>
@@ -100,6 +101,7 @@ class PortPickerWidget
 
 #ifdef ANDROID
   Java::LocalObject detect_listener;
+  Java::LocalObject usb_serial_detect_listener;
 
   struct DetectedPort {
     DeviceConfig::PortType type;
@@ -164,6 +166,12 @@ public:
         detect_listener =
           bluetooth_helper->AddDetectDeviceListener(env, *this);
     }
+
+    if (usb_serial_helper != nullptr) {
+      const auto env = Java::GetEnv();
+      usb_serial_detect_listener =
+        usb_serial_helper->AddDetectDeviceListener(env, *this);
+    }
 #endif
   }
 
@@ -173,6 +181,12 @@ public:
       bluetooth_helper->RemoveDetectDeviceListener(detect_listener.GetEnv(),
                                                    detect_listener);
       detect_listener = {};
+    }
+
+    if (usb_serial_detect_listener) {
+      usb_serial_helper->RemoveDetectDeviceListener(usb_serial_detect_listener.GetEnv(),
+                                                    usb_serial_detect_listener);
+      usb_serial_detect_listener = {};
     }
 #endif
 
@@ -249,6 +263,10 @@ PortPickerWidget::OnDeviceDetected(Type type, const char *address,
     port_type = (features & DetectDeviceListener::FEATURE_HM10) != 0
       ? DeviceConfig::PortType::BLE_HM10
       : DeviceConfig::PortType::BLE_SENSOR;
+    break;
+
+  case Type::USB_SERIAL:
+    port_type = DeviceConfig::PortType::ANDROID_USB_SERIAL;
     break;
   }
 
