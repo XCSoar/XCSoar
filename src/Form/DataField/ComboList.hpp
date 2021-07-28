@@ -78,6 +78,14 @@ public:
     return items[i];
   }
 
+  int Find(int int_value) const noexcept {
+    for (std::size_t i = 0; i < items.size(); ++i)
+      if (items[i].int_value == int_value)
+        return i;
+
+    return -1;
+  }
+
   void Clear() noexcept {
     items.clear();
   }
