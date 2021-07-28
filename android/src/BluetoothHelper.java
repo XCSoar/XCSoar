@@ -229,7 +229,7 @@ final class BluetoothHelper
       : 0;
   }
 
-  private void broadcastScanResult(ScanResult result) {
+  private synchronized void broadcastScanResult(ScanResult result) {
     BluetoothDevice device = result.getDevice();
     long features = getFeatures(result);
 
