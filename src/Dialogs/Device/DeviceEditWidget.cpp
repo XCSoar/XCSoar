@@ -87,7 +87,7 @@ static constexpr struct {
   { DeviceConfig::PortType::TCP_LISTENER, N_("TCP port") },
   { DeviceConfig::PortType::UDP_LISTENER, N_("UDP port") },
 
-  { DeviceConfig::PortType::SERIAL, NULL } /* sentinel */
+  { DeviceConfig::PortType::SERIAL, nullptr } /* sentinel */
 };
 
 /** the number of fixed port types (excludes Serial, Bluetooth and IOIOUart) */
@@ -95,8 +95,8 @@ static constexpr unsigned num_port_types = ARRAY_SIZE(port_types) - 1;
 
 static unsigned
 AddPort(DataFieldEnum &df, DeviceConfig::PortType type,
-        const TCHAR *text, const TCHAR *display_string=NULL,
-        const TCHAR *help=NULL) noexcept
+        const TCHAR *text, const TCHAR *display_string=nullptr,
+        const TCHAR *help=nullptr) noexcept
 {
   /* the upper 16 bit is the port type, and the lower 16 bit is a
      serial number to make the enum id unique */
@@ -153,7 +153,7 @@ FillDefaultSerialPorts(DataFieldEnum &df) noexcept
 static void
 FillPortTypes(DataFieldEnum &df, const DeviceConfig &config) noexcept
 {
-  for (unsigned i = 0; port_types[i].label != NULL; i++) {
+  for (unsigned i = 0; port_types[i].label != nullptr; i++) {
     unsigned id = AddPort(df, port_types[i].type, port_types[i].label,
                           gettext(port_types[i].label));
 
@@ -166,7 +166,7 @@ static void
 SetPort(DataFieldEnum &df, DeviceConfig::PortType type,
         const TCHAR *value) noexcept
 {
-  assert(value != NULL);
+  assert(value != nullptr);
 
   if (!df.Set(value))
     df.Set(AddPort(df, type, value));
@@ -389,7 +389,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config) noexcept
     return;
   }
 
-  for (unsigned i = 0; port_types[i].label != NULL; i++) {
+  for (unsigned i = 0; port_types[i].label != nullptr; i++) {
     if (port_types[i].type == config.port_type) {
       df.Set(port_types[i].label);
       break;
@@ -439,7 +439,7 @@ EditPortCallback(const TCHAR *caption, DataField &_df,
 
 DeviceEditWidget::DeviceEditWidget(const DeviceConfig &_config) noexcept
   :RowFormWidget(UIGlobals::GetDialogLook()),
-   config(_config), listener(NULL) {}
+   config(_config), listener(nullptr) {}
 
 void
 DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
@@ -528,11 +528,11 @@ static bool
 SupportsBulkBaudRate(const DataField &df) noexcept
 {
   const TCHAR *driver_name = df.GetAsString();
-  if (driver_name == NULL)
+  if (driver_name == nullptr)
     return false;
 
   const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == NULL)
+  if (driver == nullptr)
     return false;
 
   return driver->SupportsBulkBaudRate();
@@ -543,11 +543,11 @@ static bool
 CanReceiveSettings(const DataField &df) noexcept
 {
   const TCHAR *driver_name = df.GetAsString();
-  if (driver_name == NULL)
+  if (driver_name == nullptr)
     return false;
 
   const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == NULL)
+  if (driver == nullptr)
     return false;
 
   return driver->CanReceiveSettings();
@@ -558,11 +558,11 @@ static bool
 CanSendSettings(const DataField &df) noexcept
 {
   const TCHAR *driver_name = df.GetAsString();
-  if (driver_name == NULL)
+  if (driver_name == nullptr)
     return false;
 
   const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == NULL)
+  if (driver == nullptr)
     return false;
 
   return driver->CanSendSettings();
@@ -640,13 +640,13 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
 
   DataFieldEnum *port_df = new DataFieldEnum(this);
   FillPorts(*port_df, config);
-  auto *port_control = Add(_("Port"), NULL, port_df);
+  auto *port_control = Add(_("Port"), nullptr, port_df);
   port_control->SetEditCallback(EditPortCallback);
 
   DataFieldEnum *baud_rate_df = new DataFieldEnum(this);
   FillBaudRates(*baud_rate_df);
   baud_rate_df->Set(config.baud_rate);
-  Add(_("Baud rate"), NULL, baud_rate_df);
+  Add(_("Baud rate"), nullptr, baud_rate_df);
 
   DataFieldEnum *bulk_baud_rate_df = new DataFieldEnum(this);
   bulk_baud_rate_df->addEnumText(_T("Default"), 0u);
@@ -658,12 +658,12 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
 
   DataFieldString *ip_address_df = new DataFieldString(_T(""), this);
   ip_address_df->Set(config.ip_address);
-  Add(_("IP address"), NULL, ip_address_df);
+  Add(_("IP address"), nullptr, ip_address_df);
 
   DataFieldEnum *tcp_port_df = new DataFieldEnum(this);
   FillTCPPorts(*tcp_port_df);
   tcp_port_df->Set(config.tcp_port);
-  Add(_("TCP port"), NULL, tcp_port_df);
+  Add(_("TCP port"), nullptr, tcp_port_df);
 
   DataFieldEnum *i2c_bus_df = new DataFieldEnum(this);
   FillI2CBus(*i2c_bus_df);
@@ -690,13 +690,13 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
   DataFieldEnum *driver_df = new DataFieldEnum(this);
 
   const struct DeviceRegister *driver;
-  for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; i++)
+  for (unsigned i = 0; (driver = GetDriverByIndex(i)) != nullptr; i++)
     driver_df->addEnumText(driver->name, driver->display_name);
 
   driver_df->Sort(1);
   driver_df->Set(config.driver_name);
 
-  Add(_("Driver"), NULL, driver_df);
+  Add(_("Driver"), nullptr, driver_df);
 
   // for a passthrough device, offer additional driver
   AddBoolean(_("Passthrough device"),
@@ -862,6 +862,6 @@ DeviceEditWidget::OnModified(DataField &df) noexcept
       IsDataField(UseSecondDriver, df) || IsDataField(K6Bt, df))
     UpdateVisibilities();
 
-  if (listener != NULL)
+  if (listener != nullptr)
     listener->OnModified(*this);
 }

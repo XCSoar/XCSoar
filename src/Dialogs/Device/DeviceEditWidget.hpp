@@ -45,8 +45,8 @@ public:
   DeviceEditWidget(const DeviceConfig &_config) noexcept;
 
   void SetListener(Listener *_listener) noexcept {
-    assert(listener == NULL);
-    assert(_listener != NULL);
+    assert(listener == nullptr);
+    assert(_listener != nullptr);
 
     listener = _listener;
   }
