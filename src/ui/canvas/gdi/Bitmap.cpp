@@ -32,7 +32,7 @@ Copyright_License {
 #include <wingdi.h>
 #include <winuser.h>
 
-Bitmap::Bitmap(Bitmap &&src)
+Bitmap::Bitmap(Bitmap &&src) noexcept
   :bitmap(src.bitmap)
 {
   src.bitmap = nullptr;
@@ -46,7 +46,7 @@ Bitmap::LoadFile(Path path)
 }
 
 void
-Bitmap::Reset()
+Bitmap::Reset() noexcept
 {
   if (bitmap != nullptr) {
     assert(IsScreenInitialized());
@@ -62,7 +62,7 @@ Bitmap::Reset()
 }
 
 PixelSize
-Bitmap::GetSize() const
+Bitmap::GetSize() const noexcept
 {
   assert(IsDefined());
 

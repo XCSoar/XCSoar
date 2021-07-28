@@ -36,7 +36,7 @@ Bitmap::Bitmap(ResourceId id)
   Load(id);
 }
 
-Bitmap::Bitmap(Bitmap &&src)
+Bitmap::Bitmap(Bitmap &&src) noexcept
   :bmp(src.bmp),
    uncompressed(std::move(src.uncompressed)),
    type(src.type),
@@ -55,7 +55,7 @@ Bitmap::Bitmap(Bitmap &&src)
 }
 
 static const char *
-find_resource_name(unsigned id)
+find_resource_name(unsigned id) noexcept
 {
   for (unsigned i = 0; DrawableNames[i].name != nullptr; ++i)
     if (DrawableNames[i].id == id)
@@ -75,7 +75,7 @@ LoadResourceBitmap(ResourceId id)
 }
 
 bool
-Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type, bool flipped)
+Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type, bool flipped) noexcept
 {
   assert(bmp == nullptr);
   assert(_bmp != nullptr);
@@ -98,7 +98,7 @@ Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type, bool flipped)
 }
 
 bool
-Bitmap::MakeTexture(jobject _bmp, Type _type, bool flipped)
+Bitmap::MakeTexture(jobject _bmp, Type _type, bool flipped) noexcept
 {
   assert(_bmp != nullptr);
 
@@ -152,7 +152,7 @@ Bitmap::LoadFile(Path path)
 }
 
 void
-Bitmap::Reset()
+Bitmap::Reset() noexcept
 {
   if (bmp != nullptr) {
     auto *env = Java::GetEnv();

@@ -120,17 +120,17 @@ public:
 #ifdef USE_MEMORY_CANVAS
   Bitmap(Bitmap &&src) = default;
 #else
-  Bitmap(Bitmap &&src);
+  Bitmap(Bitmap &&src) noexcept;
 #endif
 
-  ~Bitmap() {
+  ~Bitmap() noexcept {
     Reset();
   }
 
   Bitmap(const Bitmap &other) = delete;
   Bitmap &operator=(const Bitmap &other) = delete;
 public:
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
 #ifdef ANDROID
     return bmp != nullptr || uncompressed.IsDefined();
 #elif defined(ENABLE_OPENGL)
@@ -143,50 +143,50 @@ public:
   }
 
 #ifdef ENABLE_OPENGL
-  const PixelSize &GetSize() const {
+  const PixelSize &GetSize() const noexcept {
     return size;
   }
 
-  unsigned GetWidth() const {
+  unsigned GetWidth() const noexcept {
     return size.width;
   }
 
-  unsigned GetHeight() const {
+  unsigned GetHeight() const noexcept {
     return size.height;
   }
 
-  bool IsFlipped() const {
+  bool IsFlipped() const noexcept {
     return flipped;
   }
 #elif defined(USE_MEMORY_CANVAS)
-  PixelSize GetSize() const {
+  PixelSize GetSize() const noexcept {
     return { buffer.width, buffer.height };
   }
 
-  unsigned GetWidth() const {
+  unsigned GetWidth() const noexcept {
     return buffer.width;
   }
 
-  unsigned GetHeight() const {
+  unsigned GetHeight() const noexcept {
     return buffer.height;
   }
 #else
   gcc_pure
-  PixelSize GetSize() const;
+  PixelSize GetSize() const noexcept;
 
-  unsigned GetWidth() const {
+  unsigned GetWidth() const noexcept {
     return GetSize().width;
   }
 
-  unsigned GetHeight() const {
+  unsigned GetHeight() const noexcept {
     return GetSize().height;
   }
 #endif
 
 #ifdef ENABLE_OPENGL
-  void EnableInterpolation();
+  void EnableInterpolation() noexcept;
 #else
-  void EnableInterpolation() {}
+  void EnableInterpolation() noexcept {}
 #endif
 
 #ifndef USE_GDI
@@ -213,18 +213,18 @@ public:
    */
   GeoQuadrilateral LoadGeoFile(Path path);
 
-  void Reset();
+  void Reset() noexcept;
 
 #ifdef ENABLE_OPENGL
-  GLTexture *GetNative() const {
+  GLTexture *GetNative() const noexcept {
     return texture;
   }
 #elif defined(USE_MEMORY_CANVAS)
-  ConstImageBuffer<BitmapPixelTraits> GetNative() const {
+  ConstImageBuffer<BitmapPixelTraits> GetNative() const noexcept {
     return buffer;
   }
 #else
-  HBITMAP GetNative() const {
+  HBITMAP GetNative() const noexcept {
     assert(IsDefined());
 
     return bitmap;
@@ -233,11 +233,13 @@ public:
 
 #ifdef ENABLE_OPENGL
 private:
-  bool MakeTexture(const UncompressedImage &uncompressed, Type type);
+  bool MakeTexture(const UncompressedImage &uncompressed, Type type) noexcept;
 
 #ifdef ANDROID
-  bool Set(JNIEnv *env, jobject _bmp, Type _type, bool flipped = false);
-  bool MakeTexture(jobject _bmp, Type _type, bool flipped = false);
+  bool Set(JNIEnv *env, jobject _bmp, Type _type,
+           bool flipped = false) noexcept;
+  bool MakeTexture(jobject _bmp, Type _type,
+                   bool flipped = false) noexcept;
 
   /* from GLSurfaceListener */
   virtual void SurfaceCreated() override;

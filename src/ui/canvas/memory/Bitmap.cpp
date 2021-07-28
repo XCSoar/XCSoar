@@ -41,7 +41,7 @@ Bitmap::Load(UncompressedImage &&uncompressed, gcc_unused Type type)
 }
 
 void
-Bitmap::Reset()
+Bitmap::Reset() noexcept
 {
   assert(!IsDefined() || IsScreenInitialized());
 

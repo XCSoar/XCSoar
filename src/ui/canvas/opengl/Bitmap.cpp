@@ -30,7 +30,7 @@ Copyright_License {
 
 #ifndef ANDROID
 
-Bitmap::Bitmap(Bitmap &&src)
+Bitmap::Bitmap(Bitmap &&src) noexcept
   :texture(src.texture),
    size(src.size),
    interpolation(src.interpolation),
@@ -42,7 +42,7 @@ Bitmap::Bitmap(Bitmap &&src)
 #endif /* !ANDROID */
 
 void
-Bitmap::EnableInterpolation()
+Bitmap::EnableInterpolation() noexcept
 {
   interpolation = true;
   if (texture != nullptr) {
@@ -52,7 +52,7 @@ Bitmap::EnableInterpolation()
 }
 
 bool
-Bitmap::MakeTexture(const UncompressedImage &uncompressed, Type type)
+Bitmap::MakeTexture(const UncompressedImage &uncompressed, Type type) noexcept
 {
   assert(IsScreenInitialized());
   assert(uncompressed.IsDefined());
@@ -106,7 +106,7 @@ Bitmap::Load(UncompressedImage &&_uncompressed, Type _type)
 #ifndef ANDROID
 
 void
-Bitmap::Reset()
+Bitmap::Reset() noexcept
 {
   assert(!IsDefined() || IsScreenInitialized());
   assert(!IsDefined() || pthread_equal(pthread_self(), OpenGL::thread));
