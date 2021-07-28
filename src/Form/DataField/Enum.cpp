@@ -85,7 +85,7 @@ DataFieldEnum::GetAsInteger() const noexcept
 }
 
 void
-DataFieldEnum::replaceEnumText(unsigned int i, const TCHAR *Text) noexcept
+DataFieldEnum::replaceEnumText(std::size_t i, const TCHAR *Text) noexcept
 {
   if (i <= entries.size())
     entries[i].SetString(Text);
@@ -255,9 +255,9 @@ DataFieldEnum::Dec() noexcept
 }
 
 void
-DataFieldEnum::Sort(unsigned startindex) noexcept
+DataFieldEnum::Sort(std::size_t startindex) noexcept
 {
-  std::sort(entries.begin() + startindex, entries.end(),
+  std::sort(std::next(entries.begin(), startindex), entries.end(),
             [](const DataFieldEnum::Entry &a, const DataFieldEnum::Entry &b) {
               return StringCollate(a.GetDisplayString(),
                                    b.GetDisplayString()) < 0;
@@ -282,7 +282,7 @@ DataFieldEnum::Find(const TCHAR *text) const noexcept
 {
   assert(text != nullptr);
 
-  for (unsigned int i = 0; i < entries.size(); i++)
+  for (std::size_t i = 0; i < entries.size(); i++)
     if (StringIsEqual(text, entries[i].GetString()))
       return i;
 
@@ -292,7 +292,7 @@ DataFieldEnum::Find(const TCHAR *text) const noexcept
 int
 DataFieldEnum::Find(unsigned id) const noexcept
 {
-  for (unsigned i = 0; i < entries.size(); i++)
+  for (std::size_t i = 0; i < entries.size(); i++)
     if (entries[i].GetId() == id)
       return i;
 
@@ -300,7 +300,7 @@ DataFieldEnum::Find(unsigned id) const noexcept
 }
 
 void
-DataFieldEnum::SetIndex(unsigned new_value, bool invoke_callback) noexcept
+DataFieldEnum::SetIndex(std::size_t new_value, bool invoke_callback) noexcept
 {
   assert(new_value < entries.size());
 
@@ -311,10 +311,4 @@ DataFieldEnum::SetIndex(unsigned new_value, bool invoke_callback) noexcept
 
   if (invoke_callback)
     Modified();
-}
-
-unsigned
-DataFieldEnum::getItem(unsigned index) const noexcept
-{
-  return entries[index].GetId();
 }

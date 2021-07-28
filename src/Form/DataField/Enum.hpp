@@ -97,11 +97,11 @@ public:
 
 private:
   StaticArray<Entry, 128> entries;
-  unsigned int value;
+  std::size_t value = 0;
 
 public:
   DataFieldEnum(DataFieldListener *listener=nullptr) noexcept
-    :DataField(Type::ENUM, true, listener), value(0) {}
+    :DataField(Type::ENUM, true, listener) {}
 
   gcc_pure
   unsigned GetValue() const noexcept;
@@ -111,7 +111,7 @@ public:
     return Find(text) >= 0;
   }
 
-  void replaceEnumText(unsigned int i, const TCHAR *Text) noexcept;
+  void replaceEnumText(std::size_t index, const TCHAR *Text) noexcept;
 
   /**
    * Clear the list of choices.  This will not notify the
@@ -174,14 +174,16 @@ public:
    */
   int SetStringAutoAdd(const TCHAR *text) noexcept;
 
-  void Sort(unsigned startindex = 0) noexcept;
+  void Sort(std::size_t startindex = 0) noexcept;
 
   gcc_pure
-  unsigned Count() const noexcept {
+  std::size_t Count() const noexcept {
     return entries.size();
   }
 
-  unsigned getItem(unsigned index) const noexcept;
+  unsigned getItem(std::size_t index) const noexcept {
+    return entries[index].GetId();
+  }
 
   /* virtual methods from class DataField */
   void Inc() noexcept override;
@@ -203,7 +205,7 @@ protected:
   gcc_pure
   int Find(unsigned id) const noexcept;
 
-  void SetIndex(unsigned new_value, bool invoke_callback) noexcept;
+  void SetIndex(std::size_t new_value, bool invoke_callback) noexcept;
 };
 
 #endif
