@@ -137,7 +137,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
     }
   }
 
-  private void AddAvailable(UsbDevice device) {
+  private synchronized void AddAvailable(UsbDevice device) {
     if (device != null && UsbSerialDevice.isSupported(device)) {
       int vid = device.getVendorId();
       int pid = device.getProductId();
@@ -151,7 +151,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
     }
   }
 
-  private UsbDevice GetAvailable(String name) {
+  private synchronized UsbDevice GetAvailable(String name) {
     for (Map.Entry<String, UsbDevice> entry : _AvailableDevices.entrySet()) {
       if(name.contentEquals(getDeviceId(entry.getValue()))) {
         return entry.getValue();
@@ -160,7 +160,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
     return null;
   }
 
-  private void RemoveAvailable(UsbDevice device) {
+  private synchronized void RemoveAvailable(UsbDevice device) {
     Log.v(TAG,"UsbDevice disconnected : " + device);
     _AvailableDevices.remove(device.getDeviceName());
   }
@@ -199,7 +199,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
     context.unregisterReceiver(this);
   }
 
-  private AndroidPort connectDevice (String name , int baud) {
+  private synchronized AndroidPort connectDevice (String name , int baud) {
     if (usbmanager == null)
       return null;
 
@@ -219,7 +219,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
     return port;
   }
 
-  public String[] listDevices() {
+  public synchronized String[] listDevices() {
 
     String[] device_names = new String[_AvailableDevices.size() * 2];
     int n = 0;
