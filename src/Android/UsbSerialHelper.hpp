@@ -23,38 +23,29 @@
 #ifndef ANDROID_USBSERIALHELPER_H
 #define ANDROID_USBSERIALHELPER_H
 
-#include <jni.h>
+#include "java/Object.hxx"
 
+class Context;
 class PortBridge;
 
-namespace UsbSerialHelper {
+class UsbSerialHelper final : protected Java::GlobalObject {
+public:
+  /**
+   * Global initialisation.  Looks up the methods of the
+   * UsbSerialHelper Java class.
+   */
+  static bool Initialise(JNIEnv *env) noexcept;
+  static void Deinitialise(JNIEnv *env) noexcept;
 
-/**
- * Global initialisation.  Looks up the methods of the
- * UsbSerialHelper Java class.
- */
-bool
-Initialise(JNIEnv *env) noexcept;
+  UsbSerialHelper(JNIEnv *env, Context &context);
+  ~UsbSerialHelper() noexcept;
 
-void
-Deinitialise(JNIEnv *env) noexcept;
+  /**
+   * Returns a list of connected usb devices.
+   */
+  jobjectArray List(JNIEnv *env) noexcept;
 
-/**
- * Is the Usb Host available
- */
-[[gnu::pure]]
-bool
-isEnabled(JNIEnv *env) noexcept;
-
-/**
- * Returns a list of connected usb devices.
- */
-jobjectArray
-list(JNIEnv *env) noexcept;
-
-PortBridge *
-connectDevice(JNIEnv *env, const char *name, unsigned baud) noexcept;
-
+  PortBridge *Connect(JNIEnv *env, const char *name, unsigned baud);
 };
 
 #endif //ANDROID_USBSERIALHELPER_H

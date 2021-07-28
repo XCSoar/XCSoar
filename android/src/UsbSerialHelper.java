@@ -45,38 +45,11 @@ public class UsbSerialHelper extends BroadcastReceiver {
   private static final String TAG = "UsbSerialHelper";
   public static final String ACTION_USB_PERMISSION = "org.xcsoar.otg.action.USB_PERMISSION";
 
-  private static UsbSerialHelper _instance;
-
   private final Context context;
   private final UsbManager usbmanager;
 
   private HashMap<String, UsbDevice> _AvailableDevices = new HashMap<>();
   private HashMap<UsbDevice, UsbSerialPort> _PendingConnection = new HashMap<>();
-
-  static synchronized void Initialise(Context context) {
-    _instance = new UsbSerialHelper(context);
-  }
-
-  static synchronized void Deinitialise(Context context) {
-    if (_instance != null) {
-      _instance.close();
-      _instance = null;
-    }
-  }
-
-  public static boolean isEnabled() {
-    return (_instance != null);
-  }
-
-  static AndroidPort connect(String name,int baud) {
-    assert(_instance != null);
-    return _instance.connectDevice(name,baud);
-  }
-
-  static String[] list() {
-    assert(_instance != null);
-    return _instance.listDevices();
-  }
 
   private static final long[] supported_ids = createTable(
     createDevice(0x16D0, 0x0BA9), // GPSBip
@@ -199,7 +172,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
     context.unregisterReceiver(this);
   }
 
-  private synchronized AndroidPort connectDevice (String name , int baud) {
+  private synchronized AndroidPort connect(String name, int baud) {
     if (usbmanager == null)
       return null;
 
@@ -219,8 +192,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
     return port;
   }
 
-  public synchronized String[] listDevices() {
-
+  public synchronized String[] list() {
     String[] device_names = new String[_AvailableDevices.size() * 2];
     int n = 0;
     for (Map.Entry<String, UsbDevice> entry : _AvailableDevices.entrySet()) {

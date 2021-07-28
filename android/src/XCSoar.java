@@ -96,8 +96,6 @@ public class XCSoar extends Activity {
 
     IOIOHelper.onCreateContext(this);
 
-    UsbSerialHelper.Initialise(this);
-
     // fullscreen mode
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|
@@ -285,8 +283,6 @@ public class XCSoar extends Activity {
     }
 
     Log.d(TAG, "in onDestroy()");
-
-    UsbSerialHelper.Deinitialise(this);
 
     if (batteryReceiver != null) {
       unregisterReceiver(batteryReceiver);

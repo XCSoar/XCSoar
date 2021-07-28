@@ -195,8 +195,11 @@ FillAndroidUsbSerialPorts(DataFieldEnum &df,
                           const DeviceConfig &config) noexcept
 {
 #ifdef ANDROID
+  if (usb_serial_helper == nullptr)
+    return;
+
   JNIEnv *env = Java::GetEnv();
-  Java::LocalRef<jobjectArray> list{env, UsbSerialHelper::list(env)};
+  Java::LocalRef<jobjectArray> list{env, usb_serial_helper->List(env)};
   if (!list)
     return;
 

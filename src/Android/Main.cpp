@@ -95,6 +95,7 @@ Vibrator *vibrator;
 bool os_haptic_feedback_enabled;
 
 BluetoothHelper *bluetooth_helper;
+UsbSerialHelper *usb_serial_helper;
 IOIOHelper *ioio_helper;
 
 gcc_visibility_default
@@ -131,7 +132,7 @@ try {
   NativeInputListener::Initialise(env);
   PortBridge::Initialise(env);
   const bool have_bluetooth = BluetoothHelper::Initialise(env);
-  UsbSerialHelper::Initialise(env);
+  const bool have_usb_serial = UsbSerialHelper::Initialise(env);
   NativeDetectDeviceListener::Initialise(env);
   const bool have_ioio = IOIOHelper::Initialise(env);
   BMP085Device::Initialise(env);
@@ -166,6 +167,14 @@ try {
       bluetooth_helper = new BluetoothHelper(env, *context);
     } catch (...) {
       LogError(std::current_exception(), "Failed to initialise Bluetooth");
+    }
+  }
+
+  if (have_usb_serial) {
+    try {
+      usb_serial_helper = new UsbSerialHelper(env, *context);
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to initialise USB serial support");
     }
   }
 
@@ -233,6 +242,9 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 
   delete ioio_helper;
   ioio_helper = nullptr;
+
+  delete usb_serial_helper;
+  usb_serial_helper = nullptr;
 
   delete bluetooth_helper;
   bluetooth_helper = nullptr;

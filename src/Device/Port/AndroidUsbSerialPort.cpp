@@ -4,7 +4,7 @@
 
 #include "AndroidUsbSerialPort.hpp"
 #include "AndroidPort.hpp"
-#include "Android/PortBridge.hpp"
+#include "Android/Main.hpp"
 #include "Android/UsbSerialHelper.hpp"
 #include "java/Global.hxx"
 
@@ -16,13 +16,10 @@ OpenAndroidUsbSerialPort(const char *name, unsigned baud,
 {
   assert(name != nullptr);
 
-  JNIEnv *env = Java::GetEnv();
-  if (env == nullptr || !UsbSerialHelper::isEnabled(env))
-    return nullptr;
+  if (usb_serial_helper == nullptr)
+    throw std::runtime_error("USB serial not available");
 
-  PortBridge *bridge = UsbSerialHelper::connectDevice(env, name, baud);
-  if (bridge == nullptr)
-    return nullptr;
-
+  auto *bridge = usb_serial_helper->Connect(Java::GetEnv(), name, baud);
+  assert(bridge != nullptr);
   return std::make_unique<AndroidPort>(listener, handler, bridge);
 }

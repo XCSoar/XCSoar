@@ -21,20 +21,20 @@
 */
 
 #include "UsbSerialHelper.hpp"
+#include "Context.hpp"
 #include "PortBridge.hpp"
 #include "java/Class.hxx"
 #include "java/Env.hxx"
 #include "java/String.hxx"
 
-namespace UsbSerialHelper {
-
 static Java::TrivialClass cls;
-static jmethodID isEnabled_method;
+static jmethodID ctor;
+static jmethodID close_method;
 static jmethodID list_method;
 static jmethodID connect_method;
 
 bool
-Initialise(JNIEnv *env) noexcept
+UsbSerialHelper::Initialise(JNIEnv *env) noexcept
 {
   assert(!cls.IsDefined());
   assert(env != nullptr);
@@ -44,49 +44,47 @@ Initialise(JNIEnv *env) noexcept
     return false;
   }
 
-  isEnabled_method = env->GetStaticMethodID(cls, "isEnabled", "()Z");
-  list_method = env->GetStaticMethodID(cls, "list", "()[Ljava/lang/String;");
-  connect_method = env->GetStaticMethodID(cls, "connect",
-                                          "(Ljava/lang/String;I)Lorg/xcsoar/AndroidPort;");
+  ctor = env->GetMethodID(cls, "<init>",
+                          "(Landroid/content/Context;)V");
+
+  close_method = env->GetMethodID(cls, "close", "()V");
+  list_method = env->GetMethodID(cls, "list", "()[Ljava/lang/String;");
+  connect_method = env->GetMethodID(cls, "connect",
+                                    "(Ljava/lang/String;I)Lorg/xcsoar/AndroidPort;");
 
   return true;
 }
 
 void
-Deinitialise(JNIEnv *env) noexcept
+UsbSerialHelper::Deinitialise(JNIEnv *env) noexcept
 {
   cls.ClearOptional(env);
 }
 
-bool
-isEnabled(JNIEnv *env) noexcept
+UsbSerialHelper::UsbSerialHelper(JNIEnv *env, Context &context)
+  :Java::GlobalObject(env,
+                      Java::NewObjectRethrow(env, cls, ctor, context.Get()))
 {
-  return cls.IsDefined() &&
-    env->CallStaticBooleanMethod(cls, isEnabled_method);
+}
+
+UsbSerialHelper::~UsbSerialHelper() noexcept
+{
+  Java::GetEnv()->CallVoidMethod(Get(), close_method);
 }
 
 PortBridge *
-connectDevice(JNIEnv *env, const char *name, unsigned baud) noexcept
+UsbSerialHelper::Connect(JNIEnv *env, const char *name, unsigned baud)
 {
-  if (!cls.IsDefined())
-    return nullptr;
-
   Java::String name2(env, name);
-  auto obj = Java::CallStaticObjectMethodRethrow(env, cls, connect_method,
-                                                 name2.Get(), (int)baud);
-  if (obj == nullptr)
-    return nullptr;
+  auto obj = Java::CallObjectMethodRethrow(env, Get(), connect_method,
+                                           name2.Get(), (int)baud);
+  assert(obj);
 
   return new PortBridge(env, obj);
 }
 
 jobjectArray
-list(JNIEnv *env) noexcept
+UsbSerialHelper::List(JNIEnv *env) noexcept
 {
-  if (!cls.IsDefined())
-    return nullptr;
-
-  return (jobjectArray)env->CallStaticObjectMethod(cls, list_method);
+  return (jobjectArray)env->CallObjectMethod(Get(), list_method);
 }
-
-} // namespace UsbSerialHelper
