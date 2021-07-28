@@ -90,6 +90,7 @@ public:
     }
 
     void SetString(const TCHAR *_string) noexcept;
+    void SetDisplayString(const TCHAR *_string) noexcept;
     void Set(unsigned _id, const TCHAR *_string,
              const TCHAR *_display_string=nullptr,
              const TCHAR *_help=nullptr) noexcept;
@@ -112,6 +113,10 @@ public:
   }
 
   void replaceEnumText(std::size_t index, const TCHAR *Text) noexcept;
+
+  void SetDisplayString(std::size_t index, const TCHAR *_string) noexcept {
+    entries[index].SetDisplayString(_string);
+  }
 
   /**
    * Clear the list of choices.  This will not notify the

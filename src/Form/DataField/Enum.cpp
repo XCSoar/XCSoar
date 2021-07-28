@@ -51,6 +51,14 @@ DataFieldEnum::Entry::SetString(const TCHAR *_string) noexcept
 }
 
 void
+DataFieldEnum::Entry::SetDisplayString(const TCHAR *_string) noexcept
+{
+  if (display_string != string)
+    free(display_string);
+  display_string = _tcsdup(_string);
+}
+
+void
 DataFieldEnum::Entry::Set(unsigned _id, const TCHAR *_string,
                           const TCHAR *_display_string,
                           const TCHAR *_help) noexcept
