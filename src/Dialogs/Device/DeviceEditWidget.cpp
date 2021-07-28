@@ -186,6 +186,23 @@ FillSerialPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
 }
 
 static void
+SetBluetoothPort(DataFieldEnum &df, DeviceConfig::PortType type,
+                 const TCHAR *bluetooth_mac) noexcept
+{
+  assert(bluetooth_mac != nullptr);
+
+  if (!df.Set(bluetooth_mac)) {
+    const TCHAR *name = nullptr;
+#ifdef ANDROID
+    if (bluetooth_helper != nullptr)
+      name = bluetooth_helper->GetNameFromAddress(Java::GetEnv(),
+                                                  bluetooth_mac);
+#endif
+    df.Set(AddPort(df, type, bluetooth_mac, name));
+  }
+}
+
+static void
 FillAndroidBluetoothPorts(DataFieldEnum &df,
                           const DeviceConfig &config) noexcept
 {
@@ -223,11 +240,11 @@ FillAndroidBluetoothPorts(DataFieldEnum &df,
       AddPort(df, portType, address2.c_str(), name2.c_str());
     }
   }
+#endif
 
   if (config.UsesBluetoothMac() &&
       !config.bluetooth_mac.empty())
-    SetPort(df, config.port_type, config.bluetooth_mac);
-#endif
+    SetBluetoothPort(df, config.port_type, config.bluetooth_mac);
 }
 
 static void
@@ -428,7 +445,7 @@ EditPortCallback(const TCHAR *caption, DataField &_df,
       ? DeviceConfig::PortType::BLE_HM10
       : DeviceConfig::PortType::BLE_SENSOR;
 
-    SetPort(df, type, address.c_str());
+    SetBluetoothPort(df, type, address.c_str());
     return true;
   }
 #endif
