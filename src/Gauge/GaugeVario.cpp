@@ -203,8 +203,8 @@ GaugeVario::RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept
   for (std::size_t i = 0; i < arc.size(); ++i) {
     const unsigned angle = INT_ANGLE_RANGE / 2
       + i * INT_ANGLE_RANGE / 2 / (arc.size() - 1);
-    const PixelPoint delta(ISINETABLE[angle] * x_radius / 1024,
-                           -ISINETABLE[(angle + INT_QUARTER_CIRCLE) % INT_ANGLE_RANGE] * y_radius / 1024);
+    const PixelPoint delta(ISINETABLE[NormalizeIntAngle(angle)] * x_radius / 1024,
+                           -ISINETABLE[NormalizeIntAngle(angle + INT_QUARTER_CIRCLE)] * y_radius / 1024);
 
     arc[i] = geometry.offset + delta;
   }
