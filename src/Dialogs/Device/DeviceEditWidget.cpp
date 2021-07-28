@@ -25,7 +25,6 @@
 #include "Dialogs/ComboPicker.hpp"
 #include "UIGlobals.hpp"
 #include "util/Compiler.h"
-#include "util/Macros.hpp"
 #include "util/NumberParser.hpp"
 #include "util/StringCompare.hxx"
 #include "Language/Language.hpp"
@@ -92,7 +91,7 @@ static constexpr struct {
 };
 
 /** the number of fixed port types (excludes Serial, Bluetooth and IOIOUart) */
-static constexpr unsigned num_port_types = ARRAY_SIZE(port_types) - 1;
+static constexpr unsigned num_port_types = std::size(port_types) - 1;
 
 static unsigned
 AddPort(DataFieldEnum &df, DeviceConfig::PortType type,
