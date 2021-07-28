@@ -439,7 +439,7 @@ EditPortCallback(const TCHAR *caption, DataField &_df,
 
 DeviceEditWidget::DeviceEditWidget(const DeviceConfig &_config) noexcept
   :RowFormWidget(UIGlobals::GetDialogLook()),
-   config(_config), listener(nullptr) {}
+   config(_config) {}
 
 void
 DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept

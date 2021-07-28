@@ -39,7 +39,7 @@ public:
 private:
   DeviceConfig config;
 
-  Listener *listener;
+  Listener *listener = nullptr;
 
 public:
   DeviceEditWidget(const DeviceConfig &_config) noexcept;
