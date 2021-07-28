@@ -229,7 +229,8 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const noexcept
     }
 #endif
 
-    StringFormat(buffer, max_size, _T("BLE %s"), name);
+    StringFormat(buffer, max_size, _T("%s: %s"),
+                 _("BLE sensor"), name);
     return buffer;
     }
 
@@ -244,7 +245,8 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const noexcept
     }
 #endif
 
-    StringFormat(buffer, max_size, _T("HM10 %s"), name);
+    StringFormat(buffer, max_size, _T("%s: %s"),
+                 _("BLE port"), name);
     return buffer;
     }
 
@@ -309,7 +311,8 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const noexcept
     return buffer;
 
   case PortType::ANDROID_USB_SERIAL:
-    StringFormat(buffer, max_size, _T("USB serial %s"), path.c_str());
+    StringFormat(buffer, max_size, _T("%s: %s"),
+                 _("USB serial"), path.c_str());
     return buffer;
   }
 
