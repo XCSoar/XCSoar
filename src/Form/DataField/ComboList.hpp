@@ -63,10 +63,8 @@ private:
 public:
   ComboList() = default;
 
-  ComboList(ComboList &&other) = default;
-
-  ComboList(const ComboList &other) = delete;
-  ComboList &operator=(const ComboList &other) = delete;
+  ComboList(ComboList &&) = default;
+  ComboList &operator=(ComboList &&) = default;
 
   bool empty() const noexcept {
     return items.empty();
