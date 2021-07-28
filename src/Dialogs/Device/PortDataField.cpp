@@ -210,11 +210,8 @@ FillAndroidUsbSerialPorts(DataFieldEnum &df,
     if (!j_name)
       continue;
 
-    const auto id = j_id.ToString();
-    const auto name = j_name.ToString();
-
     AddPort(df, DeviceConfig::PortType::ANDROID_USB_SERIAL,
-            id.c_str(), name.c_str());
+            j_id.GetUTFChars().c_str(), j_name.GetUTFChars().c_str());
   }
 
   if (config.port_type == DeviceConfig::PortType::ANDROID_USB_SERIAL &&
