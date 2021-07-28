@@ -295,6 +295,23 @@ FillPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
 }
 
 void
+UpdatePortEntry(DataFieldEnum &df, DeviceConfig::PortType type,
+                const TCHAR *value, const TCHAR *name) noexcept
+{
+  for (std::size_t i = 0, n = df.Count(); i < n; ++i) {
+    const auto &item = df[i];
+    if (DeviceConfig::PortType(item.GetId() >> 16) == type &&
+        StringIsEqual(value, item.GetString())) {
+      if (name != nullptr)
+        df.SetDisplayString(i, name);
+      return;
+    }
+  }
+
+  AddPort(df, type, value, name);
+}
+
+void
 SetPort(DataFieldEnum &df, const DeviceConfig &config) noexcept
 {
   switch (config.port_type) {

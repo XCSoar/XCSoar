@@ -711,7 +711,6 @@ endif
 
 ifeq ($(TARGET),ANDROID)
 XCSOAR_SOURCES += \
-	$(SRC)/Dialogs/Device/ScanBluetoothLeDialog.cpp \
 	$(SRC)/java/Global.cxx \
 	$(SRC)/java/Object.cxx \
 	$(SRC)/java/String.cxx \

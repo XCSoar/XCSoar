@@ -28,5 +28,4 @@ class DataFieldEnum;
 #include <tchar.h>
 
 bool
-PortPicker(DataFieldEnum &df, const TCHAR *caption,
-           const TCHAR *help_text) noexcept;
+PortPicker(DataFieldEnum &df, const TCHAR *caption) noexcept;

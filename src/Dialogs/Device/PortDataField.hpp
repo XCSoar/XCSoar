@@ -33,6 +33,10 @@ void
 FillPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept;
 
 void
+UpdatePortEntry(DataFieldEnum &df, DeviceConfig::PortType type,
+                const TCHAR *value, const TCHAR *name) noexcept;
+
+void
 SetPort(DataFieldEnum &df, DeviceConfig::PortType type,
         const TCHAR *value) noexcept;
 
