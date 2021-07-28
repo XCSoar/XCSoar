@@ -23,7 +23,7 @@
 
 #include "DeviceEditWidget.hpp"
 #include "PortDataField.hpp"
-#include "Dialogs/ComboPicker.hpp"
+#include "PortPicker.hpp"
 #include "UIGlobals.hpp"
 #include "util/Compiler.h"
 #include "util/NumberParser.hpp"
@@ -31,18 +31,10 @@
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/String.hpp"
-#include "Form/DataField/ComboList.hpp"
 #include "Device/Register.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Features.hpp"
 #include "Interface.hpp"
-
-#ifdef ANDROID
-#include "java/Global.hxx"
-#include "Android/Main.hpp"
-#include "Android/BluetoothHelper.hpp"
-#include "ScanBluetoothLeDialog.hpp"
-#endif
 
 enum ControlIndex {
   Port, BaudRate, BulkBaudRate,
@@ -108,43 +100,10 @@ FillPress(DataFieldEnum &dfe) noexcept
 }
 
 static bool
-EditPortCallback(const TCHAR *caption, DataField &_df,
+EditPortCallback(const TCHAR *caption, DataField &df,
                  const TCHAR *help_text) noexcept
 {
-  DataFieldEnum &df = (DataFieldEnum &)_df;
-
-  ComboList combo_list = df.CreateComboList(nullptr);
-
-#ifdef ANDROID
-  static constexpr int SCAN_BLUETOOTH_LE = -1;
-  if (bluetooth_helper != nullptr &&
-      bluetooth_helper->HasLe(Java::GetEnv()))
-    combo_list.Append(SCAN_BLUETOOTH_LE, _("Bluetooth LE"));
-#endif
-
-  int i = ComboPicker(caption, combo_list, help_text);
-  if (i < 0)
-    return false;
-
-  const ComboList::Item &item = combo_list[i];
-
-#ifdef ANDROID
-  if (item.int_value == SCAN_BLUETOOTH_LE) {
-    auto [address, is_hm10] = ScanBluetoothLeDialog(*bluetooth_helper);
-    if (address.empty())
-        return false;
-
-    const auto type = is_hm10
-      ? DeviceConfig::PortType::BLE_HM10
-      : DeviceConfig::PortType::BLE_SENSOR;
-
-    SetBluetoothPort(df, type, address.c_str());
-    return true;
-  }
-#endif
-
-  df.SetFromCombo(item.int_value, item.string_value.c_str());
-  return true;
+  return PortPicker((DataFieldEnum &)df, caption, help_text);
 }
 
 DeviceEditWidget::DeviceEditWidget(const DeviceConfig &_config) noexcept
