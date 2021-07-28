@@ -181,8 +181,8 @@ public:
     return entries.size();
   }
 
-  unsigned getItem(std::size_t index) const noexcept {
-    return entries[index].GetId();
+  const auto &operator[](std::size_t index) const noexcept {
+    return entries[index];
   }
 
   /* virtual methods from class DataField */
