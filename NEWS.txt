@@ -1,4 +1,5 @@
 Version 7.11 - not yet released
+* fix crash bug in pc_met viewer
 * user interface
   - new vario gauge background
   - fix truncated labels in many dialogs

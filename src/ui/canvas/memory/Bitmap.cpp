@@ -28,6 +28,12 @@ Copyright_License {
 
 #include <cassert>
 
+Bitmap::Bitmap(Bitmap &&src) noexcept
+  :buffer(src.buffer)
+{
+  src.buffer = {};
+}
+
 bool
 Bitmap::Load(UncompressedImage &&uncompressed, gcc_unused Type type)
 {
