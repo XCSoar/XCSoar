@@ -117,33 +117,17 @@ final class BluetoothHelper
     }
   }
 
-  public String[] list() {
-    Set<BluetoothDevice> devices = adapter.getBondedDevices();
-    if (devices == null)
-      return null;
-
-    String[] addresses = new String[devices.size() * 3];
-    int n = 0;
-    for (BluetoothDevice device: devices) {
-      addresses[n++] = device.getAddress();
-      addresses[n++] = device.getName();
-      addresses[n++] = BluetoothDevice.DEVICE_TYPE_LE == device.getType() ? "BLE" : "CLASSIC";
-    }
-
-    return addresses;
-  }
-
   public synchronized void addDetectDeviceListener(DetectDeviceListener l) {
     detectListeners.add(l);
 
-    /* TODO: remove list() and enable this code:
     Set<BluetoothDevice> devices = adapter.getBondedDevices();
     if (devices != null)
       for (BluetoothDevice device : devices)
-        l.onDeviceDetected(DetectDeviceListener.TYPE_BLUETOOTH_CLASSIC,
+        l.onDeviceDetected(device.getType() == BluetoothDevice.DEVICE_TYPE_LE
+                           ? DetectDeviceListener.TYPE_BLUETOOTH_LE
+                           : DetectDeviceListener.TYPE_BLUETOOTH_CLASSIC,
                            device.getAddress(), device.getName(),
                            0);
-    */
 
     if (hasLe && scanner == null) {
       try {

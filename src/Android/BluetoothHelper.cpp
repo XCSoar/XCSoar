@@ -39,7 +39,7 @@ static jmethodID ctor;
 static jfieldID hasLe_field;
 static jmethodID isEnabled_method;
 static jmethodID getNameFromAddress_method;
-static jmethodID list_method, connect_method, createServer_method;
+static jmethodID connect_method, createServer_method;
 static jmethodID hm10connect_method;
 static jmethodID connectSensor_method;
 static jmethodID addDetectDeviceListener_method;
@@ -63,7 +63,6 @@ BluetoothHelper::Initialise(JNIEnv *env) noexcept
   isEnabled_method = env->GetMethodID(cls, "isEnabled", "()Z");
   getNameFromAddress_method = env->GetMethodID(cls, "getNameFromAddress",
                                                "(Ljava/lang/String;)Ljava/lang/String;");
-  list_method = env->GetMethodID(cls, "list", "()[Ljava/lang/String;");
   connectSensor_method = env->GetMethodID(cls, "connectSensor",
                                           "(Ljava/lang/String;Lorg/xcsoar/SensorListener;)"
                                           "Lorg/xcsoar/BluetoothSensor;");
@@ -128,14 +127,6 @@ BluetoothHelper::GetNameFromAddress(JNIEnv *env,
   auto j = address_to_name.insert(std::make_pair(std::move(x_address),
                                                  std::move(name)));
   return j.first->second.c_str();
-}
-
-Java::LocalRef<jobjectArray>
-BluetoothHelper::GetBondedList(JNIEnv *env) const noexcept
-{
-  /* call BluetoothHelper.connect() */
-
-  return {env, (jobjectArray)env->CallObjectMethod(Get(), list_method)};
 }
 
 bool

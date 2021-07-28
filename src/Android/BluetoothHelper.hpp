@@ -56,11 +56,6 @@ public:
                                  const char *address) const noexcept;
 
   /**
-   * Returns a list of all bonded devices.
-   */
-  Java::LocalRef<jobjectArray> GetBondedList(JNIEnv *env) const noexcept;
-
-  /**
    * Does the device support Bluetooth LE?
    */
   [[gnu::const]]
