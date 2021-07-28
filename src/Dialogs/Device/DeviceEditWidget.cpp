@@ -224,9 +224,7 @@ FillAndroidBluetoothPorts(DataFieldEnum &df,
     }
   }
 
-  if ((config.port_type == DeviceConfig::PortType::RFCOMM ||
-       config.port_type == DeviceConfig::PortType::BLE_SENSOR ||
-       config.port_type == DeviceConfig::PortType::BLE_HM10) &&
+  if (config.UsesBluetoothMac() &&
       !config.bluetooth_mac.empty())
     SetPort(df, config.port_type, config.bluetooth_mac);
 #endif

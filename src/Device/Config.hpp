@@ -254,6 +254,12 @@ struct DeviceConfig {
       port_type == PortType::IOIOUART;
   }
 
+  static constexpr bool UsesBluetoothMac(PortType port_type) noexcept {
+    return port_type == PortType::RFCOMM ||
+      port_type == PortType::BLE_SENSOR ||
+      port_type == PortType::BLE_HM10;
+  }
+
   constexpr bool IsDisabled() const noexcept {
     return !enabled || port_type == PortType::DISABLED;
   }
@@ -289,6 +295,10 @@ struct DeviceConfig {
   bool UsesSpeed() const noexcept {
     return UsesSpeed(port_type) ||
       (MaybeBluetooth() && k6bt);
+  }
+
+  bool UsesBluetoothMac() const noexcept {
+    return UsesBluetoothMac(port_type);
   }
 
   /**
