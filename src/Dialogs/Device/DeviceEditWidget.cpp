@@ -33,7 +33,6 @@
 #include "Form/DataField/String.hpp"
 #include "Device/Register.hpp"
 #include "Device/Driver.hpp"
-#include "Device/Features.hpp"
 #include "Interface.hpp"
 
 enum ControlIndex {

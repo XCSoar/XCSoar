@@ -22,6 +22,7 @@
 */
 
 #include "PortDataField.hpp"
+#include "Device/Features.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
 #include "util/StringCompare.hxx"
