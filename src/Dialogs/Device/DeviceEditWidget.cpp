@@ -27,6 +27,7 @@
 #include "util/Compiler.h"
 #include "util/Macros.hpp"
 #include "util/NumberParser.hpp"
+#include "util/StringCompare.hxx"
 #include "Language/Language.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
@@ -120,9 +121,9 @@ DetectSerialPorts(DataFieldEnum &df) noexcept
   bool found = false;
   const char *path;
   while ((path = enumerator.Next()) != nullptr) {
-    const char *display_string = path;
-    if (memcmp(path, "/dev/", 5) == 0)
-      display_string = path + 5;
+    const char *display_string = StringAfterPrefix(path, "/dev/");
+    if (display_string == nullptr)
+      display_string = path;
 
     AddPort(df, DeviceConfig::PortType::SERIAL, path, display_string);
     found = true;
