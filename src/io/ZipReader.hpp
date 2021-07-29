@@ -49,7 +49,7 @@ public:
   uint64_t GetPosition() const;
 
   /* virtual methods from class Reader */
-  size_t Read(void *data, size_t size) override;
+  std::size_t Read(void *data, std::size_t size) override;
 };
 
 #endif

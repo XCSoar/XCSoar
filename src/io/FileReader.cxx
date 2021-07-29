@@ -45,8 +45,8 @@ FileReader::FileReader(Path _path)
 		throw FormatLastError("Failed to open %s", path.ToUTF8().c_str());
 }
 
-size_t
-FileReader::Read(void *data, size_t size)
+std::size_t
+FileReader::Read(void *data, std::size_t size)
 {
 	assert(IsDefined());
 
@@ -95,8 +95,8 @@ FileReader::FileReader(Path _path)
 {
 }
 
-size_t
-FileReader::Read(void *data, size_t size)
+std::size_t
+FileReader::Read(void *data, std::size_t size)
 {
 	assert(IsDefined());
 

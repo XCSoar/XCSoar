@@ -55,7 +55,7 @@ public:
 	 * on end-of-stream
 	 */
 	gcc_nonnull_all
-	virtual size_t Read(void *data, size_t size) = 0;
+	virtual std::size_t Read(void *data, std::size_t size) = 0;
 };
 
 #endif
