@@ -23,7 +23,9 @@ Copyright_License {
 
 #pragma once
 
+struct GeoPoint;
 class AtmosphericPressure;
+class GliderLinkId;
 
 /**
  * C++ wrapper for the Java interface SensorListener.
@@ -60,6 +62,11 @@ public:
   virtual void OnNunchukValues(int joy_x, int joy_y,
                                int acc_x, int acc_y, int acc_z,
                                int switches) noexcept = 0;
+
+  virtual void OnGliderLinkTraffic(GliderLinkId id, const char *callsign,
+                                   GeoPoint location, double altitude,
+                                   double gspeed, double vspeed,
+                                   unsigned bearing) noexcept = 0;
 
   virtual void OnSensorError(const char *msg) noexcept = 0;
 };

@@ -51,6 +51,11 @@ public interface SensorListener {
                        int accel_x, int accel_y, int accel_z,
                        int switches);
 
+  void onGliderLinkTraffic(long gid, String callsign,
+                           double longitude, double latitude, double altitude,
+                           double gspeed, double vspeed,
+                           double bearing);
+
   /**
    * An error has occurred, and the sensor is now defunct.
    *

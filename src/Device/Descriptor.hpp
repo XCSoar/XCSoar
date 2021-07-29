@@ -641,6 +641,10 @@ private:
   void OnNunchukValues(int joy_x, int joy_y,
                        int acc_x, int acc_y, int acc_z,
                        int switches) noexcept final;
+  void OnGliderLinkTraffic(GliderLinkId id, const char *callsign,
+                           GeoPoint location, double altitude,
+                           double gspeed, double vspeed,
+                           unsigned bearing) noexcept override;
   void OnSensorError(const char *msg) noexcept override;
 #endif // ANDROID
 };

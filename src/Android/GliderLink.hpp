@@ -32,6 +32,7 @@ Copyright_License {
 #include <jni.h>
 
 class Context;
+class SensorListener;
 
 class GliderLink {
   static Java::TrivialClass gl_cls;
@@ -45,7 +46,8 @@ public:
   static void Initialise(JNIEnv *env) noexcept;
   static void Deinitialise(JNIEnv *env) noexcept;
 
-  GliderLink(JNIEnv *env, Context &context, unsigned index) noexcept;
+  GliderLink(JNIEnv *env, Context &context,
+             SensorListener &listener);
 };
 
 #endif

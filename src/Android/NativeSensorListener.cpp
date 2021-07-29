@@ -23,7 +23,9 @@ Copyright_License {
 
 #include "NativeSensorListener.hpp"
 #include "SensorListener.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "GliderLink/GliderLinkId.hpp"
 #include "java/Class.hxx"
 #include "java/String.hxx"
 #include "org_xcsoar_NativeSensorListener.h"
@@ -234,6 +236,32 @@ Java_org_xcsoar_NativeSensorListener_onNunchuckValues(JNIEnv *env, jobject obj,
 
   auto &listener = *(SensorListener *)ptr;
   listener.OnNunchukValues(joy_x, joy_y, acc_x, acc_y, acc_z, switches);
+}
+
+gcc_visibility_default
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeSensorListener_setGliderLinkInfo(JNIEnv *env,
+                                                       jobject obj,
+                                                       jlong gid,
+                                                       jstring callsign,
+                                                       jdouble latitude,
+                                                       jdouble longitude,
+                                                       jdouble altitude,
+                                                       jdouble gspeed,
+                                                       jdouble vspeed,
+                                                       jint bearing)
+{
+  jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
+  if (ptr == 0)
+    return;
+
+  auto &listener = *(SensorListener *)ptr;
+  listener.OnGliderLinkTraffic(GliderLinkId{(uint32_t)gid},
+                               Java::String::GetUTFChars(env, callsign).c_str(),
+                               GeoPoint(Angle::Degrees(longitude),
+                                        Angle::Degrees(latitude)),
+                               altitude, gspeed, vspeed,
+                               bearing);
 }
 
 gcc_visibility_default

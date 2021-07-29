@@ -42,11 +42,7 @@ class GliderLinkReceiver
 
   private final Context context;
 
-  /**
-   * Index of this device in the global list. This value is extracted directly
-   * from this object by the C++ wrapper code.
-   */
-  private final int index;
+  private final SensorListener listener;
 
   private static Handler handler;
 
@@ -59,9 +55,9 @@ class GliderLinkReceiver
     handler = new Handler();
   }
 
-  public GliderLinkReceiver(final Context context, int index) {
+  public GliderLinkReceiver(final Context context, SensorListener listener) {
     this.context = context;
-    this.index = index;
+    this.listener = listener;
 
     handler.post(new Runnable() {
       @Override
@@ -80,10 +76,6 @@ class GliderLinkReceiver
       }
     });
   }
-
-  private static native void setGliderLinkInfo(int deviceId, long gid, String callsign,
-          double latitude, double longitude, double altitude,
-          double gspeed, double vspeed, int bearing);
 
   @Override
   public void onReceive(Context context, Intent intent) {
@@ -110,9 +102,14 @@ class GliderLinkReceiver
              }
       */
 
-      setGliderLinkInfo(index, pos.getLong("gid"), pos.getString("callsign"), pos.getDouble("latitude"),
-              pos.getDouble("longitude"), pos.getDouble("altitude"), pos.getDouble("gspeed"), pos.getDouble("vspeed"),
-              pos.getInt("bearing"));
+      listener.onGliderLinkTraffic(pos.getLong("gid"),
+                                   pos.getString("callsign"),
+                                   pos.getDouble("latitude"),
+                                   pos.getDouble("longitude"),
+                                   pos.getDouble("altitude"),
+                                   pos.getDouble("gspeed"),
+                                   pos.getDouble("vspeed"),
+                                   pos.getInt("bearing"));
     } catch (JSONException e) {
       Log.e(TAG, e.getLocalizedMessage(), e);
     }

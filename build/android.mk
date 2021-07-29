@@ -45,7 +45,6 @@ NATIVE_CLASSES := \
 	NativeInputListener \
 	DownloadUtil \
 	BatteryReceiver \
-	GliderLinkReceiver \
 	NativePortListener \
 	NativeDetectDeviceListener
 NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
@@ -277,7 +276,6 @@ $(call SRC_TO_OBJ,$(SRC)/Android/EventBridge.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativeSensorListener.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativeDetectDeviceListener.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/Battery.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/GliderLink.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativePortListener.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativeInputListener.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/DownloadManager.cpp): $(NATIVE_HEADERS)

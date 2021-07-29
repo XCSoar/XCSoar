@@ -385,6 +385,61 @@ DeviceDescriptor::OnNunchukValues(int joy_x, int joy_y,
 }
 
 void
+DeviceDescriptor::OnGliderLinkTraffic(GliderLinkId id, const char *callsign,
+                                      GeoPoint location, double altitude,
+                                      double gspeed, double vspeed,
+                                      unsigned bearing) noexcept
+{
+  // GliderLink uses these special values in case they don't have a real value  
+  const double ALT_NONE = -10000.0;
+  const double BEARING_NONE = 361.0;
+  const double GSPEED_NONE = -1.0;
+  const double VSPEED_NONE = -8675309.0;
+
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+
+  GliderLinkTrafficList &traffic_list = basic.glink_data.traffic;
+
+  GliderLinkTraffic *traffic = traffic_list.FindTraffic(id);
+  if (traffic == nullptr) {
+    traffic = traffic_list.AllocateTraffic();
+    if (traffic == nullptr)
+      // no more slots available
+      return;
+
+    traffic->Clear();
+    traffic->id = id;
+
+    traffic_list.new_traffic.Update(basic.clock);
+  }
+
+  traffic->name.SetASCII(callsign);
+
+  traffic->location = location;
+
+  traffic->altitude_received = altitude > ALT_NONE;
+  if (traffic->altitude_received)
+    traffic->altitude = altitude;
+  traffic->speed_received = gspeed >= GSPEED_NONE;
+  if (traffic->speed_received)
+    traffic->speed = gspeed;
+  traffic->climb_rate_received = vspeed > VSPEED_NONE;
+  if (traffic->climb_rate_received)
+    traffic->climb_rate = vspeed;
+  traffic->track_received = bearing < BEARING_NONE;
+  if (traffic->track_received)
+    traffic->track = Angle::Degrees(bearing);
+
+  // set time of fix to current time
+  traffic->valid.Update(basic.clock);
+
+  e.Commit();
+}
+
+void
 DeviceDescriptor::OnSensorError(const char *msg) noexcept
 {
   PortError(msg);
