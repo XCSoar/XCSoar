@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.io.IOException;
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
@@ -107,7 +108,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
 
           UsbSerialPort port = _PendingConnection.get(device);
           _PendingConnection.remove(device);
-          if (port != null && usbmanager != null) {
+          if (port != null) {
             port.open(usbmanager);
           }
         }
@@ -144,19 +145,21 @@ public class UsbSerialHelper extends BroadcastReceiver {
     _AvailableDevices.remove(device.getDeviceName());
   }
 
-  private UsbSerialHelper(Context context) {
+  private UsbSerialHelper(Context context) throws IOException {
     Log.v(TAG, "onCreate()");
     this.context = context;
+
     usbmanager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
-    if(usbmanager != null) {
-      try {
-        HashMap<String, UsbDevice> devices = usbmanager.getDeviceList();
-        for (Map.Entry<String, UsbDevice> entry : devices.entrySet()) {
-          AddAvailable(entry.getValue());
-        }
-      } catch (NullPointerException e) {
-        Log.e(TAG, "onCreate()", e);
+    if (usbmanager == null)
+      throw new IOException("No USB service");
+
+    try {
+      HashMap<String, UsbDevice> devices = usbmanager.getDeviceList();
+      for (Map.Entry<String, UsbDevice> entry : devices.entrySet()) {
+        AddAvailable(entry.getValue());
       }
+    } catch (NullPointerException e) {
+      Log.e(TAG, "onCreate()", e);
     }
 
     registerReceiver();
@@ -179,9 +182,6 @@ public class UsbSerialHelper extends BroadcastReceiver {
   }
 
   private synchronized AndroidPort connect(String name, int baud) {
-    if (usbmanager == null)
-      return null;
-
     UsbDevice device = GetAvailable(name);
     if (device == null)
       return null;
