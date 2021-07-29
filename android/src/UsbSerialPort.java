@@ -54,15 +54,18 @@ public final class UsbSerialPort
   public synchronized void open(UsbManager manager) {
     _UsbConnection = manager.openDevice(_UsbDevice);
     if (_UsbConnection == null) {
+      setState(STATE_FAILED);
       return;
     }
 
     _SerialPort = UsbSerialDevice.createUsbSerialDevice(_UsbDevice, _UsbConnection);
     if (_SerialPort == null) {
+      setState(STATE_FAILED);
       return;
     }
 
     if (!_SerialPort.open()) {
+      setState(STATE_FAILED);
       return;
     }
 
