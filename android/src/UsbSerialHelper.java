@@ -181,10 +181,12 @@ public class UsbSerialHelper extends BroadcastReceiver {
     context.unregisterReceiver(this);
   }
 
-  private synchronized AndroidPort connect(String name, int baud) {
+  private synchronized AndroidPort connect(String name, int baud)
+    throws IOException
+  {
     UsbDevice device = GetAvailable(name);
     if (device == null)
-      return null;
+      throw new IOException("USB serial device not found");
 
     UsbSerialPort port = new UsbSerialPort(device,baud);
     if (usbmanager.hasPermission(device)) {
