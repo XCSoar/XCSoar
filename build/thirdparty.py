@@ -138,6 +138,7 @@ elif re.match('(arm.*|aarch64)-apple-darwin', actual_host_triplet) is not None:
 elif 'apple-darwin' in actual_host_triplet:
     thirdparty_libs = [
         libsodium,
+        openssl,
         cares,
         curl,
         lua,

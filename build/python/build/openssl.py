@@ -45,6 +45,9 @@ class OpenSSLProject(MakeProject):
             # Windows
             'i686-w64-mingw32': 'mingw',
             'x86_64-w64-mingw32': 'mingw64',
+
+            # Apple
+            'x86_64-apple-darwin': 'darwin64-x86_64-cc',
         }
 
         openssl_arch = openssl_archs[toolchain.toolchain_arch]
