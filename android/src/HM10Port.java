@@ -117,7 +117,6 @@ public class HM10Port
 
       portState = STATE_LIMBO;
     } catch (Error e) {
-      portState = STATE_FAILED;
       error(e.getMessage());
     }
 
@@ -148,7 +147,6 @@ public class HM10Port
       portState = STATE_READY;
     } catch (Error e) {
       error(e.getMessage());
-      portState = STATE_FAILED;
     } finally {
       stateChanged();
     }
@@ -254,6 +252,8 @@ public class HM10Port
   }
 
   protected void error(String msg) {
+    portState = STATE_FAILED;
+
     PortListener portListener = this.portListener;
     if (portListener != null)
       portListener.portError(msg);
