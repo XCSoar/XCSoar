@@ -156,7 +156,6 @@ public class HM10Port
   @Override
   public void onCharacteristicRead(BluetoothGatt gatt,
       BluetoothGattCharacteristic characteristic, int status) {
-    Log.e(TAG, "GATT characteristic read");
     writeBuffer.beginWriteNextChunk(gatt, dataCharacteristic);
   }
 
