@@ -49,6 +49,7 @@ public final class UsbSerialPort
   private PortListener portListener;
   private InputListener inputListener;
   private int _baudRate;
+  private int state = STATE_LIMBO;
 
   public synchronized void open(UsbManager manager) {
     _UsbConnection = manager.openDevice(_UsbDevice);
@@ -72,7 +73,7 @@ public final class UsbSerialPort
     _SerialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);
     _SerialPort.read(this);
 
-    stateChanged();
+    setState(STATE_READY);
   }
 
   public synchronized void close() {
@@ -99,7 +100,7 @@ public final class UsbSerialPort
 
   @Override
   public int getState() {
-    return (_SerialPort != null) ? STATE_READY : STATE_LIMBO;
+    return state;
   }
 
   @Override
@@ -138,5 +139,13 @@ public final class UsbSerialPort
     PortListener portListener = this.portListener;
     if (portListener != null)
       portListener.portStateChanged();
+  }
+
+  protected void setState(int newState) {
+    if (newState == state)
+      return;
+
+    state = newState;
+    stateChanged();
   }
 }
