@@ -102,25 +102,26 @@ public class HM10Port
   public void onConnectionStateChange(BluetoothGatt gatt,
       int status,
       int newState) {
-    int newPortState = STATE_LIMBO;
-    if (BluetoothProfile.STATE_CONNECTED == newState) {
-      if (!gatt.discoverServices()) {
-        Log.e(TAG, "Discovering GATT services request failed");
-        newPortState = STATE_FAILED;
+    try {
+      if (BluetoothProfile.STATE_CONNECTED == newState) {
+        if (!gatt.discoverServices())
+          throw new Error("Discovering GATT services request failed");
+      } else {
+        dataCharacteristic = null;
+        deviceNameCharacteristic = null;
+
+        if ((BluetoothProfile.STATE_DISCONNECTED == newState) && !shutdown &&
+            !gatt.connect())
+          throw new Error("Received GATT disconnected event, and reconnect attempt failed");
       }
-    } else {
-      dataCharacteristic = null;
-      deviceNameCharacteristic = null;
-      if ((BluetoothProfile.STATE_DISCONNECTED == newState) && !shutdown) {
-        if (!gatt.connect()) {
-          Log.w(TAG,
-              "Received GATT disconnected event, and reconnect attempt failed");
-          newPortState = STATE_FAILED;
-        }
-      }
+
+      portState = STATE_LIMBO;
+    } catch (Error e) {
+      portState = STATE_FAILED;
+      error(e.getMessage());
     }
+
     writeBuffer.clear();
-    portState = newPortState;
     stateChanged();
     synchronized (gattStateSync) {
       gattState = newState;
