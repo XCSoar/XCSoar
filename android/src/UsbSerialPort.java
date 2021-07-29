@@ -35,7 +35,9 @@ import java.util.Arrays;
 
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
-public final class UsbSerialPort implements AndroidPort {
+public final class UsbSerialPort
+  implements AndroidPort, UsbSerialInterface.UsbReadCallback
+{
   public UsbSerialPort(UsbDevice device,int baud) {
     _UsbDevice = device;
     _baudRate = baud;
@@ -59,7 +61,7 @@ public final class UsbSerialPort implements AndroidPort {
           _SerialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
           _SerialPort.setParity(UsbSerialInterface.PARITY_NONE);
           _SerialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);
-          _SerialPort.read(_ReadCallback);
+          _SerialPort.read(this);
         }
         stateChanged();
       }
@@ -117,18 +119,15 @@ public final class UsbSerialPort implements AndroidPort {
     return length;
   }
 
-  private UsbSerialInterface.UsbReadCallback _ReadCallback = new UsbSerialInterface.UsbReadCallback() {
-      @Override
-      public void onReceivedData(byte[] arg0) {
-        if (arg0.length == 0)
-          return;
+  @Override
+  public void onReceivedData(byte[] arg0) {
+    if (arg0.length == 0)
+      return;
 
-        InputListener listner = inputListener;
-        if(listner != null) {
-          listner.dataReceived(arg0, arg0.length);
-        }
-      }
-    };
+    InputListener listener = inputListener;
+    if (listener != null)
+      listener.dataReceived(arg0, arg0.length);
+  }
 
   protected final void stateChanged() {
     PortListener portListener = this.portListener;
