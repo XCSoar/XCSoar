@@ -78,8 +78,6 @@ public final class UsbSerialPort
       _UsbConnection.close();
       _UsbConnection = null;
     }
-
-    stateChanged();
   }
 
   @Override
