@@ -55,6 +55,8 @@
 #
 #   IWYU        "y" to run "include-what-you-use" on all sources
 #
+#   USE_CCACHE  "y" to build with ccache
+#
 
 .DEFAULT_GOAL := all
 
