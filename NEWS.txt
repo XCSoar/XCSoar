@@ -13,6 +13,7 @@ Version 7.11 - not yet released
   - add DroidSoar/I2C calibration dialog
   - fix reconnect to Bluetooth LE devices
   - fix distorted colors on some devices
+  - detect USB serial adapter disconnect
 * Polars
   - new Wassmer WA 26 P Squale polar
 

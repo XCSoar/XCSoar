@@ -130,8 +130,10 @@ public final class UsbSerialPort
 
   @Override
   public void onReceivedData(byte[] arg0) {
-    if (arg0.length == 0)
+    if (arg0.length == 0) {
+      error("Disconnected");
       return;
+    }
 
     InputListener listener = inputListener;
     if (listener != null)
@@ -150,5 +152,13 @@ public final class UsbSerialPort
 
     state = newState;
     stateChanged();
+  }
+
+  protected void error(String msg) {
+    state = STATE_FAILED;
+
+    PortListener portListener = this.portListener;
+    if (portListener != null)
+      portListener.portError(msg);
   }
 }
