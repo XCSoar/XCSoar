@@ -29,8 +29,7 @@ Copyright_License {
 #include <cassert>
 
 BufferedPort::BufferedPort(PortListener *_listener, DataHandler &_handler)
-  :Port(_listener, _handler),
-   running(false), closing(false)
+  :Port(_listener, _handler)
 {
 }
 

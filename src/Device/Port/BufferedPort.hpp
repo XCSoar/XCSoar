@@ -52,9 +52,9 @@ class BufferedPort : public Port, protected DataHandler {
 
   StaticFifoBuffer<uint8_t, 16384> buffer;
 
-  bool running;
+  bool running = false;
 
-  bool closing;
+  bool closing = false;
 
 public:
   BufferedPort(PortListener *_listener, DataHandler &_handler);
