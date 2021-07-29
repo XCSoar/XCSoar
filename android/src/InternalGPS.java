@@ -22,8 +22,6 @@
 
 package org.xcsoar;
 
-import java.io.Closeable;
-
 import android.os.Handler;
 import android.os.Bundle;
 import android.content.Context;
@@ -48,7 +46,8 @@ import java.lang.Math;
  * Code to support the internal GPS receiver via #LocationManager.
  */
 public class InternalGPS
-  implements LocationListener, SensorEventListener, Runnable, Closeable {
+  implements LocationListener, SensorEventListener, Runnable, AndroidSensor
+{
   private static final String TAG = "XCSoar";
 
   private static Handler handler;

@@ -22,8 +22,6 @@
 
 package org.xcsoar;
 
-import java.io.Closeable;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.BroadcastReceiver;
@@ -35,7 +33,10 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.os.Handler;
 
-class GliderLinkReceiver extends BroadcastReceiver implements Closeable {
+class GliderLinkReceiver
+  extends BroadcastReceiver
+  implements AndroidSensor
+{
   private static final String TAG = "XCSoar";
   public static final String ACTION = "link.glider.gliderlink.target_position";
 

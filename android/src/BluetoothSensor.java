@@ -22,7 +22,6 @@
 
 package org.xcsoar;
 
-import java.io.Closeable;
 import java.io.IOException;
 
 import android.bluetooth.BluetoothDevice;
@@ -41,7 +40,7 @@ import android.os.Build;
  */
 public final class BluetoothSensor
   extends BluetoothGattCallback
-  implements Closeable
+  implements AndroidSensor
 {
   private final SensorListener listener;
 

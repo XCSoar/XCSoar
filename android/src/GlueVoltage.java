@@ -23,14 +23,13 @@
 
 package org.xcsoar;
 
-import java.io.Closeable;
 import ioio.lib.api.IOIO;
 import ioio.lib.api.exception.ConnectionLostException;
 
 /*
  * A driver for voltage measurement on the IOIO board.
  */
-final class GlueVoltage implements Closeable, IOIOConnectionListener {
+final class GlueVoltage implements AndroidSensor, IOIOConnectionListener {
   private IOIOConnectionHolder holder;
   private final SensorListener listener;
   private final int sample_rate;
