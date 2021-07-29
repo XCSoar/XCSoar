@@ -29,7 +29,7 @@ Copyright_License {
 #include <cassert>
 
 void
-BufferedPort::BeginClose()
+BufferedPort::BeginClose() noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
   closing = true;
@@ -37,7 +37,7 @@ BufferedPort::BeginClose()
 }
 
 void
-BufferedPort::EndClose()
+BufferedPort::EndClose() noexcept
 {
 }
 

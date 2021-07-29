@@ -60,8 +60,8 @@ public:
   using Port::Port;
 
 protected:
-  void BeginClose();
-  void EndClose();
+  void BeginClose() noexcept;
+  void EndClose() noexcept;
 
 public:
   /* virtual methods from class Port */
