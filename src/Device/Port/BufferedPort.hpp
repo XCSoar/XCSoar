@@ -57,7 +57,7 @@ class BufferedPort : public Port, protected DataHandler {
   bool closing = false;
 
 public:
-  BufferedPort(PortListener *_listener, DataHandler &_handler);
+  using Port::Port;
 
 protected:
   void BeginClose();
@@ -65,11 +65,11 @@ protected:
 
 public:
   /* virtual methods from class Port */
-  virtual void Flush() override;
-  virtual int Read(void *Buffer, size_t Size) override;
-  virtual WaitResult WaitRead(std::chrono::steady_clock::duration timeout) override;
-  virtual bool StopRxThread() override;
-  virtual bool StartRxThread() override;
+  void Flush() override;
+  int Read(void *Buffer, size_t Size) override;
+  WaitResult WaitRead(std::chrono::steady_clock::duration timeout) override;
+  bool StopRxThread() override;
+  bool StartRxThread() override;
 
 protected:
   /* virtual methods from class DataHandler */
