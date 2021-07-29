@@ -22,7 +22,7 @@ def configure(toolchain, src, build, args=()):
     # looking for libraries on the build host (TODO: fix this
     # properly); but we must not do that on Android because the NDK
     # has a sysroot already
-    if '-android' not in toolchain.actual_arch:
+    if '-android' not in toolchain.actual_arch and '-darwin' not in toolchain.actual_arch:
         cross_args.append('-DCMAKE_SYSROOT=' + toolchain.install_prefix)
 
     cc = toolchain.cc
