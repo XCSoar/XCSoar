@@ -26,7 +26,6 @@ import android.annotation.TargetApi;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
-import android.util.Log;
 import android.os.Build;
 
 import com.felhr.usbserial.UsbSerialDevice;
@@ -37,8 +36,6 @@ import java.util.Arrays;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 public final class UsbSerialPort implements AndroidPort {
-  private static final String TAG = "UsbSerialPort";
-
   public UsbSerialPort(UsbDevice device,int baud) {
     _UsbDevice = device;
     _baudRate = baud;
@@ -52,8 +49,6 @@ public final class UsbSerialPort implements AndroidPort {
   private int _baudRate;
 
   public synchronized void open(UsbManager manager) {
-    Log.v(TAG, "open()");
-
     _UsbConnection = manager.openDevice(_UsbDevice);
     if (_UsbConnection != null) {
       _SerialPort = UsbSerialDevice.createUsbSerialDevice(_UsbDevice, _UsbConnection);
@@ -71,9 +66,7 @@ public final class UsbSerialPort implements AndroidPort {
     }
   }
 
-
   public synchronized void close() {
-    Log.v(TAG, "close()");
     if( _SerialPort != null) {
       _SerialPort.close();
       _SerialPort = null;
