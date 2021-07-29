@@ -52,20 +52,27 @@ public final class UsbSerialPort
 
   public synchronized void open(UsbManager manager) {
     _UsbConnection = manager.openDevice(_UsbDevice);
-    if (_UsbConnection != null) {
-      _SerialPort = UsbSerialDevice.createUsbSerialDevice(_UsbDevice, _UsbConnection);
-      if (_SerialPort != null) {
-        if (_SerialPort.open()) {
-          _SerialPort.setBaudRate(getBaudRate());
-          _SerialPort.setDataBits(UsbSerialInterface.DATA_BITS_8);
-          _SerialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
-          _SerialPort.setParity(UsbSerialInterface.PARITY_NONE);
-          _SerialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);
-          _SerialPort.read(this);
-        }
-        stateChanged();
-      }
+    if (_UsbConnection == null) {
+      return;
     }
+
+    _SerialPort = UsbSerialDevice.createUsbSerialDevice(_UsbDevice, _UsbConnection);
+    if (_SerialPort == null) {
+      return;
+    }
+
+    if (!_SerialPort.open()) {
+      return;
+    }
+
+    _SerialPort.setBaudRate(getBaudRate());
+    _SerialPort.setDataBits(UsbSerialInterface.DATA_BITS_8);
+    _SerialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
+    _SerialPort.setParity(UsbSerialInterface.PARITY_NONE);
+    _SerialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);
+    _SerialPort.read(this);
+
+    stateChanged();
   }
 
   public synchronized void close() {
