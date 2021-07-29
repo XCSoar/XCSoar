@@ -162,13 +162,13 @@ class TopCanvas
    * opened.  This is used on Linux to switch to graphics mode
    * (KD_GRAPHICS) or restore text mode (KD_TEXT).
    */
-  int tty_fd;
+  int tty_fd = -1;
 #endif
 
 #ifdef USE_FB
-  int fd;
+  int fd = -1;
 
-  void *map;
+  void *map = nullptr;
   unsigned map_pitch, map_bpp;
 
   uint32_t epd_update_marker;
@@ -179,7 +179,7 @@ class TopCanvas
    * Runtime flag that can be used to disable dithering at runtime for
    * some situations.
    */
-  bool enable_dither;
+  bool enable_dither = true;
 
   /**
    * some kobo Device don't need to wait eInk update complet before send new update cmd
@@ -189,21 +189,6 @@ class TopCanvas
 #endif
 
 public:
-#ifdef USE_FB
-  TopCanvas()
-    :
-#ifdef USE_TTY
-    tty_fd(-1),
-#endif
-    fd(-1), map(nullptr)
-#ifdef KOBO
-    , enable_dither(true)
-#endif
-  {}
-#elif defined(USE_TTY)
-  TopCanvas():tty_fd(-1) {}
-#endif
-
 #ifndef ANDROID
   ~TopCanvas() {
     Destroy();
