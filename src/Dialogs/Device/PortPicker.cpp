@@ -152,7 +152,7 @@ public:
       return true;
 
     changed = true;
-    df.Set(item.int_value);
+    df.SetFromCombo(item.int_value, item.string_value.c_str());
     return true;
   }
 
