@@ -42,15 +42,11 @@ TCPClientPort::TCPClientPort(EventLoop &event_loop, Cares::Channel &cares,
 
 TCPClientPort::~TCPClientPort()
 {
-  BufferedPort::BeginClose();
-
   BlockingCall(GetEventLoop(), [this](){
     socket.Close();
     connect.reset();
     resolver.reset();
   });
-
-  BufferedPort::EndClose();
 }
 
 size_t

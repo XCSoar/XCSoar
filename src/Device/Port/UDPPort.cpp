@@ -51,13 +51,9 @@ UDPPort::UDPPort(EventLoop &event_loop,
 
 UDPPort::~UDPPort()
 {
-  BufferedPort::BeginClose();
-
   BlockingCall(GetEventLoop(), [this](){
     socket.Close();
   });
-
-  BufferedPort::EndClose();
 }
 
 PortState

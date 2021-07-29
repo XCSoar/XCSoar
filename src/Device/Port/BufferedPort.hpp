@@ -54,14 +54,8 @@ class BufferedPort : public Port, protected DataHandler {
 
   bool running = false;
 
-  bool closing = false;
-
 public:
   using Port::Port;
-
-protected:
-  void BeginClose() noexcept;
-  void EndClose() noexcept;
 
 public:
   /* virtual methods from class Port */

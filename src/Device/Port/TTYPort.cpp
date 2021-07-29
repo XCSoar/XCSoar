@@ -160,13 +160,9 @@ TTYPort::TTYPort(EventLoop &event_loop,
 
 TTYPort::~TTYPort()
 {
-  BufferedPort::BeginClose();
-
   BlockingCall(GetEventLoop(), [this](){
     socket.Close();
   });
-
-  BufferedPort::EndClose();
 }
 
 PortState

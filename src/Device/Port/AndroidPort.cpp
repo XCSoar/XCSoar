@@ -40,11 +40,7 @@ AndroidPort::~AndroidPort()
 {
   assert(bridge != nullptr);
 
-  BeginClose();
-
   delete bridge;
-
-  EndClose();
 }
 
 PortState

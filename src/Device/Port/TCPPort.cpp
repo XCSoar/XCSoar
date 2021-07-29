@@ -59,14 +59,10 @@ TCPPort::TCPPort(EventLoop &event_loop,
 
 TCPPort::~TCPPort()
 {
-  BufferedPort::BeginClose();
-
   BlockingCall(GetEventLoop(), [this](){
     connection.Close();
     listener.Close();
   });
-
-  BufferedPort::EndClose();
 }
 
 PortState

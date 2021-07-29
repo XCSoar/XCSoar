@@ -41,8 +41,6 @@ SerialPort::SerialPort(PortListener *_listener, DataHandler &_handler)
 
 SerialPort::~SerialPort()
 {
-  BufferedPort::BeginClose();
-
   // Close the communication port.
   if (hPort != INVALID_HANDLE_VALUE) {
     StoppableThread::BeginStop();
@@ -52,8 +50,6 @@ SerialPort::~SerialPort()
 
     Thread::Join();
   }
-
-  BufferedPort::EndClose();
 }
 
 void
