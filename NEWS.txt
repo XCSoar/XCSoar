@@ -1,4 +1,4 @@
-Version 7.11 - not yet released
+Version 7.11 - 2021/07/30
 * fix crash bug in pc_met viewer
 * user interface
   - new vario gauge background
