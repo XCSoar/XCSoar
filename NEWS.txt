@@ -14,6 +14,7 @@ Version 7.11 - not yet released
   - fix reconnect to Bluetooth LE devices
   - fix distorted colors on some devices
   - detect USB serial adapter disconnect
+  - support baud rate switching on USB serial adapters
 * Polars
   - new Wassmer WA 26 P Squale polar
 

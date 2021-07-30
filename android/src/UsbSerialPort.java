@@ -118,6 +118,7 @@ public final class UsbSerialPort
 
   @Override
   public boolean setBaudRate(int baud) {
+    _SerialPort.setBaudRate(baud);
     _baudRate =  baud;
     return true;
   }
