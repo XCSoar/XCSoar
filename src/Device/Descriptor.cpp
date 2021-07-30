@@ -164,9 +164,6 @@ DeviceDescriptor::GetState() const
 #endif
 
 #ifdef ANDROID
-  if (i2cbaro.front() != nullptr)
-    return PortState::READY;
-
   if (java_sensor != nullptr)
     return PortState::READY;
 #endif
@@ -313,21 +310,24 @@ DeviceDescriptor::OpenDroidSoarV2()
   /* we use different values for the I2C Kalman filter */
   kalman_filter = {KF_I2C_MAX_DT, KF_I2C_VAR_ACCEL};
 
-  i2cbaro[0] = new I2CbaroDevice(Java::GetEnv(),
-                                 ioio_helper->GetHolder(),
-                                 0,
-                                 2 + (0x77 << 8) + (27 << 16), 0,	// bus, address
-                                 5,                               // update freq.
-                                 0,                               // flags
-                                 *this);
+  auto i2c = I2CbaroDevice::Create(Java::GetEnv(),
+                                   ioio_helper->GetHolder(),
+                                   0,
+                                   2 + (0x77 << 8) + (27 << 16), 0,	// bus, address
+                                   5,                               // update freq.
+                                   0,                               // flags
+                                   *this);
+  java_sensor = new Java::GlobalCloseable(i2c);
 
-  i2cbaro[1] = new I2CbaroDevice(Java::GetEnv(),
-                                 ioio_helper->GetHolder(),
-                                 1,
-                                 1 + (0x77 << 8) + (46 << 16), 0 ,
-                                 5,
-                                 0,
-                                 *this);
+  i2c = I2CbaroDevice::Create(Java::GetEnv(),
+                              ioio_helper->GetHolder(),
+                              1,
+                              1 + (0x77 << 8) + (46 << 16), 0 ,
+                              5,
+                              0,
+                              *this);
+  second_java_sensor = new Java::GlobalCloseable(i2c);
+
   return true;
 #else
   return false;
@@ -347,13 +347,15 @@ DeviceDescriptor::OpenI2Cbaro()
   /* we use different values for the I2C Kalman filter */
   kalman_filter = {KF_I2C_MAX_DT, KF_I2C_VAR_ACCEL};
 
-  i2cbaro.front() = new I2CbaroDevice(Java::GetEnv(),
-                                      ioio_helper->GetHolder(),
-                                      0,
-                                      config.i2c_bus, config.i2c_addr,
-                                      config.press_use == DeviceConfig::PressureUse::TEK_PRESSURE ? 20 : 5,
-                                      0, // called flags, actually reserved for future use.
-                                      *this);
+  auto i2c = I2CbaroDevice::Create(Java::GetEnv(),
+                                   ioio_helper->GetHolder(),
+                                   0,
+                                   config.i2c_bus, config.i2c_addr,
+                                   config.press_use == DeviceConfig::PressureUse::TEK_PRESSURE ? 20 : 5,
+                                   0, // called flags, actually reserved for future use.
+                                   *this);
+  java_sensor = new Java::GlobalCloseable(i2c);
+
   return true;
 #else
   return false;
@@ -588,10 +590,8 @@ DeviceDescriptor::Close()
 #endif
 
 #ifdef ANDROID
-  for (auto &i : i2cbaro) {
-    delete i;
-    i = nullptr;
-  }
+  delete second_java_sensor;
+  second_java_sensor = nullptr;
 
   delete java_sensor;
   java_sensor = nullptr;

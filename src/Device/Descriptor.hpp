@@ -70,7 +70,6 @@ class Device;
 class AtmosphericPressure;
 struct DeviceRegister;
 class InternalSensors;
-class I2CbaroDevice;
 class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
@@ -179,8 +178,8 @@ class DeviceDescriptor final
 #endif
 
 #ifdef ANDROID
-  std::array<I2CbaroDevice *, 3> i2cbaro{nullptr, nullptr, nullptr}; // static, pitot, tek; in any order
   Java::GlobalCloseable *java_sensor = nullptr;
+  Java::GlobalCloseable *second_java_sensor = nullptr;
 
   /* We use a Kalman filter to smooth Android device pressure sensor
      noise.  The filter requires two parameters: the first is the

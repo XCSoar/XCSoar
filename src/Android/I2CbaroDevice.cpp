@@ -44,10 +44,11 @@ I2CbaroDevice::Deinitialise(JNIEnv *env) noexcept
   i2cbaro_class.Clear(env);
 }
 
-static auto
-CreateI2CbaroDevice(JNIEnv *env, jobject holder, unsigned index,
-                    unsigned twi_num, unsigned i2c_addr, unsigned sample_rate, unsigned flags,
-                    SensorListener &_listener)
+Java::LocalObject
+I2CbaroDevice::Create(JNIEnv *env, jobject holder, unsigned index,
+                      unsigned twi_num, unsigned i2c_addr,
+                      unsigned sample_rate, unsigned flags,
+                      SensorListener &_listener)
 {
   const auto listener = NativeSensorListener::Create(env, _listener);
   return Java::NewObjectRethrow(env, i2cbaro_class, i2cbaro_ctor,
@@ -55,14 +56,4 @@ CreateI2CbaroDevice(JNIEnv *env, jobject holder, unsigned index,
                                 index,
                                 twi_num, i2c_addr, sample_rate, flags,
                                 listener.Get());
-}
-
-I2CbaroDevice::I2CbaroDevice(JNIEnv *env, jobject holder, unsigned index,
-                             unsigned twi_num, unsigned i2c_addr,
-                             unsigned sample_rate, unsigned flags,
-                             SensorListener &listener)
-  :obj(CreateI2CbaroDevice(env, holder, index,
-                           twi_num, i2c_addr, sample_rate, flags,
-                           listener))
-{
 }

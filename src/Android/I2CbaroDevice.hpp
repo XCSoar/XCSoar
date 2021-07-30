@@ -24,26 +24,25 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_I2CBARO_DEVICE_HPP
 #define XCSOAR_ANDROID_I2CBARO_DEVICE_HPP
 
-#include "java/Closeable.hxx"
-#include "Atmosphere/Pressure.hpp"
-#include "Math/SelfTimingKalmanFilter1d.hpp"
-
-#include <jni.h>
+#include "java/Object.hxx"
 
 class SensorListener;
 
-class I2CbaroDevice final {
-  Java::GlobalCloseable obj;
+namespace I2CbaroDevice {
 
-public:
-  static void Initialise(JNIEnv *env) noexcept;
-  static void Deinitialise(JNIEnv *env) noexcept;
+void
+Initialise(JNIEnv *env) noexcept;
 
-  I2CbaroDevice(JNIEnv *env, jobject holder,
-                unsigned index,
-                unsigned twi_num, unsigned i2c_addr,
-                unsigned sample_rate, unsigned flags,
-                SensorListener &listener);
-};
+void
+Deinitialise(JNIEnv *env) noexcept;
+
+Java::LocalObject
+Create(JNIEnv *env, jobject holder,
+       unsigned index,
+       unsigned twi_num, unsigned i2c_addr,
+       unsigned sample_rate, unsigned flags,
+       SensorListener &listener);
+
+} // namespace I2CbaroDevice
 
 #endif
