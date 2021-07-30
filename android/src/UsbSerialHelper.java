@@ -146,7 +146,6 @@ public class UsbSerialHelper extends BroadcastReceiver {
   }
 
   private UsbSerialHelper(Context context) throws IOException {
-    Log.v(TAG, "onCreate()");
     this.context = context;
 
     usbmanager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
@@ -166,7 +165,6 @@ public class UsbSerialHelper extends BroadcastReceiver {
   }
 
   private void close() {
-    Log.v(TAG, "onDestroy()");
     unregisterReceiver();
   }
 
