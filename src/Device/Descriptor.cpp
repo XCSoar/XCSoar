@@ -57,7 +57,6 @@ Copyright_License {
 #include "Android/Main.hpp"
 #include "Android/Product.hpp"
 #include "Android/IOIOHelper.hpp"
-#include "Android/BMP085Device.hpp"
 #include "Android/I2CbaroDevice.hpp"
 #include "Android/NunchuckDevice.hpp"
 #include "Android/VoltageDevice.hpp"
@@ -165,9 +164,6 @@ DeviceDescriptor::GetState() const
 #endif
 
 #ifdef ANDROID
-  if (droidsoar_v2 != nullptr)
-    return PortState::READY;
-
   if (i2cbaro.front() != nullptr)
     return PortState::READY;
 
@@ -596,9 +592,6 @@ DeviceDescriptor::Close()
 #endif
 
 #ifdef ANDROID
-  delete droidsoar_v2;
-  droidsoar_v2 = nullptr;
-
   for (auto &i : i2cbaro) {
     delete i;
     i = nullptr;

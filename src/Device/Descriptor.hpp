@@ -70,7 +70,6 @@ class Device;
 class AtmosphericPressure;
 struct DeviceRegister;
 class InternalSensors;
-class BMP085Device;
 class I2CbaroDevice;
 class NunchuckDevice;
 class VoltageDevice;
@@ -182,7 +181,6 @@ class DeviceDescriptor final
 #endif
 
 #ifdef ANDROID
-  BMP085Device *droidsoar_v2 = nullptr;
   std::array<I2CbaroDevice *, 3> i2cbaro{nullptr, nullptr, nullptr}; // static, pitot, tek; in any order
   NunchuckDevice *nunchuck = nullptr;
   VoltageDevice *voltage = nullptr;
