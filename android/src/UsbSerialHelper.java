@@ -152,13 +152,9 @@ public class UsbSerialHelper extends BroadcastReceiver {
     if (usbmanager == null)
       throw new IOException("No USB service");
 
-    try {
-      HashMap<String, UsbDevice> devices = usbmanager.getDeviceList();
-      for (Map.Entry<String, UsbDevice> entry : devices.entrySet()) {
-        AddAvailable(entry.getValue());
-      }
-    } catch (NullPointerException e) {
-      Log.e(TAG, "onCreate()", e);
+    HashMap<String, UsbDevice> devices = usbmanager.getDeviceList();
+    for (Map.Entry<String, UsbDevice> entry : devices.entrySet()) {
+      AddAvailable(entry.getValue());
     }
 
     registerReceiver();
