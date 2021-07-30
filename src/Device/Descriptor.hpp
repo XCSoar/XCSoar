@@ -39,7 +39,6 @@ Copyright_License {
 #include "thread/Debug.hpp"
 #include "util/tstring.hpp"
 #include "util/StaticFifoBuffer.hxx"
-#include "Android/GliderLink.hpp"
 
 #ifdef ANDROID
 #include "Android/SensorListener.hpp"
@@ -187,7 +186,6 @@ class DeviceDescriptor final
   std::array<I2CbaroDevice *, 3> i2cbaro{nullptr, nullptr, nullptr}; // static, pitot, tek; in any order
   NunchuckDevice *nunchuck = nullptr;
   VoltageDevice *voltage = nullptr;
-  GliderLink *glider_link = nullptr;
   Java::GlobalCloseable *java_sensor = nullptr;
 
   /* We use a Kalman filter to smooth Android device pressure sensor

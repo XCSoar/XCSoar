@@ -21,27 +21,25 @@ Copyright_License {
 }
 */
 
-#ifdef ANDROID
-
 #ifndef XCSOAR_ANDROID_GLIDER_LINK_HPP
 #define XCSOAR_ANDROID_GLIDER_LINK_HPP
 
-#include "java/Closeable.hxx"
+#include "java/Object.hxx"
 
 class Context;
 class SensorListener;
 
-class GliderLink {
-  Java::GlobalCloseable obj;
+namespace GliderLink {
 
-public:
-  static void Initialise(JNIEnv *env) noexcept;
-  static void Deinitialise(JNIEnv *env) noexcept;
+void
+Initialise(JNIEnv *env) noexcept;
 
-  GliderLink(JNIEnv *env, Context &context,
-             SensorListener &listener);
-};
+void
+Deinitialise(JNIEnv *env) noexcept;
 
-#endif
+Java::LocalObject
+Create(JNIEnv *env, Context &context, SensorListener &listener);
+
+} // namespace GliderLink
 
 #endif

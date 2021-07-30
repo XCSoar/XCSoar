@@ -48,9 +48,9 @@ GliderLink::Deinitialise(JNIEnv *env) noexcept
   gl_cls.Clear(env);
 }
 
-GliderLink::GliderLink(JNIEnv *env, Context &context,
-                       SensorListener &listener)
-  :obj(Java::NewObjectRethrow(env, gl_cls, gl_ctor_id, context.Get(),
-                              NativeSensorListener::Create(env, listener).Get()))
+Java::LocalObject
+GliderLink::Create(JNIEnv *env, Context &context, SensorListener &listener)
 {
+  return Java::NewObjectRethrow(env, gl_cls, gl_ctor_id, context.Get(),
+                                NativeSensorListener::Create(env, listener).Get());
 }

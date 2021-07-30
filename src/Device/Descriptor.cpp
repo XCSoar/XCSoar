@@ -177,9 +177,6 @@ DeviceDescriptor::GetState() const
   if (voltage != nullptr)
     return PortState::READY;
 
-  if (glider_link != nullptr)
-    return PortState::READY;
-
   if (java_sensor != nullptr)
     return PortState::READY;
 #endif
@@ -429,8 +426,8 @@ DeviceDescriptor::OpenGliderLink()
   if (is_simulator())
     return true;
 
-  glider_link = new GliderLink(Java::GetEnv(), *context, *this);
-
+  java_sensor = new Java::GlobalCloseable(GliderLink::Create(Java::GetEnv(),
+                                                             *context, *this));
   return true;
 #else
   return false;
@@ -611,9 +608,6 @@ DeviceDescriptor::Close()
 
   delete voltage;
   voltage = nullptr;
-
-  delete glider_link;
-  glider_link = nullptr;
 
   delete java_sensor;
   java_sensor = nullptr;
