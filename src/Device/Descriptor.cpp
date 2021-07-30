@@ -1163,6 +1163,12 @@ DeviceDescriptor::OnSysTicker()
   if (port != nullptr && port->GetState() == PortState::FAILED)
     has_failed = true;
 
+#ifdef ANDROID
+  if (java_sensor != nullptr &&
+      AndroidSensor::GetState(Java::GetEnv(), *java_sensor) == PortState::FAILED)
+    has_failed = true;
+#endif
+
   if (has_failed && !IsOccupied())
     Close();
 
