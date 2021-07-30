@@ -23,7 +23,7 @@
 
 package org.xcsoar;
 
-import android.util.Log;
+import java.io.IOException;
 import ioio.lib.api.IOIO;
 import ioio.lib.api.TwiMaster;
 import ioio.lib.api.DigitalInput;
@@ -40,8 +40,6 @@ import ioio.lib.api.exception.ConnectionLostException;
  *
  */
 final class I2Cbaro extends Thread {
-  private static final String TAG = "XCSoar";
-
   private int type = 0;
   private int sample_rate;
   private int sleep_time;
@@ -427,14 +425,10 @@ final class I2Cbaro extends Thread {
     try {
       if (i2c_addr == 0x77 && setup085())
         type = 85;
-      else {
-        if (setup5611())
-          type = 5611;
-        else {
-         Log.e(TAG, "No supported barometer found.");
-          return;
-        }
-      }
+      else if (setup5611())
+        type = 5611;
+      else
+          throw new IOException("No supported barometer found");
 
       if (type == 5611) {
         sleep_time = 1000 / sample_rate - 11; // - conversion time
