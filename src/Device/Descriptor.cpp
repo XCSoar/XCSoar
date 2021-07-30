@@ -167,9 +167,6 @@ DeviceDescriptor::GetState() const
   if (i2cbaro.front() != nullptr)
     return PortState::READY;
 
-  if (nunchuck != nullptr)
-    return PortState::READY;
-
   if (voltage != nullptr)
     return PortState::READY;
 
@@ -378,10 +375,11 @@ DeviceDescriptor::OpenNunchuck()
 
   joy_state_x = joy_state_y = 0;
 
-  nunchuck = new NunchuckDevice(Java::GetEnv(),
-                                ioio_helper->GetHolder(),
-                                config.i2c_bus, 5, // twi, sample_rate
-                                *this);
+  auto nunchuk = NunchuckDevice::Create(Java::GetEnv(),
+                                        ioio_helper->GetHolder(),
+                                        config.i2c_bus, 5, // twi, sample_rate
+                                        *this);
+  java_sensor = new Java::GlobalCloseable(nunchuk);
   return true;
 #else
   return false;
@@ -596,8 +594,6 @@ DeviceDescriptor::Close()
     delete i;
     i = nullptr;
   }
-  delete nunchuck;
-  nunchuck = nullptr;
 
   delete voltage;
   voltage = nullptr;

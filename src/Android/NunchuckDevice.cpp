@@ -44,23 +44,14 @@ NunchuckDevice::Deinitialise(JNIEnv *env) noexcept
   nunchuck_class.Clear(env);
 }
 
-static auto
-CreateNunchuckDevice(JNIEnv *env, jobject holder,
-                     unsigned twi_num, unsigned sample_rate,
-                     SensorListener &_listener)
+Java::LocalObject
+NunchuckDevice::Create(JNIEnv *env, jobject holder,
+                       unsigned twi_num, unsigned sample_rate,
+                       SensorListener &_listener)
 {
   const auto listener = NativeSensorListener::Create(env, _listener);
   return Java::NewObjectRethrow(env, nunchuck_class, nunchuck_ctor,
                                 holder,
                                 twi_num, sample_rate,
                                 listener.Get());
-}
-
-NunchuckDevice::NunchuckDevice(JNIEnv *env, jobject holder,
-                               unsigned twi_num, unsigned sample_rate,
-                               SensorListener &listener)
-  :obj(CreateNunchuckDevice(env, holder,
-                            twi_num, sample_rate,
-                            listener))
-{
 }

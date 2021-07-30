@@ -71,7 +71,6 @@ class AtmosphericPressure;
 struct DeviceRegister;
 class InternalSensors;
 class I2CbaroDevice;
-class NunchuckDevice;
 class VoltageDevice;
 class RecordedFlightList;
 struct RecordedFlightInfo;
@@ -182,7 +181,6 @@ class DeviceDescriptor final
 
 #ifdef ANDROID
   std::array<I2CbaroDevice *, 3> i2cbaro{nullptr, nullptr, nullptr}; // static, pitot, tek; in any order
-  NunchuckDevice *nunchuck = nullptr;
   VoltageDevice *voltage = nullptr;
   Java::GlobalCloseable *java_sensor = nullptr;
 
