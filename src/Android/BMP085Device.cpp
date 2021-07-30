@@ -44,25 +44,15 @@ BMP085Device::Deinitialise(JNIEnv *env) noexcept
   bmp085_class.Clear(env);
 }
 
-static Java::LocalObject
-CreateBMP085Device(JNIEnv *env, jobject holder,
-                   unsigned twi_num, unsigned eoc_pin,
-                   unsigned oversampling,
-                   SensorListener &_listener) noexcept
+Java::LocalObject
+BMP085Device::Create(JNIEnv *env, jobject holder,
+                     unsigned twi_num, unsigned eoc_pin,
+                     unsigned oversampling,
+                     SensorListener &_listener)
 {
   const auto listener = NativeSensorListener::Create(env, _listener);
   return Java::NewObjectRethrow(env, bmp085_class, bmp085_ctor,
                                 holder,
                                 twi_num, eoc_pin, oversampling,
                                 listener.Get());
-}
-
-BMP085Device::BMP085Device(JNIEnv *env, jobject holder,
-                           unsigned twi_num, unsigned eoc_pin,
-                           unsigned oversampling,
-                           SensorListener &listener) noexcept
-  :obj(CreateBMP085Device(env, holder,
-                          twi_num, eoc_pin, oversampling,
-                          listener))
-{
 }

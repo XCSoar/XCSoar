@@ -24,23 +24,24 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_BMP085_DEVICE_HPP
 #define XCSOAR_ANDROID_BMP085_DEVICE_HPP
 
-#include "java/Closeable.hxx"
-
-#include <jni.h>
+#include "java/Object.hxx"
 
 class SensorListener;
 
-class BMP085Device final {
-  Java::GlobalCloseable obj;
+namespace BMP085Device {
 
-public:
-  static void Initialise(JNIEnv *env) noexcept;
-  static void Deinitialise(JNIEnv *env) noexcept;
+void
+Initialise(JNIEnv *env) noexcept;
 
-  BMP085Device(JNIEnv *env, jobject holder,
-               unsigned twi_num, unsigned eoc_pin,
-               unsigned oversampling,
-               SensorListener &listener) noexcept;
-};
+void
+Deinitialise(JNIEnv *env) noexcept;
+
+Java::LocalObject
+Create(JNIEnv *env, jobject holder,
+       unsigned twi_num, unsigned eoc_pin,
+       unsigned oversampling,
+       SensorListener &listener);
+
+} // BMP085Device
 
 #endif
