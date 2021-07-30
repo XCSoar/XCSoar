@@ -159,11 +159,6 @@ DeviceDescriptor::GetState() const
   if (port != nullptr)
     return port->GetState();
 
-#ifdef HAVE_INTERNAL_GPS
-  if (internal_sensors != nullptr)
-    return PortState::READY;
-#endif
-
 #ifdef ANDROID
   if (java_sensor != nullptr)
     return AndroidSensor::GetState(Java::GetEnv(), *java_sensor);
