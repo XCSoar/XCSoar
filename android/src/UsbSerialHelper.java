@@ -117,7 +117,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
   }
 
   private synchronized void AddAvailable(UsbDevice device) {
-    if (device != null && UsbSerialDevice.isSupported(device)) {
+    if (UsbSerialDevice.isSupported(device)) {
       int vid = device.getVendorId();
       int pid = device.getProductId();
 
