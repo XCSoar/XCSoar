@@ -23,11 +23,12 @@ Copyright_License {
 
 #include "GliderLink.hpp"
 #include "NativeSensorListener.hpp"
+#include "java/Class.hxx"
 #include "java/Env.hxx"
 #include "Context.hpp"
 
-Java::TrivialClass GliderLink::gl_cls;
-jmethodID GliderLink::gl_ctor_id;
+static Java::TrivialClass gl_cls;
+static jmethodID gl_ctor_id;
 
 void
 GliderLink::Initialise(JNIEnv *env) noexcept
