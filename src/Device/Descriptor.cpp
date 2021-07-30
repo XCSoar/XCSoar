@@ -60,6 +60,7 @@ Copyright_License {
 #include "Android/I2CbaroDevice.hpp"
 #include "Android/NunchuckDevice.hpp"
 #include "Android/VoltageDevice.hpp"
+#include "Android/Sensor.hpp"
 #endif
 
 #ifdef __APPLE__
@@ -165,7 +166,7 @@ DeviceDescriptor::GetState() const
 
 #ifdef ANDROID
   if (java_sensor != nullptr)
-    return PortState::READY;
+    return AndroidSensor::GetState(Java::GetEnv(), *java_sensor);
 #endif
 
   return PortState::FAILED;

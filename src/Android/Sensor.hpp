@@ -21,33 +21,22 @@ Copyright_License {
 }
 */
 
-package org.xcsoar;
+#pragma once
 
-import java.io.Closeable;
+#include "Device/Port/State.hpp"
+
+#include <jni.h>
 
 /**
- * The Java interface of the C++ AndroidPort class.
+ * Support for the #AndroidSensor Java class.
  */
-interface AndroidPort extends AndroidSensor {
-  void setListener(PortListener listener);
+namespace AndroidSensor {
 
-  void setInputListener(InputListener listener);
+void
+Initialise(JNIEnv *env) noexcept;
 
-  /**
-   * @see Port::Drain()
-   */
-  boolean drain();
+[[gnu::pure]]
+PortState
+GetState(JNIEnv *env, jobject object) noexcept;
 
-  int getBaudRate();
-  boolean setBaudRate(int baud);
-
-  /**
-   * Write data to the port.  Execution blocks until at least one
-   * bytes is written or an error occurs or until the timeout expires.
-   *
-   * @param data the data to be written
-   * @param length the number of bytes to be written
-   * @return the number of bytes that were written or -1 on error/timeout
-   */
-  int write(byte[] data, int length);
-}
+} // namespace AndroidSensor

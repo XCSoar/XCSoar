@@ -36,6 +36,7 @@ final class GlueI2Cbaro implements AndroidSensor, IOIOConnectionListener {
   private final SensorListener listener;
 
   private I2Cbaro instance;
+  private int state = STATE_LIMBO;
 
   GlueI2Cbaro(IOIOConnectionHolder _holder, int index,
               int _twiNum, int _i2c_addr, int _sample_rate, int _flags,
@@ -63,12 +64,19 @@ final class GlueI2Cbaro implements AndroidSensor, IOIOConnectionListener {
       holder.removeListener(this);
   }
 
+  @Override
+  public int getState() {
+    return state;
+  }
+
   @Override public void onIOIOConnect(IOIO ioio)
     throws ConnectionLostException, InterruptedException {
     try {
       instance = new I2Cbaro(ioio, index, twiNum, i2c_addr, sample_rate, flags,
                              listener);
+      state = STATE_READY;
     } catch (Exception e) {
+      state = STATE_FAILED;
       listener.onSensorError(e.getMessage());
     }
   }
@@ -77,6 +85,7 @@ final class GlueI2Cbaro implements AndroidSensor, IOIOConnectionListener {
     if (instance == null)
       return;
 
+    state = STATE_LIMBO;
     instance.close();
     instance = null;
   }

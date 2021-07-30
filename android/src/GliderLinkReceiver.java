@@ -46,6 +46,8 @@ class GliderLinkReceiver
 
   private static Handler handler;
 
+  private int state = STATE_LIMBO;
+
   /**
    * Global initialization of the class.  Must be called from the main
    * event thread, because the Handler object must be bound to that
@@ -78,9 +80,15 @@ class GliderLinkReceiver
   }
 
   @Override
+  public int getState() {
+    return state;
+  }
+
+  @Override
   public void onReceive(Context context, Intent intent) {
     try {
       JSONObject json = new JSONObject(intent.getStringExtra("json"));
+      state = STATE_READY;
 
       JSONObject pos = json.getJSONObject("position");
       

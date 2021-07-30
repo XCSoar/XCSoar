@@ -35,6 +35,7 @@ final class GlueNunchuck implements AndroidSensor, IOIOConnectionListener {
   private final SensorListener listener;
 
   private Nunchuck instance;
+  private int state = STATE_LIMBO;
 
   GlueNunchuck(IOIOConnectionHolder _holder,
                int _twiNum, int _sample_rate,
@@ -59,15 +60,22 @@ final class GlueNunchuck implements AndroidSensor, IOIOConnectionListener {
       holder.removeListener(this);
   }
 
+  @Override
+  public int getState() {
+    return state;
+  }
+
   @Override public void onIOIOConnect(IOIO ioio)
     throws ConnectionLostException, InterruptedException {
     instance = new Nunchuck(ioio, twiNum, sample_rate, listener);
+    state = STATE_READY;
   }
 
   @Override public void onIOIODisconnect(IOIO ioio) {
     if (instance == null)
       return;
 
+    state = STATE_LIMBO;
     instance.close();
     instance = null;
   }

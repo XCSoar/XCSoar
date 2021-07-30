@@ -34,6 +34,7 @@ final class GlueVoltage implements AndroidSensor, IOIOConnectionListener {
   private final SensorListener listener;
   private final int sample_rate;
   private Voltage instance;
+  private int state = STATE_LIMBO;
 
   GlueVoltage(IOIOConnectionHolder _holder, int _sample_rate,
               SensorListener _listener) {
@@ -55,11 +56,18 @@ final class GlueVoltage implements AndroidSensor, IOIOConnectionListener {
       holder.removeListener(this);
   }
 
+  @Override
+  public int getState() {
+    return state;
+  }
+
   @Override public void onIOIOConnect(IOIO ioio)
     throws ConnectionLostException, InterruptedException {
     try {
       instance = new Voltage(ioio, sample_rate, listener);
+      state = STATE_READY;
     } catch (Exception e) {
+      state = STATE_FAILED;
       listener.onSensorError(e.getMessage());
     }
   }
@@ -68,6 +76,7 @@ final class GlueVoltage implements AndroidSensor, IOIOConnectionListener {
     if (instance == null)
       return;
 
+    state = STATE_LIMBO;
     instance.close();
     instance = null;
   }

@@ -30,6 +30,7 @@ Copyright_License {
 #include "Vibrator.hpp"
 #include "InternalSensors.hpp"
 #include "GliderLink.hpp"
+#include "Sensor.hpp"
 #include "PortBridge.hpp"
 #include "BluetoothHelper.hpp"
 #include "UsbSerialHelper.hpp"
@@ -130,6 +131,7 @@ try {
   GliderLink::Initialise(env);
   NativePortListener::Initialise(env);
   NativeInputListener::Initialise(env);
+  AndroidSensor::Initialise(env);
   PortBridge::Initialise(env);
   const bool have_bluetooth = BluetoothHelper::Initialise(env);
   const bool have_usb_serial = UsbSerialHelper::Initialise(env);

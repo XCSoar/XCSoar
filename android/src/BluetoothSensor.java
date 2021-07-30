@@ -46,6 +46,8 @@ public final class BluetoothSensor
 
   private final BluetoothGatt gatt;
 
+  private int state = STATE_LIMBO;
+
   public BluetoothSensor(Context context, BluetoothDevice device,
                          SensorListener listener)
     throws IOException
@@ -66,7 +68,13 @@ public final class BluetoothSensor
     gatt.close();
   }
 
+  @Override
+  public int getState() {
+    return state;
+  }
+
   private void submitError(String msg) {
+    state = STATE_FAILED;
     listener.onSensorError(msg);
   }
 
@@ -151,8 +159,10 @@ public final class BluetoothSensor
     if (service != null) {
       BluetoothGattCharacteristic c =
         service.getCharacteristic(BluetoothUuids.HEART_RATE_MEASUREMENT_CHARACTERISTIC);
-      if (c != null)
+      if (c != null) {
+        state = STATE_READY;
         enableNotification(c);
+      }
     }
 
     /* enable notifications for Flytec Sensbox */
@@ -164,8 +174,13 @@ public final class BluetoothSensor
         enableNotification(c);
 
       c = service.getCharacteristic(BluetoothUuids.FLYTEC_SENSBOX_MOVEMENT_SENSOR_CHARACTERISTIC);
-      if (c != null)
+      if (c != null) {
+        state = STATE_READY;
         enableNotification(c);
+      }
     }
+
+    if (state == STATE_LIMBO)
+      submitError("Unsupported Bluetooth device");
   }
 }

@@ -74,6 +74,8 @@ public class InternalGPS
   private double acceleration;
   private static boolean queriedLocationSettings = false;
 
+  private int state = STATE_LIMBO;
+
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
   InternalGPS(Context context, SensorListener listener) {
@@ -158,6 +160,11 @@ public class InternalGPS
     safeDestruct.finishShutdown();
   }
 
+  @Override
+  public int getState() {
+    return state;
+  }
+
   private void sendLocation(Location location) {
     Bundle extras = location.getExtras();
 
@@ -210,14 +217,17 @@ public class InternalGPS
                                         Bundle extras) {
     switch (status) {
     case LocationProvider.OUT_OF_SERVICE:
+      state = STATE_FAILED;
       setConnectedSafe(0); // not connected
       break;
 
     case LocationProvider.TEMPORARILY_UNAVAILABLE:
+      state = STATE_LIMBO;
       setConnectedSafe(1); // waiting for fix
       break;
 
     case LocationProvider.AVAILABLE:
+      state = STATE_READY;
       break;
     }
   }

@@ -35,6 +35,7 @@ final class GlueBMP085 implements AndroidSensor, IOIOConnectionListener {
   private final SensorListener listener;
 
   private BMP085 instance;
+  private int state = STATE_LIMBO;
 
   GlueBMP085(IOIOConnectionHolder _holder,
              int _twiNum, int _eocPin, int _oversampling,
@@ -60,15 +61,22 @@ final class GlueBMP085 implements AndroidSensor, IOIOConnectionListener {
       holder.removeListener(this);
   }
 
+  @Override
+  public int getState() {
+    return state;
+  }
+
   @Override public void onIOIOConnect(IOIO ioio)
     throws ConnectionLostException, InterruptedException {
     instance = new BMP085(ioio, twiNum, eocPin, oversampling, listener);
+    state = STATE_READY;
   }
 
   @Override public void onIOIODisconnect(IOIO ioio) {
     if (instance == null)
       return;
 
+    state = STATE_LIMBO;
     instance.close();
     instance = null;
   }

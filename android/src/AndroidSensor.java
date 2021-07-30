@@ -29,4 +29,9 @@ import java.io.Closeable;
  * The Java interface of the C++ AndroidSensor class.
  */
 interface AndroidSensor extends Closeable {
+  int STATE_READY = 0;
+  int STATE_FAILED = 1;
+  int STATE_LIMBO = 2;
+
+  int getState();
 }
