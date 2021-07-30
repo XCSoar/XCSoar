@@ -45,8 +45,6 @@ public final class BluetoothSensor
   private final SensorListener listener;
 
   private final BluetoothGatt gatt;
-  private BluetoothGattCharacteristic dataCharacteristic;
-  private BluetoothGattCharacteristic deviceNameCharacteristic;
 
   public BluetoothSensor(Context context, BluetoothDevice device,
                          SensorListener listener)
@@ -148,8 +146,6 @@ public final class BluetoothSensor
       submitError("Discovering GATT services failed");
       return;
     }
-
-    long features = 0;
 
     BluetoothGattService service = gatt.getService(BluetoothUuids.HEART_RATE_SERVICE);
     if (service != null) {
