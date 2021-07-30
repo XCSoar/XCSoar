@@ -88,7 +88,11 @@ class GliderLinkReceiver
   public void onReceive(Context context, Intent intent) {
     try {
       JSONObject json = new JSONObject(intent.getStringExtra("json"));
-      state = STATE_READY;
+
+      if (state != STATE_READY) {
+        state = STATE_READY;
+        listener.onSensorStateChanged();
+      }
 
       JSONObject pos = json.getJSONObject("position");
       

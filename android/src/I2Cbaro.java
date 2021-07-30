@@ -447,6 +447,7 @@ final class I2Cbaro extends Thread {
     } catch (InterruptedException e) {
     } catch (Exception e) {
       listener.onSensorError(e.getMessage());
+      // TODO make GlueI2Cbaro.getState() return STATE_FAILED
     }
   }
 }

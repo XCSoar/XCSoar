@@ -110,6 +110,7 @@ final class Voltage extends Thread {
     } catch (InterruptedException e) {
     } catch (Exception e) {
       listener.onSensorError(e.getMessage());
+      // TODO make GlueVoltage.getState() return STATE_FAILED
     }
   }
 }

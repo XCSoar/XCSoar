@@ -68,5 +68,6 @@ public:
                                    double gspeed, double vspeed,
                                    unsigned bearing) noexcept = 0;
 
+  virtual void OnSensorStateChanged() noexcept = 0;
   virtual void OnSensorError(const char *msg) noexcept = 0;
 };

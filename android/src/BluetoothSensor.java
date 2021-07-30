@@ -161,6 +161,7 @@ public final class BluetoothSensor
         service.getCharacteristic(BluetoothUuids.HEART_RATE_MEASUREMENT_CHARACTERISTIC);
       if (c != null) {
         state = STATE_READY;
+        listener.onSensorStateChanged();
         enableNotification(c);
       }
     }
@@ -176,6 +177,7 @@ public final class BluetoothSensor
       c = service.getCharacteristic(BluetoothUuids.FLYTEC_SENSBOX_MOVEMENT_SENSOR_CHARACTERISTIC);
       if (c != null) {
         state = STATE_READY;
+        listener.onSensorStateChanged();
         enableNotification(c);
       }
     }

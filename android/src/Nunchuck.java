@@ -199,6 +199,7 @@ final class Nunchuck extends Thread {
     } catch (InterruptedException e) {
     } catch (Exception e) {
       listener.onSensorError(e.getMessage());
+      // TODO make GlueNunchuck.getState() return STATE_FAILED
     }
   }
 }

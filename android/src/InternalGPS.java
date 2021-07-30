@@ -219,15 +219,18 @@ public class InternalGPS
     case LocationProvider.OUT_OF_SERVICE:
       state = STATE_FAILED;
       setConnectedSafe(0); // not connected
+      listener.onSensorStateChanged();
       break;
 
     case LocationProvider.TEMPORARILY_UNAVAILABLE:
       state = STATE_LIMBO;
       setConnectedSafe(1); // waiting for fix
+      listener.onSensorStateChanged();
       break;
 
     case LocationProvider.AVAILABLE:
       state = STATE_READY;
+      listener.onSensorStateChanged();
       break;
     }
   }

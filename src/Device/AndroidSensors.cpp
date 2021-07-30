@@ -440,8 +440,13 @@ DeviceDescriptor::OnGliderLinkTraffic(GliderLinkId id, const char *callsign,
 }
 
 void
+DeviceDescriptor::OnSensorStateChanged() noexcept
+{
+  PortStateChanged();
+}
+
+void
 DeviceDescriptor::OnSensorError(const char *msg) noexcept
 {
   PortError(msg);
-  PortStateChanged();
 }

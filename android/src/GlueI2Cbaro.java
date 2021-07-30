@@ -75,6 +75,7 @@ final class GlueI2Cbaro implements AndroidSensor, IOIOConnectionListener {
       instance = new I2Cbaro(ioio, index, twiNum, i2c_addr, sample_rate, flags,
                              listener);
       state = STATE_READY;
+      listener.onSensorStateChanged();
     } catch (Exception e) {
       state = STATE_FAILED;
       listener.onSensorError(e.getMessage());
@@ -85,8 +86,10 @@ final class GlueI2Cbaro implements AndroidSensor, IOIOConnectionListener {
     if (instance == null)
       return;
 
-    state = STATE_LIMBO;
     instance.close();
     instance = null;
+
+    state = STATE_LIMBO;
+    listener.onSensorStateChanged();
   }
 }

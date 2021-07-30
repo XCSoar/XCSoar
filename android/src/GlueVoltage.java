@@ -66,6 +66,7 @@ final class GlueVoltage implements AndroidSensor, IOIOConnectionListener {
     try {
       instance = new Voltage(ioio, sample_rate, listener);
       state = STATE_READY;
+      listener.onSensorStateChanged();
     } catch (Exception e) {
       state = STATE_FAILED;
       listener.onSensorError(e.getMessage());
@@ -76,8 +77,9 @@ final class GlueVoltage implements AndroidSensor, IOIOConnectionListener {
     if (instance == null)
       return;
 
-    state = STATE_LIMBO;
     instance.close();
     instance = null;
+    state = STATE_LIMBO;
+    listener.onSensorStateChanged();
   }
 }

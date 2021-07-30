@@ -251,6 +251,7 @@ final class BMP085 extends Thread {
     } catch (InterruptedException e) {
     } catch (Exception e) {
       listener.onSensorError(e.getMessage());
+      // TODO make GlueBMP085.getState() return STATE_FAILED
     }
   }
 }

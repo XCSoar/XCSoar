@@ -92,5 +92,8 @@ final class NativeSensorListener implements SensorListener {
                                          double bearing);
 
   @Override
+  public native void onSensorStateChanged();
+
+  @Override
   public native void onSensorError(String msg);
 }

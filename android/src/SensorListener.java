@@ -57,6 +57,12 @@ public interface SensorListener {
                            double bearing);
 
   /**
+   * The state has changed, and AndroidSensor.getState() will provide
+   * the new value.
+   */
+  void onSensorStateChanged();
+
+  /**
    * An error has occurred, and the sensor is now defunct.
    *
    * @param msg a human-readable error message

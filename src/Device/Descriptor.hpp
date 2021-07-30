@@ -636,6 +636,7 @@ private:
                            GeoPoint location, double altitude,
                            double gspeed, double vspeed,
                            unsigned bearing) noexcept override;
+  void OnSensorStateChanged() noexcept override;
   void OnSensorError(const char *msg) noexcept override;
 #endif // ANDROID
 };
