@@ -30,7 +30,7 @@ static Java::TrivialClass voltage_class;
 static jmethodID voltage_ctor;
 
 void
-VoltageDevice::Initialise(JNIEnv *env)
+VoltageDevice::Initialise(JNIEnv *env) noexcept
 {
   voltage_class.Find(env, "org/xcsoar/GlueVoltage");
 
@@ -39,28 +39,19 @@ VoltageDevice::Initialise(JNIEnv *env)
 }
 
 void
-VoltageDevice::Deinitialise(JNIEnv *env)
+VoltageDevice::Deinitialise(JNIEnv *env) noexcept
 {
   voltage_class.Clear(env);
 }
 
-static auto
-CreateVoltageDevice(JNIEnv *env, jobject holder,
-                    unsigned sample_rate,
-                    SensorListener &_listener)
+Java::LocalObject
+VoltageDevice::Create(JNIEnv *env, jobject holder,
+                      unsigned sample_rate,
+                      SensorListener &_listener)
 {
   const auto listener = NativeSensorListener::Create(env, _listener);
   return Java::NewObjectRethrow(env, voltage_class, voltage_ctor,
                                 holder,
                                 sample_rate,
                                 listener.Get());
-}
-
-VoltageDevice::VoltageDevice(JNIEnv *env, jobject holder,
-                             unsigned sample_rate,
-                             SensorListener &listener)
-  :obj(CreateVoltageDevice(env, holder,
-                           sample_rate,
-                           listener))
-{
 }

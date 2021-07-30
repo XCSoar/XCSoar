@@ -167,9 +167,6 @@ DeviceDescriptor::GetState() const
   if (i2cbaro.front() != nullptr)
     return PortState::READY;
 
-  if (voltage != nullptr)
-    return PortState::READY;
-
   if (java_sensor != nullptr)
     return PortState::READY;
 #endif
@@ -403,10 +400,11 @@ DeviceDescriptor::OpenVoltage()
     i.Reset();
   temperature_filter.Reset();
 
-  voltage = new VoltageDevice(Java::GetEnv(),
-                              ioio_helper->GetHolder(),
-                              60, // sample_rate per minute
-                              *this);
+  auto voltage = VoltageDevice::Create(Java::GetEnv(),
+                                       ioio_helper->GetHolder(),
+                                       60, // sample_rate per minute
+                                       *this);
+  java_sensor = new Java::GlobalCloseable(voltage);
   return true;
 #else
   return false;
@@ -594,9 +592,6 @@ DeviceDescriptor::Close()
     delete i;
     i = nullptr;
   }
-
-  delete voltage;
-  voltage = nullptr;
 
   delete java_sensor;
   java_sensor = nullptr;

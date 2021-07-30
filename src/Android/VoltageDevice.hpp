@@ -24,20 +24,23 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_VOLTAGE_DEVICE_HPP
 #define XCSOAR_ANDROID_VOLTAGE_DEVICE_HPP
 
-#include "java/Closeable.hxx"
+#include "java/Object.hxx"
 
 class SensorListener;
 
-class VoltageDevice final {
-  Java::GlobalCloseable obj;
+namespace VoltageDevice {
 
-public:
-  static void Initialise(JNIEnv *env);
-  static void Deinitialise(JNIEnv *env);
+void
+Initialise(JNIEnv *env) noexcept;
 
-  VoltageDevice(JNIEnv *env, jobject holder,
-                unsigned sample_rate,
-                SensorListener &listener);
-};
+void
+Deinitialise(JNIEnv *env) noexcept;
+
+Java::LocalObject
+Create(JNIEnv *env, jobject holder,
+       unsigned sample_rate,
+       SensorListener &listener);
+
+} // namespace VoltageDevice
 
 #endif
