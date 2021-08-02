@@ -309,6 +309,8 @@ EventLoop::Run() noexcept
 			break;
 
 		RunDeferred();
+		if (quit)
+			break;
 
 		if (RunOneIdle())
 			/* check for other new events after each
