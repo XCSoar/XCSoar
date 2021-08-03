@@ -67,18 +67,30 @@ public:
 	Value &operator=(const Value &) = delete;
 
 	template<typename V>
-	void Set(V &&value) {
-		SetTable(L, LUA_REGISTRYINDEX,
+	void Set(lua_State *thread_L, V &&value) {
+		SetTable(thread_L, LUA_REGISTRYINDEX,
 			 LightUserData(this),
 			 std::forward<V>(value));
+	}
+
+	template<typename V>
+	void Set(V &&value) {
+		Set(L, std::forward<V>(value));
+	}
+
+	/**
+	 * Push the value on the given thread's stack.
+	 */
+	void Push(lua_State *thread_L) const {
+		GetTable(thread_L, LUA_REGISTRYINDEX,
+			 LightUserData(const_cast<Value *>(this)));
 	}
 
 	/**
 	 * Push the value on the stack.
 	 */
 	void Push() const {
-		GetTable(L, LUA_REGISTRYINDEX,
-			 LightUserData(const_cast<Value *>(this)));
+		Push(L);
 	}
 
 	lua_State *GetState() const {
@@ -87,9 +99,9 @@ public:
 };
 
 static inline void
-Push(lua_State *, const Value &value)
+Push(lua_State *L, const Value &value)
 {
-	value.Push();
+	value.Push(L);
 }
 
 inline
