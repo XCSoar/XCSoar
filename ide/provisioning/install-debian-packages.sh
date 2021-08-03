@@ -24,6 +24,7 @@ update_pkg() {
   apt-get update
 }
 
+
 install_base() {
   echo Installing base dependencies...
   apt-get install ${APTOPTS[*]} make \
@@ -70,6 +71,8 @@ install_linux() {
     imagemagick gettext \
     mesa-common-dev libgl1-mesa-dev libegl1-mesa-dev \
     fonts-dejavu \
+    libnetcdf-c++4-dev \
+    libnetcdf-dev \
     xz-utils
   echo
 }

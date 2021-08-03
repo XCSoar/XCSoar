@@ -25,7 +25,7 @@ struct SkysightRequest {
 public:
   enum class Status {Idle, Busy, Complete, Error};
 
-  SkysightRequest(const SkysightRequestArgs _args): args(_args) {};
+  SkysightRequest(const SkysightRequestArgs &_args): args(_args) {};
   bool Process();
   bool ProcessToString(tstring &response);
 
@@ -88,7 +88,7 @@ protected:
 struct SkysightAsyncRequest final:
   public SkysightRequest, public StandbyThread {
 public:
-  SkysightAsyncRequest(const SkysightRequestArgs _args):
+  SkysightAsyncRequest(const SkysightRequestArgs &_args):
     SkysightRequest(_args), StandbyThread("SkysightAPIRequest"),
     status(Status::Idle) {};
 

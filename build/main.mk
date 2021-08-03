@@ -630,6 +630,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/NOAAStore.cpp \
 	$(SRC)/Weather/NOAAUpdater.cpp \
 	$(SRC)/Weather/Skysight/Skysight.cpp \
+	$(SRC)/Weather/Skysight/CDFDecoder.cpp \
 	$(SRC)/Weather/Skysight/APIQueue.cpp \
 	$(SRC)/Weather/Skysight/SkysightAPI.cpp \
 	$(SRC)/Weather/Skysight/Request.cpp \
