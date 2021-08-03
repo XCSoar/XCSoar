@@ -5,6 +5,7 @@
 #include "APIQueue.hpp"
 #include "APIGlue.hpp"
 #include "Request.hpp"
+#include "CDFDecoder.hpp"
 #include "Metrics.hpp"
 #include "ui/event/Timer.hpp"
 #include "time/BrokenDateTime.hpp"
@@ -27,6 +28,12 @@ SkysightAPIQueue::AddRequest(std::unique_ptr<SkysightAsyncRequest> request,
     request_queue.emplace_back(std::move(request));
   }
   if (!is_busy)
+    Process();
+}
+
+void SkysightAPIQueue::AddDecodeJob(std::unique_ptr<CDFDecoder> &&job) {
+  decode_queue.emplace_back(std::move(job));
+  if(!is_busy)
     Process();
 }
 
@@ -66,6 +73,27 @@ void SkysightAPIQueue::Process()
       break;
     }
   }
+
+  if (!empty(decode_queue)) {
+    auto &&decode_job = decode_queue.begin();
+    switch ((*decode_job)->GetStatus()) {
+    case CDFDecoder::Status::Idle:
+      (*decode_job)->DecodeAsync();
+      if (!timer.IsActive())
+	      timer.Schedule(std::chrono::milliseconds(300));
+      break;
+    case CDFDecoder::Status::Complete:
+    case CDFDecoder::Status::Error:
+      (*decode_job)->Done();
+      decode_queue.erase(decode_job);
+      break;
+    case CDFDecoder::Status::Busy:
+      break;
+    }
+  }
+
+  if (empty(request_queue) && empty(decode_queue))
+    timer.Cancel();
 
   is_busy = false;
 }

@@ -5,12 +5,14 @@
 #define WEATHER_SKYSIGHTAPI_QUEUE_HPP
 
 #include "Request.hpp"
+#include "CDFDecoder.hpp"
 #include "Metrics.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include <vector>
 
 class SkysightAPIQueue final {
   std::vector<std::unique_ptr<SkysightAsyncRequest>> request_queue;
+  std::vector<std::unique_ptr<CDFDecoder>> decode_queue;
   bool is_busy = false;
   bool is_clearing = false;
   tstring key;
@@ -30,6 +32,7 @@ public:
   bool IsLoggedIn();
   void AddRequest(std::unique_ptr<SkysightAsyncRequest> request,
 		  bool append_end = true);
+  void AddDecodeJob(std::unique_ptr<CDFDecoder> &&job);
   void Clear(const tstring msg);
   void DoClearingQueue();
 };

@@ -26,6 +26,7 @@ struct BrokenDateTime;
 class SkysightAPI final {
   friend struct SkysightRequest;
   friend struct SkysightAsyncRequest;
+  friend class CDFDecoder;
   UI::PeriodicTimer timer{[this]{ OnTimer(); }};
   
 public:
@@ -49,6 +50,10 @@ public:
 
   BrokenDateTime FromUnixTime(uint64_t t);
   static void GenerateLoginRequest();
+
+  static void MakeCallback(SkysightCallback cb, const tstring &&details,
+        const bool success, const tstring &&layer,
+        const uint64_t time_index);
 
 protected:
   static SkysightAPI *self;
@@ -84,10 +89,6 @@ protected:
 			const tstring &result);
   bool ParseData(const SkysightRequestArgs &args, const tstring &result);
   bool ParseLogin(const SkysightRequestArgs &args, const tstring &result);
-
-  static void MakeCallback(SkysightCallback cb, const tstring &&details,
-			   const bool success, const tstring &&layer,
-			   const uint64_t time_index);
 
   inline bool GetData(SkysightCallType t, SkysightCallback cb = nullptr,
 		      bool force_recache = false) {

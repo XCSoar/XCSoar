@@ -196,8 +196,6 @@ SkysightAsyncRequest::Tick() noexcept
     result = RequestToBuffer(resultStr);
   }
 
-  LogFormat("SkysightAsyncRequest::Tick %d", result);
-
   if (result) {
     SkysightAPI::ParseResponse(resultStr.c_str(), result, args);
   } else {
