@@ -97,6 +97,14 @@ Push(lua_State *L, double value) noexcept
 	lua_pushnumber(L, value);
 }
 
+struct CurrentThread {};
+
+static inline void
+Push(lua_State *L, CurrentThread) noexcept
+{
+	lua_pushthread(L);
+}
+
 gcc_nonnull_all
 static inline void
 Push(lua_State *L, lua_CFunction value) noexcept
