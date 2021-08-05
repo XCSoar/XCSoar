@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-10 09:50+0200\n"
-"PO-Revision-Date: 2021-07-20 10:35+0000\n"
-"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
+"PO-Revision-Date: 2021-08-06 23:34+0000\n"
+"Last-Translator: Веско <v.jeliazkov@jeliazkov.net>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/bg/>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -661,7 +661,7 @@ msgstr "Няма трафик"
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:137
 #, no-c-format
 msgid "Vario"
-msgstr "Вариометър"
+msgstr "Варио"
 
 #: src/Gauge/BigTrafficWidget.cpp:384 src/Renderer/MapItemListRenderer.cpp:77
 #: src/Renderer/MapItemListRenderer.cpp:83
@@ -951,7 +951,7 @@ msgstr "Задача и места за кацане"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:33
 #, no-c-format
 msgid "None"
-msgstr "Никакви"
+msgstr "Няма"
 
 #: src/Menu/ExpandMacros.cpp:373 src/Input/InputEventsSettings.cpp:317
 #, no-c-format
@@ -2298,13 +2298,13 @@ msgid ""
 "have made even in a zigzag glide. This value is not calculated while "
 "circling."
 msgstr ""
-"Прелетяното разстояние разделено на загубената височина в зададен период от "
-"време. Отрицателни стойности се показват като „^^^“ и означават курс с набор "
-"на височина, а качество на планиране над 200 се показва като „+++“. В "
+"Прелетяно разстояние в зададен период от време разделено на загубената "
+"височина. Отрицателни стойности се показват като „^^^“ и означават курс с "
+"набор на височина, а качество на планиране над 200 се показва като „+++“. В "
 "системните настройки можете да конфигурирате периода на усредняване. "
 "Препоръчани стойности са 60, 90 или 120. Ниски стойности ще са близо до "
 "моментното качество, а високи до постигнато качество по маршрута. "
-"Забележете, че разстоянието НЕ Е правата линия между между две точки от "
+"Забележете, че разстоянието НЕ Е правата линия между две точки от "
 "траекторията, а е пътя, който сте изминали криволичейки. Това е "
 "разстоянието, което действително сте прелетяли на зигзаг. Тази стойност не "
 "се изчислява при въртене."
@@ -2320,9 +2320,9 @@ msgid "Exp1"
 msgstr "Експ. 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:732
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Contest distance"
-msgstr "Разстояние от състезание в интернет OLC (On-line contest)"
+msgstr "Разстояние от състезание в Интернет OLC (On-line contest)"
 
 #: src/InfoBoxes/Content/Factory.cpp:733
 #, fuzzy, no-c-format
@@ -2413,7 +2413,7 @@ msgid ""
 msgstr ""
 "Барометрична височина показана като ешелон. Ако барометричната височина не е "
 "достъпна ешелона се изчислява от височината на ГПС-а при положение, че е "
-"зададено коректно налягане на летището (QNH). Ако ешелонът е изчислен от от "
+"зададено коректно налягане на летището (QNH). Ако ешелонът е изчислен от "
 "височината на ГПС-а, надписът „Ешелон“ е червен."
 
 #: src/InfoBoxes/Content/Factory.cpp:782 src/InfoBoxes/Content/Factory.cpp:783
@@ -3181,7 +3181,7 @@ msgstr "Настройки"
 #: src/InfoBoxes/Content/Altitude.cpp:70 src/InfoBoxes/Content/Altitude.cpp:128
 #: src/InfoBoxes/Content/Altitude.cpp:194
 msgid "no QNH"
-msgstr "няма QNH"
+msgstr "Няма QNH"
 
 #: src/InfoBoxes/Content/MacCready.cpp:50 src/InfoBoxes/Content/Weather.cpp:106
 #: src/InfoBoxes/Content/Radio.cpp:53 src/InfoBoxes/Content/Radio.cpp:58
@@ -4751,7 +4751,7 @@ msgstr "Колесник свален"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:75
 msgid "Acknowledge"
-msgstr "Потвърждение"
+msgstr "Потвърждаване"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:76
 msgid "Repeat"
@@ -5047,7 +5047,7 @@ msgstr "Определя как да се запълни въздушната з
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:104
 #: src/Monitor/AirspaceWarningMonitor.cpp:74
 msgid "ACK"
-msgstr "Потвърждение"
+msgstr "Потвърждаване"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:105
 #: src/Monitor/AirspaceWarningMonitor.cpp:83
@@ -5225,7 +5225,7 @@ msgstr "Елементи"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:107
 #, no-c-format
 msgid "Safety Factors"
-msgstr "Фактор за безопасност"
+msgstr "Безопасност"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:108
 #: src/Dialogs/Settings/dlgConfiguration.cpp:161
@@ -5701,7 +5701,7 @@ msgstr "Поляра W"
 
 #: src/Dialogs/dlgInfoBoxAccess.cpp:95 src/Dialogs/dlgInfoBoxAccess.cpp:111
 msgid "Switch InfoBox"
-msgstr "Смяна на инфо-поле"
+msgstr "Замяна инфо-поле"
 
 #: src/Dialogs/ReplayDialog.cpp:73
 msgid "File"
@@ -7206,8 +7206,8 @@ msgid ""
 "Enables the automatic starting and stopping of logger on takeoff and landing "
 "respectively. Disable when flying paragliders."
 msgstr ""
-"Позволява автоматично започване и спиране на журнала при излитане и кацане "
-"съответно. Изключете, когато летште с парапланер."
+"Позволява автоматично стартиране и спиране на журнала съответно при излитане "
+"и кацане. Изключете, когато летите с парапланер."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:90
 msgid "NMEA logger"
@@ -8187,7 +8187,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:117
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:272
 msgid "Finish height ref."
-msgstr "Финалната височина е спрямо"
+msgstr "Спрямо финалната височина"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:118
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:273
@@ -8206,11 +8206,13 @@ msgid ""
 "Wait time in minutes after Pilot Event and before start gate opens. 0 means "
 "start opens immediately."
 msgstr ""
+"Време на изчакване в минути след задействане на старта и преди отваряне на "
+"стартовия прозорец. 0 означава, че старта отваря веднага."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:133
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:280
 msgid "PEV start window"
-msgstr ""
+msgstr "Стартов прозорец от пилота"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:134
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:281
@@ -8218,6 +8220,9 @@ msgid ""
 "Number of minutes start remains open after Pilot Event and PEV wait time.0 "
 "means start will never close after it opens."
 msgstr ""
+"Време в минути, през което старта остава отворен след натискане на старт и "
+"времето на изчакване. 0 означава, че старта не се затваря след като веднъж е "
+"задействан."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:79
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -10385,11 +10390,12 @@ msgid "Dropped marker"
 msgstr "Поставен маркер"
 
 #: Data/Input/default.xci:433
-#, fuzzy
 msgid ""
 "Pilot\n"
 "Event"
-msgstr "Пилот"
+msgstr ""
+"Пилот\n"
+"Събитие"
 
 #: Data/Input/default.xci:775 Data/Input/default.xci:1182
 msgid "FLARM Radar"
