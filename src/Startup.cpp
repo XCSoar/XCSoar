@@ -102,6 +102,8 @@ Copyright_License {
 #include "lua/StartFile.hpp"
 #include "lua/Background.hpp"
 
+#include "util/ScopeExit.hxx"
+
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Globals.hpp"
 #include "ui/canvas/opengl/Dynamic.hpp"
@@ -216,6 +218,16 @@ Startup()
 #endif
              OpenGL::texture_non_power_of_two,
             OpenGL::render_buffer_stencil);
+#endif
+
+#ifdef ANDROID
+  /* mark the UI EventLoop as "running", which allows
+     TopWindow::Pause() to submit the PAUSE command to the event
+     queue; this works because the remaining code in this function may
+     invoke modal dialogs, and its event loop will be able to process
+     PAUSE even if TopWindow::RunEventLoop() is not yet invoked */
+  main_window->BeginRunning();
+  AtScopeExit(main_window) { main_window->EndRunning(); };
 #endif
 
   CommonInterface::SetUISettings().SetDefaults();
