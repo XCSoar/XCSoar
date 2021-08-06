@@ -52,7 +52,6 @@ Copyright_License {
 #include "ui/event/Queue.hpp"
 #include "ui/canvas/opengl/Init.hpp"
 #include "Dialogs/Message.hpp"
-#include "Simulator.hpp"
 #include "Profile/Profile.hpp"
 #include "MainWindow.hpp"
 #include "Startup.hpp"
