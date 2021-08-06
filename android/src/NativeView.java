@@ -305,6 +305,8 @@ class NativeView extends SurfaceView
   }
 
   @Override public void run() {
+    final Context context = getContext();
+
     try {
       initGL(getHolder());
     } catch (Exception e) {
@@ -316,10 +318,10 @@ class NativeView extends SurfaceView
 
     android.graphics.Rect r = getHolder().getSurfaceFrame();
     DisplayMetrics metrics = new DisplayMetrics();
-    ((Activity)getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+    ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
     try {
-      if (initializeNative(getContext(), r.width(), r.height(),
+      if (initializeNative(context, r.width(), r.height(),
                            (int)metrics.xdpi, (int)metrics.ydpi,
                            Build.VERSION.SDK_INT, Build.PRODUCT))
         runNative();
