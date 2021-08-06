@@ -36,7 +36,7 @@ Notify::Notify(CallbackFunction _callback) noexcept
 }
 
 void
-Notify::SendNotification()
+Notify::SendNotification() noexcept
 {
   if (pending.exchange(true, std::memory_order_relaxed))
     return;
@@ -49,7 +49,7 @@ Notify::SendNotification()
 }
 
 void
-Notify::ClearNotification()
+Notify::ClearNotification() noexcept
 {
   if (!pending.exchange(false, std::memory_order_relaxed))
     return;
@@ -60,7 +60,7 @@ Notify::ClearNotification()
 }
 
 void
-Notify::RunNotification()
+Notify::RunNotification() noexcept
 {
   if (pending.exchange(false, std::memory_order_relaxed))
     callback();
@@ -78,7 +78,7 @@ Notify::OnUser(unsigned id)
 #else
 
 void
-Notify::Callback(void *ctx)
+Notify::Callback(void *ctx) noexcept
 {
   Notify &notify = *(Notify *)ctx;
   notify.RunNotification();

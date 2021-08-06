@@ -53,7 +53,7 @@ public:
   Notify(const Notify &) = delete;
 
 #ifndef USE_WINUSER
-  ~Notify() {
+  ~Notify() noexcept {
     ClearNotification();
   }
 #endif
@@ -62,21 +62,21 @@ public:
    * Send a notification to this object.  This method can be called
    * from any thread.
    */
-  void SendNotification();
+  void SendNotification() noexcept;
 
   /**
    * Clear any pending notification.
    */
-  void ClearNotification();
+  void ClearNotification() noexcept;
 
 private:
-  void RunNotification();
+  void RunNotification() noexcept;
 
 #ifndef USE_WINUSER
   /**
    * Called by the event loop when the "notify" message is received.
    */
-  static void Callback(void *ctx);
+  static void Callback(void *ctx) noexcept;
 #endif
 
 #ifdef USE_WINUSER
