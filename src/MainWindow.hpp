@@ -372,10 +372,6 @@ protected:
 
   /* virtual methods from class TopWindow */
   virtual bool OnClose() noexcept override;
-
-#ifdef ANDROID
-  virtual void OnPause() noexcept override;
-#endif
 };
 
 #endif

@@ -1038,18 +1038,3 @@ MainWindow::ToggleForceFLARMRadar()
   force_traffic_gauge = !force_traffic_gauge;
   CommonInterface::SetUISettings().traffic.enable_gauge = force_traffic_gauge;
 }
-
-#ifdef ANDROID
-
-void
-MainWindow::OnPause() noexcept
-{
-  if (!IsRunning() && HasDialog())
-    /* suspending before initialization has finished doesn't leave
-       anything worth resuming, so let's just quit now */
-    CancelDialog();
-
-  SingleWindow::OnPause();
-}
-
-#endif /* ANDROID */
