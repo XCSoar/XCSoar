@@ -337,6 +337,16 @@ public:
 
 #ifdef ANDROID
   /**
+   * Set the "running" flag, which is used by Pause().
+   */
+  void BeginRunning() noexcept;
+
+  /**
+   * Clear the "running" flag, which is used by Pause().
+   */
+  void EndRunning() noexcept;
+
+  /**
    * The Android OpenGL surface has been resized; notify the TopWindow
    * that this has happened.  The caller should also submit the RESIZE
    * event to the event queue.  This method is thread-safe.

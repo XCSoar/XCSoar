@@ -31,6 +31,10 @@ Copyright_License {
 #include "ui/event/Globals.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
+#include "util/ScopeExit.hxx"
+
+#include <cassert>
+
 
 namespace UI {
 
@@ -239,14 +243,30 @@ TopWindow::OnEvent(const Event &event)
   return false;
 }
 
+void
+TopWindow::BeginRunning() noexcept
+{
+  std::lock_guard<Mutex> lock(paused_mutex);
+  assert(!running);
+  running = true;
+}
+
+void
+TopWindow::EndRunning() noexcept
+{
+  std::lock_guard<Mutex> lock(paused_mutex);
+  assert(running);
+  running = false;
+  /* wake up the Android Activity thread, just in case it's waiting
+     inside Pause() */
+  paused_cond.notify_one();
+}
+
 int
 TopWindow::RunEventLoop() noexcept
 {
-  {
-    std::lock_guard<Mutex> lock(paused_mutex);
-    assert(!running);
-    running = true;
-  }
+  BeginRunning();
+  AtScopeExit(this) { EndRunning(); };
 
   Refresh();
 
@@ -254,15 +274,6 @@ TopWindow::RunEventLoop() noexcept
   Event event;
   while (IsDefined() && loop.Get(event))
     loop.Dispatch(event);
-
-  {
-    std::lock_guard<Mutex> lock(paused_mutex);
-    assert(running);
-    running = false;
-    /* wake up the Android Activity thread, just in case it's waiting
-       inside Pause() */
-    paused_cond.notify_one();
-  }
 
   return 0;
 }
