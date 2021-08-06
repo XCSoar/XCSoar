@@ -323,8 +323,25 @@ class NativeView extends SurfaceView
     try {
       if (initializeNative(context, r.width(), r.height(),
                            (int)metrics.xdpi, (int)metrics.ydpi,
-                           Build.VERSION.SDK_INT, Build.PRODUCT))
-        runNative();
+                           Build.VERSION.SDK_INT, Build.PRODUCT)) {
+
+        try {
+          context.startService(new Intent(context, XCSoar.serviceClass));
+        } catch (IllegalStateException e) {
+          /* we get crash reports on this all the time, but I don't
+             know why - Android docs say "the application is in a
+             state where the service can not be started (such as not
+             in the foreground in a state when services are allowed)",
+             but we're about to be resumed, which means we're in
+             foreground... */
+        }
+
+        try {
+          runNative();
+        } finally {
+          context.stopService(new Intent(context, XCSoar.serviceClass));
+        }
+      }
     } catch (Exception e) {
       Log.e(TAG, "Initialisation error", e);
       errorHandler.sendMessage(errorHandler.obtainMessage(0, e));

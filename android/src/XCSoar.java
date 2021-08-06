@@ -55,7 +55,7 @@ public class XCSoar extends Activity {
    * Hack: this is set by onCreate(), to support the "testing"
    * package.
    */
-  protected static Class<?> serviceClass;
+  public static Class<?> serviceClass;
 
   private static NativeView nativeView;
 
@@ -130,9 +130,6 @@ public class XCSoar extends Activity {
     Log.d(TAG, "in quit()");
 
     nativeView = null;
-
-    Log.d(TAG, "stopping service");
-    stopService(new Intent(this, serviceClass));
 
     TextView tv = new TextView(XCSoar.this);
     tv.setText("Shutting down XCSoar...");
@@ -257,16 +254,6 @@ public class XCSoar extends Activity {
 
     if (!Loader.loaded)
       return;
-
-    try {
-      startService(new Intent(this, serviceClass));
-    } catch (IllegalStateException e) {
-      /* we get crash reports on this all the time, but I don't know
-         why - Android docs say "the application is in a state where
-         the service can not be started (such as not in the foreground
-         in a state when services are allowed)", but we're about to be
-         resumed, which means we're in foreground... */
-    }
 
     if (nativeView != null)
       nativeView.onResume();
