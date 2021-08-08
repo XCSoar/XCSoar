@@ -179,6 +179,7 @@ DeviceDescriptor::OnBarometricPressureSensor(float pressure,
   NMEAInfo &basic = *e;
 
   basic.UpdateClock();
+  basic.alive.Update(basic.clock);
   basic.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
                                                 kalman_filter.GetXVel()));
   basic.ProvideStaticPressure(
