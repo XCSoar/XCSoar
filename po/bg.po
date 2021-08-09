@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-10 09:50+0200\n"
-"PO-Revision-Date: 2021-08-06 23:34+0000\n"
+"PO-Revision-Date: 2021-08-10 17:32+0000\n"
 "Last-Translator: Веско <v.jeliazkov@jeliazkov.net>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/bg/>\n"
@@ -961,7 +961,7 @@ msgstr "Задача и летища"
 #: src/InfoBoxes/Content/Factory.cpp:136
 #, no-c-format
 msgid "Altitude GPS"
-msgstr "Височина по ГПС"
+msgstr "Височ. ГПС"
 
 #: src/InfoBoxes/Content/Factory.cpp:137
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:83
@@ -1330,7 +1330,7 @@ msgstr "Разстояние за финиширане през оставащи
 #: src/InfoBoxes/Content/Factory.cpp:301
 #, no-c-format
 msgid "Terrain elevation"
-msgstr "Височина на релефа"
+msgstr "Височина над релефа"
 
 #: src/InfoBoxes/Content/Factory.cpp:302
 #, no-c-format
@@ -2325,9 +2325,9 @@ msgid "Contest distance"
 msgstr "Разстояние от състезание в Интернет OLC (On-line contest)"
 
 #: src/InfoBoxes/Content/Factory.cpp:733
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cont Dist"
-msgstr "Фин. разст."
+msgstr "OLC разст."
 
 #: src/InfoBoxes/Content/Factory.cpp:734
 #, fuzzy, no-c-format
@@ -2948,23 +2948,23 @@ msgid "Distance to where take-off was detected."
 msgstr "Разстояние до точката определена за начало на полета."
 
 #: src/InfoBoxes/Content/Factory.cpp:1013
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Contest speed"
-msgstr "Скорост на интернет състезание (On-line Contest)"
+msgstr "Средна скорост на интернет състезание (On-line Contest)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cont Speed"
-msgstr "Скорост"
+msgstr "OLC Скорост"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown speed according to the configured "
 "Contest rule set."
 msgstr ""
-"Моментна оценка на прелитната скорост според правилата на конфигурираното "
-"състезание в интернет (On-line Contest)."
+"Моментна оценка на прелетната скорост според правилата на конфигурираното "
+"интернет състезание (On-line Contest)."
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
@@ -3131,9 +3131,9 @@ msgid "Alternate 2 GR"
 msgstr "Необходимо качество за резерва 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:1097
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Altn2 GR"
-msgstr "Качество за Рез. 1"
+msgstr "Качество за Рез. 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:1098
 #, fuzzy, no-c-format
@@ -3356,7 +3356,7 @@ msgstr "Местоположение"
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:54
 #: src/Dialogs/Task/TaskPointDialog.cpp:265
 msgid "Relocate"
-msgstr "Нова позиция"
+msgstr "Преместване"
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:95
 #: src/Dialogs/Device/PortMonitor.cpp:141
@@ -3605,7 +3605,7 @@ msgstr "Карта и инфо-полета"
 
 #: src/PageSettings.cpp:80
 msgid "Info Hide"
-msgstr "Скриване на информация"
+msgstr "Скриване на инфо-полета"
 
 #: src/PageSettings.cpp:82
 msgid "Map (Full screen)"
@@ -4509,7 +4509,7 @@ msgstr "Монитор на порта"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:140
 #, no-c-format
 msgid "Units"
-msgstr "Мерни ед."
+msgstr "Мерни единици"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:74
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:79
@@ -4751,7 +4751,7 @@ msgstr "Колесник свален"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:75
 msgid "Acknowledge"
-msgstr "Потвърждаване"
+msgstr "Потвържд."
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:76
 msgid "Repeat"
@@ -5047,7 +5047,7 @@ msgstr "Определя как да се запълни въздушната з
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:104
 #: src/Monitor/AirspaceWarningMonitor.cpp:74
 msgid "ACK"
-msgstr "Потвърждаване"
+msgstr "Потвържд."
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:105
 #: src/Monitor/AirspaceWarningMonitor.cpp:83
@@ -5104,7 +5104,7 @@ msgstr "Използване на зигзаг и въртене."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:72
 msgid "Auto wind"
-msgstr "Вятър автом"
+msgstr "Определяне на вятъра"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 msgid "This allows switching on or off the automatic wind algorithm."
@@ -5114,7 +5114,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:76
 msgid "External wind"
-msgstr "Вятър външно"
+msgstr "Външни уреди за вятър"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:77
 msgid "Should XCSoar accept wind estimates from other instruments?"
@@ -5251,7 +5251,7 @@ msgstr "FLARM и други"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:119
 #, no-c-format
 msgid "Audio Vario"
-msgstr "Звук на варио"
+msgstr "Звук на вариометър"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:125
 #, no-c-format
@@ -6608,15 +6608,15 @@ msgid "Final glide"
 msgstr "Финално долитане"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:66
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Adjusts MC for fastest arrival.  For contest sprint tasks, the MacCready is "
 "adjusted in order to cover the greatest distance in the remaining time and "
 "reach the finish height."
 msgstr ""
-"Нагласяне на MC за най-бързо пристигане. За OLC (интернет състезание) "
-"спринтови задачи настройките са такива, че да може да се прелети възможно "
-"най-голямо разстояние за оставащото време при достигане на финална височина."
+"Нагласяне на MC за най-бързо пристигане. За състезателни спринтови задачи MC "
+"се настройва така, че да покрива възможно най-голямо разстояние за "
+"оставащото време при достигане на финална височина."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:68
 #, no-c-format
@@ -7685,8 +7685,8 @@ msgid ""
 "The sorting will try to find landing options in the current direction to the "
 "configured home waypoint."
 msgstr ""
-"При подреждането се везтат в предвид места за приземяване в текущата посока "
-"на полета към настроената начална точка."
+"При подреждането се везимат в предвид места за приземяване в текущата посока "
+"на полета към избраната начална точка."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:88
 msgid "Alternates mode"
@@ -7801,7 +7801,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:93
 #: Data/Input/default.xci:876
 msgid "Airspaces"
-msgstr "Въздушно пространство"
+msgstr "Въздушни пространства"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:93
 msgid "The file name of the primary airspace file."
@@ -8302,9 +8302,9 @@ msgstr ""
 "времето на този толеранс."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable contest calculations"
-msgstr "Изключване OLC изчисления"
+msgstr "Изключване състезателни изчисления"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:95
 #, no-c-format
@@ -8386,6 +8386,10 @@ msgid ""
 "and the largest Out & Return distance that can be fitted into the flight "
 "route."
 msgstr ""
+"WeGlide комбинира няколко системи за точкуване състезанието WeGlide. "
+"Получените точки са комбинация от точки за разстояние и бонус за площ, който "
+"програмата смята като най-големия ФАИ триъгълник и най-голямата дистанция за "
+"отиване и връщане, които могат да се поместят в прелетения маршрут."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:123
 #, no-c-format
@@ -8396,9 +8400,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
-#, fuzzy
 msgid "Contest"
-msgstr "Съдържание"
+msgstr "Правила на интернет състезание"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:128
 #, fuzzy
@@ -8417,8 +8420,8 @@ msgid ""
 "If enabled, then the next task point is included in the score calculation, "
 "assuming that you will reach it."
 msgstr ""
-"Ако е включено, следващата точка от задачата се включва в изчислението "
-"оценката, при положение, че я достигнете."
+"Ако е включено, следващата точка от задачата се включва в изчисляването на "
+"точките предполагайки, че я достигате."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:139
 msgid "FAI triangle areas"
@@ -8593,7 +8596,7 @@ msgstr "Ако е включено се чертаят контурни лини
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:128
 msgid "Preset"
-msgstr "Предв. зададен"
+msgstr "Предварително зададени"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:128
 msgid "Load a set of units."
@@ -9094,7 +9097,7 @@ msgstr "Ъгъл"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:120
 msgid "Turn Points"
-msgstr "Повратна точка"
+msgstr "Повратни точки"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:144
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:147
@@ -9233,7 +9236,7 @@ msgstr "Преименуване"
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:316
 #: src/Monitor/AirspaceWarningMonitor.cpp:89
 msgid "More"
-msgstr "Повече"
+msgstr "Подробности"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:211
 msgid "Load the selected task?"
@@ -9505,7 +9508,7 @@ msgstr "Район"
 
 #: src/Dialogs/dlgCredits.cpp:127 Data/Input/default.xci:868
 msgid "Credits"
-msgstr "Благодарности"
+msgstr "Относно програмата"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
 msgid "Audio vario"
@@ -10244,8 +10247,8 @@ msgid ""
 "Zoom\n"
 "Out"
 msgstr ""
-"Мащаб\n"
-"намаляване"
+"Намаляване\n"
+"мащаба"
 
 #: Data/Input/default.xci:662
 msgid "Lua"
@@ -10369,8 +10372,8 @@ msgid ""
 "Pan\n"
 "Off"
 msgstr ""
-"Карта\n"
-"автом."
+"Навигац.\n"
+"карта"
 
 #: Data/Input/default.xci:530 Data/Input/default.xci:1103
 msgid "Topo."
@@ -10434,8 +10437,8 @@ msgid ""
 "Pan\n"
 "On"
 msgstr ""
-"Карта\n"
-"търсене"
+"Разглеждане\n"
+"на картата"
 
 #: Data/Input/default.xci:356 Data/Input/default.xci:405
 #: Data/Input/default.xci:894
@@ -10504,8 +10507,8 @@ msgid ""
 "Zoom\n"
 "In"
 msgstr ""
-"Мащаб\n"
-"увеличаване"
+"Увеличаване\n"
+"мащаба"
 
 #: Data/Input/default.xci:508 Data/Input/default.xci:1081
 msgid "Labels"
