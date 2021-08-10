@@ -25,7 +25,6 @@ Copyright_License {
 #include "FileReader.hxx"
 #include "FileOutputStream.hxx"
 #include "system/FileUtil.hpp"
-#include "util/Compiler.h"
 
 #include <cstdint>
 #include <stdexcept>
@@ -68,13 +67,13 @@ struct FileInfo {
   /**
    * Is this date in the future?
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsFuture() const {
     return mtime > File::Now();
   }
 };
 
-gcc_pure
+[[gnu::pure]]
 static inline bool
 GetRegularFileInfo(Path path, FileInfo &info)
 {

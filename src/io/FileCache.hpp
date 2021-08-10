@@ -41,7 +41,7 @@ public:
   FileCache(AllocatedPath &&_cache_path);
 
 protected:
-  gcc_pure
+  [[gnu::pure]]
   AllocatedPath MakeCachePath(const TCHAR *name) const {
     return AllocatedPath::Build(cache_path, name);
   }
