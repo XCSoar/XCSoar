@@ -26,7 +26,7 @@ Copyright_License {
 #include <cassert>
 
 BrokenTime
-BrokenTime::FromSecondOfDay(unsigned second_of_day)
+BrokenTime::FromSecondOfDay(unsigned second_of_day) noexcept
 {
   assert(second_of_day < 3600u * 24u);
 
@@ -36,13 +36,13 @@ BrokenTime::FromSecondOfDay(unsigned second_of_day)
 }
 
 BrokenTime
-BrokenTime::FromSecondOfDayChecked(unsigned second_of_day)
+BrokenTime::FromSecondOfDayChecked(unsigned second_of_day) noexcept
 {
   return FromSecondOfDay(second_of_day % (3600u * 24u));
 }
 
 BrokenTime
-BrokenTime::FromMinuteOfDay(unsigned minute_of_day)
+BrokenTime::FromMinuteOfDay(unsigned minute_of_day) noexcept
 {
   assert(minute_of_day < 60u * 24u);
 
@@ -50,13 +50,13 @@ BrokenTime::FromMinuteOfDay(unsigned minute_of_day)
 }
 
 BrokenTime
-BrokenTime::FromMinuteOfDayChecked(unsigned minute_of_day)
+BrokenTime::FromMinuteOfDayChecked(unsigned minute_of_day) noexcept
 {
   return FromMinuteOfDay(minute_of_day % (60u * 24u));
 }
 
 BrokenTime
-BrokenTime::operator+(unsigned seconds) const
+BrokenTime::operator+(unsigned seconds) const noexcept
 {
   assert(IsPlausible());
 
@@ -65,7 +65,7 @@ BrokenTime::operator+(unsigned seconds) const
 }
 
 BrokenTime
-BrokenTime::operator+(int seconds) const
+BrokenTime::operator+(int seconds) const noexcept
 {
   assert(IsPlausible());
 

@@ -28,13 +28,13 @@ Copyright_License {
 #include <cassert>
 
 BrokenDate
-BrokenDate::TodayUTC()
+BrokenDate::TodayUTC() noexcept
 {
   return BrokenDateTime::NowUTC();
 }
 
 void
-BrokenDate::IncrementDay()
+BrokenDate::IncrementDay() noexcept
 {
   assert(IsPlausible());
 
@@ -61,7 +61,7 @@ BrokenDate::IncrementDay()
 }
 
 void
-BrokenDate::DecrementDay()
+BrokenDate::DecrementDay() noexcept
 {
   assert(IsPlausible());
 
@@ -80,7 +80,7 @@ BrokenDate::DecrementDay()
 }
 
 int
-BrokenDate::DaysSince(const BrokenDate &other) const
+BrokenDate::DaysSince(const BrokenDate &other) const noexcept
 {
   constexpr int SECONDS_PER_DAY = 24 * 60 * 60;
 

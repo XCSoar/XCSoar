@@ -50,32 +50,32 @@ struct BrokenTime {
   /**
    * Non-initializing default constructor.
    */
-  BrokenTime() = default;
+  BrokenTime() noexcept = default;
 
   constexpr
-  BrokenTime(unsigned _hour, unsigned _minute, unsigned _second=0)
+  BrokenTime(unsigned _hour, unsigned _minute, unsigned _second=0) noexcept
     :hour(_hour), minute(_minute), second(_second) {}
 
   constexpr
-  bool operator==(const BrokenTime other) const {
+  bool operator==(const BrokenTime other) const noexcept {
     return hour == other.hour && minute == other.minute &&
       second == other.second;
   }
 
   constexpr
-  bool operator>(const BrokenTime other) const {
+  bool operator>(const BrokenTime other) const noexcept {
     return hour > other.hour ||
       (hour == other.hour && (minute > other.minute ||
                               (minute == other.minute && second > other.second)));
   }
 
   constexpr
-  bool operator<(const BrokenTime other) const {
+  bool operator<(const BrokenTime other) const noexcept {
     return other > *this;
   }
 
   constexpr
-  static BrokenTime Midnight() {
+  static BrokenTime Midnight() noexcept {
     return BrokenTime(0, 0);
   }
 
@@ -83,7 +83,7 @@ struct BrokenTime {
    * Returns an instance that fails the Plausible() check.
    */
   constexpr
-  static BrokenTime Invalid() {
+  static BrokenTime Invalid() noexcept {
     return BrokenTime(24, 60, 60);
   }
 
@@ -91,7 +91,7 @@ struct BrokenTime {
    * Does this object contain plausible values?
    */
   constexpr
-  bool IsPlausible() const {
+  bool IsPlausible() const noexcept {
     return hour < 24 && minute < 60 && second < 60;
   }
 
@@ -99,7 +99,7 @@ struct BrokenTime {
    * Returns the number of seconds which have passed on this day.
    */
   constexpr
-  unsigned GetSecondOfDay() const {
+  unsigned GetSecondOfDay() const noexcept {
     return hour * 3600u + minute * 60u + second;
   }
 
@@ -110,20 +110,20 @@ struct BrokenTime {
    * @param second_of_day 0 .. 3600*24-1
    */
   [[gnu::const]]
-  static BrokenTime FromSecondOfDay(unsigned second_of_day);
+  static BrokenTime FromSecondOfDay(unsigned second_of_day) noexcept;
 
   /**
    * A wrapper for FromSecondOfDay() which allows values bigger than
    * or equal to 3600*24.
    */
   [[gnu::const]]
-  static BrokenTime FromSecondOfDayChecked(unsigned second_of_day);
+  static BrokenTime FromSecondOfDayChecked(unsigned second_of_day) noexcept;
 
   /**
    * Returns the number of minutes which have passed on this day.
    */
   constexpr
-  unsigned GetMinuteOfDay() const {
+  unsigned GetMinuteOfDay() const noexcept {
     return hour * 60u + minute;
   }
 
@@ -134,14 +134,14 @@ struct BrokenTime {
    * @param minute_of_day 0 .. 60*24-1
    */
   [[gnu::const]]
-  static BrokenTime FromMinuteOfDay(unsigned minute_of_day);
+  static BrokenTime FromMinuteOfDay(unsigned minute_of_day) noexcept;
 
   /**
    * A wrapper for FromMinuteOfDay() which allows values bigger than
    * or equal to 60*24.
    */
   [[gnu::const]]
-  static BrokenTime FromMinuteOfDayChecked(unsigned minute_of_day);
+  static BrokenTime FromMinuteOfDayChecked(unsigned minute_of_day) noexcept;
 
   /**
    * Returns a BrokenTime that has the specified number of seconds
@@ -150,7 +150,7 @@ struct BrokenTime {
    * @param seconds the number of seconds to add
    */
   [[gnu::pure]]
-  BrokenTime operator+(unsigned seconds) const;
+  BrokenTime operator+(unsigned seconds) const noexcept;
 
   /**
    * Returns a BrokenTime that has the specified number of seconds
@@ -159,15 +159,15 @@ struct BrokenTime {
    * @param seconds the number of seconds to add; may be negative
    */
   [[gnu::pure]]
-  BrokenTime operator+(int seconds) const;
+  BrokenTime operator+(int seconds) const noexcept;
 
   [[gnu::pure]]
-  BrokenTime operator-(int seconds) const {
+  BrokenTime operator-(int seconds) const noexcept {
     return *this + (-seconds);
   }
 
   [[gnu::pure]]
-  BrokenTime operator-(unsigned seconds) const {
+  BrokenTime operator-(unsigned seconds) const noexcept {
     return *this - int(seconds);
   }
 };

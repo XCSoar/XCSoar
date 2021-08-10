@@ -36,7 +36,7 @@ Copyright_License {
 #ifdef HAVE_POSIX
 
 static const BrokenDateTime
-ToBrokenDateTime(const struct tm &tm)
+ToBrokenDateTime(const struct tm &tm) noexcept
 {
   BrokenDateTime dt;
 
@@ -53,7 +53,7 @@ ToBrokenDateTime(const struct tm &tm)
 }
 
 BrokenDateTime
-BrokenDateTime::FromUnixTimeUTC(int64_t t)
+BrokenDateTime::FromUnixTimeUTC(int64_t t) noexcept
 {
   return ToBrokenDateTime(GmTime(std::chrono::system_clock::from_time_t(t)));
 }
@@ -61,7 +61,7 @@ BrokenDateTime::FromUnixTimeUTC(int64_t t)
 #else /* !HAVE_POSIX */
 
 static const BrokenDateTime
-ToBrokenDateTime(const SYSTEMTIME st)
+ToBrokenDateTime(const SYSTEMTIME st) noexcept
 {
   BrokenDateTime dt;
 
@@ -78,7 +78,7 @@ ToBrokenDateTime(const SYSTEMTIME st)
 }
 
 static const BrokenDateTime
-ToBrokenDateTime(const FILETIME &ft)
+ToBrokenDateTime(const FILETIME &ft) noexcept
 {
   SYSTEMTIME st;
   FileTimeToSystemTime(&ft, &st);
@@ -86,7 +86,7 @@ ToBrokenDateTime(const FILETIME &ft)
 }
 
 static const SYSTEMTIME
-ToSystemTime(const BrokenDateTime &dt)
+ToSystemTime(const BrokenDateTime &dt) noexcept
 {
   SYSTEMTIME st;
 
@@ -104,7 +104,7 @@ ToSystemTime(const BrokenDateTime &dt)
 }
 
 static const FILETIME
-ToFileTime(const BrokenDateTime &dt)
+ToFileTime(const BrokenDateTime &dt) noexcept
 {
   SYSTEMTIME st = ToSystemTime(dt);
   FILETIME ft;
@@ -113,7 +113,7 @@ ToFileTime(const BrokenDateTime &dt)
 }
 
 static time_t
-timegm (struct tm *tm)
+timegm (struct tm *tm) noexcept
 {
   static constexpr unsigned ndays[] = {
     31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
@@ -142,7 +142,7 @@ timegm (struct tm *tm)
 #endif
 
 int64_t
-BrokenDateTime::ToUnixTimeUTC() const
+BrokenDateTime::ToUnixTimeUTC() const noexcept
 {
   assert(IsPlausible());
 
@@ -158,7 +158,7 @@ BrokenDateTime::ToUnixTimeUTC() const
 }
 
 const BrokenDateTime
-BrokenDateTime::NowUTC()
+BrokenDateTime::NowUTC() noexcept
 {
 #ifdef HAVE_POSIX
   time_t t = time(NULL);
@@ -172,7 +172,7 @@ BrokenDateTime::NowUTC()
 }
 
 const BrokenDateTime
-BrokenDateTime::NowLocal()
+BrokenDateTime::NowLocal() noexcept
 {
 #ifdef HAVE_POSIX
   time_t t = time(NULL);
@@ -189,7 +189,7 @@ BrokenDateTime::NowLocal()
 }
 
 BrokenDateTime
-BrokenDateTime::operator+(int seconds) const
+BrokenDateTime::operator+(int seconds) const noexcept
 {
   assert(IsPlausible());
 
@@ -208,7 +208,7 @@ BrokenDateTime::operator+(int seconds) const
 }
 
 int
-BrokenDateTime::operator-(const BrokenDateTime &other) const
+BrokenDateTime::operator-(const BrokenDateTime &other) const noexcept
 {
   return ToUnixTimeUTC() - other.ToUnixTimeUTC();
 }

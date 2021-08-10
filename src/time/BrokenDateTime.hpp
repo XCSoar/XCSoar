@@ -38,23 +38,23 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
   /**
    * Non-initializing default constructor.
    */
-  BrokenDateTime() = default;
+  BrokenDateTime() noexcept = default;
 
   constexpr
   BrokenDateTime(unsigned _year, unsigned _month, unsigned _day,
-                 unsigned _hour, unsigned _minute, unsigned _second=0)
+                 unsigned _hour, unsigned _minute, unsigned _second=0) noexcept
     :BrokenDate(_year, _month, _day), BrokenTime(_hour, _minute, _second) {}
 
   constexpr
-  BrokenDateTime(unsigned _year, unsigned _month, unsigned _day)
+  BrokenDateTime(unsigned _year, unsigned _month, unsigned _day) noexcept
     :BrokenDate(_year, _month, _day), BrokenTime(0, 0) {}
 
   constexpr
-  BrokenDateTime(const BrokenDate &date, const BrokenTime &time)
+  BrokenDateTime(const BrokenDate &date, const BrokenTime &time) noexcept
     :BrokenDate(date), BrokenTime(time) {}
 
   constexpr
-  bool operator==(const BrokenDateTime other) const {
+  bool operator==(const BrokenDateTime other) const noexcept {
     return (const BrokenDate &)*this == (const BrokenDate &)other &&
       (const BrokenTime &)*this == (const BrokenTime &)other;
   }
@@ -63,7 +63,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * Returns an instance that fails the Plausible() check.
    */
   constexpr
-  static BrokenDateTime Invalid() {
+  static BrokenDateTime Invalid() noexcept {
     return BrokenDateTime(BrokenDate::Invalid(), BrokenTime::Invalid());
   }
 
@@ -71,7 +71,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * Does the "date" part of this object contain plausible values?
    */
   constexpr
-  bool IsDatePlausible() const {
+  bool IsDatePlausible() const noexcept {
     return BrokenDate::IsPlausible();
   }
 
@@ -79,7 +79,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * Does the "time" part of this object contain plausible values?
    */
   constexpr
-  bool IsTimePlausible() const {
+  bool IsTimePlausible() const noexcept {
     return BrokenTime::IsPlausible();
   }
 
@@ -87,7 +87,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * Does this object contain plausible values?
    */
   constexpr
-  bool IsPlausible() const {
+  bool IsPlausible() const noexcept {
     return IsDatePlausible() && IsTimePlausible();
   }
 
@@ -95,7 +95,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * Returns a new #BrokenDateTime with the same date at midnight.
    */
   constexpr
-  BrokenDateTime AtMidnight() const {
+  BrokenDateTime AtMidnight() const noexcept {
     return BrokenDateTime(*this, BrokenTime::Midnight());
   }
 
@@ -105,23 +105,23 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * BrokenDateTime object.
    */
   [[gnu::const]]
-  static BrokenDateTime FromUnixTimeUTC(int64_t t);
+  static BrokenDateTime FromUnixTimeUTC(int64_t t) noexcept;
 #endif
 
   [[gnu::pure]]
-  int64_t ToUnixTimeUTC() const;
+  int64_t ToUnixTimeUTC() const noexcept;
 
   /**
    * Returns the current system date and time, in UTC.
    */
   [[gnu::pure]]
-  static const BrokenDateTime NowUTC();
+  static const BrokenDateTime NowUTC() noexcept;
 
   /**
    * Returns the current system date and time, in the current time zone.
    */
   [[gnu::pure]]
-  static const BrokenDateTime NowLocal();
+  static const BrokenDateTime NowLocal() noexcept;
 
   /**
    * Returns a BrokenDateTime that has the specified number of seconds
@@ -130,10 +130,10 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * @param seconds the number of seconds to add; may be negative
    */
   [[gnu::pure]]
-  BrokenDateTime operator+(int seconds) const;
+  BrokenDateTime operator+(int seconds) const noexcept;
 
   [[gnu::pure]]
-  BrokenDateTime operator-(int seconds) const {
+  BrokenDateTime operator-(int seconds) const noexcept {
     return *this + (-seconds);
   }
 
@@ -144,7 +144,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * <now> - <old> = positive timespan since <old> in seconds
    */
   [[gnu::pure]]
-  int operator-(const BrokenDateTime &other) const;
+  int operator-(const BrokenDateTime &other) const noexcept;
 };
 
 static_assert(std::is_trivial<BrokenDateTime>::value, "type is not trivial");
