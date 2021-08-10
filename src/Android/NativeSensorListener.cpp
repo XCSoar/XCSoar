@@ -88,7 +88,9 @@ Java_org_xcsoar_NativeSensorListener_onLocationSensor(JNIEnv *env, jobject obj,
 
   auto &listener = *(SensorListener *)ptr;
   listener.OnLocationSensor(TimePointAfterUnixEpoch(std::chrono::milliseconds{time}),
-                            n_satellites, longitude, latitude,
+                            n_satellites,
+                            GeoPoint(Angle::Degrees(longitude),
+                                     Angle::Degrees(latitude)),
                             hasAltitude, altitude,
                             hasBearing, bearing,
                             hasSpeed, ground_speed,

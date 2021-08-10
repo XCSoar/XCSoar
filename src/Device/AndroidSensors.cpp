@@ -58,7 +58,7 @@ DeviceDescriptor::OnConnected(int connected) noexcept
 void
 DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
                                    int n_satellites,
-                                   double longitude, double latitude,
+                                   GeoPoint location,
                                    bool hasAltitude, double altitude,
                                    bool hasBearing, double bearing,
                                    bool hasSpeed, double ground_speed,
@@ -90,8 +90,7 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
   basic.gps.satellites_used_available.Update(basic.clock);
   basic.gps.real = true;
   basic.gps.nonexpiring_internal_gps = true;
-  basic.location = GeoPoint(Angle::Degrees(longitude),
-                            Angle::Degrees(latitude));
+  basic.location = location;
   basic.location_available.Update(basic.clock);
 
   if (hasAltitude) {

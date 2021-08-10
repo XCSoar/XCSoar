@@ -38,7 +38,7 @@ public:
 
   virtual void OnLocationSensor(std::chrono::system_clock::time_point time,
                                 int n_satellites,
-                                double longitude, double latitude,
+                                GeoPoint location,
                                 bool hasAltitude, double altitude,
                                 bool hasBearing, double bearing,
                                 bool hasSpeed, double ground_speed,
