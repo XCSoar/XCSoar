@@ -48,7 +48,6 @@ PYTHON_SOURCES = \
 	$(ENGINE_SRC_DIR)/Airspace/Airspaces.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceSorter.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceAircraftPerformance.cpp \
-	$(ENGINE_SRC_DIR)/Airspace/Predicate/AirspacePredicate.cpp \
 	$(SRC)/NMEA/Aircraft.cpp
 PYTHON_LDADD = $(DEBUG_REPLAY_LDADD)
 PYTHON_LDLIBS = $(shell python-config --ldflags)
