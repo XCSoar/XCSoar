@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "util/StringPointer.hxx"
 #include "util/AllocatedString.hxx"
-#include "util/Compiler.h"
 
 #include <string>
 
@@ -66,7 +65,7 @@ public:
   explicit constexpr Path(const_pointer _value):value(_value) {}
   Path(std::nullptr_t n):value(n) {}
 
-  gcc_pure
+  [[gnu::pure]]
   AllocatedPath operator+(const_pointer other) const;
 
   constexpr bool IsNull() const {
@@ -86,13 +85,13 @@ public:
    * Returns empty string on error or if this instance is "nulled"
    * (#IsNull returns true).
    */
-  gcc_pure
+  [[gnu::pure]]
   std::string ToUTF8() const;
 
-  gcc_pure
+  [[gnu::pure]]
   bool operator==(Path other) const;
 
-  gcc_pure
+  [[gnu::pure]]
   bool operator!=(Path other) const {
     return !(*this == other);
   }
@@ -105,45 +104,45 @@ public:
     return !value.IsNull();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsAbsolute() const;
 
   /**
    * Is this path a "base name", i.e. is there no path separate?
    * Behaviour is undefined when the string is empty.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsBase() const;
 
   /**
    * Returns the parent of the specified path, i.e. the part before
    * the last separator.  Returns "." if there is no directory name.
    */
-  gcc_pure
+  [[gnu::pure]]
   AllocatedPath GetParent() const;
 
   /**
    * Returns the base name of the specified path, i.e. the part after
    * the last separator.  May return nullptr if there is no base name.
    */
-  gcc_pure
+  [[gnu::pure]]
   Path GetBase() const;
 
   /**
    * Check if this object is "inside" to the given path, and if yes,
    * return the relative path.
    */
-  gcc_pure
+  [[gnu::pure]]
   Path RelativeTo(Path parent) const;
 
-  gcc_pure
+  [[gnu::pure]]
   bool MatchesExtension(const_pointer extension) const;
 
   /**
    * Returns the filename extension (starting with a dot) or nullptr
    * if the base name doesn't have one.
    */
-  gcc_pure
+  [[gnu::pure]]
   const_pointer GetExtension() const;
 
   /**
@@ -152,7 +151,7 @@ public:
    * @param new_extension the new filename extension (must start with
    * a dot)
    */
-  gcc_pure
+  [[gnu::pure]]
   AllocatedPath WithExtension(const_pointer new_extension) const;
 };
 
@@ -198,15 +197,15 @@ public:
     return value_type::Donate(value);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   static AllocatedPath Build(const_pointer a, const_pointer b);
 
-  gcc_pure
+  [[gnu::pure]]
   static AllocatedPath Build(Path a, const_pointer b) {
     return Build(a.c_str(), b);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   static AllocatedPath Build(Path a, Path b) {
     return Build(a, b.c_str());
   }
@@ -222,7 +221,7 @@ public:
     return *this = AllocatedPath(src);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   AllocatedPath operator+(const_pointer other) const {
     return Path(*this) + other;
   }
@@ -243,22 +242,22 @@ public:
     return Path(*this).ToUTF8();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool operator==(Path other) const {
     return Path(*this) == other;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool operator!=(Path other) const {
     return !(*this == other);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool operator==(std::nullptr_t) const {
     return value == nullptr;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool operator!=(std::nullptr_t) const {
     return value != nullptr;
   }
@@ -267,12 +266,12 @@ public:
     return Path(c_str());
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsAbsolute() const {
     return Path(*this).IsAbsolute();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsBase() const {
     return Path(*this).IsBase();
   }
@@ -281,7 +280,7 @@ public:
     return Path(*this).GetParent();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   Path GetBase() const {
     return Path(*this).GetBase();
   }
@@ -290,22 +289,22 @@ public:
    * Check if this object is "inside" to the given path, and if yes,
    * return the relative path.
    */
-  gcc_pure
+  [[gnu::pure]]
   Path RelativeTo(Path parent) const {
     return Path(*this).RelativeTo(parent);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool MatchesExtension(const_pointer extension) const {
     return Path(*this).MatchesExtension(extension);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const_pointer GetExtension() const {
     return Path(*this).GetExtension();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   AllocatedPath WithExtension(const_pointer new_extension) const {
     return Path(*this).WithExtension(new_extension);
   }

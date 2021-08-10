@@ -70,7 +70,7 @@ Path::operator+(const_pointer other) const
 
 #ifdef _WIN32
 
-gcc_pure gcc_nonnull_all
+[[gnu::pure]] [[gnu::nonnull]]
 static constexpr bool
 IsDrive(Path::const_pointer p)
 {
@@ -104,7 +104,7 @@ Path::IsBase() const
 #endif
 }
 
-gcc_pure
+[[gnu::pure]]
 static Path::const_pointer
 LastSeparator(Path::const_pointer path)
 {
