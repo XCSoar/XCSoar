@@ -46,7 +46,7 @@ public:
   void LogFinishEvent(const NMEAInfo &gps_info);
   void LogPilotEvent(const NMEAInfo &gps_info);
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsLoggerActive() const;
 
   void GUIStartLogger(const NMEAInfo& gps_info,
