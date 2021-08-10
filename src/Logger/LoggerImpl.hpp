@@ -108,15 +108,14 @@ private:
   bool simulator;
 
 public:
-  /** Default constructor */
-  LoggerImpl();
-  ~LoggerImpl();
+  LoggerImpl() noexcept;
+  ~LoggerImpl() noexcept;
 
 public:
   void LogPoint(const NMEAInfo &gps_info);
   void LogEvent(const NMEAInfo &gps_info, const char* event);
 
-  bool IsActive() const {
+  bool IsActive() const noexcept {
     return writer != nullptr;
   }
 
@@ -129,7 +128,7 @@ public:
    */
   void StopLogger(const NMEAInfo &gps_info);
   void LoggerNote(const TCHAR *text);
-  void ClearBuffer();
+  void ClearBuffer() noexcept;
 
 private:
   /**
@@ -138,9 +137,9 @@ private:
    */
   bool StartLogger(const NMEAInfo &gps_info, const LoggerSettings &settings,
                    const char *logger_id);
-  
+
 private:
-  void LogPointToBuffer(const NMEAInfo &gps_info);
+  void LogPointToBuffer(const NMEAInfo &gps_info) noexcept;
   void WritePoint(const NMEAInfo &gps_info);
 };
 

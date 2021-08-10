@@ -75,8 +75,8 @@ LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
   return *this;
 }
 
-LoggerImpl::LoggerImpl() = default;
-LoggerImpl::~LoggerImpl() = default;
+LoggerImpl::LoggerImpl() noexcept = default;
+LoggerImpl::~LoggerImpl() noexcept = default;
 
 void
 LoggerImpl::StopLogger(const NMEAInfo &gps_info)
@@ -101,7 +101,7 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
 }
 
 void
-LoggerImpl::LogPointToBuffer(const NMEAInfo &gps_info)
+LoggerImpl::LogPointToBuffer(const NMEAInfo &gps_info) noexcept
 {
   assert(gps_info.alive);
   assert(gps_info.time_available);
@@ -257,8 +257,9 @@ LoggerImpl::LoggerNote(const TCHAR *text)
     writer->LoggerNote(text);
 }
 
+[[gnu::pure]]
 static const TCHAR *
-GetGPSDeviceName()
+GetGPSDeviceName() noexcept
 {
   if (is_simulator())
     return _T("Simulator");
@@ -313,7 +314,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 }
 
 void
-LoggerImpl::ClearBuffer()
+LoggerImpl::ClearBuffer() noexcept
 {
   pre_takeoff_buffer.clear();
 }
