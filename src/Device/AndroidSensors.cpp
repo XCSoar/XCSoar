@@ -26,7 +26,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Geo/Geoid.hpp"
 #include "system/Clock.hpp"
-#include "time/SystemClock.hxx"
 
 void
 DeviceDescriptor::OnConnected(int connected) noexcept
@@ -57,7 +56,8 @@ DeviceDescriptor::OnConnected(int connected) noexcept
 }
 
 void
-DeviceDescriptor::OnLocationSensor(int_least64_t _time, int n_satellites,
+DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
+                                   int n_satellites,
                                    double longitude, double latitude,
                                    bool hasAltitude, double altitude,
                                    bool hasBearing, double bearing,
@@ -70,8 +70,6 @@ DeviceDescriptor::OnLocationSensor(int_least64_t _time, int n_satellites,
   NMEAInfo &basic = *e;
   basic.UpdateClock();
   basic.alive.Update(basic.clock);
-
-  const auto time = TimePointAfterUnixEpoch(std::chrono::milliseconds{_time});
 
   const BrokenDateTime date_time{time};
   const BrokenDateTime midnight = date_time.AtMidnight();

@@ -607,7 +607,8 @@ private:
 #ifdef ANDROID
   /* methods from SensorListener */
   void OnConnected(int connected) noexcept override;
-  void OnLocationSensor(int_least64_t time, int n_satellites,
+  void OnLocationSensor(std::chrono::system_clock::time_point time,
+                        int n_satellites,
                         double longitude, double latitude,
                         bool hasAltitude, double altitude,
                         bool hasBearing, double bearing,

@@ -28,6 +28,7 @@ Copyright_License {
 #include "GliderLink/GliderLinkId.hpp"
 #include "java/Class.hxx"
 #include "java/String.hxx"
+#include "time/SystemClock.hxx"
 #include "org_xcsoar_NativeSensorListener.h"
 
 namespace NativeSensorListener {
@@ -86,7 +87,8 @@ Java_org_xcsoar_NativeSensorListener_onLocationSensor(JNIEnv *env, jobject obj,
     return;
 
   auto &listener = *(SensorListener *)ptr;
-  listener.OnLocationSensor(time, n_satellites, longitude, latitude,
+  listener.OnLocationSensor(TimePointAfterUnixEpoch(std::chrono::milliseconds{time}),
+                            n_satellites, longitude, latitude,
                             hasAltitude, altitude,
                             hasBearing, bearing,
                             hasSpeed, ground_speed,
