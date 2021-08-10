@@ -125,6 +125,8 @@ include $(topdir)/build/libstdcxx.mk
 include $(topdir)/build/libutil.mk
 include $(topdir)/build/libmath.mk
 include $(topdir)/build/libgeo.mk
+include $(topdir)/build/libnmea.mk
+include $(topdir)/build/libcomputer.mk
 include $(topdir)/build/libos.mk
 include $(topdir)/build/libtime.mk
 include $(topdir)/build/libprofile.mk
@@ -171,6 +173,8 @@ ifeq ($(FUZZER),y)
 include $(topdir)/build/fuzzer.mk
 else
 include $(topdir)/build/vali.mk
+include $(topdir)/build/infobox.mk
+include $(topdir)/build/mapwindow.mk
 include $(topdir)/build/main.mk
 include $(topdir)/build/cloud.mk
 include $(topdir)/build/kobo.mk

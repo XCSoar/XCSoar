@@ -229,15 +229,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
-	$(SRC)/Computer/ClimbAverageCalculator.cpp \
-	$(SRC)/Computer/ConditionMonitor/ConditionMonitor.cpp \
-	$(SRC)/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp \
-	$(SRC)/Computer/ConditionMonitor/ConditionMonitorFinalGlide.cpp \
-	$(SRC)/Computer/ConditionMonitor/ConditionMonitorGlideTerrain.cpp \
-	$(SRC)/Computer/ConditionMonitor/ConditionMonitorLandableReachable.cpp \
-	$(SRC)/Computer/ConditionMonitor/ConditionMonitorSunset.cpp \
-	$(SRC)/Computer/ConditionMonitor/ConditionMonitorWind.cpp \
-	$(SRC)/Computer/ConditionMonitor/ConditionMonitors.cpp \
 	$(SRC)/Plane/PlaneGlue.cpp \
 	$(SRC)/Plane/PlaneFileGlue.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
@@ -252,30 +243,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/FlarmComputer.cpp \
 	$(SRC)/FLARM/Global.cpp \
 	$(SRC)/FLARM/Glue.cpp \
-	$(SRC)/Computer/CuComputer.cpp \
-	$(SRC)/Computer/FlyingComputer.cpp \
-	$(SRC)/Computer/CirclingComputer.cpp \
-	$(SRC)/Computer/ThermalBandComputer.cpp \
-	$(SRC)/Computer/Wind/Computer.cpp \
-	$(SRC)/Computer/ContestComputer.cpp \
-	$(SRC)/Computer/TraceComputer.cpp \
-	$(SRC)/Computer/WarningComputer.cpp \
-	$(SRC)/Computer/ThermalLocator.cpp \
-	$(SRC)/Computer/ThermalBase.cpp \
-	$(SRC)/Computer/LiftDatabaseComputer.cpp \
-	$(SRC)/Computer/LogComputer.cpp \
-	$(SRC)/Computer/AverageVarioComputer.cpp \
-	$(SRC)/Computer/GlideRatioCalculator.cpp \
-	$(SRC)/Computer/GlideRatioComputer.cpp \
-	$(SRC)/Computer/GlideComputer.cpp \
-	$(SRC)/Computer/GlideComputerBlackboard.cpp \
-	$(SRC)/Computer/GlideComputerAirData.cpp \
-	$(SRC)/Computer/WaveComputer.cpp \
-	$(SRC)/Computer/StatsComputer.cpp \
-	$(SRC)/Computer/RouteComputer.cpp \
-	$(SRC)/Computer/TaskComputer.cpp \
-	$(SRC)/Computer/GlideComputerInterface.cpp \
-	$(SRC)/Computer/Events.cpp \
 	$(SRC)/BallastDumpManager.cpp \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/Logger/Logger.cpp \
@@ -292,23 +259,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Logger/ExternalLogger.cpp \
 	$(SRC)/Logger/FlightLogger.cpp \
 	$(SRC)/Logger/GlueFlightLogger.cpp \
-	$(SRC)/NMEA/Info.cpp \
-	$(SRC)/NMEA/MoreData.cpp \
-	$(SRC)/NMEA/GPSState.cpp \
-	$(SRC)/NMEA/Acceleration.cpp \
-	$(SRC)/NMEA/Attitude.cpp \
-	$(SRC)/NMEA/ExternalSettings.cpp \
-	$(SRC)/NMEA/FlyingState.cpp \
-	$(SRC)/NMEA/Derived.cpp \
-	$(SRC)/NMEA/VarioInfo.cpp \
-	$(SRC)/NMEA/ClimbInfo.cpp \
-	$(SRC)/NMEA/CirclingInfo.cpp \
-	$(SRC)/NMEA/ThermalLocator.cpp \
-	$(SRC)/NMEA/ClimbHistory.cpp \
-	$(SRC)/NMEA/SwitchState.cpp \
-	$(SRC)/NMEA/InputLine.cpp \
-	$(SRC)/NMEA/Checksum.cpp \
-	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/Replay/Replay.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
@@ -338,12 +288,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/CupWriter.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
-	$(SRC)/Computer/Wind/CirclingWind.cpp \
-	$(SRC)/Computer/Wind/MeasurementList.cpp \
-	$(SRC)/Computer/Wind/Store.cpp \
-	$(SRC)/Computer/Wind/WindEKF.cpp \
-	$(SRC)/Computer/Wind/WindEKFGlue.cpp \
-	$(SRC)/Computer/Wind/Settings.cpp \
 	\
 	$(SRC)/CrossSection/AirspaceXSRenderer.cpp \
 	$(SRC)/CrossSection/TerrainXSRenderer.cpp \
@@ -372,41 +316,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Menu/ButtonLabel.cpp \
 	$(SRC)/Menu/ExpandMacros.cpp \
 	$(SRC)/Menu/ShowMenuButton.cpp \
-	$(SRC)/InfoBoxes/Content/Factory.cpp \
-	$(SRC)/InfoBoxes/Content/Alternate.cpp \
-	$(SRC)/InfoBoxes/Content/Base.cpp \
-	$(SRC)/InfoBoxes/Content/Altitude.cpp \
-	$(SRC)/InfoBoxes/Content/Direction.cpp \
-	$(SRC)/InfoBoxes/Content/Glide.cpp \
-	$(SRC)/InfoBoxes/Content/MacCready.cpp \
-	$(SRC)/InfoBoxes/Content/Other.cpp \
-	$(SRC)/InfoBoxes/Content/Speed.cpp \
-	$(SRC)/InfoBoxes/Content/Task.cpp \
-	$(SRC)/InfoBoxes/Content/Places.cpp \
-	$(SRC)/InfoBoxes/Content/Contest.cpp \
-	$(SRC)/InfoBoxes/Content/Team.cpp \
-	$(SRC)/InfoBoxes/Content/Terrain.cpp \
-	$(SRC)/InfoBoxes/Content/Thermal.cpp \
-	$(SRC)/InfoBoxes/Content/Time.cpp \
-	$(SRC)/InfoBoxes/Content/Trace.cpp \
-	$(SRC)/InfoBoxes/Content/Weather.cpp \
-	$(SRC)/InfoBoxes/Content/Airspace.cpp \
-	$(SRC)/InfoBoxes/Content/Radio.cpp \
-	$(SRC)/InfoBoxes/Data.cpp \
-	$(SRC)/InfoBoxes/Format.cpp \
-	$(SRC)/InfoBoxes/Units.cpp \
-	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
-	$(SRC)/InfoBoxes/InfoBoxWindow.cpp \
-	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \
-	$(SRC)/InfoBoxes/InfoBoxManager.cpp \
-	$(SRC)/InfoBoxes/Panel/AltitudeInfo.cpp \
-	$(SRC)/InfoBoxes/Panel/AltitudeSimulator.cpp \
-	$(SRC)/InfoBoxes/Panel/AltitudeSetup.cpp \
-	$(SRC)/InfoBoxes/Panel/MacCreadyEdit.cpp \
-	$(SRC)/InfoBoxes/Panel/MacCreadySetup.cpp \
-	$(SRC)/InfoBoxes/Panel/WindEdit.cpp \
-	$(SRC)/InfoBoxes/Panel/ATCReference.cpp \
-	$(SRC)/InfoBoxes/Panel/RadioEdit.cpp \
 	$(SRC)/Pan.cpp \
 	$(SRC)/Input/InputConfig.cpp \
 	$(SRC)/Input/InputDefaults.cpp \
@@ -436,8 +345,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/LogFile.cpp \
 	\
 	$(SRC)/Geo/Geoid.cpp \
-	$(SRC)/MapWindow/MapCanvas.cpp \
-	$(SRC)/MapWindow/StencilMapCanvas.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Projection/CompareProjection.cpp \
@@ -474,33 +381,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/NextArrowRenderer.cpp \
 	$(SRC)/Renderer/WaveRenderer.cpp \
 	$(SRC)/Projection/ChartProjection.cpp \
-	$(SRC)/MapWindow/Items/MapItem.cpp \
-	$(SRC)/MapWindow/Items/OverlayMapItem.cpp \
-	$(SRC)/MapWindow/Items/List.cpp \
-	$(SRC)/MapWindow/Items/Builder.cpp \
-	$(SRC)/MapWindow/Items/AirspaceBuilder.cpp \
-	$(SRC)/MapWindow/Items/TrafficBuilder.cpp \
-	$(SRC)/MapWindow/Items/WeatherBuilder.cpp \
-	$(SRC)/MapWindow/MapWindow.cpp \
-	$(SRC)/MapWindow/MapWindowEvents.cpp \
-	$(SRC)/MapWindow/MapWindowGlideRange.cpp \
-	$(SRC)/Projection/MapWindowProjection.cpp \
-	$(SRC)/MapWindow/MapWindowRender.cpp \
-	$(SRC)/MapWindow/MapWindowSymbols.cpp \
-	$(SRC)/MapWindow/MapWindowContest.cpp \
-	$(SRC)/MapWindow/MapWindowTask.cpp \
-	$(SRC)/MapWindow/MapWindowThermal.cpp \
-	$(SRC)/MapWindow/MapWindowTraffic.cpp \
-	$(SRC)/MapWindow/MapWindowTrail.cpp \
-	$(SRC)/MapWindow/MapWindowWaypoints.cpp \
-	$(SRC)/MapWindow/GlueMapWindow.cpp \
-	$(SRC)/MapWindow/GlueMapWindowItems.cpp \
-	$(SRC)/MapWindow/GlueMapWindowEvents.cpp \
-	$(SRC)/MapWindow/GlueMapWindowOverlays.cpp \
-	$(SRC)/MapWindow/GlueMapWindowDisplayMode.cpp \
-	$(SRC)/MapWindow/TargetMapWindow.cpp \
-	$(SRC)/MapWindow/TargetMapWindowEvents.cpp \
-	$(SRC)/MapWindow/TargetMapWindowDrag.cpp \
 	$(SRC)/UIUtil/GestureManager.cpp \
 	$(SRC)/UIUtil/TrackingGestureManager.cpp \
 	$(SRC)/DrawThread.cpp \
@@ -511,10 +391,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Weather/Rasp/RaspStyle.cpp \
 	$(SRC)/Weather/Rasp/Providers.cpp \
 	\
-	$(SRC)/Computer/BasicComputer.cpp \
-	$(SRC)/Computer/GroundSpeedComputer.cpp \
-	$(SRC)/Computer/AutoQNH.cpp \
-	\
 	$(SRC)/Blackboard/BlackboardListener.cpp \
 	$(SRC)/Blackboard/ProxyBlackboardListener.cpp \
 	$(SRC)/Blackboard/RateLimitedBlackboardListener.cpp \
@@ -524,7 +400,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Blackboard/ScopeCalculatedListener.cpp \
 	\
 	$(SRC)/Blackboard/DeviceBlackboard.cpp \
-	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/UIReceiveBlackboard.cpp \
 	$(SRC)/UIGlobals.cpp \
@@ -535,7 +410,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/SystemSettings.cpp \
 	$(SRC)/Audio/Settings.cpp \
 	$(SRC)/Audio/VarioSettings.cpp \
-	$(SRC)/Computer/Settings.cpp \
 	$(SRC)/MergeThread.cpp \
 	$(SRC)/CalculationThread.cpp \
 	$(SRC)/DisplayMode.cpp \
@@ -700,8 +574,7 @@ $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
 
 ifeq ($(OPENGL),y)
 XCSOAR_SOURCES += \
-	$(SRC)/Dialogs/Weather/MapOverlayWidget.cpp \
-	$(SRC)/MapWindow/OverlayBitmap.cpp
+	$(SRC)/Dialogs/Weather/MapOverlayWidget.cpp
 endif
 
 ifeq ($(TARGET_IS_DARWIN),y)
@@ -795,13 +668,18 @@ XCSOAR_SOURCES += $(SRC)/Audio/VarioGlue.cpp
 endif
 
 XCSOAR_LDADD = $(IO_LDADD)
-XCSOAR_DEPENDS = GETTEXT PROFILE \
+XCSOAR_DEPENDS = \
+	LIBMAPWINDOW \
+	LIBINFOBOX \
+	GETTEXT PROFILE \
 	TERRAIN \
 	WIDGET FORM DATA_FIELD \
 	LOOK \
 	AUDIO SCREEN EVENT \
 	RESOURCE DATA \
 	DRIVER PORT \
+	LIBCOMPUTER \
+	LIBNMEA \
 	LIBHTTP IO ASYNC TASK CONTEST ROUTE GLIDE WAYPOINT AIRSPACE \
 	LUA \
 	SHAPELIB ZZIP \
