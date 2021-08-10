@@ -130,14 +130,14 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
     return nullptr;
   }
 
-  int64_t begin = 0,
-          end = std::numeric_limits<int64_t>::max();
+  auto begin = std::chrono::system_clock::time_point::min();
+  auto end = std::chrono::system_clock::time_point::max();
 
   if (py_begin != nullptr && PyDateTime_Check(py_begin))
-    begin = Python::PyToBrokenDateTime(py_begin).ToUnixTimeUTC();
+    begin = Python::PyToBrokenDateTime(py_begin).ToTimePoint();
 
   if (py_end != nullptr && PyDateTime_Check(py_end))
-    end = Python::PyToBrokenDateTime(py_end).ToUnixTimeUTC();
+    end = Python::PyToBrokenDateTime(py_end).ToTimePoint();
 
   // prepare output
   PyObject *py_fixes = PyList_New(0);
@@ -153,7 +153,7 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
     if (replay->Level() == -1) continue;
 
     const MoreData &basic = replay->Basic();
-    const int64_t date_time_utc = basic.date_time_utc.ToUnixTimeUTC();
+    const auto date_time_utc = basic.date_time_utc.ToTimePoint();
 
     if (date_time_utc < begin)
       continue;
@@ -402,14 +402,14 @@ PyObject* xcsoar_Flight_encode(Pyxcsoar_Flight *self, PyObject *args) {
     return nullptr;
   }
 
-  int64_t begin = 0,
-          end = std::numeric_limits<int64_t>::max();
+  auto begin = std::chrono::system_clock::time_point::min();
+  auto end = std::chrono::system_clock::time_point::max();
 
   if (py_begin != nullptr && PyDateTime_Check(py_begin))
-    begin = Python::PyToBrokenDateTime(py_begin).ToUnixTimeUTC();
+    begin = Python::PyToBrokenDateTime(py_begin).ToTimePoint();
 
   if (py_end != nullptr && PyDateTime_Check(py_end))
-    end = Python::PyToBrokenDateTime(py_end).ToUnixTimeUTC();
+    end = Python::PyToBrokenDateTime(py_end).ToTimePoint();
 
   GoogleEncode encoded_locations(2, true, 1e5),
                encoded_levels,
@@ -428,7 +428,7 @@ PyObject* xcsoar_Flight_encode(Pyxcsoar_Flight *self, PyObject *args) {
     if (replay->Level() == -1) continue;
 
     const MoreData &basic = replay->Basic();
-    const int64_t date_time_utc = basic.date_time_utc.ToUnixTimeUTC();
+    const auto date_time_utc = basic.date_time_utc.ToTimePoint();
 
     if (date_time_utc < begin)
       continue;

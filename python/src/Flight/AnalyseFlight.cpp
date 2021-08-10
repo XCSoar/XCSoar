@@ -69,31 +69,26 @@ Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
   AutoQNH auto_qnh(5);
   auto_qnh.Reset();
 
-  const int64_t takeoff_unix = takeoff_time.ToUnixTimeUTC();
-  const int64_t landing_unix = landing_time.ToUnixTimeUTC();
+  const auto takeoff_tp = takeoff_time.ToTimePoint();
+  const auto landing_tp = landing_time.ToTimePoint();
 
-
-  int64_t scoring_start_unix, scoring_end_unix;
+  auto scoring_start_tp = std::chrono::system_clock::time_point::min();
+  auto scoring_end_tp = std::chrono::system_clock::time_point::max();
 
   if (scoring_start_time.IsPlausible())
-    scoring_start_unix = scoring_start_time.ToUnixTimeUTC();
-  else
-    scoring_start_unix = std::numeric_limits<int64_t>::max();
+    scoring_start_tp = scoring_start_time.ToTimePoint();
 
   if (scoring_end_time.IsPlausible())
-    scoring_end_unix = scoring_end_time.ToUnixTimeUTC();
-  else
-    scoring_end_unix = 0;
-
+    scoring_end_tp = scoring_end_time.ToTimePoint();
 
   while (replay.Next()) {
     const MoreData &basic = replay.Basic();
-    const int64_t date_time_utc = basic.date_time_utc.ToUnixTimeUTC();
+    const auto date_time_utc = basic.date_time_utc.ToTimePoint();
 
-    if (date_time_utc < takeoff_unix)
+    if (date_time_utc < takeoff_tp)
       continue;
 
-    if (date_time_utc > landing_unix)
+    if (date_time_utc > landing_tp)
       break;
 
     circling_computer.TurnRate(replay.SetCalculated(),
@@ -138,7 +133,8 @@ Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
 
     last_location = basic.location;
 
-    if (date_time_utc >= scoring_start_unix && date_time_utc <= scoring_end_unix) {
+    if (date_time_utc >= scoring_start_tp &&
+        date_time_utc <= scoring_end_tp) {
       const TracePoint point(basic);
       full_trace.push_back(point);
       triangle_trace.push_back(point);
