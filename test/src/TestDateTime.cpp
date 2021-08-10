@@ -172,7 +172,7 @@ TestDateTime()
   ok1(BrokenDateTime(2010, 2, 28, 23, 59, 59) + std::chrono::seconds(2) == BrokenDateTime(2010, 3, 1, 0, 0, 1));
   ok1(BrokenDateTime(2010, 12, 31, 23, 59, 59) + std::chrono::seconds(1) == BrokenDateTime(2011, 1, 1));
 
-  ok1(BrokenDateTime(2010, 1, 2, 12, 15, 30).ToUnixTimeUTC() == 1262434530);
+  ok1(std::chrono::system_clock::to_time_t(BrokenDateTime(2010, 1, 2, 12, 15, 30).ToTimePoint()) == 1262434530);
 
   ok1(BrokenDateTime(2010, 1, 1, 0, 0 ,1) -
       BrokenDateTime(2010, 1, 1, 0, 0 ,0) == std::chrono::seconds(1));
