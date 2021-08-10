@@ -47,7 +47,7 @@ public:
   void LogPilotEvent(const NMEAInfo &gps_info);
 
   [[gnu::pure]]
-  bool IsLoggerActive() const;
+  bool IsLoggerActive() const noexcept;
 
   void GUIStartLogger(const NMEAInfo& gps_info,
                       const ComputerSettings& settings,
@@ -60,7 +60,7 @@ public:
   void GUIStopLogger(const NMEAInfo &gps_info,
                      bool noAsk = false);
   void LoggerNote(const TCHAR *text);
-  void ClearBuffer();
+  void ClearBuffer() noexcept;
 };
 
 #endif
