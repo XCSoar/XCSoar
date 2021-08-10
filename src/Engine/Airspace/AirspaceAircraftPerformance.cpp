@@ -25,15 +25,15 @@
 
 #include <algorithm>
 
-#define BIG 1000000.
+static constexpr FloatDuration BIG{1000000.};
 
-double
-AirspaceAircraftPerformance::SolutionGeneral(double distance, double dh) const
+FloatDuration
+AirspaceAircraftPerformance::SolutionGeneral(double distance, double dh) const noexcept
 {
-  const auto t_cruise = distance > 0
+  const FloatDuration t_cruise{distance > 0
     ? distance / GetCruiseSpeed()
-    : double(0);
-  const auto h_descent = dh - t_cruise * GetCruiseDescent();
+    : double(0)};
+  const auto h_descent = dh - t_cruise.count() * GetCruiseDescent();
 
   if (fabs(h_descent) < 1)
     return t_cruise;
@@ -46,7 +46,7 @@ AirspaceAircraftPerformance::SolutionGeneral(double distance, double dh) const
     if (mod_descent_rate <= 0)
       return BIG;
 
-    const auto t_descent = h_descent / mod_descent_rate;
+    const FloatDuration t_descent{h_descent / mod_descent_rate};
     return std::max(t_cruise, t_descent);
 
   }
@@ -58,7 +58,7 @@ AirspaceAircraftPerformance::SolutionGeneral(double distance, double dh) const
   if (mod_climb_rate <= 0)
     return BIG;
 
-  const auto t_climb = -h_descent / mod_climb_rate;
+  const FloatDuration t_climb{-h_descent / mod_climb_rate};
   return t_cruise + t_climb;
 }
 
@@ -87,7 +87,7 @@ public:
      m_h_min(h_min) {}
 
   double f(const double h) noexcept override {
-    return m_perf.SolutionGeneral(m_distance, m_alt-h);
+    return m_perf.SolutionGeneral(m_distance, m_alt - h).count();
   }
 
   /**
@@ -97,14 +97,14 @@ public:
    *
    * @return Time of arrival (or -1 if no solution found)
    */
-  double solve(double &h) {
+  FloatDuration solve(double &h) noexcept {
     auto h_this = find_min(m_h_min);
-    auto t = f(h_this);
+    FloatDuration t{f(h_this)};
     if (t < BIG) {
       h = h_this;
       return t;
     }
-    return -1;
+    return FloatDuration{-1};
   }
 
 private:
@@ -114,13 +114,13 @@ private:
   const double m_h_min;
 };
 
-double
+FloatDuration
 AirspaceAircraftPerformance::SolutionVertical(double distance, double altitude,
                                               double base, double top,
-                                              double &intercept_alt) const
+                                              double &intercept_alt) const noexcept
 {
   if (!SolutionExists(distance, altitude, base, top))
-    return -1;
+    return FloatDuration{-1};
 
   if (top <= base) {
     // unique solution
@@ -129,7 +129,7 @@ AirspaceAircraftPerformance::SolutionVertical(double distance, double altitude,
       intercept_alt = top;
       return t_this;
     }
-    return -1;
+    return FloatDuration{-1};
   }
 
   AirspaceAircraftInterceptVertical aaiv(*this, distance, altitude, base, top);
@@ -159,7 +159,7 @@ public:
      m_perf(aap), m_d_min(distance_min), m_dh(dh) {}
 
   double f(const double distance) noexcept override {
-    return m_perf.SolutionGeneral(distance, m_dh);
+    return m_perf.SolutionGeneral(distance, m_dh).count();
   }
 
   /**
@@ -169,14 +169,14 @@ public:
    *
    * @return Time of arrival (or -1 if no solution found)
    */
-  double solve(double &distance) {
+  FloatDuration solve(double &distance) noexcept {
     auto distance_this = find_min(m_d_min);
-    auto t = f(distance_this);
+    FloatDuration t{f(distance_this)};
     if (t < BIG) {
       distance = distance_this;
       return t;
     }
-    return -1;
+    return FloatDuration{-1};
   }
 
 private:
@@ -185,14 +185,14 @@ private:
   const double m_dh;
 };
 
-double 
+FloatDuration
 AirspaceAircraftPerformance::SolutionHorizontal(double distance_min,
                                                 double distance_max,
                                                 double altitude, double h,
-                                                double &intercept_distance) const
+                                                double &intercept_distance) const noexcept
 {
   if (!SolutionExists(distance_max, altitude, h, h))
-    return -1;
+    return FloatDuration{-1};
 
   const auto dh = altitude - h;
 
@@ -203,7 +203,7 @@ AirspaceAircraftPerformance::SolutionHorizontal(double distance_min,
       intercept_distance = distance_max;
       return t_this;
     }
-    return -1;
+    return FloatDuration{-1};
   }
   AirspaceAircraftInterceptHorizontal aaih(*this, distance_min, distance_max, dh);
   return aaih.solve(intercept_distance);

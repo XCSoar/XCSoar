@@ -106,7 +106,7 @@ ReplayControlWidget::OnStartClicked()
 inline void
 ReplayControlWidget::OnFastForwardClicked()
 {
-  replay->FastForward(10 * 60);
+  replay->FastForward(std::chrono::minutes{10});
 }
 
 void

@@ -38,18 +38,18 @@ AverageVarioComputer::Compute(const MoreData &basic,
                               bool circling, bool last_circling,
                               VarioInfo &vario_info)
 {
-  const auto dt = delta_time.Update(basic.time, 1, 0);
-  if (dt < 0 || circling != last_circling) {
+  const auto dt = delta_time.Update(basic.time, std::chrono::seconds{1}, {});
+  if (dt.count() < 0 || circling != last_circling) {
     Reset();
     vario_info.average = basic.brutto_vario;
     vario_info.netto_average = basic.netto_vario;
     return;
   }
 
-  if (dt <= 0)
+  if (dt.count() <= 0)
     return;
 
-  const unsigned Elapsed = uround(dt);
+  const unsigned Elapsed = std::chrono::round<std::chrono::seconds>(dt).count();
   if (Elapsed == 0)
     return;
 

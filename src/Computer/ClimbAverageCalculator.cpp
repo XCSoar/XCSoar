@@ -34,10 +34,10 @@ ClimbAverageCalculator::Reset()
 }
 
 double
-ClimbAverageCalculator::GetAverage(double time, double altitude,
-                                   double average_time)
+ClimbAverageCalculator::GetAverage(TimeStamp time, double altitude,
+                                   FloatDuration average_time) noexcept
 {
-  assert(average_time <= MAX_HISTORY);
+  assert(average_time.count() <= MAX_HISTORY);
 
   int bestHistory;
 
@@ -71,13 +71,14 @@ ClimbAverageCalculator::GetAverage(double time, double altitude,
   // calculate the average !
   if (bestHistory != newestValIndex)
     return (altitude - history[bestHistory].altitude) /
-           (time - history[bestHistory].time);
+      (time - history[bestHistory].time).count();
 
   return 0;
 }
 
 bool
-ClimbAverageCalculator::Expired(double now, double max_age) const
+ClimbAverageCalculator::Expired(TimeStamp now,
+                                FloatDuration max_age) const noexcept
 {
   if (newestValIndex < 0)
     return true;

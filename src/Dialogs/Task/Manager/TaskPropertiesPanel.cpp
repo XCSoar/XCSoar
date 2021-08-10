@@ -32,6 +32,8 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 
+using namespace std::chrono;
+
 enum Controls {
   TASK_TYPE,
   MIN_TIME,
@@ -67,7 +69,7 @@ TaskPropertiesPanel::RefreshView()
   bool fai_start_finish = p.finish_constraints.fai_finish;
 
   SetRowVisible(MIN_TIME, aat_types);
-  LoadValueTime(MIN_TIME, (int)p.aat_min_time);
+  LoadValueDuration(MIN_TIME, p.aat_min_time);
 
   LoadValue(START_REQUIRES_ARM, p.start_constraints.require_arm);
 
@@ -98,11 +100,11 @@ TaskPropertiesPanel::RefreshView()
   LoadValueEnum(TASK_TYPE, ftype);
 
   SetRowVisible(PEV_START_WAIT_TIME, !fai_start_finish);
-  LoadValueTime(PEV_START_WAIT_TIME,
-                p.start_constraints.pev_start_wait_time);
+  LoadValueDuration(PEV_START_WAIT_TIME,
+                    p.start_constraints.pev_start_wait_time);
   SetRowVisible(PEV_START_WINDOW, !fai_start_finish);
-  LoadValueTime(PEV_START_WINDOW,
-                p.start_constraints.pev_start_window);
+  LoadValueDuration(PEV_START_WINDOW,
+                    p.start_constraints.pev_start_window);
 
   dialog.InvalidateTaskView();
 
@@ -119,11 +121,7 @@ TaskPropertiesPanel::ReadValues()
   TaskFactoryType newtype = ordered_task->GetFactoryType();
   changed |= SaveValueEnum(TASK_TYPE, newtype);
 
-  int min_time = GetValueInteger(MIN_TIME);
-  if (min_time != (int)p.aat_min_time) {
-    p.aat_min_time = min_time;
-    changed = true;
-  }
+  changed |= SaveValue(MIN_TIME, p.aat_min_time);
 
   if (SaveValue(START_REQUIRES_ARM, p.start_constraints.require_arm))
     changed = true;
@@ -228,8 +226,8 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent,
   }
   Add(_("Task type"), _("Sets the behaviour for the current task."), dfe);
 
-  AddTime(_("AAT min. time"), _("Minimum AAT task time in minutes."),
-          0, 36000, 60, 180);
+  AddDuration(_("AAT min. time"), _("Minimum AAT task time in minutes."),
+              {}, hours{10}, minutes{1}, minutes{3});
 
   AddBoolean(_("Arm start manually"),
              _("Configure whether the start must be armed manually or automatically."),
@@ -273,14 +271,14 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent,
           _("Reference used for finish min height rule."),
           altitude_reference_list);
 
-  AddTime(_("PEV start wait time"),
-          _("Wait time in minutes after Pilot Event and before start gate opens. "
-            "0 means start opens immediately."),
-          0, 30*60, 60, 0);
-  AddTime(_("PEV start window"),
-          _("Number of minutes start remains open after Pilot Event and PEV wait time."
-            "0 means start will never close after it opens."),
-          0, 30*60, 60, 0);
+  AddDuration(_("PEV start wait time"),
+              _("Wait time in minutes after Pilot Event and before start gate opens. "
+                "0 means start opens immediately."),
+              {}, minutes{30}, minutes{1}, {});
+  AddDuration(_("PEV start window"),
+              _("Number of minutes start remains open after Pilot Event and PEV wait time."
+                "0 means start will never close after it opens."),
+              {}, minutes{30}, minutes{1}, {});
 
   AddBoolean(_("FAI start / finish rules"),
              _("If enabled, has no max start height or max start speed and requires the minimum height above ground for finish to be greater than 1000m below the start height."),

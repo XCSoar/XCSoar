@@ -122,7 +122,7 @@ FlytecDevice::ParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
 
   //  Time(hhmmss),   6 Digits
 
-  double time;
+  TimeStamp time;
   if (NMEAParser::ReadTime(line, info.date_time_utc, time) &&
       !NMEAParser::TimeHasAdvanced(time, last_time, info))
     return true;

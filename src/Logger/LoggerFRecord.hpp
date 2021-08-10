@@ -27,6 +27,8 @@ Copyright_License {
 #include "time/GPSClock.hpp"
 #include "NMEA/GPSState.hpp"
 
+class TimeStamp;
+
 class LoggerFRecord
 {
   /* 4.5 minutes */
@@ -43,7 +45,8 @@ public:
    * Returns true if the IGCWriter is supposed to write a new F record to
    * the IGC file or false if no update is needed.
    */
-  bool Update(const GPSState &gps, double time, bool nav_warning);
+  bool Update(const GPSState &gps, TimeStamp time,
+              bool nav_warning) noexcept;
 
   void Reset();
 

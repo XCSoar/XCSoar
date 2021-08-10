@@ -26,17 +26,20 @@
 #include "AirspaceClass.hpp"
 
 #include <cassert>
+#include <chrono>
 
 struct AirspaceWarningConfig
 {
+  using Duration = std::chrono::duration<unsigned>;
+
   /** Warning time before airspace entry */
-  unsigned warning_time;
+  Duration warning_time;
 
   /** Enable repetitive sound */
   bool repetitive_sound;
 
   /** Time an acknowledgement will persist before a warning is reissued */
-  unsigned acknowledgement_time;
+  Duration acknowledgement_time;
 
   /** Altitude margin (m) outside of which to not display airspace for auto mode */
   unsigned altitude_warning_margin;

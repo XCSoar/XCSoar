@@ -29,6 +29,8 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 
+using namespace std::chrono;
+
 enum ControlIndex {
   StartMaxSpeed,
   StartMaxSpeedMargin,
@@ -123,18 +125,18 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent,
   AddSpacer();
   SetExpertRow(spacer_3);
 
-  AddTime(_("PEV start wait time"),
-          _("Wait time in minutes after Pilot Event and before start gate opens. "
-            "0 means start opens immediately."),
-          0, 30*60, 60,
-          task_behaviour.ordered_defaults.start_constraints.pev_start_wait_time);
+  AddDuration(_("PEV start wait time"),
+              _("Wait time in minutes after Pilot Event and before start gate opens. "
+                "0 means start opens immediately."),
+              {}, minutes{30}, minutes{1},
+              task_behaviour.ordered_defaults.start_constraints.pev_start_wait_time);
   SetExpertRow(PEVStartWaitTime);
 
-  AddTime(_("PEV start window"),
-          _("Number of minutes start remains open after Pilot Event and PEV wait time."
-            "0 means start will never close after it opens."),
-          0, 30*60, 60,
-          task_behaviour.ordered_defaults.start_constraints.pev_start_window);
+  AddDuration(_("PEV start window"),
+              _("Number of minutes start remains open after Pilot Event and PEV wait time."
+                "0 means start will never close after it opens."),
+              {}, minutes{30}, minutes{1},
+              task_behaviour.ordered_defaults.start_constraints.pev_start_window);
   SetExpertRow(PEVStartWindow);
 
 }

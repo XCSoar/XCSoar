@@ -47,7 +47,7 @@ TaskBehaviour::SetDefaults()
 
   optimise_targets_range = true;
   optimise_targets_bearing = true;
-  optimise_targets_margin = 300;
+  optimise_targets_margin = std::chrono::minutes{5};
   auto_mc = false;
   auto_mc_mode = AutoMCMode::CLIMBAVERAGE;
   calc_cruise_efficiency = true;

@@ -73,7 +73,8 @@ LoggerFRecord::CheckSatellitesChanged(const GPSState &gps) const
 }
 
 bool
-LoggerFRecord::Update(const GPSState &gps, double time, bool nav_warning)
+LoggerFRecord::Update(const GPSState &gps, TimeStamp time,
+                      bool nav_warning) noexcept
 {
   // Accelerate to 30 seconds if bad signal
   const std::chrono::steady_clock::duration period = IsBadSignal(gps) || nav_warning

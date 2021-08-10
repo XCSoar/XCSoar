@@ -84,7 +84,7 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromValue(0);
   chart.ScaleXFromData(fs.thermal_average);
   if (derived_info.flight.flying)
-    chart.ScaleXFromValue(derived_info.flight.flight_time/3600);
+    chart.ScaleXFromValue(derived_info.flight.flight_time / std::chrono::hours{1});
 
   // draw red area below MC, blue area above
   {

@@ -97,7 +97,7 @@ private:
   /**
    * Remove old waves.
    */
-  void Decay(double min_time) noexcept;
+  void Decay(TimeStamp min_time) noexcept;
 
   void FoundWave(const WaveInfo &new_wave) noexcept;
 };

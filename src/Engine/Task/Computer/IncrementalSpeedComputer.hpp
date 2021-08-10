@@ -23,6 +23,7 @@
 #ifndef XCSOAR_INCREMENTAL_SPEED_COMPUTER_HPP
 #define XCSOAR_INCREMENTAL_SPEED_COMPUTER_HPP
 
+#include "time/Stamp.hpp"
 #include "Math/Filter.hpp"
 #include "Math/AvFilter.hpp"
 #include "Math/DiffFilter.hpp"
@@ -40,7 +41,7 @@ class IncrementalSpeedComputer {
   Filter v_lpf;
   const bool is_positive;
 
-  double last_time;
+  TimeStamp last_time;
 
 public:
   /** Constructor; initialises all to zero */
@@ -52,7 +53,7 @@ public:
    *
    * @param time monotonic time of day in seconds
    */
-  void Compute(DistanceStat &data, double time);
+  void Compute(DistanceStat &data, TimeStamp time) noexcept;
 
   void Reset(DistanceStat &data);
 };

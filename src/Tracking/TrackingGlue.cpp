@@ -229,7 +229,7 @@ TrackingGlue::OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
 
   {
     const std::lock_guard<Mutex> lock(skylines_data.mutex);
-    const SkyLinesTracking::Data::Traffic traffic(time_of_day_ms,
+    const SkyLinesTracking::Data::Traffic traffic(SkyLinesTracking::Data::Time{time_of_day_ms},
                                                   location, altitude);
     skylines_data.traffic[pilot_id] = traffic;
 
@@ -261,7 +261,8 @@ TrackingGlue::OnWave(unsigned time_of_day_ms,
     skylines_data.waves.pop_front();
 
   // TODO: replace existing item?
-  skylines_data.waves.emplace_back(time_of_day_ms, a, b);
+  skylines_data.waves.emplace_back(SkyLinesTracking::Data::Time{time_of_day_ms},
+                                   a, b);
 }
 
 void

@@ -31,6 +31,7 @@ Copyright_License {
 #include "NMEA/Attitude.hpp"
 #include "SwitchState.hpp"
 #include "time/BrokenDateTime.hpp"
+#include "time/Stamp.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Atmosphere/Temperature.hpp"
@@ -55,7 +56,7 @@ struct NMEAInfo {
    * any data.  It is used to update and check the #Validity
    * attributes in this struct.
    */
-  double clock;
+  TimeStamp clock;
 
   /**
    * Is the device alive?  This attribute gets updated each time a
@@ -213,7 +214,7 @@ struct NMEAInfo {
   /**
    * Global time (seconds after UTC midnight)
    */
-  double time;
+  TimeStamp time;
 
   /**
    * GPS date and time (UTC).
@@ -371,7 +372,7 @@ struct NMEAInfo {
    * @param other_time the time stamp (see attribute #time)
    */
   [[gnu::pure]]
-  BrokenDateTime GetDateTimeAt(double other_time) const;
+  BrokenDateTime GetDateTimeAt(TimeStamp other_time) const noexcept;
 
   bool MovementDetected() const {
     return ground_speed_available && ground_speed > 2;
@@ -389,7 +390,7 @@ struct NMEAInfo {
     gps_altitude_available.Clear();
   }
 
-  void ProvideTime(double time);
+  void ProvideTime(TimeStamp time) noexcept;
   void ProvideDate(const BrokenDate &date);
 
   /**

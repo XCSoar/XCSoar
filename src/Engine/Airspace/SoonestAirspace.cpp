@@ -31,11 +31,11 @@ Copyright_License {
 
 struct SoonestAirspace {
   const AbstractAirspace *airspace = nullptr;
-  double time = -1;
+  FloatDuration time{-1};
 
   SoonestAirspace() = default;
   SoonestAirspace(const AbstractAirspace &_airspace,
-                  double _time)
+                  FloatDuration _time)
     :airspace(&_airspace), time(_time) {}
 
 
@@ -49,7 +49,7 @@ __attribute__((always_inline))
 static inline SoonestAirspace
 CalculateSoonestAirspace(const AircraftState &state,
                          const AirspaceAircraftPerformance &perf,
-                         const double max_time,
+                         const FloatDuration max_time,
                          const FlatProjection &projection,
                          const AbstractAirspace &airspace)
 {
@@ -76,11 +76,11 @@ FindSoonestAirspace(const Airspaces &airspaces,
                     const AircraftState &state,
                     const AirspaceAircraftPerformance &perf,
                     AirspacePredicate predicate,
-                    const double max_time)
+                    const FloatDuration max_time)
 {
   const auto &projection = airspaces.GetProjection();
   const auto range = perf.GetMaxSpeed() * max_time;
-  return FindMinimum(airspaces, state.location, range, predicate,
+  return FindMinimum(airspaces, state.location, range.count(), predicate,
                      [&state, &perf, max_time,
                       &projection](const AbstractAirspace &airspace){
                        return CalculateSoonestAirspace(state, perf, max_time,

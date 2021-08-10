@@ -42,7 +42,7 @@ GPSState::Reset()
 }
 
 void
-GPSState::Expire(double now)
+GPSState::Expire(TimeStamp now) noexcept
 {
   if (fix_quality_available.Expire(now, std::chrono::seconds(5)))
     fix_quality = FixQuality::NO_FIX;

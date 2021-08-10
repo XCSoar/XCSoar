@@ -37,9 +37,9 @@ void
 StatsComputer::ResetFlight(const bool full)
 {
   last_location = GeoPoint::Invalid();
-  last_climb_start_time = -1;
-  last_cruise_start_time = -1;
-  last_thermal_end_time = -1;
+  last_climb_start_time = TimeStamp::Undefined();
+  last_cruise_start_time = TimeStamp::Undefined();
+  last_thermal_end_time = TimeStamp::Undefined();
 
   if (full)
     flightstats.Reset();
@@ -152,7 +152,7 @@ StatsComputer::ProcessClimbEvents(const DerivedInfo &calculated)
   }
 
   if (calculated.last_thermal.IsDefined() &&
-      (last_thermal_end_time < 0 ||
+      (!last_thermal_end_time.IsDefined() ||
        calculated.last_thermal.end_time > last_thermal_end_time))
     OnDepartedThermal(calculated);
 
@@ -160,5 +160,5 @@ StatsComputer::ProcessClimbEvents(const DerivedInfo &calculated)
   last_cruise_start_time = calculated.cruise_start_time;
   last_thermal_end_time = calculated.last_thermal.IsDefined()
     ? calculated.last_thermal.end_time
-    : -1.;
+    : TimeStamp::Undefined();
 }

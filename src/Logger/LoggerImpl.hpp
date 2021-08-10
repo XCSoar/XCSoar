@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "LoggerFRecord.hpp"
 #include "time/BrokenDateTime.hpp"
+#include "time/Stamp.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "system/Path.hpp"
 #include "util/OverwritingRingBuffer.hpp"
@@ -65,7 +66,7 @@ public:
     int satellite_ids[GPSState::MAXSATELLITES];
     bool satellite_ids_available;
     /** Time of fix (s) */
-    double time;
+    TimeStamp time;
     /** GPS fix quality */
     FixQuality fix_quality;
     /** GPS fix state */

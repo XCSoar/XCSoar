@@ -28,6 +28,8 @@ extern "C" {
 #include "tap.h"
 }
 
+using namespace std::chrono;
+
 static bool
 test_aat(int test_num, int n_wind)
 {
@@ -36,7 +38,7 @@ test_aat(int test_num, int n_wind)
 
   TestFlightResult result = test_flight(test_num, n_wind);
   bool fine = result.result;
-  double min_time = (double)aat_min_time(test_num) + 300.0;
+  FloatDuration min_time = FloatDuration{aat_min_time(test_num)} + minutes{5};
   // 300 second offset is default 5 minute margin provided in TaskBehaviour
 
   const double t_ratio = fabs(result.time_elapsed / min_time - 1.0);

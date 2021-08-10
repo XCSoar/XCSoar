@@ -57,7 +57,7 @@ class KineticManager
   PeriodClock clock;
 
 public:
-  explicit KineticManager(std::chrono::duration<double> _stopping_time = std::chrono::seconds{1}) noexcept
+  explicit KineticManager(FloatDuration _stopping_time = std::chrono::seconds{1}) noexcept
     :stopping_time(_stopping_time) {}
 
   /** Needs to be called once the manual movement is started */

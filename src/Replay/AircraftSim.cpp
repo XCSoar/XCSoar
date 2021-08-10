@@ -31,7 +31,7 @@ AircraftSim::Start(const GeoPoint& location_start,
   state.Reset();
   state.location = location_start;
   state.altitude = altitude;
-  state.time = 0;
+  state.time = {};
   state.wind.norm = 0;
   state.wind.bearing = Angle();
   state.ground_speed = 16;
@@ -44,21 +44,24 @@ AircraftSim::Start(const GeoPoint& location_start,
 
 
 GeoPoint
-AircraftSim::GetEndPoint(const Angle heading, const double timestep) const
+AircraftSim::GetEndPoint(const Angle heading,
+                         const FloatDuration timestep) const noexcept
 {
-  GeoPoint ref = GeoVector(state.true_airspeed*timestep, heading).EndPoint(state.location);
-  return GeoVector(state.wind.norm*timestep,
+  GeoPoint ref = GeoVector(state.true_airspeed * timestep.count(), heading)
+    .EndPoint(state.location);
+  return GeoVector(state.wind.norm * timestep.count(),
                    state.wind.bearing + Angle::HalfCircle()).EndPoint(ref);
 }
 
 void
-AircraftSim::Integrate(const Angle heading, const double timestep)
+AircraftSim::Integrate(const Angle heading,
+                       const FloatDuration timestep) noexcept
 {
   GeoPoint v = GetEndPoint(heading, timestep);
   state.track = state.location.Bearing(v);
-  state.ground_speed = v.DistanceS(state.location)/timestep;
+  state.ground_speed = v.DistanceS(state.location) / timestep.count();
   state.location = v;
-  state.altitude += state.vario*timestep;
+  state.altitude += state.vario * timestep.count();
   state.time += timestep;
 }
 
@@ -72,7 +75,8 @@ AircraftSim::SetWind(const double speed, const Angle direction)
 
 
 bool
-AircraftSim::Update(const Angle heading, const double timestep)
+AircraftSim::Update(const Angle heading,
+                    const FloatDuration timestep) noexcept
 {
   state_last = state;
   Integrate(heading, timestep);

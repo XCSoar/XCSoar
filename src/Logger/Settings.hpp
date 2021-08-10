@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "util/StaticString.hxx"
 
-#include <cstdint>
+#include <chrono>
 
 /**
  * Logger settings
@@ -43,10 +43,10 @@ struct LoggerSettings {
   bool enable_nmea_logger;
 
   /** Logger interval in cruise mode */
-  uint16_t time_step_cruise;
+  std::chrono::duration<unsigned> time_step_cruise;
 
   /** Logger interval in circling mode */
-  uint16_t time_step_circling;
+  std::chrono::duration<unsigned> time_step_circling;
 
   enum class AutoLogger: uint8_t {
     ON,

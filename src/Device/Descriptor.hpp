@@ -37,6 +37,7 @@ Copyright_License {
 #include "ui/event/Notify.hpp"
 #include "thread/Mutex.hxx"
 #include "thread/Debug.hpp"
+#include "time/FloatDuration.hxx"
 #include "util/tstring.hpp"
 #include "util/StaticFifoBuffer.hxx"
 
@@ -516,7 +517,7 @@ public:
   bool IsAlive() const;
 
   [[gnu::pure]]
-  double GetClock() const noexcept;
+  TimeStamp GetClock() const noexcept;
 
   /**
    * Return a copy of the device's current data.

@@ -27,13 +27,15 @@
 #include "FinishConstraints.hpp"
 #include "Task/Shapes/FAITriangleSettings.hpp"
 
+#include <chrono>
+
 /**
  * Settings for ordered tasks; most of these are set by
  * the #AbstractTaskFactory but can be overriden
  */
 struct OrderedTaskSettings {
   /** Desired AAT minimum task time (s) */
-  double aat_min_time;
+  std::chrono::duration<unsigned> aat_min_time;
 
   StartConstraints start_constraints;
   FinishConstraints finish_constraints;

@@ -262,7 +262,7 @@ struct DerivedInfo:
    */
   void Reset();
 
-  void Expire(double Time);
+  void Expire(TimeStamp time) noexcept;
 
   /**
    * Return the current wind vector, or the null vector if no wind is
@@ -275,7 +275,7 @@ struct DerivedInfo:
       : SpeedVector::Zero();
   }
 
-  void ProvideAutoMacCready(double clock, double mc) {
+  void ProvideAutoMacCready(TimeStamp clock, double mc) {
     if (auto_mac_cready_available &&
         fabs(auto_mac_cready - mc) < 0.05)
       /* change is too small, ignore the new value to limit the rate */

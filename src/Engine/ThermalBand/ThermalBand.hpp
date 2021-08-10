@@ -40,7 +40,7 @@ class ThermalBand {
   static constexpr unsigned NUM_SLICES = 64;
 
   // minimum time of activity for this band to be considered valid
-  static constexpr double MIN_VALID_TIME = 30.;
+  static constexpr FloatDuration MIN_VALID_TIME = std::chrono::seconds{30};
 
 protected:
   double h_min;
@@ -94,7 +94,7 @@ public:
   // calculate the maximum number of thermal encounters across all elements
   double GetMaxN() const;
   // calculate the total time elapsed in climb across all elements
-  double GetTimeElapsed() const;
+  FloatDuration GetTimeElapsed() const noexcept;
   // calculate the maximum climb rate across all elements
   double GetMaxW() const;
 

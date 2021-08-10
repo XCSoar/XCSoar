@@ -39,6 +39,7 @@
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Operation/Operation.hpp"
 #include "Units/System.hpp"
+#include "time/BrokenTime.hpp"
 
 #include <stdlib.h>
 
@@ -46,7 +47,7 @@ struct SeeYouTaskInformation {
   /** True = RT, False = AAT */
   bool wp_dis = true;
   /** AAT task time in seconds */
-  double task_time = 0;
+  std::chrono::duration<unsigned> task_time{};
   /** MaxAltStart in meters */
   double max_start_altitude = 0;
 };
@@ -70,7 +71,7 @@ struct SeeYouTurnpointInformation {
   Angle angle1{}, angle2{}, angle12{};
 };
 
-static double
+static std::chrono::duration<unsigned>
 ParseTaskTime(const TCHAR* str)
 {
   int hh = 0, mm = 0, ss = 0;
@@ -81,7 +82,7 @@ ParseTaskTime(const TCHAR* str)
     if (str != end && _tcslen(str + 3) > 3 && str[5] == _T(':'))
       ss = _tcstol(str + 6, nullptr, 10);
   }
-  return ss + mm * 60 + hh * 3600;
+  return BrokenTime(hh, mm, ss).DurationSinceMidnight();
 }
 
 static SeeYouTurnpointInformation::Style

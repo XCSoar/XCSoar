@@ -23,6 +23,7 @@
 #ifndef DATANODE_HPP
 #define DATANODE_HPP
 
+#include "time/FloatDuration.hxx"
 #include "util/Compiler.h"
 
 #include <list>
@@ -100,6 +101,10 @@ public:
 
   bool GetAttribute(const TCHAR *name, Angle &value) const noexcept;
 
+  bool GetAttribute(const TCHAR *name, FloatDuration &value) const noexcept;
+  bool GetAttribute(const TCHAR *name,
+                    std::chrono::duration<unsigned> &value) const noexcept;
+
   /**
    * Retrieve named attribute value, with numeric conversion
    *
@@ -176,6 +181,15 @@ public:
   void SetAttribute(const TCHAR *name, double value) noexcept;
 
   void SetAttribute(const TCHAR *name, Angle value) noexcept;
+
+  void SetAttribute(const TCHAR *name, FloatDuration value) noexcept {
+    SetAttribute(name, value.count());
+  }
+
+  void SetAttribute(const TCHAR *name,
+                    std::chrono::duration<unsigned> value) noexcept {
+    SetAttribute(name, value.count());
+  }
 
   /**
    * Set named attribute value, with numeric to text conversion

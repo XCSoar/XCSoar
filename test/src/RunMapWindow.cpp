@@ -140,8 +140,8 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
   DerivedInfo derived_info;
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
-  nmea_info.time = 1297230000;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.time = TimeStamp{FloatDuration{1297230000}};
   nmea_info.alive.Update(nmea_info.clock);
 
   if (settings_computer.poi.home_location_available)

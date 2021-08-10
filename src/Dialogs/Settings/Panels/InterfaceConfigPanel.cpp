@@ -38,6 +38,8 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Hardware/Vibrator.hpp"
 
+using namespace std::chrono;
+
 enum ControlIndex {
   UIScale,
   CustomDPI,
@@ -160,10 +162,11 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
   }
 #endif /* !HAVE_NATIVE_GETTEXT */
 
-  AddTime(_("Menu timeout"),
-          _("This determines how long menus will appear on screen if the user does not make any button "
-            "presses or interacts with the computer."),
-          1, 60, 1, settings.menu_timeout / 2);
+  AddDuration(_("Menu timeout"),
+              _("This determines how long menus will appear on screen if the user does not make any button "
+                "presses or interacts with the computer."),
+              seconds{1}, minutes{1}, seconds{1},
+              settings.menu_timeout / 2);
   SetExpertRow(MenuTimeout);
 
   static constexpr StaticEnumChoice text_input_list[] = {
@@ -260,7 +263,7 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
   }
 #endif
 
-  unsigned menu_timeout = GetValueInteger(MenuTimeout) * 2;
+  duration<unsigned> menu_timeout{GetValueInteger(MenuTimeout) * 2};
   if (settings.menu_timeout != menu_timeout) {
     settings.menu_timeout = menu_timeout;
     Profile::Set(ProfileKeys::MenuTimeout, menu_timeout);

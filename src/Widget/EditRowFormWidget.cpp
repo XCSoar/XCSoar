@@ -225,10 +225,13 @@ RowFormWidget::AddPassword(const TCHAR *label, const TCHAR *help,
 }
 
 WndProperty *
-RowFormWidget::AddTime(const TCHAR *label, const TCHAR *help,
-                       int min_value, int max_value, unsigned step,
-                       int value, unsigned max_tokens,
-                       DataFieldListener *listener) noexcept
+RowFormWidget::AddDuration(const TCHAR *label, const TCHAR *help,
+                           std::chrono::seconds min_value,
+                           std::chrono::seconds max_value,
+                           std::chrono::seconds step,
+                           std::chrono::seconds value,
+                           unsigned max_tokens,
+                           DataFieldListener *listener) noexcept
 {
   WndProperty *edit = Add(label, help);
   DataFieldTime *df = new DataFieldTime(min_value, max_value, value,
@@ -331,7 +334,7 @@ RowFormWidget::LoadValue(unsigned i, RoughTime value) noexcept
 }
 
 void
-RowFormWidget::LoadValueTime(unsigned i, int value) noexcept
+RowFormWidget::LoadValueDuration(unsigned i, std::chrono::seconds value) noexcept
 {
   WndProperty &control = GetControl(i);
   DataFieldTime &df = *(DataFieldTime *)control.GetDataField();
@@ -380,6 +383,14 @@ RowFormWidget::GetValueIntegerAngle(unsigned i) const noexcept
     (const AngleDataField &)GetDataField(i);
   assert(df.GetType() == DataField::Type::ANGLE);
   return df.GetIntegerValue();
+}
+
+std::chrono::seconds
+RowFormWidget::GetValueTime(unsigned i) const noexcept
+{
+  const auto &df = (const DataFieldTime &)GetDataField(i);
+  assert(df.GetType() == DataField::Type::TIME);
+  return df.GetValue();
 }
 
 RoughTime
@@ -457,6 +468,18 @@ RowFormWidget::SaveValue(unsigned i, Angle &value_r) const noexcept
     return false;
 
   value_r = GetValueAngle(i);
+  return true;
+}
+
+bool
+RowFormWidget::SaveValue(unsigned i,
+                         std::chrono::seconds &value_r) const noexcept
+{
+  const auto new_value = GetValueTime(i);
+  if (new_value == value_r)
+    return false;
+
+  value_r = new_value;
   return true;
 }
 

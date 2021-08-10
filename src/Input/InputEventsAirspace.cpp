@@ -116,7 +116,8 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
   const AirspaceAircraftPerformance perf(polar);
 
   const auto *as = FindSoonestAirspace(airspace_database, aircraft_state, perf,
-                                       std::move(visible), 1800);
+                                       std::move(visible),
+                                       std::chrono::minutes{30});
   if (!as) {
     return;
   } 

@@ -79,7 +79,7 @@ DebugReplayIGC::CopyFromFix(const IGCFix &fix)
     raw_basic.date_time_utc.IncrementDay();
   }
 
-  basic.clock = basic.time = fix.time.GetSecondOfDay();
+  basic.clock = basic.time = TimeStamp{fix.time.DurationSinceMidnight()};
   basic.time_available.Update(basic.clock);
   basic.date_time_utc.hour = fix.time.hour;
   basic.date_time_utc.minute = fix.time.minute;

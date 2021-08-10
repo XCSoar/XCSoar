@@ -70,7 +70,7 @@ struct GliderLinkTrafficList {
     *this = add;
   }
 
-  void Expire(double clock) {
+  void Expire(TimeStamp clock) noexcept {
     new_traffic.Expire(clock, std::chrono::minutes(5));
 
     for (unsigned i = list.size(); i-- > 0;)

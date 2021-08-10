@@ -87,7 +87,7 @@ TaskMacCready::print(std::ostream &f, const AIRCRAFT_STATE &aircraft) const
 static void
 PrintTracePoint(const TracePoint &point, std::ofstream& fs)
 {
-  fs << point.GetTime()
+  fs << point.GetTime().count()
      << " " << point.GetLocation().longitude
      << " " << point.GetLocation().latitude
      << " " << point.GetAltitude()

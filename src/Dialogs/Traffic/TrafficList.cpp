@@ -51,6 +51,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "Pan.hpp"
 
+using namespace std::chrono;
+
 enum Controls {
   CALLSIGN,
 };
@@ -77,7 +79,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
      */
     uint32_t skylines_id = 0;
 
-    uint32_t time_of_day_ms;
+    SkyLinesTracking::Data::Time time_of_day;
 #endif
 
     /**
@@ -130,11 +132,11 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     }
 
 #ifdef HAVE_SKYLINES_TRACKING
-    explicit Item(uint32_t _id, uint32_t _time_of_day_ms,
+    explicit Item(uint32_t _id, SkyLinesTracking::Data::Time _time_of_day,
                   const GeoPoint &_location, int _altitude,
                   tstring &&_name)
       :id(FlarmId::Undefined()), skylines_id(_id),
-       time_of_day_ms(_time_of_day_ms),
+       time_of_day(_time_of_day),
        color(FlarmColor::COUNT),
        loaded(false),
        location(_location),
@@ -411,7 +413,7 @@ TrafficListWidget::UpdateList()
           ? name_i->second
           : tstring();
 
-        items.emplace_back(i.first, i.second.time_of_day_ms,
+        items.emplace_back(i.first, i.second.time_of_day,
                            i.second.location, i.second.altitude,
                            std::move(name));
         Item &item = items.back();
@@ -546,20 +548,22 @@ TrafficListWidget::Prepare(ContainerWindow &parent,
 /**
  * Calculate how many minutes have passed since #past_ms.
  */
-gcc_const
-static unsigned
-SinceInMinutes(double now_s, uint32_t past_ms)
+[[gnu::const]]
+static constexpr auto
+SinceInMinutes(TimeStamp now,
+               duration<uint32_t, milliseconds::period> past_ms) noexcept
 {
-  const unsigned day_minutes = 24 * 60;
-  unsigned now_minutes = uint32_t(now_s / 60) % day_minutes;
-  unsigned past_minutes = (past_ms / 60000) % day_minutes;
+  using Minutes = duration<unsigned, minutes::period>;
+  constexpr Minutes ONE_DAY = hours{24};
+  auto now_minutes = now.Cast<Minutes>() % ONE_DAY;
+  auto past_minutes = duration_cast<Minutes>(past_ms) % ONE_DAY;
 
-  if (past_minutes >= 20 * 60 && now_minutes < 4 * 60)
+  if (past_minutes >= hours{20} && now_minutes < hours{4})
     /* midnight rollover */
-    now_minutes += day_minutes;
+    now_minutes += ONE_DAY;
 
   if (past_minutes > now_minutes)
-    return 0;
+    return Minutes{};
 
   return now_minutes - past_minutes;
 }
@@ -686,7 +690,7 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
     if (CommonInterface::Basic().time_available) {
       tmp.UnsafeFormat(_("%u minutes ago"),
                        SinceInMinutes(CommonInterface::Basic().time,
-                                      item.time_of_day_ms));
+                                      item.time_of_day));
     } else
       tmp.clear();
 

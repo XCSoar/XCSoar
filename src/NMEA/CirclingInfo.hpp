@@ -25,6 +25,8 @@ Copyright_License {
 #define XCSOAR_CIRCLING_INFO_HPP
 
 #include "Geo/GeoPoint.hpp"
+#include "time/FloatDuration.hxx"
+#include "time/Stamp.hpp"
 
 #include <type_traits>
 
@@ -71,7 +73,7 @@ struct CirclingInfo
   double climb_start_altitude_te;
 
   /** StartTime of the current/last climb */
-  double climb_start_time;
+  TimeStamp climb_start_time;
 
   /** StartLocation of the current/last cruise */
   GeoPoint cruise_start_location;
@@ -80,7 +82,7 @@ struct CirclingInfo
   /** StartAltitude of the current/last cruise (total energy) */
   double cruise_start_altitude_te;
   /** StartTime of the current/last cruise */
-  double cruise_start_time;
+  TimeStamp cruise_start_time;
 
   /** Current TurnMode (Cruise, Climb or somewhere between) */
   CirclingMode turn_mode;
@@ -112,13 +114,13 @@ struct CirclingInfo
   double noncircling_climb_percentage;
 
   /** Time spent in cruise mode */
-  double time_cruise;
+  FloatDuration time_cruise;
   /** Time spent in circling mode */
-  double time_circling;
+  FloatDuration time_circling;
   /** Time spent in circling mode and climbing */
-  double time_climb_circling;
+  FloatDuration time_climb_circling;
   /** Time spent in non-circling climb */
-  double time_climb_noncircling;
+  FloatDuration time_climb_noncircling;
 
   /** Maximum height gain (from MinAltitude) during task */
   double max_height_gain;

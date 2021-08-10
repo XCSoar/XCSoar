@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "tchar.h"
 #include "Device/Driver.hpp"
+#include "time/Stamp.hpp"
 
 class Port;
 struct NMEAInfo;
@@ -37,10 +38,10 @@ class NMEAInputLine;
 class FlytecDevice : public AbstractDevice
 {
   Port &port;
-  double last_time;
+  TimeStamp last_time = TimeStamp::Undefined();
 
 public:
-  FlytecDevice(Port &_port):port(_port), last_time(0) {}
+  FlytecDevice(Port &_port) noexcept:port(_port) {}
 
   /* virtual methods from class Device */
   bool ParseNMEA(const char *line, NMEAInfo &info) override;

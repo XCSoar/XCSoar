@@ -115,7 +115,7 @@ struct GPSState
 #endif
 
   void Reset();
-  void Expire(double now);
+  void Expire(TimeStamp now) noexcept;
 };
 
 #endif

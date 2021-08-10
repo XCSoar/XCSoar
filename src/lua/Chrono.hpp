@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2021 The XCSoar Project
@@ -20,43 +21,36 @@
 }
 */
 
-#ifndef CONTEST_RESULT_HPP
-#define CONTEST_RESULT_HPP
+#pragma once
 
+#include "Util.hxx"
 #include "time/FloatDuration.hxx"
+#include "time/Stamp.hpp"
 
-#include <type_traits>
+struct lua_State;
 
-struct ContestResult
+namespace Lua {
+
+static inline void
+Push(lua_State *L, FloatDuration value) noexcept
 {
-  /** Score (pts) according to contest rule */
-  double score;
-  /** Optimum distance (m) travelled according to contest rule */
-  double distance;
-  /** Time (s) of optimised OLC path */
-  FloatDuration time;
+  Push(L, value.count());
+}
 
-  constexpr void Reset() noexcept {
-    score = 0;
-    distance = 0;
-    time = {};
-  }
+template<class Rep, class Period>
+static inline void
+Push(lua_State *L, std::chrono::duration<Rep,Period> value) noexcept
+{
+  Push(L, std::chrono::duration_cast<FloatDuration>(value));
+}
 
-  constexpr bool IsDefined() const noexcept {
-    return score > 0;
-  }
+static inline void
+Push(lua_State *L, TimeStamp value) noexcept
+{
+  if (value.IsDefined())
+    Push(L, value.ToDuration());
+  else
+    lua_pushnil(L);
+}
 
-  /**
-   * Returns the average speed on the optimised path [m/s].  Returns
-   * zero if the result is invalid.
-   */
-  constexpr double GetSpeed() const noexcept {
-    return time.count() > 0
-      ? distance / time.count()
-      : 0.;
-  }
-};
-
-static_assert(std::is_trivial<ContestResult>::value, "type is not trivial");
-
-#endif
+} // namespace Lua

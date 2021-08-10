@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "BrokenDate.hpp"
 #include "BrokenTime.hpp"
+#include "Stamp.hpp"
 
 struct NMEAInfo;
 
@@ -49,7 +50,7 @@ class WrapClock {
    * The last time_of_day parameter.  This is negative if Normalise()
    * was never called since the most recent Reset() call.
    */
-  double last_stamp;
+  TimeStamp last_stamp;
 
   /**
    * The last known input date.  Check IsPlausible() before using this
@@ -72,7 +73,7 @@ class WrapClock {
 public:
   void Reset() {
     last_day = 0;
-    last_stamp = -1;
+    last_stamp = TimeStamp::Undefined();
     last_input_date = last_output_date = BrokenDate::Invalid();
     last_time = BrokenTime::Invalid();
   }
@@ -90,7 +91,8 @@ public:
    * @return a normalised time stamp [seconds] that is ascending and
    * linear (unless a "time warp" is observed)
    */
-  double Normalise(double stamp, BrokenDate &date, const BrokenTime &time);
+  TimeStamp Normalise(TimeStamp stamp, BrokenDate &date,
+                      const BrokenTime &time) noexcept;
 
   /**
    * Convenience wrapper that takes a #NMEAInfo and updates its "time"

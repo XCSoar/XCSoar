@@ -35,7 +35,7 @@ AirspaceWarningManager::AirspaceWarningManager(const AirspaceWarningConfig &_con
   :airspaces(_airspaces), serial(0)
 {
   /* force filter initialisation in the first SetConfig() call */
-  config.warning_time = -1;
+  config.warning_time = AirspaceWarningConfig::Duration::max();
 
   SetConfig(_config);
 }
@@ -70,18 +70,19 @@ AirspaceWarningManager::Reset(const AircraftState &state)
 }
 
 void 
-AirspaceWarningManager::SetPredictionTimeGlide(double time)
+AirspaceWarningManager::SetPredictionTimeGlide(FloatDuration time) noexcept
 {
   prediction_time_glide = time;
 }
 
 void 
-AirspaceWarningManager::SetPredictionTimeFilter(double time)
+AirspaceWarningManager::SetPredictionTimeFilter(FloatDuration time) noexcept
 {
   prediction_time_filter = time;
-  cruise_filter.Design(std::max(10.,
-                                prediction_time_filter * CRUISE_FILTER_FACT));
-  circling_filter.Design(std::max(10., prediction_time_filter));
+  cruise_filter.Design(std::max(prediction_time_filter * CRUISE_FILTER_FACT,
+                                FloatDuration{10}));
+  circling_filter.Design(std::max(prediction_time_filter,
+                                  FloatDuration{10}));
 }
 
 AirspaceWarning& 
@@ -121,7 +122,7 @@ AirspaceWarningManager::Update(const AircraftState& state,
                                const GlidePolar &glide_polar,
                                const TaskStats &task_stats,
                                const bool circling,
-                               const unsigned dt)
+                               const std::chrono::duration<unsigned> dt) noexcept
 {
   bool changed = false;
 
@@ -171,7 +172,7 @@ class AirspaceIntersectionWarningVisitor final
   const AirspaceAircraftPerformance &perf;
   AirspaceWarningManager &warning_manager;
   const AirspaceWarning::State warning_state;
-  const double max_time;
+  const FloatDuration max_time;
   bool found;
   const double max_alt;
   bool mode_inside;
@@ -193,7 +194,7 @@ public:
                                      const AirspaceAircraftPerformance &_perf,
                                      AirspaceWarningManager &_warning_manager,
                                      const AirspaceWarning::State _warning_state,
-                                     const double _max_time,
+                                     const FloatDuration _max_time,
                                      const double _max_alt = -1):
     state(_state),
     perf(_perf),
@@ -272,16 +273,17 @@ private:
 
 bool 
 AirspaceWarningManager::UpdatePredicted(const AircraftState& state, 
-                                         const GeoPoint &location_predicted,
-                                         const AirspaceAircraftPerformance &perf,
-                                         const AirspaceWarning::State warning_state,
-                                        const double max_time)
+                                        const GeoPoint &location_predicted,
+                                        const AirspaceAircraftPerformance &perf,
+                                        const AirspaceWarning::State warning_state,
+                                        const FloatDuration max_time) noexcept
 {
   // this is the time limit of intrusions, beyond which we are not interested.
   // it can be the minimum of the user set warning time, or the time of the 
   // task segment
 
-  const auto max_time_limit = std::min(double(config.warning_time), max_time);
+  const auto max_time_limit = std::min(FloatDuration{config.warning_time},
+                                       max_time);
 
   // the ceiling is the max height for predicted intrusions, given
   // that you may be climbing.  the ceiling is nominally set at 1000m
@@ -336,7 +338,7 @@ AirspaceWarningManager::UpdateTask(const AircraftState &state,
   const auto time_remaining = solution.time_elapsed;
 
   const GeoVector vector(state.location, location_tp);
-  auto max_distance = config.warning_time * glide_polar.GetVMax();
+  auto max_distance = config.warning_time.count() * glide_polar.GetVMax();
   if (vector.distance > max_distance)
     /* limit the distance to what our glider can actually fly within
        the configured warning time */

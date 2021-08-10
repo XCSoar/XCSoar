@@ -97,19 +97,19 @@ UpdateInfoBoxThermalLastTime(InfoBoxData &data) noexcept
     return;
   }
 
-  data.SetValueFromTimeTwoLines((int)thermal.duration);
+  data.SetValueFromTimeTwoLines(thermal.duration);
 }
 
 void
 UpdateInfoBoxThermalAllAvg(InfoBoxData &data) noexcept
 {
-  if (CommonInterface::Calculated().time_circling <= 0) {
+  if (CommonInterface::Calculated().time_circling.count() <= 0) {
     data.SetInvalid();
     return;
   }
 
   SetVSpeed(data, CommonInterface::Calculated().total_height_gain /
-            CommonInterface::Calculated().time_circling);
+            CommonInterface::Calculated().time_circling.count());
 }
 
 void
@@ -148,7 +148,7 @@ UpdateInfoBoxThermalTime(InfoBoxData &data) noexcept
         data.SetInvalid();
         return;
     }
-    data.SetValueFromTimeTwoLines((int)thermal.duration);
+    data.SetValueFromTimeTwoLines(thermal.duration);
 }
 
 

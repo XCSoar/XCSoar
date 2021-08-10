@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Task.hpp"
+#include "Chrono.hpp"
 #include "MetaTable.hxx"
 #include "Geo.hpp"
 #include "Util.hxx"
@@ -31,6 +32,8 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Util/Gradient.hpp"
+
+using namespace std::chrono;
 
 static int
 l_task_index(lua_State *L)
@@ -88,7 +91,7 @@ l_task_index(lua_State *L)
       const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
       if (!task_stats.task_valid || !task_stats.current_leg.IsAchievable()) 
         return 0; 
-      assert(task_stats.current_leg.time_remaining_now >= 0);
+      assert(task_stats.current_leg.time_remaining_now.count() >= 0);
 
       Lua::Push(L, task_stats.current_leg.time_remaining_now);
   } else if (StringIsEqual(name, "next_eta")) {
@@ -101,7 +104,7 @@ l_task_index(lua_State *L)
       }
 
       const BrokenTime t = now_local +
-        std::chrono::seconds{long(task_stats.current_leg.solution_remaining.time_elapsed)};
+        duration_cast<seconds>(task_stats.current_leg.solution_remaining.time_elapsed);
       float time = t.hour + (float)(t.second/60);
 
       Lua::Push(L, time);
@@ -167,7 +170,7 @@ l_task_index(lua_State *L)
 
       if (!task_stats.task_valid || !task_stats.total.IsAchievable()) 
         return 0;
-      assert(task_stats.total.time_remaining_now >= 0);
+      assert(task_stats.total.time_remaining_now.count() >= 0);
 
       Lua::Push(L, task_stats.total.time_remaining_now);
   } else if (StringIsEqual(name, "final_eta")) {
@@ -179,7 +182,7 @@ l_task_index(lua_State *L)
         return 0;    
 
       const BrokenTime t = now_local +
-        std::chrono::seconds{long(task_stats.total.solution_remaining.time_elapsed)};
+        duration_cast<seconds>(task_stats.total.solution_remaining.time_elapsed);
 
       float time = t.hour + (float)(t.minute/60);
       Lua::Push(L, time);
@@ -262,7 +265,7 @@ l_task_index(lua_State *L)
       if (!task_stats.has_targets || !task_stats.total.IsAchievable()) 
         return 0;
    
-      assert(task_stats.total.time_remaining_start >= 0);
+      assert(task_stats.total.time_remaining_start.count() >= 0);
 
       auto diff = task_stats.total.time_remaining_start -
         common_stats.aat_time_remaining;
@@ -328,13 +331,11 @@ l_task_index(lua_State *L)
 
       if (!task_stats.task_valid || maxheight <= 0
           || !protected_task_manager
-          || common_stats.TimeUnderStartMaxHeight <= 0) {
+          || !common_stats.TimeUnderStartMaxHeight.IsDefined()) {
         return 0;
       }
-      const int time = (int)(CommonInterface::Basic().time -
-      common_stats.TimeUnderStartMaxHeight);
 
-      Lua::Push(L, time);
+      Lua::Push(L, (CommonInterface::Basic().time - common_stats.TimeUnderStartMaxHeight).count());
   } else if (StringIsEqual(name, "next_etevmg")) {
       const NMEAInfo &basic = CommonInterface::Basic();
       const TaskStats &task_stats = CommonInterface::Calculated().task_stats;

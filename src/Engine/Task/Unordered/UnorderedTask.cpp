@@ -142,16 +142,16 @@ UnorderedTask::GlideSolutionPlanned(const AircraftState &state,
     leg_remaining_effective.Reset();
 }
 
-double
+TimeStamp
 UnorderedTask::ScanTotalStartTime() noexcept
 {
-  return -1;
+  return TimeStamp::Undefined();
 }
 
-double
+TimeStamp
 UnorderedTask::ScanLegStartTime() noexcept
 {
-  return -1;
+  return TimeStamp::Undefined();
 }
 
 void

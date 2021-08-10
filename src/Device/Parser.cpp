@@ -42,13 +42,13 @@ NMEAParser::Reset()
 {
   real = true;
   use_geoid = true;
-  last_time = 0;
+  last_time = {};
 }
 
 bool
 NMEAParser::ParseLine(const char *string, NMEAInfo &info)
 {
-  assert(info.clock > 0);
+  assert(info.clock.IsDefined());
 
   if (string[0] != '$')
     return false;
@@ -248,31 +248,26 @@ ReadAltitude(NMEAInputLine &line, double &value_r)
 }
 
 bool
-NMEAParser::TimeHasAdvanced(double this_time, NMEAInfo &info)
+NMEAParser::TimeHasAdvanced(TimeStamp this_time, NMEAInfo &info) noexcept
 {
   return TimeHasAdvanced(this_time, last_time, info);
 }
 
-gcc_const
-static bool
-IsMidnightWraparound(double this_time, double last_time)
+static constexpr bool
+IsMidnightWraparound(TimeStamp this_time, TimeStamp last_time) noexcept
 {
-  constexpr unsigned SECONDS_PER_HOUR = 60 * 60;
-  constexpr unsigned SECONDS_PER_DAY = 24 * SECONDS_PER_HOUR;
-
-  return this_time < SECONDS_PER_HOUR &&
-    last_time >= SECONDS_PER_DAY - SECONDS_PER_HOUR;
+  return this_time < TimeStamp{std::chrono::hours{1}} && last_time >= TimeStamp{std::chrono::hours{23}};
 }
 
-gcc_const
-static bool
-TimeHasAdvanced(double this_time, double last_time)
+static constexpr bool
+TimeHasAdvanced(TimeStamp this_time, TimeStamp last_time) noexcept
 {
   return this_time >= last_time || IsMidnightWraparound(this_time, last_time);
 }
 
 bool
-NMEAParser::TimeHasAdvanced(double this_time, double &last_time, NMEAInfo &info)
+NMEAParser::TimeHasAdvanced(TimeStamp this_time, TimeStamp &last_time,
+                            NMEAInfo &info)
 {
   if (!::TimeHasAdvanced(this_time, last_time)) {
     last_time = this_time;
@@ -344,7 +339,7 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  double this_time;
+  TimeStamp this_time;
   if (!ReadTime(line, info.date_time_utc, this_time))
     return true;
 
@@ -395,7 +390,7 @@ NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
 
 bool
 NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
-                     double &time_of_day_s)
+                     TimeStamp &time_of_day_s) noexcept
 {
   double value;
   if (!line.ReadChecked(value) || value < 0)
@@ -417,7 +412,7 @@ NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
     return false;
 
   broken_time = BrokenTime(hour, minute, (unsigned)second);
-  time_of_day_s = (hour * 3600 + minute * 60) + second;
+  time_of_day_s = TimeStamp{broken_time.DurationSinceMidnight()};
   return true;
 }
 
@@ -463,7 +458,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
    * 13) Checksum
    */
 
-  double this_time;
+  TimeStamp this_time;
   if (!ReadTime(line, info.date_time_utc, this_time))
     return true;
 
@@ -587,7 +582,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
 
   GPSState &gps = info.gps;
 
-  double this_time;
+  TimeStamp this_time;
   if (!ReadTime(line, info.date_time_utc, this_time))
     return true;
 

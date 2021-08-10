@@ -35,6 +35,8 @@
 #include "Computer/Settings.hpp"
 #include "util/StringCompare.hxx"
 
+using namespace std::chrono;
+
 struct Result {
   BrokenDateTime takeoff_time, release_time, landing_time;
   GeoPoint takeoff_location, release_location, landing_location;
@@ -72,7 +74,7 @@ Update(const MoreData &basic, const FlyingState &state,
     result.landing_location = state.landing_location;
   }
 
-  if (state.release_time >= 0 && !result.release_time.IsPlausible()) {
+  if (state.release_time.IsDefined() && !result.release_time.IsPlausible()) {
     result.release_time = basic.GetDateTimeAt(state.release_time);
     result.release_location = state.release_location;
   }
@@ -148,7 +150,7 @@ Run(DebugReplay &replay, Result &result,
 
     last_location = basic.location;
 
-    if (!released && replay.Calculated().flight.release_time >= 0) {
+    if (!released && replay.Calculated().flight.release_time.IsDefined()) {
       released = true;
 
       full_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
@@ -234,18 +236,18 @@ WritePoint(const ContestTracePoint &point,
   boost::json::object object =
     boost::json::value_from(point.GetLocation()).as_object();
 
-  object.emplace("time", (long)point.GetTime());
+  object.emplace("time", (long)point.GetTime().count());
 
   if (previous != NULL) {
     auto distance = point.DistanceTo(previous->GetLocation());
     object.emplace("distance", uround(distance));
 
-    unsigned duration =
-      std::max((int)point.GetTime() - (int)previous->GetTime(), 0);
-    object.emplace("duration", duration);
+    const auto duration = std::max(point.GetTime() - previous->GetTime(),
+                                   std::chrono::duration<unsigned>{});
+    object.emplace("duration", (int)duration.count());
 
-    if (duration > 0) {
-      const double speed = distance / duration;
+    if (duration.count() > 0) {
+      const double speed = distance / duration.count();
       object.emplace("speed", speed);
     }
   }
@@ -275,7 +277,7 @@ WriteContest(const ContestResult &result,
 
   object.emplace("score", result.score);
   object.emplace("distance", result.distance);
-  object.emplace("duration", (unsigned)result.time);
+  object.emplace("duration", (unsigned)result.time.count());
   object.emplace("speed", result.GetSpeed());
 
   object.emplace("turnpoints", WriteTrace(trace));
@@ -374,9 +376,9 @@ int main(int argc, char **argv)
 
   args.ExpectEnd();
 
-  static Trace full_trace(0, Trace::null_time, full_max_points);
-  static Trace triangle_trace(0, Trace::null_time, triangle_max_points);
-  static Trace sprint_trace(0, 9000, sprint_max_points);
+  static Trace full_trace({}, Trace::null_time, full_max_points);
+  static Trace triangle_trace({}, Trace::null_time, triangle_max_points);
+  static Trace sprint_trace({}, minutes{150}, sprint_max_points);
 
   Result result;
   Run(*replay, result, full_trace, triangle_trace, sprint_trace);

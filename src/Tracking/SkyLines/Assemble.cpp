@@ -28,6 +28,8 @@ Copyright_License {
 #include "util/ByteOrder.hxx"
 #include "util/CRC.hpp"
 
+using namespace std::chrono;
+
 SkyLinesTracking::PingPacket
 SkyLinesTracking::MakePing(uint64_t key, uint16_t id)
 {
@@ -112,7 +114,7 @@ SkyLinesTracking::ToFix(uint64_t key, const NMEAInfo &basic)
   packet.header.key = ToBE64(key);
   packet.flags = 0;
 
-  packet.time = ToBE32(uint32_t(basic.time * 1000));
+  packet.time = ToBE32(basic.time.Cast<duration<uint32_t, milliseconds::period>>().count());
   packet.reserved = 0;
 
   if (basic.location_available) {

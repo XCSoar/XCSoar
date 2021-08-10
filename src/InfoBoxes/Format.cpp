@@ -69,7 +69,7 @@ InfoBoxData::SetCommentFromBearingDifference(Angle delta) noexcept
 }
 
 void
-InfoBoxData::SetValueFromTimeTwoLines(int dd) noexcept
+InfoBoxData::SetValueFromTimeTwoLines(std::chrono::seconds dd) noexcept
 {
   FormatTimeTwoLines(value.buffer(), comment.buffer(), dd);
 }

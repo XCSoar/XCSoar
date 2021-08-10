@@ -27,6 +27,8 @@ Copyright_License {
 #include "Geo/Geoid.hpp"
 #include "time/FloatDuration.hxx"
 
+using namespace std::chrono;
+
 void
 DeviceDescriptor::OnConnected(int connected) noexcept
 {
@@ -73,8 +75,8 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
 
   const BrokenDateTime date_time{time};
   const BrokenDateTime midnight = date_time.AtMidnight();
-  double second_of_day =
-    std::chrono::duration_cast<FloatDuration>(time - midnight.ToTimePoint()).count();
+  TimeStamp second_of_day{
+    duration_cast<FloatDuration>(time - midnight.ToTimePoint())};
 
   basic.time = second_of_day;
   basic.time_available.Update(basic.clock);

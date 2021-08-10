@@ -26,7 +26,9 @@ Copyright_License {
 
 #include "util/StaticString.hxx"
 #include "Units/Unit.hpp"
+#include "time/FloatDuration.hxx"
 
+#include <chrono>
 #include <cstdint>
 
 #include <tchar.h>
@@ -191,7 +193,11 @@ struct InfoBoxData {
   /**
    * Set the InfoBox value to time HH:MM and SS
    */
-  void SetValueFromTimeTwoLines(int dd) noexcept;
+  void SetValueFromTimeTwoLines(std::chrono::seconds dd) noexcept;
+
+  void SetValueFromTimeTwoLines(FloatDuration dd) noexcept {
+    SetValueFromTimeTwoLines(std::chrono::duration_cast<std::chrono::seconds>(dd));
+  }
 
   /**
    * Set the InfoBox comment to the specified percentage value.

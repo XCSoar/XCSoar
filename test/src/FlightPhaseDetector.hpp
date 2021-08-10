@@ -26,6 +26,7 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "time/BrokenDateTime.hpp"
+#include "time/Stamp.hpp"
 
 struct MoreData;
 struct DerivedInfo;
@@ -59,9 +60,9 @@ struct Phase {
   /** Date and time in UTC when the phase ended */
   BrokenDateTime end_datetime;
   /** Seconds from midnight UTC when the phase started */
-  double start_time;
+  TimeStamp start_time;
   /** Seconds from midnight UTC when the phase ended */
-  double end_time;
+  TimeStamp end_time;
   /** Direction of circling (or NO_DIRECTION when not circling) */
   CirclingDirection circling_direction;
   /** Starting altitude of the phase */
@@ -73,7 +74,7 @@ struct Phase {
   /** Ending location of the phase */
   GeoPoint end_loc;
   /** Duration of the phase in seconds */
-  double duration;
+  FloatDuration duration;
   /** Fraction of the phase duration compared to total flight time. */
   double fraction;
   /** Altitude difference between start_alt and end_alt */
@@ -97,9 +98,8 @@ struct Phase {
     phase_type = NO_PHASE;
     start_datetime.Clear();
     end_datetime.Clear();
-    start_time = 0;
-    end_time = 0;
-    duration = 0;
+    start_time = end_time = TimeStamp::Undefined();
+    duration = {};
     fraction = 0;
     circling_direction = NO_DIRECTION;
     alt_diff = 0;

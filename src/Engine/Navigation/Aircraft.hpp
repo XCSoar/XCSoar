@@ -24,7 +24,10 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SpeedVector.hpp"
+#include "time/FloatDuration.hxx"
+#include "time/Stamp.hpp"
 
+#include <chrono>
 #include <type_traits>
 
 /**
@@ -125,7 +128,7 @@ struct AircraftState:
    * Global time (seconds after UTC midnight).  A negative value means
    * "no time available", e.g. if no GPS fix was obtained yet.
    */
-  double time;
+  TimeStamp time;
 
   //################
   //   Navigation
@@ -153,6 +156,14 @@ struct AircraftState:
 
   bool flying;
 
+  constexpr bool HasTime() const noexcept {
+    return time.IsDefined();
+  }
+
+  void ResetTime() noexcept {
+    time = TimeStamp::Undefined();
+  }
+
   /**
    * Calculate predicted state in future.
    * Assumes aircraft will continue along current TrackBearing and Speed with
@@ -161,7 +172,7 @@ struct AircraftState:
    * @return Predicted aircraft state in in_time seconds
    */
   [[gnu::pure]]
-  AircraftState GetPredictedState(double in_time) const noexcept;
+  AircraftState GetPredictedState(FloatDuration in_time) const noexcept;
 
   void Reset() noexcept;
 };

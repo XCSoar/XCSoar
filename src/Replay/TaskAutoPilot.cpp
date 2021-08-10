@@ -172,7 +172,7 @@ TaskAutoPilot::UpdateMode(const TaskAccessor& task, const AircraftState& state)
 void
 TaskAutoPilot::UpdateCruiseBearing(const TaskAccessor& task,
                                    const AircraftState& state,
-                                   const double timestep)
+                                   const FloatDuration timestep) noexcept
 {
   const ElementStat &stat = task.GetLegStats();
   Angle bct = stat.solution_remaining.cruise_track_bearing;
@@ -198,17 +198,17 @@ TaskAutoPilot::UpdateCruiseBearing(const TaskAccessor& task,
 
   auto diff = (bearing - heading).AsDelta();
   auto d = diff.Degrees();
-  auto max_turn = parms.turn_speed * timestep;
+  auto max_turn = parms.turn_speed * timestep.count();
   heading += Angle::Degrees(Clamp(d, -max_turn, max_turn));
   if (parms.bearing_noise > 0)
-    heading += GetHeadingDeviation() * timestep;
+    heading += GetHeadingDeviation() * timestep.count();
 
   heading = heading.AsBearing();
 }
 
 void
 TaskAutoPilot::UpdateState(const TaskAccessor& task, AircraftState& state,
-                           const double timestep)
+                           const FloatDuration timestep) noexcept
 {
   const GlidePolar &glide_polar = task.GetGlidePolar();
 
@@ -228,12 +228,12 @@ TaskAutoPilot::UpdateState(const TaskAccessor& task, AircraftState& state,
   }
   case Climb: {
     state.true_airspeed = glide_polar.GetVMin();
-    auto d = parms.turn_speed * timestep;
+    auto d = parms.turn_speed * timestep.count();
     if (d < 360)
       heading += Angle::Degrees(d);
 
     if (parms.bearing_noise > 0)
-      heading += GetHeadingDeviation() * timestep;
+      heading += GetHeadingDeviation() * timestep.count();
 
     heading = heading.AsBearing();
     state.vario = climb_rate * parms.climb_factor;

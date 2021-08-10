@@ -43,7 +43,7 @@ ExternalSettings::Clear()
 }
 
 void
-ExternalSettings::Expire(double time)
+ExternalSettings::Expire([[maybe_unused]] TimeStamp time) noexcept
 {
   /* the settings do not expire, they are only updated with a new
      value */
@@ -141,7 +141,7 @@ ExternalSettings::EliminateRedundant(const ExternalSettings &other,
 }
 
 bool
-ExternalSettings::ProvideMacCready(double value, double time)
+ExternalSettings::ProvideMacCready(double value, TimeStamp time) noexcept
 {
   if (value < 0 || value > 20)
     /* failed sanity check */
@@ -156,7 +156,7 @@ ExternalSettings::ProvideMacCready(double value, double time)
 }
 
 bool
-ExternalSettings::ProvideBallastFraction(double value, double time)
+ExternalSettings::ProvideBallastFraction(double value, TimeStamp time) noexcept
 {
   if (value < 0 || value > 1)
     /* failed sanity check */
@@ -171,7 +171,7 @@ ExternalSettings::ProvideBallastFraction(double value, double time)
 }
 
 bool
-ExternalSettings::ProvideBallastOverload(double value, double time)
+ExternalSettings::ProvideBallastOverload(double value, TimeStamp time) noexcept
 {
   if (value < 1 || value > 5)
     /* failed sanity check */
@@ -186,7 +186,7 @@ ExternalSettings::ProvideBallastOverload(double value, double time)
 }
 
 bool
-ExternalSettings::ProvideWingLoading(double value, double time)
+ExternalSettings::ProvideWingLoading(double value, TimeStamp time) noexcept
 {
   if (value < 1 || value > 200)
     /* failed sanity check */
@@ -201,7 +201,7 @@ ExternalSettings::ProvideWingLoading(double value, double time)
 }
 
 bool
-ExternalSettings::ProvideBugs(double value, double time)
+ExternalSettings::ProvideBugs(double value, TimeStamp time) noexcept
 {
   if (value < 0.5 || value > 1)
     /* failed sanity check */
@@ -216,7 +216,8 @@ ExternalSettings::ProvideBugs(double value, double time)
 }
 
 bool
-ExternalSettings::ProvideQNH(AtmosphericPressure value, double time)
+ExternalSettings::ProvideQNH(AtmosphericPressure value,
+                             TimeStamp time) noexcept
 {
   if (value.GetHectoPascal() < 500 ||
       value.GetHectoPascal() > 1500)
@@ -232,7 +233,7 @@ ExternalSettings::ProvideQNH(AtmosphericPressure value, double time)
 }
 
 bool
-ExternalSettings::ProvideVolume(unsigned value, double time)
+ExternalSettings::ProvideVolume(unsigned value, TimeStamp time) noexcept
 {
   if (value > 100)
     /* failed sanity check */

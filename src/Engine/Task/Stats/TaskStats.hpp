@@ -103,7 +103,7 @@ public:
 
   WindowStats last_hour;
 
-  double GetEstimatedTotalTime() const {
+  FloatDuration GetEstimatedTotalTime() const noexcept {
     return total.time_elapsed + total.time_remaining_start;
   }
 

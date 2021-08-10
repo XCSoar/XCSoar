@@ -248,9 +248,9 @@ UpdateInfoBoxNextETE(InfoBoxData &data) noexcept
     return;
   }
 
-  assert(task_stats.current_leg.time_remaining_now >= 0);
+  assert(task_stats.current_leg.time_remaining_now.count() >= 0);
 
-  data.SetValueFromTimeTwoLines((int)task_stats.current_leg.time_remaining_now);
+  data.SetValueFromTimeTwoLines(task_stats.current_leg.time_remaining_now);
 }
 
 void
@@ -268,7 +268,7 @@ UpdateInfoBoxNextETA(InfoBoxData &data) noexcept
   }
 
   const BrokenTime t = now_local +
-    std::chrono::seconds(long(task_stats.current_leg.solution_remaining.time_elapsed));
+    std::chrono::duration_cast<std::chrono::seconds>(task_stats.current_leg.solution_remaining.time_elapsed);
 
   // Set Value
   data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
@@ -398,9 +398,9 @@ UpdateInfoBoxFinalETE(InfoBoxData &data) noexcept
     return;
   }
 
-  assert(task_stats.total.time_remaining_now >= 0);
+  assert(task_stats.total.time_remaining_now.count() >= 0);
 
-  data.SetValueFromTimeTwoLines((int)task_stats.total.time_remaining_now);
+  data.SetValueFromTimeTwoLines(task_stats.total.time_remaining_now);
 }
 
 void
@@ -416,7 +416,7 @@ UpdateInfoBoxFinalETA(InfoBoxData &data) noexcept
   }
 
   const BrokenTime t = now_local +
-    std::chrono::seconds(long(task_stats.total.solution_remaining.time_elapsed));
+    std::chrono::duration_cast<std::chrono::seconds>(task_stats.total.solution_remaining.time_elapsed);
 
   // Set Value
   data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
@@ -548,7 +548,7 @@ UpdateInfoBoxTaskAATime(InfoBoxData &data) noexcept
   }
 
   data.SetValueFromTimeTwoLines(common_stats.aat_time_remaining);
-  data.SetValueColor(common_stats.aat_time_remaining < 0 ? 1 : 0);
+  data.SetValueColor(common_stats.aat_time_remaining.count() < 0 ? 1 : 0);
 }
 
 void
@@ -564,16 +564,16 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data) noexcept
     return;
   }
 
-  assert(task_stats.total.time_remaining_start >= 0);
+  assert(task_stats.total.time_remaining_start.count() >= 0);
 
   auto diff = task_stats.total.time_remaining_start -
     common_stats.aat_time_remaining;
 
   data.SetValueFromTimeTwoLines(diff);
   // Set Color (red/blue/black)
-  data.SetValueColor(diff < 0 ? 1 :
-                   task_stats.total.time_remaining_start >
-                       common_stats.aat_time_remaining + 5*60 ? 2 : 0);
+  data.SetValueColor(diff.count() < 0 ? 1 :
+                     task_stats.total.time_remaining_start >
+                     common_stats.aat_time_remaining + std::chrono::minutes{5} ? 2 : 0);
 }
 
 void
@@ -681,13 +681,13 @@ UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data) noexcept
 
   if (!task_stats.task_valid || maxheight <= 0
       || !protected_task_manager
-      || common_stats.TimeUnderStartMaxHeight <= 0) {
+      || !common_stats.TimeUnderStartMaxHeight.IsDefined()) {
     data.SetInvalid();
     return;
   }
 
-  data.SetValueFromTimeTwoLines((int)(CommonInterface::Basic().time -
-                                      common_stats.TimeUnderStartMaxHeight));
+  data.SetValueFromTimeTwoLines(CommonInterface::Basic().time -
+                                common_stats.TimeUnderStartMaxHeight);
   data.SetComment(_("Time Below"));
 }
 
@@ -712,7 +712,7 @@ UpdateInfoBoxNextETEVMG(InfoBoxData &data) noexcept
     return;
   }
 
-  data.SetValueFromTimeTwoLines((int)(d/v));
+  data.SetValueFromTimeTwoLines(FloatDuration{d / v});
 }
 
 void
@@ -767,7 +767,7 @@ UpdateInfoBoxFinalETEVMG(InfoBoxData &data) noexcept
     return;
   }
 
-  data.SetValueFromTimeTwoLines((int)(d/v));
+  data.SetValueFromTimeTwoLines(FloatDuration{d / v});
 }
 
 void
@@ -783,14 +783,13 @@ UpdateInfoBoxCruiseEfficiency(InfoBoxData &data) noexcept
   data.SetCommentFromVerticalSpeed(task_stats.effective_mc, false);
 }
 
-gcc_pure
-static unsigned
-SecondsUntil(unsigned now, RoughTime until)
+static constexpr unsigned
+SecondsUntil(TimeStamp now, RoughTime until) noexcept
 {
-  int d = until.GetMinuteOfDay() * 60 - now;
-  if (d < 0)
-    d += 24 * 60 * 60;
-  return d;
+  auto d = TimeStamp{until} - now;
+  if (d.count() < 0)
+    d += std::chrono::hours{24};
+  return std::chrono::duration_cast<std::chrono::duration<unsigned>>(d).count();
 }
 
 void
@@ -812,8 +811,8 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
     return;
   }
 
-  const unsigned now_s(basic.time);
-  const RoughTime now = RoughTime::FromSecondOfDayChecked(now_s);
+  const auto now_s = basic.time;
+  const RoughTime now{now_s};
 
   if (open.HasEnded(now)) {
     data.SetValueInvalid();
@@ -857,8 +856,8 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
     return;
   }
 
-  const unsigned arrival_s(basic.time + current_remaining.time_elapsed);
-  const RoughTime arrival = RoughTime::FromSecondOfDayChecked(arrival_s);
+  const auto arrival_s = basic.time + current_remaining.time_elapsed;
+  const RoughTime arrival{arrival_s};
 
   if (open.HasEnded(arrival)) {
     data.SetValueInvalid();

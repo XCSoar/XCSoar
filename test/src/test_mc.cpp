@@ -107,7 +107,7 @@ test_glide_alt(const double h, const double W, const double Wangle,
   GlideResult gr = MacCready::Solve(settings, polar, gs);
   hfile << (double)h << " " 
         << (double)gr.altitude_difference << " "
-        << (double)gr.time_elapsed << " " 
+        << (double)gr.time_elapsed.count() << " "
         << (double)gr.v_opt << " " 
         << (double)W << " "
         << (double)Wangle << " "

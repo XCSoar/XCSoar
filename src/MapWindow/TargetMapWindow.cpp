@@ -185,7 +185,8 @@ TargetMapWindow::RenderTrail(Canvas &canvas)
   if (glide_computer == nullptr)
     return;
 
-  unsigned min_time = std::max(0, (int)Basic().time - 600);
+  const auto min_time = std::max(Basic().time - std::chrono::minutes{10},
+                                 TimeStamp{});
   trail_renderer.Draw(canvas, glide_computer->GetTraceComputer(),
                       projection, min_time);
 }

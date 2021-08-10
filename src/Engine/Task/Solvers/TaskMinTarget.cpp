@@ -30,7 +30,7 @@ TaskMinTarget::f(const double p) noexcept
   set_range(p);
 
   res = tm.glide_solution(aircraft);
-  return res.time_elapsed - t_remaining;
+  return (res.time_elapsed - t_remaining).count();
 }
 
 

@@ -177,7 +177,12 @@ XCTracerDevice::XCTRC(NMEAInputLine &line, NMEAInfo &info)
   if (valid_fields == 3+4+2) {
     /* now convert the date, time, lat & long fields to the internal format */
     BrokenDate date = BrokenDate(year,month,day);
-    double time = hour*60*60 + minute*60 + second + centisecond/100.0;
+    const TimeStamp time{
+      FloatDuration{std::chrono::hours{hour}} +
+      FloatDuration{std::chrono::minutes{minute}} +
+      FloatDuration{std::chrono::seconds{second}} +
+      FloatDuration{std::chrono::milliseconds{centisecond * 10}}
+    };
 
     GeoPoint point;
     point.latitude = Angle::Degrees(latitude);

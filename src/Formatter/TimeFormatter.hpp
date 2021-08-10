@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TIME_FORMATTER_HPP
 #define XCSOAR_TIME_FORMATTER_HPP
 
-#include "time/FloatDuration.hxx"
+#include "time/Stamp.hpp"
 #include "util/StringBuffer.hxx"
 
 #include <tchar.h>
@@ -58,19 +58,13 @@ void
 FormatTime(TCHAR *buffer, FloatDuration time) noexcept;
 
 static inline void
-FormatTime(TCHAR *buffer, double time) noexcept
+FormatTime(TCHAR *buffer, TimeStamp time) noexcept
 {
-  FormatTime(buffer, FloatDuration{time});
+  FormatTime(buffer, time.ToDuration());
 }
 
 void
 FormatTimeLong(TCHAR *buffer, FloatDuration time) noexcept;
-
-static inline void
-FormatTimeLong(TCHAR *buffer, double time) noexcept
-{
-  FormatTimeLong(buffer, FloatDuration{time});
-}
 
 /**
  * precedes with "-" if time is negative
@@ -90,10 +84,30 @@ FormatSignedTimeHHMM(std::chrono::seconds time) noexcept
 }
 
 [[gnu::const]]
-static inline BasicStringBuffer<TCHAR, 8>
-FormatSignedTimeHHMM(int time) noexcept
+static inline auto
+FormatSignedTimeHHMM(FloatDuration time) noexcept
 {
-  return FormatSignedTimeHHMM(std::chrono::seconds{time});
+  return FormatSignedTimeHHMM(std::chrono::duration_cast<std::chrono::seconds>(time));
+}
+
+static inline void
+FormatTimeHHMM(TCHAR *buffer, TimeStamp time) noexcept
+{
+  FormatSignedTimeHHMM(buffer, time.Cast<std::chrono::seconds>());
+}
+
+[[gnu::const]]
+static inline auto
+FormatTimeHHMM(std::chrono::duration<unsigned> time) noexcept
+{
+  return FormatSignedTimeHHMM(std::chrono::duration_cast<std::chrono::seconds>(time));
+}
+
+[[gnu::const]]
+static inline auto
+FormatTimeHHMM(TimeStamp time) noexcept
+{
+  return FormatSignedTimeHHMM(time.Cast<std::chrono::seconds>());
 }
 
 /**
@@ -105,13 +119,6 @@ FormatSignedTimeHHMM(int time) noexcept
 void
 FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2,
                    std::chrono::seconds time) noexcept;
-
-static inline void
-FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2,
-                   int time) noexcept
-{
-  FormatTimeTwoLines(buffer1, buffer2, std::chrono::seconds{time});
-}
 
 void
 FormatTimespanSmart(TCHAR *buffer, std::chrono::seconds timespan,
@@ -130,10 +137,10 @@ FormatTimespanSmart(std::chrono::seconds timespan, unsigned max_tokens = 1,
 
 [[gnu::const]]
 static inline auto
-FormatTimespanSmart(int timespan, unsigned max_tokens = 1,
+FormatTimespanSmart(FloatDuration timespan, unsigned max_tokens = 1,
                     const TCHAR *separator = _T(" ")) noexcept
 {
-  return FormatTimespanSmart(std::chrono::seconds{timespan},
+  return FormatTimespanSmart(std::chrono::duration_cast<std::chrono::seconds>(timespan),
                              max_tokens, separator);
 }
 

@@ -85,7 +85,7 @@ static Mode current_mode = InputEvents::MODE_DEFAULT;
  */
 static Mode overlay_mode = MODE_DEFAULT;
 
-static unsigned MenuTimeOut = 0;
+static std::chrono::duration<unsigned> MenuTimeOut{};
 
 /**
  * True if a full menu update was postponed by drawButtons().
@@ -465,7 +465,7 @@ InputEvents::processGo(unsigned eventid) noexcept
     const InputConfig::Event &event = input_config.events[eventid];
     if (event.event != NULL) {
       event.event(event.misc);
-      MenuTimeOut = 0;
+      MenuTimeOut = {};
     }
 
     eventid = event.next;
@@ -482,7 +482,7 @@ void
 InputEvents::ShowMenu() noexcept
 {
   setMode(MODE_MENU);
-  MenuTimeOut = 0;
+  MenuTimeOut = {};
   ProcessMenuTimer();
 }
 
@@ -509,7 +509,7 @@ InputEvents::ProcessMenuTimer() noexcept
   // refresh visible buttons if still visible
   drawButtons(getModeID());
 
-  MenuTimeOut++;
+  MenuTimeOut += std::chrono::seconds{1};
 }
 
 void

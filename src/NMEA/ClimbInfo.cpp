@@ -26,7 +26,7 @@ Copyright_License {
 void
 OneClimbInfo::Clear()
 {
-  duration = 0;
+  duration = {};
   gain = 0;
   lift_rate = 0;
   start_altitude = 0;

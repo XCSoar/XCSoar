@@ -25,6 +25,7 @@
 
 #include "AirspaceInterceptSolution.hpp"
 
+#include <chrono>
 #include <cstdint>
 
 #ifdef DO_PRINT
@@ -37,6 +38,8 @@ class AbstractAirspace;
  * Class to hold information about active airspace warnings
  */
 class AirspaceWarning {
+  using Duration = std::chrono::duration<unsigned>;
+
 public:
 
   /**
@@ -56,14 +59,14 @@ private:
   State state_last = WARNING_CLEAR;
   AirspaceInterceptSolution solution = AirspaceInterceptSolution::Invalid();
 
-  unsigned acktime_warning = 0;
-  unsigned acktime_inside = 0;
-  unsigned debounce_time = 60;
+  Duration acktime_warning{};
+  Duration acktime_inside{};
+  Duration debounce_time = std::chrono::minutes{1};
   bool ack_day = false;
   bool expired = true;
   bool expired_last = true;
 
-  static constexpr unsigned null_acktime = -1;
+  static constexpr auto null_acktime = Duration::max();
 
 public:
   /**
@@ -135,7 +138,7 @@ public:
    *
    * @return True if warning is still active
    */
-  bool WarningLive(const unsigned ack_time, const unsigned dt);
+  bool WarningLive(const Duration ack_time, const Duration dt) noexcept;
 
   /**
    * Access solution (nearest to enter, if outside, or to exit, if inside)

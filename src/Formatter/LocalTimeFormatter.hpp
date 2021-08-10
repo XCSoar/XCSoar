@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_LOCAL_TIME_FORMATTER_HPP
 
 #include "time/RoughTime.hpp"
+#include "time/Stamp.hpp"
 #include "util/StringBuffer.hxx"
 
 #include <tchar.h>
@@ -38,31 +39,17 @@ class RoughTimeDelta;
  * @param time UTC time of day [seconds]
  */
 void
-FormatLocalTimeHHMM(TCHAR *buffer, std::chrono::seconds time,
-                    RoughTimeDelta utc_offset);
-
-static inline void
-FormatLocalTimeHHMM(TCHAR *buffer, int time,
-                    RoughTimeDelta utc_offset) noexcept
-{
-  FormatLocalTimeHHMM(buffer, std::chrono::seconds{time}, utc_offset);
-}
+FormatLocalTimeHHMM(TCHAR *buffer, TimeStamp time,
+                    RoughTimeDelta utc_offset) noexcept;
 
 [[gnu::const]]
 static inline BasicStringBuffer<TCHAR, 8>
-FormatLocalTimeHHMM(std::chrono::seconds time,
+FormatLocalTimeHHMM(TimeStamp time,
                     RoughTimeDelta utc_offset) noexcept
 {
   BasicStringBuffer<TCHAR, 8> buffer;
   FormatLocalTimeHHMM(buffer.data(), time, utc_offset);
   return buffer;
-}
-
-[[gnu::const]]
-static inline BasicStringBuffer<TCHAR, 8>
-FormatLocalTimeHHMM(int time, RoughTimeDelta utc_offset) noexcept
-{
-  return FormatLocalTimeHHMM(std::chrono::seconds{time}, utc_offset);
 }
 
 #endif

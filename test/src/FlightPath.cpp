@@ -26,9 +26,11 @@ Copyright_License {
 #include "Engine/Trace/Trace.hpp"
 #include "util/StringCompare.hxx"
 
+using namespace std::chrono;
+
 int main(int argc, char **argv)
 {
-  int start = -1, end = -1;
+  TimeStamp start = TimeStamp::Undefined(), end = TimeStamp::Undefined();
   unsigned max_points = 1000;
 
   Args args(argc, argv,
@@ -51,15 +53,15 @@ int main(int argc, char **argv)
         max_points = _max_points;
     } else if ((value = StringAfterPrefix(arg, "--start=")) != nullptr) {
       char *endptr;
-      start = strtol(value, &endptr, 10);
-      if (endptr == value || *endptr != '\0' || start < 0) {
+      start = TimeStamp{FloatDuration{strtol(value, &endptr, 10)}};
+      if (endptr == value || *endptr != '\0' || !start.IsDefined()) {
         fputs("The start parameter could not be parsed correctly.\n", stderr);
         args.UsageError();
       }
     } else if ((value = StringAfterPrefix(arg, "--end=")) != nullptr) {
       char *endptr;
-      end = strtol(value, &endptr, 10);
-      if (endptr == value || *endptr != '\0' || end < 0) {
+      end = TimeStamp{FloatDuration{strtol(value, &endptr, 10)}};
+      if (endptr == value || *endptr != '\0' || !end.IsDefined()) {
         fputs("The end parameter could not be parsed correctly.\n", stderr);
         args.UsageError();
       }
@@ -68,7 +70,7 @@ int main(int argc, char **argv)
     }
   }
 
-  if (start >= 0 && end >= 0 && start >= end) {
+  if (start.IsDefined() && end.IsDefined() && start >= end) {
     fputs("The start parameter has to be smaller than the end parameter.\n", stderr);
     args.UsageError();
   }
@@ -79,7 +81,7 @@ int main(int argc, char **argv)
 
   args.ExpectEnd();
 
-  Trace trace(0, Trace::null_time, max_points);
+  Trace trace({}, Trace::null_time, max_points);
 
   bool takeoff = false;
 
@@ -91,15 +93,15 @@ int main(int argc, char **argv)
         !basic.NavAltitudeAvailable())
       continue;
 
-    if (start >= 0 && (int)basic.time < start)
+    if (start.IsDefined() && basic.time < start)
       continue;
 
-    if (end >= 0 && (int)basic.time > end)
+    if (end.IsDefined() && basic.time > end)
       break;
 
     trace.push_back(TracePoint(basic));
 
-    if (start < 0 && calculated.flight.flying && !takeoff) {
+    if (!start.IsDefined() && calculated.flight.flying && !takeoff) {
       takeoff = true;
       trace.EraseEarlierThan(calculated.flight.takeoff_time);
     }
@@ -110,7 +112,7 @@ int main(int argc, char **argv)
   for (auto i = trace.begin(), end = trace.end(); i != end; ++i) {
     const TracePoint &point = *i;
     printf("%u %f %f %d %u\n",
-           point.GetTime(),
+           point.GetTime().count(),
            (double)point.GetLocation().latitude.Degrees(),
            (double)point.GetLocation().longitude.Degrees(),
            point.GetIntegerAltitude(),

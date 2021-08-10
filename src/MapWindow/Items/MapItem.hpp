@@ -39,6 +39,8 @@ Copyright_License {
 #include "Weather/NOAAStore.hpp"
 #endif
 
+#include <chrono>
+
 #include <tchar.h>
 
 enum class TaskPointType : uint8_t;
@@ -204,16 +206,20 @@ struct TrafficMapItem: public MapItem
 
 struct SkyLinesTrafficMapItem : public MapItem
 {
-  uint32_t id, time_of_day_ms;
+  using Time = std::chrono::duration<uint_least32_t, std::chrono::milliseconds::period>;
+
+  uint32_t id;
+
+  Time time_of_day;
 
   int altitude;
 
   StaticString<40> name;
 
-  SkyLinesTrafficMapItem(uint32_t _id, uint32_t _time_of_day_ms,
+  SkyLinesTrafficMapItem(uint32_t _id, Time _time_of_day_ms,
                          int _altitude,
                          const TCHAR *_name)
-    :MapItem(SKYLINES_TRAFFIC), id(_id), time_of_day_ms(_time_of_day_ms),
+    :MapItem(SKYLINES_TRAFFIC), id(_id), time_of_day(_time_of_day_ms),
      altitude(_altitude),
      name(_name) {}
 };

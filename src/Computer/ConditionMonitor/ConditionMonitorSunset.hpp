@@ -28,7 +28,8 @@ Copyright_License {
 
 class ConditionMonitorSunset final : public ConditionMonitor {
 public:
-  constexpr ConditionMonitorSunset():ConditionMonitor(60 * 30, 60) {}
+  constexpr ConditionMonitorSunset() noexcept
+    :ConditionMonitor(std::chrono::minutes{30}, std::chrono::minutes{1}) {}
 
 protected:
   bool CheckCondition(const NMEAInfo &basic,

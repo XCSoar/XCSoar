@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_REPLAY_CLOCK_HPP
 #define XCSOAR_REPLAY_CLOCK_HPP
 
+#include "Stamp.hpp"
+
 /**
  * This class provides a synthetic clock value (for NMEAInfo::clock)
  * fed from a wall-clock time.  This is useful for providing good
@@ -32,14 +34,16 @@ Copyright_License {
  * Call Reset() before first use.
  */
 class ReplayClock {
-  double clock;
+  using Duration = FloatDuration;
 
-  double last_time;
+  TimeStamp clock;
+
+  TimeStamp last_time;
 
 public:
   void Reset() {
-    clock = 0;
-    last_time = -1;
+    clock = {};
+    last_time = TimeStamp::Undefined();
   }
 
   /**
@@ -47,12 +51,12 @@ public:
    *
    * @param time the wallclock time; -1 means unknown
    */
-  double NextClock(double time) {
-    double offset;
-    if (time < 0 || last_time < 0 || time < last_time)
+  TimeStamp NextClock(TimeStamp time) noexcept {
+    Duration offset;
+    if (!time.IsDefined() || !last_time.IsDefined() || time < last_time)
       /* we have no (usable) wall clock time (yet): fully synthesised
          clock; increment by one second on each iteration */
-      offset = 1;
+      offset = std::chrono::seconds{1};
     else if (time > last_time)
       /* apply the delta between the two wall clock times to the clock
          value */
@@ -60,7 +64,7 @@ public:
     else
       /* wall clock time was not updated: apply only a very small
          offset */
-      offset = 0.01;
+      offset = std::chrono::milliseconds{10};
 
     last_time = time;
     return clock += offset;

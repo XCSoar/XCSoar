@@ -51,12 +51,12 @@ ConditionMonitor::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
 }
 
 bool
-ConditionMonitor::Ready_Time_Notification(double T)
+ConditionMonitor::Ready_Time_Notification(TimeStamp T) const noexcept
 {
-  if (T <= 0)
+  if (!T.IsDefined())
     return false;
 
-  if (LastTime_Notification < 0 || T < LastTime_Notification)
+  if (!LastTime_Notification.IsDefined() || T < LastTime_Notification)
     return true;
 
   if (T >= LastTime_Notification + Interval_Notification)
@@ -66,13 +66,13 @@ ConditionMonitor::Ready_Time_Notification(double T)
 }
 
 bool
-ConditionMonitor::Ready_Time_Check(double T, bool *restart)
+ConditionMonitor::Ready_Time_Check(TimeStamp T, bool *restart) noexcept
 {
-  if (T <= 0)
+  if (!T.IsDefined())
     return false;
 
-  if (LastTime_Check < 0 || T < LastTime_Check) {
-    LastTime_Notification = -1;
+  if (!LastTime_Check.IsDefined() || T < LastTime_Check) {
+    LastTime_Notification = TimeStamp::Undefined();
     *restart = true;
     return true;
   }

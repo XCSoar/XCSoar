@@ -35,7 +35,8 @@ class TracePoint;
  * necessary for the contest trace.
  */
 struct ContestTracePoint {
-  unsigned time;
+  using Duration = std::chrono::duration<unsigned>;
+  Duration time;
 
   GeoPoint location;
 
@@ -43,14 +44,14 @@ struct ContestTracePoint {
   ContestTracePoint(const TracePoint &src) noexcept;
 
   void Clear() noexcept {
-    time = (unsigned)(0 - 1);
+    time = Duration::max();
   }
 
   constexpr bool IsDefined() const noexcept {
-    return time != (unsigned)(0 - 1);
+    return time != Duration::max();
   }
 
-  constexpr unsigned GetTime() const noexcept {
+  constexpr Duration GetTime() const noexcept {
     return time;
   }
 
@@ -62,7 +63,7 @@ struct ContestTracePoint {
     return time > other.time;
   }
 
-  unsigned DeltaTime(const ContestTracePoint &previous) const noexcept {
+  constexpr Duration DeltaTime(const ContestTracePoint &previous) const noexcept {
     assert(!IsOlderThan(previous));
 
     return time - previous.time;

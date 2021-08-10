@@ -22,6 +22,8 @@
 #ifndef THERMAL_SLICE_HPP
 #define THERMAL_SLICE_HPP
 
+#include "time/FloatDuration.hxx"
+
 #include <type_traits>
 
 /*
@@ -42,13 +44,13 @@ struct ThermalSlice {
   double n;
 
   // Time accumulated climbing up to this slice. [s]
-  double time;
+  FloatDuration time;
 
   // Time to arrive at next slice [s]
-  double dt;
+  FloatDuration dt;
 
   // Set the time of passage through this slice.
-  void SetSample(double _time) {
+  void SetSample(FloatDuration _time) noexcept {
     time = _time;
     n = 1.;
   }
@@ -63,8 +65,8 @@ struct ThermalSlice {
     w_n = 0;
     w_t = 0;
     n = 0;
-    time = 0;
-    dt = 0;
+    time = {};
+    dt = {};
   }
 
   // whether this item has data

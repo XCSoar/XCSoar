@@ -23,6 +23,8 @@
 #ifndef XCSOAR_START_STATS_HPP
 #define XCSOAR_START_STATS_HPP
 
+#include "time/Stamp.hpp"
+
 #include <type_traits>
 
 struct AircraftState;
@@ -37,7 +39,7 @@ struct StartStats {
    * The time when the task was started [UTC seconds of day].  Only
    * valid if #task_started is true.
    */
-  double time;
+  TimeStamp time;
 
   /**
    * The aircraft's altitude when the task was started [m MSL].  Only

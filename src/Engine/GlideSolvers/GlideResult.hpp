@@ -19,10 +19,12 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef GLIDERESULT_HPP
 #define GLIDERESULT_HPP
 
 #include "Geo/GeoVector.hpp"
+#include "time/FloatDuration.hxx"
 #include "GlideSettings.hpp"
 
 #include <type_traits>
@@ -130,9 +132,9 @@ struct GlideResult {
   double height_glide;
 
   /** Time to complete task (s) */
-  double time_elapsed;
+  FloatDuration time_elapsed;
   /** Equivalent time to recover glided height (s) at MC */
-  double time_virtual;
+  FloatDuration time_virtual;
 
   /**
    * Height above/below final glide for this task [m relative].

@@ -28,7 +28,7 @@ Copyright_License {
 
 TracePoint::TracePoint(const MoreData &basic)
   :SearchPoint(basic.location),
-   time((unsigned)basic.time),
+   time(basic.time.Cast<Time>()),
    altitude(basic.nav_altitude),
    vario(basic.netto_vario),
    engine_noise_level(basic.engine_noise_level_available
@@ -40,7 +40,7 @@ TracePoint::TracePoint(const MoreData &basic)
 
 TracePoint::TracePoint(const AircraftState &state):
   SearchPoint(state.location),
-  time((unsigned)state.time),
+  time(state.time.Cast<Time>()),
   altitude(state.altitude),
   vario(state.netto_vario),
   engine_noise_level(0),

@@ -30,7 +30,7 @@ TestFormat()
 {
   TCHAR buffer[256];
 
-  FormatTime(buffer, {});
+  FormatTime(buffer, FloatDuration{});
   ok1(StringIsEqual(buffer, _T("00:00:00")));
 
   FormatTime(buffer, std::chrono::seconds{1});

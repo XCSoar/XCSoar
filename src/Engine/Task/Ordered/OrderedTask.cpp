@@ -192,22 +192,22 @@ OrderedTask::UpdateGeometry()
 
 // TIMES
 
-double
+TimeStamp
 OrderedTask::ScanTotalStartTime() noexcept
 {
   if (task_points.empty())
-    return -1;
+    return TimeStamp::Undefined();
 
   return task_points.front()->GetEnteredState().time;
 }
 
-double
+TimeStamp
 OrderedTask::ScanLegStartTime() noexcept
 {
   if (active_task_point > 0)
     return task_points[active_task_point-1]->GetEnteredState().time;
 
-  return -1;
+  return TimeStamp::Undefined();
 }
 
 // DISTANCES
@@ -613,7 +613,7 @@ OrderedTask::UpdateIdle(const AircraftState &state,
   bool retval = AbstractTask::UpdateIdle(state, glide_polar);
 
   if (HasStart() && task_behaviour.optimise_targets_range &&
-      GetOrderedTaskSettings().aat_min_time > 0) {
+      GetOrderedTaskSettings().aat_min_time.count() > 0) {
 
     CalcMinTarget(state, glide_polar,
                   GetOrderedTaskSettings().aat_min_time + task_behaviour.optimise_targets_margin);
@@ -1051,7 +1051,7 @@ OrderedTask::CalcEffectiveMC(const AircraftState &aircraft,
 inline double
 OrderedTask::CalcMinTarget(const AircraftState &aircraft,
                            const GlidePolar &glide_polar,
-                           const double t_target)
+                           const FloatDuration t_target) noexcept
 {
   if (stats.has_targets) {
     // only perform scan if modification is possible

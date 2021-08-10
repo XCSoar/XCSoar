@@ -29,6 +29,8 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 
+using namespace std::chrono;
+
 WarningComputer::WarningComputer(const AirspaceWarningConfig &_config,
                                  Airspaces &_airspaces)
   :airspaces(_airspaces),
@@ -46,12 +48,12 @@ WarningComputer::Update(const ComputerSettings &settings_computer,
   if (!basic.time_available)
     return;
 
-  const auto dt = delta_time.Update(basic.time, 1, 20);
-  if (dt < 0)
+  const auto dt = delta_time.Update(basic.time, seconds{1}, seconds{20});
+  if (dt.count() < 0)
     /* time warp */
     Reset();
 
-  if (dt <= 0)
+  if (dt.count() <= 0)
     return;
 
   airspaces.SetFlightLevels(settings_computer.pressure);
@@ -82,6 +84,6 @@ WarningComputer::Update(const ComputerSettings &settings_computer,
   if (lease->Update(as, settings_computer.polar.glide_polar_task,
                     calculated.task_stats,
                     calculated.circling,
-                    uround(dt)))
+                    round<duration<unsigned>>(dt)))
     result.latest.Update(basic.clock);
 }

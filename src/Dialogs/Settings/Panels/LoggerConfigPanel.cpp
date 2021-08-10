@@ -31,6 +31,8 @@ Copyright_License {
 #include "Logger/NMEALogger.hpp"
 #include "UtilsSettings.hpp"
 
+using namespace std::chrono;
+
 enum ControlIndex {
   PilotName,
   CoPilotName,
@@ -71,14 +73,14 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent,
 
   AddText(_("CoPilot name"), nullptr, logger.copilot_name);
 
-  AddTime(_("Time step cruise"),
-          _("This is the time interval between logged points when not circling."),
-          1, 30, 1, logger.time_step_cruise);
+  AddDuration(_("Time step cruise"),
+              _("This is the time interval between logged points when not circling."),
+              seconds{1}, seconds{30}, seconds{1}, logger.time_step_cruise);
   SetExpertRow(LoggerTimeStepCruise);
 
-  AddTime(_("Time step circling"),
-          _("This is the time interval between logged points when circling."),
-          1, 30, 1, logger.time_step_circling);
+  AddDuration(_("Time step circling"),
+              _("This is the time interval between logged points when circling."),
+              seconds{1}, seconds{30}, seconds{1}, logger.time_step_circling);
   SetExpertRow(LoggerTimeStepCircling);
 
   AddEnum(_("Auto. logger"),

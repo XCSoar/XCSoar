@@ -27,6 +27,7 @@ Copyright_License {
 #include "ui/event/Timer.hpp"
 #include "NMEA/Info.hpp"
 #include "time/PeriodClock.hpp"
+#include "time/Stamp.hpp"
 #include "system/Path.hpp"
 
 class Logger;
@@ -52,7 +53,7 @@ class Replay final
    * The time of day according to replay input.  This is negative if
    * unknown.
    */
-  double virtual_time;
+  TimeStamp virtual_time;
 
   /**
    * If this value is not negative, then we're in fast-forward mode:
@@ -61,7 +62,7 @@ class Replay final
    * #virtual_time is negative, then this is the duration, and
    * #virtual_time will be added as soon as it is known.
    */
-  double fast_forward;
+  TimeStamp fast_forward;
 
   /**
    * Keeps track of the wall-clock time between two Update() calls.
@@ -118,20 +119,20 @@ public:
    * seconds.  This replays the given amount of time from the input
    * time as quickly as possible.  Returns false if unable to fast forward.
    */
-  bool FastForward(double delta_s) {
+  bool FastForward(FloatDuration delta_s) noexcept {
     if (!IsActive())
       return false;
 
-    fast_forward = delta_s;
-    if (virtual_time >= 0) {
-      fast_forward += virtual_time;
+    if (virtual_time.IsDefined()) {
+      fast_forward = virtual_time + delta_s;
       return true;
     } else {
+      fast_forward = TimeStamp{delta_s};
       return false;
     }
   }
 
-  double GetVirtualTime() const {
+  TimeStamp GetVirtualTime() const noexcept {
     return virtual_time;
   }
 

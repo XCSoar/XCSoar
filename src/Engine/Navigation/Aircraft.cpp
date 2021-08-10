@@ -24,12 +24,12 @@
 #include "Geo/GeoVector.hpp"
 
 AircraftState
-AircraftState::GetPredictedState(double in_time) const noexcept
+AircraftState::GetPredictedState(FloatDuration in_time) const noexcept
 {
   AircraftState state_next = *this;
-  GeoVector vec(ground_speed * in_time, track);
+  GeoVector vec(ground_speed * in_time.count(), track);
   state_next.location = vec.EndPoint(location);
-  state_next.altitude += vario * in_time;
+  state_next.altitude += vario * in_time.count();
   return state_next;
 }
 
@@ -40,7 +40,7 @@ AircraftState::Reset() noexcept
   SpeedState::Reset();
   VarioState::Reset();
 
-  time = -1;
+  ResetTime();
   location.SetInvalid();
   track = Angle::Zero();
   g_load = 1;

@@ -76,7 +76,8 @@ public:
     trace.LockedCopyTo(v);
   }
 
-  void LockedCopyTraceTo(TracePointVector &v, unsigned min_time,
+  void LockedCopyTraceTo(TracePointVector &v,
+                         std::chrono::duration<unsigned> min_time,
                          const GeoPoint &location, double resolution) const {
     trace.LockedCopyTo(v, min_time, location, resolution);
   }

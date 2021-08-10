@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Replay.hpp"
+#include "Chrono.hpp"
 #include "MetaTable.hxx"
 #include "Util.hxx"
 #include "system/Path.hpp"
@@ -69,7 +70,7 @@ l_replay_fastforward(lua_State *L)
   if (lua_gettop(L) != 1)
     return luaL_error(L, "Invalid parameters");
 
-  double delta_s = luaL_checknumber(L, 1);
+  FloatDuration delta_s{luaL_checknumber(L, 1)};
   return !replay->FastForward(delta_s);
 }
 

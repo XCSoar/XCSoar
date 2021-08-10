@@ -31,14 +31,14 @@ CirclingInfo::Clear()
 
   turn_rate = turn_rate_heading = Angle::Zero();
 
-  time_cruise = 0;
-  time_circling = 0;
-  time_climb_noncircling = 0;
-  time_climb_circling = 0;
+  time_cruise = {};
+  time_circling = {};
+  time_climb_noncircling = {};
+  time_climb_circling = {};
   total_height_gain = 0;
 
-  cruise_start_time = -1;
-  climb_start_time = -1;
+  cruise_start_time = TimeStamp::Undefined();
+  climb_start_time = TimeStamp::Undefined();
 
   max_height_gain = 0;
 

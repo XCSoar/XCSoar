@@ -41,8 +41,7 @@ UpdateInfoBoxTimeLocal(InfoBoxData &data) noexcept
   }
 
   // Set Value
-  FormatLocalTimeHHMM(data.value.buffer(), (int)basic.time,
-                      settings.utc_offset);
+  FormatLocalTimeHHMM(data.value.buffer(), basic.time, settings.utc_offset);
 
   // Set Comment
   data.UnsafeFormatComment(_T("%02u"), basic.date_time_utc.second);
@@ -71,9 +70,9 @@ UpdateInfoBoxTimeFlight(InfoBoxData &data) noexcept
 {
   const FlyingState &flight = CommonInterface::Calculated().flight;
 
-  if (flight.flight_time <= 0) {
+  if (flight.flight_time.count() <= 0) {
     data.SetInvalid();
     return;
   }
-  data.SetValueFromTimeTwoLines((int)flight.flight_time);
+  data.SetValueFromTimeTwoLines(flight.flight_time);
 }

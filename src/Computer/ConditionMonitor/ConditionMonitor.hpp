@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_CONDITION_MONITOR_HPP
 #define XCSOAR_CONDITION_MONITOR_HPP
 
+#include "time/Stamp.hpp"
+
 struct NMEAInfo;
 struct DerivedInfo;
 struct ComputerSettings;
@@ -35,16 +37,15 @@ struct ComputerSettings;
 class ConditionMonitor
 {
 protected:
-  double LastTime_Notification;
-  double LastTime_Check;
-  double Interval_Notification;
-  double Interval_Check;
+  TimeStamp LastTime_Notification = TimeStamp::Undefined();
+  TimeStamp LastTime_Check = TimeStamp::Undefined();
+  FloatDuration Interval_Notification;
+  const FloatDuration Interval_Check;
 
 public:
-  constexpr ConditionMonitor(unsigned _interval_notification,
-                             unsigned _interval_check)
-    :LastTime_Notification(-1), LastTime_Check(-1),
-     Interval_Notification(_interval_notification),
+  constexpr ConditionMonitor(FloatDuration _interval_notification,
+                             FloatDuration _interval_check) noexcept
+    :Interval_Notification(_interval_notification),
      Interval_Check(_interval_check) {}
 
   void Update(const NMEAInfo &basic, const DerivedInfo &calculated,
@@ -57,8 +58,8 @@ private:
   virtual void Notify() = 0;
   virtual void SaveLast() = 0;
 
-  bool Ready_Time_Notification(double T);
-  bool Ready_Time_Check(double T, bool *restart);
+  bool Ready_Time_Notification(TimeStamp t) const noexcept;
+  bool Ready_Time_Check(TimeStamp t, bool *restart) noexcept;
 };
 
 #endif

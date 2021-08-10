@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Client.hpp"
 #include "time/GPSClock.hpp"
+#include "time/Stamp.hpp"
 
 struct DerivedInfo;
 
@@ -54,7 +55,7 @@ class Glue {
   Client cloud_client;
   GPSClock cloud_clock;
 
-  double last_climb_time = -1;
+  TimeStamp last_climb_time = TimeStamp::Undefined();
 
 public:
   Glue(EventLoop &event_loop, Handler *_handler);

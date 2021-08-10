@@ -41,9 +41,9 @@ struct TestFlightComponents
 struct TestFlightResult
 {
   bool result;
-  double time_elapsed;
-  double time_planned;
-  double time_remaining;
+  FloatDuration time_elapsed;
+  FloatDuration time_planned;
+  FloatDuration time_remaining;
   double calc_cruise_efficiency;
   double calc_effective_mc;
 
@@ -77,7 +77,7 @@ TestFlightResult test_flight(int test_num, int n_wind,
 
 bool test_flight_times(int test_num, int n_wind);
 
-double
-aat_min_time(int test_num);
+std::chrono::duration<unsigned>
+aat_min_time(int test_num) noexcept;
 
 #endif

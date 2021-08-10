@@ -142,7 +142,7 @@ std::ostream& operator<< (std::ostream& f,
   const AirspaceInterceptSolution &solution = aw.GetSolution();
   f << "# intercept " << solution.location.longitude << " " << solution.location.latitude
     << " dist " << solution.distance << " alt " << solution.altitude << " time "
-    << solution.elapsed_time << "\n";
+    << solution.elapsed_time.count() << "\n";
 
   return f;
 }

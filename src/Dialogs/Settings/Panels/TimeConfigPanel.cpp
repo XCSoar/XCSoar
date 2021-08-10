@@ -30,6 +30,8 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 
+using namespace std::chrono;
+
 enum ControlIndex {
   UTCOffset,
   LocalTime,
@@ -58,7 +60,7 @@ void
 TimeConfigPanel::SetLocalTime(RoughTimeDelta utc_offset)
 {
   SetText(LocalTime,
-          FormatLocalTimeHHMM((int)CommonInterface::Basic().time, utc_offset));
+          FormatLocalTimeHHMM(CommonInterface::Basic().time, utc_offset));
 }
 
 void
@@ -77,12 +79,15 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
     CommonInterface::GetComputerSettings();
 
   const RoughTimeDelta utc_offset = settings_computer.utc_offset;
-  AddTime(_("UTC offset"),
+  AddDuration(_("UTC offset"),
           _("The UTC offset field allows the UTC local time offset to be specified.  The local "
             "time is displayed below in order to make it easier to verify the correct offset "
             "has been entered."),
-           -13 * 60 * 60, 13  * 60 * 60, 30 * 60,
-          utc_offset.AsSeconds(), 2, this);
+              hours{-13},
+              hours{13},
+              minutes{30},
+              utc_offset.ToDuration(),
+              2, this);
 
   Add(_("Local time"), 0, true);
   SetLocalTime(utc_offset);
@@ -103,9 +108,9 @@ TimeConfigPanel::Save(bool &_changed) noexcept
 
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
 
-  int ival = GetValueInteger(UTCOffset);
-  const RoughTimeDelta new_utc_offset = RoughTimeDelta::FromSeconds(ival);
-  if (new_utc_offset != settings_computer.utc_offset) {
+  const auto ival = GetValueTime(UTCOffset);
+  if (const auto new_utc_offset = RoughTimeDelta::FromDuration(ival);
+      new_utc_offset != settings_computer.utc_offset) {
     settings_computer.utc_offset = new_utc_offset;
 
     Profile::Set(ProfileKeys::UTCOffsetSigned, ival);

@@ -26,8 +26,8 @@ Copyright_License {
 void
 LoggerSettings::SetDefaults()
 {
-  time_step_cruise = 5;
-  time_step_circling = 1;
+  time_step_cruise = std::chrono::seconds{5};
+  time_step_circling = std::chrono::seconds{1};
   auto_logger = AutoLogger::ON;
   logger_id.clear();
   pilot_name.clear();

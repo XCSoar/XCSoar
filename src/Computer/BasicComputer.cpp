@@ -318,14 +318,14 @@ ComputeGPSVario(MoreData &basic,
        shows when this value was parsed by XCSoar */
     const auto delta_t = basic.time - last_gps.time;
 
-    if (delta_t > 0) {
+    if (delta_t.count() > 0) {
       /* only update when a new value was received */
 
       auto delta_h = basic.gps_altitude - last_gps.gps_altitude;
       auto delta_e = basic.energy_height - last_gps.energy_height;
 
-      basic.gps_vario = delta_h / delta_t;
-      basic.gps_vario_TE = (delta_h + delta_e) / delta_t;
+      basic.gps_vario = delta_h / delta_t.count();
+      basic.gps_vario_TE = (delta_h + delta_e) / delta_t.count();
       basic.gps_vario_available = basic.gps_altitude_available;
     }
   } else {

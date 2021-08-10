@@ -25,6 +25,9 @@
 #include "Math/Angle.hpp"
 #include "Math/Filter.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "time/FloatDuration.hxx"
+
+#include <chrono>
 
 struct AircraftState;
 
@@ -94,7 +97,8 @@ public:
                   const AircraftState& state);
 
   void UpdateState(const TaskAccessor& task,
-                   AircraftState &state, double timestep=1);
+                   AircraftState &state,
+                   FloatDuration timestep=std::chrono::seconds{1}) noexcept;
 
   bool UpdateAutopilot(TaskAccessor &task,
                        const AircraftState &state);
@@ -122,7 +126,7 @@ private:
                             bool previous = false);
 
   void UpdateCruiseBearing(const TaskAccessor& task, const AircraftState& state,
-                           double timestep);
+                           FloatDuration timestep) noexcept;
 
   double GetTargetHeight(const TaskAccessor &task) const;
   Angle GetHeadingDeviation();

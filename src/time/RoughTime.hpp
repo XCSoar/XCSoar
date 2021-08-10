@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_ROUGH_TIME_SPAN_HPP
 #define XCSOAR_ROUGH_TIME_SPAN_HPP
 
+#include "Stamp.hpp"
+
 #include <cassert>
 #include <chrono>
 #include <cstdint>
@@ -67,8 +69,7 @@ public:
    * midnight.
    */
   template<class Rep, class Period>
-  [[gnu::const]]
-  static auto FromSinceMidnight(const std::chrono::duration<Rep,Period> &since_midnight) noexcept {
+  static constexpr RoughTime FromSinceMidnight(const std::chrono::duration<Rep,Period> &since_midnight) noexcept {
     return FromMinuteOfDay(std::chrono::duration_cast<std::chrono::minutes>(since_midnight).count());
   }
 
@@ -84,9 +85,8 @@ public:
    * one day.
    */
   template<class Rep, class Period>
-  [[gnu::const]]
-  static auto FromSinceMidnightChecked(const std::chrono::duration<Rep,Period> &since_midnight) noexcept {
-    return FromMinuteOfDayChecked(std::chrono::duration_cast<std::chrono::minutes>(since_midnight).count());
+  static constexpr RoughTime FromSinceMidnightChecked(const std::chrono::duration<Rep,Period> &since_midnight) noexcept {
+    return FromMinuteOfDayChecked((int)std::chrono::duration_cast<std::chrono::minutes>(since_midnight).count());
   }
 
   static constexpr RoughTime FromMinuteOfDayChecked(unsigned mod) noexcept {
@@ -96,6 +96,9 @@ public:
   static constexpr RoughTime FromSecondOfDayChecked(unsigned sod) noexcept {
     return FromMinuteOfDayChecked(sod / 60);
   }
+
+  explicit constexpr RoughTime(TimeStamp t) noexcept
+    :RoughTime(FromSinceMidnightChecked(t.ToDuration())) {}
 
   static constexpr RoughTime Invalid() noexcept {
     return RoughTime(INVALID);
@@ -160,6 +163,10 @@ public:
 
     value = (value + MAX - Duration{1}) % MAX;
     return *this;
+  }
+
+  constexpr operator TimeStamp() const noexcept {
+    return TimeStamp{value};
   }
 };
 
@@ -249,6 +256,12 @@ public:
   constexpr
   static RoughTimeDelta FromHours(int _value) noexcept {
     return RoughTimeDelta(Duration{_value * 60});
+  }
+
+  template<class Rep, class Period>
+  [[gnu::const]]
+  static RoughTimeDelta FromDuration(const std::chrono::duration<Rep,Period> &d) noexcept {
+    return RoughTimeDelta{std::chrono::duration_cast<Duration>(d)};
   }
 
   constexpr std::chrono::minutes ToDuration() const noexcept {

@@ -56,7 +56,7 @@ class AirspaceWarningWidget final
       buffer.Format(_T("%s: %s"), _("Inside airspace"), airspace.GetName());
     else
       buffer.Format(_T("%s: %s (%s)"), _("Near airspace"), airspace.GetName(),
-                    FormatTimespanSmart(int(solution.elapsed_time),
+                    FormatTimespanSmart(solution.elapsed_time,
                                         2).c_str());
 
     return buffer;

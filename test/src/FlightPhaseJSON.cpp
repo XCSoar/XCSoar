@@ -70,7 +70,7 @@ WritePhase(Phase &phase) noexcept
   object.emplace("end_time", buffer.c_str());
 
   object.emplace("type", FormatPhaseType(phase.phase_type));
-  object.emplace("duration", (int)phase.duration);
+  object.emplace("duration", (int)phase.duration.count());
   object.emplace("circling_direction",
                  FormatCirclingDirection(phase.circling_direction));
   object.emplace("alt_diff", (int)phase.alt_diff);
@@ -89,7 +89,7 @@ WriteCirclingStats(const Phase &stats) noexcept
 {
   return {
     {"alt_diff", (int)stats.alt_diff},
-    {"duration", (int)stats.duration},
+    {"duration", (int)stats.duration.count()},
     {"fraction", stats.fraction},
     {"vario", stats.GetVario()},
     {"count", stats.merges},
@@ -101,7 +101,7 @@ WriteCruiseStats(const Phase &stats) noexcept
 {
   return {
     {"alt_diff", (int)stats.alt_diff},
-    {"duration", (int)stats.duration},
+    {"duration", (int)stats.duration.count()},
     {"fraction", stats.fraction},
     {"distance", (int)stats.distance},
     {"speed", stats.GetSpeed()},

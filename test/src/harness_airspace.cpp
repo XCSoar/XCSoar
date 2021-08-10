@@ -188,7 +188,7 @@ public:
 
     AirspaceInterceptSolution solution = Intercept(as, m_state, m_perf);
     if (solution.IsValid()) {
-      *iout << "# intercept " << solution.elapsed_time << " h " << solution.altitude << "\n";
+      *iout << "# intercept " << solution.elapsed_time.count() << " h " << solution.altitude << "\n";
       *iout << solution.location.longitude << " " << solution.location.latitude << " " << "\n\n";
     }
   }
@@ -239,7 +239,7 @@ public:
       as.Intercept(state, vec.EndPoint(state.location), projection, m_perf);
     if (solution.IsValid()) {
       if (fout) {
-        *fout << "# intercept in " << solution.elapsed_time << " h " << solution.altitude << "\n";
+        *fout << "# intercept in " << solution.elapsed_time.count() << " h " << solution.altitude << "\n";
       }
     }
   }

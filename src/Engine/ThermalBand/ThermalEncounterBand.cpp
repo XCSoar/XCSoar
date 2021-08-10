@@ -25,12 +25,13 @@
 #include <cassert>
 
 void
-ThermalEncounterBand::AddSample(const double time, const double height)
+ThermalEncounterBand::AddSample(const TimeStamp time,
+                                const double height) noexcept
 {
-  const double time_rel = time - time_start;
+  const FloatDuration time_rel = time - time_start;
 
   // start condition, not initialised or descended through start, or gone back in time
-  if (empty() || height <= h_min || time_rel <= 0.) {
+  if (empty() || height <= h_min || time_rel.count() <= 0) {
     Start(time, height);
     return;
   }
@@ -40,7 +41,7 @@ ThermalEncounterBand::AddSample(const double time, const double height)
 
   // forward predict, mixing in previous segment proportionally to
   // how far into this segment has been achieved
-  const double tstep = EstimateTimeStep(time_rel, height, prev);
+  const FloatDuration tstep = EstimateTimeStep(time_rel, height, prev);
 
   // fill previous relevant slices with interpolated time, and update stats
   for (unsigned i = prev + 1; i <= next; ++i) {
@@ -80,7 +81,7 @@ ThermalEncounterBand::ResizeToHeight(const double height)
 
 inline unsigned
 ThermalEncounterBand::FindPenultimateFinished(const unsigned index,
-                                              const double time)
+                                              const FloatDuration time) noexcept
 {
   // find penultimate completed slice up to index
   unsigned prev = 0;
@@ -91,14 +92,14 @@ ThermalEncounterBand::FindPenultimateFinished(const unsigned index,
   return prev;
 }
 
-inline double
-ThermalEncounterBand::EstimateTimeStep(const double time,
+inline FloatDuration
+ThermalEncounterBand::EstimateTimeStep(const FloatDuration time,
                                        const double height,
-                                       const unsigned index)
+                                       const unsigned index) noexcept
 {
   // time since completed slice
-  const double dt_comp = time-slices[index].time;
-  assert(dt_comp > 0);
+  const auto dt_comp = time-slices[index].time;
+  assert(dt_comp.count() > 0);
 
   // height since completed slice
   const double dh_comp = height-GetSliceHeight(index);
@@ -110,13 +111,13 @@ ThermalEncounterBand::EstimateTimeStep(const double time,
 }
 
 inline void
-ThermalEncounterBand::Start(const double time,
+ThermalEncounterBand::Start(const TimeStamp time,
                             const double height)
 {
   Reset();
   time_start = time;
   ThermalSlice s;
-  s.SetSample(0);
+  s.SetSample({});
   slices.append(s);
   h_min = height;
 }

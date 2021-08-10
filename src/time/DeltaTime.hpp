@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DELTA_TIME_HPP
 #define XCSOAR_DELTA_TIME_HPP
 
+#include "Stamp.hpp"
 #include "util/Compiler.h"
 
 /**
@@ -35,16 +36,16 @@ class DeltaTime {
    * The time stamp of the previous call.  A negative value means
    * "unavailable".
    */
-  double last_time;
+  TimeStamp last_time;
 
 public:
   void Reset() {
-    last_time = -1;
+    last_time = TimeStamp::Undefined();
   }
 
   gcc_pure
   bool IsDefined() const {
-    return last_time >= 0;
+    return last_time.IsDefined();
   }
 
   /**
@@ -59,7 +60,9 @@ public:
    * @return the (non-negative) time stamp difference since the last
    * call, or 0 if difference is too small, or -1 on time warp
    */
-  double Update(double current_time, double min_delta, double warp_tolerance);
+  FloatDuration Update(TimeStamp current_time,
+                       FloatDuration min_delta,
+                       FloatDuration warp_tolerance) noexcept;
 };
 
 #endif

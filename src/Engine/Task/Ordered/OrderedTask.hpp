@@ -462,7 +462,7 @@ private:
    */
   double CalcMinTarget(const AircraftState &state_now,
                        const GlidePolar &glide_polar,
-                       const double t_target);
+                       const FloatDuration t_target) noexcept;
 
   /**
    * Sets previous/next taskpoint pointers for task point at specified
@@ -715,8 +715,8 @@ protected:
                        const GlidePolar &glide_polar,
                        double &value) const noexcept override;
   double CalcGradient(const AircraftState &state_now) const noexcept override;
-  double ScanTotalStartTime() noexcept override;
-  double ScanLegStartTime() noexcept override;
+  TimeStamp ScanTotalStartTime() noexcept override;
+  TimeStamp ScanLegStartTime() noexcept override;
   double ScanDistanceNominal() noexcept override;
   double ScanDistancePlanned() noexcept override;
   double ScanDistanceRemaining(const GeoPoint &ref) noexcept override;

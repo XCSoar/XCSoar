@@ -115,16 +115,16 @@ public:
   AirspaceAircraftPerformance(const GlidePolar &polar,
                               const GlideResult &solution)
     :vertical_tolerance(0.001),
-     cruise_speed(solution.time_elapsed > 0
-                  ? solution.vector.distance / solution.time_elapsed
+     cruise_speed(solution.time_elapsed.count() > 0
+                  ? solution.vector.distance / solution.time_elapsed.count()
                   : 1.),
-     cruise_descent(solution.time_elapsed > 0
+     cruise_descent(solution.time_elapsed.count() > 0
                     ? (solution.height_climb > 0
                        ? -solution.height_climb
-                       : solution.height_glide) / solution.time_elapsed
+                       : solution.height_glide) / solution.time_elapsed.count()
                     : 0.),
      descent_rate(polar.GetSBestLD()),
-     climb_rate(solution.time_elapsed > 0 && solution.height_climb > 0
+     climb_rate(solution.time_elapsed.count() > 0 && solution.height_climb > 0
                 ? polar.GetMC()
                 : 0.),
      max_speed(cruise_speed) {
@@ -187,7 +187,7 @@ public:
    * @return Time to intercept (s) or -1 if failed
    */
   [[gnu::pure]]
-  double SolutionGeneral(double distance, double dh) const;
+  FloatDuration SolutionGeneral(double distance, double dh) const noexcept;
 
   /**
    * Find time to intercept a target with a height band, set distance
@@ -200,9 +200,9 @@ public:
    *
    * @return Time of intercept (s)
    */
-  double SolutionVertical(double distance, double altitude,
-                          double base, double top,
-                          double &intercept_alt) const;
+  FloatDuration SolutionVertical(double distance, double altitude,
+                                 double base, double top,
+                                 double &intercept_alt) const noexcept;
 
   /**
    * Find time to intercept a target with a distance band, set height
@@ -215,9 +215,9 @@ public:
    *
    * @return Time of intercept (s)
    */
-  double SolutionHorizontal(double distance_min, double distance_max,
-                            double altitude, double h,
-                            double &intercept_distance) const;
+  FloatDuration SolutionHorizontal(double distance_min, double distance_max,
+                                   double altitude, double h,
+                                   double &intercept_distance) const noexcept;
 
 private:
   [[gnu::pure]]

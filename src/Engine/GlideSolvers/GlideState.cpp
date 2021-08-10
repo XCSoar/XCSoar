@@ -95,13 +95,13 @@ GlideState::CalcSpeedups(const SpeedVector _wind)
 }
 
 double
-GlideState::DriftedDistance(const double time) const
+GlideState::DriftedDistance(const FloatDuration time) const
 {
   if (wind.IsZero())
     return vector.distance;
 
   // Distance that the wine travels in the given #time
-  const auto distance_wind = wind.norm * time;
+  const auto distance_wind = wind.norm * time.count();
   // Direction of the wind
   auto sc_wind = wind.bearing.Reciprocal().SinCos();
   const auto sin_wind = sc_wind.first, cos_wind = sc_wind.second;

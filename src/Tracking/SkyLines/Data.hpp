@@ -38,22 +38,24 @@ Copyright_License {
 namespace SkyLinesTracking {
 
 struct Data {
+  using Time = std::chrono::duration<uint_least32_t, std::chrono::milliseconds::period>;
+
   struct Traffic {
     /**
      * Millisecond of day.
      *
      * @see SkyLinesTracking::TrafficResponsePacket::Traffic::time
      */
-    uint32_t time_of_day_ms;
+    Time time_of_day;
 
     GeoPoint location;
     int altitude;
 
     Traffic() = default;
-    constexpr Traffic(uint32_t _time, GeoPoint _location,
-                      int _altitude)
-    :time_of_day_ms(_time),
-      location(_location), altitude(_altitude) {}
+    constexpr Traffic(Time _time, GeoPoint _location,
+                      int _altitude) noexcept
+      :time_of_day(_time),
+       location(_location), altitude(_altitude) {}
   };
 
   struct Wave {
@@ -62,7 +64,7 @@ struct Data {
      *
      * @see SkyLinesTracking::Wave::time
      */
-    uint32_t time_of_day_ms;
+    Time time_of_day;
 
     /**
      * Two points describing the wave line.  This is the same as the
@@ -71,8 +73,8 @@ struct Data {
     GeoPoint a, b;
 
     Wave() = default;
-    constexpr Wave(uint32_t _time, GeoPoint _a, GeoPoint _b)
-    :time_of_day_ms(_time), a(_a), b(_b) {}
+    constexpr Wave(Time _time, GeoPoint _a, GeoPoint _b) noexcept
+      :time_of_day(_time), a(_a), b(_b) {}
   };
 
   struct Thermal {

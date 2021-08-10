@@ -51,10 +51,10 @@ operator<<(std::ostream &f, const GlideResult &gl)
   f << "#    VOpt                " <<  gl.v_opt << " (m/s)\n";
   f << "#    HeightClimb         " <<  gl.height_climb << " (m)\n";
   f << "#    HeightGlide         " <<  gl.height_glide << " (m)\n";
-  f << "#    TimeElapsed         " <<  gl.time_elapsed << " (s)\n";
-  f << "#    TimeVirtual         " <<  gl.time_virtual << " (s)\n";
-  if (gl.time_elapsed > 0) {
-    f << "#    Vave remaining      " <<  gl.vector.distance/gl.time_elapsed << " (m/s)\n";
+  f << "#    TimeElapsed         " <<  gl.time_elapsed.count() << " (s)\n";
+  f << "#    TimeVirtual         " <<  gl.time_virtual.count() << " (s)\n";
+  if (gl.time_elapsed.count() > 0) {
+    f << "#    Vave remaining      " <<  gl.vector.distance/gl.time_elapsed.count() << " (m/s)\n";
   }
   f << "#    EffectiveWindSpeed  " <<  gl.effective_wind_speed << " (m/s)\n";
   f << "#    EffectiveWindAngle  " <<  gl.effective_wind_angle << " (deg)\n";
@@ -80,10 +80,10 @@ operator<<(std::ostream &f, const DistanceStat &ds)
 static std::ostream &
 operator<<(std::ostream &f, const ElementStat &es)
 {
-  f << "#  Time started " << es.time_started << " (s)\n";
-  f << "#  Time elapsed " << es.time_elapsed << " (s)\n";
-  f << "#  Time remaining " << es.time_remaining_now << " (s)\n";
-  f << "#  Time planned " << es.time_planned << " (s)\n";
+  f << "#  Time started " << es.time_started.ToDuration().count() << " (s)\n";
+  f << "#  Time elapsed " << es.time_elapsed.count() << " (s)\n";
+  f << "#  Time remaining " << es.time_remaining_now.count() << " (s)\n";
+  f << "#  Time planned " << es.time_planned.count() << " (s)\n";
   f << "#  Gradient " << es.gradient << "\n";
   f << "#  Remaining: \n";
   f << es.remaining;
@@ -184,7 +184,7 @@ PrintHelper::orderedtaskpoint_print(std::ostream& f,
   if (item==0) {
     taskpoint_print(f,tp,state);
     orderedtaskpoint_print_boundary(f,tp,state);
-    f << "# Entered " << tp.GetEnteredState().time << "\n";
+    f << "# Entered " << tp.GetEnteredState().time.ToDuration().count() << "\n";
     f << "# Bearing travelled " << tp.GetVectorTravelled().bearing << "\n";
     f << "# Distance travelled " << tp.GetVectorTravelled().distance << "\n";
     f << "# Bearing remaining " << tp.GetVectorRemaining(state.location).bearing << "\n";

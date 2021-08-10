@@ -212,18 +212,17 @@ InputEvents::eventPilotEvent(const TCHAR *misc)
   RoughTime new_start = RoughTime(bt.hour, bt.minute);
   RoughTime new_end = RoughTime::Invalid();
 
-  if (start.pev_start_wait_time > 0) {
-  // Set start time to the next full minute after wait time.
-  // This way we make sure wait time is passed before xcsoar opens the start.
-  bool round = bt.second == 0;
-    auto delta = RoughTimeDelta::FromMinutes(
-      start.pev_start_wait_time / 60 + !round);
-    new_start = new_start + delta;
+  if (start.pev_start_wait_time.count() > 0) {
+    auto t = std::chrono::duration_cast<std::chrono::minutes>(start.pev_start_wait_time);
+    // Set start time to the next full minute after wait time.
+    // This way we make sure wait time is passed before xcsoar opens the start.
+    if (bt.second > 0)
+      t += std::chrono::minutes{1};
+    new_start = new_start + RoughTimeDelta::FromDuration(t);
   }
 
-  if (start.pev_start_window > 0) {
-    new_end = new_start + RoughTimeDelta::FromMinutes(
-      start.pev_start_window / 60);
+  if (start.pev_start_window.count() > 0) {
+    new_end = new_start + RoughTimeDelta::FromDuration(start.pev_start_window);
   }
   const RoughTimeSpan ts = RoughTimeSpan(new_start, new_end);
 

@@ -42,6 +42,29 @@ ConstDataNode::GetAttribute(const TCHAR *name, Angle &value) const noexcept
 }
 
 bool
+ConstDataNode::GetAttribute(const TCHAR *name, FloatDuration &value) const noexcept
+{
+  double v;
+  if (GetAttribute(name, v)) {
+    value = FloatDuration{v};
+    return true;
+  } else
+    return false;
+}
+
+bool
+ConstDataNode::GetAttribute(const TCHAR *name,
+                            std::chrono::duration<unsigned> &value) const noexcept
+{
+  unsigned v;
+  if (GetAttribute(name, v)) {
+    value = std::chrono::duration<unsigned>{v};
+    return true;
+  } else
+    return false;
+}
+
+bool
 ConstDataNode::GetAttribute(const TCHAR *name, double &value) const noexcept
 {
   const TCHAR *val = GetAttribute(name);

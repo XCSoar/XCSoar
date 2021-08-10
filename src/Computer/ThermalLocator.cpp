@@ -32,17 +32,19 @@ Copyright_License {
 
 #include <cassert>
 
+using namespace std::chrono;
+
 inline void
-ThermalLocator::Point::Drift(double t, const FlatProjection &projection,
+ThermalLocator::Point::Drift(TimeStamp t, const FlatProjection &projection,
                              const GeoPoint& wind_drift)
 {
   const auto dt = t - t_0;
 
   // thermal decay function is located in GenerateSineTables.cpp
-  recency_weight = thermal_recency_fn((unsigned)fabs(dt));
+  recency_weight = thermal_recency_fn(duration_cast<duration<unsigned>>(abs(dt)).count());
   lift_weight = w*recency_weight;
 
-  GeoPoint p = location + wind_drift * dt;
+  GeoPoint p = location + wind_drift * dt.count();
 
   // convert to flat earth coordinates
   loc_drift = projection.ProjectFloat(p);
@@ -56,7 +58,8 @@ ThermalLocator::Reset()
 }
 
 inline void
-ThermalLocator::AddPoint(const double t, const GeoPoint &location, const double w)
+ThermalLocator::AddPoint(const TimeStamp t, const GeoPoint &location,
+                         const double w) noexcept
 {
   points[n_index].location = location;
   points[n_index].t_0 = t;
@@ -70,7 +73,7 @@ ThermalLocator::AddPoint(const double t, const GeoPoint &location, const double 
 }
 
 void
-ThermalLocator::Update(const double t_0,
+ThermalLocator::Update(const TimeStamp t_0,
                        const GeoPoint &location_0,
                        const SpeedVector wind, 
                        ThermalLocatorInfo &therm)
@@ -133,7 +136,7 @@ ThermalLocator::glider_average()
 }
 
 inline void
-ThermalLocator::Drift(const double t_0, const FlatProjection &projection,
+ThermalLocator::Drift(const TimeStamp t_0, const FlatProjection &projection,
                       const GeoPoint& traildrift)
 {
   for (unsigned i = 0; i < n_points; ++i)
@@ -141,7 +144,7 @@ ThermalLocator::Drift(const double t_0, const FlatProjection &projection,
 }
 
 void
-ThermalLocator::Process(const bool circling, const double time,
+ThermalLocator::Process(const bool circling, const TimeStamp time,
                         const GeoPoint &location, const double w,
                         const SpeedVector wind, ThermalLocatorInfo& therm)
 {

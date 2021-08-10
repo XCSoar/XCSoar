@@ -28,31 +28,31 @@ Copyright_License {
 void
 NMEAInfo::UpdateClock()
 {
-  clock = ToFloatSeconds(std::chrono::steady_clock::now().time_since_epoch());
+  clock = TimeStamp{std::chrono::steady_clock::now().time_since_epoch()};
 }
 
 BrokenDateTime
-NMEAInfo::GetDateTimeAt(double other_time) const
+NMEAInfo::GetDateTimeAt(TimeStamp other_time) const noexcept
 {
-  if (other_time < 0)
+  if (!other_time.IsDefined())
     return BrokenDateTime::Invalid();
 
   if (!time_available || !date_time_utc.IsDatePlausible())
     return BrokenDateTime(BrokenDate::Invalid(),
-                          BrokenTime::FromSecondOfDayChecked(int(other_time)));
+                          BrokenTime::FromSinceMidnightChecked(other_time.ToDuration()));
 
   return date_time_utc + std::chrono::duration_cast<std::chrono::system_clock::duration>(FloatDuration{other_time - time});
 }
 
 void
-NMEAInfo::ProvideTime(double _time)
+NMEAInfo::ProvideTime(TimeStamp _time) noexcept
 {
-  assert(_time >= 0);
+  assert(_time.IsDefined());
 
   time = _time;
   time_available.Update(clock);
 
-  (BrokenTime &)date_time_utc = BrokenTime::FromSecondOfDayChecked(time);
+  (BrokenTime &)date_time_utc = BrokenTime::FromSinceMidnightChecked(time.ToDuration());
 }
 
 void
@@ -142,7 +142,7 @@ NMEAInfo::Reset()
   pressure_altitude = 0;
 
   time_available.Clear();
-  time = 0;
+  time = {};
 
   date_time_utc = BrokenDateTime::Invalid();
 

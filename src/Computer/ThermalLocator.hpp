@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/Flat/FlatPoint.hpp"
+#include "time/Stamp.hpp"
 
 struct SpeedVector;
 class FlatProjection;
@@ -52,7 +53,7 @@ private:
      * @param wind_drift Wind drift offset
      * @param decay decay factor for weighting
      */
-    void Drift(double t, const FlatProjection &projection,
+    void Drift(TimeStamp t, const FlatProjection &projection,
                const GeoPoint& wind_drift);
 
     /** Actual location of sample */
@@ -60,7 +61,7 @@ private:
     /** Projected/drifted sample */
     FlatPoint loc_drift;
     /** Time of sample (s) */
-    double t_0;
+    TimeStamp t_0;
     /** Scaled updraft value of sample */
     double w;
     /** Lift weighting used for this point */
@@ -89,7 +90,7 @@ public:
    * @param wind Wind vector
    * @param therm Output thermal estimate data
    */
-  void Process(bool circling, double time, const GeoPoint &location,
+  void Process(bool circling, TimeStamp time, const GeoPoint &location,
                double w, SpeedVector wind,
                ThermalLocatorInfo& therm);
 
@@ -101,11 +102,11 @@ public:
 private:
   FlatPoint glider_average();
 
-  void AddPoint(double t, const GeoPoint &location, double w);
-  void Update(double t_0, const GeoPoint &location_0,
+  void AddPoint(TimeStamp t, const GeoPoint &location, double w) noexcept;
+  void Update(TimeStamp t_0, const GeoPoint &location_0,
               SpeedVector wind, ThermalLocatorInfo &therm);
 
-  void Drift(double t_0, const FlatProjection &projection,
+  void Drift(TimeStamp t_0, const FlatProjection &projection,
              const GeoPoint &traildrift);
 };
 

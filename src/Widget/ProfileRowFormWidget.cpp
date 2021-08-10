@@ -167,3 +167,15 @@ RowFormWidget::SaveValue(unsigned i,
   value = new_value;
   return true;
 }
+
+bool
+RowFormWidget::SaveValue(unsigned i,
+                         const char *registry_key,
+                         std::chrono::seconds &value) const noexcept
+{
+  if (!SaveValue(i, value))
+    return false;
+
+  Profile::Set(registry_key, value);
+  return true;
+}

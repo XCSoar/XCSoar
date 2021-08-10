@@ -376,19 +376,19 @@ GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
 void
 GlueMapWindow::RenderTrail(Canvas &canvas, const PixelPoint aircraft_pos)
 {
-  unsigned min_time;
+  TimeStamp min_time;
   switch(GetMapSettings().trail.length) {
   case TrailSettings::Length::OFF:
     return;
   case TrailSettings::Length::LONG:
-    min_time = std::max(0, (int)Basic().time - 3600);
+    min_time = std::max(Basic().time - std::chrono::hours{1}, TimeStamp{});
     break;
   case TrailSettings::Length::SHORT:
-    min_time = std::max(0, (int)Basic().time - 600);
+    min_time = std::max(Basic().time - std::chrono::minutes{10}, TimeStamp{});
     break;
   case TrailSettings::Length::FULL:
   default:
-    min_time = 0; // full
+    min_time = {}; // full
     break;
   }
 

@@ -765,7 +765,7 @@ DeviceDescriptor::IsAlive() const
   return device_blackboard->RealState(index).alive;
 }
 
-double
+TimeStamp
 DeviceDescriptor::GetClock() const noexcept
 {
   const std::lock_guard<Mutex> lock(device_blackboard->mutex);

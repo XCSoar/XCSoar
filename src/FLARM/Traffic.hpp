@@ -180,7 +180,7 @@ struct FlarmTraffic {
    *
    * @return true if the object is still valid
    */
-  bool Refresh(double Time) {
+  bool Refresh(TimeStamp Time) noexcept {
     valid.Expire(Time, std::chrono::seconds(2));
     return valid;
   }

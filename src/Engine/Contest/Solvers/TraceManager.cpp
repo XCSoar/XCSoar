@@ -79,7 +79,7 @@ TraceManager::IsMasterUpdated(bool continuous) const noexcept
   //  return true;
 
   // find min distance and time step within this trace
-  const unsigned threshold_delta_t_trace = trace_master.GetAverageDeltaTime();
+  const auto threshold_delta_t_trace = trace_master.GetAverageDeltaTime();
   const unsigned threshold_distance_trace = trace_master.GetAverageDeltaDistance();
 
   const TracePoint &last_master = trace_master.back();

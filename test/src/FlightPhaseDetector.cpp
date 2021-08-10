@@ -25,8 +25,10 @@
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
-static constexpr double MIN_PHASE_TIME(30);
-static constexpr double FP_TOLERANCE(0.001);
+using namespace std::chrono;
+
+static constexpr FloatDuration MIN_PHASE_TIME = seconds{30};
+static constexpr double FP_TOLERANCE = 0.001;
 
 /**
  * Update circling directon for given phase with given new direction
@@ -103,18 +105,18 @@ CalcCirclingDirection(const DerivedInfo &calculated)
 
 double
 Phase::GetSpeed() const {
-  if (duration < FP_TOLERANCE) {
+  if (duration < FloatDuration{FP_TOLERANCE}) {
     return 0;
   }
-  return distance / duration;
+  return distance / duration.count();
 }
 
 double
 Phase::GetVario() const {
-  if (duration < FP_TOLERANCE) {
+  if (duration < FloatDuration{FP_TOLERANCE}) {
     return 0;
   }
-  return alt_diff / duration;
+  return alt_diff / duration.count();
 }
 
 double
@@ -236,17 +238,17 @@ FlightPhaseDetector::Finish()
   auto total_circling = totals.total_circstats.duration;
   auto total_cruise = totals.total_cruisestats.duration;
   auto total_duration = total_circling + total_cruise;
-  if (total_duration > 0) {
-      totals.total_circstats.fraction = total_circling / total_duration;
-      totals.total_cruisestats.fraction = total_cruise / total_duration;
+  if (total_duration.count() > 0) {
+    totals.total_circstats.fraction = total_circling / total_duration;
+    totals.total_cruisestats.fraction = total_cruise / total_duration;
 
-      if (total_circling > 0) {
-          totals.left_circstats.fraction =
-              totals.left_circstats.duration / total_circling;
-          totals.right_circstats.fraction =
-              totals.right_circstats.duration / total_circling;
-          totals.mixed_circstats.fraction =
-              totals.mixed_circstats.duration / total_circling;
+    if (total_circling.count() > 0) {
+      totals.left_circstats.fraction =
+        totals.left_circstats.duration / total_circling;
+      totals.right_circstats.fraction =
+        totals.right_circstats.duration / total_circling;
+      totals.mixed_circstats.fraction =
+        totals.mixed_circstats.duration / total_circling;
       }
   }
 }

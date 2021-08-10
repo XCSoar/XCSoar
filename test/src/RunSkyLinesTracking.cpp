@@ -36,6 +36,8 @@ Copyright_License {
 
 #include <memory>
 
+using namespace std::chrono;
+
 class Handler : public SkyLinesTracking::Handler {
   Args &args;
 
@@ -66,7 +68,7 @@ public:
 
   virtual void OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
                          const GeoPoint &location, int altitude) override {
-    BrokenTime time = BrokenTime::FromSecondOfDay(time_of_day_ms / 1000);
+    auto time = BrokenTime::FromSinceMidnight(milliseconds(time_of_day_ms));
 
     printf("received traffic pilot=%u time=%02u:%02u:%02u location=%f/%f altitude=%d\n",
            pilot_id, time.hour, time.minute, time.second,
@@ -105,7 +107,7 @@ Handler::OnSkyLinesReady()
     NMEAInfo basic;
     basic.Reset();
     basic.UpdateClock();
-    basic.time = 1;
+    basic.time = TimeStamp{FloatDuration{1}};
     basic.time_available.Update(basic.clock);
 
     client.SendFix(basic);

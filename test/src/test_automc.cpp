@@ -35,10 +35,10 @@ test_automc(int test_num, int n_wind)
   // arrives home faster than without
 
   TestFlightResult result = test_flight(test_num, n_wind, 1.0, false);
-  double t0 = result.time_elapsed;
+  const FloatDuration t0 = result.time_elapsed;
 
   result = test_flight(test_num, n_wind, 1.0, true);
-  double t1 = result.time_elapsed;
+  const FloatDuration t1 = result.time_elapsed;
 
   bool fine = (t1 / t0 < 1.015);
   if (!fine || verbose)

@@ -33,14 +33,9 @@ static void
 GenerateNMEA(TextWriter &writer,
              const GeoPoint &loc, const double speed,
              const Angle bearing, const double alt,
-             const double baroalt, const double t)
+             const double baroalt, const TimeStamp t) noexcept
 {
-  unsigned time = (unsigned)t;
-  unsigned hour = time / 3600;
-  time -= hour * 3600;
-  unsigned minute = time / 60;
-  time -= minute * 60;
-  unsigned second = time;
+  const auto time = BrokenTime::FromSinceMidnightChecked(t.ToDuration());
 
   const auto lat = loc.latitude.ToDMS();
   double lat_ms = lat.minutes + lat.seconds / 60.;
@@ -49,7 +44,7 @@ GenerateNMEA(TextWriter &writer,
   double lon_ms = lon.minutes + lon.seconds / 60.;
 
   NarrowString<256> gprmc("$GPRMC");
-  gprmc.AppendFormat(",%02d%02d%02d", hour, minute, second);
+  gprmc.AppendFormat(",%02u%02u%02u", time.hour, time.minute, time.second);
   gprmc.append(",A");
   gprmc.AppendFormat(",%02d%06.3f", lat.degrees, lat_ms);
   gprmc.append(lat.negative ? ",S" : ",N");
@@ -63,7 +58,7 @@ GenerateNMEA(TextWriter &writer,
   printf("%s\n", gprmc.c_str());
 
   NarrowString<256> gpgga("$GPGGA");
-  gpgga.AppendFormat(",%02d%02d%02d", hour, minute, second);
+  gpgga.AppendFormat(",%02u%02u%02u", time.hour, time.minute, time.second);
   gpgga.AppendFormat(",%02d%06.3f", lat.degrees, lat_ms);
   gprmc.append(lat.negative ? ",S" : ",N");
   gpgga.AppendFormat(",%03d%06.3f", lon.degrees, lon_ms);

@@ -25,6 +25,7 @@
 #include "AirspaceWarning.hpp"
 #include "AirspaceWarningConfig.hpp"
 #include "Util/AircraftStateFilter.hpp"
+#include "time/FloatDuration.hxx"
 
 #include <list>
 
@@ -50,8 +51,8 @@ class AirspaceWarningManager {
 
   const Airspaces &airspaces;
 
-  double prediction_time_glide;
-  double prediction_time_filter;
+  FloatDuration prediction_time_glide;
+  FloatDuration prediction_time_filter;
 
   AircraftStateFilter cruise_filter;
   AircraftStateFilter circling_filter;
@@ -118,21 +119,21 @@ public:
    */
   bool Update(const AircraftState &state, const GlidePolar &glide_polar,
               const TaskStats &task_stats,
-              const bool circling, const unsigned dt);
+              bool circling, std::chrono::duration<unsigned> dt) noexcept;
 
   /**
    * Adjust time of glide predictor
    *
    * @param the_time New time (s)
    */
-  void SetPredictionTimeGlide(double time);
+  void SetPredictionTimeGlide(FloatDuration time) noexcept;
 
   /**
    * Adjust time of state predictor.  Also updates filter time constant
    *
    * @param the_time New time (s)
    */
-  void SetPredictionTimeFilter(double time);
+  void SetPredictionTimeFilter(FloatDuration time) noexcept;
 
   /**
    * Find corresponding airspace warning item in store for an airspace
@@ -270,7 +271,7 @@ private:
                        const GeoPoint &location_predicted,
                        const AirspaceAircraftPerformance &perf,
                        const AirspaceWarning::State warning_state,
-                       double max_time);
+                       FloatDuration max_time) noexcept;
 };
 
 #endif

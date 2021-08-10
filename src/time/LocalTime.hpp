@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef LOCALTIME_H
 #define LOCALTIME_H
 
-#include <chrono>
-
+class TimeStamp;
 class RoughTimeDelta;
 
 /**
@@ -34,11 +33,7 @@ class RoughTimeDelta;
  * @param utc_offset Offset in second
  */
 [[gnu::pure]]
-std::chrono::seconds
-TimeLocal(std::chrono::seconds d, RoughTimeDelta utc_offset) noexcept;
-
-[[gnu::pure]]
-unsigned
-TimeLocal(int d, RoughTimeDelta utc_offset);
+TimeStamp
+TimeLocal(TimeStamp time, RoughTimeDelta utc_offset) noexcept;
 
 #endif

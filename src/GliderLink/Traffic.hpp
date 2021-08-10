@@ -94,8 +94,8 @@ struct GliderLinkTraffic {
    *
    * @return true if the object is still valid
    */
-  bool Refresh(double Time) {
-    valid.Expire(Time, std::chrono::minutes(5));
+  bool Refresh(TimeStamp time) noexcept {
+    valid.Expire(time, std::chrono::minutes(5));
     return valid;
   }
 };

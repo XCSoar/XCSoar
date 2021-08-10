@@ -28,6 +28,8 @@ Copyright_License {
 #include "GlideComputerInterface.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
+using namespace std::chrono;
+
 static PeriodClock last_team_code_update;
 
 GlideComputer::GlideComputer(const ComputerSettings &_settings,
@@ -139,10 +141,11 @@ GlideComputer::ProcessGPS(bool force)
 
   // update basic trace history
   if (basic.time_available) {
-    const auto dt = trace_history_time.Update(basic.time, 0.5, 30);
-    if (dt > 0)
+    const auto dt = trace_history_time.Update(basic.time,
+                                              milliseconds{500}, seconds{30});
+    if (dt.count() > 0)
       calculated.trace_history.append(basic);
-    else if (dt < 0)
+    else if (dt.count() < 0)
       /* time warp */
       calculated.trace_history.clear();
   }
@@ -152,7 +155,7 @@ GlideComputer::ProcessGPS(bool force)
   // Update the ConditionMonitors
   ConditionMonitorsUpdate(Basic(), Calculated(), settings);
 
-  return idle_clock.CheckUpdate(std::chrono::milliseconds(500));
+  return idle_clock.CheckUpdate(milliseconds(500));
 }
 
 void
@@ -205,7 +208,7 @@ GlideComputer::CalculateOwnTeamCode()
     return;
 
   // Only calculate every 10sec otherwise cancel calculation
-  if (!last_team_code_update.CheckUpdate(std::chrono::seconds(10)))
+  if (!last_team_code_update.CheckUpdate(seconds(10)))
     return;
 
   // Get bearing and distance to the reference waypoint

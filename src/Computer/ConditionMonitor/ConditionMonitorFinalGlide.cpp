@@ -42,14 +42,14 @@ ConditionMonitorFinalGlide::CheckCondition(const NMEAInfo &basic,
   bool BeforeFinalGlide = !res.IsFinalGlide();
 
   if (BeforeFinalGlide) {
-    Interval_Notification = 60 * 5;
+    Interval_Notification = std::chrono::minutes{5};
     if (tad > 50 && last_tad < -50)
       // report above final glide early
       return true;
     else if (tad < -50)
       last_tad = tad;
   } else {
-    Interval_Notification = 60;
+    Interval_Notification = std::chrono::minutes{1};
     if (res.IsFinalGlide()) {
       if (last_tad < -50 && tad > 1)
         // just reached final glide, previously well below

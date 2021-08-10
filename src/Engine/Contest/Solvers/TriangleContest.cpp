@@ -310,7 +310,7 @@ TriangleContest::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
 
   // Return early if this tp-range can't beat the current best_d...
   // Assume a maximum speed of 100 m/s
-  const unsigned fastskiprange = GetPoint(to).DeltaTime(GetPoint(from)) * 100;
+  const unsigned fastskiprange = GetPoint(to).DeltaTime(GetPoint(from)).count() * 100;
   const unsigned fastskiprange_flat =
     trace_master.ProjectRange(GetPoint(from).GetLocation(), fastskiprange);
 
@@ -470,7 +470,7 @@ TriangleContest::CalculateResult() const noexcept
   ContestResult result;
   result.time = (is_complete && is_closed)
     ? solution[4].DeltaTime(solution[0])
-    : 0.;
+    : FloatDuration{};
   result.distance = (is_complete && is_closed)
     ? CalcLegDistance(solution, 0) + CalcLegDistance(solution, 1) + CalcLegDistance(solution, 2)
     : 0.;

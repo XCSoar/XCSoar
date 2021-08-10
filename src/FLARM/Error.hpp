@@ -85,7 +85,7 @@ struct FlarmError {
     }
   }
 
-  void Expire([[maybe_unused]] double clock) noexcept {
+  void Expire([[maybe_unused]] TimeStamp clock) noexcept {
     /* no expiry; this object will be cleared only when the device
        connection is lost */
   }

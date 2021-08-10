@@ -44,7 +44,7 @@ class TaskMinTarget final : private ZeroFinder {
   TaskMacCreadyRemaining tm;
   GlideResult res;
   const AircraftState &aircraft;
-  const double t_remaining;
+  const FloatDuration t_remaining;
   StartPoint &tp_start;
   bool force_current;
 
@@ -64,7 +64,7 @@ public:
                 const unsigned activeTaskPoint,
                 const AircraftState &_aircraft,
                 const GlideSettings &settings, const GlidePolar &_gp,
-                double _t_remaining,
+                FloatDuration _t_remaining,
                 StartPoint &_ts) noexcept
     :ZeroFinder(0, 1, TOLERANCE),
      tm(tps.begin(), tps.end(), activeTaskPoint, settings, _gp,

@@ -23,6 +23,7 @@
 #define COMMON_STATS_HPP
 
 #include "time/RoughTime.hpp"
+#include "time/Stamp.hpp"
 #include "Geo/GeoVector.hpp"
 #include "TaskSummary.hpp"
 #include "../TaskType.hpp"
@@ -46,9 +47,9 @@ public:
   /** Whether the task found landable reachable waypoints (aliases abort) */
   bool landable_reachable;
   /** time UTC ship descended through max task start height */
-  double TimeUnderStartMaxHeight;
+  TimeStamp TimeUnderStartMaxHeight;
   /** Time (s) until assigned minimum time is achieved */
-  double aat_time_remaining;
+  FloatDuration aat_time_remaining;
   /** Average speed over target task distance at minimum assigned time + margin (m/s) */
   double aat_speed_target;
   /** Average speed over max task at minimum assigned time + margin (m/s) */

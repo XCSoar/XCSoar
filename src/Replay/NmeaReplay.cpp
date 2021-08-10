@@ -58,7 +58,9 @@ NmeaReplay::~NmeaReplay()
 bool
 NmeaReplay::ParseLine(const char *line, NMEAInfo &data)
 {
-  data.clock = clock.NextClock(data.time_available ? data.time : -1);
+  data.clock = clock.NextClock(data.time_available
+                               ? data.time
+                               : TimeStamp::Undefined());
 
   if ((device != nullptr && device->ParseNMEA(line, data)) ||
       (parser != nullptr && parser->ParseLine(line, data))) {

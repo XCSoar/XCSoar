@@ -61,7 +61,7 @@ public:
    * @return True if observation zone has been entered
    */
   bool HasEntered() const {
-    return state_entered.time > 0;
+    return state_entered.HasTime();
   }
 
   /**

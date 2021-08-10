@@ -24,10 +24,11 @@
 #include "Task/Stats/DistanceStat.hpp"
 
 void
-DistanceStatComputer::CalcSpeed(DistanceStat &data, double time)
+DistanceStatComputer::CalcSpeed(DistanceStat &data,
+                                FloatDuration time) noexcept
 {
-  if (time > 0 && data.IsDefined())
-    data.speed = data.GetDistance() / time;
+  if (time.count() > 0 && data.IsDefined())
+    data.speed = data.GetDistance() / time.count();
   else
     data.speed = 0;
 }

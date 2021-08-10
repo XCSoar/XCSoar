@@ -353,7 +353,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
       solution.IsValid()) {
 
     _stprintf(buffer, _T("%d secs"),
-              (int)solution.elapsed_time);
+              (int)solution.elapsed_time.count());
 
     if (solution.distance > 0)
       _stprintf(buffer + _tcslen(buffer), _T(" dist %d m"),
@@ -447,16 +447,16 @@ AirspaceWarningListWidget::UpdateList()
     const AirspaceWarningConfig &warning_config =
       CommonInterface::GetComputerSettings().airspace.warnings;
     if (warning_config.repetitive_sound) {
-      unsigned tt_closest_airspace = 1000;
+      FloatDuration tt_closest_airspace{1000};
       for (auto i : warning_list) {
         /* Find smallest time to nearest aispace (cannot always rely
            on fact that closest airspace should be in the beginning of
            the list) */
         if (i.state < AirspaceWarning::WARNING_INSIDE)
           tt_closest_airspace = std::min(tt_closest_airspace,
-                                         unsigned(i.solution.elapsed_time));
+                                         i.solution.elapsed_time);
         else
-          tt_closest_airspace = 0;
+          tt_closest_airspace = {};
       }
 
       const unsigned sound_interval =

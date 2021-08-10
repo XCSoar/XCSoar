@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "TaskAutoPilot.hpp"
 #include "AircraftSim.hpp"
+#include "time/FloatDuration.hxx"
 
 class DemoReplay
 {
@@ -38,7 +39,8 @@ public:
 
 protected:
   void Start(const TaskAccessor& task, const GeoPoint& default_location);
-  bool Update(double time_scale, TaskAccessor& task);
+  bool Update(FloatDuration time_scale,
+              TaskAccessor &task) noexcept;
 };
 
 #endif

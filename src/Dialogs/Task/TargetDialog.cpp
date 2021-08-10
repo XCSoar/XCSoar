@@ -478,7 +478,7 @@ TargetWidget::RefreshCalculator()
 {
   bool nodisplay = false;
   bool is_aat;
-  double aat_time;
+  FloatDuration aat_time;
 
   {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
@@ -519,8 +519,8 @@ TargetWidget::RefreshCalculator()
   delta_t.SetVisible(!nodisplay);
 
   if (!nodisplay) {
-    ete.SetText(FormatTimespanSmart((int)aat_time_estimated, 2));
-    delta_t.SetText(FormatTimespanSmart((int)(aat_time_estimated - aat_time), 2));
+    ete.SetText(FormatTimespanSmart(aat_time_estimated, 2));
+    delta_t.SetText(FormatTimespanSmart(aat_time_estimated - aat_time, 2));
   }
 
   const ElementStat &total = task_stats.total;
