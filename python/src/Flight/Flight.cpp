@@ -74,14 +74,13 @@ void Flight::Reduce(const BrokenDateTime start, const BrokenDateTime end,
   unsigned start_index = 0,
            end_index = 0;
 
-  int64_t start_time = start.ToUnixTimeUTC(),
-          end_time = end.ToUnixTimeUTC();
-
   for (auto fix : *fixes) {
-    if (BrokenDateTime(fix.date, fix.time).ToUnixTimeUTC() < start_time)
+    const BrokenDateTime date_time{fix.date, fix.time};
+
+    if (date_time < start)
       start_index++;
 
-    if (BrokenDateTime(fix.date, fix.time).ToUnixTimeUTC() < end_time)
+    if (date_time < end)
       end_index++;
     else
       break;

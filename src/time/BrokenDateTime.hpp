@@ -67,6 +67,15 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
     return GetDate() == other.GetDate() && GetTime() == other.GetTime();
   }
 
+  constexpr bool operator>(const BrokenDateTime other) const noexcept {
+    return GetDate() > other.GetDate() ||
+      (GetDate() == other.GetDate() && GetTime() > other.GetTime());
+  }
+
+  constexpr bool operator<(const BrokenDateTime other) const noexcept {
+    return other > *this;
+  }
+
   /**
    * Returns an instance that fails the Plausible() check.
    */
