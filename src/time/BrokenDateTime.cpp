@@ -113,33 +113,6 @@ ToFileTime(const BrokenDateTime &dt) noexcept
   return ft;
 }
 
-static time_t
-timegm (struct tm *tm) noexcept
-{
-  static constexpr unsigned ndays[] = {
-    31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-  };
-
-  time_t res = 0;
-
-  for (int year = 70; year < tm->tm_year; ++year)
-    res += IsLeapYear(year) ? 366 : 365;
-
-  for (int month = 0; month < tm->tm_mon; ++month)
-    res += ndays[month];
-
-  if (tm->tm_mon > 1 && IsLeapYear(tm->tm_year + 1900))
-    res++;
-
-  res += tm->tm_mday - 1;
-  res *= 24;
-  res += tm->tm_hour;
-  res *= 60;
-  res += tm->tm_min;
-  res *= 60;
-  res += tm->tm_sec;
-  return res;
-}
 #endif
 
 int64_t
@@ -155,7 +128,7 @@ BrokenDateTime::ToUnixTimeUTC() const noexcept
   tm.tm_min = minute;
   tm.tm_sec = second;
   tm.tm_isdst = 0;
-  return ::timegm(&tm);
+  return std::chrono::system_clock::to_time_t(TimeGm(tm));
 }
 
 const BrokenDateTime
