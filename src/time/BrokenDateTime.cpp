@@ -145,12 +145,6 @@ BrokenDateTime::ToTimePoint() const noexcept
 #endif
 }
 
-int64_t
-BrokenDateTime::ToUnixTimeUTC() const noexcept
-{
-  return std::chrono::system_clock::to_time_t(ToTimePoint());
-}
-
 const BrokenDateTime
 BrokenDateTime::NowUTC() noexcept
 {

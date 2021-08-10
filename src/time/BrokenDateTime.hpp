@@ -128,9 +128,6 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
   [[gnu::pure]]
   std::chrono::system_clock::time_point ToTimePoint() const noexcept;
 
-  [[gnu::pure]]
-  int64_t ToUnixTimeUTC() const noexcept;
-
   /**
    * Returns the current system date and time, in UTC.
    */
