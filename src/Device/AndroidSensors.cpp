@@ -26,6 +26,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Geo/Geoid.hpp"
 #include "system/Clock.hpp"
+#include "time/SystemClock.hxx"
 
 void
 DeviceDescriptor::OnConnected(int connected) noexcept
@@ -56,7 +57,7 @@ DeviceDescriptor::OnConnected(int connected) noexcept
 }
 
 void
-DeviceDescriptor::OnLocationSensor(int_least64_t time, int n_satellites,
+DeviceDescriptor::OnLocationSensor(int_least64_t _time, int n_satellites,
                                    double longitude, double latitude,
                                    bool hasAltitude, double altitude,
                                    bool hasBearing, double bearing,
@@ -70,11 +71,12 @@ DeviceDescriptor::OnLocationSensor(int_least64_t time, int n_satellites,
   basic.UpdateClock();
   basic.alive.Update(basic.clock);
 
-  BrokenDateTime date_time = BrokenDateTime::FromUnixTimeUTC(time / 1000);
-  double second_of_day = date_time.GetSecondOfDay() +
-    /* add the millisecond fraction of the original timestamp for
-       better accuracy */
-    unsigned(time % 1000) / 1000.;
+  const auto time = TimePointAfterUnixEpoch(std::chrono::milliseconds{_time});
+
+  const BrokenDateTime date_time{time};
+  const BrokenDateTime midnight = date_time.AtMidnight();
+  double second_of_day =
+    std::chrono::duration_cast<std::chrono::duration<double>>(time - midnight.ToTimePoint()).count();
 
   if (second_of_day < basic.time &&
       basic.date_time_utc.IsDatePlausible() &&
