@@ -108,7 +108,7 @@ private:
   bool simulator;
 
 public:
-  LoggerImpl() noexcept;
+  LoggerImpl();
   ~LoggerImpl() noexcept;
 
 public:
