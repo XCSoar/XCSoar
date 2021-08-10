@@ -125,11 +125,14 @@ ToFileTime(const BrokenDateTime &dt) noexcept
 
 #endif
 
-int64_t
-BrokenDateTime::ToUnixTimeUTC() const noexcept
+std::chrono::system_clock::time_point
+BrokenDateTime::ToTimePoint() const noexcept
 {
   assert(IsPlausible());
 
+#ifdef _WIN32
+  return FileTimeToChrono(ToFileTime(*this));
+#else
   struct tm tm;
   tm.tm_year = year - 1900;
   tm.tm_mon = month - 1;
@@ -138,7 +141,14 @@ BrokenDateTime::ToUnixTimeUTC() const noexcept
   tm.tm_min = minute;
   tm.tm_sec = second;
   tm.tm_isdst = 0;
-  return std::chrono::system_clock::to_time_t(TimeGm(tm));
+  return TimeGm(tm);
+#endif
+}
+
+int64_t
+BrokenDateTime::ToUnixTimeUTC() const noexcept
+{
+  return std::chrono::system_clock::to_time_t(ToTimePoint());
 }
 
 const BrokenDateTime

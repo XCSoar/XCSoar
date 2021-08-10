@@ -110,6 +110,9 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
 #endif
 
   [[gnu::pure]]
+  std::chrono::system_clock::time_point ToTimePoint() const noexcept;
+
+  [[gnu::pure]]
   int64_t ToUnixTimeUTC() const noexcept;
 
   /**
