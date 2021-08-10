@@ -92,7 +92,7 @@ public:
 
 private:
   AllocatedPath filename;
-  IGCWriter *writer;
+  IGCWriter *writer = nullptr;
 
   OverwritingRingBuffer<PreTakeoffBuffer, PRETAKEOFF_BUFFER_MAX> pre_takeoff_buffer;
 

@@ -75,10 +75,7 @@ LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
   return *this;
 }
 
-LoggerImpl::LoggerImpl()
-  :writer(nullptr)
-{
-}
+LoggerImpl::LoggerImpl() = default;
 
 LoggerImpl::~LoggerImpl()
 {
