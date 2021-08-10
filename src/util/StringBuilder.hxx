@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2019 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2015-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,10 +30,7 @@
 #ifndef STRING_BUILDER_HXX
 #define STRING_BUILDER_HXX
 
-#include "StringAPI.hxx"
-
 #include <algorithm>
-
 #include <cstddef>
 
 /**
@@ -97,16 +94,8 @@ public:
 		*p = SENTINEL;
 	}
 
-	void Append(const_pointer src, size_t length) {
-		CheckAppend(length);
-
-		p = std::copy_n(src, length, p);
-		*p = SENTINEL;
-	}
-
-	void Append(const_pointer src) {
-		Append(src, StringLength(src));
-	}
+	void Append(const_pointer src);
+	void Append(const_pointer src, size_t length);
 
 	template<typename... Args>
 	void Append(T ch, Args&&... args) {
