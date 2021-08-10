@@ -27,6 +27,7 @@ Copyright_License {
 #include "BrokenDate.hpp"
 #include "BrokenTime.hpp"
 
+#include <chrono>
 #include <type_traits>
 
 /**
@@ -50,6 +51,8 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
   constexpr
   BrokenDateTime(const BrokenDate &date, const BrokenTime &time) noexcept
     :BrokenDate(date), BrokenTime(time) {}
+
+  explicit BrokenDateTime(std::chrono::system_clock::time_point tp) noexcept;
 
   constexpr
   bool operator==(const BrokenDateTime other) const noexcept {

@@ -25,6 +25,10 @@ Copyright_License {
 #include "Calendar.hxx"
 #include "Convert.hxx"
 
+#ifdef _WIN32
+#include "FileTime.hxx"
+#endif
+
 #include <cassert>
 
 #include <time.h>
@@ -35,6 +39,9 @@ Copyright_License {
 #endif
 
 #ifdef HAVE_POSIX
+
+BrokenDateTime::BrokenDateTime(std::chrono::system_clock::time_point tp) noexcept
+  :BrokenDateTime(FromUnixTimeUTC(std::chrono::system_clock::to_time_t(tp))) {}
 
 static const BrokenDateTime
 ToBrokenDateTime(const struct tm &tm) noexcept
@@ -86,6 +93,9 @@ ToBrokenDateTime(const FILETIME &ft) noexcept
   return ToBrokenDateTime(st);
 }
 
+BrokenDateTime::BrokenDateTime(std::chrono::system_clock::time_point tp) noexcept
+  :BrokenDateTime(ToBrokenDateTime(ChronoToFileTime(tp))) {}
+
 static const SYSTEMTIME
 ToSystemTime(const BrokenDateTime &dt) noexcept
 {
@@ -134,15 +144,7 @@ BrokenDateTime::ToUnixTimeUTC() const noexcept
 const BrokenDateTime
 BrokenDateTime::NowUTC() noexcept
 {
-#ifdef HAVE_POSIX
-  time_t t = time(NULL);
-  return FromUnixTimeUTC(t);
-#else /* !HAVE_POSIX */
-  SYSTEMTIME st;
-  GetSystemTime(&st);
-
-  return ToBrokenDateTime(st);
-#endif /* !HAVE_POSIX */
+  return BrokenDateTime{std::chrono::system_clock::now()};
 }
 
 const BrokenDateTime
