@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "BrokenDateTime.hpp"
 #include "Calendar.hxx"
+#include "Convert.hxx"
 
 #include <cassert>
 #include <time.h>
@@ -52,13 +53,9 @@ ToBrokenDateTime(const struct tm &tm)
 }
 
 BrokenDateTime
-BrokenDateTime::FromUnixTimeUTC(int64_t _t)
+BrokenDateTime::FromUnixTimeUTC(int64_t t)
 {
-  time_t t = (time_t)_t;
-  struct tm tm;
-  gmtime_r(&t, &tm);
-
-  return ToBrokenDateTime(tm);
+  return ToBrokenDateTime(GmTime(std::chrono::system_clock::from_time_t(t)));
 }
 
 #else /* !HAVE_POSIX */
