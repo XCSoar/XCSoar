@@ -40,7 +40,7 @@ struct DerivedInfo;
  * Depends on #FlyingComputer.
  */
 class FlightLogger {
-  AllocatedPath path = nullptr;
+  AllocatedPath path;
 
   double last_time;
   bool seen_on_ground, seen_flying;

@@ -76,7 +76,7 @@ LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
 }
 
 LoggerImpl::LoggerImpl()
-  :filename(nullptr), writer(nullptr)
+  :writer(nullptr)
 {
 }
 

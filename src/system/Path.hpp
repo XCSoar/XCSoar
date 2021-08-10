@@ -182,6 +182,7 @@ private:
 public:
   AllocatedPath(AllocatedPath &&) = default;
 
+  AllocatedPath() noexcept = default;
   AllocatedPath(std::nullptr_t n):value(n) {}
 
   AllocatedPath(Path src)

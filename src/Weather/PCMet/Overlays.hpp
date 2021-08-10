@@ -56,9 +56,6 @@ struct OverlayInfo {
 
   tstring label;
   AllocatedPath path;
-
-  OverlayInfo()
-    :path(nullptr) {}
 };
 
 gcc_pure

@@ -190,7 +190,7 @@ class DownloadFilePickerWidget final
 
   std::exception_ptr repository_error;
 
-  AllocatedPath path = AllocatedPath(nullptr);
+  AllocatedPath path;
 
 public:
   DownloadFilePickerWidget(WidgetDialog &_dialog, FileType _file_type)
