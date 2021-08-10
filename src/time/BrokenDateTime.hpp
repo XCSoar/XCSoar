@@ -134,21 +134,25 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * @param seconds the number of seconds to add; may be negative
    */
   [[gnu::pure]]
-  BrokenDateTime operator+(int seconds) const noexcept;
+  BrokenDateTime operator+(std::chrono::system_clock::duration delta) const noexcept {
+    return BrokenDateTime{ToTimePoint() + delta};
+  }
 
   [[gnu::pure]]
-  BrokenDateTime operator-(int seconds) const noexcept {
-    return *this + (-seconds);
+  BrokenDateTime operator-(std::chrono::system_clock::duration delta) const noexcept {
+    return BrokenDateTime{ToTimePoint() - delta};
   }
 
   /**
    * Returns the number of seconds between the two BrokenDateTime structs.
    * The second one is subtracted from the first one.
    *
-   * <now> - <old> = positive timespan since <old> in seconds
+   * <now> - <old> = positive timespan since <old>
    */
   [[gnu::pure]]
-  int operator-(const BrokenDateTime &other) const noexcept;
+  std::chrono::system_clock::duration operator-(const BrokenDateTime &other) const noexcept {
+    return ToTimePoint() - other.ToTimePoint();
+  }
 };
 
 static_assert(std::is_trivial<BrokenDateTime>::value, "type is not trivial");

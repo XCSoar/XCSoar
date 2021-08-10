@@ -136,11 +136,10 @@ TestTime()
   ok1(BrokenTime::FromMinuteOfDay(735) == BrokenTime(12, 15));
   ok1(BrokenTime::FromMinuteOfDayChecked(735) == BrokenTime(12, 15));
 
-  ok1(BrokenTime(12, 15) + 120 == BrokenTime(12, 17));
-  ok1(BrokenTime(23, 59) + 120 == BrokenTime(0, 1));
-  ok1(BrokenTime(23, 59) + 120 == BrokenTime(0, 1));
-  ok1(BrokenTime(0, 1) - 120 == BrokenTime(23, 59));
-  ok1(BrokenTime(0, 1) - 120u == BrokenTime(23, 59));
+  ok1(BrokenTime(12, 15) + std::chrono::minutes(2) == BrokenTime(12, 17));
+  ok1(BrokenTime(23, 59) + std::chrono::minutes(2) == BrokenTime(0, 1));
+  ok1(BrokenTime(23, 59) + std::chrono::minutes(2) == BrokenTime(0, 1));
+  ok1(BrokenTime(0, 1) - std::chrono::minutes(2) == BrokenTime(23, 59));
 }
 
 static void
@@ -168,26 +167,26 @@ TestDateTime()
   ok1(BrokenDateTime(2010, 1, 2, 12, 15, 30).second == 30);
 
   ok1(BrokenDateTime(2010, 2, 28, 23, 0, 0) == BrokenDateTime(2010, 2, 28, 23, 0, 0));
-  ok1(BrokenDateTime(2010, 2, 28, 23, 0, 0) + 3600 == BrokenDateTime(2010, 3, 1));
-  ok1(BrokenDateTime(2010, 2, 28, 23, 59, 59) + 1 == BrokenDateTime(2010, 3, 1));
-  ok1(BrokenDateTime(2010, 2, 28, 23, 59, 59) + 2 == BrokenDateTime(2010, 3, 1, 0, 0, 1));
-  ok1(BrokenDateTime(2010, 12, 31, 23, 59, 59) + 1 == BrokenDateTime(2011, 1, 1));
+  ok1(BrokenDateTime(2010, 2, 28, 23, 0, 0) + std::chrono::hours(1) == BrokenDateTime(2010, 3, 1));
+  ok1(BrokenDateTime(2010, 2, 28, 23, 59, 59) + std::chrono::seconds(1) == BrokenDateTime(2010, 3, 1));
+  ok1(BrokenDateTime(2010, 2, 28, 23, 59, 59) + std::chrono::seconds(2) == BrokenDateTime(2010, 3, 1, 0, 0, 1));
+  ok1(BrokenDateTime(2010, 12, 31, 23, 59, 59) + std::chrono::seconds(1) == BrokenDateTime(2011, 1, 1));
 
   ok1(BrokenDateTime(2010, 1, 2, 12, 15, 30).ToUnixTimeUTC() == 1262434530);
 
   ok1(BrokenDateTime(2010, 1, 1, 0, 0 ,1) -
-      BrokenDateTime(2010, 1, 1, 0, 0 ,0) == 1);
+      BrokenDateTime(2010, 1, 1, 0, 0 ,0) == std::chrono::seconds(1));
   ok1(BrokenDateTime(2010, 1, 1, 0, 1 ,0) -
-      BrokenDateTime(2010, 1, 1, 0, 0 ,0) == 60);
+      BrokenDateTime(2010, 1, 1, 0, 0 ,0) == std::chrono::minutes(1));
   ok1(BrokenDateTime(2010, 1, 1, 1, 0 ,0) -
-      BrokenDateTime(2010, 1, 1, 0, 0 ,0) == 60 * 60);
+      BrokenDateTime(2010, 1, 1, 0, 0 ,0) == std::chrono::hours(1));
   ok1(BrokenDateTime(2010, 1, 2, 0, 0 ,0) -
-      BrokenDateTime(2010, 1, 1, 0, 0 ,0) == 60 * 60 * 24);
+      BrokenDateTime(2010, 1, 1, 0, 0 ,0) == std::chrono::hours(24));
 }
 
 int main(int argc, char **argv)
 {
-  plan_tests(107);
+  plan_tests(106);
 
   TestDate();
   TestTime();

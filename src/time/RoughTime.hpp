@@ -27,6 +27,7 @@ Copyright_License {
 #include "util/Compiler.h"
 
 #include <cassert>
+#include <chrono>
 #include <cstdint>
 
 /**
@@ -225,6 +226,10 @@ public:
   constexpr
   static RoughTimeDelta FromHours(int _value) {
     return RoughTimeDelta(_value * 60);
+  }
+
+  constexpr std::chrono::minutes ToDuration() const noexcept {
+    return std::chrono::minutes{value};
   }
 
   constexpr int AsMinutes() const {

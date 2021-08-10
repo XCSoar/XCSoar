@@ -24,20 +24,22 @@ Copyright_License {
 #include "FlightInfo.hpp"
 #include "time/BrokenDateTime.hpp"
 
-int FlightInfo::Duration() const {
+std::chrono::system_clock::duration
+FlightInfo::Duration() const noexcept
+{
   if (!date.IsPlausible() ||
       !start_time.IsPlausible() || !end_time.IsPlausible())
-    return -1;
+    return std::chrono::seconds{-1};
 
-  int secs = BrokenDateTime(date, end_time) - BrokenDateTime(date, start_time);
+  auto duration = BrokenDateTime(date, end_time) - BrokenDateTime(date, start_time);
 
   // adjust for possible date advance between start and end (add one day)
-  if (secs < 0)
-    secs += 24 * 60 * 60;
+  if (duration.count() < 0)
+    duration += std::chrono::hours(24);
 
   // if still not a plausible duration return invalid duration
-  if (secs < 0 || secs > 14 * 60 * 60)
-    return -1;
+  if (duration.count() < 0 || duration > std::chrono::hours(14))
+    return std::chrono::seconds{-1};
 
-  return secs;
+  return duration;
 }

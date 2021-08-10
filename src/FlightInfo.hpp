@@ -32,7 +32,7 @@ struct FlightInfo {
 
   BrokenTime start_time, end_time;
 
-  int Duration() const;
+  std::chrono::system_clock::duration Duration() const noexcept;
 };
 
 #endif

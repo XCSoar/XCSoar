@@ -41,7 +41,7 @@ NMEAInfo::GetDateTimeAt(double other_time) const
     return BrokenDateTime(BrokenDate::Invalid(),
                           BrokenTime::FromSecondOfDayChecked(int(other_time)));
 
-  return date_time_utc + int(other_time - time);
+  return date_time_utc + std::chrono::duration_cast<std::chrono::system_clock::duration>(std::chrono::duration<double>{other_time - time});
 }
 
 void

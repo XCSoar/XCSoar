@@ -101,7 +101,7 @@ l_task_index(lua_State *L)
       }
 
       const BrokenTime t = now_local +
-      unsigned(task_stats.current_leg.solution_remaining.time_elapsed);
+        std::chrono::seconds{long(task_stats.current_leg.solution_remaining.time_elapsed)};
       float time = t.hour + (float)(t.second/60);
 
       Lua::Push(L, time);
@@ -179,7 +179,7 @@ l_task_index(lua_State *L)
         return 0;    
 
       const BrokenTime t = now_local +
-        unsigned(task_stats.total.solution_remaining.time_elapsed);
+        std::chrono::seconds{long(task_stats.total.solution_remaining.time_elapsed)};
 
       float time = t.hour + (float)(t.minute/60);
       Lua::Push(L, time);

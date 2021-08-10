@@ -58,7 +58,7 @@ Simulator::Touch(NMEAInfo &basic)
 
   basic.time_available.Update(basic.clock);
   basic.time += 1;
-  basic.date_time_utc = basic.date_time_utc + 1;
+  basic.date_time_utc = basic.date_time_utc + std::chrono::seconds{1};
 }
 
 void

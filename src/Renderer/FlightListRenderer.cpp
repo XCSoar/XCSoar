@@ -93,8 +93,8 @@ FlightListRenderer::Draw(Canvas &canvas, PixelRect rc)
       canvas.DrawText({x, y}, _T("--:--"));
     x += time_width;
 
-    if (flight.Duration() >= 0) {
-      BrokenTime duration = BrokenTime::FromSecondOfDay(flight.Duration());
+    if (flight.Duration().count() >= 0) {
+      BrokenTime duration = BrokenTime::FromSinceMidnight(flight.Duration());
       buffer.UnsafeFormat(_T("%02u:%02u"),
                           duration.hour, duration.minute);
       canvas.DrawText({x, y}, buffer);

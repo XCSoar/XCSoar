@@ -268,7 +268,7 @@ UpdateInfoBoxNextETA(InfoBoxData &data)
   }
 
   const BrokenTime t = now_local +
-    unsigned(task_stats.current_leg.solution_remaining.time_elapsed);
+    std::chrono::seconds(long(task_stats.current_leg.solution_remaining.time_elapsed));
 
   // Set Value
   data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
@@ -416,7 +416,7 @@ UpdateInfoBoxFinalETA(InfoBoxData &data)
   }
 
   const BrokenTime t = now_local +
-    unsigned(task_stats.total.solution_remaining.time_elapsed);
+    std::chrono::seconds(long(task_stats.total.solution_remaining.time_elapsed));
 
   // Set Value
   data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
@@ -736,9 +736,9 @@ UpdateInfoBoxNextETAVMG(InfoBoxData &data)
     return;
   }
 
-  const int dd = (int)(d/v);
   const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
   if (now_local.IsPlausible()) {
+    const std::chrono::seconds dd{long(d/v)};
     const BrokenTime t = now_local + dd;
     data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
     data.UnsafeFormatComment(_T("%02u"), t.second);

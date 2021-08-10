@@ -204,7 +204,7 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
   if (*p == 0 || !ParseDecodedDateTime(p, metar.last_update))
     return false;
 
-  if (BrokenDateTime::NowUTC() - metar.last_update > 24*60*60)
+  if (BrokenDateTime::NowUTC() - metar.last_update > std::chrono::hours{24})
     return false;
 
   // Search for line feed followed by "ob:"
@@ -278,7 +278,7 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf,
   if (p == buffer)
     return false;
 
-  if (BrokenDateTime::NowUTC() - taf.last_update > 2*24*60*60)
+  if (BrokenDateTime::NowUTC() - taf.last_update > std::chrono::hours{2*24})
     return false;
 
   // Skip characters until line feed or string end

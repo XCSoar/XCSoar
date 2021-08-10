@@ -26,6 +26,7 @@ Copyright_License {
 
 #include <type_traits>
 
+#include <chrono>
 #include <cstdint>
 
 /**
@@ -113,6 +114,16 @@ struct BrokenTime {
   static BrokenTime FromSecondOfDay(unsigned second_of_day) noexcept;
 
   /**
+   * Construct a BrokenTime object from the specified duration since
+   * midnight.  seconds which have passed on this day.
+   */
+  template<class Rep, class Period>
+  [[gnu::const]]
+  static BrokenTime FromSinceMidnight(const std::chrono::duration<Rep,Period> &since_midnight) noexcept {
+    return FromSecondOfDay(std::chrono::duration_cast<std::chrono::seconds>(since_midnight).count());
+  }
+
+  /**
    * A wrapper for FromSecondOfDay() which allows values bigger than
    * or equal to 3600*24.
    */
@@ -147,28 +158,14 @@ struct BrokenTime {
    * Returns a BrokenTime that has the specified number of seconds
    * added to it.  It properly wraps around midnight.
    *
-   * @param seconds the number of seconds to add
-   */
-  [[gnu::pure]]
-  BrokenTime operator+(unsigned seconds) const noexcept;
-
-  /**
-   * Returns a BrokenTime that has the specified number of seconds
-   * added to it.  It properly wraps around midnight.
-   *
    * @param seconds the number of seconds to add; may be negative
    */
   [[gnu::pure]]
-  BrokenTime operator+(int seconds) const noexcept;
+  BrokenTime operator+(std::chrono::seconds delta) const noexcept;
 
   [[gnu::pure]]
-  BrokenTime operator-(int seconds) const noexcept {
-    return *this + (-seconds);
-  }
-
-  [[gnu::pure]]
-  BrokenTime operator-(unsigned seconds) const noexcept {
-    return *this - int(seconds);
+  BrokenTime operator-(std::chrono::seconds delta) const noexcept {
+    return *this + (-delta);
   }
 };
 

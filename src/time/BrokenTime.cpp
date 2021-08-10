@@ -56,22 +56,13 @@ BrokenTime::FromMinuteOfDayChecked(unsigned minute_of_day) noexcept
 }
 
 BrokenTime
-BrokenTime::operator+(unsigned seconds) const noexcept
+BrokenTime::operator+(std::chrono::seconds delta) const noexcept
 {
   assert(IsPlausible());
 
-  seconds += GetSecondOfDay();
-  return FromSecondOfDayChecked(seconds);
-}
+  delta += std::chrono::seconds(GetSecondOfDay());
+  while (delta.count() < 0)
+    delta += std::chrono::hours(24);
 
-BrokenTime
-BrokenTime::operator+(int seconds) const noexcept
-{
-  assert(IsPlausible());
-
-  seconds += GetSecondOfDay();
-  while (seconds < 0)
-    seconds += 3600 * 24;
-
-  return FromSecondOfDayChecked(seconds);
+  return FromSecondOfDayChecked(std::chrono::seconds{delta}.count());
 }

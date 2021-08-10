@@ -80,16 +80,16 @@ GlideComputer::ProcessGPS(bool force)
 
   if (basic.time_available) {
     /* use UTC offset to calculate local time */
-    const int utc_offset_s = settings.utc_offset.AsSeconds();
+    const auto utc_offset = settings.utc_offset.ToDuration();
 
     calculated.date_time_local = basic.date_time_utc.IsDatePlausible()
       /* known date: apply UTC offset to BrokenDateTime, which may
          increment/decrement date */
-      ? basic.date_time_utc + utc_offset_s
+      ? basic.date_time_utc + utc_offset
       /* unknown date: apply UTC offset only to BrokenTime, leave the
          BrokenDate part invalid as it was */
       : BrokenDateTime(BrokenDate::Invalid(),
-                       ((const BrokenTime &)basic.date_time_utc) + utc_offset_s);
+                       ((const BrokenTime &)basic.date_time_utc) + utc_offset);
   } else
     calculated.date_time_local = BrokenDateTime::Invalid();
 

@@ -169,28 +169,3 @@ BrokenDateTime::NowLocal() noexcept
   return ToBrokenDateTime(st);
 #endif /* !HAVE_POSIX */
 }
-
-BrokenDateTime
-BrokenDateTime::operator+(int seconds) const noexcept
-{
-  assert(IsPlausible());
-
-#ifdef HAVE_POSIX
-  return FromUnixTimeUTC(ToUnixTimeUTC() + seconds);
-#else
-  FILETIME ft = ToFileTime(*this);
-  ULARGE_INTEGER uli;
-  uli.u.HighPart = ft.dwHighDateTime;
-  uli.u.LowPart = ft.dwLowDateTime;
-  uli.QuadPart += (LONGLONG)seconds * 10000000;
-  ft.dwHighDateTime = uli.u.HighPart;
-  ft.dwLowDateTime = uli.u.LowPart;
-  return ToBrokenDateTime(ft);
-#endif
-}
-
-int
-BrokenDateTime::operator-(const BrokenDateTime &other) const noexcept
-{
-  return ToUnixTimeUTC() - other.ToUnixTimeUTC();
-}
