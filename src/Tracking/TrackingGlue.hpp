@@ -76,7 +76,7 @@ class TrackingGlue final
    * The Unix UTC time stamp that was last submitted to the tracking
    * server.  This attribute is used to detect time warps.
    */
-  int64_t last_timestamp = 0;
+  std::chrono::system_clock::time_point last_timestamp{};
 
   BrokenDateTime date_time;
   GeoPoint location;

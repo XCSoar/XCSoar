@@ -92,7 +92,7 @@ TestTracking(int argc, char *argv[], CurlGlobal &curl)
     result = SendPosition(
         session, package_id, basic.location, (unsigned)basic.nav_altitude,
         (unsigned)Units::ToUserUnit(basic.ground_speed, Unit::KILOMETER_PER_HOUR),
-        basic.track, datetime.ToUnixTimeUTC(),
+        basic.track, datetime.ToTimePoint(),
         curl, env);
 
     if (!result)

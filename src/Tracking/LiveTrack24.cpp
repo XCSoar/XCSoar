@@ -130,7 +130,7 @@ bool
 LiveTrack24::SendPosition(SessionID session, unsigned packet_id,
                           GeoPoint position, unsigned altitude,
                           unsigned ground_speed, Angle track,
-                          int64_t timestamp_utc,
+                          std::chrono::system_clock::time_point timestamp_utc,
                           CurlGlobal &curl, OperationEnvironment &env)
 {
   // http://www.livetrack24.com/track.php?leolive=4&sid=42664778&pid=321&
@@ -144,7 +144,7 @@ LiveTrack24::SendPosition(SessionID session, unsigned packet_id,
              (double)position.longitude.Degrees(),
              altitude, ground_speed,
              (unsigned)track.AsBearing().Degrees(),
-             (long long int)timestamp_utc);
+             (long long)std::chrono::system_clock::to_time_t(timestamp_utc));
 
   return SendRequest(url, curl,env);
 }

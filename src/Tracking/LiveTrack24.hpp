@@ -24,8 +24,10 @@ Copyright_License {
 #ifndef LIVETRACK24_HPP
 #define LIVETRACK24_HPP
 
-#include <tchar.h>
+#include <chrono>
 #include <cstdint>
+
+#include <tchar.h>
 
 class Angle;
 struct BrokenDateTime;
@@ -120,7 +122,7 @@ StartTracking(SessionID session, const TCHAR *username,
 bool
 SendPosition(SessionID session, unsigned packet_id,
              GeoPoint position, unsigned altitude, unsigned ground_speed,
-             Angle track, int64_t timestamp_utc,
+             Angle track, std::chrono::system_clock::time_point timestamp_utc,
              CurlGlobal &curl, OperationEnvironment &env);
 
 /** Sends the "end of track" packet to the tracking server */

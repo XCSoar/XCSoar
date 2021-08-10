@@ -168,16 +168,17 @@ TrackingGlue::Tick() noexcept
         LiveTrack24::EndTracking(state.session_id, state.packet_id,
                                  curl, env);
         state.ResetSession();
-        last_timestamp = 0;
+        last_timestamp = {};
       }
 
       /* don't track if not flying */
       return;
     }
 
-    const int64_t current_timestamp = date_time.ToUnixTimeUTC();
+    const auto current_timestamp = date_time.ToTimePoint();
 
-    if (state.HasSession() && current_timestamp + 60 < last_timestamp) {
+    if (state.HasSession() &&
+        current_timestamp + std::chrono::minutes(1) < last_timestamp) {
       /* time warp: create a new session */
       LiveTrack24::EndTracking(state.session_id, state.packet_id, curl, env);
       state.ResetSession();
