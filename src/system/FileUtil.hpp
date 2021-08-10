@@ -26,7 +26,9 @@ Copyright_License {
 
 #include "Path.hpp"
 
+#include <chrono>
 #include <cstdint>
+
 #include <tchar.h>
 
 #ifdef HAVE_POSIX
@@ -177,16 +179,8 @@ GetSize(Path path) noexcept;
  * @return 0 in case of failure or a timestamp for comparison
  */
 [[gnu::pure]]
-uint64_t
+std::chrono::system_clock::time_point
 GetLastModification(Path path) noexcept;
-
-/**
- * Get a timestamp that can be used to compare to file timestamps
- * @return a timestamp for comparison
- */
-[[gnu::pure]]
-uint64_t
-Now() noexcept;
 
 /**
  * Sets the modification timestamp of the file to the current system time

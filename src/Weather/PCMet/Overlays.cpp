@@ -88,14 +88,14 @@ FindLatestOverlay(PCMet::OverlayInfo &info)
 {
   struct Visitor : public File::Visitor {
     PCMet::OverlayInfo &info;
-    uint64_t latest_modification;
-    uint64_t now;
+    std::chrono::system_clock::time_point latest_modification = std::chrono::system_clock::time_point::min();
+    const std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
 
     explicit Visitor(PCMet::OverlayInfo &_info)
-      :info(_info), latest_modification(0), now(File::Now()) {}
+      :info(_info) {}
 
     void Visit(Path path, Path) override {
-      uint64_t last_modification = File::GetLastModification(path);
+      const auto last_modification = File::GetLastModification(path);
       if (last_modification > latest_modification &&
           last_modification <= now) {
         latest_modification = last_modification;

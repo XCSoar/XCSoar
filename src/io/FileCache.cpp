@@ -26,6 +26,10 @@ Copyright_License {
 #include "FileOutputStream.hxx"
 #include "system/FileUtil.hpp"
 
+#ifdef _WIN32
+#include "time/FileTime.hxx"
+#endif
+
 #include <cstdint>
 #include <stdexcept>
 
@@ -39,21 +43,10 @@ Copyright_License {
 #   include <fileapi.h>
 #endif
 
-static constexpr unsigned FILE_CACHE_MAGIC = 0xab352f8a;
-
-#ifndef HAVE_POSIX
-
-constexpr
-static uint64_t
-FileTimeToInteger(FILETIME ft)
-{
-  return ft.dwLowDateTime | ((uint64_t)ft.dwHighDateTime << 32);
-}
-
-#endif
+static constexpr unsigned FILE_CACHE_MAGIC = 0xab352f8b;
 
 struct FileInfo {
-  uint64_t mtime;
+  std::chrono::system_clock::time_point mtime;
   uint64_t size;
 
   bool operator==(const FileInfo &other) const {
@@ -69,7 +62,7 @@ struct FileInfo {
    */
   [[gnu::pure]]
   bool IsFuture() const {
-    return mtime > File::Now();
+    return mtime > std::chrono::system_clock::now();
   }
 };
 
@@ -82,7 +75,7 @@ GetRegularFileInfo(Path path, FileInfo &info)
   if (stat(path.c_str(), &st) < 0 || !S_ISREG(st.st_mode))
     return false;
 
-  info.mtime = st.st_mtime;
+  info.mtime = std::chrono::system_clock::from_time_t(st.st_mtime);
   info.size = st.st_size;
   return true;
 #else
@@ -91,7 +84,7 @@ GetRegularFileInfo(Path path, FileInfo &info)
       (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
     return false;
 
-  info.mtime = FileTimeToInteger(data.ftLastWriteTime);
+  info.mtime = FileTimeToChrono(data.ftLastWriteTime);
   info.size = data.nFileSizeLow |
     ((uint64_t)data.nFileSizeHigh << 32);
   return true;

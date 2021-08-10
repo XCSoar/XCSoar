@@ -102,7 +102,6 @@ CanDownload(const FileRepository &repository, const TCHAR *name)
 static bool
 UpdateAvailable(const FileRepository &repository, const TCHAR *name)
 {
-#ifdef HAVE_POSIX
   const AvailableFile *remote_file = FindRemoteFile(repository, name);
 
   if (remote_file == nullptr)
@@ -111,13 +110,9 @@ UpdateAvailable(const FileRepository &repository, const TCHAR *name)
   BrokenDate remote_changed = remote_file->update_date;
 
   const auto path = LocalPath(name);
-  BrokenDate local_changed = static_cast<BrokenDate>(BrokenDateTime::FromUnixTimeUTC(
-                              File::GetLastModification(path)));
+  BrokenDate local_changed = BrokenDateTime{File::GetLastModification(path)};
 
   return local_changed < remote_changed;
-#else
-  return false;
-#endif
 }
 #endif
 
@@ -149,13 +144,8 @@ class ManagedFileListWidget
       if (File::Exists(path)) {
         FormatByteSize(size.buffer(), size.capacity(),
                        File::GetSize(path));
-#ifdef HAVE_POSIX
         FormatISO8601(last_modified.buffer(),
-                      BrokenDateTime::FromUnixTimeUTC(File::GetLastModification(path)));
-#else
-        // XXX implement
-        last_modified.clear();
-#endif
+                      BrokenDateTime{File::GetLastModification(path)});
       } else {
         size.clear();
         last_modified.clear();
@@ -398,16 +388,13 @@ ManagedFileListWidget::RefreshList()
         continue;
 
       bool is_out_of_date = false;
-#ifdef HAVE_POSIX
       if (file_exists) {
-        BrokenDate local_changed = static_cast<BrokenDate>(BrokenDateTime::FromUnixTimeUTC(
-                                    File::GetLastModification(path)));
+        BrokenDate local_changed = BrokenDateTime{File::GetLastModification(path)};
         is_out_of_date = (local_changed < remote_file.update_date);
 
         if (is_out_of_date)
           some_out_of_date = true;
       }
-#endif
 
       items.append().Set(base.c_str(),
                          is_downloading ? &download_status : nullptr,
