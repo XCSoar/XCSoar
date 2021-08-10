@@ -23,6 +23,8 @@ Copyright_License {
 
 #pragma once
 
+#include <cstdint>
+
 struct GeoPoint;
 class AtmosphericPressure;
 class GliderLinkId;
@@ -34,7 +36,7 @@ class SensorListener {
 public:
   virtual void OnConnected(int connected) noexcept = 0;
 
-  virtual void OnLocationSensor(long time, int n_satellites,
+  virtual void OnLocationSensor(int_least64_t time, int n_satellites,
                                 double longitude, double latitude,
                                 bool hasAltitude, double altitude,
                                 bool hasBearing, double bearing,

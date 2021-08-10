@@ -56,7 +56,7 @@ DeviceDescriptor::OnConnected(int connected) noexcept
 }
 
 void
-DeviceDescriptor::OnLocationSensor(long time, int n_satellites,
+DeviceDescriptor::OnLocationSensor(int_least64_t time, int n_satellites,
                                    double longitude, double latitude,
                                    bool hasAltitude, double altitude,
                                    bool hasBearing, double bearing,
