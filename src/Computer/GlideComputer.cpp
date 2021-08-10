@@ -89,7 +89,7 @@ GlideComputer::ProcessGPS(bool force)
       /* unknown date: apply UTC offset only to BrokenTime, leave the
          BrokenDate part invalid as it was */
       : BrokenDateTime(BrokenDate::Invalid(),
-                       ((const BrokenTime &)basic.date_time_utc) + utc_offset);
+                       basic.date_time_utc.GetTime() + utc_offset);
   } else
     calculated.date_time_local = BrokenDateTime::Invalid();
 

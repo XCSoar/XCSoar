@@ -164,7 +164,7 @@ PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
                      Path(nullptr));
   }
 
-  BrokenDateTime run_time((BrokenDate)now_utc, BrokenTime(run_hour, 0));
+  BrokenDateTime run_time(now_utc.GetDate(), BrokenTime(run_hour, 0));
   if (run_hour < now_utc.hour)
     run_time.DecrementDay();
 

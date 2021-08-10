@@ -54,10 +54,17 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
 
   explicit BrokenDateTime(std::chrono::system_clock::time_point tp) noexcept;
 
+  constexpr const BrokenDate &GetDate() const noexcept {
+    return *this;
+  }
+
+  constexpr const BrokenTime &GetTime() const noexcept {
+    return *this;
+  }
+
   constexpr
   bool operator==(const BrokenDateTime other) const noexcept {
-    return (const BrokenDate &)*this == (const BrokenDate &)other &&
-      (const BrokenTime &)*this == (const BrokenTime &)other;
+    return GetDate() == other.GetDate() && GetTime() == other.GetTime();
   }
 
   /**

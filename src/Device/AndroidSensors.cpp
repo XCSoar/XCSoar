@@ -78,7 +78,7 @@ DeviceDescriptor::OnLocationSensor(int_least64_t time, int n_satellites,
 
   if (second_of_day < basic.time &&
       basic.date_time_utc.IsDatePlausible() &&
-      (BrokenDate)date_time > (BrokenDate)basic.date_time_utc)
+      date_time.GetDate() > basic.date_time_utc.GetDate())
     /* don't wrap around when going past midnight in UTC */
     second_of_day += 24u * 3600u;
 

@@ -225,7 +225,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   const auto logs_path = MakeLocalPath(_T("logs"));
 
   const BrokenDate today = gps_info.date_time_utc.IsDatePlausible()
-    ? (const BrokenDate &)gps_info.date_time_utc
+    ? gps_info.date_time_utc.GetDate()
     : BrokenDate::TodayUTC();
 
   StaticString<64> name;
