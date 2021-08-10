@@ -76,11 +76,7 @@ LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
 }
 
 LoggerImpl::LoggerImpl() = default;
-
-LoggerImpl::~LoggerImpl()
-{
-  delete writer;
-}
+LoggerImpl::~LoggerImpl() = default;
 
 void
 LoggerImpl::StopLogger(const NMEAInfo &gps_info)
@@ -99,8 +95,7 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   LogFormat(_T("Logger stopped: %s"), filename.c_str());
 
   // Logger off
-  delete writer;
-  writer = nullptr;
+  writer.reset();
 
   pre_takeoff_buffer.clear();
 }
@@ -245,7 +240,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   frecord.Reset();
 
   try {
-    writer = new IGCWriter(filename);
+    writer = std::make_unique<IGCWriter>(filename);
   } catch (...) {
     LogError(std::current_exception());
     return false;

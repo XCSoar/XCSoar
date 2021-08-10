@@ -30,6 +30,8 @@ Copyright_License {
 #include "system/Path.hpp"
 #include "util/OverwritingRingBuffer.hpp"
 
+#include <memory>
+
 #include <tchar.h>
 
 struct NMEAInfo;
@@ -92,7 +94,7 @@ public:
 
 private:
   AllocatedPath filename;
-  IGCWriter *writer = nullptr;
+  std::unique_ptr<IGCWriter> writer;
 
   OverwritingRingBuffer<PreTakeoffBuffer, PRETAKEOFF_BUFFER_MAX> pre_takeoff_buffer;
 
