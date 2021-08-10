@@ -26,6 +26,7 @@ Copyright_License {
 #include "Convert.hxx"
 
 #include <cassert>
+
 #include <time.h>
 
 #ifndef HAVE_POSIX
@@ -175,11 +176,7 @@ const BrokenDateTime
 BrokenDateTime::NowLocal() noexcept
 {
 #ifdef HAVE_POSIX
-  time_t t = time(NULL);
-  struct tm tm;
-  localtime_r(&t, &tm);
-
-  return ToBrokenDateTime(tm);
+  return ToBrokenDateTime(LocalTime(std::chrono::system_clock::now()));
 #else /* !HAVE_POSIX */
   SYSTEMTIME st;
   GetLocalTime(&st);

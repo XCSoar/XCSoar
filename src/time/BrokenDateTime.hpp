@@ -29,8 +29,6 @@ Copyright_License {
 
 #include <type_traits>
 
-#include <cstdint>
-
 /**
  * A broken-down representation of date and time.
  */
