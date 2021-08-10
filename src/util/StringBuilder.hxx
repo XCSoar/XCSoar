@@ -30,7 +30,6 @@
 #ifndef STRING_BUILDER_HXX
 #define STRING_BUILDER_HXX
 
-#include "TruncateString.hpp"
 #include "StringAPI.hxx"
 
 #include <algorithm>
@@ -72,18 +71,37 @@ public:
 		return p >= end - 1;
 	}
 
-	void Append(T ch) {
-		if (!IsFull())
-			*p++ = ch;
+	/**
+	 * This class gets thrown when the buffer would overflow by an
+	 * operation.  The buffer is then in an undefined state.
+	 */
+	class Overflow {};
+
+	constexpr bool CanAppend(size_type length) const noexcept {
+		return p + length < end;
 	}
 
-	void Append(const_pointer src) {
-		p = CopyTruncateString(p, GetRemainingSize(), src);
+	void CheckAppend(size_type length) const {
+		if (!CanAppend(length))
+			throw Overflow();
+	}
+
+	void Append(T ch) {
+		CheckAppend(1);
+
+		*p++ = ch;
+		*p = SENTINEL;
 	}
 
 	void Append(const_pointer src, size_t length) {
-		p = std::copy_n(src, std::min(length, GetRemainingSize() - 1),
-				p);
+		CheckAppend(length);
+
+		p = std::copy_n(src, length, p);
+		*p = SENTINEL;
+	}
+
+	void Append(const_pointer src) {
+		Append(src, StringLength(src));
 	}
 
 	template<typename... Args>
