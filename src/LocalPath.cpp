@@ -27,7 +27,6 @@ Copyright_License {
 #include "util/StringCompare.hxx"
 #include "util/StringFormat.hpp"
 #include "util/StringAPI.hxx"
-#include "util/StringBuilder.hxx"
 #include "Asset.hpp"
 
 #include "system/FileUtil.hpp"
