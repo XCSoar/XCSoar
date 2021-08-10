@@ -58,7 +58,7 @@ struct OverlayInfo {
   AllocatedPath path;
 };
 
-gcc_pure
+[[gnu::pure]]
 std::list<OverlayInfo> CollectOverlays();
 
 struct Overlay {

@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_BROKEN_TIME_HPP
 #define XCSOAR_BROKEN_TIME_HPP
 
-#include "util/Compiler.h"
-
 #include <type_traits>
 
 #include <cstdint>
@@ -111,14 +109,14 @@ struct BrokenTime {
    *
    * @param second_of_day 0 .. 3600*24-1
    */
-  gcc_const
+  [[gnu::const]]
   static BrokenTime FromSecondOfDay(unsigned second_of_day);
 
   /**
    * A wrapper for FromSecondOfDay() which allows values bigger than
    * or equal to 3600*24.
    */
-  gcc_const
+  [[gnu::const]]
   static BrokenTime FromSecondOfDayChecked(unsigned second_of_day);
 
   /**
@@ -135,14 +133,14 @@ struct BrokenTime {
    *
    * @param minute_of_day 0 .. 60*24-1
    */
-  gcc_const
+  [[gnu::const]]
   static BrokenTime FromMinuteOfDay(unsigned minute_of_day);
 
   /**
    * A wrapper for FromMinuteOfDay() which allows values bigger than
    * or equal to 60*24.
    */
-  gcc_const
+  [[gnu::const]]
   static BrokenTime FromMinuteOfDayChecked(unsigned minute_of_day);
 
   /**
@@ -151,7 +149,7 @@ struct BrokenTime {
    *
    * @param seconds the number of seconds to add
    */
-  gcc_pure
+  [[gnu::pure]]
   BrokenTime operator+(unsigned seconds) const;
 
   /**
@@ -160,15 +158,15 @@ struct BrokenTime {
    *
    * @param seconds the number of seconds to add; may be negative
    */
-  gcc_pure
+  [[gnu::pure]]
   BrokenTime operator+(int seconds) const;
 
-  gcc_pure
+  [[gnu::pure]]
   BrokenTime operator-(int seconds) const {
     return *this + (-seconds);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   BrokenTime operator-(unsigned seconds) const {
     return *this - int(seconds);
   }

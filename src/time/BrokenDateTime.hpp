@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "BrokenDate.hpp"
 #include "BrokenTime.hpp"
-#include "util/Compiler.h"
 
 #include <type_traits>
 
@@ -105,23 +104,23 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * Convert a UNIX UTC time stamp (seconds since epoch) to a
    * BrokenDateTime object.
    */
-  gcc_const
+  [[gnu::const]]
   static BrokenDateTime FromUnixTimeUTC(int64_t t);
 #endif
 
-  gcc_pure
+  [[gnu::pure]]
   int64_t ToUnixTimeUTC() const;
 
   /**
    * Returns the current system date and time, in UTC.
    */
-  gcc_pure
+  [[gnu::pure]]
   static const BrokenDateTime NowUTC();
 
   /**
    * Returns the current system date and time, in the current time zone.
    */
-  gcc_pure
+  [[gnu::pure]]
   static const BrokenDateTime NowLocal();
 
   /**
@@ -130,10 +129,10 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    *
    * @param seconds the number of seconds to add; may be negative
    */
-  gcc_pure
+  [[gnu::pure]]
   BrokenDateTime operator+(int seconds) const;
 
-  gcc_pure
+  [[gnu::pure]]
   BrokenDateTime operator-(int seconds) const {
     return *this + (-seconds);
   }
@@ -144,7 +143,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    *
    * <now> - <old> = positive timespan since <old> in seconds
    */
-  gcc_pure
+  [[gnu::pure]]
   int operator-(const BrokenDateTime &other) const;
 };
 

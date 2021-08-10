@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_BROKEN_DATE_HPP
 #define XCSOAR_BROKEN_DATE_HPP
 
-#include "util/Compiler.h"
-
 #include <type_traits>
 
 #include <cstdint>
@@ -109,7 +107,7 @@ struct BrokenDate {
   /**
    * Returns the current system date in UTC.
    */
-  gcc_pure
+  [[gnu::pure]]
   static BrokenDate TodayUTC();
 
   void IncrementDay();
@@ -121,7 +119,7 @@ struct BrokenDate {
    * two #BrokenDate structs.  The result may be negative if #other is
    * bigger than #this.
    */
-  gcc_pure
+  [[gnu::pure]]
   int DaysSince(const BrokenDate &other) const;
 };
 
