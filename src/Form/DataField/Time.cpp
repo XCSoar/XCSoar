@@ -39,7 +39,7 @@ DataFieldTime::GetAsString() const noexcept
 const TCHAR *
 DataFieldTime::GetAsDisplayString() const noexcept
 {
-  FormatTimespanSmart(string_buffer, value, max_tokens);
+  FormatTimespanSmart(string_buffer, std::chrono::seconds{value}, max_tokens);
   return string_buffer;
 }
 

@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "time/RoughTime.hpp"
 #include "util/StringBuffer.hxx"
-#include "util/Compiler.h"
 
 #include <tchar.h>
 
@@ -39,15 +38,31 @@ class RoughTimeDelta;
  * @param time UTC time of day [seconds]
  */
 void
-FormatLocalTimeHHMM(TCHAR *buffer, int time, RoughTimeDelta utc_offset);
+FormatLocalTimeHHMM(TCHAR *buffer, std::chrono::seconds time,
+                    RoughTimeDelta utc_offset);
 
-gcc_const
+static inline void
+FormatLocalTimeHHMM(TCHAR *buffer, int time,
+                    RoughTimeDelta utc_offset) noexcept
+{
+  FormatLocalTimeHHMM(buffer, std::chrono::seconds{time}, utc_offset);
+}
+
+[[gnu::const]]
 static inline BasicStringBuffer<TCHAR, 8>
-FormatLocalTimeHHMM(int time, RoughTimeDelta utc_offset)
+FormatLocalTimeHHMM(std::chrono::seconds time,
+                    RoughTimeDelta utc_offset) noexcept
 {
   BasicStringBuffer<TCHAR, 8> buffer;
   FormatLocalTimeHHMM(buffer.data(), time, utc_offset);
   return buffer;
+}
+
+[[gnu::const]]
+static inline BasicStringBuffer<TCHAR, 8>
+FormatLocalTimeHHMM(int time, RoughTimeDelta utc_offset) noexcept
+{
+  return FormatLocalTimeHHMM(std::chrono::seconds{time}, utc_offset);
 }
 
 #endif

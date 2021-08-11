@@ -27,7 +27,8 @@ Copyright_License {
 #include "time/RoughTime.hpp"
 
 void
-FormatLocalTimeHHMM(TCHAR *buffer, int time, RoughTimeDelta utc_offset)
+FormatLocalTimeHHMM(TCHAR *buffer, std::chrono::seconds time,
+                    RoughTimeDelta utc_offset)
 {
   FormatSignedTimeHHMM(buffer, TimeLocal(time, utc_offset));
 }

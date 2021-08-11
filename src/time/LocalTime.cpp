@@ -24,6 +24,17 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "time/RoughTime.hpp"
 
+std::chrono::seconds
+TimeLocal(std::chrono::seconds localtime, RoughTimeDelta utc_offset) noexcept
+{
+  localtime += utc_offset.ToDuration();
+
+  if (localtime.count() < 0)
+    localtime += std::chrono::hours{24};
+
+  return localtime;
+}
+
 unsigned
 TimeLocal(int localtime, RoughTimeDelta utc_offset)
 {

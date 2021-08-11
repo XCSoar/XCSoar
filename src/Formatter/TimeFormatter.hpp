@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TIME_FORMATTER_HPP
 #define XCSOAR_TIME_FORMATTER_HPP
 
+#include "time/FloatDuration.hxx"
 #include "util/StringBuffer.hxx"
 
 #include <tchar.h>
@@ -54,10 +55,22 @@ FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp) noexcept;
 #endif
 
 void
-FormatTime(TCHAR *buffer, double time) noexcept;
+FormatTime(TCHAR *buffer, FloatDuration time) noexcept;
+
+static inline void
+FormatTime(TCHAR *buffer, double time) noexcept
+{
+  FormatTime(buffer, FloatDuration{time});
+}
 
 void
-FormatTimeLong(TCHAR *buffer, double time) noexcept;
+FormatTimeLong(TCHAR *buffer, FloatDuration time) noexcept;
+
+static inline void
+FormatTimeLong(TCHAR *buffer, double time) noexcept
+{
+  FormatTimeLong(buffer, FloatDuration{time});
+}
 
 /**
  * precedes with "-" if time is negative
@@ -65,15 +78,22 @@ FormatTimeLong(TCHAR *buffer, double time) noexcept;
  * @param time input seconds
  */
 void
-FormatSignedTimeHHMM(TCHAR* buffer, int time) noexcept;
+FormatSignedTimeHHMM(TCHAR *buffer, std::chrono::seconds time) noexcept;
+
+[[gnu::const]]
+static inline BasicStringBuffer<TCHAR, 8>
+FormatSignedTimeHHMM(std::chrono::seconds time) noexcept
+{
+  BasicStringBuffer<TCHAR, 8> buffer;
+  FormatSignedTimeHHMM(buffer.data(), time);
+  return buffer;
+}
 
 [[gnu::const]]
 static inline BasicStringBuffer<TCHAR, 8>
 FormatSignedTimeHHMM(int time) noexcept
 {
-  BasicStringBuffer<TCHAR, 8> buffer;
-  FormatSignedTimeHHMM(buffer.data(), time);
-  return buffer;
+  return FormatSignedTimeHHMM(std::chrono::seconds{time});
 }
 
 /**
@@ -83,21 +103,38 @@ FormatSignedTimeHHMM(int time) noexcept
  * @param d input seconds
  */
 void
-FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, int time) noexcept;
+FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2,
+                   std::chrono::seconds time) noexcept;
+
+static inline void
+FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2,
+                   int time) noexcept
+{
+  FormatTimeTwoLines(buffer1, buffer2, std::chrono::seconds{time});
+}
 
 void
-FormatTimespanSmart(TCHAR *buffer, int timespan,
+FormatTimespanSmart(TCHAR *buffer, std::chrono::seconds timespan,
                     unsigned max_tokens = 1,
                     const TCHAR *separator = _T(" ")) noexcept;
 
 [[gnu::const]]
 static inline BasicStringBuffer<TCHAR, 64>
-FormatTimespanSmart(int timespan, unsigned max_tokens = 1,
+FormatTimespanSmart(std::chrono::seconds timespan, unsigned max_tokens = 1,
                     const TCHAR *separator = _T(" ")) noexcept
 {
   BasicStringBuffer<TCHAR, 64> buffer;
   FormatTimespanSmart(buffer.data(), timespan, max_tokens, separator);
   return buffer;
+}
+
+[[gnu::const]]
+static inline auto
+FormatTimespanSmart(int timespan, unsigned max_tokens = 1,
+                    const TCHAR *separator = _T(" ")) noexcept
+{
+  return FormatTimespanSmart(std::chrono::seconds{timespan},
+                             max_tokens, separator);
 }
 
 #endif
