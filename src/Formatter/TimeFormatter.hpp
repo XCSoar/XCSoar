@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_TIME_FORMATTER_HPP
 
 #include "util/StringBuffer.hxx"
-#include "util/Compiler.h"
 
 #include <tchar.h>
 
@@ -68,7 +67,7 @@ FormatTimeLong(TCHAR *buffer, double time) noexcept;
 void
 FormatSignedTimeHHMM(TCHAR* buffer, int time) noexcept;
 
-gcc_const
+[[gnu::const]]
 static inline BasicStringBuffer<TCHAR, 8>
 FormatSignedTimeHHMM(int time) noexcept
 {
@@ -91,7 +90,7 @@ FormatTimespanSmart(TCHAR *buffer, int timespan,
                     unsigned max_tokens = 1,
                     const TCHAR *separator = _T(" ")) noexcept;
 
-gcc_const
+[[gnu::const]]
 static inline BasicStringBuffer<TCHAR, 64>
 FormatTimespanSmart(int timespan, unsigned max_tokens = 1,
                     const TCHAR *separator = _T(" ")) noexcept
