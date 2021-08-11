@@ -223,8 +223,7 @@ GetFlightNumber(const RecordedFlightList &flight_list,
   for (auto it = flight_list.begin(), end = flight_list.end(); it != end; ++it) {
     const RecordedFlightInfo &_flight = *it;
     if (flight.date == _flight.date &&
-        (flight.start_time.GetSecondOfDay() >
-         _flight.start_time.GetSecondOfDay()))
+        flight.start_time > _flight.start_time)
       flight_number++;
   }
   return flight_number;
