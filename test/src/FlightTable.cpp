@@ -25,6 +25,7 @@
 #include "IGC/IGCExtensions.hpp"
 #include "io/FileLineReader.hpp"
 #include "system/FileUtil.hpp"
+#include "time/FloatDuration.hxx"
 #include "util/StaticString.hxx"
 #include "util/PrintException.hxx"
 #include "util/Compiler.h"
@@ -76,7 +77,7 @@ FlightCheck::fix(const IGCFix &fix)
     auto distance = fix.location.Distance(previous.location);
     const auto duration = fix.time.DurationSinceMidnight()
       - previous.time.DurationSinceMidnight();
-    auto speed = distance / std::chrono::duration<double>{duration}.count();
+    auto speed = distance / FloatDuration{duration}.count();
     if (speed > 15) {
       if (fast_count == 0)
         fast = fix;

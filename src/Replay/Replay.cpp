@@ -234,7 +234,7 @@ Replay::OnTimer()
   else {
     constexpr std::chrono::steady_clock::duration lower = std::chrono::milliseconds(100);
     constexpr std::chrono::steady_clock::duration upper = std::chrono::seconds(3);
-    const std::chrono::duration<double> delta_s((next_data.time - virtual_time) / time_scale);
+    const FloatDuration delta_s((next_data.time - virtual_time) / time_scale);
     const auto delta = std::chrono::duration_cast<std::chrono::steady_clock::duration>(delta_s);
     schedule = Clamp(delta, lower, upper);
   }

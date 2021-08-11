@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_GPS_CLOCK_HPP
 #define XCSOAR_GPS_CLOCK_HPP
 
+#include "FloatDuration.hxx"
+
 #include <chrono>
 
 /**
@@ -88,7 +90,7 @@ public:
     if (CheckReverse(now))
       return false;
 
-    if (now >= last + std::chrono::duration_cast<std::chrono::duration<double>>(dt).count()) {
+    if (now >= last + std::chrono::duration_cast<FloatDuration>(dt).count()) {
       Update(now);
       return true;
     } else
