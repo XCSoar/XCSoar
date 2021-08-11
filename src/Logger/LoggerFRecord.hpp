@@ -48,12 +48,12 @@ public:
   void Reset();
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   static bool IsBadSignal(const GPSState &gps) {
     return !gps.satellites_used_available || gps.satellites_used < 3;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool CheckSatellitesChanged(const GPSState &gps) const;
 };
 

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Logger/LoggerFRecord.hpp"
+#include "util/Compiler.h"
 
 #include <string.h>
 
