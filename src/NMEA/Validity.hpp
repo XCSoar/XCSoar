@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_VALIDITY_HPP
 #define XCSOAR_VALIDITY_HPP
 
-#include "util/Compiler.h"
+#include "time/FloatDuration.hxx"
 
 #include <chrono>
 #include <type_traits>
@@ -41,7 +41,6 @@ class Validity {
   static constexpr int BITS = 6;
 
   using Duration = std::chrono::duration<uint32_t, std::ratio<1, 1 << BITS>>;
-  using FloatDuration = std::chrono::duration<double>;
 
   Duration last;
 
