@@ -91,7 +91,8 @@ class GlueMapWindow : public MapWindow {
   bool ignore_single_click = false;
 
 #ifdef ENABLE_OPENGL
-  KineticManager kinetic_x = 700, kinetic_y = 700;
+  KineticManager kinetic_x{std::chrono::milliseconds{700}};
+  KineticManager kinetic_y{std::chrono::milliseconds{700}};
   UI::PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
 #endif
 

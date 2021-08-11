@@ -57,8 +57,8 @@ class KineticManager
   PeriodClock clock;
 
 public:
-  KineticManager(int _stopping_time = 1000)
-    :stopping_time(std::chrono::milliseconds(_stopping_time)) {}
+  explicit KineticManager(std::chrono::duration<double> _stopping_time = std::chrono::seconds{1}) noexcept
+    :stopping_time(_stopping_time) {}
 
   /** Needs to be called once the manual movement is started */
   void MouseDown(int x);
