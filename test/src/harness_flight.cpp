@@ -52,19 +52,19 @@ aat_min_time(int test_num)
 #include "Task/TaskManager.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 
-class PrintTaskAutoPilot: public TaskAutoPilot
+class PrintTaskAutoPilot final : public TaskAutoPilot
 {
 public:
   PrintTaskAutoPilot(const AutopilotParameters &_parms):
     TaskAutoPilot(_parms) {};
 
 protected:
-  virtual void OnManualAdvance() {
+  void OnManualAdvance() override {
     if (verbose>1) {
       printf("# manual advance to %d\n",awp);
     }
   }
-  virtual void OnModeChange() {
+  void OnModeChange() override {
     if (verbose>1) {
       switch (acstate) {
       case Cruise:
@@ -79,7 +79,7 @@ protected:
       }
     }
   }
-  virtual void OnClose() {
+  void OnClose() override {
     WaitPrompt();
   }
 };
