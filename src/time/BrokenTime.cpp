@@ -60,7 +60,7 @@ BrokenTime::operator+(std::chrono::seconds delta) const noexcept
 {
   assert(IsPlausible());
 
-  delta += std::chrono::seconds(GetSecondOfDay());
+  delta += DurationSinceMidnight();
   while (delta.count() < 0)
     delta += std::chrono::hours(24);
 

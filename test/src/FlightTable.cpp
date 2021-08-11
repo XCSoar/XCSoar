@@ -74,7 +74,9 @@ FlightCheck::fix(const IGCFix &fix)
 
   if (previous_valid && fix.time > previous.time) {
     auto distance = fix.location.Distance(previous.location);
-    auto speed = distance / (fix.time.GetSecondOfDay() - previous.time.GetSecondOfDay());
+    const auto duration = fix.time.DurationSinceMidnight()
+      - previous.time.DurationSinceMidnight();
+    auto speed = distance / std::chrono::duration<double>{duration}.count();
     if (speed > 15) {
       if (fast_count == 0)
         fast = fix;

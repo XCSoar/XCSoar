@@ -104,6 +104,10 @@ struct BrokenTime {
     return hour * 3600u + minute * 60u + second;
   }
 
+  constexpr std::chrono::seconds DurationSinceMidnight() const noexcept {
+    return std::chrono::seconds(GetSecondOfDay());
+  }
+
   /**
    * Construct a BrokenTime object from the specified number of
    * seconds which have passed on this day.
