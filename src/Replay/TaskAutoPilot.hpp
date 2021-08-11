@@ -30,21 +30,15 @@ struct AircraftState;
 
 struct AutopilotParameters {
   double bearing_noise;
-  double target_noise;
+  double target_noise = 0.1;
   double turn_speed;
-  double sink_factor;
-  double climb_factor;
-  double start_alt;
-  bool enable_bestcruisetrack;
-  bool goto_target;
+  double sink_factor = 1;
+  double climb_factor = 1;
+  double start_alt = 1500;
+  bool enable_bestcruisetrack = false;
+  bool goto_target = false;
 
-  AutopilotParameters():
-    target_noise(0.1),
-    sink_factor(1.0),
-    climb_factor(1.0),
-    start_alt(1500.0),
-    enable_bestcruisetrack(false),
-    goto_target(false)
+  AutopilotParameters() noexcept
     {
       SetRealistic();
     };
