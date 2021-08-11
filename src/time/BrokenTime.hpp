@@ -135,6 +135,16 @@ struct BrokenTime {
   static BrokenTime FromSecondOfDayChecked(unsigned second_of_day) noexcept;
 
   /**
+   * A wrapper for FromSinceMidnight() which allows values bigger than
+   * one day.
+   */
+  template<class Rep, class Period>
+  [[gnu::const]]
+  static BrokenTime FromSinceMidnightChecked(const std::chrono::duration<Rep,Period> &since_midnight) noexcept {
+    return FromSecondOfDayChecked(std::chrono::duration_cast<std::chrono::seconds>(since_midnight).count());
+  }
+
+  /**
    * Returns the number of minutes which have passed on this day.
    */
   constexpr
