@@ -43,6 +43,10 @@ Copyright_License {
 #include <fnmatch.h>
 #include <utime.h>
 #include <time.h>
+#elif defined( _MSC_VER)
+# include <corecrt_io.h>
+# include <BaseTsd.h>
+  typedef SSIZE_T ssize_t;
 #endif
 
 void
