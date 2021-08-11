@@ -32,42 +32,48 @@ Copyright_License {
  * This data type stores a time of day with minute granularity.
  */
 class RoughTime {
-  static constexpr uint16_t INVALID = -1;
-  static constexpr uint16_t MAX = 24 * 60;
+  using Duration = std::chrono::duration<uint16_t,
+                                         std::chrono::minutes::period>;
+
+  static constexpr auto INVALID = Duration::max();
+  static constexpr Duration MAX = std::chrono::hours{24};
 
   /**
    * Minute of day.  Must be smaller than 24*60.  The only exception
    * is the special value #INVALID.
    */
-  uint16_t value;
+  Duration value;
 
-  constexpr RoughTime(uint16_t _value) noexcept
+  constexpr RoughTime(Duration _value) noexcept
     :value(_value) {}
 
 public:
   RoughTime() noexcept = default;
 
   constexpr RoughTime(unsigned hour, unsigned minute) noexcept
-    :value(hour * 60 + minute) {}
+    :value(std::chrono::duration_cast<Duration>(std::chrono::hours{hour}) +
+           std::chrono::duration_cast<Duration>(std::chrono::minutes{minute}))
+  {
+  }
 
   [[gnu::const]]
   static RoughTime FromMinuteOfDay(unsigned mod) noexcept {
-    assert(mod < MAX);
+    assert(std::chrono::minutes{mod} < MAX);
 
-    return RoughTime(mod);
+    return RoughTime(std::chrono::minutes{mod});
   }
 
   [[gnu::const]]
   static RoughTime FromMinuteOfDayChecked(int mod) noexcept {
     while (mod < 0)
-      mod += MAX;
+      mod += MAX.count();
 
     return FromMinuteOfDayChecked(unsigned(mod));
   }
 
   [[gnu::const]]
   static RoughTime FromMinuteOfDayChecked(unsigned mod) noexcept {
-    return RoughTime(mod % MAX);
+    return RoughTime(std::chrono::minutes{mod % MAX.count()});
   }
 
   [[gnu::const]]
@@ -97,7 +103,7 @@ public:
 
   constexpr bool operator <(RoughTime other) const noexcept {
     /* this formula supports midnight wraparound */
-    return (MAX - 1 + other.value - value) % MAX < MAX / 2;
+    return (MAX - Duration{1} + other.value - value) % MAX < MAX / 2;
   }
 
   constexpr bool operator >(RoughTime other) const noexcept {
@@ -113,22 +119,22 @@ public:
   }
 
   constexpr unsigned GetHour() const noexcept {
-    return value / 60;
+    return std::chrono::duration_cast<std::chrono::hours>(value).count();
   }
 
   constexpr unsigned GetMinute() const noexcept {
-    return value % 60;
+    return value.count() % 60;
   }
 
   constexpr unsigned GetMinuteOfDay() const noexcept {
-    return value;
+    return value.count();
   }
 
   RoughTime &operator++() noexcept {
     assert(IsValid());
     assert(value < MAX);
 
-    value = (value + 1) % MAX;
+    value = (value + Duration{1}) % MAX;
     return *this;
   }
 
@@ -136,7 +142,7 @@ public:
     assert(IsValid());
     assert(value < MAX);
 
-    value = (value + MAX - 1) % MAX;
+    value = (value + MAX - Duration{1}) % MAX;
     return *this;
   }
 };
@@ -203,9 +209,12 @@ class RoughTimeDelta {
   /**
    * Relative minutes.
    */
-  int16_t value;
+  using Duration = std::chrono::duration<int16_t,
+                                         std::chrono::minutes::period>;
 
-  constexpr RoughTimeDelta(int16_t _value) noexcept
+  Duration value;
+
+  constexpr RoughTimeDelta(Duration _value) noexcept
     :value(_value) {}
 
 public:
@@ -213,29 +222,29 @@ public:
 
   constexpr
   static RoughTimeDelta FromMinutes(int _value) noexcept {
-    return RoughTimeDelta(_value);
+    return RoughTimeDelta(Duration{_value});
   }
 
   constexpr
   static RoughTimeDelta FromSeconds(int _value) noexcept {
-    return RoughTimeDelta(_value / 60);
+    return RoughTimeDelta(Duration{_value / 60});
   }
 
   constexpr
   static RoughTimeDelta FromHours(int _value) noexcept {
-    return RoughTimeDelta(_value * 60);
+    return RoughTimeDelta(Duration{_value * 60});
   }
 
   constexpr std::chrono::minutes ToDuration() const noexcept {
-    return std::chrono::minutes{value};
-  }
-
-  constexpr int AsMinutes() const noexcept {
     return value;
   }
 
+  constexpr int AsMinutes() const noexcept {
+    return value.count();
+  }
+
   constexpr int AsSeconds() const noexcept {
-    return value * 60;
+    return value.count() * 60;
   }
 
   constexpr bool operator==(RoughTimeDelta other) const noexcept {
