@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_ROUGH_TIME_SPAN_HPP
 #define XCSOAR_ROUGH_TIME_SPAN_HPP
 
-#include "util/Compiler.h"
-
 #include <cassert>
 #include <chrono>
 #include <cstdint>
@@ -52,14 +50,14 @@ public:
   constexpr RoughTime(unsigned hour, unsigned minute)
     :value(hour * 60 + minute) {}
 
-  gcc_const
+  [[gnu::const]]
   static RoughTime FromMinuteOfDay(unsigned mod) {
     assert(mod < MAX);
 
     return RoughTime(mod);
   }
 
-  gcc_const
+  [[gnu::const]]
   static RoughTime FromMinuteOfDayChecked(int mod) {
     while (mod < 0)
       mod += MAX;
@@ -67,12 +65,12 @@ public:
     return FromMinuteOfDayChecked(unsigned(mod));
   }
 
-  gcc_const
+  [[gnu::const]]
   static RoughTime FromMinuteOfDayChecked(unsigned mod) {
     return RoughTime(mod % MAX);
   }
 
-  gcc_const
+  [[gnu::const]]
   static RoughTime FromSecondOfDayChecked(unsigned sod) {
     return FromMinuteOfDayChecked(sod / 60);
   }
@@ -253,7 +251,7 @@ public:
   }
 };
 
-gcc_const
+[[gnu::const]]
 static inline RoughTime
 operator+(RoughTime t, RoughTimeDelta delta)
 {
@@ -264,7 +262,7 @@ operator+(RoughTime t, RoughTimeDelta delta)
   return RoughTime::FromMinuteOfDayChecked(value);
 }
 
-gcc_const
+[[gnu::const]]
 static inline RoughTime
 operator-(RoughTime t, RoughTimeDelta delta)
 {
