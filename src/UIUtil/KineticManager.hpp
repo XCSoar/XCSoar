@@ -42,7 +42,7 @@ class KineticManager
   const FloatDuration stopping_time;
 
   /** Whether the kinetic movement is still active */
-  bool steady;
+  bool steady = true;
 
   /** Position at the end of the manual movement */
   int last;
@@ -58,7 +58,7 @@ class KineticManager
 
 public:
   KineticManager(int _stopping_time = 1000)
-    :stopping_time(std::chrono::milliseconds(_stopping_time)), steady(true) {}
+    :stopping_time(std::chrono::milliseconds(_stopping_time)) {}
 
   /** Needs to be called once the manual movement is started */
   void MouseDown(int x);
