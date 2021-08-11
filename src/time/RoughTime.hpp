@@ -41,24 +41,24 @@ class RoughTime {
    */
   uint16_t value;
 
-  constexpr RoughTime(uint16_t _value)
+  constexpr RoughTime(uint16_t _value) noexcept
     :value(_value) {}
 
 public:
-  RoughTime() = default;
+  RoughTime() noexcept = default;
 
-  constexpr RoughTime(unsigned hour, unsigned minute)
+  constexpr RoughTime(unsigned hour, unsigned minute) noexcept
     :value(hour * 60 + minute) {}
 
   [[gnu::const]]
-  static RoughTime FromMinuteOfDay(unsigned mod) {
+  static RoughTime FromMinuteOfDay(unsigned mod) noexcept {
     assert(mod < MAX);
 
     return RoughTime(mod);
   }
 
   [[gnu::const]]
-  static RoughTime FromMinuteOfDayChecked(int mod) {
+  static RoughTime FromMinuteOfDayChecked(int mod) noexcept {
     while (mod < 0)
       mod += MAX;
 
@@ -66,65 +66,65 @@ public:
   }
 
   [[gnu::const]]
-  static RoughTime FromMinuteOfDayChecked(unsigned mod) {
+  static RoughTime FromMinuteOfDayChecked(unsigned mod) noexcept {
     return RoughTime(mod % MAX);
   }
 
   [[gnu::const]]
-  static RoughTime FromSecondOfDayChecked(unsigned sod) {
+  static RoughTime FromSecondOfDayChecked(unsigned sod) noexcept {
     return FromMinuteOfDayChecked(sod / 60);
   }
 
-  static constexpr RoughTime Invalid() {
+  static constexpr RoughTime Invalid() noexcept {
     return RoughTime(INVALID);
   }
 
-  void SetInvalid() {
+  void SetInvalid() noexcept {
     value = INVALID;
   }
 
-  constexpr bool IsValid() const {
+  constexpr bool IsValid() const noexcept {
     return value != INVALID;
   }
 
-  constexpr bool operator ==(RoughTime other) const {
+  constexpr bool operator ==(RoughTime other) const noexcept {
     return value == other.value;
   }
 
-  constexpr bool operator !=(RoughTime other) const {
+  constexpr bool operator !=(RoughTime other) const noexcept {
     return value != other.value;
   }
 
-  constexpr bool operator <(RoughTime other) const {
+  constexpr bool operator <(RoughTime other) const noexcept {
     /* this formula supports midnight wraparound */
     return (MAX - 1 + other.value - value) % MAX < MAX / 2;
   }
 
-  constexpr bool operator >(RoughTime other) const {
+  constexpr bool operator >(RoughTime other) const noexcept {
     return other < *this;
   }
 
-  constexpr bool operator <=(RoughTime other) const {
+  constexpr bool operator <=(RoughTime other) const noexcept {
     return !(*this > other);
   }
 
-  constexpr bool operator >=(RoughTime other) const {
+  constexpr bool operator >=(RoughTime other) const noexcept {
     return !(*this < other);
   }
 
-  constexpr unsigned GetHour() const {
+  constexpr unsigned GetHour() const noexcept {
     return value / 60;
   }
 
-  constexpr unsigned GetMinute() const {
+  constexpr unsigned GetMinute() const noexcept {
     return value % 60;
   }
 
-  constexpr unsigned GetMinuteOfDay() const {
+  constexpr unsigned GetMinuteOfDay() const noexcept {
     return value;
   }
 
-  RoughTime &operator++() {
+  RoughTime &operator++() noexcept {
     assert(IsValid());
     assert(value < MAX);
 
@@ -132,7 +132,7 @@ public:
     return *this;
   }
 
-  RoughTime &operator--() {
+  RoughTime &operator--() noexcept {
     assert(IsValid());
     assert(value < MAX);
 
@@ -157,40 +157,40 @@ class RoughTimeSpan {
   RoughTime end;
 
 public:
-  RoughTimeSpan() = default;
+  RoughTimeSpan() noexcept = default;
 
-  constexpr RoughTimeSpan(RoughTime _start, RoughTime _end)
+  constexpr RoughTimeSpan(RoughTime _start, RoughTime _end) noexcept
     :start(_start), end(_end) {}
 
-  static constexpr RoughTimeSpan Invalid() {
+  static constexpr RoughTimeSpan Invalid() noexcept {
     return RoughTimeSpan(RoughTime::Invalid(), RoughTime::Invalid());
   }
 
-  constexpr const RoughTime &GetStart() const {
+  constexpr const RoughTime &GetStart() const noexcept {
     return start;
   }
 
-  constexpr const RoughTime &GetEnd() const {
+  constexpr const RoughTime &GetEnd() const noexcept {
     return end;
   }
 
-  constexpr bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
     return start.IsValid() || end.IsValid();
   }
 
-  constexpr bool HasBegun(RoughTime now) const {
+  constexpr bool HasBegun(RoughTime now) const noexcept {
     /* if start is invalid, we assume the time span has always already
        begun */
     return !start.IsValid() || now >= start;
   }
 
-  constexpr bool HasEnded(RoughTime now) const {
+  constexpr bool HasEnded(RoughTime now) const noexcept {
     /* if end is invalid, the time span is open-ended, i.e. it will
        never end */
     return end.IsValid() && now >= end;
   }
 
-  constexpr bool IsInside(RoughTime now) const {
+  constexpr bool IsInside(RoughTime now) const noexcept {
     return HasBegun(now) && !HasEnded(now);
   }
 };
@@ -205,24 +205,24 @@ class RoughTimeDelta {
    */
   int16_t value;
 
-  constexpr RoughTimeDelta(int16_t _value)
+  constexpr RoughTimeDelta(int16_t _value) noexcept
     :value(_value) {}
 
 public:
-  RoughTimeDelta() = default;
+  RoughTimeDelta() noexcept = default;
 
   constexpr
-  static RoughTimeDelta FromMinutes(int _value) {
+  static RoughTimeDelta FromMinutes(int _value) noexcept {
     return RoughTimeDelta(_value);
   }
 
   constexpr
-  static RoughTimeDelta FromSeconds(int _value) {
+  static RoughTimeDelta FromSeconds(int _value) noexcept {
     return RoughTimeDelta(_value / 60);
   }
 
   constexpr
-  static RoughTimeDelta FromHours(int _value) {
+  static RoughTimeDelta FromHours(int _value) noexcept {
     return RoughTimeDelta(_value * 60);
   }
 
@@ -230,30 +230,30 @@ public:
     return std::chrono::minutes{value};
   }
 
-  constexpr int AsMinutes() const {
+  constexpr int AsMinutes() const noexcept {
     return value;
   }
 
-  constexpr int AsSeconds() const {
+  constexpr int AsSeconds() const noexcept {
     return value * 60;
   }
 
-  constexpr bool operator==(RoughTimeDelta other) const {
+  constexpr bool operator==(RoughTimeDelta other) const noexcept {
     return value == other.value;
   }
 
-  constexpr bool operator!=(RoughTimeDelta other) const {
+  constexpr bool operator!=(RoughTimeDelta other) const noexcept {
     return value != other.value;
   }
 
-  constexpr RoughTimeDelta operator-() const {
+  constexpr RoughTimeDelta operator-() const noexcept {
     return RoughTimeDelta(-value);
   }
 };
 
 [[gnu::const]]
 static inline RoughTime
-operator+(RoughTime t, RoughTimeDelta delta)
+operator+(RoughTime t, RoughTimeDelta delta) noexcept
 {
   if (!t.IsValid())
     return t;
@@ -264,7 +264,7 @@ operator+(RoughTime t, RoughTimeDelta delta)
 
 [[gnu::const]]
 static inline RoughTime
-operator-(RoughTime t, RoughTimeDelta delta)
+operator-(RoughTime t, RoughTimeDelta delta) noexcept
 {
   return t + (-delta);
 }
