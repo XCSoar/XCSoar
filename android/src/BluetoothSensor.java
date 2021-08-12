@@ -114,18 +114,21 @@ public final class BluetoothSensor
 
       if (BluetoothUuids.FLYTEC_SENSBOX_SERVICE.equals(c.getService().getUuid())) {
         if (BluetoothUuids.FLYTEC_SENSBOX_NAVIGATION_SENSOR_CHARACTERISTIC.equals(c.getUuid())) {
+          final int gps_status = c.getIntValue(c.FORMAT_UINT8, 18) & 0x7;
+          final boolean hasAltitude = (gps_status == 2 || gps_status == 4);
+
           listener.onLocationSensor(c.getIntValue(c.FORMAT_UINT32, 0),
                                     -1,
                                     c.getIntValue(c.FORMAT_SINT32, 8) / 10000000.,
                                     c.getIntValue(c.FORMAT_SINT32, 4) / 10000000.,
-                                    false, 0,
+                                    hasAltitude, c.getIntValue(c.FORMAT_SINT16, 12),
                                     false, 0,
                                     false, 0,
                                     false, 0,
                                     false, 0);
 
-          listener.onPressureAltitudeSensor(c.getIntValue(c.FORMAT_SINT16, 12));
-          listener.onVarioSensor(c.getIntValue(c.FORMAT_SINT16, 16) / 10.f);
+          listener.onPressureAltitudeSensor(c.getIntValue(c.FORMAT_SINT16, 14));
+          listener.onVarioSensor(c.getIntValue(c.FORMAT_SINT16, 16) / 100.f);
 
           //c.getIntValue(c.FORMAT_SINT16, 14), // ??
         }
