@@ -25,20 +25,6 @@
 
 #include <algorithm>
 
-SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const Duration _max_dt,
-                                                   const double var_x_accel) noexcept
-  :filter_(var_x_accel)
-{
-  SetMaxDt(_max_dt);
-}
-
-void
-SelfTimingKalmanFilter1d::SetMaxDt(const Duration _max_dt) noexcept
-{
-  // It's OK, albeit silly, to have a zero max_dt value. We just always reset.
-  max_dt = std::max(_max_dt, Duration{});
-}
-
 void
 SelfTimingKalmanFilter1d::Update(const double z_abs,
                                  const double var_z_abs) noexcept

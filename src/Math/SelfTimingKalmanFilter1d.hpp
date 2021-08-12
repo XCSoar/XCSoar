@@ -64,16 +64,9 @@ public:
    *
    * Or you can just punt and set it to, like, a minute.
    */
-  SelfTimingKalmanFilter1d(Duration max_dt,
-                           double var_x_accel=1) noexcept;
-
-  // Get and set the maximum update interval as desired. See note above
-  // constructors for details on update intervals.
-  void SetMaxDt(Duration max_dt) noexcept;
-
-  Duration GetMaxDt() const noexcept {
-    return max_dt;
-  }
+  SelfTimingKalmanFilter1d(Duration _max_dt,
+                           double var_x_accel=1) noexcept
+    :filter_(var_x_accel), max_dt(_max_dt) {}
 
   /**
    * Updates state given a direct sensor measurement of the absolute
