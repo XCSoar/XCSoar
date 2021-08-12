@@ -205,9 +205,13 @@ Use one of the following targets:
  * - ``ANDROID``
    - for ARM CPUs (same as ``ANDROID7``)
  * - ``ANDROID7``
-   - for ARMv7 CPUs
+   - for ARMv7 CPUs (32 bit)
+ * - ``ANDROIDAARCH64``
+   - for 64 bit ARM CPUs
  * - ``ANDROID86``
-   - for x86 CPUs
+   - for x86-32 CPUs
+ * - ``ANDROIDX64``
+   - for x86-64 CPUs
  * - ``ANDROIDFAT``
    - "fat" package for all supported CPUs
 
