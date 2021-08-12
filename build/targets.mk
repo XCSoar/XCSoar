@@ -316,7 +316,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r22b
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r23
 
   ANDROID_SDK_PLATFORM = android-29
   ANDROID_NDK_API = 21
@@ -380,8 +380,8 @@ ifeq ($(TARGET),ANDROID)
 
   ANDROID_TOOLCHAIN = $(ANDROID_NDK)/toolchains/$(ANDROID_TOOLCHAIN_NAME)/prebuilt/$(ANDROID_HOST_TAG)
 
-  TCPREFIX = $(ANDROID_TOOLCHAIN)/bin/$(HOST_TRIPLET)-
   LLVM_PREFIX = $(ANDROID_TOOLCHAIN)/bin/
+  TCPREFIX = $(LLVM_PREFIX)/llvm-
 
 
   ifeq ($(ARMV7),y)
