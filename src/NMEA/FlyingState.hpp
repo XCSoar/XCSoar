@@ -107,6 +107,14 @@ struct FlyingState
   /** Reset flying state as if never flown */
   void Reset();
 
+  /**
+   * Was a take-off recorded?  This validates the fields
+   * #takeoff_time, #takeoff_location and #takeoff_altitude.
+   */
+  bool HasTakenOff() const noexcept {
+    return takeoff_time >= 0;
+  }
+
   bool IsTowing() const {
     return flying && release_time < 0;
   }
