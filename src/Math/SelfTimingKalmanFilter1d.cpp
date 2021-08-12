@@ -26,30 +26,33 @@
 #include <algorithm>
 
 SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const double max_dt,
-                                                   const double var_x_accel)
-    : filter_(var_x_accel) {
+                                                   const double var_x_accel) noexcept
+  :filter_(var_x_accel)
+{
   SetMaxDt(max_dt);
 }
 
-SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const double max_dt) {
+SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const double max_dt) noexcept
+{
   SetMaxDt(max_dt);
 }
 
 void
-SelfTimingKalmanFilter1d::SetMaxDt(const double max_dt)
+SelfTimingKalmanFilter1d::SetMaxDt(const double max_dt) noexcept
 {
   // It's OK, albeit silly, to have a zero max_dt value. We just always reset.
   max_dt_us_ = max_dt < 0 ? 0u : unsigned(max_dt * 1e6);
 }
 
 double
-SelfTimingKalmanFilter1d::GetMaxDt() const
+SelfTimingKalmanFilter1d::GetMaxDt() const noexcept
 {
   return max_dt_us_ / 1e6;
 }
 
 void
-SelfTimingKalmanFilter1d::Update(const double z_abs, const double var_z_abs)
+SelfTimingKalmanFilter1d::Update(const double z_abs,
+                                 const double var_z_abs) noexcept
 {
   const unsigned int t_us = MonotonicClockUS();
 

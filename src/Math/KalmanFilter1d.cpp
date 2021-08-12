@@ -25,32 +25,33 @@
 
 #include <cassert>
 
-KalmanFilter1d::KalmanFilter1d(const double var_x_accel)
+KalmanFilter1d::KalmanFilter1d(const double var_x_accel) noexcept
   :var_x_accel_(var_x_accel)
 {
   Reset();
 }
 
-KalmanFilter1d::KalmanFilter1d()
+KalmanFilter1d::KalmanFilter1d() noexcept
   :var_x_accel_(1)
 {
   Reset();
 }
 
 void
-KalmanFilter1d::Reset()
+KalmanFilter1d::Reset() noexcept
 {
   Reset(0, 0);
 }
 
 void
-KalmanFilter1d::Reset(const double x_abs_value)
+KalmanFilter1d::Reset(const double x_abs_value) noexcept
 {
   Reset(x_abs_value, 0);
 }
 
 void
-KalmanFilter1d::Reset(const double x_abs_value, const double x_vel_value)
+KalmanFilter1d::Reset(const double x_abs_value,
+                      const double x_vel_value) noexcept
 {
   x_abs_ = x_abs_value;
   x_vel_ = x_vel_value;
@@ -61,7 +62,7 @@ KalmanFilter1d::Reset(const double x_abs_value, const double x_vel_value)
 
 void
 KalmanFilter1d::Update(const double z_abs, const double var_z_abs,
-                       const double dt)
+                       const double dt) noexcept
 {
   // Some abbreviated constants to make the code line up nicely:
   static constexpr double F1 = 1;
