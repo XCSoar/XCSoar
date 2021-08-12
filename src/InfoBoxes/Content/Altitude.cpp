@@ -30,11 +30,7 @@ Copyright_License {
 #include "InfoBoxes/Panel/AltitudeSetup.hpp"
 #include "Units/Units.hpp"
 #include "Interface.hpp"
-#include "Engine/Waypoint/Waypoint.hpp"
-#include "Engine/Waypoint/Waypoints.hpp"
 #include "Language/Language.hpp"
-#include "Components.hpp"
-#include "Simulator.hpp"
 
 #include <tchar.h>
 
