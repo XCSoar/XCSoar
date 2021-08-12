@@ -25,6 +25,7 @@
 
 #include "KalmanFilter1d.hpp"
 
+#include <chrono>
 #include <cstdint>
 
 /**
@@ -32,6 +33,12 @@
  * that updates need provide only measurement information.
  */
 class SelfTimingKalmanFilter1d {
+public:
+  using Clock = std::chrono::steady_clock;
+  using Duration = Clock::duration;
+  using TimePoint = Clock::time_point;
+
+private:
   KalmanFilter1d filter_;
 
   // Internal time representations are in milliseconds.
@@ -39,12 +46,12 @@ class SelfTimingKalmanFilter1d {
   /**
    * Reset if updates are less frequent than this.
    */
-  uint64_t max_dt_us_;
+  Duration max_dt;
 
   /**
    * Time of last update.
    */
-  uint64_t t_last_update_us_ = 0;
+  TimePoint last_update_time;
 
 public:
   /**
@@ -57,13 +64,16 @@ public:
    *
    * Or you can just punt and set it to, like, a minute.
    */
-  SelfTimingKalmanFilter1d(double max_dt,
+  SelfTimingKalmanFilter1d(Duration max_dt,
                            double var_x_accel=1) noexcept;
 
   // Get and set the maximum update interval as desired. See note above
   // constructors for details on update intervals.
-  void SetMaxDt(double max_dt) noexcept;
-  double GetMaxDt() const noexcept;
+  void SetMaxDt(Duration max_dt) noexcept;
+
+  Duration GetMaxDt() const noexcept {
+    return max_dt;
+  }
 
   /**
    * Updates state given a direct sensor measurement of the absolute

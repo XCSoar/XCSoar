@@ -193,9 +193,11 @@ class DeviceDescriptor final
      normal distribution, probably because glider pilots usually
      experience fairly constant pressure change most of the time. */
   static constexpr double KF_VAR_ACCEL = 0.0075;
-  static constexpr double KF_MAX_DT = 60;
+  static constexpr SelfTimingKalmanFilter1d::Duration KF_MAX_DT =
+    std::chrono::minutes{1};
 
-  static constexpr double KF_I2C_MAX_DT = 5;
+  static constexpr SelfTimingKalmanFilter1d::Duration KF_I2C_MAX_DT =
+    std::chrono::seconds{5};
   static constexpr double KF_I2C_VAR_ACCEL = 0.3;
   static constexpr double KF_I2C_VAR_ACCEL_85 = KF_VAR_ACCEL;
 
