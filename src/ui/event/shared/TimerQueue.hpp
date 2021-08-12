@@ -38,7 +38,7 @@ class Timer;
 class TimerQueue {
   struct TimerRecord {
     /**
-     * Projected MonotonicClockUS() value when this timer is due.
+     * Projected time point when this timer is due.
      */
     std::chrono::steady_clock::time_point due;
 

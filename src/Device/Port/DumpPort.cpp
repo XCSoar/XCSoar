@@ -47,7 +47,7 @@ DumpPort::CheckEnabled()
 
   if (std::chrono::steady_clock::now() >= until) {
     /* duration has just expired; clear to avoid calling
-       MonotonicClockMS() again in the next call */
+       steady_clock::now() again in the next call */
     until = std::chrono::steady_clock::time_point{};
     return false;
   }

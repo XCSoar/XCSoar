@@ -27,7 +27,6 @@ Copyright_License {
 #include "Atmosphere/Pressure.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
-#include "system/Clock.hpp"
 #include "java/Env.hxx"
 
 Java::TrivialClass InternalSensors::gps_cls, InternalSensors::sensors_cls;
