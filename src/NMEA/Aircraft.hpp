@@ -24,13 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_AIRCRAFT_HPP
 #define XCSOAR_NMEA_AIRCRAFT_HPP
 
-#include "util/Compiler.h"
-
 struct MoreData;
 struct DerivedInfo;
 struct AircraftState;
 
-gcc_pure
+[[gnu::pure]]
 const AircraftState
 ToAircraftState(const MoreData &info, const DerivedInfo &calculated);
 

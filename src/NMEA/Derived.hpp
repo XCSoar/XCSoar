@@ -268,7 +268,7 @@ struct DerivedInfo:
    * Return the current wind vector, or the null vector if no wind is
    * available.
    */
-  gcc_pure
+  [[gnu::pure]]
   SpeedVector GetWindOrZero() const {
     return wind_available
       ? wind

@@ -30,6 +30,7 @@
 #include "Geo/GeoBounds.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/Math.hpp"
+#include "util/Compiler.h"
 
 #include <cassert>
 

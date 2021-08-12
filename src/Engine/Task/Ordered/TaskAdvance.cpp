@@ -24,6 +24,7 @@
 #include "Task/Points/TaskPoint.hpp"
 #include "Points/AATPoint.hpp"
 #include "Points/ASTPoint.hpp"
+#include "util/Compiler.h"
 
 void
 TaskAdvance::Reset()

@@ -369,7 +369,7 @@ struct NMEAInfo {
    *
    * @param other_time the time stamp (see attribute #time)
    */
-  gcc_pure
+  [[gnu::pure]]
   BrokenDateTime GetDateTimeAt(double other_time) const;
 
   bool MovementDetected() const {
@@ -505,7 +505,7 @@ struct NMEAInfo {
    * altitude is available.  The "second" element contains the
    * altitude value [m] if "first" is true.
    */
-  gcc_pure
+  [[gnu::pure]]
   std::pair<bool, double> GetAnyAltitude() const {
     return pressure_altitude_available
       ? std::make_pair(true, pressure_altitude)

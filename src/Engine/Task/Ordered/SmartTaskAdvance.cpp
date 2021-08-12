@@ -23,6 +23,7 @@
 #include "SmartTaskAdvance.hpp"
 #include "Task/Points/TaskPoint.hpp"
 #include "Points/StartPoint.hpp"
+#include "util/Compiler.h"
 
 SmartTaskAdvance::SmartTaskAdvance()
   :state(TaskAdvance::MANUAL)
