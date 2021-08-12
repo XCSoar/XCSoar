@@ -22,13 +22,13 @@ Copyright_License {
 */
 
 #include "NMEA/Info.hpp"
-#include "system/Clock.hpp"
 #include "Atmosphere/AirDensity.hpp"
+#include "time/Cast.hxx"
 
 void
 NMEAInfo::UpdateClock()
 {
-  clock = MonotonicClockFloat();
+  clock = ToFloatSeconds(std::chrono::steady_clock::now().time_since_epoch());
 }
 
 BrokenDateTime
