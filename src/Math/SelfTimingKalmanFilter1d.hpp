@@ -57,8 +57,8 @@ public:
    *
    * Or you can just punt and set it to, like, a minute.
    */
-  SelfTimingKalmanFilter1d(double max_dt, double var_x_accel) noexcept;
-  SelfTimingKalmanFilter1d(double max_dt) noexcept;
+  SelfTimingKalmanFilter1d(double max_dt,
+                           double var_x_accel=1) noexcept;
 
   // Get and set the maximum update interval as desired. See note above
   // constructors for details on update intervals.
@@ -76,15 +76,7 @@ public:
 
   // Remaining methods are identical to their counterparts in KalmanFilter1d.
 
-  void Reset() noexcept {
-    filter_.Reset();
-  }
-
-  void Reset(const double x_abs_value) noexcept {
-    filter_.Reset(x_abs_value);
-  }
-
-  void Reset(const double x_abs_value, const double x_vel_value) noexcept {
+  void Reset(const double x_abs_value=0, const double x_vel_value=0) noexcept {
     filter_.Reset(x_abs_value, x_vel_value);
   }
 

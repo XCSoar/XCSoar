@@ -31,24 +31,6 @@ KalmanFilter1d::KalmanFilter1d(const double var_x_accel) noexcept
   Reset();
 }
 
-KalmanFilter1d::KalmanFilter1d() noexcept
-  :var_x_accel_(1)
-{
-  Reset();
-}
-
-void
-KalmanFilter1d::Reset() noexcept
-{
-  Reset(0, 0);
-}
-
-void
-KalmanFilter1d::Reset(const double x_abs_value) noexcept
-{
-  Reset(x_abs_value, 0);
-}
-
 void
 KalmanFilter1d::Reset(const double x_abs_value,
                       const double x_vel_value) noexcept

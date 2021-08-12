@@ -32,11 +32,6 @@ SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const double max_dt,
   SetMaxDt(max_dt);
 }
 
-SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const double max_dt) noexcept
-{
-  SetMaxDt(max_dt);
-}
-
 void
 SelfTimingKalmanFilter1d::SetMaxDt(const double max_dt) noexcept
 {

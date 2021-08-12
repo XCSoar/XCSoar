@@ -54,8 +54,7 @@ class KalmanFilter1d {
   // Constructors: the first allows you to supply the variance of the
   // acceleration noise input to the system model in x units per second squared;
   // the second constructor assumes a variance of 1.0.
-  KalmanFilter1d(double var_x_accel) noexcept;
-  KalmanFilter1d() noexcept;
+  explicit KalmanFilter1d(double var_x_accel=1) noexcept;
 
   // The following three methods reset the filter. All of them assign a huge
   // variance to the tracked absolute quantity and a var_x_accel_ variance to
@@ -65,9 +64,7 @@ class KalmanFilter1d {
   //
   // NOTE: "x_abs_value" is meant to connote the value of the absolute quantity
   // x, not the absolute value of x.
-  void Reset() noexcept;
-  void Reset(double x_abs_value) noexcept;
-  void Reset(double x_abs_value, double x_vel_value) noexcept;
+  void Reset(double x_abs_value=0, double x_vel_value=0) noexcept;
 
   /**
    * Sets the variance of the acceleration noise input to the system model in
