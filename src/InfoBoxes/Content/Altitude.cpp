@@ -138,6 +138,7 @@ void
 UpdateInfoBoxAltitudeQFE(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
+  const auto &calculated = CommonInterface::Calculated();
 
   const auto any_altitude = basic.GetAnyAltitude();
   if (!any_altitude) {
@@ -145,14 +146,15 @@ UpdateInfoBoxAltitudeQFE(InfoBoxData &data)
     return;
   }
 
-  auto Value = *any_altitude;
+  if (!calculated.flight.HasTakenOff()) {
+    data.SetInvalid();
+    data.SetComment(_("Not flying"));
+    return;
+  }
 
-  const auto home_waypoint = way_points.GetHome();
-  if (home_waypoint)
-    Value -= home_waypoint->elevation;
-
-  data.SetValueFromAltitude(Value);
-  data.SetCommentFromAlternateAltitude(Value);
+  const double value = *any_altitude - calculated.flight.takeoff_altitude;
+  data.SetValueFromAltitude(value);
+  data.SetCommentFromAlternateAltitude(value);
 }
 
 void
