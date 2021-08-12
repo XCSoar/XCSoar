@@ -114,6 +114,8 @@ public final class BluetoothSensor
 
       if (BluetoothUuids.FLYTEC_SENSBOX_SERVICE.equals(c.getService().getUuid())) {
         if (BluetoothUuids.FLYTEC_SENSBOX_NAVIGATION_SENSOR_CHARACTERISTIC.equals(c.getUuid())) {
+          /* protocol documentation:
+             https://github.com/flytec/SensBoxLib_iOS/blob/master/_SensBox%20Documentation/SensorBox%20BLE%20Protocol.pdf */
           final int gps_status = c.getIntValue(c.FORMAT_UINT8, 18) & 0x7;
           final boolean hasAltitude = (gps_status == 2 || gps_status == 4);
 
@@ -129,8 +131,6 @@ public final class BluetoothSensor
 
           listener.onPressureAltitudeSensor(c.getIntValue(c.FORMAT_SINT16, 14));
           listener.onVarioSensor(c.getIntValue(c.FORMAT_SINT16, 16) / 100.f);
-
-          //c.getIntValue(c.FORMAT_SINT16, 14), // ??
         }
       }
     } catch (NullPointerException e) {

@@ -56,6 +56,10 @@ public interface BluetoothUuids {
   /* Flytec Sensbox */
   UUID FLYTEC_SENSBOX_SERVICE =
     UUID.fromString("aba27100-143b-4b81-a444-edcd0000f020");
+
+  /**
+   * @see https://github.com/flytec/SensBoxLib_iOS/blob/master/_SensBox%20Documentation/SensorBox%20BLE%20Protocol.pdf
+   */
   UUID FLYTEC_SENSBOX_NAVIGATION_SENSOR_CHARACTERISTIC =
     UUID.fromString("aba27100-143b-4b81-a444-edcd0000f022");
   UUID FLYTEC_SENSBOX_MOVEMENT_SENSOR_CHARACTERISTIC =

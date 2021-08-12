@@ -4,6 +4,7 @@ Version 7.12 - not yet released
   - correct Pilot Event (PEV) message for PowerFLARM devices
 * Android
   - fix broken GPS date/time from internal GPS
+  - various fixes for the Flytec Sensbox driver
 
 Version 7.11 - 2021/07/30
 * fix crash bug in pc_met viewer
