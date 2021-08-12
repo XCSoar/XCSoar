@@ -25,7 +25,6 @@ Copyright_License {
 #include "DataEditor.hpp"
 #include "NMEA/Info.hpp"
 #include "Geo/Geoid.hpp"
-#include "system/Clock.hpp"
 #include "time/FloatDuration.hxx"
 
 void
@@ -42,13 +41,13 @@ DeviceDescriptor::OnConnected(int connected) noexcept
     break;
 
   case 1: /* waiting for fix */
-    basic.alive.Update(MonotonicClockFloat());
+    basic.alive.Update(basic.clock);
     basic.gps.nonexpiring_internal_gps = true;
     basic.location_available.Clear();
     break;
 
   case 2: /* connected */
-    basic.alive.Update(MonotonicClockFloat());
+    basic.alive.Update(basic.clock);
     basic.gps.nonexpiring_internal_gps = true;
     break;
   }
