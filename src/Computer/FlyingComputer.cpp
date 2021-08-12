@@ -93,6 +93,7 @@ FlyingComputer::Check(FlyingState &state, double time)
       state.flying = true;
       state.takeoff_time = moving_since;
       state.takeoff_location = moving_at;
+      state.takeoff_altitude = moving_altitude;
       state.flight_time = 0;
 
       /* when a new flight starts, forget the old release and power-on/off time */
@@ -126,7 +127,7 @@ FlyingComputer::Check(FlyingState &state, double time)
 
 void
 FlyingComputer::Moving(FlyingState &state, double time, double dt,
-                       const GeoPoint &location)
+                       const GeoPoint &location, double altitude) noexcept
 {
   // Increase InFlight countdown for further evaluation
   moving_clock.Add(dt);
@@ -134,6 +135,7 @@ FlyingComputer::Moving(FlyingState &state, double time, double dt,
   if (moving_since < 0) {
     moving_since = time;
     moving_at = location;
+    moving_altitude = altitude;
   }
 
   // We are moving so we are certainly not on the ground
@@ -287,7 +289,8 @@ FlyingComputer::Compute(double takeoff_speed,
 
   if (CheckTakeOffSpeed(takeoff_speed, basic) ||
       CheckAltitudeAGL(calculated))
-    Moving(flying, basic.time, dt, basic.location);
+    Moving(flying, basic.time, dt, basic.location,
+           basic.GetAnyAltitude().value_or(0));
   else if (!flying.flying ||
            (CheckLandingSpeed(takeoff_speed, basic) &&
             (!any_altitude || !CheckClimbing(dt, *any_altitude))))
@@ -322,7 +325,7 @@ FlyingComputer::Compute(double takeoff_speed,
     return;
 
   if (state.ground_speed > takeoff_speed)
-    Moving(flying, state.time, dt, state.location);
+    Moving(flying, state.time, dt, state.location, state.altitude);
   else
     Stationary(flying, state.time, dt, state.location);
 }

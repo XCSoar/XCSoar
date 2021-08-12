@@ -73,6 +73,13 @@ class FlyingComputer {
    */
   GeoPoint moving_at;
 
+  /**
+   * If the aircraft is currently assumed to be moving, then this
+   * denotes the altitude when moving started initially.  This
+   * attribute is only valid if #moving_since is non-negative.
+   */
+  double moving_altitude;
+
   double stationary_since;
   GeoPoint stationary_at;
 
@@ -155,7 +162,7 @@ protected:
    * @param time Time the aircraft is moving
    */
   void Moving(FlyingState &state, double time, double dt,
-              const GeoPoint &location);
+              const GeoPoint &location, double altitude) noexcept;
 
   /**
    * Update flying state when stationary 
