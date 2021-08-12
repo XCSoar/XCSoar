@@ -201,11 +201,6 @@ Use one of the following targets:
 +------------------+--------------------------------------------------+
 | ``ANDROID7``     | for ARMv7 CPUs                                   |
 +------------------+--------------------------------------------------+
-| ``ANDROID7NEON`` | with                                             |
-|                  | `NEON <http://www.arm.c                          |
-|                  | om/products/processors/technologies/neon.php>`__ |
-|                  | extension                                        |
-+------------------+--------------------------------------------------+
 | ``ANDROID86``    | for x86 CPUs                                     |
 +------------------+--------------------------------------------------+
 | ``ANDROIDMIPS``  | for MIPS CPUs                                    |

@@ -3,7 +3,7 @@ TARGETS = PC WIN64 \
 	WAYLAND \
 	FUZZER \
 	PI PI2 CUBIE KOBO NEON \
-	ANDROID ANDROID7 ANDROID7NEON ANDROID86 \
+	ANDROID ANDROID7 ANDROID86 \
 	ANDROIDAARCH64 ANDROIDX64 \
 	ANDROIDFAT \
 	OSX64 IOS32 IOS64
@@ -70,15 +70,11 @@ ifeq ($(TARGET),ANDROID)
   override TARGET = ANDROID7
 endif
 
-ifeq ($(TARGET),ANDROID7NEON)
-  NEON := y
-  override TARGET = ANDROID7
-endif
-
 ifeq ($(TARGET),ANDROID7)
   TARGET_IS_ARM = y
   TARGET_IS_ARMHF = y
   ARMV7 := y
+  NEON := y
   override TARGET = ANDROID
 endif
 
@@ -383,15 +379,8 @@ ifeq ($(TARGET),ANDROID)
   LLVM_PREFIX = $(ANDROID_TOOLCHAIN)/bin/
   TCPREFIX = $(LLVM_PREFIX)/llvm-
 
-
   ifeq ($(ARMV7),y)
-    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp
-
-    ifeq ($(NEON),y)
-      TARGET_ARCH += -mfpu=neon
-    else
-      TARGET_ARCH += -mfpu=vfpv3-d16
-    endif
+    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=neon
   endif
 
   TARGET_ARCH += -fpic -funwind-tables
