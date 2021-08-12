@@ -70,11 +70,13 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
     dfd.SetValue(date);
     return true;
   } else if (df.GetType() == DataField::Type::INTEGER) {
+    auto &dfi = static_cast<DataFieldInteger &>(df);
+
     // signed or unsigned depends on min if value >= 0 or < 0...
-    if (static_cast<DataFieldInteger &>(df).GetMin() >= 0) {
+    if (dfi.GetMin() >= 0) {
       unsigned value = df.GetAsInteger(); // min is >= 0!
       if (!NumberEntryDialog(caption, value,
-          log10(static_cast<DataFieldInteger &>(df).GetMax()) + 1))
+          log10(dfi.GetMax()) + 1))
         return false;
 
       df.SetAsInteger(value); // SetAsInteger with unsigned!
@@ -83,9 +85,7 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
       /* with signed range has to avoid the length of negative AND
       * positiv numbers */
       int value = df.GetAsInteger();  // min is < 0!
-      unsigned max =
-          std::max(abs(static_cast<DataFieldInteger &>(df).GetMax()),
-                   abs(static_cast<DataFieldInteger &>(df).GetMin()));
+      unsigned max = std::max(abs(dfi.GetMax()), abs(dfi.GetMin()));
       if (!NumberEntryDialog(caption, value, log10(max) + 1))
         return false;
 
