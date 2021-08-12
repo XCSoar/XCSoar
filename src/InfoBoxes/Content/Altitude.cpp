@@ -139,12 +139,13 @@ UpdateInfoBoxAltitudeQFE(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
 
-  if (!basic.gps_altitude_available) {
+  const auto any_altitude = basic.GetAnyAltitude();
+  if (!any_altitude) {
     data.SetInvalid();
     return;
   }
 
-  auto Value = basic.gps_altitude;
+  auto Value = *any_altitude;
 
   const auto home_waypoint = way_points.GetHome();
   if (home_waypoint)
