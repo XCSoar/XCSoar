@@ -329,25 +329,23 @@ ifeq ($(TARGET),ANDROID)
   # Default is ARM V7a
   ANDROID_APK_LIB_ABI           = armeabi-v7a
   LLVM_TARGET                  := armv7a-linux-androideabi
-  HOST_TRIPLET                  = arm-linux-androideabi
 
   ifeq ($(X86),y)
     ANDROID_APK_LIB_ABI           = x86
     LLVM_TARGET                  := i686-linux-android
-    HOST_TRIPLET                  = i686-linux-android
   endif
 
   ifeq ($(AARCH64),y)
     ANDROID_APK_LIB_ABI           = arm64-v8a
     LLVM_TARGET                  := aarch64-linux-android
-    HOST_TRIPLET                  = aarch64-linux-android
   endif
 
   ifeq ($(X64),y)
     ANDROID_APK_LIB_ABI           = x86_64
     LLVM_TARGET                  := x86_64-linux-android
-    HOST_TRIPLET                  = x86_64-linux-android
   endif
+
+  HOST_TRIPLET := $(LLVM_TARGET)
 
   # Like in the clang compiler scripts in the NDK add the NDK level to the LLVM target
   LLVM_TARGET := $(LLVM_TARGET)$(ANDROID_NDK_API)
