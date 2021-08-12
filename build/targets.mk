@@ -372,9 +372,7 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_HOST_TAG = linux-x86
   endif
 
-  ANDROID_TOOLCHAIN = $(ANDROID_NDK)/toolchains/llvm/prebuilt/$(ANDROID_HOST_TAG)
-
-  LLVM_PREFIX = $(ANDROID_TOOLCHAIN)/bin/
+  LLVM_PREFIX = $(ANDROID_NDK)/toolchains/llvm/prebuilt/$(ANDROID_HOST_TAG)/bin/
   TCPREFIX = $(LLVM_PREFIX)/llvm-
 
   ifeq ($(ARMV7),y)
