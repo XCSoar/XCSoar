@@ -196,15 +196,20 @@ To compile, run::
 
 Use one of the following targets:
 
-+------------------+--------------------------------------------------+
-| ``ANDROID``      | for ARM CPUs (same as ``ANDROID7``)              |
-+------------------+--------------------------------------------------+
-| ``ANDROID7``     | for ARMv7 CPUs                                   |
-+------------------+--------------------------------------------------+
-| ``ANDROID86``    | for x86 CPUs                                     |
-+------------------+--------------------------------------------------+
-| ``ANDROIDFAT``   | “fat” package for all supported CPUs             |
-+------------------+--------------------------------------------------+
+.. list-table::
+ :widths: 20 80
+ :header-rows: 1
+
+ * - Name
+   - Description
+ * - ``ANDROID``
+   - for ARM CPUs (same as ``ANDROID7``)
+ * - ``ANDROID7``
+   - for ARMv7 CPUs
+ * - ``ANDROID86``
+   - for x86 CPUs
+ * - ``ANDROIDFAT``
+   - "fat" package for all supported CPUs
 
 Compiling for Windows
 ~~~~~~~~~~~~~~~~~~~~~
