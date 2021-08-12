@@ -356,8 +356,6 @@ ifeq ($(TARGET),ANDROID)
 
   # clang is the mandatory compiler on Android
   override CLANG = y
-
-  ANDROID_TOOLCHAIN_NAME = llvm
   override LIBCXX = y
 
   ifeq ($(HOST_IS_DARWIN),y)
@@ -374,7 +372,7 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_HOST_TAG = linux-x86
   endif
 
-  ANDROID_TOOLCHAIN = $(ANDROID_NDK)/toolchains/$(ANDROID_TOOLCHAIN_NAME)/prebuilt/$(ANDROID_HOST_TAG)
+  ANDROID_TOOLCHAIN = $(ANDROID_NDK)/toolchains/llvm/prebuilt/$(ANDROID_HOST_TAG)
 
   LLVM_PREFIX = $(ANDROID_TOOLCHAIN)/bin/
   TCPREFIX = $(LLVM_PREFIX)/llvm-
