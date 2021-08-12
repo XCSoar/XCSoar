@@ -324,11 +324,9 @@ ifeq ($(TARGET),ANDROID)
   # LLVM_TARGET: Open the appropriate compiler script in $ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin,
   #   e.g. aarch64-linux-android21-clang++ for AARCH64, NDK level 21, 
   #   and transcribe the value of the option "--target". 
-  # HOST_TRIPLET = $(ANDROID_NDK_GCC_TOOLCHAIN_ABI)
   # ANDROID_APK_LIB_ABI: See https://developer.android.com/ndk/guides/abis#sa for valid names.
 
   # Default is ARM V7a
-  ANDROID_NDK_GCC_TOOLCHAIN_ABI = arm-linux-androideabi
   ANDROID_APK_LIB_ABI           = armeabi-v7a
   LLVM_TARGET                  := armv7a-linux-androideabi
   HOST_TRIPLET                  = arm-linux-androideabi
