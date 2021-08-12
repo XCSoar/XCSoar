@@ -246,7 +246,7 @@ $$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so: $$(OUT)/$(3)/thirdparty.stamp
 # extract symbolication files for Google Play
 ANDROID_SYMBOLICATION_BUILD += $$(ANDROID_BUILD)/symbols/$(2)/lib$(1).so
 $$(ANDROID_BUILD)/symbols/$(2)/lib$(1).so: $$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1)-ns.so | $$(ANDROID_BUILD)/symbols/$(2)/dirstamp
-	$$(Q)$$(ANDROID_TOOLCHAIN)/bin/llvm-objcopy$$(EXE) --strip-debug $$< $$@
+	$$(Q)$$(TCPREFIX)objcopy$$(EXE) --strip-debug $$< $$@
 
 endef
 
