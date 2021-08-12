@@ -372,7 +372,7 @@ ifeq ($(TARGET),ANDROID)
   TCPREFIX = $(LLVM_PREFIX)/llvm-
 
   ifeq ($(ARMV7),y)
-    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=neon
+    TARGET_ARCH += -mfloat-abi=softfp -mfpu=neon
   endif
 
   TARGET_ARCH += -fpic -funwind-tables
