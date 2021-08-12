@@ -180,7 +180,7 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
 
   const auto any_altitude = basic.GetAnyAltitude();
 
-  if (!basic.airspeed_available && any_altitude.first) {
+  if (!basic.airspeed_available && any_altitude) {
     double dyn; bool available = false;
     if (basic.dyn_pressure_available) {
       dyn = basic.dyn_pressure.GetHectoPascal();
@@ -193,7 +193,7 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
     if (available) {
       basic.indicated_airspeed = sqrt(double(163.2653061) * dyn);
       basic.true_airspeed = basic.indicated_airspeed *
-                            AirDensityRatio(any_altitude.second);
+                            AirDensityRatio(*any_altitude);
 
       basic.airspeed_available.Update(basic.clock);
       basic.airspeed_real = true; // Anyway not less real then any other method.
@@ -223,8 +223,8 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
   basic.true_airspeed = TrueAirspeedEstimated;
 
   basic.indicated_airspeed = TrueAirspeedEstimated;
-  if (any_altitude.first)
-    basic.indicated_airspeed /= AirDensityRatio(any_altitude.second);
+  if (any_altitude)
+    basic.indicated_airspeed /= AirDensityRatio(*any_altitude);
 
   basic.airspeed_available.Update(basic.clock);
   basic.airspeed_real = false;

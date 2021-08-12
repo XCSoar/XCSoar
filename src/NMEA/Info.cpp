@@ -93,8 +93,8 @@ NMEAInfo::ProvideTrueAirspeed(double tas)
 {
   auto any_altitude = GetAnyAltitude();
 
-  if (any_altitude.first)
-    ProvideTrueAirspeedWithAltitude(tas, any_altitude.second);
+  if (any_altitude)
+    ProvideTrueAirspeedWithAltitude(tas, *any_altitude);
   else
     /* no altitude; dirty fallback */
     ProvideBothAirspeeds(tas, tas);
@@ -105,8 +105,8 @@ NMEAInfo::ProvideIndicatedAirspeed(double ias)
 {
   auto any_altitude = GetAnyAltitude();
 
-  if (any_altitude.first)
-    ProvideIndicatedAirspeedWithAltitude(ias, any_altitude.second);
+  if (*any_altitude)
+    ProvideIndicatedAirspeedWithAltitude(ias, *any_altitude);
   else
     /* no altitude; dirty fallback */
     ProvideBothAirspeeds(ias, ias);

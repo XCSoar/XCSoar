@@ -269,13 +269,13 @@ FlyingComputer::Compute(double takeoff_speed,
   const auto any_altitude = basic.GetAnyAltitude();
 
   if (!basic.airspeed_available && !calculated.altitude_agl_valid &&
-      any_altitude.first && last_ground_altitude >= 0 &&
-      any_altitude.second > last_ground_altitude + 250) {
+      any_altitude && last_ground_altitude >= 0 &&
+      *any_altitude > last_ground_altitude + 250) {
     /* lower the threshold for "not moving" when the aircraft is high
        above the take-off airfield and there's no airspeed probe; this
        shall reduce the risk of false landing detection when flying in
        strong head wind (e.g. ridge or wave) */
-    auto dh = any_altitude.second - last_ground_altitude;
+    auto dh = *any_altitude - last_ground_altitude;
 
     if (dh > 1000)
       takeoff_speed /= 4;
@@ -290,17 +290,17 @@ FlyingComputer::Compute(double takeoff_speed,
     Moving(flying, basic.time, dt, basic.location);
   else if (!flying.flying ||
            (CheckLandingSpeed(takeoff_speed, basic) &&
-            (!any_altitude.first || !CheckClimbing(dt, any_altitude.second))))
+            (!any_altitude || !CheckClimbing(dt, *any_altitude))))
     Stationary(flying, basic.time, dt, basic.location);
 
   if (basic.engine_noise_level_available)
     CheckPowered(dt, basic, flying);
 
-  if (any_altitude.first) {
+  if (any_altitude) {
     if (flying.on_ground)
-      last_ground_altitude = any_altitude.second;
+      last_ground_altitude = *any_altitude;
 
-    CheckRelease(flying, basic.time, basic.location, any_altitude.second);
+    CheckRelease(flying, basic.time, basic.location, *any_altitude);
   } else
     sinking_since = -1;
 

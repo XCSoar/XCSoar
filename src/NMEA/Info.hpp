@@ -42,6 +42,7 @@ Copyright_License {
 #include "GliderLink/GliderLinkData.hpp"
 #endif
 
+#include <optional>
 #include <type_traits>
 
 /**
@@ -501,19 +502,21 @@ struct NMEAInfo {
 
   /**
    * Returns the pressure altitude, and falls back to the barometric
-   * altitude or the GPS altitude.  The "first" element is false if no
-   * altitude is available.  The "second" element contains the
-   * altitude value [m] if "first" is true.
+   * altitude or the GPS altitude.  Returns `std::nullopt` if none is
+   * available.
    */
   [[gnu::pure]]
-  std::pair<bool, double> GetAnyAltitude() const {
-    return pressure_altitude_available
-      ? std::make_pair(true, pressure_altitude)
-      : (baro_altitude_available
-         ? std::make_pair(true, baro_altitude)
-         : (gps_altitude_available
-            ? std::make_pair(true, gps_altitude)
-            : std::make_pair(false, 0.)));
+  std::optional<double> GetAnyAltitude() const noexcept {
+    if (pressure_altitude_available)
+      return pressure_altitude;
+
+    if (baro_altitude_available)
+      return baro_altitude;
+
+    if (gps_altitude_available)
+      return gps_altitude;
+
+    return std::nullopt;
   }
 
   /**
