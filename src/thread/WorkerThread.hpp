@@ -55,7 +55,7 @@ public:
   /**
    * Wakes up the thread to do work, calls tick().
    */
-  void Trigger() {
+  void Trigger() noexcept {
     const std::lock_guard<Mutex> lock(mutex);
     if (!trigger_flag) {
       trigger_flag = true;
@@ -66,7 +66,7 @@ public:
   /**
    * Suspend execution until Resume() is called.
    */
-  void BeginSuspend() {
+  void BeginSuspend() noexcept {
     const std::lock_guard<Mutex> lock(mutex);
     _BeginSuspend();
   }
@@ -74,12 +74,12 @@ public:
   /**
    * Like BeginSuspend(), but expects the mutex to be locked already.
    */
-  void _BeginSuspend() {
+  void _BeginSuspend() noexcept {
     SuspensibleThread::_BeginSuspend();
     trigger_cond.notify_one();
   }
 
-  void Suspend() {
+  void Suspend() noexcept {
     std::unique_lock<Mutex> lock(mutex);
     _BeginSuspend();
     _WaitUntilSuspended(lock);
@@ -89,7 +89,7 @@ public:
    * Triggers thread shutdown.  Call Thread::Join() after this to wait
    * synchronously for the thread to exit.
    */
-  void BeginStop() {
+  void BeginStop() noexcept {
     const std::lock_guard<Mutex> lock(mutex);
     SuspensibleThread::_BeginStop();
     trigger_cond.notify_one();
