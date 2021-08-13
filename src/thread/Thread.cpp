@@ -67,7 +67,7 @@ Thread::Start()
   if (error != 0)
     throw MakeErrno(error, "pthread_attr_init() failed");
 
-  int error = pthread_attr_setstacksize(&attr, 640 * 1024);
+  error = pthread_attr_setstacksize(&attr, 640 * 1024);
   if (error != 0)
     throw MakeErrno(error, "pthread_attr_setstacksize() failed");
 
