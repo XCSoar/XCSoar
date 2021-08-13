@@ -83,6 +83,15 @@ public:
   }
 
   /**
+   * Cast this object to an integer.  This integer should only be used
+   * for equality comparisons with other integers from this method,
+   * e.g. to check if a redraw is needed.
+   */
+  auto ToInteger() const noexcept {
+    return last.count();
+  }
+
+  /**
    * Checks if the time stamp has expired, and calls clear() if so.
    *
    * @param now the current time stamp in seconds
