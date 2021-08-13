@@ -311,12 +311,6 @@ public class XCSoar extends Activity {
       return super.onKeyUp(keyCode, event);
   }
 
-  @Override public void onWindowFocusChanged(boolean hasFocus) {
-    if (Loader.loaded)
-      enableImmersiveModeIfSupported();
-    super.onWindowFocusChanged(hasFocus);
-  }
-
   @Override public boolean dispatchTouchEvent(final MotionEvent ev) {
     if (nativeView != null) {
       nativeView.onTouchEvent(ev);
