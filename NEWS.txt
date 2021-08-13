@@ -1,4 +1,4 @@
-Version 7.12 - not yet released
+Version 7.12 - 2021/08/13
 * calculations
   - fix the "Height above takeoff" InfoBox
 * devices
