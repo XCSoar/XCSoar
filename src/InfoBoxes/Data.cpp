@@ -24,14 +24,14 @@ Copyright_License {
 #include "Data.hpp"
 
 void
-InfoBoxData::Clear()
+InfoBoxData::Clear() noexcept
 {
   title.clear();
   SetInvalid();
 }
 
 void
-InfoBoxData::SetInvalid()
+InfoBoxData::SetInvalid() noexcept
 {
   SetAllColors(0);
   SetValueInvalid();
@@ -40,34 +40,34 @@ InfoBoxData::SetInvalid()
 }
 
 void
-InfoBoxData::SetValueInvalid()
+InfoBoxData::SetValueInvalid() noexcept
 {
   SetValue(_T("---"));
   SetValueUnit(Unit::UNDEFINED);
 }
 
 void
-InfoBoxData::SetTitle(const TCHAR *_title)
+InfoBoxData::SetTitle(const TCHAR *_title) noexcept
 {
   title = _title;
   title.CropIncompleteUTF8();
 }
 
 void
-InfoBoxData::SetValue(const TCHAR *_value)
+InfoBoxData::SetValue(const TCHAR *_value) noexcept
 {
   value = _value;
 }
 
 void
-InfoBoxData::SetComment(const TCHAR *_comment)
+InfoBoxData::SetComment(const TCHAR *_comment) noexcept
 {
   comment = _comment;
   comment.CropIncompleteUTF8();
 }
 
 void
-InfoBoxData::SetAllColors(unsigned color)
+InfoBoxData::SetAllColors(unsigned color) noexcept
 {
   SetTitleColor(color);
   SetValueColor(color);
@@ -75,14 +75,14 @@ InfoBoxData::SetAllColors(unsigned color)
 }
 
 bool
-InfoBoxData::CompareTitle(const InfoBoxData &other) const
+InfoBoxData::CompareTitle(const InfoBoxData &other) const noexcept
 {
   return title == other.title &&
     title_color == other.title_color;
 }
 
 bool
-InfoBoxData::CompareValue(const InfoBoxData &other) const
+InfoBoxData::CompareValue(const InfoBoxData &other) const noexcept
 {
   return value == other.value &&
     value_unit == other.value_unit &&
@@ -90,7 +90,7 @@ InfoBoxData::CompareValue(const InfoBoxData &other) const
 }
 
 bool
-InfoBoxData::CompareComment(const InfoBoxData &other) const
+InfoBoxData::CompareComment(const InfoBoxData &other) const noexcept
 {
   return comment == other.comment &&
     comment_color == other.comment_color;
