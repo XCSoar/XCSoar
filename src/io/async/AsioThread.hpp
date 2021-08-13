@@ -39,8 +39,10 @@ public:
   /**
    * Start the thread.  This method should be called after creating
    * this object.
+   *
+   * Throws on error.
    */
-  bool Start();
+  void Start();
 
   /**
    * Stop the thread.  This method must be called before the

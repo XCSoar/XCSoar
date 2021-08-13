@@ -59,7 +59,10 @@ public:
     :ThreadedOperationEnvironment(_env), job(_job),
      running(false), was_running(false) {}
 
-  bool Start();
+  /**
+   * Throws on error.
+   */
+  void Start();
 
   /**
    * Wait until the thread finishes and rethrow exceptions that may

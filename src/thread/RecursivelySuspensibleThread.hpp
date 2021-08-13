@@ -43,7 +43,7 @@ public:
   RecursivelySuspensibleThread(const char *_name)
     :SuspensibleThread(_name) {}
 
-  bool Start(bool suspended=false);
+  void Start(bool suspended=false);
 
   void BeginSuspend();
 

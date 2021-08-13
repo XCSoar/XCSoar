@@ -25,11 +25,11 @@ Copyright_License {
 
 #include <cassert>
 
-bool
+void
 RecursivelySuspensibleThread::Start(bool suspended)
 {
   suspend_count = suspended ? 1 : 0;
-  return SuspensibleThread::Start(suspended);
+  SuspensibleThread::Start(suspended);
 }
 
 void

@@ -110,7 +110,11 @@ public:
 
   void SetIdlePriority() noexcept;
 
-  bool Start() noexcept;
+  /**
+   * Throws on error.
+   */
+  void Start();
+
   void Join() noexcept;
 
 #ifndef HAVE_POSIX
