@@ -44,7 +44,7 @@ class Thread {
 
 #ifdef HAVE_POSIX
   pthread_t handle;
-  bool defined;
+  bool defined = false;
 
 #ifndef NDEBUG
   /**
@@ -52,24 +52,20 @@ class Thread {
    * IsInside(), which may return false until pthread_create() has
    * initialised the #handle.
    */
-  bool creating;
+  bool creating = false;
 #endif
 
 #else
-  HANDLE handle;
+  HANDLE handle = nullptr;
   DWORD id;
 #endif
 
 public:
 
 #ifdef HAVE_POSIX
-  Thread(const char *_name=nullptr) noexcept:name(_name), defined(false) {
-#ifndef NDEBUG
-    creating = false;
-#endif
-  }
+  Thread(const char *_name=nullptr) noexcept:name(_name) {}
 #else
-  Thread(const char *_name=nullptr) noexcept:name(_name), handle(nullptr) {}
+  Thread(const char *_name=nullptr) noexcept:name(_name) {}
 #endif
 
 #ifndef NDEBUG
