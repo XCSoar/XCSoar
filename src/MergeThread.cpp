@@ -31,8 +31,15 @@ Copyright_License {
 
 MergeThread::MergeThread(DeviceBlackboard &_device_blackboard)
   :WorkerThread("MergeThread",
+#ifdef KOBO
+                /* throttle more on the Kobo, because the EPaper
+                   screen cannot be updated that often */
+                std::chrono::milliseconds{450},
+                std::chrono::milliseconds{100},
+#else
                 std::chrono::milliseconds{50},
                 std::chrono::milliseconds{20},
+#endif
                 std::chrono::milliseconds{10}),
    device_blackboard(_device_blackboard)
 {

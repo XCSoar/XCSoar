@@ -34,7 +34,13 @@ Copyright_License {
  */
 CalculationThread::CalculationThread(GlideComputer &_glide_computer)
   :WorkerThread("CalcThread",
+#ifdef KOBO
+                /* throttle more on the Kobo, because the EPaper
+                   screen cannot be updated that often */
+                std::chrono::milliseconds{900},
+#else
                 std::chrono::milliseconds{450},
+#endif
                 std::chrono::milliseconds{100},
                 std::chrono::milliseconds{50}),
    force(false),
