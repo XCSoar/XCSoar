@@ -30,10 +30,12 @@ Copyright_License {
  * A thread which performs regular work in background.
  */
 class WorkerThread : public SuspensibleThread {
+  using Duration = std::chrono::steady_clock::duration;
+
   Cond trigger_cond;
   bool trigger_flag = false;
 
-  const std::chrono::steady_clock::duration period_min, idle_min, delay;
+  const Duration period_min, idle_min, delay;
 
 public:
   /**
@@ -47,8 +49,8 @@ public:
    * allow grouping consecutive Trigger() calls into one Tick()
    */
   WorkerThread(const char *_name,
-               unsigned period_min=0, unsigned idle_min=0,
-               unsigned delay=0);
+               Duration period_min={}, Duration idle_min={},
+               Duration delay={}) noexcept;
 
   /**
    * Wakes up the thread to do work, calls tick().
