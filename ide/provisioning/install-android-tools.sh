@@ -48,7 +48,7 @@ else
 
   ANDROID_NDK_TMP_ZIP=$(mktemp)
   wget --progress=bar:force:noscroll \
-      ${ANDROID_REPO_URL}/android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip \
+      ${ANDROID_REPO_URL}/android-ndk-${ANDROID_NDK_VERSION}-linux.zip \
       -O "${ANDROID_NDK_TMP_ZIP}"
 
   cd ~/opt
