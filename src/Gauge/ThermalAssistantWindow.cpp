@@ -61,7 +61,7 @@ ThermalAssistantWindow::DrawCircle(Canvas &canvas)
 }
 
 void
-ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas)
+ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas) noexcept
 {
 #ifdef ENABLE_OPENGL
   if (transparent) {

@@ -264,7 +264,7 @@ GaugeVario::RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept
 }
 
 void
-GaugeVario::OnPaintBuffer(Canvas &canvas)
+GaugeVario::OnPaintBuffer(Canvas &canvas) noexcept
 {
   const PixelRect rc = GetClientRect();
 

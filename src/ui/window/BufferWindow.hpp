@@ -71,7 +71,7 @@ protected:
   void OnPaint(Canvas &canvas) override;
 
   /* our virtual methods */
-  virtual void OnPaintBuffer(Canvas &canvas) = 0;
+  virtual void OnPaintBuffer(Canvas &canvas) noexcept = 0;
 };
 
 #endif

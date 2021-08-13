@@ -126,7 +126,7 @@ MapWindow::UpdateTerrain()
  * Handles the drawing of the moving map and is called by the DrawThread
  */
 void
-MapWindow::OnPaintBuffer(Canvas &canvas)
+MapWindow::OnPaintBuffer(Canvas &canvas) noexcept
 {
 #ifndef ENABLE_OPENGL
   unsigned render_generation = ui_generation;

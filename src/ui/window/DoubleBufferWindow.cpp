@@ -47,7 +47,7 @@ DoubleBufferWindow::OnDestroy()
 }
 
 void
-DoubleBufferWindow::Flip()
+DoubleBufferWindow::Flip() noexcept
 {
   /* enable the drawing buffer */
   {

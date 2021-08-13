@@ -336,7 +336,7 @@ protected:
   virtual void OnPaint(Canvas& canvas) override;
 
   /* virtual methods from class DoubleBufferWindow */
-  virtual void OnPaintBuffer(Canvas& canvas) override;
+  virtual void OnPaintBuffer(Canvas& canvas) noexcept override;
 
 private:
   /**

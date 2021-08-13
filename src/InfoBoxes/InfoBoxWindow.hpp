@@ -170,7 +170,7 @@ protected:
   bool OnMouseMove(PixelPoint p, unsigned keys) override;
 
   /* virtual methods from class LazyPaintWindow */
-  void OnPaintBuffer(Canvas &canvas) override;
+  void OnPaintBuffer(Canvas &canvas) noexcept override;
 };
 
 #endif

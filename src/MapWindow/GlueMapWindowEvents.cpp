@@ -401,7 +401,7 @@ GlueMapWindow::OnPaint(Canvas &canvas)
 }
 
 void
-GlueMapWindow::OnPaintBuffer(Canvas &canvas)
+GlueMapWindow::OnPaintBuffer(Canvas &canvas) noexcept
 {
 #ifdef ENABLE_OPENGL
   ExchangeBlackboard();

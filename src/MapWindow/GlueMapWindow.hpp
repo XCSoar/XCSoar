@@ -221,7 +221,7 @@ protected:
   virtual bool OnKeyDown(unsigned key_code) override;
   virtual void OnCancelMode() override;
   virtual void OnPaint(Canvas &canvas) override;
-  virtual void OnPaintBuffer(Canvas& canvas) override;
+  virtual void OnPaintBuffer(Canvas& canvas) noexcept override;
 
   /**
    * This event handler gets called when a gesture has
