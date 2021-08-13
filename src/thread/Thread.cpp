@@ -55,9 +55,9 @@ Thread::Start()
 #endif
 
 #if defined(__GLIBC__) || defined(__BIONIC__) || defined(__APPLE__)
-  int error = pthread_create(&handle, nullptr, ThreadProc, this);
-  if (error != 0)
-    throw MakeErrno(error, "pthread_create() failed");
+  constexpr pthread_attr_t *attr_pointer = nullptr;
+
+  int error;
 #else
   /* In other libc implementations, the default stack size for created threads
      might not be large enough (e. g. 80 KB on musl libc).
@@ -71,10 +71,12 @@ Thread::Start()
   if (error != 0)
     throw MakeErrno(error, "pthread_attr_setstacksize() failed");
 
-  error = pthread_create(&handle, &attr, ThreadProc, this);
+  pthread_attr_t *attr_pointer = &attr;
+#endif
+
+  error = pthread_create(&handle, attr_pointer, ThreadProc, this);
   if (error != 0)
     throw MakeErrno(error, "pthread_create() failed");
-#endif
 
   defined = true;
 
