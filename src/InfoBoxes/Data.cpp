@@ -33,6 +33,7 @@ InfoBoxData::Clear() noexcept
 void
 InfoBoxData::SetInvalid() noexcept
 {
+  custom = 0;
   SetAllColors(0);
   SetValueInvalid();
   SetValueUnit(Unit::UNDEFINED);

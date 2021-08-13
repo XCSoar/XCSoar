@@ -9,6 +9,7 @@ Version 7.12 - not yet released
   - various fixes for the Flytec Sensbox driver
 * Kobo
   - throttle sensor-triggered screen updates
+  - improve performance of graphical InfoBoxes
 
 Version 7.11 - 2021/07/30
 * fix crash bug in pc_met viewer

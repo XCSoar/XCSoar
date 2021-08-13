@@ -250,15 +250,19 @@ InfoBoxContentThermalAssistant::InfoBoxContentThermalAssistant() noexcept
 void
 InfoBoxContentThermalAssistant::Update(InfoBoxData &data) noexcept
 {
-  if (!CommonInterface::Calculated().circling) {
+  const auto &basic = CommonInterface::Basic();
+  const auto &calculated = CommonInterface::Calculated();
+
+  if (!calculated.circling) {
     data.SetInvalid();
     return;
   }
 
-  data.SetCustom();
+  data.SetCustom(basic.location_available.ToInteger() +
+                 basic.track_available.ToInteger() +
+                 basic.attitude.heading_available.ToInteger());
 
-  renderer.Update(CommonInterface::Basic().attitude,
-                  CommonInterface::Calculated());
+  renderer.Update(basic.attitude, calculated);
 }
 
 void
@@ -282,5 +286,8 @@ InfoBoxContentClimbPercent::OnCustomPaint(Canvas &canvas, const PixelRect &rc)no
 void
 InfoBoxContentClimbPercent::Update(InfoBoxData &data) noexcept
 {
-  data.SetCustom();
+  const auto &basic = CommonInterface::Basic();
+
+  // TODO: use an appropriate digest
+  data.SetCustom(basic.location_available.ToInteger());
 }

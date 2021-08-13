@@ -27,6 +27,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 #include "InfoBoxes/Content/Altitude.hpp"
 
+class Validity;
 class TraceVariableHistory;
 
 class InfoBoxContentSpark: public InfoBoxContent
@@ -36,7 +37,8 @@ protected:
              const TraceVariableHistory &var,
              const bool center = true) noexcept;
   void SetVSpeedComment(InfoBoxData &data,
-                        const TraceVariableHistory& var) noexcept;
+                        const TraceVariableHistory &var,
+                        Validity validity) noexcept;
 };
 
 class InfoBoxContentVarioSpark : public InfoBoxContentSpark

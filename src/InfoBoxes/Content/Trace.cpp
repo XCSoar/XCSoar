@@ -92,31 +92,41 @@ InfoBoxContentCirclingAverageSpark::OnCustomPaint(Canvas &canvas,
 
 void
 InfoBoxContentSpark::SetVSpeedComment(InfoBoxData &data,
-                                      const TraceVariableHistory &var) noexcept
+                                      const TraceVariableHistory &var,
+                                      Validity validity) noexcept
 {
   if (var.empty())
     return;
 
   data.SetCommentFromVerticalSpeed(var.last());
-  data.SetCustom();
+  data.SetCustom(validity.ToInteger());
 }
 
 void
 InfoBoxContentVarioSpark::Update(InfoBoxData &data) noexcept
 {
-  SetVSpeedComment(data, CommonInterface::Calculated().trace_history.BruttoVario);
+  const auto &trace_history = CommonInterface::Calculated().trace_history;
+
+  SetVSpeedComment(data, trace_history.BruttoVario,
+                   trace_history.vario_available);
 }
 
 void
 InfoBoxContentNettoVarioSpark::Update(InfoBoxData &data) noexcept
 {
-  SetVSpeedComment(data, CommonInterface::Calculated().trace_history.NettoVario);
+  const auto &trace_history = CommonInterface::Calculated().trace_history;
+
+  SetVSpeedComment(data, trace_history.NettoVario,
+                   trace_history.vario_available);
 }
 
 void
 InfoBoxContentCirclingAverageSpark::Update(InfoBoxData &data) noexcept
 {
-  SetVSpeedComment(data, CommonInterface::Calculated().trace_history.CirclingAverage);
+  const auto &trace_history = CommonInterface::Calculated().trace_history;
+
+  SetVSpeedComment(data, trace_history.CirclingAverage,
+                   trace_history.circling_available);
 }
 
 void
@@ -132,7 +142,12 @@ InfoBoxContentBarogram::Update(InfoBoxData &data) noexcept
   } else
     data.SetCommentInvalid();
 
-  data.SetCustom();
+  // TODO: use an appropriate digest
+  data.SetCustom(basic.location_available.ToInteger() +
+                 basic.gps_altitude_available.ToInteger() +
+                 basic.baro_altitude_available.ToInteger() +
+                 basic.pressure_altitude_available.ToInteger() +
+                 basic.static_pressure_available.ToInteger());
 }
 
 void
@@ -191,7 +206,7 @@ InfoBoxContentThermalBand::OnCustomPaint(Canvas &canvas,
 void
 InfoBoxContentThermalBand::Update(InfoBoxData &data) noexcept
 {
-  data.SetCustom();
+  data.SetCustom(CommonInterface::Basic().location_available.ToInteger());
 }
 
 void
@@ -209,5 +224,6 @@ InfoBoxContentTaskProgress::OnCustomPaint(Canvas &canvas,
 void
 InfoBoxContentTaskProgress::Update(InfoBoxData &data) noexcept
 {
-  data.SetCustom();
+  // TODO: use an appropriate digest
+  data.SetCustom(CommonInterface::Basic().location_available.ToInteger());
 }

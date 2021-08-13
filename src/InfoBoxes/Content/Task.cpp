@@ -907,7 +907,9 @@ InfoBoxContentNextArrow::Update(InfoBoxData &data) noexcept
 
   // Set value
   if (angle_valid)
-    data.SetCustom(); // Enables OnCustomPaint
+    // Enables OnCustomPaint
+    // TODO: use an appropriate digest
+    data.SetCustom(basic.track_available.ToInteger());
   else
     data.SetInvalid();
 

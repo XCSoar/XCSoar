@@ -173,13 +173,20 @@ InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas,
 void
 InfoBoxContentHorizon::Update(InfoBoxData &data) noexcept
 {
-  if (!CommonInterface::Basic().attitude.IsBankAngleUseable() &&
-      !CommonInterface::Basic().attitude.IsPitchAngleUseable()) {
+  const auto &basic = CommonInterface::Basic();
+
+  if (!basic.attitude.IsBankAngleUseable() &&
+      !basic.attitude.IsPitchAngleUseable()) {
     data.SetInvalid();
     return;
   }
 
-  data.SetCustom();
+  /* mix all Validity fields which may have been used to calculate the
+     attitude, see ComputeDynamics() */
+  data.SetCustom(basic.location_available.ToInteger() +
+                 basic.airspeed_available.ToInteger() +
+                 basic.attitude.bank_angle_available.ToInteger() +
+                 basic.attitude.pitch_angle_available.ToInteger());
 }
 
 // TODO: merge with original copy from Dialogs/StatusPanels/SystemStatusPanel.cpp

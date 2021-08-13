@@ -57,6 +57,7 @@ GlideComputerAirData::ResetFlight(DerivedInfo &calculated,
 
   lift_database_computer.Reset(calculated.lift_database,
                                calculated.trace_history.CirclingAverage);
+  calculated.trace_history.circling_available.Clear();
 
   thermallocator.Reset();
 
@@ -137,6 +138,8 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   lift_database_computer.Compute(calculated.lift_database,
                                  calculated.trace_history.CirclingAverage,
                                  basic, calculated);
+  calculated.trace_history.circling_available.Update(basic.clock);
+
   circling_computer.MaxHeightGain(basic, calculated.flight, calculated);
   NextLegEqThermal(basic, calculated, settings);
 }

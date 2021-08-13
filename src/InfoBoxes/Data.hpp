@@ -27,12 +27,23 @@ Copyright_License {
 #include "util/StaticString.hxx"
 #include "Units/Unit.hpp"
 
+#include <cstdint>
+
 #include <tchar.h>
 
 class Angle;
 
 struct InfoBoxData {
   static constexpr unsigned COLOR_COUNT = 6;
+
+  /**
+   * If non-zero, then custom painting is enabled via
+   * InfoBoxContent::OnCustomPaint().  The integer value can be used
+   * to detect changes.
+   */
+  uint64_t custom;
+
+  unsigned content_serial;
 
   StaticString<32> title;
   StaticString<32> value;
@@ -46,15 +57,16 @@ struct InfoBoxData {
 
   /**
    * Enable custom painting via InfoBoxContent::OnCustomPaint().
+   *
+   * @param _custom a non-zero value which should change each time a
+   * different content will be drawn
    */
-  void SetCustom() noexcept {
-    /* 0xff is a "magic" value that indicates custom painting*/
-    value_color = 0xff;
-    value.clear();
+  void SetCustom(uint64_t _custom) noexcept {
+    custom = _custom;
   }
 
-  bool GetCustom() const noexcept {
-    return value_color == 0xff;
+  uint64_t GetCustom() const noexcept {
+    return custom;
   }
 
   /**
@@ -253,6 +265,11 @@ struct InfoBoxData {
   }
 
   void SetAllColors(unsigned color) noexcept;
+
+  bool CompareCustom(const InfoBoxData &other) const noexcept {
+    return content_serial == other.content_serial &&
+      custom == other.custom;
+  }
 
   bool CompareTitle(const InfoBoxData &other) const noexcept;
   bool CompareValue(const InfoBoxData &other) const noexcept;

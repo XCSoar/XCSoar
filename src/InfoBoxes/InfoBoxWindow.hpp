@@ -46,6 +46,13 @@ class InfoBoxWindow : public LazyPaintWindow
 
   const unsigned id;
 
+  /**
+   * This value is an identifier for the #content field; it is
+   * incremented each time a new #InfoBoxContent is installed.  It is
+   * used to check whether a custom repaint is necessary.
+   */
+  unsigned content_serial;
+
   InfoBoxData data;
 
   bool dragging = false;

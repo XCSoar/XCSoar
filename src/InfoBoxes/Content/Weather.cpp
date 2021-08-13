@@ -193,7 +193,7 @@ InfoBoxContentWindArrow::Update(InfoBoxData &data) noexcept
     return;
   }
 
-  data.SetCustom();
+  data.SetCustom(info.wind_available.ToInteger());
 
   TCHAR speed_buffer[16];
   FormatUserWindSpeed(info.wind.norm, speed_buffer, true, false);
