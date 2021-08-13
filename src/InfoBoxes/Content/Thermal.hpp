@@ -28,66 +28,66 @@ Copyright_License {
 #include "Gauge/ThermalAssistantRenderer.hpp"
 
 void
-UpdateInfoBoxVario(InfoBoxData &data);
+UpdateInfoBoxVario(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxVarioNetto(InfoBoxData &data);
+UpdateInfoBoxVarioNetto(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxThermal30s(InfoBoxData &data);
+UpdateInfoBoxThermal30s(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxThermalLastAvg(InfoBoxData &data);
+UpdateInfoBoxThermalLastAvg(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxThermalLastGain(InfoBoxData &data);
+UpdateInfoBoxThermalLastGain(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxThermalLastTime(InfoBoxData &data);
+UpdateInfoBoxThermalLastTime(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxThermalAllAvg(InfoBoxData &data);
+UpdateInfoBoxThermalAllAvg(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxThermalAvg(InfoBoxData &data);
+UpdateInfoBoxThermalAvg(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxThermalGain(InfoBoxData &data);
+UpdateInfoBoxThermalGain(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxThermalTime(InfoBoxData& data);
+UpdateInfoBoxThermalTime(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxThermalRatio(InfoBoxData &data);
+UpdateInfoBoxThermalRatio(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxNonCirclingClimbRatio(InfoBoxData &data);
+UpdateInfoBoxNonCirclingClimbRatio(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxVarioDistance(InfoBoxData &data);
+UpdateInfoBoxVarioDistance(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxNextLegEqThermal(InfoBoxData &data);
+UpdateInfoBoxNextLegEqThermal(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxCircleDiameter(InfoBoxData &data);
+UpdateInfoBoxCircleDiameter(InfoBoxData &data) noexcept;
 
 class InfoBoxContentThermalAssistant: public InfoBoxContent
 {
   ThermalAssistantRenderer renderer;
 
 public:
-  InfoBoxContentThermalAssistant();
+  InfoBoxContentThermalAssistant() noexcept;
 
-  virtual void Update(InfoBoxData &data) override;
-  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
+  void Update(InfoBoxData &data) noexcept override;
+  void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
 };
 
 class InfoBoxContentClimbPercent : public InfoBoxContent
 {
  public:
-  virtual void Update(InfoBoxData &data) override;
-  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
+  void Update(InfoBoxData &data) noexcept override;
+  void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
 };
 
 #endif

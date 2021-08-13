@@ -29,14 +29,15 @@ Copyright_License {
 class InfoBoxContentContest: public InfoBoxContent
 {
 public:
-  virtual const InfoBoxPanel *GetDialogContent() override;
-  virtual void Update(InfoBoxData &data) override;
+  const InfoBoxPanel *GetDialogContent() noexcept override;
+  void Update(InfoBoxData &data) noexcept override;
 };
 
 class InfoBoxContentContestSpeed: public InfoBoxContent
 {
 public:
-  virtual const InfoBoxPanel *GetDialogContent() override;
-  virtual void Update(InfoBoxData &data) override;
+  const InfoBoxPanel *GetDialogContent() noexcept override;
+  void Update(InfoBoxData &data) noexcept override;
 };
+
 #endif

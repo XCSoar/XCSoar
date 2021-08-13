@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_INFOBOX_FACTORY_HPP
 
 #include "Type.hpp"
-#include "util/Compiler.h"
 
 #include <memory>
 
@@ -38,27 +37,27 @@ namespace InfoBoxFactory
   /**
    * Returns the human-readable name of the info box type.
    */
-  gcc_const
+  [[gnu::const]]
   const TCHAR *
-  GetName(Type type);
+  GetName(Type type) noexcept;
 
   /**
    * Returns the default caption of the info box type.  This is
    * usually a shorter version of the string returned by GetName(), to
    * fit in the small #InfoBoxWindow.
    */
-  gcc_const
+  [[gnu::const]]
   const TCHAR *
-  GetCaption(Type type);
+  GetCaption(Type type) noexcept;
 
   /**
    * Returns the long description (help text) of the info box type.
    */
-  gcc_const
+  [[gnu::const]]
   const TCHAR *
-  GetDescription(Type type);
+  GetDescription(Type type) noexcept;
 
-  std::unique_ptr<InfoBoxContent> Create(Type infobox_type);
+  std::unique_ptr<InfoBoxContent> Create(Type infobox_type) noexcept;
 };
 
 #endif

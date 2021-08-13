@@ -29,7 +29,7 @@ Copyright_License {
 #include <tchar.h>
 
 void
-UpdateInfoBoxGRInstant(InfoBoxData &data)
+UpdateInfoBoxGRInstant(InfoBoxData &data) noexcept
 {
   const auto gr = CommonInterface::Calculated().gr;
 
@@ -43,7 +43,7 @@ UpdateInfoBoxGRInstant(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxGRCruise(InfoBoxData &data)
+UpdateInfoBoxGRCruise(InfoBoxData &data) noexcept
 {
   const auto &basic = CommonInterface::Basic();
   const auto &calculated = CommonInterface::Calculated();
@@ -64,7 +64,7 @@ UpdateInfoBoxGRCruise(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxGRAvg(InfoBoxData &data)
+UpdateInfoBoxGRAvg(InfoBoxData &data) noexcept
 {
   const auto average_gr = CommonInterface::Calculated().average_gr;
 
@@ -83,7 +83,7 @@ UpdateInfoBoxGRAvg(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxLDVario(InfoBoxData &data)
+UpdateInfoBoxLDVario(InfoBoxData &data) noexcept
 {
   const auto ld_vario = CommonInterface::Calculated().ld_vario;
 

@@ -27,9 +27,9 @@ Copyright_License {
 struct InfoBoxData;
 
 void
-UpdateInfoBoxTerrainHeight(InfoBoxData &data);
+UpdateInfoBoxTerrainHeight(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTerrainCollision(InfoBoxData &data);
+UpdateInfoBoxTerrainCollision(InfoBoxData &data) noexcept;
 
 #endif

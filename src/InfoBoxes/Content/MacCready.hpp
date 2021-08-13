@@ -29,9 +29,8 @@ Copyright_License {
 class InfoBoxContentMacCready : public InfoBoxContent
 {
 public:
-  virtual const InfoBoxPanel *GetDialogContent() override;
-
-  virtual void Update(InfoBoxData &data) override;
+  const InfoBoxPanel *GetDialogContent() noexcept override;
+  void Update(InfoBoxData &data) noexcept override;
 };
 
 #endif

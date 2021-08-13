@@ -33,7 +33,8 @@ Copyright_License {
 #include <tchar.h>
 
 static void
-UpdateInfoBoxFrequency(InfoBoxData & data, const RadioFrequency & freq, const TCHAR * freq_name)
+UpdateInfoBoxFrequency(InfoBoxData &data, const RadioFrequency freq,
+                       const TCHAR *freq_name) noexcept
 {
   if(freq.IsDefined()) {
     data.FormatValue(_T("%u.%03u"), freq.GetKiloHertz() / 1000, freq.GetKiloHertz() % 1000);
@@ -60,12 +61,13 @@ static constexpr InfoBoxPanel standby_frequency_panels[] = {
 };
 
 const InfoBoxPanel *
-InfoBoxContentActiveRadioFrequency::GetDialogContent() {
+InfoBoxContentActiveRadioFrequency::GetDialogContent() noexcept
+{
   return active_frequency_panels;
 }
 
 void
-InfoBoxContentActiveRadioFrequency::Update(InfoBoxData &data)
+InfoBoxContentActiveRadioFrequency::Update(InfoBoxData &data) noexcept
 {
   const auto &settings_radio =
     CommonInterface::GetComputerSettings().radio;
@@ -73,12 +75,13 @@ InfoBoxContentActiveRadioFrequency::Update(InfoBoxData &data)
 }
 
 const InfoBoxPanel *
-InfoBoxContentStandbyRadioFrequency::GetDialogContent() {
+InfoBoxContentStandbyRadioFrequency::GetDialogContent() noexcept
+{
   return standby_frequency_panels;
 }
 
 void
-InfoBoxContentStandbyRadioFrequency::Update(InfoBoxData &data)
+InfoBoxContentStandbyRadioFrequency::Update(InfoBoxData &data) noexcept
 {
   const auto &settings_radio =
     CommonInterface::GetComputerSettings().radio;

@@ -34,7 +34,7 @@ Copyright_License {
 #include <tchar.h>
 
 void
-UpdateInfoBoxHeartRate(InfoBoxData &data)
+UpdateInfoBoxHeartRate(InfoBoxData &data) noexcept
 {
   const auto &basic = CommonInterface::Basic();
 
@@ -47,7 +47,7 @@ UpdateInfoBoxHeartRate(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxGLoad(InfoBoxData &data)
+UpdateInfoBoxGLoad(InfoBoxData &data) noexcept
 {
   if (!CommonInterface::Basic().acceleration.available) {
     data.SetInvalid();
@@ -59,7 +59,7 @@ UpdateInfoBoxGLoad(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxBattery(InfoBoxData &data)
+UpdateInfoBoxBattery(InfoBoxData &data) noexcept
 {
 #ifdef HAVE_BATTERY
   bool DisplaySupplyVoltageAsValue=false;
@@ -128,21 +128,21 @@ UpdateInfoBoxBattery(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxExperimental1(InfoBoxData &data)
+UpdateInfoBoxExperimental1(InfoBoxData &data) noexcept
 {
   // Set Value
   data.SetInvalid();
 }
 
 void
-UpdateInfoBoxExperimental2(InfoBoxData &data)
+UpdateInfoBoxExperimental2(InfoBoxData &data) noexcept
 {
   // Set Value
   data.SetInvalid();
 }
 
 void
-UpdateInfoBoxCPULoad(InfoBoxData &data)
+UpdateInfoBoxCPULoad(InfoBoxData &data) noexcept
 {
   unsigned percent_load = SystemLoadCPU();
   if (percent_load <= 100) {
@@ -153,14 +153,15 @@ UpdateInfoBoxCPULoad(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFreeRAM(InfoBoxData &data)
+UpdateInfoBoxFreeRAM(InfoBoxData &data) noexcept
 {
   // used to be implemented on WinCE
   data.SetInvalid();
 }
 
 void
-InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
+InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas,
+                                     const PixelRect &rc) noexcept
 {
   if (CommonInterface::Basic().acceleration.available) {
     const Look &look = UIGlobals::GetLook();
@@ -170,7 +171,7 @@ InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 }
 
 void
-InfoBoxContentHorizon::Update(InfoBoxData &data)
+InfoBoxContentHorizon::Update(InfoBoxData &data) noexcept
 {
   if (!CommonInterface::Basic().attitude.IsBankAngleUseable() &&
       !CommonInterface::Basic().attitude.IsPitchAngleUseable()) {
@@ -182,9 +183,9 @@ InfoBoxContentHorizon::Update(InfoBoxData &data)
 }
 
 // TODO: merge with original copy from Dialogs/StatusPanels/SystemStatusPanel.cpp
-gcc_pure
+[[gnu::pure]]
 static const TCHAR *
-GetGPSStatus(const NMEAInfo &basic)
+GetGPSStatus(const NMEAInfo &basic) noexcept
 {
   if (!basic.alive)
     return N_("Disconnected");
@@ -197,7 +198,7 @@ GetGPSStatus(const NMEAInfo &basic)
 }
 
 void
-UpdateInfoBoxNbrSat(InfoBoxData &data)
+UpdateInfoBoxNbrSat(InfoBoxData &data) noexcept
 {
     const NMEAInfo &basic = CommonInterface::Basic();
     const GPSState &gps = basic.gps;

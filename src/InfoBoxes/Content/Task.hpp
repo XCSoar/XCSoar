@@ -29,131 +29,131 @@ Copyright_License {
 extern const InfoBoxPanel next_waypoint_infobox_panels[];
 
 void
-UpdateInfoBoxBearing(InfoBoxData &data);
+UpdateInfoBoxBearing(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxBearingDiff(InfoBoxData &data);
+UpdateInfoBoxBearingDiff(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxRadial(InfoBoxData &data);
+UpdateInfoBoxRadial(InfoBoxData &data) noexcept;
 
 class InfoBoxContentNextWaypoint : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data) override;
-  virtual const InfoBoxPanel *GetDialogContent() override;
+  void Update(InfoBoxData &data) noexcept override;
+  const InfoBoxPanel *GetDialogContent() noexcept override;
 };
 
 void
-UpdateInfoBoxNextDistance(InfoBoxData &data);
+UpdateInfoBoxNextDistance(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxNextDistanceNominal(InfoBoxData &data);
+UpdateInfoBoxNextDistanceNominal(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxNextETE(InfoBoxData &data);
+UpdateInfoBoxNextETE(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxNextETA(InfoBoxData &data);
+UpdateInfoBoxNextETA(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxNextAltitudeDiff(InfoBoxData &data);
+UpdateInfoBoxNextAltitudeDiff(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxNextMC0AltitudeDiff(InfoBoxData &data);
+UpdateInfoBoxNextMC0AltitudeDiff(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxNextAltitudeRequire(InfoBoxData &data);
+UpdateInfoBoxNextAltitudeRequire(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data);
+UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxNextGR(InfoBoxData &data);
+UpdateInfoBoxNextGR(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxFinalDistance(InfoBoxData &data);
+UpdateInfoBoxFinalDistance(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxFinalETE(InfoBoxData &data);
+UpdateInfoBoxFinalETE(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxFinalETA(InfoBoxData &data);
+UpdateInfoBoxFinalETA(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxFinalAltitudeDiff(InfoBoxData &data);
+UpdateInfoBoxFinalAltitudeDiff(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxFinalMC0AltitudeDiff(InfoBoxData &data);
+UpdateInfoBoxFinalMC0AltitudeDiff(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxFinalAltitudeRequire(InfoBoxData &data);
+UpdateInfoBoxFinalAltitudeRequire(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxFinalGR(InfoBoxData &data);
+UpdateInfoBoxFinalGR(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTaskSpeed(InfoBoxData &data);
+UpdateInfoBoxTaskSpeed(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTaskSpeedAchieved(InfoBoxData &data);
+UpdateInfoBoxTaskSpeedAchieved(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data);
+UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTaskSpeedHour(InfoBoxData &data);
+UpdateInfoBoxTaskSpeedHour(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTaskAATime(InfoBoxData &data);
+UpdateInfoBoxTaskAATime(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data);
+UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTaskAADistance(InfoBoxData &data);
+UpdateInfoBoxTaskAADistance(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data);
+UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTaskAADistanceMin(InfoBoxData &data);
+UpdateInfoBoxTaskAADistanceMin(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTaskAASpeed(InfoBoxData &data);
+UpdateInfoBoxTaskAASpeed(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data);
+UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data);
+UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data);
+UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxNextETEVMG(InfoBoxData &data);
+UpdateInfoBoxNextETEVMG(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxNextETAVMG(InfoBoxData &data);
+UpdateInfoBoxNextETAVMG(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxFinalETEVMG(InfoBoxData &data);
+UpdateInfoBoxFinalETEVMG(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxCruiseEfficiency(InfoBoxData &data);
+UpdateInfoBoxCruiseEfficiency(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxStartOpen(InfoBoxData &data);
+UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxStartOpenArrival(InfoBoxData &data);
+UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept;
 
 class InfoBoxContentNextArrow: public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data) override;
-  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
+  void Update(InfoBoxData &data) noexcept override;
+  void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
 };
 
 #endif

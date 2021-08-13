@@ -41,7 +41,7 @@ Copyright_License {
 #include <tchar.h>
 
 static void
-ShowNextWaypointDetails()
+ShowNextWaypointDetails() noexcept
 {
   if (protected_task_manager == nullptr)
     return;
@@ -54,7 +54,7 @@ ShowNextWaypointDetails()
 }
 
 static std::unique_ptr<Widget>
-LoadNextWaypointDetailsPanel(unsigned id)
+LoadNextWaypointDetailsPanel(unsigned id) noexcept
 {
   return std::make_unique<CallbackWidget>(ShowNextWaypointDetails);
 }
@@ -69,7 +69,7 @@ const InfoBoxPanel next_waypoint_infobox_panels[] = {
 };
 
 void
-UpdateInfoBoxBearing(InfoBoxData &data)
+UpdateInfoBoxBearing(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
@@ -85,7 +85,7 @@ UpdateInfoBoxBearing(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxBearingDiff(InfoBoxData &data)
+UpdateInfoBoxBearingDiff(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
@@ -102,7 +102,7 @@ UpdateInfoBoxBearingDiff(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxRadial(InfoBoxData &data)
+UpdateInfoBoxRadial(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
@@ -120,7 +120,7 @@ UpdateInfoBoxRadial(InfoBoxData &data)
 }
 
 void
-InfoBoxContentNextWaypoint::Update(InfoBoxData &data)
+InfoBoxContentNextWaypoint::Update(InfoBoxData &data) noexcept
 {
   // use proper non-terminal next task stats
 
@@ -165,13 +165,13 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data)
 }
 
 const InfoBoxPanel *
-InfoBoxContentNextWaypoint::GetDialogContent()
+InfoBoxContentNextWaypoint::GetDialogContent() noexcept
 {
   return next_waypoint_infobox_panels;
 }
 
 void
-UpdateInfoBoxNextDistance(InfoBoxData &data)
+UpdateInfoBoxNextDistance(InfoBoxData &data) noexcept
 {
   const auto way_point = protected_task_manager != nullptr
     ? protected_task_manager->GetActiveWaypoint()
@@ -205,7 +205,7 @@ UpdateInfoBoxNextDistance(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxNextDistanceNominal(InfoBoxData &data)
+UpdateInfoBoxNextDistanceNominal(InfoBoxData &data) noexcept
 {
   const auto way_point = protected_task_manager != nullptr
     ? protected_task_manager->GetActiveWaypoint()
@@ -238,7 +238,7 @@ UpdateInfoBoxNextDistanceNominal(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxNextETE(InfoBoxData &data)
+UpdateInfoBoxNextETE(InfoBoxData &data) noexcept
 {
   // use proper non-terminal next task stats
 
@@ -254,7 +254,7 @@ UpdateInfoBoxNextETE(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxNextETA(InfoBoxData &data)
+UpdateInfoBoxNextETA(InfoBoxData &data) noexcept
 {
   // use proper non-terminal next task stats
 
@@ -293,7 +293,7 @@ SetValueFromAltDiff(InfoBoxData &data, const TaskStats &task_stats,
 }
 
 void
-UpdateInfoBoxNextAltitudeDiff(InfoBoxData &data)
+UpdateInfoBoxNextAltitudeDiff(InfoBoxData &data) noexcept
 {
   // pilots want this to be assuming terminal flight to this wp
 
@@ -304,7 +304,7 @@ UpdateInfoBoxNextAltitudeDiff(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxNextMC0AltitudeDiff(InfoBoxData &data)
+UpdateInfoBoxNextMC0AltitudeDiff(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
@@ -313,7 +313,7 @@ UpdateInfoBoxNextMC0AltitudeDiff(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxNextAltitudeRequire(InfoBoxData &data)
+UpdateInfoBoxNextAltitudeRequire(InfoBoxData &data) noexcept
 {
   // pilots want this to be assuming terminal flight to this wp
 
@@ -328,7 +328,7 @@ UpdateInfoBoxNextAltitudeRequire(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data)
+UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data) noexcept
 {
   // pilots want this to be assuming terminal flight to this wp
 
@@ -346,7 +346,7 @@ UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data)
 
 
 void
-UpdateInfoBoxNextGR(InfoBoxData &data)
+UpdateInfoBoxNextGR(InfoBoxData &data) noexcept
 {
   // pilots want this to be assuming terminal flight to this wp, and this
   // is what current_leg gradient does.
@@ -370,7 +370,7 @@ UpdateInfoBoxNextGR(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalDistance(InfoBoxData &data)
+UpdateInfoBoxFinalDistance(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.task_stats;
@@ -389,7 +389,7 @@ UpdateInfoBoxFinalDistance(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalETE(InfoBoxData &data)
+UpdateInfoBoxFinalETE(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
@@ -404,7 +404,7 @@ UpdateInfoBoxFinalETE(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalETA(InfoBoxData &data)
+UpdateInfoBoxFinalETA(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
@@ -426,7 +426,7 @@ UpdateInfoBoxFinalETA(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalAltitudeDiff(InfoBoxData &data)
+UpdateInfoBoxFinalAltitudeDiff(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
@@ -434,7 +434,7 @@ UpdateInfoBoxFinalAltitudeDiff(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalMC0AltitudeDiff(InfoBoxData &data)
+UpdateInfoBoxFinalMC0AltitudeDiff(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
@@ -443,7 +443,7 @@ UpdateInfoBoxFinalMC0AltitudeDiff(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalAltitudeRequire(InfoBoxData &data)
+UpdateInfoBoxFinalAltitudeRequire(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid ||
@@ -456,7 +456,7 @@ UpdateInfoBoxFinalAltitudeRequire(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskSpeed(InfoBoxData &data)
+UpdateInfoBoxTaskSpeed(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid || !task_stats.total.travelled.IsDefined()) {
@@ -469,7 +469,7 @@ UpdateInfoBoxTaskSpeed(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskSpeedAchieved(InfoBoxData &data)
+UpdateInfoBoxTaskSpeedAchieved(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid ||
@@ -483,7 +483,7 @@ UpdateInfoBoxTaskSpeedAchieved(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data)
+UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid || task_stats.inst_speed_fast < 0 ||
@@ -500,7 +500,7 @@ UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskSpeedHour(InfoBoxData &data)
+UpdateInfoBoxTaskSpeedHour(InfoBoxData &data) noexcept
 {
   const WindowStats &window =
     CommonInterface::Calculated().task_stats.last_hour;
@@ -514,7 +514,7 @@ UpdateInfoBoxTaskSpeedHour(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalGR(InfoBoxData &data)
+UpdateInfoBoxFinalGR(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
@@ -535,7 +535,7 @@ UpdateInfoBoxFinalGR(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskAATime(InfoBoxData &data)
+UpdateInfoBoxTaskAATime(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -552,7 +552,7 @@ UpdateInfoBoxTaskAATime(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
+UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -577,7 +577,7 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskAADistance(InfoBoxData &data)
+UpdateInfoBoxTaskAADistance(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -593,7 +593,7 @@ UpdateInfoBoxTaskAADistance(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data)
+UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -608,7 +608,7 @@ UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskAADistanceMin(InfoBoxData &data)
+UpdateInfoBoxTaskAADistanceMin(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -623,7 +623,7 @@ UpdateInfoBoxTaskAADistanceMin(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskAASpeed(InfoBoxData &data)
+UpdateInfoBoxTaskAASpeed(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -639,7 +639,7 @@ UpdateInfoBoxTaskAASpeed(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data)
+UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -655,7 +655,7 @@ UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data)
+UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -672,7 +672,7 @@ UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data)
+UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const auto &task_stats = calculated.ordered_task_stats;
@@ -692,7 +692,7 @@ UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxNextETEVMG(InfoBoxData &data)
+UpdateInfoBoxNextETEVMG(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
@@ -716,7 +716,7 @@ UpdateInfoBoxNextETEVMG(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxNextETAVMG(InfoBoxData &data)
+UpdateInfoBoxNextETAVMG(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
@@ -747,7 +747,7 @@ UpdateInfoBoxNextETAVMG(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalETEVMG(InfoBoxData &data)
+UpdateInfoBoxFinalETEVMG(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
@@ -771,7 +771,7 @@ UpdateInfoBoxFinalETEVMG(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxCruiseEfficiency(InfoBoxData &data)
+UpdateInfoBoxCruiseEfficiency(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid || !task_stats.start.task_started) {
@@ -794,7 +794,7 @@ SecondsUntil(unsigned now, RoughTime until)
 }
 
 void
-UpdateInfoBoxStartOpen(InfoBoxData &data)
+UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const auto &calculated = CommonInterface::Calculated();
@@ -836,7 +836,7 @@ UpdateInfoBoxStartOpen(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxStartOpenArrival(InfoBoxData &data)
+UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const auto &calculated = CommonInterface::Calculated();
@@ -885,7 +885,7 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data)
  * This function updates the text fields in the infobox.
  */
 void
-InfoBoxContentNextArrow::Update(InfoBoxData &data)
+InfoBoxContentNextArrow::Update(InfoBoxData &data) noexcept
 {
   // use proper non-terminal next task stats
   const NMEAInfo &basic = CommonInterface::Basic();
@@ -923,7 +923,8 @@ InfoBoxContentNextArrow::Update(InfoBoxData &data)
  * This function renders the arrow.
  */
 void
-InfoBoxContentNextArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
+InfoBoxContentNextArrow::OnCustomPaint(Canvas &canvas,
+                                       const PixelRect &rc) noexcept
 {
   // use proper non-terminal next task stats
   const NMEAInfo &basic = CommonInterface::Basic();

@@ -30,7 +30,7 @@ Copyright_License {
 #include "Formatter/Units.hpp"
 
 void
-UpdateInfoBoxHomeDistance(InfoBoxData &data)
+UpdateInfoBoxHomeDistance(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
@@ -51,7 +51,7 @@ UpdateInfoBoxHomeDistance(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTakeoffDistance(InfoBoxData &data)
+UpdateInfoBoxTakeoffDistance(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const FlyingState &flight = CommonInterface::Calculated().flight;
@@ -81,7 +81,7 @@ const InfoBoxPanel atc_infobox_panels[] = {
 };
 
 void
-UpdateInfoBoxATCRadial(InfoBoxData &data)
+UpdateInfoBoxATCRadial(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const GeoPoint &reference =

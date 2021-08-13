@@ -50,12 +50,13 @@ const InfoBoxPanel altitude_infobox_panels[] = {
 };
 
 const InfoBoxPanel *
-InfoBoxContentAltitude::GetDialogContent() {
+InfoBoxContentAltitude::GetDialogContent() noexcept
+{
   return altitude_infobox_panels;
 }
 
 void
-UpdateInfoBoxAltitudeNav(InfoBoxData &data)
+UpdateInfoBoxAltitudeNav(InfoBoxData &data) noexcept
 {
   const MoreData &basic = CommonInterface::Basic();
 
@@ -81,7 +82,7 @@ UpdateInfoBoxAltitudeNav(InfoBoxData &data)
 }
 
 void
-InfoBoxContentAltitudeGPS::Update(InfoBoxData &data)
+InfoBoxContentAltitudeGPS::Update(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
 
@@ -95,7 +96,7 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxAltitudeAGL(InfoBoxData &data)
+UpdateInfoBoxAltitudeAGL(InfoBoxData &data) noexcept
 {
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
@@ -113,7 +114,7 @@ UpdateInfoBoxAltitudeAGL(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxAltitudeBaro(InfoBoxData &data)
+UpdateInfoBoxAltitudeBaro(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
 
@@ -131,7 +132,7 @@ UpdateInfoBoxAltitudeBaro(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxAltitudeQFE(InfoBoxData &data)
+UpdateInfoBoxAltitudeQFE(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const auto &calculated = CommonInterface::Calculated();
@@ -154,7 +155,7 @@ UpdateInfoBoxAltitudeQFE(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxAltitudeFlightLevel(InfoBoxData &data)
+UpdateInfoBoxAltitudeFlightLevel(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const ComputerSettings &settings_computer =

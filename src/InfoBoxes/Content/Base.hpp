@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_INFOBOX_CONTENT_HPP
 #define XCSOAR_INFOBOX_CONTENT_HPP
 
-#include "util/Compiler.h"
-
 struct PixelRect;
 struct InfoBoxData;
 struct InfoBoxPanel;
@@ -41,15 +39,15 @@ public:
     ibkRight = 2
   };
 
-  virtual ~InfoBoxContent();
+  virtual ~InfoBoxContent() noexcept;
 
-  virtual void Update(InfoBoxData &data) = 0;
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode);
+  virtual void Update(InfoBoxData &data) noexcept = 0;
+  virtual bool HandleKey(const InfoBoxKeyCodes keycode) noexcept;
 
-  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc);
+  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept;
 
-  gcc_pure
-  virtual const InfoBoxPanel *GetDialogContent();
+  [[gnu::pure]]
+  virtual const InfoBoxPanel *GetDialogContent() noexcept;
 };
 
 #endif

@@ -30,7 +30,7 @@ Copyright_License {
 #include <tchar.h>
 
 void
-UpdateInfoBoxTimeLocal(InfoBoxData &data)
+UpdateInfoBoxTimeLocal(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
@@ -49,7 +49,7 @@ UpdateInfoBoxTimeLocal(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTimeUTC(InfoBoxData &data)
+UpdateInfoBoxTimeUTC(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
 
@@ -67,7 +67,7 @@ UpdateInfoBoxTimeUTC(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTimeFlight(InfoBoxData &data)
+UpdateInfoBoxTimeFlight(InfoBoxData &data) noexcept
 {
   const FlyingState &flight = CommonInterface::Calculated().flight;
 

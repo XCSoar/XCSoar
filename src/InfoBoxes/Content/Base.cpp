@@ -23,21 +23,21 @@ Copyright_License {
 
 #include "Base.hpp"
 
-InfoBoxContent::~InfoBoxContent() {}
+InfoBoxContent::~InfoBoxContent() noexcept = default;
 
 bool
-InfoBoxContent::HandleKey(const InfoBoxKeyCodes keycode)
+InfoBoxContent::HandleKey(const InfoBoxKeyCodes keycode) noexcept
 {
   return false;
 }
 
 void
-InfoBoxContent::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
+InfoBoxContent::OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept
 {
 }
 
 const InfoBoxPanel *
-InfoBoxContent::GetDialogContent()
+InfoBoxContent::GetDialogContent() noexcept
 {
   return nullptr;
 }

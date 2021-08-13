@@ -29,20 +29,20 @@ Copyright_License {
 class InfoBoxContentSpeedGround : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data) override;
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode) override;
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleKey(const InfoBoxKeyCodes keycode) noexcept override;
 };
 
 void
-UpdateInfoBoxSpeedIndicated(InfoBoxData &data);
+UpdateInfoBoxSpeedIndicated(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxSpeed(InfoBoxData &data);
+UpdateInfoBoxSpeed(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxSpeedMacCready(InfoBoxData &data);
+UpdateInfoBoxSpeedMacCready(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxSpeedDolphin(InfoBoxData &data);
+UpdateInfoBoxSpeedDolphin(InfoBoxData &data) noexcept;
 
 #endif

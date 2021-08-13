@@ -34,7 +34,7 @@ Copyright_License {
 #include <tchar.h>
 
 static void
-SetVSpeed(InfoBoxData &data, double value)
+SetVSpeed(InfoBoxData &data, double value) noexcept
 {
   TCHAR buffer[32];
   FormatUserVerticalSpeed(value, buffer, false);
@@ -53,7 +53,8 @@ static constexpr InfoBoxPanel panels[] = {
 };
 
 const InfoBoxPanel *
-InfoBoxContentMacCready::GetDialogContent() {
+InfoBoxContentMacCready::GetDialogContent() noexcept
+{
   return panels;
 }
 
@@ -62,7 +63,7 @@ InfoBoxContentMacCready::GetDialogContent() {
  */
 
 void
-InfoBoxContentMacCready::Update(InfoBoxData &data)
+InfoBoxContentMacCready::Update(InfoBoxData &data) noexcept
 {
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();

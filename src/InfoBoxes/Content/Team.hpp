@@ -29,18 +29,18 @@ Copyright_License {
 class InfoBoxContentTeamCode : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data) override;
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode) override;
-  virtual const InfoBoxPanel *GetDialogContent() override;
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleKey(const InfoBoxKeyCodes keycode) noexcept override;
+  const InfoBoxPanel *GetDialogContent() noexcept override;
 };
 
 void
-UpdateInfoBoxTeamBearing(InfoBoxData &data);
+UpdateInfoBoxTeamBearing(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTeamBearingDiff(InfoBoxData &data);
+UpdateInfoBoxTeamBearingDiff(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTeamDistance(InfoBoxData &data);
+UpdateInfoBoxTeamDistance(InfoBoxData &data) noexcept;
 
 #endif
