@@ -33,7 +33,7 @@ RecursivelySuspensibleThread::Start(bool suspended)
 }
 
 void
-RecursivelySuspensibleThread::BeginSuspend()
+RecursivelySuspensibleThread::BeginSuspend() noexcept
 {
   ++suspend_count;
   if (suspend_count == 1)
@@ -41,7 +41,7 @@ RecursivelySuspensibleThread::BeginSuspend()
 }
 
 void
-RecursivelySuspensibleThread::Suspend()
+RecursivelySuspensibleThread::Suspend() noexcept
 {
   ++suspend_count;
 
@@ -51,7 +51,7 @@ RecursivelySuspensibleThread::Suspend()
 }
 
 void
-RecursivelySuspensibleThread::Resume()
+RecursivelySuspensibleThread::Resume() noexcept
 {
   assert(suspend_count > 0);
 
