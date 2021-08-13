@@ -37,8 +37,6 @@ class GlueMapWindow;
  * 
  */
 class DrawThread final : public RecursivelySuspensibleThread {
-  static constexpr unsigned MIN_WAIT_TIME = 100;
-
   /**
    * Is work pending?  This flag gets cleared by the thread as soon as
    * it starts working.
