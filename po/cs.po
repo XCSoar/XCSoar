@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-10 09:50+0200\n"
-"PO-Revision-Date: 2021-08-08 11:32+0000\n"
+"PO-Revision-Date: 2021-08-15 22:35+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -962,7 +962,7 @@ msgstr "Výška GPS"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:83
 #, no-c-format
 msgid "Alt GPS"
-msgstr "Výška GPS"
+msgstr "Alt GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:138
 #, no-c-format
@@ -984,7 +984,7 @@ msgstr "Výška AGL"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:87
 #, no-c-format
 msgid "H AGL"
-msgstr "Výška AGL"
+msgstr "H AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:146
 #, no-c-format
@@ -2224,12 +2224,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:707
 #, no-c-format
 msgid "Height above take-off"
-msgstr "Výška nad bodem vzletu"
+msgstr "Výška nad místem vzletu"
 
 #: src/InfoBoxes/Content/Factory.cpp:708
 #, no-c-format
 msgid "H T/O"
-msgstr "Výška T/O"
+msgstr "H T/O"
 
 #: src/InfoBoxes/Content/Factory.cpp:709
 #, no-c-format
@@ -2331,7 +2331,7 @@ msgstr "Výška příletu na další OB"
 #: src/InfoBoxes/Content/Factory.cpp:757
 #, no-c-format
 msgid "WP AltA"
-msgstr "OB příl. výška"
+msgstr "OB AltA"
 
 #: src/InfoBoxes/Content/Factory.cpp:758
 #, no-c-format
@@ -2658,7 +2658,7 @@ msgstr "Výška (Auto)"
 #: src/InfoBoxes/Content/Factory.cpp:905
 #, no-c-format
 msgid "Alt Auto"
-msgstr "Výška Auto"
+msgstr "Alt Auto"
 
 #: src/InfoBoxes/Content/Factory.cpp:906
 #, no-c-format
@@ -10083,7 +10083,7 @@ msgstr "V terén"
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:36
 #, no-c-format
 msgid "Height terrain"
-msgstr "Výška terény"
+msgstr "Výška terénu"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:38
 #, no-c-format
