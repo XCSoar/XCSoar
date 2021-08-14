@@ -56,28 +56,24 @@ public:
   {
   }
 
-  [[gnu::const]]
-  static RoughTime FromMinuteOfDay(unsigned mod) noexcept {
+  static constexpr RoughTime FromMinuteOfDay(unsigned mod) noexcept {
     assert(std::chrono::minutes{mod} < MAX);
 
     return RoughTime(std::chrono::minutes{mod});
   }
 
-  [[gnu::const]]
-  static RoughTime FromMinuteOfDayChecked(int mod) noexcept {
+  static constexpr RoughTime FromMinuteOfDayChecked(int mod) noexcept {
     while (mod < 0)
       mod += MAX.count();
 
     return FromMinuteOfDayChecked(unsigned(mod));
   }
 
-  [[gnu::const]]
-  static RoughTime FromMinuteOfDayChecked(unsigned mod) noexcept {
+  static constexpr RoughTime FromMinuteOfDayChecked(unsigned mod) noexcept {
     return RoughTime(std::chrono::minutes{mod % MAX.count()});
   }
 
-  [[gnu::const]]
-  static RoughTime FromSecondOfDayChecked(unsigned sod) noexcept {
+  static constexpr RoughTime FromSecondOfDayChecked(unsigned sod) noexcept {
     return FromMinuteOfDayChecked(sod / 60);
   }
 
@@ -260,8 +256,7 @@ public:
   }
 };
 
-[[gnu::const]]
-static inline RoughTime
+static constexpr RoughTime
 operator+(RoughTime t, RoughTimeDelta delta) noexcept
 {
   if (!t.IsValid())
@@ -271,8 +266,7 @@ operator+(RoughTime t, RoughTimeDelta delta) noexcept
   return RoughTime::FromMinuteOfDayChecked(value);
 }
 
-[[gnu::const]]
-static inline RoughTime
+static constexpr RoughTime
 operator-(RoughTime t, RoughTimeDelta delta) noexcept
 {
   return t + (-delta);
