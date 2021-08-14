@@ -119,7 +119,7 @@ struct BrokenTime {
 
   /**
    * Construct a BrokenTime object from the specified duration since
-   * midnight.  seconds which have passed on this day.
+   * midnight.
    */
   template<class Rep, class Period>
   [[gnu::const]]
