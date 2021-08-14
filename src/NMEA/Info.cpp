@@ -52,14 +52,7 @@ NMEAInfo::ProvideTime(double _time)
   time = _time;
   time_available.Update(clock);
 
-  unsigned t = (unsigned)_time;
-  date_time_utc.second = t % 60;
-  t /= 60;
-
-  date_time_utc.minute = t % 60;
-  t /= 60;
-
-  date_time_utc.hour = t % 24;
+  (BrokenTime &)date_time_utc = BrokenTime::FromSecondOfDayChecked(time);
 }
 
 void
