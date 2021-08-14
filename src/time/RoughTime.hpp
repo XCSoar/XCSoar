@@ -62,11 +62,31 @@ public:
     return RoughTime(std::chrono::minutes{mod});
   }
 
+  /**
+   * Construct a #RoughTime object from the specified duration since
+   * midnight.
+   */
+  template<class Rep, class Period>
+  [[gnu::const]]
+  static auto FromSinceMidnight(const std::chrono::duration<Rep,Period> &since_midnight) noexcept {
+    return FromMinuteOfDay(std::chrono::duration_cast<std::chrono::minutes>(since_midnight).count());
+  }
+
   static constexpr RoughTime FromMinuteOfDayChecked(int mod) noexcept {
     while (mod < 0)
       mod += MAX.count();
 
     return FromMinuteOfDayChecked(unsigned(mod));
+  }
+
+  /**
+   * A wrapper for FromSinceMidnight() which allows values bigger than
+   * one day.
+   */
+  template<class Rep, class Period>
+  [[gnu::const]]
+  static auto FromSinceMidnightChecked(const std::chrono::duration<Rep,Period> &since_midnight) noexcept {
+    return FromMinuteOfDayChecked(std::chrono::duration_cast<std::chrono::minutes>(since_midnight).count());
   }
 
   static constexpr RoughTime FromMinuteOfDayChecked(unsigned mod) noexcept {
