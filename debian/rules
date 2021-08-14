@@ -20,6 +20,10 @@ ifneq (,$(findstring clang,$(DEB_BUILD_OPTIONS)))
   OPTIONS += CLANG=y
 endif
 
+ifneq (,$(findstring ccache,$(DEB_BUILD_OPTIONS)))
+  OPTIONS += USE_CCACHE=y
+endif
+
 %:
 	dh $@
 
