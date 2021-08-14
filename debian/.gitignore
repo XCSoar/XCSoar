@@ -1,6 +1,7 @@
 /files
-/stamp-*
+/*-stamp
 /tmp
 /*.substvars
+/.debhelper/
 /xcsoar
 /vali-xcs

@@ -2,6 +2,7 @@ xcsoar (7.13) unstable; urgency=medium
 
   * new release
   * remove -doc package
+  * use debhelper 12
 
  --
 
