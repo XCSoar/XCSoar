@@ -52,16 +52,16 @@ public:
 
 private:
   const AbstractAirspace &airspace;
-  State state;
-  State state_last;
-  AirspaceInterceptSolution solution;
+  State state = WARNING_CLEAR;
+  State state_last = WARNING_CLEAR;
+  AirspaceInterceptSolution solution = AirspaceInterceptSolution::Invalid();
 
-  unsigned acktime_warning;
-  unsigned acktime_inside;
-  unsigned debounce_time;
-  bool ack_day;
-  bool expired;
-  bool expired_last;
+  unsigned acktime_warning = 0;
+  unsigned acktime_inside = 0;
+  unsigned debounce_time = 60;
+  bool ack_day = false;
+  bool expired = true;
+  bool expired_last = true;
 
   static constexpr unsigned null_acktime = -1;
 

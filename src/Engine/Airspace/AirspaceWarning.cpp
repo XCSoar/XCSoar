@@ -27,16 +27,7 @@ Copyright_License {
 #include <algorithm>
 
 AirspaceWarning::AirspaceWarning(const AbstractAirspace &_airspace)
-  :airspace(_airspace),
-   state(WARNING_CLEAR),
-   state_last(WARNING_CLEAR),
-   solution(AirspaceInterceptSolution::Invalid()),
-   acktime_warning(0),
-   acktime_inside(0),
-   debounce_time(60),
-   ack_day(false),
-   expired(true),
-   expired_last(true)
+  :airspace(_airspace)
 {
 }
 
