@@ -124,69 +124,17 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
   SetPort(port_df, config);
   port_control.RefreshDisplay();
 
-  WndProperty &baud_control = GetControl(BaudRate);
-  DataFieldEnum &baud_df = *(DataFieldEnum *)baud_control.GetDataField();
-  baud_df.Set(config.baud_rate);
-  baud_control.RefreshDisplay();
-
-  WndProperty &bulk_baud_control = GetControl(BulkBaudRate);
-  DataFieldEnum &bulk_baud_df = *(DataFieldEnum *)
-    bulk_baud_control.GetDataField();
-  bulk_baud_df.Set(config.bulk_baud_rate);
-  bulk_baud_control.RefreshDisplay();
-
-  WndProperty &ip_address_control = GetControl(IP_ADDRESS);
-  DataFieldEnum &ip_address_df = *(DataFieldEnum *)
-    ip_address_control.GetDataField();
-  ip_address_df.Set(config.ip_address);
-  ip_address_control.RefreshDisplay();
-
-  WndProperty &tcp_port_control = GetControl(TCPPort);
-  DataFieldEnum &tcp_port_df = *(DataFieldEnum *)
-    tcp_port_control.GetDataField();
-  tcp_port_df.Set(config.tcp_port);
-  tcp_port_control.RefreshDisplay();
-
-  WndProperty &i2c_bus_control = GetControl(I2CBus);
-  DataFieldEnum &i2c_bus_df = *(DataFieldEnum *)
-    i2c_bus_control.GetDataField();
-  i2c_bus_df.Set(config.i2c_bus);
-  i2c_bus_control.RefreshDisplay();
-
-  WndProperty &i2c_addr_control = GetControl(I2CAddr);
-  DataFieldEnum &i2c_addr_df = *(DataFieldEnum *)
-    i2c_addr_control.GetDataField();
-  i2c_addr_df.Set(config.i2c_addr);
-  i2c_addr_control.RefreshDisplay();
-
-  WndProperty &press_control = GetControl(PressureUsage);
-  DataFieldEnum &press_df = *(DataFieldEnum *)
-    press_control.GetDataField();
-  press_df.Set((unsigned)config.press_use);
-  press_control.RefreshDisplay();
-
-  WndProperty &driver_control = GetControl(Driver);
-  DataFieldEnum &driver_df = *(DataFieldEnum *)driver_control.GetDataField();
-  driver_df.Set(config.driver_name);
-  driver_control.RefreshDisplay();
-
-  WndProperty &sync_from_control = GetControl(SyncFromDevice);
-  DataFieldBoolean &sync_from_df =
-      *(DataFieldBoolean *)sync_from_control.GetDataField();
-  sync_from_df.Set(config.sync_from_device);
-  sync_from_control.RefreshDisplay();
-
-  WndProperty &sync_to_control = GetControl(SyncToDevice);
-  DataFieldBoolean &sync_to_df =
-      *(DataFieldBoolean *)sync_to_control.GetDataField();
-  sync_to_df.Set(config.sync_to_device);
-  sync_to_control.RefreshDisplay();
-
-  WndProperty &k6bt_control = GetControl(K6Bt);
-  DataFieldBoolean &k6bt_df =
-      *(DataFieldBoolean *)k6bt_control.GetDataField();
-  k6bt_df.Set(config.k6bt);
-  k6bt_control.RefreshDisplay();
+  LoadValueEnum(BaudRate, config.baud_rate);
+  LoadValueEnum(BulkBaudRate, config.bulk_baud_rate);
+  LoadValueEnum(IP_ADDRESS, config.ip_address);
+  LoadValueEnum(TCPPort, config.tcp_port);
+  LoadValueEnum(I2CBus, config.i2c_bus);
+  LoadValueEnum(I2CAddr, config.i2c_addr);
+  LoadValueEnum(PressureUsage, config.press_use);
+  LoadValueEnum(Driver, config.driver_name);
+  LoadValue(SyncFromDevice, config.sync_from_device);
+  LoadValue(SyncToDevice, config.sync_to_device);
+  LoadValue(K6Bt, config.k6bt);
 
   UpdateVisibilities();
 }
