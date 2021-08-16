@@ -1,4 +1,7 @@
 Version 7.13 - not yet released
+* task management
+  - Use task defaults for start and finish height ref (MSL or AGL) when loading
+    tasks from soarscore.com
 
 Version 7.12 - 2021/08/13
 * calculations
