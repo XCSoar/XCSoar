@@ -132,7 +132,7 @@ TestTime()
 
   ok1(BrokenTime(12, 15, 30).GetSecondOfDay() == 44130);
   ok1(BrokenTime::FromSinceMidnight(seconds{44130}) == BrokenTime(12, 15, 30));
-  ok1(BrokenTime::FromSinceMidnight(seconds{130530}) == BrokenTime(12, 15, 30));
+  ok1(BrokenTime::FromSinceMidnightChecked(seconds{130530}) == BrokenTime(12, 15, 30));
 
   ok1(BrokenTime(12, 15, 30).GetMinuteOfDay() == 735);
   ok1(BrokenTime::FromMinuteOfDay(735) == BrokenTime(12, 15));
