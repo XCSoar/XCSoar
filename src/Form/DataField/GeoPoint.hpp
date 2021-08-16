@@ -36,6 +36,11 @@ class GeoPointDataField final : public DataField {
 
   const CoordinateFormat format;
 
+  /**
+   * For GetAsString().  Must be mutable because the method is const.
+   */
+  mutable TCHAR string_buffer[64];
+
 public:
   GeoPointDataField(GeoPoint _value, CoordinateFormat _format,
                     DataFieldListener *listener=nullptr) noexcept
