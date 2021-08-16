@@ -23,6 +23,20 @@ Copyright_License {
 
 #include "FlightStatistics.hpp"
 
+static constexpr double
+ToHours(double t) noexcept
+{
+  return t / 3600.;
+}
+
+static constexpr double
+ToNormalisedHours(double t) noexcept
+{
+  return t >= 0
+    ? ToHours(t)
+    : 0.;
+}
+
 void FlightStatistics::Reset() {
   std::lock_guard<Mutex> lock(mutex);
 
@@ -50,16 +64,15 @@ void
 FlightStatistics::AddAltitudeTerrain(const double tflight, const double terrainalt)
 {
   std::lock_guard<Mutex> lock(mutex);
-  altitude_terrain.Update(std::max(0., tflight / 3600.),
-                          terrainalt);
+  altitude_terrain.Update(ToNormalisedHours(tflight), terrainalt);
 }
 
 void
 FlightStatistics::AddAltitude(const double tflight, const double alt, const bool final_glide)
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const double t = ToNormalisedHours(tflight);
 
-  const double t = std::max(0., tflight / 3600);
+  std::lock_guard<Mutex> lock(mutex);
 
   altitude.Update(t, alt);
 
@@ -96,7 +109,7 @@ void
 FlightStatistics::AddTaskSpeed(const double tflight, const double val)
 {
   std::lock_guard<Mutex> lock(mutex);
-  task_speed.Update(tflight / 3600, val);
+  task_speed.Update(ToHours(tflight), val);
 }
 
 void
@@ -108,14 +121,14 @@ FlightStatistics::AddClimbBase(const double tflight, const double alt)
   // as the base
   //
   if (altitude_ceiling.HasResult())
-    altitude_base.UpdateConvexNegative(std::max(0., tflight) / 3600, alt);
+    altitude_base.UpdateConvexNegative(ToNormalisedHours(tflight), alt);
 }
 
 void
 FlightStatistics::AddClimbCeiling(const double tflight, const double alt)
 {
   std::lock_guard<Mutex> lock(mutex);
-  altitude_ceiling.UpdateConvexPositive(std::max(0., tflight) / 3600, alt);
+  altitude_ceiling.UpdateConvexPositive(ToNormalisedHours(tflight), alt);
 }
 
 /**
@@ -127,8 +140,8 @@ FlightStatistics::AddThermalAverage(const double tflight_start,
                                     const double tflight_end, const double v)
 {
   std::lock_guard<Mutex> lock(mutex);
-  thermal_average.Update(std::max(0., tflight_start) / 3600, v,
-                         (tflight_end-tflight_start)/3600);
+  thermal_average.Update(ToNormalisedHours(tflight_start), v,
+                         ToHours(tflight_end - tflight_start));
 }
 
 void
