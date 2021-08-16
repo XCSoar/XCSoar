@@ -36,7 +36,7 @@ template<typename... Args>
 static inline bool
 Start(const char *path, Args... args)
 {
-  const char *const argv[]{path, args...};
+  const char *const argv[]{path, args..., nullptr};
   return Start(argv);
 }
 
@@ -50,7 +50,7 @@ template<typename... Args>
 static inline bool
 Run(const char *path, Args... args)
 {
-  const char *const argv[]{path, args...};
+  const char *const argv[]{path, args..., nullptr};
   return Run(argv);
 }
 
