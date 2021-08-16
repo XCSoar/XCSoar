@@ -101,6 +101,8 @@ similar operating systems:
 
 -  `zlib <http://www.zlib.net/>`__
 
+- `c-ares <https://c-ares.haxx.se/`__
+
 -  `CURL <http://curl.haxx.se/>`__
 
 -  `Lua <http://www.lua.org/>`__
@@ -129,6 +131,7 @@ The following command installs these on Debian::
       libfreetype6-dev \
       libpng-dev libjpeg-dev \
       libtiff5-dev libgeotiff-dev \
+      libc-ares-dev \
       libcurl4-openssl-dev \
       libc-ares-dev \
       liblua5.2-dev lua5.2-dev \
