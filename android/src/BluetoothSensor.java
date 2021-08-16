@@ -54,6 +54,9 @@ public final class BluetoothSensor
   private final Queue<BluetoothGattCharacteristic> enableNotificationQueue =
     new LinkedList<BluetoothGattCharacteristic>();
 
+  private boolean haveFlytecMovement = false;
+  private double flytecGroundSpeed, flytecTrack, flytecAcceleration;
+
   public BluetoothSensor(Context context, BluetoothDevice device,
                          SensorListener listener)
     throws IOException
@@ -80,6 +83,7 @@ public final class BluetoothSensor
   }
 
   private void submitError(String msg) {
+    haveFlytecMovement = false;
     state = STATE_FAILED;
     listener.onSensorError(msg);
   }
@@ -145,13 +149,18 @@ public final class BluetoothSensor
                                     c.getIntValue(c.FORMAT_SINT32, 4) / 10000000.,
                                     hasAltitude, true,
                                     c.getIntValue(c.FORMAT_SINT16, 12),
+                                    haveFlytecMovement, flytecTrack,
+                                    haveFlytecMovement, flytecGroundSpeed,
                                     false, 0,
-                                    false, 0,
-                                    false, 0,
-                                    false, 0);
+                                    haveFlytecMovement, flytecAcceleration);
 
           listener.onPressureAltitudeSensor(c.getIntValue(c.FORMAT_SINT16, 14));
           listener.onVarioSensor(c.getIntValue(c.FORMAT_SINT16, 16) / 100.f);
+        } else if (BluetoothUuids.FLYTEC_SENSBOX_MOVEMENT_SENSOR_CHARACTERISTIC.equals(c.getUuid())) {
+          flytecGroundSpeed = c.getIntValue(c.FORMAT_SINT16, 6) / 10.;
+          flytecTrack = c.getIntValue(c.FORMAT_SINT16, 8) / 10.;
+          flytecAcceleration = c.getIntValue(c.FORMAT_UINT16, 16) / 10.;
+          haveFlytecMovement = true;
         }
       }
     } catch (NullPointerException e) {
