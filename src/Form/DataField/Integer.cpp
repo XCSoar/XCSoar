@@ -29,7 +29,7 @@ Copyright_License {
 
 static bool datafield_key_up = false;
 
-gcc_pure
+[[gnu::pure]]
 static int
 ParseString(const TCHAR *s) noexcept
 {
@@ -178,7 +178,7 @@ DataFieldInteger::CreateComboList(const TCHAR *reference_string) const noexcept
 }
 
 void
-DataFieldInteger::SetFromCombo(gcc_unused int index,
+DataFieldInteger::SetFromCombo([[maybe_unused]] int index,
                                const TCHAR *value) noexcept
 {
   SetAsString(value);

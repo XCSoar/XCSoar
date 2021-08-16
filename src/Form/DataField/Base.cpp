@@ -24,7 +24,6 @@ Copyright_License {
 #include "Base.hpp"
 #include "Listener.hpp"
 #include "ComboList.hpp"
-#include "util/Compiler.h"
 
 #include <math.h>
 
@@ -72,12 +71,12 @@ DataField::GetAsDisplayString() const noexcept
 }
 
 void
-DataField::SetAsInteger(gcc_unused int value) noexcept
+DataField::SetAsInteger([[maybe_unused]] int value) noexcept
 {
 }
 
 void
-DataField::SetAsString(gcc_unused const TCHAR *value) noexcept
+DataField::SetAsString([[maybe_unused]] const TCHAR *value) noexcept
 {
 }
 

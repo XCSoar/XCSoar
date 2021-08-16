@@ -104,10 +104,10 @@ public:
   DataFieldEnum(DataFieldListener *listener=nullptr) noexcept
     :DataField(Type::ENUM, true, listener) {}
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetValue() const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool Exists(const TCHAR *text) const noexcept {
     return Find(text) >= 0;
   }
@@ -181,7 +181,7 @@ public:
 
   void Sort(std::size_t startindex = 0) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   std::size_t Count() const noexcept {
     return entries.size();
   }
@@ -204,10 +204,10 @@ protected:
   /**
    * Finds an entry with the specified text.  Returns -1 if not found.
    */
-  gcc_pure
+  [[gnu::pure]]
   int Find(const TCHAR *text) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   int Find(unsigned id) const noexcept;
 
   void SetIndex(std::size_t new_value, bool invoke_callback) noexcept;

@@ -116,7 +116,7 @@ AngleDataField::Dec() noexcept
 }
 
 void
-AngleDataField::SetFromCombo(int i, gcc_unused const TCHAR *s) noexcept
+AngleDataField::SetFromCombo(int i, [[maybe_unused]] const TCHAR *s) noexcept
 {
   assert(i >= 0);
   assert(unsigned(i) < MAX);

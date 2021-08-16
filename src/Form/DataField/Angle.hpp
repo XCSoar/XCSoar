@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Base.hpp"
 #include "Math/Angle.hpp"
-#include "util/Compiler.h"
 
 /**
  * This #DataField implementation stores an angle value from 0 to 359
@@ -66,10 +65,10 @@ public:
     return value % MAX;
   }
 
-  gcc_const
+  [[gnu::const]]
   static unsigned Import(int value) noexcept;
 
-  gcc_const
+  [[gnu::const]]
   static unsigned Import(Angle value) noexcept {
     return lround(value.AsBearing().Degrees()) % 360u;
   }

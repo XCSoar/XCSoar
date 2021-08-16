@@ -81,7 +81,7 @@ DataFieldTime::SpeedUp(bool key_up) noexcept
 
 void
 DataFieldTime::SetFromCombo(int data_field_index,
-                            gcc_unused const TCHAR *value_string) noexcept
+                            [[maybe_unused]] const TCHAR *value_string) noexcept
 {
   SetValue(std::chrono::seconds{data_field_index});
 }

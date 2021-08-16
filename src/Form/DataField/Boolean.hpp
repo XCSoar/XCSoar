@@ -67,7 +67,7 @@ public:
   ComboList CreateComboList(const TCHAR *reference) const noexcept override;
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   bool ParseString(const TCHAR *s) const noexcept;
 };
 

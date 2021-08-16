@@ -130,10 +130,10 @@ public:
    * Returns the number of files in the list
    * @return The number of files in the list
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetNumFiles() const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   int Find(Path path) const noexcept;
 
   /**
@@ -155,7 +155,7 @@ public:
    * Returns the PathFile of the currently selected item
    * @return The PathFile of the currently selected item
    */
-  gcc_pure
+  [[gnu::pure]]
   Path GetPathFile() const noexcept;
 
   /**
@@ -175,10 +175,10 @@ public:
   void ScanMultiplePatterns(const TCHAR *patterns) noexcept;
 
   /** For use by other classes */
-  gcc_pure
+  [[gnu::pure]]
   unsigned size() const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   Path GetItem(unsigned index) const noexcept;
 
   /* virtual methods from class DataField */
