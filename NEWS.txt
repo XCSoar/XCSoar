@@ -6,6 +6,7 @@ Version 7.13 - not yet released
   - fix crash in Kobo menu
 * Android
   - fix GPS time from the Flytec Sensbox
+  - don't apply Geoid separation to Flytec Sensbox GPS altitude
 
 Version 7.12 - 2021/08/13
 * calculations

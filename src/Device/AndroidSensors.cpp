@@ -61,7 +61,8 @@ void
 DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
                                    int n_satellites,
                                    GeoPoint location,
-                                   bool hasAltitude, double altitude,
+                                   bool hasAltitude, bool geoid_altitude,
+                                   double altitude,
                                    bool hasBearing, double bearing,
                                    bool hasSpeed, double ground_speed,
                                    bool hasAccuracy, double accuracy,
@@ -90,7 +91,9 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
   basic.location_available.Update(basic.clock);
 
   if (hasAltitude) {
-    auto GeoidSeparation = EGM96::LookupSeparation(basic.location);
+    auto GeoidSeparation = geoid_altitude
+      ? 0.
+      : EGM96::LookupSeparation(basic.location);
     basic.gps_altitude = altitude - GeoidSeparation;
     basic.gps_altitude_available.Update(basic.clock);
   } else

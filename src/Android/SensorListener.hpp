@@ -36,10 +36,15 @@ class SensorListener {
 public:
   virtual void OnConnected(int connected) noexcept = 0;
 
+  /**
+   * @param geoid_altitude is the GPS altitude above Geoid (true) or
+   * above the WGS84 ellipsoid (false)?
+   */
   virtual void OnLocationSensor(std::chrono::system_clock::time_point time,
                                 int n_satellites,
                                 GeoPoint location,
-                                bool hasAltitude, double altitude,
+                                bool hasAltitude, bool geoid_altitude,
+                                double altitude,
                                 bool hasBearing, double bearing,
                                 bool hasSpeed, double ground_speed,
                                 bool hasAccuracy, double accuracy,

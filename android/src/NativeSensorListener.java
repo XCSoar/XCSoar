@@ -42,7 +42,9 @@ final class NativeSensorListener implements SensorListener {
   @Override
   public native void onLocationSensor(long time, int n_satellites,
                                       double longitude, double latitude,
-                                      boolean hasAltitude, double altitude,
+                                      boolean hasAltitude,
+                                      boolean geoidAltitude,
+                                      double altitude,
                                       boolean hasBearing, double bearing,
                                       boolean hasSpeed, double speed,
                                       boolean hasAccuracy, double accuracy,

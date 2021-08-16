@@ -28,9 +28,14 @@ package org.xcsoar;
 public interface SensorListener {
   void onConnected(int connected);
 
+  /**
+   * @param geoidAltitude is the GPS altitude above Geoid (true) or
+   * above the WGS84 ellipsoid (false)?
+   */
   void onLocationSensor(long time, int n_satellites,
                         double longitude, double latitude,
-                        boolean hasAltitude, double altitude,
+                        boolean hasAltitude, boolean geoidAltitude,
+                        double altitude,
                         boolean hasBearing, double bearing,
                         boolean hasSpeed, double speed,
                         boolean hasAccuracy, double accuracy,
