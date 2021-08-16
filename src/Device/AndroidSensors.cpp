@@ -76,12 +76,6 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
   double second_of_day =
     std::chrono::duration_cast<FloatDuration>(time - midnight.ToTimePoint()).count();
 
-  if (second_of_day < basic.time &&
-      basic.date_time_utc.IsDatePlausible() &&
-      date_time.GetDate() > basic.date_time_utc.GetDate())
-    /* don't wrap around when going past midnight in UTC */
-    second_of_day += 24u * 3600u;
-
   basic.time = second_of_day;
   basic.time_available.Update(basic.clock);
   basic.date_time_utc = date_time;
