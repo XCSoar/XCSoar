@@ -284,6 +284,16 @@ RowFormWidget::LoadValue(unsigned i, bool value) noexcept
 }
 
 void
+RowFormWidget::LoadValueEnum(unsigned i, const TCHAR *text) noexcept
+{
+  WndProperty &control = GetControl(i);
+  DataFieldEnum &df = *(DataFieldEnum *)control.GetDataField();
+  assert(df.GetType() == DataField::Type::ENUM);
+  if (df.Set(text))
+    control.RefreshDisplay();
+}
+
+void
 RowFormWidget::LoadValueEnum(unsigned i, unsigned value) noexcept
 {
   WndProperty &control = GetControl(i);

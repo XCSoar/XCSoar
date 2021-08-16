@@ -40,6 +40,7 @@ Copyright_License {
 #include <cstdint>
 #include <functional>
 #include <memory>
+#include <type_traits>
 
 struct DialogLook;
 struct StaticEnumChoice;
@@ -568,9 +569,10 @@ public:
 
   void LoadValue(unsigned i, int value) noexcept;
   void LoadValue(unsigned i, bool value) noexcept;
+  void LoadValueEnum(unsigned i, const TCHAR *text) noexcept;
   void LoadValueEnum(unsigned i, unsigned value) noexcept;
 
-  template<typename T>
+  template<typename T, typename=std::enable_if_t<std::is_enum_v<T>>>
   void LoadValueEnum(unsigned i, T value) noexcept {
     LoadValueEnum(i, unsigned(value));
   }
