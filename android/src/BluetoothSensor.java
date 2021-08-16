@@ -119,7 +119,10 @@ public final class BluetoothSensor
           final int gps_status = c.getIntValue(c.FORMAT_UINT8, 18) & 0x7;
           final boolean hasAltitude = (gps_status == 2 || gps_status == 4);
 
-          listener.onLocationSensor(c.getIntValue(c.FORMAT_UINT32, 0),
+          final long time =
+            Integer.toUnsignedLong(c.getIntValue(c.FORMAT_UINT32, 0));
+
+          listener.onLocationSensor(time,
                                     -1,
                                     c.getIntValue(c.FORMAT_SINT32, 8) / 10000000.,
                                     c.getIntValue(c.FORMAT_SINT32, 4) / 10000000.,
