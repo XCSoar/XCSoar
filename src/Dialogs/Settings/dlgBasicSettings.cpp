@@ -252,13 +252,13 @@ FlightSetupPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(Ballast, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
-    SetBallastLitres(dff.GetAsFixed());
+    SetBallastLitres(dff.GetValue());
   } else if (IsDataField(Bugs, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
-    SetBugs(1 - (dff.GetAsFixed() / 100));
+    SetBugs(1 - (dff.GetValue() / 100));
   } else if (IsDataField(QNH, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
-    SetQNH(Units::FromUserPressure(dff.GetAsFixed()));
+    SetQNH(Units::FromUserPressure(dff.GetValue()));
   }
 }
 

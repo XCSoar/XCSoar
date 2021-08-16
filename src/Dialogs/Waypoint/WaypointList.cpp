@@ -355,7 +355,7 @@ CreateDistanceDataField(DataFieldListener *listener)
     df->addEnumText(buffer);
   }
 
-  df->Set(dialog_state.distance_index);
+  df->SetValue(dialog_state.distance_index);
   return df;
 }
 
@@ -368,7 +368,7 @@ CreateDirectionDataField(DataFieldListener *listener, Angle last_heading)
     df->addEnumText(GetDirectionData(buffer, ARRAY_SIZE(buffer), i,
                                      last_heading));
 
-  df->Set(dialog_state.direction_index);
+  df->SetValue(dialog_state.direction_index);
   return df;
 }
 
@@ -394,7 +394,7 @@ CreateTypeDataField(DataFieldListener *listener)
   ReplaceProfilePathBase(*df, (unsigned)TypeFilter::MAP,
                          ProfileKeys::MapFile);
 
-  df->Set((int)dialog_state.type_index);
+  df->SetValue(dialog_state.type_index);
   return df;
 }
 

@@ -184,7 +184,7 @@ RowFormWidget::AddEnum(const TCHAR *label, const TCHAR *help,
     df->EnableItemHelp(true);
 
   df->AddChoices(list);
-  df->Set(value);
+  df->SetValue(value);
 
   edit->SetDataField(df);
   return edit;
@@ -269,7 +269,7 @@ RowFormWidget::LoadValue(unsigned i, int value) noexcept
   WndProperty &control = GetControl(i);
   DataFieldInteger &df = *(DataFieldInteger *)control.GetDataField();
   assert(df.GetType() == DataField::Type::INTEGER);
-  df.Set(value);
+  df.SetValue(value);
   control.RefreshDisplay();
 }
 
@@ -279,7 +279,7 @@ RowFormWidget::LoadValue(unsigned i, bool value) noexcept
   WndProperty &control = GetControl(i);
   DataFieldBoolean &df = *(DataFieldBoolean *)control.GetDataField();
   assert(df.GetType() == DataField::Type::BOOLEAN);
-  df.Set(value);
+  df.SetValue(value);
   control.RefreshDisplay();
 }
 
@@ -289,7 +289,7 @@ RowFormWidget::LoadValueEnum(unsigned i, const TCHAR *text) noexcept
   WndProperty &control = GetControl(i);
   DataFieldEnum &df = *(DataFieldEnum *)control.GetDataField();
   assert(df.GetType() == DataField::Type::ENUM);
-  if (df.Set(text))
+  if (df.SetValue(text))
     control.RefreshDisplay();
 }
 
@@ -299,7 +299,7 @@ RowFormWidget::LoadValueEnum(unsigned i, unsigned value) noexcept
   WndProperty &control = GetControl(i);
   DataFieldEnum &df = *(DataFieldEnum *)control.GetDataField();
   assert(df.GetType() == DataField::Type::ENUM);
-  df.Set(value);
+  df.SetValue(value);
   control.RefreshDisplay();
 }
 
@@ -309,7 +309,7 @@ RowFormWidget::LoadValue(unsigned i, double value) noexcept
   WndProperty &control = GetControl(i);
   DataFieldFloat &df = *(DataFieldFloat *)control.GetDataField();
   assert(df.GetType() == DataField::Type::REAL);
-  df.Set(value);
+  df.SetValue(value);
   control.RefreshDisplay();
 }
 
@@ -320,7 +320,7 @@ RowFormWidget::LoadValue(unsigned i, const TCHAR *value) noexcept
   DataFieldString &df = *(DataFieldString *)control.GetDataField();
   assert(df.GetType() == DataField::Type::STRING ||
          df.GetType() == DataField::Type::PREFIX);
-  df.Set(value);
+  df.SetValue(value);
   control.RefreshDisplay();
 }
 
@@ -349,7 +349,7 @@ RowFormWidget::LoadValueDuration(unsigned i, std::chrono::seconds value) noexcep
   WndProperty &control = GetControl(i);
   DataFieldTime &df = *(DataFieldTime *)control.GetDataField();
   assert(df.GetType() == DataField::Type::TIME);
-  df.Set(value);
+  df.SetValue(value);
   control.RefreshDisplay();
 }
 
@@ -359,7 +359,7 @@ RowFormWidget::GetValueBoolean(unsigned i) const noexcept
   const DataFieldBoolean &df =
     (const DataFieldBoolean &)GetDataField(i);
   assert(df.GetType() == DataField::Type::BOOLEAN);
-  return df.GetAsBoolean();
+  return df.GetValue();
 }
 
 int
@@ -374,7 +374,7 @@ RowFormWidget::GetValueFloat(unsigned i) const noexcept
   const DataFieldFloat &df =
     (const DataFieldFloat &)GetDataField(i);
   assert(df.GetType() == DataField::Type::REAL);
-  return df.GetAsFixed();
+  return df.GetValue();
 }
 
 Angle

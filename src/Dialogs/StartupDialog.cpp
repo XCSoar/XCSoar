@@ -143,7 +143,7 @@ SelectProfileCallback(const TCHAR *caption, DataField &_df,
 {
   FileDataField &df = (FileDataField &)_df;
 
-  const auto path = SelectProfileDialog(df.GetPathFile());
+  const auto path = SelectProfileDialog(df.GetValue());
   if (path.IsNull())
     return false;
 
@@ -187,7 +187,7 @@ bool
 StartupWidget::Save(bool &changed) noexcept
 {
   const auto &dff = (const FileDataField &)GetDataField(PROFILE);
-  if (!SelectProfile(dff.GetPathFile()))
+  if (!SelectProfile(dff.GetValue()))
     return false;
 
   changed = true;
@@ -206,7 +206,7 @@ dlgStartupShowModal()
 
   if (dff->GetNumFiles() == 1) {
     /* skip this dialog if there is only one */
-    const auto path = dff->GetPathFile();
+    const auto path = dff->GetValue();
     if (ProfileFileHasPassword(path) == TriState::FALSE &&
         SelectProfile(path)) {
       delete dff;
@@ -233,7 +233,7 @@ dlgStartupShowModal()
     }
   }
 
-  dff->Set(best_index);
+  dff->SetIndex(best_index);
 
   /* show the dialog */
   const DialogLook &look = UIGlobals::GetDialogLook();

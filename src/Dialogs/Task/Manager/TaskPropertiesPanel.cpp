@@ -176,7 +176,7 @@ void
 TaskPropertiesPanel::OnFAIFinishHeightChange(DataFieldBoolean &df)
 {
   OrderedTaskSettings p = ordered_task->GetOrderedTaskSettings();
-  bool newvalue = df.GetAsBoolean();
+  bool newvalue = df.GetValue();
   if (newvalue != p.finish_constraints.fai_finish) {
     p.finish_constraints.fai_finish = p.start_constraints.fai_finish
       = newvalue;
@@ -222,7 +222,7 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent,
                      (unsigned)factory_types[i],
                      OrderedTaskFactoryDescription(factory_types[i]));
     if (factory_types[i] == ordered_task->GetFactoryType())
-      dfe->Set((unsigned)factory_types[i]);
+      dfe->SetValue(factory_types[i]);
   }
   Add(_("Task type"), _("Sets the behaviour for the current task."), dfe);
 

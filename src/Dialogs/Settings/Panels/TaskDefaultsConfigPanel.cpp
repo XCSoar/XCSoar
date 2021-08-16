@@ -119,7 +119,7 @@ FillPointTypes(DataFieldEnum &df,
                    OrderedTaskPointDescription(type));
   }
 
-  df.Set((unsigned)value);
+  df.SetValue(value);
 }
 
 static void
@@ -189,7 +189,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent,
           (unsigned)factory_types[i], OrderedTaskFactoryDescription(
               factory_types[i]));
       if (factory_types[i] == task_behaviour.task_type_default)
-        dfe->Set((unsigned)factory_types[i]);
+        dfe->SetValue(factory_types[i]);
     }
     wp->RefreshDisplay();
   }

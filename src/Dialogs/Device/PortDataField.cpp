@@ -137,7 +137,7 @@ FillPortTypes(DataFieldEnum &df, const DeviceConfig &config) noexcept
                           gettext(port_types[i].label));
 
     if (port_types[i].type == config.port_type)
-      df.Set(id);
+      df.SetValue(id);
   }
 }
 
@@ -147,8 +147,8 @@ SetPort(DataFieldEnum &df, DeviceConfig::PortType type,
 {
   assert(value != nullptr);
 
-  if (!df.Set(value))
-    df.Set(AddPort(df, type, value));
+  if (!df.SetValue(value))
+    df.SetValue(AddPort(df, type, value));
 }
 
 static void
@@ -170,14 +170,14 @@ SetBluetoothPort(DataFieldEnum &df, DeviceConfig::PortType type,
 {
   assert(bluetooth_mac != nullptr);
 
-  if (!df.Set(bluetooth_mac)) {
+  if (!df.SetValue(bluetooth_mac)) {
     const TCHAR *name = nullptr;
 #ifdef ANDROID
     if (bluetooth_helper != nullptr)
       name = bluetooth_helper->GetNameFromAddress(Java::GetEnv(),
                                                   bluetooth_mac);
 #endif
-    df.Set(AddPort(df, type, bluetooth_mac, name));
+    df.SetValue(AddPort(df, type, bluetooth_mac, name));
   }
 }
 
@@ -217,7 +217,7 @@ FillAndroidIOIOPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
                           AndroidIOIOUartPort::getPortHelp(i));
     if (config.port_type == DeviceConfig::PortType::IOIOUART &&
         config.ioio_uart_id == i)
-      df.Set(id);
+      df.SetValue(id);
   }
 #endif
 }
@@ -282,13 +282,13 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config) noexcept
   case DeviceConfig::PortType::IOIOUART:
     StaticString<16> buffer;
     buffer.UnsafeFormat(_T("%d"), config.ioio_uart_id);
-    df.Set(buffer);
+    df.SetValue(buffer);
     return;
   }
 
   for (unsigned i = 0; port_types[i].label != nullptr; i++) {
     if (port_types[i].type == config.port_type) {
-      df.Set(port_types[i].label);
+      df.SetValue(port_types[i].label);
       break;
     }
   }

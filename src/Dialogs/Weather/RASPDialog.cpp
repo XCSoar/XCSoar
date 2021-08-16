@@ -105,7 +105,7 @@ RASPSettingsPanel::FillItemControl() noexcept
   }
 
   const WeatherUIState &state = CommonInterface::GetUIState().weather;
-  df.Set(state.map);
+  df.SetValue(state.map);
 }
 
 void
@@ -128,7 +128,7 @@ RASPSettingsPanel::UpdateTimeControl() noexcept
       });
 
     if (time.IsPlausible())
-      time_df.Set(time.GetMinuteOfDay());
+      time_df.SetValue(time.GetMinuteOfDay());
     GetControl(TIME).RefreshDisplay();
   }
 }

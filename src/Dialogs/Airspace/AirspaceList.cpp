@@ -372,7 +372,7 @@ FillDistanceEnum(DataFieldEnum &df)
     df.AddChoice(distances[i], buffer);
   }
 
-  df.Set(0u);
+  df.SetValue(0u);
 }
 
 static void
@@ -390,7 +390,7 @@ FillDirectionEnum(DataFieldEnum &df)
   for (unsigned i = 0; i < ARRAY_SIZE(directions); ++i)
     df.AddChoice(directions[i], FormatBearing(directions[i]).c_str());
 
-  df.Set(WILDCARD);
+  df.SetValue(WILDCARD);
 }
 
 static DataField *

@@ -143,7 +143,7 @@ TerrainDisplayConfigPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(EnableTerrain, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    terrain_settings.enable = dfb.GetAsBoolean();
+    terrain_settings.enable = dfb.GetValue();
     ShowTerrainControls();
   } else {
     UpdateTerrainPreview();

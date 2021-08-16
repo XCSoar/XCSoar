@@ -49,7 +49,7 @@ RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
   if (registry_key != nullptr) {
     const auto path = Profile::GetPath(registry_key);
     if (!path.IsNull())
-      df->Lookup(path);
+      df->SetValue(path);
   }
 
   edit->RefreshDisplay();
@@ -128,7 +128,7 @@ RowFormWidget::SaveValueFileReader(unsigned i,
                                    const char *registry_key) noexcept
 {
   const auto *dfe = (const FileDataField *)GetControl(i).GetDataField();
-  Path new_value = dfe->GetPathFile();
+  Path new_value = dfe->GetValue();
   const auto contracted = ContractLocalPath(new_value);
   if (contracted != nullptr)
     new_value = contracted;

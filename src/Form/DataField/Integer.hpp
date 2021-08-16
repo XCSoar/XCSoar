@@ -29,7 +29,6 @@ Copyright_License {
 
 class DataFieldInteger final : public NumberDataField
 {
-private:
   int value;
   int min;
   int max;
@@ -52,10 +51,6 @@ public:
                      edit_format, display_format, listener),
      value(_value), min(_min), max(_max), step(_step) {}
 
-  void Set(int _value) noexcept {
-    value = _value;
-  }
-
   void SetMin(int _min) noexcept {
     min = _min;
   }
@@ -70,6 +65,21 @@ public:
 
   int GetMax() const noexcept {
     return max;
+  }
+
+  int GetValue() const noexcept {
+    return value;
+  }
+
+  void SetValue(int _value) noexcept {
+    value = _value;
+  }
+
+  void ModifyValue(int new_value) noexcept {
+    if (new_value != GetValue()) {
+      SetValue(new_value);
+      Modified();
+    }
   }
 
   /* virtual methods from class DataField */

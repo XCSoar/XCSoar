@@ -128,13 +128,13 @@ TrackingConfigPanel::OnModified(DataField &df) noexcept
 #ifdef HAVE_SKYLINES_TRACKING
   if (IsDataField(SL_ENABLED, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    SetSkyLinesEnabled(dfb.GetAsBoolean());
+    SetSkyLinesEnabled(dfb.GetValue());
     return;
   }
 
   if (IsDataField(SL_TRAFFIC_ENABLED, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    SetRowEnabled(SL_NEAR_TRAFFIC_ENABLED, dfb.GetAsBoolean());
+    SetRowEnabled(SL_NEAR_TRAFFIC_ENABLED, dfb.GetValue());
     return;
   }
 #endif
@@ -142,7 +142,7 @@ TrackingConfigPanel::OnModified(DataField &df) noexcept
 #ifdef HAVE_LIVETRACK24
   if (IsDataField(LT24_ENABLED, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    SetLiveTrack24Enabled(dfb.GetAsBoolean());
+    SetLiveTrack24Enabled(dfb.GetValue());
   }
 #endif
 }
@@ -244,7 +244,7 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexc
           settings.livetrack24.vehicle_name);
 
   WndProperty *edit = AddEnum(_("Server"), _T(""), server_list, 0);
-  ((DataFieldEnum *)edit->GetDataField())->Set(settings.livetrack24.server);
+  ((DataFieldEnum *)edit->GetDataField())->SetValue(settings.livetrack24.server);
   edit->RefreshDisplay();
 
   AddText(_("Username"), _T(""), settings.livetrack24.username);

@@ -57,14 +57,6 @@ public:
     unit = text;
   }
 
-  void Set(double _value) noexcept {
-    mValue = _value;
-  }
-
-  double GetAsFixed() const noexcept {
-    return mValue;
-  }
-
   void SetMin(double v) noexcept {
     mMin = v;
   }
@@ -81,7 +73,15 @@ public:
     return mStep;
   }
 
-  void SetAsFloat(double Value) noexcept;
+  double GetValue() const noexcept {
+    return mValue;
+  }
+
+  void SetValue(double _value) noexcept {
+    mValue = _value;
+  }
+
+  void ModifyValue(double Value) noexcept;
 
   /* virtual methods from class DataField */
   void Inc() noexcept override;

@@ -64,7 +64,7 @@ ScoringConfigPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(SHOW_FAI_TRIANGLE_AREAS, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    ShowFAITriangleControls(dfb.GetAsBoolean());
+    ShowFAITriangleControls(dfb.GetValue());
   }
 }
 

@@ -158,7 +158,7 @@ AirspaceConfigPanel::OnModified(DataField &df) noexcept
     ShowDisplayControls(mode);
   } else if (IsDataField(AirspaceWarnings, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    ShowWarningControls(dfb.GetAsBoolean());
+    ShowWarningControls(dfb.GetValue());
   }
 }
 

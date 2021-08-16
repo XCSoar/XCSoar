@@ -74,22 +74,22 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
 
     // signed or unsigned depends on min if value >= 0 or < 0...
     if (dfi.GetMin() >= 0) {
-      unsigned value = df.GetAsInteger(); // min is >= 0!
+      unsigned value = dfi.GetValue(); // min is >= 0!
       if (!NumberEntryDialog(caption, value,
           log10(dfi.GetMax()) + 1))
         return false;
 
-      df.SetAsInteger(value); // SetAsInteger with unsigned!
+      dfi.ModifyValue(value); // SetAsInteger with unsigned!
       return true;
     } else {
       /* with signed range has to avoid the length of negative AND
       * positiv numbers */
-      int value = df.GetAsInteger();  // min is < 0!
+      int value = dfi.GetValue();  // min is < 0!
       unsigned max = std::max(abs(dfi.GetMax()), abs(dfi.GetMin()));
       if (!NumberEntryDialog(caption, value, log10(max) + 1))
         return false;
 
-      df.SetAsInteger(value);  // SetAsInteger with signed!
+      dfi.ModifyValue(value);  // SetAsInteger with signed!
       return true;
     }
   } else {

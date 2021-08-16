@@ -33,6 +33,12 @@ Copyright_License {
 class DataFieldListener;
 class ComboList;
 
+/**
+ * Most implementations have a method GetValue() for obtaining the raw
+ * value with its native type; ModifyValue() sets a new value and
+ * invokes DataFieldListener::OnModified(); SetValue() does the same,
+ * but does not invoke the callback.
+ */
 class DataField
 {
 public:

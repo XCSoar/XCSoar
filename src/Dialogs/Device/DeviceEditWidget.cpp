@@ -249,35 +249,35 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
 
   DataFieldEnum *baud_rate_df = new DataFieldEnum(this);
   FillBaudRates(*baud_rate_df);
-  baud_rate_df->Set(config.baud_rate);
+  baud_rate_df->SetValue(config.baud_rate);
   Add(_("Baud rate"), nullptr, baud_rate_df);
 
   DataFieldEnum *bulk_baud_rate_df = new DataFieldEnum(this);
   bulk_baud_rate_df->addEnumText(_T("Default"), 0u);
   FillBaudRates(*bulk_baud_rate_df);
-  bulk_baud_rate_df->Set(config.bulk_baud_rate);
+  bulk_baud_rate_df->SetValue(config.bulk_baud_rate);
   Add(_("Bulk baud rate"),
       _("The baud rate used for bulk transfers, such as task declaration or flight download."),
       bulk_baud_rate_df);
 
   DataFieldString *ip_address_df = new DataFieldString(_T(""), this);
-  ip_address_df->Set(config.ip_address);
+  ip_address_df->SetValue(config.ip_address);
   Add(_("IP address"), nullptr, ip_address_df);
 
   DataFieldEnum *tcp_port_df = new DataFieldEnum(this);
   FillTCPPorts(*tcp_port_df);
-  tcp_port_df->Set(config.tcp_port);
+  tcp_port_df->SetValue(config.tcp_port);
   Add(_("TCP port"), nullptr, tcp_port_df);
 
   DataFieldEnum *i2c_bus_df = new DataFieldEnum(this);
   FillI2CBus(*i2c_bus_df);
-  i2c_bus_df->Set(config.i2c_bus);
+  i2c_bus_df->SetValue(config.i2c_bus);
   Add(_("I²C bus"), _("Select the description or bus number that matches your configuration."),
                       i2c_bus_df);
 
   DataFieldEnum *i2c_addr_df = new DataFieldEnum(this);
   FillI2CAddr(*i2c_addr_df);
-  i2c_addr_df->Set(config.i2c_addr);
+  i2c_addr_df->SetValue(config.i2c_addr);
   Add(_("I²C addr"), _("The I²C address that matches your configuration. "
                         "This field is not used when your selection in the \"I²C bus\" field is not an I²C bus number. "
                         "Assume this field is not in use if that doesn\'t make sense to you."),
@@ -285,7 +285,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
 
   DataFieldEnum *press_df = new DataFieldEnum(this);
   FillPress(*press_df);
-  press_df->Set((unsigned)config.press_use);
+  press_df->SetValue(config.press_use);
   Add(_("Pressure use"), _("Select the purpose of this pressure sensor. "
                            "This sensor measures some pressure. Here you tell the system "
                            "what pressure this is and what it should be used for."),
@@ -298,7 +298,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
     driver_df->addEnumText(driver->name, driver->display_name);
 
   driver_df->Sort(1);
-  driver_df->Set(config.driver_name);
+  driver_df->SetValue(config.driver_name);
 
   Add(_("Driver"), nullptr, driver_df);
 
@@ -313,7 +313,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
     driver2_df->addEnumText(driver->name, driver->display_name);
 
   driver2_df->Sort(1);
-  driver2_df->Set(config.driver2_name);
+  driver2_df->SetValue(config.driver2_name);
 
   Add(_("Second Driver"), nullptr, driver2_df);
 

@@ -181,7 +181,7 @@ DataFieldEnum::GetHelp() const noexcept
 }
 
 void
-DataFieldEnum::Set(unsigned Value) noexcept
+DataFieldEnum::SetValue(unsigned Value) noexcept
 {
   int i = Find(Value);
   if (i >= 0)
@@ -189,13 +189,35 @@ DataFieldEnum::Set(unsigned Value) noexcept
 }
 
 bool
-DataFieldEnum::Set(const TCHAR *text) noexcept
+DataFieldEnum::SetValue(const TCHAR *text) noexcept
 {
   int i = Find(text);
   if (i < 0)
     return false;
 
   SetIndex(i, false);
+  return true;
+}
+
+bool
+DataFieldEnum::ModifyValue(unsigned new_value) noexcept
+{
+  int i = Find(new_value);
+  if (i < 0)
+    return false;
+
+  SetIndex(i, true);
+  return true;
+}
+
+bool
+DataFieldEnum::ModifyValue(const TCHAR *text) noexcept
+{
+  int i = Find(text);
+  if (i < 0)
+    return false;
+
+  SetIndex(i, true);
   return true;
 }
 
@@ -217,17 +239,13 @@ DataFieldEnum::SetStringAutoAdd(const TCHAR *text) noexcept
 void
 DataFieldEnum::SetAsInteger(int Value) noexcept
 {
-  int i = Find(Value);
-  if (i >= 0)
-    SetIndex(i, true);
+  ModifyValue(Value);
 }
 
 void
 DataFieldEnum::SetAsString(const TCHAR *Value) noexcept
 {
-  int i = Find(Value);
-  if (i >= 0)
-    SetIndex(i, true);
+  ModifyValue(Value);
 }
 
 void

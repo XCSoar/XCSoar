@@ -43,7 +43,12 @@ public:
                   DataFieldListener *listener=nullptr) noexcept
     :DataField(Type::STRING, false, listener), mValue(_value) {}
 
-  void Set(const TCHAR *Value) noexcept;
+  const TCHAR *GetValue() const noexcept {
+    return mValue.c_str();
+  }
+
+  void SetValue(const TCHAR *new_value) noexcept;
+  void ModifyValue(const TCHAR *new_value) noexcept;
 
   /* virtual methods from class DataField */
   const TCHAR *GetAsString() const noexcept override;

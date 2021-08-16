@@ -46,13 +46,13 @@ DataFieldTime::GetAsDisplayString() const noexcept
 void
 DataFieldTime::Inc() noexcept
 {
-  SetValue(value + step * SpeedUp(true));
+  ModifyValue(value + step * SpeedUp(true));
 }
 
 void
 DataFieldTime::Dec() noexcept
 {
-  SetValue(value - step * SpeedUp(false));
+  ModifyValue(value - step * SpeedUp(false));
 }
 
 int
@@ -83,7 +83,7 @@ void
 DataFieldTime::SetFromCombo(int data_field_index,
                             [[maybe_unused]] const TCHAR *value_string) noexcept
 {
-  SetValue(std::chrono::seconds{data_field_index});
+  ModifyValue(std::chrono::seconds{data_field_index});
 }
 
 void

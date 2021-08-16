@@ -54,16 +54,6 @@ public:
     return value;
   }
 
-protected:
-  void SetValue(std::chrono::seconds _value) noexcept {
-    if (_value == value)
-      return;
-
-    value = _value;
-    Modified();
-  }
-
-public:
   void SetMin(std::chrono::seconds _min) noexcept {
     min = _min;
   }
@@ -81,8 +71,15 @@ public:
     max_tokens = _max_tokens;
   }
 
-  void Set(std::chrono::seconds _value) noexcept {
+  void SetValue(std::chrono::seconds _value) noexcept {
     value = _value;
+  }
+
+  void ModifyValue(std::chrono::seconds new_value) noexcept {
+    if (new_value != GetValue()) {
+      SetValue(new_value);
+      Modified();
+    }
   }
 
   /* virtual methods from class DataField */
@@ -97,7 +94,7 @@ public:
   const TCHAR *GetAsDisplayString() const noexcept override;
 
   void SetAsInteger(int _value) noexcept override {
-    SetValue(std::chrono::seconds{_value});
+    ModifyValue(std::chrono::seconds{_value});
   }
 
   ComboList CreateComboList(const TCHAR *reference) const noexcept override;

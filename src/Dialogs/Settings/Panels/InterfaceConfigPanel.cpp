@@ -110,7 +110,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
       _stprintf(buffer, _("%d dpi"), *dpi);
       df.AddChoice(*dpi, buffer);
     }
-    df.Set(settings.custom_dpi);
+    df.SetValue(settings.custom_dpi);
     wp_dpi->RefreshDisplay();
   }
   SetExpertRow(CustomDPI);
@@ -152,11 +152,11 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
       value = Path(_T(""));
 
     if (value == Path(_T("none")))
-      df.Set(1);
+      df.SetValue(1);
     else if (!value.IsEmpty() && value != Path(_T("auto"))) {
       const Path base = value.GetBase();
       if (base != nullptr)
-        df.Set(base.c_str());
+        df.SetValue(base.c_str());
     }
     wp->RefreshDisplay();
   }

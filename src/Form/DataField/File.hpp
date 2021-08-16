@@ -142,7 +142,8 @@ public:
    * that item
    * @param text PathFile to search for
    */
-  void Lookup(Path text) noexcept;
+  void SetValue(Path new_value) noexcept;
+  void ModifyValue(Path new_value) noexcept;
 
   /**
    * Force the value to the given path.  If the path is not in the
@@ -156,13 +157,14 @@ public:
    * @return The PathFile of the currently selected item
    */
   [[gnu::pure]]
-  Path GetPathFile() const noexcept;
+  Path GetValue() const noexcept;
 
   /**
    * Sets the selection to the given index
    * @param Value The array index to select
    */
-  void Set(unsigned new_value) noexcept;
+  void SetIndex(unsigned new_value) noexcept;
+  void ModifyIndex(unsigned new_value) noexcept;
 
   /** Sorts the filelist by filenames */
   void Sort() noexcept;

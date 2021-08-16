@@ -54,7 +54,7 @@ AltitudeSetupPanel::OnModified(DataField &_df) noexcept
   ComputerSettings &settings =
     CommonInterface::SetComputerSettings();
 
-  settings.pressure = Units::FromUserPressure(df.GetAsFixed());
+  settings.pressure = Units::FromUserPressure(df.GetValue());
   settings.pressure_available.Update(CommonInterface::Basic().clock);
 
   {

@@ -53,18 +53,18 @@ DataFieldFloat::GetAsDisplayString() const noexcept
 void
 DataFieldFloat::SetAsInteger(int Value) noexcept
 {
-  SetAsFloat(Value);
+  ModifyValue(Value);
 }
 
 void
-DataFieldFloat::SetAsFloat(double Value) noexcept
+DataFieldFloat::ModifyValue(double Value) noexcept
 {
   if (Value < mMin)
     Value = mMin;
   if (Value > mMax)
     Value = mMax;
-  if (mValue != Value) {
-    mValue = Value;
+  if (Value != GetValue()) {
+    SetValue(Value);
     Modified();
   }
 }
@@ -72,7 +72,7 @@ DataFieldFloat::SetAsFloat(double Value) noexcept
 void
 DataFieldFloat::SetAsString(const TCHAR *Value) noexcept
 {
-  SetAsFloat(ParseDouble(Value));
+  ModifyValue(ParseDouble(Value));
 }
 
 void
@@ -81,9 +81,9 @@ DataFieldFloat::Inc() noexcept
   // no keypad, allow user to scroll small values
   if (mFine && mValue < 0.95 && mStep >= 0.5 &&
       mMin >= 0)
-    SetAsFloat(mValue + 0.1);
+    ModifyValue(mValue + 0.1);
   else
-    SetAsFloat(mValue + mStep * SpeedUp(true));
+    ModifyValue(mValue + mStep * SpeedUp(true));
 }
 
 void
@@ -92,9 +92,9 @@ DataFieldFloat::Dec() noexcept
   // no keypad, allow user to scroll small values
   if (mFine && mValue <= 1 && mStep >= 0.5 &&
       mMin >= 0)
-    SetAsFloat(mValue - 0.1);
+    ModifyValue(mValue - 0.1);
   else
-    SetAsFloat(mValue - mStep * SpeedUp(false));
+    ModifyValue(mValue - mStep * SpeedUp(false));
 }
 
 double

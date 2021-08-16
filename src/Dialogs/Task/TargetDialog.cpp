@@ -258,9 +258,9 @@ private:
   /* virtual methods from class DataFieldListener */
   void OnModified(DataField &df) noexcept override {
     if (&df == range.GetDataField())
-      OnRangeModified(((DataFieldFloat &)df).GetAsFixed());
+      OnRangeModified(((DataFieldFloat &)df).GetValue());
     else if (&df == radial.GetDataField())
-      OnRadialModified(((DataFieldFloat &)df).GetAsFixed());
+      OnRadialModified(((DataFieldFloat &)df).GetValue());
   }
 
   /* virtual methods from class BlackboardListener */
@@ -460,7 +460,7 @@ TargetWidget::LoadRange()
 {
   DataFieldFloat &df = *(DataFieldFloat *)range.GetDataField();
   assert(df.GetType() == DataField::Type::REAL);
-  df.Set(range_and_radial.range * 100);
+  df.SetValue(range_and_radial.range * 100);
   range.RefreshDisplay();
 }
 
@@ -469,7 +469,7 @@ TargetWidget::LoadRadial()
 {
   DataFieldFloat &df = *(DataFieldFloat *)radial.GetDataField();
   assert(df.GetType() == DataField::Type::REAL);
-  df.Set(range_and_radial.radial.Degrees());
+  df.SetValue(range_and_radial.radial.Degrees());
   radial.RefreshDisplay();
 }
 

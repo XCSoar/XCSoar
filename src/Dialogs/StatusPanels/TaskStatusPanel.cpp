@@ -53,7 +53,7 @@ TaskStatusPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(MC, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
-    auto mc = Units::ToSysVSpeed(dff.GetAsFixed());
+    auto mc = Units::ToSysVSpeed(dff.GetValue());
     ActionInterface::SetManualMacCready(mc);
     Refresh();
   }

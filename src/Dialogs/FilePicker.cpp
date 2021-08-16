@@ -77,6 +77,6 @@ FilePicker(const TCHAR *caption, const TCHAR *patterns)
   FileDataField df;
   df.ScanMultiplePatterns(patterns);
   return FilePicker(caption, df)
-    ? df.GetPathFile()
+    ? df.GetValue()
     : nullptr;
 }
