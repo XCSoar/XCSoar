@@ -22,6 +22,8 @@
 
 package org.xcsoar;
 
+import java.util.Queue;
+import java.util.LinkedList;
 import java.io.IOException;
 
 import android.bluetooth.BluetoothDevice;
@@ -47,6 +49,10 @@ public final class BluetoothSensor
   private final BluetoothGatt gatt;
 
   private int state = STATE_LIMBO;
+
+  private BluetoothGattCharacteristic currentEnableNotification;
+  private final Queue<BluetoothGattCharacteristic> enableNotificationQueue =
+    new LinkedList<BluetoothGattCharacteristic>();
 
   public BluetoothSensor(Context context, BluetoothDevice device,
                          SensorListener listener)
@@ -78,14 +84,25 @@ public final class BluetoothSensor
     listener.onSensorError(msg);
   }
 
-  private void enableNotification(BluetoothGattCharacteristic c) {
+  private boolean doEnableNotification(BluetoothGattCharacteristic c) {
     BluetoothGattDescriptor d = c.getDescriptor(BluetoothUuids.CLIENT_CHARACTERISTIC_CONFIGURATION);
     if (d == null)
-      return;
+      return false;
 
     gatt.setCharacteristicNotification(c, true);
     d.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-    gatt.writeDescriptor(d);
+    return gatt.writeDescriptor(d);
+  }
+
+  private void enableNotification(BluetoothGattCharacteristic c) {
+    synchronized(enableNotificationQueue) {
+      if (currentEnableNotification == null) {
+        currentEnableNotification = c;
+        if (!doEnableNotification(c))
+          currentEnableNotification = null;
+      } else
+        enableNotificationQueue.add(c);
+    }
   }
 
   private void readHeartRateMeasurement(BluetoothGattCharacteristic c) {
@@ -151,6 +168,19 @@ public final class BluetoothSensor
       }
     } else {
       submitError("GATT disconnected");
+    }
+  }
+
+  @Override
+  public void onDescriptorWrite(BluetoothGatt gatt,
+                                BluetoothGattDescriptor descriptor,
+                                int status) {
+    synchronized(enableNotificationQueue) {
+      currentEnableNotification = enableNotificationQueue.poll();
+      if (currentEnableNotification != null) {
+        if (!doEnableNotification(currentEnableNotification))
+          currentEnableNotification = null;
+      }
     }
   }
 
