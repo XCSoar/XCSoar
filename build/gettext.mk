@@ -8,6 +8,9 @@ MSGMERGE = msgmerge
 
 GETTEXT_PACKAGE = xcsoar
 GETTEXT_SOURCES = $(XCSOAR_SOURCES) \
+	$(LIBINFOBOX_SOURCES) \
+	$(LIBMAPWINDOW_SOURCES) \
+	$(LIBCOMPUTER_SOURCES) \
 	$(wildcard $(SRC)/Dialogs/Device/Vega/*Parameters.hpp) \
 	$(SRC)/Weather/Rasp/RaspStore.cpp
 GETTEXT_EVENTS = Data/Input/default.xci
