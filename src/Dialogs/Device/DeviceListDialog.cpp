@@ -84,6 +84,8 @@ class DeviceListWidget final
     bool radio:1;
     bool debug:1;
 
+    int8_t battery_percent;
+
     void Set(const DeviceConfig &config, const DeviceDescriptor &device,
              const NMEAInfo &basic) {
       /* if a DeviceDescriptor is "unconfigured" but its DeviceConfig
@@ -123,14 +125,16 @@ class DeviceListWidget final
       debug = device.IsDumpEnabled();
       radio = basic.settings.has_active_frequency || 
         basic.settings.has_standby_frequency;
-      
+      battery_percent = basic.battery_level_available
+        ? (int)basic.battery_level
+        : -1;
     }
   };
 
   union Item {
   private:
     Flags flags;
-    uint16_t i;
+    uint32_t i;
 
     static_assert(sizeof(flags) <= sizeof(i), "wrong size");
 
@@ -162,7 +166,7 @@ class DeviceListWidget final
     }
   };
 
-  static_assert(sizeof(Item) == 2, "wrong size");
+  static_assert(sizeof(Item) == 4, "wrong size");
 
   Item items[NUMDEV];
   tstring error_messages[NUMDEV];
@@ -425,6 +429,12 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     if (flags.debug) {
       buffer.append(_T("; "));
       buffer.append(_("Debug"));
+    }
+
+    if (flags.battery_percent >= 0) {
+      buffer.append(_T("; "));
+      buffer.append(_("Battery"));
+      buffer.AppendFormat(_T("=%d%%"), flags.battery_percent);
     }
 
     status = buffer;
