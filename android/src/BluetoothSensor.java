@@ -154,11 +154,11 @@ public final class BluetoothSensor
                                     false, 0);
 
           listener.onPressureAltitudeSensor(c.getIntValue(c.FORMAT_SINT16, 14));
-          listener.onVarioSensor(c.getIntValue(c.FORMAT_SINT16, 16) / 100.f);
         } else if (BluetoothUuids.FLYTEC_SENSBOX_MOVEMENT_SENSOR_CHARACTERISTIC.equals(c.getUuid())) {
           flytecGroundSpeed = c.getIntValue(c.FORMAT_SINT16, 6) / 10.;
           flytecTrack = c.getIntValue(c.FORMAT_SINT16, 8) / 10.;
 
+          listener.onVarioSensor(c.getIntValue(c.FORMAT_SINT16, 4) / 100.f);
           listener.onAccelerationSensor1(c.getIntValue(c.FORMAT_UINT16, 16) / 10.);
 
           haveFlytecMovement = true;

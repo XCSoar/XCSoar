@@ -8,6 +8,7 @@ Version 7.13 - not yet released
   - fix GPS time from the Flytec Sensbox
   - support speed, track and acceleration from Flytec Sensbox
   - don't apply Geoid separation to Flytec Sensbox GPS altitude
+  - use the 8 Hz vario from Flytec Sensbox GPS altitude instead of 1 Hz
 
 Version 7.12 - 2021/08/13
 * calculations
