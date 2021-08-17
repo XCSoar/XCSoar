@@ -166,6 +166,12 @@ public final class BluetoothSensor
           haveFlytecMovement = true;
         } else if (BluetoothUuids.FLYTEC_SENSBOX_SECOND_GPS_CHARACTERISTIC.equals(c.getUuid())) {
           flytecSatellites = c.getIntValue(c.FORMAT_UINT8, 6);
+        } else if (BluetoothUuids.FLYTEC_SENSBOX_SYSTEM_CHARACTERISTIC.equals(c.getUuid())) {
+          listener.onBatteryPercent(c.getIntValue(c.FORMAT_UINT8, 4));
+
+          final double CELSIUS_OFFSET = 273.15;
+          double temperatureCelsius = c.getIntValue(c.FORMAT_SINT16, 6) / 10.;
+          listener.onTemperature(CELSIUS_OFFSET + temperatureCelsius);
         }
       }
     } catch (NullPointerException e) {
@@ -233,6 +239,10 @@ public final class BluetoothSensor
         enableNotification(c);
 
       c = service.getCharacteristic(BluetoothUuids.FLYTEC_SENSBOX_SECOND_GPS_CHARACTERISTIC);
+      if (c != null)
+        enableNotification(c);
+
+      c = service.getCharacteristic(BluetoothUuids.FLYTEC_SENSBOX_SYSTEM_CHARACTERISTIC);
       if (c != null)
         enableNotification(c);
     }
