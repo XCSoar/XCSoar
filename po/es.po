@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-07-23 13:33+0000\n"
+"PO-Revision-Date: 2021-08-18 16:35+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1123,19 +1123,19 @@ msgstr "Vario: sonido apagado"
 
 #: src/Input/InputEventsSettings.cpp:89
 msgid "Snail trail off"
-msgstr "Rastro de caracol apagado"
+msgstr "Rastro sobre el suelo apagado"
 
 #: src/Input/InputEventsSettings.cpp:93
 msgid "Long snail trail"
-msgstr "Rastro de caracol largo"
+msgstr "Rastro sobre el suelo largo"
 
 #: src/Input/InputEventsSettings.cpp:97
 msgid "Short snail trail"
-msgstr "Rastro de caracol corto"
+msgstr "Rastro sobre el suelo corto"
 
 #: src/Input/InputEventsSettings.cpp:101
 msgid "Full snail trail"
-msgstr "Rastro de caracol completo"
+msgstr "Rastro sobre el suelo completo"
 
 #: src/Input/InputEventsSettings.cpp:203
 msgid "Bugs performance"
@@ -1691,12 +1691,11 @@ msgstr "Deshabilitado"
 
 #: src/Device/Config.cpp:233 src/Dialogs/Device/PortPicker.cpp:77
 msgid "BLE sensor"
-msgstr ""
+msgstr "Sensor BLE"
 
 #: src/Device/Config.cpp:249 src/Dialogs/Device/PortPicker.cpp:74
-#, fuzzy
 msgid "BLE port"
-msgstr "Puerto ET"
+msgstr "Puerto BLE"
 
 #: src/Device/Config.cpp:269 src/Dialogs/Device/PortDataField.cpp:52
 #, no-c-format
@@ -1717,9 +1716,8 @@ msgid "GliderLink traffic receiver"
 msgstr "Receptor de tráfico GliderLink"
 
 #: src/Device/Config.cpp:315 src/Dialogs/Device/PortPicker.cpp:80
-#, fuzzy
 msgid "USB serial"
-msgstr "Número de serie"
+msgstr "Puerto serie USB"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:94 src/Dialogs/WidgetDialog.cpp:264
@@ -2080,9 +2078,8 @@ msgstr "Baro"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:399
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:128
-#, fuzzy
 msgid "Pitot"
-msgstr "Puerto del Pitot"
+msgstr "Pitot"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:404
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
@@ -2272,18 +2269,16 @@ msgid "Save"
 msgstr "Guardar"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:58
-#, fuzzy
 msgid "Calibrate"
-msgstr "Tasa de ascenso"
+msgstr "Calibrar"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:130
-#, fuzzy
 msgid "Offset"
-msgstr "Desplazamiento UTC"
+msgstr "Desfase"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:144
 msgid "Pitot sensor calibration"
-msgstr ""
+msgstr "Calibración del sensor Pitot"
 
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:60
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:59
@@ -3785,7 +3780,7 @@ msgstr "Dif. alt. MC actual"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:121
 #, no-c-format
 msgid "Required glide ratio"
-msgstr "Tasa de planeo necesaria"
+msgstr "Relación de planeo necesaria"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:60
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:98
@@ -4297,8 +4292,7 @@ msgid ""
 "required height to reach the final waypoint at MC zero."
 msgstr ""
 "Si se establece en ON, la barra de planeo final mostrará una segunda flecha "
-"que indica la altura necesaria para alcanzar el punto de referencia final "
-"con MC 0."
+"que indica la altura necesaria para alcanzar el waypoint final con MC 0."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:142
 msgid "Vario bar"
@@ -5593,8 +5587,8 @@ msgid ""
 "Secondary waypoints file.  This may be used to add waypoints for a "
 "competition."
 msgstr ""
-"Archivo de waypoints secundarios. Se puede usar para agregar puntos de "
-"referencia para una competición."
+"Archivo de waypoints secundarios. Se puede usar para agregar wqypoints para "
+"una competición."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:85
 msgid "Watched waypoints"
@@ -5758,7 +5752,7 @@ msgstr "Gráficos simples ampliados."
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:123
 #, no-c-format
 msgid "Detailed"
-msgstr "Detallada"
+msgstr "Detallado"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:124
 #, no-c-format
@@ -5860,7 +5854,9 @@ msgstr "Longitud del rastro"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:160
 msgid ""
 "Determines whether and how long a snail trail is drawn behind the glider."
-msgstr "Determina si se dibuja el rastro del planeador y su duración."
+msgstr ""
+"Determina si se dibuja el recorrido del planeador sobre el suelo y su "
+"duración."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:172
 msgid "Trail type"
@@ -5878,8 +5874,8 @@ msgstr "Rastro escalado"
 msgid ""
 "If set to ON the snail trail width is scaled according to the vario signal."
 msgstr ""
-"Si se establece en ON, la anchura de la estela del caracol se escala según "
-"la señal del vario."
+"Si se establece en ON, la anchura del rastro sobre el suelo se escala según "
+"la valor del vario."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:181
 msgid "Detour cost markers"
@@ -6349,17 +6345,17 @@ msgstr "Pastel"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:220
 #, no-c-format
 msgid "Italian Avioportolano VFR Chart"
-msgstr "Gráfico de VFR Avioportolano italiano"
+msgstr "Avioportolano VFR italiano"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:221
 #, no-c-format
 msgid "German DFS VFR Chart"
-msgstr "Gráfico alemán DFS VFR"
+msgstr "DFS VFR alemán"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:222
 #, no-c-format
 msgid "French SIA VFR Chart"
-msgstr "Gráfico SIA VFR francés"
+msgstr "SIA VFR francés"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:226
 msgid "Terrain colors"
@@ -6604,7 +6600,7 @@ msgstr "Formato de la etiqueta"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:102
 msgid "Determines how labels are displayed with each waypoint"
-msgstr "Determina cómo se muestran las etiquetas de cada punto de referencia"
+msgstr "Determina cómo se muestran las etiquetas de cada wqypoint"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:108
 #, no-c-format
@@ -6660,9 +6656,9 @@ msgid ""
 "Both Required glide ratio and terrain avoidance height are displayed. "
 "Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings."
 msgstr ""
-"Se muestran tanto la tasa de planeo necesaria como la altura de sobrevuelo "
-"del terreno. Requiere \"Tipo de alcance: Girar\" en los ajustes de "
-"\"Computador de planeo > Ruta\"."
+"Se muestran tanto la relación de planeo necesaria como la altura de "
+"sobrevuelo del terreno. Requiere \"Tipo de alcance: Girar\" en los ajustes "
+"de \"Computador de planeo > Ruta\"."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:129
 msgid "Determines how arrival height is displayed in waypoint labels"
@@ -9671,19 +9667,19 @@ msgstr ""
 "ajustado para la energía total."
 
 #: src/InfoBoxes/Content/Factory.cpp:1104
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Heart Rate"
-msgstr "Hora de salida"
+msgstr "Ritmo cardiaco"
 
 #: src/InfoBoxes/Content/Factory.cpp:1105
 #, no-c-format
 msgid "Heart"
-msgstr ""
+msgstr "Corazón"
 
 #: src/InfoBoxes/Content/Factory.cpp:1106
 #, no-c-format
 msgid "Heart rate in beats per minute."
-msgstr ""
+msgstr "Ritmo cardiaco en latidos por minuto."
 
 #: src/InfoBoxes/Content/Alternate.cpp:74
 #, c-format
@@ -9702,9 +9698,8 @@ msgid "no QNH"
 msgstr "Sin QNH"
 
 #: src/InfoBoxes/Content/Altitude.cpp:148
-#, fuzzy
 msgid "Not flying"
-msgstr "No está virando"
+msgstr "No está volando"
 
 #: src/InfoBoxes/Content/MacCready.cpp:71
 msgid "MC AUTO"
