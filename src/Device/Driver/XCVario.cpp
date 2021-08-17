@@ -137,7 +137,7 @@ PXCV(NMEAInputLine &line, NMEAInfo &info)
   }
   // Space diagonal acceleration in X,Y,Z axes measure
   if ( line.ReadChecked(x) && line.ReadChecked(y) && line.ReadChecked(z) )
-    info.acceleration.ProvideGLoad(SpaceDiagonal(x, y, z), true);
+    info.acceleration.ProvideGLoad(SpaceDiagonal(x, y, z));
 
   return true;
 }

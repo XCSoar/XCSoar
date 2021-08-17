@@ -58,7 +58,7 @@ ParsePITV3(NMEAInputLine &line, NMEAInfo &info)
 
   // Load factor [g]
   if (line.ReadChecked(value)) {
-    info.acceleration.ProvideGLoad(value, true);
+    info.acceleration.ProvideGLoad(value);
   }
 
   return true;

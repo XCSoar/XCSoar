@@ -113,7 +113,7 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
   basic.gps.hdop = hasAccuracy ? accuracy : -1;
 
   if (hasAcceleration)
-    basic.acceleration.ProvideGLoad(acceleration, true);
+    basic.acceleration.ProvideGLoad(acceleration);
 
   e.Commit();
 }
@@ -348,7 +348,7 @@ DeviceDescriptor::OnNunchukValues(int joy_x, int joy_y,
       const auto e = BeginEdit();
       NMEAInfo &basic = *e;
       basic.UpdateClock();
-      basic.acceleration.ProvideGLoad(acc_z / 1000., true);
+      basic.acceleration.ProvideGLoad(acc_z / 1000.);
       e.Commit();
     }
 

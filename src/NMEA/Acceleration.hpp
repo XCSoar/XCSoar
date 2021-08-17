@@ -52,7 +52,7 @@ struct AccelerationState
     available = false;
   }
 
-  void ProvideGLoad(double _g_load, bool _real) {
+  void ProvideGLoad(double _g_load, bool _real=true) noexcept {
     g_load = _g_load;
     real = _real;
     available = true;
