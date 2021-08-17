@@ -1,4 +1,5 @@
 Version 7.13 - not yet released
+* fix freeze bug
 * task management
   - Use task defaults for start and finish height ref (MSL or AGL) when loading
     tasks from soarscore.com

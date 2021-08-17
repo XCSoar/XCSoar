@@ -37,7 +37,7 @@ bool
 SearchPointVector::ThinToSize(const unsigned max_size)
 {
   static constexpr double tolerance = 1.0e-8;
-  unsigned i = 2;
+  double i = 2;
   bool retval = false;
   while (size() > max_size) {
     retval |= ::PruneInterior(*this, tolerance * i);
