@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-08-15 22:35+0000\n"
+"PO-Revision-Date: 2021-08-18 16:35+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -2398,12 +2398,12 @@ msgstr "Dolů"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
 msgid "Locked"
-msgstr "Zamčeno"
+msgstr "Zajištěny"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
 #, no-c-format
 msgid "Not locked"
-msgstr "Není uzamčen"
+msgstr "Nezajištěny"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:72
 msgid "Airbrake locked"
@@ -2415,11 +2415,11 @@ msgstr "Klapky"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:74
 msgid "Gear down"
-msgstr "Vysunutý podvozek"
+msgstr "Podv. vysunut"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:75
 msgid "Acknowledge"
-msgstr "Potvrdit"
+msgstr "Potvrď"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:76
 msgid "Repeat"
@@ -2473,7 +2473,7 @@ msgstr "Vlečné letadlo"
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:127
 #, no-c-format
 msgid "Helicopter"
-msgstr "Helikoptéra"
+msgstr "Vrtulník"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:128
 #, no-c-format
@@ -2488,7 +2488,7 @@ msgstr "Výsadkové letadlo"
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:130
 #, no-c-format
 msgid "Hang glider"
-msgstr "Rogalo"
+msgstr "Závěsný kluzák"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:131
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:189
@@ -2525,7 +2525,7 @@ msgstr "Vzducholoď"
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:140
 #, no-c-format
 msgid "Unmanned aerial vehicle"
-msgstr "Bezpilotní aero prostředek"
+msgstr "Bezpilotní letoun"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:142
 #, no-c-format
@@ -10393,7 +10393,7 @@ msgstr ""
 
 #: Data/Input/default.xci:742
 msgid "Stored to EEPROM"
-msgstr "Uložit do EEPROM"
+msgstr "Uloženo do EEPROM"
 
 #: Data/Input/default.xci:420 Data/Input/default.xci:1063
 msgid "Dropped marker"
