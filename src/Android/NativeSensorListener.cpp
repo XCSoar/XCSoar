@@ -81,8 +81,7 @@ Java_org_xcsoar_NativeSensorListener_onLocationSensor(JNIEnv *env, jobject obj,
                                                       jdouble altitude,
                                                       jboolean hasBearing, jdouble bearing,
                                                       jboolean hasSpeed, jdouble ground_speed,
-                                                      jboolean hasAccuracy, jdouble accuracy,
-                                                      jboolean hasAcceleration, jdouble acceleration)
+                                                      jboolean hasAccuracy, jdouble accuracy)
 {
   jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
   if (ptr == 0)
@@ -96,8 +95,20 @@ Java_org_xcsoar_NativeSensorListener_onLocationSensor(JNIEnv *env, jobject obj,
                             hasAltitude, geoidAltitude, altitude,
                             hasBearing, bearing,
                             hasSpeed, ground_speed,
-                            hasAccuracy, accuracy,
-                            hasAcceleration, acceleration);
+                            hasAccuracy, accuracy);
+}
+
+gcc_visibility_default
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeSensorListener_onAccelerationSensor1(JNIEnv *env, jobject obj,
+                                                           jdouble acceleration)
+{
+  jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
+  if (ptr == 0)
+    return;
+
+  auto &listener = *(SensorListener *)ptr;
+  listener.OnAccelerationSensor(acceleration);
 }
 
 gcc_visibility_default

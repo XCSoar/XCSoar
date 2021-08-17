@@ -47,9 +47,10 @@ final class NativeSensorListener implements SensorListener {
                                       double altitude,
                                       boolean hasBearing, double bearing,
                                       boolean hasSpeed, double speed,
-                                      boolean hasAccuracy, double accuracy,
-                                      boolean hasAcceleration,
-                                      double acceleration);
+                                      boolean hasAccuracy, double accuracy);
+
+  @Override
+  public native void onAccelerationSensor1(double acceleration);
 
   @Override
   public native void onAccelerationSensor(float ddx, float ddy, float ddz);

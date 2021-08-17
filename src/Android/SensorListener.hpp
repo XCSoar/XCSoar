@@ -47,10 +47,9 @@ public:
                                 double altitude,
                                 bool hasBearing, double bearing,
                                 bool hasSpeed, double ground_speed,
-                                bool hasAccuracy, double accuracy,
-                                bool hasAcceleration,
-                                double acceleration) noexcept = 0;
+                                bool hasAccuracy, double accuracy) noexcept = 0;
 
+  virtual void OnAccelerationSensor(double acceleration) noexcept = 0;
   virtual void OnAccelerationSensor(float ddx, float ddy,
                                     float ddz) noexcept = 0;
   virtual void OnRotationSensor(float dtheta_x, float dtheta_y,

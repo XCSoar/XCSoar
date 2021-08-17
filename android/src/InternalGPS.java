@@ -71,7 +71,6 @@ public class InternalGPS
   private SensorManager sensorManager;
   private WindowManager windowManager;
   private Sensor accelerometer;
-  private double acceleration;
   private static boolean queriedLocationSettings = false;
 
   private int state = STATE_LIMBO;
@@ -101,7 +100,6 @@ public class InternalGPS
     windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-    acceleration = 1.0;
 
     update();
   }
@@ -175,8 +173,7 @@ public class InternalGPS
                               location.getAltitude(),
                               location.hasBearing(), location.getBearing(),
                               location.hasSpeed(), location.getSpeed(),
-                              location.hasAccuracy(), location.getAccuracy(),
-                              true, acceleration);
+                              location.hasAccuracy(), location.getAccuracy());
   }
 
   private void setConnectedSafe(int connected) {
@@ -242,6 +239,7 @@ public class InternalGPS
 
   /** from sensorEventListener */
   public void onSensorChanged(SensorEvent event) {
+    double acceleration;
     acceleration = Math.sqrt((double) event.values[0]*event.values[0] +
                              (double) event.values[1]*event.values[1] +
                              (double) event.values[2]*event.values[2]) /
@@ -261,5 +259,7 @@ public class InternalGPS
         break;
     }
     // TODO: do lowpass filtering to remove vibrations?!?
+
+    listener.onAccelerationSensor1(acceleration);
   }
 }

@@ -55,7 +55,7 @@ public final class BluetoothSensor
     new LinkedList<BluetoothGattCharacteristic>();
 
   private boolean haveFlytecMovement = false;
-  private double flytecGroundSpeed, flytecTrack, flytecAcceleration;
+  private double flytecGroundSpeed, flytecTrack;
 
   public BluetoothSensor(Context context, BluetoothDevice device,
                          SensorListener listener)
@@ -151,15 +151,16 @@ public final class BluetoothSensor
                                     c.getIntValue(c.FORMAT_SINT16, 12),
                                     haveFlytecMovement, flytecTrack,
                                     haveFlytecMovement, flytecGroundSpeed,
-                                    false, 0,
-                                    haveFlytecMovement, flytecAcceleration);
+                                    false, 0);
 
           listener.onPressureAltitudeSensor(c.getIntValue(c.FORMAT_SINT16, 14));
           listener.onVarioSensor(c.getIntValue(c.FORMAT_SINT16, 16) / 100.f);
         } else if (BluetoothUuids.FLYTEC_SENSBOX_MOVEMENT_SENSOR_CHARACTERISTIC.equals(c.getUuid())) {
           flytecGroundSpeed = c.getIntValue(c.FORMAT_SINT16, 6) / 10.;
           flytecTrack = c.getIntValue(c.FORMAT_SINT16, 8) / 10.;
-          flytecAcceleration = c.getIntValue(c.FORMAT_UINT16, 16) / 10.;
+
+          listener.onAccelerationSensor1(c.getIntValue(c.FORMAT_UINT16, 16) / 10.);
+
           haveFlytecMovement = true;
         }
       }

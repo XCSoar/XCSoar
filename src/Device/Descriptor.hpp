@@ -617,9 +617,8 @@ private:
                         double altitude,
                         bool hasBearing, double bearing,
                         bool hasSpeed, double speed,
-                        bool hasAccuracy, double accuracy,
-                        bool hasAcceleration,
-                        double acceleration) noexcept override;
+                        bool hasAccuracy, double accuracy) noexcept override;
+  void OnAccelerationSensor(double acceleration) noexcept override;
   void OnAccelerationSensor(float ddx, float ddy,
                             float ddz) noexcept override;
   void OnRotationSensor(float dtheta_x, float dtheta_y,

@@ -38,9 +38,9 @@ public interface SensorListener {
                         double altitude,
                         boolean hasBearing, double bearing,
                         boolean hasSpeed, double speed,
-                        boolean hasAccuracy, double accuracy,
-                        boolean hasAcceleration, double acceleration);
+                        boolean hasAccuracy, double accuracy);
 
+  void onAccelerationSensor1(double acceleration);
   void onAccelerationSensor(float ddx, float ddy, float ddz);
   void onRotationSensor(float dtheta_x, float dtheta_y, float dtheta_z);
   void onMagneticFieldSensor(float h_x, float h_y, float h_z);

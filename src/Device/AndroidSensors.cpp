@@ -65,9 +65,7 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
                                    double altitude,
                                    bool hasBearing, double bearing,
                                    bool hasSpeed, double ground_speed,
-                                   bool hasAccuracy, double accuracy,
-                                   bool hasAcceleration,
-                                   double acceleration) noexcept
+                                   bool hasAccuracy, double accuracy) noexcept
 {
   const auto e = BeginEdit();
   NMEAInfo &basic = *e;
@@ -112,12 +110,21 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
 
   basic.gps.hdop = hasAccuracy ? accuracy : -1;
 
-  if (hasAcceleration)
-    basic.acceleration.ProvideGLoad(acceleration);
-
   e.Commit();
 }
 
+void
+DeviceDescriptor::OnAccelerationSensor(double acceleration) noexcept
+{
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+
+  basic.acceleration.ProvideGLoad(acceleration);
+
+  e.Commit();
+}
 
 void
 DeviceDescriptor::OnAccelerationSensor(float ddx, float ddy,
