@@ -25,6 +25,7 @@ Copyright_License {
 #include "SensorListener.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "Atmosphere/Temperature.hpp"
 #include "GliderLink/GliderLinkId.hpp"
 #include "java/Class.hxx"
 #include "java/String.hxx"
@@ -279,6 +280,34 @@ Java_org_xcsoar_NativeSensorListener_setGliderLinkInfo(JNIEnv *env,
                                         Angle::Degrees(latitude)),
                                altitude, gspeed, vspeed,
                                bearing);
+}
+
+gcc_visibility_default
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeSensorListener_onTemperature(JNIEnv *env,
+                                                   jobject obj,
+                                                   jdouble temperature_kelvin)
+{
+  jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
+  if (ptr == 0)
+    return;
+
+  auto &listener = *(SensorListener *)ptr;
+  listener.OnTemperature(Temperature::FromKelvin(temperature_kelvin));
+}
+
+gcc_visibility_default
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeSensorListener_onBatteryPercent(JNIEnv *env,
+                                                      jobject obj,
+                                                      jdouble battery_percent)
+{
+  jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
+  if (ptr == 0)
+    return;
+
+  auto &listener = *(SensorListener *)ptr;
+  listener.OnBatteryPercent(battery_percent);
 }
 
 gcc_visibility_default

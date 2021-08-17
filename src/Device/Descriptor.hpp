@@ -640,6 +640,8 @@ private:
                            GeoPoint location, double altitude,
                            double gspeed, double vspeed,
                            unsigned bearing) noexcept override;
+  void OnTemperature(Temperature temperature) noexcept override;
+  void OnBatteryPercent(double battery_percent) noexcept override;
   void OnSensorStateChanged() noexcept override;
   void OnSensorError(const char *msg) noexcept override;
 #endif // ANDROID

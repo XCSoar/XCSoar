@@ -95,6 +95,12 @@ final class NativeSensorListener implements SensorListener {
                                          double bearing);
 
   @Override
+  public native void onTemperature(double temperature_kelvin);
+
+  @Override
+  public native void onBatteryPercent(double battery_percent);
+
+  @Override
   public native void onSensorStateChanged();
 
   @Override

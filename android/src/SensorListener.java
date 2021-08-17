@@ -61,6 +61,10 @@ public interface SensorListener {
                            double gspeed, double vspeed,
                            double bearing);
 
+  void onTemperature(double temperature_kelvin);
+
+  void onBatteryPercent(double battery_percent);
+
   /**
    * The state has changed, and AndroidSensor.getState() will provide
    * the new value.

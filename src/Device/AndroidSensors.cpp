@@ -446,6 +446,34 @@ DeviceDescriptor::OnGliderLinkTraffic(GliderLinkId id, const char *callsign,
 }
 
 void
+DeviceDescriptor::OnTemperature(Temperature temperature) noexcept
+{
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+
+  basic.temperature = temperature;
+  basic.temperature_available = true;
+
+  e.Commit();
+}
+
+void
+DeviceDescriptor::OnBatteryPercent(double battery_percent) noexcept
+{
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+
+  basic.battery_level = battery_percent;
+  basic.battery_level_available.Update(basic.clock);
+
+  e.Commit();
+}
+
+void
 DeviceDescriptor::OnSensorStateChanged() noexcept
 {
   PortStateChanged();

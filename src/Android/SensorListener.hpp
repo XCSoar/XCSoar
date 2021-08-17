@@ -28,6 +28,7 @@ Copyright_License {
 struct GeoPoint;
 class AtmosphericPressure;
 class GliderLinkId;
+class Temperature;
 
 /**
  * C++ wrapper for the Java interface SensorListener.
@@ -74,6 +75,10 @@ public:
                                    GeoPoint location, double altitude,
                                    double gspeed, double vspeed,
                                    unsigned bearing) noexcept = 0;
+
+  virtual void OnTemperature(Temperature temperature) noexcept = 0;
+
+  virtual void OnBatteryPercent(double battery_percent) noexcept = 0;
 
   virtual void OnSensorStateChanged() noexcept = 0;
   virtual void OnSensorError(const char *msg) noexcept = 0;
