@@ -87,6 +87,7 @@ struct GrahamPartitions {
   SearchPoint left, right;
   std::vector<SearchPoint> upper;
   std::vector<SearchPoint> lower;
+  bool pruned = false;
 };
 
 [[gnu::pure]]
@@ -148,6 +149,8 @@ PartitionPoints(const std::vector<SearchPoint> &src, double tolerance) noexcept
         result.upper.push_back(i);
       else
         result.lower.push_back(i);
+    } else {
+      result.pruned = true;
     }
   };
 
@@ -245,7 +248,7 @@ BuildHull(GrahamPartitions &&partitions, double tolerance) noexcept
                                     std::move(partitions.upper),
                                     hull.upper, tolerance, -1);
 
-  hull.pruned = lower_pruned || upper_pruned;
+  hull.pruned = partitions.pruned || lower_pruned || upper_pruned;
 
   return hull;
 }
