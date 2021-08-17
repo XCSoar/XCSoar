@@ -218,15 +218,15 @@ public final class BluetoothSensor
     if (service != null) {
       BluetoothGattCharacteristic c =
         service.getCharacteristic(BluetoothUuids.FLYTEC_SENSBOX_NAVIGATION_SENSOR_CHARACTERISTIC);
-      if (c != null)
-        enableNotification(c);
-
-      c = service.getCharacteristic(BluetoothUuids.FLYTEC_SENSBOX_MOVEMENT_SENSOR_CHARACTERISTIC);
       if (c != null) {
         state = STATE_READY;
         listener.onSensorStateChanged();
         enableNotification(c);
       }
+
+      c = service.getCharacteristic(BluetoothUuids.FLYTEC_SENSBOX_MOVEMENT_SENSOR_CHARACTERISTIC);
+      if (c != null)
+        enableNotification(c);
     }
 
     if (state == STATE_LIMBO)
