@@ -56,6 +56,7 @@ public final class BluetoothSensor
 
   private boolean haveFlytecMovement = false;
   private double flytecGroundSpeed, flytecTrack;
+  private int flytecSatellites = 0;
 
   public BluetoothSensor(Context context, BluetoothDevice device,
                          SensorListener listener)
@@ -84,6 +85,7 @@ public final class BluetoothSensor
 
   private void submitError(String msg) {
     haveFlytecMovement = false;
+    flytecSatellites = 0;
     state = STATE_FAILED;
     listener.onSensorError(msg);
   }
@@ -144,7 +146,7 @@ public final class BluetoothSensor
             Integer.toUnsignedLong(c.getIntValue(c.FORMAT_UINT32, 0));
 
           listener.onLocationSensor(time,
-                                    -1,
+                                    flytecSatellites,
                                     c.getIntValue(c.FORMAT_SINT32, 8) / 10000000.,
                                     c.getIntValue(c.FORMAT_SINT32, 4) / 10000000.,
                                     hasAltitude, true,
@@ -162,6 +164,8 @@ public final class BluetoothSensor
           listener.onAccelerationSensor1(c.getIntValue(c.FORMAT_UINT16, 16) / 10.);
 
           haveFlytecMovement = true;
+        } else if (BluetoothUuids.FLYTEC_SENSBOX_SECOND_GPS_CHARACTERISTIC.equals(c.getUuid())) {
+          flytecSatellites = c.getIntValue(c.FORMAT_UINT8, 6);
         }
       }
     } catch (NullPointerException e) {
@@ -225,6 +229,10 @@ public final class BluetoothSensor
       }
 
       c = service.getCharacteristic(BluetoothUuids.FLYTEC_SENSBOX_MOVEMENT_SENSOR_CHARACTERISTIC);
+      if (c != null)
+        enableNotification(c);
+
+      c = service.getCharacteristic(BluetoothUuids.FLYTEC_SENSBOX_SECOND_GPS_CHARACTERISTIC);
       if (c != null)
         enableNotification(c);
     }
