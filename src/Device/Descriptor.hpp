@@ -42,7 +42,7 @@ Copyright_License {
 #include "util/StaticFifoBuffer.hxx"
 
 #ifdef ANDROID
-#include "Android/SensorListener.hpp"
+#include "SensorListener.hpp"
 #include "Math/SelfTimingKalmanFilter1d.hpp"
 #include "Math/WindowFilter.hpp"
 #endif

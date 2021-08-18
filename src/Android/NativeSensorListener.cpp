@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "NativeSensorListener.hpp"
-#include "SensorListener.hpp"
+#include "Device/SensorListener.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Atmosphere/Temperature.hpp"
