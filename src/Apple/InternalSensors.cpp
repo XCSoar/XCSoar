@@ -85,7 +85,6 @@ Copyright_License {
 
   basic.gps.nonexpiring_internal_gps = true;
 
-  basic.airspeed_available.Clear();
   if (location && (location.speed >= 0.0)) {
     basic.ground_speed = location.speed;
     basic.ground_speed_available.Update(basic.clock);
