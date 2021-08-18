@@ -94,7 +94,7 @@ Copyright_License {
   }
 
   if (location && location.timestamp) {
-    basic.time = [self getSecondsOfDay: location.timestamp];
+    basic.time = TimeStamp{FloatDuration{[self getSecondsOfDay: location.timestamp]}};
     basic.time_available.Update(basic.clock);
     basic.date_time_utc = BrokenDateTime::FromUnixTimeUTC(
         [location.timestamp timeIntervalSince1970]);
