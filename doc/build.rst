@@ -270,7 +270,7 @@ Compiling for macOS (with Homebrew)
 
 Install the required Homebrew packages::
 
-  brew install automake autoconf libtool  imagemagick ffmpeg \
+  brew install automake autoconf libtool imagemagick ffmpeg \
       librsvg quilt pkg-config
 
 Then compile::
