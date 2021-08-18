@@ -24,37 +24,33 @@ Copyright_License {
 #ifndef XCSOAR_APPLE_INTERNAL_SENSORS_HPP
 #define XCSOAR_APPLE_INTERNAL_SENSORS_HPP
 
-#include "util/Compiler.h"
+class SensorListener;
 
 #import <CoreLocation/CoreLocation.h>
 
 @interface LocationDelegate : NSObject <CLLocationManagerDelegate>
 {
-  @private unsigned int index;
+  @private SensorListener *listener;
   @private NSCalendar *gregorian_calendar;
 }
 
 -(instancetype) init __attribute__((unavailable()));
 
--(instancetype) init: (unsigned int) index_;
+-(instancetype) init: (SensorListener *) _listener;
 @end
 
 // InternalSensors implementation which uses the Apple CoreLocation API
 class InternalSensors {
-private:
-  unsigned int index;
+  SensorListener &listener;
   CLLocationManager *location_manager;
   LocationDelegate *location_delegate;
-
-  InternalSensors(unsigned int index);
 
   void Init();
   void Deinit();
 
 public:
+  explicit InternalSensors(SensorListener &_listener);
   ~InternalSensors();
-  gcc_malloc
-  static InternalSensors *Create(unsigned int index);
 };
 
 #endif

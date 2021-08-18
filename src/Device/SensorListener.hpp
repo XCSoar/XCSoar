@@ -50,6 +50,7 @@ public:
                                 bool hasSpeed, double ground_speed,
                                 bool hasAccuracy, double accuracy) noexcept = 0;
 
+#ifdef ANDROID
   virtual void OnAccelerationSensor(double acceleration) noexcept = 0;
   virtual void OnAccelerationSensor(float ddx, float ddy,
                                     float ddz) noexcept = 0;
@@ -82,4 +83,5 @@ public:
 
   virtual void OnSensorStateChanged() noexcept = 0;
   virtual void OnSensorError(const char *msg) noexcept = 0;
+#endif // ANDROID
 };

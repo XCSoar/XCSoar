@@ -41,8 +41,11 @@ Copyright_License {
 #include "util/tstring.hpp"
 #include "util/StaticFifoBuffer.hxx"
 
-#ifdef ANDROID
+#ifdef HAVE_INTERNAL_GPS
 #include "SensorListener.hpp"
+#endif
+
+#ifdef ANDROID
 #include "Math/SelfTimingKalmanFilter1d.hpp"
 #include "Math/WindowFilter.hpp"
 #endif
@@ -79,7 +82,7 @@ class DeviceDataEditor;
 
 class DeviceDescriptor final
   : PortListener,
-#ifdef ANDROID
+#ifdef HAVE_INTERNAL_GPS
     SensorListener,
 #endif
     PortLineSplitter {
@@ -607,7 +610,7 @@ private:
   /* virtual methods from PortLineHandler */
   bool LineReceived(const char *line) noexcept override;
 
-#ifdef ANDROID
+#ifdef HAVE_INTERNAL_GPS
   /* methods from SensorListener */
   void OnConnected(int connected) noexcept override;
   void OnLocationSensor(std::chrono::system_clock::time_point time,
@@ -618,6 +621,8 @@ private:
                         bool hasBearing, double bearing,
                         bool hasSpeed, double speed,
                         bool hasAccuracy, double accuracy) noexcept override;
+
+#ifdef ANDROID
   void OnAccelerationSensor(double acceleration) noexcept override;
   void OnAccelerationSensor(float ddx, float ddy,
                             float ddz) noexcept override;
@@ -645,6 +650,7 @@ private:
   void OnSensorStateChanged() noexcept override;
   void OnSensorError(const char *msg) noexcept override;
 #endif // ANDROID
+#endif // HAVE_INTERNAL_GPS
 };
 
 #endif

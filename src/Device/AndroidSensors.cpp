@@ -113,6 +113,8 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
   e.Commit();
 }
 
+#ifdef ANDROID
+
 void
 DeviceDescriptor::OnAccelerationSensor(double acceleration) noexcept
 {
@@ -484,3 +486,5 @@ DeviceDescriptor::OnSensorError(const char *msg) noexcept
 {
   PortError(msg);
 }
+
+#endif
