@@ -66,7 +66,6 @@ struct FileInfo {
   }
 };
 
-[[gnu::pure]]
 static inline bool
 GetRegularFileInfo(Path path, FileInfo &info)
 {
