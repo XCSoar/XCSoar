@@ -349,10 +349,7 @@ class NativeView extends SurfaceView
       return;
     }
 
-    Log.d(TAG, "deinitializeNative()");
     deinitializeNative();
-
-    Log.d(TAG, "sending message to quitHandler");
     quitHandler.sendMessage(quitHandler.obtainMessage());
   }
 

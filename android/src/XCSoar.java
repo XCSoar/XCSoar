@@ -115,15 +115,12 @@ public class XCSoar extends Activity {
   }
 
   private void quit() {
-    Log.d(TAG, "in quit()");
-
     nativeView = null;
 
     TextView tv = new TextView(XCSoar.this);
     tv.setText("Shutting down XCSoar...");
     setContentView(tv);
 
-    Log.d(TAG, "finish()");
     finish();
   }
 
@@ -139,7 +136,6 @@ public class XCSoar extends Activity {
       TextView tv = new TextView(XCSoar.this);
       tv.setText(msg.obj.toString());
       setContentView(tv);
-
     }
   };
 
@@ -154,7 +150,6 @@ public class XCSoar extends Activity {
     /* check if external storage is available; XCSoar doesn't work as
        long as external storage is being forwarded to a PC */
     String state = Environment.getExternalStorageState();
-    Log.d(TAG, "getExternalStorageState() = " + state);
     if (!Environment.MEDIA_MOUNTED.equals(state)) {
       TextView tv = new TextView(this);
       tv.setText("External storage is not available (state='" + state
@@ -256,8 +251,6 @@ public class XCSoar extends Activity {
       return;
     }
 
-    Log.d(TAG, "in onDestroy()");
-
     if (batteryReceiver != null) {
       unregisterReceiver(batteryReceiver);
       batteryReceiver = null;
@@ -274,7 +267,6 @@ public class XCSoar extends Activity {
     IOIOHelper.onDestroyContext();
 
     super.onDestroy();
-    Log.d(TAG, "System.exit()");
     System.exit(0);
   }
 
