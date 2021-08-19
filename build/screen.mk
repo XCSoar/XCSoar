@@ -112,7 +112,6 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/opengl/UncompressedImage.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Buffer.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Shapes.cpp \
-	$(CANVAS_SRC_DIR)/opengl/Surface.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Shaders.cpp \
 	$(CANVAS_SRC_DIR)/opengl/CanvasRotateShift.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Triangulate.cpp

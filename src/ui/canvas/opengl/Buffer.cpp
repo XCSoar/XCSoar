@@ -22,7 +22,3 @@ Copyright_License {
 */
 
 #include "Buffer.hpp"
-
-#ifndef NDEBUG
-unsigned num_buffers;
-#endif

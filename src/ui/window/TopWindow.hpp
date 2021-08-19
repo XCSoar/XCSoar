@@ -201,6 +201,9 @@ class TopWindow : public ContainerWindow {
    */
   bool resized = false;
 
+  // TODO: eliminate this field
+  bool surface_valid = true;
+
   PixelSize new_size;
 #endif
 

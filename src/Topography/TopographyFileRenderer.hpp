@@ -30,7 +30,6 @@ Copyright_License {
 #include "Geo/GeoBounds.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "ui/canvas/opengl/Surface.hpp"
 #else
 #include "ui/canvas/Brush.hpp"
 #include "Topography/ShapeRenderer.hpp"
@@ -51,9 +50,6 @@ struct TopographyLook;
  * Class used to manage and render vector topography layers
  */
 class TopographyFileRenderer final
-#ifdef ENABLE_OPENGL
-  : GLSurfaceListener
-#endif
 {
   const TopographyFile &file;
 
@@ -115,9 +111,6 @@ private:
 
   void PaintPoint(Canvas &canvas, const WindowProjection &projection,
                   const XShape &shape, const float *opengl_matrix) const;
-
-  virtual void SurfaceCreated() override;
-  virtual void SurfaceDestroyed() override;
 #else
   void PaintPoint(Canvas &canvas, const WindowProjection &projection,
                   const unsigned short *lines, const unsigned short *end_lines,

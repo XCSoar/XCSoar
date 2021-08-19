@@ -65,17 +65,11 @@ TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file,
   ResourceId icon_ID = file.GetIcon();
   if (icon_ID.IsDefined())
     icon.LoadResource(icon_ID, file.GetBigIcon());
-
-#ifdef ENABLE_OPENGL
-  AddSurfaceListener(*this);
-#endif
 }
 
 TopographyFileRenderer::~TopographyFileRenderer()
 {
 #ifdef ENABLE_OPENGL
-  RemoveSurfaceListener(*this);
-
   delete array_buffer;
 #endif
 }
@@ -510,19 +504,3 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
     }
   }
 }
-
-#ifdef ENABLE_OPENGL
-
-void
-TopographyFileRenderer::SurfaceCreated()
-{
-}
-
-void
-TopographyFileRenderer::SurfaceDestroyed()
-{
-  delete array_buffer;
-  array_buffer = nullptr;
-}
-
-#endif

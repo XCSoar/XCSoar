@@ -34,8 +34,6 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
-#include "ui/canvas/custom/UncompressedImage.hpp"
-#include "ui/canvas/opengl/Surface.hpp"
 #include <jni.h>
 #endif
 
@@ -65,9 +63,6 @@ using BitmapPixelTraits = BGRAPixelTraits;
  * An image loaded from storage.
  */
 class Bitmap final
-#ifdef ANDROID
-             : private GLSurfaceListener
-#endif
 {
 public:
   enum class Type {
@@ -84,14 +79,6 @@ public:
   };
 
 protected:
-#ifdef ANDROID
-  jobject bmp = nullptr;
-
-  UncompressedImage uncompressed;
-
-  Type type;
-#endif
-
 #ifdef ENABLE_OPENGL
   GLTexture *texture = nullptr;
   PixelSize size;
@@ -127,9 +114,7 @@ public:
   Bitmap &operator=(const Bitmap &other) = delete;
 public:
   bool IsDefined() const noexcept {
-#ifdef ANDROID
-    return bmp != nullptr || uncompressed.IsDefined();
-#elif defined(ENABLE_OPENGL)
+#ifdef ENABLE_OPENGL
     return texture != nullptr;
 #elif defined(USE_MEMORY_CANVAS)
     return buffer.data != nullptr;
@@ -236,10 +221,6 @@ private:
            bool flipped = false) noexcept;
   bool MakeTexture(jobject _bmp, Type _type,
                    bool flipped = false) noexcept;
-
-  /* from GLSurfaceListener */
-  virtual void SurfaceCreated() override;
-  virtual void SurfaceDestroyed() override;
 #endif
 #endif
 };

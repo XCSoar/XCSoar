@@ -75,11 +75,6 @@ Copyright_License {
 #include "NunchuckDevice.hpp"
 #include "VoltageDevice.hpp"
 
-#ifndef NDEBUG
-#include "ui/canvas/opengl/Texture.hpp"
-#include "ui/canvas/opengl/Buffer.hpp"
-#endif
-
 #include <cassert>
 #include <stdlib.h>
 
@@ -315,9 +310,6 @@ Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
     /* event subsystem is not initialized, there is nothing to pause */
 
   CommonInterface::main_window->Pause();
-
-  assert(num_textures == 0);
-  assert(num_buffers == 0);
 }
 
 gcc_visibility_default

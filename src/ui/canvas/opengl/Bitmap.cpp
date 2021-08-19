@@ -28,8 +28,6 @@ Copyright_License {
 #include "Texture.hpp"
 #include "Debug.hpp"
 
-#ifndef ANDROID
-
 Bitmap::Bitmap(Bitmap &&src) noexcept
   :texture(src.texture),
    size(src.size),
@@ -38,8 +36,6 @@ Bitmap::Bitmap(Bitmap &&src) noexcept
 {
   src.texture = nullptr;
 }
-
-#endif /* !ANDROID */
 
 void
 Bitmap::EnableInterpolation() noexcept
@@ -80,30 +76,13 @@ Bitmap::Load(UncompressedImage &&_uncompressed, Type _type)
   size = { _uncompressed.GetWidth(), _uncompressed.GetHeight() };
   flipped = _uncompressed.IsFlipped();
 
-#ifdef ANDROID
-  uncompressed = std::move(_uncompressed);
-  type = _type;
-
-  AddSurfaceListener(*this);
-
-  if (!surface_valid)
-    return true;
-
-  if (!MakeTexture(uncompressed, type)) {
-    Reset();
-    return false;
-  }
-#else
   if (!MakeTexture(_uncompressed, _type)) {
     Reset();
     return false;
   }
-#endif
 
   return true;
 }
-
-#ifndef ANDROID
 
 void
 Bitmap::Reset() noexcept
@@ -114,5 +93,3 @@ Bitmap::Reset() noexcept
   delete texture;
   texture = nullptr;
 }
-
-#endif /* !ANDROID */

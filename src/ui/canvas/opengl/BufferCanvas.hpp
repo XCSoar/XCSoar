@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_BUFFER_CANVAS_HPP
 
 #include "Canvas.hpp"
-#include "Surface.hpp"
 #include "Math/Point2D.hpp"
 
 #include <glm/mat4x4.hpp>
@@ -42,7 +41,7 @@ class GLRenderBuffer;
 /**
  * An off-screen #Canvas implementation.
  */
-class BufferCanvas : public Canvas, private GLSurfaceListener {
+class BufferCanvas : public Canvas {
   GLTexture *texture = nullptr;
 
   GLFrameBuffer *frame_buffer = nullptr;
@@ -116,13 +115,6 @@ public:
   void Commit(Canvas &other);
 
   void CopyTo(Canvas &other);
-
-#ifdef ENABLE_OPENGL
-private:
-  /* from GLSurfaceListener */
-  void SurfaceCreated() override;
-  void SurfaceDestroyed() override;
-#endif
 };
 
 #endif

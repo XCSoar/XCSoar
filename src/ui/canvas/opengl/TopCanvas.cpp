@@ -40,9 +40,6 @@ TopCanvas::Resume()
 #ifdef ANDROID
   surface = eglGetCurrentSurface(EGL_DRAW);
 #endif
-
-  OpenGL::SetupContext();
-  OpenGL::SetupViewport(UnsignedPoint2D(size.width, size.height));
 }
 
 bool

@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "../TopWindow.hpp"
 #include "ui/canvas/custom/Cache.hpp"
-#include "ui/canvas/opengl/Surface.hpp"
-#include "ui/canvas/opengl/Shapes.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "ui/event/Queue.hpp"
 #include "ui/event/android/Loop.hpp"
@@ -71,7 +69,7 @@ TopWindow::ResumeSurface() noexcept
 
   screen->Resume();
 
-  ::SurfaceCreated();
+  surface_valid = true;
 
   RefreshSize();
 
@@ -118,9 +116,8 @@ TopWindow::OnPause() noexcept
     return;
 
   TextCache::Flush();
-  OpenGL::DeinitShapes();
 
-  SurfaceDestroyed();
+  surface_valid = false;
 
   native_view->deinitSurface();
 

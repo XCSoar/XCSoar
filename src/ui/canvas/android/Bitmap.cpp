@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/opengl/Texture.hpp"
-#include "ui/canvas/opengl/Surface.hpp"
 #include "Android/Bitmap.hpp"
 #include "Android/NativeView.hpp"
 #include "Android/Main.hpp"
@@ -34,24 +33,6 @@ Copyright_License {
 Bitmap::Bitmap(ResourceId id)
 {
   Load(id);
-}
-
-Bitmap::Bitmap(Bitmap &&src) noexcept
-  :bmp(src.bmp),
-   uncompressed(std::move(src.uncompressed)),
-   type(src.type),
-   texture(src.texture),
-   size(src.size),
-   interpolation(src.interpolation),
-   flipped(src.flipped)
-{
-  src.bmp = nullptr;
-  src.texture = nullptr;
-
-  if (IsDefined()) {
-    RemoveSurfaceListener(src);
-    AddSurfaceListener(*this);
-  }
 }
 
 static const char *
@@ -75,21 +56,14 @@ LoadResourceBitmap(ResourceId id)
 }
 
 bool
-Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type, bool flipped) noexcept
+Bitmap::Set(JNIEnv *env, jobject bmp, Type type, bool flipped) noexcept
 {
-  assert(bmp == nullptr);
-  assert(_bmp != nullptr);
-
-  bmp = env->NewGlobalRef(_bmp);
-
-  type = _type;
+  assert(bmp != nullptr);
 
   size.width = AndroidBitmap::GetWidth(env, bmp);
   size.height = AndroidBitmap::GetHeight(env, bmp);
 
-  AddSurfaceListener(*this);
-
-  if (surface_valid && !MakeTexture(bmp, type, flipped)) {
+  if (!MakeTexture(bmp, type, flipped)) {
     Reset();
     return false;
   }
@@ -149,43 +123,4 @@ Bitmap::LoadFile(Path path)
     return false;
 
   return Set(Java::GetEnv(), new_bmp, Type::STANDARD, flipped);
-}
-
-void
-Bitmap::Reset() noexcept
-{
-  if (bmp != nullptr) {
-    auto *env = Java::GetEnv();
-    AndroidBitmap::Recycle(env, bmp);
-    env->DeleteGlobalRef(bmp);
-    bmp = nullptr;
-
-    RemoveSurfaceListener(*this);
-  } else if (uncompressed.IsDefined()) {
-    uncompressed = UncompressedImage();
-    RemoveSurfaceListener(*this);
-  }
-
-  delete texture;
-  texture = nullptr;
-}
-
-void
-Bitmap::SurfaceCreated()
-{
-  assert(bmp != nullptr || uncompressed.IsDefined());
-
-  if (bmp != nullptr)
-    MakeTexture(bmp, type);
-  else if (uncompressed.IsDefined())
-    MakeTexture(uncompressed, type);
-}
-
-void
-Bitmap::SurfaceDestroyed()
-{
-  assert(bmp != nullptr || uncompressed.IsDefined());
-
-  delete texture;
-  texture = nullptr;
 }
