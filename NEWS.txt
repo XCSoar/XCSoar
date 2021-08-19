@@ -1,4 +1,4 @@
-Version 7.13 - not yet released
+Version 7.13 - 2021/08/19
 * fix freeze bug
 * fix terrain cache file bug
 * task management

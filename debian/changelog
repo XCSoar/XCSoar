@@ -4,7 +4,7 @@ xcsoar (7.13) unstable; urgency=medium
   * remove -doc package
   * use debhelper 12
 
- --
+ -- Max Kellermann <max.kellermann@gmail.com>  Thu, 19 Aug 2021 18:03:49 +0200
 
 xcsoar (7.12) unstable; urgency=medium
 
