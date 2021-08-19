@@ -33,6 +33,7 @@ Copyright_License {
 Java::TrivialClass NativeView::cls;
 jfieldID NativeView::textureNonPowerOfTwo_field;
 jmethodID NativeView::init_surface_method, NativeView::deinit_surface_method;
+jmethodID NativeView::setFullScreen_method;
 jmethodID NativeView::setRequestedOrientationID;
 jmethodID NativeView::loadResourceBitmap_method;
 jmethodID NativeView::loadFileBitmap_method;
@@ -55,6 +56,10 @@ NativeView::Initialise(JNIEnv *env)
     env->GetStaticFieldID(cls, "textureNonPowerOfTwo", "Z");
   init_surface_method = env->GetMethodID(cls, "initSurface", "()Z");
   deinit_surface_method = env->GetMethodID(cls, "deinitSurface", "()V");
+
+  setFullScreen_method =
+    env->GetMethodID(cls, "setFullScreen", "(Z)V");
+
   setRequestedOrientationID =
     env->GetMethodID(cls, "setRequestedOrientation", "(I)Z");
 

@@ -37,12 +37,18 @@ Copyright_License {
 #include "Menu/ShowMenuButton.hpp"
 #include "ActionInterface.hpp"
 
+#ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
+#endif
+
 #ifdef USE_POLL_EVENT
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
 #endif
 
 enum ControlIndex {
+  FullScreen,
   MapOrientation,
   AppInfoBoxGeom,
   AppFlarmLocation,
@@ -180,6 +186,11 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
 
   RowFormWidget::Prepare(parent, rc);
 
+#ifdef ANDROID
+  AddBoolean(_("Full screen"), _("Run XCSoar in full screen mode"),
+             ui_settings.display.full_screen);
+#endif
+
   if (Display::RotateSupported())
     AddEnum(_("Display orientation"), _("Rotate the display on devices that support it."),
             display_orientation_list, (unsigned)ui_settings.display.orientation);
@@ -240,6 +251,12 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   bool changed = false;
 
   UISettings &ui_settings = CommonInterface::SetUISettings();
+
+#ifdef ANDROID
+  changed |= SaveValue(FullScreen, ProfileKeys::FullScreen,
+                       ui_settings.display.full_screen);
+  native_view->SetFullScreen(ui_settings.display.full_screen);
+#endif
 
   bool orientation_changed = false;
 

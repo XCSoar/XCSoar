@@ -35,6 +35,7 @@ struct DisplaySettings {
   DisplayOrientation orientation;
   uint8_t cursor_size;
   bool invert_cursor_colors;
+  bool full_screen;
 
   void SetDefaults();
 };

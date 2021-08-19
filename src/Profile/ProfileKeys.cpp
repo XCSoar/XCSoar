@@ -25,6 +25,7 @@ Copyright_License {
 
 namespace ProfileKeys {
 
+const char FullScreen[] = "FullScreen";
 const char UIScale[] = "UIScale";
 const char CustomDPI[] = "CustomDPI";
 const char Password[] = "Password";

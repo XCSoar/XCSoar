@@ -27,6 +27,7 @@ Copyright_License {
 namespace ProfileKeys {
 
 extern const char ShowMenuButton[];
+extern const char FullScreen[];
 extern const char UIScale[];
 extern const char CustomDPI[];
 extern const char Password[];

@@ -276,6 +276,13 @@ class NativeView extends SurfaceView
     config = null;
   }
 
+  /**
+   * Called from native code.
+   */
+  void setFullScreen(boolean fullScreen) {
+    fullScreenHandler.sendEmptyMessage(fullScreen ? 1 : 0);
+  }
+
   private boolean setRequestedOrientation(int requestedOrientation) {
     try {
       ((Activity)getContext()).setRequestedOrientation(requestedOrientation);
@@ -337,8 +344,6 @@ class NativeView extends SurfaceView
              but we're about to be resumed, which means we're in
              foreground... */
         }
-
-        fullScreenHandler.sendEmptyMessage(1);
 
         try {
           runNative();

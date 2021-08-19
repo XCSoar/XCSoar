@@ -113,6 +113,7 @@ Copyright_License {
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 #include "Android/Context.hpp"
 #endif
 
@@ -267,6 +268,10 @@ Startup()
 
   /* create XCSoarData on the first start */
   CreateDataPath();
+
+#ifdef ANDROID
+  native_view->SetFullScreen(ui_settings.display.full_screen);
+#endif
 
   Display::LoadOrientation(operation);
   main_window->CheckResize();
