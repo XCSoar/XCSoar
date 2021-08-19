@@ -96,7 +96,8 @@ public class XCSoar extends Activity {
 
     final Window window = getWindow();
     window.requestFeature(Window.FEATURE_NO_TITLE);
-    WindowUtil.enterFullScreenMode(window);
+    if (wantFullScreen())
+      WindowUtil.enterFullScreenMode(window);
 
     TextView tv = new TextView(this);
     tv.setText("Loading XCSoar...");
@@ -141,6 +142,10 @@ public class XCSoar extends Activity {
 
     }
   };
+
+  boolean wantFullScreen() {
+    return Loader.loaded;
+  }
 
   public void initSDL() {
     if (!Loader.loaded)
@@ -294,7 +299,7 @@ public class XCSoar extends Activity {
   }
 
   @Override public void onWindowFocusChanged(boolean hasFocus) {
-    if (hasFocus && Loader.loaded)
+    if (hasFocus && wantFullScreen())
       /* some Android don't restore immersive mode after returning to
          this app, so unfortunately we need to reapply those settings
          manually */
