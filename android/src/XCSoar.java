@@ -143,6 +143,14 @@ public class XCSoar extends Activity {
     return Loader.loaded && !isInMultiWindowMode();
   }
 
+  void applyFullScreen() {
+    final Window window = getWindow();
+    if (wantFullScreen())
+      WindowUtil.enterFullScreenMode(window);
+    else
+      WindowUtil.leaveFullScreenMode(window);
+  }
+
   public void initNative() {
     if (!Loader.loaded)
       return;
@@ -299,11 +307,7 @@ public class XCSoar extends Activity {
 
   @Override
   public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {
-    final Window window = getWindow();
-    if (wantFullScreen())
-      WindowUtil.enterFullScreenMode(window);
-    else
-      WindowUtil.leaveFullScreenMode(window);
+    applyFullScreen();
   }
 
   @Override public boolean dispatchTouchEvent(final MotionEvent ev) {
