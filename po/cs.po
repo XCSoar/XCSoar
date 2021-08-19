@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-08-19 19:15+0000\n"
+"PO-Revision-Date: 2021-08-20 21:34+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -435,7 +435,7 @@ msgstr "Neznámý typ souboru s prostory"
 #: src/FLARM/Error.cpp:29
 #, no-c-format
 msgid "No error"
-msgstr "Žádná chyba"
+msgstr "Vše OK"
 
 #: src/FLARM/Error.cpp:30
 #, no-c-format
@@ -2058,7 +2058,7 @@ msgstr "Špatný příjem GPS"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:94
 #, no-c-format
 msgid "Connected"
-msgstr "Připojeno"
+msgstr "Připojen"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:394
 msgid "Baro"
@@ -3545,7 +3545,7 @@ msgstr "Co je poblíž"
 #: src/InfoBoxes/Content/Other.cpp:198
 #, no-c-format
 msgid "Disconnected"
-msgstr "Odpojen"
+msgstr "Nepřipojen"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:49
 #: src/InfoBoxes/Content/Other.cpp:200
