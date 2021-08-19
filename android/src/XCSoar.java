@@ -263,10 +263,7 @@ public class XCSoar extends Activity {
       batteryReceiver = null;
     }
 
-    if (nativeView != null) {
-      nativeView.exitApp();
-      nativeView = null;
-    }
+    nativeView = null;
 
     // Release the WakeLock instance to re-enable screen timeouts
     if (wakeLock != null) {
