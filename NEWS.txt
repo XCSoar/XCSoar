@@ -11,6 +11,8 @@ Version 7.13 - not yet released
   - support speed, track and acceleration from Flytec Sensbox
   - don't apply Geoid separation to Flytec Sensbox GPS altitude
   - use the 8 Hz vario from Flytec Sensbox GPS altitude instead of 1 Hz
+  - restore full-screen mode properly after returning to XCSoar
+  - disable full-screen mode in multi-window mode
 
 Version 7.12 - 2021/08/13
 * calculations

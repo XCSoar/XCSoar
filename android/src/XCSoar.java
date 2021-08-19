@@ -144,7 +144,7 @@ public class XCSoar extends Activity {
   };
 
   boolean wantFullScreen() {
-    return Loader.loaded;
+    return Loader.loaded && !isInMultiWindowMode();
   }
 
   public void initSDL() {
@@ -306,6 +306,15 @@ public class XCSoar extends Activity {
       WindowUtil.enableImmersiveMode(getWindow());
 
     super.onWindowFocusChanged(hasFocus);
+  }
+
+  @Override
+  public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {
+    final Window window = getWindow();
+    if (wantFullScreen())
+      WindowUtil.enterFullScreenMode(window);
+    else
+      WindowUtil.leaveFullScreenMode(window);
   }
 
   @Override public boolean dispatchTouchEvent(final MotionEvent ev) {

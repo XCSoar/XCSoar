@@ -56,8 +56,18 @@ class WindowUtil {
                                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
   }
 
+  static void disableImmersiveMode(Window window) {
+    View decorView = window.getDecorView();
+    decorView.setSystemUiVisibility(0);
+  }
+
   static void enterFullScreenMode(Window window) {
     window.addFlags(FULL_SCREEN_WINDOW_FLAGS);
     enableImmersiveMode(window);
+  }
+
+  static void leaveFullScreenMode(Window window) {
+    disableImmersiveMode(window);
+    window.clearFlags(FULL_SCREEN_WINDOW_FLAGS);
   }
 }
