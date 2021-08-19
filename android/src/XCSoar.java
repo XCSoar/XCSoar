@@ -28,8 +28,6 @@ import android.app.PendingIntent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.KeyEvent;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.os.Build;
 import android.os.Environment;
@@ -46,7 +44,6 @@ import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.util.Log;
 import android.provider.Settings;
-import android.view.View;
 
 public class XCSoar extends Activity {
   private static final String TAG = "XCSoar";
@@ -96,7 +93,7 @@ public class XCSoar extends Activity {
 
     IOIOHelper.onCreateContext(this);
 
-    enterFullScreenMode();
+    WindowUtil.enterFullScreenMode(getWindow());
 
     TextView tv = new TextView(this);
     tv.setText("Loading XCSoar...");
@@ -195,32 +192,6 @@ public class XCSoar extends Activity {
 
     if (nativeView != null)
       nativeView.setHapticFeedback(hapticFeedbackEnabled);
-  }
-
-  private void enterFullScreenMode() {
-    // fullscreen mode
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-    Window window = getWindow();
-    window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|
-                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-    /* Workaround for layout problems in Android KitKat with immersive full
-       screen mode: Sometimes the content view was not initialized with the
-       correct size, which caused graphics artifacts. */
-    window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN|
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS|
-                    WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR|
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-
-    // Set / Reset the System UI visibility flags for Immersive Full Screen Mode
-    View decorView = window.getDecorView();
-    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|
-                                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|
-                                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|
-                                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|
-                                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION|
-                                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
   }
 
   private static final String[] NEEDED_PERMISSIONS = new String[] {
