@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-08-15 22:35+0000\n"
+"PO-Revision-Date: 2021-08-19 19:15+0000\n"
 "Last-Translator: Tymofii Lytvynenko <till.svit@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/uk/>\n"
@@ -78,7 +78,7 @@ msgstr "Змішаний"
 #: src/Task/TypeStrings.cpp:39
 #, no-c-format
 msgid "Touring"
-msgstr ""
+msgstr "Турне"
 
 #: src/Task/TypeStrings.cpp:52
 #, no-c-format
@@ -190,6 +190,8 @@ msgid ""
 "(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Німецькі правила) Будь-яка точка в межах 1/2 км від центру або 10 км в 90 "
+"градусному секторі. Розрахунок від центру."
 
 #: src/Task/TypeStrings.cpp:83
 #, no-c-format
@@ -197,6 +199,8 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Британські правила) Будь-яка точка в межах 1/2 км від центру або 20 км в 90 "
+"градусному секторі. Розрахунок від центру."
 
 #: src/Task/TypeStrings.cpp:85
 #, no-c-format
@@ -204,6 +208,8 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Британські правила) Будь-яка точка в межах 1/2 км від центру або 10 км в "
+"180 градусному секторі. Розрахунок від центру."
 
 #: src/Task/TypeStrings.cpp:87
 #, no-c-format
@@ -306,12 +312,12 @@ msgstr "Сектор в формі замкової щілини (DAeC)"
 #: src/Task/TypeStrings.cpp:117
 #, no-c-format
 msgid "BGA Fixed Course sector"
-msgstr ""
+msgstr "BGA сектор з фіксованим курсом"
 
 #: src/Task/TypeStrings.cpp:118
 #, no-c-format
 msgid "BGA Enhanced Option Fixed Course sector"
-msgstr ""
+msgstr "BGA Посилений варіант сектора з фіксованим курсом"
 
 #: src/Task/TypeStrings.cpp:119
 #, no-c-format
@@ -356,7 +362,7 @@ msgstr "Стартовий сектор BGA"
 #: src/Task/TypeStrings.cpp:127
 #, no-c-format
 msgid "Area sector with inner radius"
-msgstr ""
+msgstr "Площа сектора з внутрішнім радіусом"
 
 #: src/Task/TypeStrings.cpp:128 src/Dialogs/Task/dlgTaskHelpers.cpp:229
 #, no-c-format
