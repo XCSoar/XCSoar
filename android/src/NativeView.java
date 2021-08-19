@@ -350,7 +350,7 @@ class NativeView extends SurfaceView
     }
 
     deinitializeNative();
-    quitHandler.sendMessage(quitHandler.obtainMessage());
+    quitHandler.sendEmptyMessage(0);
   }
 
   protected native boolean initializeNative(Context context,
