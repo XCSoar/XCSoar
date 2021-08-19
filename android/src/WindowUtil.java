@@ -45,8 +45,6 @@ class WindowUtil {
   }
 
   static void enterFullScreenMode(Window window) {
-    window.requestFeature(Window.FEATURE_NO_TITLE);
-
     window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|
                     WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 

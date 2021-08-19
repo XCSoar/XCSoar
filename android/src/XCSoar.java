@@ -28,6 +28,7 @@ import android.app.PendingIntent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.KeyEvent;
+import android.view.Window;
 import android.widget.TextView;
 import android.os.Build;
 import android.os.Environment;
@@ -93,7 +94,9 @@ public class XCSoar extends Activity {
 
     IOIOHelper.onCreateContext(this);
 
-    WindowUtil.enterFullScreenMode(getWindow());
+    final Window window = getWindow();
+    window.requestFeature(Window.FEATURE_NO_TITLE);
+    WindowUtil.enterFullScreenMode(window);
 
     TextView tv = new TextView(this);
     tv.setText("Loading XCSoar...");
