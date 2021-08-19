@@ -64,7 +64,7 @@ class NativeView extends SurfaceView
   implements SurfaceHolder.Callback, Runnable {
   private static final String TAG = "XCSoar";
 
-  final Handler quitHandler, errorHandler;
+  final Handler quitHandler, fullScreenHandler, errorHandler;
 
   Resources resources;
 
@@ -97,10 +97,12 @@ class NativeView extends SurfaceView
   Thread thread;
 
   public NativeView(Activity context, Handler _quitHandler,
+                    Handler _fullScreenHandler,
                     Handler _errorHandler) {
     super(context);
 
     quitHandler = _quitHandler;
+    fullScreenHandler = _fullScreenHandler;
     errorHandler = _errorHandler;
 
     resources = context.getResources();
@@ -335,6 +337,8 @@ class NativeView extends SurfaceView
              but we're about to be resumed, which means we're in
              foreground... */
         }
+
+        fullScreenHandler.sendEmptyMessage(1);
 
         try {
           runNative();

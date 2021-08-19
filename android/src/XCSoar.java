@@ -61,6 +61,8 @@ public class XCSoar extends Activity {
 
   BatteryReceiver batteryReceiver;
 
+  boolean fullScreen = false;
+
   @Override protected void onCreate(Bundle savedInstanceState) {
     if (serviceClass == null)
       serviceClass = MyService.class;
@@ -96,8 +98,6 @@ public class XCSoar extends Activity {
 
     final Window window = getWindow();
     window.requestFeature(Window.FEATURE_NO_TITLE);
-    if (wantFullScreen())
-      WindowUtil.enterFullScreenMode(window);
 
     TextView tv = new TextView(this);
     tv.setText("Loading XCSoar...");
@@ -139,8 +139,15 @@ public class XCSoar extends Activity {
     }
   };
 
+  final Handler fullScreenHandler = new Handler() {
+      public void handleMessage(Message msg) {
+        fullScreen = msg.what != 0;
+        applyFullScreen();
+      }
+    };
+
   boolean wantFullScreen() {
-    return Loader.loaded && !isInMultiWindowMode();
+    return Loader.loaded && fullScreen && !isInMultiWindowMode();
   }
 
   void applyFullScreen() {
@@ -166,7 +173,8 @@ public class XCSoar extends Activity {
       return;
     }
 
-    nativeView = new NativeView(this, quitHandler, errorHandler);
+    nativeView = new NativeView(this, quitHandler, fullScreenHandler,
+                                errorHandler);
     setContentView(nativeView);
     // Receive keyboard events
     nativeView.setFocusableInTouchMode(true);
