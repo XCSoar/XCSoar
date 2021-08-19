@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-08-10 17:32+0000\n"
+"PO-Revision-Date: 2021-08-20 21:34+0000\n"
 "Last-Translator: Веско <v.jeliazkov@jeliazkov.net>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/bg/>\n"
@@ -7276,7 +7276,7 @@ msgstr "Оптимизирана"
 #: Data/Input/default.xci:1023
 #, no-c-format
 msgid "Alternates"
-msgstr "Резерви"
+msgstr "Резервни летища"
 
 #: src/Dialogs/Tracking/CloudEnableDialog.cpp:71
 msgid ""
