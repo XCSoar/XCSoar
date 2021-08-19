@@ -143,7 +143,7 @@ public class XCSoar extends Activity {
     return Loader.loaded && !isInMultiWindowMode();
   }
 
-  public void initSDL() {
+  public void initNative() {
     if (!Loader.loaded)
       return;
 
@@ -240,7 +240,7 @@ public class XCSoar extends Activity {
     if (nativeView != null)
       nativeView.onResume();
     else
-      initSDL();
+      initNative();
     getHapticFeedbackSettings();
   }
 
