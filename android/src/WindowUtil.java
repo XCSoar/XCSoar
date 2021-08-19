@@ -30,6 +30,20 @@ import android.view.View;
  * A library of utility functions for class #Window.
  */
 class WindowUtil {
+  /**
+   * Set / Reset the System UI visibility flags for Immersive Full
+   * Screen Mode.
+   */
+  static void enableImmersiveMode(Window window) {
+    View decorView = window.getDecorView();
+    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|
+                                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|
+                                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|
+                                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|
+                                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION|
+                                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+  }
+
   static void enterFullScreenMode(Window window) {
     window.requestFeature(Window.FEATURE_NO_TITLE);
 
@@ -44,13 +58,6 @@ class WindowUtil {
                     WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR|
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
-    // Set / Reset the System UI visibility flags for Immersive Full Screen Mode
-    View decorView = window.getDecorView();
-    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|
-                                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|
-                                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|
-                                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|
-                                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION|
-                                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+    enableImmersiveMode(window);
   }
 }
