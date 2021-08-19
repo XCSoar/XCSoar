@@ -290,6 +290,16 @@ public class XCSoar extends Activity {
       return super.onKeyUp(keyCode, event);
   }
 
+  @Override public void onWindowFocusChanged(boolean hasFocus) {
+    if (hasFocus && Loader.loaded)
+      /* some Android don't restore immersive mode after returning to
+         this app, so unfortunately we need to reapply those settings
+         manually */
+      WindowUtil.enableImmersiveMode(getWindow());
+
+    super.onWindowFocusChanged(hasFocus);
+  }
+
   @Override public boolean dispatchTouchEvent(final MotionEvent ev) {
     if (nativeView != null) {
       nativeView.onTouchEvent(ev);
