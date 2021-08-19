@@ -30,6 +30,18 @@ import android.view.View;
  * A library of utility functions for class #Window.
  */
 class WindowUtil {
+  static final int FULL_SCREEN_WINDOW_FLAGS =
+    WindowManager.LayoutParams.FLAG_FULLSCREEN|
+    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON|
+
+    /* Workaround for layout problems in Android KitKat with immersive full
+       screen mode: Sometimes the content view was not initialized with the
+       correct size, which caused graphics artifacts. */
+    WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN|
+    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS|
+    WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR|
+    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+
   /**
    * Set / Reset the System UI visibility flags for Immersive Full
    * Screen Mode.
@@ -45,17 +57,7 @@ class WindowUtil {
   }
 
   static void enterFullScreenMode(Window window) {
-    window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|
-                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-    /* Workaround for layout problems in Android KitKat with immersive full
-       screen mode: Sometimes the content view was not initialized with the
-       correct size, which caused graphics artifacts. */
-    window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN|
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS|
-                    WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR|
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-
+    window.addFlags(FULL_SCREEN_WINDOW_FLAGS);
     enableImmersiveMode(window);
   }
 }
