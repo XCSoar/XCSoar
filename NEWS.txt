@@ -1,4 +1,4 @@
-Version 7.14 - not yet released
+Version 7.14 - 2021/08/20
 * Android
   - keep screen on, even if not in full-screen mode
   - fix bottom bar background in non-full-screen mode
