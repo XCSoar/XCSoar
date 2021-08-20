@@ -37,6 +37,8 @@ import android.view.MotionEvent;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
+import android.view.View;
+import android.view.ViewParent;
 import android.os.Build;
 import android.os.Handler;
 import android.net.Uri;
@@ -489,17 +491,34 @@ class NativeView extends SurfaceView
 
   @Override public boolean onTouchEvent(final MotionEvent event)
   {
+    /* the MotionEvent coordinates are supposed to be relative to this
+       View, but in fact they are not: they seem to be relative to
+       this app's Window; to work around this, we apply an offset;
+       this.getXY() (which is usually 0) plus getParent().getXY()
+       (which is a FrameLayout with non-zero coordinates unless we're
+       in full-screen mode) */
+    float offsetX = getX(), offsetY = getY();
+    ViewParent _p = getParent();
+    if (_p instanceof View) {
+      View p = (View)_p;
+      offsetX += p.getX();
+      offsetY += p.getY();
+    }
+
+    final int x = (int)(event.getX() - offsetX);
+    final int y = (int)(event.getY() - offsetY);
+
     switch (event.getActionMasked()) {
     case MotionEvent.ACTION_DOWN:
-      EventBridge.onMouseDown((int)event.getX(), (int)event.getY());
+      EventBridge.onMouseDown(x, y);
       break;
 
     case MotionEvent.ACTION_UP:
-      EventBridge.onMouseUp((int)event.getX(), (int)event.getY());
+      EventBridge.onMouseUp(x, y);
       break;
 
     case MotionEvent.ACTION_MOVE:
-      EventBridge.onMouseMove((int)event.getX(), (int)event.getY());
+      EventBridge.onMouseMove(x, y);
       break;
 
     case MotionEvent.ACTION_POINTER_DOWN:

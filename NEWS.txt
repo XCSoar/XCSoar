@@ -2,6 +2,7 @@ Version 7.14 - not yet released
 * Android
   - keep screen on, even if not in full-screen mode
   - fix bottom bar background in non-full-screen mode
+  - fix touch position in non-full-screen mode
 
 Version 7.13 - 2021/08/19
 * fix freeze bug
