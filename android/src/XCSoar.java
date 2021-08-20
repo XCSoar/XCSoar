@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.KeyEvent;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.os.Build;
 import android.os.Environment;
@@ -140,6 +141,9 @@ public class XCSoar extends Activity {
   };
 
   private void acquireWakeLock() {
+    final Window window = getWindow();
+    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
     if (wakeLock != null)
       return;
 

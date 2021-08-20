@@ -32,7 +32,6 @@ import android.view.View;
 class WindowUtil {
   static final int FULL_SCREEN_WINDOW_FLAGS =
     WindowManager.LayoutParams.FLAG_FULLSCREEN|
-    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON|
 
     /* Workaround for layout problems in Android KitKat with immersive full
        screen mode: Sometimes the content view was not initialized with the
