@@ -139,6 +139,28 @@ public class XCSoar extends Activity {
     }
   };
 
+  private void acquireWakeLock() {
+    if (wakeLock != null)
+      return;
+
+    // Obtain an instance of the Android PowerManager class
+    PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
+
+    // Create a WakeLock instance to keep the screen from timing out
+    // Note: FULL_WAKE_LOCK is deprecated in favor of FLAG_KEEP_SCREEN_ON
+    wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK|
+                              PowerManager.ACQUIRE_CAUSES_WAKEUP, TAG);
+
+    // Activate the WakeLock
+    wakeLock.acquire();
+  }
+
+  final Handler wakeLockHandler = new Handler() {
+      public void handleMessage(Message msg) {
+        acquireWakeLock();
+      }
+    };
+
   final Handler fullScreenHandler = new Handler() {
       public void handleMessage(Message msg) {
         fullScreen = msg.what != 0;
@@ -173,24 +195,14 @@ public class XCSoar extends Activity {
       return;
     }
 
-    nativeView = new NativeView(this, quitHandler, fullScreenHandler,
+    nativeView = new NativeView(this, quitHandler,
+                                wakeLockHandler, fullScreenHandler,
                                 errorHandler);
     setContentView(nativeView);
     // Receive keyboard events
     nativeView.setFocusableInTouchMode(true);
     nativeView.setFocusable(true);
     nativeView.requestFocus();
-
-    // Obtain an instance of the Android PowerManager class
-    PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-
-    // Create a WakeLock instance to keep the screen from timing out
-    // Note: FULL_WAKE_LOCK is deprecated in favor of FLAG_KEEP_SCREEN_ON
-    wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK|
-                              PowerManager.ACQUIRE_CAUSES_WAKEUP, TAG);
-
-    // Activate the WakeLock
-    wakeLock.acquire();
   }
 
   @Override protected void onPause() {

@@ -45,6 +45,7 @@ class NativeView {
   static Java::TrivialClass cls;
   static jfieldID textureNonPowerOfTwo_field;
   static jmethodID init_surface_method, deinit_surface_method;
+  static jmethodID acquireWakeLock_method;
   static jmethodID setFullScreen_method;
   static jmethodID setRequestedOrientationID;
   static jmethodID loadResourceBitmap_method;
@@ -105,6 +106,10 @@ public:
 
   void deinitSurface() {
     env->CallVoidMethod(obj, deinit_surface_method);
+  }
+
+  void AcquireWakeLock() const noexcept {
+    return env->CallVoidMethod(obj, acquireWakeLock_method);
   }
 
   void SetFullScreen(bool full_screen) const noexcept {

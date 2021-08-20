@@ -64,7 +64,7 @@ class NativeView extends SurfaceView
   implements SurfaceHolder.Callback, Runnable {
   private static final String TAG = "XCSoar";
 
-  final Handler quitHandler, fullScreenHandler, errorHandler;
+  final Handler quitHandler, wakelockhandler, fullScreenHandler, errorHandler;
 
   Resources resources;
 
@@ -97,11 +97,13 @@ class NativeView extends SurfaceView
   Thread thread;
 
   public NativeView(Activity context, Handler _quitHandler,
+                    Handler _wakeLockHandler,
                     Handler _fullScreenHandler,
                     Handler _errorHandler) {
     super(context);
 
     quitHandler = _quitHandler;
+    wakelockhandler = _wakeLockHandler;
     fullScreenHandler = _fullScreenHandler;
     errorHandler = _errorHandler;
 
@@ -277,6 +279,13 @@ class NativeView extends SurfaceView
     }
 
     config = null;
+  }
+
+  /**
+   * Called from native code.
+   */
+  void acquireWakeLock() {
+    wakelockhandler.sendEmptyMessage(0);
   }
 
   /**

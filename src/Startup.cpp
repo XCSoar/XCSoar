@@ -270,6 +270,7 @@ Startup()
   CreateDataPath();
 
 #ifdef ANDROID
+  native_view->AcquireWakeLock();
   native_view->SetFullScreen(ui_settings.display.full_screen);
 #endif
 
