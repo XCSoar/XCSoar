@@ -489,7 +489,28 @@ class NativeView extends SurfaceView
 
   @Override public boolean onTouchEvent(final MotionEvent event)
   {
-    touchInput.process(event);
+    switch (event.getActionMasked()) {
+    case MotionEvent.ACTION_DOWN:
+      EventBridge.onMouseDown((int)event.getX(), (int)event.getY());
+      break;
+
+    case MotionEvent.ACTION_UP:
+      EventBridge.onMouseUp((int)event.getX(), (int)event.getY());
+      break;
+
+    case MotionEvent.ACTION_MOVE:
+      EventBridge.onMouseMove((int)event.getX(), (int)event.getY());
+      break;
+
+    case MotionEvent.ACTION_POINTER_DOWN:
+      EventBridge.onPointerDown();
+      break;
+
+    case MotionEvent.ACTION_POINTER_UP:
+      EventBridge.onPointerUp();
+      break;
+    }
+
     return true;
   }
 
