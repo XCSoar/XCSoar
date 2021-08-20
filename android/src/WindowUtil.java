@@ -65,8 +65,8 @@ class WindowUtil {
     enableImmersiveMode(window);
   }
 
-  static void leaveFullScreenMode(Window window) {
+  static void leaveFullScreenMode(Window window, int preserveFlags) {
     disableImmersiveMode(window);
-    window.clearFlags(FULL_SCREEN_WINDOW_FLAGS);
+    window.clearFlags(FULL_SCREEN_WINDOW_FLAGS & ~preserveFlags);
   }
 }

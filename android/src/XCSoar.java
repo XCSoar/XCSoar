@@ -62,6 +62,12 @@ public class XCSoar extends Activity {
 
   BatteryReceiver batteryReceiver;
 
+  /**
+   * These are the flags initially set on our #Window.  Those flag
+   * will be preserved by WindowUtil.leaveFullScreenMode().
+   */
+  int initialWindowFlags;
+
   boolean fullScreen = false;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +109,11 @@ public class XCSoar extends Activity {
     TextView tv = new TextView(this);
     tv.setText("Loading XCSoar...");
     setContentView(tv);
+
+    /* after setContentView(), Android has initialised a few default
+       window flags, which we now remember for
+       WindowUtil.leaveFullScreenMode() to avoid clearing those */
+    initialWindowFlags = window.getAttributes().flags;
 
     batteryReceiver = new BatteryReceiver();
     registerReceiver(batteryReceiver,
@@ -181,7 +192,7 @@ public class XCSoar extends Activity {
     if (wantFullScreen())
       WindowUtil.enterFullScreenMode(window);
     else
-      WindowUtil.leaveFullScreenMode(window);
+      WindowUtil.leaveFullScreenMode(window, initialWindowFlags);
   }
 
   public void initNative() {
