@@ -187,7 +187,8 @@ class NativeView extends SurfaceView
 
     /* initialize context and surface */
 
-    if (context == EGL10.EGL_NO_CONTEXT) {
+    boolean hadContext = context != EGL10.EGL_NO_CONTEXT;
+    if (!hadContext) {
       final int contextClientVersion = 2;
       final int[] contextAttribList = new int[]{
         EGL14.EGL_CONTEXT_CLIENT_VERSION, contextClientVersion,
@@ -199,12 +200,6 @@ class NativeView extends SurfaceView
       if (context == EGL10.EGL_NO_CONTEXT)
         throw new EGLException("eglCreateContext() failed: " +
                                egl.eglGetError());
-
-      GL10 gl = (GL10)context.getGL();
-      Log.d(TAG, "OpenGL vendor: " + gl.glGetString(GL10.GL_VENDOR));
-      Log.d(TAG, "OpenGL version: " + gl.glGetString(GL10.GL_VERSION));
-      Log.d(TAG, "OpenGL renderer: " + gl.glGetString(GL10.GL_RENDERER));
-      Log.d(TAG, "OpenGL extensions: " + gl.glGetString(GL10.GL_EXTENSIONS));
     }
 
     surface = egl.eglCreateWindowSurface(display, config,
@@ -215,6 +210,14 @@ class NativeView extends SurfaceView
 
     if (!egl.eglMakeCurrent(display, surface, surface, context))
       throw new EGLException("eglMakeCurrent() failed: " + egl.eglGetError());
+
+    if (!hadContext) {
+      GL10 gl = (GL10)context.getGL();
+      Log.d(TAG, "OpenGL vendor: " + gl.glGetString(GL10.GL_VENDOR));
+      Log.d(TAG, "OpenGL version: " + gl.glGetString(GL10.GL_VERSION));
+      Log.d(TAG, "OpenGL renderer: " + gl.glGetString(GL10.GL_RENDERER));
+      Log.d(TAG, "OpenGL extensions: " + gl.glGetString(GL10.GL_EXTENSIONS));
+    }
   }
 
   /**
