@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-08-20 21:34+0000\n"
+"PO-Revision-Date: 2021-08-24 18:35+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1677,12 +1677,11 @@ msgstr "Vypnuté"
 
 #: src/Device/Config.cpp:233 src/Dialogs/Device/PortPicker.cpp:77
 msgid "BLE sensor"
-msgstr ""
+msgstr "BLE senzor"
 
 #: src/Device/Config.cpp:249 src/Dialogs/Device/PortPicker.cpp:74
-#, fuzzy
 msgid "BLE port"
-msgstr "TE port"
+msgstr "BLE port"
 
 #: src/Device/Config.cpp:269 src/Dialogs/Device/PortDataField.cpp:52
 #, no-c-format
@@ -1703,9 +1702,8 @@ msgid "GliderLink traffic receiver"
 msgstr "GliderLink přijímač"
 
 #: src/Device/Config.cpp:315 src/Dialogs/Device/PortPicker.cpp:80
-#, fuzzy
 msgid "USB serial"
-msgstr "Sériový"
+msgstr "USB serial"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:94 src/Dialogs/WidgetDialog.cpp:264
@@ -2066,9 +2064,8 @@ msgstr "Baro"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:399
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:128
-#, fuzzy
 msgid "Pitot"
-msgstr "Pitot port"
+msgstr "Pitot"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:404
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
@@ -2257,18 +2254,16 @@ msgid "Save"
 msgstr "Ulož"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:58
-#, fuzzy
 msgid "Calibrate"
-msgstr "Rychlost vzestupu"
+msgstr "Kalibruj"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:130
-#, fuzzy
 msgid "Offset"
-msgstr "UTC Odchylka"
+msgstr "Offset"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:144
 msgid "Pitot sensor calibration"
-msgstr ""
+msgstr "Kalibrace pitot-senzoru"
 
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:60
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:59
@@ -2280,7 +2275,7 @@ msgstr "Produkt"
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:65
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:59
 msgid "Serial"
-msgstr "Sériový"
+msgstr "Výr. č."
 
 #: src/Dialogs/Device/LX/V7ConfigWidget.cpp:87
 msgid "GPS baud rate"
@@ -2877,7 +2872,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:313
 msgid "Max. temp."
-msgstr "Max. teplota"
+msgstr "Max. tepl."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:314
 msgid ""
@@ -3872,7 +3867,10 @@ msgstr "Smazat otočný bod?"
 
 #: src/Dialogs/Waypoint/Manager.cpp:299 Data/Input/default.xci:613
 msgid "Waypoints Editor"
-msgstr "Editor otočných bodů"
+msgstr ""
+"Editor\n"
+"otočných\n"
+"bodů"
 
 #: src/Dialogs/Waypoint/Manager.cpp:308
 msgid "Save changes to waypoint file?"
@@ -9525,19 +9523,19 @@ msgstr ""
 "místu přistání. Není kompenzováno na celkovou energii TE."
 
 #: src/InfoBoxes/Content/Factory.cpp:1104
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Heart Rate"
-msgstr "Čas startu"
+msgstr "Srdeční tep"
 
 #: src/InfoBoxes/Content/Factory.cpp:1105
 #, no-c-format
 msgid "Heart"
-msgstr ""
+msgstr "Kardiograf"
 
 #: src/InfoBoxes/Content/Factory.cpp:1106
 #, no-c-format
 msgid "Heart rate in beats per minute."
-msgstr ""
+msgstr "Srdeční tep v úderech za minutu."
 
 #: src/InfoBoxes/Content/Alternate.cpp:74
 #, c-format
@@ -9556,9 +9554,8 @@ msgid "no QNH"
 msgstr "není QNH"
 
 #: src/InfoBoxes/Content/Altitude.cpp:148
-#, fuzzy
 msgid "Not flying"
-msgstr "Nekroužím"
+msgstr "Neletím"
 
 #: src/InfoBoxes/Content/MacCready.cpp:71
 msgid "MC AUTO"
@@ -10279,7 +10276,7 @@ msgstr ""
 msgid "Raw Logger"
 msgstr ""
 "NMEA\n"
-"logger"
+"Logger"
 
 #: Data/Input/default.xci:508 Data/Input/default.xci:1081
 msgid "Labels"
