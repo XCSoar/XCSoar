@@ -27,26 +27,17 @@ import android.os.Bundle;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
-import android.location.GpsSatellite;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.view.WindowManager;
-import android.view.Surface;
 import android.util.Log;
-import java.lang.Math;
 
 /**
  * Code to support the internal GPS receiver via #LocationManager.
  */
 public class InternalGPS
-  implements LocationListener, SensorEventListener, Runnable, AndroidSensor
+  implements LocationListener, Runnable, AndroidSensor
 {
   private static final String TAG = "XCSoar";
 
@@ -59,9 +50,6 @@ public class InternalGPS
   //String locationProvider = LocationManager.NETWORK_PROVIDER;
 
   private final LocationManager locationManager;
-  private final SensorManager sensorManager;
-  private final WindowManager windowManager;
-  private final Sensor accelerometer;
   private static boolean queriedLocationSettings = false;
 
   private int state = STATE_LIMBO;
@@ -89,10 +77,6 @@ public class InternalGPS
       queriedLocationSettings = true;
     }
 
-    windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-    sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-    accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
     update();
   }
 
@@ -103,7 +87,6 @@ public class InternalGPS
   @Override public void run() {
     Log.d(TAG, "Updating GPS subscription...");
     locationManager.removeUpdates(this);
-    sensorManager.unregisterListener(this);
 
     if (locationProvider != null) {
       Log.d(TAG, "Subscribing to GPS updates.");
@@ -116,9 +99,6 @@ public class InternalGPS
         setConnectedSafe(0);
         return;
       }
-
-      sensorManager.registerListener(this, accelerometer,
-                                     sensorManager.SENSOR_DELAY_NORMAL);
 
       setConnectedSafe(1); // waiting for fix
     } else {
@@ -223,35 +203,5 @@ public class InternalGPS
       listener.onSensorStateChanged();
       break;
     }
-  }
-
-  /** from sensorEventListener */
-  public void onAccuracyChanged(Sensor sensor, int accuracy) {
-  }
-
-  /** from sensorEventListener */
-  public void onSensorChanged(SensorEvent event) {
-    double acceleration;
-    acceleration = Math.sqrt((double) event.values[0]*event.values[0] +
-                             (double) event.values[1]*event.values[1] +
-                             (double) event.values[2]*event.values[2]) /
-                   SensorManager.GRAVITY_EARTH;
-    switch (windowManager.getDefaultDisplay().getOrientation()) {
-      case Surface.ROTATION_0:   // g = -y
-        acceleration *= Math.signum(event.values[1]);
-        break;
-      case Surface.ROTATION_90:  // g = -x
-        acceleration *= Math.signum(event.values[0]);
-        break;
-      case Surface.ROTATION_180:  // g = y
-        acceleration *= Math.signum(-event.values[1]);
-        break;
-      case Surface.ROTATION_270:  // g = x
-        acceleration *= Math.signum(-event.values[0]);
-        break;
-    }
-    // TODO: do lowpass filtering to remove vibrations?!?
-
-    listener.onAccelerationSensor1(acceleration);
   }
 }
