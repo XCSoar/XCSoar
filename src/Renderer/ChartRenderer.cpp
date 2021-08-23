@@ -524,10 +524,12 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step,
 
   auto start = (int)(x.min / tic_step) * tic_step;
 
+  const double small_tic_step = tic_step / 5;
+
   for (auto xval = start; xval <= x.max; xval += tic_step) {
     int xmin = ScreenX(xval);
 
-    for (auto xmval = xval; xmval < xval+tic_step; xmval+= tic_step/5) {
+    for (auto xmval = xval; xmval < xval + tic_step; xmval += small_tic_step) {
       const auto xmmin = ScreenX(xmval);
       line[0].x = line[1].x = line[2].x = line[3].x = xmmin;
       if (xmmin >= rc_chart.left && xmmin <= rc.right) {
@@ -585,10 +587,12 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step,
 
   auto start = (int)(y.min / tic_step) * tic_step;
 
+  const double small_tic_step = tic_step / 5;
+
   for (auto yval = start; yval <= y.max; yval += tic_step) {
     const int ymin = ScreenY(yval);
 
-    for (auto ymval = yval; ymval < yval+tic_step; ymval+= tic_step/5) {
+    for (auto ymval = yval; ymval < yval + tic_step; ymval += small_tic_step) {
       const auto ymmin = ScreenY(ymval);
       line[0].y = line[1].y = line[2].y = line[3].y = ymmin;
       if (ymmin >= rc_chart.top && ymmin <= rc.bottom) {
