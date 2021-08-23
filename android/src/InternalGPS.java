@@ -135,6 +135,21 @@ public class InternalGPS
     return state;
   }
 
+  private void setStateSafe(int _state) {
+    if (_state == state)
+      return;
+
+    state = _state;
+
+    if (!safeDestruct.increment()) {
+      try {
+        listener.onSensorStateChanged();
+      } finally {
+        safeDestruct.decrement();
+      }
+    }
+  }
+
   private void sendLocation(Location location) {
     Bundle extras = location.getExtras();
 
@@ -187,20 +202,18 @@ public class InternalGPS
                                         Bundle extras) {
     switch (status) {
     case LocationProvider.OUT_OF_SERVICE:
-      state = STATE_FAILED;
       setConnectedSafe(0); // not connected
-      listener.onSensorStateChanged();
+      setStateSafe(STATE_FAILED);
       break;
 
     case LocationProvider.TEMPORARILY_UNAVAILABLE:
-      state = STATE_LIMBO;
       setConnectedSafe(1); // waiting for fix
-      listener.onSensorStateChanged();
+      setStateSafe(STATE_LIMBO);
       break;
 
     case LocationProvider.AVAILABLE:
-      state = STATE_READY;
       listener.onSensorStateChanged();
+      setStateSafe(STATE_READY);
       break;
     }
   }
