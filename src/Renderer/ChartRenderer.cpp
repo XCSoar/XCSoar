@@ -553,7 +553,7 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step,
         if (unit_format != UnitFormat::NONE) {
           const auto unit_text = FormatTicText(xval * unit_step / tic_step,
                                                unit_step, unit_format);
-          const auto w = canvas.CalcTextSize(unit_text.c_str()).width;
+          const auto w = canvas.CalcTextWidth(unit_text.c_str());
           xmin -= w/2;
           if ((xmin >= next_text) && ((int)(xmin + Layout::VptScale(30)) < x_label_left)) {
             canvas.DrawText({xmin, y}, unit_text.c_str());
