@@ -535,28 +535,29 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step,
     for (auto xmval = xval; xmval < xval + tic_step; xmval += small_tic_step) {
       const auto xmmin = ScreenX(xmval);
       line[0].x = line[1].x = line[2].x = line[3].x = xmmin;
-      if (xmmin >= rc_chart.left && xmmin <= rc.right) {
-        canvas.Select(look.GetPen(ChartLook::STYLE_GRIDMINOR));
-        canvas.DrawLine(line[0], line[2]);
-        canvas.DrawLine(line[1], line[3]);
+      if (xmmin < rc_chart.left || xmmin > rc.right)
+        continue;
 
-        if (xmval == xval) {
-          if (xval == 0) {
-            canvas.Select(look.GetPen(ChartLook::STYLE_GRIDZERO));
-          } else {
-            canvas.Select(look.GetPen(ChartLook::STYLE_GRID));
-          }
-          canvas.DrawLine(line[0], line[1]);
+      canvas.Select(look.GetPen(ChartLook::STYLE_GRIDMINOR));
+      canvas.DrawLine(line[0], line[2]);
+      canvas.DrawLine(line[1], line[3]);
 
-          if (unit_format != UnitFormat::NONE) {
-            const auto unit_text = FormatTicText(xval * unit_step / tic_step,
-                                                 unit_step, unit_format);
-            const auto w = canvas.CalcTextSize(unit_text.c_str()).width;
-            xmin -= w/2;
-            if ((xmin >= next_text) && ((int)(xmin + Layout::VptScale(30)) < x_label_left)) {
-              canvas.DrawText({xmin, y}, unit_text.c_str());
-              next_text = xmin + w + Layout::GetTextPadding();
-            }
+      if (xmval == xval) {
+        if (xval == 0) {
+          canvas.Select(look.GetPen(ChartLook::STYLE_GRIDZERO));
+        } else {
+          canvas.Select(look.GetPen(ChartLook::STYLE_GRID));
+        }
+        canvas.DrawLine(line[0], line[1]);
+
+        if (unit_format != UnitFormat::NONE) {
+          const auto unit_text = FormatTicText(xval * unit_step / tic_step,
+                                               unit_step, unit_format);
+          const auto w = canvas.CalcTextSize(unit_text.c_str()).width;
+          xmin -= w/2;
+          if ((xmin >= next_text) && ((int)(xmin + Layout::VptScale(30)) < x_label_left)) {
+            canvas.DrawText({xmin, y}, unit_text.c_str());
+            next_text = xmin + w + Layout::GetTextPadding();
           }
         }
       }
@@ -598,26 +599,27 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step,
     for (auto ymval = yval; ymval < yval + tic_step; ymval += small_tic_step) {
       const auto ymmin = ScreenY(ymval);
       line[0].y = line[1].y = line[2].y = line[3].y = ymmin;
-      if (ymmin >= rc_chart.top && ymmin <= rc.bottom) {
-        canvas.Select(look.GetPen(ChartLook::STYLE_GRIDMINOR));
-        canvas.DrawLine(line[0], line[2]);
-        canvas.DrawLine(line[1], line[3]);
+      if (ymmin < rc_chart.top || ymmin > rc.bottom)
+        continue;
 
-        if (ymval == yval) {
-          if (yval == 0) {
-            canvas.Select(look.GetPen(ChartLook::STYLE_GRIDZERO));
-          } else {
-            canvas.Select(look.GetPen(ChartLook::STYLE_GRID));
-          }
-          canvas.DrawLine(line[0], line[1]);
+      canvas.Select(look.GetPen(ChartLook::STYLE_GRIDMINOR));
+      canvas.DrawLine(line[0], line[2]);
+      canvas.DrawLine(line[1], line[3]);
 
-          if ((unit_format != UnitFormat::NONE) && (ymin > (int)(y_label_bottom + Layout::VptScale(30)))) {
-            const auto unit_text = FormatTicText(yval * unit_step / tic_step,
-                                                 unit_step, unit_format);
-            const auto c = canvas.CalcTextSize(unit_text.c_str());
-            canvas.DrawText({std::max(x - (int)c.width, rc.left + (int)Layout::GetTextPadding()), ymin - (int)c.height / 2},
-                            unit_text.c_str());
-          }
+      if (ymval == yval) {
+        if (yval == 0) {
+          canvas.Select(look.GetPen(ChartLook::STYLE_GRIDZERO));
+        } else {
+          canvas.Select(look.GetPen(ChartLook::STYLE_GRID));
+        }
+        canvas.DrawLine(line[0], line[1]);
+
+        if ((unit_format != UnitFormat::NONE) && (ymin > (int)(y_label_bottom + Layout::VptScale(30)))) {
+          const auto unit_text = FormatTicText(yval * unit_step / tic_step,
+                                               unit_step, unit_format);
+          const auto c = canvas.CalcTextSize(unit_text.c_str());
+          canvas.DrawText({std::max(x - (int)c.width, rc.left + (int)Layout::GetTextPadding()), ymin - (int)c.height / 2},
+                          unit_text.c_str());
         }
       }
     }
