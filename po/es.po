@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-08-18 16:35+0000\n"
+"PO-Revision-Date: 2021-08-24 18:35+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -2804,7 +2804,7 @@ msgstr "¿Debería aceptar XCSoar estimaciones de viento de otros instrumentos?"
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:81
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:165
 msgid "Trail drift"
-msgstr "Rastro derivado"
+msgstr "Rastro desplazado"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:82
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:166
@@ -2813,7 +2813,7 @@ msgid ""
 "in circling mode. Switched Off, the snail trail stays uncompensated for wind "
 "drift."
 msgstr ""
-"Determina si el rastro deriva con el viento en el modo vuelo circular. "
+"Determina si el rastro se desplaza con el viento en el modo vuelo circular. "
 "Desactivado, el rastro permanece sin compensación por la deriva del viento."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:92
@@ -4046,7 +4046,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:182
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:160
 msgid "Label visibility"
-msgstr "Visibilidad de las etiqueta"
+msgstr "Etiquetas visibles"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:183
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:161
@@ -4093,7 +4093,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:205
 msgid "Warning time"
-msgstr "Tiempo de Advertencia"
+msgstr "Tiempo de advertencia"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:206
 msgid ""
@@ -4125,7 +4125,7 @@ msgid ""
 "be repeated."
 msgstr ""
 "Este es el periodo de tiempo durante el cual no se repetirá la alerta de "
-"espacio aereo reconocido."
+"espacio aereo detectado."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:222
 msgid "Use black outline"
@@ -4140,7 +4140,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:227
 msgid "Airspace fill mode"
-msgstr "Tipo de relleno de espacios aereos"
+msgstr "Tipo de relleno"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:228
 msgid "Specifies the mode for filling the airspace area."
@@ -4148,7 +4148,7 @@ msgstr "Especifica el modo en el que se rellena el interior del espacio aereo."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:233
 msgid "Airspace transparency"
-msgstr "Transparencia del espacio aereo"
+msgstr "Transparencia"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:233
 msgid "If enabled, then airspaces are filled transparently."
@@ -5649,12 +5649,12 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:84
 #, no-c-format
 msgid "Disable display of ground track line."
-msgstr "Desactivar la visualización de la línea de tierra."
+msgstr "Desactivar la visualización de la trayectoria sobre el terreno."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:85
 #, no-c-format
 msgid "Always display ground track line."
-msgstr "Mostrar siempre la trayectoria sobre el suelo."
+msgstr "Mostrar siempre la trayectoria sobre el terreno."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:86
 #, no-c-format
@@ -5662,8 +5662,8 @@ msgid ""
 "Display ground track line if there is a significant difference to plane "
 "heading."
 msgstr ""
-"Muestre la línea de seguimiento del terreno si hay una diferencia "
-"significativa en el rumbo del planeador."
+"Muestre la trayectoria sobre el terreno si hay una diferencia significativa "
+"con el rumbo del planeador."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:99
 #, no-c-format
@@ -5705,7 +5705,7 @@ msgid ""
 "The climb colour for this scheme is orange to red, sinking is displayed as "
 "light blue to dark blue. Zero lift is presented as a yellow line."
 msgstr ""
-"El color de ascenso para este esquema es naranja a rojo, el hundimiento se "
+"El color de ascenso para este esquema es naranja a rojo, el descenso se "
 "muestra como azul claro a azul oscuro. La elevación cero se presenta como "
 "una línea amarilla."
 
@@ -5726,13 +5726,13 @@ msgid ""
 "= sink. Zero lift is presented as a yellow line."
 msgstr ""
 "Puntos dependientes del vario con líneas. De naranja a rojo = ascenso. De "
-"azul claro a azul oscuro = hundimiento. El ascenso cero se presenta como una "
+"azul claro a azul oscuro = descenso. El ascenso cero se presenta como una "
 "línea amarilla."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:114
 #, no-c-format
 msgid "The colour scheme corresponds to the height."
-msgstr "El esquema de color corresponde a la altura."
+msgstr "El esquema de color depende de la altura."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:120
 #, no-c-format
@@ -5757,7 +5757,7 @@ msgstr "Detallado"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:124
 #, no-c-format
 msgid "Detailed rendered aircraft graphics."
-msgstr "Gráficos detallados de los aviones."
+msgstr "Gráficos detallados del avión."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:125
 #, no-c-format
@@ -5837,7 +5837,7 @@ msgstr "Rastro sobre el suelo"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:153
 msgid "Display the ground track as a grey line on the map."
-msgstr "Mostrar el recorrido sobre el suelo como una línea gris en el mapa."
+msgstr "Mostrar la trayectoria sobre el suelo como una línea gris en el mapa."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
 msgid "FLARM traffic"
@@ -5855,7 +5855,7 @@ msgstr "Longitud del rastro"
 msgid ""
 "Determines whether and how long a snail trail is drawn behind the glider."
 msgstr ""
-"Determina si se dibuja el recorrido del planeador sobre el suelo y su "
+"Determina si se dibuja la trayectoria del planeador sobre el suelo y su "
 "duración."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:172
@@ -5874,8 +5874,8 @@ msgstr "Rastro escalado"
 msgid ""
 "If set to ON the snail trail width is scaled according to the vario signal."
 msgstr ""
-"Si se establece en ON, la anchura del rastro sobre el suelo se escala según "
-"la valor del vario."
+"Si se establece en ON, la anchura del rastro sobre el terreno se escala "
+"según el valor del vario."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:181
 msgid "Detour cost markers"
@@ -6377,7 +6377,7 @@ msgstr "Sol"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:239
 msgid "Slope shading"
-msgstr "Sombreado de pendiente"
+msgstr "Terreno sombreado"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:240
 msgid ""
@@ -6410,16 +6410,16 @@ msgid ""
 "Defines the brightness (whiteness) of the terrain rendering.  This controls "
 "the average illumination of the terrain."
 msgstr ""
-"Define el brillo (blancura) de la representación del terreno. Controla la "
+"Define el brillo (blancura) con que se muetra el terreno. Controla la "
 "claridad promedio del terreno."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:267
 msgid "Contours"
-msgstr "Contornos"
+msgstr "Líneas de nivel"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:268
 msgid "If enabled, draws contour lines on the terrain."
-msgstr "Si está habilitado, traza líneas de contorno en el terreno."
+msgstr "Si está habilitado, traza líneas de nivel en el terreno."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:128
 msgid "Preset"
@@ -6695,7 +6695,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:150
 #, no-c-format
 msgid "Task waypoints & landables"
-msgstr "Puntos de tarea y de aterrizaje"
+msgstr "Waypoints de la tarea y aterrizajes"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:151
 #, no-c-format
@@ -6730,7 +6730,7 @@ msgstr ""
 "Los aeropuertos y las zonas aterrizables se muestran como círculos púrpuras. "
 "Si se puede alcanzar el waypoint, se agrega un círculo verde más grande por "
 "detrás del púrpura. Si el waypoint está bloqueado por una montaña, el "
-"círculo será verde en lugar de rojo."
+"círculo será rojo en lugar de verde."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:172
 #, no-c-format
@@ -6776,8 +6776,8 @@ msgid ""
 msgstr ""
 "Hay tres estilos disponibles: círculos púrpuras (estilo WinPilot), un estilo "
 "de alto contraste (monocromo) o naranja. La representación difiere sea para "
-"un campo aterrizable o un aeropuerto. Todos los estilos marcan los waypoint "
-"al alcance en verde."
+"un campo aterrizable o un aeropuerto. Todos los estilos muestran en verde "
+"los waypoint al alcance."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:188
 msgid "Detailed landables"
@@ -6789,7 +6789,7 @@ msgid ""
 "[On] Show landables with variable information like runway length and heading."
 msgstr ""
 "[Desactivado] Mostrar iconos fijos para las pistas de aterrizaje.\n"
-"[Activado] Mostrar los puntos de aterrizaje con información variable como la "
+"[Activado] Mostrar los aterrizajes con información variable, como la "
 "longitud de la pista y el rumbo."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:194
@@ -6799,12 +6799,12 @@ msgstr "Tamaño del terreno de aterrizaje"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:195
 msgid "A percentage to select the size landables are displayed on the map."
 msgstr ""
-"Un porcentaje para seleccionar el tamaño de los aterrizajes que se muestra "
-"en el mapa."
+"Un porcentaje para escoger el tamaño de los aterrizajes que se muestran en "
+"el mapa."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:199
 msgid "Scale runway length"
-msgstr "Escala de longitud de pista"
+msgstr "Longitud de pista variable"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:200
 msgid ""
