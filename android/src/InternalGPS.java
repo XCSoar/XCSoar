@@ -43,8 +43,7 @@ public class InternalGPS
   private final SensorListener listener;
 
   /** the name of the currently selected location provider */
-  String locationProvider = LocationManager.GPS_PROVIDER;
-  //String locationProvider = LocationManager.NETWORK_PROVIDER;
+  static final String locationProvider = LocationManager.GPS_PROVIDER;
 
   private final LocationManager locationManager;
   private static boolean queriedLocationSettings = false;
@@ -65,7 +64,7 @@ public class InternalGPS
          safe, therefore we're first checking the latter; if the
          device does have a GPS, it returns non-null even when the
          user has disabled GPS */
-      locationProvider = null;
+      return;
     } else if (!locationManager.isProviderEnabled(locationProvider) &&
         !queriedLocationSettings) {
       // Let user turn on GPS, XCSoar is not allowed to.
@@ -74,8 +73,7 @@ public class InternalGPS
       queriedLocationSettings = true;
     }
 
-    if (locationProvider != null)
-      handler.post(this);
+    handler.post(this);
   }
 
   /**
