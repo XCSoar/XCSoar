@@ -524,7 +524,10 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step,
 
   auto start = (int)(x.min / tic_step) * tic_step;
 
-  const double small_tic_step = tic_step / 5;
+  const double small_tic_step = unit_format == UnitFormat::TIME && tic_step <= 1
+    /* a small tick every 10 minutes */
+    ? 1. / 6.
+    : tic_step / 5;
 
   for (auto xval = start; xval <= x.max; xval += tic_step) {
     int xmin = ScreenX(xval);
