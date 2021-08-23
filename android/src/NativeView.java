@@ -114,8 +114,6 @@ class NativeView extends SurfaceView
     hasKeyboard = resources.getConfiguration().keyboard !=
       Configuration.KEYBOARD_NOKEYS;
 
-    touchInput = DifferentTouchInput.getInstance();
-
     SurfaceHolder holder = getHolder();
     holder.addCallback(this);
     holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
@@ -567,6 +565,4 @@ class NativeView extends SurfaceView
     EventBridge.onKeyUp(translateKeyCode(keyCode));
     return true;
   }
-
-  DifferentTouchInput touchInput = null;
 }
