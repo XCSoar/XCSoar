@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-07-20 10:35+0000\n"
-"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
+"PO-Revision-Date: 2021-08-24 18:35+0000\n"
+"Last-Translator: 山岭野兔 <bd8bin@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "xcsoar/translations/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Launchpad-Export-Date: 2016-03-01 23:01+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1629,12 +1629,11 @@ msgstr "禁用"
 
 #: src/Device/Config.cpp:233 src/Dialogs/Device/PortPicker.cpp:77
 msgid "BLE sensor"
-msgstr ""
+msgstr "蓝牙传感器"
 
 #: src/Device/Config.cpp:249 src/Dialogs/Device/PortPicker.cpp:74
-#, fuzzy
 msgid "BLE port"
-msgstr "TE端口"
+msgstr "BLE端口"
 
 #: src/Device/Config.cpp:269 src/Dialogs/Device/PortDataField.cpp:52
 #, no-c-format
@@ -1655,9 +1654,8 @@ msgid "GliderLink traffic receiver"
 msgstr "空中交通信息接收器"
 
 #: src/Device/Config.cpp:315 src/Dialogs/Device/PortPicker.cpp:80
-#, fuzzy
 msgid "USB serial"
-msgstr "串行"
+msgstr "USB串口"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:94 src/Dialogs/WidgetDialog.cpp:264
@@ -2010,9 +2008,8 @@ msgstr "气压"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:399
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:128
-#, fuzzy
 msgid "Pitot"
-msgstr "Pitot端口"
+msgstr "空速管"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:404
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
@@ -2200,18 +2197,16 @@ msgid "Save"
 msgstr "保存"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:58
-#, fuzzy
 msgid "Calibrate"
-msgstr "鲜艳的"
+msgstr "校准"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:130
-#, fuzzy
 msgid "Offset"
-msgstr "UTC偏移量"
+msgstr "偏移量"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:144
 msgid "Pitot sensor calibration"
-msgstr ""
+msgstr "空速传感器校准"
 
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:60
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:59
@@ -4053,7 +4048,7 @@ msgstr "总是显示滑翔条。"
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:57
 #, no-c-format
 msgid "Disable thermal assistant."
-msgstr "禁用热气流辅助"
+msgstr "禁用热气流辅助。"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:59
 #, no-c-format
@@ -4258,14 +4253,12 @@ msgid "Final glide"
 msgstr "最终滑翔"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:68
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Adjusts MC for fastest arrival.  For contest sprint tasks, the MacCready is "
 "adjusted in order to cover the greatest distance in the remaining time and "
 "reach the finish height."
-msgstr ""
-"调整MC最快到达。对于OLC冲刺任务，MacCready被调整以覆盖剩余时间中的最大距离并"
-"达到完成高度。"
+msgstr "调整 MC 以实现最快到达。 对于竞赛冲刺任务，MacCready 进行了调整，以便在剩余时间内完成最大距离并到达终点高度。"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:70
 #, no-c-format
@@ -5749,28 +5742,27 @@ msgstr "参考用于完成任务的最小高度规则。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:128
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:274
-#, fuzzy
 msgid "PEV start wait time"
-msgstr "估算任务时间"
+msgstr "PEV 开始等待时间"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:129
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:275
 msgid ""
 "Wait time in minutes after Pilot Event and before start gate opens. 0 means "
 "start opens immediately."
-msgstr ""
+msgstr "在飞行员完成阶段任务后和启动门打开之前的等待时间（以分钟为单位）。 0 表示开始立即打开。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:135
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:278
 msgid "PEV start window"
-msgstr ""
+msgstr "PEV窗口开启"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:136
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:279
 msgid ""
 "Number of minutes start remains open after Pilot Event and PEV wait time.0 "
 "means start will never close after it opens."
-msgstr ""
+msgstr "前一任务完成后 和 PEV 等待时间后门保持打开的分钟数。0 表示 start 在打开后永远不会关闭。"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:81
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -5847,9 +5839,9 @@ msgid ""
 msgstr "AAT任务优化的安全余量。优化试图完成任务在最小时间加上这个边际时间。"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable contest calculations"
-msgstr "禁用OLC计算"
+msgstr "禁用比赛计算"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:95
 #, no-c-format
@@ -5923,6 +5915,8 @@ msgid ""
 "and the largest Out & Return distance that can be fitted into the flight "
 "route."
 msgstr ""
+"WeGlide 在 自由WeGlide比赛中结合了多种评分系统。 自由得分是自由距离得分和区域奖励的组合。 对于面积奖励，评分程序确定了最大的 FAI "
+"三角形和可以适合飞行路线的最大往返距离。"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:123
 #, no-c-format
@@ -5930,17 +5924,15 @@ msgid ""
 "A start point, one turn point and a finish point are chosen from the flight "
 "path such that the distance between the start point and the turn point is "
 "maximized"
-msgstr ""
+msgstr "从飞行路径中选择一个起点、一个转折点和一个终点，使得起点和转折点之间的距离最大化"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
-#, fuzzy
 msgid "Contest"
-msgstr "内容"
+msgstr "比赛"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:128
-#, fuzzy
 msgid "Select the rules used for calculating optimal points for a contest."
-msgstr "选择用于在线竞赛最佳点计算的规则。执行符合官方2010年9月23日发布的。"
+msgstr "选择用于计算比赛最佳分数的规则。"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:131
 msgid "Predict Contest"
@@ -6997,9 +6989,8 @@ msgid "Now"
 msgstr "现在"
 
 #: src/Dialogs/DateEntry.cpp:63
-#, fuzzy
 msgid "Reset"
-msgstr "预设"
+msgstr "重置"
 
 #: src/Dialogs/Weather/WeatherDialog.cpp:46
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:336
@@ -8411,21 +8402,21 @@ msgid "Exp1"
 msgstr "实验1"
 
 #: src/InfoBoxes/Content/Factory.cpp:732
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Contest distance"
-msgstr "在线竞赛距离"
+msgstr "比赛距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:733
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cont Dist"
-msgstr "终点距离"
+msgstr "比赛距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:734
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
 "Contest rule set."
-msgstr "根据配置的在线竞赛规则设置对飞行距离进行即时评估。"
+msgstr "根据配置的比赛规则集即时评估飞行距离。"
 
 #: src/InfoBoxes/Content/Factory.cpp:740
 #, no-c-format
@@ -8957,21 +8948,21 @@ msgid "Distance to where take-off was detected."
 msgstr "检测到起飞的距离。"
 
 #: src/InfoBoxes/Content/Factory.cpp:1013
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Contest speed"
-msgstr "在线竞赛速度"
+msgstr "比赛速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cont Speed"
-msgstr "速度"
+msgstr "比赛速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown speed according to the configured "
 "Contest rule set."
-msgstr "根据配置的在线竞赛规则的设置对飞行速度进行即时评估。"
+msgstr "根据配置的比赛规则集即时评估飞行速度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
@@ -9126,31 +9117,31 @@ msgid "Alternate 2 GR"
 msgstr "到达备用2所需滑翔比"
 
 #: src/InfoBoxes/Content/Factory.cpp:1097
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Altn2 GR"
 msgstr "到达备用1所需滑翔比"
 
 #: src/InfoBoxes/Content/Factory.cpp:1098
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Geometric gradient to the arrival height above the second alternate. This is "
 "not adjusted for total energy."
-msgstr "几何梯度到到达高度以上的最佳备用地。这不是为总能量调整。"
+msgstr "到第二个备用位置上方的到达高度的几何梯度。 这不是针对总能量进行调整的。"
 
 #: src/InfoBoxes/Content/Factory.cpp:1104
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Heart Rate"
-msgstr "开始时间"
+msgstr "心率"
 
 #: src/InfoBoxes/Content/Factory.cpp:1105
 #, no-c-format
 msgid "Heart"
-msgstr ""
+msgstr "心率"
 
 #: src/InfoBoxes/Content/Factory.cpp:1106
 #, no-c-format
 msgid "Heart rate in beats per minute."
-msgstr ""
+msgstr "每分钟心跳次数。"
 
 #: src/InfoBoxes/Content/Alternate.cpp:74
 #, c-format
@@ -9169,9 +9160,8 @@ msgid "no QNH"
 msgstr "无绝对高度"
 
 #: src/InfoBoxes/Content/Altitude.cpp:148
-#, fuzzy
 msgid "Not flying"
-msgstr "不盘转"
+msgstr "停飞"
 
 #: src/InfoBoxes/Content/MacCready.cpp:71
 msgid "MC AUTO"
@@ -9818,11 +9808,12 @@ msgstr ""
 "风"
 
 #: Data/Input/default.xci:433
-#, fuzzy
 msgid ""
 "Pilot\n"
 "Event"
-msgstr "飞行员"
+msgstr ""
+"飞行员\n"
+"任务点"
 
 #: Data/Input/default.xci:423 Data/Input/default.xci:1066
 msgid ""
@@ -10035,7 +10026,7 @@ msgstr ""
 
 #: Data/Input/default.xci:430
 msgid "Pilot event announced"
-msgstr ""
+msgstr "飞行员任务点公布"
 
 #: Data/Input/default.xci:59
 msgid "Above final glide"
