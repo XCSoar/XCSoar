@@ -159,7 +159,7 @@ AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
   else
     rcd.bottom = chart.ScreenY(as.GetBaseAltitude(state));
 
-  int min_x = 1024, max_x = 0;
+  int min_x = canvas.GetWidth(), max_x = 0;
 
   // Iterate through the intersections
   for (const auto &i : intersections) {
