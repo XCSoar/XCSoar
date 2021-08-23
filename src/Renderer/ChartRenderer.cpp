@@ -481,9 +481,9 @@ ChartRenderer::FormatTicText(const double val, const double step,
   BasicStringBuffer<TCHAR, 32> buffer;
 
   if (units == UnitFormat::TIME) {
-    int hh = (int)(val);
-    int mm = (int)((val-hh)*60);
-    StringFormat(buffer.data(), buffer.capacity(), _T("%d:%02d"), hh, mm);
+    const unsigned total_minutes(val * 60);
+    StringFormat(buffer.data(), buffer.capacity(), _T("%u:%02u"),
+                 total_minutes / 60, total_minutes % 60);
   } else {
     if (step < 1) {
       StringFormat(buffer.data(), buffer.capacity(), _T("%.1f"), val);
