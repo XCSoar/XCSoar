@@ -48,7 +48,9 @@ Copyright_License {
 #endif
 
 enum ControlIndex {
+#ifdef ANDROID
   FullScreen,
+#endif
   MapOrientation,
   AppInfoBoxGeom,
   AppFlarmLocation,
