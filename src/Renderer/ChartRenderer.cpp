@@ -483,7 +483,7 @@ ChartRenderer::FormatTicText(const double val, const double step,
   if (units == UnitFormat::TIME) {
     int hh = (int)(val);
     int mm = (int)((val-hh)*60);
-    StringFormat(buffer.data(), buffer.capacity(), _T("%02d:%02d"), hh, mm);
+    StringFormat(buffer.data(), buffer.capacity(), _T("%d:%02d"), hh, mm);
   } else {
     if (step < 1) {
       StringFormat(buffer.data(), buffer.capacity(), _T("%.1f"), val);
