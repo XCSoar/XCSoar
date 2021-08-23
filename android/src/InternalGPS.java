@@ -67,10 +67,10 @@ public class InternalGPS
   String locationProvider = LocationManager.GPS_PROVIDER;
   //String locationProvider = LocationManager.NETWORK_PROVIDER;
 
-  private LocationManager locationManager;
-  private SensorManager sensorManager;
-  private WindowManager windowManager;
-  private Sensor accelerometer;
+  private final LocationManager locationManager;
+  private final SensorManager sensorManager;
+  private final WindowManager windowManager;
+  private final Sensor accelerometer;
   private static boolean queriedLocationSettings = false;
 
   private int state = STATE_LIMBO;

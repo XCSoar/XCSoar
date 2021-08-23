@@ -90,16 +90,16 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
   // i.e. that are retrieved by calling getDefaultSensor on sensor IDs present
   // in that array. This array is indexed by sensor numerical type ID---if the
   // corresponding sensor is absent or unsupported, the value will be null.
-  private Sensor[] default_sensors_;
+  private final Sensor[] default_sensors_;
 
   // The set of sensors in SUPPORTED_SENSORS that are present on this device
   // that we are actively listening to and passing into XCSoar. This array is
   // indexed by sensor numerical type ID---if the corresponding sensor is
   // absent or unsupported, the value will be null.
-  private boolean[] enabled_sensors_;
+  private final boolean[] enabled_sensors_;
 
   // Sensor manager.
-  private SensorManager sensor_manager_;
+  private final SensorManager sensor_manager_;
 
   // Handler for non-GPS sensor reading.
   private static Handler handler_;
