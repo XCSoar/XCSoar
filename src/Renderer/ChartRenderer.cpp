@@ -530,7 +530,7 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step,
     : tic_step / 5;
 
   for (auto xval = start; xval <= x.max; xval += tic_step) {
-    int xmin = ScreenX(xval);
+    const int xmin = ScreenX(xval);
 
     for (auto xmval = xval; xmval < xval + tic_step; xmval += small_tic_step) {
       const auto xmmin = ScreenX(xmval);
@@ -554,10 +554,11 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step,
           const auto unit_text = FormatTicText(xval * unit_step / tic_step,
                                                unit_step, unit_format);
           const auto w = canvas.CalcTextWidth(unit_text.c_str());
-          xmin -= w/2;
-          if ((xmin >= next_text) && ((int)(xmin + Layout::VptScale(30)) < x_label_left)) {
-            canvas.DrawText({xmin, y}, unit_text.c_str());
-            next_text = xmin + w + Layout::GetTextPadding();
+          const int label_x = xmin - w / 2;
+          if (label_x >= next_text &&
+              int(label_x + Layout::VptScale(30)) < x_label_left) {
+            canvas.DrawText({label_x, y}, unit_text.c_str());
+            next_text = label_x + w + Layout::GetTextPadding();
           }
         }
       }
