@@ -1,4 +1,4 @@
-Version 7.15 - not yet released
+Version 7.15 - 2021/08/23
 * user interface
   - fix crash in Config/System
   - fix overlapping axes labels in cross section
