@@ -45,6 +45,7 @@ public final class BluetoothSensor
   implements AndroidSensor
 {
   private final SensorListener listener;
+  private final SafeDestruct safeDestruct = new SafeDestruct();
 
   private final BluetoothGatt gatt;
 
@@ -75,7 +76,9 @@ public final class BluetoothSensor
 
   @Override
   public void close() {
+    safeDestruct.beginShutdown();
     gatt.close();
+    safeDestruct.finishShutdown();
   }
 
   @Override
@@ -83,11 +86,33 @@ public final class BluetoothSensor
     return state;
   }
 
+  private void setStateSafe(int _state) {
+    if (_state == state)
+      return;
+
+    state = _state;
+
+    if (!safeDestruct.increment()) {
+      try {
+        listener.onSensorStateChanged();
+      } finally {
+        safeDestruct.decrement();
+      }
+    }
+  }
+
   private void submitError(String msg) {
     haveFlytecMovement = false;
     flytecSatellites = 0;
     state = STATE_FAILED;
-    listener.onSensorError(msg);
+
+    if (safeDestruct.increment()) {
+      try {
+        listener.onSensorError(msg);
+      } finally {
+        safeDestruct.decrement();
+      }
+    }
   }
 
   private boolean doEnableNotification(BluetoothGattCharacteristic c) {
@@ -128,6 +153,9 @@ public final class BluetoothSensor
   @Override
   public synchronized void onCharacteristicChanged(BluetoothGatt gatt,
                                                    BluetoothGattCharacteristic c) {
+    if (!safeDestruct.increment())
+      return;
+
     try {
       if (BluetoothUuids.HEART_RATE_SERVICE.equals(c.getService().getUuid())) {
         if (BluetoothUuids.HEART_RATE_MEASUREMENT_CHARACTERISTIC.equals(c.getUuid())) {
@@ -176,6 +204,8 @@ public final class BluetoothSensor
       }
     } catch (NullPointerException e) {
       /* probably caused by a malformed value - ignore */
+    } finally {
+      safeDestruct.decrement();
     }
   }
 
@@ -217,8 +247,7 @@ public final class BluetoothSensor
       BluetoothGattCharacteristic c =
         service.getCharacteristic(BluetoothUuids.HEART_RATE_MEASUREMENT_CHARACTERISTIC);
       if (c != null) {
-        state = STATE_READY;
-        listener.onSensorStateChanged();
+        setStateSafe(STATE_READY);
         enableNotification(c);
       }
     }
@@ -229,8 +258,7 @@ public final class BluetoothSensor
       BluetoothGattCharacteristic c =
         service.getCharacteristic(BluetoothUuids.FLYTEC_SENSBOX_NAVIGATION_SENSOR_CHARACTERISTIC);
       if (c != null) {
-        state = STATE_READY;
-        listener.onSensorStateChanged();
+        setStateSafe(STATE_READY);
         enableNotification(c);
       }
 
