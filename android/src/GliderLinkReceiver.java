@@ -43,6 +43,7 @@ class GliderLinkReceiver
   private final Context context;
 
   private final SensorListener listener;
+  private final SafeDestruct safeDestruct = new SafeDestruct();
 
   private final Handler handler;
 
@@ -63,12 +64,16 @@ class GliderLinkReceiver
 
   @Override
   public void close() {
+    safeDestruct.beginShutdown();
+
     handler.post(new Runnable() {
       @Override
       public void run() {
         context.unregisterReceiver(GliderLinkReceiver.this);
       }
     });
+
+    safeDestruct.finishShutdown();
   }
 
   @Override
@@ -78,6 +83,9 @@ class GliderLinkReceiver
 
   @Override
   public void onReceive(Context context, Intent intent) {
+    if (!safeDestruct.increment())
+      return;
+
     try {
       JSONObject json = new JSONObject(intent.getStringExtra("json"));
 
@@ -116,6 +124,8 @@ class GliderLinkReceiver
                                    pos.getInt("bearing"));
     } catch (JSONException e) {
       Log.e(TAG, e.getLocalizedMessage(), e);
+    } finally {
+      safeDestruct.decrement();
     }
   }
 }
