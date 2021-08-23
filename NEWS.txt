@@ -1,6 +1,8 @@
 Version 7.15 - not yet released
 * user interface
   - fix crash in Config/System
+* Android
+  - fix crash on Android 5 and 6
 
 Version 7.14 - 2021/08/20
 * Android

@@ -183,8 +183,15 @@ public class XCSoar extends Activity {
       }
     };
 
+  private boolean isInMultiWindowModeCompat() {
+    /* isInMultiWindowMode() was added in API 24 (Android 7.0) */
+    return Build.VERSION.SDK_INT >= 24
+      ? isInMultiWindowMode()
+      : false;
+  }
+
   boolean wantFullScreen() {
-    return Loader.loaded && fullScreen && !isInMultiWindowMode();
+    return Loader.loaded && fullScreen && !isInMultiWindowModeCompat();
   }
 
   void applyFullScreen() {
