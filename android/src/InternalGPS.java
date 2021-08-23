@@ -177,26 +177,26 @@ public class InternalGPS
   }
 
   private void setConnectedSafe(int connected) {
-    if (!safeDestruct.Increment())
+    if (!safeDestruct.increment())
       return;
 
     try {
       listener.onConnected(connected);
     } finally {
-      safeDestruct.Decrement();
+      safeDestruct.decrement();
     }
   }
 
   /** from LocationListener */
   @Override public void onLocationChanged(Location newLocation) {
-    if (!safeDestruct.Increment())
+    if (!safeDestruct.increment())
       return;
 
     try {
       listener.onConnected(2); // fix found
       sendLocation(newLocation);
     } finally {
-      safeDestruct.Decrement();
+      safeDestruct.decrement();
     }
   }
 

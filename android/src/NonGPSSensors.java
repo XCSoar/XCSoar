@@ -254,7 +254,7 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
 
   /** from SensorEventListener; report new sensor values to XCSoar. */
   public void onSensorChanged(SensorEvent event) {
-    if (!safeDestruct.Increment())
+    if (!safeDestruct.increment())
       return;
 
     try {
@@ -277,7 +277,7 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
         break;
       }
     } finally {
-      safeDestruct.Decrement();
+      safeDestruct.decrement();
     }
   }
 }
