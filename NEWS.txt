@@ -1,6 +1,7 @@
 Version 7.15 - not yet released
 * user interface
   - fix crash in Config/System
+  - fix overlapping axes labels in cross section
 * Android
   - fix crash on Android 5 and 6
 

@@ -100,7 +100,7 @@ ChartRenderer::Begin() noexcept
 
     rc_chart.left += std::max(size.width + Layout::GetTextPadding() * 2,
                               Layout::VptScale(30));
-    y_label_bottom = rc.top - size.height - Layout::GetTextPadding() * 2;
+    y_label_bottom = rc.top + size.height + Layout::GetTextPadding() * 2;
   }
 
   if (!x_label.empty() || !y_label.empty())
