@@ -31,7 +31,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
-import android.util.Log;
 
 /**
  * Code to support the internal GPS receiver via #LocationManager.
@@ -39,8 +38,6 @@ import android.util.Log;
 public class InternalGPS
   implements LocationListener, Runnable, AndroidSensor
 {
-  private static final String TAG = "XCSoar";
-
   private final Handler handler;
 
   private final SensorListener listener;
@@ -85,11 +82,9 @@ public class InternalGPS
    * LocationManager subscription inside the main thread.
    */
   @Override public void run() {
-    Log.d(TAG, "Updating GPS subscription...");
     locationManager.removeUpdates(this);
 
     if (locationProvider != null) {
-      Log.d(TAG, "Subscribing to GPS updates.");
       try {
         locationManager.requestLocationUpdates(locationProvider,
                                                1000, 0, this);
@@ -102,10 +97,8 @@ public class InternalGPS
 
       setConnectedSafe(1); // waiting for fix
     } else {
-      Log.d(TAG, "Unsubscribing from GPS updates.");
       setConnectedSafe(0); // not connected
     }
-    Log.d(TAG, "Done updating GPS subscription...");
   }
 
   /**
@@ -113,7 +106,6 @@ public class InternalGPS
    * thread.
    */
   private void update() {
-    Log.d(TAG, "Triggering GPS subscription update...");
     handler.removeCallbacks(this);
     handler.post(this);
   }
