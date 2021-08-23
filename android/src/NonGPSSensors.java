@@ -102,7 +102,7 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
   private final SensorManager sensor_manager_;
 
   // Handler for non-GPS sensor reading.
-  private static Handler handler_;
+  private final Handler handler_;
 
   private final SensorListener listener;
 
@@ -111,16 +111,8 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
 
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
-  /**
-   * Global initialization of the class.  Must be called from the main
-   * event thread, because the Handler object must be bound to that
-   * thread.
-   */
-  public static void Initialize() {
-    handler_ = new Handler();
-  }
-
   NonGPSSensors(Context context, SensorListener listener) {
+    handler_ = new Handler(context.getMainLooper());
     this.listener = listener;
     default_sensors_ = new Sensor[SENSOR_TYPE_ID_UPPER_BOUND];
     enabled_sensors_ = new boolean[SENSOR_TYPE_ID_UPPER_BOUND];

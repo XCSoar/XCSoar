@@ -44,23 +44,15 @@ class GliderLinkReceiver
 
   private final SensorListener listener;
 
-  private static Handler handler;
+  private final Handler handler;
 
   private int state = STATE_LIMBO;
-
-  /**
-   * Global initialization of the class.  Must be called from the main
-   * event thread, because the Handler object must be bound to that
-   * thread.
-   */
-  public static void Initialize() {
-    handler = new Handler();
-  }
 
   public GliderLinkReceiver(final Context context, SensorListener listener) {
     this.context = context;
     this.listener = listener;
 
+    handler = new Handler(context.getMainLooper());
     handler.post(new Runnable() {
       @Override
       public void run() {

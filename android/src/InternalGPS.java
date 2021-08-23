@@ -50,18 +50,9 @@ public class InternalGPS
 {
   private static final String TAG = "XCSoar";
 
-  private static Handler handler;
+  private final Handler handler;
 
   private final SensorListener listener;
-
-  /**
-   * Global initialization of the class.  Must be called from the main
-   * event thread, because the Handler object must be bound to that
-   * thread.
-   */
-  public static void Initialize() {
-    handler = new Handler();
-  }
 
   /** the name of the currently selected location provider */
   String locationProvider = LocationManager.GPS_PROVIDER;
@@ -78,6 +69,7 @@ public class InternalGPS
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
   InternalGPS(Context context, SensorListener listener) {
+    handler = new Handler(context.getMainLooper());
     this.listener = listener;
 
     locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
