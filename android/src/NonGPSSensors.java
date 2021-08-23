@@ -95,13 +95,13 @@ public class NonGPSSensors
   // i.e. that are retrieved by calling getDefaultSensor on sensor IDs present
   // in that array. This array is indexed by sensor numerical type ID---if the
   // corresponding sensor is absent or unsupported, the value will be null.
-  private final Sensor[] default_sensors_;
+  private final Sensor[] default_sensors_ = new Sensor[SENSOR_TYPE_ID_UPPER_BOUND];
 
   // The set of sensors in SUPPORTED_SENSORS that are present on this device
   // that we are actively listening to and passing into XCSoar. This array is
   // indexed by sensor numerical type ID---if the corresponding sensor is
   // absent or unsupported, the value will be null.
-  private final boolean[] enabled_sensors_;
+  private final boolean[] enabled_sensors_ = new boolean[SENSOR_TYPE_ID_UPPER_BOUND];
 
   private final WindowManager windowManager;
 
@@ -123,9 +123,6 @@ public class NonGPSSensors
     this.listener = listener;
 
     windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-
-    default_sensors_ = new Sensor[SENSOR_TYPE_ID_UPPER_BOUND];
-    enabled_sensors_ = new boolean[SENSOR_TYPE_ID_UPPER_BOUND];
 
     // Obtain sensor manager.
     sensor_manager_ = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
