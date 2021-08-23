@@ -29,6 +29,8 @@
 
 package org.xcsoar;
 
+import java.io.Closeable;
+
 import android.content.Context;
 import android.os.Handler;
 import android.hardware.Sensor;
@@ -45,7 +47,9 @@ import java.util.Map;
 /**
  * Code to support the growing suite of non-GPS sensors on Android platforms.
  */
-public class NonGPSSensors implements SensorEventListener, Runnable {
+public class NonGPSSensors
+  implements SensorEventListener, Runnable, Closeable
+{
   private static final String TAG = "XCSoar";
 
   // Constant array saying whether we want to support certain sensors.
@@ -216,8 +220,8 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
     return enabled_sensors_[id];
   }
 
-  /** Cancel all sensor subscriptions. */
-  public void cancelAllSensorSubscriptions() {
+  @Override
+  public void close() {
     safeDestruct.beginShutdown();
     for (int id : SUPPORTED_SENSORS) enabled_sensors_[id] = false;
     updateSensorSubscriptions();

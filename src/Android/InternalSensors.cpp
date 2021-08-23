@@ -36,7 +36,6 @@ jmethodID InternalSensors::mid_sensors_getSubscribableSensors;
 jmethodID InternalSensors::mid_sensors_subscribeToSensor_;
 jmethodID InternalSensors::mid_sensors_cancelSensorSubscription_;
 jmethodID InternalSensors::mid_sensors_subscribedToSensor_;
-jmethodID InternalSensors::mid_sensors_cancelAllSensorSubscriptions_;
 
 bool
 InternalSensors::Initialise(JNIEnv *env)
@@ -65,12 +64,9 @@ InternalSensors::Initialise(JNIEnv *env)
       env->GetMethodID(sensors_cls, "cancelSensorSubscription", "(I)Z");
   mid_sensors_subscribedToSensor_ =
       env->GetMethodID(sensors_cls, "subscribedToSensor", "(I)Z");
-  mid_sensors_cancelAllSensorSubscriptions_ =
-      env->GetMethodID(sensors_cls, "cancelAllSensorSubscriptions", "()V");
   assert(mid_sensors_subscribeToSensor_ != nullptr);
   assert(mid_sensors_cancelSensorSubscription_ != nullptr);
   assert(mid_sensors_subscribedToSensor_ != nullptr);
-  assert(mid_sensors_cancelAllSensorSubscriptions_ != nullptr);
 
   return true;
 }
@@ -89,12 +85,6 @@ InternalSensors::InternalSensors(const Java::LocalObject &gps_obj,
 {
   // Import the list of subscribable sensors from the NonGPSSensors object.
   getSubscribableSensors(gps_obj.GetEnv(), gps_obj);
-}
-
-InternalSensors::~InternalSensors()
-{
-  // Unsubscribe from sensors and the GPS.
-  cancelAllSensorSubscriptions();
 }
 
 bool
@@ -120,14 +110,6 @@ InternalSensors::subscribedToSensor(int id) const
   JNIEnv *env = Java::GetEnv();
   return env->CallBooleanMethod(obj_NonGPSSensors_.Get(),
                                 mid_sensors_subscribedToSensor_, (jint)id);
-}
-
-void
-InternalSensors::cancelAllSensorSubscriptions()
-{
-  JNIEnv *env = Java::GetEnv();
-  env->CallVoidMethod(obj_NonGPSSensors_.Get(),
-                      mid_sensors_cancelAllSensorSubscriptions_);
 }
 
 InternalSensors *
