@@ -74,7 +74,8 @@ public class InternalGPS
       queriedLocationSettings = true;
     }
 
-    update();
+    if (locationProvider != null)
+      handler.post(this);
   }
 
   /**
@@ -82,43 +83,26 @@ public class InternalGPS
    * LocationManager subscription inside the main thread.
    */
   @Override public void run() {
-    locationManager.removeUpdates(this);
-
-    if (locationProvider != null) {
-      try {
-        locationManager.requestLocationUpdates(locationProvider,
-                                               1000, 0, this);
-      } catch (IllegalArgumentException e) {
-        /* this exception was recorded on the Android Market, message
-           was: "provider=gps" - no idea what that means */
-        setConnectedSafe(0);
-        return;
-      }
-
-      setConnectedSafe(1); // waiting for fix
-    } else {
-      setConnectedSafe(0); // not connected
+    try {
+      locationManager.requestLocationUpdates(locationProvider,
+                                             1000, 0, this);
+    } catch (IllegalArgumentException e) {
+      /* this exception was recorded on the Android Market, message
+         was: "provider=gps" - no idea what that means */
     }
-  }
-
-  /**
-   * Update the LocationManager subscription.  May be called from any
-   * thread.
-   */
-  private void update() {
-    handler.removeCallbacks(this);
-    handler.post(this);
-  }
-
-  public void setLocationProvider(String _locationProvider) {
-    locationProvider = _locationProvider;
-    update();
   }
 
   @Override
   public void close() {
     safeDestruct.beginShutdown();
-    setLocationProvider(null);
+
+    handler.removeCallbacks(this);
+    handler.post(new Runnable() {
+        @Override public void run() {
+          locationManager.removeUpdates(InternalGPS.this);
+        }
+      });
+
     safeDestruct.finishShutdown();
   }
 
