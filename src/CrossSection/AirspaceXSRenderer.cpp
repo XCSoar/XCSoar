@@ -198,8 +198,8 @@ AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
     const PixelSize name_size = canvas.CalcTextSize(name);
     const int x = name_size.width >= max_width
       ? min_x
-      : (min_x + max_x - name_size.width) / 2;
-    const int y = (rcd.top + rcd.bottom - name_size.height) / 2;
+      : (min_x + max_x - (int)name_size.width) / 2;
+    const int y = (rcd.top + rcd.bottom - (int)name_size.height) / 2;
 
     canvas.DrawClippedText({x, y}, max_x - x, name);
   }
