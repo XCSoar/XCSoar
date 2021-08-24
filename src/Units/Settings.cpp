@@ -24,7 +24,7 @@ Copyright_License {
 #include "Settings.hpp"
 
 void
-UnitSetting::SetDefaults()
+UnitSetting::SetDefaults() noexcept
 {
   distance_unit = Unit::KILOMETER;
   altitude_unit = Unit::METER;
@@ -39,7 +39,7 @@ UnitSetting::SetDefaults()
 }
 
 Unit
-UnitSetting::GetByGroup(UnitGroup group) const
+UnitSetting::GetByGroup(UnitGroup group) const noexcept
 {
   switch (group) {
   case UnitGroup::NONE:
@@ -80,7 +80,7 @@ UnitSetting::GetByGroup(UnitGroup group) const
 }
 
 bool
-UnitSetting::operator==(const UnitSetting &right) const
+UnitSetting::operator==(const UnitSetting &right) const noexcept
 {
   return (distance_unit == right.distance_unit &&
       altitude_unit == right.altitude_unit &&
