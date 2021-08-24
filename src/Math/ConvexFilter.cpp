@@ -50,11 +50,3 @@ ConvexFilter::UpdateConvex(double x, double y, int csign) noexcept
     Remove(sum_n-2);
   }
 }
-
-double
-ConvexFilter::GetLastY() const noexcept
-{
-  assert(!IsEmpty());
-
-  return slots[sum_n-1].y;
-}
