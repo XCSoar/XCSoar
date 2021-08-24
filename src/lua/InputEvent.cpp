@@ -110,7 +110,8 @@ public:
   }
 
   void AttachEnum(unsigned code) {
-    if ((code < GCE_COUNT + NE_COUNT) && event_store_enum.Insert(code, this)) {
+    if (code < unsigned(GCE_COUNT) + unsigned(NE_COUNT) &&
+        event_store_enum.Insert(code, this)) {
       Lua::AddPersistent(L, this);
     }
   }
