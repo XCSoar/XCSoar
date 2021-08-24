@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "RasterTileCache.hpp"
 #include "Math/Angle.hpp"
-#include "Math/FastMath.hpp"
 #include "io/BufferedOutputStream.hxx"
 #include "io/BufferedReader.hxx"
 
@@ -186,9 +185,8 @@ RasterTileCache::GetInterpolatedHeight(RasterLocation l) const noexcept
     // outside overall bounds
     return TerrainHeight::Invalid();
 
-  unsigned px = l.x, py = l.y;
-  const unsigned int ix = CombinedDivAndMod(px);
-  const unsigned int iy = CombinedDivAndMod(py);
+  const auto [px, ix] = RasterTraits::CalcSubpixel(l.x);
+  const auto [py, iy] = RasterTraits::CalcSubpixel(l.y);
 
   const RasterTile &tile = tiles.Get(px / tile_size.x, py / tile_size.y);
   if (tile.IsLoaded())
