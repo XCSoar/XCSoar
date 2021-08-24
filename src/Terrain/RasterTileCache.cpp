@@ -67,7 +67,7 @@ RasterTileCache::PutOverviewTile(unsigned index,
   if (start.y + height > overview.GetSize().y)
     height = overview.GetSize().y - start.y;
 
-  const unsigned skip = 1 << OVERVIEW_BITS;
+  const unsigned skip = 1 << RasterTraits::OVERVIEW_BITS;
 
   auto *gcc_restrict dest = overview.GetData()
     + start.y * dest_pitch + start.x;

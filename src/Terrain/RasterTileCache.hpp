@@ -56,14 +56,6 @@ class RasterTileCache {
 #endif
 
   /**
-   * The width and height of the terrain bitmap is shifted by this
-   * number of bits to determine the overview size.
-   */
-  static constexpr unsigned OVERVIEW_BITS = 4;
-
-  static constexpr unsigned OVERVIEW_MASK = (~0u) << OVERVIEW_BITS;
-
-  /**
    * Target number of steps in intersection searches; total distance
    * is shifted by this number of bits
    */

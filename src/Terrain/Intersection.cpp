@@ -71,7 +71,8 @@ RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
   // calculate number of fine steps to produce a step on the overview field
   const int step_fine = std::max(1, max_steps >> INTERSECT_BITS);
   // number of steps for update to the overview map
-  const int step_coarse = std::max(1<< OVERVIEW_BITS, step_fine);
+  const int step_coarse = std::max(1 << RasterTraits::OVERVIEW_BITS,
+                                   step_fine);
 
   // number of steps to be cleared after climbing over obstruction
   const int intersect_steps = 32;
@@ -238,7 +239,7 @@ RasterTileCache::GetFieldDirect(RasterLocation p) const noexcept
 
   // The overview might not cover the whole tile, if width or height are not
   // a multiple of 2^OVERVIEW_BITS.
-  auto p_overview = p >> OVERVIEW_BITS;
+  auto p_overview = p >> RasterTraits::OVERVIEW_BITS;
   assert(p_overview.x <= overview.GetSize().x);
   assert(p_overview.y <= overview.GetSize().y);
 
@@ -280,7 +281,7 @@ RasterTileCache::Intersection(const SignedRasterLocation origin,
   // number of steps for update to the fine map
   const int step_fine = std::max(1, refine_step);
   // number of steps for update to the overview map
-  const int step_coarse = std::max(1<< OVERVIEW_BITS, step_fine);
+  const int step_coarse = std::max(1 << RasterTraits::OVERVIEW_BITS, step_fine);
 
   // counter for steps to reach next position to be checked on the field.
   unsigned step_counter = 0;
