@@ -24,13 +24,14 @@
 #include "Trace/Trace.hpp"
 #include "system/FileUtil.hpp"
 #include "Waypoint/Waypoint.hpp"
+#include "util/ConvertString.hpp"
 
 #include <fstream>
 
 std::ostream &
 operator<<(std::ostream &f, Path path)
 {
-  f << path.c_str();
+  f << WideToUTF8Converter(path.c_str());
   return f;
 }
 
