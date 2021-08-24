@@ -91,7 +91,7 @@ FormatDistance(TCHAR *buffer, double value, Unit unit,
     StringFormatUnsafe(buffer, _T("%.*f"), precision, (double)value);
 }
 
-gcc_const
+[[gnu::const]]
 static Unit
 GetSmallerDistanceUnit(Unit unit)
 {
