@@ -93,24 +93,24 @@ struct Waypoint {
   FlatGeoPoint flat_location;
 
 #ifndef NDEBUG
-  bool flat_location_initialised;
+  bool flat_location_initialised = false;
 #endif
 
   /** Height AMSL (m) of waypoint terrain */
   double elevation;
 
   /** Main runway */
-  Runway runway;
+  Runway runway = Runway::Null();
 
-  RadioFrequency radio_frequency;
+  RadioFrequency radio_frequency = RadioFrequency::Null();
 
   /** Type of the waypoint */
-  Type type;
+  Type type = Type::NORMAL;
   /** Flag types of this waypoint */
   Flags flags;
 
   /** File number to store waypoint in */
-  WaypointOrigin origin;
+  WaypointOrigin origin = WaypointOrigin::NONE;
 
   /** Name of waypoint */
   tstring name;
@@ -130,15 +130,7 @@ struct Waypoint {
    *
    * @return Uninitialised object
    */
-  Waypoint()
-    :
-#ifndef NDEBUG
-     flat_location_initialised(false),
-#endif
-     runway(Runway::Null()), radio_frequency(RadioFrequency::Null()),
-     type(Type::NORMAL), origin(WaypointOrigin::NONE)
-  {
-  }
+  Waypoint() = default;
 
   /**
    * Constructor for real waypoints
