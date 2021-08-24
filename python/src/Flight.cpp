@@ -37,6 +37,8 @@
 #include <cinttypes>
 #include <limits>
 
+using namespace std::chrono;
+
 PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs) {
   /* constructor */
   static char *kwlist[] = {"file", "keep", nullptr};
@@ -447,7 +449,7 @@ PyObject* xcsoar_Flight_encode(Pyxcsoar_Flight *self, PyObject *args) {
     encoded_locations.addDouble(fix.location.longitude.Degrees());
 
     encoded_levels.addUnsignedNumber(replay->Level());
-    encoded_times.addSignedNumber(basic.time);
+    encoded_times.addSignedNumber(duration_cast<duration<int>>(basic.time.ToDuration()).count());
     encoded_altitude.addSignedNumber(self->flight->qnh.PressureAltitudeToQNHAltitude(fix.pressure_altitude));
 
     if (fix.enl >= 0)

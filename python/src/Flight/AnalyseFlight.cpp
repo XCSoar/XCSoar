@@ -35,6 +35,8 @@
 
 #include <limits>
 
+using namespace std::chrono;
+
 void
 Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
     WindList &wind_list,
@@ -172,9 +174,9 @@ void AnalyseFlight(DebugReplay &replay,
              const unsigned max_iterations,
              const unsigned max_tree_size)
 {
-  Trace full_trace(0, Trace::null_time, full_points);
-  Trace triangle_trace(0, Trace::null_time, triangle_points);
-  Trace sprint_trace(0, 9000, sprint_points);
+  Trace full_trace({}, Trace::null_time, full_points);
+  Trace triangle_trace({}, Trace::null_time, triangle_points);
+  Trace sprint_trace({}, minutes{150}, sprint_points);
   FlightPhaseDetector flight_phase_detector;
 
   Run(replay, flight_phase_detector, wind_list,

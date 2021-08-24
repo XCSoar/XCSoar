@@ -39,6 +39,8 @@
     #define PyInt_AsLong PyLong_AsLong
 #endif
 
+using namespace std::chrono;
+
 PyObject* Python::BrokenDateTimeToPy(const BrokenDateTime &datetime) {
   PyDateTime_IMPORT;
 
@@ -107,7 +109,7 @@ PyObject* Python::WritePoint(const ContestTracePoint &point,
                              const ContestTracePoint *previous) {
   PyObject *py_point = PyDict_New();
 
-  PyObject *py_time = PyInt_FromLong((long)point.GetTime());
+  PyObject *py_time = PyInt_FromLong(duration_cast<duration<long>>(point.GetTime()).count());
   PyObject *py_location = WriteLonLat(point.GetLocation());
 
   PyDict_SetItemString(py_point, "time", py_time);
@@ -123,7 +125,7 @@ PyObject* Python::WritePoint(const ContestTracePoint &point,
     Py_DECREF(py_distance);
 
     unsigned duration =
-      std::max((int)point.GetTime() - (int)previous->GetTime(), 0);
+      std::max(duration_cast<std::chrono::duration<int>>(point.GetTime() - previous->GetTime()).count(), 0);
     PyObject *py_duration = PyFloat_FromDouble(duration);
     PyDict_SetItemString(py_point, "duration", py_duration);
     Py_DECREF(py_duration);
@@ -157,7 +159,7 @@ PyObject* Python::WriteContest(const ContestResult &result,
   return Py_BuildValue("{s:d,s:d,s:i,s:d,s:N}",
     "score", result.score,
     "distance", result.distance,
-    "duration", (long)result.time,
+    "duration", duration_cast<duration<long>>(result.time).count(),
     "speed", result.GetSpeed(),
     "turnpoints", py_trace);
 }
@@ -197,7 +199,7 @@ PyObject* Python::WritePhase(const Phase &phase) {
     "start_time", BrokenDateTimeToPy(phase.start_datetime),
     "end_time", BrokenDateTimeToPy(phase.end_datetime),
     "type", FormatPhaseType(phase.phase_type),
-    "duration", (long)phase.duration,
+    "duration", duration_cast<duration<long>>(phase.duration).count(),
     "circling_direction", FormatCirclingDirection(phase.circling_direction),
     "alt_diff", (long)phase.alt_diff,
     "distance", (long)phase.distance,
@@ -209,7 +211,7 @@ PyObject* Python::WritePhase(const Phase &phase) {
 PyObject* Python::WriteCirclingStats(const Phase &stats) {
   return Py_BuildValue("{s:i,s:i,s:d,s:d,s:i}",
     "alt_diff", (long)stats.alt_diff,
-    "duration", (long)stats.duration,
+    "duration", duration_cast<duration<long>>(stats.duration).count(),
     "fraction", stats.fraction,
     "vario", stats.GetVario(),
     "count", (long)stats.merges);
@@ -218,7 +220,7 @@ PyObject* Python::WriteCirclingStats(const Phase &stats) {
 PyObject* Python::WriteCruiseStats(const Phase &stats) {
   return Py_BuildValue("{s:i,s:i,s:d,s:i,s:d,s:d,s:d,s:i}",
     "alt_diff", (long)stats.alt_diff,
-    "duration", (long)stats.duration,
+    "duration", duration_cast<duration<long>>(stats.duration).count(),
     "fraction", stats.fraction,
     "distance", (long)stats.distance,
     "speed", stats.GetSpeed(),

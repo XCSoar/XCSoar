@@ -155,9 +155,11 @@ double DouglasPeuckerMod::DistanceGeo(const GeoPoint &p0,
   return out;
 }
 
-double DouglasPeuckerMod::DistanceTime(const unsigned time0,
-                                        const unsigned time1,
-                                        const unsigned time2) {
+double
+DouglasPeuckerMod::DistanceTime(const unsigned time0,
+                                const unsigned time1,
+                                const unsigned time2) noexcept
+{
   double out = sqrt(abs(int(time1 - time0)) / max_delta_time * threshold) +
                sqrt(abs(int(time2 - time0)) / max_delta_time * threshold);
 

@@ -25,6 +25,8 @@
 #ifndef PYTHON_DOUGLASPEUCKERMOD_HPP
 #define PYTHON_DOUGLASPEUCKERMOD_HPP
 
+#include "time/Stamp.hpp"
+
 #include <vector>
 #include <list>
 #include <memory>
@@ -99,9 +101,19 @@ private:
    * Calculate a DouglasPeucker-like weight using the temporal
    * distance of a fix to it's adjacent fixes.
    */
-  double DistanceTime(const unsigned time0,
-                       const unsigned time1,
-                       const unsigned time2);
+  [[gnu::pure]]
+  double DistanceTime(unsigned time0,
+                      unsigned time1,
+                      unsigned time2) noexcept;
+
+  [[gnu::pure]]
+  double DistanceTime(TimeStamp time0,
+                      TimeStamp time1,
+                      TimeStamp time2) noexcept {
+    return DistanceTime(std::chrono::duration_cast<std::chrono::duration<unsigned>>(time0.ToDuration()).count(),
+                        std::chrono::duration_cast<std::chrono::duration<unsigned>>(time1.ToDuration()).count(),
+                        std::chrono::duration_cast<std::chrono::duration<unsigned>>(time2.ToDuration()).count());
+  }
 
   /**
    * This computes the appropriate zoom level of a point in terms of it's
