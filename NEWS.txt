@@ -1,3 +1,5 @@
+Version 7.16 - not yet released
+
 Version 7.15 - 2021/08/23
 * user interface
   - fix crash in Config/System
