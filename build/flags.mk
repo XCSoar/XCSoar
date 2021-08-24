@@ -1,4 +1,4 @@
-CXX_FEATURES = -std=gnu++17
+CXX_FEATURES = -std=gnu++2a
 CXX_FEATURES += -fno-threadsafe-statics
 CXX_FEATURES += -fmerge-all-constants
 

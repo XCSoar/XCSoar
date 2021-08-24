@@ -26,7 +26,7 @@
 Waypoint::Waypoint(const GeoPoint &_location)
   :location(_location),
    runway(Runway::Null()), radio_frequency(RadioFrequency::Null()),
-   type(Type::NORMAL), flags(Flags::Defaults()),
+   type(Type::NORMAL),
    origin(WaypointOrigin::NONE)
 {
 }

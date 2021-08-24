@@ -251,7 +251,7 @@ Trace::push_back(const TracePoint &point)
   assert(size() < max_size);
 
   TraceDelta *td = allocator.allocate(1);
-  allocator.construct(td, point);
+  std::allocator_traits<Allocator>::construct(allocator, td, point);
   td->point.Project(task_projection);
 
   delta_list.insert(*td);

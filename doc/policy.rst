@@ -190,10 +190,10 @@ Some sample code to demonstrate our code style::
 C++
 ===
 
-XCSoar is written in C++17.
+XCSoar is written in C++20.
 
-XCSoar’s standard compilers are ``gcc`` (at least version 6) and
-``clang`` (at least version 4.0).
+XCSoar’s standard compilers are ``gcc`` (at least version 8) and
+``clang`` (at least version 10).
 
 Avoid preprocessor macros, because they are obscure, error prone, not
 type-safe, hard to read and hard to debug. Use ``inline`` functions

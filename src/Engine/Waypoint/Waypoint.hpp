@@ -67,21 +67,15 @@ struct Waypoint {
    */
   struct Flags {
     /** If waypoint can be used as a turnpoint */
-    bool turn_point:1;
+    bool turn_point:1 = false;
     /** If waypoint is to be used as home */
-    bool home:1;
+    bool home:1 = false;
     /** If waypoint is marked as a potential start point */
-    bool start_point:1;
+    bool start_point:1 = false;
     /** If waypoint is marked as a potential finish point */
-    bool finish_point:1;
+    bool finish_point:1 = false;
     /** If waypoint is watched, i.e. displayed with arrival height in map */
-    bool watched:1;
-
-    Flags() = default;
-
-    static constexpr Flags Defaults() {
-      return { false, false, false, false, false };
-    }
+    bool watched:1 = false;
   };
 
   /** Unique id */
@@ -142,7 +136,7 @@ struct Waypoint {
      flat_location_initialised(false),
 #endif
      runway(Runway::Null()), radio_frequency(RadioFrequency::Null()),
-     type(Type::NORMAL), flags(Flags::Defaults()), origin(WaypointOrigin::NONE)
+     type(Type::NORMAL), origin(WaypointOrigin::NONE)
   {
   }
 

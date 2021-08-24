@@ -214,8 +214,8 @@ class Trace : private NonCopyable
   struct Disposer {
     Alloc &alloc;
 
-    void operator()(typename Alloc::pointer td) {
-      alloc.destroy(td);
+    void operator()(typename std::allocator_traits<Alloc>::pointer td) {
+      std::allocator_traits<Alloc>::destroy(alloc, td);
       alloc.deallocate(td, 1);
     }
   };
