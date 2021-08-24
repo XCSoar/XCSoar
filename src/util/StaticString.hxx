@@ -258,6 +258,18 @@ public:
 		return !equals(value);
 	}
 
+	template<std::size_t other_max>
+	[[gnu::pure]]
+	bool operator==(const StaticStringBase<T, other_max> &other) const noexcept {
+		return *this == other.c_str();
+	}
+
+	template<std::size_t other_max>
+	[[gnu::pure]]
+	bool operator!=(const StaticStringBase<T, other_max> &other) const noexcept {
+		return *this != other.c_str();
+	}
+
 	StaticStringBase<T, max> &operator =(const_pointer new_value) {
 		assign(new_value);
 		return *this;
