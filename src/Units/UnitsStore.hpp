@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_UNITS_STORE_HPP
 #define XCSOAR_UNITS_STORE_HPP
 
-#include "util/Compiler.h"
 #include <tchar.h>
 
 struct UnitSetting;
@@ -32,26 +31,28 @@ struct UnitSetting;
 /**
  * Namespace to manage units presets.
  */
-namespace Units
-{
-  namespace Store
-  {
-    gcc_const
-    const TCHAR* GetName(unsigned i);
+namespace Units::Store {
 
-    gcc_const
-    const UnitSetting& Read(unsigned i);
+[[gnu::const]]
+const TCHAR *
+GetName(unsigned i) noexcept;
 
-    gcc_const
-    unsigned Count();
+[[gnu::const]]
+const UnitSetting &
+Read(unsigned i) noexcept;
 
-    /**
-     * Only the units part of the structure is addressed.
-     * @return Index + 1 if an equivalent set is found, else 0.
-     */
-    gcc_pure
-    unsigned EqualsPresetUnits(const UnitSetting &config);
-  }
-}
+[[gnu::const]]
+unsigned
+Count() noexcept;
+
+/**
+ * Only the units part of the structure is addressed.
+ * @return Index + 1 if an equivalent set is found, else 0.
+ */
+[[gnu::pure]]
+unsigned
+EqualsPresetUnits(const UnitSetting &config) noexcept;
+
+} // namespace Units::Store
 
 #endif

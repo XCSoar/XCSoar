@@ -86,28 +86,28 @@ static constexpr UnitStoreItem Presets[] =
   } }
 };
 
-const TCHAR*
-Units::Store::GetName(unsigned i)
+const TCHAR *
+Units::Store::GetName(unsigned i) noexcept
 {
   assert(i < Count());
   return gettext(Presets[i].Name);
 }
 
-const UnitSetting&
-Units::Store::Read(unsigned i)
+const UnitSetting &
+Units::Store::Read(unsigned i) noexcept
 {
   assert(i < Count());
   return Presets[i].Units;
 }
 
 unsigned
-Units::Store::Count()
+Units::Store::Count() noexcept
 {
   return ARRAY_SIZE(Presets);
 }
 
 unsigned
-Units::Store::EqualsPresetUnits(const UnitSetting &config)
+Units::Store::EqualsPresetUnits(const UnitSetting &config) noexcept
 {
   unsigned len = Count();
   for (unsigned i = 0; i < len; i++) {
