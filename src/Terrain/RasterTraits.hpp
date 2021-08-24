@@ -36,7 +36,7 @@ namespace RasterTraits {
  */
 constexpr unsigned OVERVIEW_BITS = 4;
 
-constexpr unsigned OVERVIEW_MASK = (~0u) << OVERVIEW_BITS;
+constexpr unsigned OVERVIEW_MASK = ~((~0u) << OVERVIEW_BITS);
 
 /**
  * The fixed-point fractional part of sub-pixel coordinates.
@@ -57,7 +57,7 @@ constexpr unsigned ToOverview(unsigned x) noexcept {
  * Convert a pixel size to an overview pixel size, rounding up.
  */
 constexpr unsigned ToOverviewCeil(unsigned x) noexcept {
-  return ToOverview(x + ~OVERVIEW_MASK);
+  return ToOverview(x + OVERVIEW_MASK);
 }
 
 } // namespace RasterTraits
