@@ -6,6 +6,7 @@ XCSoar
    :caption: Contents:
 
    build
+   policy
    lua
 
 
