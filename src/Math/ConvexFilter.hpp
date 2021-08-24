@@ -53,7 +53,7 @@ public:
   double GetLastY() const noexcept {
     assert(!IsEmpty());
 
-    return slots[sum_n-1].y;
+    return GetSlots()[GetCount() - 1].y;
   }
 
 private:
