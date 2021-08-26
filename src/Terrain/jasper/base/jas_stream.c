@@ -89,7 +89,7 @@
 #if defined(JAS_HAVE_UNISTD_H)
 #include <unistd.h>
 #endif
-#if !defined(__WINE__) && (defined(WIN32) || defined(JAS_HAVE_IO_H))
+#if !defined(__WINE__) && (defined(_WIN32) || defined(JAS_HAVE_IO_H))
 #include <io.h>
 #endif
 #ifdef _WIN32
@@ -557,7 +557,7 @@ jas_stream_t *jas_stream_fdopen(int fd, const char *mode)
 	/* Parse the mode string. */
 	stream->openmode_ = jas_strtoopenmode(mode);
 
-#if defined(WIN32) || defined(JAS_HAVE_IO_H)
+#if defined(_WIN32) || defined(JAS_HAVE_IO_H)
 	/* Argh!!!  Someone ought to banish text mode (i.e., O_TEXT) to the
 	  greatest depths of purgatory! */
 	/* Ensure that the file descriptor is in binary mode, if the caller
