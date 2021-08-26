@@ -1,4 +1,4 @@
-CXX_FEATURES = -std=gnu++2a
+CXX_FEATURES = -std=c++20
 CXX_FEATURES += -fno-threadsafe-statics
 CXX_FEATURES += -fmerge-all-constants
 

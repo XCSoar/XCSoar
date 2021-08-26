@@ -63,11 +63,11 @@ Copyright_License {
 
 #ifdef __clang__
 #  if CLANG_VERSION < GCC_MAKE_VERSION(10,0,0)
-#    error Sorry, your clang version is too old.  You need at least version 4.0.
+#    error Sorry, your clang version is too old.  You need at least version 10.
 #  endif
 #elif defined(__GNUC__)
-#  if GCC_OLDER_THAN(8,0)
-#    error Sorry, your gcc version is too old.  You need at least version 6.
+#  if GCC_OLDER_THAN(10,0)
+#    error Sorry, your gcc version is too old.  You need at least version 10.
 #  endif
 #else
 #  warning Untested compiler.  Use at your own risk!
