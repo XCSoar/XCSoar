@@ -35,8 +35,8 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
+#include "Math/Constants.hpp"
 #include "util/Clamp.hpp"
-
 
 extern "C" {
 #include <lauxlib.h>

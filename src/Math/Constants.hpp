@@ -36,6 +36,14 @@ Copyright_License {
 #define M_PI_2 1.5707963268
 #endif
 
+#ifndef M_SQRT2
+#define M_SQRT2 1.41421356237309504880
+#endif
+
+#ifndef M_SQRT1_2
+#define M_SQRT1_2 0.70710678118654752440
+#endif
+
 static constexpr double DEG_TO_RAD = .0174532925199432958;
 static constexpr double RAD_TO_DEG = 57.2957795131;
 

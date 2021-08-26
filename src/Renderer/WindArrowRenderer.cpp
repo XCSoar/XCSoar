@@ -26,6 +26,7 @@ Copyright_License {
 #include "Look/WindArrowLook.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Math/Angle.hpp"
+#include "Math/Constants.hpp"
 #include "Math/Util.hpp"
 #include "Math/Screen.hpp"
 #include "NMEA/Derived.hpp"
