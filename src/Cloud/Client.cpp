@@ -30,6 +30,7 @@ Copyright_License {
 #include "net/AddressInfo.hxx"
 #include "net/Resolver.hxx"
 
+#include <boost/geometry/algorithms/distance.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
 #include <boost/geometry/strategies/strategies.hpp>
 

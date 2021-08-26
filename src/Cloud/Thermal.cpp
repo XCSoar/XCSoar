@@ -28,6 +28,7 @@ Copyright_License {
 #include "Tracking/SkyLines/Assemble.hpp"
 #include "Tracking/SkyLines/Import.hpp"
 
+#include <boost/geometry/algorithms/distance.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
 #include <boost/geometry/strategies/strategies.hpp>
 

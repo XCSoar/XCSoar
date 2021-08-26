@@ -26,6 +26,7 @@
 #include "Navigation/Aircraft.hpp"
 
 #include <boost/geometry/geometries/linestring.hpp>
+#include <boost/geometry/algorithms/distance.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
 #include <boost/geometry/strategies/strategies.hpp>
 
