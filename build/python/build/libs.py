@@ -13,9 +13,9 @@ from build.sdl2 import SDL2Project
 from build.lua import LuaProject
 
 binutils = BinutilsProject(
-    'https://ftp.gnu.org/gnu/binutils/binutils-2.36.1.tar.xz',
-    'http://mirrors.ibiblio.org/gnu/ftp/gnu/binutils/binutils-2.36.1.tar.xz',
-    'e81d9edf373f193af428a0f256674aea62a9d74dfe93f65192d4eae030b0f3b0',
+    'https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz',
+    'http://mirrors.ibiblio.org/gnu/ftp/gnu/binutils/binutils-2.37.tar.xz',
+    '820d9724f020a3e69cb337893a0b63c2db161dadcb0e06fc11dc29eb1e84a32c',
     'bin/as',
     [
         '--with-system-zlib',
