@@ -1,4 +1,4 @@
-Version 7.16 - not yet released
+Version 7.16 - 2021/08/27
 * user interface
   - don't draw "---" over graphical InfoBoxes
 * Android
