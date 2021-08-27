@@ -65,6 +65,7 @@ struct InfoBoxData {
    */
   void SetCustom(uint64_t _custom) noexcept {
     custom = _custom;
+    value.clear();
   }
 
   uint64_t GetCustom() const noexcept {

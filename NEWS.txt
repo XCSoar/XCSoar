@@ -1,4 +1,6 @@
 Version 7.16 - not yet released
+* user interface
+  - don't draw "---" over graphical InfoBoxes
 * Android
   - fix deadlock bug with Bluetooth sensors and the internal GPS
 
