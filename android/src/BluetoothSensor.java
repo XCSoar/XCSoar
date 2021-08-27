@@ -92,7 +92,7 @@ public final class BluetoothSensor
 
     state = _state;
 
-    if (!safeDestruct.increment()) {
+    if (safeDestruct.increment()) {
       try {
         listener.onSensorStateChanged();
       } finally {
