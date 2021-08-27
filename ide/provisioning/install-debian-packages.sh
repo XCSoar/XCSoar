@@ -40,7 +40,7 @@ apt-get install ${APTOPTS[*]} make g++ \
   libtiff5-dev libgeotiff-dev \
   libcurl4-openssl-dev \
   libc-ares-dev \
-  liblua5.2-dev lua5.2-dev \
+  liblua5.4-dev \
   libxml-parser-perl \
   libasound2-dev \
   libsdl2-dev \

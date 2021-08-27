@@ -20,7 +20,7 @@ Learning Lua
 This manual will not attempt to teach you basic Lua. There are enough
 resources on the internet, for example:
 
--  `Lua 5.3 Reference Manual <http://www.lua.org/manual/5.3/>`__
+-  `Lua 5.4 Reference Manual <http://www.lua.org/manual/5.4/>`__
 
 -  `Programming in Lua <http://www.lua.org/pil/contents.html>`__, a book
    on Lua

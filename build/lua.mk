@@ -6,7 +6,7 @@ ifeq ($(USE_THIRDPARTY_LIBS),y)
 LIBLUA_LDLIBS = -llua
 LIBLUA_CPPFLAGS =
 else
-$(eval $(call pkg-config-library,LIBLUA,lua5.2))
+$(eval $(call pkg-config-library,LIBLUA,lua5.4))
 endif
 
 LUA_SOURCES = \

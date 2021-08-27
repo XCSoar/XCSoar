@@ -134,7 +134,7 @@ The following command installs these on Debian::
       libc-ares-dev \
       libcurl4-openssl-dev \
       libc-ares-dev \
-      liblua5.2-dev lua5.2-dev \
+      liblua5.4-dev \
       libxml-parser-perl \
       libasound2-dev \
       librsvg2-bin xsltproc \
