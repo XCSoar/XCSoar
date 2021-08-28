@@ -265,8 +265,9 @@ endef
 
 $(foreach NAME,$(ANDROID_LIB_NAMES),$(eval $(call generate-all-abis,$(NAME))))
 
-.PHONY: libs
+.PHONY: libs compile
 libs: $(ANDROID_THIRDPARTY_STAMPS)
+compile: $(ANDROID_LIB_BUILD)
 
 # Generate symbols.zip (symbolication file) for Google Play, which
 # allows Google Play to show symbol names in stack traces.
