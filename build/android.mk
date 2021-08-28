@@ -90,11 +90,13 @@ ifeq ($(TESTING),y)
 	JAVA_SOURCES += $(wildcard android/src/testing/*.java)
 endif
 
-ANDROID_XML_RES := $(wildcard android/res/*/*.xml)
-ANDROID_XML_RES_COPIES := $(patsubst android/%,$(ANDROID_BUILD)/%,$(ANDROID_XML_RES))
+GEN_DIR = $(ANDROID_BUILD)/gen
+RES_DIR = $(ANDROID_BUILD)/res
+DRAWABLE_DIR = $(RES_DIR)/drawable
+RAW_DIR = $(RES_DIR)/raw
 
-DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
-RAW_DIR = $(ANDROID_BUILD)/res/raw
+ANDROID_XML_RES := $(wildcard android/res/*/*.xml)
+ANDROID_XML_RES_COPIES := $(patsubst android/res/%,$(RES_DIR)/%,$(ANDROID_XML_RES))
 
 ifeq ($(TESTING),y)
 ICON_SVG = $(topdir)/Data/graphics/logo_red.svg
@@ -104,37 +106,37 @@ endif
 
 ICON_WHITE_SVG = $(topdir)/Data/graphics/logo_white.svg
 
-$(ANDROID_BUILD)/res/drawable-ldpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-ldpi/dirstamp
+$(RES_DIR)/drawable-ldpi/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable-ldpi/dirstamp
 	$(Q)rsvg-convert --width=36 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable/dirstamp
+$(RES_DIR)/drawable/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable/dirstamp
 	$(Q)rsvg-convert --width=48 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-hdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-hdpi/dirstamp
+$(RES_DIR)/drawable-hdpi/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable-hdpi/dirstamp
 	$(Q)rsvg-convert --width=72 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-xhdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-xhdpi/dirstamp
+$(RES_DIR)/drawable-xhdpi/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable-xhdpi/dirstamp
 	$(Q)rsvg-convert --width=96 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-xxhdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-xxhdpi/dirstamp
+$(RES_DIR)/drawable-xxhdpi/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable-xxhdpi/dirstamp
 	$(Q)rsvg-convert --width=144 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-xxxhdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-xxxhdpi/dirstamp
+$(RES_DIR)/drawable-xxxhdpi/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable-xxxhdpi/dirstamp
 	$(Q)rsvg-convert --width=192 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable/notification_icon.png: $(ICON_WHITE_SVG) | $(ANDROID_BUILD)/res/drawable/dirstamp
+$(RES_DIR)/drawable/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR)/drawable/dirstamp
 	$(Q)rsvg-convert --width=24 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-hdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(ANDROID_BUILD)/res/drawable-hdpi/dirstamp
+$(RES_DIR)/drawable-hdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR)/drawable-hdpi/dirstamp
 	$(Q)rsvg-convert --width=36 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-xhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(ANDROID_BUILD)/res/drawable-xhdpi/dirstamp
+$(RES_DIR)/drawable-xhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR)/drawable-xhdpi/dirstamp
 	$(Q)rsvg-convert --width=48 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-xxhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(ANDROID_BUILD)/res/drawable-xxhdpi/dirstamp
+$(RES_DIR)/drawable-xxhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR)/drawable-xxhdpi/dirstamp
 	$(Q)rsvg-convert --width=72 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-xxxhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(ANDROID_BUILD)/res/drawable-xxxhdpi/dirstamp
+$(RES_DIR)/drawable-xxxhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR)/drawable-xxxhdpi/dirstamp
 	$(Q)rsvg-convert --width=96 $< -o $@
 
 OGGENC = oggenc --quiet --quality 1
@@ -168,17 +170,17 @@ $(PNG5): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstam
 	$(Q)$(IM_PREFIX)convert $< $@
 
 PNG_FILES = $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5) \
-	$(ANDROID_BUILD)/res/drawable-ldpi/icon.png \
-	$(ANDROID_BUILD)/res/drawable/icon.png \
-	$(ANDROID_BUILD)/res/drawable-hdpi/icon.png \
-	$(ANDROID_BUILD)/res/drawable-xhdpi/icon.png \
-	$(ANDROID_BUILD)/res/drawable-xxhdpi/icon.png \
-	$(ANDROID_BUILD)/res/drawable-xxxhdpi/icon.png \
-	$(ANDROID_BUILD)/res/drawable/notification_icon.png \
-	$(ANDROID_BUILD)/res/drawable-hdpi/notification_icon.png \
-	$(ANDROID_BUILD)/res/drawable-xhdpi/notification_icon.png \
-	$(ANDROID_BUILD)/res/drawable-xxhdpi/notification_icon.png \
-	$(ANDROID_BUILD)/res/drawable-xxxhdpi/notification_icon.png
+	$(RES_DIR)/drawable-ldpi/icon.png \
+	$(RES_DIR)/drawable/icon.png \
+	$(RES_DIR)/drawable-hdpi/icon.png \
+	$(RES_DIR)/drawable-xhdpi/icon.png \
+	$(RES_DIR)/drawable-xxhdpi/icon.png \
+	$(RES_DIR)/drawable-xxxhdpi/icon.png \
+	$(RES_DIR)/drawable/notification_icon.png \
+	$(RES_DIR)/drawable-hdpi/notification_icon.png \
+	$(RES_DIR)/drawable-xhdpi/notification_icon.png \
+	$(RES_DIR)/drawable-xxhdpi/notification_icon.png \
+	$(RES_DIR)/drawable-xxxhdpi/notification_icon.png
 
 ifeq ($(TESTING),y)
 MANIFEST = android/testing/AndroidManifest.xml
@@ -186,24 +188,24 @@ else
 MANIFEST = android/AndroidManifest.xml
 endif
 
-$(ANDROID_XML_RES_COPIES): $(ANDROID_BUILD)/%: android/%
+$(ANDROID_XML_RES_COPIES): $(RES_DIR)/%: android/res/%
 	$(Q)-$(MKDIR) -p $(dir $@)
 	$(Q)cp $< $@
 
-$(ANDROID_BUILD)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) | $(ANDROID_BUILD)/gen/dirstamp
+$(ANDROID_BUILD)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) | $(GEN_DIR)/dirstamp
 	@$(NQ)echo "  AAPT"
 	$(Q)$(AAPT) package -f -m --auto-add-overlay \
 		--custom-package $(JAVA_PACKAGE) \
 		-M $(MANIFEST) \
-		-S $(ANDROID_BUILD)/res \
-		-J $(ANDROID_BUILD)/gen \
+		-S $(RES_DIR) \
+		-J $(GEN_DIR) \
 		-I $(ANDROID_SDK_PLATFORM_DIR)/android.jar \
 		-F $(ANDROID_BUILD)/resources.apk
 
 # R.java is generated by aapt, when resources.apk is generated
-$(ANDROID_BUILD)/gen/org/xcsoar/R.java: $(ANDROID_BUILD)/resources.apk
+$(GEN_DIR)/org/xcsoar/R.java: $(ANDROID_BUILD)/resources.apk
 
-$(ANDROID_BUILD)/classes.dex: $(JAVA_SOURCES) $(ANDROID_BUILD)/gen/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
+$(ANDROID_BUILD)/classes.dex: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
 	@$(NQ)echo "  JAVAC   $(JAVA_CLASSFILES_DIR)"
 	$(Q)$(JAVAC) \
 		-source 1.7 -target 1.7 \
@@ -212,7 +214,7 @@ $(ANDROID_BUILD)/classes.dex: $(JAVA_SOURCES) $(ANDROID_BUILD)/gen/org/xcsoar/R.
 		-Xlint:-options \
 		-Xlint:-static \
 		-cp $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) \
-		-d $(JAVA_CLASSFILES_DIR) $(ANDROID_BUILD)/gen/org/xcsoar/R.java \
+		-d $(JAVA_CLASSFILES_DIR) $(GEN_DIR)/org/xcsoar/R.java \
 		-h $(NATIVE_INCLUDE) \
 		$(JAVA_SOURCES)
 	@$(NQ)echo "  DX      $@"
