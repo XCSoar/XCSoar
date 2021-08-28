@@ -96,6 +96,7 @@ endif
 include $(topdir)/build/flags.mk
 include $(topdir)/build/charset.mk
 include $(topdir)/build/warnings.mk
+include $(topdir)/build/host.mk
 include $(topdir)/build/compile.mk
 include $(topdir)/build/link.mk
 include $(topdir)/build/resource.mk
