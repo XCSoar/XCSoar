@@ -53,6 +53,7 @@ class Project:
 
         # protect concurrent builds by holding an exclusive lock
         # TODO: release the lock as soon as this project build finishes
+        os.makedirs(parent_path, exist_ok=True)
         self.__lockfile = open(os.path.join(parent_path, 'lock.' + self.base), 'w')
         fcntl.flock(self.__lockfile.fileno(), fcntl.LOCK_EX)
 
