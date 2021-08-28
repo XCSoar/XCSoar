@@ -4,32 +4,32 @@ WARNINGS += -Wundef
 WARNINGS += -Wmissing-declarations
 WARNINGS += -Wredundant-decls
 
-CXXFLAGS += $(WARNINGS)
-CXXFLAGS += -Wmissing-noreturn
-CXXFLAGS += -Wvla
+CXX_WARNINGS = $(WARNINGS)
+CXX_WARNINGS += -Wmissing-noreturn
+CXX_WARNINGS += -Wvla
 
 # disable some warnings, we're not ready for them yet
-CXXFLAGS += -Wno-unused-parameter
-CXXFLAGS += -Wno-missing-field-initializers 
-CXXFLAGS += -Wcast-align
+CXX_WARNINGS += -Wno-unused-parameter
+CXX_WARNINGS += -Wno-missing-field-initializers
+CXX_WARNINGS += -Wcast-align
 
 # plain C warnings
 
-CFLAGS += $(WARNINGS)
-CFLAGS += -Wmissing-prototypes -Wstrict-prototypes
-CFLAGS += -Wnested-externs
+C_WARNINGS = $(WARNINGS)
+C_WARNINGS += -Wmissing-prototypes -Wstrict-prototypes
+C_WARNINGS += -Wnested-externs
 
 # make warnings fatal (for perfectionists)
 
 WERROR ?= $(DEBUG)
 
 ifeq ($(WERROR),y)
-CXXFLAGS += -Werror
-CFLAGS += -Werror
+CXX_WARNINGS += -Werror
+C_WARNINGS += -Werror
 endif
 
-#CXXFLAGS += -pedantic
-#CXXFLAGS += -pedantic-errors
+#CXX_WARNINGS += -pedantic
+#CXX_WARNINGS += -pedantic-errors
 
 # -Wdisabled-optimization
 # -Wunused -Wshadow -Wunreachable-code
