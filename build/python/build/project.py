@@ -1,4 +1,4 @@
-import os, shutil
+import os, fcntl, shutil
 import re
 
 from build.download import download_and_verify
@@ -50,6 +50,12 @@ class Project:
             parent_path = toolchain.src_path
         else:
             parent_path = toolchain.build_path
+
+        # protect concurrent builds by holding an exclusive lock
+        # TODO: release the lock as soon as this project build finishes
+        self.__lockfile = open(os.path.join(parent_path, 'lock.' + self.base), 'w')
+        fcntl.flock(self.__lockfile.fileno(), fcntl.LOCK_EX)
+
         path = untar(self.download(toolchain), parent_path, self.base,
                      lazy=out_of_tree and self.patches is None)
         if self.patches is not None:
