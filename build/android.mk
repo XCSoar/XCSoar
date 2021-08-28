@@ -231,21 +231,21 @@ define generate-abi
 ANDROID_LIB_BUILD += $$(ANDROID_BUILD)/lib/$(2)/lib$(1).so
 
 # copy libxcsoar.so to ANDROIDFAT
-$$(ANDROID_BUILD)/lib/$(2)/lib$(1).so: $$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so | $$(ANDROID_BUILD)/lib/$(2)/dirstamp
+$$(ANDROID_BUILD)/lib/$(2)/lib$(1).so: $$(TARGET_OUTPUT_DIR)/$(2)/$$(XCSOAR_ABI)/bin/lib$(1).so | $$(ANDROID_BUILD)/lib/$(2)/dirstamp
 	$$(Q)cp $$< $$@
 
 # build third-party libraries
-ANDROID_THIRDPARTY_STAMPS += $$(OUT)/$(3)/thirdparty.stamp
-$$(OUT)/$(3)/thirdparty.stamp:
-	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) libs
+ANDROID_THIRDPARTY_STAMPS += $$(TARGET_OUTPUT_DIR)/$(2)/thirdparty.stamp
+$$(TARGET_OUTPUT_DIR)/$(2)/thirdparty.stamp:
+	$$(Q)$$(MAKE) TARGET_OUTPUT_DIR=$$(TARGET_OUTPUT_DIR) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) libs
 
 # build libxcsoar.so
-$$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so: $$(OUT)/$(3)/thirdparty.stamp
-	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
+$$(TARGET_OUTPUT_DIR)/$(2)/$$(XCSOAR_ABI)/bin/lib$(1).so: $$(TARGET_OUTPUT_DIR)/$(2)/thirdparty.stamp
+	$$(Q)$$(MAKE) TARGET_OUTPUT_DIR=$$(TARGET_OUTPUT_DIR) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
 
 # extract symbolication files for Google Play
 ANDROID_SYMBOLICATION_BUILD += $$(ANDROID_BUILD)/symbols/$(2)/lib$(1).so
-$$(ANDROID_BUILD)/symbols/$(2)/lib$(1).so: $$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1)-ns.so | $$(ANDROID_BUILD)/symbols/$(2)/dirstamp
+$$(ANDROID_BUILD)/symbols/$(2)/lib$(1).so: $$(TARGET_OUTPUT_DIR)/$(2)/$$(XCSOAR_ABI)/bin/lib$(1)-ns.so | $$(ANDROID_BUILD)/symbols/$(2)/dirstamp
 	$$(Q)$$(TCPREFIX)objcopy$$(EXE) --strip-debug $$< $$@
 
 endef

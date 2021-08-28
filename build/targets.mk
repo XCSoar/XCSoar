@@ -76,26 +76,31 @@ ifeq ($(TARGET),ANDROID7)
   ARMV7 := y
   NEON := y
   override TARGET = ANDROID
+  override TARGET_FLAVOR = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROID86)
   X86 := y
   override TARGET = ANDROID
+  override TARGET_FLAVOR = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROIDAARCH64)
   AARCH64 := y
   override TARGET = ANDROID
+  override TARGET_FLAVOR = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROIDX64)
   X64 := y
   override TARGET = ANDROID
+  override TARGET_FLAVOR = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROIDFAT)
   FAT_BINARY := y
   override TARGET = ANDROID
+  override TARGET_FLAVOR = ANDROID
 endif
 
 # real targets
@@ -344,6 +349,8 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_APK_LIB_ABI           = x86_64
     LLVM_TARGET                  := x86_64-linux-android
   endif
+
+  XCSOAR_ARCH_SUBDIR = /$(ANDROID_APK_LIB_ABI)
 
   HOST_TRIPLET := $(LLVM_TARGET)
 
