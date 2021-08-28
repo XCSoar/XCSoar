@@ -1,7 +1,7 @@
 from build.verify import verify_file_digest
+from .lockfile import lockfile
 import os
 from tempfile import NamedTemporaryFile
-import fcntl
 import urllib.request
 import sys
 
@@ -28,18 +28,15 @@ def download_and_verify(url, alternative_url, md5, parent_path):
     path = os.path.join(parent_path, os.path.basename(url))
 
     # protect concurrent builds by holding an exclusive lock
-    lockfile = open(os.path.join(parent_path, 'lock.' + os.path.basename(url)), 'w')
-    fcntl.flock(lockfile.fileno(), fcntl.LOCK_EX)
+    with lockfile(os.path.join(parent_path, 'lock.' + os.path.basename(url))):
+        try:
+            if verify_file_digest(path, md5): return path
+            os.unlink(path)
+        except FileNotFoundError:
+            pass
 
-    try:
-        if verify_file_digest(path, md5): return path
-        os.unlink(path)
-    except FileNotFoundError:
-        pass
+        with NamedTemporaryFile(dir=parent_path) as tmp:
+            __download_and_verify_to(url, alternative_url, md5, tmp.name)
+            os.link(tmp.name, path)
 
-    with NamedTemporaryFile(dir=parent_path) as tmp:
-        __download_and_verify_to(url, alternative_url, md5, tmp.name)
-        os.link(tmp.name, path)
-
-    lockfile.close()
-    return path
+        return path
