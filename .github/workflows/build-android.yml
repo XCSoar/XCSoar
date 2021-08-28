@@ -56,7 +56,7 @@ jobs:
           options: -v ${{ github.workspace }}:/opt/xcsoar -v /home/runner/work/XCSoar/XCSoar/.ccache:/root/.ccache
           run: |
             cd /opt/xcsoar
-            xcsoar-compile ${{ env.TARGET }} USE_CCACHE=y V=2 everything DEBUG=${{ env.DEBUG }}
+            xcsoar-compile ${{ env.TARGET }} USE_CCACHE=y V=2 DEBUG=${{ env.DEBUG }}
       - name: upload artifact
         uses: actions/upload-artifact@v2
         with:
