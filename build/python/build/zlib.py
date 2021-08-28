@@ -29,4 +29,4 @@ class ZlibProject(MakeProject):
 
         subprocess.check_call(['./configure', '--prefix=' + toolchain.install_prefix, '--static'],
                               cwd=src, env=toolchain.env)
-        MakeProject.build(self, toolchain, src)
+        self.build_make(toolchain, src)

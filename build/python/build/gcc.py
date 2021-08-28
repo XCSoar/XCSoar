@@ -22,4 +22,4 @@ class GccProject(AutotoolsProject):
             build = self.configure(toolchain=toolchain.native,
                                    target_toolchain=toolchain,
                                    build=build)
-        MakeProject.build(self, toolchain.native, build)
+        self.build_make(toolchain.native, build)

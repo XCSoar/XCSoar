@@ -64,4 +64,4 @@ class OpenSSLProject(MakeProject):
                                '--libdir=lib', # no "lib64" on amd64, please
                                '--prefix=' + toolchain.install_prefix],
                               cwd=src, env=toolchain.env)
-        MakeProject.build(self, toolchain, src)
+        self.build_make(toolchain, src)

@@ -30,7 +30,7 @@ class LuaProject(MakeProject):
 
         wd = os.path.join(src, 'src')
 
-        MakeProject.build(self, toolchain, wd, False)
+        self.build_make(toolchain, wd, False)
 
         includedir = os.path.join(toolchain.install_prefix, 'include')
         libdir = os.path.join(toolchain.install_prefix, 'lib')
