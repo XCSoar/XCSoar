@@ -48,7 +48,7 @@ class StringUTFChars {
 
 public:
 	StringUTFChars() noexcept = default;
-	StringUTFChars(std::nullptr_t) noexcept {};
+	StringUTFChars(std::nullptr_t) noexcept {}
 
 	StringUTFChars(JNIEnv *_env,
 		       const jstring _string,
