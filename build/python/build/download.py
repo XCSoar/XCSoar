@@ -1,5 +1,6 @@
 from build.verify import verify_file_digest
 import os
+import fcntl
 import urllib.request
 import sys
 
@@ -8,6 +9,10 @@ def download_and_verify(url, alternative_url, md5, parent_path):
 
     os.makedirs(parent_path, exist_ok=True)
     path = os.path.join(parent_path, os.path.basename(url))
+
+    # protect concurrent builds by holding an exclusive lock
+    lockfile = open(os.path.join(parent_path, 'lock.' + os.path.basename(url)), 'w')
+    fcntl.flock(lockfile.fileno(), fcntl.LOCK_EX)
 
     try:
         if verify_file_digest(path, md5): return path
@@ -31,4 +36,5 @@ def download_and_verify(url, alternative_url, md5, parent_path):
         raise RuntimeError("Digest mismatch")
 
     os.rename(tmp_path, path)
+    lockfile.close()
     return path
