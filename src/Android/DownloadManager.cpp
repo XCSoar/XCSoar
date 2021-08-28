@@ -66,6 +66,12 @@ AndroidDownloadManager::Initialise(JNIEnv *env) noexcept
 
   ctor = env->GetMethodID(util_class, "<init>",
                           "(JLandroid/content/Context;)V");
+  if (Java::DiscardException(env)) {
+    /* need to check for Java exceptions again because the first
+       method lookup initializes the Java class */
+    util_class.Clear(env);
+    return false;
+  }
 
   enumerate_method = env->GetMethodID(util_class, "enumerate", "(J)V");
 

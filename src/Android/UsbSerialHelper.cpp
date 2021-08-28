@@ -48,6 +48,12 @@ UsbSerialHelper::Initialise(JNIEnv *env) noexcept
 
   ctor = env->GetMethodID(cls, "<init>",
                           "(Landroid/content/Context;)V");
+  if (Java::DiscardException(env)) {
+    /* need to check for Java exceptions again because the first
+       method lookup initializes the Java class */
+    cls.Clear(env);
+    return false;
+  }
 
   close_method = env->GetMethodID(cls, "close", "()V");
   connect_method = env->GetMethodID(cls, "connect",

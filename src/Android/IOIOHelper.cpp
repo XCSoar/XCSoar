@@ -41,6 +41,13 @@ IOIOHelper::Initialise(JNIEnv *env)
     return false;
 
   ctor = env->GetMethodID(cls, "<init>", "()V");
+  if (Java::DiscardException(env)) {
+    /* need to check for Java exceptions again because the first
+       method lookup initializes the Java class */
+    cls.Clear(env);
+    return false;
+  }
+
   openUart_method = env->GetMethodID(cls, "openUart",
                                      "(II)Lorg/xcsoar/AndroidPort;");
   shutdown_method = env->GetMethodID(cls, "shutdown", "()V");

@@ -56,8 +56,15 @@ BluetoothHelper::Initialise(JNIEnv *env) noexcept
     /* Android < 2.0 doesn't have Bluetooth support */
     return false;
 
+
   ctor = env->GetMethodID(cls, "<init>",
                           "(Landroid/content/Context;)V");
+  if (Java::DiscardException(env)) {
+    /* need to check for Java exceptions again because the first
+       method lookup initializes the Java class */
+    cls.Clear(env);
+    return false;
+  }
 
   hasLe_field = env->GetFieldID(cls, "hasLe", "Z");
   isEnabled_method = env->GetMethodID(cls, "isEnabled", "()Z");
