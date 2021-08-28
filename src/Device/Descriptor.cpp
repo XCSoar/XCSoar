@@ -432,6 +432,9 @@ DeviceDescriptor::OpenBluetoothSensor()
   if (is_simulator())
     return true;
 
+  if (bluetooth_helper == nullptr)
+    throw std::runtime_error("Bluetooth not available");
+
   if (config.bluetooth_mac.empty())
     throw std::runtime_error("No Bluetooth MAC configured");
 
