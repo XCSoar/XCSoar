@@ -118,7 +118,7 @@ class AutotoolsProject(MakeProject):
             args += ['DESTDIR=' + toolchain.install_prefix]
         return args
 
-    def build(self, toolchain, target_toolchain=None):
+    def _build(self, toolchain, target_toolchain=None):
         build = self.configure(toolchain, target_toolchain=target_toolchain)
         if self.subdirs is not None:
             for subdir in self.subdirs:

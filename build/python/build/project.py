@@ -73,3 +73,7 @@ class Project:
             pass
         os.makedirs(path, exist_ok=True)
         return path
+
+    def build(self, toolchain):
+        self._build(toolchain)
+
