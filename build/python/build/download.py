@@ -1,8 +1,25 @@
 from build.verify import verify_file_digest
 import os
+from tempfile import NamedTemporaryFile
 import fcntl
 import urllib.request
 import sys
+
+def __download(url, alternative_url, path):
+    print("download", url)
+    try:
+        urllib.request.urlretrieve(url, path)
+    except:
+        if alternative_url is None:
+          raise
+        print("download error:", sys.exc_info()[0])
+        print("download (alternative location)", alternative_url)
+        urllib.request.urlretrieve(alternative_url, path)
+
+def __download_and_verify_to(url, alternative_url, md5, path):
+    __download(url, alternative_url, path)
+    if not verify_file_digest(path, md5):
+        raise RuntimeError("Digest mismatch")
 
 def download_and_verify(url, alternative_url, md5, parent_path):
     """Download a file, verify its MD5 checksum and return the local path."""
@@ -20,21 +37,9 @@ def download_and_verify(url, alternative_url, md5, parent_path):
     except FileNotFoundError:
         pass
 
-    tmp_path = path + '.tmp'
+    with NamedTemporaryFile(dir=parent_path) as tmp:
+        __download_and_verify_to(url, alternative_url, md5, tmp.name)
+        os.link(tmp.name, path)
 
-    print("download", url)
-    try:
-        urllib.request.urlretrieve(url, tmp_path)
-    except:
-        if alternative_url is None:
-          raise
-        print("download error:", sys.exc_info()[0])
-        print("download (alternative location)", alternative_url)
-        urllib.request.urlretrieve(alternative_url, tmp_path)
-    if not verify_file_digest(tmp_path, md5):
-        os.unlink(tmp_path)
-        raise RuntimeError("Digest mismatch")
-
-    os.rename(tmp_path, path)
     lockfile.close()
     return path
