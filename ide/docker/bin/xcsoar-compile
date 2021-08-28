@@ -9,7 +9,7 @@ TARGET=${ARGS[0]}
 unset "ARGS[0]"
 
 case "${TARGET}" in
-      "ANDROID")
+      ANDROID*)
         make TARGET="${TARGET}" -j "${CPUS}" ${ARGS[@]}
       ;;
       "DOCS")
