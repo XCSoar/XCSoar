@@ -4,11 +4,11 @@ import os, os.path
 import re
 import sys
 
-if len(sys.argv) != 15:
-    print("Usage: build.py LIB_PATH TARGET HOST_TRIPLET ACTUAL_HOST_TRIPLET ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP WINDRES", file=sys.stderr)
+if len(sys.argv) != 14:
+    print("Usage: build.py LIB_PATH HOST_TRIPLET ACTUAL_HOST_TRIPLET ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP WINDRES", file=sys.stderr)
     sys.exit(1)
 
-lib_path, target, toolchain_host_triplet, actual_host_triplet, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip, windres = sys.argv[1:]
+lib_path, toolchain_host_triplet, actual_host_triplet, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip, windres = sys.argv[1:]
 
 # the path to the XCSoar sources
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
@@ -145,7 +145,7 @@ elif 'apple-darwin' in actual_host_triplet:
         libgeotiff,
         sdl2
     ]
-elif target == 'ANDROID':
+elif 'android' in actual_host_triplet:
     thirdparty_libs = [
         libsodium,
         openssl,
