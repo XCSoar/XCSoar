@@ -77,11 +77,7 @@ LogoPageWindow::OnPaint(Canvas &canvas)
   canvas.DrawText({x + Layout::FastScale(80), y}, XCSoar_VersionString);
   y += Layout::FastScale(22);
 
-  canvas.DrawText({x, y}, _T("date: "));
-  canvas.DrawText({x + Layout::FastScale(80), y}, _T(__DATE__));
 #ifdef GIT_COMMIT_ID
-  y += Layout::FastScale(22);
-
   canvas.DrawText({x, y}, _T("git: "));
   canvas.DrawText({x + Layout::FastScale(80), y}, _T(GIT_COMMIT_ID));
 #endif
