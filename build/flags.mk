@@ -6,7 +6,7 @@ ifeq ($(CLANG),n)
 CXX_FEATURES += -fconserve-space -fno-operator-names
 endif
 
-C_FEATURES = -std=gnu99
+C_FEATURES = -std=c11
 
 # produce position independent code when compiling the python library
 ifeq ($(MAKECMDGOALS),python)
