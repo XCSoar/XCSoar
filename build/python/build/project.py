@@ -33,6 +33,8 @@ class Project:
 
         self.patches = patches
 
+        self.__unpack_lockfile = None
+
     def download(self, toolchain):
         return download_and_verify(self.url, self.alternative_url, self.md5, toolchain.tarball_path)
 
@@ -52,10 +54,9 @@ class Project:
             parent_path = toolchain.build_path
 
         # protect concurrent builds by holding an exclusive lock
-        # TODO: release the lock as soon as this project build finishes
         os.makedirs(parent_path, exist_ok=True)
-        self.__lockfile = open(os.path.join(parent_path, 'lock.' + self.base), 'w')
-        fcntl.flock(self.__lockfile.fileno(), fcntl.LOCK_EX)
+        self.__unpack_lockfile = open(os.path.join(parent_path, 'lock.' + self.base), 'w')
+        fcntl.flock(self.__unpack_lockfile.fileno(), fcntl.LOCK_EX)
 
         path = untar(self.download(toolchain), parent_path, self.base,
                      lazy=out_of_tree and self.patches is None)
@@ -75,5 +76,9 @@ class Project:
         return path
 
     def build(self, toolchain):
-        self._build(toolchain)
-
+        try:
+            self._build(toolchain)
+        finally:
+            if self.__unpack_lockfile:
+                self.__unpack_lockfile.close()
+                self.__unpack_lockfile = None
