@@ -171,6 +171,8 @@ include $(topdir)/build/harness.mk
 
 ifeq ($(FUZZER),y)
 include $(topdir)/build/fuzzer.mk
+else ifeq ($(FAT_BINARY),y)
+  # No native code in TARGET=ANDROIDFAT
 else
 include $(topdir)/build/vali.mk
 include $(topdir)/build/infobox.mk
