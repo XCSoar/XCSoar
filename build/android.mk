@@ -295,7 +295,7 @@ $(NATIVE_HEADERS): $(ANDROID_BUILD)/classes.dex
 $(ANDROID_BUILD)/unsigned.apk: $(ANDROID_BUILD)/classes.dex $(ANDROID_BUILD)/resources.apk $(ANDROID_LIB_BUILD)
 	@$(NQ)echo "  APK     $@"
 	$(Q)cp $(ANDROID_BUILD)/resources.apk $@
-	$(Q)cd $(dir $@) && zip -q -r $(notdir $@) classes.dex lib
+	$(Q)cd $(dir $@) && zip -q -r $(notdir $@) classes.dex lib/*/*.so
 
 # Generate ~/.android/debug.keystore, if it does not exists, as the official
 # Android build tools do it:
