@@ -119,6 +119,7 @@ INCLUDES += $(BOOST_CPPFLAGS)
 
 include $(topdir)/build/libjson.mk
 
+ifeq ($(FAT_BINARY),n)
 # Create libraries for zzip, jasper and compatibility stuff
 include $(topdir)/build/libresource.mk
 include $(topdir)/build/liblook.mk
@@ -169,6 +170,7 @@ include $(topdir)/build/libaudio.mk
 include $(topdir)/build/libterrain.mk
 include $(topdir)/build/lua.mk
 include $(topdir)/build/harness.mk
+endif # FAT_BINARY=n
 
 ifeq ($(FUZZER),y)
 include $(topdir)/build/fuzzer.mk
@@ -230,7 +232,12 @@ endif
 endif
 
 all: $(OUTPUTS)
+
+ifeq ($(FAT_BINARY),n)
 everything: $(OUTPUTS) $(OPTIONAL_OUTPUTS) debug build-check build-harness
+else
+everything: all
+endif
 
 clean:
 	@$(NQ)echo "cleaning all"
