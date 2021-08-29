@@ -127,7 +127,7 @@ TopCanvas::Create(PixelSize new_size,
   const EGLNativeDisplayType native_display = EGL_DEFAULT_DISPLAY;
   mali_native_window.width = new_size.width;
   mali_native_window.height = new_size.height;
-  struct mali_native_window *native_window = &mali_native_window;
+  fbdev_window *native_window = &mali_native_window;
 #elif defined(MESA_KMS)
   current_bo = nullptr;
   connector = nullptr;

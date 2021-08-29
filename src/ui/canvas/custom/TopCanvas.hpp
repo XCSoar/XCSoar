@@ -42,6 +42,14 @@ Copyright_License {
 #ifdef USE_EGL
 #include "ui/egl/System.hpp"
 
+#ifdef HAVE_MALI_NATIVE_WINDOW
+// The old LINUX-SUNXI EGL headers define struct mali_native_window.
+// The new headers for mainline kernels from Bootlin typedef fbdev_window.
+// The struct content is identical.
+// typedef fbdev_window from struct mali_native_window for the old headers.
+typedef struct mali_native_window fbdev_window;
+#endif
+
 #ifdef MESA_KMS
 #include <drm.h>
 #include <xf86drm.h>
@@ -102,7 +110,7 @@ class TopCanvas
   DISPMANX_ELEMENT_HANDLE_T vc_element;
   EGL_DISPMANX_WINDOW_T vc_window;
 #elif defined(HAVE_MALI)
-  struct mali_native_window mali_native_window;
+  fbdev_window mali_native_window;
 #elif defined(MESA_KMS)
   struct gbm_device *native_display;
   struct gbm_surface *native_window;

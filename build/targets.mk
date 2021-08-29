@@ -201,7 +201,7 @@ ifeq ($(TARGET),CUBIE)
   override TARGET = NEON
   CUBIE ?= /opt/cubie/root
   TARGET_IS_CUBIE=y
-  # OSS Lima driver is available and usable with XCSoar
+  # Open-source Lima driver is available and usable with XCSoar
   # in current mainline kernels, 
   # and in MESA included in recent distributions
   ifeq ($(ENABLE_MESA_KMS),y)
