@@ -19,14 +19,14 @@
 #
 #   ENABLE_SDL  If set to "y", the UI is drawn with libSDL.
 #
-#   ENABLE_MESA_KMS If set to "y", the programs switches graphics mode on.
-#               Use this option when the program runs on a text-mode system.
+#   ENABLE_MESA_KMS If set to "y", the program uses KMS to switch to graphics mode.
+#               Use this option when the program runs on a text-mode system
 #               without graphics and window system like X11 or Wayland.
 #               Default for Rasperry PI 4, optional for Cubieboard.
 #
 #   OPENGL      "y" means render with OpenGL.
 #
-#   GLES2        "y" means render with OpenGL/ES 2.0.
+#   GLES2       "y" means render with OpenGL/ES 2.0.
 #
 #   GREYSCALE   "y" means render 8-bit greyscale internally
 #
