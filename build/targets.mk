@@ -50,6 +50,7 @@ TARGET_IS_PI4 := n
 TARGET_IS_PI32 := n
 TARGET_IS_PI64 := n
 TARGET_IS_KOBO := n
+TARGET_IS_CUBIE := n
 HAVE_POSIX := n
 HAVE_WIN32 := y
 HAVE_MSVCRT := y
@@ -199,7 +200,16 @@ ifeq ($(TARGET),CUBIE)
   # cross-crompiling for Cubieboard
   override TARGET = NEON
   CUBIE ?= /opt/cubie/root
-  TARGET_HAS_MALI = y
+  TARGET_IS_CUBIE=y
+  # OSS Lima driver is available and usable with XCSoar
+  # in current mainline kernels, 
+  # and in MESA included in recent distributions
+  ifeq ($(ENABLE_MESA_KMS),y)
+    OPENGL = y
+    GLES2 = y
+  else
+    TARGET_HAS_MALI = y
+  endif
 endif
 
 ifeq ($(TARGET),KOBO)
@@ -441,7 +451,7 @@ ifeq ($(TARGET_IS_PI),y)
   endif
 endif
 
-ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
+ifeq ($(HOST_IS_ARM)$(TARGET_IS_CUBIE),ny)
   # cross-crompiling for Cubieboard
   TARGET_CPPFLAGS += --sysroot=$(CUBIE) -isystem $(CUBIE)/usr/include/arm-linux-gnueabihf
   TARGET_CPPFLAGS += -isystem $(CUBIE)/usr/local/stow/sunxi-mali/include
@@ -547,9 +557,9 @@ ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
   TARGET_LDFLAGS += --sysroot=$(PI) -L$(PI)/usr/lib/arm-linux-gnueabihf
 endif
 
-ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
+ifeq ($(HOST_IS_ARM)$(TARGET_IS_CUBIE),ny)
   # cross-crompiling for Cubieboard
-  TARGET_LDFLAGS += --sysroot=$(CUBIE)
+  TARGET_LDFLAGS += -L/usr/arm-linux-gnueabihf/lib --sysroot=$(CUBIE)
   TARGET_LDFLAGS += -L$(CUBIE)/lib/arm-linux-gnueabihf
   TARGET_LDFLAGS += -L$(CUBIE)/usr/lib/arm-linux-gnueabihf
   TARGET_LDFLAGS += -L$(CUBIE)/usr/local/stow/sunxi-mali/lib
