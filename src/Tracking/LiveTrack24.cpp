@@ -27,13 +27,13 @@ Copyright_License {
 #include "util/ConvertString.hpp"
 #include "net/http/ToBuffer.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "util/RuntimeError.hxx"
 #include "util/StaticString.hxx"
 #include "util/StringView.hxx"
 #include "Version.hpp"
 
 #include <cassert>
 #include <cstdlib>
-#include <stdexcept>
 
 namespace LiveTrack24 {
 
@@ -195,6 +195,10 @@ LiveTrack24::SendRequest(const char *url,
   StringView response{buffer, size};
   if (response.StartsWith("OK"))
     return true;
+
+  if (response.SkipPrefix("NOK : ") && !response.empty())
+    throw FormatRuntimeError("Error from server: %.*s",
+                             int(response.size), response.data);
 
   throw std::runtime_error("Error from server");
 }
