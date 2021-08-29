@@ -395,26 +395,26 @@ TopCanvas::Flip()
     saved_crtc = drmModeGetCrtc(dri_fd, encoder->crtc_id);
     drmModeSetCrtc(dri_fd, encoder->crtc_id, fb->fb_id, 0, 0,
                    &connector->connector_id, 1, &mode);
-  }
+  } else {
 
-  bool flip_finished = false;
-  int page_flip_ret = drmModePageFlip(dri_fd, encoder->crtc_id, fb->fb_id,
-                                      DRM_MODE_PAGE_FLIP_EVENT,
-                                      &flip_finished);
-  if (0 != page_flip_ret) {
-    fprintf(stderr, "drmModePageFlip() failed: %d\n", page_flip_ret);
-    exit(EXIT_FAILURE);
-  }
-  while (!flip_finished) {
-    int handle_event_ret = drmHandleEvent(dri_fd, &evctx);
-    if (0 != handle_event_ret) {
-      fprintf(stderr, "drmHandleEvent() failed: %d\n", handle_event_ret);
+    bool flip_finished = false;
+    int page_flip_ret = drmModePageFlip(dri_fd, encoder->crtc_id, fb->fb_id,
+                                        DRM_MODE_PAGE_FLIP_EVENT,
+                                        &flip_finished);
+    if (0 != page_flip_ret) {
+      fprintf(stderr, "drmModePageFlip() failed: %d\n", page_flip_ret);
       exit(EXIT_FAILURE);
     }
-  }
+    while (!flip_finished) {
+      int handle_event_ret = drmHandleEvent(dri_fd, &evctx);
+      if (0 != handle_event_ret) {
+        fprintf(stderr, "drmHandleEvent() failed: %d\n", handle_event_ret);
+        exit(EXIT_FAILURE);
+      }
+    }
 
-  if (nullptr != current_bo)
     gbm_surface_release_buffer(native_window, current_bo);
+  }
 
   current_bo = new_bo;
 #endif
