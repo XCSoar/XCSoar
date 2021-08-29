@@ -28,6 +28,7 @@ Copyright_License {
 #include "net/http/ToBuffer.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "util/StaticString.hxx"
+#include "util/StringView.hxx"
 #include "Version.hpp"
 
 #include <cassert>
@@ -182,6 +183,9 @@ LiveTrack24::SendRequest(const char *url,
   char buffer[64];
   size_t size = Net::DownloadToBuffer(curl, url, buffer, sizeof(buffer),
                                       env);
-  return !env.IsCancelled() && size >= 2 &&
-    buffer[0] == 'O' && buffer[1] == 'K';
+  if (env.IsCancelled())
+    return false;
+
+  StringView response{buffer, size};
+  return response.StartsWith("OK");
 }
