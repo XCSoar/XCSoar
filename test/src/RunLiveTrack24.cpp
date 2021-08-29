@@ -29,6 +29,7 @@ Copyright_License {
 #include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "DebugReplay.hpp"
+#include "util/PrintException.hxx"
 #include "util/ScopeExit.hxx"
 
 #include <cstdio>
@@ -111,7 +112,7 @@ TestTracking(int argc, char *argv[], CurlGlobal &curl)
 
 int
 main(int argc, char *argv[])
-{
+try {
   AsioThread io_thread;
   io_thread.Start();
   AtScopeExit(&) { io_thread.Stop(); };
@@ -121,4 +122,7 @@ main(int argc, char *argv[])
   bool result = TestTracking(argc, argv, *Net::curl);
 
   return result ? EXIT_SUCCESS : EXIT_FAILURE;
+} catch (...) {
+  PrintException(std::current_exception());
+  return EXIT_FAILURE;
 }

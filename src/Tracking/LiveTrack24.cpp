@@ -33,14 +33,20 @@ Copyright_License {
 
 #include <cassert>
 #include <cstdlib>
+#include <stdexcept>
 
 namespace LiveTrack24 {
 
 static NarrowString<256> server;
 
 static const char *GetServer();
-static bool SendRequest(const char *url,
-                        CurlGlobal &curl, OperationEnvironment &env);
+
+/**
+ * Throws on error.
+ */
+static bool
+SendRequest(const char *url,
+            CurlGlobal &curl, OperationEnvironment &env);
 
 } // namespace LiveTrack24
 
@@ -187,5 +193,8 @@ LiveTrack24::SendRequest(const char *url,
     return false;
 
   StringView response{buffer, size};
-  return response.StartsWith("OK");
+  if (response.StartsWith("OK"))
+    return true;
+
+  throw std::runtime_error("Error from server");
 }
