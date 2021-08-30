@@ -22,77 +22,22 @@ Copyright_License {
 */
 
 #include "TrackingGlue.hpp"
+#include "Tracking/TrackingSettings.hpp"
 #include "NMEA/MoreData.hpp"
-#include "NMEA/Derived.hpp"
-#include "Units/System.hpp"
-#include "Operation/Operation.hpp"
 #include "LogFile.hpp"
-#include "util/Macros.hpp"
-
-static LiveTrack24::VehicleType
-MapVehicleTypeToLivetrack24(LiveTrack24::Settings::VehicleType vt)
-{
-  static constexpr LiveTrack24::VehicleType vehicleTypeMap[] = {
-    LiveTrack24::VehicleType::GLIDER,
-    LiveTrack24::VehicleType::PARAGLIDER,
-    LiveTrack24::VehicleType::POWERED_AIRCRAFT,
-    LiveTrack24::VehicleType::HOT_AIR_BALLOON,
-    LiveTrack24::VehicleType::FLEX_WING_FAI1,
-    LiveTrack24::VehicleType::RIGID_WING_FAI5,
-  };
-
-  unsigned vti = (unsigned) vt;
-  if (vti >= ARRAY_SIZE(vehicleTypeMap))
-    vti = 0;
-
-  return vehicleTypeMap[vti];
-}
 
 TrackingGlue::TrackingGlue(EventLoop &event_loop,
                            CurlGlobal &curl) noexcept
-  :StandbyThread("Tracking"),
-   skylines(event_loop, this),
-   livetrack24_client(curl)
+  :skylines(event_loop, this),
+   livetrack24(curl)
 {
-  settings.SetDefaults();
-  livetrack24_client.SetServer(settings.livetrack24.server);
-}
-
-void
-TrackingGlue::StopAsync()
-{
-  std::lock_guard<Mutex> lock(mutex);
-  StandbyThread::StopAsync();
-}
-
-void
-TrackingGlue::WaitStopped()
-{
-  std::lock_guard<Mutex> lock(mutex);
-  StandbyThread::WaitStopped();
 }
 
 void
 TrackingGlue::SetSettings(const TrackingSettings &_settings)
 {
   skylines.SetSettings(_settings.skylines);
-
-  if (_settings.livetrack24.server != settings.livetrack24.server ||
-      _settings.livetrack24.username != settings.livetrack24.username ||
-      _settings.livetrack24.password != settings.livetrack24.password) {
-    /* wait for the current job to finish */
-    LockWaitDone();
-
-    /* now it's safe to access these variables without a lock */
-    settings = _settings;
-    state.ResetSession();
-    livetrack24_client.SetServer(_settings.livetrack24.server);
-  } else {
-    /* no fundamental setting changes; the write needs to be protected
-       by the mutex, because another job may be running already */
-    std::lock_guard<Mutex> lock(mutex);
-    settings = _settings;
-  }
+  livetrack24.SetSettings(_settings.livetrack24);
 }
 
 void
@@ -104,120 +49,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
     LogError(std::current_exception(), "SkyLines error");
   }
 
-  if (!settings.livetrack24.enabled)
-    /* disabled by configuration */
-    /* note that we are allowed to read "settings" without locking the
-       mutex, because the background thread never writes to this
-       attribute */
-    return;
-
-  if (!basic.time_available || !basic.gps.real || !basic.location_available)
-    /* can't track without a valid GPS fix */
-    return;
-
-  if (!clock.CheckUpdate(std::chrono::seconds(settings.livetrack24.interval)))
-    /* later */
-    return;
-
-  std::lock_guard<Mutex> lock(mutex);
-  if (IsBusy())
-    /* still running, skip this submission */
-    return;
-
-  date_time = basic.date_time_utc;
-  if (!date_time.IsDatePlausible())
-    /* use "today" if the GPS didn't provide a date */
-    (BrokenDate &)date_time = BrokenDate::TodayUTC();
-
-  location = basic.location;
-  /* XXX use nav_altitude? */
-  altitude = basic.NavAltitudeAvailable() && basic.nav_altitude > 0
-    ? (unsigned)basic.nav_altitude
-    : 0u;
-  ground_speed = basic.ground_speed_available
-    ? (unsigned)Units::ToUserUnit(basic.ground_speed, Unit::KILOMETER_PER_HOUR)
-    : 0u;
-  track = basic.track_available
-    ? basic.track
-    : Angle::Zero();
-
-  last_flying = flying;
-  flying = calculated.flight.flying;
-
-  Trigger();
-}
-
-void
-TrackingGlue::Tick() noexcept
-{
-  if (!settings.livetrack24.enabled)
-    /* settings have been cleared meanwhile, bail out */
-    return;
-
-  unsigned tracking_interval = settings.livetrack24.interval;
-  LiveTrack24::Settings copy = this->settings.livetrack24;
-
-  const ScopeUnlock unlock(mutex);
-
-  QuietOperationEnvironment env;
-
-  try {
-    if (!flying) {
-      if (last_flying && state.HasSession()) {
-        /* landing: end tracking session */
-        livetrack24_client.EndTracking(state.session_id, state.packet_id, env);
-        state.ResetSession();
-        last_timestamp = {};
-      }
-
-      /* don't track if not flying */
-      return;
-    }
-
-    const auto current_timestamp = date_time.ToTimePoint();
-
-    if (state.HasSession() &&
-        current_timestamp + std::chrono::minutes(1) < last_timestamp) {
-      /* time warp: create a new session */
-      livetrack24_client.EndTracking(state.session_id, state.packet_id, env);
-      state.ResetSession();
-    }
-
-    last_timestamp = current_timestamp;
-
-    if (!state.HasSession()) {
-      LiveTrack24::UserID user_id = 0;
-      if (!copy.username.empty() && !copy.password.empty())
-        user_id = livetrack24_client.GetUserID(copy.username, copy.password,
-                                               env);
-
-      if (user_id == 0) {
-        copy.username.clear();
-        copy.password.clear();
-        state.session_id = LiveTrack24::GenerateSessionID();
-      } else {
-        state.session_id = LiveTrack24::GenerateSessionID(user_id);
-      }
-
-      if (!livetrack24_client.StartTracking(state.session_id, copy.username,
-                                            copy.password, tracking_interval,
-                                            MapVehicleTypeToLivetrack24(settings.livetrack24.vehicleType),
-                                            settings.livetrack24.vehicle_name,
-                                            env)) {
-        state.ResetSession();
-        return;
-      }
-
-      state.packet_id = 2;
-    }
-
-    livetrack24_client.SendPosition(state.session_id, state.packet_id++,
-                                    location, altitude, ground_speed, track,
-                                    current_timestamp,
-                                    env);
-  } catch (...) {
-    LogError(std::current_exception(), "LiveTrack24 error");
-  }
+  livetrack24.OnTimer(basic, calculated);
 }
 
 void
