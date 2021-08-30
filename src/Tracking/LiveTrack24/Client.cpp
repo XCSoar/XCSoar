@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "LiveTrack24.hpp"
+#include "Client.hpp"
 #include "Operation/Operation.hpp"
 #include "util/StringCompare.hxx"
 #include "util/ConvertString.hpp"
@@ -85,19 +85,6 @@ LiveTrack24::GetUserID(const TCHAR *username, const TCHAR *password,
     return 0;
 
   return user_id;
-}
-
-LiveTrack24::SessionID
-LiveTrack24::GenerateSessionID()
-{
-  int r = rand();
-  return (r & 0x7F000000) | 0x80000000;
-}
-
-LiveTrack24::SessionID
-LiveTrack24::GenerateSessionID(UserID user_id)
-{
-  return GenerateSessionID() | (user_id & 0x00ffffff);
 }
 
 bool
