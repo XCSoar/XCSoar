@@ -46,9 +46,9 @@ namespace Co {
  * A helper task which invokes a coroutine from synchronous code.
  */
 class InvokeTask {
+public:
 	using Callback = BoundMethod<void(std::exception_ptr error) noexcept>;
 
-public:
 	struct promise_type {
 		Callback callback;
 
