@@ -94,9 +94,10 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) 
       continue;
 
     if (shape.get_type() != MS_SHAPE_NULL) {
-      if (shape.get_type() == MS_SHAPE_POINT)
-        visible_points.push_back(&shape);
-      else
+      if (shape.get_type() == MS_SHAPE_POINT) {
+        if (icon.IsDefined())
+          visible_points.push_back(&shape);
+      } else
         visible_shapes.push_back(&shape);
     }
 
@@ -146,8 +147,7 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
                                    const WindowProjection &projection,
                                    const XShape &shape) const noexcept
 {
-  if (!icon.IsDefined())
-    return;
+  assert(icon.IsDefined());
 
   // TODO: for now i assume there is only one point for point-XShapes
 
@@ -165,8 +165,7 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
                                    const unsigned short *end_lines,
                                    const GeoPoint *points) const noexcept
 {
-  if (!icon.IsDefined())
-    return;
+  assert(icon.IsDefined());
 
   for (; lines < end_lines; ++lines) {
     const GeoPoint *end = points + *lines;
