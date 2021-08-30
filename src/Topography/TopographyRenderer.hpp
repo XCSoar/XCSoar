@@ -41,13 +41,14 @@ class TopographyRenderer : private NonCopyable {
   StaticArray<TopographyFileRenderer *, TopographyStore::MAXTOPOGRAPHY> files;
 
 public:
-  TopographyRenderer(const TopographyStore &store, const TopographyLook &look);
+  TopographyRenderer(const TopographyStore &store,
+                     const TopographyLook &look) noexcept;
 
   TopographyRenderer(const TopographyRenderer &) = delete;
 
-  ~TopographyRenderer();
+  ~TopographyRenderer() noexcept;
 
-  const TopographyStore &GetStore() const {
+  const TopographyStore &GetStore() const noexcept {
     return store;
   }
 
@@ -56,10 +57,10 @@ public:
    * @param canvas The drawing canvas
    * @param rc The area to draw in
    */
-  void Draw(Canvas &canvas, const WindowProjection &projection) const;
+  void Draw(Canvas &canvas, const WindowProjection &projection) const noexcept;
 
   void DrawLabels(Canvas &canvas, const WindowProjection &projection,
-                  LabelBlock &label_block) const;
+                  LabelBlock &label_block) const noexcept;
 };
 
 #endif

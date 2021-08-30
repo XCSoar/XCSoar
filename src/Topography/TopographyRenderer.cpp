@@ -25,14 +25,14 @@ Copyright_License {
 #include "Topography/TopographyFileRenderer.hpp"
 
 TopographyRenderer::TopographyRenderer(const TopographyStore &_store,
-                                       const TopographyLook &look)
+                                       const TopographyLook &look) noexcept
   :store(_store)
 {
   for (unsigned i = 0; i < store.size(); ++i)
     files.append(new TopographyFileRenderer(store[i], look));
 }
 
-TopographyRenderer::~TopographyRenderer()
+TopographyRenderer::~TopographyRenderer() noexcept
 {
   for (auto it = files.begin(), end = files.end(); it != end; ++it)
     delete *it;
@@ -40,7 +40,7 @@ TopographyRenderer::~TopographyRenderer()
 
 void
 TopographyRenderer::Draw(Canvas &canvas,
-                         const WindowProjection &projection) const
+                         const WindowProjection &projection) const noexcept
 {
   for (auto it = files.begin(), end = files.end(); it != end; ++it)
     (*it)->Paint(canvas, projection);
@@ -49,7 +49,7 @@ TopographyRenderer::Draw(Canvas &canvas,
 void
 TopographyRenderer::DrawLabels(Canvas &canvas,
                                const WindowProjection &projection,
-                               LabelBlock &label_block) const
+                               LabelBlock &label_block) const noexcept
 {
   for (auto it = files.begin(), end = files.end(); it != end; ++it)
     (*it)->PaintLabels(canvas, projection, label_block);
