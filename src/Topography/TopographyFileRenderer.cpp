@@ -95,8 +95,19 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) 
 
     if (shape.get_type() != MS_SHAPE_NULL) {
       if (shape.get_type() == MS_SHAPE_POINT) {
-        if (icon.IsDefined())
-          visible_points.push_back(&shape);
+        if (icon.IsDefined()) {
+          const auto *points = shape.GetPoints();
+          for (const unsigned line_size : shape.GetLines()) {
+            const auto *end = points + line_size;
+            for (; points < end; ++points) {
+#ifdef ENABLE_OPENGL
+              visible_points.push_back(file.ToGeoPoint(*points));
+#else
+              visible_points.push_back(*points);
+#endif
+            }
+          }
+        }
       } else
         visible_shapes.push_back(&shape);
     }
@@ -142,56 +153,15 @@ TopographyFileRenderer::UpdateArrayBuffer() noexcept
   array_buffer->CommitWrite(n * sizeof(*p), p - n);
 }
 
-inline void
-TopographyFileRenderer::PaintPoint(Canvas &canvas,
-                                   const WindowProjection &projection,
-                                   const XShape &shape) const noexcept
-{
-  assert(icon.IsDefined());
-
-  // TODO: for now i assume there is only one point for point-XShapes
-
-  if (auto p = projection.GeoToScreenIfVisible(file.ToGeoPoint(shape.GetPoints()[0]))) {
-    icon.Draw(canvas, *p);
-  }
-}
-
-#else
-
-inline void
-TopographyFileRenderer::PaintPoint(Canvas &canvas,
-                                   const WindowProjection &projection,
-                                   const unsigned short *lines,
-                                   const unsigned short *end_lines,
-                                   const GeoPoint *points) const noexcept
-{
-  assert(icon.IsDefined());
-
-  for (; lines < end_lines; ++lines) {
-    const GeoPoint *end = points + *lines;
-    for (; points < end; ++points) {
-      if (auto p = projection.GeoToScreenIfVisible(*points))
-        icon.Draw(canvas, *p);
-    }
-  }
-}
-
 #endif
 
 inline void
 TopographyFileRenderer::PaintPoints(Canvas &canvas,
                                     const WindowProjection &projection) noexcept
 {
-  for (const XShape *shape_p : visible_points) {
-    const XShape &shape = *shape_p;
-
-#ifdef ENABLE_OPENGL
-    PaintPoint(canvas, projection, shape);
-#else // !ENABLE_OPENGL
-    const auto lines = shape.GetLines();
-    const GeoPoint *points = shape.GetPoints();
-    PaintPoint(canvas, projection, lines.begin(), lines.end(), points);
-#endif
+  for (const auto &point : visible_points) {
+    if (auto p = projection.GeoToScreenIfVisible(point))
+      icon.Draw(canvas, *p);
   }
 }
 

@@ -70,7 +70,9 @@ class TopographyFileRenderer final
   Serial visible_serial;
   GeoBounds visible_bounds;
 
-  std::vector<const XShape *> visible_shapes, visible_points, visible_labels;
+  std::vector<const XShape *> visible_shapes, visible_labels;
+
+  std::vector<GeoPoint> visible_points;
 
 #ifdef ENABLE_OPENGL
   GLArrayBuffer *array_buffer;
@@ -108,13 +110,6 @@ private:
 
 #ifdef ENABLE_OPENGL
   void UpdateArrayBuffer() noexcept;
-
-  void PaintPoint(Canvas &canvas, const WindowProjection &projection,
-                  const XShape &shape) const noexcept;
-#else
-  void PaintPoint(Canvas &canvas, const WindowProjection &projection,
-                  const unsigned short *lines, const unsigned short *end_lines,
-                  const GeoPoint *points) const noexcept;
 #endif
 
   void PaintPoints(Canvas &canvas, const WindowProjection &projection) noexcept;
