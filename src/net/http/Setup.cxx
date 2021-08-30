@@ -27,103 +27,36 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Request.hxx"
 #include "Setup.hxx"
-#include "Global.hxx"
-#include "event/Call.hxx"
+#include "Easy.hxx"
+#include "util/ConvertString.hpp"
+#include "Version.hpp"
 
-#include <curl/curl.h>
+#include <stdio.h>
 
-#include <cassert>
-
-CurlRequest::CurlRequest(CurlGlobal &_global, CurlEasy _easy,
-			 CurlResponseHandler &_handler)
-	:global(_global), handler(_handler), easy(std::move(_easy))
-{
-	SetupEasy();
-}
-
-CurlRequest::CurlRequest(CurlGlobal &_global,
-			 CurlResponseHandler &_handler)
-	:global(_global), handler(_handler)
-{
-	SetupEasy();
-}
-
-CurlRequest::~CurlRequest() noexcept
-{
-	FreeEasy();
-}
+namespace Curl {
 
 void
-CurlRequest::SetupEasy()
+Setup(CurlEasy &easy)
 {
-	easy.SetPrivate((void *)this);
+	char user_agent[32];
+	snprintf(user_agent, 32, "XCSoar/%s",
+		 (const char *)WideToUTF8Converter(XCSoar_Version));
+	easy.SetUserAgent(user_agent);
 
-	handler.Install(easy);
+#if !defined(ANDROID) && !defined(_WIN32)
+	easy.SetOption(CURLOPT_NETRC, 1L);
+#endif
+	easy.SetNoSignal();
+	easy.SetConnectTimeout(10);
+	easy.SetOption(CURLOPT_HTTPAUTH, (long) CURLAUTH_ANY);
 
-	Curl::Setup(easy);
+#ifdef ANDROID
+	/* this is disabled until we figure out how to use Android's
+	   CA certificates with libcurl */
+	easy.SetVerifyHost(false);
+	easy.SetVerifyPeer(false);
+#endif
 }
 
-void
-CurlRequest::Start()
-{
-	assert(!registered);
-
-	global.Add(*this);
-	registered = true;
-}
-
-void
-CurlRequest::StartIndirect()
-{
-	BlockingCall(global.GetEventLoop(), [this](){
-			Start();
-		});
-}
-
-void
-CurlRequest::Stop() noexcept
-{
-	if (!registered)
-		return;
-
-	global.Remove(*this);
-	registered = false;
-}
-
-void
-CurlRequest::StopIndirect()
-{
-	BlockingCall(global.GetEventLoop(), [this](){
-			Stop();
-		});
-}
-
-void
-CurlRequest::FreeEasy() noexcept
-{
-	if (!easy)
-		return;
-
-	Stop();
-	easy = nullptr;
-}
-
-void
-CurlRequest::Resume() noexcept
-{
-	assert(registered);
-
-	easy.Unpause();
-
-	global.InvalidateSockets();
-}
-
-void
-CurlRequest::Done(CURLcode result) noexcept
-{
-	Stop();
-
-	handler.Done(result);
-}
+} // namespace Curl
