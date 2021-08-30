@@ -34,16 +34,16 @@ TopographyRenderer::TopographyRenderer(const TopographyStore &_store,
 
 TopographyRenderer::~TopographyRenderer() noexcept
 {
-  for (auto it = files.begin(), end = files.end(); it != end; ++it)
-    delete *it;
+  for (auto *i : files)
+    delete i;
 }
 
 void
 TopographyRenderer::Draw(Canvas &canvas,
                          const WindowProjection &projection) const noexcept
 {
-  for (auto it = files.begin(), end = files.end(); it != end; ++it)
-    (*it)->Paint(canvas, projection);
+  for (auto *i : files)
+    i->Paint(canvas, projection);
 }
 
 void
@@ -51,6 +51,6 @@ TopographyRenderer::DrawLabels(Canvas &canvas,
                                const WindowProjection &projection,
                                LabelBlock &label_block) const noexcept
 {
-  for (auto it = files.begin(), end = files.end(); it != end; ++it)
-    (*it)->PaintLabels(canvas, projection, label_block);
+  for (auto *i : files)
+    i->PaintLabels(canvas, projection, label_block);
 }
