@@ -79,11 +79,11 @@ class TopographyFileRenderer final
 
 public:
   TopographyFileRenderer(const TopographyFile &file,
-                         const TopographyLook &look);
+                         const TopographyLook &look) noexcept;
 
   TopographyFileRenderer(const TopographyFileRenderer &) = delete;
 
-  ~TopographyFileRenderer();
+  ~TopographyFileRenderer() noexcept;
 
   /**
    * Paints the polygons, lines and points/icons in the TopographyFile
@@ -91,7 +91,7 @@ public:
    * @param bitmap_canvas Temporary canvas for the icon
    * @param projection
    */
-  void Paint(Canvas &canvas, const WindowProjection &projection);
+  void Paint(Canvas &canvas, const WindowProjection &projection) noexcept;
 
   /**
    * Paints a topography label if the space is available in the LabelBlock
@@ -100,21 +100,22 @@ public:
    * @param label_block The LabelBlock class to use for decluttering
    * @param settings_map
    */
-  void PaintLabels(Canvas &canvas,
-                   const WindowProjection &projection, LabelBlock &label_block);
+  void PaintLabels(Canvas &canvas, const WindowProjection &projection,
+                   LabelBlock &label_block) noexcept;
 
 private:
-  void UpdateVisibleShapes(const WindowProjection &projection);
+  void UpdateVisibleShapes(const WindowProjection &projection) noexcept;
 
 #ifdef ENABLE_OPENGL
-  void UpdateArrayBuffer();
+  void UpdateArrayBuffer() noexcept;
 
   void PaintPoint(Canvas &canvas, const WindowProjection &projection,
-                  const XShape &shape, const float *opengl_matrix) const;
+                  const XShape &shape,
+                  const float *opengl_matrix) const noexcept;
 #else
   void PaintPoint(Canvas &canvas, const WindowProjection &projection,
                   const unsigned short *lines, const unsigned short *end_lines,
-                  const GeoPoint *points) const;
+                  const GeoPoint *points) const noexcept;
 #endif
 };
 

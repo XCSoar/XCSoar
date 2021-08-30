@@ -53,7 +53,7 @@ Copyright_License {
 #include <set>
 
 TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file,
-                                               const TopographyLook &_look)
+                                               const TopographyLook &_look) noexcept
   :file(_file), look(_look),
    pen(Layout::ScaleFinePenWidth(file.GetPenWidth()), file.GetColor()),
 #ifdef ENABLE_OPENGL
@@ -67,7 +67,7 @@ TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file,
     icon.LoadResource(icon_ID, file.GetBigIcon());
 }
 
-TopographyFileRenderer::~TopographyFileRenderer()
+TopographyFileRenderer::~TopographyFileRenderer() noexcept
 {
 #ifdef ENABLE_OPENGL
   delete array_buffer;
@@ -75,7 +75,7 @@ TopographyFileRenderer::~TopographyFileRenderer()
 }
 
 void
-TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection)
+TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) noexcept
 {
   if (file.GetSerial() == visible_serial &&
       visible_bounds.IsInside(projection.GetScreenBounds()) &&
@@ -103,7 +103,7 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection)
 #ifdef ENABLE_OPENGL
 
 inline void
-TopographyFileRenderer::UpdateArrayBuffer()
+TopographyFileRenderer::UpdateArrayBuffer() noexcept
 {
   if (array_buffer == nullptr)
     array_buffer = new GLArrayBuffer();
@@ -140,7 +140,7 @@ inline void
 TopographyFileRenderer::PaintPoint(Canvas &canvas,
                                    const WindowProjection &projection,
                                    const XShape &shape,
-                                   const float *opengl_matrix) const
+                                   const float *opengl_matrix) const noexcept
 {
   if (!icon.IsDefined())
     return;
@@ -167,7 +167,7 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
                                    const WindowProjection &projection,
                                    const unsigned short *lines,
                                    const unsigned short *end_lines,
-                                   const GeoPoint *points) const
+                                   const GeoPoint *points) const noexcept
 {
   if (!icon.IsDefined())
     return;
@@ -185,7 +185,7 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
 
 void
 TopographyFileRenderer::Paint(Canvas &canvas,
-                              const WindowProjection &projection)
+                              const WindowProjection &projection) noexcept
 {
   const std::lock_guard<Mutex> lock(file.mutex);
 
@@ -416,7 +416,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 void
 TopographyFileRenderer::PaintLabels(Canvas &canvas,
                                     const WindowProjection &projection,
-                                    LabelBlock &label_block)
+                                    LabelBlock &label_block) noexcept
 {
   const std::lock_guard<Mutex> lock(file.mutex);
 
