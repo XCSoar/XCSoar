@@ -28,7 +28,6 @@ Copyright_License {
 #include "net/http/ToBuffer.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "util/RuntimeError.hxx"
-#include "util/StaticString.hxx"
 #include "util/StringView.hxx"
 #include "Version.hpp"
 
@@ -37,22 +36,9 @@ Copyright_License {
 
 namespace LiveTrack24 {
 
-static NarrowString<256> server;
-
-static const char *GetServer();
-
-/**
- * Throws on error.
- */
-static bool
-SendRequest(const char *url,
-            CurlGlobal &curl, OperationEnvironment &env);
-
-} // namespace LiveTrack24
-
-LiveTrack24::UserID
-LiveTrack24::GetUserID(const TCHAR *username, const TCHAR *password,
-                       CurlGlobal &curl, OperationEnvironment &env)
+UserID
+Client::GetUserID(const TCHAR *username, const TCHAR *password,
+                  OperationEnvironment &env)
 {
   // http://www.livetrack24.com/client.php?op=login&user=<username>&pass=<pass>
 
@@ -88,10 +74,10 @@ LiveTrack24::GetUserID(const TCHAR *username, const TCHAR *password,
 }
 
 bool
-LiveTrack24::StartTracking(SessionID session, const TCHAR *username,
-                           const TCHAR *password, unsigned tracking_interval,
-                           VehicleType vtype, const TCHAR *vname,
-                           CurlGlobal &curl, OperationEnvironment &env)
+Client::StartTracking(SessionID session, const TCHAR *username,
+                      const TCHAR *password, unsigned tracking_interval,
+                      VehicleType vtype, const TCHAR *vname,
+                      OperationEnvironment &env)
 {
   // http://www.livetrack24.com/track.php?leolive=2&sid=42664778&pid=1&
   //   client=YourProgramName&v=1&user=yourusername&pass=yourpass&
@@ -117,15 +103,15 @@ LiveTrack24::StartTracking(SessionID session, const TCHAR *username,
              GetServer(), session, 1, "XCSoar", version,
              (const char *)username2, (const char *)password, vtype, vname);
 
-  return SendRequest(url, curl, env);
+  return SendRequest(url, env);
 }
 
 bool
-LiveTrack24::SendPosition(SessionID session, unsigned packet_id,
-                          GeoPoint position, unsigned altitude,
-                          unsigned ground_speed, Angle track,
-                          std::chrono::system_clock::time_point timestamp_utc,
-                          CurlGlobal &curl, OperationEnvironment &env)
+Client::SendPosition(SessionID session, unsigned packet_id,
+                     GeoPoint position, unsigned altitude,
+                     unsigned ground_speed, Angle track,
+                     std::chrono::system_clock::time_point timestamp_utc,
+                     OperationEnvironment &env)
 {
   // http://www.livetrack24.com/track.php?leolive=4&sid=42664778&pid=321&
   //   lat=22.3&lon=40.2&alt=23&sog=40&cog=160&tm=1241422845
@@ -140,12 +126,12 @@ LiveTrack24::SendPosition(SessionID session, unsigned packet_id,
              (unsigned)track.AsBearing().Degrees(),
              (long long)std::chrono::system_clock::to_time_t(timestamp_utc));
 
-  return SendRequest(url, curl,env);
+  return SendRequest(url, env);
 }
 
 bool
-LiveTrack24::EndTracking(SessionID session, unsigned packet_id,
-                         CurlGlobal &curl, OperationEnvironment &env)
+Client::EndTracking(SessionID session, unsigned packet_id,
+                    OperationEnvironment &env)
 {
   // http://www.livetrack24.com/track.php?leolive=3&sid=42664778&pid=453&prid=0
 
@@ -153,24 +139,17 @@ LiveTrack24::EndTracking(SessionID session, unsigned packet_id,
   url.Format("http://%s/track.php?leolive=3&sid=%u&pid=%u&prid=0",
              GetServer(), session, packet_id);
 
-  return SendRequest(url, curl, env);
+  return SendRequest(url, env);
 }
 
 void
-LiveTrack24::SetServer(const TCHAR * _server)
+Client::SetServer(const TCHAR * _server) noexcept
 {
   server.SetASCII(_server);
 }
 
-const char *
-LiveTrack24::GetServer()
-{
-  return server;
-}
-
 bool
-LiveTrack24::SendRequest(const char *url,
-                         CurlGlobal &curl, OperationEnvironment &env)
+Client::SendRequest(const char *url, OperationEnvironment &env)
 {
   // Request the file
   char buffer[64];
@@ -189,3 +168,5 @@ LiveTrack24::SendRequest(const char *url,
 
   throw std::runtime_error("Error from server");
 }
+
+} // namespace LiveTrack24

@@ -51,11 +51,11 @@ MapVehicleTypeToLivetrack24(LiveTrack24::Settings::VehicleType vt)
 TrackingGlue::TrackingGlue(EventLoop &event_loop,
                            CurlGlobal &curl) noexcept
   :StandbyThread("Tracking"),
-   curl(curl),
-   skylines(event_loop, this)
+   skylines(event_loop, this),
+   livetrack24_client(curl)
 {
   settings.SetDefaults();
-  LiveTrack24::SetServer(settings.livetrack24.server);
+  livetrack24_client.SetServer(settings.livetrack24.server);
 }
 
 void
@@ -86,7 +86,7 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
     /* now it's safe to access these variables without a lock */
     settings = _settings;
     state.ResetSession();
-    LiveTrack24::SetServer(_settings.livetrack24.server);
+    livetrack24_client.SetServer(_settings.livetrack24.server);
   } else {
     /* no fundamental setting changes; the write needs to be protected
        by the mutex, because another job may be running already */
@@ -165,8 +165,7 @@ TrackingGlue::Tick() noexcept
     if (!flying) {
       if (last_flying && state.HasSession()) {
         /* landing: end tracking session */
-        LiveTrack24::EndTracking(state.session_id, state.packet_id,
-                                 curl, env);
+        livetrack24_client.EndTracking(state.session_id, state.packet_id, env);
         state.ResetSession();
         last_timestamp = {};
       }
@@ -180,7 +179,7 @@ TrackingGlue::Tick() noexcept
     if (state.HasSession() &&
         current_timestamp + std::chrono::minutes(1) < last_timestamp) {
       /* time warp: create a new session */
-      LiveTrack24::EndTracking(state.session_id, state.packet_id, curl, env);
+      livetrack24_client.EndTracking(state.session_id, state.packet_id, env);
       state.ResetSession();
     }
 
@@ -189,8 +188,8 @@ TrackingGlue::Tick() noexcept
     if (!state.HasSession()) {
       LiveTrack24::UserID user_id = 0;
       if (!copy.username.empty() && !copy.password.empty())
-        user_id = LiveTrack24::GetUserID(copy.username, copy.password,
-                                         curl, env);
+        user_id = livetrack24_client.GetUserID(copy.username, copy.password,
+                                               env);
 
       if (user_id == 0) {
         copy.username.clear();
@@ -200,11 +199,11 @@ TrackingGlue::Tick() noexcept
         state.session_id = LiveTrack24::GenerateSessionID(user_id);
       }
 
-      if (!LiveTrack24::StartTracking(state.session_id, copy.username,
-                                      copy.password, tracking_interval,
-                                      MapVehicleTypeToLivetrack24(settings.livetrack24.vehicleType),
-                                      settings.livetrack24.vehicle_name,
-                                      curl, env)) {
+      if (!livetrack24_client.StartTracking(state.session_id, copy.username,
+                                            copy.password, tracking_interval,
+                                            MapVehicleTypeToLivetrack24(settings.livetrack24.vehicleType),
+                                            settings.livetrack24.vehicle_name,
+                                            env)) {
         state.ResetSession();
         return;
       }
@@ -212,10 +211,10 @@ TrackingGlue::Tick() noexcept
       state.packet_id = 2;
     }
 
-    LiveTrack24::SendPosition(state.session_id, state.packet_id++,
-                              location, altitude, ground_speed, track,
-                              current_timestamp,
-                              curl, env);
+    livetrack24_client.SendPosition(state.session_id, state.packet_id++,
+                                    location, altitude, ground_speed, track,
+                                    current_timestamp,
+                                    env);
   } catch (...) {
     LogError(std::current_exception(), "LiveTrack24 error");
   }

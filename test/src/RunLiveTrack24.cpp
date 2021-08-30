@@ -37,7 +37,7 @@ Copyright_License {
 using namespace LiveTrack24;
 
 static bool
-TestTracking(int argc, char *argv[], CurlGlobal &curl)
+TestTracking(int argc, char *argv[], LiveTrack24::Client &client)
 {
   Args args(argc, argv, "[DRIVER] FILE [USERNAME [PASSWORD]]");
   DebugReplay *replay = CreateDebugReplay(args);
@@ -57,8 +57,7 @@ TestTracking(int argc, char *argv[], CurlGlobal &curl)
     username = args.ExpectNextT();
     password = args.IsEmpty() ? _T("") : args.ExpectNextT();
 
-    user_id = LiveTrack24::GetUserID(username.c_str(), password.c_str(),
-                                     curl, env);
+    user_id = client.GetUserID(username.c_str(), password.c_str(), env);
     has_user_id = (user_id != 0);
   }
 
@@ -68,9 +67,10 @@ TestTracking(int argc, char *argv[], CurlGlobal &curl)
 
 
   printf("Starting tracking ... ");
-  bool result = StartTracking(session, username.c_str(), password.c_str(), 10,
-                              VehicleType::GLIDER, _T("Hornet"),
-                              curl, env);
+  bool result = client.StartTracking(session, username.c_str(),
+                                     password.c_str(), 10,
+                                     VehicleType::GLIDER, _T("Hornet"),
+                                     env);
   printf(result ? "done\n" : "failed\n");
   if (!result)
     return false;
@@ -90,11 +90,12 @@ TestTracking(int argc, char *argv[], CurlGlobal &curl)
     BrokenDateTime datetime(now.year, now.month, now.day, time.hour,
                             time.minute, time.second);
 
-    result = SendPosition(
-        session, package_id, basic.location, (unsigned)basic.nav_altitude,
-        (unsigned)Units::ToUserUnit(basic.ground_speed, Unit::KILOMETER_PER_HOUR),
-        basic.track, datetime.ToTimePoint(),
-        curl, env);
+    result = client.SendPosition(session, package_id, basic.location,
+                                 (unsigned)basic.nav_altitude,
+                                 (unsigned)Units::ToUserUnit(basic.ground_speed,
+                                                             Unit::KILOMETER_PER_HOUR),
+                                 basic.track, datetime.ToTimePoint(),
+                                 env);
 
     if (!result)
       break;
@@ -104,7 +105,7 @@ TestTracking(int argc, char *argv[], CurlGlobal &curl)
   printf(result ? "done\n" : "failed\n");
 
   printf("Stopping tracking ... ");
-  result = EndTracking(session, package_id, curl, env);
+  result = client.EndTracking(session, package_id, env);
   printf(result ? "done\n" : "failed\n");
 
   return true;
@@ -118,8 +119,10 @@ try {
   AtScopeExit(&) { io_thread.Stop(); };
   const Net::ScopeInit net_init(io_thread.GetEventLoop());
 
-  LiveTrack24::SetServer(_T("www.livetrack24.com"));
-  bool result = TestTracking(argc, argv, *Net::curl);
+  LiveTrack24::Client client(*Net::curl);
+  client.SetServer(_T("www.livetrack24.com"));
+
+  bool result = TestTracking(argc, argv, client);
 
   return result ? EXIT_SUCCESS : EXIT_FAILURE;
 } catch (...) {

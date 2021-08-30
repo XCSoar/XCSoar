@@ -60,8 +60,6 @@ class TrackingGlue final
     }
   };
 
-  CurlGlobal &curl;
-
   PeriodClock clock;
 
   TrackingSettings settings;
@@ -71,6 +69,8 @@ class TrackingGlue final
   SkyLinesTracking::Data skylines_data;
 
   LiveTrack24State state;
+
+  LiveTrack24::Client livetrack24_client;
 
   /**
    * The Unix UTC time stamp that was last submitted to the tracking

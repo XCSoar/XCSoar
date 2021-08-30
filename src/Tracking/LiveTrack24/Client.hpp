@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Protocol.hpp"
 #include "SessionID.hpp"
+#include "util/StaticString.hxx"
 
 #include <chrono>
 #include <cstdint>
@@ -36,6 +37,8 @@ class Angle;
 struct GeoPoint;
 class OperationEnvironment;
 class CurlGlobal;
+
+namespace LiveTrack24 {
 
 /**
  * API for the LiveTrack24.com server.
@@ -55,47 +58,60 @@ class CurlGlobal;
  *
  * @see http://www.livetrack24.com/wiki/en/Leonardo%20Live%20Tracking%20API
  */
-namespace LiveTrack24 {
+class Client final {
+  CurlGlobal &curl;
 
-/**
- * Queries the server for the user id with the given credentials.
- * @param username Case-insensitive username
- * @param password Case-insensitive password
- * @return 0 if userdata are incorrect, or else the userID of the user
- */
-UserID
-GetUserID(const TCHAR *username, const TCHAR *password,
-          CurlGlobal &curl, OperationEnvironment &env);
+  NarrowString<256> server;
 
-/** Sends the "start of track" packet to the tracking server */
-bool
-StartTracking(SessionID session, const TCHAR *username,
-              const TCHAR *password, unsigned tracking_interval,
-              VehicleType vtype, const TCHAR *vname,
-              CurlGlobal &curl, OperationEnvironment &env);
+public:
+  explicit Client(CurlGlobal &_curl) noexcept
+    :curl(_curl) {}
 
-/**
- * Sends a "gps point" packet to the tracking server
- *
- * @param ground_speed Speed over ground in km/h
- */
-bool
-SendPosition(SessionID session, unsigned packet_id,
-             GeoPoint position, unsigned altitude, unsigned ground_speed,
-             Angle track, std::chrono::system_clock::time_point timestamp_utc,
-             CurlGlobal &curl, OperationEnvironment &env);
+  /**
+   * Queries the server for the user id with the given credentials.
+   * @param username Case-insensitive username
+   * @param password Case-insensitive password
+   * @return 0 if userdata are incorrect, or else the userID of the user
+   */
+  UserID GetUserID(const TCHAR *username, const TCHAR *password,
+                   OperationEnvironment &env);
 
-/** Sends the "end of track" packet to the tracking server */
-bool
-EndTracking(SessionID session, unsigned packet_id,
-            CurlGlobal &curl, OperationEnvironment &env);
+  /** Sends the "start of track" packet to the tracking server */
+  bool StartTracking(SessionID session, const TCHAR *username,
+                     const TCHAR *password, unsigned tracking_interval,
+                     VehicleType vtype, const TCHAR *vname,
+                     OperationEnvironment &env);
 
-/**
- * Set the tracking server
- * @param server e.g. www.livetrack24.com (without http:// prefix)
- */
-void
-SetServer(const TCHAR *server);
+  /**
+   * Sends a "gps point" packet to the tracking server
+   *
+   * @param ground_speed Speed over ground in km/h
+   */
+  bool SendPosition(SessionID session, unsigned packet_id,
+                    GeoPoint position, unsigned altitude, unsigned ground_speed,
+                    Angle track, std::chrono::system_clock::time_point timestamp_utc,
+                    OperationEnvironment &env);
+
+  /** Sends the "end of track" packet to the tracking server */
+  bool EndTracking(SessionID session, unsigned packet_id,
+                   OperationEnvironment &env);
+
+  /**
+   * Set the tracking server
+   * @param server e.g. www.livetrack24.com (without http:// prefix)
+   */
+  void SetServer(const TCHAR *server) noexcept;
+
+private:
+  const char *GetServer() const noexcept {
+    return server;
+  }
+
+  /**
+   * Throws on error.
+   */
+  bool SendRequest(const char *url, OperationEnvironment &env);
+};
 
 } // namespace Livetrack24
 
