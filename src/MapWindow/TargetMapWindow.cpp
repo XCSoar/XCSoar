@@ -103,7 +103,7 @@ TargetMapWindow::Create(ContainerWindow &parent, PixelRect rc,
   BufferWindow::Create(parent, rc, style);
 }
 
-void
+inline void
 TargetMapWindow::RenderTerrain(Canvas &canvas)
 {
   background.SetShadingAngle(projection, GetMapSettings().terrain,
@@ -111,21 +111,21 @@ TargetMapWindow::RenderTerrain(Canvas &canvas)
   background.Draw(canvas, projection, GetMapSettings().terrain);
 }
 
-void
+inline void
 TargetMapWindow::RenderTopography(Canvas &canvas)
 {
   if (topography_renderer != nullptr && GetMapSettings().topography_enabled)
     topography_renderer->Draw(canvas, projection);
 }
 
-void
+inline void
 TargetMapWindow::RenderTopographyLabels(Canvas &canvas)
 {
   if (topography_renderer != nullptr && GetMapSettings().topography_enabled)
     topography_renderer->DrawLabels(canvas, projection, label_block);
 }
 
-void
+inline void
 TargetMapWindow::RenderAirspace(Canvas &canvas)
 {
   if (GetMapSettings().airspace.enable)
@@ -139,7 +139,7 @@ TargetMapWindow::RenderAirspace(Canvas &canvas)
                            GetMapSettings().airspace);
 }
 
-void
+inline void
 TargetMapWindow::DrawTask(Canvas &canvas)
 {
   if (task == nullptr)
@@ -164,7 +164,7 @@ TargetMapWindow::DrawTask(Canvas &canvas)
   }
 }
 
-void
+inline void
 TargetMapWindow::DrawWaypoints(Canvas &canvas)
 {
   const MapSettings &settings_map = GetMapSettings();
@@ -179,7 +179,7 @@ TargetMapWindow::DrawWaypoints(Canvas &canvas)
                             task, nullptr);
 }
 
-void
+inline void
 TargetMapWindow::RenderTrail(Canvas &canvas)
 {
   if (glide_computer == nullptr)

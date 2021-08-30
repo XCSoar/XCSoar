@@ -43,7 +43,7 @@ MapWindow::RenderTrackBearing(Canvas &canvas, const PixelPoint aircraft_pos)
   DrawTrackBearing(canvas, aircraft_pos, false);
 }
 
-void
+inline void
 MapWindow::RenderTerrain(Canvas &canvas)
 {
   background.SetShadingAngle(render_projection, GetMapSettings().terrain,
@@ -88,14 +88,14 @@ MapWindow::RenderRasp(Canvas &canvas)
     rasp_renderer->Draw(canvas, render_projection);
 }
 
-void
+inline void
 MapWindow::RenderTopography(Canvas &canvas)
 {
   if (topography_renderer != nullptr && GetMapSettings().topography_enabled)
     topography_renderer->Draw(canvas, render_projection);
 }
 
-void
+inline void
 MapWindow::RenderTopographyLabels(Canvas &canvas)
 {
   if (topography_renderer != nullptr && GetMapSettings().topography_enabled)
@@ -111,7 +111,7 @@ MapWindow::RenderOverlays(Canvas &canvas)
 #endif
 }
 
-void
+inline void
 MapWindow::RenderFinalGlideShading(Canvas &canvas)
 {
   if (terrain != nullptr &&
@@ -119,7 +119,7 @@ MapWindow::RenderFinalGlideShading(Canvas &canvas)
       DrawTerrainAbove(canvas);
 }
 
-void
+inline void
 MapWindow::RenderAirspace(Canvas &canvas)
 {
   if (GetMapSettings().airspace.enable) {
@@ -143,7 +143,7 @@ MapWindow::RenderAirspace(Canvas &canvas)
   }
 }
 
-void
+inline void
 MapWindow::RenderNOAAStations(Canvas &canvas)
 {
 #ifdef HAVE_NOAA
@@ -172,7 +172,7 @@ MapWindow::DrawWaves(Canvas &canvas)
   renderer.Draw(canvas, render_projection, Calculated().wave);
 }
 
-void
+inline void
 MapWindow::RenderGlide(Canvas &canvas)
 {
   // draw red cross on glide through terrain marker
