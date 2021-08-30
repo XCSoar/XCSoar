@@ -23,12 +23,15 @@ Copyright_License {
 
 #include "Tracking/LiveTrack24/Client.hpp"
 #include "net/http/Init.hpp"
-#include "io/async/AsioThread.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "Units/System.hpp"
 #include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "DebugReplay.hpp"
+#include "co/InvokeTask.hxx"
+#include "co/Task.hxx"
+#include "event/Loop.hxx"
+#include "event/DeferEvent.hxx"
 #include "util/PrintException.hxx"
 #include "util/ScopeExit.hxx"
 
@@ -36,15 +39,34 @@ Copyright_License {
 
 using namespace LiveTrack24;
 
-static bool
+struct Instance {
+  EventLoop event_loop;
+
+  const Net::ScopeInit net_init{event_loop};
+
+  Co::InvokeTask invoke_task;
+
+  DeferEvent defer_start{event_loop, BIND_THIS_METHOD(OnDeferredStart)};
+
+  std::exception_ptr error;
+
+  void OnCompletion(std::exception_ptr _error) noexcept {
+    error = std::move(_error);
+    event_loop.Break();
+  }
+
+  void OnDeferredStart() noexcept {
+    invoke_task.Start(BIND_THIS_METHOD(OnCompletion));
+  }
+};
+
+static Co::InvokeTask
 TestTracking(int argc, char *argv[], LiveTrack24::Client &client)
 {
   Args args(argc, argv, "[DRIVER] FILE [USERNAME [PASSWORD]]");
   DebugReplay *replay = CreateDebugReplay(args);
   if (replay == NULL)
-    return false;
-
-  ConsoleOperationEnvironment env;
+    throw std::runtime_error("CreateDebugReplay() failed");
 
   bool has_user_id;
   UserID user_id;
@@ -57,7 +79,7 @@ TestTracking(int argc, char *argv[], LiveTrack24::Client &client)
     username = args.ExpectNextT();
     password = args.IsEmpty() ? _T("") : args.ExpectNextT();
 
-    user_id = client.GetUserID(username.c_str(), password.c_str(), env);
+    user_id = co_await client.GetUserID(username.c_str(), password.c_str());
     has_user_id = (user_id != 0);
   }
 
@@ -67,13 +89,10 @@ TestTracking(int argc, char *argv[], LiveTrack24::Client &client)
 
 
   printf("Starting tracking ... ");
-  bool result = client.StartTracking(session, username.c_str(),
-                                     password.c_str(), 10,
-                                     VehicleType::GLIDER, _T("Hornet"),
-                                     env);
-  printf(result ? "done\n" : "failed\n");
-  if (!result)
-    return false;
+  co_await client.StartTracking(session, username.c_str(),
+                                password.c_str(), 10,
+                                VehicleType::GLIDER, _T("Hornet"));
+  printf("done\n");
 
   BrokenDate now = BrokenDate::TodayUTC();
 
@@ -90,41 +109,34 @@ TestTracking(int argc, char *argv[], LiveTrack24::Client &client)
     BrokenDateTime datetime(now.year, now.month, now.day, time.hour,
                             time.minute, time.second);
 
-    result = client.SendPosition(session, package_id, basic.location,
+    co_await client.SendPosition(session, package_id, basic.location,
                                  (unsigned)basic.nav_altitude,
                                  (unsigned)Units::ToUserUnit(basic.ground_speed,
                                                              Unit::KILOMETER_PER_HOUR),
-                                 basic.track, datetime.ToTimePoint(),
-                                 env);
-
-    if (!result)
-      break;
+                                 basic.track, datetime.ToTimePoint());
 
     package_id++;
   }
-  printf(result ? "done\n" : "failed\n");
+  printf("done\n");
 
   printf("Stopping tracking ... ");
-  result = client.EndTracking(session, package_id, env);
-  printf(result ? "done\n" : "failed\n");
-
-  return true;
+  co_await client.EndTracking(session, package_id);
+  printf("done\n");
 }
 
 int
 main(int argc, char *argv[])
 try {
-  AsioThread io_thread;
-  io_thread.Start();
-  AtScopeExit(&) { io_thread.Stop(); };
-  const Net::ScopeInit net_init(io_thread.GetEventLoop());
+  Instance instance;
 
-  LiveTrack24::Client client(*Net::curl);
+  Client client{*Net::curl};
   client.SetServer(_T("www.livetrack24.com"));
+  instance.invoke_task = TestTracking(argc, argv, client);
+  instance.defer_start.Schedule();
 
-  bool result = TestTracking(argc, argv, client);
+  instance.event_loop.Run();
 
-  return result ? EXIT_SUCCESS : EXIT_FAILURE;
+  return EXIT_SUCCESS;
 } catch (...) {
   PrintException(std::current_exception());
   return EXIT_FAILURE;

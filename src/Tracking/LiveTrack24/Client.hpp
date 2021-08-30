@@ -37,6 +37,7 @@ class Angle;
 struct GeoPoint;
 class OperationEnvironment;
 class CurlGlobal;
+namespace Co { template<typename T> class Task; }
 
 namespace LiveTrack24 {
 
@@ -73,28 +74,26 @@ public:
    * @param password Case-insensitive password
    * @return 0 if userdata are incorrect, or else the userID of the user
    */
-  UserID GetUserID(const TCHAR *username, const TCHAR *password,
-                   OperationEnvironment &env);
+  Co::Task<UserID> GetUserID(const TCHAR *username, const TCHAR *password);
 
   /** Sends the "start of track" packet to the tracking server */
-  bool StartTracking(SessionID session, const TCHAR *username,
-                     const TCHAR *password, unsigned tracking_interval,
-                     VehicleType vtype, const TCHAR *vname,
-                     OperationEnvironment &env);
+  Co::Task<void> StartTracking(SessionID session, const TCHAR *username,
+                               const TCHAR *password, unsigned tracking_interval,
+                               VehicleType vtype, const TCHAR *vname);
 
   /**
    * Sends a "gps point" packet to the tracking server
    *
    * @param ground_speed Speed over ground in km/h
    */
-  bool SendPosition(SessionID session, unsigned packet_id,
-                    GeoPoint position, unsigned altitude, unsigned ground_speed,
-                    Angle track, std::chrono::system_clock::time_point timestamp_utc,
-                    OperationEnvironment &env);
+  Co::Task<void> SendPosition(SessionID session, unsigned packet_id,
+                              GeoPoint position, unsigned altitude,
+                              unsigned ground_speed,
+                              Angle track,
+                              std::chrono::system_clock::time_point timestamp_utc);
 
   /** Sends the "end of track" packet to the tracking server */
-  bool EndTracking(SessionID session, unsigned packet_id,
-                   OperationEnvironment &env);
+  Co::Task<void> EndTracking(SessionID session, unsigned packet_id);
 
   /**
    * Set the tracking server
@@ -110,7 +109,7 @@ private:
   /**
    * Throws on error.
    */
-  bool SendRequest(const char *url, OperationEnvironment &env);
+  Co::Task<void> SendRequest(const char *url);
 };
 
 } // namespace Livetrack24

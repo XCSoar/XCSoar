@@ -516,11 +516,6 @@ Shutdown()
   // Turn off all displays
   global_running = false;
 
-#ifdef HAVE_TRACKING
-  if (tracking != nullptr)
-    tracking->StopAsync();
-#endif
-
   // Stop logger and save igc file
   operation.SetText(_("Shutdown, saving logs..."));
   if (logger != nullptr)
@@ -646,11 +641,8 @@ Shutdown()
 #endif
 
 #ifdef HAVE_TRACKING
-  if (tracking != nullptr) {
-    tracking->WaitStopped();
-    delete tracking;
-    tracking = nullptr;
-  }
+  delete tracking;
+  tracking = nullptr;
 #endif
 
 #ifdef HAVE_DOWNLOAD_MANAGER

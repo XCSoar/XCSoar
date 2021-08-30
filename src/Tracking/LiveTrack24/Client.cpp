@@ -25,20 +25,22 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "util/StringCompare.hxx"
 #include "util/ConvertString.hpp"
-#include "net/http/ToBuffer.hpp"
+#include "net/http/CoRequest.hxx"
+#include "net/http/Setup.hxx"
 #include "Geo/GeoPoint.hpp"
+#include "co/Task.hxx"
 #include "util/RuntimeError.hxx"
 #include "util/StringView.hxx"
 #include "Version.hpp"
 
 #include <cassert>
 #include <cstdlib>
+#include <stdexcept>
 
 namespace LiveTrack24 {
 
-UserID
-Client::GetUserID(const TCHAR *username, const TCHAR *password,
-                  OperationEnvironment &env)
+Co::Task<UserID>
+Client::GetUserID(const TCHAR *username, const TCHAR *password)
 {
   // http://www.livetrack24.com/client.php?op=login&user=<username>&pass=<pass>
 
@@ -50,34 +52,31 @@ Client::GetUserID(const TCHAR *username, const TCHAR *password,
   const WideToUTF8Converter username2(username);
   const WideToUTF8Converter password2(password);
   if (!username2.IsValid() || !password2.IsValid())
-    return 0;
+    throw std::runtime_error("WideToUTF8Converter failed");
 
   NarrowString<1024> url;
   url.Format("http://%s/client.php?op=login&user=%s&pass=%s",
              GetServer(), (const char *)username2, (const char *)password);
 
   // Request the file
-  char buffer[1024];
-  size_t size = Net::DownloadToBuffer(curl, url, buffer, sizeof(buffer) - 1,
-                                      env);
-  if (env.IsCancelled() || size == 0)
-    return 0;
+  CurlEasy easy(url);
+  Curl::Setup(easy);
 
-  buffer[size] = 0;
+  const auto response = co_await Curl::CoRequest(curl, std::move(easy));
+  const char *body = response.body.c_str();
 
   char *p_end;
-  UserID user_id = strtoul(buffer, &p_end, 10);
-  if (buffer == p_end)
-    return 0;
+  UserID user_id = strtoul(body, &p_end, 10);
+  if (p_end == body || user_id == 0)
+    throw std::runtime_error("Login failed");
 
-  return user_id;
+  co_return user_id;
 }
 
-bool
+Co::Task<void>
 Client::StartTracking(SessionID session, const TCHAR *username,
                       const TCHAR *password, unsigned tracking_interval,
-                      VehicleType vtype, const TCHAR *vname,
-                      OperationEnvironment &env)
+                      VehicleType vtype, const TCHAR *vname)
 {
   // http://www.livetrack24.com/track.php?leolive=2&sid=42664778&pid=1&
   //   client=YourProgramName&v=1&user=yourusername&pass=yourpass&
@@ -88,7 +87,7 @@ Client::StartTracking(SessionID session, const TCHAR *username,
   const WideToUTF8Converter password2(password);
   const WideToUTF8Converter vname2(vname);
   if (!username2.IsValid() || !password2.IsValid() || !vname2.IsValid())
-    return false;
+    throw std::runtime_error("WideToUTF8Converter failed");
 
 #ifdef _UNICODE
   NarrowString<32> version;
@@ -103,15 +102,14 @@ Client::StartTracking(SessionID session, const TCHAR *username,
              GetServer(), session, 1, "XCSoar", version,
              (const char *)username2, (const char *)password, vtype, vname);
 
-  return SendRequest(url, env);
+  co_return co_await SendRequest(url);
 }
 
-bool
+Co::Task<void>
 Client::SendPosition(SessionID session, unsigned packet_id,
                      GeoPoint position, unsigned altitude,
                      unsigned ground_speed, Angle track,
-                     std::chrono::system_clock::time_point timestamp_utc,
-                     OperationEnvironment &env)
+                     std::chrono::system_clock::time_point timestamp_utc)
 {
   // http://www.livetrack24.com/track.php?leolive=4&sid=42664778&pid=321&
   //   lat=22.3&lon=40.2&alt=23&sog=40&cog=160&tm=1241422845
@@ -126,12 +124,11 @@ Client::SendPosition(SessionID session, unsigned packet_id,
              (unsigned)track.AsBearing().Degrees(),
              (long long)std::chrono::system_clock::to_time_t(timestamp_utc));
 
-  return SendRequest(url, env);
+  co_return co_await SendRequest(url);
 }
 
-bool
-Client::EndTracking(SessionID session, unsigned packet_id,
-                    OperationEnvironment &env)
+Co::Task<void>
+Client::EndTracking(SessionID session, unsigned packet_id)
 {
   // http://www.livetrack24.com/track.php?leolive=3&sid=42664778&pid=453&prid=0
 
@@ -139,7 +136,7 @@ Client::EndTracking(SessionID session, unsigned packet_id,
   url.Format("http://%s/track.php?leolive=3&sid=%u&pid=%u&prid=0",
              GetServer(), session, packet_id);
 
-  return SendRequest(url, env);
+  co_return co_await SendRequest(url);
 }
 
 void
@@ -148,19 +145,16 @@ Client::SetServer(const TCHAR * _server) noexcept
   server.SetASCII(_server);
 }
 
-bool
-Client::SendRequest(const char *url, OperationEnvironment &env)
+Co::Task<void>
+Client::SendRequest(const char *url)
 {
-  // Request the file
-  char buffer[64];
-  size_t size = Net::DownloadToBuffer(curl, url, buffer, sizeof(buffer),
-                                      env);
-  if (env.IsCancelled())
-    return false;
+  CurlEasy easy(url);
+  Curl::Setup(easy);
 
-  StringView response{buffer, size};
+  const auto _response = co_await Curl::CoRequest(curl, std::move(easy));
+  StringView response{std::string_view{_response.body}};
   if (response.StartsWith("OK"))
-    return true;
+    co_return;
 
   if (response.SkipPrefix("NOK : ") && !response.empty())
     throw FormatRuntimeError("Error from server: %.*s",

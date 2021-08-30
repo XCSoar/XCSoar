@@ -50,14 +50,6 @@ class TrackingGlue final
 public:
   TrackingGlue(EventLoop &event_loop, CurlGlobal &curl) noexcept;
 
-  void StopAsync() noexcept {
-    livetrack24.StopAsync();
-  }
-
-  void WaitStopped() noexcept {
-    livetrack24.WaitStopped();
-  }
-
   void SetSettings(const TrackingSettings &_settings);
 
   void OnTimer(const MoreData &basic, const DerivedInfo &calculated);

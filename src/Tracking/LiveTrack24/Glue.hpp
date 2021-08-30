@@ -26,9 +26,9 @@ Copyright_License {
 
 #include "Settings.hpp"
 #include "Client.hpp"
-#include "thread/StandbyThread.hpp"
 #include "time/PeriodClock.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "co/InjectTask.hxx"
 #include "time/BrokenDateTime.hpp"
 
 struct MoreData;
@@ -37,7 +37,7 @@ class CurlGlobal;
 
 namespace LiveTrack24 {
 
-class Glue final : StandbyThread {
+class Glue final {
   struct State
   {
     LiveTrack24::SessionID session_id;
@@ -73,17 +73,17 @@ class Glue final : StandbyThread {
   Angle track;
   bool flying = false, last_flying;
 
+  Co::InjectTask inject_task;
+
 public:
   explicit Glue(CurlGlobal &curl) noexcept;
-
-  void StopAsync();
-  void WaitStopped();
 
   void SetSettings(const Settings &_settings);
   void OnTimer(const MoreData &basic, const DerivedInfo &calculated);
 
 protected:
-  void Tick() noexcept override;
+  Co::InvokeTask Tick(Settings settings);
+  void OnCompletion(std::exception_ptr error) noexcept;
 };
 
 } // namespace Livetrack24

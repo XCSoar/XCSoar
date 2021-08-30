@@ -27,6 +27,8 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Operation/Operation.hpp"
 #include "LogFile.hpp"
+#include "co/Task.hxx"
+#include "net/http/Global.hxx"
 #include "util/Macros.hpp"
 
 namespace LiveTrack24 {
@@ -51,25 +53,11 @@ MapVehicleTypeToLivetrack24(Settings::VehicleType vt)
 }
 
 Glue::Glue(CurlGlobal &curl) noexcept
-  :StandbyThread("Tracking"),
-   client(curl)
+  :client(curl),
+   inject_task(curl.GetEventLoop())
 {
   settings.SetDefaults();
   client.SetServer(settings.server);
-}
-
-void
-Glue::StopAsync()
-{
-  std::lock_guard<Mutex> lock(mutex);
-  StandbyThread::StopAsync();
-}
-
-void
-Glue::WaitStopped()
-{
-  std::lock_guard<Mutex> lock(mutex);
-  StandbyThread::WaitStopped();
 }
 
 void
@@ -79,16 +67,14 @@ Glue::SetSettings(const Settings &_settings)
       _settings.username != settings.username ||
       _settings.password != settings.password) {
     /* wait for the current job to finish */
-    LockWaitDone();
+    inject_task.Cancel();
 
-    /* now it's safe to access these variables without a lock */
+    /* now it's safe to access these variables */
     settings = _settings;
     state.ResetSession();
     client.SetServer(_settings.server);
   } else {
-    /* no fundamental setting changes; the write needs to be protected
-       by the mutex, because another job may be running already */
-    std::lock_guard<Mutex> lock(mutex);
+    /* no fundamental setting changes */
     settings = _settings;
   }
 }
@@ -111,8 +97,7 @@ Glue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
     /* later */
     return;
 
-  std::lock_guard<Mutex> lock(mutex);
-  if (IsBusy())
+  if (inject_task)
     /* still running, skip this submission */
     return;
 
@@ -136,80 +121,74 @@ Glue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
   last_flying = flying;
   flying = calculated.flight.flying;
 
-  Trigger();
+  inject_task.Start(Tick(settings), BIND_THIS_METHOD(OnCompletion));
+}
+
+Co::InvokeTask
+Glue::Tick(Settings settings)
+{
+  assert(settings.enabled);
+
+  if (!flying) {
+    if (last_flying && state.HasSession()) {
+      /* landing: end tracking session */
+      co_await client.EndTracking(state.session_id, state.packet_id);
+      state.ResetSession();
+      last_timestamp = {};
+    }
+
+    /* don't track if not flying */
+    co_return;
+  }
+
+  const auto current_timestamp = date_time.ToTimePoint();
+
+  if (state.HasSession() &&
+      current_timestamp + std::chrono::minutes(1) < last_timestamp) {
+    /* time warp: create a new session */
+    const auto old_state = state;
+    state.ResetSession();
+    co_await client.EndTracking(old_state.session_id, old_state.packet_id);
+  }
+
+  last_timestamp = current_timestamp;
+
+  if (!state.HasSession()) {
+    UserID user_id = 0;
+    if (!settings.username.empty() && !settings.password.empty())
+      user_id = co_await client.GetUserID(settings.username, settings.password);
+
+    if (user_id == 0) {
+      settings.username.clear();
+      settings.password.clear();
+      state.session_id = GenerateSessionID();
+    } else {
+      state.session_id = GenerateSessionID(user_id);
+    }
+
+    try {
+      co_await client.StartTracking(state.session_id, settings.username,
+                                    settings.password, settings.interval,
+                                    MapVehicleTypeToLivetrack24(settings.vehicleType),
+                                    settings.vehicle_name);
+    } catch (...) {
+      state.ResetSession();
+      throw;
+    }
+
+    state.packet_id = 2;
+  }
+
+  co_await client.SendPosition(state.session_id, state.packet_id++,
+                               location, altitude, ground_speed, track,
+                               current_timestamp);
 }
 
 void
-Glue::Tick() noexcept
+Glue::OnCompletion(std::exception_ptr error) noexcept
 {
-  if (!settings.enabled)
-    /* settings have been cleared meanwhile, bail out */
-    return;
-
-  unsigned tracking_interval = settings.interval;
-  auto copy = settings;
-
-  const ScopeUnlock unlock(mutex);
-
-  QuietOperationEnvironment env;
-
-  try {
-    if (!flying) {
-      if (last_flying && state.HasSession()) {
-        /* landing: end tracking session */
-        client.EndTracking(state.session_id, state.packet_id, env);
-        state.ResetSession();
-        last_timestamp = {};
-      }
-
-      /* don't track if not flying */
-      return;
-    }
-
-    const auto current_timestamp = date_time.ToTimePoint();
-
-    if (state.HasSession() &&
-        current_timestamp + std::chrono::minutes(1) < last_timestamp) {
-      /* time warp: create a new session */
-      client.EndTracking(state.session_id, state.packet_id, env);
-      state.ResetSession();
-    }
-
-    last_timestamp = current_timestamp;
-
-    if (!state.HasSession()) {
-      UserID user_id = 0;
-      if (!copy.username.empty() && !copy.password.empty())
-        user_id = client.GetUserID(copy.username, copy.password,
-                                               env);
-
-      if (user_id == 0) {
-        copy.username.clear();
-        copy.password.clear();
-        state.session_id = GenerateSessionID();
-      } else {
-        state.session_id = GenerateSessionID(user_id);
-      }
-
-      if (!client.StartTracking(state.session_id, copy.username,
-                                            copy.password, tracking_interval,
-                                            MapVehicleTypeToLivetrack24(settings.vehicleType),
-                                            settings.vehicle_name,
-                                            env)) {
-        state.ResetSession();
-        return;
-      }
-
-      state.packet_id = 2;
-    }
-
-    client.SendPosition(state.session_id, state.packet_id++,
-                                    location, altitude, ground_speed, track,
-                                    current_timestamp,
-                                    env);
-  } catch (...) {
-    LogError(std::current_exception(), "LiveTrack24 error");
-  }
+  if (error)
+    LogError(error, "LiveTrack24 error");
 }
 
 } // namespace Livetrack24
