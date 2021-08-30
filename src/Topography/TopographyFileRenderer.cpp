@@ -86,14 +86,19 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) 
   visible_serial = file.GetSerial();
   visible_bounds = projection.GetScreenBounds().Scale(1.2);
   visible_shapes.clear();
+  visible_points.clear();
   visible_labels.clear();
 
   for (const XShape &shape : file) {
     if (!visible_bounds.Overlaps(shape.get_bounds()))
       continue;
 
-    if (shape.get_type() != MS_SHAPE_NULL)
-      visible_shapes.push_back(&shape);
+    if (shape.get_type() != MS_SHAPE_NULL) {
+      if (shape.get_type() == MS_SHAPE_POINT)
+        visible_points.push_back(&shape);
+      else
+        visible_shapes.push_back(&shape);
+    }
 
     if (shape.GetLabel() != nullptr)
       visible_labels.push_back(&shape);
@@ -139,8 +144,7 @@ TopographyFileRenderer::UpdateArrayBuffer() noexcept
 inline void
 TopographyFileRenderer::PaintPoint(Canvas &canvas,
                                    const WindowProjection &projection,
-                                   const XShape &shape,
-                                   const float *opengl_matrix) const noexcept
+                                   const XShape &shape) const noexcept
 {
   if (!icon.IsDefined())
     return;
@@ -148,15 +152,7 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
   // TODO: for now i assume there is only one point for point-XShapes
 
   if (auto p = projection.GeoToScreenIfVisible(file.ToGeoPoint(shape.GetPoints()[0]))) {
-#ifndef HAVE_GLES
-    glPushMatrix();
-    glLoadMatrixf(opengl_matrix);
-#endif
-
     icon.Draw(canvas, *p);
-#ifndef HAVE_GLES
-    glPopMatrix();
-#endif
   }
 }
 
@@ -183,6 +179,23 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
 
 #endif
 
+inline void
+TopographyFileRenderer::PaintPoints(Canvas &canvas,
+                                    const WindowProjection &projection) noexcept
+{
+  for (const XShape *shape_p : visible_points) {
+    const XShape &shape = *shape_p;
+
+#ifdef ENABLE_OPENGL
+    PaintPoint(canvas, projection, shape);
+#else // !ENABLE_OPENGL
+    const auto lines = shape.GetLines();
+    const GeoPoint *points = shape.GetPoints();
+    PaintPoint(canvas, projection, lines.begin(), lines.end(), points);
+#endif
+  }
+}
+
 void
 TopographyFileRenderer::Paint(Canvas &canvas,
                               const WindowProjection &projection) noexcept
@@ -197,6 +210,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     return;
 
   UpdateVisibleShapes(projection);
+  PaintPoints(canvas, projection);
 
   if (visible_shapes.empty())
     return;
@@ -225,13 +239,6 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   const ShapeScalar min_distance =
     ShapeScalar(file.GetMinimumPointDistance(level))
     / (Layout::Scale(1) * FAISphere::REARTH);
-
-#ifdef HAVE_GLES
-  const float *const opengl_matrix = nullptr;
-#else
-  float opengl_matrix[16];
-  glGetFloatv(GL_MODELVIEW_MATRIX, opengl_matrix);
-#endif
 
   glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                      glm::value_ptr(ToGLM(projection, file.GetCenter())));
@@ -263,22 +270,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
     switch (shape.get_type()) {
     case MS_SHAPE_NULL:
-      break;
-
     case MS_SHAPE_POINT:
-#ifdef ENABLE_OPENGL
-      /* disable the ScopeVertexPointer instance because PaintPoint()
-         uses that attribute */
-      glDisableVertexAttribArray(OpenGL::Attribute::POSITION);
-
-      PaintPoint(canvas, projection, shape, opengl_matrix);
-
-      /* reenable the ScopeVertexPointer instance because PaintPoint()
-         left it disabled */
-      glEnableVertexAttribArray(OpenGL::Attribute::POSITION);
-#else // !ENABLE_OPENGL
-      PaintPoint(canvas, projection, lines.begin(), lines.end(), points);
-#endif
       break;
 
     case MS_SHAPE_LINE:

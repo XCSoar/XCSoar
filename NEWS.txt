@@ -1,4 +1,6 @@
 Version 7.17 - not yet released
+* map display
+  - fix airspace display bug
 * Android
   - fix startup crash bug
 * Linux text mode console
