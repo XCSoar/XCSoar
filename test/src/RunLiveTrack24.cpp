@@ -117,7 +117,7 @@ main(int argc, char *argv[])
   AtScopeExit(&) { io_thread.Stop(); };
   const Net::ScopeInit net_init(io_thread.GetEventLoop());
 
-  LiveTrack24::SetServer(_T("test.livetrack24.com"));
+  LiveTrack24::SetServer(_T("www.livetrack24.com"));
   bool result = TestTracking(argc, argv, *Net::curl);
 
   return result ? EXIT_SUCCESS : EXIT_FAILURE;
