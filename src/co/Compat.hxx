@@ -49,6 +49,19 @@ using std::experimental::noop_coroutine;
 
 #else /* not clang */
 
+#if defined __GNUC__ && defined _WIN32
+#if __GNUC__ == 10
+namespace std {
+inline namespace __n4861 {
+/* workaround for Windows linker error "multiple definition of ..."
+   with GCC10: these two symbols are declared as "weak", but only
+   adding "inline" and "selectany" makes the linker failure go away */
+inline void __dummy_resume_destroy();
+extern struct __noop_coro_frame __noop_coro_fr __attribute__((selectany));
+}}
+#endif
+#endif
+
 #include <coroutine>
 #ifndef __cpp_impl_coroutine
 #error Need -fcoroutines
