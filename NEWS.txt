@@ -3,6 +3,7 @@ Version 7.17 - not yet released
   - fix airspace display bug
 * Android
   - fix startup crash bug
+  - use native text entry dialog
 * Linux text mode console
   - fix program termination for some DRI drivers, e.g. VMWare
     in full-screen mode without Window manager.

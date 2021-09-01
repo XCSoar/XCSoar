@@ -35,6 +35,12 @@ Copyright_License {
 #include "Dialogs/DateEntry.hpp"
 #include "Dialogs/NumberEntry.hpp"
 
+#ifdef ANDROID
+#include "java/Global.hxx"
+#include "Android/Main.hpp"
+#include "Android/TextEntryDialog.hpp"
+#endif
+
 bool
 EditDataFieldDialog(const TCHAR *caption, DataField &df,
                     const TCHAR *help_text)
@@ -102,6 +108,24 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
     PrefixDataField::AllowedCharactersFunction acf;
     if (df.GetType() == DataField::Type::PREFIX)
       acf = ((PrefixDataField &)df).GetAllowedCharactersFunction();
+
+#ifdef ANDROID
+    if (!acf) {
+      /* not using AndroidTextEntryDialog::Type::PASSWORD for
+         PasswordDataField because AndroidTextEntryDialog doesn't have
+         an option (yet) to reveal the password */
+      auto type = AndroidTextEntryDialog::Type::TEXT;
+
+      AndroidTextEntryDialog dlg;
+      auto new_value = dlg.ShowModal(Java::GetEnv(), *context,
+                                     caption, value, type);
+      if (!new_value)
+        return false;
+
+      df.SetAsString(new_value->c_str());
+      return true;
+    }
+#endif
 
     if (!TextEntryDialog(buffer, caption, acf))
       return false;

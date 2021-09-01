@@ -39,6 +39,7 @@ Copyright_License {
 #include "NativeInputListener.hpp"
 #include "NativeSensorListener.hpp"
 #include "TextUtil.hpp"
+#include "TextEntryDialog.hpp"
 #include "Product.hpp"
 #include "Nook.hpp"
 #include "Language/Language.hpp"
@@ -135,6 +136,7 @@ try {
   I2CbaroDevice::Initialise(env);
   NunchuckDevice::Initialise(env);
   VoltageDevice::Initialise(env);
+  AndroidTextEntryDialog::Initialise(env);
 
   context = new Context(env, _context);
 
@@ -262,6 +264,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   delete context;
   context = nullptr;
 
+  AndroidTextEntryDialog::Deinitialise(env);
   BMP085Device::Deinitialise(env);
   I2CbaroDevice::Deinitialise(env);
   NunchuckDevice::Deinitialise(env);
