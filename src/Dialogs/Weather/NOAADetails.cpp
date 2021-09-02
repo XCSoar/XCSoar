@@ -22,13 +22,13 @@ Copyright_License {
 */
 
 #include "NOAADetails.hpp"
-#include "Dialogs/JobDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 #include "Weather/Features.hpp"
 
 #ifdef HAVE_NOAA
 
+#include "Dialogs/CoDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/LargeTextWidget.hpp"
 #include "Weather/NOAAGlue.hpp"
@@ -36,6 +36,9 @@ Copyright_License {
 #include "Weather/NOAAUpdater.hpp"
 #include "Weather/ParsedMETAR.hpp"
 #include "Weather/NOAAFormatter.hpp"
+#include "Operation/PluggableOperationEnvironment.hpp"
+#include "co/InvokeTask.hxx"
+#include "co/Task.hxx"
 #include "net/http/Init.hpp"
 #include "UIGlobals.hpp"
 
@@ -89,13 +92,20 @@ NOAADetailsWidget::Update()
   dialog.SetCaption(caption);
 }
 
+static Co::InvokeTask
+UpdateTask(NOAAStore::Item &item, ProgressListener &progress) noexcept
+{
+  co_await NOAAUpdater::Update(item, *Net::curl, progress);
+}
+
 inline void
 NOAADetailsWidget::UpdateClicked()
 {
-  DialogJobRunner runner(dialog.GetMainWindow(), dialog.GetLook(),
-                         _("Download"), true);
-  NOAAUpdater::Update(*station_iterator, *Net::curl, runner);
-  Update();
+  PluggableOperationEnvironment env;
+  if (ShowCoDialog(dialog.GetMainWindow(), dialog.GetLook(),
+                   _("Download"), UpdateTask(*station_iterator, env),
+                   &env))
+    Update();
 }
 
 inline void

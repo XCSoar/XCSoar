@@ -26,15 +26,43 @@ Copyright_License {
 #include "Weather/NOAAStore.hpp"
 #include "Weather/NOAAUpdater.hpp"
 #include "net/http/Init.hpp"
-#include "io/async/AsioThread.hpp"
-#include "ConsoleJobRunner.hpp"
+#include "co/InvokeTask.hxx"
+#include "co/Task.hxx"
+#include "event/Loop.hxx"
+#include "event/DeferEvent.hxx"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/GeoPointFormatter.hpp"
 #include "util/Macros.hpp"
-#include "util/ScopeExit.hxx"
+#include "util/PrintException.hxx"
 
 #include <cstdio>
+
+struct Instance {
+  EventLoop event_loop;
+
+  const Net::ScopeInit net_init{event_loop};
+
+  Co::InvokeTask invoke_task;
+
+  DeferEvent defer_start{event_loop, BIND_THIS_METHOD(OnDeferredStart)};
+
+  std::exception_ptr error;
+
+  void OnCompletion(std::exception_ptr _error) noexcept {
+    error = std::move(_error);
+    event_loop.Break();
+  }
+
+  void OnDeferredStart() noexcept {
+    invoke_task.Start(BIND_THIS_METHOD(OnCompletion));
+  }
+
+  Co::InvokeTask Run(NOAAStore &store, ProgressListener &progress) {
+    co_await NOAAUpdater::Update(store, *Net::curl, progress);
+  }
+};
 
 static void
 DisplayParsedMETAR(const NOAAStore::Item &station)
@@ -140,7 +168,7 @@ DisplayTAF(const NOAAStore::Item &station)
 
 int
 main(int argc, char *argv[])
-{
+try {
   if (argc < 2) {
     printf("Usage: %s <code>[ <code> ...]\n", argv[0]);
     printf("   <code> is the four letter ICAO code (upper case)\n");
@@ -155,14 +183,17 @@ main(int argc, char *argv[])
     store.AddStation(argv[i]);
   }
 
-  AsioThread io_thread;
-  io_thread.Start();
-  AtScopeExit(&) { io_thread.Stop(); };
-  const Net::ScopeInit net_init(io_thread.GetEventLoop());
+  Instance instance;
+
+  ConsoleOperationEnvironment env;
 
   printf("Updating METAR and TAF ...\n");
-  ConsoleJobRunner runner;
-  NOAAUpdater::Update(store, *Net::curl, runner);
+  instance.invoke_task = instance.Run(store, env);
+  instance.defer_start.Schedule();
+
+  instance.event_loop.Run();
+  if (instance.error)
+    std::rethrow_exception(instance.error);
 
   for (auto i = store.begin(), end = store.end(); i != end; ++i) {
     printf("---\n");
@@ -172,4 +203,7 @@ main(int argc, char *argv[])
   }
 
   return 0;
+} catch (...) {
+  PrintException(std::current_exception());
+  return EXIT_FAILURE;
 }

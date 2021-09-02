@@ -24,44 +24,45 @@ Copyright_License {
 #include "NOAAUpdater.hpp"
 #include "NOAADownloader.hpp"
 #include "METARParser.hpp"
+#include "co/Task.hxx"
 #include "LogFile.hpp"
 
-bool
+Co::Task<bool>
 NOAAUpdater::Update(NOAAStore::Item &item,
-                    CurlGlobal &curl, JobRunner &runner)
-try {
-  bool metar_downloaded = NOAADownloader::DownloadMETAR(item.code, item.metar,
-                                                        curl, runner);
-  if (metar_downloaded) {
+                    CurlGlobal &curl, ProgressListener &progress) noexcept
+{
+  bool metar_downloaded = false, taf_downloaded = false;
+
+  try {
+    item.metar = co_await NOAADownloader::DownloadMETAR(item.code,
+                                                        curl, progress);
     item.metar_available = true;
+    metar_downloaded = true;
 
     if (METARParser::Parse(item.metar, item.parsed_metar))
       item.parsed_metar_available = true;
+  } catch (...) {
+    LogError(std::current_exception());
   }
 
-  bool taf_downloaded = NOAADownloader::DownloadTAF(item.code, item.taf,
-                                                    curl, runner);
-  if (taf_downloaded)
+  try {
+    item.taf = co_await NOAADownloader::DownloadTAF(item.code, curl, progress);
     item.taf_available = true;
+    taf_downloaded = true;
+  } catch (...) {
+    LogError(std::current_exception());
+  }
 
-  return metar_downloaded && taf_downloaded;
-} catch (...) {
-  LogError(std::current_exception());
-  return false;
+  co_return metar_downloaded && taf_downloaded;
 }
 
-bool
-NOAAUpdater::Update(NOAAStore &store, CurlGlobal &curl, JobRunner &runner)
+Co::Task<bool>
+NOAAUpdater::Update(NOAAStore &store, CurlGlobal &curl,
+                    ProgressListener &progress) noexcept
 {
   bool result = true;
-  for (auto &i : store) {
-    try {
-      result = Update(i, curl, runner) && result;
-    } catch (...) {
-      LogError(std::current_exception());
-      result = false;
-    }
-  }
+  for (auto &i : store)
+    result = co_await Update(i, curl, progress) && result;
 
-  return result;
+  co_return result;
 }
