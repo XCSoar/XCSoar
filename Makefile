@@ -137,6 +137,7 @@ include $(topdir)/build/libcomputer.mk
 include $(topdir)/build/libos.mk
 include $(topdir)/build/libtime.mk
 include $(topdir)/build/libprofile.mk
+include $(topdir)/build/liboperation.mk
 include $(topdir)/build/libnet.mk
 include $(topdir)/build/libhttp.mk
 include $(topdir)/build/libcoroutines.mk

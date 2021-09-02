@@ -219,12 +219,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	$(SRC)/Renderer/GeoBitmapRenderer.cpp \
 	\
-	$(SRC)/Operation/Operation.cpp \
-	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
-	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(SRC)/Operation/PopupOperationEnvironment.cpp \
 	$(SRC)/Operation/MessageOperationEnvironment.cpp \
-	$(SRC)/Operation/ThreadedOperationEnvironment.cpp \
 	$(SRC)/Operation/VerboseOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Atmosphere/AirDensity.cpp \
@@ -687,6 +683,7 @@ XCSOAR_DEPENDS = \
 	LIBHTTP CO IO ASYNC TASK CONTEST ROUTE GLIDE WAYPOINT AIRSPACE \
 	LUA \
 	SHAPELIB ZZIP \
+	OPERATION \
 	LIBNET TIME OS THREAD \
 	UTIL GEO MATH
 
