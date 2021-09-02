@@ -54,6 +54,8 @@ public:
 class LocalCloseable : public LocalObject {
 public:
 	using LocalObject::LocalObject;
+	LocalCloseable(LocalObject &&src) noexcept
+		:LocalObject(std::move(src)) {}
 	~LocalCloseable() noexcept;
 };
 
