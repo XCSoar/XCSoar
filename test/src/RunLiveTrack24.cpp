@@ -135,6 +135,8 @@ try {
   instance.defer_start.Schedule();
 
   instance.event_loop.Run();
+  if (instance.error)
+    std::rethrow_exception(instance.error);
 
   return EXIT_SUCCESS;
 } catch (...) {
