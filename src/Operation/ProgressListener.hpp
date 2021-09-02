@@ -21,38 +21,23 @@ Copyright_License {
 }
 */
 
-#ifndef NET_HTTP_PROGRESS_HPP
-#define NET_HTTP_PROGRESS_HPP
-
-#include <curl/system.h>
-
-class CurlEasy;
-class ProgressListener;
-
-namespace Net {
+#pragma once
 
 /**
- * This class reports upload and download progress to an
- * #OperationEnvironment instance.
+ * Receive progress updates.
  */
-class ProgressAdapter {
-  ProgressListener &listener;
-
+class ProgressListener {
 public:
   /**
-   * Register as "xferinfo" callback with the given #CurlEasy and keep
-   * reporting progress to the #OperationEnvironment instance.
+   * Initialize the progress bar, and set the maximum value which will
+   * mean "100% done".  The default value is 0, which means "no
+   * progress bar".
    */
-  ProgressAdapter(CurlEasy &curl, ProgressListener &listener);
+  virtual void SetProgressRange(unsigned range) noexcept = 0;
 
-private:
-  void Callback(curl_off_t dltotal, curl_off_t dlnow,
-                curl_off_t ultotal, curl_off_t ulnow) noexcept;
-
-  static int _Callback(void *clientp, curl_off_t dltotal, curl_off_t dlnow,
-                       curl_off_t ultotal, curl_off_t ulnow) noexcept;
+  /**
+   * Set the current position of the progress bar.  Must not be bigger
+   * than the configured range.
+   */
+  virtual void SetProgressPosition(unsigned position) noexcept = 0;
 };
-
-} // namespace Net
-
-#endif

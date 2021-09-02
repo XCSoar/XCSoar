@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_OPERATION_HPP
 #define XCSOAR_OPERATION_HPP
 
+#include "ProgressListener.hpp"
 #include "util/NonCopyable.hpp"
 
 #include <chrono>
@@ -36,7 +37,7 @@ Copyright_License {
  * in a separate thread, and this class provides a bridge to the
  * calling thread.
  */
-class OperationEnvironment : private NonCopyable {
+class OperationEnvironment : private NonCopyable, public ProgressListener {
 public:
   /**
    * Has the caller requested to cancel the operation?
@@ -68,19 +69,6 @@ public:
    * current state of the operation.
    */
   virtual void SetText(const TCHAR *text) noexcept = 0;
-
-  /**
-   * Initialize the progress bar, and set the maximum value which will
-   * mean "100% done".  The default value is 0, which means "no
-   * progress bar".
-   */
-  virtual void SetProgressRange(unsigned range) noexcept = 0;
-
-  /**
-   * Set the current position of the progress bar.  Must not be bigger
-   * than the configured range.
-   */
-  virtual void SetProgressPosition(unsigned position) noexcept = 0;
 };
 
 class NullOperationEnvironment : public OperationEnvironment {

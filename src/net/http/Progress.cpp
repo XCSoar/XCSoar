@@ -23,14 +23,14 @@ Copyright_License {
 
 #include "Progress.hpp"
 #include "Easy.hxx"
-#include "Operation/Operation.hpp"
+#include "Operation/ProgressListener.hpp"
 
 #include <limits.h>
 
 namespace Net {
 
-ProgressAdapter::ProgressAdapter(CurlEasy &curl, OperationEnvironment &_env)
-  :env(_env)
+ProgressAdapter::ProgressAdapter(CurlEasy &curl, ProgressListener &_listener)
+  :listener(_listener)
 {
   curl.SetXferInfoFunction(_Callback, this);
 }
@@ -50,8 +50,8 @@ ProgressAdapter::Callback(curl_off_t dltotal, curl_off_t dlnow,
     /* no useful information at all (or overflow) */
     return;
 
-  env.SetProgressRange(range);
-  env.SetProgressPosition(dlnow + ulnow);
+  listener.SetProgressRange(range);
+  listener.SetProgressPosition(dlnow + ulnow);
 }
 
 int
