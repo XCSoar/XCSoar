@@ -61,6 +61,7 @@ Client::GetUserID(const TCHAR *username, const TCHAR *password)
   // Request the file
   CurlEasy easy(url);
   Curl::Setup(easy);
+  easy.SetFailOnError();
 
   const auto response = co_await Curl::CoRequest(curl, std::move(easy));
   const char *body = response.body.c_str();
@@ -150,6 +151,7 @@ Client::SendRequest(const char *url)
 {
   CurlEasy easy(url);
   Curl::Setup(easy);
+  easy.SetFailOnError();
 
   const auto _response = co_await Curl::CoRequest(curl, std::move(easy));
   StringView response{std::string_view{_response.body}};
