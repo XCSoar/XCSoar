@@ -214,9 +214,9 @@ CheckBoxControl::OnPaint(Canvas &canvas)
     };
 
     unsigned top = canvas.GetHeight() / 2;
-    for (unsigned i = 0; i < ARRAY_SIZE(check_mark); ++i) {
-      check_mark[i].x = (check_mark[i].x * (int)size) / 24 + top;
-      check_mark[i].y = (check_mark[i].y * (int)size) / 24 + top;
+    for (auto &i : check_mark) {
+      i.x = (i.x * (int)size) / 24 + top;
+      i.y = (i.y * (int)size) / 24 + top;
     }
 
     canvas.DrawPolygon(check_mark, ARRAY_SIZE(check_mark));
