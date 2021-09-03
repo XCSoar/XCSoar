@@ -155,10 +155,11 @@ PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
     const WideToUTF8Converter username(settings.ftp_credentials.username);
     const WideToUTF8Converter password(settings.ftp_credentials.password);
 
-    co_await Net::CoDownloadToFile(curl, url,
-                                   username, password,
-                                   path, nullptr,
-                                   progress);
+    const auto ignored_response = co_await
+      Net::CoDownloadToFile(curl, url,
+                            username, password,
+                            path, nullptr,
+                            progress);
   }
 
   BrokenDateTime run_time(now_utc.GetDate(), BrokenTime(run_hour, 0));

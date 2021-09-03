@@ -171,8 +171,9 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
     // to the latest image and the namelist array of all stored images
     snprintf(url, sizeof(url), PCMET_URI "%.*s", int(src.size), src.data);
 
-    co_await Net::CoDownloadToFile(curl, url, username, password,
-                                   path, nullptr, progress);
+    const auto ignored_response = co_await
+      Net::CoDownloadToFile(curl, url, username, password,
+                            path, nullptr, progress);
   }
 
   co_return std::move(path);

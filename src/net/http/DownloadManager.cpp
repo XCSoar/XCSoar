@@ -249,9 +249,10 @@ DownloadToFileTransaction(CurlGlobal &curl,
                           ProgressListener &progress)
 {
   FileTransaction transaction(path);
-  co_await Net::CoDownloadToFile(curl, url, nullptr, nullptr,
-                                 transaction.GetTemporaryPath(),
-                                 sha256, progress);
+  const auto ignored_response = co_await
+    Net::CoDownloadToFile(curl, url, nullptr, nullptr,
+                          transaction.GetTemporaryPath(),
+                          sha256, progress);
   transaction.Commit();
 }
 

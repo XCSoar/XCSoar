@@ -161,9 +161,10 @@ public:
 static Co::InvokeTask
 DownloadRASP(const char *url, Path path, ProgressListener &progress)
 {
-  co_await Net::CoDownloadToFile(*Net::curl, url,
-                                 nullptr, nullptr,
-                                 path, nullptr, progress);
+  const auto ignored_response = co_await
+    Net::CoDownloadToFile(*Net::curl, url,
+                          nullptr, nullptr,
+                          path, nullptr, progress);
 }
 
 void
