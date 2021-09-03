@@ -33,7 +33,9 @@ Copyright_License {
 #include <tchar.h>
 
 struct PCMetSettings;
-class JobRunner;
+class CurlGlobal;
+class ProgressListener;
+namespace Co { template<typename T> class Task; }
 
 namespace PCMet {
 
@@ -77,11 +79,11 @@ struct Overlay {
   }
 };
 
-Overlay
+Co::Task<Overlay>
 DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
                 const PCMetSettings &settings,
-                JobRunner &runner);
+                CurlGlobal &curl, ProgressListener &progress);
 
-};
+} // namespace PCMet
 
 #endif

@@ -24,15 +24,14 @@ Copyright_License {
 #include "Overlays.hpp"
 #include "Settings.hpp"
 #include "ui/canvas/Bitmap.hpp"
-#include "net/http/Init.hpp"
-#include "net/http/ToBuffer.hpp"
-#include "net/http/ToFile.hpp"
+#include "net/http/CoDownloadToFile.hpp"
 #include "Job/Runner.hpp"
-#include "LocalPath.hpp"
+#include "co/Task.hxx"
 #include "system/FileUtil.hpp"
 #include "util/StaticString.hxx"
 #include "util/ConvertString.hpp"
 #include "util/Macros.hpp"
+#include "LocalPath.hpp"
 
 #include <stdexcept>
 
@@ -134,10 +133,10 @@ PCMet::CollectOverlays()
   return list;
 }
 
-PCMet::Overlay
+Co::Task<PCMet::Overlay>
 PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
                        const PCMetSettings &settings,
-                       JobRunner &runner)
+                       CurlGlobal &curl, ProgressListener &progress)
 {
   const unsigned run_hour = (now_utc.hour / 3) * 3;
   unsigned run = (now_utc.hour / 3) * 300;
@@ -156,12 +155,10 @@ PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
     const WideToUTF8Converter username(settings.ftp_credentials.username);
     const WideToUTF8Converter password(settings.ftp_credentials.password);
 
-    Net::DownloadToFileJob job(*Net::curl, url, path);
-    job.SetBasicAuth(username, password);
-    if (!runner.Run(job))
-      return Overlay(BrokenDateTime::Invalid(),
-                     BrokenDateTime::Invalid(),
-                     Path(nullptr));
+    co_await Net::CoDownloadToFile(curl, url,
+                                   username, password,
+                                   path, nullptr,
+                                   progress);
   }
 
   BrokenDateTime run_time(now_utc.GetDate(), BrokenTime(run_hour, 0));
@@ -175,5 +172,5 @@ PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
     valid_time.IncrementDay();
   }
 
-  return Overlay(run_time, valid_time, std::move(path));
+  co_return Overlay{run_time, valid_time, std::move(path)};
 }
