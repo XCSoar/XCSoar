@@ -16,6 +16,7 @@ LIBHTTP_SOURCES = \
 	$(SRC)/net/http/Request.cxx \
 	$(SRC)/net/http/CoRequest.cxx \
 	$(SRC)/net/http/CoStreamRequest.cxx \
+	$(SRC)/net/http/CoDownloadToFile.cpp \
 	$(SRC)/net/http/Global.cxx \
 	$(SRC)/net/http/Init.cpp
 
