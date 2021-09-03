@@ -25,6 +25,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "Screen/Layout.hpp"
 #include "Asset.hpp"
 #include "util/Macros.hpp"
 
@@ -48,8 +49,8 @@ unsigned
 CheckBoxControl::GetMinimumWidth(const DialogLook &look, unsigned height,
                                  tstring::const_pointer caption) noexcept
 {
-  // TODO: use Layout::GetTextPadding()?
-  return height + 2 + look.check_box.font->TextSize(caption).width + 4;
+  const unsigned padding = Layout::GetTextPadding();
+  return 3 * padding + height + look.check_box.font->TextSize(caption).width;
 }
 
 void
@@ -192,8 +193,7 @@ CheckBoxControl::OnPaint(Canvas &canvas)
           : cb_look.standard))
     : cb_look.disabled;
 
-  // TODO: use Layout::GetTextPadding()?
-  const unsigned padding = 2;
+  const unsigned padding = Layout::GetTextPadding();
   unsigned size = canvas.GetHeight() - 2 * padding;
 
   canvas.Select(state_look.box_brush);
@@ -225,5 +225,8 @@ CheckBoxControl::OnPaint(Canvas &canvas)
   canvas.Select(*cb_look.font);
   canvas.SetTextColor(state_look.text_color);
   canvas.SetBackgroundTransparent();
-  canvas.DrawText({(int)canvas.GetHeight() + 2, 2}, caption.c_str());
+
+  const PixelPoint caption_position(canvas.GetHeight() + 2 * padding,
+                                    2);
+  canvas.DrawText(caption_position, caption.c_str());
 }
