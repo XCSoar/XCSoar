@@ -11,6 +11,7 @@ from build.gcc import BinutilsProject, GccProject, GccBootstrapProject
 from build.linux import SabotageLinuxHeadersProject
 from build.sdl2 import SDL2Project
 from build.lua import LuaProject
+from .musl import MuslProject
 
 binutils = BinutilsProject(
     'https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz',
@@ -85,7 +86,7 @@ gcc_bootstrap = GccBootstrapProject(
     use_actual_arch=True,
 )
 
-musl = AutotoolsProject(
+musl = MuslProject(
     'https://www.musl-libc.org/releases/musl-1.1.18.tar.gz',
     'https://fossies.org/linux/misc/musl-1.1.18.tar.gz',
     'd017ee5d01aec0c522a1330fdff06b1e428cb409e1db819cc4935d5da4a5a118',
