@@ -30,10 +30,10 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"
 #include "util/ConvertString.hpp"
+#include "util/StringView.hxx"
 
 #include <stdexcept>
 
-#include <string.h>
 #include <stdio.h>
 
 #define PCMET_URI "https://www.flugwetter.de"
@@ -130,33 +130,32 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
   buffer[job.GetLength()] = 0;
 
   static constexpr char img_needle[] = "<img name=\"bild\" src=\"/";
-  char *img = strstr(buffer, "<img name=\"bild\" src=\"/");
+  const char *img = strstr(buffer, img_needle);
   if (img == nullptr)
     return Bitmap();
 
-  char *src = img + sizeof(img_needle) - 2;
-  char *end = strchr(src + 1, '"');
+  const char *_src = img + sizeof(img_needle) - 2;
+  const char *end = strchr(_src + 1, '"');
   if (end == nullptr)
     return Bitmap();
 
-  *end = 0;
-
-  const char *slash = strrchr(src, '/');
-  if (slash == nullptr || slash[1] == 0)
+  const StringView src{_src, end};
+  std::string_view _name = src.SplitLast('/').second;
+  if (_name.empty())
     return Bitmap();
 
-  const char *name = slash + 1;
+  const std::string name{_name};
 
   // TODO: verify file name
 
   const auto cache_path = MakeLocalPath(_T("pc_met"));
   const auto path = AllocatedPath::Build(cache_path,
-                                         UTF8ToWideConverter(name));
+                                         UTF8ToWideConverter(name.c_str()));
 
   if (!File::Exists(path)) {
     // URI for a single page of a selected 'Satellitenbilder"-page with link
     // to the latest image and the namelist array of all stored images
-    snprintf(url, sizeof(url), PCMET_URI "%s", src);
+    snprintf(url, sizeof(url), PCMET_URI "%.*s", int(src.size), src.data);
 
     Net::DownloadToFileJob job2(curl, url, path);
     job2.SetBasicAuth(username, password);
