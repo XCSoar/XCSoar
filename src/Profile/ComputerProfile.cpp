@@ -92,12 +92,11 @@ Profile::Load(const ProfileMap &map, WeGlideSettings &settings)
   map.Get(ProfileKeys::WeGlideEnabled, settings.enabled);
   map.Get(ProfileKeys::WeGlidePilotID, settings.pilot_id);
 
-  char date_string[20];
-  snprintf(date_string, 20, "%s", map.Get(ProfileKeys::WeGlidePilotBirthDate, "0"));
-
-  unsigned day, month, year;
-  if (sscanf(date_string, "%04u-%02u-%02u", &year, &month, &day) == 3) {
-    settings.pilot_birthdate = BrokenDate(year, month, day);
+  const char *date = map.Get(ProfileKeys::WeGlidePilotBirthDate);
+  if (date != nullptr) {
+    unsigned day, month, year;
+    if (sscanf(date, "%04u-%02u-%02u", &year, &month, &day) == 3)
+      settings.pilot_birthdate = {year, month, day};
   }
 }
 
