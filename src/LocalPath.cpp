@@ -67,6 +67,7 @@ Copyright_License {
  * The absolute location of the XCSoarData directory.
  */
 static AllocatedPath data_path;
+static AllocatedPath cache_path;
 
 Path
 GetPrimaryDataPath() noexcept
@@ -83,6 +84,10 @@ SetPrimaryDataPath(Path path) noexcept
   assert(!path.IsEmpty());
 
   data_path = path;
+
+#ifndef ANDROID
+  cache_path = LocalPath(_T("cache"));
+#endif
 }
 
 AllocatedPath
@@ -315,12 +320,29 @@ VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
     Directory::VisitSpecificFiles(home_path, filter, visitor, true);
 }
 
+Path
+GetCachePath() noexcept
+{
+  Directory::Create(cache_path);
+  return cache_path;
+}
+
 bool
 InitialiseDataPath()
 {
   data_path = FindDataPath();
   if (data_path == nullptr)
     return false;
+
+#ifdef ANDROID
+    cache_path = context->GetExternalCacheDir(Java::GetEnv());
+    if (cache_path == nullptr)
+      throw std::runtime_error("No Android cache directory");
+
+    // TODO: delete the old cache directory in XCSoarData?
+#else
+    cache_path = LocalPath(_T("cache"));
+#endif
 
   return true;
 }
