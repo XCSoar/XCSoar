@@ -111,10 +111,9 @@ Net::DownloadManager::Cancel(Path relative_path) noexcept
 
 #else /* !ANDROID */
 
-#include "ToFile.hpp"
 #include "Global.hxx"
 #include "Init.hpp"
-#include "net/http/CoDownloadToFile.hpp"
+#include "CoDownloadToFile.hpp"
 #include "Operation/ProgressListener.hpp"
 #include "LocalPath.hpp"
 #include "thread/Mutex.hxx"
