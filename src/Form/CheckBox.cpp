@@ -227,6 +227,6 @@ CheckBoxControl::OnPaint(Canvas &canvas)
   canvas.SetBackgroundTransparent();
 
   const PixelPoint caption_position(canvas.GetHeight() + 2 * padding,
-                                    2);
+                                    ((int)canvas.GetHeight() - (int)cb_look.font->GetHeight()) / 2);
   canvas.DrawText(caption_position, caption.c_str());
 }
