@@ -114,7 +114,6 @@ Copyright_License {
 #ifdef ANDROID
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
-#include "Android/Context.hpp"
 #endif
 
 static TaskManager *task_manager;

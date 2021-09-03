@@ -32,7 +32,9 @@ Copyright_License {
 #include "system/FileUtil.hpp"
 
 #ifdef ANDROID
+#include "Android/Context.hpp"
 #include "Android/Environment.hpp"
+#include "Android/Main.hpp"
 #endif
 
 #ifdef _WIN32
