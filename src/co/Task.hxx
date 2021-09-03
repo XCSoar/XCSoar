@@ -162,7 +162,7 @@ public:
 			return coroutine;
 		}
 
-		decltype(auto) await_resume() {
+		T await_resume() {
 			return coroutine.promise().GetReturnValue();
 		}
 	};
