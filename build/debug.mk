@@ -9,14 +9,17 @@ else
   OPTIMIZE += -DNDEBUG
 endif
 
+TARGET_OPTIMIZE :=
+HOST_OPTIMIZE := -g
+
 ifeq ($(CLANG),y)
-  OPTIMIZE += -g
+  TARGET_OPTIMIZE += -g
 else
 ifeq ($(HAVE_WIN32),y)
   # WINE works best with stabs debug symbols
-  OPTIMIZE += -gstabs
+  TARGET_OPTIMIZE += -gstabs
 else
-  OPTIMIZE += -g
+  TARGET_OPTIMIZE += -g
 endif
 endif
 
@@ -39,19 +42,19 @@ ifeq ($(LTO),y)
   ifeq ($(CLANG),n)
     # 8 LTO threads - that's an arbitrary value, but better than the
     # default
-    OPTIMIZE += -flto=8
+    TARGET_OPTIMIZE += -flto=8
   else
     ifeq ($(THIN_LTO),y)
-      OPTIMIZE += -flto=thin
+      TARGET_OPTIMIZE += -flto=thin
     else
-      OPTIMIZE += -flto
+      TARGET_OPTIMIZE += -flto
     endif
   endif
 endif
 
 ifeq ($(LLVM),y)
   # generate LLVM bitcode
-  OPTIMIZE += -emit-llvm
+  TARGET_OPTIMIZE += -emit-llvm
 endif
 
 OPTIMIZE_LDFLAGS = $(filter-out -emit-llvm,$(OPTIMIZE))
