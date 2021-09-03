@@ -1,6 +1,8 @@
 Version 7.17 - not yet released
 * map display
   - fix airspace display bug
+* weather
+  - update RASP provider list
 * Android
   - fix startup crash bug
   - use native text entry dialog
