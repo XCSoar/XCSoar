@@ -38,6 +38,7 @@ enum Controls {
   TASK_TYPE,
   MIN_TIME,
   START_REQUIRES_ARM,
+  START_SCORE_EXIT,
   START_OPEN_TIME,
   START_CLOSE_TIME,
   START_MAX_SPEED,
@@ -72,6 +73,7 @@ TaskPropertiesPanel::RefreshView()
   LoadValueDuration(MIN_TIME, p.aat_min_time);
 
   LoadValue(START_REQUIRES_ARM, p.start_constraints.require_arm);
+  LoadValue(START_SCORE_EXIT, p.start_constraints.score_exit);
 
   LoadValue(START_OPEN_TIME, p.start_constraints.open_time_span.GetStart());
   LoadValue(START_CLOSE_TIME, p.start_constraints.open_time_span.GetEnd());
@@ -125,6 +127,8 @@ TaskPropertiesPanel::ReadValues()
 
   if (SaveValue(START_REQUIRES_ARM, p.start_constraints.require_arm))
     changed = true;
+
+  changed |= SaveValue(START_SCORE_EXIT, p.start_constraints.score_exit);
 
   RoughTime new_open = p.start_constraints.open_time_span.GetStart();
   RoughTime new_close = p.start_constraints.open_time_span.GetEnd();
@@ -232,6 +236,8 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent,
   AddBoolean(_("Arm start manually"),
              _("Configure whether the start must be armed manually or automatically."),
              false);
+
+  AddBoolean(_("Score start exit"), nullptr, false);
 
   const RoughTimeDelta time_zone =
     CommonInterface::GetComputerSettings().utc_offset;

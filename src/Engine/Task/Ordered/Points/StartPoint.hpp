@@ -71,6 +71,10 @@ public:
     return constraints.require_arm;
   }
 
+  bool GetScoreExit() const noexcept {
+    return constraints.score_exit;
+  }
+
   /**
    * Search for the min point on the boundary from
    * the aircraft state to the next point.  Should only

@@ -52,6 +52,12 @@ struct StartConstraints {
   bool require_arm;
 
   /**
+   * If this is true, then exiting the observation zone is the goal,
+   * not entering it.
+   */
+  bool score_exit;
+
+  /**
    * This is a copy of FinishConstraints::fai_finish.  If true, then
    * the constraints defined in this class will be ignored.
    */

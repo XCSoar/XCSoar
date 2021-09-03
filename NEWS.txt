@@ -3,6 +3,8 @@ Version 7.17 - not yet released
   - fix airspace display bug
 * weather
   - update RASP provider list
+* task management
+  - add option to score start on entry
 * Android
   - fix startup crash bug
   - use native text entry dialog
