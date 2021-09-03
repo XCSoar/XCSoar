@@ -162,7 +162,8 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
 
   // TODO: verify file name
 
-  const auto cache_path = MakeLocalPath(_T("pc_met"));
+  // TODO: delete the old directory XCSoarData/pc_met?
+  const auto cache_path = MakeCacheDirectory(_T("pc_met"));
   auto path = AllocatedPath::Build(cache_path,
                                    UTF8ToWideConverter(name.c_str()));
 

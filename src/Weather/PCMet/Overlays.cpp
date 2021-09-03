@@ -103,7 +103,7 @@ FindLatestOverlay(PCMet::OverlayInfo &info)
     }
   } visitor(info);
 
-  const auto cache_path = MakeLocalPath(_T("pc_met"));
+  const auto cache_path = MakeCacheDirectory(_T("pc_met"));
   StaticString<256> pattern;
   pattern.Format(_T("%s_%s_lv_%06u_p_%03u_*.tiff"),
                  type_names[unsigned(info.type)],
@@ -147,7 +147,7 @@ PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
              area_names[unsigned(info.area)],
              info.level, info.step, run);
 
-  const auto cache_path = MakeLocalPath(_T("pc_met"));
+  const auto cache_path = MakeCacheDirectory(_T("pc_met"));
   auto path = AllocatedPath::Build(cache_path,
                                    UTF8ToWideConverter(url.c_str() + sizeof(PCMET_FTP)));
 
