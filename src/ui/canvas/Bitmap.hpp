@@ -110,8 +110,8 @@ public:
     Reset();
   }
 
-  Bitmap(const Bitmap &other) = delete;
-  Bitmap &operator=(const Bitmap &other) = delete;
+  Bitmap &operator=(Bitmap &&src) noexcept;
+
 public:
   bool IsDefined() const noexcept {
 #ifdef ENABLE_OPENGL

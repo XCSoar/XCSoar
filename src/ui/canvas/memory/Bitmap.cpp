@@ -33,6 +33,13 @@ Bitmap::Bitmap(Bitmap &&src) noexcept
 {
 }
 
+Bitmap &Bitmap::operator=(Bitmap &&src) noexcept
+{
+  using std::swap;
+  swap(buffer, src.buffer);
+  return *this;
+}
+
 bool
 Bitmap::Load(UncompressedImage &&uncompressed, gcc_unused Type type)
 {

@@ -37,6 +37,13 @@ Bitmap::Bitmap(Bitmap &&src) noexcept
 {
 }
 
+Bitmap &Bitmap::operator=(Bitmap &&src) noexcept
+{
+  using std::swap;
+  swap(bitmap, src.bitmap);
+  return *this;
+}
+
 bool
 Bitmap::LoadFile(Path path)
 {

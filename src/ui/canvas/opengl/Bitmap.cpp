@@ -36,6 +36,16 @@ Bitmap::Bitmap(Bitmap &&src) noexcept
 {
 }
 
+Bitmap &Bitmap::operator=(Bitmap &&src) noexcept
+{
+  delete texture;
+  texture = std::exchange(src.texture, nullptr);
+  size = src.size;
+  interpolation = src.interpolation;
+  flipped = src.flipped;
+  return *this;
+}
+
 void
 Bitmap::EnableInterpolation() noexcept
 {
