@@ -86,9 +86,9 @@ InjectTask::OnCompletion(std::exception_ptr error) noexcept
 	assert(task);
 
 	task = {};
-	callback(std::move(error));
-
 	alive = false;
+
+	callback(std::move(error));
 }
 
 } // namespace Co
