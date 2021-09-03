@@ -66,7 +66,7 @@ Copyright_License {
 /**
  * The absolute location of the XCSoarData directory.
  */
-static AllocatedPath data_path = AllocatedPath(nullptr);
+static AllocatedPath data_path;
 
 Path
 GetPrimaryDataPath() noexcept
