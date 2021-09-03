@@ -29,12 +29,11 @@ Copyright_License {
 #include "Debug.hpp"
 
 Bitmap::Bitmap(Bitmap &&src) noexcept
-  :texture(src.texture),
+  :texture(std::exchange(src.texture, nullptr)),
    size(src.size),
    interpolation(src.interpolation),
    flipped(src.flipped)
 {
-  src.texture = nullptr;
 }
 
 void

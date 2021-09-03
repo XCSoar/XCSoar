@@ -29,9 +29,8 @@ Copyright_License {
 #include <cassert>
 
 Bitmap::Bitmap(Bitmap &&src) noexcept
-  :buffer(src.buffer)
+  :buffer(std::exchange(src.buffer, WritableImageBuffer<BitmapPixelTraits>::Empty()))
 {
-  src.buffer = {};
 }
 
 bool

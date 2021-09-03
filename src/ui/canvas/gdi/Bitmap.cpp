@@ -33,9 +33,8 @@ Copyright_License {
 #include <winuser.h>
 
 Bitmap::Bitmap(Bitmap &&src) noexcept
-  :bitmap(src.bitmap)
+  :bitmap(std::exchange(src.bitmap, nullptr))
 {
-  src.bitmap = nullptr;
 }
 
 bool
