@@ -68,7 +68,7 @@ AndroidTextEntryDialog::Initialise(JNIEnv *env) noexcept
 void
 AndroidTextEntryDialog::Deinitialise(JNIEnv *env) noexcept
 {
-  text_entry_dialog_class.ClearOptional(env);
+  text_entry_dialog_class.Clear(env);
 }
 
 JNIEXPORT void JNICALL
