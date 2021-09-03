@@ -22,7 +22,7 @@ git remote add master https://github.com/XCSoar/XCSoar.git
 SCRIPT
 
 Vagrant.configure("2") do |config|
-    config.vm.box = "generic/debian10"
+    config.vm.box = "generic/debian11"
 
     config.vm.synced_folder "../..", "/xcsoar-host-src"
 
