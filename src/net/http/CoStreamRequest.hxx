@@ -1,8 +1,5 @@
 /*
- * Copyright 2020-2021 CM4all GmbH
- * All rights reserved.
- *
- * author: Max Kellermann <mk@cm4all.com>
+ * Copyright 2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,69 +29,27 @@
 
 #pragma once
 
-#include "Request.hxx"
-#include "Handler.hxx"
-#include "co/Compat.hxx"
+#include "CoRequest.hxx"
 
-#include <exception>
+class OutputStream;
 
 namespace Curl {
 
-struct CoResponse {
-	unsigned status = 0;
-
-	std::multimap<std::string, std::string> headers;
-
-	std::string body;
-};
-
 /**
- * A CURL HTTP request as a C++20 coroutine.
+ * A variant of #CoRequest which redirects the response body to an
+ * #OutputStream.  The caller owns the #OutputStream, and errors
+ * thrown by OutputStream::Write() will be rethrown to the awaiter.
  */
-class CoRequest : CurlResponseHandler {
-	CurlRequest request;
-
-	CoResponse response;
-	std::exception_ptr error;
-
-	std::coroutine_handle<> continuation;
-
-	bool ready = false;
+class CoStreamRequest : public CoRequest {
+	OutputStream &os;
 
 public:
-	CoRequest(CurlGlobal &global, CurlEasy easy);
-
-	auto operator co_await() noexcept {
-		struct Awaitable final {
-			CoRequest &request;
-
-			bool await_ready() const noexcept {
-				return request.ready;
-			}
-
-			std::coroutine_handle<> await_suspend(std::coroutine_handle<> _continuation) const noexcept {
-				request.continuation = _continuation;
-				return std::noop_coroutine();
-			}
-
-			CoResponse await_resume() const {
-				if (request.error)
-					std::rethrow_exception(std::move(request.error));
-
-				return std::move(request.response);
-			}
-		};
-
-		return Awaitable{*this};
-	}
+	CoStreamRequest(CurlGlobal &global, CurlEasy &&easy, OutputStream &_os)
+		:CoRequest(global, std::move(easy)), os(_os) {}
 
 private:
 	/* virtual methods from CurlResponseHandler */
-	void OnHeaders(unsigned status,
-		       std::multimap<std::string, std::string> &&headers) override;
 	void OnData(ConstBuffer<void> data) override;
-	void OnEnd() override;
-	void OnError(std::exception_ptr e) noexcept override;
 };
 
 } // namespace Curl
