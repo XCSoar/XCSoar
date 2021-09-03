@@ -79,14 +79,14 @@ public:
   /* virtual methods from class ScoredTaskPoint */
   void Reset() override;
   bool CheckEnterTransition(const AircraftState &ref_now,
-                            const AircraftState &ref_last) const override;
+                            const AircraftState &ref_last) const noexcept override;
 
   /* virtual methods from class OrderedTaskPoint */
-  void SetTaskBehaviour(const TaskBehaviour &tb) override;
-  void SetOrderedTaskSettings(const OrderedTaskSettings &otb) override;
+  void SetTaskBehaviour(const TaskBehaviour &tb) noexcept override;
+  void SetOrderedTaskSettings(const OrderedTaskSettings &otb) noexcept override;
   void SetNeighbours(OrderedTaskPoint *prev,
-                     OrderedTaskPoint *next) override;
-  bool IsInSector(const AircraftState &ref) const override;
+                     OrderedTaskPoint *next) noexcept override;
+  bool IsInSector(const AircraftState &ref) const noexcept override;
 
 private:
   /* virtual methods from class ScoredTaskPoint */

@@ -214,11 +214,11 @@ public:
   }
 
   /* virtual methods from class OrderedTaskPoint */
-  bool Equals(const OrderedTaskPoint &other) const override;
+  bool Equals(const OrderedTaskPoint &other) const noexcept override;
   bool UpdateSampleNear(const AircraftState &state,
-                        const FlatProjection &projection) override;
+                        const FlatProjection &projection) noexcept override;
   bool UpdateSampleFar(const AircraftState &state,
-                       const FlatProjection &projection) override;
+                       const FlatProjection &projection) noexcept override;
 };
 
 #endif

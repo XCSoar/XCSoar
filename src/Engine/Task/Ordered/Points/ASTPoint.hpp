@@ -69,7 +69,7 @@ public:
   }
 
   /* virtual methods from OrderedTaskPoint */
-  bool Equals(const OrderedTaskPoint &_other) const override;
+  bool Equals(const OrderedTaskPoint &_other) const noexcept override;
 };
 
 #endif

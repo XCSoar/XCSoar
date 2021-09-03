@@ -23,7 +23,7 @@
 #include "ASTPoint.hpp"
 
 bool
-ASTPoint::Equals(const OrderedTaskPoint &_other) const
+ASTPoint::Equals(const OrderedTaskPoint &_other) const noexcept
 {
   const ASTPoint &other = (const ASTPoint &)_other;
 

@@ -38,8 +38,8 @@ AATPoint::GetLocationRemaining() const noexcept
 }
 
 bool
-AATPoint::UpdateSampleNear(const AircraftState& state,
-                           const FlatProjection &projection)
+AATPoint::UpdateSampleNear(const AircraftState &state,
+                           const FlatProjection &projection) noexcept
 {
   bool retval = OrderedTaskPoint::UpdateSampleNear(state, projection);
   retval |= CheckTarget(state, false);
@@ -48,8 +48,8 @@ AATPoint::UpdateSampleNear(const AircraftState& state,
 }
 
 bool
-AATPoint::UpdateSampleFar(const AircraftState& state,
-                          const FlatProjection &projection)
+AATPoint::UpdateSampleFar(const AircraftState &state,
+                          const FlatProjection &projection) noexcept
 {
   /* the orderedtaskpoint::update_sample_far does nothing for now but
      we are calling this in case that changes */
@@ -187,7 +187,7 @@ AATPoint::GetTargetRangeRadial(double oldrange) const
 }
 
 bool
-AATPoint::Equals(const OrderedTaskPoint &other) const
+AATPoint::Equals(const OrderedTaskPoint &other) const noexcept
 {
   const auto &tp = (const AATPoint &)other;
 
