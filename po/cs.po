@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-08-24 18:35+0000\n"
+"PO-Revision-Date: 2021-09-04 11:35+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -3180,8 +3180,8 @@ msgstr "Tým kód"
 #: src/Dialogs/dlgAnalysis.cpp:538
 msgid "Task Calc"
 msgstr ""
-"Výpočet\n"
-"úlohy"
+"Stav\n"
+"Úloha"
 
 #: src/Dialogs/dlgAnalysis.cpp:461 src/Dialogs/dlgAnalysis.cpp:470
 #: src/Dialogs/dlgAnalysis.cpp:479 src/Dialogs/dlgAnalysis.cpp:488
@@ -3241,13 +3241,15 @@ msgstr "Rychlost úlohy"
 #: src/Dialogs/dlgAnalysis.cpp:547
 msgid "Task calc"
 msgstr ""
-"Výpočet\n"
-"úlohy"
+"Stav\n"
+"Úloha"
 
 #: src/Dialogs/dlgAnalysis.cpp:565
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
 msgid "Warnings"
-msgstr "Varování"
+msgstr ""
+"Prostory\n"
+"Varování"
 
 #: src/Dialogs/dlgChecklist.cpp:50 src/Dialogs/dlgChecklist.cpp:142
 msgid "Checklist"
