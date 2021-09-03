@@ -21,15 +21,13 @@ Copyright_License {
 }
 */
 
+#include "CoInstance.hpp"
 #include "Cloud/weglide/UploadFlight.hpp"
 #include "Cloud/weglide/WeGlideSettings.hpp"
 #include "net/http/Init.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "json/Serialize.hxx"
-#include "co/InvokeTask.hxx"
 #include "co/Task.hxx"
-#include "event/Loop.hxx"
-#include "event/DeferEvent.hxx"
 #include "system/Args.hpp"
 #include "io/StdioOutputStream.hxx"
 #include "util/Macros.hpp"
@@ -39,31 +37,15 @@ Copyright_License {
 
 #include <cstdio>
 
-struct Instance {
-  EventLoop event_loop;
-
-  const Net::ScopeInit net_init{event_loop};
-
-  Co::InvokeTask invoke_task;
-
-  DeferEvent defer_start{event_loop, BIND_THIS_METHOD(OnDeferredStart)};
+struct Instance : CoInstance {
+  const Net::ScopeInit net_init{GetEventLoop()};
 
   boost::json::value value;
-  std::exception_ptr error;
 
-  void OnCompletion(std::exception_ptr _error) noexcept {
-    error = std::move(_error);
-    event_loop.Break();
-  }
-
-  void OnDeferredStart() noexcept {
-    invoke_task.Start(BIND_THIS_METHOD(OnCompletion));
-  }
-
-  Co::InvokeTask Run(const WeGlideSettings &settings,
-                     uint_least32_t glider_type,
-                     Path igc_path,
-                     ProgressListener &progress)
+  Co::InvokeTask DoRun(const WeGlideSettings &settings,
+                       uint_least32_t glider_type,
+                       Path igc_path,
+                       ProgressListener &progress)
   {
     value = co_await WeGlide::UploadFlight(*Net::curl, settings, glider_type,
                                            igc_path, progress);
@@ -91,13 +73,8 @@ try {
   Instance instance;
   ConsoleOperationEnvironment env;
 
-  instance.invoke_task = instance.Run(settings, glider,
-                                      igc_path, env);
-  instance.defer_start.Schedule();
-
-  instance.event_loop.Run();
-  if (instance.error)
-    std::rethrow_exception(instance.error);
+  instance.Run(instance.DoRun(settings, glider,
+                              igc_path, env));
 
   StdioOutputStream _stdout(stdout);
   Json::Serialize(_stdout, instance.value);

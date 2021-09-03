@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "CoInstance.hpp"
 #include "Tracking/LiveTrack24/Client.hpp"
 #include "net/http/Init.hpp"
 #include "time/BrokenDateTime.hpp"
@@ -28,36 +29,15 @@ Copyright_License {
 #include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "DebugReplay.hpp"
-#include "co/InvokeTask.hxx"
 #include "co/Task.hxx"
-#include "event/Loop.hxx"
-#include "event/DeferEvent.hxx"
 #include "util/PrintException.hxx"
-#include "util/ScopeExit.hxx"
 
 #include <cstdio>
 
 using namespace LiveTrack24;
 
-struct Instance {
-  EventLoop event_loop;
-
-  const Net::ScopeInit net_init{event_loop};
-
-  Co::InvokeTask invoke_task;
-
-  DeferEvent defer_start{event_loop, BIND_THIS_METHOD(OnDeferredStart)};
-
-  std::exception_ptr error;
-
-  void OnCompletion(std::exception_ptr _error) noexcept {
-    error = std::move(_error);
-    event_loop.Break();
-  }
-
-  void OnDeferredStart() noexcept {
-    invoke_task.Start(BIND_THIS_METHOD(OnCompletion));
-  }
+struct Instance : CoInstance {
+  const Net::ScopeInit net_init{GetEventLoop()};
 };
 
 static Co::InvokeTask
@@ -131,13 +111,7 @@ try {
 
   Client client{*Net::curl};
   client.SetServer(_T("www.livetrack24.com"));
-  instance.invoke_task = TestTracking(argc, argv, client);
-  instance.defer_start.Schedule();
-
-  instance.event_loop.Run();
-  if (instance.error)
-    std::rethrow_exception(instance.error);
-
+  instance.Run(TestTracking(argc, argv, client));
   return EXIT_SUCCESS;
 } catch (...) {
   PrintException(std::current_exception());

@@ -21,15 +21,13 @@ Copyright_License {
 }
 */
 
+#include "CoInstance.hpp"
 #include "Weather/TAF.hpp"
 #include "Weather/METAR.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/NOAAUpdater.hpp"
 #include "net/http/Init.hpp"
-#include "co/InvokeTask.hxx"
 #include "co/Task.hxx"
-#include "event/Loop.hxx"
-#include "event/DeferEvent.hxx"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
@@ -39,30 +37,15 @@ Copyright_License {
 
 #include <cstdio>
 
-struct Instance {
-  EventLoop event_loop;
-
-  const Net::ScopeInit net_init{event_loop};
-
-  Co::InvokeTask invoke_task;
-
-  DeferEvent defer_start{event_loop, BIND_THIS_METHOD(OnDeferredStart)};
-
-  std::exception_ptr error;
-
-  void OnCompletion(std::exception_ptr _error) noexcept {
-    error = std::move(_error);
-    event_loop.Break();
-  }
-
-  void OnDeferredStart() noexcept {
-    invoke_task.Start(BIND_THIS_METHOD(OnCompletion));
-  }
-
-  Co::InvokeTask Run(NOAAStore &store, ProgressListener &progress) {
-    co_await NOAAUpdater::Update(store, *Net::curl, progress);
-  }
+struct Instance : CoInstance {
+  const Net::ScopeInit net_init{GetEventLoop()};
 };
+
+static Co::InvokeTask
+Run(NOAAStore &store, ProgressListener &progress)
+{
+  co_await NOAAUpdater::Update(store, *Net::curl, progress);
+}
 
 static void
 DisplayParsedMETAR(const NOAAStore::Item &station)
@@ -188,12 +171,7 @@ try {
   ConsoleOperationEnvironment env;
 
   printf("Updating METAR and TAF ...\n");
-  instance.invoke_task = instance.Run(store, env);
-  instance.defer_start.Schedule();
-
-  instance.event_loop.Run();
-  if (instance.error)
-    std::rethrow_exception(instance.error);
+  instance.Run(Run(store, env));
 
   for (auto i = store.begin(), end = store.end(); i != end; ++i) {
     printf("---\n");
