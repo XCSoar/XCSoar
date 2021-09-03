@@ -28,8 +28,9 @@ Copyright_License {
 
 struct PCMetSettings;
 class CurlGlobal;
-class JobRunner;
-class Bitmap;
+class ProgressListener;
+class AllocatedPath;
+namespace Co { template<typename T> class Task; }
 
 namespace PCMet {
 
@@ -47,10 +48,13 @@ struct ImageType {
 
 extern const ImageType image_types[];
 
-Bitmap
+/**
+ * Throws on error.
+ */
+Co::Task<::AllocatedPath>
 DownloadLatestImage(const char *type, const char *area,
                     const PCMetSettings &settings,
-                    CurlGlobal &curl, JobRunner &runner);
+                    CurlGlobal &curl, ProgressListener &progress);
 
 } // namespace PCMet
 
