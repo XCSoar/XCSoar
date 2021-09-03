@@ -147,6 +147,8 @@ FileCache::Save(const TCHAR *name, Path original_path)
     // TODO: proper error message (GetRegularFileInfo() should throw)
     throw std::runtime_error("Cannot access cached file");
 
+  Directory::Create(cache_path);
+
   const auto path = MakeCachePath(name);
 
   File::Delete(path);

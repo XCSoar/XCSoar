@@ -325,8 +325,16 @@ VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
 Path
 GetCachePath() noexcept
 {
-  Directory::Create(cache_path);
   return cache_path;
+}
+
+AllocatedPath
+MakeCacheDirectory(const TCHAR *name) noexcept
+{
+  Directory::Create(cache_path);
+  auto path = AllocatedPath::Build(cache_path, Path(name));
+  Directory::Create(path);
+  return path;
 }
 
 bool

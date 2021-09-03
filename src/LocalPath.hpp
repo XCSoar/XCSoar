@@ -118,4 +118,8 @@ void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor);
 Path
 GetCachePath() noexcept;
 
+[[gnu::pure]]
+AllocatedPath
+MakeCacheDirectory(const TCHAR *name) noexcept;
+
 #endif
