@@ -205,9 +205,8 @@ private:
   bool CheckTargetOutside(const AircraftState& state);
 
 public:
-
   /* virtual methods from class TaskPoint */
-  const GeoPoint& GetLocationRemaining() const override;
+  const GeoPoint &GetLocationRemaining() const noexcept override;
 
   /* virtual methods from class ObservationZoneClient */
   double ScoreAdjustment() const override {

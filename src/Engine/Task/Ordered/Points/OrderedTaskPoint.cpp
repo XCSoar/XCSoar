@@ -215,7 +215,7 @@ OrderedTaskPoint::BoundingBoxOverlaps(const FlatBoundingBox &that) const
 }
 
 GeoVector
-OrderedTaskPoint::GetNextLegVector() const
+OrderedTaskPoint::GetNextLegVector() const noexcept
 {
   if (tp_next)
     return tp_next->GetVectorPlanned();

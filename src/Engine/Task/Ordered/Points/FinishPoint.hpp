@@ -74,7 +74,7 @@ public:
   void SetFaiFinishHeight(double height);
 
   /* virtual methods from class TaskPoint */
-  double GetElevation() const override;
+  double GetElevation() const noexcept override;
 
   /* virtual methods from class ScoredTaskPoint */
   void Reset() override;

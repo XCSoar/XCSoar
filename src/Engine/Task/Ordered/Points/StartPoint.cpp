@@ -47,7 +47,7 @@ StartPoint::SetTaskBehaviour(const TaskBehaviour &tb)
 }
 
 double
-StartPoint::GetElevation() const
+StartPoint::GetElevation() const noexcept
 {
   return GetBaseElevation() + safety_height;
 }

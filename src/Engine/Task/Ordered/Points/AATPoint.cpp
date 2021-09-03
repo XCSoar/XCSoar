@@ -25,8 +25,8 @@
 #include "Geo/Flat/FlatLine.hpp"
 #include "util/Clamp.hpp"
 
-const GeoPoint&
-AATPoint::GetLocationRemaining() const
+const GeoPoint &
+AATPoint::GetLocationRemaining() const noexcept
 {
   if (!IsPast())
     return target_location;

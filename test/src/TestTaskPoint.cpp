@@ -32,11 +32,11 @@ public:
   DummyTaskPoint(TaskPointType _type, const GeoPoint &_location)
     :TaskPoint(_type, _location) {}
 
-  GeoVector GetVectorRemaining(const GeoPoint &reference) const override {
+  GeoVector GetVectorRemaining(const GeoPoint &reference) const noexcept override {
     return GeoVector();
   }
 
-  double GetElevation() const override {
+  double GetElevation() const noexcept override {
     return 0;
   }
 };

@@ -289,13 +289,13 @@ protected:
 
 public:
   /* virtual methods from class TaskPoint */
-  const GeoPoint &GetLocationRemaining() const override {
+  const GeoPoint &GetLocationRemaining() const noexcept override {
     return ScoredTaskPoint::GetLocationRemaining();
   }
-  GeoVector GetVectorRemaining(const GeoPoint &) const override {
+  GeoVector GetVectorRemaining(const GeoPoint &) const noexcept override {
     return TaskLeg::GetVectorRemaining();
   }
-  GeoVector GetNextLegVector() const override;
+  GeoVector GetNextLegVector() const noexcept override;
 
 protected:
   /* virtual methods from class ScoredTaskPoint */

@@ -57,7 +57,7 @@ FinishPoint::EntryPrecondition() const
 }
 
 double
-FinishPoint::GetElevation() const
+FinishPoint::GetElevation() const noexcept
 {
   const auto nominal_elevation = GetBaseElevation() + safety_height;
 

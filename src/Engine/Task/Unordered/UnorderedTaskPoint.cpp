@@ -36,7 +36,7 @@ UnorderedTaskPoint::SetTaskBehaviour(const TaskBehaviour &tb)
 }
 
 GeoVector
-UnorderedTaskPoint::GetVectorRemaining(const GeoPoint &reference) const
+UnorderedTaskPoint::GetVectorRemaining(const GeoPoint &reference) const noexcept
 {
   if (!reference.IsValid())
     return GeoVector::Invalid();
@@ -45,7 +45,7 @@ UnorderedTaskPoint::GetVectorRemaining(const GeoPoint &reference) const
 }
 
 double
-UnorderedTaskPoint::GetElevation() const
+UnorderedTaskPoint::GetElevation() const noexcept
 {
   return GetBaseElevation() + safety_height_arrival;
 }

@@ -84,7 +84,7 @@ public:
                        const FlatProjection &projection);
 
   /* virtual methods from class TaskPoint */
-  double GetElevation() const override;
+  double GetElevation() const noexcept override;
 
   /* virtual methods from class ScoredTaskPoint */
   bool CheckExitTransition(const AircraftState &ref_now,

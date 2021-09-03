@@ -25,7 +25,7 @@
 #include "Geo/GeoVector.hpp"
 
 GeoVector
-TaskPoint::GetNextLegVector() const
+TaskPoint::GetNextLegVector() const noexcept
 {
   return GeoVector::Invalid();
 }
