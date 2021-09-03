@@ -1,6 +1,8 @@
 Version 7.17 - not yet released
 * map display
   - fix airspace display bug
+* user interface
+  - add 8x3 InfoBoxes portrait layout
 * weather
   - update RASP provider list
 * task management

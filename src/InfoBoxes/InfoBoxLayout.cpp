@@ -336,12 +336,21 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry) noexc
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_24:
-    rc.right = MakeRightColumn(layout, layout.positions + 16, 8,
-                               rc.right, rc.top, rc.bottom);
-    rc.right = MakeRightColumn(layout, layout.positions + 8, 8,
-                               rc.right, rc.top, rc.bottom);
-    rc.right = MakeRightColumn(layout, layout.positions, 8,
-                               rc.right, rc.top, rc.bottom);
+    if (layout.landscape) {
+      rc.right = MakeRightColumn(layout, layout.positions + 16, 8,
+                                 rc.right, rc.top, rc.bottom);
+      rc.right = MakeRightColumn(layout, layout.positions + 8, 8,
+                                 rc.right, rc.top, rc.bottom);
+      rc.right = MakeRightColumn(layout, layout.positions, 8,
+                                 rc.right, rc.top, rc.bottom);
+    } else {
+      rc.bottom = MakeBottomRow(layout, layout.positions + 16, 8,
+                                rc.left, rc.right, rc.bottom);
+      rc.bottom = MakeBottomRow(layout, layout.positions + 8, 8,
+                                rc.left, rc.right, rc.bottom);
+      rc.bottom = MakeBottomRow(layout, layout.positions, 8,
+                                rc.left, rc.right, rc.bottom);
+    }
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_9_VARIO:
@@ -444,6 +453,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
     case InfoBoxSettings::Geometry::OBSOLETE_SPLIT_8:
     case InfoBoxSettings::Geometry::OBSOLETE_TOP_LEFT_8:
     case InfoBoxSettings::Geometry::OBSOLETE_BOTTOM_RIGHT_8:
+    case InfoBoxSettings::Geometry::RIGHT_24:
       break;
 
     case InfoBoxSettings::Geometry::RIGHT_9_VARIO:
@@ -455,9 +465,6 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
       break;
 
     case InfoBoxSettings::Geometry::RIGHT_16:
-      return InfoBoxSettings::Geometry::BOTTOM_RIGHT_12;
-
-    case InfoBoxSettings::Geometry::RIGHT_24:
       return InfoBoxSettings::Geometry::BOTTOM_RIGHT_12;
 
     case InfoBoxSettings::Geometry::OBSOLETE_BOTTOM_RIGHT_12:
@@ -597,8 +604,14 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_24:
-    layout.control_size.height = screen_size.height / 8;
-    layout.control_size.width = layout.control_size.height * 1.44;
+    if (landscape) {
+      layout.control_size.height = screen_size.height / 8;
+      layout.control_size.width = layout.control_size.height * 1.44;
+    } else {
+      layout.control_size.width = 3 * screen_size.width / layout.count;
+      layout.control_size.height = CalculateInfoBoxRowHeight(screen_size.height,
+                                                             layout.control_size.width);
+    }
     break;
 
   case InfoBoxSettings::Geometry::OBSOLETE_SPLIT_8:
@@ -815,9 +828,16 @@ InfoBoxLayout::GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_24:
-    if (i % 8 != 0)
+    if (landscape) {
+      if (i % 8 != 0)
+        border |= BORDERTOP;
+      border |= BORDERLEFT;
+    } else {
       border |= BORDERTOP;
-    border |= BORDERLEFT;
+
+      if (i != 7 && i != 15 && i != 23)
+        border |= BORDERRIGHT;
+    }
     break;
 
   case InfoBoxSettings::Geometry::OBSOLETE_SPLIT_8:
