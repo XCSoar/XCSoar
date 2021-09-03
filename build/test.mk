@@ -962,9 +962,8 @@ $(eval $(call link-program,RunDownloadToFile,RUN_DOWNLOAD_TO_FILE))
 
 UPLOAD_FILE_SOURCES = \
 	$(SRC)/Version.cpp \
-	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/UploadFile.cpp
-UPLOAD_FILE_DEPENDS = LIBHTTP ASYNC OS LIBNET OPERATION OS IO THREAD UTIL
+UPLOAD_FILE_DEPENDS = LIBHTTP ASYNC OS LIBNET OS IO UTIL
 $(eval $(call link-program,UploadFile,UPLOAD_FILE))
 
 RUN_WEGLIDE_UPLOAD_FLIGHT_SOURCES = \

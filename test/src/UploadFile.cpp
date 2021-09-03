@@ -21,19 +21,37 @@ Copyright_License {
 }
 */
 
+#include "CoInstance.hpp"
 #include "net/http/Mime.hxx"
-#include "net/http/ToStream.hpp"
+#include "net/http/CoStreamRequest.hxx"
 #include "net/http/Easy.hxx"
 #include "net/http/Init.hpp"
+#include "net/http/Setup.hxx"
 #include "system/Args.hpp"
-#include "Operation/ConsoleOperationEnvironment.hpp"
 #include "io/StdioOutputStream.hxx"
-#include "io/async/AsioThread.hpp"
-#include "util/ConstBuffer.hxx"
 #include "util/PrintException.hxx"
-#include "util/ScopeExit.hxx"
 
 #include <stdio.h>
+
+struct Instance : CoInstance {
+  const Net::ScopeInit net_init{GetEventLoop()};
+};
+
+static Co::InvokeTask
+Run(CurlGlobal &curl, const char *url, const char *name, const char *path,
+    OutputStream &os)
+{
+  CurlEasy easy(url);
+  Curl::Setup(easy);
+  easy.SetFailOnError();
+
+  CurlMime mime(easy.Get());
+  mime.Add(name).FileData(path);
+  easy.SetMimePost(mime.get());
+
+  const auto response =
+    co_await Curl::CoStreamRequest(curl, std::move(easy), os);
+}
 
 int
 main(int argc, char **argv) noexcept
@@ -44,22 +62,9 @@ try {
   const char *path = args.ExpectNext();
   args.ExpectEnd();
 
-  AsioThread io_thread;
-  io_thread.Start();
-  AtScopeExit(&) { io_thread.Stop(); };
-  const Net::ScopeInit net_init(io_thread.GetEventLoop());
-
-  CurlEasy easy(url);
-  easy.SetFailOnError();
-
-  CurlMime mime(easy.Get());
-  mime.Add(name).FileData(path);
-
-  easy.SetMimePost(mime.get());
-
-  ConsoleOperationEnvironment env;
+  Instance instance;
   StdioOutputStream sos(stdout);
-  Net::DownloadToStream(*Net::curl, std::move(easy), sos, env);
+  instance.Run(Run(*Net::curl, url, name, path, sos));
 
   printf("\n");
   return EXIT_SUCCESS;
