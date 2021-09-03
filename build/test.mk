@@ -802,6 +802,7 @@ ifeq ($(HAVE_HTTP)$(TARGET_IS_ANDROID),yn)
 DEBUG_PROGRAM_NAMES += DownloadFile \
 	RunDownloadToFile \
 	UploadFile \
+	RunWeGlideUploadFlight \
 	RunNOAADownloader RunSkyLinesTracking RunLiveTrack24
 endif
 
@@ -965,6 +966,17 @@ UPLOAD_FILE_SOURCES = \
 	$(TEST_SRC_DIR)/UploadFile.cpp
 UPLOAD_FILE_DEPENDS = LIBHTTP ASYNC OS LIBNET OPERATION OS IO THREAD UTIL
 $(eval $(call link-program,UploadFile,UPLOAD_FILE))
+
+RUN_WEGLIDE_UPLOAD_FLIGHT_SOURCES = \
+	$(SRC)/Version.cpp \
+	$(SRC)/Cloud/weglide/UploadFlight.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/net/SocketError.cxx \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/RunWeGlideUploadFlight.cpp
+RUN_WEGLIDE_UPLOAD_FLIGHT_DEPENDS = JSON LIBHTTP ASYNC LIBNET OPERATION OS IO UTIL TIME
+$(eval $(call link-program,RunWeGlideUploadFlight,RUN_WEGLIDE_UPLOAD_FLIGHT))
 
 RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/net/SocketError.cxx \
