@@ -53,7 +53,7 @@ public:
     :dialog(parent, dialog_look, caption),
      inject_task(asio_thread->GetEventLoop())
   {
-    dialog.SetForceOpen(true);
+    dialog.AddCancelButton();
 
     if (_env != nullptr)
       _env->SetOperationEnvironment(env);
