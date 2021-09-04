@@ -75,11 +75,12 @@ BitmapDialog(const PCMet::ImageType &type, const PCMet::ImageArea &area)
   try {
     AllocatedPath path;
     PluggableOperationEnvironment env;
-    ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-                 _("Download"),
-                 DownloadTask(path, type.uri, area.name,
-                              settings, *Net::curl, env),
-                 &env);
+    if (!ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                      _("Download"),
+                      DownloadTask(path, type.uri, area.name,
+                                   settings, *Net::curl, env),
+                      &env))
+      return;
 
     Bitmap bitmap;
     bitmap.LoadFile(path);

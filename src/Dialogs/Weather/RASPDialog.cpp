@@ -188,10 +188,12 @@ RASPSettingsPanel::Download() noexcept
   try {
     FileTransaction transaction(path);
     PluggableOperationEnvironment env;
-    ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-                 _("Download"),
-                 DownloadRASP(url, transaction.GetTemporaryPath(), env),
-                 &env);
+
+    if (!ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                      _("Download"),
+                      DownloadRASP(url, transaction.GetTemporaryPath(), env),
+                      &env))
+      return;
 
     transaction.Commit();
   } catch (...) {

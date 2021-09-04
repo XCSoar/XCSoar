@@ -381,12 +381,13 @@ WeatherMapOverlayListWidget::UseClicked(unsigned i)
       try {
         std::optional<PCMet::Overlay> overlay;
         PluggableOperationEnvironment env;
-        ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-                     _("Download"),
-                     OverlayDownloadTask(overlay, info,
-                                         BrokenDateTime::NowUTC(),
-                                         settings, env),
-                     &env);
+        if (!ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                          _("Download"),
+                          OverlayDownloadTask(overlay, info,
+                                              BrokenDateTime::NowUTC(),
+                                              settings, env),
+                          &env))
+          return;
 
         item.path = std::move(overlay->path);
         UpdatePreview(item.path);
@@ -412,11 +413,12 @@ WeatherMapOverlayListWidget::UpdateClicked()
 
         std::optional<PCMet::Overlay> overlay;
         PluggableOperationEnvironment env;
-        ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-                     _("Download"),
-                     OverlayDownloadTask(overlay, info, now,
-                                         settings, env),
-                     &env);
+        if (!ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                          _("Download"),
+                          OverlayDownloadTask(overlay, info, now,
+                                              settings, env),
+                          &env))
+          return;
 
         if (i == active_index)
           SetOverlay(overlay->path, info.label.c_str());

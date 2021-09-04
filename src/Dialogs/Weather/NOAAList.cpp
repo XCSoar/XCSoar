@@ -198,11 +198,10 @@ NOAAListWidget::AddClicked()
   noaa_store->SaveToProfile();
 
   PluggableOperationEnvironment env;
-  ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-               _("Download"), UpdateTask(*i, env),
-               &env);
-
-  UpdateList();
+  if (ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                   _("Download"), UpdateTask(*i, env),
+                   &env))
+    UpdateList();
 }
 
 static Co::InvokeTask
@@ -215,10 +214,10 @@ inline void
 NOAAListWidget::UpdateClicked()
 {
   PluggableOperationEnvironment env;
-  ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-               _("Download"), UpdateTask(*noaa_store, env),
-               &env);
-  UpdateList();
+  if (ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                   _("Download"), UpdateTask(*noaa_store, env),
+                   &env))
+    UpdateList();
 }
 
 inline void
