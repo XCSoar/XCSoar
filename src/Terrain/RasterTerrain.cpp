@@ -106,7 +106,7 @@ try {
 }
 
 bool
-RasterTerrain::UpdateTiles(const GeoPoint &location, double radius)
+RasterTerrain::UpdateTiles(const GeoPoint &location, double radius) noexcept
 {
   auto &tile_cache = map.GetTileCache();
   if (!tile_cache.IsValid())

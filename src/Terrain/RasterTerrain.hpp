@@ -53,11 +53,11 @@ private:
   /**
    * Constructor.  Returns uninitialised object.
    */
-  explicit RasterTerrain(ZipArchive &&_archive)
+  explicit RasterTerrain(ZipArchive &&_archive) noexcept
     :Guard<RasterMap>(map), archive(std::move(_archive)) {}
 
 public:
-  const Serial &GetSerial() const {
+  const Serial &GetSerial() const noexcept {
     return map.GetSerial();
   }
 
@@ -67,20 +67,20 @@ public:
   static RasterTerrain *OpenTerrain(FileCache *cache,
                                     OperationEnvironment &operation);
 
-  gcc_pure
-  TerrainHeight GetTerrainHeight(const GeoPoint location) const {
+  [[gnu::pure]]
+  TerrainHeight GetTerrainHeight(const GeoPoint location) const noexcept {
     Lease lease(*this);
     return lease->GetHeight(location);
   }
 
-  GeoPoint GetTerrainCenter() const {
+  GeoPoint GetTerrainCenter() const noexcept {
     return map.GetMapCenter();
   }
 
   /**
    * @return true if the method shall be called again
    */
-  bool UpdateTiles(const GeoPoint &location, double radius);
+  bool UpdateTiles(const GeoPoint &location, double radius) noexcept;
 
 private:
   /**
