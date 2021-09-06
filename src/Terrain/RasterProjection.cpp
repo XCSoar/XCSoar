@@ -41,7 +41,7 @@ RasterProjection::Set(const GeoBounds &bounds,
 
 double
 RasterProjection::FinePixelDistance(const GeoPoint &location,
-                                    unsigned pixels) const
+                                    unsigned pixels) const noexcept
 {
   /**
    * This factor is used to reduce fixed point rounding errors.
@@ -66,7 +66,7 @@ RasterProjection::FinePixelDistance(const GeoPoint &location,
 }
 
 unsigned
-RasterProjection::DistancePixelsFine(double distance) const
+RasterProjection::DistancePixelsFine(double distance) const noexcept
 {
   Angle angle = Angle::Radians(distance / FAISphere::REARTH);
   return AngleToHeight(angle);
