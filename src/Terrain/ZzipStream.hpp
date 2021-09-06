@@ -28,6 +28,9 @@ Copyright_License {
 
 struct zzip_dir;
 
+/**
+ * Throws on error.
+ */
 jas_stream_t *
 OpenJasperZzipStream(struct zzip_dir *dir, const char *path);
 

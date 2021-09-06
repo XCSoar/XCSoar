@@ -70,8 +70,12 @@ RasterTerrain::Load(Path path, FileCache *cache,
     LogError(std::current_exception(), "Failed to load terrain cache");
   }
 
-  if (!LoadTerrainOverview(archive.get(), map.GetTileCache(), operation))
+  try {
+    LoadTerrainOverview(archive.get(), map.GetTileCache(), operation);
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to load terrain overview");
     return false;
+  }
 
   map.UpdateProjection();
 
@@ -112,7 +116,12 @@ RasterTerrain::UpdateTiles(const GeoPoint &location, double radius) noexcept
   if (!tile_cache.IsValid())
     return false;
 
-  UpdateTerrainTiles(archive.get(), tile_cache, mutex,
-                     map.GetProjection(), location, radius);
+  try {
+    UpdateTerrainTiles(archive.get(), tile_cache, mutex,
+                       map.GetProjection(), location, radius);
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to update terrain tiles");
+  }
+
   return map.IsDirty();
 }

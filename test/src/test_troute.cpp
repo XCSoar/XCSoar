@@ -35,6 +35,7 @@
 #include "Geo/GeoVector.hpp"
 #include "Operation/Operation.hpp"
 #include "system/FileUtil.hpp"
+#include "util/PrintException.hxx"
 
 #include <zzip/zzip.h>
 
@@ -106,7 +107,9 @@ test_troute(const RasterMap &map, double mwind, double mc, int ceiling)
   // route.UpdatePolar(polar, wind);
 }
 
-int main(int argc, char** argv) {
+int
+main(int argc, char **argv)
+try {
   static const char hc_path[] = "tmp/map.xcm";
   const char *map_path;
   if ((argc<2) || !strlen(argv[0])) {
@@ -123,12 +126,9 @@ int main(int argc, char** argv) {
 
   RasterMap map;
 
-  NullOperationEnvironment operation;
-  if (!LoadTerrainOverview(dir, map.GetTileCache(),
-                           operation)) {
-    fprintf(stderr, "failed to load map\n");
-    zzip_dir_close(dir);
-    return EXIT_FAILURE;
+  {
+    NullOperationEnvironment operation;
+    LoadTerrainOverview(dir, map.GetTileCache(), operation);
   }
 
   map.UpdateProjection();
@@ -147,5 +147,7 @@ int main(int argc, char** argv) {
   test_troute(map, 5.0, 1, 10000);
 
   return exit_status();
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }
-

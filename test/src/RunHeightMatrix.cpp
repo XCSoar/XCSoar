@@ -47,11 +47,9 @@ try {
 
   RasterMap map;
 
-  NullOperationEnvironment operation;
-  if (!LoadTerrainOverview(archive.get(), map.GetTileCache(),
-                           operation)) {
-    fprintf(stderr, "failed to load map\n");
-    return EXIT_FAILURE;
+  {
+    NullOperationEnvironment operation;
+    LoadTerrainOverview(archive.get(), map.GetTileCache(), operation);
   }
 
   map.UpdateProjection();

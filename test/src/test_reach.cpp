@@ -35,6 +35,7 @@
 #include "Geo/SpeedVector.hpp"
 #include "Operation/Operation.hpp"
 #include "system/FileUtil.hpp"
+#include "util/PrintException.hxx"
 
 #include <zzip/zzip.h>
 
@@ -101,7 +102,9 @@ test_reach(const RasterMap &map, double mwind, double mc, double height_min_work
   //  printf("# pixel size %g\n", (double)pd);
 }
 
-int main(int argc, char** argv) {
+int
+main(int argc, char **argv)
+try {
   static const char hc_path[] = "tmp/map.xcm";
   const char *map_path;
   if ((argc<2) || !strlen(argv[1])) {
@@ -118,11 +121,9 @@ int main(int argc, char** argv) {
 
   RasterMap map;
 
-  NullOperationEnvironment operation;
-  if (!LoadTerrainOverview(dir, map.GetTileCache(),
-                           operation)) {
-    fprintf(stderr, "failed to load map\n");
-    return EXIT_FAILURE;
+  {
+    NullOperationEnvironment operation;
+    LoadTerrainOverview(dir, map.GetTileCache(), operation);
   }
 
   map.UpdateProjection();
@@ -142,5 +143,7 @@ int main(int argc, char** argv) {
   test_reach(map, 0, 0.1, 250);
 
   return exit_status();
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }
-

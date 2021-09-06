@@ -46,11 +46,11 @@ try {
 
   ZipArchive archive(map_path);
 
-  NullOperationEnvironment operation;
   RasterTileCache rtc;
-  if (!LoadTerrainOverview(archive.get(), rtc, operation)) {
-    fprintf(stderr, "LoadOverview failed\n");
-    return EXIT_FAILURE;
+
+  {
+    NullOperationEnvironment operation;
+    LoadTerrainOverview(archive.get(), rtc, operation);
   }
 
   GeoBounds bounds = rtc.GetBounds();

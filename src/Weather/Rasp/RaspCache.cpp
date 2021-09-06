@@ -28,6 +28,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "system/Path.hpp"
 #include "io/ZipArchive.hpp"
+#include "LogFile.hpp"
 
 #include <cassert>
 #include <windef.h> // for MAX_PATH
@@ -115,10 +116,14 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
                               effective_time);
 
   auto new_map = std::make_unique<RasterMap>();
-  if (!LoadTerrainOverview(archive->get(), new_name, nullptr,
-                           new_map->GetTileCache(),
-                           true, operation))
+  try {
+    LoadTerrainOverview(archive->get(), new_name, nullptr,
+                        new_map->GetTileCache(),
+                        true, operation);
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to load RASP file");
     return;
+  }
 
   new_map->UpdateProjection();
 
