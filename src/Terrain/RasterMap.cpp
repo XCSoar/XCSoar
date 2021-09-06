@@ -29,7 +29,7 @@ Copyright_License {
 #include <cassert>
 
 void
-RasterMap::UpdateProjection()
+RasterMap::UpdateProjection() noexcept
 {
   projection.Set(GetBounds(), raster_tile_cache.GetFineSize());
 }
@@ -42,14 +42,14 @@ RasterMap::LoadCache(BufferedReader &r)
 }
 
 TerrainHeight
-RasterMap::GetHeight(const GeoPoint &location) const
+RasterMap::GetHeight(const GeoPoint &location) const noexcept
 {
   const auto pt = projection.ProjectCoarse(location);
   return raster_tile_cache.GetHeight(pt);
 }
 
 TerrainHeight
-RasterMap::GetInterpolatedHeight(const GeoPoint &location) const
+RasterMap::GetInterpolatedHeight(const GeoPoint &location) const noexcept
 {
   const auto pt = projection.ProjectFine(location);
   return raster_tile_cache.GetInterpolatedHeight(pt);
@@ -58,7 +58,7 @@ RasterMap::GetInterpolatedHeight(const GeoPoint &location) const
 void
 RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
                     TerrainHeight *buffer, unsigned size,
-                    bool interpolate) const
+                    bool interpolate) const noexcept
 {
   assert(buffer != nullptr);
   assert(size > 0);
@@ -133,7 +133,7 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const int h_origin,
                              const GeoPoint &destination, const int h_destination,
                              const int h_virt, const int h_ceiling,
                              const int h_safety,
-                             GeoPoint &intx, int &h) const
+                             GeoPoint &intx, int &h) const noexcept
 {
   const auto c_origin = projection.ProjectCoarseRound(origin);
   const auto c_destination = projection.ProjectCoarseRound(destination);
@@ -172,7 +172,7 @@ GeoPoint
 RasterMap::Intersection(const GeoPoint& origin,
                         const int h_origin, const int h_glide,
                         const GeoPoint& destination,
-                        const int height_floor) const
+                        const int height_floor) const noexcept
 {
   const auto c_origin = projection.ProjectCoarseRound(origin);
   const auto c_destination = projection.ProjectCoarseRound(destination);
