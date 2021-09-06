@@ -59,23 +59,18 @@ RasterTerrain::SaveCache(FileCache &cache, Path path) const
   os->Commit();
 }
 
-inline bool
+inline void
 RasterTerrain::Load(Path path, FileCache *cache,
                     OperationEnvironment &operation)
 {
   try {
     if (LoadCache(cache, path))
-      return true;
+      return;
   } catch (...) {
     LogError(std::current_exception(), "Failed to load terrain cache");
   }
 
-  try {
-    LoadTerrainOverview(archive.get(), map.GetTileCache(), operation);
-  } catch (...) {
-    LogError(std::current_exception(), "Failed to load terrain overview");
-    return false;
-  }
+  LoadTerrainOverview(archive.get(), map.GetTileCache(), operation);
 
   map.UpdateProjection();
 
@@ -86,8 +81,6 @@ RasterTerrain::Load(Path path, FileCache *cache,
       LogError(std::current_exception(), "Failed to save terrain cache");
     }
   }
-
-  return true;
 }
 
 std::unique_ptr<RasterTerrain>
@@ -98,9 +91,7 @@ try {
     return nullptr;
 
   auto rt = std::make_unique<RasterTerrain>(ZipArchive{path});
-  if (!rt->Load(path, cache, operation))
-    return nullptr;
-
+  rt->Load(path, cache, operation);
   return rt;
 } catch (const std::runtime_error &e) {
   operation.SetErrorMessage(UTF8ToWideConverter(e.what()));

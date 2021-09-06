@@ -100,7 +100,10 @@ private:
    */
   void SaveCache(FileCache &cache, Path path) const;
 
-  bool Load(Path path, FileCache *cache,
+  /**
+   * Throws on error.
+   */
+  void Load(Path path, FileCache *cache,
             OperationEnvironment &operation);
 };
 
