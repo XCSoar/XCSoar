@@ -29,7 +29,7 @@
  */
 template<typename T>
 constexpr T
-RoundingRightShift(T value, unsigned bits)
+RoundingRightShift(T value, unsigned bits) noexcept
 {
   return (value + T(T(1) << (bits - 1))) >> bits;
 }
