@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_IO_ZIP_ARCHIVE_HPP
 #define XCSOAR_IO_ZIP_ARCHIVE_HPP
 
-#include "util/Compiler.h"
-
 #include <algorithm>
 #include <string>
 #include <cstddef>
@@ -44,30 +42,30 @@ public:
    * Open a ZIP archive.  Throws std::runtime_error on error.
    */
   explicit ZipArchive(Path path);
-  ~ZipArchive();
+  ~ZipArchive() noexcept;
 
-  ZipArchive(ZipArchive &&src):dir(src.dir) {
+  ZipArchive(ZipArchive &&src) noexcept:dir(src.dir) {
     src.dir = nullptr;
   }
 
-  ZipArchive &operator=(ZipArchive &&src) {
+  ZipArchive &operator=(ZipArchive &&src) noexcept {
     std::swap(dir, src.dir);
     return *this;
   }
 
-  struct zzip_dir *get() {
+  struct zzip_dir *get() noexcept {
     return dir;
   }
 
-  gcc_pure
-  bool Exists(const char *name) const;
+  [[gnu::pure]]
+  bool Exists(const char *name) const noexcept;
 
   /**
    * Obtain the next directory entry name.  Can be used to iterate
    * over all files in the archive.  Returns an empty string after the
    * last entry.
    */
-  std::string NextName();
+  std::string NextName() noexcept;
 };
 
 #endif
