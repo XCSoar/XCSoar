@@ -91,6 +91,8 @@ public:
   PopupMessage *popup = nullptr;
 
 private:
+  UI::Notify terrain_loader_notify{[this]{ OnTerrainLoaded(); }};
+
   /**
    * Called by the #MergeThread when new GPS data is available.
    */
@@ -232,6 +234,11 @@ public:
   void ResumeThreads();
 
   /**
+   * Start loading the terrain file (asynchronously).
+   */
+  void LoadTerrain() noexcept;
+
+  /**
    * Set the keyboard focus on the default element (i.e. the
    * MapWindow).
    */
@@ -356,6 +363,8 @@ private:
   void OnGpsNotify() noexcept;
   void OnCalculatedNotify() noexcept;
   void OnRestorePageNotify() noexcept;
+
+  void OnTerrainLoaded() noexcept;
 
 protected:
   /* virtual methods from class Window */

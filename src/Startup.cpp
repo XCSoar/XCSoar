@@ -24,6 +24,7 @@ Copyright_License {
 #include "Startup.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
+#include "DataGlobals.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/Settings.hpp"
@@ -31,6 +32,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "Terrain/AsyncLoader.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
 #include "Input/InputEvents.hpp"
 #include "Input/InputQueue.hpp"
@@ -88,6 +90,7 @@ Copyright_License {
 #include "Task/DefaultTask.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Operation/VerboseOperationEnvironment.hpp"
+#include "Operation/PopupOperationEnvironment.hpp"
 #include "PageActions.hpp"
 #include "Weather/Features.hpp"
 #include "Weather/NOAAGlue.hpp"
@@ -170,6 +173,40 @@ AfterStartup()
   InfoBoxManager::SetDirty();
 
   ForceCalculation();
+}
+
+void
+MainWindow::LoadTerrain() noexcept
+{
+  delete terrain_loader;
+  terrain_loader = nullptr;
+
+  if (const auto path = Profile::GetPath(ProfileKeys::MapFile);
+      path != nullptr) {
+    LogFormat("LoadTerrain");
+    terrain_loader = new AsyncTerrainOverviewLoader();
+
+    static PopupOperationEnvironment env;
+    terrain_loader->Start(file_cache, path, env, terrain_loader_notify);
+  }
+}
+
+void
+MainWindow::OnTerrainLoaded() noexcept
+try {
+  assert(terrain_loader != nullptr);
+
+  std::unique_ptr<AsyncTerrainOverviewLoader> loader{std::exchange(terrain_loader, nullptr)};
+  auto new_terrain = loader->Wait();
+  loader.reset();
+
+  const ScopeSuspendAllThreads suspend;
+
+  DataGlobals::UnsetTerrain();
+  DataGlobals::SetTerrain(std::move(new_terrain));
+  DataGlobals::UpdateHome(false);
+} catch (...) {
+  LogError(std::current_exception(), "LoadTerrain failed");
 }
 
 /**
@@ -299,9 +336,7 @@ Startup()
     new ProtectedTaskManager(*task_manager, computer_settings.task);
 
   // Read the terrain file
-  operation.SetText(_("Loading Terrain File..."));
-  LogFormat("OpenTerrain");
-  terrain = RasterTerrain::OpenTerrain(file_cache, operation).release();
+  main_window->LoadTerrain();
 
   logger = new Logger();
 
@@ -596,6 +631,8 @@ Shutdown()
 
   // Clear terrain database
 
+  delete terrain_loader;
+  terrain_loader = nullptr;
   delete terrain;
   terrain = nullptr;
   delete topography;

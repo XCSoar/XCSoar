@@ -1,4 +1,6 @@
 Version 7.18 - not yet released
+* data files
+  - load terrain while XCSoar is running
 * devices
   - TCP Client: fix crash bug
 * tracking

@@ -120,12 +120,8 @@ SettingsLeave(const UISettings &old_ui_settings)
     TopographyFileChanged = true;
   }
 
-  if (TerrainFileChanged) {
-    operation.SetText(_("Loading Terrain File..."));
-
-    DataGlobals::UnsetTerrain();
-    DataGlobals::SetTerrain(RasterTerrain::OpenTerrain(file_cache, operation));
-  }
+  if (TerrainFileChanged)
+    main_window.LoadTerrain();
 
   if (WaypointFileChanged || AirfieldFileChanged) {
     // re-load waypoints
@@ -147,7 +143,7 @@ SettingsLeave(const UISettings &old_ui_settings)
     }
   }
 
-  if (WaypointFileChanged || TerrainFileChanged) {
+  if (WaypointFileChanged) {
     // re-set home
     DataGlobals::UpdateHome(WaypointFileChanged);
   }

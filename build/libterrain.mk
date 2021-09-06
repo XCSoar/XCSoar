@@ -1,4 +1,5 @@
 TERRAIN_SOURCES = \
+	$(SRC)/Terrain/AsyncLoader.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \

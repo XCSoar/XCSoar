@@ -29,6 +29,7 @@ Copyright_License {
 class FileCache;
 class TopographyStore;
 class RasterTerrain;
+class AsyncTerrainOverviewLoader;
 class GlideComputer;
 class DrawThread;
 class MultipleDevices;
@@ -52,6 +53,7 @@ extern ProtectedTaskManager *protected_task_manager;
 extern Replay *replay;
 extern TopographyStore *topography;
 extern RasterTerrain *terrain;
+extern AsyncTerrainOverviewLoader *terrain_loader;
 extern GlideComputer *glide_computer;
 #ifndef ENABLE_OPENGL
 extern DrawThread *draw_thread;
