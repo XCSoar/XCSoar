@@ -29,7 +29,8 @@ Copyright_License {
 #include "thread/Guard.hpp"
 #include "system/Path.hpp"
 #include "io/ZipArchive.hpp"
-#include "util/Compiler.h"
+
+#include <memory>
 
 class FileCache;
 class OperationEnvironment;
@@ -49,14 +50,13 @@ private:
 
   RasterMap map;
 
-private:
+public:
   /**
    * Constructor.  Returns uninitialised object.
    */
   explicit RasterTerrain(ZipArchive &&_archive) noexcept
     :Guard<RasterMap>(map), archive(std::move(_archive)) {}
 
-public:
   const Serial &GetSerial() const noexcept {
     return map.GetSerial();
   }
@@ -64,8 +64,8 @@ public:
   /**
    * Load the terrain.  Determines the file to load from profile settings.
    */
-  static RasterTerrain *OpenTerrain(FileCache *cache,
-                                    OperationEnvironment &operation);
+  static std::unique_ptr<RasterTerrain> OpenTerrain(FileCache *cache,
+                                                    OperationEnvironment &operation);
 
   [[gnu::pure]]
   TerrainHeight GetTerrainHeight(const GeoPoint location) const noexcept {

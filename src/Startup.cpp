@@ -301,7 +301,7 @@ Startup()
   // Read the terrain file
   operation.SetText(_("Loading Terrain File..."));
   LogFormat("OpenTerrain");
-  terrain = RasterTerrain::OpenTerrain(file_cache, operation);
+  terrain = RasterTerrain::OpenTerrain(file_cache, operation).release();
 
   logger = new Logger();
 

@@ -132,7 +132,7 @@ SettingsLeave(const UISettings &old_ui_settings)
 
     // re-load terrain
     delete terrain;
-    terrain = RasterTerrain::OpenTerrain(file_cache, operation);
+    terrain = RasterTerrain::OpenTerrain(file_cache, operation).release();
 
     main_window.SetTerrain(terrain);
     glide_computer->SetTerrain(terrain);

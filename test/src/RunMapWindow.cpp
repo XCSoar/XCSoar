@@ -118,7 +118,7 @@ LoadFiles(PlacesOfInterestSettings &poi_settings,
   topography = new TopographyStore();
   LoadConfiguredTopography(*topography, operation);
 
-  terrain = RasterTerrain::OpenTerrain(NULL, operation);
+  terrain = RasterTerrain::OpenTerrain(nullptr, operation).release();
 
   WaypointGlue::LoadWaypoints(way_points, terrain, operation);
   WaypointGlue::SetHome(way_points, terrain, poi_settings, team_code_settings,
