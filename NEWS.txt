@@ -1,3 +1,5 @@
+Version 7.18 - not yet released
+
 Version 7.17 - 2021/09/04
 * map display
   - fix airspace display bug
