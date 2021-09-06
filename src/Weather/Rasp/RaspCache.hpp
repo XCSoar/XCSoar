@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_WEATHER_RASP_CACHE_HPP
 #define XCSOAR_WEATHER_RASP_CACHE_HPP
 
+#include <memory>
+
 #include <tchar.h>
 
 struct BrokenTime;
@@ -44,18 +46,11 @@ class RaspCache {
   unsigned time = 0;
   unsigned last_time = 0;
 
-  RasterMap *map = nullptr;
+  std::unique_ptr<RasterMap> map;
 
 public:
-  /** 
-   * Default constructor
-   */
-  RaspCache(const RaspStore &_store, unsigned _parameter)
-    :store(_store), parameter(_parameter) {}
-
-  ~RaspCache() {
-    Close();
-  }
+  RaspCache(const RaspStore &_store, unsigned _parameter) noexcept;
+  ~RaspCache() noexcept;
 
   const RaspStore &GetStore() const {
     return store;
@@ -63,7 +58,7 @@ public:
 
   [[gnu::pure]]
   const RasterMap *GetMap() const {
-    return map;
+    return map.get();
   }
 
   /**
@@ -105,9 +100,6 @@ public:
    * Sets the current time index.
    */
   void SetTime(BrokenTime t);
-
-private:
-  void Close();
 };
 
 #endif
