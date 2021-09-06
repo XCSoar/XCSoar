@@ -84,15 +84,22 @@ RasterTerrain::Load(Path path, FileCache *cache,
 }
 
 std::unique_ptr<RasterTerrain>
+RasterTerrain::OpenTerrain(FileCache *cache, Path path,
+                           OperationEnvironment &operation)
+{
+  auto rt = std::make_unique<RasterTerrain>(ZipArchive{path});
+  rt->Load(path, cache, operation);
+  return rt;
+}
+
+std::unique_ptr<RasterTerrain>
 RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
 try {
   const auto path = Profile::GetPath(ProfileKeys::MapFile);
   if (path.IsNull())
     return nullptr;
 
-  auto rt = std::make_unique<RasterTerrain>(ZipArchive{path});
-  rt->Load(path, cache, operation);
-  return rt;
+  return OpenTerrain(cache, path, operation);
 } catch (const std::runtime_error &e) {
   operation.SetErrorMessage(UTF8ToWideConverter(e.what()));
   return nullptr;

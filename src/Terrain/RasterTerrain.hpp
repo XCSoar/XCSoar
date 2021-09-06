@@ -62,6 +62,13 @@ public:
   }
 
   /**
+   * Throws on error.
+   */
+  static std::unique_ptr<RasterTerrain> OpenTerrain(FileCache *cache,
+                                                    Path path,
+                                                    OperationEnvironment &operation);
+
+  /**
    * Load the terrain.  Determines the file to load from profile settings.
    */
   static std::unique_ptr<RasterTerrain> OpenTerrain(FileCache *cache,
