@@ -36,7 +36,8 @@ TCPClientPort::TCPClientPort(EventLoop &event_loop, Cares::Channel &cares,
 {
   BlockingCall(GetEventLoop(), [this, &cares, host, port](){
     Cares::SimpleHandler &resolver_handler = *this;
-    resolver.emplace(cares, resolver_handler, host, port);
+    resolver.emplace(resolver_handler, port);
+    resolver->Start(cares, host);
   });
 }
 

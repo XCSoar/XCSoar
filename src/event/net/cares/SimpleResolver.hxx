@@ -58,13 +58,14 @@ class SimpleResolver final : Handler {
 	const unsigned port;
 
 public:
-	SimpleResolver(Channel &channel, SimpleHandler &_handler,
-		       const char *name, unsigned _port=0) noexcept;
+	SimpleResolver(SimpleHandler &_handler, unsigned _port=0) noexcept;
 
 	~SimpleResolver() noexcept {
 		if (cancel_ptr)
 			cancel_ptr.Cancel();
 	}
+
+	void Start(Channel &channel, const char *name) noexcept;
 
 private:
 	/* virtual methods from Cares::Handler */
