@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_WEATHER_RASP_CACHE_HPP
 #define XCSOAR_WEATHER_RASP_CACHE_HPP
 
-#include "util/Compiler.h"
-
 #include <tchar.h>
 
 struct BrokenTime;
@@ -63,7 +61,7 @@ public:
     return store;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const RasterMap *GetMap() const {
     return map;
   }
@@ -71,25 +69,25 @@ public:
   /**
    * Returns the current map's name.
    */
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetMapName() const;
 
   /**
    * Returns the human-readable name for the current RASP map, or
    * nullptr if no RASP map is enabled.
    */
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetMapLabel() const;
 
   /**
    * Returns the index of the weather map being displayed.
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetParameter() const {
     return parameter;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsInside(GeoPoint p) const;
 
   /**
@@ -100,7 +98,7 @@ public:
   /**
    * Returns the current time index.
    */
-  gcc_pure
+  [[gnu::pure]]
   BrokenTime GetTime() const;
 
   /**
