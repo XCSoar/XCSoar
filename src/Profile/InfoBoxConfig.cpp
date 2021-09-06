@@ -78,6 +78,7 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
   case InfoBoxSettings::Geometry::SPLIT_8:
   case InfoBoxSettings::Geometry::SPLIT_10:
   case InfoBoxSettings::Geometry::SPLIT_3X4:
+  case InfoBoxSettings::Geometry::SPLIT_3X5:
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_8:
   case InfoBoxSettings::Geometry::TOP_LEFT_8:
     break;

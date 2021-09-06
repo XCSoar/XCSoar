@@ -37,6 +37,7 @@ static constexpr unsigned char geometry_counts[] = {
   12, 9, 8, 4, 4, 4, 4,
   8, 16, 15, 10, 10, 10,
   12, // 3 rows X 4 boxes
+  15, // 3 rows X 5 boxes
 };
 
 namespace InfoBoxLayout {
@@ -328,6 +329,24 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry) noexc
     }
     break;
 
+  case InfoBoxSettings::Geometry::SPLIT_3X5:
+    if (layout.landscape) {
+      rc.left = MakeLeftColumn(layout, layout.positions, 5,
+                               rc.left, rc.top, rc.bottom);
+      rc.left = MakeLeftColumn(layout, layout.positions + 5, 5,
+                               rc.left, rc.top, rc.bottom);
+      rc.right = MakeRightColumn(layout, layout.positions + 10, 5,
+                               rc.right, rc.top, rc.bottom);
+    } else {
+      rc.top = MakeTopRow(layout, layout.positions, 5,
+                          rc.left, rc.right, rc.top);
+      rc.top = MakeTopRow(layout, layout.positions + 5, 5,
+                          rc.left, rc.right, rc.top);
+      rc.bottom = MakeBottomRow(layout, layout.positions + 10, 5,
+                          rc.left, rc.right, rc.bottom);
+    }
+    break;
+
   case InfoBoxSettings::Geometry::RIGHT_16:
     rc.right = MakeRightColumn(layout, layout.positions + 8, 8,
                                rc.right, rc.top, rc.bottom);
@@ -411,6 +430,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
     case InfoBoxSettings::Geometry::SPLIT_8:
     case InfoBoxSettings::Geometry::SPLIT_10:
     case InfoBoxSettings::Geometry::SPLIT_3X4:
+    case InfoBoxSettings::Geometry::SPLIT_3X5:
     case InfoBoxSettings::Geometry::BOTTOM_RIGHT_8:
     case InfoBoxSettings::Geometry::TOP_LEFT_8:
     case InfoBoxSettings::Geometry::OBSOLETE_SPLIT_8:
@@ -448,6 +468,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
     case InfoBoxSettings::Geometry::SPLIT_8:
     case InfoBoxSettings::Geometry::SPLIT_10:
     case InfoBoxSettings::Geometry::SPLIT_3X4:
+    case InfoBoxSettings::Geometry::SPLIT_3X5:
     case InfoBoxSettings::Geometry::BOTTOM_RIGHT_8:
     case InfoBoxSettings::Geometry::TOP_LEFT_8:
     case InfoBoxSettings::Geometry::OBSOLETE_SPLIT_8:
@@ -537,6 +558,7 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
     break;
 
   case InfoBoxSettings::Geometry::SPLIT_3X4:
+  case InfoBoxSettings::Geometry::SPLIT_3X5:
     if (landscape) {
       layout.control_size.height = 3 * screen_size.height / layout.count;
       layout.control_size.width = CalculateInfoBoxColumnWidth(screen_size.width,
@@ -668,6 +690,27 @@ InfoBoxLayout::GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
         border |= BORDERTOP;
 
       if (i != 3 && i != 7 && i != 11)
+        border |= BORDERRIGHT;
+    }
+
+    break;
+
+  case InfoBoxSettings::Geometry::SPLIT_3X5:
+    if (landscape) {
+      if (i != 4 && i != 9 && i != 14)
+        border |= BORDERBOTTOM;
+
+      if (i < 10)
+        border |= BORDERRIGHT;
+      else
+        border |= BORDERLEFT;
+    } else {
+      if (i < 10)
+        border |= BORDERBOTTOM;
+      else
+        border |= BORDERTOP;
+
+      if (i != 4 && i != 9 && i != 14)
         border |= BORDERRIGHT;
     }
 
