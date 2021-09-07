@@ -31,7 +31,7 @@ Copyright_License {
  * #ProxyOperationEnvironment, but this one's underlying instance is
  * optional.
  */
-class PluggableOperationEnvironment : public OperationEnvironment {
+class PluggableOperationEnvironment final : public OperationEnvironment {
   OperationEnvironment *other = nullptr;
 
 public:
