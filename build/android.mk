@@ -196,7 +196,7 @@ $(ANDROID_XML_RES_COPIES): $(RES_DIR)/%: android/res/%
 	$(Q)-$(MKDIR) -p $(dir $@)
 	$(Q)cp $< $@
 
-$(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) | $(GEN_DIR)/dirstamp
+$(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) $(MANIFEST) | $(GEN_DIR)/dirstamp
 	@$(NQ)echo "  AAPT"
 	$(Q)$(AAPT) package -f -m --auto-add-overlay \
 		--custom-package $(JAVA_PACKAGE) \
