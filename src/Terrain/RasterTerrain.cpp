@@ -100,8 +100,8 @@ try {
     return nullptr;
 
   return OpenTerrain(cache, path, operation);
-} catch (const std::runtime_error &e) {
-  operation.SetErrorMessage(UTF8ToWideConverter(e.what()));
+} catch (...) {
+  operation.SetError(std::current_exception());
   return nullptr;
 }
 

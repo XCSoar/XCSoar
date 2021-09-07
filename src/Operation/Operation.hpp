@@ -28,6 +28,7 @@ Copyright_License {
 #include "util/NonCopyable.hpp"
 
 #include <chrono>
+#include <exception>
 #include <functional>
 
 #include <tchar.h>
@@ -39,6 +40,8 @@ Copyright_License {
  */
 class OperationEnvironment : private NonCopyable, public ProgressListener {
 public:
+  void SetError(std::exception_ptr e) noexcept;
+
   /**
    * Has the caller requested to cancel the operation?
    */
