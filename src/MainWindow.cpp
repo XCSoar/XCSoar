@@ -70,7 +70,7 @@ static constexpr unsigned separator_height = 2;
 #ifdef HAVE_SHOW_MENU_BUTTON
 [[gnu::pure]]
 static PixelRect
-GetShowMenuButtonRect(const PixelRect rc)
+GetShowMenuButtonRect(const PixelRect rc) noexcept
 {
   const unsigned padding = Layout::GetTextPadding();
   const unsigned size = Layout::GetMaximumControlHeight();
@@ -85,7 +85,7 @@ GetShowMenuButtonRect(const PixelRect rc)
 
 [[gnu::pure]]
 static PixelRect
-GetBottomWidgetRect(const PixelRect &rc, const Widget *bottom_widget)
+GetBottomWidgetRect(const PixelRect &rc, const Widget *bottom_widget) noexcept
 {
   if (bottom_widget == nullptr) {
     /* no bottom widget: return empty rectangle, map uses the whole
@@ -112,7 +112,7 @@ GetBottomWidgetRect(const PixelRect &rc, const Widget *bottom_widget)
 
 [[gnu::pure]]
 static PixelRect
-GetMapRectAbove(const PixelRect &rc, const PixelRect &bottom_rect)
+GetMapRectAbove(const PixelRect &rc, const PixelRect &bottom_rect) noexcept
 {
   PixelRect result = rc;
   result.bottom = bottom_rect.top;
@@ -125,7 +125,7 @@ GetMapRectAbove(const PixelRect &rc, const PixelRect &bottom_rect)
  * Destructor of the MainWindow-Class
  * @return
  */
-MainWindow::~MainWindow()
+MainWindow::~MainWindow() noexcept
 {
   Destroy();
 }
@@ -138,7 +138,7 @@ MainWindow::Create(PixelSize size, UI::TopWindowStyle style)
 
 [[noreturn]]
 static void
-FatalError(const TCHAR *msg)
+FatalError(const TCHAR *msg) noexcept
 {
 #if defined(HAVE_POSIX) && defined(NDEBUG)
   /* make sure this gets written to stderr in any case; LogFormat()
@@ -161,7 +161,7 @@ FatalError(const TCHAR *msg)
 
 [[noreturn]]
 static void
-NoFontsAvailable()
+NoFontsAvailable() noexcept
 {
   FatalError(_T("Font initialisation failed"));
 }
@@ -242,7 +242,7 @@ MainWindow::InitialiseConfigured()
 }
 
 void
-MainWindow::Deinitialise()
+MainWindow::Deinitialise() noexcept
 {
   InfoBoxManager::Destroy();
   ButtonLabel::Destroy();
@@ -271,7 +271,7 @@ MainWindow::Deinitialise()
 }
 
 void
-MainWindow::ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout)
+MainWindow::ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout) noexcept
 {
   if (!layout.HasVario()) {
     vario.Clear();
@@ -290,7 +290,7 @@ MainWindow::ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout)
 
 void
 MainWindow::ReinitialiseLayoutTA(PixelRect rc,
-                                 const InfoBoxLayout::Layout &layout)
+                                 const InfoBoxLayout::Layout &layout) noexcept
 {
   unsigned sz = std::min(layout.control_size.height,
                          layout.control_size.width) * 2;
@@ -314,13 +314,13 @@ MainWindow::ReinitialiseLayoutTA(PixelRect rc,
     rc.left = GetMainRect().left;
     rc.right = rc.left + sz;
     break;
-  } 
+  }
   rc.top = rc.bottom - sz;
   thermal_assistant.Move(rc);
 }
 
 void
-MainWindow::ReinitialiseLayout()
+MainWindow::ReinitialiseLayout() noexcept
 {
   if (map == nullptr)
     /* without the MapWindow, it is safe to assume that the MainWindow
@@ -386,9 +386,9 @@ MainWindow::ReinitialiseLayout()
     map->BringToBottom();
 }
 
-void 
+void
 MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
-                                     const InfoBoxLayout::Layout &ib_layout)
+                                     const InfoBoxLayout::Layout &ib_layout) noexcept
 {
   TrafficSettings::GaugeLocation val =
     CommonInterface::GetUISettings().traffic.gauge_location;
@@ -453,7 +453,7 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
 }
 
 void
-MainWindow::Destroy()
+MainWindow::Destroy() noexcept
 {
   Deinitialise();
 
@@ -461,7 +461,7 @@ MainWindow::Destroy()
 }
 
 void
-MainWindow::FinishStartup()
+MainWindow::FinishStartup() noexcept
 {
   timer.Schedule(std::chrono::milliseconds(500)); // 2 times per second
 
@@ -469,7 +469,7 @@ MainWindow::FinishStartup()
 }
 
 void
-MainWindow::BeginShutdown()
+MainWindow::BeginShutdown() noexcept
 {
   timer.Cancel();
 
@@ -477,21 +477,21 @@ MainWindow::BeginShutdown()
 }
 
 void
-MainWindow::SuspendThreads()
+MainWindow::SuspendThreads() noexcept
 {
   if (map != nullptr)
     map->SuspendThreads();
 }
 
 void
-MainWindow::ResumeThreads()
+MainWindow::ResumeThreads() noexcept
 {
   if (map != nullptr)
     map->ResumeThreads();
 }
 
 void
-MainWindow::SetDefaultFocus()
+MainWindow::SetDefaultFocus() noexcept
 {
   if (map != nullptr && widget == nullptr)
     map->SetFocus();
@@ -500,14 +500,14 @@ MainWindow::SetDefaultFocus()
 }
 
 void
-MainWindow::FlushRendererCaches()
+MainWindow::FlushRendererCaches() noexcept
 {
   if (map != nullptr)
     map->FlushCaches();
 }
 
 void
-MainWindow::FullRedraw()
+MainWindow::FullRedraw() noexcept
 {
   if (map != nullptr)
     map->FullRedraw();
@@ -550,7 +550,7 @@ MainWindow::OnSetFocus()
 }
 
 void
-MainWindow::StopDragging()
+MainWindow::StopDragging() noexcept
 {
   if (!dragging)
     return;
@@ -744,7 +744,7 @@ MainWindow::OnPaint(Canvas &canvas)
 }
 
 void
-MainWindow::SetFullScreen(bool _full_screen)
+MainWindow::SetFullScreen(bool _full_screen) noexcept
 {
   if (_full_screen == FullScreen)
     return;
@@ -768,35 +768,35 @@ MainWindow::SetFullScreen(bool _full_screen)
 }
 
 void
-MainWindow::SetTerrain(RasterTerrain *terrain)
+MainWindow::SetTerrain(RasterTerrain *terrain) noexcept
 {
   if (map != nullptr)
     map->SetTerrain(terrain);
 }
 
 void
-MainWindow::SetTopography(TopographyStore *topography)
+MainWindow::SetTopography(TopographyStore *topography) noexcept
 {
   if (map != nullptr)
     map->SetTopography(topography);
 }
 
 void
-MainWindow::SetComputerSettings(const ComputerSettings &settings_computer)
+MainWindow::SetComputerSettings(const ComputerSettings &settings_computer) noexcept
 {
   if (map != nullptr)
     map->SetComputerSettings(settings_computer);
 }
 
 void
-MainWindow::SetMapSettings(const MapSettings &settings_map)
+MainWindow::SetMapSettings(const MapSettings &settings_map) noexcept
 {
   if (map != nullptr)
     map->SetMapSettings(settings_map);
 }
 
 void
-MainWindow::SetUIState(const UIState &ui_state)
+MainWindow::SetUIState(const UIState &ui_state) noexcept
 {
   if (map != nullptr) {
     map->SetUIState(ui_state);
@@ -805,13 +805,13 @@ MainWindow::SetUIState(const UIState &ui_state)
 }
 
 GlueMapWindow *
-MainWindow::GetMapIfActive()
+MainWindow::GetMapIfActive() noexcept
 {
   return IsMapActive() ? map : nullptr;
 }
 
 GlueMapWindow *
-MainWindow::ActivateMap()
+MainWindow::ActivateMap() noexcept
 {
   restore_page_pending = false;
 
@@ -841,7 +841,7 @@ MainWindow::ActivateMap()
 }
 
 void
-MainWindow::DeferredRestorePage()
+MainWindow::DeferredRestorePage() noexcept
 {
   if (restore_page_pending)
     return;
@@ -851,7 +851,7 @@ MainWindow::DeferredRestorePage()
 }
 
 void
-MainWindow::KillWidget()
+MainWindow::KillWidget() noexcept
 {
   if (widget == nullptr)
     return;
@@ -866,7 +866,7 @@ MainWindow::KillWidget()
 }
 
 void
-MainWindow::KillBottomWidget()
+MainWindow::KillBottomWidget() noexcept
 {
   if (bottom_widget == nullptr)
     return;
@@ -882,7 +882,7 @@ MainWindow::KillBottomWidget()
 }
 
 void
-MainWindow::SetBottomWidget(Widget *_widget)
+MainWindow::SetBottomWidget(Widget *_widget) noexcept
 {
   if (bottom_widget == nullptr && _widget == nullptr)
     return;
@@ -916,7 +916,7 @@ MainWindow::SetBottomWidget(Widget *_widget)
 }
 
 void
-MainWindow::SetWidget(Widget *_widget)
+MainWindow::SetWidget(Widget *_widget) noexcept
 {
   assert(_widget != nullptr);
 
@@ -954,7 +954,7 @@ MainWindow::SetWidget(Widget *_widget)
 }
 
 Widget *
-MainWindow::GetFlavourWidget(const TCHAR *flavour)
+MainWindow::GetFlavourWidget(const TCHAR *flavour) noexcept
 {
   return InputEvents::IsFlavour(flavour)
     ? widget
@@ -962,7 +962,7 @@ MainWindow::GetFlavourWidget(const TCHAR *flavour)
 }
 
 void
-MainWindow::UpdateVarioGaugeVisibility()
+MainWindow::UpdateVarioGaugeVisibility() noexcept
 {
   bool full_screen = GetFullScreen();
 
@@ -971,14 +971,14 @@ MainWindow::UpdateVarioGaugeVisibility()
 }
 
 void
-MainWindow::UpdateGaugeVisibility()
+MainWindow::UpdateGaugeVisibility() noexcept
 {
   UpdateVarioGaugeVisibility();
   UpdateTrafficGaugeVisibility();
 }
 
 void
-MainWindow::UpdateTrafficGaugeVisibility()
+MainWindow::UpdateTrafficGaugeVisibility() noexcept
 {
   const FlarmData &flarm = CommonInterface::Basic().flarm;
 
@@ -1018,7 +1018,7 @@ MainWindow::UpdateTrafficGaugeVisibility()
 }
 
 const MapWindowProjection &
-MainWindow::GetProjection() const
+MainWindow::GetProjection() const noexcept
 {
   AssertThread();
   assert(map != nullptr);
@@ -1027,13 +1027,13 @@ MainWindow::GetProjection() const
 }
 
 void
-MainWindow::ToggleSuppressFLARMRadar()
+MainWindow::ToggleSuppressFLARMRadar() noexcept
 {
   suppress_traffic_gauge = !suppress_traffic_gauge;
 }
 
 void
-MainWindow::ToggleForceFLARMRadar()
+MainWindow::ToggleForceFLARMRadar() noexcept
 {
   force_traffic_gauge = !force_traffic_gauge;
   CommonInterface::SetUISettings().traffic.enable_gauge = force_traffic_gauge;
