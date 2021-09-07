@@ -29,15 +29,15 @@ Copyright_License {
 
 #include <stdexcept>
 
-std::unique_ptr<ZipArchive>
+std::optional<ZipArchive>
 OpenMapFile()
 try {
   auto path = Profile::GetPath(ProfileKeys::MapFile);
   if (path == nullptr)
-    return nullptr;
+    return std::nullopt;
 
-  return std::make_unique<ZipArchive>(path);
+  return ZipArchive{path};
 } catch (const std::runtime_error &e) {
   // TODO: log error?
-  return nullptr;
+  return std::nullopt;
 }
