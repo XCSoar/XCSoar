@@ -85,6 +85,33 @@ GetShowMenuButtonRect(const PixelRect rc) noexcept
 
 [[gnu::pure]]
 static PixelRect
+GetTopWidgetRect(const PixelRect &rc, const Widget *top_widget) noexcept
+{
+  if (top_widget == nullptr) {
+    /* no top widget: return empty rectangle, map uses the whole main
+       area */
+    PixelRect result = rc;
+    result.bottom = result.top;
+    return result;
+  }
+
+  const unsigned requested_height = top_widget->GetMinimumSize().height;
+  unsigned height;
+  if (requested_height > 0) {
+    const unsigned max_height = rc.GetHeight() / 2;
+    height = std::min(max_height, requested_height);
+  } else {
+    const unsigned recommended_height = rc.GetHeight() / 4;
+    height = recommended_height;
+  }
+
+  PixelRect result = rc;
+  result.bottom = result.top + height;
+  return result;
+}
+
+[[gnu::pure]]
+static PixelRect
 GetBottomWidgetRect(const PixelRect &rc, const Widget *bottom_widget) noexcept
 {
   if (bottom_widget == nullptr) {
@@ -118,6 +145,17 @@ GetMapRectAbove(const PixelRect &rc, const PixelRect &bottom_rect) noexcept
   result.bottom = bottom_rect.top;
   if (bottom_rect.top < bottom_rect.bottom)
     result.bottom -= separator_height;
+  return result;
+}
+
+[[gnu::pure]]
+static PixelRect
+GetMapRectBelow(const PixelRect &rc, const PixelRect &top_rect) noexcept
+{
+  PixelRect result = rc;
+  result.top = top_rect.bottom;
+  if (top_rect.top < top_rect.bottom)
+    result.top += separator_height;
   return result;
 }
 
@@ -363,7 +401,14 @@ MainWindow::ReinitialiseLayout() noexcept
     else
       InfoBoxManager::Show();
 
-    const PixelRect main_rect = GetMainRect();
+    PixelRect main_rect = GetMainRect();
+    const PixelRect top_rect = GetTopWidgetRect(main_rect,
+                                                top_widget);
+    main_rect = GetMapRectBelow(main_rect, top_rect);
+
+    if (HaveTopWidget())
+      top_widget->Move(top_rect);
+
     const PixelRect bottom_rect = GetBottomWidgetRect(main_rect,
                                                       bottom_widget);
 
@@ -473,6 +518,7 @@ MainWindow::BeginShutdown() noexcept
 {
   timer.Cancel();
 
+  KillTopWidget();
   KillBottomWidget();
 }
 
@@ -627,6 +673,7 @@ bool
 MainWindow::OnKeyDown(unsigned key_code)
 {
   return (widget != nullptr && widget->KeyPress(key_code)) ||
+    (HaveTopWidget() && top_widget->KeyPress(key_code)) ||
     (HaveBottomWidget() && bottom_widget->KeyPress(key_code)) ||
     InputEvents::processKey(key_code) ||
     SingleWindow::OnKeyDown(key_code);
@@ -866,6 +913,49 @@ MainWindow::KillWidget() noexcept
 }
 
 void
+MainWindow::KillTopWidget() noexcept
+{
+  if (top_widget == nullptr)
+    return;
+
+  top_widget->Hide();
+  top_widget->Unprepare();
+  delete top_widget;
+  top_widget = nullptr;
+}
+
+void
+MainWindow::SetTopWidget(Widget *_widget) noexcept
+{
+  if (top_widget == nullptr && _widget == nullptr)
+    return;
+
+  KillTopWidget();
+
+  top_widget = _widget;
+
+  PixelRect main_rect = GetMainRect();
+  const PixelRect top_rect = GetTopWidgetRect(main_rect,
+                                              top_widget);
+  if (top_widget != nullptr) {
+    top_widget->Initialise(*this, top_rect);
+    top_widget->Prepare(*this, top_rect);
+    top_widget->Show(top_rect);
+  }
+
+  main_rect = GetMapRectBelow(main_rect, top_rect);
+
+  const PixelRect bottom_rect = GetBottomWidgetRect(main_rect,
+                                                    bottom_widget);
+
+  if (HaveBottomWidget())
+    bottom_widget->Move(bottom_rect);
+
+  map->Move(GetMapRectAbove(main_rect, bottom_rect));
+  map->FullRedraw();
+}
+
+void
 MainWindow::KillBottomWidget() noexcept
 {
   if (bottom_widget == nullptr)
@@ -897,7 +987,13 @@ MainWindow::SetBottomWidget(Widget *_widget) noexcept
 
   bottom_widget = _widget;
 
-  const PixelRect main_rect = GetMainRect();
+  PixelRect main_rect = GetMainRect();
+  const PixelRect top_rect = GetTopWidgetRect(main_rect,
+                                              top_widget);
+  main_rect = GetMapRectBelow(main_rect, top_rect);
+  if (HaveTopWidget())
+    top_widget->Move(top_rect);
+
   const PixelRect bottom_rect = GetBottomWidgetRect(main_rect,
                                                     bottom_widget);
 

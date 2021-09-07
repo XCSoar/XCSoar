@@ -66,6 +66,11 @@ class MainWindow : public UI::SingleWindow {
   GlueMapWindow *map = nullptr;
 
   /**
+   * A #Widget that is shown above the map.
+   */
+  Widget *top_widget = nullptr;
+
+  /**
    * A #Widget that is shown below the map.
    */
   Widget *bottom_widget = nullptr;
@@ -151,6 +156,17 @@ protected:
    * caller is responsible for reactivating the map or another Widget.
    */
   void KillWidget() noexcept;
+
+  bool HaveTopWidget() const noexcept {
+    return top_widget != nullptr;
+  }
+
+  /**
+   * Destroy the current "top" Widget, but don't resize the main area.
+   * The caller is responsible for doing that or installing a new top
+   * Widget.
+   */
+  void KillTopWidget() noexcept;
 
   bool HaveBottomWidget() const noexcept {
     /* currently, the bottom widget is only visible below the map, but
@@ -319,6 +335,13 @@ public:
    * immediately, and there is no guarantee that it succeeds.
    */
   void DeferredRestorePage() noexcept;
+
+  /**
+   * Show this #Widget above the map.  This replaces (deletes) the
+   * previous top widget, if any.  To disable this feature, call this
+   * method with widget==nullptr.
+   */
+  void SetTopWidget(Widget *widget) noexcept;
 
   /**
    * Show this #Widget below the map.  This replaces (deletes) the
