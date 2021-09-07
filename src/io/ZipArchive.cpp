@@ -23,16 +23,16 @@ Copyright_License {
 
 #include "ZipArchive.hpp"
 #include "system/ConvertPathName.hpp"
+#include "util/RuntimeError.hxx"
 
 #include <zzip/zzip.h>
-
-#include <stdexcept>
 
 ZipArchive::ZipArchive(Path path)
   :dir(zzip_dir_open(NarrowPathName(path), nullptr))
 {
   if (dir == nullptr)
-    throw std::runtime_error(std::string("Failed to open ZIP archive ") + (const char *)NarrowPathName(path));
+    throw FormatRuntimeError("Failed to open ZIP archive %s",
+                             (const char *)NarrowPathName(path));
 }
 
 ZipArchive::~ZipArchive() noexcept
