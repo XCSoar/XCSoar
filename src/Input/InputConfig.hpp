@@ -39,18 +39,18 @@ Copyright_License {
 struct InputConfig {
   // Sensible maximums
 
-  static constexpr unsigned MAX_MODE = 32;
-  static constexpr unsigned MAX_MODE_STRING = 24;
+  static constexpr std::size_t MAX_MODE = 32;
+  static constexpr std::size_t MAX_MODE_STRING = 24;
 #ifdef ENABLE_SDL
-  static constexpr unsigned MAX_KEY = 400;
+  static constexpr std::size_t MAX_KEY = 400;
 #elif defined(USE_X11)
-  static constexpr unsigned MAX_KEY = 0x100;
+  static constexpr std::size_t MAX_KEY = 0x100;
 #elif defined(USE_POLL_EVENT)
-  static constexpr unsigned MAX_KEY = 0600;
+  static constexpr std::size_t MAX_KEY = 0600;
 #else
-  static constexpr unsigned MAX_KEY = 255;
+  static constexpr std::size_t MAX_KEY = 255;
 #endif
-  static constexpr unsigned MAX_EVENTS = 2048;
+  static constexpr std::size_t MAX_EVENTS = 2048;
 
   typedef void (*pt2Event)(const TCHAR *);
 
@@ -100,7 +100,7 @@ struct InputConfig {
 
   [[gnu::pure]]
   int LookupMode(TStringView name) const noexcept {
-    for (unsigned i = 0, size = modes.size(); i < size; ++i)
+    for (std::size_t i = 0, size = modes.size(); i < size; ++i)
       if (name.Equals(modes[i].c_str()))
         return i;
 
@@ -124,8 +124,8 @@ struct InputConfig {
     return mode;
   }
 
-  unsigned AppendEvent(pt2Event handler, const TCHAR *misc,
-                       unsigned next) noexcept {
+  std::size_t AppendEvent(pt2Event handler, const TCHAR *misc,
+                          unsigned next) noexcept {
     if (events.full())
       return 0;
 
@@ -137,7 +137,7 @@ struct InputConfig {
     return events.size() - 1;
   }
 
-  void AppendMenu(unsigned mode_id, const TCHAR* label,
+  void AppendMenu(std::size_t mode_id, const TCHAR *label,
                   unsigned location, unsigned event_id) noexcept {
     assert(mode_id < MAX_MODE);
 
@@ -151,8 +151,8 @@ struct InputConfig {
                    unsigned event_id) noexcept;
 
   [[gnu::pure]]
-  const MenuItem &GetMenuItem(unsigned mode,
-                              unsigned location) const noexcept {
+  const MenuItem &GetMenuItem(std::size_t mode,
+                              std::size_t location) const noexcept {
     assert(mode < MAX_MODE);
     assert(location < Menu::MAX_ITEMS);
 
