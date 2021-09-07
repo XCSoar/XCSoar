@@ -9,6 +9,7 @@ WINDOW_SRC_DIR = $(SRC)/ui/window
 
 SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Debug.cpp \
+	$(SRC)/Renderer/ProgressBarRenderer.cpp \
 	$(CONTROL_SRC_DIR)/ProgressBar.cpp \
 	$(CANVAS_SRC_DIR)/Ramp.cpp \
 	$(CANVAS_SRC_DIR)/Util.cpp \
