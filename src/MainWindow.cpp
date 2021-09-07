@@ -45,6 +45,7 @@ Copyright_License {
 #include "Look/DefaultFonts.hpp"
 #include "Look/Look.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
+#include "Operation/PluggableOperationEnvironment.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "ProgressGlue.hpp"
 #include "UIState.hpp"
@@ -757,6 +758,7 @@ MainWindow::OnDestroy()
   timer.Cancel();
 
   KillWidget();
+  KillTopWidget();
   KillBottomWidget();
 
   SingleWindow::OnDestroy();

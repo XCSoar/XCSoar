@@ -49,6 +49,7 @@ class RasterTerrain;
 class TopographyStore;
 class MapWindowProjection;
 class PopupMessage;
+class PluggableOperationEnvironment;
 namespace InfoBoxLayout { struct Layout; }
 
 /**
@@ -97,6 +98,8 @@ public:
 
 private:
   UI::Notify terrain_loader_notify{[this]{ OnTerrainLoaded(); }};
+
+  std::unique_ptr<PluggableOperationEnvironment> terrain_loader_env;
 
   /**
    * Called by the #MergeThread when new GPS data is available.

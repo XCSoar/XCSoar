@@ -90,7 +90,8 @@ Copyright_License {
 #include "Task/DefaultTask.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Operation/VerboseOperationEnvironment.hpp"
-#include "Operation/PopupOperationEnvironment.hpp"
+#include "Operation/PluggableOperationEnvironment.hpp"
+#include "Widget/ProgressWidget.hpp"
 #include "PageActions.hpp"
 #include "Weather/Features.hpp"
 #include "Weather/NOAAGlue.hpp"
@@ -178,6 +179,8 @@ AfterStartup()
 void
 MainWindow::LoadTerrain() noexcept
 {
+  SetTopWidget(nullptr);
+
   delete terrain_loader;
   terrain_loader = nullptr;
 
@@ -186,8 +189,13 @@ MainWindow::LoadTerrain() noexcept
     LogFormat("LoadTerrain");
     terrain_loader = new AsyncTerrainOverviewLoader();
 
-    static PopupOperationEnvironment env;
-    terrain_loader->Start(file_cache, path, env, terrain_loader_notify);
+    terrain_loader_env = std::make_unique<PluggableOperationEnvironment>();
+    auto *progress = new ProgressWidget(*terrain_loader_env,
+                                        _("Loading Terrain File..."));
+    SetTopWidget(progress);
+
+    terrain_loader->Start(file_cache, path, *terrain_loader_env,
+                          terrain_loader_notify);
   }
 }
 
@@ -199,6 +207,9 @@ try {
   std::unique_ptr<AsyncTerrainOverviewLoader> loader{std::exchange(terrain_loader, nullptr)};
   auto new_terrain = loader->Wait();
   loader.reset();
+
+  SetTopWidget(nullptr);
+  terrain_loader_env.reset();
 
   const ScopeSuspendAllThreads suspend;
 
