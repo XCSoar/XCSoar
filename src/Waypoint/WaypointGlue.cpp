@@ -121,17 +121,21 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
 
   // If no waypoint file found yet
   if (!found) {
-    auto archive = OpenMapFile();
-    if (archive) {
-      found |= LoadWaypointFile(way_points, archive->get(), "waypoints.xcw",
-                                WaypointFileType::WINPILOT,
-                                WaypointOrigin::MAP,
-                                terrain, operation);
+    try {
+      if (auto archive = OpenMapFile()) {
+        found |= LoadWaypointFile(way_points, archive->get(), "waypoints.xcw",
+                                  WaypointFileType::WINPILOT,
+                                  WaypointOrigin::MAP,
+                                  terrain, operation);
 
-      found |= LoadWaypointFile(way_points, archive->get(), "waypoints.cup",
-                                WaypointFileType::SEEYOU,
-                                WaypointOrigin::MAP,
-                                terrain, operation);
+        found |= LoadWaypointFile(way_points, archive->get(), "waypoints.cup",
+                                  WaypointFileType::SEEYOU,
+                                  WaypointOrigin::MAP,
+                                  terrain, operation);
+      }
+    } catch (...) {
+      LogError(std::current_exception(),
+               "Failed to load waypoints from map file");
     }
   }
 
