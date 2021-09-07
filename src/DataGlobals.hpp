@@ -40,8 +40,13 @@ class RaspStore;
  * replaced in another program.
  */
 namespace DataGlobals {
-std::shared_ptr<RaspStore> GetRasp();
-void SetRasp(std::shared_ptr<RaspStore> rasp);
+
+std::shared_ptr<RaspStore>
+GetRasp() noexcept;
+
+void
+SetRasp(std::shared_ptr<RaspStore> rasp) noexcept;
+
 };
 
 #endif

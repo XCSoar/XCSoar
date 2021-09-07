@@ -28,7 +28,7 @@ Copyright_License {
 #include "Interface.hpp"
 
 std::shared_ptr<RaspStore>
-DataGlobals::GetRasp()
+DataGlobals::GetRasp() noexcept
 {
   auto *map = UIGlobals::GetMap();
   return map != nullptr
@@ -37,7 +37,7 @@ DataGlobals::GetRasp()
 }
 
 void
-DataGlobals::SetRasp(std::shared_ptr<RaspStore> rasp)
+DataGlobals::SetRasp(std::shared_ptr<RaspStore> rasp) noexcept
 {
   auto &state = CommonInterface::SetUIState().weather;
   if (state.map >= int(rasp->GetItemCount()))
