@@ -23,31 +23,35 @@ Copyright_License {
 
 #pragma once
 
-#include "Operation.hpp"
+#include "WindowWidget.hpp"
+#include "Operation/MessageOperationEnvironment.hpp"
+#include "util/tstring.hpp"
+
+class PluggableOperationEnvironment;
 
 /**
- * An #OperationEnvironment implementation that forwards all calls to
- * another #OperationEnvironment instance.  Similar to
- * #ProxyOperationEnvironment, but this one's underlying instance is
- * optional.
+ * A widget which displays a progress bar.
  */
-class PluggableOperationEnvironment final : public OperationEnvironment {
-  OperationEnvironment *other = nullptr;
+class ProgressWidget final : public WindowWidget, MessageOperationEnvironment {
+  class ProgressBar;
+
+  PluggableOperationEnvironment &env;
+
+  tstring text;
 
 public:
-  void SetOperationEnvironment(OperationEnvironment &_other) noexcept {
-    other = &_other;
-  }
+  explicit ProgressWidget(PluggableOperationEnvironment &_env,
+                          const TCHAR *_text) noexcept
+    :env(_env), text(_text) {}
 
-  void SetOperationEnvironment(std::nullptr_t n) noexcept {
-    other = n;
-  }
+  /* virtual methods from class Widget */
+  PixelSize GetMinimumSize() const noexcept override;
+  PixelSize GetMaximumSize() const noexcept override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Unprepare() noexcept override;
 
+private:
   /* virtual methods from class OperationEnvironment */
-  bool IsCancelled() const noexcept override;
-  void SetCancelHandler(std::function<void()> handler) noexcept override;
-  void Sleep(std::chrono::steady_clock::duration duration) noexcept override;
-  void SetErrorMessage(const TCHAR *text) noexcept override;
   void SetText(const TCHAR *text) noexcept override;
   void SetProgressRange(unsigned range) noexcept override;
   void SetProgressPosition(unsigned position) noexcept override;
