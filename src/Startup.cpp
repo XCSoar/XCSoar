@@ -124,7 +124,7 @@ static GlideComputerTaskEvents *task_events;
 static bool
 LoadProfile()
 {
-  if (Profile::GetPath().IsNull() &&
+  if (Profile::GetPath() == nullptr &&
       !dlgStartupShowModal())
     return false;
 

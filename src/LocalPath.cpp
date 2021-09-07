@@ -74,7 +74,7 @@ static AllocatedPath cache_path;
 Path
 GetPrimaryDataPath() noexcept
 {
-  assert(!data_path.IsNull());
+  assert(data_path != nullptr);
 
   return data_path;
 }
@@ -82,7 +82,7 @@ GetPrimaryDataPath() noexcept
 void
 SetPrimaryDataPath(Path path) noexcept
 {
-  assert(!path.IsNull());
+  assert(path != nullptr);
   assert(!path.IsEmpty());
 
   data_path = path;
@@ -95,8 +95,8 @@ SetPrimaryDataPath(Path path) noexcept
 AllocatedPath
 LocalPath(Path file) noexcept
 {
-  assert(!data_path.IsNull());
-  assert(!file.IsNull());
+  assert(data_path != nullptr);
+  assert(file != nullptr);
 
   return AllocatedPath::Build(data_path, file);
 }
@@ -118,7 +118,7 @@ MakeLocalPath(const TCHAR *name)
 Path
 RelativePath(Path path) noexcept
 {
-  assert(!data_path.IsNull());
+  assert(data_path != nullptr);
 
   return path.RelativeTo(data_path);
 }
@@ -166,7 +166,7 @@ ContractLocalPath(Path src) noexcept
 {
   // Get the relative file name and location (ptr)
   const Path relative = RelativePath(src);
-  if (relative.IsNull())
+  if (relative == nullptr)
     return nullptr;
 
   // Replace the full local path by the code "%LOCAL_PATH%\\" (output)

@@ -38,7 +38,7 @@ Copyright_License {
 std::string
 Path::ToUTF8() const
 {
-  if (IsNull())
+  if (*this == nullptr)
     return std::string();
 
 #ifdef _UNICODE
@@ -55,7 +55,7 @@ Path::ToUTF8() const
 AllocatedPath
 Path::operator+(const_pointer other) const
 {
-  assert(!IsNull());
+  assert(*this != nullptr);
   assert(other != nullptr);
 
   size_t this_length = StringLength(value.c_str());
@@ -82,7 +82,7 @@ IsDrive(Path::const_pointer p)
 bool
 Path::IsAbsolute() const
 {
-  assert(!IsNull());
+  assert(*this != nullptr);
 
 #ifdef _WIN32
   if (IsDrive(c_str()) && IsDirSeparator(c_str()[2]))
@@ -95,7 +95,7 @@ Path::IsAbsolute() const
 bool
 Path::IsBase() const
 {
-  assert(!IsNull());
+  assert(*this != nullptr);
 
 #ifdef _WIN32
   return _tcspbrk(c_str(), _T("/\\")) == nullptr;
@@ -120,7 +120,7 @@ LastSeparator(Path::const_pointer path)
 AllocatedPath
 Path::GetParent() const
 {
-  assert(!IsNull());
+  assert(*this != nullptr);
 
   const const_pointer v = c_str();
   const const_pointer p = LastSeparator(v);
@@ -133,7 +133,7 @@ Path::GetParent() const
 Path
 Path::GetBase() const
 {
-  assert(!IsNull());
+  assert(*this != nullptr);
 
   const_pointer result = c_str();
   const_pointer p = LastSeparator(result);
@@ -149,16 +149,16 @@ Path::GetBase() const
 bool
 Path::operator==(Path other) const
 {
-  return IsNull() || other.IsNull()
-    ? (IsNull() && other.IsNull())
+  return *this == nullptr || other == nullptr
+    ? (*this == nullptr && other == nullptr)
     : StringIsEqual(c_str(), other.c_str());
 }
 
 Path
 Path::RelativeTo(Path parent) const
 {
-  assert(!IsNull());
-  assert(!parent.IsNull());
+  assert(*this != nullptr);
+  assert(parent != nullptr);
 
   auto p = StringAfterPrefix(c_str(), parent.c_str());
   return p != nullptr && IsDirSeparator(*p)

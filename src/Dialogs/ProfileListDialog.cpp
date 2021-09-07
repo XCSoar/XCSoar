@@ -354,7 +354,7 @@ SelectProfileDialog(Path selected_path)
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.EnableCursorSelection();
 
-  if (!selected_path.IsNull()) {
+  if (selected_path != nullptr) {
     dialog.PrepareWidget();
     dialog.GetWidget().SelectPath(selected_path);
   }

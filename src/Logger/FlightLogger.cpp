@@ -102,7 +102,7 @@ FlightLogger::TickInternal(const MoreData &basic,
 void
 FlightLogger::Tick(const MoreData &basic, const DerivedInfo &calculated)
 {
-  assert(!path.IsNull());
+  assert(path != nullptr);
 
   if (basic.gps.replay || basic.gps.simulator)
     return;

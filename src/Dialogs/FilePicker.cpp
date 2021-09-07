@@ -53,7 +53,7 @@ FilePicker(const TCHAR *caption, FileDataField &df,
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (i == -2) {
     const auto path = DownloadFilePicker(df.GetFileType());
-    if (path.IsNull())
+    if (path == nullptr)
       return false;
 
     df.ForceModify(path);

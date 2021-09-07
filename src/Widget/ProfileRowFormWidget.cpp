@@ -48,7 +48,7 @@ RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
 
   if (registry_key != nullptr) {
     const auto path = Profile::GetPath(registry_key);
-    if (!path.IsNull())
+    if (path != nullptr)
       df->SetValue(path);
   }
 

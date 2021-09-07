@@ -181,7 +181,7 @@ OpenTempFile(FileDescriptor directory_fd,
 		return fd.Open(directory_fd, ".", O_TMPFILE|O_WRONLY, 0666);
 
 	const auto directory = path.GetParent();
-	if (directory.IsNull())
+	if (directory == nullptr)
 		return false;
 
 	return fd.Open(directory.c_str(), O_TMPFILE|O_WRONLY, 0666);

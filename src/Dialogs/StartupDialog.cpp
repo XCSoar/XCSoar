@@ -144,7 +144,7 @@ SelectProfileCallback(const TCHAR *caption, DataField &_df,
   FileDataField &df = (FileDataField &)_df;
 
   const auto path = SelectProfileDialog(df.GetValue());
-  if (path.IsNull())
+  if (path == nullptr)
     return false;
 
   df.ForceModify(path);

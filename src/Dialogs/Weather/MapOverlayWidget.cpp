@@ -141,7 +141,7 @@ private:
 
     preview_bitmap.Reset();
     try {
-      if (path.IsNull() || !preview_bitmap.LoadFile(path))
+      if (path == nullptr || !preview_bitmap.LoadFile(path))
         return;
     } catch (const std::exception &e) {
       return;
@@ -375,7 +375,7 @@ WeatherMapOverlayListWidget::UseClicked(unsigned i)
   if (item.pc_met) {
     const auto &info = *item.pc_met;
     label = info.label.c_str();
-    if (item.path.IsNull()) {
+    if (item.path == nullptr) {
       const auto &settings = CommonInterface::GetComputerSettings().weather.pcmet;
 
       try {

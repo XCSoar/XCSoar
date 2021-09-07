@@ -148,7 +148,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
 
     auto value_buffer = Profile::GetPath(ProfileKeys::LanguageFile);
     Path value = value_buffer;
-    if (value.IsNull())
+    if (value == nullptr)
       value = Path(_T(""));
 
     if (value == Path(_T("none")))
@@ -247,7 +247,7 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
     default:
       new_value = df.GetAsString();
       buffer = ContractLocalPath(Path(new_value));
-      if (!buffer.IsNull())
+      if (buffer != nullptr)
         new_value = buffer.c_str();
       new_base = Path(new_value).GetBase().c_str();
       if (new_base == nullptr)

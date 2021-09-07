@@ -42,7 +42,7 @@ try {
   assert(profile_key != nullptr);
 
   const auto path = Profile::GetPath(profile_key);
-  if (path.IsNull())
+  if (path == nullptr)
     return nullptr;
 
   return std::make_unique<FileLineReaderA>(path);

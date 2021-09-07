@@ -37,7 +37,7 @@ PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile)
 {
   {
     auto plane_path = profile.GetPath("PlanePath");
-    if (!plane_path.IsNull() &&
+    if (plane_path != nullptr &&
         PlaneGlue::ReadFile(plane, plane_path))
       return;
   }

@@ -96,7 +96,7 @@ std::unique_ptr<RasterTerrain>
 RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
 try {
   const auto path = Profile::GetPath(ProfileKeys::MapFile);
-  if (path.IsNull())
+  if (path == nullptr)
     return nullptr;
 
   return OpenTerrain(cache, path, operation);

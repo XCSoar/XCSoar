@@ -83,7 +83,7 @@ void
 InputEvents::eventRunLuaFile(const TCHAR *misc)
 {
   const auto path = SelectLuaFile(misc);
-  if (path.IsNull())
+  if (path == nullptr)
     return;
 
   try {

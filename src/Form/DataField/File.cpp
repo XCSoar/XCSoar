@@ -95,7 +95,7 @@ FileDataField::FileDataField(DataFieldListener *listener) noexcept
 int
 FileDataField::GetAsInteger() const noexcept
 {
-  if (!postponed_value.IsNull())
+  if (postponed_value != nullptr)
     EnsureLoadedDeconst();
 
   return current_index;
@@ -416,6 +416,6 @@ FileDataField::EnsureLoaded() noexcept
   if (postponed_sort)
     Sort();
 
-  if (!postponed_value.IsNull())
+  if (postponed_value != nullptr)
     SetValue(postponed_value);
 }

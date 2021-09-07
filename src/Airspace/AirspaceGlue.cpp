@@ -87,11 +87,11 @@ ReadAirspace(Airspaces &airspaces,
 
   // Read the airspace filenames from the registry
   auto path = Profile::GetPath(ProfileKeys::AirspaceFile);
-  if (!path.IsNull())
+  if (path != nullptr)
     airspace_ok |= ParseAirspaceFile(airspaces, path, operation);
 
   path = Profile::GetPath(ProfileKeys::AdditionalAirspaceFile);
-  if (!path.IsNull())
+  if (path != nullptr)
     airspace_ok |= ParseAirspaceFile(airspaces, path, operation);
 
   auto archive = OpenMapFile();

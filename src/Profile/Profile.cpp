@@ -52,7 +52,7 @@ Profile::GetPath()
 void
 Profile::Load()
 {
-  assert(!startProfileFile.IsNull());
+  assert(startProfileFile != nullptr);
 
   LogFormat("Loading profiles");
   LoadFile(startProfileFile);
@@ -77,10 +77,10 @@ Profile::Save() noexcept
     return;
 
   LogFormat("Saving profiles");
-  if (startProfileFile.IsNull())
+  if (startProfileFile == nullptr)
     SetFiles(nullptr);
 
-  assert(!startProfileFile.IsNull());
+  assert(startProfileFile != nullptr);
 
   try {
     SaveFile(startProfileFile);
@@ -103,7 +103,7 @@ Profile::SetFiles(Path override_path)
      new file now */
   SetModified(true);
 
-  if (!override_path.IsNull()) {
+  if (override_path != nullptr) {
     if (override_path.IsBase()) {
       if (StringFind(override_path.c_str(), '.') != nullptr)
         startProfileFile = LocalPath(override_path);

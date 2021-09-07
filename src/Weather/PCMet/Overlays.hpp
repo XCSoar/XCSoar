@@ -75,7 +75,7 @@ struct Overlay {
     :run_time(_run_time), valid_time(_valid_time), path(std::move(_path)) {}
 
   bool IsDefined() const {
-    return !path.IsNull();
+    return path != nullptr;
   }
 };
 

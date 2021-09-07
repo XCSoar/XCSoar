@@ -33,7 +33,7 @@ std::unique_ptr<ZipArchive>
 OpenMapFile()
 try {
   auto path = Profile::GetPath(ProfileKeys::MapFile);
-  if (path.IsNull())
+  if (path == nullptr)
     return nullptr;
 
   return std::make_unique<ZipArchive>(path);

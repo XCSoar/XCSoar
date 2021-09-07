@@ -68,10 +68,6 @@ public:
   [[gnu::pure]]
   AllocatedPath operator+(const_pointer other) const;
 
-  constexpr bool IsNull() const {
-    return value == nullptr;
-  }
-
   bool IsEmpty() const {
     return value.empty();
   }
@@ -82,8 +78,7 @@ public:
 
   /**
    * Convert the path to UTF-8.
-   * Returns empty string on error or if this instance is "nulled"
-   * (#IsNull returns true).
+   * Returns empty string on error or if this instance is "nulled".
    */
   [[gnu::pure]]
   std::string ToUTF8() const;
@@ -96,12 +91,12 @@ public:
     return !(*this == other);
   }
 
-  constexpr bool operator==(std::nullptr_t) const {
-    return value.IsNull();
+  constexpr bool operator==(std::nullptr_t n) const noexcept {
+    return value == n;
   }
 
-  constexpr bool operator!=(std::nullptr_t) const {
-    return !value.IsNull();
+  constexpr bool operator!=(std::nullptr_t n) const noexcept {
+    return value != n;
   }
 
   [[gnu::pure]]
@@ -186,7 +181,7 @@ public:
   AllocatedPath(std::nullptr_t n):value(n) {}
 
   AllocatedPath(Path src)
-    :value(src.IsNull() ? nullptr : value_type(src.c_str())) {}
+    :value(src == nullptr ? nullptr : value_type(src.c_str())) {}
 
   explicit AllocatedPath(const_pointer src)
     :AllocatedPath(Path(src)) {}
@@ -227,10 +222,6 @@ public:
     return Path(*this) + other;
   }
 
-  bool IsNull() const {
-    return value == nullptr;
-  }
-
   bool IsEmpty() const {
     return value.empty();
   }
@@ -253,14 +244,12 @@ public:
     return !(*this == other);
   }
 
-  [[gnu::pure]]
-  bool operator==(std::nullptr_t) const {
-    return value == nullptr;
+  constexpr bool operator==(std::nullptr_t n) const noexcept {
+    return value == n;
   }
 
-  [[gnu::pure]]
-  bool operator!=(std::nullptr_t) const {
-    return value != nullptr;
+  constexpr bool operator!=(std::nullptr_t n) const noexcept {
+    return value != n;
   }
 
   operator Path() const {

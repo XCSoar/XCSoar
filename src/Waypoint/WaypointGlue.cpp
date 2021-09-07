@@ -101,19 +101,19 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
 
   // ### FIRST FILE ###
   auto path = Profile::GetPath(ProfileKeys::WaypointFile);
-  if (!path.IsNull())
+  if (path != nullptr)
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::PRIMARY,
                               terrain, operation);
 
   // ### SECOND FILE ###
   path = Profile::GetPath(ProfileKeys::AdditionalWaypointFile);
-  if (!path.IsNull())
+  if (path != nullptr)
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::ADDITIONAL,
                               terrain, operation);
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
   path = Profile::GetPath(ProfileKeys::WatchedWaypointFile);
-  if (!path.IsNull())
+  if (path != nullptr)
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::WATCHED,
                               terrain, operation);
 

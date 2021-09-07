@@ -379,12 +379,12 @@ ManagedFileListWidget::RefreshList()
     const auto path = LocalPath(remote_file);
     const bool file_exists = File::Exists(path);
 
-    if (!path.IsNull() &&
+    if (path != nullptr &&
         (is_downloading || file_exists)) {
       download_active |= is_downloading;
 
       const Path base = path.GetBase();
-      if (base.IsNull())
+      if (base == nullptr)
         continue;
 
       bool is_out_of_date = false;
