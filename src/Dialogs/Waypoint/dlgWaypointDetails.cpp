@@ -59,7 +59,10 @@ Copyright_License {
 #include "util/StringPointer.hxx"
 #include "util/AllocatedString.hxx"
 
-#include <cassert>
+#ifdef ANDROID
+#include "Android/NativeView.hpp"
+#include "Android/Main.hpp"
+#endif
 
 #ifdef HAVE_RUN_FILE
 
@@ -94,7 +97,13 @@ WaypointExternalFileListHandler::OnActivateItem(unsigned i) noexcept
   auto file = waypoint->files_external.begin();
   std::advance(file, i);
 
+#ifdef ANDROID
+  /* on Android, the ContentProvider API needs to be used to give
+     other apps access to this file */
+  native_view->OpenWaypointFile(waypoint->id, file->c_str());
+#else
   RunFile(LocalPath(file->c_str()).c_str());
+#endif
 }
 
 void

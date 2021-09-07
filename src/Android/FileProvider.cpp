@@ -21,22 +21,33 @@ Copyright_License {
 }
 */
 
-#include "RunFile.hpp"
+#include "org_xcsoar_FileProvider.h"
+#include "Engine/Waypoint/Waypoints.hpp"
+#include "system/Path.hpp"
+#include "java/String.hxx"
+#include "Components.hpp"
+#include "LocalPath.hpp"
 
-#ifdef ANDROID
-// replaced by NativeView::OpenWaypointFile()
-#elif defined(HAVE_POSIX) && !defined(_WIN32) && !defined(KOBO)
+#include <cassert>
 
-#include "Process.hpp"
-
-bool
-RunFile(const TCHAR *path)
+JNIEXPORT jstring JNICALL
+Java_org_xcsoar_FileProvider_getWaypointFileForUri(JNIEnv *env, jclass,
+                                                   jint id, jstring _filename)
 {
-#if defined(__APPLE__)
-  return Start("/usr/bin/open", path);
-#else
-  return Start("/usr/bin/xdg-open", path);
-#endif
-}
+  auto w = way_points.LookupId(id);
+  if (!w)
+    return nullptr;
 
-#endif
+  const auto filename = Java::String::GetUTFChars(env, _filename);
+
+  /* check if the given file really exists; refuse access to other
+     files not specified in the waypoint details file */
+  for (const auto &i : w->files_external) {
+    if (i == filename.c_str()) {
+      auto path = LocalPath(filename.c_str());
+      return env->NewStringUTF(path.c_str());
+    }
+  }
+
+  return nullptr;
+}

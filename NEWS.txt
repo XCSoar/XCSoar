@@ -7,6 +7,8 @@ Version 7.18 - not yet released
   - SkyLines: fix "Show nearby traffic" setting
 * user interface
   - add 3x5 InfoBoxes layout
+* Android
+  - fix opening waypoint pictures
 
 Version 7.17 - 2021/09/04
 * map display

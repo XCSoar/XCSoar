@@ -39,7 +39,7 @@ jmethodID NativeView::setRequestedOrientationID;
 jmethodID NativeView::loadResourceBitmap_method;
 jmethodID NativeView::loadFileBitmap_method;
 jmethodID NativeView::bitmapToTexture_method;
-jmethodID NativeView::open_file_method;
+jmethodID NativeView::openWaypointFile_method;
 jmethodID NativeView::getNetState_method;
 
 Java::TrivialClass NativeView::clsBitmap;
@@ -73,8 +73,9 @@ NativeView::Initialise(JNIEnv *env)
   bitmapToTexture_method = env->GetMethodID(cls, "bitmapToTexture",
                                             "(Landroid/graphics/Bitmap;Z[I)Z");
 
-  open_file_method = env->GetMethodID(cls, "openFile",
-                                      "(Ljava/lang/String;)V");
+  openWaypointFile_method =
+    env->GetMethodID(cls, "openWaypointFile",
+                     "(ILjava/lang/String;)V");
 
   getNetState_method = env->GetMethodID(cls, "getNetState", "()I");
 

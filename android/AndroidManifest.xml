@@ -40,6 +40,11 @@
     </activity>
 
     <service android:name=".MyService" android:foregroundServiceType="location"/>
+
+    <provider android:name="org.xcsoar.FileProvider"
+              android:authorities="org.xcsoar"
+              android:exported="false"
+              android:grantUriPermissions="true"/>
   </application>
 
   <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="29"/>

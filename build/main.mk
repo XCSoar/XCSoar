@@ -626,6 +626,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/IOIOHelper.cpp \
 	$(SRC)/Android/UsbSerialHelper.cpp \
 	$(SRC)/Android/TextEntryDialog.cpp \
+	$(SRC)/Android/FileProvider.cpp \
 	$(SRC)/Android/Main.cpp
 
 else

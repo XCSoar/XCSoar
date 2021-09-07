@@ -51,7 +51,7 @@ class NativeView {
   static jmethodID loadResourceBitmap_method;
   static jmethodID loadFileBitmap_method;
   static jmethodID bitmapToTexture_method;
-  static jmethodID open_file_method;
+  static jmethodID openWaypointFile_method;
   static jmethodID getNetState_method;
 
   static Java::TrivialClass clsBitmap;
@@ -145,9 +145,9 @@ public:
     env->SetStaticBooleanField(cls, textureNonPowerOfTwo_field, value);
   }
 
-  void openFile(const char *pathName) {
-    Java::String pathName2(env, pathName);
-    env->CallVoidMethod(obj, open_file_method, pathName2.Get());
+  void OpenWaypointFile(unsigned id, const char *filename) {
+    env->CallVoidMethod(obj, openWaypointFile_method, id,
+                        Java::String(env, filename).Get());
   }
 
   gcc_pure

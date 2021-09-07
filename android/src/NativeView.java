@@ -464,22 +464,29 @@ class NativeView extends SurfaceView
   /**
    * Starts a VIEW intent for a given file
    */
-  private void openFile(String pathName) {
+  private void openWaypointFile(int id, String filename) {
     Intent intent = new Intent();
     intent.setAction(Intent.ACTION_VIEW);
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK +
                     Intent.FLAG_RECEIVER_REPLACE_PENDING);
-    File file = new File(pathName);
 
     try {
-      String extension = pathName.substring(pathName.lastIndexOf(".") + 1);
+      String extension = filename.substring(filename.lastIndexOf(".") + 1);
       MimeTypeMap mime = MimeTypeMap.getSingleton();
       String mimeType = mime.getMimeTypeFromExtension(extension);
 
-      intent.setDataAndType(Uri.fromFile(file), mimeType);
+      /* this URI is going to be handled by FileProvider */
+      Uri uri = new Uri.Builder().scheme("content")
+        .authority("org.xcsoar")
+        .encodedPath("/waypoints/" + id + "/" + Uri.encode(filename))
+        .build();
+
+      intent.setDataAndType(uri, mimeType);
+      intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
       getContext().startActivity(intent);
     } catch (Exception e) {
-      Log.e(TAG, "NativeView.openFile('" + pathName + "') error", e);
+      Log.e(TAG, "NativeView.openFile('" + filename + "') error", e);
     }
   }
 
