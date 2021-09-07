@@ -41,6 +41,9 @@ extern "C" {
 long
 TerrainLoader::SkipMarkerSegment(long file_offset) const
 {
+  if (env.IsCancelled())
+    return -1;
+
   if (scan_overview)
     /* use all segments when loading the overview */
     return 0;
