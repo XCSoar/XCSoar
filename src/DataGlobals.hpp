@@ -27,6 +27,7 @@ Copyright_License {
 #include <memory>
 
 class RaspStore;
+class RasterTerrain;
 
 /**
  * This namespace provides helper functions to access generic global
@@ -41,11 +42,30 @@ class RaspStore;
  */
 namespace DataGlobals {
 
+/**
+ * Unset the current #RasterTerrain instance in all XCSoar subsystems.
+ *
+ * This must be called while all threads are suspended via
+ * SuspendAllThreads().
+ */
+void
+UnsetTerrain() noexcept;
+
+void
+SetTerrain(std::unique_ptr<RasterTerrain> _terrain) noexcept;
+
 std::shared_ptr<RaspStore>
 GetRasp() noexcept;
 
 void
 SetRasp(std::shared_ptr<RaspStore> rasp) noexcept;
+
+/**
+ * Determine the home waypoint and startup location.  Call this after
+ * loading a new waypoint or terrain file.
+ */
+void
+UpdateHome(bool reset) noexcept;
 
 };
 

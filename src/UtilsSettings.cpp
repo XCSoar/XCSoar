@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "UtilsSettings.hpp"
-#include "Profile/Current.hpp"
 #include "Protection.hpp"
 #include "Look/Look.hpp"
 #include "MainWindow.hpp"
@@ -60,6 +59,7 @@ Copyright_License {
 #include "Audio/VolumeController.hpp"
 #include "PageActions.hpp"
 #include "FLARM/Glue.hpp"
+#include "DataGlobals.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
@@ -123,22 +123,8 @@ SettingsLeave(const UISettings &old_ui_settings)
   if (TerrainFileChanged) {
     operation.SetText(_("Loading Terrain File..."));
 
-    /* just in case the bottom widget uses the old terrain object
-       (e.g. the cross section) */
-    main_window.SetBottomWidget(nullptr);
-
-    main_window.SetTerrain(nullptr);
-    glide_computer->SetTerrain(nullptr);
-
-    // re-load terrain
-    delete terrain;
-    terrain = RasterTerrain::OpenTerrain(file_cache, operation).release();
-
-    main_window.SetTerrain(terrain);
-    glide_computer->SetTerrain(terrain);
-
-    /* re-create the bottom widget if it was deleted here */
-    PageActions::Update();
+    DataGlobals::UnsetTerrain();
+    DataGlobals::SetTerrain(RasterTerrain::OpenTerrain(file_cache, operation));
   }
 
   if (WaypointFileChanged || AirfieldFileChanged) {
@@ -163,13 +149,7 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   if (WaypointFileChanged || TerrainFileChanged) {
     // re-set home
-    WaypointGlue::SetHome(way_points, terrain,
-                          CommonInterface::SetComputerSettings().poi,
-                          CommonInterface::SetComputerSettings().team_code,
-                          device_blackboard, WaypointFileChanged);
-    WaypointGlue::SaveHome(Profile::map,
-                           CommonInterface::GetComputerSettings().poi,
-                           CommonInterface::GetComputerSettings().team_code);
+    DataGlobals::UpdateHome(WaypointFileChanged);
   }
 
   if (TopographyFileChanged) {
