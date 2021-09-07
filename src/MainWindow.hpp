@@ -182,12 +182,12 @@ public:
   void Deinitialise();
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   const PixelRect &GetMainRect(const PixelRect &full_rc) const {
     return FullScreen ? full_rc : map_rect;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   PixelRect GetMainRect() const {
     return FullScreen ? GetClientRect() : map_rect;
   }
@@ -288,7 +288,7 @@ public:
    * Returns the map even if it is not active.  May return nullptr if
    * there is no map.
    */
-  gcc_pure
+  [[gnu::pure]]
   GlueMapWindow *GetMap() {
     return map;
   }
@@ -304,7 +304,7 @@ public:
    * Returns the map if it is active, or nullptr if the map is not
    * active.
    */
-  gcc_pure
+  [[gnu::pure]]
   GlueMapWindow *GetMapIfActive();
 
   /**
@@ -339,12 +339,12 @@ public:
    *
    * @see InputEvents::IsFlavour(), InputEvents::SetFlavour()
    */
-  gcc_pure
+  [[gnu::pure]]
   Widget *GetFlavourWidget(const TCHAR *flavour);
 
   void UpdateGaugeVisibility();
 
-  gcc_pure
+  [[gnu::pure]]
   const MapWindowProjection &GetProjection() const;
 
   void ToggleSuppressFLARMRadar();

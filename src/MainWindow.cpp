@@ -68,7 +68,7 @@ Copyright_License {
 static constexpr unsigned separator_height = 2;
 
 #ifdef HAVE_SHOW_MENU_BUTTON
-gcc_pure
+[[gnu::pure]]
 static PixelRect
 GetShowMenuButtonRect(const PixelRect rc)
 {
@@ -83,7 +83,7 @@ GetShowMenuButtonRect(const PixelRect rc)
 }
 #endif
 
-gcc_pure
+[[gnu::pure]]
 static PixelRect
 GetBottomWidgetRect(const PixelRect &rc, const Widget *bottom_widget)
 {
@@ -110,7 +110,7 @@ GetBottomWidgetRect(const PixelRect &rc, const Widget *bottom_widget)
   return result;
 }
 
-gcc_pure
+[[gnu::pure]]
 static PixelRect
 GetMapRectAbove(const PixelRect &rc, const PixelRect &bottom_rect)
 {
