@@ -35,7 +35,7 @@ def configure(toolchain, src, build, args=()):
         '-DCMAKE_BUILD_TYPE=release',
     ] + \
     __cmake_compiler_args('C', toolchain.cc) + \
-    __cmake_compiler_args('CCC', toolchain.cxx) + \
+    __cmake_compiler_args('CXX', toolchain.cxx) + \
     [
         '-DCMAKE_C_FLAGS=' + toolchain.cflags + ' ' + toolchain.cppflags,
         '-DCMAKE_CXX_FLAGS=' + toolchain.cxxflags + ' ' + toolchain.cppflags,
