@@ -40,22 +40,20 @@ class Angle
 {
   double value;
 
-  explicit constexpr Angle(const double _value):value(_value) {};
+  explicit constexpr Angle(const double _value) noexcept:value(_value) {};
 
 public:
   /**
    * The default constructor does not initialize the value.  It must
    * not be used until it is assigned.
    */
-  Angle() = default;
+  Angle() noexcept = default;
 
-  constexpr
-  static Angle Zero() {
+  static constexpr Angle Zero() noexcept {
     return Native(double(0));
   }
 
-  constexpr
-  static Angle Native(const double _value) {
+  static constexpr Angle Native(const double _value) noexcept {
     return Angle(_value);
   }
 
@@ -63,8 +61,7 @@ public:
    * Construct an instance that describes a "full circle" (360
    * degrees).
    */
-  constexpr
-  static Angle FullCircle() {
+  static constexpr Angle FullCircle() noexcept {
     return Native(M_2PI);
   }
 
@@ -72,8 +69,7 @@ public:
    * Construct an instance that describes a "half circle" (180
    * degrees).
    */
-  constexpr
-  static Angle HalfCircle() {
+  static constexpr Angle HalfCircle() noexcept {
     return Native(M_PI);
   }
 
@@ -81,33 +77,31 @@ public:
    * Construct an instance that describes a "quarter circle" 90
    * degrees).
    */
-  constexpr
-  static Angle QuarterCircle() {
+  static constexpr Angle QuarterCircle() noexcept {
     return Native(M_PI_2);
   }
 
-  constexpr double Native() const {
+  constexpr double Native() const noexcept {
     return value;
   }
 
-  constexpr
-  static Angle Degrees(double value) {
+  static constexpr Angle Degrees(double value) noexcept {
     return Angle(value * DEG_TO_RAD);
   }
 
-  static constexpr Angle Radians(const double _value) {
+  static constexpr Angle Radians(const double _value) noexcept {
     return Angle(_value);
   }
 
-  constexpr double Degrees() const {
+  constexpr double Degrees() const noexcept {
     return value * RAD_TO_DEG;
   }
 
-  constexpr double Radians() const {
+  constexpr double Radians() const noexcept {
     return value;
   }
 
-  constexpr double Hours() const {
+  constexpr double Hours() const noexcept {
     return value * 24 / M_2PI;
   }
 
@@ -115,24 +109,25 @@ public:
     unsigned degrees, minutes, seconds;
     bool negative;
 
-    DMS() = default;
+    DMS() noexcept = default;
 
-    constexpr DMS(unsigned d, unsigned m=0, unsigned s=0, bool n=false)
+    constexpr DMS(unsigned d, unsigned m=0, unsigned s=0,
+                  bool n=false) noexcept
       :degrees(d), minutes(m), seconds(s), negative(n) {}
 
-    constexpr double ToAbsoluteFloat() const {
+    constexpr double ToAbsoluteFloat() const noexcept {
       return degrees + minutes / 60. + seconds / 3600.;
     }
 
-    constexpr double ToFloat() const {
+    constexpr double ToFloat() const noexcept {
       return negative ? -ToAbsoluteFloat() : ToAbsoluteFloat();
     }
   };
 
-  constexpr Angle(DMS dms):Angle(Degrees(dms.ToFloat())) {}
+  constexpr Angle(DMS dms) noexcept:Angle(Degrees(dms.ToFloat())) {}
 
   static constexpr Angle FromDMS(unsigned d, unsigned m=0, unsigned s=0,
-                                 bool n=false) {
+                                 bool n=false) noexcept {
     return DMS(d, m, s, n);
   }
 
@@ -146,7 +141,7 @@ public:
    * @param east True if East, False if West (pointer)
    */
   [[gnu::pure]]
-  DMS ToDMS() const;
+  DMS ToDMS() const noexcept;
 
   /**
    * Converts this Angle to degrees, minute, decimal minutes and a
@@ -158,10 +153,10 @@ public:
    * @param east True if East, False if West (pointer)
    */
   void ToDMM(unsigned &dd, unsigned &mm, unsigned &mmm,
-             bool &is_positive) const;
+             bool &is_positive) const noexcept;
 
   [[gnu::pure]]
-  Angle Absolute() const {
+  Angle Absolute() const noexcept {
     return Angle(fabs(Native()));
   }
 
@@ -169,7 +164,7 @@ public:
    * Calculates the tangent of the Angle.
    */
   [[gnu::pure]]
-  inline double tan() const {
+  inline double tan() const noexcept {
     return ::tan(Radians());
   }
 
@@ -177,12 +172,12 @@ public:
    * Calculates the sine of the Angle.
    */
   [[gnu::pure]]
-  inline double sin() const {
+  inline double sin() const noexcept {
     return ::sin(Radians());
   }
 
   [[gnu::pure]]
-  inline double accurate_half_sin() const {
+  inline double accurate_half_sin() const noexcept {
     return Half().sin();
   }
 
@@ -190,7 +185,7 @@ public:
    * Calculates the cosine of the Angle.
    */
   [[gnu::pure]]
-  inline double cos() const {
+  inline double cos() const noexcept {
     return ::cos(Radians());
   }
 
@@ -198,7 +193,7 @@ public:
    * Faster but more inaccurate version of sin()
    */
   [[gnu::pure]]
-  inline double fastsine() const {
+  inline double fastsine() const noexcept {
     return (::fastsine(Native()));
   }
 
@@ -206,12 +201,12 @@ public:
    * Faster but more inaccurate version of cos()
    */
   [[gnu::pure]]
-  inline double fastcosine() const {
+  inline double fastcosine() const noexcept {
     return (::fastcosine(Native()));
   }
 
   [[gnu::pure]]
-  inline double invfastcosine() const {
+  inline double invfastcosine() const noexcept {
     return (::invfastcosine(Native()));
   }
 
@@ -220,7 +215,7 @@ public:
    * in the range between -1024 and 1024.
    */
   [[gnu::pure]]
-  inline int ifastsine() const {
+  inline int ifastsine() const noexcept {
     return (::ifastsine(Native()));
   }
 
@@ -229,37 +224,37 @@ public:
    * in the range between -1024 and 1024.
    */
   [[gnu::pure]]
-  inline int ifastcosine() const {
+  inline int ifastcosine() const noexcept {
     return (::ifastcosine(Native()));
   }
 
   [[gnu::pure]]
-  bool IsPositive() const {
+  bool IsPositive() const noexcept {
     return value > 0;
   }
 
   [[gnu::pure]]
-  bool IsNegative() const {
+  bool IsNegative() const noexcept {
     return std::signbit(value);
   }
 
   [[gnu::pure]]
-  std::pair<double, double> SinCos() const {
+  std::pair<double, double> SinCos() const noexcept {
     return ::sin_cos(Radians());
   }
 
   [[gnu::pure]]
-  double AbsoluteDegrees() const;
+  double AbsoluteDegrees() const noexcept;
 
   [[gnu::pure]]
-  double AbsoluteRadians() const;
+  double AbsoluteRadians() const noexcept;
 
-  void Flip() {
+  void Flip() noexcept {
     value = -value;
   }
 
   constexpr
-  Angle Flipped() const {
+  Angle Flipped() const noexcept {
     return Angle(-value);
   }
 
@@ -268,21 +263,21 @@ public:
    * @return Output angle (-180 - +180 degrees)
    */
   [[gnu::pure]]
-  Angle AsDelta() const;
+  Angle AsDelta() const noexcept;
 
   /**
    * Limits the angle (theta) to 0 - 360 degrees
    * @return Output angle (0-360 degrees)
    */
   [[gnu::pure]]
-  Angle AsBearing() const;
+  Angle AsBearing() const noexcept;
 
   /**
    * Returns half of this angle.  This is only useful (and valid) when
    * the angle has been normalized with AsDelta().
    */
   constexpr
-  Angle Half() const {
+  Angle Half() const noexcept {
     return Angle(value * 0.5);
   }
 
@@ -291,10 +286,10 @@ public:
    * @return Output angle (0 - 360 degrees)
    */
   [[gnu::pure]]
-  Angle Reciprocal() const;
+  Angle Reciprocal() const noexcept;
 
   [[gnu::pure]]
-  Angle HalfAngle(const Angle end) const;
+  Angle HalfAngle(const Angle end) const noexcept;
 
   /**
    * Computes a certain fraction between the two angles.
@@ -303,7 +298,7 @@ public:
    * @return the resulting Angle, not normalized
    */
   [[gnu::pure]]
-  Angle Fraction(const Angle end, const double fraction) const;
+  Angle Fraction(const Angle end, const double fraction) const noexcept;
 
   [[gnu::pure]] Angle
   constexpr operator*(const double x) const noexcept {
@@ -320,44 +315,29 @@ public:
     return value / x.value;
   }
 
-  constexpr
-  Angle
-  operator+(const Angle x) const
-  {
+  constexpr Angle operator+(const Angle x) const noexcept {
     return Angle(value + x.value);
   }
 
-  constexpr
-  Angle
-  operator-(const Angle x) const
-  {
+  constexpr Angle operator-(const Angle x) const noexcept {
     return Angle(value - x.value);
   }
 
-  constexpr
-  Angle
-  operator-() const
-  {
+  constexpr Angle operator-() const noexcept {
     return Angle(-value);
   }
 
-  const Angle&
-  operator*=(const double x)
-  {
+  const Angle &operator*=(const double x) noexcept {
     value *= x;
     return *this;
   }
 
-  const Angle&
-  operator+=(Angle x)
-  {
+  const Angle &operator+=(Angle x) noexcept {
     value += x.value;
     return *this;
   }
 
-  const Angle&
-  operator-=(Angle x)
-  {
+  const Angle &operator-=(Angle x) noexcept {
     value -= x.value;
     return *this;
   }
@@ -369,7 +349,7 @@ public:
    * Return the positive difference between two angles.
    */
   [[gnu::pure]]
-  Angle fdim(const Angle x) const {
+  Angle fdim(const Angle x) const noexcept {
     return Native(std::fdim(value, x.value));
   }
 
@@ -378,19 +358,19 @@ public:
    * than "start", then wraparound is calculated correctly.
    */
   [[gnu::pure]]
-  bool Between(const Angle start, const Angle end) const;
+  bool Between(const Angle start, const Angle end) const noexcept;
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, Angle a);
 #endif
 
   [[gnu::const]]
-  static Angle asin(double x) {
+  static Angle asin(double x) noexcept {
     return Radians(::asin(x));
   }
 
   [[gnu::const]]
-  static Angle acos(double x) {
+  static Angle acos(double x) noexcept {
     return Radians(::acos(x));
   }
 
@@ -403,7 +383,7 @@ public:
    * @return Counter-clockwise angle between the x-axis and the given coordinate
    */
   [[gnu::const]]
-  static Angle FromXY(const double x, const double y) {
+  static Angle FromXY(const double x, const double y) noexcept {
     return Angle::Radians(atan2(y,x));
   }
 
@@ -411,7 +391,7 @@ public:
    * Check whether the two angles are roughly equal.
    */
   [[gnu::const]]
-  bool CompareRoughly(Angle other, Angle threshold = Angle::Degrees(10)) const;
+  bool CompareRoughly(Angle other, Angle threshold = Angle::Degrees(10)) const noexcept;
 };
 
 static_assert(std::is_trivial<Angle>::value, "type is not trivial");

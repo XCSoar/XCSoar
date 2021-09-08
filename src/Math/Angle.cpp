@@ -26,7 +26,7 @@ Copyright_License {
 #include <cassert>
 
 Angle::DMS
-Angle::ToDMS() const
+Angle::ToDMS() const noexcept
 {
   DMS dms;
   dms.negative = value < 0;
@@ -46,7 +46,7 @@ Angle::ToDMS() const
 
 void
 Angle::ToDMM(unsigned &dd, unsigned &mm, unsigned &mmm,
-             bool &is_positive) const
+             bool &is_positive) const noexcept
 {
   is_positive = value >= 0;
 
@@ -58,19 +58,19 @@ Angle::ToDMM(unsigned &dd, unsigned &mm, unsigned &mmm,
 }
 
 double
-Angle::AbsoluteDegrees() const
+Angle::AbsoluteDegrees() const noexcept
 {
   return Absolute().Degrees();
 }
 
 double
-Angle::AbsoluteRadians() const
+Angle::AbsoluteRadians() const noexcept
 {
   return Absolute().Radians();
 }
 
 Angle
-Angle::AsBearing() const
+Angle::AsBearing() const noexcept
 {
   assert(!isnan(value));
   assert(!isinf(value));
@@ -98,7 +98,7 @@ Angle::AsBearing() const
 }
 
 Angle
-Angle::AsDelta() const
+Angle::AsDelta() const noexcept
 {
   assert(!isnan(value));
   assert(!isinf(value));
@@ -122,13 +122,13 @@ Angle::AsDelta() const
 }
 
 Angle
-Angle::Reciprocal() const
+Angle::Reciprocal() const noexcept
 {
   return (*this + HalfCircle()).AsBearing();
 }
 
 Angle
-Angle::HalfAngle(const Angle end) const
+Angle::HalfAngle(const Angle end) const noexcept
 {
   if (value == end.value) {
     return Reciprocal();
@@ -146,7 +146,7 @@ Angle::HalfAngle(const Angle end) const
 }
 
 Angle
-Angle::Fraction(const Angle end, const double fraction) const
+Angle::Fraction(const Angle end, const double fraction) const noexcept
 {
   if (value == end.value)
     return Angle(value);
@@ -156,7 +156,7 @@ Angle::Fraction(const Angle end, const double fraction) const
 }
 
 bool
-Angle::Between(const Angle start, const Angle end) const
+Angle::Between(const Angle start, const Angle end) const noexcept
 {
   Angle width = (end - start).AsBearing();
   Angle delta = (*this - start).AsBearing();
@@ -165,7 +165,7 @@ Angle::Between(const Angle start, const Angle end) const
 }
 
 bool
-Angle::CompareRoughly(Angle other, Angle threshold) const
+Angle::CompareRoughly(Angle other, Angle threshold) const noexcept
 {
   const Angle delta = (*this - other).AsDelta();
   return delta >= -threshold && delta <= threshold;
