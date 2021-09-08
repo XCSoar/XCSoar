@@ -301,12 +301,13 @@ libtiff = CmakeProject(
 )
 
 libgeotiff = CmakeProject(
-    'http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.2.tar.gz',
-    'https://fossies.org/linux/privat/libgeotiff-1.4.2.tar.gz',
-    '96ab80e0d4eff7820579957245d844f8',
+    'http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.3.tar.gz',
+    'https://fossies.org/linux/privat/libgeotiff-1.4.3.tar.gz',
+    'b8510d9b968b5ee899282cdd5bef13fd02d5a4c19f664553f81e31127bc47265',
     'lib/libgeotiff.a',
     [
         '-DWITH_UTILITIES=OFF',
+        '-DBUILD_SHARED_LIBS=OFF',
     ],
     patches=abspath('lib/libgeotiff/patches'),
 )
