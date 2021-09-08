@@ -33,7 +33,7 @@ Index: proj-5.2.0/cmake/ProjUtilities.cmake
 ===================================================================
 --- proj-5.2.0.orig/cmake/ProjUtilities.cmake
 +++ proj-5.2.0/cmake/ProjUtilities.cmake
-@@ -454,3 +454,30 @@ function(proj_append_lla_output_file LLA
+@@ -454,3 +454,19 @@ function(proj_append_lla_output_file LLA
      set(${FILE_LIST} ${LIST_OUT} PARENT_SCOPE)
  endfunction()
  
@@ -44,20 +44,9 @@ Index: proj-5.2.0/cmake/ProjUtilities.cmake
 +
 +function(configure_proj_pc)
 +  set(prefix "${CMAKE_INSTALL_PREFIX}")
-+  set(exec_prefix "$\{prefix\}")
-+  set(libdir "$\{exec_prefix\}/${PROJ_LIB_SUBDIR}")
-+  set(includedir "$\{prefix\}/${PROJ_INCLUDE_SUBDIR}")
-+  set(datarootdir "$\{prefix\}/${CMAKE_INSTALL_DATAROOTDIR}")
-+  set(datadir "$\{datarootdir\}")
-+  set(PACKAGE "proj")
-+  set(VERSION ${PROJ_VERSION})
-+  set(SQLITE3_LIBS -lsqlite3)
-+  if(TIFF_ENABLED)
-+    set(TIFF_LIBS -ltiff)
-+  endif()
-+  if(CURL_ENABLED)
-+    set(CURL_LIBS -lcurl)
-+  endif()
++  set(exec_prefix "\${prefix}")
++  set(libdir "\${exec_prefix}/${LIBDIR}")
++  set(includedir "\${prefix}/${INCLUDEDIR}")
 +
 +  configure_file(
 +    ${CMAKE_CURRENT_SOURCE_DIR}/proj.pc.in
