@@ -211,17 +211,22 @@ curl = CmakeProject(
     patches=abspath('lib/curl/patches'),
 )
 
-proj = AutotoolsProject(
+proj = CmakeProject(
     'http://download.osgeo.org/proj/proj-5.1.0.tar.gz',
     'https://fossies.org/linux/privat/proj-5.1.0.tar.gz',
     '6b1379a53317d9b5b8c723c1dc7bf2e3a8eb22ceb46b8807a1ce48ef65685bb3',
     'lib/libproj.a',
     [
-        '--disable-shared', '--enable-static',
-        '--without-mutex',
+        '-DPROJ_TESTS=OFF',
+        '-DBUILD_CCT=OFF',
+        '-DBUILD_CS2CS=OFF',
+        '-DBUILD_GEOD=OFF',
+        '-DBUILD_GIE=OFF',
+        '-DBUILD_NAD2BIN=OFF',
+        '-DBUILD_PROJ=OFF',
+        '-DBUILD_LIBPROJ_SHARED=OFF',
+        '-DUSE_THREAD=OFF',
     ],
-    patches=abspath('lib/proj/patches'),
-    autogen=True,
 )
 
 libpng = AutotoolsProject(
