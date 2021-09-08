@@ -268,34 +268,36 @@ simple_usbmodeswitch = AutotoolsProject(
     ldflags='-pthread',
 )
 
-libtiff = AutotoolsProject(
+libtiff = CmakeProject(
     'http://download.osgeo.org/libtiff/tiff-4.0.10.tar.gz',
     'http://ftp.lfs-matrix.net/pub/blfs/conglomeration/tiff/tiff-4.0.10.tar.gz',
     '2c52d11ccaf767457db0c46795d9c7d1a8d8f76f68b0b800a3dfe45786b996e4',
     'lib/libtiff.a',
     [
-        '--disable-shared', '--enable-static',
-        '--disable-largefile',
-        '--disable-cxx',
-        '--disable-ccitt',
-        '--disable-packbits',
-        '--disable-lzw',
-        '--disable-thunder',
-        '--disable-next',
-        '--disable-logluv',
-        '--disable-mdi',
-        '--disable-pixarlog',
-        '--disable-jpeg',
-        '--disable-old-jpeg',
-        '--disable-jbig',
-        '--disable-lzma',
-        '--disable-zstd',
-        '--disable-webp',
-        '--disable-strip-chopping',
-        '--disable-extrasample-as-alpha',
+        '-DBUILD_SHARED_LIBS=OFF',
+        '-Dld-version-script=OFF',
+        '-Dccitt=OFF',
+        '-Dpackbits=OFF',
+        '-Dlzw=OFF',
+        '-Dthunder=OFF',
+        '-Dnext=OFF',
+        '-Dlogluv=OFF',
+        '-Dmdi=OFF',
+        '-Dpixarlog=OFF',
+        '-Djpeg=OFF',
+        '-Dold-jpeg=OFF',
+        '-Djbig=OFF',
+        '-Dlzma=OFF',
+        '-Dzstd=OFF',
+        '-Dwebp=OFF',
+        '-Dcxx=OFF',
+        '-Dstrip-chopping=OFF',
+        '-Dextrasample-as-alpha=OFF',
+
+        # workaround for build failure with -Dstrip-chopping=OFF
+        '-DSTRIP_SIZE_DEFAULT=8192',
     ],
     patches=abspath('lib/libtiff/patches'),
-    autogen=True,
 )
 
 libgeotiff = AutotoolsProject(

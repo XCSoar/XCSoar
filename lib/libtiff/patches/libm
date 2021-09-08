@@ -1,0 +1,12 @@
+Index: tiff-4.0.10/libtiff-4.pc.in
+===================================================================
+--- tiff-4.0.10.orig/libtiff-4.pc.in
++++ tiff-4.0.10/libtiff-4.pc.in
+@@ -6,6 +6,6 @@ includedir=@includedir@
+ Name: libtiff
+ Description:  Tag Image File Format (TIFF) library.
+ Version: @VERSION@
+-Libs: -L${libdir} -ltiff
++Libs: -L${libdir} -ltiff -lm
+ Libs.private: @tiff_libs_private@
+ Cflags: -I${includedir}
