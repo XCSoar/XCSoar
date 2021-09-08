@@ -34,6 +34,7 @@ Copyright_License {
 #endif
 
 #include <cmath>
+#include <compare>
 
 class Angle
 {
@@ -361,41 +362,8 @@ public:
     return *this;
   }
 
-  constexpr bool
-  operator==(const Angle x) const
-  {
-    return value == x.value;
-  }
-
-  constexpr bool
-  operator!=(const Angle x) const
-  {
-    return value != x.value;
-  }
-
-  constexpr bool
-  operator<(const Angle x) const
-  {
-    return value < x.value;
-  }
-
-  constexpr bool
-  operator>(const Angle x) const
-  {
-    return value > x.value;
-  }
-
-  constexpr bool
-  operator<=(const Angle x) const
-  {
-    return value <= x.value;
-  }
-
-  constexpr bool
-  operator>=(const Angle x) const
-  {
-    return value >= x.value;
-  }
+  friend constexpr auto operator<=>(const Angle &,
+                                    const Angle &) noexcept = default;
 
   /**
    * Return the positive difference between two angles.
