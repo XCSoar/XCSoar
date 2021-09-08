@@ -227,6 +227,7 @@ proj = CmakeProject(
         '-DBUILD_LIBPROJ_SHARED=OFF',
         '-DUSE_THREAD=OFF',
     ],
+    patches=abspath('lib/proj/patches'),
 )
 
 libpng = AutotoolsProject(
