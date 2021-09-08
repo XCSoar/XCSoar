@@ -90,16 +90,6 @@ public:
   }
 
   constexpr
-  static Angle Degrees(int value) {
-    return Angle(value * DEG_TO_RAD);
-  }
-
-  constexpr
-  static Angle Degrees(unsigned value) {
-    return Degrees(int(value));
-  }
-
-  constexpr
   static Angle Degrees(double value) {
     return Angle(value * DEG_TO_RAD);
   }
@@ -319,20 +309,6 @@ public:
     return Angle(value * x);
   }
 
-  constexpr
-  Angle
-  operator*(const int x) const
-  {
-    return Angle(value * x);
-  }
-
-  constexpr
-  Angle
-  operator*(const unsigned x) const
-  {
-    return Angle(value * x);
-  }
-
   [[gnu::pure]]
   constexpr Angle operator/(const double x) const noexcept {
     return Angle(value / x);
@@ -341,20 +317,6 @@ public:
   [[gnu::pure]]
   constexpr double operator/(const Angle x) const noexcept {
     return value / x.value;
-  }
-
-  constexpr
-  Angle
-  operator/(const int x) const
-  {
-    return Angle(value / x);
-  }
-
-  constexpr
-  Angle
-  operator/(const unsigned x) const
-  {
-    return Angle(value / x);
   }
 
   constexpr
