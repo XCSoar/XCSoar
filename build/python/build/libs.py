@@ -300,21 +300,15 @@ libtiff = CmakeProject(
     patches=abspath('lib/libtiff/patches'),
 )
 
-libgeotiff = AutotoolsProject(
+libgeotiff = CmakeProject(
     'http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.2.tar.gz',
     'https://fossies.org/linux/privat/libgeotiff-1.4.2.tar.gz',
     '96ab80e0d4eff7820579957245d844f8',
     'lib/libgeotiff.a',
     [
-        '--disable-shared', '--enable-static',
-        '--disable-doxygen-doc',
-        '--disable-doxygen-dot',
-        '--disable-doxygen-man',
-        '--disable-doxygen-html',
+        '-DWITH_UTILITIES=OFF',
     ],
     patches=abspath('lib/libgeotiff/patches'),
-    autogen=True,
-    libs='-lz',
 )
 
 sdl2 = SDL2Project(
