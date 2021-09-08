@@ -315,8 +315,7 @@ public:
   Angle Fraction(const Angle end, const double fraction) const;
 
   [[gnu::pure]] Angle
-  operator*(const double x) const
-  {
+  constexpr operator*(const double x) const noexcept {
     return Angle(value * x);
   }
 
@@ -335,16 +334,12 @@ public:
   }
 
   [[gnu::pure]]
-  Angle
-  operator/(const double x) const
-  {
+  constexpr Angle operator/(const double x) const noexcept {
     return Angle(value / x);
   }
 
   [[gnu::pure]]
-  double
-  operator/(const Angle x) const
-  {
+  constexpr double operator/(const Angle x) const noexcept {
     return value / x.value;
   }
 
