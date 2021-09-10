@@ -181,7 +181,8 @@ GlueMapWindow::PartialRedraw() noexcept
 #ifdef ENABLE_OPENGL
   Invalidate();
 #else
-  draw_thread->TriggerRedraw();
+  if (draw_thread != nullptr)
+    draw_thread->TriggerRedraw();
 #endif
 }
 
@@ -208,6 +209,7 @@ GlueMapWindow::QuickRedraw()
 #ifndef ENABLE_OPENGL
   /* we suppose that the operation will need a full redraw later, so
      trigger that now */
-  draw_thread->TriggerRedraw();
+  if (draw_thread != nullptr)
+    draw_thread->TriggerRedraw();
 #endif
 }
