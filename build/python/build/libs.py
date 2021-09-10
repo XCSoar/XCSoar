@@ -270,9 +270,9 @@ simple_usbmodeswitch = AutotoolsProject(
 )
 
 libtiff = CmakeProject(
-    'http://download.osgeo.org/libtiff/tiff-4.0.10.tar.gz',
-    'http://ftp.lfs-matrix.net/pub/blfs/conglomeration/tiff/tiff-4.0.10.tar.gz',
-    '2c52d11ccaf767457db0c46795d9c7d1a8d8f76f68b0b800a3dfe45786b996e4',
+    'http://download.osgeo.org/libtiff/tiff-4.3.0.tar.gz',
+    'https://fossies.org/linux/misc/tiff-4.3.0.tar.gz',
+    '0e46e5acb087ce7d1ac53cf4f56a09b221537fc86dfc5daaad1c2e89e1b37ac8',
     'lib/libtiff.a',
     [
         '-DBUILD_SHARED_LIBS=OFF',
@@ -290,6 +290,7 @@ libtiff = CmakeProject(
         '-Djbig=OFF',
         '-Dlzma=OFF',
         '-Dzstd=OFF',
+        '-Dlerc=OFF',
         '-Dwebp=OFF',
         '-Dcxx=OFF',
         '-Dstrip-chopping=OFF',
@@ -297,6 +298,8 @@ libtiff = CmakeProject(
 
         # workaround for build failure with -Dstrip-chopping=OFF
         '-DSTRIP_SIZE_DEFAULT=8192',
+
+        '-DCMAKE_EXE_LINKER_FLAGS=-lm',
     ],
     patches=abspath('lib/libtiff/patches'),
 )
