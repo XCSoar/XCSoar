@@ -7,7 +7,8 @@ OPERATION_SOURCES := \
 
 # This is necessary because ThreadedOperationEnvironment depends on
 # class UI::DelayedNotify, which embeds a UI::Timer, which has a
-# different implementation based on macro USE_POLL_EVENT
-OPERATION_CPPFLAGS = $(POLL_EVENT_CPPFLAGS)
+# different implementation based on macro USE_POLL_EVENT; and class
+# UI::Notify checks the USE_WINUSER macro
+OPERATION_CPPFLAGS = $(POLL_EVENT_CPPFLAGS) $(WINUSER_CPPFLAGS)
 
 $(eval $(call link-library,liboperation,OPERATION))
