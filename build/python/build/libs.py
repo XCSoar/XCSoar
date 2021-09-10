@@ -174,8 +174,6 @@ cares = CmakeProject(
         '-DCARES_BUILD_TOOLS=OFF',
     ],
     patches=abspath('lib/c-ares/patches'),
-    #autogen=True,
-    #subdirs=['include', 'src/lib'],
 )
 
 curl = CmakeProject(

@@ -8,11 +8,8 @@ class AutotoolsProject(MakeProject):
                  cppflags='',
                  ldflags='',
                  libs='',
-                 shared=False,
                  install_prefix=None,
                  use_destdir=False,
-                 make_args=[],
-                 config_script='configure',
                  use_actual_arch=False,
                  subdirs=None,
                  **kwargs):
@@ -22,21 +19,10 @@ class AutotoolsProject(MakeProject):
         self.cppflags = cppflags
         self.ldflags = ldflags
         self.libs = libs
-        self.shared = shared
         self.install_prefix = install_prefix
         self.use_destdir = use_destdir
-        self.make_args = make_args
-        self.config_script = config_script
         self.use_actual_arch = use_actual_arch
         self.subdirs = subdirs
-
-    def _filter_cflags(self, flags):
-        if self.shared:
-            # filter out certain flags which are only useful with
-            # static linking
-            for f in ('-fvisibility=hidden', '-fdata-sections', '-ffunction-sections'):
-                flags = flags.replace(' ' + f + ' ', ' ')
-        return flags
 
     def configure(self, toolchain, src=None, build=None, target_toolchain=None):
         if src is None:
@@ -68,11 +54,11 @@ class AutotoolsProject(MakeProject):
             install_prefix = toolchain.install_prefix
 
         configure = [
-            os.path.join(src, self.config_script),
+            os.path.join(src, 'configure'),
             'CC=' + toolchain.cc,
             'CXX=' + toolchain.cxx,
-            'CFLAGS=' + self._filter_cflags(toolchain.cflags),
-            'CXXFLAGS=' + self._filter_cflags(toolchain.cxxflags),
+            'CFLAGS=' + toolchain.cflags,
+            'CXXFLAGS=' + toolchain.cxxflags,
             'CPPFLAGS=' + cppflags + ' ' + self.cppflags,
             'LDFLAGS=' + toolchain.ldflags + ' ' + self.ldflags,
             'LIBS=' + toolchain.libs + ' ' + self.libs,
@@ -110,7 +96,7 @@ class AutotoolsProject(MakeProject):
         return build
 
     def get_make_args(self, toolchain):
-        return MakeProject.get_make_args(self, toolchain) + self.make_args
+        return MakeProject.get_make_args(self, toolchain)
 
     def get_make_install_args(self, toolchain):
         args = MakeProject.get_make_install_args(self, toolchain)
