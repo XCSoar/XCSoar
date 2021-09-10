@@ -27,9 +27,19 @@ def configure(toolchain, src, build, args=()):
 
     cc = toolchain.cc
 
+    if '-darwin' in toolchain.actual_arch:
+        cmake_system_name = 'Darwin'
+    elif toolchain.is_windows:
+        cmake_system_name = 'Windows'
+    else:
+        cmake_system_name = 'Linux'
+
     configure = [
         'cmake',
         src,
+
+        '-DCMAKE_SYSTEM_NAME=' + cmake_system_name,
+        '-DCMAKE_SYSTEM_PROCESSOR=' + toolchain.actual_arch.split('-', 1)[0],
 
         '-DCMAKE_INSTALL_PREFIX=' + toolchain.install_prefix,
         '-DCMAKE_BUILD_TYPE=release',
