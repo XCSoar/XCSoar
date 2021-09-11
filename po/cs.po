@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-09-04 11:35+0000\n"
+"PO-Revision-Date: 2021-09-11 10:01+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -710,7 +710,9 @@ msgstr "Předchozí místo přistání"
 
 #: src/Menu/ExpandMacros.cpp:115 src/Menu/ExpandMacros.cpp:137
 msgid "Finish Turnpoint"
-msgstr "Koncový bod trati"
+msgstr ""
+"Cílový bod\n"
+"trati"
 
 #: src/Menu/ExpandMacros.cpp:119 src/Menu/ExpandMacros.cpp:156
 msgid "Next Startpoint"
@@ -718,7 +720,9 @@ msgstr "Další bod startu"
 
 #: src/Menu/ExpandMacros.cpp:123 src/Menu/ExpandMacros.cpp:160
 msgid "Start Turnpoint"
-msgstr "Výchozí bod trati"
+msgstr ""
+"Startovní\n"
+"bod trati"
 
 #: src/Menu/ExpandMacros.cpp:141
 msgid "Arm start"
@@ -1759,7 +1763,7 @@ msgstr "Ignoruj"
 
 #: src/Dialogs/ListPicker.cpp:173 src/Dialogs/HelpDialog.cpp:38
 msgid "Help"
-msgstr "Pomoc"
+msgstr "Nápověda"
 
 #: src/Dialogs/ListPicker.cpp:178 src/Dialogs/Device/PortPicker.cpp:314
 #: src/Dialogs/Traffic/TrafficList.cpp:795
@@ -3758,15 +3762,15 @@ msgstr "Směr a vzdálenost"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:176
 msgid "Alt. diff. MC 0"
-msgstr "R výšek MC0"
+msgstr "ΔH při MC0"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:180
 msgid "Alt. diff. MC safety"
-msgstr "R výšek MC bezp"
+msgstr "ΔH při MC bezp"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:185
 msgid "Alt. diff. MC current"
-msgstr "R výšek MC akt"
+msgstr "ΔH při MC akt"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:203
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:121
@@ -3811,7 +3815,7 @@ msgstr "Úspěch"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:114
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:154
 msgid "Created 2-point task from Goto Task."
-msgstr "Vytvořena dvoubodová úloha z jednobodové (GoTo)."
+msgstr "Z jednobodové úlohy(GoTo) vytvořena dvoubodá."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:183
 msgid "Waypoint not in task."
@@ -5061,7 +5065,7 @@ msgstr "Trasa"
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:60
 #, no-c-format
 msgid "Use a recent average of the ground track as basis."
-msgstr "Použit současný průměrovaný kurz nad zemí jako základ."
+msgstr "Použij současný průměrovaný kurz pozemní stopy jako základ."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:61
 #: src/Dialogs/Task/TargetDialog.cpp:772 Data/Input/default.xci:441
@@ -5073,7 +5077,7 @@ msgstr "Cíl"
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:62
 #, no-c-format
 msgid "Use the current target waypoint as basis."
-msgstr "Použít současný cílový bod jako základ."
+msgstr "Použij současný cílový bod jako základ."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:112
 msgid "Cruise orientation"
@@ -6155,7 +6159,7 @@ msgid ""
 "path such that the distance between the start point and the turn point is "
 "maximized"
 msgstr ""
-"Ze záznamu letu je vybrán startovní bod, jeden otočný bod a koncový bod tak, "
+"Ze záznamu letu je vybrán startovní bod, jeden otočný bod a cílový bod tak, "
 "aby byla maximalizována vzdálenost mezi startem a otočným bodem"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
@@ -6885,7 +6889,7 @@ msgstr "Uprav bod"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:132
 msgid "Make Finish"
-msgstr "Na cíl"
+msgstr "Změň na cíl"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:138
 msgid "Reverse"
@@ -7750,8 +7754,7 @@ msgstr "Cíl AltD"
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
-msgstr ""
-"Výška příletu nad koncový bod trati relativně k bezpečné výšce příletu."
+msgstr "Výška příletu nad cílový bod trati relativně k bezpečné výšce příletu."
 
 #: src/InfoBoxes/Content/Factory.cpp:269
 #, no-c-format
@@ -8463,7 +8466,7 @@ msgstr "Kurz k poslední známé poloze týmového letadla."
 #: src/InfoBoxes/Content/Factory.cpp:603
 #, no-c-format
 msgid "Team bearing difference"
-msgstr "Rozdíl kurzů týmu"
+msgstr "Rozdíl kurzů v týmu"
 
 #: src/InfoBoxes/Content/Factory.cpp:604
 #, no-c-format
@@ -8553,7 +8556,7 @@ msgstr "AAT rozdíl časů"
 #: src/InfoBoxes/Content/Factory.cpp:644
 #, no-c-format
 msgid "AAT dT"
-msgstr "AAT Δčas"
+msgstr "AAT Δčasů"
 
 #: src/InfoBoxes/Content/Factory.cpp:645
 #, no-c-format
@@ -9049,7 +9052,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:879
 #, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr "Příští OB - rel. výška příletu při MC0"
+msgstr "Příští OB - rozdíl výšek při MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:880
 #, no-c-format
@@ -9351,7 +9354,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "Rozdíl výšek dokluzu při MC0"
+msgstr "Cíl - rozdíl výšek při MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1021
 #, no-c-format
