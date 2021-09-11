@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-09-11 10:01+0000\n"
+"PO-Revision-Date: 2021-09-11 10:19+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -685,12 +685,16 @@ msgstr "Nahrávám databázi letišť..."
 #: src/Menu/ExpandMacros.cpp:83 src/Menu/ExpandMacros.cpp:116
 #: src/Menu/ExpandMacros.cpp:138
 msgid "Next Turnpoint"
-msgstr "Další otočný bod"
+msgstr ""
+"Další\n"
+"otočný bod"
 
 #: src/Menu/ExpandMacros.cpp:87 src/Menu/ExpandMacros.cpp:124
 #: src/Menu/ExpandMacros.cpp:161
 msgid "Previous Turnpoint"
-msgstr "Předchozí otočný bod"
+msgstr ""
+"Předchozí\n"
+"otočný bod"
 
 #: src/Menu/ExpandMacros.cpp:94
 msgid "Furthest Landpoint"
@@ -1100,7 +1104,9 @@ msgstr "Start úlohy"
 
 #: src/Input/InputEventsTask.cpp:330
 msgid "Next turnpoint"
-msgstr "Následující otočný bod"
+msgstr ""
+"Následující\n"
+"otočný bod"
 
 #: src/Input/InputEventsTask.cpp:332
 msgid "Task finished"
@@ -3754,7 +3760,7 @@ msgstr "Nemá řešení"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:133
 msgid "Runway"
-msgstr "Dráha směr + délka"
+msgstr "VPD směr; délka"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:164
 msgid "Bearing and Distance"
