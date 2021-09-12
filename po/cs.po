@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-09-11 10:19+0000\n"
+"PO-Revision-Date: 2021-09-12 10:20+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -45,7 +45,7 @@ msgstr "FAI trojúhelník"
 #: src/Task/TypeStrings.cpp:33
 #, no-c-format
 msgid "FAI out and return"
-msgstr "FAI návratová"
+msgstr "FAI návrat"
 
 #: src/Task/TypeStrings.cpp:34
 #, no-c-format
@@ -3113,7 +3113,7 @@ msgstr "Letiště"
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:141
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:115
 msgid "Radio frequency"
-msgstr "Rádio frekvence"
+msgstr "Radiofrekvence"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:142 Data/Input/default.xci:563
 msgid "Plane"
@@ -7089,7 +7089,7 @@ msgstr "Cíl"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:71
 msgid "Out and return"
-msgstr "Návratová"
+msgstr "Návrat"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:75
 msgid "Two legs"
