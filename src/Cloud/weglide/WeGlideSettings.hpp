@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_CLOUD_WEGLIDE_WEGLIDESETTINGS_HPP
 #define XCSOAR_CLOUD_WEGLIDE_WEGLIDESETTINGS_HPP
 
-#include "time/BrokenDate.hpp"
+#include "WeGlideObjects.hpp"
 
 #include <cstdint>
 
@@ -55,10 +55,11 @@ struct WeGlideSettings {
   static constexpr char gliderlist_uri[] = "https://raw.githubusercontent.com/"
     "weglide/GliderList/master/gliderlist.csv";
 
-  uint32_t pilot_id;
-  BrokenDate pilot_birthdate;
+  WeGlide::User pilot;
 
   void SetDefaults() noexcept;
 };
+
+static_assert(std::is_trivial<WeGlideSettings>::value, "type is not trivial");
 
 #endif  // XCSOAR_CLOUD_WEGLIDE_WEGLIDESETTINGS_HPP
