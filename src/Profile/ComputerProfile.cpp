@@ -91,13 +91,13 @@ void
 Profile::Load(const ProfileMap &map, WeGlideSettings &settings)
 {
   map.Get(ProfileKeys::WeGlideEnabled, settings.enabled);
-  map.Get(ProfileKeys::WeGlidePilotID, settings.pilot_id);
+  map.Get(ProfileKeys::WeGlidePilotID, settings.pilot.id);
 
   const char *date = map.Get(ProfileKeys::WeGlidePilotBirthDate);
   if (date != nullptr) {
     unsigned day, month, year;
     if (sscanf(date, "%04u-%02u-%02u", &year, &month, &day) == 3)
-      settings.pilot_birthdate = {year, month, day};
+      settings.pilot.birthdate = {year, month, day};
   }
 }
 

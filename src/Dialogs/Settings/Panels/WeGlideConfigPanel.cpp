@@ -94,10 +94,10 @@ WeGlideConfigPanel::Prepare(ContainerWindow &parent,
 
   AddInteger(_("Pilot"),
              _("Take this from your WeGlide Profile. Or set to 0 if not used."),
-             _T("%d"), _T("%d"), 1, 99999, 1, weglide.pilot_id);
+             _T("%d"), _T("%d"), 1, 99999, 1, weglide.pilot.id);
 
   AddDate(_("Pilot date of birth"), nullptr,
-          weglide.pilot_birthdate);
+          weglide.pilot.birthdate);
 
   SetEnabled(weglide.enabled);
 }
@@ -114,11 +114,11 @@ WeGlideConfigPanel::Save(bool &_changed) noexcept
                        weglide.automatic_upload);
 
   changed |= SaveValue(WeGlidePilotID, ProfileKeys::WeGlidePilotID,
-                       weglide.pilot_id);
+                       weglide.pilot.id);
 
   changed |= SaveValue(WeGlidePilotBirthDate,
                        ProfileKeys::WeGlidePilotBirthDate,
-                       weglide.pilot_birthdate);
+                       weglide.pilot.birthdate);
 
   changed |= SaveValue(WeGlideEnabled, ProfileKeys::WeGlideEnabled,
                        weglide.enabled);
