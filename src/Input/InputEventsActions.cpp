@@ -87,6 +87,10 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/MultipleDevices.hpp"
 
+#include "Form/DataField/File.hpp"
+#include "Dialogs/FilePicker.hpp"
+#include "contest/weglide/UploadIGCFile.hpp"
+
 #include <cassert>
 #include <tchar.h>
 #include <algorithm>
@@ -737,4 +741,18 @@ void
 InputEvents::eventExchangeFrequencies(const TCHAR *misc)
 {
   XCSoarInterface::ExchangeRadioFrequencies(true);
+}
+
+void
+InputEvents::eventUploadIGCFile(const TCHAR *misc) {
+  FileDataField df;
+  df.ScanMultiplePatterns(_T("*.igc"));
+  df.SetFileType(FileType::IGC);
+  if (FilePicker(_T("IGC-FilePicker"), df)) {
+    auto path = df.GetValue();
+    if (!path.IsEmpty())
+      if (WeGlide::UploadIGCFile(path)) {
+        // success!
+      }
+  }
 }
