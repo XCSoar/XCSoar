@@ -144,7 +144,7 @@ public:
 	/**
 	 * Returns one element.  No bounds checking.
 	 */
-	reference operator[](size_type i) noexcept {
+	constexpr reference operator[](size_type i) noexcept {
 		assert(i < size());
 
 		return array[i];
@@ -153,7 +153,7 @@ public:
 	/**
 	 * Returns one constant element.  No bounds checking.
 	 */
-	const_reference operator[](size_type i) const noexcept {
+	constexpr const_reference operator[](size_type i) const noexcept {
 		assert(i < size());
 
 		return array[i];
@@ -175,13 +175,13 @@ public:
 		return std::next(array.begin(), the_size);
 	}
 
-	reference back() noexcept {
+	constexpr reference back() noexcept {
 		assert(the_size > 0);
 
 		return array[the_size - 1];
 	}
 
-	const_reference back() const noexcept {
+	constexpr const_reference back() const noexcept {
 		assert(the_size > 0);
 
 		return array[the_size - 1];
@@ -283,13 +283,13 @@ public:
 		append() = T(std::forward<Args>(args)...);
 	}
 
-	reference front() noexcept {
+	constexpr reference front() noexcept {
 		assert(the_size > 0);
 
 		return array.front();
 	}
 
-	const_reference front() const noexcept {
+	constexpr const_reference front() const noexcept {
 		assert(the_size > 0);
 
 		return array.front();
