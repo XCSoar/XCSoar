@@ -25,7 +25,7 @@ Copyright_License {
 #include "Waypoint/Factory.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "system/Args.hpp"
-#include "Operation/Operation.hpp"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 
   Waypoints way_points;
 
-  NullOperationEnvironment operation;
+  ConsoleOperationEnvironment operation;
   if (!ReadWaypointFile(path, way_points,
                         WaypointFactory(WaypointOrigin::NONE),
                         operation)) {

@@ -40,7 +40,7 @@ Copyright_License {
 #include "io/ConfiguredFile.hpp"
 #include "LocalPath.hpp"
 #include "Components.hpp"
-#include "Operation/Operation.hpp"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 
 #include <memory>
 #include <tchar.h>
@@ -61,7 +61,7 @@ dlgAirspaceDetails(const AbstractAirspace &the_airspace,
 static void
 LoadFiles(Airspaces &airspace_database)
 {
-  NullOperationEnvironment operation;
+  ConsoleOperationEnvironment operation;
 
   auto reader = OpenConfiguredTextFile(ProfileKeys::AirspaceFile,
                                        Charset::AUTO);

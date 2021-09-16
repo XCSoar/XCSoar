@@ -45,7 +45,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "io/ConfiguredFile.hpp"
 #include "io/LineReader.hpp"
-#include "Operation/Operation.hpp"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 #include "thread/Debug.hpp"
 
 void
@@ -113,7 +113,7 @@ static void
 LoadFiles(PlacesOfInterestSettings &poi_settings,
           TeamCodeSettings &team_code_settings)
 {
-  NullOperationEnvironment operation;
+  ConsoleOperationEnvironment operation;
 
   topography = new TopographyStore();
   LoadConfiguredTopography(*topography, operation);
