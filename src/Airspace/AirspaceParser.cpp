@@ -454,9 +454,21 @@ ParseArcBearings(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
     return false;
 
   temp_area.radius = Units::ToSysUnit(radius, Unit::NAUTICAL_MILES);
-  Angle start_bearing, end_bearing;
-  if (!ParseBearingDegrees(input, start_bearing) ||
-      !ParseBearingDegrees(input, end_bearing))
+
+  input.Strip();
+  if (!input.SkipMatch(','))
+    return false;
+
+  Angle start_bearing;
+  if (!ParseBearingDegrees(input, start_bearing))
+    return false;
+
+  input.Strip();
+  if (!input.SkipMatch(','))
+    return false;
+
+  Angle end_bearing;
+  if (!ParseBearingDegrees(input, end_bearing))
     return false;
 
   temp_area.AppendArc(start_bearing, end_bearing);

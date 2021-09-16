@@ -1,4 +1,6 @@
 Version 7.19 - not yet released
+* data files
+  - fix bug in OpenAir arc parser
 
 Version 7.18 - 2021/09/10
 * data files
