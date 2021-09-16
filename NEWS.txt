@@ -1,3 +1,5 @@
+Version 7.19 - not yet released
+
 Version 7.18 - 2021/09/10
 * data files
   - load terrain while XCSoar is running
