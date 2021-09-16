@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-09-07 23:55+0000\n"
+"PO-Revision-Date: 2021-09-17 11:38+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -2577,7 +2577,7 @@ msgstr "Ir a"
 #: src/Dialogs/MapItemListDialog.cpp:171
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:115
 msgid "Ack Day"
-msgstr "Día ACK"
+msgstr "Aceptar día"
 
 #: src/Dialogs/MapItemListDialog.cpp:255
 #: src/MapWindow/GlueMapWindowItems.cpp:116
@@ -2646,7 +2646,7 @@ msgstr "Radio"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:75
 msgid "Top"
-msgstr "Superior"
+msgstr "Techo"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:78
 msgid "Base"
@@ -2730,12 +2730,12 @@ msgstr "Define cómo se rellena el espacio aéreo con el color elegido."
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:104
 #: src/Monitor/AirspaceWarningMonitor.cpp:74
 msgid "ACK"
-msgstr "ACK"
+msgstr "Aceptar"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:105
 #: src/Monitor/AirspaceWarningMonitor.cpp:83
 msgid "ACK Day"
-msgstr "Día ACK"
+msgstr "Aceptar día"
 
 #. the warnings were emptied between the opening of the dialog and
 #. this refresh, so only need to display "No Warnings" for top
@@ -3394,7 +3394,7 @@ msgstr "Tiempo de deslastrado"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:128
 msgid "Max. Cruise Speed"
-msgstr "V. Máx. de Crucero"
+msgstr "V. Máx. de cucero"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:63
 msgid "List"
@@ -6162,7 +6162,7 @@ msgid ""
 "the Classic score."
 msgstr ""
 "Una combinación de reglas clásicas y FAI. El 30% de la puntuación FAI se "
-"agrega a la puntuación Classic."
+"agrega a la puntuación clasica."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:108
 #, no-c-format
