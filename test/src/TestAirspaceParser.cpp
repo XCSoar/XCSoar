@@ -85,9 +85,8 @@ TestOpenAir()
 
   ok1(airspaces.GetSize() == 24);
 
-  const auto range = airspaces.QueryAll();
-  for (auto it = range.begin(); it != range.end(); ++it) {
-    const AbstractAirspace &airspace = it->GetAirspace();
+  for (const auto &as_ : airspaces.QueryAll()) {
+    const AbstractAirspace &airspace = as_.GetAirspace();
     if (StringIsEqual(_T("Circle-Test"), airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::CIRCLE))
         continue;
@@ -156,10 +155,9 @@ TestOpenAir()
       ok1(airspace.GetTop().reference == AltitudeReference::STD);
       ok1(equals(airspace.GetTop().flight_level, 50));
     } else {
-      for (unsigned i = 0; i < ARRAY_SIZE(classes); ++i) {
-        if (StringIsEqual(classes[i].name, airspace.GetName()))
-          ok1(airspace.GetType() == classes[i].type);
-      }
+      for (const auto &c : classes)
+        if (StringIsEqual(c.name, airspace.GetName()))
+          ok1(airspace.GetType() == c.type);
     }
   }
 }
@@ -193,9 +191,8 @@ TestTNP()
 
   ok1(airspaces.GetSize() == 24);
 
-  const auto range = airspaces.QueryAll();
-  for (auto it = range.begin(); it != range.end(); ++it) {
-    const AbstractAirspace &airspace = it->GetAirspace();
+  for (const auto &as_ : airspaces.QueryAll()) {
+    const AbstractAirspace &airspace = as_.GetAirspace();
     if (StringIsEqual(_T("Circle-Test"), airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::CIRCLE))
         continue;
@@ -264,10 +261,9 @@ TestTNP()
       ok1(airspace.GetTop().reference == AltitudeReference::STD);
       ok1(equals(airspace.GetTop().flight_level, 50));
     } else {
-      for (unsigned i = 0; i < ARRAY_SIZE(classes); ++i) {
-        if (StringIsEqual(classes[i].name, airspace.GetName()))
-          ok1(airspace.GetType() == classes[i].type);
-      }
+      for (const auto &c : classes)
+        if (StringIsEqual(c.name, airspace.GetName()))
+          ok1(airspace.GetType() == c.type);
     }
   }
 }
