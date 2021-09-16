@@ -37,8 +37,12 @@ Copyright_License {
 #include "Airspace/AirspaceCircle.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
+#include "util/ConvertString.hpp"
+#include "util/Exception.hxx"
 #include "util/StaticString.hxx"
 #include "util/StringCompare.hxx"
+
+#include <stdexcept>
 
 #include <tchar.h>
 
@@ -269,14 +273,14 @@ struct TempAirspaceType
   }
 };
 
-static bool
-ShowParseWarning(int line, const TCHAR *str, OperationEnvironment &operation)
+static void
+ShowParseWarning(const TCHAR *msg, int line, const TCHAR *str,
+                 OperationEnvironment &operation) noexcept
 {
   StaticString<256> buffer;
-  buffer.Format(_T("%s: %d\r\n\"%s\""),
-                _("Parse Error at Line"), line, str);
+  buffer.Format(_T("%s [%d]\r\n\"%s\""),
+                msg, line, str);
   operation.SetErrorMessage(buffer.c_str());
-  return false;
 }
 
 static void
@@ -371,26 +375,26 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
 }
 
 /**
- * @return the non-negative angle or a negative value on error
+ * Throws on error.
  */
 static Angle
 ReadNonNegativeAngle(StringParser<TCHAR> &input, double max_degrees)
 {
   double degrees;
   if (!input.ReadDouble(degrees) || degrees < 0 || degrees > max_degrees)
-    return Angle::Native(-1);
+    throw std::runtime_error("Bad angle");
 
   if (input.SkipMatch(':')) {
     double minutes;
     if (!input.ReadDouble(minutes) || minutes < 0 || minutes > 60)
-      return Angle::Native(-1);
+      throw std::runtime_error("Bad angle");
 
     degrees += minutes / 60;
 
     if (input.SkipMatch(':')) {
       double seconds;
       if (!input.ReadDouble(seconds) || seconds < 0 || seconds > 60)
-        return Angle::Native(-1);
+        throw std::runtime_error("Bad angle");
 
       degrees += seconds / 3600;
     }
@@ -399,102 +403,96 @@ ReadNonNegativeAngle(StringParser<TCHAR> &input, double max_degrees)
   return Angle::Degrees(degrees);
 }
 
-static bool
-ReadCoords(StringParser<TCHAR> &input, GeoPoint &point)
+/**
+ * Throws on error.
+ */
+static GeoPoint
+ReadCoords(StringParser<TCHAR> &input)
 {
   // Format: 53:20:41 N 010:24:41 E
   // Alternative Format: 53:20.68 N 010:24.68 E
 
-  auto angle = ReadNonNegativeAngle(input, 91);
-  if (angle.IsNegative())
-    return false;
+  GeoPoint point;
+  point.latitude = ReadNonNegativeAngle(input, 91);
 
   input.Strip();
   if (input.SkipMatch('S') || input.SkipMatch('s'))
-    angle.Flip();
+    point.latitude.Flip();
   else if (!input.SkipMatch('N') && !input.SkipMatch('n'))
-    return false;
+    throw std::runtime_error("N or S expected");
 
-  point.latitude = angle;
-
-  angle = ReadNonNegativeAngle(input, 181);
-  if (angle.IsNegative())
-    return false;
+  point.longitude = ReadNonNegativeAngle(input, 181);
 
   input.Strip();
   if (input.SkipMatch('W') || input.SkipMatch('w'))
-    angle.Flip();
+    point.longitude.Flip();
   else if (!input.SkipMatch('E') && !input.SkipMatch('e'))
-    return false;
-
-  point.longitude = angle;
+    throw std::runtime_error("W or E expected");
 
   point.Normalize(); // ensure longitude is within -180:180
-  return true;
+  return point;
 }
 
-static bool
-ParseBearingDegrees(StringParser<TCHAR> &input, Angle &value_r)
+/**
+ * Throws on error.
+ */
+static Angle
+ParseBearingDegrees(StringParser<TCHAR> &input)
 {
   double value;
   if (!input.ReadDouble(value) || value < 0 || value > 361)
-    return false;
+      throw std::runtime_error("Bad angle");
 
-  value_r = Angle::Degrees(value).AsBearing();
-  return true;
+  return Angle::Degrees(value).AsBearing();
 }
 
-static bool
+/**
+ * Throws on error.
+ */
+static void
 ParseArcBearings(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
 {
   // Determine radius and start/end bearing
 
   double radius;
   if (!input.ReadDouble(radius) || radius <= 0 || radius > 1000)
-    return false;
+      throw std::runtime_error("Bad radius");
 
   temp_area.radius = Units::ToSysUnit(radius, Unit::NAUTICAL_MILES);
 
   input.Strip();
   if (!input.SkipMatch(','))
-    return false;
+    throw std::runtime_error("',' expected");
 
-  Angle start_bearing;
-  if (!ParseBearingDegrees(input, start_bearing))
-    return false;
+  Angle start_bearing = ParseBearingDegrees(input);
 
   input.Strip();
   if (!input.SkipMatch(','))
-    return false;
+    throw std::runtime_error("',' expected");
 
-  Angle end_bearing;
-  if (!ParseBearingDegrees(input, end_bearing))
-    return false;
+  Angle end_bearing = ParseBearingDegrees(input);
 
   temp_area.AppendArc(start_bearing, end_bearing);
-  return true;
 }
 
-static bool
+/**
+ * Throws on error.
+ */
+static void
 ParseArcPoints(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
 {
   // Read start coordinates
-  GeoPoint start;
-  if (!ReadCoords(input, start))
-    return false;
+  GeoPoint start = ReadCoords(input);
 
   // Skip comma character
   input.Strip();
   if (!input.SkipMatch(','))
-    return false;
+    throw std::runtime_error("',' expected");
 
   // Read end coordinates
-  GeoPoint end;
-  if (!ReadCoords(input, end))
-    return false;
+  GeoPoint end = ReadCoords(input);
 
   temp_area.AppendArc(start, end);
-  return true;
 }
 
 static AirspaceClass
@@ -507,7 +505,10 @@ ParseType(const TCHAR *buffer)
   return OTHER;
 }
 
-static bool
+/**
+ * Throws on error.
+ */
+static void
 ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
           TempAirspaceType &temp_area)
 {
@@ -523,19 +524,13 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
       if (!input.SkipWhitespace())
         break;
 
-    {
-      GeoPoint temp_point;
-      if (!ReadCoords(input, temp_point))
-        return false;
-
-      temp_area.points.push_back(temp_point);
+      temp_area.points.push_back(ReadCoords(input));
       break;
-    }
 
     case _T('C'):
     case _T('c'):
       if (!input.ReadDouble(d) || d < 0 || d > 1000)
-        return false;
+        throw std::runtime_error("Bad radius");
 
       temp_area.radius = Units::ToSysUnit(d, Unit::NAUTICAL_MILES);
       temp_area.AddCircle(airspace_database);
@@ -544,14 +539,13 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
 
     case _T('A'):
     case _T('a'):
-      return ParseArcBearings(input, temp_area);
+      ParseArcBearings(input, temp_area);
+      break;
 
     case _T('B'):
     case _T('b'):
-      return ParseArcPoints(input, temp_area);
-
-    default:
-      return true;
+      ParseArcPoints(input, temp_area);
+      break;
     }
     break;
 
@@ -559,8 +553,7 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
   case _T('v'):
     input.Strip();
     if (input.SkipMatchIgnoreCase(_T("X="), 2)) {
-      if (!ReadCoords(input, temp_area.center))
-        return false;
+      temp_area.center = ReadCoords(input);
     } else if (input.SkipMatchIgnoreCase(_T("D=-"), 3)) {
       temp_area.rotation = -1;
     } else if (input.SkipMatchIgnoreCase(_T("D=+"), 3)) {
@@ -605,18 +598,13 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
       if (input.SkipWhitespace())
         temp_area.radio = input.c_str();
       break;
-
-    default:
-      return true;
     }
 
     break;
-
   }
-  return true;
 }
 
-static bool
+static void
 ParseLine(Airspaces &airspace_database, TCHAR *line,
           TempAirspaceType &temp_area)
 {
@@ -625,7 +613,7 @@ ParseLine(Airspaces &airspace_database, TCHAR *line,
   if (comment != nullptr)
     *comment = _T('\0');
 
-  return ParseLine(airspace_database, StringParser<TCHAR>(line), temp_area);
+  ParseLine(airspace_database, StringParser<TCHAR>(line), temp_area);
 }
 
 static AirspaceClass
@@ -658,28 +646,33 @@ ParseTypeTNP(const TCHAR *buffer)
   return OTHER;
 }
 
-static bool
-ReadNonNegativeAngleTNP(StringParser<TCHAR> &input, Angle &value_r,
-                        unsigned max_degrees)
+/**
+ * Throws on error.
+ */
+static Angle
+ReadNonNegativeAngleTNP(StringParser<TCHAR> &input, unsigned max_degrees)
 {
   unsigned deg, min, sec;
   if (!input.ReadUnsigned(sec))
-    return false;
+    throw std::runtime_error("Bad angle");
 
   deg = sec / 10000;
   min = (sec - deg * 10000) / 100;
   sec = sec - min * 100 - deg * 10000;
 
   if (deg > max_degrees || min >= 60 || sec >= 60)
-    return false;
+    throw std::runtime_error("Bad angle");
 
-  value_r = Angle::DMS(deg, min, sec);
-  return true;
+  return Angle::DMS(deg, min, sec);
 }
 
-static bool
-ParseCoordsTNP(StringParser<TCHAR> &input, GeoPoint &point)
+/**
+ * Throws on error.
+ */
+static GeoPoint
+ParseCoordsTNP(StringParser<TCHAR> &input)
 {
+  GeoPoint point;
   // Format: N542500 E0105000
   bool negative = false;
 
@@ -688,11 +681,9 @@ ParseCoordsTNP(StringParser<TCHAR> &input, GeoPoint &point)
   else if (input.SkipMatch('N') || input.SkipMatch('n'))
     negative = false;
   else
-    return false;
+    throw std::runtime_error("N or S expected");
 
-  if (!ReadNonNegativeAngleTNP(input, point.latitude, 91))
-    return false;
-
+  point.latitude = ReadNonNegativeAngleTNP(input, 91);
   if (negative)
     point.latitude.Flip();
 
@@ -703,24 +694,24 @@ ParseCoordsTNP(StringParser<TCHAR> &input, GeoPoint &point)
   else if (input.SkipMatch('E') || input.SkipMatch('e'))
     negative = false;
   else
-    return false;
+    throw std::runtime_error("W or E expected");
 
-  if (!ReadNonNegativeAngleTNP(input, point.longitude, 181))
-    return false;
-
+  point.longitude = ReadNonNegativeAngleTNP(input, 181);
   if (negative)
     point.longitude.Flip();
 
   point.Normalize(); // ensure longitude is within -180:180
-
-  return true;
+  return point;
 }
 
-static bool
+/**
+ * Throws on error.
+ */
+static void
 ParseArcTNP(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
 {
   if (temp_area.points.empty())
-    return false;
+    throw std::runtime_error("Arc on empty airspace");
 
   // (ANTI-)CLOCKWISE RADIUS=34.95 CENTRE=N523333 E0131603 TO=N522052 E0122236
 
@@ -728,52 +719,53 @@ ParseArcTNP(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
 
   /* skip "RADIUS=... " */
   if (!input.SkipWord())
-    return false;
+    throw std::runtime_error("Arc syntax error");
 
   if (!input.SkipMatchIgnoreCase(_T("CENTRE="), 7))
-    return false;
+    throw std::runtime_error("CENTRE=... expected");
 
-  if (!ParseCoordsTNP(input, temp_area.center))
-    return false;
+  temp_area.center = ParseCoordsTNP(input);
 
   if (!input.SkipMatchIgnoreCase(_T(" TO="), 4))
-    return false;
+    throw std::runtime_error("TO=... expected");
 
-  GeoPoint to;
-  if (!ParseCoordsTNP(input, to))
-    return false;
+  GeoPoint to = ParseCoordsTNP(input);
 
   temp_area.AppendArc(from, to);
-
-  return true;
 }
 
-static bool
+/**
+ * Throws on error.
+ */
+static void
 ParseCircleTNP(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
 {
   // CIRCLE RADIUS=17.00 CENTRE=N533813 E0095943
 
   if (!input.SkipMatchIgnoreCase(_T("RADIUS="), 7))
-    return false;
+    throw std::runtime_error("RADIUS=... expected");
 
   double radius;
   if (!input.ReadDouble(radius) || radius <= 0 || radius > 1000)
-    return false;
+    throw std::runtime_error("Bad radius");
 
   temp_area.radius = Units::ToSysUnit(radius, Unit::NAUTICAL_MILES);
 
   if (!input.SkipMatchIgnoreCase(_T(" CENTRE="), 8))
-    return false;
+    throw std::runtime_error("CENTRE=... expected");
 
-  return ParseCoordsTNP(input, temp_area.center);
+  temp_area.center = ParseCoordsTNP(input);
 }
 
-static bool
+/**
+ * Throws on error.
+ */
+static void
 ParseLineTNP(Airspaces &airspace_database, StringParser<TCHAR> &input,
              TempAirspaceType &temp_area, bool &ignore)
 {
   if (input.Match('#'))
-    return true;
+    return;
 
   if (input.SkipMatchIgnoreCase(_T("INCLUDE="), 8)) {
     if (input.MatchIgnoreCase(_T("YES"), 3))
@@ -781,32 +773,25 @@ ParseLineTNP(Airspaces &airspace_database, StringParser<TCHAR> &input,
     else if (input.MatchIgnoreCase(_T("NO"), 2))
       ignore = true;
 
-    return true;
+    return;
   }
 
   if (ignore)
-    return true;
+    return;
 
   if (input.SkipMatchIgnoreCase(_T("POINT="), 6)) {
-    GeoPoint temp_point;
-    if (!ParseCoordsTNP(input, temp_point))
-      return false;
-
-    temp_area.points.push_back(temp_point);
+    temp_area.points.push_back(ParseCoordsTNP(input));
   } else if (input.SkipMatchIgnoreCase(_T("CIRCLE "), 7)) {
-    if (!ParseCircleTNP(input, temp_area))
-      return false;
+    ParseCircleTNP(input, temp_area);
 
     temp_area.AddCircle(airspace_database);
     temp_area.ResetTNP();
   } else if (input.SkipMatchIgnoreCase(_T("CLOCKWISE "), 10)) {
     temp_area.rotation = 1;
-    if (!ParseArcTNP(input, temp_area))
-      return false;
+    ParseArcTNP(input, temp_area);
   } else if (input.SkipMatchIgnoreCase(_T("ANTI-CLOCKWISE "), 15)) {
     temp_area.rotation = -1;
-    if (!ParseArcTNP(input, temp_area))
-      return false;
+    ParseArcTNP(input, temp_area);
   } else if (input.SkipMatchIgnoreCase(_T("TITLE="), 6)) {
     temp_area.AddPolygon(airspace_database);
     temp_area.ResetTNP();
@@ -833,8 +818,6 @@ ParseLineTNP(Airspaces &airspace_database, StringParser<TCHAR> &input,
     else if (input.MatchAllIgnoreCase(_T("EVERYDAY")))
       temp_area.days_of_operation.SetAll();
   }
-
-  return true;
 }
 
 static AirspaceFileType
@@ -883,16 +866,18 @@ ParseAirspaceFile(Airspaces &airspaces,
     }
 
     // Parse the line
-    if (filetype == AirspaceFileType::OPENAIR)
-      if (!ParseLine(airspaces, line, temp_area) &&
-          !ShowParseWarning(line_num, line, operation))
-        return false;
-
-    if (filetype == AirspaceFileType::TNP) {
-      StringParser<TCHAR> input(line);
-      if (!ParseLineTNP(airspaces, input, temp_area, ignore) &&
-          !ShowParseWarning(line_num, line, operation))
-        return false;
+    try {
+      if (filetype == AirspaceFileType::OPENAIR)
+        ParseLine(airspaces, line, temp_area);
+      if (filetype == AirspaceFileType::TNP) {
+        StringParser<TCHAR> input(line);
+        ParseLineTNP(airspaces, input, temp_area, ignore);
+      }
+    } catch (...) {
+      const auto msg = GetFullMessage(std::current_exception());
+      ShowParseWarning(UTF8ToWideConverter(msg.c_str()), line_num, line,
+                       operation);
+      return false;
     }
 
     // Update the ProgressDialog
