@@ -532,8 +532,7 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
 
     case _T('A'):
     case _T('a'):
-      ParseArcBearings(input, temp_area);
-      break;
+      return ParseArcBearings(input, temp_area);
 
     case _T('B'):
     case _T('b'):
