@@ -44,6 +44,7 @@ Copyright_License {
 #include "util/Compiler.h"
 #include "Audio/Sound.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <vector>
 
@@ -226,11 +227,8 @@ bool
 AirspaceWarningListWidget::HasWarning() const
 {
   ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
-  for (auto i = lease->begin(), end = lease->end(); i != end; ++i)
-    if (i->IsAckExpired())
-      return true;
-
-  return false;
+  return std::any_of(lease->begin(), lease->end(),
+                     [](const auto &i){ return i.IsAckExpired(); });
 }
 
 static void
