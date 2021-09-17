@@ -411,10 +411,7 @@ inline void
 AirspaceWarningListWidget::CopyList()
 {
   const ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
-
-  warning_list.clear();
-  for (auto i = lease->begin(), end = lease->end(); i != end; ++i)
-    warning_list.push_back(*i);
+  warning_list = {lease->begin(), lease->end()};
 }
 
 void
