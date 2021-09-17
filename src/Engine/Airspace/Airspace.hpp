@@ -60,7 +60,7 @@ public:
    * @return airspace letter inside envelope suitable for insertion in a search structure
    */
   Airspace(AbstractAirspace &airspace,
-           const FlatProjection &projection);
+           const FlatProjection &projection) noexcept;
 
   /**
    * Checks whether an aircraft is inside the airspace.
@@ -70,7 +70,7 @@ public:
    * @return true if aircraft is inside airspace
    */
   [[gnu::pure]]
-  bool IsInside(const AircraftState &loc) const;
+  bool IsInside(const AircraftState &loc) const noexcept;
 
   /**
    * Checks whether a point is inside the airspace lateral boundary.
@@ -80,7 +80,7 @@ public:
    * @return true if location is inside airspace
    */
   [[gnu::pure]]
-  bool IsInside(const GeoPoint &loc) const;
+  bool IsInside(const GeoPoint &loc) const noexcept;
 
   /**
    * Checks whether a line intersects with the airspace, by directing
@@ -94,7 +94,7 @@ public:
   [[gnu::pure]]
   AirspaceIntersectionVector Intersects(const GeoPoint &g1,
                                         const GeoPoint &end,
-                                        const FlatProjection &projection) const;
+                                        const FlatProjection &projection) const noexcept;
 
   /**
    * Destroys concrete airspace enclosed by this instance if present.
@@ -103,14 +103,14 @@ public:
    * concrete airspace so have to be careful here.
    *
    */
-  void Destroy();
+  void Destroy() noexcept;
 
   /**
    * Accessor for contained AbstractAirspace
    *
    * @return Airspace letter
    */
-  AbstractAirspace &GetAirspace() const {
+  AbstractAirspace &GetAirspace() const noexcept {
     return *airspace;
   };
 
@@ -119,37 +119,37 @@ public:
    *
    * @param alt Height above MSL of terrain (m) at center
    */
-  void SetGroundLevel(double alt) const;
+  void SetGroundLevel(double alt) const noexcept;
 
   /**
    * Is it necessary to call SetGroundLevel() for this AbstractAirspace?
    */
   [[gnu::pure]]
-  bool NeedGroundLevel() const;
+  bool NeedGroundLevel() const noexcept;
 
   /**
    * Set QNH pressure for FL-referenced airspace altitudes
    *
    * @param press Atmospheric pressure model and QNH
    */
-  void SetFlightLevel(const AtmosphericPressure &press) const;
+  void SetFlightLevel(const AtmosphericPressure &press) const noexcept;
 
   /**
    * Set activity based on day mask
    *
    * @param days Mask of activity
    */
-  void SetActivity(const AirspaceActivity mask) const;
+  void SetActivity(const AirspaceActivity mask) const noexcept;
 
   /**
    * Clear the convex clearance polygon
    */
-  void ClearClearance() const;
+  void ClearClearance() const noexcept;
 
   /**
    * Equality operator, matches if contained airspace is the same
    */
-  bool operator==(Airspace const &a) const {
+  bool operator==(Airspace const &a) const noexcept {
     return &GetAirspace() == &a.GetAirspace();
   }
 
