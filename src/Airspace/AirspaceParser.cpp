@@ -121,7 +121,7 @@ static constexpr AirspaceClassStringCouple airspace_tnp_type_strings[] = {
 
 struct TempAirspaceType
 {
-  TempAirspaceType() {
+  TempAirspaceType() noexcept {
     points.reserve(256);
     Reset();
   }
@@ -145,7 +145,7 @@ struct TempAirspaceType
   int rotation;
 
   void
-  Reset()
+  Reset() noexcept
   {
     days_of_operation.SetAll();
     radio = _T("");
@@ -159,7 +159,7 @@ struct TempAirspaceType
   }
 
   void
-  ResetTNP()
+  ResetTNP() noexcept
   {
     // Preserve type, radio and days_of_operation for next airspace blocks
     points.clear();
@@ -170,7 +170,7 @@ struct TempAirspaceType
   }
 
   void
-  AddPolygon(Airspaces &airspace_database)
+  AddPolygon(Airspaces &airspace_database) noexcept
   {
     if (points.size() < 3)
       return;
@@ -183,7 +183,7 @@ struct TempAirspaceType
   }
 
   void
-  AddCircle(Airspaces &airspace_database)
+  AddCircle(Airspaces &airspace_database) noexcept
   {
     AbstractAirspace *as = new AirspaceCircle(center, radius);
     as->SetProperties(std::move(name), type, base, top);
@@ -192,8 +192,8 @@ struct TempAirspaceType
     airspace_database.Add(as);
   }
 
-  static int
-  ArcStepWidth(double radius)
+  static constexpr int
+  ArcStepWidth(double radius) noexcept
   {
     if (radius > 50000)
       return 1;
@@ -206,7 +206,7 @@ struct TempAirspaceType
   }
 
   void
-  AppendArc(const GeoPoint start, const GeoPoint end)
+  AppendArc(const GeoPoint start, const GeoPoint end) noexcept
   {
 
     // Determine start bearing and radius
@@ -244,7 +244,7 @@ struct TempAirspaceType
   }
 
   void
-  AppendArc(Angle start, Angle end)
+  AppendArc(Angle start, Angle end) noexcept
   {
     // 5 or -5, depending on direction
     const auto _step = ArcStepWidth(radius);
@@ -495,8 +495,9 @@ ParseArcPoints(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
   temp_area.AppendArc(start, end);
 }
 
+[[gnu::pure]]
 static AirspaceClass
-ParseType(const TCHAR *buffer)
+ParseType(const TCHAR *buffer) noexcept
 {
   for (unsigned i = 0; i < ARRAY_SIZE(airspace_class_strings); i++)
     if (StringIsEqualIgnoreCase(buffer, airspace_class_strings[i].string))
@@ -604,6 +605,9 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
   }
 }
 
+/**
+ * Throws on error.
+ */
 static void
 ParseLine(Airspaces &airspace_database, TCHAR *line,
           TempAirspaceType &temp_area)
@@ -616,8 +620,9 @@ ParseLine(Airspaces &airspace_database, TCHAR *line,
   ParseLine(airspace_database, StringParser<TCHAR>(line), temp_area);
 }
 
+[[gnu::pure]]
 static AirspaceClass
-ParseClassTNP(const TCHAR *buffer)
+ParseClassTNP(const TCHAR *buffer) noexcept
 {
   for (unsigned i = 0; i < ARRAY_SIZE(airspace_tnp_class_chars); i++)
     if (buffer[0] == airspace_tnp_class_chars[i].character)
@@ -626,8 +631,9 @@ ParseClassTNP(const TCHAR *buffer)
   return OTHER;
 }
 
+[[gnu::pure]]
 static AirspaceClass
-ParseTypeTNP(const TCHAR *buffer)
+ParseTypeTNP(const TCHAR *buffer) noexcept
 {
   // Handle e.g. "TYPE=CLASS C" properly
   const TCHAR *type = StringAfterPrefixIgnoreCase(buffer, _T("CLASS "));
@@ -837,7 +843,8 @@ DetectFileType(const TCHAR *line)
 
 bool
 ParseAirspaceFile(Airspaces &airspaces,
-                  TLineReader &reader, OperationEnvironment &operation)
+                  TLineReader &reader,
+                  OperationEnvironment &operation) noexcept
 {
   bool ignore = false;
 

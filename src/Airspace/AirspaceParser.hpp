@@ -30,6 +30,7 @@ class OperationEnvironment;
 
 bool
 ParseAirspaceFile(Airspaces &airspaces,
-                  TLineReader &reader, OperationEnvironment &operation);
+                  TLineReader &reader,
+                  OperationEnvironment &operation) noexcept;
 
 #endif
