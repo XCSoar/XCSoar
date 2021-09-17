@@ -448,7 +448,7 @@ AirspaceWarningListWidget::UpdateList()
       CommonInterface::GetComputerSettings().airspace.warnings;
     if (warning_config.repetitive_sound) {
       FloatDuration tt_closest_airspace{1000};
-      for (auto i : warning_list) {
+      for (const auto &i : warning_list) {
         /* Find smallest time to nearest aispace (cannot always rely
            on fact that closest airspace should be in the beginning of
            the list) */
