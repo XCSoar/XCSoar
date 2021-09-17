@@ -27,7 +27,7 @@
 #include "AirspaceIntersectSort.hpp"
 #include "AirspaceIntersectionVector.hpp"
 
-AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const double _radius)
+AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const double _radius) noexcept
   :AbstractAirspace(Shape::CIRCLE), m_center(loc), m_radius(_radius)
 {
   is_convex = TriState::TRUE;
@@ -45,14 +45,14 @@ AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const double _radius)
 }
 
 bool
-AirspaceCircle::Inside(const GeoPoint &loc) const
+AirspaceCircle::Inside(const GeoPoint &loc) const noexcept
 {
   return loc.DistanceS(m_center) <= m_radius;
 }
 
 AirspaceIntersectionVector
 AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end,
-                           const FlatProjection &projection) const
+                           const FlatProjection &projection) const noexcept
 {
   const auto f_radius = projection.ProjectRangeFloat(m_center, m_radius);
   const auto f_center = projection.ProjectFloat(m_center);
@@ -89,7 +89,7 @@ AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end,
 
 GeoPoint
 AirspaceCircle::ClosestPoint(const GeoPoint &loc,
-                             const FlatProjection &) const
+                             const FlatProjection &) const noexcept
 {
   // Calculate distance from center point
   const auto d = loc.DistanceS(m_center);
