@@ -36,7 +36,6 @@ Copyright_License {
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
-#include "util/TrivialArray.hxx"
 #include "util/Macros.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -46,6 +45,8 @@ Copyright_License {
 #include "Audio/Sound.hpp"
 
 #include <cassert>
+#include <vector>
+
 #include <stdio.h>
 
 struct WarningItem
@@ -54,8 +55,6 @@ struct WarningItem
   AirspaceWarning::State state;
   AirspaceInterceptSolution solution;
   bool ack_expired, ack_day;
-
-  WarningItem() = default;
 
   WarningItem(const AirspaceWarning &warning)
     :airspace(&warning.GetAirspace()),
@@ -79,7 +78,7 @@ class AirspaceWarningListWidget final
   Button *ack_day_button;
   Button *enable_button;
 
-  TrivialArray<WarningItem, 64u> warning_list;
+  std::vector<WarningItem> warning_list;
 
   /**
    * Current list cursor airspace.
@@ -416,8 +415,7 @@ AirspaceWarningListWidget::CopyList()
   const ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
 
   warning_list.clear();
-  for (auto i = lease->begin(), end = lease->end();
-       i != end && !warning_list.full(); ++i)
+  for (auto i = lease->begin(), end = lease->end(); i != end; ++i)
     warning_list.push_back(*i);
 }
 
@@ -434,7 +432,7 @@ AirspaceWarningListWidget::UpdateList()
       auto it = std::find(warning_list.begin(), warning_list.end(),
                           *selected_airspace);
       if (it != warning_list.end()) {
-        i = it - warning_list.begin();
+        i = std::distance(warning_list.begin(), it);
         GetList().SetCursorIndex(i);
       }
     }
