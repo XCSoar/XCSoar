@@ -27,6 +27,6 @@
 
 struct Waypoint;
 
-typedef std::shared_ptr<const Waypoint> WaypointPtr;
+using WaypointPtr = std::shared_ptr<const Waypoint>;
 
 #endif
