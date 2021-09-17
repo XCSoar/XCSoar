@@ -57,7 +57,7 @@ class AirspaceWarningManager {
   AircraftStateFilter cruise_filter;
   AircraftStateFilter circling_filter;
 
-  typedef std::list<AirspaceWarning> AirspaceWarningList;
+  using AirspaceWarningList = std::list<AirspaceWarning>;
 
   AirspaceWarningList warnings;
 
@@ -67,7 +67,7 @@ class AirspaceWarningManager {
   unsigned serial;
 
 public:
-  typedef AirspaceWarningList::const_iterator const_iterator;
+  using const_iterator = AirspaceWarningList::const_iterator;
 
   /** 
    * Default constructor

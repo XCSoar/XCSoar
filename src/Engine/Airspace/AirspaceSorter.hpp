@@ -36,7 +36,7 @@ public:
                              const FlatProjection &projection) const;
 };
 
-typedef std::vector<AirspaceSelectInfo> AirspaceSelectInfoVector;
+using AirspaceSelectInfoVector = std::vector<AirspaceSelectInfo>;
 
 struct AirspaceFilterData {
   /**

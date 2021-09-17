@@ -34,7 +34,7 @@ class AirspaceIntersectionVector;
  * Utility class to sort airspaces in ascending order of vector parameter (0,1)
  */
 class AirspaceIntersectSort {
-  typedef std::pair<double, GeoPoint> Intersection;
+  using Intersection = std::pair<double, GeoPoint>;
 
   /**
    * Function object used to rank intercepts by vector parameter t(0,1)
