@@ -152,10 +152,9 @@ struct TempAirspaceType
     type = OTHER;
     base = top = AirspaceAltitude();
     points.clear();
-    center.longitude = Angle::Zero();
-    center.latitude = Angle::Zero();
+    center = GeoPoint::Invalid();
+    radius = -1;
     rotation = 1;
-    radius = 0;
   }
 
   void
@@ -163,10 +162,9 @@ struct TempAirspaceType
   {
     // Preserve type, radio and days_of_operation for next airspace blocks
     points.clear();
-    center.longitude = Angle::Zero();
-    center.latitude = Angle::Zero();
+    center = GeoPoint::Invalid();
+    radius = -1;
     rotation = 1;
-    radius = 0;
   }
 
   void
@@ -182,10 +180,23 @@ struct TempAirspaceType
     airspace_database.Add(as);
   }
 
+  GeoPoint RequireCenter() {
+    if (!center.IsValid())
+      throw std::runtime_error("No center");
+    return center;
+  }
+
+  double RequireRadius() {
+    if (radius < 0)
+      throw std::runtime_error("No radius");
+    return radius;
+  }
+
   void
-  AddCircle(Airspaces &airspace_database) noexcept
+  AddCircle(Airspaces &airspace_database)
   {
-    AbstractAirspace *as = new AirspaceCircle(center, radius);
+    AbstractAirspace *as = new AirspaceCircle(RequireCenter(),
+                                              RequireRadius());
     as->SetProperties(std::move(name), type, base, top);
     as->SetRadio(radio);
     as->SetDays(days_of_operation);
@@ -208,6 +219,7 @@ struct TempAirspaceType
   void
   AppendArc(const GeoPoint start, const GeoPoint end) noexcept
   {
+    const auto center = RequireCenter();
 
     // Determine start bearing and radius
     const GeoVector v = center.DistanceBearing(start);
@@ -246,6 +258,8 @@ struct TempAirspaceType
   void
   AppendArc(Angle start, Angle end) noexcept
   {
+    const auto center = RequireCenter();
+
     // 5 or -5, depending on direction
     const auto _step = ArcStepWidth(radius);
     const auto step = Angle::Degrees(rotation * _step);
