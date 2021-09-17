@@ -51,10 +51,8 @@ airspace_random_properties(AbstractAirspace& as)
 bool test_airspace_extra(Airspaces &airspaces) {
   // try adding a null polygon
 
-  AbstractAirspace* as;
   std::vector<GeoPoint> pts;
-  as = new AirspacePolygon(pts);
-  airspaces.Add(as);
+  airspaces.Add(std::make_shared<AirspacePolygon>(pts));
 
   // try clearing now (we haven't called optimise())
 
@@ -71,13 +69,13 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
   }
 
   for (unsigned i=0; i<n; i++) {
-    AbstractAirspace* as;
+    AirspacePtr as;
     if (rand()%4!=0) {
       GeoPoint c;
       c.longitude = Angle::Degrees(((rand()%1200-600)/1000.0))+center.longitude;
       c.latitude = Angle::Degrees(((rand()%1200-600)/1000.0))+center.latitude;
       double radius(10000.0*(0.2+(rand()%12)/12.0));
-      as = new AirspaceCircle(c,radius);
+      as = std::make_shared<AirspaceCircle>(c,radius);
     } else {
 
       // just for testing, create a random polygon from a convex hull around
@@ -94,7 +92,7 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
         p.latitude += Angle::Degrees(((rand()%200)/1000.0));
         pts.push_back(p);
       }
-      as = new AirspacePolygon(pts,true);
+      as = std::make_shared<AirspacePolygon>(pts,true);
     }
     airspace_random_properties(*as);
     airspaces.Add(as);
@@ -194,10 +192,10 @@ public:
     }
   }
 
-  virtual void Visit(const AbstractAirspace &as) override {
+  void Visit(ConstAirspacePtr as) noexcept override {
     if (do_report) {
-      *yout << as;
-      intersection(as);
+      *yout << *as;
+      intersection(*as);
     }
   }
 };
@@ -295,8 +293,8 @@ void scan_airspaces(const AircraftState state,
   }
 
   {
-    const auto *as = FindSoonestAirspace(airspaces, state, perf,
-                                         [](const auto &){ return true; });
+    const auto as = FindSoonestAirspace(airspaces, state, perf,
+                                        [](const auto &){ return true; });
     if (do_report) {
       std::ofstream fout("output/results/res-bb-sortedsoonest.txt");
       if (as) {

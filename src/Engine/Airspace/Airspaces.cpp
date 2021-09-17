@@ -65,7 +65,7 @@ Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
 {
   for (const auto &i : QueryIntersecting(loc, end))
     if (visitor.SetIntersections(i.Intersects(loc, end, task_projection)))
-      visitor.Visit(i.GetAirspace());
+      visitor.Visit(i.GetAirspacePtr());
 
   if (include_inside) {
     for (const auto &i : QueryInside(loc)) {
@@ -77,7 +77,7 @@ Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
         v.reserve(1);
         v.emplace_back(loc, end);
         visitor.SetIntersections(std::move(v));
-        visitor.Visit(i.GetAirspace());
+        visitor.Visit(i.GetAirspacePtr());
       }
     }
   }
@@ -97,13 +97,13 @@ Airspaces::Optimise() noexcept
     // to re-build airspace envelopes
 
     for (const auto &i : QueryAll())
-      tmp_as.push_back(&i.GetAirspace());
+      tmp_as.push_back(i.GetAirspacePtr());
 
     airspace_tree.clear();
   }
 
-  for (AbstractAirspace *i : tmp_as) {
-    Airspace as(*i, task_projection);
+  for (auto &i : tmp_as) {
+    Airspace as(std::move(i), task_projection);
     airspace_tree.insert(as);
   }
 
@@ -113,7 +113,7 @@ Airspaces::Optimise() noexcept
 }
 
 void
-Airspaces::Add(AbstractAirspace *airspace) noexcept
+Airspaces::Add(AirspacePtr airspace) noexcept
 {
   if (!airspace)
     // nothing to add
@@ -134,28 +134,14 @@ Airspaces::Add(AbstractAirspace *airspace) noexcept
     task_projection.Scan(airspace->GetReferenceLocation());
   }
 
-  tmp_as.push_back(airspace);
+  tmp_as.push_back(std::move(airspace));
 }
 
 void
 Airspaces::Clear() noexcept
 {
   // delete temporaries in case they were added without an optimise() call
-  while (!tmp_as.empty()) {
-    if (owns_children) {
-      AbstractAirspace *aa = tmp_as.front();
-      delete aa;
-    }
-    tmp_as.pop_front();
-  }
-
-  // delete items in the tree
-  if (owns_children) {
-    for (const auto &i : QueryAll()) {
-      Airspace a = i;
-      a.Destroy();
-    }
-  }
+  tmp_as.clear();
 
   // then delete the tree
   airspace_tree.clear();

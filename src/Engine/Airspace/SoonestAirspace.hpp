@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef SOONEST_AIRSPACE_HPP
 #define SOONEST_AIRSPACE_HPP
 
+#include "Ptr.hpp"
 #include "Predicate/AirspacePredicate.hpp"
 #include "time/FloatDuration.hxx"
 
@@ -33,7 +34,7 @@ struct AircraftState;
 class AirspaceAircraftPerformance;
 
 [[gnu::pure]]
-const AbstractAirspace *
+ConstAirspacePtr
 FindSoonestAirspace(const Airspaces &airspaces,
                     const AircraftState &state,
                     const AirspaceAircraftPerformance &perf,

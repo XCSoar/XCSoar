@@ -89,8 +89,8 @@ public:
    */
   void Render(const AbstractAirspace &as) const;
 
-  virtual void Visit(const AbstractAirspace &as) override {
-    Render(as);
+  void Visit(ConstAirspacePtr as) noexcept override {
+    Render(*as);
   }
 };
 

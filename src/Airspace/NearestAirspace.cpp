@@ -63,8 +63,8 @@ FindHorizontal(const GeoPoint &location,
   const auto &projection = airspace_database.GetProjection();
   return FindMinimum(airspace_database, location, 30000,
                      std::forward<Predicate>(predicate),
-                     [&location, &projection](const AbstractAirspace &airspace){
-                       return CalculateNearestAirspaceHorizontal(location, projection, airspace);
+                     [&location, &projection](ConstAirspacePtr &&airspace){
+                       return CalculateNearestAirspaceHorizontal(location, projection, *airspace);
                      },
                      CompareNearestAirspace());
 }

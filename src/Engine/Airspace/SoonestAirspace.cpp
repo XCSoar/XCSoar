@@ -30,13 +30,13 @@ Copyright_License {
 #include "Navigation/Aircraft.hpp"
 
 struct SoonestAirspace {
-  const AbstractAirspace *airspace = nullptr;
+  ConstAirspacePtr airspace;
   FloatDuration time{-1};
 
   SoonestAirspace() = default;
-  SoonestAirspace(const AbstractAirspace &_airspace,
+  SoonestAirspace(ConstAirspacePtr &&_airspace,
                   FloatDuration _time)
-    :airspace(&_airspace), time(_time) {}
+    :airspace(std::move(_airspace)), time(_time) {}
 
 
   bool IsDefined() const {
@@ -51,17 +51,17 @@ CalculateSoonestAirspace(const AircraftState &state,
                          const AirspaceAircraftPerformance &perf,
                          const FloatDuration max_time,
                          const FlatProjection &projection,
-                         const AbstractAirspace &airspace)
+                         ConstAirspacePtr &&airspace)
 {
-  const auto closest = airspace.ClosestPoint(state.location, projection);
+  const auto closest = airspace->ClosestPoint(state.location, projection);
   assert(closest.IsValid());
 
-  const auto solution = airspace.Intercept(state, perf, closest, closest);
+  const auto solution = airspace->Intercept(state, perf, closest, closest);
   if (!solution.IsValid() ||
       solution.elapsed_time > max_time)
     return SoonestAirspace();
 
-  return SoonestAirspace(airspace, solution.elapsed_time);
+  return SoonestAirspace(std::move(airspace), solution.elapsed_time);
 }
 
 struct CompareSoonestAirspace {
@@ -71,7 +71,7 @@ struct CompareSoonestAirspace {
   }
 };
 
-const AbstractAirspace *
+ConstAirspacePtr
 FindSoonestAirspace(const Airspaces &airspaces,
                     const AircraftState &state,
                     const AirspaceAircraftPerformance &perf,
@@ -80,11 +80,12 @@ FindSoonestAirspace(const Airspaces &airspaces,
 {
   const auto &projection = airspaces.GetProjection();
   const auto range = perf.GetMaxSpeed() * max_time;
-  return FindMinimum(airspaces, state.location, range.count(), predicate,
-                     [&state, &perf, max_time,
-                      &projection](const AbstractAirspace &airspace){
-                       return CalculateSoonestAirspace(state, perf, max_time,
-                                                       projection, airspace);
-                     },
-                     CompareSoonestAirspace()).airspace;
+  return std::move(FindMinimum(airspaces, state.location, range.count(), predicate,
+                               [&state, &perf, max_time,
+                                &projection](ConstAirspacePtr &&airspace){
+                                 return CalculateSoonestAirspace(state, perf, max_time,
+                                                                 projection,
+                                                                 std::move(airspace));
+                               },
+                               CompareSoonestAirspace()).airspace);
 }

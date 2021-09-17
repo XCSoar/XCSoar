@@ -86,21 +86,21 @@ AirspaceWarningManager::SetPredictionTimeFilter(FloatDuration time) noexcept
 }
 
 AirspaceWarning& 
-AirspaceWarningManager::GetWarning(const AbstractAirspace &airspace)
+AirspaceWarningManager::GetWarning(ConstAirspacePtr airspace) noexcept
 {
-  AirspaceWarning* warning = GetWarningPtr(airspace);
+  AirspaceWarning* warning = GetWarningPtr(*airspace);
   if (warning)
     return *warning;
 
   // not found, create new entry
   ++serial;
-  warnings.emplace_back(airspace);
+  warnings.emplace_back(std::move(airspace));
   return warnings.back();
 }
 
 
-AirspaceWarning* 
-AirspaceWarningManager::GetWarningPtr(const AbstractAirspace &airspace)
+AirspaceWarning *
+AirspaceWarningManager::GetWarningPtr(const AbstractAirspace &airspace) noexcept
 {
   for (auto &w : warnings)
     if (&(w.GetAirspace()) == &airspace)
@@ -109,8 +109,8 @@ AirspaceWarningManager::GetWarningPtr(const AbstractAirspace &airspace)
   return nullptr;
 }
 
-AirspaceWarning*
-AirspaceWarningManager::GetNewWarningPtr(const AbstractAirspace &airspace)
+AirspaceWarning *
+AirspaceWarningManager::GetNewWarningPtr(ConstAirspacePtr airspace) noexcept
 {
   ++serial;
   warnings.emplace_back(airspace);
@@ -210,7 +210,8 @@ public:
    *
    * @param airspace Airspace corresponding to current intersection
    */
-  void Intersection(const AbstractAirspace& airspace) {
+  void Intersection(ConstAirspacePtr &airspace_ptr) noexcept {
+    const auto &airspace = *airspace_ptr;
     if (!airspace.IsActive())
       return; // ignore inactive airspaces completely
 
@@ -235,14 +236,14 @@ public:
         return;
 
       if (warning == nullptr)
-        warning = warning_manager.GetNewWarningPtr(airspace);
+        warning = warning_manager.GetNewWarningPtr(std::move(airspace_ptr));
 
       warning->UpdateSolution(warning_state, solution);
       found = true;
     }
   }
 
-  void Visit(const AbstractAirspace &as) override {
+  void Visit(ConstAirspacePtr as) noexcept override {
     Intersection(as);
   }
 
@@ -304,8 +305,7 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
   visitor.SetMode(true);
 
   for (const auto &i : airspaces.QueryInside(state.location)) {
-    const AbstractAirspace &airspace = i.GetAirspace();
-    visitor.Visit(airspace);
+    visitor.Visit(i.GetAirspacePtr());
   }
 
   return visitor.Found();
@@ -395,23 +395,23 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
   bool found = false;
 
   for (const auto &i : airspaces.QueryInside(state.location)) {
-    const AbstractAirspace &airspace = i.GetAirspace();
+    const auto airspace = i.GetAirspacePtr();
 
     const AltitudeState &altitude = state;
     if (// ignore inactive airspaces
-        !airspace.IsActive() ||
-        !config.IsClassEnabled(airspace.GetType()) ||
-        !airspace.Inside(altitude))
+        !airspace->IsActive() ||
+        !config.IsClassEnabled(airspace->GetType()) ||
+        !airspace->Inside(altitude))
       continue;
 
-    AirspaceWarning *warning = GetWarningPtr(airspace);
+    AirspaceWarning *warning = GetWarningPtr(*airspace);
 
     if (warning == nullptr ||
         warning->IsStateAccepted(AirspaceWarning::WARNING_INSIDE)) {
-      GeoPoint c = airspace.ClosestPoint(state.location, GetProjection());
+      GeoPoint c = airspace->ClosestPoint(state.location, GetProjection());
       const AirspaceAircraftPerformance perf_glide(glide_polar);
       const AirspaceInterceptSolution solution =
-        airspace.Intercept(state, c, GetProjection(), perf_glide);
+        airspace->Intercept(state, c, GetProjection(), perf_glide);
 
       if (warning == nullptr)
         warning = GetNewWarningPtr(airspace);
@@ -425,43 +425,43 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
 }
 
 void
-AirspaceWarningManager::Acknowledge(const AbstractAirspace &airspace)
+AirspaceWarningManager::Acknowledge(ConstAirspacePtr airspace) noexcept
 {
-  auto *w = GetWarningPtr(airspace);
+  auto *w = GetWarningPtr(*airspace);
   if (w != nullptr)
     w->Acknowledge();
 }
 
-void 
-AirspaceWarningManager::AcknowledgeWarning(const AbstractAirspace& airspace,
-                                            const bool set)
+void
+AirspaceWarningManager::AcknowledgeWarning(ConstAirspacePtr airspace,
+                                           const bool set) noexcept
 {
-  GetWarning(airspace).AcknowledgeWarning(set);
+  GetWarning(std::move(airspace)).AcknowledgeWarning(set);
 }
 
-void 
-AirspaceWarningManager::AcknowledgeInside(const AbstractAirspace& airspace,
-                                           const bool set)
+void
+AirspaceWarningManager::AcknowledgeInside(ConstAirspacePtr airspace,
+                                          const bool set) noexcept
 {
-  GetWarning(airspace).AcknowledgeInside(set);
+  GetWarning(std::move(airspace)).AcknowledgeInside(set);
 }
 
-void 
-AirspaceWarningManager::AcknowledgeDay(const AbstractAirspace& airspace,
-                                        const bool set)
+void
+AirspaceWarningManager::AcknowledgeDay(ConstAirspacePtr airspace,
+                                       const bool set) noexcept
 {
-  GetWarning(airspace).AcknowledgeDay(set);
+  GetWarning(std::move(airspace)).AcknowledgeDay(set);
 }
 
 bool
-AirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const
+AirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const noexcept
 {
   const AirspaceWarning *warning = GetWarningPtr(airspace);
   return warning != nullptr && warning->GetAckDay();
 }
 
 bool
-AirspaceWarningManager::IsActive(const AbstractAirspace &airspace) const
+AirspaceWarningManager::IsActive(const AbstractAirspace &airspace) const noexcept
 {
   return airspace.IsActive() && config.IsClassEnabled(airspace.GetType()) &&
     !GetAckDay(airspace);

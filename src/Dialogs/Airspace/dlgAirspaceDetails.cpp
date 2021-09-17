@@ -37,7 +37,7 @@ Copyright_License {
 
 class AirspaceDetailsWidget final
   : public RowFormWidget {
-  const AbstractAirspace &airspace;
+  ConstAirspacePtr airspace;
   ProtectedAirspaceWarningManager *warnings;
 
 public:
@@ -46,10 +46,10 @@ public:
    */
   WndForm *dialog;
 
-  AirspaceDetailsWidget(const AbstractAirspace &_airspace,
+  AirspaceDetailsWidget(ConstAirspacePtr _airspace,
                         ProtectedAirspaceWarningManager *_warnings)
     :RowFormWidget(UIGlobals::GetDialogLook()),
-     airspace(_airspace), warnings(_warnings) {}
+     airspace(std::move(_airspace)), warnings(_warnings) {}
 
   void AckDayOrEnable() noexcept;
 
@@ -64,22 +64,22 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent,
   const NMEAInfo &basic = CommonInterface::Basic();
   TCHAR buffer[64];
 
-  AddMultiLine(airspace.GetName());
+  AddMultiLine(airspace->GetName());
 
-  if (!airspace.GetRadioText().empty())
-    AddReadOnly(_("Radio"), nullptr, airspace.GetRadioText().c_str());
+  if (!airspace->GetRadioText().empty())
+    AddReadOnly(_("Radio"), nullptr, airspace->GetRadioText().c_str());
 
-  AddReadOnly(_("Type"), nullptr, AirspaceFormatter::GetClass(airspace));
+  AddReadOnly(_("Type"), nullptr, AirspaceFormatter::GetClass(*airspace));
 
-  AirspaceFormatter::FormatAltitude(buffer, airspace.GetTop());
+  AirspaceFormatter::FormatAltitude(buffer, airspace->GetTop());
   AddReadOnly(_("Top"), nullptr, buffer);
 
-  AirspaceFormatter::FormatAltitude(buffer, airspace.GetBase());
+  AirspaceFormatter::FormatAltitude(buffer, airspace->GetBase());
   AddReadOnly(_("Base"), nullptr, buffer);
 
   if (warnings != nullptr) {
     const GeoPoint closest =
-      airspace.ClosestPoint(basic.location, warnings->GetProjection());
+      airspace->ClosestPoint(basic.location, warnings->GetProjection());
     const auto distance = closest.Distance(basic.location);
 
     FormatUserDistance(distance, buffer);
@@ -92,14 +92,14 @@ AirspaceDetailsWidget::AckDayOrEnable() noexcept
 {
   assert(warnings != nullptr);
 
-  const bool acked = warnings->GetAckDay(airspace);
+  const bool acked = warnings->GetAckDay(*airspace);
   warnings->AcknowledgeDay(airspace, !acked);
 
   dialog->SetModalResult(mrOK);
 }
 
 void
-dlgAirspaceDetails(const AbstractAirspace &airspace,
+dlgAirspaceDetails(ConstAirspacePtr airspace,
                    ProtectedAirspaceWarningManager *warnings)
 {
   AirspaceDetailsWidget *widget =
@@ -111,7 +111,7 @@ dlgAirspaceDetails(const AbstractAirspace &airspace,
 
   if (warnings != nullptr) {
     widget->dialog = &dialog;
-    dialog.AddButton(warnings->GetAckDay(airspace)
+    dialog.AddButton(warnings->GetAckDay(*airspace)
                      ? _("Enable") : _("Ack Day"),
                      [widget](){ widget->AckDayOrEnable(); });
   }

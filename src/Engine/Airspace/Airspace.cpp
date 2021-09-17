@@ -24,16 +24,10 @@
 #include "AbstractAirspace.hpp"
 #include "AirspaceIntersectionVector.hpp"
 
-void
-Airspace::Destroy() noexcept
-{
-  delete airspace;
-}
-
-Airspace::Airspace(AbstractAirspace &airspace,
+Airspace::Airspace(AirspacePtr _airspace,
                    const FlatProjection &tp) noexcept
-  :FlatBoundingBox(airspace.GetBoundingBox(tp)),
-   airspace(&airspace)
+  :FlatBoundingBox(_airspace->GetBoundingBox(tp)),
+   airspace(std::move(_airspace))
 {
 }
 

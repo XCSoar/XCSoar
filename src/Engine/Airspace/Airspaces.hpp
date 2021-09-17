@@ -26,6 +26,7 @@
 #include "Predicate/AirspacePredicate.hpp"
 #include "AirspacesInterface.hpp"
 #include "AirspaceActivity.hpp"
+#include "Ptr.hpp"
 #include "util/Serial.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Atmosphere/Pressure.hpp"
@@ -48,7 +49,7 @@ class Airspaces : public AirspacesInterface {
   AirspaceTree airspace_tree;
   TaskProjection task_projection;
 
-  std::deque<AbstractAirspace *> tmp_as;
+  std::deque<AirspacePtr> tmp_as;
 
   /**
    * This attribute keeps track of changes to this project.  It is
@@ -91,7 +92,7 @@ public:
    *
    * @param asp New airspace to be added.
    */
-  void Add(AbstractAirspace *asp) noexcept;
+  void Add(AirspacePtr airspace) noexcept;
 
   /**
    * Re-organise the internal airspace tree after inserting/deleting.

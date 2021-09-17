@@ -24,6 +24,7 @@
 #define AIRSPACE_WARNING_HPP
 
 #include "AirspaceInterceptSolution.hpp"
+#include "Ptr.hpp"
 
 #include <chrono>
 #include <cstdint>
@@ -54,7 +55,7 @@ public:
   };
 
 private:
-  const AbstractAirspace &airspace;
+  const ConstAirspacePtr airspace;
   State state = WARNING_CLEAR;
   State state_last = WARNING_CLEAR;
   AirspaceInterceptSolution solution = AirspaceInterceptSolution::Invalid();
@@ -74,7 +75,9 @@ public:
    *
    * @param the_airspace Airspace that this object will manage warnings for
    */
-  explicit AirspaceWarning(const AbstractAirspace &the_airspace);
+  template<typename T>
+  explicit AirspaceWarning(T &&_airspace) noexcept
+    :airspace(std::forward<T>(_airspace)) {}
 
   /**
    * Save warning state prior to performing update
@@ -117,6 +120,10 @@ public:
    * @return Airspace
    */
   const AbstractAirspace &GetAirspace() const {
+    return *airspace;
+  }
+
+  ConstAirspacePtr GetAirspacePtr() const noexcept {
     return airspace;
   }
 

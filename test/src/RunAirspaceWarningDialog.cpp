@@ -53,7 +53,7 @@ InterfaceBlackboard CommonInterface::Private::blackboard;
 ProtectedAirspaceWarningManager *airspace_warnings;
 
 void
-dlgAirspaceDetails(const AbstractAirspace &the_airspace,
+dlgAirspaceDetails(ConstAirspacePtr the_airspace,
                    ProtectedAirspaceWarningManager *airspace_warnings)
 {
 }
@@ -90,7 +90,7 @@ Main()
 
   AirspaceInterceptSolution ais;
   for (unsigned i = 0; i < 5 && it != range.end(); ++i, ++it)
-    airspace_warning.GetWarning(it->GetAirspace())
+    airspace_warning.GetWarning(it->GetAirspacePtr())
       .UpdateSolution((AirspaceWarning::State)i, ais);
 
   dlgAirspaceWarningsShowModal(*airspace_warnings);

@@ -22,6 +22,7 @@
 #ifndef AIRSPACE_HPP
 #define AIRSPACE_HPP
 
+#include "Ptr.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
 
 #ifdef DO_PRINT
@@ -47,7 +48,7 @@ class FlatProjection;
  */
 class Airspace final : public FlatBoundingBox
 {
-  AbstractAirspace *airspace;
+  AirspacePtr airspace;
 
 public:
 
@@ -59,7 +60,7 @@ public:
    *
    * @return airspace letter inside envelope suitable for insertion in a search structure
    */
-  Airspace(AbstractAirspace &airspace,
+  Airspace(AirspacePtr _airspace,
            const FlatProjection &projection) noexcept;
 
   /**
@@ -97,21 +98,17 @@ public:
                                         const FlatProjection &projection) const noexcept;
 
   /**
-   * Destroys concrete airspace enclosed by this instance if present.
-   * Note that this should not be called by clients but only by the
-   * master store.  Many copies of this airspace may point to the same
-   * concrete airspace so have to be careful here.
-   *
-   */
-  void Destroy() noexcept;
-
-  /**
    * Accessor for contained AbstractAirspace
    *
    * @return Airspace letter
    */
   AbstractAirspace &GetAirspace() const noexcept {
     return *airspace;
+  };
+
+  // TODO change to ConstAirspacePtr
+  AirspacePtr GetAirspacePtr() const noexcept {
+    return airspace;
   };
 
   /**

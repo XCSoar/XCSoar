@@ -31,6 +31,7 @@ Copyright_License {
 #include "NMEA/ThermalLocator.hpp"
 #include "Weather/Features.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
+#include "Engine/Airspace/Ptr.hpp"
 #include "Engine/Route/ReachResult.hpp"
 #include "Tracking/SkyLines/Features.hpp"
 #include "util/StaticString.hxx"
@@ -45,7 +46,6 @@ Copyright_License {
 
 enum class TaskPointType : uint8_t;
 
-class AbstractAirspace;
 class ObservationZonePoint;
 
 struct MapItem
@@ -169,10 +169,11 @@ struct TaskOZMapItem: public MapItem
 
 struct AirspaceMapItem: public MapItem
 {
-  const AbstractAirspace *airspace;
+  ConstAirspacePtr airspace;
 
-  AirspaceMapItem(const AbstractAirspace &_airspace)
-    :MapItem(AIRSPACE), airspace(&_airspace) {}
+  template<typename T>
+  explicit AirspaceMapItem(T &&_airspace) noexcept
+    :MapItem(AIRSPACE), airspace(std::forward<T>(_airspace)) {}
 };
 
 struct WaypointMapItem: public MapItem

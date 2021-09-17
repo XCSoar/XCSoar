@@ -209,7 +209,7 @@ AirspaceListWidget::OnAirspaceListEnter(unsigned i)
 
   assert(i < items.size());
 
-  dlgAirspaceDetails(items[i].GetAirspace(), airspace_warnings);
+  dlgAirspaceDetails(items[i].GetAirspacePtr(), airspace_warnings);
 }
 
 void

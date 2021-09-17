@@ -173,11 +173,11 @@ struct TempAirspaceType
     if (points.size() < 3)
       return;
 
-    AbstractAirspace *as = new AirspacePolygon(points);
+    auto as = std::make_shared<AirspacePolygon>(points);
     as->SetProperties(std::move(name), type, base, top);
     as->SetRadio(radio);
     as->SetDays(days_of_operation);
-    airspace_database.Add(as);
+    airspace_database.Add(std::move(as));
   }
 
   GeoPoint RequireCenter() {
@@ -195,12 +195,12 @@ struct TempAirspaceType
   void
   AddCircle(Airspaces &airspace_database)
   {
-    AbstractAirspace *as = new AirspaceCircle(RequireCenter(),
-                                              RequireRadius());
+    auto as = std::make_shared<AirspaceCircle>(RequireCenter(),
+                                               RequireRadius());
     as->SetProperties(std::move(name), type, base, top);
     as->SetRadio(radio);
     as->SetDays(days_of_operation);
-    airspace_database.Add(as);
+    airspace_database.Add(std::move(as));
   }
 
   static constexpr int

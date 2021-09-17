@@ -52,19 +52,19 @@ Copyright_License {
 
 struct WarningItem
 {
-  const AbstractAirspace *airspace;
+  ConstAirspacePtr airspace;
   AirspaceWarning::State state;
   AirspaceInterceptSolution solution;
   bool ack_expired, ack_day;
 
   WarningItem(const AirspaceWarning &warning)
-    :airspace(&warning.GetAirspace()),
+    :airspace(warning.GetAirspacePtr()),
      state(warning.GetWarningState()),
      solution(warning.GetSolution()),
      ack_expired(warning.IsAckExpired()), ack_day(warning.GetAckDay()) {}
 
   bool operator==(const AbstractAirspace &other) const {
-    return &other == airspace;
+    return &other == airspace.get();
   }
 };
 
@@ -84,7 +84,7 @@ class AirspaceWarningListWidget final
   /**
    * Current list cursor airspace.
    */
-  const AbstractAirspace *selected_airspace;
+  ConstAirspacePtr selected_airspace;
 
   TwoTextRowsRenderer row_renderer;
 
@@ -96,7 +96,6 @@ class AirspaceWarningListWidget final
 public:
   AirspaceWarningListWidget(ProtectedAirspaceWarningManager &aw)
     :airspace_warnings(aw),
-     selected_airspace(nullptr),
      sound_interval_counter(1)
   {}
 
@@ -152,13 +151,13 @@ static bool auto_close = true;
 const AbstractAirspace *
 AirspaceWarningListWidget::GetSelectedAirspace() const
 {
-  return selected_airspace;
+  return selected_airspace.get();
 }
 
 void
 AirspaceWarningListWidget::UpdateButtons()
 {
-  const AbstractAirspace *airspace = GetSelectedAirspace();
+  auto &airspace = selected_airspace;
   if (airspace == NULL) {
     ack_button->SetVisible(false);
     ack_day_button->SetVisible(false);
@@ -170,7 +169,7 @@ AirspaceWarningListWidget::UpdateButtons()
 
   {
     ProtectedAirspaceWarningManager::ExclusiveLease lease(airspace_warnings);
-    const AirspaceWarning &warning = lease->GetWarning(*airspace);
+    const AirspaceWarning &warning = lease->GetWarning(airspace);
     ack_expired = warning.IsAckExpired();
     ack_day = warning.GetAckDay();
   }
@@ -220,7 +219,7 @@ void
 AirspaceWarningListWidget::OnActivateItem(gcc_unused unsigned i) noexcept
 {
   if (selected_airspace != nullptr)
-    dlgAirspaceDetails(*selected_airspace, &airspace_warnings);
+    dlgAirspaceDetails(selected_airspace, &airspace_warnings);
 }
 
 bool
@@ -249,9 +248,9 @@ AutoHide()
 void
 AirspaceWarningListWidget::Ack()
 {
-  const AbstractAirspace *airspace = GetSelectedAirspace();
+  const auto &airspace = selected_airspace;
   if (airspace != NULL) {
-    airspace_warnings.Acknowledge(*airspace);
+    airspace_warnings.Acknowledge(airspace);
     UpdateList();
     AutoHide();
   }
@@ -260,9 +259,9 @@ AirspaceWarningListWidget::Ack()
 void
 AirspaceWarningListWidget::AckDay()
 {
-  const AbstractAirspace *airspace = GetSelectedAirspace();
+  const auto &airspace = selected_airspace;
   if (airspace != NULL) {
-    airspace_warnings.AcknowledgeDay(*airspace, true);
+    airspace_warnings.AcknowledgeDay(airspace, true);
     UpdateList();
     AutoHide();
   }
@@ -271,7 +270,7 @@ AirspaceWarningListWidget::AckDay()
 void
 AirspaceWarningListWidget::Enable()
 {
-  const AbstractAirspace *airspace = GetSelectedAirspace();
+  const auto &airspace = selected_airspace;
   if (airspace == NULL)
     return;
 

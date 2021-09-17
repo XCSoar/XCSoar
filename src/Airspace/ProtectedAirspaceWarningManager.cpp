@@ -53,39 +53,39 @@ ProtectedAirspaceWarningManager::IsEmpty() const
 }
 
 bool
-ProtectedAirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const
+ProtectedAirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const noexcept
 {
   Lease lease(*this);
   return lease->GetAckDay(airspace);
 }
 
 void
-ProtectedAirspaceWarningManager::AcknowledgeDay(const AbstractAirspace &airspace,
-                                                const bool set)
+ProtectedAirspaceWarningManager::AcknowledgeDay(ConstAirspacePtr airspace,
+                                                const bool set) noexcept
 {
   ExclusiveLease lease(*this);
-  lease->AcknowledgeDay(airspace, set);
+  lease->AcknowledgeDay(std::move(airspace), set);
 }
 
 void
-ProtectedAirspaceWarningManager::AcknowledgeWarning(const AbstractAirspace &airspace,
-                                                    const bool set)
+ProtectedAirspaceWarningManager::AcknowledgeWarning(ConstAirspacePtr airspace,
+                                                    const bool set) noexcept
 {
   ExclusiveLease lease(*this);
-  lease->AcknowledgeWarning(airspace, set);
+  lease->AcknowledgeWarning(std::move(airspace), set);
 }
 
 void
-ProtectedAirspaceWarningManager::AcknowledgeInside(const AbstractAirspace &airspace,
-                                                   const bool set)
+ProtectedAirspaceWarningManager::AcknowledgeInside(ConstAirspacePtr airspace,
+                                                   const bool set) noexcept
 {
   ExclusiveLease lease(*this);
-  lease->AcknowledgeInside(airspace, set);
+  lease->AcknowledgeInside(std::move(airspace), set);
 }
 
 void
-ProtectedAirspaceWarningManager::Acknowledge(const AbstractAirspace &airspace)
+ProtectedAirspaceWarningManager::Acknowledge(ConstAirspacePtr airspace) noexcept
 {
   ExclusiveLease lease(*this);
-  lease->Acknowledge(airspace);
+  lease->Acknowledge(std::move(airspace));
 }

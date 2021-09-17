@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2021 The XCSoar Project
@@ -19,35 +18,13 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
-#ifndef AIRSPACE_MINIMUM_HPP
-#define AIRSPACE_MINIMUM_HPP
+#pragma once
 
-#include "Airspaces.hpp"
+#include <memory>
 
-template<typename Predicate, typename Func,
-         typename Result=decltype(((Func *)nullptr)->operator()(ConstAirspacePtr{})),
-         class Cmp=std::less<Result>>
-[[gnu::pure]]
-static inline Result
-FindMinimum(const Airspaces &airspaces, const GeoPoint &location, double range,
-            Predicate &&predicate,
-            Func &&func,
-            Cmp &&cmp=Cmp())
-{
-  Result minimum;
-  for (const auto &i : airspaces.QueryWithinRange(location, range)) {
-    auto aa = i.GetAirspacePtr();
-    if (!predicate(*aa))
-      continue;
+class AbstractAirspace;
 
-    Result result = func(std::move(aa));
-    if (cmp(result, minimum))
-      minimum = result;
-  }
-
-  return minimum;
-}
-
-#endif
+using AirspacePtr = std::shared_ptr<AbstractAirspace>;
+using ConstAirspacePtr = std::shared_ptr<const AbstractAirspace>;

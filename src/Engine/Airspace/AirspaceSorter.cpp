@@ -109,7 +109,7 @@ FilterAirspaces(const Airspaces &airspaces, const GeoPoint &location,
     : airspaces.QueryWithinRange(location, filter.distance);
   for (const auto &i : range)
     if (predicate(i.GetAirspace()))
-      result.emplace_back(i.GetAirspace());
+      result.emplace_back(i.GetAirspacePtr());
 
   if (filter.direction.IsNegative() && filter.distance < 0)
     SortByName(result);

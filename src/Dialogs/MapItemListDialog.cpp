@@ -239,7 +239,7 @@ MapItemListWidget::OnAckClicked()
 {
   const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
     list[GetCursorIndex()];
-  GetAirspaceWarnings()->AcknowledgeDay(*as_item.airspace);
+  GetAirspaceWarnings()->AcknowledgeDay(as_item.airspace);
   UpdateButtons();
 }
 
@@ -279,7 +279,7 @@ ShowMapItemDialog(const MapItem &item,
     break;
 
   case MapItem::AIRSPACE:
-    dlgAirspaceDetails(*((const AirspaceMapItem &)item).airspace,
+    dlgAirspaceDetails(((const AirspaceMapItem &)item).airspace,
                        airspace_warnings);
     break;
   case MapItem::WAYPOINT:

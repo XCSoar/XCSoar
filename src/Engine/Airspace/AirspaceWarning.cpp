@@ -26,11 +26,6 @@ Copyright_License {
 
 #include <algorithm>
 
-AirspaceWarning::AirspaceWarning(const AbstractAirspace &_airspace)
-  :airspace(_airspace)
-{
-}
-
 void AirspaceWarning::SaveState()
 {
   state_last = state;

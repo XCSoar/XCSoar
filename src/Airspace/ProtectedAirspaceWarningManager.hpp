@@ -23,11 +23,11 @@
 #ifndef XCSOAR_PROTECTED_AIRSPACE_WARNING_MANAGER_HPP
 #define XCSOAR_PROTECTED_AIRSPACE_WARNING_MANAGER_HPP
 
+#include "Engine/Airspace/Ptr.hpp"
 #include "thread/Guard.hpp"
 #include "util/Compiler.h"
 
 class AirspaceWarningManager;
-class AbstractAirspace;
 class FlatProjection;
 
 class ProtectedAirspaceWarningManager : public Guard<AirspaceWarningManager> {
@@ -42,14 +42,12 @@ public:
   void AcknowledgeAll();
 
   gcc_pure
-  bool GetAckDay(const AbstractAirspace& airspace) const;
+  bool GetAckDay(const AbstractAirspace &airspace) const noexcept;
 
-  void AcknowledgeDay(const AbstractAirspace &airspace, const bool set=true);
-  void AcknowledgeWarning(const AbstractAirspace &airspace,
-                          const bool set=true);
-  void AcknowledgeInside(const AbstractAirspace &airspace,
-                         const bool set=true);
-  void Acknowledge(const AbstractAirspace &airspace);
+  void AcknowledgeDay(ConstAirspacePtr airspace, bool set=true) noexcept;
+  void AcknowledgeWarning(ConstAirspacePtr airspace, bool set=true) noexcept;
+  void AcknowledgeInside(ConstAirspacePtr airspace, bool set=true) noexcept;
+  void Acknowledge(ConstAirspacePtr airspace) noexcept;
 
   gcc_pure
   bool IsEmpty() const;

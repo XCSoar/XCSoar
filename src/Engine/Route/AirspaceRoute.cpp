@@ -54,8 +54,10 @@ public:
     rpolar(_rpolar),
     nearest((const AbstractAirspace *)nullptr, _e.first) {}
 
-  void Visit(const AbstractAirspace &as) override {
+  void Visit(ConstAirspacePtr _as) noexcept override {
     assert(!intersections.empty());
+
+    const auto &as = *_as;
 
     GeoPoint point = intersections[0].first;
 

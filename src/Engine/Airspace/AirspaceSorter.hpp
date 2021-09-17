@@ -1,6 +1,7 @@
 #ifndef AIRSPACE_SORTER_HPP
 #define AIRSPACE_SORTER_HPP
 
+#include "Ptr.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Airspace/AirspaceClass.hpp"
 
@@ -16,17 +17,22 @@ class FlatProjection;
 class AirspaceSelectInfo
 {
   /** Pointer to actual airspace (unprotected!) */
-  const AbstractAirspace *airspace;
+  ConstAirspacePtr airspace;
 
   /** From observer to waypoint */
   mutable GeoVector vec;
 
 public:
-  AirspaceSelectInfo(const AbstractAirspace &_airspace)
-    :airspace(&_airspace), vec(GeoVector::Invalid()) {}
+  template<typename T>
+  explicit AirspaceSelectInfo(T &&_airspace) noexcept
+    :airspace(std::forward<T>(_airspace)), vec(GeoVector::Invalid()) {}
 
   const AbstractAirspace &GetAirspace() const {
     return *airspace;
+  }
+
+  const auto &GetAirspacePtr() const noexcept {
+    return airspace;
   }
 
   void ResetVector();
