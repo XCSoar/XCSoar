@@ -27,7 +27,7 @@ public:
   explicit AirspaceSelectInfo(T &&_airspace) noexcept
     :airspace(std::forward<T>(_airspace)), vec(GeoVector::Invalid()) {}
 
-  const AbstractAirspace &GetAirspace() const {
+  const AbstractAirspace &GetAirspace() const noexcept {
     return *airspace;
   }
 
@@ -35,11 +35,13 @@ public:
     return airspace;
   }
 
-  void ResetVector();
+  void ResetVector() noexcept {
+    vec.SetInvalid();
+  }
 
   [[gnu::pure]]
   const GeoVector &GetVector(const GeoPoint &location,
-                             const FlatProjection &projection) const;
+                             const FlatProjection &projection) const noexcept;
 };
 
 using AirspaceSelectInfoVector = std::vector<AirspaceSelectInfo>;
@@ -72,7 +74,7 @@ struct AirspaceFilterData {
   [[gnu::pure]]
   bool Match(const GeoPoint &location,
              const FlatProjection &projection,
-             const AbstractAirspace &as) const;
+             const AbstractAirspace &as) const noexcept;
 };
 
 /**
@@ -84,6 +86,6 @@ struct AirspaceFilterData {
 [[gnu::pure]]
 AirspaceSelectInfoVector
 FilterAirspaces(const Airspaces &airspaces, const GeoPoint &location,
-                const AirspaceFilterData &filter);
+                const AirspaceFilterData &filter) noexcept;
 
 #endif
