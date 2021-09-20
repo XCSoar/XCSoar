@@ -168,15 +168,15 @@ ReachIntersectionTest::Intersects(const AGeoPoint& destination)
   if (!route)
     return false;
 
-  ReachResult result;
-  if (!route->FindPositiveArrival(destination, result))
+  const auto result = route->FindPositiveArrival(destination);
+  if (!result)
     return false;
 
   // we use find_positive_arrival here instead of is_inside, because may use
   // arrival height for sorting later
-  return result.terrain_valid == ReachResult::Validity::UNREACHABLE ||
-    (result.terrain_valid == ReachResult::Validity::VALID &&
-     result.terrain < destination.altitude);
+  return result->terrain_valid == ReachResult::Validity::UNREACHABLE ||
+    (result->terrain_valid == ReachResult::Validity::VALID &&
+     result->terrain < destination.altitude);
 }
 
 void

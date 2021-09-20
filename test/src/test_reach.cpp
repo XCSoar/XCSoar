@@ -83,15 +83,14 @@ test_reach(const RasterMap &map, double mwind, double mc, double height_min_work
                    origin.latitude + Angle::Degrees(0.6 * fy));
         int h = map.GetInterpolatedHeight(x).GetValueOr0();
         AGeoPoint adest(x, h);
-        ReachResult reach;
-        route.FindPositiveArrival(adest, reach);
+        const auto reach = route.FindPositiveArrival(adest);
         if ((i % 5 == 0) && (j % 5 == 0)) {
           AGeoPoint ao2(x, h + 1000);
           route.SolveReachTerrain(ao2, config, INT_MAX);
         }
         fout << x.longitude.Degrees() << " "
              << x.latitude.Degrees() << " "
-             << h << " " << (int)reach.terrain << "\n";
+             << h << " " << (int)reach->terrain << "\n";
       }
       fout << "\n";
     }

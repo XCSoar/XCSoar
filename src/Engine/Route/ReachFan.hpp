@@ -26,6 +26,8 @@
 #include "Geo/Flat/FlatProjection.hpp"
 #include "FlatTriangleFanTree.hpp"
 
+#include <optional>
+
 class RoutePolars;
 class RasterMap;
 class GeoBounds;
@@ -53,8 +55,9 @@ public:
   bool Solve(const AGeoPoint origin, const RoutePolars &rpolars,
              const RasterMap *terrain, const bool do_solve = true) noexcept;
 
-  bool FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
-                           ReachResult &result_r) const noexcept;
+  [[gnu::pure]]
+  std::optional<ReachResult> FindPositiveArrival(const AGeoPoint dest,
+                                                 const RoutePolars &rpolars) const noexcept;
 
   void AcceptInRange(const GeoBounds &bounds,
                      FlatTriangleFanVisitor &visitor) const noexcept;

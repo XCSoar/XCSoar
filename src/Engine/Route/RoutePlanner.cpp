@@ -21,6 +21,7 @@
  */
 
 #include "RoutePlanner.hpp"
+#include "ReachResult.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
 
@@ -509,6 +510,12 @@ RoutePlanner::Intersection(const AGeoPoint &origin,
 {
   const FlatProjection proj(origin);
   return rpolars_route.Intersection(origin, destination, terrain, proj);
+}
+
+std::optional<ReachResult>
+RoutePlanner::FindPositiveArrival(const AGeoPoint &dest) const noexcept
+{
+  return reach_terrain.FindPositiveArrival(dest, rpolars_reach);
 }
 
 /*

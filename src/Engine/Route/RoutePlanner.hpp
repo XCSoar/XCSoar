@@ -282,10 +282,8 @@ public:
    *
    * @return true if check was successful
    */
-  bool FindPositiveArrival(const AGeoPoint &dest,
-                           ReachResult &result_r) const noexcept {
-    return reach_terrain.FindPositiveArrival(dest, rpolars_reach, result_r);
-  }
+  [[gnu::pure]]
+  std::optional<ReachResult> FindPositiveArrival(const AGeoPoint &dest) const noexcept;
 
   int GetTerrainBase() const noexcept {
     return reach_terrain.GetTerrainBase();

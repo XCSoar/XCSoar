@@ -76,7 +76,8 @@ public:
   void SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
                   int h_ceiling, bool do_solve);
 
-  bool FindPositiveArrival(const AGeoPoint &dest, ReachResult &result_r) const;
+  [[gnu::pure]]
+  std::optional<ReachResult> FindPositiveArrival(const AGeoPoint &dest) const noexcept;
 
   const FlatProjection &GetTerrainReachProjection() const {
     return planner.GetTerrainReachProjection();
