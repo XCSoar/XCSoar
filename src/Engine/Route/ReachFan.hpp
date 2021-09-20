@@ -40,26 +40,26 @@ class ReachFan
 public:
   friend class PrintHelper;
 
-  bool IsEmpty() const {
+  bool IsEmpty() const noexcept {
     return root.IsEmpty();
   }
 
-  const FlatProjection &GetProjection() const {
+  const FlatProjection &GetProjection() const noexcept {
     return projection;
   }
 
-  void Reset();
+  void Reset() noexcept;
 
   bool Solve(const AGeoPoint origin, const RoutePolars &rpolars,
-             const RasterMap *terrain, const bool do_solve = true);
+             const RasterMap *terrain, const bool do_solve = true) noexcept;
 
   bool FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
-                           ReachResult &result_r) const;
+                           ReachResult &result_r) const noexcept;
 
   void AcceptInRange(const GeoBounds &bounds,
-                     FlatTriangleFanVisitor &visitor) const;
+                     FlatTriangleFanVisitor &visitor) const noexcept;
 
-  int GetTerrainBase() const {
+  int GetTerrainBase() const noexcept {
     return terrain_base;
   }
 };

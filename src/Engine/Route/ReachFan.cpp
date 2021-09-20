@@ -28,7 +28,7 @@
 static constexpr int MIN_FLOOR_CLEARANCE = 100;
 
 void
-ReachFan::Reset()
+ReachFan::Reset() noexcept
 {
   root.Clear();
   terrain_base = 0;
@@ -36,7 +36,7 @@ ReachFan::Reset()
 
 bool
 ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
-                const RasterMap* terrain, const bool do_solve)
+                const RasterMap* terrain, const bool do_solve) noexcept
 {
   Reset();
 
@@ -83,7 +83,7 @@ ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
 
 bool
 ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
-                              ReachResult &result_r) const
+                              ReachResult &result_r) const noexcept
 {
   if (root.IsEmpty())
     return false;
@@ -118,7 +118,7 @@ ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
 
 void
 ReachFan::AcceptInRange(const GeoBounds &bounds,
-                        FlatTriangleFanVisitor &visitor) const
+                        FlatTriangleFanVisitor &visitor) const noexcept
 {
   if (root.IsEmpty())
     return;
