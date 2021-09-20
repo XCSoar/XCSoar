@@ -222,7 +222,6 @@ void
 AirspaceListWidget::UpdateList()
 {
   AirspaceFilterData data;
-  data.Clear();
 
   if (dialog_state.type != WILDCARD)
     data.cls = (AirspaceClass)dialog_state.type;

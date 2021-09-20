@@ -49,32 +49,25 @@ struct AirspaceFilterData {
    * Show only airspaces of this class.  The special value
    * #AirspaceClass::AIRSPACECLASSCOUNT disables this filter.
    */
-  AirspaceClass cls;
+  AirspaceClass cls = AirspaceClass::AIRSPACECLASSCOUNT;
 
   /**
    * Show only airspaces with a name beginning with this string.
    */
-  const TCHAR *name_prefix;
+  const TCHAR *name_prefix = nullptr;
 
   /**
    * Show only airspaces with a direction deviating less than 18
    * degrees from the aircraft.  A negative value disables this
    * filter.
    */
-  Angle direction;
+  Angle direction = Angle::Native(-1);
 
   /**
    * Show only airspaces less than this number of meters from the
    * aircraft.  A negative value disables this filter.
    */
-  double distance;
-
-  void Clear() {
-    cls = AirspaceClass::AIRSPACECLASSCOUNT;
-    name_prefix = nullptr;
-    direction = Angle::Native(-1);
-    distance = -1;
-  }
+  double distance = -1;
 
   [[gnu::pure]]
   bool Match(const GeoPoint &location,
