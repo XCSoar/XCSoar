@@ -65,16 +65,10 @@ public:
   Airspaces() noexcept
     :qnh(AtmosphericPressure::Zero()) {}
 
+  ~Airspaces() noexcept;
+
   Airspaces(const Airspaces &) = delete;
   Airspaces &operator=(const Airspaces &) = delete;
-
-  /**
-   * Destructor.
-   * This also destroys Airspace objects contained in the tree or temporary buffer
-   */
-  ~Airspaces() noexcept {
-    Clear();
-  }
 
   const Serial &GetSerial() const noexcept {
     return serial;

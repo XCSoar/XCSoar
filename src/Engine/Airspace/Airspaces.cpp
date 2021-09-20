@@ -32,6 +32,8 @@
 
 namespace bgi = boost::geometry::index;
 
+Airspaces::~Airspaces() noexcept = default;
+
 Airspaces::const_iterator_range
 Airspaces::QueryWithinRange(const GeoPoint &location, double range) const noexcept
 {
