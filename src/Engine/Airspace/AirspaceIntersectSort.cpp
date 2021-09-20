@@ -31,19 +31,16 @@ AirspaceIntersectSort::add(const double t, const GeoPoint &p) noexcept
     m_q.push(std::make_pair(t, p));
 }
 
-bool
-AirspaceIntersectSort::top(GeoPoint &p) const noexcept
+std::optional<GeoPoint>
+AirspaceIntersectSort::top() const noexcept
 {
-  if (m_airspace->Inside(m_start)) {
-    p = m_start;
-    return true;
-  }
-  if (!m_q.empty()) {
-    p = m_q.top().second;
-    return true;
-  }
+  if (m_airspace->Inside(m_start))
+    return m_start;
 
-  return false;
+  if (!m_q.empty())
+    return m_q.top().second;
+
+  return std::nullopt;
 }
 
 AirspaceIntersectionVector

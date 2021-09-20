@@ -25,6 +25,7 @@
 
 #include "Geo/GeoPoint.hpp"
 
+#include <optional>
 #include <queue>
 
 class AbstractAirspace;
@@ -81,12 +82,9 @@ public:
 
   /**
    * Return closest intercept point (or location if inside)
-   *
-   * @param p Point to set if any
-   *
-   * @return True if an intercept was found
    */
-  bool top(GeoPoint &p) const noexcept;
+  [[gnu::pure]]
+  std::optional<GeoPoint> top() const noexcept;
 
   /**
    * Return vector of pairs of enter/exit intersections.
