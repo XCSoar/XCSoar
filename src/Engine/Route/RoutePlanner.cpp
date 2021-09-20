@@ -25,9 +25,6 @@
 #include "Geo/Flat/FlatProjection.hpp"
 
 RoutePlanner::RoutePlanner() noexcept
-  :terrain(NULL), planner(0),
-   unique_links(50000),
-   reach_polar_mode(RoutePlannerConfig::Polar::TASK)
 {
   Reset();
 }

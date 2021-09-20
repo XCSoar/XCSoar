@@ -111,7 +111,7 @@ protected:
   /** Aircraft performance model for reach to working floor */
   RoutePolars rpolars_reach_working;
   /** Terrain raster */
-  const RasterMap *terrain;
+  const RasterMap *terrain = nullptr;
   /** Minimum height scanned during solution (m) */
   int h_min;
   /** Maxmimum height scanned during solution (m) */
@@ -119,7 +119,7 @@ protected:
 
 private:
   /** A* search algorithm */
-  AStar<RoutePoint, RoutePointHasher> planner;
+  AStar<RoutePoint, RoutePointHasher> planner{0};
 
   /**
    * Convex hull of search to date, used by terrain node
@@ -130,7 +130,7 @@ private:
   typedef std::unordered_set<RouteLinkBase, RouteLinkBaseHasher> RouteLinkSet;
 
   /** Links that have been visited during solution */
-  RouteLinkSet unique_links;
+  RouteLinkSet unique_links{50000};
   typedef std::queue< RouteLink> RouteLinkQueue;
   /** Link candidates to be processed for intersection tests */
   RouteLinkQueue links;
@@ -146,7 +146,7 @@ private:
   ReachFan reach_terrain;
   ReachFan reach_working;
 
-  RoutePlannerConfig::Polar reach_polar_mode;
+  RoutePlannerConfig::Polar reach_polar_mode = RoutePlannerConfig::Polar::TASK;
 
   mutable unsigned long count_dij;
   mutable unsigned long count_unique;
