@@ -91,6 +91,7 @@ Copyright_License {
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Operation/VerboseOperationEnvironment.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
+#include "Operation/SubOperationEnvironment.hpp"
 #include "Widget/ProgressWidget.hpp"
 #include "PageActions.hpp"
 #include "Weather/Features.hpp"
@@ -230,6 +231,7 @@ bool
 Startup()
 {
   VerboseOperationEnvironment operation;
+  operation.SetProgressRange(1024);
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   Net::DownloadManager::Initialise();
@@ -384,13 +386,22 @@ Startup()
 
   // Read the topography file(s)
   topography = new TopographyStore();
-  LoadConfiguredTopography(*topography, operation);
+  {
+    SubOperationEnvironment sub_env(operation, 0, 256);
+    LoadConfiguredTopography(*topography, sub_env);
+  }
 
   // Read the waypoint files
-  WaypointGlue::LoadWaypoints(way_points, terrain, operation);
+  {
+    SubOperationEnvironment sub_env(operation, 256, 512);
+    WaypointGlue::LoadWaypoints(way_points, terrain, sub_env);
+  }
 
   // Read and parse the airfield info file
-  WaypointDetails::ReadFileFromProfile(way_points, operation);
+  {
+    SubOperationEnvironment sub_env(operation, 512, 768);
+    WaypointDetails::ReadFileFromProfile(way_points, sub_env);
+  }
 
   // Set the home waypoint
   WaypointGlue::SetHome(way_points, terrain,
@@ -408,8 +419,11 @@ Startup()
   rasp->ScanAll();
 
   // Reads the airspace files
-  ReadAirspace(airspace_database, terrain, computer_settings.pressure,
-               operation);
+  {
+    SubOperationEnvironment sub_env(operation, 768, 1024);
+    ReadAirspace(airspace_database, terrain, computer_settings.pressure,
+                 sub_env);
+  }
 
   {
     const AircraftState aircraft_state =

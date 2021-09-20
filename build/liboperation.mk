@@ -3,6 +3,7 @@ OPERATION_SOURCES := \
 	$(SRC)/Operation/PluggableOperationEnvironment.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
+	$(SRC)/Operation/SubOperationEnvironment.cpp \
 	$(SRC)/Operation/ThreadedOperationEnvironment.cpp
 
 # This is necessary because ThreadedOperationEnvironment depends on
