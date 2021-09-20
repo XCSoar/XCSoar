@@ -35,11 +35,9 @@ class ReachFan
 {
   FlatProjection projection;
   FlatTriangleFanTree root;
-  int terrain_base;
+  int terrain_base = 0;
 
 public:
-  ReachFan():terrain_base(0) {}
-
   friend class PrintHelper;
 
   bool IsEmpty() const {
