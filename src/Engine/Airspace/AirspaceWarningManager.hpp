@@ -64,7 +64,7 @@ class AirspaceWarningManager {
   /**
    * This number is incremented each time this object is modified.
    */
-  unsigned serial;
+  unsigned serial = 0;
 
 public:
   using const_iterator = AirspaceWarningList::const_iterator;

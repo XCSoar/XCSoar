@@ -32,7 +32,7 @@
 
 AirspaceWarningManager::AirspaceWarningManager(const AirspaceWarningConfig &_config,
                                                const Airspaces &_airspaces)
-  :airspaces(_airspaces), serial(0)
+  :airspaces(_airspaces)
 {
   /* force filter initialisation in the first SetConfig() call */
   config.warning_time = AirspaceWarningConfig::Duration::max();
@@ -173,9 +173,9 @@ class AirspaceIntersectionWarningVisitor final
   AirspaceWarningManager &warning_manager;
   const AirspaceWarning::State warning_state;
   const FloatDuration max_time;
-  bool found;
+  bool found = false;
   const double max_alt;
-  bool mode_inside;
+  bool mode_inside = false;
 
 public:
   /**
@@ -201,11 +201,9 @@ public:
     warning_manager(_warning_manager),
     warning_state(_warning_state),
     max_time(_max_time),
-    found(false),
-    max_alt(_max_alt),
-    mode_inside(false)
-    {      
-    };
+    max_alt(_max_alt)
+  {
+  }
 
   /**
    * Check whether this intersection should be added to, or updated in, the warning manager
