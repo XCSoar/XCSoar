@@ -38,11 +38,18 @@ public:
    * and the airspace polygon becomes the convex hull border.
    *
    * @param pts Vector representing border
-   * @param prune If true, converts border to convex hull of points (for testing only)
    *
    * @return Initialised airspace object
    */
-  explicit AirspacePolygon(const std::vector<GeoPoint> &pts, const bool prune = false) noexcept;
+  explicit AirspacePolygon(const std::vector<GeoPoint> &pts) noexcept;
+
+  /**
+   * Converts border to convex hull of points (for testing only).
+   */
+  void MakeConvex() noexcept {
+    m_border.PruneInterior();
+    is_convex = TriState::TRUE;
+  }
 
   /* virtual methods from class AbstractAirspace */
   const GeoPoint GetReferenceLocation() const noexcept override;

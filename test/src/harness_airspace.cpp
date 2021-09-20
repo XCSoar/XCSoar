@@ -92,7 +92,10 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
         p.latitude += Angle::Degrees(((rand()%200)/1000.0));
         pts.push_back(p);
       }
-      as = std::make_shared<AirspacePolygon>(pts,true);
+
+      auto polygon = std::make_shared<AirspacePolygon>(pts);
+      polygon->MakeConvex();
+      as = std::move(polygon);
     }
     airspace_random_properties(*as);
     airspaces.Add(as);

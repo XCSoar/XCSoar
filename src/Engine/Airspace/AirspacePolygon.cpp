@@ -26,8 +26,7 @@
 #include "AirspaceIntersectSort.hpp"
 #include "AirspaceIntersectionVector.hpp"
 
-AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint> &pts,
-                                 const bool prune) noexcept
+AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint> &pts) noexcept
   :AbstractAirspace(Shape::POLYGON)
 {
   assert(pts.size() >= 3);
@@ -43,14 +42,7 @@ AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint> &pts,
   if (p_start != p_end)
     m_border.emplace_back(p_start);
 
-
-  if (prune) {
-    // only for testing
-    m_border.PruneInterior();
-    is_convex = TriState::TRUE;
-  } else {
-    is_convex = TriState::UNKNOWN;
-  }
+  is_convex = TriState::UNKNOWN;
 }
 
 const GeoPoint
