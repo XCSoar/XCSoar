@@ -334,7 +334,7 @@ AirspaceListWidget::OnGPSUpdate(const MoreData &basic)
   if (dialog_state.direction == 0 && !CommonInterface::Calculated().circling) {
     const Angle heading = basic.attitude.heading;
     Angle a = last_heading - heading;
-    if (a.AsDelta().AbsoluteDegrees() >= 10) {
+    if (a.AsDelta().Absolute() >= Angle::Degrees(10)) {
       last_heading = heading;
 
       UpdateList();

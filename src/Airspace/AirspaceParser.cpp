@@ -229,7 +229,7 @@ struct TempAirspaceType
     // 5 or -5, depending on direction
     const auto _step = ArcStepWidth(radius);
     const auto step = Angle::Degrees(rotation * _step);
-    const auto threshold = _step * 1.5;
+    const auto threshold = Angle::Degrees(_step * 1.5);
 
     // Determine end bearing
     Angle end_bearing = center.Bearing(end);
@@ -246,7 +246,7 @@ struct TempAirspaceType
     points.push_back(start);
 
     // Add intermediate polygon points
-    while ((end_bearing - start_bearing).AbsoluteDegrees() > threshold) {
+    while ((end_bearing - start_bearing).Absolute() > threshold) {
       start_bearing += step;
       points.push_back(FindLatitudeLongitude(center, start_bearing, radius));
     }
@@ -263,7 +263,7 @@ struct TempAirspaceType
     // 5 or -5, depending on direction
     const auto _step = ArcStepWidth(radius);
     const auto step = Angle::Degrees(rotation * _step);
-    const auto threshold = _step * 1.5;
+    const auto threshold = Angle::Degrees(_step * 1.5);
 
     if (rotation > 0) {
       while (end < start)
@@ -277,7 +277,7 @@ struct TempAirspaceType
     points.push_back(FindLatitudeLongitude(center, start, radius));
 
     // Add intermediate polygon points
-    while ((end - start).AbsoluteDegrees() > threshold) {
+    while ((end - start).Absolute() > threshold) {
       start += step;
       points.push_back(FindLatitudeLongitude(center, start, radius));
     }

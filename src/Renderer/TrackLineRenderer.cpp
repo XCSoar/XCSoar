@@ -72,7 +72,7 @@ TrackLineRenderer::Draw(Canvas &canvas,
     return;
 
   if (settings.display_ground_track == DisplayGroundTrack::AUTO &&
-      (basic.track - basic.attitude.heading).AsDelta().AbsoluteDegrees() < 5)
+      (basic.track - basic.attitude.heading).AsDelta().Absolute() < Angle::Degrees(5))
     return;
 
   TrackLineRenderer::Draw(canvas, projection.GetScreenAngle(), basic.track, pos);

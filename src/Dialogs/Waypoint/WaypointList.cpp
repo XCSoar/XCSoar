@@ -484,7 +484,7 @@ WaypointListWidget::OnGPSUpdate(const MoreData &basic)
       !CommonInterface::Calculated().circling) {
     const Angle heading = basic.attitude.heading;
     Angle a = last_heading - heading;
-    if (a.AsDelta().AbsoluteDegrees() >= 60) {
+    if (a.AsDelta().Absolute() >= Angle::Degrees(60)) {
       last_heading = heading;
       filter_widget.Update(last_heading);
       UpdateList();

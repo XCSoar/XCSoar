@@ -266,7 +266,7 @@ GlueMapWindow::OnMouseUp(PixelPoint p)
       const auto min_speed = 1.1 *
         CommonInterface::GetComputerSettings().polar.glide_polar_task.GetVMin();
       const Angle new_bearing = drag_start_geopoint.Bearing(location);
-      if (((new_bearing - old_bearing).AsDelta().AbsoluteDegrees() < 30) ||
+      if ((new_bearing - old_bearing).AsDelta().Absolute() < Angle::Degrees(30) ||
           (CommonInterface::Basic().ground_speed < min_speed))
         device_blackboard->SetSpeed(Clamp(distance / Layout::FastScale(3),
                                           min_speed, 100.));
