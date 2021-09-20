@@ -68,8 +68,8 @@ FlatEllipse::Parametric(const double t) const
   return res;
 }
 
-bool 
-FlatEllipse::Intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const
+std::optional<std::pair<FlatPoint, FlatPoint>>
+FlatEllipse::Intersect(const FlatLine &line) const noexcept
 {
   const double er = ab();
   const double ier = ba();
@@ -78,24 +78,22 @@ FlatEllipse::Intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const
   s_line.Rotate(theta.Reciprocal());
   s_line.MultiplyY(er);
 
-  if (s_line.IntersectOriginCircle(a, i1, i2)) {
-    i1.MultiplyY(ier);
-    i1.Rotate(theta);
-    i1 += p;
-    
-    i2.MultiplyY(ier);
-    i2.Rotate(theta);
-    i2 += p;
-    
-    return true;
+  auto result = s_line.IntersectOriginCircle(a);
+  if (result) {
+    result->first.MultiplyY(ier);
+    result->first.Rotate(theta);
+    result->first += p;
+
+    result->second.MultiplyY(ier);
+    result->second.Rotate(theta);
+    result->second += p;
   }
 
-  return false;
+  return result;
 }
 
-bool
-FlatEllipse::IntersectExtended(const FlatPoint &pe, FlatPoint &i1,
-                                FlatPoint &i2) const
+std::optional<std::pair<FlatPoint, FlatPoint>>
+FlatEllipse::IntersectExtended(const FlatPoint &pe) const noexcept
 {
   const FlatLine l_f1p(f1, pe);
   const FlatLine l_pf2(pe, f2);
@@ -108,8 +106,8 @@ FlatEllipse::IntersectExtended(const FlatPoint &pe, FlatPoint &i1,
 
   FlatLine e_l(pe, FlatPoint(pe.x + d * can, pe.y + d * san));
   // e_l is the line extended from p in direction of f1-p 
-  
-  return Intersect(e_l, i1, i2);
+
+  return Intersect(e_l);
 }
 
 // define an ellipse by three points,

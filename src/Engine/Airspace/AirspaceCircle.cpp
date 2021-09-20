@@ -60,9 +60,12 @@ AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end,
   const auto f_end = projection.ProjectFloat(end);
   const FlatLine line(f_start, f_end);
 
-  FlatPoint f_p1, f_p2;
-  if (!line.IntersectCircle(f_radius, f_center, f_p1, f_p2))
+  const auto f_p = line.IntersectCircle(f_radius, f_center);
+  if (!f_p)
     return AirspaceIntersectionVector();
+
+  const auto &f_p1 = f_p->first;
+  const auto &f_p2 = f_p->second;
 
   const auto mag = line.GetSquaredDistance();
   if (mag <= 0)

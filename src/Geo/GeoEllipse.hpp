@@ -26,6 +26,9 @@
 #include "Flat/FlatProjection.hpp"
 #include "Flat/FlatEllipse.hpp"
 
+#include <optional>
+#include <utility>
+
 /**
  * Ellipse in geodesic coordinates, defined by two foci and
  * a point on the ellipse.  Internally uses a flat-earth projection
@@ -68,7 +71,8 @@ public:
    *
    * @return True if line intersects
    */
-  bool IntersectExtended(const GeoPoint &p, GeoPoint &i1, GeoPoint &i2) const;
+  [[gnu::pure]]
+  std::optional<std::pair<GeoPoint, GeoPoint>> IntersectExtended(const GeoPoint &p) const noexcept;
 };
 
 

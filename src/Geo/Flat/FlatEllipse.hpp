@@ -26,6 +26,9 @@
 #include "FlatPoint.hpp"
 #include "Math/Angle.hpp"
 
+#include <optional>
+#include <utility>
+
 class FlatLine;
 
 /**
@@ -73,7 +76,8 @@ public:
    *
    * @return True if line intersects
    */
-  bool IntersectExtended(const FlatPoint &p, FlatPoint &i1, FlatPoint &i2) const;
+  [[gnu::pure]]
+  std::optional<std::pair<FlatPoint, FlatPoint>> IntersectExtended(const FlatPoint &p) const noexcept;
 
 private:
   [[gnu::pure]]
@@ -86,7 +90,8 @@ private:
     return b / a;
   }
 
-  bool Intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const;
+  [[gnu::pure]]
+  std::optional<std::pair<FlatPoint, FlatPoint>> Intersect(const FlatLine &line) const noexcept;
 };
 
 #endif

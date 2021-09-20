@@ -38,17 +38,16 @@ GeoEllipse::Parametric(const double t) const
   return projection.Unproject(fp);
 }
 
-bool 
-GeoEllipse::IntersectExtended(const GeoPoint &p, GeoPoint &i1,
-                              GeoPoint &i2) const
+std::optional<std::pair<GeoPoint, GeoPoint>>
+GeoEllipse::IntersectExtended(const GeoPoint &p) const noexcept
 {
   const FlatPoint pf = projection.ProjectFloat(p);
-  FlatPoint i1f, i2f;
-  if (ell.IntersectExtended(pf,i1f,i2f)) {
-    i1 = projection.Unproject(i1f);
-    i2 = projection.Unproject(i2f);
-    return true;
-  }
 
-  return false;
+  if (auto i = ell.IntersectExtended(pf))
+    return std::pair<GeoPoint, GeoPoint>{
+      projection.Unproject(i->first),
+      projection.Unproject(i->second),
+    };
+
+  return std::nullopt;
 }
