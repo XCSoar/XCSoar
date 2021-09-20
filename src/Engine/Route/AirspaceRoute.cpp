@@ -187,7 +187,7 @@ AirspaceRoute::AirspaceRoute()
   Reset();
 }
 
-AirspaceRoute::~AirspaceRoute()
+AirspaceRoute::~AirspaceRoute() noexcept
 {
   // clean up, we dont need the clearances any more
   m_airspaces.ClearClearances();

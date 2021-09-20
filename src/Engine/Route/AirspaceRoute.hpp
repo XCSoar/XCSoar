@@ -48,7 +48,7 @@ public:
   friend class PrintHelper;
 
   AirspaceRoute();
-  virtual ~AirspaceRoute();
+  ~AirspaceRoute() noexcept;
 
   void Synchronise(const Airspaces &master, AirspacePredicate condition,
                    const AGeoPoint &origin,
