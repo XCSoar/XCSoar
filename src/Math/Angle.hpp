@@ -143,17 +143,21 @@ public:
   [[gnu::pure]]
   DMS ToDMS() const noexcept;
 
+  struct DMM {
+    unsigned degrees, minutes, decimal_minutes;
+
+    /**
+     * True if East, false if West.
+     */
+    bool positive;
+  };
+
   /**
    * Converts this Angle to degrees, minute, decimal minutes and a
    * bool-based east/north variable
-   *
-   * @param dd Degrees (pointer)
-   * @param mm Minutes (pointer)
-   * @param mmm Decimal minutes (pointer)
-   * @param east True if East, False if West (pointer)
    */
-  void ToDMM(unsigned &dd, unsigned &mm, unsigned &mmm,
-             bool &is_positive) const noexcept;
+  [[gnu::pure]]
+  DMM ToDMM() const noexcept;
 
   [[gnu::pure]]
   Angle Absolute() const noexcept {

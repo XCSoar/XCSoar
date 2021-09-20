@@ -44,17 +44,19 @@ Angle::ToDMS() const noexcept
   return dms;
 }
 
-void
-Angle::ToDMM(unsigned &dd, unsigned &mm, unsigned &mmm,
-             bool &is_positive) const noexcept
+Angle::DMM
+Angle::ToDMM() const noexcept
 {
-  is_positive = value >= 0;
+  DMM dmm;
+  dmm.positive = value >= 0;
 
   unsigned value = lround(AbsoluteDegrees() * 60000);
-  dd = value / 60000;
+  dmm.degrees = value / 60000;
   value %= 60000;
-  mm = value / 1000;
-  mmm = value % 1000;
+  dmm.minutes = value / 1000;
+  dmm.decimal_minutes = value % 1000;
+
+  return dmm;
 }
 
 double
