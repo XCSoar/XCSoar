@@ -90,9 +90,7 @@ Airspaces::Optimise() noexcept
     /* avoid assertion failure in uninitialised task_projection */
     return;
 
-  if (!owns_children || task_projection.Update()) {
-    // dont update task_projection if not owner!
-
+  if (task_projection.Update()) {
     // task projection changed, so need to push items back onto stack
     // to re-build airspace envelopes
 
@@ -127,12 +125,10 @@ Airspaces::Add(AirspacePtr airspace) noexcept
   // this allows for airspaces to be add at any time
   activity_mask.SetAll();
 
-  if (owns_children) {
-    if (IsEmpty())
-      task_projection.Reset(airspace->GetReferenceLocation());
+  if (IsEmpty())
+    task_projection.Reset(airspace->GetReferenceLocation());
 
-    task_projection.Scan(airspace->GetReferenceLocation());
-  }
+  task_projection.Scan(airspace->GetReferenceLocation());
 
   tmp_as.push_back(std::move(airspace));
 }
