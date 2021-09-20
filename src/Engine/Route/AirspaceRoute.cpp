@@ -182,7 +182,7 @@ AirspaceRoute::AirspaceSize() const
   return m_airspaces.GetSize();
 }
 
-AirspaceRoute::AirspaceRoute():m_airspaces(false)
+AirspaceRoute::AirspaceRoute()
 {
   Reset();
 }

@@ -44,8 +44,6 @@ class Airspaces : public AirspacesInterface {
   AtmosphericPressure qnh;
   AirspaceActivity activity_mask;
 
-  const bool owns_children;
-
   AirspaceTree airspace_tree;
   TaskProjection task_projection;
 
@@ -62,13 +60,10 @@ public:
    * Constructor.
    * Note this class can't safely be copied (yet)
    *
-   * If m_owner, this instance will be responsible for deleting objects
-   * on destruction.
-   *
    * @return empty Airspaces class.
    */
-  Airspaces(bool _owns_children=true) noexcept
-    :qnh(AtmosphericPressure::Zero()), owns_children(_owns_children) {}
+  Airspaces() noexcept
+    :qnh(AtmosphericPressure::Zero()) {}
 
   Airspaces(const Airspaces &) = delete;
   Airspaces &operator=(const Airspaces &) = delete;

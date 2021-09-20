@@ -103,7 +103,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     state.altitude = loc_start.altitude;
 
     {
-      Airspaces as_route(false);
+      Airspaces as_route;
       // dummy
 
       // real one, see if items changed
