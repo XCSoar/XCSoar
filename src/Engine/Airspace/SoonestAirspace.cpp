@@ -44,8 +44,7 @@ struct SoonestAirspace {
   }
 };
 
-gcc_pure
-__attribute__((always_inline))
+[[gnu::pure,gnu::always_inline]]
 static inline SoonestAirspace
 CalculateSoonestAirspace(const AircraftState &state,
                          const AirspaceAircraftPerformance &perf,
@@ -65,7 +64,7 @@ CalculateSoonestAirspace(const AircraftState &state,
 }
 
 struct CompareSoonestAirspace {
-  gcc_pure
+  [[gnu::pure]]
   bool operator()(const SoonestAirspace &a, const SoonestAirspace &b) const {
     return a.IsDefined() && (!b.IsDefined() || a.time < b.time);
   }
