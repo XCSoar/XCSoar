@@ -35,7 +35,6 @@ def configure(toolchain, src, build, args=()):
     cross_args = []
 
     if toolchain.is_windows:
-        cross_args.append('-DCMAKE_SYSTEM_NAME=Windows')
         cross_args.append('-DCMAKE_RC_COMPILER=' + toolchain.windres)
 
     # Several targets need a sysroot to prevent pkg-config from
