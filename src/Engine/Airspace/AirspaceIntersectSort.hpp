@@ -40,7 +40,8 @@ class AirspaceIntersectSort {
    * Function object used to rank intercepts by vector parameter t(0,1)
    */
   struct Rank : public std::binary_function<Intersection, Intersection, bool> {
-    bool operator()(const Intersection& x, const Intersection& y) const {
+    bool operator()(const Intersection &x,
+                    const Intersection &y) const noexcept {
       return x.first > y.first;
     }
   };
@@ -58,7 +59,7 @@ public:
    * @param the_airspace Airspace to test for intersections
    */
   AirspaceIntersectSort(const GeoPoint &start,
-                        const AbstractAirspace &the_airspace)
+                        const AbstractAirspace &the_airspace) noexcept
     :m_start(start), m_airspace(&the_airspace) {}
 
   /**
@@ -67,14 +68,14 @@ public:
    * @param t Ray parameter [0,1]
    * @param p Point of intersection
    */
-  void add(const double t, const GeoPoint &p);
+  void add(const double t, const GeoPoint &p) noexcept;
 
   /**
    * Determine if no points are found
    *
    * @return True if no points added
    */
-  bool empty() const {
+  bool empty() const noexcept {
     return m_q.empty();
   }
 
@@ -85,14 +86,14 @@ public:
    *
    * @return True if an intercept was found
    */
-  bool top(GeoPoint &p) const;
+  bool top(GeoPoint &p) const noexcept;
 
   /**
    * Return vector of pairs of enter/exit intersections.
    *
    * @return vector
    */
-  AirspaceIntersectionVector all();
+  AirspaceIntersectionVector all() noexcept;
 };
 
 #endif

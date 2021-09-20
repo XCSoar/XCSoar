@@ -24,15 +24,15 @@
 #include "AbstractAirspace.hpp"
 #include "AirspaceIntersectionVector.hpp"
 
-void 
-AirspaceIntersectSort::add(const double t, const GeoPoint &p)
+void
+AirspaceIntersectSort::add(const double t, const GeoPoint &p) noexcept
 {
   if (t >= 0)
     m_q.push(std::make_pair(t, p));
 }
 
 bool
-AirspaceIntersectSort::top(GeoPoint &p) const
+AirspaceIntersectSort::top(GeoPoint &p) const noexcept
 {
   if (m_airspace->Inside(m_start)) {
     p = m_start;
@@ -47,7 +47,7 @@ AirspaceIntersectSort::top(GeoPoint &p) const
 }
 
 AirspaceIntersectionVector
-AirspaceIntersectSort::all()
+AirspaceIntersectSort::all() noexcept
 {
   AirspaceIntersectionVector res;
 
