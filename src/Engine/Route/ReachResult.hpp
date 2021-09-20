@@ -55,19 +55,19 @@ struct ReachResult {
    */
   Validity terrain_valid;
 
-  void Clear() {
+  constexpr void Clear() noexcept {
     terrain_valid = Validity::INVALID;
   }
 
-  bool IsReachableDirect() const {
+  constexpr bool IsReachableDirect() const noexcept {
     return direct >= 0;
   }
 
-  bool IsReachableTerrain() const {
+  constexpr bool IsReachableTerrain() const noexcept {
     return terrain_valid == Validity::VALID && terrain >= 0;
   }
 
-  bool IsDeltaConsiderable() const {
+  constexpr bool IsDeltaConsiderable() const noexcept {
     if (terrain_valid != Validity::VALID)
       return false;
 
@@ -75,16 +75,16 @@ struct ReachResult {
     return delta >= 10 && delta * 100 / direct > 5;
   }
 
-  bool IsReachRelevant() const {
+  constexpr bool IsReachRelevant() const noexcept {
     return terrain_valid == Validity::VALID && terrain != direct;
   }
 
-  void Add(int delta) {
+  constexpr void Add(int delta) noexcept {
     direct += delta;
     terrain += delta;
   }
 
-  void Subtract(int delta) {
+  constexpr void Subtract(int delta) noexcept {
     direct -= delta;
     terrain -= delta;
   }
