@@ -24,14 +24,14 @@
 #include "Math/FastMath.hpp"
 
 unsigned
-FlatGeoPoint::Distance(const FlatGeoPoint &sp) const
+FlatGeoPoint::Distance(const FlatGeoPoint &sp) const noexcept
 {
   const FlatGeoPoint delta = *this - sp;
   return ihypot(delta.x, delta.y);
 }
 
 unsigned
-FlatGeoPoint::DistanceSquared(const FlatGeoPoint &sp) const
+FlatGeoPoint::DistanceSquared(const FlatGeoPoint &sp) const noexcept
 {
   const FlatGeoPoint delta = *this - sp;
   return delta.DotProduct(delta);

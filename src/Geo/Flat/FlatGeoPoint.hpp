@@ -32,7 +32,7 @@
  * Integer projected (flat-earth) version of Geodetic coordinates
  */
 struct FlatGeoPoint : IntPoint2D {
-  FlatGeoPoint() = default;
+  FlatGeoPoint() noexcept = default;
   using IntPoint2D::IntPoint2D;
 
   /**
@@ -43,7 +43,7 @@ struct FlatGeoPoint : IntPoint2D {
    * @return Distance in projected units
    */
   [[gnu::pure]]
-  unsigned Distance(const FlatGeoPoint &sp) const;
+  unsigned Distance(const FlatGeoPoint &sp) const noexcept;
 
   /**
    * Find squared distance from one point to another
@@ -53,7 +53,7 @@ struct FlatGeoPoint : IntPoint2D {
    * @return Squared distance in projected units
    */
   [[gnu::pure]]
-  unsigned DistanceSquared(const FlatGeoPoint &sp) const;
+  unsigned DistanceSquared(const FlatGeoPoint &sp) const noexcept;
 
   /**
    * Multiply point by a constant
@@ -63,7 +63,7 @@ struct FlatGeoPoint : IntPoint2D {
    * @return Scaled value
    */
   [[gnu::pure]]
-  FlatGeoPoint operator*(const double t) const {
+  FlatGeoPoint operator*(const double t) const noexcept {
     return FlatGeoPoint(iround(x * t), iround(y * t));
   }
 
@@ -74,7 +74,7 @@ struct FlatGeoPoint : IntPoint2D {
    *
    * @return Cross product
    */
-  constexpr int CrossProduct(FlatGeoPoint other) const {
+  constexpr int CrossProduct(FlatGeoPoint other) const noexcept {
     return ::CrossProduct(*this, other);
   }
 
@@ -85,7 +85,7 @@ struct FlatGeoPoint : IntPoint2D {
    *
    * @return Dot product
    */
-  constexpr int DotProduct(FlatGeoPoint other) const {
+  constexpr int DotProduct(FlatGeoPoint other) const noexcept {
     return ::DotProduct(*this, other);
   }
 
@@ -107,7 +107,7 @@ struct FlatGeoPoint : IntPoint2D {
   };
 
   [[gnu::pure]]
-  bool Sort(const FlatGeoPoint& sp) const {
+  bool Sort(const FlatGeoPoint& sp) const noexcept {
     if (x < sp.x)
       return false;
     else if (x == sp.x)
@@ -126,19 +126,17 @@ struct AFlatGeoPoint : public FlatGeoPoint {
   /** Nav reference altitude (m) */
   int altitude;
 
-  constexpr
-  AFlatGeoPoint(const int x, const int y, const int alt):
-    FlatGeoPoint(x,y),altitude(alt) {};
+  constexpr AFlatGeoPoint(const int x, const int y, const int alt) noexcept
+    :FlatGeoPoint(x,y),altitude(alt) {};
 
-  constexpr
-  AFlatGeoPoint(const FlatGeoPoint p, const int alt)
+  constexpr AFlatGeoPoint(const FlatGeoPoint p, const int alt) noexcept
     :FlatGeoPoint(p), altitude(alt) {};
 
-  constexpr
-  AFlatGeoPoint():FlatGeoPoint(0,0),altitude(0) {};
+  constexpr AFlatGeoPoint() noexcept
+    :FlatGeoPoint(0,0),altitude(0) {};
 
   /** Rounds location to reduce state space */
-  void RoundLocation() {
+  void RoundLocation() noexcept {
     // round point to correspond roughly with terrain step size
     x = (x >> 2) << 2;
     y = (y >> 2) << 2;
@@ -167,7 +165,7 @@ struct AFlatGeoPoint : public FlatGeoPoint {
    * @return true if lexicographically smaller
    */
   [[gnu::pure]]
-  bool Sort(const AFlatGeoPoint &sp) const {
+  bool Sort(const AFlatGeoPoint &sp) const noexcept {
     if (!FlatGeoPoint::Sort(sp))
       return false;
     else if (FlatGeoPoint::operator==(sp))
