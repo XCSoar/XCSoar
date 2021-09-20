@@ -84,14 +84,14 @@ class GlidePolar;
 class RoutePlanner {
   struct RoutePointHasher : std::unary_function<RoutePoint, size_t> {
     [[gnu::const]]
-    result_type operator()(const argument_type p) const {
+    result_type operator()(const argument_type p) const noexcept {
       return p.x * result_type(104729) + p.y;
     }
   };
 
   struct RouteLinkBaseHasher : std::unary_function<RouteLinkBase, size_t> {
     [[gnu::const]]
-    result_type operator()(const argument_type l) const {
+    result_type operator()(const argument_type l) const noexcept {
       RoutePointHasher p;
       return p(l.first) * result_type(27644437) + p(l.second);
     }
@@ -165,24 +165,24 @@ public:
    * Call update_polar to update the aircraft performance model or wind estimate
    * after initialisation.
    */
-  RoutePlanner();
+  RoutePlanner() noexcept;
 
   /**
    * Set terrain database
    * @param terrain RasterMap to be used for terrain intersection tests
    */
-  void SetTerrain(const RasterMap *_terrain) {
+  void SetTerrain(const RasterMap *_terrain) noexcept {
     terrain = _terrain;
   }
 
-  bool IsTerrainReachEmpty() const {
+  bool IsTerrainReachEmpty() const noexcept {
     return reach_terrain.IsEmpty();
   }
 
   /**
    * Delete all reach fans.
    */
-  void ClearReach();
+  void ClearReach() noexcept;
 
   /**
    * Find the optimal path.  Works in reverse time order, from the
@@ -198,7 +198,7 @@ public:
    */
   bool Solve(const AGeoPoint &origin, const AGeoPoint &destination,
              const RoutePlannerConfig &config,
-             int h_ceiling = INT_MAX);
+             int h_ceiling = INT_MAX) noexcept;
 
   /**
    * Solve reach footprint to terrain
@@ -209,7 +209,7 @@ public:
    * @return True if reach was scanned
    */
   bool SolveReachTerrain(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                         int h_ceiling, bool do_solve=true);
+                         int h_ceiling, bool do_solve=true) noexcept;
 
   /**
    * Solve reach footprint to working height
@@ -220,22 +220,22 @@ public:
    * @return True if reach was scanned
    */
   bool SolveReachWorking(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                         int h_ceiling, bool do_solve=true);
+                         int h_ceiling, bool do_solve=true) noexcept;
 
-  const FlatProjection &GetTerrainReachProjection() const {
+  const FlatProjection &GetTerrainReachProjection() const noexcept {
     return reach_terrain.GetProjection();
   }
 
   /** Visit reach (working or terrain reach) */
   void AcceptInRange(const GeoBounds &bounds,
                      FlatTriangleFanVisitor &visitor,
-                     bool working) const;
+                     bool working) const noexcept;
 
   /**
    * Retrieve current solution.  If solver failed previously,
    * direct flight from origin to destination is produced.
    */
-  const Route &GetSolution() const {
+  const Route &GetSolution() const noexcept {
     return solution_route;
   }
 
@@ -251,10 +251,10 @@ public:
                    const RoutePlannerConfig &config,
                    const GlidePolar &polar, const GlidePolar &safety_polar,
                    const SpeedVector &wind,
-                   const int height_min_working=0);
+                   const int height_min_working=0) noexcept;
 
   /** Reset the optimiser as if never flown and clear temporary buffers. */
-  virtual void Reset();
+  virtual void Reset() noexcept;
 
   /**
    * Determine if intersection with terrain occurs in forwards direction from
@@ -269,7 +269,7 @@ public:
    */
   [[gnu::pure]]
   GeoPoint Intersection(const AGeoPoint &origin,
-                        const AGeoPoint &destination) const;
+                        const AGeoPoint &destination) const noexcept;
 
   /**
    * Find arrival height at destination.
@@ -283,11 +283,11 @@ public:
    * @return true if check was successful
    */
   bool FindPositiveArrival(const AGeoPoint &dest,
-                           ReachResult &result_r) const {
+                           ReachResult &result_r) const noexcept {
     return reach_terrain.FindPositiveArrival(dest, rpolars_reach, result_r);
   }
 
-  int GetTerrainBase() const {
+  int GetTerrainBase() const noexcept {
     return reach_terrain.GetTerrainBase();
   }
 
@@ -298,7 +298,8 @@ protected:
    *
    * @return True if solution is trivial
    */
-  virtual bool IsTrivial() const {
+  [[gnu::pure]]
+  virtual bool IsTrivial() const noexcept {
     return !dirty;
   }
 
@@ -307,7 +308,7 @@ protected:
    *
    * @param e Link to add to candidates
    */
-  void AddCandidate(const RouteLink &e);
+  void AddCandidate(const RouteLink &e) noexcept;
 
   /**
    * Add a link to candidates for search
@@ -315,7 +316,7 @@ protected:
    *
    * @param e Link to add to candidates
    */
-  void AddCandidate(const RouteLinkBase &e);
+  void AddCandidate(const RouteLinkBase &e) noexcept;
 
   /**
    * Attempt to add a candidate link skipping the previous
@@ -323,7 +324,7 @@ protected:
    *
    * @param p Point to find shortcut to
    */
-  void AddShortcut(const RoutePoint &p);
+  void AddShortcut(const RoutePoint &p) noexcept;
 
   /**
    * If this link is truly achievable, add or update
@@ -333,7 +334,7 @@ protected:
    *
    * @return True if link was achievable
    */
-  bool LinkCleared(const RouteLink &e);
+  bool LinkCleared(const RouteLink &e) noexcept;
 
   /**
    * Test whether a proposed link is unique (has not been proposed for search),
@@ -346,7 +347,7 @@ protected:
    *
    * @return True if this link has not been suggested yet
    */
-  bool IsSetUnique(const RouteLinkBase &e);
+  bool IsSetUnique(const RouteLinkBase &e) noexcept;
 
   /**
    * Given a desired path e, and a clearance point, generate candidates directly
@@ -357,7 +358,7 @@ protected:
    * @param inx Clearance point from last check
    * @param e Link that was attempted
    */
-  void AddNearbyTerrain(const RoutePoint &inx, const RouteLink& e);
+  void AddNearbyTerrain(const RoutePoint &inx, const RouteLink &e) noexcept;
 
   /**
    * Check whether a desired link may be flown without intersecting with
@@ -369,7 +370,8 @@ protected:
    *
    * @return True if path is clear
    */
-  bool CheckClearanceTerrain(const RouteLink &e, RoutePoint& inp) const;
+  bool CheckClearanceTerrain(const RouteLink &e,
+                             RoutePoint& inp) const noexcept;
 
 private:
   /**
@@ -380,7 +382,8 @@ private:
    *
    * @return True if path is clear
    */
-  virtual bool CheckSecondary(const RouteLink &e) {
+  [[gnu::pure]]
+  virtual bool CheckSecondary(const RouteLink &e) noexcept {
     return true;
   }
 
@@ -394,8 +397,8 @@ private:
    *
    * @return True if path is clear
    */
-
-  virtual bool CheckClearance(const RouteLink &e, RoutePoint& inx) const = 0;
+  virtual bool CheckClearance(const RouteLink &e,
+                              RoutePoint &inx) const noexcept = 0;
 
   /**
    * Given a desired path e, and a clearance point, generate candidates directly
@@ -404,7 +407,7 @@ private:
    * @param inx Clearance point from last check
    * @param e Link that was attempted
    */
-  virtual void AddNearby(const RouteLink &e) = 0;
+  virtual void AddNearby(const RouteLink &e) noexcept = 0;
 
   /**
    * Hook to allow subclasses to update internal data at start of solve() call
@@ -412,7 +415,8 @@ private:
    * @param origin origin of search
    * @param destination destination of search
    */
-  virtual void OnSolve(const AGeoPoint& origin, const AGeoPoint& destination);
+  virtual void OnSolve(const AGeoPoint &origin,
+                       const AGeoPoint &destination) noexcept;
 
   /**
    * Generate a candidate to left or right of the clearance point, unless:
@@ -424,7 +428,8 @@ private:
    * @param c_link Attempted path
    * @param sign +1 for left, -1 for right
    */
-  void AddNearbyTerrainSweep(const RoutePoint& p, const RouteLink &c_link, const int sign);
+  void AddNearbyTerrainSweep(const RoutePoint& p, const RouteLink &c_link,
+                             int sign) noexcept;
 
   /**
    * For a link known to not clear obstacles, generate whatever candidate edges
@@ -432,7 +437,7 @@ private:
    *
    * @param e Link to check
    */
-  void AddEdges(const RouteLink &e);
+  void AddEdges(const RouteLink &e) noexcept;
 
   /**
    * Test whether a candidate destination is inside the area already searched
@@ -442,7 +447,8 @@ private:
    *
    * @return True if the candidate is outside the hull
    */
-  bool IsHullExtended(const RoutePoint& p);
+  [[gnu::pure]]
+  bool IsHullExtended(const RoutePoint &p) noexcept;
 
   /**
    * Backtrack solution from A* internal structure to construct a
@@ -454,7 +460,7 @@ private:
    * @return Destination score (s)
    */
   unsigned FindSolution(const RoutePoint &final_point,
-                        Route& this_route) const;
+                        Route &this_route) const noexcept;
 };
 
 #endif

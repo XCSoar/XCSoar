@@ -54,23 +54,23 @@ public:
                    const AGeoPoint &origin,
                    const AGeoPoint &destination) noexcept;
 
-  void Reset() override;
+  void Reset() noexcept override;
 
   [[gnu::pure]]
   unsigned AirspaceSize() const noexcept;
 
 protected:
 
-  void OnSolve(const AGeoPoint &origin, const AGeoPoint &destination) override;
+  void OnSolve(const AGeoPoint &origin, const AGeoPoint &destination) noexcept override;
 
-  bool IsTrivial() const override {
+  bool IsTrivial() const noexcept override {
     return m_airspaces.IsEmpty() && RoutePlanner::IsTrivial();
   }
 
 private:
-  bool CheckClearance(const RouteLink &e, RoutePoint &inp) const override;
-  void AddNearby(const RouteLink &e) override;
-  bool CheckSecondary(const RouteLink &e) override;
+  bool CheckClearance(const RouteLink &e, RoutePoint &inp) const noexcept override;
+  void AddNearby(const RouteLink &e) noexcept override;
+  bool CheckSecondary(const RouteLink &e) noexcept override;
 
   void AddNearbyAirspace(const RouteAirspaceIntersection &inx,
                          const RouteLink &e) noexcept;

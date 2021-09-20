@@ -195,7 +195,7 @@ AirspaceRoute::~AirspaceRoute() noexcept
 }
 
 void
-AirspaceRoute::Reset()
+AirspaceRoute::Reset() noexcept
 {
   RoutePlanner::Reset();
   m_airspaces.ClearClearances();
@@ -245,7 +245,7 @@ AirspaceRoute::AddNearbyAirspace(const RouteAirspaceIntersection &inx,
 }
 
 void
-AirspaceRoute::AddNearby(const RouteLink &e)
+AirspaceRoute::AddNearby(const RouteLink &e) noexcept
 {
   if (m_inx.airspace == nullptr) {
     // NOTE: m_inx is "mutable" so that const in AddNearbyTerrain is ignored!!
@@ -257,7 +257,7 @@ AirspaceRoute::AddNearby(const RouteLink &e)
 }
 
 bool
-AirspaceRoute::CheckSecondary(const RouteLink &e)
+AirspaceRoute::CheckSecondary(const RouteLink &e) noexcept
 {
   if (!rpolars_route.IsAirspaceEnabled())
     return true; // trivial
@@ -271,7 +271,8 @@ AirspaceRoute::CheckSecondary(const RouteLink &e)
 }
 
 bool
-AirspaceRoute::CheckClearance(const RouteLink &e, RoutePoint &inp) const
+AirspaceRoute::CheckClearance(const RouteLink &e,
+                              RoutePoint &inp) const noexcept
 {
   // attempt terrain clearance first
 
@@ -297,7 +298,8 @@ AirspaceRoute::CheckClearance(const RouteLink &e, RoutePoint &inp) const
 }
 
 void
-AirspaceRoute::OnSolve(const AGeoPoint &origin, const AGeoPoint &destination)
+AirspaceRoute::OnSolve(const AGeoPoint &origin,
+                       const AGeoPoint &destination) noexcept
 {
   if (m_airspaces.IsEmpty()) {
     projection.SetCenter(origin);
