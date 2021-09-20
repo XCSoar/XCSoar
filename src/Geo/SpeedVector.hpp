@@ -44,7 +44,7 @@ struct SpeedVector {
   /** 
    * Non-initialising default constructor.
    */
-  SpeedVector() = default;
+  SpeedVector() noexcept = default;
 
   /** 
    * Constructor given bearing and magnitude
@@ -53,8 +53,8 @@ struct SpeedVector {
    * @param _norm Magnitude of vector (m/s)
    * @return Initialised object
    */
-  constexpr
-  SpeedVector(Angle _bearing, double _norm):bearing(_bearing), norm(_norm) {}
+  constexpr SpeedVector(Angle _bearing, double _norm) noexcept
+    :bearing(_bearing), norm(_norm) {}
 
   /** 
    * Constructor given two magnitudes (east and north)
@@ -63,27 +63,27 @@ struct SpeedVector {
    * @param y North speed
    * @return Initialised object
    */
-  SpeedVector(double x, double y)
+  SpeedVector(double x, double y) noexcept
     :bearing(Angle::FromXY(y,x).AsBearing()), norm(hypot(x, y)) {}
 
   /**
    * Returns the null vector.
    */
-  static constexpr SpeedVector Zero() {
+  static constexpr SpeedVector Zero() noexcept {
     return SpeedVector(Angle::Zero(), 0);
   }
 
   /**
    * Returns true if the norm of the vector is zero.
    */
-  constexpr bool IsZero() const {
+  constexpr bool IsZero() const noexcept {
     return !IsNonZero();
   }
 
   /**
    * Returns true if the norm of the vector is non-zero.
    */
-  constexpr bool IsNonZero() const {
+  constexpr bool IsNonZero() const noexcept {
     return norm > 0;
   }
 
@@ -91,7 +91,7 @@ struct SpeedVector {
    * Return the vector with the bearing rotated by 180 degrees.
    */
   [[gnu::pure]]
-  SpeedVector Reciprocal() const {
+  SpeedVector Reciprocal() const noexcept {
     return SpeedVector(bearing.Reciprocal(), norm);
   }
 };
