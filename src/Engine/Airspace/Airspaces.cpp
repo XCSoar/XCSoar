@@ -188,14 +188,14 @@ Airspaces::ClearClearances() noexcept
     v.ClearClearance();
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 AirspacePointersEquals(const Airspace &a, const Airspace &b) noexcept
 {
   return &a.GetAirspace() == &b.GetAirspace();
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 CompareAirspaceVectors(const AirspacesInterface::AirspaceVector &a,
                        const AirspacesInterface::AirspaceVector &b) noexcept
