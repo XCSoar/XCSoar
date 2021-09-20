@@ -41,7 +41,7 @@ class AirspaceIntersectionVisitor;
  * fast geospatial lookups.
  */
 class Airspaces : public AirspacesInterface {
-  AtmosphericPressure qnh;
+  AtmosphericPressure qnh = AtmosphericPressure::Zero();
   AirspaceActivity activity_mask;
 
   AirspaceTree airspace_tree;
@@ -62,8 +62,7 @@ public:
    *
    * @return empty Airspaces class.
    */
-  Airspaces() noexcept
-    :qnh(AtmosphericPressure::Zero()) {}
+  Airspaces() noexcept {}
 
   ~Airspaces() noexcept;
 
