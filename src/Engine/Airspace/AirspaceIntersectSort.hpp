@@ -50,7 +50,7 @@ class AirspaceIntersectSort {
   std::priority_queue<Intersection, std::vector<Intersection>, Rank> m_q;
 
   const GeoPoint& m_start;
-  const AbstractAirspace *m_airspace;
+  const AbstractAirspace &airspace;
 
 public:
   /**
@@ -61,7 +61,7 @@ public:
    */
   AirspaceIntersectSort(const GeoPoint &start,
                         const AbstractAirspace &the_airspace) noexcept
-    :m_start(start), m_airspace(&the_airspace) {}
+    :m_start(start), airspace(the_airspace) {}
 
   /**
    * Add point to queue

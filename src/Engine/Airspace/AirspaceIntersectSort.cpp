@@ -34,7 +34,7 @@ AirspaceIntersectSort::add(const double t, const GeoPoint &p) noexcept
 std::optional<GeoPoint>
 AirspaceIntersectSort::top() const noexcept
 {
-  if (m_airspace->Inside(m_start))
+  if (airspace.Inside(m_start))
     return m_start;
 
   if (!m_q.empty())
@@ -60,7 +60,7 @@ AirspaceIntersectSort::all() noexcept
     // when inside, checking midpoint is ok, otherwise we should
     // check just beyond the last location
 
-    if (m_airspace->Inside(p_mid)) {
+    if (airspace.Inside(p_mid)) {
       res.emplace_back(p_last, p_this);
       waiting = false;
     } else {
