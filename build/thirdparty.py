@@ -89,7 +89,12 @@ class Toolchain:
 
         # redirect pkg-config to use our root directory instead of the
         # default one on the build host
-        self.env['PKG_CONFIG_LIBDIR'] = os.path.join(install_prefix, 'lib/pkgconfig')
+        import shutil
+        bin_dir = os.path.join(install_prefix, 'bin')
+        os.makedirs(bin_dir, exist_ok=True)
+        self.pkg_config = shutil.copy(os.path.join(xcsoar_path, 'build', 'pkg-config.sh'),
+                                      os.path.join(bin_dir, 'pkg-config'))
+        self.env['PKG_CONFIG'] = self.pkg_config
 
         # WORKAROUND: Under some circumstances, if QEMU User Emulation is
         # installed on the build system, and enabled for binfmt_misc, it can
