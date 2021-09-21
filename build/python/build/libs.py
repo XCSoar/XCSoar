@@ -5,7 +5,6 @@ from build.autotools import AutotoolsProject
 from build.cmake import CmakeProject
 from build.openssl import OpenSSLProject
 from build.freetype import FreeTypeProject
-from build.curl import CurlProject
 from build.libpng import LibPNGProject
 from build.gcc import BinutilsProject, GccProject, GccBootstrapProject
 from build.linux import SabotageLinuxHeadersProject
