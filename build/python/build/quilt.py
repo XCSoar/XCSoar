@@ -1,4 +1,4 @@
-import os.path, subprocess, shutil
+import subprocess
 
 def run_quilt(toolchain, cwd, patches_path, *args):
     env = dict(toolchain.env)
