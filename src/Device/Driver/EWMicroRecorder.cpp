@@ -54,10 +54,17 @@ public:
 
 public:
   /* virtual methods from class Device */
+  bool EnableNMEA(OperationEnvironment &env) override;
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env) override;
 };
+
+bool
+EWMicroRecorderDevice::EnableNMEA(OperationEnvironment &env)
+{
+  return port.FullWrite("!!\r\n", 4, env, std::chrono::milliseconds(500));
+}
 
 static bool
 ReadAltitude(NMEAInputLine &line, double &value_r)
@@ -352,12 +359,7 @@ EWMicroRecorderDevice::Declare(const Declaration &declaration,
 
   port.StopRxThread();
 
-  bool success = DeclareInner(port, declaration, env);
-
-  // go back to NMEA mode
-  port.FullWrite("!!\r\n", 4, env, std::chrono::milliseconds(500));
-
-  return success;
+  return DeclareInner(port, declaration, env);
 }
 
 
