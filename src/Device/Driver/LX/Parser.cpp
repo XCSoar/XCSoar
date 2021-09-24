@@ -193,7 +193,7 @@ LXWP3(NMEAInputLine &line, NMEAInfo &info)
 }
 
 /**
- * Parse the $PLXV0 sentence (LXNav V7).
+ * Parse the $PLXV0 sentence (LXNAV sVarios (including V7)).
  */
 static bool
 PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
@@ -217,7 +217,7 @@ PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
 }
 
 static void
-ParseNanoInfo(NMEAInputLine &line, DeviceInfo &device)
+ParseNanoVarioInfo(NMEAInputLine &line, DeviceInfo &device)
 {
   ReadString(line, device.product);
   ReadString(line, device.software_version);
@@ -226,7 +226,7 @@ ParseNanoInfo(NMEAInputLine &line, DeviceInfo &device)
 }
 
 /**
- * Parse the $PLXVC sentence (LXNAV Nano).
+ * Parse the $PLXVC sentence (LXNAV Nano and sVarios).
  *
  * $PLXVC,<key>,<type>,<values>*<checksum><cr><lf>
  */
@@ -250,7 +250,7 @@ PLXVC(NMEAInputLine &line, DeviceInfo &device,
       settings.Set(name, std::string(value.begin(), value.end()));
     }
   } else if (StringIsEqual(key, "INFO") && type[0] == 'A') {
-    ParseNanoInfo(line, device);
+    ParseNanoVarioInfo(line, device);
   } else if (StringIsEqual(key, "GPSINFO") && type[0] == 'A') {
     /* the LXNAV V7 (firmware >= 2.01) forwards the Nano's INFO
        sentence with the "GPS" prefix */
@@ -263,13 +263,13 @@ PLXVC(NMEAInputLine &line, DeviceInfo &device,
     } else if (StringIsEqual(name, "INFO")) {
       line.Read(type, ARRAY_SIZE(type));
       if (type[0] == 'A')
-        ParseNanoInfo(line, secondary_device);
+        ParseNanoVarioInfo(line, secondary_device);
     }
   }
 }
 
 /**
- * Parse the $PLXVF sentence (LXNav V7).
+ * Parse the $PLXVF sentence (LXNAV sVarios (including V7)).
  *
  * $PLXVF,time ,AccX,AccY,AccZ,Vario,IAS,PressAlt*CS<CR><LF>
  *
@@ -301,7 +301,7 @@ PLXVF(NMEAInputLine &line, NMEAInfo &info)
 }
 
 /**
- * Parse the $PLXVS sentence (LXNav V7).
+ * Parse the $PLXVS sentence (LXNAV sVarios (including V7)).
  *
  * $PLXVS,OAT,mode,voltage *CS<CR><LF>
  *
@@ -392,7 +392,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
   if (StringIsEqual(type, "$PLXV0")) {
     is_v7 = true;
     is_colibri = false;
-    return PLXV0(line, v7_settings);
+    return PLXV0(line, lxnav_vario_settings);
   }
 
   if (StringIsEqual(type, "$PLXVC")) {

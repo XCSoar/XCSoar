@@ -50,7 +50,7 @@ class LXDevice: public AbstractDevice
   /**
    * Is this ia Colibri or LX20 or a similar "old" logger?  This is
    * initialised to true if the NMEA baud rate is configured to 4800,
-   * which disables the advanced V7/Nano protocol, to avoid confusing
+   * which disables the advanced LX Vario/Nano protocol, to avoid confusing
    * the Colibri.  It is cleared as soon as a "modern" LX product is
    * detected (passively).
    */
@@ -77,14 +77,14 @@ class LXDevice: public AbstractDevice
   bool is_lx16xx;
 
   /**
-   * Was a V7 with a Nano on the GPS port detected?
+   * Was a vario with a Nano on the GPS port detected?
    */
   bool is_forwarded_nano;
 
   /**
-   * Settings that were received in PLXV0 (LXNAV V7) sentences.
+   * Settings that were received in PLXV0 (LXNAV Vario) sentences.
    */
-  DeviceSettingsMap<std::string> v7_settings;
+  DeviceSettingsMap<std::string> lxnav_vario_settings;
 
   /**
    * Settings that were received in PLXVC (LXNAV Nano) sentences.
@@ -131,37 +131,37 @@ public:
   }
 
   /**
-   * Write a setting to a LXNAV V7.
+   * Write a setting to a LXNAV Vario.
    *
    * @return true if sending the command has succeeded (it does not
-   * indicate whether the V7 has understood and processed it)
+   * indicate whether the Vario has understood and processed it)
    */
-  bool SendV7Setting(const char *name, const char *value,
+  bool SendLXNAVVarioSetting(const char *name, const char *value,
                      OperationEnvironment &env);
 
   /**
-   * Request a setting from a LXNAV V7.  The V7 will send the value,
+   * Request a setting from a LXNAV Vario.  The Vario will send the value,
    * but this method will not wait for that.
    *
    * @return true if sending the command has succeeded (it does not
-   * indicate whether the V7 has understood and processed it)
+   * indicate whether the Vario has understood and processed it)
    */
-  bool RequestV7Setting(const char *name, OperationEnvironment &env);
+  bool RequestLXNAVVarioSetting(const char *name, OperationEnvironment &env);
 
   /**
    * Wait for the specified setting to be received.  Returns the value
    * on success, or an empty string on timeout.
    */
-  std::string WaitV7Setting(const char *name, OperationEnvironment &env,
+  std::string WaitLXNAVVarioSetting(const char *name, OperationEnvironment &env,
                             unsigned timeout_ms);
 
   /**
-   * Look up the given setting in the table of received LXNAV V7
+   * Look up the given setting in the table of received LXNAV Vario
    * values.  If the value does not exist, an empty string is
    * returned.
    */
   gcc_pure
-  std::string GetV7Setting(const char *name) const;
+  std::string GetLXNAVVarioSetting(const char *name) const;
 
   /**
    * Write a setting to a LXNAV Nano.
@@ -202,7 +202,7 @@ protected:
    * mode.  If the Nano is connected through a LXNAV V7, it will
    * enable pass-through mode on the V7.
    */
-  bool EnableNanoNMEA(OperationEnvironment &env);
+  bool EnableLoggerNMEA(OperationEnvironment &env);
 
   bool EnableCommandMode(OperationEnvironment &env);
 

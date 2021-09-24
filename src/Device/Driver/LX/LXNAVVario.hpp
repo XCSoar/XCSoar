@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_DRIVER_LX_V7_HPP
-#define XCSOAR_DEVICE_DRIVER_LX_V7_HPP
+#ifndef XCSOAR_DEVICE_DRIVER_LX_LXVARIO_HPP
+#define XCSOAR_DEVICE_DRIVER_LX_LXVARIO_HPP
 
 #include "Device/Port/Port.hpp"
 #include "Device/Util/NMEAWriter.hpp"
@@ -33,9 +33,9 @@ Copyright_License {
 /**
  * Code specific to LXNav varios (e.g. V7).
  *
- * Source: V7 Dataport specification Version 1.98
+ * Source: LXNav Vario Dataport specification Version 1.03
  */
-namespace V7 {
+namespace LXNAVVario {
   /**
    * Enable direct link with GPS port.
    */
@@ -46,16 +46,16 @@ namespace V7 {
   }
 
   /**
-   * Enable communication with V7.
+   * Enable communication with the vario.
    */
   static inline bool
-  ModeVSeven(Port &port, OperationEnvironment &env)
+  ModeNormal(Port &port, OperationEnvironment &env)
   {
     return PortWriteNMEA(port, "PLXV0,CONNECTION,W,VSEVEN", env);
   }
 
   /**
-   * Set up the NMEA sentences sent by the V7 vario:
+   * Set up the NMEA sentences sent by the vario:
    *
    * - PLXVF at 2 Hz
    * - PLXVS every 5 seconds
@@ -72,7 +72,7 @@ namespace V7 {
   }
 
   /**
-   * Set the MC setting of the V7 vario
+   * Set the MC setting of the vario
    * @param mc in m/s
    */
   static inline bool
@@ -84,7 +84,7 @@ namespace V7 {
   }
 
   /**
-   * Set the ballast setting of the V7 vario
+   * Set the ballast setting of the vario
    * @param overload 1.0 - 1.4 (100 - 140%)
    */
   static inline bool
@@ -96,7 +96,7 @@ namespace V7 {
   }
 
   /**
-   * Set the bugs setting of the V7 vario
+   * Set the bugs setting of the vario
    * @param bugs 0 - 30 %
    */
   static inline bool
@@ -108,7 +108,7 @@ namespace V7 {
   }
 
   /**
-   * Set the QNH setting of the V7 vario
+   * Set the QNH setting of the vario
    */
   static inline bool
   SetQNH(Port &port, OperationEnvironment &env, const AtmosphericPressure &qnh)
@@ -120,7 +120,7 @@ namespace V7 {
   }
 
   /**
-   * Send pilotevent to V7 vario 
+   * Send pilotevent to vario 
    * (needs S10x/S8x firmware 8.01 or newer)
    */
   static inline bool

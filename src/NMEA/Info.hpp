@@ -352,7 +352,7 @@ struct NMEAInfo {
 
   /**
    * Information about the "secondary" device, e.g. the GPS connected
-   * "behind" the LXNAV V7.
+   * "behind" the LXNAV Vario.
    */
   DeviceInfo secondary_device;
 

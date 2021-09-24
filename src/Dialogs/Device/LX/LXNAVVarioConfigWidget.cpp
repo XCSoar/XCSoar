@@ -21,13 +21,13 @@ Copyright_License {
 }
 */
 
-#include "V7ConfigWidget.hpp"
+#include "LXNAVVarioConfigWidget.hpp"
 #include "Device/Driver/LX/Internal.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 
-static const char *const v7_setting_names[] = {
+static const char *const lxnav_vario_setting_names[] = {
   "BRGPS",
   "BRPDA",
   NULL
@@ -38,8 +38,8 @@ RequestAllSettings(LXDevice &device)
 {
   PopupOperationEnvironment env;
 
-  for (auto i = v7_setting_names; *i != NULL; ++i)
-    if (!device.RequestV7Setting(*i, env))
+  for (auto i = lxnav_vario_setting_names; *i != NULL; ++i)
+    if (!device.RequestLXNAVVarioSetting(*i, env))
       return false;
 
   return true;
@@ -50,7 +50,7 @@ WaitUnsignedValue(LXDevice &device, const char *name,
                   unsigned default_value)
 {
   PopupOperationEnvironment env;
-  const auto x = device.WaitV7Setting(name, env, 500);
+  const auto x = device.WaitLXNAVVarioSetting(name, env, 500);
   if (!x.empty()) {
     char *endptr;
     unsigned long y = strtoul(x.c_str(), &endptr, 10);
@@ -62,7 +62,7 @@ WaitUnsignedValue(LXDevice &device, const char *name,
 }
 
 void
-V7ConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+LXNAVVarioConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   RequestAllSettings(device);
 
@@ -89,7 +89,7 @@ V7ConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 }
 
 bool
-V7ConfigWidget::Save(bool &_changed) noexcept
+LXNAVVarioConfigWidget::Save(bool &_changed) noexcept
 {
   PopupOperationEnvironment env;
   bool changed = false;
@@ -97,13 +97,13 @@ V7ConfigWidget::Save(bool &_changed) noexcept
 
   if (SaveValue(BRGPS, brgps)) {
     buffer.UnsafeFormat("%u", brgps);
-    device.SendV7Setting("BRGPS", buffer, env);
+    device.SendLXNAVVarioSetting("BRGPS", buffer, env);
     changed = true;
   }
 
   if (SaveValue(BRPDA, brpda)) {
     buffer.UnsafeFormat("%u", brpda);
-    device.SendV7Setting("BRPDA", buffer, env);
+    device.SendLXNAVVarioSetting("BRPDA", buffer, env);
     changed = true;
   }
 

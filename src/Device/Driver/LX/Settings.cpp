@@ -24,20 +24,20 @@ Copyright_License {
 #include "Internal.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "LX1600.hpp"
-#include "V7.hpp"
+#include "LXNAVVario.hpp"
 
 #include <cstdio>
 
 bool
-LXDevice::SendV7Setting(const char *name, const char *value,
+LXDevice::SendLXNAVVarioSetting(const char *name, const char *value,
                         OperationEnvironment &env)
 {
   if (!EnableNMEA(env))
     return false;
 
   {
-    const std::lock_guard<Mutex> lock(v7_settings);
-    v7_settings.MarkOld(name);
+    const std::lock_guard<Mutex> lock(lxnav_vario_settings);
+    lxnav_vario_settings.MarkOld(name);
   }
 
   char buffer[256];
@@ -46,14 +46,14 @@ LXDevice::SendV7Setting(const char *name, const char *value,
 }
 
 bool
-LXDevice::RequestV7Setting(const char *name, OperationEnvironment &env)
+LXDevice::RequestLXNAVVarioSetting(const char *name, OperationEnvironment &env)
 {
   if (!EnableNMEA(env))
     return false;
 
   {
-    const std::lock_guard<Mutex> lock(v7_settings);
-    v7_settings.MarkOld(name);
+    const std::lock_guard<Mutex> lock(lxnav_vario_settings);
+    lxnav_vario_settings.MarkOld(name);
   }
 
   char buffer[256];
@@ -62,24 +62,24 @@ LXDevice::RequestV7Setting(const char *name, OperationEnvironment &env)
 }
 
 std::string
-LXDevice::WaitV7Setting(const char *name, OperationEnvironment &env,
+LXDevice::WaitLXNAVVarioSetting(const char *name, OperationEnvironment &env,
                         unsigned timeout_ms)
 {
-  std::unique_lock<Mutex> lock(v7_settings);
-  auto i = v7_settings.Wait(lock, name, env,
+  std::unique_lock<Mutex> lock(lxnav_vario_settings);
+  auto i = lxnav_vario_settings.Wait(lock, name, env,
                             std::chrono::milliseconds(timeout_ms));
-  if (i == v7_settings.end())
+  if (i == lxnav_vario_settings.end())
     return std::string();
 
   return *i;
 }
 
 std::string
-LXDevice::GetV7Setting(const char *name) const
+LXDevice::GetLXNAVVarioSetting(const char *name) const
 {
-  std::lock_guard<Mutex> lock(v7_settings);
-  auto i = v7_settings.find(name);
-  if (i == v7_settings.end())
+  std::lock_guard<Mutex> lock(lxnav_vario_settings);
+  auto i = lxnav_vario_settings.find(name);
+  if (i == lxnav_vario_settings.end())
     return std::string();
 
   return *i;
@@ -89,7 +89,7 @@ bool
 LXDevice::SendNanoSetting(const char *name, const char *value,
                         OperationEnvironment &env)
 {
-  if (!EnableNanoNMEA(env))
+  if (!EnableLoggerNMEA(env))
     return false;
 
   {
@@ -105,7 +105,7 @@ LXDevice::SendNanoSetting(const char *name, const char *value,
 bool
 LXDevice::RequestNanoSetting(const char *name, OperationEnvironment &env)
 {
-  if (!EnableNanoNMEA(env))
+  if (!EnableLoggerNMEA(env))
     return false;
 
   {
@@ -150,7 +150,7 @@ LXDevice::PutBallast(gcc_unused double fraction, double overload,
     return false;
 
   if (IsV7())
-    return V7::SetBallast(port, env, overload);
+    return LXNAVVario::SetBallast(port, env, overload);
   else
     return LX1600::SetBallast(port, env, overload);
 }
@@ -164,7 +164,7 @@ LXDevice::PutBugs(double bugs, OperationEnvironment &env)
   int transformed_bugs_value = 100 - (int)(bugs*100);
 
   if (IsV7())
-    return V7::SetBugs(port, env, transformed_bugs_value);
+    return LXNAVVario::SetBugs(port, env, transformed_bugs_value);
   else
     return LX1600::SetBugs(port, env, transformed_bugs_value);
 }
@@ -176,7 +176,7 @@ LXDevice::PutMacCready(double mac_cready, OperationEnvironment &env)
     return false;
 
   if (IsV7())
-    return V7::SetMacCready(port, env, mac_cready);
+    return LXNAVVario::SetMacCready(port, env, mac_cready);
   else
     return LX1600::SetMacCready(port, env, mac_cready);
 }
@@ -188,7 +188,7 @@ LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
     return false;
 
   if (IsV7())
-    return V7::SetQNH(port, env, pres);
+    return LXNAVVario::SetQNH(port, env, pres);
   else
     return LX1600::SetQNH(port, env, pres);
 }
@@ -208,5 +208,5 @@ LXDevice::PutPilotEvent(OperationEnvironment &env)
   if (!IsV7())
     return false;
 
-  return V7::PutPilotEvent(env, port);
+  return LXNAVVario::PutPilotEvent(env, port);
 }

@@ -149,7 +149,7 @@ LXDevice::ReadFlightList(RecordedFlightList &flight_list,
                          OperationEnvironment &env)
 {
   if (IsNano()) {
-    if (!EnableNanoNMEA(env))
+    if (!EnableLoggerNMEA(env))
       return false;
 
     assert(!busy);

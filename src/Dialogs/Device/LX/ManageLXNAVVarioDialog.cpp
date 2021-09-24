@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "ManageV7Dialog.hpp"
-#include "V7ConfigWidget.hpp"
+#include "ManageLXNAVVarioDialog.hpp"
+#include "LXNAVVarioConfigWidget.hpp"
 #include "ManageNanoDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -32,14 +32,14 @@ Copyright_License {
 #include "Device/Driver/LX/Internal.hpp"
 #include "NMEA/DeviceInfo.hpp"
 
-class ManageV7Widget final
+class ManageLXNAVVarioWidget final
   : public RowFormWidget {
   LXDevice &device;
   const DeviceInfo info;
   const DeviceInfo secondary_info;
 
 public:
-  ManageV7Widget(const DialogLook &look, LXDevice &_device,
+  ManageLXNAVVarioWidget(const DialogLook &look, LXDevice &_device,
                  const DeviceInfo &info,
                  const DeviceInfo &secondary_info)
     :RowFormWidget(look), device(_device), info(info),
@@ -50,7 +50,7 @@ public:
 };
 
 void
-ManageV7Widget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+ManageLXNAVVarioWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   StaticString<64> buffer;
 
@@ -79,9 +79,9 @@ ManageV7Widget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   }
 
   AddButton(_("Setup"), [this](){
-    V7ConfigWidget widget(GetLook(), device);
+    LXNAVVarioConfigWidget widget(GetLook(), device);
     DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
-                        _T("LXNAV V7"), widget);
+                        _T("LXNAV Vario"), widget);
   });
 
   if (device.IsNano())
@@ -95,13 +95,13 @@ ManageV7Widget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 }
 
 void
-ManageV7Dialog(Device &device, const DeviceInfo &info,
+ManageLXNAVVarioDialog(Device &device, const DeviceInfo &info,
                const DeviceInfo &secondary_info)
 {
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(),
-                      _T("LXNAV V7"),
-                      new ManageV7Widget(UIGlobals::GetDialogLook(),
+                      _T("LXNAV Vario"),
+                      new ManageLXNAVVarioWidget(UIGlobals::GetDialogLook(),
                                          (LXDevice &)device, info,
                                          secondary_info));
   dialog.AddButton(_("Close"), mrCancel);

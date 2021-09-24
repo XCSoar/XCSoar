@@ -26,8 +26,8 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Device/ManageFlarmDialog.cpp \
 	$(SRC)/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp \
 	$(SRC)/Dialogs/Device/ManageI2CPitotDialog.cpp \
-	$(SRC)/Dialogs/Device/LX/ManageV7Dialog.cpp \
-	$(SRC)/Dialogs/Device/LX/V7ConfigWidget.cpp \
+	$(SRC)/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp \
+	$(SRC)/Dialogs/Device/LX/LXNAVVarioConfigWidget.cpp \
 	$(SRC)/Dialogs/Device/LX/ManageNanoDialog.cpp \
 	$(SRC)/Dialogs/Device/LX/NanoConfigWidget.cpp \
 	$(SRC)/Dialogs/Device/LX/ManageLX16xxDialog.cpp \
