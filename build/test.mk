@@ -803,6 +803,7 @@ DEBUG_PROGRAM_NAMES += DownloadFile \
 	RunDownloadToFile \
 	UploadFile \
 	RunWeGlideUploadFlight \
+	RunTimClient \
 	RunNOAADownloader RunSkyLinesTracking RunLiveTrack24
 endif
 
@@ -965,6 +966,13 @@ UPLOAD_FILE_SOURCES = \
 	$(TEST_SRC_DIR)/UploadFile.cpp
 UPLOAD_FILE_DEPENDS = LIBHTTP ASYNC OS LIBNET OS IO UTIL
 $(eval $(call link-program,UploadFile,UPLOAD_FILE))
+
+RUN_TIM_CLIENT_SOURCES = \
+	$(SRC)/Version.cpp \
+	$(SRC)/net/client/tim/Client.cpp \
+	$(TEST_SRC_DIR)/RunTimClient.cpp
+RUN_TIM_CLIENT_DEPENDS = JSON LIBHTTP ASYNC OS LIBNET IO UTIL
+$(eval $(call link-program,RunTimClient,RUN_TIM_CLIENT))
 
 RUN_WEGLIDE_UPLOAD_FLIGHT_SOURCES = \
 	$(SRC)/Version.cpp \
