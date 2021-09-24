@@ -31,13 +31,40 @@
  */
 
 #include "CoRequest.hxx"
+#include "Global.hxx"
 
 namespace Curl {
 
 CoRequest::CoRequest(CurlGlobal &global, CurlEasy easy)
-	:request(global, std::move(easy), *this)
+	:request(global, std::move(easy), *this),
+	 defer_error(global.GetEventLoop(), BIND_THIS_METHOD(OnDeferredError))
 {
 	request.Start();
+}
+
+void
+CoRequest::DeferError(std::exception_ptr _error) noexcept
+{
+	assert(_error);
+	assert(!error);
+	assert(!ready);
+	assert(!defer_error.IsPending());
+
+	error = std::move(_error);
+	ready = true;
+
+	if (continuation)
+		defer_error.Schedule();
+}
+
+inline void
+CoRequest::OnDeferredError() noexcept
+{
+	assert(error);
+	assert(ready);
+	assert(continuation);
+
+	continuation.resume();
 }
 
 void
@@ -51,6 +78,8 @@ CoRequest::OnHeaders(unsigned status,
 void
 CoRequest::OnData(ConstBuffer<void> data)
 {
+	assert(!defer_error.IsPending());
+
 	response.body.append((const char *)data.data,
 			     data.size);
 }
@@ -58,7 +87,11 @@ CoRequest::OnData(ConstBuffer<void> data)
 void
 CoRequest::OnEnd()
 {
+	assert(!defer_error.IsPending());
+
 	ready = true;
+
+	defer_error.Cancel();
 
 	if (continuation)
 		continuation.resume();
@@ -67,6 +100,8 @@ CoRequest::OnEnd()
 void
 CoRequest::OnError(std::exception_ptr e) noexcept
 {
+	assert(!defer_error.IsPending());
+
 	error = std::move(e);
 	ready = true;
 

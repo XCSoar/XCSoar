@@ -35,6 +35,7 @@
 #include "Request.hxx"
 #include "Handler.hxx"
 #include "co/Compat.hxx"
+#include "event/DeferEvent.hxx"
 
 #include <exception>
 
@@ -54,6 +55,8 @@ struct CoResponse {
 class CoRequest : protected CurlResponseHandler {
 	CurlRequest request;
 
+	DeferEvent defer_error;
+
 	CoResponse response;
 	std::exception_ptr error;
 
@@ -63,6 +66,8 @@ class CoRequest : protected CurlResponseHandler {
 
 public:
 	CoRequest(CurlGlobal &global, CurlEasy easy);
+
+	void DeferError(std::exception_ptr _error) noexcept;
 
 	auto operator co_await() noexcept {
 		struct Awaitable final {
@@ -89,6 +94,8 @@ public:
 	}
 
 private:
+	void OnDeferredError() noexcept;
+
 	/* virtual methods from CurlResponseHandler */
 	void OnHeaders(unsigned status,
 		       std::multimap<std::string, std::string> &&headers) override;
