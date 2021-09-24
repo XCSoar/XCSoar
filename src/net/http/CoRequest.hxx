@@ -51,7 +51,7 @@ struct CoResponse {
 /**
  * A CURL HTTP request as a C++20 coroutine.
  */
-class CoRequest : CurlResponseHandler {
+class CoRequest : protected CurlResponseHandler {
 	CurlRequest request;
 
 	CoResponse response;
