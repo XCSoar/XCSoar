@@ -34,8 +34,11 @@ namespace Curl {
 
 void
 CoStreamRequest::OnData(ConstBuffer<void> data)
-{
+try {
 	os.Write(data.data, data.size);
+} catch (...) {
+	DeferError(std::current_exception());
+	throw Pause{};
 }
 
 } // namespace Curl
