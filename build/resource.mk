@@ -160,17 +160,6 @@ endif
 
 #######
 
-DIALOG_FILES = $(wildcard Data/Dialogs/*.xml)
-DIALOG_FILES += $(wildcard Data/Dialogs/Infobox/*.xml)
-DIALOG_FILES += $(wildcard Data/Dialogs/Configuration/*.xml)
-
-DIALOG_COMPRESSED = $(patsubst Data/Dialogs/%.xml,$(DATA)/dialogs/%.xml.gz,$(DIALOG_FILES))
-$(DIALOG_COMPRESSED): $(DATA)/dialogs/%.xml.gz: Data/Dialogs/%.xml \
-	| $(DATA)/dialogs/Configuration/dirstamp $(DATA)/dialogs/Infobox/dirstamp
-	@$(NQ)echo "  GZIP    $@"
-	$(Q)gzip --best <$< >$@.tmp
-	$(Q)mv $@.tmp $@
-
 TEXT_FILES = AUTHORS COPYING NEWS.txt
 
 TEXT_COMPRESSED = $(patsubst %,$(DATA)/%.gz,$(TEXT_FILES))
@@ -179,7 +168,7 @@ $(TEXT_COMPRESSED): $(DATA)/%.gz: % | $(DATA)/dirstamp
 	$(Q)gzip --best <$< >$@.tmp
 	$(Q)mv $@.tmp $@
 
-RESOURCE_FILES = $(DIALOG_COMPRESSED) $(TEXT_COMPRESSED)
+RESOURCE_FILES = $(TEXT_COMPRESSED)
 
 ifeq ($(TARGET),ANDROID)
 RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))
