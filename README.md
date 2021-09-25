@@ -32,7 +32,9 @@ For more information, please refer to the git documentation.
 
 ## Compiling from source
 
-Please read the current [Developer's Manual](https://xcsoar.org/discover/manual.html) for detailed build instructions.
+Please read the current [Developer's
+Manual](https://xcsoar.readthedocs.io/en/latest/build.html) for
+detailed build instructions.
 
 ## Submitting patches
 
