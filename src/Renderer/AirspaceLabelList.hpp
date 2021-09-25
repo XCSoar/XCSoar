@@ -55,11 +55,11 @@ public:
     labels.clear();
   }
 
-  const Label *begin() const {
+  auto begin() const noexcept {
     return labels.begin();
   }
 
-  const Label *end() const {
+  auto end() const noexcept {
     return labels.end();
   }
 
