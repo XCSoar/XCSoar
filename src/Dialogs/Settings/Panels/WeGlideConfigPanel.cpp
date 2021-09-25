@@ -85,8 +85,7 @@ WeGlideConfigPanel::Prepare(ContainerWindow &parent,
 
   RowFormWidget::Prepare(parent, rc);
 
-  AddBoolean(_("Enable"),
-             _("This enabled the communication with the WeGlide server."),
+  AddBoolean(_("Enable"), nullptr,
              weglide.enabled, this);
 
   AddBoolean(_("Automatic Upload"),
