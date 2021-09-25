@@ -149,7 +149,7 @@ static constexpr TabMenuPage setup_pages[] = {
 #endif
   { _T("XCSoar Cloud"), CreateCloudConfigPanel },
 #ifdef HAVE_PCMET
-  { _T("Weather"), CreateWeatherConfigPanel },
+  { N_("Weather"), CreateWeatherConfigPanel },
 #endif
   { _T("WeGlide"), CreateWeGlideConfigPanel },
 #ifdef HAVE_VOLUME_CONTROLLER
