@@ -46,10 +46,10 @@ enum ControlIndex {
 class WeGlideConfigPanel final
   : public RowFormWidget, DataFieldListener {
 public:
-  WeGlideConfigPanel()
+  WeGlideConfigPanel() noexcept
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-  void SetEnabled(bool enabled);
+  void SetEnabled(bool enabled) noexcept;
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -61,7 +61,7 @@ private:
 };
 
 void
-WeGlideConfigPanel::SetEnabled(bool enabled)
+WeGlideConfigPanel::SetEnabled(bool enabled) noexcept
 {
   SetRowEnabled(WeGlideAutomaticUpload, enabled);
   SetRowEnabled(WeGlidePilotBirthDate, enabled);
