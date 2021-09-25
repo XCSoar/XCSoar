@@ -376,9 +376,11 @@ WaveComputer::Compute(const NMEAInfo &basic,
     result.waves.push_back(wave);
 
   /* now copy the rest */
-  for (auto i = waves.begin(), end = waves.end();
-       i != end && !result.waves.full(); ++i)
-    result.waves.push_back(*i);
+  for (const auto &i : waves) {
+    if (result.waves.full())
+      break;
+    result.waves.push_back(i);
+  }
 
   /* remember some data for the next iteration */
   last_location_available = basic.location_available;
