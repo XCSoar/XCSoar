@@ -82,18 +82,18 @@ class GlidePolar;
  * (RoutePlannerGlue) is responsible for locking the RasterMap on solve() calls.
  */
 class RoutePlanner {
-  struct RoutePointHasher : std::unary_function<RoutePoint, size_t> {
+  struct RoutePointHasher {
     [[gnu::const]]
-    result_type operator()(const argument_type p) const noexcept {
-      return p.x * result_type(104729) + p.y;
+    std::size_t operator()(const RoutePoint &p) const noexcept {
+      return p.x * std::size_t(104729) + p.y;
     }
   };
 
-  struct RouteLinkBaseHasher : std::unary_function<RouteLinkBase, size_t> {
+  struct RouteLinkBaseHasher {
     [[gnu::const]]
-    result_type operator()(const argument_type l) const noexcept {
+    std::size_t operator()(const RouteLinkBase &l) const noexcept {
       RoutePointHasher p;
-      return p(l.first) * result_type(27644437) + p(l.second);
+      return p(l.first) * std::size_t(27644437) + p(l.second);
     }
   };
 

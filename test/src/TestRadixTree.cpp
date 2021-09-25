@@ -55,8 +55,7 @@ prefix_sum(const RadixTree<int> &rt, const TCHAR *prefix)
 }
 
 template<typename T>
-struct AscendingKeyVisitor
-  : public std::binary_function<const TCHAR *, T, void> {
+struct AscendingKeyVisitor {
   tstring last;
 
   void operator()(const TCHAR *key, const T &value) {

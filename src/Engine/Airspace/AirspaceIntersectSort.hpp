@@ -40,7 +40,7 @@ class AirspaceIntersectSort {
   /**
    * Function object used to rank intercepts by vector parameter t(0,1)
    */
-  struct Rank : public std::binary_function<Intersection, Intersection, bool> {
+  struct Rank {
     bool operator()(const Intersection &x,
                     const Intersection &y) const noexcept {
       return x.first > y.first;
