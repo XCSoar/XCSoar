@@ -63,6 +63,7 @@ private:
 void
 WeGlideConfigPanel::SetEnabled(bool enabled)
 {
+  SetRowEnabled(WeGlideAutomaticUpload, enabled);
   SetRowEnabled(WeGlidePilotBirthDate, enabled);
   SetRowEnabled(WeGlidePilotID, enabled);
 }
