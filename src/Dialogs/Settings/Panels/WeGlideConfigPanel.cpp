@@ -90,7 +90,7 @@ WeGlideConfigPanel::Prepare(ContainerWindow &parent,
              weglide.enabled, this);
 
   AddBoolean(_("Automatic Upload"),
-             _("This transmits the IGC file after download from logger/data recorder to WeGlide automatically."),
+             _("Uploads flights automatically after download from logger?"),
              weglide.automatic_upload, this);
 
   AddInteger(_("Pilot"),
