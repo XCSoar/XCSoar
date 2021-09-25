@@ -77,7 +77,7 @@ The following is needed for all targets:
 
 -  `Info-ZIP <http://www.info-zip.org/>`__
 
--  Perl and XML::Parser
+-  Perl
 
 -  FFmpeg
 
