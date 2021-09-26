@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-07-20 10:35+0000\n"
-"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
+"PO-Revision-Date: 2021-09-27 15:39+0000\n"
+"Last-Translator: ulipo <uli.peru@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/it/>\n"
 "Language: it\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Launchpad-Export-Date: 2015-09-08 16:12+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1687,12 +1687,11 @@ msgstr "Disabilitato"
 
 #: src/Device/Config.cpp:233 src/Dialogs/Device/PortPicker.cpp:77
 msgid "BLE sensor"
-msgstr ""
+msgstr "Sensore BLE"
 
 #: src/Device/Config.cpp:249 src/Dialogs/Device/PortPicker.cpp:74
-#, fuzzy
 msgid "BLE port"
-msgstr "Porta TE"
+msgstr "Porta BLE"
 
 #: src/Device/Config.cpp:269 src/Dialogs/Device/PortDataField.cpp:52
 #, no-c-format
@@ -1701,7 +1700,7 @@ msgstr "Server Bluetooth"
 
 #: src/Device/Config.cpp:288
 msgid "GPS Intermediate Driver"
-msgstr "GPS Intermediate Driver"
+msgstr "Driver GPS  intermedio"
 
 #: src/Device/Config.cpp:291 src/Dialogs/Device/PortDataField.cpp:49
 #, no-c-format
@@ -1710,12 +1709,11 @@ msgstr "GPS integrato & sensori"
 
 #: src/Device/Config.cpp:294
 msgid "GliderLink traffic receiver"
-msgstr ""
+msgstr "Ricevitore traffico GLiderLink"
 
 #: src/Device/Config.cpp:315 src/Dialogs/Device/PortPicker.cpp:80
-#, fuzzy
 msgid "USB serial"
-msgstr "Seriale"
+msgstr "Seriale USB"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:94 src/Dialogs/WidgetDialog.cpp:264
@@ -1836,9 +1834,8 @@ msgid "Error"
 msgstr "Errore"
 
 #: src/Dialogs/FileManager.cpp:476
-#, fuzzy
 msgid "Update available"
-msgstr "Nessun TAF disponibile!"
+msgstr "Aggiornamento disponibile"
 
 #: src/Dialogs/FileManager.cpp:744 src/Dialogs/DownloadFilePicker.cpp:386
 #: src/Dialogs/DownloadFilePicker.cpp:388
@@ -1916,7 +1913,7 @@ msgstr "Indirizzo IP"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:327
 msgid "I²C bus"
-msgstr ""
+msgstr "Bus I²C"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:327
 msgid "Select the description or bus number that matches your configuration."
@@ -1926,7 +1923,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:333
 msgid "I²C addr"
-msgstr ""
+msgstr "Indirizzo I²C"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:333
 #, fuzzy
