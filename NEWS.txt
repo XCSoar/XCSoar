@@ -6,6 +6,7 @@ Version 7.19 - not yet released
   - consistent progress bar during startup
 * Android
   - fix crash with USB serial adapter
+  - add WCH CH9102F into the list of accepted USB serial adapters
 
 Version 7.18 - 2021/09/10
 * data files
