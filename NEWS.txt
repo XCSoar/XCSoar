@@ -4,6 +4,8 @@ Version 7.19 - not yet released
   - fix crash bug in terrain loader
 * user interface
   - consistent progress bar during startup
+* Android
+  - fix crash with USB serial adapter
 
 Version 7.18 - 2021/09/10
 * data files
