@@ -463,7 +463,7 @@ AnalysisWidget::Update()
     dialog.SetCaption(sTmp);
     BarographCaption(sTmp, glide_computer.GetFlightStats());
     info.SetText(sTmp);
-    SetCalcCaption(_("Settings"));
+    SetCalcCaption(_("Set Flight"));
     break;
 
   case AnalysisPage::CLIMB:
@@ -507,7 +507,7 @@ AnalysisWidget::Update()
     dialog.SetCaption(sTmp);
     GlidePolarCaption(sTmp, settings_computer.polar.glide_polar_task);
     info.SetText(sTmp);
-    SetCalcCaption(_("Settings"));
+    SetCalcCaption(_("Set Flight"));
     break;
 
   case AnalysisPage::MACCREADY:
@@ -516,7 +516,7 @@ AnalysisWidget::Update()
     dialog.SetCaption(sTmp);
     MacCreadyCaption(sTmp, settings_computer.polar.glide_polar_task);
     info.SetText(sTmp);
-    SetCalcCaption(_("Settings"));
+    SetCalcCaption(_("Set Flight"));
     break;
 
   case AnalysisPage::TEMPTRACE:
@@ -525,7 +525,7 @@ AnalysisWidget::Update()
     dialog.SetCaption(sTmp);
     TemperatureChartCaption(sTmp, glide_computer.GetCuSonde());
     info.SetText(sTmp);
-    SetCalcCaption(_("Settings"));
+    SetCalcCaption(_("Set Flight"));
     break;
 
   case AnalysisPage::TASK_SPEED:
@@ -544,7 +544,7 @@ AnalysisWidget::Update()
     dialog.SetCaption(sTmp);
     FlightStatisticsRenderer::CaptionTask(sTmp, calculated);
     info.SetText(sTmp);
-    SetCalcCaption(_("Task calc"));
+    SetCalcCaption(_("Task Calc"));
     break;
 
   case AnalysisPage::CONTEST:
