@@ -64,52 +64,52 @@ UpdateInfoBoxBattery(InfoBoxData &data) noexcept
 #ifdef HAVE_BATTERY
   bool DisplaySupplyVoltageAsValue=false;
   switch (Power::External::Status) {
-    case Power::External::OFF:
-      if (CommonInterface::Basic().battery_level_available)
-        data.UnsafeFormatComment(_T("%s; %d%%"),
-                                 _("AC Off"),
-                                 (int)CommonInterface::Basic().battery_level);
-      else
-        data.SetComment(_("AC Off"));
-      break;
-    case Power::External::ON:
-      if (!CommonInterface::Basic().voltage_available)
-        data.SetComment(_("AC ON"));
-      else{
-        DisplaySupplyVoltageAsValue = true;
-        data.SetValueFromVoltage(CommonInterface::Basic().voltage);
-      }
-      break;
-    case Power::External::UNKNOWN:
-    default:
-      data.SetCommentInvalid();
+  case Power::External::OFF:
+    if (CommonInterface::Basic().battery_level_available)
+      data.UnsafeFormatComment(_T("%s; %d%%"),
+                               _("AC Off"),
+                               (int)CommonInterface::Basic().battery_level);
+    else
+      data.SetComment(_("AC Off"));
+    break;
+  case Power::External::ON:
+    if (!CommonInterface::Basic().voltage_available)
+      data.SetComment(_("AC ON"));
+    else{
+      DisplaySupplyVoltageAsValue = true;
+      data.SetValueFromVoltage(CommonInterface::Basic().voltage);
+    }
+    break;
+  case Power::External::UNKNOWN:
+  default:
+    data.SetCommentInvalid();
   }
 #ifndef ANDROID
   switch (Power::Battery::Status){
-    case Power::Battery::HIGH:
-    case Power::Battery::LOW:
-    case Power::Battery::CRITICAL:
-    case Power::Battery::CHARGING:
-      if (Power::Battery::RemainingPercentValid){
+  case Power::Battery::HIGH:
+  case Power::Battery::LOW:
+  case Power::Battery::CRITICAL:
+  case Power::Battery::CHARGING:
+    if (Power::Battery::RemainingPercentValid){
 #endif
-        if (!DisplaySupplyVoltageAsValue)
-          data.SetValueFromPercent(Power::Battery::RemainingPercent);
-        else
-          data.SetCommentFromPercent(Power::Battery::RemainingPercent);
-#ifndef ANDROID
-      }
+      if (!DisplaySupplyVoltageAsValue)
+        data.SetValueFromPercent(Power::Battery::RemainingPercent);
       else
-        if (!DisplaySupplyVoltageAsValue)
-          data.SetValueInvalid();
-        else
-          data.SetCommentInvalid();
-      break;
-    case Power::Battery::NOBATTERY:
-    case Power::Battery::UNKNOWN:
+        data.SetCommentFromPercent(Power::Battery::RemainingPercent);
+#ifndef ANDROID
+    }
+    else
       if (!DisplaySupplyVoltageAsValue)
         data.SetValueInvalid();
       else
         data.SetCommentInvalid();
+    break;
+  case Power::Battery::NOBATTERY:
+  case Power::Battery::UNKNOWN:
+    if (!DisplaySupplyVoltageAsValue)
+      data.SetValueInvalid();
+    else
+      data.SetCommentInvalid();
   }
 #endif
   return;
