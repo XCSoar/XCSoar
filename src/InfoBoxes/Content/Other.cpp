@@ -31,6 +31,10 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 
+#ifdef HAVE_BATTERY
+#include "Hardware/PowerInfo.hpp"
+#endif
+
 #include <tchar.h>
 
 void
@@ -62,9 +66,13 @@ void
 UpdateInfoBoxBattery(InfoBoxData &data) noexcept
 {
 #ifdef HAVE_BATTERY
+  const auto &info = Power::global_info;
+  const auto &battery = info.battery;
+  const auto &external = info.external;
+
   bool DisplaySupplyVoltageAsValue=false;
-  switch (Power::External::status) {
-  case Power::External::Status::OFF:
+  switch (external.status) {
+  case Power::ExternalInfo::Status::OFF:
     if (CommonInterface::Basic().battery_level_available)
       data.UnsafeFormatComment(_T("%s; %d%%"),
                                _("AC Off"),
@@ -73,7 +81,7 @@ UpdateInfoBoxBattery(InfoBoxData &data) noexcept
       data.SetComment(_("AC Off"));
     break;
 
-  case Power::External::Status::ON:
+  case Power::ExternalInfo::Status::ON:
     if (!CommonInterface::Basic().voltage_available)
       data.SetComment(_("AC ON"));
     else{
@@ -82,22 +90,22 @@ UpdateInfoBoxBattery(InfoBoxData &data) noexcept
     }
     break;
 
-  case Power::External::Status::UNKNOWN:
+  case Power::ExternalInfo::Status::UNKNOWN:
   default:
     data.SetCommentInvalid();
   }
 #ifndef ANDROID
-  switch (Power::Battery::status) {
-  case Power::Battery::Status::HIGH:
-  case Power::Battery::Status::LOW:
-  case Power::Battery::Status::CRITICAL:
-  case Power::Battery::Status::CHARGING:
-    if (Power::Battery::RemainingPercentValid){
+  switch (battery.status) {
+  case Power::BatteryInfo::Status::HIGH:
+  case Power::BatteryInfo::Status::LOW:
+  case Power::BatteryInfo::Status::CRITICAL:
+  case Power::BatteryInfo::Status::CHARGING:
+    if (battery.remaining_percent_valid){
 #endif
       if (!DisplaySupplyVoltageAsValue)
-        data.SetValueFromPercent(Power::Battery::RemainingPercent);
+        data.SetValueFromPercent(battery.remaining_percent);
       else
-        data.SetCommentFromPercent(Power::Battery::RemainingPercent);
+        data.SetCommentFromPercent(battery.remaining_percent);
 #ifndef ANDROID
     }
     else
@@ -107,8 +115,8 @@ UpdateInfoBoxBattery(InfoBoxData &data) noexcept
         data.SetCommentInvalid();
     break;
 
-  case Power::Battery::Status::NOBATTERY:
-  case Power::Battery::Status::UNKNOWN:
+  case Power::BatteryInfo::Status::NOBATTERY:
+  case Power::BatteryInfo::Status::UNKNOWN:
     if (!DisplaySupplyVoltageAsValue)
       data.SetValueInvalid();
     else

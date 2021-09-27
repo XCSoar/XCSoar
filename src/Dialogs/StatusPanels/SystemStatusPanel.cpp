@@ -29,6 +29,10 @@ Copyright_License {
 #include "Hardware/Battery.hpp"
 #include "net/State.hpp"
 
+#ifdef HAVE_BATTERY
+#include "Hardware/PowerInfo.hpp"
+#endif
+
 enum Controls {
   GPS,
   NumSat,
@@ -110,8 +114,9 @@ SystemStatusPanel::Refresh() noexcept
 
   Temp.clear();
 #ifdef HAVE_BATTERY
-  if (Power::Battery::RemainingPercentValid) {
-    Temp.Format(_T("%u %% "), Power::Battery::RemainingPercent);
+  const auto &battery = Power::global_info.battery;
+  if (battery.remaining_percent_valid) {
+    Temp.Format(_T("%u %% "), battery.remaining_percent);
   }
 #endif
   if (basic.voltage_available)

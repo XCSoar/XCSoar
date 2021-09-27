@@ -25,6 +25,7 @@ Copyright_License {
 #include "util/StringAPI.hxx"
 
 #ifdef HAVE_BATTERY
+#include "PowerInfo.hpp"
 
 #ifdef KOBO
 
@@ -35,30 +36,20 @@ Copyright_License {
 #include <stdlib.h>
 
 namespace Power {
-
-namespace Battery {
-
-unsigned RemainingPercent = 0;
-bool RemainingPercentValid = false;
-Status status = Status::UNKNOWN;
-
-} // namespace Battery
-
-namespace External {
-
-Status status = Status::UNKNOWN;
-
-} // namespace External
-
+Info global_info;
 } // namespace Power
 
 void
 UpdateBatteryInfo()
 {
+  auto &info = Power::global_info;
+  auto &battery = info.battery;
+  auto &external = info.external;
+
   // assume failure at entry
-  Power::Battery::RemainingPercentValid = false;
-  Power::Battery::status = Power::Battery::Status::UNKNOWN;
-  Power::External::status = Power::External::Status::UNKNOWN;
+  battery.remaining_percent_valid = false;
+  battery.status = Power::BatteryInfo::Status::UNKNOWN;
+  external.status = Power::ExternalInfo::Status::UNKNOWN;
   char line[256];
 
   if (DetectKoboModel() == KoboModel::GLO_HD) {
@@ -66,16 +57,16 @@ UpdateBatteryInfo()
                          line, sizeof(line))) {
       if (StringIsEqual(line,"Not charging\n") ||
           StringIsEqual(line,"Charging\n"))
-        Power::External::status = Power::External::Status::ON;
+        external.status = Power::ExternalInfo::Status::ON;
       else if (StringIsEqual(line,"Discharging\n"))
-        Power::External::status = Power::External::Status::OFF;
+        external.status = Power::ExternalInfo::Status::OFF;
     }
 
     if (File::ReadString(Path("/sys/class/power_supply/mc13892_bat/capacity"),
                          line, sizeof(line))) {
       int rem = atoi(line);
-      Power::Battery::RemainingPercentValid = true;
-      Power::Battery::RemainingPercent = rem;
+      battery.remaining_percent_valid = true;
+      battery.remaining_percent = rem;
     }
   } else {
     // code shamelessly copied from OS/SystemLoad.cpp
@@ -91,29 +82,29 @@ UpdateBatteryInfo()
       if (StringIsEqual(field,"POWER_SUPPLY_STATUS")) {
         if (StringIsEqual(value,"Not charging") ||
             StringIsEqual(value,"Charging")) {
-          Power::External::status = Power::External::Status::ON;
+          external.status = Power::ExternalInfo::Status::ON;
         } else if (StringIsEqual(value,"Discharging")) {
-          Power::External::status = Power::External::Status::OFF;
+          external.status = Power::ExternalInfo::Status::OFF;
         }
       } else if (StringIsEqual(field,"POWER_SUPPLY_CAPACITY")) {
         int rem = atoi(value);
-        Power::Battery::RemainingPercentValid = true;
-        Power::Battery::RemainingPercent = rem;
+        battery.remaining_percent_valid = true;
+        battery.remaining_percent = rem;
       }
     }
   }
 
-  if (Power::External::status == Power::External::Status::OFF) {
-    if (Power::Battery::RemainingPercentValid) {
-      if (Power::Battery::RemainingPercent>30)
-        Power::Battery::status = Power::Battery::Status::HIGH;
-      else if (Power::Battery::RemainingPercent>10)
-        Power::Battery::status = Power::Battery::Status::LOW;
-      else if (Power::Battery::RemainingPercent<10)
-        Power::Battery::status = Power::Battery::Status::CRITICAL;
+  if (external.status == Power::ExternalInfo::Status::OFF) {
+    if (battery.remaining_percent_valid) {
+      if (battery.remaining_percent>30)
+        battery.status = Power::BatteryInfo::Status::HIGH;
+      else if (battery.remaining_percent>10)
+        battery.status = Power::BatteryInfo::Status::LOW;
+      else if (battery.remaining_percent<10)
+        battery.status = Power::BatteryInfo::Status::CRITICAL;
     }
-  } else if (Power::External::status == Power::External::Status::ON)
-    Power::Battery::status = Power::Battery::Status::CHARGING;
+  } else if (external.status == Power::ExternalInfo::Status::ON)
+    battery.status = Power::BatteryInfo::Status::CHARGING;
 }
 
 #endif
@@ -123,59 +114,49 @@ UpdateBatteryInfo()
 #include <SDL_power.h>
 
 namespace Power {
-
-namespace Battery {
-
-unsigned RemainingPercent = 0;
-bool RemainingPercentValid = false;
-Status status = Status::UNKNOWN;
-
-} // namespace Battery
-
-namespace External {
-
-Status status = Status::UNKNOWN;
-
-} // namespace External
-
+Info global_info;
 } // namespace Power
 
 void
 UpdateBatteryInfo()
 {
+  auto &info = Power::global_info;
+  auto &battery = info.battery;
+  auto &external = info.external;
+
   int remaining_percent;
   SDL_PowerState power_state = SDL_GetPowerInfo(NULL, &remaining_percent);
   if (remaining_percent >= 0) {
-    Power::Battery::RemainingPercent = remaining_percent;
-    Power::Battery::RemainingPercentValid = true;
+    battery.remaining_percent = remaining_percent;
+    battery.remaining_percent_valid = true;
   } else {
-    Power::Battery::RemainingPercentValid = false;
+    battery.remaining_percent_valid = false;
   }
 
   switch (power_state) {
   case SDL_POWERSTATE_CHARGING:
   case SDL_POWERSTATE_CHARGED:
-    Power::External::status = Power::External::Status::ON;
-    Power::Battery::status = Power::Battery::Status::CHARGING;
+    external.status = Power::ExternalInfo::Status::ON;
+    battery.status = Power::BatteryInfo::Status::CHARGING;
     break;
 
   case SDL_POWERSTATE_ON_BATTERY:
-    Power::External::status = Power::External::Status::OFF;
+    external.status = Power::ExternalInfo::Status::OFF;
     if (remaining_percent >= 0) {
       if (remaining_percent > 30) {
-        Power::Battery::status = Power::Battery::Status::HIGH;
+        battery.status = Power::BatteryInfo::Status::HIGH;
       } else if (remaining_percent > 30) {
-        Power::Battery::status = Power::Battery::Status::LOW;
+        battery.status = Power::BatteryInfo::Status::LOW;
       } else {
-        Power::Battery::status = Power::Battery::Status::CRITICAL;
+        battery.status = Power::BatteryInfo::Status::CRITICAL;
       }
     } else {
-      Power::Battery::status = Power::Battery::Status::UNKNOWN;
+      battery.status = Power::BatteryInfo::Status::UNKNOWN;
     }
     break;
 
   default:
-    Power::External::status = Power::External::Status::UNKNOWN;
+    external.status = Power::ExternalInfo::Status::UNKNOWN;
   }
 }
 
