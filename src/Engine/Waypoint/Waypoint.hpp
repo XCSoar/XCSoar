@@ -112,6 +112,9 @@ struct Waypoint {
   /** File number to store waypoint in */
   WaypointOrigin origin = WaypointOrigin::NONE;
 
+  /** Short name (code) label of waypoint */
+  tstring shortname;
+
   /** Name of waypoint */
   tstring name;
   /** Additional comment text for waypoint */
