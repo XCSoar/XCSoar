@@ -37,7 +37,6 @@ Copyright_License {
 namespace Power
 {
   namespace Battery{
-    unsigned Temperature = 0;
     unsigned RemainingPercent = 0;
     bool RemainingPercentValid = false;
     batterystatus Status = UNKNOWN;
@@ -121,7 +120,6 @@ UpdateBatteryInfo()
 namespace Power
 {
   namespace Battery{
-    unsigned Temperature = 0;
     unsigned RemainingPercent = 0;
     bool RemainingPercentValid = false;
     batterystatus Status = UNKNOWN;

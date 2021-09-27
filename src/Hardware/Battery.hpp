@@ -39,7 +39,6 @@ namespace Power
       UNKNOWN
     };
 
-    extern unsigned Temperature;
     extern unsigned RemainingPercent;
     extern bool RemainingPercentValid;
     extern batterystatus Status;
