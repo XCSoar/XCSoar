@@ -28,6 +28,7 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/SettingsMap.hpp"
 #include "thread/Mutex.hxx"
+#include "util/StaticString.hxx"
 
 #include <atomic>
 #include <cstdint>
@@ -60,6 +61,11 @@ class LXDevice: public AbstractDevice
    * Was a LXNAV V7 detected?
    */
   bool is_v7;
+
+  /**
+   * Was a LXNAV S series vario detected?
+   */
+  bool is_sVario;
 
   /**
    * Was a LXNAV Nano detected?
@@ -113,10 +119,31 @@ public:
   }
 
   /**
+   * Was a LXNAV S series vario detected?
+   */
+  bool IsSVario() const {
+    return is_sVario;
+  }
+
+  /**
+   * Was a LXNAV vario device detected?
+   */
+  bool IsLXNAVVario() const {
+    return IsV7() || IsSVario();
+  }
+
+  /**
    * Was a LXNAV Nano detected?
    */
   bool IsNano() const {
     return port_is_nano || is_nano || is_forwarded_nano;
+  }
+
+  /**
+   * Was an LXNAV logger device detected?
+   */
+  bool IsLXNAVLogger() const {
+    return IsNano() || IsSVario();
   }
 
   /**
@@ -127,7 +154,15 @@ public:
   }
 
   void ResetDeviceDetection() {
-    is_v7 = is_nano = is_lx16xx = is_forwarded_nano = false;
+    is_v7 = is_sVario = is_nano = is_lx16xx = is_forwarded_nano = false;
+  }
+
+  void IdDeviceByName(NarrowString<16> productName)
+  {
+    is_v7 = productName.equals("V7");
+    is_sVario = productName.equals("NINC") || productName.equals("S8x");
+    is_nano = productName.equals("NANO") || productName.equals("NANO3") || productName.equals("NANO4");
+    is_lx16xx = productName.equals("1606") || productName.equals("1600");
   }
 
   /**
