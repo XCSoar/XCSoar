@@ -25,6 +25,7 @@ Copyright_License {
 #include "ChartRenderer.hpp"
 #include "Look/MapLook.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "ui/canvas/Canvas.hpp"
