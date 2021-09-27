@@ -34,18 +34,23 @@ Copyright_License {
 #include <string.h>
 #include <stdlib.h>
 
-namespace Power
-{
-  namespace Battery{
-    unsigned RemainingPercent = 0;
-    bool RemainingPercentValid = false;
-    batterystatus Status = UNKNOWN;
-  };
+namespace Power {
 
-  namespace External{
-    externalstatus Status = UNKNOWN;
-  };
-};
+namespace Battery {
+
+unsigned RemainingPercent = 0;
+bool RemainingPercentValid = false;
+batterystatus Status = UNKNOWN;
+
+} // namespace Battery
+
+namespace External {
+
+externalstatus Status = UNKNOWN;
+
+} // namespace External
+
+} // namespace Power
 
 void
 UpdateBatteryInfo()
@@ -117,18 +122,23 @@ UpdateBatteryInfo()
 
 #include <SDL_power.h>
 
-namespace Power
-{
-  namespace Battery{
-    unsigned RemainingPercent = 0;
-    bool RemainingPercentValid = false;
-    batterystatus Status = UNKNOWN;
-  };
+namespace Power {
 
-  namespace External{
-    externalstatus Status = UNKNOWN;
-  };
-};
+namespace Battery {
+
+unsigned RemainingPercent = 0;
+bool RemainingPercentValid = false;
+batterystatus Status = UNKNOWN;
+
+} // namespace Battery
+
+namespace External {
+
+externalstatus Status = UNKNOWN;
+
+} // namespace External
+
+} // namespace Power
 
 void
 UpdateBatteryInfo()

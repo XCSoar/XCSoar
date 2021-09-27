@@ -27,33 +27,38 @@ Copyright_License {
 #if defined(ANDROID) || defined(KOBO) || defined(ENABLE_SDL)
 #define HAVE_BATTERY
 
-namespace Power
-{
-  namespace Battery{
-    enum batterystatus {
-      LOW,
-      HIGH,
-      CRITICAL,
-      CHARGING,
-      NOBATTERY,
-      UNKNOWN
-    };
+namespace Power {
 
-    extern unsigned RemainingPercent;
-    extern bool RemainingPercentValid;
-    extern batterystatus Status;
-  };
-  namespace External{
-    enum externalstatus{
-      OFF,
-      ON,
-      UNKNOWN
-    };
+namespace Battery {
 
-    extern externalstatus Status;
-  };
+enum batterystatus {
+  LOW,
+  HIGH,
+  CRITICAL,
+  CHARGING,
+  NOBATTERY,
+  UNKNOWN
+};
 
-}
+extern unsigned RemainingPercent;
+extern bool RemainingPercentValid;
+extern batterystatus Status;
+
+} // namespace Battery
+
+namespace External {
+
+enum externalstatus{
+  OFF,
+  ON,
+  UNKNOWN
+};
+
+extern externalstatus Status;
+
+} // namespace External
+
+} // namespace Power
 
 #ifdef ANDROID
 
