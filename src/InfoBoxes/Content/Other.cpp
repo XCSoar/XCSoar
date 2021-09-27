@@ -63,8 +63,8 @@ UpdateInfoBoxBattery(InfoBoxData &data) noexcept
 {
 #ifdef HAVE_BATTERY
   bool DisplaySupplyVoltageAsValue=false;
-  switch (Power::External::Status) {
-  case Power::External::OFF:
+  switch (Power::External::status) {
+  case Power::External::Status::OFF:
     if (CommonInterface::Basic().battery_level_available)
       data.UnsafeFormatComment(_T("%s; %d%%"),
                                _("AC Off"),
@@ -72,7 +72,8 @@ UpdateInfoBoxBattery(InfoBoxData &data) noexcept
     else
       data.SetComment(_("AC Off"));
     break;
-  case Power::External::ON:
+
+  case Power::External::Status::ON:
     if (!CommonInterface::Basic().voltage_available)
       data.SetComment(_("AC ON"));
     else{
@@ -80,16 +81,17 @@ UpdateInfoBoxBattery(InfoBoxData &data) noexcept
       data.SetValueFromVoltage(CommonInterface::Basic().voltage);
     }
     break;
-  case Power::External::UNKNOWN:
+
+  case Power::External::Status::UNKNOWN:
   default:
     data.SetCommentInvalid();
   }
 #ifndef ANDROID
-  switch (Power::Battery::Status){
-  case Power::Battery::HIGH:
-  case Power::Battery::LOW:
-  case Power::Battery::CRITICAL:
-  case Power::Battery::CHARGING:
+  switch (Power::Battery::status) {
+  case Power::Battery::Status::HIGH:
+  case Power::Battery::Status::LOW:
+  case Power::Battery::Status::CRITICAL:
+  case Power::Battery::Status::CHARGING:
     if (Power::Battery::RemainingPercentValid){
 #endif
       if (!DisplaySupplyVoltageAsValue)
@@ -104,8 +106,9 @@ UpdateInfoBoxBattery(InfoBoxData &data) noexcept
       else
         data.SetCommentInvalid();
     break;
-  case Power::Battery::NOBATTERY:
-  case Power::Battery::UNKNOWN:
+
+  case Power::Battery::Status::NOBATTERY:
+  case Power::Battery::Status::UNKNOWN:
     if (!DisplaySupplyVoltageAsValue)
       data.SetValueInvalid();
     else

@@ -31,7 +31,7 @@ bool RemainingPercentValid = false;
 }
 
 namespace Power::External {
-externalstatus Status = UNKNOWN;
+Status status = Status::UNKNOWN;
 }
 
 gcc_visibility_default
@@ -44,11 +44,11 @@ Java_org_xcsoar_BatteryReceiver_setBatteryPercent(JNIEnv *env, jclass cls,
 
   switch (plugged) {
   case 0:
-    Power::External::Status = Power::External::OFF;
+    Power::External::status = Power::External::Status::OFF;
     break;
 
   default:
-    Power::External::Status = Power::External::ON;
+    Power::External::status = Power::External::Status::ON;
     break;
   }
 }

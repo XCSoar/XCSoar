@@ -40,13 +40,13 @@ namespace Battery {
 
 unsigned RemainingPercent = 0;
 bool RemainingPercentValid = false;
-batterystatus Status = UNKNOWN;
+Status status = Status::UNKNOWN;
 
 } // namespace Battery
 
 namespace External {
 
-externalstatus Status = UNKNOWN;
+Status status = Status::UNKNOWN;
 
 } // namespace External
 
@@ -57,8 +57,8 @@ UpdateBatteryInfo()
 {
   // assume failure at entry
   Power::Battery::RemainingPercentValid = false;
-  Power::Battery::Status = Power::Battery::UNKNOWN;
-  Power::External::Status = Power::External::UNKNOWN;
+  Power::Battery::status = Power::Battery::Status::UNKNOWN;
+  Power::External::status = Power::External::Status::UNKNOWN;
   char line[256];
 
   if (DetectKoboModel() == KoboModel::GLO_HD) {
@@ -66,9 +66,9 @@ UpdateBatteryInfo()
                          line, sizeof(line))) {
       if (StringIsEqual(line,"Not charging\n") ||
           StringIsEqual(line,"Charging\n"))
-        Power::External::Status = Power::External::ON;
+        Power::External::status = Power::External::Status::ON;
       else if (StringIsEqual(line,"Discharging\n"))
-        Power::External::Status = Power::External::OFF;
+        Power::External::status = Power::External::Status::OFF;
     }
 
     if (File::ReadString(Path("/sys/class/power_supply/mc13892_bat/capacity"),
@@ -91,9 +91,9 @@ UpdateBatteryInfo()
       if (StringIsEqual(field,"POWER_SUPPLY_STATUS")) {
         if (StringIsEqual(value,"Not charging") ||
             StringIsEqual(value,"Charging")) {
-          Power::External::Status = Power::External::ON;
+          Power::External::status = Power::External::Status::ON;
         } else if (StringIsEqual(value,"Discharging")) {
-          Power::External::Status = Power::External::OFF;
+          Power::External::status = Power::External::Status::OFF;
         }
       } else if (StringIsEqual(field,"POWER_SUPPLY_CAPACITY")) {
         int rem = atoi(value);
@@ -103,17 +103,17 @@ UpdateBatteryInfo()
     }
   }
 
-  if (Power::External::Status == Power::External::OFF) {
+  if (Power::External::status == Power::External::Status::OFF) {
     if (Power::Battery::RemainingPercentValid) {
       if (Power::Battery::RemainingPercent>30)
-        Power::Battery::Status = Power::Battery::HIGH;
+        Power::Battery::status = Power::Battery::Status::HIGH;
       else if (Power::Battery::RemainingPercent>10)
-        Power::Battery::Status = Power::Battery::LOW;
+        Power::Battery::status = Power::Battery::Status::LOW;
       else if (Power::Battery::RemainingPercent<10)
-        Power::Battery::Status = Power::Battery::CRITICAL;
+        Power::Battery::status = Power::Battery::Status::CRITICAL;
     }
-  } else if (Power::External::Status == Power::External::ON)
-    Power::Battery::Status = Power::Battery::CHARGING;
+  } else if (Power::External::status == Power::External::Status::ON)
+    Power::Battery::status = Power::Battery::Status::CHARGING;
 }
 
 #endif
@@ -128,13 +128,13 @@ namespace Battery {
 
 unsigned RemainingPercent = 0;
 bool RemainingPercentValid = false;
-batterystatus Status = UNKNOWN;
+Status status = Status::UNKNOWN;
 
 } // namespace Battery
 
 namespace External {
 
-externalstatus Status = UNKNOWN;
+Status status = Status::UNKNOWN;
 
 } // namespace External
 
@@ -155,27 +155,27 @@ UpdateBatteryInfo()
   switch (power_state) {
   case SDL_POWERSTATE_CHARGING:
   case SDL_POWERSTATE_CHARGED:
-    Power::External::Status = Power::External::ON;
-    Power::Battery::Status = Power::Battery::CHARGING;
+    Power::External::status = Power::External::Status::ON;
+    Power::Battery::status = Power::Battery::Status::CHARGING;
     break;
 
   case SDL_POWERSTATE_ON_BATTERY:
-    Power::External::Status = Power::External::OFF;
+    Power::External::status = Power::External::Status::OFF;
     if (remaining_percent >= 0) {
       if (remaining_percent > 30) {
-        Power::Battery::Status = Power::Battery::HIGH;
+        Power::Battery::status = Power::Battery::Status::HIGH;
       } else if (remaining_percent > 30) {
-        Power::Battery::Status = Power::Battery::LOW;
+        Power::Battery::status = Power::Battery::Status::LOW;
       } else {
-        Power::Battery::Status = Power::Battery::CRITICAL;
+        Power::Battery::status = Power::Battery::Status::CRITICAL;
       }
     } else {
-      Power::Battery::Status = Power::Battery::UNKNOWN;
+      Power::Battery::status = Power::Battery::Status::UNKNOWN;
     }
     break;
 
   default:
-    Power::External::Status = Power::External::UNKNOWN;
+    Power::External::status = Power::External::Status::UNKNOWN;
   }
 }
 

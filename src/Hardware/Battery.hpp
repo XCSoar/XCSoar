@@ -27,11 +27,13 @@ Copyright_License {
 #if defined(ANDROID) || defined(KOBO) || defined(ENABLE_SDL)
 #define HAVE_BATTERY
 
+#include <cstdint>
+
 namespace Power {
 
 namespace Battery {
 
-enum batterystatus {
+enum class Status : uint8_t {
   LOW,
   HIGH,
   CRITICAL,
@@ -42,19 +44,19 @@ enum batterystatus {
 
 extern unsigned RemainingPercent;
 extern bool RemainingPercentValid;
-extern batterystatus Status;
+extern Status status;
 
 } // namespace Battery
 
 namespace External {
 
-enum externalstatus{
+enum class Status : uint8_t {
   OFF,
   ON,
   UNKNOWN
 };
 
-extern externalstatus Status;
+extern Status status;
 
 } // namespace External
 

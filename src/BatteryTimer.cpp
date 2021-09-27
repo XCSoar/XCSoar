@@ -47,7 +47,7 @@ BatteryTimer::Process()
   // JMW, maybe this should be active always...
   // we don't want the PDA to be completely depleted.
 
-  if (Power::External::Status == Power::External::OFF) {
+  if (Power::External::status == Power::External::Status::OFF) {
     if (is_simulator() && Power::Battery::RemainingPercentValid &&
         Power::Battery::RemainingPercent < BATTERY_EXIT) {
       LogFormat("Battery low exit...");
