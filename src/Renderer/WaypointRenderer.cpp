@@ -214,6 +214,13 @@ protected:
         tmp[0] = '\0';
       break;
 
+    case WaypointRendererSettings::DisplayTextType::SHORT_NAME:
+      if (!way_point.shortname.empty())
+        CopyTruncateString(buffer, buffer_size, way_point.shortname.c_str());
+      else
+        CopyTruncateString(buffer, buffer_size, way_point.name.c_str(), 5);
+      break;
+
     case WaypointRendererSettings::DisplayTextType::OBSOLETE_DONT_USE_NUMBER:
     case WaypointRendererSettings::DisplayTextType::OBSOLETE_DONT_USE_NAMEIFINTASK:
       assert(false);
