@@ -21,28 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_HARDWARE_BATTERY_H
-#define XCSOAR_HARDWARE_BATTERY_H
-
-#include "PowerFeatures.hpp"
+#include "PowerGlobal.hpp"
 
 #ifdef HAVE_BATTERY
+#include "PowerInfo.hpp"
 
-#ifdef ANDROID
+namespace Power {
+Info global_info;
+} // namespace Power
 
-static inline void
-UpdateBatteryInfo()
-{
-  /* nothing to do, this is updated by Android callbacks */
-}
-
-#else
-
-void
-UpdateBatteryInfo();
-
-#endif
-
-#endif /* !HAVE_BATTERY */
-
-#endif
+#endif // HAVE_BATTERY

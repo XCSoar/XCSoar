@@ -26,7 +26,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Hardware/Battery.hpp"
+#include "Hardware/PowerGlobal.hpp"
 #include "net/State.hpp"
 
 #ifdef HAVE_BATTERY

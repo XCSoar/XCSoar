@@ -24,6 +24,7 @@ Copyright_License {
 #include "BatteryTimer.hpp"
 #include "Hardware/Battery.hpp"
 #include "Hardware/PowerInfo.hpp"
+#include "Hardware/PowerGlobal.hpp"
 #include "UIActions.hpp"
 #include "LogFile.hpp"
 #include "Simulator.hpp"

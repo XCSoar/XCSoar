@@ -26,6 +26,7 @@ Copyright_License {
 
 #ifdef HAVE_BATTERY
 #include "PowerInfo.hpp"
+#include "PowerGlobal.hpp"
 
 #ifdef KOBO
 
@@ -34,10 +35,6 @@ Copyright_License {
 
 #include <string.h>
 #include <stdlib.h>
-
-namespace Power {
-Info global_info;
-} // namespace Power
 
 void
 UpdateBatteryInfo()
@@ -112,10 +109,6 @@ UpdateBatteryInfo()
 #ifdef ENABLE_SDL
 
 #include <SDL_power.h>
-
-namespace Power {
-Info global_info;
-} // namespace Power
 
 void
 UpdateBatteryInfo()

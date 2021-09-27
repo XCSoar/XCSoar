@@ -21,14 +21,10 @@ Copyright_License {
 }
 */
 
-#include "Hardware/Battery.hpp"
+#include "Hardware/PowerGlobal.hpp"
 #include "Hardware/PowerInfo.hpp"
 #include "org_xcsoar_BatteryReceiver.h"
 #include "util/Compiler.h"
-
-namespace Power {
-Info global_info;
-} // namespace Power
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
