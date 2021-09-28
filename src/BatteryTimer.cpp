@@ -56,14 +56,14 @@ BatteryTimer::Process()
   // we don't want the PDA to be completely depleted.
 
   if (external.status == Power::ExternalInfo::Status::OFF) {
-    if (is_simulator() && battery.remaining_percent_valid &&
-        battery.remaining_percent < BATTERY_EXIT) {
+    if (is_simulator() && battery.remaining_percent &&
+        *battery.remaining_percent < BATTERY_EXIT) {
       LogFormat("Battery low exit...");
       // TODO feature: Warning message on battery shutdown
       UIActions::SignalShutdown(true);
     } else {
-      if (battery.remaining_percent_valid &&
-          battery.remaining_percent < BATTERY_WARNING) {
+      if (battery.remaining_percent &&
+          *battery.remaining_percent < BATTERY_WARNING) {
         if (last_warning.CheckUpdate(BATTERY_REMINDER))
           // TODO feature: Show the user what the batt status is.
           Message::AddMessage(_("Battery low"));

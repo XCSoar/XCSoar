@@ -115,8 +115,8 @@ SystemStatusPanel::Refresh() noexcept
   Temp.clear();
 #ifdef HAVE_BATTERY
   const auto &battery = Power::global_info.battery;
-  if (battery.remaining_percent_valid) {
-    Temp.Format(_T("%u %% "), battery.remaining_percent);
+  if (battery.remaining_percent) {
+    Temp.Format(_T("%u %% "), *battery.remaining_percent);
   }
 #endif
   if (basic.voltage_available)

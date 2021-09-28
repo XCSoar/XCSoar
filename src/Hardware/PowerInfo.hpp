@@ -23,13 +23,14 @@ Copyright_License {
 
 #pragma once
 
+#include "util/OptionalPercent.hxx"
+
 #include <cstdint>
 
 namespace Power {
 
 struct BatteryInfo {
-  uint_least8_t remaining_percent;
-  bool remaining_percent_valid = false;
+  OptionalPercent remaining_percent = std::nullopt;
 };
 
 struct ExternalInfo {

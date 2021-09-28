@@ -95,11 +95,11 @@ UpdateInfoBoxBattery(InfoBoxData &data) noexcept
     data.SetCommentInvalid();
   }
 
-  if (battery.remaining_percent_valid){
+  if (battery.remaining_percent) {
     if (!DisplaySupplyVoltageAsValue)
-      data.SetValueFromPercent(battery.remaining_percent);
+      data.SetValueFromPercent(*battery.remaining_percent);
     else
-      data.SetCommentFromPercent(battery.remaining_percent);
+      data.SetCommentFromPercent(*battery.remaining_percent);
   } else {
     if (!DisplaySupplyVoltageAsValue)
       data.SetValueInvalid();

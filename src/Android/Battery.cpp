@@ -36,7 +36,6 @@ Java_org_xcsoar_BatteryReceiver_setBatteryPercent(JNIEnv *env, jclass cls,
   auto &external = info.external;
 
   battery.remaining_percent = value;
-  battery.remaining_percent_valid = true;
 
   switch (plugged) {
   case 0:

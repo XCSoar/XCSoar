@@ -59,7 +59,6 @@ GetInfo() noexcept
     if (File::ReadString(Path("/sys/class/power_supply/mc13892_bat/capacity"),
                          line, sizeof(line))) {
       int rem = atoi(line);
-      battery.remaining_percent_valid = true;
       battery.remaining_percent = rem;
     }
   } else {
@@ -82,7 +81,6 @@ GetInfo() noexcept
         }
       } else if (StringIsEqual(field,"POWER_SUPPLY_CAPACITY")) {
         int rem = atoi(value);
-        battery.remaining_percent_valid = true;
         battery.remaining_percent = rem;
       }
     }
@@ -112,7 +110,6 @@ GetInfo() noexcept
   SDL_PowerState power_state = SDL_GetPowerInfo(NULL, &remaining_percent);
   if (remaining_percent >= 0) {
     battery.remaining_percent = remaining_percent;
-    battery.remaining_percent_valid = true;
   }
 
   switch (power_state) {
