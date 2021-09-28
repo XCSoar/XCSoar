@@ -1007,24 +1007,42 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
     ok1(!lx_device.IsV7());
     ok1(!lx_device.IsNano());
     ok1(!lx_device.IsLX16xx());
+    ok1(!lx_device.IsSVario());
 
     lx_device.ResetDeviceDetection();
     ok1(device->ParseNMEA("$LXWP1,V7,12345,1.0,1.0,12345*6f", nmea_info));
     ok1(lx_device.IsV7());
     ok1(!lx_device.IsNano());
     ok1(!lx_device.IsLX16xx());
+    ok1(!lx_device.IsSVario());
 
     lx_device.ResetDeviceDetection();
     ok1(device->ParseNMEA("$LXWP1,NANO,12345,1.0,1.0,12345*00", nmea_info));
     ok1(!lx_device.IsV7());
     ok1(lx_device.IsNano());
     ok1(!lx_device.IsLX16xx());
+    ok1(!lx_device.IsSVario());
+
+    lx_device.ResetDeviceDetection();
+    ok1(device->ParseNMEA("$LXWP1,NINC,12345,1.0,1.0,12345*04", nmea_info));
+    ok1(!lx_device.IsV7());
+    ok1(!lx_device.IsNano());
+    ok1(!lx_device.IsLX16xx());
+    ok1(lx_device.IsSVario());
+
+    lx_device.ResetDeviceDetection();
+    ok1(device->ParseNMEA("$LXWP1,S8x,12345,1.0,1.0,12345*1D", nmea_info));
+    ok1(!lx_device.IsV7());
+    ok1(!lx_device.IsNano());
+    ok1(!lx_device.IsLX16xx());
+    ok1(lx_device.IsSVario());
 
     lx_device.ResetDeviceDetection();
     ok1(device->ParseNMEA("$LXWP1,1606,4294967295,1.90,1.00,4294967295*06", nmea_info));
     ok1(!lx_device.IsV7());
     ok1(!lx_device.IsNano());
     ok1(lx_device.IsLX16xx());
+    ok1(!lx_device.IsSVario());
 
     ok1(nmea_info.device.product == "1606");
     ok1(nmea_info.device.serial == "4294967295");
@@ -1062,17 +1080,12 @@ TestLXV7()
   ok1(basic.pressure_altitude_available);
   ok1(equals(basic.pressure_altitude, 244.3));
 
-  ok1(lx_device.IsV7());
-  lx_device.ResetDeviceDetection();
-
   ok1(device->ParseNMEA("$PLXVS,23.1,0,12.3,*71", basic));
   ok1(basic.temperature_available);
   ok1(equals(basic.temperature.ToKelvin(), 296.25));
   ok1(basic.switch_state.flight_mode == SwitchState::FlightMode::CIRCLING);
   ok1(basic.voltage_available);
   ok1(equals(basic.voltage, 12.3));
-
-  ok1(lx_device.IsV7());
 
   delete device;
 }
@@ -1602,7 +1615,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(827);
+  plan_tests(839);
 
   TestGeneric();
   TestTasman();

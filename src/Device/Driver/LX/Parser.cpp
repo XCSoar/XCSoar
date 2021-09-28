@@ -395,13 +395,11 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
     return LXWP3(line, info);
 
   if (StringIsEqual(type, "$PLXV0")) {
-    is_v7 = true;
     is_colibri = false;
     return PLXV0(line, lxnav_vario_settings);
   }
 
   if (StringIsEqual(type, "$PLXVC")) {
-    is_nano = true;
     is_colibri = false;
     PLXVC(line, info.device, info.secondary_device, nano_settings);
     is_forwarded_nano = info.secondary_device.product.equals("NANO") ||
@@ -414,13 +412,11 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
   }
 
   if (StringIsEqual(type, "$PLXVF")) {
-    is_v7 = true;
     is_colibri = false;
     return PLXVF(line, info);
   }
 
   if (StringIsEqual(type, "$PLXVS")) {
-    is_v7 = true;
     is_colibri = false;
     return PLXVS(line, info);
   }
