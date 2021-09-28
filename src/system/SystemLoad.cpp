@@ -41,28 +41,26 @@ SystemLoadCPU() noexcept
   static unsigned tick_last = 0;
 
   uint64_t  creationTime, exitTime, kernelTime, userTime;
-  bool ok = ::GetProcessTimes( ::GetCurrentProcess(),
-                               (FILETIME*)&creationTime, (FILETIME*)&exitTime,
-                               (FILETIME*)&kernelTime, (FILETIME*)&userTime );
+  if (!GetProcessTimes(GetCurrentProcess(),
+                       (FILETIME *)&creationTime, (FILETIME *)&exitTime,
+                       (FILETIME *)&kernelTime, (FILETIME *)&userTime))
+    return -1;
 
-  if (ok) {
+  unsigned tick = ::GetTickCount();
 
-    unsigned tick = ::GetTickCount();
+  userTime /= 10000;
+  kernelTime /= 10000;
 
-    userTime /= 10000;
-    kernelTime /= 10000;
-
-    if (tick && (tick_last>0)) {
-      unsigned dt_user = userTime-userTime_last;
-      unsigned dt_kernel = kernelTime-kernelTime_last;
-      unsigned dt = tick-tick_last;
-      retval = (100*(dt_user+dt_kernel))/dt;
-    }
-
-    tick_last = tick;
-    userTime_last = userTime;
-    kernelTime_last = kernelTime;
+  if (tick && (tick_last>0)) {
+    unsigned dt_user = userTime-userTime_last;
+    unsigned dt_kernel = kernelTime-kernelTime_last;
+    unsigned dt = tick-tick_last;
+    retval = (100*(dt_user+dt_kernel))/dt;
   }
+
+  tick_last = tick;
+  userTime_last = userTime;
+  kernelTime_last = kernelTime;
 
   return retval;
 }
