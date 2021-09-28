@@ -36,6 +36,7 @@ Copyright_License {
 class WaypointEditWidget final : public RowFormWidget, DataFieldListener {
   enum Rows {
     NAME,
+    SHORTNAME,
     COMMENT,
     LOCATION,
     ELEVATION,
@@ -77,6 +78,7 @@ WaypointEditWidget::Prepare(gcc_unused ContainerWindow &parent,
                             gcc_unused const PixelRect &rc) noexcept
 {
   AddText(_("Name"), nullptr, value.name.c_str(), this);
+  AddText(_("Short Name"), nullptr, value.shortname.c_str(), this);
   AddText(_("Comment"), nullptr, value.comment.c_str(), this);
   Add(_("Location"), nullptr,
       new GeoPointDataField(value.location,
@@ -96,6 +98,7 @@ WaypointEditWidget::Save(bool &_changed) noexcept
 {
   bool changed = modified;
   value.name = GetValueString(NAME);
+  value.shortname = GetValueString(SHORTNAME);
   value.comment = GetValueString(COMMENT);
   value.location = ((GeoPointDataField &)GetDataField(LOCATION)).GetValue();
   changed |= SaveValue(ELEVATION, UnitGroup::ALTITUDE, value.elevation);
