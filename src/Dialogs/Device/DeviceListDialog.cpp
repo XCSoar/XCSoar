@@ -669,7 +669,7 @@ DeviceListWidget::ManageCurrent()
     }
 
     LXDevice &lx_device = *(LXDevice *)device;
-    if (lx_device.IsV7())
+    if (lx_device.IsLXNAVVario())
       ManageLXNAVVarioDialog(lx_device, info, secondary_info);
     else if (lx_device.IsNano())
       ManageNanoDialog(lx_device, info);

@@ -153,6 +153,13 @@ public:
     return is_lx16xx;
   }
 
+  /**
+   * Can this device be managed by XCSoar?
+   */
+  bool IsManageable() const {
+    return IsV7() || IsSVario() || IsNano() || IsLX16xx();
+  }
+
   void ResetDeviceDetection() {
     is_v7 = is_sVario = is_nano = is_lx16xx = is_forwarded_nano = false;
   }

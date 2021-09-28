@@ -149,7 +149,7 @@ LXDevice::PutBallast(gcc_unused double fraction, double overload,
   if (!EnableNMEA(env))
     return false;
 
-  if (IsV7())
+  if (IsLXNAVVario())
     return LXNAVVario::SetBallast(port, env, overload);
   else
     return LX1600::SetBallast(port, env, overload);
@@ -163,7 +163,7 @@ LXDevice::PutBugs(double bugs, OperationEnvironment &env)
 
   int transformed_bugs_value = 100 - (int)(bugs*100);
 
-  if (IsV7())
+  if (IsLXNAVVario())
     return LXNAVVario::SetBugs(port, env, transformed_bugs_value);
   else
     return LX1600::SetBugs(port, env, transformed_bugs_value);
@@ -175,7 +175,7 @@ LXDevice::PutMacCready(double mac_cready, OperationEnvironment &env)
   if (!EnableNMEA(env))
     return false;
 
-  if (IsV7())
+  if (IsLXNAVVario())
     return LXNAVVario::SetMacCready(port, env, mac_cready);
   else
     return LX1600::SetMacCready(port, env, mac_cready);
@@ -187,7 +187,7 @@ LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
   if (!EnableNMEA(env))
     return false;
 
-  if (IsV7())
+  if (IsLXNAVVario())
     return LXNAVVario::SetQNH(port, env, pres);
   else
     return LX1600::SetQNH(port, env, pres);
@@ -205,7 +205,7 @@ LXDevice::PutVolume(unsigned volume, OperationEnvironment &env)
 bool
 LXDevice::PutPilotEvent(OperationEnvironment &env)
 {
-  if (!IsV7())
+  if (!IsLXNAVVario())
     return false;
 
   return LXNAVVario::PutPilotEvent(env, port);

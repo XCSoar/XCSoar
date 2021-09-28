@@ -719,7 +719,7 @@ DeviceDescriptor::IsManageable() const
 
     if (StringIsEqual(driver->name, _T("LX")) && device != nullptr) {
       const LXDevice &lx = *(const LXDevice *)device;
-      return lx.IsV7() || lx.IsNano() || lx.IsLX16xx();
+      return lx.IsManageable();
     }
   }
 

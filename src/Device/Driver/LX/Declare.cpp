@@ -218,7 +218,7 @@ LXDevice::Declare(const Declaration &declaration,
   if (declaration.Size() < 2 || declaration.Size() > 12)
     return false;
 
-  if (IsNano())
+  if (IsLXNAVLogger())
     return Nano::Declare(port, declaration, env);
 
   if (!EnableCommandMode(env))

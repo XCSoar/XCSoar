@@ -78,7 +78,7 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
   LXNAVVario::ModeNormal(port, env);
 
   LXNAVVario::SetupNMEA(port, env);
-  if (!is_v7)
+  if (!IsLXNAVVario())
     LX1600::SetupNMEA(port, env);
 
   if (old_baud_rate != 0)
@@ -87,7 +87,7 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
   port.Flush();
 
   Nano::RequestForwardedInfo(port, env);
-  if (!is_v7)
+  if (!IsLXNAVVario())
     Nano::RequestInfo(port, env);
 
   return true;
