@@ -38,6 +38,7 @@ struct WaypointRendererSettings {
     FIRST_THREE,
     OBSOLETE_DONT_USE_NAMEIFINTASK,
     FIRST_WORD,
+    SHORT_NAME,
   } display_text_type;
 
   /** Which arrival height to display next to waypoint labels */
