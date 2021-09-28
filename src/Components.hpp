@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_COMPONENTS_HPP
 #define XCSOAR_COMPONENTS_HPP
 
-#include "util/Compiler.h"
-
 class FileCache;
 class TopographyStore;
 class RasterTerrain;
@@ -72,7 +70,7 @@ extern TrackingGlue *tracking;
  * Returns the global ProtectedAirspaceWarningManager instance.  May
  * be nullptr if disabled.
  */
-gcc_pure
+[[gnu::pure]]
 ProtectedAirspaceWarningManager *
 GetAirspaceWarnings();
 
