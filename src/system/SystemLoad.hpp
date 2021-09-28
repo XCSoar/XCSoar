@@ -23,6 +23,8 @@ Copyright_License {
 
 #pragma once
 
+#include "util/OptionalPercent.hxx"
+
 [[gnu::pure]]
-unsigned
+OptionalPercent
 SystemLoadCPU() noexcept;

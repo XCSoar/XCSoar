@@ -99,7 +99,7 @@ UpdateInfoBoxBattery(InfoBoxData &data) noexcept
     if (!DisplaySupplyVoltageAsValue)
       data.SetValueFromPercent(*battery.remaining_percent);
     else
-      data.SetCommentFromPercent(*battery.remaining_percent);
+      data.SetCommentFromPercent(* battery.remaining_percent);
   } else {
     if (!DisplaySupplyVoltageAsValue)
       data.SetValueInvalid();
@@ -139,9 +139,9 @@ UpdateInfoBoxExperimental2(InfoBoxData &data) noexcept
 void
 UpdateInfoBoxCPULoad(InfoBoxData &data) noexcept
 {
-  unsigned percent_load = SystemLoadCPU();
-  if (percent_load <= 100) {
-    data.SetValueFromPercent(percent_load);
+  const auto percent_load = SystemLoadCPU();
+  if (percent_load) {
+    data.SetValueFromPercent(*percent_load);
   } else {
     data.SetInvalid();
   }
