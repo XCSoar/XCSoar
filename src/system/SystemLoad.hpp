@@ -21,10 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_OS_SYSTEMLOAD_HPP
+#pragma once
 
 [[gnu::pure]]
 unsigned
 SystemLoadCPU() noexcept;
-
-#endif
