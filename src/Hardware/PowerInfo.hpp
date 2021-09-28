@@ -39,7 +39,7 @@ struct BatteryInfo {
   };
 #endif
 
-  unsigned remaining_percent;
+  uint_least8_t remaining_percent;
   bool remaining_percent_valid = false;
 
 #ifndef ANDROID
