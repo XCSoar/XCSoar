@@ -4,6 +4,8 @@ Version 7.19 - not yet released
   - fix crash bug in terrain loader
   - support short name in CUP files
   - search waypoints via short name
+* devices
+  - improved support for LXNAV S8x/S10x varios, including task declaration.
 * user interface
   - consistent progress bar during startup
 * Android

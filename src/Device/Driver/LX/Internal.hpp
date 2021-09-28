@@ -57,6 +57,11 @@ class LXDevice: public AbstractDevice
    */
   bool is_colibri;
 
+  /*
+   * Indicates whether pass-through mode should be used
+   */
+  bool use_pass_through;
+
   /**
    * Was a LXNAV V7 detected?
    */
@@ -103,10 +108,10 @@ class LXDevice: public AbstractDevice
 
 public:
   LXDevice(Port &_port, unsigned baud_rate, unsigned _bulk_baud_rate,
-           bool _port_is_nano=false)
+           bool _use_pass_through, bool _port_is_nano=false)
     :port(_port), bulk_baud_rate(_bulk_baud_rate),
      busy(false),
-     is_colibri(baud_rate == 4800),
+     is_colibri(baud_rate == 4800), use_pass_through(_use_pass_through),
      is_v7(false), is_nano(_port_is_nano), port_is_nano(_port_is_nano),
      is_lx16xx(false), is_forwarded_nano(false),
      mode(Mode::UNKNOWN), old_baud_rate(0) {}
@@ -158,6 +163,10 @@ public:
    */
   bool IsManageable() const {
     return IsV7() || IsSVario() || IsNano() || IsLX16xx();
+  }
+
+  bool UsePassThrough() {
+    return use_pass_through;
   }
 
   void ResetDeviceDetection() {

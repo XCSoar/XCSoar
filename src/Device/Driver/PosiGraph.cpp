@@ -40,7 +40,7 @@ Copyright_License {
 class PGDevice : public LXDevice {
 public:
   PGDevice(Port &_port, unsigned baud_rate, unsigned bulk_baud_rate)
-    :LXDevice(_port, baud_rate, bulk_baud_rate) {}
+    :LXDevice(_port, baud_rate, bulk_baud_rate, true) {}
 
   /* virtual methods from class Device */
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
