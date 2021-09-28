@@ -48,6 +48,9 @@ public:
 	constexpr OptionalPercent(std::nullopt_t) noexcept
 		:value(INVALID) {}
 
+	constexpr OptionalPercent(uint_least8_t _value) noexcept
+		:value(_value) {}
+
 	constexpr operator bool() const noexcept {
 		return value != INVALID;
 	}
