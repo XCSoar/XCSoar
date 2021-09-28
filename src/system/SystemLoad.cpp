@@ -67,7 +67,7 @@ SystemLoadCPU() noexcept
   return retval;
 }
 
-#elif defined(__linux__) || defined(ANDROID)
+#elif defined(__linux__)
 
 #include "system/FileUtil.hpp"
 
