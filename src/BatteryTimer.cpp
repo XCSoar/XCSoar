@@ -40,7 +40,9 @@ BatteryTimer::Process()
   // power has been lost and you are now on battery power - ie:
   // something else is wrong
 
-  UpdateBatteryInfo();
+#ifndef ANDROID
+  Power::global_info = Power::GetInfo();
+#endif
 
   const auto &info = Power::global_info;
   const auto &battery = info.battery;

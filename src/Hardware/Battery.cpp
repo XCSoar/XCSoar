@@ -24,9 +24,8 @@ Copyright_License {
 #include "Battery.hpp"
 #include "util/StringAPI.hxx"
 
-#ifdef HAVE_BATTERY
+#if defined(HAVE_BATTERY) && !defined(ANDROID)
 #include "PowerInfo.hpp"
-#include "PowerGlobal.hpp"
 
 #ifdef KOBO
 
@@ -36,17 +35,15 @@ Copyright_License {
 #include <string.h>
 #include <stdlib.h>
 
-void
-UpdateBatteryInfo()
+namespace Power {
+
+Info
+GetInfo() noexcept
 {
-  auto &info = Power::global_info;
+  Info info;
   auto &battery = info.battery;
   auto &external = info.external;
 
-  // assume failure at entry
-  battery.remaining_percent_valid = false;
-  battery.status = Power::BatteryInfo::Status::UNKNOWN;
-  external.status = Power::ExternalInfo::Status::UNKNOWN;
   char line[256];
 
   if (DetectKoboModel() == KoboModel::GLO_HD) {
@@ -69,7 +66,7 @@ UpdateBatteryInfo()
     // code shamelessly copied from OS/SystemLoad.cpp
     if (!File::ReadString(Path("/sys/class/power_supply/mc13892_bat/uevent"),
                           line, sizeof(line)))
-      return;
+      return info;
 
     char field[80], value[80];
     int n;
@@ -102,7 +99,11 @@ UpdateBatteryInfo()
     }
   } else if (external.status == Power::ExternalInfo::Status::ON)
     battery.status = Power::BatteryInfo::Status::CHARGING;
+
+  return info;
 }
+
+} // namespace Power
 
 #endif
 
@@ -110,10 +111,12 @@ UpdateBatteryInfo()
 
 #include <SDL_power.h>
 
-void
-UpdateBatteryInfo()
+namespace Power {
+
+Info
+GetInfo() noexcept
 {
-  auto &info = Power::global_info;
+  Info info;
   auto &battery = info.battery;
   auto &external = info.external;
 
@@ -122,8 +125,6 @@ UpdateBatteryInfo()
   if (remaining_percent >= 0) {
     battery.remaining_percent = remaining_percent;
     battery.remaining_percent_valid = true;
-  } else {
-    battery.remaining_percent_valid = false;
   }
 
   switch (power_state) {
@@ -143,15 +144,17 @@ UpdateBatteryInfo()
       } else {
         battery.status = Power::BatteryInfo::Status::CRITICAL;
       }
-    } else {
-      battery.status = Power::BatteryInfo::Status::UNKNOWN;
     }
     break;
 
   default:
-    external.status = Power::ExternalInfo::Status::UNKNOWN;
+    break;
   }
+
+  return info;
 }
+
+} // namespace Power
 
 #endif
 

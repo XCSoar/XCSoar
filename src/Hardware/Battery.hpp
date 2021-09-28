@@ -26,23 +26,19 @@ Copyright_License {
 
 #include "PowerFeatures.hpp"
 
-#ifdef HAVE_BATTERY
+#if defined(HAVE_BATTERY) && !defined(ANDROID)
 
-#ifdef ANDROID
+namespace Power {
 
-static inline void
-UpdateBatteryInfo()
-{
-  /* nothing to do, this is updated by Android callbacks */
-}
+/* note: this function is not implemented on Android, because a JNI
+   callback will update the global variable there */
 
-#else
+[[gnu::pure]]
+struct Info
+GetInfo() noexcept;
 
-void
-UpdateBatteryInfo();
+} // namespace Power
 
-#endif
-
-#endif /* !HAVE_BATTERY */
+#endif /* HAVE_BATTERY */
 
 #endif
