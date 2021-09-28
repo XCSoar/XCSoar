@@ -29,7 +29,7 @@ namespace Power {
 
 struct BatteryInfo {
 #ifndef ANDROID
-  enum class Status : uint8_t {
+  enum class Status : uint_least8_t {
     UNKNOWN,
     LOW,
     HIGH,
@@ -48,7 +48,7 @@ struct BatteryInfo {
 };
 
 struct ExternalInfo {
-  enum class Status : uint8_t {
+  enum class Status : uint_least8_t {
     UNKNOWN,
     OFF,
     ON,
