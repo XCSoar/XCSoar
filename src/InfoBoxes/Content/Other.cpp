@@ -94,35 +94,19 @@ UpdateInfoBoxBattery(InfoBoxData &data) noexcept
   default:
     data.SetCommentInvalid();
   }
-#ifndef ANDROID
-  switch (battery.status) {
-  case Power::BatteryInfo::Status::HIGH:
-  case Power::BatteryInfo::Status::LOW:
-  case Power::BatteryInfo::Status::CRITICAL:
-  case Power::BatteryInfo::Status::CHARGING:
-    if (battery.remaining_percent_valid){
-#endif
-      if (!DisplaySupplyVoltageAsValue)
-        data.SetValueFromPercent(battery.remaining_percent);
-      else
-        data.SetCommentFromPercent(battery.remaining_percent);
-#ifndef ANDROID
-    }
-    else
-      if (!DisplaySupplyVoltageAsValue)
-        data.SetValueInvalid();
-      else
-        data.SetCommentInvalid();
-    break;
 
-  case Power::BatteryInfo::Status::NOBATTERY:
-  case Power::BatteryInfo::Status::UNKNOWN:
+  if (battery.remaining_percent_valid){
+    if (!DisplaySupplyVoltageAsValue)
+      data.SetValueFromPercent(battery.remaining_percent);
+    else
+      data.SetCommentFromPercent(battery.remaining_percent);
+  } else {
     if (!DisplaySupplyVoltageAsValue)
       data.SetValueInvalid();
     else
       data.SetCommentInvalid();
   }
-#endif
+
   return;
 
 #endif
