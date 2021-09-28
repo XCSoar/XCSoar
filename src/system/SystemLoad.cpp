@@ -31,7 +31,8 @@
 #include <stdio.h>
 #include <cstdint>
 
-unsigned SystemLoadCPU()
+unsigned
+SystemLoadCPU() noexcept
 {
   unsigned retval = (unsigned)-1;
 
@@ -77,7 +78,7 @@ struct cpu {
 };
 
 unsigned
-SystemLoadCPU()
+SystemLoadCPU() noexcept
 {
   char line[256];
   if (!File::ReadString(Path("/proc/stat"), line, sizeof(line)))
@@ -118,7 +119,8 @@ SystemLoadCPU()
 #else /* !_WIN32 */
 
 ///@todo implement for non-win32
-unsigned SystemLoadCPU()
+unsigned
+SystemLoadCPU() noexcept
 {
   return (unsigned)-1;
 }
