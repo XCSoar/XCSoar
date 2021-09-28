@@ -28,23 +28,8 @@ Copyright_License {
 namespace Power {
 
 struct BatteryInfo {
-#ifndef ANDROID
-  enum class Status : uint_least8_t {
-    UNKNOWN,
-    LOW,
-    HIGH,
-    CRITICAL,
-    CHARGING,
-    NOBATTERY,
-  };
-#endif
-
   uint_least8_t remaining_percent;
   bool remaining_percent_valid = false;
-
-#ifndef ANDROID
-  Status status = Status::UNKNOWN;
-#endif
 };
 
 struct ExternalInfo {

@@ -88,18 +88,6 @@ GetInfo() noexcept
     }
   }
 
-  if (external.status == Power::ExternalInfo::Status::OFF) {
-    if (battery.remaining_percent_valid) {
-      if (battery.remaining_percent>30)
-        battery.status = Power::BatteryInfo::Status::HIGH;
-      else if (battery.remaining_percent>10)
-        battery.status = Power::BatteryInfo::Status::LOW;
-      else if (battery.remaining_percent<10)
-        battery.status = Power::BatteryInfo::Status::CRITICAL;
-    }
-  } else if (external.status == Power::ExternalInfo::Status::ON)
-    battery.status = Power::BatteryInfo::Status::CHARGING;
-
   return info;
 }
 
@@ -131,20 +119,10 @@ GetInfo() noexcept
   case SDL_POWERSTATE_CHARGING:
   case SDL_POWERSTATE_CHARGED:
     external.status = Power::ExternalInfo::Status::ON;
-    battery.status = Power::BatteryInfo::Status::CHARGING;
     break;
 
   case SDL_POWERSTATE_ON_BATTERY:
     external.status = Power::ExternalInfo::Status::OFF;
-    if (remaining_percent >= 0) {
-      if (remaining_percent > 30) {
-        battery.status = Power::BatteryInfo::Status::HIGH;
-      } else if (remaining_percent > 30) {
-        battery.status = Power::BatteryInfo::Status::LOW;
-      } else {
-        battery.status = Power::BatteryInfo::Status::CRITICAL;
-      }
-    }
     break;
 
   default:
