@@ -40,9 +40,13 @@ endif
 
 ifeq ($(LTO),y)
   ifeq ($(CLANG),n)
-    # 8 LTO threads - that's an arbitrary value, but better than the
-    # default
-    TARGET_OPTIMIZE += -flto=8
+    # Let GCC figure out the number of available CPU threads itself
+    TARGET_OPTIMIZE += -flto=auto
+    # Only compile GIMPLE bytecode into the objects, thus reduce compile time,
+    # and reveal any not LTO capable component in the tool chain
+    # Otherwise the machine code in fat ojects could be used, but you have no idea
+    # that LTO was not effective
+    TARGET_OPTIMIZE += -fno-fat-lto-objects
   else
     ifeq ($(THIN_LTO),y)
       TARGET_OPTIMIZE += -flto=thin
@@ -57,7 +61,7 @@ ifeq ($(LLVM),y)
   TARGET_OPTIMIZE += -emit-llvm
 endif
 
-OPTIMIZE_LDFLAGS = $(filter-out -emit-llvm,$(OPTIMIZE))
+OPTIMIZE_LDFLAGS = $(filter-out -emit-llvm,$(OPTIMIZE) $(TARGET_OPTIMIZE))
 ifeq ($(CLANG)$(TARGET_IS_DARWIN)$(LTO),yny)
   # The Gold linker is known to work for LTO with LLVM Clang.  LLD
   # might be an option in the future, when it working reliably.

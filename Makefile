@@ -194,6 +194,7 @@ include $(topdir)/build/test.mk
 endif
 
 include $(topdir)/build/hot.mk
+include $(topdir)/build/nolto.mk
 
 ifeq ($(FUZZER),n)
 include $(topdir)/build/python.mk
