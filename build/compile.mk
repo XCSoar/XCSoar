@@ -69,8 +69,8 @@ SRC_TO_OBJ = $(subst /./,/,$(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.cxx,%$(O
 
 DEPFILE = $(@:$(OBJ_SUFFIX)=.d)
 DEPFLAGS = -Wp,-MD,$(DEPFILE),-MT,$@
-cc-flags = $(DEPFLAGS) $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_COVERAGE)
-cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_COVERAGE)
+cc-flags = $(DEPFLAGS) $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_COVERAGE)  $(EXTRA_CPPFLAGS)  $(EXTRA_CFLAGS)
+cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_COVERAGE)  $(EXTRA_CPPFLAGS)  $(EXTRA_CXXFLAGS)
 
 #
 # Useful debugging targets - make preprocessed versions of the source

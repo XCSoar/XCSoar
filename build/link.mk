@@ -1,6 +1,6 @@
 LINK = $(CXX)
 
-ld-flags = $(ALL_LDFLAGS) $(TARGET_ARCH)
+ld-flags = $(ALL_LDFLAGS) $(TARGET_ARCH)  $(EXTRA_LDFLAGS)
 ld-libs = $(ALL_LDLIBS)
 
 # Generates a program linking rule.
