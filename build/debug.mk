@@ -2,7 +2,7 @@ DEBUG ?= y
 DEBUG_GLIBCXX ?= n
 
 ifeq ($(DEBUG),y)
-  OPTIMIZE := -O0
+  OPTIMIZE := -Og
   OPTIMIZE += -funit-at-a-time
 else
   OPTIMIZE := -Os
