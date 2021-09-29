@@ -61,7 +61,7 @@ IMI::Connect(Port &port, OperationEnvironment &env)
   if (!Send(port, env, MSG_CFG_HELLO) || env.IsCancelled())
     return false;
 
-  const TMsg *msg = Receive(port, env, 100, 0);
+  const TMsg *msg = Receive(port, env, 2000, 0);
   if (!msg || msg->msgID != MSG_CFG_HELLO || env.IsCancelled())
     return false;
 
@@ -85,7 +85,7 @@ IMI::Connect(Port &port, OperationEnvironment &env)
     if (env.IsCancelled())
       return false;
 
-    const TMsg *msg = Receive(port, env, 300, sizeof(TDeviceInfo));
+    const TMsg *msg = Receive(port, env, 2000, sizeof(TDeviceInfo));
     if (!msg || env.IsCancelled())
       return false;
 
@@ -145,7 +145,7 @@ IMI::DeclarationWrite(Port &port, const Declaration &decl,
 
   // send declaration for current task
   return SendRet(port, env, MSG_DECLARATION, &imiDecl, sizeof(imiDecl),
-                 MSG_ACK_SUCCESS, 0, -1) != nullptr;
+                 MSG_ACK_SUCCESS, 2000, -1) != nullptr;
 }
 
 bool
@@ -163,7 +163,7 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list,
   for (;; count++) {
     const TMsg *pMsg = SendRet(port, env,
                                MSG_FLIGHT_INFO, nullptr, 0, MSG_FLIGHT_INFO,
-                               -1, totalCount, address, addressStop, 200, 6);
+                               -1, totalCount, address, addressStop, 2000, 6);
     if (pMsg == nullptr)
       break;
 

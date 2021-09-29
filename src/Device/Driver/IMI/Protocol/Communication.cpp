@@ -190,7 +190,7 @@ IMI::FlashRead(Port &port, void *buffer, unsigned address, unsigned size,
                              MSG_FLASH, 0, 0, MSG_FLASH, -1,
                              IMICOMM_BIGPARAM1(address),
                              IMICOMM_BIGPARAM2(address),
-                             size, 300, 2);
+                             size, 3000, 2);
 
   if (pMsg == nullptr || size != pMsg->parameter3)
     return false;
