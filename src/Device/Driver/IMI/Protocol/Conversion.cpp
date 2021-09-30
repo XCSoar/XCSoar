@@ -25,6 +25,7 @@ Copyright_License {
 #include "time/BrokenDateTime.hpp"
 #include "Math/Angle.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
+#include "time/Calendar.hxx"
 
 #ifdef _UNICODE
 #include <stringapiset.h>
@@ -33,11 +34,7 @@ Copyright_License {
 #define IMI_SECONDS_IN_MINUTE       (60)
 #define IMI_SECONDS_IN_HOUR      (60*60)
 #define IMI_SECONDS_IN_DAY    (24*60*60)
-#define IMI_ISLEAP(y) ((y & 3) == 0) //simple version valid for years 2000-2099
-#define IMI_DAYS_IN_YEAR(year) (IMI_ISLEAP(year) ? 366 : 365)
-
-static constexpr IMI::IMIBYTE IMI_DAYS_IN_MONTH[12] =
-  { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+#define IMI_DAYS_IN_YEAR(year) (IsLeapYear(year) ? 366 : 365)
 
 void
 IMI::ConvertToChar(const TCHAR* unicode, char* ascii, int outSize)
@@ -73,11 +70,9 @@ IMI::ConvertToDateTime(IMI::IMIDATETIMESEC in)
   }
 
   // find month
-  for (out.month = 0; out.month < 12; out.month++) {
-    unsigned secondsinmonth = IMI_DAYS_IN_MONTH[out.month]
+  for (out.month = 1; out.month <= 12; ++out.month) {
+    unsigned secondsinmonth = DaysInMonth(out.month, out.year)
       * IMI_SECONDS_IN_DAY;
-    if (out.month == 1 && IMI_ISLEAP(out.year))
-      secondsinmonth += IMI_SECONDS_IN_DAY;
 
     if (in < secondsinmonth)
       break;
@@ -96,8 +91,6 @@ IMI::ConvertToDateTime(IMI::IMIDATETIMESEC in)
   in %= IMI_SECONDS_IN_MINUTE;
 
   out.second = (uint8_t)in;
-
-  out.month++;
 
   return out;
 }
