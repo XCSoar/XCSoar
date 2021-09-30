@@ -34,7 +34,6 @@ Copyright_License {
 #define IMI_SECONDS_IN_MINUTE       (60)
 #define IMI_SECONDS_IN_HOUR      (60*60)
 #define IMI_SECONDS_IN_DAY    (24*60*60)
-#define IMI_DAYS_IN_YEAR(year) (IsLeapYear(year) ? 366 : 365)
 
 void
 IMI::ConvertToChar(const TCHAR* unicode, char* ascii, int outSize)
@@ -62,7 +61,7 @@ IMI::ConvertToDateTime(IMI::IMIDATETIMESEC in)
 
   // find year
   for (out.year = 2000; out.year <= 2099; ++out.year) {
-    unsigned secondsinyear = IMI_DAYS_IN_YEAR(out.year) * IMI_SECONDS_IN_DAY;
+    unsigned secondsinyear = DaysInYear(out.year) * IMI_SECONDS_IN_DAY;
     if (in < secondsinyear)
       break;
 
