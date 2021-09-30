@@ -302,7 +302,11 @@ static constexpr IMIDWORD IMIFIX_ID_K_RECORD = 0b101;
 static constexpr IMIDWORD IMIFIX_ID_X_RECORD = 0b110;
 static constexpr IMIDWORD IMIFIX_ID_FREE = 0b111;
 
-#define IMIIS_FIX(id) (id >= IMIFIX_ID_B_RECORD && id <= IMIFIX_ID_X_RECORD)
+static constexpr bool
+IMIIS_FIX(IMIDWORD id) noexcept
+{
+  return id >= IMIFIX_ID_B_RECORD && id <= IMIFIX_ID_X_RECORD;
+}
 
 struct Fix
 {
@@ -389,10 +393,25 @@ struct FixK
 
 static constexpr std::size_t IMICOMM_MSG_HEADER_SIZE = offsetof(TMsg, payload);
 
-} // namespace IMI
+static constexpr uint_least32_t
+IMICOMM_MAKEBIGPARAM(IMIDWORD param1, IMIDWORD param2) noexcept
+{
+  return (uint_least32_t(param1 & 0xff) << 16) |
+    (uint_least32_t(param2 & 0xffff));
+}
 
-#define IMICOMM_MAKEBIGPARAM(param1, param2) ((((unsigned)(param1 & 0xFF)) << 16) | (unsigned)(param2 & 0xFFFF))
-#define IMICOMM_BIGPARAM1(param) ((IMIBYTE)((param) >> 16))
-#define IMICOMM_BIGPARAM2(param) ((IMIWORD)(param))
+static constexpr IMIBYTE
+IMICOMM_BIGPARAM1(uint_least32_t param) noexcept
+{
+  return IMIBYTE(param >> 16);
+}
+
+static constexpr IMIDWORD
+IMICOMM_BIGPARAM2(uint_least32_t param) noexcept
+{
+  return IMIDWORD(param);
+}
+
+} // namespace IMI
 
 #endif
