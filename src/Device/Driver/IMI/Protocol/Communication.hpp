@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Types.hpp"
 
+#include <chrono>
+
 class Port;
 class OperationEnvironment;
 
@@ -62,13 +64,13 @@ namespace IMI
    * @brief Receives a message from the device
    *
    * @param port Device handle
-   * @param extraTimeout Additional timeout to wait for the message
+   * @param extra_timeout Additional timeout to wait for the message
    * @param expectedPayloadSize Expected size of the message
    *
    * @return Pointer to a message structure if expected message was received or 0 otherwise
    */
   const TMsg *Receive(Port &port, OperationEnvironment &env,
-                      unsigned extraTimeout,
+                      std::chrono::steady_clock::duration extra_timeout,
                       unsigned expectedPayloadSize);
 
   /**
@@ -83,7 +85,7 @@ namespace IMI
    * @param parameter1 1st parameter for to put in the message
    * @param parameter2 2nd parameter for to put in the message
    * @param parameter3 3rd parameter for to put in the message
-   * @param extraTimeout Additional timeout to wait for the message
+   * @param extra_timeout Additional timeout to wait for the message
    * @param retry Number of send retries
    *
    * @return Pointer to a message structure if expected message was received or 0 otherwise
@@ -93,7 +95,8 @@ namespace IMI
                       IMIWORD payloadSize, IMIBYTE reMsgID,
                       IMIWORD retPayloadSize, IMIBYTE parameter1 = 0,
                       IMIWORD parameter2 = 0, IMIWORD parameter3 = 0,
-                      unsigned extraTimeout = 300, int retry = 4);
+                      std::chrono::steady_clock::duration extra_timeout = std::chrono::milliseconds{300},
+                      int retry = 4);
 
   bool FlashRead(Port &port, void *buffer, unsigned address, unsigned size,
                  OperationEnvironment &env);

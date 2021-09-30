@@ -61,7 +61,7 @@ IMI::Connect(Port &port, OperationEnvironment &env)
   if (!Send(port, env, MSG_CFG_HELLO) || env.IsCancelled())
     return false;
 
-  const TMsg *msg = Receive(port, env, 2000, 0);
+  const TMsg *msg = Receive(port, env, std::chrono::seconds{2}, 0);
   if (!msg || msg->msgID != MSG_CFG_HELLO || env.IsCancelled())
     return false;
 
@@ -88,7 +88,8 @@ IMI::Connect(Port &port, OperationEnvironment &env)
     if (env.IsCancelled())
       return false;
 
-    const TMsg *msg = Receive(port, env, 2000, sizeof(TDeviceInfo));
+    const TMsg *msg = Receive(port, env, std::chrono::seconds{2},
+                              sizeof(TDeviceInfo));
     if (!msg || env.IsCancelled())
       return false;
 
@@ -166,7 +167,8 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list,
   for (;; count++) {
     const TMsg *pMsg = SendRet(port, env,
                                MSG_FLIGHT_INFO, nullptr, 0, MSG_FLIGHT_INFO,
-                               -1, totalCount, address, addressStop, 2000, 6);
+                               -1, totalCount, address, addressStop,
+                               std::chrono::seconds{2}, 6);
     if (pMsg == nullptr)
       break;
 

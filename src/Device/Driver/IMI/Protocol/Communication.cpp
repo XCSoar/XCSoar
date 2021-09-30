@@ -72,21 +72,28 @@ IMI::Send(Port &port, OperationEnvironment &env,
   return Send(port, msg, env);
 }
 
+static constexpr std::chrono::steady_clock::duration
+CalcPayloadTimeout(std::size_t payload_size, unsigned baud_rate) noexcept
+{
+  if (baud_rate == 0)
+    /* fallback for timeout calculation */
+    baud_rate = 9600;
+
+  return std::chrono::milliseconds(10000 * (payload_size + sizeof(IMI::IMICOMM_MSG_HEADER_SIZE) + 10) / baud_rate);
+}
+
 const IMI::TMsg *
 IMI::Receive(Port &port, OperationEnvironment &env,
-             unsigned extraTimeout, unsigned expectedPayloadSize)
+             std::chrono::steady_clock::duration extra_timeout,
+             unsigned expectedPayloadSize)
 {
   if (expectedPayloadSize > COMM_MAX_PAYLOAD_SIZE)
     expectedPayloadSize = COMM_MAX_PAYLOAD_SIZE;
 
-  // set timeout
-  unsigned baudrate = port.GetBaudrate();
-  if (baudrate == 0)
-    /* fallback for timeout calculation */
-    baudrate = 9600;
+  const auto payload_timeout =
+    CalcPayloadTimeout(expectedPayloadSize, port.GetBaudrate());
 
-  const TimeoutClock timeout(std::chrono::milliseconds(extraTimeout) +
-                             std::chrono::milliseconds(10000 * (expectedPayloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudrate));
+  const TimeoutClock timeout(extra_timeout + payload_timeout);
 
   // wait for the message
   while (true) {
@@ -116,19 +123,15 @@ IMI::SendRet(Port &port, OperationEnvironment &env,
              IMIBYTE msgID, const void *payload,
              IMIWORD payloadSize, IMIBYTE reMsgID, IMIWORD retPayloadSize,
              IMIBYTE parameter1, IMIWORD parameter2, IMIWORD parameter3,
-             unsigned extraTimeout, int retry)
+             std::chrono::steady_clock::duration extra_timeout,
+             int retry)
 {
-  unsigned baudRate = port.GetBaudrate();
-  if (baudRate == 0)
-    /* fallback for timeout calculation */
-    baudRate = 9600;
+  extra_timeout += CalcPayloadTimeout(payloadSize, port.GetBaudrate());
 
-  extraTimeout += 10000 * (payloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10)
-      / baudRate;
   while (retry--) {
     if (Send(port, env, msgID, payload, payloadSize, parameter1, parameter2,
              parameter3)) {
-      const TMsg *msg = Receive(port, env, extraTimeout, retPayloadSize);
+      const TMsg *msg = Receive(port, env, extra_timeout, retPayloadSize);
       if (msg && msg->msgID == reMsgID && (retPayloadSize == (IMIWORD)-1
           || msg->payloadSize == retPayloadSize))
         return msg;
@@ -190,7 +193,7 @@ IMI::FlashRead(Port &port, void *buffer, unsigned address, unsigned size,
                              MSG_FLASH, 0, 0, MSG_FLASH, -1,
                              IMICOMM_BIGPARAM1(address),
                              IMICOMM_BIGPARAM2(address),
-                             size, 3000, 2);
+                             size, std::chrono::seconds{3}, 2);
 
   if (pMsg == nullptr || size != pMsg->parameter3)
     return false;
