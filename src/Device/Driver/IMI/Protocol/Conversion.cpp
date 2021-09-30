@@ -85,20 +85,19 @@ IMI::ConvertToDateTime(IMI::IMIDATETIMESEC in)
   }
 
   // calculate day
-  out.day = (uint8_t)(in / IMI_SECONDS_IN_DAY);
-  in -= (out.day) * IMI_SECONDS_IN_DAY;
+  out.day = (uint8_t)(1 + in / IMI_SECONDS_IN_DAY);
+  in %= IMI_SECONDS_IN_DAY;
 
   // hour, minutes and seconds
   out.hour = (uint8_t)(in / IMI_SECONDS_IN_HOUR);
-  in -= (out.hour) * IMI_SECONDS_IN_HOUR;
+  in %= IMI_SECONDS_IN_HOUR;
 
   out.minute = (uint8_t)(in / IMI_SECONDS_IN_MINUTE);
-  in -= (out.minute) * IMI_SECONDS_IN_MINUTE;
+  in %= IMI_SECONDS_IN_MINUTE;
 
   out.second = (uint8_t)in;
 
   out.month++;
-  out.day++;
 
   return out;
 }
