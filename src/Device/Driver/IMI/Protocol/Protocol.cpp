@@ -70,7 +70,10 @@ IMI::Connect(Port &port, OperationEnvironment &env)
   // configure baudrate
   unsigned baudRate = port.GetBaudrate();
   if (baudRate == 0)
-    return false;
+    /* if the Port doesn't know the baud rate (e.g. because it's
+       connected to the "real" serial port over Bluetooth), assume
+       it's 9600, which I hope works for everybody */
+    baudRate = 9600;
 
   if (!Send(port, env,
             MSG_CFG_STARTCONFIG, 0, 0, IMICOMM_BIGPARAM1(baudRate),

@@ -7,6 +7,7 @@ Version 7.19 - not yet released
   - ability to display short name on map
 * devices
   - improved support for LXNAV S8x/S10x varios, including task declaration.
+  - IMI: fix task declaration over Bluetooth
 * user interface
   - consistent progress bar during startup
 * Android
