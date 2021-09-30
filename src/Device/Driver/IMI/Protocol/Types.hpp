@@ -66,30 +66,30 @@ enum TMsgType {
 };
 
 // constants
-const IMIBYTE IMICOMM_SYNC_CHAR1 = 'E';
-const IMIBYTE IMICOMM_SYNC_CHAR2 = 'X';
-const unsigned IMICOMM_SYNC_LEN  = 2;
-const unsigned IMICOMM_CRC_LEN   = 2;
-const unsigned COMM_MAX_PAYLOAD_SIZE = 2048;
-const unsigned COMM_MAX_BULK_SIZE = 0xFFFF + 1;
+static constexpr IMIBYTE IMICOMM_SYNC_CHAR1 = 'E';
+static constexpr IMIBYTE IMICOMM_SYNC_CHAR2 = 'X';
+static constexpr unsigned IMICOMM_SYNC_LEN = 2;
+static constexpr unsigned IMICOMM_CRC_LEN = 2;
+static constexpr unsigned COMM_MAX_PAYLOAD_SIZE = 2048;
+static constexpr unsigned COMM_MAX_BULK_SIZE = 0xFFFF + 1;
 
-const unsigned IMIDECL_PLT_LENGTH = 30;
-const unsigned IMIDECL_CM2_LENGTH = 30;
-const unsigned IMIDECL_GTY_LENGTH = 20;
-const unsigned IMIDECL_GID_LENGTH = 12;
-const unsigned IMIDECL_CID_LENGTH = 4;
-const unsigned IMIDECL_CCL_LENGTH = 20;
-const unsigned IMIDECL_CLB_LENGTH = 20;
-const unsigned IMIDECL_SIT_LENGTH = 20;
+static constexpr unsigned IMIDECL_PLT_LENGTH = 30;
+static constexpr unsigned IMIDECL_CM2_LENGTH = 30;
+static constexpr unsigned IMIDECL_GTY_LENGTH = 20;
+static constexpr unsigned IMIDECL_GID_LENGTH = 12;
+static constexpr unsigned IMIDECL_CID_LENGTH = 4;
+static constexpr unsigned IMIDECL_CCL_LENGTH = 20;
+static constexpr unsigned IMIDECL_CLB_LENGTH = 20;
+static constexpr unsigned IMIDECL_SIT_LENGTH = 20;
 
-const unsigned IMIDECL_TASK_NAME_LENGTH = 30;
+static constexpr unsigned IMIDECL_TASK_NAME_LENGTH = 30;
 
-const unsigned IMIDECL_WP_NAME_LENGTH   = 12;
-const unsigned IMIDECL_MAX_WAYPOINTS    = 15;
+static constexpr unsigned IMIDECL_WP_NAME_LENGTH   = 12;
+static constexpr unsigned IMIDECL_MAX_WAYPOINTS    = 15;
 
-const unsigned IMIRSA_MAX_BITS = 1024;
+static constexpr unsigned IMIRSA_MAX_BITS = 1024;
 
-const unsigned IMINO_ENL_MASK = 0x80;
+static constexpr unsigned IMINO_ENL_MASK = 0x80;
 
 // messages
 struct TDeviceInfo {
