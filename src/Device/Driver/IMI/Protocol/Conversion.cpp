@@ -63,36 +63,30 @@ IMI::ConvertToDateTime(IMI::IMIDATETIMESEC in)
 {
   BrokenDateTime out;
 
-  if (in >= IMI_SECONDS_IN_DAY) {
-    // find year
-    for (out.year = 0; out.year <= 99; out.year++) {
-      unsigned secondsinyear = IMI_DAYS_IN_YEAR(out.year) * IMI_SECONDS_IN_DAY;
-      if (in < secondsinyear)
-        break;
+  // find year
+  for (out.year = 0; out.year <= 99; out.year++) {
+    unsigned secondsinyear = IMI_DAYS_IN_YEAR(out.year) * IMI_SECONDS_IN_DAY;
+    if (in < secondsinyear)
+      break;
 
-      in -= secondsinyear;
-    }
-
-    // find month
-    for (out.month = 0; out.month < 12; out.month++) {
-      unsigned secondsinmonth = IMI_DAYS_IN_MONTH[out.month]
-          * IMI_SECONDS_IN_DAY;
-      if (out.month == 1 && IMI_ISLEAP(out.year))
-        secondsinmonth += IMI_SECONDS_IN_DAY;
-
-      if (in < secondsinmonth)
-        break;
-      in -= secondsinmonth;
-    }
-
-    // calculate day
-    out.day = (uint8_t)(in / IMI_SECONDS_IN_DAY);
-    in -= (out.day) * IMI_SECONDS_IN_DAY;
-  } else {
-    out.year = 0;
-    out.month = 0;
-    out.day = 0;
+    in -= secondsinyear;
   }
+
+  // find month
+  for (out.month = 0; out.month < 12; out.month++) {
+    unsigned secondsinmonth = IMI_DAYS_IN_MONTH[out.month]
+      * IMI_SECONDS_IN_DAY;
+    if (out.month == 1 && IMI_ISLEAP(out.year))
+      secondsinmonth += IMI_SECONDS_IN_DAY;
+
+    if (in < secondsinmonth)
+      break;
+    in -= secondsinmonth;
+  }
+
+  // calculate day
+  out.day = (uint8_t)(in / IMI_SECONDS_IN_DAY);
+  in -= (out.day) * IMI_SECONDS_IN_DAY;
 
   // hour, minutes and seconds
   out.hour = (uint8_t)(in / IMI_SECONDS_IN_HOUR);
