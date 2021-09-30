@@ -293,14 +293,14 @@ struct Flight
   Signature signature;
 } gcc_packed;
 
-#define IMIFIX_ID_DELETED     0   //000
-#define IMIFIX_ID_IMIDECLARATION 1   //001
-#define IMIFIX_ID_B_RECORD    2   //010
-#define IMIFIX_ID_B2_RECORD   3   //011
-#define IMIFIX_ID_E_RECORD    4   //100
-#define IMIFIX_ID_K_RECORD    5   //101
-#define IMIFIX_ID_X_RECORD    6   //110 // reserved
-#define IMIFIX_ID_FREE        7   //111
+static constexpr IMIDWORD IMIFIX_ID_DELETED = 0b000;
+static constexpr IMIDWORD IMIFIX_ID_IMIDECLARATION = 0b001;
+static constexpr IMIDWORD IMIFIX_ID_B_RECORD = 0b010;
+static constexpr IMIDWORD IMIFIX_ID_B2_RECORD = 0b011;
+static constexpr IMIDWORD IMIFIX_ID_E_RECORD = 0b100;
+static constexpr IMIDWORD IMIFIX_ID_K_RECORD = 0b101;
+static constexpr IMIDWORD IMIFIX_ID_X_RECORD = 0b110;
+static constexpr IMIDWORD IMIFIX_ID_FREE = 0b111;
 
 #define IMIIS_FIX(id) (id >= IMIFIX_ID_B_RECORD && id <= IMIFIX_ID_X_RECORD)
 
@@ -352,10 +352,10 @@ struct FixB2
   IMIDWORD checksum:8;
 } gcc_packed; // B2 record (id = 3)
 
-#define IMIFIX_E_TYPE_SATELLITES 0
-#define IMIFIX_E_TYPE_COMMENT    1
-#define IMIFIX_E_TYPE_PEV        2
-#define IMIFIX_E_TYPE_TASK       3
+static constexpr IMIBYTE IMIFIX_E_TYPE_SATELLITES = 0;
+static constexpr IMIBYTE IMIFIX_E_TYPE_COMMENT = 1;
+static constexpr IMIBYTE IMIFIX_E_TYPE_PEV = 2;
+static constexpr IMIBYTE IMIFIX_E_TYPE_TASK = 3;
 
 struct FixE
 {
