@@ -544,7 +544,7 @@ AnalysisWidget::Update()
     dialog.SetCaption(sTmp);
     FlightStatisticsRenderer::CaptionTask(sTmp, calculated);
     info.SetText(sTmp);
-    SetCalcCaption(_("Task calc"));
+    SetCalcCaption(_("Task Calc"));
     break;
 
   case AnalysisPage::CONTEST:
