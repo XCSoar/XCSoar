@@ -64,7 +64,7 @@ IMI::ConvertToDateTime(IMI::IMIDATETIMESEC in)
   BrokenDateTime out;
 
   // find year
-  for (out.year = 0; out.year <= 99; out.year++) {
+  for (out.year = 2000; out.year <= 2099; ++out.year) {
     unsigned secondsinyear = IMI_DAYS_IN_YEAR(out.year) * IMI_SECONDS_IN_DAY;
     if (in < secondsinyear)
       break;
@@ -97,7 +97,6 @@ IMI::ConvertToDateTime(IMI::IMIDATETIMESEC in)
 
   out.second = (uint8_t)in;
 
-  out.year += 2000;
   out.month++;
   out.day++;
 
