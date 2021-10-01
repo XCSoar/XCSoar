@@ -36,6 +36,6 @@ Copyright_License {
  */
 gcc_nonnull_all
 TCHAR *
-UnescapeBackslash(const TCHAR *old_string);
+UnescapeBackslash(const TCHAR *old_string) noexcept;
 
 #endif

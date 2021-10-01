@@ -26,7 +26,7 @@ Copyright_License {
 #include <string.h>
 
 TCHAR *
-UnescapeBackslash(const TCHAR* old_string)
+UnescapeBackslash(const TCHAR* old_string) noexcept
 {
   TCHAR buffer[2048]; // Note - max size of any string we cope with here !
 
