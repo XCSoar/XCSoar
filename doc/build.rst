@@ -330,7 +330,7 @@ To compile XCSoar, run::
 To build the kobo install file ``KoboRoot.tgz``, you need the following
 Debian packages::
 
-  sudo apt install fakeroot ttf-bitstream-vera
+  sudo apt install fakeroot ttf-bitstream-vera python3-setuptools
 
 Then compile using this command::
 
