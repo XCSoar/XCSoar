@@ -43,7 +43,6 @@ Copyright_License {
 namespace IMI
 {
   bool _connected = false;
-  TDeviceInfo _info;
   IMIWORD _serialNumber;
 }
 
@@ -53,6 +52,9 @@ IMI::Connect(Port &port, OperationEnvironment &env)
   if (_connected)
     return true;
 
+  /* note: this variable is never used, only written to; but we may
+     find it useful one day */
+  TDeviceInfo _info;
   memset(&_info, 0, sizeof(_info));
   _serialNumber = 0;
   MessageParser::Reset();
