@@ -54,20 +54,40 @@ IMI::Connect(Port &port, OperationEnvironment &env)
   TDeviceInfo _info;
   memset(&_info, 0, sizeof(_info));
   _serialNumber = 0;
-  MessageParser::Reset();
 
   // check connectivity
-  if (!Send(port, env, MSG_CFG_HELLO) || env.IsCancelled())
-    return false;
+  for (unsigned i = 0;; ++i) {
+    port.Flush();
+    MessageParser::Reset();
 
-  const TMsg *msg = Receive(port, env, std::chrono::seconds{2}, 0);
-  if (env.IsCancelled())
-    return false;
+    if (!Send(port, env, MSG_CFG_HELLO) || env.IsCancelled())
+      return false;
 
-  if (!msg || msg->msgID != MSG_CFG_HELLO)
-    throw std::runtime_error("No HELLO response");
+    const TMsg *msg = Receive(port, env, std::chrono::seconds{2}, 0);
+    if (env.IsCancelled())
+      return false;
 
-  _serialNumber = msg->sn;
+    if (msg == nullptr && i < 3)
+      /* try again */
+      continue;
+
+    if (msg != nullptr && msg->msgID == MSG_ACK_INVSTATE && i < 10) {
+      /* INVSTATE means the logger is still in some communication
+         mode, but there's no way to quickly cancel this communication
+         mode; we need to wait until it re-enters NMEA mode
+         automatically after up to 10 seconds, that's why we retry up
+         to 10 times */
+      env.Sleep(std::chrono::seconds{1});
+      port.Flush();
+      continue;
+    }
+
+    if (!msg || msg->msgID != MSG_CFG_HELLO)
+      throw std::runtime_error("No HELLO response");
+
+    _serialNumber = msg->sn;
+    break;
+  }
 
   // configure baudrate
   unsigned baudRate = port.GetBaudrate();
