@@ -29,6 +29,8 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
 #include "time/TimeoutClock.hpp"
+#include "util/ByteOrder.hxx"
+#include "util/CRC.hpp"
 
 #include <stdexcept>
 
@@ -54,39 +56,35 @@ Write(Port &port, const void *data, std::size_t size,
 }
 
 void
-IMI::Send(Port &port, const TMsg &msg, OperationEnvironment &env)
-{
-  Write(port, &msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2,
-        env, std::chrono::seconds{2});
-}
-
-void
 IMI::Send(Port &port, OperationEnvironment &env,
           IMIBYTE msgID, const void *payload, IMIWORD payloadSize,
           IMIBYTE parameter1, IMIWORD parameter2, IMIWORD parameter3)
 {
-  if (payloadSize > COMM_MAX_PAYLOAD_SIZE)
-    throw std::runtime_error("Payload too large");
+  Sync sync;
+  sync.syncChar1 = IMICOMM_SYNC_CHAR1;
+  sync.syncChar2 = IMICOMM_SYNC_CHAR2;
+  Write(port, &sync, sizeof(sync), env, std::chrono::seconds{1});
 
-  TMsg msg;
-  memset(&msg, 0, sizeof(msg));
+  Header header;
+  header.sn = _serialNumber;
+  header.msgID = msgID;
+  header.parameter1 = parameter1;
+  header.parameter2 = parameter2;
+  header.parameter3 = parameter3;
+  header.payloadSize = payloadSize;
 
-  msg.syncChar1 = IMICOMM_SYNC_CHAR1;
-  msg.syncChar2 = IMICOMM_SYNC_CHAR2;
-  msg.sn = _serialNumber;
-  msg.msgID = msgID;
-  msg.parameter1 = parameter1;
-  msg.parameter2 = parameter2;
-  msg.parameter3 = parameter3;
-  msg.payloadSize = payloadSize;
-  memcpy(msg.payload, payload, payloadSize);
+  IMIWORD crc = 0xffff;
+  crc = UpdateCRC16CCITT(&header, sizeof(header), crc);
 
-  IMIWORD crc = CRC16Checksum(((IMIBYTE*)&msg) + 2,
-                              payloadSize + IMICOMM_MSG_HEADER_SIZE - 2);
-  msg.payload[payloadSize] = (IMIBYTE)(crc >> 8);
-  msg.payload[payloadSize + 1] = (IMIBYTE)crc;
+  Write(port, &header, sizeof(header), env, std::chrono::seconds{1});
 
-  Send(port, msg, env);
+  if (payloadSize > 0) {
+    Write(port, payload, payloadSize, env, std::chrono::seconds{2});
+    crc = UpdateCRC16CCITT(payload, payloadSize, crc);
+  }
+
+  crc = ToBE16(crc);
+  Write(port, &crc, sizeof(crc), env, std::chrono::seconds{1});
 }
 
 static constexpr std::chrono::steady_clock::duration

@@ -35,17 +35,6 @@ class OperationEnvironment;
 namespace IMI {
 
 /**
- * @brief Sends message buffer to a device
- *
- * Throws on error or cancellation.
- *
- * @param port Device handle
- * @param msg IMI message to send
- */
-void
-Send(Port &port, const TMsg &msg, OperationEnvironment &env);
-
-/**
  * @brief Prepares and sends the message to a device
  *
  * Throws on error or cancellation.
