@@ -61,10 +61,6 @@ Copyright_License {
 #include "FLARM/Glue.hpp"
 #include "DataGlobals.hpp"
 
-#if defined(__BORLANDC__)  // due to compiler bug
-  #include "Waypoint/Waypoints.hpp"
-#endif
-
 bool DevicePortChanged = false;
 bool MapFileChanged = false;
 bool AirspaceFileChanged = false;

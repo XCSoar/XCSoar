@@ -210,20 +210,8 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
           TCHAR d_misc[256] = _T("");
           int ef;
 
-          #if defined(__BORLANDC__)
-          memset(d_event, 0, sizeof(d_event));
-          memset(d_misc, 0, sizeof(d_event));
-          if (StringFind(value, ' ') == nullptr) {
-            _tcscpy(d_event, value);
-          } else {
-          #endif
-
           ef = _stscanf(value, _T("%[^ ] %[A-Za-z0-9_ \\/().,-]"), d_event,
               d_misc);
-
-          #if defined(__BORLANDC__)
-          }
-          #endif
 
           if ((ef == 1) || (ef == 2)) {
 
