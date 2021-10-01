@@ -28,22 +28,27 @@ Copyright_License {
 
 namespace IMI
 {
-  namespace MessageParser {
-    /**
-     * @brief Resets the state of the parser
-     */
-    void Reset();
 
-    /**
-     * @brief Parses received message chunk
-     *
-     * @param buffer Buffer with received data
-     * @param size The size of received data
-     *
-     * @return Received message or 0 if invalid on incomplete.
-     */
-    const TMsg *Parse(const IMIBYTE buffer[], int size);
-  };
-}
+namespace MessageParser {
+
+/**
+ * @brief Resets the state of the parser
+ */
+void
+Reset();
+
+/**
+ * @brief Parses received message chunk
+ *
+ * @param buffer Buffer with received data
+ * @param size The size of received data
+ *
+ * @return Received message or 0 if invalid on incomplete.
+ */
+const TMsg *
+Parse(const IMIBYTE buffer[], int size);
+
+} // namespace MessageParser
+} // namespace IMI
 
 #endif

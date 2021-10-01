@@ -28,11 +28,12 @@ Copyright_License {
 
 class BufferedOutputStream;
 
-namespace IMI
-{
+namespace IMI {
+
 void WriteHeader(BufferedOutputStream &os, const TDeclaration &decl, IMIBYTE tampered);
 void WriteFix(BufferedOutputStream &os, const Fix &fix, bool fromB2, int no_enl);
 void WriteSignature(BufferedOutputStream &os, const Signature &sig, IMIWORD sn);
-};
+
+} // namespace IMI
 
 #endif
