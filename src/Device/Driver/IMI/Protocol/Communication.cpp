@@ -105,6 +105,7 @@ IMI::Receive(Port &port, OperationEnvironment &env,
   const TimeoutClock timeout(extra_timeout + payload_timeout);
 
   // wait for the message
+  MessageParser mp;
   while (true) {
     // read message
     IMIBYTE buffer[64];
@@ -115,7 +116,7 @@ IMI::Receive(Port &port, OperationEnvironment &env,
       return std::nullopt;
 
     // parse message
-    if (auto msg = MessageParser::Parse(buffer, bytesRead))
+    if (auto msg = mp.Parse(buffer, bytesRead))
       // message received
       return msg;
   }

@@ -28,7 +28,6 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Device/Declaration.hpp"
 #include "Device/RecordedFlight.hpp"
-#include "MessageParser.hpp"
 #include "Device/Port/Port.hpp"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
@@ -58,7 +57,6 @@ IMI::Connect(Port &port, OperationEnvironment &env)
   // check connectivity
   for (unsigned i = 0;; ++i) {
     port.Flush();
-    MessageParser::Reset();
 
     Send(port, env, MSG_CFG_HELLO);
 
@@ -209,8 +207,6 @@ bool
 IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
                     Path path, OperationEnvironment &env)
 {
-  MessageParser::Reset();
-
   Flight flight;
   if (!FlashRead(port, &flight, flight_info.internal.imi, sizeof(flight), env))
     return false;
