@@ -36,9 +36,6 @@ IMIDevice::ReadFlightList(RecordedFlightList &flight_list,
   bool success = Connect(env) && !env.IsCancelled();
   success = success && IMI::ReadFlightList(port, flight_list, env);
 
-  // disconnect
-  Disconnect(env);
-
   return success;
 }
 
@@ -50,9 +47,6 @@ IMIDevice::DownloadFlight(const RecordedFlightInfo &flight, Path path,
 
   bool success = Connect(env) && !env.IsCancelled();
   success = success && IMI::FlightDownload(port, flight, path, env);
-
-  // disconnect
-  Disconnect(env);
 
   return success;
 }

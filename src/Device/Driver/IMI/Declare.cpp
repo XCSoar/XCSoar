@@ -42,8 +42,5 @@ IMIDevice::Declare(const Declaration &declaration,
   bool success = Connect(env) && !env.IsCancelled();
   success = success && IMI::DeclarationWrite(port, declaration, env);
 
-  // disconnect
-  Disconnect(env);
-
   return success;
 }

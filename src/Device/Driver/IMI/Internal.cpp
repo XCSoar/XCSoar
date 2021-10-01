@@ -31,6 +31,12 @@ Copyright_License {
 #include "util/StringAPI.hxx"
 
 bool
+IMIDevice::EnableNMEA(OperationEnvironment &env)
+{
+  return IMI::Disconnect(port, env);
+}
+
+bool
 IMIDevice::Connect(OperationEnvironment &env)
 {
   // connect to the device
@@ -38,13 +44,6 @@ IMIDevice::Connect(OperationEnvironment &env)
     return false;
 
   return true;
-}
-
-void
-IMIDevice::Disconnect(OperationEnvironment &env)
-{
-  // disconnect
-  IMI::Disconnect(port, env);
 }
 
 static bool
