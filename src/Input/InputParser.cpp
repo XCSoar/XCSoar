@@ -96,7 +96,7 @@ struct EventBuilder {
       if (location > 0) {
         // Only copy this once per object - save string space
         if (!new_label) {
-          new_label = UnescapeBackslash(label);
+          new_label = UnescapeBackslash(label.c_str());
         }
 
         config.AppendMenu(mode_id, new_label, location, event_id);
