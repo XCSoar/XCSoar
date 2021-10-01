@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_INPUT_LOOKUP_HPP
 
 #include "util/Compiler.h"
+#include "util/TStringView.hxx"
 
 #include <tchar.h>
 
@@ -39,7 +40,8 @@ gcc_pure
 int findNE(const TCHAR *data);
 
 gcc_pure
-pt2Event findEvent(const TCHAR *);
+pt2Event
+findEvent(TStringView name) noexcept;
 
 } // namespace InputEvents
 
