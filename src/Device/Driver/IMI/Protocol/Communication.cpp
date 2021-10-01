@@ -121,13 +121,14 @@ IMI::SendRet(Port &port, OperationEnvironment &env,
   extra_timeout += CalcPayloadTimeout(payloadSize, port.GetBaudrate());
 
   while (retry--) {
-    if (Send(port, env, msgID, payload, payloadSize, parameter1, parameter2,
-             parameter3)) {
-      const TMsg *msg = Receive(port, env, extra_timeout, retPayloadSize);
-      if (msg && msg->msgID == reMsgID && (retPayloadSize == (IMIWORD)-1
-          || msg->payloadSize == retPayloadSize))
-        return msg;
-    }
+    if (!Send(port, env, msgID, payload, payloadSize, parameter1, parameter2,
+              parameter3))
+      return nullptr;
+
+    const TMsg *msg = Receive(port, env, extra_timeout, retPayloadSize);
+    if (msg && msg->msgID == reMsgID &&
+        (retPayloadSize == (IMIWORD)-1 || msg->payloadSize == retPayloadSize))
+      return msg;
   }
 
   return nullptr;
