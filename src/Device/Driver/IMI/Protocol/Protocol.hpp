@@ -73,11 +73,11 @@ FlightDownload(Port &port, const RecordedFlightInfo &flight,
 /**
  * @brief Disconnects from the device
  *
- * @param port Device handle
+ * Throws on error or cancellation.
  *
- * @return Operation status
+ * @param port Device handle
  */
-bool
+void
 Disconnect(Port &port, OperationEnvironment &env);
 
 } // namespace IMI

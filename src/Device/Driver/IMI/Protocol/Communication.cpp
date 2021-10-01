@@ -24,6 +24,7 @@ Copyright_License {
 #include "Communication.hpp"
 #include "Protocol.hpp"
 #include "Checksum.hpp"
+#include "Error.hpp"
 #include "MessageParser.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
@@ -38,20 +39,20 @@ namespace IMI
   extern IMIWORD _serialNumber;
 }
 
-bool
+void
 IMI::Send(Port &port, const TMsg &msg, OperationEnvironment &env)
 {
   if (port.FullWrite(&msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2,
                      env, std::chrono::seconds(2)))
-    return true;
+    return;
 
   if (env.IsCancelled())
-    return false;
+    throw Cancelled{};
 
   throw std::runtime_error("Port write error");
 }
 
-bool
+void
 IMI::Send(Port &port, OperationEnvironment &env,
           IMIBYTE msgID, const void *payload, IMIWORD payloadSize,
           IMIBYTE parameter1, IMIWORD parameter2, IMIWORD parameter3)
@@ -77,7 +78,7 @@ IMI::Send(Port &port, OperationEnvironment &env,
   msg.payload[payloadSize] = (IMIBYTE)(crc >> 8);
   msg.payload[payloadSize + 1] = (IMIBYTE)crc;
 
-  return Send(port, msg, env);
+  Send(port, msg, env);
 }
 
 static constexpr std::chrono::steady_clock::duration
@@ -108,6 +109,8 @@ IMI::Receive(Port &port, OperationEnvironment &env,
     // read message
     IMIBYTE buffer[64];
     size_t bytesRead = port.WaitAndRead(buffer, sizeof(buffer), env, timeout);
+    if (env.IsCancelled())
+      throw Cancelled{};
     if (bytesRead == 0)
       return nullptr;
 
@@ -130,13 +133,8 @@ IMI::SendRet(Port &port, OperationEnvironment &env,
   extra_timeout += CalcPayloadTimeout(payloadSize, port.GetBaudrate());
 
   while (retry--) {
-    if (!Send(port, env, msgID, payload, payloadSize, parameter1, parameter2,
-              parameter3)) {
-      if (env.IsCancelled())
-        return nullptr;
-      else
-        throw std::runtime_error("Send failed");
-    }
+    Send(port, env, msgID, payload, payloadSize, parameter1, parameter2,
+         parameter3);
 
     const TMsg *msg = Receive(port, env, extra_timeout, retPayloadSize);
     if (msg && msg->msgID == reMsgID &&

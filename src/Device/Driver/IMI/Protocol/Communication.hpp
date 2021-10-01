@@ -36,16 +36,18 @@ namespace IMI {
 /**
  * @brief Sends message buffer to a device
  *
+ * Throws on error or cancellation.
+ *
  * @param port Device handle
  * @param msg IMI message to send
- *
- * @return Operation status
  */
-bool
+void
 Send(Port &port, const TMsg &msg, OperationEnvironment &env);
 
 /**
  * @brief Prepares and sends the message to a device
+ *
+ * Throws on error or cancellation.
  *
  * @param port Device handle
  * @param msgID ID of the message to send
@@ -54,10 +56,8 @@ Send(Port &port, const TMsg &msg, OperationEnvironment &env);
  * @param parameter1 1st parameter for to put in the message
  * @param parameter2 2nd parameter for to put in the message
  * @param parameter3 3rd parameter for to put in the message
- *
- * @return Operation status
  */
-bool
+void
 Send(Port &port, OperationEnvironment &env,
      IMIBYTE msgID, const void *payload = 0,
      IMIWORD payloadSize = 0, IMIBYTE parameter1 = 0,

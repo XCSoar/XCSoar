@@ -60,13 +60,9 @@ IMI::Connect(Port &port, OperationEnvironment &env)
     port.Flush();
     MessageParser::Reset();
 
-    if (!Send(port, env, MSG_CFG_HELLO) || env.IsCancelled())
-      return false;
+    Send(port, env, MSG_CFG_HELLO);
 
     const TMsg *msg = Receive(port, env, std::chrono::seconds{2}, 0);
-    if (env.IsCancelled())
-      return false;
-
     if (msg == nullptr && i < 3)
       /* try again */
       continue;
@@ -97,22 +93,17 @@ IMI::Connect(Port &port, OperationEnvironment &env)
        it's 9600, which I hope works for everybody */
     baudRate = 9600;
 
-  if (!Send(port, env,
-            MSG_CFG_STARTCONFIG, 0, 0, IMICOMM_BIGPARAM1(baudRate),
-            IMICOMM_BIGPARAM2(baudRate)) || env.IsCancelled())
-    return false;
+  Send(port, env,
+       MSG_CFG_STARTCONFIG, 0, 0, IMICOMM_BIGPARAM1(baudRate),
+       IMICOMM_BIGPARAM2(baudRate));
 
   // get device info
   for (unsigned i = 0; i < 4; i++) {
-    if (!Send(port, env, MSG_CFG_DEVICEINFO))
-      continue;
-
-    if (env.IsCancelled())
-      return false;
+    Send(port, env, MSG_CFG_DEVICEINFO);
 
     const TMsg *msg = Receive(port, env, std::chrono::seconds{2},
                               sizeof(TDeviceInfo));
-    if (!msg || env.IsCancelled())
+    if (!msg)
       return false;
 
     if (msg->msgID == MSG_ACK_NOTCONFIG)
@@ -254,10 +245,6 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
 
     address = address + fixesToRead * sizeof(Fix);
     fixesRemains -= fixesToRead;
-
-    if (env.IsCancelled())
-      // canceled by user
-      return false;
   }
 
   WriteSignature(bos, flight.signature, flight.decl.header.sn);
@@ -266,8 +253,8 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
   return true;
 }
 
-bool
+void
 IMI::Disconnect(Port &port, OperationEnvironment &env)
 {
-  return Send(port, env, MSG_CFG_BYE);
+  Send(port, env, MSG_CFG_BYE);
 }

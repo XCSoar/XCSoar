@@ -33,7 +33,8 @@ Copyright_License {
 bool
 IMIDevice::EnableNMEA(OperationEnvironment &env)
 {
-  return IMI::Disconnect(port, env);
+  IMI::Disconnect(port, env);
+  return true;
 }
 
 bool

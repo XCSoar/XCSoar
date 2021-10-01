@@ -21,37 +21,16 @@ Copyright_License {
 }
 */
 
-#include "Internal.hpp"
-#include "Protocol/Protocol.hpp"
-#include "Protocol/Error.hpp"
-#include "Device/Port/Port.hpp"
-#include "Operation/Operation.hpp"
-#include "system/Path.hpp"
+#pragma once
 
-bool
-IMIDevice::ReadFlightList(RecordedFlightList &flight_list,
-                          OperationEnvironment &env)
-try {
-  port.StopRxThread();
+namespace IMI {
 
-  bool success = Connect(env);
-  success = success && IMI::ReadFlightList(port, flight_list, env);
+/**
+ * This class is thrown when the user has cancelled the operation via
+ * OperationEnvironment::IsCancelled().  It will be caught by
+ * top-level IMIDevice methods, and allows simplifying the
+ * cancellation checks.
+ */
+struct Cancelled {};
 
-  return success;
-} catch (IMI::Cancelled) {
-  return false;
-}
-
-bool
-IMIDevice::DownloadFlight(const RecordedFlightInfo &flight, Path path,
-                          OperationEnvironment &env)
-try {
-  port.StopRxThread();
-
-  bool success = Connect(env);
-  success = success && IMI::FlightDownload(port, flight, path, env);
-
-  return success;
-} catch (IMI::Cancelled) {
-  return false;
-}
+} // namespace IMI
