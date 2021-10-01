@@ -158,6 +158,8 @@ public:
   /**
    * Declare a task.
    *
+   * Throws on error.
+   *
    * @param declaration the task declaration
    * @param home the home waypoint, or nullptr if not known/configured;
    * this is not part of the task declaration, but some drivers might
@@ -170,6 +172,8 @@ public:
   /**
    * Read the list of recorded flights.
    *
+   * Throws on error.
+   *
    * @param flight_list the flights will be appended to this list
    * @return true on success
    */
@@ -178,6 +182,8 @@ public:
 
   /**
    * Download a flight into a file.
+   *
+   * Throws on error.
    *
    * @param flight the flight that shall be downloaded
    * @param path the file name to save to
