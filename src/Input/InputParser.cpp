@@ -165,7 +165,7 @@ struct EventBuilder {
 void
 ParseInputFile(InputConfig &config, TLineReader &reader)
 {
-  // TODO code - Safer sizes, strings etc - use C++ (can scanf restrict length?)
+  // TODO code - Safer sizes, strings etc - use C++
 
   // Multiple modes (so large string)
   EventBuilder current;
@@ -205,17 +205,10 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
       } else if (StringIsEqual(key, _T("data"))) {
         current.data = value;
       } else if (StringIsEqual(key, _T("event"))) {
-        if (_tcslen(value) >= 256)
-          continue;
+        const TStringView v{value};
+        const auto [d_event, d_misc] = v.Split(' ');
 
-        TCHAR d_event[256] = _T("");
-        TCHAR d_misc[256] = _T("");
-        int ef;
-
-        ef = _stscanf(value, _T("%[^ ] %[A-Za-z0-9_ \\/().,-]"), d_event,
-                      d_misc);
-
-        if (ef < 1) {
+        if (d_event.empty()) {
           LogFormat("Invalid event type at %i", line);
           continue;
         }
@@ -224,7 +217,8 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
 
         pt2Event event = InputEvents::findEvent(d_event);
         if (!event) {
-          LogFormat(_T("Invalid event type: %s at %i"), d_event, line);
+          LogFormat(_T("Invalid event type: %.*s at %i"),
+                    int(d_event.size), d_event.data, line);
           continue;
         }
 
