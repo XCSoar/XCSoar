@@ -8,6 +8,7 @@ Version 7.19 - not yet released
 * devices
   - improved support for LXNAV S8x/S10x varios, including task declaration.
   - IMI: fix task declaration over Bluetooth
+  - IMI: show progress bar for flight download
 * user interface
   - consistent progress bar during startup
 * Android

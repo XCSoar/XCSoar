@@ -186,6 +186,9 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list,
     address = pMsg->parameter2;
     addressStop = pMsg->parameter3;
 
+    env.SetProgressRange(totalCount);
+    env.SetProgressPosition(count);
+
     for (unsigned i = 0; i < pMsg->payloadSize / sizeof(IMI::FlightInfo); i++) {
       const IMI::FlightInfo *fi = ((const IMI::FlightInfo*)pMsg->payload) + i;
       RecordedFlightInfo &ifi = flight_list.append();
@@ -229,6 +232,8 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
   unsigned address = flight_info.internal.imi + sizeof(flight);
 
   unsigned fixesRemains = flight.finish.fixes;
+  env.SetProgressRange(fixesRemains);
+  unsigned position = 0;
   while (fixesRemains) {
     unsigned fixesToRead = fixesRemains;
     if (fixesToRead > fixesCount)
@@ -245,6 +250,9 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
 
     address = address + fixesToRead * sizeof(Fix);
     fixesRemains -= fixesToRead;
+
+    position += fixesToRead;
+    env.SetProgressPosition(position);
   }
 
   WriteSignature(bos, flight.signature, flight.decl.header.sn);
