@@ -37,19 +37,27 @@ Copyright_License {
 namespace IMI
 {
   extern IMIWORD _serialNumber;
+
+static void
+Write(Port &port, const void *data, std::size_t size,
+      OperationEnvironment &env,
+      std::chrono::steady_clock::duration timeout)
+{
+  if (!port.FullWrite(data, size, env, timeout)) {
+    if (env.IsCancelled())
+      throw Cancelled{};
+
+    throw std::runtime_error("Port write error");
+  }
+}
+
 }
 
 void
 IMI::Send(Port &port, const TMsg &msg, OperationEnvironment &env)
 {
-  if (port.FullWrite(&msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2,
-                     env, std::chrono::seconds(2)))
-    return;
-
-  if (env.IsCancelled())
-    throw Cancelled{};
-
-  throw std::runtime_error("Port write error");
+  Write(port, &msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2,
+        env, std::chrono::seconds{2});
 }
 
 void
