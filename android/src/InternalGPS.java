@@ -174,21 +174,28 @@ public class InternalGPS
   /** from LocationListener */
   @Override public void onStatusChanged(String provider, int status,
                                         Bundle extras) {
-    switch (status) {
-    case LocationProvider.OUT_OF_SERVICE:
-      setConnectedSafe(0); // not connected
-      setStateSafe(STATE_FAILED);
-      break;
+    if (!safeDestruct.increment())
+      return;
 
-    case LocationProvider.TEMPORARILY_UNAVAILABLE:
-      setConnectedSafe(1); // waiting for fix
-      setStateSafe(STATE_LIMBO);
-      break;
+    try {
+      switch (status) {
+      case LocationProvider.OUT_OF_SERVICE:
+        setConnectedSafe(0); // not connected
+        setStateSafe(STATE_FAILED);
+        break;
 
-    case LocationProvider.AVAILABLE:
-      listener.onSensorStateChanged();
-      setStateSafe(STATE_READY);
-      break;
+      case LocationProvider.TEMPORARILY_UNAVAILABLE:
+        setConnectedSafe(1); // waiting for fix
+        setStateSafe(STATE_LIMBO);
+        break;
+
+      case LocationProvider.AVAILABLE:
+        listener.onSensorStateChanged();
+        setStateSafe(STATE_READY);
+        break;
+      }
+    } finally {
+      safeDestruct.decrement();
     }
   }
 }
