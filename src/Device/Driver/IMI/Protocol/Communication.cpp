@@ -91,7 +91,7 @@ CalcPayloadTimeout(std::size_t payload_size, unsigned baud_rate) noexcept
   return std::chrono::milliseconds(10000 * (payload_size + sizeof(IMI::IMICOMM_MSG_HEADER_SIZE) + 10) / baud_rate);
 }
 
-const IMI::TMsg *
+std::optional<IMI::TMsg>
 IMI::Receive(Port &port, OperationEnvironment &env,
              std::chrono::steady_clock::duration extra_timeout,
              unsigned expectedPayloadSize)
@@ -112,17 +112,16 @@ IMI::Receive(Port &port, OperationEnvironment &env,
     if (env.IsCancelled())
       throw Cancelled{};
     if (bytesRead == 0)
-      return nullptr;
+      return std::nullopt;
 
     // parse message
-    const TMsg *msg = MessageParser::Parse(buffer, bytesRead);
-    if (msg != nullptr)
+    if (auto msg = MessageParser::Parse(buffer, bytesRead))
       // message received
       return msg;
   }
 }
 
-const IMI::TMsg *
+IMI::TMsg
 IMI::SendRet(Port &port, OperationEnvironment &env,
              IMIBYTE msgID, const void *payload,
              IMIWORD payloadSize, IMIBYTE reMsgID, IMIWORD retPayloadSize,
@@ -136,10 +135,10 @@ IMI::SendRet(Port &port, OperationEnvironment &env,
     Send(port, env, msgID, payload, payloadSize, parameter1, parameter2,
          parameter3);
 
-    const TMsg *msg = Receive(port, env, extra_timeout, retPayloadSize);
+    auto msg = Receive(port, env, extra_timeout, retPayloadSize);
     if (msg && msg->msgID == reMsgID &&
         (retPayloadSize == (IMIWORD)-1 || msg->payloadSize == retPayloadSize))
-      return msg;
+      return *msg;
   }
 
   throw std::runtime_error("No reply");
@@ -190,18 +189,16 @@ IMI::FlashRead(Port &port, void *buffer, unsigned address, unsigned size,
   if (size == 0)
     return true;
 
-  const TMsg *pMsg = SendRet(port, env,
-                             MSG_FLASH, 0, 0, MSG_FLASH, -1,
-                             IMICOMM_BIGPARAM1(address),
-                             IMICOMM_BIGPARAM2(address),
-                             size, std::chrono::seconds{3}, 2);
-  if (pMsg == nullptr)
-    return false;
+  const auto msg = SendRet(port, env,
+                           MSG_FLASH, 0, 0, MSG_FLASH, -1,
+                           IMICOMM_BIGPARAM1(address),
+                           IMICOMM_BIGPARAM2(address),
+                           size, std::chrono::seconds{3}, 2);
 
-  if (size != pMsg->parameter3)
+  if (size != msg.parameter3)
     throw std::runtime_error("Wrong FLASH result size");
 
-  if (!RLEDecompress((IMIBYTE*)buffer, pMsg->payload, pMsg->payloadSize, size))
+  if (!RLEDecompress((IMIBYTE*)buffer, msg.payload, msg.payloadSize, size))
     throw std::runtime_error("RLE decompression error");
 
   return true;

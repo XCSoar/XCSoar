@@ -105,11 +105,11 @@ IMI::MessageParser::Check(const TMsg *msg, IMIDWORD size)
   return crc1 == crc2;
 }
 
-const IMI::TMsg *
+std::optional<IMI::TMsg>
 IMI::MessageParser::Parse(const IMIBYTE _buffer[], int size)
 {
   const IMIBYTE *ptr = _buffer;
-  const TMsg *msg = 0;
+  std::optional<TMsg> msg;
 
   for (; size; size--) {
     IMIBYTE byte = *ptr++;
@@ -147,7 +147,7 @@ IMI::MessageParser::Parse(const IMIBYTE _buffer[], int size)
         if (bytes_left == 0) {
           // end of message
           if (Check(&GetMessage(), buffer_pos))
-            msg = &GetMessage();
+            msg = GetMessage();
 
           // prepare parser for the next message
           Reset();

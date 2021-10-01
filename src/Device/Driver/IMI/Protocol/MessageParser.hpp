@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Types.hpp"
 
+#include <optional>
+
 namespace IMI
 {
 
@@ -45,7 +47,7 @@ Reset();
  *
  * @return Received message or 0 if invalid on incomplete.
  */
-const TMsg *
+std::optional<TMsg>
 Parse(const IMIBYTE buffer[], int size);
 
 } // namespace MessageParser

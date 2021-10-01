@@ -27,6 +27,7 @@ Copyright_License {
 #include "Types.hpp"
 
 #include <chrono>
+#include <optional>
 
 class Port;
 class OperationEnvironment;
@@ -72,7 +73,7 @@ Send(Port &port, OperationEnvironment &env,
  *
  * @return Pointer to a message structure if expected message was received or 0 otherwise
  */
-const TMsg *
+std::optional<TMsg>
 Receive(Port &port, OperationEnvironment &env,
         std::chrono::steady_clock::duration extra_timeout,
         unsigned expectedPayloadSize);
@@ -91,10 +92,8 @@ Receive(Port &port, OperationEnvironment &env,
  * @param parameter3 3rd parameter for to put in the message
  * @param extra_timeout Additional timeout to wait for the message
  * @param retry Number of send retries
- *
- * @return Pointer to a message structure if expected message was received or 0 otherwise
  */
-const TMsg *
+TMsg
 SendRet(Port &port, OperationEnvironment &env,
         IMIBYTE msgID, const void *payload,
         IMIWORD payloadSize, IMIBYTE reMsgID,

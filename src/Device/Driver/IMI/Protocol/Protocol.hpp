@@ -55,10 +55,8 @@ Connect(Port &port, OperationEnvironment &env);
  *
  * @param port Device handle
  * @param decl Task declaration data
- *
- * @return Operation status
  */
-bool
+void
 DeclarationWrite(Port &port, const Declaration &decl,
                  OperationEnvironment &env);
 

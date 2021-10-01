@@ -62,12 +62,12 @@ IMI::Connect(Port &port, OperationEnvironment &env)
 
     Send(port, env, MSG_CFG_HELLO);
 
-    const TMsg *msg = Receive(port, env, std::chrono::seconds{2}, 0);
-    if (msg == nullptr && i < 3)
+    const auto msg = Receive(port, env, std::chrono::seconds{2}, 0);
+    if (!msg && i < 3)
       /* try again */
       continue;
 
-    if (msg != nullptr && msg->msgID == MSG_ACK_INVSTATE && i < 10) {
+    if (msg && msg->msgID == MSG_ACK_INVSTATE && i < 10) {
       /* INVSTATE means the logger is still in some communication
          mode, but there's no way to quickly cancel this communication
          mode; we need to wait until it re-enters NMEA mode
@@ -101,8 +101,8 @@ IMI::Connect(Port &port, OperationEnvironment &env)
   for (unsigned i = 0; i < 4; i++) {
     Send(port, env, MSG_CFG_DEVICEINFO);
 
-    const TMsg *msg = Receive(port, env, std::chrono::seconds{2},
-                              sizeof(TDeviceInfo));
+    const auto msg = Receive(port, env, std::chrono::seconds{2},
+                             sizeof(TDeviceInfo));
     if (!msg)
       return false;
 
@@ -129,7 +129,7 @@ IMI::Connect(Port &port, OperationEnvironment &env)
   return false;
 }
 
-bool
+void
 IMI::DeclarationWrite(Port &port, const Declaration &decl,
                       OperationEnvironment &env)
 {
@@ -161,8 +161,8 @@ IMI::DeclarationWrite(Port &port, const Declaration &decl,
               imiDecl.wp[size + 1]);
 
   // send declaration for current task
-  return SendRet(port, env, MSG_DECLARATION, &imiDecl, sizeof(imiDecl),
-                 MSG_ACK_SUCCESS, 2000, -1) != nullptr;
+  SendRet(port, env, MSG_DECLARATION, &imiDecl, sizeof(imiDecl),
+          MSG_ACK_SUCCESS, 2000, -1);
 }
 
 bool
@@ -175,22 +175,20 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list,
   IMIBYTE count = 1, totalCount = 0;
 
   for (;; count++) {
-    const TMsg *pMsg = SendRet(port, env,
-                               MSG_FLIGHT_INFO, nullptr, 0, MSG_FLIGHT_INFO,
-                               -1, totalCount, address, addressStop,
-                               std::chrono::seconds{2}, 6);
-    if (pMsg == nullptr)
-      break;
+    const auto msg = SendRet(port, env,
+                             MSG_FLIGHT_INFO, nullptr, 0, MSG_FLIGHT_INFO,
+                             -1, totalCount, address, addressStop,
+                             std::chrono::seconds{2}, 6);
 
-    totalCount = pMsg->parameter1;
-    address = pMsg->parameter2;
-    addressStop = pMsg->parameter3;
+    totalCount = msg.parameter1;
+    address = msg.parameter2;
+    addressStop = msg.parameter3;
 
     env.SetProgressRange(totalCount);
     env.SetProgressPosition(count);
 
-    for (unsigned i = 0; i < pMsg->payloadSize / sizeof(IMI::FlightInfo); i++) {
-      const IMI::FlightInfo *fi = ((const IMI::FlightInfo*)pMsg->payload) + i;
+    for (unsigned i = 0; i < msg.payloadSize / sizeof(IMI::FlightInfo); i++) {
+      const IMI::FlightInfo *fi = ((const IMI::FlightInfo*)msg.payload) + i;
       RecordedFlightInfo &ifi = flight_list.append();
 
       BrokenDateTime start = ConvertToDateTime(fi->start);
@@ -200,7 +198,7 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list,
       ifi.internal.imi = fi->address;
     }
 
-    if (pMsg->payloadSize == 0 || address == 0xFFFF)
+    if (msg.payloadSize == 0 || address == 0xFFFF)
       return true;
   }
 

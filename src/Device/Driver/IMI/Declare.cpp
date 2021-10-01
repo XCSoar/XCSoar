@@ -45,10 +45,11 @@ try {
 
   port.StopRxThread();
 
-  bool success = Connect(env);
-  success = success && IMI::DeclarationWrite(port, declaration, env);
+  if (!Connect(env))
+    return false;
 
-  return success;
+  IMI::DeclarationWrite(port, declaration, env);
+  return true;
 } catch (IMI::Cancelled) {
   return false;
 }
