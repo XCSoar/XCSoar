@@ -1,4 +1,4 @@
-Version 7.19 - not yet released
+Version 7.19 - 2021/10/01
 * data files
   - fix bug in OpenAir arc parser
   - fix crash bug in terrain loader
