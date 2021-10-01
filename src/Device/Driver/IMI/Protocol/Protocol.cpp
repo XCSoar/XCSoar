@@ -95,6 +95,10 @@ IMI::Connect(Port &port, OperationEnvironment &env)
     if (!msg || env.IsCancelled())
       return false;
 
+    if (msg->msgID == MSG_ACK_NOTCONFIG)
+      /* the MSG_CFG_STARTCONFIG command above was rejected */
+      return false;
+
     if (msg->msgID != MSG_CFG_DEVICEINFO)
       continue;
 

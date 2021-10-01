@@ -105,16 +105,9 @@ IMI::Receive(Port &port, OperationEnvironment &env,
 
     // parse message
     const TMsg *msg = MessageParser::Parse(buffer, bytesRead);
-    if (msg != nullptr) {
+    if (msg != nullptr)
       // message received
-      if (msg->msgID == MSG_ACK_NOTCONFIG) {
-        Disconnect(port, env);
-        return nullptr;
-      } else if (msg->msgID == MSG_CFG_KEEPCONFIG)
-        return nullptr;
-      else
-        return msg;
-    }
+      return msg;
   }
 }
 
