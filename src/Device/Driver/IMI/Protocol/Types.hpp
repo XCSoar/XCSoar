@@ -228,14 +228,19 @@ struct TDeclaration {
   IMIWORD crc16;
 } gcc_packed;
 
-
-struct TMsg {
+struct Sync {
   IMIBYTE syncChar1, syncChar2;
+};
+
+struct Header {
   IMIWORD sn;
   IMIBYTE msgID, parameter1;
   IMIWORD parameter2;
   IMIWORD parameter3;
   IMIWORD payloadSize;
+};
+
+struct TMsg : Sync, Header {
   IMIBYTE payload[COMM_MAX_PAYLOAD_SIZE];
   IMIWORD crc16;
 } gcc_packed;
@@ -391,7 +396,7 @@ struct FixK
   IMIBYTE checksum;
 } gcc_packed;
 
-static constexpr std::size_t IMICOMM_MSG_HEADER_SIZE = offsetof(TMsg, payload);
+static constexpr std::size_t IMICOMM_MSG_HEADER_SIZE = sizeof(Sync) + sizeof(Header);
 
 static constexpr uint_least32_t
 IMICOMM_MAKEBIGPARAM(IMIDWORD param1, IMIDWORD param2) noexcept
