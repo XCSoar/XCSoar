@@ -205,40 +205,41 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
       } else if (StringIsEqual(key, _T("data"))) {
         current.data = value;
       } else if (StringIsEqual(key, _T("event"))) {
-        if (_tcslen(value) < 256) {
-          TCHAR d_event[256] = _T("");
-          TCHAR d_misc[256] = _T("");
-          int ef;
+        if (_tcslen(value) >= 256)
+          continue;
 
-          ef = _stscanf(value, _T("%[^ ] %[A-Za-z0-9_ \\/().,-]"), d_event,
-              d_misc);
+        TCHAR d_event[256] = _T("");
+        TCHAR d_misc[256] = _T("");
+        int ef;
 
-          if ((ef == 1) || (ef == 2)) {
+        ef = _stscanf(value, _T("%[^ ] %[A-Za-z0-9_ \\/().,-]"), d_event,
+                      d_misc);
 
-            // TODO code: Consider reusing existing identical events
-
-            pt2Event event = InputEvents::findEvent(d_event);
-            if (event) {
-              TCHAR *allocated = UnescapeBackslash(d_misc);
-              current.event_id = config.AppendEvent(event, allocated,
-                                                    current.event_id);
-
-              /* not freeing the string, because
-                 InputConfig::AppendEvent() stores the string point
-                 without duplicating it; strictly speaking, this is a
-                 memory leak, but the input file is only loaded once
-                 at startup, so this is acceptable; in return, we
-                 don't have to duplicate the hard-coded defaults,
-                 which saves some memory */
-              //free(allocated);
-
-            } else {
-              LogFormat(_T("Invalid event type: %s at %i"), d_event, line);
-            }
-          } else {
-            LogFormat("Invalid event type at %i", line);
-          }
+        if (ef < 1) {
+          LogFormat("Invalid event type at %i", line);
+          continue;
         }
+
+        // TODO code: Consider reusing existing identical events
+
+        pt2Event event = InputEvents::findEvent(d_event);
+        if (!event) {
+          LogFormat(_T("Invalid event type: %s at %i"), d_event, line);
+          continue;
+        }
+
+        TCHAR *allocated = UnescapeBackslash(d_misc);
+        current.event_id = config.AppendEvent(event, allocated,
+                                              current.event_id);
+
+        /* not freeing the string, because
+           InputConfig::AppendEvent() stores the string point
+           without duplicating it; strictly speaking, this is a
+           memory leak, but the input file is only loaded once
+           at startup, so this is acceptable; in return, we
+           don't have to duplicate the hard-coded defaults,
+           which saves some memory */
+        //free(allocated);
       } else if (StringIsEqual(key, _T("label"))) {
         current.label = value;
       } else if (StringIsEqual(key, _T("location"))) {
