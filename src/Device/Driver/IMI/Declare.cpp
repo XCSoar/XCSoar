@@ -27,6 +27,8 @@ Copyright_License {
 #include "Device/Declaration.hpp"
 #include "Operation/Operation.hpp"
 
+#include <stdexcept>
+
 bool
 IMIDevice::Declare(const Declaration &declaration,
                    gcc_unused const Waypoint *home,
@@ -34,8 +36,11 @@ IMIDevice::Declare(const Declaration &declaration,
 {
   // verify WP number
   unsigned size = declaration.Size();
-  if (size < 2 || size > 13)
-    return false;
+  if (size < 2)
+    throw std::runtime_error("Task is too small");
+
+  if (size > 13)
+    throw std::runtime_error("Task is too large");
 
   port.StopRxThread();
 

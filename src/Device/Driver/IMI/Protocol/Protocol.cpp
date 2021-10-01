@@ -37,6 +37,7 @@ Copyright_License {
 #include "time/BrokenDateTime.hpp"
 
 #include <memory>
+#include <stdexcept>
 
 #include <stdlib.h>
 
@@ -60,8 +61,11 @@ IMI::Connect(Port &port, OperationEnvironment &env)
     return false;
 
   const TMsg *msg = Receive(port, env, std::chrono::seconds{2}, 0);
-  if (!msg || msg->msgID != MSG_CFG_HELLO || env.IsCancelled())
+  if (env.IsCancelled())
     return false;
+
+  if (!msg || msg->msgID != MSG_CFG_HELLO)
+    throw std::runtime_error("No HELLO response");
 
   _serialNumber = msg->sn;
 
@@ -105,7 +109,7 @@ IMI::Connect(Port &port, OperationEnvironment &env)
       memset(&_info, 0, sizeof(TDeviceInfo));
       memcpy(&_info, msg->payload, 16);
     } else {
-      return false;
+      throw std::runtime_error("Invalid DEVICEINFO response");
     }
 
     return true;

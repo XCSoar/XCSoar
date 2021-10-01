@@ -26,7 +26,10 @@ Copyright_License {
 #include "Checksum.hpp"
 #include "MessageParser.hpp"
 #include "Device/Port/Port.hpp"
+#include "Operation/Operation.hpp"
 #include "time/TimeoutClock.hpp"
+
+#include <stdexcept>
 
 #include <string.h>
 
@@ -38,8 +41,14 @@ namespace IMI
 bool
 IMI::Send(Port &port, const TMsg &msg, OperationEnvironment &env)
 {
-  return port.FullWrite(&msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2,
-                        env, std::chrono::seconds(2));
+  if (port.FullWrite(&msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2,
+                     env, std::chrono::seconds(2)))
+    return true;
+
+  if (env.IsCancelled())
+    return false;
+
+  throw std::runtime_error("Port write error");
 }
 
 bool
@@ -48,7 +57,7 @@ IMI::Send(Port &port, OperationEnvironment &env,
           IMIBYTE parameter1, IMIWORD parameter2, IMIWORD parameter3)
 {
   if (payloadSize > COMM_MAX_PAYLOAD_SIZE)
-    return false;
+    throw std::runtime_error("Payload too large");
 
   TMsg msg;
   memset(&msg, 0, sizeof(msg));
@@ -122,8 +131,12 @@ IMI::SendRet(Port &port, OperationEnvironment &env,
 
   while (retry--) {
     if (!Send(port, env, msgID, payload, payloadSize, parameter1, parameter2,
-              parameter3))
-      return nullptr;
+              parameter3)) {
+      if (env.IsCancelled())
+        return nullptr;
+      else
+        throw std::runtime_error("Send failed");
+    }
 
     const TMsg *msg = Receive(port, env, extra_timeout, retPayloadSize);
     if (msg && msg->msgID == reMsgID &&
@@ -131,7 +144,7 @@ IMI::SendRet(Port &port, OperationEnvironment &env,
       return msg;
   }
 
-  return nullptr;
+  throw std::runtime_error("No reply");
 }
 
 static bool
@@ -184,9 +197,14 @@ IMI::FlashRead(Port &port, void *buffer, unsigned address, unsigned size,
                              IMICOMM_BIGPARAM1(address),
                              IMICOMM_BIGPARAM2(address),
                              size, std::chrono::seconds{3}, 2);
-
-  if (pMsg == nullptr || size != pMsg->parameter3)
+  if (pMsg == nullptr)
     return false;
 
-  return RLEDecompress((IMIBYTE*)buffer, pMsg->payload, pMsg->payloadSize, size);
+  if (size != pMsg->parameter3)
+    throw std::runtime_error("Wrong FLASH result size");
+
+  if (!RLEDecompress((IMIBYTE*)buffer, pMsg->payload, pMsg->payloadSize, size))
+    throw std::runtime_error("RLE decompression error");
+
+  return true;
 }
