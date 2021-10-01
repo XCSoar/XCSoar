@@ -33,7 +33,6 @@ Copyright_License {
 namespace IMI
 {
   extern IMIWORD _serialNumber;
-  extern bool _connected;
 }
 
 bool
@@ -176,9 +175,6 @@ bool
 IMI::FlashRead(Port &port, void *buffer, unsigned address, unsigned size,
                OperationEnvironment &env)
 {
-  if (!_connected)
-    return false;
-
   if (size == 0)
     return true;
 

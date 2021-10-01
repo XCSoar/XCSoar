@@ -42,16 +42,12 @@ Copyright_License {
 
 namespace IMI
 {
-  bool _connected = false;
   IMIWORD _serialNumber;
 }
 
 bool
 IMI::Connect(Port &port, OperationEnvironment &env)
 {
-  if (_connected)
-    return true;
-
   /* note: this variable is never used, only written to; but we may
      find it useful one day */
   TDeviceInfo _info;
@@ -112,7 +108,6 @@ IMI::Connect(Port &port, OperationEnvironment &env)
       return false;
     }
 
-    _connected = true;
     return true;
   }
 
@@ -123,9 +118,6 @@ bool
 IMI::DeclarationWrite(Port &port, const Declaration &decl,
                       OperationEnvironment &env)
 {
-  if (!_connected)
-    return false;
-
   TDeclaration imiDecl;
   memset(&imiDecl, 0, sizeof(imiDecl));
 
@@ -164,9 +156,6 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list,
 {
   flight_list.clear();
 
-  if (!_connected)
-    return false;
-
   IMIWORD address = 0, addressStop = 0xFFFF;
   IMIBYTE count = 1, totalCount = 0;
 
@@ -204,9 +193,6 @@ bool
 IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
                     Path path, OperationEnvironment &env)
 {
-  if (!_connected)
-    return false;
-
   MessageParser::Reset();
 
   Flight flight;
@@ -259,12 +245,5 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
 bool
 IMI::Disconnect(Port &port, OperationEnvironment &env)
 {
-  if (!_connected)
-    return true;
-
-  if (!Send(port, env, MSG_CFG_BYE))
-    return false;
-
-  _connected = false;
-  return true;
+  return Send(port, env, MSG_CFG_BYE);
 }
