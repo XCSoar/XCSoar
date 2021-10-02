@@ -185,7 +185,7 @@ ParseArgs(int argc, char** argv)
 
 const char* GetTestName(const char* in, int task_num, int wind_num)
 {
-  static char buffer[80];
+  static char buffer[100];
   sprintf(buffer,"%s (task %s, wind %s)", in, task_name(task_num), wind_name(wind_num));
   return buffer;
 }

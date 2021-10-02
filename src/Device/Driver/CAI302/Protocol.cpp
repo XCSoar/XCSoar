@@ -584,7 +584,7 @@ CAI302::SetBaudRate(Port &port, unsigned baud_rate, OperationEnvironment &env)
   if (n == 0)
     return false;
 
-  char cmd[16];
+  char cmd[20];
   sprintf(cmd, "BAUD %u\r", n);
   return SendCommandQuick(port, cmd, env);
 }
