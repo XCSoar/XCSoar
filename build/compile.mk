@@ -96,8 +96,8 @@ $(ABI_OUTPUT_DIR)/%.i: %.c FORCE
 # Provide our own rules for building...
 #
 
-WRAPPED_CC = $(CCACHE) $(CC)
-WRAPPED_CXX = $(CCACHE) $(CXX)
+WRAPPED_CC = $(strip $(CCACHE) $(CC))
+WRAPPED_CXX = $(strip $(CCACHE) $(CXX))
 
 $(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.c | $(ABI_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
 	@$(NQ)echo "  CC      $@"
