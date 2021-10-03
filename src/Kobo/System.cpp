@@ -331,3 +331,59 @@ KoboRunFtpd()
   Start("/usr/bin/tcpsvd", "-E", "0.0.0.0", "21", "ftpd", "-w", "/mnt/onboard");
 #endif
 }
+
+bool
+KoboCanChangeBacklightBrightness()
+{
+#ifdef KOBO
+  switch (DetectKoboModel()) {
+    case KoboModel::GLO_HD:
+      return true;
+    default:
+      return false;
+  }
+#endif
+  return false;
+}
+
+int
+KoboGetBacklightBrightness()
+{
+#ifdef KOBO
+
+  char line[4];
+  int result = 0;
+  switch (DetectKoboModel()) {
+    case KoboModel::GLO_HD:
+      if (File::ReadString(Path("/sys/class/backlight/mxc_msp430_fl.0/brightness"), line, sizeof(line))) {
+        result = atoi(line);
+      }
+      break;
+    default:
+      // nothing to do here...
+      break;
+  }
+  return result;
+#else
+  return 0;
+#endif
+}
+
+void
+KoboSetBacklightBrightness(int percent)
+{
+#ifdef KOBO
+
+  if(percent < 0) { percent = 0; }
+  if(percent > 100) { percent = 100; }
+
+  switch (DetectKoboModel()) {
+    case KoboModel::GLO_HD:
+      File::WriteExisting(Path("/sys/class/backlight/mxc_msp430_fl.0/brightness"), std::to_string(percent).c_str());
+      break;
+    default:
+      // nothing to do here...
+      break;
+  }
+#endif
+}
