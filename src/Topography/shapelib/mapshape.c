@@ -1161,13 +1161,7 @@ int msSHXLoadPage( SHPHandle psSHP, int shxBufferPage )
   if( shxBufferPage < 0  )
     return(MS_FAILURE);
 
-  if( -1 == zzip_seek( psSHP->fpSHX, 100 + shxBufferPage * SHX_BUFFER_PAGE * 8, 0 )) {
-    /*
-     * msSetError(MS_IOERR, "failed to seek offset", "msSHXLoadPage()");
-     * return(MS_FAILURE);
-    */
-  }
-  if( SHX_BUFFER_PAGE != zzip_fread( buffer, 8, SHX_BUFFER_PAGE, psSHP->fpSHX )) {
+  if( SHX_BUFFER_PAGE * 8 != zzip_pread(psSHP->fpSHX, buffer, 8 * SHX_BUFFER_PAGE, 100 + shxBufferPage * SHX_BUFFER_PAGE * 8)) {
     /*
      * msSetError(MS_IOERR, "failed to fread SHX record", "msSHXLoadPage()");
      * return(MS_FAILURE);
