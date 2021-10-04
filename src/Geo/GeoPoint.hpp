@@ -100,8 +100,10 @@ struct GeoPoint {
    * Check if both longitude and latitude are in the allowed range.
    */
   constexpr bool Check() const noexcept {
-    return longitude >= -Angle::HalfCircle() &&
+    return std::isfinite(longitude.Native()) &&
+      longitude >= -Angle::HalfCircle() &&
       longitude <= Angle::HalfCircle() &&
+      std::isfinite(latitude.Native()) &&
       latitude >= -Angle::QuarterCircle() &&
       latitude <= Angle::QuarterCircle();
   }
