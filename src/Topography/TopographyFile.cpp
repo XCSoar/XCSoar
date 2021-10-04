@@ -49,7 +49,9 @@ TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
   if (msShapefileOpen(&file, "rb", dir, filename, 0) == -1)
     return;
 
-  if (file.numshapes == 0) {
+  const std::size_t n_shapes = file.numshapes;
+  constexpr std::size_t MAX_SHAPES = 16 * 1024 * 1024;
+  if (n_shapes == 0 || n_shapes > MAX_SHAPES) {
     msShapefileClose(&file);
     return;
   }
@@ -63,7 +65,7 @@ TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
 
   center = file_bounds.GetCenter();
 
-  shapes.ResizeDiscard(file.numshapes);
+  shapes.ResizeDiscard(n_shapes);
   std::fill(shapes.begin(), shapes.end(), ShapeList(nullptr));
 
   if (dir != nullptr)
