@@ -160,6 +160,7 @@ SHPTreeHandle msSHPDiskTreeOpen(struct zzip_dir *zdir, const char * pszTree,
   }
 
   if( zzip_fread( pabyBuf, 8, 1, psTree->fp ) != 1 ) {
+    zzip_close(psTree->fp);
     msFree(psTree);
     return( NULL );
   }
@@ -200,6 +201,7 @@ SHPTreeHandle msSHPDiskTreeOpen(struct zzip_dir *zdir, const char * pszTree,
 
     if( zzip_fread( pabyBuf, 8, 1, psTree->fp ) != 1 )
     {
+      zzip_close(psTree->fp);
       msFree(psTree);
       return( NULL );
     }
