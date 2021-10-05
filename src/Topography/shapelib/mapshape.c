@@ -1522,6 +1522,7 @@ void msSHPReadShape( SHPHandle psSHP, int hEntity, shapeObj *shape )
     if (nPoints < 0 || nPoints > 50 * 1000 * 1000) {
       free(shape->line);
       shape->line = NULL;
+      shape->numlines = 0;
       shape->type = MS_SHAPE_NULL;
       msSetError(MS_SHPERR, "Corrupted .shp file : shape %d, nPoints=%d.",
                  "msSHPReadShape()", hEntity, nPoints);
@@ -1534,6 +1535,7 @@ void msSHPReadShape( SHPHandle psSHP, int hEntity, shapeObj *shape )
     if (nRequiredSize > nEntitySize) {
       free(shape->line);
       shape->line = NULL;
+      shape->numlines = 0;
       shape->type = MS_SHAPE_NULL;
       msSetError(MS_SHPERR, "Corrupted .shp file : shape %d : nPoints = %d, nEntitySize = %d",
                  "msSHPReadShape()", hEntity, nPoints, nEntitySize);
