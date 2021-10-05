@@ -32,5 +32,9 @@ template<typename T>
 constexpr bool
 IsFinite(T value) noexcept
 {
+#if defined _MSC_VER
+  return std::isfinite(value);
+#else
   return __builtin_isfinite(value);
+#endif
 }
