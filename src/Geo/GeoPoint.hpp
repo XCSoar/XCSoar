@@ -26,6 +26,7 @@ Copyright_License {
 #define XCSOAR_GeoPoint_HPP
 
 #include "Math/Angle.hpp"
+#include "Math/Classify.hpp"
 
 #include <type_traits>
 
@@ -100,10 +101,10 @@ struct GeoPoint {
    * Check if both longitude and latitude are in the allowed range.
    */
   constexpr bool Check() const noexcept {
-    return std::isfinite(longitude.Native()) &&
+    return IsFinite(longitude.Native()) &&
       longitude >= -Angle::HalfCircle() &&
       longitude <= Angle::HalfCircle() &&
-      std::isfinite(latitude.Native()) &&
+      IsFinite(latitude.Native()) &&
       latitude >= -Angle::QuarterCircle() &&
       latitude <= Angle::QuarterCircle();
   }
