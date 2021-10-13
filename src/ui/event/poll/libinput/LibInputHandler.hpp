@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_LIBINPUT_LIBINPUT_HPP
 #define XCSOAR_EVENT_LIBINPUT_LIBINPUT_HPP
 
-#include "event/SocketEvent.hxx"
+#include "event/PipeEvent.hxx"
 #include "ui/dim/Size.hpp"
 
 #include <cassert>
@@ -50,7 +50,7 @@ class LibInputHandler final {
   struct libinput* li = nullptr;
   struct libinput_interface* li_if = nullptr;
 
-  SocketEvent fd;
+  PipeEvent fd;
 
   double x = -1.0, y = -1.0;
 

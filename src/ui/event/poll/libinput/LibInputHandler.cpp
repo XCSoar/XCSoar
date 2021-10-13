@@ -81,7 +81,7 @@ LibInputHandler::Open() noexcept
   if (_fd < 0)
     return false;
 
-  fd.Open(SocketDescriptor(_fd));
+  fd.Open(FileDescriptor{_fd});
   fd.ScheduleRead();
   return true;
 }
@@ -89,7 +89,7 @@ LibInputHandler::Open() noexcept
 void
 LibInputHandler::Close() noexcept
 {
-  fd.ReleaseSocket();
+  fd.ReleaseFileDescriptor();
 
   if (nullptr != li)
     libinput_unref(li);

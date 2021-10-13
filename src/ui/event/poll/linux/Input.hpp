@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_LINUX_INPUT_HPP
 #define XCSOAR_EVENT_LINUX_INPUT_HPP
 
-#include "event/SocketEvent.hxx"
+#include "event/PipeEvent.hxx"
 #include "Math/Point2D.hpp"
 
 namespace UI {
@@ -73,7 +73,7 @@ class LinuxInputDevice final {
 
   bool is_pointer;
 
-  SocketEvent socket_event;
+  PipeEvent event;
 
 public:
   LinuxInputDevice(EventQueue &_queue, MergeMouse &_merge);
@@ -86,7 +86,7 @@ public:
   void Close();
 
   bool IsOpen() const {
-    return socket_event.IsDefined();
+    return event.IsDefined();
   }
 
 private:
