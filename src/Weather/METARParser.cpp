@@ -398,7 +398,7 @@ METARParser::ParseLine(const METAR::ContentString &content, ParsedMETAR &parsed)
   // METAR ETOU 231055Z AUTO 15004KT 9999 FEW130 27/19 A2993 RMK AO2 RAB1038E1048DZB1006E1011 SLP128 P0000 T02710189=
   // METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=
 
-  METARLine line(content.begin());
+  METARLine line(content.c_str());
   const TCHAR *token;
 
   // Parse four-letter ICAO code
@@ -548,7 +548,7 @@ METARParser::ParseDecoded(const METAR::ContentString &decoded,
   // Duesseldorf, Germany (EDDL) 51-18N 006-46E 41M
   // Nov 04, 2011 - 07:50 PM EDT / 2011.11.04 2350 UTC
 
-  const TCHAR *start = decoded.begin();
+  const TCHAR *start = decoded.c_str();
   const TCHAR *end = start + _tcslen(start);
   const auto *opening_brace = StringFind(start, _T('('));
   const auto *closing_brace = StringFind(start, _T(')'));
