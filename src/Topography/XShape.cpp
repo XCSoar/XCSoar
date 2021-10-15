@@ -89,11 +89,6 @@ GetMinPointsForShapeType(int shapelib_type) noexcept
 XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
                int label_field)
 {
-#ifdef ENABLE_OPENGL
-  std::fill_n(index_count, THINNING_LEVELS, nullptr);
-  std::fill_n(indices, THINNING_LEVELS, nullptr);
-#endif
-
   shapeObj shape;
   msInitShape(&shape);
   AtScopeExit(&shape) { msFreeShape(&shape); };

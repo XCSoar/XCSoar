@@ -70,7 +70,7 @@ class XShape {
   /**
    * Indices of polygon triangles or lines with reduced number of vertices.
    */
-  uint16_t *indices[THINNING_LEVELS];
+  uint16_t *indices[THINNING_LEVELS]{};
 
   /**
    * For polygons this will contain the total number of triangle vertices
@@ -78,7 +78,7 @@ class XShape {
    * For lines there will be an array of size num_lines for each thinning
    * level, which contains the number of points for each line.
    */
-  uint16_t *index_count[THINNING_LEVELS];
+  uint16_t *index_count[THINNING_LEVELS]{};
 
   /**
    * The start offset in the #GLArrayBuffer (vertex buffer object).
