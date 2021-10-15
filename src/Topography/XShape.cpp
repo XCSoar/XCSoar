@@ -67,9 +67,8 @@ ImportLabel(const char *src)
  * Returns the minimum number of points for each line of this shape
  * type.  Returns -1 if the shape type is not supported.
  */
-gcc_const
-static unsigned
-GetMinPointsForShapeType(int shapelib_type)
+static constexpr int
+GetMinPointsForShapeType(int shapelib_type) noexcept
 {
   switch (shapelib_type) {
   case MS_SHAPE_POINT:
