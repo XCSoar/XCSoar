@@ -40,16 +40,18 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 
-static void
+static const uint16_t *
 TriangulateAll(const TopographyFile &file)
 {
   const std::lock_guard<Mutex> lock(file.mutex);
 
-  const unsigned short *count;
+  const uint16_t *dummy;
   for (const XShape &shape : file)
     if (shape.get_type() == MS_SHAPE_POLYGON)
       for (unsigned i = 0; i < 4; ++i)
-        shape.GetIndices(i, 1, count);
+        dummy = shape.GetIndices(i, 1).indices;
+
+  return dummy;
 }
 
 static void

@@ -113,9 +113,14 @@ protected:
                     ShapeScalar min_distance) noexcept;
 
 public:
-  const uint16_t *GetIndices(int thinning_level,
-                             ShapeScalar min_distance,
-                             const uint16_t *&count) const noexcept;
+  struct Indices {
+    const uint16_t *indices;
+    const uint16_t *count;
+  };
+
+  [[gnu::pure]]
+  Indices GetIndices(int thinning_level,
+                     ShapeScalar min_distance) const noexcept;
 #endif
 
   const GeoBounds &get_bounds() const noexcept {

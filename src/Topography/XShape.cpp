@@ -240,18 +240,16 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance) noexcept
   }
 }
 
-const uint16_t *
-XShape::GetIndices(int thinning_level, ShapeScalar min_distance,
-                   const uint16_t *&count) const noexcept
+XShape::Indices
+XShape::GetIndices(int thinning_level, ShapeScalar min_distance) const noexcept
 {
   if (indices[thinning_level] == nullptr) {
     XShape &deconst = const_cast<XShape &>(*this);
     if (!deconst.BuildIndices(thinning_level, min_distance))
-      return nullptr;
+      return {};
   }
 
-  count = index_count[thinning_level];
-  return indices[thinning_level];
+  return {indices[thinning_level], index_count[thinning_level]};
 }
 
 #endif // ENABLE_OPENGL

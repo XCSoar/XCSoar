@@ -247,18 +247,19 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #ifdef ENABLE_OPENGL
         vp.Update(GL_FLOAT, points);
 
-        const GLushort *indices, *count;
+        XShape::Indices indices;
         if (level == 0 ||
-            (indices = shape.GetIndices(level, min_distance, count)) == nullptr) {
+            (indices = shape.GetIndices(level, min_distance)).indices == nullptr) {
           unsigned offset = 0;
           for (unsigned n : lines) {
             glDrawArrays(GL_LINE_STRIP, offset, n);
             offset += n;
           }
         } else {
-          for (unsigned n : ConstBuffer<GLushort>(count, lines.size)) {
-            glDrawElements(GL_LINE_STRIP, n, GL_UNSIGNED_SHORT, indices);
-            indices += n;
+          for (unsigned n : ConstBuffer<GLushort>(indices.count, lines.size)) {
+            glDrawElements(GL_LINE_STRIP, n, GL_UNSIGNED_SHORT,
+                           indices.indices);
+            indices.indices += n;
           }
         }
 #else // !ENABLE_OPENGL
@@ -281,10 +282,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     case MS_SHAPE_POLYGON:
 #ifdef ENABLE_OPENGL
       {
-        const GLushort *index_count;
-        const GLushort *triangles = shape.GetIndices(level, min_distance,
-                                                     index_count);
-        const unsigned n = *index_count;
+        const auto triangles = shape.GetIndices(level, min_distance);
+        const unsigned n = *triangles.count;
 
 #ifdef GL_EXT_multi_draw_arrays
         const unsigned offset = shape.GetOffset();
@@ -295,14 +294,14 @@ TopographyFileRenderer::Paint(Canvas &canvas,
           const size_t size = polygon_indices.size();
           polygon_indices.resize(size + n, offset);
           for (unsigned i = 0; i < n; ++i)
-            polygon_indices[size + i] += triangles[i];
+            polygon_indices[size + i] += triangles.indices[i];
           break;
         }
 #endif
 
         vp.Update(GL_FLOAT, points);
         glDrawElements(GL_TRIANGLE_STRIP, n, GL_UNSIGNED_SHORT,
-                       triangles);
+                       triangles.indices);
       }
 #else // !ENABLE_OPENGL
       {
