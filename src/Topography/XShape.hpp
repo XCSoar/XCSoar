@@ -97,47 +97,48 @@ public:
 
   XShape(const XShape &) = delete;
 
-  ~XShape();
+  ~XShape() noexcept;
 
 #ifdef ENABLE_OPENGL
-  void SetOffset(unsigned _offset) const {
+  void SetOffset(unsigned _offset) const noexcept {
     offset = _offset;
   }
 
-  unsigned GetOffset() const {
+  unsigned GetOffset() const noexcept {
     return offset;
   }
 
 protected:
-  bool BuildIndices(unsigned thinning_level, ShapeScalar min_distance);
+  bool BuildIndices(unsigned thinning_level,
+                    ShapeScalar min_distance) noexcept;
 
 public:
   const uint16_t *GetIndices(int thinning_level,
                              ShapeScalar min_distance,
-                             const uint16_t *&count) const;
+                             const uint16_t *&count) const noexcept;
 #endif
 
-  const GeoBounds &get_bounds() const {
+  const GeoBounds &get_bounds() const noexcept {
     return bounds;
   }
 
-  MS_SHAPE_TYPE get_type() const {
+  MS_SHAPE_TYPE get_type() const noexcept {
     return (MS_SHAPE_TYPE)type;
   }
 
-  ConstBuffer<uint16_t> GetLines() const {
+  ConstBuffer<uint16_t> GetLines() const noexcept {
     return { lines, num_lines };
   }
 
 #ifdef ENABLE_OPENGL
-  const ShapePoint *GetPoints() const {
+  const ShapePoint *GetPoints() const noexcept {
 #else
-  const GeoPoint *GetPoints() const {
+  const GeoPoint *GetPoints() const noexcept {
 #endif
     return points;
   }
 
-  const TCHAR *GetLabel() const {
+  const TCHAR *GetLabel() const noexcept {
     return label.c_str();
   }
 };

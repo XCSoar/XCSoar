@@ -42,7 +42,7 @@ Copyright_License {
 #include <tchar.h>
 
 static BasicAllocatedString<TCHAR>
-ImportLabel(const char *src)
+ImportLabel(const char *src) noexcept
 {
   if (src == nullptr)
     return nullptr;
@@ -158,7 +158,7 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
   }
 }
 
-XShape::~XShape()
+XShape::~XShape() noexcept
 {
   delete[] points;
 #ifdef ENABLE_OPENGL
@@ -171,7 +171,7 @@ XShape::~XShape()
 #ifdef ENABLE_OPENGL
 
 bool
-XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
+XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance) noexcept
 {
   assert(indices[thinning_level] == nullptr);
 
@@ -242,7 +242,7 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
 
 const uint16_t *
 XShape::GetIndices(int thinning_level, ShapeScalar min_distance,
-                   const uint16_t *&count) const
+                   const uint16_t *&count) const noexcept
 {
   if (indices[thinning_level] == nullptr) {
     XShape &deconst = const_cast<XShape &>(*this);
