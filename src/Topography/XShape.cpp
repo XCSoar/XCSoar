@@ -89,7 +89,6 @@ GetMinPointsForShapeType(int shapelib_type)
 
 XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
                int label_field)
-  :label(nullptr)
 {
 #ifdef ENABLE_OPENGL
   std::fill_n(index_count, THINNING_LEVELS, nullptr);
