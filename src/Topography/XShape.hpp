@@ -65,7 +65,7 @@ class XShape {
    * All points of all lines.
    */
 #ifdef ENABLE_OPENGL
-  ShapePoint *points;
+  ShapePoint *points = nullptr;
 
   /**
    * Indices of polygon triangles or lines with reduced number of vertices.
@@ -86,7 +86,7 @@ class XShape {
    */
   mutable unsigned offset;
 #else // !ENABLE_OPENGL
-  GeoPoint *points;
+  GeoPoint *points = nullptr;
 #endif
 
   BasicAllocatedString<TCHAR> label;

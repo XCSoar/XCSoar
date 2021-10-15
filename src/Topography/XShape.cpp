@@ -97,7 +97,6 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
   bounds = ImportRect(shape.bounds);
   if (!bounds.Check()) {
     /* malformed bounds */
-    points = nullptr;
     return;
   }
 
@@ -108,7 +107,6 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
   const int min_points = GetMinPointsForShapeType(shape.type);
   if (min_points < 0) {
     /* not supported, leave an empty XShape object */
-    points = nullptr;
     return;
   }
 
