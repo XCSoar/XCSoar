@@ -165,8 +165,8 @@ XShape::~XShape()
   delete[] points;
 #ifdef ENABLE_OPENGL
   // Note: index_count and indices share one buffer
-  for (unsigned i = 0; i < THINNING_LEVELS; i++)
-    delete[] index_count[i];
+  for (auto *i : index_count)
+    delete[] i;
 #endif
 }
 
