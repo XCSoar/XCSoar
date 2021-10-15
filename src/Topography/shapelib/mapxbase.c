@@ -722,7 +722,7 @@ DBFFieldType msDBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName
 static int msDBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField, void * pValue )
 {
   unsigned int          nRecordOffset;
-  int  i, len;
+  int  len;
   uchar *pabyRec;
   char  szSField[40];
 
@@ -742,7 +742,7 @@ static int msDBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField, void * 
     flushRecord( psDBF );
 
     psDBF->nRecords++;
-    for( i = 0; i < psDBF->nRecordLength; i++ )
+    for( unsigned i = 0; i < psDBF->nRecordLength; i++ )
       psDBF->pszCurrentRecord[i] = ' ';
 
     psDBF->nCurrentRecord = hEntity;

@@ -46,6 +46,9 @@
 #ifdef SHAPELIB_DISABLED
 #include <errno.h>
 
+#include <algorithm>
+#include <cctype>
+
 /*
  * Find the first occurrence of find in s, ignore case.
  */
@@ -60,6 +63,7 @@
 #endif
 
 #ifdef USE_ICONV
+#include "mapiconv.h"
 #include <iconv.h>
 #include <wchar.h>
 #endif
@@ -148,9 +152,9 @@ char *strrstr(const char *string, const char *find)
  */
 size_t strlcat(char *dst, const char *src, size_t siz)
 {
-  register char *d = dst;
-  register const char *s = src;
-  register size_t n = siz;
+  char *d = dst;
+  const char *s = src;
+  size_t n = siz;
   size_t dlen;
 
   /* Find the end of dst and adjust bytes left but don't go past end */
@@ -210,9 +214,9 @@ size_t strlcat(char *dst, const char *src, size_t siz)
 size_t
 strlcpy(char *dst, const char *src, size_t siz)
 {
-  register char *d = dst;
-  register const char *s = src;
-  register size_t n = siz;
+  char *d = dst;
+  const char *s = src;
+  size_t n = siz;
 
   /* Copy as many bytes as will fit */
   if (n != 0 && --n != 0) {
@@ -287,10 +291,9 @@ char *strcasestr(const char *s, const char *find)
 #endif
 
 #ifndef HAVE_STRNCASECMP
-int strncasecmp(const char *s1, const char *s2, int len)
+int strncasecmp(const char *s1, const char *s2, size_t len)
 {
-  register const char *cp1, *cp2;
-  int cmp = 0;
+  const char *cp1, *cp2;
 
   cp1 = s1;
   cp2 = s2;
@@ -304,6 +307,7 @@ int strncasecmp(const char *s1, const char *s2, int len)
     return 1;
 
   while(*cp1 && *cp2 && len) {
+    int cmp;
     if((cmp = (toupper(*cp1) - toupper(*cp2))) != 0)
       return(cmp);
     cp1++;
@@ -327,8 +331,7 @@ int strncasecmp(const char *s1, const char *s2, int len)
 #ifndef HAVE_STRCASECMP
 int strcasecmp(const char *s1, const char *s2)
 {
-  register const char *cp1, *cp2;
-  int cmp = 0;
+  const char *cp1, *cp2;
 
   cp1 = s1;
   cp2 = s2;
@@ -336,6 +339,7 @@ int strcasecmp(const char *s1, const char *s2)
     return (0);
   }
   while(*cp1 && *cp2) {
+    int cmp;
     if((cmp = (toupper(*cp1) - toupper(*cp2))) != 0)
       return(cmp);
     cp1++;
@@ -353,6 +357,34 @@ int strcasecmp(const char *s1, const char *s2)
 #endif
 
 #ifdef SHAPELIB_DISABLED
+
+/*
+** msStringToInt() and msStringToDouble() are helper functions to convert strings to numbers. They
+** return MS_FAILURE if the input string is NULL or if the entire string did not convert successfully.
+*/
+int msStringToInt(const char *str, int *value, int base)
+{
+  char *parse_check = NULL;
+
+  if(!str) return MS_FAILURE;
+
+  *value = (int)strtol(str, &parse_check, base);
+  if(*parse_check != '\0') return MS_FAILURE;
+
+  return MS_SUCCESS;
+}
+
+int msStringToDouble(const char *str, double *value)
+{
+  char *parse_check = NULL;
+
+  if(!str) return MS_FAILURE;
+
+  *value = strtod(str, &parse_check);
+  if(*parse_check != '\0') return MS_FAILURE;
+
+  return MS_SUCCESS;
+}
 
 char *msLongToString(long value)
 {
@@ -386,18 +418,33 @@ char *msIntToString(int value)
 
 void msStringToUpper(char *string)
 {
+  int i;
+
   if (string != NULL) {
-    for (; *string; ++string)
-      *string = toupper(*string);
+    for (i = 0; string[i]; i++) {
+      string[i] = toupper(string[i]);
+    }
+    return;
   }
 }
 
 void msStringToLower(char *string)
 {
+  int i;
+
   if (string != NULL) {
-    for (; *string; ++string)
-      *string = tolower(*string);
+    for (i = 0; string[i]; i++) {
+      string[i] = tolower(string[i]);
+    }
+    return;
   }
+}
+
+std::string msStringToLower(const std::string& s) {
+  std::string ret(s);
+  std::transform(ret.begin(), ret.end(), ret.begin(), 
+                 [](unsigned char c){ return std::tolower(c); });
+  return ret;
 }
 
 /**
@@ -485,6 +532,15 @@ void msStringTrim(char *str)
   return;
 }
 
+void msStringTrim(std::string& string)
+{
+  const size_t npos = string.find_first_not_of(' ');
+  if( npos != std::string::npos )
+    string.erase(0, npos);
+  msStringTrimBlanks(string);
+}
+
+
 /*
 ** Remove leading white spaces and shift everything to the left.
 */
@@ -517,6 +573,20 @@ char *msStringTrimLeft(char *string)
   return string;
 }
 
+void msStringTrimLeft(std::string& string)
+{
+  const size_t length = string.length();
+  for( size_t i = 0; i < length; i++ ) {
+    if( !isspace(string[i]) ) {
+        if( i > 0 ) {
+          string.erase(0, i-1);
+        }
+        return;
+    }
+  }
+  string.clear();
+}
+
 /* ------------------------------------------------------------------------------- */
 /*       Trims trailing blanks from a string                                        */
 /* ------------------------------------------------------------------------------- */
@@ -531,6 +601,13 @@ void msStringTrimBlanks(char *string)
       return;
     }
   }
+}
+
+void msStringTrimBlanks(std::string& string)
+{
+  const size_t npos = string.find_last_not_of(' ');
+  if( npos != std::string::npos )
+    string.resize(npos+1);
 }
 
 /* ------------------------------------------------------------------------------- */
@@ -553,13 +630,13 @@ void msStringTrimEOL(char *string)
 /*       Replace all occurances of old with new in str.                            */
 /*       It is assumed that str was dynamically created using malloc.              */
 /* ------------------------------------------------------------------------------- */
-char *msReplaceSubstring(char *str, const char *old, const char *new)
+char *msReplaceSubstring(char *str, const char *old, const char *newstr)
 {
   size_t str_len, old_len, new_len, tmp_offset;
   char *tmp_ptr;
 
-  if(new == NULL)
-    new = "";
+  if(newstr == NULL)
+    newstr = "";
 
   /*
   ** If old is not found then leave str alone
@@ -572,7 +649,7 @@ char *msReplaceSubstring(char *str, const char *old, const char *new)
   */
   str_len = strlen(str);
   old_len = strlen(old);
-  new_len = strlen(new);
+  new_len = strlen(newstr);
 
   /*
   ** Now loop until old is NOT found in new
@@ -600,7 +677,7 @@ char *msReplaceSubstring(char *str, const char *old, const char *new)
     /*
     ** Now copy new over old
     */
-    memcpy(tmp_ptr, new, new_len);
+    memcpy(tmp_ptr, newstr, new_len);
 
     /*
     ** And look for more matches in the rest of the string
@@ -616,11 +693,11 @@ char *msReplaceSubstring(char *str, const char *old, const char *new)
  * when we won't have to do reallocs etc
  * used to replace the wrap characetr by a newline for labels
  */
-void msReplaceChar(char *str, char old, char new)
+void msReplaceChar(char *str, char old, char newstr)
 {
   while(*(str++))
     if(*str==old)
-      *str=new;
+      *str=newstr;
 }
 
 /*
@@ -854,6 +931,18 @@ char **msStringSplit(const char *string, char ch, int *num_tokens)
   return(token);
 }
 
+std::vector<std::string> msStringSplit(const char *string, char ch)
+{
+    int num_tokens = 0;
+    char** tmp = msStringSplit(string, ch, &num_tokens);
+    std::vector<std::string> res;
+    res.reserve(num_tokens);
+    for( int i = 0; i < num_tokens; i++ )
+        res.push_back(tmp[i]);
+    msFreeCharArray(tmp, num_tokens);
+    return res;
+}
+
 /*
  This function is a copy of CSLTokenizeString2() function of the CPL component.
  See the port/cpl_string.cpp file in gdal source for the complete documentation.
@@ -989,7 +1078,7 @@ char ** msStringSplitComplex( const char * pszString,
    * If the last token was empty, then we need to capture
    * it now, as the loop would skip it.
    */
-  if( *pszString == '\0' && bAllowEmptyTokens && nRetLen > 0
+  if( pszString != NULL && *pszString == '\0' && bAllowEmptyTokens && nRetLen > 0
       && strchr(pszDelimiters,*(pszString-1)) != NULL ) {
     if( nRetLen >= nRetMax - 1 ) {
       nRetMax = nRetMax * 2 + 10;
@@ -1237,6 +1326,7 @@ char *msEncodeHTMLEntities(const char *string)
       /* If we had to realloc then this string must contain several */
       /* entities... so let's go with twice the previous buffer size */
       buflen *= 2;
+      /* cppcheck-suppress memleakOnRealloc */
       newstring = (char*)realloc(newstring, buflen+1);
       MS_CHECK_ALLOC(newstring, buflen+1, NULL);
     }
@@ -1507,7 +1597,7 @@ char *msCommifyString(char *str)
 /*       It is assumed that str was dynamically created using malloc.              */
 /*       Same function as msReplaceSubstring but this is case insensitive          */
 /* ------------------------------------------------------------------------------- */
-char *msCaseReplaceSubstring(char *str, const char *old, const char *new)
+char *msCaseReplaceSubstring(char *str, const char *old, const char *newstr)
 {
   size_t str_len, old_len, new_len, tmp_offset;
   char *tmp_ptr;
@@ -1518,8 +1608,8 @@ char *msCaseReplaceSubstring(char *str, const char *old, const char *new)
   if( (tmp_ptr = (char *) strcasestr(str, old)) == NULL)
     return(str);
   
-  if(new == NULL)
-    new = "";
+  if(newstr == NULL)
+    newstr = "";
 
 
   /*
@@ -1527,7 +1617,7 @@ char *msCaseReplaceSubstring(char *str, const char *old, const char *new)
   */
   str_len = strlen(str);
   old_len = strlen(old);
-  new_len = strlen(new);
+  new_len = strlen(newstr);
 
   /*
   ** Now loop until old is NOT found in new
@@ -1555,7 +1645,7 @@ char *msCaseReplaceSubstring(char *str, const char *old, const char *new)
     /*
     ** Now copy new over old
     */
-    memcpy(tmp_ptr, new, new_len);
+    memcpy(tmp_ptr, newstr, new_len);
 
     /*
     ** And look for more matches in the rest of the string
@@ -1595,8 +1685,8 @@ char *msGetFriBidiEncodedString(const char *string, const char *encoding)
 #ifdef FRIBIDI_NO_CHARSETS
   iconv_t to_ucs4, from_ucs4;
 #else
-  int to_char_set_num;
-  int from_char_set_num;
+  FriBidiCharSet to_char_set_num;
+  FriBidiCharSet from_char_set_num;
 #endif
 
   len = strlen(string);
@@ -1639,12 +1729,24 @@ char *msGetFriBidiEncodedString(const char *string, const char *encoding)
     FriBidiLevel *levels;
     FriBidiStrIndex new_len;
     fribidi_boolean log2vis;
-    int i, j;
 
     visual = (FriBidiChar *) msSmallMalloc (sizeof (FriBidiChar) * (len + 1));
     ltov = NULL;
     vtol = NULL;
     levels = NULL;
+
+    // fribidi_log2vis() doesn't support multi-line paragraphs.
+    // See: https://lists.freedesktop.org/archives/fribidi/2008-January/000515.html
+    for( size_t i = 0; i < len; i++ )
+    {
+        if (logical[i] == '\n') {
+          msSetError(MS_IDENTERR,
+                     "Input string is a multi-line paragraph, which is not supported.",
+                     "msGetFriBidiEncodedString()");
+          msFree(visual);
+          return NULL;
+        }
+    }
 
     /* Create a bidi string. */
     log2vis = fribidi_log2vis (logical, len, &base,
@@ -1654,10 +1756,9 @@ char *msGetFriBidiEncodedString(const char *string, const char *encoding)
     if (!log2vis) {
       msSetError(MS_IDENTERR, "Failed to create bidi string.",
                  "msGetFriBidiEncodedString()");
+      msFree(visual);
       return NULL;
     }
-
-    new_len = len;
 
     /* Convert it to utf-8 for display. */
 #ifdef FRIBIDI_NO_CHARSETS
@@ -1676,7 +1777,8 @@ char *msGetFriBidiEncodedString(const char *string, const char *encoding)
 
     /* scan str and compress out FRIBIDI_CHAR_FILL UTF8 characters */
 
-    for (i=0, j=0; i<new_len; i++, j++) {
+    int j=0;
+    for (int i=0; i<new_len; i++, j++) {
       if (outstring[i] == '\xef' && outstring[i+1] == '\xbb' && outstring[i+2] == '\xbf') {
         i += 3;
       }
@@ -1688,7 +1790,7 @@ char *msGetFriBidiEncodedString(const char *string, const char *encoding)
 
 #endif
 
-    free(visual);
+    msFree(visual);
     return msStrdup(outstring);
   }
 }
@@ -1704,7 +1806,7 @@ char *msGetEncodedString(const char *string, const char *encoding)
   iconv_t cd = NULL;
   const char *inp;
   char *outp, *out = NULL;
-  size_t len, bufsize, bufleft, iconv_status;
+  size_t len, bufsize, bufleft;
   assert(encoding);
 
 #ifdef USE_FRIBIDI
@@ -1740,11 +1842,10 @@ char *msGetEncodedString(const char *string, const char *encoding)
   outp = out;
 
   bufleft = bufsize;
-  iconv_status = -1;
 
   while (len > 0) {
-    iconv_status = iconv(cd, (char**)&inp, &len, &outp, &bufleft);
-    if(iconv_status == -1) {
+    const size_t iconv_status = msIconv(cd, (char**)&inp, &len, &outp, &bufleft);
+    if(iconv_status == static_cast<size_t>(-1)) {
       msFree(out);
       iconv_close(cd);
       return msStrdup(string);
@@ -1770,12 +1871,11 @@ char* msConvertWideStringToUTF8 (const wchar_t* string, const char* encoding)
 #ifdef USE_ICONV
 
   char* output = NULL;
-  char* errormessage = NULL;
+  const char* errormessage = NULL;
   iconv_t cd = NULL;
   size_t nStr;
   size_t nInSize;
   size_t nOutSize;
-  size_t iconv_status = -1;
   size_t nBufferSize;
 
   char* pszUTF8 = NULL;
@@ -1799,7 +1899,7 @@ char* msConvertWideStringToUTF8 (const wchar_t* string, const char* encoding)
       nInSize = sizeof (wchar_t)*nStr;
       pszUTF8 = output;
       pwszWide = string;
-      iconv_status = iconv(cd, (char **)&pwszWide, &nInSize, &pszUTF8, &nOutSize);
+      size_t iconv_status = msIconv(cd, (char **)&pwszWide, &nInSize, &pszUTF8, &nOutSize);
       if ((size_t)-1 == iconv_status) {
         switch (errno) {
           case E2BIG:
@@ -1841,6 +1941,85 @@ char* msConvertWideStringToUTF8 (const wchar_t* string, const char* encoding)
   return output;
 #else
   msSetError(MS_MISCERR, "Not implemented since Iconv is not enabled.", "msConvertWideStringToUTF8()");
+  return NULL;
+#endif
+}
+
+wchar_t* msConvertWideStringFromUTF8 (const char* string, const char* encoding)
+{
+#ifdef USE_ICONV
+  wchar_t* output = NULL;
+  const char* errormessage = NULL;
+  iconv_t cd = NULL;
+  size_t nStr;
+  size_t nInSize;
+  size_t nOutSize;
+  size_t nBufferSize;
+
+  const char* pszUTF8 = NULL;
+  wchar_t* pwszWide = NULL;
+
+  if (string != NULL) {
+    nStr = strlen (string);
+    nBufferSize = ((nStr * 6) + 1);
+    output = (wchar_t*) msSmallMalloc (nBufferSize);
+
+    if (nStr == 0) {
+      /* return an empty 8 byte string */
+      output[0] = '\0';
+      return output;
+    }
+
+    cd = iconv_open(encoding, "UTF-8");
+
+    nOutSize = nBufferSize;
+    if ((iconv_t)-1 != cd) {
+      nInSize = sizeof (char)*nStr;
+      pszUTF8 = string;
+      pwszWide = output;
+      size_t iconv_status = msIconv(cd, (char **)&pszUTF8, &nInSize, (char **)&pwszWide, &nOutSize);
+      if ((size_t)-1 == iconv_status) {
+        switch (errno) {
+          case E2BIG:
+            errormessage = "There is not sufficient room in buffer";
+            break;
+          case EILSEQ:
+            errormessage = "An invalid multibyte sequence has been encountered in the input";
+            break;
+          case EINVAL:
+            errormessage = "An incomplete multibyte sequence has been encountered in the input";
+            break;
+          default:
+            errormessage = "Unknown";
+            break;
+        }
+        msSetError(MS_MISCERR, "Unable to convert string in UTF8 to encoding '%s' %s",
+                   "msConvertWideStringFromUTF8()",
+                   encoding, errormessage);
+        iconv_close(cd);
+        msFree(output);
+        return NULL;
+      }
+      iconv_close(cd);
+    } else {
+      msSetError(MS_MISCERR, "Encoding not supported by libiconv (%s).",
+                 "msConvertWideStringFromUTF8()",
+                 encoding);
+      msFree(output);
+      return NULL;
+    }
+  } else {
+    /* we were given a NULL wide string, nothing we can do here */
+    return NULL;
+  }
+
+  /* NULL-terminate the output string */
+  if (nOutSize >= sizeof (wchar_t))
+    *((wchar_t *) pwszWide) = L'\0';
+
+  return output;
+#else
+  msSetError(MS_MISCERR, "Not implemented since Iconv is not enabled.", "msConvertWideStringFromUTF8()");
   return NULL;
 #endif
 }
@@ -2049,15 +2228,19 @@ int msGetUnicodeEntity(const char *inptr, unsigned int *unicode)
     } else {
       char entity_name_buf[MAP_ENTITY_NAME_LENGTH_MAX+1];
       char *p;
-      struct mapentities_s key, *res;
+      struct mapentities_s key;
       key.name = p = entity_name_buf;
       for (l = 1; l <=  MAP_ENTITY_NAME_LENGTH_MAX+1; l++) {
         if (*in == '\0') /*end of string before possible entity: return*/
           break;
         if (*in == ';') { /*possible end of entity: do a lookup*/
           *p++ = '\0';
-          res = bsearch(&key, mapentities, MAP_NR_OF_ENTITIES,
-                        sizeof(mapentities[0]), *cmp_entities);
+          const struct mapentities_s* res =
+            static_cast<const struct mapentities_s*>(bsearch(
+                &key,
+                mapentities,
+                MAP_NR_OF_ENTITIES,
+                sizeof(mapentities[0]), cmp_entities));
           if (res) {
             *unicode = res->value;
             return ++l;
@@ -2116,7 +2299,7 @@ char *msStrdup(const char * pszString)
         pszString = "";
 
     nStringLength = strlen(pszString) + 1; /* null terminated byte */
-    pszReturn = malloc(nStringLength);
+    pszReturn = static_cast<char*>(malloc(nStringLength));
 
     if (pszReturn == NULL) {
         fprintf(stderr, "msSmallMalloc(): Out of memory allocating %ld bytes.\n",
@@ -2167,6 +2350,15 @@ char* msStringEscape( const char * pszString )
   return string_tmp;
 }
 
+std::string msStdStringEscape( const char * pszString )
+{
+  char* tmp = msStringEscape(pszString);
+  std::string ret(tmp);
+  if( tmp != pszString )
+      msFree(tmp);
+  return ret;
+}
+
 /************************************************************************/
 /*                             msStringInArray()                        */
 /************************************************************************/
@@ -2180,6 +2372,15 @@ int msStringInArray( const char * pszString, char **array, int numelements)
       return MS_TRUE;
   }
   return MS_FALSE;
+}
+
+bool msStringInArray( const char * pszString, const std::vector<std::string>& array)
+{
+  for( const auto& str: array ) {
+    if (strcasecmp(pszString, str.c_str())==0)
+      return true;
+  }
+  return false;
 }
 
 int msLayerEncodeShapeAttributes( layerObj *layer, shapeObj *shape) {
@@ -2202,7 +2403,6 @@ int msLayerEncodeShapeAttributes( layerObj *layer, shapeObj *shape) {
   }
 
   for(i=0;i <shape->numvalues; i++) {
-    int failedIconv = FALSE;
     if(!shape->values[i] || (len = strlen(shape->values[i]))==0) {
       continue;    /* Nothing to do */
     }
@@ -2216,10 +2416,11 @@ int msLayerEncodeShapeAttributes( layerObj *layer, shapeObj *shape) {
 
     bufleft = bufsize;
 
+    bool failedIconv = false;
     while (len > 0) {
-      const size_t iconv_status = iconv(cd, (char**)&inp, &len, &outp, &bufleft);
-      if(iconv_status == (size_t)(-1)) {
-        failedIconv = TRUE;
+      const size_t iconv_status = msIconv(cd, (char**)&inp, &len, &outp, &bufleft);
+      if(iconv_status == static_cast<size_t>(-1)) {
+        failedIconv = true;
         break;
       }
     }
