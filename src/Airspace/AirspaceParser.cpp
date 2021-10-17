@@ -608,8 +608,11 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
         ReadAltitude(input, temp_area.top);
       break;
 
+    /** 'AR 999.999 or 'AF 999.999' in accordance with the Naviter change proposed in 2018 - (Find 'Additional OpenAir fields' here) http://www.winpilot.com/UsersGuide/UserAirspace.asp **/
     case _T('R'):
     case _T('r'):
+    case _T('F'):
+    case _T('f'):
       if (input.SkipWhitespace())
         temp_area.radio = input.c_str();
       break;
