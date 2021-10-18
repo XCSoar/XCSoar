@@ -1,7 +1,16 @@
-* Airspace to test radio frequency
+* Airspace to test 1 radio frequency
 AC C
-AN Radio-Test
+AN Radio-Test 1 (AR with MHz)
 AR 130.125 MHz
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test 2 radio frequency
+AC C
+AN Radio-Test 2 (AF without MHz)
+AF 130.125
 AL 1000 ft
 AH 2000 ft
 V X=01:05.5 N 000:05.5 E
