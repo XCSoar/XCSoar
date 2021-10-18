@@ -52,6 +52,7 @@ public class HM10Port
 
   private PortListener portListener;
   private volatile InputListener listener;
+  private final SafeDestruct safeDestruct = new SafeDestruct();
 
   private final BluetoothGatt gatt;
   private BluetoothGattCharacteristic dataCharacteristic;
@@ -177,9 +178,13 @@ public class HM10Port
       BluetoothGattCharacteristic characteristic) {
     if ((dataCharacteristic != null) &&
         (dataCharacteristic.getUuid().equals(characteristic.getUuid()))) {
-      if (listener != null) {
-        byte[] data = characteristic.getValue();
-        listener.dataReceived(data, data.length);;
+      if (listener != null && safeDestruct.increment()) {
+        try {
+          byte[] data = characteristic.getValue();
+          listener.dataReceived(data, data.length);;
+        } finally {
+          safeDestruct.decrement();
+        }
       }
     }
   }
@@ -195,6 +200,8 @@ public class HM10Port
 
   @Override
   public void close() {
+    safeDestruct.beginShutdown();
+
     shutdown = true;
     writeBuffer.clear();
     gatt.disconnect();
@@ -213,6 +220,8 @@ public class HM10Port
       }
     }
     gatt.close();
+
+    safeDestruct.finishShutdown();
   }
 
   @Override
@@ -247,16 +256,26 @@ public class HM10Port
 
   protected final void stateChanged() {
     PortListener portListener = this.portListener;
-    if (portListener != null)
-      portListener.portStateChanged();
+    if (portListener != null && safeDestruct.increment()) {
+      try {
+        portListener.portStateChanged();
+      } finally {
+        safeDestruct.decrement();
+      }
+    }
   }
 
   protected void error(String msg) {
     portState = STATE_FAILED;
 
     PortListener portListener = this.portListener;
-    if (portListener != null)
-      portListener.portError(msg);
+    if (portListener != null && safeDestruct.increment()) {
+      try {
+        portListener.portError(msg);
+      } finally {
+        safeDestruct.decrement();
+      }
+    }
   }
 
   static class Error extends Exception {
