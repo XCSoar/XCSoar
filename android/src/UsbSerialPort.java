@@ -50,6 +50,7 @@ public final class UsbSerialPort
   private InputListener inputListener;
   private int _baudRate;
   private int state = STATE_LIMBO;
+  private final SafeDestruct safeDestruct = new SafeDestruct();
 
   public synchronized void open(UsbManager manager) {
     _UsbConnection = manager.openDevice(_UsbDevice);
@@ -80,6 +81,8 @@ public final class UsbSerialPort
   }
 
   public synchronized void close() {
+    safeDestruct.beginShutdown();
+
     if( _SerialPort != null) {
       _SerialPort.close();
       _SerialPort = null;
@@ -89,6 +92,8 @@ public final class UsbSerialPort
       _UsbConnection.close();
       _UsbConnection = null;
     }
+
+    safeDestruct.finishShutdown();
   }
 
   @Override
@@ -137,14 +142,24 @@ public final class UsbSerialPort
     }
 
     InputListener listener = inputListener;
-    if (listener != null)
-      listener.dataReceived(arg0, arg0.length);
+    if (listener != null && safeDestruct.increment()) {
+      try {
+        listener.dataReceived(arg0, arg0.length);
+      } finally {
+        safeDestruct.decrement();
+      }
+    }
   }
 
   protected final void stateChanged() {
     PortListener portListener = this.portListener;
-    if (portListener != null)
-      portListener.portStateChanged();
+    if (portListener != null && safeDestruct.increment()) {
+      try {
+        portListener.portStateChanged();
+      } finally {
+        safeDestruct.decrement();
+      }
+    }
   }
 
   protected void setState(int newState) {
@@ -159,7 +174,12 @@ public final class UsbSerialPort
     state = STATE_FAILED;
 
     PortListener portListener = this.portListener;
-    if (portListener != null)
-      portListener.portError(msg);
+    if (portListener != null && safeDestruct.increment()) {
+      try {
+        portListener.portError(msg);
+      } finally {
+        safeDestruct.decrement();
+      }
+    }
   }
 }
