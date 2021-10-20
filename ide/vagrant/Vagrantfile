@@ -1,7 +1,7 @@
 Vagrant.configure("2") do |config|
     config.vm.box = "generic/debian11"
 
-    config.vm.synced_folder "../..", "/xcsoar-host-src", type: "rsync", rsync__auto: true, rsync__exclude: ['./build']
+    config.vm.synced_folder "../..", "/xcsoar-host-src", type: "rsync", rsync__auto: true
 
     # Change directory to shared folder directory when connecting using vagrant ssh
     config.ssh.extra_args = ["-t", "cd /xcsoar-host-src; bash --login"]
