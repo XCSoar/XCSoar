@@ -6,6 +6,9 @@ Vagrant.configure("2") do |config|
     # Change directory to shared folder directory when connecting using vagrant ssh
     config.ssh.extra_args = ["-t", "cd /xcsoar-host-src; bash --login"]
 
+    # Change directory to shared folder directory when connecting using vagrant ssh
+    config.ssh.extra_args = ["-t", "cd /xcsoar-host-src; bash --login"]
+
     config.vm.define "XCSoarDevEnv"
     config.vm.hostname = "XCSoarDevEnv"
 
@@ -60,8 +63,6 @@ Vagrant.configure("2") do |config|
         cd
         git clone --recurse-submodules -o host /xcsoar-host-src xcsoar-src
         cd xcsoar-src
-        git remote add master https://github.com/XCSoar/XCSoar.git
-
-        make TARGET=UNIX
+        git remote add master https://github.com/XCSoar/XCSoar.git    
     SCRIPT
 end
