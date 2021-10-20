@@ -1,30 +1,10 @@
-$script = <<SCRIPT
-
-set -e
-
-cat >> ~/.profile << EOF
-export LANG=C
-export LC_CTYPE=C
-EOF
-
-sudo apt-get update
-
-sudo /xcsoar-host-src/ide/provisioning/install-debian-packages.sh
-/xcsoar-host-src/ide/provisioning/install-android-tools.sh
-
-sudo apt-get clean
-
-cd
-git clone --recurse-submodules -o host /xcsoar-host-src xcsoar-src
-cd xcsoar-src
-git remote add master https://github.com/XCSoar/XCSoar.git
-
-SCRIPT
-
 Vagrant.configure("2") do |config|
     config.vm.box = "generic/debian11"
 
     config.vm.synced_folder "../..", "/xcsoar-host-src"
+
+    # Change directory to shared folder directory when connecting using vagrant ssh
+    config.ssh.extra_args = ["-t", "cd /xcsoar-host-src; bash --login"]
 
     config.vm.define "XCSoarDevEnv"
     config.vm.hostname = "XCSoarDevEnv"
@@ -57,5 +37,29 @@ Vagrant.configure("2") do |config|
         v.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 500]
     end
 
-    config.vm.provision "shell", inline: $script, privileged: false
+    config.vm.provision "os_setup", type: "shell", privileged: false, inline: <<-SCRIPT
+        set -e
+        
+        if ! grep -q "export LANG=C" ~/.profile ; then
+            echo "export LANG=C" >> ~/.profile
+        fi
+        if ! grep -q "export LC_CTYPE=C" ~/.profile ; then
+            echo "export LC_CTYPE=C" >> ~/.profile
+        fi
+
+        sudo apt-get update
+    SCRIPT
+
+    config.vm.provision "install-debian-packages", type: "shell", path: "../provisioning/install-debian-packages.sh"
+
+    config.vm.provision "install-android-tools", type: "shell", privileged: false, path: "../provisioning/install-android-tools.sh"
+
+    config.vm.provision "xcsoar_source", type: "shell", privileged: false, inline: <<-SCRIPT
+        sudo apt-get clean
+
+        cd
+        git clone --recurse-submodules -o host /xcsoar-host-src xcsoar-src
+        cd xcsoar-src
+        git remote add master https://github.com/XCSoar/XCSoar.git    
+    SCRIPT
 end
