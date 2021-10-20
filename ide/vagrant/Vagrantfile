@@ -6,9 +6,6 @@ Vagrant.configure("2") do |config|
     # Change directory to shared folder directory when connecting using vagrant ssh
     config.ssh.extra_args = ["-t", "cd /xcsoar-host-src; bash --login"]
 
-    # Change directory to shared folder directory when connecting using vagrant ssh
-    config.ssh.extra_args = ["-t", "cd /xcsoar-host-src; bash --login"]
-
     config.vm.define "XCSoarDevEnv"
     config.vm.hostname = "XCSoarDevEnv"
 
