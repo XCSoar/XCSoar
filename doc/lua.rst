@@ -669,7 +669,7 @@ The following methods are available in ``xcsoar.timer``:
 HTTP Client
 -----------
 
-The class ``xcsoar.http.Request`` can be used to send HTTP requests.
+The class ``xcsoar.http.Request`` can be used to send HTTP and/or HTTPS requests.
 
 .. code-block:: lua
 
