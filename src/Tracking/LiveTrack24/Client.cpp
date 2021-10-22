@@ -49,17 +49,23 @@ Client::GetUserID(const TCHAR *username, const TCHAR *password)
   assert(password != NULL);
   assert(!StringIsEmpty(password));
 
-  const WideToUTF8Converter username2(username);
-  const WideToUTF8Converter password2(password);
-  if (!username2.IsValid() || !password2.IsValid())
-    throw std::runtime_error("WideToUTF8Converter failed");
-
-  NarrowString<1024> url;
-  url.Format("http://%s/client.php?op=login&user=%s&pass=%s",
-             GetServer(), (const char *)username2, (const char *)password);
-
   // Request the file
-  CurlEasy easy(url);
+  CurlEasy easy;
+
+  {
+    const WideToUTF8Converter username2(username);
+    const WideToUTF8Converter password2(password);
+    if (!username2.IsValid() || !password2.IsValid())
+      throw std::runtime_error("WideToUTF8Converter failed");
+
+    NarrowString<1024> url;
+    url.Format("http://%s/client.php?op=login&user=%s&pass=%s",
+               GetServer(),
+               easy.Escape(username2).c_str(),
+               easy.Escape(password2).c_str());
+    easy.SetURL(url);
+  }
+
   Curl::Setup(easy);
   easy.SetFailOnError();
 
@@ -84,26 +90,36 @@ Client::StartTracking(SessionID session, const TCHAR *username,
   //   phone=Nokia 2600c&gps=BT GPS&trk1=4&vtype=16388&
   //   vname=vehicle name and model
 
-  const WideToUTF8Converter username2(username);
-  const WideToUTF8Converter password2(password);
-  const WideToUTF8Converter vname2(vname);
-  if (!username2.IsValid() || !password2.IsValid() || !vname2.IsValid())
-    throw std::runtime_error("WideToUTF8Converter failed");
+  CurlEasy easy;
+
+  {
+    const WideToUTF8Converter username2(username);
+    const WideToUTF8Converter password2(password);
+    const WideToUTF8Converter vname2(vname);
+    if (!username2.IsValid() || !password2.IsValid() || !vname2.IsValid())
+      throw std::runtime_error("WideToUTF8Converter failed");
 
 #ifdef _UNICODE
-  NarrowString<32> version;
-  version.SetASCII(XCSoar_VersionLong);
+    NarrowString<32> version;
+    version.SetASCII(XCSoar_VersionLong);
 #else
-  const char *version = XCSoar_VersionLong;
+    const char *version = XCSoar_VersionLong;
 #endif
 
-  NarrowString<2048> url;
-  url.Format("http://%s/track.php?leolive=2&sid=%u&pid=%u&"
-             "client=%s&v=%s&user=%s&pass=%s&vtype=%u&vname=%s",
-             GetServer(), session, 1, "XCSoar", version,
-             (const char *)username2, (const char *)password, vtype, vname);
+    NarrowString<2048> url;
+    url.Format("http://%s/track.php?leolive=2&sid=%u&pid=%u&"
+               "client=%s&v=%s&user=%s&pass=%s&vtype=%u&vname=%s",
+               GetServer(), session, 1,
+               "XCSoar", easy.Escape(version).c_str(),
+               easy.Escape(username2).c_str(),
+               easy.Escape(password2).c_str(),
+               vtype,
+               easy.Escape(vname2).c_str());
 
-  co_return co_await SendRequest(url);
+    easy.SetURL(url);
+  }
+
+  co_return co_await SendRequest(std::move(easy));
 }
 
 Co::Task<void>
@@ -147,9 +163,8 @@ Client::SetServer(const TCHAR * _server) noexcept
 }
 
 Co::Task<void>
-Client::SendRequest(const char *url)
+Client::SendRequest(CurlEasy easy)
 {
-  CurlEasy easy(url);
   Curl::Setup(easy);
   easy.SetFailOnError();
 
@@ -163,6 +178,12 @@ Client::SendRequest(const char *url)
                              int(response.size), response.data);
 
   throw std::runtime_error("Error from server");
+}
+
+Co::Task<void>
+Client::SendRequest(const char *url)
+{
+  return SendRequest(CurlEasy{url});
 }
 
 } // namespace LiveTrack24

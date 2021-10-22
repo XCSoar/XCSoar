@@ -1,6 +1,8 @@
 Version 7.20 - not yet released
 * map
   - fix crash in the topography loader
+* tracking
+  - SkyLines: fix "URL using bad/illegal format"
 
 Version 7.19 - 2021/10/01
 * data files

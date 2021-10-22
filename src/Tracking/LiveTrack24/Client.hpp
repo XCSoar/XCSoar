@@ -37,6 +37,7 @@ class Angle;
 struct GeoPoint;
 class OperationEnvironment;
 class CurlGlobal;
+class CurlEasy;
 namespace Co { template<typename T> class Task; }
 
 namespace LiveTrack24 {
@@ -105,6 +106,8 @@ private:
   const char *GetServer() const noexcept {
     return server;
   }
+
+  Co::Task<void> SendRequest(CurlEasy easy);
 
   /**
    * Throws on error.
