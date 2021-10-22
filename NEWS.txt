@@ -4,6 +4,7 @@ Version 7.20 - not yet released
 * tracking
   - SkyLines: fix "URL using bad/illegal format"
 * Android
+  - disable background location access due to Google Play Store policy
   - fix compatibility with Android older than 7
 
 Version 7.19 - 2021/10/01
