@@ -1,4 +1,4 @@
-Version 7.20 - not yet released
+Version 7.20 - 2021/10/22
 * map
   - fix crash in the topography loader
 * tracking
