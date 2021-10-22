@@ -3,6 +3,8 @@ Version 7.20 - not yet released
   - fix crash in the topography loader
 * tracking
   - SkyLines: fix "URL using bad/illegal format"
+* Android
+  - fix compatibility with Android older than 7
 
 Version 7.19 - 2021/10/01
 * data files

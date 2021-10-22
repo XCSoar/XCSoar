@@ -150,6 +150,18 @@ public final class BluetoothSensor
     listener.onHeartRateSensor(bpm);
   }
 
+  static long toUnsignedLong(int x) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+      // Android 7 "Nougat" supports Java 8
+      return Integer.toUnsignedLong(x);
+
+    // Reimplement for older Android versions
+    long l = x;
+    if (l < 0)
+      l += (1L << 32);
+    return l;
+  }
+
   @Override
   public synchronized void onCharacteristicChanged(BluetoothGatt gatt,
                                                    BluetoothGattCharacteristic c) {
@@ -171,7 +183,7 @@ public final class BluetoothSensor
           final boolean hasAltitude = (gps_status == 2 || gps_status == 4);
 
           final long time = 1000 *
-            Integer.toUnsignedLong(c.getIntValue(c.FORMAT_UINT32, 0));
+            toUnsignedLong(c.getIntValue(c.FORMAT_UINT32, 0));
 
           listener.onLocationSensor(time,
                                     flytecSatellites,
