@@ -83,7 +83,7 @@ TestOpenAir()
     { _T("Class-RMZ-Test"), RMZ },
   };
 
-  ok1(airspaces.GetSize() == 25);
+  ok1(airspaces.GetSize() == 26);
 
   for (const auto &as_ : airspaces.QueryAll()) {
     const AbstractAirspace &airspace = as_.GetAirspace();
@@ -128,8 +128,10 @@ TestOpenAir()
       ok1(equals(points[4].GetLocation(),
                  Angle::DMS(1, 30, 30),
                  Angle::DMS(1, 30, 30, true)));
-    } else if (StringIsEqual(_T("Radio-Test"), airspace.GetName())) {
+    } else if (StringIsEqual(_T("Radio-Test 1 (AR with MHz)"), airspace.GetName())) {
       ok1(StringIsEqual(_T("130.125 MHz"), airspace.GetRadioText().c_str()));
+    } else if (StringIsEqual(_T("Radio-Test 2 (AF without MHz)"), airspace.GetName())) {
+      ok1(StringIsEqual(_T("130.125"), airspace.GetRadioText().c_str()));
     } else if (StringIsEqual(_T("Height-Test-1"), airspace.GetName())) {
       ok1(airspace.GetBase().IsTerrain());
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
@@ -278,7 +280,7 @@ TestTNP()
 
 int main(int argc, char **argv)
 try {
-  plan_tests(104);
+  plan_tests(105);
 
   TestOpenAir();
   TestTNP();
