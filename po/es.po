@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-09-17 11:38+0000\n"
+"PO-Revision-Date: 2021-10-25 19:45+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -167,7 +167,7 @@ msgstr ""
 msgid ""
 "A straight line start gate.  Cross start gate from inside area to start."
 msgstr ""
-"Una puerta de inicio en línea recta. Cruce la puerta de salida desde el área "
+"Una puerta de salida en línea recta. Cruce la puerta de salida desde el área "
 "interior para comenzar."
 
 #: src/Task/TypeStrings.cpp:78
@@ -246,7 +246,8 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
 msgid "Cross finish gate line into area to finish."
-msgstr "Cruce la línea de puerta de llegada al área para terminar."
+msgstr ""
+"Cruce la línea de puerta de llegada hacia el área interior para terminar."
 
 #: src/Task/TypeStrings.cpp:94
 #, no-c-format
@@ -344,12 +345,12 @@ msgstr "Cuadrante de llegada FAI"
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
 msgid "Finish line"
-msgstr "Línea de llegada"
+msgstr "Línea de meta"
 
 #: src/Task/TypeStrings.cpp:125
 #, no-c-format
 msgid "Finish cylinder"
-msgstr "Cilindro de llegada"
+msgstr "Cilindro de meta"
 
 #: src/Task/TypeStrings.cpp:126
 #, no-c-format
@@ -379,7 +380,7 @@ msgstr "No hay salida válida"
 #: src/Task/ValidationErrorStrings.cpp:33
 #, no-c-format
 msgid "No valid finish"
-msgstr "No hay llegada válida"
+msgstr "Meta no válida"
 
 #: src/Task/ValidationErrorStrings.cpp:34
 #, no-c-format
@@ -721,7 +722,7 @@ msgstr "Punto de Aterrizaje Anterior"
 
 #: src/Menu/ExpandMacros.cpp:115 src/Menu/ExpandMacros.cpp:137
 msgid "Finish Turnpoint"
-msgstr "Punto de Viraje de Llegada"
+msgstr "Punto de viraje de meta"
 
 #: src/Menu/ExpandMacros.cpp:119 src/Menu/ExpandMacros.cpp:156
 msgid "Next Startpoint"
@@ -1296,7 +1297,7 @@ msgstr "Hace %u minutos"
 
 #: src/Renderer/WaypointListRenderer.cpp:146
 msgid "Arrival Alt"
-msgstr "Alt Llegada"
+msgstr "Alt llegada"
 
 #: src/Weather/Rasp/RaspStore.cpp:48 src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
@@ -4963,7 +4964,7 @@ msgstr "Activar el cursor negro"
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:59
 #, no-c-format
 msgid "Start only"
-msgstr "Inicio solamente"
+msgstr "Solo salida"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:72
 msgid "Pilot name"
@@ -5021,7 +5022,7 @@ msgstr "Libro de registro"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:98
 msgid "Logs each start and landing."
-msgstr "Registra cada inicio y aterrizaje."
+msgstr "Registra cada salida y aterrizaje."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:102
 msgid "Logger ID"
@@ -5940,7 +5941,7 @@ msgid ""
 "Maximum speed above maximum start speed to tolerate.  Set to 0 for no "
 "tolerance."
 msgstr ""
-"Velocidad máxima por encima de la velocidad máxima de inicio que se puede "
+"Velocidad máxima por encima de la velocidad máxima de salida que se puede "
 "tolerar. Poner a 0 para no tolerar."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:82
@@ -5954,7 +5955,7 @@ msgid ""
 "Maximum height based on start height reference (AGL or MSL) while starting "
 "the task.  Set to 0 for no limit."
 msgstr ""
-"Altura máxima basada en la referencia de altura de inicio (AGL o MSL) al "
+"Altura máxima basada en la referencia de altura de salida (AGL o MSL) al "
 "iniciar la tarea. Establezca a 0 para no tener limitaciones."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:89
@@ -6064,18 +6065,18 @@ msgstr "Radio"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:147
 msgid "Default start type for new tasks you create."
-msgstr "Tipo de inicio predeterminado para las nuevas tareas."
+msgstr "Tipo de salida predeterminada para las nuevas tareas."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:152
 msgid "Default radius or gate width of the start zone for new tasks."
 msgstr ""
-"Radio predeterminado o ancho de puerta de la zona de inicio para nuevas "
+"Radio predeterminado o ancho de puerta de la zona de salida para nuevas "
 "tareas."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:158
 #: src/Dialogs/Task/TaskPointDialog.cpp:388
 msgid "Finish point"
-msgstr "Punto de llegada"
+msgstr "Punto de meta"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:159
 msgid "Default finish type for new tasks you create."
@@ -6084,8 +6085,7 @@ msgstr "Tipo de llegada por defecto para las nuevas tareas."
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:164
 msgid "Default radius or gate width of the finish zone in new tasks."
 msgstr ""
-"Radio predeterminado o ancho de puerta de la zona de llegada en tareas "
-"nuevas."
+"Radio predeterminado o ancho de puerta de la zona de meta en tareas nuevas."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:170
 msgid "Turn point"
@@ -6147,8 +6147,8 @@ msgid ""
 "Up to seven points including start and finish, finish height must not be "
 "lower than start height less 1000 meters."
 msgstr ""
-"Hasta siete puntos, incluidos el inicio y el final, la altura de "
-"finalización no debe ser inferior a la altura inicial inferior a 1000 metros."
+"Hasta siete puntos, incluidos salida y meta, la altura de meta no debe ser "
+"inferior a la altura de salida menos 1000 metros."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:101
 #, no-c-format
@@ -6223,8 +6223,8 @@ msgid ""
 "path such that the distance between the start point and the turn point is "
 "maximized"
 msgstr ""
-"Se elige un punto de salida, un punto de giro y un punto de llegada en la "
-"trayectoria de vuelo de forma que la distancia entre el punto de inicio y el "
+"Se elige un punto de salida, un punto de giro y un punto de meta en la "
+"trayectoria de vuelo de forma que la distancia entre el punto de salida y el "
 "punto de giro sea máxima"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
@@ -6895,7 +6895,7 @@ msgstr "Radio del cilindro OZ."
 
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
 msgid "Width of the start/finish gate."
-msgstr "Ancho de la puerta de salida/llegada."
+msgstr "Ancho de la puerta de salida/meta."
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:47
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:43
@@ -7025,7 +7025,7 @@ msgstr "Hora de cierre de la salida"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:283
 msgid "FAI start / finish rules"
-msgstr "Reglas de inicio / finalización de FAI"
+msgstr "Reglas FAI de salida / llegada"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:284
 msgid ""
@@ -7120,7 +7120,7 @@ msgstr "Eliminar"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:137
 msgid "(Add Alternate Start)"
-msgstr "(Agregar inicio alternativo)"
+msgstr "(Agregar salida alternativa)"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:200
 msgid "Alternate Start Points"
@@ -9080,7 +9080,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:830
 #, no-c-format
 msgid "Time under max. start height"
-msgstr "Tiempo bajo max. altura de inicio"
+msgstr "Tiempo bajo altura de salida máx."
 
 #: src/InfoBoxes/Content/Factory.cpp:831
 #, no-c-format
@@ -9363,7 +9363,7 @@ msgstr "Cuenta atrás para la apertura/cierre de la salida al alcance"
 #: src/InfoBoxes/Content/Factory.cpp:960
 #, no-c-format
 msgid "Start reach"
-msgstr "Llegada al Inicio"
+msgstr "Llegada a la salida"
 
 #: src/InfoBoxes/Content/Factory.cpp:961
 #, no-c-format
