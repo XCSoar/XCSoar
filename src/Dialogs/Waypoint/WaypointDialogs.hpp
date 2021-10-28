@@ -35,6 +35,8 @@ WaypointPtr
 ShowWaypointListDialog(const GeoPoint &location,
                        OrderedTask *ordered_task = nullptr,
                        unsigned ordered_task_index = 0);
+void 
+ShowWaypointListPersistentDialog(const GeoPoint &location);
 
 void
 dlgConfigWaypointsShowModal();

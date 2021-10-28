@@ -392,6 +392,17 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
                                 allow_navigation, allow_edit);
 }
 
+// WaypointDetailsPersistent
+// Similar to WaypointDetails, but returns to the Waypoint List 
+// when the Waypoint Details page is closed rather than returning
+// to the main view.
+void
+InputEvents::eventWaypointDetailsPersistent(gcc_unused const TCHAR *misc)
+{
+  const NMEAInfo &basic = CommonInterface::Basic();
+  ShowWaypointListPersistentDialog(basic.location);
+}
+
 void
 InputEvents::eventWaypointEditor(const TCHAR *misc)
 {
