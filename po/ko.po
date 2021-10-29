@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 18:39+0200\n"
-"PO-Revision-Date: 2021-07-20 10:35+0000\n"
-"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
+"PO-Revision-Date: 2021-10-31 00:33+0000\n"
+"Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
 "Language: ko\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -189,8 +189,7 @@ msgid ""
 "sector.  Scored from center."
 msgstr ""
 "(영국식 룰)\n"
-"포인트에서 1/2km의 원혹은 반경 20km의 90도 섹터를 안에서 밖으로 통과할때 득점"
-"한다."
+"포인트에서 1/2km의 원 혹은 반경 20km의 90도 섹터를 안에서 밖으로 통과할때 득점한다."
 
 #: src/Task/TypeStrings.cpp:85
 #, no-c-format
@@ -1643,12 +1642,11 @@ msgstr "사용 안함"
 
 #: src/Device/Config.cpp:233 src/Dialogs/Device/PortPicker.cpp:77
 msgid "BLE sensor"
-msgstr ""
+msgstr "BLE 센서"
 
 #: src/Device/Config.cpp:249 src/Dialogs/Device/PortPicker.cpp:74
-#, fuzzy
 msgid "BLE port"
-msgstr "TE 포트"
+msgstr "BLE 포트"
 
 #: src/Device/Config.cpp:269 src/Dialogs/Device/PortDataField.cpp:52
 #, no-c-format
@@ -1669,9 +1667,8 @@ msgid "GliderLink traffic receiver"
 msgstr "GliderLink 트래픽 수신기"
 
 #: src/Device/Config.cpp:315 src/Dialogs/Device/PortPicker.cpp:80
-#, fuzzy
 msgid "USB serial"
-msgstr "시리얼"
+msgstr "USB 시리얼"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:94 src/Dialogs/WidgetDialog.cpp:264
@@ -2022,9 +2019,8 @@ msgstr "기압"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:399
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:128
-#, fuzzy
 msgid "Pitot"
-msgstr "피토 포트"
+msgstr "피토 센서"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:404
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
@@ -2212,18 +2208,16 @@ msgid "Save"
 msgstr "저장"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:58
-#, fuzzy
 msgid "Calibrate"
-msgstr "상승률"
+msgstr "영점조절"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:130
-#, fuzzy
 msgid "Offset"
-msgstr "UTC 오프셋"
+msgstr "보정값"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:144
 msgid "Pitot sensor calibration"
-msgstr ""
+msgstr "피토 센서 영점조정"
 
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:60
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:59
@@ -4289,14 +4283,12 @@ msgid "Final glide"
 msgstr "골 러시(FinalGlide)"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:68
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Adjusts MC for fastest arrival.  For contest sprint tasks, the MacCready is "
 "adjusted in order to cover the greatest distance in the remaining time and "
 "reach the finish height."
-msgstr ""
-"빠른 도착을 위한 맥크레디: 남은 시간 대비 골에 가장 빨리 도착 할 수 있게 조절"
-"한다."
+msgstr "빠른 도착을 위한 맥크레디. 남은 시간 대비 골에 가장 빨리 도착 할 수 있게 조절한다."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:70
 #, no-c-format
@@ -5817,28 +5809,27 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:128
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:274
-#, fuzzy
 msgid "PEV start wait time"
-msgstr "타스크예상시간"
+msgstr "PEV 시작 대기 시간"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:129
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:275
 msgid ""
 "Wait time in minutes after Pilot Event and before start gate opens. 0 means "
 "start opens immediately."
-msgstr ""
+msgstr "게이트 오픈까지 남은 시간, 남은 시간이 0이면 즉시 스타트하십시오."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:135
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:278
 msgid "PEV start window"
-msgstr ""
+msgstr "PEV 스타트 윈도우"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:136
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:279
 msgid ""
 "Number of minutes start remains open after Pilot Event and PEV wait time.0 "
 "means start will never close after it opens."
-msgstr ""
+msgstr "PEV 대기시간, 스타트 종료 시간까지 까지 몇분 남았는지 표시. 0 으로 표시되면 스타트 오픈이후 스타트마감시각이 없음."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:81
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -5917,9 +5908,9 @@ msgstr ""
 "간에 여기에 설정된 마진시간을 추가한다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable contest calculations"
-msgstr "OLC 콘테스트 선택안함"
+msgstr "콘테스트 계산 실행안함"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:95
 #, no-c-format
@@ -5998,6 +5989,8 @@ msgid ""
 "and the largest Out & Return distance that can be fitted into the flight "
 "route."
 msgstr ""
+"WeGlide는 WeGlide Free 대회에서의 여러 채점 시스템을 결합한다. 자유 점수는 자유 거리 점수와 지역 보너스의 조합이다. "
+"지역 보너스의 경우 점수 프로그램은 비행 경로에 맞출 수 있는 가장 큰 FAI 삼각형과 가장 큰 Out & Return 거리를 결정한다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:123
 #, no-c-format
@@ -6005,19 +5998,15 @@ msgid ""
 "A start point, one turn point and a finish point are chosen from the flight "
 "path such that the distance between the start point and the turn point is "
 "maximized"
-msgstr ""
+msgstr "스타트 포인트와 턴포인트 사이의 거리가 최대가 되도록 타스크 경로에서 스타트포인트, 첫번째 턴포인트, 피니시포인트를 설정한다"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
-#, fuzzy
 msgid "Contest"
-msgstr "목차"
+msgstr "대회"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:128
-#, fuzzy
 msgid "Select the rules used for calculating optimal points for a contest."
-msgstr ""
-"OLC(On-Line contest) 온라인 콘테스트 점수 계산방법: 본 규칙은 2010년 9월 23"
-"일 이전까지 업데이트된 항목을 준수한다."
+msgstr "콘테스트에 대한 최적의 점수를 계산하는 데 사용하는 규칙을 선택한다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:131
 msgid "Predict Contest"
@@ -8535,21 +8524,21 @@ msgid "Exp1"
 msgstr "설정1"
 
 #: src/InfoBoxes/Content/Factory.cpp:732
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Contest distance"
-msgstr "거리(On-Line Contest 진행거리)"
+msgstr "Contest 거리"
 
 #: src/InfoBoxes/Content/Factory.cpp:733
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cont Dist"
-msgstr "거리(골)"
+msgstr "콘테스트거리"
 
 #: src/InfoBoxes/Content/Factory.cpp:734
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
 "Contest rule set."
-msgstr "OLC규칙에 의해 계산된 거리."
+msgstr "대회 규칙 세트에 따라 구성된 비행 거리의 즉각적인 평가."
 
 #: src/InfoBoxes/Content/Factory.cpp:740
 #, no-c-format
@@ -9091,21 +9080,21 @@ msgid "Distance to where take-off was detected."
 msgstr "이륙장거리: 이륙장에서 기체까지의 거리."
 
 #: src/InfoBoxes/Content/Factory.cpp:1013
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Contest speed"
-msgstr "속도(온라인 컨테스트(On-Line Contest)속도)"
+msgstr "속도(On-Line Contest속도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cont Speed"
-msgstr "속도"
+msgstr "컨테스트속도"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown speed according to the configured "
 "Contest rule set."
-msgstr "OLC 규칙으로 계산된 현시점까지의 평균 비행 속도."
+msgstr "컨테스트 대회 규칙에 의해 규정된 비행 속도의 즉각적인 평가."
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
@@ -9260,31 +9249,31 @@ msgid "Alternate 2 GR"
 msgstr "활공비(예비착륙장2 활공비)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1097
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Altn2 GR"
-msgstr "예비1활공비"
+msgstr "예비2활공비"
 
 #: src/InfoBoxes/Content/Factory.cpp:1098
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Geometric gradient to the arrival height above the second alternate. This is "
 "not adjusted for total energy."
 msgstr "예비착륙장까지 필요한 활공비. 고도상승을 고려하지 않음."
 
 #: src/InfoBoxes/Content/Factory.cpp:1104
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Heart Rate"
-msgstr "시작 시각"
+msgstr "심박수"
 
 #: src/InfoBoxes/Content/Factory.cpp:1105
 #, no-c-format
 msgid "Heart"
-msgstr ""
+msgstr "심박"
 
 #: src/InfoBoxes/Content/Factory.cpp:1106
 #, no-c-format
 msgid "Heart rate in beats per minute."
-msgstr ""
+msgstr "분당 심박수."
 
 #: src/InfoBoxes/Content/Alternate.cpp:74
 #, c-format
@@ -9303,9 +9292,8 @@ msgid "no QNH"
 msgstr "QNH필요"
 
 #: src/InfoBoxes/Content/Altitude.cpp:148
-#, fuzzy
 msgid "Not flying"
-msgstr "써클링 아님"
+msgstr "비행중이 아님"
 
 #: src/InfoBoxes/Content/MacCready.cpp:71
 msgid "MC AUTO"
@@ -9943,11 +9931,12 @@ msgstr ""
 "설정"
 
 #: Data/Input/default.xci:433
-#, fuzzy
 msgid ""
 "Pilot\n"
 "Event"
-msgstr "파일럿"
+msgstr ""
+"파일럿\n"
+"이벤트"
 
 #: Data/Input/default.xci:423 Data/Input/default.xci:1066
 msgid ""
@@ -10160,7 +10149,7 @@ msgstr ""
 
 #: Data/Input/default.xci:430
 msgid "Pilot event announced"
-msgstr ""
+msgstr "파일럿 이벤트 공지"
 
 #: Data/Input/default.xci:59
 msgid "Above final glide"
