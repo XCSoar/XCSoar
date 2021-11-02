@@ -36,6 +36,8 @@ Copyright_License {
 #include "MMX.hpp"
 #endif
 
+#include <type_traits>
+
 /**
  * This class hosts two base classes: one that is optimised (e.g. via
  * SIMD) and one that is portable (but slow).  The optimised one will
@@ -45,6 +47,10 @@ Copyright_License {
 template<typename Optimised, unsigned N, typename Portable>
 class SelectOptimisedPixelOperations
   : protected Optimised, protected Portable {
+
+  static_assert(std::is_same_v<typename Optimised::PixelTraits, typename Portable::PixelTraits>);
+  static_assert(std::is_same_v<typename Optimised::SourcePixelTraits, typename Portable::SourcePixelTraits>);
+
 public:
   using typename Portable::PixelTraits;
   using typename Portable::SourcePixelTraits;
