@@ -127,54 +127,48 @@ struct FloatPoint2D : Point2D<float> {
 static_assert(std::is_trivial<FloatPoint2D>::value, "type is not trivial");
 
 template<typename P>
-concept IsPoint2D = std::is_base_of_v<Point2D<typename P::scalar_type,
-                                              typename P::product_type>,
-                                      P>;
+concept AnyPoint2D = std::is_base_of_v<Point2D<typename P::scalar_type,
+                                               typename P::product_type>,
+                                       P>;
 
-template<typename P, typename RT=typename P::product_type>
-requires(IsPoint2D<P>)
+template<AnyPoint2D P, typename RT=typename P::product_type>
 constexpr P
 operator+(P a, P b) noexcept
 {
   return P(a.x + b.x, a.y + b.y);
 }
 
-template<typename P, typename RT=typename P::product_type>
-requires(IsPoint2D<P>)
+template<AnyPoint2D P>
 constexpr P
 operator-(P a, P b) noexcept
 {
   return P(a.x - b.x, a.y - b.y);
 }
 
-template<typename P, typename RT=typename P::product_type,
-         typename Z>
-requires(IsPoint2D<P> && std::is_arithmetic_v<Z>)
+template<AnyPoint2D P, typename Z>
+requires(std::is_arithmetic_v<Z>)
 constexpr P
 operator*(P a, Z z) noexcept
 {
   return P(a.x * z, a.y * z);
 }
 
-template<typename P, typename RT=typename P::product_type,
-         typename Z>
-requires(IsPoint2D<P> && std::is_arithmetic_v<Z>)
+template<AnyPoint2D P, typename Z>
+requires(std::is_arithmetic_v<Z>)
 constexpr P
 operator/(P a, Z z) noexcept
 {
   return P(a.x / z, a.y / z);
 }
 
-template<typename P, typename RT=typename P::product_type>
-requires(IsPoint2D<P>)
+template<AnyPoint2D P, typename RT=typename P::product_type>
 constexpr RT
 DotProduct(P a, P b) noexcept
 {
   return RT(a.x) * RT(b.x) + RT(a.y) * RT(b.y);
 }
 
-template<typename P, typename RT=typename P::product_type>
-requires(IsPoint2D<P>)
+template<AnyPoint2D P, typename RT=typename P::product_type>
 constexpr RT
 CrossProduct(P a, P b) noexcept
 {
@@ -184,8 +178,7 @@ CrossProduct(P a, P b) noexcept
 /**
  * Calculates the "manhattan distance" or "taxicab distance".
  */
-template<typename P, typename RT=typename P::scalar_type>
-requires(IsPoint2D<P>)
+template<AnyPoint2D P, typename RT=typename P::scalar_type>
 constexpr RT
 ManhattanDistance(P a, P b) noexcept
 {
