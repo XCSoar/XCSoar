@@ -163,7 +163,8 @@ public:
 
   void SetValue(unsigned Value) noexcept;
 
-  template<typename T, typename=std::enable_if_t<std::is_enum_v<T>>>
+  template<typename T>
+  requires(std::is_enum_v<T>)
   void SetValue(T value) noexcept {
     SetValue(unsigned(value));
   }
@@ -179,7 +180,8 @@ public:
 
   bool ModifyValue(unsigned new_value) noexcept;
 
-  template<typename T, typename=std::enable_if_t<std::is_enum_v<T>>>
+  template<typename T>
+  requires(std::is_enum_v<T>)
   bool ModifyValue(T value) noexcept {
     return ModifyValue(unsigned(value));
   }
