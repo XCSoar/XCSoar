@@ -44,10 +44,10 @@ template<typename Optimised, unsigned N, typename Portable>
 class SelectOptimisedPixelOperations
   : protected Optimised, protected Portable {
 public:
-  typedef typename Portable::PixelTraits PixelTraits;
-  typedef typename PixelTraits::color_type color_type;
-  typedef typename PixelTraits::rpointer rpointer;
-  typedef typename PixelTraits::const_rpointer const_rpointer;
+  using PixelTraits = typename Portable::PixelTraits;
+  using color_type = typename PixelTraits::color_type;
+  using rpointer = typename PixelTraits::rpointer;
+  using const_rpointer = typename PixelTraits::const_rpointer;
 
   static constexpr unsigned PORTABLE_MASK = N - 1;
   static constexpr unsigned OPTIMISED_MASK = ~PORTABLE_MASK;
@@ -89,7 +89,7 @@ struct BitOrPixelOperations
 template<typename PixelTraits>
 struct TransparentPixelOperations
   : PortableTransparentPixelOperations<PixelTraits> {
-  typedef typename PixelTraits::color_type color_type;
+  using color_type = typename PixelTraits::color_type;
 
   explicit constexpr TransparentPixelOperations(const color_type key)
     :PortableTransparentPixelOperations<PixelTraits>(key) {}
