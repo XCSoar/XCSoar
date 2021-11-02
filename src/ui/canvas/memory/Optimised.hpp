@@ -25,6 +25,8 @@ Copyright_License {
 #define XCSOAR_SCREEN_MEMORY_OPTIMISED_HPP
 
 #include "PixelOperations.hpp"
+#include "PixelTraits.hpp"
+#include "util/Compiler.h"
 
 #ifdef __ARM_NEON__
 #include "NEON.hpp"
