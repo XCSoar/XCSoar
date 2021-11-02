@@ -34,15 +34,15 @@ Copyright_License {
  */
 template<class WritePixelOperation>
 struct PerPixelOperations : private WritePixelOperation {
-  typedef typename WritePixelOperation::PixelTraits PixelTraits;
-  typedef typename PixelTraits::pointer pointer;
-  typedef typename PixelTraits::rpointer rpointer;
-  typedef typename PixelTraits::const_pointer const_pointer;
-  typedef typename PixelTraits::color_type color_type;
+  using PixelTraits = typename WritePixelOperation::PixelTraits;
+  using pointer = typename PixelTraits::pointer;
+  using rpointer = typename PixelTraits::rpointer;
+  using const_pointer = typename PixelTraits::const_pointer;
+  using color_type = typename PixelTraits::color_type;
 
-  typedef typename WritePixelOperation::SourcePixelTraits SourcePixelTraits;
-  typedef typename SourcePixelTraits::color_type source_color_type;
-  typedef typename SourcePixelTraits::const_rpointer source_const_rpointer;
+  using SourcePixelTraits = typename WritePixelOperation::SourcePixelTraits;
+  using source_color_type = typename SourcePixelTraits::color_type;
+  using source_const_rpointer = typename SourcePixelTraits::const_rpointer;
 
   PerPixelOperations() = default;
 
@@ -73,11 +73,11 @@ struct PerPixelOperations : private WritePixelOperation {
 
 template<class Operation>
 struct UnaryWritePixel : private Operation {
-  typedef typename Operation::PixelTraits PixelTraits;
-  typedef typename PixelTraits::pointer pointer;
+  using PixelTraits = typename Operation::PixelTraits;
+  using pointer = typename PixelTraits::pointer;
 
-  typedef typename Operation::SourcePixelTraits SourcePixelTraits;
-  typedef typename SourcePixelTraits::color_type source_color_type;
+  using SourcePixelTraits = typename Operation::SourcePixelTraits;
+  using source_color_type = typename SourcePixelTraits::color_type;
 
   UnaryWritePixel() = default;
 
@@ -101,11 +101,11 @@ using UnaryPerPixelOperations =
 
 template<class Operation>
 struct BinaryWritePixel : private Operation {
-  typedef typename Operation::PixelTraits PixelTraits;
-  typedef typename PixelTraits::pointer pointer;
+  using PixelTraits = typename Operation::PixelTraits;
+  using pointer = typename PixelTraits::pointer;
 
-  typedef typename Operation::SourcePixelTraits SourcePixelTraits;
-  typedef typename SourcePixelTraits::color_type source_color_type;
+  using SourcePixelTraits = typename Operation::SourcePixelTraits;
+  using source_color_type = typename SourcePixelTraits::color_type;
 
   BinaryWritePixel() = default;
 
@@ -133,12 +133,12 @@ using BinaryPerPixelOperations =
  */
 template<typename Check, typename Operation=typename Check::PixelTraits>
 struct ConditionalWritePixel : private Check, private Operation {
-  typedef typename Check::PixelTraits PixelTraits;
-  typedef typename PixelTraits::rpointer rpointer;
-  typedef typename PixelTraits::const_rpointer const_rpointer;
-  typedef typename PixelTraits::color_type color_type;
+  using PixelTraits = typename Check::PixelTraits;
+  using rpointer = typename PixelTraits::rpointer;
+  using const_rpointer = typename PixelTraits::const_rpointer;
+  using color_type = typename PixelTraits::color_type;
 
-  typedef PixelTraits SourcePixelTraits;
+  using SourcePixelTraits = PixelTraits;
 
   ConditionalWritePixel() = default;
 
@@ -170,11 +170,11 @@ using ConditionalPixelOperations =
  */
 template<typename PT, typename Operation>
 struct PixelPerChannelAdapter : private Operation {
-  typedef PT PixelTraits;
-  typedef typename PixelTraits::color_type color_type;
-  typedef typename PixelTraits::channel_type channel_type;
+  using PixelTraits = PT;
+  using color_type = typename PixelTraits::color_type;
+  using channel_type = typename PixelTraits::channel_type;
 
-  typedef PixelTraits SourcePixelTraits;
+  using SourcePixelTraits = PixelTraits;
 
   PixelPerChannelAdapter() = default;
 
@@ -222,16 +222,16 @@ using BinaryPerChannelOperations =
  */
 template<typename PT, typename Operation>
 struct PixelIntegerAdapter : private Operation {
-  typedef PT PixelTraits;
-  typedef typename PixelTraits::color_type color_type;
-  typedef typename PixelTraits::integer_type integer_type;
+  using PixelTraits = PT;
+  using color_type = typename PixelTraits::color_type;
+  using integer_type = typename PixelTraits::integer_type;
 
-  typedef PixelTraits SourcePixelTraits;
+  using SourcePixelTraits = PixelTraits;
 
-  typedef color_type argument_type;
-  typedef color_type first_argument_type;
-  typedef color_type second_argument_type;
-  typedef color_type result_type;
+  using argument_type = color_type;
+  using first_argument_type = color_type;
+  using second_argument_type = color_type;
+  using result_type = color_type;
 
   PixelIntegerAdapter() = default;
 
@@ -345,8 +345,8 @@ using PortableAlphaPixelOperations =
 
 template<typename PT>
 struct NotWhiteCondition {
-  typedef PT PixelTraits;
-  typedef typename PT::color_type color_type;
+  using PixelTraits = PT;
+  using color_type = typename PT::color_type;
 
   constexpr bool operator()(color_type c) const {
     return !PixelTraits::IsWhite(c);
@@ -360,10 +360,10 @@ using NotWhiteAlphaPixelOperations =
 
 template<typename PT, typename SPT>
 struct PixelOpaqueText {
-  typedef PT PixelTraits;
-  typedef typename PixelTraits::color_type color_type;
+  using PixelTraits = PT;
+  using color_type = typename PixelTraits::color_type;
 
-  typedef SPT SourcePixelTraits;
+  using SourcePixelTraits = SPT;
 
 private:
   const color_type background_color, text_color;
@@ -389,11 +389,11 @@ using OpaqueTextPixelOperations =
  */
 template<typename PT, typename SPT>
 struct PixelColoredAlpha {
-  typedef PT PixelTraits;
-  typedef typename PixelTraits::color_type color_type;
-  typedef typename PixelTraits::channel_type channel_type;
+  using PixelTraits = PT;
+  using color_type = typename PixelTraits::color_type;
+  using channel_type = typename PixelTraits::channel_type;
 
-  typedef SPT SourcePixelTraits;
+  using SourcePixelTraits = SPT;
 
 private:
   color_type color;
@@ -420,11 +420,11 @@ using ColoredAlphaPixelOperations =
  */
 template<typename PT, typename SPT>
 struct PixelOpaqueAlpha {
-  typedef PT PixelTraits;
-  typedef typename PixelTraits::color_type color_type;
-  typedef typename PixelTraits::channel_type channel_type;
+  using PixelTraits = PT;
+  using color_type = typename PixelTraits::color_type;
+  using channel_type = typename PixelTraits::channel_type;
 
-  typedef SPT SourcePixelTraits;
+  using SourcePixelTraits = SPT;
 
 private:
   const color_type a, b;
@@ -447,10 +447,10 @@ using OpaqueAlphaPixelOperations =
 
 template<typename PT>
 struct ColorKey {
-  typedef PT PixelTraits;
-  typedef typename PixelTraits::color_type color_type;
-  typedef color_type argument_type;
-  typedef bool result_type;
+  using PixelTraits = PT;
+  using color_type = typename PixelTraits::color_type;
+  using argument_type = color_type;
+  using result_type = bool;
 
   argument_type key;
 
@@ -473,8 +473,8 @@ template<typename PixelTraits>
 class TransparentInvertPixelOperations
   : private PixelIntegerAdapter<PixelTraits,
                                 PixelBitNot<typename PixelTraits::integer_type>> {
-  typedef typename PixelTraits::pointer pointer;
-  typedef typename PixelTraits::color_type color_type;
+  using pointer = typename PixelTraits::pointer;
+  using color_type = typename PixelTraits::color_type;
 
   color_type key;
 
