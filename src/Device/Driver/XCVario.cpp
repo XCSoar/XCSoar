@@ -27,6 +27,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
+#include "Device/Port/Port.hpp"
 #include "NMEA/InputLine.hpp"
 #include "util/Clamp.hpp"
 #include "Atmosphere/Pressure.hpp"
@@ -44,6 +45,7 @@ public:
   bool PutMacCready(double mc, OperationEnvironment &env) override;
   bool PutBugs(double bugs, OperationEnvironment &env) override;
   bool PutBallast(double fraction, double overload, OperationEnvironment &env) override;
+  bool PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env) override;
 };
 
 /*
@@ -157,6 +159,20 @@ XVCDevice::ParseNMEA(const char *String, NMEAInfo &info)
   else
     return false;
 }
+
+// For documentation refer to chapter 10.1.3 Device Driver/XCVario in mulilingual handbook: https://xcvario.de/handbuch
+
+bool 
+XVCDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
+{
+  /* the XCVario understands "!g,q<NNNN>" command for QNH updates with recent builds */
+  char buffer[32];
+  unsigned qnh = uround(pres.GetPascal()/100);
+  int msg_len = sprintf(buffer,"!g,q%u\r", std::min(qnh,(unsigned)2000));
+  return port.FullWrite(buffer, msg_len, env, std::chrono::seconds(2) );
+}
+
+
 
 bool
 XVCDevice::PutMacCready(double mac_cready, OperationEnvironment &env)
