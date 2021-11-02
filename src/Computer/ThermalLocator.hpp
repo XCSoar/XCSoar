@@ -28,6 +28,8 @@ Copyright_License {
 #include "Geo/Flat/FlatPoint.hpp"
 #include "time/Stamp.hpp"
 
+#include <array>
+
 struct SpeedVector;
 class FlatProjection;
 struct ThermalLocatorInfo;
@@ -71,7 +73,7 @@ private:
   };
 
   /** Circular buffer of points */
-  Point points[TLOCATOR_NMAX];
+  std::array<Point, TLOCATOR_NMAX> points;
 
   /** Index of next point to add */
   unsigned n_index;
