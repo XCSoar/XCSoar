@@ -30,6 +30,18 @@ Copyright_License {
 #include <functional>
 
 /**
+ * Convert a PixelTraits type to a PixelOperations type.
+ */
+template<typename PT>
+struct PixelTraitsOperations : public PT {
+  using PixelTraits = PT;
+  using SourcePixelTraits = PT;
+
+  constexpr PixelTraitsOperations(const PixelTraits &pt) noexcept
+    :PT(pt) {}
+};
+
+/**
  * Build a PixelOperations class with a base class that implements
  * only WritePixelOperation().
  */

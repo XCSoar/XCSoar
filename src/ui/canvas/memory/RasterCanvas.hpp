@@ -75,6 +75,10 @@ protected:
     return *this;
   }
 
+  PixelTraitsOperations<PixelTraits> GetSolidPixelOperations() noexcept {
+    return GetPixelTraits();
+  }
+
   constexpr bool Check(unsigned x, unsigned y) const noexcept {
     return buffer.Check(x, y);
   }
@@ -255,7 +259,7 @@ public:
   }
 
   void DrawPixel(int x, int y, color_type c) noexcept {
-    DrawPixel(x, y, c, GetPixelTraits());
+    DrawPixel(x, y, c, GetSolidPixelOperations());
   }
 
   template<typename PixelOperations>
@@ -285,7 +289,7 @@ public:
   }
 
   void FillRectangle(int x1, int y1, int x2, int y2, color_type c) noexcept {
-    FillRectangle<PixelTraits>(x1, y1, x2, y2, c, GetPixelTraits());
+    FillRectangle(x1, y1, x2, y2, c, GetSolidPixelOperations());
   }
 
   template<typename PixelOperations>
@@ -309,7 +313,7 @@ public:
 
   void DrawHLine(int x1, int x2, int y, color_type c) noexcept {
     DrawHLine(x1, x2, y, c,
-              GetPixelTraits());
+              GetSolidPixelOperations());
   }
 
   template<typename PixelOperations>
@@ -343,7 +347,7 @@ public:
   }
 
   void DrawRectangle(int x1, int y1, int x2, int y2, color_type c) noexcept {
-    DrawRectangle(x1, y1, x2, y2, c, GetPixelTraits());
+    DrawRectangle(x1, y1, x2, y2, c, GetSolidPixelOperations());
   }
 
   void DrawLineDirect(const int x1, const int y1, const int x2, const int y2,
@@ -640,9 +644,9 @@ public:
   void FillPolygon(const PixelPoint *points, unsigned n,
                    color_type color) noexcept {
     FillPolygonFast(points, n, color,
-                    GetPixelTraits());
+                    GetSolidPixelOperations());
 //    FillPolygon(points, n, color,
-//                GetPixelTraits());
+//                GetSolidPixelOperations());
   }
 
   template<typename PixelOperations>
@@ -724,7 +728,7 @@ public:
 
   void DrawCircle(int x, int y, unsigned rad, color_type color) noexcept {
     DrawCircle(x, y, rad, color,
-               GetPixelTraits());
+               GetSolidPixelOperations());
   }
 
   template<typename PixelOperations>
@@ -808,7 +812,7 @@ public:
 
   void FillCircle(int x, int y, unsigned rad, color_type color) noexcept {
     FillCircle(x, y, rad, color,
-               GetPixelTraits());
+               GetSolidPixelOperations());
   }
 
   template<typename PixelOperations, typename SPT=PixelTraits>
@@ -834,7 +838,7 @@ public:
   void CopyRectangle(int x, int y, unsigned w, unsigned h,
                      const_pointer src, unsigned src_pitch) noexcept {
     CopyRectangle(x, y, w, h, src, src_pitch,
-                  GetPixelTraits());
+                  GetSolidPixelOperations());
   }
 
   template<typename PixelOperations, typename SPT=PixelTraits>
@@ -914,7 +918,7 @@ public:
                       PixelSize src_size) noexcept {
     ScaleRectangle(dest_position, dest_size,
                    src, src_pitch, src_size,
-                   GetPixelTraits());
+                   GetSolidPixelOperations());
   }
 };
 
