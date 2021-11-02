@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BUFFER_HPP
 #define XCSOAR_SCREEN_BUFFER_HPP
 
+#include "Concepts.hpp"
 #include "util/Compiler.h"
 
 /**
@@ -31,7 +32,7 @@ Copyright_License {
  * write to.  This class does not allocate or free any memory, it
  * refers to a buffer owned by somebody else.
  */
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 struct WritableImageBuffer {
   typedef typename PixelTraits::pointer pointer;
   typedef typename PixelTraits::rpointer rpointer;
@@ -77,7 +78,7 @@ struct WritableImageBuffer {
  * read-only.  This class does not allocate or free any memory, it
  * refers to a buffer owned by somebody else.
  */
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 struct ConstImageBuffer {
   typedef typename PixelTraits::const_pointer pointer;
   typedef typename PixelTraits::const_rpointer rpointer;

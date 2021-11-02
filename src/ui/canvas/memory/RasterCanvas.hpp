@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_RASTER_CANVAS_HPP
 #define XCSOAR_SCREEN_RASTER_CANVAS_HPP
 
+#include "Concepts.hpp"
 #include "Buffer.hpp"
 #include "Bresenham.hpp"
 #include "Murphy.hpp"
@@ -47,7 +48,7 @@ Copyright_License {
  *
  * Much of this code was copied from SDL_gfx.
  */
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 class RasterCanvas : private PixelTraits {
   using typename PixelTraits::pointer;
   using typename PixelTraits::rpointer;
@@ -251,7 +252,7 @@ protected:
   }
 
 public:
-  template<typename PixelOperations>
+  template<AnyWritePixelOperation PixelOperations>
   void DrawPixel(int x, int y, color_type c,
                  PixelOperations operations) noexcept {
     if (Check(x, y))
@@ -262,7 +263,7 @@ public:
     DrawPixel(x, y, c, GetSolidPixelOperations());
   }
 
-  template<typename PixelOperations>
+  template<AnyFillPixelOperation PixelOperations>
   void FillRectangle(int x1, int y1, int x2, int y2, color_type c,
                      PixelOperations operations) noexcept {
     if (x1 < 0)
@@ -292,7 +293,7 @@ public:
     FillRectangle(x1, y1, x2, y2, c, GetSolidPixelOperations());
   }
 
-  template<typename PixelOperations>
+  template<AnyFillPixelOperation PixelOperations>
   void DrawHLine(int x1, int x2, int y, color_type c,
                  PixelOperations operations) noexcept {
     if (y < 0 || unsigned(y) >= buffer.height)
@@ -316,7 +317,7 @@ public:
               GetSolidPixelOperations());
   }
 
-  template<typename PixelOperations>
+  template<AnyWritePixelOperation PixelOperations>
   void DrawVLine(int x, int y1, int y2, color_type c,
                  PixelOperations operations) noexcept {
     if (x < 0 || unsigned(x) >= buffer.width)
@@ -731,7 +732,7 @@ public:
                GetSolidPixelOperations());
   }
 
-  template<typename PixelOperations>
+  template<AnyFullPixelOperation PixelOperations>
   void FillCircle(int x, int y, unsigned rad, color_type color,
                   PixelOperations operations) noexcept {
     // Special case for rad=0 - draw a point
@@ -815,7 +816,7 @@ public:
                GetSolidPixelOperations());
   }
 
-  template<typename PixelOperations, typename SPT=PixelTraits>
+  template<typename PixelOperations, AnyPixelTraits SPT=PixelTraits>
 #ifndef __clang__
   __attribute__((flatten))
 #endif
@@ -841,7 +842,7 @@ public:
                   GetSolidPixelOperations());
   }
 
-  template<typename PixelOperations, typename SPT=PixelTraits>
+  template<typename PixelOperations, AnyPixelTraits SPT=PixelTraits>
   void ScalePixels(rpointer dest, unsigned dest_size,
                    typename SPT::const_rpointer src,
                    unsigned src_size,
@@ -873,7 +874,7 @@ public:
     }
   }
 
-  template<typename PixelOperations, typename SPT=PixelTraits>
+  template<typename PixelOperations, AnyPixelTraits SPT=PixelTraits>
   void ScaleRectangle(PixelPoint dest_position, PixelSize dest_size,
                       typename SPT::const_rpointer src, unsigned src_pitch,
                       PixelSize src_size,

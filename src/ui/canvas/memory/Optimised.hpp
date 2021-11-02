@@ -44,7 +44,7 @@ Copyright_License {
  * be used as much as possible, and for the odd remainder, we use the
  * portable version.
  */
-template<typename Optimised, unsigned N, typename Portable>
+template<AnyBulkPixelOperation Optimised, unsigned N, AnyBulkPixelOperation Portable>
 class SelectOptimisedPixelOperations
   : protected Optimised, protected Portable {
 
@@ -91,12 +91,12 @@ public:
   }
 };
 
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 struct BitOrPixelOperations
   : PortableBitOrPixelOperations<PixelTraits> {
 };
 
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 struct TransparentPixelOperations
   : PortableTransparentPixelOperations<PixelTraits> {
   using color_type = typename PixelTraits::color_type;
@@ -125,7 +125,7 @@ struct TransparentPixelOperations<GreyscalePixelTraits>
 
 #endif
 
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 class AlphaPixelOperations
   : public PortableAlphaPixelOperations<PixelTraits> {
 public:
@@ -164,6 +164,9 @@ class AlphaPixelOperations<BGRAPixelTraits>
   : public SelectOptimisedPixelOperations<MMXAlpha32PixelOperations, 2,
                                           PortableAlphaPixelOperations<BGRAPixelTraits>> {
 public:
+  using typename SelectOptimisedPixelOperations::PixelTraits;
+  using typename SelectOptimisedPixelOperations::SourcePixelTraits;
+
   explicit constexpr AlphaPixelOperations(const uint8_t alpha)
     :SelectOptimisedPixelOperations(alpha) {}
 };

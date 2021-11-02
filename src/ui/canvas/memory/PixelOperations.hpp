@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PIXEL_OPERATIONS_HPP
 #define XCSOAR_SCREEN_PIXEL_OPERATIONS_HPP
 
+#include "Concepts.hpp"
 #include "../PortableColor.hpp"
 #include "util/Compiler.h"
 
@@ -45,7 +46,7 @@ struct PixelTraitsOperations : public PT {
  * Build a PixelOperations class with a base class that implements
  * only WritePixelOperation().
  */
-template<class WritePixelOperation>
+template<AnyWritePixelOperation WritePixelOperation>
 struct PerPixelOperations : private WritePixelOperation {
   using typename WritePixelOperation::PixelTraits;
   using pointer = typename PixelTraits::pointer;
@@ -80,7 +81,7 @@ struct PerPixelOperations : private WritePixelOperation {
   }
 };
 
-template<class Operation>
+template<AnyPixelOperation Operation>
 struct UnaryWritePixel : private Operation {
   using typename Operation::PixelTraits;
   using pointer = typename PixelTraits::pointer;
@@ -100,11 +101,11 @@ struct UnaryWritePixel : private Operation {
  * manipulates the source color.  It is called "unary" because the
  * function object has one parameter.
  */
-template<class Operation>
+template<typename Operation>
 using UnaryPerPixelOperations =
   PerPixelOperations<UnaryWritePixel<Operation>>;
 
-template<class Operation>
+template<AnyPixelOperation Operation>
 struct BinaryWritePixel : private Operation {
   using typename Operation::PixelTraits;
   using pointer = typename PixelTraits::pointer;
@@ -125,7 +126,7 @@ struct BinaryWritePixel : private Operation {
  * color.  It is called "binary" because the function object has two
  * parameters.
  */
-template<class Operation>
+template<AnyPixelOperation Operation>
 using BinaryPerPixelOperations =
   PerPixelOperations<BinaryWritePixel<Operation>>;
 
@@ -169,7 +170,7 @@ using ConditionalPixelOperations =
  * channel.  The resulting function object will operate on a
  * PixelTraits::color_type.
  */
-template<typename PT, typename Operation>
+template<AnyPixelTraits PT, typename Operation>
 struct PixelPerChannelAdapter : private Operation {
   using PixelTraits = PT;
   using color_type = typename PixelTraits::color_type;
@@ -200,7 +201,7 @@ struct PixelPerChannelAdapter : private Operation {
  * Wrapper that glues #UnaryPerPixelOperations,
  * #PixelPerChannelAdapter and a custom function class together.
  */
-template<typename PixelTraits, typename Operation>
+template<AnyPixelTraits PixelTraits, typename Operation>
 using UnaryPerChannelOperations =
   UnaryPerPixelOperations<PixelPerChannelAdapter<PixelTraits, Operation>>;
 
@@ -208,7 +209,7 @@ using UnaryPerChannelOperations =
  * Wrapper that glues #BinaryPerPixelOperations,
  * #PixelPerChannelAdapter and a custom function class together.
  */
-template<typename PixelTraits, typename Operation>
+template<AnyPixelTraits PixelTraits, typename Operation>
 using BinaryPerChannelOperations =
   BinaryPerPixelOperations<PixelPerChannelAdapter<PixelTraits, Operation>>;
 
@@ -217,7 +218,7 @@ using BinaryPerChannelOperations =
  * integer.  The resulting function object will operate on a
  * PixelTraits::color_type.
  */
-template<typename PT, typename Operation>
+template<AnyPixelTraits PT, typename Operation>
 struct PixelIntegerAdapter : private Operation {
   using PixelTraits = PT;
   using color_type = typename PixelTraits::color_type;
@@ -254,7 +255,7 @@ struct PixelIntegerAdapter : private Operation {
  * Wrapper that glues #UnaryPerPixelOperations, #PixelIntegerAdapter
  * and a custom function class together.
  */
-template<typename PixelTraits, typename Operation>
+template<AnyPixelTraits PixelTraits, typename Operation>
 using UnaryIntegerOperations =
   UnaryPerPixelOperations<PixelIntegerAdapter<PixelTraits, Operation>>;
 
@@ -262,7 +263,7 @@ using UnaryIntegerOperations =
  * Wrapper that glues #BinaryPerPixelOperations, #PixelIntegerAdapter
  * and a custom function class together.
  */
-template<typename PixelTraits, typename Operation>
+template<AnyPixelTraits PixelTraits, typename Operation>
 using BinaryIntegerOperations =
   BinaryPerPixelOperations<PixelIntegerAdapter<PixelTraits, Operation>>;
 
@@ -279,7 +280,7 @@ struct PixelBitNot {
 /**
  * Invert all source colors.
  */
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 using BitNotPixelOperations =
   UnaryIntegerOperations<PixelTraits,
                          PixelBitNot<typename PixelTraits::integer_type>>;
@@ -287,7 +288,7 @@ using BitNotPixelOperations =
 /**
  * Combine source and destination color with bit-wise "or".
  */
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 using PortableBitOrPixelOperations =
   BinaryIntegerOperations<PixelTraits,
                           std::bit_or<typename PixelTraits::integer_type>>;
@@ -299,7 +300,7 @@ struct PixelBitNotOr {
   }
 };
 
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 using BitNotOrPixelOperations =
   BinaryIntegerOperations<PixelTraits,
                           PixelBitNotOr<typename PixelTraits::integer_type>>;
@@ -307,7 +308,7 @@ using BitNotOrPixelOperations =
 /**
  * Combine source and destination color with bit-wise "and".
  */
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 using BitAndPixelOperations =
   BinaryIntegerOperations<PixelTraits,
                           std::bit_and<typename PixelTraits::integer_type>>;
@@ -331,12 +332,12 @@ public:
 /**
  * Blend source and destination color with a given alpha value.
  */
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 using PortableAlphaPixelOperations =
   BinaryPerChannelOperations<PixelTraits,
                              PixelAlphaOperation<typename PixelTraits::channel_type>>;
 
-template<typename PT>
+template<AnyPixelTraits PT>
 struct NotWhiteCondition {
   using PixelTraits = PT;
   using color_type = typename PT::color_type;
@@ -346,12 +347,12 @@ struct NotWhiteCondition {
   }
 };
 
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 using NotWhiteAlphaPixelOperations =
   ConditionalPixelOperations<NotWhiteCondition<PixelTraits>,
                              PortableAlphaPixelOperations<PixelTraits>>;
 
-template<typename PT, typename SPT>
+template<AnyPixelTraits PT, AnyPixelTraits SPT>
 struct PixelOpaqueText {
   using PixelTraits = PT;
   using color_type = typename PixelTraits::color_type;
@@ -372,7 +373,7 @@ public:
   }
 };
 
-template<typename PixelTraits, typename SPT>
+template<AnyPixelTraits PixelTraits, AnyPixelTraits SPT>
 using OpaqueTextPixelOperations =
   UnaryPerPixelOperations<PixelOpaqueText<PixelTraits, SPT>>;
 
@@ -380,7 +381,7 @@ using OpaqueTextPixelOperations =
  * The input buffer contains alpha values, and each pixel is blended
  * using the alpha value, the existing color and the given color.
  */
-template<typename PT, typename SPT>
+template<AnyPixelTraits PT, AnyPixelTraits SPT>
 struct PixelColoredAlpha {
   using PixelTraits = PT;
   using color_type = typename PixelTraits::color_type;
@@ -403,7 +404,7 @@ public:
   }
 };
 
-template<typename PixelTraits, typename SPT>
+template<AnyPixelTraits PixelTraits, AnyPixelTraits SPT>
 using ColoredAlphaPixelOperations =
   BinaryPerPixelOperations<PixelColoredAlpha<PixelTraits, SPT>>;
 
@@ -411,7 +412,7 @@ using ColoredAlphaPixelOperations =
  * The input buffer contains alpha values, and each pixel is blended
  * using the alpha value between the two given colors.
  */
-template<typename PT, typename SPT>
+template<AnyPixelTraits PT, AnyPixelTraits SPT>
 struct PixelOpaqueAlpha {
   using PixelTraits = PT;
   using color_type = typename PixelTraits::color_type;
@@ -434,11 +435,11 @@ public:
   }
 };
 
-template<typename PixelTraits, typename SPT>
+template<typename PixelTraits, AnyPixelTraits SPT>
 using OpaqueAlphaPixelOperations =
   UnaryPerPixelOperations<PixelOpaqueAlpha<PixelTraits, SPT>>;
 
-template<typename PT>
+template<AnyPixelTraits PT>
 struct ColorKey {
   using PixelTraits = PT;
   using color_type = typename PixelTraits::color_type;
@@ -458,11 +459,11 @@ struct ColorKey {
  * Color keying: skip writing a pixel if the source color matches the
  * given color key.
  */
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 using PortableTransparentPixelOperations =
   ConditionalPixelOperations<ColorKey<PixelTraits>>;
 
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 class TransparentInvertPixelOperations
   : private PixelIntegerAdapter<PixelTraits,
                                 PixelBitNot<typename PixelTraits::integer_type>> {

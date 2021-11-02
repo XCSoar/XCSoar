@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PIXEL_TRAITS_HPP
 #define XCSOAR_SCREEN_PIXEL_TRAITS_HPP
 
+#include "Concepts.hpp"
 #include "ui/canvas/PortableColor.hpp"
 #include "util/ByteOrder.hxx"
 #include "util/Cast.hxx"
@@ -245,7 +246,7 @@ struct GreyscalePixelTraits {
    *
    * @param SPT the source pixel format
    */
-  template<typename SPT>
+  template<AnyPixelTraits SPT>
   struct Mixed {
     template<typename F>
     gcc_hot
