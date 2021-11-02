@@ -47,6 +47,8 @@ class SelectOptimisedPixelOperations
   : protected Optimised, protected Portable {
 public:
   using typename Portable::PixelTraits;
+  using typename Portable::SourcePixelTraits;
+
   using color_type = typename PixelTraits::color_type;
   using rpointer = typename PixelTraits::rpointer;
   using const_rpointer = typename PixelTraits::const_rpointer;
