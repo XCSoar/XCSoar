@@ -34,13 +34,13 @@ Copyright_License {
  */
 template<class WritePixelOperation>
 struct PerPixelOperations : private WritePixelOperation {
-  using PixelTraits = typename WritePixelOperation::PixelTraits;
+  using typename WritePixelOperation::PixelTraits;
   using pointer = typename PixelTraits::pointer;
   using rpointer = typename PixelTraits::rpointer;
   using const_pointer = typename PixelTraits::const_pointer;
   using color_type = typename PixelTraits::color_type;
 
-  using SourcePixelTraits = typename WritePixelOperation::SourcePixelTraits;
+  using typename WritePixelOperation::SourcePixelTraits;
   using source_color_type = typename SourcePixelTraits::color_type;
   using source_const_rpointer = typename SourcePixelTraits::const_rpointer;
 
@@ -69,10 +69,10 @@ struct PerPixelOperations : private WritePixelOperation {
 
 template<class Operation>
 struct UnaryWritePixel : private Operation {
-  using PixelTraits = typename Operation::PixelTraits;
+  using typename Operation::PixelTraits;
   using pointer = typename PixelTraits::pointer;
 
-  using SourcePixelTraits = typename Operation::SourcePixelTraits;
+  using typename Operation::SourcePixelTraits;
   using source_color_type = typename SourcePixelTraits::color_type;
 
   using Operation::Operation;
@@ -93,10 +93,10 @@ using UnaryPerPixelOperations =
 
 template<class Operation>
 struct BinaryWritePixel : private Operation {
-  using PixelTraits = typename Operation::PixelTraits;
+  using typename Operation::PixelTraits;
   using pointer = typename PixelTraits::pointer;
 
-  using SourcePixelTraits = typename Operation::SourcePixelTraits;
+  using typename Operation::SourcePixelTraits;
   using source_color_type = typename SourcePixelTraits::color_type;
 
   using Operation::Operation;
@@ -121,7 +121,7 @@ using BinaryPerPixelOperations =
  */
 template<typename Check, typename Operation=typename Check::PixelTraits>
 struct ConditionalWritePixel : private Check, private Operation {
-  using PixelTraits = typename Check::PixelTraits;
+  using typename Check::PixelTraits;
   using rpointer = typename PixelTraits::rpointer;
   using const_rpointer = typename PixelTraits::const_rpointer;
   using color_type = typename PixelTraits::color_type;
