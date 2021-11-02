@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PIXEL_OPERATIONS_HPP
 #define XCSOAR_SCREEN_PIXEL_OPERATIONS_HPP
 
+#include "../PortableColor.hpp"
+
 #include <functional>
 
 /**
