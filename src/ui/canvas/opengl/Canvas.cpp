@@ -412,8 +412,8 @@ static unsigned
 AngleToDonutVertex(Angle angle)
 {
   return GLDonutVertices::ImportAngle(NATIVE_TO_INT(angle.Native())
-                                      + ARRAY_SIZE(ISINETABLE) * 3u / 4u,
-                                      ARRAY_SIZE(ISINETABLE));
+                                      + ISINETABLE.size() * 3u / 4u,
+                                      ISINETABLE.size());
 }
 
 gcc_const
