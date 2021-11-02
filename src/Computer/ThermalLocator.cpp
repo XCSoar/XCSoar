@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "ThermalLocator.hpp"
+#include "ThermalRecency.hpp"
 #include "Geo/Math.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
-#include "Math/FastMath.hpp"
 #include "NMEA/ThermalLocator.hpp"
 
 #include <algorithm>

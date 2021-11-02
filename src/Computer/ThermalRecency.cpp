@@ -21,29 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MATH_FASTMATH_HPP
-#define XCSOAR_MATH_FASTMATH_HPP
+#include "ThermalRecency.hpp"
+#include "MathTables.h"
 
-/**
- * Compares a^2 + b^2 against c^2
- * Use this instead of hypot when comparing
- * @return 1 if a^2 + b^2 > c^2,
- *         0 if a^2 + b^2 = c^2,
- *        -1 if a^2 + b^2 < c^2,
- */
-[[gnu::const]]
-int
-compare_squared(int a, int b, int c) noexcept;
-
-[[gnu::const]]
-unsigned
-isqrt4(unsigned val) noexcept;
-
-[[gnu::const]]
-static inline unsigned
-ihypot(int x, int y) noexcept
+double
+thermal_recency_fn(unsigned x) noexcept
 {
-  return isqrt4(x * x + y * y);
+  return x < THERMALRECENCY_SIZE
+    ? THERMALRECENCY[x]
+    : 0.;
 }
-
-#endif

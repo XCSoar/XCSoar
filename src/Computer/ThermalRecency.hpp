@@ -34,3 +34,7 @@ thermal_fn(int x) noexcept
   return std::exp((-0.2 / ThermalLocator::TLOCATOR_NMAX)
                   * std::pow((double)x, 1.5));
 }
+
+[[gnu::const]]
+double
+thermal_recency_fn(unsigned x) noexcept;

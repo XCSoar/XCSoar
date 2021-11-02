@@ -354,6 +354,7 @@ TEST_REPLAY_TASK_DEPENDS = TASK ROUTE WAYPOINT GLIDE LIBNMEA GEO MATH IO OS UTIL
 $(eval $(call link-program,test_replay_task,TEST_REPLAY_TASK))
 
 TEST_MATH_TABLES_SOURCES = \
+	$(SRC)/Computer/ThermalRecency.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestMathTables.cpp
 TEST_MATH_TABLES_DEPENDS = MATH
