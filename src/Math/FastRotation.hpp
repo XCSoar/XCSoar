@@ -58,7 +58,7 @@ public:
     };
   }
 
-  template<typename P, typename=std::enable_if_t<std::is_base_of_v<Point, P>>>
+  template<AnyPoint2D P>
   constexpr P Rotate(P p) const noexcept {
     return Rotate(Point{p});
   }
@@ -113,7 +113,7 @@ public:
     };
   }
 
-  template<typename P, typename=std::enable_if_t<std::is_base_of_v<Point, P>>>
+  template<AnyPoint2D P>
   constexpr P Rotate(P p) const noexcept {
     return Rotate(Point{p});
   }
