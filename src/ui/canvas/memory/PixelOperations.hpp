@@ -44,11 +44,7 @@ struct PerPixelOperations : private WritePixelOperation {
   using source_color_type = typename SourcePixelTraits::color_type;
   using source_const_rpointer = typename SourcePixelTraits::const_rpointer;
 
-  PerPixelOperations() = default;
-
-  template<typename... Args>
-  explicit constexpr PerPixelOperations(Args&&... args)
-    :WritePixelOperation(std::forward<Args>(args)...) {}
+  using WritePixelOperation::WritePixelOperation;
 
   inline void WritePixel(pointer p, source_color_type c) const {
     WritePixelOperation::WritePixel(p, c);
@@ -79,11 +75,7 @@ struct UnaryWritePixel : private Operation {
   using SourcePixelTraits = typename Operation::SourcePixelTraits;
   using source_color_type = typename SourcePixelTraits::color_type;
 
-  UnaryWritePixel() = default;
-
-  template<typename... Args>
-  explicit constexpr UnaryWritePixel(Args&&... args)
-    :Operation(std::forward<Args>(args)...) {}
+  using Operation::Operation;
 
   inline void WritePixel(pointer p, source_color_type c) const {
     PixelTraits::WritePixel(p, (*this)(c));
@@ -107,11 +99,7 @@ struct BinaryWritePixel : private Operation {
   using SourcePixelTraits = typename Operation::SourcePixelTraits;
   using source_color_type = typename SourcePixelTraits::color_type;
 
-  BinaryWritePixel() = default;
-
-  template<typename... Args>
-  explicit constexpr BinaryWritePixel(Args&&... args)
-    :Operation(std::forward<Args>(args)...) {}
+  using Operation::Operation;
 
   inline void WritePixel(pointer p, source_color_type c) const {
     PixelTraits::WritePixel(p, (*this)(PixelTraits::ReadPixel(p), c));
@@ -176,11 +164,7 @@ struct PixelPerChannelAdapter : private Operation {
 
   using SourcePixelTraits = PixelTraits;
 
-  PixelPerChannelAdapter() = default;
-
-  template<typename... Args>
-  explicit constexpr PixelPerChannelAdapter(Args&&... args)
-    :Operation(std::forward<Args>(args)...) {}
+  using Operation::Operation;
 
   constexpr color_type operator()(color_type x) const {
     return PixelTraits::TransformChannels(x, [this](channel_type x) {
@@ -233,11 +217,7 @@ struct PixelIntegerAdapter : private Operation {
   using second_argument_type = color_type;
   using result_type = color_type;
 
-  PixelIntegerAdapter() = default;
-
-  template<typename... Args>
-  explicit constexpr PixelIntegerAdapter(Args&&... args)
-    :Operation(std::forward<Args>(args)...) {}
+  using Operation::Operation;
 
   constexpr result_type operator()(argument_type x) const {
     return PixelTraits::TransformInteger(x, [this](integer_type x) {
