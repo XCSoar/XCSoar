@@ -2,7 +2,7 @@ CXX_FEATURES = -std=c++20
 CXX_FEATURES += -fno-threadsafe-statics
 CXX_FEATURES += -fmerge-all-constants
 
-HOST_CXX_FEATURES := $(CXX_FEATURES)
+HOST_CXX_FEATURES := -std=c++17
 
 ifeq ($(CLANG),n)
 CXX_FEATURES += -fcoroutines
