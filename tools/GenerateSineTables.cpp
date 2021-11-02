@@ -35,9 +35,8 @@ main(int argc, char **argv)
   }
   puts("};");
 
-  printf("#define THERMALRECENCY_SIZE %d\n", ThermalLocator::TLOCATOR_NMAX);
-  printf("const std::array<double, %d> THERMALRECENCY{\n", ThermalLocator::TLOCATOR_NMAX);
-  for (unsigned i = 0; i < ThermalLocator::TLOCATOR_NMAX; i++)
+  printf("const std::array<double, %d> THERMALRECENCY{\n", THERMALRECENCY_SIZE);
+  for (unsigned i = 0; i < THERMALRECENCY_SIZE; i++)
     printf("  %.20e,\n", thermal_fn(i));
   puts("};");
 

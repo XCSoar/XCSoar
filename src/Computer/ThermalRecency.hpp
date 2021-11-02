@@ -23,15 +23,15 @@ Copyright_License {
 
 #pragma once
 
-#include "ThermalLocator.hpp"
-
 #include <cmath>
+
+constexpr unsigned THERMALRECENCY_SIZE = 60;
 
 [[gnu::const]]
 static inline double
 thermal_fn(int x) noexcept
 {
-  return std::exp((-0.2 / ThermalLocator::TLOCATOR_NMAX)
+  return std::exp((-0.2 / THERMALRECENCY_SIZE)
                   * std::pow((double)x, 1.5));
 }
 

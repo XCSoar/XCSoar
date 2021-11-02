@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef THERMALLOCATOR_H
 #define THERMALLOCATOR_H
 
+#include "ThermalRecency.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/Flat/FlatPoint.hpp"
 #include "time/Stamp.hpp"
@@ -41,7 +42,7 @@ struct ThermalLocatorInfo;
 class ThermalLocator {
 public:
   static constexpr unsigned TLOCATOR_NMIN = 5;
-  static constexpr unsigned TLOCATOR_NMAX = 60;
+  static constexpr unsigned TLOCATOR_NMAX = THERMALRECENCY_SIZE;
 
 private:
   /** Class used to hold thermal estimate samples */
