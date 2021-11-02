@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2021 The XCSoar Project
@@ -20,17 +21,16 @@
 }
 */
 
-#include "Math/FastMath.hpp"
-#include "Computer/ThermalRecency.hpp"
-#include "TestUtil.hpp"
+#pragma once
 
-int main(int argc, char **argv)
+#include "ThermalLocator.hpp"
+
+#include <cmath>
+
+[[gnu::const]]
+static inline double
+thermal_fn(int x) noexcept
 {
-  plan_tests(ThermalLocator::TLOCATOR_NMAX);
-
-  for (unsigned i = 0; i < ThermalLocator::TLOCATOR_NMAX; ++i)
-    ok1((int)(thermal_fn(i) * 1024 * 1024) ==
-        (int)(thermal_recency_fn(i) * 1024 * 1024));
-
-  return exit_status();
+  return std::exp((-0.2 / ThermalLocator::TLOCATOR_NMAX)
+                  * std::pow((double)x, 1.5));
 }

@@ -1,15 +1,9 @@
 #include "Math/Constants.hpp"
 #include "Math/FastTrig.hpp"
-#include "Computer/ThermalLocator.hpp"
+#include "Computer/ThermalRecency.hpp"
 
 #include <math.h>
 #include <stdio.h>
-
-static inline double
-thermal_fn(int x)
-{
-  return exp((-0.2/ThermalLocator::TLOCATOR_NMAX)*pow((double)x, 1.5));
-}
 
 int
 main(int argc, char **argv)
