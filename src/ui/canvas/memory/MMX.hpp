@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_MMX_HPP
 #define XCSOAR_SCREEN_MMX_HPP
 
+#include "PixelTraits.hpp"
 #include "ui/canvas/PortableColor.hpp"
 
 #ifndef __MMX__
@@ -110,6 +111,9 @@ public:
 
 class MMXAlpha8PixelOperations : MMXAlphaPixelOperations {
 public:
+  using PixelTraits = GreyscalePixelTraits;
+  using SourcePixelTraits = GreyscalePixelTraits;
+
   using MMXAlphaPixelOperations::MMXAlphaPixelOperations;
 
   gcc_hot gcc_flatten gcc_nonnull_all
@@ -129,6 +133,9 @@ public:
 
 class MMXAlpha32PixelOperations : MMXAlphaPixelOperations {
 public:
+  using PixelTraits = BGRAPixelTraits;
+  using SourcePixelTraits = BGRAPixelTraits;
+
   using MMXAlphaPixelOperations::MMXAlphaPixelOperations;
 
   gcc_hot
