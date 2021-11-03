@@ -144,7 +144,7 @@ public:
 
 template<>
 class AlphaPixelOperations<GreyscalePixelTraits>
-  : public SelectOptimisedPixelOperations<MMXAlphaPixelOperations, 8,
+  : public SelectOptimisedPixelOperations<MMXAlpha8PixelOperations, 8,
                                           PortableAlphaPixelOperations<GreyscalePixelTraits>> {
 public:
   explicit constexpr AlphaPixelOperations(const uint8_t alpha)
@@ -155,7 +155,7 @@ public:
 
 template<>
 class AlphaPixelOperations<BGRAPixelTraits>
-  : public SelectOptimisedPixelOperations<MMXAlphaPixelOperations, 2,
+  : public SelectOptimisedPixelOperations<MMXAlpha32PixelOperations, 2,
                                           PortableAlphaPixelOperations<BGRAPixelTraits>> {
 public:
   explicit constexpr AlphaPixelOperations(const uint8_t alpha)
