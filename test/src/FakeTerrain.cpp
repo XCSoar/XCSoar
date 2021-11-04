@@ -36,7 +36,7 @@ RasterMap::GroundIntersection(const GeoPoint &origin,
                               const GeoPoint &destination,
                               const int height_floor) const noexcept
 {
-  return GeoPoint(Angle::Zero(), Angle::Zero());
+  return GeoPoint::Invalid();
 }
 
 bool
