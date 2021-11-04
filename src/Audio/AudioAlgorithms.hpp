@@ -61,7 +61,7 @@ inline void UpmixMonoPCM(T *pcm_stream_buffer, size_t num_mono_frames,
  * Convert an int32_t value to int16_t and perform clipping on
  * overflow / underflow.
  */
-inline int16_t Clip(int32_t value) {
+constexpr int16_t Clip(int32_t value) noexcept {
   return static_cast<int16_t>(
       std::clamp(
           value,
