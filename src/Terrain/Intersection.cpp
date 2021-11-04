@@ -32,26 +32,23 @@ Copyright_License {
 #include <stdio.h>
 #endif
 
-bool
+std::optional<RasterTileCache::Intersection>
 RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
                                    const SignedRasterLocation destination,
                                    int h_origin,
                                    int h_dest,
                                    const int slope_fact, const int h_ceiling,
                                    const int h_safety,
-                                   RasterLocation &_location, int &_h,
                                    const bool can_climb) const noexcept
 {
   RasterLocation location = origin;
   if (!IsInside(location))
     // origin is outside overall bounds
-    return false;
+    return std::nullopt;
 
   const TerrainHeight h_origin2 = GetFieldDirect(location).first;
   if (h_origin2.IsInvalid()) {
-    _location = location;
-    _h = h_origin;
-    return true;
+    return {{location, h_origin}};
   }
 
   if (!h_origin2.IsSpecial())
@@ -96,9 +93,7 @@ RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
 #ifdef DEBUG_TILE
     printf("# fint start above ceiling %d %d\n", h_origin, h_ceiling);
 #endif
-    _location = location;
-    _h = h_origin;
-    return true;
+    return {{location, h_origin}};
   }
 
 #ifdef DEBUG_TILE
@@ -160,12 +155,11 @@ RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
       }
 
       if (h_int > h_ceiling) {
-        _location = last_clear_location;
-        _h = last_clear_h;
 #ifdef DEBUG_TILE
         printf("# fint reach ceiling\n");
 #endif
-        return true; // reached ceiling
+        // reached ceiling
+        return {{last_clear_location, last_clear_h}};
       }
 
       if (!this_intersecting) {
@@ -178,9 +172,7 @@ RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
           printf("# fint int->clear\n");
 #endif
           if (intersect_counter >= intersect_steps) {
-            _location = location;
-            _h = h_int;
-            return true;
+            return {{location, h_int}};
           }
         } else {
           last_clear_location = location;
@@ -193,7 +185,7 @@ RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
 #ifdef DEBUG_TILE
       printf("# fint cleared\n");
 #endif
-      return false;
+      return std::nullopt;
     }
 
     const int e2 = 2*err;
@@ -215,14 +207,12 @@ RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
 
   // early exit due to inability to find clearance after intersecting
   if (intersect_counter) {
-    _location = last_clear_location;
-    _h = last_clear_h;
 #ifdef DEBUG_TILE
     printf("# fint early exit\n");
 #endif
-    return true;
+    return {{last_clear_location, last_clear_h}};
   }
-  return false;
+  return std::nullopt;
 }
 
 inline std::pair<TerrainHeight, bool>

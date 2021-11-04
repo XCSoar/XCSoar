@@ -113,20 +113,20 @@ RoutePolars::CheckClearance(const RouteLink &e, const RasterMap* map,
   if (!config.IsTerrainEnabled())
     return true;
 
-  GeoPoint int_x;
-  int int_h;
   GeoPoint start = proj.Unproject(e.first);
   GeoPoint dest = proj.Unproject(e.second);
 
   assert(map);
 
-  if (!map->FirstIntersection(start, e.first.altitude, dest,
-                              e.second.altitude, CalcVHeight(e),
-                              climb_ceiling, GetSafetyHeight(),
-                              int_x, int_h))
+  const auto intersection =
+    map->FirstIntersection(start, e.first.altitude, dest,
+                           e.second.altitude, CalcVHeight(e),
+                           climb_ceiling, GetSafetyHeight());
+  if (!intersection)
     return true;
 
-  inp = RoutePoint(proj.ProjectInteger(int_x), int_h);
+  inp = RoutePoint(proj.ProjectInteger(intersection.location),
+                   intersection.height);
   return false;
 }
 

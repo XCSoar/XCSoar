@@ -124,11 +124,24 @@ public:
                 TerrainHeight *buffer, unsigned size,
                 bool interpolate) const noexcept;
 
+  struct Intersection {
+    GeoPoint location;
+    int height;
+
+    constexpr operator bool() const noexcept {
+      return location.IsValid();
+    }
+
+    static constexpr Intersection Invalid() noexcept {
+      return {GeoPoint::Invalid(), 0};
+    }
+  };
+
   [[gnu::pure]]
-  bool FirstIntersection(const GeoPoint &origin, int h_origin,
-                         const GeoPoint &destination, int h_destination,
-                         int h_virt, int h_ceiling, int h_safety,
-                         GeoPoint& intx, int &h) const noexcept;
+  Intersection FirstIntersection(const GeoPoint &origin, int h_origin,
+                                 const GeoPoint &destination,
+                                 int h_destination,
+                                 int h_virt, int h_ceiling, int h_safety) const noexcept;
 
   /**
    * Find location where aircraft hits the ground or height_floor
