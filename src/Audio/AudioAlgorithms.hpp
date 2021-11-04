@@ -31,6 +31,7 @@ Copyright_License {
 #include <limits>
 #include <type_traits>
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -62,10 +63,9 @@ inline void UpmixMonoPCM(T *pcm_stream_buffer, size_t num_mono_frames,
  */
 inline int16_t Clip(int32_t value) {
   return static_cast<int16_t>(
-      std::min(
-          std::max(
-              value,
-              static_cast<int32_t>(std::numeric_limits<int16_t>::min())),
+      std::clamp(
+          value,
+          static_cast<int32_t>(std::numeric_limits<int16_t>::min()),
           static_cast<int32_t>(std::numeric_limits<int16_t>::max())));
 }
 
