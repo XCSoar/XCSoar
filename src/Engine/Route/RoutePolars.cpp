@@ -229,10 +229,10 @@ RoutePolars::Intersection(const AGeoPoint &origin,
   if (e.d <= 0)
     return GeoPoint::Invalid();
 
-  return map->Intersection(origin,
-                           origin.altitude - GetSafetyHeight(),
-                           CalcVHeight(e), destination,
-                           height_min_working);
+  return map->GroundIntersection(origin,
+                                 origin.altitude - GetSafetyHeight(),
+                                 CalcVHeight(e), destination,
+                                 height_min_working);
 }
 
 int
@@ -259,8 +259,8 @@ RoutePolars::ReachIntercept(const int index, const AFlatGeoPoint &flat_origin,
     return flat_dest;
 
   const GeoPoint dest = proj.Unproject(flat_dest);
-  const GeoPoint p = map->Intersection(origin, altitude,
-                                       altitude, dest, height_min_working);
+  const GeoPoint p = map->GroundIntersection(origin, altitude,
+                                             altitude, dest, height_min_working);
 
   if (!p.IsValid())
     return flat_dest;

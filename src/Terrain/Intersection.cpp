@@ -252,11 +252,11 @@ RasterTileCache::GetFieldDirect(RasterLocation p) const noexcept
 }
 
 SignedRasterLocation
-RasterTileCache::Intersection(const SignedRasterLocation origin,
-                              const SignedRasterLocation destination,
-                              const int h_origin,
-                              const int slope_fact,
-                              const int height_floor) const noexcept
+RasterTileCache::GroundIntersection(const SignedRasterLocation origin,
+                                    const SignedRasterLocation destination,
+                                    const int h_origin,
+                                    const int slope_fact,
+                                    const int height_floor) const noexcept
 {
   SignedRasterLocation location = origin;
 
@@ -322,8 +322,8 @@ RasterTileCache::Intersection(const SignedRasterLocation origin,
           return RasterLocation(last_clear_location.x, last_clear_location.y);
 
         // refine solution
-        return Intersection(last_clear_location, location,
-                            last_clear_h, slope_fact, height_floor);
+        return GroundIntersection(last_clear_location, location,
+                                  last_clear_h, slope_fact, height_floor);
       }
 
       if (h_int <= 0)

@@ -145,10 +145,10 @@ public:
    * was found
    */
   [[gnu::pure]]
-  GeoPoint Intersection(const GeoPoint& origin,
-                        int h_origin, int h_glide,
-                        const GeoPoint& destination,
-                        const int height_floor) const noexcept;
+  GeoPoint GroundIntersection(const GeoPoint &origin,
+                              int h_origin, int h_glide,
+                              const GeoPoint &destination,
+                              const int height_floor) const noexcept;
 };
 
 

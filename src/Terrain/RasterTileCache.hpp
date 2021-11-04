@@ -194,9 +194,10 @@ public:
    * @return {-1,-1} if no intersection was found
    */
   gcc_pure SignedRasterLocation
-  Intersection(SignedRasterLocation origin, SignedRasterLocation destination,
-               int h_origin, const int slope_fact,
-               int height_floor) const noexcept;
+  GroundIntersection(SignedRasterLocation origin,
+                     SignedRasterLocation destination,
+                     int h_origin, const int slope_fact,
+                     int height_floor) const noexcept;
 
 private:
   /**
