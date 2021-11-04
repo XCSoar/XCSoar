@@ -308,7 +308,8 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
     input.Strip();
 
     if (IsDigitASCII(input.front())) {
-      input.ReadDouble(value);
+      if (auto x = input.ReadDouble())
+        value = *x;
     } else if (input.SkipMatchIgnoreCase(_T("GND"), 3) ||
                input.SkipMatchIgnoreCase(_T("AGL"), 3)) {
       type = AGL;
@@ -395,22 +396,25 @@ static Angle
 ReadNonNegativeAngle(StringParser<TCHAR> &input, double max_degrees)
 {
   double degrees;
-  if (!input.ReadDouble(degrees) || degrees < 0 || degrees > max_degrees)
+
+  if (auto x = input.ReadDouble(); x && *x >= 0 && *x <= max_degrees)
+    degrees = *x;
+  else
     throw std::runtime_error("Bad angle");
 
   if (input.SkipMatch(':')) {
-    double minutes;
-    if (!input.ReadDouble(minutes) || minutes < 0 || minutes > 60)
+    if (auto minutes = input.ReadDouble();
+        minutes && *minutes >= 0 && *minutes <= 60)
+      degrees += *minutes / 60;
+    else
       throw std::runtime_error("Bad angle");
 
-    degrees += minutes / 60;
-
     if (input.SkipMatch(':')) {
-      double seconds;
-      if (!input.ReadDouble(seconds) || seconds < 0 || seconds > 60)
+      if (auto seconds = input.ReadDouble();
+          seconds && *seconds >= 0 && *seconds <= 60)
+        degrees += *seconds / 3600;
+      else
         throw std::runtime_error("Bad angle");
-
-      degrees += seconds / 3600;
     }
   }
 
@@ -453,11 +457,20 @@ ReadCoords(StringParser<TCHAR> &input)
 static Angle
 ParseBearingDegrees(StringParser<TCHAR> &input)
 {
-  double value;
-  if (!input.ReadDouble(value) || value < 0 || value > 361)
-      throw std::runtime_error("Bad angle");
+  if (auto value = input.ReadDouble(); value && *value >= 0 && *value <= 361)
+    return Angle::Degrees(*value).AsBearing();
+  else
+    throw std::runtime_error("Bad angle");
+}
 
-  return Angle::Degrees(value).AsBearing();
+static double
+ParseRadiusNM(StringParser<TCHAR> &input)
+{
+  if (auto radius = input.ReadDouble();
+      radius && *radius > 0 && *radius <= 1000)
+    return Units::ToSysUnit(*radius, Unit::NAUTICAL_MILES);
+  else
+    throw std::runtime_error("Bad radius");
 }
 
 /**
@@ -468,11 +481,7 @@ ParseArcBearings(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
 {
   // Determine radius and start/end bearing
 
-  double radius;
-  if (!input.ReadDouble(radius) || radius <= 0 || radius > 1000)
-      throw std::runtime_error("Bad radius");
-
-  temp_area.radius = Units::ToSysUnit(radius, Unit::NAUTICAL_MILES);
+  temp_area.radius = ParseRadiusNM(input);
 
   input.Strip();
   if (!input.SkipMatch(','))
@@ -527,8 +536,6 @@ static void
 ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
           TempAirspaceType &temp_area)
 {
-  double d;
-
   // Only return expected lines
   switch (input.pop_front()) {
   case _T('D'):
@@ -544,10 +551,7 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
 
     case _T('C'):
     case _T('c'):
-      if (!input.ReadDouble(d) || d < 0 || d > 1000)
-        throw std::runtime_error("Bad radius");
-
-      temp_area.radius = Units::ToSysUnit(d, Unit::NAUTICAL_MILES);
+      temp_area.radius = ParseRadiusNM(input);
       temp_area.AddCircle(airspace_database);
       temp_area.Reset();
       break;
@@ -676,7 +680,10 @@ static Angle
 ReadNonNegativeAngleTNP(StringParser<TCHAR> &input, unsigned max_degrees)
 {
   unsigned deg, min, sec;
-  if (!input.ReadUnsigned(sec))
+
+  if (auto _sec = input.ReadUnsigned())
+    sec = *_sec;
+  else
     throw std::runtime_error("Bad angle");
 
   deg = sec / 10000;
@@ -768,11 +775,7 @@ ParseCircleTNP(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
   if (!input.SkipMatchIgnoreCase(_T("RADIUS="), 7))
     throw std::runtime_error("RADIUS=... expected");
 
-  double radius;
-  if (!input.ReadDouble(radius) || radius <= 0 || radius > 1000)
-    throw std::runtime_error("Bad radius");
-
-  temp_area.radius = Units::ToSysUnit(radius, Unit::NAUTICAL_MILES);
+  temp_area.radius = ParseRadiusNM(input);
 
   if (!input.SkipMatchIgnoreCase(_T(" CENTRE="), 8))
     throw std::runtime_error("CENTRE=... expected");

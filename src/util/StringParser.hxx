@@ -34,6 +34,8 @@
 #include "NumberParser.hpp"
 #include "StringStrip.hxx"
 
+#include <optional>
+
 /**
  * Parse a string incrementally.
  */
@@ -76,26 +78,24 @@ public:
 		p = ::StripLeft(p);
 	}
 
-	bool ReadUnsigned(unsigned &value_r, int base=10) {
+	std::optional<unsigned> ReadUnsigned(int base=10) noexcept {
 		pointer endptr;
 		const auto value = ::ParseUnsigned(p, &endptr, base);
 		if (endptr == p)
-			return false;
+			return std::nullopt;
 
-		value_r = value;
 		p = endptr;
-		return true;
+		return value;
 	}
 
-	bool ReadDouble(double &value_r) {
+	std::optional<double> ReadDouble() noexcept {
 		pointer endptr;
 		const auto value = ::ParseDouble(p, &endptr);
 		if (endptr == p)
-			return false;
+			return std::nullopt;
 
-		value_r = value;
 		p = endptr;
-		return true;
+		return value;
 	}
 
 	gcc_pure
