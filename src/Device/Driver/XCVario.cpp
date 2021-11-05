@@ -199,7 +199,7 @@ XVCDevice::PutBallast(double fraction, gcc_unused double overload,
   /* the XCVario understands CAI302 like command for ballast "!g,b" with
      float precision */
    char buffer[32];
-   float ballast = fraction * 10.;
+   double ballast = fraction * 10.;
    int msg_len = sprintf(buffer,"!g,b%.3f\r", ballast );
    return port.FullWrite(buffer, msg_len, env, std::chrono::seconds(2) );
 }
