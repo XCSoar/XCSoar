@@ -104,11 +104,11 @@ PBB50(NMEAInputLine &line, NMEAInfo &info)
   // inclimb/incruise 1=cruise,0=climb, OAT
   switch (line.Read(-1)) {
   case 0:
-    info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;
+    info.switch_state.flight_mode = SwitchState::FlightMode::CIRCLING;
     break;
 
   case 1:
-    info.switch_state.flight_mode = SwitchState::FlightMode::CIRCLING;
+    info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;
     break;
   }
 
