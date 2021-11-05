@@ -353,7 +353,7 @@ TestBorgeltB50()
   ok1(equals(nmea_info.settings.bugs, 0.9));
   ok1(nmea_info.settings.ballast_overload_available);
   ok1(equals(nmea_info.settings.ballast_overload, 1.3));
-  ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::CIRCLING);
+  ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::CRUISE);
   ok1(nmea_info.temperature_available);
   ok1(equals(nmea_info.temperature.ToKelvin(), 245.15));
 
