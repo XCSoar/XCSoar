@@ -305,10 +305,10 @@ protected:
 
 	struct LeafList {
 		/* a linked list of values, or nullptr if this is a splitted bucket */
-		Leaf *head;
-		unsigned size;
+		Leaf *head = nullptr;
+		unsigned size = 0;
 
-		LeafList() noexcept:head(nullptr), size(0) {}
+		constexpr LeafList() noexcept = default;
 
 		~LeafList() noexcept {
 			assert(head == nullptr);
