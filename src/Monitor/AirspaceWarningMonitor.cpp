@@ -37,7 +37,7 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/TimeFormatter.hpp"
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 /* this warning is bogus because GCC is not clever enough to
    understand that the "state" variable in Check() only gets evaluated
    if it has been initialised */

@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <stdio.h>
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 /* this warning is bogus because GCC is not clever enough to
    understand that the "last_value" variable only gets evaluated after
    it has been initialised */
