@@ -1063,7 +1063,7 @@ public:
 
 		Leaf *leaf = leaf_allocator.allocate(1);
 		std::allocator_traits<LeafAllocator>::construct(leaf_allocator,
-								leaf, Leaf(std::forward<U>(value)));
+								leaf, std::forward<U>(value));
 
 		root.AddHere(leaf);
 
@@ -1083,7 +1083,7 @@ public:
 
 		Leaf *leaf = leaf_allocator.allocate(1);
 		std::allocator_traits<LeafAllocator>::construct(leaf_allocator,
-								leaf, Leaf(std::forward<U>(value)));
+								leaf, std::forward<U>(value));
 
 		bounds.Scan(GetPosition(leaf->value));
 		root.AddHere(leaf);
@@ -1103,7 +1103,7 @@ public:
 
 		Leaf *leaf = leaf_allocator.allocate(1);
 		std::allocator_traits<LeafAllocator>::construct(leaf_allocator,
-								leaf, Leaf(std::forward<U>(value)));
+								leaf, std::forward<U>(value));
 
 		Rectangle bounds = this->bounds;
 		root.Add(bounds, leaf, bucket_allocator);
