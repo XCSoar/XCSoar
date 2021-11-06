@@ -37,6 +37,13 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/TimeFormatter.hpp"
 
+#ifdef __GNUC__
+/* this warning is bogus because GCC is not clever enough to
+   understand that the "state" variable in Check() only gets evaluated
+   if it has been initialised */
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+
 class AirspaceWarningWidget final
   : public QuestionWidget {
 

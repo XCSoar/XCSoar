@@ -24,6 +24,13 @@ Copyright_License {
 #define ENABLE_SCREEN
 #define ENABLE_BUTTON_LOOK
 
+#ifdef __GNUC__
+/* this warning is bogus because GCC is not clever enough to
+   understand that the switch/case in paint() always initialises the
+   "label" variable */
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+
 #include "Main.hpp"
 #include "Math/Angle.hpp"
 #include "ui/window/SingleWindow.hpp"
