@@ -9,7 +9,9 @@ CXX_WARNINGS += -Wmissing-noreturn
 CXX_WARNINGS += -Wvla
 
 # these warnings are not helpful
+ifeq ($(CLANG),n)
 CXX_WARNINGS += -Wno-format-truncation
+endif
 
 # disable some warnings, we're not ready for them yet
 CXX_WARNINGS += -Wno-unused-parameter
