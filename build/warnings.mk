@@ -8,6 +8,9 @@ CXX_WARNINGS = $(WARNINGS)
 CXX_WARNINGS += -Wmissing-noreturn
 CXX_WARNINGS += -Wvla
 
+# these warnings are not helpful
+CXX_WARNINGS += -Wno-format-truncation
+
 # disable some warnings, we're not ready for them yet
 CXX_WARNINGS += -Wno-unused-parameter
 CXX_WARNINGS += -Wno-missing-field-initializers
