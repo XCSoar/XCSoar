@@ -45,7 +45,7 @@ TriangulateAll(const TopographyFile &file)
 {
   const std::lock_guard<Mutex> lock(file.mutex);
 
-  const uint16_t *dummy;
+  const uint16_t *dummy = nullptr;
   for (const XShape &shape : file)
     if (shape.get_type() == MS_SHAPE_POLYGON)
       for (unsigned i = 0; i < 4; ++i)
