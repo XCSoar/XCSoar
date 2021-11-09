@@ -198,7 +198,7 @@ InfoBoxContentWindArrow::Update(InfoBoxData &data) noexcept
   TCHAR speed_buffer[16];
   FormatUserWindSpeed(info.wind.norm, speed_buffer, true, false);
 
-  StaticString<32> buffer;
+  StaticString<36> buffer;
   buffer.Format(_T("%s / %s"),
                 FormatBearing(info.wind.bearing).c_str(),
                 speed_buffer);

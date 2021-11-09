@@ -259,7 +259,7 @@ WaypointFilterWidget::Update(Angle _last_heading)
   DataFieldEnum &direction_df = *(DataFieldEnum *)
     direction_control.GetDataField();
 
-  TCHAR buffer[12];
+  TCHAR buffer[22];
   direction_df.replaceEnumText(1, GetDirectionData(buffer, ARRAY_SIZE(buffer),
                                                    1, last_heading));
   direction_control.RefreshDisplay();
@@ -348,7 +348,7 @@ CreateDistanceDataField(DataFieldListener *listener)
   DataFieldEnum *df = new DataFieldEnum(listener);
   df->addEnumText(_T("*"));
 
-  TCHAR buffer[15];
+  TCHAR buffer[22];
   for (unsigned i = 1; i < ARRAY_SIZE(distance_filter_items); i++) {
     FormatUserDistance(Units::ToSysDistance(distance_filter_items[i]),
                        buffer);
@@ -362,7 +362,7 @@ CreateDistanceDataField(DataFieldListener *listener)
 static DataField *
 CreateDirectionDataField(DataFieldListener *listener, Angle last_heading)
 {
-  TCHAR buffer[12];
+  TCHAR buffer[22];
   DataFieldEnum *df = new DataFieldEnum(listener);
   for (unsigned i = 0; i < ARRAY_SIZE(direction_filter_items); i++)
     df->addEnumText(GetDirectionData(buffer, ARRAY_SIZE(buffer), i,
