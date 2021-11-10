@@ -1,6 +1,8 @@
 Version 7.21 - not yet released
 * data files
   - Support for AF/AR frequency fields in OpenAir 
+* user interface
+  - new input event allows returning to waypoint list from waypoint details.
 
 Version 7.20 - 2021/10/22
 * map
