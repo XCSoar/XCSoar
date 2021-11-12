@@ -26,6 +26,13 @@ Copyright_License {
 
 #include "Airspaces.hpp"
 
+#if defined(__GNUC__) && !defined(__clang__)
+/* this warning is bogus because GCC is not clever enough to
+   understand that NearestAirspace::distance is always valid when also
+   NearestAirspace::airspace != nullptr */
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+
 template<typename Predicate, typename Func,
          typename Result=decltype(((Func *)nullptr)->operator()(ConstAirspacePtr{})),
          class Cmp=std::less<Result>>
