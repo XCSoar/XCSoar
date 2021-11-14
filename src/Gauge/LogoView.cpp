@@ -152,6 +152,8 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc) noexcept
     title_position.x = 0;
     title_position.y = 0;
     break;
+  default:
+    gcc_unreachable();
   }
 
   // Draw 'XCSoar N.N' title

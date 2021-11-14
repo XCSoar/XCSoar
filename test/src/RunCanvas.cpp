@@ -170,6 +170,9 @@ private:
       canvas.DrawPolygon(p2, 3);
       label = _T("huge polygon");
       break;
+
+    default:
+      gcc_unreachable();
     }
 
     canvas.SetTextColor(Color(0, 0, 128));
