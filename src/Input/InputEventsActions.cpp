@@ -613,7 +613,7 @@ InputEvents::eventRun(const TCHAR *misc)
   ::CloseHandle(pi.hThread);
 
   #elif !defined(__APPLE__) || !TARGET_OS_IPHONE
-  system(misc);
+  if (system(misc)) {;} // Ignore return value
   #endif
 }
 

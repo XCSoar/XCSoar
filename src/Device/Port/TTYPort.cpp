@@ -199,7 +199,7 @@ TTYPort::Open(const TCHAR *path, unsigned baud_rate)
        USB serial adapter; this is mostly relevant to the Nook */
     TCHAR command[MAX_PATH];
     StringFormat(command, MAX_PATH, "su -c 'chmod 666 %s'", path);
-    system(command);
+    if(system(command)) {;} // Ignore return value
   }
 #endif
 
