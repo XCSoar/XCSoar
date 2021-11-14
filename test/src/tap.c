@@ -91,7 +91,7 @@ _gen_result(int ok, const char *func, const char *file, unsigned int line,
 	if(test_name != NULL) {
 #ifdef HAVE_VASPRINTF
 		va_start(ap, test_name);
-		vasprintf(&local_test_name, test_name, ap);
+		(void) vasprintf(&local_test_name, test_name, ap); // Ignore return value
 		va_end(ap);
 #else
                 (void)ap;
@@ -332,7 +332,7 @@ skip(unsigned int n, unsigned int ok, const char *fmt, ...)
 
 #ifdef HAVE_VASPRINTF
   va_start(ap, fmt);
-  asprintf(&skip_msg, fmt, ap);
+  (void) asprintf(&skip_msg, fmt, ap); // Ignore return value
   va_end(ap);
 #else
 #define skip_msg fmt
@@ -371,7 +371,7 @@ todo_start(char *fmt, ...)
 
 #ifdef HAVE_VASPRINTF
 	va_start(ap, fmt);
-	vasprintf(&todo_msg, fmt, ap);
+	(void) vasprintf(&todo_msg, fmt, ap); // Ignore return value
 	va_end(ap);
 #else
         (void)ap;
