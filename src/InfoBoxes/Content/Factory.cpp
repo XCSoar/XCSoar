@@ -201,7 +201,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Last thermal gain"),
     N_("TL Gain"),
-    N_("Total altitude gain/loss in the last thermal."),
+    N_("Total altitude gain/loss in the last thermal. The number in smaller font reflects the overall climb rate for the last thermal."),
     UpdateInfoBoxThermalLastGain,
   },
 
