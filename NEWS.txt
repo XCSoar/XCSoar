@@ -1,4 +1,6 @@
 Version 7.43 - not yet released
+* ui
+  - TC 30s Infobox shows now climb rate since start of thermal
 * windows
  - black text color in airspace list like all other systems
 * Kobo
