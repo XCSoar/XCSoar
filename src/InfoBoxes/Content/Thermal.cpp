@@ -140,6 +140,12 @@ UpdateInfoBoxThermalGain(InfoBoxData &data) noexcept
   }
 
   data.SetValueFromAltitude(thermal.gain);
+
+  StaticString<16> duration_buffer;
+  duration_buffer.Format(_T("%u s"),std::chrono::duration_cast<std::chrono::seconds>(thermal.duration));
+  TCHAR buffer[32];
+  _tcscpy (buffer, duration_buffer);
+  data.SetComment (buffer);
 }
 
 void
