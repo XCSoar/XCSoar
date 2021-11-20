@@ -62,6 +62,7 @@ UpdateInfoBoxThermal30s(InfoBoxData &data) noexcept
   // Set Color (red/black)
   data.SetValueColor(2 * CommonInterface::Calculated().average <
       CommonInterface::Calculated().common_stats.current_risk_mc ? 1 : 0);
+  data.SetCommentFromVerticalSpeed(CommonInterface::Calculated().current_thermal.lift_rate);
 }
 
 void
