@@ -67,6 +67,7 @@ UpdateInfoBoxThermalLastGain(InfoBoxData &data) noexcept
   }
 
   data.SetValueFromAltitude(thermal.gain);
+  data.SetCommentFromVerticalSpeed(thermal.lift_rate);
 }
 
 void
