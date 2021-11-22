@@ -24,7 +24,9 @@ package org.xcsoar;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.KeyEvent;
@@ -270,11 +272,20 @@ public class XCSoar extends Activity {
        is not enough */
 
     if (!hasAllPermissions()) {
-      try {
-        this.requestPermissions(NEEDED_PERMISSIONS, 0);
-      } catch (IllegalArgumentException e) {
-        Log.e(TAG, "could not request permissions: " + String.join(", ", NEEDED_PERMISSIONS), e);
-      }
+      new AlertDialog.Builder(this)
+        .setTitle("Location Permission")
+        .setMessage("XCSoar needs to collect location data to enable live navigation calculation and IGC logger, even when the app is in the background")
+        .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              try {
+                XCSoar.this.requestPermissions(NEEDED_PERMISSIONS, 0);
+              } catch (IllegalArgumentException e) {
+                Log.e(TAG, "could not request permissions: " + String.join(", ", NEEDED_PERMISSIONS), e);
+              }
+            }
+        })
+        .show();
     }
   }
 
