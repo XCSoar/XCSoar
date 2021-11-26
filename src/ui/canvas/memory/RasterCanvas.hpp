@@ -58,6 +58,7 @@ class RasterCanvas : private PixelTraits {
   using PixelTraits::ForVertical;
 
 public:
+  using Point = PixelPoint;
   using typename PixelTraits::color_type;
 
 private:

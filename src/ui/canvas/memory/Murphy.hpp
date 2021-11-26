@@ -37,6 +37,8 @@ Copyright_License {
  */
 template<typename Canvas>
 struct MurphyIterator {
+  using Point = typename Canvas::Point;
+
   Canvas &canvas;
   const typename Canvas::color_type color;
   const unsigned line_mask;
@@ -171,7 +173,7 @@ public:
         canvas.DrawPixel(b.x, b.y, color);
       } while (b.Next());
 
-      const PixelPoint p[4] = {
+      const Point p[4] = {
         { (int)m1x, (int)m1y },
         { (int)m2x, (int)m2y },
         { (int)ml1bx, (int)ml1by },
