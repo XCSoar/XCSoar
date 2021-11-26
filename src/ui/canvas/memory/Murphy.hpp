@@ -37,7 +37,7 @@ Copyright_License {
  * code from SDL_gfx.
  */
 template<typename Canvas>
-struct MurphyIterator {
+class MurphyIterator {
   using Point = typename Canvas::Point;
 
   Canvas &canvas;
@@ -66,6 +66,7 @@ public:
     return line_mask_position + u;
   }
 
+private:
   void Paraline(Point p, int d1) noexcept {
     d1 = -d1;
 
@@ -161,6 +162,7 @@ public:
     first2 = ml2b;
   }
 
+public:
   void Wideline(Point p1, Point p2,
                 uint8_t width, uint8_t miter) noexcept {
     assert(p1 != p2);
