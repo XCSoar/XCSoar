@@ -51,7 +51,7 @@ class MurphyIterator {
   /* loop constants */
   int ku, kt, kv, kd;
 
-  int oct2;
+  bool oct2;
   bool quad4;
   Point last1, last2, first1, first2;
 
@@ -75,7 +75,7 @@ private:
         canvas.DrawPixel(p.x, p.y, color);
 
       if (d1 <= kt) {
-        if (oct2 == 0) {
+        if (!oct2) {
           p.x++;
         } else {
           if (!quad4)
@@ -179,12 +179,10 @@ public:
       quad4 = false;
     }
 
-    if (v > u) {
+    oct2 = v > u;
+    if (oct2) {
       /* swap things if in 2 octant */
       std::swap(u, v);
-      oct2 = 1;
-    } else {
-      oct2 = 0;
     }
 
     ku = u + u; /* change in l for square shift */
@@ -202,7 +200,7 @@ public:
     const auto [sang, cang] = Angle::FromXY(u, v).SinCos();
 
     Point pt;
-    if (oct2 == 0) {
+    if (!oct2) {
       pt.x = p1.x + (int)lrint(offset * sang);
       if (!quad4) {
         pt.y = p1.y - (int)lrint(offset * cang);
@@ -241,7 +239,7 @@ public:
 
       if (d0 < kt) {
         /* square move */
-        if (oct2 == 0) {
+        if (!oct2) {
           if (!quad4) {
             pt.y++;
           } else {
@@ -256,7 +254,7 @@ public:
         d0 -= ku;
         if (d1 < kt) {
           /* normal diagonal */
-          if (oct2 == 0) {
+          if (!oct2) {
             pt.x--;
             if (!quad4) {
               pt.y++;
@@ -274,7 +272,7 @@ public:
           d1 += kv;
         } else {
           /* double square move, extra parallel line */
-          if (oct2 == 0) {
+          if (!oct2) {
             pt.x--;
           } else {
             if (!quad4) {
@@ -290,7 +288,7 @@ public:
             return;
           }
           Paraline(pt, d1);
-          if (oct2 == 0) {
+          if (!oct2) {
             if (!quad4) {
               pt.y++;
             } else {
