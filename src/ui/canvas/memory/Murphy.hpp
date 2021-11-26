@@ -27,10 +27,9 @@ Copyright_License {
 #include "Bresenham.hpp"
 #include "Math/Angle.hpp"
 
-#include <algorithm>
-
 #include <math.h>
 #include <cstdint>
+#include <utility>
 
 /**
  * Implementation of the Murphy line drawing algorithm.  Based on
