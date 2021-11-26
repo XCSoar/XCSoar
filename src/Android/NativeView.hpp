@@ -150,7 +150,7 @@ public:
                         Java::String(env, filename).Get());
   }
 
-  gcc_pure
+  [[gnu::pure]]
   int getNetState() const {
     return env->CallIntMethod(obj, getNetState_method);
   }

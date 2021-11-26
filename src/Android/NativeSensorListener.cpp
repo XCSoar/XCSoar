@@ -30,6 +30,7 @@ Copyright_License {
 #include "java/Class.hxx"
 #include "java/String.hxx"
 #include "time/SystemClock.hxx"
+#include "util/Compiler.h"
 #include "org_xcsoar_NativeSensorListener.h"
 
 namespace NativeSensorListener {

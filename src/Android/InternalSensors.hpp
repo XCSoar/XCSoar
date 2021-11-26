@@ -27,7 +27,6 @@ Copyright_License {
 #include "java/Object.hxx"
 #include "java/Class.hxx"
 #include "java/Closeable.hxx"
-#include "util/Compiler.h"
 
 #include <jni.h>
 #include <vector>
@@ -85,7 +84,6 @@ public:
   bool cancelSensorSubscription(int id);
   bool subscribedToSensor(int id) const;
 
-  gcc_malloc
   static InternalSensors *create(JNIEnv* env, Context* native_view,
                                  SensorListener &listener);
 };
