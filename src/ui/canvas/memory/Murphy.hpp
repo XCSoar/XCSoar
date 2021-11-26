@@ -153,6 +153,33 @@ private:
     first2 = ml2b;
   }
 
+  [[gnu::pure]]
+  Point InitialPoint(Point p1, double width) const noexcept {
+    const auto [sang, cang] = Angle::FromXY(u, v).SinCos();
+    const double offset = width * 0.5;
+    const int s_offset = (int)lrint(offset * sang);
+    const int c_offset = (int)lrint(offset * cang);
+
+    Point pt;
+    if (!oct2) {
+      pt.x = p1.x + s_offset;
+      if (!quad4) {
+        pt.y = p1.y - c_offset;
+      } else {
+        pt.y = p1.y + c_offset;
+      }
+    } else {
+      pt.x = p1.x - c_offset;
+      if (!quad4) {
+        pt.y = p1.y + s_offset;
+      } else {
+        pt.y = p1.y - s_offset;
+      }
+    }
+
+    return pt;
+  }
+
 public:
   void Wideline(Point p1, Point p2,
                 uint8_t width, uint8_t miter) noexcept {
@@ -195,27 +222,7 @@ public:
     int dd = 0;
 
     /* angle for initial point calculation */
-    const auto [sang, cang] = Angle::FromXY(u, v).SinCos();
-    const double offset = width * 0.5;
-    const int s_offset = (int)lrint(offset * sang);
-    const int c_offset = (int)lrint(offset * cang);
-
-    Point pt;
-    if (!oct2) {
-      pt.x = p1.x + s_offset;
-      if (!quad4) {
-        pt.y = p1.y - c_offset;
-      } else {
-        pt.y = p1.y + c_offset;
-      }
-    } else {
-      pt.x = p1.x - c_offset;
-      if (!quad4) {
-        pt.y = p1.y + s_offset;
-      } else {
-        pt.y = p1.y - s_offset;
-      }
-    }
+    Point pt = InitialPoint(p1, width);
 
     /* thickness threshold: used here for constant thickness line */
     const int tk = int(4. * hypot(pt.x - p1.x, pt.y - p1.y) * hypot(u, v));
