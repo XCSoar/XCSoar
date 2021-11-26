@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_BRESENHAM_HPP
 #define XCSOAR_BRESENHAM_HPP
 
+#include <utility>
+
 /**
  * Implementation of the Bresenham line drawing algorithm.  Based on
  * code from SDL_gfx.
