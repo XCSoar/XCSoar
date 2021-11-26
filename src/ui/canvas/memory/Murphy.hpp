@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_MURPHY_HPP
 
 #include "Bresenham.hpp"
+#include "Math/Angle.hpp"
 
 #include <algorithm>
 
@@ -237,9 +238,7 @@ public:
     int dd = 0;
 
     /* angle for initial point calculation */
-    const double ang = atan((double) v / (double) u);
-    const double sang = sin(ang);
-    const double cang = cos(ang);
+    const auto [sang, cang] = Angle::FromXY(u, v).SinCos();
 
     int ptx, pty;
     if (oct2 == 0) {
