@@ -158,8 +158,6 @@ public:
                 uint8_t width, uint8_t miter) noexcept {
     assert(p1 != p2);
 
-    float offset = (float)width / 2.f;
-
     /* Initialisation */
     u = p2.x - p1.x; /* delta x */
     v = p2.y - p1.y; /* delta y */
@@ -198,21 +196,24 @@ public:
 
     /* angle for initial point calculation */
     const auto [sang, cang] = Angle::FromXY(u, v).SinCos();
+    const double offset = width * 0.5;
+    const int s_offset = (int)lrint(offset * sang);
+    const int c_offset = (int)lrint(offset * cang);
 
     Point pt;
     if (!oct2) {
-      pt.x = p1.x + (int)lrint(offset * sang);
+      pt.x = p1.x + s_offset;
       if (!quad4) {
-        pt.y = p1.y - (int)lrint(offset * cang);
+        pt.y = p1.y - c_offset;
       } else {
-        pt.y = p1.y + (int)lrint(offset * cang);
+        pt.y = p1.y + c_offset;
       }
     } else {
-      pt.x = p1.x - (int)lrint(offset * cang);
+      pt.x = p1.x - c_offset;
       if (!quad4) {
-        pt.y = p1.y + (int)lrint(offset * sang);
+        pt.y = p1.y + s_offset;
       } else {
-        pt.y = p1.y - (int)lrint(offset * sang);
+        pt.y = p1.y - s_offset;
       }
     }
 
