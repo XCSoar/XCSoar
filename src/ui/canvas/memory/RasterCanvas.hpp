@@ -419,8 +419,8 @@ public:
 
     MurphyIterator<RasterCanvas<PixelTraits>> murphy(*this, c, line_mask,
                                                      line_mask_position);
-    murphy.Wideline(x1, y1, x2, y2, thickness, 0);
-    murphy.Wideline(x1, y1, x2, y2, thickness, 1);
+    murphy.Wideline({x1, y1}, {x2, y2}, thickness, 0);
+    murphy.Wideline({x1, y1}, {x2, y2}, thickness, 1);
     line_mask_position = murphy.GetLineMaskPosition();
   }
 

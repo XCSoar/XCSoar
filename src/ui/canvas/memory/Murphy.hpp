@@ -28,6 +28,7 @@ Copyright_License {
 #include "Math/Angle.hpp"
 
 #include <math.h>
+#include <array>
 #include <cstdint>
 #include <utility>
 
@@ -52,9 +53,8 @@ struct MurphyIterator {
 
   int oct2;
   bool quad4;
-  int last1x, last1y, last2x, last2y;
-  int first1x, first1y, first2x, first2y;
-  int tempx, tempy;
+  Point last1, last2, first1, first2;
+  Point temp;
 
 public:
   MurphyIterator(Canvas &_canvas, typename Canvas::color_type _color,
@@ -66,147 +66,114 @@ public:
     return line_mask_position + u;
   }
 
-  void Paraline(int x, int y, int d1) noexcept {
+  void Paraline(Point p, int d1) noexcept {
     d1 = -d1;
 
     unsigned lmp = line_mask_position;
-    for (int p = 0; p <= u; p++) {
+    for (int i = 0; i <= u; ++i) {
       if ((lmp++ | line_mask) == unsigned(-1))
-        canvas.DrawPixel(x, y, color);
+        canvas.DrawPixel(p.x, p.y, color);
 
       if (d1 <= kt) {
         if (oct2 == 0) {
-          x++;
+          p.x++;
         } else {
           if (!quad4)
-            y++;
+            p.y++;
           else
-            y--;
+            p.y--;
         }
         d1 += kv;
       } else {
-        x++;
+        p.x++;
         if (!quad4)
-          y++;
+          p.y++;
         else
-          y--;
+          p.y--;
         d1 += kd;
       }
     }
 
-    tempx = x;
-    tempy = y;
+    temp = p;
   }
 
   void Iteration(uint8_t miter,
-                 unsigned ml1bx, unsigned ml1by,
-                 unsigned ml2bx, unsigned ml2by,
-                 unsigned ml1x, unsigned ml1y,
-                 unsigned ml2x, unsigned ml2y) noexcept {
-    if (miter > 1 && first1x != -32768) {
-      const int fix = (first1x + first2x) / 2;
-      const int fiy = (first1y + first2y) / 2;
-      const int lax = (last1x + last2x) / 2;
-      const int lay = (last1y + last2y) / 2;
-      const int curx = (ml1x + ml2x) / 2;
-      const int cury = (ml1y + ml2y) / 2;
+                 Point ml1b, Point ml2b,
+                 Point ml1, Point ml2) noexcept {
+    if (miter > 1 && first1.x != -32768) {
+      const Point fi = (first1 + first2) / 2;
+      const Point la = (last1 + last2) / 2;
+      const Point cur = (ml1 + ml2) / 2;
 
-      int atemp1 = (fix - curx);
-      int atemp2 = (fiy - cury);
-      int ftmp1 = atemp1 * atemp1 + atemp2 * atemp2;
-      atemp1 = (lax - curx);
-      atemp2 = (lay - cury);
-      int ftmp2 = atemp1 * atemp1 + atemp2 * atemp2;
+      int ftmp1 = (fi - cur).MagnitudeSquared();
+      int ftmp2 = (la - cur).MagnitudeSquared();
 
-      unsigned m1x, m1y, m2x, m2y;
+      Point m1, m2;
       if (ftmp1 <= ftmp2) {
-        m1x = first1x;
-        m1y = first1y;
-        m2x = first2x;
-        m2y = first2y;
+        m1 = first1;
+        m2 = first2;
       } else {
-        m1x = last1x;
-        m1y = last1y;
-        m2x = last2x;
-        m2y = last2y;
+        m1 = last1;
+        m2 = last2;
       }
 
-      atemp1 = (m2x - ml2x);
-      atemp2 = (m2y - ml2y);
-      ftmp1 = atemp1 * atemp1 + atemp2 * atemp2;
-      atemp1 = (m2x - ml2bx);
-      atemp2 = (m2y - ml2by);
-      ftmp2 = atemp1 * atemp1 + atemp2 * atemp2;
+      ftmp1 = (m2 - ml2).MagnitudeSquared();
+      ftmp2 = (m2 - ml2b).MagnitudeSquared();
 
       if (ftmp2 >= ftmp1) {
-        ftmp1 = ml2bx;
-        ftmp2 = ml2by;
-        ml2bx = ml2x;
-        ml2by = ml2y;
-        ml2x = ftmp1;
-        ml2y = ftmp2;
-        ftmp1 = ml1bx;
-        ftmp2 = ml1by;
-        ml1bx = ml1x;
-        ml1by = ml1y;
-        ml1x = ftmp1;
-        ml1y = ftmp2;
+        std::swap(ml2, ml2b);
+        std::swap(ml1, ml1b);
       }
 
-      BresenhamIterator b(m2x, m2y, m1x, m1y);
+      BresenhamIterator b(m2.x, m2.y, m1.x, m1.y);
       do {
         canvas.DrawPixel(b.x, b.y, color);
       } while (b.Next());
 
-      b = BresenhamIterator(m1x, m1y, ml1bx, ml1by);
+      b = BresenhamIterator(m1.x, m1.y, ml1b.x, ml1b.y);
       do {
         canvas.DrawPixel(b.x, b.y, color);
       } while (b.Next());
 
-      b = BresenhamIterator(ml1bx, ml1by, ml2bx, ml2by);
+      b = BresenhamIterator(ml1b.x, ml1b.y, ml2b.x, ml2b.y);
       do {
         canvas.DrawPixel(b.x, b.y, color);
       } while (b.Next());
 
-      b = BresenhamIterator(ml2bx, ml2by, m2x, m2y);
+      b = BresenhamIterator(ml2b.x, ml2b.y, m2.x, m2.y);
       do {
         canvas.DrawPixel(b.x, b.y, color);
       } while (b.Next());
 
-      const Point p[4] = {
-        { (int)m1x, (int)m1y },
-        { (int)m2x, (int)m2y },
-        { (int)ml1bx, (int)ml1by },
-        { (int)ml2bx, (int)ml2by },
+      const auto p = std::array{
+        m1,
+        m2,
+        ml1b,
+        ml2b,
       };
 
-      canvas.FillPolygon(p, 4, color);
+      canvas.FillPolygon(p.data(), p.size(), color);
     }
 
-    last1x = ml1x;
-    last1y = ml1y;
-    last2x = ml2x;
-    last2y = ml2y;
-    first1x = ml1bx;
-    first1y = ml1by;
-    first2x = ml2bx;
-    first2y = ml2by;
+    last1 = ml1;
+    last2 = ml2;
+    first1 = ml1b;
+    first2 = ml2b;
   }
 
-  void Wideline(int x1, int y1, int x2, int y2,
+  void Wideline(Point p1, Point p2,
                 uint8_t width, uint8_t miter) noexcept {
-    assert(x1 != x2 || y1 != y2);
+    assert(p1 != p2);
 
     float offset = (float)width / 2.f;
 
     /* Initialisation */
-    u = x2 - x1; /* delta x */
-    v = y2 - y1; /* delta y */
+    u = p2.x - p1.x; /* delta x */
+    v = p2.y - p1.y; /* delta y */
 
     if (u < 0) {
       /* swap to make sure we are in quadrants 1 or 4 */
-      std::swap(x1, x2);
-      std::swap(y1, y2);
+      std::swap(p1, p2);
       u *= -1;
       v *= -1;
     }
@@ -241,65 +208,54 @@ public:
     /* angle for initial point calculation */
     const auto [sang, cang] = Angle::FromXY(u, v).SinCos();
 
-    int ptx, pty;
+    Point pt;
     if (oct2 == 0) {
-      ptx = x1 + (int)lrint(offset * sang);
+      pt.x = p1.x + (int)lrint(offset * sang);
       if (!quad4) {
-        pty = y1 - (int)lrint(offset * cang);
+        pt.y = p1.y - (int)lrint(offset * cang);
       } else {
-        pty = y1 + (int)lrint(offset * cang);
+        pt.y = p1.y + (int)lrint(offset * cang);
       }
     } else {
-      ptx = x1 - (int)lrint(offset * cang);
+      pt.x = p1.x - (int)lrint(offset * cang);
       if (!quad4) {
-        pty = y1 + (int)lrint(offset * sang);
+        pt.y = p1.y + (int)lrint(offset * sang);
       } else {
-        pty = y1 - (int)lrint(offset * sang);
+        pt.y = p1.y - (int)lrint(offset * sang);
       }
     }
 
     /* thickness threshold: used here for constant thickness line */
-    const int tk = int(4. * hypot(ptx - x1, pty - y1) * hypot(u, v));
+    const int tk = int(4. * hypot(pt.x - p1.x, pt.y - p1.y) * hypot(u, v));
 
     if (miter == 0) {
-      first1x = -32768;
-      first1y = -32768;
-      first2x = -32768;
-      first2y = -32768;
-      last1x = -32768;
-      last1y = -32768;
-      last2x = -32768;
-      last2y = -32768;
+      first1 = first2 = last1 = last2 = {-32768, -32768};
     }
 
     /* outer loop, stepping perpendicular to line */
-    int ml1x, ml1y, ml2x, ml2y, ml1bx, ml1by, ml2bx, ml2by;
+    Point ml1, ml2, ml1b, ml2b;
     for (unsigned q = 0; dd <= tk; q++) {
 
       /* call to inner loop - right edge */
-      Paraline(ptx, pty, d1);
+      Paraline(pt, d1);
       if (q == 0) {
-        ml1x = ptx;
-        ml1y = pty;
-        ml1bx = tempx;
-        ml1by = tempy;
+        ml1 = pt;
+        ml1b = temp;
       } else {
-        ml2x = ptx;
-        ml2y = pty;
-        ml2bx = tempx;
-        ml2by = tempy;
+        ml2 = pt;
+        ml2b = temp;
       }
 
       if (d0 < kt) {
         /* square move */
         if (oct2 == 0) {
           if (!quad4) {
-            pty++;
+            pt.y++;
           } else {
-            pty--;
+            pt.y--;
           }
         } else {
-          ptx++;
+          pt.x++;
         }
       } else {
         /* diagonal move */
@@ -308,50 +264,48 @@ public:
         if (d1 < kt) {
           /* normal diagonal */
           if (oct2 == 0) {
-            ptx--;
+            pt.x--;
             if (!quad4) {
-              pty++;
+              pt.y++;
             } else {
-              pty--;
+              pt.y--;
             }
           } else {
-            ptx++;
+            pt.x++;
             if (!quad4) {
-              pty--;
+              pt.y--;
             } else {
-              pty++;
+              pt.y++;
             }
           }
           d1 += kv;
         } else {
           /* double square move, extra parallel line */
           if (oct2 == 0) {
-            ptx--;
+            pt.x--;
           } else {
             if (!quad4) {
-              pty--;
+              pt.y--;
             } else {
-              pty++;
+              pt.y++;
             }
           }
           d1 += kd;
           if (dd > tk) {
-            Iteration(miter,
-                      ml1bx, ml1by, ml2bx, ml2by,
-                      ml1x, ml1y, ml2x, ml2y);
+            Iteration(miter, ml1b, ml2b, ml1, ml2);
             /* breakout on the extra line */
             return;
           }
-          Paraline(ptx, pty, d1);
+          Paraline(pt, d1);
           if (oct2 == 0) {
             if (!quad4) {
-              pty++;
+              pt.y++;
             } else {
 
-              pty--;
+              pt.y--;
             }
           } else {
-            ptx++;
+            pt.x++;
           }
         }
       }
@@ -359,7 +313,7 @@ public:
       d0 += kv;
     }
 
-    Iteration(miter, ml1bx, ml1by, ml2bx, ml2by, ml1x, ml1y, ml2x, ml2y);
+    Iteration(miter, ml1b, ml2b, ml1, ml2);
   }
 };
 
