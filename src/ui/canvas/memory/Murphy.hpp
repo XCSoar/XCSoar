@@ -98,6 +98,13 @@ private:
     temp = p;
   }
 
+  void DrawThinLine(Point a, Point b) noexcept {
+    BresenhamIterator bresenham{a, b};
+      do {
+        canvas.DrawPixel(bresenham.p.x, bresenham.p.y, color);
+      } while (bresenham.Next());
+  }
+
   void Iteration(uint8_t miter,
                  Point ml1b, Point ml2b,
                  Point ml1, Point ml2) noexcept {
@@ -126,25 +133,10 @@ private:
         std::swap(ml1, ml1b);
       }
 
-      BresenhamIterator b{m2, m1};
-      do {
-        canvas.DrawPixel(b.p.x, b.p.y, color);
-      } while (b.Next());
-
-      b = BresenhamIterator{m1, ml1b};
-      do {
-        canvas.DrawPixel(b.p.x, b.p.y, color);
-      } while (b.Next());
-
-      b = BresenhamIterator{ml1b, ml2b};
-      do {
-        canvas.DrawPixel(b.p.x, b.p.y, color);
-      } while (b.Next());
-
-      b = BresenhamIterator{ml2b, m2};
-      do {
-        canvas.DrawPixel(b.p.x, b.p.y, color);
-      } while (b.Next());
+      DrawThinLine(m2, m1);
+      DrawThinLine(m1, ml1b);
+      DrawThinLine(ml1b, ml2b);
+      DrawThinLine(ml2b, m2);
 
       const auto p = std::array{
         m1,
