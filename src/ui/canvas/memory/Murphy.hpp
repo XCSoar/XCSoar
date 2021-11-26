@@ -125,24 +125,24 @@ public:
         std::swap(ml1, ml1b);
       }
 
-      BresenhamIterator b(m2.x, m2.y, m1.x, m1.y);
+      BresenhamIterator b{m2, m1};
       do {
-        canvas.DrawPixel(b.x, b.y, color);
+        canvas.DrawPixel(b.p.x, b.p.y, color);
       } while (b.Next());
 
-      b = BresenhamIterator(m1.x, m1.y, ml1b.x, ml1b.y);
+      b = BresenhamIterator{m1, ml1b};
       do {
-        canvas.DrawPixel(b.x, b.y, color);
+        canvas.DrawPixel(b.p.x, b.p.y, color);
       } while (b.Next());
 
-      b = BresenhamIterator(ml1b.x, ml1b.y, ml2b.x, ml2b.y);
+      b = BresenhamIterator{ml1b, ml2b};
       do {
-        canvas.DrawPixel(b.x, b.y, color);
+        canvas.DrawPixel(b.p.x, b.p.y, color);
       } while (b.Next());
 
-      b = BresenhamIterator(ml2b.x, ml2b.y, m2.x, m2.y);
+      b = BresenhamIterator{ml2b, m2};
       do {
-        canvas.DrawPixel(b.x, b.y, color);
+        canvas.DrawPixel(b.p.x, b.p.y, color);
       } while (b.Next());
 
       const auto p = std::array{

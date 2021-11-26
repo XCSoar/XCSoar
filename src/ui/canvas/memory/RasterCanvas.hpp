@@ -499,10 +499,10 @@ public:
       if (p_1->y == p_0->y) {
         // don't add horizontal line, just draw it now?
       } else if (p_1->y < p_0->y) {
-        edge_buffer[n_edges] = BresenhamIterator(p_1->x, p_1->y, p_0->x, p_0->y);
+        edge_buffer[n_edges] = BresenhamIterator(*p_1, *p_0);
         n_edges++;
       } else {
-        edge_buffer[n_edges] = BresenhamIterator(p_0->x, p_0->y, p_1->x, p_1->y);
+        edge_buffer[n_edges] = BresenhamIterator(*p_0, *p_1);
         n_edges++;
       }
       miny = std::min(p_0->y, miny);
@@ -532,11 +532,11 @@ public:
       for (auto it= edge_start; it!= edge_end; ++it) {
         // advance line until it gets to next y value (if possible)
         changed |= it->AdvanceTo(y);
-        if (it->y == y) {
-          if (it->x < x)
+        if (it->p.y == y) {
+          if (it->p.x < x)
             changed = true; // order changed
           else
-            x = it->x;
+            x = it->p.x;
         }
       }
 
@@ -561,10 +561,10 @@ public:
       int x0 = -1;
       for (auto it= edge_start; it!= edge_end; ++it) {
         // if this item is valid, it's a start point or end point of a line
-        if (it->y != y) 
+        if (it->p.y != y) 
           continue;
 
-        int x1 = it->x;
+        int x1 = it->p.x;
         if (mode) 
           DrawHLine(x0, x1, y, color, operations);
         mode = !mode;
