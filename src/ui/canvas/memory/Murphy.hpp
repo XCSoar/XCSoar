@@ -54,7 +54,6 @@ class MurphyIterator {
   int oct2;
   bool quad4;
   Point last1, last2, first1, first2;
-  Point temp;
 
 public:
   MurphyIterator(Canvas &_canvas, typename Canvas::color_type _color,
@@ -67,7 +66,7 @@ public:
   }
 
 private:
-  void Paraline(Point p, int d1) noexcept {
+  Point Paraline(Point p, int d1) noexcept {
     d1 = -d1;
 
     unsigned lmp = line_mask_position;
@@ -95,7 +94,7 @@ private:
       }
     }
 
-    temp = p;
+    return p;
   }
 
   void DrawThinLine(Point a, Point b) noexcept {
@@ -231,7 +230,7 @@ public:
     for (unsigned q = 0; dd <= tk; q++) {
 
       /* call to inner loop - right edge */
-      Paraline(pt, d1);
+      const auto temp = Paraline(pt, d1);
       if (q == 0) {
         ml1 = pt;
         ml1b = temp;
