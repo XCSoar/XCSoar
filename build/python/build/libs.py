@@ -177,9 +177,9 @@ cares = CmakeProject(
 )
 
 curl = CmakeProject(
-    'https://curl.se/download/curl-7.79.1.tar.xz',
-    'https://github.com/curl/curl/releases/download/curl-7_79_1/curl-7.79.1.tar.xz',
-    '0606f74b1182ab732a17c11613cbbaf7084f2e6cca432642d0e3ad7c224c3689',
+    'https://curl.se/download/curl-7.80.0.tar.xz',
+    'https://github.com/curl/curl/releases/download/curl-7_80_0/curl-7.80.0.tar.xz',
+    'a132bd93188b938771135ac7c1f3ac1d3ce507c1fcbef8c471397639214ae2ab',
     'lib/libcurl.a',
     [
         '-DBUILD_CURL_EXE=OFF',
