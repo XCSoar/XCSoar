@@ -34,6 +34,7 @@
 
 #include <map>
 #include <stdexcept>
+#include <utility>
 
 /**
  * An OO wrapper for a "CURLM*" (a libCURL "multi" handle).
