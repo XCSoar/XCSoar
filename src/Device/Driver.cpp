@@ -132,7 +132,7 @@ AbstractDevice::DownloadFlight(const RecordedFlightInfo &flight,
 }
 
 bool
-AbstractDevice::DataReceived(const void *data, size_t length, NMEAInfo &info)
+AbstractDevice::DataReceived(std::span<const std::byte>, NMEAInfo &) noexcept
 {
   return false;
 }

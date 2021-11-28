@@ -82,7 +82,7 @@ UDPPort::Write(const void *data, size_t length)
 void
 UDPPort::OnSocketReady(unsigned) noexcept
 try {
-  char input[4096];
+  std::byte input[4096];
   ssize_t nbytes = socket.GetSocket().Read(input, sizeof(input));
   if (nbytes < 0)
     throw MakeSocketError("Failed to receive");
@@ -93,7 +93,7 @@ try {
     return;
   }
 
-  DataReceived(input, nbytes);
+  DataReceived({input, std::size_t(nbytes)});
 } catch (...) {
   socket.Close();
   StateChanged();

@@ -50,7 +50,7 @@ class BufferedPort : public Port, protected DataHandler {
    */
   Cond cond;
 
-  StaticFifoBuffer<uint8_t, 16384> buffer;
+  StaticFifoBuffer<std::byte, 16384> buffer;
 
   bool running = false;
 
@@ -67,7 +67,7 @@ public:
 
 protected:
   /* virtual methods from class DataHandler */
-  bool DataReceived(const void *data, size_t length) noexcept override;
+  bool DataReceived(std::span<const std::byte> s) noexcept override;
 };
 
 #endif

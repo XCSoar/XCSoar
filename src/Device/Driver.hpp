@@ -25,6 +25,8 @@ Copyright_License {
 #define XCSOAR_DEVICE_DRIVER_HPP
 
 #include <cstddef>
+#include <span>
+
 #include <tchar.h>
 
 struct NMEAInfo;
@@ -205,8 +207,8 @@ public:
    * @return true when the data has been processed,
    *         false if more data is necessary
    */
-  virtual bool DataReceived(const void *data, size_t length,
-                            struct NMEAInfo &info) = 0;
+  virtual bool DataReceived(std::span<const std::byte> s,
+                            struct NMEAInfo &info) noexcept = 0;
 
   /**
    * This method is invoked by #MergeThread after each merge,
@@ -279,8 +281,8 @@ public:
 
   void OnSysTicker() override;
 
-  bool DataReceived(const void *data, size_t length,
-                    struct NMEAInfo &info) override;
+  bool DataReceived(std::span<const std::byte> s,
+                    struct NMEAInfo &info) noexcept override;
 
   void OnSensorUpdate(const MoreData &basic) override {}
 

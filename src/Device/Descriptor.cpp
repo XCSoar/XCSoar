@@ -1271,10 +1271,10 @@ DeviceDescriptor::PortError(const char *msg) noexcept
 }
 
 bool
-DeviceDescriptor::DataReceived(const void *data, size_t length) noexcept
+DeviceDescriptor::DataReceived(std::span<const std::byte> s) noexcept
 {
   if (monitor != nullptr)
-    monitor->DataReceived(data, length);
+    monitor->DataReceived(s);
 
   // Pass data directly to drivers that use binary data protocols
   if (driver != nullptr && device != nullptr && driver->UsesRawData()) {
@@ -1284,7 +1284,7 @@ DeviceDescriptor::DataReceived(const void *data, size_t length) noexcept
 
     /* call Device::DataReceived() without holding
        DeviceBlackboard::mutex to avoid blocking all other threads */
-    if (device->DataReceived(data, length, basic)) {
+    if (device->DataReceived(s, basic)) {
       if (!config.sync_from_device)
         basic.settings = old_settings;
 
@@ -1295,7 +1295,7 @@ DeviceDescriptor::DataReceived(const void *data, size_t length) noexcept
   }
 
   if (!IsNMEAOut())
-    PortLineSplitter::DataReceived(data, length);
+    PortLineSplitter::DataReceived(s);
 
   return true;
 }

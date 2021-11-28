@@ -46,7 +46,7 @@ Java_org_xcsoar_NativeInputListener_dataReceived(JNIEnv *env, jobject obj,
   DataHandler &handler = *(DataHandler *)(void *)ptr;
 
   jbyte *data2 = env->GetByteArrayElements(data, nullptr);
-  handler.DataReceived(data2, length);
+  handler.DataReceived({(const std::byte *)data2, std::size_t(length)});
   env->ReleaseByteArrayElements(data, data2, 0);
 }
 

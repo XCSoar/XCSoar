@@ -43,7 +43,7 @@ class FLARMEmulator : public Emulator, PortLineSplitter {
   std::map<std::string, std::string> settings;
 
   bool binary;
-  StaticFifoBuffer<char, 256u> binary_buffer;
+  StaticFifoBuffer<std::byte, 256u> binary_buffer;
 
 public:
   FLARMEmulator():binary(false) {
@@ -172,8 +172,8 @@ private:
     return p - data;
   }
 
-  void BinaryReceived(const void *_data, size_t length) {
-    const uint8_t *data = (const uint8_t *)_data, *end = data + length;
+  void BinaryReceived(std::span<const std::byte> s) noexcept {
+    const auto *data = s.data(), *end = data + s.size();
 
     do {
       /* append new data to buffer, as much as fits there */
@@ -207,13 +207,13 @@ private:
   }
 
 protected:
-  bool DataReceived(const void *data, size_t length) noexcept override {
+  bool DataReceived(std::span<const std::byte> s) noexcept override {
     if (binary) {
-      BinaryReceived(data, length);
+      BinaryReceived(s);
       return true;
     } else {
-      fwrite(data, 1, length, stdout);
-      return PortLineSplitter::DataReceived(data, length);
+      fwrite(s.data(), 1, s.size(), stdout);
+      return PortLineSplitter::DataReceived(s);
     }
   }
 

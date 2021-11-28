@@ -67,7 +67,7 @@ TCPClientPort::Write(const void *data, size_t length)
 void
 TCPClientPort::OnSocketReady(unsigned) noexcept
 try {
-  char input[4096];
+  std::byte input[4096];
   ssize_t nbytes = socket.GetSocket().Read(input, sizeof(input));
   if (nbytes < 0)
     throw MakeSocketError("Failed to receive");
@@ -75,7 +75,7 @@ try {
   if (nbytes == 0)
     throw std::runtime_error("Connection closed by peer");
 
-  DataReceived(input, nbytes);
+  DataReceived({input, std::size_t(nbytes)});
 } catch (...) {
   socket.Close();
   state = PortState::FAILED;

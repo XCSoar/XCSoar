@@ -605,7 +605,7 @@ private:
   void PortError(const char *msg) noexcept override;
 
   /* virtual methods from DataHandler  */
-  bool DataReceived(const void *data, size_t length) noexcept override;
+  bool DataReceived(std::span<const std::byte> s) noexcept override;
 
   /* virtual methods from PortLineHandler */
   bool LineReceived(const char *line) noexcept override;

@@ -49,7 +49,7 @@ public:
 
 private:
   /* virtual methods from class DataHandler */
-  bool DataReceived(const void *data, size_t length) noexcept override;
+  bool DataReceived(std::span<const std::byte> s) noexcept override;
 };
 
 #endif

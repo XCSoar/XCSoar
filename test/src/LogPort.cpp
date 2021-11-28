@@ -53,11 +53,11 @@ public:
 
 class MyHandler : public DataHandler {
 public:
-  bool DataReceived(const void *data, size_t length) noexcept override {
+  bool DataReceived(std::span<const std::byte> s) noexcept override {
     char prefix[16];
     sprintf(prefix, "%12llu ", (unsigned long long)
             std::chrono::steady_clock::now().time_since_epoch().count());
-    HexDump(prefix, data, length);
+    HexDump(prefix, s.data(), s.size());
     return true;
   }
 };

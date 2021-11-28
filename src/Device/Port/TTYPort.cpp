@@ -330,7 +330,7 @@ TTYPort::OnSocketReady(unsigned) noexcept
 {
   TTYDescriptor tty(socket.GetSocket().ToFileDescriptor());
 
-  char input[4096];
+  std::byte input[4096];
   ssize_t nbytes = tty.Read(input, sizeof(input));
   if (nbytes < 0) {
     int e = errno;
@@ -348,5 +348,5 @@ TTYPort::OnSocketReady(unsigned) noexcept
     return;
   }
 
-  DataReceived(input, nbytes);
+  DataReceived({input, std::size_t(nbytes)});
 }

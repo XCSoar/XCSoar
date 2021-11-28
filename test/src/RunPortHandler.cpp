@@ -50,8 +50,8 @@ public:
 
 class MyHandler : public DataHandler {
 public:
-  bool DataReceived(const void *data, size_t length) noexcept override {
-    return fwrite(data, 1, length, stdout) == length;
+  bool DataReceived(std::span<const std::byte> s) noexcept override {
+    return fwrite(s.data(), 1, s.size(), stdout) == s.size();
   }
 };
 

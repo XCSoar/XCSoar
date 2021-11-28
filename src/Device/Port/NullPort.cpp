@@ -95,7 +95,7 @@ NullPort::WaitRead(std::chrono::steady_clock::duration timeout)
 }
 
 bool
-NullPort::DataReceived(const void *data, size_t length) noexcept
+NullPort::DataReceived(std::span<const std::byte>) noexcept
 {
   return true;
 }

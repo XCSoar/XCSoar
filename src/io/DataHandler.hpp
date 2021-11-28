@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_IO_DATA_HANDLER_HPP
 
 #include <cstddef>
+#include <span>
 
 /**
  * Interface with callbacks for the #Port class.
@@ -34,8 +35,7 @@ public:
   /**
    * @return false if the handler wishes to receive no more data
    */
-  [[gnu::nonnull]]
-  virtual bool DataReceived(const void *data, size_t length) noexcept = 0;
+  virtual bool DataReceived(std::span<const std::byte> s) noexcept = 0;
 };
 
 #endif

@@ -39,7 +39,8 @@ public:
   explicit ATR833Device(Port &_port):port(_port) {}
 
 public:
-  bool DataReceived(const void *data, size_t length, NMEAInfo &info) override;
+  bool DataReceived(std::span<const std::byte> s,
+                    NMEAInfo &info) noexcept override;
   bool PutActiveFrequency(RadioFrequency frequency,
                           const TCHAR *name,
                           OperationEnvironment &env) override;
@@ -76,8 +77,8 @@ public:
 };
 
 bool
-ATR833Device::DataReceived(const void *data, size_t length,
-                           NMEAInfo &info)
+ATR833Device::DataReceived(std::span<const std::byte>,
+                           NMEAInfo &info) noexcept
 {
   // actually made no use of radio information
   // TODO: interpret data delivered by ATR833 to display Radio settings...

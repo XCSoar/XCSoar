@@ -227,7 +227,7 @@ SerialPort::Run() noexcept
   assert(Thread::IsInside());
 
   DWORD dwBytesTransferred;
-  BYTE inbuf[1024];
+  std::byte inbuf[1024];
 
   // JMW added purging of port on open to prevent overflow
   Flush();
@@ -288,7 +288,7 @@ SerialPort::Run() noexcept
         continue;
     }
 
-    DataReceived(inbuf, dwBytesTransferred);
+    DataReceived({inbuf, dwBytesTransferred});
   }
 
   Flush();

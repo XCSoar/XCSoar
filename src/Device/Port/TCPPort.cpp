@@ -117,7 +117,7 @@ try {
 void
 TCPPort::OnConnectionReady(unsigned) noexcept
 try {
-  char input[4096];
+  std::byte input[4096];
   ssize_t nbytes = connection.GetSocket().Read(input, sizeof(input));
   if (nbytes < 0)
     throw MakeSocketError("Failed to receive");
@@ -128,7 +128,7 @@ try {
     return;
   }
 
-  DataReceived(input, nbytes);
+  DataReceived({input, std::size_t(nbytes)});
 } catch (...) {
   connection.Close();
   StateChanged();
