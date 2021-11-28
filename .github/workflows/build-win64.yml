@@ -1,9 +1,21 @@
 on:
   workflow_dispatch:  
   push:
+    paths-ignore:
+      - 'doc/**'
+      - 'ide/**'
+      - '.github/workflows/build-container.yml'
+      - '.github/workflows/build-android.yml'
+      - '.github/workflows/build-unix.yml'
     branches:
       - master
   pull_request:
+    paths-ignore:
+      - 'doc/**'
+      - 'ide/**'
+      - '.github/workflows/build-container.yml'
+      - '.github/workflows/build-android.yml'
+      - '.github/workflows/build-unix.yml'
     branches:
       - master
 env:
