@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_IO_DATA_HANDLER_HPP
 #define XCSOAR_IO_DATA_HANDLER_HPP
 
-#include "util/Compiler.h"
-
 #include <cstddef>
 
 /**
@@ -36,7 +34,7 @@ public:
   /**
    * @return false if the handler wishes to receive no more data
    */
-  gcc_nonnull_all
+  [[gnu::nonnull]]
   virtual bool DataReceived(const void *data, size_t length) noexcept = 0;
 };
 

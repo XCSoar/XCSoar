@@ -32,7 +32,6 @@
 
 #include "Reader.hxx"
 #include "system/Path.hpp"
-#include "util/Compiler.h"
 
 #ifdef _WIN32
 #include <fileapi.h>
@@ -91,7 +90,7 @@ public:
 
 	void Close() noexcept;
 
-	gcc_pure
+	[[gnu::pure]]
 	uint64_t GetSize() const noexcept {
 #ifdef _WIN32
 		LARGE_INTEGER size;
@@ -103,7 +102,7 @@ public:
 #endif
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	uint64_t GetPosition() const noexcept {
 #ifdef _WIN32
 		LARGE_INTEGER zero;

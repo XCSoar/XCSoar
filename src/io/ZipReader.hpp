@@ -42,10 +42,10 @@ public:
 
   virtual ~ZipReader();
 
-  gcc_pure
+  [[gnu::pure]]
   uint64_t GetSize() const;
 
-  gcc_pure
+  [[gnu::pure]]
   uint64_t GetPosition() const;
 
   /* virtual methods from class Reader */

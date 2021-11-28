@@ -32,7 +32,6 @@
 
 #include "OutputStream.hxx"
 #include "system/Path.hpp"
-#include "util/Compiler.h"
 
 #ifndef _WIN32
 #include "FileDescriptor.hxx"
@@ -133,7 +132,7 @@ public:
 		return path;
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	uint64_t Tell() const noexcept;
 
 	/* virtual methods from class OutputStream */
