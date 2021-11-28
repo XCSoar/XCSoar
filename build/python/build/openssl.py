@@ -58,6 +58,7 @@ class OpenSSLProject(MakeProject):
                                'no-module', 'no-engine', 'no-static-engine',
                                'no-async',
                                'no-tests',
+                               'no-makedepend',
                                'no-asm', # "asm" causes build failures on Windows
                                openssl_arch,
                                '--cross-compile-prefix=' + cross_compile_prefix,
