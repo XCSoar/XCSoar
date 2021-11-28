@@ -23,7 +23,7 @@ on:
 env:
   TARGET: KOBO
 jobs:
-  compile-xcsoar-${{ env.TARGET }}:
+  compile-xcsoar-kobo:
     runs-on: ubuntu-latest
     steps:
      - id: checkout 
