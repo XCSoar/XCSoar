@@ -1,6 +1,8 @@
 # <img src="./Data/graphics/logo.svg" width="5%" alt="XCSoar Logo"> XCSoar
 
 [![.github/workflows/build-android.yml](https://github.com/XCSoar/XCSoar/actions/workflows/build-android.yml/badge.svg)](https://github.com/XCSoar/XCSoar/actions/workflows/build-android.yml)
+[![.github/workflows/build-kobo.yml](https://github.com/XCSoar/XCSoar/actions/workflows/build-kobo.yml/badge.svg)](https://github.com/XCSoar/XCSoar/actions/workflows/build-kobo.yml)
+[![.github/workflows/build-win64.yml](https://github.com/XCSoar/XCSoar/actions/workflows/build-win64.yml/badge.svg)](https://github.com/XCSoar/XCSoar/actions/workflows/build-win64.yml)
 [![.github/workflows/build-unix.yml](https://github.com/XCSoar/XCSoar/actions/workflows/build-unix.yml/badge.svg)](https://github.com/XCSoar/XCSoar/actions/workflows/build-unix.yml)
 [![.github/workflows/build-docs.yml](https://github.com/XCSoar/XCSoar/actions/workflows/build-docs.yml/badge.svg)](https://github.com/XCSoar/XCSoar/actions/workflows/build-docs.yml)
 
