@@ -135,11 +135,9 @@ public:
 
   template<typename K>
   void Set(const K &key, const V &value) {
-    auto [it, inserted] = map.insert(std::make_pair(key, Item(value)));
-    auto &item = it->second;
+    auto [it, _] = map.insert_or_assign(key, Item(value));
+    Item &item = it->second;
     item.old = false;
-    if (!inserted)
-      item.value = value;
 
     cond.notify_all();
   }
