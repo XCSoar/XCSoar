@@ -46,7 +46,7 @@ class LXDevice: public AbstractDevice
 
   unsigned bulk_baud_rate;
 
-  std::atomic<bool> busy;
+  std::atomic<bool> busy{false};
 
   /**
    * Is this ia Colibri or LX20 or a similar "old" logger?  This is
@@ -65,7 +65,7 @@ class LXDevice: public AbstractDevice
   /**
    * Was a LXNAV V7 detected?
    */
-  bool is_v7;
+  bool is_v7 = false;
 
   /**
    * Was a LXNAV S series vario detected?
@@ -85,12 +85,12 @@ class LXDevice: public AbstractDevice
   /**
    * Was a LXNavigation LX1600/1606 vario detected?
    */
-  bool is_lx16xx;
+  bool is_lx16xx = false;
 
   /**
    * Was a vario with a Nano on the GPS port detected?
    */
-  bool is_forwarded_nano;
+  bool is_forwarded_nano = false;
 
   /**
    * Settings that were received in PLXV0 (LXNAV Vario) sentences.
@@ -103,18 +103,15 @@ class LXDevice: public AbstractDevice
   DeviceSettingsMap<std::string> nano_settings;
 
   Mutex mutex;
-  Mode mode;
-  unsigned old_baud_rate;
+  Mode mode = Mode::UNKNOWN;
+  unsigned old_baud_rate = 0;
 
 public:
   LXDevice(Port &_port, unsigned baud_rate, unsigned _bulk_baud_rate,
            bool _use_pass_through, bool _port_is_nano=false)
     :port(_port), bulk_baud_rate(_bulk_baud_rate),
-     busy(false),
      is_colibri(baud_rate == 4800), use_pass_through(_use_pass_through),
-     is_v7(false), is_nano(_port_is_nano), port_is_nano(_port_is_nano),
-     is_lx16xx(false), is_forwarded_nano(false),
-     mode(Mode::UNKNOWN), old_baud_rate(0) {}
+     is_nano(_port_is_nano), port_is_nano(_port_is_nano) {}
 
   /**
    * Was a LXNAV V7 detected?
