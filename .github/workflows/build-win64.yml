@@ -50,6 +50,8 @@ jobs:
          name: xcsoar-${{ env.TARGET }}-artifact
          path: |
            ${{ github.workspace }}/output/${{ env.TARGET }}
+           !${{ github.workspace }}/output/${{ env.TARGET }}/lib/build
+           !**.d
   xcsoar-run-checks-win64:
      runs-on: windows-latest
      needs: compile-xcsoar-win64
