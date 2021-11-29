@@ -1,6 +1,6 @@
 ---
 on:
-  workflow_dispatch:  
+  workflow_dispatch:
   push:
     paths-ignore:
       - 'doc/**'
@@ -26,7 +26,7 @@ jobs:
   compile-xcsoar-kobo:
     runs-on: ubuntu-latest
     steps:
-     - id: checkout 
+     - id: checkout
        uses: actions/checkout@v2
        with:
          submodules: True
@@ -38,12 +38,12 @@ jobs:
        uses: ASzc/change-string-case-action@v1
        with:
          string: ${{ github.repository }}
-     - name: XCSoar Compile ${{ env.TARGET }} 
+     - name: XCSoar Compile ${{ env.TARGET }}
        uses: addnab/docker-run-action@v3
        with:
          image: ghcr.io/${{ steps.repository.outputs.lowercase }}/xcsoar-build:latest
          options: -v ${{ github.workspace }}:/opt/xcsoar -v /home/runner/work/XCSoar/XCSoar/.ccache:/root/.ccache
-         run: | 
+         run: |
            cd /opt/xcsoar
            xcsoar-compile ${{ env.TARGET }} USE_CCACHE=y V=2 everything
      - name: XCSoar run checks
@@ -51,6 +51,6 @@ jobs:
        with:
          image: ghcr.io/${{ steps.repository.outputs.lowercase }}/xcsoar-build:latest
          options: -v ${{ github.workspace }}:/opt/xcsoar -v /home/runner/work/XCSoar/XCSoar/.ccache:/root/.ccache
-         run: | 
+         run: |
            cd /opt/xcsoar
            xcsoar-compile ${{ env.TARGET }} V=2 check

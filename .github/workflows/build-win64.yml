@@ -1,5 +1,5 @@
 on:
-  workflow_dispatch:  
+  workflow_dispatch:
   push:
     paths-ignore:
       - 'doc/**'
@@ -24,8 +24,8 @@ jobs:
   compile-xcsoar-win64:
     runs-on: ubuntu-latest
     steps:
-     - id: checkout 
-       uses: actions/checkout@v2 
+     - id: checkout
+       uses: actions/checkout@v2
        with:
          submodules: True
      - id: cache-ccache
@@ -36,12 +36,12 @@ jobs:
        uses: ASzc/change-string-case-action@v1
        with:
          string: ${{ github.repository }}
-     - name: XCSoar Compile WIN64 
+     - name: XCSoar Compile WIN64
        uses: addnab/docker-run-action@v3
        with:
          image: ghcr.io/${{ steps.repository.outputs.lowercase }}/xcsoar-build:latest
          options: -v ${{ github.workspace }}:/opt/xcsoar -v /home/runner/work/XCSoar/XCSoar/.ccache:/root/.ccache
-         run: | 
+         run: |
            cd /opt/xcsoar
            xcsoar-compile ${{ env.TARGET }} USE_CCACHE=y V=2 everything
      - name: store checks and compile artefacts
@@ -56,7 +56,7 @@ jobs:
      runs-on: windows-latest
      needs: compile-xcsoar-win64
      steps:
-     - id: checkout 
+     - id: checkout
        uses: actions/checkout@v2
        with:
          submodules: True
@@ -65,6 +65,6 @@ jobs:
        with:
          name: xcsoar-${{ env.TARGET }}-artifact
          path: ${{ github.workspace }}/output/${{ env.TARGET }}
-     - name: XCSoar run checks on ${{ env.TARGET }} 
+     - name: XCSoar run checks on ${{ env.TARGET }}
        run: make check
        working-directory: ${{ github.workspace }}

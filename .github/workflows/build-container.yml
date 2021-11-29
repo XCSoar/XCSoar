@@ -19,10 +19,10 @@ jobs:
       - name: Login to Registry
         uses: docker/login-action@v1
         with:
-          registry: ghcr.io 
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ github.token }}
-      - id: string 
+      - id: string
         uses: ASzc/change-string-case-action@v1
         with:
           string: ${{ github.repository }}
