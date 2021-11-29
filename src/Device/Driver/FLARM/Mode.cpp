@@ -80,8 +80,7 @@ FlarmDevice::BinaryMode(OperationEnvironment &env)
   if (!Send("PFLAX", env))
     return false;
 
-  // Remember that we should now be in binary mode (for further assert() calls)
-  mode = Mode::BINARY;
+  mode = Mode::UNKNOWN;
 
   // "After switching, connection should again be checked by issuing a ping."
   // Testing has revealed that switching the protocol takes a certain amount
@@ -94,12 +93,15 @@ FlarmDevice::BinaryMode(OperationEnvironment &env)
       return false;
     }
 
-    if (BinaryPing(env, std::chrono::milliseconds(500)))
+    if (BinaryPing(env, std::chrono::milliseconds(500))) {
       // We are now in binary mode and have verified that with a binary ping
+
+      // Remember that we should now be in binary mode (for further assert() calls)
+      mode = Mode::BINARY;
       return true;
+    }
   }
 
   // Apparently the switch to binary mode didn't work
-  mode = Mode::UNKNOWN;
   return false;
 }
