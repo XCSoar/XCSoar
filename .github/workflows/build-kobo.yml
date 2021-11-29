@@ -58,12 +58,3 @@ jobs:
           run: |
             cd /opt/xcsoar
             xcsoar-compile ${{ env.TARGET }} USE_CCACHE=y V=2 everything
-
-      - name: XCSoar run checks
-        uses: addnab/docker-run-action@v3
-        with:
-          image: ghcr.io/${{ steps.repository.outputs.lowercase }}/xcsoar-build:latest
-          options: -v ${{ github.workspace }}:/opt/xcsoar -v /home/runner/work/XCSoar/XCSoar/.ccache:/root/.ccache
-          run: |
-            cd /opt/xcsoar
-            xcsoar-compile ${{ env.TARGET }} V=2 check
