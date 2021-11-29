@@ -70,7 +70,7 @@ class LXDevice: public AbstractDevice
   /**
    * Was a LXNAV S series vario detected?
    */
-  bool is_sVario;
+  bool is_sVario = false;
 
   /**
    * Was a LXNAV Nano detected?
