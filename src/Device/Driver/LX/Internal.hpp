@@ -44,7 +44,7 @@ class LXDevice: public AbstractDevice
 
   Port &port;
 
-  unsigned bulk_baud_rate;
+  const unsigned bulk_baud_rate;
 
   std::atomic<bool> busy{false};
 
@@ -60,7 +60,7 @@ class LXDevice: public AbstractDevice
   /*
    * Indicates whether pass-through mode should be used
    */
-  bool use_pass_through;
+  const bool use_pass_through;
 
   /**
    * Was a LXNAV V7 detected?
