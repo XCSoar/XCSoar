@@ -64,6 +64,7 @@ SM_OBJ = $(call SRC_TO_OBJ,$(SRC)/StatusMessage.cpp)
 $(SM_OBJ): $(OUT)/include/Status_defaults.cpp
 
 generate:: $(OUT)/include/MathTables.h $(XCI_HEADERS) \
+	$(OUT)/include/Status_defaults.cpp \
 	$(OUT)/include/InputEvents_Text2Event.cpp $(OUT)/include/InputEvents_Text2GCE.cpp $(OUT)/include/InputEvents_Text2NE.cpp \
 	$(OUT)/include/InputEvents_Char2GCE.cpp $(OUT)/include/InputEvents_Char2NE.cpp
 
