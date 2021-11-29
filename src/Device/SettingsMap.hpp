@@ -125,12 +125,12 @@ public:
   }
 
   template<typename K>
-  gcc_pure
+  [[gnu::pure]]
   const_iterator find(const K &key) const noexcept {
     return const_iterator(map.find(key));
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const_iterator end() const noexcept {
     return const_iterator(map.end());
   }
