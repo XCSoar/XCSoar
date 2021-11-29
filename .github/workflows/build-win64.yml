@@ -64,6 +64,7 @@ jobs:
             ${{ github.workspace }}/output/${{ env.TARGET }}
             !${{ github.workspace }}/output/${{ env.TARGET }}/lib/build
             !**.d
+          retention-days: 1
 
   xcsoar-run-checks-win64:
     runs-on: windows-latest
