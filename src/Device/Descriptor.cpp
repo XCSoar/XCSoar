@@ -217,7 +217,7 @@ DeviceDescriptor::CancelAsync()
 
 inline bool
 DeviceDescriptor::OpenOnPort(std::unique_ptr<DumpPort> &&_port, OperationEnvironment &env)
-{
+try {
   assert(port == nullptr);
   assert(device == nullptr);
   assert(second_device == nullptr);
@@ -258,7 +258,6 @@ DeviceDescriptor::OpenOnPort(std::unique_ptr<DumpPort> &&_port, OperationEnviron
   EnableNMEA(env);
 
   if (env.IsCancelled()) {
-    /* the caller is responsible for freeing the port on error */
     port = nullptr;
     delete device;
     device = nullptr;
@@ -268,6 +267,13 @@ DeviceDescriptor::OpenOnPort(std::unique_ptr<DumpPort> &&_port, OperationEnviron
   }
 
   return true;
+} catch (...) {
+  port = nullptr;
+  delete device;
+  device = nullptr;
+  delete second_device;
+  second_device = nullptr;
+  throw;
 }
 
 bool
