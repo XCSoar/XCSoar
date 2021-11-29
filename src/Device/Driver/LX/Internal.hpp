@@ -108,7 +108,7 @@ class LXDevice: public AbstractDevice
 
 public:
   LXDevice(Port &_port, unsigned baud_rate, unsigned _bulk_baud_rate,
-           bool _use_pass_through, bool _port_is_nano=false)
+           bool _use_pass_through, bool _port_is_nano=false) noexcept
     :port(_port), bulk_baud_rate(_bulk_baud_rate),
      is_colibri(baud_rate == 4800), use_pass_through(_use_pass_through),
      is_nano(_port_is_nano), port_is_nano(_port_is_nano) {}
@@ -116,61 +116,61 @@ public:
   /**
    * Was a LXNAV V7 detected?
    */
-  bool IsV7() const {
+  bool IsV7() const noexcept {
     return is_v7;
   }
 
   /**
    * Was a LXNAV S series vario detected?
    */
-  bool IsSVario() const {
+  bool IsSVario() const noexcept {
     return is_sVario;
   }
 
   /**
    * Was a LXNAV vario device detected?
    */
-  bool IsLXNAVVario() const {
+  bool IsLXNAVVario() const noexcept {
     return IsV7() || IsSVario();
   }
 
   /**
    * Was a LXNAV Nano detected?
    */
-  bool IsNano() const {
+  bool IsNano() const noexcept {
     return port_is_nano || is_nano || is_forwarded_nano;
   }
 
   /**
    * Was an LXNAV logger device detected?
    */
-  bool IsLXNAVLogger() const {
+  bool IsLXNAVLogger() const noexcept {
     return IsNano() || IsSVario();
   }
 
   /**
    * Was a LXNavigation LX1600/1606 vario detected?
    */
-  bool IsLX16xx() const {
+  bool IsLX16xx() const noexcept {
     return is_lx16xx;
   }
 
   /**
    * Can this device be managed by XCSoar?
    */
-  bool IsManageable() const {
+  bool IsManageable() const noexcept {
     return IsV7() || IsSVario() || IsNano() || IsLX16xx();
   }
 
-  bool UsePassThrough() {
+  bool UsePassThrough() const noexcept {
     return use_pass_through;
   }
 
-  void ResetDeviceDetection() {
+  void ResetDeviceDetection() noexcept {
     is_v7 = is_sVario = is_nano = is_lx16xx = is_forwarded_nano = false;
   }
 
-  void IdDeviceByName(NarrowString<16> productName)
+  void IdDeviceByName(NarrowString<16> productName) noexcept
   {
     is_v7 = productName.equals("V7");
     is_sVario = productName.equals("NINC") || productName.equals("S8x");
@@ -209,7 +209,7 @@ public:
    * returned.
    */
   gcc_pure
-  std::string GetLXNAVVarioSetting(const char *name) const;
+  std::string GetLXNAVVarioSetting(const char *name) const noexcept;
 
   /**
    * Write a setting to a LXNAV Nano.
@@ -242,7 +242,7 @@ public:
    * returned.
    */
   gcc_pure
-  std::string GetNanoSetting(const char *name) const;
+  std::string GetNanoSetting(const char *name) const noexcept;
 
 protected:
   /**

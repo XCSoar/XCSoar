@@ -75,7 +75,7 @@ LXDevice::WaitLXNAVVarioSetting(const char *name, OperationEnvironment &env,
 }
 
 std::string
-LXDevice::GetLXNAVVarioSetting(const char *name) const
+LXDevice::GetLXNAVVarioSetting(const char *name) const noexcept
 {
   std::lock_guard<Mutex> lock(lxnav_vario_settings);
   auto i = lxnav_vario_settings.find(name);
@@ -132,7 +132,7 @@ LXDevice::WaitNanoSetting(const char *name, OperationEnvironment &env,
 }
 
 std::string
-LXDevice::GetNanoSetting(const char *name) const
+LXDevice::GetNanoSetting(const char *name) const noexcept
 {
   std::lock_guard<Mutex> lock(nano_settings);
   auto i = nano_settings.find(name);
