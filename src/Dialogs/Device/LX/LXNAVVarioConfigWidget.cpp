@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "LXNAVVarioConfigWidget.hpp"
+#include "Dialogs/Error.hpp"
 #include "Device/Driver/LX/Internal.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
@@ -90,7 +91,7 @@ LXNAVVarioConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) no
 
 bool
 LXNAVVarioConfigWidget::Save(bool &_changed) noexcept
-{
+try {
   PopupOperationEnvironment env;
   bool changed = false;
   NarrowString<32> buffer;
@@ -109,4 +110,7 @@ LXNAVVarioConfigWidget::Save(bool &_changed) noexcept
 
   _changed |= changed;
   return true;
+} catch (...) {
+  ShowError(std::current_exception(), _T("Vega"));
+  return false;
 }

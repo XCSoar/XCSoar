@@ -26,6 +26,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Dialogs/FilePicker.hpp"
 #include "Dialogs/JobDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "UIGlobals.hpp"
 #include "CAI302/UnitsEditor.hpp"
 #include "CAI302/WaypointUploader.hpp"
@@ -84,11 +85,19 @@ ManageCAI302Widget::Prepare(ContainerWindow &parent,
                             const PixelRect &rc) noexcept
 {
   AddButton(_("Units"), [this](){
-    EditUnits(GetLook(), device);
+    try {
+      EditUnits(GetLook(), device);
+    } catch (...) {
+      ShowError(std::current_exception(), _("Units"));
+    }
   });
 
   AddButton(_("Waypoints"), [this](){
-    UploadWaypoints(GetLook(), device);
+    try {
+      UploadWaypoints(GetLook(), device);
+    } catch (...) {
+      ShowError(std::current_exception(), _("Waypoints"));
+    }
   });
 
   AddButton(_("Start Logger"), [this](){
@@ -106,13 +115,21 @@ ManageCAI302Widget::Prepare(ContainerWindow &parent,
                       _T("CAI 302"), MB_YESNO) != IDYES)
         return;
 
-      MessageOperationEnvironment env;
-      device.ClearLog(env);
+      try {
+        MessageOperationEnvironment env;
+        device.ClearLog(env);
+      } catch (...) {
+        ShowError(std::current_exception(), _("Waypoints"));
+      }
   });
 
   AddButton(_("Reboot"), [this](){
-    MessageOperationEnvironment env;
-    device.Reboot(env);
+    try {
+      MessageOperationEnvironment env;
+      device.Reboot(env);
+    } catch (...) {
+      ShowError(std::current_exception(), _("Waypoints"));
+    }
   });
 }
 

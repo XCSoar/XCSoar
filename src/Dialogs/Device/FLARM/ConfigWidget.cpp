@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "ConfigWidget.hpp"
+#include "Dialogs/Error.hpp"
 #include "Device/Driver/FLARM/Device.hpp"
 #include "FLARM/Traffic.hpp"
 #include "Form/DataField/Enum.hpp"
@@ -152,7 +153,7 @@ FLARMConfigWidget::Prepare(ContainerWindow &parent,
 
 bool
 FLARMConfigWidget::Save(bool &_changed) noexcept
-{
+try {
   PopupOperationEnvironment env;
   bool changed = false;
   NarrowString<32> buffer;
@@ -201,4 +202,7 @@ FLARMConfigWidget::Save(bool &_changed) noexcept
 
   _changed |= changed;
   return true;
+} catch (...) {
+  ShowError(std::current_exception(), _T("FLARM"));
+  return false;
 }
