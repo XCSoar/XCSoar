@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "SerialPort.hpp"
 #include "Asset.hpp"
+#include "Operation/Cancelled.hpp"
 #include "system/Error.hxx"
 #include "system/Sleep.h"
 #include "system/OverlappedEvent.hpp"
@@ -205,7 +206,7 @@ SerialPort::WaitDataPending(OverlappedEvent &overlapped,
       ::CancelIo(hPort);
       ::SetCommMask(hPort, 0);
       overlapped.Wait();
-      return WaitResult::CANCELLED;
+      throw OperationCancelled{};
     }
 
     DWORD result;
@@ -252,7 +253,6 @@ SerialPort::Run() noexcept
       continue;
 
     case WaitResult::FAILED:
-    case WaitResult::CANCELLED:
       ::Sleep(100);
       continue;
     }

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "BufferedPort.hpp"
 #include "time/TimeoutClock.hpp"
+#include "Operation/Cancelled.hpp"
 
 #include <algorithm>
 
@@ -83,7 +84,7 @@ BufferedPort::WaitRead(std::chrono::steady_clock::duration _timeout)
 
   while (buffer.empty()) {
     if (running)
-      return WaitResult::CANCELLED;
+      throw OperationCancelled{};
 
     auto remaining = timeout.GetRemainingSigned();
     if (remaining.count() <= 0)

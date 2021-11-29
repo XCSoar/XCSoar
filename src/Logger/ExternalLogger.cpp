@@ -33,6 +33,7 @@
 #include "Components.hpp"
 #include "LocalPath.hpp"
 #include "UIGlobals.hpp"
+#include "Operation/Cancelled.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Job/TriStateJob.hpp"
@@ -110,6 +111,8 @@ try {
   }
 
   gcc_unreachable();
+} catch (OperationCancelled) {
+  return false;
 } catch (...) {
   ShowError(_("Error occured,\nTask NOT declared!"),
             std::current_exception(),
@@ -271,6 +274,8 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     case TriStateJobResult::CANCELLED:
       return;
     }
+  } catch (OperationCancelled) {
+    return;
   } catch (...) {
     ShowError(_("Failed to download flight list."),
               std::current_exception(),
@@ -310,6 +315,8 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
       case TriStateJobResult::CANCELLED:
         continue;
       }
+    } catch (OperationCancelled) {
+      continue;
     } catch (...) {
       ShowError(_("Failed to download flight."),
                 std::current_exception(),

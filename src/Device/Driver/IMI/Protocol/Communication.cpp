@@ -24,7 +24,6 @@ Copyright_License {
 #include "Communication.hpp"
 #include "Protocol.hpp"
 #include "Checksum.hpp"
-#include "Error.hpp"
 #include "MessageParser.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
@@ -46,9 +45,6 @@ Write(Port &port, const void *data, std::size_t size,
       std::chrono::steady_clock::duration timeout)
 {
   if (!port.FullWrite(data, size, env, timeout)) {
-    if (env.IsCancelled())
-      throw Cancelled{};
-
     throw std::runtime_error("Port write error");
   }
 }
@@ -116,8 +112,6 @@ IMI::Receive(Port &port, OperationEnvironment &env,
     // read message
     IMIBYTE buffer[64];
     size_t bytesRead = port.WaitAndRead(buffer, sizeof(buffer), env, timeout);
-    if (env.IsCancelled())
-      throw Cancelled{};
     if (bytesRead == 0)
       return std::nullopt;
 

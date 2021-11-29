@@ -189,10 +189,6 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
 
   unsigned tracks = 0;
   while (true) {
-    // Check if the user cancelled the operation
-    if (env.IsCancelled())
-      return false;
-
     // Receive the next line
     if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer),
                      std::chrono::seconds(1)))
@@ -285,10 +281,6 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
   env.SetProgressRange(range);
 
   while (true) {
-    // Check if the user cancelled the operation
-    if (env.IsCancelled())
-      return false;
-
     // Receive the next line
     if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer),
                      std::chrono::seconds(1)))

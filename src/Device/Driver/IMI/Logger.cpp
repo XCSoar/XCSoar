@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Protocol/Protocol.hpp"
-#include "Protocol/Error.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
 #include "system/Path.hpp"
@@ -31,27 +30,23 @@ Copyright_License {
 bool
 IMIDevice::ReadFlightList(RecordedFlightList &flight_list,
                           OperationEnvironment &env)
-try {
+{
   port.StopRxThread();
 
   bool success = Connect(env);
   success = success && IMI::ReadFlightList(port, flight_list, env);
 
   return success;
-} catch (IMI::Cancelled) {
-  return false;
 }
 
 bool
 IMIDevice::DownloadFlight(const RecordedFlightInfo &flight, Path path,
                           OperationEnvironment &env)
-try {
+{
   port.StopRxThread();
 
   bool success = Connect(env);
   success = success && IMI::FlightDownload(port, flight, path, env);
 
   return success;
-} catch (IMI::Cancelled) {
-  return false;
 }

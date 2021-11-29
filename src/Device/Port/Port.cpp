@@ -25,6 +25,7 @@ Copyright_License {
 #include "Listener.hpp"
 #include "time/TimeoutClock.hpp"
 #include "Operation/Operation.hpp"
+#include "Operation/Cancelled.hpp"
 #include "util/Exception.hxx"
 
 #include <algorithm>
@@ -38,8 +39,12 @@ Port::~Port() {}
 bool
 Port::WaitConnected(OperationEnvironment &env)
 {
-  while (GetState() == PortState::LIMBO && !env.IsCancelled())
+  while (GetState() == PortState::LIMBO) {
+    if (env.IsCancelled())
+      throw OperationCancelled{};
+
     env.Sleep(std::chrono::milliseconds(200));
+  }
 
   return GetState() == PortState::READY;
 }
@@ -63,7 +68,10 @@ Port::FullWrite(const void *buffer, size_t length,
       return false;
 
     size_t nbytes = Write(p, end - p);
-    if (nbytes == 0 || env.IsCancelled())
+    if (env.IsCancelled())
+      throw OperationCancelled{};
+
+    if (nbytes == 0)
       return false;
 
     p += nbytes;
@@ -110,7 +118,6 @@ Port::FullFlush(OperationEnvironment &env,
       return true;
 
     case WaitResult::FAILED:
-    case WaitResult::CANCELLED:
       return false;
     }
   } while (!total_timeout.HasExpired());
@@ -178,7 +185,7 @@ Port::WaitRead(OperationEnvironment &env,
       return result;
 
     if (env.IsCancelled())
-      return WaitResult::CANCELLED;
+      throw OperationCancelled{};
 
     remaining -= t;
   } while (remaining.count() > 0);
@@ -193,7 +200,7 @@ Port::WaitAndRead(void *buffer, size_t length,
 {
   WaitResult wait_result = WaitRead(env, timeout);
   if (wait_result != WaitResult::READY)
-    // Operation canceled, Timeout expired or I/O error occurred
+    // Timeout expired or I/O error occurred
     return 0;
 
   int nbytes = Read(buffer, length);
@@ -229,7 +236,7 @@ Port::ExpectString(const char *token, OperationEnvironment &env,
     size_t nbytes = WaitAndRead(buffer,
                                 std::min(sizeof(buffer), size_t(token_end - p)),
                                 env, timeout);
-    if (nbytes == 0 || env.IsCancelled())
+    if (nbytes == 0)
       return false;
 
     for (const char *q = buffer, *end = buffer + nbytes; q != end; ++q) {

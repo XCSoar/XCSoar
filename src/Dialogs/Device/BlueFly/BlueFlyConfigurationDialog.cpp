@@ -27,6 +27,7 @@ Copyright_License {
 #include "Dialogs/Error.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
+#include "Operation/Cancelled.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "UIGlobals.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -89,6 +90,8 @@ public:
 
     try {
       device.WriteDeviceSettings(params, env);
+    } catch (OperationCancelled) {
+      return false;
     } catch (...) {
       ShowError(std::current_exception(), _T("BlueFly Vario"));
       return false;

@@ -317,9 +317,6 @@ DeclareInner(Port &port, const Declaration &declaration,
   WritePair(port, "Description", _T("XCSoar task declaration"), env);
 
   for (unsigned i = 0; i < 11; i++) {
-    if (env.IsCancelled())
-      return false;
-
     if (i+1>= declaration.Size()) {
       port.FullWriteString("TP LatLon: 0000000N00000000E TURN POINT\r\n",
                            env, std::chrono::seconds(1));
@@ -338,8 +335,7 @@ DeclareInner(Port &port, const Declaration &declaration,
 
   const Waypoint &wp = declaration.GetLastWaypoint();
   if (!EWMicroRecorderWriteWaypoint(port, "Finish LatLon", wp, env) ||
-      !EWMicroRecorderWriteWaypoint(port, "Land LatLon", wp, env) ||
-      env.IsCancelled())
+      !EWMicroRecorderWriteWaypoint(port, "Land LatLon", wp, env))
       return false;
 
   port.Write('\x03');         // finish sending user file

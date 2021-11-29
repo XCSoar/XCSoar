@@ -38,7 +38,7 @@ LX::CommandMode(Port &port, OperationEnvironment &env)
 
   /* the port is clean now; try the SYN/ACK procedure up to three
      times */
-  for (unsigned i = 0; i < 100 && !env.IsCancelled(); ++i)
+  for (unsigned i = 0; i < 100; ++i)
     if (Connect(port, env))
       /* make sure all remaining ACKs are flushed */
       return port.FullFlush(env, std::chrono::milliseconds(200),

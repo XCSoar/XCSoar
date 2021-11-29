@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Protocol/Protocol.hpp"
-#include "Protocol/Error.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
 #include "Operation/Operation.hpp"
@@ -34,7 +33,7 @@ bool
 IMIDevice::Declare(const Declaration &declaration,
                    gcc_unused const Waypoint *home,
                    OperationEnvironment &env)
-try {
+{
   // verify WP number
   unsigned size = declaration.Size();
   if (size < 2)
@@ -50,6 +49,4 @@ try {
 
   IMI::DeclarationWrite(port, declaration, env);
   return true;
-} catch (IMI::Cancelled) {
-  return false;
 }

@@ -41,6 +41,7 @@ Copyright_License {
 #include "Logger/NMEALogger.hpp"
 #include "Language/Language.hpp"
 #include "Operation/Operation.hpp"
+#include "Operation/Cancelled.hpp"
 #include "system/Path.hpp"
 #include "../Simulator.hpp"
 #include "Input/InputQueue.hpp"
@@ -188,6 +189,7 @@ DeviceDescriptor::CancelAsync() noexcept
 
   try {
     async.Wait();
+  } catch (OperationCancelled) {
   } catch (...) {
     LogError(std::current_exception());
   }
@@ -238,16 +240,9 @@ try {
 
   EnableNMEA(env);
 
-  if (env.IsCancelled()) {
-    port = nullptr;
-    delete device;
-    device = nullptr;
-    delete second_device;
-    second_device = nullptr;
-    return false;
-  }
-
   return true;
+} catch (OperationCancelled) {
+  return false;
 } catch (...) {
   port = nullptr;
   delete device;
@@ -470,6 +465,8 @@ try {
   std::unique_ptr<Port> port;
   try {
     port = OpenPort(event_loop, cares, config, this, *this);
+  } catch (OperationCancelled) {
+    return false;
   } catch (...) {
     const auto e = std::current_exception();
 
@@ -505,9 +502,7 @@ try {
   }
 
   if (!port->WaitConnected(env)) {
-    if (!env.IsCancelled())
-      ++n_failures;
-
+    ++n_failures;
     return false;
   }
 
@@ -515,14 +510,14 @@ try {
   dump_port->Disable();
 
   if (!OpenOnPort(std::move(dump_port), env)) {
-    if (!env.IsCancelled())
-      ++n_failures;
-
+    ++n_failures;
     return false;
   }
 
   ResetFailureCounter();
   return true;
+} catch (OperationCancelled) {
+  return false;
 } catch (...) {
   const auto _msg = GetFullMessage(std::current_exception());
   const UTF8ToWideConverter msg(_msg.c_str());
@@ -655,6 +650,7 @@ DeviceDescriptor::EnableNMEA(OperationEnvironment &env) noexcept
 
   try {
     success = device->EnableNMEA(env);
+  } catch (OperationCancelled) {
   } catch (...) {
     LogError(std::current_exception(), "EnableNMEA() failed");
   }
@@ -878,6 +874,8 @@ DeviceDescriptor::PutMacCready(double value,
   try {
     if (!device->PutMacCready(value, env))
       return false;
+  } catch (OperationCancelled) {
+    return false;
   } catch (...) {
     LogError(std::current_exception(), "PutMacCready() failed");
     return false;
@@ -906,6 +904,8 @@ DeviceDescriptor::PutBugs(double value, OperationEnvironment &env) noexcept
     const ScopeReturnDevice restore(*this, env);
     if (!device->PutBugs(value, env))
       return false;
+  } catch (OperationCancelled) {
+    return false;
   } catch (...) {
     LogError(std::current_exception(), "PutBugs() failed");
     return false;
@@ -936,6 +936,8 @@ DeviceDescriptor::PutBallast(double fraction, double overload,
     const ScopeReturnDevice restore(*this, env);
     if (!device->PutBallast(fraction, overload, env))
       return false;
+  } catch (OperationCancelled) {
+    return false;
   } catch (...) {
     LogError(std::current_exception(), "PutBallast() failed");
     return false;
@@ -966,6 +968,8 @@ DeviceDescriptor::PutVolume(unsigned volume,
   try {
     ScopeReturnDevice restore(*this, env);
     return device->PutVolume(volume, env);
+  } catch (OperationCancelled) {
+    return false;
   } catch (...) {
     LogError(std::current_exception(), "PutVolume() failed");
     return false;
@@ -987,6 +991,8 @@ DeviceDescriptor::PutPilotEvent(OperationEnvironment &env) noexcept
   try {
     ScopeReturnDevice restore(*this, env);
     return device->PutPilotEvent(env);
+  } catch (OperationCancelled) {
+    return false;
   } catch (...) {
     LogError(std::current_exception(), "PutPilotEvent() failed");
     return false;
@@ -1010,6 +1016,8 @@ DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
   try {
     ScopeReturnDevice restore(*this, env);
     return device->PutActiveFrequency(frequency, name, env);
+  } catch (OperationCancelled) {
+    return false;
   } catch (...) {
     LogError(std::current_exception(), "PutActiveFrequency() failed");
     return false;
@@ -1033,6 +1041,8 @@ DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
   try {
     ScopeReturnDevice restore(*this, env);
     return device->PutStandbyFrequency(frequency, name, env);
+  } catch (OperationCancelled) {
+    return false;
   } catch (...) {
     LogError(std::current_exception(), "PutStandbyFrequency() failed");
     return false;
@@ -1057,6 +1067,8 @@ DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
     ScopeReturnDevice restore(*this, env);
     if (!device->PutQNH(value, env))
       return false;
+  } catch (OperationCancelled) {
+    return false;
   } catch (...) {
     LogError(std::current_exception(), "PutQNH() failed");
     return false;
@@ -1282,6 +1294,7 @@ DeviceDescriptor::OnJobFinished() noexcept
 
   try {
     async.Wait();
+  } catch (OperationCancelled) {
   } catch (...) {
     LogError(std::current_exception());
   }

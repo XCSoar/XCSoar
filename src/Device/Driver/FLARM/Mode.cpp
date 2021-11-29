@@ -87,12 +87,6 @@ FlarmDevice::BinaryMode(OperationEnvironment &env)
   // of time (around 1.5 sec). Due to that it is recommended to issue new pings
   // for a certain time until the ping is ACKed properly or a timeout occurs.
   for (unsigned i = 0; i < 10; ++i) {
-    if (env.IsCancelled()) {
-      BinaryReset(env, std::chrono::milliseconds(200));
-      mode = Mode::UNKNOWN;
-      return false;
-    }
-
     if (BinaryPing(env, std::chrono::milliseconds(500))) {
       // We are now in binary mode and have verified that with a binary ping
 

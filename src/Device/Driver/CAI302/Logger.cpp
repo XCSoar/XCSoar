@@ -81,7 +81,7 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
     env.SetProgressPosition(i);
   }
 
-  return !flight_list.empty() && !env.IsCancelled();
+  return !flight_list.empty();
 }
 
 bool
@@ -116,8 +116,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   BufferedOutputStream os(fos);
 
   CAI302::FileASCII file_ascii;
-  if (!UploadFileASCII(port, flight.internal.cai302, file_ascii, env) ||
-      env.IsCancelled())
+  if (!UploadFileASCII(port, flight.internal.cai302, file_ascii, env))
     return false;
 
   unsigned bytes_per_block = file_ascii.bytes_per_block;

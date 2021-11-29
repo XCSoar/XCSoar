@@ -239,15 +239,6 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
     if (ch < 0)
       return -1;
 
-    // dabei ist Benutzerabbruch jederzeit möglich
-    if (env.IsCancelled()) {
-      env.Sleep(std::chrono::milliseconds(10));
-      port.Write(CAN);
-      port.Write(CAN);
-      port.Write(CAN);
-      return -1;
-    }
-
     // oder aber das empfangene Zeichen wird ausgewertet
     switch (ch) {
     case DLE:

@@ -23,14 +23,10 @@ Copyright_License {
 
 #pragma once
 
-namespace IMI {
-
 /**
- * This class is thrown when the user has cancelled the operation via
- * OperationEnvironment::IsCancelled().  It will be caught by
- * top-level IMIDevice methods, and allows simplifying the
- * cancellation checks.
+ * This exception is thrown when an operation detects that it has been
+ * cancelled.
+ *
+ * @see OperationEnvironment::IsCancelled()
  */
-struct Cancelled {};
-
-} // namespace IMI
+class OperationCancelled {};

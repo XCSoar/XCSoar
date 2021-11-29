@@ -32,6 +32,7 @@ Copyright_License {
 #include "CAI302/WaypointUploader.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Language/Language.hpp"
+#include "Operation/Cancelled.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/Driver/CAI302/Internal.hpp"
 #include "Device/Driver/CAI302/Protocol.hpp"
@@ -87,6 +88,7 @@ ManageCAI302Widget::Prepare(ContainerWindow &parent,
   AddButton(_("Units"), [this](){
     try {
       EditUnits(GetLook(), device);
+    } catch (OperationCancelled) {
     } catch (...) {
       ShowError(std::current_exception(), _("Units"));
     }
@@ -95,6 +97,7 @@ ManageCAI302Widget::Prepare(ContainerWindow &parent,
   AddButton(_("Waypoints"), [this](){
     try {
       UploadWaypoints(GetLook(), device);
+    } catch (OperationCancelled) {
     } catch (...) {
       ShowError(std::current_exception(), _("Waypoints"));
     }
@@ -118,6 +121,7 @@ ManageCAI302Widget::Prepare(ContainerWindow &parent,
       try {
         MessageOperationEnvironment env;
         device.ClearLog(env);
+      } catch (OperationCancelled) {
       } catch (...) {
         ShowError(std::current_exception(), _("Waypoints"));
       }
@@ -127,6 +131,7 @@ ManageCAI302Widget::Prepare(ContainerWindow &parent,
     try {
       MessageOperationEnvironment env;
       device.Reboot(env);
+    } catch (OperationCancelled) {
     } catch (...) {
       ShowError(std::current_exception(), _("Waypoints"));
     }

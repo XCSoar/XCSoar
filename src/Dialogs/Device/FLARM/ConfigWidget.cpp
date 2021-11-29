@@ -27,6 +27,7 @@ Copyright_License {
 #include "FLARM/Traffic.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
+#include "Operation/Cancelled.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "system/Sleep.h"
 
@@ -202,6 +203,8 @@ try {
 
   _changed |= changed;
   return true;
+} catch (OperationCancelled) {
+  return false;
 } catch (...) {
   ShowError(std::current_exception(), _T("FLARM"));
   return false;

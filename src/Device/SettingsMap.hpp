@@ -29,6 +29,7 @@ Copyright_License {
 #include "thread/Mutex.hxx"
 #include "thread/Cond.hxx"
 #include "Operation/Operation.hpp"
+#include "Operation/Cancelled.hpp"
 
 #include <map>
 #include <string>
@@ -98,13 +99,13 @@ public:
   template<typename K>
   const_iterator Wait(std::unique_lock<Mutex> &lock,
                       const K &key, OperationEnvironment &env,
-                      TimeoutClock timeout) noexcept {
+                      TimeoutClock timeout) {
     while (true) {
       if (auto i = map.find(key); i != map.end() && !i->second.old)
         return const_iterator(i);
 
       if (env.IsCancelled())
-        return end();
+        throw OperationCancelled{};
 
       const auto remaining = timeout.GetRemainingSigned();
       if (remaining.count() <= 0)
@@ -117,7 +118,7 @@ public:
   template<typename K, class Rep, class Period>
   const_iterator Wait(std::unique_lock<Mutex> &lock,
                       const K &key, OperationEnvironment &env,
-                      const std::chrono::duration<Rep,Period> &_timeout) noexcept {
+                      const std::chrono::duration<Rep,Period> &_timeout) {
     TimeoutClock timeout(_timeout);
     return Wait(lock, key, env, timeout);
   }

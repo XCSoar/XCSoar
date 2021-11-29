@@ -60,12 +60,6 @@ public:
      * An I/O error has occurred, and the port shall not be used.
      */
     FAILED,
-
-    /**
-     * The operation was cancelled, probably by
-     * OperationEnvironment::IsCancelled().
-     */
-    CANCELLED,
   };
 
 protected:
