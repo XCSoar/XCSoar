@@ -53,7 +53,7 @@ class DeviceSettingsMap {
 
     bool old;
 
-    explicit Item(const V &_value):value(_value) {}
+    explicit constexpr Item(const V &_value) noexcept:value(_value) {}
   };
 
   typedef std::map<std::string, Item> Map;
@@ -65,31 +65,32 @@ public:
     typename Map::const_iterator i;
 
   public:
-    explicit const_iterator(typename Map::const_iterator _i):i(_i) {}
+    explicit constexpr const_iterator(typename Map::const_iterator _i) noexcept
+      :i(_i) {}
 
-    const V &operator*() const {
+    constexpr const V &operator*() const noexcept {
       return i->second.value;
     }
 
-    const V *operator->() const {
+    constexpr const V *operator->() const noexcept {
       return &i->second.value;
     }
 
-    bool operator==(const const_iterator &other) const {
+    constexpr bool operator==(const const_iterator &other) const noexcept {
       return i == other.i;
     }
 
-    bool operator!=(const const_iterator &other) const {
+    constexpr bool operator!=(const const_iterator &other) const noexcept {
       return i != other.i;
     }
   };
 
-  operator Mutex &() const {
+  operator Mutex &() const noexcept {
     return const_cast<Mutex &>(mutex);
   }
 
   template<typename K>
-  void MarkOld(const K &key) {
+  void MarkOld(const K &key) noexcept {
     auto i = map.find(key);
     if (i != map.end())
       i->second.old = true;
@@ -98,7 +99,7 @@ public:
   template<typename K>
   const_iterator Wait(std::unique_lock<Mutex> &lock,
                       const K &key, OperationEnvironment &env,
-                      TimeoutClock timeout) {
+                      TimeoutClock timeout) noexcept {
     while (true) {
       auto i = map.find(key);
       if (i != map.end() && !i->second.old)
@@ -118,19 +119,19 @@ public:
   template<typename K, class Rep, class Period>
   const_iterator Wait(std::unique_lock<Mutex> &lock,
                       const K &key, OperationEnvironment &env,
-                      const std::chrono::duration<Rep,Period> &_timeout) {
+                      const std::chrono::duration<Rep,Period> &_timeout) noexcept {
     TimeoutClock timeout(_timeout);
     return Wait(lock, key, env, timeout);
   }
 
   template<typename K>
   gcc_pure
-  const_iterator find(const K &key) const {
+  const_iterator find(const K &key) const noexcept {
     return const_iterator(map.find(key));
   }
 
   gcc_pure
-  const_iterator end() const {
+  const_iterator end() const noexcept {
     return const_iterator(map.end());
   }
 
@@ -146,11 +147,11 @@ public:
   }
 
   template<typename K>
-  void erase(const K &key) {
+  void erase(const K &key) noexcept {
     map.erase(key);
   }
 
-  void clear() {
+  void clear() noexcept {
     map.clear();
   }
 };
