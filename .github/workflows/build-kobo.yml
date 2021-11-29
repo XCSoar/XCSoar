@@ -20,11 +20,14 @@ on:
       - '.github/workflows/build-unix.yml'
     branches:
       - master
+
 env:
   TARGET: KOBO
+
 jobs:
   compile-xcsoar-kobo:
     runs-on: ubuntu-latest
+
     steps:
       - id: checkout
         uses: actions/checkout@v2
@@ -38,6 +41,15 @@ jobs:
         uses: ASzc/change-string-case-action@v1
         with:
           string: ${{ github.repository }}
+
+      - name: "Cache third-party libraries"
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
+          path: |
+            ${{ github.workspace }}/output/${{ env.TARGET }}/lib
+            !${{ github.workspace }}/output/${{ env.TARGET }}/lib/build
+
       - name: XCSoar Compile ${{ env.TARGET }}
         uses: addnab/docker-run-action@v3
         with:
@@ -46,6 +58,7 @@ jobs:
           run: |
             cd /opt/xcsoar
             xcsoar-compile ${{ env.TARGET }} USE_CCACHE=y V=2 everything
+
       - name: XCSoar run checks
         uses: addnab/docker-run-action@v3
         with:

@@ -18,8 +18,10 @@ on:
       - '.github/workflows/build-unix.yml'
     branches:
       - master
+
 env:
   TARGET: WIN64
+
 jobs:
   compile-xcsoar-win64:
     runs-on: ubuntu-latest
@@ -36,6 +38,15 @@ jobs:
         uses: ASzc/change-string-case-action@v1
         with:
           string: ${{ github.repository }}
+
+      - name: "Cache third-party libraries"
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
+          path: |
+            ${{ github.workspace }}/output/${{ env.TARGET }}/lib/lib
+            !${{ github.workspace }}/output/${{ env.TARGET }}/lib/lib/build
+
       - name: XCSoar Compile WIN64
         uses: addnab/docker-run-action@v3
         with:
@@ -44,6 +55,7 @@ jobs:
           run: |
             cd /opt/xcsoar
             xcsoar-compile ${{ env.TARGET }} USE_CCACHE=y V=2 everything
+
       - name: store checks and compile artefacts
         uses: actions/upload-artifact@v2
         with:
@@ -52,6 +64,7 @@ jobs:
             ${{ github.workspace }}/output/${{ env.TARGET }}
             !${{ github.workspace }}/output/${{ env.TARGET }}/lib/build
             !**.d
+
   xcsoar-run-checks-win64:
     runs-on: windows-latest
     needs: compile-xcsoar-win64
