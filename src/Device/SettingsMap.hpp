@@ -91,8 +91,7 @@ public:
 
   template<typename K>
   void MarkOld(const K &key) noexcept {
-    auto i = map.find(key);
-    if (i != map.end())
+    if (auto i = map.find(key); i != map.end())
       i->second.old = true;
   }
 
@@ -101,8 +100,7 @@ public:
                       const K &key, OperationEnvironment &env,
                       TimeoutClock timeout) noexcept {
     while (true) {
-      auto i = map.find(key);
-      if (i != map.end() && !i->second.old)
+      if (auto i = map.find(key); i != map.end() && !i->second.old)
         return const_iterator(i);
 
       if (env.IsCancelled())
