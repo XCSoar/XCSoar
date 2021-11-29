@@ -49,6 +49,15 @@ jobs:
         uses: ASzc/change-string-case-action@v1
         with:
           string: ${{ github.repository }}
+
+      - name: "Cache third-party libraries"
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
+          path: |
+            ${{ github.workspace }}/output/ANDROID/*/lib
+            !${{ github.workspace }}/output/ANDROID/*/lib/build
+
       - name: Compile XCSoar
         uses: addnab/docker-run-action@v3
         with:
@@ -57,6 +66,7 @@ jobs:
           run: |
             cd /opt/xcsoar
             xcsoar-compile ${{ env.TARGET }} USE_CCACHE=y V=2 DEBUG=${{ env.DEBUG }}
+
       - name: upload artifact
         uses: actions/upload-artifact@v2
         with:
