@@ -10,6 +10,7 @@ DATA_RESOURCES = \
 DATA_SOURCES += $(foreach file,$(DATA_RESOURCES),$(DATA)/$(notdir $(file)).c)
 
 define add-data-file
+generate:: $(DATA)/$(notdir $(1)).c
 $(DATA)/$(notdir $(1)).c: $(1) $(topdir)/tools/BinToC.pl $(topdir)/tools/BinToC.pm | $$(DATA)/dirstamp
 	@$$(NQ)echo "  GEN     $$@"
 	$(Q)$(PERL) $(topdir)/tools/BinToC.pl $$< $$@
