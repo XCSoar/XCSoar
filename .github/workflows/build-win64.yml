@@ -80,5 +80,5 @@ jobs:
         name: xcsoar-${{ env.TARGET }}-artifact
         path: ${{ github.workspace }}/output/${{ env.TARGET }}
     - name: XCSoar run checks on ${{ env.TARGET }}
-      run: make check
+      run: make check-no-build
       working-directory: ${{ github.workspace }}

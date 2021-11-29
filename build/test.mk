@@ -713,6 +713,9 @@ check: $(TESTS) | $(OUT)/test/dirstamp
 	@$(NQ)echo "  TEST    $(notdir $(patsubst %$(TARGET_EXEEXT),%,$^))"
 	$(Q)$(PERL) $(TEST_SRC_DIR)/testall.pl $(TESTS)
 
+check-no-build: $(OUT)/test/dirstamp
+	$(PERL) $(TEST_SRC_DIR)/testall.pl $(TESTS)
+
 DEBUG_PROGRAM_NAMES = \
 	test_reach \
 	test_route \
