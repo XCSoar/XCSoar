@@ -25,6 +25,7 @@ Copyright_License {
 #include "NativePortListener.hpp"
 #include "NativeInputListener.hpp"
 #include "java/Class.hxx"
+#include "java/Exception.hxx"
 
 #include <string.h>
 
@@ -78,7 +79,7 @@ PortBridge::setInputListener(JNIEnv *env, DataHandler *handler)
   env->CallVoidMethod(Get(), setInputListener_method, listener.Get());
 }
 
-int
+std::size_t
 PortBridge::write(JNIEnv *env, const void *data, size_t length)
 {
   if (length > write_buffer_size)
@@ -88,5 +89,11 @@ PortBridge::write(JNIEnv *env, const void *data, size_t length)
   memcpy(dest, data, length);
   env->ReleaseByteArrayElements(write_buffer, dest, 0);
 
-  return env->CallIntMethod(Get(), write_method, write_buffer.Get(), length);
+  int nbytes = env->CallIntMethod(Get(), write_method,
+                                  write_buffer.Get(), length);
+  Java::RethrowException(env);
+  if (nbytes <= 0)
+    throw std::runtime_error{"Port write failed"};
+
+  return (std::size_t)nbytes;
 }

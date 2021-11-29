@@ -161,8 +161,7 @@ DeclareInner(Port &port, const Declaration &declaration,
   env.SetProgressRange(5);
   env.SetProgressPosition(0);
 
-  if (!LX::CommandMode(port, env))
-      return false;
+  LX::CommandMode(port, env);
 
   env.SetProgressPosition(1);
 

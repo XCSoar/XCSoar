@@ -104,8 +104,7 @@ DeclareInner(Port &port, const unsigned bulkrate,
 {
   assert(declaration.Size() >= 2);
 
-  if (!Volkslogger::ConnectAndFlush(port, env, std::chrono::seconds(20)))
-    return false;
+  Volkslogger::ConnectAndFlush(port, env, std::chrono::seconds(20));
 
   //Clear DECLARATION struct and populate with xcs declaration
   VLAPI_DATA::DECLARATION vl_declaration;
@@ -156,8 +155,7 @@ DeclareInner(Port &port, const unsigned bulkrate,
   vl_declaration.put(&dbb1);
 
   // and write buffer back into VOLKSLOGGER
-  if (!Volkslogger::ConnectAndFlush(port, env, std::chrono::seconds(10)))
-    return false;
+  Volkslogger::ConnectAndFlush(port, env, std::chrono::seconds(10));
 
   const bool success =
     Volkslogger::WriteDatabase(port, env, dbb1.buffer, sizeof(dbb1.buffer));

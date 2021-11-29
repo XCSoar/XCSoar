@@ -314,44 +314,44 @@ namespace CAI302 {
   /**
    * Enter "command" mode, but don't wait for the prompt.
    */
-  bool
+  void
   CommandModeQuick(Port &port);
 
   /**
    * Enter "command" mode.
    */
-  bool
+  void
   CommandMode(Port &port, OperationEnvironment &env);
 
   /**
    * Send a command, but don't wait for the next command prompt.
    */
-  bool
+  void
   SendCommandQuick(Port &port, const char *cmd, OperationEnvironment &env);
 
   /**
    * Send a command, and wait for the next command prompt.
    */
-  bool
+  void
   SendCommand(Port &port, const char *cmd, OperationEnvironment &env,
               std::chrono::steady_clock::duration timeout=std::chrono::seconds(2));
 
   /**
    * Enter "log" mode, but don't wait for the command prompt.
    */
-  bool
+  void
   LogModeQuick(Port &port, OperationEnvironment &env);
 
   /**
    * Enter "log" mode.
    */
-  bool
+  void
   LogMode(Port &port, OperationEnvironment &env);
 
   /**
    * Enter "upload" mode.
    */
-  bool
+  void
   UploadMode(Port &port, OperationEnvironment &env);
 
   /**
@@ -462,7 +462,7 @@ namespace CAI302 {
   /**
    * Enter "download" mode.
    */
-  bool
+  void
   DownloadMode(Port &port, OperationEnvironment &env);
 
   /**
@@ -513,49 +513,49 @@ namespace CAI302 {
   /**
    * Restart the CAI302 by sending the command "SIF 0 0".
    */
-  bool
+  void
   Reboot(Port &port, OperationEnvironment &env);
 
   /**
    * Power off the CAI302 by sending the command "DIE".
    */
-  bool
+  void
   PowerOff(Port &port, OperationEnvironment &env);
 
   /**
    * Start logging unconditionally.
    */
-  bool
+  void
   StartLogging(Port &port, OperationEnvironment &env);
 
   /**
    * Stop logging unconditionally.
    */
-  bool
+  void
   StopLogging(Port &port, OperationEnvironment &env);
 
   /**
    * Set audio volume 0 is loudest, 170 is silent.
    */
-  bool
+  void
   SetVolume(Port &port, unsigned volume, OperationEnvironment &env);
 
   /**
    * Erase all waypoints.
    */
-  bool
+  void
   ClearPoints(Port &port, OperationEnvironment &env);
 
   /**
    * Erase the pilot name.
    */
-  bool
+  void
   ClearPilot(Port &port, OperationEnvironment &env);
 
   /**
    * Erase all log memory.
    */
-  bool
+  void
   ClearLog(Port &port, OperationEnvironment &env);
 
   /**

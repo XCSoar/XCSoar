@@ -98,8 +98,7 @@ DeclareInner(Port &port, const Declaration &declaration,
 
   env.SetProgressPosition(4);
 
-  if (!CAI302::DownloadMode(port, env))
-    return false;
+  CAI302::DownloadMode(port, env);
 
   convert_string(pilot.name, sizeof(pilot.name), declaration.pilot_name);
   CAI302::DownloadPilot(port, pilot, 0, env);
@@ -128,8 +127,7 @@ CAI302Device::Declare(const Declaration &declaration,
                       gcc_unused const Waypoint *home,
                       OperationEnvironment &env)
 {
-  if (!UploadMode(env))
-    return false;
+  UploadMode(env);
 
   if (!DeclareInner(port, declaration, env)) {
     mode = Mode::UNKNOWN;

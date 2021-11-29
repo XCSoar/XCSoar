@@ -269,19 +269,17 @@ WriteGeoPoint(Port &port, const GeoPoint &value, OperationEnvironment &env)
   port.FullWriteString(buffer, env, std::chrono::seconds(1));
 }
 
-static bool
+static void
 EWMicroRecorderWriteWaypoint(Port &port, const char *type,
                              const Waypoint &way_point,
                              OperationEnvironment &env)
 {
   WriteLabel(port, type, env);
   WriteGeoPoint(port, way_point.location, env);
-  if (!port.Write(' '))
-    return false;
+  port.Write(' ');
   WriteCleanString(port, way_point.name.c_str(),
                    env, std::chrono::seconds(1));
   port.FullWrite("\r\n", 2, env, std::chrono::milliseconds(500));
-  return true;
 }
 
 static bool
@@ -324,20 +322,17 @@ DeclareInner(Port &port, const Declaration &declaration,
     } else {
       const Waypoint &wp = declaration.GetWaypoint(i);
       if (i == 0) {
-        if (!EWMicroRecorderWriteWaypoint(port, "Take Off LatLong", wp, env) ||
-            !EWMicroRecorderWriteWaypoint(port, "Start LatLon", wp, env))
-          return false;
+        EWMicroRecorderWriteWaypoint(port, "Take Off LatLong", wp, env);
+        EWMicroRecorderWriteWaypoint(port, "Start LatLon", wp, env);
       } else if (i + 1 < declaration.Size()) {
-        if (!EWMicroRecorderWriteWaypoint(port, "TP LatLon", wp, env))
-          return false;
+        EWMicroRecorderWriteWaypoint(port, "TP LatLon", wp, env);
       }
     }
   }
 
   const Waypoint &wp = declaration.GetLastWaypoint();
-  if (!EWMicroRecorderWriteWaypoint(port, "Finish LatLon", wp, env) ||
-      !EWMicroRecorderWriteWaypoint(port, "Land LatLon", wp, env))
-      return false;
+  EWMicroRecorderWriteWaypoint(port, "Finish LatLon", wp, env);
+  EWMicroRecorderWriteWaypoint(port, "Land LatLon", wp, env);
 
   port.Write('\x03');         // finish sending user file
 

@@ -165,7 +165,9 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
   } else
     old_baud_rate = 0;
 
-  if (!LX::CommandMode(port, env)) {
+  try {
+    LX::CommandMode(port, env);
+  } catch (...) {
     if (old_baud_rate != 0) {
       port.SetBaudrate(old_baud_rate);
       old_baud_rate = 0;
@@ -173,7 +175,7 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
 
     std::lock_guard<Mutex> lock(mutex);
     mode = Mode::UNKNOWN;
-    return false;
+    throw;
   }
 
   busy = false;

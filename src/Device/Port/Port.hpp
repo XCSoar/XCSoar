@@ -87,9 +87,12 @@ public:
 
   /**
    * Writes a string to the serial port
+   *
+   * Throws on error.
+   *
    * @param data Pointer to the first character
    * @param length Length of the string
-   * @return the number of bytes written, or 0 on error
+   * @return the number of bytes written
    */
   gcc_nonnull_all
   virtual size_t Write(const void *data, size_t length) = 0;
@@ -106,8 +109,8 @@ public:
    * Writes a single byte to the serial port
    * @param ch Byte to write
    */
-  bool Write(char ch) {
-    return Write(&ch, sizeof(ch)) == sizeof(ch);
+  void Write(char ch) {
+    Write(&ch, sizeof(ch));
   }
 
   /**

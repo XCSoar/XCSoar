@@ -74,7 +74,14 @@ DumpPort::Write(const void *data, size_t length)
   if (enabled)
     LogFormat("Write(%u)", (unsigned)length);
 
-  size_t nbytes = port->Write(data, length);
+  size_t nbytes;
+  try {
+    nbytes = port->Write(data, length);
+  } catch (...) {
+    if (enabled)
+      LogFormat("Write(%u)=error", (unsigned)length);
+    throw;
+  }
 
   if (enabled) {
     LogFormat("Write(%u)=%u", (unsigned)length, (unsigned)nbytes);

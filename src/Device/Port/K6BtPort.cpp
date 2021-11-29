@@ -83,8 +83,7 @@ K6BtPort::Write(const void *_data, size_t length)
 
     /* write the ESCAPE byte again (but don't consider it in the
        return value) */
-    if (port->Write(p, 1) != 1)
-      return total;
+    port->Write(p, 1);
 
     ++p;
 

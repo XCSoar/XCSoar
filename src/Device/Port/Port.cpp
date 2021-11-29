@@ -30,6 +30,8 @@ Copyright_License {
 #include "util/Exception.hxx"
 
 #include <algorithm>
+#include <cassert>
+
 #include <string.h>
 
 Port::Port(PortListener *_listener, DataHandler &_handler)
@@ -69,11 +71,10 @@ Port::FullWrite(const void *buffer, size_t length,
       throw DeviceTimeout{"Port write timeout"};
 
     size_t nbytes = Write(p, end - p);
+    assert(nbytes > 0);
+
     if (env.IsCancelled())
       throw OperationCancelled{};
-
-    if (nbytes == 0)
-      throw std::runtime_error{"Port write failed"};
 
     p += nbytes;
   }

@@ -51,10 +51,7 @@ CAI302WaypointUploader::Run(OperationEnvironment &env)
   env.SetProgressRange(waypoints.size() + 1);
   env.SetProgressPosition(0);
 
-  if (!device.ClearPoints(env)) {
-    env.SetErrorMessage(_("Failed to erase waypoints."));
-    return;
-  }
+  device.ClearPoints(env);
 
   if (!device.EnableBulkMode(env)) {
     env.SetErrorMessage(_("Failed to switch baud rate."));

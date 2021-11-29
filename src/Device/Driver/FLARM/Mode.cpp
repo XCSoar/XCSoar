@@ -32,9 +32,7 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
   case Mode::UNKNOWN:
     /* device could be in binary mode, we don't know, but this is the
        best we can do: */
-    if (!BinaryReset(env, std::chrono::milliseconds(500)))
-      return false;
-
+    BinaryReset(env, std::chrono::milliseconds(500));
     mode = Mode::NMEA;
 
     /* request self-test results and version information from FLARM */
@@ -53,11 +51,8 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
     return true;
 
   case Mode::BINARY:
-    if (!BinaryReset(env, std::chrono::milliseconds(500))) {
-      mode = Mode::UNKNOWN;
-      return false;
-    }
-
+    mode = Mode::UNKNOWN;
+    BinaryReset(env, std::chrono::milliseconds(500));
     mode = Mode::NMEA;
     return true;
   }

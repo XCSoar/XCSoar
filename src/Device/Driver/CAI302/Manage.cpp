@@ -31,83 +31,65 @@ bool
 CAI302Device::ReadGeneralInfo(CAI302::GeneralInfo &data,
                               OperationEnvironment &env)
 {
-  if (!UploadMode(env))
-    return false;
-
+  UploadMode(env);
   return CAI302::UploadGeneralInfo(port, data, env);
 }
 
-bool
+void
 CAI302Device::Reboot(OperationEnvironment &env)
 {
-  if (!CommandMode(env))
-    return false;
-
-  return CAI302::Reboot(port, env);
+  CommandMode(env);
+  CAI302::Reboot(port, env);
 }
 
-bool
+void
 CAI302Device::PowerOff(OperationEnvironment &env)
 {
-  if (!CommandMode(env))
-    return false;
-
-  return CAI302::PowerOff(port, env);
+  CommandMode(env);
+  CAI302::PowerOff(port, env);
 }
 
-bool
+void
 CAI302Device::StartLogging(OperationEnvironment &env)
 {
-  if (!CommandMode(env))
-    return false;
-
-  return CAI302::StartLogging(port, env);
+  CommandMode(env);
+  CAI302::StartLogging(port, env);
 }
 
-bool
+void
 CAI302Device::StopLogging(OperationEnvironment &env)
 {
-  if (!CommandMode(env))
-    return false;
-
-  return CAI302::StopLogging(port, env);
+  CommandMode(env);
+  CAI302::StopLogging(port, env);
 }
 
-bool
+void
 CAI302Device::SetVolume(unsigned volume, OperationEnvironment &env)
 {
-  if (!CommandMode(env))
-    return false;
-
-  return CAI302::SetVolume(port, volume, env);
+  CommandMode(env);
+  CAI302::SetVolume(port, volume, env);
 }
 
-bool
+void
 CAI302Device::ClearPoints(OperationEnvironment &env)
 {
-  if (!CommandMode(env))
-    return false;
-
-  return CAI302::ClearPoints(port, env);
+  CommandMode(env);
+  CAI302::ClearPoints(port, env);
 }
 
 
-bool
+void
 CAI302Device::ClearPilot(OperationEnvironment &env)
 {
-  if (!CommandMode(env))
-    return false;
-
-  return CAI302::ClearPilot(port, env);
+  CommandMode(env);
+  CAI302::ClearPilot(port, env);
 }
 
-bool
+void
 CAI302Device::ClearLog(OperationEnvironment &env)
 {
-  if (!CommandMode(env))
-    return false;
-
-  return CAI302::ClearLog(port, env);
+  CommandMode(env);
+  CAI302::ClearLog(port, env);
 }
 
 bool
@@ -117,8 +99,7 @@ CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
 {
   assert(list.empty());
 
-  if (!UploadMode(env))
-    return false;
+  UploadMode(env);
 
   CAI302::PilotMetaActive meta;
   if (!CAI302::UploadPilotMetaActive(port, meta, env))
@@ -155,8 +136,7 @@ CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
 bool
 CAI302Device::ReadActivePilot(CAI302::Pilot &pilot, OperationEnvironment &env)
 {
-  if (!UploadMode(env))
-    return false;
+  UploadMode(env);
 
   if (!CAI302::UploadPilot(port, 0, pilot, env)) {
     mode = Mode::UNKNOWN;
@@ -170,8 +150,7 @@ bool
 CAI302Device::WriteActivePilot(const CAI302::Pilot &pilot,
                                OperationEnvironment &env)
 {
-  if (!DownloadMode(env))
-    return false;
+  DownloadMode(env);
 
   try {
     CAI302::DownloadPilot(port, pilot, 0, env);
@@ -187,8 +166,7 @@ bool
 CAI302Device::WritePilot(unsigned index, const CAI302::Pilot &pilot,
                          OperationEnvironment &env)
 {
-  if (!DownloadMode(env))
-    return false;
+  DownloadMode(env);
 
   try {
     CAI302::DownloadPilot(port, pilot, 64 + index, env);
@@ -203,8 +181,7 @@ CAI302Device::WritePilot(unsigned index, const CAI302::Pilot &pilot,
 bool
 CAI302Device::AddPilot(const CAI302::Pilot &pilot, OperationEnvironment &env)
 {
-  if (!DownloadMode(env))
-    return false;
+  DownloadMode(env);
 
   try {
     CAI302::DownloadPilot(port, pilot, 255, env);
@@ -219,8 +196,7 @@ CAI302Device::AddPilot(const CAI302::Pilot &pilot, OperationEnvironment &env)
 int
 CAI302Device::ReadNavpointCount(OperationEnvironment &env)
 {
-  if (!UploadMode(env))
-    return -1;
+  UploadMode(env);
 
   CAI302::NavpointMeta meta;
   if (!CAI302::UploadNavpointMeta(port, meta, env)) {
@@ -235,8 +211,7 @@ bool
 CAI302Device::ReadNavpoint(unsigned index, CAI302::Navpoint &navpoint,
                            OperationEnvironment &env)
 {
-  if (!UploadMode(env))
-    return false;
+  UploadMode(env);
 
   if (!CAI302::UploadNavpoint(port, index, navpoint, env)) {
     mode = Mode::UNKNOWN;
@@ -261,8 +236,7 @@ bool
 CAI302Device::WriteNavpoint(unsigned id, const Waypoint &wp,
                             OperationEnvironment &env)
 {
-  if (!DownloadMode(env))
-    return false;
+  DownloadMode(env);
 
   char name[64], remark[64];
   ToASCII(name, ARRAY_SIZE(name), wp.name.c_str());

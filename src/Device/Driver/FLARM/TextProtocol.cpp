@@ -80,8 +80,7 @@ FlarmDevice::Send(const char *sentence, OperationEnvironment &env)
   /* workaround for a Garrecht TRX-1090 firmware bug: start with a new
      line, because the TRX-1090 expects the '$' to be the first
      character, or it won't forward the sentence to the FLARM  */
-  if (!port.Write('\n'))
-    throw std::runtime_error{"Port write failed"};
+  port.Write('\n');
 
   /* From the FLARM data port specification: "All sentences must [...]
      end with [...] two checksum characters [...].  [...] these

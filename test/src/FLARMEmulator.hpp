@@ -127,16 +127,16 @@ private:
     return p - data;
   }
 
-  bool SendACK(uint16_t sequence_number) {
+  void SendACK(uint16_t sequence_number) {
     uint16_t payload = ToLE16(sequence_number);
     FLARM::FrameHeader header =
       FLARM::PrepareFrameHeader(sequence_number, FLARM::MT_ACK,
                                 &payload, sizeof(payload));
-    return port->Write(FLARM::START_FRAME) &&
-      FLARM::SendEscaped(*port, &header, sizeof(header), *env,
-                         std::chrono::seconds(2)) &&
-      FLARM::SendEscaped(*port, &payload, sizeof(payload), *env,
-                         std::chrono::seconds(2));
+    port->Write(FLARM::START_FRAME);
+    FLARM::SendEscaped(*port, &header, sizeof(header), *env,
+                       std::chrono::seconds(2));
+    FLARM::SendEscaped(*port, &payload, sizeof(payload), *env,
+                       std::chrono::seconds(2));
   }
 
   size_t HandleBinary(const void *_data, size_t length) {

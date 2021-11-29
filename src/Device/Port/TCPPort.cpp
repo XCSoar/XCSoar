@@ -80,12 +80,12 @@ size_t
 TCPPort::Write(const void *data, size_t length)
 {
   if (!connection.IsDefined())
-    return 0;
+    throw std::runtime_error("Port is closed");
 
   ssize_t nbytes = connection.GetSocket().Write(data, length);
   if (nbytes < 0)
     // TODO check EAGAIN?
-    return 0;
+    throw MakeSocketError("Failed to send");
 
   return nbytes;
 }

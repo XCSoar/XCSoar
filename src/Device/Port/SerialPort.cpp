@@ -22,11 +22,12 @@ Copyright_License {
 */
 
 #include "SerialPort.hpp"
-#include "Asset.hpp"
+#include "Device/Error.hpp"
 #include "Operation/Cancelled.hpp"
 #include "system/Error.hxx"
 #include "system/Sleep.h"
 #include "system/OverlappedEvent.hpp"
+#include "Asset.hpp"
 
 #include <fileapi.h>
 
@@ -300,7 +301,7 @@ SerialPort::Write(const void *data, size_t length)
   DWORD NumberOfBytesWritten;
 
   if (hPort == INVALID_HANDLE_VALUE)
-    return 0;
+    throw std::runtime_error("Port is closed");
 
   OverlappedEvent osWriter;
 
@@ -308,8 +309,8 @@ SerialPort::Write(const void *data, size_t length)
   if (::WriteFile(hPort, data, length, &NumberOfBytesWritten, osWriter.GetPointer()))
     return NumberOfBytesWritten;
 
-  if (::GetLastError() != ERROR_IO_PENDING)
-    return 0;
+  if (auto error = ::GetLastError(); error != ERROR_IO_PENDING)
+    throw MakeLastError(error, "Port write failed");
 
   // Let's wait for ReadFile() to finish
   unsigned timeout_ms = 1000 + length * 10;
@@ -323,7 +324,7 @@ SerialPort::Write(const void *data, size_t length)
     ::CancelIo(hPort);
     ::SetCommMask(hPort, 0);
     osWriter.Wait();
-    return 0;
+    throw DeviceTimeout{"Port write timeout"};
   }
 }
 

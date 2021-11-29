@@ -35,7 +35,7 @@ FindSpecial(const uint8_t *const begin, const uint8_t *const end)
   return std::min(start, escape);
 }
 
-bool
+void
 FLARM::SendEscaped(Port &port, const void *buffer, size_t length,
                    OperationEnvironment &env,
                    std::chrono::steady_clock::duration _timeout)
@@ -63,22 +63,18 @@ FLARM::SendEscaped(Port &port, const void *buffer, size_t length,
 
     // Check for bytes that need to be escaped and send
     // the appropriate replacements
-    bool result;
-    if (*p == START_FRAME)
-      result = port.Write(ESCAPE) && port.Write(ESCAPE_START);
-    else if (*p == ESCAPE)
-      result = port.Write(ESCAPE) && port.Write(ESCAPE_ESCAPE);
-    else
+    if (*p == START_FRAME) {
+      port.Write(ESCAPE);
+      port.Write(ESCAPE_START);
+    } else if (*p == ESCAPE) {
+      port.Write(ESCAPE);
+      port.Write(ESCAPE_ESCAPE);
+    } else
       // Otherwise just send the original byte
-      result = port.Write(*p);
-
-    if (!result)
-      return false;
+      port.Write(*p);
 
     p++;
   }
-
-  return true;
 }
 
 static uint8_t *
@@ -145,10 +141,10 @@ FLARM::ReceiveEscaped(Port &port, void *buffer, size_t length,
   return true;
 }
 
-bool
+void
 FlarmDevice::SendStartByte()
 {
-  return port.Write(FLARM::START_FRAME);
+  port.Write(FLARM::START_FRAME);
 }
 
 inline void
@@ -182,12 +178,12 @@ FlarmDevice::PrepareFrameHeader(FLARM::MessageType message_type,
                                    data, length);
 }
 
-bool
+void
 FlarmDevice::SendFrameHeader(const FLARM::FrameHeader &header,
                              OperationEnvironment &env,
                              std::chrono::steady_clock::duration timeout)
 {
-  return SendEscaped(&header, sizeof(header), env, timeout);
+  SendEscaped(&header, sizeof(header), env, timeout);
 }
 
 bool
@@ -279,12 +275,13 @@ FlarmDevice::BinaryPing(OperationEnvironment &env,
   FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MT_PING);
 
   // Send request and wait for positive answer
-  return SendStartByte() &&
-    SendFrameHeader(header, env, timeout.GetRemainingOrZero()) &&
-    WaitForACK(header.sequence_number, env, timeout.GetRemainingOrZero());
+
+  SendStartByte();
+  SendFrameHeader(header, env, timeout.GetRemainingOrZero());
+  return WaitForACK(header.sequence_number, env, timeout.GetRemainingOrZero());
 }
 
-bool
+void
 FlarmDevice::BinaryReset(OperationEnvironment &env,
                          std::chrono::steady_clock::duration _timeout)
 {
@@ -294,6 +291,6 @@ FlarmDevice::BinaryReset(OperationEnvironment &env,
   FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MT_EXIT);
 
   // Send request and wait for positive answer
-  return SendStartByte() &&
-    SendFrameHeader(header, env, timeout.GetRemainingOrZero());
+  SendStartByte();
+  SendFrameHeader(header, env, timeout.GetRemainingOrZero());
 }

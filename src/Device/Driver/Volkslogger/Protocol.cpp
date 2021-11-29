@@ -30,40 +30,36 @@ Copyright_License {
 
 #include <string.h>
 
-bool
+void
 Volkslogger::Reset(Port &port, OperationEnvironment &env, unsigned n)
 {
   static constexpr auto delay = std::chrono::milliseconds(2);
 
   while (n-- > 0) {
-    if (!port.Write(CAN))
-      return false;
-
+    port.Write(CAN);
     env.Sleep(delay);
   }
-
-  return true;
 }
 
-bool
+void
 Volkslogger::Handshake(Port &port, OperationEnvironment &env,
                        std::chrono::steady_clock::duration _timeout)
 {
   TimeoutClock timeout(_timeout);
 
   while (true) { // Solange R's aussenden, bis ein L zurückkommt
-    if (!port.Write('R'))
-      return false;
+    port.Write('R');
 
     auto remaining = timeout.GetRemainingSigned();
     if (remaining.count() < 0)
-      return false;
+      throw DeviceTimeout{"Handshake timeout"};
 
     if (remaining > std::chrono::milliseconds(500))
       remaining = std::chrono::milliseconds(500);
 
     try {
       port.WaitForChar('L', env, remaining);
+      break;
     } catch (const DeviceTimeout &) {
       /* timeout, try again */
     }
@@ -73,45 +69,44 @@ Volkslogger::Handshake(Port &port, OperationEnvironment &env,
   while (true) { // Auf 4 hintereinanderfolgende L's warten
     const auto remaining = timeout.GetRemainingSigned();
     if (remaining.count() < 0)
-      return false;
+      throw DeviceTimeout{"Handshake timeout"};
 
     port.WaitForChar('L', env, remaining);
 
     count++;
     if (count >= 4)
-      return true;
+      return;
   }
 }
 
-bool
+void
 Volkslogger::Connect(Port &port, OperationEnvironment &env,
                      std::chrono::steady_clock::duration timeout)
 {
-  return Reset(port, env, 10) && Handshake(port, env, timeout);
+  Reset(port, env, 10);
+  Handshake(port, env, timeout);
 }
 
-bool
+void
 Volkslogger::ConnectAndFlush(Port &port, OperationEnvironment &env,
                              std::chrono::steady_clock::duration timeout)
 {
   port.Flush();
 
-  if (!Connect(port, env, timeout))
-    return false;
-
+  Connect(port, env, timeout);
   port.FullFlush(env, std::chrono::milliseconds(50),
                  std::chrono::milliseconds(300));
-  return true;
 }
 
-static bool
+static void
 SendWithCRC(Port &port, const void *data, size_t length,
             OperationEnvironment &env)
 {
   port.FullWrite(data, length, env, std::chrono::seconds(2));
 
   uint16_t crc16 = UpdateCRC16CCITT(data, length, 0);
-  return port.Write(crc16 >> 8) && port.Write(crc16 & 0xff);
+  port.Write(crc16 >> 8);
+  port.Write(crc16 & 0xff);
 }
 
 bool
@@ -125,8 +120,7 @@ Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
                  std::chrono::milliseconds(100));
 
   /* reset command interpreter */
-  if (!Reset(port, env, 6))
-    return false;
+  Reset(port, env, 6);
 
   /* send command packet */
 
@@ -135,13 +129,11 @@ Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
     0, 0, 0, 0, 0,
   };
 
-  if (!port.Write(ENQ))
-    return false;
+  port.Write(ENQ);
 
   env.Sleep(delay);
 
-  if (!SendWithCRC(port, cmdarray, sizeof(cmdarray), env))
-    return false;
+  SendWithCRC(port, cmdarray, sizeof(cmdarray), env);
 
   /* wait for confirmation */
 
@@ -224,8 +216,7 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
   while (!ende) {
     // Zeichen anfordern und darauf warten
 
-    if (!port.Write(ACK))
-      return -1;
+    port.Write(ACK);
 
     // Set longer timeout on first char
     const std::chrono::steady_clock::duration timeout = start ? TIMEOUT_NORMAL : timeout_firstchar;
@@ -304,7 +295,7 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
   return nbytes - 2;
 }
 
-bool
+void
 Volkslogger::WriteBulk(Port &port, OperationEnvironment &env,
                        const void *buffer, unsigned length)
 {
@@ -320,8 +311,6 @@ Volkslogger::WriteBulk(Port &port, OperationEnvironment &env,
       n = 400;
 
     n = port.Write(p, n);
-    if (n == 0)
-      return false;
 
     crc16 = UpdateCRC16CCITT(p, n, crc16);
     p += n;
@@ -333,7 +322,8 @@ Volkslogger::WriteBulk(Port &port, OperationEnvironment &env,
     env.Sleep(delay);
   }
 
-  return port.Write(crc16 >> 8) && port.Write(crc16 & 0xff);
+  port.Write(crc16 >> 8);
+  port.Write(crc16 & 0xff);
 }
 
 int
@@ -391,9 +381,7 @@ Volkslogger::SendCommandWriteBulk(Port &port, OperationEnvironment &env,
 
   env.Sleep(std::chrono::milliseconds(100));
 
-  if (!WriteBulk(port, env, data, size))
-    return false;
-
+  WriteBulk(port, env, data, size);
   WaitForACK(port, env);
   return true;
 }

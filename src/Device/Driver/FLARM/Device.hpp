@@ -157,10 +157,10 @@ private:
   bool DeclareInternal(const Declaration &declaration,
                        OperationEnvironment &env);
 
-  bool SendEscaped(const void *data, size_t length,
+  void SendEscaped(const void *data, size_t length,
                    OperationEnvironment &env,
                    std::chrono::steady_clock::duration timeout) {
-    return FLARM::SendEscaped(port, data, length, env, timeout);
+    FLARM::SendEscaped(port, data, length, env, timeout);
   }
 
   bool ReceiveEscaped(void *data, size_t length,
@@ -171,9 +171,8 @@ private:
 
   /**
    * Send the byte that is used to signal that start of a new frame
-   * @return True if the byte was sent successfully
    */
-  bool SendStartByte();
+  void SendStartByte();
 
   /**
    * Waits for a certain amount of time until the next frame start signal byte
@@ -201,10 +200,8 @@ private:
    * Sends a FrameHeader to the port. Remember that a StartByte should be
    * sent first!
    * @param header FrameHeader that should be sent.
-   * @return True if the header was sent successfully, False if a timeout
-   * or any transfer problems occurred
    */
-  bool SendFrameHeader(const FLARM::FrameHeader &header,
+  void SendFrameHeader(const FLARM::FrameHeader &header,
                        OperationEnvironment &env,
                        std::chrono::steady_clock::duration timeout);
 
@@ -262,9 +259,8 @@ private:
 
   /**
    * "Resets the device. The only way to resume normal operation."
-   * @return True if the message was sent properly, False otherwise
    */
-  bool BinaryReset(OperationEnvironment &env,
+  void BinaryReset(OperationEnvironment &env,
                    std::chrono::steady_clock::duration timeout);
 
   /**

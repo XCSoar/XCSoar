@@ -116,12 +116,10 @@ static bool
 ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
                     OperationEnvironment &env)
 {
-  if (!LX::CommandMode(port, env))
-    return false;
+  LX::CommandMode(port, env);
 
   port.Flush();
-  if (!LX::SendCommand(port, LX::READ_FLIGHT_LIST))
-    return false;
+  LX::SendCommand(port, LX::READ_FLIGHT_LIST);
 
   bool success = false;
   while (!flight_list.full()) {
@@ -176,17 +174,14 @@ static bool
 DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
                     BufferedOutputStream &os, OperationEnvironment &env)
 {
-  if (!LX::CommandMode(port, env))
-    return false;
+  LX::CommandMode(port, env);
 
   port.Flush();
 
   LX::SeekMemory seek;
   seek.start_address = flight.internal.lx.start_address;
   seek.end_address = flight.internal.lx.end_address;
-  if (!LX::SendPacket(port, LX::SEEK_MEMORY, &seek, sizeof(seek), env))
-      return false;
-
+  LX::SendPacket(port, LX::SEEK_MEMORY, &seek, sizeof(seek), env);
   LX::ExpectACK(port, env);
 
   LX::MemorySection memory_section;

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "TTYPort.hpp"
+#include "Device/Error.hpp"
 #include "Asset.hpp"
 #include "io/UniqueFileDescriptor.hxx"
 #include "system/Error.hxx"
@@ -279,7 +280,7 @@ TTYPort::Write(const void *data, size_t length)
   assert(socket.IsDefined());
 
   if (!valid.load(std::memory_order_relaxed))
-    return 0;
+    throw std::runtime_error("Port is closed");
 
   TTYDescriptor fd(socket.GetSocket().ToFileDescriptor());
   auto nbytes = fd.Write(data, length);
@@ -288,11 +289,11 @@ TTYPort::Write(const void *data, size_t length)
         /* the output fifo is full; wait until we can write (or until
            the timeout expires) */
         WaitWrite(5000) != Port::WaitResult::READY)
-      return 0;
+      throw DeviceTimeout{"Port write timeout"};
 
     nbytes = fd.Write(data, length);
     if (nbytes < 0)
-      return 0;
+      throw MakeErrno("Port write failed");
   }
 
   return nbytes;

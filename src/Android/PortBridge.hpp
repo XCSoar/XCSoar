@@ -70,7 +70,7 @@ public:
     return env->CallBooleanMethod(Get(), setBaudRate_method, baud_rate);
   }
 
-  int write(JNIEnv *env, const void *data, size_t length);
+  std::size_t write(JNIEnv *env, const void *data, size_t length);
 };
 
 #endif
