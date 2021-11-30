@@ -31,11 +31,10 @@ Copyright_License {
 #include <string.h>
 #include <stdio.h>
 
-bool
+void
 CAI302::WriteString(Port &port, const char *p, OperationEnvironment &env)
 {
-  size_t length = strlen(p);
-  return port.FullWrite(p, length, env, std::chrono::seconds(2));
+  port.FullWriteString(p, env, std::chrono::seconds(2));
 }
 
 bool
@@ -66,7 +65,8 @@ CAI302::SendCommandQuick(Port &port, const char *cmd,
     return false;
 
   port.Flush();
-  return WriteString(port, cmd, env);
+  WriteString(port, cmd, env);
+  return true;
 }
 
 bool
@@ -81,7 +81,11 @@ CAI302::SendCommand(Port &port, const char *cmd,
 bool
 CAI302::LogModeQuick(Port &port, OperationEnvironment &env)
 {
-  return CommandModeQuick(port) && WriteString(port, "LOG 0\r", env);
+  if (!CommandModeQuick(port))
+    return false;
+
+  WriteString(port, "LOG 0\r", env);
+  return true;
 }
 
 bool
@@ -187,8 +191,7 @@ CAI302::UploadShort(Port &port, const char *command,
                     std::chrono::steady_clock::duration timeout)
 {
   port.Flush();
-  if (!WriteString(port, command, env))
-    return -1;
+  WriteString(port, command, env);
 
   int nbytes = ReadShortReply(port, response, max_size, env, timeout);
   if (nbytes < 0)
@@ -207,16 +210,14 @@ CAI302::UploadLarge(Port &port, const char *command,
                     std::chrono::steady_clock::duration timeout)
 {
   port.Flush();
-  if (!WriteString(port, command, env))
-    return -1;
+  WriteString(port, command, env);
 
   int nbytes = ReadLargeReply(port, response, max_size, env, timeout);
 
   if (nbytes == -2) {
     /* transmission error - try again */
 
-    if (!WriteString(port, command, env))
-      return -1;
+    WriteString(port, command, env);
 
     nbytes = ReadLargeReply(port, response, max_size, env, timeout);
   }
@@ -354,7 +355,8 @@ CAI302::DownloadCommand(Port &port, const char *command,
                         OperationEnvironment &env,
                         std::chrono::steady_clock::duration timeout)
 {
-  return WriteString(port, command, env) && WaitDownloadPrompt(port, env);
+  WriteString(port, command, env);
+  return WaitDownloadPrompt(port, env);
 }
 
 bool

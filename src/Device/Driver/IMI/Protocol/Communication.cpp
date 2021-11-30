@@ -38,17 +38,6 @@ Copyright_License {
 namespace IMI
 {
   extern IMIWORD _serialNumber;
-
-static void
-Write(Port &port, const void *data, std::size_t size,
-      OperationEnvironment &env,
-      std::chrono::steady_clock::duration timeout)
-{
-  if (!port.FullWrite(data, size, env, timeout)) {
-    throw std::runtime_error("Port write error");
-  }
-}
-
 }
 
 void
@@ -59,7 +48,7 @@ IMI::Send(Port &port, OperationEnvironment &env,
   Sync sync;
   sync.syncChar1 = IMICOMM_SYNC_CHAR1;
   sync.syncChar2 = IMICOMM_SYNC_CHAR2;
-  Write(port, &sync, sizeof(sync), env, std::chrono::seconds{1});
+  port.FullWrite(&sync, sizeof(sync), env, std::chrono::seconds{1});
 
   Header header;
   header.sn = _serialNumber;
@@ -72,15 +61,15 @@ IMI::Send(Port &port, OperationEnvironment &env,
   IMIWORD crc = 0xffff;
   crc = UpdateCRC16CCITT(&header, sizeof(header), crc);
 
-  Write(port, &header, sizeof(header), env, std::chrono::seconds{1});
+  port.FullWrite(&header, sizeof(header), env, std::chrono::seconds{1});
 
   if (payloadSize > 0) {
-    Write(port, payload, payloadSize, env, std::chrono::seconds{2});
+    port.FullWrite(payload, payloadSize, env, std::chrono::seconds{2});
     crc = UpdateCRC16CCITT(payload, payloadSize, crc);
   }
 
   crc = ToBE16(crc);
-  Write(port, &crc, sizeof(crc), env, std::chrono::seconds{1});
+  port.FullWrite(&crc, sizeof(crc), env, std::chrono::seconds{1});
 }
 
 static constexpr std::chrono::steady_clock::duration

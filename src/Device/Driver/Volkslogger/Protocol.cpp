@@ -109,8 +109,7 @@ static bool
 SendWithCRC(Port &port, const void *data, size_t length,
             OperationEnvironment &env)
 {
-  if (!port.FullWrite(data, length, env, std::chrono::seconds(2)))
-    return false;
+  port.FullWrite(data, length, env, std::chrono::seconds(2));
 
   uint16_t crc16 = UpdateCRC16CCITT(data, length, 0);
   return port.Write(crc16 >> 8) && port.Write(crc16 & 0xff);

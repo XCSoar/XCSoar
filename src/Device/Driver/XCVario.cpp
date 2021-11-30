@@ -169,7 +169,8 @@ XVCDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
   char buffer[32];
   unsigned qnh = uround(pres.GetHectoPascal());
   int msg_len = sprintf(buffer,"!g,q%u\r", std::min(qnh,(unsigned)2000));
-  return port.FullWrite(buffer, msg_len, env, std::chrono::seconds(2) );
+  port.FullWrite(buffer, msg_len, env, std::chrono::seconds(2) );
+  return true;
 }
 
 
@@ -201,7 +202,8 @@ XVCDevice::PutBallast(double fraction, gcc_unused double overload,
    char buffer[32];
    double ballast = fraction * 10.;
    int msg_len = sprintf(buffer,"!g,b%.3f\r", ballast );
-   return port.FullWrite(buffer, msg_len, env, std::chrono::seconds(2) );
+   port.FullWrite(buffer, msg_len, env, std::chrono::seconds(2) );
+  return true;
 }
 
 static Device *

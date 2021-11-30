@@ -189,8 +189,7 @@ KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
     }
 
     // Send the message
-    if (!port.FullWrite(msg, msg_size, env, CMD_TIMEOUT))
-      return false;
+    port.FullWrite(msg, msg_size, env, CMD_TIMEOUT);
 
     // Wait for the response
     uint8_t _response;

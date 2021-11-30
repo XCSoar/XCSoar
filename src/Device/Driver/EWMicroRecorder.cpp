@@ -63,7 +63,8 @@ public:
 bool
 EWMicroRecorderDevice::EnableNMEA(OperationEnvironment &env)
 {
-  return port.FullWrite("!!\r\n", 4, env, std::chrono::milliseconds(500));
+  port.FullWrite("!!\r\n", 4, env, std::chrono::milliseconds(500));
+  return true;
 }
 
 static bool
@@ -197,7 +198,7 @@ CleanString(char *p)
 /**
  * Clean a string and write it to the Port.
  */
-static bool
+static void
 WriteCleanString(Port &port, const TCHAR *p,
                  OperationEnvironment &env,
                  std::chrono::steady_clock::duration timeout)
@@ -207,29 +208,29 @@ WriteCleanString(Port &port, const TCHAR *p,
 
   CleanString(buffer.buffer());
 
-  return port.FullWriteString(buffer, env, timeout);
+  port.FullWriteString(buffer, env, timeout);
 }
 
-static bool
+static void
 WriteLabel(Port &port, const char *name, OperationEnvironment &env)
 {
-  return port.FullWriteString(name, env, std::chrono::seconds(1)) &&
-    port.FullWrite(": ", 2, env, std::chrono::milliseconds(500));
+  port.FullWriteString(name, env, std::chrono::seconds(1));
+  port.FullWrite(": ", 2, env, std::chrono::milliseconds(500));
 }
 
 /**
  * Write a name/value pair to the EW microRecorder.
  */
-static bool
+static void
 WritePair(Port &port, const char *name, const TCHAR *value,
           OperationEnvironment &env)
 {
-  return WriteLabel(port, name, env) &&
-    WriteCleanString(port, value, env, std::chrono::seconds(1)) &&
-    port.FullWrite("\r\n", 2, env, std::chrono::milliseconds(500));
+  WriteLabel(port, name, env);
+  WriteCleanString(port, value, env, std::chrono::seconds(1));
+  port.FullWrite("\r\n", 2, env, std::chrono::milliseconds(500));
 }
 
-static bool
+static void
 WriteGeoPoint(Port &port, const GeoPoint &value, OperationEnvironment &env)
 {
   int DegLat, DegLon;
@@ -265,7 +266,7 @@ WriteGeoPoint(Port &port, const GeoPoint &value, OperationEnvironment &env)
           DegLat, (int)MinLat, NoS,
           DegLon, (int)MinLon, EoW);
 
-  return port.FullWriteString(buffer, env, std::chrono::seconds(1));
+  port.FullWriteString(buffer, env, std::chrono::seconds(1));
 }
 
 static bool
@@ -273,12 +274,14 @@ EWMicroRecorderWriteWaypoint(Port &port, const char *type,
                              const Waypoint &way_point,
                              OperationEnvironment &env)
 {
-  return WriteLabel(port, type, env) &&
-    WriteGeoPoint(port, way_point.location, env) &&
-    port.Write(' ') &&
-    WriteCleanString(port, way_point.name.c_str(),
-                     env, std::chrono::seconds(1)) &&
-    port.FullWrite("\r\n", 2, env, std::chrono::milliseconds(500));
+  WriteLabel(port, type, env);
+  WriteGeoPoint(port, way_point.location, env);
+  if (!port.Write(' '))
+    return false;
+  WriteCleanString(port, way_point.name.c_str(),
+                   env, std::chrono::seconds(1));
+  port.FullWrite("\r\n", 2, env, std::chrono::milliseconds(500));
+  return true;
 }
 
 static bool
@@ -299,10 +302,9 @@ DeclareInner(Port &port, const Declaration &declaration,
 
   port.Write('\x18');         // start to upload file
 
-  if (!port.FullWriteString(user_data, env, std::chrono::seconds(5)) ||
-      !port.FullWriteString("USER DETAILS\r\n--------------\r\n\r\n",
-                            env, std::chrono::seconds(1)))
-    return false;
+  port.FullWriteString(user_data, env, std::chrono::seconds(5));
+  port.FullWriteString("USER DETAILS\r\n--------------\r\n\r\n",
+                       env, std::chrono::seconds(1));
 
   WritePair(port, "Pilot Name", declaration.pilot_name.c_str(), env);
   WritePair(port, "Competition ID", declaration.competition_id.c_str(), env);
@@ -310,9 +312,8 @@ DeclareInner(Port &port, const Declaration &declaration,
   WritePair(port,  "Aircraft ID",
             declaration.aircraft_registration.c_str(), env);
 
-  if (!port.FullWriteString("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n",
-                            env, std::chrono::seconds(1)))
-    return false;
+  port.FullWriteString("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n",
+                       env, std::chrono::seconds(1));
 
   WritePair(port, "Description", _T("XCSoar task declaration"), env);
 

@@ -70,9 +70,9 @@ public:
     }
   }
 
-  bool Send(Port &port, OperationEnvironment &env) {
+  void Send(Port &port, OperationEnvironment &env) {
     data[fill++] = checksum;
-    return port.FullWrite(data, fill, env, std::chrono::seconds(2));
+    port.FullWrite(data, fill, env, std::chrono::seconds(2));
   }
 };
 
@@ -93,7 +93,8 @@ ATR833Device::PutActiveFrequency(RadioFrequency frequency,
   ATRBuffer buffer(SETACTIVE);
   buffer.Put(frequency.GetKiloHertz() / 1000);
   buffer.Put((frequency.GetKiloHertz() % 1000) / 5);
-  return buffer.Send(port, env);
+  buffer.Send(port, env);
+  return true;
 }
 
 
@@ -105,9 +106,9 @@ ATR833Device::PutStandbyFrequency(RadioFrequency frequency,
   ATRBuffer buffer(SETSTANDBY);
   buffer.Put(frequency.GetKiloHertz() / 1000);
   buffer.Put((frequency.GetKiloHertz() % 1000) / 5);
-  return buffer.Send(port, env);
+  buffer.Send(port, env);
+  return true;
 }
-
 
 static Device *
 ATR833CreateOnPort(const DeviceConfig &config, Port &com_port)

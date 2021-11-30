@@ -240,8 +240,7 @@ namespace LX {
     bool Write(const void *data, size_t length,
                OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout=std::chrono::seconds(5)) {
-      if (!port.FullWrite(data, length, env, timeout))
-        return false;
+      port.FullWrite(data, length, env, timeout);
 
       crc = calc_crc((const uint8_t *)data, length, crc);
       return true;

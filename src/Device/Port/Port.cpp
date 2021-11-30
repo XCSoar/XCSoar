@@ -55,7 +55,7 @@ Port::Write(const char *s)
   return Write(s, strlen(s));
 }
 
-bool
+void
 Port::FullWrite(const void *buffer, size_t length,
                 OperationEnvironment &env,
                 std::chrono::steady_clock::duration _timeout)
@@ -65,27 +65,25 @@ Port::FullWrite(const void *buffer, size_t length,
   const char *p = (const char *)buffer, *end = p + length;
   while (p < end) {
     if (timeout.HasExpired())
-      return false;
+      throw std::runtime_error{"Port write timeout"};
 
     size_t nbytes = Write(p, end - p);
     if (env.IsCancelled())
       throw OperationCancelled{};
 
     if (nbytes == 0)
-      return false;
+      throw std::runtime_error{"Port write failed"};
 
     p += nbytes;
   }
-
-  return true;
 }
 
-bool
+void
 Port::FullWriteString(const char *s,
                       OperationEnvironment &env,
                       std::chrono::steady_clock::duration timeout)
 {
-  return FullWrite(s, strlen(s), env, timeout);
+  FullWrite(s, strlen(s), env, timeout);
 }
 
 int

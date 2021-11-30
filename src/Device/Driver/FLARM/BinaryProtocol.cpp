@@ -53,8 +53,7 @@ FLARM::SendEscaped(Port &port, const void *buffer, size_t length,
     if (special > p) {
       /* bulk write of "harmless" characters */
 
-      if (!port.FullWrite(p, special - p, env, timeout.GetRemainingOrZero()))
-        return false;
+      port.FullWrite(p, special - p, env, timeout.GetRemainingOrZero());
 
       p = special;
     }

@@ -30,8 +30,6 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Units/Units.hpp"
 
-#include <stdexcept>
-
 static void
 FormatLatitude(char *buffer, size_t buffer_size, Angle latitude )
 {
@@ -70,8 +68,7 @@ PortWriteNMEANoChecksum(Port &port, const char *line,
   // reasonable hard-coded timeout; Copied from ::PortWriteNMEA()
   constexpr auto timeout = std::chrono::seconds(1);
 
-  if (!port.FullWrite(line, strlen(line), env, timeout))
-    throw std::runtime_error{"Port write failed"};
+  port.FullWrite(line, strlen(line), env, timeout);
 }
 
 /*

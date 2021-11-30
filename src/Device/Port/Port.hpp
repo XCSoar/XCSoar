@@ -116,11 +116,12 @@ public:
    * Note that this port's write timeout is still in effect for each
    * individual write operation.
    *
+   * Throws on error.
+   *
    * @param timeout give up after this duration
-   * @return true on success
    */
   gcc_nonnull_all
-  bool FullWrite(const void *buffer, size_t length,
+  void FullWrite(const void *buffer, size_t length,
                  OperationEnvironment &env,
                  std::chrono::steady_clock::duration timeout);
 
@@ -128,7 +129,7 @@ public:
    * Just like FullWrite(), but write a null-terminated string
    */
   gcc_nonnull_all
-  bool FullWriteString(const char *s,
+  void FullWriteString(const char *s,
                        OperationEnvironment &env,
                        std::chrono::steady_clock::duration timeout);
 

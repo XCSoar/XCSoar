@@ -309,8 +309,7 @@ namespace CAI302 {
 
 #pragma pack(pop)
 
-  bool
-  WriteString(Port &port, const char *p, OperationEnvironment &env);
+  void WriteString(Port &port, const char *p, OperationEnvironment &env);
 
   /**
    * Enter "command" mode, but don't wait for the prompt.

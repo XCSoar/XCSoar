@@ -40,12 +40,12 @@ PortWriteNMEA(Port &port, const char *line, OperationEnvironment &env)
      parameter? */
   static constexpr auto timeout = std::chrono::seconds(1);
 
-  if (!port.Write('$') ||
-      !port.FullWrite(line, strlen(line), env, timeout))
+  if (!port.Write('$'))
     throw std::runtime_error{"Port write failed"};
+
+  port.FullWrite(line, strlen(line), env, timeout);
 
   char checksum[16];
   sprintf(checksum, "*%02X\r\n", NMEAChecksum(line));
-  if (!port.FullWrite(checksum, strlen(checksum), env, timeout))
-    throw std::runtime_error{"Port write failed"};
+  port.FullWrite(checksum, strlen(checksum), env, timeout);
 }

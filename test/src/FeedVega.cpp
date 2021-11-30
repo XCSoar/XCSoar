@@ -94,11 +94,7 @@ try {
 
     last_stamp = current_stamp;
 
-    if (!port->FullWrite(start, end - start, env, std::chrono::seconds(1))) {
-      fprintf(stderr, "Failed to write to port\n");
-      return EXIT_FAILURE;
-
-    }
+    port->FullWrite(start, end - start, env, std::chrono::seconds(1));
   }
 
   return EXIT_SUCCESS;

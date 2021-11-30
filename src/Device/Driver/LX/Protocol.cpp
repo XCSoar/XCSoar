@@ -64,9 +64,12 @@ LX::SendPacket(Port &port, Command command,
                OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout)
 {
-  return SendCommand(port, command) &&
-    port.FullWrite(data, length, env, timeout) &&
-    port.Write(calc_crc(data, length, 0xff));
+  if (!SendCommand(port, command))
+    return false;
+
+  port.FullWrite(data, length, env, timeout);
+
+  return port.Write(calc_crc(data, length, 0xff));
 }
 
 bool
