@@ -148,11 +148,11 @@ namespace LX {
     return port.Write(SYN);
   }
 
-  static inline bool
+  static inline void
   ExpectACK(Port &port, OperationEnvironment &env,
             std::chrono::steady_clock::duration timeout=std::chrono::seconds(2))
   {
-    return port.WaitForChar(ACK, env, timeout) == Port::WaitResult::READY;
+    port.WaitForChar(ACK, env, timeout);
   }
 
   /**
@@ -164,7 +164,11 @@ namespace LX {
   Connect(Port &port, OperationEnvironment &env,
           std::chrono::steady_clock::duration timeout=std::chrono::milliseconds(500))
   {
-    return SendSYN(port) && ExpectACK(port, env, timeout);
+    if (!SendSYN(port))
+      return false;
+
+    ExpectACK(port, env, timeout);
+    return true;
   }
 
   /**

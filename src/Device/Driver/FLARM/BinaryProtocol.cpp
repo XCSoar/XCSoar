@@ -152,11 +152,11 @@ FlarmDevice::SendStartByte()
   return port.Write(FLARM::START_FRAME);
 }
 
-bool
+inline void
 FlarmDevice::WaitForStartByte(OperationEnvironment &env,
                               std::chrono::steady_clock::duration timeout)
 {
-  return port.WaitForChar(FLARM::START_FRAME, env, timeout) == Port::WaitResult::READY;
+  port.WaitForChar(FLARM::START_FRAME, env, timeout);
 }
 
 FLARM::FrameHeader
@@ -210,8 +210,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
   // Receive frames until timeout or expected frame found
   while (!timeout.HasExpired()) {
     // Wait until the next start byte comes around
-    if (!WaitForStartByte(env, timeout.GetRemainingOrZero()))
-      continue;
+    WaitForStartByte(env, timeout.GetRemainingOrZero());
 
     // Read the following FrameHeader
     FLARM::FrameHeader header;

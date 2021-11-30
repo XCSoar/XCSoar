@@ -178,9 +178,10 @@ private:
   /**
    * Waits for a certain amount of time until the next frame start signal byte
    * is received
-   * @return True if the start byte was received, False if a timeout occurred
+   *
+   * Throws on error.
    */
-  bool WaitForStartByte(OperationEnvironment &env,
+  void WaitForStartByte(OperationEnvironment &env,
                         std::chrono::steady_clock::duration timeout);
 
   /**

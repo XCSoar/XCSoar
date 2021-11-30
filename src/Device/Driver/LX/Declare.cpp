@@ -186,8 +186,7 @@ DeclareInner(Port &port, const Declaration &declaration,
 
   writer.Write(&lx_driver_Declaration, sizeof(lx_driver_Declaration), env);
   writer.Flush();
-  if (!LX::ExpectACK(port, env))
-    return false;
+  LX::ExpectACK(port, env);
 
   env.SetProgressPosition(4);
   LX::SendCommand(port, LX::WRITE_CONTEST_CLASS);
@@ -195,7 +194,8 @@ DeclareInner(Port &port, const Declaration &declaration,
   env.SetProgressPosition(5);
 
   writer.Flush();
-  return LX::ExpectACK(port, env);
+  LX::ExpectACK(port, env);
+  return true;
 }
 
 bool

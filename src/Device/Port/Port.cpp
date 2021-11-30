@@ -239,17 +239,23 @@ Port::ExpectString(const char *token, OperationEnvironment &env,
   }
 }
 
-Port::WaitResult
+void
 Port::WaitForChar(const char token, OperationEnvironment &env,
                   std::chrono::steady_clock::duration _timeout)
 {
   const TimeoutClock timeout(_timeout);
 
   while (true) {
-    WaitResult wait_result = WaitRead(env, timeout.GetRemainingOrZero());
-    if (wait_result != WaitResult::READY)
-      // Operation canceled, Timeout expired or I/O error occurred
-      return wait_result;
+    switch (WaitRead(env, timeout.GetRemainingOrZero())) {
+    case WaitResult::READY:
+      break;
+
+    case WaitResult::TIMEOUT:
+      throw DeviceTimeout{"Port read timeout"};
+
+    case WaitResult::FAILED:
+      throw std::runtime_error{"Port read failed"};
+    }
 
     // Read and compare character with token
     int ch = GetChar();
@@ -257,10 +263,8 @@ Port::WaitForChar(const char token, OperationEnvironment &env,
       break;
 
     if (timeout.HasExpired())
-      return WaitResult::TIMEOUT;
+      throw DeviceTimeout{"Port read timeout"};
   }
-
-  return WaitResult::READY;
 }
 
 void

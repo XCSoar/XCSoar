@@ -38,11 +38,11 @@ Copyright_License {
 #include <stdlib.h>
 #include <string.h>
 
-static bool
+static void
 ExpectXOff(Port &port, OperationEnvironment &env,
            std::chrono::steady_clock::duration timeout)
 {
-  return port.WaitForChar(0x13, env, timeout) == Port::WaitResult::READY;
+  port.WaitForChar(0x13, env, timeout);
 }
 
 static bool
@@ -184,8 +184,7 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
   strcat(buffer, "\r\n");
 
   port.Write(buffer);
-  if (!ExpectXOff(port, env, std::chrono::seconds(1)))
-    return false;
+  ExpectXOff(port, env, std::chrono::seconds{1});
 
   unsigned tracks = 0;
   while (true) {
@@ -265,8 +264,7 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
   strcat(buffer, "\r\n");
 
   port.Write(buffer);
-  if (!ExpectXOff(port, env, std::chrono::seconds(1)))
-    return false;
+  ExpectXOff(port, env, std::chrono::seconds{1});
 
   // Open file writer
   FileOutputStream fos(path);

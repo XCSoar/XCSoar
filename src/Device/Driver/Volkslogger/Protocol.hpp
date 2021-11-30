@@ -131,7 +131,7 @@ namespace Volkslogger {
     return SendCommandSwitchBaudRate(port, env, cmd, 0, baud_rate);
   }
 
-  bool WaitForACK(Port &port, OperationEnvironment &env);
+  void WaitForACK(Port &port, OperationEnvironment &env);
 
   /**
    * Read data from the Logger

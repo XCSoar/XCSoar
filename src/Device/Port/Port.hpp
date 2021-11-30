@@ -281,13 +281,15 @@ public:
    * Wait until the expected character is received, the timeout expires
    * or the operation gets canceled.
    *
+   * Throws on error.
+   *
    * @param token The expected character
    * @param env An OperationEnvironment that allows canceling the
    * operation
    * @param timeout give up after this duration
    */
-  WaitResult WaitForChar(const char token, OperationEnvironment &env,
-                         std::chrono::steady_clock::duration timeout);
+  void WaitForChar(const char token, OperationEnvironment &env,
+                   std::chrono::steady_clock::duration timeout);
 
 protected:
   /**

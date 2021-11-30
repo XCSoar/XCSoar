@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Protocol.hpp"
 #include "util/CRC.hpp"
+#include "Device/Error.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
 #include "time/TimeoutClock.hpp"
@@ -61,15 +62,11 @@ Volkslogger::Handshake(Port &port, OperationEnvironment &env,
     if (remaining > std::chrono::milliseconds(500))
       remaining = std::chrono::milliseconds(500);
 
-    Port::WaitResult result =
+    try {
       port.WaitForChar('L', env, remaining);
-    if (result == Port::WaitResult::READY)
-      break;
-
-    if (result != Port::WaitResult::TIMEOUT)
-      return false;
-
-    /* timeout, try again */
+    } catch (const DeviceTimeout &) {
+      /* timeout, try again */
+    }
   }
 
   unsigned count = 1;
@@ -78,8 +75,7 @@ Volkslogger::Handshake(Port &port, OperationEnvironment &env,
     if (remaining.count() < 0)
       return false;
 
-    if (port.WaitForChar('L', env, remaining) != Port::WaitResult::READY)
-      return false;
+    port.WaitForChar('L', env, remaining);
 
     count++;
     if (count >= 4)
@@ -191,10 +187,10 @@ Volkslogger::SendCommandSwitchBaudRate(Port &port, OperationEnvironment &env,
   return port.SetBaudrate(baud_rate);
 }
 
-bool
+void
 Volkslogger::WaitForACK(Port &port, OperationEnvironment &env)
 {
-  return port.WaitForChar(ACK, env, std::chrono::seconds(30)) == Port::WaitResult::READY;
+  port.WaitForChar(ACK, env, std::chrono::seconds(30));
 }
 
 int
@@ -389,12 +385,18 @@ Volkslogger::SendCommandWriteBulk(Port &port, OperationEnvironment &env,
                                   Command cmd,
                                   const void *data, size_t size)
 {
-  if (!SendCommand(port, env, cmd, 0, 0) || !WaitForACK(port, env))
+  if (!SendCommand(port, env, cmd, 0, 0))
     return false;
+
+  WaitForACK(port, env);
 
   env.Sleep(std::chrono::milliseconds(100));
 
-  return WriteBulk(port, env, data, size) && WaitForACK(port, env);
+  if (!WriteBulk(port, env, data, size))
+    return false;
+
+  WaitForACK(port, env);
+  return true;
 }
 
 size_t
