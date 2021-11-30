@@ -25,7 +25,7 @@ Copyright_License {
 
 #include <stdio.h>
 
-bool
+void
 FlarmDevice::SendSetting(const char *name, const char *value,
                          OperationEnvironment &env)
 {
@@ -41,15 +41,15 @@ FlarmDevice::SendSetting(const char *name, const char *value,
 
   char buffer[64];
   sprintf(buffer, "PFLAC,S,%s,%s", name, value);
-  return Send(buffer, env);
+  Send(buffer, env);
 }
 
-bool
+void
 FlarmDevice::RequestSetting(const char *name, OperationEnvironment &env)
 {
   char buffer[64];
   sprintf(buffer, "PFLAC,R,%s", name);
-  return Send(buffer, env);
+  Send(buffer, env);
 }
 
 std::pair<bool, std::string>

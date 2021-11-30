@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <stdio.h>
 
-bool
+void
 VegaDevice::SendSetting(const char *name, int value, OperationEnvironment &env)
 {
   /* erase the old value from the settings map, because we expect to
@@ -40,15 +40,15 @@ VegaDevice::SendSetting(const char *name, int value, OperationEnvironment &env)
 
   char buffer[64];
   sprintf(buffer, "PDVSC,S,%s,%d", name, value);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
 }
 
-bool
+void
 VegaDevice::RequestSetting(const char *name, OperationEnvironment &env)
 {
   char buffer[64];
   sprintf(buffer, "PDVSC,R,%s", name);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
 }
 
 std::pair<bool, int>
@@ -66,12 +66,14 @@ bool
 VegaDevice::PutMacCready(double _mc, OperationEnvironment &env)
 {
   volatile_data.mc = uround(_mc * 10);
-  return volatile_data.SendTo(port, env);
+  volatile_data.SendTo(port, env);
+  return true;
 }
 
 bool
 VegaDevice::PutQNH(const AtmosphericPressure& pres, OperationEnvironment &env)
 {
   volatile_data.qnh = uround(pres.GetHectoPascal() * 10);
-  return volatile_data.SendTo(port, env);
+  volatile_data.SendTo(port, env);
+  return true;
 }

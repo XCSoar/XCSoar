@@ -831,8 +831,12 @@ DeviceDescriptor::WriteNMEA(const char *line,
 {
   assert(line != nullptr);
 
+  if (port != nullptr)
+      return false;
+
   try {
-    return port != nullptr && PortWriteNMEA(*port, line, env);
+    PortWriteNMEA(*port, line, env);
+    return true;
   } catch (OperationCancelled) {
     return false;
   } catch (...) {

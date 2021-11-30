@@ -42,7 +42,8 @@ LXDevice::SendLXNAVVarioSetting(const char *name, const char *value,
 
   char buffer[256];
   sprintf(buffer, "PLXV0,%s,W,%s", name, value);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
+  return true;
 }
 
 bool
@@ -58,7 +59,8 @@ LXDevice::RequestLXNAVVarioSetting(const char *name, OperationEnvironment &env)
 
   char buffer[256];
   sprintf(buffer, "PLXV0,%s,R", name);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
+  return true;
 }
 
 std::string
@@ -99,7 +101,8 @@ LXDevice::SendNanoSetting(const char *name, const char *value,
 
   char buffer[256];
   sprintf(buffer, "PLXVC,SET,W,%s,%s", name, value);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
+  return true;
 }
 
 bool
@@ -115,7 +118,8 @@ LXDevice::RequestNanoSetting(const char *name, OperationEnvironment &env)
 
   char buffer[256];
   sprintf(buffer, "PLXVC,SET,R,%s", name);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
+  return true;
 }
 
 std::string
@@ -150,9 +154,10 @@ LXDevice::PutBallast(gcc_unused double fraction, double overload,
     return false;
 
   if (IsLXNAVVario())
-    return LXNAVVario::SetBallast(port, env, overload);
+    LXNAVVario::SetBallast(port, env, overload);
   else
-    return LX1600::SetBallast(port, env, overload);
+    LX1600::SetBallast(port, env, overload);
+  return true;
 }
 
 bool
@@ -164,9 +169,10 @@ LXDevice::PutBugs(double bugs, OperationEnvironment &env)
   int transformed_bugs_value = 100 - (int)(bugs*100);
 
   if (IsLXNAVVario())
-    return LXNAVVario::SetBugs(port, env, transformed_bugs_value);
+    LXNAVVario::SetBugs(port, env, transformed_bugs_value);
   else
-    return LX1600::SetBugs(port, env, transformed_bugs_value);
+    LX1600::SetBugs(port, env, transformed_bugs_value);
+  return true;
 }
 
 bool
@@ -176,9 +182,10 @@ LXDevice::PutMacCready(double mac_cready, OperationEnvironment &env)
     return false;
 
   if (IsLXNAVVario())
-    return LXNAVVario::SetMacCready(port, env, mac_cready);
+    LXNAVVario::SetMacCready(port, env, mac_cready);
   else
-    return LX1600::SetMacCready(port, env, mac_cready);
+    LX1600::SetMacCready(port, env, mac_cready);
+  return true;
 }
 
 bool
@@ -188,9 +195,10 @@ LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
     return false;
 
   if (IsLXNAVVario())
-    return LXNAVVario::SetQNH(port, env, pres);
+    LXNAVVario::SetQNH(port, env, pres);
   else
-    return LX1600::SetQNH(port, env, pres);
+    LX1600::SetQNH(port, env, pres);
+  return true;
 }
 
 bool
@@ -199,7 +207,8 @@ LXDevice::PutVolume(unsigned volume, OperationEnvironment &env)
   if (!IsLX16xx() || !EnableNMEA(env))
     return false;
 
-  return LX1600::SetVolume(port, env, volume);
+  LX1600::SetVolume(port, env, volume);
+  return true;
 }
 
 bool
@@ -208,5 +217,6 @@ LXDevice::PutPilotEvent(OperationEnvironment &env)
   if (!IsLXNAVVario())
     return false;
 
-  return LXNAVVario::PutPilotEvent(env, port);
+  LXNAVVario::PutPilotEvent(env, port);
+  return true;
 }

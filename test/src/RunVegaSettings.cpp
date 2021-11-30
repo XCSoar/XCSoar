@@ -61,12 +61,10 @@ try {
     char *q = strdup(p);
     char *v = strchr(q, '=');
     if (v == NULL) {
-      if (!device.RequestSetting(q, env))
-        printf("Error\n");
+      device.RequestSetting(q, env);
     } else {
       *v++ = 0;
-      if (!device.SendSetting(q, atoi(v), env))
-        printf("Error\n");
+      device.SendSetting(q, atoi(v), env);
     }
 
     free(q);

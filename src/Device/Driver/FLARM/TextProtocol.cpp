@@ -28,6 +28,8 @@ Copyright_License {
 #include "time/TimeoutClock.hpp"
 
 #include <cassert>
+#include <stdexcept>
+
 #include <string.h>
 
 static constexpr bool
@@ -70,7 +72,7 @@ FlarmDevice::TextMode(OperationEnvironment &env)
   return true;
 }
 
-bool
+void
 FlarmDevice::Send(const char *sentence, OperationEnvironment &env)
 {
   assert(sentence != nullptr);
@@ -79,13 +81,13 @@ FlarmDevice::Send(const char *sentence, OperationEnvironment &env)
      line, because the TRX-1090 expects the '$' to be the first
      character, or it won't forward the sentence to the FLARM  */
   if (!port.Write('\n'))
-    return false;
+    throw std::runtime_error{"Port write failed"};
 
   /* From the FLARM data port specification: "All sentences must [...]
      end with [...] two checksum characters [...].  [...] these
      characters [...] must be provided in sentences to FLARM and are
      part of the answers given by FLARM." */
-  return PortWriteNMEA(port, sentence, env);
+  PortWriteNMEA(port, sentence, env);
 }
 
 bool

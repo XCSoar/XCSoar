@@ -69,12 +69,18 @@ RequestAllSettings(FlarmDevice &device)
 {
   PopupOperationEnvironment env;
 
-  for (auto i = flarm_setting_names; *i != NULL; ++i)
-    if (!device.RequestSetting(*i, env))
-      return false;
+  try {
+    for (auto i = flarm_setting_names; *i != NULL; ++i)
+      device.RequestSetting(*i, env);
 
-  for (auto i = flarm_setting_names; *i != NULL; ++i)
-    WaitForSetting(device, *i, 500);
+    for (auto i = flarm_setting_names; *i != NULL; ++i)
+      WaitForSetting(device, *i, 500);
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    env.SetError(std::current_exception());
+    return false;
+  }
 
   return true;
 }

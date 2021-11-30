@@ -67,11 +67,8 @@ public:
 
   /**
    * Write a setting to the FLARM.
-   *
-   * @return true if sending the command has succeeded (it does not
-   * indicate whether the FLARM has understood and processed it)
    */
-  bool SendSetting(const char *name, const char *value,
+  void SendSetting(const char *name, const char *value,
                    OperationEnvironment &env);
 
   /**
@@ -81,7 +78,7 @@ public:
    * @return true if sending the command has succeeded (it does not
    * indicate whether the FLARM has understood and processed it)
    */
-  bool RequestSetting(const char *name, OperationEnvironment &env);
+  void RequestSetting(const char *name, OperationEnvironment &env);
 
   /**
    * Look up the given setting in the table of received values.  The
@@ -139,7 +136,7 @@ private:
   /**
    * Sends the supplied sentence with a $ prepended and a line break appended
    */
-  bool Send(const char *sentence, OperationEnvironment &env);
+  void Send(const char *sentence, OperationEnvironment &env);
   bool Receive(const char *prefix, char *buffer, size_t length,
                OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout);

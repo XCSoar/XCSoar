@@ -222,8 +222,7 @@ AltairProDevice::PropertySetGet(const char *name, const char *value,
   char buffer[1024];
   StringFormat(buffer, std::size(buffer),
                "PDVSC,S,%s,%s", name, value);
-  if (!PortWriteNMEA(port, Buffer, env))
-    return false;
+  PortWriteNMEA(port, Buffer, env);
 
   // expect eg $PDVSC,A,FOO,
   if (!port.ExpectString("PDVSC,A,", env, timeout.GetRemainingOrZero()) ||

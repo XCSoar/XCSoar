@@ -57,7 +57,7 @@ namespace Vega {
 
     void CopyFrom(const DerivedInfo &calculated);
 
-    bool SendTo(Port &port, OperationEnvironment &env) const;
+    void SendTo(Port &port, OperationEnvironment &env) const;
   };
 }
 

@@ -140,7 +140,8 @@ VaulterDevice::PutMacCready(double mc, OperationEnvironment &env)
     return false;
   char buffer[30];
   sprintf(buffer,"PITV1,MC=%0.2f", mc);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
+  return true;
 }
 
 bool
@@ -150,7 +151,8 @@ VaulterDevice::PutBallast(double fraction, double overload, OperationEnvironment
     return false;
   char buffer[30];
   sprintf(buffer,"PITV1,WL=%0.2f", overload);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
+  return true;
 }
 
 bool

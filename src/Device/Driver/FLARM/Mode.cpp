@@ -77,8 +77,7 @@ FlarmDevice::BinaryMode(OperationEnvironment &env)
 
   // "Binary mode is engaged by sending the text command "$PFLAX"
   // (including a newline character) to Flarm."
-  if (!Send("PFLAX", env))
-    return false;
+  Send("PFLAX", env);
 
   mode = Mode::UNKNOWN;
 

@@ -53,22 +53,22 @@ namespace LX1600 {
   /**
    * Store the current settings into the EEPROM of the device.
    */
-  static inline bool
+  static inline void
   SaveToEEPROM(Port &port, OperationEnvironment &env)
   {
-    return PortWriteNMEA(port, "PFLX0,EEPROM", env);
+    PortWriteNMEA(port, "PFLX0,EEPROM", env);
   }
 
   /**
    * Initialize all settings to default, writes to EEPROM and resets unit.
    */
-  static inline bool
+  static inline void
   FactoryReset(Port &port, OperationEnvironment &env)
   {
-    return PortWriteNMEA(port, "PFLX0,INITEEPROM", env);
+    PortWriteNMEA(port, "PFLX0,INITEEPROM", env);
   }
 
-  static inline bool
+  static inline void
   SetupNMEA(Port &port, OperationEnvironment &env)
   {
     /*
@@ -77,28 +77,28 @@ namespace LX1600 {
      * LXWP1+3+5: once every 60 seconds
      * LXWP2: once every 10 seconds
      */
-    return PortWriteNMEA(port, "PFLX0,LXWP0,1,LXWP1,60,LXWP2,10,LXWP3,60,LXWP5,60", env);
+    PortWriteNMEA(port, "PFLX0,LXWP0,1,LXWP1,60,LXWP2,10,LXWP3,60,LXWP5,60", env);
   }
 
   /**
    * Set the MC setting of the LX16xx vario
    * @param mc in m/s
    */
-  static inline bool
+  static inline void
   SetMacCready(Port &port, OperationEnvironment &env, double mc)
   {
     assert(mc >= 0.0 && mc <= 5.0);
 
     char buffer[32];
     sprintf(buffer, "PFLX2,%1.1f,,,,,,", mc);
-    return PortWriteNMEA(port, buffer, env);
+    PortWriteNMEA(port, buffer, env);
   }
 
   /**
    * Set the ballast setting of the LX16xx vario
    * @param overload 1.0 - 1.5 (100 - 140%)
    */
-  static inline bool
+  static inline void
   SetBallast(Port &port, OperationEnvironment &env, double overload)
   {
     assert(overload >= 1.0 && overload <= 1.5);
@@ -108,14 +108,14 @@ namespace LX1600 {
 
     char buffer[100];
     sprintf(buffer, "PFLX2,,%.2f,,,,", overload);
-    return PortWriteNMEA(port, buffer, env);
+    PortWriteNMEA(port, buffer, env);
   }
 
   /**
    * Set the bugs setting of the LX16xx vario
    * @param bugs 0 - 30 %
    */
-  static inline bool
+  static inline void
   SetBugs(Port &port, OperationEnvironment &env, unsigned bugs)
   {
     assert(bugs <= 30);
@@ -125,26 +125,26 @@ namespace LX1600 {
 
     char buffer[100];
     sprintf(buffer, "PFLX2,,,%u,,,", bugs);
-    return PortWriteNMEA(port, buffer, env);
+    PortWriteNMEA(port, buffer, env);
   }
 
   /**
    * Set the altitude offset of the LX16xx vario
    * @param altitude_offset offset necessary to set QNE in ft (default=0)
    */
-  static inline bool
+  static inline void
   SetAltitudeOffset(Port &port, OperationEnvironment &env,
                     double altitude_offset)
   {
     char buffer[100];
     sprintf(buffer, "PFLX3,%.2f,,,,,,,,,,,,", altitude_offset);
-    return PortWriteNMEA(port, buffer, env);
+    PortWriteNMEA(port, buffer, env);
   }
 
   /**
    * Set the QNH setting of the LX16xx vario
    */
-  static inline bool
+  static inline void
   SetQNH(Port &port, OperationEnvironment &env, const AtmosphericPressure &qnh)
   {
     assert(qnh.IsPlausible());
@@ -153,7 +153,7 @@ namespace LX1600 {
         -AtmosphericPressure::StaticPressureToPressureAltitude(qnh),
         Unit::FEET);
 
-    return SetAltitudeOffset(port, env, altitude_offset);
+    SetAltitudeOffset(port, env, altitude_offset);
   }
 
   /**
@@ -162,19 +162,19 @@ namespace LX1600 {
    * These are the polar coefficients in LX format
    * (i.e. for v=(km/h*100) and w=(m/s))
    */
-  static inline bool
+  static inline void
   SetPolar(Port &port, OperationEnvironment &env, double a, double b, double c)
   {
     char buffer[100];
     sprintf(buffer, "PFLX2,,,,%.2f,%.2f,%.2f,", a, b, c);
-    return PortWriteNMEA(port, buffer, env);
+    PortWriteNMEA(port, buffer, env);
   }
 
   /**
    * Set the polar coefficients of the LX16xx vario
    * @param polar Polar coefficients in XCSoar format (SI, m/s)
    */
-  static inline bool
+  static inline void
   SetPolar(Port &port, OperationEnvironment &env, const PolarCoefficients &polar)
   {
     // Convert from m/s to (km/h)/100
@@ -182,14 +182,14 @@ namespace LX1600 {
     auto polar_b = polar.b * 100 / 3.6;
     auto polar_c = polar.c;
 
-    return SetPolar(port, env, polar_a, polar_b, polar_c);
+    SetPolar(port, env, polar_a, polar_b, polar_c);
   }
 
   /**
    * Set the audio volume setting of the LX16xx vario
    * @param volume 0 - 100 %
    */
-  static inline bool
+  static inline void
   SetVolume(Port &port, OperationEnvironment &env, unsigned volume)
   {
     assert(volume <= 100);
@@ -199,7 +199,7 @@ namespace LX1600 {
 
     char buffer[100];
     sprintf(buffer, "PFLX2,,,,,,,%u", volume);
-    return PortWriteNMEA(port, buffer, env);
+    PortWriteNMEA(port, buffer, env);
   }
 
   /**
@@ -211,7 +211,7 @@ namespace LX1600 {
    * @param te_level level of TE compensation in %
    * (from 50 to 150 default=0) 0 -> TECOMP = OFF
    */
-  static inline bool
+  static inline void
   SetFilters(Port &port, OperationEnvironment &env,
              double vario_filter, double te_filter, unsigned te_level)
   {
@@ -221,7 +221,7 @@ namespace LX1600 {
     char buffer[100];
     sprintf(buffer, "PFLX3,,,%.1f,%.1f,%u",
             vario_filter, te_filter, te_level);
-    return PortWriteNMEA(port, buffer, env);
+    PortWriteNMEA(port, buffer, env);
   }
 
   /**
@@ -234,7 +234,7 @@ namespace LX1600 {
    * @param threshold_speed speed of automatic switch from vario to sc mode
    * (if SCMODE == 2) (from 50 to 150 km/h, default=110)
    */
-  static inline bool
+  static inline void
   SetSCSettings(Port &port, OperationEnvironment &env,
                 SCMode mode, double deadband, SCControlMode control_mode,
                 double threshold_speed = 0)
@@ -254,7 +254,7 @@ namespace LX1600 {
       sprintf(buffer, "PFLX3,,%u,,,,,,%.1f,%u",
               (unsigned)mode, deadband, (unsigned)control_mode);
 
-    return PortWriteNMEA(port, buffer, env);
+    PortWriteNMEA(port, buffer, env);
   }
 
   /**
@@ -264,7 +264,7 @@ namespace LX1600 {
    * (between 5s and 30s, default=25)
    * @param range range of the vario display (2.5, 5.0 or 10.0, default=5.0)
    */
-  static inline bool
+  static inline void
   SetVarioSettings(Port &port, OperationEnvironment &env,
                    unsigned avg_time, double range)
   {
@@ -274,27 +274,27 @@ namespace LX1600 {
     char buffer[100];
     sprintf(buffer, "PFLX3,,,,,,%u,%.1f", avg_time, range);
 
-    return PortWriteNMEA(port, buffer, env);
+    PortWriteNMEA(port, buffer, env);
   }
 
   /**
    * Set the Smart VARIO filtering
    * @param filter filter setting in m/s^2
    */
-  static inline bool
+  static inline void
   SetSmartDiffFilter(Port &port, OperationEnvironment &env, double filter)
   {
     char buffer[100];
     sprintf(buffer, "PFLX3,,,,,,,,,,,%.1f", filter);
 
-    return PortWriteNMEA(port, buffer, env);
+    PortWriteNMEA(port, buffer, env);
   }
 
   /**
    * Set the time offset of the LX16xx vario
    * @param offset time offset in hours
    */
-  static inline bool
+  static inline void
   SetTimeOffset(Port &port, OperationEnvironment &env, int offset)
   {
     assert(offset >= -14 && offset <= 14);
@@ -302,7 +302,7 @@ namespace LX1600 {
     char buffer[100];
     sprintf(buffer, "PFLX3,,,,,,,,,,,,,%d", offset);
 
-    return PortWriteNMEA(port, buffer, env);
+    PortWriteNMEA(port, buffer, env);
   }
 }
 

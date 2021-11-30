@@ -35,11 +35,12 @@ class OperationEnvironment;
 /**
  * Writes one line of NMEA data.
  *
+ * Throws on error.
+ *
  * @param port the port to write to
  * @param line the line without asterisk, checksum and newline
- * @return true on success
  */
-bool
+void
 PortWriteNMEA(Port &port, const char *line, OperationEnvironment &env);
 
 #endif

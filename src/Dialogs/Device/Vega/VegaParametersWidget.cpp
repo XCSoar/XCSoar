@@ -138,9 +138,17 @@ VegaParametersWidget::RequestAll()
       ++start;
     }
 
-    if (!SettingExists(device, i->name) &&
-        !device.RequestSetting(i->name, env))
+    if (!SettingExists(device, i->name))
       return false;
+
+    try {
+      device.RequestSetting(i->name, env);
+    } catch (OperationCancelled) {
+      return false;
+    } catch (...) {
+      env.SetError(std::current_exception());
+      return false;
+    }
   }
 
   /* wait for the remaining responses */
@@ -217,9 +225,14 @@ VegaParametersWidget::Save(bool &changed_r) noexcept
       continue;
 
     /* value has been changed by the user */
-    if (!device.SendSetting(parameter.name, ui_value, env))
-      /* error; should this be told to the user? */
+    try {
+      device.SendSetting(parameter.name, ui_value, env);
+    } catch (OperationCancelled) {
       return false;
+    } catch (...) {
+      env.SetError(std::current_exception());
+      return false;
+    }
 
     parameter.value = ui_value;
     changed = true;

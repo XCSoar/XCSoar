@@ -111,10 +111,8 @@ LXDevice::EnablePassThrough(OperationEnvironment &env)
   if (mode == Mode::PASS_THROUGH)
     return true;
 
-  if (is_v7 || use_pass_through) {
-    if (!LXNAVVario::ModeDirect(port, env))
-      return false;
-  }
+  if (is_v7 || use_pass_through)
+    LXNAVVario::ModeDirect(port, env);
 
   mode = Mode::PASS_THROUGH;
   return true;
@@ -125,7 +123,7 @@ LXDevice::EnableLoggerNMEA(OperationEnvironment &env)
 {
   return IsV7() || UsePassThrough()
     ? EnablePassThrough(env)
-    : LXNAVVario::ModeNormal(port, env);
+    : (LXNAVVario::ModeNormal(port, env), true);
 }
 
 bool

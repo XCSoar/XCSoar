@@ -39,19 +39,19 @@ namespace LXNAVVario {
   /**
    * Enable direct link with GPS port.
    */
-  static inline bool
+  static inline void
   ModeDirect(Port &port, OperationEnvironment &env)
   {
-    return PortWriteNMEA(port, "PLXV0,CONNECTION,W,DIRECT", env);
+    PortWriteNMEA(port, "PLXV0,CONNECTION,W,DIRECT", env);
   }
 
   /**
    * Enable communication with the vario.
    */
-  static inline bool
+  static inline void
   ModeNormal(Port &port, OperationEnvironment &env)
   {
-    return PortWriteNMEA(port, "PLXV0,CONNECTION,W,VSEVEN", env);
+    PortWriteNMEA(port, "PLXV0,CONNECTION,W,VSEVEN", env);
   }
 
   /**
@@ -65,70 +65,70 @@ namespace LXNAVVario {
    * - LXWP3 disabled (we don't parse it)
    * - LXWP5 disabled (we don't parse it)
    */
-  static inline bool
+  static inline void
   SetupNMEA(Port &port, OperationEnvironment &env)
   {
-    return PortWriteNMEA(port, "PLXV0,NMEARATE,W,2,5,1,60,30,0,0", env);
+    PortWriteNMEA(port, "PLXV0,NMEARATE,W,2,5,1,60,30,0,0", env);
   }
 
   /**
    * Set the MC setting of the vario
    * @param mc in m/s
    */
-  static inline bool
+  static inline void
   SetMacCready(Port &port, OperationEnvironment &env, double mc)
   {
     char buffer[32];
     sprintf(buffer, "PLXV0,MC,W,%.1f", mc);
-    return PortWriteNMEA(port, buffer, env);
+    PortWriteNMEA(port, buffer, env);
   }
 
   /**
    * Set the ballast setting of the vario
    * @param overload 1.0 - 1.4 (100 - 140%)
    */
-  static inline bool
+  static inline void
   SetBallast(Port &port, OperationEnvironment &env, double overload)
   {
     char buffer[100];
     sprintf(buffer, "PLXV0,BAL,W,%.2f", overload);
-    return PortWriteNMEA(port, buffer, env);
+    PortWriteNMEA(port, buffer, env);
   }
 
   /**
    * Set the bugs setting of the vario
    * @param bugs 0 - 30 %
    */
-  static inline bool
+  static inline void
   SetBugs(Port &port, OperationEnvironment &env, unsigned bugs)
   {
     char buffer[100];
     sprintf(buffer, "PLXV0,BUGS,W,%u", bugs);
-    return PortWriteNMEA(port, buffer, env);
+    PortWriteNMEA(port, buffer, env);
   }
 
   /**
    * Set the QNH setting of the vario
    */
-  static inline bool
+  static inline void
   SetQNH(Port &port, OperationEnvironment &env, const AtmosphericPressure &qnh)
   {
     char buffer[100];
     unsigned QNHinPascal = uround(qnh.GetPascal());
     sprintf(buffer, "PLXV0,QNH,W,%u", QNHinPascal); 
-    return PortWriteNMEA(port, buffer, env);
+    PortWriteNMEA(port, buffer, env);
   }
 
   /**
    * Send pilotevent to vario 
    * (needs S10x/S8x firmware 8.01 or newer)
    */
-  static inline bool
+  static inline void
   PutPilotEvent(OperationEnvironment &env, Port &port)
   {
     const char *sentence = "PFLAI,PILOTEVENT";
 
-    return PortWriteNMEA(port, sentence, env);
+    PortWriteNMEA(port, sentence, env);
   }
 }
 
