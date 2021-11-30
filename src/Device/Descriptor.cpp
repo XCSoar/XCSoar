@@ -68,10 +68,6 @@ Copyright_License {
 #include "Apple/InternalSensors.hpp"
 #endif
 
-#ifdef _UNICODE
-#include <stringapiset.h> // for WideCharToMultiByte()
-#endif
-
 #include <cassert>
 
 class OpenDeviceJob final : public Job {
@@ -855,12 +851,8 @@ DeviceDescriptor::WriteNMEA(const TCHAR *line,
   if (port == nullptr)
     return false;
 
-  char buffer[4096];
-  if (::WideCharToMultiByte(CP_ACP, 0, line, -1, buffer, sizeof(buffer),
-                            nullptr, nullptr) <= 0)
-    return false;
-
-  return WriteNMEA(buffer, env);
+  WideToACPConverter narrow{line};
+  return narrow.IsValid() && WriteNMEA(narrow, env);
 }
 #endif
 
