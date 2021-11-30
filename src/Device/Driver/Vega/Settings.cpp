@@ -51,15 +51,15 @@ VegaDevice::RequestSetting(const char *name, OperationEnvironment &env)
   PortWriteNMEA(port, buffer, env);
 }
 
-std::pair<bool, int>
-VegaDevice::GetSetting(const char *name) const
+std::optional<int>
+VegaDevice::GetSetting(const char *name) const noexcept
 {
   std::lock_guard<Mutex> lock(settings);
   auto i = settings.find(name);
   if (i == settings.end())
-    return std::make_pair(false, 0);
+    return std::nullopt;
 
-  return std::make_pair(true, *i);
+  return *i;
 }
 
 bool

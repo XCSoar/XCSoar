@@ -44,9 +44,9 @@ static const char *const flarm_setting_names[] = {
 
 gcc_pure
 static bool
-SettingExists(FlarmDevice &device, const char *name)
+SettingExists(FlarmDevice &device, const char *name) noexcept
 {
-  return device.GetSetting(name).first;
+  return (bool)device.GetSetting(name);
 }
 
 /**
@@ -89,11 +89,10 @@ static unsigned
 GetUnsignedValue(const FlarmDevice &device, const char *name,
                  unsigned default_value)
 {
-  auto x = device.GetSetting(name);
-  if (x.first) {
+  if (const auto x = device.GetSetting(name)) {
     char *endptr;
-    unsigned long y = strtoul(x.second.c_str(), &endptr, 10);
-    if (endptr > x.second.c_str() && *endptr == 0)
+    unsigned long y = strtoul(x->c_str(), &endptr, 10);
+    if (endptr > x->c_str() && *endptr == 0)
       return (unsigned)y;
   }
 

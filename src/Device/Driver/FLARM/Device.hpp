@@ -32,6 +32,7 @@ Copyright_License {
 #include "Device/SettingsMap.hpp"
 
 #include <cstdint>
+#include <optional>
 #include <string>
 
 class Port;
@@ -86,7 +87,7 @@ public:
    * element is the value.
    */
   gcc_pure
-  std::pair<bool, std::string> GetSetting(const char *name) const;
+  std::optional<std::string> GetSetting(const char *name) const noexcept;
 
 protected:
   bool TextMode(OperationEnvironment &env);

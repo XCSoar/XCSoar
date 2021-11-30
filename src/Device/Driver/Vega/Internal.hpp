@@ -29,6 +29,8 @@ Copyright_License {
 #include "thread/Mutex.hxx"
 #include "Volatile.hpp"
 
+#include <optional>
+
 class NMEAInputLine;
 
 class VegaDevice : public AbstractDevice {
@@ -63,7 +65,7 @@ public:
    * element is the value.
    */
   gcc_pure
-  std::pair<bool, int> GetSetting(const char *name) const;
+  std::optional<int> GetSetting(const char *name) const noexcept;
 
 protected:
   bool PDVSC(NMEAInputLine &line, NMEAInfo &info);

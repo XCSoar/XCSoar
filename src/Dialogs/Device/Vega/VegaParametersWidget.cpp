@@ -96,7 +96,7 @@ gcc_pure
 static bool
 SettingExists(VegaDevice &device, const char *name)
 {
-  return device.GetSetting(name).first;
+  return (bool)device.GetSetting(name);
 }
 
 /**
@@ -170,10 +170,9 @@ VegaParametersWidget::UpdateUI()
         continue;
     }
 
-    auto x = device.GetSetting(parameter.name);
-    if (x.first) {
-      parameter.value = x.second;
-      GetDataField(i).SetAsInteger(x.second);
+    if (const auto x = device.GetSetting(parameter.name)) {
+      parameter.value = *x;
+      GetDataField(i).SetAsInteger(*x);
       GetControl(i).RefreshDisplay();
     }
   }
