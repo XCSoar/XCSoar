@@ -146,7 +146,7 @@ Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
   /* wait for confirmation */
 
   port.WaitRead(env, std::chrono::seconds(4));
-  return port.GetChar() == 0;
+  return port.ReadByte() == std::byte{0};
 }
 
 gcc_const
@@ -231,9 +231,7 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
     const std::chrono::steady_clock::duration timeout = start ? TIMEOUT_NORMAL : timeout_firstchar;
     port.WaitRead(env, timeout);
 
-    int ch = port.GetChar();
-    if (ch < 0)
-      return -1;
+    const auto ch = (uint8_t)port.ReadByte();
 
     // oder aber das empfangene Zeichen wird ausgewertet
     switch (ch) {

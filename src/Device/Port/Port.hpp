@@ -174,9 +174,10 @@ public:
 
   /**
    * Read a single byte from the serial port
-   * @return the unsigned byte that was read or -1 on failure
+   *
+   * Throws on error.
    */
-  int GetChar();
+  std::byte ReadByte();
 
   /**
    * Read data from the serial port

@@ -57,11 +57,7 @@ ReceiveLine(Port &port, char *buffer, size_t length,
     port.WaitRead(env, timeout.GetRemainingOrZero());
 
     // Read single character from port
-    int c = port.GetChar();
-
-    // On failure try again until timed out
-    if (c == -1)
-      continue;
+    char c = (char)port.ReadByte();
 
     // Break on XOn
     if (c == 0x11) {

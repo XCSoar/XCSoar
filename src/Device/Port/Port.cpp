@@ -87,13 +87,14 @@ Port::FullWriteString(const char *s,
   FullWrite(s, strlen(s), env, timeout);
 }
 
-int
-Port::GetChar()
+std::byte
+Port::ReadByte()
 {
-  unsigned char ch;
-  return Read(&ch, sizeof(ch)) == sizeof(ch)
-    ? ch
-    : -1;
+  std::byte b;
+  if (Read(&b, sizeof(b)) != sizeof(b))
+    throw std::runtime_error{"Port read failed"};
+
+  return b;
 }
 
 void
@@ -242,7 +243,7 @@ Port::WaitForChar(const char token, OperationEnvironment &env,
     WaitRead(env, timeout.GetRemainingOrZero());
 
     // Read and compare character with token
-    int ch = GetChar();
+    const char ch = (char)ReadByte();
     if (ch == token)
       break;
 

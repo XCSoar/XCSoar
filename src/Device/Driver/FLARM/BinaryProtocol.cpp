@@ -97,12 +97,12 @@ ReceiveSomeUnescape(Port &port, uint8_t *buffer, size_t length,
     if (*src == FLARM::ESCAPE) {
       ++src;
 
-      int ch;
+      uint8_t ch;
       if (src == end) {
         /* at the end of the buffer; need to read one more byte */
         port.WaitRead(env, timeout.GetRemainingOrZero());
 
-        ch = port.GetChar();
+        ch = (uint8_t)port.ReadByte();
       } else
         ch = *src++;
 
