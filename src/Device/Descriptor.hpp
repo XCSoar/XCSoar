@@ -549,9 +549,9 @@ public:
    */
   void ForwardLine(const char *line);
 
-  bool WriteNMEA(const char *line, OperationEnvironment &env);
+  bool WriteNMEA(const char *line, OperationEnvironment &env) noexcept;
 #ifdef _UNICODE
-  bool WriteNMEA(const TCHAR *line, OperationEnvironment &env);
+  bool WriteNMEA(const TCHAR *line, OperationEnvironment &env) noexcept;
 #endif
 
   bool PutMacCready(double mac_cready, OperationEnvironment &env) noexcept;

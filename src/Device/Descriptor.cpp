@@ -830,16 +830,25 @@ DeviceDescriptor::ForwardLine(const char *line)
 }
 
 bool
-DeviceDescriptor::WriteNMEA(const char *line, OperationEnvironment &env)
+DeviceDescriptor::WriteNMEA(const char *line,
+                            OperationEnvironment &env) noexcept
 {
   assert(line != nullptr);
 
-  return port != nullptr && PortWriteNMEA(*port, line, env);
+  try {
+    return port != nullptr && PortWriteNMEA(*port, line, env);
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    env.SetError(std::current_exception());
+    return false;
+  }
 }
 
 #ifdef _UNICODE
 bool
-DeviceDescriptor::WriteNMEA(const TCHAR *line, OperationEnvironment &env)
+DeviceDescriptor::WriteNMEA(const TCHAR *line,
+                            OperationEnvironment &env) noexcept
 {
   assert(line != nullptr);
 
