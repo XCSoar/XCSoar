@@ -73,27 +73,6 @@ Copyright_License {
 
 #include <cassert>
 
-/**
- * This scope class calls DeviceDescriptor::Return() and
- * DeviceDescriptor::EnableNMEA() when the caller leaves the current
- * scope.  The caller must have called DeviceDescriptor::Borrow()
- * successfully before constructing this class.
- */
-struct ScopeReturnDevice {
-  DeviceDescriptor &device;
-  OperationEnvironment &env;
-
-  ScopeReturnDevice(DeviceDescriptor &_device,
-                    OperationEnvironment &_env) noexcept
-    :device(_device), env(_env) {
-  }
-
-  ~ScopeReturnDevice() noexcept {
-    device.EnableNMEA(env);
-    device.Return();
-  }
-};
-
 class OpenDeviceJob final : public Job {
   DeviceDescriptor &device;
 

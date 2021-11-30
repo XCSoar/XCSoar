@@ -656,4 +656,26 @@ private:
 #endif // HAVE_INTERNAL_GPS
 };
 
+/**
+ * This scope class calls DeviceDescriptor::Return() and
+ * DeviceDescriptor::EnableNMEA() when the caller leaves the current
+ * scope.  The caller must have called DeviceDescriptor::Borrow()
+ * successfully before constructing this class.
+ */
+class ScopeReturnDevice {
+  DeviceDescriptor &device;
+  OperationEnvironment &env;
+
+public:
+  ScopeReturnDevice(DeviceDescriptor &_device,
+                    OperationEnvironment &_env) noexcept
+    :device(_device), env(_env) {
+  }
+
+  ~ScopeReturnDevice() noexcept {
+    device.EnableNMEA(env);
+    device.Return();
+  }
+};
+
 #endif
