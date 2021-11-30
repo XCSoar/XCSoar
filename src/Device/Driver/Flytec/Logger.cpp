@@ -47,14 +47,14 @@ ExpectXOff(Port &port, OperationEnvironment &env,
 
 static bool
 ReceiveLine(Port &port, char *buffer, size_t length,
+            OperationEnvironment &env,
             std::chrono::steady_clock::duration _timeout)
 {
   TimeoutClock timeout(_timeout);
 
   char *p = (char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.HasExpired())
-      return false;
+    port.WaitRead(env, timeout.GetRemainingOrZero());
 
     // Read single character from port
     int c = port.GetChar();
@@ -189,7 +189,7 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
   unsigned tracks = 0;
   while (true) {
     // Receive the next line
-    if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer),
+    if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer), env,
                      std::chrono::seconds(1)))
       return false;
 
@@ -280,7 +280,7 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
 
   while (true) {
     // Receive the next line
-    if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer),
+    if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer), env,
                      std::chrono::seconds(1)))
       return false;
 
