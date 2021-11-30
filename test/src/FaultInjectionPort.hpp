@@ -92,9 +92,8 @@ public:
     return Size;
   }
 
-  WaitResult WaitRead(std::chrono::steady_clock::duration timeout) override {
+  void WaitRead(std::chrono::steady_clock::duration timeout) override {
     if (inject_port_fault == 0)
       throw std::runtime_error{"Injected fault"};
-    return WaitResult::READY;
   }
 };

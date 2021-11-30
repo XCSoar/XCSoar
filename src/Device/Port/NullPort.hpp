@@ -47,7 +47,7 @@ public:
   int Read(void *Buffer, size_t Size) override;
 
   [[noreturn]]
-  WaitResult WaitRead(std::chrono::steady_clock::duration timeout) override;
+  void WaitRead(std::chrono::steady_clock::duration timeout) override;
 
 private:
   /* virtual methods from class DataHandler */

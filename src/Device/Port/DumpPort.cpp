@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DumpPort.hpp"
+#include "Device/Error.hpp"
 #include "HexDump.hpp"
 
 #include <cstdint>
@@ -160,17 +161,22 @@ DumpPort::Read(void *buffer, size_t size)
   return nbytes;
 }
 
-Port::WaitResult
+void
 DumpPort::WaitRead(std::chrono::steady_clock::duration timeout)
 {
   const bool enabled = CheckEnabled();
   if (enabled)
     LogFormat("WaitRead %lu", (unsigned long)timeout.count());
 
-  Port::WaitResult result = port->WaitRead(timeout);
-
-  if (enabled)
-    LogFormat("WaitRead %lu = %d", (unsigned long)timeout.count(), (int)result);
-
-  return result;
+  try {
+    port->WaitRead(timeout);
+  } catch (const DeviceTimeout &) {
+    if (enabled)
+      LogFormat("WaitRead %lu = timeout", (unsigned long)timeout.count());
+    throw;
+  } catch (...) {
+    if (enabled)
+      LogFormat("WaitRead %lu = error", (unsigned long)timeout.count());
+    throw;
+  }
 }

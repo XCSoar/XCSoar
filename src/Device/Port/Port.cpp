@@ -162,12 +162,10 @@ Port::WaitRead(OperationEnvironment &env,
        non-blocking I/O in all Port implementations */
     const auto t = std::min<std::chrono::steady_clock::duration>(remaining, std::chrono::milliseconds(500));
 
-    switch (WaitRead(t)) {
-    case WaitResult::READY:
+    try {
+      WaitRead(t);
       return;
-
-    case WaitResult::TIMEOUT:
-      break;
+    } catch (const DeviceTimeout &){
     }
 
     if (env.IsCancelled())

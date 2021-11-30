@@ -40,23 +40,6 @@ class TimeoutClock;
  * Generic Port thread handler class
  */
 class Port {
-public:
-  /**
-   * Warning: these enum integer values are hard-coded in the
-   * Android/Java class InputThread.
-   */
-  enum class WaitResult {
-    /**
-     * The port is ready; the desired operation will not block.
-     */
-    READY,
-
-    /**
-     * Timeout has expired.
-     */
-    TIMEOUT,
-  };
-
 protected:
   PortListener *const listener;
 
@@ -188,8 +171,10 @@ public:
 
   /**
    * Wait until data becomes available or the timeout expires.
+   *
+   * Throws on error.
    */
-  virtual WaitResult WaitRead(std::chrono::steady_clock::duration timeout) = 0;
+  virtual void WaitRead(std::chrono::steady_clock::duration timeout) = 0;
 
   /**
    * Force flushing the receive buffers, by trying to read from the

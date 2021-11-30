@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "BufferedPort.hpp"
+#include "Device/Error.hpp"
 #include "time/TimeoutClock.hpp"
 #include "Operation/Cancelled.hpp"
 
@@ -76,7 +77,7 @@ BufferedPort::Read(void *dest, size_t length)
   return nbytes;
 }
 
-Port::WaitResult
+void
 BufferedPort::WaitRead(std::chrono::steady_clock::duration _timeout)
 {
   TimeoutClock timeout(_timeout);
@@ -88,12 +89,10 @@ BufferedPort::WaitRead(std::chrono::steady_clock::duration _timeout)
 
     auto remaining = timeout.GetRemainingSigned();
     if (remaining.count() <= 0)
-      return WaitResult::TIMEOUT;
+      throw DeviceTimeout{"Timeout"};
 
     cond.wait_for(lock, remaining);
   }
-
-  return WaitResult::READY;
 }
 
 bool

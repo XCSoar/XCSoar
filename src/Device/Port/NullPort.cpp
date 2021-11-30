@@ -90,7 +90,7 @@ NullPort::Read(void *Buffer, size_t Size)
   return -1;
 }
 
-Port::WaitResult
+void
 NullPort::WaitRead(std::chrono::steady_clock::duration timeout)
 {
   throw std::runtime_error{"Cannot read from NullPort"};
