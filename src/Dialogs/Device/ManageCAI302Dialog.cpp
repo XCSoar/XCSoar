@@ -105,35 +105,45 @@ ManageCAI302Widget::Prepare(ContainerWindow &parent,
 
   AddButton(_("Start Logger"), [this](){
     MessageOperationEnvironment env;
-    device.StartLogging(env);
+    try {
+      device.StartLogging(env);
+    } catch (OperationCancelled) {
+    } catch (...) {
+      env.SetError(std::current_exception());
+    }
   });
 
   AddButton(_("Stop Logger"), [this](){
     MessageOperationEnvironment env;
-    device.StopLogging(env);
+    try {
+      device.StopLogging(env);
+    } catch (OperationCancelled) {
+    } catch (...) {
+      env.SetError(std::current_exception());
+    }
   });
 
   AddButton(_("Delete all flights"), [this](){
-      if (ShowMessageBox(_("Do you really want to delete all flights from the device?"),
-                      _T("CAI 302"), MB_YESNO) != IDYES)
-        return;
+    if (ShowMessageBox(_("Do you really want to delete all flights from the device?"),
+                       _T("CAI 302"), MB_YESNO) != IDYES)
+      return;
 
-      try {
-        MessageOperationEnvironment env;
-        device.ClearLog(env);
-      } catch (OperationCancelled) {
-      } catch (...) {
-        ShowError(std::current_exception(), _("Waypoints"));
-      }
+    MessageOperationEnvironment env;
+    try {
+      device.ClearLog(env);
+    } catch (OperationCancelled) {
+    } catch (...) {
+      env.SetError(std::current_exception());
+    }
   });
 
   AddButton(_("Reboot"), [this](){
+    MessageOperationEnvironment env;
     try {
-      MessageOperationEnvironment env;
       device.Reboot(env);
     } catch (OperationCancelled) {
     } catch (...) {
-      ShowError(std::current_exception(), _("Waypoints"));
+      env.SetError(std::current_exception());
     }
   });
 }
