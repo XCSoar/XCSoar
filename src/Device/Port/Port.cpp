@@ -106,19 +106,15 @@ Port::FullFlush(OperationEnvironment &env,
   const TimeoutClock total_timeout(_total_timeout);
 
   do {
-    switch (WaitRead(env, timeout)) {
-    case WaitResult::READY:
-      if (char buffer[0x100];
-          Read(buffer, sizeof(buffer)) <= 0)
-        throw std::runtime_error{"Port read failed"};
-      break;
-
-    case WaitResult::TIMEOUT:
+    try {
+      WaitRead(env, timeout);
+    } catch (const DeviceTimeout &) {
       return;
-
-    case WaitResult::FAILED:
-      throw std::runtime_error{"Port read failed"};
     }
+
+    if (char buffer[0x100];
+        Read(buffer, sizeof(buffer)) <= 0)
+      throw std::runtime_error{"Port read failed"};
   } while (!total_timeout.HasExpired());
 }
 
@@ -153,7 +149,7 @@ Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
   FullRead(buffer, length, env, timeout, timeout, timeout);
 }
 
-Port::WaitResult
+void
 Port::WaitRead(OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout)
 {
@@ -163,9 +159,17 @@ Port::WaitRead(OperationEnvironment &env,
     /* this loop is ugly, and should be redesigned when we have
        non-blocking I/O in all Port implementations */
     const auto t = std::min<std::chrono::steady_clock::duration>(remaining, std::chrono::milliseconds(500));
-    WaitResult result = WaitRead(t);
-    if (result != WaitResult::TIMEOUT)
-      return result;
+
+    switch (WaitRead(t)) {
+    case WaitResult::READY:
+      return;
+
+    case WaitResult::TIMEOUT:
+      break;
+
+    case WaitResult::FAILED:
+      throw std::runtime_error{"Port read failed"};
+    }
 
     if (env.IsCancelled())
       throw OperationCancelled{};
@@ -173,7 +177,7 @@ Port::WaitRead(OperationEnvironment &env,
     remaining -= t;
   } while (remaining.count() > 0);
 
-  return WaitResult::TIMEOUT;
+  throw DeviceTimeout{"Port read timeout"};
 }
 
 size_t
@@ -181,16 +185,7 @@ Port::WaitAndRead(void *buffer, size_t length,
                   OperationEnvironment &env,
                   std::chrono::steady_clock::duration timeout)
 {
-  switch (WaitRead(env, timeout)) {
-  case WaitResult::READY:
-    break;
-
-  case WaitResult::TIMEOUT:
-    throw DeviceTimeout{"Port read timeout"};
-
-  case WaitResult::FAILED:
-    throw std::runtime_error{"Port read failed"};
-  }
+  WaitRead(env, timeout);
 
   int nbytes = Read(buffer, length);
   if (nbytes <= 0)
@@ -244,16 +239,7 @@ Port::WaitForChar(const char token, OperationEnvironment &env,
   const TimeoutClock timeout(_timeout);
 
   while (true) {
-    switch (WaitRead(env, timeout.GetRemainingOrZero())) {
-    case WaitResult::READY:
-      break;
-
-    case WaitResult::TIMEOUT:
-      throw DeviceTimeout{"Port read timeout"};
-
-    case WaitResult::FAILED:
-      throw std::runtime_error{"Port read failed"};
-    }
+    WaitRead(env, timeout.GetRemainingOrZero());
 
     // Read and compare character with token
     int ch = GetChar();

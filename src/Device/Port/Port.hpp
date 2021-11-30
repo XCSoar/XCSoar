@@ -242,12 +242,14 @@ public:
    * Wait until data becomes available, the timeout expires or the
    * operation gets cancelled.
    *
+   * Throws on error.
+   *
    * @param timeout give up after this duration
    * @param env an OperationEnvironment that allows cancelling the
    * operation
    */
-  WaitResult WaitRead(OperationEnvironment &env,
-                      std::chrono::steady_clock::duration timeout);
+  void WaitRead(OperationEnvironment &env,
+                std::chrono::steady_clock::duration timeout);
 
   /**
    * Combination of WaitRead() and Read().

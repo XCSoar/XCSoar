@@ -145,8 +145,8 @@ Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
 
   /* wait for confirmation */
 
-  return port.WaitRead(env, std::chrono::seconds(4)) == Port::WaitResult::READY &&
-    port.GetChar() == 0;
+  port.WaitRead(env, std::chrono::seconds(4));
+  return port.GetChar() == 0;
 }
 
 gcc_const
@@ -229,8 +229,7 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
 
     // Set longer timeout on first char
     const std::chrono::steady_clock::duration timeout = start ? TIMEOUT_NORMAL : timeout_firstchar;
-    if (port.WaitRead(env, timeout) != Port::WaitResult::READY)
-      return -1;
+    port.WaitRead(env, timeout);
 
     int ch = port.GetChar();
     if (ch < 0)

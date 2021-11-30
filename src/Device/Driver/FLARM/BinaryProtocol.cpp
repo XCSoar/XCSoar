@@ -100,8 +100,7 @@ ReceiveSomeUnescape(Port &port, uint8_t *buffer, size_t length,
       int ch;
       if (src == end) {
         /* at the end of the buffer; need to read one more byte */
-        if (port.WaitRead(env, timeout.GetRemainingOrZero()) != Port::WaitResult::READY)
-          return nullptr;
+        port.WaitRead(env, timeout.GetRemainingOrZero());
 
         ch = port.GetChar();
       } else
