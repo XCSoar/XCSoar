@@ -174,22 +174,22 @@ SerialPort::GetDataPending() const
     : -1;
 }
 
-Port::WaitResult
+void
 SerialPort::WaitDataPending(OverlappedEvent &overlapped,
                             unsigned timeout_ms) const
 {
   int nbytes = GetDataPending();
   if (nbytes > 0)
-    return WaitResult::READY;
+    return;
   else if (nbytes < 0)
-    return WaitResult::FAILED;
+    throw MakeLastError("ClearCommError() failed");
 
   ::SetCommMask(hPort, EV_RXCHAR);
 
   DWORD dwCommModemStatus;
   if (!::WaitCommEvent(hPort, &dwCommModemStatus, overlapped.GetPointer())) {
-    if (::GetLastError() != ERROR_IO_PENDING)
-      return WaitResult::FAILED;
+    if (const auto error = ::GetLastError(); error != ERROR_IO_PENDING)
+      throw MakeLastError(error, "WaitCommEvent() failed");
 
     switch (overlapped.Wait(timeout_ms)) {
     case OverlappedEvent::FINISHED:
@@ -200,7 +200,7 @@ SerialPort::WaitDataPending(OverlappedEvent &overlapped,
       ::CancelIo(hPort);
       ::SetCommMask(hPort, 0);
       overlapped.Wait();
-      return WaitResult::TIMEOUT;
+      throw DeviceTimeout("WaitCommEvent() timed out");
 
     case OverlappedEvent::CANCELED:
       /* the operation may still be running, we have to cancel it */
@@ -212,15 +212,17 @@ SerialPort::WaitDataPending(OverlappedEvent &overlapped,
 
     DWORD result;
     if (!::GetOverlappedResult(hPort, overlapped.GetPointer(), &result, FALSE))
-      return WaitResult::FAILED;
+      throw MakeLastError("GetOverlappedResult() failed");
   }
 
   if ((dwCommModemStatus & EV_RXCHAR) == 0)
-      return WaitResult::FAILED;
+    throw std::runtime_error{"No EV_RXCHAR"};
 
-  return GetDataPending() > 0
-    ? WaitResult::READY
-    : WaitResult::FAILED;
+  nbytes = GetDataPending();
+  if (nbytes < 0)
+    throw MakeLastError("ClearCommError() failed");
+  else if (nbytes == 0)
+    throw std::runtime_error{"No data"};
 }
 
 void
@@ -245,15 +247,11 @@ SerialPort::Run() noexcept
 
   while (!CheckStopped()) {
 
-    WaitResult result = WaitDataPending(osStatus, INFINITE);
-    switch (result) {
-    case WaitResult::READY:
-      break;
-
-    case WaitResult::TIMEOUT:
+    try {
+      WaitDataPending(osStatus, INFINITE);
+    } catch (const DeviceTimeout &) {
       continue;
-
-    case WaitResult::FAILED:
+    } catch (...) {
       ::Sleep(100);
       continue;
     }

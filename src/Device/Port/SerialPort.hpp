@@ -90,10 +90,10 @@ protected:
   /**
    * Wait until there is data in the driver's receive buffer.
    *
-   * @return the number of bytes, or -1 on error
+   * Throws on error.
    */
-  WaitResult WaitDataPending(OverlappedEvent &overlapped,
-                             unsigned timeout_ms) const;
+  void WaitDataPending(OverlappedEvent &overlapped,
+                       unsigned timeout_ms) const;
 
 public:
   /* virtual methods from class Port */
