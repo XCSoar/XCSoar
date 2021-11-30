@@ -291,28 +291,28 @@ class DeviceDescriptor final
 
 public:
   DeviceDescriptor(EventLoop &_event_loop, Cares::Channel &_cares,
-                   unsigned index, PortListener *port_listener);
+                   unsigned index, PortListener *port_listener) noexcept;
   ~DeviceDescriptor() noexcept;
 
-  unsigned GetIndex() const {
+  unsigned GetIndex() const noexcept {
     return index;
   }
 
-  const DeviceConfig &GetConfig() const {
+  const DeviceConfig &GetConfig() const noexcept {
     return config;
   }
 
-  void SetConfig(const DeviceConfig &config);
-  void ClearConfig();
+  void SetConfig(const DeviceConfig &config) noexcept;
+  void ClearConfig() noexcept;
 
   bool IsConfigured() const {
     return config.port_type != DeviceConfig::PortType::DISABLED;
   }
 
   gcc_pure
-  PortState GetState() const;
+  PortState GetState() const noexcept;
 
-  tstring GetErrorMessage() const {
+  tstring GetErrorMessage() const noexcept {
     const std::lock_guard<Mutex> lock(mutex);
     return error_message;
   }
@@ -320,7 +320,7 @@ public:
   /**
    * Was there a failure on the #Port object?
    */
-  bool HasPortFailed() const {
+  bool HasPortFailed() const noexcept {
     return config.IsAvailable() && config.UsesPort() && port == nullptr;
   }
 
@@ -328,12 +328,12 @@ public:
    * @see DumpPort::IsEnabled()
    */
   gcc_pure
-  bool IsDumpEnabled() const;
+  bool IsDumpEnabled() const noexcept;
 
   /**
    * @see DumpPort::Disable()
    */
-  void DisableDump();
+  void DisableDump() noexcept;
 
   /**
    * @see DumpPort::EnableTemporarily()
@@ -344,12 +344,12 @@ public:
    * Wrapper for Driver::HasTimeout().  This method can't be inline
    * because the Driver struct is incomplete at this point.
    */
-  bool ShouldReopenDriverOnTimeout() const;
+  bool ShouldReopenDriverOnTimeout() const noexcept;
 
   /**
    * Should the #Port be reopened automatically when a timeout occurs?
    */
-  bool ShouldReopenOnTimeout() const {
+  bool ShouldReopenOnTimeout() const noexcept {
     return config.ShouldReopenOnTimeout() &&
       ShouldReopenDriverOnTimeout();
   }
@@ -357,7 +357,7 @@ public:
   /**
    * Should the #Port be reopened?
    */
-  bool ShouldReopen() const {
+  bool ShouldReopen() const noexcept {
     return HasPortFailed() || (!IsAlive() && ShouldReopenOnTimeout());
   }
 
@@ -368,7 +368,7 @@ public:
    * Should only be used by driver-specific code (such as the CAI 302
    * manager).
    */
-  Device *GetDevice() {
+  Device *GetDevice() noexcept {
     return device;
   }
 
@@ -376,11 +376,13 @@ private:
   /**
    * Cancel the #AsyncJobRunner object if it is running.
    */
-  void CancelAsync();
+  void CancelAsync() noexcept;
 
   /**
    * When this method fails, the caller is responsible for freeing the
    * Port object.
+   *
+   * Throws on error.
    */
   gcc_nonnull_all
   bool OpenOnPort(std::unique_ptr<DumpPort> &&port, OperationEnvironment &env);
@@ -405,7 +407,7 @@ public:
    */
   bool DoOpen(OperationEnvironment &env) noexcept;
 
-  void ResetFailureCounter() {
+  void ResetFailureCounter() noexcept {
     n_failures = 0u;
   }
 
@@ -414,7 +416,7 @@ public:
    */
   void Open(OperationEnvironment &env);
 
-  void Close();
+  void Close() noexcept;
 
   /**
    * @param env a persistent object
@@ -439,31 +441,31 @@ public:
    */
   bool EnableNMEA(OperationEnvironment &env);
 
-  const TCHAR *GetDisplayName() const;
+  const TCHAR *GetDisplayName() const noexcept;
 
   /**
    * Compares the driver's name.
    */
-  bool IsDriver(const TCHAR *name) const;
+  bool IsDriver(const TCHAR *name) const noexcept;
 
   gcc_pure
-  bool CanDeclare() const;
+  bool CanDeclare() const noexcept;
 
   gcc_pure
-  bool IsLogger() const;
+  bool IsLogger() const noexcept;
 
-  bool IsCondor() const {
+  bool IsCondor() const noexcept {
     return IsDriver(_T("Condor"));
   }
 
-  bool IsVega() const {
+  bool IsVega() const noexcept {
     return IsDriver(_T("Vega"));
   }
 
-  bool IsNMEAOut() const;
-  bool IsManageable() const;
+  bool IsNMEAOut() const noexcept;
+  bool IsManageable() const noexcept;
 
-  bool IsBorrowed() const {
+  bool IsBorrowed() const noexcept {
     return borrowed;
   }
 
@@ -473,7 +475,7 @@ public:
    *
    * May only be called from the main thread.
    */
-  bool IsOccupied() const {
+  bool IsOccupied() const noexcept {
     assert(InMainThread());
 
     return IsBorrowed() || async.IsBusy();
@@ -486,7 +488,7 @@ public:
    *
    * @see Borrow()
    */
-  bool CanBorrow() const {
+  bool CanBorrow() const noexcept {
     assert(InMainThread());
 
     return device != nullptr && GetState() == PortState::READY &&
@@ -502,7 +504,7 @@ public:
    * @return false if the device is already occupied and cannot be
    * borrowed
    */
-  bool Borrow();
+  bool Borrow() noexcept;
 
   /**
    * Return a borrowed device.  The caller is responsible for
@@ -510,14 +512,14 @@ public:
    *
    * May only be called from the main thread.
    */
-  void Return();
+  void Return() noexcept;
 
   /**
    * Query the device's "alive" flag from the DeviceBlackboard.
    * This method locks the DeviceBlackboard.
    */
   gcc_pure
-  bool IsAlive() const;
+  bool IsAlive() const noexcept;
 
   [[gnu::pure]]
   TimeStamp GetClock() const noexcept;
@@ -531,14 +533,14 @@ public:
   DeviceDataEditor BeginEdit() noexcept;
 
 private:
-  bool ParseNMEA(const char *line, struct NMEAInfo &info);
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) noexcept;
 
 public:
-  void SetMonitor(DataHandler  *_monitor) {
+  void SetMonitor(DataHandler  *_monitor) noexcept {
     monitor = _monitor;
   }
 
-  void SetDispatcher(PortLineHandler *_dispatcher) {
+  void SetDispatcher(PortLineHandler *_dispatcher) noexcept {
     dispatcher = _dispatcher;
   }
 
@@ -584,18 +586,18 @@ public:
   bool DownloadFlight(const RecordedFlightInfo &flight, Path path,
                       OperationEnvironment &env);
 
-  void OnSysTicker();
+  void OnSysTicker() noexcept;
 
   /**
    * Wrapper for Driver::OnSensorUpdate().
    */
-  void OnSensorUpdate(const MoreData &basic);
+  void OnSensorUpdate(const MoreData &basic) noexcept;
 
   /**
    * Wrapper for Driver::OnCalculatedUpdate().
    */
   void OnCalculatedUpdate(const MoreData &basic,
-                          const DerivedInfo &calculated);
+                          const DerivedInfo &calculated) noexcept;
 
 private:
   void OnJobFinished() noexcept;

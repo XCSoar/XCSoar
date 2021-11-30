@@ -83,11 +83,12 @@ struct ScopeReturnDevice {
   DeviceDescriptor &device;
   OperationEnvironment &env;
 
-  ScopeReturnDevice(DeviceDescriptor &_device, OperationEnvironment &_env)
+  ScopeReturnDevice(DeviceDescriptor &_device,
+                    OperationEnvironment &_env) noexcept
     :device(_device), env(_env) {
   }
 
-  ~ScopeReturnDevice() {
+  ~ScopeReturnDevice() noexcept {
     device.EnableNMEA(env);
     device.Return();
   }
@@ -97,7 +98,8 @@ class OpenDeviceJob final : public Job {
   DeviceDescriptor &device;
 
 public:
-  OpenDeviceJob(DeviceDescriptor &_device):device(_device) {}
+  explicit OpenDeviceJob(DeviceDescriptor &_device) noexcept
+    :device(_device) {}
 
   /* virtual methods from class Job */
   void Run(OperationEnvironment &env) override {
@@ -108,7 +110,7 @@ public:
 DeviceDescriptor::DeviceDescriptor(EventLoop &_event_loop,
                                    Cares::Channel &_cares,
                                    unsigned _index,
-                                   PortListener *_port_listener)
+                                   PortListener *_port_listener) noexcept
   :event_loop(_event_loop), cares(_cares), index(_index),
    port_listener(_port_listener)
 {
@@ -121,7 +123,7 @@ DeviceDescriptor::~DeviceDescriptor() noexcept
 }
 
 void
-DeviceDescriptor::SetConfig(const DeviceConfig &_config)
+DeviceDescriptor::SetConfig(const DeviceConfig &_config) noexcept
 {
   ResetFailureCounter();
 
@@ -142,13 +144,13 @@ DeviceDescriptor::SetConfig(const DeviceConfig &_config)
 }
 
 void
-DeviceDescriptor::ClearConfig()
+DeviceDescriptor::ClearConfig() noexcept
 {
   config.Clear();
 }
 
 PortState
-DeviceDescriptor::GetState() const
+DeviceDescriptor::GetState() const noexcept
 {
   if (has_failed)
     return PortState::FAILED;
@@ -168,13 +170,13 @@ DeviceDescriptor::GetState() const
 }
 
 bool
-DeviceDescriptor::IsDumpEnabled() const
+DeviceDescriptor::IsDumpEnabled() const noexcept
 {
   return port != nullptr && port->IsEnabled();
 }
 
 void
-DeviceDescriptor::DisableDump()
+DeviceDescriptor::DisableDump() noexcept
 {
   if (port != nullptr)
     port->Disable();
@@ -188,13 +190,13 @@ DeviceDescriptor::EnableDumpTemporarily(std::chrono::steady_clock::duration dura
 }
 
 bool
-DeviceDescriptor::ShouldReopenDriverOnTimeout() const
+DeviceDescriptor::ShouldReopenDriverOnTimeout() const noexcept
 {
   return driver == nullptr || driver->HasTimeout();
 }
 
 void
-DeviceDescriptor::CancelAsync()
+DeviceDescriptor::CancelAsync() noexcept
 {
   assert(InMainThread());
 
@@ -583,7 +585,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
 }
 
 void
-DeviceDescriptor::Close()
+DeviceDescriptor::Close() noexcept
 {
   assert(InMainThread());
   assert(!IsBorrowed());
@@ -681,7 +683,7 @@ DeviceDescriptor::EnableNMEA(OperationEnvironment &env)
 }
 
 const TCHAR *
-DeviceDescriptor::GetDisplayName() const
+DeviceDescriptor::GetDisplayName() const noexcept
 {
   return driver != nullptr
     ? driver->display_name
@@ -689,7 +691,7 @@ DeviceDescriptor::GetDisplayName() const
 }
 
 bool
-DeviceDescriptor::IsDriver(const TCHAR *name) const
+DeviceDescriptor::IsDriver(const TCHAR *name) const noexcept
 {
   return driver != nullptr
     ? StringIsEqual(driver->name, name)
@@ -697,7 +699,7 @@ DeviceDescriptor::IsDriver(const TCHAR *name) const
 }
 
 bool
-DeviceDescriptor::CanDeclare() const
+DeviceDescriptor::CanDeclare() const noexcept
 {
   return driver != nullptr &&
     (driver->CanDeclare() ||
@@ -705,19 +707,19 @@ DeviceDescriptor::CanDeclare() const
 }
 
 bool
-DeviceDescriptor::IsLogger() const
+DeviceDescriptor::IsLogger() const noexcept
 {
   return driver != nullptr && driver->IsLogger();
 }
 
 bool
-DeviceDescriptor::IsNMEAOut() const
+DeviceDescriptor::IsNMEAOut() const noexcept
 {
   return driver != nullptr && driver->IsNMEAOut();
 }
 
 bool
-DeviceDescriptor::IsManageable() const
+DeviceDescriptor::IsManageable() const noexcept
 {
   if (driver != nullptr) {
     if (driver->IsManageable())
@@ -741,7 +743,7 @@ DeviceDescriptor::IsManageable() const
 }
 
 bool
-DeviceDescriptor::Borrow()
+DeviceDescriptor::Borrow() noexcept
 {
   assert(InMainThread());
 
@@ -753,7 +755,7 @@ DeviceDescriptor::Borrow()
 }
 
 void
-DeviceDescriptor::Return()
+DeviceDescriptor::Return() noexcept
 {
   assert(InMainThread());
   assert(IsBorrowed());
@@ -769,7 +771,7 @@ DeviceDescriptor::Return()
 }
 
 bool
-DeviceDescriptor::IsAlive() const
+DeviceDescriptor::IsAlive() const noexcept
 {
   std::lock_guard<Mutex> lock(device_blackboard->mutex);
   return device_blackboard->RealState(index).alive;
@@ -797,7 +799,7 @@ DeviceDescriptor::BeginEdit() noexcept
 }
 
 bool
-DeviceDescriptor::ParseNMEA(const char *line, NMEAInfo &info)
+DeviceDescriptor::ParseNMEA(const char *line, NMEAInfo &info) noexcept
 {
   assert(line != nullptr);
 
@@ -1166,7 +1168,7 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
 }
 
 void
-DeviceDescriptor::OnSysTicker()
+DeviceDescriptor::OnSysTicker() noexcept
 {
   assert(InMainThread());
 
@@ -1205,7 +1207,7 @@ DeviceDescriptor::OnSysTicker()
 }
 
 void
-DeviceDescriptor::OnSensorUpdate(const MoreData &basic)
+DeviceDescriptor::OnSensorUpdate(const MoreData &basic) noexcept
 {
   /* must hold the mutex because this method may run in any thread,
      just in case the main thread deletes the Device while this method
@@ -1218,7 +1220,7 @@ DeviceDescriptor::OnSensorUpdate(const MoreData &basic)
 
 void
 DeviceDescriptor::OnCalculatedUpdate(const MoreData &basic,
-                                     const DerivedInfo &calculated)
+                                     const DerivedInfo &calculated) noexcept
 {
   assert(InMainThread());
 
