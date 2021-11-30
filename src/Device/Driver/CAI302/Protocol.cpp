@@ -114,8 +114,7 @@ CAI302::ReadShortReply(Port &port, void *buffer, unsigned max_size,
                        std::chrono::steady_clock::duration timeout)
 {
   unsigned char header[3];
-  if (!port.FullRead(header, sizeof(header), env, timeout))
-    return -1;
+  port.FullRead(header, sizeof(header), env, timeout);
 
   unsigned size = header[0];
   if (size < sizeof(header))
@@ -125,8 +124,7 @@ CAI302::ReadShortReply(Port &port, void *buffer, unsigned max_size,
   if (size > max_size)
     size = max_size;
 
-  if (!port.FullRead(buffer, size, env, timeout))
-    return -1;
+  port.FullRead(buffer, size, env, timeout);
 
   // XXX verify the checksum
 
@@ -145,8 +143,7 @@ CAI302::ReadLargeReply(Port &port, void *buffer, unsigned max_size,
                        std::chrono::steady_clock::duration timeout)
 {
   unsigned char header[5];
-  if (!port.FullRead(header, sizeof(header), env, timeout))
-    return -1;
+  port.FullRead(header, sizeof(header), env, timeout);
 
   if (header[0] == 0x09 && header[1] >= 0x10 &&
       header[3] == 0x0d && header[4] == 0x0a) {
@@ -170,8 +167,7 @@ CAI302::ReadLargeReply(Port &port, void *buffer, unsigned max_size,
   if (size > max_size)
     size = max_size;
 
-  if (!port.FullRead(buffer, size, env, timeout))
-    return -1;
+  port.FullRead(buffer, size, env, timeout);
 
   // XXX verify the checksum
 

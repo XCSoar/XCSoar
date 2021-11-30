@@ -123,7 +123,7 @@ Port::FullFlush(OperationEnvironment &env,
   return true;
 }
 
-bool
+void
 Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
                std::chrono::steady_clock::duration first_timeout,
                std::chrono::steady_clock::duration subsequent_timeout,
@@ -135,7 +135,7 @@ Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
 
   size_t nbytes = WaitAndRead(buffer, length, env, first_timeout);
   if (nbytes == 0)
-    return false;
+    throw std::runtime_error{"Port read failed"};
 
   p += nbytes;
 
@@ -143,7 +143,7 @@ Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
     const auto ft = full_timeout.GetRemainingSigned();
     if (ft.count() < 0)
       /* timeout */
-      return false;
+      throw std::runtime_error{"Port read timeout"};
 
     const auto t = std::min(ft, subsequent_timeout);
 
@@ -153,19 +153,17 @@ Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
        * Error occured, or no data read, which is also an error
        * when WaitRead returns READY
        */
-      return false;
+      throw std::runtime_error{"Port read failed"};
 
     p += nbytes;
   }
-
-  return true;
 }
 
-bool
+void
 Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout)
 {
-  return FullRead(buffer, length, env, timeout, timeout, timeout);
+  FullRead(buffer, length, env, timeout, timeout, timeout);
 }
 
 Port::WaitResult

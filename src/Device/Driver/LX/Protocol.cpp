@@ -147,11 +147,12 @@ LX::ReadCRC(Port &port, void *buffer, size_t length, OperationEnvironment &env,
 {
   uint8_t crc;
 
-  return port.FullRead(buffer, length, env,
-                       first_timeout, subsequent_timeout,
-                       total_timeout) &&
-    port.FullRead(&crc, sizeof(crc), env,
-                  subsequent_timeout, subsequent_timeout,
-                  subsequent_timeout) &&
-    calc_crc(buffer, length, 0xff) == crc;
+  port.FullRead(buffer, length, env,
+                first_timeout, subsequent_timeout,
+                total_timeout);
+  port.FullRead(&crc, sizeof(crc), env,
+                subsequent_timeout, subsequent_timeout,
+                subsequent_timeout);
+
+  return calc_crc(buffer, length, 0xff) == crc;
 }

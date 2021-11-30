@@ -210,15 +210,16 @@ public:
   /**
    * Read data from the serial port, take care for partial reads.
    *
+   * Throws on error.
+   *
    * @param env an OperationEnvironment that allows canceling the
    * operation
    * @param first_timeout timeout for the first read
    * @param subsequent_timeout timeout for the subsequent reads
    * @param total_timeout timeout for the whole operation
-   * @return true on success
    */
   gcc_nonnull_all
-  bool FullRead(void *buffer, size_t length, OperationEnvironment &env,
+  void FullRead(void *buffer, size_t length, OperationEnvironment &env,
                 std::chrono::steady_clock::duration first_timeout,
                 std::chrono::steady_clock::duration subsequent_timeout,
                 std::chrono::steady_clock::duration total_timeout);
@@ -226,13 +227,15 @@ public:
   /**
    * Read data from the serial port, take care for partial reads.
    *
+   * Throws on error.
+   *
    * @param env an OperationEnvironment that allows canceling the
    * operation
    * @param timeout give up after this duration
    * @return true on success
    */
   gcc_nonnull_all
-  bool FullRead(void *buffer, size_t length, OperationEnvironment &env,
+  void FullRead(void *buffer, size_t length, OperationEnvironment &env,
                 std::chrono::steady_clock::duration timeout);
 
   /**
