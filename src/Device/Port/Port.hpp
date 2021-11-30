@@ -252,7 +252,9 @@ public:
   /**
    * Combination of WaitRead() and Read().
    *
-   * @return 0 on timeout/canceled/error or the number of bytes read
+   * Throws on error.
+   *
+   * @return the number of bytes read (always positive)
    */
   size_t WaitAndRead(void *buffer, size_t length,
                      OperationEnvironment &env,
@@ -261,7 +263,9 @@ public:
   /**
    * Combination of WaitRead() and Read().
    *
-   * @return 0 on timeout/canceled/error or the number of bytes read
+   * Throws on error.
+   *
+   * @return the number of bytes read (always positive)
    */
   size_t WaitAndRead(void *buffer, size_t length,
                      OperationEnvironment &env, TimeoutClock timeout);

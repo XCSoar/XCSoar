@@ -41,8 +41,6 @@ PortNMEAReader::Fill(TimeoutClock timeout)
     return false;
 
   size_t nbytes = port.WaitAndRead(dest.data, dest.size, env, timeout);
-  if (nbytes == 0)
-    return false;
 
   buffer.Append(nbytes);
   return true;

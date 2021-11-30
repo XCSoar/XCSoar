@@ -133,11 +133,7 @@ Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
 
   char *p = (char *)buffer, *end = p + length;
 
-  size_t nbytes = WaitAndRead(buffer, length, env, first_timeout);
-  if (nbytes == 0)
-    throw std::runtime_error{"Port read failed"};
-
-  p += nbytes;
+  p += WaitAndRead(buffer, length, env, first_timeout);
 
   while (p < end) {
     const auto ft = full_timeout.GetRemainingSigned();
@@ -147,15 +143,7 @@ Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
 
     const auto t = std::min(ft, subsequent_timeout);
 
-    nbytes = WaitAndRead(p, end - p, env, t);
-    if (nbytes == 0)
-      /*
-       * Error occured, or no data read, which is also an error
-       * when WaitRead returns READY
-       */
-      throw std::runtime_error{"Port read failed"};
-
-    p += nbytes;
+    p += WaitAndRead(p, end - p, env, t);
   }
 }
 
@@ -194,14 +182,20 @@ Port::WaitAndRead(void *buffer, size_t length,
                   OperationEnvironment &env,
                   std::chrono::steady_clock::duration timeout)
 {
-  WaitResult wait_result = WaitRead(env, timeout);
-  if (wait_result != WaitResult::READY)
-    // Timeout expired or I/O error occurred
-    return 0;
+  switch (WaitRead(env, timeout)) {
+  case WaitResult::READY:
+    break;
+
+  case WaitResult::TIMEOUT:
+    throw std::runtime_error{"Port read timeout"};
+
+  case WaitResult::FAILED:
+    throw std::runtime_error{"Port read failed"};
+  }
 
   int nbytes = Read(buffer, length);
-  if (nbytes < 0)
-    return 0;
+  if (nbytes <= 0)
+    throw std::runtime_error{"Port read failed"};
 
   return (size_t)nbytes;
 }
@@ -212,7 +206,7 @@ Port::WaitAndRead(void *buffer, size_t length,
 {
   const auto remaining = timeout.GetRemainingSigned();
   if (remaining.count() < 0)
-    return 0;
+    throw std::runtime_error{"Port read timeout"};
 
   return WaitAndRead(buffer, length, env, remaining);
 }
@@ -232,8 +226,6 @@ Port::ExpectString(const char *token, OperationEnvironment &env,
     size_t nbytes = WaitAndRead(buffer,
                                 std::min(sizeof(buffer), size_t(token_end - p)),
                                 env, timeout);
-    if (nbytes == 0)
-      throw std::runtime_error{"Port read failed"};
 
     for (const char *q = buffer, *end = buffer + nbytes; q != end; ++q) {
       const char ch = *q;

@@ -232,8 +232,6 @@ AltairProDevice::PropertySetGet(const char *name, const char *value,
   // read value eg bar
   while (size > 0) {
     const size_t nbytes = port.WaitAndRead(Buffer, size, env, timeout);
-    if (nbytes == 0)
-      return false;
 
     char *asterisk = (char *)memchr(Buffer, '*', nbytes);
     if (asterisk != nullptr) {

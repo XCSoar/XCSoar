@@ -26,7 +26,7 @@ Copyright_License {
 #include "Checksum.hpp"
 #include "MessageParser.hpp"
 #include "Device/Port/Port.hpp"
-#include "Operation/Operation.hpp"
+#include "Operation/Cancelled.hpp"
 #include "time/TimeoutClock.hpp"
 #include "util/ByteOrder.hxx"
 #include "util/CRC.hpp"
@@ -82,7 +82,7 @@ CalcPayloadTimeout(std::size_t payload_size, unsigned baud_rate) noexcept
   return std::chrono::milliseconds(10000 * (payload_size + sizeof(IMI::IMICOMM_MSG_HEADER_SIZE) + 10) / baud_rate);
 }
 
-std::optional<IMI::TMsg>
+IMI::TMsg
 IMI::Receive(Port &port, OperationEnvironment &env,
              std::chrono::steady_clock::duration extra_timeout,
              unsigned expectedPayloadSize)
@@ -101,13 +101,11 @@ IMI::Receive(Port &port, OperationEnvironment &env,
     // read message
     IMIBYTE buffer[64];
     size_t bytesRead = port.WaitAndRead(buffer, sizeof(buffer), env, timeout);
-    if (bytesRead == 0)
-      return std::nullopt;
 
     // parse message
     if (auto msg = mp.Parse(buffer, bytesRead))
       // message received
-      return msg;
+      return *msg;
   }
 }
 
@@ -121,17 +119,23 @@ IMI::SendRet(Port &port, OperationEnvironment &env,
 {
   extra_timeout += CalcPayloadTimeout(payloadSize, port.GetBaudrate());
 
-  while (retry--) {
+  while (true) {
     Send(port, env, msgID, payload, payloadSize, parameter1, parameter2,
          parameter3);
 
-    auto msg = Receive(port, env, extra_timeout, retPayloadSize);
-    if (msg && msg->msgID == reMsgID &&
-        (retPayloadSize == (IMIWORD)-1 || msg->payloadSize == retPayloadSize))
-      return *msg;
+    try {
+      if (auto msg = Receive(port, env, extra_timeout, retPayloadSize);
+          msg.msgID == reMsgID &&
+          (retPayloadSize == (IMIWORD)-1 || msg.payloadSize == retPayloadSize))
+        return msg;
+    } catch (OperationCancelled) {
+      throw;
+    } catch (...) {
+      // TODO rethrow on I/O error, only ignore timeouts
+      if (retry-- == 0)
+        throw;
+    }
   }
-
-  throw std::runtime_error("No reply");
 }
 
 static bool

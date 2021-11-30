@@ -25,6 +25,7 @@ Copyright_License {
 #include "Conversion.hpp"
 #include "IGC.hpp"
 #include "Communication.hpp"
+#include "Operation/Cancelled.hpp"
 #include "Operation/Operation.hpp"
 #include "Device/Declaration.hpp"
 #include "Device/RecordedFlight.hpp"
@@ -60,12 +61,22 @@ IMI::Connect(Port &port, OperationEnvironment &env)
 
     Send(port, env, MSG_CFG_HELLO);
 
-    const auto msg = Receive(port, env, std::chrono::seconds{2}, 0);
-    if (!msg && i < 3)
+    TMsg msg;
+
+    try {
+      msg = Receive(port, env, std::chrono::seconds{2}, 0);
+    } catch (OperationCancelled) {
+      throw;
+    } catch (...) {
+      // TODO rethrow on I/O error, only ignore timeouts
+      if (i >= 3)
+        throw;
+
       /* try again */
       continue;
+    }
 
-    if (msg && msg->msgID == MSG_ACK_INVSTATE && i < 10) {
+    if (msg.msgID == MSG_ACK_INVSTATE && i < 10) {
       /* INVSTATE means the logger is still in some communication
          mode, but there's no way to quickly cancel this communication
          mode; we need to wait until it re-enters NMEA mode
@@ -76,10 +87,10 @@ IMI::Connect(Port &port, OperationEnvironment &env)
       continue;
     }
 
-    if (!msg || msg->msgID != MSG_CFG_HELLO)
+    if (msg.msgID != MSG_CFG_HELLO)
       throw std::runtime_error("No HELLO response");
 
-    _serialNumber = msg->sn;
+    _serialNumber = msg.sn;
     break;
   }
 
@@ -101,22 +112,20 @@ IMI::Connect(Port &port, OperationEnvironment &env)
 
     const auto msg = Receive(port, env, std::chrono::seconds{2},
                              sizeof(TDeviceInfo));
-    if (!msg)
-      return false;
 
-    if (msg->msgID == MSG_ACK_NOTCONFIG)
+    if (msg.msgID == MSG_ACK_NOTCONFIG)
       /* the MSG_CFG_STARTCONFIG command above was rejected */
       return false;
 
-    if (msg->msgID != MSG_CFG_DEVICEINFO)
+    if (msg.msgID != MSG_CFG_DEVICEINFO)
       continue;
 
-    if (msg->payloadSize == sizeof(TDeviceInfo)) {
-      memcpy(&_info, msg->payload, sizeof(TDeviceInfo));
-    } else if (msg->payloadSize == 16) {
+    if (msg.payloadSize == sizeof(TDeviceInfo)) {
+      memcpy(&_info, msg.payload, sizeof(TDeviceInfo));
+    } else if (msg.payloadSize == 16) {
       // old version of the structure
       memset(&_info, 0, sizeof(TDeviceInfo));
-      memcpy(&_info, msg->payload, 16);
+      memcpy(&_info, msg.payload, 16);
     } else {
       throw std::runtime_error("Invalid DEVICEINFO response");
     }

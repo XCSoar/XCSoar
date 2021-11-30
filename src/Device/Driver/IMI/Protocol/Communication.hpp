@@ -27,7 +27,6 @@ Copyright_License {
 #include "Types.hpp"
 
 #include <chrono>
-#include <optional>
 
 class Port;
 class OperationEnvironment;
@@ -59,10 +58,8 @@ Send(Port &port, OperationEnvironment &env,
  * @param port Device handle
  * @param extra_timeout Additional timeout to wait for the message
  * @param expectedPayloadSize Expected size of the message
- *
- * @return Pointer to a message structure if expected message was received or 0 otherwise
  */
-std::optional<TMsg>
+TMsg
 Receive(Port &port, OperationEnvironment &env,
         std::chrono::steady_clock::duration extra_timeout,
         unsigned expectedPayloadSize);

@@ -104,8 +104,6 @@ FlarmDevice::Receive(const char *prefix, char *buffer, size_t length,
   char *p = (char *)buffer, *end = p + length;
   while (true) {
     size_t nbytes = port.WaitAndRead(p, end - p, env, timeout);
-    if (nbytes == 0)
-      return false;
 
     char *q = (char *)memchr(p, '*', nbytes);
     if (q != nullptr) {
