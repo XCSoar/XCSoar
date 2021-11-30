@@ -34,6 +34,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "util/TruncateString.hpp"
 #include "util/ConvertString.hpp"
+#include "util/ScopeExit.hxx"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -204,14 +205,16 @@ EWDevice::Declare(const struct Declaration &declaration,
   else if (old_baud_rate != 0 && !port.SetBaudrate(9600))
     return false;
 
+  AtScopeExit(this, old_baud_rate) {
+    // restore baudrate
+    if (old_baud_rate != 0)
+      port.SetBaudrate(old_baud_rate);
+  };
+
   bool success = DeclareInner(declaration, env);
 
   // switch to NMEA mode
   port.Write("NMEA\r\n");
-
-  // restore baudrate
-  if (old_baud_rate != 0)
-    port.SetBaudrate(old_baud_rate);
 
   return success;
 }
