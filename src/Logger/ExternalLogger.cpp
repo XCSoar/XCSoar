@@ -85,12 +85,14 @@ try {
   if (!dev.Borrow())
     return false;
 
+  MessageOperationEnvironment env;
+  const ScopeReturnDevice return_device{dev, env};
+
   const TCHAR *caption = dev.GetDisplayName();
   if (caption == nullptr)
     caption = _("Declare task");
 
   auto result = DoDeviceDeclare(dev, declaration, home);
-  dev.Return();
 
   switch (result) {
   case TriStateJobResult::SUCCESS:
