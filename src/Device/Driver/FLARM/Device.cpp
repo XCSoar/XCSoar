@@ -238,8 +238,8 @@ FlarmDevice::SetConfig(const char *setting, const char *value,
   expected_answer[6u] = 'A';
 
   Send(buffer, env);
-  return port.ExpectString(expected_answer, env, std::chrono::seconds(2)) &&
-    ExpectChecksum(port, NMEAChecksum(expected_answer), env);
+  port.ExpectString(expected_answer, env, std::chrono::seconds(2));
+  return ExpectChecksum(port, NMEAChecksum(expected_answer), env);
 }
 
 #ifdef _UNICODE

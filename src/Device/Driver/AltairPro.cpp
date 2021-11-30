@@ -225,10 +225,9 @@ AltairProDevice::PropertySetGet(const char *name, const char *value,
   PortWriteNMEA(port, Buffer, env);
 
   // expect eg $PDVSC,A,FOO,
-  if (!port.ExpectString("PDVSC,A,", env, timeout.GetRemainingOrZero()) ||
-      !port.ExpectString(name, env, timeout.GetRemainingOrZero()) ||
-      !port.ExpectString(",", env, timeout.GetRemainingOrZero()))
-    return false;
+  port.ExpectString("PDVSC,A,", env, timeout.GetRemainingOrZero());
+  port.ExpectString(name, env, timeout.GetRemainingOrZero());
+  port.ExpectString(",", env, timeout.GetRemainingOrZero());
 
   // read value eg bar
   while (size > 0) {

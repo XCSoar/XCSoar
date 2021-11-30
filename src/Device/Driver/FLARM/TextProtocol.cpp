@@ -99,8 +99,7 @@ FlarmDevice::Receive(const char *prefix, char *buffer, size_t length,
 
   TimeoutClock timeout(_timeout);
 
-  if (!port.ExpectString(prefix, env, _timeout))
-    return false;
+  port.ExpectString(prefix, env, _timeout);
 
   char *p = (char *)buffer, *end = p + length;
   while (true) {

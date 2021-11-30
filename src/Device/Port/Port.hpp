@@ -266,8 +266,11 @@ public:
   size_t WaitAndRead(void *buffer, size_t length,
                      OperationEnvironment &env, TimeoutClock timeout);
 
+  /**
+   * Throws on error.
+   */
   gcc_nonnull_all
-  bool ExpectString(const char *token, OperationEnvironment &env,
+  void ExpectString(const char *token, OperationEnvironment &env,
                     std::chrono::steady_clock::duration timeout=std::chrono::seconds(2));
 
   /**

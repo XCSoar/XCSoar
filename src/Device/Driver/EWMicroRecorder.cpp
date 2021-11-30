@@ -341,8 +341,9 @@ DeclareInner(Port &port, const Declaration &declaration,
 
   port.Write('\x03');         // finish sending user file
 
-  return port.ExpectString("uploaded successfully",
-                           env, std::chrono::seconds(5));
+  port.ExpectString("uploaded successfully",
+                    env, std::chrono::seconds(5));
+  return true;
 }
 
 bool

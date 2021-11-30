@@ -52,16 +52,16 @@ convert_string(char *dest, size_t size, const TCHAR *src)
 #endif
 }
 
-static bool
+static void
 cai302DeclAddWaypoint(Port &port, int DeclIndex, const Waypoint &way_point,
                       OperationEnvironment &env)
 {
   char Name[13];
   convert_string(Name, sizeof(Name), way_point.name.c_str());
 
-  return CAI302::DeclareTP(port, DeclIndex, way_point.location,
-                           (int)way_point.elevation,
-                           Name, env);
+  CAI302::DeclareTP(port, DeclIndex, way_point.location,
+                    (int)way_point.elevation,
+                    Name, env);
 }
 
 static bool
@@ -102,8 +102,7 @@ DeclareInner(Port &port, const Declaration &declaration,
     return false;
 
   convert_string(pilot.name, sizeof(pilot.name), declaration.pilot_name);
-  if (!CAI302::DownloadPilot(port, pilot, 0, env))
-    return false;
+  CAI302::DownloadPilot(port, pilot, 0, env);
 
   env.SetProgressPosition(5);
 
@@ -111,19 +110,17 @@ DeclareInner(Port &port, const Declaration &declaration,
                  declaration.aircraft_type);
   convert_string(polar.glider_id, sizeof(polar.glider_id),
                  declaration.aircraft_registration);
-  if (!CAI302::DownloadPolar(port, polar, env))
-    return false;
+  CAI302::DownloadPolar(port, polar, env);
 
   env.SetProgressPosition(6);
 
   for (unsigned i = 0; i < size; ++i) {
-    if (!cai302DeclAddWaypoint(port, i, declaration.GetWaypoint(i), env))
-      return false;
-
+    cai302DeclAddWaypoint(port, i, declaration.GetWaypoint(i), env);
     env.SetProgressPosition(7 + i);
   }
 
-  return CAI302::DeclareSave(port, env);
+  CAI302::DeclareSave(port, env);
+  return true;
 }
 
 bool

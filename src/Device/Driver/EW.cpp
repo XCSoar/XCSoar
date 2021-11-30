@@ -31,6 +31,7 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
 #include "NMEA/Checksum.hpp"
+#include "Operation/Cancelled.hpp"
 #include "Operation/Operation.hpp"
 #include "util/TruncateString.hpp"
 #include "util/ConvertString.hpp"
@@ -88,8 +89,14 @@ EWDevice::TryConnect(OperationEnvironment &env)
 
     // send IO Mode command
     port.Write("##\r\n");
-    if (port.ExpectString("IO Mode.\r", env))
+
+    try {
+      port.ExpectString("IO Mode.\r", env);
       return true;
+    } catch (OperationCancelled) {
+      return false;
+    } catch (...) {
+    }
 
     if (!port.FullFlush(env, std::chrono::milliseconds(100),
                         std::chrono::milliseconds(500)))
@@ -144,8 +151,7 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
           /* format unknown, left blank (GPS has a RTC) */);
   port.Write(sTmp);
 
-  if (!port.ExpectString("OK\r", env))
-    return false;
+  port.ExpectString("OK\r", env);
 
   /*
   sprintf(sTmp, "#SUI%02d", 0);           // send pilot name
@@ -154,8 +160,7 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
   port.Write(PilotsName);
   port.Write('\r');
 
-  if (!port.ExpectString("OK\r"))
-    return false;
+  port.ExpectString("OK\r");
 
   sprintf(sTmp, "#SUI%02d", 1);           // send type of aircraft
   WriteWithChecksum(port, sTmp);
@@ -163,8 +168,7 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
   port.Write(Class);
   port.Write('\r');
 
-  if (!port.ExpectString("OK\r"))
-    nDeclErrorCode = 1;
+  port.ExpectString("OK\r");
 
   sprintf(sTmp, "#SUI%02d", 2);           // send aircraft ID
   WriteWithChecksum(port, sTmp);
@@ -172,16 +176,14 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
   port.Write(ID);
   port.Write('\r');
 
-  if (!port.ExpectString("OK\r"))
-    return false;
+  port.ExpectString("OK\r");
   */
 
   // clear all 6 TP's
   for (int i = 0; i < 6; i++) {
     sprintf(sTmp, "#CTP%02d", i);
     WriteWithChecksum(port, sTmp);
-    if (!port.ExpectString("OK\r", env))
-      return false;
+    port.ExpectString("OK\r", env);
   }
 
   for (unsigned j = 0; j < declaration.Size(); ++j)
@@ -279,8 +281,7 @@ EWDevice::AddWaypoint(const Waypoint &way_point, OperationEnvironment &env)
   WriteWithChecksum(port, EWRecord);
 
   // wait for response
-  if (!port.ExpectString("OK\r", env))
-    return false;
+  port.ExpectString("OK\r", env);
 
   // increase TP index
   ewDecelTpIndex++;

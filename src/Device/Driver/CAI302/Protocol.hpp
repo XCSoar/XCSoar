@@ -467,17 +467,19 @@ namespace CAI302 {
 
   /**
    * Send a command.  CAI302 must be at the download prompt already.
+   *
+   * Throws on error.
    */
-  bool
+  void
   DownloadCommand(Port &port, const char *command,
                   OperationEnvironment &env,
                   std::chrono::steady_clock::duration timeout=std::chrono::seconds(2));
 
-  bool
+  void
   DownloadPilot(Port &port, const Pilot &data, unsigned ordinal,
                 OperationEnvironment &env);
 
-  bool
+  void
   DownloadPolar(Port &port, const Polar &data, OperationEnvironment &env);
 
   bool
@@ -488,10 +490,10 @@ namespace CAI302 {
   UploadNavpoint(Port &port, unsigned i, Navpoint &data,
                  OperationEnvironment &env);
 
-  bool
+  void
   CloseNavpoints(Port &port, OperationEnvironment &env);
 
-  bool
+  void
   DownloadNavpoint(Port &port, const GeoPoint &location,
                    int altitude, unsigned id,
                    bool turnpoint, bool airfield, bool markpoint,
@@ -501,11 +503,11 @@ namespace CAI302 {
                    const char *name, const char *remark,
                    OperationEnvironment &env);
 
-  bool
+  void
   DeclareTP(Port &port, unsigned i, const GeoPoint &location,
             int altitude, const char *name, OperationEnvironment &env);
 
-  bool
+  void
   DeclareSave(Port &port, OperationEnvironment &env);
 
   /**

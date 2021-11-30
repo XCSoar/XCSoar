@@ -173,9 +173,11 @@ CAI302Device::WriteActivePilot(const CAI302::Pilot &pilot,
   if (!DownloadMode(env))
     return false;
 
-  if (!CAI302::DownloadPilot(port, pilot, 0, env)) {
+  try {
+    CAI302::DownloadPilot(port, pilot, 0, env);
+  } catch (...) {
     mode = Mode::UNKNOWN;
-    return false;
+    throw;
   }
 
   return true;
@@ -188,9 +190,11 @@ CAI302Device::WritePilot(unsigned index, const CAI302::Pilot &pilot,
   if (!DownloadMode(env))
     return false;
 
-  if (!CAI302::DownloadPilot(port, pilot, 64 + index, env)) {
+  try {
+    CAI302::DownloadPilot(port, pilot, 64 + index, env);
+  } catch (...) {
     mode = Mode::UNKNOWN;
-    return false;
+    throw;
   }
 
   return true;
@@ -202,9 +206,11 @@ CAI302Device::AddPilot(const CAI302::Pilot &pilot, OperationEnvironment &env)
   if (!DownloadMode(env))
     return false;
 
-  if (!CAI302::DownloadPilot(port, pilot, 255, env)) {
+  try {
+    CAI302::DownloadPilot(port, pilot, 255, env);
+  } catch (...) {
     mode = Mode::UNKNOWN;
-    return false;
+    throw;
   }
 
   return true;
@@ -262,21 +268,23 @@ CAI302Device::WriteNavpoint(unsigned id, const Waypoint &wp,
   ToASCII(name, ARRAY_SIZE(name), wp.name.c_str());
   ToASCII(remark, ARRAY_SIZE(remark), wp.comment.c_str());
 
-  if (!CAI302::DownloadNavpoint(port, wp.location, (int)wp.elevation, id,
-                                wp.IsTurnpoint(), wp.IsAirport(), false,
-                                wp.IsLandable(), wp.IsStartpoint(),
-                                wp.IsFinishpoint(), wp.flags.home,
-                                false, wp.IsTurnpoint(), false,
-                                name, remark, env)) {
+  try {
+    CAI302::DownloadNavpoint(port, wp.location, (int)wp.elevation, id,
+                             wp.IsTurnpoint(), wp.IsAirport(), false,
+                             wp.IsLandable(), wp.IsStartpoint(),
+                             wp.IsFinishpoint(), wp.flags.home,
+                             false, wp.IsTurnpoint(), false,
+                             name, remark, env);
+  } catch (...) {
     mode = Mode::UNKNOWN;
-    return false;
+    throw;
   }
 
   return true;
 }
 
-bool
+void
 CAI302Device::CloseNavpoints(OperationEnvironment &env)
 {
-  return CAI302::CloseNavpoints(port, env);
+  CAI302::CloseNavpoints(port, env);
 }

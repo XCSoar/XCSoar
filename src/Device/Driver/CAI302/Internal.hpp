@@ -143,7 +143,7 @@ public:
   bool WriteNavpoint(unsigned id, const Waypoint &wp,
                      OperationEnvironment &env);
 
-  bool CloseNavpoints(OperationEnvironment &env);
+  void CloseNavpoints(OperationEnvironment &env);
 };
 
 #endif

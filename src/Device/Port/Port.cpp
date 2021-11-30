@@ -217,7 +217,7 @@ Port::WaitAndRead(void *buffer, size_t length,
   return WaitAndRead(buffer, length, env, remaining);
 }
 
-bool
+void
 Port::ExpectString(const char *token, OperationEnvironment &env,
                    std::chrono::steady_clock::duration _timeout)
 {
@@ -233,7 +233,7 @@ Port::ExpectString(const char *token, OperationEnvironment &env,
                                 std::min(sizeof(buffer), size_t(token_end - p)),
                                 env, timeout);
     if (nbytes == 0)
-      return false;
+      throw std::runtime_error{"Port read failed"};
 
     for (const char *q = buffer, *end = buffer + nbytes; q != end; ++q) {
       const char ch = *q;
@@ -241,7 +241,7 @@ Port::ExpectString(const char *token, OperationEnvironment &env,
         /* retry */
         p = token;
       else if (++p == token_end)
-        return true;
+        return;
     }
   }
 }
