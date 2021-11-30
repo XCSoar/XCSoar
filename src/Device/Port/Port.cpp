@@ -96,7 +96,7 @@ Port::GetChar()
     : -1;
 }
 
-bool
+void
 Port::FullFlush(OperationEnvironment &env,
                 std::chrono::steady_clock::duration timeout,
                 std::chrono::steady_clock::duration _total_timeout)
@@ -105,23 +105,21 @@ Port::FullFlush(OperationEnvironment &env,
 
   const TimeoutClock total_timeout(_total_timeout);
 
-  char buffer[0x100];
   do {
     switch (WaitRead(env, timeout)) {
     case WaitResult::READY:
-      if (!Read(buffer, sizeof(buffer)))
-        return false;
+      if (char buffer[0x100];
+          Read(buffer, sizeof(buffer)) <= 0)
+        throw std::runtime_error{"Port read failed"};
       break;
 
     case WaitResult::TIMEOUT:
-      return true;
+      return;
 
     case WaitResult::FAILED:
-      return false;
+      throw std::runtime_error{"Port read failed"};
     }
   } while (!total_timeout.HasExpired());
-
-  return true;
 }
 
 void

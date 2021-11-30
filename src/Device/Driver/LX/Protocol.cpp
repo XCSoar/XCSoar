@@ -31,18 +31,22 @@ LX::CommandMode(Port &port, OperationEnvironment &env)
 {
   /* switch to command mode, first attempt */
 
-  if (!SendSYN(port) ||
-      !port.FullFlush(env, std::chrono::milliseconds(50),
-                      std::chrono::milliseconds(200)))
+  if (!SendSYN(port))
     return false;
+
+  port.FullFlush(env, std::chrono::milliseconds(50),
+                 std::chrono::milliseconds(200));
 
   /* the port is clean now; try the SYN/ACK procedure up to three
      times */
-  for (unsigned i = 0; i < 100; ++i)
-    if (Connect(port, env))
+  for (unsigned i = 0; i < 100; ++i) {
+    if (Connect(port, env)) {
       /* make sure all remaining ACKs are flushed */
-      return port.FullFlush(env, std::chrono::milliseconds(200),
-                            std::chrono::milliseconds(500));
+      port.FullFlush(env, std::chrono::milliseconds(200),
+                     std::chrono::milliseconds(500));
+      return true;
+    }
+}
 
   return false;
 }

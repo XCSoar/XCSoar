@@ -96,9 +96,12 @@ Volkslogger::ConnectAndFlush(Port &port, OperationEnvironment &env,
 {
   port.Flush();
 
-  return Connect(port, env, timeout) &&
-    port.FullFlush(env, std::chrono::milliseconds(50),
-                   std::chrono::milliseconds(300));
+  if (!Connect(port, env, timeout))
+    return false;
+
+  port.FullFlush(env, std::chrono::milliseconds(50),
+                 std::chrono::milliseconds(300));
+  return true;
 }
 
 static bool
@@ -118,9 +121,8 @@ Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
   static constexpr auto delay = std::chrono::milliseconds(2);
 
   /* flush buffers */
-  if (!port.FullFlush(env, std::chrono::milliseconds(20),
-                      std::chrono::milliseconds(100)))
-    return false;
+  port.FullFlush(env, std::chrono::milliseconds(20),
+                 std::chrono::milliseconds(100));
 
   /* reset command interpreter */
   if (!Reset(port, env, 6))

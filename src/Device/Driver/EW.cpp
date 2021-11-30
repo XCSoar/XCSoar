@@ -96,9 +96,8 @@ EWDevice::TryConnect(OperationEnvironment &env)
     } catch (const DeviceTimeout &) {
     }
 
-    if (!port.FullFlush(env, std::chrono::milliseconds(100),
-                        std::chrono::milliseconds(500)))
-      return false;
+    port.FullFlush(env, std::chrono::milliseconds(100),
+                   std::chrono::milliseconds(500));
   }
 
   return false;

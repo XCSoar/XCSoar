@@ -198,12 +198,12 @@ public:
    *
    * The configured read timeout not relevant for this method.
    *
+   * Throws on error.
+   *
    * @param total_timeout the timeout for each read call
    * @param total_timeout the maximum total duration of this method
-   * @return true on timeout, false if an error has occurred or the
-   * operation was cancelled
    */
-  bool FullFlush(OperationEnvironment &env,
+  void FullFlush(OperationEnvironment &env,
                  std::chrono::steady_clock::duration timeout,
                  std::chrono::steady_clock::duration total_timeout);
 
