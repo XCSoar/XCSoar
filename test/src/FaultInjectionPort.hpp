@@ -24,6 +24,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <stdexcept>
+
 #include <stdio.h>
 
 static unsigned inject_port_fault;
@@ -91,8 +93,8 @@ public:
   }
 
   WaitResult WaitRead(std::chrono::steady_clock::duration timeout) override {
-    return inject_port_fault > 0
-      ? WaitResult::READY
-      : WaitResult::FAILED;
+    if (inject_port_fault == 0)
+      throw std::runtime_error{"Injected fault"};
+    return WaitResult::READY;
   }
 };

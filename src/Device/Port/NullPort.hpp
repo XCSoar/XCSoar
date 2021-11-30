@@ -45,6 +45,8 @@ public:
   bool StopRxThread() override;
   bool StartRxThread() override;
   int Read(void *Buffer, size_t Size) override;
+
+  [[noreturn]]
   WaitResult WaitRead(std::chrono::steady_clock::duration timeout) override;
 
 private:

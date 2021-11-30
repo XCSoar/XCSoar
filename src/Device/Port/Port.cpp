@@ -168,9 +168,6 @@ Port::WaitRead(OperationEnvironment &env,
 
     case WaitResult::TIMEOUT:
       break;
-
-    case WaitResult::FAILED:
-      throw std::runtime_error{"Port read failed"};
     }
 
     if (env.IsCancelled())

@@ -55,11 +55,6 @@ public:
      * Timeout has expired.
      */
     TIMEOUT,
-
-    /**
-     * An I/O error has occurred, and the port shall not be used.
-     */
-    FAILED,
   };
 
 protected:

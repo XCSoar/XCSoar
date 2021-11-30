@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "NullPort.hpp"
 
+#include <stdexcept>
+
 #include <stdio.h>
 
 NullPort::NullPort()
@@ -91,7 +93,7 @@ NullPort::Read(void *Buffer, size_t Size)
 Port::WaitResult
 NullPort::WaitRead(std::chrono::steady_clock::duration timeout)
 {
-  return WaitResult::FAILED;
+  throw std::runtime_error{"Cannot read from NullPort"};
 }
 
 bool
