@@ -667,12 +667,18 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 }
 
 bool
-DeviceDescriptor::EnableNMEA(OperationEnvironment &env)
+DeviceDescriptor::EnableNMEA(OperationEnvironment &env) noexcept
 {
   if (device == nullptr)
     return true;
 
-  bool success = device->EnableNMEA(env);
+  bool success = false;
+
+  try {
+    success = device->EnableNMEA(env);
+  } catch (...) {
+    LogError(std::current_exception(), "EnableNMEA() failed");
+  }
 
   if (port != nullptr)
     /* re-enable the NMEA handler if it has been disabled by the
@@ -875,7 +881,8 @@ DeviceDescriptor::WriteNMEA(const TCHAR *line, OperationEnvironment &env)
 #endif
 
 bool
-DeviceDescriptor::PutMacCready(double value, OperationEnvironment &env)
+DeviceDescriptor::PutMacCready(double value,
+                               OperationEnvironment &env) noexcept
 {
   assert(InMainThread());
 
@@ -888,8 +895,14 @@ DeviceDescriptor::PutMacCready(double value, OperationEnvironment &env)
     return false;
 
   ScopeReturnDevice restore(*this, env);
-  if (!device->PutMacCready(value, env))
+
+  try {
+    if (!device->PutMacCready(value, env))
+      return false;
+  } catch (...) {
+    LogError(std::current_exception(), "PutMacCready() failed");
     return false;
+  }
 
   settings_sent.mac_cready = value;
   settings_sent.mac_cready_available.Update(GetClock());
@@ -898,7 +911,7 @@ DeviceDescriptor::PutMacCready(double value, OperationEnvironment &env)
 }
 
 bool
-DeviceDescriptor::PutBugs(double value, OperationEnvironment &env)
+DeviceDescriptor::PutBugs(double value, OperationEnvironment &env) noexcept
 {
   assert(InMainThread());
 
@@ -910,9 +923,14 @@ DeviceDescriptor::PutBugs(double value, OperationEnvironment &env)
     /* TODO: postpone until the borrowed device has been returned */
     return false;
 
-  ScopeReturnDevice restore(*this, env);
-  if (!device->PutBugs(value, env))
+  try {
+    const ScopeReturnDevice restore(*this, env);
+    if (!device->PutBugs(value, env))
+      return false;
+  } catch (...) {
+    LogError(std::current_exception(), "PutBugs() failed");
     return false;
+  }
 
   settings_sent.bugs = value;
   settings_sent.bugs_available.Update(GetClock());
@@ -922,7 +940,7 @@ DeviceDescriptor::PutBugs(double value, OperationEnvironment &env)
 
 bool
 DeviceDescriptor::PutBallast(double fraction, double overload,
-                             OperationEnvironment &env)
+                             OperationEnvironment &env) noexcept
 {
   assert(InMainThread());
 
@@ -935,9 +953,14 @@ DeviceDescriptor::PutBallast(double fraction, double overload,
     /* TODO: postpone until the borrowed device has been returned */
     return false;
 
-  ScopeReturnDevice restore(*this, env);
-  if (!device->PutBallast(fraction, overload, env))
+  try {
+    const ScopeReturnDevice restore(*this, env);
+    if (!device->PutBallast(fraction, overload, env))
+      return false;
+  } catch (...) {
+    LogError(std::current_exception(), "PutBallast() failed");
     return false;
+  }
 
   const auto clock = GetClock();
   settings_sent.ballast_fraction = fraction;
@@ -949,7 +972,8 @@ DeviceDescriptor::PutBallast(double fraction, double overload,
 }
 
 bool
-DeviceDescriptor::PutVolume(unsigned volume, OperationEnvironment &env)
+DeviceDescriptor::PutVolume(unsigned volume,
+                            OperationEnvironment &env) noexcept
 {
   assert(InMainThread());
 
@@ -960,12 +984,17 @@ DeviceDescriptor::PutVolume(unsigned volume, OperationEnvironment &env)
     /* TODO: postpone until the borrowed device has been returned */
     return false;
 
-  ScopeReturnDevice restore(*this, env);
-  return device->PutVolume(volume, env);
+  try {
+    ScopeReturnDevice restore(*this, env);
+    return device->PutVolume(volume, env);
+  } catch (...) {
+    LogError(std::current_exception(), "PutVolume() failed");
+    return false;
+  }
 }
 
 bool
-DeviceDescriptor::PutPilotEvent(OperationEnvironment &env)
+DeviceDescriptor::PutPilotEvent(OperationEnvironment &env) noexcept
 {
   assert(InMainThread());
 
@@ -976,14 +1005,19 @@ DeviceDescriptor::PutPilotEvent(OperationEnvironment &env)
     /* TODO: postpone until the borrowed device has been returned */
     return false;
 
-  ScopeReturnDevice restore(*this, env);
-  return device->PutPilotEvent(env);
+  try {
+    ScopeReturnDevice restore(*this, env);
+    return device->PutPilotEvent(env);
+  } catch (...) {
+    LogError(std::current_exception(), "PutPilotEvent() failed");
+    return false;
+  }
 }
 
 bool
 DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
                                      const TCHAR *name,
-                                     OperationEnvironment &env)
+                                     OperationEnvironment &env) noexcept
 {
   assert(InMainThread());
 
@@ -994,14 +1028,19 @@ DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
     /* TODO: postpone until the borrowed device has been returned */
     return false;
 
-  ScopeReturnDevice restore(*this, env);
-  return device->PutActiveFrequency(frequency, name, env);
+  try {
+    ScopeReturnDevice restore(*this, env);
+    return device->PutActiveFrequency(frequency, name, env);
+  } catch (...) {
+    LogError(std::current_exception(), "PutActiveFrequency() failed");
+    return false;
+  }
 }
 
 bool
 DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
                                       const TCHAR *name,
-                                      OperationEnvironment &env)
+                                      OperationEnvironment &env) noexcept
 {
   assert(InMainThread());
 
@@ -1012,13 +1051,18 @@ DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
     /* TODO: postpone until the borrowed device has been returned */
     return false;
 
-  ScopeReturnDevice restore(*this, env);
-  return device->PutStandbyFrequency(frequency, name, env);
+  try {
+    ScopeReturnDevice restore(*this, env);
+    return device->PutStandbyFrequency(frequency, name, env);
+  } catch (...) {
+    LogError(std::current_exception(), "PutStandbyFrequency() failed");
+    return false;
+  }
 }
 
 bool
 DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
-                         OperationEnvironment &env)
+                         OperationEnvironment &env) noexcept
 {
   assert(InMainThread());
 
@@ -1030,9 +1074,14 @@ DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
     /* TODO: postpone until the borrowed device has been returned */
     return false;
 
-  ScopeReturnDevice restore(*this, env);
-  if (!device->PutQNH(value, env))
+  try {
+    ScopeReturnDevice restore(*this, env);
+    if (!device->PutQNH(value, env))
+      return false;
+  } catch (...) {
+    LogError(std::current_exception(), "PutQNH() failed");
     return false;
+  }
 
   settings_sent.qnh = value;
   settings_sent.qnh_available.Update(GetClock());
@@ -1190,7 +1239,11 @@ DeviceDescriptor::OnSysTicker() noexcept
   const bool now_alive = IsAlive();
   if (!now_alive && was_alive && !IsOccupied()) {
     /* connection was just lost */
-    device->LinkTimeout();
+    try {
+      device->LinkTimeout();
+    } catch (...) {
+      LogError(std::current_exception(), "LinkTimeout() failed");
+    }
 
     NullOperationEnvironment env;
     EnableNMEA(env);
@@ -1201,8 +1254,12 @@ DeviceDescriptor::OnSysTicker() noexcept
   if (now_alive || IsBorrowed()) {
     ticker = !ticker;
     if (ticker)
-      // write settings to vario every second
-      device->OnSysTicker();
+      try {
+        // write settings to vario every second
+        device->OnSysTicker();
+      } catch (...) {
+        LogError(std::current_exception(), "OnSysTicker() failed");
+      }
   }
 }
 
@@ -1215,7 +1272,11 @@ DeviceDescriptor::OnSensorUpdate(const MoreData &basic) noexcept
   const std::lock_guard<Mutex> lock(mutex);
 
   if (device != nullptr)
-    device->OnSensorUpdate(basic);
+    try {
+      device->OnSensorUpdate(basic);
+    } catch (...) {
+      LogError(std::current_exception(), "OnSensorUpdate() failed");
+    }
 }
 
 void
@@ -1225,7 +1286,11 @@ DeviceDescriptor::OnCalculatedUpdate(const MoreData &basic,
   assert(InMainThread());
 
   if (device != nullptr)
-    device->OnCalculatedUpdate(basic, calculated);
+    try {
+      device->OnCalculatedUpdate(basic, calculated);
+    } catch (...) {
+      LogError(std::current_exception(), "OnCalculatedUpdate() failed");
+    }
 }
 
 void

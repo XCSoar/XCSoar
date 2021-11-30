@@ -439,7 +439,7 @@ public:
    * will re-enable the receive thread, to avoid false negatives due
    * to flaky cables.
    */
-  bool EnableNMEA(OperationEnvironment &env);
+  bool EnableNMEA(OperationEnvironment &env) noexcept;
 
   const TCHAR *GetDisplayName() const noexcept;
 
@@ -554,19 +554,20 @@ public:
   bool WriteNMEA(const TCHAR *line, OperationEnvironment &env);
 #endif
 
-  bool PutMacCready(double mac_cready, OperationEnvironment &env);
-  bool PutBugs(double bugs, OperationEnvironment &env);
+  bool PutMacCready(double mac_cready, OperationEnvironment &env) noexcept;
+  bool PutBugs(double bugs, OperationEnvironment &env) noexcept;
   bool PutBallast(double fraction, double overload,
-                  OperationEnvironment &env);
-  bool PutVolume(unsigned volume, OperationEnvironment &env);
-  bool PutPilotEvent(OperationEnvironment &env);
+                  OperationEnvironment &env) noexcept;
+  bool PutVolume(unsigned volume, OperationEnvironment &env) noexcept;
+  bool PutPilotEvent(OperationEnvironment &env) noexcept;
   bool PutActiveFrequency(RadioFrequency frequency,
                           const TCHAR *name,
-                          OperationEnvironment &env);
+                          OperationEnvironment &env) noexcept;
   bool PutStandbyFrequency(RadioFrequency frequency,
                            const TCHAR *name,
-                           OperationEnvironment &env);
-  bool PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env);
+                           OperationEnvironment &env) noexcept;
+  bool PutQNH(const AtmosphericPressure &pres,
+              OperationEnvironment &env) noexcept;
 
   /**
    * Caller is responsible for calling Borrow() and Return().
