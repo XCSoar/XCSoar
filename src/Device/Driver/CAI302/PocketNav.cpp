@@ -35,7 +35,8 @@ CAI302::PutMacCready(Port &port, double mc, OperationEnvironment &env)
 
   char buffer[32];
   sprintf(buffer, "!g,m%u\r", mac_cready);
-  return port.Write(buffer);
+  port.FullWriteString(buffer, env, std::chrono::milliseconds{100});
+  return true;
 }
 
 bool
@@ -45,7 +46,8 @@ CAI302::PutBugs(Port &port, double bugs, OperationEnvironment &env)
 
   char buffer[32];
   sprintf(buffer, "!g,u%u\r", bugs2);
-  return port.Write(buffer);
+  port.FullWriteString(buffer, env, std::chrono::milliseconds{100});
+  return true;
 }
 
 bool
@@ -55,5 +57,6 @@ CAI302::PutBallast(Port &port, double fraction, OperationEnvironment &env)
 
   char buffer[32];
   sprintf(buffer, "!g,b%u\r", ballast);
-  return port.Write(buffer);
+  port.FullWriteString(buffer, env, std::chrono::milliseconds{100});
+  return true;
 }
