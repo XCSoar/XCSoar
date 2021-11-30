@@ -262,7 +262,6 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
       break;
 
     case TriStateJobResult::ERROR:
-      device.EnableNMEA(env);
       ShowMessageBox(_("Failed to download flight list."),
                      _("Download flight"), MB_OK | MB_ICONERROR);
       return;
@@ -279,7 +278,6 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 
   // The logger seems to be empty -> cancel
   if (flight_list.empty()) {
-    device.EnableNMEA(env);
     ShowMessageBox(_("Logger is empty."),
                 _("Download flight"), MB_OK | MB_ICONINFORMATION);
     return;
@@ -341,6 +339,4 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
                     _("Download flight"), MB_YESNO | MB_ICONQUESTION) != IDYES)
       break;
   }
-
-  device.EnableNMEA(env);
 }

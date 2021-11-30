@@ -568,8 +568,10 @@ DeviceListWidget::DownloadFlightFromCurrent()
     return;
   }
 
+  MessageOperationEnvironment env;
+  const ScopeReturnDevice return_device{device, env};
+
   ExternalLogger::DownloadFlightFrom(device);
-  device.Return();
 }
 
 inline void
@@ -640,9 +642,11 @@ DeviceListWidget::ManageCurrent()
     return;
   }
 
+  MessageOperationEnvironment env;
+  const ScopeReturnDevice return_device{descriptor, env};
+
   Device *device = descriptor.GetDevice();
   if (device == NULL) {
-    descriptor.Return();
     return;
   }
 
@@ -679,10 +683,6 @@ DeviceListWidget::ManageCurrent()
     dlgConfigurationVarioShowModal(*device);
   else if (descriptor.IsDriver(_T("BlueFly")))
     dlgConfigurationBlueFlyVarioShowModal(*device);
-
-  MessageOperationEnvironment env;
-  descriptor.EnableNMEA(env);
-  descriptor.Return();
 }
 
 inline void
