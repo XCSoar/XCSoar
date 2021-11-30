@@ -25,8 +25,8 @@ Copyright_License {
 #include "Protocol.hpp"
 #include "Checksum.hpp"
 #include "MessageParser.hpp"
+#include "Device/Error.hpp"
 #include "Device/Port/Port.hpp"
-#include "Operation/Cancelled.hpp"
 #include "time/TimeoutClock.hpp"
 #include "util/ByteOrder.hxx"
 #include "util/CRC.hpp"
@@ -128,10 +128,7 @@ IMI::SendRet(Port &port, OperationEnvironment &env,
           msg.msgID == reMsgID &&
           (retPayloadSize == (IMIWORD)-1 || msg.payloadSize == retPayloadSize))
         return msg;
-    } catch (OperationCancelled) {
-      throw;
-    } catch (...) {
-      // TODO rethrow on I/O error, only ignore timeouts
+    } catch (const DeviceTimeout &) {
       if (retry-- == 0)
         throw;
     }

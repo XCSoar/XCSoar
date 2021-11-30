@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Port.hpp"
 #include "Listener.hpp"
+#include "Device/Error.hpp"
 #include "time/TimeoutClock.hpp"
 #include "Operation/Operation.hpp"
 #include "Operation/Cancelled.hpp"
@@ -65,7 +66,7 @@ Port::FullWrite(const void *buffer, size_t length,
   const char *p = (const char *)buffer, *end = p + length;
   while (p < end) {
     if (timeout.HasExpired())
-      throw std::runtime_error{"Port write timeout"};
+      throw DeviceTimeout{"Port write timeout"};
 
     size_t nbytes = Write(p, end - p);
     if (env.IsCancelled())
@@ -139,7 +140,7 @@ Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
     const auto ft = full_timeout.GetRemainingSigned();
     if (ft.count() < 0)
       /* timeout */
-      throw std::runtime_error{"Port read timeout"};
+      throw DeviceTimeout{"Port read timeout"};
 
     const auto t = std::min(ft, subsequent_timeout);
 
@@ -187,7 +188,7 @@ Port::WaitAndRead(void *buffer, size_t length,
     break;
 
   case WaitResult::TIMEOUT:
-    throw std::runtime_error{"Port read timeout"};
+    throw DeviceTimeout{"Port read timeout"};
 
   case WaitResult::FAILED:
     throw std::runtime_error{"Port read failed"};
@@ -206,7 +207,7 @@ Port::WaitAndRead(void *buffer, size_t length,
 {
   const auto remaining = timeout.GetRemainingSigned();
   if (remaining.count() < 0)
-    throw std::runtime_error{"Port read timeout"};
+    throw DeviceTimeout{"Port read timeout"};
 
   return WaitAndRead(buffer, length, env, remaining);
 }

@@ -30,8 +30,8 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
+#include "Device/Error.hpp"
 #include "NMEA/Checksum.hpp"
-#include "Operation/Cancelled.hpp"
 #include "Operation/Operation.hpp"
 #include "util/TruncateString.hpp"
 #include "util/ConvertString.hpp"
@@ -93,9 +93,7 @@ EWDevice::TryConnect(OperationEnvironment &env)
     try {
       port.ExpectString("IO Mode.\r", env);
       return true;
-    } catch (OperationCancelled) {
-      return false;
-    } catch (...) {
+    } catch (const DeviceTimeout &) {
     }
 
     if (!port.FullFlush(env, std::chrono::milliseconds(100),

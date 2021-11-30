@@ -25,9 +25,9 @@ Copyright_License {
 #include "Conversion.hpp"
 #include "IGC.hpp"
 #include "Communication.hpp"
-#include "Operation/Cancelled.hpp"
 #include "Operation/Operation.hpp"
 #include "Device/Declaration.hpp"
+#include "Device/Error.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Device/Port/Port.hpp"
 #include "system/FileUtil.hpp"
@@ -65,10 +65,7 @@ IMI::Connect(Port &port, OperationEnvironment &env)
 
     try {
       msg = Receive(port, env, std::chrono::seconds{2}, 0);
-    } catch (OperationCancelled) {
-      throw;
-    } catch (...) {
-      // TODO rethrow on I/O error, only ignore timeouts
+    } catch (const DeviceTimeout &) {
       if (i >= 3)
         throw;
 
