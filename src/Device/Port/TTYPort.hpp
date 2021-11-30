@@ -70,8 +70,6 @@ public:
    */
   const char *OpenPseudo();
 
-  WaitResult WaitWrite(unsigned timeout_ms);
-
   /* virtual methods from class Port */
   virtual PortState GetState() const override;
   virtual bool Drain() override;
@@ -81,6 +79,8 @@ public:
   virtual size_t Write(const void *data, size_t length) override;
 
 private:
+  void WaitWrite(unsigned timeout_ms);
+
   void OnSocketReady(unsigned events) noexcept;
 };
 

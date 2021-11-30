@@ -256,22 +256,22 @@ TTYPort::Flush()
   BufferedPort::Flush();
 }
 
-Port::WaitResult
+inline void
 TTYPort::WaitWrite(unsigned timeout_ms)
 {
   assert(socket.IsDefined());
 
   if (!valid.load(std::memory_order_relaxed))
-    return WaitResult::FAILED;
+    throw std::runtime_error("Port is closed");
 
   const TTYDescriptor fd(socket.GetSocket().ToFileDescriptor());
   int ret = fd.WaitWritable(timeout_ms);
   if (ret > 0)
-    return WaitResult::READY;
+    return;
   else if (ret == 0)
-    return WaitResult::TIMEOUT;
+      throw DeviceTimeout{"Port write timeout"};
   else
-    return WaitResult::FAILED;
+      throw MakeErrno("Port write failed");
 }
 
 size_t
@@ -285,11 +285,10 @@ TTYPort::Write(const void *data, size_t length)
   TTYDescriptor fd(socket.GetSocket().ToFileDescriptor());
   auto nbytes = fd.Write(data, length);
   if (nbytes < 0) {
-    if (errno != EAGAIN ||
-        /* the output fifo is full; wait until we can write (or until
-           the timeout expires) */
-        WaitWrite(5000) != Port::WaitResult::READY)
-      throw DeviceTimeout{"Port write timeout"};
+    if (errno != EAGAIN)
+      /* the output fifo is full; wait until we can write (or until
+         the timeout expires) */
+      WaitWrite(5000);
 
     nbytes = fd.Write(data, length);
     if (nbytes < 0)
