@@ -1585,7 +1585,10 @@ TestDeclare(const struct DeviceRegister &driver)
       break;
   }
 
-  device->EnableNMEA(env);
+  try {
+    device->EnableNMEA(env);
+  } catch (...) {
+  }
 
   ok1(port.baud_rate == FaultInjectionPort::DEFAULT_BAUD_RATE);
 
@@ -1616,7 +1619,10 @@ TestFlightList(const struct DeviceRegister &driver)
       break;
   }
 
-  device->EnableNMEA(env);
+  try {
+    device->EnableNMEA(env);
+  } catch (...) {
+  }
 
   ok1(port.baud_rate == FaultInjectionPort::DEFAULT_BAUD_RATE);
 
