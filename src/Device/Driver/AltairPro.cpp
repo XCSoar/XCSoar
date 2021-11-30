@@ -50,8 +50,6 @@ class AltairProDevice : public AbstractDevice {
 private:
   Port &port;
 
-  bool DeclareInternal(const struct Declaration &declaration,
-                       OperationEnvironment &env);
   void PutTurnPoint(const TCHAR *name, const Waypoint *waypoint,
                     OperationEnvironment &env);
   bool PropertySetGet(char *Buffer, size_t size, OperationEnvironment &env);
@@ -147,15 +145,6 @@ AltairProDevice::Declare(const struct Declaration &declaration,
 {
   port.StopRxThread();
 
-  bool result = DeclareInternal(declaration, env);
-
-  return result;
-}
-
-bool
-AltairProDevice::DeclareInternal(const struct Declaration &declaration,
-                                 OperationEnvironment &env)
-{
   TCHAR Buffer[256];
 
   StringFormatUnsafe(Buffer, _T("PDVSC,S,Pilot,%s"),
