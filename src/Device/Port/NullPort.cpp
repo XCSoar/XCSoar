@@ -38,7 +38,7 @@ NullPort::NullPort(DataHandler &_handler)
 }
 
 PortState
-NullPort::GetState() const
+NullPort::GetState() const noexcept
 {
   return PortState::READY;
 }
@@ -73,7 +73,7 @@ NullPort::StartRxThread()
 }
 
 unsigned
-NullPort::GetBaudrate() const
+NullPort::GetBaudrate() const noexcept
 {
   return 0;
 }

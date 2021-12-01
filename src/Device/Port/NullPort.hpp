@@ -36,11 +36,11 @@ public:
   NullPort(DataHandler  &_handler);
 
   /* virtual methods from class Port */
-  PortState GetState() const override;
+  PortState GetState() const noexcept override;
   size_t Write(const void *data, size_t length) override;
   bool Drain() override;
   void Flush() override;
-  unsigned GetBaudrate() const override;
+  unsigned GetBaudrate() const noexcept override;
   bool SetBaudrate(unsigned baud_rate) override;
   bool StopRxThread() override;
   bool StartRxThread() override;

@@ -40,7 +40,7 @@ K6BtPort::SendCommand(uint8_t cmd)
 }
 
 PortState
-K6BtPort::GetState() const
+K6BtPort::GetState() const noexcept
 {
   return port->GetState();
 }
@@ -165,7 +165,7 @@ K6BtPort::SetBaudrate(unsigned _baud_rate)
 }
 
 unsigned
-K6BtPort::GetBaudrate() const
+K6BtPort::GetBaudrate() const noexcept
 {
   return baud_rate;
 }

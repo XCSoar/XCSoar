@@ -159,7 +159,7 @@ TTYPort::TTYPort(EventLoop &event_loop,
 {
 }
 
-TTYPort::~TTYPort()
+TTYPort::~TTYPort() noexcept
 {
   BlockingCall(GetEventLoop(), [this](){
     socket.Close();
@@ -167,7 +167,7 @@ TTYPort::~TTYPort()
 }
 
 PortState
-TTYPort::GetState() const
+TTYPort::GetState() const noexcept
 {
   return valid.load(std::memory_order_relaxed)
     ? PortState::READY
@@ -184,7 +184,7 @@ TTYPort::Drain()
 #ifndef __APPLE__
 gcc_pure
 static bool
-IsCharDev(const char *path)
+IsCharDev(const char *path) noexcept
 {
   struct stat st;
   return stat(path, &st) == 0 && S_ISCHR(st.st_mode);
@@ -299,7 +299,7 @@ TTYPort::Write(const void *data, size_t length)
 }
 
 unsigned
-TTYPort::GetBaudrate() const
+TTYPort::GetBaudrate() const noexcept
 {
   assert(socket.IsDefined());
 

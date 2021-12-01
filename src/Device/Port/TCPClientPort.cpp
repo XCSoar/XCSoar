@@ -41,7 +41,7 @@ TCPClientPort::TCPClientPort(EventLoop &event_loop, Cares::Channel &cares,
   });
 }
 
-TCPClientPort::~TCPClientPort()
+TCPClientPort::~TCPClientPort() noexcept
 {
   BlockingCall(GetEventLoop(), [this](){
     socket.Close();

@@ -36,7 +36,7 @@ AndroidPort::AndroidPort(PortListener *_listener, DataHandler &_handler,
   bridge->setInputListener(Java::GetEnv(), this);
 }
 
-AndroidPort::~AndroidPort()
+AndroidPort::~AndroidPort() noexcept
 {
   assert(bridge != nullptr);
 
@@ -44,7 +44,7 @@ AndroidPort::~AndroidPort()
 }
 
 PortState
-AndroidPort::GetState() const
+AndroidPort::GetState() const noexcept
 {
   assert(bridge != nullptr);
 
@@ -60,7 +60,7 @@ AndroidPort::Drain()
 }
 
 unsigned
-AndroidPort::GetBaudrate() const
+AndroidPort::GetBaudrate() const noexcept
 {
   assert(bridge != nullptr);
 

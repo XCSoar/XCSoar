@@ -48,14 +48,14 @@ public:
   /**
    * Closes the serial port (Destructor)
    */
-  virtual ~UDPPort();
+  ~UDPPort() noexcept override;
 
   auto &GetEventLoop() const noexcept {
     return socket.GetEventLoop();
   }
 
   /* virtual methods from class Port */
-  PortState GetState() const override;
+  PortState GetState() const noexcept override;
 
   bool Drain() override {
     /* writes are synchronous */
@@ -66,7 +66,7 @@ public:
     return true;
   }
 
-  unsigned GetBaudrate() const override {
+  unsigned GetBaudrate() const noexcept override {
     return 0;
   }
 

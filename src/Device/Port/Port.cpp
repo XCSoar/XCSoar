@@ -34,10 +34,10 @@ Copyright_License {
 
 #include <string.h>
 
-Port::Port(PortListener *_listener, DataHandler &_handler)
+Port::Port(PortListener *_listener, DataHandler &_handler) noexcept
   :listener(_listener), handler(_handler) {}
 
-Port::~Port() {}
+Port::~Port() noexcept = default;
 
 bool
 Port::WaitConnected(OperationEnvironment &env)
@@ -249,7 +249,7 @@ Port::WaitForChar(const char token, OperationEnvironment &env,
 }
 
 void
-Port::StateChanged()
+Port::StateChanged() noexcept
 {
   PortListener *l = listener;
   if (l != nullptr)
@@ -257,7 +257,7 @@ Port::StateChanged()
 }
 
 void
-Port::Error(const char *msg)
+Port::Error(const char *msg) noexcept
 {
   PortListener *l = listener;
   if (l != nullptr)

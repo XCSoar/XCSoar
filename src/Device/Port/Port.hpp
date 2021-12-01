@@ -46,14 +46,14 @@ protected:
   DataHandler &handler;
 
 public:
-  Port(PortListener *_listener, DataHandler &_handler);
-  virtual ~Port();
+  Port(PortListener *_listener, DataHandler &_handler) noexcept;
+  virtual ~Port() noexcept;
 
   /**
    * Returns the current state of this object.
    */
   gcc_pure
-  virtual PortState GetState() const = 0;
+  virtual PortState GetState() const noexcept = 0;
 
   /**
    * Wait until the connection has been established.
@@ -139,7 +139,7 @@ public:
    * @return the current baud rate, or 0 on error or if a baud rate is
    * not applicable to this #Port implementation
    */
-  virtual unsigned GetBaudrate() const = 0;
+  virtual unsigned GetBaudrate() const noexcept = 0;
 
   /**
    * Stops the receive thread
@@ -282,12 +282,12 @@ protected:
    * Implementations should call this method whenever the return value
    * of GetState() would change.
    */
-  void StateChanged();
+  void StateChanged() noexcept;
 
   /**
    * Call PortListener::PortError().
    */
-  void Error(const char *msg);
+  void Error(const char *msg) noexcept;
 
   /**
    * Call PortListener::PortError().

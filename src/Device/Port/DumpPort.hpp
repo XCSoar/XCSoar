@@ -51,14 +51,14 @@ public:
   /**
    * Disable dumping immediately.
    */
-  void Disable() {
+  void Disable() noexcept {
     until = std::chrono::steady_clock::time_point{};
   }
 
   /**
    * Enable dumping forever.
    */
-  void EnableForever() {
+  void EnableForever() noexcept {
     until = std::chrono::steady_clock::time_point::max();
   }
 
@@ -69,7 +69,7 @@ public:
     until = std::chrono::steady_clock::now() + duration;
   }
 
-  bool IsEnabled() const {
+  bool IsEnabled() const noexcept {
     return until > std::chrono::steady_clock::time_point{};
   }
 
@@ -77,16 +77,16 @@ private:
   /**
    * Determine whether dumping is currently enabled.
    */
-  bool CheckEnabled();
+  bool CheckEnabled() noexcept;
 
 public:
   /* virtual methods from Port */
-  PortState GetState() const override;
+  PortState GetState() const noexcept override;
   bool WaitConnected(OperationEnvironment &env) override;
   size_t Write(const void *data, size_t length) override;
   bool Drain() override;
   void Flush() override;
-  unsigned GetBaudrate() const override;
+  unsigned GetBaudrate() const noexcept override;
   bool SetBaudrate(unsigned baud_rate) override;
   bool StopRxThread() override;
   bool StartRxThread() override;

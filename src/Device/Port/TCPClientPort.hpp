@@ -50,14 +50,14 @@ public:
   TCPClientPort(EventLoop &event_loop, Cares::Channel &cares,
                 const char *host, unsigned port,
                 PortListener *_listener, DataHandler &_handler);
-  virtual ~TCPClientPort();
+  ~TCPClientPort() noexcept override;
 
   auto &GetEventLoop() const noexcept {
     return socket.GetEventLoop();
   }
 
   /* virtual methods from class Port */
-  PortState GetState() const override {
+  PortState GetState() const noexcept override {
     return state;
   }
 
@@ -70,7 +70,7 @@ public:
     return true;
   }
 
-  unsigned GetBaudrate() const override {
+  unsigned GetBaudrate() const noexcept override {
     return 0;
   }
 

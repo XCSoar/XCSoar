@@ -38,7 +38,7 @@ DumpPort::DumpPort(std::unique_ptr<Port> _port) noexcept
    port(std::move(_port)) {}
 
 bool
-DumpPort::CheckEnabled()
+DumpPort::CheckEnabled() noexcept
 {
   if (until == std::chrono::steady_clock::time_point{})
     return false;
@@ -57,7 +57,7 @@ DumpPort::CheckEnabled()
 }
 
 PortState
-DumpPort::GetState() const
+DumpPort::GetState() const noexcept
 {
   return port->GetState();
 }
@@ -111,7 +111,7 @@ DumpPort::Flush()
 }
 
 unsigned
-DumpPort::GetBaudrate() const
+DumpPort::GetBaudrate() const noexcept
 {
   return port->GetBaudrate();
 }

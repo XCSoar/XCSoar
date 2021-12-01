@@ -57,7 +57,7 @@ TCPPort::TCPPort(EventLoop &event_loop,
   });
 }
 
-TCPPort::~TCPPort()
+TCPPort::~TCPPort() noexcept
 {
   BlockingCall(GetEventLoop(), [this](){
     connection.Close();
@@ -66,7 +66,7 @@ TCPPort::~TCPPort()
 }
 
 PortState
-TCPPort::GetState() const
+TCPPort::GetState() const noexcept
 {
   if (connection.IsDefined())
     return PortState::READY;

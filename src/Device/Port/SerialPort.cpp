@@ -41,7 +41,7 @@ SerialPort::SerialPort(PortListener *_listener, DataHandler &_handler)
 {
 }
 
-SerialPort::~SerialPort()
+SerialPort::~SerialPort() noexcept
 {
   // Close the communication port.
   if (hPort != INVALID_HANDLE_VALUE) {
@@ -119,7 +119,7 @@ SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
 }
 
 PortState
-SerialPort::GetState() const
+SerialPort::GetState() const noexcept
 {
   return hPort != INVALID_HANDLE_VALUE
     ? PortState::READY
@@ -149,7 +149,7 @@ SerialPort::Flush()
 }
 
 int
-SerialPort::GetDataQueued() const
+SerialPort::GetDataQueued() const noexcept
 {
   if (hPort == INVALID_HANDLE_VALUE)
     return -1;
@@ -162,7 +162,7 @@ SerialPort::GetDataQueued() const
 }
 
 int
-SerialPort::GetDataPending() const
+SerialPort::GetDataPending() const noexcept
 {
   if (hPort == INVALID_HANDLE_VALUE)
     return -1;
@@ -356,7 +356,7 @@ SerialPort::SetRxTimeout(unsigned Timeout)
 }
 
 unsigned
-SerialPort::GetBaudrate() const
+SerialPort::GetBaudrate() const noexcept
 {
   if (hPort == INVALID_HANDLE_VALUE)
     return 0;

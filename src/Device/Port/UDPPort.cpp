@@ -49,7 +49,7 @@ UDPPort::UDPPort(EventLoop &event_loop,
   });
 }
 
-UDPPort::~UDPPort()
+UDPPort::~UDPPort() noexcept
 {
   BlockingCall(GetEventLoop(), [this](){
     socket.Close();
@@ -57,7 +57,7 @@ UDPPort::~UDPPort()
 }
 
 PortState
-UDPPort::GetState() const
+UDPPort::GetState() const noexcept
 {
   if (socket.IsDefined())
     return PortState::READY;

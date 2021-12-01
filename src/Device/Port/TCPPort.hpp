@@ -48,14 +48,14 @@ public:
   /**
    * Closes the serial port (Destructor)
    */
-  virtual ~TCPPort();
+  ~TCPPort() noexcept override;
 
   auto &GetEventLoop() const noexcept {
     return listener.GetEventLoop();
   }
 
   /* virtual methods from class Port */
-  PortState GetState() const override;
+  PortState GetState() const noexcept override;
 
   bool Drain() override {
     /* writes are synchronous */
@@ -66,20 +66,20 @@ public:
     return true;
   }
 
-  unsigned GetBaudrate() const override {
+  unsigned GetBaudrate() const noexcept override {
     return 0;
   }
 
   size_t Write(const void *data, size_t length) override;
 
 protected:
-  void AsyncAccept() {
+  void AsyncAccept() noexcept {
     listener.ScheduleRead();
   }
 
   void OnListenerReady(unsigned events) noexcept;
 
-  void AsyncRead() {
+  void AsyncRead() noexcept {
     connection.ScheduleRead();
   }
 

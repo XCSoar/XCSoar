@@ -49,7 +49,7 @@ public:
    */
   TTYPort(EventLoop &event_loop,
           PortListener *_listener, DataHandler &_handler);
-  virtual ~TTYPort();
+  ~TTYPort() noexcept override;
 
   auto &GetEventLoop() const noexcept {
     return socket.GetEventLoop();
@@ -71,11 +71,11 @@ public:
   const char *OpenPseudo();
 
   /* virtual methods from class Port */
-  virtual PortState GetState() const override;
+  virtual PortState GetState() const noexcept override;
   virtual bool Drain() override;
   virtual void Flush() override;
   virtual bool SetBaudrate(unsigned baud_rate) override;
-  virtual unsigned GetBaudrate() const override;
+  virtual unsigned GetBaudrate() const noexcept override;
   virtual size_t Write(const void *data, size_t length) override;
 
 private:
