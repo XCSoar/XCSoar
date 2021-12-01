@@ -146,8 +146,7 @@ K6BtPort::SendSetBaudrate(unsigned _baud_rate)
 {
   int code = BaudRateToK6Bt(_baud_rate);
   if (code < 0)
-    /* not supported by K6Bt */
-    return false;
+    throw std::runtime_error("Baud rate not supported by K6Bt");
 
   return SendCommand(CHANGE_BAUD_RATE | code);
 }
