@@ -561,8 +561,10 @@ namespace CAI302 {
   /**
    * Ask the CAI302 to switch the baud rate.  It does not change the
    * baud rate of the specified #Port.
+   *
+   * Throws on error.
    */
-  bool
+  void
   SetBaudRate(Port &port, unsigned baud_rate, OperationEnvironment &env);
 }
 

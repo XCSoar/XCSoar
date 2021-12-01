@@ -71,8 +71,9 @@ bool
 CAI302Device::SetBaudRate(unsigned baud_rate, OperationEnvironment &env)
 {
   CommandMode(env);
-  if (!CAI302::SetBaudRate(port, baud_rate, env) ||
-      !port.Drain())
+  CAI302::SetBaudRate(port, baud_rate, env);
+
+  if (!port.Drain())
     return false;
 
   /* the CAI302 needs some time to apply the new baud rate; if we

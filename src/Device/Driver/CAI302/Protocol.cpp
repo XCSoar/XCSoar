@@ -565,15 +565,14 @@ ConvertBaudRate(unsigned baud_rate) noexcept
   }
 }
 
-bool
+void
 CAI302::SetBaudRate(Port &port, unsigned baud_rate, OperationEnvironment &env)
 {
   unsigned n = ConvertBaudRate(baud_rate);
   if (n == 0)
-    return false;
+    throw std::runtime_error("Baud rate not supported by CAI302");
 
   char cmd[20];
   sprintf(cmd, "BAUD %u\r", n);
   SendCommandQuick(port, cmd, env);
-  return true;
 }
