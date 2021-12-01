@@ -45,7 +45,7 @@ public:
   PortState GetState() const noexcept override;
   bool Drain() override;
   unsigned GetBaudrate() const noexcept override;
-  bool SetBaudrate(unsigned baud_rate) override;
+  void SetBaudrate(unsigned baud_rate) override;
   size_t Write(const void *data, size_t length) override;
 };
 

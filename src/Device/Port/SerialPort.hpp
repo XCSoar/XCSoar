@@ -100,7 +100,7 @@ public:
   PortState GetState() const noexcept override;
   bool Drain() override;
   void Flush() override;
-  bool SetBaudrate(unsigned baud_rate) override;
+  void SetBaudrate(unsigned baud_rate) override;
   unsigned GetBaudrate() const noexcept override;
   size_t Write(const void *data, size_t length) override;
 

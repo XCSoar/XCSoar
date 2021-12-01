@@ -178,7 +178,8 @@ Volkslogger::SendCommandSwitchBaudRate(Port &port, OperationEnvironment &env,
   if (!SendCommand(port, env, cmd, param1, baud_rate_index))
     return false;
 
-  return port.SetBaudrate(baud_rate);
+  port.SetBaudrate(baud_rate);
+  return true;
 }
 
 void

@@ -74,7 +74,7 @@ public:
   virtual PortState GetState() const noexcept override;
   virtual bool Drain() override;
   virtual void Flush() override;
-  virtual bool SetBaudrate(unsigned baud_rate) override;
+  virtual void SetBaudrate(unsigned baud_rate) override;
   virtual unsigned GetBaudrate() const noexcept override;
   virtual size_t Write(const void *data, size_t length) override;
 

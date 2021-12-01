@@ -65,9 +65,8 @@ public:
     return baud_rate;
   }
 
-  bool SetBaudrate(unsigned _baud_rate) override {
+  void SetBaudrate(unsigned _baud_rate) override {
     baud_rate = _baud_rate;
-    return true;
   }
 
   bool StopRxThread() override {

@@ -80,8 +80,7 @@ CAI302Device::SetBaudRate(unsigned baud_rate, OperationEnvironment &env)
      switch too early, it'll cancel the command */
   env.Sleep(std::chrono::milliseconds(500));
 
-  if (!port.SetBaudrate(baud_rate))
-    return false;
+  port.SetBaudrate(baud_rate);
 
   CAI302::CommandMode(port, env);
   return true;

@@ -141,27 +141,25 @@ BaudRateToK6Bt(unsigned baud_rate) noexcept
   }
 }
 
-bool
+void
 K6BtPort::SendSetBaudrate(unsigned _baud_rate)
 {
   int code = BaudRateToK6Bt(_baud_rate);
   if (code < 0)
     throw std::runtime_error("Baud rate not supported by K6Bt");
 
-  return SendCommand(CHANGE_BAUD_RATE | code);
+  if (!SendCommand(CHANGE_BAUD_RATE | code))
+    throw std::runtime_error("Failed to send CHANGE_BAUD_RATE to K6Bt");
 }
 
-bool
+void
 K6BtPort::SetBaudrate(unsigned _baud_rate)
 {
   if (_baud_rate == baud_rate)
-    return true;
+    return;
 
-  if (!SendSetBaudrate(_baud_rate))
-    return false;
-
+  SendSetBaudrate(_baud_rate);
   baud_rate = _baud_rate;
-  return true;
 }
 
 unsigned

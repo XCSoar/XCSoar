@@ -116,13 +116,13 @@ DumpPort::GetBaudrate() const noexcept
   return port->GetBaudrate();
 }
 
-bool
+void
 DumpPort::SetBaudrate(unsigned baud_rate)
 {
   if (CheckEnabled())
     LogFormat("SetBaudrate %u", baud_rate);
 
-  return port->SetBaudrate(baud_rate);
+  port->SetBaudrate(baud_rate);
 }
 
 bool

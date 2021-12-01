@@ -66,8 +66,7 @@ public:
     return true;
   }
 
-  bool SetBaudrate(unsigned baud_rate) override {
-    return true;
+  void SetBaudrate(unsigned) override {
   }
 
   unsigned GetBaudrate() const noexcept override {

@@ -25,6 +25,7 @@ Copyright_License {
 #include "Android/PortBridge.hpp"
 
 #include <cassert>
+#include <stdexcept>
 
 AndroidPort::AndroidPort(PortListener *_listener, DataHandler &_handler,
                          PortBridge *_bridge)
@@ -67,12 +68,13 @@ AndroidPort::GetBaudrate() const noexcept
   return bridge->getBaudRate(Java::GetEnv());
 }
 
-bool
+void
 AndroidPort::SetBaudrate(unsigned baud_rate)
 {
   assert(bridge != nullptr);
 
-  return bridge->setBaudRate(Java::GetEnv(), baud_rate);
+  if (!bridge->setBaudRate(Java::GetEnv(), baud_rate))
+    throw std::runtime_error{"Failed to set baud rate"};
 }
 
 size_t

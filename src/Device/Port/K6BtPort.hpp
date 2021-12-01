@@ -50,7 +50,7 @@ public:
 
 protected:
   bool SendCommand(uint8_t cmd);
-  bool SendSetBaudrate(unsigned baud_rate);
+  void SendSetBaudrate(unsigned baud_rate);
 
 public:
   /* virtual methods from Port */
@@ -59,7 +59,7 @@ public:
   size_t Write(const void *data, size_t length) override;
   bool Drain() override;
   void Flush() override;
-  bool SetBaudrate(unsigned baud_rate) override;
+  void SetBaudrate(unsigned baud_rate) override;
   unsigned GetBaudrate() const noexcept override;
   bool StopRxThread() override;
   bool StartRxThread() override;

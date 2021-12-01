@@ -157,9 +157,11 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
          than enough */
       env.Sleep(std::chrono::milliseconds(100));
 
-      if (!port.SetBaudrate(bulk_baud_rate)) {
+      try {
+        port.SetBaudrate(bulk_baud_rate);
+      } catch (...) {
         mode = Mode::UNKNOWN;
-        return false;
+        throw;
       }
     }
   } else

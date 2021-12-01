@@ -367,7 +367,7 @@ SerialPort::GetBaudrate() const noexcept
   return PortDCB.BaudRate;
 }
 
-bool
+void
 SerialPort::SetBaudrate(unsigned BaudRate)
 {
   COMSTAT ComStat;
@@ -375,7 +375,7 @@ SerialPort::SetBaudrate(unsigned BaudRate)
   DWORD dwErrors;
 
   if (hPort == INVALID_HANDLE_VALUE)
-    return false;
+    throw std::runtime_error("Port is closed");
 
   do {
     ClearCommError(hPort, &dwErrors, &ComStat);
@@ -387,5 +387,6 @@ SerialPort::SetBaudrate(unsigned BaudRate)
 
   PortDCB.BaudRate = BaudRate;
 
-  return SetCommState(hPort, &PortDCB);
+  if (!SetCommState(hPort, &PortDCB))
+    throw MakeLastError("Failed to set baud rate");
 }

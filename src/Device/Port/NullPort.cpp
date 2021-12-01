@@ -78,10 +78,9 @@ NullPort::GetBaudrate() const noexcept
   return 0;
 }
 
-bool
-NullPort::SetBaudrate(unsigned baud_rate)
+void
+NullPort::SetBaudrate(unsigned)
 {
-  return true;
 }
 
 int

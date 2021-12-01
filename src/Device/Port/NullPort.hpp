@@ -41,7 +41,7 @@ public:
   bool Drain() override;
   void Flush() override;
   unsigned GetBaudrate() const noexcept override;
-  bool SetBaudrate(unsigned baud_rate) override;
+  void SetBaudrate(unsigned baud_rate) override;
   bool StopRxThread() override;
   bool StartRxThread() override;
   int Read(void *Buffer, size_t Size) override;

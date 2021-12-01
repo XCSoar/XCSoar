@@ -311,18 +311,13 @@ TTYPort::GetBaudrate() const noexcept
   return speed_t_to_baud_rate(cfgetispeed(&attr));
 }
 
-bool
+void
 TTYPort::SetBaudrate(unsigned baud_rate)
 {
   assert(socket.IsDefined());
 
   const TTYDescriptor tty(socket.GetSocket().ToFileDescriptor());
-  try {
-    ::SetBaudrate(tty, baud_rate);
-    return true;
-  } catch (...) {
-    return false;
-  }
+  ::SetBaudrate(tty, baud_rate);
 }
 
 void
