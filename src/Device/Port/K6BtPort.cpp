@@ -111,9 +111,8 @@ K6BtPort::Flush()
   SendCommand(FLUSH_BUFFERS | 0x3); /* flush RX and TX buffer */
 }
 
-gcc_const
-static int
-BaudRateToK6Bt(unsigned baud_rate)
+static constexpr int
+BaudRateToK6Bt(unsigned baud_rate) noexcept
 {
   switch (baud_rate) {
   case 2400:
