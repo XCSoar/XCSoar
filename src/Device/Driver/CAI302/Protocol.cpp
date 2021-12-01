@@ -549,8 +549,8 @@ CAI302::ClearLog(Port &port, OperationEnvironment &env)
   SendCommand(port, "CLEAR LOG\r", env, std::chrono::minutes(1));
 }
 
-static unsigned
-ConvertBaudRate(unsigned baud_rate)
+static constexpr unsigned
+ConvertBaudRate(unsigned baud_rate) noexcept
 {
   switch (baud_rate) {
   case 1200: return 4;
