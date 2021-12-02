@@ -80,6 +80,11 @@ echo "dc 0" > /sys/devices/platform/pmic_light.1/lit
 echo '/mnt/onboard/XCSoarData/crash/core.%p' >/proc/sys/kernel/core_pattern
 ulimit -c unlimited
 
+# workaround for Kobo Clara HD: the touch screen doesn't respond
+# and the initial screen render is blank if we are too fast
+# delay should not cause any problem and might help other models
+usleep 100000
+
 # launch user script
 if [ -f /mnt/onboard/XCSoarData/kobo/init.sh ]; then
     source /mnt/onboard/XCSoarData/kobo/init.sh
