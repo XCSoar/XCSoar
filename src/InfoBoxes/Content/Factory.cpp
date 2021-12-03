@@ -339,7 +339,7 @@ static constexpr MetaData meta_data[] = {
   // e_WindSpeed_Est
   {
     N_("Wind speed"),
-    N_("Wind V"),
+    N_("Wind"),
     N_("Wind speed estimated by XCSoar. Manual adjustment is possible with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through settings, adjust the values with left/right cursor keys."),
     UpdateInfoBoxWindSpeed,
     wind_infobox_panels,
@@ -348,7 +348,7 @@ static constexpr MetaData meta_data[] = {
   // e_WindBearing_Est
   {
     N_("Wind bearing"),
-    N_("Wind Brng"),
+    N_("Wind"),
     N_("Wind bearing estimated by XCSoar. Manual adjustment is possible with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through settings, adjust the values with left/right cursor keys."),
     UpdateInfoBoxWindBearing,
     wind_infobox_panels,
@@ -885,7 +885,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_HeadWind
   {
-    N_("Head wind component"),
+    N_("Wind, head component"),
     N_("Head Wind"),
     N_("The current head wind component. Head wind is calculated from TAS and GPS ground speed if airspeed is available from external device. Otherwise the estimated wind is used for the calculation."),
     UpdateInfoBoxHeadWind,
@@ -918,7 +918,7 @@ static constexpr MetaData meta_data[] = {
 
   // HeadWindSimplified
   {
-    N_("Head wind component (simplified)"),
+    N_("Wind, head component (simplified)"),
     N_("Head Wind *"),
     N_("The current head wind component. The simplified head wind is calculated by subtracting GPS ground speed from the TAS if airspeed is available from external device."),
     UpdateInfoBoxHeadWindSimplified,
