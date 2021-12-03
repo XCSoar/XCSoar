@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-09-12 10:20+0000\n"
+"PO-Revision-Date: 2021-12-03 15:53+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1295,8 +1295,9 @@ msgid "Arrival Alt"
 msgstr "Př. výška"
 
 #: src/Renderer/WaypointListRenderer.cpp:165
+#, fuzzy
 msgid " ("
-msgstr ""
+msgstr " ("
 
 #: src/Weather/Rasp/RaspStore.cpp:48 src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
@@ -3407,9 +3408,8 @@ msgid "Max. Cruise Speed"
 msgstr "Max. rychlost přeskoku"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:138
-#, fuzzy
 msgid "WeGlide Type"
-msgstr "Typ letounu"
+msgstr "WeGlide typ"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:63
 msgid "List"
@@ -3780,9 +3780,9 @@ msgstr "VPD směr; délka"
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:136
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:88
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Short Name"
-msgstr "Krátké jméno souboru"
+msgstr "Krátké jméno"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:167
 msgid "Bearing and Distance"
