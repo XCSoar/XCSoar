@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-09-27 15:39+0000\n"
+"PO-Revision-Date: 2021-12-04 22:08+0000\n"
 "Last-Translator: ulipo <uli.peru@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/it/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Launchpad-Export-Date: 2015-09-08 16:12+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1800,9 +1800,8 @@ msgid "Add"
 msgstr "Aggiungi"
 
 #: src/Dialogs/FileManager.cpp:423
-#, fuzzy
 msgid "Update all"
-msgstr "Aggiornamento"
+msgstr "Aggiorna tutto"
 
 #: src/Dialogs/FileManager.cpp:456
 msgid "Queued"
@@ -1875,12 +1874,12 @@ msgstr "TCP client"
 #. selection UI
 #: src/Dialogs/Device/PortDataField.cpp:66
 #: src/Dialogs/Device/DeviceEditWidget.cpp:270
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TCP port"
 msgstr "Porta TCP"
 
 #: src/Dialogs/Device/PortDataField.cpp:67
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "UDP port"
 msgstr "Porta UDP"
 
@@ -1907,7 +1906,6 @@ msgstr ""
 "tema o download del volo."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:265
-#, fuzzy
 msgid "IP address"
 msgstr "Indirizzo IP"
 
@@ -1926,23 +1924,21 @@ msgid "I²C addr"
 msgstr "Indirizzo I²C"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:281
-#, fuzzy
 msgid ""
 "The I²C address that matches your configuration. This field is not used when "
 "your selection in the \"I²C bus\" field is not an I²C bus number. Assume "
 "this field is not in use if that doesn't make sense to you."
 msgstr ""
-"L'indirizzo I2C corrispondente alla tua configurazione. Questo campo non "
-"viene utilizzato quando la selezione nel campo Bus I2C non corrisponde ad un "
-"numero di bus I2C. Se non capisci la frase precedente, puoi tranquillamente "
-"assumere che questo campo non sia usato."
+"L'indirizzo I²C corrispondente alla tua configurazione. Questo campo non "
+"viene utilizzato quando la selezione nel campo \"Bus I²C\" non corrisponde "
+"ad un numero di bus I²C. Se non capisci la frase precedente, puoi "
+"tranquillamente assumere che questo campo non sia usato."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:289
 msgid "Pressure use"
 msgstr "Uso pressione"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:289
-#, fuzzy
 msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
 "pressure. Here you tell the system what pressure this is and what it should "
@@ -1962,7 +1958,6 @@ msgid "Passthrough device"
 msgstr "dispositivo di passthrough"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:307
-#, fuzzy
 msgid "Whether the device has a passed-through device connected."
 msgstr ""
 "Questa opzione consente di configurare se questo dispositivo è connesso ad "
@@ -1991,7 +1986,6 @@ msgid "Sync. to device"
 msgstr "Sincro con dispositivo"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:327
-#, fuzzy
 msgid ""
 "Tells XCSoar to send settings like the MacCready value, bugs and ballast to "
 "the device."
@@ -2087,9 +2081,8 @@ msgstr "Barometro"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:403
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:128
-#, fuzzy
 msgid "Pitot"
-msgstr "Porta Pitot"
+msgstr "Pitot"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:408
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
@@ -2283,18 +2276,16 @@ msgid "Save"
 msgstr "Salva"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:58
-#, fuzzy
 msgid "Calibrate"
-msgstr "rateo di salita"
+msgstr "Calibra"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:130
-#, fuzzy
 msgid "Offset"
-msgstr "Fuso orario UTC"
+msgstr "Offset"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:144
 msgid "Pitot sensor calibration"
-msgstr ""
+msgstr "Calibrazione sensore Pitot"
 
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:60
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:59
@@ -3421,9 +3412,8 @@ msgid "Max. Cruise Speed"
 msgstr "Massima Velocità di Crociera"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:138
-#, fuzzy
 msgid "WeGlide Type"
-msgstr "Tipo Velivolo"
+msgstr "Tipo WeGlide"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:63
 msgid "List"
@@ -3794,9 +3784,9 @@ msgstr "Pista"
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:136
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:88
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Short Name"
-msgstr "Nome file corto"
+msgstr "Nome Breve"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:167
 msgid "Bearing and Distance"
@@ -3936,39 +3926,39 @@ msgid "Landable"
 msgstr "Atterrabile"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:73
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Mountain Pass"
-msgstr "Montuoso"
+msgstr "Passo Montuoso"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Mountain Top"
-msgstr "Montuoso"
+msgstr "Cima"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
 #, no-c-format
 msgid "Transmitter Mast"
-msgstr ""
+msgstr "Trasmettitore"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:76
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tower"
-msgstr "Accensione"
+msgstr "Torre"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:77
 #, no-c-format
 msgid "Tunnel"
-msgstr ""
+msgstr "Tunnel"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
 #, no-c-format
 msgid "Bridge"
-msgstr ""
+msgstr "Ponte"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:79
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Power Plant"
-msgstr "Accensione"
+msgstr "Centrale Elettrica"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:89
 msgid "Comment"
@@ -4241,24 +4231,24 @@ msgstr ""
 "Mostra barra di planata finale se ci si avvicina alla zona di planata finale."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:57
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable thermal assistant."
-msgstr "Assistente termica"
+msgstr "Disabilita assistente termica."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:59
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom left"
 msgstr "In Basso a Sinistra"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:60
 #, no-c-format
 msgid "Show thermal assistant in bottom left."
-msgstr ""
+msgstr "Mostra l'assistente di termica in basso a sinistra."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:62
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom left (avoid infoboxes)"
-msgstr "Auto (segui InfoBox)"
+msgstr "In basso a sinistra (evita InfoBox)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:63
 #, no-c-format
@@ -4266,6 +4256,8 @@ msgid ""
 "Show thermal assistant in bottom left, above/to right of infoboxes (if "
 "there)."
 msgstr ""
+"Mostra l'assistente di termica in basso a sinistra, sopra o a destra degli "
+"InfoBox (se presenti)."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
 #, fuzzy, no-c-format
@@ -4275,18 +4267,20 @@ msgstr "In Basso a Destra"
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:66
 #, no-c-format
 msgid "Show thermal assistant in bottom right."
-msgstr ""
+msgstr "Mostra l'assistente di termica in basso a destra."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom right (avoid infoboxes)"
-msgstr "Auto (segui InfoBox)"
+msgstr "In basso a destra (evita InfoBox)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:69
 #, no-c-format
 msgid ""
 "Show thermal assistant in bottom right above/to left of infoboxes (if there)."
 msgstr ""
+"Mostra l'assistente di termica in basso a destra, sopra o a sinistra degli "
+"InfoBox (se presenti)."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:107
 msgid ""
@@ -4319,6 +4313,8 @@ msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
 "the main screen."
 msgstr ""
+"Abilita e seleziona la posizione dell'assistente di termica quando "
+"sovrapposto alla schermata principale."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:121
 msgid "Thermal band"
@@ -4444,16 +4440,16 @@ msgid "Thermal Averager needle"
 msgstr "Mediometro"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:93
-#, fuzzy
 msgid ""
 "If true, the vario gauge will display a thermal averager needle instead of "
 "current climb rate needle.  During cruise, this needle displays the last "
 "thermal average netto value.  During circling, this needle displays the "
 "average net value."
 msgstr ""
-"Se abilitato, l'indicatore vario mostrerà anche l'ago del mediometro.  "
-"Durante la planata, questo mostra il valore medio netto.  In termica, mostra "
-"il valore medio lordo."
+"Se abilitato, l'indicatore vario mostrerà l'ago del mediometro invece "
+"dell'ago del rateo di salita corrente. Durante la planata, questo ago mostra "
+"il valore netto medio dell'ultima termica.  In termica, mostra il valore "
+"netto medio."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:67
 #, no-c-format
@@ -4461,14 +4457,14 @@ msgid "Final glide"
 msgstr "Planata finale"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:68
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Adjusts MC for fastest arrival.  For contest sprint tasks, the MacCready is "
 "adjusted in order to cover the greatest distance in the remaining time and "
 "reach the finish height."
 msgstr ""
-"Regola MC per l'arrivo più veloce. Per temi OLC sprint, il MacCready viene "
-"regolato in modo da coprire la maggior distanza nel tempo restante e "
+"Regola MC per l'arrivo più veloce. Per temi di gara sprint, il MacCready "
+"viene regolato in modo da coprire la maggior distanza nel tempo rimanente e "
 "raggiungere l'altezza finale."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:70
@@ -4585,23 +4581,25 @@ msgstr "Assistente d'onda"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:125
 msgid "Cruise/Circling period"
-msgstr ""
+msgstr "Tempo di Termica/Planata"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:126
 msgid ""
 "How many seconds of turning before changing from cruise to circling mode."
 msgstr ""
+"Quanti secondi di termica prima di cambiare modalità da planata a termica."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:131
-#, fuzzy
 msgid "Circling/Cruise period"
-msgstr "Orientamento in termica"
+msgstr "Tempo Termica/Planata"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:132
 msgid ""
 "How many seconds of flying straight before changing from circling to cruise "
 "mode."
 msgstr ""
+"Quanti secondi di volo rettilineo prima di cambiare modalità da termica a "
+"planata."
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:88
 msgid "Use final glide mode"
@@ -4739,19 +4737,19 @@ msgid "8 Split"
 msgstr "8 Divisi"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:89
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "10 Split"
-msgstr "8 Divisi"
+msgstr "10 Divisi"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:91
 #, no-c-format
 msgid "12 Split in 3 rows"
-msgstr ""
+msgstr "12 Divisi in 3 righe"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:93
 #, no-c-format
 msgid "15 Split in 3 rows"
-msgstr ""
+msgstr "15 Divisi in 3 righe"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:95
 #, no-c-format
@@ -4794,9 +4792,9 @@ msgid "5 Right (Square)"
 msgstr "5 Destra (Quadrato)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:111
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "10 Bottom or Right"
-msgstr "12 Basso o Destra"
+msgstr "10 Basso o Destra"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:113
 #, no-c-format
@@ -4804,9 +4802,9 @@ msgid "12 Bottom or Right"
 msgstr "12 Basso o Destra"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:115
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "10 Top or Left"
-msgstr "12 Alto o Sinistra"
+msgstr "10 Alto o Sinistra"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:117
 #, no-c-format
@@ -4819,9 +4817,9 @@ msgid "16 Right (Landscape)"
 msgstr "16 Destra (Orizzontale)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:121
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "24 Bottom or Right"
-msgstr "4 Basso o Destra"
+msgstr "24 Basso o Destra"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:123
 #, no-c-format
@@ -4941,13 +4939,12 @@ msgid "Glass"
 msgstr "Vetro"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:194
-#, fuzzy
 msgid "Full screen"
-msgstr "Mappa (schermo intero)"
+msgstr "Schermo intero"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:194
 msgid "Run XCSoar in full screen mode"
-msgstr ""
+msgstr "Esegui XCSoar a schermo intero"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:199
 msgid "Display orientation"
@@ -5021,19 +5018,19 @@ msgstr "Mostra il pulsante del menù"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:245
 msgid "Cursor zoom"
-msgstr ""
+msgstr "Zoom cursore"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:245
 msgid "Cursor zoom factor"
-msgstr ""
+msgstr "Fattore di zoom del cursore"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:247
 msgid "Invert cursor color"
-msgstr ""
+msgstr "Inverti colore cursore"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:247
 msgid "Enable black cursor"
-msgstr ""
+msgstr "Abilita cursore nero"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:59
 #, no-c-format
@@ -5045,9 +5042,8 @@ msgid "Pilot name"
 msgstr "Nome Pilota"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:74
-#, fuzzy
 msgid "CoPilot name"
-msgstr "Nome Pilota"
+msgstr "Nome CoPilota"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:76
 msgid "Time step cruise"
@@ -5713,17 +5709,15 @@ msgstr ""
 "utili su singole boe e aviosuperfici."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:109
-#, fuzzy
 msgid "FLARM Device Database"
-msgstr "Dettaglio traffico FLARM"
+msgstr "Database Dispositivo FLARM"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:110
-#, fuzzy
 msgid ""
 "The name of the file containing information about registered FLARM devices."
 msgstr ""
-"Il nome del file (.xcm) contenente geografia del terreno, topografia e "
-"opzionalmente le boe, i loro dettagli e spazi aerei."
+"Il nome del file contenente informazioni riguardo ai dispositivi FLARM "
+"registrati."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:84
 #, no-c-format
@@ -5885,29 +5879,29 @@ msgid "Draws an arrow head with a dashed arrow line."
 msgstr "Disegna una freccia con il gambo tratteggiato."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:140
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No SkyLines traffic is drawn."
-msgstr "Nessuna freccia del vento viene disegnata."
+msgstr "Nessun traffico SkyLines viene mostrato."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 #, no-c-format
 msgid "Symbol"
-msgstr ""
+msgstr "Simbolo"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 #, no-c-format
 msgid "Draws the SkyLines symbol only."
-msgstr ""
+msgstr "Mostra solo il simbolo SkyLines."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
 msgid "Symbol and Name"
-msgstr ""
+msgstr "Simbolo e Nome"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
 msgid "Draws the SkyLines symbol with name."
-msgstr ""
+msgstr "Mostra il simbolo SkyLines con il nome."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:152
 msgid "Ground track"
@@ -5987,13 +5981,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:196
 msgid "SkyLines traffic mode"
-msgstr ""
+msgstr "Modalità traffico SkyLines"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:197
 msgid ""
 "Show the SkyLines traffic symbols/names on the map, downloaded from the "
 "SkyLines server."
 msgstr ""
+"Mostra i simboli/nomi del traffico di SkyLines sulla mappa, scaricandoli dal "
+"server SkyLines."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:68
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:249
@@ -6105,6 +6101,8 @@ msgid ""
 "Wait time in minutes after Pilot Event and before start gate opens. 0 means "
 "start opens immediately."
 msgstr ""
+"Tempo di attesa in minuti dopo l'Evento Pilota e prima che apra lo start. 0 "
+"significa che lo start apre immediatamente."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:135
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:284
