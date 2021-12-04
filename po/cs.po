@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-12-03 15:53+0000\n"
+"PO-Revision-Date: 2021-12-04 22:08+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -1295,7 +1295,6 @@ msgid "Arrival Alt"
 msgstr "Př. výška"
 
 #: src/Renderer/WaypointListRenderer.cpp:165
-#, fuzzy
 msgid " ("
 msgstr " ("
 
@@ -3516,7 +3515,7 @@ msgstr "Zadejte své heslo"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:88
 msgid "Wrong password."
-msgstr "Nesprávné heslo"
+msgstr "Nesprávné heslo."
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:103
 msgid "Enter a new password"
@@ -3925,39 +3924,39 @@ msgid "Landable"
 msgstr "Nouzová plocha"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:73
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Mountain Pass"
-msgstr "Hornatý"
+msgstr "Horský průsmyk"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Mountain Top"
-msgstr "Hornatý"
+msgstr "Horský vrchol"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
 #, no-c-format
 msgid "Transmitter Mast"
-msgstr ""
+msgstr "Vysílač"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:76
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tower"
-msgstr "Napájení"
+msgstr "Věž"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:77
 #, no-c-format
 msgid "Tunnel"
-msgstr ""
+msgstr "Tunel"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
 #, no-c-format
 msgid "Bridge"
-msgstr ""
+msgstr "Most"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:79
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Power Plant"
-msgstr "Napájení"
+msgstr "Elektrárna"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:89
 msgid "Comment"
@@ -4722,9 +4721,9 @@ msgid "12 Split in 3 rows"
 msgstr "12 rozděleno / 3 řady"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "15 Split in 3 rows"
-msgstr "12 rozděleno / 3 řady"
+msgstr "15 rozděleno / 3 řady"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:95
 #, no-c-format
@@ -4792,9 +4791,9 @@ msgid "16 Right (Landscape)"
 msgstr "16 vpravo (na šířku)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:121
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "24 Bottom or Right"
-msgstr "4 dole nebo vpravo"
+msgstr "24 dole nebo vpravo"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:123
 #, no-c-format
@@ -4912,13 +4911,12 @@ msgid "Glass"
 msgstr "Sklo"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:194
-#, fuzzy
 msgid "Full screen"
-msgstr "Mapa (celá obrazovka)"
+msgstr "Celá obrazovka"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:194
 msgid "Run XCSoar in full screen mode"
-msgstr ""
+msgstr "Spustí XCSoar v celoobrazovkovém režimu"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:199
 msgid "Display orientation"
@@ -5069,7 +5067,7 @@ msgstr "Zaznamená každý start a přistání."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:102
 msgid "Logger ID"
-msgstr "Logger ID"
+msgstr "Logger-ID"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:45
 #, no-c-format
@@ -6608,6 +6606,8 @@ msgid ""
 "The short name of each waypoint is displayed. If unavailable, the first five "
 "letters of the full name are displayed."
 msgstr ""
+"Zobrazí krátké jméno každého otočného bodu. Pokud není k dispozici, je "
+"zobrazeno prvních pět znaků celého jména."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:105
 msgid "Label format"
@@ -6890,21 +6890,20 @@ msgid "Obtain and show thermal locations reported by others."
 msgstr "Získává a zobrazuje pozici st. proudů od dalších uživatelů."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:91
-#, fuzzy
 msgid "Automatic Upload"
-msgstr "Auto"
+msgstr "Automatický upload"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:92
 msgid "Uploads flights automatically after download from logger?"
-msgstr ""
+msgstr "Má se provést automatický upload letů, stažených z loggeru?"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:96
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
-msgstr ""
+msgstr "Použijte údaje ze svého účtu WeGlide. Pokud není použito, zadejte 0."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:99
 msgid "Pilot date of birth"
-msgstr ""
+msgstr "Datum narození pilota"
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:43
 msgid "Radius of the OZ cylinder."
@@ -7033,9 +7032,8 @@ msgid "Configure whether the start must be armed manually or automatically."
 msgstr "Určuje, zda má být start úlohy označen ručně nebo automaticky."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:240
-#, fuzzy
 msgid "Score start exit"
-msgstr "Boduj opuštění sektoru"
+msgstr "Boduj opuštění startu"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:244
 msgid "Start open time"
@@ -7352,9 +7350,9 @@ msgid ""
 "Please help us improve XCSoar!"
 msgstr ""
 "Projekt XCSoar právě vyvíjí revoluční službu, která umožňuje sdílení pozic "
-"stoupavých proudů, vlnových prostorů a dalších informací s ostatními "
-"piloty.\n"
-"Jste ochotni participovat v testovací fázi? To znamená, že vaše pozice, "
+"stoupavých proudů, vlnových prostorů a dalších informací s ostatními piloty."
+"\n"
+"Jste ochotni participovat v testovací fázi? To znamená, že vaše poloha, "
 "pozice stoupavých proudů, vlnových prostorů a jiná meteorologická data budou "
 "odesílána na náš testovací server. Tuto službu lze kdykoliv deaktivovat v "
 "nastavení \"Sledování\".\n"
@@ -9151,7 +9149,7 @@ msgstr ""
 "oblasti."
 
 #: src/InfoBoxes/Content/Factory.cpp:888
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind, head component"
 msgstr "Složka protivětru"
 
@@ -9231,7 +9229,7 @@ msgstr ""
 "současném rameni."
 
 #: src/InfoBoxes/Content/Factory.cpp:921
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind, head component (simplified)"
 msgstr "Složka protivětru (zjednodušeně)"
 
