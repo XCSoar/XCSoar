@@ -87,6 +87,7 @@ GetDPI()
 #ifdef KOBO
   switch (DetectKoboModel()) {
   case KoboModel::GLO_HD:
+  case KoboModel::CLARA_HD:
     return 300;
 
   case KoboModel::TOUCH2:
