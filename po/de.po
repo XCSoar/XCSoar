@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-07-20 10:35+0000\n"
-"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
+"PO-Revision-Date: 2021-12-06 22:09+0000\n"
+"Last-Translator: Helmut Rohs <helmut.rohs@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
 "translations/de/>\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -2075,9 +2075,8 @@ msgstr "Baro"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:403
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:128
-#, fuzzy
 msgid "Pitot"
-msgstr "Pitot Anschluss"
+msgstr "Pitotrohr"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:408
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
@@ -2271,9 +2270,8 @@ msgid "Save"
 msgstr "Speichern"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:58
-#, fuzzy
 msgid "Calibrate"
-msgstr "Steigwert"
+msgstr "Kalibriere"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:130
 #, fuzzy
@@ -2282,7 +2280,7 @@ msgstr "Zeitzonenverschiebung"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:144
 msgid "Pitot sensor calibration"
-msgstr ""
+msgstr "Pitot Sensor Kalibrierung"
 
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:60
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:59
@@ -3409,9 +3407,8 @@ msgid "Max. Cruise Speed"
 msgstr "Manövergeschwindigkeit"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:138
-#, fuzzy
 msgid "WeGlide Type"
-msgstr "Luftfahrzeugtyp"
+msgstr "WeGlide Typ"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:63
 msgid "List"
@@ -3781,9 +3778,9 @@ msgstr "Startbahn"
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:136
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:88
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Short Name"
-msgstr "Datei Kurzname"
+msgstr "Kurzname"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:167
 msgid "Bearing and Distance"
@@ -3925,39 +3922,39 @@ msgid "Landable"
 msgstr "Landbar"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:73
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Mountain Pass"
-msgstr "Gebirgig"
+msgstr "Gebirgspass"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Mountain Top"
-msgstr "Gebirgig"
+msgstr "Berggipfel"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
 #, no-c-format
 msgid "Transmitter Mast"
-msgstr ""
+msgstr "Sendemast"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:76
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tower"
-msgstr "Stromversorgung"
+msgstr "Turm"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:77
 #, no-c-format
 msgid "Tunnel"
-msgstr ""
+msgstr "Tunnel"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
 #, no-c-format
 msgid "Bridge"
-msgstr ""
+msgstr "Brücke"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:79
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Power Plant"
-msgstr "Stromversorgung"
+msgstr "Kraftwerk"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:89
 msgid "Comment"
@@ -4447,13 +4444,13 @@ msgid "Final glide"
 msgstr "Endanflug"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:68
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Adjusts MC for fastest arrival.  For contest sprint tasks, the MacCready is "
 "adjusted in order to cover the greatest distance in the remaining time and "
 "reach the finish height."
 msgstr ""
-"Stellt MacCready auf die schnellstmögliche Ankunft ein. Bei den OLC Sprint-"
+"Stellt MC auf die schnellstmögliche Ankunft ein. Bei den Contest Sprint-"
 "Aufgaben sind die Einstellungen so, dass eine möglichst große Strecke "
 "innerhalb der verbleibenden Zeit zurückgelegt wird und die Ankunftshöhe "
 "eingehalten wird."
@@ -4736,9 +4733,9 @@ msgid "12 Split in 3 rows"
 msgstr "12 geteilt in 3 Zeilen"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "15 Split in 3 rows"
-msgstr "12 geteilt in 3 Zeilen"
+msgstr "15 geteilt in 3 Zeilen"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:95
 #, no-c-format
@@ -4806,9 +4803,9 @@ msgid "16 Right (Landscape)"
 msgstr "16 Rechts (Querformat)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:121
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "24 Bottom or Right"
-msgstr "4 Unten oder Rechts"
+msgstr "24 Unten oder Rechts"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:123
 #, no-c-format
@@ -4926,13 +4923,12 @@ msgid "Glass"
 msgstr "Glas"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:194
-#, fuzzy
 msgid "Full screen"
-msgstr "Karte (Ganzer Bildsch.)"
+msgstr "Ganzer Bildsch."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:194
 msgid "Run XCSoar in full screen mode"
-msgstr ""
+msgstr "Starte XCSoar Bildschirm füllend"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:199
 msgid "Display orientation"
@@ -6069,9 +6065,8 @@ msgstr "Bezug für die Regel über die min. Ankunftshöhe."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:128
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:280
-#, fuzzy
 msgid "PEV start wait time"
-msgstr "Geschätzte Aufgabenzeit"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:129
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:281
@@ -6079,6 +6074,8 @@ msgid ""
 "Wait time in minutes after Pilot Event and before start gate opens. 0 means "
 "start opens immediately."
 msgstr ""
+"Wartezeit in Minuten bevor das Start-Tor nach dem Piloten Event öffnet. 0 "
+"bedeutet der Start öffnet sofort."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:135
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:284
@@ -6091,6 +6088,8 @@ msgid ""
 "Number of minutes start remains open after Pilot Event and PEV wait time.0 "
 "means start will never close after it opens."
 msgstr ""
+"Dauer in Minuten für die das Start-Tor nach dem Piloten Event geöffnet "
+"bleibt. 0 bedeutet der Start bleibt unbegrenzt offen."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:81
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -6112,7 +6111,7 @@ msgstr "Radius"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:147
 msgid "Default start type for new tasks you create."
-msgstr "Standard Abflugtyp für Aufgaben."
+msgstr "Standard Abflugtyp für neue Aufgaben."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:152
 msgid "Default radius or gate width of the start zone for new tasks."
