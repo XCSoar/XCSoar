@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-10-25 19:45+0000\n"
+"PO-Revision-Date: 2021-12-04 22:08+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1298,7 +1298,7 @@ msgstr "Alt llegada"
 
 #: src/Renderer/WaypointListRenderer.cpp:165
 msgid " ("
-msgstr ""
+msgstr " ("
 
 #: src/Weather/Rasp/RaspStore.cpp:48 src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
@@ -3410,9 +3410,8 @@ msgid "Max. Cruise Speed"
 msgstr "V. Máx. de cucero"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:138
-#, fuzzy
 msgid "WeGlide Type"
-msgstr "Tipo De Vehículo"
+msgstr "Tipo WeGlide"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:63
 msgid "List"
@@ -3781,9 +3780,9 @@ msgstr "Pista"
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:136
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:88
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Short Name"
-msgstr "Nombre de Archivo corto"
+msgstr "Nombre corto"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:167
 msgid "Bearing and Distance"
@@ -3923,39 +3922,39 @@ msgid "Landable"
 msgstr "Aterrizable"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:73
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Mountain Pass"
-msgstr "Montañoso"
+msgstr "Collado"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Mountain Top"
-msgstr "Montañoso"
+msgstr "Cumbre"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
 #, no-c-format
 msgid "Transmitter Mast"
-msgstr ""
+msgstr "Antena"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:76
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tower"
-msgstr "Energía"
+msgstr "Torre"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:77
 #, no-c-format
 msgid "Tunnel"
-msgstr ""
+msgstr "Tunel"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
 #, no-c-format
 msgid "Bridge"
-msgstr ""
+msgstr "Puente"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:79
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Power Plant"
-msgstr "Energía"
+msgstr "Central eléctrica"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:89
 msgid "Comment"
@@ -4747,9 +4746,9 @@ msgid "12 Split in 3 rows"
 msgstr "12 dividido en 3 líneas"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "15 Split in 3 rows"
-msgstr "12 dividido en 3 líneas"
+msgstr "12 en 3 líneas"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:95
 #, no-c-format
@@ -4817,9 +4816,9 @@ msgid "16 Right (Landscape)"
 msgstr "16 Derecho (Apaisado)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:121
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "24 Bottom or Right"
-msgstr "4 Abajo o Derecha"
+msgstr "4 Abajo o a Derecha"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:123
 #, no-c-format
@@ -4939,13 +4938,12 @@ msgid "Glass"
 msgstr "Cristal"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:194
-#, fuzzy
 msgid "Full screen"
-msgstr "Mapa (Pantalla Completa)"
+msgstr "Pantalla completa"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:194
 msgid "Run XCSoar in full screen mode"
-msgstr ""
+msgstr "Ejecutar XCSoar a pantalla completa"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:199
 msgid "Display orientation"
@@ -6673,6 +6671,8 @@ msgid ""
 "The short name of each waypoint is displayed. If unavailable, the first five "
 "letters of the full name are displayed."
 msgstr ""
+"Se muestra el nombre corto de cada waypoint. Si no está disponible, se "
+"muestran las cinco primeras letras del nombre completo."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:105
 msgid "Label format"
@@ -6970,21 +6970,20 @@ msgstr ""
 "Obtiene y muestra la localización de térmicas reportadas por otros usuarios."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:91
-#, fuzzy
 msgid "Automatic Upload"
-msgstr "Automático"
+msgstr "Subida automática"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:92
 msgid "Uploads flights automatically after download from logger?"
-msgstr ""
+msgstr "¿Se suben los vuelos automáticamente tras descargarlos del logger?"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:96
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
-msgstr ""
+msgstr "Establecer el de su Perfil WeGlide, o 0 si no se usa."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:99
 msgid "Pilot date of birth"
-msgstr ""
+msgstr "Fecha de nacimiento del piloto"
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:43
 msgid "Radius of the OZ cylinder."
@@ -7113,9 +7112,8 @@ msgid "Configure whether the start must be armed manually or automatically."
 msgstr "Configura si la salida debe prepararse de forma manual o automática."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:240
-#, fuzzy
 msgid "Score start exit"
-msgstr "Salida de puntuación"
+msgstr "Puntuar la salida"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:244
 msgid "Start open time"
@@ -9281,9 +9279,9 @@ msgstr ""
 "dentro del sector TAA."
 
 #: src/InfoBoxes/Content/Factory.cpp:888
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind, head component"
-msgstr "Componente de viento en contra"
+msgstr "Componente de viento en cara"
 
 #: src/InfoBoxes/Content/Factory.cpp:889
 #, no-c-format
@@ -9364,9 +9362,9 @@ msgstr ""
 "térmica igual al ajuste MacCready en el tramo actual."
 
 #: src/InfoBoxes/Content/Factory.cpp:921
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind, head component (simplified)"
-msgstr "componente de viento en cara (simplificado)"
+msgstr "Componente de viento en cara (simplificado)"
 
 #: src/InfoBoxes/Content/Factory.cpp:922
 #, no-c-format
