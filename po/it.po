@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-12-04 22:08+0000\n"
+"PO-Revision-Date: 2021-12-06 22:09+0000\n"
 "Last-Translator: ulipo <uli.peru@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/it/>\n"
@@ -1972,7 +1972,6 @@ msgid "Sync. from device"
 msgstr "Sincro dal dispositivo"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:321
-#, fuzzy
 msgid ""
 "Tells XCSoar to use settings like the MacCready value, bugs and ballast from "
 "the device."
@@ -1994,7 +1993,6 @@ msgstr ""
 "le impostazioni come valore di MacCready, sporco (insetti) e zavorra."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:333
-#, fuzzy
 msgid "Whether you use a K6Bt to connect the device."
 msgstr "Attiva questo per usare K6Bt per connettere il dispositivo."
 
@@ -4260,7 +4258,7 @@ msgstr ""
 "InfoBox (se presenti)."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Bottom right"
 msgstr "In Basso a Destra"
 
@@ -4435,7 +4433,6 @@ msgstr ""
 "il valore medio lordo."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:92
-#, fuzzy
 msgid "Thermal Averager needle"
 msgstr "Mediometro"
 
@@ -5998,7 +5995,6 @@ msgstr "velocità massima di partenza"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:68
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:250
-#, fuzzy
 msgid "Maximum speed allowed in start observation zone. Set to 0 for no limit."
 msgstr ""
 "Velocità massima consentita nella zona di partenza. Impostare a 0 per non "
@@ -6091,9 +6087,8 @@ msgstr "ALtitudine di riferimento per la regola di altezza minima di arrivo."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:128
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:280
-#, fuzzy
 msgid "PEV start wait time"
-msgstr "Tempo tema stimato"
+msgstr "Tempo di attesa start PEV"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:129
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:281
@@ -6107,7 +6102,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:135
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:284
 msgid "PEV start window"
-msgstr ""
+msgstr "Finestra di start PEV"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:136
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:285
@@ -6115,6 +6110,8 @@ msgid ""
 "Number of minutes start remains open after Pilot Event and PEV wait time.0 "
 "means start will never close after it opens."
 msgstr ""
+"Numero di minuti in cui lo start rimane aperto dopo un Evento Pilota e PEV. "
+"0 significa che lo start non si chiuderà mai dopo l'apertura."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:81
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -6196,9 +6193,9 @@ msgstr ""
 "margine di tempo."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable contest calculations"
-msgstr "Disattiva Calcoli OLC"
+msgstr "Disattiva calcoli gara"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:95
 #, no-c-format
@@ -6280,6 +6277,11 @@ msgid ""
 "and the largest Out & Return distance that can be fitted into the flight "
 "route."
 msgstr ""
+"WeGlide combina multipli sistemi di punteggio nella competizione WeGlide "
+"Free. Il punteggio è una combinazione della distanza libera e del bonus "
+"area. Per il bonus area, il programma di punteggio determina il triangolo "
+"FAI più ampio e la più grande distanza Out & Return che possono essere "
+"ricavati nella traccia del volo."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:123
 #, no-c-format
@@ -6288,19 +6290,18 @@ msgid ""
 "path such that the distance between the start point and the turn point is "
 "maximized"
 msgstr ""
+"Vengono scelti dalla traccia del volo un punto di start, una boa ed un punto "
+"di arrivo, in modo che la distanza tra start e boa sia massima"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
-#, fuzzy
 msgid "Contest"
-msgstr "Contenuto"
+msgstr "Competizione"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:128
-#, fuzzy
 msgid "Select the rules used for calculating optimal points for a contest."
 msgstr ""
-"Selezionare le regole utilizzate per il calcolo dei punti ottimali per i "
-"Contest On-Line. L'implementazione è conforme al rilascio ufficiale del 23 "
-"Settembre 2010."
+"Selezionare le regole utilizzate per il calcolo dei punti ottimali per la "
+"competizione."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:131
 msgid "Predict Contest"
@@ -6664,6 +6665,8 @@ msgid ""
 "The short name of each waypoint is displayed. If unavailable, the first five "
 "letters of the full name are displayed."
 msgstr ""
+"Viene mostrato il nome breve di ogni boa. Se non disponibile, vengono "
+"mostrate le prime cinque lettere del nome completo."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:105
 msgid "Label format"
@@ -6719,18 +6722,19 @@ msgstr ""
 "Efficienza: Virate\" nelle impostazioni in \"Computer di Volo > Rotta\"."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:126
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Required GR & terrain glide"
-msgstr "Rettilineo ed evita terreno"
+msgstr "Efficienza richiesta & planata al suolo"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:127
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Both Required glide ratio and terrain avoidance height are displayed. "
 "Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings."
 msgstr ""
-"Vengono visualizzate entrambe le altezze di arrivo. Richiede \"Modalità "
-"Efficienza: Virate\" nelle impostazioni in \"Computer di Volo > Rotta\"."
+"Vengono visualizzate sia l'efficienza richiesta che l'altezza di evitazione "
+"del terreno. Richiede \"Modalità Efficienza: Virate\" nelle impostazioni in "
+"\"Computer di Volo > Rotta\"."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:132
 msgid "Determines how arrival height is displayed in waypoint labels"
@@ -6959,21 +6963,20 @@ msgid "Obtain and show thermal locations reported by others."
 msgstr "Ottieni e mostra le posizioni delle termiche riportate da altri."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:91
-#, fuzzy
 msgid "Automatic Upload"
-msgstr "Automatico"
+msgstr "Caricamento Automatico"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:92
 msgid "Uploads flights automatically after download from logger?"
-msgstr ""
+msgstr "Carica automaticamente i voli dopo averli scaricati dal logger?"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:96
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
-msgstr ""
+msgstr "Ottieni questo dal tuo profilo WeGlide o lascia a 0 se non utilizzato."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:99
 msgid "Pilot date of birth"
-msgstr ""
+msgstr "Data di nascita del pilota"
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:43
 msgid "Radius of the OZ cylinder."
@@ -8945,9 +8948,9 @@ msgid "Exp1"
 msgstr "Sper1"
 
 #: src/InfoBoxes/Content/Factory.cpp:732
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Contest distance"
-msgstr "distanza On-Line Contest"
+msgstr "Distanza competizione"
 
 #: src/InfoBoxes/Content/Factory.cpp:733
 #, fuzzy, no-c-format
@@ -9538,9 +9541,9 @@ msgid "Distance to where take-off was detected."
 msgstr "Distanza da dove è stato rilevato il decollo."
 
 #: src/InfoBoxes/Content/Factory.cpp:1013
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Contest speed"
-msgstr "velocità del contest On-Line"
+msgstr "Velocità competizione"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, fuzzy, no-c-format
@@ -9548,13 +9551,13 @@ msgid "Cont Speed"
 msgstr "Velocità"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown speed according to the configured "
 "Contest rule set."
 msgstr ""
-"valutazione istantanea della velocità di volo secondo le regole OLC "
-"impostate."
+"Valutazione istantanea della velocità di volo secondo le regole di "
+"competizione impostate."
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
@@ -9671,9 +9674,9 @@ msgstr ""
 "questa informazione non è disponibile, il valore mostrato è '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:1073
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Active Radio Frequency"
-msgstr "Imposta Frequenza Attiva"
+msgstr "Frequenza Radio Attiva"
 
 #: src/InfoBoxes/Content/Factory.cpp:1074
 #, no-c-format
