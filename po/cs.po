@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-12-04 22:08+0000\n"
+"PO-Revision-Date: 2021-12-06 22:09+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -3515,7 +3515,7 @@ msgstr "Zadejte své heslo"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:88
 msgid "Wrong password."
-msgstr "Nesprávné heslo."
+msgstr "Nesprávné heslo"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:103
 msgid "Enter a new password"
@@ -5123,8 +5123,8 @@ msgid ""
 "The moving map display will be rotated so the wind is always oriented up to "
 "down. (can be useful for wave flying)"
 msgstr ""
-"Pohyblivý displej s mapou bude natočen tak, že vítr je vždy orientován shora "
-"dolů (může být užitečné ve vlně)."
+"Pohyblivý displej s mapou bude natočen tak, aby byl směr větru vždy "
+"orientován shora dolů (může být užitečné ve vlně)."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
@@ -7053,9 +7053,9 @@ msgid ""
 "minimum height above ground for finish to be greater than 1000m below the "
 "start height."
 msgstr ""
-"Rozdíl minimální cílové výšky nad zemí a strartovní výšky musí být maximálně "
+"Rozdíl minimální cílové výšky nad zemí a strartovní výšky musí být více než "
 "1000m. Omezení maximální výšky startu nebo maximální startovní rychlosti "
-"není aplikováno"
+"není aplikováno."
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:66
 msgid "Task not saved"
