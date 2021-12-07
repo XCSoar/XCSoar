@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-12-06 22:09+0000\n"
+"PO-Revision-Date: 2021-12-10 11:50+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -1101,9 +1101,7 @@ msgstr "Start úlohy"
 
 #: src/Input/InputEventsTask.cpp:330
 msgid "Next turnpoint"
-msgstr ""
-"Následující\n"
-"otočný bod"
+msgstr "Další otočný bod"
 
 #: src/Input/InputEventsTask.cpp:332
 msgid "Task finished"
@@ -3878,11 +3876,11 @@ msgstr "Posuň mapu na bod"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:262
 msgid "Set Active Frequency"
-msgstr "Nastav aktivní frekvenci"
+msgstr "Nastav na aktivní frekvenci"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:267
 msgid "Set Standby Frequency"
-msgstr "Nastav záložní frekvenci"
+msgstr "Nastav na záložní frekvenci"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:428 Data/Input/default.xci:1039
 msgid "GoTo"
@@ -6950,7 +6948,7 @@ msgstr "Úhel"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:120
 msgid "Turn Points"
-msgstr "Body"
+msgstr "Otočné body"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:144
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:147
