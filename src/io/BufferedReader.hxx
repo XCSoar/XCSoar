@@ -37,7 +37,7 @@
 class Reader;
 
 class BufferedReader {
-	static constexpr size_t MAX_SIZE = 512 * 1024;
+	static constexpr std::size_t MAX_SIZE = 512 * 1024;
 
 	Reader &reader;
 
