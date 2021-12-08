@@ -31,6 +31,7 @@
 #include "Reader.hxx"
 #include "util/TextFile.hxx"
 
+#include <cassert>
 #include <cstdint>
 #include <stdexcept>
 
