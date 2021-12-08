@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-08-24 18:35+0000\n"
-"Last-Translator: 山岭野兔 <bd8bin@gmail.com>\n"
+"PO-Revision-Date: 2021-12-10 11:50+0000\n"
+"Last-Translator: Robin <xin.he@126.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "xcsoar/translations/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Launchpad-Export-Date: 2016-03-01 23:01+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1263,7 +1263,7 @@ msgstr "到达高度"
 
 #: src/Renderer/WaypointListRenderer.cpp:165
 msgid " ("
-msgstr ""
+msgstr " （"
 
 #: src/Weather/Rasp/RaspStore.cpp:48 src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
@@ -1518,7 +1518,7 @@ msgstr "Vave参数"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:52
 msgid "Vest"
-msgstr "Vest"
+msgstr "背心或嵌入"
 
 #: src/UIActions.cpp:52
 msgid "Quit program?"
@@ -3314,9 +3314,8 @@ msgid "Max. Cruise Speed"
 msgstr "最大巡航速度"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:138
-#, fuzzy
 msgid "WeGlide Type"
-msgstr "交通工具类型"
+msgstr "WeGlide 类型"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:63
 msgid "List"
@@ -3678,9 +3677,9 @@ msgstr "跑道"
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:136
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:88
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Short Name"
-msgstr "短"
+msgstr "简写名称"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:167
 msgid "Bearing and Distance"
@@ -3820,39 +3819,39 @@ msgid "Landable"
 msgstr "可着陆"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:73
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Mountain Pass"
-msgstr "山地"
+msgstr "山地Pass"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Mountain Top"
-msgstr "山地"
+msgstr "山地Top"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
 #, no-c-format
 msgid "Transmitter Mast"
-msgstr ""
+msgstr "信号源 Mast"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:76
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tower"
-msgstr "电量"
+msgstr "塔"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:77
 #, no-c-format
 msgid "Tunnel"
-msgstr ""
+msgstr "通道"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
 #, no-c-format
 msgid "Bridge"
-msgstr ""
+msgstr "桥接"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:79
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Power Plant"
-msgstr "电量"
+msgstr "电源或电池"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:89
 msgid "Comment"
@@ -4578,9 +4577,9 @@ msgid "12 Split in 3 rows"
 msgstr "3列12格"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "15 Split in 3 rows"
-msgstr "3列12格"
+msgstr "3行包含15个"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:95
 #, no-c-format
@@ -4648,9 +4647,9 @@ msgid "16 Right (Landscape)"
 msgstr "16个右边分格（横放）"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:121
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "24 Bottom or Right"
-msgstr "4个底部或右边分格"
+msgstr "24 底部或右侧"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:123
 #, no-c-format
@@ -4768,13 +4767,12 @@ msgid "Glass"
 msgstr "玻璃"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:194
-#, fuzzy
 msgid "Full screen"
-msgstr "地图（全屏）"
+msgstr "全屏"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:194
 msgid "Run XCSoar in full screen mode"
-msgstr ""
+msgstr "使用全屏模式运行XCSoar"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:199
 msgid "Display orientation"
@@ -6363,7 +6361,7 @@ msgstr "不显示航点名称。"
 msgid ""
 "The short name of each waypoint is displayed. If unavailable, the first five "
 "letters of the full name are displayed."
-msgstr ""
+msgstr "显示每一个途径点的简写名称，或显示其全称的前5个字母"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:105
 msgid "Label format"
@@ -6635,21 +6633,20 @@ msgid "Obtain and show thermal locations reported by others."
 msgstr "获取并显示其他人报告的热气流位置。"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:91
-#, fuzzy
 msgid "Automatic Upload"
-msgstr "自动"
+msgstr "自动上传"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:92
 msgid "Uploads flights automatically after download from logger?"
-msgstr ""
+msgstr "是否在从日志中下载后自动上传飞行记录？"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:96
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
-msgstr ""
+msgstr "从您的WeGlide设置中获取或默认设置为0。"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:99
 msgid "Pilot date of birth"
-msgstr ""
+msgstr "飞行员出生日期"
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:43
 msgid "Radius of the OZ cylinder."
@@ -6778,9 +6775,8 @@ msgid "Configure whether the start must be armed manually or automatically."
 msgstr "配置开始是否必须手动或自动Arm。"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:240
-#, fuzzy
 msgid "Score start exit"
-msgstr "得分退出"
+msgstr "计分开始终止"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:244
 msgid "Start open time"
@@ -8788,9 +8784,9 @@ msgstr ""
 "内的目标。"
 
 #: src/InfoBoxes/Content/Factory.cpp:888
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind, head component"
-msgstr "迎风分量"
+msgstr "风，迎风量"
 
 #: src/InfoBoxes/Content/Factory.cpp:889
 #, no-c-format
@@ -8862,9 +8858,9 @@ msgid ""
 msgstr "在下一赛程上爬升的热气流速率等于当前赛程上的MacCready设置。"
 
 #: src/InfoBoxes/Content/Factory.cpp:921
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind, head component (simplified)"
-msgstr "迎风分量（简化）"
+msgstr "风，迎风量（简化）"
 
 #: src/InfoBoxes/Content/Factory.cpp:922
 #, no-c-format
