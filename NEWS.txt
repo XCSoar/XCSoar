@@ -5,6 +5,7 @@ Version 7.21 - not yet released
   - fix inverted cruise/circling mode in borgelt and xcvario driver
 * Kobo
   - Add support for Clara HD
+  - Control backlight brightness of the Kobo Glo HD
 * Android
   - re-enable background location and comply with Google Play Store policy
 
