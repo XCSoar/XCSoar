@@ -4,7 +4,7 @@ Version 7.21 - not yet released
 * devices
   - fix inverted cruise/circling mode in borgelt and xcvario driver
 * Kobo
-  - fix Clara HD touch screen
+  - Add support for Clara HD
 * Android
   - re-enable background location and comply with Google Play Store policy
 
