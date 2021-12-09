@@ -58,7 +58,9 @@ SystemWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   AddButton("Reboot", [](){ KoboReboot(); });
   AddButton(IsKoboOTGKernel() ? "Disable USB-OTG" : "Enable USB-OTG",
             [this](){ SwitchKernel(); });
-
+#ifdef KOBO
+  SetRowEnabled(SWITCH_KERNEL, DetectKoboModel() != KoboModel::CLARA_HD);
+#endif
   AddButton("Export USB storage", [this](){ ExportUSBStorage(); });
   SetRowEnabled(USB_STORAGE, !IsKoboOTGKernel());
 }
