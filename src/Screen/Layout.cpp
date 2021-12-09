@@ -115,7 +115,7 @@ Layout::Initialize(PixelSize new_size, unsigned ui_scale, unsigned custom_dpi) n
        the viewing distance is usually smaller */
     font_scale = font_scale * 2 / 3;
 
-  text_padding = VptScale(2);
+  text_padding = VptScale(4);
 
   minimum_control_height = std::min(FontScale(23),
                                     min_screen_pixels / 12);
