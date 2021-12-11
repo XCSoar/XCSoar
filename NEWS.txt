@@ -1,4 +1,4 @@
-Version 7.21 - not yet released
+Version 7.21 - 2021/12/11
 * data files
   - Support for AF/AR frequency fields in OpenAir
 * devices
