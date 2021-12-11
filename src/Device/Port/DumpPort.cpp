@@ -68,14 +68,14 @@ DumpPort::WaitConnected(OperationEnvironment &env)
   return port->WaitConnected(env);
 }
 
-size_t
-DumpPort::Write(const void *data, size_t length)
+std::size_t
+DumpPort::Write(const void *data, std::size_t length)
 {
   const bool enabled = CheckEnabled();
   if (enabled)
     LogFormat("Write(%u)", (unsigned)length);
 
-  size_t nbytes;
+  std::size_t nbytes;
   try {
     nbytes = port->Write(data, length);
   } catch (...) {
@@ -144,7 +144,7 @@ DumpPort::StartRxThread()
 }
 
 int
-DumpPort::Read(void *buffer, size_t size)
+DumpPort::Read(void *buffer, std::size_t size)
 {
   const bool enabled = CheckEnabled();
   if (enabled)

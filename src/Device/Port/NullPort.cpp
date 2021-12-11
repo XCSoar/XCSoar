@@ -54,8 +54,8 @@ NullPort::Flush()
 {
 }
 
-size_t
-NullPort::Write(const void *data, size_t length)
+std::size_t
+NullPort::Write(const void *data, std::size_t length)
 {
   return length;
 }
@@ -84,7 +84,7 @@ NullPort::SetBaudrate(unsigned)
 }
 
 int
-NullPort::Read(void *Buffer, size_t Size)
+NullPort::Read(void *Buffer, std::size_t Size)
 {
   return -1;
 }

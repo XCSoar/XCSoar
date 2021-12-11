@@ -77,8 +77,8 @@ AndroidPort::SetBaudrate(unsigned baud_rate)
     throw std::runtime_error{"Failed to set baud rate"};
 }
 
-size_t
-AndroidPort::Write(const void *data, size_t length)
+std::size_t
+AndroidPort::Write(const void *data, std::size_t length)
 {
   assert(bridge != nullptr);
 

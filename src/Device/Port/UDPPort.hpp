@@ -69,7 +69,7 @@ public:
     return 0;
   }
 
-  size_t Write(const void *data, size_t length) override;
+  std::size_t Write(const void *data, std::size_t length) override;
 
 protected:
   void OnSocketReady(unsigned events) noexcept;

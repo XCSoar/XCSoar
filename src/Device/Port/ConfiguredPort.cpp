@@ -62,7 +62,7 @@ Copyright_License {
  * See http://msdn.microsoft.com/en-us/library/bb202042.aspx
  */
 static bool
-DetectGPS(TCHAR *path, size_t path_max_size)
+DetectGPS(TCHAR *path, std::size_t path_max_size)
 {
   return false;
 }

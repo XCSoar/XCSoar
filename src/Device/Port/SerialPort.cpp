@@ -264,7 +264,7 @@ SerialPort::Run() noexcept
 
     // Start reading data
 
-    if ((size_t)nbytes > sizeof(inbuf))
+    if ((std::size_t)nbytes > sizeof(inbuf))
       nbytes = sizeof(inbuf);
 
     if (!::ReadFile(hPort, inbuf, nbytes, &dwBytesTransferred,
@@ -293,8 +293,8 @@ SerialPort::Run() noexcept
   Flush();
 }
 
-size_t
-SerialPort::Write(const void *data, size_t length)
+std::size_t
+SerialPort::Write(const void *data, std::size_t length)
 {
   DWORD NumberOfBytesWritten;
 

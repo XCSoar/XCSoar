@@ -52,14 +52,14 @@ Port::WaitConnected(OperationEnvironment &env)
   return GetState() == PortState::READY;
 }
 
-size_t
+std::size_t
 Port::Write(const char *s)
 {
   return Write(s, strlen(s));
 }
 
 void
-Port::FullWrite(const void *buffer, size_t length,
+Port::FullWrite(const void *buffer, std::size_t length,
                 OperationEnvironment &env,
                 std::chrono::steady_clock::duration _timeout)
 {
@@ -70,7 +70,7 @@ Port::FullWrite(const void *buffer, size_t length,
     if (timeout.HasExpired())
       throw DeviceTimeout{"Port write timeout"};
 
-    size_t nbytes = Write(p, end - p);
+    std::size_t nbytes = Write(p, end - p);
     assert(nbytes > 0);
 
     if (env.IsCancelled())
@@ -121,7 +121,7 @@ Port::FullFlush(OperationEnvironment &env,
 }
 
 void
-Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
+Port::FullRead(void *buffer, std::size_t length, OperationEnvironment &env,
                std::chrono::steady_clock::duration first_timeout,
                std::chrono::steady_clock::duration subsequent_timeout,
                std::chrono::steady_clock::duration total_timeout)
@@ -145,7 +145,7 @@ Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
 }
 
 void
-Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
+Port::FullRead(void *buffer, std::size_t length, OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout)
 {
   FullRead(buffer, length, env, timeout, timeout, timeout);
@@ -177,8 +177,8 @@ Port::WaitRead(OperationEnvironment &env,
   throw DeviceTimeout{"Port read timeout"};
 }
 
-size_t
-Port::WaitAndRead(void *buffer, size_t length,
+std::size_t
+Port::WaitAndRead(void *buffer, std::size_t length,
                   OperationEnvironment &env,
                   std::chrono::steady_clock::duration timeout)
 {
@@ -188,11 +188,11 @@ Port::WaitAndRead(void *buffer, size_t length,
   if (nbytes <= 0)
     throw std::runtime_error{"Port read failed"};
 
-  return (size_t)nbytes;
+  return (std::size_t)nbytes;
 }
 
-size_t
-Port::WaitAndRead(void *buffer, size_t length,
+std::size_t
+Port::WaitAndRead(void *buffer, std::size_t length,
                   OperationEnvironment &env, TimeoutClock timeout)
 {
   const auto remaining = timeout.GetRemainingSigned();
@@ -214,9 +214,10 @@ Port::ExpectString(const char *token, OperationEnvironment &env,
 
   const char *p = token;
   while (true) {
-    size_t nbytes = WaitAndRead(buffer,
-                                std::min(sizeof(buffer), size_t(token_end - p)),
-                                env, timeout);
+    auto nbytes = WaitAndRead(buffer,
+                              std::min(sizeof(buffer),
+                                       std::size_t(token_end - p)),
+                              env, timeout);
 
     for (const char *q = buffer, *end = buffer + nbytes; q != end; ++q) {
       const char ch = *q;

@@ -274,8 +274,8 @@ TTYPort::WaitWrite(unsigned timeout_ms)
       throw MakeErrno("Port write failed");
 }
 
-size_t
-TTYPort::Write(const void *data, size_t length)
+std::size_t
+TTYPort::Write(const void *data, std::size_t length)
 {
   assert(socket.IsDefined());
 

@@ -63,20 +63,20 @@ K6BtPort::WaitConnected(OperationEnvironment &env)
   return true;
 }
 
-size_t
-K6BtPort::Write(const void *_data, size_t length)
+std::size_t
+K6BtPort::Write(const void *_data, std::size_t length)
 {
   /* in order to forward the buffer verbatim to the real device, we
      have to escape all ESCAPE bytes (i.e. send each of them twice) */
 
   const uint8_t *data = (const uint8_t *)_data;
 
-  size_t total = 0;
+  std::size_t total = 0;
 
   const uint8_t *p;
   while ((p = (const uint8_t *)memchr(data, ESCAPE, length)) != nullptr) {
-    size_t chunk = p - data + 1;
-    size_t nbytes = port->Write(data, chunk);
+    std::size_t chunk = p - data + 1;
+    std::size_t nbytes = port->Write(data, chunk);
     total += nbytes;
     if (nbytes != chunk)
       return total;
@@ -181,7 +181,7 @@ K6BtPort::StartRxThread(void)
 }
 
 int
-K6BtPort::Read(void *Buffer, size_t Size)
+K6BtPort::Read(void *Buffer, std::size_t Size)
 {
   return port->Read(Buffer, Size);
 }

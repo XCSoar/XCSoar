@@ -76,8 +76,8 @@ TCPPort::GetState() const noexcept
     return PortState::FAILED;
 }
 
-size_t
-TCPPort::Write(const void *data, size_t length)
+std::size_t
+TCPPort::Write(const void *data, std::size_t length)
 {
   if (!connection.IsDefined())
     throw std::runtime_error("Port is closed");

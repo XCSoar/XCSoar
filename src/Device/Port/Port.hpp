@@ -28,6 +28,7 @@ Copyright_License {
 #include "util/Compiler.h"
 
 #include <chrono>
+#include <cstddef>
 #include <exception>
 #include <cstddef>
 
@@ -73,7 +74,7 @@ public:
    * @return the number of bytes written
    */
   gcc_nonnull_all
-  virtual size_t Write(const void *data, size_t length) = 0;
+  virtual std::size_t Write(const void *data, std::size_t length) = 0;
 
   /**
    * Writes a null-terminated string to the serial port
@@ -81,7 +82,7 @@ public:
    * @return the number of bytes written, or 0 on error
    */
   gcc_nonnull_all
-  size_t Write(const char *s);
+  std::size_t Write(const char *s);
 
   /**
    * Writes a single byte to the serial port
@@ -102,7 +103,7 @@ public:
    * @param timeout give up after this duration
    */
   gcc_nonnull_all
-  void FullWrite(const void *buffer, size_t length,
+  void FullWrite(const void *buffer, std::size_t length,
                  OperationEnvironment &env,
                  std::chrono::steady_clock::duration timeout);
 
@@ -169,7 +170,7 @@ public:
    * @return Number of bytes read from the serial port or -1 on failure
    */
   gcc_nonnull_all
-  virtual int Read(void *Buffer, size_t Size) = 0;
+  virtual int Read(void *Buffer, std::size_t Size) = 0;
 
   /**
    * Wait until data becomes available or the timeout expires.
@@ -205,7 +206,7 @@ public:
    * @param total_timeout timeout for the whole operation
    */
   gcc_nonnull_all
-  void FullRead(void *buffer, size_t length, OperationEnvironment &env,
+  void FullRead(void *buffer, std::size_t length, OperationEnvironment &env,
                 std::chrono::steady_clock::duration first_timeout,
                 std::chrono::steady_clock::duration subsequent_timeout,
                 std::chrono::steady_clock::duration total_timeout);
@@ -221,7 +222,7 @@ public:
    * @return true on success
    */
   gcc_nonnull_all
-  void FullRead(void *buffer, size_t length, OperationEnvironment &env,
+  void FullRead(void *buffer, std::size_t length, OperationEnvironment &env,
                 std::chrono::steady_clock::duration timeout);
 
   /**
@@ -244,9 +245,9 @@ public:
    *
    * @return the number of bytes read (always positive)
    */
-  size_t WaitAndRead(void *buffer, size_t length,
-                     OperationEnvironment &env,
-                     std::chrono::steady_clock::duration timeout);
+  std::size_t WaitAndRead(void *buffer, std::size_t length,
+                          OperationEnvironment &env,
+                          std::chrono::steady_clock::duration timeout);
 
   /**
    * Combination of WaitRead() and Read().
@@ -255,8 +256,8 @@ public:
    *
    * @return the number of bytes read (always positive)
    */
-  size_t WaitAndRead(void *buffer, size_t length,
-                     OperationEnvironment &env, TimeoutClock timeout);
+  std::size_t WaitAndRead(void *buffer, std::size_t length,
+                          OperationEnvironment &env, TimeoutClock timeout);
 
   /**
    * Throws on error.

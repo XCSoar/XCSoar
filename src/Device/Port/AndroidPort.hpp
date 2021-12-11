@@ -46,7 +46,7 @@ public:
   bool Drain() override;
   unsigned GetBaudrate() const noexcept override;
   void SetBaudrate(unsigned baud_rate) override;
-  size_t Write(const void *data, size_t length) override;
+  std::size_t Write(const void *data, std::size_t length) override;
 };
 
 #endif

@@ -61,7 +61,7 @@ BufferedPort::StartRxThread()
 }
 
 int
-BufferedPort::Read(void *dest, size_t length)
+BufferedPort::Read(void *dest, std::size_t length)
 {
   assert(!running);
 
@@ -71,7 +71,7 @@ BufferedPort::Read(void *dest, size_t length)
   if (r.size == 0)
     return -1;
 
-  size_t nbytes = std::min(length, r.size);
+  std::size_t nbytes = std::min(length, r.size);
   std::copy_n(r.data, nbytes, (std::byte *)dest);
   buffer.Consume(nbytes);
   return nbytes;
