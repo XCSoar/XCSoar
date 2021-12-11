@@ -30,9 +30,8 @@ Copyright_License {
 TCPPort::TCPPort(EventLoop &event_loop,
                  unsigned port,
                  PortListener *_listener, DataHandler &_handler)
-  :BufferedPort(_listener, _handler),
-   listener(event_loop, BIND_THIS_METHOD(OnListenerReady)),
-   connection(event_loop, BIND_THIS_METHOD(OnConnectionReady))
+  :SocketPort(event_loop, _listener, _handler),
+   listener(event_loop, BIND_THIS_METHOD(OnListenerReady))
 {
   const IPv4Address address(port);
 
@@ -60,7 +59,6 @@ TCPPort::TCPPort(EventLoop &event_loop,
 TCPPort::~TCPPort() noexcept
 {
   BlockingCall(GetEventLoop(), [this](){
-    connection.Close();
     listener.Close();
   });
 }
@@ -68,26 +66,12 @@ TCPPort::~TCPPort() noexcept
 PortState
 TCPPort::GetState() const noexcept
 {
-  if (connection.IsDefined())
+  if (IsConnected())
     return PortState::READY;
   else if (listener.IsDefined())
     return PortState::LIMBO;
   else
     return PortState::FAILED;
-}
-
-std::size_t
-TCPPort::Write(const void *data, std::size_t length)
-{
-  if (!connection.IsDefined())
-    throw std::runtime_error("Port is closed");
-
-  ssize_t nbytes = connection.GetSocket().Write(data, length);
-  if (nbytes < 0)
-    // TODO check EAGAIN?
-    throw MakeSocketError("Failed to send");
-
-  return nbytes;
 }
 
 void
@@ -105,32 +89,10 @@ try {
 
   s.SetOption(SOL_SOCKET, SO_SNDTIMEO, &value, sizeof(value));
 
-  connection.Close();
-  connection.Open(s);
-  connection.ScheduleRead();
+  SocketPort::Close();
+  SocketPort::Open(s);
 } catch (...) {
   listener.Close();
-  StateChanged();
-  Error(std::current_exception());
-}
-
-void
-TCPPort::OnConnectionReady(unsigned) noexcept
-try {
-  std::byte input[4096];
-  ssize_t nbytes = connection.GetSocket().Read(input, sizeof(input));
-  if (nbytes < 0)
-    throw MakeSocketError("Failed to receive");
-
-  if (nbytes == 0) {
-    connection.Close();
-    StateChanged();
-    return;
-  }
-
-  DataReceived({input, std::size_t(nbytes)});
-} catch (...) {
-  connection.Close();
   StateChanged();
   Error(std::current_exception());
 }

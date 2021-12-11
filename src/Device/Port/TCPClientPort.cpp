@@ -22,17 +22,12 @@ Copyright_License {
 */
 
 #include "TCPClientPort.hpp"
-#include "net/SocketError.hxx"
 #include "event/Call.hxx"
-#include "util/StaticString.hxx"
-
-#include <tchar.h>
 
 TCPClientPort::TCPClientPort(EventLoop &event_loop, Cares::Channel &cares,
                              const char *host, unsigned port,
                              PortListener *_listener, DataHandler &_handler)
-  :BufferedPort(_listener, _handler),
-   socket(event_loop, BIND_THIS_METHOD(OnSocketReady))
+  :SocketPort(event_loop, _listener, _handler)
 {
   BlockingCall(GetEventLoop(), [this, &cares, host, port](){
     Cares::SimpleHandler &resolver_handler = *this;
@@ -44,43 +39,9 @@ TCPClientPort::TCPClientPort(EventLoop &event_loop, Cares::Channel &cares,
 TCPClientPort::~TCPClientPort() noexcept
 {
   BlockingCall(GetEventLoop(), [this](){
-    socket.Close();
     connect.reset();
     resolver.reset();
   });
-}
-
-std::size_t
-TCPClientPort::Write(const void *data, std::size_t length)
-{
-  if (!socket.IsDefined())
-    throw std::runtime_error("Port is closed");
-
-  ssize_t nbytes = socket.GetSocket().Write(data, length);
-  if (nbytes < 0)
-    // TODO check EAGAIN?
-    throw MakeSocketError("Failed to send");
-
-  return nbytes;
-}
-
-void
-TCPClientPort::OnSocketReady(unsigned) noexcept
-try {
-  std::byte input[4096];
-  ssize_t nbytes = socket.GetSocket().Read(input, sizeof(input));
-  if (nbytes < 0)
-    throw MakeSocketError("Failed to receive");
-
-  if (nbytes == 0)
-    throw std::runtime_error("Connection closed by peer");
-
-  DataReceived({input, std::size_t(nbytes)});
-} catch (...) {
-  socket.Close();
-  state = PortState::FAILED;
-  StateChanged();
-  Error(std::current_exception());
 }
 
 void
@@ -125,8 +86,7 @@ TCPClientPort::OnSocketConnectSuccess(UniqueSocketDescriptor &&fd) noexcept
 
   fd.SetOption(SOL_SOCKET, SO_SNDTIMEO, &value, sizeof(value));
 
-  socket.Open(fd.Release());
-  socket.ScheduleRead();
+  SocketPort::Open(fd.Release());
 
   connect.reset();
 
@@ -143,4 +103,16 @@ TCPClientPort::OnSocketConnectError(std::exception_ptr ep) noexcept
   state = PortState::FAILED;
   StateChanged();
   Error(std::move(ep));
+}
+
+void
+TCPClientPort::OnConnectionClosed()
+{
+  throw std::runtime_error("Connection closed by peer");
+}
+
+void
+TCPClientPort::OnConnectionError() noexcept
+{
+  state = PortState::FAILED;
 }

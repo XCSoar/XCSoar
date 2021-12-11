@@ -25,13 +25,11 @@ Copyright_License {
 #include "net/IPv4Address.hxx"
 #include "net/UniqueSocketDescriptor.hxx"
 #include "net/SocketError.hxx"
-#include "event/Call.hxx"
 
 UDPPort::UDPPort(EventLoop &event_loop,
                  unsigned port,
                  PortListener *_listener, DataHandler &_handler)
-  :BufferedPort(_listener, _handler),
-   socket(event_loop, BIND_THIS_METHOD(OnSocketReady))
+  :SocketPort(event_loop, _listener, _handler)
 {
   const IPv4Address address(port);
 
@@ -42,60 +40,5 @@ UDPPort::UDPPort(EventLoop &event_loop,
   if (!s.Bind(address))
     throw MakeSocketError("Failed to bind socket");
 
-  socket.Open(s.Release());
-
-  BlockingCall(event_loop, [this](){
-    socket.ScheduleRead();
-  });
-}
-
-UDPPort::~UDPPort() noexcept
-{
-  BlockingCall(GetEventLoop(), [this](){
-    socket.Close();
-  });
-}
-
-PortState
-UDPPort::GetState() const noexcept
-{
-  if (socket.IsDefined())
-    return PortState::READY;
-  else
-    return PortState::FAILED;
-}
-
-std::size_t
-UDPPort::Write(const void *data, std::size_t length)
-{
-  if (!socket.IsDefined())
-    throw std::runtime_error("Port is closed");
-
-  ssize_t nbytes = socket.GetSocket().Write(data, length);
-  if (nbytes < 0)
-    // TODO check EAGAIN?
-    throw MakeSocketError("Failed to send");
-
-  return nbytes;
-}
-
-void
-UDPPort::OnSocketReady(unsigned) noexcept
-try {
-  std::byte input[4096];
-  ssize_t nbytes = socket.GetSocket().Read(input, sizeof(input));
-  if (nbytes < 0)
-    throw MakeSocketError("Failed to receive");
-
-  if (nbytes == 0) {
-    socket.Close();
-    StateChanged();
-    return;
-  }
-
-  DataReceived({input, std::size_t(nbytes)});
-} catch (...) {
-  socket.Close();
-  StateChanged();
-  Error(std::current_exception());
+  OpenIndirect(s.Release());
 }

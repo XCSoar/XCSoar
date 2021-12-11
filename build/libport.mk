@@ -3,6 +3,7 @@ PORT_SRC_DIR = $(SRC)/Device/Port
 PORT_SOURCES = \
 	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Port/BufferedPort.cpp \
+	$(SRC)/Device/Port/SocketPort.cpp \
 	$(SRC)/Device/Port/UDPPort.cpp \
 	$(SRC)/Device/Port/TCPPort.cpp \
 	$(SRC)/Device/Port/K6BtPort.cpp \
