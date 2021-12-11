@@ -2,3 +2,4 @@ no_locale.diff
 ublas_no_serialization.patch
 no_math_throw
 geometry_missing_include
+no_multiprecision

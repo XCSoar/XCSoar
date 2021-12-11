@@ -1,0 +1,35 @@
+Index: boost_1_78_0/boost/geometry/core/coordinate_promotion.hpp
+===================================================================
+--- boost_1_78_0.orig/boost/geometry/core/coordinate_promotion.hpp
++++ boost_1_78_0/boost/geometry/core/coordinate_promotion.hpp
+@@ -11,10 +11,12 @@
+ 
+ #include <boost/geometry/core/coordinate_type.hpp>
+ 
++#if 0
+ // TODO: move this to a future headerfile implementing traits for these types
+ #include <boost/rational.hpp>
+ #include <boost/multiprecision/cpp_bin_float.hpp>
+ #include <boost/multiprecision/cpp_int.hpp>
++#endif
+ 
+ namespace boost { namespace geometry
+ {
+@@ -71,6 +73,8 @@ struct promoted_to_floating_point
+         >;
+ };
+ 
++#if 0
++
+ // Boost.Rational goes to double
+ template <typename T>
+ struct promoted_to_floating_point<boost::rational<T>>
+@@ -102,6 +106,8 @@ struct promoted_to_floating_point
+         >;
+ };
+ 
++#endif
++
+ }
+ 
+ 
