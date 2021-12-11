@@ -32,11 +32,7 @@ Copyright_License {
 #include "util/StringAPI.hxx"
 
 #include <cassert>
-
 #include <list>
-
-#include <boost/assert.hpp>
-
 
 #if defined(HAVE_EXT_VOLUME_CONTROLLER) && defined(ENABLE_ALSA)
 
@@ -73,7 +69,7 @@ static constexpr const char *CONTROL_NAMES_PRIORITY[] =
 VolumeController::~VolumeController()
 {
   if (nullptr != alsa_mixer_handle)
-    BOOST_VERIFY(0 == snd_mixer_close(alsa_mixer_handle));
+    snd_mixer_close(alsa_mixer_handle);
 }
 
 bool
@@ -100,13 +96,11 @@ VolumeController::SetExternalVolumeNoLock(unsigned vol_percent)
           static_cast<float>(vol_percent) / GetMaxValue();
 
     if (ext_master_ctl_has_vol)
-      BOOST_VERIFY(0 == snd_mixer_selem_set_playback_volume_all(
-                            ext_master_volume_ctl, ext_vol));
+      snd_mixer_selem_set_playback_volume_all(ext_master_volume_ctl, ext_vol);
 
     if (ext_master_ctl_has_switch)
-      BOOST_VERIFY(0 == snd_mixer_selem_set_playback_switch_all(
-                            ext_master_volume_ctl,
-                            (0 == vol_percent) ? 0 : 1));
+      snd_mixer_selem_set_playback_switch_all(ext_master_volume_ctl,
+                                              (0 == vol_percent) ? 0 : 1);
 
     return ext_master_ctl_has_vol;
   }
@@ -241,10 +235,9 @@ VolumeController::InitExternalVolumeControl(unsigned initial_vol_percent)
       (0 != snd_mixer_selem_has_playback_switch(ext_master_volume_ctl));
 
   if (ext_master_ctl_has_vol) {
-    BOOST_VERIFY(0 == snd_mixer_selem_get_playback_volume_range(
-                          ext_master_volume_ctl,
-                          &ext_master_min,
-                          &ext_master_max));
+    snd_mixer_selem_get_playback_volume_range(ext_master_volume_ctl,
+                                              &ext_master_min,
+                                              &ext_master_max);
     if (0 != snd_mixer_selem_ask_playback_dB_vol(
                  ext_master_volume_ctl, 0, 0, &ext_master_zero_db))
       ext_master_zero_db = ext_master_max;
@@ -276,27 +269,23 @@ VolumeController::InitExternalVolumeControl(unsigned initial_vol_percent)
       if (0 != snd_mixer_selem_ask_playback_dB_vol(
                    pcm_volume_ctl, 0, 0, &pcm_value)) {
         long pcm_min;
-        BOOST_VERIFY(0 == snd_mixer_selem_get_playback_volume_range(
-                              pcm_volume_ctl,
-                              &pcm_min,
-                              &pcm_value));
+        snd_mixer_selem_get_playback_volume_range(pcm_volume_ctl,
+                                                  &pcm_min,
+                                                  &pcm_value);
       }
 
       LogFormat("Ensuring that PCM mixer element on ALSA device \"%s\" is "
                     "set to 100%%",
                 alsa_device_name);
 
-      BOOST_VERIFY(0 == snd_mixer_selem_set_playback_volume_all(
-                            pcm_volume_ctl, pcm_value));
+      snd_mixer_selem_set_playback_volume_all(pcm_volume_ctl, pcm_value);
     }
 
     if (snd_mixer_selem_has_playback_switch(pcm_volume_ctl)) {
       LogFormat("Ensuring that PCM mixer element on ALSA device \"%s\" is "
                     "not muted",
                 alsa_device_name);
-      BOOST_VERIFY(0 == snd_mixer_selem_set_playback_switch_all(
-                            pcm_volume_ctl,
-                            1));
+      snd_mixer_selem_set_playback_switch_all(pcm_volume_ctl, 1);
     }
   }
 
