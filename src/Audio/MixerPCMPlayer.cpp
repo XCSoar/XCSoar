@@ -26,8 +26,6 @@ Copyright_License {
 #include "GlobalPCMMixer.hpp"
 #include "PCMMixer.hpp"
 
-#include <boost/assert.hpp>
-
 MixerPCMPlayer::~MixerPCMPlayer()
 {
   Stop();

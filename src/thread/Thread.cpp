@@ -30,13 +30,7 @@ Copyright_License {
 #include "java/Global.hxx"
 #endif
 
-#include <boost/intrusive/list.hpp>
-
 #include <cassert>
-
-#ifdef HAVE_POSIX
-#include <signal.h>
-#endif
 
 void
 Thread::SetIdlePriority() noexcept
