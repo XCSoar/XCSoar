@@ -30,7 +30,7 @@ Copyright_License {
 #include <type_traits>
 
 #ifdef DO_PRINT
-#include <iostream>
+#include <iosfwd>
 #endif
 
 #include <cmath>

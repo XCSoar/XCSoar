@@ -30,7 +30,7 @@
 #include <cstdint>
 
 #ifdef DO_PRINT
-#include <iostream>
+#include <iosfwd>
 #endif
 
 class AbstractAirspace;

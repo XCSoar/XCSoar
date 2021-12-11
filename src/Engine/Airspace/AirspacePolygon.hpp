@@ -27,7 +27,7 @@
 #include <vector>
 
 #ifdef DO_PRINT
-#include <iostream>
+#include <iosfwd>
 #endif
 
 /** General polygon form airspace */

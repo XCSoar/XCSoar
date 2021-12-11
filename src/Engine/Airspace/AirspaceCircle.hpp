@@ -26,7 +26,7 @@
 #include "AbstractAirspace.hpp"
 
 #ifdef DO_PRINT
-#include <iostream>
+#include <iosfwd>
 #endif
 
 /**
