@@ -180,7 +180,7 @@ K6BtPort::StartRxThread(void)
   return port->StartRxThread();
 }
 
-int
+std::size_t
 K6BtPort::Read(void *Buffer, std::size_t Size)
 {
   return port->Read(Buffer, Size);

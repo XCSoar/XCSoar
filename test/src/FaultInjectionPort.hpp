@@ -79,9 +79,9 @@ public:
     return true;
   }
 
-  int Read(void *Buffer, size_t Size) override {
+  std::size_t Read(void *Buffer, size_t Size) override {
     if (inject_port_fault == 0)
-      return -1;
+      return 0;
 
     if (--inject_port_fault == 0)
       StateChanged();

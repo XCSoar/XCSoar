@@ -167,10 +167,11 @@ public:
    * Read data from the serial port
    * @param Buffer Pointer to the buffer
    * @param Size Size of the buffer
-   * @return Number of bytes read from the serial port or -1 on failure
+   * @return Number of bytes read from the port (0 if no data is
+   * available currently)
    */
   gcc_nonnull_all
-  virtual int Read(void *Buffer, std::size_t Size) = 0;
+  virtual std::size_t Read(void *Buffer, std::size_t Size) = 0;
 
   /**
    * Wait until data becomes available or the timeout expires.

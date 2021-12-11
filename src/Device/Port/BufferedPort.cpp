@@ -60,7 +60,7 @@ BufferedPort::StartRxThread()
   return true;
 }
 
-int
+std::size_t
 BufferedPort::Read(void *dest, std::size_t length)
 {
   assert(!running);
@@ -68,9 +68,6 @@ BufferedPort::Read(void *dest, std::size_t length)
   std::lock_guard<Mutex> lock(mutex);
 
   auto r = buffer.Read();
-  if (r.size == 0)
-    return -1;
-
   std::size_t nbytes = std::min(length, r.size);
   std::copy_n(r.data, nbytes, (std::byte *)dest);
   buffer.Consume(nbytes);

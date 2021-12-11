@@ -64,10 +64,7 @@ try {
       continue;
     }
 
-    int nbytes = port->Read(buffer, sizeof(buffer));
-    if (nbytes < 0)
-      break;
-
+    std::size_t nbytes = port->Read(buffer, sizeof(buffer));
     fwrite((const void *)buffer, 1, nbytes, stdout);
   }
 

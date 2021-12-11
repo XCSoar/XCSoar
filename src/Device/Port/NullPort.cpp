@@ -83,10 +83,10 @@ NullPort::SetBaudrate(unsigned)
 {
 }
 
-int
+std::size_t
 NullPort::Read(void *Buffer, std::size_t Size)
 {
-  return -1;
+  return 0;
 }
 
 void
