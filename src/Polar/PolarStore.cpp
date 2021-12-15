@@ -305,6 +305,9 @@ static constexpr PolarStore::Item internal_polars[] =
   // flight manual http://www.issoire-aviation.fr/doc_avia_gen/MdV_WA26P_R2.pdf
   // Contest handicap reference: http://docplayer.fr/79733029-Handicaps-planeurs-ffvv.html
   { _T("WA 26 P Squale"),  330, 0, 80, -0.61, 152, -2, 174, -3.0, 12.6, 225, 86 },
+  // as taken from handbook of DG-800S the pure glider variant
+  { _T("DG-800S (15m)"), 370, 150, 80, -0.58,    140, -1.05, 190,    -2.18, 10.68, 0.0, 113 },
+  { _T("DG-800S (18m)"), 350, 150, 80, -0.46,    140, -1.10, 190,    -2.60, 11.81, 0.0, 118 },
 };
 
 const PolarStore::Item &
