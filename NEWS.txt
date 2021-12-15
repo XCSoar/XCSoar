@@ -1,3 +1,7 @@
+Version 7.22 - not yet released
+* Polars
+  - add DG-800S
+
 Version 7.21 - 2021/12/11
 * data files
   - Support for AF/AR frequency fields in OpenAir
