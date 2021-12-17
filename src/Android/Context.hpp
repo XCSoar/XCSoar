@@ -30,6 +30,13 @@ class AllocatedPath;
 
 class Context : public Java::GlobalObject {
 public:
+  /**
+   * Global initialisation.  Looks up the methods of the
+   * Context Java class.
+   */
+  static void Initialise(JNIEnv *env) noexcept;
+  static void Deinitialise(JNIEnv *env) noexcept;
+
   Context(JNIEnv *env, jobject obj):Java::GlobalObject(env, obj) {
   }
 

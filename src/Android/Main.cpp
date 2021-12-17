@@ -119,6 +119,7 @@ try {
   Java::URLConnection::Initialise(env);
 
   NativeView::Initialise(env);
+  Context::Initialise(env);
   Environment::Initialise(env);
   AndroidBitmap::Initialise(env);
   NativeSensorListener::Initialise(env);
@@ -280,6 +281,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   GliderLink::Deinitialise(env);
   AndroidBitmap::Deinitialise(env);
   Environment::Deinitialise(env);
+  Context::Deinitialise(env);
   NativeView::Deinitialise(env);
   Java::URL::Deinitialise(env);
 
