@@ -33,7 +33,14 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
   vertical = IsVertical(orientation, rc);
 
   if (vertical) {
-    tab_display.right = pager.left = rc.left + td.GetRecommendedColumnWidth();
+    unsigned tab_width = td.GetRecommendedColumnWidth();
+    if (e != nullptr) {
+      const auto extra_size = e->GetMinimumSize();
+      if (extra_size.width > tab_width)
+        tab_width = extra_size.width;
+    }
+
+    tab_display.right = pager.left = rc.left + tab_width;
 
     if (e != nullptr) {
       auto max_size = e->GetMaximumSize();
@@ -46,7 +53,14 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
       tab_display.top = extra.bottom = extra.top + extra_height;
     }
   } else {
-    tab_display.bottom = pager.top = rc.top + td.GetRecommendedRowHeight();
+    unsigned tab_height = td.GetRecommendedRowHeight();
+    if (e != nullptr) {
+      const auto extra_size = e->GetMinimumSize();
+      if (extra_size.height > tab_height)
+        tab_height = extra_size.height;
+    }
+
+    tab_display.bottom = pager.top = rc.top + tab_height;
 
     if (e != nullptr) {
       auto max_size = e->GetMaximumSize();
