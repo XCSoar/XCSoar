@@ -39,6 +39,7 @@ jmethodID NativeView::setRequestedOrientationID;
 jmethodID NativeView::loadResourceBitmap_method;
 jmethodID NativeView::loadFileBitmap_method;
 jmethodID NativeView::bitmapToTexture_method;
+jmethodID NativeView::shareText_method;
 jmethodID NativeView::openWaypointFile_method;
 jmethodID NativeView::getNetState_method;
 
@@ -72,6 +73,9 @@ NativeView::Initialise(JNIEnv *env)
                                            "(Ljava/lang/String;)Landroid/graphics/Bitmap;");
   bitmapToTexture_method = env->GetMethodID(cls, "bitmapToTexture",
                                             "(Landroid/graphics/Bitmap;Z[I)Z");
+
+  shareText_method = env->GetMethodID(cls, "shareText",
+                                          "(Ljava/lang/String;)V");
 
   openWaypointFile_method =
     env->GetMethodID(cls, "openWaypointFile",
@@ -152,4 +156,11 @@ NativeView::loadFileBitmap(Path path)
 {
   Java::String path2(env, path.c_str());
   return {env, env->CallObjectMethod(obj, loadFileBitmap_method, path2.Get())};
+}
+
+void
+NativeView::ShareText(const char *text) noexcept
+{
+  env->CallVoidMethod(obj, shareText_method,
+                      Java::String{env, text}.Get());
 }

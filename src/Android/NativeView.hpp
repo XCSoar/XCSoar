@@ -51,6 +51,7 @@ class NativeView {
   static jmethodID loadResourceBitmap_method;
   static jmethodID loadFileBitmap_method;
   static jmethodID bitmapToTexture_method;
+  static jmethodID shareText_method;
   static jmethodID openWaypointFile_method;
   static jmethodID getNetState_method;
 
@@ -144,6 +145,12 @@ public:
   void SetTexturePowerOfTwo(bool value) {
     env->SetStaticBooleanField(cls, textureNonPowerOfTwo_field, value);
   }
+
+  /**
+   * Deliver plain text data to somebody; the user will be asked to
+   * pick a recipient.
+   */
+  void ShareText(const char *text) noexcept;
 
   void OpenWaypointFile(unsigned id, const char *filename) {
     env->CallVoidMethod(obj, openWaypointFile_method, id,

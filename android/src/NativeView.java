@@ -461,6 +461,16 @@ class NativeView extends SurfaceView
     return BitmapUtil.bitmapToOpenGL(bmp, false, alpha, result);
   }
 
+  private void shareText(String text) {
+    Intent send = new Intent();
+    send.setAction(Intent.ACTION_SEND);
+    send.putExtra(Intent.EXTRA_TEXT, text);
+    send.setType("text/plain");
+
+    Intent share = Intent.createChooser(send, null);
+    getContext().startActivity(share);
+  }
+
   /**
    * Starts a VIEW intent for a given file
    */
