@@ -37,11 +37,12 @@ class ColorButtonRenderer : public ButtonRenderer {
   const Color color;
 
 public:
-  ColorButtonRenderer(const ButtonLook &_look, Color _color)
+  ColorButtonRenderer(const ButtonLook &_look, Color _color) noexcept
     :frame_renderer(_look), color(_color) {}
 
   void DrawButton(Canvas &canvas, const PixelRect &rc,
-                  bool enabled, bool focused, bool pressed) const override;
+                  bool enabled, bool focused,
+                  bool pressed) const noexcept override;
 };
 
 #endif

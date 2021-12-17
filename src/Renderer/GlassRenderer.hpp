@@ -38,6 +38,6 @@ class Color;
  * specified color, without any additional effect.
  */
 void
-DrawGlassBackground(Canvas &canvas, const PixelRect &rc, Color color);
+DrawGlassBackground(Canvas &canvas, const PixelRect &rc, Color color) noexcept;
 
 #endif

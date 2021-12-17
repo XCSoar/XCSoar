@@ -29,10 +29,11 @@ Copyright_License {
 class ShowMenuButton : public Button {
 public:
   void Create(ContainerWindow &parent, const PixelRect &rc,
-              WindowStyle style=WindowStyle());
+              WindowStyle style=WindowStyle()) noexcept;
+
 protected:
   /* virtual methods from class ButtonWindow */
-  bool OnClicked() override;
+  bool OnClicked() noexcept override;
 };
 
 #endif

@@ -33,7 +33,7 @@ Copyright_License {
 TabDisplay::TabDisplay(TabWidget &_pager, const DialogLook &_look,
                        ContainerWindow &parent, PixelRect rc,
                        bool _vertical,
-                       WindowStyle style)
+                       WindowStyle style) noexcept
   :pager(_pager),
    look(_look),
    vertical(_vertical),
@@ -44,14 +44,14 @@ TabDisplay::TabDisplay(TabWidget &_pager, const DialogLook &_look,
   Create(parent, rc, style);
 }
 
-TabDisplay::~TabDisplay()
+TabDisplay::~TabDisplay() noexcept
 {
   for (const auto i : buttons)
     delete i;
 }
 
 inline unsigned
-TabButton::GetRecommendedWidth(const DialogLook &look) const
+TabButton::GetRecommendedWidth(const DialogLook &look) const noexcept
 {
   if (icon != nullptr)
     return icon->GetSize().width + 2 * Layout::GetTextPadding();
@@ -60,7 +60,7 @@ TabButton::GetRecommendedWidth(const DialogLook &look) const
 }
 
 inline unsigned
-TabButton::GetRecommendedHeight(const DialogLook &look) const
+TabButton::GetRecommendedHeight(const DialogLook &look) const noexcept
 {
   if (icon != nullptr)
     return icon->GetSize().height + 2 * Layout::GetTextPadding();
@@ -69,7 +69,7 @@ TabButton::GetRecommendedHeight(const DialogLook &look) const
 }
 
 unsigned
-TabDisplay::GetRecommendedColumnWidth() const
+TabDisplay::GetRecommendedColumnWidth() const noexcept
 {
   unsigned width = Layout::GetMaximumControlHeight();
   for (auto *i : buttons) {
@@ -82,7 +82,7 @@ TabDisplay::GetRecommendedColumnWidth() const
 }
 
 unsigned
-TabDisplay::GetRecommendedRowHeight() const
+TabDisplay::GetRecommendedRowHeight() const noexcept
 {
   unsigned height = Layout::GetMaximumControlHeight();
   for (auto *i : buttons) {
@@ -96,14 +96,14 @@ TabDisplay::GetRecommendedRowHeight() const
 }
 
 void
-TabDisplay::UpdateLayout(const PixelRect &rc, bool _vertical)
+TabDisplay::UpdateLayout(const PixelRect &rc, bool _vertical) noexcept
 {
   vertical = _vertical;
   Move(rc);
 }
 
 void
-TabDisplay::CalculateLayout()
+TabDisplay::CalculateLayout() noexcept
 {
   if (buttons.empty() || !IsDefined())
     return;
@@ -173,7 +173,7 @@ TabDisplay::CalculateLayout()
 }
 
 void
-TabDisplay::Add(const TCHAR *caption, const MaskedIcon *icon)
+TabDisplay::Add(const TCHAR *caption, const MaskedIcon *icon) noexcept
 {
   TabButton *b = new TabButton(caption, icon);
   buttons.append(b);
@@ -181,7 +181,7 @@ TabDisplay::Add(const TCHAR *caption, const MaskedIcon *icon)
 }
 
 int
-TabDisplay::GetButtonIndexAt(PixelPoint p) const
+TabDisplay::GetButtonIndexAt(PixelPoint p) const noexcept
 {
   for (unsigned i = 0; i < GetSize(); i++) {
     if (buttons[i]->rc.Contains(p))
@@ -266,7 +266,6 @@ TabDisplay::OnKeyCheck(unsigned key_code) const
     return false;
   }
 }
-
 
 bool
 TabDisplay::OnKeyDown(unsigned key_code)
@@ -367,7 +366,7 @@ TabDisplay::OnMouseMove(PixelPoint p, unsigned keys)
 }
 
 void
-TabDisplay::EndDrag()
+TabDisplay::EndDrag() noexcept
 {
   if (dragging) {
     dragging = false;

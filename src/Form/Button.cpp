@@ -128,7 +128,7 @@ Button::SetDown(bool _down)
 }
 
 bool
-Button::OnClicked()
+Button::OnClicked() noexcept
 {
   if (callback) {
     callback();

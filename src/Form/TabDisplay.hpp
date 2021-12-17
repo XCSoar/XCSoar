@@ -48,7 +48,7 @@ public:
   PixelRect rc;
 
 public:
-  TabButton(const TCHAR *_caption, const MaskedIcon *_icon)
+  TabButton(const TCHAR *_caption, const MaskedIcon *_icon) noexcept
     :icon(_icon)
   {
     caption = _caption;
@@ -59,16 +59,16 @@ public:
   }
 
   gcc_pure
-  unsigned GetRecommendedWidth(const DialogLook &look) const;
+  unsigned GetRecommendedWidth(const DialogLook &look) const noexcept;
 
   gcc_pure
-  unsigned GetRecommendedHeight(const DialogLook &look) const;
+  unsigned GetRecommendedHeight(const DialogLook &look) const noexcept;
 
   /**
    * Paints one button
    */
   void Draw(Canvas &canvas, const DialogLook &look,
-            bool focused, bool pressed, bool selected) const {
+            bool focused, bool pressed, bool selected) const noexcept {
     renderer.Draw(canvas, rc, look, caption, icon, focused, pressed, selected);
   }
 };
@@ -98,34 +98,34 @@ public:
   TabDisplay(TabWidget &_pager, const DialogLook &look,
              ContainerWindow &parent, PixelRect rc,
              bool vertical,
-             WindowStyle style=WindowStyle());
+             WindowStyle style=WindowStyle()) noexcept;
 
-  virtual ~TabDisplay();
+  ~TabDisplay() noexcept override;
 
-  const DialogLook &GetLook() const {
+  const DialogLook &GetLook() const noexcept {
     return look;
   }
 
   gcc_pure
-  unsigned GetRecommendedColumnWidth() const;
+  unsigned GetRecommendedColumnWidth() const noexcept;
 
   gcc_pure
-  unsigned GetRecommendedRowHeight() const;
+  unsigned GetRecommendedRowHeight() const noexcept;
 
-  bool IsVertical() const {
+  bool IsVertical() const noexcept {
     return vertical;
   }
 
-  void UpdateLayout(const PixelRect &rc, bool _vertical);
+  void UpdateLayout(const PixelRect &rc, bool _vertical) noexcept;
 
-  unsigned GetSize() const {
+  unsigned GetSize() const noexcept {
     return buttons.size();
   }
 
-  void Add(const TCHAR *caption, const MaskedIcon *icon=nullptr);
+  void Add(const TCHAR *caption, const MaskedIcon *icon=nullptr) noexcept;
 
   gcc_pure
-  const TCHAR *GetCaption(unsigned i) const {
+  const TCHAR *GetCaption(unsigned i) const noexcept {
     return buttons[i]->caption.c_str();
   }
 
@@ -133,10 +133,10 @@ public:
    * @return -1 if there is no button at the specified position
    */
   gcc_pure
-  int GetButtonIndexAt(PixelPoint p) const;
+  int GetButtonIndexAt(PixelPoint p) const noexcept;
 
 private:
-  void CalculateLayout();
+  void CalculateLayout() noexcept;
 
 protected:
   void OnResize(PixelSize new_size) override;
@@ -154,7 +154,7 @@ protected:
   bool OnMouseUp(PixelPoint p) override;
   bool OnMouseMove(PixelPoint p, unsigned keys) override;
 
-  void EndDrag();
+  void EndDrag() noexcept;
 };
 
 #endif

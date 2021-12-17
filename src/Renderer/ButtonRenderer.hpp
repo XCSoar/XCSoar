@@ -32,31 +32,32 @@ class ButtonFrameRenderer {
   const ButtonLook &look;
 
 public:
-  explicit ButtonFrameRenderer(const ButtonLook &_look):look(_look) {}
+  explicit ButtonFrameRenderer(const ButtonLook &_look) noexcept:look(_look) {}
 
-  const ButtonLook &GetLook() const {
+  const ButtonLook &GetLook() const noexcept {
     return look;
   }
 
   [[gnu::const]]
-  static unsigned GetMargin();
+  static unsigned GetMargin() noexcept;
 
   void DrawButton(Canvas &canvas, PixelRect rc,
-                  bool focused, bool pressed) const;
+                  bool focused, bool pressed) const noexcept;
 
   [[gnu::pure]]
-  PixelRect GetDrawingRect(PixelRect rc, bool pressed) const;
+  PixelRect GetDrawingRect(PixelRect rc, bool pressed) const noexcept;
 };
 
 class ButtonRenderer {
 public:
-  virtual ~ButtonRenderer() {}
+  virtual ~ButtonRenderer() noexcept = default;
 
   [[gnu::pure]]
-  virtual unsigned GetMinimumButtonWidth() const;
+  virtual unsigned GetMinimumButtonWidth() const noexcept;
 
   virtual void DrawButton(Canvas &canvas, const PixelRect &rc,
-                          bool enabled, bool focused, bool pressed) const = 0;
+                          bool enabled, bool focused,
+                          bool pressed) const noexcept = 0;
 };
 
 #endif

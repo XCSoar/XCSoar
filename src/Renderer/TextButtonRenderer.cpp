@@ -36,7 +36,8 @@ TextButtonRenderer::GetMinimumButtonWidth(const ButtonLook &look,
 
 inline void
 TextButtonRenderer::DrawCaption(Canvas &canvas, const PixelRect &rc,
-                                bool enabled, bool focused, bool pressed) const
+                                bool enabled, bool focused,
+                                bool pressed) const noexcept
 {
   const ButtonLook &look = GetLook();
 
@@ -54,7 +55,7 @@ TextButtonRenderer::DrawCaption(Canvas &canvas, const PixelRect &rc,
 }
 
 unsigned
-TextButtonRenderer::GetMinimumButtonWidth() const
+TextButtonRenderer::GetMinimumButtonWidth() const noexcept
 {
   return 2 * (frame_renderer.GetMargin() + Layout::GetTextPadding())
     + GetLook().font->TextSize(caption.c_str()).width;
@@ -62,7 +63,8 @@ TextButtonRenderer::GetMinimumButtonWidth() const
 
 void
 TextButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
-                               bool enabled, bool focused, bool pressed) const
+                               bool enabled, bool focused,
+                               bool pressed) const noexcept
 {
   frame_renderer.DrawButton(canvas, rc, focused, pressed);
 

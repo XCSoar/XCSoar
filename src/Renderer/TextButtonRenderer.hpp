@@ -40,7 +40,7 @@ class TextButtonRenderer : public ButtonRenderer {
   StaticString<64> caption;
 
 public:
-  explicit TextButtonRenderer(const ButtonLook &_look)
+  explicit TextButtonRenderer(const ButtonLook &_look) noexcept
     :frame_renderer(_look) {
     text_renderer.SetCenter();
     text_renderer.SetVCenter();
@@ -48,7 +48,7 @@ public:
   }
 
   TextButtonRenderer(const ButtonLook &_look,
-                     StaticString<64>::const_pointer _caption)
+                     StaticString<64>::const_pointer _caption) noexcept
     :frame_renderer(_look), caption(_caption) {
     text_renderer.SetCenter();
     text_renderer.SetVCenter();
@@ -59,28 +59,29 @@ public:
   static unsigned GetMinimumButtonWidth(const ButtonLook &look,
                                         const TCHAR *caption) noexcept;
 
-  const ButtonLook &GetLook() const {
+  const ButtonLook &GetLook() const noexcept {
     return frame_renderer.GetLook();
   }
 
-  StaticString<64>::const_pointer GetCaption() const {
+  StaticString<64>::const_pointer GetCaption() const noexcept {
     return caption;
   }
 
-  void SetCaption(StaticString<64>::const_pointer _caption) {
+  void SetCaption(StaticString<64>::const_pointer _caption) noexcept {
     caption = _caption;
     text_renderer.InvalidateLayout();
   }
 
   [[gnu::pure]]
-  unsigned GetMinimumButtonWidth() const override;
+  unsigned GetMinimumButtonWidth() const noexcept override;
 
   void DrawButton(Canvas &canvas, const PixelRect &rc,
-                  bool enabled, bool focused, bool pressed) const override;
+                  bool enabled, bool focused,
+                  bool pressed) const noexcept override;
 
 private:
   void DrawCaption(Canvas &canvas, const PixelRect &rc,
-                   bool enabled, bool focused, bool pressed) const;
+                   bool enabled, bool focused, bool pressed) const noexcept;
 };
 
 #endif

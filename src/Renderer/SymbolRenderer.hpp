@@ -36,8 +36,8 @@ namespace SymbolRenderer
     RIGHT,
   };
 
-  void DrawArrow(Canvas &canvas, PixelRect rc, Direction direction);
-  void DrawSign(Canvas &canvas, PixelRect rc, bool plus);
+  void DrawArrow(Canvas &canvas, PixelRect rc, Direction direction) noexcept;
+  void DrawSign(Canvas &canvas, PixelRect rc, bool plus) noexcept;
 }
 
 #endif

@@ -26,15 +26,15 @@ Copyright_License {
 #include "ui/canvas/Bitmap.hpp"
 
 unsigned
-BitmapButtonRenderer::GetMinimumButtonWidth() const
+BitmapButtonRenderer::GetMinimumButtonWidth() const noexcept
 {
   return bitmap.GetSize().width;
 }
 
 void
 BitmapButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
-                                 bool enabled,
-                                 bool focused, bool pressed) const
+                                 bool enabled, bool focused,
+                                 bool pressed) const noexcept
 {
   if (pressed)
     canvas.StretchNot(bitmap);
