@@ -1,4 +1,6 @@
 Version 7.22 - not yet released
+* user interface
+  - add "Share" button to the status dialog
 * Polars
   - add DG-800S
 
