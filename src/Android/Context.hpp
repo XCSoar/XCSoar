@@ -37,8 +37,7 @@ public:
   static void Initialise(JNIEnv *env) noexcept;
   static void Deinitialise(JNIEnv *env) noexcept;
 
-  Context(JNIEnv *env, jobject obj):Java::GlobalObject(env, obj) {
-  }
+  using Java::GlobalObject::GlobalObject;
 
   AllocatedPath GetExternalFilesDir(JNIEnv *env) noexcept;
   AllocatedPath GetExternalCacheDir(JNIEnv *env) noexcept;
