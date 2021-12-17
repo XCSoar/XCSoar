@@ -592,6 +592,14 @@ public:
   void LoadValueDuration(unsigned i, std::chrono::seconds value) noexcept;
 
   /**
+   * Return the raw text of the #WndProperty, bypassing the
+   * #DataField.
+   */
+  const TCHAR *GetText(unsigned i) const noexcept {
+    return GetControl(i).GetText();
+  }
+
+  /**
    * Clear the value of the specified row.  This bypasses the
    * DataField which may be attached to the control.  Use this method
    * to indicate that there's no valid value currently.
