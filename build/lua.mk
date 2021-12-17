@@ -37,6 +37,10 @@ LUA_SOURCES = \
 	$(SRC)/lua/Replay.cpp \
 	$(SRC)/lua/InputEvent.cpp \
 
+ifeq ($(TARGET),ANDROID)
+LUA_SOURCES += $(SRC)/lua/Android.cpp
+endif
+
 LUA_CPPFLAGS_INTERNAL = $(LIBLUA_CPPFLAGS) $(SCREEN_CPPFLAGS) $(LIBHTTP_CPPFLAGS)
 LUA_LDLIBS = $(LIBLUA_LDLIBS)
 

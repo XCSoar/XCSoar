@@ -159,6 +159,9 @@ contains the following names:
    - Class for scheduling periodic callbacks.  See :ref:`lua.timer`.
  * - ``http``
    - HTTP client.  See :ref:`lua.http`.
+ * - ``share_text(text)``
+   - Deliver plain text data to somebody; the user will be asked to
+     pick a recipient (Android only).
 
 .. _lua.blackboard:
 
