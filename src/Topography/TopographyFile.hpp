@@ -204,7 +204,7 @@ public:
    * must be loaded.  A negative value is returned when all thresholds
    * have been reached already.
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetNextScaleThreshold(double map_scale) const {
     return map_scale <= scale_threshold
       ? (map_scale <= label_threshold
@@ -248,11 +248,11 @@ public:
     return const_iterator(nullptr);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetSkipSteps(double map_scale) const;
 
 #ifdef ENABLE_OPENGL
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint ToGeoPoint(const ShapePoint &p) const {
     return GeoPoint(center.longitude + Angle::Native(p.x),
                     center.latitude + Angle::Native(p.y));
@@ -261,13 +261,13 @@ public:
   /**
    * @return thinning level, range: 0 .. XShape::THINNING_LEVELS-1
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetThinningLevel(double map_scale) const;
 
   /**
    * @return minimum distance between points in ShapePoint coordinates
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetMinimumPointDistance(unsigned level) const;
 #endif
 

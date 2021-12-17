@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Topography/XShape.hpp"
 #include "Convert.hpp"
+#include "util/Compiler.h"
 #include "util/StringAPI.hxx"
 #include "util/UTF8.hpp"
 #include "util/StringStrip.hxx"

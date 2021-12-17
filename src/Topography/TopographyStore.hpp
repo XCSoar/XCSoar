@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "util/NonCopyable.hpp"
 #include "util/StaticArray.hxx"
-#include "util/Compiler.h"
 
 #include <tchar.h>
 
@@ -75,7 +74,7 @@ public:
   /**
    * @see TopographyFile::GetNextScaleThreshold()
    */
-  gcc_pure
+  [[gnu::pure]]
   double GetNextScaleThreshold(double map_scale) const;
 
   /**
