@@ -43,15 +43,18 @@ IsForbiddenFlarmChar(unsigned char ch)
 }
 
 char *
-CopyCleanFlarmString(char *gcc_restrict dest, const char *gcc_restrict src)
+CopyCleanFlarmString(char *gcc_restrict dest, const char *gcc_restrict src, int nChars)
 {
-  while (true) {
+  int i=0;
+  while (nChars == 0 || i < nChars) {
     char ch = *src++;
     if (ch == 0)
       break;
 
-    if (!IsForbiddenFlarmChar(ch))
+    if (!IsForbiddenFlarmChar(ch)) {
       *dest++ = ch;
+      i++;
+    }
   }
 
   *dest = 0;

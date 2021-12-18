@@ -33,6 +33,6 @@ Copyright_License {
  * (worst-case).
  */
 char *
-CopyCleanFlarmString(char *gcc_restrict dest, const char *gcc_restrict src);
+CopyCleanFlarmString(char *gcc_restrict dest, const char *gcc_restrict src, int nChars = 0);
 
 #endif

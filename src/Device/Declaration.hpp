@@ -85,6 +85,11 @@ struct Declaration {
     return turnpoints[i].waypoint.name.c_str();
   }
 
+  gcc_pure
+  const TCHAR *GetShortName(const unsigned i) const {
+    return turnpoints[i].waypoint.shortname.c_str();
+  }
+
   const GeoPoint &GetLocation(const unsigned i) const {
     return turnpoints[i].waypoint.location;
   }
