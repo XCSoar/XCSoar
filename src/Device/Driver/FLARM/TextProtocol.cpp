@@ -33,7 +33,7 @@ Copyright_License {
 #include <string.h>
 
 static constexpr bool
-IsForbiddenFlarmChar(unsigned char ch)
+IsForbiddenFlarmChar(unsigned char ch) noexcept
 {
   return
     /* don't allow ASCII control characters */
@@ -43,7 +43,8 @@ IsForbiddenFlarmChar(unsigned char ch)
 }
 
 char *
-CopyCleanFlarmString(char *gcc_restrict dest, const char *gcc_restrict src, std::size_t maxBytes)
+CopyCleanFlarmString(char *gcc_restrict dest, const char *gcc_restrict src,
+                     std::size_t maxBytes) noexcept
 {
   std::size_t i=0;
   while (i < maxBytes) {

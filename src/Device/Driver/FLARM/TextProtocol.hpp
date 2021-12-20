@@ -38,6 +38,6 @@ Copyright_License {
  */
 char *
 CopyCleanFlarmString(char *gcc_restrict dest, const char *gcc_restrict src,
-                     std::size_t maxBytes);
+                     std::size_t maxBytes) noexcept;
 
 #endif
