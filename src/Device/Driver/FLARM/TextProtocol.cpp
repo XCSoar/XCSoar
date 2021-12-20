@@ -43,10 +43,10 @@ IsForbiddenFlarmChar(unsigned char ch)
 }
 
 char *
-CopyCleanFlarmString(char *gcc_restrict dest, const char *gcc_restrict src, int nChars)
+CopyCleanFlarmString(char *gcc_restrict dest, const char *gcc_restrict src, std::size_t maxBytes)
 {
-  int i=0;
-  while (nChars == 0 || i < nChars) {
+  std::size_t i=0;
+  while (maxBytes == 0 || i < maxBytes) {
     char ch = *src++;
     if (ch == 0)
       break;

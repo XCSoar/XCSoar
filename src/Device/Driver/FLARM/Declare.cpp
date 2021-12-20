@@ -119,6 +119,9 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
      *
      * This means we can use the <= 6 character short name in the waypoint declaration
      * without hitting the 192 byte limit.
+     * Wouldn't expect to see a short name > 6 characters, but the optional 3rd
+     * parameter of CopyCleanFlarmString() allows us to trim off excess characters
+     * so that a dodgy waypoint configuration doesn't cause an overflow.
      */
     NarrowString<90> buffer;
 	const WideToUTF8Converter shortName(declaration.GetShortName(i));
