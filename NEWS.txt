@@ -3,6 +3,8 @@ Version 7.22 - not yet released
   - add "Share" button to the status dialog
 * Polars
   - add DG-800S
+* devices
+  - FLARM: send turn point names in task declaration
 
 Version 7.21 - 2021/12/11
 * data files
