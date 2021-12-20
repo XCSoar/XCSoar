@@ -46,7 +46,7 @@ char *
 CopyCleanFlarmString(char *gcc_restrict dest, const char *gcc_restrict src, std::size_t maxBytes)
 {
   std::size_t i=0;
-  while (maxBytes == 0 || i < maxBytes) {
+  while (i < maxBytes) {
     char ch = *src++;
     if (ch == 0)
       break;

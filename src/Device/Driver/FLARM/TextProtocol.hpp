@@ -33,10 +33,11 @@ Copyright_License {
  * setting value.  There is no buffer overflow check; the destination
  * buffer must be large enough to fit all of the source string
  * (worst-case).
- * If maxBytes > 0, copy no more than maxBytes bytes (excluding null terminator)
- * If maxBytes == 0, copy full string (excluding illegal characters)
+ *
+ * @param maxBytes copy no more than maxBytes bytes (excluding null terminator)
  */
 char *
-CopyCleanFlarmString(char *gcc_restrict dest, const char *gcc_restrict src, std::size_t maxBytes = 0);
+CopyCleanFlarmString(char *gcc_restrict dest, const char *gcc_restrict src,
+                     std::size_t maxBytes);
 
 #endif
