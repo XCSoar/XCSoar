@@ -49,25 +49,27 @@ private:
   /**
    * This number is incremented each time this object is modified.
    */
-  unsigned serial;
+  unsigned serial = 0;
 
 public:
-  TopographyStore():serial(0) {}
-  ~TopographyStore();
+  TopographyStore() = default;
+  ~TopographyStore() noexcept {
+    Reset();
+  }
 
   /**
    * Returns a serial for the current state.  The serial gets
    * incremented each time the list of warnings is modified.
    */
-  unsigned GetSerial() const {
+  unsigned GetSerial() const noexcept {
     return serial;
   }
 
-  unsigned size() const {
+  unsigned size() const noexcept {
     return files.size();
   }
 
-  const TopographyFile &operator [](unsigned i) const {
+  const TopographyFile &operator [](unsigned i) const noexcept {
     return *files[i];
   }
 
@@ -75,7 +77,7 @@ public:
    * @see TopographyFile::GetNextScaleThreshold()
    */
   [[gnu::pure]]
-  double GetNextScaleThreshold(double map_scale) const;
+  double GetNextScaleThreshold(double map_scale) const noexcept;
 
   /**
    * @param max_update the maximum number of files updated in this
@@ -83,17 +85,17 @@ public:
    * @return the number of files which were updated
    */
   unsigned ScanVisibility(const WindowProjection &m_projection,
-                          unsigned max_update=1024);
+                          unsigned max_update=1024) noexcept;
 
   /**
    * Load all shapes of all files into memory.  For debugging
    * purposes.
    */
-  void LoadAll();
+  void LoadAll() noexcept;
 
   void Load(OperationEnvironment &operation, NLineReader &reader,
-            const TCHAR *directory, struct zzip_dir *zdir = nullptr);
-  void Reset();
+            const TCHAR *directory, struct zzip_dir *zdir = nullptr) noexcept;
+  void Reset() noexcept;
 };
 
 #endif

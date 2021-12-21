@@ -85,7 +85,7 @@ static constexpr LOOKUP_ICON icon_list[] = {
 };
 
 double
-TopographyStore::GetNextScaleThreshold(double map_scale) const
+TopographyStore::GetNextScaleThreshold(double map_scale) const noexcept
 {
   double result(-1);
   for (auto *file : files) {
@@ -99,7 +99,7 @@ TopographyStore::GetNextScaleThreshold(double map_scale) const
 
 unsigned
 TopographyStore::ScanVisibility(const WindowProjection &m_projection,
-                              unsigned max_update)
+                                unsigned max_update) noexcept
 {
   // check if any needs to have cache updates because wasnt
   // visible previously when bounds moved
@@ -124,7 +124,7 @@ TopographyStore::ScanVisibility(const WindowProjection &m_projection,
 }
 
 void
-TopographyStore::LoadAll()
+TopographyStore::LoadAll() noexcept
 {
   for (const auto &i : files) {
     TopographyFile &file = *i;
@@ -132,14 +132,9 @@ TopographyStore::LoadAll()
   }
 }
 
-TopographyStore::~TopographyStore()
-{
-  Reset();
-}
-
 void
 TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
-                      const TCHAR *directory, struct zzip_dir *zdir)
+                      const TCHAR *directory, struct zzip_dir *zdir) noexcept
 {
   Reset();
 
@@ -285,7 +280,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
 }
 
 void
-TopographyStore::Reset()
+TopographyStore::Reset() noexcept
 {
   for (auto *file : files)
     delete file;
