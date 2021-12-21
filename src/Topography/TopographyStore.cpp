@@ -29,22 +29,12 @@ Copyright_License {
 #include "io/LineReader.hpp"
 #include "Operation/Operation.hpp"
 #include "Compatibility/path.h"
-#include "Asset.hpp"
 #include "LogFile.hpp"
 #include "Resources.hpp"
 
 #include <cstdint>
 
 #include <windef.h> // for MAX_PATH
-
-static bool
-IsHugeTopographyFile(const char *name)
-{
-  return StringIsEqual(name, "village_point") ||
-    StringIsEqual(name, "citysmall_point") ||
-    StringIsEqual(name, "roadsmall_point") ||
-    StringIsEqual(name, "roadsmall_line");
-}
 
 typedef struct {
   const char *name;
@@ -186,19 +176,6 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     if (p == nullptr || p == line)
       // If no comma was found -> ignore this line/shapefile
       continue;
-
-    if (HasLittleMemory()) {
-      /* hard-coded blacklist for huge files on PPC2000; those
-         devices usually have very little memory */
-
-      // Null-terminate the line string after the first comma
-      // for strcmp() calls in IsHugeTopographyFile() function
-      *p = 0;
-
-      // Skip large topography files
-      if (IsHugeTopographyFile(line))
-        continue;
-    }
 
     // Extract filename and append it to the shape_filename buffer
     memcpy(shape_filename_end, line, p - line);
