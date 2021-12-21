@@ -95,9 +95,10 @@ public:
   XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
          int label_field=-1);
 
-  XShape(const XShape &) = delete;
-
   ~XShape() noexcept;
+
+  XShape(const XShape &) = delete;
+  XShape &operator=(const XShape &) = delete;
 
 #ifdef ENABLE_OPENGL
   void SetOffset(unsigned _offset) const noexcept {
