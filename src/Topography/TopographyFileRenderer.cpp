@@ -171,9 +171,6 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 {
   const std::lock_guard<Mutex> lock(file.mutex);
 
-  if (file.IsEmpty())
-    return;
-
   const auto map_scale = projection.GetMapScale();
   if (!file.IsVisible(map_scale))
     return;
@@ -379,9 +376,6 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
                                     LabelBlock &label_block) noexcept
 {
   const std::lock_guard<Mutex> lock(file.mutex);
-
-  if (file.IsEmpty())
-    return;
 
   const auto map_scale = projection.GetMapScale();
   if (!file.IsVisible(map_scale) || !file.IsLabelVisible(map_scale))

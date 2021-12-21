@@ -29,6 +29,7 @@ Copyright_License {
 #include <zzip/lib.h>
 
 #include <algorithm>
+#include <stdexcept>
 
 TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
                                double _threshold,
@@ -46,20 +47,24 @@ TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
    important_label_threshold(_important_label_threshold)
 {
   if (msShapefileOpen(&file, "rb", dir, filename, 0) == -1)
-    return;
+    throw std::runtime_error{"Failed to open shapefile"};
 
   const std::size_t n_shapes = file.numshapes;
   constexpr std::size_t MAX_SHAPES = 16 * 1024 * 1024;
-  if (n_shapes == 0 || n_shapes > MAX_SHAPES) {
+  if (n_shapes == 0) {
     msShapefileClose(&file);
-    return;
+    throw std::runtime_error{"Empty shapefile"};
+  }
+
+  if (n_shapes > MAX_SHAPES) {
+    msShapefileClose(&file);
+    throw std::runtime_error{"Too many shapes in shapefile"};
   }
 
   const auto file_bounds = ImportRect(file.bounds);
   if (!file_bounds.Check()) {
-    /* malformed bounds */
     msShapefileClose(&file);
-    return;
+    throw std::runtime_error{"Malformed shapefile bounds"};
   }
 
   center = file_bounds.GetCenter();
@@ -75,9 +80,6 @@ TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
 
 TopographyFile::~TopographyFile() noexcept
 {
-  if (IsEmpty())
-    return;
-
   ClearCache();
   msShapefileClose(&file);
 
@@ -108,9 +110,6 @@ LoadShape(shapefileObj *file, const GeoPoint &center, int i,
 bool
 TopographyFile::Update(const WindowProjection &map_projection)
 {
-  if (IsEmpty())
-    return false;
-
   if (map_projection.GetMapScale() > scale_threshold)
     /* not visible, don't update cache now */
     return false;
@@ -130,7 +129,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
   switch (msShapefileWhichShapes(&file, dir, deg_bounds, 0)) {
   case MS_FAILURE:
     ClearCache();
-    return false;
+    throw std::runtime_error{"Failed to update shapefile"};
 
   case MS_DONE:
     /* screen is outside of map bounds */

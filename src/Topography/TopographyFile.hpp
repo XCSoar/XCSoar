@@ -150,6 +150,9 @@ public:
 public:
   /**
    * The constructor opens the given shapefile and clears the cache
+   *
+   * Throws on error.
+   *
    * @param shpname The shapefile to open (*.shp)
    * @param threshold the zoom threshold for displaying this object
    * @param color The color to use for drawing, including alpha for OpenGL
@@ -160,7 +163,6 @@ public:
    * @param label_threshold the zoom threshold for label rendering
    * @param important_label_threshold labels below this zoom threshold will
    * be rendered in default style
-   * @return
    */
   TopographyFile(zzip_dir *dir, const char *shpname,
                  double threshold, double label_threshold,
@@ -184,10 +186,6 @@ public:
 
   const GeoPoint &GetCenter() const noexcept {
     return center;
-  }
-
-  bool IsEmpty() const noexcept {
-    return shapes.empty();
   }
 
   bool IsVisible(double map_scale) const noexcept {
@@ -272,11 +270,15 @@ public:
 #endif
 
   /**
+   * Throws on error.
+   *
    * @return true if new data from the topography file has been loaded
    */
   bool Update(const WindowProjection &map_projection);
 
   /**
+   * Throws on error.
+   *
    * Load all shapes into memory.  For debugging purposes.
    */
   void LoadAll();

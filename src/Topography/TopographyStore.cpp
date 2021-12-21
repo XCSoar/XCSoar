@@ -30,9 +30,11 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Compatibility/path.h"
 #include "Asset.hpp"
+#include "LogFile.hpp"
 #include "Resources.hpp"
 
 #include <cstdint>
+
 #include <windef.h> // for MAX_PATH
 
 static bool
@@ -116,10 +118,14 @@ TopographyStore::ScanVisibility(const WindowProjection &m_projection,
   // to make sure eventually everything gets refreshed
   unsigned num_updated = 0;
   for (auto *file : files) {
-    if (file->Update(m_projection)) {
-      ++num_updated;
-      if (num_updated >= max_update)
-        break;
+    try {
+      if (file->Update(m_projection)) {
+        ++num_updated;
+        if (num_updated >= max_update)
+          break;
+      }
+    } catch (...) {
+      LogError(std::current_exception());
     }
   }
 
@@ -280,22 +286,21 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     }
 
     // Create TopographyFile instance from parsed line
-    TopographyFile *file = new TopographyFile(zdir, shape_filename,
-                                              shape_range, label_range,
-                                              labelImportantRange,
+    try {
+      TopographyFile *file = new TopographyFile(zdir, shape_filename,
+                                                shape_range, label_range,
+                                                labelImportantRange,
 #ifdef ENABLE_OPENGL
-                                              Color(red, green, blue, alpha),
+                                                Color(red, green, blue, alpha),
 #else
-                                              Color(red, green, blue),
+                                                Color(red, green, blue),
 #endif
-                                              shape_field, icon, big_icon,
-                                              pen_width);
-    if (file->IsEmpty())
-      // If the shape file could not be read -> skip this line/file
-      delete file;
-    else
-      // .. otherwise append it to our list of shape files
+                                                shape_field, icon, big_icon,
+                                                pen_width);
       files.append(file);
+    } catch (...) {
+      LogError(std::current_exception());
+    }
 
     // Update progress bar
     operation.SetProgressPosition((reader.Tell() * 100) / filesize);
