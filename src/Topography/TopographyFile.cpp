@@ -74,7 +74,7 @@ TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
   ++serial;
 }
 
-TopographyFile::~TopographyFile()
+TopographyFile::~TopographyFile() noexcept
 {
   if (IsEmpty())
     return;
@@ -89,7 +89,7 @@ TopographyFile::~TopographyFile()
 }
 
 void
-TopographyFile::ClearCache()
+TopographyFile::ClearCache() noexcept
 {
   for (auto i = shapes.begin(), end = shapes.end(); i != end; ++i) {
     delete i->shape;
@@ -212,7 +212,7 @@ TopographyFile::LoadAll()
 }
 
 unsigned
-TopographyFile::GetSkipSteps(double map_scale) const
+TopographyFile::GetSkipSteps(double map_scale) const noexcept
 {
   if (map_scale > scale_threshold * 0.75)
     return 4;
@@ -226,7 +226,7 @@ TopographyFile::GetSkipSteps(double map_scale) const
 #ifdef ENABLE_OPENGL
 
 unsigned
-TopographyFile::GetThinningLevel(double map_scale) const
+TopographyFile::GetThinningLevel(double map_scale) const noexcept
 {
   if (2 * map_scale > scale_threshold)
     return 3;
@@ -239,7 +239,7 @@ TopographyFile::GetThinningLevel(double map_scale) const
 }
 
 unsigned
-TopographyFile::GetMinimumPointDistance(unsigned level) const
+TopographyFile::GetMinimumPointDistance(unsigned level) const noexcept
 {
   switch (level) {
     case 1:

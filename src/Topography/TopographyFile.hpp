@@ -176,25 +176,25 @@ public:
   /**
    * The destructor clears the cache and closes the shapefile
    */
-  ~TopographyFile();
+  ~TopographyFile() noexcept;
 
-  const Serial &GetSerial() const {
+  const Serial &GetSerial() const noexcept {
     return serial;
   }
 
-  const GeoPoint &GetCenter() const {
+  const GeoPoint &GetCenter() const noexcept {
     return center;
   }
 
-  bool IsEmpty() const {
+  bool IsEmpty() const noexcept {
     return shapes.empty();
   }
 
-  bool IsVisible(double map_scale) const {
+  bool IsVisible(double map_scale) const noexcept {
     return map_scale <= scale_threshold;
   }
 
-  bool IsLabelVisible(double map_scale) const {
+  bool IsLabelVisible(double map_scale) const noexcept {
     return map_scale <= label_threshold;
   }
 
@@ -205,7 +205,7 @@ public:
    * have been reached already.
    */
   [[gnu::pure]]
-  double GetNextScaleThreshold(double map_scale) const {
+  double GetNextScaleThreshold(double map_scale) const noexcept {
     return map_scale <= scale_threshold
       ? (map_scale <= label_threshold
          /* both thresholds reached: not relevant */
@@ -220,40 +220,40 @@ public:
          : std::max(scale_threshold, label_threshold));
   }
 
-  bool IsLabelImportant(double map_scale) const {
+  bool IsLabelImportant(double map_scale) const noexcept {
     return map_scale <= important_label_threshold;
   }
 
-  ResourceId GetIcon() const {
+  ResourceId GetIcon() const noexcept {
     return icon;
   }
 
-  ResourceId GetBigIcon() const {
+  ResourceId GetBigIcon() const noexcept {
     return big_icon;
   }
 
-  Color GetColor() const {
+  Color GetColor() const noexcept {
     return color;
   }
 
-  unsigned GetPenWidth() const {
+  unsigned GetPenWidth() const noexcept {
     return pen_width;
   }
 
-  const_iterator begin() const {
+  const_iterator begin() const noexcept {
     return const_iterator(first);
   }
 
-  const_iterator end() const {
+  const_iterator end() const noexcept {
     return const_iterator(nullptr);
   }
 
   [[gnu::pure]]
-  unsigned GetSkipSteps(double map_scale) const;
+  unsigned GetSkipSteps(double map_scale) const noexcept;
 
 #ifdef ENABLE_OPENGL
   [[gnu::pure]]
-  GeoPoint ToGeoPoint(const ShapePoint &p) const {
+  GeoPoint ToGeoPoint(const ShapePoint &p) const noexcept {
     return GeoPoint(center.longitude + Angle::Native(p.x),
                     center.latitude + Angle::Native(p.y));
   }
@@ -262,13 +262,13 @@ public:
    * @return thinning level, range: 0 .. XShape::THINNING_LEVELS-1
    */
   [[gnu::pure]]
-  unsigned GetThinningLevel(double map_scale) const;
+  unsigned GetThinningLevel(double map_scale) const noexcept;
 
   /**
    * @return minimum distance between points in ShapePoint coordinates
    */
   [[gnu::pure]]
-  unsigned GetMinimumPointDistance(unsigned level) const;
+  unsigned GetMinimumPointDistance(unsigned level) const noexcept;
 #endif
 
   /**
@@ -282,7 +282,7 @@ public:
   void LoadAll();
 
 protected:
-  void ClearCache();
+  void ClearCache() noexcept;
 };
 
 #endif
