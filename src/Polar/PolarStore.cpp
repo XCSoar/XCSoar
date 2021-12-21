@@ -262,8 +262,8 @@ static constexpr PolarStore::Item internal_polars[] =
   // from SeeYou
   { _T("ASW-28 (15m)"), 310, 200, 92.6, -0.571, 120.38, -0.875, 148.16, -1.394, 10.5, 55.555, 108 },
 
-  // idaflieg measurement, 23.08.2012 at Aalen Elchingen (preliminary result)
-  { _T("AK-8"), 360 , 100, 87.3 , -0.658 , 130.0, -0.973 , 170.0, -1.957 , 9.75 , 50.0 , 107 },
+  // from Akaflieg Karlsruhe, idaflieg measurement 2017 with new winglet design at Aalen Elchingen 
+  { _T("AK-8"), 362 , 100, 84.1343, -0.6524, 130.0, -0.9474, 170.0, -1.8380, 9.75, 50.0, 107 },
 
   // from factory polar (flight manual)
   { _T("Blanik L13-AC"), 500, 0, 70, -0.85, 110, -1.25, 160, -3.2, 17.44, 44.44, 78 }, // duplicate to #106?!
