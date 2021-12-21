@@ -38,13 +38,12 @@ TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
                                int _label_field,
                                ResourceId _icon, ResourceId _big_icon,
                                unsigned _pen_width)
-  :dir(_dir), first(nullptr),
+  :dir(_dir),
    label_field(_label_field), icon(_icon), big_icon(_big_icon),
    pen_width(_pen_width),
    color(_color), scale_threshold(_threshold),
    label_threshold(_label_threshold),
-   important_label_threshold(_important_label_threshold),
-   cache_bounds(GeoBounds::Invalid())
+   important_label_threshold(_important_label_threshold)
 {
   if (msShapefileOpen(&file, "rb", dir, filename, 0) == -1)
     return;

@@ -68,7 +68,7 @@ class TopographyFile {
   GeoPoint center;
 
   AllocatedArray<ShapeList> shapes;
-  const ShapeList *first;
+  const ShapeList *first = nullptr;
 
   const int label_field;
 
@@ -101,7 +101,7 @@ class TopographyFile {
    * The current scope of the shape cache.  If the screen exceeds this
    * rectangle, then we need to update the cache.
    */
-  GeoBounds cache_bounds;
+  GeoBounds cache_bounds = GeoBounds::Invalid();
 
 public:
   /**
