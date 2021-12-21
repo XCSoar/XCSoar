@@ -111,10 +111,10 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
     return;
   }
 
-  const unsigned input_lines = std::min((unsigned)shape.numlines,
-                                        (unsigned)MAX_LINES);
-  unsigned num_points = 0;
-  for (unsigned l = 0; l < input_lines; ++l) {
+  const std::size_t input_lines = std::min((std::size_t)shape.numlines,
+                                           MAX_LINES);
+  std::size_t num_points = 0;
+  for (std::size_t l = 0; l < input_lines; ++l) {
     if (shape.line[l].numpoints < min_points)
       /* malformed shape */
       continue;
@@ -136,10 +136,10 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
   points = new GeoPoint[num_points];
   GeoPoint *p = points;
 #endif
-  for (unsigned l = 0; l < num_lines; ++l) {
+  for (std::size_t l = 0; l < num_lines; ++l) {
     const pointObj *src = shape.line[l].point;
     num_points = lines[l];
-    for (unsigned j = 0; j < num_points; ++j, ++src) {
+    for (std::size_t j = 0; j < num_points; ++j, ++src) {
 #ifdef ENABLE_OPENGL
       const GeoPoint vertex(Angle::Degrees(src->x), Angle::Degrees(src->y));
       const GeoPoint relative = vertex - file_center;
@@ -177,9 +177,9 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance) noexcept
   assert(indices[thinning_level] == nullptr);
 
   uint16_t *idx, *idx_count;
-  unsigned num_points = 0;
+  std::size_t num_points = 0;
 
-  for (unsigned i=0; i < num_lines; i++)
+  for (std::size_t i=0; i < num_lines; i++)
     num_points += lines[i];
 
   if (type == MS_SHAPE_LINE) {
@@ -221,13 +221,13 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance) noexcept
 
     *idx_count = 0;
     const ShapePoint *pt = points;
-    for (unsigned i=0; i < num_lines; i++) {
-      unsigned count = PolygonToTriangles(pt, lines[i], idx + *idx_count,
-                                          min_distance);
+    for (std::size_t i=0; i < num_lines; i++) {
+      std::size_t count = PolygonToTriangles(pt, lines[i], idx + *idx_count,
+                                             min_distance);
       if (i > 0) {
         const GLushort offset = pt - points;
-        const unsigned max_idx_count = *idx_count + count;
-        for (unsigned j=*idx_count; j < max_idx_count; j++)
+        const std::size_t max_idx_count = *idx_count + count;
+        for (std::size_t j = *idx_count; j < max_idx_count; j++)
           idx[j] += offset;
       }
       *idx_count += count;

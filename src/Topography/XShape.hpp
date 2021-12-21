@@ -35,6 +35,7 @@ Copyright_License {
 #endif
 
 #include <array>
+#include <cstddef>
 #include <cstdint>
 
 #include <tchar.h>
@@ -42,9 +43,9 @@ Copyright_License {
 struct GeoPoint;
 
 class XShape {
-  static constexpr unsigned MAX_LINES = 32;
+  static constexpr std::size_t MAX_LINES = 32;
 #ifdef ENABLE_OPENGL
-  static constexpr unsigned THINNING_LEVELS = 4;
+  static constexpr std::size_t THINNING_LEVELS = 4;
 #endif
 
   GeoBounds bounds;
