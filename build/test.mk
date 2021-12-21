@@ -1137,6 +1137,7 @@ $(eval $(call link-program,KeyCodeDumper,KEY_CODE_DUMPER))
 LOAD_TOPOGRAPHY_SOURCES = \
 	$(SRC)/Topography/TopographyStore.cpp \
 	$(SRC)/Topography/TopographyFile.cpp \
+	$(SRC)/Topography/Index.cpp \
 	$(SRC)/Topography/XShape.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
@@ -1767,6 +1768,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Topography/TopographyFileRenderer.cpp \
 	$(SRC)/Topography/TopographyRenderer.cpp \
 	$(SRC)/Topography/TopographyGlue.cpp \
+	$(SRC)/Topography/Index.cpp \
 	$(SRC)/Topography/XShape.cpp \
 	$(SRC)/Topography/CachedTopographyRenderer.cpp \
 	$(SRC)/Units/Units.cpp \
