@@ -98,6 +98,9 @@ class XShape {
   BasicAllocatedString<TCHAR> label;
 
 public:
+  /**
+   * Throws on error.
+   */
   XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
          int label_field=-1);
 

@@ -94,12 +94,12 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
   msInitShape(&shape);
   AtScopeExit(&shape) { msFreeShape(&shape); };
   msSHPReadShape(shpfile->hSHP, i, &shape);
+  if (shape.type == MS_SHAPE_NULL)
+    throw std::runtime_error{"Failed to read shape"};
 
   bounds = ImportRect(shape.bounds);
-  if (!bounds.Check()) {
-    /* malformed bounds */
-    return;
-  }
+  if (!bounds.Check())
+    throw std::runtime_error{"Malformed shape bounds"};
 
   type = shape.type;
 
