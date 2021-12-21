@@ -128,14 +128,13 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
   /* OpenGL: convert GeoPoints to ShapePoints, make them relative to
      the map's boundary center */
 
-  points = new ShapePoint[num_points];
-  ShapePoint *p = points;
+  points = std::make_unique<ShapePoint[]>(num_points);
 #else // !ENABLE_OPENGL
   /* convert all points of all lines to GeoPoints */
 
-  points = new GeoPoint[num_points];
-  GeoPoint *p = points;
+  points = std::make_unique<GeoPoint[]>(num_points);
 #endif
+  auto *p = points.get();
   for (std::size_t l = 0; l < num_lines; ++l) {
     const pointObj *src = shape.line[l].point;
     num_points = lines[l];
@@ -159,15 +158,7 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
   }
 }
 
-XShape::~XShape() noexcept
-{
-  delete[] points;
-#ifdef ENABLE_OPENGL
-  // Note: index_count and indices share one buffer
-  for (auto *i : index_count)
-    delete[] i;
-#endif
-}
+XShape::~XShape() noexcept = default;
 
 #ifdef ENABLE_OPENGL
 
@@ -185,12 +176,12 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance) noexcept
   if (type == MS_SHAPE_LINE) {
     if (num_points <= 2)
       return false;  // line cannot be simplified, so don't create indices
-    index_count[thinning_level] = idx_count =
-      new GLushort[num_lines + num_points];
+    index_count[thinning_level] = std::make_unique<GLushort[]>(num_lines + num_points);
+    idx_count = index_count[thinning_level].get();
     indices[thinning_level] = idx = idx_count + num_lines;
 
     const uint16_t *end_l = lines + num_lines;
-    const ShapePoint *p = points;
+    const ShapePoint *p = points.get();
     unsigned i = 0;
     for (const uint16_t *l = lines; l < end_l; l++) {
       assert(*l >= 2);
@@ -215,17 +206,17 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance) noexcept
     // TODO: free memory saved by thinning (use malloc/realloc or some class?)
     return true;
   } else if (type == MS_SHAPE_POLYGON) {
-    index_count[thinning_level] = idx_count =
-      new GLushort[1 + 3*(num_points-2) + 2*(num_lines-1)];
+    index_count[thinning_level] = std::make_unique<GLushort[]>(1 + 3 * (num_points - 2) + 2 * (num_lines - 1));
+    idx_count = index_count[thinning_level].get();
     indices[thinning_level] = idx = idx_count + 1;
 
     *idx_count = 0;
-    const ShapePoint *pt = points;
+    const ShapePoint *pt = points.get();
     for (std::size_t i=0; i < num_lines; i++) {
       std::size_t count = PolygonToTriangles(pt, lines[i], idx + *idx_count,
                                              min_distance);
       if (i > 0) {
-        const GLushort offset = pt - points;
+        const GLushort offset = pt - points.get();
         const std::size_t max_idx_count = *idx_count + count;
         for (std::size_t j = *idx_count; j < max_idx_count; j++)
           idx[j] += offset;
@@ -250,7 +241,7 @@ XShape::GetIndices(int thinning_level, ShapeScalar min_distance) const noexcept
       return {};
   }
 
-  return {indices[thinning_level], index_count[thinning_level]};
+  return {indices[thinning_level], index_count[thinning_level].get()};
 }
 
 #endif // ENABLE_OPENGL

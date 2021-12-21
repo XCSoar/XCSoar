@@ -37,6 +37,9 @@ Copyright_License {
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <memory>
+
+#include <tchar.h>
 
 #include <tchar.h>
 
@@ -68,7 +71,7 @@ class XShape {
    * All points of all lines.
    */
 #ifdef ENABLE_OPENGL
-  ShapePoint *points = nullptr;
+  std::unique_ptr<ShapePoint[]> points;
 
   /**
    * Indices of polygon triangles or lines with reduced number of vertices.
@@ -81,7 +84,7 @@ class XShape {
    * For lines there will be an array of size num_lines for each thinning
    * level, which contains the number of points for each line.
    */
-  std::array<uint16_t *, THINNING_LEVELS> index_count{};
+  std::array<std::unique_ptr<uint16_t[]>, THINNING_LEVELS> index_count;
 
   /**
    * The start offset in the #GLArrayBuffer (vertex buffer object).
@@ -89,7 +92,7 @@ class XShape {
    */
   mutable unsigned offset;
 #else // !ENABLE_OPENGL
-  GeoPoint *points = nullptr;
+  std::unique_ptr<GeoPoint[]> points;
 #endif
 
   BasicAllocatedString<TCHAR> label;
@@ -144,7 +147,7 @@ public:
 #else
   const GeoPoint *GetPoints() const noexcept {
 #endif
-    return points;
+    return points.get();
   }
 
   const TCHAR *GetLabel() const noexcept {
