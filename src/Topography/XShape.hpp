@@ -34,8 +34,10 @@ Copyright_License {
 #include "Topography/XShapePoint.hpp"
 #endif
 
-#include <tchar.h>
+#include <array>
 #include <cstdint>
+
+#include <tchar.h>
 
 struct GeoPoint;
 
@@ -70,7 +72,7 @@ class XShape {
   /**
    * Indices of polygon triangles or lines with reduced number of vertices.
    */
-  uint16_t *indices[THINNING_LEVELS]{};
+  std::array<uint16_t *, THINNING_LEVELS> indices{};
 
   /**
    * For polygons this will contain the total number of triangle vertices
@@ -78,7 +80,7 @@ class XShape {
    * For lines there will be an array of size num_lines for each thinning
    * level, which contains the number of points for each line.
    */
-  uint16_t *index_count[THINNING_LEVELS]{};
+  std::array<uint16_t *, THINNING_LEVELS> index_count{};
 
   /**
    * The start offset in the #GLArrayBuffer (vertex buffer object).
