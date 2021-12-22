@@ -60,7 +60,7 @@ public:
 #endif
 
   void DrawLabels(Canvas &canvas, const WindowProjection &projection,
-                  LabelBlock &label_block) const noexcept {
+                  LabelBlock &label_block) noexcept {
     renderer.DrawLabels(canvas, projection, label_block);
   }
 };

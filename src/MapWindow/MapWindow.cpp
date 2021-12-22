@@ -25,6 +25,7 @@ Copyright_License {
 #include "OverlayBitmap.hpp"
 #include "Look/MapLook.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
+#include "Topography/TopographyStore.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Weather/Rasp/RaspRenderer.hpp"
 #include "Computer/GlideComputer.hpp"

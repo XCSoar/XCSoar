@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "CachedTopographyRenderer.hpp"
+#include "TopographyStore.hpp"
 
 #ifndef ENABLE_OPENGL
 
