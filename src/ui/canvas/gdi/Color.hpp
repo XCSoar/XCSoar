@@ -59,6 +59,9 @@ public:
   explicit constexpr Color(RGB8Color other)
     :value(RGB(other.Red(), other.Green(), other.Blue())) {}
 
+  explicit constexpr Color(BGRA8Color src) noexcept
+    :value(RGB(src.Red(), src.Green(), src.Blue())) {}
+
   /**
    * Returns the red part of the color
    * @return The red part of the color (0-255)

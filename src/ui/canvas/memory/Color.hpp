@@ -72,6 +72,9 @@ public:
   explicit constexpr Color(RGB8Color other, uint8_t _alpha=OPAQUE)
     :luminosity(other), alpha(_alpha) {}
 
+  explicit constexpr Color(BGRA8Color src) noexcept
+    :luminosity((RGB8Color)src), alpha(src.Alpha()) {}
+
 #else
   constexpr
   Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a=OPAQUE)
@@ -79,6 +82,9 @@ public:
 
   explicit constexpr Color(RGB8Color other)
     :value({other.Red(), other.Green(), other.Blue(), OPAQUE}) {}
+
+  explicit constexpr Color(BGRA8Color src) noexcept
+    :value(src) {}
 #endif
 
 #ifdef GREYSCALE

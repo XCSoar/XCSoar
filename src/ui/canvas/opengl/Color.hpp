@@ -86,6 +86,10 @@ public:
     :r(Import(other.Red())), g(Import(other.Green())), b(Import(other.Blue())),
      a(MAX) {}
 
+  explicit constexpr Color(BGRA8Color src) noexcept
+    :r(Import(src.Red())), g(Import(src.Green())), b(Import(src.Blue())),
+     a(Import(src.Alpha())) {}
+
   Color() noexcept = default;
 
 #ifdef HAVE_GLES
