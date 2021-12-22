@@ -28,7 +28,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "ui/dim/Point.hpp"
 #include "ui/dim/BulkPoint.hpp"
-#include "util/Clamp.hpp"
 
 #include <algorithm>
 
@@ -54,7 +53,7 @@ ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
       }
     }
 
-    const auto f = Clamp(double(proj) / mag12, 0., 1.);
+    const auto f = std::clamp(double(proj) / mag12, 0., 1.);
     // location of 'closest' point
     return PixelPoint(lround(v12.x * f) + p1.x,
                       lround(v12.y * f) + p1.y);
