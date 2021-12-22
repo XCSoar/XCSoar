@@ -31,6 +31,7 @@ Copyright_License {
 #include "Topography/XShape.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "system/Args.hpp"
+#include "io/FileLineReader.hpp"
 #include "io/ZipArchive.hpp"
 #include "io/ZipLineReader.hpp"
 #include "util/PrintException.hxx"
@@ -65,19 +66,31 @@ TriangulateAll(const TopographyStore &store)
 
 int main(int argc, char **argv)
 try {
-  Args args(argc, argv, "PATH");
-  const auto path = args.ExpectNextPath();
+  Args args(argc, argv, "{FILE.xcm | FILE.tpl PATH}");
+  const auto file = args.ExpectNextPath();
+  decltype(args.ExpectNextPath()) directory{};
+  if (!args.IsEmpty())
+    directory = args.ExpectNextPath();
   args.ExpectEnd();
-
-  ZipArchive archive(path);
-
-  ZipLineReaderA reader(archive.get(), "topology.tpl");
 
   TopographyStore topography;
 
-  {
-    ConsoleOperationEnvironment operation;
-    topography.Load(operation, reader, NULL, archive.get());
+  if (directory == nullptr) {
+    ZipArchive archive(file);
+
+    ZipLineReaderA reader(archive.get(), "topology.tpl");
+
+    {
+      ConsoleOperationEnvironment operation;
+      topography.Load(operation, reader, NULL, archive.get());
+    }
+  } else {
+    FileLineReaderA reader{file};
+
+    {
+      ConsoleOperationEnvironment operation;
+      topography.Load(operation, reader, directory, nullptr);
+    }
   }
 
   topography.LoadAll();
