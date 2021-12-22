@@ -277,8 +277,11 @@ FindDataPath() noexcept
 
   if (IsAndroid()) {
 #ifdef ANDROID
+    const auto env = Java::GetEnv();
+
     /* try Context.getExternalStoragePublicDirectory() */
-    if (auto path = Environment::getExternalStoragePublicDirectory("XCSoarData");
+    if (auto path = Environment::GetExternalStoragePublicDirectory(env,
+                                                                   "XCSoarData");
         path != nullptr) {
       __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                           "Environment.getExternalStoragePublicDirectory()='%s'",

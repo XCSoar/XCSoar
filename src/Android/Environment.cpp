@@ -49,21 +49,14 @@ Deinitialise(JNIEnv *env) noexcept
   cls.Clear(env);
 }
 
-static Java::String
-getExternalStoragePublicDirectory(JNIEnv *env, const char *type) noexcept
+AllocatedPath
+GetExternalStoragePublicDirectory(JNIEnv *env, const char *type) noexcept
 {
   Java::String type2(env, type);
   Java::File file(env, env->CallStaticObjectMethod(cls,
                                                    getExternalStoragePublicDirectory_method,
                                                    type2.Get()));
-  return file.GetAbsolutePathChecked();
-}
-
-AllocatedPath
-getExternalStoragePublicDirectory(const char *type) noexcept
-{
-  JNIEnv *env = Java::GetEnv();
-  return Java::ToPathChecked(getExternalStoragePublicDirectory(env, type));
+  return Java::ToPathChecked(file.GetAbsolutePathChecked());
 }
 
 } // namespace Environment
