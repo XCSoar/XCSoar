@@ -44,6 +44,7 @@ Copyright_License {
 #endif
 
 #include <algorithm>
+#include <list>
 
 #include <cassert>
 #include <stdlib.h>
@@ -66,17 +67,19 @@ Copyright_License {
 #define KOBO_USER_DATA "/mnt/onboard"
 
 /**
- * The absolute location of the XCSoarData directory.
+ * A list of XCSoarData directories.  The first one is the primary
+ * one, where "%LOCAL_PATH%\\" refers to.
  */
-static AllocatedPath data_path;
+static std::list<AllocatedPath> data_paths;
+
 static AllocatedPath cache_path;
 
 Path
 GetPrimaryDataPath() noexcept
 {
-  assert(data_path != nullptr);
+  assert(!data_paths.empty());
 
-  return data_path;
+  return data_paths.front();
 }
 
 void
@@ -85,7 +88,11 @@ SetPrimaryDataPath(Path path) noexcept
   assert(path != nullptr);
   assert(!path.IsEmpty());
 
-  data_path = path;
+  if (auto i = std::find(data_paths.begin(), data_paths.end(), path);
+      i != data_paths.end())
+    data_paths.erase(i);
+
+  data_paths.emplace_front(path);
 
 #ifndef ANDROID
   cache_path = LocalPath(_T("cache"));
@@ -240,18 +247,18 @@ GetHomeDataPath(bool create=false) noexcept
 #endif
 }
 
-static AllocatedPath
-FindDataPath() noexcept
+static std::list<AllocatedPath>
+FindDataPaths() noexcept
 {
-#ifdef _WIN32
-  if (auto path = FindDataPathAtModule(nullptr);
-      path != nullptr)
-      return path;
-#endif
+  std::list<AllocatedPath> result;
 
-  if constexpr (IsKobo())
-    return Path(Path(_T(KOBO_USER_DATA DIR_SEPARATOR_S XCSDATADIR)));
+  /* Kobo: hard-coded XCSoarData path */
+  if constexpr (IsKobo()) {
+    result.emplace_back(_T(KOBO_USER_DATA DIR_SEPARATOR_S XCSDATADIR));
+    return result;
+  }
 
+  /* Android: ask the Android API */
   if constexpr (IsAndroid()) {
 #ifdef ANDROID
     const auto env = Java::GetEnv();
@@ -263,26 +270,32 @@ FindDataPath() noexcept
       __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                           "Environment.getExternalStoragePublicDirectory()='%s'",
                           path.c_str());
-      return path;
+      result.emplace_back(std::move(path));
     }
 #endif
+
+    return result;
   }
 
-  if (auto path = GetHomeDataPath(true); path != nullptr)
-      return path;
+#ifdef _WIN32
+  /* look for a XCSoarData directory in the same directory as
+     XCSoar.exe */
+  if (auto path = FindDataPathAtModule(nullptr); path != nullptr)
+    result.emplace_back(std::move(path));
+#endif
 
-  return nullptr;
+  if (auto path = GetHomeDataPath(result.empty());
+      path != nullptr && path != result.front())
+    result.emplace_back(std::move(path));
+
+  return result;
 }
 
 void
 VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
 {
-  const auto data_path = GetPrimaryDataPath();
-  Directory::VisitSpecificFiles(data_path, filter, visitor, true);
-
-  if (const auto home_path = GetHomeDataPath();
-      home_path != nullptr && data_path != home_path)
-    Directory::VisitSpecificFiles(home_path, filter, visitor, true);
+  for (const auto &i : data_paths)
+    Directory::VisitSpecificFiles(i, filter, visitor, true);
 }
 
 Path
@@ -303,8 +316,8 @@ MakeCacheDirectory(const TCHAR *name) noexcept
 bool
 InitialiseDataPath()
 {
-  data_path = FindDataPath();
-  if (data_path == nullptr)
+  data_paths = FindDataPaths();
+  if (data_paths.empty())
     return false;
 
 #ifdef ANDROID
@@ -323,7 +336,7 @@ InitialiseDataPath()
 void
 DeinitialiseDataPath() noexcept
 {
-  data_path = nullptr;
+  data_paths.clear();
 }
 
 void
