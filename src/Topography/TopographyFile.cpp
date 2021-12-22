@@ -105,7 +105,7 @@ TopographyFile::ClearCache() noexcept
   for (auto &i : shapes)
     i.shape.reset();
 
-  first = nullptr;
+  list.clear();
 }
 
 static std::unique_ptr<XShape>
@@ -157,19 +157,19 @@ TopographyFile::Update(const WindowProjection &map_projection)
   assert(status != nullptr);
 
   // Iterate through the shapefile entries
-  const auto **current = &first;
+  auto prev = list.before_begin();
   auto it = shapes.begin();
   for (std::size_t i = 0; i < file.size(); ++i, ++it) {
     if (!msGetBit(status, i)) {
       // If the shape is outside the bounds
       // delete the shape from the cache
       if (it->shape != nullptr) {
-        assert(*current == it);
+        assert(&*std::next(prev) == it);
 
         /* remove from linked list (protected) */
         {
           const std::lock_guard<Mutex> lock(mutex);
-          *current = it->next;
+          list.erase_after(prev);
           ++serial;
         }
 
@@ -180,25 +180,25 @@ TopographyFile::Update(const WindowProjection &map_projection)
     } else {
       // is inside the bounds
       if (it->shape == nullptr) {
-        assert(*current != it);
+        assert(&*std::next(prev) != it);
 
         // shape isn't cached yet -> cache the shape
         it->shape = LoadShape(file, center, i, label_field);
-        it->next = *current;
 
         /* insert into linked list (protected) */
         {
           const std::lock_guard<Mutex> lock(mutex);
-          *current = it;
+          prev = list.insert_after(prev, *it);
           ++serial;
         }
+      } else {
+        ++prev;
+        assert(&*prev == it);
       }
-
-      current = &it->next;
     }
   }
-  // end of list marker
-  assert(*current == nullptr);
+
+  assert(std::next(prev) == list.end());
 
   return true;
 }
@@ -207,18 +207,22 @@ void
 TopographyFile::LoadAll()
 {
   // Iterate through the shapefile entries
-  const auto **current = &first;
+  auto prev = list.before_begin();
   auto it = shapes.begin();
   for (std::size_t i = 0; i < file.size(); ++i, ++it) {
-    if (it->shape == nullptr)
+    if (it->shape == nullptr) {
+      assert(&*std::next(prev) != it);
       // shape isn't cached yet -> cache the shape
       it->shape = LoadShape(file, center, i, label_field);
-    // update list pointer
-    *current = it;
-    current = &it->next;
+      // update list pointer
+      prev = list.insert_after(prev, *it);
+    } else {
+      ++prev;
+      assert(&*prev == it);
+    }
   }
-  // end of list marker
-  *current = nullptr;
+
+  assert(std::next(prev) == list.end());
 
   ++serial;
 }

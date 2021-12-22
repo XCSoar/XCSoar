@@ -28,6 +28,7 @@ Copyright_License {
 #include "shapelib/mapserver.h"
 #include "Geo/GeoBounds.hpp"
 #include "util/AllocatedArray.hxx"
+#include "util/IntrusiveForwardList.hxx"
 #include "util/Serial.hpp"
 #include "ui/canvas/Color.hpp"
 #include "ResourceId.hpp"
@@ -89,9 +90,7 @@ public:
 };
 
 class TopographyFile {
-  struct ShapeEnvelope {
-    const ShapeEnvelope *next;
-
+  struct ShapeEnvelope final : IntrusiveForwardListHook {
     std::unique_ptr<const XShape> shape;
   };
 
@@ -110,7 +109,9 @@ class TopographyFile {
   GeoPoint center;
 
   AllocatedArray<ShapeEnvelope> shapes;
-  const ShapeEnvelope *first = nullptr;
+
+  using ShapeList = IntrusiveForwardList<ShapeEnvelope>;
+  ShapeList list;
 
   const int label_field;
 
@@ -155,33 +156,26 @@ public:
   class const_iterator {
     friend class TopographyFile;
 
-    const ShapeEnvelope *current;
+    ShapeList::const_iterator i;
 
-    const_iterator(const ShapeEnvelope *p):current(p) {}
+    constexpr const_iterator(ShapeList::const_iterator _i) noexcept:i(_i) {}
 
   public:
     const_iterator &operator++() {
-      assert(current != nullptr);
-
-      current = current->next;
+      ++i;
       return *this;
     }
 
     const XShape &operator*() const {
-      assert(current != nullptr);
-      assert(current->shape != nullptr);
-
-      return *current->shape;
+      return *i->shape;
     }
 
     const XShape *operator->() const {
-      assert(current != nullptr);
-
-      return current->shape.operator->();
+      return i->shape.operator->();
     }
 
     bool operator==(const const_iterator &other) const {
-      return current == other.current;
+      return i == other.i;
     }
 
     bool operator!=(const const_iterator &other) const {
@@ -281,11 +275,11 @@ public:
   }
 
   const_iterator begin() const noexcept {
-    return const_iterator(first);
+    return const_iterator{list.begin()};
   }
 
   const_iterator end() const noexcept {
-    return const_iterator(nullptr);
+    return const_iterator{list.end()};
   }
 
   [[gnu::pure]]
