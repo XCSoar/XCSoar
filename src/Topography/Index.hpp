@@ -32,8 +32,11 @@ Copyright_License {
 #include "ResourceId.hpp"
 
 #include <optional>
+#include <string_view>
 
 struct TopographyIndexEntry {
+  std::string_view name;
+
   double shape_range, label_range, important_label_range;
 
   ResourceId icon, big_icon;
@@ -50,4 +53,4 @@ struct TopographyIndexEntry {
 };
 
 std::optional<TopographyIndexEntry>
-ParseTopographyIndexLine(char *line, char *shape_filename_end) noexcept;
+ParseTopographyIndexLine(char *line) noexcept;

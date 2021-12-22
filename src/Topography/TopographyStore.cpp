@@ -115,9 +115,14 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
   while (!files.full() && (line = reader.ReadLine()) != nullptr) {
     // .tpl Line format: filename,range,icon,field,r,g,b,pen_width,label_range,important_range,alpha
 
-    const auto entry = ParseTopographyIndexLine(line, shape_filename_end);
+    const auto entry = ParseTopographyIndexLine(line);
     if (!entry)
       continue;
+
+    // Extract filename and append it to the shape_filename buffer
+    memcpy(shape_filename_end, entry->name.data(), entry->name.size());
+    // Append ".shp" file extension to the shape_filename buffer
+    strcpy(shape_filename_end + entry->name.size(), ".shp");
 
     // Create TopographyFile instance from parsed line
     try {

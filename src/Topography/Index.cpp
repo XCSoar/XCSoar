@@ -26,8 +26,6 @@ Copyright_License {
 #include "util/StringCompare.hxx"
 #include "Resources.hpp"
 
-#include <string_view>
-
 #include <stdlib.h>
 #include <tchar.h>
 
@@ -80,7 +78,7 @@ static constexpr LOOKUP_ICON icon_list[] = {
 };
 
 std::optional<TopographyIndexEntry>
-ParseTopographyIndexLine(char *line, char *shape_filename_end) noexcept
+ParseTopographyIndexLine(char *line) noexcept
 {
   // .tpl Line format: filename,range,icon,field,r,g,b,pen_width,label_range,important_range,alpha
 
@@ -96,10 +94,7 @@ ParseTopographyIndexLine(char *line, char *shape_filename_end) noexcept
       // If no comma was found -> ignore this line/shapefile
       return std::nullopt;
 
-    // Extract filename and append it to the shape_filename buffer
-    memcpy(shape_filename_end, line, p - line);
-    // Append ".shp" file extension to the shape_filename buffer
-    strcpy(shape_filename_end + (p - line), ".shp");
+    entry.name = {line, std::size_t(p - line)};
 
     // Parse shape range
     entry.shape_range = strtod(p + 1, &p) * 1000;
