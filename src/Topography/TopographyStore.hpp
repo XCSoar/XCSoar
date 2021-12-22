@@ -27,8 +27,7 @@ Copyright_License {
 #include "util/NonCopyable.hpp"
 #include "util/StaticArray.hxx"
 
-#include <tchar.h>
-
+class Path;
 class WindowProjection;
 class TopographyFile;
 class NLineReader;
@@ -94,7 +93,7 @@ public:
   void LoadAll() noexcept;
 
   void Load(OperationEnvironment &operation, NLineReader &reader,
-            const TCHAR *directory, struct zzip_dir *zdir = nullptr) noexcept;
+            Path directory, struct zzip_dir *zdir = nullptr) noexcept;
   void Reset() noexcept;
 };
 

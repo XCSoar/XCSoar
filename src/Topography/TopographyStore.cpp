@@ -25,8 +25,9 @@ Copyright_License {
 #include "Topography/TopographyFile.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
-#include "util/ConvertString.hpp"
 #include "io/LineReader.hpp"
+#include "system/ConvertPathName.hpp"
+#include "system/Path.hpp"
 #include "Operation/Operation.hpp"
 #include "Compatibility/path.h"
 #include "LogFile.hpp"
@@ -134,7 +135,7 @@ TopographyStore::LoadAll() noexcept
 
 void
 TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
-                      const TCHAR *directory, struct zzip_dir *zdir) noexcept
+                      Path directory, struct zzip_dir *zdir) noexcept
 {
   Reset();
 
@@ -142,7 +143,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
   // (shape_filename will be modified with the shape_filename_end pointer)
   char shape_filename[MAX_PATH];
   if (directory != nullptr) {
-    const WideToACPConverter narrow_directory(directory);
+    const NarrowPathName narrow_directory(directory);
     strcpy(shape_filename, narrow_directory);
     strcat(shape_filename, DIR_SEPARATOR_S);
   } else
