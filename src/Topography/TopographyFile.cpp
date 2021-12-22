@@ -31,6 +31,13 @@ Copyright_License {
 #include <algorithm>
 #include <stdexcept>
 
+inline
+ShapeFile::ShapeFile(zzip_dir *dir, const char *filename)
+{
+  if (msShapefileOpen(&obj, "rb", dir, filename, 0) == -1)
+    throw std::runtime_error{"Failed to open shapefile"};
+}
+
 TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
                                double _threshold,
                                double _label_threshold,
@@ -40,32 +47,24 @@ TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
                                ResourceId _icon, ResourceId _big_icon,
                                unsigned _pen_width)
   :dir(_dir),
+   file(dir, filename),
    label_field(_label_field), icon(_icon), big_icon(_big_icon),
    pen_width(_pen_width),
    color(_color), scale_threshold(_threshold),
    label_threshold(_label_threshold),
    important_label_threshold(_important_label_threshold)
 {
-  if (msShapefileOpen(&file, "rb", dir, filename, 0) == -1)
-    throw std::runtime_error{"Failed to open shapefile"};
-
-  const std::size_t n_shapes = file.numshapes;
+  const std::size_t n_shapes = file.size();
   constexpr std::size_t MAX_SHAPES = 16 * 1024 * 1024;
-  if (n_shapes == 0) {
-    msShapefileClose(&file);
+  if (n_shapes == 0)
     throw std::runtime_error{"Empty shapefile"};
-  }
 
-  if (n_shapes > MAX_SHAPES) {
-    msShapefileClose(&file);
+  if (n_shapes > MAX_SHAPES)
     throw std::runtime_error{"Too many shapes in shapefile"};
-  }
 
-  const auto file_bounds = ImportRect(file.bounds);
-  if (!file_bounds.Check()) {
-    msShapefileClose(&file);
+  const auto file_bounds = ImportRect(file.GetBounds());
+  if (!file_bounds.Check())
     throw std::runtime_error{"Malformed shapefile bounds"};
-  }
 
   center = file_bounds.GetCenter();
 
@@ -81,7 +80,6 @@ TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
 TopographyFile::~TopographyFile() noexcept
 {
   ClearCache();
-  msShapefileClose(&file);
 
   if (dir != nullptr) {
     --dir->refcount;
@@ -122,11 +120,9 @@ TopographyFile::Update(const WindowProjection &map_projection)
 
   cache_bounds = screenRect.Scale(2);
 
-  rectObj deg_bounds = ConvertRect(cache_bounds);
-
   // Test which shapes are inside the given bounds and save the
   // status to file.status
-  switch (msShapefileWhichShapes(&file, dir, deg_bounds, 0)) {
+  switch (file.WhichShapes(dir, ConvertRect(cache_bounds))) {
   case MS_FAILURE:
     ClearCache();
     throw std::runtime_error{"Failed to update shapefile"};
@@ -139,13 +135,14 @@ TopographyFile::Update(const WindowProjection &map_projection)
     break;
   }
 
-  assert(file.status != nullptr);
+  const auto status = file.GetStatus();
+  assert(status != nullptr);
 
   // Iterate through the shapefile entries
   const ShapeList **current = &first;
   auto it = shapes.begin();
-  for (int i = 0; i < file.numshapes; ++i, ++it) {
-    if (!msGetBit(file.status, i)) {
+  for (std::size_t i = 0; i < file.size(); ++i, ++it) {
+    if (!msGetBit(status, i)) {
       // If the shape is outside the bounds
       // delete the shape from the cache
       if (it->shape != nullptr) {
@@ -169,7 +166,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
         assert(*current != it);
 
         // shape isn't cached yet -> cache the shape
-        it->shape = LoadShape(&file, center, i, label_field);
+        it->shape = LoadShape(file.Native(), center, i, label_field);
         it->next = *current;
 
         /* insert into linked list (protected) */
@@ -195,10 +192,10 @@ TopographyFile::LoadAll()
   // Iterate through the shapefile entries
   const ShapeList **current = &first;
   auto it = shapes.begin();
-  for (int i = 0; i < file.numshapes; ++i, ++it) {
+  for (std::size_t i = 0; i < file.size(); ++i, ++it) {
     if (it->shape == nullptr)
       // shape isn't cached yet -> cache the shape
-      it->shape = LoadShape(&file, center, i, label_field);
+      it->shape = LoadShape(file.Native(), center, i, label_field);
     // update list pointer
     *current = it;
     current = &it->next;
