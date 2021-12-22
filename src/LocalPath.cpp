@@ -345,13 +345,13 @@ InitialiseDataPath()
     return false;
 
 #ifdef ANDROID
-    cache_path = context->GetExternalCacheDir(Java::GetEnv());
-    if (cache_path == nullptr)
-      throw std::runtime_error("No Android cache directory");
+  cache_path = context->GetExternalCacheDir(Java::GetEnv());
+  if (cache_path == nullptr)
+    throw std::runtime_error("No Android cache directory");
 
-    // TODO: delete the old cache directory in XCSoarData?
+  // TODO: delete the old cache directory in XCSoarData?
 #else
-    cache_path = LocalPath(_T("cache"));
+  cache_path = LocalPath(_T("cache"));
 #endif
 
   return true;
