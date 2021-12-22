@@ -78,7 +78,7 @@ static constexpr LOOKUP_ICON icon_list[] = {
 };
 
 std::optional<TopographyIndexEntry>
-ParseTopographyIndexLine(char *line) noexcept
+ParseTopographyIndexLine(const char *line) noexcept
 {
   // .tpl Line format: filename,range,icon,field,r,g,b,pen_width,label_range,important_range,alpha
 
@@ -89,7 +89,7 @@ ParseTopographyIndexLine(char *line) noexcept
       return std::nullopt;
 
     // Find first comma to extract shape filename
-    char *p = strchr(line, ',');
+    const char *p = strchr(line, ',');
     if (p == nullptr || p == line)
       // If no comma was found -> ignore this line/shapefile
       return std::nullopt;
@@ -97,12 +97,15 @@ ParseTopographyIndexLine(char *line) noexcept
     entry.name = {line, std::size_t(p - line)};
 
     // Parse shape range
-    entry.shape_range = strtod(p + 1, &p) * 1000;
-    if (*p != _T(','))
+    char *endptr;
+    entry.shape_range = strtod(p + 1, &endptr) * 1000;
+    if (*endptr != _T(','))
       return std::nullopt;
 
+    p = endptr + 1;
+
     // Extract shape icon name
-    char *start = p + 1;
+    const char *start = p;
     p = strchr(start, ',');
     if (p == nullptr)
       return std::nullopt;
@@ -124,49 +127,63 @@ ParseTopographyIndexLine(char *line) noexcept
     }
 
     // Parse shape field for text display
-    entry.shape_field = strtol(p + 1, &p, 10) - 1;
-    if (*p != _T(','))
+    entry.shape_field = strtol(p + 1, &endptr, 10) - 1;
+    if (*endptr != _T(','))
       return std::nullopt;
+
+    p = endptr + 1;
 
     // Parse red component of line / shading colour
-    uint8_t red = (uint8_t)strtol(p + 1, &p, 10);
-    if (*p != _T(','))
+    uint8_t red = (uint8_t)strtol(p, &endptr, 10);
+    if (*endptr != _T(','))
       return std::nullopt;
+
+    p = endptr + 1;
 
     // Parse green component of line / shading colour
-    uint8_t green = (uint8_t)strtol(p + 1, &p, 10);
-    if (*p != _T(','))
+    uint8_t green = (uint8_t)strtol(p, &endptr, 10);
+    if (*endptr != _T(','))
       return std::nullopt;
 
+    p = endptr + 1;
+
     // Parse blue component of line / shading colour
-    uint8_t blue = (uint8_t)strtol(p + 1, &p, 10);
+    uint8_t blue = (uint8_t)strtol(p, &endptr, 10);
+
+    p = endptr;
 
     // Parse pen width of lines
     entry.pen_width = 1;
     if (*p == _T(',')) {
-      entry.pen_width = strtoul(p + 1, &p, 10);
+      entry.pen_width = strtoul(p + 1, &endptr, 10);
       if (entry.pen_width < 1)
         entry.pen_width = 1;
       else if (entry.pen_width > 31)
         entry.pen_width = 31;
+
+      p = endptr;
     }
 
     // Parse range for displaying labels
     entry.label_range = entry.shape_range;
-    if (*p == _T(','))
-      entry.label_range = strtod(p + 1, &p) * 1000;
+    if (*p == _T(',')) {
+      entry.label_range = strtod(p + 1, &endptr) * 1000;
+      p = endptr;
+    }
 
     // Parse range for displaying labels with "important" rendering style
     entry.important_label_range = 0;
-    if (*p == _T(','))
-      entry.important_label_range = strtod(p + 1, &p) * 1000;
+    if (*p == _T(',')) {
+      entry.important_label_range = strtod(p + 1, &endptr) * 1000;
+      p = endptr;
+    }
 
     // Handle alpha component
     // If not present at all (i.e. v6.6 or earlier file), default to 100% opaque
     uint8_t alpha = 255;
     if (*p == _T(',')) {
       // An alpha component of shading colour is present (v6.7 or later file).
-      alpha = (uint8_t)strtol(p + 1, &p, 10);
+      alpha = (uint8_t)strtol(p + 1, &endptr, 10);
       // Ignore a totally transparent file!
       if (alpha == 0)
         return std::nullopt;
@@ -175,6 +192,8 @@ ParseTopographyIndexLine(char *line) noexcept
       if (alpha != 255)
         return std::nullopt;
 #endif
+
+      p = endptr;
     }
 
 #ifdef ENABLE_OPENGL

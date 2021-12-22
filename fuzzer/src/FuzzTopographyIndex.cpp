@@ -32,6 +32,6 @@ int
 LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 {
   std::string line{(const char *)data, size};
-  ParseTopographyIndexLine(line.data());
+  ParseTopographyIndexLine(line.c_str());
   return EXIT_SUCCESS;
 }

@@ -53,4 +53,4 @@ struct TopographyIndexEntry {
 };
 
 std::optional<TopographyIndexEntry>
-ParseTopographyIndexLine(char *line) noexcept;
+ParseTopographyIndexLine(const char *line) noexcept;
