@@ -87,16 +87,10 @@ GetMinPointsForShapeType(int shapelib_type) noexcept
   }
 }
 
-XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
-               int label_field)
+XShape::XShape(const shapeObj &shape, const GeoPoint &file_center,
+               const char *_label)
+  :label(ImportLabel(_label))
 {
-  shapeObj shape;
-  msInitShape(&shape);
-  AtScopeExit(&shape) { msFreeShape(&shape); };
-  msSHPReadShape(shpfile->hSHP, i, &shape);
-  if (shape.type == MS_SHAPE_NULL)
-    throw std::runtime_error{"Failed to read shape"};
-
   bounds = ImportRect(shape.bounds);
   if (!bounds.Check())
     throw std::runtime_error{"Malformed shape bounds"};
@@ -150,11 +144,6 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
                       Angle::Degrees(src->y));
 #endif
     }
-  }
-
-  if (label_field >= 0) {
-    const char *src = msDBFReadStringAttribute(shpfile->hDBF, i, label_field);
-    label = ImportLabel(src);
   }
 }
 

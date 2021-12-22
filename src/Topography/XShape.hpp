@@ -101,8 +101,8 @@ public:
   /**
    * Throws on error.
    */
-  XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
-         int label_field=-1);
+  XShape(const shapeObj &shape, const GeoPoint &file_center,
+         const char *label);
 
   ~XShape() noexcept;
 

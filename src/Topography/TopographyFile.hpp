@@ -78,10 +78,13 @@ public:
     return obj.status;
   }
 
-  // TODO eliminate
-  shapefileObj *Native() noexcept {
-    return &obj;
-  }
+  /**
+   * Throws on error.
+   */
+  void ReadShape(shapeObj &shape, std::size_t i);
+
+  [[gnu::pure]]
+  const char *ReadLabel(std::size_t i, unsigned field) noexcept;
 };
 
 class TopographyFile {

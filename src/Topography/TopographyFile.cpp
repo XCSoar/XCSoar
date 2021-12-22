@@ -25,6 +25,7 @@ Copyright_License {
 #include "Topography/XShape.hpp"
 #include "Convert.hpp"
 #include "Projection/WindowProjection.hpp"
+#include "util/ScopeExit.hxx"
 
 #include <zzip/lib.h>
 
@@ -36,6 +37,20 @@ ShapeFile::ShapeFile(zzip_dir *dir, const char *filename)
 {
   if (msShapefileOpen(&obj, "rb", dir, filename, 0) == -1)
     throw std::runtime_error{"Failed to open shapefile"};
+}
+
+inline void
+ShapeFile::ReadShape(shapeObj &shape, std::size_t i)
+{
+  msSHPReadShape(obj.hSHP, i, &shape);
+  if (shape.type == MS_SHAPE_NULL)
+    throw std::runtime_error{"Failed to read shape"};
+}
+
+inline const char *
+ShapeFile::ReadLabel(std::size_t i, unsigned field) noexcept
+{
+  return msDBFReadStringAttribute(obj.hDBF, i, field);
 }
 
 TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
@@ -99,10 +114,18 @@ TopographyFile::ClearCache() noexcept
 }
 
 static XShape *
-LoadShape(shapefileObj *file, const GeoPoint &center, int i,
-          int label_field)
+LoadShape(ShapeFile &file, GeoPoint &center, std::size_t i, int label_field)
 {
-  return new XShape(file, center, i, label_field);
+  shapeObj shape;
+  msInitShape(&shape);
+  AtScopeExit(&shape) { msFreeShape(&shape); };
+  file.ReadShape(shape, i);
+
+  const char *label = label_field >= 0
+    ? file.ReadLabel(i, label_field)
+    : nullptr;
+
+  return new XShape(shape, center, label);
 }
 
 bool
@@ -166,7 +189,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
         assert(*current != it);
 
         // shape isn't cached yet -> cache the shape
-        it->shape = LoadShape(file.Native(), center, i, label_field);
+        it->shape = LoadShape(file, center, i, label_field);
         it->next = *current;
 
         /* insert into linked list (protected) */
@@ -195,7 +218,7 @@ TopographyFile::LoadAll()
   for (std::size_t i = 0; i < file.size(); ++i, ++it) {
     if (it->shape == nullptr)
       // shape isn't cached yet -> cache the shape
-      it->shape = LoadShape(file.Native(), center, i, label_field);
+      it->shape = LoadShape(file, center, i, label_field);
     // update list pointer
     *current = it;
     current = &it->next;
