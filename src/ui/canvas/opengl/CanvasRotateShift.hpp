@@ -37,7 +37,7 @@ class CanvasRotateShift
 {
 public:
   CanvasRotateShift(PixelPoint pos, Angle angle,
-                    int scale = 100) noexcept;
+                    double scale=1.) noexcept;
 
   ~CanvasRotateShift() noexcept;
 

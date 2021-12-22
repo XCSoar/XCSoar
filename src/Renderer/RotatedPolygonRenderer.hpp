@@ -53,7 +53,7 @@ public:
                          const PixelPoint pos, const Angle angle,
                          const unsigned scale=100)
 #ifdef ENABLE_OPENGL
-    :points(src.data()), rotate_shift(pos, angle, scale)
+    :points(src.data()), rotate_shift(pos, angle, scale / 100.)
 #endif
   {
 #ifndef ENABLE_OPENGL
