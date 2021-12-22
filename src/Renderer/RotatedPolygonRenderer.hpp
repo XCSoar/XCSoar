@@ -26,12 +26,12 @@ Copyright_License {
 
 #include "ui/canvas/Canvas.hpp"
 #include "Math/Angle.hpp"
-#include "util/Macros.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/CanvasRotateShift.hpp"
 #else
 #include "Math/Screen.hpp"
+#include <array>
 #endif
 
 #include <algorithm>
@@ -44,7 +44,7 @@ class RotatedPolygonRenderer {
   const BulkPixelPoint *points;
   CanvasRotateShift rotate_shift;
 #else
-  BulkPixelPoint points[64];
+  std::array<BulkPixelPoint, 64> points;
 #endif
 
 public:
@@ -56,19 +56,20 @@ public:
 #endif
   {
 #ifndef ENABLE_OPENGL
-    assert(src.size() <= ARRAY_SIZE(points));
+    assert(src.size() <= points.size());
 
-    std::copy(src.begin(), src.end(), points);
-    PolygonRotateShift({points, src.size()}, pos, angle, scale);
+    std::copy(src.begin(), src.end(), points.begin());
+    PolygonRotateShift(std::span{points}.first(src.size()),
+                       pos, angle, scale);
 #endif
   }
 
   void Draw(Canvas &canvas, unsigned start, unsigned n) const {
 #ifndef ENABLE_OPENGL
-    assert(start + n <= ARRAY_SIZE(points));
+    assert(start + n <= points.size());
 #endif
 
-    canvas.DrawPolygon(points + start, n);
+    canvas.DrawPolygon(&points[0] + start, n);
   }
 };
 

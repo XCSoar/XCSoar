@@ -28,6 +28,7 @@ Copyright_License {
 #include "MapSettings.hpp"
 #include "Asset.hpp"
 #include "Math/Angle.hpp"
+#include "util/Macros.hpp"
 
 #include <algorithm>
 
