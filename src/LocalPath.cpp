@@ -217,7 +217,7 @@ ModuleInFlash(HMODULE module, TCHAR *buffer) noexcept
 static AllocatedPath
 GetHomeDataPath(bool create=false) noexcept
 {
-  if (IsAndroid() || IsKobo())
+  if constexpr (IsAndroid() || IsKobo())
     /* hard-coded path for Android */
     return nullptr;
 
@@ -269,10 +269,10 @@ FindDataPath() noexcept
   }
 #endif
 
-  if (IsKobo())
+  if constexpr (IsKobo())
     return Path(Path(_T(KOBO_USER_DATA DIR_SEPARATOR_S XCSDATADIR)));
 
-  if (IsAndroid()) {
+  if constexpr (IsAndroid()) {
 #ifdef ANDROID
     const auto env = Java::GetEnv();
 
