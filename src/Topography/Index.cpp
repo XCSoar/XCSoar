@@ -26,6 +26,8 @@ Copyright_License {
 #include "util/StringCompare.hxx"
 #include "Resources.hpp"
 
+#include <string_view>
+
 #include <stdlib.h>
 #include <tchar.h>
 
@@ -105,22 +107,19 @@ ParseTopographyIndexLine(char *line, char *shape_filename_end) noexcept
       return std::nullopt;
 
     // Extract shape icon name
-    char icon_name[23];
     char *start = p + 1;
     p = strchr(start, ',');
     if (p == nullptr)
       return std::nullopt;
 
-    // Null-terminate the line string at the next comma for strncpy() call
-    *p = 0;
-    strncpy(icon_name, start, 22);
+    const std::string_view icon_name{start, std::size_t(p - start)};
 
     entry.icon = ResourceId::Null();
     entry.big_icon = ResourceId::Null();
-    if (strlen(icon_name) > 0) {
+    if (!icon_name.empty()) {
       const LOOKUP_ICON *ip = icon_list;
       while (ip->name != nullptr) {
-        if (StringIsEqual(ip->name, icon_name)) {
+        if (icon_name == ip->name) {
           entry.icon = ip->resource_id;
           entry.big_icon = ip->big_resource_id;
           break;
