@@ -137,6 +137,16 @@ Scale(long x) noexcept
 }
 
 [[gnu::const]]
+static inline double
+Scale(double x) noexcept
+{
+  if constexpr (!ScaleSupported())
+    return x;
+
+  return x * (Layout::scale_1024 / 1024.);
+}
+
+[[gnu::const]]
 static inline PixelSize
 Scale(PixelSize size) noexcept
 {

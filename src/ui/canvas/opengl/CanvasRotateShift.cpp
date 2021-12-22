@@ -39,9 +39,7 @@ CanvasRotateShift::CanvasRotateShift(const PixelPoint pos, Angle angle,
                                                 glm::vec3(pos.x, pos.y, 0)),
                                  GLfloat(angle.Radians()),
                                  glm::vec3(0, 0, 1));
-  float gl_scale = scale / 100.f;
-  if (Layout::ScaleSupported())
-    gl_scale *= Layout::scale_1024 / 1024.f;
+  float gl_scale = Layout::Scale(scale / 100.);
   matrix = glm::scale(matrix, glm::vec3(gl_scale));
 
   OpenGL::solid_shader->Use();
