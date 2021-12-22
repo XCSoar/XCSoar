@@ -106,7 +106,7 @@ XShape::XShape(const shapeObj &shape, const GeoPoint &file_center,
   }
 
   const std::size_t input_lines = std::min((std::size_t)shape.numlines,
-                                           MAX_LINES);
+                                           lines.size());
   std::size_t num_points = 0;
   for (std::size_t l = 0; l < input_lines; ++l) {
     if (shape.line[l].numpoints < min_points)
@@ -169,10 +169,10 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance) noexcept
     idx_count = index_count[thinning_level].get();
     indices[thinning_level] = idx = idx_count + num_lines;
 
-    const uint16_t *end_l = lines + num_lines;
+    const auto end_l = std::next(lines.begin(), num_lines);
     const ShapePoint *p = points.get();
     unsigned i = 0;
-    for (const uint16_t *l = lines; l < end_l; l++) {
+    for (auto l = lines.begin(); l != end_l; ++l) {
       assert(*l >= 2);
       const ShapePoint *end_p = p + *l - 1;
       // always add first point

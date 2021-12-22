@@ -65,7 +65,7 @@ class XShape {
    * a fixed-size array to reduce the number of allocations at
    * runtime.
    */
-  uint16_t lines[MAX_LINES];
+  std::array<uint16_t, MAX_LINES> lines;
 
   /**
    * All points of all lines.
@@ -142,7 +142,7 @@ public:
   }
 
   ConstBuffer<uint16_t> GetLines() const noexcept {
-    return { lines, num_lines };
+    return { lines.data(), num_lines };
   }
 
 #ifdef ENABLE_OPENGL
