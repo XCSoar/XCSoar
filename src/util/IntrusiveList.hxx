@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2020 Max Kellermann <max.kellermann@gmail.com>
  * All rights reserved.
  *
  * author: Max Kellermann <mk@cm4all.com>
