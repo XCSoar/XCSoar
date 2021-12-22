@@ -58,8 +58,8 @@ TriangulateAll(const TopographyFile &file)
 static void
 TriangulateAll(const TopographyStore &store)
 {
-  for (unsigned i = 0; i < store.size(); ++i)
-    TriangulateAll(store[i]);
+  for (auto &i : store)
+    TriangulateAll(i);
 }
 
 #endif

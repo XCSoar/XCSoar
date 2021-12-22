@@ -24,12 +24,13 @@ Copyright_License {
 #ifndef TOPOGRAPHY_STORE_HPP
 #define TOPOGRAPHY_STORE_HPP
 
+#include "TopographyFile.hpp"
 #include "util/NonCopyable.hpp"
-#include "util/StaticArray.hxx"
+
+#include <forward_list>
 
 class Path;
 class WindowProjection;
-class TopographyFile;
 class NLineReader;
 class OperationEnvironment;
 struct zzip_dir;
@@ -38,12 +39,7 @@ struct zzip_dir;
  * Class used to manage and render vector topography layers
  */
 class TopographyStore : private NonCopyable {
-public:
-  /** maximum number of topography layers */
-  static constexpr unsigned MAXTOPOGRAPHY = 30;
-
-private:
-  StaticArray<TopographyFile *, MAXTOPOGRAPHY> files;
+  std::forward_list<TopographyFile> files;
 
   /**
    * This number is incremented each time this object is modified.
@@ -51,10 +47,8 @@ private:
   unsigned serial = 0;
 
 public:
-  TopographyStore() = default;
-  ~TopographyStore() noexcept {
-    Reset();
-  }
+  TopographyStore() noexcept;
+  ~TopographyStore() noexcept;
 
   /**
    * Returns a serial for the current state.  The serial gets
@@ -64,12 +58,12 @@ public:
     return serial;
   }
 
-  unsigned size() const noexcept {
-    return files.size();
+  auto begin() const noexcept {
+    return files.begin();
   }
 
-  const TopographyFile &operator [](unsigned i) const noexcept {
-    return *files[i];
+  auto end() const noexcept {
+    return files.end();
   }
 
   /**

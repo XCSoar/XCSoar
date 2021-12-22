@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Topography/TopographyStore.hpp"
-#include "Topography/TopographyFile.hpp"
 #include "Index.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
@@ -37,12 +36,15 @@ Copyright_License {
 
 #include <windef.h> // for MAX_PATH
 
+TopographyStore::TopographyStore() noexcept {}
+TopographyStore::~TopographyStore() noexcept = default;
+
 double
 TopographyStore::GetNextScaleThreshold(double map_scale) const noexcept
 {
   double result(-1);
-  for (auto *file : files) {
-    double threshold = file->GetNextScaleThreshold(map_scale);
+  for (const auto &file : files) {
+    double threshold = file.GetNextScaleThreshold(map_scale);
     if (threshold > result)
       result = threshold;
   }
@@ -60,9 +62,9 @@ TopographyStore::ScanVisibility(const WindowProjection &m_projection,
   // we will make sure we update at least one cache per call
   // to make sure eventually everything gets refreshed
   unsigned num_updated = 0;
-  for (auto *file : files) {
+  for (auto &file : files) {
     try {
-      if (file->Update(m_projection)) {
+      if (file.Update(m_projection)) {
         ++num_updated;
         if (num_updated >= max_update)
           break;
@@ -79,10 +81,8 @@ TopographyStore::ScanVisibility(const WindowProjection &m_projection,
 void
 TopographyStore::LoadAll() noexcept
 {
-  for (const auto &i : files) {
-    TopographyFile &file = *i;
-    file.LoadAll();
-  }
+  for (auto &i : files)
+    i.LoadAll();
 }
 
 void
@@ -111,8 +111,8 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
 
   // Iterate through shape files in the "topology.tpl" file until
   // end or max. file number reached
-  char *line;
-  while (!files.full() && (line = reader.ReadLine()) != nullptr) {
+  auto i = files.before_begin();
+  while (char *line = reader.ReadLine()) {
     // .tpl Line format: filename,range,icon,field,r,g,b,pen_width,label_range,important_range,alpha
 
     const auto entry = ParseTopographyIndexLine(line);
@@ -126,15 +126,15 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
 
     // Create TopographyFile instance from parsed line
     try {
-      TopographyFile *file = new TopographyFile(zdir, shape_filename,
-                                                entry->shape_range,
-                                                entry->label_range,
-                                                entry->important_label_range,
-                                                entry->color,
-                                                entry->shape_field,
-                                                entry->icon, entry->big_icon,
-                                                entry->pen_width);
-      files.append(file);
+      i = files.emplace_after(i,
+                              zdir, shape_filename,
+                              entry->shape_range,
+                              entry->label_range,
+                              entry->important_label_range,
+                              entry->color,
+                              entry->shape_field,
+                              entry->icon, entry->big_icon,
+                              entry->pen_width);
     } catch (...) {
       LogError(std::current_exception());
     }
@@ -147,8 +147,5 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
 void
 TopographyStore::Reset() noexcept
 {
-  for (auto *file : files)
-    delete file;
-
   files.clear();
 }

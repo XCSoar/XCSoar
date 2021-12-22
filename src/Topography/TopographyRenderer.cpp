@@ -24,14 +24,15 @@ Copyright_License {
 #include "Topography/TopographyRenderer.hpp"
 #include "Topography/TopographyFileRenderer.hpp"
 #include "TopographyStore.hpp"
+#include "TopographyFile.hpp"
 
 TopographyRenderer::TopographyRenderer(const TopographyStore &_store,
                                        const TopographyLook &look) noexcept
   :store(_store)
 {
   auto previous = files.before_begin();
-  for (unsigned i = 0; i < store.size(); ++i)
-    previous = files.emplace_after(previous, store[i], look);
+  for (const auto &file : store)
+    previous = files.emplace_after(previous, file, look);
 }
 
 TopographyRenderer::~TopographyRenderer() noexcept = default;
