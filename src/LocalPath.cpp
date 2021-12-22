@@ -223,8 +223,7 @@ GetHomeDataPath(bool create=false) noexcept
 
 #ifdef HAVE_POSIX
   /* on Unix, use ~/.xcsoar */
-  const TCHAR *home = getenv("HOME");
-  if (home != nullptr) {
+  if (const TCHAR *home = getenv("HOME"); home != nullptr) {
     return AllocatedPath::Build(Path(home),
 #ifdef __APPLE__
     /* Mac OS X users are not used to dot-files in their home
@@ -262,11 +261,9 @@ static AllocatedPath
 FindDataPath() noexcept
 {
 #ifdef _WIN32
-  {
-    auto path = FindDataPathAtModule(nullptr);
-    if (path != nullptr)
+  if (auto path = FindDataPathAtModule(nullptr);
+      path != nullptr)
       return path;
-  }
 #endif
 
   if constexpr (IsKobo())
@@ -302,11 +299,8 @@ FindDataPath() noexcept
   }
 #endif
 
-  {
-    auto path = GetHomeDataPath(true);
-    if (path != nullptr)
+  if (auto path = GetHomeDataPath(true); path != nullptr)
       return path;
-  }
 
   return nullptr;
 }
