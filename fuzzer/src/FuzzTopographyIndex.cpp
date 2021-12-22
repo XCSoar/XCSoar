@@ -21,33 +21,18 @@ Copyright_License {
 }
 */
 
-#pragma once
+#include "Topography/Index.hpp"
+#include "util/ScopeExit.hxx"
 
-#ifdef FUZZER
-#include "ui/canvas/PortableColor.hpp"
-#else
-#include "ui/canvas/Color.hpp"
-#endif
+#include <string>
 
-#include "ResourceId.hpp"
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
 
-#include <optional>
-
-struct TopographyIndexEntry {
-  double shape_range, label_range, important_label_range;
-
-  ResourceId icon, big_icon;
-
-  long shape_field;
-
-#ifdef FUZZER
-  BGRA8Color color;
-#else
-  Color color;
-#endif
-
-  unsigned pen_width = 1;
-};
-
-std::optional<TopographyIndexEntry>
-ParseTopographyIndexLine(char *line, char *shape_filename_end) noexcept;
+int
+LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
+{
+  std::string line{(const char *)data, size};
+  char shape_filename_end[1024];
+  ParseTopographyIndexLine(line.data(), shape_filename_end);
+  return EXIT_SUCCESS;
+}

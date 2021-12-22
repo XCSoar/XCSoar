@@ -411,6 +411,7 @@ TARGET_CPPFLAGS = -I$(TARGET_OUTPUT_DIR)/include
 ifeq ($(FUZZER),y)
   FUZZER_FLAGS = -fsanitize=fuzzer,address
   TARGET_CXXFLAGS += $(FUZZER_FLAGS)
+  TARGET_CPPFLAGS += -DFUZZER
 endif
 
 ifneq ($(WINVER),)
