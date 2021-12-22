@@ -89,8 +89,8 @@ public:
 };
 
 class TopographyFile {
-  struct ShapeList {
-    const ShapeList *next;
+  struct ShapeEnvelope {
+    const ShapeEnvelope *next;
 
     std::unique_ptr<const XShape> shape;
   };
@@ -109,8 +109,8 @@ class TopographyFile {
    */
   GeoPoint center;
 
-  AllocatedArray<ShapeList> shapes;
-  const ShapeList *first = nullptr;
+  AllocatedArray<ShapeEnvelope> shapes;
+  const ShapeEnvelope *first = nullptr;
 
   const int label_field;
 
@@ -155,9 +155,9 @@ public:
   class const_iterator {
     friend class TopographyFile;
 
-    const ShapeList *current;
+    const ShapeEnvelope *current;
 
-    const_iterator(const ShapeList *p):current(p) {}
+    const_iterator(const ShapeEnvelope *p):current(p) {}
 
   public:
     const_iterator &operator++() {

@@ -157,7 +157,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
   assert(status != nullptr);
 
   // Iterate through the shapefile entries
-  const ShapeList **current = &first;
+  const auto **current = &first;
   auto it = shapes.begin();
   for (std::size_t i = 0; i < file.size(); ++i, ++it) {
     if (!msGetBit(status, i)) {
@@ -207,7 +207,7 @@ void
 TopographyFile::LoadAll()
 {
   // Iterate through the shapefile entries
-  const ShapeList **current = &first;
+  const auto **current = &first;
   auto it = shapes.begin();
   for (std::size_t i = 0; i < file.size(); ++i, ++it) {
     if (it->shape == nullptr)
