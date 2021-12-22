@@ -31,16 +31,17 @@ Copyright_License {
 #include "util/Macros.hpp"
 
 #include <algorithm>
+#include <array>
 
 static void
 DrawMirroredPolygon(const BulkPixelPoint *src, unsigned points,
                     Canvas &canvas, const Angle angle,
                     const PixelPoint pos)
 {
-  BulkPixelPoint dst[64];
-  assert(2 * points <= ARRAY_SIZE(dst));
+  std::array<BulkPixelPoint, 64> dst;
+  assert(2 * points <= dst.size());
 
-  std::copy_n(src, points, dst);
+  std::copy_n(src, points, dst.begin());
   for (unsigned i = 0; i < points; ++i) {
     dst[2 * points - i - 1].x = -dst[i].x;
     dst[2 * points - i - 1].y = dst[i].y;
@@ -48,9 +49,9 @@ DrawMirroredPolygon(const BulkPixelPoint *src, unsigned points,
 #ifdef ENABLE_OPENGL
   CanvasRotateShift rotate_shift(pos, angle, 50);
 #else
-  PolygonRotateShift({dst, 2 * points}, pos, angle, 50);
+  PolygonRotateShift({dst.data(), 2 * points}, pos, angle, 50);
 #endif
-  canvas.DrawPolygon(dst, 2 * points);
+  canvas.DrawPolygon(dst.data(), 2 * points);
 }
 
 static void
