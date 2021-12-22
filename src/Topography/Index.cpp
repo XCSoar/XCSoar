@@ -108,6 +108,9 @@ ParseTopographyIndexLine(char *line, char *shape_filename_end) noexcept
     char icon_name[23];
     char *start = p + 1;
     p = strchr(start, ',');
+    if (p == nullptr)
+      return std::nullopt;
+
     // Null-terminate the line string at the next comma for strncpy() call
     *p = 0;
     strncpy(icon_name, start, 22);
