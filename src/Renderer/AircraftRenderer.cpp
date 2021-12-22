@@ -34,24 +34,24 @@ Copyright_License {
 #include <array>
 
 static void
-DrawMirroredPolygon(const BulkPixelPoint *src, unsigned points,
+DrawMirroredPolygon(std::span<const BulkPixelPoint> src,
                     Canvas &canvas, const Angle angle,
                     const PixelPoint pos)
 {
   std::array<BulkPixelPoint, 64> dst;
-  assert(2 * points <= dst.size());
+  assert(2 * src.size() <= dst.size());
 
-  std::copy_n(src, points, dst.begin());
-  for (unsigned i = 0; i < points; ++i) {
-    dst[2 * points - i - 1].x = -dst[i].x;
-    dst[2 * points - i - 1].y = dst[i].y;
+  std::copy(src.begin(), src.end(), dst.begin());
+  for (std::size_t i = 0; i < src.size(); ++i) {
+    dst[2 * src.size() - i - 1].x = -dst[i].x;
+    dst[2 * src.size() - i - 1].y = dst[i].y;
   }
 #ifdef ENABLE_OPENGL
   CanvasRotateShift rotate_shift(pos, angle, 50);
 #else
-  PolygonRotateShift({dst.data(), 2 * points}, pos, angle, 50);
+  PolygonRotateShift({dst.data(), 2 * src.size()}, pos, angle, 50);
 #endif
-  canvas.DrawPolygon(dst.data(), 2 * points);
+  canvas.DrawPolygon(dst.data(), 2 * src.size());
 }
 
 static void
@@ -75,7 +75,6 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
       {-5, 18},
       {0, 18},
     };
-    static constexpr unsigned AIRCRAFT_POINTS = ARRAY_SIZE(Aircraft);
 
     if (!inverse) {
       canvas.SelectWhiteBrush();
@@ -85,8 +84,7 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
       canvas.SelectWhitePen();
     }
 
-    DrawMirroredPolygon(Aircraft, AIRCRAFT_POINTS,
-                        canvas, angle, aircraft_pos);
+    DrawMirroredPolygon(Aircraft, canvas, angle, aircraft_pos);
   }
 
   {
@@ -96,12 +94,10 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
       {-1, -2},
       {0, -1},
     };
-    const unsigned CANOPY_POINTS = ARRAY_SIZE(Canopy);
 
     canvas.Select(look.canopy_pen);
     canvas.Select(look.canopy_brush);
-    DrawMirroredPolygon(Canopy, CANOPY_POINTS,
-                        canvas, angle, aircraft_pos);
+    DrawMirroredPolygon(Canopy, canvas, angle, aircraft_pos);
   }
 }
 
