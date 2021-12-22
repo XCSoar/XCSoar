@@ -95,10 +95,9 @@ SetPrimaryDataPath(Path path) noexcept
 AllocatedPath
 LocalPath(Path file) noexcept
 {
-  assert(data_path != nullptr);
   assert(file != nullptr);
 
-  return AllocatedPath::Build(data_path, file);
+  return AllocatedPath::Build(GetPrimaryDataPath(), file);
 }
 
 AllocatedPath
@@ -118,9 +117,7 @@ MakeLocalPath(const TCHAR *name)
 Path
 RelativePath(Path path) noexcept
 {
-  assert(data_path != nullptr);
-
-  return path.RelativeTo(data_path);
+  return path.RelativeTo(GetPrimaryDataPath());
 }
 
 static constexpr TCHAR local_path_code[] = _T("%LOCAL_PATH%\\");
