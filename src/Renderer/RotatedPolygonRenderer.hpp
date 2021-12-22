@@ -25,12 +25,12 @@ Copyright_License {
 #define XCSOAR_SCREEN_ROTATED_POLYGON_RENDERER_HPP
 
 #include "ui/canvas/Canvas.hpp"
+#include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/CanvasRotateShift.hpp"
 #else
-#include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
 #include <array>
 #endif
@@ -53,7 +53,7 @@ public:
                          const PixelPoint pos, const Angle angle,
                          const unsigned scale=100)
 #ifdef ENABLE_OPENGL
-    :points(src.data()), rotate_shift(pos, angle, scale / 100.)
+    :points(src.data()), rotate_shift(pos, angle, Layout::Scale(scale / 100.))
 #endif
   {
 #ifndef ENABLE_OPENGL

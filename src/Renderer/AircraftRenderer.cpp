@@ -45,7 +45,7 @@ DrawMirroredPolygon(std::span<const BulkPixelPoint> src,
     dst[2 * src.size() - i - 1].y = dst[i].y;
   }
 #ifdef ENABLE_OPENGL
-  CanvasRotateShift rotate_shift(pos, angle, 0.5);
+  CanvasRotateShift rotate_shift(pos, angle, Layout::Scale(0.5f));
 #else
   PolygonRotateShift({dst.data(), 2 * src.size()}, pos, angle, Layout::Scale(50U));
 #endif
