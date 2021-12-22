@@ -84,7 +84,6 @@ TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
   center = file_bounds.GetCenter();
 
   shapes.ResizeDiscard(n_shapes);
-  std::fill(shapes.begin(), shapes.end(), ShapeList(nullptr));
 
   if (dir != nullptr)
     ++dir->refcount;
@@ -94,8 +93,6 @@ TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
 
 TopographyFile::~TopographyFile() noexcept
 {
-  ClearCache();
-
   if (dir != nullptr) {
     --dir->refcount;
     zzip_dir_free(dir);
@@ -105,15 +102,13 @@ TopographyFile::~TopographyFile() noexcept
 void
 TopographyFile::ClearCache() noexcept
 {
-  for (auto i = shapes.begin(), end = shapes.end(); i != end; ++i) {
-    delete i->shape;
-    i->shape = nullptr;
-  }
+  for (auto &i : shapes)
+    i.shape.reset();
 
   first = nullptr;
 }
 
-static XShape *
+static std::unique_ptr<XShape>
 LoadShape(ShapeFile &file, GeoPoint &center, std::size_t i, int label_field)
 {
   shapeObj shape;
@@ -125,7 +120,7 @@ LoadShape(ShapeFile &file, GeoPoint &center, std::size_t i, int label_field)
     ? file.ReadLabel(i, label_field)
     : nullptr;
 
-  return new XShape(shape, center, label);
+  return std::make_unique<XShape>(shape, center, label);
 }
 
 bool
@@ -180,8 +175,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
 
         /* now it's unreachable, and we can delete the XShape without
            holding a lock */
-        delete it->shape;
-        it->shape = nullptr;
+        it->shape.reset();
       }
     } else {
       // is inside the bounds

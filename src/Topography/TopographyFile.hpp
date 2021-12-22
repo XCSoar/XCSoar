@@ -38,6 +38,7 @@ Copyright_License {
 #endif
 
 #include <cassert>
+#include <memory>
 
 class WindowProjection;
 class XShape;
@@ -91,10 +92,7 @@ class TopographyFile {
   struct ShapeList {
     const ShapeList *next;
 
-    const XShape *shape;
-
-    ShapeList() {}
-    ShapeList(const XShape *_shape):shape(_shape) {}
+    std::unique_ptr<const XShape> shape;
   };
 
   /**
@@ -179,7 +177,7 @@ public:
     const XShape *operator->() const {
       assert(current != nullptr);
 
-      return current->shape;
+      return current->shape.operator->();
     }
 
     bool operator==(const const_iterator &other) const {
