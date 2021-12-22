@@ -401,21 +401,13 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
     assert(label != nullptr);
 
     const auto lines = shape.GetLines();
-#ifdef ENABLE_OPENGL
-    const ShapePoint *points = shape.GetPoints();
-#else
-    const GeoPoint *points = shape.GetPoints();
-#endif
+    const auto *points = shape.GetPoints();
 
     for (const unsigned n : lines) {
       int minx = canvas.GetWidth();
       int miny = canvas.GetHeight();
 
-#ifdef ENABLE_OPENGL
-      const ShapePoint *end = points + n;
-#else
-      const GeoPoint *end = points + n;
-#endif
+      const auto *end = points + n;
       for (; points < end; points += iskip) {
 #ifdef ENABLE_OPENGL
         auto pt = projection.GeoToScreen(file.ToGeoPoint(*points));
