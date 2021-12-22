@@ -21,14 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_MEMORY_COLOR_HPP
-#define XCSOAR_SCREEN_MEMORY_COLOR_HPP
+#pragma once
 
 #include "ui/canvas/PortableColor.hpp"
-#include "util/Compiler.h"
 
 #include <cstdint>
-
 
 /* Workaround: Some Win32 headers define OPAQUE and TRANSPARENT as preprocessor
  * defines. Undefine them to avoid name conflict. */
@@ -224,5 +221,3 @@ public:
     return !(*this == other);
   }
 };
-
-#endif
