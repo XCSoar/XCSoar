@@ -35,6 +35,7 @@ Copyright_License {
 #include "Topography/ShapeRenderer.hpp"
 #endif
 
+#include <memory>
 #include <vector>
 
 class TopographyFile;
@@ -75,7 +76,7 @@ class TopographyFileRenderer final
   std::vector<GeoPoint> visible_points;
 
 #ifdef ENABLE_OPENGL
-  GLArrayBuffer *array_buffer;
+  std::unique_ptr<GLArrayBuffer> array_buffer;
   Serial array_buffer_serial;
 #endif
 

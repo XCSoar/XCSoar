@@ -55,11 +55,9 @@ Copyright_License {
 TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file,
                                                const TopographyLook &_look) noexcept
   :file(_file), look(_look),
-   pen(Layout::ScaleFinePenWidth(file.GetPenWidth()), file.GetColor()),
-#ifdef ENABLE_OPENGL
-   array_buffer(nullptr)
-#else
-   brush(file.GetColor())
+   pen(Layout::ScaleFinePenWidth(file.GetPenWidth()), file.GetColor())
+#ifndef ENABLE_OPENGL
+  , brush(file.GetColor())
 #endif
 {
   ResourceId icon_ID = file.GetIcon();
@@ -67,12 +65,7 @@ TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file,
     icon.LoadResource(icon_ID, file.GetBigIcon());
 }
 
-TopographyFileRenderer::~TopographyFileRenderer() noexcept
-{
-#ifdef ENABLE_OPENGL
-  delete array_buffer;
-#endif
-}
+TopographyFileRenderer::~TopographyFileRenderer() noexcept = default;
 
 void
 TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) noexcept
@@ -123,7 +116,7 @@ inline void
 TopographyFileRenderer::UpdateArrayBuffer() noexcept
 {
   if (array_buffer == nullptr)
-    array_buffer = new GLArrayBuffer();
+    array_buffer = std::make_unique<GLArrayBuffer>();
   else if (file.GetSerial() == array_buffer_serial)
     return;
 
