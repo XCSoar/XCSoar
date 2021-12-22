@@ -5,6 +5,8 @@ Version 7.22 - not yet released
   - add DG-800S
 * devices
   - FLARM: send turn point names in task declaration
+* Android
+  - use app-specific data directory by default
 
 Version 7.21 - 2021/12/11
 * data files
