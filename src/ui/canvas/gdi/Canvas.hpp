@@ -582,11 +582,6 @@ public:
   void ScaleCopy(PixelPoint dest_position,
                  const Bitmap &src,
                  PixelPoint src_position, PixelSize src_size) noexcept;
-
-  gcc_pure
-  HWColor GetPixel(PixelPoint p) const noexcept {
-    return HWColor(::GetPixel(dc, p.x, p.y));
-  }
 };
 
 #endif
