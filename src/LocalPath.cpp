@@ -198,55 +198,6 @@ FindDataPathAtModule(HMODULE hModule) noexcept
 
 #endif /* _WIN32 */
 
-/**
- * Returns the location of XCSoarData in the user's home directory.
- *
- * @param create true creates the path if it does not exist
- * @return a buffer which may be used to build the path
- */
-static AllocatedPath
-GetHomeDataPath(bool create=false) noexcept
-{
-  if constexpr (IsAndroid() || IsKobo())
-    /* hard-coded path for Android */
-    return nullptr;
-
-#ifdef HAVE_POSIX
-  /* on Unix, use ~/.xcsoar */
-  if (const TCHAR *home = getenv("HOME"); home != nullptr) {
-    return AllocatedPath::Build(Path(home),
-#ifdef __APPLE__
-    /* Mac OS X users are not used to dot-files in their home
-       directory - make it a little bit easier for them to find the
-       files.
-       If target is an iOS device, use the already existing "Documents" folder
-       inside the application's sandbox.
-       This folder can also be accessed via iTunes, if UIFileSharingEnabled is set
-       to YES in Info.plist
-    */
-#if (TARGET_OS_IPHONE)
-    _T("Documents")
-#else
-    _T(XCSDATADIR)
-#endif
-#else
-                                _T("/.xcsoar")
-#endif
-                                );
-  } else
-    return nullptr;
-#else
-
-  TCHAR buffer[MAX_PATH];
-  bool success = SHGetSpecialFolderPath(nullptr, buffer, CSIDL_PERSONAL,
-                                        create);
-  if (!success)
-    return nullptr;
-
-  return AllocatedPath::Build(buffer, _T(XCSDATADIR));
-#endif
-}
-
 static std::list<AllocatedPath>
 FindDataPaths() noexcept
 {
@@ -282,17 +233,43 @@ FindDataPaths() noexcept
      XCSoar.exe */
   if (auto path = FindDataPathAtModule(nullptr); path != nullptr)
     result.emplace_back(std::move(path));
-#endif
 
-  if (auto path = GetHomeDataPath(result.empty());
-      path != nullptr && path != result.front())
-    result.emplace_back(std::move(path));
+  /* Windows: use "My Documents\XCSoarData" */
+  {
+    TCHAR buffer[MAX_PATH];
+    if (SHGetSpecialFolderPath(nullptr, buffer, CSIDL_PERSONAL, true))
+      result.emplace_back(AllocatedPath::Build(buffer, _T(XCSDATADIR)));
+  }
+#endif // _WIN32
 
-  /* Linux (and others): allow global configuration in /etc/xcsoar */
 #ifdef HAVE_POSIX
-  if (!IsEmbedded() && Directory::Exists(Path{"/etc/xcsoar"}))
-    data_paths.emplace_back(Path{"/etc/xcsoar"});
+  /* on Unix, use ~/.xcsoar */
+  if (const char *home = getenv("HOME"); home != nullptr) {
+#ifdef __APPLE__
+    /* Mac OS X users are not used to dot-files in their home
+       directory - make it a little bit easier for them to find the
+       files.  If target is an iOS device, use the already existing
+       "Documents" folder inside the application's sandbox.  This
+       folder can also be accessed via iTunes, if
+       UIFileSharingEnabled is set to YES in Info.plist */
+#if (TARGET_OS_IPHONE)
+    constexpr const char *in_home = "Documents" XCSDATADIR;
+#else
+    constexpr const char *in_home = XCSDATADIR;
 #endif
+#else // !APPLE
+    constexpr const char *in_home = ".xcsoar";
+#endif
+
+    result.emplace_back(AllocatedPath::Build(Path(home), in_home));
+  }
+
+#ifndef __APPLE__
+  /* Linux (and others): allow global configuration in /etc/xcsoar */
+  if (Directory::Exists(Path{"/etc/xcsoar"}))
+    data_paths.emplace_back(Path{"/etc/xcsoar"});
+#endif // !APPLE
+#endif // HAVE_POSIX
 
   return result;
 }
