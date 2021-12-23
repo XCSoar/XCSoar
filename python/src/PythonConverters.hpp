@@ -26,6 +26,7 @@
 #include <Python.h>
 
 #include "util/tstring.hpp"
+#include "time/Stamp.hpp"
 
 struct BrokenDateTime;
 struct GeoPoint;
@@ -87,6 +88,8 @@ namespace Python {
    * Convert a python string/unicode object to a tstring (aka std::[w]string)
    */
   bool PyStringToString(PyObject *py_string, tstring &string);
+
+  TimeStamp PyLongToTimeStamp(PyObject* clock);
 };
 
 #endif /* PYTHON_PYTHONCONVERTERS_HPP */
