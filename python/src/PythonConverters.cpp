@@ -86,6 +86,17 @@ GeoPoint Python::ReadLonLat(PyObject *py_location) {
   return location;
 }
 
+TimeStamp Python::PyLongToTimeStamp(PyObject* ts) {
+  if(!PyLong_Check(ts)) {
+    PyErr_SetString(PyExc_TypeError, "Failed to parse timestamp.");
+    return TimeStamp::Undefined();
+  }
+  long lts = PyLong_AsLong(ts);
+  seconds secs(lts);
+  return TimeStamp(duration_cast<FloatDuration>(secs));
+}
+
+
 PyObject* Python::WriteEvent(const BrokenDateTime &datetime,
                              const GeoPoint &location) {
   PyObject *py_event = PyDict_New();
