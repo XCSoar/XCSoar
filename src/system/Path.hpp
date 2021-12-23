@@ -246,6 +246,16 @@ public:
     return !(*this == other);
   }
 
+  [[gnu::pure]]
+  bool operator==(const AllocatedPath &other) const noexcept {
+    return Path{*this} == Path{other};
+  }
+
+  [[gnu::pure]]
+  bool operator!=(const AllocatedPath &other) const noexcept {
+    return !(*this == other);
+  }
+
   constexpr bool operator==(std::nullptr_t n) const noexcept {
     return value == n;
   }
