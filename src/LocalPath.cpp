@@ -237,7 +237,8 @@ FindDataPaths() noexcept
   /* Windows: use "My Documents\XCSoarData" */
   {
     TCHAR buffer[MAX_PATH];
-    if (SHGetSpecialFolderPath(nullptr, buffer, CSIDL_PERSONAL, true))
+    if (SHGetSpecialFolderPath(nullptr, buffer, CSIDL_PERSONAL,
+                               result.empty()))
       result.emplace_back(AllocatedPath::Build(buffer, _T(XCSDATADIR)));
   }
 #endif // _WIN32
