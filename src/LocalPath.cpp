@@ -189,23 +189,6 @@ FindDataPathAtModule(HMODULE hModule) noexcept
     : nullptr;
 }
 
-static const TCHAR *
-ModuleInFlash(HMODULE module, TCHAR *buffer) noexcept
-{
-  if (GetModuleFileName(module, buffer, MAX_PATH) <= 0)
-    return nullptr;
-
-  // At least "C:\"
-  if (StringLength(buffer) < 3 ||
-      buffer[1] != _T(':') ||
-      buffer[2] != _T('\\'))
-    return nullptr;
-
-  // Trim the module path to the drive letter plus colon
-  buffer[2] = _T('\0');
-  return buffer;
-}
-
 #endif /* _WIN32 */
 
 /**
@@ -284,20 +267,6 @@ FindDataPath() noexcept
     }
 #endif
   }
-
-#ifdef _WIN32
-  /* if XCSoar was started from a flash disk, put the XCSoarData onto
-     it, too */
-  {
-    TCHAR buffer[MAX_PATH];
-    if (ModuleInFlash(nullptr, buffer) != nullptr) {
-      _tcscat(buffer, _T(DIR_SEPARATOR_S));
-      _tcscat(buffer, _T(XCSDATADIR));
-      if (Directory::Exists(Path(buffer)))
-        return Path(buffer);
-    }
-  }
-#endif
 
   if (auto path = GetHomeDataPath(true); path != nullptr)
       return path;
