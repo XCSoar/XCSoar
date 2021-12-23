@@ -315,9 +315,11 @@ PyObject* Python::IGCFixEnhancedToPyTuple(const IGCFixEnhanced &fix) {
     Py_INCREF(Py_None);
   }
 
-  return Py_BuildValue("(NiNiiNNNNNNNi)",
+  PyObject *py_clock = PyInt_FromLong(duration_cast<seconds>(fix.clock.ToDuration()).count());
+
+  return Py_BuildValue("(NNNiiNNNNNNii)",
     BrokenDateTimeToPy(BrokenDateTime(fix.date, fix.time)),
-    fix.clock,
+    py_clock,
     WriteLonLat(fix.location),
     fix.gps_altitude,
     fix.pressure_altitude,
@@ -333,6 +335,7 @@ PyObject* Python::IGCFixEnhancedToPyTuple(const IGCFixEnhanced &fix) {
 
 bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
   PyObject *py_datetime = nullptr,
+           *py_clock = nullptr,
            *py_location = nullptr,
            *py_gps_alt = nullptr,
            *py_pressure_alt = nullptr,
@@ -347,8 +350,8 @@ bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
 
   fix.Clear();
 
-  if (!PyArg_ParseTuple(py_fix, "OiOO|OOOOOOOOO",
-         &py_datetime, &fix.clock, &py_location,
+  if (!PyArg_ParseTuple(py_fix, "OOOO|OOOOOOOOO",
+         &py_datetime, &py_clock, &py_location,
          &py_gps_alt, &py_pressure_alt,
          &py_enl, &py_trt, &py_gsp, &py_tas, &py_ias,
          &py_siu, &py_elevation, &py_level)) {
@@ -357,7 +360,7 @@ bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
 
   fix.date = PyToBrokenDateTime(py_datetime);
   fix.time = PyToBrokenDateTime(py_datetime);
-
+  fix.clock = PyLongToTimeStamp(py_clock);
   fix.location = ReadLonLat(py_location);
 
   if (!fix.location.IsValid())
