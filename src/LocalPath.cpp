@@ -234,7 +234,7 @@ GetHomeDataPath(bool create=false) noexcept
 #endif
                                 );
   } else
-    return Path("/etc/xcsoar");
+    return nullptr;
 #else
 
   TCHAR buffer[MAX_PATH];
@@ -287,6 +287,12 @@ FindDataPaths() noexcept
   if (auto path = GetHomeDataPath(result.empty());
       path != nullptr && path != result.front())
     result.emplace_back(std::move(path));
+
+  /* Linux (and others): allow global configuration in /etc/xcsoar */
+#ifdef HAVE_POSIX
+  if (!IsEmbedded() && Directory::Exists(Path{"/etc/xcsoar"}))
+    data_paths.emplace_back(Path{"/etc/xcsoar"});
+#endif
 
   return result;
 }
