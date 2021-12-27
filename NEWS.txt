@@ -5,6 +5,8 @@ Version 7.22 - not yet released
   - add DG-800S
 * devices
   - FLARM: send turn point names in task declaration
+* user interface
+  - add 3x6 InfoBoxes layout
 * Android
   - use app-specific data directory by default
 
