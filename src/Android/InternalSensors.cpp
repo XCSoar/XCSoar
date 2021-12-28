@@ -27,6 +27,7 @@ Copyright_License {
 #include "Atmosphere/Pressure.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
+#include "java/Array.hxx"
 #include "java/Env.hxx"
 
 Java::TrivialClass InternalSensors::gps_cls, InternalSensors::sensors_cls;
@@ -143,7 +144,7 @@ InternalSensors::getSubscribableSensors(JNIEnv *env, jobject sensors_obj)
     env->CallObjectMethod(obj_NonGPSSensors_.Get(),
                           mid_sensors_getSubscribableSensors);
   jsize ss_arr_size = env->GetArrayLength(ss_arr);
-  jint *ss_arr_elems = env->GetIntArrayElements(ss_arr, nullptr);
-  subscribable_sensors_.assign(ss_arr_elems, ss_arr_elems + ss_arr_size);
-  env->ReleaseIntArrayElements(ss_arr, ss_arr_elems, 0);
+  const Java::IntArrayElements ss_arr_elems{env, ss_arr};
+  subscribable_sensors_.assign(ss_arr_elems.get(),
+                               ss_arr_elems.get() + ss_arr_size);
 }

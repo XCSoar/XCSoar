@@ -24,6 +24,7 @@ Copyright_License {
 #include "PortBridge.hpp"
 #include "NativePortListener.hpp"
 #include "NativeInputListener.hpp"
+#include "java/Array.hxx"
 #include "java/Class.hxx"
 #include "java/Exception.hxx"
 
@@ -85,9 +86,7 @@ PortBridge::write(JNIEnv *env, const void *data, size_t length)
   if (length > write_buffer_size)
     length = write_buffer_size;
 
-  jbyte *dest = env->GetByteArrayElements(write_buffer, nullptr);
-  memcpy(dest, data, length);
-  env->ReleaseByteArrayElements(write_buffer, dest, 0);
+  memcpy(Java::ByteArrayElements{env, write_buffer}.get(), data, length);
 
   int nbytes = env->CallIntMethod(Get(), write_method,
                                   write_buffer.Get(), length);
