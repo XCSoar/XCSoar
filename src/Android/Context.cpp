@@ -29,7 +29,9 @@ Copyright_License {
 #include "system/Path.hpp"
 
 static Java::TrivialClass cls;
-static jmethodID getExternalFilesDir_method, getExternalCacheDir_method,
+static jmethodID getExternalFilesDir_method,
+  getExternalFilesDirs_method,
+  getExternalCacheDir_method,
   getSystemService_method;
 
 void
@@ -39,6 +41,8 @@ Context::Initialise(JNIEnv *env) noexcept
 
   getExternalFilesDir_method = env->GetMethodID(cls, "getExternalFilesDir",
                                                 "(Ljava/lang/String;)Ljava/io/File;");
+  getExternalFilesDirs_method = env->GetMethodID(cls, "getExternalFilesDirs",
+                                                 "(Ljava/lang/String;)[Ljava/io/File;");
   getExternalCacheDir_method = env->GetMethodID(cls, "getExternalCacheDir",
                                                 "()Ljava/io/File;");
   getSystemService_method = env->GetMethodID(cls, "getSystemService",
@@ -56,6 +60,32 @@ Context::GetExternalFilesDir(JNIEnv *env) noexcept
 {
   Java::File dir{env, env->CallObjectMethod(Get(), getExternalFilesDir_method, nullptr)};
   return ToPathChecked(dir.GetAbsolutePathChecked());
+}
+
+std::forward_list<AllocatedPath>
+Context::GetExternalFilesDirs(JNIEnv *env) const noexcept
+{
+  assert(env != nullptr);
+
+  const Java::LocalRef<jobjectArray> array{
+    env,
+    (jobjectArray)env->CallObjectMethod(Get(), getExternalFilesDirs_method,
+                                        nullptr),
+  };
+
+  assert(array);
+
+  const jsize n = env->GetArrayLength(array);
+
+  std::forward_list<AllocatedPath> result;
+  auto previous = result.before_begin();
+
+  for (jsize i = 0; i < n; ++i) {
+    Java::File dir{env, env->GetObjectArrayElement(array, i)};
+    previous = result.emplace_after(previous, ToPath(dir.GetAbsolutePath()));
+  }
+
+  return result;
 }
 
 AllocatedPath

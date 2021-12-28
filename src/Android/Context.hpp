@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "java/Object.hxx"
 
+#include <forward_list>
+
 class AllocatedPath;
 
 class Context : public Java::GlobalObject {
@@ -40,6 +42,8 @@ public:
   using Java::GlobalObject::GlobalObject;
 
   AllocatedPath GetExternalFilesDir(JNIEnv *env) noexcept;
+  std::forward_list<AllocatedPath> GetExternalFilesDirs(JNIEnv *env) const noexcept;
+
   AllocatedPath GetExternalCacheDir(JNIEnv *env) noexcept;
 
   Java::LocalObject GetSystemService(JNIEnv *env, jstring name);
