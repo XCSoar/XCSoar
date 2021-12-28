@@ -9,6 +9,7 @@ Version 7.22 - not yet released
   - add 3x6 InfoBoxes layout
 * Android
   - use app-specific data directory by default
+  - allow using all external storages
 
 Version 7.21 - 2021/12/11
 * data files

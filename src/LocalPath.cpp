@@ -214,9 +214,9 @@ FindDataPaths() noexcept
 #ifdef ANDROID
     const auto env = Java::GetEnv();
 
-    if (auto path = context->GetExternalFilesDir(env); path != nullptr) {
+    for (auto &path : context->GetExternalFilesDirs(env)) {
       __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
-                          "Context.getExternalFilesDir()='%s'",
+                          "Context.getExternalFilesDirs()='%s'",
                           path.c_str());
       result.emplace_back(std::move(path));
     }
