@@ -28,7 +28,7 @@
 static constexpr int MIN_FLOOR_CLEARANCE = 100;
 
 void
-ReachFan::Reset()
+ReachFan::Reset() noexcept
 {
   root.Clear();
   terrain_base = 0;
@@ -36,7 +36,7 @@ ReachFan::Reset()
 
 bool
 ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
-                const RasterMap* terrain, const bool do_solve)
+                const RasterMap* terrain, const bool do_solve) noexcept
 {
   Reset();
 
@@ -81,16 +81,17 @@ ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
   return true;
 }
 
-bool
-ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
-                              ReachResult &result_r) const
+std::optional<ReachResult>
+ReachFan::FindPositiveArrival(const AGeoPoint dest,
+                              const RoutePolars &rpolars) const noexcept
 {
   if (root.IsEmpty())
-    return false;
+    return std::nullopt;
 
   const FlatGeoPoint d(projection.ProjectInteger(dest));
   const ReachFanParms parms(rpolars, projection, terrain_base);
 
+  ReachResult result_r;
   result_r.Clear();
 
   // first calculate direct (terrain-independent height)
@@ -98,13 +99,13 @@ ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
 
   if (root.IsDummy())
     /* terrain reach is not available, stop here */
-    return true;
+    return result_r;
 
   // if can't reach even with no terrain, exit early
   if (std::min(root.GetHeight(), result_r.direct) < dest.altitude) {
     result_r.terrain = result_r.direct;
     result_r.terrain_valid = ReachResult::Validity::UNREACHABLE;
-    return true;
+    return result_r;
   }
 
   // now calculate turning solution
@@ -113,12 +114,12 @@ ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
     ? ReachResult::Validity::VALID
     : ReachResult::Validity::UNREACHABLE;
 
-  return true;
+  return result_r;
 }
 
 void
 ReachFan::AcceptInRange(const GeoBounds &bounds,
-                        FlatTriangleFanVisitor &visitor) const
+                        FlatTriangleFanVisitor &visitor) const noexcept
 {
   if (root.IsEmpty())
     return;

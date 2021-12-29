@@ -26,12 +26,13 @@ Copyright_License {
 
 #include "java/Object.hxx"
 #include "java/Class.hxx"
-#include "util/Compiler.h"
+#include "java/Closeable.hxx"
 
 #include <jni.h>
 #include <vector>
 
 class Context;
+class SensorListener;
 
 /**
  * Consolidated class for handling Java objects that work with Android GPS
@@ -50,7 +51,6 @@ class InternalSensors {
   static jmethodID mid_sensors_subscribeToSensor_;
   static jmethodID mid_sensors_cancelSensorSubscription_;
   static jmethodID mid_sensors_subscribedToSensor_;
-  static jmethodID mid_sensors_cancelAllSensorSubscriptions_;
 
 public:
   static bool Initialise(JNIEnv *env);
@@ -58,15 +58,14 @@ public:
 
  private:
   // Java objects working with the GPS and the other sensors respectively.
-  Java::GlobalObject obj_InternalGPS_;
-  Java::GlobalObject obj_NonGPSSensors_;
+  Java::GlobalCloseable internal_gps;
+  Java::GlobalCloseable obj_NonGPSSensors_;
   std::vector<int> subscribable_sensors_;
 
-  InternalSensors(JNIEnv* env, jobject gps_obj, jobject sensors_obj);
+  InternalSensors(const Java::LocalObject &gps_obj,
+                  const Java::LocalObject &sensors_obj) noexcept;
   void getSubscribableSensors(JNIEnv* env, jobject sensors_obj);
  public:
-  ~InternalSensors();
-
   /* Sensor type identifier constants for use with subscription
      methods below.  These must have the same numerical values as
      their counterparts in the Android API's Sensor class. */
@@ -84,11 +83,9 @@ public:
   bool subscribeToSensor(int id);
   bool cancelSensorSubscription(int id);
   bool subscribedToSensor(int id) const;
-  void cancelAllSensorSubscriptions();
 
-  gcc_malloc
   static InternalSensors *create(JNIEnv* env, Context* native_view,
-                                 unsigned int index);
+                                 SensorListener &listener);
 };
 
 #endif

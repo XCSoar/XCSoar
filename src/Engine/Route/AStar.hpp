@@ -95,8 +95,7 @@ class AStar
       :priority(_priority), iterator(_iterator) {}
   };
 
-  struct Rank: public std::binary_function<NodeValue, NodeValue, bool>
-  {
+  struct Rank {
     constexpr
     bool operator()(const NodeValue &x, const NodeValue &y) const noexcept {
       return x.priority.f() > y.priority.f();

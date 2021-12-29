@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DumpPort.hpp"
+#include "Device/Error.hpp"
 #include "HexDump.hpp"
 
 #include <cstdint>
@@ -37,7 +38,7 @@ DumpPort::DumpPort(std::unique_ptr<Port> _port) noexcept
    port(std::move(_port)) {}
 
 bool
-DumpPort::CheckEnabled()
+DumpPort::CheckEnabled() noexcept
 {
   if (until == std::chrono::steady_clock::time_point{})
     return false;
@@ -47,7 +48,7 @@ DumpPort::CheckEnabled()
 
   if (std::chrono::steady_clock::now() >= until) {
     /* duration has just expired; clear to avoid calling
-       MonotonicClockMS() again in the next call */
+       steady_clock::now() again in the next call */
     until = std::chrono::steady_clock::time_point{};
     return false;
   }
@@ -56,7 +57,7 @@ DumpPort::CheckEnabled()
 }
 
 PortState
-DumpPort::GetState() const
+DumpPort::GetState() const noexcept
 {
   return port->GetState();
 }
@@ -67,14 +68,21 @@ DumpPort::WaitConnected(OperationEnvironment &env)
   return port->WaitConnected(env);
 }
 
-size_t
-DumpPort::Write(const void *data, size_t length)
+std::size_t
+DumpPort::Write(const void *data, std::size_t length)
 {
   const bool enabled = CheckEnabled();
   if (enabled)
     LogFormat("Write(%u)", (unsigned)length);
 
-  size_t nbytes = port->Write(data, length);
+  std::size_t nbytes;
+  try {
+    nbytes = port->Write(data, length);
+  } catch (...) {
+    if (enabled)
+      LogFormat("Write(%u)=error", (unsigned)length);
+    throw;
+  }
 
   if (enabled) {
     LogFormat("Write(%u)=%u", (unsigned)length, (unsigned)nbytes);
@@ -103,18 +111,18 @@ DumpPort::Flush()
 }
 
 unsigned
-DumpPort::GetBaudrate() const
+DumpPort::GetBaudrate() const noexcept
 {
   return port->GetBaudrate();
 }
 
-bool
+void
 DumpPort::SetBaudrate(unsigned baud_rate)
 {
   if (CheckEnabled())
     LogFormat("SetBaudrate %u", baud_rate);
 
-  return port->SetBaudrate(baud_rate);
+  port->SetBaudrate(baud_rate);
 }
 
 bool
@@ -135,17 +143,17 @@ DumpPort::StartRxThread()
   return port->StartRxThread();
 }
 
-int
-DumpPort::Read(void *buffer, size_t size)
+std::size_t
+DumpPort::Read(void *buffer, std::size_t size)
 {
   const bool enabled = CheckEnabled();
   if (enabled)
     LogFormat("Read(%u)", (unsigned)size);
 
-  int nbytes = port->Read(buffer, size);
+  auto nbytes = port->Read(buffer, size);
 
   if (enabled) {
-    LogFormat("Read(%u)=%d", (unsigned)size, nbytes);
+    LogFormat("Read(%u)=%u", (unsigned)size, (unsigned)nbytes);
     if (nbytes > 0)
       HexDump("R ", buffer, nbytes);
   }
@@ -153,17 +161,22 @@ DumpPort::Read(void *buffer, size_t size)
   return nbytes;
 }
 
-Port::WaitResult
+void
 DumpPort::WaitRead(std::chrono::steady_clock::duration timeout)
 {
   const bool enabled = CheckEnabled();
   if (enabled)
     LogFormat("WaitRead %lu", (unsigned long)timeout.count());
 
-  Port::WaitResult result = port->WaitRead(timeout);
-
-  if (enabled)
-    LogFormat("WaitRead %lu = %d", (unsigned long)timeout.count(), (int)result);
-
-  return result;
+  try {
+    port->WaitRead(timeout);
+  } catch (const DeviceTimeout &) {
+    if (enabled)
+      LogFormat("WaitRead %lu = timeout", (unsigned long)timeout.count());
+    throw;
+  } catch (...) {
+    if (enabled)
+      LogFormat("WaitRead %lu = error", (unsigned long)timeout.count());
+    throw;
+  }
 }

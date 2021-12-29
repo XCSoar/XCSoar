@@ -161,11 +161,7 @@ DeclareInner(Port &port, const Declaration &declaration,
   env.SetProgressRange(5);
   env.SetProgressPosition(0);
 
-  if (!LX::CommandMode(port, env))
-      return false;
-
-  if (env.IsCancelled())
-    return false;
+  LX::CommandMode(port, env);
 
   env.SetProgressPosition(1);
 
@@ -179,9 +175,6 @@ DeclareInner(Port &port, const Declaration &declaration,
   LX::ContestClass contest_class;
   LoadContestClass(contest_class, declaration);
 
-  if (env.IsCancelled())
-    return false;
-
   env.SetProgressPosition(2);
 
   LX::SendCommand(port, LX::WRITE_FLIGHT_INFO); // start declaration
@@ -190,16 +183,9 @@ DeclareInner(Port &port, const Declaration &declaration,
   writer.Write(&pilot, sizeof(pilot), env);
   env.SetProgressPosition(3);
 
-  if (env.IsCancelled())
-    return false;
-
   writer.Write(&lx_driver_Declaration, sizeof(lx_driver_Declaration), env);
   writer.Flush();
-  if (!LX::ExpectACK(port, env))
-    return false;
-
-  if (env.IsCancelled())
-    return false;
+  LX::ExpectACK(port, env);
 
   env.SetProgressPosition(4);
   LX::SendCommand(port, LX::WRITE_CONTEST_CLASS);
@@ -207,7 +193,8 @@ DeclareInner(Port &port, const Declaration &declaration,
   env.SetProgressPosition(5);
 
   writer.Flush();
-  return LX::ExpectACK(port, env);
+  LX::ExpectACK(port, env);
+  return true;
 }
 
 bool
@@ -218,7 +205,7 @@ LXDevice::Declare(const Declaration &declaration,
   if (declaration.Size() < 2 || declaration.Size() > 12)
     return false;
 
-  if (IsNano())
+  if (IsLXNAVLogger())
     return Nano::Declare(port, declaration, env);
 
   if (!EnableCommandMode(env))

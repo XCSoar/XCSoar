@@ -126,7 +126,7 @@ protected:
    * keyboard).  The default implementation invokes the OnClick
    * callback.
    */
-  virtual bool OnClicked();
+  virtual bool OnClicked() noexcept;
 
   /* virtual methods from class Window */
   bool OnKeyCheck(unsigned key_code) const override;

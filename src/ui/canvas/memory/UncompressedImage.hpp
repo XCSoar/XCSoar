@@ -24,13 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_MEMORY_UNCOMPRESSED_IMAGE_HPP
 #define XCSOAR_SCREEN_MEMORY_UNCOMPRESSED_IMAGE_HPP
 
+#include "Concepts.hpp"
 #include "Buffer.hpp"
 #include "ui/canvas/custom/UncompressedImage.hpp"
 
 struct RGBPixelReader {
   const uint8_t *p;
 
-  template<typename PixelTraits>
+  template<AnyPixelTraits PixelTraits>
   typename PixelTraits::color_type Read(PixelTraits) noexcept {
     const uint8_t r = *p++, g = *p++, b = *p++;
     return typename PixelTraits::color_type(r, g, b);
@@ -40,14 +41,14 @@ struct RGBPixelReader {
 struct GrayPixelReader {
   const uint8_t *p;
 
-  template<typename PixelTraits>
+  template<AnyPixelTraits PixelTraits>
   typename PixelTraits::color_type Read(PixelTraits) noexcept {
     const uint8_t l = *p++;
     return typename PixelTraits::color_type(l, l, l);
   }
 };
 
-template<typename PixelTraits, typename Reader>
+template<AnyPixelTraits PixelTraits, typename Reader>
 static inline void
 ConvertLine(typename PixelTraits::rpointer dest, Reader src,
             unsigned n) noexcept
@@ -56,7 +57,7 @@ ConvertLine(typename PixelTraits::rpointer dest, Reader src,
     PixelTraits::WritePixel(dest, src.Read(PixelTraits()));
 }
 
-template<typename PixelTraits, typename Format>
+template<AnyPixelTraits PixelTraits, typename Format>
 static inline void
 ConvertImage(WritableImageBuffer<PixelTraits> buffer,
              const uint8_t *src, int src_pitch, bool flipped) noexcept
@@ -79,7 +80,7 @@ ConvertImage(WritableImageBuffer<PixelTraits> buffer,
  *
  * @return the new SDL_Surface object or nullptr on error
  */
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 static inline void
 ImportSurface(WritableImageBuffer<PixelTraits> &buffer,
               const UncompressedImage &uncompressed) noexcept

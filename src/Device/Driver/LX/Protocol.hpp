@@ -29,6 +29,7 @@ Copyright_License {
 
 #include <cstddef>
 #include <cstdint>
+#include <utility>
 
 class OperationEnvironment;
 
@@ -142,17 +143,17 @@ namespace LX {
 
 #pragma pack(pop)
 
-  static inline bool
+  static inline void
   SendSYN(Port &port)
   {
-    return port.Write(SYN);
+    port.Write(SYN);
   }
 
-  static inline bool
+  static inline void
   ExpectACK(Port &port, OperationEnvironment &env,
             std::chrono::steady_clock::duration timeout=std::chrono::seconds(2))
   {
-    return port.WaitForChar(ACK, env, timeout) == Port::WaitResult::READY;
+    port.WaitForChar(ACK, env, timeout);
   }
 
   /**
@@ -160,19 +161,19 @@ namespace LX {
    *
    * @return true on success
    */
-  static inline bool
+  static inline void
   Connect(Port &port, OperationEnvironment &env,
           std::chrono::steady_clock::duration timeout=std::chrono::milliseconds(500))
   {
-    return SendSYN(port) && ExpectACK(port, env, timeout);
+    SendSYN(port);
+    ExpectACK(port, env, timeout);
   }
 
   /**
    * Enter command mode: flush all buffers, configure a sensible
    * receive timeout, sends SYN three times and waits for ACK.
    */
-  bool
-  CommandMode(Port &port, OperationEnvironment &env);
+  void CommandMode(Port &port, OperationEnvironment &env);
 
   /**
    * Enter command mode without waiting for ACK.
@@ -180,14 +181,14 @@ namespace LX {
   void
   CommandModeQuick(Port &port, OperationEnvironment &env);
 
-  static inline bool
+  static inline void
   SendCommand(Port &port, Command command)
   {
-    return port.Write(PREFIX) &&
-      port.Write(command);
+    port.Write(PREFIX);
+    port.Write(command);
   }
 
-  bool
+  void
   SendPacket(Port &port, Command command,
              const void *data, size_t length,
              OperationEnvironment &env,
@@ -240,28 +241,22 @@ namespace LX {
     bool Write(const void *data, size_t length,
                OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout=std::chrono::seconds(5)) {
-      if (!port.FullWrite(data, length, env, timeout))
-        return false;
+      port.FullWrite(data, length, env, timeout);
 
       crc = calc_crc((const uint8_t *)data, length, crc);
       return true;
     }
 
-    bool Write(uint8_t value) {
-      if (!port.Write(value))
-        return false;
-
+    void Write(uint8_t value) {
+      port.Write(value);
       crc = calc_crc_char(value, crc);
-      return true;
     }
 
     /**
      * Write the CRC, and reset it, so the object can be reused.
      */
-    bool Flush() {
-      bool success = port.Write(crc);
-      crc = 0xff;
-      return success;
+    void Flush() {
+      port.Write(std::exchange(crc, 0xff));
     }
   };
 }

@@ -35,11 +35,15 @@
 #include <cassert>
 #include <cstdio>
 
+using namespace std::chrono;
+
 static void
-OnAdvance(Trace &trace, const GeoPoint &loc, const double alt, const double t)
+OnAdvance(Trace &trace, const GeoPoint &loc, const double alt,
+          const TimeStamp t) noexcept
 {
-  if (t>1) {
-    const TracePoint point(loc, unsigned(t), alt, 0, 0);
+  if (t.IsDefined()) {
+    const TracePoint point(loc, t.Cast<duration<unsigned>>(),
+                           alt, 0, 0);
     trace.push_back(point);
   }
 // get the trace, just so it's included in timing
@@ -56,7 +60,7 @@ TestTrace(Path filename, unsigned ntrace, bool output=false)
   FileLineReaderA reader(filename);
 
   printf("# %d", ntrace);  
-  Trace trace(1000, ntrace);
+  Trace trace(seconds{1000}, Trace::null_time, ntrace);
 
   IGCExtensions extensions;
   extensions.clear();
@@ -74,9 +78,9 @@ TestTrace(Path filename, unsigned ntrace, bool output=false)
       continue;
 
     OnAdvance(trace,
-               fix.location,
-               fix.gps_altitude,
-               fix.time.GetSecondOfDay());
+              fix.location,
+              fix.gps_altitude,
+              TimeStamp{fix.time.DurationSinceMidnight()});
   }
   putchar('\n');
   printf("# samples %d\n", i);

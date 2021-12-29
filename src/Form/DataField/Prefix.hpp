@@ -56,7 +56,7 @@ public:
   const TCHAR *GetAsDisplayString() const noexcept override;
 
 protected:
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetAllowedCharacters() const noexcept {
     return allowed_characters
       ? allowed_characters(_T(""))

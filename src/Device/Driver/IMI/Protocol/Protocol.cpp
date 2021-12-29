@@ -27,8 +27,8 @@ Copyright_License {
 #include "Communication.hpp"
 #include "Operation/Operation.hpp"
 #include "Device/Declaration.hpp"
+#include "Device/Error.hpp"
 #include "Device/RecordedFlight.hpp"
-#include "MessageParser.hpp"
 #include "Device/Port/Port.hpp"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
@@ -37,85 +37,106 @@ Copyright_License {
 #include "time/BrokenDateTime.hpp"
 
 #include <memory>
+#include <stdexcept>
 
 #include <stdlib.h>
 
 namespace IMI
 {
-  bool _connected = false;
-  TDeviceInfo _info;
   IMIWORD _serialNumber;
 }
 
 bool
 IMI::Connect(Port &port, OperationEnvironment &env)
 {
-  if (_connected)
-    return true;
-
+  /* note: this variable is never used, only written to; but we may
+     find it useful one day */
+  TDeviceInfo _info;
   memset(&_info, 0, sizeof(_info));
   _serialNumber = 0;
-  MessageParser::Reset();
 
   // check connectivity
-  if (!Send(port, env, MSG_CFG_HELLO) || env.IsCancelled())
-    return false;
+  for (unsigned i = 0;; ++i) {
+    port.Flush();
 
-  const TMsg *msg = Receive(port, env, 100, 0);
-  if (!msg || msg->msgID != MSG_CFG_HELLO || env.IsCancelled())
-    return false;
+    Send(port, env, MSG_CFG_HELLO);
 
-  _serialNumber = msg->sn;
+    TMsg msg;
+
+    try {
+      msg = Receive(port, env, std::chrono::seconds{2}, 0);
+    } catch (const DeviceTimeout &) {
+      if (i >= 3)
+        throw;
+
+      /* try again */
+      continue;
+    }
+
+    if (msg.msgID == MSG_ACK_INVSTATE && i < 10) {
+      /* INVSTATE means the logger is still in some communication
+         mode, but there's no way to quickly cancel this communication
+         mode; we need to wait until it re-enters NMEA mode
+         automatically after up to 10 seconds, that's why we retry up
+         to 10 times */
+      env.Sleep(std::chrono::seconds{1});
+      port.Flush();
+      continue;
+    }
+
+    if (msg.msgID != MSG_CFG_HELLO)
+      throw std::runtime_error("No HELLO response");
+
+    _serialNumber = msg.sn;
+    break;
+  }
 
   // configure baudrate
   unsigned baudRate = port.GetBaudrate();
   if (baudRate == 0)
-    return false;
+    /* if the Port doesn't know the baud rate (e.g. because it's
+       connected to the "real" serial port over Bluetooth), assume
+       it's 9600, which I hope works for everybody */
+    baudRate = 9600;
 
-  if (!Send(port, env,
-            MSG_CFG_STARTCONFIG, 0, 0, IMICOMM_BIGPARAM1(baudRate),
-            IMICOMM_BIGPARAM2(baudRate)) || env.IsCancelled())
-    return false;
+  Send(port, env,
+       MSG_CFG_STARTCONFIG, 0, 0, IMICOMM_BIGPARAM1(baudRate),
+       IMICOMM_BIGPARAM2(baudRate));
 
   // get device info
   for (unsigned i = 0; i < 4; i++) {
-    if (!Send(port, env, MSG_CFG_DEVICEINFO))
-      continue;
+    Send(port, env, MSG_CFG_DEVICEINFO);
 
-    if (env.IsCancelled())
+    const auto msg = Receive(port, env, std::chrono::seconds{2},
+                             sizeof(TDeviceInfo));
+
+    if (msg.msgID == MSG_ACK_NOTCONFIG)
+      /* the MSG_CFG_STARTCONFIG command above was rejected */
       return false;
 
-    const TMsg *msg = Receive(port, env, 300, sizeof(TDeviceInfo));
-    if (!msg || env.IsCancelled())
-      return false;
-
-    if (msg->msgID != MSG_CFG_DEVICEINFO)
+    if (msg.msgID != MSG_CFG_DEVICEINFO)
       continue;
 
-    if (msg->payloadSize == sizeof(TDeviceInfo)) {
-      memcpy(&_info, msg->payload, sizeof(TDeviceInfo));
-    } else if (msg->payloadSize == 16) {
+    if (msg.payloadSize == sizeof(TDeviceInfo)) {
+      memcpy(&_info, msg.payload, sizeof(TDeviceInfo));
+    } else if (msg.payloadSize == 16) {
       // old version of the structure
       memset(&_info, 0, sizeof(TDeviceInfo));
-      memcpy(&_info, msg->payload, 16);
+      memcpy(&_info, msg.payload, 16);
     } else {
-      return false;
+      throw std::runtime_error("Invalid DEVICEINFO response");
     }
 
-    _connected = true;
     return true;
   }
 
   return false;
 }
 
-bool
+void
 IMI::DeclarationWrite(Port &port, const Declaration &decl,
                       OperationEnvironment &env)
 {
-  if (!_connected)
-    return false;
-
   TDeclaration imiDecl;
   memset(&imiDecl, 0, sizeof(imiDecl));
 
@@ -144,8 +165,8 @@ IMI::DeclarationWrite(Port &port, const Declaration &decl,
               imiDecl.wp[size + 1]);
 
   // send declaration for current task
-  return SendRet(port, env, MSG_DECLARATION, &imiDecl, sizeof(imiDecl),
-                 MSG_ACK_SUCCESS, 0, -1) != nullptr;
+  SendRet(port, env, MSG_DECLARATION, &imiDecl, sizeof(imiDecl),
+          MSG_ACK_SUCCESS, 2000, -1);
 }
 
 bool
@@ -154,25 +175,24 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list,
 {
   flight_list.clear();
 
-  if (!_connected)
-    return false;
-
   IMIWORD address = 0, addressStop = 0xFFFF;
   IMIBYTE count = 1, totalCount = 0;
 
   for (;; count++) {
-    const TMsg *pMsg = SendRet(port, env,
-                               MSG_FLIGHT_INFO, nullptr, 0, MSG_FLIGHT_INFO,
-                               -1, totalCount, address, addressStop, 200, 6);
-    if (pMsg == nullptr)
-      break;
+    const auto msg = SendRet(port, env,
+                             MSG_FLIGHT_INFO, nullptr, 0, MSG_FLIGHT_INFO,
+                             -1, totalCount, address, addressStop,
+                             std::chrono::seconds{2}, 6);
 
-    totalCount = pMsg->parameter1;
-    address = pMsg->parameter2;
-    addressStop = pMsg->parameter3;
+    totalCount = msg.parameter1;
+    address = msg.parameter2;
+    addressStop = msg.parameter3;
 
-    for (unsigned i = 0; i < pMsg->payloadSize / sizeof(IMI::FlightInfo); i++) {
-      const IMI::FlightInfo *fi = ((const IMI::FlightInfo*)pMsg->payload) + i;
+    env.SetProgressRange(totalCount);
+    env.SetProgressPosition(count);
+
+    for (unsigned i = 0; i < msg.payloadSize / sizeof(IMI::FlightInfo); i++) {
+      const IMI::FlightInfo *fi = ((const IMI::FlightInfo*)msg.payload) + i;
       RecordedFlightInfo &ifi = flight_list.append();
 
       BrokenDateTime start = ConvertToDateTime(fi->start);
@@ -182,7 +202,7 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list,
       ifi.internal.imi = fi->address;
     }
 
-    if (pMsg->payloadSize == 0 || address == 0xFFFF)
+    if (msg.payloadSize == 0 || address == 0xFFFF)
       return true;
   }
 
@@ -193,11 +213,6 @@ bool
 IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
                     Path path, OperationEnvironment &env)
 {
-  if (!_connected)
-    return false;
-
-  MessageParser::Reset();
-
   Flight flight;
   if (!FlashRead(port, &flight, flight_info.internal.imi, sizeof(flight), env))
     return false;
@@ -217,6 +232,8 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
   unsigned address = flight_info.internal.imi + sizeof(flight);
 
   unsigned fixesRemains = flight.finish.fixes;
+  env.SetProgressRange(fixesRemains);
+  unsigned position = 0;
   while (fixesRemains) {
     unsigned fixesToRead = fixesRemains;
     if (fixesToRead > fixesCount)
@@ -234,9 +251,8 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
     address = address + fixesToRead * sizeof(Fix);
     fixesRemains -= fixesToRead;
 
-    if (env.IsCancelled())
-      // canceled by user
-      return false;
+    position += fixesToRead;
+    env.SetProgressPosition(position);
   }
 
   WriteSignature(bos, flight.signature, flight.decl.header.sn);
@@ -245,15 +261,8 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
   return true;
 }
 
-bool
+void
 IMI::Disconnect(Port &port, OperationEnvironment &env)
 {
-  if (!_connected)
-    return true;
-
-  if (!Send(port, env, MSG_CFG_BYE))
-    return false;
-
-  _connected = false;
-  return true;
+  Send(port, env, MSG_CFG_BYE);
 }

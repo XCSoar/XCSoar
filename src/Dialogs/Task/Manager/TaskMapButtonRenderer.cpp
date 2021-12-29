@@ -33,7 +33,7 @@ Copyright_License {
 
 static void
 DrawTask(Canvas &canvas, const PixelRect rc,
-         const MapLook &look, const OrderedTask &task)
+         const MapLook &look, const OrderedTask &task) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   PaintTask(canvas, rc, task,
@@ -48,7 +48,7 @@ void
 TaskMapButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
                                   gcc_unused bool enabled,
                                   gcc_unused bool focused,
-                                  bool pressed) const
+                                  bool pressed) const noexcept
 {
   if (task == nullptr) {
     canvas.ClearWhite();

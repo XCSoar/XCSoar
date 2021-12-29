@@ -89,8 +89,8 @@ public:
    */
   void Render(const AbstractAirspace &as) const;
 
-  virtual void Visit(const AbstractAirspace &as) override {
-    Render(as);
+  void Visit(ConstAirspacePtr as) noexcept override {
+    Render(*as);
   }
 };
 
@@ -159,7 +159,7 @@ AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
   else
     rcd.bottom = chart.ScreenY(as.GetBaseAltitude(state));
 
-  int min_x = 1024, max_x = 0;
+  int min_x = canvas.GetWidth(), max_x = 0;
 
   // Iterate through the intersections
   for (const auto &i : intersections) {
@@ -198,8 +198,8 @@ AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
     const PixelSize name_size = canvas.CalcTextSize(name);
     const int x = name_size.width >= max_width
       ? min_x
-      : (min_x + max_x - name_size.width) / 2;
-    const int y = (rcd.top + rcd.bottom - name_size.height) / 2;
+      : (min_x + max_x - (int)name_size.width) / 2;
+    const int y = (rcd.top + rcd.bottom - (int)name_size.height) / 2;
 
     canvas.DrawClippedText({x, y}, max_x - x, name);
   }

@@ -26,9 +26,12 @@ Copyright_License {
 
 #include "LoggerFRecord.hpp"
 #include "time/BrokenDateTime.hpp"
+#include "time/Stamp.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "system/Path.hpp"
 #include "util/OverwritingRingBuffer.hpp"
+
+#include <memory>
 
 #include <tchar.h>
 
@@ -63,7 +66,7 @@ public:
     int satellite_ids[GPSState::MAXSATELLITES];
     bool satellite_ids_available;
     /** Time of fix (s) */
-    double time;
+    TimeStamp time;
     /** GPS fix quality */
     FixQuality fix_quality;
     /** GPS fix state */
@@ -92,7 +95,7 @@ public:
 
 private:
   AllocatedPath filename;
-  IGCWriter *writer;
+  std::unique_ptr<IGCWriter> writer;
 
   OverwritingRingBuffer<PreTakeoffBuffer, PRETAKEOFF_BUFFER_MAX> pre_takeoff_buffer;
 
@@ -106,15 +109,14 @@ private:
   bool simulator;
 
 public:
-  /** Default constructor */
   LoggerImpl();
-  ~LoggerImpl();
+  ~LoggerImpl() noexcept;
 
 public:
   void LogPoint(const NMEAInfo &gps_info);
   void LogEvent(const NMEAInfo &gps_info, const char* event);
 
-  bool IsActive() const {
+  bool IsActive() const noexcept {
     return writer != nullptr;
   }
 
@@ -127,7 +129,7 @@ public:
    */
   void StopLogger(const NMEAInfo &gps_info);
   void LoggerNote(const TCHAR *text);
-  void ClearBuffer();
+  void ClearBuffer() noexcept;
 
 private:
   /**
@@ -136,9 +138,9 @@ private:
    */
   bool StartLogger(const NMEAInfo &gps_info, const LoggerSettings &settings,
                    const char *logger_id);
-  
+
 private:
-  void LogPointToBuffer(const NMEAInfo &gps_info);
+  void LogPointToBuffer(const NMEAInfo &gps_info) noexcept;
   void WritePoint(const NMEAInfo &gps_info);
 };
 

@@ -38,10 +38,6 @@ Copyright_License {
 
 #include <cassert>
 
-#ifndef NDEBUG
-unsigned num_textures;
-#endif
-
 static constexpr unsigned
 NextPowerOfTwo(unsigned i) noexcept
 {
@@ -132,10 +128,6 @@ GLTexture::ResizeDiscard(PixelSize new_size) noexcept
 void
 GLTexture::Initialise() noexcept
 {
-#ifndef NDEBUG
-  ++num_textures;
-#endif
-
   glGenTextures(1, &id);
   Bind();
   Configure();

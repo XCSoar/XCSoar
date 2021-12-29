@@ -29,6 +29,11 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Language/Language.hpp"
 
+#ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
+#endif
+
 enum Controls {
   Location,
   Altitude,
@@ -36,6 +41,9 @@ enum Controls {
   Near,
   Bearing,
   Distance,
+#ifdef ANDROID
+  ShareButton,
+#endif
 };
 
 void
@@ -48,6 +56,9 @@ FlightStatusPanel::Refresh() noexcept
     SetText(Location, FormatGeoPoint(basic.location));
   else
     ClearText(Location);
+#ifdef ANDROID
+  SetRowEnabled(ShareButton, basic.location_available);
+#endif
 
   if (basic.gps_altitude_available)
     SetText(Altitude, FormatUserAltitude(basic.gps_altitude));
@@ -82,4 +93,12 @@ FlightStatusPanel::Prepare(ContainerWindow &parent,
   AddReadOnly(_("Near"));
   AddReadOnly(_("Bearing"));
   AddReadOnly(_("Distance"));
+
+#ifdef ANDROID
+  AddButton(_("Share"), [this](){
+    native_view->ShareText(GetText(Location));
+  });
+
+  SetRowEnabled(ShareButton, false);
+#endif
 }

@@ -7,15 +7,9 @@
 
 #include <algorithm>
 
-void
-AirspaceSelectInfo::ResetVector()
-{
-  vec.SetInvalid();
-}
-
 const GeoVector &
 AirspaceSelectInfo::GetVector(const GeoPoint &location,
-                              const FlatProjection &projection) const
+                              const FlatProjection &projection) const noexcept
 {
   if (!vec.IsValid()) {
     const auto closest_loc = airspace->ClosestPoint(location, projection);
@@ -25,10 +19,10 @@ AirspaceSelectInfo::GetVector(const GeoPoint &location,
   return vec;
 }
 
-bool
+inline bool
 AirspaceFilterData::Match(const GeoPoint &location,
                           const FlatProjection &projection,
-                          const AbstractAirspace &as) const
+                          const AbstractAirspace &as) const noexcept
 {
   if (cls != AirspaceClass::AIRSPACECLASSCOUNT && as.GetType() != cls)
     return false;
@@ -39,8 +33,8 @@ AirspaceFilterData::Match(const GeoPoint &location,
   if (!direction.IsNegative()) {
     const auto closest = as.ClosestPoint(location, projection);
     const auto bearing = location.Bearing(closest);
-    auto direction_error = (bearing - direction).AsDelta().AbsoluteDegrees();
-    if (direction_error > 18)
+    auto direction_error = (bearing - direction).AsDelta().Absolute();
+    if (direction_error > Angle::Degrees(18))
       return false;
   }
 
@@ -62,7 +56,7 @@ class AirspaceFilterPredicate final {
 public:
   AirspaceFilterPredicate(const GeoPoint &_location,
                           const FlatProjection &_projection,
-                          const AirspaceFilterData &_filter)
+                          const AirspaceFilterData &_filter) noexcept
     :location(_location), projection(_projection), filter(_filter) {}
 
   [[gnu::pure]]
@@ -73,7 +67,7 @@ public:
 
 static void
 SortByDistance(AirspaceSelectInfoVector &vec, const GeoPoint &location,
-               const FlatProjection &projection)
+               const FlatProjection &projection) noexcept
 {
   auto compare = [&] (const AirspaceSelectInfo &elem1,
                       const AirspaceSelectInfo &elem2) {
@@ -85,7 +79,7 @@ SortByDistance(AirspaceSelectInfoVector &vec, const GeoPoint &location,
 }
 
 static void
-SortByName(AirspaceSelectInfoVector &vec)
+SortByName(AirspaceSelectInfoVector &vec) noexcept
 {
   auto compare = [&] (const AirspaceSelectInfo &elem1,
                       const AirspaceSelectInfo &elem2) {
@@ -98,7 +92,7 @@ SortByName(AirspaceSelectInfoVector &vec)
 
 AirspaceSelectInfoVector
 FilterAirspaces(const Airspaces &airspaces, const GeoPoint &location,
-                const AirspaceFilterData &filter)
+                const AirspaceFilterData &filter) noexcept
 {
   const AirspaceFilterPredicate predicate(location, airspaces.GetProjection(),
                                           filter);
@@ -109,7 +103,7 @@ FilterAirspaces(const Airspaces &airspaces, const GeoPoint &location,
     : airspaces.QueryWithinRange(location, filter.distance);
   for (const auto &i : range)
     if (predicate(i.GetAirspace()))
-      result.emplace_back(i.GetAirspace());
+      result.emplace_back(i.GetAirspacePtr());
 
   if (filter.direction.IsNegative() && filter.distance < 0)
     SortByName(result);

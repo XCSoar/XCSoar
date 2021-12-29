@@ -115,7 +115,7 @@ void msInitShape(shapeObj *shape)
 
 #ifdef SHAPELIB_DISABLED
 
-int msCopyShape(shapeObj *from, shapeObj *to)
+int msCopyShape(const shapeObj *from, shapeObj *to)
 {
   int i;
 
@@ -250,7 +250,9 @@ int msIsOuterRing(shapeObj *shape, int r)
   int i, status=MS_TRUE;
   int result1, result2;
 
-  if(shape->numlines == 1) return(MS_TRUE);
+  if(!shape) return MS_FALSE ;
+  if(shape->numlines == 1) return MS_TRUE;
+  if(r < 0 || r >= shape->numlines) return MS_FALSE; /* bad ring index */
 
   for(i=0; i<shape->numlines; i++) {
     if(i == r) continue;
@@ -283,13 +285,15 @@ int *msGetOuterList(shapeObj *shape)
   int i;
   int *list;
 
+  if(!shape) return NULL;
+
   list = (int *)malloc(sizeof(int)*shape->numlines);
   MS_CHECK_ALLOC(list, sizeof(int)*shape->numlines, NULL);
 
   for(i=0; i<shape->numlines; i++)
     list[i] = msIsOuterRing(shape, i);
 
-  return(list);
+  return list;
 }
 
 /*
@@ -299,6 +303,9 @@ int *msGetInnerList(shapeObj *shape, int r, int *outerlist)
 {
   int i;
   int *list;
+
+  if(!shape || !outerlist) return NULL;
+  if(r < 0 || r >= shape->numlines) return NULL; /* bad ring index */
 
   list = (int *)malloc(sizeof(int)*shape->numlines);
   MS_CHECK_ALLOC(list, sizeof(int)*shape->numlines, NULL);
@@ -345,7 +352,7 @@ int msAddPointToLine(lineObj *line, pointObj *point )
   return MS_SUCCESS;
 }
 
-int msAddLine(shapeObj *p, lineObj *new_line)
+int msAddLine(shapeObj *p, const lineObj *new_line)
 {
   lineObj lineCopy;
 
@@ -353,8 +360,10 @@ int msAddLine(shapeObj *p, lineObj *new_line)
   lineCopy.point = (pointObj *) malloc(new_line->numpoints*sizeof(pointObj));
   MS_CHECK_ALLOC(lineCopy.point, new_line->numpoints*sizeof(pointObj), MS_FAILURE);
 
-  memcpy( lineCopy.point, new_line->point, sizeof(pointObj) * new_line->numpoints );
+  if( new_line->point )
+      memcpy( lineCopy.point, new_line->point, sizeof(pointObj) * new_line->numpoints );
 
+  // cppcheck-suppress memleak
   return msAddLineDirectly( p, &lineCopy );
 }
 
@@ -368,11 +377,20 @@ int msAddLineDirectly(shapeObj *p, lineObj *new_line)
 
   if( p->numlines == 0 ) {
     p->line = (lineObj *) malloc(sizeof(lineObj));
-    MS_CHECK_ALLOC(p->line, sizeof(lineObj), MS_FAILURE);
   } else {
-    p->line = (lineObj *) realloc(p->line, (p->numlines+1)*sizeof(lineObj));
-    MS_CHECK_ALLOC(p->line, (p->numlines+1)*sizeof(lineObj), MS_FAILURE);
+    lineObj* newline = (lineObj *) realloc(p->line, (p->numlines+1)*sizeof(lineObj));
+    if( !newline ) {
+        free(p->line);
+    }
+    p->line = newline;
   }
+  if( !p->line )
+  {
+    free(new_line->point );
+    new_line->point = NULL;
+    new_line->numpoints = 0;
+  }
+  MS_CHECK_ALLOC(p->line, (p->numlines+1)*sizeof(lineObj), MS_FAILURE);
 
   /* Copy the new line onto the end of the extended line array */
   c= p->numlines;
@@ -510,10 +528,10 @@ void msClipPolylineRect(shapeObj *shape, rectObj rect)
   double x1, x2, y1, y2;
   shapeObj tmp;
 
-  memset( &tmp, 0, sizeof(shapeObj) );
-
-  if(shape->numlines == 0) /* nothing to clip */
+  if(!shape || shape->numlines == 0) /* nothing to clip */
     return;
+
+  memset( &tmp, 0, sizeof(shapeObj) );
 
   /*
   ** Don't do any clip processing of shapes completely within the
@@ -592,10 +610,10 @@ void msClipPolygonRect(shapeObj *shape, rectObj rect)
   shapeObj tmp;
   lineObj line= {0,NULL};
 
-  msInitShape(&tmp);
-
-  if(shape->numlines == 0) /* nothing to clip */
+  if(!shape || shape->numlines == 0) /* nothing to clip */
     return;
+
+  msInitShape(&tmp);
 
   /*
   ** Don't do any clip processing of shapes completely within the
@@ -1145,7 +1163,7 @@ void msTransformPixelToShape(shapeObj *shape, rectObj extent, double cellsize)
 */
 static pointObj generateLineIntersection(pointObj a, pointObj b, pointObj c, pointObj d)
 {
-  pointObj p = {0,0,0,0}; // initialize
+  pointObj p = {0}; // initialize
   double r;
   double denominator, numerator;
 
@@ -1165,7 +1183,7 @@ static pointObj generateLineIntersection(pointObj a, pointObj b, pointObj c, poi
 void bufferPolyline(shapeObj *p, shapeObj *op, int w)
 {
   int i, j;
-  pointObj a;
+  pointObj a = {0};
   lineObj inside, outside;
   double angle;
   double dx, dy;
@@ -1249,6 +1267,8 @@ double msGetPolygonArea(shapeObj *p)
   int i;
   double area=0;
 
+  if(!p) return 0;
+
   for(i=0; i<p->numlines; i++) {
     if(msIsOuterRing(p, i))
       area += getRingArea(&(p->line[i]));
@@ -1264,22 +1284,20 @@ double msGetPolygonArea(shapeObj *p)
 */
 static int getPolygonCenterOfGravity(shapeObj *p, pointObj *lp)
 {
-  int i, j;
-  double area=0;
-  double sx=0, sy=0, tsx, tsy, s; /* sums */
-  double a;
-
+  double sx=0, sy=0; /* sums */
   double largestArea=0;
 
-  for(i=0; i<p->numlines; i++) {
-    tsx = tsy = s = 0; /* reset the ring sums */
-    for(j=0; j<p->line[i].numpoints-1; j++) {
-      a = p->line[i].point[j].x*p->line[i].point[j+1].y - p->line[i].point[j+1].x*p->line[i].point[j].y;
+  for(int i=0; i<p->numlines; i++) {
+    double tsx = 0;
+    double tsy = 0;
+    double s = 0; /* reset the ring sums */
+    for(int j=0; j<p->line[i].numpoints-1; j++) {
+      double a = p->line[i].point[j].x*p->line[i].point[j+1].y - p->line[i].point[j+1].x*p->line[i].point[j].y;
       s += a;
       tsx += (p->line[i].point[j].x + p->line[i].point[j+1].x)*a;
       tsy += (p->line[i].point[j].y + p->line[i].point[j+1].y)*a;
     }
-    area = MS_ABS(s/2);
+    double area = MS_ABS(s/2);
 
     if(area > largestArea) {
       largestArea = area;
@@ -1624,15 +1642,17 @@ int msPolylineLabelPoint(mapObj *map, shapeObj *p, textSymbolObj *ts, labelObj *
   struct polyline_lengths pll;
   int i, ret = MS_SUCCESS;
   double minfeaturesize = -1;
-  assert(ts->annotext);
+  assert(ts == NULL || ts->annotext);
 
 
   if(label && ts) {
     if(label->autominfeaturesize) {
       if(!ts->textpath) {
-        if(UNLIKELY(MS_FAILURE == msComputeTextPath(map,ts)))
+        if(MS_UNLIKELY(MS_FAILURE == msComputeTextPath(map,ts)))
           return MS_FAILURE;
       }
+      if(!ts->textpath)
+        return MS_FAILURE;
       minfeaturesize = ts->textpath->bounds.bbox.maxx;
     } else if(label->minfeaturesize) {
       minfeaturesize = label->minfeaturesize * resolutionfactor;
@@ -1670,6 +1690,7 @@ int msPolylineLabelPoint(mapObj *map, shapeObj *p, textSymbolObj *ts, labelObj *
 
 int msLineLabelPoint(mapObj *map, lineObj *p, textSymbolObj *ts, struct line_lengths *ll, struct label_auto_result *lar, labelObj *label, double resolutionfactor)
 {
+  (void)map;
   int j, l, n, point_repeat;
   double t, theta, fwd_length, point_distance;
   double center_point_position, left_point_position, right_point_position, point_position;
@@ -1678,7 +1699,7 @@ int msLineLabelPoint(mapObj *map, lineObj *p, textSymbolObj *ts, struct line_len
     repeat_distance = label->repeatdistance * resolutionfactor;
   }
 
-  if(UNLIKELY(p->numpoints < 2))
+  if(MS_UNLIKELY(p->numpoints < 2))
     return MS_FAILURE;
   point_distance = 0;
   point_repeat = 1;
@@ -1806,10 +1827,12 @@ int msPolylineLabelPath(mapObj *map, imageObj *image, shapeObj *p, textSymbolObj
  
   if(label->autominfeaturesize) {
     if(!ts->textpath) {
-      if(UNLIKELY(MS_FAILURE == msComputeTextPath(map,ts))) {
+      if(MS_UNLIKELY(MS_FAILURE == msComputeTextPath(map,ts))) {
         return MS_FAILURE;
       }
     }
+    if(!ts->textpath)
+      return MS_FAILURE;
     minfeaturesize = ts->textpath->bounds.bbox.maxx;
   } else if(label->minfeaturesize) {
     minfeaturesize = label->minfeaturesize * image->resolutionfactor;
@@ -1941,9 +1964,12 @@ int msLineLabelPath(mapObj *map, imageObj *img, lineObj *p, textSymbolObj *ts, s
     return msLineLabelPoint(map,p,ts,ll,&lfr->lar,label, img->resolutionfactor);
   
   if(!ts->textpath) {
-    if(UNLIKELY(MS_FAILURE == msComputeTextPath(map,ts))) {
+    if(MS_UNLIKELY(MS_FAILURE == msComputeTextPath(map,ts))) {
       return MS_FAILURE;
     }
+  }
+  if(!ts->textpath) {
+    return MS_FAILURE;
   }
   
   /* skip the label and use the normal algorithm if it has fewer than 2 characters */
@@ -2168,21 +2194,19 @@ int msLineLabelPath(mapObj *map, imageObj *img, lineObj *p, textSymbolObj *ts, s
                   max_dec_retry_offset = max_inc_retry_offset = first_label_position;
                 } else if(l==0) {
                   if(direction>0) {
-                    max_dec_retry_offset = MS_MIN(first_label_position, max_retry_offset);
-                    max_inc_retry_offset = max_retry_offset;
-                  } else {
-                    max_dec_retry_offset = max_retry_offset;
                     max_inc_retry_offset = MS_MIN(first_label_position, max_retry_offset);
-                    //max_inc_retry_offset = MS_MIN(ll->total_length-cur_label_position-text_length, max_retry_offset);
+                    max_dec_retry_offset = max_retry_offset;
+                  } else {
+                    max_inc_retry_offset = max_retry_offset;
+                    max_dec_retry_offset = MS_MIN(first_label_position, max_retry_offset);
                   }
                 } else if(l == label_repeat-1) {
                   if(direction>0) {
-                    max_inc_retry_offset = MS_MIN(first_label_position, max_retry_offset);
-                    max_dec_retry_offset = max_retry_offset;
-                  } else {
-                    max_inc_retry_offset = max_retry_offset;
                     max_dec_retry_offset = MS_MIN(first_label_position, max_retry_offset);
-                    //max_inc_retry_offset = MS_MIN(ll->total_length-cur_label_position-text_length, max_retry_offset);
+                    max_inc_retry_offset = max_retry_offset;
+                  } else {
+                    max_dec_retry_offset = max_retry_offset;
+                    max_inc_retry_offset = MS_MIN(first_label_position, max_retry_offset);
                   }
                 } else {
                   max_dec_retry_offset = max_inc_retry_offset = max_retry_offset;
@@ -2192,7 +2216,7 @@ int msLineLabelPath(mapObj *map, imageObj *img, lineObj *p, textSymbolObj *ts, s
                 if(retry_offset == 0.0) {
                   first_retry_idx = k-1;
                 }
-                retry_offset = compute_retry_offset(ts, first_retry_idx, retry_offset, max_inc_retry_offset, max_dec_retry_offset);
+                retry_offset = compute_retry_offset(ts, first_retry_idx, retry_offset, max_dec_retry_offset, max_inc_retry_offset);
                 if(retry_offset == 0.0) { /* no offsetted position to try */
                   freeTextPath(tp);
                   free(tp);
@@ -2315,11 +2339,7 @@ void msRectToFormattedString(rectObj *rect, char *format, char *buffer, int buff
 
 void msPointToFormattedString(pointObj *point, const char *format, char *buffer, int buffer_length)
 {
-#ifdef USE_POINT_Z_M
   snprintf(buffer, buffer_length, format, point->x, point->y, point->z, point->m);
-#else
-  snprintf(buffer, buffer_length, format, point->x, point->y);
-#endif
 }
 
 /* Returns true if a shape contains only degenerate parts */
@@ -2337,6 +2357,93 @@ int msIsDegenerateShape(shapeObj *shape)
     non_degenerate_parts++;
   }
   return( non_degenerate_parts == 0 );
+}
+
+shapeObj *msRings2Shape(shapeObj *shape, int outer) {
+  shapeObj *shape2;
+  int i, rv, *outerList=NULL;
+
+  if(!shape) return NULL;
+  if(shape->type != MS_SHAPE_POLYGON) return NULL;
+
+  outer = (outer)?1:0; // set explicitly to 1 or 0
+
+  shape2 = (shapeObj *) malloc(sizeof(shapeObj));
+  MS_CHECK_ALLOC(shape2, sizeof(shapeObj), NULL);
+  msInitShape(shape2);
+  shape2->type = shape->type;
+
+  outerList = msGetOuterList(shape);
+  if(!outerList) {
+    msFreeShape(shape2);
+    free(shape2);
+    return NULL;
+  }
+
+  for(i=0; i<shape->numlines; i++) {
+    if(outerList[i] == outer) { // else inner
+      rv = msAddLine(shape2, &(shape->line[i]));
+      if(rv != MS_SUCCESS) {
+        msFreeShape(shape2);
+        free(shape2);
+        free(outerList);
+        return NULL;
+      }
+    }
+  }
+
+  free(outerList); // clean up
+  return shape2;
+}
+
+shapeObj *msDensify(shapeObj *shape, double tolerance) {
+  int i, j, k, l; // counters                                                                                                                                                
+  int n;
+  shapeObj *shape2;
+  lineObj line;
+  double distance, length, c;
+
+  if(!shape) return NULL;
+  if(shape->type != MS_SHAPE_POLYGON && shape->type != MS_SHAPE_LINE) return NULL;
+  if(tolerance <= 0) return NULL; // must be positive
+
+  shape2 = (shapeObj *) malloc(sizeof(shapeObj));
+  MS_CHECK_ALLOC(shape2, sizeof(shapeObj), NULL);
+  msInitShape(shape2);
+  shape2->type = shape->type; // POLGYON or LINE
+
+  for(i=0; i<shape->numlines; i++) {
+
+    line.numpoints = shape->line[i].numpoints;
+    line.point = (pointObj *) malloc(sizeof(pointObj)*line.numpoints); // best case we don't have to add any points
+    MS_CHECK_ALLOC(line.point, sizeof(pointObj)*line.numpoints, NULL);
+
+    for(j=0, l=0; j<shape->line[i].numpoints-1; j++, l++) {
+      line.point[l] = shape->line[i].point[j];
+
+      distance = msDistancePointToPoint(&(shape->line[i].point[j]), &(shape->line[i].point[j+1]));
+      if(distance > tolerance) {
+        n = (int) floor(distance/tolerance); // number of new points, n+1 is the number of new segments
+        length = distance/(n+1); // segment length
+
+        line.numpoints += n;
+        line.point = (pointObj *) realloc(line.point, sizeof(pointObj)*line.numpoints);
+        MS_CHECK_ALLOC(line.point, sizeof(pointObj)*line.numpoints, NULL);
+
+        for(k=0; k<n; k++) {
+          c = (k+1)*length/distance;
+          l++;
+          line.point[l].x = shape->line[i].point[j].x + c*(shape->line[i].point[j+1].x - shape->line[i].point[j].x);
+          line.point[l].y = shape->line[i].point[j].y + c*(shape->line[i].point[j+1].y - shape->line[i].point[j].y);
+        }
+      }
+    }
+    line.point[l] = shape->line[i].point[j];
+
+    msAddLineDirectly(shape2, &line);
+  }
+
+  return shape2;
 }
 
 #endif /* SHAPELIB_DISABLED */

@@ -87,17 +87,16 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
        ends is delayed for another 10 seconds */
     i = 0;
 
-  unsigned time(basic.clock);
   if (derived.turn_rate.Absolute() > Angle::Degrees(20) ||
       (basic.acceleration.available &&
        basic.acceleration.real &&
        fabs(basic.acceleration.g_load - 1) > 0.3)) {
 
-    SetBlackout(time);
+    SetBlackout(basic.clock);
     return Result(0);
   }
 
-  if (InBlackout(time))
+  if (InBlackout(basic.clock))
     return Result(0);
 
   // clear blackout

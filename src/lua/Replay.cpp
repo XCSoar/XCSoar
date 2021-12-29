@@ -22,6 +22,8 @@ Copyright_License {
 */
 
 #include "Replay.hpp"
+#include "Chrono.hpp"
+#include "MetaTable.hxx"
 #include "Util.hxx"
 #include "system/Path.hpp"
 #include "Components.hpp"
@@ -68,7 +70,7 @@ l_replay_fastforward(lua_State *L)
   if (lua_gettop(L) != 1)
     return luaL_error(L, "Invalid parameters");
 
-  double delta_s = luaL_checknumber(L, 1);
+  FloatDuration delta_s{luaL_checknumber(L, 1)};
   return !replay->FastForward(delta_s);
 }
 
@@ -113,9 +115,7 @@ Lua::InitReplay(lua_State *L)
 
   lua_newtable(L);
 
-  lua_newtable(L);
-  SetField(L, -2, "__index", l_replay_index);
-  lua_setmetatable(L, -2);
+  MakeIndexMetaTableFor(L, RelativeStackIndex{-1}, l_replay_index);
 
   luaL_setfuncs(L, settings_funcs, 0);
 

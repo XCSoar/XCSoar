@@ -32,7 +32,6 @@
 
 #include "OutputStream.hxx"
 #include "system/Path.hpp"
-#include "util/Compiler.h"
 
 #ifndef _WIN32
 #include "FileDescriptor.hxx"
@@ -42,7 +41,10 @@
 #include <cstdint>
 
 #ifdef _WIN32
-#include <windows.h>
+#include <fileapi.h>
+#include <windef.h> // for HWND (needed by winbase.h)
+#include <handleapi.h> // for INVALID_HANDLE_VALUE
+#include <winbase.h> // for FILE_END
 #endif
 
 #if defined(__linux__) && !defined(ANDROID)
@@ -130,7 +132,7 @@ public:
 		return path;
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	uint64_t Tell() const noexcept;
 
 	/* virtual methods from class OutputStream */

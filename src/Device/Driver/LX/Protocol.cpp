@@ -22,29 +22,38 @@ Copyright_License {
 */
 
 #include "Protocol.hpp"
+#include "Device/Error.hpp"
 #include "Operation/Operation.hpp"
 
 #include <cassert>
 
-bool
+void
 LX::CommandMode(Port &port, OperationEnvironment &env)
 {
   /* switch to command mode, first attempt */
 
-  if (!SendSYN(port) ||
-      !port.FullFlush(env, std::chrono::milliseconds(50),
-                      std::chrono::milliseconds(200)))
-    return false;
+  SendSYN(port);
+
+  port.FullFlush(env, std::chrono::milliseconds(50),
+                 std::chrono::milliseconds(200));
 
   /* the port is clean now; try the SYN/ACK procedure up to three
      times */
-  for (unsigned i = 0; i < 100 && !env.IsCancelled(); ++i)
-    if (Connect(port, env))
-      /* make sure all remaining ACKs are flushed */
-      return port.FullFlush(env, std::chrono::milliseconds(200),
-                            std::chrono::milliseconds(500));
+  for (unsigned i = 0;; ++i) {
+    try {
+      Connect(port, env);
+    } catch (const DeviceTimeout &) {
+      if (i >= 100)
+        throw;
+      /* retry */
+      continue;
+    }
 
-  return false;
+    /* make sure all remaining ACKs are flushed */
+    port.FullFlush(env, std::chrono::milliseconds(200),
+                   std::chrono::milliseconds(500));
+    return;
+  }
 }
 
 void
@@ -58,15 +67,16 @@ LX::CommandModeQuick(Port &port, OperationEnvironment &env)
   env.Sleep(std::chrono::milliseconds(500));
 }
 
-bool
+void
 LX::SendPacket(Port &port, Command command,
                const void *data, size_t length,
                OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout)
 {
-  return SendCommand(port, command) &&
-    port.FullWrite(data, length, env, timeout) &&
-    port.Write(calc_crc(data, length, 0xff));
+  SendCommand(port, command);
+
+  port.FullWrite(data, length, env, timeout);
+  port.Write(calc_crc(data, length, 0xff));
 }
 
 bool
@@ -77,7 +87,8 @@ LX::ReceivePacket(Port &port, Command command,
                   std::chrono::steady_clock::duration total_timeout)
 {
   port.Flush();
-  return SendCommand(port, command) &&
+  SendCommand(port, command);
+  return
     ReadCRC(port, data, length, env,
             first_timeout, subsequent_timeout, total_timeout);
 }
@@ -101,8 +112,7 @@ LX::ReceivePacketRetry(Port &port, Command command,
     if (n_retries-- == 0)
       return false;
 
-    if (!CommandMode(port, env))
-      return false;
+    CommandMode(port, env);
 
     port.Flush();
   }
@@ -144,11 +154,12 @@ LX::ReadCRC(Port &port, void *buffer, size_t length, OperationEnvironment &env,
 {
   uint8_t crc;
 
-  return port.FullRead(buffer, length, env,
-                       first_timeout, subsequent_timeout,
-                       total_timeout) &&
-    port.FullRead(&crc, sizeof(crc), env,
-                  subsequent_timeout, subsequent_timeout,
-                  subsequent_timeout) &&
-    calc_crc(buffer, length, 0xff) == crc;
+  port.FullRead(buffer, length, env,
+                first_timeout, subsequent_timeout,
+                total_timeout);
+  port.FullRead(&crc, sizeof(crc), env,
+                subsequent_timeout, subsequent_timeout,
+                subsequent_timeout);
+
+  return calc_crc(buffer, length, 0xff) == crc;
 }

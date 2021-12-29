@@ -67,7 +67,7 @@ CloudConfigPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(ENABLED, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    SetEnabled(dfb.GetAsBoolean());
+    SetEnabled(dfb.GetValue());
   }
 }
 

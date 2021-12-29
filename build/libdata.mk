@@ -5,10 +5,12 @@ DATA_RESOURCES = \
 	$(MO_FILES) \
 	output/data/COPYING.gz \
 	output/data/AUTHORS.gz \
+	output/data/NEWS.txt.gz \
 	Data/other/egm96s.dem
 DATA_SOURCES += $(foreach file,$(DATA_RESOURCES),$(DATA)/$(notdir $(file)).c)
 
 define add-data-file
+generate:: $(DATA)/$(notdir $(1)).c
 $(DATA)/$(notdir $(1)).c: $(1) $(topdir)/tools/BinToC.pl $(topdir)/tools/BinToC.pm | $$(DATA)/dirstamp
 	@$$(NQ)echo "  GEN     $$@"
 	$(Q)$(PERL) $(topdir)/tools/BinToC.pl $$< $$@

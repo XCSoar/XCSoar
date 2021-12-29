@@ -4,3 +4,6 @@
 [submodule "lib/glm"]
 	path = lib/glm
 	url = git://github.com/g-truc/glm
+[submodule "android/UsbSerial"]
+	path = android/UsbSerial
+	url = git://github.com/XCSoar/UsbSerial

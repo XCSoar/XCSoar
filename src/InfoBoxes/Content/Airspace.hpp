@@ -27,9 +27,9 @@ Copyright_License {
 struct InfoBoxData;
 
 void
-UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data);
+UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxNearestAirspaceVertical(InfoBoxData &data);
+UpdateInfoBoxNearestAirspaceVertical(InfoBoxData &data) noexcept;
 
 #endif

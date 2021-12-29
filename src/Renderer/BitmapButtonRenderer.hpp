@@ -35,14 +35,15 @@ class BitmapButtonRenderer : public ButtonRenderer {
   const Bitmap &bitmap;
 
 public:
-  explicit BitmapButtonRenderer(const Bitmap &_bitmap)
+  explicit BitmapButtonRenderer(const Bitmap &_bitmap) noexcept
     :bitmap(_bitmap) {}
 
   [[gnu::pure]]
-  unsigned GetMinimumButtonWidth() const override;
+  unsigned GetMinimumButtonWidth() const noexcept override;
 
   void DrawButton(Canvas &canvas, const PixelRect &rc,
-                  bool enabled, bool focused, bool pressed) const override;
+                  bool enabled, bool focused,
+                  bool pressed) const noexcept override;
 };
 
 #endif

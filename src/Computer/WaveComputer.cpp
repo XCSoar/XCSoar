@@ -84,7 +84,7 @@ GetNettoVarioAvailable(const NMEAInfo &basic) noexcept
 gcc_pure
 static WaveInfo
 GetWaveInfo(const LeastSquares &ls, const FlatProjection &projection,
-            double time) noexcept
+            TimeStamp time) noexcept
 {
   if (!ls.HasResult())
     return WaveInfo::Undefined();
@@ -104,7 +104,7 @@ GetWaveInfo(const LeastSquares &ls, const FlatProjection &projection,
 }
 
 void
-WaveComputer::Decay(double min_time) noexcept
+WaveComputer::Decay(TimeStamp min_time) noexcept
 {
   waves.remove_if([min_time](const auto &i){ return i.time < min_time; });
 }
@@ -310,12 +310,13 @@ WaveComputer::Compute(const NMEAInfo &basic,
        and a vario value */
     return;
 
-  const auto dt = delta_time.Update(basic.time, 0.5, 20);
-  if (dt < 0)
+  const auto dt = delta_time.Update(basic.time, FloatDuration{0.5},
+                                    std::chrono::seconds{20});
+  if (dt.count() < 0)
     /* time warp */
     Reset();
 
-  if (dt <= 0)
+  if (dt.count() <= 0)
     /* throttle */
     return;
 
@@ -339,7 +340,7 @@ WaveComputer::Compute(const NMEAInfo &basic,
   else
     sinking_clock.Subtract(dt);
 
-  const bool sinking = sinking_clock >= dt + 1;
+  const bool sinking = sinking_clock >= dt + std::chrono::seconds{1};
   if (sinking) {
     /* we've been sinking; stop calculating the current wave; prepare
        to flush the #LeastSquares instance */
@@ -347,7 +348,8 @@ WaveComputer::Compute(const NMEAInfo &basic,
       /* we've been lifting in the wave for some time; see if we
          really spotted a wave */
       const WaveInfo wave = GetWaveInfo(ls, projection,
-                                        basic.time_available ? basic.time : 0);
+                                        basic.time_available
+                                        ? basic.time : TimeStamp::Undefined());
       if (wave.IsDefined())
         /* yes, spotted a wave: copy it from the #LeastSquares
            instance to the list of waves */
@@ -359,7 +361,7 @@ WaveComputer::Compute(const NMEAInfo &basic,
 
   if (basic.time_available)
     /* forget all waves which are older than 8 hours */
-    Decay(basic.time - 8 * 3600);
+    Decay(basic.time - std::chrono::hours{8});
 
   /* fill the #WaveResult */
 
@@ -368,14 +370,17 @@ WaveComputer::Compute(const NMEAInfo &basic,
   /* first copy the wave that is currently being calculated (partial
      data) */
   WaveInfo wave = GetWaveInfo(ls, projection,
-                              basic.time_available ? basic.time : 0);
+                              basic.time_available
+                              ? basic.time : TimeStamp::Undefined());
   if (wave.IsDefined())
     result.waves.push_back(wave);
 
   /* now copy the rest */
-  for (auto i = waves.begin(), end = waves.end();
-       i != end && !result.waves.full(); ++i)
-    result.waves.push_back(*i);
+  for (const auto &i : waves) {
+    if (result.waves.full())
+      break;
+    result.waves.push_back(i);
+  }
 
   /* remember some data for the next iteration */
   last_location_available = basic.location_available;

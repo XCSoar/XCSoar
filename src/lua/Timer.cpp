@@ -30,6 +30,7 @@ Copyright_License {
 #include "Class.hxx"
 #include "Persistent.hpp"
 #include "ui/event/PeriodicTimer.hpp"
+#include "time/FloatDuration.hxx"
 
 extern "C" {
 #include <lauxlib.h>
@@ -108,7 +109,7 @@ using LuaTimerClass = Lua::Class<LuaTimer, lua_timer_class>;
 static constexpr auto
 LuaToSteadyDuration(lua_Number n) noexcept
 {
-  return std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::duration<double>(n));
+  return std::chrono::duration_cast<std::chrono::steady_clock::duration>(FloatDuration(n));
 }
 
 int

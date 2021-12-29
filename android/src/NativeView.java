@@ -37,6 +37,8 @@ import android.view.MotionEvent;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
+import android.view.View;
+import android.view.ViewParent;
 import android.os.Build;
 import android.os.Handler;
 import android.net.Uri;
@@ -44,11 +46,14 @@ import android.content.Intent;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.Configuration;
+import android.opengl.EGL14;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.webkit.MimeTypeMap;
 
 class EGLException extends Exception {
+  private static final long serialVersionUID = 5928634879321047581L;
+
   public EGLException(String _msg) {
     super(_msg);
   }
@@ -61,7 +66,7 @@ class NativeView extends SurfaceView
   implements SurfaceHolder.Callback, Runnable {
   private static final String TAG = "XCSoar";
 
-  final Handler quitHandler, errorHandler;
+  final Handler quitHandler, wakelockhandler, fullScreenHandler, errorHandler;
 
   Resources resources;
 
@@ -94,18 +99,20 @@ class NativeView extends SurfaceView
   Thread thread;
 
   public NativeView(Activity context, Handler _quitHandler,
+                    Handler _wakeLockHandler,
+                    Handler _fullScreenHandler,
                     Handler _errorHandler) {
     super(context);
 
     quitHandler = _quitHandler;
+    wakelockhandler = _wakeLockHandler;
+    fullScreenHandler = _fullScreenHandler;
     errorHandler = _errorHandler;
 
     resources = context.getResources();
 
     hasKeyboard = resources.getConfiguration().keyboard !=
       Configuration.KEYBOARD_NOKEYS;
-
-    touchInput = DifferentTouchInput.getInstance();
 
     SurfaceHolder holder = getHolder();
     holder.addCallback(this);
@@ -121,21 +128,22 @@ class NativeView extends SurfaceView
     throws EGLException {
     int[] num_config = new int[1];
     int[] configSpec = new int[]{
-      EGL10.EGL_STENCIL_SIZE, 1,  /* Don't change this position in array! */
+      /* EGL_STENCIL_SIZE not listed here because we have a fallback
+         for configurations without stencil (but we prefer native
+         stencil) (maybe we can just require a stencil and get rid of
+         the complicated and slow fallback code eventually?) */
+
       EGL10.EGL_RED_SIZE, 4,
       EGL10.EGL_GREEN_SIZE, 4,
       EGL10.EGL_BLUE_SIZE, 4,
-      EGL10.EGL_ALPHA_SIZE, 0,
-      EGL10.EGL_DEPTH_SIZE, 0,
+
+      EGL10.EGL_SURFACE_TYPE, EGL10.EGL_WINDOW_BIT,
+      EGL10.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT,
+
       EGL10.EGL_NONE
     };
 
     egl.eglChooseConfig(display, configSpec, null, 0, num_config);
-    if (num_config[0] == 0) {
-      /* fallback in case stencil buffer is not available */
-      configSpec[1] = 0;
-      egl.eglChooseConfig(display, configSpec, null, 0, num_config);
-    }
 
     int numConfigs = num_config[0];
     EGLConfig[] configs = new EGLConfig[numConfigs];
@@ -144,7 +152,7 @@ class NativeView extends SurfaceView
       throw new EGLException("eglChooseConfig() failed: " + egl.eglGetError());
 
     EGLConfig closestConfig = EGLUtil.findClosestConfig(egl, display, configs,
-                                                        4, 4, 4, 0, 0, 8);
+                                                        5, 6, 5, 0, 0, 1);
     if (closestConfig == null)
       throw new EGLException("eglChooseConfig() failed");
 
@@ -181,11 +189,11 @@ class NativeView extends SurfaceView
 
     /* initialize context and surface */
 
-    if (context == EGL10.EGL_NO_CONTEXT) {
-      final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
+    boolean hadContext = context != EGL10.EGL_NO_CONTEXT;
+    if (!hadContext) {
       final int contextClientVersion = 2;
       final int[] contextAttribList = new int[]{
-        EGL_CONTEXT_CLIENT_VERSION, contextClientVersion,
+        EGL14.EGL_CONTEXT_CLIENT_VERSION, contextClientVersion,
         EGL10.EGL_NONE
       };
 
@@ -205,11 +213,13 @@ class NativeView extends SurfaceView
     if (!egl.eglMakeCurrent(display, surface, surface, context))
       throw new EGLException("eglMakeCurrent() failed: " + egl.eglGetError());
 
-    GL10 gl = (GL10)context.getGL();
-    Log.d(TAG, "OpenGL vendor: " + gl.glGetString(GL10.GL_VENDOR));
-    Log.d(TAG, "OpenGL version: " + gl.glGetString(GL10.GL_VERSION));
-    Log.d(TAG, "OpenGL renderer: " + gl.glGetString(GL10.GL_RENDERER));
-    Log.d(TAG, "OpenGL extensions: " + gl.glGetString(GL10.GL_EXTENSIONS));
+    if (!hadContext) {
+      GL10 gl = (GL10)context.getGL();
+      Log.d(TAG, "OpenGL vendor: " + gl.glGetString(GL10.GL_VENDOR));
+      Log.d(TAG, "OpenGL version: " + gl.glGetString(GL10.GL_VERSION));
+      Log.d(TAG, "OpenGL renderer: " + gl.glGetString(GL10.GL_RENDERER));
+      Log.d(TAG, "OpenGL extensions: " + gl.glGetString(GL10.GL_EXTENSIONS));
+    }
   }
 
   /**
@@ -271,6 +281,20 @@ class NativeView extends SurfaceView
     config = null;
   }
 
+  /**
+   * Called from native code.
+   */
+  void acquireWakeLock() {
+    wakelockhandler.sendEmptyMessage(0);
+  }
+
+  /**
+   * Called from native code.
+   */
+  void setFullScreen(boolean fullScreen) {
+    fullScreenHandler.sendEmptyMessage(fullScreen ? 1 : 0);
+  }
+
   private boolean setRequestedOrientation(int requestedOrientation) {
     try {
       ((Activity)getContext()).setRequestedOrientation(requestedOrientation);
@@ -302,6 +326,8 @@ class NativeView extends SurfaceView
   }
 
   @Override public void run() {
+    final Context context = getContext();
+
     try {
       initGL(getHolder());
     } catch (Exception e) {
@@ -313,13 +339,30 @@ class NativeView extends SurfaceView
 
     android.graphics.Rect r = getHolder().getSurfaceFrame();
     DisplayMetrics metrics = new DisplayMetrics();
-    ((Activity)getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+    ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
     try {
-      if (initializeNative(getContext(), r.width(), r.height(),
+      if (initializeNative(context, r.width(), r.height(),
                            (int)metrics.xdpi, (int)metrics.ydpi,
-                           Build.VERSION.SDK_INT, Build.PRODUCT))
-        runNative();
+                           Build.VERSION.SDK_INT, Build.PRODUCT)) {
+
+        try {
+          context.startService(new Intent(context, XCSoar.serviceClass));
+        } catch (IllegalStateException e) {
+          /* we get crash reports on this all the time, but I don't
+             know why - Android docs say "the application is in a
+             state where the service can not be started (such as not
+             in the foreground in a state when services are allowed)",
+             but we're about to be resumed, which means we're in
+             foreground... */
+        }
+
+        try {
+          runNative();
+        } finally {
+          context.stopService(new Intent(context, XCSoar.serviceClass));
+        }
+      }
     } catch (Exception e) {
       Log.e(TAG, "Initialisation error", e);
       errorHandler.sendMessage(errorHandler.obtainMessage(0, e));
@@ -327,11 +370,8 @@ class NativeView extends SurfaceView
       return;
     }
 
-    Log.d(TAG, "deinitializeNative()");
     deinitializeNative();
-
-    Log.d(TAG, "sending message to quitHandler");
-    quitHandler.sendMessage(quitHandler.obtainMessage());
+    quitHandler.sendEmptyMessage(0);
   }
 
   protected native boolean initializeNative(Context context,
@@ -421,25 +461,42 @@ class NativeView extends SurfaceView
     return BitmapUtil.bitmapToOpenGL(bmp, false, alpha, result);
   }
 
+  private void shareText(String text) {
+    Intent send = new Intent();
+    send.setAction(Intent.ACTION_SEND);
+    send.putExtra(Intent.EXTRA_TEXT, text);
+    send.setType("text/plain");
+
+    Intent share = Intent.createChooser(send, null);
+    getContext().startActivity(share);
+  }
+
   /**
    * Starts a VIEW intent for a given file
    */
-  private void openFile(String pathName) {
+  private void openWaypointFile(int id, String filename) {
     Intent intent = new Intent();
     intent.setAction(Intent.ACTION_VIEW);
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK +
                     Intent.FLAG_RECEIVER_REPLACE_PENDING);
-    File file = new File(pathName);
 
     try {
-      String extension = pathName.substring(pathName.lastIndexOf(".") + 1);
+      String extension = filename.substring(filename.lastIndexOf(".") + 1);
       MimeTypeMap mime = MimeTypeMap.getSingleton();
       String mimeType = mime.getMimeTypeFromExtension(extension);
 
-      intent.setDataAndType(Uri.fromFile(file), mimeType);
+      /* this URI is going to be handled by FileProvider */
+      Uri uri = new Uri.Builder().scheme("content")
+        .authority("org.xcsoar")
+        .encodedPath("/waypoints/" + id + "/" + Uri.encode(filename))
+        .build();
+
+      intent.setDataAndType(uri, mimeType);
+      intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
       getContext().startActivity(intent);
     } catch (Exception e) {
-      Log.e(TAG, "NativeView.openFile('" + pathName + "') error", e);
+      Log.e(TAG, "NativeView.openFile('" + filename + "') error", e);
     }
   }
 
@@ -449,7 +506,45 @@ class NativeView extends SurfaceView
 
   @Override public boolean onTouchEvent(final MotionEvent event)
   {
-    touchInput.process(event);
+    /* the MotionEvent coordinates are supposed to be relative to this
+       View, but in fact they are not: they seem to be relative to
+       this app's Window; to work around this, we apply an offset;
+       this.getXY() (which is usually 0) plus getParent().getXY()
+       (which is a FrameLayout with non-zero coordinates unless we're
+       in full-screen mode) */
+    float offsetX = getX(), offsetY = getY();
+    ViewParent _p = getParent();
+    if (_p instanceof View) {
+      View p = (View)_p;
+      offsetX += p.getX();
+      offsetY += p.getY();
+    }
+
+    final int x = (int)(event.getX() - offsetX);
+    final int y = (int)(event.getY() - offsetY);
+
+    switch (event.getActionMasked()) {
+    case MotionEvent.ACTION_DOWN:
+      EventBridge.onMouseDown(x, y);
+      break;
+
+    case MotionEvent.ACTION_UP:
+      EventBridge.onMouseUp(x, y);
+      break;
+
+    case MotionEvent.ACTION_MOVE:
+      EventBridge.onMouseMove(x, y);
+      break;
+
+    case MotionEvent.ACTION_POINTER_DOWN:
+      EventBridge.onPointerDown();
+      break;
+
+    case MotionEvent.ACTION_POINTER_UP:
+      EventBridge.onPointerUp();
+      break;
+    }
+
     return true;
   }
 
@@ -459,9 +554,6 @@ class NativeView extends SurfaceView
 
   public void onPause() {
     pauseNative();
-  }
-
-  public void exitApp() {
   }
 
   private final int translateKeyCode(int keyCode) {
@@ -490,6 +582,4 @@ class NativeView extends SurfaceView
     EventBridge.onKeyUp(translateKeyCode(keyCode));
     return true;
   }
-
-  DifferentTouchInput touchInput = null;
 }

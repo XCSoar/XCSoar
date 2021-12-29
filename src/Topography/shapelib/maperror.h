@@ -84,8 +84,9 @@ extern "C" {
 #define MS_OWSERR 40
 #define MS_OGLERR 41
 #define MS_RENDERERERR 42
-#define MS_V8ERR 43  
-#define MS_NUMERRORCODES 44
+#define MS_V8ERR 43
+#define MS_OGCAPIERR 44
+#define MS_NUMERRORCODES 45
 
 #define MESSAGELENGTH 2048
 #define ROUTINELENGTH 64
@@ -108,12 +109,17 @@ extern "C" {
 #endif
 #endif
 
+/**
+This class allows inspection of the MapServer error stack. 
+Instances of errorObj are created internally by MapServer as errors happen. 
+Errors are managed as a chained list with the first item being the most recent error.
+*/
   typedef struct errorObj {
-    int code;
-    char routine[ROUTINELENGTH];
-    char message[MESSAGELENGTH];
-    int isreported;
-    int errorcount; /* number of subsequent errors */
+    int code; ///< MapServer error code such as :data:`MS_IMGERR`
+    char routine[ROUTINELENGTH]; ///< MapServer function in which the error was set
+    char message[MESSAGELENGTH]; ///< Context-dependent error message
+    int isreported; ///< :data:`MS_TRUE` or :data:`MS_FALSE` flag indicating if the error has been output
+    int errorcount; ///< Number of subsequent errors
 #ifndef SWIG
     struct errorObj *next;
 #endif
@@ -122,11 +128,29 @@ extern "C" {
   /*
   ** Function prototypes
   */
+
+  /**
+  Get the MapServer error object
+  */
   MS_DLL_EXPORT errorObj *msGetErrorObj(void);
+  /**
+  Clear the list of error objects
+  */
   MS_DLL_EXPORT void msResetErrorList(void);
+  /**
+  Returns a string containing MapServer version information, and details on what optional components 
+  are built in - the same report as produced by ``mapserv -v``
+  */
   MS_DLL_EXPORT char *msGetVersion(void);
+  /**
+  Returns the MapServer version number (x.y.z) as an integer (x*10000 + y*100 + z) 
+  e.g. V7.4.2 would return 70402
+  */
   MS_DLL_EXPORT int  msGetVersionInt(void);
-  MS_DLL_EXPORT char *msGetErrorString(char *delimiter);
+  /**
+  Return a string of all errors
+  */
+  MS_DLL_EXPORT char *msGetErrorString(const char *delimiter);
 
 #ifndef SWIG
   MS_DLL_EXPORT void msSetError(int code, const char *message, const char *routine, ...) MS_PRINT_FUNC_FORMAT(2,4) ;

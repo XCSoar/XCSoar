@@ -30,37 +30,37 @@ TestFormat()
 {
   TCHAR buffer[256];
 
-  FormatTime(buffer, 0);
+  FormatTime(buffer, FloatDuration{});
   ok1(StringIsEqual(buffer, _T("00:00:00")));
 
-  FormatTime(buffer, 1);
+  FormatTime(buffer, std::chrono::seconds{1});
   ok1(StringIsEqual(buffer, _T("00:00:01")));
 
-  FormatTime(buffer, 59);
+  FormatTime(buffer, std::chrono::seconds{59});
   ok1(StringIsEqual(buffer, _T("00:00:59")));
 
-  FormatTime(buffer, 60);
+  FormatTime(buffer, std::chrono::seconds{60});
   ok1(StringIsEqual(buffer, _T("00:01:00")));
 
-  FormatTime(buffer, 60 * 5);
+  FormatTime(buffer, std::chrono::seconds{60 * 5});
   ok1(StringIsEqual(buffer, _T("00:05:00")));
 
-  FormatTime(buffer, 60 * 59);
+  FormatTime(buffer, std::chrono::seconds{60 * 59});
   ok1(StringIsEqual(buffer, _T("00:59:00")));
 
-  FormatTime(buffer, 60 * 60);
+  FormatTime(buffer, std::chrono::seconds{60 * 60});
   ok1(StringIsEqual(buffer, _T("01:00:00")));
 
-  FormatTime(buffer, 60 * 60 * 3 + 60 * 25);
+  FormatTime(buffer, std::chrono::seconds{60 * 60 * 3 + 60 * 25});
   ok1(StringIsEqual(buffer, _T("03:25:00")));
 
-  FormatTime(buffer, 60 * 60 * 19 + 60 * 47 + 43);
+  FormatTime(buffer, std::chrono::seconds{60 * 60 * 19 + 60 * 47 + 43});
   ok1(StringIsEqual(buffer, _T("19:47:43")));
 
-  FormatTime(buffer, -(60 * 59));
+  FormatTime(buffer, std::chrono::seconds{-(60 * 59)});
   ok1(StringIsEqual(buffer, _T("-00:59:00")));
 
-  FormatTime(buffer, -(60 * 60 * 19 + 60 * 47 + 43));
+  FormatTime(buffer, std::chrono::seconds{-(60 * 60 * 19 + 60 * 47 + 43)});
   ok1(StringIsEqual(buffer, _T("-19:47:43")));
 }
 
@@ -69,37 +69,37 @@ TestFormatLong()
 {
   TCHAR buffer[256];
 
-  FormatTimeLong(buffer, 0);
+  FormatTimeLong(buffer, {});
   ok1(StringIsEqual(buffer, _T("00:00:00.000")));
 
-  FormatTimeLong(buffer, 1.123);
+  FormatTimeLong(buffer, FloatDuration{1.123});
   ok1(StringIsEqual(buffer, _T("00:00:01.123")));
 
-  FormatTimeLong(buffer, 59);
+  FormatTimeLong(buffer, std::chrono::seconds{59});
   ok1(StringIsEqual(buffer, _T("00:00:59.000")));
 
-  FormatTimeLong(buffer, 60.001);
+  FormatTimeLong(buffer, FloatDuration{60.001});
   ok1(StringIsEqual(buffer, _T("00:01:00.001")));
 
-  FormatTimeLong(buffer, 60 * 5);
+  FormatTimeLong(buffer, std::chrono::seconds{60 * 5});
   ok1(StringIsEqual(buffer, _T("00:05:00.000")));
 
-  FormatTimeLong(buffer, 60 * 59);
+  FormatTimeLong(buffer, std::chrono::seconds{60 * 59});
   ok1(StringIsEqual(buffer, _T("00:59:00.000")));
 
-  FormatTimeLong(buffer, 60 * 60);
+  FormatTimeLong(buffer, std::chrono::seconds{60 * 60});
   ok1(StringIsEqual(buffer, _T("01:00:00.000")));
 
-  FormatTimeLong(buffer, 60 * 60 * 3 + 60 * 25);
+  FormatTimeLong(buffer, std::chrono::seconds{60 * 60 * 3 + 60 * 25});
   ok1(StringIsEqual(buffer, _T("03:25:00.000")));
 
-  FormatTimeLong(buffer, 60 * 60 * 19 + 60 * 47 + 43.765);
+  FormatTimeLong(buffer, FloatDuration{60 * 60 * 19 + 60 * 47 + 43.765});
   ok1(StringIsEqual(buffer, _T("19:47:43.765")));
 
-  FormatTimeLong(buffer, -(60 * 59));
+  FormatTimeLong(buffer, std::chrono::seconds{-(60 * 59)});
   ok1(StringIsEqual(buffer, _T("-00:59:00.000")));
 
-  FormatTimeLong(buffer, -(60 * 60 * 19 + 60 * 47 + 43.765));
+  FormatTimeLong(buffer, FloatDuration{-(60 * 60 * 19 + 60 * 47 + 43.765)});
   ok1(StringIsEqual(buffer, _T("-19:47:43.765")));
 }
 
@@ -108,37 +108,37 @@ TestHHMM()
 {
   TCHAR buffer[256];
 
-  FormatSignedTimeHHMM(buffer, 0);
+  FormatSignedTimeHHMM(buffer, {});
   ok1(StringIsEqual(buffer, _T("00:00")));
 
-  FormatSignedTimeHHMM(buffer, 1);
+  FormatSignedTimeHHMM(buffer, std::chrono::seconds{1});
   ok1(StringIsEqual(buffer, _T("00:00")));
 
-  FormatSignedTimeHHMM(buffer, 59);
+  FormatSignedTimeHHMM(buffer, std::chrono::seconds{59});
   ok1(StringIsEqual(buffer, _T("00:00")));
 
-  FormatSignedTimeHHMM(buffer, 60);
+  FormatSignedTimeHHMM(buffer, std::chrono::seconds{60});
   ok1(StringIsEqual(buffer, _T("00:01")));
 
-  FormatSignedTimeHHMM(buffer, 60 * 5);
+  FormatSignedTimeHHMM(buffer, std::chrono::seconds{60 * 5});
   ok1(StringIsEqual(buffer, _T("00:05")));
 
-  FormatSignedTimeHHMM(buffer, 60 * 59);
+  FormatSignedTimeHHMM(buffer, std::chrono::seconds{60 * 59});
   ok1(StringIsEqual(buffer, _T("00:59")));
 
-  FormatSignedTimeHHMM(buffer, 60 * 60);
+  FormatSignedTimeHHMM(buffer, std::chrono::seconds{60 * 60});
   ok1(StringIsEqual(buffer, _T("01:00")));
 
-  FormatSignedTimeHHMM(buffer, 60 * 60 * 3 + 60 * 25);
+  FormatSignedTimeHHMM(buffer, std::chrono::seconds{60 * 60 * 3 + 60 * 25});
   ok1(StringIsEqual(buffer, _T("03:25")));
 
-  FormatSignedTimeHHMM(buffer, 60 * 60 * 19 + 60 * 47);
+  FormatSignedTimeHHMM(buffer, std::chrono::seconds{60 * 60 * 19 + 60 * 47});
   ok1(StringIsEqual(buffer, _T("19:47")));
 
-  FormatSignedTimeHHMM(buffer, -(60 * 59));
+  FormatSignedTimeHHMM(buffer, std::chrono::seconds{-(60 * 59)});
   ok1(StringIsEqual(buffer, _T("-00:59")));
 
-  FormatSignedTimeHHMM(buffer, -(60 * 60 * 19 + 60 * 47));
+  FormatSignedTimeHHMM(buffer, std::chrono::seconds{-(60 * 60 * 19 + 60 * 47)});
   ok1(StringIsEqual(buffer, _T("-19:47")));
 }
 
@@ -149,57 +149,59 @@ TestTwoLines()
 {
   TCHAR buffer[256], buffer2[256];
 
-  FormatTimeTwoLines(buffer, buffer2, 0);
+  FormatTimeTwoLines(buffer, buffer2, {});
   ok1(StringIsEqual(buffer, _T("00'00")));
   ok1(StringIsEqual(buffer2, _T("")));
 
-  FormatTimeTwoLines(buffer, buffer2, 1);
+  FormatTimeTwoLines(buffer, buffer2, std::chrono::seconds{1});
   ok1(StringIsEqual(buffer, _T("00'01")));
   ok1(StringIsEqual(buffer2, _T("")));
 
-  FormatTimeTwoLines(buffer, buffer2, 59);
+  FormatTimeTwoLines(buffer, buffer2, std::chrono::seconds{59});
   ok1(StringIsEqual(buffer, _T("00'59")));
   ok1(StringIsEqual(buffer2, _T("")));
 
-  FormatTimeTwoLines(buffer, buffer2, 60);
+  FormatTimeTwoLines(buffer, buffer2, std::chrono::seconds{60});
   ok1(StringIsEqual(buffer, _T("01'00")));
   ok1(StringIsEqual(buffer2, _T("")));
 
-  FormatTimeTwoLines(buffer, buffer2, 60 * 5);
+  FormatTimeTwoLines(buffer, buffer2, std::chrono::seconds{60 * 5});
   ok1(StringIsEqual(buffer, _T("05'00")));
   ok1(StringIsEqual(buffer2, _T("")));
 
-  FormatTimeTwoLines(buffer, buffer2, 60 * 59);
+  FormatTimeTwoLines(buffer, buffer2, std::chrono::seconds{60 * 59});
   ok1(StringIsEqual(buffer, _T("59'00")));
   ok1(StringIsEqual(buffer2, _T("")));
 
-  FormatTimeTwoLines(buffer, buffer2, 60 * 60);
+  FormatTimeTwoLines(buffer, buffer2, std::chrono::seconds{60 * 60});
   ok1(StringIsEqual(buffer, _T("01:00")));
   ok1(StringIsEqual(buffer2, _T("00")));
 
-  FormatTimeTwoLines(buffer, buffer2, 60 * 60 * 3 + 60 * 25 + 13);
+  FormatTimeTwoLines(buffer, buffer2, std::chrono::seconds{60 * 60 * 3 + 60 * 25 + 13});
   ok1(StringIsEqual(buffer, _T("03:25")));
   ok1(StringIsEqual(buffer2, _T("13")));
 
-  FormatTimeTwoLines(buffer, buffer2, 60 * 60 * 19 + 60 * 47 + 28);
+  FormatTimeTwoLines(buffer, buffer2, std::chrono::seconds{60 * 60 * 19 + 60 * 47 + 28});
   ok1(StringIsEqual(buffer, _T("19:47")));
   ok1(StringIsEqual(buffer2, _T("28")));
 
-  FormatTimeTwoLines(buffer, buffer2, -(60 * 59));
+  FormatTimeTwoLines(buffer, buffer2, std::chrono::seconds{-(60 * 59)});
   ok1(StringIsEqual(buffer, _T("-59'00")));
   ok1(StringIsEqual(buffer2, _T("")));
 
-  FormatTimeTwoLines(buffer, buffer2, -(60 * 60 * 19 + 60 * 47 + 28));
+  FormatTimeTwoLines(buffer, buffer2, std::chrono::seconds{-(60 * 60 * 19 + 60 * 47 + 28)});
   ok1(StringIsEqual(buffer, _T("-19:47")));
   ok1(StringIsEqual(buffer2, _T("28")));
 }
 
 static void
-TestSmart(int time, const TCHAR *expected_output1,
+TestSmart(int _time, const TCHAR *expected_output1,
           const TCHAR *expected_output2, const TCHAR *expected_output3,
           const TCHAR *expected_output4, const TCHAR *separator = _T(" "))
 {
   TCHAR buffer[256];
+
+  const auto time = std::chrono::seconds{_time};
 
   FormatTimespanSmart(buffer, time, 1, separator);
   ok1(StringIsEqual(buffer, expected_output1));

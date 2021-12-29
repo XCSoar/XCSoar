@@ -27,7 +27,8 @@ Copyright_License {
 #include "time/RoughTime.hpp"
 
 void
-FormatLocalTimeHHMM(TCHAR *buffer, int time, RoughTimeDelta utc_offset)
+FormatLocalTimeHHMM(TCHAR *buffer, TimeStamp time,
+                    RoughTimeDelta utc_offset) noexcept
 {
-  FormatSignedTimeHHMM(buffer, TimeLocal(time, utc_offset));
+  FormatTimeHHMM(buffer, TimeLocal(time, utc_offset));
 }

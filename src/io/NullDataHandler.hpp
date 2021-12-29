@@ -28,7 +28,7 @@ Copyright_License {
 
 class NullDataHandler : public DataHandler {
 public:
-  bool DataReceived(const void *, size_t) noexcept override {
+  bool DataReceived(std::span<const std::byte>) noexcept override {
     return true;
   }
 };

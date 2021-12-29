@@ -25,6 +25,8 @@ Copyright_License {
 #define XCSOAR_DEVICE_DRIVER_HPP
 
 #include <cstddef>
+#include <span>
+
 #include <tchar.h>
 
 struct NMEAInfo;
@@ -120,6 +122,13 @@ public:
   virtual bool PutVolume(unsigned volume, OperationEnvironment &env) = 0;
 
   /**
+   * Declare pilot event
+   *
+   * @return true on success
+   */
+  virtual bool PutPilotEvent(OperationEnvironment &env) = 0;
+
+  /**
    * Set a new radio frequency.
    *
    * @param frequency the new frequency
@@ -151,6 +160,8 @@ public:
   /**
    * Declare a task.
    *
+   * Throws on error.
+   *
    * @param declaration the task declaration
    * @param home the home waypoint, or nullptr if not known/configured;
    * this is not part of the task declaration, but some drivers might
@@ -163,6 +174,8 @@ public:
   /**
    * Read the list of recorded flights.
    *
+   * Throws on error.
+   *
    * @param flight_list the flights will be appended to this list
    * @return true on success
    */
@@ -171,6 +184,8 @@ public:
 
   /**
    * Download a flight into a file.
+   *
+   * Throws on error.
    *
    * @param flight the flight that shall be downloaded
    * @param path the file name to save to
@@ -192,8 +207,8 @@ public:
    * @return true when the data has been processed,
    *         false if more data is necessary
    */
-  virtual bool DataReceived(const void *data, size_t length,
-                            struct NMEAInfo &info) = 0;
+  virtual bool DataReceived(std::span<const std::byte> s,
+                            struct NMEAInfo &info) noexcept = 0;
 
   /**
    * This method is invoked by #MergeThread after each merge,
@@ -244,6 +259,7 @@ public:
   bool PutQNH(const AtmosphericPressure &pres,
               OperationEnvironment &env) override;
   bool PutVolume(unsigned volume, OperationEnvironment &env) override;
+  bool PutPilotEvent(OperationEnvironment &env) override;
   bool PutActiveFrequency(RadioFrequency frequency,
                           const TCHAR *name,
                           OperationEnvironment &env) override;
@@ -265,8 +281,8 @@ public:
 
   void OnSysTicker() override;
 
-  bool DataReceived(const void *data, size_t length,
-                    struct NMEAInfo &info) override;
+  bool DataReceived(std::span<const std::byte> s,
+                    struct NMEAInfo &info) noexcept override;
 
   void OnSensorUpdate(const MoreData &basic) override {}
 

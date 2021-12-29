@@ -21,20 +21,14 @@
 */
 
 #include "Math/FastMath.hpp"
-#include "Computer/ThermalLocator.hpp"
+#include "Computer/ThermalRecency.hpp"
 #include "TestUtil.hpp"
-
-static inline double
-thermal_fn(int x)
-{
-  return exp((-0.2/ThermalLocator::TLOCATOR_NMAX)*pow((double)x, 1.5));
-}
 
 int main(int argc, char **argv)
 {
-  plan_tests(ThermalLocator::TLOCATOR_NMAX);
+  plan_tests(THERMALRECENCY_SIZE);
 
-  for (unsigned i = 0; i < ThermalLocator::TLOCATOR_NMAX; ++i)
+  for (unsigned i = 0; i < THERMALRECENCY_SIZE; ++i)
     ok1((int)(thermal_fn(i) * 1024 * 1024) ==
         (int)(thermal_recency_fn(i) * 1024 * 1024));
 

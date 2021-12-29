@@ -166,9 +166,10 @@ protected:
   virtual void OnResize(PixelSize new_size) override;
 
   /* virtual methods from class AntiFlickerWindow */
-  virtual void OnPaintBuffer(Canvas &canvas) override;
+  virtual void OnPaintBuffer(Canvas &canvas) noexcept override;
 
 private:
+  void RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept;
   void RenderZero(Canvas &canvas) noexcept;
   void RenderValue(Canvas &canvas, const LabelValueGeometry &g,
                    LabelValueDrawInfo &di,

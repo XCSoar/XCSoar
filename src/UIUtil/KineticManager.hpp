@@ -31,6 +31,7 @@
 #define KINETIC_MANAGER_HPP
 
 #include "time/PeriodClock.hpp"
+#include "time/FloatDuration.hxx"
 
 /**
  * A manager class that can be used for kinetic scrolling
@@ -38,10 +39,10 @@
 class KineticManager
 {
   /** Time in ms until the kinetic movement is stopped */
-  const std::chrono::duration<double> stopping_time;
+  const FloatDuration stopping_time;
 
   /** Whether the kinetic movement is still active */
-  bool steady;
+  bool steady = true;
 
   /** Position at the end of the manual movement */
   int last;
@@ -56,8 +57,8 @@ class KineticManager
   PeriodClock clock;
 
 public:
-  KineticManager(int _stopping_time = 1000)
-    :stopping_time(std::chrono::milliseconds(_stopping_time)), steady(true) {}
+  explicit KineticManager(FloatDuration _stopping_time = std::chrono::seconds{1}) noexcept
+    :stopping_time(_stopping_time) {}
 
   /** Needs to be called once the manual movement is started */
   void MouseDown(int x);

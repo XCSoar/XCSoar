@@ -292,7 +292,7 @@ AddValueCounts(unsigned *counts, unsigned max_value,
   }
 }
 
-gcc_pure
+[[gnu::pure]]
 static GLushort *
 FindOne(const unsigned *counts, unsigned max_value,
         GLushort *values, const GLushort *values_end) noexcept
@@ -307,7 +307,7 @@ FindOne(const unsigned *counts, unsigned max_value,
   return nullptr;
 }
 
-gcc_pure
+[[gnu::pure]]
 static GLushort *
 FindSharedEdge(const unsigned idx1, const unsigned idx2,
                GLushort *values, const GLushort *values_end) noexcept

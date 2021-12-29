@@ -53,7 +53,8 @@ GetSparkRect(PixelRect rc)
 
 void
 InfoBoxContentSpark::Paint(Canvas &canvas, const PixelRect &rc,
-                           const TraceVariableHistory &var, const bool center)
+                           const TraceVariableHistory &var,
+                           const bool center) noexcept
 {
   if (var.empty())
     return;
@@ -67,58 +68,69 @@ InfoBoxContentSpark::Paint(Canvas &canvas, const PixelRect &rc,
 }
 
 void
-InfoBoxContentVarioSpark::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
+InfoBoxContentVarioSpark::OnCustomPaint(Canvas &canvas,
+                                        const PixelRect &rc) noexcept
 {
   Paint(canvas, rc, CommonInterface::Calculated().trace_history.BruttoVario);
 }
 
 void
 InfoBoxContentNettoVarioSpark::OnCustomPaint(Canvas &canvas,
-                                             const PixelRect &rc)
+                                             const PixelRect &rc) noexcept
 {
   Paint(canvas, rc, CommonInterface::Calculated().trace_history.NettoVario);
 }
 
 void
 InfoBoxContentCirclingAverageSpark::OnCustomPaint(Canvas &canvas,
-                                                  const PixelRect &rc)
+                                                  const PixelRect &rc) noexcept
 {
   Paint(canvas, rc,
         CommonInterface::Calculated().trace_history.CirclingAverage,
-    false);
+        false);
 }
 
 void
 InfoBoxContentSpark::SetVSpeedComment(InfoBoxData &data,
-                                      const TraceVariableHistory &var)
+                                      const TraceVariableHistory &var,
+                                      Validity validity) noexcept
 {
   if (var.empty())
     return;
 
   data.SetCommentFromVerticalSpeed(var.last());
-  data.SetCustom();
+  data.SetCustom(validity.ToInteger());
 }
 
 void
-InfoBoxContentVarioSpark::Update(InfoBoxData &data)
+InfoBoxContentVarioSpark::Update(InfoBoxData &data) noexcept
 {
-  SetVSpeedComment(data, CommonInterface::Calculated().trace_history.BruttoVario);
+  const auto &trace_history = CommonInterface::Calculated().trace_history;
+
+  SetVSpeedComment(data, trace_history.BruttoVario,
+                   trace_history.vario_available);
 }
 
 void
-InfoBoxContentNettoVarioSpark::Update(InfoBoxData &data)
+InfoBoxContentNettoVarioSpark::Update(InfoBoxData &data) noexcept
 {
-  SetVSpeedComment(data, CommonInterface::Calculated().trace_history.NettoVario);
+  const auto &trace_history = CommonInterface::Calculated().trace_history;
+
+  SetVSpeedComment(data, trace_history.NettoVario,
+                   trace_history.vario_available);
 }
 
 void
-InfoBoxContentCirclingAverageSpark::Update(InfoBoxData &data)
+InfoBoxContentCirclingAverageSpark::Update(InfoBoxData &data) noexcept
 {
-  SetVSpeedComment(data, CommonInterface::Calculated().trace_history.CirclingAverage);
+  const auto &trace_history = CommonInterface::Calculated().trace_history;
+
+  SetVSpeedComment(data, trace_history.CirclingAverage,
+                   trace_history.circling_available);
 }
 
 void
-InfoBoxContentBarogram::Update(InfoBoxData &data)
+InfoBoxContentBarogram::Update(InfoBoxData &data) noexcept
 {
   const MoreData &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
@@ -130,11 +142,16 @@ InfoBoxContentBarogram::Update(InfoBoxData &data)
   } else
     data.SetCommentInvalid();
 
-  data.SetCustom();
+  // TODO: use an appropriate digest
+  data.SetCustom(basic.location_available.ToInteger() +
+                 basic.gps_altitude_available.ToInteger() +
+                 basic.baro_altitude_available.ToInteger() +
+                 basic.pressure_altitude_available.ToInteger() +
+                 basic.static_pressure_available.ToInteger());
 }
 
 void
-InfoBoxContentBarogram::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
+InfoBoxContentBarogram::OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept
 {
   const Look &look = UIGlobals::GetLook();
   RenderBarographSpark(canvas, GetSparkRect(rc),
@@ -146,7 +163,7 @@ InfoBoxContentBarogram::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 }
 
 static void
-ShowAnalysisBarograph()
+ShowAnalysisBarograph() noexcept
 {
   dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
                        UIGlobals::GetLook(),
@@ -156,7 +173,7 @@ ShowAnalysisBarograph()
 }
 
 static std::unique_ptr<Widget>
-LoadAnalysisBarographPanel(unsigned id)
+LoadAnalysisBarographPanel(unsigned id) noexcept
 {
   return std::make_unique<CallbackWidget>(ShowAnalysisBarograph);
 }
@@ -168,13 +185,14 @@ InfoBoxPanel analysis_barograph_infobox_panels[] = {
 };
 
 const InfoBoxPanel *
-InfoBoxContentBarogram::GetDialogContent()
+InfoBoxContentBarogram::GetDialogContent() noexcept
 {
   return analysis_barograph_infobox_panels;
 }
 
 void
-InfoBoxContentThermalBand::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
+InfoBoxContentThermalBand::OnCustomPaint(Canvas &canvas,
+                                         const PixelRect &rc) noexcept
 {
   const Look &look = UIGlobals::GetLook();
   ThermalBandRenderer renderer(look.thermal_band, look.chart);
@@ -186,13 +204,14 @@ InfoBoxContentThermalBand::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 }
 
 void
-InfoBoxContentThermalBand::Update(InfoBoxData &data)
+InfoBoxContentThermalBand::Update(InfoBoxData &data) noexcept
 {
-  data.SetCustom();
+  data.SetCustom(CommonInterface::Basic().location_available.ToInteger());
 }
 
 void
-InfoBoxContentTaskProgress::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
+InfoBoxContentTaskProgress::OnCustomPaint(Canvas &canvas,
+                                          const PixelRect &rc) noexcept
 {
   const Look &look = UIGlobals::GetLook();
   TaskProgressRenderer renderer(look.map.task);
@@ -203,7 +222,8 @@ InfoBoxContentTaskProgress::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 }
 
 void
-InfoBoxContentTaskProgress::Update(InfoBoxData &data)
+InfoBoxContentTaskProgress::Update(InfoBoxData &data) noexcept
 {
-  data.SetCustom();
+  // TODO: use an appropriate digest
+  data.SetCustom(CommonInterface::Basic().location_available.ToInteger());
 }

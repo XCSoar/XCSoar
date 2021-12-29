@@ -25,9 +25,10 @@ Copyright_License {
 #include "DeviceEditWidget.hpp"
 #include "Vega/VegaDialogs.hpp"
 #include "BlueFly/BlueFlyDialogs.hpp"
+#include "ManageI2CPitotDialog.hpp"
 #include "ManageCAI302Dialog.hpp"
 #include "ManageFlarmDialog.hpp"
-#include "LX/ManageV7Dialog.hpp"
+#include "LX/ManageLXNAVVarioDialog.hpp"
 #include "LX/ManageNanoDialog.hpp"
 #include "LX/ManageLX16xxDialog.hpp"
 #include "PortMonitor.hpp"
@@ -61,6 +62,7 @@ Copyright_License {
 
 #ifdef ANDROID
 #include "java/Global.hxx"
+#include "Android/Main.hpp"
 #include "Android/BluetoothHelper.hpp"
 #endif
 
@@ -76,11 +78,13 @@ class DeviceListWidget final
   struct Flags {
     bool duplicate:1;
     bool open:1, error:1;
-    bool alive:1, location:1, gps:1, baro:1, airspeed:1, vario:1, traffic:1;
+    bool alive:1, location:1, gps:1, baro:1, pitot:1, airspeed:1, vario:1, traffic:1;
     bool temperature:1;
     bool humidity:1;
     bool radio:1;
     bool debug:1;
+
+    int8_t battery_percent;
 
     void Set(const DeviceConfig &config, const DeviceDescriptor &device,
              const NMEAInfo &basic) {
@@ -112,6 +116,7 @@ class DeviceListWidget final
       baro = basic.baro_altitude_available ||
         basic.pressure_altitude_available ||
         basic.static_pressure_available;
+      pitot = basic.pitot_pressure_available;
       airspeed = basic.airspeed_available;
       vario = basic.total_energy_vario_available;
       traffic = basic.flarm.IsDetected();
@@ -120,14 +125,16 @@ class DeviceListWidget final
       debug = device.IsDumpEnabled();
       radio = basic.settings.has_active_frequency || 
         basic.settings.has_standby_frequency;
-      
+      battery_percent = basic.battery_level_available
+        ? (int)basic.battery_level
+        : -1;
     }
   };
 
   union Item {
   private:
     Flags flags;
-    uint16_t i;
+    uint32_t i;
 
     static_assert(sizeof(flags) <= sizeof(i), "wrong size");
 
@@ -159,7 +166,7 @@ class DeviceListWidget final
     }
   };
 
-  static_assert(sizeof(Item) == 2, "wrong size");
+  static_assert(sizeof(Item) == 4, "wrong size");
 
   Item items[NUMDEV];
   tstring error_messages[NUMDEV];
@@ -391,6 +398,11 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       buffer.append(_("Baro"));
     }
 
+    if (flags.pitot) {
+      buffer.append(_T("; "));
+      buffer.append(_("Pitot"));
+    }
+
     if (flags.airspeed) {
       buffer.append(_T("; "));
       buffer.append(_("Airspeed"));
@@ -419,6 +431,12 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       buffer.append(_("Debug"));
     }
 
+    if (flags.battery_percent >= 0) {
+      buffer.append(_T("; "));
+      buffer.append(_("Battery"));
+      buffer.AppendFormat(_T("=%d%%"), flags.battery_percent);
+    }
+
     status = buffer;
   } else if (config.IsDisabled()) {
     status = _("Disabled");
@@ -435,8 +453,10 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     status = buffer;
 #ifdef ANDROID
   } else if ((config.port_type == DeviceConfig::PortType::RFCOMM ||
+              config.port_type == DeviceConfig::PortType::BLE_HM10 ||
               config.port_type == DeviceConfig::PortType::RFCOMM_SERVER) &&
-             !BluetoothHelper::isEnabled(Java::GetEnv())) {
+             bluetooth_helper != nullptr &&
+             !bluetooth_helper->IsEnabled(Java::GetEnv())) {
     status = _("Bluetooth is disabled");
 #endif
   } else if (flags.duplicate) {
@@ -503,8 +523,10 @@ DeviceListWidget::ReconnectCurrent()
   const DeviceConfig &config =
     CommonInterface::SetSystemSettings().devices[current];
   if ((config.port_type == DeviceConfig::PortType::RFCOMM ||
+       config.port_type == DeviceConfig::PortType::BLE_HM10 ||
        config.port_type == DeviceConfig::PortType::RFCOMM_SERVER) &&
-      !BluetoothHelper::isEnabled(Java::GetEnv())) {
+      bluetooth_helper != nullptr &&
+      !bluetooth_helper->IsEnabled(Java::GetEnv())) {
     ShowMessageBox(_("Bluetooth is disabled"), _("Reconnect"),
                    MB_OK | MB_ICONERROR);
     return;
@@ -546,8 +568,10 @@ DeviceListWidget::DownloadFlightFromCurrent()
     return;
   }
 
+  MessageOperationEnvironment env;
+  const ScopeReturnDevice return_device{device, env};
+
   ExternalLogger::DownloadFlightFrom(device);
-  device.Return();
 }
 
 inline void
@@ -597,6 +621,16 @@ DeviceListWidget::ManageCurrent()
   if (!descriptor.IsManageable())
     return;
 
+#ifdef ANDROID
+  const auto &config = descriptor.GetConfig();
+  if (config.port_type == DeviceConfig::PortType::DROIDSOAR_V2 ||
+      (config.port_type == DeviceConfig::PortType::I2CPRESSURESENSOR &&
+       config.press_use == DeviceConfig::PressureUse::PITOT)) {
+    ManageI2CPitotDialog(UIGlobals::GetMainWindow(), look, descriptor);
+    return;
+  }
+#endif
+
   if (descriptor.GetState() != PortState::READY) {
     ShowMessageBox(_("Device is not connected"), _("Manage"),
                    MB_OK | MB_ICONERROR);
@@ -608,9 +642,11 @@ DeviceListWidget::ManageCurrent()
     return;
   }
 
+  MessageOperationEnvironment env;
+  const ScopeReturnDevice return_device{descriptor, env};
+
   Device *device = descriptor.GetDevice();
   if (device == NULL) {
-    descriptor.Return();
     return;
   }
 
@@ -637,8 +673,8 @@ DeviceListWidget::ManageCurrent()
     }
 
     LXDevice &lx_device = *(LXDevice *)device;
-    if (lx_device.IsV7())
-      ManageV7Dialog(lx_device, info, secondary_info);
+    if (lx_device.IsLXNAVVario())
+      ManageLXNAVVarioDialog(lx_device, info, secondary_info);
     else if (lx_device.IsNano())
       ManageNanoDialog(lx_device, info);
     else if (lx_device.IsLX16xx())
@@ -647,10 +683,6 @@ DeviceListWidget::ManageCurrent()
     dlgConfigurationVarioShowModal(*device);
   else if (descriptor.IsDriver(_T("BlueFly")))
     dlgConfigurationBlueFlyVarioShowModal(*device);
-
-  MessageOperationEnvironment env;
-  descriptor.EnableNMEA(env);
-  descriptor.Return();
 }
 
 inline void

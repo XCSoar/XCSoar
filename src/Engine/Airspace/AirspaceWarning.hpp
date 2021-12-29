@@ -24,11 +24,13 @@
 #define AIRSPACE_WARNING_HPP
 
 #include "AirspaceInterceptSolution.hpp"
+#include "Ptr.hpp"
 
+#include <chrono>
 #include <cstdint>
 
 #ifdef DO_PRINT
-#include <iostream>
+#include <iosfwd>
 #endif
 
 class AbstractAirspace;
@@ -37,6 +39,8 @@ class AbstractAirspace;
  * Class to hold information about active airspace warnings
  */
 class AirspaceWarning {
+  using Duration = std::chrono::duration<unsigned>;
+
 public:
 
   /**
@@ -51,19 +55,19 @@ public:
   };
 
 private:
-  const AbstractAirspace &airspace;
-  State state;
-  State state_last;
-  AirspaceInterceptSolution solution;
+  const ConstAirspacePtr airspace;
+  State state = WARNING_CLEAR;
+  State state_last = WARNING_CLEAR;
+  AirspaceInterceptSolution solution = AirspaceInterceptSolution::Invalid();
 
-  unsigned acktime_warning;
-  unsigned acktime_inside;
-  unsigned debounce_time;
-  bool ack_day;
-  bool expired;
-  bool expired_last;
+  Duration acktime_warning{};
+  Duration acktime_inside{};
+  Duration debounce_time = std::chrono::minutes{1};
+  bool ack_day = false;
+  bool expired = true;
+  bool expired_last = true;
 
-  static constexpr unsigned null_acktime = -1;
+  static constexpr auto null_acktime = Duration::max();
 
 public:
   /**
@@ -71,7 +75,9 @@ public:
    *
    * @param the_airspace Airspace that this object will manage warnings for
    */
-  explicit AirspaceWarning(const AbstractAirspace &the_airspace);
+  template<typename T>
+  explicit AirspaceWarning(T &&_airspace) noexcept
+    :airspace(std::forward<T>(_airspace)) {}
 
   /**
    * Save warning state prior to performing update
@@ -114,6 +120,10 @@ public:
    * @return Airspace
    */
   const AbstractAirspace &GetAirspace() const {
+    return *airspace;
+  }
+
+  ConstAirspacePtr GetAirspacePtr() const noexcept {
     return airspace;
   }
 
@@ -135,7 +145,7 @@ public:
    *
    * @return True if warning is still active
    */
-  bool WarningLive(const unsigned ack_time, const unsigned dt);
+  bool WarningLive(const Duration ack_time, const Duration dt) noexcept;
 
   /**
    * Access solution (nearest to enter, if outside, or to exit, if inside)

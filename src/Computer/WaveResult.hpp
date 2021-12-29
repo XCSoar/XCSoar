@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Math/Angle.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "time/Stamp.hpp"
 #include "util/TrivialArray.hxx"
 
 struct WaveInfo {
@@ -41,7 +42,7 @@ struct WaveInfo {
    * A negative value means a wallclock was not available at the time
    * this wave was calculated.
    */
-  double time;
+  TimeStamp time;
 
   static WaveInfo Undefined() {
     WaveInfo result;

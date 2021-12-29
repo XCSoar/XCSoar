@@ -37,10 +37,6 @@ class TaskPoint
   GeoPoint location;
 
 public:
-  bool IsIntermediatePoint() const {
-    return type == TaskPointType::AST || type == TaskPointType::AAT;
-  }
-
   /**
    * Constructor.  Location and elevation of waypoint is used
    * as the task point's reference values; a copy of the waypoint
@@ -50,11 +46,15 @@ public:
    *
    * @return Initialised object
    */
-  TaskPoint(TaskPointType _type, const GeoPoint &_location)
+  TaskPoint(TaskPointType _type, const GeoPoint &_location) noexcept
     :type(_type), location(_location) {}
 
   TaskPointType GetType() const {
     return type;
+  }
+
+  bool IsIntermediatePoint() const noexcept {
+    return type == TaskPointType::AST || type == TaskPointType::AAT;
   }
 
   /**
@@ -64,7 +64,7 @@ public:
    * @return Location
    */
   [[gnu::pure]]
-  virtual const GeoPoint &GetLocationRemaining() const {
+  virtual const GeoPoint &GetLocationRemaining() const noexcept {
     return location;
   }
 
@@ -74,7 +74,7 @@ public:
    * @return Vector for task leg
    */
   [[gnu::pure]]
-  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const = 0;
+  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const noexcept = 0;
 
   /**
     * Calculate vector of next leg, if there is one
@@ -82,7 +82,7 @@ public:
     * @return Vector for task leg or GeoVector::Invalid() if there is no next leg
     */
   [[gnu::pure]]
-  virtual GeoVector GetNextLegVector() const;
+  virtual GeoVector GetNextLegVector() const noexcept;
 
   /**
    * Capability of this TaskPoint to have adjustable range/target
@@ -90,7 +90,7 @@ public:
    * @return True if task point has a target (can have range set)
    */
   [[gnu::pure]]
-  bool HasTarget() const {
+  bool HasTarget() const noexcept {
     return type == TaskPointType::AAT;
   }
 
@@ -101,19 +101,19 @@ public:
    * @return Minimum allowable elevation of task point
    */
   [[gnu::pure]]
-  virtual double GetElevation() const = 0;
+  virtual double GetElevation() const noexcept = 0;
 
   /**
    * distance from this to the reference
    */
-  double Distance(const GeoPoint &ref) const {
+  double Distance(const GeoPoint &ref) const noexcept {
     return location.Distance(ref);
   }
 
   /**
    * The actual location
    */
-  const GeoPoint &GetLocation() const {
+  const GeoPoint &GetLocation() const noexcept {
     return location;
   }
 };

@@ -24,32 +24,34 @@
 #define THERMAL_ENCOUNTER_BAND_HPP
 
 #include "ThermalBand.hpp"
+#include "time/Stamp.hpp"
 
 #include <type_traits>
 
 class ThermalEncounterBand : public ThermalBand
 {
-  double time_start;
+  TimeStamp time_start;
 
 public:
   void Reset() noexcept {
     ThermalBand::Reset();
-    time_start = 0;
+    time_start = TimeStamp::Undefined();
   }
 
-  void AddSample(const double time,
-                 const double height);
+  void AddSample(const TimeStamp time,
+                 const double height) noexcept;
 
 private:
   unsigned ResizeToHeight(const double height);
 
-  unsigned FindPenultimateFinished(const unsigned index, const double time);
+  unsigned FindPenultimateFinished(const unsigned index,
+                                   const FloatDuration time) noexcept;
 
-  double EstimateTimeStep(const double time,
-                          const double height,
-                          const unsigned index);
+  FloatDuration EstimateTimeStep(const FloatDuration time,
+                                 const double height,
+                                 const unsigned index) noexcept;
 
-  void Start(const double time,
+  void Start(const TimeStamp time,
              const double height);
 
 };

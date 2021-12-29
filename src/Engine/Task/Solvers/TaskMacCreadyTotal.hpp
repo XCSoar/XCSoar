@@ -51,7 +51,7 @@ public:
    * @return Effective distance remaining (m)
    */
   [[gnu::pure]]
-  double effective_distance(double time_remaining) const;
+  double effective_distance(FloatDuration time_remaining) const noexcept;
 
   /**
    * Calculate effective distance remaining such that at the virtual
@@ -63,7 +63,7 @@ public:
    * @return Effective distance remaining (m) for active leg
    */
   [[gnu::pure]]
-  double effective_leg_distance(double time_remaining) const;
+  double effective_leg_distance(FloatDuration time_remaining) const noexcept;
 
 private:
   /* virtual methods from class TaskMacCready */

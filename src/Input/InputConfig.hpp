@@ -31,28 +31,26 @@ Copyright_License {
 #include "util/TrivialArray.hxx"
 #include "util/TStringView.hxx"
 
+#include <array>
 #include <cassert>
-#include <tchar.h>
 
-#ifdef ENABLE_SDL
-#include <SDL_keycode.h>
-#endif
+#include <tchar.h>
 
 struct InputConfig {
   // Sensible maximums
 
-  static constexpr unsigned MAX_MODE = 32;
-  static constexpr unsigned MAX_MODE_STRING = 24;
+  static constexpr std::size_t MAX_MODE = 32;
+  static constexpr std::size_t MAX_MODE_STRING = 24;
 #ifdef ENABLE_SDL
-  static constexpr unsigned MAX_KEY = 400;
+  static constexpr std::size_t MAX_KEY = 400;
 #elif defined(USE_X11)
-  static constexpr unsigned MAX_KEY = 0x100;
+  static constexpr std::size_t MAX_KEY = 0x100;
 #elif defined(USE_POLL_EVENT)
-  static constexpr unsigned MAX_KEY = 0600;
+  static constexpr std::size_t MAX_KEY = 0600;
 #else
-  static constexpr unsigned MAX_KEY = 255;
+  static constexpr std::size_t MAX_KEY = 255;
 #endif
-  static constexpr unsigned MAX_EVENTS = 2048;
+  static constexpr std::size_t MAX_EVENTS = 2048;
 
   typedef void (*pt2Event)(const TCHAR *);
 
@@ -89,27 +87,27 @@ struct InputConfig {
   RadixTree<unsigned> Gesture2Event;
 
   // Glide Computer Events
-  unsigned short GC2Event[GCE_COUNT];
+  std::array<short, GCE_COUNT> GC2Event;
 
   // NMEA Triggered Events
-  unsigned short N2Event[NE_COUNT];
+  std::array<short, NE_COUNT> N2Event;
 
   TrivialArray<Event, MAX_EVENTS> events;
 
-  Menu menus[MAX_MODE];
+  std::array<Menu, MAX_MODE> menus;
 
-  void SetDefaults();
+  void SetDefaults() noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   int LookupMode(TStringView name) const noexcept {
-    for (unsigned i = 0, size = modes.size(); i < size; ++i)
+    for (std::size_t i = 0, size = modes.size(); i < size; ++i)
       if (name.Equals(modes[i].c_str()))
         return i;
 
     return -1;
   }
 
-  int AppendMode(TStringView name) {
+  int AppendMode(TStringView name) noexcept {
     if (modes.full())
       return -1;
 
@@ -117,8 +115,8 @@ struct InputConfig {
     return modes.size() - 1;
   }
 
-  gcc_pure
-  int MakeMode(TStringView name) {
+  [[gnu::pure]]
+  int MakeMode(TStringView name) noexcept {
     int mode = LookupMode(name);
     if (mode < 0)
       mode = AppendMode(name);
@@ -126,8 +124,8 @@ struct InputConfig {
     return mode;
   }
 
-  unsigned AppendEvent(pt2Event handler, const TCHAR *misc,
-                       unsigned next) {
+  std::size_t AppendEvent(pt2Event handler, const TCHAR *misc,
+                          unsigned next) noexcept {
     if (events.full())
       return 0;
 
@@ -139,67 +137,22 @@ struct InputConfig {
     return events.size() - 1;
   }
 
-  void AppendMenu(unsigned mode_id, const TCHAR* label,
-                  unsigned location, unsigned event_id) {
+  void AppendMenu(std::size_t mode_id, const TCHAR *label,
+                  unsigned location, unsigned event_id) noexcept {
     assert(mode_id < MAX_MODE);
 
     menus[mode_id].Add(label, location, event_id);
   }
 
-  gcc_pure
-  unsigned GetKeyEvent(unsigned mode, unsigned key_code) const {
-    assert(mode < MAX_MODE);
+  [[gnu::pure]]
+  unsigned GetKeyEvent(unsigned mode, unsigned key_code) const noexcept;
 
-    unsigned key_code_idx = key_code;
-    auto key_2_event = Key2Event;
-#ifdef ENABLE_SDL
-    if (key_code & SDLK_SCANCODE_MASK) {
-      key_code_idx = key_code & ~SDLK_SCANCODE_MASK;
-      key_2_event = Key2EventNonChar;
-    }
-#endif
+  void SetKeyEvent(unsigned mode, unsigned key_code,
+                   unsigned event_id) noexcept;
 
-#ifdef USE_X11
-    if (key_code_idx >= 0xff00) {
-      key_code_idx -= 0xff00;
-      key_2_event = Key2EventFF00;
-    }
-#endif
-
-    if (key_code_idx >= MAX_KEY)
-      return 0;
-
-    if (mode > 0 && key_2_event[mode][key_code_idx] != 0)
-      return key_2_event[mode][key_code_idx];
-
-    /* fall back to the default mode */
-    return key_2_event[0][key_code_idx];
-  }
-
-  void SetKeyEvent(unsigned mode, unsigned key_code, unsigned event_id) {
-    assert(mode < MAX_MODE);
-
-    auto key_2_event = Key2Event;
-#ifdef ENABLE_SDL
-    if (key_code & SDLK_SCANCODE_MASK) {
-      key_2_event = Key2EventNonChar;
-      key_code &= ~SDLK_SCANCODE_MASK;
-    }
-#endif
-
-#ifdef USE_X11
-    if (key_code >= 0xff00) {
-      key_code -= 0xff00;
-      key_2_event = Key2EventFF00;
-    }
-#endif
-
-    if (key_code < MAX_KEY)
-      key_2_event[mode][key_code] = event_id;
-  }
-
-  gcc_pure
-  const MenuItem &GetMenuItem(unsigned mode, unsigned location) const {
+  [[gnu::pure]]
+  const MenuItem &GetMenuItem(std::size_t mode,
+                              std::size_t location) const noexcept {
     assert(mode < MAX_MODE);
     assert(location < Menu::MAX_ITEMS);
 

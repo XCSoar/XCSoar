@@ -130,10 +130,10 @@ public:
    * Returns the number of files in the list
    * @return The number of files in the list
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetNumFiles() const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   int Find(Path path) const noexcept;
 
   /**
@@ -142,7 +142,8 @@ public:
    * that item
    * @param text PathFile to search for
    */
-  void Lookup(Path text) noexcept;
+  void SetValue(Path new_value) noexcept;
+  void ModifyValue(Path new_value) noexcept;
 
   /**
    * Force the value to the given path.  If the path is not in the
@@ -155,14 +156,15 @@ public:
    * Returns the PathFile of the currently selected item
    * @return The PathFile of the currently selected item
    */
-  gcc_pure
-  Path GetPathFile() const noexcept;
+  [[gnu::pure]]
+  Path GetValue() const noexcept;
 
   /**
    * Sets the selection to the given index
    * @param Value The array index to select
    */
-  void Set(unsigned new_value) noexcept;
+  void SetIndex(unsigned new_value) noexcept;
+  void ModifyIndex(unsigned new_value) noexcept;
 
   /** Sorts the filelist by filenames */
   void Sort() noexcept;
@@ -175,10 +177,10 @@ public:
   void ScanMultiplePatterns(const TCHAR *patterns) noexcept;
 
   /** For use by other classes */
-  gcc_pure
+  [[gnu::pure]]
   unsigned size() const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   Path GetItem(unsigned index) const noexcept;
 
   /* virtual methods from class DataField */

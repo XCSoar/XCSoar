@@ -33,7 +33,7 @@
 #include <cstdint>
 
 #ifdef _WIN32
-#include <windows.h>
+#include <minwindef.h>
 #elif defined(__APPLE__)
 #import <Foundation/Foundation.h>
 #endif
@@ -42,9 +42,11 @@
  * macOS) - undefine */
 #ifdef TRUE
 #undef TRUE
+static constexpr bool TRUE = true;
 #endif
 #ifdef FALSE
 #undef FALSE
+static constexpr bool FALSE = false;
 #endif
 
 /**

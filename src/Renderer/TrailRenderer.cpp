@@ -45,11 +45,12 @@ TrailRenderer::LoadTrace(const TraceComputer &trace_computer)
 
 bool
 TrailRenderer::LoadTrace(const TraceComputer &trace_computer,
-                         unsigned min_time,
+                         TimeStamp min_time,
                          const WindowProjection &projection)
 {
   trace.clear();
-  trace_computer.LockedCopyTo(trace, min_time,
+  trace_computer.LockedCopyTo(trace,
+                              min_time.Cast<std::chrono::duration<unsigned>>(),
                               projection.GetGeoScreenCenter(),
                               projection.DistancePixelsToMeters(3));
   return !trace.empty();
@@ -111,7 +112,8 @@ GetMinMax(TrailSettings::Type type, const TracePointVector &trace)
 
 void
 TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
-                    const WindowProjection &projection, unsigned min_time,
+                    const WindowProjection &projection,
+                    TimeStamp min_time,
                     bool enable_traildrift, const PixelPoint pos,
                     const NMEAInfo &basic, const DerivedInfo &calculated,
                     const TrailSettings &settings)
@@ -211,7 +213,7 @@ TrailRenderer::Draw(Canvas &canvas, const WindowProjection &projection)
 void
 TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     const WindowProjection &projection,
-                    unsigned min_time)
+                    TimeStamp min_time) noexcept
 {
   if (LoadTrace(trace_computer, min_time, projection))
     Draw(canvas, projection);

@@ -28,6 +28,13 @@ Copyright_License {
 
 #include <stdio.h>
 
+#if defined(__GNUC__) && !defined(__clang__)
+/* this warning is bogus because GCC is not clever enough to
+   understand that the "last_value" variable only gets evaluated after
+   it has been initialised */
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+
 int main(int argc, char **argv)
 try {
   Args args(argc, argv, "FILE");

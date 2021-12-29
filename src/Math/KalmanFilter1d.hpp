@@ -54,8 +54,7 @@ class KalmanFilter1d {
   // Constructors: the first allows you to supply the variance of the
   // acceleration noise input to the system model in x units per second squared;
   // the second constructor assumes a variance of 1.0.
-  KalmanFilter1d(double var_x_accel);
-  KalmanFilter1d();
+  explicit KalmanFilter1d(double var_x_accel=1) noexcept;
 
   // The following three methods reset the filter. All of them assign a huge
   // variance to the tracked absolute quantity and a var_x_accel_ variance to
@@ -65,15 +64,13 @@ class KalmanFilter1d {
   //
   // NOTE: "x_abs_value" is meant to connote the value of the absolute quantity
   // x, not the absolute value of x.
-  void Reset();
-  void Reset(double x_abs_value);
-  void Reset(double x_abs_value, double x_vel_value);
+  void Reset(double x_abs_value=0, double x_vel_value=0) noexcept;
 
   /**
    * Sets the variance of the acceleration noise input to the system model in
    * x units per second squared.
    */
-  void SetAccelerationVariance(double var_x_accel) {
+  void SetAccelerationVariance(double var_x_accel) noexcept {
     var_x_accel_ = var_x_accel;
   }
 
@@ -84,14 +81,14 @@ class KalmanFilter1d {
    * greater than 0; for the first measurement after a Reset(), it's
    * safe to use 1.0.
    */
-  void Update(double z_abs, double var_z_abs, double dt);
+  void Update(double z_abs, double var_z_abs, double dt) noexcept;
 
   // Getters for the state and its covariance.
-  double GetXAbs() const { return x_abs_; }
-  double GetXVel() const { return x_vel_; }
-  double GetCovAbsAbs() const { return p_abs_abs_; }
-  double GetCovAbsVel() const { return p_abs_vel_; }
-  double GetCovVelVel() const { return p_vel_vel_; }
+  double GetXAbs() const noexcept { return x_abs_; }
+  double GetXVel() const noexcept { return x_vel_; }
+  double GetCovAbsAbs() const noexcept { return p_abs_abs_; }
+  double GetCovAbsVel() const noexcept { return p_abs_vel_; }
+  double GetCovVelVel() const noexcept { return p_vel_vel_; }
 };
 
 #endif

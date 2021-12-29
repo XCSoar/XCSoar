@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_STATIC_PARSER_HPP
 #define XCSOAR_FLARM_STATIC_PARSER_HPP
 
+class TimeStamp;
 class NMEAInputLine;
 struct FlarmError;
 struct FlarmVersion;
@@ -34,13 +35,14 @@ struct TrafficList;
  * Parses a PFLAE sentence (self-test results).
  */
 void
-ParsePFLAE(NMEAInputLine &line, FlarmError &error, double clock);
+ParsePFLAE(NMEAInputLine &line, FlarmError &error, TimeStamp clock) noexcept;
 
 /**
  * Parses a PFLAV sentence (version information).
  */
 void
-ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, double clock);
+ParsePFLAV(NMEAInputLine &line, FlarmVersion &version,
+           TimeStamp clock) noexcept;
 
 /**
  * Parses a PFLAU sentence
@@ -50,7 +52,7 @@ ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, double clock);
  * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
  */
 void
-ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, double clock);
+ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, TimeStamp clock) noexcept;
 
 /**
  * Parses a PFLAA sentence
@@ -60,6 +62,6 @@ ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, double clock);
  * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
  */
 void
-ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, double clock);
+ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock) noexcept;
 
 #endif

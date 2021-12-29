@@ -102,15 +102,15 @@ namespace Volkslogger {
     cmd_RST = 0x0c,
   };
 
-  bool Reset(Port &port, OperationEnvironment &env, unsigned n);
+  void Reset(Port &port, OperationEnvironment &env, unsigned n);
 
-  bool Handshake(Port &port, OperationEnvironment &env,
+  void Handshake(Port &port, OperationEnvironment &env,
+                 std::chrono::steady_clock::duration timeout);
+
+  void Connect(Port &port, OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout);
 
-  bool Connect(Port &port, OperationEnvironment &env,
-               std::chrono::steady_clock::duration timeout);
-
-  bool ConnectAndFlush(Port &port, OperationEnvironment &env,
+  void ConnectAndFlush(Port &port, OperationEnvironment &env,
                        std::chrono::steady_clock::duration timeout);
 
   bool SendCommand(Port &port, OperationEnvironment &env,
@@ -131,7 +131,7 @@ namespace Volkslogger {
     return SendCommandSwitchBaudRate(port, env, cmd, 0, baud_rate);
   }
 
-  bool WaitForACK(Port &port, OperationEnvironment &env);
+  void WaitForACK(Port &port, OperationEnvironment &env);
 
   /**
    * Read data from the Logger
@@ -146,7 +146,7 @@ namespace Volkslogger {
                void *buffer, size_t max_length,
                std::chrono::steady_clock::duration timeout_firstchar={});
 
-  bool WriteBulk(Port &port, OperationEnvironment &env,
+  void WriteBulk(Port &port, OperationEnvironment &env,
                  const void *buffer, unsigned length);
 
   /**

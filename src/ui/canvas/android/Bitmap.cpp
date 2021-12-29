@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/opengl/Texture.hpp"
-#include "ui/canvas/opengl/Surface.hpp"
 #include "Android/Bitmap.hpp"
 #include "Android/NativeView.hpp"
 #include "Android/Main.hpp"
@@ -36,26 +35,8 @@ Bitmap::Bitmap(ResourceId id)
   Load(id);
 }
 
-Bitmap::Bitmap(Bitmap &&src)
-  :bmp(src.bmp),
-   uncompressed(std::move(src.uncompressed)),
-   type(src.type),
-   texture(src.texture),
-   size(src.size),
-   interpolation(src.interpolation),
-   flipped(src.flipped)
-{
-  src.bmp = nullptr;
-  src.texture = nullptr;
-
-  if (IsDefined()) {
-    RemoveSurfaceListener(src);
-    AddSurfaceListener(*this);
-  }
-}
-
 static const char *
-find_resource_name(unsigned id)
+find_resource_name(unsigned id) noexcept
 {
   for (unsigned i = 0; DrawableNames[i].name != nullptr; ++i)
     if (DrawableNames[i].id == id)
@@ -64,7 +45,7 @@ find_resource_name(unsigned id)
   return nullptr;
 }
 
-static jobject
+static Java::LocalObject
 LoadResourceBitmap(ResourceId id)
 {
   const char *name = find_resource_name((unsigned)id);
@@ -75,22 +56,14 @@ LoadResourceBitmap(ResourceId id)
 }
 
 bool
-Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type, bool flipped)
+Bitmap::Set(JNIEnv *env, jobject bmp, Type type, bool flipped) noexcept
 {
-  assert(bmp == nullptr);
-  assert(_bmp != nullptr);
-
-  bmp = env->NewGlobalRef(_bmp);
-  env->DeleteLocalRef(_bmp);
-
-  type = _type;
+  assert(bmp != nullptr);
 
   size.width = AndroidBitmap::GetWidth(env, bmp);
   size.height = AndroidBitmap::GetHeight(env, bmp);
 
-  AddSurfaceListener(*this);
-
-  if (surface_valid && !MakeTexture(bmp, type, flipped)) {
+  if (!MakeTexture(bmp, type, flipped)) {
     Reset();
     return false;
   }
@@ -99,7 +72,7 @@ Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type, bool flipped)
 }
 
 bool
-Bitmap::MakeTexture(jobject _bmp, Type _type, bool flipped)
+Bitmap::MakeTexture(jobject _bmp, Type _type, bool flipped) noexcept
 {
   assert(_bmp != nullptr);
 
@@ -124,11 +97,11 @@ Bitmap::Load(ResourceId id, Type _type)
 
   Reset();
 
-  auto *new_bmp = LoadResourceBitmap(id);
+  auto new_bmp = LoadResourceBitmap(id);
   if (new_bmp == nullptr)
     return false;
 
-  return Set(Java::GetEnv(), new_bmp, _type);
+  return Set(new_bmp.GetEnv(), new_bmp, _type);
 }
 
 bool
@@ -138,7 +111,7 @@ Bitmap::LoadFile(Path path)
 
   Reset();
 
-  jobject new_bmp;
+  Java::LocalObject new_bmp;
   bool flipped = false;
   if (path.MatchesExtension(_T(".tif")) || path.MatchesExtension(_T(".tiff"))) {
     new_bmp = native_view->loadFileTiff(path);
@@ -150,43 +123,4 @@ Bitmap::LoadFile(Path path)
     return false;
 
   return Set(Java::GetEnv(), new_bmp, Type::STANDARD, flipped);
-}
-
-void
-Bitmap::Reset()
-{
-  if (bmp != nullptr) {
-    auto *env = Java::GetEnv();
-    AndroidBitmap::Recycle(env, bmp);
-    env->DeleteGlobalRef(bmp);
-    bmp = nullptr;
-
-    RemoveSurfaceListener(*this);
-  } else if (uncompressed.IsDefined()) {
-    uncompressed = UncompressedImage();
-    RemoveSurfaceListener(*this);
-  }
-
-  delete texture;
-  texture = nullptr;
-}
-
-void
-Bitmap::SurfaceCreated()
-{
-  assert(bmp != nullptr || uncompressed.IsDefined());
-
-  if (bmp != nullptr)
-    MakeTexture(bmp, type);
-  else if (uncompressed.IsDefined())
-    MakeTexture(uncompressed, type);
-}
-
-void
-Bitmap::SurfaceDestroyed()
-{
-  assert(bmp != nullptr || uncompressed.IsDefined());
-
-  delete texture;
-  texture = nullptr;
 }

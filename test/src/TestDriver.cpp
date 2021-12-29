@@ -83,7 +83,7 @@ TestGeneric()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
   nmea_info.alive.Update(nmea_info.clock);
 
   /* no GPS reception */
@@ -96,7 +96,7 @@ TestGeneric()
   ok1(nmea_info.date_time_utc.hour == 8);
   ok1(nmea_info.date_time_utc.minute == 23);
   ok1(nmea_info.date_time_utc.second == 10);
-  ok1(equals(nmea_info.time, 8 * 3600 + 23 * 60 + 10.141));
+  ok1(equals(nmea_info.time, TimeStamp{FloatDuration{8 * 3600 + 23 * 60 + 10.141}}));
 
   /* got a GPS fix */
   ok1(parser.ParseLine("$GPRMC,082311,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*6C",
@@ -141,7 +141,7 @@ TestTasman()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(parser.ParseLine("$PTAS1,200,200,02426,000*25", nmea_info));
   ok1(nmea_info.total_energy_vario_available);
@@ -167,7 +167,7 @@ TestFLARM()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(parser.ParseLine("$PFLAU,3,1,1,1,0*50",
                                       nmea_info));
@@ -258,12 +258,12 @@ static void
 TestAltairRU()
 {
   NullPort null;
-  Device *device = altair_pro_driver.CreateOnPort(dummy_config, null);
+  std::unique_ptr<Device> device{altair_pro_driver.CreateOnPort(dummy_config, null)};
   ok1(device != NULL);
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$PTFRS,1,0,0,0,0,0,0,0,5,1,10,0,3,1338313437,0,0,0,,,2*4E",
                         nmea_info));
@@ -273,7 +273,7 @@ TestAltairRU()
   ok1(!nmea_info.voltage_available);
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$PTFRS,1,0,0,0,0,0,0,0,342,1,10,0,3,1338313438,0,0,12743,,,2*42",
                         nmea_info));
@@ -293,7 +293,7 @@ TestBlueFly()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   // repeat input to get stable filter output
   ok1(device->ParseNMEA("PRS 00017CBA", nmea_info));
@@ -306,7 +306,7 @@ TestBlueFly()
   ok1(equals(nmea_info.static_pressure.GetPascal(), 97466));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("PRS 00017CCA", nmea_info));
   ok1(device->ParseNMEA("PRS 00017CCA", nmea_info));
@@ -339,7 +339,7 @@ TestBorgeltB50()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$PBB50,042,-01.1,1.0,12345,10,1.3,1,-28*75", nmea_info));
   ok1(nmea_info.airspeed_available);
@@ -353,7 +353,7 @@ TestBorgeltB50()
   ok1(equals(nmea_info.settings.bugs, 0.9));
   ok1(nmea_info.settings.ballast_overload_available);
   ok1(equals(nmea_info.settings.ballast_overload, 1.3));
-  ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::CIRCLING);
+  ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::CRUISE);
   ok1(nmea_info.temperature_available);
   ok1(equals(nmea_info.temperature.ToKelvin(), 245.15));
 
@@ -369,7 +369,7 @@ TestCAI302()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("!w,000,000,0000,500,01287,01020,-0668,191,199,191,000,000,100*44",
                         nmea_info));
@@ -427,7 +427,7 @@ TestCProbe()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$PCPROBE,T,FD92,FF93,00D9,FD18,017E,FEDB,0370,0075,00D6,0064,001C,000000,,",
                         nmea_info));
@@ -464,7 +464,7 @@ TestEye()
 
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$PEYA,1015.5,1020.5,3499,1012.3,265,12,176,+05.4,+15.2,095,1650,+05.1,+3.9*3a",
                         nmea_info));
@@ -494,7 +494,7 @@ TestEye()
 
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$PEYI,+110,+020,+135,+130,+140,+0.12,+1.03,+9.81,+12,248,246,+02.3,*16",
                         nmea_info));
@@ -518,7 +518,7 @@ TestFlymasterF1()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$VARIO,999.98,-12,12.4,12.7,0,21.3,25.5*66",
                         nmea_info));
@@ -556,35 +556,35 @@ TestFlyNet()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("_PRS 00017CBA", nmea_info));
   ok1(nmea_info.static_pressure_available);
   ok1(equals(nmea_info.static_pressure.GetPascal(), 97466));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("_PRS 00018BCD", nmea_info));
   ok1(nmea_info.static_pressure_available);
   ok1(equals(nmea_info.static_pressure.GetPascal(), 101325));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("_BAT 0", nmea_info));
   ok1(nmea_info.battery_level_available);
   ok1(equals(nmea_info.battery_level, 0));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("_BAT 7", nmea_info));
   ok1(nmea_info.battery_level_available);
   ok1(equals(nmea_info.battery_level, 70));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("_BAT A", nmea_info));
   ok1(nmea_info.battery_level_available);
@@ -602,7 +602,7 @@ TestFlytec()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$BRSF,063,-013,-0035,1,193,00351,535,485*33",
                         nmea_info));
@@ -610,7 +610,7 @@ TestFlytec()
   ok1(equals(nmea_info.true_airspeed, 17.5));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$VMVABD,1234.5,M,0547.0,M,-0.0,,,MS,63.0,KH,22.4,C*51",
                         nmea_info));
@@ -624,7 +624,7 @@ TestFlytec()
   ok1(equals(nmea_info.temperature.ToKelvin(), 295.55));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$FLYSEN,,,,,,,,,V,,101450,02341,0334,02000,,,,,,,,,*72",
                         nmea_info));
@@ -640,7 +640,7 @@ TestFlytec()
   ok1(equals(nmea_info.true_airspeed, 200));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$FLYSEN,,,,,,,,,,V,,101450,02341,0334,02000,,,,,,,,,*5e",
                         nmea_info));
@@ -660,7 +660,7 @@ TestFlytec()
   ok1(!device->ParseNMEA("$FLYSEN,,,,,,,,,,,,,,,,,,,,*5e", nmea_info));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$FLYSEN,241211,201500,4700.840,N,00818.457,E,092,"
                         "01100,01234,A,09,097517,01321,-001,01030,P,023,,038,"
@@ -698,7 +698,7 @@ TestFlytec()
              Temperature::FromCelsius(23).ToKelvin()));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$FLYSEN,241211,201500,4700.840,N,00818.457,E,092,"
                         "01100,01234,V,09,097517,01321,-001,01030,P,023,017,038,"
@@ -743,7 +743,7 @@ TestLeonardo()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$C,+2025,-7,+18,+25,+29,122,314,314,0,-356,+25,45,T*3D",
                         nmea_info));
@@ -764,7 +764,7 @@ TestLeonardo()
   ok1(equals(nmea_info.external_wind.norm, 6.94444444));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$c,+2025,-2,+18*5C", nmea_info));
   ok1(nmea_info.baro_altitude_available);
@@ -777,7 +777,7 @@ TestLeonardo()
   ok1(!nmea_info.netto_vario_available);
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$D,+7,100554,+25,18,+31,,0,-356,+25,+11,115,96*6A",
                         nmea_info));
@@ -793,7 +793,7 @@ TestLeonardo()
   ok1(equals(nmea_info.temperature.ToKelvin(), 304.15));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$PDGFTL1,2025,2000,250,-14,45,134,28,65,382,153*3D",
                         nmea_info));
@@ -816,7 +816,7 @@ TestLeonardo()
   ok1(equals(nmea_info.voltage, 3.82));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$PDGFTTL,2025,2000,250,-14*41", nmea_info));
   ok1(nmea_info.pressure_altitude_available);
@@ -840,7 +840,7 @@ TestLevilAHRS()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   // All angles in tenth of degrees
   ok1(device->ParseNMEA("$RPYL,127,729,3215,99,88,1376,0,", nmea_info));
@@ -875,7 +875,7 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   /* empty sentence */
   ok1(device->ParseNMEA("$LXWP0,N,,,,,,,,,,,*6d", nmea_info));
@@ -887,7 +887,7 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
 
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   /* altitude and wind */
   ok1(device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", nmea_info));
@@ -911,7 +911,7 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
 
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   /* airspeed and vario available */
   ok1(device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1*47",
@@ -931,7 +931,7 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
 
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   /* airspeed without altitude */
   ok1(device->ParseNMEA("$LXWP0,Y,222.3,,,,,,,,,,*55",
@@ -960,7 +960,7 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
 
 
     nmea_info.Reset();
-    nmea_info.clock = 1;
+    nmea_info.clock = TimeStamp{FloatDuration{1}};
 
     // Test LX160 (sw 3.04) variant (different bugs notation)
     ok1(device->ParseNMEA("$LXWP2,1.1,1.00,1.00,2.14,-3.87,2.38*3E", nmea_info));
@@ -1001,30 +1001,48 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
 
 
     nmea_info.Reset();
-    nmea_info.clock = 1;
+    nmea_info.clock = TimeStamp{FloatDuration{1}};
 
     LXDevice &lx_device = *(LXDevice *)device;
     ok1(!lx_device.IsV7());
     ok1(!lx_device.IsNano());
     ok1(!lx_device.IsLX16xx());
+    ok1(!lx_device.IsSVario());
 
     lx_device.ResetDeviceDetection();
     ok1(device->ParseNMEA("$LXWP1,V7,12345,1.0,1.0,12345*6f", nmea_info));
     ok1(lx_device.IsV7());
     ok1(!lx_device.IsNano());
     ok1(!lx_device.IsLX16xx());
+    ok1(!lx_device.IsSVario());
 
     lx_device.ResetDeviceDetection();
     ok1(device->ParseNMEA("$LXWP1,NANO,12345,1.0,1.0,12345*00", nmea_info));
     ok1(!lx_device.IsV7());
     ok1(lx_device.IsNano());
     ok1(!lx_device.IsLX16xx());
+    ok1(!lx_device.IsSVario());
+
+    lx_device.ResetDeviceDetection();
+    ok1(device->ParseNMEA("$LXWP1,NINC,12345,1.0,1.0,12345*04", nmea_info));
+    ok1(!lx_device.IsV7());
+    ok1(!lx_device.IsNano());
+    ok1(!lx_device.IsLX16xx());
+    ok1(lx_device.IsSVario());
+
+    lx_device.ResetDeviceDetection();
+    ok1(device->ParseNMEA("$LXWP1,S8x,12345,1.0,1.0,12345*1D", nmea_info));
+    ok1(!lx_device.IsV7());
+    ok1(!lx_device.IsNano());
+    ok1(!lx_device.IsLX16xx());
+    ok1(lx_device.IsSVario());
 
     lx_device.ResetDeviceDetection();
     ok1(device->ParseNMEA("$LXWP1,1606,4294967295,1.90,1.00,4294967295*06", nmea_info));
     ok1(!lx_device.IsV7());
     ok1(!lx_device.IsNano());
     ok1(lx_device.IsLX16xx());
+    ok1(!lx_device.IsSVario());
 
     ok1(nmea_info.device.product == "1606");
     ok1(nmea_info.device.serial == "4294967295");
@@ -1049,7 +1067,7 @@ TestLXV7()
 
   NMEAInfo basic;
   basic.Reset();
-  basic.clock = 1;
+  basic.clock = TimeStamp{FloatDuration{1}};
 
   LXDevice &lx_device = *(LXDevice *)device;
   lx_device.ResetDeviceDetection();
@@ -1062,17 +1080,12 @@ TestLXV7()
   ok1(basic.pressure_altitude_available);
   ok1(equals(basic.pressure_altitude, 244.3));
 
-  ok1(lx_device.IsV7());
-  lx_device.ResetDeviceDetection();
-
   ok1(device->ParseNMEA("$PLXVS,23.1,0,12.3,*71", basic));
   ok1(basic.temperature_available);
   ok1(equals(basic.temperature.ToKelvin(), 296.25));
   ok1(basic.switch_state.flight_mode == SwitchState::FlightMode::CIRCLING);
   ok1(basic.voltage_available);
   ok1(equals(basic.voltage, 12.3));
-
-  ok1(lx_device.IsV7());
 
   delete device;
 }
@@ -1086,7 +1099,7 @@ TestILEC()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   /* baro altitude disabled */
   ok1(device->ParseNMEA("$PILC,PDA1,1489,-3.21*69", nmea_info));
@@ -1117,7 +1130,7 @@ TestVega()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   /* enable FLARM mode (switches the $PGRMZ parser to pressure
      altitude) */
@@ -1161,7 +1174,7 @@ TestOpenVario()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   // Empty sentence is handled by device driver
   ok1(device->ParseNMEA("$POV*49", nmea_info));
@@ -1234,7 +1247,7 @@ TestWesterboer()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$PWES0,20,-25,25,-22,2,-100,589,589,1260,1296,128,295*01",
                         nmea_info));
@@ -1273,7 +1286,7 @@ TestZander()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   /* baro altitude enabled */
   ok1(device->ParseNMEA("$PZAN1,02476,123456*04", nmea_info));
@@ -1287,52 +1300,52 @@ TestZander()
   ok1(equals(nmea_info.total_energy_vario, -1.5));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
   ok1(device->ParseNMEA("$PZAN3,+,026,V,321,035,A,321,035,V*44", nmea_info));
   ok1(nmea_info.external_wind_available);
   ok1(equals(nmea_info.external_wind.bearing, 321));
   ok1(equals(nmea_info.external_wind.norm, 9.72222));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
   ok1(device->ParseNMEA("$PZAN3,+,026,V,321,035,V,321,035,V*53", nmea_info));
   ok1(!nmea_info.external_wind_available);
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
   ok1(device->ParseNMEA("$PZAN3,+,026,A,321,035,A*2f", nmea_info));
   ok1(nmea_info.external_wind_available);
   ok1(equals(nmea_info.external_wind.bearing, 321));
   ok1(equals(nmea_info.external_wind.norm, 9.72222));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
   ok1(device->ParseNMEA("$PZAN3,+,026,A,321,035,A,V*55", nmea_info));
   ok1(nmea_info.external_wind_available);
   ok1(equals(nmea_info.external_wind.bearing, 321));
   ok1(equals(nmea_info.external_wind.norm, 9.72222));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
   ok1(device->ParseNMEA("$PZAN3,+,026,A,321,035,V,A*55", nmea_info));
   ok1(nmea_info.external_wind_available);
   ok1(equals(nmea_info.external_wind.bearing, 321));
   ok1(equals(nmea_info.external_wind.norm, 9.72222));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
   ok1(device->ParseNMEA("$PZAN3,+,026,A,321,035,A,A*42", nmea_info));
   ok1(nmea_info.external_wind_available);
   ok1(equals(nmea_info.external_wind.bearing, 321));
   ok1(equals(nmea_info.external_wind.norm, 9.72222));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
   ok1(device->ParseNMEA("$PZAN3,+,026,A,321,035,V*38", nmea_info));
   ok1(!nmea_info.external_wind_available);
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
   ok1(device->ParseNMEA("$PZAN3,+,026,A,321,035,V,V*42", nmea_info));
   ok1(!nmea_info.external_wind_available);
 
@@ -1341,17 +1354,17 @@ TestZander()
   ok1(equals(nmea_info.settings.mac_cready, 1.5));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
   ok1(device->ParseNMEA("$PZAN5,,MUEHL,123.4,KM,T,234*24", nmea_info));
   ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::UNKNOWN);
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
   ok1(device->ParseNMEA("$PZAN5,SF,MUEHL,123.4,KM,T,234*31", nmea_info));
   ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::CRUISE);
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
   ok1(device->ParseNMEA("$PZAN5,VA,MUEHL,123.4,KM,T,234*33", nmea_info));
   ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::CIRCLING);
 
@@ -1367,7 +1380,7 @@ TestVaulter()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   ok1(device->ParseNMEA("$PITV3,-16.0,-23.9,147.9,23.03,1.01*1C", nmea_info));
   ok1(nmea_info.attitude.bank_angle_available);
@@ -1408,7 +1421,7 @@ TestXCTracer()
 
   NMEAInfo nmea_info;
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   /* empty sentence */
   ok1(device->ParseNMEA("$LXWP0,N,,,,,,,,,,,*6d", nmea_info));
@@ -1422,7 +1435,7 @@ TestXCTracer()
   ok1(!device->ParseNMEA("$XCTRC*6d", nmea_info));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   /* altitude and !wind */
   ok1(device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", nmea_info));
@@ -1435,7 +1448,7 @@ TestXCTracer()
   ok1(!nmea_info.external_wind_available);
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   /* !airspeed and vario available */
   ok1(device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1*47",nmea_info));
@@ -1464,7 +1477,7 @@ TestXCTracer()
   ok1(nmea_info.date_time_utc.hour == 10);
   ok1(nmea_info.date_time_utc.minute == 56);
   ok1(nmea_info.date_time_utc.second == 23);
-  ok1(equals(nmea_info.time, 10 * 3600 + 56 * 60 + 23.80));
+  ok1(equals(nmea_info.time, TimeStamp{FloatDuration{10 * 3600 + 56 * 60 + 23.80}}));
 
   ok1(nmea_info.location_available);
   ok1(equals(nmea_info.location.longitude, 8.104885));
@@ -1498,13 +1511,13 @@ TestACD()
   NMEAInfo nmea_info;
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   /* $PAAVS responses from XPDR must be ignored */
   ok1(!device->ParseNMEA("$PAAVS,XPDR,7000,1,0,1697,0,0*68",nmea_info));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   /* test ALT response */
   ok1(device->ParseNMEA("$PAAVS,ALT,526.23,457.33,100500*0E",
@@ -1518,7 +1531,7 @@ TestACD()
   ok1(equals(nmea_info.settings.qnh.GetPascal(), 100500));
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   /* test COM response */
   ok1(device->ParseNMEA("$PAAVS,COM,130330,122500,100,75,1,1,0,0*0D",
@@ -1561,13 +1574,21 @@ TestDeclare(const struct DeviceRegister &driver)
 
   for (unsigned i = 0; i < 1024; ++i) {
     inject_port_fault = i;
-    bool success = device->Declare(declaration, NULL, env);
+    bool success;
+    try {
+      success = device->Declare(declaration, NULL, env);
+    } catch (...) {
+      success = false;
+    }
     if (success || !port.running ||
         port.baud_rate != FaultInjectionPort::DEFAULT_BAUD_RATE)
       break;
   }
 
-  device->EnableNMEA(env);
+  try {
+    device->EnableNMEA(env);
+  } catch (...) {
+  }
 
   ok1(port.baud_rate == FaultInjectionPort::DEFAULT_BAUD_RATE);
 
@@ -1587,13 +1608,21 @@ TestFlightList(const struct DeviceRegister &driver)
   for (unsigned i = 0; i < 1024; ++i) {
     inject_port_fault = i;
     RecordedFlightList flight_list;
-    bool success = device->ReadFlightList(flight_list, env);
+    bool success;
+    try {
+      success = device->ReadFlightList(flight_list, env);
+    } catch (...) {
+      success = false;
+    }
     if (success || !port.running ||
         port.baud_rate != FaultInjectionPort::DEFAULT_BAUD_RATE)
       break;
   }
 
-  device->EnableNMEA(env);
+  try {
+    device->EnableNMEA(env);
+  } catch (...) {
+  }
 
   ok1(port.baud_rate == FaultInjectionPort::DEFAULT_BAUD_RATE);
 
@@ -1602,7 +1631,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(827);
+  plan_tests(839);
 
   TestGeneric();
   TestTasman();

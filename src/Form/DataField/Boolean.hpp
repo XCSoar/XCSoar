@@ -42,19 +42,19 @@ public:
      mValue(_value),
      true_text(_true_text), false_text(_false_text) {}
 
-  void Set(bool Value) noexcept;
-
-  bool GetAsBoolean() const noexcept {
+  bool GetValue() const noexcept {
     return mValue;
   }
 
-  void SetAsBoolean(bool Value) noexcept;
+  void SetValue(bool new_value) noexcept {
+    mValue = new_value;
+  }
 
-  void Set(int Value) noexcept {
-    if (Value > 0)
-      Set(true);
-    else
-      Set(false);
+  void ModifyValue(bool new_value) noexcept {
+    if (new_value != GetValue()) {
+      SetValue(new_value);
+      Modified();
+    }
   }
 
   /* virtual methods from class DataField */
@@ -67,7 +67,7 @@ public:
   ComboList CreateComboList(const TCHAR *reference) const noexcept override;
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   bool ParseString(const TCHAR *s) const noexcept;
 };
 

@@ -23,10 +23,7 @@ Copyright_License {
 
 #include "UtilsSystem.hpp"
 #include "CommandLine.hpp"
-#include "LocalPath.hpp"
-#include "LogFile.hpp"
 #include "ui/dim/Size.hpp"
-#include "system/Path.hpp"
 
 #ifdef ANDROID
 #include "Android/NativeView.hpp"
@@ -35,56 +32,14 @@ Copyright_License {
 
 #include <tchar.h>
 
-#ifdef HAVE_POSIX
-#ifndef ANDROID
-#include <sys/statvfs.h>
-#endif
-#include <sys/stat.h>
-#endif
-
 #ifdef _WIN32
-#include <windows.h>
+#include <windef.h> // for HWND (needed by winuser.h)
+#include <winuser.h>
 #endif
 
 #ifdef USE_VIDEOCORE
 #include <bcm_host.h>
 #endif
-
-/**
- * Calculates the free disk space for the given path
- * @param path The path defining the "drive" to look on
- * @return Number of KiB free on the destination drive
- */
-unsigned long FindFreeSpace(const TCHAR *path) {
-#ifdef HAVE_POSIX
-#ifdef ANDROID
-  return 64 * 1024 * 1024;
-#else
-  struct statvfs s;
-  if (statvfs(path, &s) < 0)
-    return 0;
-  return s.f_bsize * s.f_bavail / 1024;
-#endif
-#else /* !HAVE_POSIX */
-  ULARGE_INTEGER FreeBytesAvailableToCaller;
-  ULARGE_INTEGER TotalNumberOfBytes;
-  ULARGE_INTEGER TotalNumberOfFreeBytes;
-  if (GetDiskFreeSpaceEx(path,
-                         &FreeBytesAvailableToCaller,
-                         &TotalNumberOfBytes,
-                         &TotalNumberOfFreeBytes)) {
-    return FreeBytesAvailableToCaller.LowPart / 1024;
-  } else
-    return 0;
-#endif /* !HAVE_POSIX */
-}
-
-void
-StartupLogFreeRamAndStorage()
-{
-  unsigned long freestorage = FindFreeSpace(GetPrimaryDataPath().c_str());
-  LogFormat("Free storage %lu KB", freestorage);
-}
 
 /**
  * Returns the screen dimension rect to be used

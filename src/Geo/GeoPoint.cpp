@@ -25,32 +25,32 @@
 #include "Math.hpp"
 #include "SimplifiedMath.hpp"
 
-GeoPoint 
-GeoPoint::Parametric(const GeoPoint &delta, const double t) const
+GeoPoint
+GeoPoint::Parametric(const GeoPoint &delta, const double t) const noexcept
 {
   return (*this) + delta * t;
 }
 
-GeoPoint 
-GeoPoint::Interpolate(const GeoPoint &end, const double t) const
+GeoPoint
+GeoPoint::Interpolate(const GeoPoint &end, const double t) const noexcept
 {
   return (*this) + (end - (*this)) * t;
 }
 
 double
-GeoPoint::Distance(const GeoPoint &other) const
+GeoPoint::Distance(const GeoPoint &other) const noexcept
 {
   return ::Distance(*this, other);
 }
 
 Angle
-GeoPoint::Bearing(const GeoPoint &other) const
+GeoPoint::Bearing(const GeoPoint &other) const noexcept
 {
   return ::Bearing(*this, other);
 }
 
 GeoVector
-GeoPoint::DistanceBearing(const GeoPoint &other) const
+GeoPoint::DistanceBearing(const GeoPoint &other) const noexcept
 {
   GeoVector gv;
   ::DistanceBearing(*this, other, &gv.distance, &gv.bearing);
@@ -58,7 +58,7 @@ GeoPoint::DistanceBearing(const GeoPoint &other) const
 }
 
 double
-GeoPoint::DistanceS(const GeoPoint &other) const
+GeoPoint::DistanceS(const GeoPoint &other) const noexcept
 {
   double distance;
   ::DistanceBearingS(*this, other, &distance, nullptr);
@@ -66,7 +66,7 @@ GeoPoint::DistanceS(const GeoPoint &other) const
 }
 
 Angle
-GeoPoint::BearingS(const GeoPoint &other) const
+GeoPoint::BearingS(const GeoPoint &other) const noexcept
 {
   Angle angle;
   ::DistanceBearingS(*this, other, (Angle *)nullptr, &angle);
@@ -74,40 +74,29 @@ GeoPoint::BearingS(const GeoPoint &other) const
 }
 
 GeoVector
-GeoPoint::DistanceBearingS(const GeoPoint &other) const
+GeoPoint::DistanceBearingS(const GeoPoint &other) const noexcept
 {
   GeoVector gv;
   ::DistanceBearingS(*this, other, &gv.distance, &gv.bearing);
   return gv;
 }
 
-double 
+double
 GeoPoint::ProjectedDistance(const GeoPoint &from,
-                             const GeoPoint &to) const
+                            const GeoPoint &to) const noexcept
 {
   return ::ProjectedDistance(from, to, *this);
 }
 
 GeoPoint
-GeoPoint::Middle(const GeoPoint &other) const
+GeoPoint::Middle(const GeoPoint &other) const noexcept
 {
   return ::Middle(*this, other);
 }
 
-bool 
-GeoPoint::Sort(const GeoPoint &sp) const
-{
-  if (longitude < sp.longitude)
-    return false;
-  else if (longitude == sp.longitude)
-    return latitude > sp.latitude;
-  else
-    return true;
-}
-
-GeoPoint 
-GeoPoint::IntermediatePoint(const GeoPoint &destination, 
-                            const double distance) const
+GeoPoint
+GeoPoint::IntermediatePoint(const GeoPoint &destination,
+                            const double distance) const noexcept
 {
   return ::IntermediatePoint(*this, destination, distance);
 }

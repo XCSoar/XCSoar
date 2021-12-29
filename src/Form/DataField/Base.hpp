@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_BASE_HPP
 #define XCSOAR_DATA_FIELD_BASE_HPP
 
-#include "util/Compiler.h"
-
 #include <cassert>
 #include <tchar.h>
 #include <cstdint>
@@ -35,6 +33,12 @@ Copyright_License {
 class DataFieldListener;
 class ComboList;
 
+/**
+ * Most implementations have a method GetValue() for obtaining the raw
+ * value with its native type; ModifyValue() sets a new value and
+ * invokes DataFieldListener::OnModified(); SetValue() does the same,
+ * but does not invoke the callback.
+ */
 class DataField
 {
 public:
@@ -50,6 +54,7 @@ public:
     TIME,
     PREFIX,
     GEOPOINT,
+    DATE,
   };
 
 private:
@@ -88,19 +93,19 @@ public:
   virtual void Inc() noexcept;
   virtual void Dec() noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   virtual int GetAsInteger() const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   virtual const TCHAR *GetAsString() const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   virtual const TCHAR *GetAsDisplayString() const noexcept;
 
   virtual void SetAsInteger(int value) noexcept;
   virtual void SetAsString(const TCHAR *value) noexcept;
 
-  virtual void EnableItemHelp(gcc_unused bool value) noexcept {};
+  virtual void EnableItemHelp([[maybe_unused]] bool value) noexcept {};
 
   /**
    * Create a #ComboList that allows the user to choose a value.
@@ -109,11 +114,11 @@ public:
    * determine the range of displayed values; pass nullptr for the
    * "default" reference
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual ComboList CreateComboList(const TCHAR *reference) const noexcept;
 
   virtual void SetFromCombo(int iDataFieldIndex,
-                            gcc_unused const TCHAR *sValue) noexcept
+                            [[maybe_unused]] const TCHAR *sValue) noexcept
   {
     SetAsInteger(iDataFieldIndex);
   }

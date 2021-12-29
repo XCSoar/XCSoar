@@ -208,6 +208,11 @@ final class IOIOAgent extends Thread {
         /* there is no connection: wait until Thread.interrupt()
            gets called */
         synchronized(this) {
+          if (enabledFlag)
+            /* don't block here, we should instead open a new
+               connection */
+            return;
+
           /* we're not actually waiting for an Object.notify() call,
              this is just a dummy call to make this thread idle and
              interruptible */

@@ -47,7 +47,7 @@ class SafeDestruct {
    * object is shutting down (no change to the reference counter in
    * this case).
    */
-  public synchronized boolean Increment() {
+  public synchronized boolean increment() {
     if (shutdown)
       return false;
 
@@ -60,7 +60,7 @@ class SafeDestruct {
    * object is shutting down (no change to the reference counter in
    * this case).
    */
-  public synchronized void Decrement() {
+  public synchronized void decrement() {
     --count;
 
     if (count == 0 && shutdown)

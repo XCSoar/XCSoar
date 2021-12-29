@@ -132,6 +132,9 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
   if (!buffer.empty())
     AddReadOnly(_("Runway"), nullptr, buffer);
 
+  if (!waypoint->shortname.empty())
+    AddReadOnly(_("Short Name"), nullptr, waypoint->shortname.c_str());
+
   if (FormatGeoPoint(waypoint->location,
                      buffer.buffer(), buffer.capacity()) != nullptr)
     AddReadOnly(_("Location"), nullptr, buffer);

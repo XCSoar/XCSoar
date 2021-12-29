@@ -26,7 +26,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "system/ConvertPathName.hpp"
 #include "system/Args.hpp"
-#include "Operation/Operation.hpp"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 
 #include <cstdint>
 #include <stdio.h>
@@ -35,7 +35,7 @@ Copyright_License {
 static bool
 LoadWaypoints(Path path, Waypoints &waypoints)
 {
-  NullOperationEnvironment operation;
+  ConsoleOperationEnvironment operation;
   if (!ReadWaypointFile(path, waypoints,
                         WaypointFactory(WaypointOrigin::NONE),
                         operation)) {

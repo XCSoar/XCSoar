@@ -27,8 +27,7 @@ Copyright_License {
 #include "net/http/Init.hpp"
 #include "io/async/AsioThread.hpp"
 #include "system/ConvertPathName.hpp"
-#include "thread/Mutex.hxx"
-#include "thread/Cond.hxx"
+#include "thread/AsyncWaiter.hxx"
 #include "util/PrintException.hxx"
 #include "util/ScopeExit.hxx"
 
@@ -43,22 +42,13 @@ using namespace std;
 class MyResponseHandler final : public CurlResponseHandler {
   FILE *const file;
 
-  Mutex mutex;
-  Cond cond;
-
-  std::exception_ptr error;
-
-  bool done;
+  AsyncWaiter waiter;
 
 public:
   explicit MyResponseHandler(FILE *_file):file(_file) {}
 
   void Wait() noexcept {
-    std::unique_lock<Mutex> lock(mutex);
-    cond.wait(lock, [this]{ return done; });
-
-    if (error)
-      std::rethrow_exception(error);
+    waiter.Wait();
   }
 
   /* virtual methods from class CurlResponseHandler */
@@ -80,16 +70,11 @@ public:
   }
 
   void OnEnd() override {
-    const std::lock_guard<Mutex> lock(mutex);
-    done = true;
-    cond.notify_one();
+    waiter.SetDone();
   }
 
   void OnError(std::exception_ptr e) noexcept override {
-    const std::lock_guard<Mutex> lock(mutex);
-    error = std::move(e);
-    done = true;
-    cond.notify_one();
+    waiter.SetError(std::move(e));
   }
 };
 

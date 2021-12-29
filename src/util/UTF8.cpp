@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "UTF8.hpp"
 #include "CharUtil.hxx"
+#include "Compiler.h"
 #include "StringView.hxx"
 
 #include <algorithm>
@@ -208,7 +209,7 @@ ValidateUTF8(StringView p) noexcept
   return true;
 }
 
-size_t
+std::size_t
 SequenceLengthUTF8(char ch) noexcept
 {
   if (IsASCII(ch))
@@ -234,9 +235,9 @@ SequenceLengthUTF8(char ch) noexcept
     return 0;
 }
 
-template<size_t L>
+template<std::size_t L>
 struct CheckSequenceUTF8 {
-  gcc_pure
+  [[gnu::pure]]
   bool operator()(const char *p) const noexcept {
     return IsContinuation(*p) && CheckSequenceUTF8<L-1>()(p + 1);
   }
@@ -244,14 +245,14 @@ struct CheckSequenceUTF8 {
 
 template<>
 struct CheckSequenceUTF8<0u> {
-  constexpr bool operator()(gcc_unused const char *p) const noexcept {
+  constexpr bool operator()(const char *) const noexcept {
     return true;
   }
 };
 
-template<size_t L>
-gcc_pure
-static size_t
+template<std::size_t L>
+[[gnu::pure]]
+static std::size_t
 InnerSequenceLengthUTF8(const char *p) noexcept
 {
   return CheckSequenceUTF8<L>()(p)
@@ -259,7 +260,7 @@ InnerSequenceLengthUTF8(const char *p) noexcept
     : 0u;
 }
 
-size_t
+std::size_t
 SequenceLengthUTF8(const char *p) noexcept
 {
   const unsigned char ch = *p++;
@@ -310,14 +311,14 @@ Latin1ToUTF8(unsigned char ch, char *buffer) noexcept
 
 const char *
 Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
-             size_t buffer_size) noexcept
+             std::size_t buffer_size) noexcept
 {
   const char *p = FindNonASCIIOrZero(src);
   if (*p == 0)
     /* everything is plain ASCII, we don't need to convert anything */
     return src;
 
-  if ((size_t)(p - src) >= buffer_size)
+  if ((std::size_t)(p - src) >= buffer_size)
     /* buffer too small */
     return nullptr;
 
@@ -384,14 +385,14 @@ UnicodeToUTF8(unsigned ch, char *q) noexcept
   return q;
 }
 
-size_t
+std::size_t
 LengthUTF8(const char *p) noexcept
 {
   /* this is a very naive implementation: it does not do any
      verification, it just counts the bytes that are not a UTF-8
      continuation  */
 
-  size_t n = 0;
+  std::size_t n = 0;
   for (; *p != 0; ++p)
     if (!IsContinuation(*p))
       ++n;
@@ -401,7 +402,7 @@ LengthUTF8(const char *p) noexcept
 /**
  * Find the null terminator.
  */
-gcc_pure
+[[gnu::pure]]
 static char *
 FindTerminator(char *p) noexcept
 {
@@ -416,9 +417,9 @@ FindTerminator(char *p) noexcept
 /**
  * Find the leading byte for the given continuation byte.
  */
-gcc_pure
+[[gnu::pure]]
 static char *
-FindLeading(gcc_unused char *const begin, char *i) noexcept
+FindLeading([[maybe_unused]] char *const begin, char *i) noexcept
 {
   assert(i > begin);
   assert(IsContinuation(*i));
@@ -450,7 +451,7 @@ CropIncompleteUTF8(char *const p) noexcept
   }
 
   char *const leading = FindLeading(p, last);
-  const size_t n_continuations = last - leading;
+  const std::size_t n_continuations = last - leading;
   assert(n_continuations > 0);
 
   const unsigned char ch = *leading;
@@ -487,8 +488,28 @@ CropIncompleteUTF8(char *const p) noexcept
   return result;
 }
 
-size_t
-TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes) noexcept
+std::size_t
+TruncateStringUTF8(StringView s, std::size_t max_chars) noexcept
+{
+  assert(ValidateUTF8(s));
+
+  std::size_t result = 0;
+  while (!s.empty() && max_chars > 0) {
+    std::size_t sequence = SequenceLengthUTF8(s.front());
+    if (sequence > s.size)
+      break;
+
+    result += sequence;
+    s.skip_front(sequence);
+    --max_chars;
+  }
+
+  return result;
+}
+
+std::size_t
+TruncateStringUTF8(const char *p,
+                   std::size_t max_chars, std::size_t max_bytes) noexcept
 {
 #if !CLANG_CHECK_VERSION(3,6)
   /* disabled on clang due to -Wtautological-pointer-compare */
@@ -496,9 +517,9 @@ TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes) noexcept
 #endif
   assert(ValidateUTF8(p));
 
-  size_t result = 0;
+  std::size_t result = 0;
   while (max_chars > 0 && *p != '\0') {
-    size_t sequence = SequenceLengthUTF8(*p);
+    std::size_t sequence = SequenceLengthUTF8(*p);
     if (sequence > max_bytes)
       break;
 
@@ -512,15 +533,15 @@ TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes) noexcept
 }
 
 char *
-CopyTruncateStringUTF8(char *dest, size_t dest_size,
-                       const char *src, size_t truncate) noexcept
+CopyTruncateStringUTF8(char *dest, std::size_t dest_size,
+                       const char *src, std::size_t truncate) noexcept
 {
   assert(dest != nullptr);
   assert(dest_size > 0);
   assert(src != nullptr);
   assert(ValidateUTF8(src));
 
-  size_t copy = TruncateStringUTF8(src, truncate, dest_size - 1);
+  std::size_t copy = TruncateStringUTF8(src, truncate, dest_size - 1);
   auto *p = std::copy_n(src, copy, dest);
   *p = '\0';
   return p;

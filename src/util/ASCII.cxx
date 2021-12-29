@@ -33,7 +33,7 @@
 #include <cassert>
 
 void
-CopyASCII(char *dest, const char *src)
+CopyASCII(char *dest, const char *src) noexcept
 {
 	do {
 		if (IsASCII(*src))
@@ -42,7 +42,8 @@ CopyASCII(char *dest, const char *src)
 }
 
 char *
-CopyASCII(char *dest, size_t dest_size, const char *src, const char *src_end)
+CopyASCII(char *dest, std::size_t dest_size,
+	  const char *src, const char *src_end) noexcept
 {
 	assert(dest_size > 0);
 	assert(src_end >= src);
@@ -56,7 +57,7 @@ CopyASCII(char *dest, size_t dest_size, const char *src, const char *src_end)
 }
 
 void
-CopyASCIIUpper(char *dest, const char *src)
+CopyASCIIUpper(char *dest, const char *src) noexcept
 {
 	do {
 		char ch = *src;

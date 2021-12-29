@@ -33,11 +33,14 @@ Copyright_License {
 Java::TrivialClass NativeView::cls;
 jfieldID NativeView::textureNonPowerOfTwo_field;
 jmethodID NativeView::init_surface_method, NativeView::deinit_surface_method;
+jmethodID NativeView::acquireWakeLock_method;
+jmethodID NativeView::setFullScreen_method;
 jmethodID NativeView::setRequestedOrientationID;
 jmethodID NativeView::loadResourceBitmap_method;
 jmethodID NativeView::loadFileBitmap_method;
 jmethodID NativeView::bitmapToTexture_method;
-jmethodID NativeView::open_file_method;
+jmethodID NativeView::shareText_method;
+jmethodID NativeView::openWaypointFile_method;
 jmethodID NativeView::getNetState_method;
 
 Java::TrivialClass NativeView::clsBitmap;
@@ -55,6 +58,12 @@ NativeView::Initialise(JNIEnv *env)
     env->GetStaticFieldID(cls, "textureNonPowerOfTwo", "Z");
   init_surface_method = env->GetMethodID(cls, "initSurface", "()Z");
   deinit_surface_method = env->GetMethodID(cls, "deinitSurface", "()V");
+
+  acquireWakeLock_method = env->GetMethodID(cls, "acquireWakeLock", "()V");
+
+  setFullScreen_method =
+    env->GetMethodID(cls, "setFullScreen", "(Z)V");
+
   setRequestedOrientationID =
     env->GetMethodID(cls, "setRequestedOrientation", "(I)Z");
 
@@ -65,8 +74,12 @@ NativeView::Initialise(JNIEnv *env)
   bitmapToTexture_method = env->GetMethodID(cls, "bitmapToTexture",
                                             "(Landroid/graphics/Bitmap;Z[I)Z");
 
-  open_file_method = env->GetMethodID(cls, "openFile",
-                                      "(Ljava/lang/String;)V");
+  shareText_method = env->GetMethodID(cls, "shareText",
+                                          "(Ljava/lang/String;)V");
+
+  openWaypointFile_method =
+    env->GetMethodID(cls, "openWaypointFile",
+                     "(ILjava/lang/String;)V");
 
   getNetState_method = env->GetMethodID(cls, "getNetState", "()I");
 
@@ -109,14 +122,16 @@ ConvertABGRToARGB(UncompressedImage &image)
   }
 }
 
-jobject NativeView::loadFileTiff(Path path)
+Java::LocalObject
+NativeView::loadFileTiff(Path path)
 {
   UncompressedImage image = LoadTiff(path);
 
   // create a Bitmap.Config enum
   Java::String config_name(env, "ARGB_8888");
-  jobject bitmap_config = env->CallStaticObjectMethod(
-    clsBitmapConfig, bitmapConfigValueOf_method, config_name.Get());
+  Java::LocalObject bitmap_config{env,
+    env->CallStaticObjectMethod(clsBitmapConfig, bitmapConfigValueOf_method,
+                                config_name.Get())};
 
   // convert ABGR to ARGB
   // TODO: I am not sure if this conversion depends on endianess. So
@@ -125,22 +140,27 @@ jobject NativeView::loadFileTiff(Path path)
 
   // create int array
   unsigned size = image.GetWidth() * image.GetHeight();
-  jintArray intArray = env->NewIntArray(size);
+  Java::LocalRef<jintArray> intArray{env, env->NewIntArray(size)};
   env->SetIntArrayRegion(intArray, 0, size, static_cast<const jint*>(image.GetData()));
 
   // call Bitmap.createBitmap()
-  jobject bitmap = env->CallStaticObjectMethod(
-    clsBitmap, createBitmap_method,
-    intArray, image.GetWidth(), image.GetHeight(),
-    bitmap_config);
-
-  env->DeleteLocalRef(intArray);
-  env->DeleteLocalRef(bitmap_config);
-  return bitmap;
+  return {env,
+    env->CallStaticObjectMethod(clsBitmap, createBitmap_method,
+                                intArray.Get(),
+                                image.GetWidth(), image.GetHeight(),
+                                bitmap_config.Get())};
 }
 
-jobject NativeView::loadFileBitmap(Path path)
+Java::LocalObject
+NativeView::loadFileBitmap(Path path)
 {
   Java::String path2(env, path.c_str());
-  return env->CallObjectMethod(obj, loadFileBitmap_method, path2.Get());
+  return {env, env->CallObjectMethod(obj, loadFileBitmap_method, path2.Get())};
+}
+
+void
+NativeView::ShareText(const char *text) noexcept
+{
+  env->CallVoidMethod(obj, shareText_method,
+                      Java::String{env, text}.Get());
 }

@@ -27,6 +27,7 @@ Copyright_License {
 namespace ProfileKeys {
 
 extern const char ShowMenuButton[];
+extern const char FullScreen[];
 extern const char UIScale[];
 extern const char CustomDPI[];
 extern const char Password[];
@@ -94,6 +95,11 @@ extern const char HomeWaypoint[];
 extern const char HomeLocation[];
 extern const char TeamcodeRefWaypoint[];
 extern const char PilotName[];
+extern const char WeGlideEnabled[];
+extern const char WeGlidePilotID[];
+extern const char WeGlidePilotBirthDate[];
+extern const char WeGlideAircraftType[];
+extern const char WeGlideAutomaticUpload[];
 extern const char CoPilotName[];
 extern const char AircraftType[];
 extern const char AircraftReg[];
@@ -167,6 +173,8 @@ extern const char FinishRadius[];
 extern const char TaskType[];
 extern const char AATMinTime[];
 extern const char AATTimeMargin[];
+extern const char PEVStartWaitTime[];
+extern const char PEVStartWindow[];
 
 extern const char EnableNavBaroAltitude[];
 

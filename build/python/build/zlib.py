@@ -24,9 +24,9 @@ class ZlibProject(MakeProject):
             self.install_target
         ]
 
-    def build(self, toolchain):
+    def _build(self, toolchain):
         src = self.unpack(toolchain, out_of_tree=False)
 
         subprocess.check_call(['./configure', '--prefix=' + toolchain.install_prefix, '--static'],
                               cwd=src, env=toolchain.env)
-        MakeProject.build(self, toolchain, src)
+        self.build_make(toolchain, src)

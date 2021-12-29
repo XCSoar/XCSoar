@@ -67,21 +67,15 @@ struct Waypoint {
    */
   struct Flags {
     /** If waypoint can be used as a turnpoint */
-    bool turn_point:1;
+    bool turn_point:1 = false;
     /** If waypoint is to be used as home */
-    bool home:1;
+    bool home:1 = false;
     /** If waypoint is marked as a potential start point */
-    bool start_point:1;
+    bool start_point:1 = false;
     /** If waypoint is marked as a potential finish point */
-    bool finish_point:1;
+    bool finish_point:1 = false;
     /** If waypoint is watched, i.e. displayed with arrival height in map */
-    bool watched:1;
-
-    Flags() = default;
-
-    static constexpr Flags Defaults() {
-      return { false, false, false, false, false };
-    }
+    bool watched:1 = false;
   };
 
   /** Unique id */
@@ -99,24 +93,27 @@ struct Waypoint {
   FlatGeoPoint flat_location;
 
 #ifndef NDEBUG
-  bool flat_location_initialised;
+  bool flat_location_initialised = false;
 #endif
 
   /** Height AMSL (m) of waypoint terrain */
   double elevation;
 
   /** Main runway */
-  Runway runway;
+  Runway runway = Runway::Null();
 
-  RadioFrequency radio_frequency;
+  RadioFrequency radio_frequency = RadioFrequency::Null();
 
   /** Type of the waypoint */
-  Type type;
+  Type type = Type::NORMAL;
   /** Flag types of this waypoint */
   Flags flags;
 
   /** File number to store waypoint in */
-  WaypointOrigin origin;
+  WaypointOrigin origin = WaypointOrigin::NONE;
+
+  /** Short name (code) label of waypoint */
+  tstring shortname;
 
   /** Name of waypoint */
   tstring name;
@@ -136,15 +133,7 @@ struct Waypoint {
    *
    * @return Uninitialised object
    */
-  Waypoint()
-    :
-#ifndef NDEBUG
-     flat_location_initialised(false),
-#endif
-     runway(Runway::Null()), radio_frequency(RadioFrequency::Null()),
-     type(Type::NORMAL), flags(Flags::Defaults()), origin(WaypointOrigin::NONE)
-  {
-  }
+  Waypoint() = default;
 
   /**
    * Constructor for real waypoints

@@ -31,4 +31,8 @@ Copyright_License {
 void
 ShowError(std::exception_ptr e, const TCHAR *caption) noexcept;
 
+void
+ShowError(const TCHAR *msg, std::exception_ptr e,
+          const TCHAR *caption) noexcept;
+
 #endif

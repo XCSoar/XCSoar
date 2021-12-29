@@ -86,7 +86,7 @@ struct ExternalSettings {
   Validity swap_frequencies;
 
   void Clear();
-  void Expire(double time);
+  void Expire(TimeStamp time) noexcept;
   void Complement(const ExternalSettings &add);
 
   /**
@@ -181,13 +181,13 @@ struct ExternalSettings {
    *
    * @return true if the value and the time stamp have been updated
    */
-  bool ProvideMacCready(double value, double time);
-  bool ProvideBallastFraction(double value, double time);
-  bool ProvideBallastOverload(double value, double time);
-  bool ProvideWingLoading(double value, double time);
-  bool ProvideBugs(double value, double time);
-  bool ProvideQNH(AtmosphericPressure value, double time);
-  bool ProvideVolume(unsigned value, double time);
+  bool ProvideMacCready(double value, TimeStamp time) noexcept;
+  bool ProvideBallastFraction(double value, TimeStamp time) noexcept;
+  bool ProvideBallastOverload(double value, TimeStamp time) noexcept;
+  bool ProvideWingLoading(double value, TimeStamp time) noexcept;
+  bool ProvideBugs(double value, TimeStamp time) noexcept;
+  bool ProvideQNH(AtmosphericPressure value, TimeStamp time) noexcept;
+  bool ProvideVolume(unsigned value, TimeStamp time) noexcept;
 };
 
 #endif

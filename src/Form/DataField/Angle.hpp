@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Base.hpp"
 #include "Math/Angle.hpp"
-#include "util/Compiler.h"
 
 /**
  * This #DataField implementation stores an angle value from 0 to 359
@@ -40,6 +39,11 @@ class AngleDataField final : public DataField {
 
   /** set to true to allow adjustment of values with step/10 precision */
   bool fine;
+
+  /**
+   * For GetAsString().  Must be mutable because the method is const.
+   */
+  mutable TCHAR string_buffer[16];
 
 public:
   AngleDataField(unsigned _value, unsigned _step, bool _fine,
@@ -61,10 +65,10 @@ public:
     return value % MAX;
   }
 
-  gcc_const
+  [[gnu::const]]
   static unsigned Import(int value) noexcept;
 
-  gcc_const
+  [[gnu::const]]
   static unsigned Import(Angle value) noexcept {
     return lround(value.AsBearing().Degrees()) % 360u;
   }

@@ -34,6 +34,7 @@ Copyright_License {
 #include "UIState.hpp"
 #include "Pan.hpp"
 #include "PageActions.hpp"
+#include "Math/Constants.hpp"
 #include "util/Clamp.hpp"
 
 // eventAutoZoom - Turn on|off|toggle AutoZoom

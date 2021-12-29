@@ -34,9 +34,9 @@ Copyright_License {
 #include "DisplaySettings.hpp"
 #include "Audio/Settings.hpp"
 
-#include <type_traits>
-
+#include <chrono>
 #include <cstdint>
+#include <type_traits>
 
 /**
  * User interface settings.
@@ -45,7 +45,7 @@ struct UISettings {
   DisplaySettings display;
 
   /** timeout in quarter seconds of menu button */
-  unsigned menu_timeout;
+  std::chrono::duration<unsigned> menu_timeout;
 
   unsigned scale;
 

@@ -26,7 +26,7 @@ Copyright_License {
 #if defined(USE_CONSOLE) && !defined(KOBO)
 
 bool
-HasPointer()
+HasPointer() noexcept
 {
   return true;
 }
@@ -36,13 +36,13 @@ HasPointer()
 #ifdef USE_LIBINPUT
 
 bool
-HasTouchScreen()
+HasTouchScreen() noexcept
 {
   return IsAndroid() || IsKobo() || IsIOS();
 }
 
 bool
-HasKeyboard()
+HasKeyboard() noexcept
 {
   return !IsEmbedded();
 }

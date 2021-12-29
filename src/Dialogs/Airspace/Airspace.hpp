@@ -24,15 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_AIRSPACE_HPP
 #define XCSOAR_DIALOGS_AIRSPACE_HPP
 
+#include "Engine/Airspace/Ptr.hpp"
 #include "Airspace/AirspaceClass.hpp"
 
-class AbstractAirspace;
 class Airspaces;
 class ProtectedAirspaceWarningManager;
 struct AirspaceLook;
 
 void
-dlgAirspaceDetails(const AbstractAirspace& the_airspace,
+dlgAirspaceDetails(ConstAirspacePtr airspace,
                    ProtectedAirspaceWarningManager *_airspace_warnings);
 
 int dlgAirspacePatternsShowModal(const AirspaceLook &look);

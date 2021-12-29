@@ -185,7 +185,7 @@ EyeDevice::ReadAcceleration(NMEAInputLine &line, AccelerationState &value_r)
   if (!x_valid || !y_valid || !z_valid)
     return false;
 
-  value_r.ProvideGLoad(SpaceDiagonal(x, y, z), true);
+  value_r.ProvideGLoad(SpaceDiagonal(x, y, z));
   return true;
 }
 

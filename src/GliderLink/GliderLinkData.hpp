@@ -39,7 +39,7 @@ struct GliderLinkData {
     traffic.Replace(add.traffic);
   }
 
-  void Expire(double clock) {
+  void Expire(TimeStamp clock) noexcept {
     traffic.Expire(clock);
   }
 };

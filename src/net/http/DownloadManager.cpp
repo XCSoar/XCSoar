@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "DownloadManager.hpp"
 #include "system/Path.hpp"
+#include "LogFile.hpp"
 
 #ifdef ANDROID
 
@@ -39,8 +40,14 @@ Net::DownloadManager::Initialise() noexcept
   if (!AndroidDownloadManager::Initialise(Java::GetEnv()))
     return false;
 
-  download_manager = AndroidDownloadManager::Create(Java::GetEnv(), *context);
-  return download_manager != nullptr;
+  try {
+    download_manager = new AndroidDownloadManager(Java::GetEnv(), *context);
+    return true;
+  } catch (...) {
+    LogError(std::current_exception(),
+             "Failed to initialise the DownloadManager");
+    return false;
+  }
 }
 
 void
@@ -104,14 +111,14 @@ Net::DownloadManager::Cancel(Path relative_path) noexcept
 
 #else /* !ANDROID */
 
-#include "ToFile.hpp"
 #include "Global.hxx"
 #include "Init.hpp"
-#include "thread/StandbyThread.hpp"
-#include "Operation/Operation.hpp"
+#include "CoDownloadToFile.hpp"
+#include "Operation/ProgressListener.hpp"
 #include "LocalPath.hpp"
+#include "thread/Mutex.hxx"
+#include "co/InjectTask.hxx"
 #include "io/FileTransaction.hpp"
-#include "LogFile.hpp"
 
 #include <string>
 #include <list>
@@ -120,7 +127,7 @@ Net::DownloadManager::Cancel(Path relative_path) noexcept
 #include <string.h>
 
 class DownloadManagerThread final
-  : protected StandbyThread, private QuietOperationEnvironment {
+  : ProgressListener {
   struct Item {
     std::string uri;
     AllocatedPath path_relative;
@@ -134,42 +141,31 @@ class DownloadManagerThread final
 
     Item &operator=(const Item &other) = delete;
 
-    gcc_pure
+    [[gnu::pure]]
     bool operator==(Path other) const noexcept {
       return path_relative == other;
     }
   };
 
   /**
-   * Information about the current download, i.e. queue.front().
-   * Protected by StandbyThread::mutex.
+   * The coroutine performing the current download.
    */
-  int64_t current_size, current_position;
+  Co::InjectTask task{Net::curl->GetEventLoop()};
+
+  Mutex mutex;
+
+  /**
+   * Information about the current download, i.e. queue.front().
+   * Protected by #mutex.
+   */
+  int64_t current_size = -1, current_position = -1;
 
   std::list<Item> queue;
 
   std::list<Net::DownloadListener *> listeners;
 
-  std::function<void()> cancel_handler;
-
 public:
-  DownloadManagerThread() noexcept
-    :StandbyThread("DownloadMgr"),
-     current_size(-1), current_position(-1) {}
-
-  void StopAsync() noexcept {
-    std::lock_guard<Mutex> lock(mutex);
-    StandbyThread::StopAsync();
-  }
-
-  void WaitStopped() noexcept {
-    std::lock_guard<Mutex> lock(mutex);
-    StandbyThread::WaitStopped();
-  }
-
   void AddListener(Net::DownloadListener &listener) noexcept {
-    std::lock_guard<Mutex> lock(mutex);
-
     assert(std::find(listeners.begin(), listeners.end(),
                      &listener) == listeners.end());
 
@@ -177,21 +173,18 @@ public:
   }
 
   void RemoveListener(Net::DownloadListener &listener) noexcept {
-    std::lock_guard<Mutex> lock(mutex);
-
     auto i = std::find(listeners.begin(), listeners.end(), &listener);
     assert(i != listeners.end());
     listeners.erase(i);
   }
 
   void Enumerate(Net::DownloadListener &listener) noexcept {
-    std::lock_guard<Mutex> lock(mutex);
-
     for (auto i = queue.begin(), end = queue.end(); i != end; ++i) {
       const Item &item = *i;
 
       int64_t size = -1, position = -1;
       if (i == queue.begin()) {
+        const std::lock_guard lock{mutex};
         size = current_size;
         position = current_position;
       }
@@ -201,19 +194,16 @@ public:
   }
 
   void Enqueue(const char *uri, Path path_relative) noexcept {
-    std::lock_guard<Mutex> lock(mutex);
     queue.emplace_back(uri, path_relative);
 
     for (auto *listener : listeners)
       listener->OnDownloadAdded(path_relative, -1, -1);
 
-    if (!IsBusy())
-      Trigger();
+    if (!task)
+      Start();
   }
 
   void Cancel(Path relative_path) noexcept {
-    std::lock_guard<Mutex> lock(mutex);
-
     auto i = std::find(queue.begin(), queue.end(), relative_path);
     if (i == queue.end())
       return;
@@ -223,16 +213,10 @@ public:
          and restart the thread to continue downloading the following
          files */
 
-      if (cancel_handler) {
-        const ScopeUnlock unlock(mutex);
-        cancel_handler();
-      }
-
-      StandbyThread::StopAsync();
-      StandbyThread::WaitStopped();
+      task.Cancel();
 
       if (!queue.empty())
-        Trigger();
+        Start();
     } else {
       /* queued download; simply remove it from the list */
       queue.erase(i);
@@ -243,25 +227,10 @@ public:
   }
 
 private:
-  void ProcessQueue(CurlGlobal &curl) noexcept;
-  void FailQueue() noexcept;
+  void Start() noexcept;
+  void OnCompletion(std::exception_ptr error) noexcept;
 
-protected:
-  /* methods from class StandbyThread */
-  void Tick() noexcept override;
-
-private:
-  /* methods from class OperationEnvironment */
-  bool IsCancelled() const noexcept override {
-    std::lock_guard<Mutex> lock(const_cast<Mutex &>(mutex));
-    return StandbyThread::IsStopped();
-  }
-
-  void SetCancelHandler(std::function<void()> handler) noexcept override {
-    std::lock_guard<Mutex> lock(mutex);
-    cancel_handler = std::move(handler);
-  }
-
+  /* methods from class ProgressListener */
   void SetProgressRange(unsigned range) noexcept override {
     std::lock_guard<Mutex> lock(mutex);
     current_size = range;
@@ -273,77 +242,59 @@ private:
   }
 };
 
-static void
+static Co::InvokeTask
 DownloadToFileTransaction(CurlGlobal &curl,
-                          const char *url, Path path,
-                          std::array<std::byte, 32> *sha256, OperationEnvironment &env)
+                          const char *url, AllocatedPath path,
+                          std::array<std::byte, 32> *sha256,
+                          ProgressListener &progress)
 {
   FileTransaction transaction(path);
-  Net::DownloadToFile(curl, url, transaction.GetTemporaryPath(), sha256, env);
+  const auto ignored_response = co_await
+    Net::CoDownloadToFile(curl, url, nullptr, nullptr,
+                          transaction.GetTemporaryPath(),
+                          sha256, progress);
   transaction.Commit();
 }
 
-inline void
-DownloadManagerThread::ProcessQueue(CurlGlobal &curl) noexcept
+void
+DownloadManagerThread::Start() noexcept
 {
-  while (!queue.empty() && !StandbyThread::IsStopped()) {
-    assert(current_size == -1);
-    assert(current_position == -1);
+  assert(!queue.empty());
+  assert(!task);
+  assert(current_size == -1);
+  assert(current_position == -1);
 
-    const Item &item = queue.front();
-    current_position = 0;
+  const Item &item = queue.front();
+  current_position = 0;
 
-    bool success = false;
-    std::exception_ptr error;
-
-    try {
-      const ScopeUnlock unlock(mutex);
-      DownloadToFileTransaction(curl, item.uri.c_str(),
-                                LocalPath(item.path_relative.c_str()),
-                                nullptr, *this);
-      success = true;
-    } catch (...) {
-      error = std::current_exception();
-      LogError(error);
-    }
-
-    current_size = current_position = -1;
-    cancel_handler = {};
-
-    const AllocatedPath path_relative(std::move(queue.front().path_relative));
-    queue.pop_front();
-
-    if (success) {
-      for (auto *listener : listeners)
-        listener->OnDownloadComplete(path_relative);
-    } else {
-      for (auto *listener : listeners)
-        listener->OnDownloadError(path_relative, error);
-    }
-  }
-}
-
-inline void
-DownloadManagerThread::FailQueue() noexcept
-{
-  while (!queue.empty() && !StandbyThread::IsStopped()) {
-    const AllocatedPath path_relative(std::move(queue.front().path_relative));
-    queue.pop_front();
-
-    for (auto *listener : listeners)
-      listener->OnDownloadError(path_relative, {});
-  }
+  task.Start(DownloadToFileTransaction(*Net::curl, item.uri.c_str(),
+                                       LocalPath(item.path_relative.c_str()),
+                                       nullptr, *this),
+             BIND_THIS_METHOD(OnCompletion));
 }
 
 void
-DownloadManagerThread::Tick() noexcept
+DownloadManagerThread::OnCompletion(std::exception_ptr error) noexcept
 {
-  try {
-    ProcessQueue(*Net::curl);
-  } catch (...) {
-    LogError(std::current_exception());
-    FailQueue();
+  assert(!queue.empty());
+
+  const AllocatedPath path_relative = std::move(queue.front().path_relative);
+  queue.pop_front();
+
+  current_size = current_position = -1;
+
+  if (error) {
+    LogError(error);
+    for (auto *listener : listeners)
+      listener->OnDownloadError(path_relative, error);
+  } else {
+    for (auto *listener : listeners)
+      listener->OnDownloadComplete(path_relative);
   }
+
+  // start the next download
+  if (!queue.empty())
+    Start();
 }
 
 static DownloadManagerThread *thread;
@@ -360,9 +311,6 @@ Net::DownloadManager::Initialise() noexcept
 void
 Net::DownloadManager::BeginDeinitialise() noexcept
 {
-  assert(thread != nullptr);
-
-  thread->StopAsync();
 }
 
 void
@@ -370,7 +318,6 @@ Net::DownloadManager::Deinitialise() noexcept
 {
   assert(thread != nullptr);
 
-  thread->WaitStopped();
   delete thread;
 }
 

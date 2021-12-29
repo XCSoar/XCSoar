@@ -120,7 +120,8 @@ ACDDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
   char buffer[100];
   unsigned qnh = uround(pres.GetPascal());
   sprintf(buffer, "PAAVC,S,ALT,QNH,%u", qnh);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
+  return true;
 }
 
 bool
@@ -128,7 +129,8 @@ ACDDevice::PutVolume(unsigned volume, OperationEnvironment &env)
 {
   char buffer[100];
   sprintf(buffer, "PAAVC,S,COM,RXVOL1,%u", volume);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
+  return true;
 }
 
 bool
@@ -139,7 +141,8 @@ ACDDevice::PutStandbyFrequency(RadioFrequency frequency,
   char buffer[100];
   unsigned freq = frequency.GetKiloHertz();
   sprintf(buffer, "PAAVC,S,COM,CHN2,%u", freq);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
+  return true;
 }
 
 bool

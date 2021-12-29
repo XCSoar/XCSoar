@@ -413,6 +413,10 @@ int jpc_dec_decode(jpc_dec_t *dec)
 		long file_offset = jas_stream_tell(dec->in);
 		long seek_offset = jas_rtc_SkipMarkerSegment(dec->loader,
 							     file_offset);
+		if (seek_offset < 0)
+			/* canceled */
+			return -1;
+
 		if (seek_offset > 0 &&
 		    jas_stream_seek(dec->in, seek_offset, SEEK_CUR) < 0)
 			return -1;

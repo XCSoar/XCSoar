@@ -27,7 +27,7 @@ Copyright_License {
 #include "util/Macros.hpp"
 #include "util/ConvertString.hpp"
 
-#include <windows.h>
+#include <stringapiset.h>
 #endif
 
 #ifdef _UNICODE

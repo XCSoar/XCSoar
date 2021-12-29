@@ -42,6 +42,14 @@ Copyright_License {
 #ifdef USE_EGL
 #include "ui/egl/System.hpp"
 
+#ifdef HAVE_MALI_NATIVE_WINDOW
+// The old LINUX-SUNXI EGL headers define struct mali_native_window.
+// The new headers for mainline kernels from Bootlin typedef fbdev_window.
+// The struct content is identical.
+// typedef fbdev_window from struct mali_native_window for the old headers.
+typedef struct mali_native_window fbdev_window;
+#endif
+
 #ifdef MESA_KMS
 #include <drm.h>
 #include <xf86drm.h>
@@ -102,7 +110,7 @@ class TopCanvas
   DISPMANX_ELEMENT_HANDLE_T vc_element;
   EGL_DISPMANX_WINDOW_T vc_window;
 #elif defined(HAVE_MALI)
-  struct mali_native_window mali_native_window;
+  fbdev_window mali_native_window;
 #elif defined(MESA_KMS)
   struct gbm_device *native_display;
   struct gbm_surface *native_window;
@@ -162,13 +170,13 @@ class TopCanvas
    * opened.  This is used on Linux to switch to graphics mode
    * (KD_GRAPHICS) or restore text mode (KD_TEXT).
    */
-  int tty_fd;
+  int tty_fd = -1;
 #endif
 
 #ifdef USE_FB
-  int fd;
+  int fd = -1;
 
-  void *map;
+  void *map = nullptr;
   unsigned map_pitch, map_bpp;
 
   uint32_t epd_update_marker;
@@ -179,7 +187,7 @@ class TopCanvas
    * Runtime flag that can be used to disable dithering at runtime for
    * some situations.
    */
-  bool enable_dither;
+  bool enable_dither = true;
 
   /**
    * some kobo Device don't need to wait eInk update complet before send new update cmd
@@ -189,21 +197,6 @@ class TopCanvas
 #endif
 
 public:
-#ifdef USE_FB
-  TopCanvas()
-    :
-#ifdef USE_TTY
-    tty_fd(-1),
-#endif
-    fd(-1), map(nullptr)
-#ifdef KOBO
-    , enable_dither(true)
-#endif
-  {}
-#elif defined(USE_TTY)
-  TopCanvas():tty_fd(-1) {}
-#endif
-
 #ifndef ANDROID
   ~TopCanvas() {
     Destroy();
@@ -228,7 +221,7 @@ public:
 #endif
 
 #ifdef ENABLE_SDL
-  void Create(SDL_Window *_window, PixelSize new_size);
+  void Create(SDL_Window *_window);
 #elif defined(USE_GLX)
   void Create(_XDisplay *x_display,
               X11Window x_window,

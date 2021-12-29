@@ -76,7 +76,7 @@ public:
    *
    * @return True if design was successfull
    */
-  bool Design(const double cutoff_wavelength) noexcept;
+  bool Design(FloatDuration cutoff_wavelength) noexcept;
 
   /**
    * Return filtered speed
@@ -111,7 +111,7 @@ public:
    * @return Predicted aircraft state in in_time seconds
    */
   [[gnu::pure]]
-  AircraftState GetPredictedState(double in_time) const noexcept;
+  AircraftState GetPredictedState(FloatDuration in_time) const noexcept;
 };
 
 #endif

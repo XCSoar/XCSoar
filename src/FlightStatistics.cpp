@@ -23,6 +23,22 @@ Copyright_License {
 
 #include "FlightStatistics.hpp"
 
+using namespace std::chrono;
+
+static constexpr double
+ToHours(FloatDuration t) noexcept
+{
+  return duration_cast<duration<double, hours::period>>(t).count();
+}
+
+static constexpr double
+ToNormalisedHours(FloatDuration t) noexcept
+{
+  return t.count() > 0
+    ? ToHours(t)
+    : 0.;
+}
+
 void FlightStatistics::Reset() {
   std::lock_guard<Mutex> lock(mutex);
 
@@ -47,19 +63,20 @@ FlightStatistics::StartTask()
 }
 
 void
-FlightStatistics::AddAltitudeTerrain(const double tflight, const double terrainalt)
+FlightStatistics::AddAltitudeTerrain(const FloatDuration tflight,
+                                     const double terrainalt) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
-  altitude_terrain.Update(std::max(0., tflight / 3600.),
-                          terrainalt);
+  altitude_terrain.Update(ToNormalisedHours(tflight), terrainalt);
 }
 
 void
-FlightStatistics::AddAltitude(const double tflight, const double alt, const bool final_glide)
+FlightStatistics::AddAltitude(const FloatDuration tflight,
+                              const double alt, const bool final_glide) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const double t = ToNormalisedHours(tflight);
 
-  const double t = std::max(0., tflight / 3600);
+  std::lock_guard<Mutex> lock(mutex);
 
   altitude.Update(t, alt);
 
@@ -93,14 +110,16 @@ FlightStatistics::AverageThermalAdjusted(const double mc_current,
 }
 
 void
-FlightStatistics::AddTaskSpeed(const double tflight, const double val)
+FlightStatistics::AddTaskSpeed(const FloatDuration tflight,
+                               const double val) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
-  task_speed.Update(tflight / 3600, val);
+  task_speed.Update(ToHours(tflight), val);
 }
 
 void
-FlightStatistics::AddClimbBase(const double tflight, const double alt)
+FlightStatistics::AddClimbBase(const FloatDuration tflight,
+                               const double alt) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
 
@@ -108,14 +127,15 @@ FlightStatistics::AddClimbBase(const double tflight, const double alt)
   // as the base
   //
   if (altitude_ceiling.HasResult())
-    altitude_base.UpdateConvexNegative(std::max(0., tflight) / 3600, alt);
+    altitude_base.UpdateConvexNegative(ToNormalisedHours(tflight), alt);
 }
 
 void
-FlightStatistics::AddClimbCeiling(const double tflight, const double alt)
+FlightStatistics::AddClimbCeiling(const FloatDuration tflight,
+                                  const double alt) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
-  altitude_ceiling.UpdateConvexPositive(std::max(0., tflight) / 3600, alt);
+  altitude_ceiling.UpdateConvexPositive(ToNormalisedHours(tflight), alt);
 }
 
 /**
@@ -123,16 +143,18 @@ FlightStatistics::AddClimbCeiling(const double tflight, const double alt)
  * @param v Average climb speed of the last thermal
  */
 void
-FlightStatistics::AddThermalAverage(const double tflight_start,
-                                    const double tflight_end, const double v)
+FlightStatistics::AddThermalAverage(const FloatDuration tflight_start,
+                                    const FloatDuration tflight_end,
+                                    const double v) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
-  thermal_average.Update(std::max(0., tflight_start) / 3600, v,
-                         (tflight_end-tflight_start)/3600);
+  thermal_average.Update(ToNormalisedHours(tflight_start), v,
+                         ToHours(tflight_end - tflight_start));
 }
 
 void
-FlightStatistics::AddClimbRate(const double tflight, const double vario, const bool circling)
+FlightStatistics::AddClimbRate(const FloatDuration tflight,
+                               const double vario, const bool circling) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
   if (circling) {

@@ -52,6 +52,7 @@ KOBO_POWER_OFF_SOURCES = \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/DisplaySize.cpp \
+	$(SRC)/Hardware/Battery.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Logger/FlightParser.cpp \
 	$(SRC)/Renderer/FlightListRenderer.cpp \

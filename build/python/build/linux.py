@@ -7,6 +7,6 @@ class SabotageLinuxHeadersProject(MakeProject):
             'prefix=' + toolchain.install_prefix,
         ]
 
-    def build(self, toolchain):
+    def _build(self, toolchain):
         src = self.unpack(toolchain)
         self.make(toolchain, src, self.get_make_install_args(toolchain))

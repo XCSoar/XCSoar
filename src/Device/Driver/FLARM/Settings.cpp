@@ -25,11 +25,7 @@ Copyright_License {
 
 #include <stdio.h>
 
-#ifdef _UNICODE
-#include <windows.h>
-#endif
-
-bool
+void
 FlarmDevice::SendSetting(const char *name, const char *value,
                          OperationEnvironment &env)
 {
@@ -45,24 +41,24 @@ FlarmDevice::SendSetting(const char *name, const char *value,
 
   char buffer[64];
   sprintf(buffer, "PFLAC,S,%s,%s", name, value);
-  return Send(buffer, env);
+  Send(buffer, env);
 }
 
-bool
+void
 FlarmDevice::RequestSetting(const char *name, OperationEnvironment &env)
 {
   char buffer[64];
   sprintf(buffer, "PFLAC,R,%s", name);
-  return Send(buffer, env);
+  Send(buffer, env);
 }
 
-std::pair<bool, std::string>
-FlarmDevice::GetSetting(const char *name) const
+std::optional<std::string>
+FlarmDevice::GetSetting(const char *name) const noexcept
 {
   std::lock_guard<Mutex> lock(settings);
   auto i = settings.find(name);
   if (i == settings.end())
-    return std::make_pair(false, std::string());
+    return std::nullopt;
 
-  return std::make_pair(true, *i);
+  return *i;
 }

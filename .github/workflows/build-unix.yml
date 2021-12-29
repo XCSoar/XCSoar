@@ -1,10 +1,12 @@
+---
 on:
-  workflow_dispatch:  
+  workflow_dispatch:
   push:
     paths-ignore:
       - 'doc/**'
       - 'ide/**'
       - '.github/workflows/build-container.yml'
+      - '.github/workflows/build-android.yml'
     branches:
       - master
   pull_request:
@@ -12,39 +14,61 @@ on:
       - 'doc/**'
       - 'ide/**'
       - '.github/workflows/build-container.yml'
+      - '.github/workflows/build-android.yml'
     branches:
       - master
 env:
   TARGET: UNIX
+  TARGET_EXT: ''
 jobs:
   xcsoar-compile:
     runs-on: ubuntu-latest
     steps:
-     - id: checkout 
-       uses: actions/checkout@v2
-       with:
-         submodules: True
-     - id: cache-ccache
-       uses: hendrikmuhs/ccache-action@v1
-       with:
-         key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}
-     - id: repository
-       uses: ASzc/change-string-case-action@v1
-       with:
-         string: ${{ github.repository }}
-     - name: XCSoar Compile ${{ env.TARGET }} 
-       uses: addnab/docker-run-action@v3
-       with:
-         image: ghcr.io/${{ steps.repository.outputs.lowercase }}/xcsoar-build:latest
-         options: -v ${{ github.workspace }}:/opt/xcsoar -v /home/runner/work/XCSoar/XCSoar/.ccache:/root/.ccache
-         run: | 
-           cd /opt/xcsoar
-           xcsoar-compile ${{ env.TARGET }} USE_CCACHE=y V=2 everything
-     - name: XCSoar run checks ${{ env.TARGET }}
-       uses: addnab/docker-run-action@v3
-       with:
-         image: ghcr.io/${{ steps.repository.outputs.lowercase }}/xcsoar-build:latest
-         options: -v ${{ github.workspace }}:/opt/xcsoar -v /home/runner/work/XCSoar/XCSoar/.ccache:/root/.ccache
-         run: | 
-           cd /opt/xcsoar
-           xcsoar-compile ${{ env.TARGET }} V=2 check
+      - name: set vars for pull request
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "DEBUG=y" >> $GITHUB_ENV
+          echo "TARGET_BIN=xcsoar" >> $GITHUB_ENV
+          echo "TARGET_FINAL=xcsoar-debug" >> $GITHUB_ENV
+      - name: set vars for push
+        if: github.event_name == 'push'
+        run: |
+          echo "DEBUG=n" >> $GITHUB_ENV
+          echo "TARGET_BIN=xcsoar" >> $GITHUB_ENV
+          echo "TARGET_FINAL=xcsoar" >> $GITHUB_ENV
+      - id: checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - id: cache-ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}
+      - name: find githash
+        run: |
+          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+      - id: repository
+        uses: ASzc/change-string-case-action@v1
+        with:
+          string: ${{ github.repository }}
+      - name: Compile XCSoar
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ghcr.io/${{ steps.repository.outputs.lowercase }}/xcsoar-build:latest
+          options: -v ${{ github.workspace }}:/opt/xcsoar -v /home/runner/work/XCSoar/XCSoar/.ccache:/root/.ccache
+          run: |
+            cd /opt/xcsoar
+            xcsoar-compile ${{ env.TARGET }} USE_CCACHE=y V=2 everything DEBUG=${{ env.DEBUG }}
+      - name: XCSoar run checks ${{ env.TARGET }}
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ghcr.io/${{ steps.repository.outputs.lowercase }}/xcsoar-build:latest
+          options: -v ${{ github.workspace }}:/opt/xcsoar -v /home/runner/work/XCSoar/XCSoar/.ccache:/root/.ccache
+          run: |
+            cd /opt/xcsoar
+            xcsoar-compile ${{ env.TARGET }} V=2 check DEBUG=${{ env.DEBUG }}
+      - name: upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}${{ env.TARGET_EXT }}
+          path: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}${{ env.TARGET_EXT }}

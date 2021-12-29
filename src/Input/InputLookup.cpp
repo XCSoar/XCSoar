@@ -50,10 +50,10 @@ static const TCHAR *const Text2NE[] = {
 };
 
 pt2Event
-InputEvents::findEvent(const TCHAR *data)
+InputEvents::findEvent(TStringView name) noexcept
 {
   for (unsigned i = 0; Text2Event[i].text != nullptr; ++i)
-    if (StringIsEqual(data, Text2Event[i].text))
+    if (name.Equals(Text2Event[i].text))
       return Text2Event[i].event;
 
   return nullptr;

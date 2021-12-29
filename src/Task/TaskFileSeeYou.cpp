@@ -39,24 +39,22 @@
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Operation/Operation.hpp"
 #include "Units/System.hpp"
+#include "time/BrokenTime.hpp"
 
 #include <stdlib.h>
 
 struct SeeYouTaskInformation {
   /** True = RT, False = AAT */
-  bool wp_dis;
+  bool wp_dis = true;
   /** AAT task time in seconds */
-  double task_time;
+  std::chrono::duration<unsigned> task_time{};
   /** MaxAltStart in meters */
-  double max_start_altitude;
-
-  SeeYouTaskInformation():
-    wp_dis(true), task_time(0), max_start_altitude(0) {}
+  double max_start_altitude = 0;
 };
 
 struct SeeYouTurnpointInformation {
   /** CUP file contained info for this OZ */
-  bool valid;
+  bool valid = false;
 
   enum Style {
     FIXED,
@@ -64,24 +62,16 @@ struct SeeYouTurnpointInformation {
     TO_NEXT_POINT,
     TO_PREVIOUS_POINT,
     TO_START_POINT,
-  } style;
+  } style = SYMMETRICAL;
 
-  bool is_line;
-  bool reduce;
+  bool is_line = false;
+  bool reduce = false;
 
-  double radius1, radius2, max_altitude;
-  Angle angle1, angle2, angle12;
-
-  SeeYouTurnpointInformation():
-    valid(false), style(SYMMETRICAL), is_line(false), reduce(false),
-    radius1(500), radius2(500),
-    max_altitude(0),
-    angle1(Angle::Zero()),
-    angle2(Angle::Zero()),
-    angle12(Angle::Zero()) {}
+  double radius1 = 500, radius2 = 200, max_altitude = 0;
+  Angle angle1{}, angle2{}, angle12{};
 };
 
-static double
+static std::chrono::duration<unsigned>
 ParseTaskTime(const TCHAR* str)
 {
   int hh = 0, mm = 0, ss = 0;
@@ -92,7 +82,7 @@ ParseTaskTime(const TCHAR* str)
     if (str != end && _tcslen(str + 3) > 3 && str[5] == _T(':'))
       ss = _tcstol(str + 6, nullptr, 10);
   }
-  return ss + mm * 60 + hh * 3600;
+  return BrokenTime(hh, mm, ss).DurationSinceMidnight();
 }
 
 static SeeYouTurnpointInformation::Style

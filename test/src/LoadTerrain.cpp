@@ -28,10 +28,10 @@ Copyright_License {
 
 #include "Terrain/RasterTileCache.hpp"
 #include "Terrain/Loader.hpp"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 #include "system/Args.hpp"
 #include "system/ConvertPathName.hpp"
 #include "io/ZipArchive.hpp"
-#include "Operation/Operation.hpp"
 #include "util/PrintException.hxx"
 
 #include <stdio.h>
@@ -46,11 +46,11 @@ try {
 
   ZipArchive archive(map_path);
 
-  NullOperationEnvironment operation;
   RasterTileCache rtc;
-  if (!LoadTerrainOverview(archive.get(), rtc, operation)) {
-    fprintf(stderr, "LoadOverview failed\n");
-    return EXIT_FAILURE;
+
+  {
+    ConsoleOperationEnvironment operation;
+    LoadTerrainOverview(archive.get(), rtc, operation);
   }
 
   GeoBounds bounds = rtc.GetBounds();

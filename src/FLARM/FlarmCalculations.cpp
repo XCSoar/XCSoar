@@ -24,16 +24,17 @@ Copyright_License {
 #include "FLARM/FlarmCalculations.hpp"
 
 double
-FlarmCalculations::Average30s(FlarmId id, double time, double altitude)
+FlarmCalculations::Average30s(FlarmId id, TimeStamp time,
+                              double altitude) noexcept
 {
   ClimbAverageCalculator &item = averageCalculatorMap[id];
-  return item.GetAverage(time, altitude, 30);
+  return item.GetAverage(time, altitude, std::chrono::seconds{30});
 }
 
 void
-FlarmCalculations::CleanUp(double now)
+FlarmCalculations::CleanUp(TimeStamp now) noexcept
 {
-  static constexpr double MAX_AGE = 60;
+  constexpr FloatDuration MAX_AGE = std::chrono::minutes{1};
 
   // Iterate through ClimbAverageCalculators and remove expired ones
   for (auto it = averageCalculatorMap.begin(),

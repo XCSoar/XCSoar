@@ -23,16 +23,10 @@
 #include "GrahamScan.hpp"
 #include "Geo/SearchPointVector.hpp"
 
-static bool
-sortleft
-(const SearchPoint& sp1, const SearchPoint& sp2)
-{ 
-  return sp1.Sort(sp2);
-}
+#include <algorithm>
 
-[[gnu::const]]
-static int
-Sign(double value, double tolerance)
+static constexpr int
+Sign(double value, double tolerance) noexcept
 {
   if (value > tolerance)
     return 1;
@@ -42,9 +36,10 @@ Sign(double value, double tolerance)
   return 0;
 }
 
+[[gnu::pure]]
 static int
 Direction(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
-          double tolerance)
+          double tolerance) noexcept
 {
   //
   // In this program we frequently want to look at three consecutive
@@ -70,15 +65,39 @@ Direction(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
   return Sign(a - b, tolerance);
 }
 
-GrahamScan::GrahamScan(SearchPointVector& sps, const double sign_tolerance):
-  raw_points(sps.begin(), sps.end()), raw_vector(sps), size(sps.size()),
-  tolerance(sign_tolerance)
+[[gnu::pure]]
+static auto
+Sorted(std::vector<SearchPoint> v) noexcept
 {
+  std::sort(v.begin(), v.end(), [](const SearchPoint &sp1, const SearchPoint &sp2){
+    const auto &gp1 = sp1.GetLocation();
+    const auto &gp2 = sp2.GetLocation();
+    if (gp1.longitude < gp2.longitude)
+      return true;
+    else if (gp1.longitude == gp2.longitude)
+      return gp1.latitude < gp2.latitude;
+    else
+      return false;
+  });
+
+  return v;
 }
 
-void
-GrahamScan::PartitionPoints()
+struct GrahamPartitions {
+  SearchPoint left, right;
+  std::vector<SearchPoint> upper;
+  std::vector<SearchPoint> lower;
+  bool pruned = false;
+};
+
+[[gnu::pure]]
+static GrahamPartitions
+PartitionPoints(const std::vector<SearchPoint> &src, double tolerance) noexcept
 {
+  GrahamPartitions result;
+  result.upper.reserve(src.size());
+  result.lower.reserve(src.size());
+
   //
   // The initial array of points is stored in vector raw_points. I first
   // sort it, which gives me the far left and far right points of the
@@ -97,63 +116,52 @@ GrahamScan::PartitionPoints()
   //
   // Step one in partitioning the points is to sort the raw data
   //
-  raw_points.sort(sortleft);
+  const auto raw_points = Sorted(src);
 
   //
   // The the far left and far right points, remove them from the
   // sorted sequence and store them in special members
   //
 
-  left = &raw_points.front();
-  right = &raw_points.back();
+  result.left = raw_points.front();
+  result.right = raw_points.back();
+
+  const auto begin = std::next(raw_points.cbegin());
+  const auto end = std::prev(raw_points.cend());
 
   //
   // Now put the remaining points in one of the two output sequences
   //
 
-  GeoPoint loclast = left->GetLocation();
+  GeoPoint loclast = result.left.GetLocation();
 
-  upper_partition_points.reserve(size);
-  lower_partition_points.reserve(size);
+  for (auto j = begin; j != end; ++j) {
+    const auto &i = *j;
 
-  for (auto &i : raw_points) {
     if (loclast.longitude != i.GetLocation().longitude ||
         loclast.latitude != i.GetLocation().latitude) {
       loclast = i.GetLocation();
 
-      int dir = Direction(left->GetLocation(), right->GetLocation(),
+      int dir = Direction(result.left.GetLocation(),
+                          result.right.GetLocation(),
                           i.GetLocation(), tolerance);
       if (dir < 0)
-        upper_partition_points.push_back(&i);
+        result.upper.push_back(i);
       else
-        lower_partition_points.push_back(&i);
+        result.lower.push_back(i);
+    } else {
+      result.pruned = true;
     }
   };
 
+  return result;
 }
 
-void
-GrahamScan::BuildHull()
-{
-  //
-  // Building the hull consists of two procedures: building the lower
-  // and then the upper hull. The two procedures are nearly identical -
-  // the main difference between the two is the test for convexity. When
-  // building the upper hull, our rull is that the middle point must
-  // always be *above* the line formed by its two closest
-  // neighbors. When building the lower hull, the rule is that point
-  // must be *below* its two closest neighbors. We pass this information
-  // to the building routine as the last parameter, which is either -1
-  // or 1.
-  //
-
-  BuildHalfHull(lower_partition_points, lower_hull, 1);
-  BuildHalfHull(upper_partition_points, upper_hull, -1);
-}
-
-void
-GrahamScan::BuildHalfHull(std::vector<SearchPoint*> input,
-                          std::vector<SearchPoint*> &output, int factor)
+static bool
+BuildHalfHull(const SearchPoint &left, const SearchPoint &right,
+              std::vector<SearchPoint> &&input,
+              std::vector<SearchPoint> &output,
+              double tolerance, int factor) noexcept
 {
   //
   // This is the method that builds either the upper or the lower half convex
@@ -175,6 +183,8 @@ GrahamScan::BuildHalfHull(std::vector<SearchPoint*> input,
   input.push_back(right);
   output.push_back(left);
 
+  bool pruned = false;
+
   //
   // The construction loop runs until the input is exhausted
   //
@@ -185,48 +195,88 @@ GrahamScan::BuildHalfHull(std::vector<SearchPoint*> input,
     // by removing the next-to-last point in the output sequence until
     // convexity is restored.
     //
-    output.push_back(i);
 
-    while (output.size() >= 3) {
-      const auto end = output.size() - 1;
+    /* remove all trailing points which would violate convexity with
+       the point to be added */
+    while (output.size() >= 2) {
+      const auto last = std::prev(output.end());
 
-      if (factor * Direction(output[end - 2]->GetLocation(),
-                             output[end]->GetLocation(),
-                             output[end - 1]->GetLocation(),
+      if (factor * Direction(std::prev(last)->GetLocation(),
+                             i.GetLocation(),
+                             last->GetLocation(),
                              tolerance) > 0)
         break;
 
-      output.erase(output.begin() + end - 1);
+      output.pop_back();
+      pruned = true;
     }
+
+    output.push_back(i);
   }
+
+  return pruned;
+}
+
+struct GrahamHull {
+  std::vector<SearchPoint> lower;
+  std::vector<SearchPoint> upper;
+  bool pruned;
+};
+
+[[gnu::pure]]
+static GrahamHull
+BuildHull(GrahamPartitions &&partitions, double tolerance) noexcept
+{
+  //
+  // Building the hull consists of two procedures: building the lower
+  // and then the upper hull. The two procedures are nearly identical -
+  // the main difference between the two is the test for convexity. When
+  // building the upper hull, our rull is that the middle point must
+  // always be *above* the line formed by its two closest
+  // neighbors. When building the lower hull, the rule is that point
+  // must be *below* its two closest neighbors. We pass this information
+  // to the building routine as the last parameter, which is either -1
+  // or 1.
+  //
+
+  GrahamHull hull;
+
+  bool lower_pruned = BuildHalfHull(partitions.left, partitions.right,
+                                    std::move(partitions.lower),
+                                    hull.lower, tolerance, 1);
+  bool upper_pruned = BuildHalfHull(partitions.left, partitions.right,
+                                    std::move(partitions.upper),
+                                    hull.upper, tolerance, -1);
+
+  hull.pruned = partitions.pruned || lower_pruned || upper_pruned;
+
+  return hull;
 }
 
 bool
-GrahamScan::PruneInterior()
+PruneInterior(SearchPointVector &raw_vector, double tolerance) noexcept
 {
-  SearchPointVector res;
-
-  /* the result is usually one more than the input vector - is that a
-   bug? */
-  res.reserve(size + 1);
-
-  if (size < 3) {
+  if (raw_vector.size() < 3) {
     return false;
     // nothing to do
   }
 
-  PartitionPoints();
-  BuildHull();
-
-  for (unsigned i = 0; i + 1 < lower_hull.size(); i++)
-    res.push_back(*lower_hull[i]);
-
-  for (int i = upper_hull.size() - 1; i >= 0; i--)
-    res.push_back(*upper_hull[i]);
-
-  if (res.size() == size)
+  const auto hull = BuildHull(PartitionPoints(raw_vector, tolerance),
+                              tolerance);
+  if (!hull.pruned)
+    /* nothing was pruned */
     return false;
 
+  SearchPointVector res;
+  res.reserve(raw_vector.size());
+
+  for (unsigned i = 0; i + 1 < hull.lower.size(); i++)
+    res.push_back(hull.lower[i]);
+
+  for (unsigned i = hull.upper.size() - 1; i >= 1; i--)
+    res.push_back(hull.upper[i]);
+
+  assert(res.size() <= raw_vector.size());
   raw_vector.swap(res);
   return true;
 }

@@ -261,6 +261,8 @@ Serialise(WritableDataNode &node, const OrderedTaskSettings &data)
   node.SetAttribute(_T("aat_min_time"), data.aat_min_time);
   node.SetAttribute(_T("start_requires_arm"),
                     data.start_constraints.require_arm);
+  node.SetAttribute(_T("start_score_exit"),
+                    data.start_constraints.score_exit);
   node.SetAttribute(_T("start_max_speed"), data.start_constraints.max_speed);
   node.SetAttribute(_T("start_max_height"), data.start_constraints.max_height);
   node.SetAttribute(_T("start_max_height_ref"),
@@ -274,6 +276,10 @@ Serialise(WritableDataNode &node, const OrderedTaskSettings &data)
   node.SetAttribute(_T("finish_min_height_ref"),
                     GetHeightRef(data.finish_constraints.min_height_ref));
   node.SetAttribute(_T("fai_finish"), data.finish_constraints.fai_finish);
+  node.SetAttribute(_T("pev_start_wait_time"),
+                    data.start_constraints.pev_start_wait_time);
+  node.SetAttribute(_T("pev_start_window"),
+                    data.start_constraints.pev_start_window);
 }
 
 void

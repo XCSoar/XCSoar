@@ -43,7 +43,7 @@ class WindStore
    * The time stamp (NMEAInfo::clock) of the last wind update.  It is
    * used to update DerivedInfo::estimated_wind_available.
    */
-  double update_clock;
+  TimeStamp update_clock;
 
   bool updated;
 
@@ -67,7 +67,8 @@ public:
   void SlotAltitude(const MoreData &info, DerivedInfo &derived);
 
   [[gnu::pure]]
-  const Vector GetWind(double Time, double h, bool &found) const;
+  const Vector GetWind(TimeStamp time, double h,
+                       bool &found) const noexcept;
 
 private:
   /**

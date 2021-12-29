@@ -26,10 +26,11 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 
 #include <cassert>
+
 #include <stdio.h>
 #include <string.h>
 
-bool
+void
 PortWriteNMEA(Port &port, const char *line, OperationEnvironment &env)
 {
   assert(line != nullptr);
@@ -38,11 +39,10 @@ PortWriteNMEA(Port &port, const char *line, OperationEnvironment &env)
      parameter? */
   static constexpr auto timeout = std::chrono::seconds(1);
 
-  if (!port.Write('$') ||
-      !port.FullWrite(line, strlen(line), env, timeout))
-    return false;
+  port.Write('$');
+  port.FullWriteString(line, env, timeout);
 
   char checksum[16];
   sprintf(checksum, "*%02X\r\n", NMEAChecksum(line));
-  return port.FullWrite(checksum, strlen(checksum), env, timeout);
+  port.FullWriteString(checksum, env, timeout);
 }

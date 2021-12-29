@@ -69,7 +69,7 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
   canvas.SelectBlackPen();
 
   // Rotate and shift the arrow to the right position and angle
-  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pt, angle);
+  PolygonRotateShift(arrow, pt, angle, Layout::Scale(100U));
 
   // Draw the arrow
   canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
@@ -119,7 +119,7 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
     canvas.SelectBlackPen();
 
   // Rotate and shift the arrow to the right position and angle
-  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pt, angle);
+  PolygonRotateShift(arrow, pt, angle, Layout::Scale(100U));
 
   // Draw the arrow
   canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));

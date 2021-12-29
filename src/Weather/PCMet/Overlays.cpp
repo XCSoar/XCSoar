@@ -24,15 +24,14 @@ Copyright_License {
 #include "Overlays.hpp"
 #include "Settings.hpp"
 #include "ui/canvas/Bitmap.hpp"
-#include "net/http/Init.hpp"
-#include "net/http/ToBuffer.hpp"
-#include "net/http/ToFile.hpp"
+#include "net/http/CoDownloadToFile.hpp"
 #include "Job/Runner.hpp"
-#include "LocalPath.hpp"
+#include "co/Task.hxx"
 #include "system/FileUtil.hpp"
 #include "util/StaticString.hxx"
 #include "util/ConvertString.hpp"
 #include "util/Macros.hpp"
+#include "LocalPath.hpp"
 
 #include <stdexcept>
 
@@ -88,14 +87,14 @@ FindLatestOverlay(PCMet::OverlayInfo &info)
 {
   struct Visitor : public File::Visitor {
     PCMet::OverlayInfo &info;
-    uint64_t latest_modification;
-    uint64_t now;
+    std::chrono::system_clock::time_point latest_modification = std::chrono::system_clock::time_point::min();
+    const std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
 
     explicit Visitor(PCMet::OverlayInfo &_info)
-      :info(_info), latest_modification(0), now(File::Now()) {}
+      :info(_info) {}
 
     void Visit(Path path, Path) override {
-      uint64_t last_modification = File::GetLastModification(path);
+      const auto last_modification = File::GetLastModification(path);
       if (last_modification > latest_modification &&
           last_modification <= now) {
         latest_modification = last_modification;
@@ -104,7 +103,7 @@ FindLatestOverlay(PCMet::OverlayInfo &info)
     }
   } visitor(info);
 
-  const auto cache_path = MakeLocalPath(_T("pc_met"));
+  const auto cache_path = MakeCacheDirectory(_T("pc_met"));
   StaticString<256> pattern;
   pattern.Format(_T("%s_%s_lv_%06u_p_%03u_*.tiff"),
                  type_names[unsigned(info.type)],
@@ -134,10 +133,10 @@ PCMet::CollectOverlays()
   return list;
 }
 
-PCMet::Overlay
+Co::Task<PCMet::Overlay>
 PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
                        const PCMetSettings &settings,
-                       JobRunner &runner)
+                       CurlGlobal &curl, ProgressListener &progress)
 {
   const unsigned run_hour = (now_utc.hour / 3) * 3;
   unsigned run = (now_utc.hour / 3) * 300;
@@ -148,7 +147,7 @@ PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
              area_names[unsigned(info.area)],
              info.level, info.step, run);
 
-  const auto cache_path = MakeLocalPath(_T("pc_met"));
+  const auto cache_path = MakeCacheDirectory(_T("pc_met"));
   auto path = AllocatedPath::Build(cache_path,
                                    UTF8ToWideConverter(url.c_str() + sizeof(PCMET_FTP)));
 
@@ -156,15 +155,14 @@ PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
     const WideToUTF8Converter username(settings.ftp_credentials.username);
     const WideToUTF8Converter password(settings.ftp_credentials.password);
 
-    Net::DownloadToFileJob job(*Net::curl, url, path);
-    job.SetBasicAuth(username, password);
-    if (!runner.Run(job))
-      return Overlay(BrokenDateTime::Invalid(),
-                     BrokenDateTime::Invalid(),
-                     Path(nullptr));
+    const auto ignored_response = co_await
+      Net::CoDownloadToFile(curl, url,
+                            username, password,
+                            path, nullptr,
+                            progress);
   }
 
-  BrokenDateTime run_time((BrokenDate)now_utc, BrokenTime(run_hour, 0));
+  BrokenDateTime run_time(now_utc.GetDate(), BrokenTime(run_hour, 0));
   if (run_hour < now_utc.hour)
     run_time.DecrementDay();
 
@@ -175,5 +173,5 @@ PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
     valid_time.IncrementDay();
   }
 
-  return Overlay(run_time, valid_time, std::move(path));
+  co_return Overlay{run_time, valid_time, std::move(path)};
 }

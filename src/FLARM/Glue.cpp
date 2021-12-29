@@ -46,7 +46,7 @@ static void
 LoadFLARMnet(FlarmNetDatabase &db)
 try {
   auto path = Profile::GetPath(ProfileKeys::FlarmFile);
-  if (path.IsNull()) {
+  if (path == nullptr) {
     return;
   }
 

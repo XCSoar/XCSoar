@@ -42,9 +42,11 @@ StandbyThread::Trigger()
 
   if (alive)
     TriggerCommand();
-  else
+  else {
     /* start it if it's not running currently */
-    alive = Start();
+    Start();
+    alive = true;
+  }
 }
 
 void

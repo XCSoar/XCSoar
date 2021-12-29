@@ -31,6 +31,7 @@ PYTHON_SOURCES = \
 	$(PYTHON_SRC)/Util.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskBehaviour.cpp \
 	$(SRC)/Logger/Settings.cpp \
+	$(SRC)/Cloud/weglide/WeGlideSettings.cpp \
 	$(SRC)/TeamCode/Settings.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
@@ -48,12 +49,11 @@ PYTHON_SOURCES = \
 	$(ENGINE_SRC_DIR)/Airspace/Airspaces.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceSorter.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceAircraftPerformance.cpp \
-	$(ENGINE_SRC_DIR)/Airspace/Predicate/AirspacePredicate.cpp \
 	$(SRC)/NMEA/Aircraft.cpp
 PYTHON_LDADD = $(DEBUG_REPLAY_LDADD)
-PYTHON_LDLIBS = $(shell python-config --ldflags)
+PYTHON_LDLIBS = $(shell python3-config --ldflags)
 PYTHON_DEPENDS = CONTEST WAYPOINT UTIL ZZIP GEO MATH TIME
-PYTHON_CPPFLAGS = $(shell python-config --includes) \
+PYTHON_CPPFLAGS = $(shell python3-config --includes) \
 	-I$(TEST_SRC_DIR) -Wno-write-strings
 PYTHON_NO_LIB_PREFIX = y
 $(eval $(call link-shared-library,xcsoar,PYTHON))

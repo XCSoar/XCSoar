@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_BITMAP_HPP
 #define XCSOAR_ANDROID_BITMAP_HPP
 
-#include "util/Compiler.h"
-
 #include <jni.h>
 
 #include <cassert>
@@ -38,7 +36,7 @@ public:
   static void Initialise(JNIEnv *env);
   static void Deinitialise(JNIEnv *env) {}
 
-  gcc_pure
+  [[gnu::pure]]
   static void Recycle(JNIEnv *env, jobject bitmap) {
     assert(env != nullptr);
     assert(bitmap != nullptr);
@@ -46,7 +44,7 @@ public:
     return env->CallVoidMethod(bitmap, recycle_method);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   static unsigned GetWidth(JNIEnv *env, jobject bitmap) {
     assert(env != nullptr);
     assert(bitmap != nullptr);
@@ -54,7 +52,7 @@ public:
     return env->CallIntMethod(bitmap, getWidth_method);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   static unsigned GetHeight(JNIEnv *env, jobject bitmap) {
     assert(env != nullptr);
     assert(bitmap != nullptr);

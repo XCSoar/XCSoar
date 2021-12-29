@@ -26,7 +26,7 @@ Copyright_License {
 #ifdef _WIN32
 #include "ui/canvas/gdi/RootDC.hpp"
 
-#include <windows.h>
+#include <wingdi.h>
 #endif
 
 #ifdef USE_X11
@@ -87,6 +87,7 @@ GetDPI()
 #ifdef KOBO
   switch (DetectKoboModel()) {
   case KoboModel::GLO_HD:
+  case KoboModel::CLARA_HD:
     return 300;
 
   case KoboModel::TOUCH2:

@@ -21,34 +21,29 @@ Copyright_License {
 }
 */
 
-#include "Hardware/Battery.hpp"
+#include "Hardware/PowerGlobal.hpp"
+#include "Hardware/PowerInfo.hpp"
 #include "org_xcsoar_BatteryReceiver.h"
 #include "util/Compiler.h"
-
-namespace Power::Battery {
-unsigned RemainingPercent = 0;
-bool RemainingPercentValid = false;
-}
-
-namespace Power::External {
-externalstatus Status = UNKNOWN;
-}
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_BatteryReceiver_setBatteryPercent(JNIEnv *env, jclass cls,
                                                   jint value, jint plugged)
 {
-  Power::Battery::RemainingPercent = value;
-  Power::Battery::RemainingPercentValid = true;
+  auto &info = Power::global_info;
+  auto &battery = info.battery;
+  auto &external = info.external;
+
+  battery.remaining_percent = value;
 
   switch (plugged) {
   case 0:
-    Power::External::Status = Power::External::OFF;
+    external.status = Power::ExternalInfo::Status::OFF;
     break;
 
   default:
-    Power::External::Status = Power::External::ON;
+    external.status = Power::ExternalInfo::Status::ON;
     break;
   }
 }

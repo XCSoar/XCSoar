@@ -8,6 +8,7 @@ $(OUT)/include/MathTables.h: $(HOST_OUTPUT_DIR)/tools/GenerateSineTables$(HOST_E
 
 $(call SRC_TO_OBJ,$(SRC)/Math/FastMath.cpp): $(OUT)/include/MathTables.h
 $(call SRC_TO_OBJ,$(SRC)/Math/FastTrig.cpp): $(OUT)/include/MathTables.h
+$(call SRC_TO_OBJ,$(SRC)/Computer/ThermalRecency.cpp): $(OUT)/include/MathTables.h
 
 $(OUT)/include/InputEvents_Text2Event.cpp: $(SRC)/Input/InputEvents.hpp \
 	$(topdir)/tools/Text2Event.pl | $(OUT)/include/dirstamp
@@ -63,6 +64,11 @@ $(OUT)/include/Status_defaults.cpp: Data/Status/default.xcs \
 SM_OBJ = $(call SRC_TO_OBJ,$(SRC)/StatusMessage.cpp)
 $(SM_OBJ): $(OUT)/include/Status_defaults.cpp
 
+generate:: $(OUT)/include/MathTables.h $(XCI_HEADERS) \
+	$(OUT)/include/Status_defaults.cpp \
+	$(OUT)/include/InputEvents_Text2Event.cpp $(OUT)/include/InputEvents_Text2GCE.cpp $(OUT)/include/InputEvents_Text2NE.cpp \
+	$(OUT)/include/InputEvents_Char2GCE.cpp $(OUT)/include/InputEvents_Char2NE.cpp
+
 # UNIX resources
 
 ifeq ($(USE_WIN32_RESOURCES),n)
@@ -91,8 +97,11 @@ $(TARGET_OUTPUT_DIR)/include/android_drawable.h: $(TARGET_OUTPUT_DIR)/XCSoar-dra
 
 $(call SRC_TO_OBJ,$(SRC)/ResourceLoader.cpp): $(TARGET_OUTPUT_DIR)/include/resource_data.h
 
+generate:: $(TARGET_OUTPUT_DIR)/include/resource_data.h
+
 ifeq ($(TARGET),ANDROID)
 $(call SRC_TO_OBJ,$(SRC)/ui/canvas/android/Bitmap.cpp): $(TARGET_OUTPUT_DIR)/include/android_drawable.h
+generate:: $(TARGET_OUTPUT_DIR)/include/android_drawable.h
 endif
 
 endif

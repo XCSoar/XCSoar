@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_ANDROID_TEXT_UTIL_HPP
 
 #include "java/Object.hxx"
-#include "util/Compiler.h"
 
 #include <utility>
 
@@ -41,17 +40,16 @@ class TextUtil : protected Java::GlobalObject {
   unsigned height, ascent_height, capital_height;
   unsigned line_spacing, style;
 
-  TextUtil(jobject _obj);
+  TextUtil(const Java::LocalObject &_obj) noexcept;
 
 public:
-  static void Initialise(JNIEnv *env);
-  static void Deinitialise(JNIEnv *env);
+  static void Initialise(JNIEnv *env) noexcept;
+  static void Deinitialise(JNIEnv *env) noexcept;
 
-  gcc_malloc
-  static TextUtil *create(const FontDescription &d);
+  static TextUtil *create(const FontDescription &d) noexcept;
 
-  gcc_pure
-  PixelSize getTextBounds(StringView text) const;
+  [[gnu::pure]]
+  PixelSize getTextBounds(StringView text) const noexcept;
 
   struct Texture {
     unsigned id;
@@ -59,31 +57,31 @@ public:
     unsigned allocated_width, allocated_height;
 
     Texture(unsigned _id, unsigned _width, unsigned _height,
-            unsigned _allocated_width, unsigned _allocated_height)
+            unsigned _allocated_width, unsigned _allocated_height) noexcept
       :id(_id), width(_width), height(_height),
        allocated_width(_allocated_width),
        allocated_height(_allocated_height) {}
   };
 
-  Texture getTextTextureGL(StringView text) const;
+  Texture getTextTextureGL(StringView text) const noexcept;
 
-  unsigned get_height() const {
+  unsigned get_height() const noexcept {
     return height;
   }
 
-  unsigned get_ascent_height() const {
+  unsigned get_ascent_height() const noexcept {
     return ascent_height;
   }
 
-  unsigned get_capital_height() const {
+  unsigned get_capital_height() const noexcept {
     return capital_height;
   }
 
-  unsigned GetLineSpacing() const {
+  unsigned GetLineSpacing() const noexcept {
     return line_spacing;
   }
 
-  unsigned get_style() const {
+  unsigned get_style() const noexcept {
     return style;
   }
 };

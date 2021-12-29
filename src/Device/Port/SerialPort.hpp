@@ -52,7 +52,7 @@ public:
   /**
    * Closes the serial port (Destructor)
    */
-  virtual ~SerialPort();
+  ~SerialPort() noexcept override;
 
   /**
    * Opens the serial port
@@ -64,7 +64,7 @@ public:
 protected:
   bool SetRxTimeout(unsigned Timeout);
 
-  bool IsDataPending() const {
+  bool IsDataPending() const noexcept {
     COMSTAT com_stat;
     DWORD errors;
 
@@ -78,31 +78,31 @@ protected:
    * @return the number of bytes, or -1 on error
    */
   gcc_pure
-  int GetDataQueued() const;
+  int GetDataQueued() const noexcept;
 
   /**
    * Determine the number of bytes in the driver's receive buffer.
    *
    * @return the number of bytes, or -1 on error
    */
-  int GetDataPending() const;
+  int GetDataPending() const noexcept;
 
   /**
    * Wait until there is data in the driver's receive buffer.
    *
-   * @return the number of bytes, or -1 on error
+   * Throws on error.
    */
-  WaitResult WaitDataPending(OverlappedEvent &overlapped,
-                             unsigned timeout_ms) const;
+  void WaitDataPending(OverlappedEvent &overlapped,
+                       unsigned timeout_ms) const;
 
 public:
   /* virtual methods from class Port */
-  virtual PortState GetState() const override;
-  virtual bool Drain() override;
-  virtual void Flush() override;
-  virtual bool SetBaudrate(unsigned baud_rate) override;
-  virtual unsigned GetBaudrate() const override;
-  virtual size_t Write(const void *data, size_t length) override;
+  PortState GetState() const noexcept override;
+  bool Drain() override;
+  void Flush() override;
+  void SetBaudrate(unsigned baud_rate) override;
+  unsigned GetBaudrate() const noexcept override;
+  std::size_t Write(const void *data, std::size_t length) override;
 
 protected:
   /* virtual methods from class Thread */

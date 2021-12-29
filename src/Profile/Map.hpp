@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_MAP2_HPP
 #define XCSOAR_PROFILE_MAP2_HPP
 
+#include "time/FloatDuration.hxx"
 #include "util/StringBuffer.hxx"
 #include "util/Compiler.h"
 
@@ -117,6 +118,22 @@ public:
   bool Get(const char *key, uint8_t &value) const;
   bool Get(const char *key, double &value) const;
 
+  bool Get(const char *key, FloatDuration &value) const noexcept {
+    double _value;
+    bool result = Get(key, _value);
+    if (result)
+      value = FloatDuration{_value};
+    return result;
+  }
+
+  bool Get(const char *key, std::chrono::duration<unsigned> &value) const noexcept {
+    unsigned _value;
+    bool result = Get(key, _value);
+    if (result)
+      value = std::chrono::duration<unsigned>{_value};
+    return result;
+  }
+
   void Set(const char *key, bool value) {
     Set(key, value ? "1" : "0");
   }
@@ -125,6 +142,14 @@ public:
   void Set(const char *key, long value);
   void Set(const char *key, unsigned value);
   void Set(const char *key, double value);
+
+  void Set(const char *key, FloatDuration value) noexcept {
+    Set(key, value.count());
+  }
+
+  void Set(const char *key, std::chrono::duration<unsigned> value) noexcept {
+    Set(key, value.count());
+  }
 
   // enum values
 

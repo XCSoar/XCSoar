@@ -44,11 +44,11 @@ public:
   void LogPoint(const NMEAInfo &gps_info);
   void LogStartEvent(const NMEAInfo &gps_info);
   void LogFinishEvent(const NMEAInfo &gps_info);
+  void LogPilotEvent(const NMEAInfo &gps_info);
 
-  gcc_pure
-  bool IsLoggerActive() const;
+  [[gnu::pure]]
+  bool IsLoggerActive() const noexcept;
 
-  bool LoggerClearFreeSpace(unsigned current_year);
   void GUIStartLogger(const NMEAInfo& gps_info,
                       const ComputerSettings& settings,
                       const ProtectedTaskManager *protected_task_manager,
@@ -60,7 +60,7 @@ public:
   void GUIStopLogger(const NMEAInfo &gps_info,
                      bool noAsk = false);
   void LoggerNote(const TCHAR *text);
-  void ClearBuffer();
+  void ClearBuffer() noexcept;
 };
 
 #endif

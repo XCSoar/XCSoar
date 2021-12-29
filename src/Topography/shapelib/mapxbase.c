@@ -138,59 +138,18 @@ static void flushRecord( DBFHandle psDBF )
 
 #endif /* SHAPELIB_DISABLED */
 
-/************************************************************************/
-/*                              msDBFOpen()                             */
-/*                                                                      */
-/*      Open a .dbf file.                                               */
-/************************************************************************/
-DBFHandle msDBFOpen(struct zzip_dir *zdir,  const char * pszFilename, const char * pszAccess )
-
+DBFHandle msDBFOpenVirtualFile( struct zzip_file * fp )
 {
   DBFHandle   psDBF;
   uchar   *pabyBuf;
   int     nFields, nRecords, nHeadLen, nRecLen, iField;
-  char          *pszDBFFilename;
-
-  /* -------------------------------------------------------------------- */
-  /*      We only allow the access strings "rb" and "r+".                 */
-  /* -------------------------------------------------------------------- */
-  if( strcmp(pszAccess,"r") != 0 && strcmp(pszAccess,"r+") != 0
-      && strcmp(pszAccess,"rb") != 0 && strcmp(pszAccess,"r+b") != 0 )
-    return( NULL );
-
-  /* -------------------------------------------------------------------- */
-  /*  Ensure the extension is converted to dbf or DBF if it is      */
-  /*  currently .shp or .shx.               */
-  /* -------------------------------------------------------------------- */
-  pszDBFFilename = (char *) msSmallMalloc(strlen(pszFilename)+1);
-  strcpy( pszDBFFilename, pszFilename );
-
-  if( strcmp(pszFilename+strlen(pszFilename)-4,".shp") == 0
-      || strcmp(pszFilename+strlen(pszFilename)-4,".shx") == 0 ) {
-    strcpy( pszDBFFilename+strlen(pszDBFFilename)-4, ".dbf");
-  } else if( strcmp(pszFilename+strlen(pszFilename)-4,".SHP") == 0
-             || strcmp(pszFilename+strlen(pszFilename)-4,".SHX") == 0 ) {
-    strcpy( pszDBFFilename+strlen(pszDBFFilename)-4, ".DBF");
-  }
 
   /* -------------------------------------------------------------------- */
   /*      Open the file.                                                  */
   /* -------------------------------------------------------------------- */
   psDBF = (DBFHandle) calloc( 1, sizeof(DBFInfo) );
   MS_CHECK_ALLOC(psDBF, sizeof(DBFInfo), NULL);
-  psDBF->fp = zzip_open_rb(zdir, pszDBFFilename);
-  if( psDBF->fp == NULL )
-  {
-    if( strcmp(pszDBFFilename+strlen(pszDBFFilename)-4,".dbf") == 0 ) {
-      strcpy( pszDBFFilename+strlen(pszDBFFilename)-4, ".DBF");
-      psDBF->fp = zzip_open_rb(zdir, pszDBFFilename);
-    }
-  }
-  if( psDBF->fp == NULL ) {
-    msFree(pszDBFFilename);
-    msFree(psDBF);
-    return( NULL );
-  }
+  psDBF->fp = fp;
 
 #ifdef SHAPELIB_DISABLED
   psDBF->bNoHeader = MS_FALSE;
@@ -202,8 +161,6 @@ DBFHandle msDBFOpen(struct zzip_dir *zdir,  const char * pszFilename, const char
 
   psDBF->pszStringField = NULL;
   psDBF->nStringFieldLen = 0;
-
-  free( pszDBFFilename );
 
   /* -------------------------------------------------------------------- */
   /*  Read Table Header info                                              */
@@ -277,6 +234,55 @@ DBFHandle msDBFOpen(struct zzip_dir *zdir,  const char * pszFilename, const char
   }
 
   return( psDBF );
+}
+
+/************************************************************************/
+/*                              msDBFOpen()                             */
+/*                                                                      */
+/*      Open a .dbf file.                                               */
+/************************************************************************/
+DBFHandle msDBFOpen( struct zzip_dir *zdir, const char * pszFilename, const char * pszAccess )
+
+{
+  /* -------------------------------------------------------------------- */
+  /*      We only allow the access strings "rb" and "r+".                 */
+  /* -------------------------------------------------------------------- */
+  if( strcmp(pszAccess,"r") != 0 && strcmp(pszAccess,"r+") != 0
+      && strcmp(pszAccess,"rb") != 0 && strcmp(pszAccess,"r+b") != 0 )
+    return( NULL );
+
+  /* -------------------------------------------------------------------- */
+  /*  Ensure the extension is converted to dbf or DBF if it is      */
+  /*  currently .shp or .shx.               */
+  /* -------------------------------------------------------------------- */
+  char *pszDBFFilename = (char *) msSmallMalloc(strlen(pszFilename)+1);
+  strcpy( pszDBFFilename, pszFilename );
+
+  if( strcmp(pszFilename+strlen(pszFilename)-4,".shp") == 0
+      || strcmp(pszFilename+strlen(pszFilename)-4,".shx") == 0 ) {
+    strcpy( pszDBFFilename+strlen(pszDBFFilename)-4, ".dbf");
+  } else if( strcmp(pszFilename+strlen(pszFilename)-4,".SHP") == 0
+             || strcmp(pszFilename+strlen(pszFilename)-4,".SHX") == 0 ) {
+    strcpy( pszDBFFilename+strlen(pszDBFFilename)-4, ".DBF");
+  }
+
+  /* -------------------------------------------------------------------- */
+  /*      Open the file.                                                  */
+  /* -------------------------------------------------------------------- */
+  struct zzip_file *fp = zzip_open_rb(zdir, pszDBFFilename);
+  if( fp == NULL )
+  {
+    if( strcmp(pszDBFFilename+strlen(pszDBFFilename)-4,".dbf") == 0 ) {
+      strcpy( pszDBFFilename+strlen(pszDBFFilename)-4, ".DBF");
+      fp = zzip_open_rb(zdir, pszDBFFilename);
+    }
+  }
+  msFree(pszDBFFilename);
+  if( fp == NULL ) {
+    return( NULL );
+  }
+
+  return msDBFOpenVirtualFile(fp);
 }
 
 /************************************************************************/
@@ -722,7 +728,7 @@ DBFFieldType msDBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName
 static int msDBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField, void * pValue )
 {
   unsigned int          nRecordOffset;
-  int  i, len;
+  int  len;
   uchar *pabyRec;
   char  szSField[40];
 
@@ -742,7 +748,7 @@ static int msDBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField, void * 
     flushRecord( psDBF );
 
     psDBF->nRecords++;
-    for( i = 0; i < psDBF->nRecordLength; i++ )
+    for( unsigned i = 0; i < psDBF->nRecordLength; i++ )
       psDBF->pszCurrentRecord[i] = ' ';
 
     psDBF->nCurrentRecord = hEntity;

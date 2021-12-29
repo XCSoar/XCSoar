@@ -28,7 +28,7 @@ Copyright_License {
 
 inline void
 SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc, bool enabled,
-                                 bool focused, bool pressed) const
+                                 bool focused, bool pressed) const noexcept
 {
   const ButtonLook &look = GetLook();
 
@@ -65,8 +65,8 @@ SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc, bool enabled,
 
 void
 SymbolButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
-                                 bool enabled,
-                                 bool focused, bool pressed) const
+                                 bool enabled, bool focused,
+                                 bool pressed) const noexcept
 {
   frame_renderer.DrawButton(canvas, rc, focused, pressed);
 

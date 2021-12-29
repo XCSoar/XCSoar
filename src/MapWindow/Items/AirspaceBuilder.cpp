@@ -104,8 +104,8 @@ MapItemListBuilder::AddVisibleAirspace(
     if (list.full())
       break;
 
-    const AbstractAirspace &airspace = i.GetAirspace();
-    if (predicate(airspace))
-      list.append(new AirspaceMapItem(airspace));
+    auto airspace = i.GetAirspacePtr();
+    if (predicate(*airspace))
+      list.append(new AirspaceMapItem(std::move(airspace)));
   }
 }

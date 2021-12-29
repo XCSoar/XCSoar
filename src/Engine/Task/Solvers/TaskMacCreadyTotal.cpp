@@ -56,13 +56,14 @@ TaskMacCreadyTotal::get_aircraft_start(const AircraftState &aircraft) const
 }
 
 double
-TaskMacCreadyTotal::effective_distance(const double time_remaining) const
+TaskMacCreadyTotal::effective_distance(const FloatDuration time_remaining) const noexcept
 {
-  double t_total = 0, d_total = 0;
+  FloatDuration t_total{};
+  double d_total = 0;
   for (int i = points.size() - 1; i >= 0; i--) {
     const GlideResult &result = leg_solutions[i];
 
-    if (result.IsOk() && result.time_elapsed > 0) {
+    if (result.IsOk() && result.time_elapsed.count() > 0) {
       auto p = (time_remaining - t_total) / result.time_elapsed;
       if (p >= 0 && p <= 1) {
         return d_total + p * result.vector.distance;
@@ -76,7 +77,7 @@ TaskMacCreadyTotal::effective_distance(const double time_remaining) const
 }
 
 double
-TaskMacCreadyTotal::effective_leg_distance(const double time_remaining) const
+TaskMacCreadyTotal::effective_leg_distance(const FloatDuration time_remaining) const noexcept
 {
   const GlideResult &result = get_active_solution();
   auto p = time_remaining / result.time_elapsed;

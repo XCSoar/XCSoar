@@ -20,11 +20,11 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #ifndef LOCALTIME_H
 #define LOCALTIME_H
 
-#include "util/Compiler.h"
-
+class TimeStamp;
 class RoughTimeDelta;
 
 /**
@@ -32,8 +32,8 @@ class RoughTimeDelta;
  * @param d UTC time in seconds
  * @param utc_offset Offset in second
  */
-gcc_pure
-unsigned
-TimeLocal(int d, RoughTimeDelta utc_offset);
+[[gnu::pure]]
+TimeStamp
+TimeLocal(TimeStamp time, RoughTimeDelta utc_offset) noexcept;
 
 #endif

@@ -27,6 +27,8 @@ Copyright_License {
 
 #include <cassert>
 
+#include <wingdi.h>
+
 namespace UI {
 
 bool

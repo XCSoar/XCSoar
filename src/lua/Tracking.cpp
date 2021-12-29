@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Tracking.hpp"
+#include "MetaTable.hxx"
 #include "Util.hxx"
 #include "util/StringAPI.hxx"
 #include "Interface.hpp"
@@ -230,9 +231,7 @@ Lua::InitTracking(lua_State *L)
 
   lua_newtable(L);
 
-  lua_newtable(L);
-  SetField(L, -2, "__index", l_tracking_index);
-  lua_setmetatable(L, -2);
+  MakeIndexMetaTableFor(L, RelativeStackIndex{-1}, l_tracking_index);
 
   luaL_setfuncs(L, settings_funcs, 0);
 

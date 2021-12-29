@@ -31,7 +31,23 @@ Copyright_License {
 #include <stdlib.h>
 
 void
-FormatISO8601(char *buffer, const BrokenDateTime &stamp)
+FormatISO8601(char *buffer, const BrokenDate &date) noexcept
+{
+  sprintf(buffer, "%04u-%02u-%02u",
+          date.year, date.month, date.day);
+}
+
+#ifdef _UNICODE
+void
+FormatISO8601(TCHAR *buffer, const BrokenDate &date) noexcept
+{
+  _stprintf(buffer, _T("%04u-%02u-%02u"),
+            date.year, date.month, date.day);
+}
+#endif
+
+void
+FormatISO8601(char *buffer, const BrokenDateTime &stamp) noexcept
 {
   sprintf(buffer, "%04u-%02u-%02uT%02u:%02u:%02uZ",
           stamp.year, stamp.month, stamp.day,
@@ -40,7 +56,7 @@ FormatISO8601(char *buffer, const BrokenDateTime &stamp)
 
 #ifdef _UNICODE
 void
-FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp)
+FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp) noexcept
 {
   _stprintf(buffer, _T("%04u-%02u-%02uT%02u:%02u:%02uZ"),
             stamp.year, stamp.month, stamp.day,
@@ -49,65 +65,66 @@ FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp)
 #endif
 
 void
-FormatTime(TCHAR* buffer, double _time)
+FormatTime(TCHAR *buffer, FloatDuration _time) noexcept
 {
-  if (_time < 0) {
+  if (_time.count() < 0) {
     *buffer++ = _T('-');
     _time = -_time;
   }
 
-  const BrokenTime time = BrokenTime::FromSecondOfDayChecked((unsigned)_time);
+  const BrokenTime time = BrokenTime::FromSinceMidnightChecked(_time);
   _stprintf(buffer, _T("%02u:%02u:%02u"),
             time.hour, time.minute, time.second);
 }
 
 void
-FormatTimeLong(TCHAR* buffer, double _time)
+FormatTimeLong(TCHAR *buffer, FloatDuration _time) noexcept
 {
-  if (_time < 0) {
+  if (_time.count() < 0) {
     *buffer++ = _T('-');
     _time = -_time;
   }
 
-  const BrokenTime time = BrokenTime::FromSecondOfDayChecked((unsigned)_time);
-  _time -= double((int)_time);
-  unsigned millisecond = uround(_time * 1000);
+  const BrokenTime time = BrokenTime::FromSinceMidnightChecked(_time);
+
+  _time -= FloatDuration{trunc(_time.count())};
+  unsigned millisecond = uround(_time.count() * 1000);
 
   _stprintf(buffer, _T("%02u:%02u:%02u.%03u"),
             time.hour, time.minute, time.second, millisecond);
 }
 
 void
-FormatSignedTimeHHMM(TCHAR* buffer, int _time)
+FormatSignedTimeHHMM(TCHAR *buffer, std::chrono::seconds _time) noexcept
 {
-  if (_time < 0) {
+  if (_time.count() < 0) {
     *buffer++ = _T('-');
     _time = -_time;
   }
 
-  const BrokenTime time = BrokenTime::FromSecondOfDayChecked(_time);
+  const BrokenTime time = BrokenTime::FromSinceMidnightChecked(_time);
   _stprintf(buffer, _T("%02u:%02u"), time.hour, time.minute);
 }
 
 void
-FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, int _time)
+FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, std::chrono::seconds _time) noexcept
 {
-  if (_time >= 24 * 3600) {
+  if (_time >= std::chrono::hours{24}) {
     _tcscpy(buffer1, _T(">24h"));
     buffer2[0] = '\0';
     return;
   }
-  if (_time <= -24 * 3600) {
+  if (_time <= -std::chrono::hours{24}) {
     _tcscpy(buffer1, _T("<-24h"));
     buffer2[0] = '\0';
     return;
   }
-  if (_time < 0) {
+  if (_time.count() < 0) {
     *buffer1++ = _T('-');
     _time = -_time;
   }
 
-  const BrokenTime time = BrokenTime::FromSecondOfDay(_time);
+  const BrokenTime time = BrokenTime::FromSinceMidnight(_time);
 
   if (time.hour > 0) { // hh:mm, ss
     // Set Value
@@ -121,7 +138,7 @@ FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, int _time)
 
 static void
 CalculateTimespanComponents(unsigned timespan, unsigned &days, unsigned &hours,
-                            unsigned &minutes, unsigned &seconds)
+                            unsigned &minutes, unsigned &seconds) noexcept
 {
   if (timespan >= 24u * 60u * 60u) {
     days = timespan / (24u * 60u * 60u);
@@ -145,13 +162,15 @@ CalculateTimespanComponents(unsigned timespan, unsigned &days, unsigned &hours,
 }
 
 void
-FormatTimespanSmart(TCHAR *buffer, int timespan, unsigned max_tokens,
-                    const TCHAR *separator)
+FormatTimespanSmart(TCHAR *buffer, std::chrono::seconds timespan,
+                    unsigned max_tokens,
+                    const TCHAR *separator) noexcept
 {
   assert(max_tokens > 0 && max_tokens <= 4);
 
   unsigned days, hours, minutes, seconds;
-  CalculateTimespanComponents(abs(timespan), days, hours, minutes, seconds);
+  CalculateTimespanComponents(std::abs(timespan.count()),
+                              days, hours, minutes, seconds);
 
   unsigned token = 0;
   bool show_days = false, show_hours = false;
@@ -196,7 +215,7 @@ FormatTimespanSmart(TCHAR *buffer, int timespan, unsigned max_tokens,
     show_seconds = true;
 
   // Output
-  if (timespan < 0) {
+  if (timespan.count() < 0) {
     *buffer = _T('-');
     buffer++;
   }

@@ -1,0 +1,66 @@
+---
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - 'doc/**'
+      - 'ide/**'
+      - '.github/workflows/build-container.yml'
+      - '.github/workflows/build-android.yml'
+      - '.github/workflows/build-unix.yml'
+      - '.github/workflows/build-win64.yml'
+    branches:
+      - master
+  pull_request:
+    paths-ignore:
+      - 'doc/**'
+      - 'ide/**'
+      - '.github/workflows/build-container.yml'
+      - '.github/workflows/build-android.yml'
+      - '.github/workflows/build-unix.yml'
+    branches:
+      - master
+
+env:
+  TARGET: KOBO
+
+jobs:
+  compile-xcsoar-kobo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - id: checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: True
+      - id: cache-ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}
+      - id: repository
+        uses: ASzc/change-string-case-action@v1
+        with:
+          string: ${{ github.repository }}
+
+      - name: "Cache third-party libraries"
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
+          path: |
+            ${{ github.workspace }}/output/${{ env.TARGET }}/lib
+            !${{ github.workspace }}/output/${{ env.TARGET }}/lib/build
+
+      - name: XCSoar Compile ${{ env.TARGET }}
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ghcr.io/${{ steps.repository.outputs.lowercase }}/xcsoar-build:latest
+          options: -v ${{ github.workspace }}:/opt/xcsoar -v /home/runner/work/XCSoar/XCSoar/.ccache:/root/.ccache
+          run: |
+            cd /opt/xcsoar
+            xcsoar-compile ${{ env.TARGET }} USE_CCACHE=y V=2 output/KOBO/KoboRoot.tgz
+
+      - name: "upload KoboRoot.tgz"
+        uses: actions/upload-artifact@v2
+        with:
+          name: KoboRoot.tgz
+          path: output/${{ env.TARGET }}/KoboRoot.tgz

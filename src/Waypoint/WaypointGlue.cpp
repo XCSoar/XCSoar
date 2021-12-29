@@ -101,19 +101,19 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
 
   // ### FIRST FILE ###
   auto path = Profile::GetPath(ProfileKeys::WaypointFile);
-  if (!path.IsNull())
+  if (path != nullptr)
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::PRIMARY,
                               terrain, operation);
 
   // ### SECOND FILE ###
   path = Profile::GetPath(ProfileKeys::AdditionalWaypointFile);
-  if (!path.IsNull())
+  if (path != nullptr)
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::ADDITIONAL,
                               terrain, operation);
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
   path = Profile::GetPath(ProfileKeys::WatchedWaypointFile);
-  if (!path.IsNull())
+  if (path != nullptr)
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::WATCHED,
                               terrain, operation);
 
@@ -121,17 +121,21 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
 
   // If no waypoint file found yet
   if (!found) {
-    auto archive = OpenMapFile();
-    if (archive) {
-      found |= LoadWaypointFile(way_points, archive->get(), "waypoints.xcw",
-                                WaypointFileType::WINPILOT,
-                                WaypointOrigin::MAP,
-                                terrain, operation);
+    try {
+      if (auto archive = OpenMapFile()) {
+        found |= LoadWaypointFile(way_points, archive->get(), "waypoints.xcw",
+                                  WaypointFileType::WINPILOT,
+                                  WaypointOrigin::MAP,
+                                  terrain, operation);
 
-      found |= LoadWaypointFile(way_points, archive->get(), "waypoints.cup",
-                                WaypointFileType::SEEYOU,
-                                WaypointOrigin::MAP,
-                                terrain, operation);
+        found |= LoadWaypointFile(way_points, archive->get(), "waypoints.cup",
+                                  WaypointFileType::SEEYOU,
+                                  WaypointOrigin::MAP,
+                                  terrain, operation);
+      }
+    } catch (...) {
+      LogError(std::current_exception(),
+               "Failed to load waypoints from map file");
     }
   }
 

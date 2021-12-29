@@ -151,7 +151,7 @@ TaskPointRenderer::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
 
   const auto p_p = ScreenClosestPoint(p_start, p_end, m_proj.GetScreenOrigin(),
                                       Layout::Scale(25));
-  PolygonRotateShift(Arrow, 2, p_p, ang);
+  PolygonRotateShift({Arrow, 2}, p_p, ang, Layout::Scale(100U));
   Arrow[2] = Arrow[1];
   Arrow[1] = p_p;
 

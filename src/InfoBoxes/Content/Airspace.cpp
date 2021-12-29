@@ -30,7 +30,7 @@ Copyright_License {
 #include "Airspace/NearestAirspace.hpp"
 
 void
-UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data)
+UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data) noexcept
 {
   NearestAirspace nearest = NearestAirspace::FindHorizontal(CommonInterface::Basic(),
                                                             glide_computer->GetAirspaceWarnings(),
@@ -45,7 +45,7 @@ UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxNearestAirspaceVertical(InfoBoxData &data)
+UpdateInfoBoxNearestAirspaceVertical(InfoBoxData &data) noexcept
 {
   NearestAirspace nearest = NearestAirspace::FindVertical(CommonInterface::Basic(),
                                                           CommonInterface::Calculated(),

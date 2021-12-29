@@ -26,7 +26,7 @@ There are several ways XCSoar can be customised:
 %Describing all of these in a detail level like a reference manual would 
 %do is beyond the scope of this document. The user is referred to browse 
 %through the XCSoar Wiki for more details. 
-%\url{http://www.xcsoar.org/trac/wiki}
+%\url{https://github.com/XCSoar/xcsoar/issues/wiki}
 
 \section{Modifying settings}
 
@@ -563,6 +563,14 @@ rules. \label{conf:taskrules}
   (AGL or MSL) while finishing the task.  Set to 0 for no limit.
 \item[Finish height ref.*]  Reference used for finish min.\ height rule,
   correspondingly to the start rule height reference.
+\item [PEV start wait time*] The default interval in minutes between
+ pilot presses the \emph{Pilot Event} (see \ref{sec:pilotevent}) button is
+ pressed and start window opens. If set to 0, the start will open
+ immediately after \emph{Pilot Event} button is pressed.
+\item [PEV start window*] The default interval in minutes during which
+ the start window remains open when \emph{Pilot Event} (see \ref
+ {sec:pilotevent}) start procedure is used. If set to 0, the start window, once
+ opened, remains open forever.
 \item[Contest]  Determines the rules used to optimise for the selected contest 
   paths. \\
   {\bf OLC FAI}: Conforms to FAI triangle rule. Three turns and common start and 
@@ -838,7 +846,7 @@ your glide computer.
 
 Currently there are two tracking protocols implemented. `{\em SkyLines}' as a spin 
 off project from XCSoar itself; for details on this service have a look at 
-\url{http://skylines.xcsoar.org}. 
+\url{https://skylines.aero}. 
 And also the `{\em LiveTrack24}' protocol used e.g.\ by the tracking
 portal on \url{http://www.livetrack24.com}.  
 Please consult the web pages of the service provider listed under `Server' 
@@ -850,7 +858,7 @@ for details on this setup.
 \item[Tracking Interval]  The time interval for which one position is sent to
   the tracking service. `{\em SkyLines}' implements a very lean protocol, so that even
   a 30 sec.\ interval does not exhaust a plain GPRS connection (ca.\ 12~kbit/sec).
-\item[Key]  Create a key on the page \url{http://skylines.xcsoar.org/tracking/info} 
+\item[Key]  Create a key on the page \url{https://skylines.aero/tracking/info} 
   and enter it here, to identify your positions at the tracking service.
 \\
 \item[LiveTrack24]  Switch this {\bf On} to enable the live stream of 

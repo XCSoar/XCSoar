@@ -1,0 +1,12 @@
+Index: boost_1_77_0/boost/geometry/index/detail/algorithms/intersection_content.hpp
+===================================================================
+--- boost_1_77_0.orig/boost/geometry/index/detail/algorithms/intersection_content.hpp
++++ boost_1_77_0/boost/geometry/index/detail/algorithms/intersection_content.hpp
+@@ -15,6 +15,7 @@
+ #ifndef BOOST_GEOMETRY_INDEX_DETAIL_ALGORITHMS_INTERSECTION_CONTENT_HPP
+ #define BOOST_GEOMETRY_INDEX_DETAIL_ALGORITHMS_INTERSECTION_CONTENT_HPP
+ 
++#include <boost/geometry/strategies/disjoint.hpp>
+ #include <boost/geometry/algorithms/detail/disjoint/box_box.hpp>
+ #include <boost/geometry/algorithms/detail/overlay/intersection_box_box.hpp>
+ 

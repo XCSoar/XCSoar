@@ -24,6 +24,8 @@ Copyright_License {
 #include "Device.hpp"
 #include "Device/Declaration.hpp"
 #include "Operation/Operation.hpp"
+#include "util/ConvertString.hpp"
+#include "TextProtocol.hpp"
 
 bool
 FlarmDevice::Declare(const Declaration &declaration,
@@ -106,18 +108,27 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
     MinLon = (tmp - DegLon) * 60 * 1000;
 
     /*
-     * We use the waypoint index here as name to get around the 192 byte
-     * task size limit of the FLARM devices.
-     *
-     * see Flarm DataPort Manual:
+     * FLARM task declaration is limited to 192 bytes
+     * See Flarm DataPort Manual:
      * "The total data size entered through this command may not surpass
      * 192 bytes when calculated as follows: 7+(Number of Waypoints * 9) +
      * (sum of length of all task and waypoint descriptions)"
+     *
+     * In addition, FLARM devices will not accept a declaration of more than
+     * 10 waypoints (excluding takeoff and landing)
+     *
+     * This means we can use the <= 6 character short name in the waypoint declaration
+     * without hitting the 192 byte limit.
+     * Wouldn't expect to see a short name > 6 characters, but the optional 3rd
+     * parameter of CopyCleanFlarmString() allows us to trim off excess characters
+     * so that a dodgy waypoint configuration doesn't cause an overflow.
      */
     NarrowString<90> buffer;
-    buffer.Format("%02d%05.0f%c,%03d%05.0f%c,%d",
-                  DegLat, (double)MinLat, NoS,
-                  DegLon, (double)MinLon, EoW, i + 1);
+	const WideToUTF8Converter shortName(declaration.GetShortName(i));
+	buffer.Format("%02d%05.0f%c,%03d%05.0f%c,",
+			  DegLat, (double)MinLat, NoS,
+			  DegLon, (double)MinLon, EoW);
+	CopyCleanFlarmString(buffer.buffer() + buffer.length(), shortName, 6);
 
     if (!SetConfig("ADDWP", buffer, env))
       return false;

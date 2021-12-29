@@ -28,12 +28,14 @@
 #include "util/Macros.hpp"
 #include "io/StdioOutputStream.hxx"
 #include "Formatter/TimeFormatter.hpp"
-#include "JSON/Writer.hpp"
-#include "JSON/GeoWriter.hpp"
+#include "json/Geo.hpp"
+#include "json/Serialize.hxx"
 #include "FlightPhaseDetector.hpp"
 #include "FlightPhaseJSON.hpp"
 #include "Computer/Settings.hpp"
 #include "util/StringCompare.hxx"
+
+using namespace std::chrono;
 
 struct Result {
   BrokenDateTime takeoff_time, release_time, landing_time;
@@ -72,7 +74,7 @@ Update(const MoreData &basic, const FlyingState &state,
     result.landing_location = state.landing_location;
   }
 
-  if (state.release_time >= 0 && !result.release_time.IsPlausible()) {
+  if (state.release_time.IsDefined() && !result.release_time.IsPlausible()) {
     result.release_time = basic.GetDateTimeAt(state.release_time);
     result.release_location = state.release_location;
   }
@@ -148,7 +150,7 @@ Run(DebugReplay &replay, Result &result,
 
     last_location = basic.location;
 
-    if (!released && replay.Calculated().flight.release_time >= 0) {
+    if (!released && replay.Calculated().flight.release_time.IsDefined()) {
       released = true;
 
       full_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
@@ -176,133 +178,146 @@ Run(DebugReplay &replay, Result &result,
 gcc_pure
 static ContestStatistics
 SolveContest(Contest contest,
-             Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace)
+             Trace &full_trace, Trace &triangle_trace,
+             Trace &sprint_trace) noexcept
 {
   ContestManager manager(contest, full_trace, triangle_trace, sprint_trace);
   manager.SolveExhaustive();
   return manager.GetStats();
 }
 
-static void
-WriteEventAttributes(BufferedOutputStream &writer,
-                     const BrokenDateTime &time, const GeoPoint &location)
+static boost::json::object
+WriteEventAttributes(const BrokenDateTime &time,
+                     const GeoPoint &location) noexcept
 {
-  JSON::ObjectWriter object(writer);
+  boost::json::object o;
+  if (location.IsValid())
+    o = boost::json::value_from(location).as_object();
 
   if (time.IsPlausible()) {
     NarrowString<64> buffer;
     FormatISO8601(buffer.buffer(), time);
-    object.WriteElement("time", JSON::WriteString, buffer);
+    o.emplace("time", buffer.c_str());
   }
 
-  if (location.IsValid())
-    JSON::WriteGeoPointAttributes(object, location);
+  return o;
 }
 
 static void
-WriteEvent(JSON::ObjectWriter &object, const char *name,
-           const BrokenDateTime &time, const GeoPoint &location)
+WriteEvent(boost::json::object &parent, const char *name,
+           const BrokenDateTime &time, const GeoPoint &location) noexcept
 {
   if (time.IsPlausible() || location.IsValid())
-    object.WriteElement(name, WriteEventAttributes, time, location);
+    parent.emplace(name, WriteEventAttributes(time, location));
 }
 
-static void
-WriteEvents(BufferedOutputStream &writer, const Result &result)
+static boost::json::object
+WriteEvents(const Result &result) noexcept
 {
-  JSON::ObjectWriter object(writer);
+  boost::json::object object;
 
   WriteEvent(object, "takeoff", result.takeoff_time, result.takeoff_location);
   WriteEvent(object, "release", result.release_time, result.release_location);
   WriteEvent(object, "landing", result.landing_time, result.landing_location);
+
+  return object;
 }
 
 static void
-WriteResult(JSON::ObjectWriter &root, const Result &result)
+WriteResult(boost::json::object &root, const Result &result) noexcept
 {
-  root.WriteElement("events", WriteEvents, result);
+  root.emplace("events", WriteEvents(result));
 }
 
-static void
-WritePoint(BufferedOutputStream &writer, const ContestTracePoint &point,
-           const ContestTracePoint *previous)
+static boost::json::object
+WritePoint(const ContestTracePoint &point,
+           const ContestTracePoint *previous) noexcept
 {
-  JSON::ObjectWriter object(writer);
+  boost::json::object object =
+    boost::json::value_from(point.GetLocation()).as_object();
 
-  object.WriteElement("time", JSON::WriteLong, (long)point.GetTime());
-  JSON::WriteGeoPointAttributes(object, point.GetLocation());
+  object.emplace("time", (long)point.GetTime().count());
 
   if (previous != NULL) {
     auto distance = point.DistanceTo(previous->GetLocation());
-    object.WriteElement("distance", JSON::WriteUnsigned, uround(distance));
+    object.emplace("distance", uround(distance));
 
-    unsigned duration =
-      std::max((int)point.GetTime() - (int)previous->GetTime(), 0);
-    object.WriteElement("duration", JSON::WriteUnsigned, duration);
+    const auto duration = std::max(point.GetTime() - previous->GetTime(),
+                                   std::chrono::duration<unsigned>{});
+    object.emplace("duration", (int)duration.count());
 
-    if (duration > 0) {
-      auto speed = distance / duration;
-      object.WriteElement("speed", JSON::WriteDouble, speed);
+    if (duration.count() > 0) {
+      const double speed = distance / duration.count();
+      object.emplace("speed", speed);
     }
   }
+
+  return object;
 }
 
-static void
-WriteTrace(BufferedOutputStream &writer, const ContestTraceVector &trace)
+static boost::json::array
+WriteTrace(const ContestTraceVector &trace) noexcept
 {
-  JSON::ArrayWriter array(writer);
+  boost::json::array array;
 
   const ContestTracePoint *previous = NULL;
   for (auto i = trace.begin(), end = trace.end(); i != end; ++i) {
-    array.WriteElement(WritePoint, *i, previous);
+    array.emplace_back(WritePoint(*i, previous));
     previous = &*i;
   }
+
+  return array;
 }
 
-static void
-WriteContest(BufferedOutputStream &writer,
-             const ContestResult &result, const ContestTraceVector &trace)
+static boost::json::object
+WriteContest(const ContestResult &result,
+             const ContestTraceVector &trace) noexcept
 {
-  JSON::ObjectWriter object(writer);
+  boost::json::object object;
 
-  object.WriteElement("score", JSON::WriteDouble, result.score);
-  object.WriteElement("distance", JSON::WriteDouble, result.distance);
-  object.WriteElement("duration", JSON::WriteUnsigned, (unsigned)result.time);
-  object.WriteElement("speed", JSON::WriteDouble, result.GetSpeed());
+  object.emplace("score", result.score);
+  object.emplace("distance", result.distance);
+  object.emplace("duration", (unsigned)result.time.count());
+  object.emplace("speed", result.GetSpeed());
 
-  object.WriteElement("turnpoints", WriteTrace, trace);
+  object.emplace("turnpoints", WriteTrace(trace));
+
+  return object;
 }
 
-static void
-WriteOLCPlus(BufferedOutputStream &writer, const ContestStatistics &stats)
+static boost::json::object
+WriteOLCPlus(const ContestStatistics &stats) noexcept
 {
-  JSON::ObjectWriter object(writer);
+  boost::json::object object;
 
-  object.WriteElement("classic", WriteContest,
-                      stats.result[0], stats.solution[0]);
-  object.WriteElement("triangle", WriteContest,
-                      stats.result[1], stats.solution[1]);
-  object.WriteElement("plus", WriteContest,
-                      stats.result[2], stats.solution[2]);
+  object.emplace("classic", WriteContest(stats.result[0], stats.solution[0]));
+  object.emplace("triangle", WriteContest(stats.result[1], stats.solution[1]));
+  object.emplace("plus", WriteContest(stats.result[2], stats.solution[2]));
+
+  return object;
 }
 
-static void
-WriteDMSt(BufferedOutputStream &writer, const ContestStatistics &stats)
+static boost::json::object
+WriteDMSt(const ContestStatistics &stats) noexcept
 {
-  JSON::ObjectWriter object(writer);
+  boost::json::object object;
 
-  object.WriteElement("quadrilateral", WriteContest,
-                      stats.result[0], stats.solution[0]);
+  object.emplace("quadrilateral",
+                 WriteContest(stats.result[0], stats.solution[0]));
+
+  return object;
 }
 
-static void
-WriteContests(BufferedOutputStream &writer, const ContestStatistics &olc_plus,
-              const ContestStatistics &dmst)
+static boost::json::object
+WriteContests(const ContestStatistics &olc_plus,
+              const ContestStatistics &dmst) noexcept
 {
-  JSON::ObjectWriter object(writer);
+  boost::json::object object;
 
-  object.WriteElement("olc_plus", WriteOLCPlus, olc_plus);
-  object.WriteElement("dmst", WriteDMSt, dmst);
+  object.emplace("olc_plus", WriteOLCPlus(olc_plus));
+  object.emplace("dmst", WriteDMSt(dmst));
+
+  return object;
 }
 
 int main(int argc, char **argv)
@@ -361,9 +376,9 @@ int main(int argc, char **argv)
 
   args.ExpectEnd();
 
-  static Trace full_trace(0, Trace::null_time, full_max_points);
-  static Trace triangle_trace(0, Trace::null_time, triangle_max_points);
-  static Trace sprint_trace(0, 9000, sprint_max_points);
+  static Trace full_trace({}, Trace::null_time, full_max_points);
+  static Trace triangle_trace({}, Trace::null_time, triangle_max_points);
+  static Trace sprint_trace({}, minutes{150}, sprint_max_points);
 
   Result result;
   Run(*replay, result, full_trace, triangle_trace, sprint_trace);
@@ -373,18 +388,18 @@ int main(int argc, char **argv)
   const ContestStatistics dmst = SolveContest(Contest::DMST, full_trace, triangle_trace, sprint_trace);
 
   StdioOutputStream os(stdout);
-  BufferedOutputStream writer(os);
 
   {
-    JSON::ObjectWriter root(writer);
+    boost::json::object root;
 
     WriteResult(root, result);
-    root.WriteElement("phases", WritePhaseList,
-                      flight_phase_detector.GetPhases());
-    root.WriteElement("performance", WritePerformanceStats,
-                      flight_phase_detector.GetTotals());
-    root.WriteElement("contests", WriteContests, olc_plus, dmst);
+    root.emplace("phases", WritePhaseList(flight_phase_detector.GetPhases()));
+    root.emplace("performance",
+                 WritePerformanceStats(flight_phase_detector.GetTotals()));
+    root.emplace("contests", WriteContests(olc_plus, dmst));
+
+    Json::Serialize(os, root);
   }
 
-  writer.Flush();
+  return EXIT_SUCCESS;
 }

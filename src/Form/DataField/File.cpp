@@ -38,7 +38,7 @@ Copyright_License {
  * @param str The string to check
  * @return True if string equals a xcsoar internal file's filename
  */
-gcc_pure
+[[gnu::pure]]
 static bool
 IsInternalFile(const TCHAR *str) noexcept
 {
@@ -95,7 +95,7 @@ FileDataField::FileDataField(DataFieldListener *listener) noexcept
 int
 FileDataField::GetAsInteger() const noexcept
 {
-  if (!postponed_value.IsNull())
+  if (postponed_value != nullptr)
     EnsureLoadedDeconst();
 
   return current_index;
@@ -104,7 +104,7 @@ FileDataField::GetAsInteger() const noexcept
 void
 FileDataField::SetAsInteger(int new_value) noexcept
 {
-  Set(new_value);
+  ModifyIndex(new_value);
 }
 
 void
@@ -146,7 +146,7 @@ FileDataField::Find(Path path) const noexcept
 }
 
 void
-FileDataField::Lookup(Path text) noexcept
+FileDataField::SetValue(Path text) noexcept
 {
   if (!loaded) {
     postponed_value = text;
@@ -156,6 +156,25 @@ FileDataField::Lookup(Path text) noexcept
   auto i = Find(text);
   if (i >= 0)
     current_index = i;
+}
+
+void
+FileDataField::ModifyValue(Path new_value) noexcept
+{
+  if (new_value == GetValue())
+    return;
+
+  if (!loaded) {
+    postponed_value = new_value;
+    Modified();
+    return;
+  }
+
+  auto i = Find(new_value);
+  if (i >= 0) {
+    current_index = i;
+    Modified();
+  }
 }
 
 void
@@ -186,7 +205,7 @@ FileDataField::GetNumFiles() const noexcept
 }
 
 Path
-FileDataField::GetPathFile() const noexcept
+FileDataField::GetValue() const noexcept
 {
   if (!loaded && postponed_value != nullptr)
     return postponed_value;
@@ -256,12 +275,27 @@ FileDataField::GetAsDisplayString() const noexcept
 }
 
 void
-FileDataField::Set(unsigned new_value) noexcept
+FileDataField::SetIndex(unsigned new_value) noexcept
 {
   if (new_value > 0)
     EnsureLoaded();
   else
     postponed_value = nullptr;
+
+  if (new_value < files.size())
+    current_index = new_value;
+}
+
+void
+FileDataField::ModifyIndex(unsigned new_value) noexcept
+{
+  if (new_value > 0)
+    EnsureLoaded();
+  else
+    postponed_value = nullptr;
+
+  if (new_value == current_index)
+    return;
 
   if (new_value < files.size()) {
     current_index = new_value;
@@ -382,6 +416,6 @@ FileDataField::EnsureLoaded() noexcept
   if (postponed_sort)
     Sort();
 
-  if (!postponed_value.IsNull())
-    Lookup(postponed_value);
+  if (postponed_value != nullptr)
+    SetValue(postponed_value);
 }

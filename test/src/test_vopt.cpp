@@ -33,18 +33,16 @@ test_speed_factor(int test_num, int n_wind)
 {
   // flying at opt speed should be minimum time flight!
 
-  double te0, te1, te2;
-
   TestFlightResult result = test_flight(test_num, n_wind, 1.0);
-  te0 = result.time_elapsed;
+  const FloatDuration te0 = result.time_elapsed;
 
   result = test_flight(test_num, n_wind, 0.7);
-  te1 = result.time_elapsed;
+  const auto te1 = result.time_elapsed;
   // time of this should be higher than nominal
   ok(te0 < te1, GetTestName("vopt slow or", test_num, n_wind), 0);
 
   result = test_flight(test_num, n_wind, 1.5);
-  te2 = result.time_elapsed;
+  const auto te2 = result.time_elapsed;
   // time of this should be higher than nominal
   ok(te0 < te2, GetTestName("vopt fast or", test_num, n_wind), 0);
 

@@ -27,6 +27,8 @@ Copyright_License {
 #include "time/GPSClock.hpp"
 #include "NMEA/GPSState.hpp"
 
+class TimeStamp;
+
 class LoggerFRecord
 {
   /* 4.5 minutes */
@@ -43,17 +45,18 @@ public:
    * Returns true if the IGCWriter is supposed to write a new F record to
    * the IGC file or false if no update is needed.
    */
-  bool Update(const GPSState &gps, double time, bool nav_warning);
+  bool Update(const GPSState &gps, TimeStamp time,
+              bool nav_warning) noexcept;
 
   void Reset();
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   static bool IsBadSignal(const GPSState &gps) {
     return !gps.satellites_used_available || gps.satellites_used < 3;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool CheckSatellitesChanged(const GPSState &gps) const;
 };
 

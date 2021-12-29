@@ -49,8 +49,8 @@ public:
   void SetTaskBehaviour(const TaskBehaviour &tb);
 
   /* virtual methods from class TaskPoint */
-  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const override;
-  virtual double GetElevation() const override;
+  GeoVector GetVectorRemaining(const GeoPoint &reference) const noexcept override;
+  double GetElevation() const noexcept override;
 };
 
 #endif

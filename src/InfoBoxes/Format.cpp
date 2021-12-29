@@ -28,13 +28,13 @@ Copyright_License {
 #include "Math/Angle.hpp"
 
 void
-InfoBoxData::SetValue(const TCHAR *format, double value)
+InfoBoxData::SetValue(const TCHAR *format, double value) noexcept
 {
   UnsafeFormatValue(format, (double)value);
 }
 
 void
-InfoBoxData::SetValue(Angle _value, const TCHAR *suffix)
+InfoBoxData::SetValue(Angle _value, const TCHAR *suffix) noexcept
 {
   assert(suffix != NULL);
 
@@ -42,20 +42,20 @@ InfoBoxData::SetValue(Angle _value, const TCHAR *suffix)
 }
 
 void
-InfoBoxData::SetValueFromBearingDifference(Angle delta)
+InfoBoxData::SetValueFromBearingDifference(Angle delta) noexcept
 {
   FormatAngleDelta(value.buffer(), value.capacity(), delta);
 }
 
 void
-InfoBoxData::SetValueFromGlideRatio(double gr)
+InfoBoxData::SetValueFromGlideRatio(double gr) noexcept
 {
   FormatGlideRatio(value.buffer(), value.capacity(), gr);
   SetValueUnit(Unit::GRADIENT);
 }
 
 void
-InfoBoxData::SetComment(Angle _value, const TCHAR *suffix)
+InfoBoxData::SetComment(Angle _value, const TCHAR *suffix) noexcept
 {
   assert(suffix != NULL);
 
@@ -63,32 +63,32 @@ InfoBoxData::SetComment(Angle _value, const TCHAR *suffix)
 }
 
 void
-InfoBoxData::SetCommentFromBearingDifference(Angle delta)
+InfoBoxData::SetCommentFromBearingDifference(Angle delta) noexcept
 {
   FormatAngleDelta(comment.buffer(), comment.capacity(), delta);
 }
 
 void
-InfoBoxData::SetValueFromTimeTwoLines(int dd)
+InfoBoxData::SetValueFromTimeTwoLines(std::chrono::seconds dd) noexcept
 {
   FormatTimeTwoLines(value.buffer(), comment.buffer(), dd);
 }
 
 void
-InfoBoxData::SetValueFromPercent(double dd)
+InfoBoxData::SetValueFromPercent(double dd) noexcept
 {
   UnsafeFormatValue(_T("%d"), (int)(dd));
   SetValueUnit(Unit::PERCENT);
 }
 
 void
-InfoBoxData::SetCommentFromPercent(double dd)
+InfoBoxData::SetCommentFromPercent(double dd) noexcept
 {
   UnsafeFormatComment(_T("%d %%"), (int)(dd));
 }
 
 void
-InfoBoxData::SetValueFromVoltage(double dd)
+InfoBoxData::SetValueFromVoltage(double dd) noexcept
 {
   UnsafeFormatValue(_T("%2.1f"), dd);
   SetValueUnit(Unit::VOLT);

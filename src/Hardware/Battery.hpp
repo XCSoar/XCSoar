@@ -24,53 +24,21 @@ Copyright_License {
 #ifndef XCSOAR_HARDWARE_BATTERY_H
 #define XCSOAR_HARDWARE_BATTERY_H
 
-#if defined(ANDROID) || defined(KOBO) || defined(ENABLE_SDL)
-#define HAVE_BATTERY
+#include "PowerFeatures.hpp"
 
-namespace Power
-{
-  namespace Battery{
-    enum batterystatus {
-      LOW,
-      HIGH,
-      CRITICAL,
-      CHARGING,
-      NOBATTERY,
-      UNKNOWN
-    };
+#if defined(HAVE_BATTERY) && !defined(ANDROID)
 
-    extern unsigned Temperature;
-    extern unsigned RemainingPercent;
-    extern bool RemainingPercentValid;
-    extern batterystatus Status;
-  };
-  namespace External{
-    enum externalstatus{
-      OFF,
-      ON,
-      UNKNOWN
-    };
+namespace Power {
 
-    extern externalstatus Status;
-  };
+/* note: this function is not implemented on Android, because a JNI
+   callback will update the global variable there */
 
-}
+[[gnu::pure]]
+struct Info
+GetInfo() noexcept;
 
-#ifdef ANDROID
+} // namespace Power
 
-static inline void
-UpdateBatteryInfo()
-{
-  /* nothing to do, this is updated by Android callbacks */
-}
-
-#else
-
-void
-UpdateBatteryInfo();
-
-#endif
-
-#endif /* !HAVE_BATTERY */
+#endif /* HAVE_BATTERY */
 
 #endif

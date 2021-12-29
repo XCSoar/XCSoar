@@ -28,13 +28,13 @@ Copyright_License {
 #include <cassert>
 
 BrokenDate
-BrokenDate::TodayUTC()
+BrokenDate::TodayUTC() noexcept
 {
   return BrokenDateTime::NowUTC();
 }
 
 void
-BrokenDate::IncrementDay()
+BrokenDate::IncrementDay() noexcept
 {
   assert(IsPlausible());
 
@@ -61,7 +61,7 @@ BrokenDate::IncrementDay()
 }
 
 void
-BrokenDate::DecrementDay()
+BrokenDate::DecrementDay() noexcept
 {
   assert(IsPlausible());
 
@@ -80,13 +80,13 @@ BrokenDate::DecrementDay()
 }
 
 int
-BrokenDate::DaysSince(const BrokenDate &other) const
+BrokenDate::DaysSince(const BrokenDate &other) const noexcept
 {
-  constexpr int SECONDS_PER_DAY = 24 * 60 * 60;
+  constexpr std::chrono::system_clock::duration one_day = std::chrono::hours(24);
 
   constexpr BrokenTime midnight = BrokenTime::Midnight();
-  const int64_t a = BrokenDateTime(*this, midnight).ToUnixTimeUTC();
-  const int64_t b = BrokenDateTime(other, midnight).ToUnixTimeUTC();
-  const int64_t delta = a - b;
-  return int(delta / SECONDS_PER_DAY);
+  const auto a = BrokenDateTime(*this, midnight).ToTimePoint();
+  const auto b = BrokenDateTime(other, midnight).ToTimePoint();
+  const auto delta = a - b;
+  return int(delta / one_day);
 }

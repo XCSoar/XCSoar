@@ -24,9 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_UTIL_ESCAPE_BACKSLASH_HPP
 #define XCSOAR_UTIL_ESCAPE_BACKSLASH_HPP
 
-#include "Compiler.h"
-
-#include <tchar.h>
+#include "TStringView.hxx"
 
 /**
  * Parses the special characters (cr, lf, back slash) in the old_string and
@@ -34,8 +32,7 @@ Copyright_License {
  * @param old_string The old string with (or without) special characters
  * @return The new parsed string
  */
-gcc_nonnull_all
-TCHAR *
-UnescapeBackslash(const TCHAR *old_string);
+TStringView::value_type *
+UnescapeBackslash(TStringView old_string) noexcept;
 
 #endif

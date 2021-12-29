@@ -29,7 +29,7 @@ Copyright_License {
 #include <exception>
 
 #ifdef _UNICODE
-#include <tchar.h>
+#include <wchar.h>
 #endif
 
 /**
@@ -44,7 +44,7 @@ LogFormat(const char *fmt, ...) noexcept;
 
 #ifdef _UNICODE
 void
-LogFormat(const TCHAR *fmt, ...) noexcept;
+LogFormat(const wchar_t *fmt, ...) noexcept;
 #endif
 
 #if !defined(NDEBUG)

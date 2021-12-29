@@ -81,13 +81,13 @@ VegaDemoWidget::OnModified(DataField &df) noexcept
 {
   if (IsDataField(VARIO, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
-    VegaDemoW = Units::ToSysVSpeed(dff.GetAsFixed());
+    VegaDemoW = Units::ToSysVSpeed(dff.GetValue());
   } else if (IsDataField(AIRSPEED, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
-    VegaDemoV = Units::ToSysSpeed(dff.GetAsFixed());
+    VegaDemoV = Units::ToSysSpeed(dff.GetValue());
   } else if (IsDataField(CIRCLING, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    VegaDemoAudioClimb = dfb.GetAsBoolean();
+    VegaDemoAudioClimb = dfb.GetValue();
   }
 
   VegaWriteDemo();

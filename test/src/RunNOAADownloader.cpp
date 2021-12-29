@@ -21,20 +21,31 @@ Copyright_License {
 }
 */
 
+#include "CoInstance.hpp"
 #include "Weather/TAF.hpp"
 #include "Weather/METAR.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/NOAAUpdater.hpp"
 #include "net/http/Init.hpp"
-#include "io/async/AsioThread.hpp"
-#include "ConsoleJobRunner.hpp"
+#include "co/Task.hxx"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/GeoPointFormatter.hpp"
 #include "util/Macros.hpp"
-#include "util/ScopeExit.hxx"
+#include "util/PrintException.hxx"
 
 #include <cstdio>
+
+struct Instance : CoInstance {
+  const Net::ScopeInit net_init{GetEventLoop()};
+};
+
+static Co::InvokeTask
+Run(NOAAStore &store, ProgressListener &progress)
+{
+  co_await NOAAUpdater::Update(store, *Net::curl, progress);
+}
 
 static void
 DisplayParsedMETAR(const NOAAStore::Item &station)
@@ -140,7 +151,7 @@ DisplayTAF(const NOAAStore::Item &station)
 
 int
 main(int argc, char *argv[])
-{
+try {
   if (argc < 2) {
     printf("Usage: %s <code>[ <code> ...]\n", argv[0]);
     printf("   <code> is the four letter ICAO code (upper case)\n");
@@ -155,14 +166,12 @@ main(int argc, char *argv[])
     store.AddStation(argv[i]);
   }
 
-  AsioThread io_thread;
-  io_thread.Start();
-  AtScopeExit(&) { io_thread.Stop(); };
-  const Net::ScopeInit net_init(io_thread.GetEventLoop());
+  Instance instance;
+
+  ConsoleOperationEnvironment env;
 
   printf("Updating METAR and TAF ...\n");
-  ConsoleJobRunner runner;
-  NOAAUpdater::Update(store, *Net::curl, runner);
+  instance.Run(Run(store, env));
 
   for (auto i = store.begin(), end = store.end(); i != end; ++i) {
     printf("---\n");
@@ -172,4 +181,7 @@ main(int argc, char *argv[])
   }
 
   return 0;
+} catch (...) {
+  PrintException(std::current_exception());
+  return EXIT_FAILURE;
 }

@@ -32,9 +32,7 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
   case Mode::UNKNOWN:
     /* device could be in binary mode, we don't know, but this is the
        best we can do: */
-    if (!BinaryReset(env, std::chrono::milliseconds(500)))
-      return false;
-
+    BinaryReset(env, std::chrono::milliseconds(500));
     mode = Mode::NMEA;
 
     /* request self-test results and version information from FLARM */
@@ -53,11 +51,8 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
     return true;
 
   case Mode::BINARY:
-    if (!BinaryReset(env, std::chrono::milliseconds(500))) {
-      mode = Mode::UNKNOWN;
-      return false;
-    }
-
+    mode = Mode::UNKNOWN;
+    BinaryReset(env, std::chrono::milliseconds(500));
     mode = Mode::NMEA;
     return true;
   }
@@ -77,29 +72,24 @@ FlarmDevice::BinaryMode(OperationEnvironment &env)
 
   // "Binary mode is engaged by sending the text command "$PFLAX"
   // (including a newline character) to Flarm."
-  if (!Send("PFLAX", env))
-    return false;
+  Send("PFLAX", env);
 
-  // Remember that we should now be in binary mode (for further assert() calls)
-  mode = Mode::BINARY;
+  mode = Mode::UNKNOWN;
 
   // "After switching, connection should again be checked by issuing a ping."
   // Testing has revealed that switching the protocol takes a certain amount
   // of time (around 1.5 sec). Due to that it is recommended to issue new pings
   // for a certain time until the ping is ACKed properly or a timeout occurs.
   for (unsigned i = 0; i < 10; ++i) {
-    if (env.IsCancelled()) {
-      BinaryReset(env, std::chrono::milliseconds(200));
-      mode = Mode::UNKNOWN;
-      return false;
-    }
-
-    if (BinaryPing(env, std::chrono::milliseconds(500)))
+    if (BinaryPing(env, std::chrono::milliseconds(500))) {
       // We are now in binary mode and have verified that with a binary ping
+
+      // Remember that we should now be in binary mode (for further assert() calls)
+      mode = Mode::BINARY;
       return true;
+    }
   }
 
   // Apparently the switch to binary mode didn't work
-  mode = Mode::UNKNOWN;
   return false;
 }

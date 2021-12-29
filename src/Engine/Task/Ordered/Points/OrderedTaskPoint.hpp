@@ -89,9 +89,9 @@ public:
   OrderedTaskPoint(TaskPointType _type,
                    std::unique_ptr<ObservationZonePoint> &&_oz,
                    WaypointPtr &&wp,
-                   const bool b_scored);
+                   const bool b_scored) noexcept;
 
-  virtual ~OrderedTaskPoint() {}
+  virtual ~OrderedTaskPoint() noexcept = default;
 
   /* choose TaskPoint's implementation, not SampledTaskPoint's */
   using TaskPoint::GetLocation;
@@ -106,26 +106,26 @@ public:
    */
   std::unique_ptr<OrderedTaskPoint> Clone(const TaskBehaviour &task_behaviour,
                                           const OrderedTaskSettings &ordered_task_settings,
-                                          WaypointPtr &&waypoint=WaypointPtr()) const;
+                                          WaypointPtr &&waypoint={}) const noexcept;
 
   /**
    * Update observation zone geometry (or other internal data) when
    * previous/next turnpoint changes.
    */
-  void UpdateGeometry();
+  void UpdateGeometry() noexcept;
 
   /** Is it possible to insert a task point before this one? */
-  bool IsPredecessorAllowed() const {
+  bool IsPredecessorAllowed() const noexcept {
     return GetType() != TaskPointType::START;
   }
 
   /** Is it possible to insert a task point after this one? */
-  bool IsSuccessorAllowed() const {
+  bool IsSuccessorAllowed() const noexcept {
     return GetType() != TaskPointType::FINISH;
   }
 
-  virtual void SetTaskBehaviour([[maybe_unused]] const TaskBehaviour &tb) {}
-  virtual void SetOrderedTaskSettings([[maybe_unused]] const OrderedTaskSettings &otb) {}
+  virtual void SetTaskBehaviour([[maybe_unused]] const TaskBehaviour &tb) noexcept {}
+  virtual void SetOrderedTaskSettings([[maybe_unused]] const OrderedTaskSettings &otb) noexcept {}
 
   /**
    * Set previous/next task points.
@@ -134,18 +134,18 @@ public:
    * @param next Next (outgoing leg's destination) task point
    */
   virtual void SetNeighbours(OrderedTaskPoint *previous,
-                             OrderedTaskPoint *next);
+                             OrderedTaskPoint *next) noexcept;
 
   /**
    * Accessor for previous task point
    *
    * @return Previous task point
    */
-  const OrderedTaskPoint *GetPrevious() const {
+  const OrderedTaskPoint *GetPrevious() const noexcept {
     return tp_previous;
   }
 
-  OrderedTaskPoint *GetPrevious() {
+  OrderedTaskPoint *GetPrevious() noexcept {
     return tp_previous;
   }
 
@@ -154,11 +154,11 @@ public:
    *
    * @return Next task point
    */
-  const OrderedTaskPoint *GetNext() const {
+  const OrderedTaskPoint *GetNext() const noexcept {
     return tp_next;
   }
 
-  OrderedTaskPoint *GetNext() {
+  OrderedTaskPoint *GetNext() noexcept {
     return tp_next;
   }
 
@@ -168,28 +168,28 @@ public:
    *
    * @return Activation state of this task point
    */
-  ActiveState GetActiveState() const {
+  ActiveState GetActiveState() const noexcept {
     return active_state;
   }
 
   /**
    * Are we past this task point?
    */
-  bool IsPast() const {
+  bool IsPast() const noexcept {
     return active_state == BEFORE_ACTIVE;
   }
 
   /**
    * Is this the current task point?
    */
-  bool IsCurrent() const {
+  bool IsCurrent() const noexcept {
     return active_state == CURRENT_ACTIVE;
   }
 
   /**
    * Do we expect to reach this task point in the future?
    */
-  bool IsFuture() const {
+  bool IsFuture() const noexcept {
     return active_state == AFTER_ACTIVE;
   }
 
@@ -202,7 +202,7 @@ public:
    *
    * @return True if the active task point is found
    */
-  bool ScanActive(const OrderedTaskPoint &atp);
+  bool ScanActive(const OrderedTaskPoint &atp) noexcept;
 
   /**
    * Test whether a taskpoint is equivalent to this one
@@ -213,7 +213,8 @@ public:
    *
    * @return True if same WP, type and OZ
    */
-  virtual bool Equals(const OrderedTaskPoint &other) const;
+  [[gnu::pure]]
+  virtual bool Equals(const OrderedTaskPoint &other) const noexcept;
 
   /**
    * Update a GeoBounds to include this taskpoint and observation
@@ -221,32 +222,32 @@ public:
    *
    * @param bounds GeoBounds to update
    */
-  void ScanBounds(GeoBounds &bounds) const;
+  void ScanBounds(GeoBounds &bounds) const noexcept;
 
-  void UpdateOZ(const FlatProjection &projection);
+  void UpdateOZ(const FlatProjection &projection) noexcept;
 
   /**
    * Update the bounding box in flat projected coordinates
    */
-  void UpdateBoundingBox(const FlatProjection &projection);
+  void UpdateBoundingBox(const FlatProjection &projection) noexcept;
 
   /**
    * Test whether a boundingbox overlaps with this oz
    */
   [[gnu::pure]]
-  bool BoundingBoxOverlaps(const FlatBoundingBox &bb) const;
+  bool BoundingBoxOverlaps(const FlatBoundingBox &bb) const noexcept;
 
   [[gnu::pure]]
-  const SearchPointVector &GetSearchPoints() const;
+  const SearchPointVector &GetSearchPoints() const noexcept;
 
   [[gnu::pure]]
   bool CheckEnterTransitionMat(const AircraftState &ref_now,
-                               const AircraftState &ref_last) const {
+                               const AircraftState &ref_last) const noexcept {
     return CheckEnterTransition(ref_now, ref_last);
   }
 
   [[gnu::pure]]
-  virtual bool IsInSector(const AircraftState &ref) const;
+  virtual bool IsInSector(const AircraftState &ref) const noexcept;
 
   /**
    * Check if aircraft is within observation zone if near, and if so,
@@ -258,7 +259,7 @@ public:
    * @return True if internal state changed
    */
   virtual bool UpdateSampleNear(const AircraftState &state,
-                                const FlatProjection &projection);
+                                const FlatProjection &projection) noexcept;
 
   /**
    * Perform updates to samples as required if known to be far from the OZ
@@ -269,7 +270,7 @@ public:
    * @return True if internal state changed
    */
   virtual bool UpdateSampleFar([[maybe_unused]] const AircraftState &state,
-                               [[maybe_unused]] const FlatProjection &projection) {
+                               [[maybe_unused]] const FlatProjection &projection) noexcept {
     return false;
   }
 
@@ -285,25 +286,25 @@ protected:
    * @return Distance (m)
    */
   [[gnu::pure]]
-  double DoubleLegDistance(const GeoPoint &ref) const;
+  double DoubleLegDistance(const GeoPoint &ref) const noexcept;
 
 public:
   /* virtual methods from class TaskPoint */
-  const GeoPoint &GetLocationRemaining() const override {
+  const GeoPoint &GetLocationRemaining() const noexcept override {
     return ScoredTaskPoint::GetLocationRemaining();
   }
-  GeoVector GetVectorRemaining(const GeoPoint &) const override {
+  GeoVector GetVectorRemaining(const GeoPoint &) const noexcept override {
     return TaskLeg::GetVectorRemaining();
   }
-  GeoVector GetNextLegVector() const override;
+  GeoVector GetNextLegVector() const noexcept override;
 
 protected:
   /* virtual methods from class ScoredTaskPoint */
   bool CheckEnterTransition(const AircraftState &ref_now,
-                            const AircraftState &ref_last) const override;
+                            const AircraftState &ref_last) const noexcept override;
 
   bool CheckExitTransition(const AircraftState &ref_now,
-                           const AircraftState &ref_last) const override{
+                           const AircraftState &ref_last) const noexcept override {
     return CheckEnterTransition(ref_last, ref_now);
   }
 };

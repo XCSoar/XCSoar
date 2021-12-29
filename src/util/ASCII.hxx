@@ -30,8 +30,6 @@
 #ifndef ASCII_HXX
 #define ASCII_HXX
 
-#include "Compiler.h"
-
 #include <cstddef>
 
 #ifdef _UNICODE
@@ -44,9 +42,9 @@
  * destination buffer must be as large as the source buffer.  Can be
  * used for in-place operation.
  */
-gcc_nonnull_all
+[[gnu::nonnull]]
 void
-CopyASCII(char *dest, const char *src);
+CopyASCII(char *dest, const char *src) noexcept;
 
 /**
  * Copy all ASCII characters to the destination string
@@ -57,15 +55,16 @@ CopyASCII(char *dest, const char *src);
  * @param dest_size the size of the destination buffer
  * @return a pointer to the written end of the destination buffer
  */
-gcc_nonnull_all
+[[gnu::nonnull]]
 char *
-CopyASCII(char *dest, size_t dest_size, const char *src, const char *src_end);
+CopyASCII(char *dest, std::size_t dest_size,
+	  const char *src, const char *src_end) noexcept;
 
 /**
  * Like CopyUpper(), but convert all letters to upper-case.
  */
-gcc_nonnull_all
+[[gnu::nonnull]]
 void
-CopyASCIIUpper(char *dest, const char *src);
+CopyASCIIUpper(char *dest, const char *src) noexcept;
 
 #endif

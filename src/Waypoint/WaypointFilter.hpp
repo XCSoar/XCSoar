@@ -67,7 +67,7 @@ struct WaypointFilter
     type_index = TypeFilter::ALL;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool Matches(const Waypoint &waypoint, GeoPoint location,
                const FAITrianglePointValidator &triangle_validator) const;
 

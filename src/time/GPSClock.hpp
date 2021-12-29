@@ -24,20 +24,25 @@ Copyright_License {
 #ifndef XCSOAR_GPS_CLOCK_HPP
 #define XCSOAR_GPS_CLOCK_HPP
 
+#include "FloatDuration.hxx"
+#include "Stamp.hpp"
+
 #include <chrono>
 
 /**
  * Class for GPS-time based time intervals
  */
 class GPSClock {
+  using Duration = FloatDuration;
+
   /**
    * A large negative value which ensure that first CheckAdvance()
    * call after Reset() returns true, even if starting XCSoar right
    * after midnight.
    */
-  static constexpr int RESET_VALUE = -99999;
+  static constexpr TimeStamp RESET_VALUE{FloatDuration{-99999}};
 
-  double last;
+  TimeStamp last = RESET_VALUE;
 
 public:
   /**
@@ -46,7 +51,7 @@ public:
    * default behaviour, call update() immediately after creating the
    * object.
    */
-  GPSClock():last(RESET_VALUE) {}
+  constexpr GPSClock() noexcept = default;
 
   /**
    * Resets the clock.
@@ -58,7 +63,7 @@ public:
   /**
    * Updates the clock.
    */
-  void Update(double now) {
+  void Update(TimeStamp now) noexcept {
     last = now;
   }
 
@@ -67,7 +72,7 @@ public:
    * @param now Current time
    * @return True if time has been reversed, False otherwise
    */
-  bool CheckReverse(const double now) {
+  bool CheckReverse(const TimeStamp now) noexcept {
     if (now<last) {
       Update(now);
       return true;
@@ -83,12 +88,12 @@ public:
    * @param dt The timestep in seconds
    * @return
    */
-  bool CheckAdvance(const double now,
-                    const std::chrono::steady_clock::duration dt) noexcept {
+  bool CheckAdvance(const TimeStamp now,
+                    const Duration dt) noexcept {
     if (CheckReverse(now))
       return false;
 
-    if (now >= last + std::chrono::duration_cast<std::chrono::duration<double>>(dt).count()) {
+    if (now >= last + dt) {
       Update(now);
       return true;
     } else

@@ -31,19 +31,26 @@
 #include "mapserver.h"
 #include "maptree.h"
 
+#include <limits.h>
+
+#ifdef __BYTE_ORDER__
+/* GCC/clang predefined macro */
+#define bBigEndian (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
+#elif defined(_MSC_VER)
+/* MSVC doesn't support the C99 trick below, but all Microsoft
+   platforms are little-endian */
+#define bBigEndian false
+#else
+/* generic check */
+#define bBigEndian (((union{int in;char out;}){1}).out)
+#endif
+
 #include <zzip/util.h>
 
 #include <stdio.h>
 #include <string.h>
 #include <sys/param.h>
 #include <stdbool.h>
-
-#ifdef ANDROID
-#include <sys/endian.h>
-#endif
-
-
-static const bool bBigEndian = BYTE_ORDER == BIG_ENDIAN;
 
 /* -------------------------------------------------------------------- */
 /*      If the following is 0.5, nodes will be split in half.  If it    */
@@ -107,18 +114,6 @@ SHPTreeHandle msSHPDiskTreeOpen(struct zzip_dir *zdir, const char * pszTree,
 
   char    pabyBuf[16];
   int     i;
-#ifdef SHAPELIB_DISABLED
-  char    bBigEndian;
-
-  /* -------------------------------------------------------------------- */
-  /*  Establish the byte order on this machine.         */
-  /* -------------------------------------------------------------------- */
-  i = 1;
-  if( *((uchar *) &i) == 1 )
-    bBigEndian = MS_FALSE;
-  else
-    bBigEndian = MS_TRUE;
-#endif /* SHAPELIB_DISABLED */
 
   /* -------------------------------------------------------------------- */
   /*  Initialize the info structure.              */
@@ -160,6 +155,7 @@ SHPTreeHandle msSHPDiskTreeOpen(struct zzip_dir *zdir, const char * pszTree,
   }
 
   if( zzip_fread( pabyBuf, 8, 1, psTree->fp ) != 1 ) {
+    zzip_close(psTree->fp);
     msFree(psTree);
     return( NULL );
   }
@@ -200,6 +196,7 @@ SHPTreeHandle msSHPDiskTreeOpen(struct zzip_dir *zdir, const char * pszTree,
 
     if( zzip_fread( pabyBuf, 8, 1, psTree->fp ) != 1 )
     {
+      zzip_close(psTree->fp);
       msFree(psTree);
       return( NULL );
     }
@@ -513,6 +510,8 @@ static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, ms_bitarray 
   if( zzip_fread( &numshapes, 4, 1, disktree->fp ) != 1 )
     goto error;
   if ( disktree->needswap ) SwapWord ( 4, &numshapes );
+  if( numshapes < 0 || numshapes > INT_MAX / 4 )
+    goto error;
 
   if(!msRectOverlap(&rect, &aoi)) { /* skip rest of this node and sub-nodes */
     offset += numshapes*sizeof(ms_int32) + sizeof(ms_int32);
@@ -539,6 +538,8 @@ static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, ms_bitarray 
   if( zzip_fread( &numsubnodes, 4, 1, disktree->fp ) != 1 )
     goto error;
   if ( disktree->needswap ) SwapWord ( 4, &numsubnodes );
+  if( numsubnodes < 0 || numsubnodes > INT_MAX / 4 )
+    goto error;
 
   for(i=0; i<numsubnodes; i++)
     searchDiskTreeNode(disktree, aoi, status);
@@ -621,14 +622,21 @@ treeNodeObj *readTreeNode( SHPTreeHandle disktree )
     return NULL;
   }
   if ( disktree->needswap ) SwapWord ( 4, &node->numshapes );
-  if( node->numshapes > 0 )
-    node->ids = (ms_int32 *)msSmallMalloc(sizeof(ms_int32)*node->numshapes);
-  res = fread( node->ids, node->numshapes*4, 1, disktree->fp );
-  if ( !res )
+  if ( node->numshapes < 0 || node->numshapes > INT_MAX / 4 )
   {
-    free(node->ids);
     free(node);
     return NULL;
+  }
+  if( node->numshapes > 0 )
+  {
+    node->ids = (ms_int32 *)msSmallMalloc(sizeof(ms_int32)*node->numshapes);
+    res = fread( node->ids, node->numshapes*4, 1, disktree->fp );
+    if ( !res )
+    {
+      free(node->ids);
+      free(node);
+      return NULL;
+    }
   }
   for( i=0; i < node->numshapes; i++ ) {
     if ( disktree->needswap ) SwapWord ( 4, &node->ids[i] );
@@ -788,6 +796,7 @@ int msWriteTree(treeObj *tree, char *filename, int B_order)
   /*  Establish the byte order on this machine.         */
   /* -------------------------------------------------------------------- */
   i = 1;
+  /* cppcheck-suppress knownConditionTrueFalse */
   if( *((uchar *) &i) == 1 )
     mtBigEndian = MS_FALSE;
   else

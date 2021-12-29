@@ -39,7 +39,7 @@ TaskStatsComputer::Reset(TaskStats &data)
 }
 
 void
-TaskStatsComputer::ComputeWindow(double time, TaskStats &data)
+TaskStatsComputer::ComputeWindow(TimeStamp time, TaskStats &data) noexcept
 {
   window.Compute(time, data, data.last_hour);
 }

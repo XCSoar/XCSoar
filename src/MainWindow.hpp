@@ -49,6 +49,7 @@ class RasterTerrain;
 class TopographyStore;
 class MapWindowProjection;
 class PopupMessage;
+class PluggableOperationEnvironment;
 namespace InfoBoxLayout { struct Layout; }
 
 /**
@@ -64,6 +65,11 @@ class MainWindow : public UI::SingleWindow {
 #endif
 
   GlueMapWindow *map = nullptr;
+
+  /**
+   * A #Widget that is shown above the map.
+   */
+  Widget *top_widget = nullptr;
 
   /**
    * A #Widget that is shown below the map.
@@ -91,6 +97,10 @@ public:
   PopupMessage *popup = nullptr;
 
 private:
+  UI::Notify terrain_loader_notify{[this]{ OnTerrainLoaded(); }};
+
+  std::unique_ptr<PluggableOperationEnvironment> terrain_loader_env;
+
   /**
    * Called by the #MergeThread when new GPS data is available.
    */
@@ -124,14 +134,21 @@ private:
 
   bool restore_page_pending = false;
 
+  /**
+   * Has "late" initialization been done already?  Those are things
+   * that must be run from inside the main event loop.  It will be
+   * checked and set by OnTimer().
+   */
+  bool late_initialised = false;
+
 public:
-  virtual ~MainWindow();
+  ~MainWindow() noexcept override;
 
 protected:
   /**
    * Is XCSoar already up and running?
    */
-  bool IsRunning() {
+  bool IsRunning() noexcept {
     /* it is safe enough to say that XCSoar initialization is complete
        after the MapWindow has been created */
     return map != nullptr;
@@ -141,9 +158,20 @@ protected:
    * Destroy the current Widget, but don't reactivate the map.  The
    * caller is responsible for reactivating the map or another Widget.
    */
-  void KillWidget();
+  void KillWidget() noexcept;
 
-  bool HaveBottomWidget() const {
+  bool HaveTopWidget() const noexcept {
+    return top_widget != nullptr;
+  }
+
+  /**
+   * Destroy the current "top" Widget, but don't resize the main area.
+   * The caller is responsible for doing that or installing a new top
+   * Widget.
+   */
+  void KillTopWidget() noexcept;
+
+  bool HaveBottomWidget() const noexcept {
     /* currently, the bottom widget is only visible below the map, but
        not below a custom main widget */
     /* TODO: eliminate this limitation; don't forget to remove the
@@ -156,12 +184,12 @@ protected:
    * area.  The caller is responsible for doing that or installing a
    * new bottom Widget.
    */
-  void KillBottomWidget();
+  void KillBottomWidget() noexcept;
 
 public:
   void Create(PixelSize size, UI::TopWindowStyle style={});
 
-  void Destroy();
+  void Destroy() noexcept;
 
   void Initialise();
   void InitialiseConfigured();
@@ -170,16 +198,16 @@ public:
    * Destroy the components of the main view (map, info boxes,
    * gauges).
    */
-  void Deinitialise();
+  void Deinitialise() noexcept;
 
 private:
-  gcc_pure
-  const PixelRect &GetMainRect(const PixelRect &full_rc) const {
+  [[gnu::pure]]
+  const PixelRect &GetMainRect(const PixelRect &full_rc) const noexcept {
     return FullScreen ? full_rc : map_rect;
   }
 
-  gcc_pure
-  PixelRect GetMainRect() const {
+  [[gnu::pure]]
+  PixelRect GetMainRect() const noexcept {
     return FullScreen ? GetClientRect() : map_rect;
   }
 
@@ -187,102 +215,108 @@ private:
    * Adjust the flarm radar position
    */
   void ReinitialiseLayout_flarm(PixelRect rc,
-                                const InfoBoxLayout::Layout &ib_layout);
+                                const InfoBoxLayout::Layout &ib_layout) noexcept;
 
   /**
    * Adjust vario
    */
-  void ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout);
+  void ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout) noexcept;
 
-  void ReinitialiseLayoutTA(PixelRect rc, const InfoBoxLayout::Layout &layout);
+  void ReinitialiseLayoutTA(PixelRect rc,
+                            const InfoBoxLayout::Layout &layout) noexcept;
 
 public:
   /**
    * Called by XCSoarInterface::Startup() after startup has been
    * completed.
    */
-  void FinishStartup();
+  void FinishStartup() noexcept;
 
   /**
    * Called by XCSoarInterface::Shutdown() before shutdown begins.
    */
-  void BeginShutdown();
+  void BeginShutdown() noexcept;
 
   /**
    * Destroy and re-create all info boxes, and adjust the map
    * position/size.
    */
-  void ReinitialiseLayout();
+  void ReinitialiseLayout() noexcept;
 
   /**
    * Suspend threads that are owned by this object.
    */
-  void SuspendThreads();
+  void SuspendThreads() noexcept;
 
   /**
    * Resumt threads that are owned by this object.
    */
-  void ResumeThreads();
+  void ResumeThreads() noexcept;
+
+  /**
+   * Start loading the terrain file (asynchronously).
+   */
+  void LoadTerrain() noexcept;
 
   /**
    * Set the keyboard focus on the default element (i.e. the
    * MapWindow).
    */
-  void SetDefaultFocus();
+  void SetDefaultFocus() noexcept;
 
-  void FlushRendererCaches();
+  void FlushRendererCaches() noexcept;
 
   /**
    * Trigger a full redraw of the screen.
    */
-  void FullRedraw();
+  void FullRedraw() noexcept;
 
-  bool GetFullScreen() const {
+  bool GetFullScreen() const noexcept {
     return FullScreen;
   }
 
-  void SetFullScreen(bool _full_screen);
+  void SetFullScreen(bool _full_screen) noexcept;
 
-  void SendGPSUpdate() {
+  void SendGPSUpdate() noexcept {
     gps_notify.SendNotification();
   }
 
-  void SendCalculatedUpdate() {
+  void SendCalculatedUpdate() noexcept {
     calculated_notify.SendNotification();
   }
 
-  void SetTerrain(RasterTerrain *terrain);
-  void SetTopography(TopographyStore *topography);
+  void SetTerrain(RasterTerrain *terrain) noexcept;
+  void SetTopography(TopographyStore *topography) noexcept;
 
-  const Look &GetLook() const {
+  const Look &GetLook() const noexcept {
     assert(look != nullptr);
 
     return *look;
   }
 
-  Look &SetLook() {
+  Look &SetLook() noexcept {
     assert(look != nullptr);
 
     return *look;
   }
 
-  void SetComputerSettings(const ComputerSettings &settings_computer);
-  void SetMapSettings(const MapSettings &settings_map);
-  void SetUIState(const UIState &ui_state);
+  void SetComputerSettings(const ComputerSettings &settings_computer) noexcept;
+  void SetMapSettings(const MapSettings &settings_map) noexcept;
+  void SetUIState(const UIState &ui_state) noexcept;
 
   /**
    * Returns the map even if it is not active.  May return nullptr if
    * there is no map.
    */
-  gcc_pure
-  GlueMapWindow *GetMap() {
+  [[gnu::pure]]
+  GlueMapWindow *GetMap() noexcept {
     return map;
   }
 
   /**
    * Is the map active, i.e. currently visible?
    */
-  bool IsMapActive() const {
+  bool IsMapActive() const noexcept {
     return widget == nullptr;
   }
 
@@ -290,34 +324,41 @@ public:
    * Returns the map if it is active, or nullptr if the map is not
    * active.
    */
-  gcc_pure
-  GlueMapWindow *GetMapIfActive();
+  [[gnu::pure]]
+  GlueMapWindow *GetMapIfActive() noexcept;
 
   /**
    * Activate the map and return a pointer to it.  May return nullptr if
    * there is no map.
    */
-  GlueMapWindow *ActivateMap();
+  GlueMapWindow *ActivateMap() noexcept;
 
   /**
    * Schedule a call to PageActions::Restore().  The function returns
    * immediately, and there is no guarantee that it succeeds.
    */
-  void DeferredRestorePage();
+  void DeferredRestorePage() noexcept;
+
+  /**
+   * Show this #Widget above the map.  This replaces (deletes) the
+   * previous top widget, if any.  To disable this feature, call this
+   * method with widget==nullptr.
+   */
+  void SetTopWidget(Widget *widget) noexcept;
 
   /**
    * Show this #Widget below the map.  This replaces (deletes) the
    * previous bottom widget, if any.  To disable this feature, call
    * this method with widget==nullptr.
    */
-  void SetBottomWidget(Widget *widget);
+  void SetBottomWidget(Widget *widget) noexcept;
 
   /**
    * Replace the map with a #Widget.  The Widget instance gets deleted
    * when the map gets reactivated with ActivateMap() or if another
    * Widget gets set.
    */
-  void SetWidget(Widget *_widget);
+  void SetWidget(Widget *_widget) noexcept;
 
   /**
    * Returns the current #Widget, but only if the specified flavour is
@@ -325,28 +366,32 @@ public:
    *
    * @see InputEvents::IsFlavour(), InputEvents::SetFlavour()
    */
-  gcc_pure
-  Widget *GetFlavourWidget(const TCHAR *flavour);
+  [[gnu::pure]]
+  Widget *GetFlavourWidget(const TCHAR *flavour) noexcept;
 
-  void UpdateGaugeVisibility();
+  void UpdateGaugeVisibility() noexcept;
 
-  gcc_pure
-  const MapWindowProjection &GetProjection() const;
+  [[gnu::pure]]
+  const MapWindowProjection &GetProjection() const noexcept;
 
-  void ToggleSuppressFLARMRadar();
-  void ToggleForceFLARMRadar();
+  void ToggleSuppressFLARMRadar() noexcept;
+  void ToggleForceFLARMRadar() noexcept;
 
 private:
-  void UpdateVarioGaugeVisibility();
-  void UpdateTrafficGaugeVisibility();
+  void UpdateVarioGaugeVisibility() noexcept;
+  void UpdateTrafficGaugeVisibility() noexcept;
 
-  void StopDragging();
+  void StopDragging() noexcept;
+
+  void LateInitialise() noexcept;
 
   void RunTimer() noexcept;
 
   void OnGpsNotify() noexcept;
   void OnCalculatedNotify() noexcept;
   void OnRestorePageNotify() noexcept;
+
+  void OnTerrainLoaded() noexcept;
 
 protected:
   /* virtual methods from class Window */
@@ -363,10 +408,6 @@ protected:
 
   /* virtual methods from class TopWindow */
   virtual bool OnClose() noexcept override;
-
-#ifdef ANDROID
-  virtual void OnPause() noexcept override;
-#endif
 };
 
 #endif

@@ -88,9 +88,9 @@ private:
   }
 
 protected:
-  bool DataReceived(const void *data, size_t length) noexcept override {
-    fwrite(data, 1, length, stdout);
-    return PortLineSplitter::DataReceived(data, length);
+  bool DataReceived(std::span<const std::byte> s) noexcept override {
+    fwrite(s.data(), 1, s.size(), stdout);
+    return PortLineSplitter::DataReceived(s);
   }
 
   bool LineReceived(const char *_line) noexcept override {

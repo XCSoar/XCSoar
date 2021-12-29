@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_CHECKSUM_HPP
 #define XCSOAR_NMEA_CHECKSUM_HPP
 
-#include "util/Compiler.h"
-
 #include <cstdint>
 
 /**
@@ -34,7 +32,7 @@ Copyright_License {
  *
  * @param p a NULL terminated string
  */
-gcc_pure
+[[gnu::pure]]
 static inline uint8_t
 NMEAChecksum(const char *p)
 {
@@ -58,7 +56,7 @@ NMEAChecksum(const char *p)
  * @param p a string
  * @param length the number of characters in the string
  */
-gcc_pure
+[[gnu::pure]]
 static inline uint8_t
 NMEAChecksum(const char *p, unsigned length)
 {
@@ -83,7 +81,7 @@ NMEAChecksum(const char *p, unsigned length)
  * Verify the NMEA checksum at the end of the specified string,
  * separated with an asterisk ('*').
  */
-gcc_pure
+[[gnu::pure]]
 bool
 VerifyNMEAChecksum(const char *p);
 

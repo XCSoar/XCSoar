@@ -40,6 +40,7 @@ Copyright_License {
 #include "Wind/Settings.hpp"
 #include "WaveSettings.hpp"
 #include "RadioFrequency.hpp"
+#include "Cloud/weglide/WeGlideSettings.hpp"
 
 #include <cstdint>
 #include <type_traits>
@@ -165,13 +166,13 @@ struct FeaturesSettings {
 
 struct CirclingSettings {
   bool external_trigger_cruise_enabled;
-  double cruise_to_circling_mode_switch_threshold;
-  double circling_to_cruise_mode_switch_threshold;
+  FloatDuration cruise_to_circling_mode_switch_threshold;
+  FloatDuration circling_to_cruise_mode_switch_threshold;
 
   void SetDefaults() {
     external_trigger_cruise_enabled = false;
-    cruise_to_circling_mode_switch_threshold = 15;
-    circling_to_cruise_mode_switch_threshold = 10;
+    cruise_to_circling_mode_switch_threshold = std::chrono::seconds{15};
+    circling_to_cruise_mode_switch_threshold = std::chrono::seconds{10};
   }
 };
 
@@ -226,6 +227,8 @@ struct ComputerSettings {
   ContestSettings contest;
 
   LoggerSettings logger;
+
+  WeGlideSettings weglide;
 
 #ifdef HAVE_TRACKING
   TrackingSettings tracking;

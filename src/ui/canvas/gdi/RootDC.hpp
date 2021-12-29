@@ -24,7 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_ROOT_DC_HXX
 #define XCSOAR_SCREEN_ROOT_DC_HXX
 
-#include <windows.h>
+#include <windef.h> // for HWND (needed by winuser.h)
+#include <winuser.h>
 
 /**
  * A HDC pointing to the root window, i.e. the whole screen.

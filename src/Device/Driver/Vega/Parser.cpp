@@ -31,7 +31,7 @@ Copyright_License {
 #include <algorithm>
 
 #ifdef _UNICODE
-#include <windows.h>
+#include <stringapiset.h>
 #endif
 
 static bool
@@ -163,7 +163,7 @@ PDVDS(NMEAInputLine &line, NMEAInfo &info)
   const int accel_x = line.Read(0), accel_z = line.Read(0);
 
   auto mag = hypot(accel_x, accel_z);
-  info.acceleration.ProvideGLoad(mag / 100, true);
+  info.acceleration.ProvideGLoad(mag / 100);
 
   /*
   double flap = line.Read(0.0);

@@ -32,7 +32,7 @@ struct IGCFixEnhanced : public IGCFix
 {
   BrokenDate date;
 
-  unsigned clock;
+  TimeStamp clock;
 
   /* The detail level of this fix. -1 is not visible at all, 0 is always visible. */
   int level;

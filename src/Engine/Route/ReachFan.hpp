@@ -26,6 +26,8 @@
 #include "Geo/Flat/FlatProjection.hpp"
 #include "FlatTriangleFanTree.hpp"
 
+#include <optional>
+
 class RoutePolars;
 class RasterMap;
 class GeoBounds;
@@ -35,33 +37,32 @@ class ReachFan
 {
   FlatProjection projection;
   FlatTriangleFanTree root;
-  int terrain_base;
+  int terrain_base = 0;
 
 public:
-  ReachFan():terrain_base(0) {}
-
   friend class PrintHelper;
 
-  bool IsEmpty() const {
+  bool IsEmpty() const noexcept {
     return root.IsEmpty();
   }
 
-  const FlatProjection &GetProjection() const {
+  const FlatProjection &GetProjection() const noexcept {
     return projection;
   }
 
-  void Reset();
+  void Reset() noexcept;
 
   bool Solve(const AGeoPoint origin, const RoutePolars &rpolars,
-             const RasterMap *terrain, const bool do_solve = true);
+             const RasterMap *terrain, const bool do_solve = true) noexcept;
 
-  bool FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
-                           ReachResult &result_r) const;
+  [[gnu::pure]]
+  std::optional<ReachResult> FindPositiveArrival(const AGeoPoint dest,
+                                                 const RoutePolars &rpolars) const noexcept;
 
   void AcceptInRange(const GeoBounds &bounds,
-                     FlatTriangleFanVisitor &visitor) const;
+                     FlatTriangleFanVisitor &visitor) const noexcept;
 
-  int GetTerrainBase() const {
+  int GetTerrainBase() const noexcept {
     return terrain_base;
   }
 };

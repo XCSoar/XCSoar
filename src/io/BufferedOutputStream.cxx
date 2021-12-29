@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2018 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2014-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,11 +37,11 @@
 
 #ifdef _UNICODE
 #include "system/Error.hxx"
-#include <windows.h>
+#include <stringapiset.h>
 #endif
 
 bool
-BufferedOutputStream::AppendToBuffer(const void *data, size_t size) noexcept
+BufferedOutputStream::AppendToBuffer(const void *data, std::size_t size) noexcept
 {
 	auto r = buffer.Write();
 	if (r.size < size)
@@ -53,7 +53,7 @@ BufferedOutputStream::AppendToBuffer(const void *data, size_t size) noexcept
 }
 
 void
-BufferedOutputStream::Write(const void *data, size_t size)
+BufferedOutputStream::Write(const void *data, std::size_t size)
 {
 	/* try to append to the current buffer */
 	if (AppendToBuffer(data, size))
@@ -88,7 +88,7 @@ BufferedOutputStream::Format(const char *fmt, ...)
 	/* format into the buffer */
 	std::va_list ap;
 	va_start(ap, fmt);
-	size_t size = vsnprintf(r.data, r.size, fmt, ap);
+	std::size_t size = vsnprintf((char *)r.data, r.size, fmt, ap);
 	va_end(ap);
 
 	if (gcc_unlikely(size >= r.size)) {
@@ -108,7 +108,7 @@ BufferedOutputStream::Format(const char *fmt, ...)
 
 		/* format into the new buffer */
 		va_start(ap, fmt);
-		size = vsnprintf(r.data, r.size, fmt, ap);
+		size = vsnprintf((char *)r.data, r.size, fmt, ap);
 		va_end(ap);
 
 		/* this time, it must fit */
@@ -127,7 +127,8 @@ BufferedOutputStream::Write(const wchar_t *p)
 }
 
 void
-BufferedOutputStream::WriteWideToUTF8(const wchar_t *src, size_t src_length)
+BufferedOutputStream::WriteWideToUTF8(const wchar_t *src,
+				      std::size_t src_length)
 {
 	if (src_length == 0)
 		return;
@@ -139,7 +140,8 @@ BufferedOutputStream::WriteWideToUTF8(const wchar_t *src, size_t src_length)
 	}
 
 	int length = WideCharToMultiByte(CP_UTF8, 0, src, src_length,
-					 r.data, r.size, nullptr, nullptr);
+					 (char *)r.data, r.size,
+					 nullptr, nullptr);
 	if (length <= 0) {
 		const auto error = GetLastError();
 		if (error != ERROR_INSUFFICIENT_BUFFER)
@@ -153,7 +155,7 @@ BufferedOutputStream::WriteWideToUTF8(const wchar_t *src, size_t src_length)
 
 		/* grow the buffer and try again */
 		length = WideCharToMultiByte(CP_UTF8, 0, src, src_length,
-					     buffer.Write(length), length,
+					     (char *)buffer.Write(length), length,
 					     nullptr, nullptr);
 		if (length <= 0)
 			throw MakeLastError(error, "UTF-8 conversion failed");

@@ -56,7 +56,7 @@ public:
     return result;
   }
 
-  virtual void Run(OperationEnvironment &env) {
+  void Run(OperationEnvironment &env) override {
     result = T::Run(env)
       ? TriStateJobResult::SUCCESS
       : (env.IsCancelled()

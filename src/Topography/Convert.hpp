@@ -35,7 +35,7 @@ ImportRect(const rectObj r)
                             Angle::Degrees(r.miny)));
 }
 
-gcc_pure
+[[gnu::pure]]
 static inline rectObj
 ConvertRect(const GeoBounds &br)
 {

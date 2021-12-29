@@ -34,6 +34,7 @@ Copyright_License {
 enum class CoordinateFormat : uint8_t;
 class RoughTime;
 class Angle;
+struct BrokenDate;
 class ContainerWindow;
 class ActionListener;
 struct DialogLook;
@@ -61,6 +62,9 @@ class DigitEntry : public PaintWindow {
       DEGREES,
       APOSTROPHE,
       QUOTE,
+      DAY,
+      MONTH,
+      YEAR,
     };
 
     Type type;
@@ -83,14 +87,45 @@ class DigitEntry : public PaintWindow {
         type == Type::DIGIT6 ||
         type == Type::DIGIT19 ||
         type == Type::DIGIT36 ||
-        type == Type::HOUR;
+        type == Type::HOUR ||
+        type == Type::DAY ||
+        type == Type::MONTH ||
+        type == Type::YEAR;
+    }
+
+    constexpr bool NoOverflow() const {
+      return type == Type::DAY ||
+        type == Type::MONTH ||
+        type == Type::YEAR;
+
     }
 
     constexpr unsigned GetMaxNumber() const {
-      return type == Type::DIGIT6 ? 5 :
-             type == Type::HOUR ? 23 :
-             type == Type::DIGIT19 ? 18 :
-             type == Type::DIGIT36 ? 35 : 9;
+      switch (type) {
+      case Type::HOUR:
+        return 23;
+
+      case Type::DAY:
+        return 30;
+
+      case Type::MONTH:
+        return 11;
+
+      case Type::YEAR:
+        return 199;
+
+      case Type::DIGIT6:
+        return 5;
+
+      case Type::DIGIT19:
+        return 18;
+
+      case Type::DIGIT36:
+        return 35;
+
+      default:
+        return 9;
+      }
     }
 
     constexpr bool IsEditable() const {
@@ -108,8 +143,27 @@ class DigitEntry : public PaintWindow {
      * Used for calculating the pixel-based width of the column.
      */
     constexpr unsigned GetWidth() const {
-      return type == Type::UNIT ? 4 :
-             type == Type::HOUR || type == Type::DIGIT19 || type == Type::DIGIT36 ? 2 : 1;
+      switch (type) {
+      case Type::DAY:
+        return 2;
+
+      case Type::MONTH:
+        return 3;
+
+      case Type::YEAR:
+        return 5;
+
+      case Type::UNIT:
+        return 4;
+
+      case Type::HOUR:
+      case Type::DIGIT19:
+      case Type::DIGIT36:
+        return 2;
+
+      default:
+        return 1;
+      }
     }
   };
 
@@ -156,6 +210,9 @@ public:
   void CreateTime(ContainerWindow &parent, const PixelRect &rc,
                   const WindowStyle style);
 
+  void CreateDate(ContainerWindow &parent, const PixelRect &rc,
+                  const WindowStyle style);
+
   void CreateAngle(ContainerWindow &parent, const PixelRect &rc,
                    const WindowStyle style);
 
@@ -189,6 +246,7 @@ public:
   void SetValue(double value);
   void SetValue(RoughTime value);
   void SetValue(Angle value);
+  void SetValue(BrokenDate value);
 
   gcc_pure
   int GetIntegerValue() const;
@@ -201,6 +259,9 @@ public:
 
   gcc_pure
   RoughTime GetTimeValue() const;
+
+  gcc_pure
+  BrokenDate GetDateValue() const;
 
   gcc_pure
   Angle GetAngleValue() const;

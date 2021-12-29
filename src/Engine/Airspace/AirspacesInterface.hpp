@@ -24,7 +24,6 @@
 
 #include "Airspace.hpp"
 #include "Geo/Flat/BoostFlatBoundingBox.hpp"
-#include "util/SliceAllocator.hxx"
 
 #include <boost/geometry/index/rtree.hpp>
 #include <boost/range/iterator_range_core.hpp>
@@ -36,7 +35,7 @@
  */
 class AirspacesInterface {
   struct AirspaceIndexable {
-    typedef FlatBoundingBox result_type;
+    using result_type = FlatBoundingBox;
 
     result_type operator()(const Airspace &airspace) const {
       return airspace;
@@ -44,17 +43,17 @@ class AirspacesInterface {
   };
 
 public:
-  typedef std::vector<Airspace> AirspaceVector; /**< Vector of airspaces (used internally) */
+  using AirspaceVector = std::vector<Airspace>; /**< Vector of airspaces (used internally) */
 
   /**
    * Type of KD-tree data structure for airspace container
    */
-  typedef boost::geometry::index::rtree<Airspace, boost::geometry::index::rstar<16>,
-                                        AirspaceIndexable> AirspaceTree;
+  using AirspaceTree =
+    boost::geometry::index::rtree<Airspace, boost::geometry::index::rstar<16>,
+                                  AirspaceIndexable> ;
 
-  typedef AirspaceTree::const_query_iterator const_iterator;
-
-  typedef boost::iterator_range<const_iterator> const_iterator_range;
+  using const_iterator = AirspaceTree::const_query_iterator;
+  using const_iterator_range = boost::iterator_range<const_iterator>;
 };
 
 #endif

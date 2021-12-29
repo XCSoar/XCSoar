@@ -25,7 +25,10 @@ Copyright_License {
 #define XCSOAR_UI_CANVAS_GDI_GDIBITMAP_HPP
 
 #if defined(_WIN32) && defined(USE_GDI)
-#include <windows.h>
+
+#include <tchar.h>
+#include <windef.h>
+
 HBITMAP GdiLoadImage(const TCHAR* filename);
 void GdiStartup();
 void GdiShutdown();

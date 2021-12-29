@@ -73,7 +73,7 @@ RowFormWidget::LoadValue(unsigned i, double value,
   WndProperty &control = GetControl(i);
   DataFieldFloat &df = *(DataFieldFloat *)control.GetDataField();
   assert(df.GetType() == DataField::Type::REAL);
-  df.Set(Units::ToUserUnit(value, unit));
+  df.SetValue(Units::ToUserUnit(value, unit));
   df.SetUnits(Units::GetUnitName(unit));
   control.RefreshDisplay();
 }
@@ -87,7 +87,7 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
   assert(df.GetType() == DataField::Type::REAL);
 
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
-  auto new_value = df.GetAsFixed();
+  auto new_value = df.GetValue();
   auto old_value = Units::ToUserUnit(value, unit);
 
   if (fabs(new_value - old_value) < df.GetStep() / 100)
@@ -107,7 +107,7 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
   assert(df.GetType() == DataField::Type::REAL);
 
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
-  auto new_value = df.GetAsFixed();
+  auto new_value = df.GetValue();
   auto old_value = Units::ToUserUnit(value, unit);
 
   if (fabs(new_value - old_value) < df.GetStep() / 100)
@@ -129,7 +129,7 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
          df.GetType() == DataField::Type::REAL);
 
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
-  auto new_value = df.GetAsFixed();
+  auto new_value = df.GetValue();
   auto old_value = Units::ToUserUnit(value, unit);
 
   if (fabs(new_value - old_value) < df.GetStep() / 100)

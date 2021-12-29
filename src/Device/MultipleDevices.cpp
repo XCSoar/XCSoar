@@ -53,6 +53,13 @@ MultipleDevices::Tick()
 }
 
 void
+MultipleDevices::Open(OperationEnvironment &env) noexcept
+{
+  for (DeviceDescriptor *i : devices)
+    i->Open(env);
+}
+
+void
 MultipleDevices::AutoReopen(OperationEnvironment &env)
 {
   for (DeviceDescriptor *i : devices)
@@ -86,6 +93,13 @@ MultipleDevices::PutVolume(unsigned volume, OperationEnvironment &env)
 {
   for (DeviceDescriptor *i : devices)
     i->PutVolume(volume, env);
+}
+
+void
+MultipleDevices::PutPilotEvent(OperationEnvironment &env)
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutPilotEvent(env);
 }
 
 void

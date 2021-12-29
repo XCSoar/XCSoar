@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Terrain/RasterBuffer.hpp"
-#include "Math/FastMath.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -69,16 +68,16 @@ TerrainHeight
 RasterBuffer::GetInterpolated(RasterLocation p) const noexcept
 {
   // check x in range, and decompose fraction part
-  const unsigned int ix = CombinedDivAndMod(p.x);
-  if (p.x >= GetSize().x)
+  const auto [px, ix] = RasterTraits::CalcSubpixel(p.x);
+  if (px >= GetSize().x)
     return TerrainHeight::Invalid();
 
   // check y in range, and decompose fraction part
-  const unsigned int iy = CombinedDivAndMod(p.y);
-  if (p.y >= GetSize().y)
+  const auto [py, iy] = RasterTraits::CalcSubpixel(p.y);
+  if (py >= GetSize().y)
     return TerrainHeight::Invalid();
 
-  return GetInterpolated(p.x, p.y, ix, iy);
+  return GetInterpolated(px, py, ix, iy);
 }
 
 /**
@@ -148,13 +147,12 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
       (unsigned)abs(dx) < (2 * size << RasterTraits::SUBPIXEL_BITS)) {
     /* interpolate */
 
-    unsigned cy = y;
-    const unsigned int iy = CombinedDivAndMod(cy);
+    const auto [cy, iy] = RasterTraits::CalcSubpixel(y);
 
     --size;
     for (int i = 0; (unsigned)i <= size; ++i) {
-      unsigned cx = ax + (i * dx) / (int)size;
-      const unsigned int ix = CombinedDivAndMod(cx);
+      const auto [cx, ix] =
+        RasterTraits::CalcSubpixel(ax + (i * dx) / (int)size);
 
       *buffer++ = GetInterpolated(cx, cy, ix, iy);
     }
@@ -222,11 +220,10 @@ RasterBuffer::ScanLine(RasterLocation a, RasterLocation b,
     /* interpolate */
 
     for (int i = 0; (unsigned)i <= size; ++i) {
-      unsigned cx = a.x + (i * d.x) / (int)size;
-      unsigned cy = a.y + (i * d.y) / (int)size;
-
-      const unsigned int ix = CombinedDivAndMod(cx);
-      const unsigned int iy = CombinedDivAndMod(cy);
+      const auto [cx, ix] =
+        RasterTraits::CalcSubpixel(a.x + (i * d.x) / (int)size);
+      const auto [cy, iy] =
+        RasterTraits::CalcSubpixel(a.y + (i * d.y) / (int)size);
 
       *buffer++ = GetInterpolated(cx, cy, ix, iy);
     }
@@ -237,7 +234,7 @@ RasterBuffer::ScanLine(RasterLocation a, RasterLocation b,
       const RasterLocation c(a.x + (i * d.x) / (int)size,
                              a.y + (i * d.y) / (int)size);
 
-      *buffer++ = Get(c);
+      *buffer++ = Get(c >> RasterTraits::SUBPIXEL_BITS);
     }
   }
 }

@@ -30,6 +30,7 @@ Copyright_License {
 #include "time/BrokenTime.hpp"
 #include "util/CharUtil.hxx"
 #include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
 
 #include <stdlib.h>
 
@@ -91,10 +92,9 @@ IGCParseHeader(const char *line, IGCHeader &header)
 bool
 IGCParseDateRecord(const char *line, BrokenDate &date)
 {
-  if (memcmp(line, "HFDTE", 5) != 0)
+  line = StringAfterPrefix(line, "HFDTE");
+  if (line == nullptr)
     return false;
-
-  line += 5;
 
   if (strncmp(line, "DATE", 4) == 0) {
     line += 4;
@@ -159,6 +159,9 @@ IGCParseExtensions(const char *buffer, IGCExtensions &extensions)
     buffer += 2;
 
     if (!CheckThreeAlphaNumeric(buffer))
+      return false;
+
+    if (extensions.full())
       return false;
 
     IGCExtension &x = extensions.append();

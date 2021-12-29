@@ -38,6 +38,7 @@ void dlgStatusShowModal(int page);
 
 void dlgCreditsShowModal(UI::SingleWindow &parent);
 
-void dlgQuickMenuShowModal(UI::SingleWindow &parent);
+void
+dlgQuickMenuShowModal(UI::SingleWindow &parent) noexcept;
 
 #endif

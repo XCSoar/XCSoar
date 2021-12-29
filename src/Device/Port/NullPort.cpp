@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "NullPort.hpp"
 
+#include <stdexcept>
+
 #include <stdio.h>
 
 NullPort::NullPort()
@@ -36,7 +38,7 @@ NullPort::NullPort(DataHandler &_handler)
 }
 
 PortState
-NullPort::GetState() const
+NullPort::GetState() const noexcept
 {
   return PortState::READY;
 }
@@ -52,8 +54,8 @@ NullPort::Flush()
 {
 }
 
-size_t
-NullPort::Write(const void *data, size_t length)
+std::size_t
+NullPort::Write(const void *data, std::size_t length)
 {
   return length;
 }
@@ -71,31 +73,30 @@ NullPort::StartRxThread()
 }
 
 unsigned
-NullPort::GetBaudrate() const
+NullPort::GetBaudrate() const noexcept
 {
   return 0;
 }
 
-bool
-NullPort::SetBaudrate(unsigned baud_rate)
+void
+NullPort::SetBaudrate(unsigned)
 {
-  return true;
 }
 
-int
-NullPort::Read(void *Buffer, size_t Size)
+std::size_t
+NullPort::Read(void *Buffer, std::size_t Size)
 {
-  return -1;
+  return 0;
 }
 
-Port::WaitResult
+void
 NullPort::WaitRead(std::chrono::steady_clock::duration timeout)
 {
-  return WaitResult::FAILED;
+  throw std::runtime_error{"Cannot read from NullPort"};
 }
 
 bool
-NullPort::DataReceived(const void *data, size_t length) noexcept
+NullPort::DataReceived(std::span<const std::byte>) noexcept
 {
   return true;
 }

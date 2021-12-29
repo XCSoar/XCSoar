@@ -27,7 +27,6 @@ Copyright_License {
 #include "RasterProjection.hpp"
 #include "RasterTileCache.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "util/Compiler.h"
 
 class OperationEnvironment;
 
@@ -41,11 +40,11 @@ public:
   RasterMap(const RasterMap &) = delete;
   RasterMap &operator=(const RasterMap &) = delete;
 
-  RasterTileCache &GetTileCache() {
+  RasterTileCache &GetTileCache() noexcept {
     return raster_tile_cache;
   }
 
-  void UpdateProjection();
+  void UpdateProjection() noexcept;
 
   /**
    * Throws on error.
@@ -59,21 +58,21 @@ public:
    */
   void LoadCache(BufferedReader &r);
 
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
     return raster_tile_cache.IsValid();
   }
 
-  const GeoBounds &GetBounds() const {
+  const GeoBounds &GetBounds() const noexcept {
     return raster_tile_cache.GetBounds();
   }
 
-  gcc_pure
-  bool IsInside(const GeoPoint &pt) const {
+  [[gnu::pure]]
+  bool IsInside(const GeoPoint &pt) const noexcept {
     return GetBounds().IsInside(pt);
   }
 
-  gcc_pure
-  GeoPoint GetMapCenter() const {
+  [[gnu::pure]]
+  GeoPoint GetMapCenter() const noexcept {
     return GetBounds().GetCenter();
   }
 
@@ -81,16 +80,16 @@ public:
    * Determines if UpdateTerrainTiles() should be called again to
    * continue loading.
    */
-  gcc_pure
-  bool IsDirty() const {
+  [[gnu::pure]]
+  bool IsDirty() const noexcept {
     return raster_tile_cache.IsDirty();
   }
 
-  const Serial &GetSerial() const {
+  const Serial &GetSerial() const noexcept {
     return raster_tile_cache.GetSerial();
   }
 
-  const RasterProjection &GetProjection() const {
+  const RasterProjection &GetProjection() const noexcept {
     return projection;
   }
 
@@ -100,35 +99,49 @@ public:
    *
    * @see RasterProjection::CoarsePixelDistance()
    */
-  gcc_pure double
-  PixelDistance(const GeoPoint &location, unsigned pixels) const {
+  [[gnu::pure]] double
+  PixelDistance(const GeoPoint &location, unsigned pixels) const noexcept {
     return projection.CoarsePixelDistance(location, pixels);
   }
 
   /**
    * Determine the non-interpolated height at the specified location.
    */
-  gcc_pure
-  TerrainHeight GetHeight(const GeoPoint &location) const;
+  [[gnu::pure]]
+  TerrainHeight GetHeight(const GeoPoint &location) const noexcept;
 
   /**
    * Determine the interpolated height at the specified location.
    */
-  gcc_pure
-  TerrainHeight GetInterpolatedHeight(const GeoPoint &location) const;
+  [[gnu::pure]]
+  TerrainHeight GetInterpolatedHeight(const GeoPoint &location) const noexcept;
 
   /**
    * Scan a straight line and fill the buffer with the specified
    * number of samples along the line.
    */
   void ScanLine(const GeoPoint &start, const GeoPoint &end,
-                TerrainHeight *buffer, unsigned size, bool interpolate) const;
+                TerrainHeight *buffer, unsigned size,
+                bool interpolate) const noexcept;
 
-  gcc_pure
-  bool FirstIntersection(const GeoPoint &origin, int h_origin,
-                         const GeoPoint &destination, int h_destination,
-                         int h_virt, int h_ceiling, int h_safety,
-                         GeoPoint& intx, int &h) const;
+  struct Intersection {
+    GeoPoint location;
+    int height;
+
+    constexpr operator bool() const noexcept {
+      return location.IsValid();
+    }
+
+    static constexpr Intersection Invalid() noexcept {
+      return {GeoPoint::Invalid(), 0};
+    }
+  };
+
+  [[gnu::pure]]
+  Intersection FirstIntersection(const GeoPoint &origin, int h_origin,
+                                 const GeoPoint &destination,
+                                 int h_destination,
+                                 int h_virt, int h_ceiling, int h_safety) const noexcept;
 
   /**
    * Find location where aircraft hits the ground or height_floor
@@ -144,12 +157,11 @@ public:
    * @return location of intersection, or GeoPoint::Invalid() if none
    * was found
    */
-  gcc_pure
-  GeoPoint Intersection(const GeoPoint& origin,
-                        int h_origin, int h_glide,
-                        const GeoPoint& destination,
-                        const int height_floor) const;
-
+  [[gnu::pure]]
+  GeoPoint GroundIntersection(const GeoPoint &origin,
+                              int h_origin, int h_glide,
+                              const GeoPoint &destination,
+                              const int height_floor) const noexcept;
 };
 
 

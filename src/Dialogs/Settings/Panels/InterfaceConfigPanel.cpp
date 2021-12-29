@@ -38,6 +38,8 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Hardware/Vibrator.hpp"
 
+using namespace std::chrono;
+
 enum ControlIndex {
   UIScale,
   CustomDPI,
@@ -108,7 +110,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
       _stprintf(buffer, _("%d dpi"), *dpi);
       df.AddChoice(*dpi, buffer);
     }
-    df.Set(settings.custom_dpi);
+    df.SetValue(settings.custom_dpi);
     wp_dpi->RefreshDisplay();
   }
   SetExpertRow(CustomDPI);
@@ -146,24 +148,25 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
 
     auto value_buffer = Profile::GetPath(ProfileKeys::LanguageFile);
     Path value = value_buffer;
-    if (value.IsNull())
+    if (value == nullptr)
       value = Path(_T(""));
 
     if (value == Path(_T("none")))
-      df.Set(1);
+      df.SetValue(1);
     else if (!value.IsEmpty() && value != Path(_T("auto"))) {
       const Path base = value.GetBase();
       if (base != nullptr)
-        df.Set(base.c_str());
+        df.SetValue(base.c_str());
     }
     wp->RefreshDisplay();
   }
 #endif /* !HAVE_NATIVE_GETTEXT */
 
-  AddTime(_("Menu timeout"),
-          _("This determines how long menus will appear on screen if the user does not make any button "
-            "presses or interacts with the computer."),
-          1, 60, 1, settings.menu_timeout / 2);
+  AddDuration(_("Menu timeout"),
+              _("This determines how long menus will appear on screen if the user does not make any button "
+                "presses or interacts with the computer."),
+              seconds{1}, minutes{1}, seconds{1},
+              settings.menu_timeout / 2);
   SetExpertRow(MenuTimeout);
 
   static constexpr StaticEnumChoice text_input_list[] = {
@@ -244,7 +247,7 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
     default:
       new_value = df.GetAsString();
       buffer = ContractLocalPath(Path(new_value));
-      if (!buffer.IsNull())
+      if (buffer != nullptr)
         new_value = buffer.c_str();
       new_base = Path(new_value).GetBase().c_str();
       if (new_base == nullptr)
@@ -260,7 +263,7 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
   }
 #endif
 
-  unsigned menu_timeout = GetValueInteger(MenuTimeout) * 2;
+  duration<unsigned> menu_timeout{GetValueInteger(MenuTimeout) * 2};
   if (settings.menu_timeout != menu_timeout) {
     settings.menu_timeout = menu_timeout;
     Profile::Set(ProfileKeys::MenuTimeout, menu_timeout);

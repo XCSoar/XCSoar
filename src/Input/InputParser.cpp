@@ -96,7 +96,7 @@ struct EventBuilder {
       if (location > 0) {
         // Only copy this once per object - save string space
         if (!new_label) {
-          new_label = UnescapeBackslash(label);
+          new_label = UnescapeBackslash(label.c_str());
         }
 
         config.AppendMenu(mode_id, new_label, location, event_id);
@@ -165,7 +165,7 @@ struct EventBuilder {
 void
 ParseInputFile(InputConfig &config, TLineReader &reader)
 {
-  // TODO code - Safer sizes, strings etc - use C++ (can scanf restrict length?)
+  // TODO code - Safer sizes, strings etc - use C++
 
   // Multiple modes (so large string)
   EventBuilder current;
@@ -205,52 +205,35 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
       } else if (StringIsEqual(key, _T("data"))) {
         current.data = value;
       } else if (StringIsEqual(key, _T("event"))) {
-        if (_tcslen(value) < 256) {
-          TCHAR d_event[256] = _T("");
-          TCHAR d_misc[256] = _T("");
-          int ef;
+        const TStringView v{value};
+        const auto [d_event, d_misc] = v.Split(' ');
 
-          #if defined(__BORLANDC__)
-          memset(d_event, 0, sizeof(d_event));
-          memset(d_misc, 0, sizeof(d_event));
-          if (StringFind(value, ' ') == nullptr) {
-            _tcscpy(d_event, value);
-          } else {
-          #endif
-
-          ef = _stscanf(value, _T("%[^ ] %[A-Za-z0-9_ \\/().,-]"), d_event,
-              d_misc);
-
-          #if defined(__BORLANDC__)
-          }
-          #endif
-
-          if ((ef == 1) || (ef == 2)) {
-
-            // TODO code: Consider reusing existing identical events
-
-            pt2Event event = InputEvents::findEvent(d_event);
-            if (event) {
-              TCHAR *allocated = UnescapeBackslash(d_misc);
-              current.event_id = config.AppendEvent(event, allocated,
-                                                    current.event_id);
-
-              /* not freeing the string, because
-                 InputConfig::AppendEvent() stores the string point
-                 without duplicating it; strictly speaking, this is a
-                 memory leak, but the input file is only loaded once
-                 at startup, so this is acceptable; in return, we
-                 don't have to duplicate the hard-coded defaults,
-                 which saves some memory */
-              //free(allocated);
-
-            } else {
-              LogFormat(_T("Invalid event type: %s at %i"), d_event, line);
-            }
-          } else {
-            LogFormat("Invalid event type at %i", line);
-          }
+        if (d_event.empty()) {
+          LogFormat("Invalid event type at %i", line);
+          continue;
         }
+
+        // TODO code: Consider reusing existing identical events
+
+        pt2Event event = InputEvents::findEvent(d_event);
+        if (!event) {
+          LogFormat(_T("Invalid event type: %.*s at %i"),
+                    int(d_event.size), d_event.data, line);
+          continue;
+        }
+
+        TCHAR *allocated = UnescapeBackslash(d_misc);
+        current.event_id = config.AppendEvent(event, allocated,
+                                              current.event_id);
+
+        /* not freeing the string, because
+           InputConfig::AppendEvent() stores the string point
+           without duplicating it; strictly speaking, this is a
+           memory leak, but the input file is only loaded once
+           at startup, so this is acceptable; in return, we
+           don't have to duplicate the hard-coded defaults,
+           which saves some memory */
+        //free(allocated);
       } else if (StringIsEqual(key, _T("label"))) {
         current.label = value;
       } else if (StringIsEqual(key, _T("location"))) {

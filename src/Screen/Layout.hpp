@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_LAYOUT_HPP
 
 #include "ui/dim/Size.hpp"
-#include "util/Compiler.h"
 
 namespace Layout
 {
@@ -100,14 +99,14 @@ ScaleSupported() noexcept
 /**
  * Is scaling enabled currently?
  */
-gcc_const
+[[gnu::const]]
 static inline bool
 ScaleEnabled() noexcept
 {
   return ScaleSupported() && scale_1024 > 1024;
 }
 
-gcc_const
+[[gnu::const]]
 static inline int
 Scale(int x) noexcept
 {
@@ -117,7 +116,7 @@ Scale(int x) noexcept
   return (x * int(scale_1024)) >> 10;
 }
 
-gcc_const
+[[gnu::const]]
 static inline unsigned
 Scale(unsigned x) noexcept
 {
@@ -127,7 +126,7 @@ Scale(unsigned x) noexcept
   return (x * scale_1024) >> 10;
 }
 
-gcc_const
+[[gnu::const]]
 static inline long
 Scale(long x) noexcept
 {
@@ -137,7 +136,17 @@ Scale(long x) noexcept
   return (x * long(scale_1024)) >> 10;
 }
 
-gcc_const
+[[gnu::const]]
+static inline double
+Scale(double x) noexcept
+{
+  if constexpr (!ScaleSupported())
+    return x;
+
+  return x * (Layout::scale_1024 / 1024.);
+}
+
+[[gnu::const]]
 static inline PixelSize
 Scale(PixelSize size) noexcept
 {
@@ -147,7 +156,7 @@ Scale(PixelSize size) noexcept
   return {Scale(size.width), Scale(size.height)};
 }
 
-gcc_const
+[[gnu::const]]
 static inline int
 FastScale(int x) noexcept
 {
@@ -157,7 +166,7 @@ FastScale(int x) noexcept
   return x * int(scale);
 }
 
-gcc_const
+[[gnu::const]]
 static inline unsigned
 FastScale(unsigned x) noexcept
 {
@@ -167,7 +176,7 @@ FastScale(unsigned x) noexcept
   return x * scale;
 }
 
-gcc_const
+[[gnu::const]]
 static inline long
 FastScale(long x) noexcept
 {
@@ -177,7 +186,7 @@ FastScale(long x) noexcept
   return x * (long)scale;
 }
 
-gcc_const
+[[gnu::const]]
 static inline unsigned
 ScalePenWidth(unsigned width) noexcept
 {
@@ -187,7 +196,7 @@ ScalePenWidth(unsigned width) noexcept
   return (width * pen_width_scale) >> 10;
 }
 
-gcc_const
+[[gnu::const]]
 static inline unsigned
 ScaleFinePenWidth(unsigned width) noexcept
 {
@@ -202,7 +211,7 @@ ScaleFinePenWidth(unsigned width) noexcept
  *
  * Use this if you need exact physical dimensions.
  */
-gcc_const
+[[gnu::const]]
 static inline unsigned
 PtScale(unsigned pt) noexcept
 {
@@ -216,7 +225,7 @@ PtScale(unsigned pt) noexcept
  *
  * Use this for best readability of on-screen objects.
  */
-gcc_const
+[[gnu::const]]
 static inline unsigned
 VptScale(unsigned pt) noexcept
 {
@@ -228,7 +237,7 @@ VptScale(unsigned pt) noexcept
  * scaling factors may be applied to consider small screens
  * (i.e. viewing distance) and user preference.
  */
-gcc_const
+[[gnu::const]]
 static inline unsigned
 FontScale(unsigned spt) noexcept
 {
@@ -241,14 +250,14 @@ FontScale(unsigned spt) noexcept
  * the pixel width "x" and the pixel height "ScaleY(x)" shall be a
  * circle.
  */
-gcc_const
+[[gnu::const]]
 static inline int
 ScaleY(int y) noexcept
 {
   return y;
 }
 
-gcc_const
+[[gnu::const]]
 static inline unsigned
 GetTextPadding() noexcept
 {
@@ -261,7 +270,7 @@ GetTextPadding() noexcept
 /**
  * Returns the minimum height of an dialog control.
  */
-gcc_pure
+[[gnu::pure]]
 static inline unsigned
 GetMinimumControlHeight() noexcept
 {
@@ -271,7 +280,7 @@ GetMinimumControlHeight() noexcept
 /**
  * Returns the maximum useful height of a dialog control.
  */
-gcc_pure
+[[gnu::pure]]
 static inline unsigned
 GetMaximumControlHeight() noexcept
 {
@@ -282,7 +291,7 @@ GetMaximumControlHeight() noexcept
  * Returns the radius (in pixels) of the hit circle around map
  * items.
  */
-gcc_pure
+[[gnu::pure]]
 static inline unsigned
 GetHitRadius() noexcept
 {

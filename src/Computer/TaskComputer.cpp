@@ -34,6 +34,7 @@ Copyright_License {
 #include <algorithm>
 
 using std::max;
+using namespace std::chrono;
 
 // JMW TODO: abstract up to higher layer so a base copy of this won't
 // call any event
@@ -140,7 +141,7 @@ Predicted(const ContestSettings &settings,
   /* predict that the next task point will be reached, using the
      calculated remaining time and the minimum arrival altitude */
   return TracePoint(current_leg.location_remaining,
-                    unsigned(basic.time + current_leg.time_remaining_now),
+                    (basic.time + current_leg.time_remaining_now).Cast<duration<unsigned>>(),
                     current_leg.solution_remaining.min_arrival_altitude,
                     0, 0);
 }

@@ -50,21 +50,21 @@ public:
 
 protected:
   bool SendCommand(uint8_t cmd);
-  bool SendSetBaudrate(unsigned baud_rate);
+  void SendSetBaudrate(unsigned baud_rate);
 
 public:
   /* virtual methods from Port */
-  PortState GetState() const override;
+  PortState GetState() const noexcept override;
   bool WaitConnected(OperationEnvironment &env) override;
-  size_t Write(const void *data, size_t length) override;
+  std::size_t Write(const void *data, std::size_t length) override;
   bool Drain() override;
   void Flush() override;
-  bool SetBaudrate(unsigned baud_rate) override;
-  unsigned GetBaudrate() const override;
+  void SetBaudrate(unsigned baud_rate) override;
+  unsigned GetBaudrate() const noexcept override;
   bool StopRxThread() override;
   bool StartRxThread() override;
-  int Read(void *Buffer, size_t Size) override;
-  WaitResult WaitRead(std::chrono::steady_clock::duration timeout) override;
+  std::size_t Read(void *Buffer, std::size_t Size) override;
+  void WaitRead(std::chrono::steady_clock::duration timeout) override;
 };
 
 #endif

@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_IO_LINE_READER_HPP
 #define XCSOAR_IO_LINE_READER_HPP
 
-#include "util/Compiler.h"
-
 #include <tchar.h>
 
 template<class T>
@@ -48,7 +46,7 @@ public:
    * Determins the size of the file.  Returns -1 if the size is
    * unknown.
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual long GetSize() const {
     return -1;
   }
@@ -57,7 +55,7 @@ public:
    * Determins the current position within the file.  Returns -1 if
    * this is unknown.
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual long Tell() const {
     return -1;
   }

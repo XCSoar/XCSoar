@@ -38,12 +38,13 @@ GroundSpeedComputer::Compute(NMEAInfo &basic)
   }
 
   if (!last_location_available)
-    delta_time.Update(basic.time, 0, 0);
+    delta_time.Update(basic.time, {}, {});
   else if (basic.location_available.Modified(last_location_available)) {
-    const auto dt = delta_time.Update(basic.time, 0.2, 5);
-    if (dt > 0) {
+    const auto dt = delta_time.Update(basic.time, FloatDuration{0.2},
+                                      std::chrono::seconds{5});
+    if (dt.count() > 0) {
       auto distance = basic.location.DistanceS(last_location);
-      basic.ground_speed = distance / dt;
+      basic.ground_speed = distance / dt.count();
       basic.ground_speed_available = basic.location_available;
     }
   }

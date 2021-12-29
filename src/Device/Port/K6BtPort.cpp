@@ -40,7 +40,7 @@ K6BtPort::SendCommand(uint8_t cmd)
 }
 
 PortState
-K6BtPort::GetState() const
+K6BtPort::GetState() const noexcept
 {
   return port->GetState();
 }
@@ -63,28 +63,27 @@ K6BtPort::WaitConnected(OperationEnvironment &env)
   return true;
 }
 
-size_t
-K6BtPort::Write(const void *_data, size_t length)
+std::size_t
+K6BtPort::Write(const void *_data, std::size_t length)
 {
   /* in order to forward the buffer verbatim to the real device, we
      have to escape all ESCAPE bytes (i.e. send each of them twice) */
 
   const uint8_t *data = (const uint8_t *)_data;
 
-  size_t total = 0;
+  std::size_t total = 0;
 
   const uint8_t *p;
   while ((p = (const uint8_t *)memchr(data, ESCAPE, length)) != nullptr) {
-    size_t chunk = p - data + 1;
-    size_t nbytes = port->Write(data, chunk);
+    std::size_t chunk = p - data + 1;
+    std::size_t nbytes = port->Write(data, chunk);
     total += nbytes;
     if (nbytes != chunk)
       return total;
 
     /* write the ESCAPE byte again (but don't consider it in the
        return value) */
-    if (port->Write(p, 1) != 1)
-      return total;
+    port->Write(p, 1);
 
     ++p;
 
@@ -112,9 +111,8 @@ K6BtPort::Flush()
   SendCommand(FLUSH_BUFFERS | 0x3); /* flush RX and TX buffer */
 }
 
-gcc_const
-static int
-BaudRateToK6Bt(unsigned baud_rate)
+static constexpr int
+BaudRateToK6Bt(unsigned baud_rate) noexcept
 {
   switch (baud_rate) {
   case 2400:
@@ -143,32 +141,29 @@ BaudRateToK6Bt(unsigned baud_rate)
   }
 }
 
-bool
+void
 K6BtPort::SendSetBaudrate(unsigned _baud_rate)
 {
   int code = BaudRateToK6Bt(_baud_rate);
   if (code < 0)
-    /* not supported by K6Bt */
-    return false;
+    throw std::runtime_error("Baud rate not supported by K6Bt");
 
-  return SendCommand(CHANGE_BAUD_RATE | code);
+  if (!SendCommand(CHANGE_BAUD_RATE | code))
+    throw std::runtime_error("Failed to send CHANGE_BAUD_RATE to K6Bt");
 }
 
-bool
+void
 K6BtPort::SetBaudrate(unsigned _baud_rate)
 {
   if (_baud_rate == baud_rate)
-    return true;
+    return;
 
-  if (!SendSetBaudrate(_baud_rate))
-    return false;
-
+  SendSetBaudrate(_baud_rate);
   baud_rate = _baud_rate;
-  return true;
 }
 
 unsigned
-K6BtPort::GetBaudrate() const
+K6BtPort::GetBaudrate() const noexcept
 {
   return baud_rate;
 }
@@ -185,14 +180,14 @@ K6BtPort::StartRxThread(void)
   return port->StartRxThread();
 }
 
-int
-K6BtPort::Read(void *Buffer, size_t Size)
+std::size_t
+K6BtPort::Read(void *Buffer, std::size_t Size)
 {
   return port->Read(Buffer, Size);
 }
 
-Port::WaitResult
+void
 K6BtPort::WaitRead(std::chrono::steady_clock::duration timeout)
 {
-  return port->WaitRead(timeout);
+  port->WaitRead(timeout);
 }

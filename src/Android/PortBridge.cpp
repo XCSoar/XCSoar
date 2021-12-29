@@ -24,11 +24,12 @@ Copyright_License {
 #include "PortBridge.hpp"
 #include "NativePortListener.hpp"
 #include "NativeInputListener.hpp"
+#include "java/Array.hxx"
 #include "java/Class.hxx"
+#include "java/Exception.hxx"
 
 #include <string.h>
 
-jmethodID PortBridge::close_method;
 jmethodID PortBridge::setListener_method;
 jmethodID PortBridge::setInputListener_method;
 jmethodID PortBridge::getState_method;
@@ -42,7 +43,6 @@ PortBridge::Initialise(JNIEnv *env)
 {
   Java::Class cls(env, "org/xcsoar/AndroidPort");
 
-  close_method = env->GetMethodID(cls, "close", "()V");
   setListener_method = env->GetMethodID(cls, "setListener",
                                         "(Lorg/xcsoar/PortListener;)V");
   setInputListener_method = env->GetMethodID(cls, "setInputListener",
@@ -55,45 +55,44 @@ PortBridge::Initialise(JNIEnv *env)
 }
 
 PortBridge::PortBridge(JNIEnv *env, jobject obj)
-  :Java::GlobalObject(env, obj) {
-  write_buffer.Set(env, env->NewByteArray(write_buffer_size));
+  :Java::GlobalCloseable(env, obj),
+   write_buffer(env, env->NewByteArray(write_buffer_size))
+{
 }
 
 void
 PortBridge::setListener(JNIEnv *env, PortListener *_listener)
 {
-  jobject listener = _listener != nullptr
-    ? NativePortListener::Create(env, *_listener)
-    : nullptr;
+  auto listener = _listener != nullptr
+    ? Java::LocalObject{env, NativePortListener::Create(env, *_listener)}
+    : Java::LocalObject{};
 
-  env->CallVoidMethod(Get(), setListener_method, listener);
-
-  if (listener != nullptr)
-    env->DeleteLocalRef(listener);
+  env->CallVoidMethod(Get(), setListener_method, listener.Get());
 }
 
 void
 PortBridge::setInputListener(JNIEnv *env, DataHandler *handler)
 {
-  jobject listener = handler != nullptr
-    ? NativeInputListener::Create(env, *handler)
-    : nullptr;
+  auto listener = handler != nullptr
+    ? Java::LocalObject{env, NativeInputListener::Create(env, *handler)}
+    : Java::LocalObject{};
 
-  env->CallVoidMethod(Get(), setInputListener_method, listener);
-
-  if (listener != nullptr)
-    env->DeleteLocalRef(listener);
+  env->CallVoidMethod(Get(), setInputListener_method, listener.Get());
 }
 
-int
+std::size_t
 PortBridge::write(JNIEnv *env, const void *data, size_t length)
 {
   if (length > write_buffer_size)
     length = write_buffer_size;
 
-  jbyte *dest = env->GetByteArrayElements(write_buffer, nullptr);
-  memcpy(dest, data, length);
-  env->ReleaseByteArrayElements(write_buffer, dest, 0);
+  memcpy(Java::ByteArrayElements{env, write_buffer}.get(), data, length);
 
-  return env->CallIntMethod(Get(), write_method, write_buffer.Get(), length);
+  int nbytes = env->CallIntMethod(Get(), write_method,
+                                  write_buffer.Get(), length);
+  Java::RethrowException(env);
+  if (nbytes <= 0)
+    throw std::runtime_error{"Port write failed"};
+
+  return (std::size_t)nbytes;
 }

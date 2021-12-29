@@ -45,7 +45,7 @@ BlueFlyDevice::BlueFlySettings::Parse(StringView name, unsigned long value)
     output_mode = value;
 }
 
-bool
+void
 BlueFlyDevice::WriteDeviceSetting(const char *name, int value,
                                   OperationEnvironment &env)
 {
@@ -54,10 +54,10 @@ BlueFlyDevice::WriteDeviceSetting(const char *name, int value,
   assert(strlen(name) == 3);
 
   sprintf(buffer, "%s %d", name, value);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
 }
 
-bool
+void
 BlueFlyDevice::RequestSettings(OperationEnvironment &env)
 {
   {
@@ -65,7 +65,7 @@ BlueFlyDevice::RequestSettings(OperationEnvironment &env)
     settings_ready = false;
   }
 
-  return PortWriteNMEA(port, "BST", env);
+  PortWriteNMEA(port, "BST", env);
 }
 
 bool

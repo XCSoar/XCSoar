@@ -31,7 +31,8 @@ Copyright_License {
 #include <cassert>
 
 #ifdef USE_WINUSER
-#include <windows.h>
+#include <windef.h> // for HWND (needed by winuser.h)
+#include <winuser.h>
 #else
 #include <boost/intrusive/list_hook.hpp>
 #endif

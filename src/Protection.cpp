@@ -119,21 +119,23 @@ void
 SuspendAllThreads()
 {
   assert(CommonInterface::main_window != nullptr);
-  assert(calculation_thread != nullptr);
 
   /* not suspending MergeThread, because it does not access shared
      unprotected data structures */
 
   CommonInterface::main_window->SuspendThreads();
-  calculation_thread->Suspend();
+
+  if (calculation_thread != nullptr)
+    calculation_thread->Suspend();
 }
 
 void
 ResumeAllThreads()
 {
-  assert(calculation_thread != nullptr);
   assert(CommonInterface::main_window != nullptr);
 
-  calculation_thread->Resume();
+  if (calculation_thread != nullptr)
+    calculation_thread->Resume();
+
   CommonInterface::main_window->ResumeThreads();
 }

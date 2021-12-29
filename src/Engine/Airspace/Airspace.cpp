@@ -24,21 +24,15 @@
 #include "AbstractAirspace.hpp"
 #include "AirspaceIntersectionVector.hpp"
 
-void
-Airspace::Destroy()
-{
-  delete airspace;
-}
-
-Airspace::Airspace(AbstractAirspace &airspace,
-                   const FlatProjection &tp)
-  :FlatBoundingBox(airspace.GetBoundingBox(tp)),
-   airspace(&airspace)
+Airspace::Airspace(AirspacePtr _airspace,
+                   const FlatProjection &tp) noexcept
+  :FlatBoundingBox(_airspace->GetBoundingBox(tp)),
+   airspace(std::move(_airspace))
 {
 }
 
 bool
-Airspace::IsInside(const AircraftState &loc) const
+Airspace::IsInside(const AircraftState &loc) const noexcept
 {
   assert(airspace != nullptr);
   return airspace->Inside(loc);
@@ -46,7 +40,7 @@ Airspace::IsInside(const AircraftState &loc) const
 
 
 bool
-Airspace::IsInside(const GeoPoint &loc) const
+Airspace::IsInside(const GeoPoint &loc) const noexcept
 {
   assert(airspace != nullptr);
   return airspace->Inside(loc);
@@ -54,42 +48,42 @@ Airspace::IsInside(const GeoPoint &loc) const
 
 AirspaceIntersectionVector
 Airspace::Intersects(const GeoPoint &g1, const GeoPoint &end,
-                     const FlatProjection &projection) const
+                     const FlatProjection &projection) const noexcept
 {
   assert(airspace != nullptr);
   return airspace->Intersects(g1, end, projection);
 }
 
 void
-Airspace::SetGroundLevel(const double alt) const
+Airspace::SetGroundLevel(const double alt) const noexcept
 {
   assert(airspace != nullptr);
   airspace->SetGroundLevel(alt);
 }
 
 bool
-Airspace::NeedGroundLevel() const
+Airspace::NeedGroundLevel() const noexcept
 {
   assert(airspace != nullptr);
   return airspace->NeedGroundLevel();
 }
 
 void
-Airspace::SetFlightLevel(const AtmosphericPressure &press) const
+Airspace::SetFlightLevel(const AtmosphericPressure &press) const noexcept
 {
   assert(airspace != nullptr);
   airspace->SetFlightLevel(press);
 }
 
 void
-Airspace::SetActivity(const AirspaceActivity mask) const
+Airspace::SetActivity(const AirspaceActivity mask) const noexcept
 {
   assert(airspace != nullptr);
   airspace->SetActivity(mask);
 }
 
 void
-Airspace::ClearClearance() const
+Airspace::ClearClearance() const noexcept
 {
   assert(airspace != nullptr);
   airspace->ClearClearance();

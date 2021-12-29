@@ -86,6 +86,8 @@ public:
 private:
   /* methods from DataFieldListener */
   void OnModified(DataField &df) noexcept override;
+
+  unsigned int FindClosestTrackingInterval(unsigned int) noexcept;
 };
 
 #ifdef HAVE_SKYLINES_TRACKING
@@ -126,13 +128,13 @@ TrackingConfigPanel::OnModified(DataField &df) noexcept
 #ifdef HAVE_SKYLINES_TRACKING
   if (IsDataField(SL_ENABLED, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    SetSkyLinesEnabled(dfb.GetAsBoolean());
+    SetSkyLinesEnabled(dfb.GetValue());
     return;
   }
 
   if (IsDataField(SL_TRAFFIC_ENABLED, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    SetRowEnabled(SL_NEAR_TRAFFIC_ENABLED, dfb.GetAsBoolean());
+    SetRowEnabled(SL_NEAR_TRAFFIC_ENABLED, dfb.GetValue());
     return;
   }
 #endif
@@ -140,12 +142,12 @@ TrackingConfigPanel::OnModified(DataField &df) noexcept
 #ifdef HAVE_LIVETRACK24
   if (IsDataField(LT24_ENABLED, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    SetLiveTrack24Enabled(dfb.GetAsBoolean());
+    SetLiveTrack24Enabled(dfb.GetValue());
   }
 #endif
 }
 
-#ifdef HAVE_SKYLINES_TRACKING
+#if (defined HAVE_SKYLINES_TRACKING || defined HAVE_LIVETRACK24)
 
 static constexpr StaticEnumChoice tracking_intervals[] = {
   { 1, _T("1 sec") },
@@ -164,6 +166,10 @@ static constexpr StaticEnumChoice tracking_intervals[] = {
   { 600, _T("10 min") },
   { 900, _T("15 min") },
   { 1200, _T("20 min") },
+  { 1800, _T("30 min") },
+  { 2400, _T("40 min") },
+  { 3000, _T("50 min") },
+  { 3600, _T("60 min") },
   { 0 },
 };
 
@@ -204,7 +210,7 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexc
   AddBoolean(_T("Roaming"), nullptr, settings.skylines.roaming, this);
 #endif
   AddEnum(_("Tracking Interval"), nullptr, tracking_intervals,
-          settings.skylines.interval);
+          FindClosestTrackingInterval(settings.skylines.interval));
 
   AddBoolean(_("Track friends"),
              _("Download the position of your friends live from the SkyLines server."),
@@ -229,7 +235,8 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexc
 #ifdef HAVE_LIVETRACK24
   AddBoolean(_T("LiveTrack24"),  _T(""), settings.livetrack24.enabled, this);
 
-  AddTime(_("Tracking Interval"), _T(""), 5, 3600, 5, settings.livetrack24.interval);
+  AddEnum(_("Tracking Interval"), nullptr, tracking_intervals, 
+          FindClosestTrackingInterval(settings.livetrack24.interval));
 
   AddEnum(_("Vehicle Type"), _("Type of vehicle used."), vehicle_type_list,
           (unsigned) settings.livetrack24.vehicleType);
@@ -237,7 +244,7 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexc
           settings.livetrack24.vehicle_name);
 
   WndProperty *edit = AddEnum(_("Server"), _T(""), server_list, 0);
-  ((DataFieldEnum *)edit->GetDataField())->Set(settings.livetrack24.server);
+  ((DataFieldEnum *)edit->GetDataField())->SetValue(settings.livetrack24.server);
   edit->RefreshDisplay();
 
   AddText(_("Username"), _T(""), settings.livetrack24.username);
@@ -325,6 +332,22 @@ TrackingConfigPanel::Save(bool &_changed) noexcept
   _changed |= changed;
 
   return true;
+}
+
+unsigned int
+TrackingConfigPanel::FindClosestTrackingInterval(unsigned int value) noexcept
+{
+  unsigned int closest_value = 0;
+  int closest_diff = INT_MAX;
+  
+  for (const StaticEnumChoice *p = tracking_intervals; p->display_string != nullptr; ++p) {
+    int diff = abs(static_cast<int>(value) - static_cast<int>(p->id));
+    if (diff < closest_diff) {
+      closest_diff = diff;
+      closest_value = p->id;
+    }
+  }
+  return closest_value;
 }
 
 std::unique_ptr<Widget>

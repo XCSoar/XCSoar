@@ -38,41 +38,46 @@ class OperationEnvironment;
  *
  * @note IMI driver methods are based on the source code provided by Juraj Rojko from IMI-Gliding.
  */
-namespace IMI
-{
-  /**
-   * @brief Connects to the device
-   *
-   * @param port Device handle
-   *
-   * @return Operation status
-   */
-  bool Connect(Port &port, OperationEnvironment &env);
+namespace IMI {
 
-  /**
-   * @brief Sends task declaration
-   *
-   * @param port Device handle
-   * @param decl Task declaration data
-   *
-   * @return Operation status
-   */
-  bool DeclarationWrite(Port &port, const Declaration &decl,
-                        OperationEnvironment &env);
+/**
+ * @brief Connects to the device
+ *
+ * @param port Device handle
+ *
+ * @return Operation status
+ */
+bool
+Connect(Port &port, OperationEnvironment &env);
 
-  bool ReadFlightList(Port &port, RecordedFlightList &flight_list,
-                      OperationEnvironment &env);
+/**
+ * @brief Sends task declaration
+ *
+ * @param port Device handle
+ * @param decl Task declaration data
+ */
+void
+DeclarationWrite(Port &port, const Declaration &decl,
+                 OperationEnvironment &env);
 
-  bool FlightDownload(Port &port, const RecordedFlightInfo &flight,
-                      Path path, OperationEnvironment &env);
-  /**
-   * @brief Disconnects from the device
-   *
-   * @param port Device handle
-   *
-   * @return Operation status
-   */
-  bool Disconnect(Port &port, OperationEnvironment &env);
-};
+bool
+ReadFlightList(Port &port, RecordedFlightList &flight_list,
+               OperationEnvironment &env);
+
+bool
+FlightDownload(Port &port, const RecordedFlightInfo &flight,
+               Path path, OperationEnvironment &env);
+
+/**
+ * @brief Disconnects from the device
+ *
+ * Throws on error or cancellation.
+ *
+ * @param port Device handle
+ */
+void
+Disconnect(Port &port, OperationEnvironment &env);
+
+} // namespace IMI
 
 #endif

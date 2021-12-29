@@ -41,16 +41,14 @@ RasterProjection::Set(const GeoBounds &bounds,
 
 double
 RasterProjection::FinePixelDistance(const GeoPoint &location,
-                                    unsigned pixels) const
+                                    unsigned pixels) const noexcept
 {
-  enum {
-    /**
-     * This factor is used to reduce fixed point rounding errors.
-     * x_scale and y_scale are quite large numbers, and building their
-     * reciprocals may lose a lot of precision.
-     */
-    FACTOR = 256,
-  };
+  /**
+   * This factor is used to reduce fixed point rounding errors.
+   * x_scale and y_scale are quite large numbers, and building their
+   * reciprocals may lose a lot of precision.
+   */
+  constexpr double FACTOR = 256;
 
   // must have called Set() first otherwise this is invalid
   assert(x_scale != 0);
@@ -68,7 +66,7 @@ RasterProjection::FinePixelDistance(const GeoPoint &location,
 }
 
 unsigned
-RasterProjection::DistancePixelsFine(double distance) const
+RasterProjection::DistancePixelsFine(double distance) const noexcept
 {
   Angle angle = Angle::Radians(distance / FAISphere::REARTH);
   return AngleToHeight(angle);

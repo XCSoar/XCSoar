@@ -36,7 +36,6 @@ Copyright_License {
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
-#include "util/TrivialArray.hxx"
 #include "util/Macros.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -45,26 +44,27 @@ Copyright_License {
 #include "util/Compiler.h"
 #include "Audio/Sound.hpp"
 
+#include <algorithm>
 #include <cassert>
+#include <vector>
+
 #include <stdio.h>
 
 struct WarningItem
 {
-  const AbstractAirspace *airspace;
+  ConstAirspacePtr airspace;
   AirspaceWarning::State state;
   AirspaceInterceptSolution solution;
   bool ack_expired, ack_day;
 
-  WarningItem() = default;
-
   WarningItem(const AirspaceWarning &warning)
-    :airspace(&warning.GetAirspace()),
+    :airspace(warning.GetAirspacePtr()),
      state(warning.GetWarningState()),
      solution(warning.GetSolution()),
      ack_expired(warning.IsAckExpired()), ack_day(warning.GetAckDay()) {}
 
   bool operator==(const AbstractAirspace &other) const {
-    return &other == airspace;
+    return &other == airspace.get();
   }
 };
 
@@ -79,12 +79,12 @@ class AirspaceWarningListWidget final
   Button *ack_day_button;
   Button *enable_button;
 
-  TrivialArray<WarningItem, 64u> warning_list;
+  std::vector<WarningItem> warning_list;
 
   /**
    * Current list cursor airspace.
    */
-  const AbstractAirspace *selected_airspace;
+  ConstAirspacePtr selected_airspace;
 
   TwoTextRowsRenderer row_renderer;
 
@@ -96,7 +96,6 @@ class AirspaceWarningListWidget final
 public:
   AirspaceWarningListWidget(ProtectedAirspaceWarningManager &aw)
     :airspace_warnings(aw),
-     selected_airspace(nullptr),
      sound_interval_counter(1)
   {}
 
@@ -152,13 +151,13 @@ static bool auto_close = true;
 const AbstractAirspace *
 AirspaceWarningListWidget::GetSelectedAirspace() const
 {
-  return selected_airspace;
+  return selected_airspace.get();
 }
 
 void
 AirspaceWarningListWidget::UpdateButtons()
 {
-  const AbstractAirspace *airspace = GetSelectedAirspace();
+  auto &airspace = selected_airspace;
   if (airspace == NULL) {
     ack_button->SetVisible(false);
     ack_day_button->SetVisible(false);
@@ -170,7 +169,7 @@ AirspaceWarningListWidget::UpdateButtons()
 
   {
     ProtectedAirspaceWarningManager::ExclusiveLease lease(airspace_warnings);
-    const AirspaceWarning &warning = lease->GetWarning(*airspace);
+    const AirspaceWarning &warning = lease->GetWarning(airspace);
     ack_expired = warning.IsAckExpired();
     ack_day = warning.GetAckDay();
   }
@@ -220,18 +219,15 @@ void
 AirspaceWarningListWidget::OnActivateItem(gcc_unused unsigned i) noexcept
 {
   if (selected_airspace != nullptr)
-    dlgAirspaceDetails(*selected_airspace, &airspace_warnings);
+    dlgAirspaceDetails(selected_airspace, &airspace_warnings);
 }
 
 bool
 AirspaceWarningListWidget::HasWarning() const
 {
   ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
-  for (auto i = lease->begin(), end = lease->end(); i != end; ++i)
-    if (i->IsAckExpired())
-      return true;
-
-  return false;
+  return std::any_of(lease->begin(), lease->end(),
+                     [](const auto &i){ return i.IsAckExpired(); });
 }
 
 static void
@@ -252,9 +248,9 @@ AutoHide()
 void
 AirspaceWarningListWidget::Ack()
 {
-  const AbstractAirspace *airspace = GetSelectedAirspace();
+  const auto &airspace = selected_airspace;
   if (airspace != NULL) {
-    airspace_warnings.Acknowledge(*airspace);
+    airspace_warnings.Acknowledge(airspace);
     UpdateList();
     AutoHide();
   }
@@ -263,9 +259,9 @@ AirspaceWarningListWidget::Ack()
 void
 AirspaceWarningListWidget::AckDay()
 {
-  const AbstractAirspace *airspace = GetSelectedAirspace();
+  const auto &airspace = selected_airspace;
   if (airspace != NULL) {
-    airspace_warnings.AcknowledgeDay(*airspace, true);
+    airspace_warnings.AcknowledgeDay(airspace, true);
     UpdateList();
     AutoHide();
   }
@@ -274,7 +270,7 @@ AirspaceWarningListWidget::AckDay()
 void
 AirspaceWarningListWidget::Enable()
 {
-  const AbstractAirspace *airspace = GetSelectedAirspace();
+  const auto &airspace = selected_airspace;
   if (airspace == NULL)
     return;
 
@@ -353,7 +349,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
       solution.IsValid()) {
 
     _stprintf(buffer, _T("%d secs"),
-              (int)solution.elapsed_time);
+              (int)solution.elapsed_time.count());
 
     if (solution.distance > 0)
       _stprintf(buffer + _tcslen(buffer), _T(" dist %d m"),
@@ -414,11 +410,7 @@ inline void
 AirspaceWarningListWidget::CopyList()
 {
   const ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
-
-  warning_list.clear();
-  for (auto i = lease->begin(), end = lease->end();
-       i != end && !warning_list.full(); ++i)
-    warning_list.push_back(*i);
+  warning_list = {lease->begin(), lease->end()};
 }
 
 void
@@ -434,7 +426,7 @@ AirspaceWarningListWidget::UpdateList()
       auto it = std::find(warning_list.begin(), warning_list.end(),
                           *selected_airspace);
       if (it != warning_list.end()) {
-        i = it - warning_list.begin();
+        i = std::distance(warning_list.begin(), it);
         GetList().SetCursorIndex(i);
       }
     }
@@ -447,16 +439,16 @@ AirspaceWarningListWidget::UpdateList()
     const AirspaceWarningConfig &warning_config =
       CommonInterface::GetComputerSettings().airspace.warnings;
     if (warning_config.repetitive_sound) {
-      unsigned tt_closest_airspace = 1000;
-      for (auto i : warning_list) {
+      FloatDuration tt_closest_airspace{1000};
+      for (const auto &i : warning_list) {
         /* Find smallest time to nearest aispace (cannot always rely
            on fact that closest airspace should be in the beginning of
            the list) */
         if (i.state < AirspaceWarning::WARNING_INSIDE)
           tt_closest_airspace = std::min(tt_closest_airspace,
-                                         unsigned(i.solution.elapsed_time));
+                                         i.solution.elapsed_time);
         else
-          tt_closest_airspace = 0;
+          tt_closest_airspace = {};
       }
 
       const unsigned sound_interval =

@@ -45,7 +45,7 @@ private:
 public:
   SuspensibleThread(const char *_name) noexcept:Thread(_name) {}
 
-  bool Start(bool suspended=false) noexcept;
+  void Start(bool suspended=false);
 
   /**
    * Triggers thread shutdown.  Call Thread::Join() after this to wait

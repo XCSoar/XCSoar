@@ -34,7 +34,7 @@ void
 WindStore::reset()
 {
   windlist.Reset();
-  update_clock = 0;
+  update_clock = {};
   updated = true;
 }
 
@@ -43,7 +43,7 @@ WindStore::SlotMeasurement(const MoreData &info,
                            const SpeedVector &windvector, unsigned quality)
 {
   updated = true;
-  windlist.addMeasurement((unsigned)info.time, windvector,
+  windlist.addMeasurement(info.time, windvector,
                           info.nav_altitude, quality);
   update_clock = info.clock;
 }
@@ -61,18 +61,17 @@ WindStore::SlotAltitude(const MoreData &info, DerivedInfo &derived)
 }
 
 const Vector
-WindStore::GetWind(double Time, double h, bool &found) const
+WindStore::GetWind(TimeStamp Time, double h,
+                   bool &found) const noexcept
 {
-  return windlist.getWind((unsigned)Time, h, found);
+  return windlist.getWind(Time, h, found);
 }
 
 void
 WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived) const
 {
   bool found;
-  Vector CurWind = windlist.getWind((unsigned)info.time, info.nav_altitude,
-                                    found);
-
+  Vector CurWind = windlist.getWind(info.time, info.nav_altitude, found);
   if (found) {
     NewWind(info, derived, CurWind);
   }

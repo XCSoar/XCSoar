@@ -38,7 +38,12 @@ class SystemWidget final
     REBOOT,
     SWITCH_KERNEL,
     USB_STORAGE,
+    INCREASE_BACKLIGHT_BRIGHTNESS,
+    DECREASE_BACKLIGHT_BRIGHTNESS
   };
+
+  Button *increase_backlight_brightness;
+  Button *decrease_backlight_brightness;
 
 public:
   SystemWidget(const DialogLook &look):RowFormWidget(look) {}
@@ -46,6 +51,9 @@ public:
 private:
   void SwitchKernel();
   void ExportUSBStorage();
+  void IncreaseBacklightBrightness();
+  void DecreaseBacklightBrightness();
+  void UpdateBacklightButtons(int percent);
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent,
@@ -58,9 +66,21 @@ SystemWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   AddButton("Reboot", [](){ KoboReboot(); });
   AddButton(IsKoboOTGKernel() ? "Disable USB-OTG" : "Enable USB-OTG",
             [this](){ SwitchKernel(); });
-
+#ifdef KOBO
+  SetRowEnabled(SWITCH_KERNEL, DetectKoboModel() != KoboModel::CLARA_HD);
+#endif
   AddButton("Export USB storage", [this](){ ExportUSBStorage(); });
   SetRowEnabled(USB_STORAGE, !IsKoboOTGKernel());
+
+  if(KoboCanChangeBacklightBrightness()) {
+    increase_backlight_brightness = AddButton("Increase Backlight Brightness", [this]() { IncreaseBacklightBrightness(); });
+    decrease_backlight_brightness = AddButton("Decrease Backlight Brightness", [this]() { DecreaseBacklightBrightness(); });
+    int current_brightness = KoboGetBacklightBrightness();
+    UpdateBacklightButtons(current_brightness);
+  } else {
+    AddDummy();
+    AddDummy();
+  }
 }
 
 inline void
@@ -131,6 +151,33 @@ SystemWidget::ExportUSBStorage()
 
   KoboUnexportUSBStorage();
   KoboMountData();
+}
+
+inline void
+SystemWidget::IncreaseBacklightBrightness()
+{
+  int current_brightness = KoboGetBacklightBrightness();
+  KoboSetBacklightBrightness(current_brightness + 20);
+  UpdateBacklightButtons(current_brightness + 20);
+}
+
+inline void
+SystemWidget::DecreaseBacklightBrightness()
+{
+  int current_brightness = KoboGetBacklightBrightness();
+  KoboSetBacklightBrightness(current_brightness - 20);
+  UpdateBacklightButtons(current_brightness - 20);
+}
+
+inline void
+SystemWidget::UpdateBacklightButtons(int percent)
+{
+  if(decrease_backlight_brightness != nullptr) {
+    decrease_backlight_brightness->SetEnabled(percent != 0);
+  }
+  if(increase_backlight_brightness != nullptr) {
+    increase_backlight_brightness->SetEnabled(percent < 100);
+  }
 }
 
 void

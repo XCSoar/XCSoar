@@ -46,12 +46,11 @@ SanitiseLine(char *const begin, char *const end)
 }
 
 bool
-PortLineSplitter::DataReceived(const void *_data, size_t length) noexcept
+PortLineSplitter::DataReceived(std::span<const std::byte> s) noexcept
 {
-  assert(_data != nullptr);
-  assert(length > 0);
+  assert(!s.empty());
 
-  const char *data = (const char *)_data, *end = data + length;
+  const char *data = (const char *)s.data(), *end = data + s.size();
 
   do {
     /* append new data to buffer, as much as fits there */

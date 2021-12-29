@@ -41,15 +41,8 @@ ToPath(JNIEnv *env, jstring s) noexcept
 	assert(env != nullptr);
 	assert(s != nullptr);
 
-	const char *p = env->GetStringUTFChars(s, nullptr);
-	if (p == nullptr)
-		return nullptr;
-
-	AtScopeExit(env, s, p) {
-		env->ReleaseStringUTFChars(s, p);
-	};
-
-	return Path(p);
+	const auto c = Java::String::GetUTFChars(env, s);
+	return Path(c.c_str());
 }
 
 } // namespace Java

@@ -189,8 +189,15 @@ VegaConfigurationExtraButtons::OnSave()
 
   // make sure changes are sent to device
   MessageOperationEnvironment env;
-  if (dirty && device->SendSetting("StoreToEeprom", 2, env))
-    dirty = false;
+  if (dirty) {
+    try {
+      device->SendSetting("StoreToEeprom", 2, env);
+      dirty = false;
+    } catch (OperationCancelled) {
+    } catch (...) {
+      env.SetError(std::current_exception());
+    }
+  }
 }
 
 inline void

@@ -5,8 +5,8 @@ CommonStats::ResetTask()
 {
   start_open_time_span = RoughTimeSpan::Invalid();
   landable_reachable = false;
-  TimeUnderStartMaxHeight = -1;
-  aat_time_remaining = 0;
+  TimeUnderStartMaxHeight = TimeStamp::Undefined();
+  aat_time_remaining = {};
   aat_speed_target = -1;
   aat_speed_max = -1;
   aat_speed_min = -1;

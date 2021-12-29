@@ -39,20 +39,20 @@ DataFieldTime::GetAsString() const noexcept
 const TCHAR *
 DataFieldTime::GetAsDisplayString() const noexcept
 {
-  FormatTimespanSmart(string_buffer, value, max_tokens);
+  FormatTimespanSmart(string_buffer, std::chrono::seconds{value}, max_tokens);
   return string_buffer;
 }
 
 void
 DataFieldTime::Inc() noexcept
 {
-  SetValue(value + step * SpeedUp(true));
+  ModifyValue(value + step * SpeedUp(true));
 }
 
 void
 DataFieldTime::Dec() noexcept
 {
-  SetValue(value - step * SpeedUp(false));
+  ModifyValue(value - step * SpeedUp(false));
 }
 
 int
@@ -81,25 +81,26 @@ DataFieldTime::SpeedUp(bool key_up) noexcept
 
 void
 DataFieldTime::SetFromCombo(int data_field_index,
-                            gcc_unused const TCHAR *value_string) noexcept
+                            [[maybe_unused]] const TCHAR *value_string) noexcept
 {
-  SetValue(data_field_index);
+  ModifyValue(std::chrono::seconds{data_field_index});
 }
 
 void
 DataFieldTime::AppendComboValue(ComboList &combo_list,
-                                int value) const noexcept
+                                std::chrono::seconds value) const noexcept
 {
   TCHAR buffer2[32];
-  StringFormatUnsafe(buffer2, _T("%d"), value);
-  combo_list.Append(value, buffer2, FormatTimespanSmart(value, max_tokens));
+  StringFormatUnsafe(buffer2, _T("%ld"), (long)value.count());
+  combo_list.Append(value.count(), buffer2,
+                    FormatTimespanSmart(value, max_tokens));
 }
 
 ComboList
 DataFieldTime::CreateComboList(const TCHAR *reference_string) const noexcept
 {
-  const int reference = reference_string != nullptr
-    ? ParseInt(reference_string)
+  const auto reference = reference_string != nullptr
+    ? std::chrono::seconds{ParseInt(reference_string)}
     : value;
 
   ComboList combo_list;
@@ -108,19 +109,19 @@ DataFieldTime::CreateComboList(const TCHAR *reference_string) const noexcept
   unsigned surrounding_items = ComboList::MAX_SIZE / 2 - 2;
 
   /* the value aligned to mStep */
-  int corrected_value = ((reference - min) / step) * step + min;
+  auto corrected_value = ((reference - min) / step) * step + min;
 
-  int first = corrected_value - (int)surrounding_items * step;
+  auto first = corrected_value - (int)surrounding_items * step;
   if (first > min)
     /* there are values before "first" - give the user a choice */
     combo_list.Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
   else if (first < min)
     first = min;
 
-  int last = std::min(first + (int)(surrounding_items * step * 2), max);
+  auto last = std::min(first + surrounding_items * step * 2, max);
 
   bool found_current = false;
-  for (int i = first; i <= last; i += step) {
+  for (std::chrono::seconds i = first; i <= last; i += step) {
     if (!found_current && reference <= i) {
       if (reference < i)
         /* the current value is not listed - insert it here */

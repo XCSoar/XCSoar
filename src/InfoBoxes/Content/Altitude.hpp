@@ -31,28 +31,28 @@ extern const InfoBoxPanel altitude_infobox_panels[];
 class InfoBoxContentAltitude : public InfoBoxContent
 {
 public:
-  virtual const InfoBoxPanel *GetDialogContent() override;
+  const InfoBoxPanel *GetDialogContent() noexcept override;
 };
 
 void
-UpdateInfoBoxAltitudeNav(InfoBoxData &data);
+UpdateInfoBoxAltitudeNav(InfoBoxData &data) noexcept;
 
 class InfoBoxContentAltitudeGPS : public InfoBoxContentAltitude
 {
 public:
-  virtual void Update(InfoBoxData &data) override;
+  void Update(InfoBoxData &data) noexcept override;
 };
 
 void
-UpdateInfoBoxAltitudeAGL(InfoBoxData &data);
+UpdateInfoBoxAltitudeAGL(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxAltitudeBaro(InfoBoxData &data);
+UpdateInfoBoxAltitudeBaro(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxAltitudeQFE(InfoBoxData &data);
+UpdateInfoBoxAltitudeQFE(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxAltitudeFlightLevel(InfoBoxData &data);
+UpdateInfoBoxAltitudeFlightLevel(InfoBoxData &data) noexcept;
 
 #endif

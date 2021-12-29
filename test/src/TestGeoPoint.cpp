@@ -29,7 +29,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(92);
+  plan_tests(80);
 
   // test constructor
   GeoPoint p1(Angle::Degrees(345.32), Angle::Degrees(-6.332));
@@ -89,20 +89,6 @@ int main(int argc, char **argv)
 
   ok1(p12.IsValid());
   ok1(equals(p12, -6.332, 164.32));
-
-  // test sort()
-  ok1(!p1.Sort(p3));
-  ok1(p3.Sort(p1));
-  ok1(!p1.Sort(p4));
-  ok1(p4.Sort(p1));
-  ok1(!p1.Sort(p5));
-  ok1(p5.Sort(p1));
-  ok1(!p4.Sort(p3));
-  ok1(p3.Sort(p4));
-  ok1(!p5.Sort(p3));
-  ok1(p3.Sort(p5));
-  ok1(!p5.Sort(p4));
-  ok1(p4.Sort(p5));
 
   // test distance()
   //

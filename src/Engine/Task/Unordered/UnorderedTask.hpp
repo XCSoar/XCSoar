@@ -48,8 +48,8 @@ public:
   double CalcRequiredGlide(const AircraftState &state_now,
                            const GlidePolar &glide_polar) const noexcept override;
   double CalcGradient(const AircraftState &state_now) const noexcept override;
-  double ScanTotalStartTime() noexcept override;
-  double ScanLegStartTime() noexcept override;
+  TimeStamp ScanTotalStartTime() noexcept override;
+  TimeStamp ScanLegStartTime() noexcept override;
   double ScanDistanceNominal() noexcept override;
   double ScanDistancePlanned() noexcept override;
   double ScanDistanceRemaining(const GeoPoint &ref) noexcept override;

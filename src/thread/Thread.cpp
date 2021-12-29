@@ -24,18 +24,13 @@ Copyright_License {
 #include "thread/Thread.hpp"
 #include "Name.hpp"
 #include "Util.hpp"
+#include "system/Error.hxx"
 
 #ifdef ANDROID
 #include "java/Global.hxx"
 #endif
 
-#include <boost/intrusive/list.hpp>
-
 #include <cassert>
-
-#ifdef HAVE_POSIX
-#include <signal.h>
-#endif
 
 void
 Thread::SetIdlePriority() noexcept
@@ -43,8 +38,8 @@ Thread::SetIdlePriority() noexcept
   ::SetThreadIdlePriority();
 }
 
-bool
-Thread::Start() noexcept
+void
+Thread::Start()
 {
   assert(!IsDefined());
 
@@ -54,29 +49,39 @@ Thread::Start() noexcept
 #endif
 
 #if defined(__GLIBC__) || defined(__BIONIC__) || defined(__APPLE__)
-  defined = pthread_create(&handle, nullptr, ThreadProc, this) == 0;
+  constexpr pthread_attr_t *attr_pointer = nullptr;
+
+  int error;
 #else
   /* In other libc implementations, the default stack size for created threads
      might not be large enough (e. g. 80 KB on musl libc).
      640 KB ought to be enough for anybody. */
   pthread_attr_t attr;
-  defined = (pthread_attr_init(&attr) == 0) &&
-            (pthread_attr_setstacksize(&attr, 640 * 1024) == 0) &&
-            (pthread_create(&handle, &attr, ThreadProc, this) == 0);
+  int error = pthread_attr_init(&attr);
+  if (error != 0)
+    throw MakeErrno(error, "pthread_attr_init() failed");
+
+  error = pthread_attr_setstacksize(&attr, 640 * 1024);
+  if (error != 0)
+    throw MakeErrno(error, "pthread_attr_setstacksize() failed");
+
+  pthread_attr_t *attr_pointer = &attr;
 #endif
+
+  error = pthread_create(&handle, attr_pointer, ThreadProc, this);
+  if (error != 0)
+    throw MakeErrno(error, "pthread_create() failed");
+
+  defined = true;
 
 #ifndef NDEBUG
   creating = false;
 #endif
-
-  bool success = defined;
 #else
   handle = ::CreateThread(nullptr, 0, ThreadProc, this, 0, &id);
-
-  bool success = handle != nullptr;
+  if (handle == nullptr)
+    throw MakeLastError("CreateThread() failed");
 #endif
-
-  return success;
 }
 
 void

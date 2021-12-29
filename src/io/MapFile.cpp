@@ -27,17 +27,12 @@ Copyright_License {
 #include "system/ConvertPathName.hpp"
 #include "system/Path.hpp"
 
-#include <stdexcept>
-
-std::unique_ptr<ZipArchive>
+std::optional<ZipArchive>
 OpenMapFile()
-try {
+{
   auto path = Profile::GetPath(ProfileKeys::MapFile);
-  if (path.IsNull())
-    return nullptr;
+  if (path == nullptr)
+    return std::nullopt;
 
-  return std::make_unique<ZipArchive>(path);
-} catch (const std::runtime_error &e) {
-  // TODO: log error?
-  return nullptr;
+  return ZipArchive{path};
 }

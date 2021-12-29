@@ -267,7 +267,7 @@ protected:
    *
    * @return Time (s) of start of task or negative value if not available
    */
-  virtual double ScanTotalStartTime() noexcept = 0;
+  virtual TimeStamp ScanTotalStartTime() noexcept = 0;
 
   /**
    * Calculate leg start time.
@@ -275,7 +275,7 @@ protected:
    *
    * @return Time (s) of start of leg or negative value if not available
    */
-  virtual double ScanLegStartTime() noexcept = 0;
+  virtual TimeStamp ScanLegStartTime() noexcept = 0;
 
   /**
    * Calculate distance of nominal task (sum of distances from each
@@ -405,8 +405,8 @@ private:
   /**
    * @param time monotonic time of day in seconds or -1 if unknown
    */
-  void UpdateStatsTimes(double time) noexcept;
-  void UpdateStatsSpeeds(double time) noexcept;
+  void UpdateStatsTimes(TimeStamp time) noexcept;
+  void UpdateStatsSpeeds(TimeStamp time) noexcept;
   void UpdateStatsGlide(const AircraftState &state,
                         const GlidePolar &glide_polar) noexcept;
   void UpdateFlightMode() noexcept;

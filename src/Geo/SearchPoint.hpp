@@ -48,7 +48,7 @@ public:
    * 
    * @return Null object
    */
-  SearchPoint() = default;
+  SearchPoint() noexcept = default;
 
   /**
    * Constructor.  The flat location is not initialized here; the
@@ -57,11 +57,12 @@ public:
    * @param loc Location of search point
    * @param tp Projection used
    */
-  SearchPoint(const GeoPoint &loc)
+  constexpr SearchPoint(const GeoPoint &loc) noexcept
     :location(loc)
   {}
 
-  SearchPoint(const GeoPoint &_location, const FlatGeoPoint &_flat)
+  constexpr SearchPoint(const GeoPoint &_location,
+                        const FlatGeoPoint &_flat) noexcept
     :location(_location), flat_location(_flat)
 #ifndef NDEBUG
     , projected(true)
@@ -75,7 +76,7 @@ public:
    * @param loc Location of search point
    * @param tp Projection used
    */
-  SearchPoint(const GeoPoint &loc, const FlatProjection &tp);
+  SearchPoint(const GeoPoint &loc, const FlatProjection &tp) noexcept;
 
   /**
    * Constructor
@@ -83,19 +84,18 @@ public:
    * @param floc Location of search point
    * @param tp Projection used
    */
-  SearchPoint(const FlatGeoPoint &floc, const FlatProjection &tp);
+  SearchPoint(const FlatGeoPoint &floc, const FlatProjection &tp) noexcept;
 
-  [[gnu::const]]
-  static SearchPoint Invalid() {
+  static constexpr SearchPoint Invalid() noexcept {
     return SearchPoint(GeoPoint::Invalid());
   }
 
   [[gnu::pure]]
-  bool IsValid() const {
+  bool IsValid() const noexcept {
     return location.IsValid();
   }
 
-  void SetInvalid() {
+  void SetInvalid() noexcept {
     location.SetInvalid();
 #ifndef NDEBUG
     projected = false;
@@ -107,12 +107,12 @@ public:
    *
    * @param tp Projection used
    */
-  void Project(const FlatProjection &tp);
+  void Project(const FlatProjection &tp) noexcept;
 
   /**
    * The actual location
    */
-  const GeoPoint &GetLocation() const {
+  const GeoPoint &GetLocation() const noexcept {
     return location;
   }
 
@@ -121,7 +121,7 @@ public:
    *
    * @return Flat projected coordinate
    */
-  const FlatGeoPoint &GetFlatLocation() const {
+  const FlatGeoPoint &GetFlatLocation() const noexcept {
     assert(projected);
 
     return flat_location;
@@ -135,7 +135,7 @@ public:
    * @return True if points coincident
    */
   [[gnu::pure]]
-  bool Equals(const SearchPoint& sp) const {
+  bool Equals(const SearchPoint &sp) const noexcept {
     return sp.location == location;
   }
 
@@ -147,7 +147,7 @@ public:
    * @return Distance in projected units
    */
   [[gnu::pure]]
-  unsigned FlatDistanceTo(const SearchPoint &sp) const {
+  unsigned FlatDistanceTo(const SearchPoint &sp) const noexcept {
     return flat_location.Distance(sp.flat_location);
   }
 
@@ -157,26 +157,14 @@ public:
    * root.
    */
   [[gnu::pure]]
-  unsigned FlatSquareDistanceTo(const SearchPoint& sp) const {
+  unsigned FlatSquareDistanceTo(const SearchPoint &sp) const noexcept {
     return flat_location.DistanceSquared(sp.flat_location);
-  }
-
-  /**
-   * Rank two points according to longitude, then latitude
-   *
-   * @param other Point to compare to
-   *
-   * @return True if this point is further left (or if equal, lower) than the other
-   */
-  [[gnu::pure]]
-  bool Sort(const SearchPoint &other) const {
-    return location.Sort(other.location);
   }
 
   /**
    * distance from this to the reference
    */
-  double DistanceTo(const GeoPoint &ref) const {
+  double DistanceTo(const GeoPoint &ref) const noexcept {
     return location.Distance(ref);
   }
 };

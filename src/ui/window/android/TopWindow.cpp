@@ -23,14 +23,16 @@ Copyright_License {
 
 #include "../TopWindow.hpp"
 #include "ui/canvas/custom/Cache.hpp"
-#include "ui/canvas/opengl/Surface.hpp"
-#include "ui/canvas/opengl/Shapes.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "ui/event/Queue.hpp"
 #include "ui/event/android/Loop.hpp"
 #include "ui/event/Globals.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
+#include "util/ScopeExit.hxx"
+
+#include <cassert>
+
 
 namespace UI {
 
@@ -67,7 +69,7 @@ TopWindow::ResumeSurface() noexcept
 
   screen->Resume();
 
-  ::SurfaceCreated();
+  surface_valid = true;
 
   RefreshSize();
 
@@ -114,9 +116,8 @@ TopWindow::OnPause() noexcept
     return;
 
   TextCache::Flush();
-  OpenGL::DeinitShapes();
 
-  SurfaceDestroyed();
+  surface_valid = false;
 
   native_view->deinitSurface();
 
@@ -239,14 +240,30 @@ TopWindow::OnEvent(const Event &event)
   return false;
 }
 
+void
+TopWindow::BeginRunning() noexcept
+{
+  std::lock_guard<Mutex> lock(paused_mutex);
+  assert(!running);
+  running = true;
+}
+
+void
+TopWindow::EndRunning() noexcept
+{
+  std::lock_guard<Mutex> lock(paused_mutex);
+  assert(running);
+  running = false;
+  /* wake up the Android Activity thread, just in case it's waiting
+     inside Pause() */
+  paused_cond.notify_one();
+}
+
 int
 TopWindow::RunEventLoop() noexcept
 {
-  {
-    std::lock_guard<Mutex> lock(paused_mutex);
-    assert(!running);
-    running = true;
-  }
+  BeginRunning();
+  AtScopeExit(this) { EndRunning(); };
 
   Refresh();
 
@@ -254,15 +271,6 @@ TopWindow::RunEventLoop() noexcept
   Event event;
   while (IsDefined() && loop.Get(event))
     loop.Dispatch(event);
-
-  {
-    std::lock_guard<Mutex> lock(paused_mutex);
-    assert(running);
-    running = false;
-    /* wake up the Android Activity thread, just in case it's waiting
-       inside Pause() */
-    paused_cond.notify_one();
-  }
 
   return 0;
 }

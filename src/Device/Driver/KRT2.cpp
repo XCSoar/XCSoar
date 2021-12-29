@@ -164,16 +164,9 @@ public:
    * the sender. This could trigger a retransmission in case of a
    * failure.
    */
-  virtual bool DataReceived(const void *data, size_t length,
-                            struct NMEAInfo &info) override;
+  virtual bool DataReceived(std::span<const std::byte> s,
+                            struct NMEAInfo &info) noexcept override;
 };
-
-/* Workaround for some GCC versions which don't inline the constexpr
-   despite being defined so in C++17, see
-   http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0386r2.pdf */
-#if GCC_OLDER_THAN(9,0)
-constexpr std::chrono::milliseconds KRT2Device::CMD_TIMEOUT;
-#endif
 
 KRT2Device::KRT2Device(Port &_port)
  : port(_port)
@@ -196,8 +189,7 @@ KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
     }
 
     // Send the message
-    if (!port.FullWrite(msg, msg_size, env, CMD_TIMEOUT))
-      return false;
+    port.FullWrite(msg, msg_size, env, CMD_TIMEOUT);
 
     // Wait for the response
     uint8_t _response;
@@ -219,14 +211,13 @@ KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
 }
 
 bool
-KRT2Device::DataReceived(const void *_data, size_t length,
-                         struct NMEAInfo &info)
+KRT2Device::DataReceived(std::span<const std::byte> s,
+                         struct NMEAInfo &info) noexcept
 {
-  assert(_data != nullptr);
-  assert(length > 0);
+  assert(!s.empty());
 
-  const uint8_t *data = (const uint8_t *)_data;
-  const uint8_t *end = data + length;
+  const auto *data = s.data();
+  const auto *const end = data + s.size();
 
   do {
     // Append new data to the buffer, as much as fits in there

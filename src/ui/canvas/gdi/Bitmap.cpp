@@ -29,10 +29,19 @@ Copyright_License {
 
 #include <cassert>
 
-Bitmap::Bitmap(Bitmap &&src)
-  :bitmap(src.bitmap)
+#include <wingdi.h>
+#include <winuser.h>
+
+Bitmap::Bitmap(Bitmap &&src) noexcept
+  :bitmap(std::exchange(src.bitmap, nullptr))
 {
-  src.bitmap = nullptr;
+}
+
+Bitmap &Bitmap::operator=(Bitmap &&src) noexcept
+{
+  using std::swap;
+  swap(bitmap, src.bitmap);
+  return *this;
 }
 
 bool
@@ -43,7 +52,7 @@ Bitmap::LoadFile(Path path)
 }
 
 void
-Bitmap::Reset()
+Bitmap::Reset() noexcept
 {
   if (bitmap != nullptr) {
     assert(IsScreenInitialized());
@@ -59,7 +68,7 @@ Bitmap::Reset()
 }
 
 PixelSize
-Bitmap::GetSize() const
+Bitmap::GetSize() const noexcept
 {
   assert(IsDefined());
 

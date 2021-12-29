@@ -24,37 +24,23 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_VOLTAGE_DEVICE_HPP
 #define XCSOAR_ANDROID_VOLTAGE_DEVICE_HPP
 
-#include "VoltageListener.hpp"
 #include "java/Object.hxx"
-#include "util/Compiler.h"
-#include "Math/WindowFilter.hpp"
 
-#include <jni.h>
+class SensorListener;
 
-#define NUMBER_OF_VOLTAGES 1
+namespace VoltageDevice {
 
-class VoltageDevice final : private VoltageListener {
-  unsigned index;
-  Java::GlobalObject obj;
-  double offset;
-  double factor;
-  WindowFilter<16> voltage_filter[NUMBER_OF_VOLTAGES];
-  WindowFilter<64> temperature_filter;
+void
+Initialise(JNIEnv *env) noexcept;
 
-public:
-  static void Initialise(JNIEnv *env);
-  static void Deinitialise(JNIEnv *env);
+void
+Deinitialise(JNIEnv *env) noexcept;
 
-  VoltageDevice(unsigned index,
-               JNIEnv *env, jobject holder,
-               double _offset, double _factor, unsigned sample_rate);
+Java::LocalObject
+Create(JNIEnv *env, jobject holder,
+       unsigned sample_rate,
+       SensorListener &listener);
 
-  ~VoltageDevice();
-
-private:
-  /* virtual methods from class VoltageListener */
-  virtual void onVoltageValues(int temp_adc, int voltage_index, int volt_adc) override;
-  virtual void onVoltageError() override;
-};
+} // namespace VoltageDevice
 
 #endif

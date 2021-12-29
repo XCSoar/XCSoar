@@ -25,14 +25,25 @@ package org.xcsoar;
 
 import java.util.UUID;
 import java.util.Set;
+import java.util.Collection;
+import java.util.List;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.TreeMap;
 import java.io.IOException;
 
+import android.os.ParcelUuid;
 import android.util.Log;
+import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothSocket;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanRecord;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
@@ -40,37 +51,44 @@ import android.content.pm.PackageManager;
  * A library that constructs Bluetooth ports.  It is called by C++
  * code.
  */
-final class BluetoothHelper {
+final class BluetoothHelper
+  extends ScanCallback
+{
   private static final String TAG = "XCSoar";
   private static final UUID THE_UUID =
         UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-  private static final BluetoothAdapter adapter;
+  private final Context context;
+
+  private final BluetoothAdapter adapter;
+
+  private BluetoothLeScanner scanner;
 
   /**
    * Does this device support Bluetooth Low Energy?
    */
-  private static boolean hasLe;
+  private final boolean hasLe;
 
-  static {
-    BluetoothAdapter _adapter;
-    try {
-      _adapter = BluetoothAdapter.getDefaultAdapter();
-    } catch (Exception e) {
-      Log.e(TAG, "BluetoothAdapter.getDefaultAdapter() failed", e);
-      _adapter = null;
-    }
+  private final Collection<DetectDeviceListener> detectListeners =
+    new LinkedList<DetectDeviceListener>();
 
-    adapter = _adapter;
+  BluetoothHelper(Context context) throws Exception {
+    this.context = context;
+
+    BluetoothManager manager = (BluetoothManager)
+      context.getSystemService(Context.BLUETOOTH_SERVICE);
+    if (manager == null)
+      throw new Exception("No Bluetooth manager");
+
+    adapter = manager.getAdapter();
+    if (adapter == null)
+      throw new Exception("No Bluetooth adapter found");
+
+    hasLe = context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
   }
 
-  public static void Initialize(Context context) {
-    hasLe = adapter != null &&
-      context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
-  }
-
-  public static boolean isEnabled() {
-    return adapter != null && adapter.isEnabled();
+  public boolean isEnabled() {
+    return adapter.isEnabled();
   }
 
   /**
@@ -90,10 +108,7 @@ final class BluetoothHelper {
     return getDisplayString(socket.getRemoteDevice());
   }
 
-  public static String getNameFromAddress(String address) {
-    if (adapter == null)
-      return null;
-
+  public String getNameFromAddress(String address) {
     try {
       return adapter.getRemoteDevice(address).getName();
     } catch (Exception e) {
@@ -102,61 +117,141 @@ final class BluetoothHelper {
     }
   }
 
-  public static String[] list() {
-    if (adapter == null)
-      return null;
+  public synchronized void addDetectDeviceListener(DetectDeviceListener l) {
+    detectListeners.add(l);
 
     Set<BluetoothDevice> devices = adapter.getBondedDevices();
-    if (devices == null)
-      return null;
+    if (devices != null)
+      for (BluetoothDevice device : devices)
+        l.onDeviceDetected(device.getType() == BluetoothDevice.DEVICE_TYPE_LE
+                           ? DetectDeviceListener.TYPE_BLUETOOTH_LE
+                           : DetectDeviceListener.TYPE_BLUETOOTH_CLASSIC,
+                           device.getAddress(), device.getName(),
+                           0);
 
-    String[] addresses = new String[devices.size() * 2];
-    int n = 0;
-    for (BluetoothDevice device: devices) {
-      addresses[n++] = device.getAddress();
-      addresses[n++] = device.getName();
+    if (hasLe && scanner == null) {
+      try {
+        scanner = adapter.getBluetoothLeScanner();
+        if (scanner != null)
+          scanner.startScan(this);
+      } catch (Exception e) {
+        Log.e(TAG, "Bluetooth LE scan failed", e);
+        scanner = null;
+      }
     }
-
-    return addresses;
   }
 
-  public static boolean startLeScan(BluetoothAdapter.LeScanCallback cb) {
-    return hasLe && adapter.startLeScan(cb);
+  public synchronized void removeDetectDeviceListener(DetectDeviceListener l) {
+    detectListeners.remove(l);
+
+    if (!detectListeners.isEmpty())
+      return;
+
+    if (scanner != null) {
+      scanner.stopScan(this);
+      scanner = null;
+    }
   }
 
-  public static void stopLeScan(BluetoothAdapter.LeScanCallback cb) {
-    if (hasLe)
-      adapter.stopLeScan(cb);
-  }
-
-  public static AndroidPort connect(Context context, String address)
-    throws IOException {
-    if (adapter == null)
-      return null;
+  public BluetoothSensor connectSensor(String address, SensorListener listener)
+    throws IOException
+  {
+    if (!hasLe)
+      throw new IOException("No Bluetooth LE support");
 
     BluetoothDevice device = adapter.getRemoteDevice(address);
     if (device == null)
-      return null;
+      throw new IOException("Bluetooth device not found");
 
-    if (hasLe && BluetoothDevice.DEVICE_TYPE_LE == device.getType()) {
-      Log.d(TAG, String.format(
-                               "Bluetooth device \"%s\" (%s) is a LE device, trying to connect using GATT...",
-                               device.getName(), device.getAddress()));
-      BluetoothGattClientPort gattClientPort
-        = new BluetoothGattClientPort(device);
-      gattClientPort.startConnect(context);
-      return gattClientPort;
-    } else {
-      BluetoothSocket socket =
-        device.createRfcommSocketToServiceRecord(THE_UUID);
-      return new BluetoothClientPort(socket);
-    }
+    return new BluetoothSensor(context, device, listener);
   }
 
-  public static AndroidPort createServer() throws IOException {
-    if (adapter == null)
-      return null;
+  public AndroidPort connectHM10(String address)
+    throws IOException {
+    if (!hasLe)
+      throw new IOException("No Bluetooth adapter found");
 
+    BluetoothDevice device = adapter.getRemoteDevice(address);
+    if (device == null)
+      throw new IOException("Bluetooth device not found");
+
+    Log.d(TAG, String.format("Bluetooth device \"%s\" (%s) is a LE device, trying to connect using GATT...",
+                             device.getName(), device.getAddress()));
+    return new HM10Port(context, device);
+  }
+
+  public AndroidPort connect(String address)
+    throws IOException {
+    BluetoothDevice device = adapter.getRemoteDevice(address);
+    if (device == null)
+      throw new IOException("Bluetooth device not found");
+
+    BluetoothSocket socket =
+      device.createRfcommSocketToServiceRecord(THE_UUID);
+    return new BluetoothClientPort(socket);
+  }
+
+  public AndroidPort createServer() throws IOException {
     return new BluetoothServerPort(adapter, THE_UUID);
+  }
+
+  /**
+   * Identify the detected service UUIDs and convert it to a feature
+   * flag bit set.
+   */
+  private static long getFeatures(Collection<ParcelUuid> serviceUuids) {
+    long features = 0;
+
+    for (ParcelUuid puuid : serviceUuids) {
+      UUID uuid = puuid.getUuid();
+      if (BluetoothUuids.HM10_SERVICE.equals(uuid))
+        features |= DetectDeviceListener.FEATURE_HM10;
+      else if (BluetoothUuids.HEART_RATE_SERVICE.equals(uuid))
+        features |= DetectDeviceListener.FEATURE_HEART_RATE;
+      else if (BluetoothUuids.FLYTEC_SENSBOX_SERVICE.equals(uuid))
+        features |= DetectDeviceListener.FEATURE_FLYTEC_SENSBOX;
+    }
+
+    return features;
+  }
+
+  private static long getFeatures(ScanRecord record) {
+    Collection<ParcelUuid> serviceUuids = record.getServiceUuids();
+    return serviceUuids != null
+      ? getFeatures(serviceUuids)
+      : 0;
+  }
+
+  private static long getFeatures(ScanResult result) {
+    ScanRecord record = result.getScanRecord();
+    return record != null
+      ? getFeatures(record)
+      : 0;
+  }
+
+  private synchronized void broadcastScanResult(ScanResult result) {
+    BluetoothDevice device = result.getDevice();
+    long features = getFeatures(result);
+
+    for (DetectDeviceListener l : detectListeners)
+      l.onDeviceDetected(DetectDeviceListener.TYPE_BLUETOOTH_LE,
+                         device.getAddress(), device.getName(),
+                         features);
+  }
+
+  @Override
+  public void onScanResult(int callbackType, ScanResult result) {
+    broadcastScanResult(result);
+  }
+
+  @Override
+  public void onBatchScanResults(List<ScanResult> results) {
+    for (ScanResult r : results)
+      broadcastScanResult(r);
+  }
+
+  @Override
+  public void onScanFailed(int errorCode) {
+    Log.e(TAG, "Bluetooth LE scan failed with error code " + errorCode);
   }
 }

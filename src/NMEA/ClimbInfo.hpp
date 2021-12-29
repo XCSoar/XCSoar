@@ -24,22 +24,24 @@ Copyright_License {
 #ifndef XCSOAR_CLIMB_INFO_HPP
 #define XCSOAR_CLIMB_INFO_HPP
 
+#include "time/Stamp.hpp"
+
 #include <type_traits>
 
 /** Information about one thermal that was or is being climbed. */
 struct OneClimbInfo
 {
   /** Time when circling started. */
-  double start_time;
+  TimeStamp start_time;
 
   /**
    * Time when circling ended
    * (or current time stamp if circling has not ended yet).
    */
-  double end_time;
+  TimeStamp end_time;
 
   /** Time spent in this thermal [s]. */
-  double duration;
+  FloatDuration duration;
 
   /** Altitude gained while in the thermal [m]. May be negative. */
   double gain;
@@ -53,7 +55,7 @@ struct OneClimbInfo
   void Clear();
 
   bool IsDefined() const {
-    return duration > 0;
+    return duration.count() > 0;
   }
 
   void CalculateDuration() {
@@ -62,7 +64,7 @@ struct OneClimbInfo
 
   void CalculateLiftRate() {
     lift_rate = IsDefined()
-      ? gain / duration
+      ? gain / duration.count()
       : 0.;
   }
 

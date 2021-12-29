@@ -77,11 +77,7 @@ LogoPageWindow::OnPaint(Canvas &canvas)
   canvas.DrawText({x + Layout::FastScale(80), y}, XCSoar_VersionString);
   y += Layout::FastScale(22);
 
-  canvas.DrawText({x, y}, _T("date: "));
-  canvas.DrawText({x + Layout::FastScale(80), y}, _T(__DATE__));
 #ifdef GIT_COMMIT_ID
-  y += Layout::FastScale(22);
-
   canvas.DrawText({x, y}, _T("git: "));
   canvas.DrawText({x + Layout::FastScale(80), y}, _T(GIT_COMMIT_ID));
 #endif
@@ -108,6 +104,9 @@ extern "C"
   extern const uint8_t COPYING_gz[];
   extern const size_t COPYING_gz_size;
 
+  extern const uint8_t NEWS_txt_gz[];
+  extern const size_t NEWS_txt_gz_size;
+
   extern const uint8_t AUTHORS_gz[];
   extern const size_t AUTHORS_gz_size;
 }
@@ -120,6 +119,9 @@ dlgCreditsShowModal(UI::SingleWindow &parent)
   const auto authors = InflateToString(AUTHORS_gz, AUTHORS_gz_size);
   const UTF8ToWideConverter authors2(authors.c_str());
 
+  const auto news = InflateToString(NEWS_txt_gz, NEWS_txt_gz_size);
+  const UTF8ToWideConverter news2(news.c_str());
+
   const auto license = InflateToString(COPYING_gz, COPYING_gz_size);
   const UTF8ToWideConverter license2(license.c_str());
 
@@ -130,6 +132,7 @@ dlgCreditsShowModal(UI::SingleWindow &parent)
                                                   dialog.MakeModalResultCallback(mrOK));
   pager->Add(std::make_unique<CreateWindowWidget>(CreateLogoPage));
   pager->Add(std::make_unique<LargeTextWidget>(look, authors2));
+  pager->Add(std::make_unique<LargeTextWidget>(look, news2));
   pager->Add(std::make_unique<LargeTextWidget>(look, license2));
 
   dialog.FinishPreliminary(std::move(pager));

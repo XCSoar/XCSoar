@@ -31,7 +31,6 @@
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Asset.hpp"
 #include "Computer/Settings.hpp"
-#include "IGCFileCleanup.hpp"
 
 void
 Logger::LogPoint(const NMEAInfo &gps_info)
@@ -66,17 +65,17 @@ Logger::LogFinishEvent(const NMEAInfo &gps_info)
   LogEvent(gps_info, "FIN");
 }
 
-bool
-Logger::IsLoggerActive() const
+void
+Logger::LogPilotEvent(const NMEAInfo &gps_info)
 {
-  const std::shared_lock<SharedMutex> protect(lock);
-  return logger.IsActive();
+  LogEvent(gps_info, "PEV");
 }
 
 bool
-Logger::LoggerClearFreeSpace(unsigned current_year)
+Logger::IsLoggerActive() const noexcept
 {
-  return IGCFileCleanup(current_year);
+  const std::shared_lock<SharedMutex> protect(lock);
+  return logger.IsActive();
 }
 
 void
@@ -111,13 +110,6 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
                       MB_YESNO | MB_ICONQUESTION) != IDYES)
         return;
     }
-  }
-
-  if (!LoggerClearFreeSpace(gps_info.date_time_utc.year)) {
-    ShowMessageBox(_("Logger inactive, insufficient storage!"),
-                _("Logger Error"), MB_OK| MB_ICONERROR);
-    LogFormat("Logger not started: Insufficient Storage");
-    return;
   }
 
   const std::lock_guard<SharedMutex> protect(lock);
@@ -158,7 +150,7 @@ Logger::LoggerNote(const TCHAR *text)
 }
 
 void
-Logger::ClearBuffer()
+Logger::ClearBuffer() noexcept
 {
   const std::lock_guard<SharedMutex> protect(lock);
   logger.ClearBuffer();

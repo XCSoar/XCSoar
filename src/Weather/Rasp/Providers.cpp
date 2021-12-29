@@ -24,20 +24,34 @@ Copyright_License {
 #include "Providers.hpp"
 
 const RaspProvider rasp_providers[] = {
-  { _T("Germany"),
-    "http://rasp.linta.de/GERMANY/xcsoar-rasp.dat" },
-  { _T("Germany Schwarzwald"),
-    "http://rasp.linta.de/BLACKFOREST_WAVE/xcsoar-rasp.dat" },
-  { _T("Germany Nordrhein-Westfalen"),
-    "http://rasp.segelflugschule-oerlinghausen.de/NRW/FCST/xcsoar-rasp.dat" },
-  { _T("Germany Niedersachsen"),
-    "http://rasp.linta.de/NIEDERSACHSEN_WAVE/xcsoar-rasp.dat" },
-  { _T("Scandinavia"),
-    "http://rasp.linta.de/SCANDINAVIA/xcsoar-rasp.dat" },
-  { _T("United Kingdom"),
-    "http://rasp-uk.uk/XCSoar/xcsoar-rasp.dat" },
   { _T("Poland"),
-    "https://fcst.pl/xcsoar-rasp.dat" },
+    "https://www.fcst.pl/xcsoar-rasp.dat" },
+
+  { _T("Norddeutschland 2.2km (by Dragos Constantinescu)"),
+    "http://46.243.114.203/drjack/RASP/NORD_DE/FCST/xcsoar-rasp.dat" },
+  { _T("Romania 2.2km (by Dragos Constantinescu)"),
+    "http://46.243.114.203/drjack/RASP/ROMANIA_3DOM/FCST/xcsoar-rasp.dat" },
+
+  { _T("Avenal, California, USA 0.9 km (by Alex Caldwell)"),
+    "http://canv.raspmaps.com/RASP/SIERRA/FCST/xcsoar-rasp.dat" },
+  { _T("Santa Ynez, California, USA 0.9 km (by Alex Caldwell)"),
+    "http://canv.raspmaps.com/RASP/SANTA_YNEZ/FCST/xcsoar-rasp.dat" },
+
+  { _T("Russia Orel (by Linar Yusupov)"),
+    "http://soaringweather.no-ip.info/RASP/xcsoar-OREL-rasp.dat" },
+  { _T("Russia Moscow (by Linar Yusupov)"),
+    "http://soaringweather.no-ip.info/RASP/xcsoar-MOSCOW-rasp.dat" },
+  { _T("Russia Kazan (by Linar Yusupov)"),
+    "http://soaringweather.no-ip.info/RASP/xcsoar-KAZAN-rasp.dat" },
+  { _T("Russia Novo (by Linar Yusupov)"),
+    "http://soaringweather.no-ip.info/RASP/xcsoar-NOVO-rasp.dat" },
+  { _T("Russia SPb (by Linar Yusupov)"),
+    "http://soaringweather.no-ip.info/RASP/xcsoar-SPETER-rasp.dat" },
+  { _T("Russia Vladik (by Linar Yusupov)"),
+    "http://soaringweather.no-ip.info/RASP/xcsoar-VLADIK-rasp.dat" },
+
+  { _T("Japan Kanto 2.6km (by Haruhiko Okamura)"),
+    "http://blipmap.glider.jp/BLIPMAP/xcsoar-rasp.dat" },
 
   { nullptr, nullptr }
 };

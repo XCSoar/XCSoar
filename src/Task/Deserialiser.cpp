@@ -239,15 +239,20 @@ DeserialiseTaskpoint(AbstractTaskFactory &fact, const ConstDataNode &node,
   fact.Append(*pt, false);
 }
 
-[[gnu::pure]]
-static AltitudeReference
-GetHeightRef(const ConstDataNode &node, const TCHAR *nodename)
+static bool
+GetHeightRef(const ConstDataNode &node, const TCHAR *nodename,
+             AltitudeReference &value)
 {
   const TCHAR *type = node.GetAttribute(nodename);
-  if (type != nullptr && StringIsEqual(type, _T("MSL")))
-    return AltitudeReference::MSL;
-
-  return AltitudeReference::AGL;
+  if (type == nullptr) {
+    return false;
+  }
+  if (StringIsEqual(type, _T("MSL"))) {
+    value = AltitudeReference::MSL;
+  } else {
+    value = AltitudeReference::AGL;
+  }
+  return true;
 }
 
 static void
@@ -256,19 +261,27 @@ Deserialise(OrderedTaskSettings &data, const ConstDataNode &node)
   node.GetAttribute(_T("aat_min_time"), data.aat_min_time);
   node.GetAttribute(_T("start_requires_arm"),
                     data.start_constraints.require_arm);
+  node.GetAttribute(_T("start_score_exit"),
+                    data.start_constraints.score_exit);
   node.GetAttribute(_T("start_max_speed"), data.start_constraints.max_speed);
   node.GetAttribute(_T("start_max_height"), data.start_constraints.max_height);
-  data.start_constraints.max_height_ref =
-    GetHeightRef(node, _T("start_max_height_ref"));
+  GetHeightRef(node, _T("start_max_height_ref"),
+               data.start_constraints.max_height_ref);
   data.start_constraints.open_time_span =
     node.GetAttributeRoughTimeSpan(_T("start_open_time"),
                                    _T("start_close_time"));
   node.GetAttribute(_T("finish_min_height"),
                     data.finish_constraints.min_height);
-  data.finish_constraints.min_height_ref =
-    GetHeightRef(node, _T("finish_min_height_ref"));
+
+  GetHeightRef(node, _T("finish_min_height_ref"),
+               data.finish_constraints.min_height_ref);
   node.GetAttribute(_T("fai_finish"), data.finish_constraints.fai_finish);
   data.start_constraints.fai_finish = data.finish_constraints.fai_finish;
+  node.GetAttribute(_T("pev_start_wait_time"),
+                    data.start_constraints.pev_start_wait_time);
+  node.GetAttribute(_T("pev_start_window"),
+                    data.start_constraints.pev_start_window);
+
 }
 
 static TaskFactoryType

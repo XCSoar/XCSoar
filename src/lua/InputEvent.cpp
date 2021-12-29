@@ -43,6 +43,8 @@ extern "C" {
 #include <lauxlib.h>
 }
 
+using namespace Lua;
+
 class LuaInputEvent;
 
 template<typename T>
@@ -77,7 +79,7 @@ static LuaEventRegistry<unsigned> event_store_enum;
 static LuaEventRegistry<const tstring> event_store_gesture;
 static LuaEventRegistry<unsigned> event_store_key;
 
-static const char* event_enum_names[] = {
+static constexpr const char* event_enum_names[] = {
   "nil",
 #include "InputEvents_Char2GCE.cpp"
 #include "InputEvents_Char2NE.cpp"
@@ -98,7 +100,7 @@ public:
 
     luaL_setmetatable(L, "xcsoar.input_event");
 
-    Register(-1);
+    Register(RelativeStackIndex{-1});
 
     /* 'this' is left on stack */
   }
@@ -108,7 +110,8 @@ public:
   }
 
   void AttachEnum(unsigned code) {
-    if ((code < GCE_COUNT + NE_COUNT) && event_store_enum.Insert(code, this)) {
+    if (code < unsigned(GCE_COUNT) + unsigned(NE_COUNT) &&
+        event_store_enum.Insert(code, this)) {
       Lua::AddPersistent(L, this);
     }
   }
@@ -148,13 +151,14 @@ public:
   }
 
 private:
-  void Register(int this_idx) {
+  void Register(RelativeStackIndex this_idx) {
     lua_newtable(L);
-    --this_idx;
+    StackPushed(this_idx);
 
-    Lua::SetField(L, -2, "input_event", Lua::StackIndex(this_idx));
+    SetField(L, RelativeStackIndex{-1}, "input_event", this_idx);
 
-    Lua::AssociatePointer(L, registry_table, (void *)this, -1);
+    Lua::AssociatePointer(L, registry_table, (void *)this,
+                          RelativeStackIndex{-1});
     lua_pop(L, 1); // pop table
   }
 

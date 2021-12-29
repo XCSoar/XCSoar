@@ -56,7 +56,7 @@ public:
      * return value.  May be called only from the main thread.
      */
 #ifdef _UNICODE
-    gcc_pure
+    [[gnu::pure]]
     const TCHAR *GetCodeT() const;
 #else
     const char *GetCodeT() const {
@@ -120,7 +120,7 @@ public:
    * Returns the amount of stations in the array
    * @return The amount of stations in the array
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned Count() const {
     return std::distance(begin(), end());
   }

@@ -6,7 +6,7 @@ ifeq ($(USE_THIRDPARTY_LIBS),y)
 LIBLUA_LDLIBS = -llua
 LIBLUA_CPPFLAGS =
 else
-$(eval $(call pkg-config-library,LIBLUA,lua5.2))
+$(eval $(call pkg-config-library,LIBLUA,lua5.4))
 endif
 
 LUA_SOURCES = \
@@ -19,6 +19,7 @@ LUA_SOURCES = \
 	$(SRC)/lua/RunFile.cxx \
 	$(SRC)/lua/StartFile.cpp \
 	$(SRC)/lua/Log.cpp \
+	$(SRC)/lua/Http.cpp \
 	$(SRC)/lua/Timer.cpp \
 	$(SRC)/lua/Geo.cpp \
 	$(SRC)/lua/Map.cpp \
@@ -36,7 +37,11 @@ LUA_SOURCES = \
 	$(SRC)/lua/Replay.cpp \
 	$(SRC)/lua/InputEvent.cpp \
 
-LUA_CPPFLAGS_INTERNAL = $(LIBLUA_CPPFLAGS) $(SCREEN_CPPFLAGS)
+ifeq ($(TARGET),ANDROID)
+LUA_SOURCES += $(SRC)/lua/Android.cpp
+endif
+
+LUA_CPPFLAGS_INTERNAL = $(LIBLUA_CPPFLAGS) $(SCREEN_CPPFLAGS) $(LIBHTTP_CPPFLAGS)
 LUA_LDLIBS = $(LIBLUA_LDLIBS)
 
 $(eval $(call link-library,liblua,LUA))

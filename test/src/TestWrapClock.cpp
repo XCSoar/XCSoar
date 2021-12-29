@@ -27,12 +27,21 @@
 #include "time/WrapClock.hpp"
 #include "TestUtil.hpp"
 
-static double
+static TimeStamp
 Normalise(WrapClock &w, BrokenDate &date,
           unsigned hour, unsigned minute, unsigned second=0)
 {
-  return w.Normalise(hour * 3600 + minute * 60 + second, date,
+  return w.Normalise(TimeStamp(FloatDuration{std::chrono::hours{hour}} +
+                               FloatDuration{std::chrono::minutes{minute}} +
+                               FloatDuration{std::chrono::seconds{second}}),
+                     date,
                      BrokenTime(hour, minute, second));
+}
+
+static constexpr bool
+equals(TimeStamp t, unsigned seconds) noexcept
+{
+  return t.ToDuration() == FloatDuration{seconds};
 }
 
 static void

@@ -89,8 +89,7 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
       // Cast to int16_t to interpret the 16th bit as the sign bit
       a[i] = int16_t(_a[i]) / 1000.;
 
-    info.acceleration.ProvideGLoad(SpaceDiagonal(a[0], a[1], a[2]),
-                                   true);
+    info.acceleration.ProvideGLoad(SpaceDiagonal(a[0], a[1], a[2]));
   }
 
   unsigned temperature;

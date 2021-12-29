@@ -51,7 +51,7 @@ RoutePolar::Initialise(const GlideSettings &settings, const GlidePolar& polar,
   for (unsigned i = 0; i < ROUTEPOLAR_POINTS; ++i, ang -= ang_step) {
     GlideResult res = SolveTask(settings, polar, wind, ang, is_glide);
     if (res.IsOk()) {
-      RoutePolarPoint point(res.time_elapsed, res.height_glide);
+      RoutePolarPoint point(res.time_elapsed.count(), res.height_glide);
       points[i] = point;
     } else
       points[i].valid = false;

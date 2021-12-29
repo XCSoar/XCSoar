@@ -26,32 +26,32 @@ Copyright_License {
 
 struct METAR;
 struct TAF;
-class JobRunner;
 class CurlGlobal;
+class ProgressListener;
+namespace Co { template<typename T> class Task; }
 
 namespace NOAADownloader {
 
 /**
  * Downloads a METAR from the NOAA server
+ *
+ * Throws on error.
+ *
  * @param code Four letter code of the airport (upper case)
- * @param metar METAR to write data into
- * @return True if the METAR was downloaded and parsed successfully,
- * otherwise False
  */
-bool
-DownloadMETAR(const char *code, METAR &metar,
-              CurlGlobal &curl, JobRunner &runner);
+Co::Task<METAR>
+DownloadMETAR(const char *code, CurlGlobal &curl, ProgressListener &progress);
 
 /**
  * Downloads a METAR from the NOAA server
+ *
+ * Throws on error.
+ *
  * @param code Four letter code of the airport (upper case)
- * @param metar METAR to write data into
- * @return True if the METAR was downloaded and parsed successfully,
- * otherwise False
  */
-bool
-DownloadTAF(const char *code, TAF &taf,
-            CurlGlobal &curl, JobRunner &runner);
+Co::Task<TAF>
+DownloadTAF(const char *code, CurlGlobal &curl,
+            ProgressListener &progress);
 
 } // namespace NOAADownloader
 

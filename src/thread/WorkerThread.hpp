@@ -30,10 +30,12 @@ Copyright_License {
  * A thread which performs regular work in background.
  */
 class WorkerThread : public SuspensibleThread {
+  using Duration = std::chrono::steady_clock::duration;
+
   Cond trigger_cond;
   bool trigger_flag = false;
 
-  const std::chrono::steady_clock::duration period_min, idle_min, delay;
+  const Duration period_min, idle_min, delay;
 
 public:
   /**
@@ -47,13 +49,13 @@ public:
    * allow grouping consecutive Trigger() calls into one Tick()
    */
   WorkerThread(const char *_name,
-               unsigned period_min=0, unsigned idle_min=0,
-               unsigned delay=0);
+               Duration period_min={}, Duration idle_min={},
+               Duration delay={}) noexcept;
 
   /**
    * Wakes up the thread to do work, calls tick().
    */
-  void Trigger() {
+  void Trigger() noexcept {
     const std::lock_guard<Mutex> lock(mutex);
     if (!trigger_flag) {
       trigger_flag = true;
@@ -64,7 +66,7 @@ public:
   /**
    * Suspend execution until Resume() is called.
    */
-  void BeginSuspend() {
+  void BeginSuspend() noexcept {
     const std::lock_guard<Mutex> lock(mutex);
     _BeginSuspend();
   }
@@ -72,12 +74,12 @@ public:
   /**
    * Like BeginSuspend(), but expects the mutex to be locked already.
    */
-  void _BeginSuspend() {
+  void _BeginSuspend() noexcept {
     SuspensibleThread::_BeginSuspend();
     trigger_cond.notify_one();
   }
 
-  void Suspend() {
+  void Suspend() noexcept {
     std::unique_lock<Mutex> lock(mutex);
     _BeginSuspend();
     _WaitUntilSuspended(lock);
@@ -87,7 +89,7 @@ public:
    * Triggers thread shutdown.  Call Thread::Join() after this to wait
    * synchronously for the thread to exit.
    */
-  void BeginStop() {
+  void BeginStop() noexcept {
     const std::lock_guard<Mutex> lock(mutex);
     SuspensibleThread::_BeginStop();
     trigger_cond.notify_one();

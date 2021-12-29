@@ -42,7 +42,7 @@ public:
   /** Reset each element (for incremental speeds). */
   void Reset(TaskStats &data);
 
-  void ComputeWindow(double time, TaskStats &data);
+  void ComputeWindow(TimeStamp time, TaskStats &data) noexcept;
 };
 
 #endif

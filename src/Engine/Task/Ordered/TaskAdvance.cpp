@@ -22,8 +22,10 @@
 
 #include "TaskAdvance.hpp"
 #include "Task/Points/TaskPoint.hpp"
+#include "Points/StartPoint.hpp"
 #include "Points/AATPoint.hpp"
 #include "Points/ASTPoint.hpp"
+#include "util/Compiler.h"
 
 void
 TaskAdvance::Reset()
@@ -42,8 +44,12 @@ TaskAdvance::IsStateReady(const TaskPoint &tp,
   case TaskPointType::UNORDERED:
     gcc_unreachable();
 
-  case TaskPointType::START:
-    return x_exit;
+  case TaskPointType::START: {
+    const auto &sp = (const StartPoint &)tp;
+    return sp.GetScoreExit()
+      ? x_exit
+      : sp.HasEntered();
+  }
 
   case TaskPointType::AAT: {
     const AATPoint &ap = (const AATPoint &)tp;

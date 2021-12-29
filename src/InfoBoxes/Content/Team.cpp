@@ -35,13 +35,13 @@ Copyright_License {
 #include <stdio.h>
 
 static void
-ShowTeamCodeDialog()
+ShowTeamCodeDialog() noexcept
 {
   dlgTeamCodeShowModal();
 }
 
 static std::unique_ptr<Widget>
-LoadTeamCodeDialog(unsigned id)
+LoadTeamCodeDialog(unsigned id) noexcept
 {
   return std::make_unique<CallbackWidget>(ShowTeamCodeDialog);
 }
@@ -52,13 +52,13 @@ static constexpr InfoBoxPanel team_code_infobox_panels[] = {
 };
 
 const InfoBoxPanel *
-InfoBoxContentTeamCode::GetDialogContent()
+InfoBoxContentTeamCode::GetDialogContent() noexcept
 {
   return team_code_infobox_panels;
 }
 
 void
-InfoBoxContentTeamCode::Update(InfoBoxData &data)
+InfoBoxContentTeamCode::Update(InfoBoxData &data) noexcept
 {
   const TeamCodeSettings &settings =
     CommonInterface::GetComputerSettings().team_code;
@@ -85,7 +85,7 @@ InfoBoxContentTeamCode::Update(InfoBoxData &data)
 }
 
 bool
-InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
+InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode) noexcept
 {
   TeamCodeSettings &settings =
     CommonInterface::SetComputerSettings().team_code;
@@ -115,7 +115,7 @@ InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
 }
 
 void
-UpdateInfoBoxTeamBearing(InfoBoxData &data)
+UpdateInfoBoxTeamBearing(InfoBoxData &data) noexcept
 {
   const TeamCodeSettings &settings =
     CommonInterface::GetComputerSettings().team_code;
@@ -144,7 +144,7 @@ UpdateInfoBoxTeamBearing(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTeamBearingDiff(InfoBoxData &data)
+UpdateInfoBoxTeamBearingDiff(InfoBoxData &data) noexcept
 {
   const TeamCodeSettings &settings =
     CommonInterface::GetComputerSettings().team_code;
@@ -174,7 +174,7 @@ UpdateInfoBoxTeamBearingDiff(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTeamDistance(InfoBoxData &data)
+UpdateInfoBoxTeamDistance(InfoBoxData &data) noexcept
 {
   const TeamCodeSettings &settings =
     CommonInterface::GetComputerSettings().team_code;

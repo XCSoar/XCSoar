@@ -26,16 +26,18 @@ Copyright_License {
 
 #include "Constants.hpp"
 
+#include <array>
+
 static constexpr unsigned INT_ANGLE_RANGE = 4096;
 static constexpr unsigned INT_ANGLE_MASK = INT_ANGLE_RANGE - 1;
 static constexpr unsigned INT_QUARTER_CIRCLE = INT_ANGLE_RANGE / 4;
 
 static constexpr double INT_ANGLE_MULT = INT_ANGLE_RANGE / M_2PI;
 
-extern const double SINETABLE[INT_ANGLE_RANGE];
-extern const double INVCOSINETABLE[INT_ANGLE_RANGE];
+extern const std::array<double, INT_ANGLE_RANGE> SINETABLE;
+extern const std::array<double, INT_ANGLE_RANGE> INVCOSINETABLE;
 
-extern const short ISINETABLE[INT_ANGLE_RANGE];
+extern const std::array<short, INT_ANGLE_RANGE> ISINETABLE;
 
 constexpr unsigned
 NormalizeIntAngle(unsigned angle) noexcept

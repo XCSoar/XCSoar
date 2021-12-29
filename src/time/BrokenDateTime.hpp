@@ -26,11 +26,9 @@ Copyright_License {
 
 #include "BrokenDate.hpp"
 #include "BrokenTime.hpp"
-#include "util/Compiler.h"
 
+#include <chrono>
 #include <type_traits>
-
-#include <cstdint>
 
 /**
  * A broken-down representation of date and time.
@@ -39,32 +37,50 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
   /**
    * Non-initializing default constructor.
    */
-  BrokenDateTime() = default;
+  BrokenDateTime() noexcept = default;
 
   constexpr
   BrokenDateTime(unsigned _year, unsigned _month, unsigned _day,
-                 unsigned _hour, unsigned _minute, unsigned _second=0)
+                 unsigned _hour, unsigned _minute, unsigned _second=0) noexcept
     :BrokenDate(_year, _month, _day), BrokenTime(_hour, _minute, _second) {}
 
   constexpr
-  BrokenDateTime(unsigned _year, unsigned _month, unsigned _day)
+  BrokenDateTime(unsigned _year, unsigned _month, unsigned _day) noexcept
     :BrokenDate(_year, _month, _day), BrokenTime(0, 0) {}
 
   constexpr
-  BrokenDateTime(const BrokenDate &date, const BrokenTime &time)
+  BrokenDateTime(const BrokenDate &date, const BrokenTime &time) noexcept
     :BrokenDate(date), BrokenTime(time) {}
 
+  explicit BrokenDateTime(std::chrono::system_clock::time_point tp) noexcept;
+
+  constexpr const BrokenDate &GetDate() const noexcept {
+    return *this;
+  }
+
+  constexpr const BrokenTime &GetTime() const noexcept {
+    return *this;
+  }
+
   constexpr
-  bool operator==(const BrokenDateTime other) const {
-    return (const BrokenDate &)*this == (const BrokenDate &)other &&
-      (const BrokenTime &)*this == (const BrokenTime &)other;
+  bool operator==(const BrokenDateTime other) const noexcept {
+    return GetDate() == other.GetDate() && GetTime() == other.GetTime();
+  }
+
+  constexpr bool operator>(const BrokenDateTime other) const noexcept {
+    return GetDate() > other.GetDate() ||
+      (GetDate() == other.GetDate() && GetTime() > other.GetTime());
+  }
+
+  constexpr bool operator<(const BrokenDateTime other) const noexcept {
+    return other > *this;
   }
 
   /**
    * Returns an instance that fails the Plausible() check.
    */
   constexpr
-  static BrokenDateTime Invalid() {
+  static BrokenDateTime Invalid() noexcept {
     return BrokenDateTime(BrokenDate::Invalid(), BrokenTime::Invalid());
   }
 
@@ -72,7 +88,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * Does the "date" part of this object contain plausible values?
    */
   constexpr
-  bool IsDatePlausible() const {
+  bool IsDatePlausible() const noexcept {
     return BrokenDate::IsPlausible();
   }
 
@@ -80,7 +96,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * Does the "time" part of this object contain plausible values?
    */
   constexpr
-  bool IsTimePlausible() const {
+  bool IsTimePlausible() const noexcept {
     return BrokenTime::IsPlausible();
   }
 
@@ -88,7 +104,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * Does this object contain plausible values?
    */
   constexpr
-  bool IsPlausible() const {
+  bool IsPlausible() const noexcept {
     return IsDatePlausible() && IsTimePlausible();
   }
 
@@ -96,7 +112,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * Returns a new #BrokenDateTime with the same date at midnight.
    */
   constexpr
-  BrokenDateTime AtMidnight() const {
+  BrokenDateTime AtMidnight() const noexcept {
     return BrokenDateTime(*this, BrokenTime::Midnight());
   }
 
@@ -105,24 +121,24 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * Convert a UNIX UTC time stamp (seconds since epoch) to a
    * BrokenDateTime object.
    */
-  gcc_const
-  static BrokenDateTime FromUnixTimeUTC(int64_t t);
+  [[gnu::const]]
+  static BrokenDateTime FromUnixTimeUTC(int64_t t) noexcept;
 #endif
 
-  gcc_pure
-  int64_t ToUnixTimeUTC() const;
+  [[gnu::pure]]
+  std::chrono::system_clock::time_point ToTimePoint() const noexcept;
 
   /**
    * Returns the current system date and time, in UTC.
    */
-  gcc_pure
-  static const BrokenDateTime NowUTC();
+  [[gnu::pure]]
+  static const BrokenDateTime NowUTC() noexcept;
 
   /**
    * Returns the current system date and time, in the current time zone.
    */
-  gcc_pure
-  static const BrokenDateTime NowLocal();
+  [[gnu::pure]]
+  static const BrokenDateTime NowLocal() noexcept;
 
   /**
    * Returns a BrokenDateTime that has the specified number of seconds
@@ -130,22 +146,26 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    *
    * @param seconds the number of seconds to add; may be negative
    */
-  gcc_pure
-  BrokenDateTime operator+(int seconds) const;
+  [[gnu::pure]]
+  BrokenDateTime operator+(std::chrono::system_clock::duration delta) const noexcept {
+    return BrokenDateTime{ToTimePoint() + delta};
+  }
 
-  gcc_pure
-  BrokenDateTime operator-(int seconds) const {
-    return *this + (-seconds);
+  [[gnu::pure]]
+  BrokenDateTime operator-(std::chrono::system_clock::duration delta) const noexcept {
+    return BrokenDateTime{ToTimePoint() - delta};
   }
 
   /**
    * Returns the number of seconds between the two BrokenDateTime structs.
    * The second one is subtracted from the first one.
    *
-   * <now> - <old> = positive timespan since <old> in seconds
+   * <now> - <old> = positive timespan since <old>
    */
-  gcc_pure
-  int operator-(const BrokenDateTime &other) const;
+  [[gnu::pure]]
+  std::chrono::system_clock::duration operator-(const BrokenDateTime &other) const noexcept {
+    return ToTimePoint() - other.ToTimePoint();
+  }
 };
 
 static_assert(std::is_trivial<BrokenDateTime>::value, "type is not trivial");

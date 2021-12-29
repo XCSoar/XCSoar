@@ -29,70 +29,34 @@ Copyright_License {
 #include "util/StringUtil.hpp"
 
 namespace Environment {
+
 static Java::TrivialClass cls;
-static jmethodID getExternalStorageDirectory_method;
 static jmethodID getExternalStoragePublicDirectory_method;
-} // namespace Environment
 
 void
-Environment::Initialise(JNIEnv *env)
+Initialise(JNIEnv *env) noexcept
 {
   cls.Find(env, "android/os/Environment");
-
-  getExternalStorageDirectory_method =
-    env->GetStaticMethodID(cls, "getExternalStorageDirectory",
-                           "()Ljava/io/File;");
 
   getExternalStoragePublicDirectory_method =
     env->GetStaticMethodID(cls, "getExternalStoragePublicDirectory",
                            "(Ljava/lang/String;)Ljava/io/File;");
-  if (getExternalStoragePublicDirectory_method == nullptr)
-    /* needs API level 8 */
-    env->ExceptionClear();
 }
 
 void
-Environment::Deinitialise(JNIEnv *env)
+Deinitialise(JNIEnv *env) noexcept
 {
   cls.Clear(env);
 }
 
-static Java::String
-getExternalStorageDirectory(JNIEnv *env)
-{
-  Java::File file{
-    env,
-    env->CallStaticObjectMethod(Environment::cls,
-                                Environment::getExternalStorageDirectory_method),
-  };
-
-  return file.GetAbsolutePathChecked();
-}
-
 AllocatedPath
-Environment::getExternalStorageDirectory() noexcept
+GetExternalStoragePublicDirectory(JNIEnv *env, const char *type) noexcept
 {
-  JNIEnv *env = Java::GetEnv();
-  return Java::ToPathChecked(::getExternalStorageDirectory(env));
-}
-
-static Java::String
-getExternalStoragePublicDirectory(JNIEnv *env, const char *type)
-{
-  if (Environment::getExternalStoragePublicDirectory_method == nullptr)
-    /* needs API level 8 */
-    return nullptr;
-
   Java::String type2(env, type);
-  Java::File file(env, env->CallStaticObjectMethod(Environment::cls,
-                                                   Environment::getExternalStoragePublicDirectory_method,
+  Java::File file(env, env->CallStaticObjectMethod(cls,
+                                                   getExternalStoragePublicDirectory_method,
                                                    type2.Get()));
-  return file.GetAbsolutePathChecked();
+  return Java::ToPathChecked(file.GetAbsolutePathChecked());
 }
 
-AllocatedPath
-Environment::getExternalStoragePublicDirectory(const char *type) noexcept
-{
-  JNIEnv *env = Java::GetEnv();
-  return Java::ToPathChecked(::getExternalStoragePublicDirectory(env, type));
-}
+} // namespace Environment

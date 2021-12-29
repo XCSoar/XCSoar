@@ -54,8 +54,8 @@ FlightParser::Read(FlightInfo &flight)
     } else if (StringIsEqual(line, "landing")) {
       if (flight.date.IsPlausible()) {
         // we have a start date/time
-        int duration = dt - BrokenDateTime(flight.date, flight.start_time);
-        if (duration >= 0 && duration <= 14 * 60 * 60) {
+        const auto duration = dt - BrokenDateTime(flight.date, flight.start_time);
+        if (duration.count() >= 0 && duration <= std::chrono::hours{14}) {
           // landing entry is likely belonging to start entry
           flight.end_time = dt;
         } else {

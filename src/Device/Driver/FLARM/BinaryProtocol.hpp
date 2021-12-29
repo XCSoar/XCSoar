@@ -118,10 +118,8 @@ namespace FLARM {
    * @param data Pointer to the first byte
    * @param length Amount of bytes that should be send. Note that the actual
    * number of bytes can be larger due to the escaping.
-   * @return True if the data was sent successfully, False if a timeout
-   * or some transfer problems occurred
    */
-  bool SendEscaped(Port &port, const void *buffer, size_t length,
+  void SendEscaped(Port &port, const void *buffer, size_t length,
                    OperationEnvironment &env,
                    std::chrono::steady_clock::duration timeout);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2020 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2013-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,14 +32,10 @@
 
 #include "ConstBuffer.hxx"
 #include "StringAPI.hxx"
-#include "Compiler.h"
 
-#include <utility>
 #include <cstddef>
-
-#if __cplusplus >= 201703L && !GCC_OLDER_THAN(7,0)
 #include <string_view>
-#endif
+#include <utility>
 
 template<typename T>
 struct BasicStringView : ConstBuffer<T> {
@@ -72,14 +68,12 @@ struct BasicStringView : ConstBuffer<T> {
 	constexpr BasicStringView(std::nullptr_t n) noexcept
 		:ConstBuffer<T>(n) {}
 
-#if __cplusplus >= 201703L && !GCC_OLDER_THAN(7,0)
 	constexpr BasicStringView(std::basic_string_view<T> src) noexcept
 		:ConstBuffer<T>(src.data(), src.size()) {}
 
 	constexpr operator std::basic_string_view<T>() const noexcept {
 		return {data, size};
 	}
-#endif
 
 	using ConstBuffer<T>::empty;
 	using ConstBuffer<T>::begin;
@@ -103,12 +97,12 @@ struct BasicStringView : ConstBuffer<T> {
 		return {start, size_t(data + size - start)};
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	pointer Find(value_type ch) const noexcept {
 		return StringFind(data, ch, this->size);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	pointer FindLast(value_type ch) const noexcept {
 		return StringFindLast(data, ch, size);
 	}
@@ -118,7 +112,7 @@ struct BasicStringView : ConstBuffer<T> {
 	 * character.  If the character is not found, then the first
 	 * value is the whole string and the second value is nullptr.
 	 */
-	gcc_pure
+	[[gnu::pure]]
 	std::pair<BasicStringView<T>, BasicStringView<T>> Split(value_type ch) const noexcept {
 		const auto separator = Find(ch);
 		if (separator == nullptr)
@@ -132,7 +126,7 @@ struct BasicStringView : ConstBuffer<T> {
 	 * character.  If the character is not found, then the first
 	 * value is the whole string and the second value is nullptr.
 	 */
-	gcc_pure
+	[[gnu::pure]]
 	std::pair<BasicStringView<T>, BasicStringView<T>> SplitLast(value_type ch) const noexcept {
 		const auto separator = FindLast(ch);
 		if (separator == nullptr)
@@ -141,30 +135,30 @@ struct BasicStringView : ConstBuffer<T> {
 		return {{begin(), separator}, {separator + 1, end()}};
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool StartsWith(BasicStringView<T> needle) const noexcept {
 		return this->size >= needle.size &&
 			StringIsEqual(data, needle.data, needle.size);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool EndsWith(BasicStringView<T> needle) const noexcept {
 		return this->size >= needle.size &&
 			StringIsEqual(data + this->size - needle.size,
 				      needle.data, needle.size);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool StartsWith(value_type ch) const noexcept {
 		return !empty() && front() == ch;
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool EndsWith(value_type ch) const noexcept {
 		return !empty() && back() == ch;
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	int Compare(BasicStringView<T> other) const noexcept {
 		if (size < other.size) {
 			int result = StringCompare(data, other.data, size);
@@ -181,26 +175,26 @@ struct BasicStringView : ConstBuffer<T> {
 			return StringCompare(data, other.data, size);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool Equals(BasicStringView<T> other) const noexcept {
 		return this->size == other.size &&
 			StringIsEqual(data, other.data, this->size);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool StartsWithIgnoreCase(BasicStringView<T> needle) const noexcept {
 		return this->size >= needle.size &&
 			StringIsEqualIgnoreCase(data, needle.data, needle.size);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool EndsWithIgnoreCase(BasicStringView<T> needle) const noexcept {
 		return this->size >= needle.size &&
 			StringIsEqualIgnoreCase(data + this->size - needle.size,
 						needle.data, needle.size);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool EqualsIgnoreCase(BasicStringView<T> other) const noexcept {
 		return this->size == other.size &&
 			StringIsEqualIgnoreCase(data, other.data, this->size);

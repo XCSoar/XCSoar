@@ -27,18 +27,19 @@ void
 ConvexFilter::UpdateConvex(double x, double y, int csign) noexcept
 {
   // ignore if coincident or back in time
-  if (!IsEmpty() && x <= x_max)
+  if (!IsEmpty() && x <= GetMaxX())
     return;
 
   Update(x, y, 1);
 
   // check pruning of previous points
 
-  while (sum_n > 2) {
-    const Slot& next = slots[sum_n-1];
-    const Slot& prev = slots[sum_n-3];
+  while (GetCount() > 2) {
+    const unsigned n = GetCount();
+    const auto &next = GetSlots()[n - 1];
+    const auto &prev = GetSlots()[n - 3];
     const double m = (next.y-prev.y)/(next.x-prev.x);
-    const Slot& cur = slots[sum_n-2];
+    const auto &cur = GetSlots()[n - 2];
     const double y_est = (cur.x - prev.x)*m + prev.y;
 
     // if this point doesn't need pruning, neither will predecessors
@@ -47,14 +48,6 @@ ConvexFilter::UpdateConvex(double x, double y, int csign) noexcept
 
     // prune this point, and continue checking previous points for
     // pruning
-    Remove(sum_n-2);
+    Remove(n - 2);
   }
-}
-
-double
-ConvexFilter::GetLastY() const noexcept
-{
-  assert(!IsEmpty());
-
-  return slots[sum_n-1].y;
 }

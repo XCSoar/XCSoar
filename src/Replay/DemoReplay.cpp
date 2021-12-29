@@ -39,7 +39,8 @@ DemoReplay::Start(const TaskAccessor& task, const GeoPoint& default_location)
 }
 
 bool
-DemoReplay::Update(double time_scale, TaskAccessor& task)
+DemoReplay::Update(FloatDuration time_scale,
+                   TaskAccessor &task) noexcept
 {
   autopilot.UpdateState(task, aircraft.GetState(), time_scale);
   aircraft.Update(autopilot.heading, time_scale);

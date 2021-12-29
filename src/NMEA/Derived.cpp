@@ -99,7 +99,7 @@ DerivedInfo::Reset()
 }
 
 void
-DerivedInfo::Expire(double Time)
+DerivedInfo::Expire(TimeStamp Time) noexcept
 {
   // NOTE: wind_available is deliberately not expired. Expiry happens automatically
   // due to the expiration of the real wind source. If wind_available would be

@@ -34,14 +34,6 @@ import ioio.lib.api.exception.ConnectionLostException;
  * A driver for voltage measurement on the IOIO board.
  */
 final class Voltage extends Thread {
-  interface Listener {
-    /**
-     * @param raw values from ad converter.
-     */
-    void onVoltageValues(int temp_adc, int voltage_index, int volt_adc);
-    void onVoltageError();
-  };
-
   private static final String TAG = "XCSoar";
 
   private AnalogInput h_volt;
@@ -49,9 +41,9 @@ final class Voltage extends Thread {
   private DigitalOutput h_led;
   private final int sleeptime;
 
-  private final Listener listener;
+  private final SensorListener listener;
 
-  public Voltage(IOIO ioio, int sample_rate, Listener _listener)
+  public Voltage(IOIO ioio, int sample_rate, SensorListener _listener)
     throws ConnectionLostException {
     super("Voltage");
 
@@ -115,13 +107,10 @@ final class Voltage extends Thread {
         listener.onVoltageValues(t, 0, v);
         sleep(sleeptime);
       }
-    } catch (ConnectionLostException e) {
-      Log.d(TAG, "Voltage.run() failed", e);
-    } catch (IllegalStateException e) {
-      Log.d(TAG, "Voltage.run() failed", e);
     } catch (InterruptedException e) {
-    } finally {
-      listener.onVoltageError();
+    } catch (Exception e) {
+      listener.onSensorError(e.getMessage());
+      // TODO make GlueVoltage.getState() return STATE_FAILED
     }
   }
 }

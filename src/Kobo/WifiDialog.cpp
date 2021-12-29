@@ -187,7 +187,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     row_renderer.DrawRightFirstRow(canvas, rc, state);
 
   if (info.signal_level >= 0) {
-    StaticString<20> text;
+    StaticString<32> text;
     text.UnsafeFormat(_T("%s %u"), wifi_security[info.security], info.signal_level);
     row_renderer.DrawRightSecondRow(canvas, rc, text);
   }

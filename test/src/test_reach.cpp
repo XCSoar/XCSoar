@@ -35,6 +35,7 @@
 #include "Geo/SpeedVector.hpp"
 #include "Operation/Operation.hpp"
 #include "system/FileUtil.hpp"
+#include "util/PrintException.hxx"
 
 #include <zzip/zzip.h>
 
@@ -82,15 +83,14 @@ test_reach(const RasterMap &map, double mwind, double mc, double height_min_work
                    origin.latitude + Angle::Degrees(0.6 * fy));
         int h = map.GetInterpolatedHeight(x).GetValueOr0();
         AGeoPoint adest(x, h);
-        ReachResult reach;
-        route.FindPositiveArrival(adest, reach);
+        const auto reach = route.FindPositiveArrival(adest);
         if ((i % 5 == 0) && (j % 5 == 0)) {
           AGeoPoint ao2(x, h + 1000);
           route.SolveReachTerrain(ao2, config, INT_MAX);
         }
         fout << x.longitude.Degrees() << " "
              << x.latitude.Degrees() << " "
-             << h << " " << (int)reach.terrain << "\n";
+             << h << " " << (int)reach->terrain << "\n";
       }
       fout << "\n";
     }
@@ -101,7 +101,9 @@ test_reach(const RasterMap &map, double mwind, double mc, double height_min_work
   //  printf("# pixel size %g\n", (double)pd);
 }
 
-int main(int argc, char** argv) {
+int
+main(int argc, char **argv)
+try {
   static const char hc_path[] = "tmp/map.xcm";
   const char *map_path;
   if ((argc<2) || !strlen(argv[1])) {
@@ -118,11 +120,9 @@ int main(int argc, char** argv) {
 
   RasterMap map;
 
-  NullOperationEnvironment operation;
-  if (!LoadTerrainOverview(dir, map.GetTileCache(),
-                           operation)) {
-    fprintf(stderr, "failed to load map\n");
-    return EXIT_FAILURE;
+  {
+    NullOperationEnvironment operation;
+    LoadTerrainOverview(dir, map.GetTileCache(), operation);
   }
 
   map.UpdateProjection();
@@ -142,5 +142,7 @@ int main(int argc, char** argv) {
   test_reach(map, 0, 0.1, 250);
 
   return exit_status();
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }
-

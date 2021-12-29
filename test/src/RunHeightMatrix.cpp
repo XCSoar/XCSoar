@@ -24,11 +24,11 @@ Copyright_License {
 #include "Terrain/RasterMap.hpp"
 #include "Terrain/HeightMatrix.hpp"
 #include "Terrain/Loader.hpp"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Layout.hpp"
 #include "system/Args.hpp"
 #include "io/ZipArchive.hpp"
-#include "Operation/Operation.hpp"
 #include "util/PrintException.hxx"
 
 #include <stdio.h>
@@ -47,11 +47,9 @@ try {
 
   RasterMap map;
 
-  NullOperationEnvironment operation;
-  if (!LoadTerrainOverview(archive.get(), map.GetTileCache(),
-                           operation)) {
-    fprintf(stderr, "failed to load map\n");
-    return EXIT_FAILURE;
+  {
+    ConsoleOperationEnvironment operation;
+    LoadTerrainOverview(archive.get(), map.GetTileCache(), operation);
   }
 
   map.UpdateProjection();

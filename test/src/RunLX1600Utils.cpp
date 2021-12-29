@@ -103,10 +103,7 @@ SetMC(Port &port, OperationEnvironment &env)
 
   fprintf(stdout, "Setting MC to \"%.1f\" ...\n", (double)mc);
 
-  if (LX1600::SetMacCready(port, env, mc))
-    fprintf(stdout, "MC set to \"%.1f\"\n", (double)mc);
-  else
-    fprintf(stdout, "Operation failed!\n");
+  LX1600::SetMacCready(port, env, mc);
 }
 
 static void
@@ -118,10 +115,7 @@ SetBallast(Port &port, OperationEnvironment &env)
 
   fprintf(stdout, "Setting Ballast to \"%.1f\" ...\n", (double)ballast);
 
-  if (LX1600::SetBallast(port, env, ballast))
-    fprintf(stdout, "Ballast set to \"%.1f\"\n", (double)ballast);
-  else
-    fprintf(stdout, "Operation failed!\n");
+  LX1600::SetBallast(port, env, ballast);
 }
 
 static void
@@ -133,10 +127,7 @@ SetBugs(Port &port, OperationEnvironment &env)
 
   fprintf(stdout, "Setting Bugs to \"%u\" ...\n", bugs);
 
-  if (LX1600::SetBugs(port, env, bugs))
-    fprintf(stdout, "Bugs set to \"%u\"\n", bugs);
-  else
-    fprintf(stdout, "Operation failed!\n");
+  LX1600::SetBugs(port, env, bugs);
 }
 
 static void
@@ -149,11 +140,7 @@ SetAltitudeOffset(Port &port, OperationEnvironment &env)
   fprintf(stdout, "Setting altitude offset to \"%.1f m\" ...\n",
           (double)altitude_offset);
 
-  if (LX1600::SetAltitudeOffset(port, env, Units::ToUserUnit(altitude_offset, Unit::FEET)))
-    fprintf(stdout, "Altitude offset set to \"%.1f m\"\n",
-            (double)altitude_offset);
-  else
-    fprintf(stdout, "Operation failed!\n");
+  LX1600::SetAltitudeOffset(port, env, Units::ToUserUnit(altitude_offset, Unit::FEET));
 }
 
 static void
@@ -166,11 +153,7 @@ SetQNH(Port &port, OperationEnvironment &env)
   fprintf(stdout, "Setting QNH to \"%.1f hPa\" ...\n",
           (double)qnh);
 
-  if (LX1600::SetQNH(port, env, AtmosphericPressure::HectoPascal(qnh)))
-    fprintf(stdout, "QNH set to \"%.1f hPa\"\n",
-            (double)qnh);
-  else
-    fprintf(stdout, "Operation failed!\n");
+  LX1600::SetQNH(port, env, AtmosphericPressure::HectoPascal(qnh));
 }
 
 static void
@@ -182,10 +165,7 @@ SetVolume(Port &port, OperationEnvironment &env)
 
   fprintf(stdout, "Setting Volume to \"%u %%\" ...\n", volume);
 
-  if (LX1600::SetVolume(port, env, volume))
-    fprintf(stdout, "Volume set to \"%u %%\"\n", volume);
-  else
-    fprintf(stdout, "Operation failed!\n");
+  LX1600::SetVolume(port, env, volume);
 }
 
 static void
@@ -197,11 +177,7 @@ SetPolar(Port &port, OperationEnvironment &env)
       !ReadDouble("polar coefficient c", c))
     return;
 
-  if (LX1600::SetPolar(port, env, a, b, c))
-    fprintf(stdout, "Polar coefficients set to \"%.2f, %.2f, %.2f\"\n",
-            (double)a, (double)b, (double)c);
-  else
-    fprintf(stdout, "Operation failed!\n");
+  LX1600::SetPolar(port, env, a, b, c);
 }
 
 static void
@@ -214,11 +190,7 @@ SetFilters(Port &port, OperationEnvironment &env)
       !ReadUnsigned("the TE level (50 - 150 %, default = 0 = off)", te_level))
     return;
 
-  if (LX1600::SetFilters(port, env, vario_filter, te_filter, te_level))
-    fprintf(stdout, "Filters set to \"%.1f, %.1f, %u\"\n",
-            (double)vario_filter, (double)te_filter, te_level);
-  else
-    fprintf(stdout, "Operation failed!\n");
+  LX1600::SetFilters(port, env, vario_filter, te_filter, te_level);
 }
 
 static void
@@ -237,11 +209,8 @@ SetSCSettings(Port &port, OperationEnvironment &env)
   else if (!ReadDouble("the SC threshold speed (50 - 150 km/h, default=110)", threshold_speed))
     return;
 
-  if (LX1600::SetSCSettings(port, env, (LX1600::SCMode)mode, deadband,
-                            (LX1600::SCControlMode)control_mode, threshold_speed))
-    fprintf(stdout, "SC settings changed!\n");
-  else
-    fprintf(stdout, "Operation failed!\n");
+  LX1600::SetSCSettings(port, env, (LX1600::SCMode)mode, deadband,
+                        (LX1600::SCControlMode)control_mode, threshold_speed);
 }
 
 static void

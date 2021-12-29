@@ -24,7 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_WINDOWS_KEY_CODE_HPP
 #define XCSOAR_EVENT_WINDOWS_KEY_CODE_HPP
 
-#include <windows.h>
+#include <windef.h> // for HWND (needed by winuser.h)
+#include <winuser.h>
 
 enum {
   KEY_SPACE = VK_SPACE,

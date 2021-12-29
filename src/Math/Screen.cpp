@@ -25,10 +25,8 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Math/FastMath.hpp"
 #include "FastRotation.hpp"
-#include "Screen/Layout.hpp"
 #include "ui/dim/Point.hpp"
 #include "ui/dim/BulkPoint.hpp"
-#include "util/Clamp.hpp"
 
 #include <algorithm>
 
@@ -54,7 +52,7 @@ ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
       }
     }
 
-    const auto f = Clamp(double(proj) / mag12, 0., 1.);
+    const auto f = std::clamp(double(proj) / mag12, 0., 1.);
     // location of 'closest' point
     return PixelPoint(lround(v12.x * f) + p1.x,
                       lround(v12.y * f) + p1.y);
@@ -89,16 +87,11 @@ roundshift(PixelPoint p) noexcept
 }
 
 void
-PolygonRotateShift(BulkPixelPoint *poly,
-                   const int n,
+PolygonRotateShift(std::span<BulkPixelPoint> poly,
                    const PixelPoint shift,
                    Angle angle,
-                   int scale,
-                   const bool use_fast_scale) noexcept
+                   int scale) noexcept
 {
-  if (use_fast_scale)
-    scale = Layout::FastScale(scale);
-
   constexpr int SCALE_SHIFT = 2;
   constexpr int TOTAL_SHIFT = FastIntegerRotation::SHIFT + SCALE_SHIFT;
 
@@ -117,11 +110,6 @@ PolygonRotateShift(BulkPixelPoint *poly,
   FastIntegerRotation fr(angle);
   fr.Scale(scale / (100 >> SCALE_SHIFT));
 
-  BulkPixelPoint *p = poly;
-  const BulkPixelPoint *pe = poly + n;
-
-  while (p < pe) {
-    *p = roundshift<TOTAL_SHIFT>(fr.RotateRaw(*p)) + shift;
-    p++;
-  }
+  for (auto &p : poly)
+    p = roundshift<TOTAL_SHIFT>(fr.RotateRaw(p)) + shift;
 }

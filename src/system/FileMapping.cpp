@@ -35,7 +35,7 @@ Copyright_License {
 #else
 #include "ConvertPathName.hpp"
 
-#include <windows.h>
+#include <fileapi.h>
 #endif
 
 FileMapping::FileMapping(Path path)

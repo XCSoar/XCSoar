@@ -35,14 +35,14 @@ PrintScreenSize()
 #ifdef _WIN32
   unsigned width = GetSystemMetrics(SM_CXSCREEN);
   unsigned height = GetSystemMetrics(SM_CYSCREEN);
-  printf("Width: %d px | Height: %d px\n", width, height);
+  printf("Width: %u px | Height: %u px\n", width, height);
 #endif
 }
 
 static void
 PrintDPI()
 {
-  printf("DPI X: %d | DPI Y: %d\n", Display::GetXDPI(), Display::GetYDPI());
+  printf("DPI X: %u | DPI Y: %u\n", Display::GetXDPI(), Display::GetYDPI());
 }
 
 int

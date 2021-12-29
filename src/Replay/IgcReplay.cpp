@@ -79,7 +79,7 @@ IgcReplay::Update(NMEAInfo &basic)
       break;
   }
 
-  basic.clock = fix.time.GetSecondOfDay();
+  basic.clock = TimeStamp{fix.time.DurationSinceMidnight()};
   basic.alive.Update(basic.clock);
   basic.ProvideTime(basic.clock);
   basic.location = fix.location;

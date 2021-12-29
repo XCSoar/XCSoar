@@ -99,11 +99,11 @@ ThermalBand::GetMaxN() const
   return n;
 }
 
-double
-ThermalBand::GetTimeElapsed() const
+FloatDuration
+ThermalBand::GetTimeElapsed() const noexcept
 {
   // note: don't include top slice as this is estimated
-  double t = 0;
+  FloatDuration t{};
   for (unsigned i = 0; i + 1 < size(); ++i) {
     t += slices[i].dt;
   }

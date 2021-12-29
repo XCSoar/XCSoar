@@ -16,7 +16,7 @@
 #if    defined ZZIP_HAVE_SYS_MMAN_H
 #include <sys/mman.h>
 #define USE_POSIX_MMAP 1
-#elif defined ZZIP_HAVE_WINBASE_H || defined WIN32
+#elif defined ZZIP_HAVE_WINBASE_H || defined _WIN32
 #include <windows.h>
 #define USE_WIN32_MMAP 1
 #else

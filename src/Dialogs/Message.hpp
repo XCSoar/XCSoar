@@ -27,7 +27,8 @@ Copyright_License {
 #include <tchar.h>
 
 #ifdef _WIN32
-#include <windows.h>
+#include <windef.h> // for HWND (needed by winuser.h)
+#include <winuser.h>
 #else
 
 enum {

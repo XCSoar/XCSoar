@@ -27,31 +27,34 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 
 void
-UpdateInfoBoxGLoad(InfoBoxData &data);
+UpdateInfoBoxHeartRate(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxBattery(InfoBoxData &data);
+UpdateInfoBoxGLoad(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxExperimental1(InfoBoxData &data);
+UpdateInfoBoxBattery(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxExperimental2(InfoBoxData &data);
+UpdateInfoBoxExperimental1(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxCPULoad(InfoBoxData &data);
+UpdateInfoBoxExperimental2(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxFreeRAM(InfoBoxData &data);
+UpdateInfoBoxCPULoad(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxNbrSat(InfoBoxData &data);
+UpdateInfoBoxFreeRAM(InfoBoxData &data) noexcept;
+
+void
+UpdateInfoBoxNbrSat(InfoBoxData &data) noexcept;
 
 class InfoBoxContentHorizon : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data) override;
-  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
+  void Update(InfoBoxData &data) noexcept override;
+  void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
 };
 
 #endif

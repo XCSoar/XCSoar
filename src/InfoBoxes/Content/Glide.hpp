@@ -27,15 +27,15 @@ Copyright_License {
 struct InfoBoxData;
 
 void
-UpdateInfoBoxGRInstant(InfoBoxData &data);
+UpdateInfoBoxGRInstant(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxGRCruise(InfoBoxData &data);
+UpdateInfoBoxGRCruise(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxGRAvg(InfoBoxData &data);
+UpdateInfoBoxGRAvg(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxLDVario(InfoBoxData &data);
+UpdateInfoBoxLDVario(InfoBoxData &data) noexcept;
 
 #endif

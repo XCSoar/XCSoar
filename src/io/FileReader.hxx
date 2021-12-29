@@ -32,14 +32,14 @@
 
 #include "Reader.hxx"
 #include "system/Path.hpp"
-#include "util/Compiler.h"
-
-#ifndef _WIN32
-#include "UniqueFileDescriptor.hxx"
-#endif
 
 #ifdef _WIN32
-#include <windows.h>
+#include <fileapi.h>
+#include <handleapi.h> // for INVALID_HANDLE_VALUE
+#include <windef.h> // for HWND (needed by winbase.h)
+#include <winbase.h> // for FILE_CURRENT
+#else
+#include "io/UniqueFileDescriptor.hxx"
 #endif
 
 class Path;
@@ -90,7 +90,7 @@ public:
 
 	void Close() noexcept;
 
-	gcc_pure
+	[[gnu::pure]]
 	uint64_t GetSize() const noexcept {
 #ifdef _WIN32
 		LARGE_INTEGER size;
@@ -102,7 +102,7 @@ public:
 #endif
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	uint64_t GetPosition() const noexcept {
 #ifdef _WIN32
 		LARGE_INTEGER zero;
@@ -124,7 +124,7 @@ public:
 	void Skip(off_t offset);
 
 	/* virtual methods from class Reader */
-	size_t Read(void *data, size_t size) override;
+	std::size_t Read(void *data, std::size_t size) override;
 };
 
 #endif

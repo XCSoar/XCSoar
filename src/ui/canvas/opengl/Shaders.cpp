@@ -162,7 +162,7 @@ CompileAttachShader(GLProgram &program, GLenum type, const char *code)
   shader.Compile();
 
   if (shader.GetCompileStatus() != GL_TRUE) {
-    char log[4096];
+    char log[1000];
     shader.GetInfoLog(log, sizeof(log));
     throw FormatRuntimeError("Shader compiler failed: %s", log);
   }
@@ -185,7 +185,7 @@ LinkProgram(GLProgram &program)
   program.Link();
 
   if (program.GetLinkStatus() != GL_TRUE) {
-    char log[4096];
+    char log[1000];
     program.GetInfoLog(log, sizeof(log));
     throw FormatRuntimeError("Shader linker failed: %s", log);
   }

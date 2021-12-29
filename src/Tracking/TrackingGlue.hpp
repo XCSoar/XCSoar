@@ -28,74 +28,31 @@ Copyright_License {
 
 #ifdef HAVE_TRACKING
 
-#include "Tracking/TrackingSettings.hpp"
 #include "Tracking/SkyLines/Handler.hpp"
 #include "Tracking/SkyLines/Glue.hpp"
 #include "Tracking/SkyLines/Data.hpp"
-#include "thread/StandbyThread.hpp"
-#include "Tracking/LiveTrack24.hpp"
-#include "time/PeriodClock.hpp"
-#include "Geo/GeoPoint.hpp"
-#include "time/BrokenDateTime.hpp"
+#include "Tracking/LiveTrack24/Glue.hpp"
 
+struct TrackingSettings;
 struct MoreData;
 struct DerivedInfo;
 class CurlGlobal;
 
 class TrackingGlue final
-  : protected StandbyThread,
-    private SkyLinesTracking::Handler
+  : private SkyLinesTracking::Handler
 {
-  struct LiveTrack24State
-  {
-    LiveTrack24::SessionID session_id;
-    unsigned packet_id;
-
-    void ResetSession() {
-      session_id = 0;
-    }
-
-    bool HasSession() {
-      return session_id != 0;
-    }
-  };
-
-  CurlGlobal &curl;
-
-  PeriodClock clock;
-
-  TrackingSettings settings;
-
   SkyLinesTracking::Glue skylines;
 
   SkyLinesTracking::Data skylines_data;
 
-  LiveTrack24State state;
-
-  /**
-   * The Unix UTC time stamp that was last submitted to the tracking
-   * server.  This attribute is used to detect time warps.
-   */
-  int64_t last_timestamp = 0;
-
-  BrokenDateTime date_time;
-  GeoPoint location;
-  unsigned altitude;
-  unsigned ground_speed;
-  Angle track;
-  bool flying = false, last_flying;
+  LiveTrack24::Glue livetrack24;
 
 public:
   TrackingGlue(EventLoop &event_loop, CurlGlobal &curl) noexcept;
 
-  void StopAsync();
-  void WaitStopped();
-
   void SetSettings(const TrackingSettings &_settings);
-  void OnTimer(const MoreData &basic, const DerivedInfo &calculated);
 
-protected:
-  void Tick() noexcept override;
+  void OnTimer(const MoreData &basic, const DerivedInfo &calculated);
 
 private:
   /* virtual methods from SkyLinesTracking::Handler */

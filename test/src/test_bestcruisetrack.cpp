@@ -40,11 +40,11 @@ test_bestcruisetrack(int test_num, int n_wind)
 
   autopilot_parms.enable_bestcruisetrack = false;
   TestFlightResult result = test_flight(test_num, n_wind);
-  double t0 = result.time_elapsed;
+  const auto t0 = result.time_elapsed;
 
   autopilot_parms.enable_bestcruisetrack = true;
   result = test_flight(test_num, n_wind);
-  double t1 = result.time_elapsed;
+  const auto t1 = result.time_elapsed;
   autopilot_parms.enable_bestcruisetrack = false;
 
   bool fine = (t1 / t0 < 1.01);

@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_RADIO_FREQUENCY_HPP
 #define XCSOAR_RADIO_FREQUENCY_HPP
 
-#include "util/Compiler.h"
-
 #include <cassert>
 #include <cstdint>
 #include <cstddef>
@@ -106,7 +104,7 @@ public:
 
   TCHAR *Format(TCHAR *buffer, size_t max_size) const;
 
-  gcc_pure
+  [[gnu::pure]]
   static RadioFrequency Parse(const TCHAR *p);
 };
 

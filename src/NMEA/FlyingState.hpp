@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_FLYING_STATE_HPP
 
 #include "Geo/GeoPoint.hpp"
+#include "time/Stamp.hpp"
 
 #include <type_traits>
 
@@ -41,12 +42,12 @@ struct FlyingState
   bool powered;
 
   /** Time of flight */
-  double flight_time;
+  FloatDuration flight_time;
 
   /**
    * Time of takeoff.  Negative if aircraft was never observed flying.
    */
-  double takeoff_time;
+  TimeStamp takeoff_time;
 
   /**
    * The location of the aircraft when it took off.  If this attribute
@@ -56,20 +57,26 @@ struct FlyingState
   GeoPoint takeoff_location;
 
   /**
+   * The altitude of the aircraft when it took off.  Only valid is
+   * takeoff_time is not negative.
+   */
+  double takeoff_altitude;
+
+  /**
    * The time stamp when the aircraft released from towing.  This is
    * an estimate based on sink.  If the aircraft was never seen on
    * ground (i.e. XCSoar was switched on while flying), this value is
    * not too useful.  This is negative if the aircraft is assumed to
    * be still towing.
    */
-  double release_time;
+  TimeStamp release_time;
 
   /**
    * The time stamp of the last detected 'power-on' - e.g. the last start
    * of the aircraft's engine.
    */
-  double power_on_time;
-  double power_off_time;
+  TimeStamp power_on_time;
+  TimeStamp power_off_time;
 
   /**
    * The location of the aircraft when it released from towing.
@@ -100,15 +107,23 @@ struct FlyingState
   /**
    * Time stamp of the landing.  Invalid if negative.
    */
-  double landing_time;
+  TimeStamp landing_time;
 
   GeoPoint landing_location;
 
   /** Reset flying state as if never flown */
   void Reset();
 
+  /**
+   * Was a take-off recorded?  This validates the fields
+   * #takeoff_time, #takeoff_location and #takeoff_altitude.
+   */
+  bool HasTakenOff() const noexcept {
+    return takeoff_time.IsDefined();
+  }
+
   bool IsTowing() const {
-    return flying && release_time < 0;
+    return flying && !release_time.IsDefined();
   }
 
   /**

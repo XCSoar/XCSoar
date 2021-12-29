@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef WSTRING_UTIL_HPP
 #define WSTRING_UTIL_HPP
 
-#include "Compiler.h"
-
 #include <wchar.h>
 
 /**
@@ -36,11 +34,11 @@ Copyright_License {
  * terminator)
  * @return a pointer to the null terminator
  */
-gcc_nonnull_all
+[[gnu::nonnull]]
 wchar_t *
 CopyString(wchar_t *dest, const wchar_t *src, size_t size);
 
-gcc_nonnull_all
+[[gnu::nonnull]]
 wchar_t *
 NormalizeSearchString(wchar_t *dest, const wchar_t *src);
 

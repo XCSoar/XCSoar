@@ -38,7 +38,7 @@ class AirspaceRoute : public RoutePlanner {
 
     constexpr
     RouteAirspaceIntersection(const AbstractAirspace *_airspace,
-                              RoutePoint _point)
+                              RoutePoint _point) noexcept
       :airspace(_airspace), point(_point) {}
   };
 
@@ -47,49 +47,54 @@ class AirspaceRoute : public RoutePlanner {
 public:
   friend class PrintHelper;
 
-  AirspaceRoute();
-  virtual ~AirspaceRoute();
+  AirspaceRoute() noexcept;
+  ~AirspaceRoute() noexcept;
 
   void Synchronise(const Airspaces &master, AirspacePredicate condition,
                    const AGeoPoint &origin,
-                   const AGeoPoint &destination);
+                   const AGeoPoint &destination) noexcept;
 
-  void Reset() override;
+  void Reset() noexcept override;
 
-  unsigned AirspaceSize() const;
+  [[gnu::pure]]
+  unsigned AirspaceSize() const noexcept;
 
 protected:
 
-  void OnSolve(const AGeoPoint &origin, const AGeoPoint &destination) override;
+  void OnSolve(const AGeoPoint &origin, const AGeoPoint &destination) noexcept override;
 
-  bool IsTrivial() const override {
+  bool IsTrivial() const noexcept override {
     return m_airspaces.IsEmpty() && RoutePlanner::IsTrivial();
   }
 
 private:
-  bool CheckClearance(const RouteLink &e, RoutePoint &inp) const override;
-  void AddNearby(const RouteLink &e) override;
-  bool CheckSecondary(const RouteLink &e) override;
+  bool CheckClearance(const RouteLink &e, RoutePoint &inp) const noexcept override;
+  void AddNearby(const RouteLink &e) noexcept override;
+  bool CheckSecondary(const RouteLink &e) noexcept override;
 
   void AddNearbyAirspace(const RouteAirspaceIntersection &inx,
-                         const RouteLink &e);
+                         const RouteLink &e) noexcept;
 
-  RouteAirspaceIntersection FirstIntersecting(const RouteLink &e) const;
+  RouteAirspaceIntersection FirstIntersecting(const RouteLink &e) const noexcept;
 
-  const AbstractAirspace *InsideOthers(const AGeoPoint &origin) const;
+  [[gnu::pure]]
+  const AbstractAirspace *InsideOthers(const AGeoPoint &origin) const noexcept;
 
+  [[gnu::pure]]
   ClearingPair FindClearingPair(const SearchPointVector &spv,
                                 const SearchPointVector::const_iterator start,
                                 const SearchPointVector::const_iterator end,
-                                const AFlatGeoPoint &dest) const;
+                                const AFlatGeoPoint &dest) const noexcept;
 
+  [[gnu::pure]]
   ClearingPair GetPairs(const SearchPointVector &spv,
                         const RoutePoint &start,
-                        const RoutePoint &dest) const;
+                        const RoutePoint &dest) const noexcept;
 
+  [[gnu::pure]]
   ClearingPair GetBackupPairs(const SearchPointVector &spv,
                               const RoutePoint &start,
-                              const RoutePoint &intc) const;
+                              const RoutePoint &intc) const noexcept;
 };
 
 #endif

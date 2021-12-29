@@ -52,7 +52,7 @@ protected:
   void DrawCircle(Canvas &canvas);
 
   virtual void OnResize(PixelSize new_size) override;
-  virtual void OnPaintBuffer(Canvas &canvas) override;
+  virtual void OnPaintBuffer(Canvas &canvas) noexcept override;
 };
 
 #endif

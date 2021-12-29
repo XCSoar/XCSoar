@@ -63,7 +63,7 @@ RulesStatusPanel::Refresh() noexcept
 
   if (start_stats.task_started) {
     SetText(StartTime,
-            FormatLocalTimeHHMM((int)start_stats.time, settings.utc_offset));
+            FormatLocalTimeHHMM(start_stats.time, settings.utc_offset));
 
     SetText(StartSpeed,
             FormatUserTaskSpeed(start_stats.ground_speed));

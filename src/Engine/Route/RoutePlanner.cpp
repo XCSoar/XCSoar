@@ -21,26 +21,24 @@
  */
 
 #include "RoutePlanner.hpp"
+#include "ReachResult.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
 
-RoutePlanner::RoutePlanner()
-  :terrain(NULL), planner(0),
-   unique_links(50000),
-   reach_polar_mode(RoutePlannerConfig::Polar::TASK)
+RoutePlanner::RoutePlanner() noexcept
 {
   Reset();
 }
 
 void
-RoutePlanner::ClearReach()
+RoutePlanner::ClearReach() noexcept
 {
   reach_terrain.Reset();
   reach_working.Reset();
 }
 
 void
-RoutePlanner::Reset()
+RoutePlanner::Reset() noexcept
 {
   origin_last = AFlatGeoPoint(0, 0, 0);
   destination_last = AFlatGeoPoint(0, 0, 0);
@@ -57,7 +55,8 @@ RoutePlanner::Reset()
 bool
 RoutePlanner::SolveReachTerrain(const AGeoPoint &origin,
                                 const RoutePlannerConfig &config,
-                                const int h_ceiling, const bool do_solve)
+                                const int h_ceiling,
+                                const bool do_solve) noexcept
 {
   rpolars_reach.SetConfig(config, origin.altitude, h_ceiling);
   reach_polar_mode = config.reach_polar_mode;
@@ -68,7 +67,8 @@ RoutePlanner::SolveReachTerrain(const AGeoPoint &origin,
 bool
 RoutePlanner::SolveReachWorking(const AGeoPoint &origin,
                                 const RoutePlannerConfig &config,
-                                const int h_ceiling, const bool do_solve)
+                                const int h_ceiling,
+                                const bool do_solve) noexcept
 {
   rpolars_reach_working.SetConfig(config, origin.altitude, h_ceiling);
   // reach_polar_mode previously set by SolveReachTerrain
@@ -78,7 +78,7 @@ RoutePlanner::SolveReachWorking(const AGeoPoint &origin,
 
 bool
 RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
-                    const RoutePlannerConfig &config, const int h_ceiling)
+                    const RoutePlannerConfig &config, const int h_ceiling) noexcept
 {
   OnSolve(origin, destination);
   rpolars_route.SetConfig(config, std::max(destination.altitude, origin.altitude),
@@ -200,7 +200,7 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
 
 unsigned
 RoutePlanner::FindSolution(const RoutePoint &final_point,
-                           Route &this_route) const
+                           Route &this_route) const noexcept
 {
   // we are iterating from goal (aircraft) backwards to start (target)
 
@@ -250,7 +250,7 @@ RoutePlanner::FindSolution(const RoutePoint &final_point,
 }
 
 bool
-RoutePlanner::LinkCleared(const RouteLink &e)
+RoutePlanner::LinkCleared(const RouteLink &e) noexcept
 {
   const bool is_final = (e.second == astar_goal);
 
@@ -287,7 +287,7 @@ RoutePlanner::LinkCleared(const RouteLink &e)
 }
 
 bool
-RoutePlanner::IsSetUnique(const RouteLinkBase &e)
+RoutePlanner::IsSetUnique(const RouteLinkBase &e) noexcept
 {
   const bool inserted = unique_links.insert(e).second;
   if (inserted)
@@ -298,7 +298,7 @@ RoutePlanner::IsSetUnique(const RouteLinkBase &e)
 }
 
 void
-RoutePlanner::AddCandidate(const RouteLinkBase& e)
+RoutePlanner::AddCandidate(const RouteLinkBase &e) noexcept
 {
   if (e.IsShort())
     return;
@@ -312,7 +312,7 @@ RoutePlanner::AddCandidate(const RouteLinkBase& e)
 }
 
 void
-RoutePlanner::AddCandidate(const RouteLink &e)
+RoutePlanner::AddCandidate(const RouteLink &e) noexcept
 {
   if (!IsSetUnique(e))
     return;
@@ -321,7 +321,7 @@ RoutePlanner::AddCandidate(const RouteLink &e)
 }
 
 void
-RoutePlanner::AddShortcut(const RoutePoint &node)
+RoutePlanner::AddShortcut(const RoutePoint &node) noexcept
 {
   const RoutePoint previous = planner.GetPredecessor(node);
   if (previous == node)
@@ -354,7 +354,7 @@ RoutePlanner::AddShortcut(const RoutePoint &node)
 }
 
 void
-RoutePlanner::AddEdges(const RouteLink &e)
+RoutePlanner::AddEdges(const RouteLink &e) noexcept
 {
   const bool this_short = e.IsShort();
   RoutePoint inx;
@@ -380,7 +380,7 @@ RoutePlanner::UpdatePolar(const GlideSettings &settings,
                           const GlidePolar &task_polar,
                           const GlidePolar &safety_polar,
                           const SpeedVector &wind,
-                          const int height_min_working)
+                          const int height_min_working) noexcept
 {
   rpolars_route.SetConfig(config);
   rpolars_route.Initialise(settings, task_polar, wind);
@@ -403,7 +403,8 @@ RoutePlanner::UpdatePolar(const GlideSettings &settings,
 */
 
 bool
-RoutePlanner::CheckClearanceTerrain(const RouteLink &e, RoutePoint& inp) const
+RoutePlanner::CheckClearanceTerrain(const RouteLink &e,
+                                    RoutePoint &inp) const noexcept
 {
   if (!terrain || !terrain->IsDefined())
     return true;
@@ -413,8 +414,9 @@ RoutePlanner::CheckClearanceTerrain(const RouteLink &e, RoutePoint& inp) const
 }
 
 void
-RoutePlanner::AddNearbyTerrainSweep(const RoutePoint& p,
-                                       const RouteLink &c_link, const int sign)
+RoutePlanner::AddNearbyTerrainSweep(const RoutePoint &p,
+                                    const RouteLink &c_link,
+                                    const int sign) noexcept
 {
   // dont add if no distance
   if ((FlatGeoPoint)c_link.first == (FlatGeoPoint)p)
@@ -440,7 +442,8 @@ RoutePlanner::AddNearbyTerrainSweep(const RoutePoint& p,
 }
 
 void
-RoutePlanner::AddNearbyTerrain(const RoutePoint &p, const RouteLink& e)
+RoutePlanner::AddNearbyTerrain(const RoutePoint &p,
+                               const RouteLink &e) noexcept
 {
   RouteLink c_link(e.first, p, projection);
 
@@ -484,13 +487,14 @@ RoutePlanner::AddNearbyTerrain(const RoutePoint &p, const RouteLink& e)
 }
 
 void
-RoutePlanner::OnSolve(const AGeoPoint &origin, const AGeoPoint &destination)
+RoutePlanner::OnSolve(const AGeoPoint &origin,
+                      const AGeoPoint &destination) noexcept
 {
   projection.SetCenter(origin);
 }
 
 bool
-RoutePlanner::IsHullExtended(const RoutePoint &p)
+RoutePlanner::IsHullExtended(const RoutePoint &p) noexcept
 {
   if (search_hull.IsInside(p))
     return false;
@@ -501,11 +505,17 @@ RoutePlanner::IsHullExtended(const RoutePoint &p)
 }
 
 GeoPoint
-RoutePlanner::Intersection(const AGeoPoint& origin,
-                           const AGeoPoint& destination) const
+RoutePlanner::Intersection(const AGeoPoint &origin,
+                           const AGeoPoint &destination) const noexcept
 {
   const FlatProjection proj(origin);
   return rpolars_route.Intersection(origin, destination, terrain, proj);
+}
+
+std::optional<ReachResult>
+RoutePlanner::FindPositiveArrival(const AGeoPoint &dest) const noexcept
+{
+  return reach_terrain.FindPositiveArrival(dest, rpolars_reach);
 }
 
 /*
@@ -524,7 +534,8 @@ RoutePlanner::Intersection(const AGeoPoint& origin,
 
 void
 RoutePlanner::AcceptInRange(const GeoBounds &bounds,
-                            FlatTriangleFanVisitor &visitor, bool working) const
+                            FlatTriangleFanVisitor &visitor,
+                            bool working) const noexcept
 {
   if (working)
     reach_working.AcceptInRange(bounds, visitor);

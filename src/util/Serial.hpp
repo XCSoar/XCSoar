@@ -30,21 +30,19 @@ Copyright_License {
  * values.
  */
 class Serial {
-  unsigned value;
+  unsigned value = 0;
 
 public:
-  Serial():value(0) {}
-
-  Serial &operator++() {
+  constexpr Serial &operator++() noexcept {
     ++value;
     return *this;
   }
 
-  bool operator==(const Serial other) const {
+  constexpr bool operator==(const Serial other) const noexcept {
     return value == other.value;
   }
 
-  bool operator!=(const Serial other) const {
+  constexpr bool operator!=(const Serial other) const noexcept {
     return value != other.value;
   }
 };

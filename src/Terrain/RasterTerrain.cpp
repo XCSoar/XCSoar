@@ -59,19 +59,18 @@ RasterTerrain::SaveCache(FileCache &cache, Path path) const
   os->Commit();
 }
 
-inline bool
+inline void
 RasterTerrain::Load(Path path, FileCache *cache,
                     OperationEnvironment &operation)
 {
   try {
     if (LoadCache(cache, path))
-      return true;
+      return;
   } catch (...) {
     LogError(std::current_exception(), "Failed to load terrain cache");
   }
 
-  if (!LoadTerrainOverview(archive.get(), map.GetTileCache(), operation))
-    return false;
+  LoadTerrainOverview(archive.get(), map.GetTileCache(), operation);
 
   map.UpdateProjection();
 
@@ -82,37 +81,43 @@ RasterTerrain::Load(Path path, FileCache *cache,
       LogError(std::current_exception(), "Failed to save terrain cache");
     }
   }
-
-  return true;
 }
 
-RasterTerrain *
+std::unique_ptr<RasterTerrain>
+RasterTerrain::OpenTerrain(FileCache *cache, Path path,
+                           OperationEnvironment &operation)
+{
+  auto rt = std::make_unique<RasterTerrain>(ZipArchive{path});
+  rt->Load(path, cache, operation);
+  return rt;
+}
+
+std::unique_ptr<RasterTerrain>
 RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
 try {
   const auto path = Profile::GetPath(ProfileKeys::MapFile);
-  if (path.IsNull())
+  if (path == nullptr)
     return nullptr;
 
-  RasterTerrain *rt = new RasterTerrain(ZipArchive(path));
-  if (!rt->Load(path, cache, operation)) {
-    delete rt;
-    return nullptr;
-  }
-
-  return rt;
-} catch (const std::runtime_error &e) {
-  operation.SetErrorMessage(UTF8ToWideConverter(e.what()));
+  return OpenTerrain(cache, path, operation);
+} catch (...) {
+  operation.SetError(std::current_exception());
   return nullptr;
 }
 
 bool
-RasterTerrain::UpdateTiles(const GeoPoint &location, double radius)
+RasterTerrain::UpdateTiles(const GeoPoint &location, double radius) noexcept
 {
   auto &tile_cache = map.GetTileCache();
   if (!tile_cache.IsValid())
     return false;
 
-  UpdateTerrainTiles(archive.get(), tile_cache, mutex,
-                     map.GetProjection(), location, radius);
+  try {
+    UpdateTerrainTiles(archive.get(), tile_cache, mutex,
+                       map.GetProjection(), location, radius);
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to update terrain tiles");
+  }
+
   return map.IsDirty();
 }

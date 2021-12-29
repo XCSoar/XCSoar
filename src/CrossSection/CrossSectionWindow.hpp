@@ -113,7 +113,7 @@ public:
 
 protected:
   /* virtual methods from AntiFlickerWindow */
-  virtual void OnPaintBuffer(Canvas &canvas) override;
+  virtual void OnPaintBuffer(Canvas &canvas) noexcept override;
 };
 
 #endif

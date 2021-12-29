@@ -42,7 +42,7 @@ PrintHelper::contestmanager_print(const ContestManager &man,
 
     for (auto it = v.begin(); it != v.end(); ++it)
       fs << it->GetLocation().longitude << " " << it->GetLocation().latitude
-         << " " << it->GetAltitude() << " " << it->GetTime()
+         << " " << it->GetAltitude() << " " << it->GetTime().count()
          << "\n";
   }
 
@@ -54,7 +54,7 @@ PrintHelper::contestmanager_print(const ContestManager &man,
 
     for (auto it = v.begin(); it != v.end(); ++it)
       fs << it->GetLocation().longitude << " " << it->GetLocation().latitude
-         << " " << it->GetAltitude() << " " << it->GetTime()
+         << " " << it->GetAltitude() << " " << it->GetTime().count()
          << "\n";
   }
 
@@ -66,7 +66,7 @@ PrintHelper::contestmanager_print(const ContestManager &man,
 
     for (auto it = v.begin(); it != v.end(); ++it)
       fs << it->GetLocation().longitude << " " << it->GetLocation().latitude
-         << " " << it->GetAltitude() << " " << it->GetTime()
+         << " " << it->GetAltitude() << " " << it->GetTime().count()
          << "\n";
   }
 
@@ -77,12 +77,12 @@ PrintHelper::contestmanager_print(const ContestManager &man,
     return;
   }
 
-  if (man.stats.result[0].time > 0) {
+  if (man.stats.result[0].time.count() > 0) {
 
     for (auto it = man.stats.solution[0].begin();
          it != man.stats.solution[0].end(); ++it) {
       fs << it->GetLocation().longitude << " " << it->GetLocation().latitude
-         << " " << it->GetTime()
+         << " " << it->GetTime().count()
          << "\n";
     }
   }
@@ -94,5 +94,5 @@ PrintHelper::print(const ContestResult& score)
   std::cout << "#   score " << score.score << "\n";
   std::cout << "#   distance " << score.distance/1000. << " (km)\n";
   std::cout << "#   speed " << score.GetSpeed() * 3.6 << " (kph)\n";
-  std::cout << "#   time " << score.time << " (sec)\n";
+  std::cout << "#   time " << score.time.count() << " (sec)\n";
 }

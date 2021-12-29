@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "BatteryTimer.hpp"
 #include "Hardware/Battery.hpp"
+#include "Hardware/PowerInfo.hpp"
+#include "Hardware/PowerGlobal.hpp"
 #include "UIActions.hpp"
 #include "LogFile.hpp"
 #include "Simulator.hpp"
@@ -38,7 +40,13 @@ BatteryTimer::Process()
   // power has been lost and you are now on battery power - ie:
   // something else is wrong
 
-  UpdateBatteryInfo();
+#ifndef ANDROID
+  Power::global_info = Power::GetInfo();
+#endif
+
+  const auto &info = Power::global_info;
+  const auto &battery = info.battery;
+  const auto &external = info.external;
 
   /* Battery status - simulator only - for safety of battery data
      note: Simulator only - more important to keep running in your plane
@@ -47,15 +55,15 @@ BatteryTimer::Process()
   // JMW, maybe this should be active always...
   // we don't want the PDA to be completely depleted.
 
-  if (Power::External::Status == Power::External::OFF) {
-    if (is_simulator() && Power::Battery::RemainingPercentValid &&
-        Power::Battery::RemainingPercent < BATTERY_EXIT) {
+  if (external.status == Power::ExternalInfo::Status::OFF) {
+    if (is_simulator() && battery.remaining_percent &&
+        *battery.remaining_percent < BATTERY_EXIT) {
       LogFormat("Battery low exit...");
       // TODO feature: Warning message on battery shutdown
       UIActions::SignalShutdown(true);
     } else {
-      if (Power::Battery::RemainingPercentValid &&
-          Power::Battery::RemainingPercent < BATTERY_WARNING) {
+      if (battery.remaining_percent &&
+          *battery.remaining_percent < BATTERY_WARNING) {
         if (last_warning.CheckUpdate(BATTERY_REMINDER))
           // TODO feature: Show the user what the batt status is.
           Message::AddMessage(_("Battery low"));

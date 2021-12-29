@@ -24,11 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_COMPONENTS_HPP
 #define XCSOAR_COMPONENTS_HPP
 
-#include "util/Compiler.h"
-
 class FileCache;
 class TopographyStore;
 class RasterTerrain;
+class AsyncTerrainOverviewLoader;
 class GlideComputer;
 class DrawThread;
 class MultipleDevices;
@@ -52,6 +51,7 @@ extern ProtectedTaskManager *protected_task_manager;
 extern Replay *replay;
 extern TopographyStore *topography;
 extern RasterTerrain *terrain;
+extern AsyncTerrainOverviewLoader *terrain_loader;
 extern GlideComputer *glide_computer;
 #ifndef ENABLE_OPENGL
 extern DrawThread *draw_thread;
@@ -70,7 +70,7 @@ extern TrackingGlue *tracking;
  * Returns the global ProtectedAirspaceWarningManager instance.  May
  * be nullptr if disabled.
  */
-gcc_pure
+[[gnu::pure]]
 ProtectedAirspaceWarningManager *
 GetAirspaceWarnings();
 

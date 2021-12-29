@@ -164,6 +164,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
 {
   enum {
     iName = 0,
+    iShortname = 1,
     iLatitude = 3,
     iLongitude = 4,
     iElevation = 5,
@@ -219,9 +220,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
   }
 
   // Check if the basic fields are provided
-  if (iName >= n_params ||
-      iLatitude >= n_params ||
-      iLongitude >= n_params)
+  if (n_params <= iLatitude)
     return false;
 
   GeoPoint location;
@@ -255,6 +254,10 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
     ParseStyle(params[iStyle], new_waypoint.type);
 
   new_waypoint.flags.turn_point = true;
+
+  // Short name (code) of waypoint 
+  if (iShortname < n_params)
+    new_waypoint.shortname = params[iShortname];
 
   // Frequency & runway direction/length (for airports and landables)
   // and description (e.g. "Some Description")

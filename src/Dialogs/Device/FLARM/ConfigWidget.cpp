@@ -22,10 +22,12 @@ Copyright_License {
 */
 
 #include "ConfigWidget.hpp"
+#include "Dialogs/Error.hpp"
 #include "Device/Driver/FLARM/Device.hpp"
 #include "FLARM/Traffic.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
+#include "Operation/Cancelled.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "system/Sleep.h"
 
@@ -42,9 +44,9 @@ static const char *const flarm_setting_names[] = {
 
 gcc_pure
 static bool
-SettingExists(FlarmDevice &device, const char *name)
+SettingExists(FlarmDevice &device, const char *name) noexcept
 {
-  return device.GetSetting(name).first;
+  return (bool)device.GetSetting(name);
 }
 
 /**
@@ -67,12 +69,18 @@ RequestAllSettings(FlarmDevice &device)
 {
   PopupOperationEnvironment env;
 
-  for (auto i = flarm_setting_names; *i != NULL; ++i)
-    if (!device.RequestSetting(*i, env))
-      return false;
+  try {
+    for (auto i = flarm_setting_names; *i != NULL; ++i)
+      device.RequestSetting(*i, env);
 
-  for (auto i = flarm_setting_names; *i != NULL; ++i)
-    WaitForSetting(device, *i, 500);
+    for (auto i = flarm_setting_names; *i != NULL; ++i)
+      WaitForSetting(device, *i, 500);
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    env.SetError(std::current_exception());
+    return false;
+  }
 
   return true;
 }
@@ -81,11 +89,10 @@ static unsigned
 GetUnsignedValue(const FlarmDevice &device, const char *name,
                  unsigned default_value)
 {
-  auto x = device.GetSetting(name);
-  if (x.first) {
+  if (const auto x = device.GetSetting(name)) {
     char *endptr;
-    unsigned long y = strtoul(x.second.c_str(), &endptr, 10);
-    if (endptr > x.second.c_str() && *endptr == 0)
+    unsigned long y = strtoul(x->c_str(), &endptr, 10);
+    if (endptr > x->c_str() && *endptr == 0)
       return (unsigned)y;
   }
 
@@ -152,7 +159,7 @@ FLARMConfigWidget::Prepare(ContainerWindow &parent,
 
 bool
 FLARMConfigWidget::Save(bool &_changed) noexcept
-{
+try {
   PopupOperationEnvironment env;
   bool changed = false;
   NarrowString<32> buffer;
@@ -201,4 +208,9 @@ FLARMConfigWidget::Save(bool &_changed) noexcept
 
   _changed |= changed;
   return true;
+} catch (OperationCancelled) {
+  return false;
+} catch (...) {
+  ShowError(std::current_exception(), _T("FLARM"));
+  return false;
 }

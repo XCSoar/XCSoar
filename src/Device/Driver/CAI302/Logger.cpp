@@ -81,7 +81,7 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
     env.SetProgressPosition(i);
   }
 
-  return !flight_list.empty() && !env.IsCancelled();
+  return !flight_list.empty();
 }
 
 bool
@@ -91,19 +91,21 @@ CAI302Device::ReadFlightList(RecordedFlightList &flight_list,
   if (!EnableBulkMode(env))
     return false;
 
-  if (!UploadMode(env)) {
+  try {
+    UploadMode(env);
+    bool success = ReadFlightListInner(port, flight_list, env);
     DisableBulkMode(env);
-    return false;
-  }
-
-  if (!ReadFlightListInner(port, flight_list, env)) {
+    return success;
+  } catch (...) {
     mode = Mode::UNKNOWN;
-    DisableBulkMode(env);
-    return false;
-  }
 
-  DisableBulkMode(env);
-  return true;
+    try {
+      DisableBulkMode(env);
+    } catch (...) {
+    }
+
+    throw;
+  }
 }
 
 static bool
@@ -116,8 +118,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   BufferedOutputStream os(fos);
 
   CAI302::FileASCII file_ascii;
-  if (!UploadFileASCII(port, flight.internal.cai302, file_ascii, env) ||
-      env.IsCancelled())
+  if (!UploadFileASCII(port, flight.internal.cai302, file_ascii, env))
     return false;
 
   unsigned bytes_per_block = file_ascii.bytes_per_block;
@@ -176,26 +177,19 @@ CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
   if (!EnableBulkMode(env))
     return false;
 
-  if (!UploadMode(env)) {
-    DisableBulkMode(env);
-    return false;
-  }
-
   try {
-    if (!DownloadFlightInner(port, flight, path, env)) {
-      mode = Mode::UNKNOWN;
-      DisableBulkMode(env);
-      return false;
-    }
+    UploadMode(env);
+    bool success = DownloadFlightInner(port, flight, path, env);
+    DisableBulkMode(env);
+    return success;
   } catch (...) {
     mode = Mode::UNKNOWN;
+
     try {
       DisableBulkMode(env);
     } catch (...) {
     }
+
     throw;
   }
-
-  DisableBulkMode(env);
-  return true;
 }

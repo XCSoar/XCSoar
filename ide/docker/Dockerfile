@@ -1,9 +1,9 @@
-FROM debian:buster
+FROM debian:bullseye
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install build dependencies
-RUN apt-get update && apt-get install -y python-minimal python3 vim ccache python3-pkgconfig gdb && apt-get clean
+RUN apt-get update && apt-get install -y python3 vim ccache python3-pkgconfig gdb && apt-get clean
 COPY ./provisioning/install-debian-packages.sh /root/install-debian-packages.sh
 RUN /root/install-debian-packages.sh && apt-get clean
 COPY ./provisioning/install-android-tools.sh /root/install-android-tools.sh

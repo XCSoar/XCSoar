@@ -130,17 +130,22 @@ RunCommand(CAI302Device &device, const char *command,
 {
   if (strcmp(command, "info") == 0)
     return PrintInfo(device, env);
-  else if (strcmp(command, "reboot") == 0)
-    return device.Reboot(env);
-  else if (strcmp(command, "poweroff") == 0)
-    return device.PowerOff(env);
-  else if (strcmp(command, "startlogger") == 0)
-    return device.StartLogging(env);
-  else if (strcmp(command, "stoplogger") == 0)
-    return device.StopLogging(env);
-  else if (strcmp(command, "clearlog") == 0)
-    return device.ClearLog(env);
-  else if (strcmp(command, "pilots") == 0)
+  else if (strcmp(command, "reboot") == 0) {
+    device.Reboot(env);
+    return true;
+  } else if (strcmp(command, "poweroff") == 0) {
+    device.PowerOff(env);
+    return true;
+  } else if (strcmp(command, "startlogger") == 0) {
+    device.StartLogging(env);
+    return true;
+  } else if (strcmp(command, "stoplogger") == 0) {
+    device.StopLogging(env);
+    return true;
+  } else if (strcmp(command, "clearlog") == 0) {
+    device.ClearLog(env);
+    return true;
+  } else if (strcmp(command, "pilots") == 0)
     return ListPilots(device, env);
   else if (strcmp(command, "navpoints") == 0)
     return ListNavpoints(device, env);

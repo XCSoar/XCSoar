@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Device/Driver.hpp"
 #include "time/BrokenDate.hpp"
+#include "time/Stamp.hpp"
 
 struct NMEAInfo;
 class NMEAInputLine;
@@ -35,7 +36,7 @@ class XCTracerDevice final : public AbstractDevice {
    * time and date of last GPS fix
    * used to check whether date/time has advanced
    */
-  double last_time = 0;
+  TimeStamp last_time = TimeStamp::Undefined();
   BrokenDate last_date = BrokenDate::Invalid();
 
   /**

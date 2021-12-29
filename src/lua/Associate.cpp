@@ -37,14 +37,12 @@ Lua::InitAssociatePointer(lua_State *L, const char *table)
 
 void
 Lua::AssociatePointer(lua_State *L, const char *table,
-                      void *p, int value_idx)
+                      void *p, RelativeStackIndex value_idx)
 {
   lua_getfield(L, LUA_REGISTRYINDEX, table);
+  StackPushed(value_idx);
 
-  if (value_idx < 0)
-    value_idx -= 2;
-
-  SetTable(L, -3, LightUserData(p), StackIndex(value_idx));
+  SetTable(L, RelativeStackIndex{-1}, LightUserData(p), value_idx);
   lua_pop(L, 1);
 }
 
@@ -52,7 +50,7 @@ void
 Lua::DisassociatePointer(lua_State *L, const char *table, void *p)
 {
   lua_getfield(L, LUA_REGISTRYINDEX, table);
-  SetTable(L, -3, LightUserData(p), nullptr);
+  SetTable(L, RelativeStackIndex{-1}, LightUserData(p), nullptr);
   lua_pop(L, 1);
 }
 
@@ -60,7 +58,7 @@ void
 Lua::LookupPointer(lua_State *L, const char *table, void *p)
 {
   lua_getfield(L, LUA_REGISTRYINDEX, table);
-  GetTable(L, -2, LightUserData(p));
+  GetTable(L, RelativeStackIndex{-1}, LightUserData(p));
   lua_remove(L, -2); // pop the registry table
 }
 

@@ -25,16 +25,33 @@ Copyright_License {
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Renderer/HorizonRenderer.hpp"
-#include "Hardware/Battery.hpp"
+#include "Hardware/PowerGlobal.hpp"
 #include "system/SystemLoad.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 
+#ifdef HAVE_BATTERY
+#include "Hardware/PowerInfo.hpp"
+#endif
+
 #include <tchar.h>
 
 void
-UpdateInfoBoxGLoad(InfoBoxData &data)
+UpdateInfoBoxHeartRate(InfoBoxData &data) noexcept
+{
+  const auto &basic = CommonInterface::Basic();
+
+  if (!basic.heart_rate_available) {
+    data.SetInvalid();
+    return;
+  }
+
+  data.FormatValue(_T("%u"), basic.heart_rate);
+}
+
+void
+UpdateInfoBoxGLoad(InfoBoxData &data) noexcept
 {
   if (!CommonInterface::Basic().acceleration.available) {
     data.SetInvalid();
@@ -46,59 +63,50 @@ UpdateInfoBoxGLoad(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxBattery(InfoBoxData &data)
+UpdateInfoBoxBattery(InfoBoxData &data) noexcept
 {
 #ifdef HAVE_BATTERY
+  const auto &info = Power::global_info;
+  const auto &battery = info.battery;
+  const auto &external = info.external;
+
   bool DisplaySupplyVoltageAsValue=false;
-  switch (Power::External::Status) {
-    case Power::External::OFF:
-      if (CommonInterface::Basic().battery_level_available)
-        data.UnsafeFormatComment(_T("%s; %d%%"),
-                                 _("AC Off"),
-                                 (int)CommonInterface::Basic().battery_level);
-      else
-        data.SetComment(_("AC Off"));
-      break;
-    case Power::External::ON:
-      if (!CommonInterface::Basic().voltage_available)
-        data.SetComment(_("AC ON"));
-      else{
-        DisplaySupplyVoltageAsValue = true;
-        data.SetValueFromVoltage(CommonInterface::Basic().voltage);
-      }
-      break;
-    case Power::External::UNKNOWN:
-    default:
+  switch (external.status) {
+  case Power::ExternalInfo::Status::OFF:
+    if (CommonInterface::Basic().battery_level_available)
+      data.UnsafeFormatComment(_T("%s; %d%%"),
+                               _("AC Off"),
+                               (int)CommonInterface::Basic().battery_level);
+    else
+      data.SetComment(_("AC Off"));
+    break;
+
+  case Power::ExternalInfo::Status::ON:
+    if (!CommonInterface::Basic().voltage_available)
+      data.SetComment(_("AC ON"));
+    else{
+      DisplaySupplyVoltageAsValue = true;
+      data.SetValueFromVoltage(CommonInterface::Basic().voltage);
+    }
+    break;
+
+  case Power::ExternalInfo::Status::UNKNOWN:
+  default:
+    data.SetCommentInvalid();
+  }
+
+  if (battery.remaining_percent) {
+    if (!DisplaySupplyVoltageAsValue)
+      data.SetValueFromPercent(*battery.remaining_percent);
+    else
+      data.SetCommentFromPercent(* battery.remaining_percent);
+  } else {
+    if (!DisplaySupplyVoltageAsValue)
+      data.SetValueInvalid();
+    else
       data.SetCommentInvalid();
   }
-#ifndef ANDROID
-  switch (Power::Battery::Status){
-    case Power::Battery::HIGH:
-    case Power::Battery::LOW:
-    case Power::Battery::CRITICAL:
-    case Power::Battery::CHARGING:
-      if (Power::Battery::RemainingPercentValid){
-#endif
-        if (!DisplaySupplyVoltageAsValue)
-          data.SetValueFromPercent(Power::Battery::RemainingPercent);
-        else
-          data.SetCommentFromPercent(Power::Battery::RemainingPercent);
-#ifndef ANDROID
-      }
-      else
-        if (!DisplaySupplyVoltageAsValue)
-          data.SetValueInvalid();
-        else
-          data.SetCommentInvalid();
-      break;
-    case Power::Battery::NOBATTERY:
-    case Power::Battery::UNKNOWN:
-      if (!DisplaySupplyVoltageAsValue)
-        data.SetValueInvalid();
-      else
-        data.SetCommentInvalid();
-  }
-#endif
+
   return;
 
 #endif
@@ -115,39 +123,40 @@ UpdateInfoBoxBattery(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxExperimental1(InfoBoxData &data)
+UpdateInfoBoxExperimental1(InfoBoxData &data) noexcept
 {
   // Set Value
   data.SetInvalid();
 }
 
 void
-UpdateInfoBoxExperimental2(InfoBoxData &data)
+UpdateInfoBoxExperimental2(InfoBoxData &data) noexcept
 {
   // Set Value
   data.SetInvalid();
 }
 
 void
-UpdateInfoBoxCPULoad(InfoBoxData &data)
+UpdateInfoBoxCPULoad(InfoBoxData &data) noexcept
 {
-  unsigned percent_load = SystemLoadCPU();
-  if (percent_load <= 100) {
-    data.SetValueFromPercent(percent_load);
+  const auto percent_load = SystemLoadCPU();
+  if (percent_load) {
+    data.SetValueFromPercent(*percent_load);
   } else {
     data.SetInvalid();
   }
 }
 
 void
-UpdateInfoBoxFreeRAM(InfoBoxData &data)
+UpdateInfoBoxFreeRAM(InfoBoxData &data) noexcept
 {
   // used to be implemented on WinCE
   data.SetInvalid();
 }
 
 void
-InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
+InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas,
+                                     const PixelRect &rc) noexcept
 {
   if (CommonInterface::Basic().acceleration.available) {
     const Look &look = UIGlobals::GetLook();
@@ -157,21 +166,28 @@ InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 }
 
 void
-InfoBoxContentHorizon::Update(InfoBoxData &data)
+InfoBoxContentHorizon::Update(InfoBoxData &data) noexcept
 {
-  if (!CommonInterface::Basic().attitude.IsBankAngleUseable() &&
-      !CommonInterface::Basic().attitude.IsPitchAngleUseable()) {
+  const auto &basic = CommonInterface::Basic();
+
+  if (!basic.attitude.IsBankAngleUseable() &&
+      !basic.attitude.IsPitchAngleUseable()) {
     data.SetInvalid();
     return;
   }
 
-  data.SetCustom();
+  /* mix all Validity fields which may have been used to calculate the
+     attitude, see ComputeDynamics() */
+  data.SetCustom(basic.location_available.ToInteger() +
+                 basic.airspeed_available.ToInteger() +
+                 basic.attitude.bank_angle_available.ToInteger() +
+                 basic.attitude.pitch_angle_available.ToInteger());
 }
 
 // TODO: merge with original copy from Dialogs/StatusPanels/SystemStatusPanel.cpp
-gcc_pure
+[[gnu::pure]]
 static const TCHAR *
-GetGPSStatus(const NMEAInfo &basic)
+GetGPSStatus(const NMEAInfo &basic) noexcept
 {
   if (!basic.alive)
     return N_("Disconnected");
@@ -184,7 +200,7 @@ GetGPSStatus(const NMEAInfo &basic)
 }
 
 void
-UpdateInfoBoxNbrSat(InfoBoxData &data)
+UpdateInfoBoxNbrSat(InfoBoxData &data) noexcept
 {
     const NMEAInfo &basic = CommonInterface::Basic();
     const GPSState &gps = basic.gps;

@@ -37,10 +37,21 @@ Copyright_License {
 #include "ui/event/Notify.hpp"
 #include "thread/Mutex.hxx"
 #include "thread/Debug.hpp"
+#include "time/FloatDuration.hxx"
 #include "util/tstring.hpp"
 #include "util/StaticFifoBuffer.hxx"
-#include "Android/GliderLink.hpp"
 
+#ifdef HAVE_INTERNAL_GPS
+#include "SensorListener.hpp"
+#endif
+
+#ifdef ANDROID
+#include "Math/SelfTimingKalmanFilter1d.hpp"
+#include "Math/WindowFilter.hpp"
+#endif
+
+#include <array>
+#include <atomic>
 #include <chrono>
 #include <memory>
 
@@ -49,6 +60,7 @@ Copyright_License {
 #include <stdio.h>
 
 namespace Cares { class Channel; }
+namespace Java { class GlobalCloseable; }
 class EventLoop;
 struct NMEAInfo;
 struct MoreData;
@@ -62,16 +74,18 @@ class Device;
 class AtmosphericPressure;
 struct DeviceRegister;
 class InternalSensors;
-class BMP085Device;
-class I2CbaroDevice;
-class NunchuckDevice;
-class VoltageDevice;
 class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
 class OpenDeviceJob;
+class DeviceDataEditor;
 
-class DeviceDescriptor final : PortListener, PortLineSplitter {
+class DeviceDescriptor final
+  : PortListener,
+#ifdef HAVE_INTERNAL_GPS
+    SensorListener,
+#endif
+    PortLineSplitter {
   /**
    * The #EventLoop instance used by #Port instances.
    */
@@ -113,7 +127,7 @@ class DeviceDescriptor final : PortListener, PortLineSplitter {
    * The #Job that currently opens the device.  nullptr if the device is
    * not currently being opened.
    */
-  OpenDeviceJob *open_job;
+  OpenDeviceJob *open_job = nullptr;
 
   /**
    * The #Port used by this device.  This is not applicable to some
@@ -125,18 +139,18 @@ class DeviceDescriptor final : PortListener, PortLineSplitter {
    * A handler that will receive all data, to display it on the
    * screen.  Can be set with SetMonitor().
    */
-  DataHandler  *monitor;
+  DataHandler *monitor = nullptr;
 
   /**
    * A handler that will receive all NMEA lines, to dispatch it to
    * other devices.
    */
-  PortLineHandler *dispatcher;
+  PortLineHandler *dispatcher = nullptr;
 
   /**
    * The device driver used to handle data to/from the device.
    */
-  const DeviceRegister *driver;
+  const DeviceRegister *driver = nullptr;
 
   /**
    * An instance of the driver.
@@ -147,33 +161,61 @@ class DeviceDescriptor final : PortListener, PortLineSplitter {
    * device was borrowed with the method Borrow().  The latter,
    * however, is only possible from the main thread.
    */
-  Device *device;
+  Device *device = nullptr;
 
   /**
    * The second device driver for a passed through device.
    */
-  const DeviceRegister *second_driver;
+  const DeviceRegister *second_driver = nullptr;
 
   /**
    * An instance of the passed through driver, if available.
    */
-  Device *second_device;
-
+  Device *second_device = nullptr;
 
 #ifdef HAVE_INTERNAL_GPS
   /**
    * A pointer to the Java object managing all Android sensors (GPS,
    * baro sensor and others).
    */
-  InternalSensors *internal_sensors;
+  InternalSensors *internal_sensors = nullptr;
 #endif
 
 #ifdef ANDROID
-  BMP085Device *droidsoar_v2;
-  I2CbaroDevice *i2cbaro[3]; // static, pitot, tek; in any order
-  NunchuckDevice *nunchuck;
-  VoltageDevice *voltage;
-  GliderLink *glider_link;
+  Java::GlobalCloseable *java_sensor = nullptr;
+  Java::GlobalCloseable *second_java_sensor = nullptr;
+
+  /* We use a Kalman filter to smooth Android device pressure sensor
+     noise.  The filter requires two parameters: the first is the
+     variance of the distribution of second derivatives of pressure
+     values that we expect to see in flight, and the second is the
+     maximum time between pressure sensor updates in seconds before
+     the filter gives up on smoothing and uses the raw value.
+     The pressure acceleration variance used here is actually wider
+     than the maximum likelihood variance observed in the data: it
+     turns out that the distribution is more heavy-tailed than a
+     normal distribution, probably because glider pilots usually
+     experience fairly constant pressure change most of the time. */
+  static constexpr double KF_VAR_ACCEL = 0.0075;
+  static constexpr SelfTimingKalmanFilter1d::Duration KF_MAX_DT =
+    std::chrono::minutes{1};
+
+  static constexpr SelfTimingKalmanFilter1d::Duration KF_I2C_MAX_DT =
+    std::chrono::seconds{5};
+  static constexpr double KF_I2C_VAR_ACCEL = 0.3;
+  static constexpr double KF_I2C_VAR_ACCEL_85 = KF_VAR_ACCEL;
+
+  SelfTimingKalmanFilter1d kalman_filter{KF_MAX_DT, KF_VAR_ACCEL};
+
+  double voltage_offset;
+  double voltage_factor;
+  std::array<WindowFilter<16>, 1> voltage_filter;
+  WindowFilter<64> temperature_filter;
+
+  /**
+   * State for Nunchuk.
+   */
+  int joy_state_x, joy_state_y;
 #endif
 
   /**
@@ -218,7 +260,13 @@ class DeviceDescriptor final : PortListener, PortLineSplitter {
    *
    * @param see ResetFailureCounter()
    */
-  unsigned n_failures;
+  unsigned n_failures = 0;
+
+  /**
+   * True when a sensor has failed and the device should be closed in
+   * the next OnSysTicker() call.
+   */
+  std::atomic_bool has_failed{false};
 
   /**
    * Internal flag for OnSysTicker() for detecting link timeout.
@@ -229,7 +277,7 @@ class DeviceDescriptor final : PortListener, PortLineSplitter {
    * Internal flag for OnSysTicker() for calling Device::OnSysTicker()
    * only every other time.
    */
-  bool ticker;
+  bool ticker = false;
 
   /**
    * True when somebody has "borrowed" the device.  Link timeouts are
@@ -239,32 +287,32 @@ class DeviceDescriptor final : PortListener, PortLineSplitter {
    *
    * @see CanBorrow(), Borrow()
    */
-  bool borrowed;
+  bool borrowed = false;
 
 public:
   DeviceDescriptor(EventLoop &_event_loop, Cares::Channel &_cares,
-                   unsigned index, PortListener *port_listener);
+                   unsigned index, PortListener *port_listener) noexcept;
   ~DeviceDescriptor() noexcept;
 
-  unsigned GetIndex() const {
+  unsigned GetIndex() const noexcept {
     return index;
   }
 
-  const DeviceConfig &GetConfig() const {
+  const DeviceConfig &GetConfig() const noexcept {
     return config;
   }
 
-  void SetConfig(const DeviceConfig &config);
-  void ClearConfig();
+  void SetConfig(const DeviceConfig &config) noexcept;
+  void ClearConfig() noexcept;
 
   bool IsConfigured() const {
     return config.port_type != DeviceConfig::PortType::DISABLED;
   }
 
   gcc_pure
-  PortState GetState() const;
+  PortState GetState() const noexcept;
 
-  tstring GetErrorMessage() const {
+  tstring GetErrorMessage() const noexcept {
     const std::lock_guard<Mutex> lock(mutex);
     return error_message;
   }
@@ -272,7 +320,7 @@ public:
   /**
    * Was there a failure on the #Port object?
    */
-  bool HasPortFailed() const {
+  bool HasPortFailed() const noexcept {
     return config.IsAvailable() && config.UsesPort() && port == nullptr;
   }
 
@@ -280,12 +328,12 @@ public:
    * @see DumpPort::IsEnabled()
    */
   gcc_pure
-  bool IsDumpEnabled() const;
+  bool IsDumpEnabled() const noexcept;
 
   /**
    * @see DumpPort::Disable()
    */
-  void DisableDump();
+  void DisableDump() noexcept;
 
   /**
    * @see DumpPort::EnableTemporarily()
@@ -296,12 +344,12 @@ public:
    * Wrapper for Driver::HasTimeout().  This method can't be inline
    * because the Driver struct is incomplete at this point.
    */
-  bool ShouldReopenDriverOnTimeout() const;
+  bool ShouldReopenDriverOnTimeout() const noexcept;
 
   /**
    * Should the #Port be reopened automatically when a timeout occurs?
    */
-  bool ShouldReopenOnTimeout() const {
+  bool ShouldReopenOnTimeout() const noexcept {
     return config.ShouldReopenOnTimeout() &&
       ShouldReopenDriverOnTimeout();
   }
@@ -309,7 +357,7 @@ public:
   /**
    * Should the #Port be reopened?
    */
-  bool ShouldReopen() const {
+  bool ShouldReopen() const noexcept {
     return HasPortFailed() || (!IsAlive() && ShouldReopenOnTimeout());
   }
 
@@ -320,7 +368,7 @@ public:
    * Should only be used by driver-specific code (such as the CAI 302
    * manager).
    */
-  Device *GetDevice() {
+  Device *GetDevice() noexcept {
     return device;
   }
 
@@ -328,11 +376,13 @@ private:
   /**
    * Cancel the #AsyncJobRunner object if it is running.
    */
-  void CancelAsync();
+  void CancelAsync() noexcept;
 
   /**
    * When this method fails, the caller is responsible for freeing the
    * Port object.
+   *
+   * Throws on error.
    */
   gcc_nonnull_all
   bool OpenOnPort(std::unique_ptr<DumpPort> &&port, OperationEnvironment &env);
@@ -348,13 +398,16 @@ private:
   bool OpenVoltage();
 
   bool OpenGliderLink();
+
+  bool OpenBluetoothSensor();
+
 public:
   /**
    * To be used by OpenDeviceJob, don't call directly.
    */
   bool DoOpen(OperationEnvironment &env) noexcept;
 
-  void ResetFailureCounter() {
+  void ResetFailureCounter() noexcept {
     n_failures = 0u;
   }
 
@@ -363,7 +416,7 @@ public:
    */
   void Open(OperationEnvironment &env);
 
-  void Close();
+  void Close() noexcept;
 
   /**
    * @param env a persistent object
@@ -386,33 +439,33 @@ public:
    * will re-enable the receive thread, to avoid false negatives due
    * to flaky cables.
    */
-  bool EnableNMEA(OperationEnvironment &env);
+  bool EnableNMEA(OperationEnvironment &env) noexcept;
 
-  const TCHAR *GetDisplayName() const;
+  const TCHAR *GetDisplayName() const noexcept;
 
   /**
    * Compares the driver's name.
    */
-  bool IsDriver(const TCHAR *name) const;
+  bool IsDriver(const TCHAR *name) const noexcept;
 
   gcc_pure
-  bool CanDeclare() const;
+  bool CanDeclare() const noexcept;
 
   gcc_pure
-  bool IsLogger() const;
+  bool IsLogger() const noexcept;
 
-  bool IsCondor() const {
+  bool IsCondor() const noexcept {
     return IsDriver(_T("Condor"));
   }
 
-  bool IsVega() const {
+  bool IsVega() const noexcept {
     return IsDriver(_T("Vega"));
   }
 
-  bool IsNMEAOut() const;
-  bool IsManageable() const;
+  bool IsNMEAOut() const noexcept;
+  bool IsManageable() const noexcept;
 
-  bool IsBorrowed() const {
+  bool IsBorrowed() const noexcept {
     return borrowed;
   }
 
@@ -422,7 +475,7 @@ public:
    *
    * May only be called from the main thread.
    */
-  bool IsOccupied() const {
+  bool IsOccupied() const noexcept {
     assert(InMainThread());
 
     return IsBorrowed() || async.IsBusy();
@@ -435,7 +488,7 @@ public:
    *
    * @see Borrow()
    */
-  bool CanBorrow() const {
+  bool CanBorrow() const noexcept {
     assert(InMainThread());
 
     return device != nullptr && GetState() == PortState::READY &&
@@ -451,7 +504,7 @@ public:
    * @return false if the device is already occupied and cannot be
    * borrowed
    */
-  bool Borrow();
+  bool Borrow() noexcept;
 
   /**
    * Return a borrowed device.  The caller is responsible for
@@ -459,24 +512,35 @@ public:
    *
    * May only be called from the main thread.
    */
-  void Return();
+  void Return() noexcept;
 
   /**
    * Query the device's "alive" flag from the DeviceBlackboard.
    * This method locks the DeviceBlackboard.
    */
   gcc_pure
-  bool IsAlive() const;
+  bool IsAlive() const noexcept;
+
+  [[gnu::pure]]
+  TimeStamp GetClock() const noexcept;
+
+  /**
+   * Return a copy of the device's current data.
+   */
+  [[gnu::pure]]
+  NMEAInfo GetData() const noexcept;
+
+  DeviceDataEditor BeginEdit() noexcept;
 
 private:
-  bool ParseNMEA(const char *line, struct NMEAInfo &info);
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) noexcept;
 
 public:
-  void SetMonitor(DataHandler  *_monitor) {
+  void SetMonitor(DataHandler  *_monitor) noexcept {
     monitor = _monitor;
   }
 
-  void SetDispatcher(PortLineHandler *_dispatcher) {
+  void SetDispatcher(PortLineHandler *_dispatcher) noexcept {
     dispatcher = _dispatcher;
   }
 
@@ -485,23 +549,25 @@ public:
    */
   void ForwardLine(const char *line);
 
-  bool WriteNMEA(const char *line, OperationEnvironment &env);
+  bool WriteNMEA(const char *line, OperationEnvironment &env) noexcept;
 #ifdef _UNICODE
-  bool WriteNMEA(const TCHAR *line, OperationEnvironment &env);
+  bool WriteNMEA(const TCHAR *line, OperationEnvironment &env) noexcept;
 #endif
 
-  bool PutMacCready(double mac_cready, OperationEnvironment &env);
-  bool PutBugs(double bugs, OperationEnvironment &env);
+  bool PutMacCready(double mac_cready, OperationEnvironment &env) noexcept;
+  bool PutBugs(double bugs, OperationEnvironment &env) noexcept;
   bool PutBallast(double fraction, double overload,
-                  OperationEnvironment &env);
-  bool PutVolume(unsigned volume, OperationEnvironment &env);
+                  OperationEnvironment &env) noexcept;
+  bool PutVolume(unsigned volume, OperationEnvironment &env) noexcept;
+  bool PutPilotEvent(OperationEnvironment &env) noexcept;
   bool PutActiveFrequency(RadioFrequency frequency,
                           const TCHAR *name,
-                          OperationEnvironment &env);
+                          OperationEnvironment &env) noexcept;
   bool PutStandbyFrequency(RadioFrequency frequency,
                            const TCHAR *name,
-                           OperationEnvironment &env);
-  bool PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env);
+                           OperationEnvironment &env) noexcept;
+  bool PutQNH(const AtmosphericPressure &pres,
+              OperationEnvironment &env) noexcept;
 
   /**
    * Caller is responsible for calling Borrow() and Return().
@@ -521,22 +587,20 @@ public:
   bool DownloadFlight(const RecordedFlightInfo &flight, Path path,
                       OperationEnvironment &env);
 
-  void OnSysTicker();
+  void OnSysTicker() noexcept;
 
   /**
    * Wrapper for Driver::OnSensorUpdate().
    */
-  void OnSensorUpdate(const MoreData &basic);
+  void OnSensorUpdate(const MoreData &basic) noexcept;
 
   /**
    * Wrapper for Driver::OnCalculatedUpdate().
    */
   void OnCalculatedUpdate(const MoreData &basic,
-                          const DerivedInfo &calculated);
+                          const DerivedInfo &calculated) noexcept;
 
 private:
-  bool ParseLine(const char *line);
-
   void OnJobFinished() noexcept;
 
   /* virtual methods from class PortListener */
@@ -544,10 +608,74 @@ private:
   void PortError(const char *msg) noexcept override;
 
   /* virtual methods from DataHandler  */
-  bool DataReceived(const void *data, size_t length) noexcept override;
+  bool DataReceived(std::span<const std::byte> s) noexcept override;
 
   /* virtual methods from PortLineHandler */
   bool LineReceived(const char *line) noexcept override;
+
+#ifdef HAVE_INTERNAL_GPS
+  /* methods from SensorListener */
+  void OnConnected(int connected) noexcept override;
+  void OnLocationSensor(std::chrono::system_clock::time_point time,
+                        int n_satellites,
+                        GeoPoint location,
+                        bool hasAltitude, bool geoid_altitude,
+                        double altitude,
+                        bool hasBearing, double bearing,
+                        bool hasSpeed, double speed,
+                        bool hasAccuracy, double accuracy) noexcept override;
+
+#ifdef ANDROID
+  void OnAccelerationSensor(double acceleration) noexcept override;
+  void OnAccelerationSensor(float ddx, float ddy,
+                            float ddz) noexcept override;
+  void OnRotationSensor(float dtheta_x, float dtheta_y,
+                        float dtheta_z) noexcept override;
+  void OnMagneticFieldSensor(float h_x, float h_y, float h_z) noexcept override;
+  void OnBarometricPressureSensor(float pressure,
+                                  float sensor_noise_variance) noexcept override;
+  void OnPressureAltitudeSensor(float altitude) noexcept override;
+  void OnI2CbaroSensor(int index, int sensorType,
+                       AtmosphericPressure pressure) noexcept override;
+  void OnVarioSensor(float vario) noexcept override;
+  void OnHeartRateSensor(unsigned bpm) noexcept override;
+  void OnVoltageValues(int temp_adc, unsigned voltage_index,
+                       int volt_adc) noexcept override;
+  void OnNunchukValues(int joy_x, int joy_y,
+                       int acc_x, int acc_y, int acc_z,
+                       int switches) noexcept final;
+  void OnGliderLinkTraffic(GliderLinkId id, const char *callsign,
+                           GeoPoint location, double altitude,
+                           double gspeed, double vspeed,
+                           unsigned bearing) noexcept override;
+  void OnTemperature(Temperature temperature) noexcept override;
+  void OnBatteryPercent(double battery_percent) noexcept override;
+  void OnSensorStateChanged() noexcept override;
+  void OnSensorError(const char *msg) noexcept override;
+#endif // ANDROID
+#endif // HAVE_INTERNAL_GPS
+};
+
+/**
+ * This scope class calls DeviceDescriptor::Return() and
+ * DeviceDescriptor::EnableNMEA() when the caller leaves the current
+ * scope.  The caller must have called DeviceDescriptor::Borrow()
+ * successfully before constructing this class.
+ */
+class ScopeReturnDevice {
+  DeviceDescriptor &device;
+  OperationEnvironment &env;
+
+public:
+  ScopeReturnDevice(DeviceDescriptor &_device,
+                    OperationEnvironment &_env) noexcept
+    :device(_device), env(_env) {
+  }
+
+  ~ScopeReturnDevice() noexcept {
+    device.EnableNMEA(env);
+    device.Return();
+  }
 };
 
 #endif

@@ -209,7 +209,7 @@ AirspaceListWidget::OnAirspaceListEnter(unsigned i)
 
   assert(i < items.size());
 
-  dlgAirspaceDetails(items[i].GetAirspace(), airspace_warnings);
+  dlgAirspaceDetails(items[i].GetAirspacePtr(), airspace_warnings);
 }
 
 void
@@ -222,7 +222,6 @@ void
 AirspaceListWidget::UpdateList()
 {
   AirspaceFilterData data;
-  data.Clear();
 
   if (dialog_state.type != WILDCARD)
     data.cls = (AirspaceClass)dialog_state.type;
@@ -335,7 +334,7 @@ AirspaceListWidget::OnGPSUpdate(const MoreData &basic)
   if (dialog_state.direction == 0 && !CommonInterface::Calculated().circling) {
     const Angle heading = basic.attitude.heading;
     Angle a = last_heading - heading;
-    if (a.AsDelta().AbsoluteDegrees() >= 10) {
+    if (a.AsDelta().Absolute() >= Angle::Degrees(10)) {
       last_heading = heading;
 
       UpdateList();
@@ -372,7 +371,7 @@ FillDistanceEnum(DataFieldEnum &df)
     df.AddChoice(distances[i], buffer);
   }
 
-  df.Set(0u);
+  df.SetValue(0u);
 }
 
 static void
@@ -390,7 +389,7 @@ FillDirectionEnum(DataFieldEnum &df)
   for (unsigned i = 0; i < ARRAY_SIZE(directions); ++i)
     df.AddChoice(directions[i], FormatBearing(directions[i]).c_str());
 
-  df.Set(WILDCARD);
+  df.SetValue(WILDCARD);
 }
 
 static DataField *

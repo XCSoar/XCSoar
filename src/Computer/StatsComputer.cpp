@@ -26,20 +26,13 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
-/* Workaround for some GCC versions which don't inline the constexpr
-   despite being defined so in C++17, see
-   http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0386r2.pdf */
-#if GCC_OLDER_THAN(9,0)
-constexpr std::chrono::steady_clock::duration StatsComputer::PERIOD;
-#endif
-
 void
 StatsComputer::ResetFlight(const bool full)
 {
   last_location = GeoPoint::Invalid();
-  last_climb_start_time = -1;
-  last_cruise_start_time = -1;
-  last_thermal_end_time = -1;
+  last_climb_start_time = TimeStamp::Undefined();
+  last_cruise_start_time = TimeStamp::Undefined();
+  last_thermal_end_time = TimeStamp::Undefined();
 
   if (full)
     flightstats.Reset();
@@ -152,7 +145,7 @@ StatsComputer::ProcessClimbEvents(const DerivedInfo &calculated)
   }
 
   if (calculated.last_thermal.IsDefined() &&
-      (last_thermal_end_time < 0 ||
+      (!last_thermal_end_time.IsDefined() ||
        calculated.last_thermal.end_time > last_thermal_end_time))
     OnDepartedThermal(calculated);
 
@@ -160,5 +153,5 @@ StatsComputer::ProcessClimbEvents(const DerivedInfo &calculated)
   last_cruise_start_time = calculated.cruise_start_time;
   last_thermal_end_time = calculated.last_thermal.IsDefined()
     ? calculated.last_thermal.end_time
-    : -1.;
+    : TimeStamp::Undefined();
 }

@@ -31,6 +31,7 @@ Copyright_License {
 FileCache *file_cache;
 TopographyStore *topography;
 RasterTerrain *terrain;
+AsyncTerrainOverviewLoader *terrain_loader;
 
 #ifndef ENABLE_OPENGL
 DrawThread *draw_thread;

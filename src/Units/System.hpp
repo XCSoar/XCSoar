@@ -25,27 +25,29 @@ Copyright_License {
 #define XCSOAR_UNITS_SYSTEM_HPP
 
 #include "Unit.hpp"
-#include "util/Compiler.h"
 
-namespace Units
-{
-  /**
-   * Converts a value from the system unit to the user-specified unit
-   * @param value The value in system unit
-   * @param Unit The destination unit
-   * @return The value in user-specified unit
-   */
-  gcc_const
-  double ToUserUnit(double value, Unit unit);
+namespace Units {
 
-  /**
-   * Converts a value from the user-specified unit to the system unit
-   * @param value The value in user-specified unit
-   * @param Unit The source unit
-   * @return The value in system unit
-   */
-  gcc_const
-  double ToSysUnit(double value, Unit unit);
-};
+/**
+ * Converts a value from the system unit to the user-specified unit
+ * @param value The value in system unit
+ * @param Unit The destination unit
+ * @return The value in user-specified unit
+ */
+[[gnu::const]]
+double
+ToUserUnit(double value, Unit unit) noexcept;
+
+/**
+ * Converts a value from the user-specified unit to the system unit
+ * @param value The value in user-specified unit
+ * @param Unit The source unit
+ * @return The value in system unit
+ */
+[[gnu::const]]
+double
+ToSysUnit(double value, Unit unit) noexcept;
+
+} // namespace Units
 
 #endif

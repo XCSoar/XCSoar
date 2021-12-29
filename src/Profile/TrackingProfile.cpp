@@ -50,6 +50,7 @@ static void Load(const ProfileMap &map,
   map.Get(ProfileKeys::SkyLinesRoaming, settings.roaming);
   map.Get(ProfileKeys::SkyLinesTrackingInterval, settings.interval);
   map.Get(ProfileKeys::SkyLinesTrafficEnabled, settings.traffic_enabled);
+  map.Get(ProfileKeys::SkyLinesNearTrafficEnabled, settings.near_traffic_enabled);
 
   const char *key = map.Get(ProfileKeys::SkyLinesTrackingKey);
   if (key != NULL)

@@ -29,10 +29,10 @@ Copyright_License {
 
 class DataFieldTime final : public DataField {
 private:
-  int value;
-  int min;
-  int max;
-  unsigned step;
+  std::chrono::seconds value;
+  std::chrono::seconds min;
+  std::chrono::seconds max;
+  std::chrono::seconds step;
   unsigned max_tokens;
   PeriodClock last_step;
   uint8_t speedup;
@@ -43,31 +43,26 @@ protected:
   int SpeedUp(bool keyup) noexcept;
 
 public:
-  DataFieldTime(int _min, int _max, int _value, unsigned _step,
+  DataFieldTime(std::chrono::seconds _min, std::chrono::seconds _max,
+                std::chrono::seconds _value, std::chrono::seconds _step,
                 DataFieldListener *listener) noexcept
     :DataField(Type::TIME, true, listener),
      value(_value), min(_min), max(_max), step(_step), max_tokens(2),
      speedup(0) {}
 
-protected:
-  void SetValue(int _value) noexcept {
-    if (_value == value)
-      return;
-
-    value = _value;
-    Modified();
+  const auto &GetValue() const noexcept {
+    return value;
   }
 
-public:
-  void SetMin(int _min) noexcept {
+  void SetMin(std::chrono::seconds _min) noexcept {
     min = _min;
   }
 
-  void SetMax(int _max) noexcept {
+  void SetMax(std::chrono::seconds _max) noexcept {
     max = _max;
   }
 
-  void SetStep(unsigned _step) noexcept {
+  void SetStep(std::chrono::seconds _step) noexcept {
     step = _step;
   }
 
@@ -76,8 +71,15 @@ public:
     max_tokens = _max_tokens;
   }
 
-  void Set(int _value) noexcept {
+  void SetValue(std::chrono::seconds _value) noexcept {
     value = _value;
+  }
+
+  void ModifyValue(std::chrono::seconds new_value) noexcept {
+    if (new_value != GetValue()) {
+      SetValue(new_value);
+      Modified();
+    }
   }
 
   /* virtual methods from class DataField */
@@ -85,21 +87,21 @@ public:
   void Dec() noexcept override;
 
   int GetAsInteger() const noexcept override {
-    return value;
+    return value.count();
   }
 
   const TCHAR *GetAsString() const noexcept override;
   const TCHAR *GetAsDisplayString() const noexcept override;
 
   void SetAsInteger(int _value) noexcept override {
-    SetValue(_value);
+    ModifyValue(std::chrono::seconds{_value});
   }
 
   ComboList CreateComboList(const TCHAR *reference) const noexcept override;
   void SetFromCombo(int data_field_index, const TCHAR *value_string) noexcept override;
 
 protected:
-  void AppendComboValue(ComboList &combo_list, int value) const noexcept;
+  void AppendComboValue(ComboList &combo_list, std::chrono::seconds value) const noexcept;
 };
 
 #endif

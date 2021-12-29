@@ -28,8 +28,9 @@ Copyright_License {
 #include "shapelib/mapserver.h"
 #include "Geo/GeoBounds.hpp"
 #include "util/AllocatedArray.hxx"
+#include "util/IntrusiveForwardList.hxx"
 #include "util/Serial.hpp"
-#include "ui/canvas/Color.hpp"
+#include "ui/canvas/PortableColor.hpp"
 #include "ResourceId.hpp"
 #include "thread/Mutex.hxx"
 
@@ -38,19 +39,59 @@ Copyright_License {
 #endif
 
 #include <cassert>
+#include <memory>
 
 class WindowProjection;
 class XShape;
 struct zzip_dir;
 
+/**
+ * C++ wrapper for #shapefileObj;
+ */
+class ShapeFile {
+  shapefileObj obj;
+
+public:
+  /**
+   * Throws on error.
+   */
+  ShapeFile(zzip_dir *dir, const char *filename);
+
+  ~ShapeFile() noexcept {
+    msShapefileClose(&obj);
+  }
+
+  ShapeFile(const ShapeFile &) = delete;
+  ShapeFile &operator=(const ShapeFile &) = delete;
+
+  std::size_t size() const noexcept {
+    return obj.numshapes;
+  }
+
+  const auto &GetBounds() const noexcept {
+    return obj.bounds;
+  }
+
+  int WhichShapes(struct zzip_dir *dir, rectObj rect) noexcept {
+    return msShapefileWhichShapes(&obj, dir, rect, 0);
+  }
+
+  ms_const_bitarray GetStatus() const noexcept {
+    return obj.status;
+  }
+
+  /**
+   * Throws on error.
+   */
+  void ReadShape(shapeObj &shape, std::size_t i);
+
+  [[gnu::pure]]
+  const char *ReadLabel(std::size_t i, unsigned field) noexcept;
+};
+
 class TopographyFile {
-  struct ShapeList {
-    const ShapeList *next;
-
-    const XShape *shape;
-
-    ShapeList() {}
-    ShapeList(const XShape *_shape):shape(_shape) {}
+  struct ShapeEnvelope final : IntrusiveForwardListHook {
+    std::unique_ptr<const XShape> shape;
   };
 
   /**
@@ -60,15 +101,17 @@ class TopographyFile {
 
   zzip_dir *const dir;
 
-  shapefileObj file;
+  ShapeFile file;
 
   /**
    * The center of shapefileObj::bounds.
    */
   GeoPoint center;
 
-  AllocatedArray<ShapeList> shapes;
-  const ShapeList *first;
+  AllocatedArray<ShapeEnvelope> shapes;
+
+  using ShapeList = IntrusiveForwardList<ShapeEnvelope>;
+  ShapeList list;
 
   const int label_field;
 
@@ -76,7 +119,7 @@ class TopographyFile {
 
   const unsigned pen_width;
 
-  const Color color;
+  const BGRA8Color color;
 
   /**
    * The threshold value for the visibility check. If the current scale
@@ -101,7 +144,7 @@ class TopographyFile {
    * The current scope of the shape cache.  If the screen exceeds this
    * rectangle, then we need to update the cache.
    */
-  GeoBounds cache_bounds;
+  GeoBounds cache_bounds = GeoBounds::Invalid();
 
 public:
   /**
@@ -113,33 +156,26 @@ public:
   class const_iterator {
     friend class TopographyFile;
 
-    const ShapeList *current;
+    ShapeList::const_iterator i;
 
-    const_iterator(const ShapeList *p):current(p) {}
+    constexpr const_iterator(ShapeList::const_iterator _i) noexcept:i(_i) {}
 
   public:
     const_iterator &operator++() {
-      assert(current != nullptr);
-
-      current = current->next;
+      ++i;
       return *this;
     }
 
     const XShape &operator*() const {
-      assert(current != nullptr);
-      assert(current->shape != nullptr);
-
-      return *current->shape;
+      return *i->shape;
     }
 
     const XShape *operator->() const {
-      assert(current != nullptr);
-
-      return current->shape;
+      return i->shape.operator->();
     }
 
     bool operator==(const const_iterator &other) const {
-      return current == other.current;
+      return i == other.i;
     }
 
     bool operator!=(const const_iterator &other) const {
@@ -150,6 +186,9 @@ public:
 public:
   /**
    * The constructor opens the given shapefile and clears the cache
+   *
+   * Throws on error.
+   *
    * @param shpname The shapefile to open (*.shp)
    * @param threshold the zoom threshold for displaying this object
    * @param color The color to use for drawing, including alpha for OpenGL
@@ -160,12 +199,11 @@ public:
    * @param label_threshold the zoom threshold for label rendering
    * @param important_label_threshold labels below this zoom threshold will
    * be rendered in default style
-   * @return
    */
   TopographyFile(zzip_dir *dir, const char *shpname,
                  double threshold, double label_threshold,
                  double important_label_threshold,
-                 const Color color,
+                 const BGRA8Color color,
                  int label_field=-1,
                  ResourceId icon=ResourceId::Null(),
                  ResourceId big_icon=ResourceId::Null(),
@@ -176,25 +214,21 @@ public:
   /**
    * The destructor clears the cache and closes the shapefile
    */
-  ~TopographyFile();
+  ~TopographyFile() noexcept;
 
-  const Serial &GetSerial() const {
+  const Serial &GetSerial() const noexcept {
     return serial;
   }
 
-  const GeoPoint &GetCenter() const {
+  const GeoPoint &GetCenter() const noexcept {
     return center;
   }
 
-  bool IsEmpty() const {
-    return shapes.empty();
-  }
-
-  bool IsVisible(double map_scale) const {
+  bool IsVisible(double map_scale) const noexcept {
     return map_scale <= scale_threshold;
   }
 
-  bool IsLabelVisible(double map_scale) const {
+  bool IsLabelVisible(double map_scale) const noexcept {
     return map_scale <= label_threshold;
   }
 
@@ -204,8 +238,8 @@ public:
    * must be loaded.  A negative value is returned when all thresholds
    * have been reached already.
    */
-  gcc_pure
-  double GetNextScaleThreshold(double map_scale) const {
+  [[gnu::pure]]
+  double GetNextScaleThreshold(double map_scale) const noexcept {
     return map_scale <= scale_threshold
       ? (map_scale <= label_threshold
          /* both thresholds reached: not relevant */
@@ -220,40 +254,40 @@ public:
          : std::max(scale_threshold, label_threshold));
   }
 
-  bool IsLabelImportant(double map_scale) const {
+  bool IsLabelImportant(double map_scale) const noexcept {
     return map_scale <= important_label_threshold;
   }
 
-  ResourceId GetIcon() const {
+  ResourceId GetIcon() const noexcept {
     return icon;
   }
 
-  ResourceId GetBigIcon() const {
+  ResourceId GetBigIcon() const noexcept {
     return big_icon;
   }
 
-  Color GetColor() const {
+  const auto &GetColor() const noexcept {
     return color;
   }
 
-  unsigned GetPenWidth() const {
+  unsigned GetPenWidth() const noexcept {
     return pen_width;
   }
 
-  const_iterator begin() const {
-    return const_iterator(first);
+  const_iterator begin() const noexcept {
+    return const_iterator{list.begin()};
   }
 
-  const_iterator end() const {
-    return const_iterator(nullptr);
+  const_iterator end() const noexcept {
+    return const_iterator{list.end()};
   }
 
-  gcc_pure
-  unsigned GetSkipSteps(double map_scale) const;
+  [[gnu::pure]]
+  unsigned GetSkipSteps(double map_scale) const noexcept;
 
 #ifdef ENABLE_OPENGL
-  gcc_pure
-  GeoPoint ToGeoPoint(const ShapePoint &p) const {
+  [[gnu::pure]]
+  GeoPoint ToGeoPoint(const ShapePoint &p) const noexcept {
     return GeoPoint(center.longitude + Angle::Native(p.x),
                     center.latitude + Angle::Native(p.y));
   }
@@ -261,28 +295,32 @@ public:
   /**
    * @return thinning level, range: 0 .. XShape::THINNING_LEVELS-1
    */
-  gcc_pure
-  unsigned GetThinningLevel(double map_scale) const;
+  [[gnu::pure]]
+  unsigned GetThinningLevel(double map_scale) const noexcept;
 
   /**
    * @return minimum distance between points in ShapePoint coordinates
    */
-  gcc_pure
-  unsigned GetMinimumPointDistance(unsigned level) const;
+  [[gnu::pure]]
+  unsigned GetMinimumPointDistance(unsigned level) const noexcept;
 #endif
 
   /**
+   * Throws on error.
+   *
    * @return true if new data from the topography file has been loaded
    */
   bool Update(const WindowProjection &map_projection);
 
   /**
+   * Throws on error.
+   *
    * Load all shapes into memory.  For debugging purposes.
    */
   void LoadAll();
 
 protected:
-  void ClearCache();
+  void ClearCache() noexcept;
 };
 
 #endif

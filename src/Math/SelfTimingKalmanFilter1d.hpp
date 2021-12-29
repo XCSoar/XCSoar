@@ -25,6 +25,7 @@
 
 #include "KalmanFilter1d.hpp"
 
+#include <chrono>
 #include <cstdint>
 
 /**
@@ -32,6 +33,12 @@
  * that updates need provide only measurement information.
  */
 class SelfTimingKalmanFilter1d {
+public:
+  using Clock = std::chrono::steady_clock;
+  using Duration = Clock::duration;
+  using TimePoint = Clock::time_point;
+
+private:
   KalmanFilter1d filter_;
 
   // Internal time representations are in milliseconds.
@@ -39,12 +46,12 @@ class SelfTimingKalmanFilter1d {
   /**
    * Reset if updates are less frequent than this.
    */
-  uint64_t max_dt_us_;
+  Duration max_dt;
 
   /**
    * Time of last update.
    */
-  uint64_t t_last_update_us_ = 0;
+  TimePoint last_update_time;
 
 public:
   /**
@@ -57,13 +64,9 @@ public:
    *
    * Or you can just punt and set it to, like, a minute.
    */
-  SelfTimingKalmanFilter1d(double max_dt, double var_x_accel);
-  SelfTimingKalmanFilter1d(double max_dt);
-
-  // Get and set the maximum update interval as desired. See note above
-  // constructors for details on update intervals.
-  void SetMaxDt(double max_dt);
-  double GetMaxDt() const;
+  SelfTimingKalmanFilter1d(Duration _max_dt,
+                           double var_x_accel=1) noexcept
+    :filter_(var_x_accel), max_dt(_max_dt) {}
 
   /**
    * Updates state given a direct sensor measurement of the absolute
@@ -72,31 +75,23 @@ public:
    * filter resetting automatically for updates separated by large
    * time intervals as described above.
    */
-  void Update(double z_abs, double var_z_abs);
+  void Update(double z_abs, double var_z_abs) noexcept;
 
   // Remaining methods are identical to their counterparts in KalmanFilter1d.
 
-  void Reset() {
-    filter_.Reset();
-  }
-
-  void Reset(const double x_abs_value) {
-    filter_.Reset(x_abs_value);
-  }
-
-  void Reset(const double x_abs_value, const double x_vel_value) {
+  void Reset(const double x_abs_value=0, const double x_vel_value=0) noexcept {
     filter_.Reset(x_abs_value, x_vel_value);
   }
 
-  void SetAccelerationVariance(const double var_x_accel) {
+  void SetAccelerationVariance(const double var_x_accel) noexcept {
     filter_.SetAccelerationVariance(var_x_accel);
   }
 
-  double GetXAbs() const { return filter_.GetXAbs(); }
-  double GetXVel() const { return filter_.GetXVel(); }
-  double GetCovAbsAbs() const { return filter_.GetCovAbsAbs(); }
-  double GetCovAbsVel() const { return filter_.GetCovAbsVel(); }
-  double GetCovVelVel() const { return filter_.GetCovVelVel(); }
+  double GetXAbs() const noexcept { return filter_.GetXAbs(); }
+  double GetXVel() const noexcept { return filter_.GetXVel(); }
+  double GetCovAbsAbs() const noexcept { return filter_.GetCovAbsAbs(); }
+  double GetCovAbsVel() const noexcept { return filter_.GetCovAbsVel(); }
+  double GetCovVelVel() const noexcept { return filter_.GetCovVelVel(); }
 };
 
 #endif

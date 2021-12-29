@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Topography/XShape.hpp"
 #include "Convert.hpp"
+#include "util/Compiler.h"
 #include "util/StringAPI.hxx"
 #include "util/UTF8.hpp"
 #include "util/StringStrip.hxx"
@@ -42,7 +43,7 @@ Copyright_License {
 #include <tchar.h>
 
 static BasicAllocatedString<TCHAR>
-ImportLabel(const char *src)
+ImportLabel(const char *src) noexcept
 {
   if (src == nullptr)
     return nullptr;
@@ -67,9 +68,8 @@ ImportLabel(const char *src)
  * Returns the minimum number of points for each line of this shape
  * type.  Returns -1 if the shape type is not supported.
  */
-gcc_const
-static unsigned
-GetMinPointsForShapeType(int shapelib_type)
+static constexpr int
+GetMinPointsForShapeType(int shapelib_type) noexcept
 {
   switch (shapelib_type) {
   case MS_SHAPE_POINT:
@@ -87,26 +87,13 @@ GetMinPointsForShapeType(int shapelib_type)
   }
 }
 
-XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
-               int label_field)
-  :label(nullptr)
+XShape::XShape(const shapeObj &shape, const GeoPoint &file_center,
+               const char *_label)
+  :label(ImportLabel(_label))
 {
-#ifdef ENABLE_OPENGL
-  std::fill_n(index_count, THINNING_LEVELS, nullptr);
-  std::fill_n(indices, THINNING_LEVELS, nullptr);
-#endif
-
-  shapeObj shape;
-  msInitShape(&shape);
-  AtScopeExit(&shape) { msFreeShape(&shape); };
-  msSHPReadShape(shpfile->hSHP, i, &shape);
-
   bounds = ImportRect(shape.bounds);
-  if (!bounds.Check()) {
-    /* malformed bounds */
-    points = nullptr;
-    return;
-  }
+  if (!bounds.Check())
+    throw std::runtime_error{"Malformed shape bounds"};
 
   type = shape.type;
 
@@ -115,14 +102,13 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
   const int min_points = GetMinPointsForShapeType(shape.type);
   if (min_points < 0) {
     /* not supported, leave an empty XShape object */
-    points = nullptr;
     return;
   }
 
-  const unsigned input_lines = std::min((unsigned)shape.numlines,
-                                        (unsigned)MAX_LINES);
-  unsigned num_points = 0;
-  for (unsigned l = 0; l < input_lines; ++l) {
+  const std::size_t input_lines = std::min((std::size_t)shape.numlines,
+                                           lines.size());
+  std::size_t num_points = 0;
+  for (std::size_t l = 0; l < input_lines; ++l) {
     if (shape.line[l].numpoints < min_points)
       /* malformed shape */
       continue;
@@ -136,18 +122,17 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
   /* OpenGL: convert GeoPoints to ShapePoints, make them relative to
      the map's boundary center */
 
-  points = new ShapePoint[num_points];
-  ShapePoint *p = points;
+  points = std::make_unique<ShapePoint[]>(num_points);
 #else // !ENABLE_OPENGL
   /* convert all points of all lines to GeoPoints */
 
-  points = new GeoPoint[num_points];
-  GeoPoint *p = points;
+  points = std::make_unique<GeoPoint[]>(num_points);
 #endif
-  for (unsigned l = 0; l < num_lines; ++l) {
+  auto *p = points.get();
+  for (std::size_t l = 0; l < num_lines; ++l) {
     const pointObj *src = shape.line[l].point;
     num_points = lines[l];
-    for (unsigned j = 0; j < num_points; ++j, ++src) {
+    for (std::size_t j = 0; j < num_points; ++j, ++src) {
 #ifdef ENABLE_OPENGL
       const GeoPoint vertex(Angle::Degrees(src->x), Angle::Degrees(src->y));
       const GeoPoint relative = vertex - file_center;
@@ -160,47 +145,34 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
 #endif
     }
   }
-
-  if (label_field >= 0) {
-    const char *src = msDBFReadStringAttribute(shpfile->hDBF, i, label_field);
-    label = ImportLabel(src);
-  }
 }
 
-XShape::~XShape()
-{
-  delete[] points;
-#ifdef ENABLE_OPENGL
-  // Note: index_count and indices share one buffer
-  for (unsigned i = 0; i < THINNING_LEVELS; i++)
-    delete[] index_count[i];
-#endif
-}
+XShape::~XShape() noexcept = default;
 
 #ifdef ENABLE_OPENGL
 
 bool
-XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
+XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance) noexcept
 {
   assert(indices[thinning_level] == nullptr);
 
   uint16_t *idx, *idx_count;
-  unsigned num_points = 0;
+  std::size_t num_points = 0;
 
-  for (unsigned i=0; i < num_lines; i++)
+  for (std::size_t i=0; i < num_lines; i++)
     num_points += lines[i];
 
   if (type == MS_SHAPE_LINE) {
     if (num_points <= 2)
       return false;  // line cannot be simplified, so don't create indices
-    index_count[thinning_level] = idx_count =
-      new GLushort[num_lines + num_points];
+    index_count[thinning_level] = std::make_unique<GLushort[]>(num_lines + num_points);
+    idx_count = index_count[thinning_level].get();
     indices[thinning_level] = idx = idx_count + num_lines;
 
-    const uint16_t *end_l = lines + num_lines;
-    const ShapePoint *p = points;
+    const auto end_l = std::next(lines.begin(), num_lines);
+    const ShapePoint *p = points.get();
     unsigned i = 0;
-    for (const uint16_t *l = lines; l < end_l; l++) {
+    for (auto l = lines.begin(); l != end_l; ++l) {
       assert(*l >= 2);
       const ShapePoint *end_p = p + *l - 1;
       // always add first point
@@ -223,19 +195,19 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
     // TODO: free memory saved by thinning (use malloc/realloc or some class?)
     return true;
   } else if (type == MS_SHAPE_POLYGON) {
-    index_count[thinning_level] = idx_count =
-      new GLushort[1 + 3*(num_points-2) + 2*(num_lines-1)];
+    index_count[thinning_level] = std::make_unique<GLushort[]>(1 + 3 * (num_points - 2) + 2 * (num_lines - 1));
+    idx_count = index_count[thinning_level].get();
     indices[thinning_level] = idx = idx_count + 1;
 
     *idx_count = 0;
-    const ShapePoint *pt = points;
-    for (unsigned i=0; i < num_lines; i++) {
-      unsigned count = PolygonToTriangles(pt, lines[i], idx + *idx_count,
-                                          min_distance);
+    const ShapePoint *pt = points.get();
+    for (std::size_t i=0; i < num_lines; i++) {
+      std::size_t count = PolygonToTriangles(pt, lines[i], idx + *idx_count,
+                                             min_distance);
       if (i > 0) {
-        const GLushort offset = pt - points;
-        const unsigned max_idx_count = *idx_count + count;
-        for (unsigned j=*idx_count; j < max_idx_count; j++)
+        const GLushort offset = pt - points.get();
+        const std::size_t max_idx_count = *idx_count + count;
+        for (std::size_t j = *idx_count; j < max_idx_count; j++)
           idx[j] += offset;
       }
       *idx_count += count;
@@ -249,18 +221,16 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
   }
 }
 
-const uint16_t *
-XShape::GetIndices(int thinning_level, ShapeScalar min_distance,
-                   const uint16_t *&count) const
+XShape::Indices
+XShape::GetIndices(int thinning_level, ShapeScalar min_distance) const noexcept
 {
   if (indices[thinning_level] == nullptr) {
     XShape &deconst = const_cast<XShape &>(*this);
     if (!deconst.BuildIndices(thinning_level, min_distance))
-      return nullptr;
+      return {};
   }
 
-  count = index_count[thinning_level];
-  return indices[thinning_level];
+  return {indices[thinning_level], index_count[thinning_level].get()};
 }
 
 #endif // ENABLE_OPENGL

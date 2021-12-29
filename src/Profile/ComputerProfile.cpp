@@ -40,6 +40,7 @@ namespace Profile {
   static void Load(const ProfileMap &map, FeaturesSettings &settings);
   static void Load(const ProfileMap &map, CirclingSettings &settings);
   static void Load(const ProfileMap &map, WaveSettings &settings);
+  static void Load(const ProfileMap &map, WeGlideSettings &settings);
 };
 
 void
@@ -83,6 +84,20 @@ Profile::Load(const ProfileMap &map, LoggerSettings &settings)
   map.Get(ProfileKeys::CoPilotName, settings.copilot_name);
   map.Get(ProfileKeys::EnableFlightLogger, settings.enable_flight_logger);
   map.Get(ProfileKeys::EnableNMEALogger, settings.enable_nmea_logger);
+}
+
+void
+Profile::Load(const ProfileMap &map, WeGlideSettings &settings)
+{
+  map.Get(ProfileKeys::WeGlideEnabled, settings.enabled);
+  map.Get(ProfileKeys::WeGlidePilotID, settings.pilot_id);
+
+  const char *date = map.Get(ProfileKeys::WeGlidePilotBirthDate);
+  if (date != nullptr) {
+    unsigned day, month, year;
+    if (sscanf(date, "%04u-%02u-%02u", &year, &month, &day) == 3)
+      settings.pilot_birthdate = {year, month, day};
+  }
 }
 
 void
@@ -169,6 +184,7 @@ Profile::Load(const ProfileMap &map, ComputerSettings &settings)
   Load(map, settings.task);
   Load(map, settings.contest);
   Load(map, settings.logger);
+  Load(map, settings.weglide);
 
 #ifdef HAVE_TRACKING
   Load(map, settings.tracking);

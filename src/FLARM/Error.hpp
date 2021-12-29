@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_FLARM_ERROR_HPP
 
 #include "NMEA/Validity.hpp"
-#include "util/Compiler.h"
 
 #include <type_traits>
 
@@ -86,7 +85,7 @@ struct FlarmError {
     }
   }
 
-  void Expire(gcc_unused double clock) {
+  void Expire([[maybe_unused]] TimeStamp clock) noexcept {
     /* no expiry; this object will be cleared only when the device
        connection is lost */
   }
@@ -96,7 +95,7 @@ struct FlarmError {
    * The caller is responsible for calling gettext() on the return
    * value.
    */
-  gcc_const
+  [[gnu::const]]
   static const TCHAR *ToString(Severity severity);
 
   /**
@@ -104,15 +103,15 @@ struct FlarmError {
    * The caller is responsible for calling gettext() on the return
    * value.
    */
-  gcc_const
+  [[gnu::const]]
   static const TCHAR *ToString(Code code);
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetSeverityString() const {
     return ToString(severity);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetCodeString() const {
     return ToString(code);
   }

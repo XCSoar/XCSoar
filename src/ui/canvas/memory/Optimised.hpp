@@ -25,6 +25,8 @@ Copyright_License {
 #define XCSOAR_SCREEN_MEMORY_OPTIMISED_HPP
 
 #include "PixelOperations.hpp"
+#include "PixelTraits.hpp"
+#include "util/Compiler.h"
 
 #ifdef __ARM_NEON__
 #include "NEON.hpp"
@@ -34,20 +36,28 @@ Copyright_License {
 #include "MMX.hpp"
 #endif
 
+#include <type_traits>
+
 /**
  * This class hosts two base classes: one that is optimised (e.g. via
  * SIMD) and one that is portable (but slow).  The optimised one will
  * be used as much as possible, and for the odd remainder, we use the
  * portable version.
  */
-template<typename Optimised, unsigned N, typename Portable>
+template<AnyBulkPixelOperation Optimised, unsigned N, AnyBulkPixelOperation Portable>
 class SelectOptimisedPixelOperations
   : protected Optimised, protected Portable {
+
+  static_assert(std::is_same_v<typename Optimised::PixelTraits, typename Portable::PixelTraits>);
+  static_assert(std::is_same_v<typename Optimised::SourcePixelTraits, typename Portable::SourcePixelTraits>);
+
 public:
-  typedef typename Portable::PixelTraits PixelTraits;
-  typedef typename PixelTraits::color_type color_type;
-  typedef typename PixelTraits::rpointer rpointer;
-  typedef typename PixelTraits::const_rpointer const_rpointer;
+  using typename Portable::PixelTraits;
+  using typename Portable::SourcePixelTraits;
+
+  using color_type = typename PixelTraits::color_type;
+  using rpointer = typename PixelTraits::rpointer;
+  using const_rpointer = typename PixelTraits::const_rpointer;
 
   static constexpr unsigned PORTABLE_MASK = N - 1;
   static constexpr unsigned OPTIMISED_MASK = ~PORTABLE_MASK;
@@ -81,15 +91,15 @@ public:
   }
 };
 
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 struct BitOrPixelOperations
   : PortableBitOrPixelOperations<PixelTraits> {
 };
 
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 struct TransparentPixelOperations
   : PortableTransparentPixelOperations<PixelTraits> {
-  typedef typename PixelTraits::color_type color_type;
+  using color_type = typename PixelTraits::color_type;
 
   explicit constexpr TransparentPixelOperations(const color_type key)
     :PortableTransparentPixelOperations<PixelTraits>(key) {}
@@ -115,7 +125,7 @@ struct TransparentPixelOperations<GreyscalePixelTraits>
 
 #endif
 
-template<typename PixelTraits>
+template<AnyPixelTraits PixelTraits>
 class AlphaPixelOperations
   : public PortableAlphaPixelOperations<PixelTraits> {
 public:
@@ -140,7 +150,7 @@ public:
 
 template<>
 class AlphaPixelOperations<GreyscalePixelTraits>
-  : public SelectOptimisedPixelOperations<MMXAlphaPixelOperations, 8,
+  : public SelectOptimisedPixelOperations<MMXAlpha8PixelOperations, 8,
                                           PortableAlphaPixelOperations<GreyscalePixelTraits>> {
 public:
   explicit constexpr AlphaPixelOperations(const uint8_t alpha)
@@ -151,9 +161,12 @@ public:
 
 template<>
 class AlphaPixelOperations<BGRAPixelTraits>
-  : public SelectOptimisedPixelOperations<MMXAlphaPixelOperations, 2,
+  : public SelectOptimisedPixelOperations<MMXAlpha32PixelOperations, 2,
                                           PortableAlphaPixelOperations<BGRAPixelTraits>> {
 public:
+  using typename SelectOptimisedPixelOperations::PixelTraits;
+  using typename SelectOptimisedPixelOperations::SourcePixelTraits;
+
   explicit constexpr AlphaPixelOperations(const uint8_t alpha)
     :SelectOptimisedPixelOperations(alpha) {}
 };

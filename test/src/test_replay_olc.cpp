@@ -18,6 +18,8 @@ extern "C" {
 #include "tap.h"
 }
 
+using namespace std::chrono;
+
 ContestResult official_score_classic,
   official_score_sprint,
   official_score_fai,
@@ -59,9 +61,9 @@ inline void load_score_file(std::ifstream& fscore,
   fscore >> tmp; score.distance = tmp;
   fscore >> tmp; double speed(tmp);
   if (speed>0) {
-    score.time = 3600*score.distance/speed;
+    score.time = FloatDuration{hours{1}} * score.distance / speed;
   } else {
-    score.time = 0;
+    score.time = {};
   }
   score.distance *= 1000;
 }
@@ -99,7 +101,7 @@ public:
     :IgcReplay(std::move(_reader)) {}
 
   void print(std::ostream &f, const MoreData &basic) {
-    f << (double)basic.time << " " 
+    f << basic.time.ToDuration().count() << " "
       <<  (double)basic.location.longitude.Degrees() << " " 
       <<  (double)basic.location.latitude.Degrees() << " "
       <<  (double)basic.nav_altitude << "\n";

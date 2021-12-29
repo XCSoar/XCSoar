@@ -62,6 +62,12 @@ xcsoar.input_event.new("gesture_URD",
                                 end
 )
 
+xcsoar.input_event.new("gesture_LDR",
+                                function(e)
+                                   xcsoar.fire_legacy_event("Checklist");
+                                end
+)
+
 xcsoar.input_event.new("gesture_URDL",
                                 function(e)
                                    xcsoar.fire_legacy_event("Pan", "on");

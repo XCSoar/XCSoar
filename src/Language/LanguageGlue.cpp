@@ -44,7 +44,7 @@ Copyright_License {
 #endif
 
 #ifdef _WIN32
-#include <windows.h>
+#include <winnls.h>
 #endif
 
 #ifdef __APPLE__
@@ -280,17 +280,11 @@ DetectLanguage()
     return NULL;
 
   // Convert the jstring to a char string
-  const char *language2 = env->GetStringUTFChars(language, NULL);
-  if (language2 == NULL)
-    return NULL;
-
-  AtScopeExit(env, &language, language2) {
-    env->ReleaseStringUTFChars(language, language2);
-  };
+  const auto language2 = language.GetUTFChars();
 
   /* generate the resource name */
 
-  const char *language3 = language2;
+  const char *language3 = language2.c_str();
   if (strcmp(language3, "pt") == 0)
     /* hack */
     language3 = "pt_BR";

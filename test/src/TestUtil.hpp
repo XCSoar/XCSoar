@@ -25,6 +25,7 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "Math/Angle.hpp"
+#include "time/Stamp.hpp"
 
 #ifndef ACCURACY
 /**
@@ -59,6 +60,20 @@ equals(const double a, const double b, const int accuracy=ACCURACY)
     return is_zero(a, accuracy) && is_zero(b, accuracy);
 
   return is_one(a / b, accuracy);
+}
+
+static inline bool
+equals(const FloatDuration a, const FloatDuration b,
+       const int accuracy=ACCURACY) noexcept
+{
+  return equals(a.count(), b.count(), accuracy);
+}
+
+static inline bool
+equals(const TimeStamp a, const TimeStamp b,
+       const int accuracy=ACCURACY) noexcept
+{
+  return equals(a.ToDuration(), b.ToDuration(), accuracy);
 }
 
 static inline bool

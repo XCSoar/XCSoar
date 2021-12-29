@@ -39,7 +39,7 @@ AttitudeState::Complement(const AttitudeState &add)
 }
 
 void
-AttitudeState::Expire(double now)
+AttitudeState::Expire(TimeStamp now) noexcept
 {
   bank_angle_available.Expire(now, std::chrono::seconds(5));
   pitch_angle_available.Expire(now, std::chrono::seconds(5));

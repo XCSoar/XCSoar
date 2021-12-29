@@ -26,7 +26,7 @@
 #include "AbstractAirspace.hpp"
 
 #ifdef DO_PRINT
-#include <iostream>
+#include <iosfwd>
 #endif
 
 /**
@@ -46,30 +46,30 @@ public:
    *
    * @return Initialised airspace object
    */
-  AirspaceCircle(const GeoPoint &loc, const double _radius);
+  AirspaceCircle(const GeoPoint &loc, const double _radius) noexcept;
 
   /* virtual methods from class AbstractAirspace */
-  const GeoPoint GetReferenceLocation() const override {
+  const GeoPoint GetReferenceLocation() const noexcept override {
     return m_center;
   }
 
-  const GeoPoint GetCenter() const override {
-		return GetReferenceLocation();
+  const GeoPoint GetCenter() const noexcept override {
+    return GetReferenceLocation();
   }
 
-  bool Inside(const GeoPoint &loc) const override;
+  bool Inside(const GeoPoint &loc) const noexcept override;
   AirspaceIntersectionVector Intersects(const GeoPoint &g1,
                                         const GeoPoint &end,
-                                        const FlatProjection &projection) const override;
+                                        const FlatProjection &projection) const noexcept override;
   GeoPoint ClosestPoint(const GeoPoint &loc,
-                        const FlatProjection &projection) const override;
+                        const FlatProjection &projection) const noexcept override;
 
   /**
    * Accessor for radius
    *
    * @return Radius of circle (m)
    */
-  const double &GetRadius() const {
+  const double &GetRadius() const noexcept {
     return m_radius;
   }
 

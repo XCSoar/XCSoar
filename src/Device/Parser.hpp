@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_PARSER_HPP
 #define XCSOAR_DEVICE_PARSER_HPP
 
+#include "time/Stamp.hpp"
+
 struct NMEAInfo;
 class NMEAInputLine;
 struct GeoPoint;
@@ -32,7 +34,7 @@ struct BrokenTime;
 
 class NMEAParser
 {
-  double last_time;
+  TimeStamp last_time;
 
 public:
   bool real;
@@ -77,7 +79,8 @@ public:
    * updates the last_time reference if necessary
    * @return True if time has advanced since last call
    */
-  static bool TimeHasAdvanced(double this_time, double &last_time,
+  static bool TimeHasAdvanced(TimeStamp this_time,
+                              TimeStamp &last_time,
                               NMEAInfo &info);
 
   static bool ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r);
@@ -88,7 +91,7 @@ public:
    * Read and parse a time stamp in the form "HHMMSS.SSS".
    */
   static bool ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
-                       double &time_of_day_s);
+                       TimeStamp &time_of_day_s) noexcept;
 
 private:
   /**
@@ -98,7 +101,7 @@ private:
    * @param info NMEA_INFO struct to update
    * @return True if time has advanced since last call
    */
-  bool TimeHasAdvanced(double this_time, NMEAInfo &info);
+  bool TimeHasAdvanced(TimeStamp this_time, NMEAInfo &info) noexcept;
 
   /**
    * Parses a GLL sentence

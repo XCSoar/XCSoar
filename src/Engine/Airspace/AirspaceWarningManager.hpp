@@ -25,6 +25,7 @@
 #include "AirspaceWarning.hpp"
 #include "AirspaceWarningConfig.hpp"
 #include "Util/AircraftStateFilter.hpp"
+#include "time/FloatDuration.hxx"
 
 #include <list>
 
@@ -50,23 +51,23 @@ class AirspaceWarningManager {
 
   const Airspaces &airspaces;
 
-  double prediction_time_glide;
-  double prediction_time_filter;
+  FloatDuration prediction_time_glide;
+  FloatDuration prediction_time_filter;
 
   AircraftStateFilter cruise_filter;
   AircraftStateFilter circling_filter;
 
-  typedef std::list<AirspaceWarning> AirspaceWarningList;
+  using AirspaceWarningList = std::list<AirspaceWarning>;
 
   AirspaceWarningList warnings;
 
   /**
    * This number is incremented each time this object is modified.
    */
-  unsigned serial;
+  unsigned serial = 0;
 
 public:
-  typedef AirspaceWarningList::const_iterator const_iterator;
+  using const_iterator = AirspaceWarningList::const_iterator;
 
   /** 
    * Default constructor
@@ -118,21 +119,21 @@ public:
    */
   bool Update(const AircraftState &state, const GlidePolar &glide_polar,
               const TaskStats &task_stats,
-              const bool circling, const unsigned dt);
+              bool circling, std::chrono::duration<unsigned> dt) noexcept;
 
   /**
    * Adjust time of glide predictor
    *
    * @param the_time New time (s)
    */
-  void SetPredictionTimeGlide(double time);
+  void SetPredictionTimeGlide(FloatDuration time) noexcept;
 
   /**
    * Adjust time of state predictor.  Also updates filter time constant
    *
    * @param the_time New time (s)
    */
-  void SetPredictionTimeFilter(double time);
+  void SetPredictionTimeFilter(FloatDuration time) noexcept;
 
   /**
    * Find corresponding airspace warning item in store for an airspace
@@ -141,7 +142,7 @@ public:
    *
    * @return Reference to airspace warning item
    */
-  AirspaceWarning& GetWarning(const AbstractAirspace& airspace);
+  AirspaceWarning &GetWarning(ConstAirspacePtr airspace) noexcept;
 
   /**
    * Find corresponding airspace warning item in store by airspace
@@ -150,7 +151,7 @@ public:
    *
    * @return Pointer to airspace warning item (or nullptr if not found)
    */
-  AirspaceWarning* GetWarningPtr(const AbstractAirspace& airspace);
+  AirspaceWarning *GetWarningPtr(const AbstractAirspace &airspace) noexcept;
 
   /**
    * Return new corresponding airspace warning item in store by airspace
@@ -159,10 +160,11 @@ public:
    *
    * @return Pointer to airspace warning item (or nullptr if not found)
    */
-  AirspaceWarning* GetNewWarningPtr(const AbstractAirspace& airspace);
+  AirspaceWarning *GetNewWarningPtr(ConstAirspacePtr airspace) noexcept;
 
-  const AirspaceWarning *GetWarningPtr(const AbstractAirspace &airspace) const {
-    return const_cast<AirspaceWarningManager *>(this)->GetWarningPtr(airspace);
+  const AirspaceWarning *GetWarningPtr(const AbstractAirspace &airspace) const noexcept {
+    return const_cast<AirspaceWarningManager *>(this)
+      ->GetWarningPtr(airspace);
   }
 
   /**
@@ -211,7 +213,7 @@ public:
    * Acknowledge an airspace warning or airspace inside (depending on
    * the state).
    */
-  void Acknowledge(const AbstractAirspace &airspace);
+  void Acknowledge(ConstAirspacePtr airspace) noexcept;
 
   /**
    * Acknowledge an airspace warning
@@ -219,8 +221,8 @@ public:
    * @param airspace The airspace subject
    * @param set Whether to set or cancel acknowledgement
    */
-  void AcknowledgeWarning(const AbstractAirspace& airspace,
-                          const bool set = true);
+  void AcknowledgeWarning(ConstAirspacePtr airspace,
+                          const bool set = true) noexcept;
 
   /**
    * Acknowledge an airspace inside
@@ -228,8 +230,8 @@ public:
    * @param airspace The airspace subject
    * @param set Whether to set or cancel acknowledgement
    */
-  void AcknowledgeInside(const AbstractAirspace& airspace,
-                         const bool set = true);
+  void AcknowledgeInside(ConstAirspacePtr airspace,
+                         const bool set = true) noexcept;
 
   /**
    * Acknowledge all warnings for airspace for whole day
@@ -237,8 +239,8 @@ public:
    * @param airspace The airspace subject
    * @param set Whether to set or cancel acknowledgement
    */
-  void AcknowledgeDay(const AbstractAirspace& airspace,
-                      const bool set = true);
+  void AcknowledgeDay(ConstAirspacePtr airspace,
+                      const bool set = true) noexcept;
 
   /**
    * Returns whether the given airspace is acknowledged for the whole day
@@ -246,7 +248,7 @@ public:
    * @param airspace The airspace subject
    */
   [[gnu::pure]]
-  bool GetAckDay(const AbstractAirspace& airspace) const;
+  bool GetAckDay(const AbstractAirspace &airspace) const noexcept;
 
   /**
    * Returns true if this airspace would be warned about,
@@ -257,7 +259,7 @@ public:
    * airspaces that are not configured for airspace warnings.
    */
   [[gnu::pure]]
-  bool IsActive(const AbstractAirspace &airspace) const;
+  bool IsActive(const AbstractAirspace &airspace) const noexcept;
 
 private:
   bool UpdateTask(const AircraftState &state, const GlidePolar &glide_polar,
@@ -270,7 +272,7 @@ private:
                        const GeoPoint &location_predicted,
                        const AirspaceAircraftPerformance &perf,
                        const AirspaceWarning::State warning_state,
-                       double max_time);
+                       FloatDuration max_time) noexcept;
 };
 
 #endif

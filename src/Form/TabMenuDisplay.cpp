@@ -35,7 +35,7 @@ Copyright_License {
 #include <cassert>
 
 TabMenuDisplay::TabMenuDisplay(PagerWidget &_pager,
-                               const DialogLook &_look)
+                               const DialogLook &_look) noexcept
   :pager(_pager),
    look(_look),
    dragging(false),
@@ -46,7 +46,8 @@ TabMenuDisplay::TabMenuDisplay(PagerWidget &_pager,
 }
 
 void
-TabMenuDisplay::InitMenu(const TabMenuGroup groups[], unsigned n_groups)
+TabMenuDisplay::InitMenu(const TabMenuGroup groups[],
+                         unsigned n_groups) noexcept
 {
   assert(groups != nullptr);
   assert(n_groups > 0);
@@ -72,7 +73,7 @@ TabMenuDisplay::InitMenu(const TabMenuGroup groups[], unsigned n_groups)
 }
 
 const TCHAR *
-TabMenuDisplay::GetCaption(TCHAR buffer[], size_t size) const
+TabMenuDisplay::GetCaption(TCHAR buffer[], size_t size) const noexcept
 {
   const unsigned page = pager.GetCurrentIndex();
   if (page >= PAGE_OFFSET) {
@@ -86,7 +87,7 @@ TabMenuDisplay::GetCaption(TCHAR buffer[], size_t size) const
 }
 
 int
-TabMenuDisplay::GetPageNum(MenuTabIndex i) const
+TabMenuDisplay::GetPageNum(MenuTabIndex i) const noexcept
 {
   assert(i.IsSub());
 
@@ -98,13 +99,13 @@ TabMenuDisplay::GetPageNum(MenuTabIndex i) const
 }
 
 static unsigned
-GetTabLineHeight()
+GetTabLineHeight() noexcept
 {
   return Layout::Scale(1);
 }
 
 void
-TabMenuDisplay::UpdateLayout()
+TabMenuDisplay::UpdateLayout() noexcept
 {
   const unsigned window_width = GetWidth();
   const unsigned window_height = GetHeight();
@@ -151,7 +152,7 @@ TabMenuDisplay::UpdateLayout()
 }
 
 inline const PixelRect &
-TabMenuDisplay::GetButtonPosition(MenuTabIndex i) const
+TabMenuDisplay::GetButtonPosition(MenuTabIndex i) const noexcept
 {
   assert(!i.IsNone());
 
@@ -161,7 +162,8 @@ TabMenuDisplay::GetButtonPosition(MenuTabIndex i) const
 }
 
 TabMenuDisplay::MenuTabIndex
-TabMenuDisplay::IsPointOverButton(PixelPoint Pos, unsigned mainIndex) const
+TabMenuDisplay::IsPointOverButton(PixelPoint Pos,
+                                  unsigned mainIndex) const noexcept
 {
   // scan main menu buttons
   for (unsigned i = 0; i < GetNumMainMenuItems(); i++)
@@ -183,7 +185,7 @@ TabMenuDisplay::IsPointOverButton(PixelPoint Pos, unsigned mainIndex) const
 }
 
 void
-TabMenuDisplay::OnPageFlipped()
+TabMenuDisplay::OnPageFlipped() noexcept
 {
   const unsigned i = pager.GetCurrentIndex();
   if (i >= PAGE_OFFSET)
@@ -191,7 +193,7 @@ TabMenuDisplay::OnPageFlipped()
 }
 
 void
-TabMenuDisplay::SetCursor(unsigned i)
+TabMenuDisplay::SetCursor(unsigned i) noexcept
 {
   if (i == cursor)
     return;
@@ -209,7 +211,7 @@ TabMenuDisplay::SetCursor(unsigned i)
 }
 
 inline bool
-TabMenuDisplay::HighlightNext()
+TabMenuDisplay::HighlightNext() noexcept
 {
   const unsigned i = cursor + 1;
   if (i >= GetNumPages())
@@ -220,7 +222,7 @@ TabMenuDisplay::HighlightNext()
 }
 
 inline bool
-TabMenuDisplay::HighlightPrevious()
+TabMenuDisplay::HighlightPrevious() noexcept
 {
   if (cursor == 0)
     return false;
@@ -343,7 +345,7 @@ TabMenuDisplay::OnMouseMove(PixelPoint p, unsigned keys)
 }
 
 inline void
-TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas) const
+TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas) const noexcept
 {
   PixelRect rc = GetMainMenuButtonSize(0);
   rc.bottom = GetMainMenuButtonSize(GetNumMainMenuItems() - 1).bottom;
@@ -353,7 +355,7 @@ TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas) const
 }
 
 inline void
-TabMenuDisplay::PaintMainMenuItems(Canvas &canvas) const
+TabMenuDisplay::PaintMainMenuItems(Canvas &canvas) const noexcept
 {
   PaintMainMenuBorder(canvas);
 
@@ -376,7 +378,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas) const
 
 inline void
 TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas,
-                                   const MainMenuButton &main_button) const
+                                   const MainMenuButton &main_button) const noexcept
 {
   PixelRect rc = GetSubMenuButtonSize(main_button.first_page_index);
   rc.bottom = GetSubMenuButtonSize(main_button.last_page_index).bottom;
@@ -386,7 +388,7 @@ TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas,
 }
 
 inline void
-TabMenuDisplay::PaintSubMenuItems(Canvas &canvas) const
+TabMenuDisplay::PaintSubMenuItems(Canvas &canvas) const noexcept
 {
   const MainMenuButton &main_button =
     GetMainMenuButton(GetPageMainIndex(cursor));
@@ -439,7 +441,7 @@ TabMenuDisplay::OnSetFocus()
 }
 
 void
-TabMenuDisplay::DragEnd()
+TabMenuDisplay::DragEnd() noexcept
 {
   if (dragging) {
     dragging = false;

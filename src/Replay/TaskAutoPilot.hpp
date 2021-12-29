@@ -25,26 +25,23 @@
 #include "Math/Angle.hpp"
 #include "Math/Filter.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "time/FloatDuration.hxx"
+
+#include <chrono>
 
 struct AircraftState;
 
 struct AutopilotParameters {
   double bearing_noise;
-  double target_noise;
+  double target_noise = 0.1;
   double turn_speed;
-  double sink_factor;
-  double climb_factor;
-  double start_alt;
-  bool enable_bestcruisetrack;
-  bool goto_target;
+  double sink_factor = 1;
+  double climb_factor = 1;
+  double start_alt = 1500;
+  bool enable_bestcruisetrack = false;
+  bool goto_target = false;
 
-  AutopilotParameters():
-    target_noise(0.1),
-    sink_factor(1.0),
-    climb_factor(1.0),
-    start_alt(1500.0),
-    enable_bestcruisetrack(false),
-    goto_target(false)
+  AutopilotParameters() noexcept
     {
       SetRealistic();
     };
@@ -95,12 +92,13 @@ private:
 public:
   TaskAutoPilot(const AutopilotParameters &_parms);
 
-  virtual void Start(const TaskAccessor& task);
-  virtual void UpdateMode(const TaskAccessor& task,
-                          const AircraftState& state);
+  void Start(const TaskAccessor& task);
+  void UpdateMode(const TaskAccessor& task,
+                  const AircraftState& state);
 
-  virtual void UpdateState(const TaskAccessor& task,
-                           AircraftState &state, double timestep=1);
+  void UpdateState(const TaskAccessor& task,
+                   AircraftState &state,
+                   FloatDuration timestep=std::chrono::seconds{1}) noexcept;
 
   bool UpdateAutopilot(TaskAccessor &task,
                        const AircraftState &state);
@@ -124,11 +122,11 @@ private:
   [[gnu::pure]]
   bool HasTarget(const TaskAccessor& task) const;
 
-  virtual GeoPoint GetStartLocation(const TaskAccessor& task,
-                                    bool previous = false);
+  GeoPoint GetStartLocation(const TaskAccessor& task,
+                            bool previous = false);
 
   void UpdateCruiseBearing(const TaskAccessor& task, const AircraftState& state,
-                           double timestep);
+                           FloatDuration timestep) noexcept;
 
   double GetTargetHeight(const TaskAccessor &task) const;
   Angle GetHeadingDeviation();

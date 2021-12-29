@@ -105,7 +105,8 @@ OpenVarioDevice::ComposeWrite(const char p_type,PolarCoefficients &p,
   char buffer[50];
   // Compose Polar String
   sprintf(buffer,"POV,C,%cPO,%f,%f,%f", p_type, p.a, p.b, p.c);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
+  return true;
 }
 
 bool
@@ -113,7 +114,7 @@ OpenVarioDevice::InformUnavailable(const char *obj, OperationEnvironment &env)
 {
   if (!EnableNMEA(env))
     return false;
-  
+
   char buffer[20];
   const char preamble[] = "POV,C,NA,";
 
@@ -122,7 +123,8 @@ OpenVarioDevice::InformUnavailable(const char *obj, OperationEnvironment &env)
   strcpy(buffer,preamble);
   strcat(buffer,obj);
 
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
+  return true;
 }
 
 bool
@@ -201,7 +203,8 @@ OpenVarioDevice::RepeatMacCready(OperationEnvironment &env)
   
   char buffer[20];
   sprintf(buffer,"POV,C,MC,%0.2f", (double)_mc);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
+  return true;
 }
 
 bool
@@ -221,7 +224,8 @@ OpenVarioDevice::RepeatBallast(OperationEnvironment &env)
   
   char buffer[20];
   sprintf(buffer,"POV,C,WL,%1.3f",(float)_overload);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
+  return true;
 }
 
 bool
@@ -241,7 +245,8 @@ OpenVarioDevice::RepeatBugs(OperationEnvironment &env)
   
   char buffer[32];
   sprintf(buffer, "POV,C,BU,%0.2f",(float)_bugs);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
+  return true;
 }
 
 bool

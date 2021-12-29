@@ -22,15 +22,14 @@
 #ifndef AIRSPACE_VISITOR_HPP
 #define AIRSPACE_VISITOR_HPP
 
-class Airspace;
-class AbstractAirspace;
+#include "Ptr.hpp"
 
 /**
  * Generic visitor for objects in the Airspaces container
  */
 class AirspaceVisitor {
 public:
-  virtual void Visit(const AbstractAirspace &aa) = 0;
+  virtual void Visit(ConstAirspacePtr airspace) noexcept = 0;
 };
 
 #endif

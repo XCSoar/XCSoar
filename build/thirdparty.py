@@ -4,11 +4,11 @@ import os, os.path
 import re
 import sys
 
-if len(sys.argv) != 15:
-    print("Usage: build.py TARGET_OUTPUT_DIR TARGET HOST_TRIPLET ACTUAL_HOST_TRIPLET ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP WINDRES", file=sys.stderr)
+if len(sys.argv) != 14:
+    print("Usage: build.py LIB_PATH HOST_TRIPLET ACTUAL_HOST_TRIPLET ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP WINDRES", file=sys.stderr)
     sys.exit(1)
 
-target_output_dir, target, toolchain_host_triplet, actual_host_triplet, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip, windres = sys.argv[1:]
+lib_path, toolchain_host_triplet, actual_host_triplet, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip, windres = sys.argv[1:]
 
 # the path to the XCSoar sources
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
@@ -17,9 +17,7 @@ sys.path[0] = os.path.join(xcsoar_path, 'build/python')
 # output directories
 from build.dirs import tarball_path, src_path
 
-target_output_dir = os.path.abspath(target_output_dir)
-
-lib_path = os.path.join(target_output_dir, 'lib')
+lib_path = os.path.abspath(lib_path)
 build_path = os.path.join(lib_path, 'build')
 install_prefix = os.path.join(lib_path, actual_host_triplet)
 
@@ -91,7 +89,12 @@ class Toolchain:
 
         # redirect pkg-config to use our root directory instead of the
         # default one on the build host
-        self.env['PKG_CONFIG_LIBDIR'] = os.path.join(install_prefix, 'lib/pkgconfig')
+        import shutil
+        bin_dir = os.path.join(install_prefix, 'bin')
+        os.makedirs(bin_dir, exist_ok=True)
+        self.pkg_config = shutil.copy(os.path.join(xcsoar_path, 'build', 'pkg-config.sh'),
+                                      os.path.join(bin_dir, 'pkg-config'))
+        self.env['PKG_CONFIG'] = self.pkg_config
 
         # WORKAROUND: Under some circumstances, if QEMU User Emulation is
         # installed on the build system, and enabled for binfmt_misc, it can
@@ -138,6 +141,7 @@ elif re.match('(arm.*|aarch64)-apple-darwin', actual_host_triplet) is not None:
 elif 'apple-darwin' in actual_host_triplet:
     thirdparty_libs = [
         libsodium,
+        openssl,
         cares,
         curl,
         lua,
@@ -146,7 +150,7 @@ elif 'apple-darwin' in actual_host_triplet:
         libgeotiff,
         sdl2
     ]
-elif target == 'ANDROID':
+elif 'android' in actual_host_triplet:
     thirdparty_libs = [
         libsodium,
         openssl,

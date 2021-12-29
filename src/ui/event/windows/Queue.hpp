@@ -30,7 +30,7 @@ Copyright_License {
 
 #include <chrono>
 
-#include <windows.h>
+#include <handleapi.h>
 
 namespace UI {
 

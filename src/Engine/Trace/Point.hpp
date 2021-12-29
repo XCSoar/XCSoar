@@ -28,8 +28,10 @@ Copyright_License {
 #include "Geo/SearchPoint.hpp"
 #include "Rough/RoughAltitude.hpp"
 #include "Rough/RoughVSpeed.hpp"
+#include "time/Stamp.hpp"
 
 #include <cassert>
+#include <chrono>
 #include <cstdint>
 
 struct MoreData;
@@ -41,8 +43,14 @@ struct AircraftState;
  */
 class TracePoint : public SearchPoint
 {
+public:
+  using Time = std::chrono::duration<unsigned>;
+
+  static constexpr Time INVALID_TIME = Time::max();
+
+private:
   /** Time of sample */
-  unsigned time;
+  Time time;
 
   /**
    * The NavAltitude [m].
@@ -73,7 +81,7 @@ public:
   TracePoint() = default;
 
   template<typename A, typename V>
-  TracePoint(const GeoPoint &location, unsigned _time,
+  TracePoint(const GeoPoint &location, std::chrono::duration<unsigned> _time,
              const A &_altitude, const V &_vario,
              unsigned _drift_factor)
     :SearchPoint(location), time(_time),
@@ -101,14 +109,14 @@ public:
   }
 
   void Clear() {
-    time = (unsigned)(0 - 1);
+    time = INVALID_TIME;
   }
 
   bool IsDefined() const {
-    return time != (unsigned)(0 - 1);
+    return time != INVALID_TIME;
   }
 
-  unsigned GetTime() const {
+  Time GetTime() const noexcept {
     return time;
   }
 
@@ -120,14 +128,14 @@ public:
     return time > other.time;
   }
 
-  unsigned DeltaTime(const TracePoint &previous) const {
+  Time DeltaTime(const TracePoint &previous) const {
     assert(!IsOlderThan(previous));
 
     return time - previous.time;
   }
 
-  double CalculateDrift(double now) const {
-    const double dt = now - time;
+  double CalculateDrift(TimeStamp now) const noexcept {
+    const double dt = (now.ToDuration() - std::chrono::duration_cast<FloatDuration>(time)).count();
     return dt * drift_factor / 256;
   }
 

@@ -31,7 +31,6 @@
 #include "system/FileUtil.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "Interface.hpp"
-#include "IGCFileCleanup.hpp"
 #include "IGC/IGCWriter.hpp"
 #include "util/CharUtil.hxx"
 
@@ -76,15 +75,8 @@ LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
   return *this;
 }
 
-LoggerImpl::LoggerImpl()
-  :filename(nullptr), writer(nullptr)
-{
-}
-
-LoggerImpl::~LoggerImpl()
-{
-  delete writer;
-}
+LoggerImpl::LoggerImpl() = default;
+LoggerImpl::~LoggerImpl() noexcept = default;
 
 void
 LoggerImpl::StopLogger(const NMEAInfo &gps_info)
@@ -103,18 +95,13 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   LogFormat(_T("Logger stopped: %s"), filename.c_str());
 
   // Logger off
-  delete writer;
-  writer = nullptr;
-
-  // Make space for logger file, if unsuccessful -> cancel
-  if (gps_info.gps.real && gps_info.date_time_utc.IsDatePlausible())
-    IGCFileCleanup(gps_info.date_time_utc.year);
+  writer.reset();
 
   pre_takeoff_buffer.clear();
 }
 
 void
-LoggerImpl::LogPointToBuffer(const NMEAInfo &gps_info)
+LoggerImpl::LogPointToBuffer(const NMEAInfo &gps_info) noexcept
 {
   assert(gps_info.alive);
   assert(gps_info.time_available);
@@ -157,7 +144,7 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
 
     // NOTE: clock is only used to set the validity of valid objects to true
     //       for which "1" is sufficient. This kludge needs to be rewritten.
-    tmp_info.clock = 1;
+    tmp_info.clock = TimeStamp{FloatDuration{1}};
 
     tmp_info.alive.Update(tmp_info.clock);
 
@@ -238,7 +225,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   const auto logs_path = MakeLocalPath(_T("logs"));
 
   const BrokenDate today = gps_info.date_time_utc.IsDatePlausible()
-    ? (const BrokenDate &)gps_info.date_time_utc
+    ? gps_info.date_time_utc.GetDate()
     : BrokenDate::TodayUTC();
 
   StaticString<64> name;
@@ -253,7 +240,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   frecord.Reset();
 
   try {
-    writer = new IGCWriter(filename);
+    writer = std::make_unique<IGCWriter>(filename);
   } catch (...) {
     LogError(std::current_exception());
     return false;
@@ -270,8 +257,9 @@ LoggerImpl::LoggerNote(const TCHAR *text)
     writer->LoggerNote(text);
 }
 
+[[gnu::pure]]
 static const TCHAR *
-GetGPSDeviceName()
+GetGPSDeviceName() noexcept
 {
   if (is_simulator())
     return _T("Simulator");
@@ -326,7 +314,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 }
 
 void
-LoggerImpl::ClearBuffer()
+LoggerImpl::ClearBuffer() noexcept
 {
   pre_takeoff_buffer.clear();
 }

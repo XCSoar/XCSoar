@@ -23,34 +23,33 @@ Copyright_License {
 
 #include "Topography/TopographyRenderer.hpp"
 #include "Topography/TopographyFileRenderer.hpp"
+#include "TopographyStore.hpp"
+#include "TopographyFile.hpp"
 
 TopographyRenderer::TopographyRenderer(const TopographyStore &_store,
-                                       const TopographyLook &look)
+                                       const TopographyLook &look) noexcept
   :store(_store)
 {
-  for (unsigned i = 0; i < store.size(); ++i)
-    files.append(new TopographyFileRenderer(store[i], look));
+  auto previous = files.before_begin();
+  for (const auto &file : store)
+    previous = files.emplace_after(previous, file, look);
 }
 
-TopographyRenderer::~TopographyRenderer()
-{
-  for (auto it = files.begin(), end = files.end(); it != end; ++it)
-    delete *it;
-}
+TopographyRenderer::~TopographyRenderer() noexcept = default;
 
 void
 TopographyRenderer::Draw(Canvas &canvas,
-                         const WindowProjection &projection) const
+                         const WindowProjection &projection) noexcept
 {
-  for (auto it = files.begin(), end = files.end(); it != end; ++it)
-    (*it)->Paint(canvas, projection);
+  for (auto &i : files)
+    i.Paint(canvas, projection);
 }
 
 void
 TopographyRenderer::DrawLabels(Canvas &canvas,
                                const WindowProjection &projection,
-                               LabelBlock &label_block) const
+                               LabelBlock &label_block) noexcept
 {
-  for (auto it = files.begin(), end = files.end(); it != end; ++it)
-    (*it)->PaintLabels(canvas, projection, label_block);
+  for (auto &i : files)
+    i.PaintLabels(canvas, projection, label_block);
 }

@@ -33,33 +33,27 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.os.Handler;
 
-
-class GliderLinkReceiver extends BroadcastReceiver {
+class GliderLinkReceiver
+  extends BroadcastReceiver
+  implements AndroidSensor
+{
   private static final String TAG = "XCSoar";
   public static final String ACTION = "link.glider.gliderlink.target_position";
 
-  /**
-   * Index of this device in the global list. This value is extracted directly
-   * from this object by the C++ wrapper code.
-   */
-  private final int index;
+  private final Context context;
 
-  private static Handler handler;
-  private Context context;
+  private final SensorListener listener;
+  private final SafeDestruct safeDestruct = new SafeDestruct();
 
-  /**
-   * Global initialization of the class.  Must be called from the main
-   * event thread, because the Handler object must be bound to that
-   * thread.
-   */
-  public static void Initialize() {
-    handler = new Handler();
-  }
+  private final Handler handler;
 
-  public GliderLinkReceiver(final Context context, int index) {
-    this.index = index;
+  private int state = STATE_LIMBO;
+
+  public GliderLinkReceiver(final Context context, SensorListener listener) {
     this.context = context;
+    this.listener = listener;
 
+    handler = new Handler(context.getMainLooper());
     handler.post(new Runnable() {
       @Override
       public void run() {
@@ -68,23 +62,37 @@ class GliderLinkReceiver extends BroadcastReceiver {
     });
   }
 
+  @Override
   public void close() {
+    safeDestruct.beginShutdown();
+
     handler.post(new Runnable() {
       @Override
       public void run() {
         context.unregisterReceiver(GliderLinkReceiver.this);
       }
     });
+
+    safeDestruct.finishShutdown();
   }
 
-  private static native void setGliderLinkInfo(int deviceId, long gid, String callsign,
-          double latitude, double longitude, double altitude,
-          double gspeed, double vspeed, int bearing);
+  @Override
+  public int getState() {
+    return state;
+  }
 
   @Override
   public void onReceive(Context context, Intent intent) {
+    if (!safeDestruct.increment())
+      return;
+
     try {
       JSONObject json = new JSONObject(intent.getStringExtra("json"));
+
+      if (state != STATE_READY) {
+        state = STATE_READY;
+        listener.onSensorStateChanged();
+      }
 
       JSONObject pos = json.getJSONObject("position");
       
@@ -106,11 +114,18 @@ class GliderLinkReceiver extends BroadcastReceiver {
              }
       */
 
-      setGliderLinkInfo(index, pos.getLong("gid"), pos.getString("callsign"), pos.getDouble("latitude"),
-              pos.getDouble("longitude"), pos.getDouble("altitude"), pos.getDouble("gspeed"), pos.getDouble("vspeed"),
-              pos.getInt("bearing"));
+      listener.onGliderLinkTraffic(pos.getLong("gid"),
+                                   pos.getString("callsign"),
+                                   pos.getDouble("latitude"),
+                                   pos.getDouble("longitude"),
+                                   pos.getDouble("altitude"),
+                                   pos.getDouble("gspeed"),
+                                   pos.getDouble("vspeed"),
+                                   pos.getInt("bearing"));
     } catch (JSONException e) {
       Log.e(TAG, e.getLocalizedMessage(), e);
+    } finally {
+      safeDestruct.decrement();
     }
   }
 }

@@ -31,7 +31,7 @@ Copyright_License {
 static UdevContext *udev_root_context = nullptr;
 static Mutex udev_context_mutex;
 
-UdevContext::UdevContext(const UdevContext &other)
+UdevContext::UdevContext(const UdevContext &other) noexcept
 {
   std::lock_guard<Mutex> lock(udev_context_mutex);
   if (other.ud) {
@@ -42,7 +42,7 @@ UdevContext::UdevContext(const UdevContext &other)
   }
 }
 
-UdevContext::~UdevContext()
+UdevContext::~UdevContext() noexcept
 {
   std::lock_guard<Mutex> lock(udev_context_mutex);
   if (nullptr != ud)
@@ -50,7 +50,7 @@ UdevContext::~UdevContext()
 }
 
 UdevContext &
-UdevContext::operator=(const UdevContext &other)
+UdevContext::operator=(const UdevContext &other) noexcept
 {
   if (this != &other) {
     std::lock_guard<Mutex> lock(udev_context_mutex);
@@ -65,7 +65,7 @@ UdevContext::operator=(const UdevContext &other)
 }
 
 UdevContext
-UdevContext::NewRef()
+UdevContext::NewRef() noexcept
 {
   {
     std::lock_guard<Mutex> lock(udev_context_mutex);

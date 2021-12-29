@@ -235,9 +235,8 @@ FlarmDevice::ReadFlightInfo(RecordedFlightInfo &flight,
   FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MT_GETRECORDINFO);
 
   // Send request
-  if (!SendStartByte() ||
-      !SendFrameHeader(header, env, std::chrono::seconds(1)))
-    return false;
+  SendStartByte();
+  SendFrameHeader(header, env, std::chrono::seconds(1));
 
   // Wait for an answer and save the payload for further processing
   AllocatedArray<uint8_t> data;
@@ -263,10 +262,9 @@ FlarmDevice::SelectFlight(uint8_t record_number, OperationEnvironment &env)
                                                  data, sizeof(data));
 
   // Send request
-  if (!SendStartByte() ||
-      !SendFrameHeader(header, env, std::chrono::seconds(1)) ||
-      !SendEscaped(data, sizeof(data), env, std::chrono::seconds(1)))
-    return FLARM::MT_ERROR;
+  SendStartByte();
+  SendFrameHeader(header, env, std::chrono::seconds(1));
+  SendEscaped(data, sizeof(data), env, std::chrono::seconds(1));
 
   // Wait for an answer
   return WaitForACKOrNACK(header.sequence_number,
@@ -289,7 +287,7 @@ FlarmDevice::ReadFlightList(RecordedFlightList &flight_list,
       break;
 
     // If neither ACK nor NACK was received
-    if (ack_result != FLARM::MT_ACK || env.IsCancelled()) {
+    if (ack_result != FLARM::MT_ACK) {
       mode = Mode::UNKNOWN;
       return false;
     }
@@ -309,19 +307,14 @@ FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
   FileOutputStream fos(path);
   BufferedOutputStream os(fos);
 
-  if (env.IsCancelled())
-    return false;
-
   env.SetProgressRange(100);
   while (true) {
     // Create header for getting IGC file data
     FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MT_GETIGCDATA);
 
     // Send request
-    if (!SendStartByte() ||
-        !SendFrameHeader(header, env, std::chrono::seconds(1)) ||
-        env.IsCancelled())
-      return false;
+    SendStartByte();
+    SendFrameHeader(header, env, std::chrono::seconds(1));
 
     // Wait for an answer and save the payload for further processing
     AllocatedArray<uint8_t> data;
@@ -330,7 +323,7 @@ FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
                                 length, env, std::chrono::seconds(10)) == FLARM::MT_ACK;
 
     // If no ACK was received
-    if (!ack || length <= 3 || env.IsCancelled())
+    if (!ack || length <= 3)
       return false;
 
     length -= 3;
@@ -369,7 +362,7 @@ FlarmDevice::DownloadFlight(const RecordedFlightInfo &flight,
   FLARM::MessageType ack_result = SelectFlight(flight.internal.flarm, env);
 
   // If no ACK was received -> cancel
-  if (ack_result != FLARM::MT_ACK || env.IsCancelled())
+  if (ack_result != FLARM::MT_ACK)
     return false;
 
   try {

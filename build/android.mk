@@ -7,6 +7,8 @@ ifeq ($(TARGET),ANDROID)
 ANDROID_KEYSTORE ?= $(HOME)/.android/mk.keystore
 ANDROID_KEY_ALIAS ?= mk
 
+ANDROID_OUTPUT_DIR = $(TARGET_OUTPUT_DIR)/android
+
 ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/$(XCSOAR_ABI)/build
 ANDROID_BIN = $(TARGET_BIN_DIR)
 
@@ -18,7 +20,7 @@ endif
 ANDROID_SDK_PLATFORM_DIR = $(ANDROID_SDK)/platforms/$(ANDROID_SDK_PLATFORM)
 ANDROID_ABI_DIR = $(ANDROID_BUILD)/lib/$(ANDROID_APK_LIB_ABI)
 
-JAVA_CLASSFILES_DIR = $(ABI_BIN_DIR)/bin/classes
+JAVA_CLASSFILES_DIR = $(ANDROID_OUTPUT_DIR)/classes
 
 ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/29.0.3
 ZIPALIGN = $(ANDROID_BUILD_TOOLS_DIR)/zipalign
@@ -39,20 +41,16 @@ endif
 JAVA_PACKAGE = org.xcsoar
 
 NATIVE_CLASSES := \
+	FileProvider \
+	TextEntryDialog \
 	NativeView \
 	EventBridge \
-	InternalGPS \
-	NonGPSSensors \
+	NativeSensorListener \
 	NativeInputListener \
 	DownloadUtil \
 	BatteryReceiver \
-	GliderLinkReceiver \
 	NativePortListener \
-	NativeLeScanCallback \
-	NativeBMP085Listener \
-	NativeI2CbaroListener \
-	NativeNunchuckListener \
-	NativeVoltageListener
+	NativeDetectDeviceListener
 NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
 NATIVE_INCLUDE = $(TARGET_OUTPUT_DIR)/include
 NATIVE_PREFIX = $(NATIVE_INCLUDE)/$(subst .,_,$(JAVA_PACKAGE))_
@@ -60,6 +58,31 @@ NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
 
 JAVA_SOURCES := \
 	$(wildcard android/src/*.java) \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/deviceids/CH34xIds.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/deviceids/CP210xIds.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/deviceids/CP2130Ids.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/deviceids/FTDISioIds.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/deviceids/Helpers.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/deviceids/PL2303Ids.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/deviceids/XdcVcpIds.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/AbstractWorkerThread.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/Buffer.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/CDCSerialDevice.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/CH34xSerialDevice.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/CP2102SerialDevice.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/CP2130SpiDevice.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/PL2303SerialDevice.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/FTDISerialDevice.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/SerialBuffer.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/SerialInputStream.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/SerialOutputStream.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/UsbSerialDebugger.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/UsbSerialDevice.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/UsbSerialInterface.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/UsbSpiDevice.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/UsbSpiInterface.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/utils/HexData.java \
+	android/UsbSerial/usbserial/src/main/java/com/felhr/utils/SafeUsbRequest.java \
 	$(wildcard android/ioio/software/IOIOLib/src/ioio/lib/*/*.java) \
 	$(wildcard android/ioio/software/IOIOLib/src/ioio/lib/*/*/*.java) \
 	$(wildcard android/ioio/software/IOIOLib/target/android/src/ioio/lib/spi/*.java) \
@@ -71,11 +94,14 @@ ifeq ($(TESTING),y)
 	JAVA_SOURCES += $(wildcard android/src/testing/*.java)
 endif
 
-ANDROID_XML_RES := $(wildcard android/res/*/*.xml)
-ANDROID_XML_RES_COPIES := $(patsubst android/%,$(ANDROID_BUILD)/%,$(ANDROID_XML_RES))
+GEN_DIR = $(ANDROID_OUTPUT_DIR)/gen
+RES_DIR = $(ANDROID_OUTPUT_DIR)/res
 
-DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
-RAW_DIR = $(ANDROID_BUILD)/res/raw
+DRAWABLE_DIR = $(RES_DIR)/drawable
+RAW_DIR = $(RES_DIR)/raw
+
+ANDROID_XML_RES := $(wildcard android/res/*/*.xml)
+ANDROID_XML_RES_COPIES := $(patsubst android/res/%,$(RES_DIR)/%,$(ANDROID_XML_RES))
 
 ifeq ($(TESTING),y)
 ICON_SVG = $(topdir)/Data/graphics/logo_red.svg
@@ -85,37 +111,37 @@ endif
 
 ICON_WHITE_SVG = $(topdir)/Data/graphics/logo_white.svg
 
-$(ANDROID_BUILD)/res/drawable-ldpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-ldpi/dirstamp
+$(RES_DIR)/drawable-ldpi/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable-ldpi/dirstamp
 	$(Q)rsvg-convert --width=36 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable/dirstamp
+$(RES_DIR)/drawable/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable/dirstamp
 	$(Q)rsvg-convert --width=48 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-hdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-hdpi/dirstamp
+$(RES_DIR)/drawable-hdpi/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable-hdpi/dirstamp
 	$(Q)rsvg-convert --width=72 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-xhdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-xhdpi/dirstamp
+$(RES_DIR)/drawable-xhdpi/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable-xhdpi/dirstamp
 	$(Q)rsvg-convert --width=96 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-xxhdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-xxhdpi/dirstamp
+$(RES_DIR)/drawable-xxhdpi/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable-xxhdpi/dirstamp
 	$(Q)rsvg-convert --width=144 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-xxxhdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-xxxhdpi/dirstamp
+$(RES_DIR)/drawable-xxxhdpi/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable-xxxhdpi/dirstamp
 	$(Q)rsvg-convert --width=192 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable/notification_icon.png: $(ICON_WHITE_SVG) | $(ANDROID_BUILD)/res/drawable/dirstamp
+$(RES_DIR)/drawable/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR)/drawable/dirstamp
 	$(Q)rsvg-convert --width=24 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-hdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(ANDROID_BUILD)/res/drawable-hdpi/dirstamp
+$(RES_DIR)/drawable-hdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR)/drawable-hdpi/dirstamp
 	$(Q)rsvg-convert --width=36 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-xhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(ANDROID_BUILD)/res/drawable-xhdpi/dirstamp
+$(RES_DIR)/drawable-xhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR)/drawable-xhdpi/dirstamp
 	$(Q)rsvg-convert --width=48 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-xxhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(ANDROID_BUILD)/res/drawable-xxhdpi/dirstamp
+$(RES_DIR)/drawable-xxhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR)/drawable-xxhdpi/dirstamp
 	$(Q)rsvg-convert --width=72 $< -o $@
 
-$(ANDROID_BUILD)/res/drawable-xxxhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(ANDROID_BUILD)/res/drawable-xxxhdpi/dirstamp
+$(RES_DIR)/drawable-xxxhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR)/drawable-xxxhdpi/dirstamp
 	$(Q)rsvg-convert --width=96 $< -o $@
 
 OGGENC = oggenc --quiet --quality 1
@@ -128,14 +154,6 @@ $(SOUND_FILES): $(RAW_DIR)/%.ogg: Data/sound/%.wav | $(RAW_DIR)/dirstamp
 	$(Q)$(OGGENC) -o $@ $<
 
 PNG1 := $(patsubst Data/bitmaps/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_BITMAPS))
-
-# workaround for an ImageMagick bug (observed with the Debian package
-# 8:6.7.7.10-2): it corrupts 4-bit gray-scale images when converting
-# BMP to PNG (TRAC #2220)
-PNG1b := $(filter $(DRAWABLE_DIR)/vario_scale_%.png,$(PNG1))
-PNG1 := $(filter-out $(DRAWABLE_DIR)/vario_scale_%.png,$(PNG1))
-$(DRAWABLE_DIR)/vario_scale_%.png: Data/bitmaps/vario_scale_%.bmp | $(DRAWABLE_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert -depth 8 $< $@
 
 $(PNG1): $(DRAWABLE_DIR)/%.png: Data/bitmaps/%.bmp | $(DRAWABLE_DIR)/dirstamp
 	$(Q)$(IM_PREFIX)convert $< $@
@@ -157,17 +175,17 @@ $(PNG5): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstam
 	$(Q)$(IM_PREFIX)convert $< $@
 
 PNG_FILES = $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5) \
-	$(ANDROID_BUILD)/res/drawable-ldpi/icon.png \
-	$(ANDROID_BUILD)/res/drawable/icon.png \
-	$(ANDROID_BUILD)/res/drawable-hdpi/icon.png \
-	$(ANDROID_BUILD)/res/drawable-xhdpi/icon.png \
-	$(ANDROID_BUILD)/res/drawable-xxhdpi/icon.png \
-	$(ANDROID_BUILD)/res/drawable-xxxhdpi/icon.png \
-	$(ANDROID_BUILD)/res/drawable/notification_icon.png \
-	$(ANDROID_BUILD)/res/drawable-hdpi/notification_icon.png \
-	$(ANDROID_BUILD)/res/drawable-xhdpi/notification_icon.png \
-	$(ANDROID_BUILD)/res/drawable-xxhdpi/notification_icon.png \
-	$(ANDROID_BUILD)/res/drawable-xxxhdpi/notification_icon.png
+	$(RES_DIR)/drawable-ldpi/icon.png \
+	$(RES_DIR)/drawable/icon.png \
+	$(RES_DIR)/drawable-hdpi/icon.png \
+	$(RES_DIR)/drawable-xhdpi/icon.png \
+	$(RES_DIR)/drawable-xxhdpi/icon.png \
+	$(RES_DIR)/drawable-xxxhdpi/icon.png \
+	$(RES_DIR)/drawable/notification_icon.png \
+	$(RES_DIR)/drawable-hdpi/notification_icon.png \
+	$(RES_DIR)/drawable-xhdpi/notification_icon.png \
+	$(RES_DIR)/drawable-xxhdpi/notification_icon.png \
+	$(RES_DIR)/drawable-xxxhdpi/notification_icon.png
 
 ifeq ($(TESTING),y)
 MANIFEST = android/testing/AndroidManifest.xml
@@ -175,28 +193,33 @@ else
 MANIFEST = android/AndroidManifest.xml
 endif
 
-$(ANDROID_XML_RES_COPIES): $(ANDROID_BUILD)/%: android/%
+$(ANDROID_XML_RES_COPIES): $(RES_DIR)/%: android/res/%
 	$(Q)-$(MKDIR) -p $(dir $@)
 	$(Q)cp $< $@
 
-$(ANDROID_BUILD)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) | $(ANDROID_BUILD)/gen/dirstamp
+$(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) $(MANIFEST) | $(GEN_DIR)/dirstamp
 	@$(NQ)echo "  AAPT"
 	$(Q)$(AAPT) package -f -m --auto-add-overlay \
 		--custom-package $(JAVA_PACKAGE) \
 		-M $(MANIFEST) \
-		-S $(ANDROID_BUILD)/res \
-		-J $(ANDROID_BUILD)/gen \
+		-S $(RES_DIR) \
+		-J $(GEN_DIR) \
 		-I $(ANDROID_SDK_PLATFORM_DIR)/android.jar \
-		-F $(ANDROID_BUILD)/resources.apk
+		-F $(ANDROID_OUTPUT_DIR)/resources.apk
 
 # R.java is generated by aapt, when resources.apk is generated
-$(ANDROID_BUILD)/gen/org/xcsoar/R.java: $(ANDROID_BUILD)/resources.apk
+$(GEN_DIR)/org/xcsoar/R.java: $(ANDROID_OUTPUT_DIR)/resources.apk
 
-$(ANDROID_BUILD)/classes.dex: $(JAVA_SOURCES) $(ANDROID_BUILD)/gen/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
+$(ANDROID_OUTPUT_DIR)/classes.dex: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
 	@$(NQ)echo "  JAVAC   $(JAVA_CLASSFILES_DIR)"
-	$(Q)$(JAVAC) -source 1.7 -target 1.7 -Xlint:-options \
+	$(Q)$(JAVAC) \
+		-source 1.7 -target 1.7 \
+		-Xlint:all \
+		-Xlint:-deprecation -Xlint:-dep-ann \
+		-Xlint:-options \
+		-Xlint:-static \
 		-cp $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) \
-		-d $(JAVA_CLASSFILES_DIR) $(ANDROID_BUILD)/gen/org/xcsoar/R.java \
+		-d $(JAVA_CLASSFILES_DIR) $(GEN_DIR)/org/xcsoar/R.java \
 		-h $(NATIVE_INCLUDE) \
 		$(JAVA_SOURCES)
 	@$(NQ)echo "  DX      $@"
@@ -215,22 +238,22 @@ define generate-abi
 ANDROID_LIB_BUILD += $$(ANDROID_BUILD)/lib/$(2)/lib$(1).so
 
 # copy libxcsoar.so to ANDROIDFAT
-$$(ANDROID_BUILD)/lib/$(2)/lib$(1).so: $$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so | $$(ANDROID_BUILD)/lib/$(2)/dirstamp
+$$(ANDROID_BUILD)/lib/$(2)/lib$(1).so: $$(TARGET_OUTPUT_DIR)/$(2)/$$(XCSOAR_ABI)/bin/lib$(1).so | $$(ANDROID_BUILD)/lib/$(2)/dirstamp
 	$$(Q)cp $$< $$@
 
 # build third-party libraries
-ANDROID_THIRDPARTY_STAMPS += $$(OUT)/$(3)/thirdparty.stamp
-$$(OUT)/$(3)/thirdparty.stamp:
-	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) libs
+ANDROID_THIRDPARTY_STAMPS += $$(TARGET_OUTPUT_DIR)/$(2)/thirdparty.stamp
+$$(TARGET_OUTPUT_DIR)/$(2)/thirdparty.stamp: FORCE
+	$$(Q)$$(MAKE) TARGET_OUTPUT_DIR=$$(TARGET_OUTPUT_DIR) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) libs
 
 # build libxcsoar.so
-$$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so: $$(OUT)/$(3)/thirdparty.stamp
-	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
+$$(TARGET_OUTPUT_DIR)/$(2)/$$(XCSOAR_ABI)/bin/lib$(1).so: $(NATIVE_HEADERS) generate boost FORCE
+	$$(Q)$$(MAKE) TARGET_OUTPUT_DIR=$$(TARGET_OUTPUT_DIR) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
 
 # extract symbolication files for Google Play
 ANDROID_SYMBOLICATION_BUILD += $$(ANDROID_BUILD)/symbols/$(2)/lib$(1).so
-$$(ANDROID_BUILD)/symbols/$(2)/lib$(1).so: $$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1)-ns.so | $$(ANDROID_BUILD)/symbols/$(2)/dirstamp
-	$$(Q)$$(ANDROID_TOOLCHAIN)/bin/llvm-objcopy$$(EXE) --strip-debug $$< $$@
+$$(ANDROID_BUILD)/symbols/$(2)/lib$(1).so: $$(TARGET_OUTPUT_DIR)/$(2)/$$(XCSOAR_ABI)/bin/lib$(1)-ns.so | $$(ANDROID_BUILD)/symbols/$(2)/dirstamp
+	$$(Q)$$(TCPREFIX)objcopy$$(EXE) --strip-debug $$< $$@
 
 endef
 
@@ -244,8 +267,9 @@ endef
 
 $(foreach NAME,$(ANDROID_LIB_NAMES),$(eval $(call generate-all-abis,$(NAME))))
 
-.PHONY: libs
+.PHONY: libs compile
 libs: $(ANDROID_THIRDPARTY_STAMPS)
+compile: $(ANDROID_LIB_BUILD)
 
 # Generate symbols.zip (symbolication file) for Google Play, which
 # allows Google Play to show symbol names in stack traces.
@@ -257,17 +281,14 @@ else # !FAT_BINARY
 # add dependency to this source file
 $(call SRC_TO_OBJ,$(SRC)/Android/Main.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/EventBridge.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/InternalSensors.cpp): $(NATIVE_HEADERS)
+$(call SRC_TO_OBJ,$(SRC)/Android/NativeSensorListener.cpp): $(NATIVE_HEADERS)
+$(call SRC_TO_OBJ,$(SRC)/Android/NativeDetectDeviceListener.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/Battery.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/GliderLink.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativePortListener.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/NativeLeScanCallback.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativeInputListener.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/DownloadManager.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/NativeBMP085Listener.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/NativeI2CbaroListener.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/NativeNunchuckListener.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/NativeVoltageListener.cpp): $(NATIVE_HEADERS)
+$(call SRC_TO_OBJ,$(SRC)/Android/TextEntryDialog.cpp): $(NATIVE_HEADERS)
+$(call SRC_TO_OBJ,$(SRC)/Android/FileProvider.cpp): $(NATIVE_HEADERS)
 
 ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES))
 $(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(ABI_BIN_DIR)/lib%.so | $(ANDROID_ABI_DIR)/dirstamp
@@ -276,13 +297,14 @@ $(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(ABI_BIN_DIR)/lib%.so | $(AND
 endif # !FAT_BINARY
 
 
-$(NATIVE_HEADERS): $(ANDROID_BUILD)/classes.dex
+$(NATIVE_HEADERS): $(ANDROID_OUTPUT_DIR)/classes.dex
 
 .DELETE_ON_ERROR: $(ANDROID_BUILD)/unsigned.apk
-$(ANDROID_BUILD)/unsigned.apk: $(ANDROID_BUILD)/classes.dex $(ANDROID_BUILD)/resources.apk $(ANDROID_LIB_BUILD)
+$(ANDROID_BUILD)/unsigned.apk: $(ANDROID_OUTPUT_DIR)/classes.dex $(ANDROID_OUTPUT_DIR)/resources.apk $(ANDROID_LIB_BUILD)
 	@$(NQ)echo "  APK     $@"
-	$(Q)cp $(ANDROID_BUILD)/resources.apk $@
-	$(Q)cd $(dir $@) && zip -q -r $(notdir $@) classes.dex lib
+	$(Q)cp $(ANDROID_OUTPUT_DIR)/classes.dex $(dir $@)/
+	$(Q)cp $(ANDROID_OUTPUT_DIR)/resources.apk $@
+	$(Q)cd $(dir $@) && zip -q -r $(notdir $@) classes.dex lib/*/*.so
 
 # Generate ~/.android/debug.keystore, if it does not exists, as the official
 # Android build tools do it:

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "StringConverter.hpp"
+#include "util/Compiler.h"
 #include "util/UTF8.hpp"
 
 #include <cassert>
@@ -30,7 +31,7 @@ Copyright_License {
 
 #ifdef _UNICODE
 #include "system/Error.hxx"
-#include <windows.h>
+#include <stringapiset.h>
 #endif
 
 #ifdef _UNICODE

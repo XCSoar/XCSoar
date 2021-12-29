@@ -40,24 +40,24 @@ int main(int argc, char **argv)
   Validity v;
   v.Clear();
   ok1(!v.IsValid());
-  v.Update(100);
+  v.Update(TimeStamp{std::chrono::seconds{100}});
   ok1(v.IsValid());
-  v.Expire(101, std::chrono::seconds(5));
+  v.Expire(TimeStamp{std::chrono::seconds{101}}, std::chrono::seconds(5));
   ok1(v.IsValid());
-  v.Expire(105, std::chrono::seconds(5));
+  v.Expire(TimeStamp{std::chrono::seconds{105}}, std::chrono::seconds(5));
   ok1(v.IsValid());
-  v.Expire(106, std::chrono::seconds(5));
+  v.Expire(TimeStamp{std::chrono::seconds{106}}, std::chrono::seconds(5));
   ok1(!v.IsValid());
 
-  v.Update(100);
-  ok1(v.Modified(Validity(99)));
-  ok1(!v.Modified(Validity(100)));
-  ok1(!v.Modified(Validity(101)));
-  ok1(!v.Complement(Validity(1)));
+  v.Update(TimeStamp{std::chrono::seconds{100}});
+  ok1(v.Modified(Validity(TimeStamp{std::chrono::seconds{99}})));
+  ok1(!v.Modified(Validity(TimeStamp{std::chrono::seconds{100}})));
+  ok1(!v.Modified(Validity(TimeStamp{std::chrono::seconds{101}})));
+  ok1(!v.Complement(Validity(TimeStamp{std::chrono::seconds{1}})));
 
   v.Clear();
   ok1(!v.Complement(invalid()));
-  ok1(v.Complement(Validity(1)));
+  ok1(v.Complement(Validity(TimeStamp{std::chrono::seconds{1}})));
 
   return exit_status();
 }

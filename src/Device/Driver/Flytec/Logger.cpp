@@ -38,30 +38,26 @@ Copyright_License {
 #include <stdlib.h>
 #include <string.h>
 
-static bool
+static void
 ExpectXOff(Port &port, OperationEnvironment &env,
            std::chrono::steady_clock::duration timeout)
 {
-  return port.WaitForChar(0x13, env, timeout) == Port::WaitResult::READY;
+  port.WaitForChar(0x13, env, timeout);
 }
 
 static bool
 ReceiveLine(Port &port, char *buffer, size_t length,
+            OperationEnvironment &env,
             std::chrono::steady_clock::duration _timeout)
 {
   TimeoutClock timeout(_timeout);
 
   char *p = (char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.HasExpired())
-      return false;
+    port.WaitRead(env, timeout.GetRemainingOrZero());
 
     // Read single character from port
-    int c = port.GetChar();
-
-    // On failure try again until timed out
-    if (c == -1)
-      continue;
+    char c = (char)port.ReadByte();
 
     // Break on XOn
     if (c == 0x11) {
@@ -184,17 +180,12 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
   strcat(buffer, "\r\n");
 
   port.Write(buffer);
-  if (!ExpectXOff(port, env, std::chrono::seconds(1)))
-    return false;
+  ExpectXOff(port, env, std::chrono::seconds{1});
 
   unsigned tracks = 0;
   while (true) {
-    // Check if the user cancelled the operation
-    if (env.IsCancelled())
-      return false;
-
     // Receive the next line
-    if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer),
+    if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer), env,
                      std::chrono::seconds(1)))
       return false;
 
@@ -269,8 +260,7 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
   strcat(buffer, "\r\n");
 
   port.Write(buffer);
-  if (!ExpectXOff(port, env, std::chrono::seconds(1)))
-    return false;
+  ExpectXOff(port, env, std::chrono::seconds{1});
 
   // Open file writer
   FileOutputStream fos(path);
@@ -285,12 +275,8 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
   env.SetProgressRange(range);
 
   while (true) {
-    // Check if the user cancelled the operation
-    if (env.IsCancelled())
-      return false;
-
     // Receive the next line
-    if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer),
+    if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer), env,
                      std::chrono::seconds(1)))
       return false;
 

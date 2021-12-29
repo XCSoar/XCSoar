@@ -38,7 +38,7 @@ l_fire_legacy_event(lua_State *L)
   if (event == nullptr)
     return luaL_error(L, "No InputEvent specified");
 
-  auto *event_function = InputEvents::findEvent(UTF8ToWideConverter(event));
+  auto *event_function = InputEvents::findEvent(UTF8ToWideConverter(event).c_str());
   if (event_function == nullptr)
     return luaL_error(L, "Unknown InputEvent");
 
@@ -54,6 +54,7 @@ void
 Lua::InitLegacy(lua_State *L)
 {
   lua_getglobal(L, "xcsoar");
-  SetField(L, -2, "fire_legacy_event", l_fire_legacy_event);
+  SetField(L, RelativeStackIndex{-1},
+           "fire_legacy_event", l_fire_legacy_event);
   lua_pop(L, 1);
 }

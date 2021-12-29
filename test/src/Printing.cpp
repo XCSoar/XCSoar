@@ -24,13 +24,14 @@
 #include "Trace/Trace.hpp"
 #include "system/FileUtil.hpp"
 #include "Waypoint/Waypoint.hpp"
+#include "util/ConvertString.hpp"
 
 #include <fstream>
 
 std::ostream &
 operator<<(std::ostream &f, Path path)
 {
-  f << path.c_str();
+  f << WideToUTF8Converter(path.c_str());
   return f;
 }
 
@@ -87,7 +88,7 @@ TaskMacCready::print(std::ostream &f, const AIRCRAFT_STATE &aircraft) const
 static void
 PrintTracePoint(const TracePoint &point, std::ofstream& fs)
 {
-  fs << point.GetTime()
+  fs << point.GetTime().count()
      << " " << point.GetLocation().longitude
      << " " << point.GetLocation().latitude
      << " " << point.GetAltitude()

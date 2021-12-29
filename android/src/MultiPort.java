@@ -23,6 +23,7 @@ Copyright_License {
 
 package org.xcsoar;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Iterator;
@@ -56,7 +57,10 @@ class MultiPort implements AndroidPort, InputListener {
         Log.i(TAG, "Bluetooth disconnect from " + port);
 
         i.remove();
-        port.close();
+        try {
+          port.close();
+        } catch (IOException e) {
+        }
         error = true;
         break;
 
@@ -93,11 +97,16 @@ class MultiPort implements AndroidPort, InputListener {
     inputListener = _listener;
   }
 
-  @Override public synchronized void close() {
+  @Override
+  public synchronized void close() {
     error = true;
 
-    for (AndroidPort port : ports)
-      port.close();
+    for (AndroidPort port : ports) {
+      try {
+        port.close();
+      } catch (IOException e) {
+      }
+    }
 
     ports.clear();
   }
@@ -130,7 +139,11 @@ class MultiPort implements AndroidPort, InputListener {
       if (nbytes < 0 && port.getState() == STATE_FAILED) {
         error = true;
         i.remove();
-        port.close();
+
+        try {
+          port.close();
+        } catch (IOException e) {
+        }
       } else if (nbytes > result)
         result = nbytes;
     }

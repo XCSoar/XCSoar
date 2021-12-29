@@ -29,10 +29,11 @@ Copyright_License {
 class InfoBoxContentAlternateName : public InfoBoxContent
 {
 public:
-  InfoBoxContentAlternateName(const unsigned _index):
-    InfoBoxContent(), index(_index) {}
-  virtual void Update(InfoBoxData &data) override;
-  virtual const InfoBoxPanel *GetDialogContent() override;
+  InfoBoxContentAlternateName(const unsigned _index) noexcept
+    :index(_index) {}
+
+  void Update(InfoBoxData &data) noexcept override;
+  const InfoBoxPanel *GetDialogContent() noexcept override;
 
 private:
   unsigned index;
@@ -41,10 +42,11 @@ private:
 class InfoBoxContentAlternateGR : public InfoBoxContent
 {
 public:
-  InfoBoxContentAlternateGR(const unsigned _index):
-    InfoBoxContent(), index(_index) {}
-  virtual void Update(InfoBoxData &data) override;
-  virtual const InfoBoxPanel *GetDialogContent() override;
+  InfoBoxContentAlternateGR(const unsigned _index) noexcept
+    :index(_index) {}
+
+  void Update(InfoBoxData &data) noexcept override;
+  const InfoBoxPanel *GetDialogContent() noexcept override;
 
 private:
   unsigned index;

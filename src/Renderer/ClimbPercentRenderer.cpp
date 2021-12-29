@@ -40,7 +40,7 @@ ClimbPercentRenderer::Draw(const CirclingInfo& stats, Canvas &canvas,
   center.x = (rc.left + rc.right) / 2;
   center.y = (rc.bottom + rc.top) / 2;
 
-  if (stats.time_cruise + stats.time_circling > 0) {
+  if (stats.time_cruise + stats.time_circling > FloatDuration{}) {
 
     canvas.SelectNullPen();
 

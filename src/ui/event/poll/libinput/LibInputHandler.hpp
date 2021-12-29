@@ -62,14 +62,14 @@ class LibInputHandler final {
 public:
   explicit LibInputHandler(EventQueue &_queue) noexcept;
 
-  ~LibInputHandler() {
+  ~LibInputHandler() noexcept {
     Close();
   }
 
-  bool Open();
-  void Close();
+  bool Open() noexcept;
+  void Close() noexcept;
 
-  void SetScreenSize(unsigned _width, unsigned _height) {
+  void SetScreenSize(unsigned _width, unsigned _height) noexcept {
     width = _width;
     height = _height;
 
@@ -83,32 +83,36 @@ public:
       y = height / 2;
   }
 
-  unsigned GetX() const {
+  unsigned GetX() const noexcept {
     return (unsigned) x;
   }
 
-  unsigned GetY() const {
+  unsigned GetY() const noexcept {
     return (unsigned) y;
   }
 
-  bool HasPointer() const {
-    return n_pointers > 0;
+  bool HasPointer() const noexcept {
+    /* in libinput, touch screens don't have
+       LIBINPUT_DEVICE_CAP_POINTER, only LIBINPUT_DEVICE_CAP_TOUCH,
+       but for XCSoar, HasPointer() is a superset of
+       HasTouchScreen() */
+    return (n_pointers + n_touch_screens) > 0;
   }
 
-  bool HasTouchScreen() const {
+  bool HasTouchScreen() const noexcept {
     return n_touch_screens > 0;
   }
 
-  bool HasKeyboard() const {
+  bool HasKeyboard() const noexcept {
     return n_keyboards > 0;
   }
 
 private:
-  int OpenDevice(const char *path, int flags);
-  void CloseDevice(int fd);
+  int OpenDevice(const char *path, int flags) noexcept;
+  void CloseDevice(int fd) noexcept;
 
-  void HandleEvent(struct libinput_event *li_event);
-  void HandlePendingEvents();
+  void HandleEvent(struct libinput_event *li_event) noexcept;
+  void HandlePendingEvents() noexcept;
 
   void OnSocketReady(unsigned events) noexcept;
 };

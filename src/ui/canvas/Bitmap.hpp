@@ -34,13 +34,11 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
-#include "ui/canvas/custom/UncompressedImage.hpp"
-#include "ui/canvas/opengl/Surface.hpp"
 #include <jni.h>
 #endif
 
 #ifdef USE_GDI
-#include <windows.h>
+#include <windef.h>
 #endif
 
 #include <cassert>
@@ -65,9 +63,6 @@ using BitmapPixelTraits = BGRAPixelTraits;
  * An image loaded from storage.
  */
 class Bitmap final
-#ifdef ANDROID
-             : private GLSurfaceListener
-#endif
 {
 public:
   enum class Type {
@@ -84,14 +79,6 @@ public:
   };
 
 protected:
-#ifdef ANDROID
-  jobject bmp = nullptr;
-
-  UncompressedImage uncompressed;
-
-  Type type;
-#endif
-
 #ifdef ENABLE_OPENGL
   GLTexture *texture = nullptr;
   PixelSize size;
@@ -117,23 +104,17 @@ public:
   Bitmap(ConstBuffer<void> buffer);
 #endif
 
-#ifdef USE_MEMORY_CANVAS
-  Bitmap(Bitmap &&src) = default;
-#else
-  Bitmap(Bitmap &&src);
-#endif
+  Bitmap(Bitmap &&src) noexcept;
 
-  ~Bitmap() {
+  ~Bitmap() noexcept {
     Reset();
   }
 
-  Bitmap(const Bitmap &other) = delete;
-  Bitmap &operator=(const Bitmap &other) = delete;
+  Bitmap &operator=(Bitmap &&src) noexcept;
+
 public:
-  bool IsDefined() const {
-#ifdef ANDROID
-    return bmp != nullptr || uncompressed.IsDefined();
-#elif defined(ENABLE_OPENGL)
+  bool IsDefined() const noexcept {
+#ifdef ENABLE_OPENGL
     return texture != nullptr;
 #elif defined(USE_MEMORY_CANVAS)
     return buffer.data != nullptr;
@@ -143,50 +124,50 @@ public:
   }
 
 #ifdef ENABLE_OPENGL
-  const PixelSize &GetSize() const {
+  const PixelSize &GetSize() const noexcept {
     return size;
   }
 
-  unsigned GetWidth() const {
+  unsigned GetWidth() const noexcept {
     return size.width;
   }
 
-  unsigned GetHeight() const {
+  unsigned GetHeight() const noexcept {
     return size.height;
   }
 
-  bool IsFlipped() const {
+  bool IsFlipped() const noexcept {
     return flipped;
   }
 #elif defined(USE_MEMORY_CANVAS)
-  PixelSize GetSize() const {
+  PixelSize GetSize() const noexcept {
     return { buffer.width, buffer.height };
   }
 
-  unsigned GetWidth() const {
+  unsigned GetWidth() const noexcept {
     return buffer.width;
   }
 
-  unsigned GetHeight() const {
+  unsigned GetHeight() const noexcept {
     return buffer.height;
   }
 #else
   gcc_pure
-  PixelSize GetSize() const;
+  PixelSize GetSize() const noexcept;
 
-  unsigned GetWidth() const {
+  unsigned GetWidth() const noexcept {
     return GetSize().width;
   }
 
-  unsigned GetHeight() const {
+  unsigned GetHeight() const noexcept {
     return GetSize().height;
   }
 #endif
 
 #ifdef ENABLE_OPENGL
-  void EnableInterpolation();
+  void EnableInterpolation() noexcept;
 #else
-  void EnableInterpolation() {}
+  void EnableInterpolation() noexcept {}
 #endif
 
 #ifndef USE_GDI
@@ -213,18 +194,18 @@ public:
    */
   GeoQuadrilateral LoadGeoFile(Path path);
 
-  void Reset();
+  void Reset() noexcept;
 
 #ifdef ENABLE_OPENGL
-  GLTexture *GetNative() const {
+  GLTexture *GetNative() const noexcept {
     return texture;
   }
 #elif defined(USE_MEMORY_CANVAS)
-  ConstImageBuffer<BitmapPixelTraits> GetNative() const {
+  ConstImageBuffer<BitmapPixelTraits> GetNative() const noexcept {
     return buffer;
   }
 #else
-  HBITMAP GetNative() const {
+  HBITMAP GetNative() const noexcept {
     assert(IsDefined());
 
     return bitmap;
@@ -233,15 +214,13 @@ public:
 
 #ifdef ENABLE_OPENGL
 private:
-  bool MakeTexture(const UncompressedImage &uncompressed, Type type);
+  bool MakeTexture(const UncompressedImage &uncompressed, Type type) noexcept;
 
 #ifdef ANDROID
-  bool Set(JNIEnv *env, jobject _bmp, Type _type, bool flipped = false);
-  bool MakeTexture(jobject _bmp, Type _type, bool flipped = false);
-
-  /* from GLSurfaceListener */
-  virtual void SurfaceCreated() override;
-  virtual void SurfaceDestroyed() override;
+  bool Set(JNIEnv *env, jobject _bmp, Type _type,
+           bool flipped = false) noexcept;
+  bool MakeTexture(jobject _bmp, Type _type,
+                   bool flipped = false) noexcept;
 #endif
 #endif
 };

@@ -41,4 +41,8 @@ OpenAndroidBluetoothPort(const TCHAR *address, PortListener *_listener,
 std::unique_ptr<Port>
 OpenAndroidBluetoothServerPort(PortListener *_listener, DataHandler &_handler);
 
+std::unique_ptr<Port>
+OpenAndroidBleHm10Port(const TCHAR *address, PortListener *_listener,
+                         DataHandler &_handler);
+
 #endif

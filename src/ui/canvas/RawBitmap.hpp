@@ -15,7 +15,6 @@
 #include "util/ByteOrder.hxx"
 
 #ifdef ENABLE_OPENGL
-#include "opengl/Surface.hpp"
 #include "ui/opengl/Features.hpp"
 #endif
 
@@ -87,9 +86,6 @@ struct RawColor
  * This class provides fast drawing methods and offscreen buffer.
  */
 class RawBitmap final
-#ifdef ENABLE_OPENGL
-  :private GLSurfaceListener
-#endif
 {
 protected:
   const unsigned width;
@@ -217,13 +213,6 @@ public:
   void StretchTo(PixelSize src_size,
                  Canvas &dest_canvas, PixelSize dest_size,
                  bool transparent_white=false) const;
-
-#ifdef ENABLE_OPENGL
-private:
-  /* from GLSurfaceListener */
-  void SurfaceCreated() override;
-  void SurfaceDestroyed() override;
-#endif
 };
 
 #endif // !defined(AFX_STSCREENBUFFER_H__22D62F5D_32E2_4785_B3D9_2341C11F84A3__INCLUDED_)

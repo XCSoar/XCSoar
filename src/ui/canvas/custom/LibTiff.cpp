@@ -71,7 +71,7 @@ public:
     return tiff;
   }
 
-  void GetField(uint32 tag, int &value_r) {
+  void GetField(uint32_t tag, int &value_r) {
     TIFFGetField(tiff, tag, &value_r);
   }
 

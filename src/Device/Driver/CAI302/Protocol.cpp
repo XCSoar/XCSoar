@@ -31,77 +31,76 @@ Copyright_License {
 #include <string.h>
 #include <stdio.h>
 
-bool
+void
 CAI302::WriteString(Port &port, const char *p, OperationEnvironment &env)
 {
-  size_t length = strlen(p);
-  return port.FullWrite(p, length, env, std::chrono::seconds(2));
+  port.FullWriteString(p, env, std::chrono::seconds(2));
 }
 
-bool
+void
 CAI302::CommandModeQuick(Port &port)
 {
-  return port.Write('\x03');
+  port.Write('\x03');
 }
 
-static bool
+static void
 WaitCommandPrompt(Port &port, OperationEnvironment &env,
                   std::chrono::steady_clock::duration timeout=std::chrono::seconds(2))
 {
-  return port.ExpectString("cmd>", env, timeout);
+  port.ExpectString("cmd>", env, timeout);
 }
 
-bool
+void
 CAI302::CommandMode(Port &port, OperationEnvironment &env)
 {
   port.Flush();
-  return CommandModeQuick(port) && WaitCommandPrompt(port, env);
+  CommandModeQuick(port);
+  WaitCommandPrompt(port, env);
 }
 
-bool
+void
 CAI302::SendCommandQuick(Port &port, const char *cmd,
                          OperationEnvironment &env)
 {
-  if (!CommandMode(port, env))
-    return false;
-
+  CommandMode(port, env);
   port.Flush();
-  return WriteString(port, cmd, env);
+  WriteString(port, cmd, env);
 }
 
-bool
+void
 CAI302::SendCommand(Port &port, const char *cmd,
                     OperationEnvironment &env,
                     std::chrono::steady_clock::duration timeout)
 {
-  return SendCommandQuick(port, cmd, env) &&
-    WaitCommandPrompt(port, env, timeout);
+  SendCommandQuick(port, cmd, env);
+  WaitCommandPrompt(port, env, timeout);
 }
 
-bool
+void
 CAI302::LogModeQuick(Port &port, OperationEnvironment &env)
 {
-  return CommandModeQuick(port) && WriteString(port, "LOG 0\r", env);
+  CommandModeQuick(port);
+  WriteString(port, "LOG 0\r", env);
 }
 
-bool
+void
 CAI302::LogMode(Port &port, OperationEnvironment &env)
 {
-  return SendCommandQuick(port, "LOG 0\r", env);
+  SendCommandQuick(port, "LOG 0\r", env);
 }
 
-static bool
+static void
 WaitUploadPrompt(Port &port, OperationEnvironment &env,
                  std::chrono::steady_clock::duration timeout=std::chrono::seconds(2))
 {
-  return port.ExpectString("up>", env, timeout);
+  port.ExpectString("up>", env, timeout);
 }
 
-bool
+void
 CAI302::UploadMode(Port &port, OperationEnvironment &env)
 {
-  return SendCommandQuick(port, "UPLOAD 1\r", env) &&
-    WaitUploadPrompt(port, env);
+  SendCommandQuick(port, "UPLOAD 1\r", env);
+  WaitUploadPrompt(port, env);
 }
 
 int
@@ -110,8 +109,7 @@ CAI302::ReadShortReply(Port &port, void *buffer, unsigned max_size,
                        std::chrono::steady_clock::duration timeout)
 {
   unsigned char header[3];
-  if (!port.FullRead(header, sizeof(header), env, timeout))
-    return -1;
+  port.FullRead(header, sizeof(header), env, timeout);
 
   unsigned size = header[0];
   if (size < sizeof(header))
@@ -121,8 +119,7 @@ CAI302::ReadShortReply(Port &port, void *buffer, unsigned max_size,
   if (size > max_size)
     size = max_size;
 
-  if (!port.FullRead(buffer, size, env, timeout))
-    return -1;
+  port.FullRead(buffer, size, env, timeout);
 
   // XXX verify the checksum
 
@@ -141,8 +138,7 @@ CAI302::ReadLargeReply(Port &port, void *buffer, unsigned max_size,
                        std::chrono::steady_clock::duration timeout)
 {
   unsigned char header[5];
-  if (!port.FullRead(header, sizeof(header), env, timeout))
-    return -1;
+  port.FullRead(header, sizeof(header), env, timeout);
 
   if (header[0] == 0x09 && header[1] >= 0x10 &&
       header[3] == 0x0d && header[4] == 0x0a) {
@@ -166,8 +162,7 @@ CAI302::ReadLargeReply(Port &port, void *buffer, unsigned max_size,
   if (size > max_size)
     size = max_size;
 
-  if (!port.FullRead(buffer, size, env, timeout))
-    return -1;
+  port.FullRead(buffer, size, env, timeout);
 
   // XXX verify the checksum
 
@@ -187,16 +182,13 @@ CAI302::UploadShort(Port &port, const char *command,
                     std::chrono::steady_clock::duration timeout)
 {
   port.Flush();
-  if (!WriteString(port, command, env))
-    return -1;
+  WriteString(port, command, env);
 
   int nbytes = ReadShortReply(port, response, max_size, env, timeout);
   if (nbytes < 0)
     return nbytes;
 
-  if (!WaitUploadPrompt(port, env))
-    return -1;
-
+  WaitUploadPrompt(port, env);
   return nbytes;
 }
 
@@ -207,16 +199,14 @@ CAI302::UploadLarge(Port &port, const char *command,
                     std::chrono::steady_clock::duration timeout)
 {
   port.Flush();
-  if (!WriteString(port, command, env))
-    return -1;
+  WriteString(port, command, env);
 
   int nbytes = ReadLargeReply(port, response, max_size, env, timeout);
 
   if (nbytes == -2) {
     /* transmission error - try again */
 
-    if (!WriteString(port, command, env))
-      return -1;
+    WriteString(port, command, env);
 
     nbytes = ReadLargeReply(port, response, max_size, env, timeout);
   }
@@ -224,9 +214,7 @@ CAI302::UploadLarge(Port &port, const char *command,
   if (nbytes < 0)
     return nbytes;
 
-  if (!WaitUploadPrompt(port, env))
-    return -1;
-
+  WaitUploadPrompt(port, env);
   return nbytes;
 }
 
@@ -335,29 +323,30 @@ CAI302::UploadPilotBlock(Port &port, unsigned start, unsigned count,
     : -1;
 }
 
-static bool
+static void
 WaitDownloadPrompt(Port &port, OperationEnvironment &env,
                    std::chrono::steady_clock::duration timeout=std::chrono::seconds(2))
 {
-  return port.ExpectString("dn>", env, timeout);
+  port.ExpectString("dn>", env, timeout);
 }
 
-bool
+void
 CAI302::DownloadMode(Port &port, OperationEnvironment &env)
 {
-  return SendCommandQuick(port, "DOWNLOAD 1\r", env) &&
-    WaitDownloadPrompt(port, env);
+  SendCommandQuick(port, "DOWNLOAD 1\r", env);
+  WaitDownloadPrompt(port, env);
 }
 
-bool
+void
 CAI302::DownloadCommand(Port &port, const char *command,
                         OperationEnvironment &env,
                         std::chrono::steady_clock::duration timeout)
 {
-  return WriteString(port, command, env) && WaitDownloadPrompt(port, env);
+  WriteString(port, command, env);
+  WaitDownloadPrompt(port, env);
 }
 
-bool
+void
 CAI302::DownloadPilot(Port &port, const Pilot &pilot, unsigned ordinal,
                       OperationEnvironment &env)
 {
@@ -382,10 +371,10 @@ CAI302::DownloadPilot(Port &port, const Pilot &pilot, unsigned ordinal,
            FromBE16(pilot.unit_word),
            FromBE16(pilot.margin_height));
 
-  return DownloadCommand(port, buffer, env);
+  DownloadCommand(port, buffer, env);
 }
 
-bool
+void
 CAI302::DownloadPolar(Port &port, const Polar &polar,
                       OperationEnvironment &env)
 {
@@ -403,7 +392,7 @@ CAI302::DownloadPolar(Port &port, const Polar &polar,
            FromBE16(polar.config_word),
            FromBE16(polar.wing_area));
 
-  return DownloadCommand(port, buffer, env);
+  DownloadCommand(port, buffer, env);
 }
 
 bool
@@ -452,7 +441,7 @@ FormatGeoPoint(char *buffer, const GeoPoint &location)
           DegLon, MinLon, EoW);
 }
 
-bool
+void
 CAI302::DownloadNavpoint(Port &port, const GeoPoint &location,
                          int altitude, unsigned id,
                          bool turnpoint, bool airfield, bool markpoint,
@@ -478,17 +467,16 @@ CAI302::DownloadNavpoint(Port &port, const GeoPoint &location,
   char buffer[256];
   snprintf(buffer, sizeof(buffer), "C,0,%s,%d,%u,%u,%-12s,%-12s\r",
            location_string, altitude, id, attr, name, remark);
-  return DownloadCommand(port, buffer, env);
+  DownloadCommand(port, buffer, env);
 }
 
-bool
+void
 CAI302::CloseNavpoints(Port &port, OperationEnvironment &env)
 {
-  return DownloadCommand(port, "C,-1\r", env, std::chrono::seconds(5));
+  DownloadCommand(port, "C,-1\r", env, std::chrono::seconds(5));
 }
 
-
-bool
+void
 CAI302::DeclareTP(Port &port, unsigned i, const GeoPoint &location,
                   int altitude, const char *name, OperationEnvironment &env)
 {
@@ -502,67 +490,67 @@ CAI302::DeclareTP(Port &port, unsigned i, const GeoPoint &location,
            name,
            altitude);
 
-  return DownloadCommand(port, buffer, env);
+  DownloadCommand(port, buffer, env);
 }
 
-bool
+void
 CAI302::DeclareSave(Port &port, OperationEnvironment &env)
 {
-  return DownloadCommand(port, "D,255\r", env, std::chrono::seconds(5));
+  DownloadCommand(port, "D,255\r", env, std::chrono::seconds(5));
 }
 
-bool
+void
 CAI302::Reboot(Port &port, OperationEnvironment &env)
 {
-  return SendCommandQuick(port, "SIF 0 0\r", env);
+  SendCommandQuick(port, "SIF 0 0\r", env);
 }
 
-bool
+void
 CAI302::PowerOff(Port &port, OperationEnvironment &env)
 {
-  return SendCommandQuick(port, "DIE\r", env);
+  SendCommandQuick(port, "DIE\r", env);
 }
 
-bool
+void
 CAI302::StartLogging(Port &port, OperationEnvironment &env)
 {
-  return SendCommand(port, "START\r", env);
+  SendCommand(port, "START\r", env);
 }
 
-bool
+void
 CAI302::StopLogging(Port &port, OperationEnvironment &env)
 {
-  return SendCommand(port, "STOP\r", env);
+  SendCommand(port, "STOP\r", env);
 }
 
-bool
+void
 CAI302::SetVolume(Port &port, unsigned volume, OperationEnvironment &env)
 {
   char cmd[16];
   sprintf(cmd, "VOL %u\r", volume);
-  return SendCommand(port, cmd, env);
+  SendCommand(port, cmd, env);
 }
 
-bool
+void
 CAI302::ClearPoints(Port &port, OperationEnvironment &env)
 {
-  return SendCommand(port, "CLEAR POINTS\r", env, std::chrono::seconds(5));
+  SendCommand(port, "CLEAR POINTS\r", env, std::chrono::seconds(5));
 }
 
-bool
+void
 CAI302::ClearPilot(Port &port, OperationEnvironment &env)
 {
-  return SendCommand(port, "CLEAR PILOT\r", env, std::chrono::seconds(5));
+  SendCommand(port, "CLEAR PILOT\r", env, std::chrono::seconds(5));
 }
 
-bool
+void
 CAI302::ClearLog(Port &port, OperationEnvironment &env)
 {
-  return SendCommand(port, "CLEAR LOG\r", env, std::chrono::minutes(1));
+  SendCommand(port, "CLEAR LOG\r", env, std::chrono::minutes(1));
 }
 
-static unsigned
-ConvertBaudRate(unsigned baud_rate)
+static constexpr unsigned
+ConvertBaudRate(unsigned baud_rate) noexcept
 {
   switch (baud_rate) {
   case 1200: return 4;
@@ -577,14 +565,14 @@ ConvertBaudRate(unsigned baud_rate)
   }
 }
 
-bool
+void
 CAI302::SetBaudRate(Port &port, unsigned baud_rate, OperationEnvironment &env)
 {
   unsigned n = ConvertBaudRate(baud_rate);
   if (n == 0)
-    return false;
+    throw std::runtime_error("Baud rate not supported by CAI302");
 
-  char cmd[16];
+  char cmd[20];
   sprintf(cmd, "BAUD %u\r", n);
-  return SendCommandQuick(port, cmd, env);
+  SendCommandQuick(port, cmd, env);
 }

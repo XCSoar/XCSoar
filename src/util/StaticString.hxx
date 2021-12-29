@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2010-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -141,12 +141,12 @@ public:
 		return StringIsEqual(c_str(), other);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool StartsWith(const_pointer prefix) const {
 		return StringStartsWith(c_str(), prefix);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool Contains(const_pointer needle) const {
 		return StringFind(c_str(), needle) != nullptr;
 	}
@@ -256,6 +256,18 @@ public:
 
 	bool operator !=(const_pointer value) const {
 		return !equals(value);
+	}
+
+	template<std::size_t other_max>
+	[[gnu::pure]]
+	bool operator==(const StaticStringBase<T, other_max> &other) const noexcept {
+		return *this == other.c_str();
+	}
+
+	template<std::size_t other_max>
+	[[gnu::pure]]
+	bool operator!=(const StaticStringBase<T, other_max> &other) const noexcept {
+		return *this != other.c_str();
 	}
 
 	StaticStringBase<T, max> &operator =(const_pointer new_value) {

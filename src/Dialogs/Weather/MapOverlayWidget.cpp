@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "MapOverlayWidget.hpp"
+#include "Dialogs/CoDialog.hpp"
 #include "Dialogs/Error.hpp"
-#include "Dialogs/JobDialog.hpp"
 #include "UIGlobals.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -38,12 +38,17 @@ Copyright_License {
 #include "Weather/PCMet/Overlays.hpp"
 #include "Interface.hpp"
 #include "LocalPath.hpp"
+#include "Operation/PluggableOperationEnvironment.hpp"
+#include "co/InvokeTask.hxx"
+#include "co/Task.hxx"
+#include "net/http/Init.hpp"
 #include "system/Path.hpp"
 #include "system/FileUtil.hpp"
 #include "util/StaticString.hxx"
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 
+#include <optional>
 #include <vector>
 
 class WeatherMapOverlayListWidget final
@@ -136,7 +141,7 @@ private:
 
     preview_bitmap.Reset();
     try {
-      if (path.IsNull() || !preview_bitmap.LoadFile(path))
+      if (path == nullptr || !preview_bitmap.LoadFile(path))
         return;
     } catch (const std::exception &e) {
       return;
@@ -347,6 +352,16 @@ WeatherMapOverlayListWidget::SetOverlay(Path path, const TCHAR *label)
   UpdateActiveIndex();
 }
 
+static Co::InvokeTask
+OverlayDownloadTask(std::optional<PCMet::Overlay> &overlay,
+                    const PCMet::OverlayInfo &info, BrokenDateTime now_utc,
+                    const PCMetSettings &settings,
+                    ProgressListener &progress)
+{
+  overlay = co_await PCMet::DownloadOverlay(info, now_utc, settings,
+                                            *Net::curl, progress);
+}
+
 void
 WeatherMapOverlayListWidget::UseClicked(unsigned i)
 {
@@ -360,18 +375,21 @@ WeatherMapOverlayListWidget::UseClicked(unsigned i)
   if (item.pc_met) {
     const auto &info = *item.pc_met;
     label = info.label.c_str();
-    if (item.path.IsNull()) {
+    if (item.path == nullptr) {
       const auto &settings = CommonInterface::GetComputerSettings().weather.pcmet;
 
-      DialogJobRunner runner(UIGlobals::GetMainWindow(),
-                             UIGlobals::GetDialogLook(),
-                             _("Download"), true);
-
       try {
-        auto overlay = PCMet::DownloadOverlay(info,
+        std::optional<PCMet::Overlay> overlay;
+        PluggableOperationEnvironment env;
+        if (!ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                          _("Download"),
+                          OverlayDownloadTask(overlay, info,
                                               BrokenDateTime::NowUTC(),
-                                              settings, runner);
-        item.path = AllocatedPath(overlay.path.c_str());
+                                              settings, env),
+                          &env))
+          return;
+
+        item.path = std::move(overlay->path);
         UpdatePreview(item.path);
       } catch (...) {
         ShowError(std::current_exception(), _T("pc_met"));
@@ -386,19 +404,25 @@ void
 WeatherMapOverlayListWidget::UpdateClicked()
 {
   const auto &settings = CommonInterface::GetComputerSettings().weather.pcmet;
-  DialogJobRunner runner(UIGlobals::GetMainWindow(),
-                         UIGlobals::GetDialogLook(),
-                         _("Download"), true);
   BrokenDateTime now = BrokenDateTime::NowUTC();
   int i = 0;
   for (auto &item : items) {
     if (item.pc_met) {
       try {
         const auto &info = *item.pc_met;
-        auto overlay = PCMet::DownloadOverlay(info, now, settings, runner);
+
+        std::optional<PCMet::Overlay> overlay;
+        PluggableOperationEnvironment env;
+        if (!ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                          _("Download"),
+                          OverlayDownloadTask(overlay, info, now,
+                                              settings, env),
+                          &env))
+          return;
+
         if (i == active_index)
-          SetOverlay(overlay.path, info.label.c_str());
-        item.path = AllocatedPath(overlay.path.c_str());
+          SetOverlay(overlay->path, info.label.c_str());
+        item.path = std::move(overlay->path);
       } catch (...) {
         ShowError(std::current_exception(), _T("pc_met"));
         break;

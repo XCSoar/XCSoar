@@ -45,7 +45,8 @@ SkyLinesTracking::Client::Open(Cares::Channel &cares, const char *server)
     InternalClose();
 
     Cares::SimpleHandler &resolver_handler = *this;
-    resolver.emplace(cares, resolver_handler, server, GetDefaultPort());
+    resolver.emplace(resolver_handler, GetDefaultPort());
+    resolver->Start(cares, server);
   });
 }
 

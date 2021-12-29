@@ -51,28 +51,19 @@ CAI302WaypointUploader::Run(OperationEnvironment &env)
   env.SetProgressRange(waypoints.size() + 1);
   env.SetProgressPosition(0);
 
-  if (!device.ClearPoints(env)) {
-    if (!env.IsCancelled())
-      env.SetErrorMessage(_("Failed to erase waypoints."));
-    return;
-  }
+  device.ClearPoints(env);
 
   if (!device.EnableBulkMode(env)) {
-    if (!env.IsCancelled())
-      env.SetErrorMessage(_("Failed to switch baud rate."));
+    env.SetErrorMessage(_("Failed to switch baud rate."));
     return;
   }
 
   unsigned id = 1;
   for (const auto &i : waypoints) {
-    if (env.IsCancelled())
-      break;
-
     env.SetProgressPosition(id);
 
     if (!device.WriteNavpoint(id++, *i, env)) {
-      if (!env.IsCancelled())
-        env.SetErrorMessage(_("Failed to write waypoint."));
+      env.SetErrorMessage(_("Failed to write waypoint."));
       break;
     }
   }

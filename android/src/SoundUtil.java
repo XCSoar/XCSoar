@@ -23,6 +23,7 @@ Copyright_License {
 
 package org.xcsoar;
 
+import java.util.Map;
 import java.util.HashMap;
 import java.io.File;
 import android.media.MediaPlayer;
@@ -30,7 +31,7 @@ import android.content.Context;
 import android.net.Uri;
 
 public class SoundUtil {
-  private static HashMap<String, Integer> resources = new HashMap();
+  private static Map<String, Integer> resources = new HashMap<String, Integer>();
 
   static {
     resources.put("IDR_FAIL", R.raw.fail);
