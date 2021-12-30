@@ -28,6 +28,7 @@ Copyright_License {
 #include "util/AllocatedString.hxx"
 
 #include <string>
+#include <string_view>
 
 #ifdef _UNICODE
 #include <wchar.h>
@@ -163,6 +164,7 @@ public:
   typedef Path::char_type char_type;
   typedef Path::const_pointer const_pointer;
   typedef Path::pointer pointer;
+  using string_view = std::basic_string_view<char_type>;
   typedef BasicAllocatedString<char_type> value_type;
 
   static constexpr auto SENTINEL = value_type::SENTINEL;
@@ -196,7 +198,7 @@ public:
   }
 
   [[gnu::pure]]
-  static AllocatedPath Build(const_pointer a, const_pointer b) noexcept;
+  static AllocatedPath Build(string_view a, string_view b) noexcept;
 
   [[gnu::pure]]
   static AllocatedPath Build(Path a, const_pointer b) noexcept {
