@@ -34,9 +34,9 @@
 
 #include <utility>
 
-#ifdef _LIBCPP_VERSION
-/* libc++ 10 has the coroutine definitions in the std::experimental
-   namespace */
+#if defined(_LIBCPP_VERSION) && defined(__clang__) && __clang_major__ < 14
+/* libc++ until 14 has the coroutine definitions in the
+   std::experimental namespace */
 
 #include <experimental/coroutine>
 
