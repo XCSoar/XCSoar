@@ -321,7 +321,7 @@ DownloadFilePickerWidget::Download()
 
   try {
     path = DownloadFile(file.GetURI(), file.GetName());
-    if (path == nullptr)
+    if (path != nullptr)
       dialog.SetModalResult(mrOK);
   } catch (...) {
     ShowError(std::current_exception(), _("Error"));

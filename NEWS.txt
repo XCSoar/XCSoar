@@ -1,5 +1,6 @@
 Version 7.22 - not yet released
 * user interface
+  - close the download dialog after successful download
   - add "Share" button to the status dialog
 * Polars
   - add DG-800S
