@@ -212,6 +212,11 @@ TriangleContest::SolveTriangle(bool exhaustive) noexcept
 
     ClosingPairs close_look;
 
+#if GCC_CHECK_VERSION(12,0)
+    // yes, we do want relaxed_pair to be a copy
+#pragma GCC diagnostic ignored "-Wrange-loop-construct"
+#endif
+
     for (const auto relaxed_pair : relaxed_pairs.closing_pairs) {
 
       const auto triangle = RunBranchAndBound(relaxed_pair.first,
