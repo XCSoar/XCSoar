@@ -36,20 +36,6 @@ int
 compare_squared(int a, int b, int c) noexcept;
 
 [[gnu::const]]
-double
-thermal_recency_fn(unsigned x) noexcept;
-
-inline unsigned int
-CombinedDivAndMod(unsigned &lx) noexcept
-{
-  unsigned int ox = lx & 0xff;
-  // JMW no need to check max since overflow will result in
-  // beyond max dimensions
-  lx = lx >> 8;
-  return ox;
-}
-
-[[gnu::const]]
 unsigned
 isqrt4(unsigned val) noexcept;
 

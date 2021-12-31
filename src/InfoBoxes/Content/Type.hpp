@@ -169,6 +169,10 @@ namespace InfoBoxFactory
     e_StandbyRadio, /* Standby Radio Frequency */
     e_Thermal_Time, /* Time in Thermal*/
 
+    e_Alternate_2_GR, /* Geometric gradient to the arrival height above the second alternate. This is not adjusted for total energy */
+
+    e_HeartRate,
+
     e_NUM_TYPES /* Last item */
   };
 

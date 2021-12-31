@@ -24,7 +24,6 @@ Copyright_License {
 #include "NOAAList.hpp"
 #include "NOAADetails.hpp"
 #include "Dialogs/Message.hpp"
-#include "Dialogs/JobDialog.hpp"
 #include "Language/Language.hpp"
 #include "Weather/Features.hpp"
 
@@ -32,6 +31,7 @@ Copyright_License {
 
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Dialogs/CoDialog.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Form/Button.hpp"
 #include "Form/ButtonPanel.hpp"
@@ -40,6 +40,9 @@ Copyright_License {
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/NOAAUpdater.hpp"
+#include "Operation/PluggableOperationEnvironment.hpp"
+#include "co/InvokeTask.hxx"
+#include "co/Task.hxx"
 #include "net/http/Init.hpp"
 #include "util/TrivialArray.hxx"
 #include "util/StringAPI.hxx"
@@ -166,6 +169,12 @@ NOAAListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                          row_renderer);
 }
 
+static Co::InvokeTask
+UpdateTask(NOAAStore::Item &item, ProgressListener &progress) noexcept
+{
+  co_await NOAAUpdater::Update(item, *Net::curl, progress);
+}
+
 inline void
 NOAAListWidget::AddClicked()
 {
@@ -188,23 +197,27 @@ NOAAListWidget::AddClicked()
   NOAAStore::iterator i = noaa_store->AddStation(code);
   noaa_store->SaveToProfile();
 
-  DialogJobRunner runner(UIGlobals::GetMainWindow(),
-                         UIGlobals::GetDialogLook(),
-                         _("Download"), true);
+  PluggableOperationEnvironment env;
+  if (ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                   _("Download"), UpdateTask(*i, env),
+                   &env))
+    UpdateList();
+}
 
-  NOAAUpdater::Update(*i, *Net::curl, runner);
-
-  UpdateList();
+static Co::InvokeTask
+UpdateTask(NOAAStore &store, ProgressListener &progress) noexcept
+{
+  co_await NOAAUpdater::Update(store, *Net::curl, progress);
 }
 
 inline void
 NOAAListWidget::UpdateClicked()
 {
-  DialogJobRunner runner(UIGlobals::GetMainWindow(),
-                         UIGlobals::GetDialogLook(),
-                         _("Download"), true);
-  NOAAUpdater::Update(*noaa_store, *Net::curl, runner);
-  UpdateList();
+  PluggableOperationEnvironment env;
+  if (ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                   _("Download"), UpdateTask(*noaa_store, env),
+                   &env))
+    UpdateList();
 }
 
 inline void

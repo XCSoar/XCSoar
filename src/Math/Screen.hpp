@@ -26,6 +26,8 @@ Copyright_License {
 #ifndef XCSOAR_MATH_SCREEN_HPP
 #define XCSOAR_MATH_SCREEN_HPP
 
+#include <span>
+
 struct BulkPixelPoint;
 struct PixelPoint;
 class Angle;
@@ -39,7 +41,6 @@ ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
  * Shifts, rotates and scales the given polygon.
  *
  * @param poly Points specifying the polygon
- * @param n Number of points of the polygon
  * @param shift The polygon is placed with position (0,0) centered here.
  * @param angle Angle of rotation
  * @param scale An input polygon with coordinates in the range -50 to +50
@@ -47,13 +48,9 @@ ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
  *        (The scale value 100 preserves the size of the input polygon.)
  *        For best scaling precision, avoid 'scale' values smaller than
  *        the intended size of the polygon.
- * @param use_fast_scale If true, additional scaling via FastScale()
- *        will be applied. This flag is only intended for backwards
- *        compatibility as the use of FastScale() is deprecated.
  */
 void
-PolygonRotateShift(BulkPixelPoint *poly, int n, PixelPoint shift,
-                   Angle angle, int scale = 100,
-                   bool use_fast_scale = true) noexcept;
+PolygonRotateShift(std::span<BulkPixelPoint> poly, PixelPoint shift,
+                   Angle angle, int scale = 100) noexcept;
 
 #endif

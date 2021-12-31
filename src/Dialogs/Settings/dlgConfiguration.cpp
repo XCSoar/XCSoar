@@ -82,6 +82,8 @@ Copyright_License {
 #include "Panels/WeatherConfigPanel.hpp"
 #endif
 
+#include "Panels/WeGlideConfigPanel.hpp"
+
 #include <cassert>
 
 static unsigned current_page;
@@ -147,8 +149,9 @@ static constexpr TabMenuPage setup_pages[] = {
 #endif
   { _T("XCSoar Cloud"), CreateCloudConfigPanel },
 #ifdef HAVE_PCMET
-  { _T("Weather"), CreateWeatherConfigPanel },
+  { N_("Weather"), CreateWeatherConfigPanel },
 #endif
+  { _T("WeGlide"), CreateWeGlideConfigPanel },
 #ifdef HAVE_VOLUME_CONTROLLER
   { N_("Audio"), CreateAudioConfigPanel },
 #endif

@@ -22,20 +22,21 @@ Copyright_License {
 */
 
 #include "Apple/InternalSensors.hpp"
-#include "thread/Mutex.hxx"
-#include "Blackboard/DeviceBlackboard.hpp"
-#include "Components.hpp"
+#include "Device/SensorListener.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "time/FloatDuration.hxx"
+#include "time/SystemClock.hxx"
 
 #include <TargetConditionals.h>
 
 #include <unistd.h>
 
 @implementation LocationDelegate
--(instancetype) init: (unsigned int) index_
+-(instancetype) init: (SensorListener *) _listener
 {
   self = [super init];
   if (self) {
-    self->index = index_;
+    self->listener = _listener;
     gregorian_calendar = [[NSCalendar alloc]
       initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
   }
@@ -74,77 +75,40 @@ Copyright_License {
   else
     location = nil;
 
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
-  NMEAInfo &basic = device_blackboard->SetRealState(self->index);
-  basic.UpdateClock();
-  if (location) {
-    basic.alive.Update(basic.clock);
-  } else {
-    basic.alive.Clear();
+  if (!location || !location.timestamp || location.horizontalAccuracy < 0.0) {
+    self->listener->OnConnected(1);
+    return;
   }
 
-  basic.gps.nonexpiring_internal_gps = true;
+  const auto time = TimePointAfterUnixEpoch(FloatDuration{[location.timestamp timeIntervalSince1970]});
 
-  basic.airspeed_available.Clear();
-  if (location && (location.speed >= 0.0)) {
-    basic.ground_speed = location.speed;
-    basic.ground_speed_available.Update(basic.clock);
-  } else {
-    basic.ground_speed_available.Clear();
-  }
+  const GeoPoint l(Angle::Degrees(location.coordinate.longitude),
+                   Angle::Degrees(location.coordinate.latitude));
 
-  if (location && location.timestamp) {
-    basic.time = [self getSecondsOfDay: location.timestamp];
-    basic.time_available.Update(basic.clock);
-    basic.date_time_utc = BrokenDateTime::FromUnixTimeUTC(
-        [location.timestamp timeIntervalSince1970]);
-  } else {
-    basic.time_available.Clear();
-  }
-
-  if (location && (location.horizontalAccuracy >= 0.0)) {
-    basic.gps.hdop = location.horizontalAccuracy;
-    basic.gps.real = true;
-    basic.location = GeoPoint(Angle::Degrees(location.coordinate.longitude),
-                              Angle::Degrees(location.coordinate.latitude));
-    basic.location_available.Update(basic.clock);
-  } else {
-    basic.location_available.Clear();
-  }
-
-  if (location && (location.verticalAccuracy >= 0.0)) {
-    basic.gps_altitude = location.altitude;
-    basic.gps_altitude_available.Update(basic.clock);
-  } else {
-    basic.gps_altitude_available.Clear();
-  }
-
-  if (location && (location.course >= 0.0)) {
-    basic.track = Angle::Degrees(location.course);
-    basic.track_available.Update(basic.clock);
-  } else {
-    basic.track_available.Clear();
-  }
-
-  device_blackboard->ScheduleMerge();
+  self->listener->OnConnected(2);
+  self->listener->OnLocationSensor(time, -1, l,
+                                   location.verticalAccuracy >= 0.0,
+                                   /* CoreLocation provides geoidal
+                                      altitude */
+                                   true,
+                                   location.altitude,
+                                   location.course >= 0.0,
+                                   location.course,
+                                   location.speed >= 0.0,
+                                   location.speed,
+                                   true, location.horizontalAccuracy);
 }
 
 - (void)locationManager:(CLLocationManager *)manager
     didFailWithError:(NSError *)error
 {
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
-  NMEAInfo &basic = device_blackboard->SetRealState(self->index);
-  if ([error code] != kCLErrorHeadingFailure) {
-    basic.alive.Clear();
-    basic.location_available.Clear();
-  }
-  device_blackboard->ScheduleMerge();
+  self->listener->OnConnected(0);
 }
 @end
 
 
-InternalSensors::InternalSensors(unsigned int _index)
-    : index(_index)
+InternalSensors::InternalSensors(SensorListener &_listener)
+  :listener(_listener)
 {
   if ([NSThread isMainThread]) {
     Init();
@@ -169,7 +133,7 @@ InternalSensors::~InternalSensors()
 void InternalSensors::Init()
 {
   location_manager = [[CLLocationManager alloc] init];
-  location_delegate = [[LocationDelegate alloc] init: index];
+  location_delegate = [[LocationDelegate alloc] init: &listener];
   location_manager.desiredAccuracy =
       kCLLocationAccuracyBestForNavigation;
   location_manager.delegate = location_delegate;
@@ -194,9 +158,4 @@ void InternalSensors::Init()
 void InternalSensors::Deinit()
 {
   [location_manager stopUpdatingLocation];
-}
-
-InternalSensors * InternalSensors::Create(unsigned int index)
-{
-  return new InternalSensors(index);
 }

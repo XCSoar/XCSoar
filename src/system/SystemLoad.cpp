@@ -25,47 +25,46 @@
 
 #ifdef _WIN32
 
-#include <windows.h>
+#include <processthreadsapi.h>
+#include <sysinfoapi.h>
 #include <tlhelp32.h>
 #include <stdio.h>
 #include <cstdint>
 
-unsigned SystemLoadCPU()
+OptionalPercent
+SystemLoadCPU() noexcept
 {
-  unsigned retval = (unsigned)-1;
-
   static unsigned userTime_last= 0;
   static unsigned kernelTime_last= 0;
   static unsigned tick_last = 0;
 
   uint64_t  creationTime, exitTime, kernelTime, userTime;
-  bool ok = ::GetProcessTimes( ::GetCurrentProcess(),
-                               (FILETIME*)&creationTime, (FILETIME*)&exitTime,
-                               (FILETIME*)&kernelTime, (FILETIME*)&userTime );
+  if (!GetProcessTimes(GetCurrentProcess(),
+                       (FILETIME *)&creationTime, (FILETIME *)&exitTime,
+                       (FILETIME *)&kernelTime, (FILETIME *)&userTime))
+    return std::nullopt;
 
-  if (ok) {
+  unsigned tick = ::GetTickCount();
 
-    unsigned tick = ::GetTickCount();
+  userTime /= 10000;
+  kernelTime /= 10000;
 
-    userTime /= 10000;
-    kernelTime /= 10000;
-
-    if (tick && (tick_last>0)) {
-      unsigned dt_user = userTime-userTime_last;
-      unsigned dt_kernel = kernelTime-kernelTime_last;
-      unsigned dt = tick-tick_last;
-      retval = (100*(dt_user+dt_kernel))/dt;
-    }
-
-    tick_last = tick;
-    userTime_last = userTime;
-    kernelTime_last = kernelTime;
+  OptionalPercent retval = std::nullopt;
+  if (tick && (tick_last>0)) {
+    unsigned dt_user = userTime-userTime_last;
+    unsigned dt_kernel = kernelTime-kernelTime_last;
+    unsigned dt = tick-tick_last;
+    retval = (100*(dt_user+dt_kernel))/dt;
   }
+
+  tick_last = tick;
+  userTime_last = userTime;
+  kernelTime_last = kernelTime;
 
   return retval;
 }
 
-#elif defined(__linux__) || defined(ANDROID)
+#elif defined(__linux__)
 
 #include "system/FileUtil.hpp"
 
@@ -75,12 +74,12 @@ struct cpu {
   long busy, idle;
 };
 
-unsigned
-SystemLoadCPU()
+OptionalPercent
+SystemLoadCPU() noexcept
 {
   char line[256];
   if (!File::ReadString(Path("/proc/stat"), line, sizeof(line)))
-    return (unsigned)-1;
+    return std::nullopt;
 
   static constexpr unsigned HISTORY_LENGTH = 5;
   static cpu history[HISTORY_LENGTH];
@@ -90,7 +89,7 @@ SystemLoadCPU()
   int n = sscanf(line, "cpu  %ld %ld %ld %ld ", &user, &nice, &system,
                  &current.idle);
   if (n != 4)
-    return (unsigned)-1;
+    return std::nullopt;
 
   current.busy = user + nice + system;
 
@@ -100,7 +99,7 @@ SystemLoadCPU()
 
   if (last.idle == 0)
     /* first run */
-    return (unsigned)-1;
+    return std::nullopt;
 
   const cpu diff = {
     current.busy - last.busy,
@@ -109,17 +108,18 @@ SystemLoadCPU()
 
   long total = diff.busy + diff.idle;
   if (total <= 0)
-    return (unsigned)-1;
+    return std::nullopt;
 
-  return (unsigned)(diff.busy * 100 / total);
+  return diff.busy * 100 / total;
 }
 
 #else /* !_WIN32 */
 
 ///@todo implement for non-win32
-unsigned SystemLoadCPU()
+OptionalPercent
+SystemLoadCPU() noexcept
 {
-  return (unsigned)-1;
+    return std::nullopt;
 }
 
 #endif /* !_WIN32 */

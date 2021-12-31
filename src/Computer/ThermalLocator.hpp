@@ -24,8 +24,12 @@ Copyright_License {
 #ifndef THERMALLOCATOR_H
 #define THERMALLOCATOR_H
 
+#include "ThermalRecency.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/Flat/FlatPoint.hpp"
+#include "time/Stamp.hpp"
+
+#include <array>
 
 struct SpeedVector;
 class FlatProjection;
@@ -38,7 +42,7 @@ struct ThermalLocatorInfo;
 class ThermalLocator {
 public:
   static constexpr unsigned TLOCATOR_NMIN = 5;
-  static constexpr unsigned TLOCATOR_NMAX = 60;
+  static constexpr unsigned TLOCATOR_NMAX = THERMALRECENCY_SIZE;
 
 private:
   /** Class used to hold thermal estimate samples */
@@ -52,7 +56,7 @@ private:
      * @param wind_drift Wind drift offset
      * @param decay decay factor for weighting
      */
-    void Drift(double t, const FlatProjection &projection,
+    void Drift(TimeStamp t, const FlatProjection &projection,
                const GeoPoint& wind_drift);
 
     /** Actual location of sample */
@@ -60,7 +64,7 @@ private:
     /** Projected/drifted sample */
     FlatPoint loc_drift;
     /** Time of sample (s) */
-    double t_0;
+    TimeStamp t_0;
     /** Scaled updraft value of sample */
     double w;
     /** Lift weighting used for this point */
@@ -70,7 +74,7 @@ private:
   };
 
   /** Circular buffer of points */
-  Point points[TLOCATOR_NMAX];
+  std::array<Point, TLOCATOR_NMAX> points;
 
   /** Index of next point to add */
   unsigned n_index;
@@ -89,7 +93,7 @@ public:
    * @param wind Wind vector
    * @param therm Output thermal estimate data
    */
-  void Process(bool circling, double time, const GeoPoint &location,
+  void Process(bool circling, TimeStamp time, const GeoPoint &location,
                double w, SpeedVector wind,
                ThermalLocatorInfo& therm);
 
@@ -101,11 +105,11 @@ public:
 private:
   FlatPoint glider_average();
 
-  void AddPoint(double t, const GeoPoint &location, double w);
-  void Update(double t_0, const GeoPoint &location_0,
+  void AddPoint(TimeStamp t, const GeoPoint &location, double w) noexcept;
+  void Update(TimeStamp t_0, const GeoPoint &location_0,
               SpeedVector wind, ThermalLocatorInfo &therm);
 
-  void Drift(double t_0, const FlatProjection &projection,
+  void Drift(TimeStamp t_0, const FlatProjection &projection,
              const GeoPoint &traildrift);
 };
 

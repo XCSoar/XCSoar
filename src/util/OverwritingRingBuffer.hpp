@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2010-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef OVERWRITING_RING_BUFFER_HPP
-#define OVERWRITING_RING_BUFFER_HPP
+#pragma once
 
 #include <algorithm>
 #include <cassert>
@@ -43,139 +42,142 @@
 template<class T, unsigned size>
 class TrivialOverwritingRingBuffer
 {
-  friend class const_iterator;
+	friend class const_iterator;
 
 public:
-  class const_iterator {
-    friend class TrivialOverwritingRingBuffer;
+	class const_iterator {
+		friend class TrivialOverwritingRingBuffer;
 
-    const TrivialOverwritingRingBuffer &buffer;
-    unsigned i;
+		const TrivialOverwritingRingBuffer &buffer;
+		unsigned i;
 
-    const_iterator(const TrivialOverwritingRingBuffer<T, size> &_buffer, unsigned _i)
-      :buffer(_buffer), i(_i) {
-      assert(i < size);
-    }
+		const_iterator(const TrivialOverwritingRingBuffer<T, size> &_buffer,
+			       unsigned _i) noexcept
+			:buffer(_buffer), i(_i)
+		{
+			assert(i < size);
+		}
 
-  public:
-    const T &operator*() const {
-      return buffer.data[i];
-    }
+	public:
+		const T &operator*() const noexcept {
+			return buffer.data[i];
+		}
 
-    typename TrivialOverwritingRingBuffer::const_iterator &operator++() {
-      i = buffer.next(i);
-      return *this;
-    }
+		typename TrivialOverwritingRingBuffer::const_iterator &operator++() noexcept {
+			i = buffer.next(i);
+			return *this;
+		}
 
-    bool operator==(const const_iterator &other) const {
-      assert(&buffer == &other.buffer);
-      return i == other.i;
-    }
+		bool operator==(const const_iterator &other) const noexcept {
+			assert(&buffer == &other.buffer);
+			return i == other.i;
+		}
 
-    bool operator!=(const const_iterator &other) const {
-      assert(&buffer == &other.buffer);
-      return i != other.i;
-    }
-  };
+		bool operator!=(const const_iterator &other) const noexcept {
+			assert(&buffer == &other.buffer);
+			return i != other.i;
+		}
+	};
 
 protected:
-  T data[size];
-  unsigned head, tail;
+	T data[size];
+	unsigned head, tail;
 
-  constexpr
-  TrivialOverwritingRingBuffer(unsigned _head, unsigned _tail)
-    :head(_head), tail(_tail) {}
+	constexpr
+	TrivialOverwritingRingBuffer(unsigned _head, unsigned _tail)
+		:head(_head), tail(_tail) {}
 
 public:
-  TrivialOverwritingRingBuffer() = default;
+	TrivialOverwritingRingBuffer() = default;
 
 protected:
-  static unsigned next(unsigned i) {
-    assert(i < size);
+	static unsigned next(unsigned i) noexcept {
+		assert(i < size);
 
-    return (i + 1) % size;
-  }
-  static unsigned previous(unsigned i) {
-    assert(i < size);
-    if (i>0)
-      return (i-1);
-    else
-      return size-1;
-  }
+		return (i + 1) % size;
+	}
+
+	static unsigned previous(unsigned i) noexcept {
+		assert(i < size);
+		if (i>0)
+			return (i-1);
+		else
+			return size-1;
+	}
 
 public:
-  bool empty() const {
-    assert(head < size);
-    assert(tail < size);
+	bool empty() const noexcept {
+		assert(head < size);
+		assert(tail < size);
 
-    return head == tail;
-  }
+		return head == tail;
+	}
 
-  void clear() {
-    head = tail = 0;
-  }
+	void clear() noexcept {
+		head = tail = 0;
+	}
 
-  // returns last value added
-  const T &last() const {
-    assert(!empty());
-    return data[previous(tail)];
-  }
+	// returns last value added
+	const T &last() const noexcept {
+		assert(!empty());
+		return data[previous(tail)];
+	}
 
-  const T &peek() const {
-    assert(!empty());
+	const T &peek() const noexcept {
+		assert(!empty());
 
-    return data[head];
-  }
+		return data[head];
+	}
 
-  const T &shift() {
-    /* this returns a reference to an item which is being Invalidated
-       - but that's okay, because it won't get purged yet */
-    const T &value = peek();
-    head = next(head);
-    return value;
-  }
+	const T &shift() noexcept {
+		/* this returns a reference to an item which is being
+		   Invalidated - but that's okay, because it won't get
+		   purged yet */
+		const T &value = peek();
+		head = next(head);
+		return value;
+	}
 
-  void push(const T &value) {
-    assert(tail < size);
+	void push(const T &value) {
+		assert(tail < size);
 
-    data[tail] = value;
-    tail = next(tail);
-    if (tail == head)
-      /* the ring buffer is full - delete the oldest item */
-      head = next(head);
-  }
+		data[tail] = value;
+		tail = next(tail);
+		if (tail == head)
+			/* the ring buffer is full - delete the oldest
+			   item */
+			head = next(head);
+	}
 
-  T pop() {
-    assert(!empty());
-    tail = previous(tail);
-    return data[tail];
-  }
+	T pop() {
+		assert(!empty());
+		tail = previous(tail);
+		return data[tail];
+	}
 
-  /**
-   * Returns a pointer to the oldest item.
-   */
-  const_iterator begin() const {
-    return const_iterator(*this, head);
-  }
+	/**
+	 * Returns a pointer to the oldest item.
+	 */
+	const_iterator begin() const noexcept {
+		return const_iterator(*this, head);
+	}
 
-  /**
-   * Returns a pointer to end of the buffer (one item after the newest
-   * item).
-   */
-  const_iterator end() const {
-    return const_iterator(*this, tail);
-  }
+	/**
+	 * Returns a pointer to end of the buffer (one item after the
+	 * newest item).
+	 */
+	const_iterator end() const noexcept {
+		return const_iterator(*this, tail);
+	}
 
-  unsigned capacity() const {
-    return size;
-  }
+	static constexpr unsigned capacity() noexcept {
+		return size;
+	}
 };
 
 template<class T, unsigned size>
 class OverwritingRingBuffer: public TrivialOverwritingRingBuffer<T, size>
 {
 public:
-  OverwritingRingBuffer():TrivialOverwritingRingBuffer<T, size>(0, 0) {}
+	OverwritingRingBuffer():TrivialOverwritingRingBuffer<T, size>(0, 0) {}
 };
-
-#endif

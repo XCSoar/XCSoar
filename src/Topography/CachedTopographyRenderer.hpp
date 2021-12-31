@@ -36,34 +36,31 @@ class CachedTopographyRenderer {
 #ifndef ENABLE_OPENGL
   TransparentRendererCache cache;
 
-  unsigned last_serial;
+  unsigned last_serial = 0;
 #endif
 
 public:
   CachedTopographyRenderer(const TopographyStore &store,
-                           const TopographyLook &look)
+                           const TopographyLook &look) noexcept
     :renderer(store, look)
-#ifndef ENABLE_OPENGL
-    , last_serial(0)
-#endif
   {}
 
-  void Flush() {
+  void Flush() noexcept {
 #ifndef ENABLE_OPENGL
     cache.Invalidate();
 #endif
   }
 
 #ifdef ENABLE_OPENGL
-  void Draw(Canvas &canvas, const WindowProjection &projection) {
+  void Draw(Canvas &canvas, const WindowProjection &projection) noexcept {
     renderer.Draw(canvas, projection);
   }
 #else
-  void Draw(Canvas &canvas, const WindowProjection &projection);
+  void Draw(Canvas &canvas, const WindowProjection &projection) noexcept;
 #endif
 
   void DrawLabels(Canvas &canvas, const WindowProjection &projection,
-                  LabelBlock &label_block) const {
+                  LabelBlock &label_block) noexcept {
     renderer.DrawLabels(canvas, projection, label_block);
   }
 };

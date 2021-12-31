@@ -26,6 +26,8 @@
 #include "Engine/ThermalBand/ThermalEncounterBand.hpp"
 #include "Engine/ThermalBand/ThermalEncounterCollection.hpp"
 
+using namespace std::chrono;
+
 static int verbose = 1;
 
 static void report(ThermalBand& band, const char* title)
@@ -37,33 +39,36 @@ static void report(ThermalBand& band, const char* title)
   const unsigned s = band.size();
   for (unsigned i=0; i<s; ++i) {
     const ThermalSlice& s = band.GetSlice(i);
-    printf("# %g %g %g %g %g %g\n", band.GetSliceCenter(i), s.w_n, s.n, s.w_t, s.dt, s.time);
+    printf("# %g %g %g %g %g %g\n",
+           band.GetSliceCenter(i), s.w_n, s.n, s.w_t, s.dt.count(), s.time.count());
   }
 }
 
-static void simulate_climb(ThermalEncounterBand& band,
-                           double& t, double &h,
-                           const double td,
-                           const double dt,
-                           const double w0,
-                           const double w1)
+static void
+simulate_climb(ThermalEncounterBand& band,
+               TimeStamp &t, double &h,
+               const FloatDuration td,
+               const FloatDuration dt,
+               const double w0,
+               const double w1)
 {
-  const double ts = t;
-  const double te = ts+td;
+  const TimeStamp ts = t;
+  const TimeStamp te = ts+td;
   for (; t< te; t+= dt) {
     double f = (t-ts)/td;
-    h += (w0*(1-f)+w1*(f))*dt;
+    h += (w0*(1-f)+w1*(f))*dt.count();
     band.AddSample(t, h);
   }
 }
 
-static void thermal_encounter_test(const double telapsed,
-                                   const double dt,
-                                   const double w0,
-                                   const double w1)
+static void
+thermal_encounter_test(const FloatDuration telapsed,
+                       const FloatDuration dt,
+                       const double w0,
+                       const double w1)
 {
   ThermalEncounterBand band;
-  double t=0;
+  TimeStamp t{};
   double h=123;
   const double w_tol = 0.1*(w0+w1)/2;
   const double h_tol = 25;
@@ -73,8 +78,8 @@ static void thermal_encounter_test(const double telapsed,
   simulate_climb(band, t, h, telapsed, dt, w0, w1);
 
   ok1(band.Valid());
-  ok1(fabs(band.GetTimeElapsed()-telapsed)< dt);
-  if (verbose) printf("# Time elapsed %g %g\n", band.GetTimeElapsed(), telapsed);
+  ok1(abs(band.GetTimeElapsed()-telapsed)< dt);
+  if (verbose) printf("# Time elapsed %g %g\n", band.GetTimeElapsed().count(), telapsed.count());
 
   const unsigned s = band.size();
   ok1(fabs(band.GetSliceCenter(s-1)-h)<h_tol);
@@ -89,10 +94,11 @@ static void thermal_encounter_test(const double telapsed,
   report(band,"enc");
 }
 
-static void thermal_collection_test(const double telapsed,
-                                    const double dt,
-                                    const double w0,
-                                    const double w1)
+static void
+thermal_collection_test(const FloatDuration telapsed,
+                        const FloatDuration dt,
+                        const double w0,
+                        const double w1)
 {
   ThermalEncounterCollection col;
 
@@ -103,7 +109,7 @@ static void thermal_collection_test(const double telapsed,
   const double h0 = 123;
   const double n_tol = 0.001;
   const double w_tol = 0.1*(w0+w1)/2;
-  double t=0;
+  TimeStamp t{};
   double h= h0;
   //const double h_tol = 25;
 
@@ -119,7 +125,7 @@ static void thermal_collection_test(const double telapsed,
   printf("# 2------\n");
   // same climb, later
   band.Reset();
-  t += 100; h = h0;
+  t += seconds{100}; h = h0;
   simulate_climb(band, t, h, telapsed, dt, w0, w0);
   report(band,"enc");
   col.Merge(band);
@@ -132,8 +138,8 @@ static void thermal_collection_test(const double telapsed,
   printf("# 3------\n");
   // different climb, half way up
   band.Reset();
-  t += 100; h = h0+45;
-  simulate_climb(band, t, h, 35, dt, w1, w1);
+  t += seconds{100}; h = h0+45;
+  simulate_climb(band, t, h, seconds{35}, dt, w1, w1);
   report(band,"enc");
   col.Merge(band);
   report(col,"col");
@@ -158,28 +164,28 @@ int main(int argc, char** argv) {
   plan_tests(7*num_encounter_tests + 9*num_collection_tests);
 
   // test different thermal strengths
-  thermal_encounter_test(100,1,1,1);
-  thermal_encounter_test(100,1,10,10);
-  thermal_encounter_test(100,1,0.1,0.1);
+  thermal_encounter_test(FloatDuration{100},FloatDuration{1},1,1);
+  thermal_encounter_test(FloatDuration{100},FloatDuration{1},10,10);
+  thermal_encounter_test(FloatDuration{100},FloatDuration{1},0.1,0.1);
 
   // test forcing decimation
-  thermal_encounter_test(1000,1,1,1);
+  thermal_encounter_test(FloatDuration{1000},FloatDuration{1},1,1);
 
   // test thermal increasing strength, for different durations
-  thermal_encounter_test(100,1,1,3);
-  thermal_encounter_test(300,1,1,3);
+  thermal_encounter_test(FloatDuration{100},FloatDuration{1},1,3);
+  thermal_encounter_test(FloatDuration{300},FloatDuration{1},1,3);
 
   // test thermal decreasing strength
-  thermal_encounter_test(300,1,3,1);
+  thermal_encounter_test(FloatDuration{300},FloatDuration{1},3,1);
 
   // test thermal decreasing strength
-  thermal_encounter_test(300,1,3,1);
+  thermal_encounter_test(FloatDuration{300},FloatDuration{1},3,1);
 
   // test collection, same strength
-  thermal_collection_test(100,1,1,1);
+  thermal_collection_test(FloatDuration{100},FloatDuration{1},1,1);
 
   // test collection, different strength
-  thermal_collection_test(100,1,1,0.5);
+  thermal_collection_test(FloatDuration{100},FloatDuration{1},1,0.5);
 
   return exit_status();
 }

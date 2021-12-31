@@ -40,27 +40,27 @@ StartPoint::StartPoint(std::unique_ptr<ObservationZonePoint> &&_oz,
 }
 
 void
-StartPoint::SetTaskBehaviour(const TaskBehaviour &tb)
+StartPoint::SetTaskBehaviour(const TaskBehaviour &tb) noexcept
 {
   safety_height = tb.safety_height_arrival;
   margins = tb.start_margins;
 }
 
 double
-StartPoint::GetElevation() const
+StartPoint::GetElevation() const noexcept
 {
   return GetBaseElevation() + safety_height;
 }
 
 void
-StartPoint::SetOrderedTaskSettings(const OrderedTaskSettings &settings)
+StartPoint::SetOrderedTaskSettings(const OrderedTaskSettings &settings) noexcept
 {
   OrderedTaskPoint::SetOrderedTaskSettings(settings);
   constraints = settings.start_constraints;
 }
 
 void
-StartPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
+StartPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next) noexcept
 {
   assert(_prev==NULL);
   // should not ever have an inbound leg
@@ -100,7 +100,7 @@ StartPoint::find_best_start(const AircraftState &state,
 }
 
 bool
-StartPoint::IsInSector(const AircraftState &state) const
+StartPoint::IsInSector(const AircraftState &state) const noexcept
 {
   return OrderedTaskPoint::IsInSector(state) &&
     // TODO: not using margins?
@@ -109,13 +109,13 @@ StartPoint::IsInSector(const AircraftState &state) const
 
 bool
 StartPoint::CheckExitTransition(const AircraftState &ref_now,
-                                const AircraftState &ref_last) const
+                                const AircraftState &ref_last) const noexcept
 {
-  if (!constraints.open_time_span.HasBegun(RoughTime::FromSecondOfDayChecked(unsigned(ref_last.time))))
+  if (!constraints.open_time_span.HasBegun(RoughTime{ref_last.time}))
     /* the start gate is not yet open when we left the OZ */
     return false;
 
-  if (constraints.open_time_span.HasEnded(RoughTime::FromSecondOfDayChecked(unsigned(ref_now.time))))
+  if (constraints.open_time_span.HasEnded(RoughTime{ref_now.time}))
     /* the start gate was already closed when we left the OZ */
     return false;
 

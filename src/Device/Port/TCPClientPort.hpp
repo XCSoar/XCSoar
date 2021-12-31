@@ -24,11 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_TCP_CLIENT_PORT_HPP
 #define XCSOAR_DEVICE_TCP_CLIENT_PORT_HPP
 
-#include "BufferedPort.hpp"
-#include "event/SocketEvent.hxx"
+#include "SocketPort.hpp"
 #include "event/net/ConnectSocket.hxx"
 #include "event/net/cares/SimpleResolver.hxx"
-#include "util/Cancellable.hxx"
 
 #include <optional>
 
@@ -38,11 +36,10 @@ namespace Cares { class Channel; }
  * A #Port implementation that connects to a TCP port.
  */
 class TCPClientPort final
-  : public BufferedPort, Cares::SimpleHandler, ConnectSocketHandler
+  : public SocketPort, Cares::SimpleHandler, ConnectSocketHandler
 {
   std::optional<Cares::SimpleResolver> resolver;
   std::optional<ConnectSocket> connect;
-  SocketEvent socket;
 
   PortState state = PortState::LIMBO;
 
@@ -50,35 +47,14 @@ public:
   TCPClientPort(EventLoop &event_loop, Cares::Channel &cares,
                 const char *host, unsigned port,
                 PortListener *_listener, DataHandler &_handler);
-  virtual ~TCPClientPort();
-
-  auto &GetEventLoop() const noexcept {
-    return socket.GetEventLoop();
-  }
+  ~TCPClientPort() noexcept override;
 
   /* virtual methods from class Port */
-  PortState GetState() const override {
+  PortState GetState() const noexcept override {
     return state;
   }
 
-  bool Drain() override {
-    /* writes are synchronous */
-    return true;
-  }
-
-  bool SetBaudrate(unsigned baud_rate) override {
-    return true;
-  }
-
-  unsigned GetBaudrate() const override {
-    return 0;
-  }
-
-  size_t Write(const void *data, size_t length) override;
-
 private:
-  void OnSocketReady(unsigned events) noexcept;
-
   /* virtual methods from Cares::SimpleHandler */
   void OnResolverSuccess(std::forward_list<AllocatedSocketAddress> addresses) noexcept override;
   void OnResolverError(std::exception_ptr error) noexcept override;
@@ -86,6 +62,13 @@ private:
   /* virtual methods from ConnectSocketHandler */
   void OnSocketConnectSuccess(UniqueSocketDescriptor &&fd) noexcept override;
   void OnSocketConnectError(std::exception_ptr ep) noexcept override;
+
+protected:
+  /* virtual methods from SocketPort */
+  [[noreturn]]
+  void OnConnectionClosed() override;
+
+  void OnConnectionError() noexcept override;
 };
 
 #endif

@@ -25,7 +25,7 @@ Copyright_License {
 
 #ifdef _WIN32
 
-#include <windows.h>
+#include <synchapi.h>
 
 #else /* !_WIN32 */
 

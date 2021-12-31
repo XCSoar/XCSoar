@@ -28,7 +28,7 @@ UISettings::SetDefaults()
 {
   display.SetDefaults();
 
-  menu_timeout = 8 * 4;
+  menu_timeout = std::chrono::seconds{8 * 4};
 
   scale = 100;
 

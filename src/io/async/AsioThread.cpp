@@ -23,13 +23,13 @@ Copyright_License {
 
 #include "AsioThread.hpp"
 
-bool
+void
 AsioThread::Start()
 {
   assert(!IsDefined());
 
   event_loop.SetAlive(true);
-  return Thread::Start();
+  Thread::Start();
 }
 
 void

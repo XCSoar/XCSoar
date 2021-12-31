@@ -29,6 +29,7 @@ Copyright_License {
 #include "thread/Mutex.hxx"
 #include "thread/Cond.hxx"
 #include "Operation/Operation.hpp"
+#include "Operation/Cancelled.hpp"
 
 #include <map>
 #include <string>
@@ -53,7 +54,7 @@ class DeviceSettingsMap {
 
     bool old;
 
-    explicit Item(const V &_value):value(_value) {}
+    explicit constexpr Item(const V &_value) noexcept:value(_value) {}
   };
 
   typedef std::map<std::string, Item> Map;
@@ -65,33 +66,33 @@ public:
     typename Map::const_iterator i;
 
   public:
-    explicit const_iterator(typename Map::const_iterator _i):i(_i) {}
+    explicit constexpr const_iterator(typename Map::const_iterator _i) noexcept
+      :i(_i) {}
 
-    const V &operator*() const {
+    constexpr const V &operator*() const noexcept {
       return i->second.value;
     }
 
-    const V *operator->() const {
+    constexpr const V *operator->() const noexcept {
       return &i->second.value;
     }
 
-    bool operator==(const const_iterator &other) const {
+    constexpr bool operator==(const const_iterator &other) const noexcept {
       return i == other.i;
     }
 
-    bool operator!=(const const_iterator &other) const {
+    constexpr bool operator!=(const const_iterator &other) const noexcept {
       return i != other.i;
     }
   };
 
-  operator Mutex &() const {
+  operator Mutex &() const noexcept {
     return const_cast<Mutex &>(mutex);
   }
 
   template<typename K>
-  void MarkOld(const K &key) {
-    auto i = map.find(key);
-    if (i != map.end())
+  void MarkOld(const K &key) noexcept {
+    if (auto i = map.find(key); i != map.end())
       i->second.old = true;
   }
 
@@ -100,12 +101,11 @@ public:
                       const K &key, OperationEnvironment &env,
                       TimeoutClock timeout) {
     while (true) {
-      auto i = map.find(key);
-      if (i != map.end() && !i->second.old)
+      if (auto i = map.find(key); i != map.end() && !i->second.old)
         return const_iterator(i);
 
       if (env.IsCancelled())
-        return end();
+        throw OperationCancelled{};
 
       const auto remaining = timeout.GetRemainingSigned();
       if (remaining.count() <= 0)
@@ -124,33 +124,31 @@ public:
   }
 
   template<typename K>
-  gcc_pure
-  const_iterator find(const K &key) const {
+  [[gnu::pure]]
+  const_iterator find(const K &key) const noexcept {
     return const_iterator(map.find(key));
   }
 
-  gcc_pure
-  const_iterator end() const {
+  [[gnu::pure]]
+  const_iterator end() const noexcept {
     return const_iterator(map.end());
   }
 
   template<typename K>
   void Set(const K &key, const V &value) {
-    auto i = map.insert(std::make_pair(key, Item(value)));
-    Item &item = i.first->second;
+    auto [it, _] = map.insert_or_assign(key, Item(value));
+    Item &item = it->second;
     item.old = false;
-    if (!i.second)
-      item.value = value;
 
     cond.notify_all();
   }
 
   template<typename K>
-  void erase(const K &key) {
+  void erase(const K &key) noexcept {
     map.erase(key);
   }
 
-  void clear() {
+  void clear() noexcept {
     map.clear();
   }
 };

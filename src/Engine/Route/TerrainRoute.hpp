@@ -29,13 +29,14 @@ class TerrainRoute: public RoutePlanner
   mutable RoutePoint m_inx_terrain;
 
 public:
-  TerrainRoute();
+  TerrainRoute() noexcept;
 
   friend class PrintHelper;
 
 private:
-  bool CheckClearance(const RouteLink &e, RoutePoint& inp) const;
-  void AddNearby(const RouteLink& e);
+  bool CheckClearance(const RouteLink &e,
+                      RoutePoint &inp) const noexcept override;
+  void AddNearby(const RouteLink &e) noexcept override;
 };
 
 #endif

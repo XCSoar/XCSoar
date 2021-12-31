@@ -36,9 +36,9 @@ Copyright_License {
 #include <cassert>
 
 std::string
-Path::ToUTF8() const
+Path::ToUTF8() const noexcept
 {
-  if (IsNull())
+  if (*this == nullptr)
     return std::string();
 
 #ifdef _UNICODE
@@ -53,9 +53,9 @@ Path::ToUTF8() const
 }
 
 AllocatedPath
-Path::operator+(const_pointer other) const
+Path::operator+(const_pointer other) const noexcept
 {
-  assert(!IsNull());
+  assert(*this != nullptr);
   assert(other != nullptr);
 
   size_t this_length = StringLength(value.c_str());
@@ -70,9 +70,9 @@ Path::operator+(const_pointer other) const
 
 #ifdef _WIN32
 
-gcc_pure gcc_nonnull_all
+[[gnu::pure]] [[gnu::nonnull]]
 static constexpr bool
-IsDrive(Path::const_pointer p)
+IsDrive(Path::const_pointer p) noexcept
 {
   return IsAlphaASCII(p[0]) && p[1] == ':';
 }
@@ -80,9 +80,9 @@ IsDrive(Path::const_pointer p)
 #endif
 
 bool
-Path::IsAbsolute() const
+Path::IsAbsolute() const noexcept
 {
-  assert(!IsNull());
+  assert(*this != nullptr);
 
 #ifdef _WIN32
   if (IsDrive(c_str()) && IsDirSeparator(c_str()[2]))
@@ -93,9 +93,9 @@ Path::IsAbsolute() const
 }
 
 bool
-Path::IsBase() const
+Path::IsBase() const noexcept
 {
-  assert(!IsNull());
+  assert(*this != nullptr);
 
 #ifdef _WIN32
   return _tcspbrk(c_str(), _T("/\\")) == nullptr;
@@ -104,9 +104,9 @@ Path::IsBase() const
 #endif
 }
 
-gcc_pure
+[[gnu::pure]]
 static Path::const_pointer
-LastSeparator(Path::const_pointer path)
+LastSeparator(Path::const_pointer path) noexcept
 {
   const auto *p = StringFindLast(path, _T('/'));
 #ifdef _WIN32
@@ -118,9 +118,9 @@ LastSeparator(Path::const_pointer path)
 }
 
 AllocatedPath
-Path::GetParent() const
+Path::GetParent() const noexcept
 {
-  assert(!IsNull());
+  assert(*this != nullptr);
 
   const const_pointer v = c_str();
   const const_pointer p = LastSeparator(v);
@@ -131,9 +131,9 @@ Path::GetParent() const
 }
 
 Path
-Path::GetBase() const
+Path::GetBase() const noexcept
 {
-  assert(!IsNull());
+  assert(*this != nullptr);
 
   const_pointer result = c_str();
   const_pointer p = LastSeparator(result);
@@ -147,18 +147,18 @@ Path::GetBase() const
 }
 
 bool
-Path::operator==(Path other) const
+Path::operator==(Path other) const noexcept
 {
-  return IsNull() || other.IsNull()
-    ? (IsNull() && other.IsNull())
+  return *this == nullptr || other == nullptr
+    ? (*this == nullptr && other == nullptr)
     : StringIsEqual(c_str(), other.c_str());
 }
 
 Path
-Path::RelativeTo(Path parent) const
+Path::RelativeTo(Path parent) const noexcept
 {
-  assert(!IsNull());
-  assert(!parent.IsNull());
+  assert(*this != nullptr);
+  assert(parent != nullptr);
 
   auto p = StringAfterPrefix(c_str(), parent.c_str());
   return p != nullptr && IsDirSeparator(*p)
@@ -167,7 +167,7 @@ Path::RelativeTo(Path parent) const
 }
 
 bool
-Path::MatchesExtension(const_pointer extension) const
+Path::MatchesExtension(const_pointer extension) const noexcept
 {
   size_t filename_length = StringLength(c_str());
   size_t extension_length = StringLength(extension);
@@ -178,7 +178,7 @@ Path::MatchesExtension(const_pointer extension) const
 }
 
 Path::const_pointer
-Path::GetExtension() const
+Path::GetExtension() const noexcept
 {
   auto base = GetBase();
   if (base == nullptr)
@@ -190,7 +190,7 @@ Path::GetExtension() const
 }
 
 AllocatedPath
-Path::WithExtension(const_pointer new_extension) const
+Path::WithExtension(const_pointer new_extension) const noexcept
 {
   assert(new_extension != nullptr);
   assert(*new_extension == _T('.'));
@@ -202,15 +202,12 @@ Path::WithExtension(const_pointer new_extension) const
 }
 
 AllocatedPath
-AllocatedPath::Build(const_pointer a, const_pointer b)
+AllocatedPath::Build(string_view a, string_view b) noexcept
 {
-  size_t a_length = StringLength(a);
-  size_t b_length = StringLength(b);
-
-  auto result = new char_type[a_length + 1 + b_length + 1];
-  auto p = std::copy_n(a, a_length, result);
+  auto result = new char_type[a.size() + 1 + b.size() + 1];
+  auto p = std::copy(a.begin(), a.end(), result);
   *p++ = DIR_SEPARATOR;
-  p = std::copy_n(b, b_length, p);
+  p = std::copy(b.begin(), b.end(), p);
   *p = SENTINEL;
   return Donate(result);
 }

@@ -59,6 +59,8 @@ Copyright_License {
 #include "Renderer/NOAAListRenderer.hpp"
 #endif
 
+using namespace std::chrono;
+
 unsigned
 MapItemListRenderer::CalculateLayout(const DialogLook &dialog_look)
 {
@@ -121,7 +123,8 @@ Draw(Canvas &canvas, PixelRect rc,
   };
 
   Angle arrow_angle = reachable ? Angle::HalfCircle() : Angle::Zero();
-  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pt, arrow_angle);
+  PolygonRotateShift({arrow, ARRAY_SIZE(arrow)}, pt, arrow_angle,
+                     Layout::Scale(100U));
 
   if (reachable) {
     canvas.Select(look.brush_above);
@@ -270,14 +273,14 @@ Draw(Canvas &canvas, PixelRect rc,
   TCHAR lift_buffer[32];
   FormatUserVerticalSpeed(thermal.lift_rate, lift_buffer, 32);
 
-  int timespan = BrokenDateTime::NowUTC().GetSecondOfDay() - (int)thermal.time;
-  if (timespan < 0)
-    timespan += 24 * 60 * 60;
+  auto timespan = TimeStamp{BrokenDateTime::NowUTC().DurationSinceMidnight()} - thermal.time;
+  if (timespan.count() < 0)
+    timespan += hours{24};
 
   buffer.Format(_T("%s: %s - left %s ago (%s)"),
                 _("Avg. lift"), lift_buffer,
                 FormatTimespanSmart(timespan).c_str(),
-                FormatLocalTimeHHMM((int)thermal.time, utc_offset).c_str());
+                FormatLocalTimeHHMM(thermal.time, utc_offset).c_str());
   row_renderer.DrawSecondRow(canvas, rc, buffer);
 }
 
@@ -386,19 +389,21 @@ Draw(Canvas &canvas, PixelRect rc,
  * Calculate how many minutes have passed since #past_ms.
  */
 [[gnu::const]]
-static unsigned
-SinceInMinutes(double now_s, uint32_t past_ms)
+static constexpr auto
+SinceInMinutes(TimeStamp now,
+               duration<uint32_t, milliseconds::period> past_ms) noexcept
 {
-  const unsigned day_minutes = 24 * 60;
-  unsigned now_minutes = uint32_t(now_s / 60) % day_minutes;
-  unsigned past_minutes = (past_ms / 60000) % day_minutes;
+  using Minutes = duration<unsigned, minutes::period>;
+  constexpr Minutes ONE_DAY = hours{24};
+  auto now_minutes = now.Cast<Minutes>() % ONE_DAY;
+  auto past_minutes = duration_cast<Minutes>(past_ms) % ONE_DAY;
 
-  if (past_minutes >= 20 * 60 && now_minutes < 4 * 60)
+  if (past_minutes >= hours{20} && now_minutes < hours{4})
     /* midnight rollover */
-    now_minutes += day_minutes;
+    now_minutes += ONE_DAY;
 
   if (past_minutes > now_minutes)
-    return 0;
+    return Minutes{};
 
   return now_minutes - past_minutes;
 }
@@ -419,7 +424,7 @@ Draw(Canvas &canvas, PixelRect rc,
     StaticString<64> buffer;
     buffer.UnsafeFormat(_("%u minutes ago"),
                         SinceInMinutes(CommonInterface::Basic().time,
-                                       item.time_of_day_ms));
+                                       duration<uint32_t, milliseconds::period>{item.time_of_day}).count());
     row_renderer.DrawSecondRow(canvas, rc, buffer);
   }
 }

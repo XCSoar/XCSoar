@@ -23,6 +23,8 @@ Copyright_License {
 
 package org.xcsoar;
 
+import java.io.IOException;
+
 /**
  * A an abstract base class for #AndroidPort implementations that act
  * as a proxy for another #AndroidPort instance.
@@ -35,8 +37,12 @@ abstract class ProxyAndroidPort implements AndroidPort {
   protected void setPort(AndroidPort _port) {
     AndroidPort oldPort = this.port;
     port = _port;
-    if (oldPort != null)
-      oldPort.close();
+    if (oldPort != null) {
+      try {
+        oldPort.close();
+      } catch (IOException e) {
+      }
+    }
 
     if (port != null)
       port.setInputListener(inputListener);
@@ -70,8 +76,12 @@ abstract class ProxyAndroidPort implements AndroidPort {
   @Override public void close() {
     AndroidPort port = this.port;
     this.port = null;
-    if (port != null)
-      port.close();
+    if (port != null) {
+      try {
+        port.close();
+      } catch (IOException e) {
+      }
+    }
 
     stateChanged();
   }

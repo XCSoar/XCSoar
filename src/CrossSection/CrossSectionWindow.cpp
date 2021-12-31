@@ -28,7 +28,7 @@
 #endif
 
 void
-CrossSectionWindow::OnPaintBuffer(Canvas &canvas)
+CrossSectionWindow::OnPaintBuffer(Canvas &canvas) noexcept
 {
   const PixelRect rc = GetClientRect();
 

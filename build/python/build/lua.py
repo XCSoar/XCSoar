@@ -25,12 +25,12 @@ class LuaProject(MakeProject):
             'liblua.a'
         ]
 
-    def build(self, toolchain):
+    def _build(self, toolchain):
         src = self.unpack(toolchain, out_of_tree=False)
 
         wd = os.path.join(src, 'src')
 
-        MakeProject.build(self, toolchain, wd, False)
+        self.build_make(toolchain, wd, False)
 
         includedir = os.path.join(toolchain.install_prefix, 'include')
         libdir = os.path.join(toolchain.install_prefix, 'lib')

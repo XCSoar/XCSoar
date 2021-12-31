@@ -25,7 +25,9 @@ Copyright_License {
 #include "TextInBox.hpp"
 #include "Look/WindArrowLook.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
+#include "Math/Constants.hpp"
 #include "Math/Util.hpp"
 #include "Math/Screen.hpp"
 #include "NMEA/Derived.hpp"
@@ -54,7 +56,8 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
   };
 
   // Rotate the arrow
-  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos, angle);
+  PolygonRotateShift({arrow, ARRAY_SIZE(arrow)}, pos, angle,
+                     Layout::Scale(100U));
 
   canvas.Select(look.arrow_pen);
   canvas.Select(look.arrow_brush);
@@ -73,8 +76,7 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
       { 0, -offset - 3 - int(std::min(20u, length) * 3u) },
     };
 
-    PolygonRotateShift(tail, ARRAY_SIZE(tail),
-                       pos, angle);
+    PolygonRotateShift(tail, pos, angle, Layout::Scale(100U));
 
     canvas.Select(look.tail_pen);
     canvas.DrawLine(tail[0], tail[1]);
@@ -104,8 +106,8 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   BulkPixelPoint label[] = {
     { 18, -26 - int(offset) },
   };
-  PolygonRotateShift(label, ARRAY_SIZE(label),
-                     pos, wind.bearing - screen_angle);
+  PolygonRotateShift(label, pos, wind.bearing - screen_angle,
+                     Layout::Scale(100U));
 
   TextInBoxMode style;
   style.align = TextInBoxMode::Alignment::CENTER;

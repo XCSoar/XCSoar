@@ -54,7 +54,7 @@ DemoReplayGlue::Update(NMEAInfo &data)
   {
     ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
     TaskAccessor ta(protected_task_manager, floor_alt);
-    retval = DemoReplay::Update(1, ta);
+    retval = DemoReplay::Update(std::chrono::seconds{1}, ta);
   }
 
   const AircraftState &s = aircraft.GetState();

@@ -34,7 +34,7 @@ void
 CharacterButton::Create(ContainerWindow &parent, const ButtonLook &look,
                         const TCHAR *text, PixelRect rc,
                         OnCharacterCallback _on_character, unsigned _character,
-                        const WindowStyle style)
+                        const WindowStyle style) noexcept
 {
   assert(_on_character);
 
@@ -45,7 +45,7 @@ CharacterButton::Create(ContainerWindow &parent, const ButtonLook &look,
 }
 
 unsigned
-CharacterButton::GetUpperCharacter() const
+CharacterButton::GetUpperCharacter() const noexcept
 {
   unsigned result = character;
   if (result < 0x80 && IsLowerAlphaASCII((TCHAR)result))
@@ -54,7 +54,7 @@ CharacterButton::GetUpperCharacter() const
 }
 
 void
-CharacterButton::SetCharacter(unsigned _character)
+CharacterButton::SetCharacter(unsigned _character) noexcept
 {
   if (_character == character)
     return;
@@ -71,7 +71,7 @@ CharacterButton::SetCharacter(unsigned _character)
 }
 
 bool
-CharacterButton::OnClicked()
+CharacterButton::OnClicked() noexcept
 {
   on_character(character);
   return true;

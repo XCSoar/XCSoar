@@ -24,7 +24,7 @@ Copyright_License {
 #include "IOIOHelper.hpp"
 #include "PortBridge.hpp"
 #include "java/Class.hxx"
-#include "java/Exception.hxx"
+#include "java/Env.hxx"
 
 Java::TrivialClass IOIOHelper::cls;
 jmethodID IOIOHelper::ctor,
@@ -41,6 +41,13 @@ IOIOHelper::Initialise(JNIEnv *env)
     return false;
 
   ctor = env->GetMethodID(cls, "<init>", "()V");
+  if (Java::DiscardException(env)) {
+    /* need to check for Java exceptions again because the first
+       method lookup initializes the Java class */
+    cls.Clear(env);
+    return false;
+  }
+
   openUart_method = env->GetMethodID(cls, "openUart",
                                      "(II)Lorg/xcsoar/AndroidPort;");
   shutdown_method = env->GetMethodID(cls, "shutdown", "()V");
@@ -57,24 +64,15 @@ IOIOHelper::Deinitialise(JNIEnv *env)
 PortBridge *
 IOIOHelper::openUart(JNIEnv *env, unsigned ID, unsigned baud)
 {
-  jobject obj = env->CallObjectMethod(Get(), openUart_method, ID, (int)baud);
-  Java::RethrowException(env);
+  auto obj = Java::CallObjectMethodRethrow(env, Get(), openUart_method,
+                                           ID, (int)baud);
   if (obj == nullptr)
     return nullptr;
 
-  PortBridge *bridge = new PortBridge(env, obj);
-  env->DeleteLocalRef(obj);
-  return bridge;
+  return new PortBridge(env, obj);
 }
 
 IOIOHelper::IOIOHelper(JNIEnv *env)
+  :Java::GlobalObject(Java::NewObjectRethrow(env, cls, ctor))
 {
-  jobject obj = env->NewObject(cls, ctor);
-  Java::RethrowException(env);
-
-  assert(obj != nullptr);
-
-  Set(env, obj);
-
-  env->DeleteLocalRef(obj);
 }

@@ -35,6 +35,7 @@
 #include "system/FileUtil.hpp"
 #include "Compatibility/path.h"
 #include "Operation/Operation.hpp"
+#include "util/PrintException.hxx"
 #include "test_debug.hpp"
 
 #include <zzip/zzip.h>
@@ -102,7 +103,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     state.altitude = loc_start.altitude;
 
     {
-      Airspaces as_route(false);
+      Airspaces as_route;
       // dummy
 
       // real one, see if items changed
@@ -183,7 +184,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
 int
 main(int argc, char** argv)
-{
+try {
   static const char map_path[] = "tmp/map.xcm";
 
   ZZIP_DIR *dir = zzip_dir_open(map_path, nullptr);
@@ -194,11 +195,9 @@ main(int argc, char** argv)
 
   RasterMap map;
 
-  NullOperationEnvironment operation;
-  if (!LoadTerrainOverview(dir, map.GetTileCache(), operation)) {
-    fprintf(stderr, "failed to load map\n");
-    zzip_dir_close(dir);
-    return EXIT_FAILURE;
+  {
+    NullOperationEnvironment operation;
+    LoadTerrainOverview(dir, map.GetTileCache(), operation);
   }
 
   map.UpdateProjection();
@@ -214,4 +213,7 @@ main(int argc, char** argv)
   plan_tests(4 + NUM_SOL);
   ok(test_route(28, map), "route 28", 0);
   return exit_status();
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

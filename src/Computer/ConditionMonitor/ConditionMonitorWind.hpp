@@ -29,13 +29,12 @@ Copyright_License {
 
 /** #ConditionMonitor to track/warn on significant changes in wind speed */
 class ConditionMonitorWind final : public ConditionMonitor {
-  SpeedVector wind;
-  SpeedVector last_wind;
+  SpeedVector wind = SpeedVector::Zero();
+  SpeedVector last_wind = SpeedVector::Zero();
 
 public:
-  constexpr ConditionMonitorWind()
-    :ConditionMonitor(60 * 5, 10),
-     wind(SpeedVector::Zero()), last_wind(SpeedVector::Zero()) {}
+  constexpr ConditionMonitorWind() noexcept
+    :ConditionMonitor(std::chrono::minutes{5}, std::chrono::seconds{10}) {}
 
 protected:
   bool CheckCondition(const NMEAInfo &basic,

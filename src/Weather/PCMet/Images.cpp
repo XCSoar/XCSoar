@@ -23,17 +23,17 @@ Copyright_License {
 
 #include "Images.hpp"
 #include "Settings.hpp"
-#include "ui/canvas/Bitmap.hpp"
-#include "net/http/ToBuffer.hpp"
-#include "net/http/ToFile.hpp"
-#include "Job/Runner.hpp"
+#include "net/http/CoRequest.hxx"
+#include "net/http/CoDownloadToFile.hpp"
+#include "net/http/Progress.hpp"
+#include "net/http/Setup.hxx"
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"
 #include "util/ConvertString.hpp"
+#include "util/StringView.hxx"
 
 #include <stdexcept>
 
-#include <string.h>
 #include <stdio.h>
 
 #define PCMET_URI "https://www.flugwetter.de"
@@ -107,10 +107,29 @@ const PCMet::ImageType PCMet::image_types[] = {
   { nullptr, nullptr, nullptr },
 };
 
-Bitmap
+static Co::Task<Curl::CoResponse>
+CoGet(CurlGlobal &curl, const char *url,
+      const char *username, const char *password,
+      ProgressListener &progress)
+{
+  CurlEasy easy{url};
+  Curl::Setup(easy);
+  const Net::ProgressAdapter progress_adapter{easy, progress};
+  easy.SetFailOnError();
+
+  if (username != nullptr)
+    easy.SetOption(CURLOPT_USERNAME, username);
+  if (password != nullptr)
+    easy.SetOption(CURLOPT_PASSWORD, password);
+
+  // TODO limit the response body size
+  co_return co_await Curl::CoRequest(curl, std::move(easy));
+}
+
+Co::Task<AllocatedPath>
 PCMet::DownloadLatestImage(const char *type, const char *area,
                            const PCMetSettings &settings,
-                           CurlGlobal &curl, JobRunner &runner)
+                           CurlGlobal &curl, ProgressListener &progress)
 {
   const WideToUTF8Converter username(settings.www_credentials.username);
   const WideToUTF8Converter password(settings.www_credentials.password);
@@ -121,54 +140,42 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
            type, area);
 
   // download the HTML page
-  char buffer[65536];
-  Net::DownloadToBufferJob job(curl, url, buffer, sizeof(buffer) - 1);
-  job.SetBasicAuth(username, password);
-  if (!runner.Run(job))
-    return Bitmap();
-
-  buffer[job.GetLength()] = 0;
+  const auto response =
+    co_await CoGet(curl, url, username, password, progress);
 
   static constexpr char img_needle[] = "<img name=\"bild\" src=\"/";
-  char *img = strstr(buffer, "<img name=\"bild\" src=\"/");
+  const char *img = strstr(response.body.c_str(), img_needle);
   if (img == nullptr)
-    return Bitmap();
+    throw std::runtime_error("No IMG tag found in pc_met HTML");
 
-  char *src = img + sizeof(img_needle) - 2;
-  char *end = strchr(src + 1, '"');
+  const char *_src = img + sizeof(img_needle) - 2;
+  const char *end = strchr(_src + 1, '"');
   if (end == nullptr)
-    return Bitmap();
+    throw std::runtime_error("Malformed IMG tag in pc_met HTML");
 
-  *end = 0;
+  const StringView src{_src, end};
+  std::string_view _name = src.SplitLast('/').second;
+  if (_name.empty())
+    throw std::runtime_error("Malformed IMG tag in pc_met HTML");
 
-  const char *slash = strrchr(src, '/');
-  if (slash == nullptr || slash[1] == 0)
-    return Bitmap();
-
-  const char *name = slash + 1;
+  const std::string name{_name};
 
   // TODO: verify file name
 
-  const auto cache_path = MakeLocalPath(_T("pc_met"));
-  const auto path = AllocatedPath::Build(cache_path,
-                                         UTF8ToWideConverter(name));
+  // TODO: delete the old directory XCSoarData/pc_met?
+  const auto cache_path = MakeCacheDirectory(_T("pc_met"));
+  auto path = AllocatedPath::Build(cache_path,
+                                   UTF8ToWideConverter(name.c_str()));
 
   if (!File::Exists(path)) {
     // URI for a single page of a selected 'Satellitenbilder"-page with link
     // to the latest image and the namelist array of all stored images
-    snprintf(url, sizeof(url), PCMET_URI "%s", src);
+    snprintf(url, sizeof(url), PCMET_URI "%.*s", int(src.size), src.data);
 
-    Net::DownloadToFileJob job2(curl, url, path);
-    job2.SetBasicAuth(username, password);
-    if (!runner.Run(job2))
-      return Bitmap();
+    const auto ignored_response = co_await
+      Net::CoDownloadToFile(curl, url, username, password,
+                            path, nullptr, progress);
   }
 
-  Bitmap bitmap;
-  try {
-    bitmap.LoadFile(path);
-  } catch (const std::runtime_error &e) {
-  }
-
-  return bitmap;
+  co_return std::move(path);
 }

@@ -32,13 +32,13 @@ IntermediateTaskPoint::IntermediateTaskPoint(TaskPointType _type,
    safety_height(tb.safety_height_arrival) {}
 
 void
-IntermediateTaskPoint::SetTaskBehaviour(const TaskBehaviour &tb)
+IntermediateTaskPoint::SetTaskBehaviour(const TaskBehaviour &tb) noexcept
 {
   safety_height = tb.safety_height_arrival;
 }
 
 double
-IntermediateTaskPoint::GetElevation() const
+IntermediateTaskPoint::GetElevation() const noexcept
 {
   return GetBaseElevation() + safety_height;
 }

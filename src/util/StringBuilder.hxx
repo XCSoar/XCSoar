@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2015-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,12 +30,10 @@
 #ifndef STRING_BUILDER_HXX
 #define STRING_BUILDER_HXX
 
-#include "TruncateString.hpp"
-#include "StringAPI.hxx"
+#include "ConstBuffer.hxx"
+#include "WritableBuffer.hxx"
 
-#include <utility>
 #include <algorithm>
-
 #include <cstddef>
 
 /**
@@ -43,11 +41,11 @@
  * end, truncating the string if the buffer is full.
  */
 template<typename T=char>
-class StringBuilder {
-	typedef T value_type;
-	typedef T *pointer;
-	typedef const T *const_pointer;
-	typedef size_t size_type;
+class BasicStringBuilder {
+	using value_type = T;
+	using pointer = T *;
+	using const_pointer = const T *;
+	using size_type = std::size_t;
 
 	pointer p;
 	const pointer end;
@@ -55,31 +53,65 @@ class StringBuilder {
 	static constexpr value_type SENTINEL = '\0';
 
 public:
-	constexpr StringBuilder(pointer _p, pointer _end):p(_p), end(_end) {}
-	constexpr StringBuilder(pointer _p, size_type size)
+	constexpr explicit BasicStringBuilder(WritableBuffer<value_type> b) noexcept
+		:p(b.begin()), end(b.end()) {}
+
+	constexpr BasicStringBuilder(pointer _p, pointer _end) noexcept
+		:p(_p), end(_end) {}
+
+	constexpr BasicStringBuilder(pointer _p, size_type size) noexcept
 		:p(_p), end(p + size) {}
 
-	constexpr size_type GetRemainingSize() const {
+	constexpr pointer GetTail() const noexcept {
+		return p;
+	}
+
+	constexpr size_type GetRemainingSize() const noexcept {
 		return end - p;
 	}
 
-	constexpr bool IsFull() const {
+	constexpr bool IsFull() const noexcept {
 		return p >= end - 1;
 	}
 
+	WritableBuffer<value_type> Write() const noexcept {
+		return {p, end};
+	}
+
+	void Extend(size_type length) noexcept {
+		p += length;
+	}
+
+	/**
+	 * This class gets thrown when the buffer would overflow by an
+	 * operation.  The buffer is then in an undefined state.
+	 */
+	class Overflow {};
+
+	constexpr bool CanAppend(size_type length) const noexcept {
+		return p + length < end;
+	}
+
+	void CheckAppend(size_type length) const {
+		if (!CanAppend(length))
+			throw Overflow();
+	}
+
 	void Append(T ch) {
-		if (!IsFull())
-			*p++ = ch;
+		CheckAppend(1);
+
+		*p++ = ch;
+		*p = SENTINEL;
 	}
 
-	void Append(const_pointer src) {
-		p = CopyTruncateString(p, GetRemainingSize(), src);
+	void Append(const_pointer src);
+	void Append(const_pointer src, size_t length);
+
+	void Append(ConstBuffer<T> src) {
+		Append(src.data, src.size);
 	}
 
-	void Append(const_pointer src, size_t length) {
-		p = std::copy_n(src, std::min(length, GetRemainingSize() - 1),
-				p);
-	}
+	void Format(const_pointer fmt, ...);
 
 	template<typename... Args>
 	void Append(T ch, Args&&... args) {
@@ -100,6 +132,11 @@ public:
 	}
 };
 
+class StringBuilder : public BasicStringBuilder<char> {
+public:
+	using BasicStringBuilder<char>::BasicStringBuilder;
+};
+
 /**
  * Helper function for StringBuilder for when all you need is just
  * concatenate several strings into a buffer.
@@ -110,7 +147,7 @@ BuildString(T *buffer, size_t size, Args&&... args)
 {
 	static_assert(sizeof...(Args) > 0, "Argument list must be non-empty");
 
-	StringBuilder<T> builder(buffer, size);
+	BasicStringBuilder<T> builder(buffer, size);
 	builder.Append(std::forward<Args>(args)...);
 	return buffer;
 }

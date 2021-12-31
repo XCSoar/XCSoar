@@ -1,8 +1,94 @@
-xcsoar (7.8) unstable; urgency=medium
+xcsoar (7.22) unstable; urgency=medium
 
   * new release
 
  --
+
+xcsoar (7.21) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Sat, 11 Dec 2021 11:05:19 +0100
+
+xcsoar (7.20) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Fri, 22 Oct 2021 17:38:54 +0200
+
+xcsoar (7.19) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Fri, 01 Oct 2021 15:40:24 +0200
+
+xcsoar (7.18) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Fri, 10 Sep 2021 23:31:54 +0200
+
+xcsoar (7.17) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Sat, 04 Sep 2021 08:43:15 +0200
+
+xcsoar (7.16) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Fri, 27 Aug 2021 16:55:23 +0200
+
+xcsoar (7.15) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Mon, 23 Aug 2021 17:54:49 +0200
+
+xcsoar (7.14) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Fri, 20 Aug 2021 17:37:01 +0200
+
+xcsoar (7.13) unstable; urgency=medium
+
+  * new release
+  * remove -doc package
+  * use debhelper 12
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Thu, 19 Aug 2021 18:03:49 +0200
+
+xcsoar (7.12) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Fri, 13 Aug 2021 19:08:21 +0200
+
+xcsoar (7.11) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Fri, 30 Jul 2021 20:05:15 +0200
+
+xcsoar (7.10) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Fri, 09 Jul 2021 06:33:03 +0200
+
+xcsoar (7.9) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Tue, 06 Jul 2021 10:10:02 +0200
+
+xcsoar (7.8) unstable; urgency=medium
+
+  * new release
+
+ -- Max Kellermann <max.kellermann@gmail.com>  Wed, 02 Jun 2021 18:48:13 +0200
 
 xcsoar (7.7) unstable; urgency=medium
 

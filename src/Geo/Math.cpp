@@ -296,7 +296,7 @@ DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
   const auto a12 = Square(s21) + cos_loc1_lat * cos_loc2_lat * Square(sl21);
   const auto a23 = Square(s32) + cos_loc2_lat * cos_loc3_lat * Square(sl32);
 
-  return (2 * FAISphere::REARTH) *
+  return FAISphere::REARTH *
     (EarthDistance(a12) + EarthDistance(a23)).Radians();
 }
 

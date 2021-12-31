@@ -23,81 +23,99 @@ Copyright_License {
 
 #include "BluetoothHelper.hpp"
 #include "Context.hpp"
-#include "Main.hpp"
-#include "NativeLeScanCallback.hpp"
+#include "NativeDetectDeviceListener.hpp"
+#include "NativeSensorListener.hpp"
 #include "PortBridge.hpp"
+#include "java/Env.hxx"
 #include "java/String.hxx"
 #include "java/Class.hxx"
-#include "java/Exception.hxx"
 
 #include <map>
 #include <string>
 #include <stdexcept>
 
-namespace BluetoothHelper {
-
 static Java::TrivialClass cls;
+static jmethodID ctor;
 static jfieldID hasLe_field;
 static jmethodID isEnabled_method;
 static jmethodID getNameFromAddress_method;
-static jmethodID list_method, connect_method, createServer_method;
-static jmethodID startLeScan_method, stopLeScan_method;
+static jmethodID connect_method, createServer_method;
+static jmethodID hm10connect_method;
+static jmethodID connectSensor_method;
+static jmethodID addDetectDeviceListener_method;
+static jmethodID removeDetectDeviceListener_method;
 
 static std::map<std::string, std::string> address_to_name;
 
-} // namespace BluetoothHelper
-
 bool
-BluetoothHelper::Initialise(JNIEnv *env)
+BluetoothHelper::Initialise(JNIEnv *env) noexcept
 {
-  assert(!cls.IsDefined());
   assert(env != nullptr);
 
   if (!cls.FindOptional(env, "org/xcsoar/BluetoothHelper"))
     /* Android < 2.0 doesn't have Bluetooth support */
     return false;
 
-  hasLe_field = env->GetStaticFieldID(cls, "hasLe", "Z");
-  isEnabled_method = env->GetStaticMethodID(cls, "isEnabled", "()Z");
-  getNameFromAddress_method = env->GetStaticMethodID(cls, "getNameFromAddress",
-                                                     "(Ljava/lang/String;)Ljava/lang/String;");
-  list_method = env->GetStaticMethodID(cls, "list", "()[Ljava/lang/String;");
-  connect_method = env->GetStaticMethodID(cls, "connect",
-                                          "(Landroid/content/Context;"
-                                          "Ljava/lang/String;)"
-                                          "Lorg/xcsoar/AndroidPort;");
-  createServer_method = env->GetStaticMethodID(cls, "createServer",
-                                               "()Lorg/xcsoar/AndroidPort;");
 
-  startLeScan_method = env->GetStaticMethodID(cls, "startLeScan",
-                                              "(Landroid/bluetooth/BluetoothAdapter$LeScanCallback;)Z");
-  stopLeScan_method = env->GetStaticMethodID(cls, "stopLeScan",
-                                             "(Landroid/bluetooth/BluetoothAdapter$LeScanCallback;)V");
+  ctor = env->GetMethodID(cls, "<init>",
+                          "(Landroid/content/Context;)V");
+  if (Java::DiscardException(env)) {
+    /* need to check for Java exceptions again because the first
+       method lookup initializes the Java class */
+    cls.Clear(env);
+    return false;
+  }
+
+  hasLe_field = env->GetFieldID(cls, "hasLe", "Z");
+  isEnabled_method = env->GetMethodID(cls, "isEnabled", "()Z");
+  getNameFromAddress_method = env->GetMethodID(cls, "getNameFromAddress",
+                                               "(Ljava/lang/String;)Ljava/lang/String;");
+  connectSensor_method = env->GetMethodID(cls, "connectSensor",
+                                          "(Ljava/lang/String;Lorg/xcsoar/SensorListener;)"
+                                          "Lorg/xcsoar/BluetoothSensor;");
+  connect_method = env->GetMethodID(cls, "connect",
+                                    "(Ljava/lang/String;)"
+                                    "Lorg/xcsoar/AndroidPort;");
+  createServer_method = env->GetMethodID(cls, "createServer",
+                                         "()Lorg/xcsoar/AndroidPort;");
+
+  hm10connect_method = env->GetMethodID(cls, "connectHM10",
+                                        "(Ljava/lang/String;)"
+                                        "Lorg/xcsoar/AndroidPort;");
+  addDetectDeviceListener_method =
+    env->GetMethodID(cls, "addDetectDeviceListener",
+                     "(Lorg/xcsoar/DetectDeviceListener;)V");
+  removeDetectDeviceListener_method =
+    env->GetMethodID(cls, "removeDetectDeviceListener",
+                     "(Lorg/xcsoar/DetectDeviceListener;)V");
 
   return true;
 }
 
 void
-BluetoothHelper::Deinitialise(JNIEnv *env)
+BluetoothHelper::Deinitialise(JNIEnv *env) noexcept
 {
   cls.ClearOptional(env);
 }
 
-bool
-BluetoothHelper::isEnabled(JNIEnv *env)
+BluetoothHelper::BluetoothHelper(JNIEnv *env, Context &context)
+  :Java::GlobalObject(env,
+                      Java::NewObjectRethrow(env, cls, ctor, context.Get()))
 {
-  return cls.IsDefined() &&
-    env->CallStaticBooleanMethod(cls, isEnabled_method);
+}
+
+bool
+BluetoothHelper::IsEnabled(JNIEnv *env) const noexcept
+{
+  return env->CallBooleanMethod(Get(), isEnabled_method);
 }
 
 const char *
-BluetoothHelper::GetNameFromAddress(JNIEnv *env, const char *address)
+BluetoothHelper::GetNameFromAddress(JNIEnv *env,
+                                    const char *address) const noexcept
 {
   assert(env != nullptr);
   assert(address != nullptr);
-
-  if (!cls.IsDefined())
-    return nullptr;
 
   std::string x_address(address);
   auto i = address_to_name.find(x_address);
@@ -106,8 +124,8 @@ BluetoothHelper::GetNameFromAddress(JNIEnv *env, const char *address)
 
   const Java::String j_address(env, address);
   jstring j_name = (jstring)
-    env->CallStaticObjectMethod(cls, getNameFromAddress_method,
-                                j_address.Get());
+    env->CallObjectMethod(Get(), getNameFromAddress_method,
+                          j_address.Get());
   if (j_name == nullptr)
     return nullptr;
 
@@ -118,86 +136,68 @@ BluetoothHelper::GetNameFromAddress(JNIEnv *env, const char *address)
   return j.first->second.c_str();
 }
 
-jobjectArray
-BluetoothHelper::list(JNIEnv *env)
-{
-  if (!cls.IsDefined())
-    return nullptr;
-
-  /* call BluetoothHelper.connect() */
-
-  return (jobjectArray)env->CallStaticObjectMethod(cls, list_method);
-}
-
 bool
-BluetoothHelper::HasLe(JNIEnv *env)
+BluetoothHelper::HasLe(JNIEnv *env) const noexcept
 {
-  return cls.IsDefined() && env->GetStaticBooleanField(cls, hasLe_field);
+  return env->GetBooleanField(Get(), hasLe_field);
 }
 
-jobject
-BluetoothHelper::StartLeScan(JNIEnv *env, LeScanCallback &_cb)
+Java::LocalObject
+BluetoothHelper::AddDetectDeviceListener(JNIEnv *env,
+                                         DetectDeviceListener &_l) noexcept
 {
-  assert(HasLe(env));
-
-  jobject cb = NativeLeScanCallback::Create(env, _cb);
-  if (cb == nullptr) {
-    env->ExceptionClear();
-    return nullptr;
-  }
-
-  if (!env->CallStaticBooleanMethod(cls, startLeScan_method, cb)) {
-    env->ExceptionClear();
-    env->DeleteLocalRef(cb);
-    return nullptr;
-  }
-
-  return cb;
+  auto l = NativeDetectDeviceListener::Create(env, _l);
+  env->CallVoidMethod(Get(), addDetectDeviceListener_method, l.Get());
+  return l;
 }
 
 void
-BluetoothHelper::StopLeScan(JNIEnv *env, jobject cb)
+BluetoothHelper::RemoveDetectDeviceListener(JNIEnv *env, jobject l) noexcept
 {
-  assert(HasLe(env));
+  env->CallVoidMethod(Get(), removeDetectDeviceListener_method, l);
+}
 
-  env->CallStaticVoidMethod(cls, stopLeScan_method, cb);
-  env->DeleteLocalRef(cb);
+Java::LocalObject
+BluetoothHelper::connectSensor(JNIEnv *env, const char *_address,
+                               SensorListener &_listener)
+{
+  const Java::String address{env, _address};
+  auto listener = NativeSensorListener::Create(env, _listener);
+  return Java::CallObjectMethodRethrow(env, Get(), connectSensor_method,
+                                       address.Get(), listener.Get());
 }
 
 PortBridge *
 BluetoothHelper::connect(JNIEnv *env, const char *address)
 {
-  if (!cls.IsDefined())
-    throw std::runtime_error("Bluetooth not available");
-
   /* call BluetoothHelper.connect() */
 
   const Java::String address2(env, address);
-  jobject obj = env->CallStaticObjectMethod(cls, connect_method,
-                                            context->Get(), address2.Get());
-  Java::RethrowException(env);
-  if (obj == nullptr)
-    return nullptr;
+  auto obj = Java::CallObjectMethodRethrow(env, Get(), connect_method,
+                                           address2.Get());
+  assert(obj);
 
-  PortBridge *helper = new PortBridge(env, obj);
-  env->DeleteLocalRef(obj);
-
-  return helper;
+  return new PortBridge(env, obj);
 }
 
 PortBridge *
 BluetoothHelper::createServer(JNIEnv *env)
 {
-  if (!cls.IsDefined())
-    throw std::runtime_error("Bluetooth not available");
+  auto obj = Java::CallObjectMethodRethrow(env, Get(), createServer_method);
+  assert(obj);
 
-  jobject obj = env->CallStaticObjectMethod(cls, createServer_method);
-  Java::RethrowException(env);
-  if (obj == nullptr)
-    return nullptr;
+  return new PortBridge(env, obj);
+}
 
-  PortBridge *helper = new PortBridge(env, obj);
-  env->DeleteLocalRef(obj);
+PortBridge *
+BluetoothHelper::connectHM10(JNIEnv *env, const char *address)
+{
+  /* call BluetoothHelper.connectHM10() */
 
-  return helper;
+  const Java::String address2(env, address);
+  auto obj = Java::CallObjectMethodRethrow(env, Get(), hm10connect_method,
+                                           address2.Get());
+  assert(obj);
+
+  return new PortBridge(env, obj);
 }

@@ -1,4 +1,190 @@
-Version 7.8 - not yet released
+Version 7.22 - not yet released
+* user interface
+  - close the download dialog after successful download
+  - add "Share" button to the status dialog
+* Polars
+  - add DG-800S
+* devices
+  - FLARM: send turn point names in task declaration
+* user interface
+  - add 3x6 InfoBoxes layout
+* Android
+  - use app-specific data directory by default
+  - allow using all external storages
+
+Version 7.21 - 2021/12/11
+* data files
+  - Support for AF/AR frequency fields in OpenAir
+* devices
+  - fix inverted cruise/circling mode in borgelt and xcvario driver
+* Kobo
+  - Add support for Clara HD
+  - Control backlight brightness of the Kobo Glo HD
+* Android
+  - re-enable background location and comply with Google Play Store policy
+
+Version 7.20 - 2021/10/22
+* map
+  - fix crash in the topography loader
+* tracking
+  - SkyLines: fix "URL using bad/illegal format"
+* Android
+  - disable background location access due to Google Play Store policy
+  - fix compatibility with Android older than 7
+
+Version 7.19 - 2021/10/01
+* data files
+  - fix bug in OpenAir arc parser
+  - fix crash bug in terrain loader
+  - support short name in CUP files
+  - search waypoints via short name
+  - ability to display short name on map
+* devices
+  - improved support for LXNAV S8x/S10x varios, including task declaration.
+  - IMI: fix task declaration over Bluetooth
+  - IMI: show progress bar for flight download
+* user interface
+  - consistent progress bar during startup
+* Android
+  - fix crash with USB serial adapter
+  - add WCH CH9102F into the list of accepted USB serial adapters
+
+Version 7.18 - 2021/09/10
+* data files
+  - load terrain while XCSoar is running
+* devices
+  - TCP Client: fix crash bug
+* tracking
+  - SkyLines: fix "Show nearby traffic" setting
+* user interface
+  - add 3x5 InfoBoxes layout
+* Android
+  - fix opening waypoint pictures
+
+Version 7.17 - 2021/09/04
+* map display
+  - fix airspace display bug
+* user interface
+  - add 8x3 InfoBoxes portrait layout
+* weather
+  - update RASP provider list
+* task management
+  - add option to score start on entry
+* Android
+  - fix startup crash bug
+  - use native text entry dialog
+* Linux text mode console
+  - fix program termination for some DRI drivers, e.g. VMWare
+    in full-screen mode without Window manager.
+* Cubieboard
+  - Mali: Support for old Linux-Sunxi EGL headers, and new Bootlin EGL headers
+  - Support for KMS/DRI and Lima instead of closed source Mali blob.
+
+Version 7.16 - 2021/08/27
+* user interface
+  - don't draw "---" over graphical InfoBoxes
+* Android
+  - fix deadlock bug with Bluetooth sensors and the internal GPS
+
+Version 7.15 - 2021/08/23
+* user interface
+  - fix crash in Config/System
+  - fix overlapping axes labels in cross section
+  - fix graphics error (vertical black lines) in cross section
+  - fix missing labels in cross section on high-resolution screens
+  - draw small tick every 10 minutes in analysis dialog (instead of 6)
+* Android
+  - fix crash on Android 5 and 6
+
+Version 7.14 - 2021/08/20
+* Android
+  - keep screen on, even if not in full-screen mode
+  - fix bottom bar background in non-full-screen mode
+  - fix touch position in non-full-screen mode
+
+Version 7.13 - 2021/08/19
+* fix freeze bug
+* fix terrain cache file bug
+* task management
+  - Use task defaults for start and finish height ref (MSL or AGL) when loading
+    tasks from soarscore.com
+* Kobo
+  - fix crash in Kobo menu
+* Android
+  - fix GPS time from the Flytec Sensbox
+  - support speed, track and acceleration from Flytec Sensbox
+  - don't apply Geoid separation to Flytec Sensbox GPS altitude
+  - use the 8 Hz vario from Flytec Sensbox GPS altitude instead of 1 Hz
+  - restore full-screen mode properly after returning to XCSoar
+  - disable full-screen mode in multi-window mode
+  - make full-screen mode optional
+
+Version 7.12 - 2021/08/13
+* calculations
+  - fix the "Height above takeoff" InfoBox
+* devices
+  - send Pilot Event (PEV) to LXNAV S10x/S8x devices (requires firmware 8.01 or newer)
+  - correct Pilot Event (PEV) message for PowerFLARM devices
+* Android
+  - fix broken GPS date/time from internal GPS
+  - various fixes for the Flytec Sensbox driver
+* Kobo
+  - throttle sensor-triggered screen updates
+  - improve performance of graphical InfoBoxes
+
+Version 7.11 - 2021/07/30
+* fix crash bug in pc_met viewer
+* user interface
+  - new vario gauge background
+  - fix truncated labels in many dialogs
+* Lua scripting
+  - add HTTP client
+  - prefer Lua gesture handlers
+* Android
+  - show Bluetooth LE device features
+  - support Bluetooth LE heart rate sensors
+  - support the Flytec Sensbox
+  - add DroidSoar/I2C calibration dialog
+  - fix reconnect to Bluetooth LE devices
+  - fix distorted colors on some devices
+  - detect USB serial adapter disconnect
+  - support baud rate switching on USB serial adapters
+* Polars
+  - new Wassmer WA 26 P Squale polar
+
+Version 7.10 - 2021/07/09
+* weather
+  - work around connection problems to NOAA server (for METAR/TAF)
+* Raspberry Pi
+  - fix text input with touch screen
+* Android
+  - fix crash with reconnected USB serial adapter
+
+Version 7.9 - 2021/07/05
+* fix crash bug in terrain renderer
+* fix crash bug in IGC file parser
+* settings
+  - allow LiveTrack24 tracking intervals smaller than 5 seconds
+* user interface
+  - support for Pilot Event (PEV) start procedure
+  - properly update device status in device list dialog
+  - add alternate 2 glide ratio infobox
+* devices
+  - TCP Client: fix automatic reconnect after connection loss
+  - GliderLink: fix disappearing configuration
+* calculations
+  - fix AAT task optimization bug
+* Android
+  - support USB serial adapters
+  - auto-reconnect to IOIO UARTs
+
+Version 7.8 - 2021/06/02
+* don't delete old IGC files automatically
+* devices
+  - TCP: fix error "Address already in use" on reconnect
+* Android
+  - fix downloads on Android 10 and later
+  - fix logging while in background on Android 10 and later
 
 Version 7.7 - 2021/05/14
 * user interface

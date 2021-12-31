@@ -25,14 +25,14 @@ Copyright_License {
 
 #include <cassert>
 
-bool
-SuspensibleThread::Start(bool _suspended) noexcept
+void
+SuspensibleThread::Start(bool _suspended)
 {
   stop_received = false;
   suspend_received = _suspended;
   suspended = false;
 
-  return Thread::Start();
+  Thread::Start();
 }
 
 void

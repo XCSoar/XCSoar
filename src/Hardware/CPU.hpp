@@ -31,10 +31,10 @@ Copyright_License {
 #ifdef HAVE_CPU_FREQUENCY
 
 void
-LockCPU();
+LockCPU() noexcept;
 
 void
-UnlockCPU();
+UnlockCPU() noexcept;
 
 #endif
 
@@ -44,11 +44,11 @@ UnlockCPU();
  */
 struct ScopeLockCPU {
 #ifdef HAVE_CPU_FREQUENCY
-  ScopeLockCPU() {
+  ScopeLockCPU() noexcept {
     LockCPU();
   }
 
-  ~ScopeLockCPU() {
+  ~ScopeLockCPU() noexcept {
     UnlockCPU();
   }
 #else

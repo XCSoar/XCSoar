@@ -24,15 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_TCP_PORT_HPP
 #define XCSOAR_DEVICE_TCP_PORT_HPP
 
-#include "BufferedPort.hpp"
+#include "SocketPort.hpp"
 #include "event/SocketEvent.hxx"
 
 /**
  * A TCP listener port class.
  */
-class TCPPort final : public BufferedPort
+class TCPPort final : public SocketPort
 {
-  SocketEvent listener, connection;
+  SocketEvent listener;
 
 public:
   /**
@@ -48,42 +48,17 @@ public:
   /**
    * Closes the serial port (Destructor)
    */
-  virtual ~TCPPort();
-
-  auto &GetEventLoop() const noexcept {
-    return listener.GetEventLoop();
-  }
+  ~TCPPort() noexcept override;
 
   /* virtual methods from class Port */
-  PortState GetState() const override;
-
-  bool Drain() override {
-    /* writes are synchronous */
-    return true;
-  }
-
-  bool SetBaudrate(unsigned baud_rate) override {
-    return true;
-  }
-
-  unsigned GetBaudrate() const override {
-    return 0;
-  }
-
-  size_t Write(const void *data, size_t length) override;
+  PortState GetState() const noexcept override;
 
 protected:
-  void AsyncAccept() {
+  void AsyncAccept() noexcept {
     listener.ScheduleRead();
   }
 
   void OnListenerReady(unsigned events) noexcept;
-
-  void AsyncRead() {
-    connection.ScheduleRead();
-  }
-
-  void OnConnectionReady(unsigned events) noexcept;
 };
 
 #endif

@@ -127,7 +127,7 @@ TopCanvas::Create(PixelSize new_size,
   const EGLNativeDisplayType native_display = EGL_DEFAULT_DISPLAY;
   mali_native_window.width = new_size.width;
   mali_native_window.height = new_size.height;
-  struct mali_native_window *native_window = &mali_native_window;
+  fbdev_window *native_window = &mali_native_window;
 #elif defined(MESA_KMS)
   current_bo = nullptr;
   connector = nullptr;
@@ -395,26 +395,26 @@ TopCanvas::Flip()
     saved_crtc = drmModeGetCrtc(dri_fd, encoder->crtc_id);
     drmModeSetCrtc(dri_fd, encoder->crtc_id, fb->fb_id, 0, 0,
                    &connector->connector_id, 1, &mode);
-  }
+  } else {
 
-  bool flip_finished = false;
-  int page_flip_ret = drmModePageFlip(dri_fd, encoder->crtc_id, fb->fb_id,
-                                      DRM_MODE_PAGE_FLIP_EVENT,
-                                      &flip_finished);
-  if (0 != page_flip_ret) {
-    fprintf(stderr, "drmModePageFlip() failed: %d\n", page_flip_ret);
-    exit(EXIT_FAILURE);
-  }
-  while (!flip_finished) {
-    int handle_event_ret = drmHandleEvent(dri_fd, &evctx);
-    if (0 != handle_event_ret) {
-      fprintf(stderr, "drmHandleEvent() failed: %d\n", handle_event_ret);
+    bool flip_finished = false;
+    int page_flip_ret = drmModePageFlip(dri_fd, encoder->crtc_id, fb->fb_id,
+                                        DRM_MODE_PAGE_FLIP_EVENT,
+                                        &flip_finished);
+    if (0 != page_flip_ret) {
+      fprintf(stderr, "drmModePageFlip() failed: %d\n", page_flip_ret);
       exit(EXIT_FAILURE);
     }
-  }
+    while (!flip_finished) {
+      int handle_event_ret = drmHandleEvent(dri_fd, &evctx);
+      if (0 != handle_event_ret) {
+        fprintf(stderr, "drmHandleEvent() failed: %d\n", handle_event_ret);
+        exit(EXIT_FAILURE);
+      }
+    }
 
-  if (nullptr != current_bo)
     gbm_surface_release_buffer(native_window, current_bo);
+  }
 
   current_bo = new_bo;
 #endif

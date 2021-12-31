@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2011-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,7 +31,7 @@
 #define CACHE_HXX
 
 #include "Manual.hxx"
-#include "Compiler.h"
+#include "Cast.hxx"
 
 #include <boost/intrusive/list.hpp>
 #include <boost/intrusive/unordered_set.hpp>
@@ -65,6 +65,10 @@ class Cache {
 			:key(std::forward<K>(_key)),
 			 data(std::forward<U>(_data)) {}
 
+		static constexpr Pair &Cast(Data &data) {
+			return ContainerCast(data, &Pair::data);
+		}
+
 		template<typename U>
 		void ReplaceData(U &&_data) {
 			data = std::forward<U>(_data);
@@ -84,11 +88,20 @@ class Cache {
 		Manual<Pair> pair;
 
 	public:
-		const Key &GetKey() const {
+		static constexpr Item &Cast(Data &data) {
+			return ContainerCast(Manual<Pair>::Cast(Pair::Cast(data)),
+					     &Item::pair);
+		}
+
+		const Key &GetKey() const noexcept {
 			return pair->key;
 		}
 
-		const Data &GetData() const {
+		const Data &GetData() const noexcept {
+			return pair->data;
+		}
+
+		Data &GetData() noexcept {
 			return pair->data;
 		}
 
@@ -98,7 +111,7 @@ class Cache {
 				       std::forward<U>(value));
 		}
 
-		void Destruct() {
+		void Destruct() noexcept {
 			pair.Destruct();
 		}
 
@@ -117,21 +130,24 @@ class Cache {
 	struct ItemHash : Hash {
 		using Hash::operator();
 
-		gcc_pure
-		std::size_t operator()(const Item &a) const {
+		[[gnu::pure]]
+		std::size_t operator()(const Item &a) const noexcept {
 			return Hash::operator()(a.GetKey());
 		}
 	};
 
 	struct ItemEqual : Equal {
-		gcc_pure
-		bool operator()(const Item &a, const Item &b) const {
+		using Equal::operator();
+
+		[[gnu::pure]]
+		bool operator()(const Item &a, const Item &b) const noexcept {
 			return Equal::operator()(a.GetKey(), b.GetKey());
 		}
 
-		gcc_pure
-		bool operator()(const Key &a, const Item &b) const {
-			return Equal::operator()(a, b.GetKey());
+		template<typename A>
+		[[gnu::pure]]
+		bool operator()(A &&a, const Item &b) const noexcept {
+			return Equal::operator()(std::forward<A>(a), b.GetKey());
 		}
 	};
 
@@ -145,10 +161,10 @@ class Cache {
 
 	ItemList chronological_list;
 
-	typedef boost::intrusive::unordered_set<Item,
-						boost::intrusive::hash<ItemHash>,
-						boost::intrusive::equal<ItemEqual>,
-						boost::intrusive::constant_time_size<false>> KeyMap;
+	using KeyMap = boost::intrusive::unordered_set<Item,
+						       boost::intrusive::hash<ItemHash>,
+						       boost::intrusive::equal<ItemEqual>,
+						       boost::intrusive::constant_time_size<false>>;
 
 	std::array<typename KeyMap::bucket_type, table_size> buckets;
 
@@ -156,7 +172,8 @@ class Cache {
 
 	std::array<Item, max_size> buffer;
 
-	Item &GetOldest() {
+	[[gnu::pure]]
+	Item &GetOldest() noexcept {
 		assert(!chronological_list.empty());
 
 		return chronological_list.back();
@@ -166,7 +183,7 @@ class Cache {
 	 * Remove the oldest item from the cache (both from the #map and
 	 * from #chronological_list), but do not destruct it.
 	 */
-	Item &RemoveOldest() {
+	Item &RemoveOldest() noexcept {
 		Item &item = GetOldest();
 
 		map.erase(map.iterator_to(item));
@@ -178,7 +195,7 @@ class Cache {
 	/**
 	 * Allocate an item from #unallocated_list, but do not construct it.
 	 */
-	Item &Allocate() {
+	Item &Allocate() noexcept {
 		assert(!unallocated_list.empty());
 
 		Item &item = unallocated_list.front();
@@ -202,28 +219,39 @@ class Cache {
 	}
 
 public:
-	Cache()
+	using hasher = typename KeyMap::hasher;
+	using key_equal = typename KeyMap::key_equal;
+
+	Cache() noexcept
 		:map(typename KeyMap::bucket_traits(&buckets.front(), buckets.size())) {
 		for (auto &i : buffer)
 			unallocated_list.push_back(i);
 	}
 
-	~Cache() {
+	~Cache() noexcept {
 		Clear();
 	}
 
 	Cache(const Cache &) = delete;
 	Cache &operator=(const Cache &) = delete;
 
-	bool IsEmpty() const {
+	decltype(auto) hash_function() const noexcept {
+		return map.hash_function();
+	}
+
+	decltype(auto) key_eq() const noexcept {
+		return map.key_eq();
+	}
+
+	bool IsEmpty() const noexcept {
 		return chronological_list.empty();
 	}
 
-	bool IsFull() const {
+	bool IsFull() const noexcept {
 		return unallocated_list.empty();
 	}
 
-	void Clear() {
+	void Clear() noexcept {
 		map.clear();
 
 		chronological_list.clear_and_dispose([this](Item *item){
@@ -237,7 +265,8 @@ public:
 	 * item exists.
 	 */
 	template<typename K>
-	const Data *Get(K &&key) {
+	[[gnu::pure]]
+	Data *Get(K &&key) noexcept {
 		auto i = map.find(std::forward<K>(key),
 				  map.hash_function(), map.key_eq());
 		if (i == map.end())
@@ -260,12 +289,13 @@ public:
 	 * room for this one.
 	 */
 	template<typename K, typename U>
-	void Put(K &&key, U &&data) {
+	Data &Put(K &&key, U &&data) {
 		Item &item = Make(std::forward<K>(key), std::forward<U>(data));
 		chronological_list.push_front(item);
 		auto i = map.insert(item);
 		(void)i;
 		assert(i.second && "Key must not exist already");
+		return item.GetData();
 	}
 
 	/**
@@ -273,7 +303,7 @@ public:
 	 * already, then the item is replaced.
 	 */
 	template<typename K, typename U>
-	void PutOrReplace(K &&key, U &&data) {
+	Data &PutOrReplace(K &&key, U &&data) {
 		typename KeyMap::insert_commit_data icd;
 		auto i = map.insert_check(key,
 					  map.hash_function(), map.key_eq(),
@@ -282,19 +312,36 @@ public:
 			Item &item = Make(std::forward<K>(key), std::forward<U>(data));
 			chronological_list.push_front(item);
 			map.insert_commit(item, icd);
+			return item.GetData();
 		} else {
 			i.first->ReplaceData(std::forward<U>(data));
+			return i.first->GetData();
 		}
+	}
+
+	/**
+	 * Remove an item from the cache using a reference to the
+	 * value.
+	 */
+	void RemoveItem(Data &data) noexcept {
+		auto &item = Item::Cast(data);
+
+		map.erase(map.iterator_to(item));
+		chronological_list.erase(chronological_list.iterator_to(item));
+
+		item.Destruct();
+		unallocated_list.push_front(item);
 	}
 
 	/**
 	 * Remove an item from the cache.
 	 */
 	template<typename K>
-	void Remove(K &&key) {
+	void Remove(K &&key) noexcept {
 		auto i = map.find(std::forward<K>(key),
 				  map.hash_function(), map.key_eq());
-		assert(i != map.end());
+		if (i == map.end())
+			return;
 
 		Item &item = *i;
 
@@ -310,7 +357,7 @@ public:
 	 * the given predicate.
 	 */
 	template<typename P>
-	void RemoveIf(P &&p) {
+	void RemoveIf(P &&p) noexcept {
 		chronological_list.remove_and_dispose_if([&p](const Item &item){
 				return p(item.GetKey(), item.GetData());
 			},
@@ -319,6 +366,17 @@ public:
 				item->Destruct();
 				unallocated_list.push_front(*item);
 			});
+	}
+
+	/**
+	 * Iterates over all items, passing each key/value pair to a
+	 * given function.  The cache must not be modified from within
+	 * that function.
+	 */
+	template<typename F>
+	void ForEach(F &&f) const {
+		for (const auto &i : chronological_list)
+			f(i.GetKey(), i.GetData());
 	}
 };
 

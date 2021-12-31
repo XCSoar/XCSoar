@@ -23,18 +23,28 @@ Copyright_License {
 
 #include "BrokenDateTime.hpp"
 #include "Calendar.hxx"
+#include "Convert.hxx"
+
+#ifdef _WIN32
+#include "FileTime.hxx"
+#endif
 
 #include <cassert>
+
 #include <time.h>
 
 #ifndef HAVE_POSIX
-#include <windows.h>
+#include <sysinfoapi.h>
+#include <timezoneapi.h>
 #endif
 
 #ifdef HAVE_POSIX
 
+BrokenDateTime::BrokenDateTime(std::chrono::system_clock::time_point tp) noexcept
+  :BrokenDateTime(FromUnixTimeUTC(std::chrono::system_clock::to_time_t(tp))) {}
+
 static const BrokenDateTime
-ToBrokenDateTime(const struct tm &tm)
+ToBrokenDateTime(const struct tm &tm) noexcept
 {
   BrokenDateTime dt;
 
@@ -51,19 +61,15 @@ ToBrokenDateTime(const struct tm &tm)
 }
 
 BrokenDateTime
-BrokenDateTime::FromUnixTimeUTC(int64_t _t)
+BrokenDateTime::FromUnixTimeUTC(int64_t t) noexcept
 {
-  time_t t = (time_t)_t;
-  struct tm tm;
-  gmtime_r(&t, &tm);
-
-  return ToBrokenDateTime(tm);
+  return ToBrokenDateTime(GmTime(std::chrono::system_clock::from_time_t(t)));
 }
 
 #else /* !HAVE_POSIX */
 
 static const BrokenDateTime
-ToBrokenDateTime(const SYSTEMTIME st)
+ToBrokenDateTime(const SYSTEMTIME st) noexcept
 {
   BrokenDateTime dt;
 
@@ -80,15 +86,18 @@ ToBrokenDateTime(const SYSTEMTIME st)
 }
 
 static const BrokenDateTime
-ToBrokenDateTime(const FILETIME &ft)
+ToBrokenDateTime(const FILETIME &ft) noexcept
 {
   SYSTEMTIME st;
   FileTimeToSystemTime(&ft, &st);
   return ToBrokenDateTime(st);
 }
 
+BrokenDateTime::BrokenDateTime(std::chrono::system_clock::time_point tp) noexcept
+  :BrokenDateTime(ToBrokenDateTime(ChronoToFileTime(tp))) {}
+
 static const SYSTEMTIME
-ToSystemTime(const BrokenDateTime &dt)
+ToSystemTime(const BrokenDateTime &dt) noexcept
 {
   SYSTEMTIME st;
 
@@ -106,7 +115,7 @@ ToSystemTime(const BrokenDateTime &dt)
 }
 
 static const FILETIME
-ToFileTime(const BrokenDateTime &dt)
+ToFileTime(const BrokenDateTime &dt) noexcept
 {
   SYSTEMTIME st = ToSystemTime(dt);
   FILETIME ft;
@@ -114,40 +123,16 @@ ToFileTime(const BrokenDateTime &dt)
   return ft;
 }
 
-static time_t
-timegm (struct tm *tm)
-{
-  static constexpr unsigned ndays[] = {
-    31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-  };
-
-  time_t res = 0;
-
-  for (int year = 70; year < tm->tm_year; ++year)
-    res += IsLeapYear(year) ? 366 : 365;
-
-  for (int month = 0; month < tm->tm_mon; ++month)
-    res += ndays[month];
-
-  if (tm->tm_mon > 1 && IsLeapYear(tm->tm_year + 1900))
-    res++;
-
-  res += tm->tm_mday - 1;
-  res *= 24;
-  res += tm->tm_hour;
-  res *= 60;
-  res += tm->tm_min;
-  res *= 60;
-  res += tm->tm_sec;
-  return res;
-}
 #endif
 
-int64_t
-BrokenDateTime::ToUnixTimeUTC() const
+std::chrono::system_clock::time_point
+BrokenDateTime::ToTimePoint() const noexcept
 {
   assert(IsPlausible());
 
+#ifdef _WIN32
+  return FileTimeToChrono(ToFileTime(*this));
+#else
   struct tm tm;
   tm.tm_year = year - 1900;
   tm.tm_mon = month - 1;
@@ -156,61 +141,25 @@ BrokenDateTime::ToUnixTimeUTC() const
   tm.tm_min = minute;
   tm.tm_sec = second;
   tm.tm_isdst = 0;
-  return ::timegm(&tm);
+  return TimeGm(tm);
+#endif
 }
 
 const BrokenDateTime
-BrokenDateTime::NowUTC()
+BrokenDateTime::NowUTC() noexcept
 {
-#ifdef HAVE_POSIX
-  time_t t = time(NULL);
-  return FromUnixTimeUTC(t);
-#else /* !HAVE_POSIX */
-  SYSTEMTIME st;
-  GetSystemTime(&st);
-
-  return ToBrokenDateTime(st);
-#endif /* !HAVE_POSIX */
+  return BrokenDateTime{std::chrono::system_clock::now()};
 }
 
 const BrokenDateTime
-BrokenDateTime::NowLocal()
+BrokenDateTime::NowLocal() noexcept
 {
 #ifdef HAVE_POSIX
-  time_t t = time(NULL);
-  struct tm tm;
-  localtime_r(&t, &tm);
-
-  return ToBrokenDateTime(tm);
+  return ToBrokenDateTime(LocalTime(std::chrono::system_clock::now()));
 #else /* !HAVE_POSIX */
   SYSTEMTIME st;
   GetLocalTime(&st);
 
   return ToBrokenDateTime(st);
 #endif /* !HAVE_POSIX */
-}
-
-BrokenDateTime
-BrokenDateTime::operator+(int seconds) const
-{
-  assert(IsPlausible());
-
-#ifdef HAVE_POSIX
-  return FromUnixTimeUTC(ToUnixTimeUTC() + seconds);
-#else
-  FILETIME ft = ToFileTime(*this);
-  ULARGE_INTEGER uli;
-  uli.u.HighPart = ft.dwHighDateTime;
-  uli.u.LowPart = ft.dwLowDateTime;
-  uli.QuadPart += (LONGLONG)seconds * 10000000;
-  ft.dwHighDateTime = uli.u.HighPart;
-  ft.dwLowDateTime = uli.u.LowPart;
-  return ToBrokenDateTime(ft);
-#endif
-}
-
-int
-BrokenDateTime::operator-(const BrokenDateTime &other) const
-{
-  return ToUnixTimeUTC() - other.ToUnixTimeUTC();
 }

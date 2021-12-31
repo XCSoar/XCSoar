@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "lua/Basic.hpp"
 #include "lua/Log.hpp"
+#include "lua/Http.hpp"
+#include "lua/Geo.hpp"
 #include "lua/RunFile.hxx"
 #include "lua/Ptr.hpp"
 #include "system/Args.hpp"
@@ -49,6 +51,8 @@ try {
 
   Lua::StatePtr state(Lua::NewBasicState());
   Lua::InitLog(state.get());
+  Lua::InitHttp(state.get());
+  Lua::InitGeo(state.get());
 
   lua_register(state.get(), "alert", l_alert);
 

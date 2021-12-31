@@ -52,7 +52,7 @@ LoadValue(WndProperty &e, double value, UnitGroup unit_group) noexcept
   DataFieldFloat &df = *(DataFieldFloat *)e.GetDataField();
   assert(df.GetType() == DataField::Type::REAL);
   df.SetUnits(Units::GetUnitName(unit));
-  df.Set(Units::ToUserUnit(value, unit));
+  df.SetValue(Units::ToUserUnit(value, unit));
 
   e.RefreshDisplay();
 }
@@ -68,7 +68,7 @@ LoadPoint(PolarShapeEditWidget::PointEditor &pe,
 static double
 GetValue(WndProperty &e) noexcept
 {
-  return ((DataFieldFloat *)e.GetDataField())->GetAsFixed();
+  return ((DataFieldFloat *)e.GetDataField())->GetValue();
 }
 
 static bool

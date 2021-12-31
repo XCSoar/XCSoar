@@ -24,8 +24,10 @@ Copyright_License {
 #include "BlueFlyDialogs.hpp"
 #include "Device/Driver/BlueFly/Internal.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
+#include "Operation/Cancelled.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "UIGlobals.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -86,7 +88,14 @@ public:
     changed |= SaveValue(VOLUME, params.volume);
     changed |= SaveValue(OUTPUT_MODE, params.output_mode);
 
-    device.WriteDeviceSettings(params, env);
+    try {
+      device.WriteDeviceSettings(params, env);
+    } catch (OperationCancelled) {
+      return false;
+    } catch (...) {
+      ShowError(std::current_exception(), _T("BlueFly Vario"));
+      return false;
+    }
 
     return true;
   }

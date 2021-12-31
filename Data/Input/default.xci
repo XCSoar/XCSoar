@@ -300,6 +300,12 @@ event=Analysis
 
 mode=default
 type=gesture
+data=LDR
+event=Checklist
+
+
+mode=default
+type=gesture
 data=URDL
 event=Pan on
 
@@ -419,11 +425,21 @@ location=6
 
 mode=Nav2
 type=key
+data=8
+event=Mode default
+event=StatusMessage Pilot event announced
+event=Logger note PEV
+event=PilotEvent
+label=Pilot\nEvent
+location=7
+
+mode=Nav2
+type=key
 data=9
 event=Setup Target
 event=Mode default
 label=Target$(CheckTask)$(CheckTaskResumed)
-location=7
+location=8
 
 # -------------
 # mode=Display1

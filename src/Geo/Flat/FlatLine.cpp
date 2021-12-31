@@ -38,9 +38,8 @@ FlatLine::Rotate(const Angle theta)
   b.Rotate(theta);
 }
 
-bool
-FlatLine::IntersectOriginCircle(const double r,
-                                FlatPoint &i1, FlatPoint &i2) const
+std::optional<std::pair<FlatPoint, FlatPoint>>
+FlatLine::IntersectOriginCircle(const double r) const noexcept
 {
   // http://mathworld.wolfram.com/Circle-LineIntersection.html
   const auto d = GetVector();
@@ -50,28 +49,33 @@ FlatLine::IntersectOriginCircle(const double r,
   auto det = Square(r) * dr - Square(D);
   if (det < 0)
     // no solution
-    return false;
+    return std::nullopt;
 
   det = sqrt(det);
   const auto inv_dr = 1. / dr;
   const auto sign_dx = (d.y < 0) ? -d.x : d.x;
-  i1.x = (D * d.y + sign_dx * det) * inv_dr;
-  i2.x = (D * d.y - sign_dx * det) * inv_dr;
-  i1.y = (-D * d.x + fabs(d.y) * det) * inv_dr;
-  i2.y = (-D * d.x - fabs(d.y) * det) * inv_dr;
-  return true;
+  return std::pair<FlatPoint, FlatPoint>{
+    {
+      (D * d.y + sign_dx * det) * inv_dr,
+      (-D * d.x + fabs(d.y) * det) * inv_dr,
+    },
+    {
+      (D * d.y - sign_dx * det) * inv_dr,
+      (-D * d.x - fabs(d.y) * det) * inv_dr,
+    },
+  };
 }
 
-bool
-FlatLine::IntersectCircle(const double r, const FlatPoint c,
-                          FlatPoint &i1, FlatPoint &i2) const
+std::optional<std::pair<FlatPoint, FlatPoint>>
+FlatLine::IntersectCircle(const double r, const FlatPoint c) const noexcept
 {
   const FlatLine that = *this - c;
-  if (that.IntersectOriginCircle(r, i1, i2)) {
-    i1 = i1 + c;
-    i2 = i2 + c;
-    return true;
+
+  auto result = that.IntersectOriginCircle(r);
+  if (result) {
+    result->first += c;
+    result->second += c;
   }
 
-  return false;
+  return result;
 }

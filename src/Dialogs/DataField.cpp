@@ -26,10 +26,20 @@ Copyright_License {
 #include "Form/DataField/GeoPoint.hpp"
 #include "Form/DataField/RoughTime.hpp"
 #include "Form/DataField/Prefix.hpp"
+#include "Form/DataField/Date.hpp"
+#include "Form/DataField/Integer.hpp"
 #include "ComboPicker.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/TimeEntry.hpp"
 #include "Dialogs/GeoPointEntry.hpp"
+#include "Dialogs/DateEntry.hpp"
+#include "Dialogs/NumberEntry.hpp"
+
+#ifdef ANDROID
+#include "java/Global.hxx"
+#include "Android/Main.hpp"
+#include "Android/TextEntryDialog.hpp"
+#endif
 
 bool
 EditDataFieldDialog(const TCHAR *caption, DataField &df,
@@ -57,6 +67,37 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
 
     gdf.ModifyValue(value);
     return true;
+  } else if (df.GetType() == DataField::Type::DATE) {
+    auto &dfd = static_cast<DataFieldDate &>(df);
+    BrokenDate date = dfd.GetValue();
+    if (!DateEntryDialog(caption, date, true))
+      return false;
+
+    dfd.SetValue(date);
+    return true;
+  } else if (df.GetType() == DataField::Type::INTEGER) {
+    auto &dfi = static_cast<DataFieldInteger &>(df);
+
+    // signed or unsigned depends on min if value >= 0 or < 0...
+    if (dfi.GetMin() >= 0) {
+      unsigned value = dfi.GetValue(); // min is >= 0!
+      if (!NumberEntryDialog(caption, value,
+          log10(dfi.GetMax()) + 1))
+        return false;
+
+      dfi.ModifyValue(value); // SetAsInteger with unsigned!
+      return true;
+    } else {
+      /* with signed range has to avoid the length of negative AND
+      * positiv numbers */
+      int value = dfi.GetValue();  // min is < 0!
+      unsigned max = std::max(abs(dfi.GetMax()), abs(dfi.GetMin()));
+      if (!NumberEntryDialog(caption, value, log10(max) + 1))
+        return false;
+
+      dfi.ModifyValue(value);  // SetAsInteger with signed!
+      return true;
+    }
   } else {
     const TCHAR *value = df.GetAsString();
     if (value == NULL)
@@ -67,6 +108,24 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
     PrefixDataField::AllowedCharactersFunction acf;
     if (df.GetType() == DataField::Type::PREFIX)
       acf = ((PrefixDataField &)df).GetAllowedCharactersFunction();
+
+#ifdef ANDROID
+    if (!acf) {
+      /* not using AndroidTextEntryDialog::Type::PASSWORD for
+         PasswordDataField because AndroidTextEntryDialog doesn't have
+         an option (yet) to reveal the password */
+      auto type = AndroidTextEntryDialog::Type::TEXT;
+
+      AndroidTextEntryDialog dlg;
+      auto new_value = dlg.ShowModal(Java::GetEnv(), *context,
+                                     caption, value, type);
+      if (!new_value)
+        return false;
+
+      df.SetAsString(new_value->c_str());
+      return true;
+    }
+#endif
 
     if (!TextEntryDialog(buffer, caption, acf))
       return false;

@@ -27,6 +27,7 @@ Copyright_License {
 #include "WindEKF.hpp"
 #include "NMEA/Validity.hpp"
 #include "Geo/SpeedVector.hpp"
+#include "time/Stamp.hpp"
 
 struct NMEAInfo;
 struct DerivedInfo;
@@ -36,7 +37,7 @@ class WindEKFGlue
   /**
    * time to not add points after flight condition is false
    */
-  static constexpr unsigned BLACKOUT_TIME = 3;
+  static constexpr FloatDuration BLACKOUT_TIME = std::chrono::seconds{3};
 
   WindEKF ekf;
 
@@ -61,7 +62,7 @@ class WindEKFGlue
    */
   unsigned i;
 
-  unsigned time_blackout;
+  TimeStamp time_blackout;
 
 public:
   struct Result
@@ -79,14 +80,14 @@ public:
 
 private:
   void ResetBlackout() {
-    time_blackout = 0;
+    time_blackout = TimeStamp::Undefined();
   }
 
-  bool InBlackout(const unsigned time) const {
+  bool InBlackout(const TimeStamp time) const noexcept {
     return time < time_blackout;
   }
 
-  void SetBlackout(const unsigned time) {
+  void SetBlackout(const TimeStamp time) {
     time_blackout = time + BLACKOUT_TIME;
   }
 };

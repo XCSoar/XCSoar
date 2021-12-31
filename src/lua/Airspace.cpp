@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Airspace.hpp"
+#include "MetaTable.hxx"
 #include "Util.hxx"
 #include "util/StringAPI.hxx"
 #include "Interface.hpp"
@@ -75,9 +76,7 @@ Lua::InitAirspace(lua_State *L)
 
   lua_newtable(L);
 
-  lua_newtable(L);
-  SetField(L, -2, "__index", l_airspace_index);
-  lua_setmetatable(L, -2);
+  MakeIndexMetaTableFor(L, RelativeStackIndex{-1}, l_airspace_index);
 
   lua_setfield(L, -2, "airspace");
 

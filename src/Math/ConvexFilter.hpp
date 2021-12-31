@@ -30,6 +30,7 @@ Copyright_License {
 
 #include "Math/LeastSquares.hpp"
 
+#include <cassert>
 #include <type_traits>
 
 class ConvexFilter: public LeastSquares
@@ -49,7 +50,11 @@ public:
     UpdateConvex(x, y, -1);
   }
 
-  double GetLastY() const noexcept;
+  double GetLastY() const noexcept {
+    assert(!IsEmpty());
+
+    return GetSlots()[GetCount() - 1].y;
+  }
 
 private:
   void UpdateConvex(double x, double y, int csign) noexcept;

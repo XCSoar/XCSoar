@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2015-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,6 +33,8 @@
 #include "CharUtil.hxx"
 #include "NumberParser.hpp"
 #include "StringStrip.hxx"
+
+#include <optional>
 
 /**
  * Parse a string incrementally.
@@ -76,49 +78,47 @@ public:
 		p = ::StripLeft(p);
 	}
 
-	bool ReadUnsigned(unsigned &value_r, int base=10) {
+	std::optional<unsigned> ReadUnsigned(int base=10) noexcept {
 		pointer endptr;
 		const auto value = ::ParseUnsigned(p, &endptr, base);
 		if (endptr == p)
-			return false;
+			return std::nullopt;
 
-		value_r = value;
 		p = endptr;
-		return true;
+		return value;
 	}
 
-	bool ReadDouble(double &value_r) {
+	std::optional<double> ReadDouble() noexcept {
 		pointer endptr;
 		const auto value = ::ParseDouble(p, &endptr);
 		if (endptr == p)
-			return false;
+			return std::nullopt;
 
-		value_r = value;
 		p = endptr;
-		return true;
+		return value;
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool MatchAll(const_pointer value) {
 		return StringIsEqual(p, value);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool MatchAllIgnoreCase(const_pointer value) {
 		return StringIsEqualIgnoreCase(p, value);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool Match(value_type value) {
 		return front() == value;
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool Match(const_pointer value, size_t size) {
 		return StringIsEqual(p, value, size);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	bool MatchIgnoreCase(const_pointer value, size_t size) {
 		return StringIsEqualIgnoreCase(p, value, size);
 	}

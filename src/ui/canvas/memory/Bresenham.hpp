@@ -24,120 +24,125 @@ Copyright_License {
 #ifndef XCSOAR_BRESENHAM_HPP
 #define XCSOAR_BRESENHAM_HPP
 
+#include "Math/Point2D.hpp"
+
+#include <utility>
+
 /**
  * Implementation of the Bresenham line drawing algorithm.  Based on
  * code from SDL_gfx.
  */
 class BresenhamIterator {
-  int dx, dy, sx, sy, error;
+  IntPoint2D d, s;
+  int error;
   bool swapdir;
-  int x_e, y_e;
+  IntPoint2D e;
 
 public:
-  int x, y;
+  IntPoint2D p;
   unsigned count;
 
   BresenhamIterator() noexcept = default;
 
-  BresenhamIterator(int x1, int y1, int x2, int y2) noexcept
-    :dx(x2 - x1), dy(y2 - y1), x_e(x2), y_e(y2), x(x1), y(y1) {
-    if (dx != 0) {
-      if (dx < 0) {
-        dx = -dx;
-        sx = -1;
+  constexpr BresenhamIterator(IntPoint2D p1, IntPoint2D p2) noexcept
+    :d(p2 - p1), e(p2), p(p1) {
+    if (d.x != 0) {
+      if (d.x < 0) {
+        d.x = -d.x;
+        s.x = -1;
       } else {
-        sx = 1;
+        s.x = 1;
       }
     } else {
-      sx = 0;
+      s.x = 0;
     }
 
-    if (dy != 0) {
-      if (dy < 0) {
-        dy = -dy;
-        sy = -1;
+    if (d.y != 0) {
+      if (d.y < 0) {
+        d.y = -d.y;
+        s.y = -1;
       } else {
-        sy = 1;
+        s.y = 1;
       }
     } else {
-      sy = 0;
+      s.y = 0;
     }
 
-    if (dy > dx) {
-      std::swap(dx, dy);
+    if (d.y > d.x) {
+      std::swap(d.x, d.y);
       swapdir = true;
     } else {
       swapdir = false;
     }
 
-    count = (dx<0) ? 0 : (unsigned int)dx;
-    dy <<= 1;
-    error = dy - dx;
-    dx <<= 1;
+    count = std::max(0, d.x);
+    d.y <<= 1;
+    error = d.y - d.x;
+    d.x <<= 1;
   }
 
-  bool Next() noexcept {
+  constexpr bool Next() noexcept {
     /* last point check */
     if (count == 0)
       return false;
 
     if (swapdir) {
-      y += sy;
+      p.y += s.y;
       while (error >= 0) {
-        x+= sx;
-        error -= dx;
+        p.x += s.x;
+        error -= d.x;
       }
     } else {
-      x += sx;
+      p.x += s.x;
       while (error >= 0) {
-        y+= sy;
-        error -= dx;
+        p.y += s.y;
+        error -= d.x;
       }
     }
 
-    error += dy;
+    error += d.y;
     count--;
 
     return count > 0;
   }
 
-  bool AdvanceTo(const int y_t) noexcept {
+  constexpr bool AdvanceTo(const int y_t) noexcept {
     if (count == 0)
       return false; // past end point
 
-    if (y == y_t) // newly visible, no need to advance
+    if (p.y == y_t) // newly visible, no need to advance
       return true;
 
-    if (y > y_t)
+    if (p.y > y_t)
       return false; // not yet visible
 
     if (swapdir) {
 
-      while ((y< y_t) && count) {
-        y += sy;
+      while (p.y < y_t && count) {
+        p.y += s.y;
         while (error >= 0) {
-          x+= sx;
-          error -= dx;
+          p.x += s.x;
+          error -= d.x;
         }
-        error += dy;
+        error += d.y;
         count--;
       }
     } else {
 
-      while ((y< y_t) && count) {
-        x += sx;
+      while (p.y < y_t && count) {
+        p.x += s.x;
         while (error >= 0) {
-          y+= sy;
-          error -= dx;
+          p.y += s.y;
+          error -= d.x;
         }
-        error += dy;
+        error += d.y;
         count--;
       }
 
     }
 
-    if (y==y_e) {
-      x= x_e;
+    if (p.y == e.y) {
+      p.x = e.x;
       count = 0;
     }
 
@@ -145,26 +150,30 @@ public:
     return count == 0;
   }
 
-  static bool CompareHorizontal(const BresenhamIterator &i1,
-                                const BresenhamIterator &i2) noexcept {
+  static constexpr bool
+  CompareHorizontal(const BresenhamIterator &i1,
+                    const BresenhamIterator &i2) noexcept
+  {
     if ((i2.count>0) && (i1.count==0))
       return true; // shift finished lines to left
     if ((i1.count>0) && (i2.count==0))
       return false; // shift finished lines to left
 
-    if (i1.x < i2.x)
+    if (i1.p.x < i2.p.x)
       return true;
-    if (i2.x < i1.x)
+    if (i2.p.x < i1.p.x)
       return false;
 
     return false; // TODO slope difference
   }
 
-  static bool CompareVerticalHorizontal(const BresenhamIterator &i1,
-                                        const BresenhamIterator &i2) noexcept {
-    if (i1.y < i2.y)
+  static constexpr bool
+  CompareVerticalHorizontal(const BresenhamIterator &i1,
+                            const BresenhamIterator &i2) noexcept
+  {
+    if (i1.p.y < i2.p.y)
       return true;
-    if (i1.y > i2.y)
+    if (i1.p.y > i2.p.y)
       return false;
     return CompareHorizontal(i1, i2);
   }

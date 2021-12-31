@@ -21,8 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_OS_SYSTEMLOAD_HPP
+#pragma once
 
-unsigned SystemLoadCPU();
+#include "util/OptionalPercent.hxx"
 
-#endif
+[[gnu::pure]]
+OptionalPercent
+SystemLoadCPU() noexcept;

@@ -57,7 +57,7 @@ Java_org_xcsoar_NativePortListener_portError(JNIEnv *env, jobject obj,
     return;
 
   PortListener &listener = *(PortListener *)(void *)ptr;
-  listener.PortError(Java::String::ToString(env, msg).c_str());
+  listener.PortError(Java::String::GetUTFChars(env, msg).c_str());
 }
 
 void

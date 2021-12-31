@@ -27,6 +27,7 @@ Copyright_License {
 #include "Geo/SpeedVector.hpp"
 #include "util/StaticArray.hxx"
 #include "NMEA/Validity.hpp"
+#include "time/Stamp.hpp"
 
 struct MoreData;
 struct CirclingInfo;
@@ -42,7 +43,7 @@ class CirclingWind
    */
   struct Sample
   {
-    double time;
+    TimeStamp time;
     SpeedVector vector;
   };
 

@@ -147,6 +147,10 @@ public:
     edit_callback = _ec;
   }
 
+  const TCHAR *GetText() const noexcept {
+    return value.c_str();
+  }
+
   /**
    * Sets the Editors text to the given Value
    * @param Value The new text of the Editor Control

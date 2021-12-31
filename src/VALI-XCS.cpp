@@ -35,10 +35,6 @@
 #include <string.h>
 #include <tchar.h>
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
 enum STATUS_t {
   eValidationPassed,
   eValidationFileNotFound,

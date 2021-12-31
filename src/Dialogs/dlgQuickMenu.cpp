@@ -52,7 +52,7 @@ class QuickMenuButtonRenderer final : public ButtonRenderer {
 
 public:
   explicit QuickMenuButtonRenderer(const DialogLook &_look,
-                                   const TCHAR *_caption)
+                                   const TCHAR *_caption) noexcept
     :look(_look), caption(_caption) {
     text_renderer.SetCenter();
     text_renderer.SetVCenter();
@@ -60,14 +60,15 @@ public:
   }
 
   gcc_pure
-  unsigned GetMinimumButtonWidth() const override;
+  unsigned GetMinimumButtonWidth() const noexcept override;
 
   void DrawButton(Canvas &canvas, const PixelRect &rc,
-                  bool enabled, bool focused, bool pressed) const override;
+                  bool enabled, bool focused,
+                  bool pressed) const noexcept override;
 };
 
 unsigned
-QuickMenuButtonRenderer::GetMinimumButtonWidth() const
+QuickMenuButtonRenderer::GetMinimumButtonWidth() const noexcept
 {
   return 2 * Layout::GetTextPadding() + look.button.font->TextSize(caption).width;
 }
@@ -75,7 +76,7 @@ QuickMenuButtonRenderer::GetMinimumButtonWidth() const
 void
 QuickMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
                                     bool enabled, bool focused,
-                                    bool pressed) const
+                                    bool pressed) const noexcept
 {
   // Draw focus rectangle
   if (pressed) {
@@ -107,14 +108,14 @@ class QuickMenu final : public WindowWidget {
 public:
   unsigned clicked_event;
 
-  QuickMenu(WndForm &_dialog, const Menu &_menu)
+  QuickMenu(WndForm &_dialog, const Menu &_menu) noexcept
     :dialog(_dialog), menu(_menu) {}
 
   auto &GetWindow() noexcept {
     return (GridView &)WindowWidget::GetWindow();
   }
 
-  void UpdateCaption();
+  void UpdateCaption() noexcept;
 
 protected:
   /* virtual methods from class Widget */
@@ -190,7 +191,7 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 }
 
 void
-QuickMenu::UpdateCaption()
+QuickMenu::UpdateCaption() noexcept
 {
   auto &grid_view = GetWindow();
   StaticString<32> buffer;
@@ -279,7 +280,7 @@ ShowQuickMenu(UI::SingleWindow &parent, const Menu &menu) noexcept
 }
 
 void
-dlgQuickMenuShowModal(UI::SingleWindow &parent)
+dlgQuickMenuShowModal(UI::SingleWindow &parent) noexcept
 {
   const auto *menu = InputEvents::GetMenu(_T("RemoteStick"));
   if (menu == nullptr)

@@ -115,27 +115,27 @@ $(eval $(call convert-to-bmp-white,$(BMP_PROGRESS_BORDER),%.bmp,%.png))
 ####### launcher graphics
 
 SVG_LAUNCH = Data/graphics/launcher.svg Data/graphics/launcher_red.svg
-PNG_LAUNCH_224 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_224.png,$(SVG_LAUNCH))
-BMP_LAUNCH_FLY_224 = $(PNG_LAUNCH_224:.png=_1.bmp)
-BMP_LAUNCH_SIM_224 = $(PNG_LAUNCH_224:.png=_2.bmp)
-BMP_LAUNCH_DLL_FLY_224 = $(PNG_LAUNCH_224:.png=_dll_1.bmp)
-BMP_LAUNCH_DLL_SIM_224 = $(PNG_LAUNCH_224:.png=_dll_2.bmp)
+PNG_LAUNCH_640 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_640.png,$(SVG_LAUNCH))
+BMP_LAUNCH_FLY_640 = $(PNG_LAUNCH_640:.png=_1.bmp)
+BMP_LAUNCH_SIM_640 = $(PNG_LAUNCH_640:.png=_2.bmp)
+BMP_LAUNCH_DLL_FLY_640 = $(PNG_LAUNCH_640:.png=_dll_1.bmp)
+BMP_LAUNCH_DLL_SIM_640 = $(PNG_LAUNCH_640:.png=_dll_2.bmp)
 
-BMP_LAUNCH_ALL = $(BMP_LAUNCH_FLY_224) $(BMP_LAUNCH_SIM_224)
+BMP_LAUNCH_ALL = $(BMP_LAUNCH_FLY_640) $(BMP_LAUNCH_SIM_640)
 ifeq ($(USE_WIN32_RESOURCES),y)
-BMP_LAUNCH_ALL += $(BMP_LAUNCH_DLL_FLY_224) $(BMP_LAUNCH_DLL_SIM_224)
+BMP_LAUNCH_ALL += $(BMP_LAUNCH_DLL_FLY_640) $(BMP_LAUNCH_DLL_SIM_640)
 endif
 
 # render from SVG to PNG
-$(eval $(call rsvg-convert,$(PNG_LAUNCH_224),$(DATA)/graphics/%_224.png,Data/graphics/%.svg,--width=224))
+$(eval $(call rsvg-convert,$(PNG_LAUNCH_640),$(DATA)/graphics/%_640.png,Data/graphics/%.svg,--width=640))
 
 # split into two uncompressed 8-bit BMPs (single 'convert' operation)
-$(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_FLY_224),%_1.bmp,%.png,-background white))
-$(BMP_LAUNCH_SIM_224): $(BMP_LAUNCH_FLY_224)
+$(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_FLY_640),%_1.bmp,%.png,-background white))
+$(BMP_LAUNCH_SIM_640): $(BMP_LAUNCH_FLY_640)
 
 # split into two uncompressed 8-bit BMPs (single 'convert' operation)
-$(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_DLL_FLY_224),%_dll_1.bmp,%.png,-background blue))
-$(BMP_LAUNCH_DLL_SIM_224): $(BMP_LAUNCH_DLL_FLY_224)
+$(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_DLL_FLY_640),%_dll_1.bmp,%.png,-background blue))
+$(BMP_LAUNCH_DLL_SIM_640): $(BMP_LAUNCH_DLL_FLY_640)
 
 # back to PNG
 
@@ -160,18 +160,7 @@ endif
 
 #######
 
-DIALOG_FILES = $(wildcard Data/Dialogs/*.xml)
-DIALOG_FILES += $(wildcard Data/Dialogs/Infobox/*.xml)
-DIALOG_FILES += $(wildcard Data/Dialogs/Configuration/*.xml)
-
-DIALOG_COMPRESSED = $(patsubst Data/Dialogs/%.xml,$(DATA)/dialogs/%.xml.gz,$(DIALOG_FILES))
-$(DIALOG_COMPRESSED): $(DATA)/dialogs/%.xml.gz: Data/Dialogs/%.xml \
-	| $(DATA)/dialogs/Configuration/dirstamp $(DATA)/dialogs/Infobox/dirstamp
-	@$(NQ)echo "  GZIP    $@"
-	$(Q)gzip --best <$< >$@.tmp
-	$(Q)mv $@.tmp $@
-
-TEXT_FILES = AUTHORS COPYING
+TEXT_FILES = AUTHORS COPYING NEWS.txt
 
 TEXT_COMPRESSED = $(patsubst %,$(DATA)/%.gz,$(TEXT_FILES))
 $(TEXT_COMPRESSED): $(DATA)/%.gz: % | $(DATA)/dirstamp
@@ -179,7 +168,7 @@ $(TEXT_COMPRESSED): $(DATA)/%.gz: % | $(DATA)/dirstamp
 	$(Q)gzip --best <$< >$@.tmp
 	$(Q)mv $@.tmp $@
 
-RESOURCE_FILES = $(DIALOG_COMPRESSED) $(TEXT_COMPRESSED)
+RESOURCE_FILES = $(TEXT_COMPRESSED)
 
 ifeq ($(TARGET),ANDROID)
 RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))

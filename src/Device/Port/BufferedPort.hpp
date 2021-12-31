@@ -50,30 +50,24 @@ class BufferedPort : public Port, protected DataHandler {
    */
   Cond cond;
 
-  StaticFifoBuffer<uint8_t, 16384> buffer;
+  StaticFifoBuffer<std::byte, 16384> buffer;
 
-  bool running;
-
-  bool closing;
+  bool running = false;
 
 public:
-  BufferedPort(PortListener *_listener, DataHandler &_handler);
-
-protected:
-  void BeginClose();
-  void EndClose();
+  using Port::Port;
 
 public:
   /* virtual methods from class Port */
-  virtual void Flush() override;
-  virtual int Read(void *Buffer, size_t Size) override;
-  virtual WaitResult WaitRead(std::chrono::steady_clock::duration timeout) override;
-  virtual bool StopRxThread() override;
-  virtual bool StartRxThread() override;
+  void Flush() override;
+  std::size_t Read(void *Buffer, std::size_t Size) override;
+  void WaitRead(std::chrono::steady_clock::duration timeout) override;
+  bool StopRxThread() override;
+  bool StartRxThread() override;
 
 protected:
   /* virtual methods from class DataHandler */
-  bool DataReceived(const void *data, size_t length) noexcept override;
+  bool DataReceived(std::span<const std::byte> s) noexcept override;
 };
 
 #endif

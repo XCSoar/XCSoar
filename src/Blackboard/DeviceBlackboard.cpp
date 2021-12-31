@@ -41,7 +41,7 @@ DeviceBlackboard::DeviceBlackboard()
   // Set GPS assumed time to system time
   gps_info.UpdateClock();
   gps_info.date_time_utc = BrokenDateTime::NowUTC();
-  gps_info.time = gps_info.date_time_utc.GetSecondOfDay();
+  gps_info.time = TimeStamp{gps_info.date_time_utc.DurationSinceMidnight()};
 
   std::fill_n(per_device_data, unsigned(NUMDEV), gps_info);
 

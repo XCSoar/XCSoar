@@ -19,9 +19,14 @@
 #
 #   ENABLE_SDL  If set to "y", the UI is drawn with libSDL.
 #
+#   ENABLE_MESA_KMS If set to "y", the program uses KMS to switch to graphics mode.
+#               Use this option when the program runs on a text-mode system
+#               without graphics and window system like X11 or Wayland.
+#               Default for Rasperry PI 4, optional for Cubieboard.
+#
 #   OPENGL      "y" means render with OpenGL.
 #
-#   GLES        "y" means render with OpenGL/ES.
+#   GLES2       "y" means render with OpenGL/ES 2.0.
 #
 #   GREYSCALE   "y" means render 8-bit greyscale internally
 #
@@ -54,6 +59,8 @@
 #               libc++ svn/git working directory.
 #
 #   IWYU        "y" to run "include-what-you-use" on all sources
+#
+#   USE_CCACHE  "y" to build with ccache
 #
 
 .DEFAULT_GOAL := all
@@ -94,6 +101,7 @@ endif
 include $(topdir)/build/flags.mk
 include $(topdir)/build/charset.mk
 include $(topdir)/build/warnings.mk
+include $(topdir)/build/host.mk
 include $(topdir)/build/compile.mk
 include $(topdir)/build/link.mk
 include $(topdir)/build/resource.mk
@@ -109,10 +117,14 @@ include $(topdir)/build/osx.mk
 include $(topdir)/build/generate.mk
 include $(topdir)/build/doxygen.mk
 include $(topdir)/build/manual.mk
+include $(topdir)/build/sphinx.mk
 
 include $(topdir)/build/libboost.mk
 INCLUDES += $(BOOST_CPPFLAGS)
 
+include $(topdir)/build/libjson.mk
+
+ifeq ($(FAT_BINARY),n)
 # Create libraries for zzip, jasper and compatibility stuff
 include $(topdir)/build/libresource.mk
 include $(topdir)/build/liblook.mk
@@ -120,11 +132,15 @@ include $(topdir)/build/libstdcxx.mk
 include $(topdir)/build/libutil.mk
 include $(topdir)/build/libmath.mk
 include $(topdir)/build/libgeo.mk
+include $(topdir)/build/libnmea.mk
+include $(topdir)/build/libcomputer.mk
 include $(topdir)/build/libos.mk
 include $(topdir)/build/libtime.mk
 include $(topdir)/build/libprofile.mk
+include $(topdir)/build/liboperation.mk
 include $(topdir)/build/libnet.mk
 include $(topdir)/build/libhttp.mk
+include $(topdir)/build/libcoroutines.mk
 include $(topdir)/build/sdl.mk
 include $(topdir)/build/alsa.mk
 include $(topdir)/build/zlib.mk
@@ -161,11 +177,16 @@ include $(topdir)/build/libaudio.mk
 include $(topdir)/build/libterrain.mk
 include $(topdir)/build/lua.mk
 include $(topdir)/build/harness.mk
+endif # FAT_BINARY=n
 
 ifeq ($(FUZZER),y)
 include $(topdir)/build/fuzzer.mk
+else ifeq ($(FAT_BINARY),y)
+  # No native code in TARGET=ANDROIDFAT
 else
 include $(topdir)/build/vali.mk
+include $(topdir)/build/infobox.mk
+include $(topdir)/build/mapwindow.mk
 include $(topdir)/build/main.mk
 include $(topdir)/build/cloud.mk
 include $(topdir)/build/kobo.mk
@@ -173,6 +194,7 @@ include $(topdir)/build/test.mk
 endif
 
 include $(topdir)/build/hot.mk
+include $(topdir)/build/nolto.mk
 
 ifeq ($(FUZZER),n)
 include $(topdir)/build/python.mk
@@ -218,7 +240,12 @@ endif
 endif
 
 all: $(OUTPUTS)
+
+ifeq ($(FAT_BINARY),n)
 everything: $(OUTPUTS) $(OPTIONAL_OUTPUTS) debug build-check build-harness
+else
+everything: all
+endif
 
 clean:
 	@$(NQ)echo "cleaning all"

@@ -26,6 +26,7 @@
 #include "Predicate/AirspacePredicate.hpp"
 #include "AirspacesInterface.hpp"
 #include "AirspaceActivity.hpp"
+#include "Ptr.hpp"
 #include "util/Serial.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Atmosphere/Pressure.hpp"
@@ -40,15 +41,13 @@ class AirspaceIntersectionVisitor;
  * fast geospatial lookups.
  */
 class Airspaces : public AirspacesInterface {
-  AtmosphericPressure qnh;
+  AtmosphericPressure qnh = AtmosphericPressure::Zero();
   AirspaceActivity activity_mask;
-
-  const bool owns_children;
 
   AirspaceTree airspace_tree;
   TaskProjection task_projection;
 
-  std::deque<AbstractAirspace *> tmp_as;
+  std::deque<AirspacePtr> tmp_as;
 
   /**
    * This attribute keeps track of changes to this project.  It is
@@ -61,24 +60,14 @@ public:
    * Constructor.
    * Note this class can't safely be copied (yet)
    *
-   * If m_owner, this instance will be responsible for deleting objects
-   * on destruction.
-   *
    * @return empty Airspaces class.
    */
-  Airspaces(bool _owns_children=true) noexcept
-    :qnh(AtmosphericPressure::Zero()), owns_children(_owns_children) {}
+  Airspaces() noexcept {}
+
+  ~Airspaces() noexcept;
 
   Airspaces(const Airspaces &) = delete;
   Airspaces &operator=(const Airspaces &) = delete;
-
-  /**
-   * Destructor.
-   * This also destroys Airspace objects contained in the tree or temporary buffer
-   */
-  ~Airspaces() noexcept {
-    Clear();
-  }
 
   const Serial &GetSerial() const noexcept {
     return serial;
@@ -91,7 +80,7 @@ public:
    *
    * @param asp New airspace to be added.
    */
-  void Add(AbstractAirspace *asp) noexcept;
+  void Add(AirspacePtr airspace) noexcept;
 
   /**
    * Re-organise the internal airspace tree after inserting/deleting.

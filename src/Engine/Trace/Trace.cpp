@@ -28,7 +28,7 @@ Copyright_License {
 #include <algorithm>
 #include <iterator>
 
-Trace::Trace(const unsigned _no_thin_time, const unsigned max_time,
+Trace::Trace(const Time _no_thin_time, const Time max_time,
              const unsigned max_size)
   :cached_size(0),
    max_time(max_time),
@@ -46,7 +46,7 @@ Trace::clear()
   assert(cached_size == chronological_list.size());
 
   average_delta_distance = 0;
-  average_delta_time = 0;
+  average_delta_time = {};
 
   delta_list.clear();
   chronological_list.clear_and_dispose(MakeDisposer());
@@ -59,17 +59,17 @@ Trace::clear()
   ++append_serial;
 }
 
-unsigned
-Trace::GetRecentTime(const unsigned t) const
+Trace::Time
+Trace::GetRecentTime(const Time t) const noexcept
 {
   if (empty())
-    return 0;
+    return {};
 
   const TracePoint &last = back();
   if (last.GetTime() > t)
     return last.GetTime() - t;
 
-  return 0;
+  return {};
 }
 
 void
@@ -117,7 +117,7 @@ Trace::EraseInside(DeltaList::iterator it)
 }
 
 bool
-Trace::EraseDelta(const unsigned target_size, const unsigned recent)
+Trace::EraseDelta(const unsigned target_size, const Time recent) noexcept
 {
   assert(cached_size == delta_list.size());
   assert(cached_size == chronological_list.size());
@@ -127,7 +127,7 @@ Trace::EraseDelta(const unsigned target_size, const unsigned recent)
 
   bool modified = false;
 
-  const unsigned recent_time = GetRecentTime(recent);
+  const Time recent_time = GetRecentTime(recent);
 
   auto candidate = delta_list.begin();
   while (size() > target_size) {
@@ -146,9 +146,9 @@ Trace::EraseDelta(const unsigned target_size, const unsigned recent)
 }
 
 bool
-Trace::EraseEarlierThan(const unsigned p_time)
+Trace::EraseEarlierThan(const Time p_time) noexcept
 {
-  if (p_time == 0 || empty() || GetFront().point.GetTime() >= p_time)
+  if (p_time == Time{} || empty() || GetFront().point.GetTime() >= p_time)
     // there will be nothing to remove
     return false;
 
@@ -175,9 +175,9 @@ Trace::EraseEarlierThan(const unsigned p_time)
 }
 
 void
-Trace::EraseLaterThan(const unsigned min_time)
+Trace::EraseLaterThan(const Time min_time) noexcept
 {
-  assert(min_time > 0);
+  assert(min_time.count() > 0);
   assert(!empty());
 
   while (!empty() && GetBack().point.GetTime() > min_time) {
@@ -218,6 +218,8 @@ Trace::push_back(const TracePoint &point)
   assert(cached_size == delta_list.size());
   assert(cached_size == chronological_list.size());
 
+  const Time min_delta = std::chrono::seconds{2};
+
   if (empty()) {
     // first point determines origin for flat projection
     task_projection.Reset(point.GetLocation());
@@ -225,16 +227,19 @@ Trace::push_back(const TracePoint &point)
   } else if (point.GetTime() < back().GetTime()) {
     // gone back in time
 
-    if (point.GetTime() + 180 < back().GetTime()) {
+    const Time clear_threshold = std::chrono::minutes{3};
+    const Time fix_threshold = std::chrono::seconds{10};
+
+    if (point.GetTime() + clear_threshold < back().GetTime()) {
       /* not fixable, clear the trace and restart from scratch */
       clear();
       return;
     }
 
     /* not much, try to fix it */
-    EraseLaterThan(point.GetTime() - 10);
+    EraseLaterThan(point.GetTime() - fix_threshold);
     ++modify_serial;
-  } else if (point.GetTime() - back().GetTime() < 2)
+  } else if (point.GetTime() - back().GetTime() < min_delta)
     // only add one item per two seconds
     return;
 
@@ -246,7 +251,7 @@ Trace::push_back(const TracePoint &point)
   assert(size() < max_size);
 
   TraceDelta *td = allocator.allocate(1);
-  allocator.construct(td, point);
+  std::allocator_traits<Allocator>::construct(allocator, td, point);
   td->point.Project(task_projection);
 
   delta_list.insert(*td);
@@ -261,9 +266,9 @@ Trace::push_back(const TracePoint &point)
 }
 
 unsigned
-Trace::CalcAverageDeltaDistance(const unsigned no_thin) const
+Trace::CalcAverageDeltaDistance(const Time no_thin) const noexcept
 {
-  unsigned r = GetRecentTime(no_thin);
+  const Time r = GetRecentTime(no_thin);
   unsigned acc = 0;
   unsigned counter = 0;
 
@@ -278,10 +283,10 @@ Trace::CalcAverageDeltaDistance(const unsigned no_thin) const
   return 0;
 }
 
-unsigned
-Trace::CalcAverageDeltaTime(const unsigned no_thin) const
+Trace::Time
+Trace::CalcAverageDeltaTime(const Time no_thin) const noexcept
 {
-  unsigned r = GetRecentTime(no_thin);
+  const Time r = GetRecentTime(no_thin);
   unsigned counter = 0;
 
   /* find the last item before the "r" timestamp */
@@ -291,18 +296,18 @@ Trace::CalcAverageDeltaTime(const unsigned no_thin) const
     ++counter;
 
   if (counter < 2)
-    return 0;
+    return {};
 
   --it;
   --counter;
 
-  unsigned start_time = front().GetTime();
-  unsigned end_time = it->point.GetTime();
+  Time start_time = front().GetTime();
+  Time end_time = it->point.GetTime();
   return (end_time - start_time) / counter;
 }
 
 void
-Trace::EnforceTimeWindow(unsigned latest_time)
+Trace::EnforceTimeWindow(const Time latest_time) noexcept
 {
   if (max_time == null_time)
     /* no time window configured */
@@ -329,8 +334,8 @@ Trace::Thin2()
     return;
 
   // if still too big, thin again, ignoring recency
-  if (no_thin_time > 0)
-    EraseDelta(target_size, 0);
+  if (no_thin_time.count() > 0)
+    EraseDelta(target_size, {});
 
   assert(size() <= target_size);
 }
@@ -374,7 +379,6 @@ public:
 
   PointerIterator() = default;
   explicit PointerIterator(I _i):i(_i) {}
-  PointerIterator<I> &operator=(const PointerIterator<I> &other) = default;
 
   PointerIterator<I> &operator--() {
     --i;
@@ -428,7 +432,7 @@ Trace::SyncPoints(TracePointerVector &v) const
 }
 
 void
-Trace::GetPoints(TracePointVector &v, unsigned min_time,
+Trace::GetPoints(TracePointVector &v, const Time min_time,
                  const GeoPoint &location, double min_distance) const
 {
   /* skip the trace points that are before min_time */

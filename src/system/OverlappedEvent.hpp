@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_OVERLAPPED_EVENT_HPP
 #define XCSOAR_OVERLAPPED_EVENT_HPP
 
-#include <windows.h>
+#include <handleapi.h>
 
 class OverlappedEvent {
   OVERLAPPED os;

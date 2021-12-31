@@ -39,6 +39,7 @@ protected:
   double sum_xw, sum_yw;
   double sum_weights;
 
+private:
   double y_max;
   double y_min;
   double x_min;

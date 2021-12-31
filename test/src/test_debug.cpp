@@ -40,7 +40,7 @@ AutopilotParameters autopilot_parms;
 int terrain_height = 1;
 AllocatedPath replay_file = Path(_T("test/data/0asljd01.igc"));
 AllocatedPath waypoint_file = Path(_T("test/data/waypoints_geo.wpt"));
-AllocatedPath task_file = nullptr;
+AllocatedPath task_file;
 double range_threshold = 15000;
 
 void PrintDistanceCounts() {
@@ -185,7 +185,7 @@ ParseArgs(int argc, char** argv)
 
 const char* GetTestName(const char* in, int task_num, int wind_num)
 {
-  static char buffer[80];
+  static char buffer[100];
   sprintf(buffer,"%s (task %s, wind %s)", in, task_name(task_num), wind_name(wind_num));
   return buffer;
 }

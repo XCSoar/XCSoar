@@ -30,6 +30,7 @@
 #ifndef CURL_EASY_HXX
 #define CURL_EASY_HXX
 
+#include "String.hxx"
 #include "util/Compiler.h"
 
 #include <curl/curl.h>
@@ -127,6 +128,13 @@ public:
 		SetOption(CURLOPT_NOPROGRESS, (long)value);
 	}
 
+	void SetXferInfoFunction(curl_xferinfo_callback function,
+				 void *data) {
+		SetOption(CURLOPT_XFERINFOFUNCTION, function);
+		SetOption(CURLOPT_XFERINFODATA, data);
+		SetNoProgress(false);
+	}
+
 	void SetNoSignal(bool value=true) {
 		SetOption(CURLOPT_NOSIGNAL, (long)value);
 	}
@@ -190,6 +198,10 @@ public:
 		SetOption(CURLOPT_HTTPPOST, post);
 	}
 
+	void SetMimePost(const curl_mime *mime) {
+		SetOption(CURLOPT_MIMEPOST, mime);
+	}
+
 	template<typename T>
 	bool GetInfo(CURLINFO info, T value_r) const noexcept {
 		return ::curl_easy_getinfo(handle, info, value_r) == CURLE_OK;
@@ -198,7 +210,7 @@ public:
 	/**
 	 * Returns the response body's size, or -1 if that is unknown.
 	 */
-	gcc_pure
+	[[gnu::pure]]
 	int64_t GetContentLength() const noexcept {
 		double value;
 		return GetInfo(CURLINFO_CONTENT_LENGTH_DOWNLOAD, &value)
@@ -214,6 +226,10 @@ public:
 
 	bool Unpause() noexcept {
 		return ::curl_easy_pause(handle, CURLPAUSE_CONT) == CURLE_OK;
+	}
+
+	CurlString Escape(const char *string, int length=0) const noexcept {
+		return CurlString(curl_easy_escape(handle, string, length));
 	}
 };
 

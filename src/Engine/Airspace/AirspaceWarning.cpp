@@ -26,20 +26,6 @@ Copyright_License {
 
 #include <algorithm>
 
-AirspaceWarning::AirspaceWarning(const AbstractAirspace &_airspace)
-  :airspace(_airspace),
-   state(WARNING_CLEAR),
-   state_last(WARNING_CLEAR),
-   solution(AirspaceInterceptSolution::Invalid()),
-   acktime_warning(0),
-   acktime_inside(0),
-   debounce_time(60),
-   ack_day(false),
-   expired(true),
-   expired_last(true)
-{
-}
-
 void AirspaceWarning::SaveState()
 {
   state_last = state;
@@ -59,7 +45,8 @@ AirspaceWarning::UpdateSolution(const State _state,
 
 
 bool
-AirspaceWarning::WarningLive(const unsigned ack_time, const unsigned dt)
+AirspaceWarning::WarningLive(const Duration ack_time,
+                             const Duration dt) noexcept
 {
   // propagate settings from manager
   if (acktime_warning == null_acktime)
@@ -77,17 +64,17 @@ AirspaceWarning::WarningLive(const unsigned ack_time, const unsigned dt)
   if (acktime_warning > dt)
     acktime_warning-= dt;
   else
-    acktime_warning = 0;
+    acktime_warning = {};
 
   if (acktime_inside > dt)
     acktime_inside-= dt;
   else
-    acktime_inside = 0;
+    acktime_inside = {};
 
   if (debounce_time > dt)
     debounce_time-= dt;
   else
-    debounce_time = 0;
+    debounce_time = {};
 
   expired = IsAckExpired();
 
@@ -124,9 +111,9 @@ AirspaceWarning::IsAckExpired() const
   case WARNING_TASK:
   case WARNING_FILTER:
   case WARNING_GLIDE:
-    return !acktime_warning;
+    return acktime_warning.count() <= 0;
   case WARNING_INSIDE:
-    return !acktime_inside;
+    return acktime_inside.count() <= 0;
   };
 
   // unknown, should never get here
@@ -149,7 +136,7 @@ AirspaceWarning::AcknowledgeInside(const bool set)
   if (set)
     acktime_inside = null_acktime;
   else
-    acktime_inside = 0;
+    acktime_inside = {};
 }
 
 void
@@ -158,7 +145,7 @@ AirspaceWarning::AcknowledgeWarning(const bool set)
   if (set)
     acktime_warning = null_acktime;
   else
-    acktime_warning = 0;
+    acktime_warning = {};
 }
 
 bool

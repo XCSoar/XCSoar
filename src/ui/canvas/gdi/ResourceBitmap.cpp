@@ -27,6 +27,9 @@ Copyright_License {
 
 #include <cassert>
 
+#include <wingdi.h>
+#include <winuser.h>
+
 Bitmap::Bitmap(ResourceId id)
 {
   Load(id);

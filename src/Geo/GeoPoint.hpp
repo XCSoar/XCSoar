@@ -26,6 +26,7 @@ Copyright_License {
 #define XCSOAR_GeoPoint_HPP
 
 #include "Math/Angle.hpp"
+#include "Math/Classify.hpp"
 
 #include <type_traits>
 
@@ -41,7 +42,7 @@ struct GeoPoint {
   /**
    * Non-initialising constructor.
    */
-  GeoPoint() = default;
+  GeoPoint() noexcept = default;
 
   /**
    * Constructor (supplied location)
@@ -51,9 +52,8 @@ struct GeoPoint {
    *
    * @return Initialised object
    */
-  constexpr
-  GeoPoint(const Angle _longitude, const Angle _latitude) :
-    longitude(_longitude), latitude(_latitude) {}
+  constexpr GeoPoint(const Angle _longitude, const Angle _latitude) noexcept
+    :longitude(_longitude), latitude(_latitude) {}
 
   /**
    * Construct an instance at the origin of the coordinate system.
@@ -62,8 +62,7 @@ struct GeoPoint {
    * simulator when XCSoar is launched for the first time with an
    * empty profile; it is pretty useless for anything else.
    */
-  constexpr
-  static GeoPoint Zero() {
+  static constexpr GeoPoint Zero() noexcept {
     return GeoPoint(Angle::Zero(), Angle::Zero());
   }
 
@@ -73,8 +72,7 @@ struct GeoPoint {
    * calculation.  This method may be used to explicitly declare a
    * GeoPoint attribute as "invalid".
    */
-  constexpr
-  static GeoPoint Invalid() {
+  static constexpr GeoPoint Invalid() noexcept {
     return GeoPoint(Angle::Zero(), Angle::FullCircle());
   }
 
@@ -84,7 +82,7 @@ struct GeoPoint {
    * calculation.  This method may be used to explicitly declare a
    * GeoPoint attribute as "invalid".
    */
-  void SetInvalid() {
+  void SetInvalid() noexcept {
     longitude = Angle::Zero();
     latitude = Angle::FullCircle();
   }
@@ -95,17 +93,18 @@ struct GeoPoint {
    * check; it is only designed to catch instances created by
    * Invalid().
    */
-  constexpr
-  bool IsValid() const {
+  constexpr bool IsValid() const noexcept {
     return latitude <= Angle::HalfCircle();
   }
 
   /**
    * Check if both longitude and latitude are in the allowed range.
    */
-  constexpr bool Check() const {
-    return longitude >= -Angle::HalfCircle() &&
+  constexpr bool Check() const noexcept {
+    return IsFinite(longitude.Native()) &&
+      longitude >= -Angle::HalfCircle() &&
       longitude <= Angle::HalfCircle() &&
+      IsFinite(latitude.Native()) &&
       latitude >= -Angle::QuarterCircle() &&
       latitude <= Angle::QuarterCircle();
   }
@@ -115,7 +114,7 @@ struct GeoPoint {
    * calculations, without unintended side effects (such as -1 degrees
    * vs 359 degrees).  This modification is in-place.
    */
-  GeoPoint &Normalize() {
+  GeoPoint &Normalize() noexcept {
     longitude = longitude.AsDelta();
 
     if (latitude < -Angle::QuarterCircle())
@@ -135,7 +134,7 @@ struct GeoPoint {
    * @return Location of point
    */
   [[gnu::pure]]
-  GeoPoint Parametric(const GeoPoint &delta, double t) const;
+  GeoPoint Parametric(const GeoPoint &delta, double t) const noexcept;
 
   /**
    * Find location interpolated from this point towards end
@@ -146,7 +145,7 @@ struct GeoPoint {
    * @return Location of point
    */
   [[gnu::pure]]
-  GeoPoint Interpolate(const GeoPoint &end, double t) const;
+  GeoPoint Interpolate(const GeoPoint &end, double t) const noexcept;
 
   /**
    * Multiply a point by a factor (used for deltas)
@@ -156,7 +155,7 @@ struct GeoPoint {
    * @return Modified point
    */
   [[gnu::pure]]
-  GeoPoint operator* (const double x) const {
+  GeoPoint operator* (const double x) const noexcept {
     GeoPoint res = *this;
     res.longitude *= x;
     res.latitude *= x;
@@ -171,7 +170,7 @@ struct GeoPoint {
    * @return Modified point
    */
   [[gnu::pure]]
-  GeoPoint operator+ (const GeoPoint &delta) const {
+  GeoPoint operator+ (const GeoPoint &delta) const noexcept {
     GeoPoint res = *this;
     res.longitude += delta.longitude;
     res.latitude += delta.latitude;
@@ -185,7 +184,7 @@ struct GeoPoint {
    *
    * @return Modified point
    */
-  const GeoPoint& operator+= (const GeoPoint &delta) {
+  const GeoPoint &operator+= (const GeoPoint &delta) noexcept {
     longitude += delta.longitude;
     latitude += delta.latitude;
     return *this;
@@ -199,7 +198,7 @@ struct GeoPoint {
    * @return Modified point
    */
   [[gnu::pure]]
-  GeoPoint operator- (const GeoPoint &delta) const {
+  GeoPoint operator-(const GeoPoint &delta) const noexcept {
     GeoPoint res = *this;
     res.longitude -= delta.longitude;
     res.latitude -= delta.latitude;
@@ -214,7 +213,7 @@ struct GeoPoint {
    * @return Distance (m)
    */
   [[gnu::pure]]
-  double Distance(const GeoPoint &other) const;
+  double Distance(const GeoPoint &other) const noexcept;
 
   /**
    * Calculate great circle initial bearing from this to the other
@@ -224,34 +223,34 @@ struct GeoPoint {
    * @return Bearing (deg)
    */
   [[gnu::pure]]
-  Angle Bearing(const GeoPoint &other) const;
+  Angle Bearing(const GeoPoint &other) const noexcept;
 
   /**
    * Calculate great circle distance and initial bearing from this to the other
    */
   [[gnu::pure]]
-  GeoVector DistanceBearing(const GeoPoint &other) const;
+  GeoVector DistanceBearing(const GeoPoint &other) const noexcept;
 
   /**
    * Like Distance(), but use a simplified faster formula that may be
    * less accurate.
    */
   [[gnu::pure]]
-  double DistanceS(const GeoPoint &other) const;
+  double DistanceS(const GeoPoint &other) const noexcept;
 
   /**
    * Like Bearing(), but use a simplified faster formula that may be
    * less accurate.
    */
   [[gnu::pure]]
-  Angle BearingS(const GeoPoint &other) const;
+  Angle BearingS(const GeoPoint &other) const noexcept;
 
   /**
    * Like DistanceBearing(), but use a simplified faster formula that
    * may be less accurate.
    */
   [[gnu::pure]]
-  GeoVector DistanceBearingS(const GeoPoint &other) const;
+  GeoVector DistanceBearingS(const GeoPoint &other) const noexcept;
 
   /**
    * Find distance along a great-circle path that this point
@@ -263,7 +262,8 @@ struct GeoPoint {
    * @return Distance (m) along from-to line
    */
   [[gnu::pure]]
-  double ProjectedDistance(const GeoPoint &from, const GeoPoint &to) const;
+  double ProjectedDistance(const GeoPoint &from,
+                           const GeoPoint &to) const noexcept;
 
   /**
    * Find point a set distance along a great-circle path towards
@@ -276,14 +276,14 @@ struct GeoPoint {
    */
   [[gnu::pure]]
   GeoPoint IntermediatePoint(const GeoPoint &destination,
-                             double distance) const;
+                             double distance) const noexcept;
 
   /**
    * Find the nearest great-circle middle point between this point and
    * the specified one.
    */
   [[gnu::pure]]
-  GeoPoint Middle(const GeoPoint &other) const;
+  GeoPoint Middle(const GeoPoint &other) const noexcept;
 
   /**
    * Test whether two points are co-located
@@ -292,8 +292,7 @@ struct GeoPoint {
    *
    * @return True if coincident
    */
-  constexpr
-  bool Equals(const GeoPoint other) const {
+  constexpr bool Equals(const GeoPoint other) const noexcept {
     return longitude == other.longitude && latitude == other.latitude;
   }
 
@@ -305,7 +304,7 @@ struct GeoPoint {
    * @return True if coincident
    */
   constexpr
-  bool operator== (const GeoPoint other) const {
+  bool operator==(const GeoPoint other) const noexcept {
     return Equals(other);
   }
 
@@ -316,20 +315,9 @@ struct GeoPoint {
    *
    * @return True if coincident
    */
-  constexpr
-  bool operator !=(const GeoPoint &other) const {
+  constexpr bool operator!=(const GeoPoint &other) const noexcept {
     return !Equals(other);
   }
-  
-  /**
-   * Rank two points according to longitude, then latitude
-   *
-   * @param other Point to compare to
-   *
-   * @return True if this point is further left (or if equal, lower) than the other
-   */
-  [[gnu::pure]]
-  bool Sort(const GeoPoint &other) const;
 };
 
 static_assert(std::is_trivial<GeoPoint>::value, "type is not trivial");
@@ -341,11 +329,10 @@ struct AGeoPoint: public GeoPoint {
   /**< Nav reference altitude (m) */
   double altitude;
 
-  AGeoPoint() = default;
+  AGeoPoint() noexcept = default;
 
-  constexpr
-  AGeoPoint(const GeoPoint p, const double alt)
-    :GeoPoint(p),altitude(alt) {};
+  constexpr AGeoPoint(GeoPoint p, double alt) noexcept
+    :GeoPoint(p), altitude(alt) {};
 };
 
 static_assert(std::is_trivial<AGeoPoint>::value, "type is not trivial");

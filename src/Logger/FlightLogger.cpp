@@ -31,7 +31,7 @@ Copyright_License {
 void
 FlightLogger::Reset()
 {
-  last_time = 0;
+  last_time = TimeStamp::Undefined();
   seen_on_ground = seen_flying = false;
   start_time.Clear();
   landing_time.Clear();
@@ -102,7 +102,7 @@ FlightLogger::TickInternal(const MoreData &basic,
 void
 FlightLogger::Tick(const MoreData &basic, const DerivedInfo &calculated)
 {
-  assert(!path.IsNull());
+  assert(path != nullptr);
 
   if (basic.gps.replay || basic.gps.simulator)
     return;
@@ -111,12 +111,12 @@ FlightLogger::Tick(const MoreData &basic, const DerivedInfo &calculated)
     /* can't work without these */
     return;
 
-  if (last_time > 0) {
+  if (last_time.IsDefined()) {
     auto time_delta = basic.time - last_time;
-    if (time_delta < 0 || time_delta > 300)
+    if (time_delta.count() < 0 || time_delta > std::chrono::minutes{5})
       /* reset on time warp (positive or negative) */
       Reset();
-    else if (time_delta < 0.5)
+    else if (time_delta < std::chrono::milliseconds{500})
       /* not enough time has passed since the last call: ignore this
          GPS fix, don't update last_time, just return */
       return;

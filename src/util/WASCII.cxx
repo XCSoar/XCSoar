@@ -33,7 +33,7 @@
 #include <cassert>
 
 void
-CopyASCII(wchar_t *dest, const wchar_t *src)
+CopyASCII(wchar_t *dest, const wchar_t *src) noexcept
 {
 	do {
 		if (IsASCII(*src))
@@ -42,8 +42,8 @@ CopyASCII(wchar_t *dest, const wchar_t *src)
 }
 
 wchar_t *
-CopyASCII(wchar_t *dest, size_t dest_size,
-	  const wchar_t *src, const wchar_t *src_end)
+CopyASCII(wchar_t *dest, std::size_t dest_size,
+	  const wchar_t *src, const wchar_t *src_end) noexcept
 {
 	assert(dest != nullptr);
 	assert(dest_size > 0);
@@ -60,7 +60,7 @@ CopyASCII(wchar_t *dest, size_t dest_size,
 }
 
 void
-CopyASCII(wchar_t *dest, const char *src)
+CopyASCII(wchar_t *dest, const char *src) noexcept
 {
 	do {
 		if (IsASCII(*src))
@@ -70,7 +70,8 @@ CopyASCII(wchar_t *dest, const char *src)
 
 template<typename D, typename S>
 static D *
-TemplateCopyASCII(D *dest, size_t dest_size, const S *src, const S *src_end)
+TemplateCopyASCII(D *dest, std::size_t dest_size,
+		  const S *src, const S *src_end) noexcept
 {
 	assert(dest != nullptr);
 	assert(dest_size > 0);
@@ -87,19 +88,21 @@ TemplateCopyASCII(D *dest, size_t dest_size, const S *src, const S *src_end)
 }
 
 wchar_t *
-CopyASCII(wchar_t *dest, size_t dest_size, const char *src, const char *src_end)
+CopyASCII(wchar_t *dest, std::size_t dest_size,
+	  const char *src, const char *src_end) noexcept
 {
 	return TemplateCopyASCII(dest, dest_size, src, src_end);
 }
 
 char *
-CopyASCII(char *dest, size_t dest_size, const wchar_t *src, const wchar_t *src_end)
+CopyASCII(char *dest, std::size_t dest_size,
+	  const wchar_t *src, const wchar_t *src_end) noexcept
 {
 	return TemplateCopyASCII(dest, dest_size, src, src_end);
 }
 
 void
-CopyASCIIUpper(char *dest, const wchar_t *src)
+CopyASCIIUpper(char *dest, const wchar_t *src) noexcept
 {
 	do {
 		wchar_t t = *src;

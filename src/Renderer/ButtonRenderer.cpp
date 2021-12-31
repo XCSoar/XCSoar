@@ -28,14 +28,14 @@ Copyright_License {
 #include "util/Macros.hpp"
 
 unsigned
-ButtonFrameRenderer::GetMargin()
+ButtonFrameRenderer::GetMargin() noexcept
 {
   return Layout::VptScale(2);
 }
 
 void
 ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
-                                bool focused, bool pressed) const
+                                bool focused, bool pressed) const noexcept
 {
   const ButtonLook::StateLook &_look = focused ? look.focused : look.standard;
 
@@ -93,7 +93,7 @@ ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
 }
 
 PixelRect
-ButtonFrameRenderer::GetDrawingRect(PixelRect rc, bool pressed) const
+ButtonFrameRenderer::GetDrawingRect(PixelRect rc, bool pressed) const noexcept
 {
   rc.Grow(-2);
   if (pressed)
@@ -103,7 +103,7 @@ ButtonFrameRenderer::GetDrawingRect(PixelRect rc, bool pressed) const
 }
 
 unsigned
-ButtonRenderer::GetMinimumButtonWidth() const
+ButtonRenderer::GetMinimumButtonWidth() const noexcept
 {
   return Layout::GetMaximumControlHeight();
 }

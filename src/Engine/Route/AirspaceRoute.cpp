@@ -47,15 +47,17 @@ private:
 public:
   AIV(const RouteLink &_e,
       const FlatProjection &_proj,
-      const RoutePolars &_rpolar)
+      const RoutePolars &_rpolar) noexcept
    :link(_e),
     min_distance(-1),
     proj(_proj),
     rpolar(_rpolar),
     nearest((const AbstractAirspace *)nullptr, _e.first) {}
 
-  void Visit(const AbstractAirspace &as) override {
+  void Visit(ConstAirspacePtr _as) noexcept override {
     assert(!intersections.empty());
+
+    const auto &as = *_as;
 
     GeoPoint point = intersections[0].first;
 
@@ -75,13 +77,13 @@ public:
     }
   }
 
-  AIVResult GetNearest() const {
+  AIVResult GetNearest() const noexcept {
     return nearest;
   }
 };
 
 AirspaceRoute::RouteAirspaceIntersection
-AirspaceRoute::FirstIntersecting(const RouteLink &e) const
+AirspaceRoute::FirstIntersecting(const RouteLink &e) const noexcept
 {
   const GeoPoint origin(projection.Unproject(e.first));
   const GeoPoint dest(projection.Unproject(e.second));
@@ -93,7 +95,7 @@ AirspaceRoute::FirstIntersecting(const RouteLink &e) const
 }
 
 const AbstractAirspace *
-AirspaceRoute::InsideOthers(const AGeoPoint &origin) const
+AirspaceRoute::InsideOthers(const AGeoPoint &origin) const noexcept
 {
   ++count_airspace;
 
@@ -110,7 +112,7 @@ AirspaceRoute::ClearingPair
 AirspaceRoute::FindClearingPair(const SearchPointVector &spv,
                                 const SearchPointVector::const_iterator start,
                                 const SearchPointVector::const_iterator end,
-                                const RoutePoint &dest) const
+                                const RoutePoint &dest) const noexcept
 {
   bool backwards = false;
   ClearingPair p(dest, dest);
@@ -150,7 +152,8 @@ AirspaceRoute::FindClearingPair(const SearchPointVector &spv,
 
 AirspaceRoute::ClearingPair
 AirspaceRoute::GetPairs(const SearchPointVector &spv,
-                        const RoutePoint &start, const RoutePoint &dest) const
+                        const RoutePoint &start,
+                        const RoutePoint &dest) const noexcept
 {
   SearchPointVector::const_iterator i_closest = spv.NearestIndexConvex(start);
   SearchPointVector::const_iterator i_furthest = spv.NearestIndexConvex(dest);
@@ -160,7 +163,7 @@ AirspaceRoute::GetPairs(const SearchPointVector &spv,
 AirspaceRoute::ClearingPair
 AirspaceRoute::GetBackupPairs(const SearchPointVector &spv,
                               const RoutePoint &_start,
-                              const RoutePoint &intc) const
+                              const RoutePoint &intc) const noexcept
 {
   SearchPointVector::const_iterator start = spv.NearestIndexConvex(intc);
   ClearingPair p(intc, intc);
@@ -175,24 +178,24 @@ AirspaceRoute::GetBackupPairs(const SearchPointVector &spv,
 }
 
 unsigned
-AirspaceRoute::AirspaceSize() const
+AirspaceRoute::AirspaceSize() const noexcept
 {
   return m_airspaces.GetSize();
 }
 
-AirspaceRoute::AirspaceRoute():m_airspaces(false)
+AirspaceRoute::AirspaceRoute() noexcept
 {
   Reset();
 }
 
-AirspaceRoute::~AirspaceRoute()
+AirspaceRoute::~AirspaceRoute() noexcept
 {
   // clean up, we dont need the clearances any more
   m_airspaces.ClearClearances();
 }
 
 void
-AirspaceRoute::Reset()
+AirspaceRoute::Reset() noexcept
 {
   RoutePlanner::Reset();
   m_airspaces.ClearClearances();
@@ -203,7 +206,7 @@ void
 AirspaceRoute::Synchronise(const Airspaces &master,
                            AirspacePredicate _condition,
                            const AGeoPoint &origin,
-                           const AGeoPoint &destination)
+                           const AGeoPoint &destination) noexcept
 {
   // @todo: also synchronise with AirspaceWarningManager to filter out items that are
   // acknowledged.
@@ -227,7 +230,7 @@ AirspaceRoute::Synchronise(const Airspaces &master,
 
 void
 AirspaceRoute::AddNearbyAirspace(const RouteAirspaceIntersection &inx,
-                                 const RouteLink &e)
+                                 const RouteLink &e) noexcept
 {
   const SearchPointVector &fat =
     inx.airspace->GetClearance(m_airspaces.GetProjection());
@@ -242,7 +245,7 @@ AirspaceRoute::AddNearbyAirspace(const RouteAirspaceIntersection &inx,
 }
 
 void
-AirspaceRoute::AddNearby(const RouteLink &e)
+AirspaceRoute::AddNearby(const RouteLink &e) noexcept
 {
   if (m_inx.airspace == nullptr) {
     // NOTE: m_inx is "mutable" so that const in AddNearbyTerrain is ignored!!
@@ -254,7 +257,7 @@ AirspaceRoute::AddNearby(const RouteLink &e)
 }
 
 bool
-AirspaceRoute::CheckSecondary(const RouteLink &e)
+AirspaceRoute::CheckSecondary(const RouteLink &e) noexcept
 {
   if (!rpolars_route.IsAirspaceEnabled())
     return true; // trivial
@@ -268,7 +271,8 @@ AirspaceRoute::CheckSecondary(const RouteLink &e)
 }
 
 bool
-AirspaceRoute::CheckClearance(const RouteLink &e, RoutePoint &inp) const
+AirspaceRoute::CheckClearance(const RouteLink &e,
+                              RoutePoint &inp) const noexcept
 {
   // attempt terrain clearance first
 
@@ -294,7 +298,8 @@ AirspaceRoute::CheckClearance(const RouteLink &e, RoutePoint &inp) const
 }
 
 void
-AirspaceRoute::OnSolve(const AGeoPoint &origin, const AGeoPoint &destination)
+AirspaceRoute::OnSolve(const AGeoPoint &origin,
+                       const AGeoPoint &destination) noexcept
 {
   if (m_airspaces.IsEmpty()) {
     projection.SetCenter(origin);

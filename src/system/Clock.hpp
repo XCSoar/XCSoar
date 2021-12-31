@@ -26,30 +26,6 @@ Copyright_License {
 
 #include "util/Compiler.h"
 
-#include <cstdint>
-
-/**
- * Returns the value of a monotonic clock in milliseconds.
- */
-gcc_pure
-unsigned
-MonotonicClockMS();
-
-/**
- * Returns the value of a monotonic clock in microseconds.
- */
-gcc_pure
-uint64_t
-MonotonicClockUS();
-
-/**
- * Returns the value of a monotonic clock in seconds as a floating
- * point value.
- */
-gcc_pure
-double
-MonotonicClockFloat();
-
 /**
  * Query the UTC offset from the OS.
  *

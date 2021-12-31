@@ -36,31 +36,31 @@ Notify::Notify(CallbackFunction _callback) noexcept
 }
 
 void
-Notify::SendNotification()
+Notify::SendNotification() noexcept
 {
   if (pending.exchange(true, std::memory_order_relaxed))
     return;
 
-#if defined(ANDROID) || defined(USE_POLL_EVENT) || defined(ENABLE_SDL)
-  event_queue->Push(Callback, this);
-#else
+#ifdef USE_WINUSER
   SendUser(0);
+#else
+  event_queue->Push(Callback, this);
 #endif
 }
 
 void
-Notify::ClearNotification()
+Notify::ClearNotification() noexcept
 {
   if (!pending.exchange(false, std::memory_order_relaxed))
     return;
 
-#if defined(ANDROID) || defined(USE_POLL_EVENT) || defined(ENABLE_SDL)
+#ifndef USE_WINUSER
   event_queue->Purge(Callback, this);
 #endif
 }
 
 void
-Notify::RunNotification()
+Notify::RunNotification() noexcept
 {
   if (pending.exchange(false, std::memory_order_relaxed))
     callback();
@@ -78,7 +78,7 @@ Notify::OnUser(unsigned id)
 #else
 
 void
-Notify::Callback(void *ctx)
+Notify::Callback(void *ctx) noexcept
 {
   Notify &notify = *(Notify *)ctx;
   notify.RunNotification();

@@ -30,21 +30,21 @@ Copyright_License {
 
 unsigned
 TextRenderer::GetHeight(Canvas &canvas, PixelRect rc,
-                        const TCHAR *text) const
+                        const TCHAR *text) const noexcept
 {
   return canvas.DrawFormattedText(rc, text, DT_CALCRECT);
 }
 
 unsigned
 TextRenderer::GetHeight(Canvas &canvas, unsigned width,
-                        const TCHAR *text) const
+                        const TCHAR *text) const noexcept
 {
   return GetHeight(canvas, PixelRect(0, 0, width, 0), text);
 }
 
 unsigned
 TextRenderer::GetHeight(const Font &font, unsigned width,
-                        const TCHAR *text) const
+                        const TCHAR *text) const noexcept
 {
   AnyCanvas canvas;
   canvas.Select(font);
@@ -53,7 +53,7 @@ TextRenderer::GetHeight(const Font &font, unsigned width,
 
 void
 TextRenderer::Draw(Canvas &canvas, PixelRect rc,
-                   const TCHAR *text) const
+                   const TCHAR *text) const noexcept
 {
   unsigned format = (center ? DT_CENTER : DT_LEFT);
 

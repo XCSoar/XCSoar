@@ -17,7 +17,7 @@ apt-get install ${APTOPTS[*]} make \
   git quilt zip \
   m4 automake wget \
   ttf-bitstream-vera fakeroot \
-  pkg-config cmake ninja-build
+  pkg-config cmake ninja-build ccache
 echo
 
 echo Installing Manual dependencies...
@@ -40,7 +40,7 @@ apt-get install ${APTOPTS[*]} make g++ \
   libtiff5-dev libgeotiff-dev \
   libcurl4-openssl-dev \
   libc-ares-dev \
-  liblua5.2-dev lua5.2-dev \
+  liblua5.4-dev \
   libxml-parser-perl \
   libasound2-dev \
   libsdl2-dev \
@@ -49,6 +49,14 @@ apt-get install ${APTOPTS[*]} make g++ \
   mesa-common-dev libgl1-mesa-dev libegl1-mesa-dev \
   fonts-dejavu \
   xz-utils
+echo
+
+echo Installing dependencies for creating Debian package
+  apt-get install ${APTOPTS[*]} dpkg-dev \
+    debhelper \
+    texlive-lang-english \
+    libio-captureoutput-perl \
+    build-essential 
 echo
 
 echo Installing dependencies for compiling with LLVM / Clang...
@@ -60,7 +68,10 @@ apt-get install ${APTOPTS[*]} libinput-dev libgbm-dev
 echo
 
 echo Installing dependencies for ARM Linux targets...
-apt-get install ${APTOPTS[*]} g++-arm-linux-gnueabihf
+apt-get install ${APTOPTS[*]} g++-arm-linux-gnueabihf \
+  libmpc-dev \
+  gmpc-dev \
+  meson
 echo
 
 echo Installing PC/WIN64 dependencies...

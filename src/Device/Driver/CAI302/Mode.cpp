@@ -28,69 +28,62 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "Device/Config.hpp"
 
-bool
+void
 CAI302Device::CommandMode(OperationEnvironment &env)
 {
   if (mode == Mode::COMMAND)
-    return true;
+    return;
 
   port.StopRxThread();
 
-  if (CAI302::CommandMode(port, env)) {
-    mode = Mode::COMMAND;
-    return true;
-  } else {
-    mode = Mode::UNKNOWN;
-    return false;
-  }
+  mode = Mode::UNKNOWN;
+  CAI302::CommandMode(port, env);
+  mode = Mode::COMMAND;
 }
 
-bool
+void
 CAI302Device::DownloadMode(OperationEnvironment &env)
 {
   if (mode == Mode::DOWNLOAD)
-    return true;
+    return;
 
   port.StopRxThread();
 
-  if (CAI302::DownloadMode(port, env)) {
-    mode = Mode::DOWNLOAD;
-    return true;
-  } else {
-    mode = Mode::UNKNOWN;
-    return false;
-  }
+  mode = Mode::UNKNOWN;
+  CAI302::DownloadMode(port, env);
+  mode = Mode::DOWNLOAD;
 }
 
-bool
+void
 CAI302Device::UploadMode(OperationEnvironment &env)
 {
   if (mode == Mode::UPLOAD)
-    return true;
+    return;
 
   port.StopRxThread();
 
-  if (CAI302::UploadMode(port, env)) {
-    mode = Mode::UPLOAD;
-    return true;
-  } else {
-    mode = Mode::UNKNOWN;
-    return false;
-  }
+  mode = Mode::UNKNOWN;
+  CAI302::UploadMode(port, env);
+  mode = Mode::UPLOAD;
 }
 
 bool
 CAI302Device::SetBaudRate(unsigned baud_rate, OperationEnvironment &env)
 {
-  if (!CommandMode(env) || !CAI302::SetBaudRate(port, baud_rate, env) ||
-      !port.Drain())
+  CommandMode(env);
+  CAI302::SetBaudRate(port, baud_rate, env);
+
+  if (!port.Drain())
     return false;
 
   /* the CAI302 needs some time to apply the new baud rate; if we
      switch too early, it'll cancel the command */
   env.Sleep(std::chrono::milliseconds(500));
 
-  return port.SetBaudrate(baud_rate) && CAI302::CommandMode(port, env);
+  port.SetBaudrate(baud_rate);
+
+  CAI302::CommandMode(port, env);
+  return true;
 }
 
 bool
@@ -131,11 +124,8 @@ CAI302Device::EnableNMEA(OperationEnvironment &env)
 
   port.StopRxThread();
 
-  if (CAI302::LogMode(port, env)) {
-    mode = Mode::NMEA;
-    return true;
-  } else {
-    mode = Mode::UNKNOWN;
-    return false;
-  }
+  mode = Mode::UNKNOWN;
+  CAI302::LogMode(port, env);
+  mode = Mode::NMEA;
+  return true;
 }

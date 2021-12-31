@@ -25,12 +25,12 @@ Copyright_License {
 #include "time/PeriodClock.hpp"
 
 WorkerThread::WorkerThread(const char *_name,
-                           unsigned _period_min, unsigned _idle_min,
-                           unsigned _delay)
+                           Duration _period_min, Duration _idle_min,
+                           Duration _delay) noexcept
   :SuspensibleThread(_name),
-   period_min(std::chrono::milliseconds(_period_min)),
-   idle_min(std::chrono::milliseconds(_idle_min)),
-   delay(std::chrono::milliseconds(_delay))
+   period_min(_period_min),
+   idle_min(_idle_min),
+   delay(_delay)
 {
 }
 

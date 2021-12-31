@@ -26,11 +26,13 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Dialogs/FilePicker.hpp"
 #include "Dialogs/JobDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "UIGlobals.hpp"
 #include "CAI302/UnitsEditor.hpp"
 #include "CAI302/WaypointUploader.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Language/Language.hpp"
+#include "Operation/Cancelled.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/Driver/CAI302/Internal.hpp"
 #include "Device/Driver/CAI302/Protocol.hpp"
@@ -84,35 +86,65 @@ ManageCAI302Widget::Prepare(ContainerWindow &parent,
                             const PixelRect &rc) noexcept
 {
   AddButton(_("Units"), [this](){
-    EditUnits(GetLook(), device);
+    try {
+      EditUnits(GetLook(), device);
+    } catch (OperationCancelled) {
+    } catch (...) {
+      ShowError(std::current_exception(), _("Units"));
+    }
   });
 
   AddButton(_("Waypoints"), [this](){
-    UploadWaypoints(GetLook(), device);
+    try {
+      UploadWaypoints(GetLook(), device);
+    } catch (OperationCancelled) {
+    } catch (...) {
+      ShowError(std::current_exception(), _("Waypoints"));
+    }
   });
 
   AddButton(_("Start Logger"), [this](){
     MessageOperationEnvironment env;
-    device.StartLogging(env);
+    try {
+      device.StartLogging(env);
+    } catch (OperationCancelled) {
+    } catch (...) {
+      env.SetError(std::current_exception());
+    }
   });
 
   AddButton(_("Stop Logger"), [this](){
     MessageOperationEnvironment env;
-    device.StopLogging(env);
+    try {
+      device.StopLogging(env);
+    } catch (OperationCancelled) {
+    } catch (...) {
+      env.SetError(std::current_exception());
+    }
   });
 
   AddButton(_("Delete all flights"), [this](){
-      if (ShowMessageBox(_("Do you really want to delete all flights from the device?"),
-                      _T("CAI 302"), MB_YESNO) != IDYES)
-        return;
+    if (ShowMessageBox(_("Do you really want to delete all flights from the device?"),
+                       _T("CAI 302"), MB_YESNO) != IDYES)
+      return;
 
-      MessageOperationEnvironment env;
+    MessageOperationEnvironment env;
+    try {
       device.ClearLog(env);
+    } catch (OperationCancelled) {
+    } catch (...) {
+      env.SetError(std::current_exception());
+    }
   });
 
   AddButton(_("Reboot"), [this](){
     MessageOperationEnvironment env;
-    device.Reboot(env);
+    try {
+      device.Reboot(env);
+    } catch (OperationCancelled) {
+    } catch (...) {
+      env.SetError(std::current_exception());
+    }
   });
 }
 

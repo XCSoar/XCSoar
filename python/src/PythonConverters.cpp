@@ -39,6 +39,8 @@
     #define PyInt_AsLong PyLong_AsLong
 #endif
 
+using namespace std::chrono;
+
 PyObject* Python::BrokenDateTimeToPy(const BrokenDateTime &datetime) {
   PyDateTime_IMPORT;
 
@@ -84,6 +86,17 @@ GeoPoint Python::ReadLonLat(PyObject *py_location) {
   return location;
 }
 
+TimeStamp Python::PyLongToTimeStamp(PyObject* ts) {
+  if(!PyLong_Check(ts)) {
+    PyErr_SetString(PyExc_TypeError, "Failed to parse timestamp.");
+    return TimeStamp::Undefined();
+  }
+  long lts = PyLong_AsLong(ts);
+  seconds secs(lts);
+  return TimeStamp(duration_cast<FloatDuration>(secs));
+}
+
+
 PyObject* Python::WriteEvent(const BrokenDateTime &datetime,
                              const GeoPoint &location) {
   PyObject *py_event = PyDict_New();
@@ -107,7 +120,7 @@ PyObject* Python::WritePoint(const ContestTracePoint &point,
                              const ContestTracePoint *previous) {
   PyObject *py_point = PyDict_New();
 
-  PyObject *py_time = PyInt_FromLong((long)point.GetTime());
+  PyObject *py_time = PyInt_FromLong(duration_cast<duration<long>>(point.GetTime()).count());
   PyObject *py_location = WriteLonLat(point.GetLocation());
 
   PyDict_SetItemString(py_point, "time", py_time);
@@ -123,7 +136,7 @@ PyObject* Python::WritePoint(const ContestTracePoint &point,
     Py_DECREF(py_distance);
 
     unsigned duration =
-      std::max((int)point.GetTime() - (int)previous->GetTime(), 0);
+      std::max(duration_cast<std::chrono::duration<int>>(point.GetTime() - previous->GetTime()).count(), 0);
     PyObject *py_duration = PyFloat_FromDouble(duration);
     PyDict_SetItemString(py_point, "duration", py_duration);
     Py_DECREF(py_duration);
@@ -157,7 +170,7 @@ PyObject* Python::WriteContest(const ContestResult &result,
   return Py_BuildValue("{s:d,s:d,s:i,s:d,s:N}",
     "score", result.score,
     "distance", result.distance,
-    "duration", (long)result.time,
+    "duration", duration_cast<duration<long>>(result.time).count(),
     "speed", result.GetSpeed(),
     "turnpoints", py_trace);
 }
@@ -197,7 +210,7 @@ PyObject* Python::WritePhase(const Phase &phase) {
     "start_time", BrokenDateTimeToPy(phase.start_datetime),
     "end_time", BrokenDateTimeToPy(phase.end_datetime),
     "type", FormatPhaseType(phase.phase_type),
-    "duration", (long)phase.duration,
+    "duration", duration_cast<duration<long>>(phase.duration).count(),
     "circling_direction", FormatCirclingDirection(phase.circling_direction),
     "alt_diff", (long)phase.alt_diff,
     "distance", (long)phase.distance,
@@ -209,7 +222,7 @@ PyObject* Python::WritePhase(const Phase &phase) {
 PyObject* Python::WriteCirclingStats(const Phase &stats) {
   return Py_BuildValue("{s:i,s:i,s:d,s:d,s:i}",
     "alt_diff", (long)stats.alt_diff,
-    "duration", (long)stats.duration,
+    "duration", duration_cast<duration<long>>(stats.duration).count(),
     "fraction", stats.fraction,
     "vario", stats.GetVario(),
     "count", (long)stats.merges);
@@ -218,7 +231,7 @@ PyObject* Python::WriteCirclingStats(const Phase &stats) {
 PyObject* Python::WriteCruiseStats(const Phase &stats) {
   return Py_BuildValue("{s:i,s:i,s:d,s:i,s:d,s:d,s:d,s:i}",
     "alt_diff", (long)stats.alt_diff,
-    "duration", (long)stats.duration,
+    "duration", duration_cast<duration<long>>(stats.duration).count(),
     "fraction", stats.fraction,
     "distance", (long)stats.distance,
     "speed", stats.GetSpeed(),
@@ -302,9 +315,11 @@ PyObject* Python::IGCFixEnhancedToPyTuple(const IGCFixEnhanced &fix) {
     Py_INCREF(Py_None);
   }
 
-  return Py_BuildValue("(NiNiiNNNNNNNi)",
+  PyObject *py_clock = PyInt_FromLong(duration_cast<seconds>(fix.clock.ToDuration()).count());
+
+  return Py_BuildValue("(NNNiiNNNNNNii)",
     BrokenDateTimeToPy(BrokenDateTime(fix.date, fix.time)),
-    fix.clock,
+    py_clock,
     WriteLonLat(fix.location),
     fix.gps_altitude,
     fix.pressure_altitude,
@@ -320,6 +335,7 @@ PyObject* Python::IGCFixEnhancedToPyTuple(const IGCFixEnhanced &fix) {
 
 bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
   PyObject *py_datetime = nullptr,
+           *py_clock = nullptr,
            *py_location = nullptr,
            *py_gps_alt = nullptr,
            *py_pressure_alt = nullptr,
@@ -334,8 +350,8 @@ bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
 
   fix.Clear();
 
-  if (!PyArg_ParseTuple(py_fix, "OiOO|OOOOOOOOO",
-         &py_datetime, &fix.clock, &py_location,
+  if (!PyArg_ParseTuple(py_fix, "OOOO|OOOOOOOOO",
+         &py_datetime, &py_clock, &py_location,
          &py_gps_alt, &py_pressure_alt,
          &py_enl, &py_trt, &py_gsp, &py_tas, &py_ias,
          &py_siu, &py_elevation, &py_level)) {
@@ -344,7 +360,7 @@ bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
 
   fix.date = PyToBrokenDateTime(py_datetime);
   fix.time = PyToBrokenDateTime(py_datetime);
-
+  fix.clock = PyLongToTimeStamp(py_clock);
   fix.location = ReadLonLat(py_location);
 
   if (!fix.location.IsValid())

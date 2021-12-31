@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Unit.hpp"
 #include "Group.hpp"
-#include "util/Compiler.h"
 
 struct UnitSetting
 {
@@ -51,15 +50,15 @@ struct UnitSetting
   /** Unit for mass */
   Unit mass_unit;
 
-  void SetDefaults();
+  void SetDefaults() noexcept;
 
   /**
    * Return the configured unit for a given group.
    */
-  gcc_pure
-  Unit GetByGroup(UnitGroup group) const;
+  [[gnu::pure]]
+  Unit GetByGroup(UnitGroup group) const noexcept;
 
-  bool operator==(const UnitSetting &right) const;
+  bool operator==(const UnitSetting &right) const noexcept;
 };
 
 #endif

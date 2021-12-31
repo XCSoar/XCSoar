@@ -32,6 +32,7 @@ Copyright_License {
 #include "Device/SettingsMap.hpp"
 
 #include <cstdint>
+#include <optional>
 #include <string>
 
 class Port;
@@ -67,11 +68,8 @@ public:
 
   /**
    * Write a setting to the FLARM.
-   *
-   * @return true if sending the command has succeeded (it does not
-   * indicate whether the FLARM has understood and processed it)
    */
-  bool SendSetting(const char *name, const char *value,
+  void SendSetting(const char *name, const char *value,
                    OperationEnvironment &env);
 
   /**
@@ -81,7 +79,7 @@ public:
    * @return true if sending the command has succeeded (it does not
    * indicate whether the FLARM has understood and processed it)
    */
-  bool RequestSetting(const char *name, OperationEnvironment &env);
+  void RequestSetting(const char *name, OperationEnvironment &env);
 
   /**
    * Look up the given setting in the table of received values.  The
@@ -89,7 +87,7 @@ public:
    * element is the value.
    */
   gcc_pure
-  std::pair<bool, std::string> GetSetting(const char *name) const;
+  std::optional<std::string> GetSetting(const char *name) const noexcept;
 
 protected:
   bool TextMode(OperationEnvironment &env);
@@ -105,6 +103,7 @@ public:
 
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env) override;
+  bool PutPilotEvent(OperationEnvironment &env) override;
 
   bool GetPilot(TCHAR *buffer, size_t length, OperationEnvironment &env);
   bool SetPilot(const TCHAR *pilot_name, OperationEnvironment &env);
@@ -138,7 +137,7 @@ private:
   /**
    * Sends the supplied sentence with a $ prepended and a line break appended
    */
-  bool Send(const char *sentence, OperationEnvironment &env);
+  void Send(const char *sentence, OperationEnvironment &env);
   bool Receive(const char *prefix, char *buffer, size_t length,
                OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout);
@@ -158,10 +157,10 @@ private:
   bool DeclareInternal(const Declaration &declaration,
                        OperationEnvironment &env);
 
-  bool SendEscaped(const void *data, size_t length,
+  void SendEscaped(const void *data, size_t length,
                    OperationEnvironment &env,
                    std::chrono::steady_clock::duration timeout) {
-    return FLARM::SendEscaped(port, data, length, env, timeout);
+    FLARM::SendEscaped(port, data, length, env, timeout);
   }
 
   bool ReceiveEscaped(void *data, size_t length,
@@ -172,16 +171,16 @@ private:
 
   /**
    * Send the byte that is used to signal that start of a new frame
-   * @return True if the byte was sent successfully
    */
-  bool SendStartByte();
+  void SendStartByte();
 
   /**
    * Waits for a certain amount of time until the next frame start signal byte
    * is received
-   * @return True if the start byte was received, False if a timeout occurred
+   *
+   * Throws on error.
    */
-  bool WaitForStartByte(OperationEnvironment &env,
+  void WaitForStartByte(OperationEnvironment &env,
                         std::chrono::steady_clock::duration timeout);
 
   /**
@@ -201,10 +200,8 @@ private:
    * Sends a FrameHeader to the port. Remember that a StartByte should be
    * sent first!
    * @param header FrameHeader that should be sent.
-   * @return True if the header was sent successfully, False if a timeout
-   * or any transfer problems occurred
    */
-  bool SendFrameHeader(const FLARM::FrameHeader &header,
+  void SendFrameHeader(const FLARM::FrameHeader &header,
                        OperationEnvironment &env,
                        std::chrono::steady_clock::duration timeout);
 
@@ -262,9 +259,8 @@ private:
 
   /**
    * "Resets the device. The only way to resume normal operation."
-   * @return True if the message was sent properly, False otherwise
    */
-  bool BinaryReset(OperationEnvironment &env,
+  void BinaryReset(OperationEnvironment &env,
                    std::chrono::steady_clock::duration timeout);
 
   /**

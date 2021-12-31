@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2020 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2011-2021 Max Kellermann <max.kellermann@gmail.com>
  *               2012 Tobias Bieniek <tobias.bieniek@gmx.de>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,10 +28,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef QUAD_TREE_HXX
-#define QUAD_TREE_HXX
-
-#include "Compiler.h"
+#pragma once
 
 #include <utility>
 #include <limits>
@@ -305,10 +302,10 @@ protected:
 
 	struct LeafList {
 		/* a linked list of values, or nullptr if this is a splitted bucket */
-		Leaf *head;
-		unsigned size;
+		Leaf *head = nullptr;
+		unsigned size = 0;
 
-		LeafList() noexcept:head(nullptr), size(0) {}
+		constexpr LeafList() noexcept = default;
 
 		~LeafList() noexcept {
 			assert(head == nullptr);
@@ -423,7 +420,7 @@ protected:
 			other.size = 0;
 		}
 
-		gcc_pure
+		[[gnu::pure]]
 		const Leaf &FindPointer(const T *value) const noexcept {
 			assert(value != nullptr);
 
@@ -438,7 +435,7 @@ protected:
 		}
 
 		template<class P>
-		gcc_pure
+		[[gnu::pure]]
 		std::pair<const Leaf *, distance_type>
 		FindNearestIf(const Point location, distance_type square_range,
 			      const P &predicate) const noexcept {
@@ -508,7 +505,7 @@ protected:
 		/**
 		 * Returns the (deep) number of leaves in this bucket.
 		 */
-		gcc_pure
+		[[gnu::pure]]
 		unsigned GetSize() const noexcept {
 			return IsSplitted()
 				? children->GetSize()
@@ -666,7 +663,7 @@ protected:
 		/**
 		 * Find the first Bucket in the tree that has at least one Leaf.
 		 */
-		gcc_pure
+		[[gnu::pure]]
 		const Bucket *FindFirstLeafBucket() const noexcept {
 			if (!leaves.IsEmpty())
 				return this;
@@ -683,7 +680,7 @@ protected:
 			return nullptr;
 		}
 
-		gcc_pure
+		[[gnu::pure]]
 		const Bucket *FindNextLeafBucket() const noexcept {
 			assert(children == nullptr);
 
@@ -703,19 +700,19 @@ protected:
 			return nullptr;
 		}
 
-		gcc_pure
+		[[gnu::pure]]
 		Bucket *FindFirstLeafBucket() noexcept {
 			const Bucket *cthis = this;
 			return const_cast<Bucket *>(cthis->FindFirstLeafBucket());
 		}
 
-		gcc_pure
+		[[gnu::pure]]
 		Bucket *FindNextLeafBucket() noexcept {
 			const Bucket *cthis = this;
 			return const_cast<Bucket *>(cthis->FindNextLeafBucket());
 		}
 
-		gcc_pure
+		[[gnu::pure]]
 		const_iterator FindPointer(Rectangle &bounds,
 					   const T *value) const noexcept {
 			assert(value != nullptr);
@@ -732,7 +729,7 @@ protected:
 		}
 
 		template<class P>
-		gcc_pure
+		[[gnu::pure]]
 		std::pair<const_iterator, distance_type>
 		FindNearestIf(const Rectangle &bounds,
 			      const Point location, distance_type square_range,
@@ -778,12 +775,12 @@ protected:
 				buckets[i].parent = parent;
 		}
 
-		gcc_const
+		[[gnu::const]]
 		Bucket &Get(bool right, bool bottom) noexcept {
 			return buckets[(bottom << 1) | right];
 		}
 
-		gcc_pure
+		[[gnu::pure]]
 		const Bucket *GetNext(const Bucket *bucket) noexcept {
 			assert(bucket != nullptr);
 			assert(bucket->parent != nullptr);
@@ -848,7 +845,7 @@ protected:
 		}
 
 		template<class P>
-		gcc_pure
+		[[gnu::pure]]
 		std::pair<const_iterator, distance_type>
 		FindNearestIf(const Rectangle &bounds,
 			      const Point location, distance_type square_range,
@@ -917,7 +914,7 @@ protected:
 	/**
 	 * Safely deconstify a bucket pointer.  This is a hack.
 	 */
-	gcc_const
+	[[gnu::const]]
 	Bucket *DeconstifyBucket(const Bucket *bucket) noexcept {
 		assert(bucket != nullptr);
 		assert(bucket->GetRoot() == &root);
@@ -928,7 +925,7 @@ protected:
 	/**
 	 * Safely deconstify a leaf pointer.  This is a hack.
 	 */
-	gcc_const
+	[[gnu::const]]
 	Leaf *DeconstifyLeaf(const Leaf *leaf) noexcept {
 		assert(leaf != nullptr);
 
@@ -1063,7 +1060,7 @@ public:
 
 		Leaf *leaf = leaf_allocator.allocate(1);
 		std::allocator_traits<LeafAllocator>::construct(leaf_allocator,
-								leaf, Leaf(std::forward<U>(value)));
+								leaf, std::forward<U>(value));
 
 		root.AddHere(leaf);
 
@@ -1083,7 +1080,7 @@ public:
 
 		Leaf *leaf = leaf_allocator.allocate(1);
 		std::allocator_traits<LeafAllocator>::construct(leaf_allocator,
-								leaf, Leaf(std::forward<U>(value)));
+								leaf, std::forward<U>(value));
 
 		bounds.Scan(GetPosition(leaf->value));
 		root.AddHere(leaf);
@@ -1103,7 +1100,7 @@ public:
 
 		Leaf *leaf = leaf_allocator.allocate(1);
 		std::allocator_traits<LeafAllocator>::construct(leaf_allocator,
-								leaf, Leaf(std::forward<U>(value)));
+								leaf, std::forward<U>(value));
 
 		Rectangle bounds = this->bounds;
 		root.Add(bounds, leaf, bucket_allocator);
@@ -1202,7 +1199,7 @@ public:
 		}
 	};
 
-	gcc_pure
+	[[gnu::pure]]
 	iterator begin() noexcept {
 		Bucket *bucket = root.FindFirstLeafBucket();
 		return bucket != nullptr
@@ -1210,7 +1207,7 @@ public:
 			: iterator();
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	iterator end() noexcept {
 		return iterator();
 	}
@@ -1281,7 +1278,7 @@ public:
 		}
 	};
 
-	gcc_pure
+	[[gnu::pure]]
 	const_iterator begin() const noexcept {
 		const Bucket *bucket = root.FindFirstLeafBucket();
 		return bucket != nullptr
@@ -1289,12 +1286,12 @@ public:
 			: const_iterator();
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	const_iterator end() const noexcept {
 		return const_iterator();
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	const_iterator FindPointer(const T *value) const noexcept {
 		assert(value != nullptr);
 		assert(IsWithinKnownBounds(*value));
@@ -1303,7 +1300,7 @@ public:
 		return root.FindPointer(bounds, value);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	unsigned size() const noexcept {
 		return root.GetSize();
 	}
@@ -1374,7 +1371,7 @@ public:
 	}
 
 	template<class P>
-	gcc_pure
+	[[gnu::pure]]
 	std::pair<const_iterator, distance_type>
 	FindNearestIf(const Point location, distance_type range,
 		      const P &predicate) const noexcept {
@@ -1383,20 +1380,20 @@ public:
 	}
 
 	template<class P>
-	gcc_pure
+	[[gnu::pure]]
 	std::pair<const_iterator, distance_type>
 	FindNearestIf(const T &value, distance_type range,
 		      const P &predicate) const noexcept {
 		return FindNearestIf(GetPosition(value), range, predicate);
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	std::pair<const_iterator, distance_type>
 	FindNearest(const Point location, distance_type range) const noexcept {
 		return root.FindNearestIf(bounds, location, Square(range), AlwaysTrue());
 	}
 
-	gcc_pure
+	[[gnu::pure]]
 	std::pair<const_iterator, distance_type>
 	FindNearest(const T &value, distance_type range) const noexcept {
 		return FindNearest(GetPosition(value), range);
@@ -1414,5 +1411,3 @@ public:
 		VisitWithinRange(GetPosition(value), range, visitor);
 	}
 };
-
-#endif

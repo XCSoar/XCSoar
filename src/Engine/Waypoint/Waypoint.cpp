@@ -24,10 +24,7 @@
 #include "Geo/Flat/FlatProjection.hpp"
 
 Waypoint::Waypoint(const GeoPoint &_location)
-  :location(_location),
-   runway(Runway::Null()), radio_frequency(RadioFrequency::Null()),
-   type(Type::NORMAL), flags(Flags::Defaults()),
-   origin(WaypointOrigin::NONE)
+  :location(_location)
 {
 }
 

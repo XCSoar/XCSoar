@@ -24,6 +24,7 @@
 #include "Terrain/RasterTerrain.hpp"
 #include "Airspace/ActivePredicate.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
+#include "Engine/Route/ReachResult.hpp"
 
 void
 RoutePlannerGlue::SetTerrain(const RasterTerrain *_terrain)
@@ -77,11 +78,10 @@ RoutePlannerGlue::SolveReach(const AGeoPoint &origin,
   }
 }
 
-bool
-RoutePlannerGlue::FindPositiveArrival(const AGeoPoint &dest,
-                                      ReachResult &result_r) const
+std::optional<ReachResult>
+RoutePlannerGlue::FindPositiveArrival(const AGeoPoint &dest) const noexcept
 {
-  return planner.FindPositiveArrival(dest, result_r);
+  return planner.FindPositiveArrival(dest);
 }
 
 GeoPoint

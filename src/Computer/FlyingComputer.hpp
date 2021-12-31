@@ -27,6 +27,7 @@ Copyright_License {
 #include "StateClock.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "time/DeltaTime.hpp"
+#include "time/Stamp.hpp"
 
 struct NMEAInfo;
 struct DerivedInfo;
@@ -64,7 +65,7 @@ class FlyingComputer {
    * negative value when the aircraft is stationary for a certain
    * amount of time.
    */
-  double moving_since;
+  TimeStamp moving_since;
 
   /**
    * If the aircraft is currently assumed to be moving, then this
@@ -73,7 +74,14 @@ class FlyingComputer {
    */
   GeoPoint moving_at;
 
-  double stationary_since;
+  /**
+   * If the aircraft is currently assumed to be moving, then this
+   * denotes the altitude when moving started initially.  This
+   * attribute is only valid if #moving_since is non-negative.
+   */
+  double moving_altitude;
+
+  TimeStamp stationary_since;
   GeoPoint stationary_at;
 
   /**
@@ -81,7 +89,7 @@ class FlyingComputer {
    * the initial powered time stamp. If the aircraft is unpowered
    * this is set to a negative value.
    */
-  double powered_since;
+  TimeStamp powered_since;
   GeoPoint powered_at;
 
   /**
@@ -89,12 +97,12 @@ class FlyingComputer {
    * the initial unpowered time stamp. If the aircraft is powered
    * this is set to a negative value.
    */
-  double unpowered_since;
+  TimeStamp unpowered_since;
   GeoPoint unpowered_at;
 
   double climbing_altitude;
 
-  double sinking_since;
+  TimeStamp sinking_since;
 
   GeoPoint sinking_location;
 
@@ -118,7 +126,7 @@ public:
                FlyingState &flying);
 
   void Compute(double takeoff_speed,
-               const AircraftState &state, double dt,
+               const AircraftState &state, FloatDuration dt,
                FlyingState &flying);
 
   /**
@@ -126,10 +134,10 @@ public:
    * but the aircraft has not been moving, this force-detects the
    * landing now.  Call at the end of a replay.
    */
-  void Finish(FlyingState &flying, double time);
+  void Finish(FlyingState &flying, TimeStamp time) noexcept;
 
 protected:
-  void CheckRelease(FlyingState &state, double time, const GeoPoint &location,
+  void CheckRelease(FlyingState &state, TimeStamp time, const GeoPoint &location,
                     double altitude);
 
   /**
@@ -140,22 +148,23 @@ protected:
    * @return true if the aircraft has been climbing for more than 10
    * seconds
    */
-  bool CheckClimbing(double dt, double altitude);
+  bool CheckClimbing(FloatDuration dt, double altitude) noexcept;
 
   /**
    * Check for powered flight.
    */
-  void CheckPowered(double dt, const NMEAInfo &basic, FlyingState &flying);
+  void CheckPowered(FloatDuration dt, const NMEAInfo &basic,
+                    FlyingState &flying) noexcept;
 
-  void Check(FlyingState &state, double time);
+  void Check(FlyingState &state, TimeStamp time) noexcept;
 
   /**
    * Update flying state when moving 
    *
    * @param time Time the aircraft is moving
    */
-  void Moving(FlyingState &state, double time, double dt,
-              const GeoPoint &location);
+  void Moving(FlyingState &state, TimeStamp time, FloatDuration dt,
+              const GeoPoint &location, double altitude) noexcept;
 
   /**
    * Update flying state when stationary 
@@ -163,7 +172,7 @@ protected:
    * @param time Time the aircraft is stationary
    * @param on_ground Whether the aircraft is known to be on the ground
    */
-  void Stationary(FlyingState &state, double time, double dt,
+  void Stationary(FlyingState &state, TimeStamp time, FloatDuration dt,
                   const GeoPoint &location);
 };
 

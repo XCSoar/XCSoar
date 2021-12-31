@@ -36,11 +36,12 @@ ElementStatComputer::Reset(ElementStat &data)
 {
   initialised = false;
 
-  CalcSpeeds(data, -1);
+  CalcSpeeds(data, TimeStamp::Undefined());
 }
 
 void 
-ElementStatComputer::CalcSpeeds(ElementStat &data, const double time)
+ElementStatComputer::CalcSpeeds(ElementStat &data,
+                                const TimeStamp time) noexcept
 {
   remaining_effective.CalcSpeed(data.remaining_effective,
                                 data.time_remaining_start);
@@ -49,7 +50,7 @@ ElementStatComputer::CalcSpeeds(ElementStat &data, const double time)
   travelled.CalcSpeed(data.travelled, data.time_elapsed);
 
   if (!initialised) {
-    if (data.time_elapsed > 15)
+    if (data.time_elapsed > std::chrono::seconds{15})
       initialised = true;
 
     vario.reset(data.vario, data.solution_remaining);

@@ -51,7 +51,7 @@ protected:
       event = _event;
     }
 
-    virtual bool OnClicked();
+    bool OnClicked() noexcept override;
   };
 
   Button buttons[MAX_BUTTONS];

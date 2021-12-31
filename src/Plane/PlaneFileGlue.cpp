@@ -68,6 +68,7 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
   bool has_registration = false;
   bool has_competition_id = false;
   bool has_type = false;
+  bool has_weglide_type = false;
   bool has_polar_name = false;
   bool has_polar = false;
   bool has_reference_mass = false;
@@ -89,6 +90,9 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
     } else if (!has_type && StringIsEqual(pair.key, "Type")) {
       plane.type.SetUTF8(pair.value);
       has_type = true;
+    } else if (!has_weglide_type &&
+      StringIsEqual(pair.key, "WeGlideAircraftType")) {
+      has_weglide_type = ReadUnsigned(pair.value, plane.weglide_glider_type);
     } else if (!has_handicap && StringIsEqual(pair.key, "Handicap")) {
       has_handicap = ReadUnsigned(pair.value, plane.handicap);
     } else if (!has_polar_name && StringIsEqual(pair.key, "PolarName")) {
@@ -120,6 +124,8 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
     plane.competition_id.clear();
   if (!has_type)
     plane.type.clear();
+  if (!has_weglide_type)
+    plane.weglide_glider_type = 0;
   if (!has_polar_name)
     plane.polar_name.clear();
   if (!has_dry_mass)
@@ -178,6 +184,8 @@ PlaneGlue::Write(const Plane &plane, KeyValueFileWriter &writer)
   writer.Write("MaxSpeed", tmp);
   tmp.Format("%f", (double)plane.wing_area);
   writer.Write("WingArea", tmp);
+  tmp.Format("%u", (unsigned)plane.weglide_glider_type);
+  writer.Write("WeGlideAircraftType", tmp);
 }
 
 void

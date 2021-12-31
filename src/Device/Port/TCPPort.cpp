@@ -30,15 +30,18 @@ Copyright_License {
 TCPPort::TCPPort(EventLoop &event_loop,
                  unsigned port,
                  PortListener *_listener, DataHandler &_handler)
-  :BufferedPort(_listener, _handler),
-   listener(event_loop, BIND_THIS_METHOD(OnListenerReady)),
-   connection(event_loop, BIND_THIS_METHOD(OnConnectionReady))
+  :SocketPort(event_loop, _listener, _handler),
+   listener(event_loop, BIND_THIS_METHOD(OnListenerReady))
 {
   const IPv4Address address(port);
 
   UniqueSocketDescriptor s;
   if (!s.Create(AF_INET, SOCK_STREAM, 0))
     throw MakeSocketError("Failed to create socket");
+
+  /* always set SO_REUSEADDR for TCP sockets to allow quick
+     restarts */
+  s.SetReuseAddress(true);
 
   if (!s.Bind(address))
     throw MakeSocketError("Failed to bind socket");
@@ -53,41 +56,22 @@ TCPPort::TCPPort(EventLoop &event_loop,
   });
 }
 
-TCPPort::~TCPPort()
+TCPPort::~TCPPort() noexcept
 {
-  BufferedPort::BeginClose();
-
   BlockingCall(GetEventLoop(), [this](){
-    connection.Close();
     listener.Close();
   });
-
-  BufferedPort::EndClose();
 }
 
 PortState
-TCPPort::GetState() const
+TCPPort::GetState() const noexcept
 {
-  if (connection.IsDefined())
+  if (IsConnected())
     return PortState::READY;
   else if (listener.IsDefined())
     return PortState::LIMBO;
   else
     return PortState::FAILED;
-}
-
-size_t
-TCPPort::Write(const void *data, size_t length)
-{
-  if (!connection.IsDefined())
-    return 0;
-
-  ssize_t nbytes = connection.GetSocket().Write(data, length);
-  if (nbytes < 0)
-    // TODO check EAGAIN?
-    return 0;
-
-  return nbytes;
 }
 
 void
@@ -105,32 +89,10 @@ try {
 
   s.SetOption(SOL_SOCKET, SO_SNDTIMEO, &value, sizeof(value));
 
-  connection.Close();
-  connection.Open(s);
-  connection.ScheduleRead();
+  SocketPort::Close();
+  SocketPort::Open(s);
 } catch (...) {
   listener.Close();
-  StateChanged();
-  Error(std::current_exception());
-}
-
-void
-TCPPort::OnConnectionReady(unsigned) noexcept
-try {
-  char input[4096];
-  ssize_t nbytes = connection.GetSocket().Read(input, sizeof(input));
-  if (nbytes < 0)
-    throw MakeSocketError("Failed to receive");
-
-  if (nbytes == 0) {
-    connection.Close();
-    StateChanged();
-    return;
-  }
-
-  DataReceived(input, nbytes);
-} catch (...) {
-  connection.Close();
   StateChanged();
   Error(std::current_exception());
 }

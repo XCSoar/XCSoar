@@ -53,7 +53,7 @@ TaskStatusPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(MC, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
-    auto mc = Units::ToSysVSpeed(dff.GetAsFixed());
+    auto mc = Units::ToSysVSpeed(dff.GetValue());
     ActionInterface::SetManualMacCready(mc);
     Refresh();
   }
@@ -71,13 +71,13 @@ TaskStatusPanel::Refresh() noexcept
   SetRowVisible(TaskTime, task_stats.has_targets);
   if (task_stats.has_targets)
     SetText(TaskTime,
-            FormatSignedTimeHHMM((int)protected_task_manager->GetOrderedTaskSettings().aat_min_time));
+            FormatTimeHHMM(protected_task_manager->GetOrderedTaskSettings().aat_min_time));
 
   SetText(ETETime,
-          FormatSignedTimeHHMM((int)task_stats.GetEstimatedTotalTime()));
+          FormatSignedTimeHHMM(task_stats.GetEstimatedTotalTime()));
 
   SetText(RemainingTime,
-          FormatSignedTimeHHMM((int)task_stats.total.time_remaining_now));
+          FormatSignedTimeHHMM(task_stats.total.time_remaining_now));
 
   if (task_stats.total.planned.IsDefined())
     SetText(TaskDistance,

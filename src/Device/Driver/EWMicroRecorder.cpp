@@ -54,10 +54,18 @@ public:
 
 public:
   /* virtual methods from class Device */
+  bool EnableNMEA(OperationEnvironment &env) override;
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env) override;
 };
+
+bool
+EWMicroRecorderDevice::EnableNMEA(OperationEnvironment &env)
+{
+  port.FullWrite("!!\r\n", 4, env, std::chrono::milliseconds(500));
+  return true;
+}
 
 static bool
 ReadAltitude(NMEAInputLine &line, double &value_r)
@@ -190,7 +198,7 @@ CleanString(char *p)
 /**
  * Clean a string and write it to the Port.
  */
-static bool
+static void
 WriteCleanString(Port &port, const TCHAR *p,
                  OperationEnvironment &env,
                  std::chrono::steady_clock::duration timeout)
@@ -200,29 +208,29 @@ WriteCleanString(Port &port, const TCHAR *p,
 
   CleanString(buffer.buffer());
 
-  return port.FullWriteString(buffer, env, timeout);
+  port.FullWriteString(buffer, env, timeout);
 }
 
-static bool
+static void
 WriteLabel(Port &port, const char *name, OperationEnvironment &env)
 {
-  return port.FullWriteString(name, env, std::chrono::seconds(1)) &&
-    port.FullWrite(": ", 2, env, std::chrono::milliseconds(500));
+  port.FullWriteString(name, env, std::chrono::seconds(1));
+  port.FullWrite(": ", 2, env, std::chrono::milliseconds(500));
 }
 
 /**
  * Write a name/value pair to the EW microRecorder.
  */
-static bool
+static void
 WritePair(Port &port, const char *name, const TCHAR *value,
           OperationEnvironment &env)
 {
-  return WriteLabel(port, name, env) &&
-    WriteCleanString(port, value, env, std::chrono::seconds(1)) &&
-    port.FullWrite("\r\n", 2, env, std::chrono::milliseconds(500));
+  WriteLabel(port, name, env);
+  WriteCleanString(port, value, env, std::chrono::seconds(1));
+  port.FullWrite("\r\n", 2, env, std::chrono::milliseconds(500));
 }
 
-static bool
+static void
 WriteGeoPoint(Port &port, const GeoPoint &value, OperationEnvironment &env)
 {
   int DegLat, DegLon;
@@ -258,20 +266,20 @@ WriteGeoPoint(Port &port, const GeoPoint &value, OperationEnvironment &env)
           DegLat, (int)MinLat, NoS,
           DegLon, (int)MinLon, EoW);
 
-  return port.FullWriteString(buffer, env, std::chrono::seconds(1));
+  port.FullWriteString(buffer, env, std::chrono::seconds(1));
 }
 
-static bool
+static void
 EWMicroRecorderWriteWaypoint(Port &port, const char *type,
                              const Waypoint &way_point,
                              OperationEnvironment &env)
 {
-  return WriteLabel(port, type, env) &&
-    WriteGeoPoint(port, way_point.location, env) &&
-    port.Write(' ') &&
-    WriteCleanString(port, way_point.name.c_str(),
-                     env, std::chrono::seconds(1)) &&
-    port.FullWrite("\r\n", 2, env, std::chrono::milliseconds(500));
+  WriteLabel(port, type, env);
+  WriteGeoPoint(port, way_point.location, env);
+  port.Write(' ');
+  WriteCleanString(port, way_point.name.c_str(),
+                   env, std::chrono::seconds(1));
+  port.FullWrite("\r\n", 2, env, std::chrono::milliseconds(500));
 }
 
 static bool
@@ -292,10 +300,9 @@ DeclareInner(Port &port, const Declaration &declaration,
 
   port.Write('\x18');         // start to upload file
 
-  if (!port.FullWriteString(user_data, env, std::chrono::seconds(5)) ||
-      !port.FullWriteString("USER DETAILS\r\n--------------\r\n\r\n",
-                            env, std::chrono::seconds(1)))
-    return false;
+  port.FullWriteString(user_data, env, std::chrono::seconds(5));
+  port.FullWriteString("USER DETAILS\r\n--------------\r\n\r\n",
+                       env, std::chrono::seconds(1));
 
   WritePair(port, "Pilot Name", declaration.pilot_name.c_str(), env);
   WritePair(port, "Competition ID", declaration.competition_id.c_str(), env);
@@ -303,42 +310,35 @@ DeclareInner(Port &port, const Declaration &declaration,
   WritePair(port,  "Aircraft ID",
             declaration.aircraft_registration.c_str(), env);
 
-  if (!port.FullWriteString("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n",
-                            env, std::chrono::seconds(1)))
-    return false;
+  port.FullWriteString("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n",
+                       env, std::chrono::seconds(1));
 
   WritePair(port, "Description", _T("XCSoar task declaration"), env);
 
   for (unsigned i = 0; i < 11; i++) {
-    if (env.IsCancelled())
-      return false;
-
     if (i+1>= declaration.Size()) {
       port.FullWriteString("TP LatLon: 0000000N00000000E TURN POINT\r\n",
                            env, std::chrono::seconds(1));
     } else {
       const Waypoint &wp = declaration.GetWaypoint(i);
       if (i == 0) {
-        if (!EWMicroRecorderWriteWaypoint(port, "Take Off LatLong", wp, env) ||
-            !EWMicroRecorderWriteWaypoint(port, "Start LatLon", wp, env))
-          return false;
+        EWMicroRecorderWriteWaypoint(port, "Take Off LatLong", wp, env);
+        EWMicroRecorderWriteWaypoint(port, "Start LatLon", wp, env);
       } else if (i + 1 < declaration.Size()) {
-        if (!EWMicroRecorderWriteWaypoint(port, "TP LatLon", wp, env))
-          return false;
+        EWMicroRecorderWriteWaypoint(port, "TP LatLon", wp, env);
       }
     }
   }
 
   const Waypoint &wp = declaration.GetLastWaypoint();
-  if (!EWMicroRecorderWriteWaypoint(port, "Finish LatLon", wp, env) ||
-      !EWMicroRecorderWriteWaypoint(port, "Land LatLon", wp, env) ||
-      env.IsCancelled())
-      return false;
+  EWMicroRecorderWriteWaypoint(port, "Finish LatLon", wp, env);
+  EWMicroRecorderWriteWaypoint(port, "Land LatLon", wp, env);
 
   port.Write('\x03');         // finish sending user file
 
-  return port.ExpectString("uploaded successfully",
-                           env, std::chrono::seconds(5));
+  port.ExpectString("uploaded successfully",
+                    env, std::chrono::seconds(5));
+  return true;
 }
 
 bool
@@ -352,12 +352,7 @@ EWMicroRecorderDevice::Declare(const Declaration &declaration,
 
   port.StopRxThread();
 
-  bool success = DeclareInner(port, declaration, env);
-
-  // go back to NMEA mode
-  port.FullWrite("!!\r\n", 4, env, std::chrono::milliseconds(500));
-
-  return success;
+  return DeclareInner(port, declaration, env);
 }
 
 

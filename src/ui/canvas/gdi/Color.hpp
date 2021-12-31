@@ -26,8 +26,10 @@ Copyright_License {
 
 #include "ui/canvas/PortableColor.hpp"
 
-#include <windows.h>
 #include <cstdint>
+
+#include <windef.h>
+#include <wingdi.h>
 
 /**
  * This class represents a color in the RGB color space.  This is used
@@ -56,6 +58,9 @@ public:
 
   explicit constexpr Color(RGB8Color other)
     :value(RGB(other.Red(), other.Green(), other.Blue())) {}
+
+  explicit constexpr Color(BGRA8Color src) noexcept
+    :value(RGB(src.Red(), src.Green(), src.Blue())) {}
 
   /**
    * Returns the red part of the color

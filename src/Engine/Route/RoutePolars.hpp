@@ -72,7 +72,7 @@ public:
    */
   void Initialise(const GlideSettings &settings, const GlidePolar& polar,
                   const SpeedVector& wind,
-                  const int _height_min_working=0);
+                  const int _height_min_working=0) noexcept;
 
   /**
    * Calculate the time required to fly the link.  Returns UINT_MAX
@@ -88,7 +88,8 @@ public:
    *
    * @return Time (s) elapsed to fly the link
    */
-  unsigned CalcTime(const RouteLink& link) const;
+  [[gnu::pure]]
+  unsigned CalcTime(const RouteLink& link) const noexcept;
 
   /**
    * Test whether flight through a link intersects with terrain
@@ -108,8 +109,9 @@ public:
    *
    * @return True if intersect occurs
    */
+  [[gnu::pure]]
   bool CheckClearance(const RouteLink &e, const RasterMap* map,
-                      const FlatProjection &proj, RoutePoint &inp) const;
+                      const FlatProjection &proj, RoutePoint &inp) const noexcept;
 
   /**
    * Rotate line from start to end either left or right
@@ -121,11 +123,13 @@ public:
    *
    * @return Rotated link
    */
+  [[gnu::pure]]
   RouteLink NeighbourLink(const RoutePoint &start, const RoutePoint &end,
-                          const FlatProjection &proj, const int sign) const;
+                          const FlatProjection &proj, int sign) const noexcept;
 
   /** Whether climbs are possible/allowed */
-  bool CanClimb() const;
+  [[gnu::pure]]
+  bool CanClimb() const noexcept;
 
   /**
    * Calculate the glide height that would be used up in
@@ -135,7 +139,8 @@ public:
    *
    * @return Height of glide (m)
    */
-  double CalcVHeight(const RouteLink &link) const;
+  [[gnu::pure]]
+  double CalcVHeight(const RouteLink &link) const noexcept;
 
   /**
    * Generate a link from the destination imposing constraints on the origin
@@ -147,9 +152,10 @@ public:
    *
    * @return Link
    */
-  RouteLink GenerateIntermediate(const RoutePoint& _dest,
-                                 const RoutePoint& _origin,
-                                 const FlatProjection &proj) const;
+  [[gnu::pure]]
+  RouteLink GenerateIntermediate(const RoutePoint &_dest,
+                                 const RoutePoint &_origin,
+                                 const FlatProjection &proj) const noexcept;
 
   /**
    * Test whether the specified link is achievable given climb potential and
@@ -161,7 +167,9 @@ public:
    *
    * @return True if achievable to fly this link
    */
-  bool IsAchievable(const RouteLink &link, const bool check_ceiling=false) const;
+  [[gnu::pure]]
+  bool IsAchievable(const RouteLink &link,
+                    bool check_ceiling=false) const noexcept;
 
   /**
    * Set configuration parameters for this performance model.
@@ -176,14 +184,14 @@ public:
    */
   void SetConfig(const RoutePlannerConfig &_config,
                  int _cruise_alt = INT_MAX,
-                 int _ceiling_alt = INT_MAX);
+                 int _ceiling_alt = INT_MAX) noexcept;
 
   /**
    * Check whether the configuration requires intersection tests with airspace.
    *
    * @return True if airspace tests are required
    */
-  bool IsAirspaceEnabled() const {
+  bool IsAirspaceEnabled() const noexcept {
     return config.IsAirspaceEnabled();
   }
 
@@ -192,7 +200,7 @@ public:
    *
    * @return True if terrain tests are required
    */
-  bool IsTerrainEnabled() const {
+  bool IsTerrainEnabled() const noexcept {
     return config.IsTerrainEnabled();
   }
 
@@ -201,7 +209,7 @@ public:
    *
    * @return True if allow turns, otherwise straight
    */
-  bool IsTurningReachEnabled() const {
+  bool IsTurningReachEnabled() const noexcept {
     return config.IsTurningReachEnabled();
   }
 
@@ -209,7 +217,8 @@ public:
    * round up just below nearest 8 second block in a quick way
    * this is an attempt to stabilise solutions
    */
-  static unsigned RoundTime(const unsigned val);
+  [[gnu::const]]
+  static unsigned RoundTime(const unsigned val) noexcept;
 
   /**
    * Determine if intersection with terrain occurs in forwards direction from
@@ -226,20 +235,21 @@ public:
   [[gnu::pure]]
   GeoPoint Intersection(const AGeoPoint &origin, const AGeoPoint &destination,
                         const RasterMap *map,
-                        const FlatProjection &proj) const;
+                        const FlatProjection &proj) const noexcept;
 
   /**
    * Calculate height of arrival at destination starting from origin
    */
-  int CalcGlideArrival(const AFlatGeoPoint& origin,
-                       const FlatGeoPoint& dest,
-                       const FlatProjection &proj) const;
+  [[gnu::pure]]
+  int CalcGlideArrival(const AFlatGeoPoint &origin,
+                       const FlatGeoPoint &dest,
+                       const FlatProjection &proj) const noexcept;
 
-  int GetSafetyHeight() const {
+  int GetSafetyHeight() const noexcept {
     return config.safety_height_terrain;
   }
 
-  int GetFloor() const {
+  int GetFloor() const noexcept {
     return height_min_working;
   }
 
@@ -247,13 +257,13 @@ public:
   FlatGeoPoint ReachIntercept(int index, const AFlatGeoPoint &flat_origin,
                               const GeoPoint &origin,
                               const RasterMap* map,
-                              const FlatProjection &proj) const;
+                              const FlatProjection &proj) const noexcept;
 
 private:
   [[gnu::pure]]
   FlatGeoPoint MSLIntercept(const int index, const FlatGeoPoint &p,
                             double altitude,
-                            const FlatProjection &proj) const;
+                            const FlatProjection &proj) const noexcept;
 };
 
 #endif

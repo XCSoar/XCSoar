@@ -26,9 +26,9 @@ Copyright_License {
 
 #include "util/StringPointer.hxx"
 #include "util/AllocatedString.hxx"
-#include "util/Compiler.h"
 
 #include <string>
+#include <string_view>
 
 #ifdef _UNICODE
 #include <wchar.h>
@@ -63,88 +63,83 @@ private:
 
 public:
   Path() = default;
-  explicit constexpr Path(const_pointer _value):value(_value) {}
+  explicit constexpr Path(const_pointer _value) noexcept:value(_value) {}
   Path(std::nullptr_t n):value(n) {}
 
-  gcc_pure
-  AllocatedPath operator+(const_pointer other) const;
+  [[gnu::pure]]
+  AllocatedPath operator+(const_pointer other) const noexcept;
 
-  constexpr bool IsNull() const {
-    return value == nullptr;
-  }
-
-  bool IsEmpty() const {
+  bool IsEmpty() const noexcept {
     return value.empty();
   }
 
-  constexpr const_pointer c_str() const {
+  constexpr const_pointer c_str() const noexcept {
     return value.c_str();
   }
 
   /**
    * Convert the path to UTF-8.
-   * Returns empty string on error or if this instance is "nulled"
-   * (#IsNull returns true).
+   * Returns empty string on error or if this instance is "nulled".
    */
-  gcc_pure
-  std::string ToUTF8() const;
+  [[gnu::pure]]
+  std::string ToUTF8() const noexcept;
 
-  gcc_pure
-  bool operator==(Path other) const;
+  [[gnu::pure]]
+  bool operator==(Path other) const noexcept;
 
-  gcc_pure
-  bool operator!=(Path other) const {
+  [[gnu::pure]]
+  bool operator!=(Path other) const noexcept {
     return !(*this == other);
   }
 
-  constexpr bool operator==(std::nullptr_t) const {
-    return value.IsNull();
+  constexpr bool operator==(std::nullptr_t n) const noexcept {
+    return value == n;
   }
 
-  constexpr bool operator!=(std::nullptr_t) const {
-    return !value.IsNull();
+  constexpr bool operator!=(std::nullptr_t n) const noexcept {
+    return value != n;
   }
 
-  gcc_pure
-  bool IsAbsolute() const;
+  [[gnu::pure]]
+  bool IsAbsolute() const noexcept;
 
   /**
    * Is this path a "base name", i.e. is there no path separate?
    * Behaviour is undefined when the string is empty.
    */
-  gcc_pure
-  bool IsBase() const;
+  [[gnu::pure]]
+  bool IsBase() const noexcept;
 
   /**
    * Returns the parent of the specified path, i.e. the part before
    * the last separator.  Returns "." if there is no directory name.
    */
-  gcc_pure
-  AllocatedPath GetParent() const;
+  [[gnu::pure]]
+  AllocatedPath GetParent() const noexcept;
 
   /**
    * Returns the base name of the specified path, i.e. the part after
    * the last separator.  May return nullptr if there is no base name.
    */
-  gcc_pure
-  Path GetBase() const;
+  [[gnu::pure]]
+  Path GetBase() const noexcept;
 
   /**
    * Check if this object is "inside" to the given path, and if yes,
    * return the relative path.
    */
-  gcc_pure
-  Path RelativeTo(Path parent) const;
+  [[gnu::pure]]
+  Path RelativeTo(Path parent) const noexcept;
 
-  gcc_pure
-  bool MatchesExtension(const_pointer extension) const;
+  [[gnu::pure]]
+  bool MatchesExtension(const_pointer extension) const noexcept;
 
   /**
    * Returns the filename extension (starting with a dot) or nullptr
    * if the base name doesn't have one.
    */
-  gcc_pure
-  const_pointer GetExtension() const;
+  [[gnu::pure]]
+  const_pointer GetExtension() const noexcept;
 
   /**
    * Return the path with its filename extension replaced with the given one.
@@ -152,8 +147,8 @@ public:
    * @param new_extension the new filename extension (must start with
    * a dot)
    */
-  gcc_pure
-  AllocatedPath WithExtension(const_pointer new_extension) const;
+  [[gnu::pure]]
+  AllocatedPath WithExtension(const_pointer new_extension) const noexcept;
 };
 
 /**
@@ -169,6 +164,7 @@ public:
   typedef Path::char_type char_type;
   typedef Path::const_pointer const_pointer;
   typedef Path::pointer pointer;
+  using string_view = std::basic_string_view<char_type>;
   typedef BasicAllocatedString<char_type> value_type;
 
   static constexpr auto SENTINEL = value_type::SENTINEL;
@@ -176,113 +172,120 @@ public:
 private:
   value_type value;
 
-  AllocatedPath(size_t size):value(value_type::Donate(new char_type[size])) {}
+  AllocatedPath(size_t size) noexcept
+    :value(value_type::Donate(new char_type[size])) {}
 
-  AllocatedPath(value_type &&src):value(std::move(src)) {}
+  AllocatedPath(value_type &&src) noexcept
+    :value(std::move(src)) {}
 
 public:
   AllocatedPath(AllocatedPath &&) = default;
 
-  AllocatedPath(std::nullptr_t n):value(n) {}
+  AllocatedPath() noexcept = default;
+  AllocatedPath(std::nullptr_t n) noexcept:value(n) {}
 
-  AllocatedPath(Path src)
-    :value(src.IsNull() ? nullptr : value_type(src.c_str())) {}
+  AllocatedPath(Path src) noexcept
+    :value(src == nullptr ? nullptr : value_type(src.c_str())) {}
 
-  explicit AllocatedPath(const_pointer src)
+  explicit AllocatedPath(const_pointer src) noexcept
     :AllocatedPath(Path(src)) {}
 
-  AllocatedPath(const_pointer _begin, const_pointer _end)
+  AllocatedPath(const_pointer _begin, const_pointer _end) noexcept
     :AllocatedPath(value_type({_begin, size_t(_end - _begin)})) {}
 
-  static AllocatedPath Donate(pointer value) {
+  static AllocatedPath Donate(pointer value) noexcept {
     return value_type::Donate(value);
   }
 
-  gcc_pure
-  static AllocatedPath Build(const_pointer a, const_pointer b);
+  [[gnu::pure]]
+  static AllocatedPath Build(string_view a, string_view b) noexcept;
 
-  gcc_pure
-  static AllocatedPath Build(Path a, const_pointer b) {
+  [[gnu::pure]]
+  static AllocatedPath Build(Path a, const_pointer b) noexcept {
     return Build(a.c_str(), b);
   }
 
-  gcc_pure
-  static AllocatedPath Build(Path a, Path b) {
+  [[gnu::pure]]
+  static AllocatedPath Build(Path a, Path b) noexcept {
     return Build(a, b.c_str());
   }
 
   AllocatedPath &operator=(AllocatedPath &&) = default;
 
-  AllocatedPath &operator=(std::nullptr_t n) {
+  AllocatedPath &operator=(std::nullptr_t n) noexcept {
     value = n;
     return *this;
   }
 
-  AllocatedPath &operator=(Path src) {
+  AllocatedPath &operator=(Path src) noexcept {
     return *this = AllocatedPath(src);
   }
 
-  gcc_pure
-  AllocatedPath operator+(const_pointer other) const {
+  [[gnu::pure]]
+  AllocatedPath operator+(const_pointer other) const noexcept {
     return Path(*this) + other;
   }
 
-  bool IsNull() const {
-    return value == nullptr;
-  }
-
-  bool IsEmpty() const {
+  bool IsEmpty() const noexcept {
     return value.empty();
   }
 
-  const_pointer c_str() const {
+  const_pointer c_str() const noexcept {
     return value.c_str();
   }
 
-  std::string ToUTF8() const {
+  std::string ToUTF8() const noexcept {
     return Path(*this).ToUTF8();
   }
 
-  gcc_pure
-  bool operator==(Path other) const {
+  [[gnu::pure]]
+  bool operator==(Path other) const noexcept {
     return Path(*this) == other;
   }
 
-  gcc_pure
-  bool operator!=(Path other) const {
+  [[gnu::pure]]
+  bool operator!=(Path other) const noexcept {
     return !(*this == other);
   }
 
-  gcc_pure
-  bool operator==(std::nullptr_t) const {
-    return value == nullptr;
+  [[gnu::pure]]
+  bool operator==(const AllocatedPath &other) const noexcept {
+    return Path{*this} == Path{other};
   }
 
-  gcc_pure
-  bool operator!=(std::nullptr_t) const {
-    return value != nullptr;
+  [[gnu::pure]]
+  bool operator!=(const AllocatedPath &other) const noexcept {
+    return !(*this == other);
   }
 
-  operator Path() const {
+  constexpr bool operator==(std::nullptr_t n) const noexcept {
+    return value == n;
+  }
+
+  constexpr bool operator!=(std::nullptr_t n) const noexcept {
+    return value != n;
+  }
+
+  operator Path() const noexcept {
     return Path(c_str());
   }
 
-  gcc_pure
-  bool IsAbsolute() const {
+  [[gnu::pure]]
+  bool IsAbsolute() const noexcept {
     return Path(*this).IsAbsolute();
   }
 
-  gcc_pure
-  bool IsBase() const {
+  [[gnu::pure]]
+  bool IsBase() const noexcept {
     return Path(*this).IsBase();
   }
 
-  AllocatedPath GetParent() const {
+  AllocatedPath GetParent() const noexcept {
     return Path(*this).GetParent();
   }
 
-  gcc_pure
-  Path GetBase() const {
+  [[gnu::pure]]
+  Path GetBase() const noexcept {
     return Path(*this).GetBase();
   }
 
@@ -290,23 +293,23 @@ public:
    * Check if this object is "inside" to the given path, and if yes,
    * return the relative path.
    */
-  gcc_pure
-  Path RelativeTo(Path parent) const {
+  [[gnu::pure]]
+  Path RelativeTo(Path parent) const noexcept {
     return Path(*this).RelativeTo(parent);
   }
 
-  gcc_pure
-  bool MatchesExtension(const_pointer extension) const {
+  [[gnu::pure]]
+  bool MatchesExtension(const_pointer extension) const noexcept {
     return Path(*this).MatchesExtension(extension);
   }
 
-  gcc_pure
-  const_pointer GetExtension() const {
+  [[gnu::pure]]
+  const_pointer GetExtension() const noexcept {
     return Path(*this).GetExtension();
   }
 
-  gcc_pure
-  AllocatedPath WithExtension(const_pointer new_extension) const {
+  [[gnu::pure]]
+  AllocatedPath WithExtension(const_pointer new_extension) const noexcept {
     return Path(*this).WithExtension(new_extension);
   }
 };

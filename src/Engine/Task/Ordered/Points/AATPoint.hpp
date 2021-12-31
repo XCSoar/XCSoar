@@ -205,9 +205,8 @@ private:
   bool CheckTargetOutside(const AircraftState& state);
 
 public:
-
   /* virtual methods from class TaskPoint */
-  const GeoPoint& GetLocationRemaining() const override;
+  const GeoPoint &GetLocationRemaining() const noexcept override;
 
   /* virtual methods from class ObservationZoneClient */
   double ScoreAdjustment() const override {
@@ -215,11 +214,11 @@ public:
   }
 
   /* virtual methods from class OrderedTaskPoint */
-  bool Equals(const OrderedTaskPoint &other) const override;
+  bool Equals(const OrderedTaskPoint &other) const noexcept override;
   bool UpdateSampleNear(const AircraftState &state,
-                        const FlatProjection &projection) override;
+                        const FlatProjection &projection) noexcept override;
   bool UpdateSampleFar(const AircraftState &state,
-                       const FlatProjection &projection) override;
+                       const FlatProjection &projection) noexcept override;
 };
 
 #endif

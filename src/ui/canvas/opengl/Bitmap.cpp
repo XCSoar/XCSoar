@@ -28,21 +28,26 @@ Copyright_License {
 #include "Texture.hpp"
 #include "Debug.hpp"
 
-#ifndef ANDROID
-
-Bitmap::Bitmap(Bitmap &&src)
-  :texture(src.texture),
+Bitmap::Bitmap(Bitmap &&src) noexcept
+  :texture(std::exchange(src.texture, nullptr)),
    size(src.size),
    interpolation(src.interpolation),
    flipped(src.flipped)
 {
-  src.texture = nullptr;
 }
 
-#endif /* !ANDROID */
+Bitmap &Bitmap::operator=(Bitmap &&src) noexcept
+{
+  delete texture;
+  texture = std::exchange(src.texture, nullptr);
+  size = src.size;
+  interpolation = src.interpolation;
+  flipped = src.flipped;
+  return *this;
+}
 
 void
-Bitmap::EnableInterpolation()
+Bitmap::EnableInterpolation() noexcept
 {
   interpolation = true;
   if (texture != nullptr) {
@@ -52,7 +57,7 @@ Bitmap::EnableInterpolation()
 }
 
 bool
-Bitmap::MakeTexture(const UncompressedImage &uncompressed, Type type)
+Bitmap::MakeTexture(const UncompressedImage &uncompressed, Type type) noexcept
 {
   assert(IsScreenInitialized());
   assert(uncompressed.IsDefined());
@@ -80,33 +85,16 @@ Bitmap::Load(UncompressedImage &&_uncompressed, Type _type)
   size = { _uncompressed.GetWidth(), _uncompressed.GetHeight() };
   flipped = _uncompressed.IsFlipped();
 
-#ifdef ANDROID
-  uncompressed = std::move(_uncompressed);
-  type = _type;
-
-  AddSurfaceListener(*this);
-
-  if (!surface_valid)
-    return true;
-
-  if (!MakeTexture(uncompressed, type)) {
-    Reset();
-    return false;
-  }
-#else
   if (!MakeTexture(_uncompressed, _type)) {
     Reset();
     return false;
   }
-#endif
 
   return true;
 }
 
-#ifndef ANDROID
-
 void
-Bitmap::Reset()
+Bitmap::Reset() noexcept
 {
   assert(!IsDefined() || IsScreenInitialized());
   assert(!IsDefined() || pthread_equal(pthread_self(), OpenGL::thread));
@@ -114,5 +102,3 @@ Bitmap::Reset()
   delete texture;
   texture = nullptr;
 }
-
-#endif /* !ANDROID */

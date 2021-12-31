@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_LOCAL_PATH_HPP
 #define XCSOAR_LOCAL_PATH_HPP
 
-#include "util/Compiler.h"
-
 #include <tchar.h>
 
 class Path;
@@ -47,7 +45,7 @@ InitialiseDataPath();
  * Release resources obtained by InitialiseDataPath().
  */
 void
-DeinitialiseDataPath();
+DeinitialiseDataPath() noexcept;
 
 /**
  * Create the primary data path;
@@ -59,13 +57,13 @@ CreateDataPath();
  * Overrides the detected primary data path.
  */
 void
-SetPrimaryDataPath(Path path);
+SetPrimaryDataPath(Path path) noexcept;
 
 /**
  * Returns the absolute path of the primary data directory.
  */
 Path
-GetPrimaryDataPath();
+GetPrimaryDataPath() noexcept;
 
 /**
  * Gives the position of an XCSoar data file within the particular file
@@ -75,10 +73,10 @@ GetPrimaryDataPath();
  * @return The fully qualified path of file.
  */
 AllocatedPath
-LocalPath(Path file);
+LocalPath(Path file) noexcept;
 
 AllocatedPath
-LocalPath(const TCHAR *file);
+LocalPath(const TCHAR *file) noexcept;
 
 /**
  * Create a subdirectory of XCSoarData and return its absolute path.
@@ -91,18 +89,18 @@ MakeLocalPath(const TCHAR *name);
  * primary data path.  Returns nullptr on failure (if the path is not
  * inside the primary data path).
  */
-gcc_pure
+[[gnu::pure]]
 Path
-RelativePath(Path path);
+RelativePath(Path path) noexcept;
 
 /**
  * Converts a file path by replacing %LOCAL_PATH% with the full pathname to
  * the XCSoarData folder
  * @param filein Pointer to the string to convert
  */
-gcc_pure
+[[gnu::pure]]
 AllocatedPath
-ExpandLocalPath(Path src);
+ExpandLocalPath(Path src) noexcept;
 
 /**
  * Converts a file path from full pathname to a shorter version with the
@@ -110,10 +108,18 @@ ExpandLocalPath(Path src);
  * @param filein Pointer to the string to convert
  * @return the new path or nullptr if the given path cannot be contracted
  */
-gcc_pure
+[[gnu::pure]]
 AllocatedPath
-ContractLocalPath(Path src);
+ContractLocalPath(Path src) noexcept;
 
 void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor);
+
+[[gnu::pure]]
+Path
+GetCachePath() noexcept;
+
+[[gnu::pure]]
+AllocatedPath
+MakeCacheDirectory(const TCHAR *name) noexcept;
 
 #endif

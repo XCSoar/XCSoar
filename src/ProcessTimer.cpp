@@ -139,7 +139,7 @@ ProcessAutoBugs() noexcept
   /**
    * Increase the bugs value every hour.
    */
-  static constexpr double interval(3600);
+  static constexpr FloatDuration interval = std::chrono::hours{1};
 
   /**
    * Decrement the bugs setting by 1%.
@@ -155,14 +155,14 @@ ProcessAutoBugs() noexcept
    * The time stamp (from FlyingState::flight_time) when we last
    * increased the bugs value automatically.
    */
-  static double last_auto_bugs;
+  static FloatDuration last_auto_bugs;
 
   const FlyingState &flight = CommonInterface::Calculated().flight;
   const PolarSettings &polar = CommonInterface::GetComputerSettings().polar;
 
   if (!flight.flying)
     /* reset when not flying */
-    last_auto_bugs = 0;
+    last_auto_bugs = {};
   else if (!polar.auto_bugs)
     /* feature is disabled */
     last_auto_bugs = flight.flight_time;

@@ -55,7 +55,7 @@ public:
 
 protected:
   /* virtual methods from AntiFlickerWindow */
-  void OnPaintBuffer(Canvas &canvas) override {
+  void OnPaintBuffer(Canvas &canvas) noexcept override {
     if (inverse)
       canvas.Clear(COLOR_BLACK);
     else

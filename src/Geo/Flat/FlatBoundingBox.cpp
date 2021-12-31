@@ -28,7 +28,7 @@
 #include <algorithm>
 
 static constexpr unsigned
-Distance1D(int a1, int a2, int b1, int b2)
+Distance1D(int a1, int a2, int b1, int b2) noexcept
 {
   return a2 < b1
     ? b1 - a2 /* A is left of B */
@@ -38,7 +38,7 @@ Distance1D(int a1, int a2, int b1, int b2)
 }
 
 unsigned
-FlatBoundingBox::SquareDistanceTo(FlatGeoPoint p) const
+FlatBoundingBox::SquareDistanceTo(FlatGeoPoint p) const noexcept
 {
   if (IsInside(p))
     return 0;
@@ -49,7 +49,7 @@ FlatBoundingBox::SquareDistanceTo(FlatGeoPoint p) const
 }
 
 unsigned
-FlatBoundingBox::Distance(const FlatBoundingBox &f) const
+FlatBoundingBox::Distance(const FlatBoundingBox &f) const noexcept
 {
   unsigned dx = Distance1D(lower_left.x, upper_right.x,
                            f.lower_left.x, f.upper_right.x);
@@ -60,7 +60,7 @@ FlatBoundingBox::Distance(const FlatBoundingBox &f) const
 }
 
 bool
-FlatBoundingBox::Intersects(const FlatRay& ray) const
+FlatBoundingBox::Intersects(const FlatRay& ray) const noexcept
 {
   double tmin = 0, tmax = 1;
 
@@ -107,7 +107,7 @@ FlatBoundingBox::Intersects(const FlatRay& ray) const
 }
 
 FlatGeoPoint
-FlatBoundingBox::GetCenter() const
+FlatBoundingBox::GetCenter() const noexcept
 {
   /// @todo This will break if overlaps 360/0
   return FlatGeoPoint((lower_left.x + upper_right.x) / 2,
@@ -115,7 +115,7 @@ FlatBoundingBox::GetCenter() const
 }
 
 bool
-FlatBoundingBox::Overlaps(const FlatBoundingBox& other) const
+FlatBoundingBox::Overlaps(const FlatBoundingBox &other) const noexcept
 {
   if (lower_left.x > other.upper_right.x)
     return false;
@@ -130,7 +130,7 @@ FlatBoundingBox::Overlaps(const FlatBoundingBox& other) const
 }
 
 bool
-FlatBoundingBox::IsInside(const FlatGeoPoint& loc) const
+FlatBoundingBox::IsInside(const FlatGeoPoint &loc) const noexcept
 {
   if (loc.x < lower_left.x)
     return false;

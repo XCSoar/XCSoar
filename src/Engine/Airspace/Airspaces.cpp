@@ -26,10 +26,13 @@
 #include "Navigation/Aircraft.hpp"
 
 #include <boost/geometry/geometries/linestring.hpp>
+#include <boost/geometry/algorithms/distance.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
 #include <boost/geometry/strategies/strategies.hpp>
 
 namespace bgi = boost::geometry::index;
+
+Airspaces::~Airspaces() noexcept = default;
 
 Airspaces::const_iterator_range
 Airspaces::QueryWithinRange(const GeoPoint &location, double range) const noexcept
@@ -64,7 +67,7 @@ Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
 {
   for (const auto &i : QueryIntersecting(loc, end))
     if (visitor.SetIntersections(i.Intersects(loc, end, task_projection)))
-      visitor.Visit(i.GetAirspace());
+      visitor.Visit(i.GetAirspacePtr());
 
   if (include_inside) {
     for (const auto &i : QueryInside(loc)) {
@@ -76,7 +79,7 @@ Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
         v.reserve(1);
         v.emplace_back(loc, end);
         visitor.SetIntersections(std::move(v));
-        visitor.Visit(i.GetAirspace());
+        visitor.Visit(i.GetAirspacePtr());
       }
     }
   }
@@ -89,20 +92,18 @@ Airspaces::Optimise() noexcept
     /* avoid assertion failure in uninitialised task_projection */
     return;
 
-  if (!owns_children || task_projection.Update()) {
-    // dont update task_projection if not owner!
-
+  if (task_projection.Update()) {
     // task projection changed, so need to push items back onto stack
     // to re-build airspace envelopes
 
     for (const auto &i : QueryAll())
-      tmp_as.push_back(&i.GetAirspace());
+      tmp_as.push_back(i.GetAirspacePtr());
 
     airspace_tree.clear();
   }
 
-  for (AbstractAirspace *i : tmp_as) {
-    Airspace as(*i, task_projection);
+  for (auto &i : tmp_as) {
+    Airspace as(std::move(i), task_projection);
     airspace_tree.insert(as);
   }
 
@@ -112,7 +113,7 @@ Airspaces::Optimise() noexcept
 }
 
 void
-Airspaces::Add(AbstractAirspace *airspace) noexcept
+Airspaces::Add(AirspacePtr airspace) noexcept
 {
   if (!airspace)
     // nothing to add
@@ -126,35 +127,19 @@ Airspaces::Add(AbstractAirspace *airspace) noexcept
   // this allows for airspaces to be add at any time
   activity_mask.SetAll();
 
-  if (owns_children) {
-    if (IsEmpty())
-      task_projection.Reset(airspace->GetReferenceLocation());
+  if (IsEmpty())
+    task_projection.Reset(airspace->GetReferenceLocation());
 
-    task_projection.Scan(airspace->GetReferenceLocation());
-  }
+  task_projection.Scan(airspace->GetReferenceLocation());
 
-  tmp_as.push_back(airspace);
+  tmp_as.push_back(std::move(airspace));
 }
 
 void
 Airspaces::Clear() noexcept
 {
   // delete temporaries in case they were added without an optimise() call
-  while (!tmp_as.empty()) {
-    if (owns_children) {
-      AbstractAirspace *aa = tmp_as.front();
-      delete aa;
-    }
-    tmp_as.pop_front();
-  }
-
-  // delete items in the tree
-  if (owns_children) {
-    for (const auto &i : QueryAll()) {
-      Airspace a = i;
-      a.Destroy();
-    }
-  }
+  tmp_as.clear();
 
   // then delete the tree
   airspace_tree.clear();
@@ -201,14 +186,14 @@ Airspaces::ClearClearances() noexcept
     v.ClearClearance();
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 AirspacePointersEquals(const Airspace &a, const Airspace &b) noexcept
 {
   return &a.GetAirspace() == &b.GetAirspace();
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 CompareAirspaceVectors(const AirspacesInterface::AirspaceVector &a,
                        const AirspacesInterface::AirspaceVector &b) noexcept

@@ -76,7 +76,7 @@ struct TrafficList {
     }
   }
 
-  void Expire(double clock) {
+  void Expire(TimeStamp clock) noexcept {
     modified.Expire(clock, std::chrono::minutes(5));
     new_traffic.Expire(clock, std::chrono::minutes(1));
 

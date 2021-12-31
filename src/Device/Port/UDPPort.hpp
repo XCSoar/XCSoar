@@ -24,16 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_UDP_PORT_HPP
 #define XCSOAR_DEVICE_UDP_PORT_HPP
 
-#include "BufferedPort.hpp"
-#include "event/SocketEvent.hxx"
+#include "SocketPort.hpp"
 
 /**
  * A UDP listener port class.
  */
-class UDPPort final : public BufferedPort
+class UDPPort final : public SocketPort
 {
-  SocketEvent socket;
-
 public:
   /**
    * Creates a new UDPPort object, but does not open it yet.
@@ -44,36 +41,6 @@ public:
   UDPPort(EventLoop &event_loop,
           unsigned port,
           PortListener *_listener, DataHandler &_handler);
-
-  /**
-   * Closes the serial port (Destructor)
-   */
-  virtual ~UDPPort();
-
-  auto &GetEventLoop() const noexcept {
-    return socket.GetEventLoop();
-  }
-
-  /* virtual methods from class Port */
-  PortState GetState() const override;
-
-  bool Drain() override {
-    /* writes are synchronous */
-    return true;
-  }
-
-  bool SetBaudrate(unsigned baud_rate) override {
-    return true;
-  }
-
-  unsigned GetBaudrate() const override {
-    return 0;
-  }
-
-  size_t Write(const void *data, size_t length) override;
-
-protected:
-  void OnSocketReady(unsigned events) noexcept;
 };
 
 #endif

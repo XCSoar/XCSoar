@@ -50,7 +50,7 @@ XCOM760Device::PutVolume(unsigned volume, OperationEnvironment &env)
 {
   char szTmp[32];
   sprintf(szTmp, "$RVOL=%u\r\n", volume);
-  port.Write(szTmp);
+  port.FullWriteString(szTmp, env, std::chrono::milliseconds{100});
   return true;
 }
 
@@ -63,7 +63,7 @@ XCOM760Device::PutActiveFrequency(RadioFrequency frequency,
   sprintf(szTmp, "$TXAF=%u.%03u\r\n",
           frequency.GetKiloHertz() / 1000,
           frequency.GetKiloHertz() % 1000);
-  port.Write(szTmp);
+  port.FullWriteString(szTmp, env, std::chrono::milliseconds{100});
   return true;
 }
 
@@ -76,7 +76,7 @@ XCOM760Device::PutStandbyFrequency(RadioFrequency frequency,
   sprintf(szTmp, "$TXSF=%u.%03u\r\n",
           frequency.GetKiloHertz() / 1000,
           frequency.GetKiloHertz() % 1000);
-  port.Write(szTmp);
+  port.FullWriteString(szTmp, env, std::chrono::milliseconds{100});
   return true;
 }
 

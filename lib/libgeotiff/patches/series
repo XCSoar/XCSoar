@@ -1,3 +1,2 @@
-out_of_tree_build.diff
 no_atof.diff
-no_programs.diff
+tiff_libm

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_VALIDITY_HPP
 #define XCSOAR_VALIDITY_HPP
 
-#include "util/Compiler.h"
+#include "time/Stamp.hpp"
 
 #include <chrono>
 #include <type_traits>
@@ -41,16 +41,15 @@ class Validity {
   static constexpr int BITS = 6;
 
   using Duration = std::chrono::duration<uint32_t, std::ratio<1, 1 << BITS>>;
-  using FloatDuration = std::chrono::duration<double>;
 
   Duration last;
 
-  static constexpr Duration Import(double time) noexcept {
-    return std::chrono::duration_cast<Duration>(FloatDuration(time));
+  static constexpr Duration Import(TimeStamp time) noexcept {
+    return time.Cast<Duration>();
   }
 
-  static constexpr double Export(Duration i) noexcept {
-    return std::chrono::duration_cast<FloatDuration>(i).count();
+  static constexpr TimeStamp Export(Duration i) noexcept {
+    return TimeStamp{std::chrono::duration_cast<FloatDuration>(i)};
   }
 
 public:
@@ -62,7 +61,7 @@ public:
   /**
    * Initialize the object with the specified timestamp.
    */
-  explicit constexpr Validity(double _last) noexcept
+  explicit constexpr Validity(TimeStamp _last) noexcept
     :last(Import(_last)) {}
 
 public:
@@ -79,8 +78,17 @@ public:
    *
    * @param now the current time stamp in seconds
    */
-  void Update(double now) {
+  void Update(TimeStamp now) noexcept {
     last = Import(now);
+  }
+
+  /**
+   * Cast this object to an integer.  This integer should only be used
+   * for equality comparisons with other integers from this method,
+   * e.g. to check if a redraw is needed.
+   */
+  auto ToInteger() const noexcept {
+    return last.count();
   }
 
   /**
@@ -90,7 +98,7 @@ public:
    * @param max_age the maximum age in seconds
    * @return true if the value is expired
    */
-  bool Expire(double _now,
+  bool Expire(TimeStamp _now,
               std::chrono::steady_clock::duration _max_age) noexcept {
     const auto now = Import(_now);
     const auto max_age = std::chrono::duration_cast<Duration>(_max_age);
@@ -112,7 +120,7 @@ public:
    * @param max_age the maximum age in seconds
    * @return true if the value is expired
    */
-  bool IsOlderThan(double _now,
+  bool IsOlderThan(TimeStamp _now,
                    std::chrono::steady_clock::duration _max_age) const noexcept {
     if (!IsValid())
       return true;

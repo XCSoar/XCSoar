@@ -32,9 +32,14 @@
 
 namespace Cares {
 
-SimpleResolver::SimpleResolver(Channel &channel, SimpleHandler &_handler,
-			       const char *name, unsigned _port) noexcept
+SimpleResolver::SimpleResolver(SimpleHandler &_handler,
+			       unsigned _port) noexcept
 	:handler(_handler), port(_port)
+{
+}
+
+void
+SimpleResolver::Start(Channel &channel, const char *name) noexcept
 {
 	channel.Lookup(name, *this, cancel_ptr);
 }

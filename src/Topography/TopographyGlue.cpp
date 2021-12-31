@@ -30,6 +30,7 @@ Copyright_License {
 #include "io/MapFile.hpp"
 #include "io/ZipArchive.hpp"
 #include "io/ZipLineReader.hpp"
+#include "system/Path.hpp"
 
 /**
  * Load topography from the map file (ZIP), load the other files from

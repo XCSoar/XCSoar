@@ -28,7 +28,8 @@ Copyright_License {
 
 #ifdef USE_WIN32_RESOURCES
 
-#include <windows.h>
+#include <winbase.h>
+#include <winuser.h>
 
 static HINSTANCE ResourceLoaderInstance;
 

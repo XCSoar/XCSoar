@@ -24,30 +24,27 @@
 #include "AbstractAirspace.hpp"
 #include "AirspaceIntersectionVector.hpp"
 
-void 
-AirspaceIntersectSort::add(const double t, const GeoPoint &p)
+void
+AirspaceIntersectSort::add(const double t, const GeoPoint &p) noexcept
 {
   if (t >= 0)
     m_q.push(std::make_pair(t, p));
 }
 
-bool
-AirspaceIntersectSort::top(GeoPoint &p) const
+std::optional<GeoPoint>
+AirspaceIntersectSort::top() const noexcept
 {
-  if (m_airspace->Inside(m_start)) {
-    p = m_start;
-    return true;
-  }
-  if (!m_q.empty()) {
-    p = m_q.top().second;
-    return true;
-  }
+  if (airspace.Inside(m_start))
+    return m_start;
 
-  return false;
+  if (!m_q.empty())
+    return m_q.top().second;
+
+  return std::nullopt;
 }
 
 AirspaceIntersectionVector
-AirspaceIntersectSort::all()
+AirspaceIntersectSort::all() noexcept
 {
   AirspaceIntersectionVector res;
 
@@ -63,7 +60,7 @@ AirspaceIntersectSort::all()
     // when inside, checking midpoint is ok, otherwise we should
     // check just beyond the last location
 
-    if (m_airspace->Inside(p_mid)) {
+    if (airspace.Inside(p_mid)) {
       res.emplace_back(p_last, p_this);
       waiting = false;
     } else {

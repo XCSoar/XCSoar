@@ -22,11 +22,10 @@ Copyright_License {
 */
 
 #include "ProgressBar.hpp"
-#include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Features.hpp"
-#include "Look/Colors.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "Renderer/ProgressBarRenderer.hpp"
 #include "thread/Debug.hpp"
-#include "Asset.hpp"
 
 void
 ProgressBar::SetRange(unsigned min_value, unsigned max_value)
@@ -79,46 +78,9 @@ ProgressBar::Step()
 void
 ProgressBar::OnPaint(Canvas &canvas)
 {
-  unsigned position = 0;
-  if (min_value < max_value) {
-    unsigned value = this->value;
-    if (value < min_value)
-      value = min_value;
-    else if (value > max_value)
-      value = max_value;
 #ifdef ROUND_PROGRESS_BAR
-    position = (value - min_value) * (GetWidth() - GetHeight()) /
-               (max_value - min_value);
+  DrawRoundProgressBar(canvas, canvas.GetRect(), value, min_value, max_value);
 #else
-    position = (value - min_value) * GetWidth() / (max_value - min_value);
-#endif
-  }
-
-#ifdef ROUND_PROGRESS_BAR
-  canvas.SelectNullPen();
-  canvas.SelectWhiteBrush();
-  canvas.DrawRoundRectangle(canvas.GetRect(), PixelSize{GetHeight()});
-
-  Brush progress_brush(IsDithered() ? COLOR_BLACK : COLOR_XCSOAR_LIGHT);
-  canvas.Select(progress_brush);
-  unsigned margin = GetHeight() / 9;
-  unsigned top, bottom;
-  if (position <= GetHeight() - 2 * margin) {
-    // Use a centered "circle" for small position values. This keeps the progress
-    // bar inside the background.
-    unsigned center_y = GetHeight() / 2;
-    top = center_y - position / 2;
-    bottom = center_y + position / 2;
-  } else {
-    top = margin;
-    bottom = GetHeight() - margin;
-  }
-  canvas.DrawRoundRectangle(PixelRect(margin, top, margin + position, bottom),
-                            PixelSize{GetHeight()});
-#else
-  canvas.DrawFilledRectangle(PixelRect(0, 0, position, GetHeight()),
-                             IsDithered() ? COLOR_BLACK : COLOR_GREEN);
-  canvas.DrawFilledRectangle(PixelRect(position, 0, GetWidth(), GetHeight()),
-                             COLOR_WHITE);
+  DrawSimpleProgressBar(canvas, canvas.GetRect(), value, min_value, max_value);
 #endif
 }

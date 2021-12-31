@@ -34,7 +34,7 @@ Copyright_License {
 #include <tchar.h>
 
 static void
-ShowAnalysis8()
+ShowAnalysis8() noexcept
 {
   dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
                        UIGlobals::GetLook(),
@@ -44,7 +44,7 @@ ShowAnalysis8()
 }
 
 static std::unique_ptr<Widget>
-LoadAnalysis8Panel(unsigned id)
+LoadAnalysis8Panel(unsigned id) noexcept
 {
   return std::make_unique<CallbackWidget>(ShowAnalysis8);
 }
@@ -56,13 +56,13 @@ InfoBoxPanel analysis8_infobox_panels[] = {
 };
 
 const InfoBoxPanel *
-InfoBoxContentContest::GetDialogContent()
+InfoBoxContentContest::GetDialogContent() noexcept
 {
   return analysis8_infobox_panels;
 }
 
 void
-InfoBoxContentContest::Update(InfoBoxData &data)
+InfoBoxContentContest::Update(InfoBoxData &data) noexcept
 {
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
@@ -90,13 +90,13 @@ InfoBoxContentContest::Update(InfoBoxData &data)
 }
 
 const InfoBoxPanel *
-InfoBoxContentContestSpeed::GetDialogContent()
+InfoBoxContentContestSpeed::GetDialogContent() noexcept
 {
   return analysis8_infobox_panels;
 }
 
 void
-InfoBoxContentContestSpeed::Update(InfoBoxData &data)
+InfoBoxContentContestSpeed::Update(InfoBoxData &data) noexcept
 {
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();

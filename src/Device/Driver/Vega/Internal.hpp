@@ -29,6 +29,8 @@ Copyright_License {
 #include "thread/Mutex.hxx"
 #include "Volatile.hpp"
 
+#include <optional>
+
 class NMEAInputLine;
 
 class VegaDevice : public AbstractDevice {
@@ -48,20 +50,14 @@ public:
 
   /**
    * Write an integer setting to the Vega.
-   *
-   * @return true if sending the command has succeeded (it does not
-   * indicate whether the Vega has understood and processed it)
    */
-  bool SendSetting(const char *name, int value, OperationEnvironment &env);
+  void SendSetting(const char *name, int value, OperationEnvironment &env);
 
   /**
    * Request an integer setting from the Vega.  The Vega will send the
    * value, but this method will not wait for that.
-   *
-   * @return true if sending the command has succeeded (it does not
-   * indicate whether the Vega has understood and processed it)
    */
-  bool RequestSetting(const char *name, OperationEnvironment &env);
+  void RequestSetting(const char *name, OperationEnvironment &env);
 
   /**
    * Look up the given setting in the table of received values.  The
@@ -69,7 +65,7 @@ public:
    * element is the value.
    */
   gcc_pure
-  std::pair<bool, int> GetSetting(const char *name) const;
+  std::optional<int> GetSetting(const char *name) const noexcept;
 
 protected:
   bool PDVSC(NMEAInputLine &line, NMEAInfo &info);

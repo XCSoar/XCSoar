@@ -62,12 +62,14 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
 
     // initialize turn_rate_delta_time on first call
     if (basic.time_available)
-      turn_rate_delta_time.Update(basic.time, 1./3., 10);
+      turn_rate_delta_time.Update(basic.time, FloatDuration{1./3.},
+                                  std::chrono::seconds{10});
     return;
   }
 
-  const auto dt = turn_rate_delta_time.Update(basic.time, 1./3., 10);
-  if (dt < 0) {
+  const auto dt = turn_rate_delta_time.Update(basic.time, FloatDuration{1./3.},
+                                              std::chrono::seconds{10});
+  if (dt.count() < 0) {
     circling_info.turn_rate = Angle::Zero();
     circling_info.turn_rate_heading = Angle::Zero();
     circling_info.turn_rate_smoothed = Angle::Zero();
@@ -77,11 +79,11 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
     return;
   }
 
-  if (dt > 0) {
+  if (dt.count() > 0) {
     circling_info.turn_rate =
-      (basic.track - last_track).AsDelta() / dt;
+      (basic.track - last_track).AsDelta() / dt.count();
     circling_info.turn_rate_heading =
-      (basic.attitude.heading - last_heading).AsDelta() / dt;
+      (basic.attitude.heading - last_heading).AsDelta() / dt.count();
 
     // JMW limit rate to 50 deg per second otherwise a big spike
     // will cause spurious lock on circling for a long time
@@ -116,8 +118,8 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
   if (!basic.time_available || !flight.flying)
     return;
 
-  const auto dt = turning_delta_time.Update(basic.time, 0, 0);
-  if (dt <= 0)
+  const auto dt = turning_delta_time.Update(basic.time, {}, {});
+  if (dt.count() <= 0)
     return;
 
   circling_info.turning =
@@ -155,9 +157,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     if (!force_circling)
       break;
 
-#if GCC_CHECK_VERSION(7,0)
     [[fallthrough]];
-#endif
 
   case CirclingMode::POSSIBLE_CLIMB:
     if (force_cruise) {
@@ -200,9 +200,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     if (!force_cruise)
       break;
 
-#if GCC_CHECK_VERSION(7,0)
     [[fallthrough]];
-#endif
 
   case CirclingMode::POSSIBLE_CRUISE:
     if (force_circling) {
@@ -243,8 +241,8 @@ CirclingComputer::PercentCircling(const MoreData &basic,
   // JMW circling % only when really circling,
   // to prevent bad stats due to flap switches and dolphin soaring
 
-  const auto dt = percent_delta_time.Update(basic.time, 0, 0);
-  if (dt <= 0)
+  const auto dt = percent_delta_time.Update(basic.time, {}, {});
+  if (dt.count() <= 0)
     return;
 
   // don't increment the accumulators unless actually flying
@@ -258,7 +256,7 @@ CirclingComputer::PercentCircling(const MoreData &basic,
     circling_info.time_circling += dt;
 
     // Add the Vario signal to the total climb height
-    circling_info.total_height_gain += basic.gps_vario * dt;
+    circling_info.total_height_gain += basic.gps_vario * dt.count();
 
     if (basic.gps_vario>= 0) {
       circling_info.time_climb_circling += dt;
@@ -275,7 +273,7 @@ CirclingComputer::PercentCircling(const MoreData &basic,
 
   const auto time_total = (circling_info.time_cruise + circling_info.time_circling);
   // Calculate the circling and non-circling percentages
-  if (time_total > 0) {
+  if (time_total.count() > 0) {
     circling_info.circling_percentage = 100 * circling_info.time_circling / time_total;
     circling_info.circling_climb_percentage = 100 * circling_info.time_climb_circling / time_total;
     circling_info.noncircling_climb_percentage = 100 * circling_info.time_climb_noncircling /

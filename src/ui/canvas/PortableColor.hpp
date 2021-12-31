@@ -112,6 +112,10 @@ public:
     return b;
   }
 
+  explicit constexpr operator RGB8Color() const noexcept {
+    return {Red(), Green(), Blue()};
+  }
+
   constexpr bool operator ==(const BGR8Color other) const {
     return r == other.r && g == other.g && b == other.b;
   }
@@ -149,6 +153,14 @@ public:
 
   constexpr uint8_t Alpha() const {
     return a;
+  }
+
+  explicit constexpr operator BGR8Color() const noexcept {
+    return base;
+  }
+
+  explicit constexpr operator RGB8Color() const noexcept {
+    return {Red(), Green(), Blue()};
   }
 
   constexpr bool operator ==(const BGRA8Color other) const {

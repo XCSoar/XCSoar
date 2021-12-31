@@ -27,29 +27,27 @@
 #include "Flat/FlatRay.hpp"
 #include "Flat/FlatBoundingBox.hpp"
 
-bool 
-SearchPointVector::PruneInterior()
+bool
+SearchPointVector::PruneInterior() noexcept
 {
-  GrahamScan gs(*this);
-  return gs.PruneInterior();
+  return ::PruneInterior(*this);
 }
 
 bool
-SearchPointVector::ThinToSize(const unsigned max_size)
+SearchPointVector::ThinToSize(const unsigned max_size) noexcept
 {
   static constexpr double tolerance = 1.0e-8;
-  unsigned i = 2;
+  double i = 2;
   bool retval = false;
   while (size() > max_size) {
-    GrahamScan gs(*this, tolerance * i);
-    retval |= gs.PruneInterior();
+    retval |= ::PruneInterior(*this, tolerance * i);
     i *= i;
   }
   return retval;
 }
 
-void 
-SearchPointVector::Project(const FlatProjection &tp)
+void
+SearchPointVector::Project(const FlatProjection &tp) noexcept
 {
   for (auto &i : *this)
     i.Project(tp);
@@ -58,7 +56,7 @@ SearchPointVector::Project(const FlatProjection &tp)
 [[gnu::pure]]
 static FlatGeoPoint
 NearestPoint(const FlatGeoPoint &p1, const FlatGeoPoint &p2,
-              const FlatGeoPoint &p3)
+             const FlatGeoPoint &p3) noexcept
 {
   const FlatGeoPoint p12 = p2-p1;
   const double rsq(p12.DotProduct(p12));
@@ -67,7 +65,7 @@ NearestPoint(const FlatGeoPoint &p1, const FlatGeoPoint &p2,
 
   const FlatGeoPoint p13 = p3-p1;
   const double numerator(p13.DotProduct(p12));
-  
+
   if (numerator <= 0) {
     return p1;
   } else if (numerator>= rsq) {
@@ -81,8 +79,8 @@ NearestPoint(const FlatGeoPoint &p1, const FlatGeoPoint &p2,
 [[gnu::pure]]
 static FlatGeoPoint
 SegmentNearestPoint(const SearchPointVector& spv,
-                      const SearchPointVector::const_iterator i1,
-                      const FlatGeoPoint &p3)
+                    const SearchPointVector::const_iterator i1,
+                    const FlatGeoPoint &p3) noexcept
 {
   if (i1+1 == spv.end()) {
     return NearestPoint(i1->GetFlatLocation(),
@@ -97,7 +95,8 @@ SegmentNearestPoint(const SearchPointVector& spv,
 
 [[gnu::pure]]
 static FlatGeoPoint
-NearestPointNonConvex(const SearchPointVector& spv, const FlatGeoPoint &p3)
+NearestPointNonConvex(const SearchPointVector &spv,
+                      const FlatGeoPoint &p3) noexcept
 {
   unsigned distance_min = 0-1;
   FlatGeoPoint point_best;
@@ -115,7 +114,7 @@ NearestPointNonConvex(const SearchPointVector& spv, const FlatGeoPoint &p3)
 }
 
 SearchPointVector::const_iterator
-SearchPointVector::NearestIndexConvex(const FlatGeoPoint &p3) const
+SearchPointVector::NearestIndexConvex(const FlatGeoPoint &p3) const noexcept
 {
   unsigned distance_min = 0 - 1;
 
@@ -133,7 +132,7 @@ SearchPointVector::NearestIndexConvex(const FlatGeoPoint &p3) const
 }
 
 FlatGeoPoint
-SearchPointVector::NearestPoint(const FlatGeoPoint &p3) const
+SearchPointVector::NearestPoint(const FlatGeoPoint &p3) const noexcept
 {
   // special case
   if (empty())
@@ -146,7 +145,7 @@ SearchPointVector::NearestPoint(const FlatGeoPoint &p3) const
 }
 
 bool
-SearchPointVector::IntersectsWith(const FlatRay &ray) const
+SearchPointVector::IntersectsWith(const FlatRay &ray) const noexcept
 {
   for (auto it = begin(); it + 1 != end(); ++it) {
     const FlatRay r_seg(it->GetFlatLocation(), (it + 1)->GetFlatLocation());
@@ -158,7 +157,7 @@ SearchPointVector::IntersectsWith(const FlatRay &ray) const
 }
 
 FlatBoundingBox
-SearchPointVector::CalculateBoundingbox() const
+SearchPointVector::CalculateBoundingbox() const noexcept
 {
   if (empty())
     return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
@@ -171,7 +170,7 @@ SearchPointVector::CalculateBoundingbox() const
 }
 
 GeoBounds
-SearchPointVector::CalculateGeoBounds() const
+SearchPointVector::CalculateGeoBounds() const noexcept
 {
   GeoBounds bb = GeoBounds::Invalid();
   for (const auto &i : *this)
@@ -181,7 +180,7 @@ SearchPointVector::CalculateGeoBounds() const
 }
 
 SearchPointVector::const_iterator
-SearchPointVector::NextCircular(const_iterator i) const
+SearchPointVector::NextCircular(const_iterator i) const noexcept
 {
   i++;
   if (i == end())
@@ -190,7 +189,7 @@ SearchPointVector::NextCircular(const_iterator i) const
 }
 
 SearchPointVector::const_iterator
-SearchPointVector::PreviousCircular(const_iterator i) const
+SearchPointVector::PreviousCircular(const_iterator i) const noexcept
 {
   if (i == begin())
     i = begin() + size() - 1;
@@ -200,13 +199,13 @@ SearchPointVector::PreviousCircular(const_iterator i) const
 }
 
 bool
-SearchPointVector::IsInside(const GeoPoint &pt) const
+SearchPointVector::IsInside(const GeoPoint &pt) const noexcept
 {
   return PolygonInterior(pt, begin(), end());
 }
 
 bool
-SearchPointVector::IsInside(const FlatGeoPoint &pt) const
+SearchPointVector::IsInside(const FlatGeoPoint &pt) const noexcept
 {
   return PolygonInterior(pt, begin(), end());
 }

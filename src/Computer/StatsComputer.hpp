@@ -27,6 +27,7 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "FlightStatistics.hpp"
 #include "time/GPSClock.hpp"
+#include "time/Stamp.hpp"
 
 struct NMEAInfo;
 struct MoreData;
@@ -37,8 +38,8 @@ class StatsComputer {
 
   GeoPoint last_location;
 
-  double last_climb_start_time, last_cruise_start_time;
-  double last_thermal_end_time;
+  TimeStamp last_climb_start_time, last_cruise_start_time;
+  TimeStamp last_thermal_end_time;
 
   FlightStatistics flightstats;
   GPSClock stats_clock;

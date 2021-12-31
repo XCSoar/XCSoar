@@ -23,8 +23,9 @@
 #include "FlightPhaseJSON.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "util/StaticString.hxx"
-#include "JSON/Writer.hpp"
-#include "JSON/GeoWriter.hpp"
+#include "json/Geo.hpp"
+
+#include <boost/json.hpp>
 
 static const char *
 FormatPhaseType(Phase::Type phase_type)
@@ -56,81 +57,81 @@ FormatCirclingDirection(Phase::CirclingDirection circling_direction)
   }
 }
 
-static void
-WritePhase(BufferedOutputStream &writer, Phase &phase)
+static boost::json::object
+WritePhase(Phase &phase) noexcept
 {
-  JSON::ObjectWriter object(writer);
+  boost::json::object object;
   NarrowString<64> buffer;
 
   FormatISO8601(buffer.buffer(), phase.start_datetime);
-  object.WriteElement("start_time", JSON::WriteString, buffer);
+  object.emplace("start_time", buffer.c_str());
 
   FormatISO8601(buffer.buffer(), phase.end_datetime);
-  object.WriteElement("end_time", JSON::WriteString, buffer);
+  object.emplace("end_time", buffer.c_str());
 
-  object.WriteElement("type", JSON::WriteString,
-                      FormatPhaseType(phase.phase_type));
-  object.WriteElement("duration", JSON::WriteInteger, (int)phase.duration);
-  object.WriteElement("circling_direction", JSON::WriteString,
-                      FormatCirclingDirection(phase.circling_direction));
-  object.WriteElement("alt_diff", JSON::WriteInteger, (int)phase.alt_diff);
-  object.WriteElement("start_alt", JSON::WriteDouble, phase.start_alt);
-  object.WriteElement("end_alt", JSON::WriteDouble, phase.end_alt);
-  object.WriteElement("distance", JSON::WriteInteger, (int)phase.distance);
-  object.WriteElement("speed", JSON::WriteDouble, phase.GetSpeed());
-  object.WriteElement("vario", JSON::WriteDouble, phase.GetVario());
-  object.WriteElement("glide_rate", JSON::WriteDouble, phase.GetGlideRate());
+  object.emplace("type", FormatPhaseType(phase.phase_type));
+  object.emplace("duration", (int)phase.duration.count());
+  object.emplace("circling_direction",
+                 FormatCirclingDirection(phase.circling_direction));
+  object.emplace("alt_diff", (int)phase.alt_diff);
+  object.emplace("start_alt", phase.start_alt);
+  object.emplace("end_alt", phase.end_alt);
+  object.emplace("distance", (int)phase.distance);
+  object.emplace("speed", phase.GetSpeed());
+  object.emplace("vario", phase.GetVario());
+  object.emplace("glide_rate", phase.GetGlideRate());
+
+  return object;
 }
 
-static void
-WriteCirclingStats(BufferedOutputStream &writer, const Phase &stats)
+static boost::json::object
+WriteCirclingStats(const Phase &stats) noexcept
 {
-  JSON::ObjectWriter object(writer);
-  object.WriteElement("alt_diff", JSON::WriteInteger, (int)stats.alt_diff);
-  object.WriteElement("duration", JSON::WriteInteger, (int)stats.duration);
-  object.WriteElement("fraction", JSON::WriteDouble, stats.fraction);
-  object.WriteElement("vario", JSON::WriteDouble, stats.GetVario());
-  object.WriteElement("count", JSON::WriteInteger, stats.merges);
+  return {
+    {"alt_diff", (int)stats.alt_diff},
+    {"duration", (int)stats.duration.count()},
+    {"fraction", stats.fraction},
+    {"vario", stats.GetVario()},
+    {"count", stats.merges},
+  };
 }
 
-static void
-WriteCruiseStats(BufferedOutputStream &writer, const Phase &stats)
+static boost::json::object
+WriteCruiseStats(const Phase &stats) noexcept
 {
-  JSON::ObjectWriter object(writer);
-  object.WriteElement("alt_diff", JSON::WriteInteger, (int)stats.alt_diff);
-  object.WriteElement("duration", JSON::WriteInteger, (int)stats.duration);
-  object.WriteElement("fraction", JSON::WriteDouble, stats.fraction);
-  object.WriteElement("distance", JSON::WriteInteger, (int)stats.distance);
-  object.WriteElement("speed", JSON::WriteDouble, stats.GetSpeed());
-  object.WriteElement("vario", JSON::WriteDouble, stats.GetVario());
-  object.WriteElement("glide_rate", JSON::WriteDouble, stats.GetGlideRate());
-  object.WriteElement("start_alt", JSON::WriteDouble, stats.start_alt);
-  object.WriteElement("end_alt", JSON::WriteDouble, stats.end_alt);
-  object.WriteElement("count", JSON::WriteInteger, stats.merges);
+  return {
+    {"alt_diff", (int)stats.alt_diff},
+    {"duration", (int)stats.duration.count()},
+    {"fraction", stats.fraction},
+    {"distance", (int)stats.distance},
+    {"speed", stats.GetSpeed()},
+    {"vario", stats.GetVario()},
+    {"glide_rate", stats.GetGlideRate()},
+    {"start_alt", stats.start_alt},
+    {"end_alt", stats.end_alt},
+    {"count", stats.merges},
+  };
 }
 
-void
-WritePerformanceStats(BufferedOutputStream &writer, const PhaseTotals &totals)
+boost::json::object
+WritePerformanceStats(const PhaseTotals &totals) noexcept
 {
-  JSON::ObjectWriter object(writer);
-  object.WriteElement("circling_total", WriteCirclingStats,
-                      totals.total_circstats);
-  object.WriteElement("circling_left", WriteCirclingStats,
-                      totals.left_circstats);
-  object.WriteElement("circling_right", WriteCirclingStats,
-                      totals.right_circstats);
-  object.WriteElement("circling_mixed", WriteCirclingStats,
-                      totals.mixed_circstats);
-  object.WriteElement("cruise_total", WriteCruiseStats,
-                      totals.total_cruisestats);
+  return {
+    {"circling_total", WriteCirclingStats(totals.total_circstats)},
+    {"circling_left", WriteCirclingStats(totals.left_circstats)},
+    {"circling_right", WriteCirclingStats(totals.right_circstats)},
+    {"circling_mixed", WriteCirclingStats(totals.mixed_circstats)},
+    {"cruise_total", WriteCruiseStats(totals.total_cruisestats)},
+  };
 }
 
-void
-WritePhaseList(BufferedOutputStream &writer, const PhaseList &phases)
+boost::json::array
+WritePhaseList(const PhaseList &phases) noexcept
 {
-  JSON::ArrayWriter array(writer);
+  boost::json::array array;
   for (Phase phase : phases) {
-    array.WriteElement(WritePhase, phase);
+    array.emplace_back(WritePhase(phase));
   }
-}
 
+  return array;
+}

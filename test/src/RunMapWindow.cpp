@@ -45,7 +45,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "io/ConfiguredFile.hpp"
 #include "io/LineReader.hpp"
-#include "Operation/Operation.hpp"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 #include "thread/Debug.hpp"
 
 void
@@ -113,12 +113,12 @@ static void
 LoadFiles(PlacesOfInterestSettings &poi_settings,
           TeamCodeSettings &team_code_settings)
 {
-  NullOperationEnvironment operation;
+  ConsoleOperationEnvironment operation;
 
   topography = new TopographyStore();
   LoadConfiguredTopography(*topography, operation);
 
-  terrain = RasterTerrain::OpenTerrain(NULL, operation);
+  terrain = RasterTerrain::OpenTerrain(nullptr, operation).release();
 
   WaypointGlue::LoadWaypoints(way_points, terrain, operation);
   WaypointGlue::SetHome(way_points, terrain, poi_settings, team_code_settings,
@@ -140,8 +140,8 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
   DerivedInfo derived_info;
 
   nmea_info.Reset();
-  nmea_info.clock = 1;
-  nmea_info.time = 1297230000;
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.time = TimeStamp{FloatDuration{1297230000}};
   nmea_info.alive.Update(nmea_info.clock);
 
   if (settings_computer.poi.home_location_available)

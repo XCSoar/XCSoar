@@ -26,16 +26,19 @@ Copyright_License {
 
 #include "NOAAStore.hpp"
 
-class JobRunner;
 class CurlGlobal;
+class ProgressListener;
+namespace Co { template<typename T> class Task; }
 
 namespace NOAAUpdater {
 
-bool
-Update(NOAAStore &store, CurlGlobal &curl, JobRunner &runner);
+Co::Task<bool>
+Update(NOAAStore &store, CurlGlobal &curl,
+       ProgressListener &progress) noexcept;
 
-bool
-Update(NOAAStore::Item &item, CurlGlobal &curl, JobRunner &runner);
+Co::Task<bool>
+Update(NOAAStore::Item &item, CurlGlobal &curl,
+       ProgressListener &progress) noexcept;
 
 }
 

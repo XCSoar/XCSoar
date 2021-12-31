@@ -257,7 +257,7 @@ AbstractTask::Update(const AircraftState &state,
 }
 
 void
-AbstractTask::UpdateStatsSpeeds(const double time) noexcept
+AbstractTask::UpdateStatsSpeeds(const TimeStamp time) noexcept
 {
   if (!stats.task_finished) {
     stats_computer.total.CalcSpeeds(stats.total, time);
@@ -276,10 +276,10 @@ AbstractTask::UpdateStatsGlide(const AircraftState &state,
 }
 
 void
-AbstractTask::UpdateStatsTimes(const double time) noexcept
+AbstractTask::UpdateStatsTimes(const TimeStamp time) noexcept
 {
   if (!stats.task_finished) {
-    stats.current_leg.SetTimes(0, ScanLegStartTime(), time);
+    stats.current_leg.SetTimes({}, ScanLegStartTime(), time);
 
     const auto until_start_s = GetType() == TaskType::ORDERED &&
       GetActiveTaskPointIndex() == 0
@@ -288,7 +288,7 @@ AbstractTask::UpdateStatsTimes(const double time) noexcept
          reach the start point */
       ? stats.current_leg.time_remaining_now
       /* already beyond the start point (or no start point) */
-      : 0;
+      : FloatDuration{};
 
     stats.total.SetTimes(until_start_s, ScanTotalStartTime(), time);
   }

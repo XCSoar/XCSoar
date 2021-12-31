@@ -68,12 +68,12 @@ public:
    * Returns the human-readable name for the current RASP map, or
    * nullptr if no RASP map is enabled.
    */
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetLabel() const {
     return cache.GetMapLabel();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsInside(GeoPoint p) const {
     return cache.IsInside(p);
   }

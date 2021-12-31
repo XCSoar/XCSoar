@@ -24,13 +24,16 @@ Copyright_License {
 #include "WrapClock.hpp"
 #include "NMEA/Info.hpp"
 
-double
-WrapClock::Normalise(double stamp, BrokenDate &date, const BrokenTime &time)
-{
-  constexpr unsigned SECONDS_PER_HOUR = 60 * 60;
-  constexpr unsigned SECONDS_PER_DAY = 24 * SECONDS_PER_HOUR;
+using namespace std::chrono;
 
-  assert(stamp >= 0);
+TimeStamp
+WrapClock::Normalise(TimeStamp stamp, BrokenDate &date,
+                     const BrokenTime &time) noexcept
+{
+  constexpr TimeStamp ONE_DAY{hours{24}};
+  constexpr TimeStamp ONE_HOUR{hours{1}};
+
+  assert(stamp.IsDefined());
   assert(time.IsPlausible());
 
   int days = 0;
@@ -47,9 +50,9 @@ WrapClock::Normalise(double stamp, BrokenDate &date, const BrokenTime &time)
         last_day += days;
         last_output_date = date;
 
-        if (days == 1 && last_stamp >= SECONDS_PER_DAY - 60 &&
+        if (days == 1 && last_stamp >= ONE_DAY - minutes{1} &&
             stamp >= last_stamp)
-          stamp = 0;
+          stamp = {};
       } else if (days < 0 && !last_input_date.IsPlausible())
         /* time warp after recovering from invalid input date */
         Reset();
@@ -59,10 +62,9 @@ WrapClock::Normalise(double stamp, BrokenDate &date, const BrokenTime &time)
   last_input_date = date;
 
   if (stamp < last_stamp && days <= 0) {
-    assert(last_stamp >= 0);
+    assert(last_stamp.IsDefined());
 
-    if (stamp < SECONDS_PER_HOUR &&
-        last_stamp >= SECONDS_PER_DAY - SECONDS_PER_HOUR) {
+    if (stamp < ONE_HOUR && last_stamp >= ONE_DAY - hours{1}) {
       /* wraparound, but no date changed: assume the date was not yet
          updated, and wrap to the next day */
       ++last_day;
@@ -72,7 +74,7 @@ WrapClock::Normalise(double stamp, BrokenDate &date, const BrokenTime &time)
 
       if (last_output_date.IsPlausible())
         last_output_date.IncrementDay();
-    } else if (stamp + 2 >= last_stamp) {
+    } else if (stamp + seconds{2} >= last_stamp) {
       /* Ignore time warps of less than 2 seconds.
 
          This is used to reduce quirks when the time stamps in GPGGA
@@ -81,7 +83,7 @@ WrapClock::Normalise(double stamp, BrokenDate &date, const BrokenTime &time)
          ignored most of the time */
 
       stamp = last_stamp;
-    } else if (stamp + 12 * 3600 < last_stamp) {
+    } else if (stamp + hours{12} < last_stamp) {
       /* big time warp */
       Reset();
     }
@@ -100,7 +102,7 @@ WrapClock::Normalise(double stamp, BrokenDate &date, const BrokenTime &time)
 
   last_time = time;
 
-  return stamp + last_day * SECONDS_PER_DAY;
+  return stamp + last_day * hours{24};
 }
 
 void

@@ -350,7 +350,7 @@ to become thoroughly familiar with each task type by referring to contest rules
 or FAI rules, which are available at \url{http://www.fai.org}. 
 
 
-\subsection*{Racing}
+\subsection*{Racing}\label{sec:task-type-racing}
 (also known as an ``assigned task'').  The racing task involves flight
 around each specified turnpoint in the specified order.  Selecting the racing task 
 type allows the pilot to enter the following parameters
@@ -374,6 +374,17 @@ type allows the pilot to enter the following parameters
     to~0 for no limit.
   \item [Finish height ref.] This specifies whether the minimum finish height 
     is referenced to ground level of the finish point (``AGL'') or Mean Sea Level (``MSL'')
+
+  \item [PEV start wait time] This specifies an interval in minutes between
+   pilot presses the \emph{Pilot Event} (see \ref{sec:pilotevent}) button is
+   pressed and start window opens. If set to 0, the start will open
+   immediately after \emph{Pilot Event} button is pressed.
+
+  \item [PEV start window] This specifies an interval in minutes during which
+   the start window remains open when \emph{Pilot Event} (see \ref
+   {sec:pilotevent}) start procedure is used. If set to 0, the start window,
+   once opened, remains open forever.
+
   \end{description}
 
 \subsection*{Assigned area task (AAT) and Modified area task (MAT)}

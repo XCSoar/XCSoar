@@ -33,6 +33,8 @@ Copyright_License {
 #include "TaskDefaultsConfigPanel.hpp"
 #include "UIGlobals.hpp"
 
+using namespace std::chrono;
+
 enum ControlIndex {
   StartType,
   StartRadius,
@@ -117,7 +119,7 @@ FillPointTypes(DataFieldEnum &df,
                    OrderedTaskPointDescription(type));
   }
 
-  df.Set((unsigned)value);
+  df.SetValue(value);
 }
 
 static void
@@ -187,18 +189,20 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent,
           (unsigned)factory_types[i], OrderedTaskFactoryDescription(
               factory_types[i]));
       if (factory_types[i] == task_behaviour.task_type_default)
-        dfe->Set((unsigned)factory_types[i]);
+        dfe->SetValue(factory_types[i]);
     }
     wp->RefreshDisplay();
   }
 
-  AddTime(_("AAT min. time"), _("Default AAT min. time for new AAT tasks."),
-          60, 10 * 60 * 60, 60, (unsigned)task_behaviour.ordered_defaults.aat_min_time);
+  AddDuration(_("AAT min. time"), _("Default AAT min. time for new AAT tasks."),
+              minutes{1}, hours{10}, minutes{1},
+              task_behaviour.ordered_defaults.aat_min_time);
 
-  AddTime(_("Optimisation margin"),
-          _("Safety margin for AAT task optimisation.  Optimisation "
-            "seeks to complete the task at the minimum time plus this margin time."),
-          0, 30 * 60, 60, (unsigned)task_behaviour.optimise_targets_margin);
+  AddDuration(_("Optimisation margin"),
+              _("Safety margin for AAT task optimisation.  Optimisation "
+                "seeks to complete the task at the minimum time plus this margin time."),
+              {}, minutes{30}, minutes{1},
+              task_behaviour.optimise_targets_margin);
   SetExpertRow(AATTimeMargin);
 
   SetStartLabel();
@@ -232,19 +236,11 @@ TaskDefaultsConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValueEnum(TaskType, ProfileKeys::TaskType, task_behaviour.task_type_default);
 
-  unsigned aatminutes = (unsigned)task_behaviour.ordered_defaults.aat_min_time;
-  if (SaveValue(AATMinTime, aatminutes)) {
-    task_behaviour.ordered_defaults.aat_min_time = aatminutes;
-    Profile::Set(ProfileKeys::AATMinTime, aatminutes);
-    changed = true;
-  }
+  changed |= SaveValue(AATMinTime, ProfileKeys::AATMinTime,
+                       task_behaviour.ordered_defaults.aat_min_time);
 
-  unsigned aatmargin = task_behaviour.optimise_targets_margin;
-  if (SaveValue(AATTimeMargin, aatmargin)) {
-    task_behaviour.optimise_targets_margin = aatmargin;
-    Profile::Set(ProfileKeys::AATTimeMargin, aatmargin);
-    changed = true;
-  }
+  changed |= SaveValue(AATTimeMargin, ProfileKeys::AATTimeMargin,
+                       task_behaviour.optimise_targets_margin);
 
   _changed |= changed;
   return true;

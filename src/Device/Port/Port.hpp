@@ -28,6 +28,7 @@ Copyright_License {
 #include "util/Compiler.h"
 
 #include <chrono>
+#include <cstddef>
 #include <exception>
 #include <cstddef>
 
@@ -40,48 +41,20 @@ class TimeoutClock;
  * Generic Port thread handler class
  */
 class Port {
-public:
-  /**
-   * Warning: these enum integer values are hard-coded in the
-   * Android/Java class InputThread.
-   */
-  enum class WaitResult {
-    /**
-     * The port is ready; the desired operation will not block.
-     */
-    READY,
-
-    /**
-     * Timeout has expired.
-     */
-    TIMEOUT,
-
-    /**
-     * An I/O error has occurred, and the port shall not be used.
-     */
-    FAILED,
-
-    /**
-     * The operation was cancelled, probably by
-     * OperationEnvironment::IsCancelled().
-     */
-    CANCELLED,
-  };
-
 protected:
   PortListener *const listener;
 
   DataHandler &handler;
 
 public:
-  Port(PortListener *_listener, DataHandler &_handler);
-  virtual ~Port();
+  Port(PortListener *_listener, DataHandler &_handler) noexcept;
+  virtual ~Port() noexcept;
 
   /**
    * Returns the current state of this object.
    */
   gcc_pure
-  virtual PortState GetState() const = 0;
+  virtual PortState GetState() const noexcept = 0;
 
   /**
    * Wait until the connection has been established.
@@ -93,12 +66,15 @@ public:
 
   /**
    * Writes a string to the serial port
+   *
+   * Throws on error.
+   *
    * @param data Pointer to the first character
    * @param length Length of the string
-   * @return the number of bytes written, or 0 on error
+   * @return the number of bytes written
    */
   gcc_nonnull_all
-  virtual size_t Write(const void *data, size_t length) = 0;
+  virtual std::size_t Write(const void *data, std::size_t length) = 0;
 
   /**
    * Writes a null-terminated string to the serial port
@@ -106,14 +82,14 @@ public:
    * @return the number of bytes written, or 0 on error
    */
   gcc_nonnull_all
-  size_t Write(const char *s);
+  std::size_t Write(const char *s);
 
   /**
    * Writes a single byte to the serial port
    * @param ch Byte to write
    */
-  bool Write(char ch) {
-    return Write(&ch, sizeof(ch)) == sizeof(ch);
+  void Write(char ch) {
+    Write(&ch, sizeof(ch));
   }
 
   /**
@@ -122,11 +98,12 @@ public:
    * Note that this port's write timeout is still in effect for each
    * individual write operation.
    *
+   * Throws on error.
+   *
    * @param timeout give up after this duration
-   * @return true on success
    */
   gcc_nonnull_all
-  bool FullWrite(const void *buffer, size_t length,
+  void FullWrite(const void *buffer, std::size_t length,
                  OperationEnvironment &env,
                  std::chrono::steady_clock::duration timeout);
 
@@ -134,7 +111,7 @@ public:
    * Just like FullWrite(), but write a null-terminated string
    */
   gcc_nonnull_all
-  bool FullWriteString(const char *s,
+  void FullWriteString(const char *s,
                        OperationEnvironment &env,
                        std::chrono::steady_clock::duration timeout);
 
@@ -152,10 +129,12 @@ public:
 
   /**
    * Sets the baud rate of the serial port to the given value
+   *
+   * Throws on error.
+   *
    * @param BaudRate The desired baudrate
-   * @return The previous baud rate or 0 on error
    */
-  virtual bool SetBaudrate(unsigned BaudRate) = 0;
+  virtual void SetBaudrate(unsigned BaudRate) = 0;
 
   /**
    * Gets the current baud rate of the serial port
@@ -163,7 +142,7 @@ public:
    * @return the current baud rate, or 0 on error or if a baud rate is
    * not applicable to this #Port implementation
    */
-  virtual unsigned GetBaudrate() const = 0;
+  virtual unsigned GetBaudrate() const noexcept = 0;
 
   /**
    * Stops the receive thread
@@ -179,23 +158,27 @@ public:
 
   /**
    * Read a single byte from the serial port
-   * @return the unsigned byte that was read or -1 on failure
+   *
+   * Throws on error.
    */
-  int GetChar();
+  std::byte ReadByte();
 
   /**
    * Read data from the serial port
    * @param Buffer Pointer to the buffer
    * @param Size Size of the buffer
-   * @return Number of bytes read from the serial port or -1 on failure
+   * @return Number of bytes read from the port (0 if no data is
+   * available currently)
    */
   gcc_nonnull_all
-  virtual int Read(void *Buffer, size_t Size) = 0;
+  virtual std::size_t Read(void *Buffer, std::size_t Size) = 0;
 
   /**
    * Wait until data becomes available or the timeout expires.
+   *
+   * Throws on error.
    */
-  virtual WaitResult WaitRead(std::chrono::steady_clock::duration timeout) = 0;
+  virtual void WaitRead(std::chrono::steady_clock::duration timeout) = 0;
 
   /**
    * Force flushing the receive buffers, by trying to read from the
@@ -203,27 +186,28 @@ public:
    *
    * The configured read timeout not relevant for this method.
    *
+   * Throws on error.
+   *
    * @param total_timeout the timeout for each read call
    * @param total_timeout the maximum total duration of this method
-   * @return true on timeout, false if an error has occurred or the
-   * operation was cancelled
    */
-  bool FullFlush(OperationEnvironment &env,
+  void FullFlush(OperationEnvironment &env,
                  std::chrono::steady_clock::duration timeout,
                  std::chrono::steady_clock::duration total_timeout);
 
   /**
    * Read data from the serial port, take care for partial reads.
    *
+   * Throws on error.
+   *
    * @param env an OperationEnvironment that allows canceling the
    * operation
    * @param first_timeout timeout for the first read
    * @param subsequent_timeout timeout for the subsequent reads
    * @param total_timeout timeout for the whole operation
-   * @return true on success
    */
   gcc_nonnull_all
-  bool FullRead(void *buffer, size_t length, OperationEnvironment &env,
+  void FullRead(void *buffer, std::size_t length, OperationEnvironment &env,
                 std::chrono::steady_clock::duration first_timeout,
                 std::chrono::steady_clock::duration subsequent_timeout,
                 std::chrono::steady_clock::duration total_timeout);
@@ -231,70 +215,83 @@ public:
   /**
    * Read data from the serial port, take care for partial reads.
    *
+   * Throws on error.
+   *
    * @param env an OperationEnvironment that allows canceling the
    * operation
    * @param timeout give up after this duration
    * @return true on success
    */
   gcc_nonnull_all
-  bool FullRead(void *buffer, size_t length, OperationEnvironment &env,
+  void FullRead(void *buffer, std::size_t length, OperationEnvironment &env,
                 std::chrono::steady_clock::duration timeout);
 
   /**
    * Wait until data becomes available, the timeout expires or the
    * operation gets cancelled.
    *
+   * Throws on error.
+   *
    * @param timeout give up after this duration
    * @param env an OperationEnvironment that allows cancelling the
    * operation
    */
-  WaitResult WaitRead(OperationEnvironment &env,
-                      std::chrono::steady_clock::duration timeout);
+  void WaitRead(OperationEnvironment &env,
+                std::chrono::steady_clock::duration timeout);
 
   /**
    * Combination of WaitRead() and Read().
    *
-   * @return 0 on timeout/canceled/error or the number of bytes read
+   * Throws on error.
+   *
+   * @return the number of bytes read (always positive)
    */
-  size_t WaitAndRead(void *buffer, size_t length,
-                     OperationEnvironment &env,
-                     std::chrono::steady_clock::duration timeout);
+  std::size_t WaitAndRead(void *buffer, std::size_t length,
+                          OperationEnvironment &env,
+                          std::chrono::steady_clock::duration timeout);
 
   /**
    * Combination of WaitRead() and Read().
    *
-   * @return 0 on timeout/canceled/error or the number of bytes read
+   * Throws on error.
+   *
+   * @return the number of bytes read (always positive)
    */
-  size_t WaitAndRead(void *buffer, size_t length,
-                     OperationEnvironment &env, TimeoutClock timeout);
+  std::size_t WaitAndRead(void *buffer, std::size_t length,
+                          OperationEnvironment &env, TimeoutClock timeout);
 
+  /**
+   * Throws on error.
+   */
   gcc_nonnull_all
-  bool ExpectString(const char *token, OperationEnvironment &env,
+  void ExpectString(const char *token, OperationEnvironment &env,
                     std::chrono::steady_clock::duration timeout=std::chrono::seconds(2));
 
   /**
    * Wait until the expected character is received, the timeout expires
    * or the operation gets canceled.
    *
+   * Throws on error.
+   *
    * @param token The expected character
    * @param env An OperationEnvironment that allows canceling the
    * operation
    * @param timeout give up after this duration
    */
-  WaitResult WaitForChar(const char token, OperationEnvironment &env,
-                         std::chrono::steady_clock::duration timeout);
+  void WaitForChar(const char token, OperationEnvironment &env,
+                   std::chrono::steady_clock::duration timeout);
 
 protected:
   /**
    * Implementations should call this method whenever the return value
    * of GetState() would change.
    */
-  void StateChanged();
+  void StateChanged() noexcept;
 
   /**
    * Call PortListener::PortError().
    */
-  void Error(const char *msg);
+  void Error(const char *msg) noexcept;
 
   /**
    * Call PortListener::PortError().

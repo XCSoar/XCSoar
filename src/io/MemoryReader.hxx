@@ -44,7 +44,7 @@ public:
 		:buffer(_buffer) {}
 
 	/* virtual methods from class Reader */
-	std::size_t Read(void *data, size_t size) override;
+	std::size_t Read(void *data, std::size_t size) override;
 };
 
 #endif

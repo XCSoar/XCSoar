@@ -42,7 +42,7 @@ Update(const MoreData &basic, const FlyingState &state,
     result.landing_location = state.landing_location;
   }
 
-  if (state.release_time >= 0 && !result.release_time.IsPlausible()) {
+  if (state.release_time.IsDefined() && !result.release_time.IsPlausible()) {
     result.release_time = basic.GetDateTimeAt(state.release_time);
     result.release_location = state.release_location;
   }
@@ -103,7 +103,7 @@ Run(DebugReplay &replay, FlightTimeResult &result)
 
     last_location = basic.location;
 
-    if (!released && replay.Calculated().flight.release_time >= 0) {
+    if (!released && replay.Calculated().flight.release_time.IsDefined()) {
       released = true;
     }
 
@@ -152,7 +152,7 @@ void FlightTimes(DebugReplay &replay, std::vector<FlightTimeResult> &results)
         && result.landing_time.IsPlausible()) {
 
       if (result.release_time.IsPlausible() &&
-          result.release_time.ToUnixTimeUTC() < result.takeoff_time.ToUnixTimeUTC())
+          result.release_time < result.takeoff_time)
         result.release_time = result.takeoff_time;
 
       results.push_back(result);

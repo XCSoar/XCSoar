@@ -25,18 +25,19 @@ Copyright_License {
 
 #include <cassert>
 
-double
-DeltaTime::Update(double current_time, double min_delta, double warp_tolerance)
+FloatDuration
+DeltaTime::Update(TimeStamp current_time, FloatDuration min_delta,
+                  FloatDuration warp_tolerance) noexcept
 {
 
-  assert(current_time >= 0);
-  assert(min_delta >= 0);
-  assert(warp_tolerance >= 0);
+  assert(current_time.IsDefined());
+  assert(min_delta.count() >= 0);
+  assert(warp_tolerance.count() >= 0);
 
   if (!IsDefined()) {
     /* first call */
     last_time = current_time;
-    return 0;
+    return {};
   }
 
   if (current_time < last_time) {
@@ -44,21 +45,21 @@ DeltaTime::Update(double current_time, double min_delta, double warp_tolerance)
 
     const auto delta = last_time - current_time;
     last_time = current_time;
-    return delta < warp_tolerance ? 0 : -1;
+    return delta < warp_tolerance ? FloatDuration{0} : FloatDuration{-1};
   }
 
   const auto delta = current_time - last_time;
   if (delta < min_delta)
     /* difference too small, don't update "last" time stamp to let
        small differences add up eventually */
-    return 0;
+    return {};
 
   last_time = current_time;
 
-  if (delta > 4 * 3600)
+  if (delta > std::chrono::hours{4})
     /* after several hours without a signal, we can assume there was
        a time warp */
-    return -1;
+    return FloatDuration{-1};
 
   return delta;
 }

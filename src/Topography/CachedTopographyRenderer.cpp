@@ -22,12 +22,13 @@ Copyright_License {
 */
 
 #include "CachedTopographyRenderer.hpp"
+#include "TopographyStore.hpp"
 
 #ifndef ENABLE_OPENGL
 
 void
 CachedTopographyRenderer::Draw(Canvas &canvas,
-                               const WindowProjection &projection)
+                               const WindowProjection &projection) noexcept
 {
   if (renderer.GetStore().GetSerial() != last_serial ||
       !cache.Check(projection)) {

@@ -32,26 +32,23 @@ Copyright_License {
 #include <stdio.h>
 #endif
 
-bool
+std::optional<RasterTileCache::Intersection>
 RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
                                    const SignedRasterLocation destination,
                                    int h_origin,
                                    int h_dest,
                                    const int slope_fact, const int h_ceiling,
                                    const int h_safety,
-                                   RasterLocation &_location, int &_h,
                                    const bool can_climb) const noexcept
 {
   RasterLocation location = origin;
   if (!IsInside(location))
     // origin is outside overall bounds
-    return false;
+    return std::nullopt;
 
   const TerrainHeight h_origin2 = GetFieldDirect(location).first;
   if (h_origin2.IsInvalid()) {
-    _location = location;
-    _h = h_origin;
-    return true;
+    return {{location, h_origin}};
   }
 
   if (!h_origin2.IsSpecial())
@@ -71,7 +68,8 @@ RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
   // calculate number of fine steps to produce a step on the overview field
   const int step_fine = std::max(1, max_steps >> INTERSECT_BITS);
   // number of steps for update to the overview map
-  const int step_coarse = std::max(1<< OVERVIEW_BITS, step_fine);
+  const int step_coarse = std::max(1 << RasterTraits::OVERVIEW_BITS,
+                                   step_fine);
 
   // number of steps to be cleared after climbing over obstruction
   const int intersect_steps = 32;
@@ -95,9 +93,7 @@ RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
 #ifdef DEBUG_TILE
     printf("# fint start above ceiling %d %d\n", h_origin, h_ceiling);
 #endif
-    _location = location;
-    _h = h_origin;
-    return true;
+    return {{location, h_origin}};
   }
 
 #ifdef DEBUG_TILE
@@ -159,12 +155,11 @@ RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
       }
 
       if (h_int > h_ceiling) {
-        _location = last_clear_location;
-        _h = last_clear_h;
 #ifdef DEBUG_TILE
         printf("# fint reach ceiling\n");
 #endif
-        return true; // reached ceiling
+        // reached ceiling
+        return {{last_clear_location, last_clear_h}};
       }
 
       if (!this_intersecting) {
@@ -177,9 +172,7 @@ RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
           printf("# fint int->clear\n");
 #endif
           if (intersect_counter >= intersect_steps) {
-            _location = location;
-            _h = h_int;
-            return true;
+            return {{location, h_int}};
           }
         } else {
           last_clear_location = location;
@@ -192,7 +185,7 @@ RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
 #ifdef DEBUG_TILE
       printf("# fint cleared\n");
 #endif
-      return false;
+      return std::nullopt;
     }
 
     const int e2 = 2*err;
@@ -214,14 +207,12 @@ RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
 
   // early exit due to inability to find clearance after intersecting
   if (intersect_counter) {
-    _location = last_clear_location;
-    _h = last_clear_h;
 #ifdef DEBUG_TILE
     printf("# fint early exit\n");
 #endif
-    return true;
+    return {{last_clear_location, last_clear_h}};
   }
-  return false;
+  return std::nullopt;
 }
 
 inline std::pair<TerrainHeight, bool>
@@ -238,7 +229,7 @@ RasterTileCache::GetFieldDirect(RasterLocation p) const noexcept
 
   // The overview might not cover the whole tile, if width or height are not
   // a multiple of 2^OVERVIEW_BITS.
-  auto p_overview = p >> OVERVIEW_BITS;
+  auto p_overview = p >> RasterTraits::OVERVIEW_BITS;
   assert(p_overview.x <= overview.GetSize().x);
   assert(p_overview.y <= overview.GetSize().y);
 
@@ -251,11 +242,11 @@ RasterTileCache::GetFieldDirect(RasterLocation p) const noexcept
 }
 
 SignedRasterLocation
-RasterTileCache::Intersection(const SignedRasterLocation origin,
-                              const SignedRasterLocation destination,
-                              const int h_origin,
-                              const int slope_fact,
-                              const int height_floor) const noexcept
+RasterTileCache::GroundIntersection(const SignedRasterLocation origin,
+                                    const SignedRasterLocation destination,
+                                    const int h_origin,
+                                    const int slope_fact,
+                                    const int height_floor) const noexcept
 {
   SignedRasterLocation location = origin;
 
@@ -280,7 +271,7 @@ RasterTileCache::Intersection(const SignedRasterLocation origin,
   // number of steps for update to the fine map
   const int step_fine = std::max(1, refine_step);
   // number of steps for update to the overview map
-  const int step_coarse = std::max(1<< OVERVIEW_BITS, step_fine);
+  const int step_coarse = std::max(1 << RasterTraits::OVERVIEW_BITS, step_fine);
 
   // counter for steps to reach next position to be checked on the field.
   unsigned step_counter = 0;
@@ -321,8 +312,8 @@ RasterTileCache::Intersection(const SignedRasterLocation origin,
           return RasterLocation(last_clear_location.x, last_clear_location.y);
 
         // refine solution
-        return Intersection(last_clear_location, location,
-                            last_clear_h, slope_fact, height_floor);
+        return GroundIntersection(last_clear_location, location,
+                                  last_clear_h, slope_fact, height_floor);
       }
 
       if (h_int <= 0)

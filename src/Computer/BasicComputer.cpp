@@ -180,19 +180,20 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
 
   const auto any_altitude = basic.GetAnyAltitude();
 
-  if (!basic.airspeed_available && any_altitude.first) {
+  if (!basic.airspeed_available && any_altitude) {
     double dyn; bool available = false;
     if (basic.dyn_pressure_available) {
       dyn = basic.dyn_pressure.GetHectoPascal();
       available = true;
     } else if (basic.pitot_pressure_available && basic.static_pressure_available) {
       dyn = basic.pitot_pressure.GetHectoPascal() - basic.static_pressure.GetHectoPascal();
-      available = true;
+      // suppress speeds below ~25 km/h
+      available = dyn >= 0.31;
     }
     if (available) {
       basic.indicated_airspeed = sqrt(double(163.2653061) * dyn);
       basic.true_airspeed = basic.indicated_airspeed *
-                            AirDensityRatio(any_altitude.second);
+                            AirDensityRatio(*any_altitude);
 
       basic.airspeed_available.Update(basic.clock);
       basic.airspeed_real = true; // Anyway not less real then any other method.
@@ -222,8 +223,8 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
   basic.true_airspeed = TrueAirspeedEstimated;
 
   basic.indicated_airspeed = TrueAirspeedEstimated;
-  if (any_altitude.first)
-    basic.indicated_airspeed /= AirDensityRatio(any_altitude.second);
+  if (any_altitude)
+    basic.indicated_airspeed /= AirDensityRatio(*any_altitude);
 
   basic.airspeed_available.Update(basic.clock);
   basic.airspeed_real = false;
@@ -317,14 +318,14 @@ ComputeGPSVario(MoreData &basic,
        shows when this value was parsed by XCSoar */
     const auto delta_t = basic.time - last_gps.time;
 
-    if (delta_t > 0) {
+    if (delta_t.count() > 0) {
       /* only update when a new value was received */
 
       auto delta_h = basic.gps_altitude - last_gps.gps_altitude;
       auto delta_e = basic.energy_height - last_gps.energy_height;
 
-      basic.gps_vario = delta_h / delta_t;
-      basic.gps_vario_TE = (delta_h + delta_e) / delta_t;
+      basic.gps_vario = delta_h / delta_t.count();
+      basic.gps_vario_TE = (delta_h + delta_e) / delta_t.count();
       basic.gps_vario_available = basic.gps_altitude_available;
     }
   } else {

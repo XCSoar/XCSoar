@@ -53,7 +53,7 @@ bool
 ProfileMap::GetPathIsEqual(const char *key, Path value) const
 {
   const auto saved_value = GetPath(key);
-  if (saved_value.IsNull())
+  if (saved_value == nullptr)
     return false;
 
   return saved_value == value;
@@ -105,7 +105,7 @@ ProfileMap::GetPathBase(const char *key) const
 void
 ProfileMap::SetPath(const char *key, Path value)
 {
-  if (value.IsNull() || StringIsEmpty(value.c_str()))
+  if (value == nullptr || StringIsEmpty(value.c_str()))
     Set(key, _T(""));
   else {
     const auto contracted = ContractLocalPath(value);

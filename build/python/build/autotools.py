@@ -8,11 +8,8 @@ class AutotoolsProject(MakeProject):
                  cppflags='',
                  ldflags='',
                  libs='',
-                 shared=False,
                  install_prefix=None,
                  use_destdir=False,
-                 make_args=[],
-                 config_script='configure',
                  use_actual_arch=False,
                  subdirs=None,
                  **kwargs):
@@ -22,21 +19,10 @@ class AutotoolsProject(MakeProject):
         self.cppflags = cppflags
         self.ldflags = ldflags
         self.libs = libs
-        self.shared = shared
         self.install_prefix = install_prefix
         self.use_destdir = use_destdir
-        self.make_args = make_args
-        self.config_script = config_script
         self.use_actual_arch = use_actual_arch
         self.subdirs = subdirs
-
-    def _filter_cflags(self, flags):
-        if self.shared:
-            # filter out certain flags which are only useful with
-            # static linking
-            for f in ('-fvisibility=hidden', '-fdata-sections', '-ffunction-sections'):
-                flags = flags.replace(' ' + f + ' ', ' ')
-        return flags
 
     def configure(self, toolchain, src=None, build=None, target_toolchain=None):
         if src is None:
@@ -68,11 +54,11 @@ class AutotoolsProject(MakeProject):
             install_prefix = toolchain.install_prefix
 
         configure = [
-            os.path.join(src, self.config_script),
+            os.path.join(src, 'configure'),
             'CC=' + toolchain.cc,
             'CXX=' + toolchain.cxx,
-            'CFLAGS=' + self._filter_cflags(toolchain.cflags),
-            'CXXFLAGS=' + self._filter_cflags(toolchain.cxxflags),
+            'CFLAGS=' + toolchain.cflags,
+            'CXXFLAGS=' + toolchain.cxxflags,
             'CPPFLAGS=' + cppflags + ' ' + self.cppflags,
             'LDFLAGS=' + toolchain.ldflags + ' ' + self.ldflags,
             'LIBS=' + toolchain.libs + ' ' + self.libs,
@@ -95,11 +81,22 @@ class AutotoolsProject(MakeProject):
 
         configure += self.configure_args
 
-        subprocess.check_call(configure, cwd=build, env=toolchain.env)
+        try:
+            subprocess.check_call(configure, cwd=build, env=toolchain.env)
+        except subprocess.CalledProcessError:
+            # dump config.log after a failed configure run
+            try:
+                with open(os.path.join(build, 'config.log')) as f:
+                    sys.stdout.write(f.read())
+            except:
+                pass
+            # re-raise the exception
+            raise
+
         return build
 
     def get_make_args(self, toolchain):
-        return MakeProject.get_make_args(self, toolchain) + self.make_args
+        return MakeProject.get_make_args(self, toolchain)
 
     def get_make_install_args(self, toolchain):
         args = MakeProject.get_make_install_args(self, toolchain)
@@ -107,10 +104,10 @@ class AutotoolsProject(MakeProject):
             args += ['DESTDIR=' + toolchain.install_prefix]
         return args
 
-    def build(self, toolchain, target_toolchain=None):
+    def _build(self, toolchain, target_toolchain=None):
         build = self.configure(toolchain, target_toolchain=target_toolchain)
         if self.subdirs is not None:
             for subdir in self.subdirs:
-                MakeProject.build(self, toolchain, os.path.join(build, subdir))
+                self.build_make(toolchain, os.path.join(build, subdir))
         else:
-            MakeProject.build(self, toolchain, build)
+            self.build_make(toolchain, build)

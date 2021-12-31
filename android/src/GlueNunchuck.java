@@ -29,16 +29,17 @@ import ioio.lib.api.exception.ConnectionLostException;
 /**
  * A driver for the Nintendo Nunchuck, connected via IOIO.
  */
-final class GlueNunchuck implements IOIOConnectionListener {
+final class GlueNunchuck implements AndroidSensor, IOIOConnectionListener {
   private IOIOConnectionHolder holder;
   private final int twiNum, sample_rate;
-  private final Nunchuck.Listener listener;
+  private final SensorListener listener;
 
   private Nunchuck instance;
+  private int state = STATE_LIMBO;
 
   GlueNunchuck(IOIOConnectionHolder _holder,
-              int _twiNum, int _sample_rate,
-             Nunchuck.Listener _listener) {
+               int _twiNum, int _sample_rate,
+               SensorListener _listener) {
     twiNum = _twiNum;
     sample_rate = _sample_rate;
     listener = _listener;
@@ -47,6 +48,7 @@ final class GlueNunchuck implements IOIOConnectionListener {
     _holder.addListener(this);
   }
 
+  @Override
   public void close() {
     IOIOConnectionHolder holder;
     synchronized(this) {
@@ -58,9 +60,21 @@ final class GlueNunchuck implements IOIOConnectionListener {
       holder.removeListener(this);
   }
 
+  @Override
+  public int getState() {
+    return state;
+  }
+
   @Override public void onIOIOConnect(IOIO ioio)
     throws ConnectionLostException, InterruptedException {
-    instance = new Nunchuck(ioio, twiNum, sample_rate, listener);
+    try {
+      instance = new Nunchuck(ioio, twiNum, sample_rate, listener);
+      state = STATE_READY;
+      listener.onSensorStateChanged();
+    } catch (Exception e) {
+      state = STATE_FAILED;
+      listener.onSensorError(e.getMessage());
+    }
   }
 
   @Override public void onIOIODisconnect(IOIO ioio) {
@@ -69,5 +83,8 @@ final class GlueNunchuck implements IOIOConnectionListener {
 
     instance.close();
     instance = null;
+
+    state = STATE_LIMBO;
+    listener.onSensorStateChanged();
   }
 }

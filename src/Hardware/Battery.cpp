@@ -24,7 +24,8 @@ Copyright_License {
 #include "Battery.hpp"
 #include "util/StringAPI.hxx"
 
-#ifdef HAVE_BATTERY
+#if defined(HAVE_BATTERY) && !defined(ANDROID)
+#include "PowerInfo.hpp"
 
 #ifdef KOBO
 
@@ -34,27 +35,15 @@ Copyright_License {
 #include <string.h>
 #include <stdlib.h>
 
-namespace Power
-{
-  namespace Battery{
-    unsigned Temperature = 0;
-    unsigned RemainingPercent = 0;
-    bool RemainingPercentValid = false;
-    batterystatus Status = UNKNOWN;
-  };
+namespace Power {
 
-  namespace External{
-    externalstatus Status = UNKNOWN;
-  };
-};
-
-void
-UpdateBatteryInfo()
+Info
+GetInfo() noexcept
 {
-  // assume failure at entry
-  Power::Battery::RemainingPercentValid = false;
-  Power::Battery::Status = Power::Battery::UNKNOWN;
-  Power::External::Status = Power::External::UNKNOWN;
+  Info info;
+  auto &battery = info.battery;
+  auto &external = info.external;
+
   char line[256];
 
   if (DetectKoboModel() == KoboModel::GLO_HD) {
@@ -62,22 +51,21 @@ UpdateBatteryInfo()
                          line, sizeof(line))) {
       if (StringIsEqual(line,"Not charging\n") ||
           StringIsEqual(line,"Charging\n"))
-        Power::External::Status = Power::External::ON;
+        external.status = Power::ExternalInfo::Status::ON;
       else if (StringIsEqual(line,"Discharging\n"))
-        Power::External::Status = Power::External::OFF;
+        external.status = Power::ExternalInfo::Status::OFF;
     }
 
     if (File::ReadString(Path("/sys/class/power_supply/mc13892_bat/capacity"),
                          line, sizeof(line))) {
       int rem = atoi(line);
-      Power::Battery::RemainingPercentValid = true;
-      Power::Battery::RemainingPercent = rem;
+      battery.remaining_percent = rem;
     }
   } else {
     // code shamelessly copied from OS/SystemLoad.cpp
     if (!File::ReadString(Path("/sys/class/power_supply/mc13892_bat/uevent"),
                           line, sizeof(line)))
-      return;
+      return info;
 
     char field[80], value[80];
     int n;
@@ -87,30 +75,21 @@ UpdateBatteryInfo()
       if (StringIsEqual(field,"POWER_SUPPLY_STATUS")) {
         if (StringIsEqual(value,"Not charging") ||
             StringIsEqual(value,"Charging")) {
-          Power::External::Status = Power::External::ON;
+          external.status = Power::ExternalInfo::Status::ON;
         } else if (StringIsEqual(value,"Discharging")) {
-          Power::External::Status = Power::External::OFF;
+          external.status = Power::ExternalInfo::Status::OFF;
         }
       } else if (StringIsEqual(field,"POWER_SUPPLY_CAPACITY")) {
         int rem = atoi(value);
-        Power::Battery::RemainingPercentValid = true;
-        Power::Battery::RemainingPercent = rem;
+        battery.remaining_percent = rem;
       }
     }
   }
 
-  if (Power::External::Status == Power::External::OFF) {
-    if (Power::Battery::RemainingPercentValid) {
-      if (Power::Battery::RemainingPercent>30)
-        Power::Battery::Status = Power::Battery::HIGH;
-      else if (Power::Battery::RemainingPercent>10)
-        Power::Battery::Status = Power::Battery::LOW;
-      else if (Power::Battery::RemainingPercent<10)
-        Power::Battery::Status = Power::Battery::CRITICAL;
-    }
-  } else if (Power::External::Status == Power::External::ON)
-    Power::Battery::Status = Power::Battery::CHARGING;
+  return info;
 }
+
+} // namespace Power
 
 #endif
 
@@ -118,58 +97,39 @@ UpdateBatteryInfo()
 
 #include <SDL_power.h>
 
-namespace Power
-{
-  namespace Battery{
-    unsigned Temperature = 0;
-    unsigned RemainingPercent = 0;
-    bool RemainingPercentValid = false;
-    batterystatus Status = UNKNOWN;
-  };
+namespace Power {
 
-  namespace External{
-    externalstatus Status = UNKNOWN;
-  };
-};
-
-void
-UpdateBatteryInfo()
+Info
+GetInfo() noexcept
 {
+  Info info;
+  auto &battery = info.battery;
+  auto &external = info.external;
+
   int remaining_percent;
   SDL_PowerState power_state = SDL_GetPowerInfo(NULL, &remaining_percent);
   if (remaining_percent >= 0) {
-    Power::Battery::RemainingPercent = remaining_percent;
-    Power::Battery::RemainingPercentValid = true;
-  } else {
-    Power::Battery::RemainingPercentValid = false;
+    battery.remaining_percent = remaining_percent;
   }
 
   switch (power_state) {
   case SDL_POWERSTATE_CHARGING:
   case SDL_POWERSTATE_CHARGED:
-    Power::External::Status = Power::External::ON;
-    Power::Battery::Status = Power::Battery::CHARGING;
+    external.status = Power::ExternalInfo::Status::ON;
     break;
 
   case SDL_POWERSTATE_ON_BATTERY:
-    Power::External::Status = Power::External::OFF;
-    if (remaining_percent >= 0) {
-      if (remaining_percent > 30) {
-        Power::Battery::Status = Power::Battery::HIGH;
-      } else if (remaining_percent > 30) {
-        Power::Battery::Status = Power::Battery::LOW;
-      } else {
-        Power::Battery::Status = Power::Battery::CRITICAL;
-      }
-    } else {
-      Power::Battery::Status = Power::Battery::UNKNOWN;
-    }
+    external.status = Power::ExternalInfo::Status::OFF;
     break;
 
   default:
-    Power::External::Status = Power::External::UNKNOWN;
+    break;
   }
+
+  return info;
 }
+
+} // namespace Power
 
 #endif
 

@@ -29,6 +29,7 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "TaskBehaviour.hpp"
 #include "Waypoint/Ptr.hpp"
+#include "util/Compiler.h"
 
 #include <memory>
 

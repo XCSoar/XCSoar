@@ -32,7 +32,9 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "NMEA/MoreData.hpp"
 
-static constexpr double THERMAL_TIME_MIN = 45;
+using namespace std::chrono;
+
+static constexpr FloatDuration THERMAL_TIME_MIN = seconds{45};
 static constexpr double THERMAL_SHEAR_RATIO_MAX = 10;
 static constexpr double DEFAULT_TAKEOFF_SPEED = 10;
 static constexpr double CLIMB_RATE_G_MIN = 0.25;
@@ -57,6 +59,7 @@ GlideComputerAirData::ResetFlight(DerivedInfo &calculated,
 
   lift_database_computer.Reset(calculated.lift_database,
                                calculated.trace_history.CirclingAverage);
+  calculated.trace_history.circling_available.Clear();
 
   thermallocator.Reset();
 
@@ -137,6 +140,8 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   lift_database_computer.Compute(calculated.lift_database,
                                  calculated.trace_history.CirclingAverage,
                                  basic, calculated);
+  calculated.trace_history.circling_available.Update(basic.clock);
+
   circling_computer.MaxHeightGain(basic, calculated.flight, calculated);
   NextLegEqThermal(basic, calculated, settings);
 }
@@ -184,7 +189,7 @@ GlideComputerAirData::CurrentThermal(const MoreData &basic,
                                      const CirclingInfo &circling,
                                      OneClimbInfo &current_thermal)
 {
-  if (circling.climb_start_time > 0) {
+  if (circling.climb_start_time.IsDefined()) {
     current_thermal.start_time = circling.climb_start_time;
     current_thermal.end_time = basic.time;
     current_thermal.gain =
@@ -215,7 +220,7 @@ GlideComputerAirData::CruiseGR(const MoreData &basic, DerivedInfo &calculated)
 {
   if (!calculated.circling && basic.location_available &&
       basic.NavAltitudeAvailable()) {
-    if (calculated.cruise_start_time < 0) {
+    if (!calculated.cruise_start_time.IsDefined()) {
       calculated.cruise_start_location = basic.location;
       calculated.cruise_start_altitude = basic.nav_altitude;
       calculated.cruise_start_time = basic.time;
@@ -271,7 +276,7 @@ GlideComputerAirData::FlightTimes(const NMEAInfo &basic,
                                   const ComputerSettings &settings)
 {
   if (basic.time_available &&
-      delta_time.Update(basic.time, 0, 180) < 0)
+      delta_time.Update(basic.time, {}, minutes{3}).count() < 0)
     /* time warp: reset the computer */
     ResetFlight(calculated, true);
 
@@ -356,7 +361,7 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
                                        bool last_circling)
 {
   if (calculated.circling || !last_circling ||
-      calculated.climb_start_time <= 0)
+      !calculated.climb_start_time.IsDefined())
     return;
 
   auto duration = calculated.cruise_start_time - calculated.climb_start_time;
@@ -399,8 +404,7 @@ GlideComputerAirData::ProcessSun(const NMEAInfo &basic,
     return;
 
   // Only calculate new azimuth if data is older than 15 minutes
-  if (!calculated.sun_data_available.IsOlderThan(basic.clock,
-                                                 std::chrono::minutes(15)))
+  if (!calculated.sun_data_available.IsOlderThan(basic.clock, minutes{15}))
     return;
 
   // Calculate new azimuth

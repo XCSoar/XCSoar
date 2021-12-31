@@ -85,7 +85,12 @@ static Mode current_mode = InputEvents::MODE_DEFAULT;
  */
 static Mode overlay_mode = MODE_DEFAULT;
 
-static unsigned MenuTimeOut = 0;
+static std::chrono::duration<unsigned> MenuTimeOut{};
+
+/**
+ * True if a full menu update was postponed by drawButtons().
+ */
+static bool menu_dirty = false;
 
 gcc_pure
 static Mode
@@ -199,6 +204,17 @@ InputEvents::drawButtons(Mode mode, bool full) noexcept
 {
   if (!global_running)
     return;
+
+  if (CommonInterface::main_window->HasDialog()) {
+    /* don't activate the menu if a modal dialog is visible; the menu
+       buttons would be put above the dialog, but would not be
+       accessible; instead, postpone */
+    if (full)
+      menu_dirty = true;
+    return;
+  }
+
+  full |= std::exchange(menu_dirty, false);
 
   const Menu &menu = input_config.menus[mode];
   const Menu *const overlay_menu = overlay_mode != MODE_DEFAULT
@@ -374,18 +390,22 @@ InputEvents::IsGesture(const TCHAR *data) noexcept
 bool
 InputEvents::processGesture(const TCHAR *data) noexcept
 {
+  // start with lua event if available!
+  if (Lua::FireGesture(data))
+    return true;
+
   // get current mode
   unsigned event_id = gesture_to_event(data);
-  if (event_id)
-  {
+  if (event_id) {
     InputEvents::processGo(event_id);
     return true;
   }
-  return Lua::FireGesture(data);
+
+  return false;
 }
 
 /*
-  InputEvent::processNmea(TCHAR* data)
+  InputEvent::processNmea(TCHAR *data)
   Take hard coded inputs from NMEA processor.
   Return = TRUE if we have a valid key match
 */
@@ -445,7 +465,7 @@ InputEvents::processGo(unsigned eventid) noexcept
     const InputConfig::Event &event = input_config.events[eventid];
     if (event.event != NULL) {
       event.event(event.misc);
-      MenuTimeOut = 0;
+      MenuTimeOut = {};
     }
 
     eventid = event.next;
@@ -462,7 +482,7 @@ void
 InputEvents::ShowMenu() noexcept
 {
   setMode(MODE_MENU);
-  MenuTimeOut = 0;
+  MenuTimeOut = {};
   ProcessMenuTimer();
 }
 
@@ -489,7 +509,7 @@ InputEvents::ProcessMenuTimer() noexcept
   // refresh visible buttons if still visible
   drawButtons(getModeID());
 
-  MenuTimeOut++;
+  MenuTimeOut += std::chrono::seconds{1};
 }
 
 void

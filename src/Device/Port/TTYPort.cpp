@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "TTYPort.hpp"
+#include "Device/Error.hpp"
 #include "Asset.hpp"
 #include "io/UniqueFileDescriptor.hxx"
 #include "system/Error.hxx"
@@ -158,19 +159,15 @@ TTYPort::TTYPort(EventLoop &event_loop,
 {
 }
 
-TTYPort::~TTYPort()
+TTYPort::~TTYPort() noexcept
 {
-  BufferedPort::BeginClose();
-
   BlockingCall(GetEventLoop(), [this](){
     socket.Close();
   });
-
-  BufferedPort::EndClose();
 }
 
 PortState
-TTYPort::GetState() const
+TTYPort::GetState() const noexcept
 {
   return valid.load(std::memory_order_relaxed)
     ? PortState::READY
@@ -187,7 +184,7 @@ TTYPort::Drain()
 #ifndef __APPLE__
 gcc_pure
 static bool
-IsCharDev(const char *path)
+IsCharDev(const char *path) noexcept
 {
   struct stat st;
   return stat(path, &st) == 0 && S_ISCHR(st.st_mode);
@@ -203,7 +200,7 @@ TTYPort::Open(const TCHAR *path, unsigned baud_rate)
        USB serial adapter; this is mostly relevant to the Nook */
     TCHAR command[MAX_PATH];
     StringFormat(command, MAX_PATH, "su -c 'chmod 666 %s'", path);
-    system(command);
+    if(system(command)) {;} // Ignore return value
   }
 #endif
 
@@ -259,51 +256,50 @@ TTYPort::Flush()
   BufferedPort::Flush();
 }
 
-Port::WaitResult
+inline void
 TTYPort::WaitWrite(unsigned timeout_ms)
 {
   assert(socket.IsDefined());
 
   if (!valid.load(std::memory_order_relaxed))
-    return WaitResult::FAILED;
+    throw std::runtime_error("Port is closed");
 
   const TTYDescriptor fd(socket.GetSocket().ToFileDescriptor());
   int ret = fd.WaitWritable(timeout_ms);
   if (ret > 0)
-    return WaitResult::READY;
+    return;
   else if (ret == 0)
-    return WaitResult::TIMEOUT;
+      throw DeviceTimeout{"Port write timeout"};
   else
-    return WaitResult::FAILED;
+      throw MakeErrno("Port write failed");
 }
 
-size_t
-TTYPort::Write(const void *data, size_t length)
+std::size_t
+TTYPort::Write(const void *data, std::size_t length)
 {
   assert(socket.IsDefined());
 
   if (!valid.load(std::memory_order_relaxed))
-    return 0;
+    throw std::runtime_error("Port is closed");
 
   TTYDescriptor fd(socket.GetSocket().ToFileDescriptor());
   auto nbytes = fd.Write(data, length);
   if (nbytes < 0) {
-    if (errno != EAGAIN ||
-        /* the output fifo is full; wait until we can write (or until
-           the timeout expires) */
-        WaitWrite(5000) != Port::WaitResult::READY)
-      return 0;
+    if (errno != EAGAIN)
+      /* the output fifo is full; wait until we can write (or until
+         the timeout expires) */
+      WaitWrite(5000);
 
     nbytes = fd.Write(data, length);
     if (nbytes < 0)
-      return 0;
+      throw MakeErrno("Port write failed");
   }
 
   return nbytes;
 }
 
 unsigned
-TTYPort::GetBaudrate() const
+TTYPort::GetBaudrate() const noexcept
 {
   assert(socket.IsDefined());
 
@@ -315,18 +311,13 @@ TTYPort::GetBaudrate() const
   return speed_t_to_baud_rate(cfgetispeed(&attr));
 }
 
-bool
+void
 TTYPort::SetBaudrate(unsigned baud_rate)
 {
   assert(socket.IsDefined());
 
   const TTYDescriptor tty(socket.GetSocket().ToFileDescriptor());
-  try {
-    ::SetBaudrate(tty, baud_rate);
-    return true;
-  } catch (...) {
-    return false;
-  }
+  ::SetBaudrate(tty, baud_rate);
 }
 
 void
@@ -334,7 +325,7 @@ TTYPort::OnSocketReady(unsigned) noexcept
 {
   TTYDescriptor tty(socket.GetSocket().ToFileDescriptor());
 
-  char input[4096];
+  std::byte input[4096];
   ssize_t nbytes = tty.Read(input, sizeof(input));
   if (nbytes < 0) {
     int e = errno;
@@ -352,5 +343,5 @@ TTYPort::OnSocketReady(unsigned) noexcept
     return;
   }
 
-  DataReceived(input, nbytes);
+  DataReceived({input, std::size_t(nbytes)});
 }

@@ -91,7 +91,8 @@ private:
   bool ParseBST(const char *content, NMEAInfo &info);
   bool ParseSET(const char *content, NMEAInfo &info);
 
-  bool WriteDeviceSetting(const char *name, int value, OperationEnvironment &env);
+  void WriteDeviceSetting(const char *name, int value,
+                          OperationEnvironment &env);
 
 public:
   explicit BlueFlyDevice(Port &_port);
@@ -101,11 +102,8 @@ public:
    * Request the current settings configuration from the BlueFly Vario.
    * The BlueFly Vario will send the values, but this method will not
    * wait for that.
-   *
-   * @return true if sending the command has succeeded (it does not
-   * indicate whether the BlueFly Vario has understood and processed it)
    */
-  bool RequestSettings(OperationEnvironment &env);
+  void RequestSettings(OperationEnvironment &env);
 
   /**
    * Wait for the BlueFly Vario to send its settings.

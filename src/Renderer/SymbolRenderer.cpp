@@ -27,7 +27,8 @@ Copyright_License {
 #include <algorithm>
 
 void
-SymbolRenderer::DrawArrow(Canvas &canvas, PixelRect rc, Direction direction)
+SymbolRenderer::DrawArrow(Canvas &canvas, PixelRect rc,
+                          Direction direction) noexcept
 {
   assert(direction == UP || direction == DOWN ||
          direction == LEFT || direction == RIGHT);
@@ -56,7 +57,7 @@ SymbolRenderer::DrawArrow(Canvas &canvas, PixelRect rc, Direction direction)
 }
 
 void
-SymbolRenderer::DrawSign(Canvas &canvas, PixelRect rc, bool plus)
+SymbolRenderer::DrawSign(Canvas &canvas, PixelRect rc, bool plus) noexcept
 {
   unsigned size = std::min(rc.GetWidth(), rc.GetHeight()) / 5;
   const auto horizontal_rect = PixelRect{rc.GetCenter()}

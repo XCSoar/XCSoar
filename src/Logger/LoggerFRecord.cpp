@@ -22,16 +22,9 @@ Copyright_License {
 */
 
 #include "Logger/LoggerFRecord.hpp"
+#include "util/Compiler.h"
 
 #include <string.h>
-
-/* Workaround for some GCC versions which don't inline the constexpr
-   despite being defined so in C++17, see
-   http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0386r2.pdf */
-#if GCC_OLDER_THAN(9,0)
-constexpr std::chrono::steady_clock::duration LoggerFRecord::DEFAULT_UPDATE_TIME;
-constexpr std::chrono::steady_clock::duration LoggerFRecord::ACCELERATED_UPDATE_TIME;
-#endif
 
 /*
  * From FAI_Tech_Spec_Gnss.pdf 
@@ -72,7 +65,8 @@ LoggerFRecord::CheckSatellitesChanged(const GPSState &gps) const
 }
 
 bool
-LoggerFRecord::Update(const GPSState &gps, double time, bool nav_warning)
+LoggerFRecord::Update(const GPSState &gps, TimeStamp time,
+                      bool nav_warning) noexcept
 {
   // Accelerate to 30 seconds if bad signal
   const std::chrono::steady_clock::duration period = IsBadSignal(gps) || nav_warning

@@ -50,15 +50,15 @@ class ButtonPanel {
   int selected_index;
 
 public:
-  ButtonPanel(ContainerWindow &parent, const ButtonLook &look);
-  ~ButtonPanel();
+  ButtonPanel(ContainerWindow &parent, const ButtonLook &look) noexcept;
+  ~ButtonPanel() noexcept;
 
   /**
    * On devices without a touch screen, enable button selection with
    * KEY_LEFT / KEY_RIGHT.  That allows navigating a ListControl while
    * allowing the user to select an action on a list item.
    */
-  void EnableCursorSelection(unsigned _index=0) {
+  void EnableCursorSelection(unsigned _index=0) noexcept {
     assert(selected_index < 0);
     assert(_index < buttons.size());
 
@@ -66,11 +66,11 @@ public:
     buttons[selected_index]->SetSelected(true);
   }
 
-  const ButtonLook &GetLook() const {
+  const ButtonLook &GetLook() const noexcept {
     return look;
   }
 
-  void SetDefaultHidden() {
+  void SetDefaultHidden() noexcept {
     style.Hide();
   }
 
@@ -88,7 +88,7 @@ public:
   /**
    * Assign a hot key to the most recently added button.
    */
-  void AddKey(unsigned key_code);
+  void AddKey(unsigned key_code) noexcept;
 
   /**
    * Call this after all buttons have been added or after the parent
@@ -96,34 +96,34 @@ public:
    *
    * @return the remaining rectangle
    */
-  PixelRect UpdateLayout(PixelRect rc);
-  PixelRect UpdateLayout();
+  PixelRect UpdateLayout(PixelRect rc) noexcept;
+  PixelRect UpdateLayout() noexcept;
 
   /**
    * Move buttons in columns on the left.
    */
-  PixelRect LeftLayout(PixelRect rc);
-  PixelRect LeftLayout();
+  PixelRect LeftLayout(PixelRect rc) noexcept;
+  PixelRect LeftLayout() noexcept;
 
   /**
    * Move buttons to rows on the bottom.
    */
-  PixelRect BottomLayout(PixelRect rc);
-  PixelRect BottomLayout();
+  PixelRect BottomLayout(PixelRect rc) noexcept;
+  PixelRect BottomLayout() noexcept;
 
-  void ShowAll();
-  void HideAll();
+  void ShowAll() noexcept;
+  void HideAll() noexcept;
 
   /**
    * Handle a hot key.
    *
    * @return true if the event has been handled
    */
-  bool KeyPress(unsigned key_code);
+  bool KeyPress(unsigned key_code) noexcept;
 
 private:
   gcc_pure
-  unsigned Width(unsigned i) const;
+  unsigned Width(unsigned i) const noexcept;
 
   /**
    * Check how many buttons fit into a row, starting at the given
@@ -134,18 +134,19 @@ private:
    * @return the first button index not in this row
    */
   gcc_pure
-  unsigned FitButtonRow(unsigned start, unsigned total_width) const;
+  unsigned FitButtonRow(unsigned start, unsigned total_width) const noexcept;
 
   gcc_pure
-  unsigned RangeMaxWidth(unsigned start, unsigned end) const;
+  unsigned RangeMaxWidth(unsigned start, unsigned end) const noexcept;
 
-  PixelRect VerticalRange(PixelRect rc, unsigned start, unsigned end);
+  PixelRect VerticalRange(PixelRect rc, unsigned start, unsigned end) noexcept;
 
-  PixelRect HorizontalRange(PixelRect rc, unsigned start, unsigned end);
+  PixelRect HorizontalRange(PixelRect rc,
+                            unsigned start, unsigned end) noexcept;
 
-  void SetSelectedIndex(unsigned _index);
-  bool SelectPrevious();
-  bool SelectNext();
+  void SetSelectedIndex(unsigned _index) noexcept;
+  bool SelectPrevious() noexcept;
+  bool SelectNext() noexcept;
 };
 
 #endif

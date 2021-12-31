@@ -30,7 +30,7 @@ void
 TabRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                   const DialogLook &look,
                   const TCHAR *caption, const MaskedIcon *icon,
-                  bool focused, bool pressed, bool selected) const
+                  bool focused, bool pressed, bool selected) const noexcept
 {
   canvas.DrawFilledRectangle(rc,
                              look.list.GetBackgroundColor(selected, focused,

@@ -31,6 +31,7 @@ Copyright_License {
 #include "NMEA/ThermalLocator.hpp"
 #include "Weather/Features.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
+#include "Engine/Airspace/Ptr.hpp"
 #include "Engine/Route/ReachResult.hpp"
 #include "Tracking/SkyLines/Features.hpp"
 #include "util/StaticString.hxx"
@@ -39,11 +40,12 @@ Copyright_License {
 #include "Weather/NOAAStore.hpp"
 #endif
 
+#include <chrono>
+
 #include <tchar.h>
 
 enum class TaskPointType : uint8_t;
 
-class AbstractAirspace;
 class ObservationZonePoint;
 
 struct MapItem
@@ -167,10 +169,11 @@ struct TaskOZMapItem: public MapItem
 
 struct AirspaceMapItem: public MapItem
 {
-  const AbstractAirspace *airspace;
+  ConstAirspacePtr airspace;
 
-  AirspaceMapItem(const AbstractAirspace &_airspace)
-    :MapItem(AIRSPACE), airspace(&_airspace) {}
+  template<typename T>
+  explicit AirspaceMapItem(T &&_airspace) noexcept
+    :MapItem(AIRSPACE), airspace(std::forward<T>(_airspace)) {}
 };
 
 struct WaypointMapItem: public MapItem
@@ -204,16 +207,20 @@ struct TrafficMapItem: public MapItem
 
 struct SkyLinesTrafficMapItem : public MapItem
 {
-  uint32_t id, time_of_day_ms;
+  using Time = std::chrono::duration<uint_least32_t, std::chrono::milliseconds::period>;
+
+  uint32_t id;
+
+  Time time_of_day;
 
   int altitude;
 
   StaticString<40> name;
 
-  SkyLinesTrafficMapItem(uint32_t _id, uint32_t _time_of_day_ms,
+  SkyLinesTrafficMapItem(uint32_t _id, Time _time_of_day_ms,
                          int _altitude,
                          const TCHAR *_name)
-    :MapItem(SKYLINES_TRAFFIC), id(_id), time_of_day_ms(_time_of_day_ms),
+    :MapItem(SKYLINES_TRAFFIC), id(_id), time_of_day(_time_of_day_ms),
      altitude(_altitude),
      name(_name) {}
 };

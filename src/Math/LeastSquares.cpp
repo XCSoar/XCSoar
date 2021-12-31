@@ -103,17 +103,18 @@ LeastSquares::Compute() noexcept
 
   y_ave = sum_yw / sum_weights;
 
-  if (sum_n>1) {
-    x_var = x_S / (sum_n - 1);
-    y_var = y_S / (sum_n - 1);
-    xy_var = xy_C / (sum_n - 1);
+  const unsigned n = GetCount();
+  if (n>1) {
+    x_var = x_S / (n - 1);
+    y_var = y_S / (n - 1);
+    xy_var = xy_C / (n - 1);
   }
 }
 
 void
 LeastSquares::Update(double y) noexcept
 {
-  Update(double(sum_n + 1), y);
+  Update(double(GetCount() + 1), y);
 }
 
 void
@@ -146,17 +147,18 @@ LeastSquares::Add(double x, double y, double weight) noexcept
   sum_xyw += x * y * weight;
 
   // See Knuth TAOCP vol 2, 3rd edition, page 232
-  if (sum_n == 1) {
+  const unsigned n = GetCount();
+  if (n == 1) {
     x_mean = x;
     y_mean = y;
   } else {
     auto dx = x-x_mean;
     auto dy = y-y_mean;
 
-    x_mean += dx / sum_n;
+    x_mean += dx / n;
     x_S += dx * (x - x_mean);
 
-    y_mean += dy / sum_n;
+    y_mean += dy / n;
     y_S += dy * (y - y_mean);
 
     xy_C += dx * (y - y_mean);
@@ -166,9 +168,9 @@ LeastSquares::Add(double x, double y, double weight) noexcept
 void
 LeastSquares::Remove(const unsigned i) noexcept
 {
-  assert(i< sum_n);
+  assert(i < GetCount());
 
-  const auto &pt = slots[i];
+  const auto &pt = GetSlots()[i];
   // Remove weighted point
   double weight = 1;
 #ifdef LEASTSQS_WEIGHT_STORE

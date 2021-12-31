@@ -188,12 +188,14 @@ TopCanvas::Create(PixelSize new_size,
   case KoboModel::TOUCH:
   case KoboModel::GLO:
   case KoboModel::AURA:
+  case KoboModel::NIA:
     frame_sync = false;
     break;
 
   case KoboModel::TOUCH2:
   case KoboModel::GLO_HD:
   case KoboModel::AURA2:
+  case KoboModel::CLARA_HD:
     frame_sync = true;
     break;
 
@@ -301,7 +303,8 @@ TopCanvas::Flip()
              (/* use A2 mode only on some Kobo models */
               DetectKoboModel() == KoboModel::TOUCH2 ||
               DetectKoboModel() == KoboModel::GLO_HD ||
-              DetectKoboModel() == KoboModel::AURA2)
+              DetectKoboModel() == KoboModel::AURA2 ||
+              DetectKoboModel() == KoboModel::CLARA_HD)
              ? WAVEFORM_MODE_A2
              : WAVEFORM_MODE_AUTO),
     UPDATE_MODE_FULL, // PARTIAL

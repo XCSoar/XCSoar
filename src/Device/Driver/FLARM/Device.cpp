@@ -38,6 +38,13 @@ FlarmDevice::LinkTimeout()
 }
 
 bool
+FlarmDevice::PutPilotEvent(OperationEnvironment &env)
+{
+  Send("PFLAI,PILOTEVENT", env);
+  return true;
+}
+
+bool
 FlarmDevice::GetStealthMode(bool &enabled, OperationEnvironment &env)
 {
   char buffer[2];
@@ -212,8 +219,8 @@ static bool
 ExpectChecksum(Port &port, uint8_t checksum, OperationEnvironment &env)
 {
   char data[4];
-  if (!port.FullRead(data, 3, env, std::chrono::milliseconds(500)) ||
-      data[0] != '*')
+  port.FullRead(data, 3, env, std::chrono::milliseconds(500));
+  if (data[0] != '*')
     return false;
 
   data[3] = '\0';
@@ -231,8 +238,8 @@ FlarmDevice::SetConfig(const char *setting, const char *value,
   expected_answer[6u] = 'A';
 
   Send(buffer, env);
-  return port.ExpectString(expected_answer, env, std::chrono::seconds(2)) &&
-    ExpectChecksum(port, NMEAChecksum(expected_answer), env);
+  port.ExpectString(expected_answer, env, std::chrono::seconds(2));
+  return ExpectChecksum(port, NMEAChecksum(expected_answer), env);
 }
 
 #ifdef _UNICODE

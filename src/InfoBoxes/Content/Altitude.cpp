@@ -30,11 +30,7 @@ Copyright_License {
 #include "InfoBoxes/Panel/AltitudeSetup.hpp"
 #include "Units/Units.hpp"
 #include "Interface.hpp"
-#include "Engine/Waypoint/Waypoint.hpp"
-#include "Engine/Waypoint/Waypoints.hpp"
 #include "Language/Language.hpp"
-#include "Components.hpp"
-#include "Simulator.hpp"
 
 #include <tchar.h>
 
@@ -54,12 +50,13 @@ const InfoBoxPanel altitude_infobox_panels[] = {
 };
 
 const InfoBoxPanel *
-InfoBoxContentAltitude::GetDialogContent() {
+InfoBoxContentAltitude::GetDialogContent() noexcept
+{
   return altitude_infobox_panels;
 }
 
 void
-UpdateInfoBoxAltitudeNav(InfoBoxData &data)
+UpdateInfoBoxAltitudeNav(InfoBoxData &data) noexcept
 {
   const MoreData &basic = CommonInterface::Basic();
 
@@ -85,7 +82,7 @@ UpdateInfoBoxAltitudeNav(InfoBoxData &data)
 }
 
 void
-InfoBoxContentAltitudeGPS::Update(InfoBoxData &data)
+InfoBoxContentAltitudeGPS::Update(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
 
@@ -99,7 +96,7 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxAltitudeAGL(InfoBoxData &data)
+UpdateInfoBoxAltitudeAGL(InfoBoxData &data) noexcept
 {
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
@@ -117,7 +114,7 @@ UpdateInfoBoxAltitudeAGL(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxAltitudeBaro(InfoBoxData &data)
+UpdateInfoBoxAltitudeBaro(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
 
@@ -135,27 +132,30 @@ UpdateInfoBoxAltitudeBaro(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxAltitudeQFE(InfoBoxData &data)
+UpdateInfoBoxAltitudeQFE(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
+  const auto &calculated = CommonInterface::Calculated();
 
-  if (!basic.gps_altitude_available) {
+  const auto any_altitude = basic.GetAnyAltitude();
+  if (!any_altitude) {
     data.SetInvalid();
     return;
   }
 
-  auto Value = basic.gps_altitude;
+  if (!calculated.flight.HasTakenOff()) {
+    data.SetInvalid();
+    data.SetComment(_("Not flying"));
+    return;
+  }
 
-  const auto home_waypoint = way_points.GetHome();
-  if (home_waypoint)
-    Value -= home_waypoint->elevation;
-
-  data.SetValueFromAltitude(Value);
-  data.SetCommentFromAlternateAltitude(Value);
+  const double value = *any_altitude - calculated.flight.takeoff_altitude;
+  data.SetValueFromAltitude(value);
+  data.SetCommentFromAlternateAltitude(value);
 }
 
 void
-UpdateInfoBoxAltitudeFlightLevel(InfoBoxData &data)
+UpdateInfoBoxAltitudeFlightLevel(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const ComputerSettings &settings_computer =

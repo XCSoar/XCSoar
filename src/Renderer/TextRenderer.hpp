@@ -41,33 +41,35 @@ class TextRenderer {
 #endif
 
 public:
-  void SetCenter(bool _center=true) {
+  constexpr void SetCenter(bool _center=true) noexcept {
     center = _center;
   }
 
-  void SetVCenter(bool _vcenter=true) {
+  constexpr void SetVCenter(bool _vcenter=true) noexcept {
     vcenter = _vcenter;
   }
 
-  void SetControl(bool _control=true) {
+  constexpr void SetControl(bool _control=true) noexcept {
 #ifndef USE_GDI
     control = _control;
 #endif
   }
 
-  void InvalidateLayout() {}
+  void InvalidateLayout() noexcept {}
 
   [[gnu::pure]]
-  unsigned GetHeight(Canvas &canvas, PixelRect rc, const TCHAR *text) const;
+  unsigned GetHeight(Canvas &canvas, PixelRect rc,
+                     const TCHAR *text) const noexcept;
 
   [[gnu::pure]]
-  unsigned GetHeight(Canvas &canvas, unsigned width, const TCHAR *text) const;
+  unsigned GetHeight(Canvas &canvas, unsigned width,
+                     const TCHAR *text) const noexcept;
 
   [[gnu::pure]]
   unsigned GetHeight(const Font &font, unsigned width,
-                     const TCHAR *text) const;
+                     const TCHAR *text) const noexcept;
 
-  void Draw(Canvas &canvas, PixelRect rc, const TCHAR *text) const;
+  void Draw(Canvas &canvas, PixelRect rc, const TCHAR *text) const noexcept;
 };
 
 #endif

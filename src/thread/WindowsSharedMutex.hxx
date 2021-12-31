@@ -30,7 +30,7 @@
 #ifndef THREAD_WINDOWS_SHARED_MUTEX_HXX
 #define THREAD_WINDOWS_SHARED_MUTEX_HXX
 
-#include <windows.h>
+#include <synchapi.h>
 
 /**
  * Low-level wrapper for a SRWLOCK.

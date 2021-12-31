@@ -26,6 +26,9 @@
 #include "FlatPoint.hpp"
 #include "Math/Line2D.hpp"
 
+#include <optional>
+#include <utility>
+
 /**
  * Defines an infinite line in real-valued cartesian coordinates,
  * with intersection methods.
@@ -56,7 +59,8 @@ public:
    * 
    * @return True if more than one intersection is found
    */
-  bool IntersectOriginCircle(double r, FlatPoint &i1, FlatPoint &i2) const;
+  [[gnu::pure]]
+  std::optional<std::pair<FlatPoint, FlatPoint>> IntersectOriginCircle(double r) const noexcept;
 
   /** 
    * Calculate intersections between this line
@@ -69,8 +73,8 @@ public:
    * 
    * @return True if more than one intersection is found
    */
-  bool IntersectCircle(double r, FlatPoint c,
-                       FlatPoint &i1, FlatPoint &i2) const;
+  [[gnu::pure]]
+  std::optional<std::pair<FlatPoint, FlatPoint>> IntersectCircle(double r,FlatPoint c) const noexcept;
 
   using Base::GetMiddle;
 

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "NativeInputListener.hpp"
 #include "io/DataHandler.hpp"
+#include "java/Array.hxx"
 #include "java/Class.hxx"
 #include "org_xcsoar_NativeInputListener.h"
 
@@ -45,9 +46,8 @@ Java_org_xcsoar_NativeInputListener_dataReceived(JNIEnv *env, jobject obj,
 
   DataHandler &handler = *(DataHandler *)(void *)ptr;
 
-  jbyte *data2 = env->GetByteArrayElements(data, nullptr);
-  handler.DataReceived(data2, length);
-  env->ReleaseByteArrayElements(data, data2, 0);
+  const Java::ByteArrayElements elems{env, data};
+  handler.DataReceived({(const std::byte *)elems.get(), std::size_t(length)});
 }
 
 void

@@ -25,49 +25,52 @@ Copyright_License {
 #define XCSOAR_SCREEN_ROTATED_POLYGON_RENDERER_HPP
 
 #include "ui/canvas/Canvas.hpp"
+#include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
-#include "util/Macros.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/CanvasRotateShift.hpp"
 #else
 #include "Math/Screen.hpp"
+#include <array>
 #endif
 
 #include <algorithm>
 
 #include <cassert>
+#include <span>
 
 class RotatedPolygonRenderer {
 #ifdef ENABLE_OPENGL
   const BulkPixelPoint *points;
   CanvasRotateShift rotate_shift;
 #else
-  BulkPixelPoint points[64];
+  std::array<BulkPixelPoint, 64> points;
 #endif
 
 public:
-  RotatedPolygonRenderer(const BulkPixelPoint *src, unsigned n,
+  RotatedPolygonRenderer(std::span<const BulkPixelPoint> src,
                          const PixelPoint pos, const Angle angle,
                          const unsigned scale=100)
 #ifdef ENABLE_OPENGL
-    :points(src), rotate_shift(pos, angle, scale)
+    :points(src.data()), rotate_shift(pos, angle, Layout::Scale(scale / 100.))
 #endif
   {
 #ifndef ENABLE_OPENGL
-    assert(n <= ARRAY_SIZE(points));
+    assert(src.size() <= points.size());
 
-    std::copy_n(src, n, points);
-    PolygonRotateShift(points, n, pos, angle, scale);
+    std::copy(src.begin(), src.end(), points.begin());
+    PolygonRotateShift(std::span{points}.first(src.size()),
+                       pos, angle, Layout::Scale(scale));
 #endif
   }
 
   void Draw(Canvas &canvas, unsigned start, unsigned n) const {
 #ifndef ENABLE_OPENGL
-    assert(start + n <= ARRAY_SIZE(points));
+    assert(start + n <= points.size());
 #endif
 
-    canvas.DrawPolygon(points + start, n);
+    canvas.DrawPolygon(&points[0] + start, n);
   }
 };
 

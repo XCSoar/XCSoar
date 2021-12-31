@@ -1,0 +1,13 @@
+Index: libgeotiff-1.4.2/CMakeLists.txt
+===================================================================
+--- libgeotiff-1.4.2.orig/CMakeLists.txt
++++ libgeotiff-1.4.2/CMakeLists.txt
+@@ -192,7 +192,7 @@ IF(WITH_TIFF)
+     IF(TIFF_FOUND)
+         # Confirm required API is available
+         INCLUDE(CheckFunctionExists)
+-        SET(CMAKE_REQUIRED_LIBRARIES ${TIFF_LIBRARIES})
++        SET(CMAKE_REQUIRED_LIBRARIES ${TIFF_LIBRARIES} -lm)
+ 
+         CHECK_FUNCTION_EXISTS(TIFFOpen HAVE_TIFFOPEN)
+         IF(NOT HAVE_TIFFOPEN)

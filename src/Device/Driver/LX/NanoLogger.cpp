@@ -38,10 +38,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-static bool
+static void
 RequestLogbookInfo(Port &port, OperationEnvironment &env)
 {
-  return PortWriteNMEA(port, "PLXVC,LOGBOOKSIZE,R,", env);
+  PortWriteNMEA(port, "PLXVC,LOGBOOKSIZE,R,", env);
 }
 
 static char *
@@ -56,8 +56,7 @@ GetNumberOfFlights(Port &port, PortNMEAReader &reader,
 {
   reader.Flush();
 
-  if (!RequestLogbookInfo(port, env))
-    return -1;
+  RequestLogbookInfo(port, env);
 
   const char *response;
   while (true) {
@@ -139,14 +138,14 @@ ReadTime(NMEAInputLine &line, BrokenTime &time)
   return time.IsPlausible();
 }
 
-static bool
+static void
 RequestLogbookContents(Port &port, unsigned start, unsigned end,
                        OperationEnvironment &env)
 {
   char buffer[32];
   sprintf(buffer, "PLXVC,LOGBOOK,R,%u,%u,", start, end);
 
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
 }
 
 static bool
@@ -205,8 +204,8 @@ GetLogbookContents(Port &port, PortNMEAReader &reader,
 {
   reader.Flush();
 
-  return RequestLogbookContents(port, start, start + n, env) &&
-    ReadLogbookContents(reader, flight_list, n, timeout);
+  RequestLogbookContents(port, start, start + n, env);
+  return ReadLogbookContents(reader, flight_list, n, timeout);
 }
 
 bool
@@ -246,7 +245,7 @@ Nano::ReadFlightList(Port &port, RecordedFlightList &flight_list,
   return true;
 }
 
-static bool
+static void
 RequestFlight(Port &port, const char *filename,
               unsigned start_row, unsigned end_row,
               OperationEnvironment &env)
@@ -254,7 +253,7 @@ RequestFlight(Port &port, const char *filename,
   char buffer[64];
   sprintf(buffer, "PLXVC,FLIGHT,R,%s,%u,%u,", filename, start_row, end_row);
 
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
 }
 
 static bool
@@ -318,8 +317,7 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
       if (i == start) {
         /* send request range to Nano */
         reader.Flush();
-        if (!RequestFlight(port, filename, start, end, env))
-          return false;
+        RequestFlight(port, filename, start, end, env);
         request_retry_count++;
       }
 

@@ -43,7 +43,7 @@ zzip_filesize(int fd)
     return st.st_size;
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 
 /* these wrappers are necessary because the WIN32 read()/write()
    functions get "int" instead of "size_t" - yuck! */
@@ -65,7 +65,7 @@ default_io_write(int fd, const void *buf, zzip_size_t len)
 static const struct zzip_plugin_io default_io = {
     &open,
     &close,
-#ifdef WIN32
+#ifdef _WIN32
     &default_io_read,
 #else
     &_zzip_read,
@@ -73,7 +73,7 @@ static const struct zzip_plugin_io default_io = {
     &_zzip_lseek,
     &zzip_filesize,
     1, 1,
-#ifdef WIN32
+#ifdef _WIN32
     &default_io_write,
 #else
     &_zzip_write

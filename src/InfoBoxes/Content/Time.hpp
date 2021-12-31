@@ -27,12 +27,12 @@ Copyright_License {
 struct InfoBoxData;
 
 void
-UpdateInfoBoxTimeLocal(InfoBoxData &data);
+UpdateInfoBoxTimeLocal(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTimeUTC(InfoBoxData &data);
+UpdateInfoBoxTimeUTC(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTimeFlight(InfoBoxData &data);
+UpdateInfoBoxTimeFlight(InfoBoxData &data) noexcept;
 
 #endif

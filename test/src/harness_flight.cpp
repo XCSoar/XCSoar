@@ -36,14 +36,16 @@
 
 #include <fstream>
 
-double
-aat_min_time(int test_num)
+using namespace std::chrono;
+
+std::chrono::duration<unsigned>
+aat_min_time(int test_num) noexcept
 {
   OrderedTaskSettings beh;
   beh.SetDefaults();
   switch (test_num) {
   case 2:
-    return 3600 * 3.8;
+    return duration<unsigned>{unsigned(3600 * 3.8)};
   default:
     return beh.aat_min_time;
   }
@@ -52,19 +54,19 @@ aat_min_time(int test_num)
 #include "Task/TaskManager.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 
-class PrintTaskAutoPilot: public TaskAutoPilot
+class PrintTaskAutoPilot final : public TaskAutoPilot
 {
 public:
   PrintTaskAutoPilot(const AutopilotParameters &_parms):
     TaskAutoPilot(_parms) {};
 
 protected:
-  virtual void OnManualAdvance() {
+  void OnManualAdvance() override {
     if (verbose>1) {
       printf("# manual advance to %d\n",awp);
     }
   }
-  virtual void OnModeChange() {
+  void OnModeChange() override {
     if (verbose>1) {
       switch (acstate) {
       case Cruise:
@@ -79,7 +81,7 @@ protected:
       }
     }
   }
-  virtual void OnClose() {
+  void OnClose() override {
     WaitPrompt();
   }
 };
@@ -144,15 +146,16 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
   do {
 
     if ((task_manager.GetActiveTaskPointIndex() == 1) &&
-        first && (task_manager.GetStats().total.time_elapsed > 10)) {
-      result.time_remaining = (double)task_manager.GetStats().total.time_remaining_now;
+        first &&
+        task_manager.GetStats().total.time_elapsed > std::chrono::seconds{10}) {
+      result.time_remaining = task_manager.GetStats().total.time_remaining_now;
       first = false;
 
-      result.time_planned = (double)task_manager.GetStats().total.time_planned;
+      result.time_planned = task_manager.GetStats().total.time_planned;
 
       if (verbose > 1) {
-        printf("# time remaining %g\n", result.time_remaining);
-        printf("# time planned %g\n", result.time_planned);
+        printf("# time remaining %g\n", result.time_remaining.count());
+        printf("# time planned %g\n", result.time_planned.count());
       }
     }
 
@@ -160,7 +163,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
       PrintHelper::taskmanager_print(task_manager, aircraft.GetState());
 
       const AircraftState state = aircraft.GetState();
-      f4 << state.time << " "
+      f4 << state.time.ToDuration().count() << " "
          <<  state.location.longitude << " "
          <<  state.location.latitude << " "
          <<  state.altitude << "\n";
@@ -184,7 +187,8 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
         bool warnings_updated = airspace_warnings->Update(aircraft.GetState(),
                                                           task_manager.GetGlidePolar(),
                                                           task_manager.GetStats(),
-                                                          false, 1);
+                                                          false,
+                                                          std::chrono::seconds{1});
         if (warnings_updated) {
           printf("# airspace warnings updated, size %d\n",
                  (int)airspace_warnings->size());
@@ -218,7 +222,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
     PrintHelper::taskmanager_print(task_manager, aircraft.GetState());
 
     const AircraftState state = aircraft.GetState();
-    f4 << state.time << " "
+    f4 << state.time.ToDuration().count() << " "
        <<  state.location.longitude << " "
        <<  state.location.latitude << " "
        <<  state.altitude << "\n";
@@ -228,8 +232,8 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
   }
   WaitPrompt();
 
-  result.time_elapsed = (double)task_manager.GetStats().total.time_elapsed;
-  result.time_planned = (double)task_manager.GetStats().total.time_planned;
+  result.time_elapsed = task_manager.GetStats().total.time_elapsed;
+  result.time_planned = task_manager.GetStats().total.time_planned;
   result.calc_cruise_efficiency = (double)task_manager.GetStats().cruise_efficiency;
   result.calc_effective_mc = (double)task_manager.GetStats().effective_mc;
 
@@ -311,9 +315,9 @@ test_flight_times(int test_num, int n_wind)
   fine &= t_rat < 0.02;
 
   if ((verbose) || !fine) {
-    printf("# time remaining %g\n", result.time_remaining);
-    printf("# time elapsed %g\n", result.time_elapsed);
-    printf("# time planned %g\n", result.time_planned);
+    printf("# time remaining %g\n", result.time_remaining.count());
+    printf("# time elapsed %g\n", result.time_elapsed.count());
+    printf("# time planned %g\n", result.time_planned.count());
     printf("# time ratio error (elapsed/planned) %g\n", t_rat);
   }
 

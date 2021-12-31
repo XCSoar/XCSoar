@@ -50,7 +50,7 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
   screen = new TopCanvas();
 
 #ifdef ENABLE_SDL
-  screen->Create(window, size);
+  screen->Create(window);
 #elif defined(USE_GLX)
   screen->Create(x_display, x_window, fb_cfg);
 #elif defined(USE_X11)

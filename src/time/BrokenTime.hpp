@@ -24,10 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_BROKEN_TIME_HPP
 #define XCSOAR_BROKEN_TIME_HPP
 
-#include "util/Compiler.h"
-
 #include <type_traits>
 
+#include <chrono>
 #include <cstdint>
 
 /**
@@ -52,32 +51,32 @@ struct BrokenTime {
   /**
    * Non-initializing default constructor.
    */
-  BrokenTime() = default;
+  BrokenTime() noexcept = default;
 
   constexpr
-  BrokenTime(unsigned _hour, unsigned _minute, unsigned _second=0)
+  BrokenTime(unsigned _hour, unsigned _minute, unsigned _second=0) noexcept
     :hour(_hour), minute(_minute), second(_second) {}
 
   constexpr
-  bool operator==(const BrokenTime other) const {
+  bool operator==(const BrokenTime other) const noexcept {
     return hour == other.hour && minute == other.minute &&
       second == other.second;
   }
 
   constexpr
-  bool operator>(const BrokenTime other) const {
+  bool operator>(const BrokenTime other) const noexcept {
     return hour > other.hour ||
       (hour == other.hour && (minute > other.minute ||
                               (minute == other.minute && second > other.second)));
   }
 
   constexpr
-  bool operator<(const BrokenTime other) const {
+  bool operator<(const BrokenTime other) const noexcept {
     return other > *this;
   }
 
   constexpr
-  static BrokenTime Midnight() {
+  static BrokenTime Midnight() noexcept {
     return BrokenTime(0, 0);
   }
 
@@ -85,7 +84,7 @@ struct BrokenTime {
    * Returns an instance that fails the Plausible() check.
    */
   constexpr
-  static BrokenTime Invalid() {
+  static BrokenTime Invalid() noexcept {
     return BrokenTime(24, 60, 60);
   }
 
@@ -93,7 +92,7 @@ struct BrokenTime {
    * Does this object contain plausible values?
    */
   constexpr
-  bool IsPlausible() const {
+  bool IsPlausible() const noexcept {
     return hour < 24 && minute < 60 && second < 60;
   }
 
@@ -101,8 +100,12 @@ struct BrokenTime {
    * Returns the number of seconds which have passed on this day.
    */
   constexpr
-  unsigned GetSecondOfDay() const {
+  unsigned GetSecondOfDay() const noexcept {
     return hour * 3600u + minute * 60u + second;
+  }
+
+  constexpr std::chrono::seconds DurationSinceMidnight() const noexcept {
+    return std::chrono::seconds(GetSecondOfDay());
   }
 
   /**
@@ -111,21 +114,41 @@ struct BrokenTime {
    *
    * @param second_of_day 0 .. 3600*24-1
    */
-  gcc_const
-  static BrokenTime FromSecondOfDay(unsigned second_of_day);
+  [[gnu::const]]
+  static BrokenTime FromSecondOfDay(unsigned second_of_day) noexcept;
+
+  /**
+   * Construct a BrokenTime object from the specified duration since
+   * midnight.
+   */
+  template<class Rep, class Period>
+  [[gnu::const]]
+  static BrokenTime FromSinceMidnight(const std::chrono::duration<Rep,Period> &since_midnight) noexcept {
+    return FromSecondOfDay(std::chrono::duration_cast<std::chrono::seconds>(since_midnight).count());
+  }
 
   /**
    * A wrapper for FromSecondOfDay() which allows values bigger than
    * or equal to 3600*24.
    */
-  gcc_const
-  static BrokenTime FromSecondOfDayChecked(unsigned second_of_day);
+  [[gnu::const]]
+  static BrokenTime FromSecondOfDayChecked(unsigned second_of_day) noexcept;
+
+  /**
+   * A wrapper for FromSinceMidnight() which allows values bigger than
+   * one day.
+   */
+  template<class Rep, class Period>
+  [[gnu::const]]
+  static BrokenTime FromSinceMidnightChecked(const std::chrono::duration<Rep,Period> &since_midnight) noexcept {
+    return FromSecondOfDayChecked(std::chrono::duration_cast<std::chrono::seconds>(since_midnight).count());
+  }
 
   /**
    * Returns the number of minutes which have passed on this day.
    */
   constexpr
-  unsigned GetMinuteOfDay() const {
+  unsigned GetMinuteOfDay() const noexcept {
     return hour * 60u + minute;
   }
 
@@ -135,24 +158,15 @@ struct BrokenTime {
    *
    * @param minute_of_day 0 .. 60*24-1
    */
-  gcc_const
-  static BrokenTime FromMinuteOfDay(unsigned minute_of_day);
+  [[gnu::const]]
+  static BrokenTime FromMinuteOfDay(unsigned minute_of_day) noexcept;
 
   /**
    * A wrapper for FromMinuteOfDay() which allows values bigger than
    * or equal to 60*24.
    */
-  gcc_const
-  static BrokenTime FromMinuteOfDayChecked(unsigned minute_of_day);
-
-  /**
-   * Returns a BrokenTime that has the specified number of seconds
-   * added to it.  It properly wraps around midnight.
-   *
-   * @param seconds the number of seconds to add
-   */
-  gcc_pure
-  BrokenTime operator+(unsigned seconds) const;
+  [[gnu::const]]
+  static BrokenTime FromMinuteOfDayChecked(unsigned minute_of_day) noexcept;
 
   /**
    * Returns a BrokenTime that has the specified number of seconds
@@ -160,17 +174,12 @@ struct BrokenTime {
    *
    * @param seconds the number of seconds to add; may be negative
    */
-  gcc_pure
-  BrokenTime operator+(int seconds) const;
+  [[gnu::pure]]
+  BrokenTime operator+(std::chrono::seconds delta) const noexcept;
 
-  gcc_pure
-  BrokenTime operator-(int seconds) const {
-    return *this + (-seconds);
-  }
-
-  gcc_pure
-  BrokenTime operator-(unsigned seconds) const {
-    return *this - int(seconds);
+  [[gnu::pure]]
+  BrokenTime operator-(std::chrono::seconds delta) const noexcept {
+    return *this + (-delta);
   }
 };
 

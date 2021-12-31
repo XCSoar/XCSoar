@@ -24,9 +24,11 @@ Copyright_License {
 #include "RowFormWidget.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/File.hpp"
+#include "Form/DataField/Date.hpp"
 #include "Profile/Profile.hpp"
 #include "LocalPath.hpp"
 #include "util/ConvertString.hpp"
+#include "Formatter/TimeFormatter.hpp"
 
 WndProperty *
 RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
@@ -46,8 +48,8 @@ RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
 
   if (registry_key != nullptr) {
     const auto path = Profile::GetPath(registry_key);
-    if (!path.IsNull())
-      df->Lookup(path);
+    if (path != nullptr)
+      df->SetValue(path);
   }
 
   edit->RefreshDisplay();
@@ -126,7 +128,7 @@ RowFormWidget::SaveValueFileReader(unsigned i,
                                    const char *registry_key) noexcept
 {
   const auto *dfe = (const FileDataField *)GetControl(i).GetDataField();
-  Path new_value = dfe->GetPathFile();
+  Path new_value = dfe->GetValue();
   const auto contracted = ContractLocalPath(new_value);
   if (contracted != nullptr)
     new_value = contracted;
@@ -140,5 +142,40 @@ RowFormWidget::SaveValueFileReader(unsigned i,
     return false;
 
   Profile::Set(registry_key, new_value2);
+  return true;
+}
+
+bool
+RowFormWidget::SaveValue(unsigned i,
+                         const char *registry_key,
+                         BrokenDate &value) const noexcept
+{
+  const auto &df = (const DataFieldDate &)GetDataField(i);
+  assert(df.GetType() == DataField::Type::DATE);
+
+  const auto new_value = df.GetValue();
+
+  if (!new_value.IsPlausible())
+    return false;
+
+  if (new_value == value)
+    return false;
+
+  TCHAR buffer[0x10];
+  FormatISO8601(buffer, new_value);
+  Profile::Set(registry_key, buffer);
+  value = new_value;
+  return true;
+}
+
+bool
+RowFormWidget::SaveValue(unsigned i,
+                         const char *registry_key,
+                         std::chrono::seconds &value) const noexcept
+{
+  if (!SaveValue(i, value))
+    return false;
+
+  Profile::Set(registry_key, value);
   return true;
 }

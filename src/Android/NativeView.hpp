@@ -45,11 +45,14 @@ class NativeView {
   static Java::TrivialClass cls;
   static jfieldID textureNonPowerOfTwo_field;
   static jmethodID init_surface_method, deinit_surface_method;
+  static jmethodID acquireWakeLock_method;
+  static jmethodID setFullScreen_method;
   static jmethodID setRequestedOrientationID;
   static jmethodID loadResourceBitmap_method;
   static jmethodID loadFileBitmap_method;
   static jmethodID bitmapToTexture_method;
-  static jmethodID open_file_method;
+  static jmethodID shareText_method;
+  static jmethodID openWaypointFile_method;
   static jmethodID getNetState_method;
 
   static Java::TrivialClass clsBitmap;
@@ -106,28 +109,35 @@ public:
     env->CallVoidMethod(obj, deinit_surface_method);
   }
 
+  void AcquireWakeLock() const noexcept {
+    return env->CallVoidMethod(obj, acquireWakeLock_method);
+  }
+
+  void SetFullScreen(bool full_screen) const noexcept {
+    return env->CallVoidMethod(obj, setFullScreen_method, full_screen);
+  }
+
   bool setRequestedOrientation(ScreenOrientation so) {
     return env->CallBooleanMethod(obj, setRequestedOrientationID, (jint)so);
   }
 
-  jobject loadResourceBitmap(const char *name) {
+  Java::LocalObject loadResourceBitmap(const char *name) {
     Java::String name2(env, name);
-    return env->CallObjectMethod(obj, loadResourceBitmap_method, name2.Get());
+    return {env,
+      env->CallObjectMethod(obj, loadResourceBitmap_method, name2.Get())};
   }
 
-  jobject loadFileTiff(Path path);
+  Java::LocalObject loadFileTiff(Path path);
 
-  jobject loadFileBitmap(Path path);
+  Java::LocalObject loadFileBitmap(Path path);
 
   bool bitmapToTexture(jobject bmp, bool alpha, jint *result) {
-    jintArray result2 = env->NewIntArray(5);
+    Java::LocalRef<jintArray> result2{env, env->NewIntArray(5)};
 
     bool success = env->CallBooleanMethod(obj, bitmapToTexture_method,
-                                          bmp, alpha, result2);
+                                          bmp, alpha, result2.Get());
     if (success)
       env->GetIntArrayRegion(result2, 0, 5, result);
-
-    env->DeleteLocalRef(result2);
 
     return success;
   }
@@ -136,12 +146,18 @@ public:
     env->SetStaticBooleanField(cls, textureNonPowerOfTwo_field, value);
   }
 
-  void openFile(const char *pathName) {
-    Java::String pathName2(env, pathName);
-    env->CallVoidMethod(obj, open_file_method, pathName2.Get());
+  /**
+   * Deliver plain text data to somebody; the user will be asked to
+   * pick a recipient.
+   */
+  void ShareText(const char *text) noexcept;
+
+  void OpenWaypointFile(unsigned id, const char *filename) {
+    env->CallVoidMethod(obj, openWaypointFile_method, id,
+                        Java::String(env, filename).Get());
   }
 
-  gcc_pure
+  [[gnu::pure]]
   int getNetState() const {
     return env->CallIntMethod(obj, getNetState_method);
   }

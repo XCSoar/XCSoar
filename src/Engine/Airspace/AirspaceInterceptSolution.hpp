@@ -24,6 +24,7 @@
 #define AIRSPACE_INTERCEPT_SOLUTION_HPP
 
 #include "Geo/GeoPoint.hpp"
+#include "time/FloatDuration.hxx"
 
 #include <type_traits>
 
@@ -40,22 +41,22 @@ struct AirspaceInterceptSolution
   /** Altitude AMSL (m) of intercept point */
   double altitude;
   /** Estimated time (s) for observer to reach intercept point */
-  double elapsed_time;
+  FloatDuration elapsed_time;
 
   AirspaceInterceptSolution() = default;
 
 private:
-  AirspaceInterceptSolution(double _distance, double _elapsed_time)
+  AirspaceInterceptSolution(double _distance, FloatDuration _elapsed_time) noexcept
     :distance(_distance), elapsed_time(_elapsed_time) {}
 
 public:
   static AirspaceInterceptSolution Invalid() {
-    return AirspaceInterceptSolution(-1, -1);
+    return AirspaceInterceptSolution(-1, FloatDuration{-1});
   }
 
   void SetInvalid() {
     distance = -1;
-    elapsed_time = -1;
+    elapsed_time = FloatDuration{-1};
   }
 
   /**
@@ -64,7 +65,7 @@ public:
    * @return True if solution is valid
    */
   bool IsValid() const {
-    return elapsed_time >= 0;
+    return elapsed_time.count() >= 0;
   }
 
   bool IsEarlierThan(const AirspaceInterceptSolution &other) const {

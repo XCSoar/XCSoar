@@ -24,10 +24,10 @@
 #include "Task/Stats/TaskStats.hpp"
 
 void
-WindowStatsComputer::Compute(double time, const TaskStats &task_stats,
-                             WindowStats &stats)
+WindowStatsComputer::Compute(TimeStamp time, const TaskStats &task_stats,
+                             WindowStats &stats) noexcept
 {
-  if (time < 0)
+  if (!time.IsDefined())
     return;
 
   if (!task_stats.task_valid || !task_stats.start.task_started ||
@@ -40,17 +40,19 @@ WindowStatsComputer::Compute(double time, const TaskStats &task_stats,
   if (task_stats.task_finished)
     return;
 
-  const auto dt = minute_clock.Update(time, 59, 180);
-  if (dt < 0) {
+  const auto dt = minute_clock.Update(time, std::chrono::seconds{59},
+                                      std::chrono::minutes{3});
+  if (dt.count() < 0) {
     Reset();
     stats.Reset();
     return;
   }
 
-  if (dt <= 0)
+  if (dt.count() <= 0)
     return;
 
-  travelled_distance.Push(time, task_stats.total.travelled.GetDistance());
+  travelled_distance.Push(time.ToDuration().count(),
+                          task_stats.total.travelled.GetDistance());
 
   stats.duration = travelled_distance.GetDeltaXChecked();
   if (stats.duration > 0) {

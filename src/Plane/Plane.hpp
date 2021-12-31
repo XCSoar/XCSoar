@@ -47,6 +47,15 @@ struct Plane
   unsigned dump_time;
 
   unsigned handicap;
+
+  /**
+   * Type of glider from a list, published by WeGlide server to select
+   * the correct glider id for the flight to upload.  The list is
+   * published on https://raw.githubusercontent.com/ the data of the
+   * selected glider you can find on
+   * https://api.weglide.org/v1/aircraft/$(ID)
+   */
+  unsigned weglide_glider_type;
 };
 
 #endif

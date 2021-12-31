@@ -30,7 +30,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 
 #ifdef _UNICODE
-#include <windows.h>
+#include <stringapiset.h>
 #endif
 
 #include <algorithm>
@@ -104,8 +104,7 @@ DeclareInner(Port &port, const unsigned bulkrate,
 {
   assert(declaration.Size() >= 2);
 
-  if (!Volkslogger::ConnectAndFlush(port, env, std::chrono::seconds(20)))
-    return false;
+  Volkslogger::ConnectAndFlush(port, env, std::chrono::seconds(20));
 
   //Clear DECLARATION struct and populate with xcs declaration
   VLAPI_DATA::DECLARATION vl_declaration;
@@ -156,8 +155,7 @@ DeclareInner(Port &port, const unsigned bulkrate,
   vl_declaration.put(&dbb1);
 
   // and write buffer back into VOLKSLOGGER
-  if (!Volkslogger::ConnectAndFlush(port, env, std::chrono::seconds(10)))
-    return false;
+  Volkslogger::ConnectAndFlush(port, env, std::chrono::seconds(10));
 
   const bool success =
     Volkslogger::WriteDatabase(port, env, dbb1.buffer, sizeof(dbb1.buffer));
@@ -179,8 +177,8 @@ VolksloggerDevice::Declare(const Declaration &declaration,
   unsigned old_baud_rate = port.GetBaudrate();
   if (old_baud_rate == 9600)
     old_baud_rate = 0;
-  else if (old_baud_rate != 0 && !port.SetBaudrate(9600))
-    return false;
+  else if (old_baud_rate != 0)
+    port.SetBaudrate(9600);
 
   bool success = DeclareInner(port, bulkrate, declaration, home, env);
 

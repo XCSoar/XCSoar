@@ -28,6 +28,7 @@ Copyright_License {
 #include "Math/ConvexFilter.hpp"
 #include "Math/Histogram.hpp"
 #include "thread/Mutex.hxx"
+#include "time/FloatDuration.hxx"
 
 class FlightStatistics {
 public:
@@ -49,13 +50,16 @@ public:
   double GetVarioScalePositive() const;
   double GetVarioScaleNegative() const;
 
-  void AddAltitude(double tflight, double alt, bool final_glide);
-  void AddAltitudeTerrain(double tflight, double terrainalt);
-  void AddTaskSpeed(double tflight, double val);
-  void AddClimbBase(double tflight, double alt);
-  void AddClimbCeiling(double tflight, double alt);
-  void AddThermalAverage(double tflight_start, double tflight_end, double v);
-  void AddClimbRate(double tflight, double vario, bool circling);
+  void AddAltitude(FloatDuration tflight,
+                   double alt, bool final_glide) noexcept;
+  void AddAltitudeTerrain(FloatDuration tflight, double terrainalt) noexcept;
+  void AddTaskSpeed(FloatDuration tflight, double val) noexcept;
+  void AddClimbBase(FloatDuration tflight, double alt) noexcept;
+  void AddClimbCeiling(FloatDuration tflight, double alt) noexcept;
+  void AddThermalAverage(FloatDuration tflight_start,
+                         FloatDuration tflight_end, double v) noexcept;
+  void AddClimbRate(FloatDuration tflight,
+                    double vario, bool circling) noexcept;
 
   void Reset();
 };

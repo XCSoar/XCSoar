@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "FastMath.hpp"
-#include "MathTables.h"
 
 #include <math.h>
 
@@ -89,12 +88,4 @@ isqrt4(unsigned val) noexcept
 
   return g;
 #endif
-}
-
-double
-thermal_recency_fn(unsigned x) noexcept
-{
-  return x < THERMALRECENCY_SIZE
-    ? THERMALRECENCY[x]
-    : 0.;
 }

@@ -33,32 +33,38 @@ class Angle;
 struct BrokenDateTime;
 struct Waypoint;
 
-namespace IMI
-{
-  struct AngleConverter
-  {
-    union
-    {
-      struct
-      {
-        IMIDWORD milliminutes :16;
-        IMIDWORD degrees :8;
-        IMIDWORD sign :1;
-      };
-      IMIDWORD value;
-    };
+namespace IMI {
 
-    AngleConverter() {}
-    AngleConverter(Angle angle);
+struct AngleConverter {
+  union
+  {
+    struct
+    {
+      IMIDWORD milliminutes :16;
+      IMIDWORD degrees :8;
+      IMIDWORD sign :1;
+    };
+    IMIDWORD value;
   };
 
-  void ConvertToChar(const TCHAR* unicode, char* ascii, int outSize);
-  BrokenDateTime ConvertToDateTime(IMIDATETIMESEC in);
+  AngleConverter() {}
+  AngleConverter(Angle angle);
+};
 
-  void ConvertOZ(const Declaration::TurnPoint &tp, bool is_start,
-                 bool is_finish, TWaypoint &imiWp);
-  void ConvertWaypoint(const Waypoint &wp, TWaypoint &imiWp);
+void
+ConvertToChar(const TCHAR* unicode, char* ascii, int outSize);
 
-}
+BrokenDateTime
+ConvertToDateTime(IMIDATETIMESEC in);
+
+void
+ConvertOZ(const Declaration::TurnPoint &tp, bool is_start,
+          bool is_finish, TWaypoint &imiWp);
+
+void
+ConvertWaypoint(const Waypoint &wp, TWaypoint &imiWp);
+
+
+} // namespace IMI
 
 #endif

@@ -66,4 +66,13 @@ KoboRunTelnetd();
 void
 KoboRunFtpd();
 
+bool
+KoboCanChangeBacklightBrightness();
+
+int
+KoboGetBacklightBrightness();
+
+void
+KoboSetBacklightBrightness(int percent);
+
 #endif

@@ -199,8 +199,6 @@ public:
   void
   print(int version, FILE *aus)
   {
-    char is[8];
-
     if (hasdeclaration) {
       strcpy(sTDECL, "            ");
 
@@ -220,7 +218,7 @@ public:
         // TDECL is used as a base
         T_FDT = TDECL;
         // Add the timezone
-        T_FDT = T_FDT + zz_min*60; // add timezone in seconds
+        T_FDT = T_FDT + std::chrono::minutes(zz_min); // add timezone in seconds
         FDT[0] = T_FDT.day;
         FDT[1] = T_FDT.month;
         FDT[2] = T_FDT.year % 100;
@@ -247,6 +245,7 @@ public:
 
       // print Turnpoints
       for (unsigned i = 0; i < NTP; i++) {
+        char is[20];
         sprintf(is, "TP%02u   ", i + 1);
         TP[i].print(version, aus, is);
       }
@@ -478,9 +477,9 @@ convert_gcs(FILE *Ausgabedatei,
   int ende;
 
   // relative time from the beginning of the logging
-  long time_relative = 0;
-  long temptime;
-  long decl_time;
+  std::chrono::system_clock::duration time_relative{};
+  std::chrono::seconds temptime;
+  std::chrono::system_clock::duration decl_time(-1);
   BrokenDateTime firsttime;
 
   BrokenDateTime realtime;
@@ -507,8 +506,6 @@ convert_gcs(FILE *Ausgabedatei,
   igcfix.lat = 0;
   igcfix.lon = 0;
 
-  decl_time = -1;
-
   ende = 0;
   p = bin_puffer;
 
@@ -523,10 +520,10 @@ convert_gcs(FILE *Ausgabedatei,
         return 0;
 
       // calculates backwards the time of the first fix
-      time_relative += p[1];
-      temptime = 65536L * p[2] + 256L * p[3] + p[4];
+      time_relative += std::chrono::seconds(p[1]);
+      temptime = std::chrono::seconds{65536L * p[2] + 256L * p[3] + p[4]};
       firsttime = BrokenDateTime(BrokenDate::Invalid(),
-                                 BrokenTime::FromSecondOfDay(temptime));
+                                 BrokenTime::FromSinceMidnight(temptime));
       firsttime.day = 10 * (p[7] >> 4) + (p[7] & 0x0f);
       firsttime.month = 10 * (p[6] >> 4) + (p[6] & 0x0f);
       firsttime.year = 10 * (p[5] >> 4) + (p[5] & 0x0f) + 1900;
@@ -547,7 +544,7 @@ convert_gcs(FILE *Ausgabedatei,
        l = 0;
        break;
        }
-       time_relative += p[2];
+       time_relative += std::chrono::seconds(p[2]);
        l = pos_ds_size[bfv][1];
        break;
        */
@@ -565,7 +562,7 @@ convert_gcs(FILE *Ausgabedatei,
       if (p + 8 > end)
         return 0;
 
-      time_relative += p[2];
+      time_relative += std::chrono::seconds(p[2]);
       igcfix.valid = ((p[0] & 0x10) >> 4) ? 'A' : 'V';
       if (Haupttyp == rectyp_pos) {
         l = pos_ds_size[bfv][0];
@@ -590,7 +587,7 @@ convert_gcs(FILE *Ausgabedatei,
       }
       break;
     case rectyp_sep:
-      time_relative = 0;
+      time_relative = {};
       bfv = p[0] & ~rectyp_msk;
       if (bfv > max_bfv) {
         // unsupported binary file version
@@ -617,7 +614,7 @@ convert_gcs(FILE *Ausgabedatei,
         p2 = p + 2;
         break;
       case rectyp_vrt:
-        time_relative += p[2];
+        time_relative += std::chrono::seconds(p[2]);
         p2 = p + 3;
         break;
       default:
@@ -868,7 +865,7 @@ convert_gcs(FILE *Ausgabedatei,
 
   if (igcfile_version >= 414 || (task.STA.koord.lat != 0)
       || (task.STA.koord.lon != 0)) {
-    if (decl_time >= 0) {
+    if (decl_time.count() >= 0) {
       task.hasdeclaration = 1;
       task.TDECL = firsttime + decl_time;
       task.print(igcfile_version, Ausgabedatei);
@@ -902,8 +899,8 @@ convert_gcs(FILE *Ausgabedatei,
         l = 0;
         break;
       }
-      time_relative += p[2];
-      realtime = realtime + p[2];
+      time_relative += std::chrono::seconds(p[2]);
+      realtime = realtime + std::chrono::seconds(p[2]);
       igcfix.valid = ((p[0] & 0x10) >> 4) ? 'A' : 'V';
       const unsigned press = unsigned(p[0] & 0x0f) << 8 | p[1];
       unsigned gpalt, fxa, enl;
@@ -989,7 +986,7 @@ convert_gcs(FILE *Ausgabedatei,
         p2 = p + 2;
         break;
       case rectyp_vrt:
-        realtime = realtime + p[2];
+        realtime = realtime + std::chrono::seconds(p[2]);
         p2 = p + 3;
         break;
       default:
@@ -1012,7 +1009,7 @@ convert_gcs(FILE *Ausgabedatei,
       ;
       break;
     case rectyp_tnd:
-      realtime = realtime + p[1];
+      realtime = realtime + std::chrono::seconds(p[1]);
       l = 8;
       break;
 
@@ -1041,7 +1038,7 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
 
   int olddate_flg = 0;
   int flight_of_day = 0;
-  long temptime;
+  std::chrono::seconds temptime;
   BrokenDateTime datetime1;
 
   int bfv = 0;
@@ -1050,8 +1047,6 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
   char pilot3[17];
   char pilot4[17];
   memset(&de, 0, sizeof(de));
-
-  size_t nbytes = 0;
 
   while (p < end) {
     Haupttyp = (p[0] & rectyp_msk);
@@ -1180,9 +1175,9 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
         return false;
 
       // speichert in timetm1 den aktuellen tnd-DS ab
-      temptime = 65536L * p[2] + 256L * p[3] + p[4];
+      temptime = std::chrono::seconds{65536L * p[2] + 256L * p[3] + p[4]};
       datetime1 = BrokenDateTime(BrokenDate::Invalid(),
-                                 BrokenTime::FromSecondOfDay(temptime));
+                                 BrokenTime::FromSinceMidnight(temptime));
       datetime1.day = 10 * (p[7] >> 4) + (p[7] & 0x0f);
       datetime1.month = 10 * (p[6] >> 4) + (p[6] & 0x0f);
       datetime1.year = 10 * (p[5] >> 4) + (p[5] & 0x0f) + 1900;
@@ -1196,12 +1191,11 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
         return false;
 
       // setzt firsttime und lasttime aufgrund der Werte im sta-DS
-      temptime = 65536L * p[4] + 256L * p[5] + p[6]; // Aufzeichnungsbeginn
+      temptime = std::chrono::seconds{65536L * p[4] + 256L * p[5] + p[6]}; // Aufzeichnungsbeginn
       de.firsttime = datetime1 - temptime;
 
-      temptime = 65536L * p[1] + 256L * p[2] + p[3]; // Aufzeichnungsdauer
-      de.recordingtime = temptime;
-      de.lasttime=de.firsttime + temptime;
+      de.recordingtime = 65536L * p[1] + 256L * p[2] + p[3]; // Aufzeichnungsdauer
+      de.lasttime = de.firsttime + std::chrono::seconds(temptime);
 
       if (!olddate_flg) {
         olddate = de.firsttime;
@@ -1230,7 +1224,6 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
       return false;
     };
     p += l;
-    nbytes += l;
   }
   return true;
 }

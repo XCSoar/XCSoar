@@ -37,8 +37,6 @@ class GlueMapWindow;
  * 
  */
 class DrawThread final : public RecursivelySuspensibleThread {
-  static constexpr unsigned MIN_WAIT_TIME = 100;
-
   /**
    * Is work pending?  This flag gets cleared by the thread as soon as
    * it starts working.
@@ -49,13 +47,13 @@ class DrawThread final : public RecursivelySuspensibleThread {
   GlueMapWindow &map;
 
 public:
-  DrawThread(GlueMapWindow &_map)
+  DrawThread(GlueMapWindow &_map) noexcept
     :RecursivelySuspensibleThread("DrawThread"), map(_map) {}
 
   /**
    * Triggers a redraw.
    */
-  void TriggerRedraw() {
+  void TriggerRedraw() noexcept {
     const std::lock_guard<Mutex> lock(mutex);
     pending = true;
     command_trigger.notify_one();

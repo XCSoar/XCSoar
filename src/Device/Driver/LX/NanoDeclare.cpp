@@ -40,8 +40,7 @@ NanoWriteDecl(Port &port, OperationEnvironment &env, PortNMEAReader &reader,
   NarrowString<256> buffer;
   buffer.Format("$PLXVC,DECL,W,%u,%u,%s", row, n_rows, content);
 
-  if (!PortWriteNMEA(port, buffer, env))
-    return false;
+  PortWriteNMEA(port, buffer, env);
 
   buffer.UnsafeFormat("PLXVC,DECL,C,%u", row);
   char *response = reader.ExpectLine(buffer,

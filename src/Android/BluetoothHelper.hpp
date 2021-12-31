@@ -24,64 +24,66 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_BLUETOOTH_HELPER_HPP
 #define XCSOAR_ANDROID_BLUETOOTH_HELPER_HPP
 
-#include "util/Compiler.h"
+#include "java/Object.hxx"
 
 #include <jni.h>
 
-class LeScanCallback;
+class Context;
+class SensorListener;
+class DetectDeviceListener;
 class PortBridge;
 
-namespace BluetoothHelper {
+class BluetoothHelper final : protected Java::GlobalObject {
+public:
+  /**
+   * Global initialisation.  Looks up the methods of the
+   * BluetoothHelper Java class.
+   */
+  static bool Initialise(JNIEnv *env) noexcept;
+  static void Deinitialise(JNIEnv *env) noexcept;
 
-/**
- * Global initialisation.  Looks up the methods of the
- * BluetoothHelper Java class.
- */
-bool Initialise(JNIEnv *env);
-void Deinitialise(JNIEnv *env);
+  BluetoothHelper(JNIEnv *env, Context &context);
 
-/**
- * Is the default Bluetooth adapter enabled in the Android Bluetooth
- * settings?
- */
-gcc_pure
-bool isEnabled(JNIEnv *env);
+  /**
+   * Is the default Bluetooth adapter enabled in the Android Bluetooth
+   * settings?
+   */
+  [[gnu::pure]]
+  bool IsEnabled(JNIEnv *env) const noexcept;
 
-gcc_pure
-const char *GetNameFromAddress(JNIEnv *env, const char *address);
+  [[gnu::pure]]
+  const char *GetNameFromAddress(JNIEnv *env,
+                                 const char *address) const noexcept;
 
-/**
- * Returns a list of all bonded devices.
- */
-gcc_malloc
-jobjectArray list(JNIEnv *env);
+  /**
+   * Does the device support Bluetooth LE?
+   */
+  [[gnu::const]]
+  bool HasLe(JNIEnv *env) const noexcept;
 
-/**
- * Does the device support Bluetooth LE?
- */
-gcc_const
-bool HasLe(JNIEnv *env);
+  /**
+   * Start scanning for Bluetooth devices.  Call
+   * RemoveDetectDeviceListener() with the returned value when you're
+   * done.
+   */
+  Java::LocalObject AddDetectDeviceListener(JNIEnv *env,
+                                            DetectDeviceListener &l) noexcept;
 
-/**
- * Start scanning for Bluetooth LE devices.  Call StopLeScan() with
- * the returned value when you're done.  Returns nullptr on error.
- */
-jobject StartLeScan(JNIEnv *env, LeScanCallback &cb);
+  /**
+   * Stop scanning for Bluetooth devices.
+   *
+   * @param l the return value of AddDetectDeviceListener()
+   */
+  void RemoveDetectDeviceListener(JNIEnv *env, jobject l) noexcept;
 
-/**
- * Stop scanning for Bluetooth LE devices.
- *
- * @param cb the return value of StartLeScan(); the local reference
- * will be deleted by this function
- */
-void StopLeScan(JNIEnv *env, jobject cb);
+  Java::LocalObject connectSensor(JNIEnv *env, const char *address,
+                                  SensorListener &listener);
 
-gcc_malloc
-PortBridge *connect(JNIEnv *env, const char *address);
+  PortBridge *connect(JNIEnv *env, const char *address);
 
-gcc_malloc
-PortBridge *createServer(JNIEnv *env);
+  PortBridge *connectHM10(JNIEnv *env, const char *address);
 
-} // namespace BluetoothHelper
+  PortBridge *createServer(JNIEnv *env);
+};
 
 #endif

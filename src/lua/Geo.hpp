@@ -31,6 +31,9 @@ class Angle;
 namespace Lua {
 
 void
+InitGeo(lua_State *L) noexcept;
+
+void
 Push(lua_State *L, Angle value);
 
 void

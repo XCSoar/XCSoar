@@ -1,7 +1,16 @@
-* Airspace to test radio frequency
+* Airspace to test 1 radio frequency with 'AR' (Airspace Radio)
 AC C
-AN Radio-Test
+AN Radio-Test 1 (AR with MHz)
 AR 130.125 MHz
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test 2 radio frequency with 'AF' (Airspace Frequency for Naviter Hamonization - http://www.winpilot.com/UsersGuide/UserAirspace.asp)
+AC C
+AN Radio-Test 2 (AF without MHz)
+AF 130.125
 AL 1000 ft
 AH 2000 ft
 V X=01:05.5 N 000:05.5 E
@@ -15,6 +24,17 @@ AL 1000 ft
 AH 2000 ft
 V X=01:05.5 N 000:05.5 E
 DC 5
+
+* Airspace to test arc parsing
+AC C
+AN Arc-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:00:00 N 001:00:00 E
+V D=-
+DA 15, 185, 155
+V D=+
+DA 25, 155, 185
 
 * Airspace to test polygon point parsing
 * and coordinate format 2
@@ -174,7 +194,7 @@ DC 5
 * Airspace to test airspace heights
 AC C
 AN Height-Test-4
-AL 100m 
+AL 100m
 AH UNLIMITED
 V X=01:05.5 N 000:05.5 E
 DC 5

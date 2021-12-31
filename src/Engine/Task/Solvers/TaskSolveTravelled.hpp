@@ -33,7 +33,7 @@ class TaskSolveTravelled : protected ZeroFinder {
 
   const AircraftState &aircraft;
   double inv_dt;
-  double dt;
+  FloatDuration dt;
 
 protected:
   TaskMacCreadyTravelled tm; /**< Travelled calculator */
@@ -60,8 +60,8 @@ public:
      tm(tps.begin(), activeTaskPoint, settings, gp)
   {
     dt = _aircraft.time - tps.begin()->GetEnteredState().time;
-    if (dt > 0) {
-      inv_dt = 1. / dt;
+    if (dt.count() > 0) {
+      inv_dt = 1. / dt.count();
     } else {
       inv_dt = 0; // error!
     }

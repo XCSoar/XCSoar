@@ -70,8 +70,7 @@ ReadFlightListInner(Port &port,
                     OperationEnvironment &env)
 {
   env.SetProgressRange(10);
-  if (!Volkslogger::ConnectAndFlush(port, env, std::chrono::seconds(20)))
-    return false;
+  Volkslogger::ConnectAndFlush(port, env, std::chrono::seconds(20));
   env.SetProgressPosition(3);
 
   uint8_t dirbuffer[VLAPI_LOG_MEMSIZE];
@@ -101,8 +100,7 @@ DownloadFlightInner(Port &port, unsigned bulkrate,
                     Path path,
                     OperationEnvironment &env)
 {
-  if (!Volkslogger::ConnectAndFlush(port, env, std::chrono::seconds(20)))
-    return false;
+  Volkslogger::ConnectAndFlush(port, env, std::chrono::seconds(20));
 
   uint8_t logbuffer[VLAPI_LOG_MEMSIZE];
   const size_t length = Volkslogger::ReadFlight(port, bulkrate, env,
@@ -140,8 +138,8 @@ VolksloggerDevice::ReadFlightList(RecordedFlightList &flight_list,
   unsigned old_baud_rate = port.GetBaudrate();
   if (old_baud_rate == 9600)
     old_baud_rate = 0;
-  else if (old_baud_rate != 0 && !port.SetBaudrate(9600))
-    return false;
+  else if (old_baud_rate != 0)
+    port.SetBaudrate(9600);
 
   bool success = ReadFlightListInner(port, flight_list, env);
 
@@ -163,8 +161,8 @@ VolksloggerDevice::DownloadFlight(const RecordedFlightInfo &flight,
   unsigned old_baud_rate = port.GetBaudrate();
   if (old_baud_rate == 9600)
     old_baud_rate = 0;
-  else if (old_baud_rate != 0 && !port.SetBaudrate(9600))
-    return false;
+  else if (old_baud_rate != 0)
+    port.SetBaudrate(9600);
 
   bool success = DownloadFlightInner(port, bulkrate,
                                      flight, path, env);

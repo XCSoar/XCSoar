@@ -228,6 +228,7 @@ void
 InfoBoxWindow::SetContentProvider(std::unique_ptr<InfoBoxContent> _content)
 {
   content = std::move(_content);
+  ++content_serial;
 
   data.SetInvalid();
   Invalidate();
@@ -241,12 +242,12 @@ InfoBoxWindow::UpdateContent()
 
   InfoBoxData old = data;
   content->Update(data);
+  data.content_serial = content_serial;
 
-  if (old.GetCustom() || data.GetCustom())
-    /* must Invalidate everything when custom painting is/was
-       enabled */
-    Invalidate();
-  else {
+  if (old.GetCustom() || data.GetCustom()) {
+    if (!data.CompareCustom(old))
+      Invalidate();
+  } else {
 #ifdef ENABLE_OPENGL
     if (!data.CompareTitle(old) || !data.CompareValue(old) ||
         !data.CompareComment(old))
@@ -446,7 +447,7 @@ InfoBoxWindow::OnMouseMove(PixelPoint p, unsigned keys)
 }
 
 void
-InfoBoxWindow::OnPaintBuffer(Canvas &canvas)
+InfoBoxWindow::OnPaintBuffer(Canvas &canvas) noexcept
 {
   Paint(canvas);
 }

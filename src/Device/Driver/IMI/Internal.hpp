@@ -37,6 +37,7 @@ public:
   IMIDevice(Port &_port):port(_port) {}
 
   /* virtual methods from class Device */
+  bool EnableNMEA(OperationEnvironment &env) override;
   bool ReadFlightList(RecordedFlightList &flight_list,
                       OperationEnvironment &env) override;
   bool DownloadFlight(const RecordedFlightInfo &flight,
@@ -48,7 +49,6 @@ public:
 
 private:
   bool Connect(OperationEnvironment &env);
-  void Disconnect(OperationEnvironment &env);
 };
 
 #endif

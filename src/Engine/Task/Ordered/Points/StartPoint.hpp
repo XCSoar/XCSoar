@@ -71,6 +71,10 @@ public:
     return constraints.require_arm;
   }
 
+  bool GetScoreExit() const noexcept {
+    return constraints.score_exit;
+  }
+
   /**
    * Search for the min point on the boundary from
    * the aircraft state to the next point.  Should only
@@ -84,18 +88,18 @@ public:
                        const FlatProjection &projection);
 
   /* virtual methods from class TaskPoint */
-  double GetElevation() const override;
+  double GetElevation() const noexcept override;
 
   /* virtual methods from class ScoredTaskPoint */
   bool CheckExitTransition(const AircraftState &ref_now,
-                           const AircraftState &ref_last) const override;
+                           const AircraftState &ref_last) const noexcept override;
 
   /* virtual methods from class OrderedTaskPoint */
-  void SetTaskBehaviour(const TaskBehaviour &tb) override;
-  void SetOrderedTaskSettings(const OrderedTaskSettings &s) override;
+  void SetTaskBehaviour(const TaskBehaviour &tb) noexcept override;
+  void SetOrderedTaskSettings(const OrderedTaskSettings &s) noexcept override;
   void SetNeighbours(OrderedTaskPoint *prev,
-                     OrderedTaskPoint *next) override;
-  bool IsInSector(const AircraftState &ref) const override;
+                     OrderedTaskPoint *next) noexcept override;
+  bool IsInSector(const AircraftState &ref) const noexcept override;
 
 private:
   /* virtual methods from class ScoredTaskPoint */

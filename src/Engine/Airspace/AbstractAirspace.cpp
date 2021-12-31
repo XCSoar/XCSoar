@@ -33,16 +33,16 @@
 
 #include <cassert>
 
-AbstractAirspace::~AbstractAirspace() {}
+AbstractAirspace::~AbstractAirspace() noexcept = default;
 
 bool
-AbstractAirspace::Inside(const AltitudeState &state) const
+AbstractAirspace::Inside(const AltitudeState &state) const noexcept
 {
   return altitude_base.IsBelow(state) && altitude_top.IsAbove(state);
 }
 
 bool
-AbstractAirspace::Inside(const AircraftState &state) const
+AbstractAirspace::Inside(const AircraftState &state) const noexcept
 {
   return altitude_base.IsBelow(state) &&
          altitude_top.IsAbove(state) &&
@@ -50,14 +50,14 @@ AbstractAirspace::Inside(const AircraftState &state) const
 }
 
 void
-AbstractAirspace::SetGroundLevel(const double alt)
+AbstractAirspace::SetGroundLevel(const double alt) noexcept
 {
   altitude_base.SetGroundLevel(alt);
   altitude_top.SetGroundLevel(alt);
 }
 
 void
-AbstractAirspace::SetFlightLevel(const AtmosphericPressure &press)
+AbstractAirspace::SetFlightLevel(const AtmosphericPressure &press) noexcept
 {
   altitude_base.SetFlightLevel(press);
   altitude_top.SetFlightLevel(press);
@@ -66,7 +66,7 @@ AbstractAirspace::SetFlightLevel(const AtmosphericPressure &press)
 AirspaceInterceptSolution
 AbstractAirspace::InterceptVertical(const AircraftState &state,
                                     const AirspaceAircraftPerformance &perf,
-                                    double distance) const
+                                    double distance) const noexcept
 {
   AirspaceInterceptSolution solution;
   solution.distance = distance;
@@ -83,7 +83,7 @@ AbstractAirspace::InterceptHorizontal(const AircraftState &state,
                                       const AirspaceAircraftPerformance &perf,
                                       double distance_start,
                                       double distance_end,
-                                      const bool lower) const
+                                      const bool lower) const noexcept
 {
   if (lower && altitude_base.IsTerrain())
     // impossible to be lower than terrain
@@ -105,7 +105,7 @@ AirspaceInterceptSolution
 AbstractAirspace::Intercept(const AircraftState &state,
                             const AirspaceAircraftPerformance &perf,
                             const GeoPoint &loc_start,
-                            const GeoPoint &loc_end) const
+                            const GeoPoint &loc_end) const noexcept
 {
   const bool only_vertical = (loc_start == loc_end) &&
     (loc_start == state.location);
@@ -175,7 +175,7 @@ AirspaceInterceptSolution
 AbstractAirspace::Intercept(const AircraftState &state,
                             const GeoPoint &end,
                             const FlatProjection &projection,
-                            const AirspaceAircraftPerformance &perf) const
+                            const AirspaceAircraftPerformance &perf) const noexcept
 {
   AirspaceInterceptSolution solution = AirspaceInterceptSolution::Invalid();
   for (const auto &i : Intersects(state.location, end, projection)) {
@@ -188,33 +188,33 @@ AbstractAirspace::Intercept(const AircraftState &state,
 }
 
 bool
-AbstractAirspace::MatchNamePrefix(const TCHAR *prefix) const
+AbstractAirspace::MatchNamePrefix(const TCHAR *prefix) const noexcept
 {
   size_t prefix_length = _tcslen(prefix);
   return StringIsEqualIgnoreCase(name.c_str(), prefix, prefix_length);
 }
 
 void
-AbstractAirspace::Project(const FlatProjection &projection)
+AbstractAirspace::Project(const FlatProjection &projection) noexcept
 {
   m_border.Project(projection);
 }
 
 const FlatBoundingBox
-AbstractAirspace::GetBoundingBox(const FlatProjection &projection)
+AbstractAirspace::GetBoundingBox(const FlatProjection &projection) noexcept
 {
   Project(projection);
   return m_border.CalculateBoundingbox();
 }
 
 GeoBounds
-AbstractAirspace::GetGeoBounds() const
+AbstractAirspace::GetGeoBounds() const noexcept
 {
   return m_border.CalculateGeoBounds();
 }
 
 const SearchPointVector&
-AbstractAirspace::GetClearance(const FlatProjection &projection) const
+AbstractAirspace::GetClearance(const FlatProjection &projection) const noexcept
 {
   #define RADIUS 5
 
@@ -241,13 +241,13 @@ AbstractAirspace::GetClearance(const FlatProjection &projection) const
 }
 
 void
-AbstractAirspace::ClearClearance() const
+AbstractAirspace::ClearClearance() const noexcept
 {
   m_clearance.clear();
 }
 
 void
-AbstractAirspace::SetActivity(const AirspaceActivity mask) const
+AbstractAirspace::SetActivity(const AirspaceActivity mask) const noexcept
 {
   active = days_of_operation.Matches(mask);
 }

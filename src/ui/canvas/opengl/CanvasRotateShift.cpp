@@ -27,22 +27,18 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "ui/dim/Point.hpp"
 #include "ui/opengl/System.hpp"
-#include "Screen/Layout.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 CanvasRotateShift::CanvasRotateShift(const PixelPoint pos, Angle angle,
-                                     const int scale) noexcept
+                                     const float scale) noexcept
 {
   glm::mat4 matrix = glm::rotate(glm::translate(glm::mat4(1),
                                                 glm::vec3(pos.x, pos.y, 0)),
                                  GLfloat(angle.Radians()),
                                  glm::vec3(0, 0, 1));
-  float gl_scale = scale / 100.f;
-  if (Layout::ScaleSupported())
-    gl_scale *= Layout::scale_1024 / 1024.f;
-  matrix = glm::scale(matrix, glm::vec3(gl_scale));
+  matrix = glm::scale(matrix, glm::vec3{scale});
 
   OpenGL::solid_shader->Use();
   glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,

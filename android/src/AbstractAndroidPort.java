@@ -114,4 +114,10 @@ abstract class AbstractAndroidPort implements AndroidPort {
     if (portListener != null)
       portListener.portStateChanged();
   }
+
+  protected final void submitError(String msg) {
+    PortListener portListener = this.portListener;
+    if (portListener != null)
+      portListener.portError(msg);
+  }
 }

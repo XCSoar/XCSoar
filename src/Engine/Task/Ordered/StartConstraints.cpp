@@ -32,7 +32,10 @@ StartConstraints::SetDefaults()
   max_height = 0;
   max_height_ref = AltitudeReference::AGL;
   require_arm = false;
+  score_exit = true;
   fai_finish = false;
+  pev_start_wait_time = {};
+  pev_start_window = {};
 }
 
 bool

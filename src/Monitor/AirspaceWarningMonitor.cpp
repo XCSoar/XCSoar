@@ -37,13 +37,20 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/TimeFormatter.hpp"
 
+#if defined(__GNUC__) && !defined(__clang__)
+/* this warning is bogus because GCC is not clever enough to
+   understand that the "state" variable in Check() only gets evaluated
+   if it has been initialised */
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+
 class AirspaceWarningWidget final
   : public QuestionWidget {
 
   AirspaceWarningMonitor &monitor;
   ProtectedAirspaceWarningManager &manager;
 
-  const AbstractAirspace &airspace;
+  const ConstAirspacePtr airspace;
   AirspaceWarning::State state;
 
   StaticString<256> buffer;
@@ -56,7 +63,7 @@ class AirspaceWarningWidget final
       buffer.Format(_T("%s: %s"), _("Inside airspace"), airspace.GetName());
     else
       buffer.Format(_T("%s: %s (%s)"), _("Near airspace"), airspace.GetName(),
-                    FormatTimespanSmart(int(solution.elapsed_time),
+                    FormatTimespanSmart(solution.elapsed_time,
                                         2).c_str());
 
     return buffer;
@@ -65,12 +72,12 @@ class AirspaceWarningWidget final
 public:
   AirspaceWarningWidget(AirspaceWarningMonitor &_monitor,
                         ProtectedAirspaceWarningManager &_manager,
-                        const AbstractAirspace &_airspace,
+                        ConstAirspacePtr _airspace,
                         AirspaceWarning::State _state,
                         const AirspaceInterceptSolution &solution)
-    :QuestionWidget(MakeMessage(_airspace, _state, solution)),
+    :QuestionWidget(MakeMessage(*_airspace, _state, solution)),
      monitor(_monitor), manager(_manager),
-     airspace(_airspace), state(_state) {
+     airspace(std::move(_airspace)), state(_state) {
     AddButton(_("ACK"), [this](){
       if (state == AirspaceWarning::WARNING_INSIDE)
         manager.AcknowledgeInside(airspace);
@@ -99,11 +106,11 @@ public:
   bool Update(const AbstractAirspace &_airspace,
               AirspaceWarning::State _state,
               const AirspaceInterceptSolution &solution) {
-    if (&_airspace != &airspace)
+    if (&_airspace != airspace.get())
       return false;
 
     state = _state;
-    SetMessage(MakeMessage(airspace, state, solution));
+    SetMessage(MakeMessage(*airspace, state, solution));
     return true;
   }
 };
@@ -159,7 +166,7 @@ AirspaceWarningMonitor::Check()
     return;
   }
 
-  const AbstractAirspace *airspace = nullptr;
+  ConstAirspacePtr airspace;
   AirspaceWarning::State state;
   AirspaceInterceptSolution solution;
 
@@ -167,7 +174,7 @@ AirspaceWarningMonitor::Check()
     const ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
     auto w = lease->begin();
     if (w != lease->end() && w->IsAckExpired()) {
-      airspace = &w->GetAirspace();
+      airspace = w->GetAirspacePtr();
       state = w->GetWarningState();
       solution = w->GetSolution();
     }
@@ -188,7 +195,7 @@ AirspaceWarningMonitor::Check()
     }
 
     widget = new AirspaceWarningWidget(*this, *airspace_warnings,
-                                       *airspace, state, solution);
+                                       std::move(airspace), state, solution);
     PageActions::SetCustomBottom(widget);
   }
 

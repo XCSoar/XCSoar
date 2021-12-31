@@ -23,13 +23,7 @@ Copyright_License {
 #if !defined(XCSOAR_UTILS_SYSTEM_H)
 #define XCSOAR_UTILS_SYSTEM_H
 
-#include <tchar.h>
-
 struct PixelSize;
-
-unsigned long FindFreeSpace(const TCHAR *path);
-
-void StartupLogFreeRamAndStorage();
 
 PixelSize
 SystemWindowSize();

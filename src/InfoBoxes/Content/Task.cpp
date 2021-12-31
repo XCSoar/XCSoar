@@ -41,7 +41,7 @@ Copyright_License {
 #include <tchar.h>
 
 static void
-ShowNextWaypointDetails()
+ShowNextWaypointDetails() noexcept
 {
   if (protected_task_manager == nullptr)
     return;
@@ -54,7 +54,7 @@ ShowNextWaypointDetails()
 }
 
 static std::unique_ptr<Widget>
-LoadNextWaypointDetailsPanel(unsigned id)
+LoadNextWaypointDetailsPanel(unsigned id) noexcept
 {
   return std::make_unique<CallbackWidget>(ShowNextWaypointDetails);
 }
@@ -69,7 +69,7 @@ const InfoBoxPanel next_waypoint_infobox_panels[] = {
 };
 
 void
-UpdateInfoBoxBearing(InfoBoxData &data)
+UpdateInfoBoxBearing(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
@@ -85,7 +85,7 @@ UpdateInfoBoxBearing(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxBearingDiff(InfoBoxData &data)
+UpdateInfoBoxBearingDiff(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
@@ -102,7 +102,7 @@ UpdateInfoBoxBearingDiff(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxRadial(InfoBoxData &data)
+UpdateInfoBoxRadial(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
@@ -120,7 +120,7 @@ UpdateInfoBoxRadial(InfoBoxData &data)
 }
 
 void
-InfoBoxContentNextWaypoint::Update(InfoBoxData &data)
+InfoBoxContentNextWaypoint::Update(InfoBoxData &data) noexcept
 {
   // use proper non-terminal next task stats
 
@@ -165,13 +165,13 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data)
 }
 
 const InfoBoxPanel *
-InfoBoxContentNextWaypoint::GetDialogContent()
+InfoBoxContentNextWaypoint::GetDialogContent() noexcept
 {
   return next_waypoint_infobox_panels;
 }
 
 void
-UpdateInfoBoxNextDistance(InfoBoxData &data)
+UpdateInfoBoxNextDistance(InfoBoxData &data) noexcept
 {
   const auto way_point = protected_task_manager != nullptr
     ? protected_task_manager->GetActiveWaypoint()
@@ -205,7 +205,7 @@ UpdateInfoBoxNextDistance(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxNextDistanceNominal(InfoBoxData &data)
+UpdateInfoBoxNextDistanceNominal(InfoBoxData &data) noexcept
 {
   const auto way_point = protected_task_manager != nullptr
     ? protected_task_manager->GetActiveWaypoint()
@@ -238,7 +238,7 @@ UpdateInfoBoxNextDistanceNominal(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxNextETE(InfoBoxData &data)
+UpdateInfoBoxNextETE(InfoBoxData &data) noexcept
 {
   // use proper non-terminal next task stats
 
@@ -248,13 +248,13 @@ UpdateInfoBoxNextETE(InfoBoxData &data)
     return;
   }
 
-  assert(task_stats.current_leg.time_remaining_now >= 0);
+  assert(task_stats.current_leg.time_remaining_now.count() >= 0);
 
-  data.SetValueFromTimeTwoLines((int)task_stats.current_leg.time_remaining_now);
+  data.SetValueFromTimeTwoLines(task_stats.current_leg.time_remaining_now);
 }
 
 void
-UpdateInfoBoxNextETA(InfoBoxData &data)
+UpdateInfoBoxNextETA(InfoBoxData &data) noexcept
 {
   // use proper non-terminal next task stats
 
@@ -268,7 +268,7 @@ UpdateInfoBoxNextETA(InfoBoxData &data)
   }
 
   const BrokenTime t = now_local +
-    unsigned(task_stats.current_leg.solution_remaining.time_elapsed);
+    std::chrono::duration_cast<std::chrono::seconds>(task_stats.current_leg.solution_remaining.time_elapsed);
 
   // Set Value
   data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
@@ -293,7 +293,7 @@ SetValueFromAltDiff(InfoBoxData &data, const TaskStats &task_stats,
 }
 
 void
-UpdateInfoBoxNextAltitudeDiff(InfoBoxData &data)
+UpdateInfoBoxNextAltitudeDiff(InfoBoxData &data) noexcept
 {
   // pilots want this to be assuming terminal flight to this wp
 
@@ -304,7 +304,7 @@ UpdateInfoBoxNextAltitudeDiff(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxNextMC0AltitudeDiff(InfoBoxData &data)
+UpdateInfoBoxNextMC0AltitudeDiff(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
@@ -313,7 +313,7 @@ UpdateInfoBoxNextMC0AltitudeDiff(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxNextAltitudeRequire(InfoBoxData &data)
+UpdateInfoBoxNextAltitudeRequire(InfoBoxData &data) noexcept
 {
   // pilots want this to be assuming terminal flight to this wp
 
@@ -328,7 +328,7 @@ UpdateInfoBoxNextAltitudeRequire(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data)
+UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data) noexcept
 {
   // pilots want this to be assuming terminal flight to this wp
 
@@ -346,7 +346,7 @@ UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data)
 
 
 void
-UpdateInfoBoxNextGR(InfoBoxData &data)
+UpdateInfoBoxNextGR(InfoBoxData &data) noexcept
 {
   // pilots want this to be assuming terminal flight to this wp, and this
   // is what current_leg gradient does.
@@ -370,7 +370,7 @@ UpdateInfoBoxNextGR(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalDistance(InfoBoxData &data)
+UpdateInfoBoxFinalDistance(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.task_stats;
@@ -389,7 +389,7 @@ UpdateInfoBoxFinalDistance(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalETE(InfoBoxData &data)
+UpdateInfoBoxFinalETE(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
@@ -398,13 +398,13 @@ UpdateInfoBoxFinalETE(InfoBoxData &data)
     return;
   }
 
-  assert(task_stats.total.time_remaining_now >= 0);
+  assert(task_stats.total.time_remaining_now.count() >= 0);
 
-  data.SetValueFromTimeTwoLines((int)task_stats.total.time_remaining_now);
+  data.SetValueFromTimeTwoLines(task_stats.total.time_remaining_now);
 }
 
 void
-UpdateInfoBoxFinalETA(InfoBoxData &data)
+UpdateInfoBoxFinalETA(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
@@ -416,7 +416,7 @@ UpdateInfoBoxFinalETA(InfoBoxData &data)
   }
 
   const BrokenTime t = now_local +
-    unsigned(task_stats.total.solution_remaining.time_elapsed);
+    std::chrono::duration_cast<std::chrono::seconds>(task_stats.total.solution_remaining.time_elapsed);
 
   // Set Value
   data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
@@ -426,7 +426,7 @@ UpdateInfoBoxFinalETA(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalAltitudeDiff(InfoBoxData &data)
+UpdateInfoBoxFinalAltitudeDiff(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
@@ -434,7 +434,7 @@ UpdateInfoBoxFinalAltitudeDiff(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalMC0AltitudeDiff(InfoBoxData &data)
+UpdateInfoBoxFinalMC0AltitudeDiff(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
@@ -443,7 +443,7 @@ UpdateInfoBoxFinalMC0AltitudeDiff(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalAltitudeRequire(InfoBoxData &data)
+UpdateInfoBoxFinalAltitudeRequire(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid ||
@@ -456,7 +456,7 @@ UpdateInfoBoxFinalAltitudeRequire(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskSpeed(InfoBoxData &data)
+UpdateInfoBoxTaskSpeed(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid || !task_stats.total.travelled.IsDefined()) {
@@ -469,7 +469,7 @@ UpdateInfoBoxTaskSpeed(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskSpeedAchieved(InfoBoxData &data)
+UpdateInfoBoxTaskSpeedAchieved(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid ||
@@ -483,7 +483,7 @@ UpdateInfoBoxTaskSpeedAchieved(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data)
+UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid || task_stats.inst_speed_fast < 0 ||
@@ -500,7 +500,7 @@ UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskSpeedHour(InfoBoxData &data)
+UpdateInfoBoxTaskSpeedHour(InfoBoxData &data) noexcept
 {
   const WindowStats &window =
     CommonInterface::Calculated().task_stats.last_hour;
@@ -514,7 +514,7 @@ UpdateInfoBoxTaskSpeedHour(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalGR(InfoBoxData &data)
+UpdateInfoBoxFinalGR(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
@@ -535,7 +535,7 @@ UpdateInfoBoxFinalGR(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskAATime(InfoBoxData &data)
+UpdateInfoBoxTaskAATime(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -548,11 +548,11 @@ UpdateInfoBoxTaskAATime(InfoBoxData &data)
   }
 
   data.SetValueFromTimeTwoLines(common_stats.aat_time_remaining);
-  data.SetValueColor(common_stats.aat_time_remaining < 0 ? 1 : 0);
+  data.SetValueColor(common_stats.aat_time_remaining.count() < 0 ? 1 : 0);
 }
 
 void
-UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
+UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -564,20 +564,20 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
     return;
   }
 
-  assert(task_stats.total.time_remaining_start >= 0);
+  assert(task_stats.total.time_remaining_start.count() >= 0);
 
   auto diff = task_stats.total.time_remaining_start -
     common_stats.aat_time_remaining;
 
   data.SetValueFromTimeTwoLines(diff);
   // Set Color (red/blue/black)
-  data.SetValueColor(diff < 0 ? 1 :
-                   task_stats.total.time_remaining_start >
-                       common_stats.aat_time_remaining + 5*60 ? 2 : 0);
+  data.SetValueColor(diff.count() < 0 ? 1 :
+                     task_stats.total.time_remaining_start >
+                     common_stats.aat_time_remaining + std::chrono::minutes{5} ? 2 : 0);
 }
 
 void
-UpdateInfoBoxTaskAADistance(InfoBoxData &data)
+UpdateInfoBoxTaskAADistance(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -593,7 +593,7 @@ UpdateInfoBoxTaskAADistance(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data)
+UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -608,7 +608,7 @@ UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskAADistanceMin(InfoBoxData &data)
+UpdateInfoBoxTaskAADistanceMin(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -623,7 +623,7 @@ UpdateInfoBoxTaskAADistanceMin(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskAASpeed(InfoBoxData &data)
+UpdateInfoBoxTaskAASpeed(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -639,7 +639,7 @@ UpdateInfoBoxTaskAASpeed(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data)
+UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -655,7 +655,7 @@ UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data)
+UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
@@ -672,7 +672,7 @@ UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data)
+UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data) noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
   const auto &task_stats = calculated.ordered_task_stats;
@@ -681,18 +681,18 @@ UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data)
 
   if (!task_stats.task_valid || maxheight <= 0
       || !protected_task_manager
-      || common_stats.TimeUnderStartMaxHeight <= 0) {
+      || !common_stats.TimeUnderStartMaxHeight.IsDefined()) {
     data.SetInvalid();
     return;
   }
 
-  data.SetValueFromTimeTwoLines((int)(CommonInterface::Basic().time -
-                                      common_stats.TimeUnderStartMaxHeight));
+  data.SetValueFromTimeTwoLines(CommonInterface::Basic().time -
+                                common_stats.TimeUnderStartMaxHeight);
   data.SetComment(_("Time Below"));
 }
 
 void
-UpdateInfoBoxNextETEVMG(InfoBoxData &data)
+UpdateInfoBoxNextETEVMG(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
@@ -712,11 +712,11 @@ UpdateInfoBoxNextETEVMG(InfoBoxData &data)
     return;
   }
 
-  data.SetValueFromTimeTwoLines((int)(d/v));
+  data.SetValueFromTimeTwoLines(FloatDuration{d / v});
 }
 
 void
-UpdateInfoBoxNextETAVMG(InfoBoxData &data)
+UpdateInfoBoxNextETAVMG(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
@@ -736,9 +736,9 @@ UpdateInfoBoxNextETAVMG(InfoBoxData &data)
     return;
   }
 
-  const int dd = (int)(d/v);
   const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
   if (now_local.IsPlausible()) {
+    const std::chrono::seconds dd{long(d/v)};
     const BrokenTime t = now_local + dd;
     data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
     data.UnsafeFormatComment(_T("%02u"), t.second);
@@ -747,7 +747,7 @@ UpdateInfoBoxNextETAVMG(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalETEVMG(InfoBoxData &data)
+UpdateInfoBoxFinalETEVMG(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
@@ -767,11 +767,11 @@ UpdateInfoBoxFinalETEVMG(InfoBoxData &data)
     return;
   }
 
-  data.SetValueFromTimeTwoLines((int)(d/v));
+  data.SetValueFromTimeTwoLines(FloatDuration{d / v});
 }
 
 void
-UpdateInfoBoxCruiseEfficiency(InfoBoxData &data)
+UpdateInfoBoxCruiseEfficiency(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid || !task_stats.start.task_started) {
@@ -783,18 +783,17 @@ UpdateInfoBoxCruiseEfficiency(InfoBoxData &data)
   data.SetCommentFromVerticalSpeed(task_stats.effective_mc, false);
 }
 
-gcc_pure
-static unsigned
-SecondsUntil(unsigned now, RoughTime until)
+static constexpr unsigned
+SecondsUntil(TimeStamp now, RoughTime until) noexcept
 {
-  int d = until.GetMinuteOfDay() * 60 - now;
-  if (d < 0)
-    d += 24 * 60 * 60;
-  return d;
+  auto d = TimeStamp{until} - now;
+  if (d.count() < 0)
+    d += std::chrono::hours{24};
+  return std::chrono::duration_cast<std::chrono::duration<unsigned>>(d).count();
 }
 
 void
-UpdateInfoBoxStartOpen(InfoBoxData &data)
+UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const auto &calculated = CommonInterface::Calculated();
@@ -812,8 +811,8 @@ UpdateInfoBoxStartOpen(InfoBoxData &data)
     return;
   }
 
-  const unsigned now_s(basic.time);
-  const RoughTime now = RoughTime::FromSecondOfDayChecked(now_s);
+  const auto now_s = basic.time;
+  const RoughTime now{now_s};
 
   if (open.HasEnded(now)) {
     data.SetValueInvalid();
@@ -836,7 +835,7 @@ UpdateInfoBoxStartOpen(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxStartOpenArrival(InfoBoxData &data)
+UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const auto &calculated = CommonInterface::Calculated();
@@ -857,8 +856,8 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data)
     return;
   }
 
-  const unsigned arrival_s(basic.time + current_remaining.time_elapsed);
-  const RoughTime arrival = RoughTime::FromSecondOfDayChecked(arrival_s);
+  const auto arrival_s = basic.time + current_remaining.time_elapsed;
+  const RoughTime arrival{arrival_s};
 
   if (open.HasEnded(arrival)) {
     data.SetValueInvalid();
@@ -885,7 +884,7 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data)
  * This function updates the text fields in the infobox.
  */
 void
-InfoBoxContentNextArrow::Update(InfoBoxData &data)
+InfoBoxContentNextArrow::Update(InfoBoxData &data) noexcept
 {
   // use proper non-terminal next task stats
   const NMEAInfo &basic = CommonInterface::Basic();
@@ -907,7 +906,9 @@ InfoBoxContentNextArrow::Update(InfoBoxData &data)
 
   // Set value
   if (angle_valid)
-    data.SetCustom(); // Enables OnCustomPaint
+    // Enables OnCustomPaint
+    // TODO: use an appropriate digest
+    data.SetCustom(basic.track_available.ToInteger());
   else
     data.SetInvalid();
 
@@ -923,7 +924,8 @@ InfoBoxContentNextArrow::Update(InfoBoxData &data)
  * This function renders the arrow.
  */
 void
-InfoBoxContentNextArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
+InfoBoxContentNextArrow::OnCustomPaint(Canvas &canvas,
+                                       const PixelRect &rc) noexcept
 {
   // use proper non-terminal next task stats
   const NMEAInfo &basic = CommonInterface::Basic();

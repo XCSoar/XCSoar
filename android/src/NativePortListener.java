@@ -27,7 +27,7 @@ package org.xcsoar;
  * An #PortListener implementation that passes method calls to native
  * code.
  */
-class NativePortListener implements PortListener {
+final class NativePortListener implements PortListener {
   /**
    * A native pointer.
    */

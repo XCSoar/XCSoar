@@ -24,12 +24,14 @@ Copyright_License {
 #ifndef TOPOGRAPHY_RENDERER_HPP
 #define TOPOGRAPHY_RENDERER_HPP
 
-#include "Topography/TopographyStore.hpp"
-#include "util/StaticArray.hxx"
+#include "util/NonCopyable.hpp"
+
+#include <forward_list>
 
 class Canvas;
 class WindowProjection;
 class LabelBlock;
+class TopographyStore;
 class TopographyFileRenderer;
 struct TopographyLook;
 
@@ -38,16 +40,18 @@ struct TopographyLook;
  */
 class TopographyRenderer : private NonCopyable {
   const TopographyStore &store;
-  StaticArray<TopographyFileRenderer *, TopographyStore::MAXTOPOGRAPHY> files;
+
+  std::forward_list<TopographyFileRenderer> files;
 
 public:
-  TopographyRenderer(const TopographyStore &store, const TopographyLook &look);
+  TopographyRenderer(const TopographyStore &store,
+                     const TopographyLook &look) noexcept;
 
   TopographyRenderer(const TopographyRenderer &) = delete;
 
-  ~TopographyRenderer();
+  ~TopographyRenderer() noexcept;
 
-  const TopographyStore &GetStore() const {
+  const TopographyStore &GetStore() const noexcept {
     return store;
   }
 
@@ -56,10 +60,10 @@ public:
    * @param canvas The drawing canvas
    * @param rc The area to draw in
    */
-  void Draw(Canvas &canvas, const WindowProjection &projection) const;
+  void Draw(Canvas &canvas, const WindowProjection &projection) noexcept;
 
   void DrawLabels(Canvas &canvas, const WindowProjection &projection,
-                  LabelBlock &label_block) const;
+                  LabelBlock &label_block) noexcept;
 };
 
 #endif

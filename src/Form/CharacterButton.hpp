@@ -41,9 +41,9 @@ public:
   void Create(ContainerWindow &parent, const ButtonLook &look,
               const TCHAR *text, PixelRect rc,
               OnCharacterCallback on_character, unsigned character,
-              const WindowStyle _style=WindowStyle());
+              const WindowStyle _style=WindowStyle()) noexcept;
 
-  unsigned GetCharacter() const {
+  unsigned GetCharacter() const noexcept {
     return character;
   }
 
@@ -51,13 +51,13 @@ public:
    * Convert GetCharacter() to upper case (ASCII only).
    */
   gcc_pure
-  unsigned GetUpperCharacter() const;
+  unsigned GetUpperCharacter() const noexcept;
 
-  void SetCharacter(unsigned character);
+  void SetCharacter(unsigned character) noexcept;
 
 protected:
   /* virtual methods from class ButtonWindow */
-  virtual bool OnClicked();
+  bool OnClicked() noexcept override;
 };
 
 #endif

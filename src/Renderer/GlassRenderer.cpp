@@ -35,7 +35,7 @@ Copyright_License {
 #endif
 
 void
-DrawGlassBackground(Canvas &canvas, const PixelRect &rc, Color color)
+DrawGlassBackground(Canvas &canvas, const PixelRect &rc, Color color) noexcept
 {
   canvas.DrawFilledRectangle(rc, color);
 

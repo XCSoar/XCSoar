@@ -95,8 +95,7 @@ Run(IGCWriter &writer)
                            Angle::Degrees(50.6322));
 
   static NMEAInfo i;
-  i.clock = 1;
-  i.time = 1;
+  i.clock = i.time = TimeStamp{std::chrono::seconds{1}};
   i.time_available.Update(i.clock);
   i.date_time_utc.year = 2010;
   i.date_time_utc.month = 9;

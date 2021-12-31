@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Geo/GeoPoint.hpp"
 #include "time/DeltaTime.hpp"
+#include "time/Stamp.hpp"
 
 struct CirclingInfo;
 struct NMEAInfo;
@@ -48,7 +49,7 @@ class CirclingComputer {
   /**
    * Start/end time of the turn.
    */
-  double turn_start_time;
+  TimeStamp turn_start_time;
 
   /**
    * Start/end location of the turn.

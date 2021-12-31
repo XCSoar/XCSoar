@@ -27,38 +27,38 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 
 void
-UpdateInfoBoxHumidity(InfoBoxData &data);
+UpdateInfoBoxHumidity(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTemperature(InfoBoxData &data);
+UpdateInfoBoxTemperature(InfoBoxData &data) noexcept;
 
 class InfoBoxContentTemperatureForecast : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data) override;
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode) override;
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleKey(const InfoBoxKeyCodes keycode) noexcept override;
 };
 
 extern const InfoBoxPanel wind_infobox_panels[];
 
 void
-UpdateInfoBoxWindSpeed(InfoBoxData &data);
+UpdateInfoBoxWindSpeed(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxWindBearing(InfoBoxData &data);
+UpdateInfoBoxWindBearing(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxHeadWind(InfoBoxData &data);
+UpdateInfoBoxHeadWind(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxHeadWindSimplified(InfoBoxData &data);
+UpdateInfoBoxHeadWindSimplified(InfoBoxData &data) noexcept;
 
 class InfoBoxContentWindArrow: public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data) override;
-  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
-  virtual const InfoBoxPanel *GetDialogContent() override;
+  void Update(InfoBoxData &data) noexcept override;
+  void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
+  const InfoBoxPanel *GetDialogContent() noexcept override;
 };
 
 #endif

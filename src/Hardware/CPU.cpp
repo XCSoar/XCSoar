@@ -30,7 +30,7 @@ Copyright_License {
 #include <atomic>
 
 static bool
-SetCPUFrequencyGovernor(const char *governor)
+SetCPUFrequencyGovernor(const char *governor) noexcept
 {
 #ifdef __linux__
   return File::WriteExisting(Path("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"),
@@ -43,14 +43,14 @@ SetCPUFrequencyGovernor(const char *governor)
 static std::atomic_uint cpu_lock;
 
 void
-LockCPU()
+LockCPU() noexcept
 {
   if (cpu_lock++ == 0)
     SetCPUFrequencyGovernor("performance");
 }
 
 void
-UnlockCPU()
+UnlockCPU() noexcept
 {
   if (cpu_lock-- == 1)
     SetCPUFrequencyGovernor("powersave");

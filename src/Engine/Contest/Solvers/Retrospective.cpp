@@ -22,6 +22,47 @@
 
 #include "Retrospective.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
+
+inline
+Retrospective::NearWaypoint::NearWaypoint(WaypointPtr &&_waypoint,
+                                          const GeoPoint &_location) noexcept
+  :waypoint(std::move(_waypoint)),
+   location(_location), leg_in(0), actual_in(0)
+{
+  range = location.Distance(waypoint->location);
+}
+
+inline
+Retrospective::NearWaypoint::NearWaypoint(WaypointPtr &&_waypoint,
+                                          const GeoPoint &_location,
+                                          const NearWaypoint &previous) noexcept
+  :waypoint(std::move(_waypoint)), location(_location)
+{
+  range = location.Distance(waypoint->location);
+  update_leg(previous);
+}
+
+inline bool
+Retrospective::NearWaypoint::update_location(const GeoPoint &location_now) noexcept
+{
+  auto range_now = location_now.Distance(waypoint->location);
+  if (range_now < range) {
+    range = range_now;
+    location = location_now;
+    return true;
+  }
+  return false;
+  // TODO: or if distance from previous tp to here is greater than leg (and wasnt previously)
+}
+
+inline void
+Retrospective::NearWaypoint::update_leg(const NearWaypoint &previous) noexcept
+{
+  leg_in = previous.waypoint->location.Distance(waypoint->location);
+  actual_in = previous.location.Distance(location);
+  bearing = previous.location.Bearing(location);
+}
 
 Retrospective::Retrospective(const Waypoints &wps) noexcept
   :waypoints(wps),

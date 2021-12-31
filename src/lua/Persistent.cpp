@@ -76,7 +76,7 @@ Lua::AddPersistent(lua_State *L, void *p)
 {
   lua_getfield(L, LUA_REGISTRYINDEX, persistent_table);
   if (!lua_isnil(L, -1)) {
-    SetTable(L, -3, LightUserData(p), true);
+    SetTable(L, RelativeStackIndex{-1}, LightUserData(p), true);
   }
 
   lua_pop(L, 1); // pop table
@@ -88,7 +88,7 @@ Lua::RemovePersistent(lua_State *L, void *p)
   lua_getfield(L, LUA_REGISTRYINDEX, persistent_table);
 
   if (!lua_isnil(L, -1)) {
-    SetTable(L, -3, LightUserData(p), nullptr);
+    SetTable(L, RelativeStackIndex{-1}, LightUserData(p), nullptr);
   }
 
   lua_pop(L, 1); // pop table

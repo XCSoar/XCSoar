@@ -28,6 +28,7 @@ Copyright_License {
 #include "WorldFile.hpp"
 #include "Operation/Operation.hpp"
 #include "system/ConvertPathName.hpp"
+#include "util/ScopeExit.hxx"
 
 extern "C" {
 #include "jasper/jp2/jp2_cod.h"
@@ -40,6 +41,9 @@ extern "C" {
 long
 TerrainLoader::SkipMarkerSegment(long file_offset) const
 {
+  if (env.IsCancelled())
+    return -1;
+
   if (scan_overview)
     /* use all segments when loading the overview */
     return 0;
@@ -182,38 +186,40 @@ TerrainLoader::PutTileData(unsigned index,
   }
 }
 
-static bool
+/**
+ * Throws on error.
+ */
+static void
 LoadJPG2000(jas_stream_t *in, void *loader)
 {
   /* Get the first box.  This should be a JP box. */
-  auto box = jp2_box_get(in);
-  if (box == nullptr)
-    return false;
+  {
+    auto box = jp2_box_get(in);
+    if (box == nullptr)
+      throw std::runtime_error("jp2_box_get() failed");
 
-  if (box->type != JP2_BOX_JP ||
-      box->data.jp.magic != JP2_JP_MAGIC) {
-    jp2_box_destroy(box);
-    return false;
+    AtScopeExit(box) { jp2_box_destroy(box); };
+    if (box->type != JP2_BOX_JP ||
+        box->data.jp.magic != JP2_JP_MAGIC)
+      throw std::runtime_error("Wrong JP magic");
   }
 
-  jp2_box_destroy(box);
-
   /* Get the second box.  This should be a FTYP box. */
-  box = jp2_box_get(in);
+  auto box = jp2_box_get(in);
   if (box == nullptr)
-    return false;
+      throw std::runtime_error("FTYP box not found");
 
   auto type = box->type;
   jp2_box_destroy(box);
   if (type != JP2_BOX_FTYP)
-    return false;
+    throw std::runtime_error("FTYP box not found");
 
   /* find the JP2C box */
   do {
     box = jp2_box_get(in);
     if (box == nullptr)
       /* not found */
-      return false;
+      throw std::runtime_error("JP2C box not found");
 
     type = box->type;
     jp2_box_destroy(box);
@@ -231,27 +237,23 @@ LoadJPG2000(jas_stream_t *in, void *loader)
 
   const auto dec = jpc_dec_create(&opts, in);
   if (dec == nullptr)
-    return false;
+    throw std::runtime_error("jpc_dec_create() failed");
+
+  AtScopeExit(dec) { jpc_dec_destroy(dec); };
 
   dec->loader = loader;
 
-  bool success = jpc_dec_decode(dec) == 0;
-  jpc_dec_destroy(dec);
-  return success;
+  if (jpc_dec_decode(dec) != 0)
+    throw std::runtime_error("jpc_dec_decode() failed");
 }
 
-inline bool
+inline void
 TerrainLoader::LoadJPG2000(struct zzip_dir *dir, const char *path)
 {
   const auto in = OpenJasperZzipStream(dir, path);
-  if (in == nullptr)
-    return false;
-
+  AtScopeExit(in) { jas_stream_close(in); };
   env.SetProgressRange(jas_stream_length(in) / 65536);
-
-  bool success = ::LoadJPG2000(in, this);
-  jas_stream_close(in);
-  return success;
+  ::LoadJPG2000(in, this);
 }
 
 static bool
@@ -269,7 +271,7 @@ LoadWorldFile(RasterTileCache &tile_cache,
   return success;
 }
 
-inline bool
+inline void
 TerrainLoader::LoadOverview(struct zzip_dir *dir,
                             const char *path, const char *world_file)
 {
@@ -277,23 +279,23 @@ TerrainLoader::LoadOverview(struct zzip_dir *dir,
 
   raster_tile_cache.Reset();
 
-  bool success = LoadJPG2000(dir, path);
+  try {
+    LoadJPG2000(dir, path);
 
-  /* if we loaded the JPG2000 file successfully, but no bounds were
-     obtained from there, try to load the world file "terrain.j2w" */
-  if (success && !raster_tile_cache.bounds.IsValid() &&
-      !LoadWorldFile(raster_tile_cache, dir, world_file))
-    /* that failed: without bounds, we can't do anything; give up,
-       discard the whole file */
-    success = false;
-
-  if (!success)
+    /* if we loaded the JPG2000 file successfully, but no bounds were
+       obtained from there, try to load the world file "terrain.j2w" */
+    if (!raster_tile_cache.bounds.IsValid() &&
+        !LoadWorldFile(raster_tile_cache, dir, world_file))
+      /* that failed: without bounds, we can't do anything; give up,
+         discard the whole file */
+      throw std::runtime_error("No bounds found");
+  } catch (...) {
     raster_tile_cache.Reset();
-
-  return success;
+    throw;
+  }
 }
 
-bool
+void
 LoadTerrainOverview(struct zzip_dir *dir,
                     const char *path, const char *world_file,
                     RasterTileCache &raster_tile_cache,
@@ -304,10 +306,10 @@ LoadTerrainOverview(struct zzip_dir *dir,
   SharedMutex mutex;
 
   TerrainLoader loader(mutex, raster_tile_cache, true, all, env);
-  return loader.LoadOverview(dir, path, world_file);
+  loader.LoadOverview(dir, path, world_file);
 }
 
-inline bool
+inline void
 TerrainLoader::UpdateTiles(struct zzip_dir *dir, const char *path,
                            SignedRasterLocation p, unsigned radius)
 {
@@ -320,28 +322,27 @@ TerrainLoader::UpdateTiles(struct zzip_dir *dir, const char *path,
 
     if (!raster_tile_cache.PollTiles(p, radius))
       /* nothing to do */
-      return true;
+      return;
   }
 
-  bool success = LoadJPG2000(dir, path);
-  raster_tile_cache.FinishTileUpdate();
-  return success;
+  AtScopeExit(this) { raster_tile_cache.FinishTileUpdate(); };
+  LoadJPG2000(dir, path);
 }
 
-bool
+void
 UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
                    RasterTileCache &raster_tile_cache, SharedMutex &mutex,
                    SignedRasterLocation p, unsigned radius)
 {
   if (!raster_tile_cache.IsValid())
-    return false;
+    return;
 
   NullOperationEnvironment env;
   TerrainLoader loader(mutex, raster_tile_cache, false, true, env);
-  return loader.UpdateTiles(dir, path, p, radius);
+  loader.UpdateTiles(dir, path, p, radius);
 }
 
-bool
+void
 UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
                    RasterTileCache &raster_tile_cache, SharedMutex &mutex,
                    const RasterProjection &projection,
@@ -349,7 +350,7 @@ UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
 {
   const auto raster_location = projection.ProjectCoarse(location);
 
-  return UpdateTerrainTiles(dir, path, raster_tile_cache, mutex,
-                            raster_location,
-                            projection.DistancePixelsCoarse(radius));
+  UpdateTerrainTiles(dir, path, raster_tile_cache, mutex,
+                     raster_location,
+                     projection.DistancePixelsCoarse(radius));
 }

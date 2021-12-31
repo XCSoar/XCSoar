@@ -25,6 +25,7 @@ Copyright_License {
 #include "OverlayBitmap.hpp"
 #include "Look/MapLook.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
+#include "Topography/TopographyStore.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Weather/Rasp/RaspRenderer.hpp"
 #include "Computer/GlideComputer.hpp"
@@ -126,7 +127,7 @@ MapWindow::UpdateTerrain()
  * Handles the drawing of the moving map and is called by the DrawThread
  */
 void
-MapWindow::OnPaintBuffer(Canvas &canvas)
+MapWindow::OnPaintBuffer(Canvas &canvas) noexcept
 {
 #ifndef ENABLE_OPENGL
   unsigned render_generation = ui_generation;

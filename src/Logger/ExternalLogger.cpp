@@ -32,8 +32,8 @@
 #include "Device/RecordedFlight.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
-#include "LogFile.hpp"
 #include "UIGlobals.hpp"
+#include "Operation/Cancelled.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Job/TriStateJob.hpp"
@@ -65,20 +65,17 @@ public:
 static TriStateJobResult
 DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration,
                 const Waypoint *home)
-try {
+{
   TriStateJob<DeclareJob> job(device, declaration, home);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
   return job.GetResult();
-} catch (...) {
-  LogError(std::current_exception());
-  return TriStateJobResult::ERROR;
 }
 
 static bool
 DeviceDeclare(DeviceDescriptor &dev, const Declaration &declaration,
               const Waypoint *home)
-{
+try {
   if (dev.IsOccupied())
     return false;
 
@@ -89,12 +86,14 @@ DeviceDeclare(DeviceDescriptor &dev, const Declaration &declaration,
   if (!dev.Borrow())
     return false;
 
+  MessageOperationEnvironment env;
+  const ScopeReturnDevice return_device{dev, env};
+
   const TCHAR *caption = dev.GetDisplayName();
   if (caption == nullptr)
     caption = _("Declare task");
 
   auto result = DoDeviceDeclare(dev, declaration, home);
-  dev.Return();
 
   switch (result) {
   case TriStateJobResult::SUCCESS:
@@ -112,6 +111,13 @@ DeviceDeclare(DeviceDescriptor &dev, const Declaration &declaration,
   }
 
   gcc_unreachable();
+} catch (OperationCancelled) {
+  return false;
+} catch (...) {
+  ShowError(_("Error occured,\nTask NOT declared!"),
+            std::current_exception(),
+            dev.GetDisplayName());
+  return false;
 }
 
 void
@@ -149,14 +155,11 @@ public:
 
 static TriStateJobResult
 DoReadFlightList(DeviceDescriptor &device, RecordedFlightList &flight_list)
-try {
+{
   TriStateJob<ReadFlightListJob> job(device, flight_list);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
   return job.GetResult();
-} catch (...) {
-  LogError(std::current_exception());
-  return TriStateJobResult::ERROR;
 }
 
 class DownloadFlightJob {
@@ -177,14 +180,11 @@ public:
 static TriStateJobResult
 DoDownloadFlight(DeviceDescriptor &device,
                  const RecordedFlightInfo &flight, Path path)
-try {
+{
   TriStateJob<DownloadFlightJob> job(device, flight, path);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
   return job.GetResult();
-} catch (...) {
-  LogError(std::current_exception());
-  return TriStateJobResult::ERROR;
 }
 
 static void
@@ -223,8 +223,7 @@ GetFlightNumber(const RecordedFlightList &flight_list,
   for (auto it = flight_list.begin(), end = flight_list.end(); it != end; ++it) {
     const RecordedFlightInfo &_flight = *it;
     if (flight.date == _flight.date &&
-        (flight.start_time.GetSecondOfDay() >
-         _flight.start_time.GetSecondOfDay()))
+        flight.start_time > _flight.start_time)
       flight_number++;
   }
   return flight_number;
@@ -261,23 +260,31 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 
   // Download the list of flights that the logger contains
   RecordedFlightList flight_list;
-  switch (DoReadFlightList(device, flight_list)) {
-  case TriStateJobResult::SUCCESS:
-    break;
 
-  case TriStateJobResult::ERROR:
-    device.EnableNMEA(env);
-    ShowMessageBox(_("Failed to download flight list."),
-                _("Download flight"), MB_OK | MB_ICONERROR);
+  try {
+    switch (DoReadFlightList(device, flight_list)) {
+    case TriStateJobResult::SUCCESS:
+      break;
+
+    case TriStateJobResult::ERROR:
+      ShowMessageBox(_("Failed to download flight list."),
+                     _("Download flight"), MB_OK | MB_ICONERROR);
+      return;
+
+    case TriStateJobResult::CANCELLED:
+      return;
+    }
+  } catch (OperationCancelled) {
     return;
-
-  case TriStateJobResult::CANCELLED:
+  } catch (...) {
+    ShowError(_("Failed to download flight list."),
+              std::current_exception(),
+              _("Download flight"));
     return;
   }
 
   // The logger seems to be empty -> cancel
   if (flight_list.empty()) {
-    device.EnableNMEA(env);
     ShowMessageBox(_("Logger is empty."),
                 _("Download flight"), MB_OK | MB_ICONINFORMATION);
     return;
@@ -294,16 +301,26 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     // Download chosen IGC file into temporary file
     FileTransaction transaction(AllocatedPath::Build(logs_path,
                                                      _T("temp.igc")));
-    switch (DoDownloadFlight(device, *flight, transaction.GetTemporaryPath())) {
-    case TriStateJobResult::SUCCESS:
-      break;
 
-    case TriStateJobResult::ERROR:
-      ShowMessageBox(_("Failed to download flight."),
-                  _("Download flight"), MB_OK | MB_ICONERROR);
+    try {
+      switch (DoDownloadFlight(device, *flight, transaction.GetTemporaryPath())) {
+      case TriStateJobResult::SUCCESS:
+        break;
+
+      case TriStateJobResult::ERROR:
+        ShowMessageBox(_("Failed to download flight."),
+                       _("Download flight"), MB_OK | MB_ICONERROR);
+        continue;
+
+      case TriStateJobResult::CANCELLED:
+        continue;
+      }
+    } catch (OperationCancelled) {
       continue;
-
-    case TriStateJobResult::CANCELLED:
+    } catch (...) {
+      ShowError(_("Failed to download flight."),
+                std::current_exception(),
+                _("Download flight"));
       continue;
     }
 
@@ -331,6 +348,4 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
                     _("Download flight"), MB_YESNO | MB_ICONQUESTION) != IDYES)
       break;
   }
-
-  device.EnableNMEA(env);
 }

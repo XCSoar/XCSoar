@@ -150,8 +150,14 @@ CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
 {
   assert(time.IsPlausible());
 
-  auto T = time.GetSecondOfDay() / 3600. - 12.
-    + time_zone.AsMinutes() / 60.;
+  using Hours = std::chrono::duration<double, std::chrono::hours::period>;
+
+  const auto time_hours =
+    std::chrono::duration_cast<Hours>(time.DurationSinceMidnight());
+  const auto tz_hours =
+    std::chrono::duration_cast<Hours>(time_zone.ToDuration());
+
+  const auto T = (time_hours - Hours{12} + tz_hours).count();
   Angle t = Angle::Degrees(15) * T;
 
   return -Angle::FromXY(Location.latitude.cos() * dec.sin() -

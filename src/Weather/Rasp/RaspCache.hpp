@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WEATHER_RASP_CACHE_HPP
 #define XCSOAR_WEATHER_RASP_CACHE_HPP
 
-#include "util/Compiler.h"
+#include <memory>
 
 #include <tchar.h>
 
@@ -46,50 +46,43 @@ class RaspCache {
   unsigned time = 0;
   unsigned last_time = 0;
 
-  RasterMap *map = nullptr;
+  std::unique_ptr<RasterMap> map;
 
 public:
-  /** 
-   * Default constructor
-   */
-  RaspCache(const RaspStore &_store, unsigned _parameter)
-    :store(_store), parameter(_parameter) {}
-
-  ~RaspCache() {
-    Close();
-  }
+  RaspCache(const RaspStore &_store, unsigned _parameter) noexcept;
+  ~RaspCache() noexcept;
 
   const RaspStore &GetStore() const {
     return store;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const RasterMap *GetMap() const {
-    return map;
+    return map.get();
   }
 
   /**
    * Returns the current map's name.
    */
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetMapName() const;
 
   /**
    * Returns the human-readable name for the current RASP map, or
    * nullptr if no RASP map is enabled.
    */
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetMapLabel() const;
 
   /**
    * Returns the index of the weather map being displayed.
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetParameter() const {
     return parameter;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsInside(GeoPoint p) const;
 
   /**
@@ -100,16 +93,13 @@ public:
   /**
    * Returns the current time index.
    */
-  gcc_pure
+  [[gnu::pure]]
   BrokenTime GetTime() const;
 
   /**
    * Sets the current time index.
    */
   void SetTime(BrokenTime t);
-
-private:
-  void Close();
 };
 
 #endif

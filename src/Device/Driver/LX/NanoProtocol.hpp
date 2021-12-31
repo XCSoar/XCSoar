@@ -36,20 +36,20 @@ namespace Nano {
   /**
    * Request basic Nano information.
    */
-  static bool
+  static void
   RequestInfo(Port &port, OperationEnvironment &env)
   {
-    return PortWriteNMEA(port, "PLXVC,INFO,R", env);
+    PortWriteNMEA(port, "PLXVC,INFO,R", env);
   }
 
   /**
    * Request basic Nano information through an LXNAV V7 (firmware >=
    * 2.01).
    */
-  static bool
+  static void
   RequestForwardedInfo(Port &port, OperationEnvironment &env)
   {
-    return PortWriteNMEA(port, "PLXVC,GPSINFO,R", env);
+    PortWriteNMEA(port, "PLXVC,GPSINFO,R", env);
   }
 }
 

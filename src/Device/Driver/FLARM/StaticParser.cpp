@@ -31,7 +31,7 @@ Copyright_License {
 #include "util/StringAPI.hxx"
 
 void
-ParsePFLAE(NMEAInputLine &line, FlarmError &error, double clock)
+ParsePFLAE(NMEAInputLine &line, FlarmError &error, TimeStamp clock) noexcept
 {
   char type[2];
   line.Read(type, ARRAY_SIZE(type));
@@ -46,7 +46,8 @@ ParsePFLAE(NMEAInputLine &line, FlarmError &error, double clock)
 }
 
 void
-ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, double clock)
+ParsePFLAV(NMEAInputLine &line, FlarmVersion &version,
+           TimeStamp clock) noexcept
 {
   char type[2];
   line.Read(type, ARRAY_SIZE(type));
@@ -69,7 +70,7 @@ ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, double clock)
 }
 
 void
-ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, double clock)
+ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, TimeStamp clock) noexcept
 {
   flarm.available.Update(clock);
 
@@ -103,7 +104,7 @@ ReadBearing(NMEAInputLine &line, Angle &value_r)
 }
 
 void
-ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, double clock)
+ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock) noexcept
 {
   flarm.modified.Update(clock);
 

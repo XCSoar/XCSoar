@@ -94,6 +94,8 @@ protected:
    * the thread is busy.
    *
    * Caller must lock the mutex.
+   *
+   * Throws on error.
    */
   void Trigger();
 
@@ -101,6 +103,8 @@ protected:
    * Same as Trigger(), but automatically lock and unlock the mutex.
    *
    * Caller must not lock the mutex.
+   *
+   * Throws on error.
    */
   void LockTrigger() {
     std::lock_guard<Mutex> lock(mutex);

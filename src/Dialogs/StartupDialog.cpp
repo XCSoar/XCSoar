@@ -143,8 +143,8 @@ SelectProfileCallback(const TCHAR *caption, DataField &_df,
 {
   FileDataField &df = (FileDataField &)_df;
 
-  const auto path = SelectProfileDialog(df.GetPathFile());
-  if (path.IsNull())
+  const auto path = SelectProfileDialog(df.GetValue());
+  if (path == nullptr)
     return false;
 
   df.ForceModify(path);
@@ -187,7 +187,7 @@ bool
 StartupWidget::Save(bool &changed) noexcept
 {
   const auto &dff = (const FileDataField &)GetDataField(PROFILE);
-  if (!SelectProfile(dff.GetPathFile()))
+  if (!SelectProfile(dff.GetValue()))
     return false;
 
   changed = true;
@@ -206,7 +206,7 @@ dlgStartupShowModal()
 
   if (dff->GetNumFiles() == 1) {
     /* skip this dialog if there is only one */
-    const auto path = dff->GetPathFile();
+    const auto path = dff->GetValue();
     if (ProfileFileHasPassword(path) == TriState::FALSE &&
         SelectProfile(path)) {
       delete dff;
@@ -220,19 +220,20 @@ dlgStartupShowModal()
 
   /* preselect the most recently used profile */
   unsigned best_index = 0;
-  uint64_t best_timestamp = 0;
+  std::chrono::system_clock::time_point best_timestamp =
+    std::chrono::system_clock::time_point::min();
   unsigned length = dff->size();
 
   for (unsigned i = 0; i < length; ++i) {
     const auto path = dff->GetItem(i);
-    uint64_t timestamp = File::GetLastModification(path);
+    const auto timestamp = File::GetLastModification(path);
     if (timestamp > best_timestamp) {
       best_timestamp = timestamp;
       best_index = i;
     }
   }
 
-  dff->Set(best_index);
+  dff->SetIndex(best_index);
 
   /* show the dialog */
   const DialogLook &look = UIGlobals::GetDialogLook();

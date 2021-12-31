@@ -25,6 +25,7 @@ Copyright_License {
 #include "Android/PortBridge.hpp"
 
 #include <cassert>
+#include <stdexcept>
 
 AndroidPort::AndroidPort(PortListener *_listener, DataHandler &_handler,
                          PortBridge *_bridge)
@@ -36,19 +37,15 @@ AndroidPort::AndroidPort(PortListener *_listener, DataHandler &_handler,
   bridge->setInputListener(Java::GetEnv(), this);
 }
 
-AndroidPort::~AndroidPort()
+AndroidPort::~AndroidPort() noexcept
 {
   assert(bridge != nullptr);
 
-  BeginClose();
-
   delete bridge;
-
-  EndClose();
 }
 
 PortState
-AndroidPort::GetState() const
+AndroidPort::GetState() const noexcept
 {
   assert(bridge != nullptr);
 
@@ -64,29 +61,26 @@ AndroidPort::Drain()
 }
 
 unsigned
-AndroidPort::GetBaudrate() const
+AndroidPort::GetBaudrate() const noexcept
 {
   assert(bridge != nullptr);
 
   return bridge->getBaudRate(Java::GetEnv());
 }
 
-bool
+void
 AndroidPort::SetBaudrate(unsigned baud_rate)
 {
   assert(bridge != nullptr);
 
-  return bridge->setBaudRate(Java::GetEnv(), baud_rate);
+  if (!bridge->setBaudRate(Java::GetEnv(), baud_rate))
+    throw std::runtime_error{"Failed to set baud rate"};
 }
 
-size_t
-AndroidPort::Write(const void *data, size_t length)
+std::size_t
+AndroidPort::Write(const void *data, std::size_t length)
 {
   assert(bridge != nullptr);
 
-  JNIEnv *env = Java::GetEnv();
-  int nbytes = bridge->write(env, data, length);
-  return nbytes > 0
-    ? (size_t)nbytes
-    : 0;
+  return bridge->write(Java::GetEnv(), data, length);
 }

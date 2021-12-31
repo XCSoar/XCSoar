@@ -71,9 +71,9 @@ RenderTaskLegs(ChartRenderer &chart,
     if (!IsTaskLegVisible(tp))
       continue;
 
-    auto x = tp.GetEnteredState().time - calculated.flight.takeoff_time;
-    if (x >= 0) {
-      x /= 3600;
+    auto dt = tp.GetEnteredState().time - calculated.flight.takeoff_time;
+    if (dt.count() >= 0) {
+      const double x = dt / std::chrono::hours{1};
       if (y>=0) {
         if (i==0) {
           chart.DrawBlankRectangle(chart.GetXMin(), chart.GetYMin(),

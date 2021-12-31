@@ -27,12 +27,12 @@ Copyright_License {
 #include "ConditionMonitor.hpp"
 
 class ConditionMonitorFinalGlide final : public ConditionMonitor {
-  double tad;
-  double last_tad;
+  double tad = 0;
+  double last_tad = 0;
 
 public:
-  constexpr ConditionMonitorFinalGlide()
-    :ConditionMonitor(60 * 5, 1), tad(0), last_tad(0) {}
+  constexpr ConditionMonitorFinalGlide() noexcept
+    :ConditionMonitor(std::chrono::minutes{5}, std::chrono::seconds{1}) {}
 
 protected:
   bool CheckCondition(const NMEAInfo &basic,

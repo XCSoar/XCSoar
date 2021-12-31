@@ -57,42 +57,25 @@ DataFieldBoolean::GetAsString() const noexcept
 }
 
 void
-DataFieldBoolean::Set(bool Value) noexcept
-{
-  mValue = Value;
-}
-
-void
-DataFieldBoolean::SetAsBoolean(bool Value) noexcept
-{
-  if (mValue != Value) {
-    mValue = Value;
-    Modified();
-  }
-}
-
-void
 DataFieldBoolean::SetAsInteger(int Value) noexcept
 {
-  if (GetAsInteger() != Value) {
-    SetAsBoolean(!(Value == 0));
-  }
+  ModifyValue(Value != 0);
 }
 
 void
 DataFieldBoolean::SetAsString(const TCHAR *Value) noexcept
 {
-  SetAsBoolean(ParseString(Value));
+  ModifyValue(ParseString(Value));
 }
 
 void
 DataFieldBoolean::Inc() noexcept
 {
-  SetAsBoolean(true);
+  ModifyValue(true);
 }
 
 void
 DataFieldBoolean::Dec() noexcept
 {
-  SetAsBoolean(false);
+  ModifyValue(false);
 }

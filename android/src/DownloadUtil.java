@@ -23,6 +23,7 @@ Copyright_License {
 
 package org.xcsoar;
 
+import java.io.Closeable;
 import java.io.File;
 import android.app.DownloadManager;
 import android.content.Context;
@@ -31,46 +32,95 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 
-class DownloadUtil extends BroadcastReceiver {
-  private static DownloadUtil instance;
+/**
+ * A helper class for using #DownloadManager from C++ via JNI.  It
+ * provides a simpler API, only exposing the features used by XCSoar.
+ */
+final class DownloadUtil extends BroadcastReceiver implements Closeable {
+  /**
+   * A native pointer to the C++ #AndroidDownloadManager instance.
+   */
+  final long ptr;
 
-  static void Initialise(Context context) {
-    instance = new DownloadUtil();
-    context.registerReceiver(instance,
+  final Context context;
+  final DownloadManager dm;
+
+  final File downloadDirectory;
+
+  DownloadUtil(long ptr, Context context) {
+    this.ptr = ptr;
+    this.context = context;
+
+    dm = (DownloadManager)context.getSystemService(Context.DOWNLOAD_SERVICE);
+    if (dm == null)
+      /* can this really happen? */
+      throw new IllegalStateException("No DownloadManager");
+
+    context.registerReceiver(this,
                              new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+    /* let the DownloadManager save to the app-specific directory,
+       which requires no special permissions; later, we can use
+       WRITE_EXTERNAL_STORAGE to move the file into XCSoarData */
+    downloadDirectory = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
   }
 
-  static void Deinitialise(Context context) {
-    if (instance != null) {
+  @Override
+  public void close() {
       try {
-        context.unregisterReceiver(instance);
+        context.unregisterReceiver(this);
       } catch (IllegalArgumentException e) {
         /* according to Google Play crash reports, this exception gets
            thrown spuriously with an empty message, and I have no idea
            how this can happen and how to dig deeper; to avoid
            spamming the crash reports, let's just ignore it */
-      } finally {
-        instance = null;
       }
-    }
   }
 
   /**
    * Check if this local URI is within the XCSoarData directory, and
    * returns the absolute path.  Returns null on mismatch.
    */
-  static String matchPath(String uri) {
+  String matchPath(Uri uri) {
     /* XXX this check is a kludge to identify downloads started
        by XCSoar */
-    return uri != null && uri.startsWith("file:///") &&
-      uri.indexOf("/XCSoarData/") > 0
-      /* strip the "file://" */
-      ? uri.substring(7)
+
+    if (!uri.getScheme().equals("file"))
+      return null;
+
+    final String path = uri.getPath();
+    final File file = new File(path);
+    final File parent = file.getParentFile();
+    if (parent == null || !parent.equals(downloadDirectory))
+      /* not in the download directory - not for us */
+      return null;
+
+    return path;
+  }
+
+  String matchPath(String uri) {
+    return uri != null
+      ? matchPath(Uri.parse(uri))
       : null;
   }
 
-  static void enumerate(DownloadManager dm, long handler) {
+  static String toFinalPath(String tmpPath) {
+    final File file = new File(tmpPath);
+    final String name = file.getName();
+    return Uri.decode(name);
+  }
+
+  File toTmpFile(String finalPath) {
+    return new File(downloadDirectory, Uri.encode(finalPath));
+  }
+
+  String toTmpPath(String finalPath) {
+    return toTmpFile(finalPath).toString();
+  }
+
+  void enumerate(long handler) {
     DownloadManager.Query query = new DownloadManager.Query();
     query.setFilterByStatus(DownloadManager.STATUS_PAUSED |
                             DownloadManager.STATUS_PENDING |
@@ -102,14 +152,14 @@ class DownloadUtil extends BroadcastReceiver {
         ? c.getLong(columnPosition)
         : -1;
 
-      onDownloadAdded(handler, path, size, position);
+      onDownloadAdded(handler, toFinalPath(path), size, position);
     } while (c.moveToNext());
   }
 
   /**
    * @param path the absolute destination path
    */
-  static long enqueue(DownloadManager dm, String uri, String path) {
+  long enqueue(String uri, String finalPath) {
     DownloadManager.Request request =
       new DownloadManager.Request(Uri.parse(uri));
 
@@ -119,7 +169,7 @@ class DownloadUtil extends BroadcastReceiver {
        storage.  Here, we must use whatever was returned by
        FindDataPath() in LocalPath.cpp. */
     //request.setDestinationInExternalPublicDir("XCSoarData", path);
-    request.setDestinationUri(Uri.fromFile(new File(path)));
+    request.setDestinationUri(Uri.fromFile(toTmpFile(finalPath)));
 
     request.setAllowedOverRoaming(false);
     request.setShowRunningNotification(true);
@@ -127,10 +177,10 @@ class DownloadUtil extends BroadcastReceiver {
   }
 
   /**
-   * Find a download with the specified name.  Returns -1 if none was
+   * Find a download with the specified URI.  Returns -1 if none was
    * found.
    */
-  static long findPath(DownloadManager dm, String path) {
+  long findUri(String _uri) {
     DownloadManager.Query query = new DownloadManager.Query();
     query.setFilterByStatus(DownloadManager.STATUS_PAUSED |
                             DownloadManager.STATUS_PENDING |
@@ -147,26 +197,27 @@ class DownloadUtil extends BroadcastReceiver {
 
     do {
       final String uri = c.getString(columnLocalURI);
-      if (uri != null && uri.endsWith(path))
+      if (uri != null && uri.equals(_uri))
         return c.getLong(columnID);
     } while (c.moveToNext());
 
     return -1;
   }
 
-  static void cancel(DownloadManager dm, String path) {
-    long id = findPath(dm, path);
+  void cancel(String finalPath) {
+    long id = findUri(Uri.fromFile(new File(toTmpPath(finalPath))).toString());
     if (id >= 0) {
       dm.remove(id);
-      onDownloadComplete(path, false);
+      onDownloadComplete(ptr, toTmpPath(finalPath), finalPath, false);
     }
   }
 
-  static native void onDownloadAdded(long handler, String path,
-                                     long size, long position);
-  static native void onDownloadComplete(String path, boolean success);
+  native void onDownloadAdded(long handler, String path,
+                              long size, long position);
+  native void onDownloadComplete(long ptr, String tmpPath, String finalPath,
+                                 boolean success);
 
-  static void checkComplete(DownloadManager dm) {
+  void checkComplete() {
     DownloadManager.Query query = new DownloadManager.Query();
     query.setFilterByStatus(DownloadManager.STATUS_FAILED |
                             DownloadManager.STATUS_SUCCESSFUL);
@@ -195,13 +246,13 @@ class DownloadUtil extends BroadcastReceiver {
 
     do {
       final String uri = c.getString(columnLocalURI);
-      final String path = matchPath(uri);
-      if (path == null)
+      final String tmpPath = matchPath(uri);
+      if (tmpPath == null)
         continue;
 
       final int status = c.getInt(columnStatus);
       final boolean success = status == DownloadManager.STATUS_SUCCESSFUL;
-      onDownloadComplete(path, success);
+      onDownloadComplete(ptr, tmpPath, toFinalPath(tmpPath), success);
 
       final long id = c.getLong(columnId);
       dm.remove(id);
@@ -210,9 +261,7 @@ class DownloadUtil extends BroadcastReceiver {
 
   @Override public void onReceive(Context context, Intent intent) {
     if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction())) {
-      final DownloadManager dm = (DownloadManager)
-        context.getSystemService(Context.DOWNLOAD_SERVICE);
-      checkComplete(dm);
+      checkComplete();
     }
   }
 }

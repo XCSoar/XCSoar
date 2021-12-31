@@ -22,6 +22,7 @@
 
 #include "TaskLeg.hpp"
 #include "Task/Ordered/Points/OrderedTaskPoint.hpp"
+#include "util/Compiler.h"
 
 #include <cassert>
 

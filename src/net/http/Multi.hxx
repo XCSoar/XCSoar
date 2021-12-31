@@ -32,16 +32,14 @@
 
 #include <curl/curl.h>
 
-#include <map>
 #include <stdexcept>
+#include <utility>
 
 /**
  * An OO wrapper for a "CURLM*" (a libCURL "multi" handle).
  */
 class CurlMulti {
 	CURLM *handle = nullptr;
-
-	std::map<const CURL *, CURLcode> results;
 
 public:
 	/**
@@ -64,7 +62,10 @@ public:
 	CurlMulti(CurlMulti &&src) noexcept
 		:handle(std::exchange(src.handle, nullptr)) {}
 
-	~CurlMulti();
+	~CurlMulti() noexcept {
+		if (handle != nullptr)
+			curl_multi_cleanup(handle);
+	}
 
 	CurlMulti &operator=(CurlMulti &&src) noexcept {
 		std::swap(handle, src.handle);
@@ -87,12 +88,16 @@ public:
 	}
 
 	void Add(CURL *easy) {
-		CURLMcode code = curl_multi_add_handle(handle, easy);
+		auto code = curl_multi_add_handle(handle, easy);
 		if (code != CURLM_OK)
 			throw std::runtime_error(curl_multi_strerror(code));
 	}
 
-	void Remove(CURL *easy);
+	void Remove(CURL *easy) {
+		auto code = curl_multi_remove_handle(handle, easy);
+		if (code != CURLM_OK)
+			throw std::runtime_error(curl_multi_strerror(code));
+	}
 
 	void FdSet(fd_set *read_fd_set, fd_set *write_fd_set, fd_set *exc_fd_set,
 		   int *max_fd) const {
@@ -122,9 +127,6 @@ public:
 			throw std::runtime_error(curl_multi_strerror(code));
 		return running_handles;
 	}
-
-	[[gnu::pure]]
-	CURLcode InfoRead(const CURL *easy);
 };
 
 #endif

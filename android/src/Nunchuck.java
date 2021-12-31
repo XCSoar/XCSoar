@@ -32,6 +32,8 @@
 
 package org.xcsoar;
 
+import java.io.IOException;
+
 import android.util.Log;
 import ioio.lib.api.IOIO;
 import ioio.lib.api.TwiMaster;
@@ -46,14 +48,6 @@ import ioio.lib.api.exception.ConnectionLostException;
  *
  */
 final class Nunchuck extends Thread {
-  interface Listener {
-    /**
-     * @param all sorts of params
-     */
-    void onNunchuckValues(int joy_x, int joy_y, int accel_x, int accel_y, int accel_z, int switches);
-    void onNunchuckError();
-  };
-
   private static final String TAG = "XCSoar";
 
   private static final byte WII_NUN_ADDR = 0x52;
@@ -73,13 +67,14 @@ final class Nunchuck extends Thread {
   private final DigitalInput h_pin23;
   private final DigitalInput h_pin24;
 
-  private final Listener listener;
+  private final SensorListener listener;
 
   // calibration data
   private int joy_x_0, joy_y_0, joy_x_sens, joy_y_sens;
   private int acc_x_0, acc_y_0, acc_z_0, acc_x_sens, acc_y_sens, acc_z_sens;
 
-  public Nunchuck(IOIO ioio, int twiNum, int sample_rate, Listener _listener)
+  public Nunchuck(IOIO ioio, int twiNum, int sample_rate,
+                  SensorListener _listener)
     throws ConnectionLostException {
     super("NUNCHUCK");
 
@@ -110,24 +105,30 @@ final class Nunchuck extends Thread {
   }
 
   private int nunchuckDecodeByte (byte x) {
-    return (int)((x ^ 0x17) + 0x17) & 0xff;
+    return (((int)x ^ 0x17) + 0x17) & 0xff;
   }
 
-  private boolean setup()
-    throws ConnectionLostException, InterruptedException {
+  private void setup()
+    throws ConnectionLostException, IOException, InterruptedException {
 
     byte[] cal = new byte [16];
     int[] u_cal = new int [16];
 
     // reset
-    if (!h_twi.writeRead(WII_NUN_ADDR, false, new byte[]{0x40, 0x00}, 2, dummy, 0)) return false;
+    if (!h_twi.writeRead(WII_NUN_ADDR, false, new byte[]{0x40, 0x00}, 2, dummy, 0))
+      throw new IOException("Nunchuk not found");
+
     sleep(50);
 
     // read calibration data
-    if (!h_twi.writeRead(WII_NUN_ADDR, false, new byte[]{REG_CAL}, 1, dummy, 0)) return false;
+    if (!h_twi.writeRead(WII_NUN_ADDR, false, new byte[]{REG_CAL}, 1, dummy, 0))
+      throw new IOException("Nunchuk not found");
+
     sleep(50);
 
-    if (!h_twi.writeRead(WII_NUN_ADDR, false, dummy, 0, cal, cal.length)) return false;
+    if (!h_twi.writeRead(WII_NUN_ADDR, false, dummy, 0, cal, cal.length))
+      throw new IOException("Nunchuk not found");
+
     sleep(50);
 
     for (int i=0; i<cal.length; i++) {
@@ -150,8 +151,6 @@ final class Nunchuck extends Thread {
     acc_x_sens = 1000*65536 / (acc_x_1 - acc_x_0);	// mG per bit
     acc_y_sens = 1000*65536 / (acc_y_1 - acc_y_0);
     acc_z_sens = 1000*65536 / (acc_z_1 - acc_z_0);
-
-    return true;
   }
 
   final static byte get_data[] = new byte[] { REG_DATA };
@@ -186,25 +185,21 @@ final class Nunchuck extends Thread {
     if (h_pin23 != null) if (h_pin23.read()) switches += 0x40;
     if (h_pin24 != null) if (h_pin24.read()) switches += 0x80;
 
-    listener.onNunchuckValues(joy_x, joy_y, acc_x, acc_y, acc_z, switches);
+    listener.onNunchukValues(joy_x, joy_y, acc_x, acc_y, acc_z, switches);
 
     sleep(sleeptime);
   }
 
   @Override public void run() {
     try {
-      if (!setup())
-        return;
+      setup();
 
       while (true)
         loop();
-    } catch (ConnectionLostException e) {
-      Log.d(TAG, "Nunchuck.run() failed", e);
-    } catch (IllegalStateException e) {
-      Log.d(TAG, "Nunchuck.run() failed", e);
     } catch (InterruptedException e) {
-    } finally {
-      listener.onNunchuckError();
+    } catch (Exception e) {
+      listener.onSensorError(e.getMessage());
+      // TODO make GlueNunchuck.getState() return STATE_FAILED
     }
   }
 }

@@ -27,6 +27,7 @@
 #include "GlideSolvers/GlideResult.hpp"
 #include "DistanceStat.hpp"
 #include "TaskVario.hpp"
+#include "time/Stamp.hpp"
 
 #include <type_traits>
 
@@ -59,24 +60,24 @@ struct ElementStat
    GeoVector next_leg_vector;
 
   /** Time (s) this element was started */
-  double time_started;
+  TimeStamp time_started;
   /** Time (s) since element was started */
-  double time_elapsed;
+  FloatDuration time_elapsed;
 
   /**
    * Time (s) remaining to element completion from now, including the
    * time to reach the start point (if task was not yet started).
    */
-  double time_remaining_now;
+  FloatDuration time_remaining_now;
 
   /**
    * Time (s) remaining to element completion, counted from the start
    * of the task.
    */
-  double time_remaining_start;
+  FloatDuration time_remaining_start;
 
   /** Time (s) of overall element */
-  double time_planned;
+  FloatDuration time_planned;
 
   /** Gradient to element completion */
   double gradient;
@@ -115,7 +116,8 @@ struct ElementStat
    * @param ts Start time of this element (s)
    * @param time monotonic time of day in seconds or -1 if unknown
    */
-  void SetTimes(double until_start_s, double ts, double time);
+  void SetTimes(FloatDuration until_start_s,
+                TimeStamp ts, TimeStamp time) noexcept;
 
   /**
    * Determine whether the task (or subtask) is able to be finished

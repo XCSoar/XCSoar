@@ -27,9 +27,9 @@
 void
 AirspaceWarningConfig::SetDefaults()
 {
-  warning_time = 30;
+  warning_time = std::chrono::seconds{30};
   repetitive_sound = false;
-  acknowledgement_time = 30;
+  acknowledgement_time = std::chrono::seconds{30};
   altitude_warning_margin = 100;
 
   std::fill_n(class_warnings, unsigned(AIRSPACECLASSCOUNT), true);

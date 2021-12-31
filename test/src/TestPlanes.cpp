@@ -58,6 +58,7 @@ TestReader()
   ok1(plane.dump_time == 90);
   ok1(equals(plane.max_speed, 41.666));
   ok1(equals(plane.wing_area, 9.8));
+  ok1(equals(plane.weglide_glider_type, 261));
 }
 
 static void
@@ -81,6 +82,7 @@ TestWriter()
   plane.dump_time = 90;
   plane.max_speed = 41.666;
   plane.wing_area = 9.8;
+  plane.weglide_glider_type = 160;
 
   PlaneGlue::WriteFile(plane, Path(_T("output/D-4449.xcp")));
 
@@ -90,6 +92,7 @@ TestWriter()
   bool found1 = false, found2 = false, found3 = false, found4 = false;
   bool found5 = false, found6 = false, found7 = false, found8 = false;
   bool found9 = false, found10 = false, found11 = false, found12 = false;
+  bool found13 = false;
 
   TCHAR *line;
   while ((line = reader.ReadLine()) != NULL) {
@@ -117,11 +120,13 @@ TestWriter()
       found11 = true;
     if (StringIsEqual(line, _T("WingArea=\"9.800000\"")))
       found12 = true;
+    if (StringIsEqual(line, _T("WeGlideAircraftType=\"160\"")))
+      found13 = true;
 
     count++;
   }
 
-  ok1(count == 12);
+  ok1(count == 13);
   ok1(found1);
   ok1(found2);
   ok1(found3);
@@ -134,11 +139,12 @@ TestWriter()
   ok1(found10);
   ok1(found11);
   ok1(found12);
+  ok1(found13);
 }
 
 int main(int argc, char **argv)
 try {
-  plan_tests(30);
+  plan_tests(32);
 
   TestReader();
   TestWriter();

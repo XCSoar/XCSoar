@@ -32,10 +32,13 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 
+using namespace std::chrono;
+
 enum Controls {
   TASK_TYPE,
   MIN_TIME,
   START_REQUIRES_ARM,
+  START_SCORE_EXIT,
   START_OPEN_TIME,
   START_CLOSE_TIME,
   START_MAX_SPEED,
@@ -43,6 +46,8 @@ enum Controls {
   START_HEIGHT_REF,
   FINISH_MIN_HEIGHT,
   FINISH_HEIGHT_REF,
+  PEV_START_WAIT_TIME,
+  PEV_START_WINDOW,
   FAI_FINISH_HEIGHT,
 };
 
@@ -65,9 +70,10 @@ TaskPropertiesPanel::RefreshView()
   bool fai_start_finish = p.finish_constraints.fai_finish;
 
   SetRowVisible(MIN_TIME, aat_types);
-  LoadValueTime(MIN_TIME, (int)p.aat_min_time);
+  LoadValueDuration(MIN_TIME, p.aat_min_time);
 
   LoadValue(START_REQUIRES_ARM, p.start_constraints.require_arm);
+  LoadValue(START_SCORE_EXIT, p.start_constraints.score_exit);
 
   LoadValue(START_OPEN_TIME, p.start_constraints.open_time_span.GetStart());
   LoadValue(START_CLOSE_TIME, p.start_constraints.open_time_span.GetEnd());
@@ -95,6 +101,13 @@ TaskPropertiesPanel::RefreshView()
 
   LoadValueEnum(TASK_TYPE, ftype);
 
+  SetRowVisible(PEV_START_WAIT_TIME, !fai_start_finish);
+  LoadValueDuration(PEV_START_WAIT_TIME,
+                    p.start_constraints.pev_start_wait_time);
+  SetRowVisible(PEV_START_WINDOW, !fai_start_finish);
+  LoadValueDuration(PEV_START_WINDOW,
+                    p.start_constraints.pev_start_window);
+
   dialog.InvalidateTaskView();
 
   // aat_min_time
@@ -110,14 +123,12 @@ TaskPropertiesPanel::ReadValues()
   TaskFactoryType newtype = ordered_task->GetFactoryType();
   changed |= SaveValueEnum(TASK_TYPE, newtype);
 
-  int min_time = GetValueInteger(MIN_TIME);
-  if (min_time != (int)p.aat_min_time) {
-    p.aat_min_time = min_time;
-    changed = true;
-  }
+  changed |= SaveValue(MIN_TIME, p.aat_min_time);
 
   if (SaveValue(START_REQUIRES_ARM, p.start_constraints.require_arm))
     changed = true;
+
+  changed |= SaveValue(START_SCORE_EXIT, p.start_constraints.score_exit);
 
   RoughTime new_open = p.start_constraints.open_time_span.GetStart();
   RoughTime new_close = p.start_constraints.open_time_span.GetEnd();
@@ -154,6 +165,11 @@ TaskPropertiesPanel::ReadValues()
   changed |= SaveValueEnum(FINISH_HEIGHT_REF,
                            p.finish_constraints.min_height_ref);
 
+  changed |= SaveValue(PEV_START_WAIT_TIME,
+                       p.start_constraints.pev_start_wait_time);
+  changed |= SaveValue(PEV_START_WINDOW,
+                       p.start_constraints.pev_start_window);
+
   if (changed)
     ordered_task->SetOrderedTaskSettings(p);
 
@@ -164,7 +180,7 @@ void
 TaskPropertiesPanel::OnFAIFinishHeightChange(DataFieldBoolean &df)
 {
   OrderedTaskSettings p = ordered_task->GetOrderedTaskSettings();
-  bool newvalue = df.GetAsBoolean();
+  bool newvalue = df.GetValue();
   if (newvalue != p.finish_constraints.fai_finish) {
     p.finish_constraints.fai_finish = p.start_constraints.fai_finish
       = newvalue;
@@ -210,16 +226,18 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent,
                      (unsigned)factory_types[i],
                      OrderedTaskFactoryDescription(factory_types[i]));
     if (factory_types[i] == ordered_task->GetFactoryType())
-      dfe->Set((unsigned)factory_types[i]);
+      dfe->SetValue(factory_types[i]);
   }
   Add(_("Task type"), _("Sets the behaviour for the current task."), dfe);
 
-  AddTime(_("AAT min. time"), _("Minimum AAT task time in minutes."),
-          0, 36000, 60, 180);
+  AddDuration(_("AAT min. time"), _("Minimum AAT task time in minutes."),
+              {}, hours{10}, minutes{1}, minutes{3});
 
   AddBoolean(_("Arm start manually"),
              _("Configure whether the start must be armed manually or automatically."),
              false);
+
+  AddBoolean(_("Score start exit"), nullptr, false);
 
   const RoughTimeDelta time_zone =
     CommonInterface::GetComputerSettings().utc_offset;
@@ -258,6 +276,15 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent,
   AddEnum(_("Finish height ref."),
           _("Reference used for finish min height rule."),
           altitude_reference_list);
+
+  AddDuration(_("PEV start wait time"),
+              _("Wait time in minutes after Pilot Event and before start gate opens. "
+                "0 means start opens immediately."),
+              {}, minutes{30}, minutes{1}, {});
+  AddDuration(_("PEV start window"),
+              _("Number of minutes start remains open after Pilot Event and PEV wait time."
+                "0 means start will never close after it opens."),
+              {}, minutes{30}, minutes{1}, {});
 
   AddBoolean(_("FAI start / finish rules"),
              _("If enabled, has no max start height or max start speed and requires the minimum height above ground for finish to be greater than 1000m below the start height."),

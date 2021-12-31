@@ -42,18 +42,46 @@ class EGLUtil {
       : defaultValue;
   }
 
+  static int attribDistance(EGL10 egl, EGLDisplay display, EGLConfig config,
+                            int attribute, int want) {
+    int value = getConfigAttrib(egl, display, config, attribute, 0);
+    int distance = Math.abs(value - want);
+    if (want > 0 && value == 0)
+      /* big penalty if this attribute if zero, but XCSoar prefers it
+         to be non-zero */
+      distance += 100;
+    else if (want == 0 && value > 0)
+      /* small penalty if this attribute is non-zero, but XCSoar
+         prefers it to be zero */
+      distance += 10;
+    return distance;
+  }
+
   static int configDistance(EGL10 egl, EGLDisplay display, EGLConfig config,
                             int want_r, int want_g, int want_b, int want_a,
                             int want_depth, int want_stencil) {
-      int r = getConfigAttrib(egl, display, config, EGL10.EGL_RED_SIZE, 0);
-      int g = getConfigAttrib(egl, display, config, EGL10.EGL_GREEN_SIZE, 0);
-      int b = getConfigAttrib(egl, display, config, EGL10.EGL_BLUE_SIZE, 0);
-      int a = getConfigAttrib(egl, display, config, EGL10.EGL_ALPHA_SIZE, 0);
-      int d = getConfigAttrib(egl, display, config, EGL10.EGL_DEPTH_SIZE, 0);
-      int s = getConfigAttrib(egl, display, config, EGL10.EGL_STENCIL_SIZE, 0);
-      return Math.abs(r - want_r) + Math.abs(g - want_g) +
-        Math.abs(b - want_b) + Math.abs(a - want_a) +
-        Math.abs(d - want_depth) + Math.abs(s - want_stencil);
+    int distance = 0;
+
+    int caveat = getConfigAttrib(egl, display, config,
+                                 EGL10.EGL_CONFIG_CAVEAT, EGL10.EGL_NONE);
+    if (caveat != EGL10.EGL_NONE)
+      /* large penalty for unaccelerated software renderer configs */
+      distance += 1000;
+
+    int r = attribDistance(egl, display, config,
+                           EGL10.EGL_RED_SIZE, want_r);
+    int g = attribDistance(egl, display, config,
+                           EGL10.EGL_GREEN_SIZE, want_g);
+    int b = attribDistance(egl, display, config,
+                           EGL10.EGL_BLUE_SIZE, want_b);
+    int a = attribDistance(egl, display, config,
+                           EGL10.EGL_ALPHA_SIZE, want_a);
+    int d = attribDistance(egl, display, config,
+                           EGL10.EGL_DEPTH_SIZE, want_depth);
+    int s = attribDistance(egl, display, config,
+                           EGL10.EGL_STENCIL_SIZE, want_stencil);
+
+    return distance + r + g + b + a + d + s;
   }
 
   static EGLConfig findClosestConfig(EGL10 egl, EGLDisplay display,
@@ -81,12 +109,24 @@ class EGLUtil {
    * debug log messages).
    */
   static String toString(EGL10 egl, EGLDisplay display, EGLConfig config) {
-    return "{rgba=" + getConfigAttrib(egl, display, config, EGL10.EGL_RED_SIZE, 0) +
-      "/" + getConfigAttrib(egl, display, config, EGL10.EGL_GREEN_SIZE, 0) +
-      "/" + getConfigAttrib(egl, display, config, EGL10.EGL_BLUE_SIZE, 0) +
-      "/" + getConfigAttrib(egl, display, config, EGL10.EGL_ALPHA_SIZE, 0) +
-      "; depth=" + getConfigAttrib(egl, display, config, EGL10.EGL_DEPTH_SIZE, 0) +
-      "; stencil=" + getConfigAttrib(egl, display, config, EGL10.EGL_STENCIL_SIZE, 0) +
-      "}";
+    String s = "{";
+
+    int luminance = getConfigAttrib(egl, display, config,
+                                    EGL10.EGL_LUMINANCE_SIZE, 0);
+    if (luminance > 0)
+      s += "la=" + luminance;
+    else
+      s += "rgba=" + getConfigAttrib(egl, display, config, EGL10.EGL_RED_SIZE, 0) +
+        "/" + getConfigAttrib(egl, display, config, EGL10.EGL_GREEN_SIZE, 0) +
+        "/" + getConfigAttrib(egl, display, config, EGL10.EGL_BLUE_SIZE, 0);
+
+    s += "/" + getConfigAttrib(egl, display, config, EGL10.EGL_ALPHA_SIZE, 0);
+
+    s += "; depth=" + getConfigAttrib(egl, display, config, EGL10.EGL_DEPTH_SIZE, 0) +
+      "; stencil=" + getConfigAttrib(egl, display, config, EGL10.EGL_STENCIL_SIZE, 0);
+
+    s += "}";
+
+    return s;
   }
 }

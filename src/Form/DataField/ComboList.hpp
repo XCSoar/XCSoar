@@ -63,10 +63,8 @@ private:
 public:
   ComboList() = default;
 
-  ComboList(ComboList &&other) = default;
-
-  ComboList(const ComboList &other) = delete;
-  ComboList &operator=(const ComboList &other) = delete;
+  ComboList(ComboList &&) = default;
+  ComboList &operator=(ComboList &&) = default;
 
   bool empty() const noexcept {
     return items.empty();
@@ -78,6 +76,14 @@ public:
 
   const Item &operator[](unsigned i) const noexcept {
     return items[i];
+  }
+
+  int Find(int int_value) const noexcept {
+    for (std::size_t i = 0; i < items.size(); ++i)
+      if (items[i].int_value == int_value)
+        return i;
+
+    return -1;
   }
 
   void Clear() noexcept {

@@ -100,7 +100,7 @@ ChartRenderer::Begin() noexcept
 
     rc_chart.left += std::max(size.width + Layout::GetTextPadding() * 2,
                               Layout::VptScale(30));
-    y_label_bottom = rc.top - size.height - Layout::GetTextPadding() * 2;
+    y_label_bottom = rc.top + size.height + Layout::GetTextPadding() * 2;
   }
 
   if (!x_label.empty() || !y_label.empty())
@@ -481,9 +481,9 @@ ChartRenderer::FormatTicText(const double val, const double step,
   BasicStringBuffer<TCHAR, 32> buffer;
 
   if (units == UnitFormat::TIME) {
-    int hh = (int)(val);
-    int mm = (int)((val-hh)*60);
-    StringFormat(buffer.data(), buffer.capacity(), _T("%02d:%02d"), hh, mm);
+    const unsigned total_minutes(val * 60);
+    StringFormat(buffer.data(), buffer.capacity(), _T("%u:%02u"),
+                 total_minutes / 60, total_minutes % 60);
   } else {
     if (step < 1) {
       StringFormat(buffer.data(), buffer.capacity(), _T("%.1f"), val);
@@ -524,38 +524,45 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step,
 
   auto start = (int)(x.min / tic_step) * tic_step;
 
+  const double small_tic_step = unit_format == UnitFormat::TIME && tic_step <= 1
+    /* a small tick every 10 minutes */
+    ? 1. / 6.
+    : tic_step / 5;
+
   for (auto xval = start; xval <= x.max; xval += tic_step) {
-    int xmin = ScreenX(xval);
+    const int xmin = ScreenX(xval);
+    if (xmin < rc_chart.left || xmin > rc.right)
+      continue;
 
-    for (auto xmval = xval; xmval < xval+tic_step; xmval+= tic_step/5) {
-      const auto xmmin = ScreenX(xmval);
-      line[0].x = line[1].x = line[2].x = line[3].x = xmmin;
-      if (xmmin >= rc_chart.left && xmmin <= rc.right) {
-        canvas.Select(look.GetPen(ChartLook::STYLE_GRIDMINOR));
-        canvas.DrawLine(line[0], line[2]);
-        canvas.DrawLine(line[1], line[3]);
+    line[0].x = line[1].x = line[2].x = line[3].x = xmin;
 
-        if (xmval == xval) {
-          if (xval == 0) {
-            canvas.Select(look.GetPen(ChartLook::STYLE_GRIDZERO));
-          } else {
-            canvas.Select(look.GetPen(ChartLook::STYLE_GRID));
-          }
-          canvas.DrawLine(line[0], line[1]);
+    canvas.Select(look.GetPen(xval == 0
+                              ? ChartLook::STYLE_GRIDZERO
+                              : ChartLook::STYLE_GRID));
+    canvas.DrawLine(line[0], line[1]);
 
-          if (unit_format != UnitFormat::NONE) {
-            const auto unit_text = FormatTicText(xval * unit_step / tic_step,
-                                                 unit_step, unit_format);
-            const auto w = canvas.CalcTextSize(unit_text.c_str()).width;
-            xmin -= w/2;
-            if ((xmin >= next_text) && ((int)(xmin + Layout::VptScale(30)) < x_label_left)) {
-              canvas.DrawText({xmin, y}, unit_text.c_str());
-              next_text = xmin + w + Layout::GetTextPadding();
-            }
-          }
-        }
+    if (unit_format != UnitFormat::NONE) {
+      const auto unit_text = FormatTicText(xval * unit_step / tic_step,
+                                           unit_step, unit_format);
+      const auto w = canvas.CalcTextWidth(unit_text.c_str());
+      const int label_x = xmin - w / 2;
+      if (label_x >= next_text &&
+          int(label_x + Layout::VptScale(30)) < x_label_left) {
+        canvas.DrawText({label_x, y}, unit_text.c_str());
+        next_text = label_x + w + Layout::GetTextPadding();
       }
     }
+  }
+
+  for (auto xval = start; xval <= x.max + tic_step; xval += small_tic_step) {
+    const auto xmin = ScreenX(xval);
+    if (xmin < rc_chart.left || xmin > rc.right)
+      continue;
+
+    line[0].x = line[1].x = line[2].x = line[3].x = xmin;
+    canvas.Select(look.GetPen(ChartLook::STYLE_GRIDMINOR));
+    canvas.DrawLine(line[0], line[2]);
+    canvas.DrawLine(line[1], line[3]);
   }
 }
 
@@ -585,35 +592,38 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step,
 
   auto start = (int)(y.min / tic_step) * tic_step;
 
+  const double small_tic_step = tic_step / 5;
+
   for (auto yval = start; yval <= y.max; yval += tic_step) {
     const int ymin = ScreenY(yval);
+    line[0].y = line[1].y = line[2].y = line[3].y = ymin;
+    if (ymin < rc_chart.top || ymin > rc.bottom)
+      continue;
 
-    for (auto ymval = yval; ymval < yval+tic_step; ymval+= tic_step/5) {
-      const auto ymmin = ScreenY(ymval);
-      line[0].y = line[1].y = line[2].y = line[3].y = ymmin;
-      if (ymmin >= rc_chart.top && ymmin <= rc.bottom) {
-        canvas.Select(look.GetPen(ChartLook::STYLE_GRIDMINOR));
-        canvas.DrawLine(line[0], line[2]);
-        canvas.DrawLine(line[1], line[3]);
+    canvas.Select(look.GetPen(yval == 0
+                              ? ChartLook::STYLE_GRIDZERO
+                              : ChartLook::STYLE_GRID));
+    canvas.DrawLine(line[0], line[1]);
 
-        if (ymval == yval) {
-          if (yval == 0) {
-            canvas.Select(look.GetPen(ChartLook::STYLE_GRIDZERO));
-          } else {
-            canvas.Select(look.GetPen(ChartLook::STYLE_GRID));
-          }
-          canvas.DrawLine(line[0], line[1]);
-
-          if ((unit_format != UnitFormat::NONE) && (ymin > (int)(y_label_bottom + Layout::VptScale(30)))) {
-            const auto unit_text = FormatTicText(yval * unit_step / tic_step,
-                                                 unit_step, unit_format);
-            const auto c = canvas.CalcTextSize(unit_text.c_str());
-            canvas.DrawText({std::max(x - (int)c.width, rc.left + (int)Layout::GetTextPadding()), ymin - (int)c.height / 2},
-                            unit_text.c_str());
-          }
-        }
-      }
+    if (unit_format != UnitFormat::NONE &&
+        ymin > (int)(y_label_bottom + Layout::VptScale(30))) {
+      const auto unit_text = FormatTicText(yval * unit_step / tic_step,
+                                           unit_step, unit_format);
+      const auto c = canvas.CalcTextSize(unit_text.c_str());
+      canvas.DrawText({std::max(x - (int)c.width, rc.left + (int)Layout::GetTextPadding()), ymin - (int)c.height / 2},
+                      unit_text.c_str());
     }
+  }
+
+  for (auto yval = start; yval <= y.max + tic_step; yval += small_tic_step) {
+    const int ymin = ScreenY(yval);
+    line[0].y = line[1].y = line[2].y = line[3].y = ymin;
+    if (ymin < rc_chart.top || ymin > rc.bottom)
+      continue;
+
+    canvas.Select(look.GetPen(ChartLook::STYLE_GRIDMINOR));
+    canvas.DrawLine(line[0], line[2]);
+    canvas.DrawLine(line[1], line[3]);
   }
 }
 

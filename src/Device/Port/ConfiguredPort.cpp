@@ -33,6 +33,7 @@ Copyright_License {
 #ifdef ANDROID
 #include "AndroidBluetoothPort.hpp"
 #include "AndroidIOIOUartPort.hpp"
+#include "AndroidUsbSerialPort.hpp"
 #endif
 
 #if defined(HAVE_POSIX)
@@ -61,7 +62,7 @@ Copyright_License {
  * See http://msdn.microsoft.com/en-us/library/bb202042.aspx
  */
 static bool
-DetectGPS(TCHAR *path, size_t path_max_size)
+DetectGPS(TCHAR *path, std::size_t path_max_size)
 {
   return false;
 }
@@ -101,6 +102,16 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     path = config.path.c_str();
     break;
 
+  case DeviceConfig::PortType::BLE_HM10:
+#ifdef ANDROID
+    if (config.bluetooth_mac.empty())
+      throw std::runtime_error("No Bluetooth MAC configured");
+
+    return OpenAndroidBleHm10Port(config.bluetooth_mac, listener, handler);
+#else
+    throw std::runtime_error("Bluetooth not available");
+#endif
+
   case DeviceConfig::PortType::RFCOMM:
 #ifdef ANDROID
     if (config.bluetooth_mac.empty())
@@ -139,6 +150,7 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     break;
 
   case DeviceConfig::PortType::INTERNAL:
+  case DeviceConfig::PortType::BLE_SENSOR:
   case DeviceConfig::PortType::DROIDSOAR_V2:
   case DeviceConfig::PortType::NUNCHUCK:
   case DeviceConfig::PortType::I2CPRESSURESENSOR:
@@ -187,6 +199,17 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     throw std::runtime_error("Pty not available");
 #endif
   }
+
+  case DeviceConfig::PortType::ANDROID_USB_SERIAL:
+#ifdef ANDROID
+    if (config.path.empty())
+      throw std::runtime_error("No name configured");
+
+    return OpenAndroidUsbSerialPort(config.path.c_str(), config.baud_rate,
+                                    listener, handler);
+#else
+    throw std::runtime_error("Android USB serial not available");
+#endif
   }
 
   if (path == nullptr)

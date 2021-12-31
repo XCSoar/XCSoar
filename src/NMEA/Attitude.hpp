@@ -71,7 +71,7 @@ struct AttitudeState
    */
   void Complement(const AttitudeState &add);
 
-  void Expire(double now);
+  void Expire(TimeStamp now) noexcept;
 };
 
 #endif

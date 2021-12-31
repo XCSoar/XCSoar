@@ -67,7 +67,7 @@ private:
    * Returns the Canvas which is currently used for rendering.  This
    * method may only be called within the drawing thread.
    */
-  Canvas &GetPaintCanvas() {
+  Canvas &GetPaintCanvas() noexcept {
     return buffers[current];
   }
 
@@ -75,14 +75,14 @@ private:
    * Marks the hidden Canvas as "done" and schedules it for painting
    * to the Window.
    */
-  void Flip();
+  void Flip() noexcept;
 
 protected:
   /**
    * Returns the Canvas which is currently visible.  A call to this
    * method must be protected with the Mutex.
    */
-  const Canvas &GetVisibleCanvas() const {
+  const Canvas &GetVisibleCanvas() const noexcept {
     return buffers[current ^ 1];
   }
 
@@ -90,10 +90,10 @@ protected:
   virtual void OnCreate() override;
   virtual void OnDestroy() override;
   virtual void OnPaint(Canvas &canvas) override;
-  virtual void OnPaintBuffer(Canvas &canvas) = 0;
+  virtual void OnPaintBuffer(Canvas &canvas) noexcept = 0;
 
 public:
-  void Repaint() {
+  void Repaint() noexcept {
     OnPaintBuffer(GetPaintCanvas());
     Flip();
   }

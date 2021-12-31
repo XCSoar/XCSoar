@@ -22,12 +22,16 @@ Copyright_License {
 */
 
 #include "Logger.hpp"
+#include "Chrono.hpp"
+#include "MetaTable.hxx"
 #include "Util.hxx"
 #include "Interface.hpp"
 
 extern "C" {
 #include <lauxlib.h>
 }
+
+using namespace std::chrono;
 
 static int
 l_logger_index(lua_State *L)
@@ -83,8 +87,8 @@ l_logger_settimestepcruise(lua_State *L)
 
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   LoggerSettings &logger = settings_computer.logger;
-  float time = luaL_checknumber(L, 1); 
-  logger.time_step_cruise = time;
+  const FloatDuration time{luaL_checknumber(L, 1)};
+  logger.time_step_cruise = duration_cast<duration<unsigned>>(time);
   
   return 0;
 }
@@ -98,8 +102,8 @@ l_logger_settimestepcircling(lua_State *L)
 
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   LoggerSettings &logger = settings_computer.logger;
-  float time = luaL_checknumber(L, 1); 
-  logger.time_step_circling = time;
+  FloatDuration time{luaL_checknumber(L, 1)};
+  logger.time_step_circling = duration_cast<duration<unsigned>>(time);
   
   return 0;
 }
@@ -210,9 +214,7 @@ Lua::InitLogger(lua_State *L)
 
   lua_newtable(L);
 
-  lua_newtable(L);
-  SetField(L, -2, "__index", l_logger_index);
-  lua_setmetatable(L, -2);
+  MakeIndexMetaTableFor(L, RelativeStackIndex{-1}, l_logger_index);
 
   luaL_setfuncs(L, settings_funcs, 0);
 

@@ -26,6 +26,12 @@ Copyright_License {
 #include <stdio.h>
 
 void
+ConsoleOperationEnvironment::SetErrorMessage(const TCHAR *text) noexcept
+{
+  _ftprintf(stderr, _T("ERROR: %s\n"), text);
+}
+
+void
 ConsoleOperationEnvironment::SetText(const TCHAR *text) noexcept
 {
   _tprintf(_T("%s\n"), text);

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <stdio.h>
 
-static TCHAR buffer[6];
+static TCHAR buffer[8];
 
 void
 RoughTimeDataField::ModifyValue(RoughTime _value) noexcept

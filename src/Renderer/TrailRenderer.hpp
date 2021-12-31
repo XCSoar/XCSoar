@@ -27,6 +27,7 @@ Copyright_License {
 #include "util/AllocatedArray.hxx"
 #include "Engine/Trace/Point.hpp"
 #include "Engine/Trace/Vector.hpp"
+#include "time/Stamp.hpp"
 
 struct PixelPoint;
 struct BulkPixelPoint;
@@ -63,7 +64,8 @@ public:
   /**
    * Load a filtered trace into this object.
    */
-  bool LoadTrace(const TraceComputer &trace_computer, unsigned min_time,
+  bool LoadTrace(const TraceComputer &trace_computer,
+                 TimeStamp min_time,
                  const WindowProjection &projection);
 
   void ScanBounds(GeoBounds &bounds) const {
@@ -71,7 +73,8 @@ public:
   }
 
   void Draw(Canvas &canvas, const TraceComputer &trace_computer,
-            const WindowProjection &projection, unsigned min_time,
+            const WindowProjection &projection,
+            TimeStamp min_time,
             bool enable_traildrift, PixelPoint pos, const NMEAInfo &basic,
             const DerivedInfo &calculated, const TrailSettings &settings);
 
@@ -81,7 +84,8 @@ public:
   void Draw(Canvas &canvas, const WindowProjection &projection);
 
   void Draw(Canvas &canvas, const TraceComputer &trace_computer,
-            const WindowProjection &projection, unsigned min_time);
+            const WindowProjection &projection,
+            TimeStamp min_time={}) noexcept;
 
   [[gnu::malloc]]
   BulkPixelPoint *Prepare(unsigned n);

@@ -309,50 +309,49 @@ namespace CAI302 {
 
 #pragma pack(pop)
 
-  bool
-  WriteString(Port &port, const char *p, OperationEnvironment &env);
+  void WriteString(Port &port, const char *p, OperationEnvironment &env);
 
   /**
    * Enter "command" mode, but don't wait for the prompt.
    */
-  bool
+  void
   CommandModeQuick(Port &port);
 
   /**
    * Enter "command" mode.
    */
-  bool
+  void
   CommandMode(Port &port, OperationEnvironment &env);
 
   /**
    * Send a command, but don't wait for the next command prompt.
    */
-  bool
+  void
   SendCommandQuick(Port &port, const char *cmd, OperationEnvironment &env);
 
   /**
    * Send a command, and wait for the next command prompt.
    */
-  bool
+  void
   SendCommand(Port &port, const char *cmd, OperationEnvironment &env,
               std::chrono::steady_clock::duration timeout=std::chrono::seconds(2));
 
   /**
    * Enter "log" mode, but don't wait for the command prompt.
    */
-  bool
+  void
   LogModeQuick(Port &port, OperationEnvironment &env);
 
   /**
    * Enter "log" mode.
    */
-  bool
+  void
   LogMode(Port &port, OperationEnvironment &env);
 
   /**
    * Enter "upload" mode.
    */
-  bool
+  void
   UploadMode(Port &port, OperationEnvironment &env);
 
   /**
@@ -463,22 +462,24 @@ namespace CAI302 {
   /**
    * Enter "download" mode.
    */
-  bool
+  void
   DownloadMode(Port &port, OperationEnvironment &env);
 
   /**
    * Send a command.  CAI302 must be at the download prompt already.
+   *
+   * Throws on error.
    */
-  bool
+  void
   DownloadCommand(Port &port, const char *command,
                   OperationEnvironment &env,
                   std::chrono::steady_clock::duration timeout=std::chrono::seconds(2));
 
-  bool
+  void
   DownloadPilot(Port &port, const Pilot &data, unsigned ordinal,
                 OperationEnvironment &env);
 
-  bool
+  void
   DownloadPolar(Port &port, const Polar &data, OperationEnvironment &env);
 
   bool
@@ -489,10 +490,10 @@ namespace CAI302 {
   UploadNavpoint(Port &port, unsigned i, Navpoint &data,
                  OperationEnvironment &env);
 
-  bool
+  void
   CloseNavpoints(Port &port, OperationEnvironment &env);
 
-  bool
+  void
   DownloadNavpoint(Port &port, const GeoPoint &location,
                    int altitude, unsigned id,
                    bool turnpoint, bool airfield, bool markpoint,
@@ -502,66 +503,68 @@ namespace CAI302 {
                    const char *name, const char *remark,
                    OperationEnvironment &env);
 
-  bool
+  void
   DeclareTP(Port &port, unsigned i, const GeoPoint &location,
             int altitude, const char *name, OperationEnvironment &env);
 
-  bool
+  void
   DeclareSave(Port &port, OperationEnvironment &env);
 
   /**
    * Restart the CAI302 by sending the command "SIF 0 0".
    */
-  bool
+  void
   Reboot(Port &port, OperationEnvironment &env);
 
   /**
    * Power off the CAI302 by sending the command "DIE".
    */
-  bool
+  void
   PowerOff(Port &port, OperationEnvironment &env);
 
   /**
    * Start logging unconditionally.
    */
-  bool
+  void
   StartLogging(Port &port, OperationEnvironment &env);
 
   /**
    * Stop logging unconditionally.
    */
-  bool
+  void
   StopLogging(Port &port, OperationEnvironment &env);
 
   /**
    * Set audio volume 0 is loudest, 170 is silent.
    */
-  bool
+  void
   SetVolume(Port &port, unsigned volume, OperationEnvironment &env);
 
   /**
    * Erase all waypoints.
    */
-  bool
+  void
   ClearPoints(Port &port, OperationEnvironment &env);
 
   /**
    * Erase the pilot name.
    */
-  bool
+  void
   ClearPilot(Port &port, OperationEnvironment &env);
 
   /**
    * Erase all log memory.
    */
-  bool
+  void
   ClearLog(Port &port, OperationEnvironment &env);
 
   /**
    * Ask the CAI302 to switch the baud rate.  It does not change the
    * baud rate of the specified #Port.
+   *
+   * Throws on error.
    */
-  bool
+  void
   SetBaudRate(Port &port, unsigned baud_rate, OperationEnvironment &env);
 }
 

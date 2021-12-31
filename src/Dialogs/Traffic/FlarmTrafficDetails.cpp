@@ -276,11 +276,15 @@ FlarmTrafficDetailsWidget::Update()
   //       yet if it was changed
   const TCHAR* cs = FlarmDetails::LookupCallsign(target_id);
   if (cs != nullptr && cs[0] != 0) {
-    StringBuilder<TCHAR> builder(tmp, ARRAY_SIZE(tmp));
-    builder.Append(cs);
-    if (record)
-      builder.Append(_T(" ("), record->registration.c_str(), _T(")"));
-    value = tmp;
+    try {
+      BasicStringBuilder<TCHAR> builder(tmp, ARRAY_SIZE(tmp));
+      builder.Append(cs);
+      if (record)
+        builder.Append(_T(" ("), record->registration.c_str(), _T(")"));
+      value = tmp;
+    } catch (BasicStringBuilder<TCHAR>::Overflow) {
+      value = cs;
+    }
   } else
     value = _T("--");
   SetText(CALLSIGN, value);

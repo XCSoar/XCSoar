@@ -62,7 +62,7 @@ private:
       :edge_value(_edge_value), iterator(_iterator) {}
   };
 
-  struct Rank : public std::binary_function<Value, Value, bool> {
+  struct Rank {
     [[gnu::pure]]
     constexpr bool operator()(const Value &x, const Value &y) const noexcept {
       return x.edge_value > y.edge_value;

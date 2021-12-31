@@ -24,6 +24,7 @@ Copyright_License {
 #include "Startup.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
+#include "DataGlobals.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/Settings.hpp"
@@ -31,6 +32,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "Terrain/AsyncLoader.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
 #include "Input/InputEvents.hpp"
 #include "Input/InputQueue.hpp"
@@ -88,6 +90,9 @@ Copyright_License {
 #include "Task/DefaultTask.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Operation/VerboseOperationEnvironment.hpp"
+#include "Operation/PluggableOperationEnvironment.hpp"
+#include "Operation/SubOperationEnvironment.hpp"
+#include "Widget/ProgressWidget.hpp"
 #include "PageActions.hpp"
 #include "Weather/Features.hpp"
 #include "Weather/NOAAGlue.hpp"
@@ -102,6 +107,8 @@ Copyright_License {
 #include "lua/StartFile.hpp"
 #include "lua/Background.hpp"
 
+#include "util/ScopeExit.hxx"
+
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Globals.hpp"
 #include "ui/canvas/opengl/Dynamic.hpp"
@@ -111,7 +118,7 @@ Copyright_License {
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
-#include "Android/Context.hpp"
+#include "Android/NativeView.hpp"
 #endif
 
 static TaskManager *task_manager;
@@ -122,7 +129,7 @@ static GlideComputerTaskEvents *task_events;
 static bool
 LoadProfile()
 {
-  if (Profile::GetPath().IsNull() &&
+  if (Profile::GetPath() == nullptr &&
       !dlgStartupShowModal())
     return false;
 
@@ -138,8 +145,6 @@ LoadProfile()
 static void
 AfterStartup()
 {
-  StartupLogFreeRamAndStorage();
-
   try {
     const auto lua_path = LocalPath(_T("lua"));
     Lua::StartFile(AllocatedPath::Build(lua_path, _T("init.lua")));
@@ -172,6 +177,50 @@ AfterStartup()
   ForceCalculation();
 }
 
+void
+MainWindow::LoadTerrain() noexcept
+{
+  SetTopWidget(nullptr);
+
+  delete terrain_loader;
+  terrain_loader = nullptr;
+
+  if (const auto path = Profile::GetPath(ProfileKeys::MapFile);
+      path != nullptr) {
+    LogFormat("LoadTerrain");
+    terrain_loader = new AsyncTerrainOverviewLoader();
+
+    terrain_loader_env = std::make_unique<PluggableOperationEnvironment>();
+    auto *progress = new ProgressWidget(*terrain_loader_env,
+                                        _("Loading Terrain File..."));
+    SetTopWidget(progress);
+
+    terrain_loader->Start(file_cache, path, *terrain_loader_env,
+                          terrain_loader_notify);
+  }
+}
+
+void
+MainWindow::OnTerrainLoaded() noexcept
+try {
+  assert(terrain_loader != nullptr);
+
+  std::unique_ptr<AsyncTerrainOverviewLoader> loader{std::exchange(terrain_loader, nullptr)};
+  auto new_terrain = loader->Wait();
+  loader.reset();
+
+  SetTopWidget(nullptr);
+  terrain_loader_env.reset();
+
+  const ScopeSuspendAllThreads suspend;
+
+  DataGlobals::UnsetTerrain();
+  DataGlobals::SetTerrain(std::move(new_terrain));
+  DataGlobals::UpdateHome(false);
+} catch (...) {
+  LogError(std::current_exception(), "LoadTerrain failed");
+}
+
 /**
  * "Boots" up XCSoar
  * @param hInstance Instance handle
@@ -182,6 +231,7 @@ bool
 Startup()
 {
   VerboseOperationEnvironment operation;
+  operation.SetProgressRange(1024);
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   Net::DownloadManager::Initialise();
@@ -218,6 +268,16 @@ Startup()
 #endif
              OpenGL::texture_non_power_of_two,
             OpenGL::render_buffer_stencil);
+#endif
+
+#ifdef ANDROID
+  /* mark the UI EventLoop as "running", which allows
+     TopWindow::Pause() to submit the PAUSE command to the event
+     queue; this works because the remaining code in this function may
+     invoke modal dialogs, and its event loop will be able to process
+     PAUSE even if TopWindow::RunEventLoop() is not yet invoked */
+  main_window->BeginRunning();
+  AtScopeExit(main_window) { main_window->EndRunning(); };
 #endif
 
   CommonInterface::SetUISettings().SetDefaults();
@@ -258,23 +318,17 @@ Startup()
   /* create XCSoarData on the first start */
   CreateDataPath();
 
+#ifdef ANDROID
+  native_view->AcquireWakeLock();
+  native_view->SetFullScreen(ui_settings.display.full_screen);
+#endif
+
   Display::LoadOrientation(operation);
   main_window->CheckResize();
 
   main_window->InitialiseConfigured();
 
-  {
-#ifdef ANDROID
-    auto cache_path = context->GetExternalCacheDir(Java::GetEnv());
-    if (cache_path == nullptr)
-      throw std::runtime_error("No Android cache directory");
-
-    // TODO: delete the old cache directory in XCSoarData?
-#else
-    auto cache_path = LocalPath(_T("cache"));
-#endif
-    file_cache = new FileCache(std::move(cache_path));
-  }
+  file_cache = new FileCache(GetCachePath());
 
   ReadLanguageFile();
 
@@ -295,9 +349,7 @@ Startup()
     new ProtectedTaskManager(*task_manager, computer_settings.task);
 
   // Read the terrain file
-  operation.SetText(_("Loading Terrain File..."));
-  LogFormat("OpenTerrain");
-  terrain = RasterTerrain::OpenTerrain(file_cache, operation);
+  main_window->LoadTerrain();
 
   logger = new Logger();
 
@@ -334,13 +386,22 @@ Startup()
 
   // Read the topography file(s)
   topography = new TopographyStore();
-  LoadConfiguredTopography(*topography, operation);
+  {
+    SubOperationEnvironment sub_env(operation, 0, 256);
+    LoadConfiguredTopography(*topography, sub_env);
+  }
 
   // Read the waypoint files
-  WaypointGlue::LoadWaypoints(way_points, terrain, operation);
+  {
+    SubOperationEnvironment sub_env(operation, 256, 512);
+    WaypointGlue::LoadWaypoints(way_points, terrain, sub_env);
+  }
 
   // Read and parse the airfield info file
-  WaypointDetails::ReadFileFromProfile(way_points, operation);
+  {
+    SubOperationEnvironment sub_env(operation, 512, 768);
+    WaypointDetails::ReadFileFromProfile(way_points, sub_env);
+  }
 
   // Set the home waypoint
   WaypointGlue::SetHome(way_points, terrain,
@@ -358,8 +419,11 @@ Startup()
   rasp->ScanAll();
 
   // Reads the airspace files
-  ReadAirspace(airspace_database, terrain, computer_settings.pressure,
-               operation);
+  {
+    SubOperationEnvironment sub_env(operation, 768, 1024);
+    ReadAirspace(airspace_database, terrain, computer_settings.pressure,
+                 sub_env);
+  }
 
   {
     const AircraftState aircraft_state =
@@ -495,17 +559,10 @@ Shutdown()
 
   main_window->BeginShutdown();
 
-  StartupLogFreeRamAndStorage();
-
   Lua::StopAllBackground();
 
   // Turn off all displays
   global_running = false;
-
-#ifdef HAVE_TRACKING
-  if (tracking != nullptr)
-    tracking->StopAsync();
-#endif
 
   // Stop logger and save igc file
   operation.SetText(_("Shutdown, saving logs..."));
@@ -599,6 +656,8 @@ Shutdown()
 
   // Clear terrain database
 
+  delete terrain_loader;
+  terrain_loader = nullptr;
   delete terrain;
   terrain = nullptr;
   delete topography;
@@ -632,11 +691,8 @@ Shutdown()
 #endif
 
 #ifdef HAVE_TRACKING
-  if (tracking != nullptr) {
-    tracking->WaitStopped();
-    delete tracking;
-    tracking = nullptr;
-  }
+  delete tracking;
+  tracking = nullptr;
 #endif
 
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -671,8 +727,6 @@ Shutdown()
   CloseLanguageFile();
 
   Display::RestoreOrientation();
-
-  StartupLogFreeRamAndStorage();
 
   LogFormat("Finished shutdown");
 }

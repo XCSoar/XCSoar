@@ -27,8 +27,10 @@ Copyright_License {
 #include "util/StringBuffer.hxx"
 #include "util/Compiler.h"
 
-#include <tchar.h>
+#include <chrono>
 #include <cstdint>
+
+#include <tchar.h>
 
 class KeyValueFileWriter;
 
@@ -103,6 +105,12 @@ namespace Profile {
   void Set(const char *key, long value);
   void Set(const char *key, unsigned value);
   void Set(const char *key, double value);
+
+static inline void
+Set(const char *key, std::chrono::duration<unsigned> value) noexcept
+{
+  Set(key, value.count());
+}
 
   template<typename T>
   static inline void SetEnum(const char *key, T value)

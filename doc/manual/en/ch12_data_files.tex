@@ -66,7 +66,7 @@ files which are generated from OpenStreetMap.
 
 Map files can be downloaded from the XCSoar web site:
 
-\url{http://www.xcsoar.org/download/maps/}
+\xcsoarwebsite{/download/maps/}
 
 To generate a custom map database with different settings and bounds, you
 may use the map generator:
@@ -115,13 +115,13 @@ Special Use Airspace section of the soaring web site:
 The following is the list of supported airspace types: Class A-G, Prohibited, 
 Danger Areas, Restricted, Task Area, CTR, No Gliders, Wave, Transponder 
 Mandatory, and Other.  All other airspace types will be drawn as type ``Other''.
-In addition to the OpenAir standard the AR command is recognized as the 
-airspace radio frequency.
+In addition to the OpenAir standard the 'AF' or 'AR' command is recognized as the airspace radio frequency.
+Ie. Since 2018, Naviter proposes the following change 'AF 999.999' (find 'Additional OpenAir fields' here - \url{http://www.winpilot.com/UsersGuide/UserAirspace.asp})
 
-\section{Airfield details}\label{sec:airfield-details}
+\section{Waypoint details}\label{sec:airfield-details}
 
-The airfield details file (extension \verb|.txt|) is a simple text
-format file containing entries for each airfield, marked in square
+The waypoint details file (extension \verb|.txt|) is a simple text
+format file containing entries for each waypoint (especially airfield), marked in square
 brackets, followed by the text to be displayed on the
 Waypoint Details Dialogue for that particular waypoint.  The text should
 have a narrow margin because the waypoint details dialogue cannot
@@ -133,7 +133,12 @@ name (this is currently not supported on PC/Windows).  Be sure
 to avoid any additional whitespaces around the equal sign or in front of the
 keyword. Which files are supported depends on your operating system and the
 applications that are installed.  Android supports JPEG files and other
-file types, others mostly BMP images.
+file types, others mostly BMP images. one or several images can be shown.
+
+The text may also specify any document specific to airfields or waypoints using
+\verb|file=| followed by the file name. Such document won't be loaded directly in XCSoar 
+but will be loaded by external app. Any arbitrary file is supported. PDF files, for example,
+will be loaded by your PDF reader.
 
 The names of airfields used in the file must correspond exactly to the
 names in the waypoints file, with the exception that converting to
@@ -168,7 +173,9 @@ REMARKS:
 
 ICAO: YBLA
 
+file=Benalla.pdf
 image=Benalla_sat.bmp
+image=Benalla_pic.bmp
 
 [GROOTE EYLANDT]
 Blah blah blah blah

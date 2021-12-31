@@ -33,7 +33,9 @@ Copyright_License {
 
 #include <cassert>
 
-static constexpr auto CLOUD_INTERVAL = std::chrono::minutes(1);
+using namespace std::chrono;
+
+static constexpr auto CLOUD_INTERVAL = minutes(1);
 
 SkyLinesTracking::Glue::Glue(EventLoop &event_loop,
                              Handler *_handler)
@@ -133,12 +135,12 @@ SkyLinesTracking::Glue::SendCloudFix(const NMEAInfo &basic,
 
   if (last_climb_time > basic.time)
     /* recover from time warp */
-    last_climb_time = -1;
+    last_climb_time = TimeStamp::Undefined();
 
-  constexpr double min_climb_duration = 30;
+  constexpr FloatDuration min_climb_duration = seconds{30};
   constexpr double min_height_gain = 100;
   if (!calculated.circling &&
-      calculated.climb_start_time >= 0 &&
+      calculated.climb_start_time.IsDefined() &&
       calculated.climb_start_time > last_climb_time &&
       calculated.cruise_start_time > calculated.climb_start_time + min_climb_duration &&
       calculated.cruise_start_altitude > calculated.climb_start_altitude + min_height_gain &&
@@ -148,11 +150,11 @@ SkyLinesTracking::Glue::SendCloudFix(const NMEAInfo &basic,
     // TODO: use TE altitude?
     last_climb_time = calculated.cruise_start_time;
 
-    double duration = calculated.cruise_start_time - calculated.climb_start_time;
+    const auto duration = calculated.cruise_start_time - calculated.climb_start_time;
     double height_gain = calculated.cruise_start_altitude - calculated.climb_start_altitude;
-    double lift = height_gain / duration;
+    double lift = height_gain / duration.count();
 
-    cloud_client.SendThermal(ToBE32(uint32_t(basic.time * 1000)),
+    cloud_client.SendThermal(ToBE32(basic.time.Cast<::duration<uint32_t, milliseconds::period>>().count()),
                              calculated.climb_start_location,
                              iround(calculated.climb_start_altitude),
                              calculated.cruise_start_location,
@@ -173,7 +175,7 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic,
     SendFixes(basic);
 
     if (traffic_enabled &&
-        traffic_clock.CheckAdvance(basic.clock, std::chrono::minutes(1)))
+        traffic_clock.CheckAdvance(basic.clock, minutes(1)))
       client.SendTrafficRequest(true, true, near_traffic_enabled);
   }
 
@@ -181,7 +183,7 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic,
     SendCloudFix(basic, calculated);
 
     if (thermal_enabled &&
-        thermal_clock.CheckAdvance(basic.clock, std::chrono::minutes(1)))
+        thermal_clock.CheckAdvance(basic.clock, minutes(1)))
       cloud_client.SendThermalRequest();
   }
 }
@@ -208,7 +210,7 @@ SkyLinesTracking::Glue::SetSettings(const Settings &settings)
 
   client.SetKey(settings.key);
 
-  interval = std::chrono::seconds(settings.interval);
+  interval = seconds(settings.interval);
 
   if (!client.IsDefined()) {
     client.Open(*global_cares_channel, "tracking.skylines.aero");

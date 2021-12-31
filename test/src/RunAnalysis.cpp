@@ -58,7 +58,7 @@ Copyright_License {
 #include "Blackboard/InterfaceBlackboard.hpp"
 #include "DebugReplay.hpp"
 #include "io/FileLineReader.hpp"
-#include "Operation/Operation.hpp"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Look/Look.hpp"
 #include "system/Args.hpp"
 
@@ -105,9 +105,9 @@ static RasterTerrain *terrain;
 static void
 LoadFiles(Airspaces &airspace_database)
 {
-  NullOperationEnvironment operation;
+  ConsoleOperationEnvironment operation;
 
-  terrain = RasterTerrain::OpenTerrain(NULL, operation);
+  terrain = RasterTerrain::OpenTerrain(nullptr, operation).release();
 
   const AtmosphericPressure pressure = AtmosphericPressure::Standard();
   ReadAirspace(airspace_database, terrain, pressure, operation);

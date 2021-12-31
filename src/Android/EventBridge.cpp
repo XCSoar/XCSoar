@@ -26,7 +26,6 @@ Copyright_License {
 #include "ui/event/Queue.hpp"
 #include "ui/event/Idle.hpp"
 #include "ui/event/Globals.hpp"
-#include "system/Clock.hpp"
 #include "util/Compiler.h"
 
 using namespace UI;

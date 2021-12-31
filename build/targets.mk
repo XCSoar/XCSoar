@@ -3,7 +3,7 @@ TARGETS = PC WIN64 \
 	WAYLAND \
 	FUZZER \
 	PI PI2 CUBIE KOBO NEON \
-	ANDROID ANDROID7 ANDROID7NEON ANDROID86 \
+	ANDROID ANDROID7 ANDROID86 \
 	ANDROIDAARCH64 ANDROIDX64 \
 	ANDROIDFAT \
 	OSX64 IOS32 IOS64
@@ -50,6 +50,7 @@ TARGET_IS_PI4 := n
 TARGET_IS_PI32 := n
 TARGET_IS_PI64 := n
 TARGET_IS_KOBO := n
+TARGET_IS_CUBIE := n
 HAVE_POSIX := n
 HAVE_WIN32 := y
 HAVE_MSVCRT := y
@@ -70,36 +71,37 @@ ifeq ($(TARGET),ANDROID)
   override TARGET = ANDROID7
 endif
 
-ifeq ($(TARGET),ANDROID7NEON)
-  NEON := y
-  override TARGET = ANDROID7
-endif
-
 ifeq ($(TARGET),ANDROID7)
   TARGET_IS_ARM = y
   TARGET_IS_ARMHF = y
   ARMV7 := y
+  NEON := y
   override TARGET = ANDROID
+  override TARGET_FLAVOR = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROID86)
   X86 := y
   override TARGET = ANDROID
+  override TARGET_FLAVOR = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROIDAARCH64)
   AARCH64 := y
   override TARGET = ANDROID
+  override TARGET_FLAVOR = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROIDX64)
   X64 := y
   override TARGET = ANDROID
+  override TARGET_FLAVOR = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROIDFAT)
   FAT_BINARY := y
   override TARGET = ANDROID
+  override TARGET_FLAVOR = ANDROID
 endif
 
 # real targets
@@ -198,7 +200,16 @@ ifeq ($(TARGET),CUBIE)
   # cross-crompiling for Cubieboard
   override TARGET = NEON
   CUBIE ?= /opt/cubie/root
-  TARGET_HAS_MALI = y
+  TARGET_IS_CUBIE=y
+  # Open-source Lima driver is available and usable with XCSoar
+  # in current mainline kernels, 
+  # and in MESA included in recent distributions
+  ifeq ($(ENABLE_MESA_KMS),y)
+    OPENGL = y
+    GLES2 = y
+  else
+    TARGET_HAS_MALI = y
+  endif
 endif
 
 ifeq ($(TARGET),KOBO)
@@ -316,7 +327,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r22b
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r23b
 
   ANDROID_SDK_PLATFORM = android-29
   ANDROID_NDK_API = 21
@@ -328,40 +339,36 @@ ifeq ($(TARGET),ANDROID)
   # LLVM_TARGET: Open the appropriate compiler script in $ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin,
   #   e.g. aarch64-linux-android21-clang++ for AARCH64, NDK level 21, 
   #   and transcribe the value of the option "--target". 
-  # HOST_TRIPLET = $(ANDROID_NDK_GCC_TOOLCHAIN_ABI)
   # ANDROID_APK_LIB_ABI: See https://developer.android.com/ndk/guides/abis#sa for valid names.
 
   # Default is ARM V7a
-  ANDROID_NDK_GCC_TOOLCHAIN_ABI = arm-linux-androideabi
   ANDROID_APK_LIB_ABI           = armeabi-v7a
   LLVM_TARGET                  := armv7a-linux-androideabi
-  HOST_TRIPLET                  = arm-linux-androideabi
 
   ifeq ($(X86),y)
     ANDROID_APK_LIB_ABI           = x86
     LLVM_TARGET                  := i686-linux-android
-    HOST_TRIPLET                  = i686-linux-android
   endif
 
   ifeq ($(AARCH64),y)
     ANDROID_APK_LIB_ABI           = arm64-v8a
     LLVM_TARGET                  := aarch64-linux-android
-    HOST_TRIPLET                  = aarch64-linux-android
   endif
 
   ifeq ($(X64),y)
     ANDROID_APK_LIB_ABI           = x86_64
     LLVM_TARGET                  := x86_64-linux-android
-    HOST_TRIPLET                  = x86_64-linux-android
   endif
+
+  XCSOAR_ARCH_SUBDIR = /$(ANDROID_APK_LIB_ABI)
+
+  HOST_TRIPLET := $(LLVM_TARGET)
 
   # Like in the clang compiler scripts in the NDK add the NDK level to the LLVM target
   LLVM_TARGET := $(LLVM_TARGET)$(ANDROID_NDK_API)
 
   # clang is the mandatory compiler on Android
   override CLANG = y
-
-  ANDROID_TOOLCHAIN_NAME = llvm
   override LIBCXX = y
 
   ifeq ($(HOST_IS_DARWIN),y)
@@ -378,20 +385,11 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_HOST_TAG = linux-x86
   endif
 
-  ANDROID_TOOLCHAIN = $(ANDROID_NDK)/toolchains/$(ANDROID_TOOLCHAIN_NAME)/prebuilt/$(ANDROID_HOST_TAG)
-
-  TCPREFIX = $(ANDROID_TOOLCHAIN)/bin/$(HOST_TRIPLET)-
-  LLVM_PREFIX = $(ANDROID_TOOLCHAIN)/bin/
-
+  LLVM_PREFIX = $(ANDROID_NDK)/toolchains/llvm/prebuilt/$(ANDROID_HOST_TAG)/bin/
+  TCPREFIX = $(LLVM_PREFIX)/llvm-
 
   ifeq ($(ARMV7),y)
-    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp
-
-    ifeq ($(NEON),y)
-      TARGET_ARCH += -mfpu=neon
-    else
-      TARGET_ARCH += -mfpu=vfpv3-d16
-    endif
+    TARGET_ARCH += -mfloat-abi=softfp -mfpu=neon
   endif
 
   TARGET_ARCH += -fpic -funwind-tables
@@ -413,6 +411,7 @@ TARGET_CPPFLAGS = -I$(TARGET_OUTPUT_DIR)/include
 ifeq ($(FUZZER),y)
   FUZZER_FLAGS = -fsanitize=fuzzer,address
   TARGET_CXXFLAGS += $(FUZZER_FLAGS)
+  TARGET_CPPFLAGS += -DFUZZER
 endif
 
 ifneq ($(WINVER),)
@@ -432,8 +431,6 @@ endif
 
 ifeq ($(HAVE_POSIX),y)
   TARGET_CPPFLAGS += -DHAVE_POSIX
-  TARGET_CPPFLAGS += -DHAVE_STDINT_H
-  TARGET_CPPFLAGS += -DHAVE_UNISTD_H
   TARGET_CPPFLAGS += -DHAVE_VASPRINTF
 endif
 
@@ -455,7 +452,7 @@ ifeq ($(TARGET_IS_PI),y)
   endif
 endif
 
-ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
+ifeq ($(HOST_IS_ARM)$(TARGET_IS_CUBIE),ny)
   # cross-crompiling for Cubieboard
   TARGET_CPPFLAGS += --sysroot=$(CUBIE) -isystem $(CUBIE)/usr/include/arm-linux-gnueabihf
   TARGET_CPPFLAGS += -isystem $(CUBIE)/usr/local/stow/sunxi-mali/include
@@ -561,9 +558,9 @@ ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
   TARGET_LDFLAGS += --sysroot=$(PI) -L$(PI)/usr/lib/arm-linux-gnueabihf
 endif
 
-ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
+ifeq ($(HOST_IS_ARM)$(TARGET_IS_CUBIE),ny)
   # cross-crompiling for Cubieboard
-  TARGET_LDFLAGS += --sysroot=$(CUBIE)
+  TARGET_LDFLAGS += -L/usr/arm-linux-gnueabihf/lib --sysroot=$(CUBIE)
   TARGET_LDFLAGS += -L$(CUBIE)/lib/arm-linux-gnueabihf
   TARGET_LDFLAGS += -L$(CUBIE)/usr/lib/arm-linux-gnueabihf
   TARGET_LDFLAGS += -L$(CUBIE)/usr/local/stow/sunxi-mali/lib

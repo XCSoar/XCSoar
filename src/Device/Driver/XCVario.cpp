@@ -27,6 +27,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
+#include "Device/Port/Port.hpp"
 #include "NMEA/InputLine.hpp"
 #include "util/Clamp.hpp"
 #include "Atmosphere/Pressure.hpp"
@@ -44,6 +45,7 @@ public:
   bool PutMacCready(double mc, OperationEnvironment &env) override;
   bool PutBugs(double bugs, OperationEnvironment &env) override;
   bool PutBallast(double fraction, double overload, OperationEnvironment &env) override;
+  bool PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env) override;
 };
 
 /*
@@ -100,11 +102,11 @@ PXCV(NMEAInputLine &line, NMEAInfo &info)
   // inclimb/incruise 1=cruise,0=climb, OAT
   switch (line.Read(-1)) {
   case 0:
-    info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;
+    info.switch_state.flight_mode = SwitchState::FlightMode::CIRCLING;
     break;
 
   case 1:
-    info.switch_state.flight_mode = SwitchState::FlightMode::CIRCLING;
+    info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;
     break;
   }
 
@@ -137,7 +139,7 @@ PXCV(NMEAInputLine &line, NMEAInfo &info)
   }
   // Space diagonal acceleration in X,Y,Z axes measure
   if ( line.ReadChecked(x) && line.ReadChecked(y) && line.ReadChecked(z) )
-    info.acceleration.ProvideGLoad(SpaceDiagonal(x, y, z), true);
+    info.acceleration.ProvideGLoad(SpaceDiagonal(x, y, z));
 
   return true;
 }
@@ -157,6 +159,21 @@ XVCDevice::ParseNMEA(const char *String, NMEAInfo &info)
   else
     return false;
 }
+
+// For documentation refer to chapter 10.1.3 Device Driver/XCVario in mulilingual handbook: https://xcvario.de/handbuch
+
+bool 
+XVCDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
+{
+  /* the XCVario understands "!g,q<NNNN>" command for QNH updates with recent builds */
+  char buffer[32];
+  unsigned qnh = uround(pres.GetHectoPascal());
+  int msg_len = sprintf(buffer,"!g,q%u\r", std::min(qnh,(unsigned)2000));
+  port.FullWrite(buffer, msg_len, env, std::chrono::seconds(2) );
+  return true;
+}
+
+
 
 bool
 XVCDevice::PutMacCready(double mac_cready, OperationEnvironment &env)
@@ -180,10 +197,13 @@ bool
 XVCDevice::PutBallast(double fraction, gcc_unused double overload,
                       OperationEnvironment &env)
 {
-  /* the XCVario understands the CAI302 "!g" command for
-     MacCready, ballast and bugs */
-
-  return CAI302::PutBallast(port, fraction, env);
+  /* the XCVario understands CAI302 like command for ballast "!g,b" with
+     float precision */
+   char buffer[32];
+   double ballast = fraction * 10.;
+   int msg_len = sprintf(buffer,"!g,b%.3f\r", ballast );
+   port.FullWrite(buffer, msg_len, env, std::chrono::seconds(2) );
+  return true;
 }
 
 static Device *

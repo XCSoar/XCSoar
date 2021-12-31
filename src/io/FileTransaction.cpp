@@ -49,7 +49,7 @@ FileTransaction::FileTransaction(Path _path) noexcept
 
 FileTransaction::~FileTransaction() noexcept
 {
-  if (!temporary_path.IsNull())
+  if (temporary_path != nullptr)
     /* cancel the transaction */
     File::Delete(temporary_path);
 }
@@ -57,7 +57,7 @@ FileTransaction::~FileTransaction() noexcept
 void
 FileTransaction::Commit()
 {
-  assert(!temporary_path.IsNull());
+  assert(temporary_path != nullptr);
 
   if (!File::Replace(temporary_path, final_path)) {
 #ifdef HAVE_POSIX
@@ -76,7 +76,7 @@ FileTransaction::Commit()
 void
 FileTransaction::Abandon() noexcept
 {
-  assert(!temporary_path.IsNull());
+  assert(temporary_path != nullptr);
 
   temporary_path = nullptr;
 }

@@ -43,7 +43,7 @@ Copyright_License {
 class PortTerminalBridge final : public DataHandler {
   TerminalWindow &terminal;
   Mutex mutex;
-  StaticFifoBuffer<char, 1024> buffer;
+  StaticFifoBuffer<std::byte, 1024> buffer;
 
   UI::DelayedNotify notify{
     std::chrono::milliseconds(100),
@@ -55,15 +55,14 @@ public:
     :terminal(_terminal) {}
   virtual ~PortTerminalBridge() {}
 
-  bool DataReceived(const void *data, size_t length) noexcept {
+  bool DataReceived(std::span<const std::byte> s) noexcept {
     {
       const std::lock_guard<Mutex> lock(mutex);
       buffer.Shift();
       auto range = buffer.Write();
-      if (range.size < length)
-        length = range.size;
-      memcpy(range.data, data, length);
-      buffer.Append(length);
+      const std::size_t nbytes = std::min(s.size(), range.size);
+      std::copy_n(s.data(), nbytes, range.data);
+      buffer.Append(nbytes);
     }
 
     notify.SendNotification();
@@ -146,8 +145,9 @@ PortMonitorWidget::CreateButtons(WidgetDialog &dialog)
 void
 PortMonitorWidget::Reconnect()
 {
-  if (device.IsOccupied()) {
-    ShowMessageBox(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
+  if (device.IsBorrowed()) {
+    ShowMessageBox(_("Device is occupied"), _("Reconnect"),
+                   MB_OK | MB_ICONERROR);
     return;
   }
 

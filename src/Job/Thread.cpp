@@ -24,14 +24,11 @@ Copyright_License {
 #include "Thread.hpp"
 #include "Job.hpp"
 
-bool
+void
 JobThread::Start()
 {
-  if (!Thread::Start())
-    return false;
-
+  Thread::Start();
   was_running = true;
-  return true;
 }
 
 void

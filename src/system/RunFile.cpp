@@ -24,18 +24,7 @@ Copyright_License {
 #include "RunFile.hpp"
 
 #ifdef ANDROID
-
-#define NO_SCREEN
-#include "Android/NativeView.hpp"
-#include "Android/Main.hpp"
-
-bool
-RunFile(const TCHAR *path)
-{
-  native_view->openFile(path);
-  return true;
-}
-
+// replaced by NativeView::OpenWaypointFile()
 #elif defined(HAVE_POSIX) && !defined(_WIN32) && !defined(KOBO)
 
 #include "Process.hpp"

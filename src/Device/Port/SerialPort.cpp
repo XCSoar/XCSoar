@@ -22,12 +22,14 @@ Copyright_License {
 */
 
 #include "SerialPort.hpp"
-#include "Asset.hpp"
+#include "Device/Error.hpp"
+#include "Operation/Cancelled.hpp"
 #include "system/Error.hxx"
 #include "system/Sleep.h"
 #include "system/OverlappedEvent.hpp"
+#include "Asset.hpp"
 
-#include <windows.h>
+#include <fileapi.h>
 
 #include <algorithm>
 #include <cassert>
@@ -39,10 +41,8 @@ SerialPort::SerialPort(PortListener *_listener, DataHandler &_handler)
 {
 }
 
-SerialPort::~SerialPort()
+SerialPort::~SerialPort() noexcept
 {
-  BufferedPort::BeginClose();
-
   // Close the communication port.
   if (hPort != INVALID_HANDLE_VALUE) {
     StoppableThread::BeginStop();
@@ -52,8 +52,6 @@ SerialPort::~SerialPort()
 
     Thread::Join();
   }
-
-  BufferedPort::EndClose();
 }
 
 void
@@ -121,7 +119,7 @@ SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
 }
 
 PortState
-SerialPort::GetState() const
+SerialPort::GetState() const noexcept
 {
   return hPort != INVALID_HANDLE_VALUE
     ? PortState::READY
@@ -151,7 +149,7 @@ SerialPort::Flush()
 }
 
 int
-SerialPort::GetDataQueued() const
+SerialPort::GetDataQueued() const noexcept
 {
   if (hPort == INVALID_HANDLE_VALUE)
     return -1;
@@ -164,7 +162,7 @@ SerialPort::GetDataQueued() const
 }
 
 int
-SerialPort::GetDataPending() const
+SerialPort::GetDataPending() const noexcept
 {
   if (hPort == INVALID_HANDLE_VALUE)
     return -1;
@@ -176,22 +174,22 @@ SerialPort::GetDataPending() const
     : -1;
 }
 
-Port::WaitResult
+void
 SerialPort::WaitDataPending(OverlappedEvent &overlapped,
                             unsigned timeout_ms) const
 {
   int nbytes = GetDataPending();
   if (nbytes > 0)
-    return WaitResult::READY;
+    return;
   else if (nbytes < 0)
-    return WaitResult::FAILED;
+    throw MakeLastError("ClearCommError() failed");
 
   ::SetCommMask(hPort, EV_RXCHAR);
 
   DWORD dwCommModemStatus;
   if (!::WaitCommEvent(hPort, &dwCommModemStatus, overlapped.GetPointer())) {
-    if (::GetLastError() != ERROR_IO_PENDING)
-      return WaitResult::FAILED;
+    if (const auto error = ::GetLastError(); error != ERROR_IO_PENDING)
+      throw MakeLastError(error, "WaitCommEvent() failed");
 
     switch (overlapped.Wait(timeout_ms)) {
     case OverlappedEvent::FINISHED:
@@ -202,27 +200,29 @@ SerialPort::WaitDataPending(OverlappedEvent &overlapped,
       ::CancelIo(hPort);
       ::SetCommMask(hPort, 0);
       overlapped.Wait();
-      return WaitResult::TIMEOUT;
+      throw DeviceTimeout("WaitCommEvent() timed out");
 
     case OverlappedEvent::CANCELED:
       /* the operation may still be running, we have to cancel it */
       ::CancelIo(hPort);
       ::SetCommMask(hPort, 0);
       overlapped.Wait();
-      return WaitResult::CANCELLED;
+      throw OperationCancelled{};
     }
 
     DWORD result;
     if (!::GetOverlappedResult(hPort, overlapped.GetPointer(), &result, FALSE))
-      return WaitResult::FAILED;
+      throw MakeLastError("GetOverlappedResult() failed");
   }
 
   if ((dwCommModemStatus & EV_RXCHAR) == 0)
-      return WaitResult::FAILED;
+    throw std::runtime_error{"No EV_RXCHAR"};
 
-  return GetDataPending() > 0
-    ? WaitResult::READY
-    : WaitResult::FAILED;
+  nbytes = GetDataPending();
+  if (nbytes < 0)
+    throw MakeLastError("ClearCommError() failed");
+  else if (nbytes == 0)
+    throw std::runtime_error{"No data"};
 }
 
 void
@@ -231,7 +231,7 @@ SerialPort::Run() noexcept
   assert(Thread::IsInside());
 
   DWORD dwBytesTransferred;
-  BYTE inbuf[1024];
+  std::byte inbuf[1024];
 
   // JMW added purging of port on open to prevent overflow
   Flush();
@@ -247,16 +247,11 @@ SerialPort::Run() noexcept
 
   while (!CheckStopped()) {
 
-    WaitResult result = WaitDataPending(osStatus, INFINITE);
-    switch (result) {
-    case WaitResult::READY:
-      break;
-
-    case WaitResult::TIMEOUT:
+    try {
+      WaitDataPending(osStatus, INFINITE);
+    } catch (const DeviceTimeout &) {
       continue;
-
-    case WaitResult::FAILED:
-    case WaitResult::CANCELLED:
+    } catch (...) {
       ::Sleep(100);
       continue;
     }
@@ -269,7 +264,7 @@ SerialPort::Run() noexcept
 
     // Start reading data
 
-    if ((size_t)nbytes > sizeof(inbuf))
+    if ((std::size_t)nbytes > sizeof(inbuf))
       nbytes = sizeof(inbuf);
 
     if (!::ReadFile(hPort, inbuf, nbytes, &dwBytesTransferred,
@@ -292,19 +287,19 @@ SerialPort::Run() noexcept
         continue;
     }
 
-    DataReceived(inbuf, dwBytesTransferred);
+    DataReceived({inbuf, dwBytesTransferred});
   }
 
   Flush();
 }
 
-size_t
-SerialPort::Write(const void *data, size_t length)
+std::size_t
+SerialPort::Write(const void *data, std::size_t length)
 {
   DWORD NumberOfBytesWritten;
 
   if (hPort == INVALID_HANDLE_VALUE)
-    return 0;
+    throw std::runtime_error("Port is closed");
 
   OverlappedEvent osWriter;
 
@@ -312,8 +307,8 @@ SerialPort::Write(const void *data, size_t length)
   if (::WriteFile(hPort, data, length, &NumberOfBytesWritten, osWriter.GetPointer()))
     return NumberOfBytesWritten;
 
-  if (::GetLastError() != ERROR_IO_PENDING)
-    return 0;
+  if (auto error = ::GetLastError(); error != ERROR_IO_PENDING)
+    throw MakeLastError(error, "Port write failed");
 
   // Let's wait for ReadFile() to finish
   unsigned timeout_ms = 1000 + length * 10;
@@ -327,7 +322,7 @@ SerialPort::Write(const void *data, size_t length)
     ::CancelIo(hPort);
     ::SetCommMask(hPort, 0);
     osWriter.Wait();
-    return 0;
+    throw DeviceTimeout{"Port write timeout"};
   }
 }
 
@@ -361,7 +356,7 @@ SerialPort::SetRxTimeout(unsigned Timeout)
 }
 
 unsigned
-SerialPort::GetBaudrate() const
+SerialPort::GetBaudrate() const noexcept
 {
   if (hPort == INVALID_HANDLE_VALUE)
     return 0;
@@ -372,7 +367,7 @@ SerialPort::GetBaudrate() const
   return PortDCB.BaudRate;
 }
 
-bool
+void
 SerialPort::SetBaudrate(unsigned BaudRate)
 {
   COMSTAT ComStat;
@@ -380,7 +375,7 @@ SerialPort::SetBaudrate(unsigned BaudRate)
   DWORD dwErrors;
 
   if (hPort == INVALID_HANDLE_VALUE)
-    return false;
+    throw std::runtime_error("Port is closed");
 
   do {
     ClearCommError(hPort, &dwErrors, &ComStat);
@@ -392,5 +387,6 @@ SerialPort::SetBaudrate(unsigned BaudRate)
 
   PortDCB.BaudRate = BaudRate;
 
-  return SetCommState(hPort, &PortDCB);
+  if (!SetCommState(hPort, &PortDCB))
+    throw MakeLastError("Failed to set baud rate");
 }

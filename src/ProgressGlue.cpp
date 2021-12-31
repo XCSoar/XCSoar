@@ -43,7 +43,6 @@ ProgressGlue::Create(const TCHAR *text) noexcept
     global_progress_window = new ProgressWindow(UIGlobals::GetMainWindow());
 
   global_progress_window->SetMessage(text);
-  global_progress_window->SetValue(0);
 
   UIGlobals::GetMainWindow().Refresh();
   throttle_clock.Reset();

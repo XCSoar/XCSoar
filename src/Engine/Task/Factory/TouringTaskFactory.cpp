@@ -58,7 +58,7 @@ TouringTaskFactory::UpdateOrderedTaskSettings(OrderedTaskSettings& to)
 {
   AbstractTaskFactory::UpdateOrderedTaskSettings(to);
 
-  to.aat_min_time = 0;
+  to.aat_min_time = {};
 
   to.start_constraints.max_speed = 0;
   to.start_constraints.max_height = 0;

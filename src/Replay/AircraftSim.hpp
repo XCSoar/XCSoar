@@ -44,16 +44,19 @@ public:
              const GeoPoint& location_last,
              double altitude);
 
-  bool Update(const Angle heading, const double timestep=1);
+  bool Update(const Angle heading,
+              const FloatDuration timestep=std::chrono::seconds{1}) noexcept;
 
-  double GetTime() const {
+  auto GetTime() const noexcept {
     return state.time;
   }
 
 private:
-  void Integrate(Angle heading, double timestep);
+  void Integrate(Angle heading,
+                 FloatDuration timestep) noexcept;
 
-  GeoPoint GetEndPoint(Angle heading, double timestep) const;
+  GeoPoint GetEndPoint(Angle heading,
+                       FloatDuration timestep) const noexcept;
 };
 
 #endif

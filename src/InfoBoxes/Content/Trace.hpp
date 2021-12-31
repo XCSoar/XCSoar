@@ -27,60 +27,61 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 #include "InfoBoxes/Content/Altitude.hpp"
 
+class Validity;
 class TraceVariableHistory;
 
 class InfoBoxContentSpark: public InfoBoxContent
 {
 protected:
   void Paint(Canvas &canvas, const PixelRect &rc,
-                const TraceVariableHistory& var,
-                const bool center = true);
+             const TraceVariableHistory &var,
+             const bool center = true) noexcept;
   void SetVSpeedComment(InfoBoxData &data,
-                    const TraceVariableHistory& var);
-
+                        const TraceVariableHistory &var,
+                        Validity validity) noexcept;
 };
 
 class InfoBoxContentVarioSpark : public InfoBoxContentSpark
 {
 public:
-  virtual void Update(InfoBoxData &data) override;
-  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
+  void Update(InfoBoxData &data) noexcept override;
+  void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
 };
 
 class InfoBoxContentNettoVarioSpark : public InfoBoxContentSpark
 {
 public:
-  virtual void Update(InfoBoxData &data) override;
-  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
+  void Update(InfoBoxData &data) noexcept override;
+  void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
 };
 
 class InfoBoxContentCirclingAverageSpark : public InfoBoxContentSpark
 {
 public:
-  virtual void Update(InfoBoxData &data) override;
-  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
+  void Update(InfoBoxData &data) noexcept override;
+  void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
 };
 
 class InfoBoxContentBarogram : public InfoBoxContentAltitude
 {
 public:
-  virtual void Update(InfoBoxData &data) override;
-  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
-  virtual const InfoBoxPanel *GetDialogContent() override;
+  void Update(InfoBoxData &data) noexcept override;
+  void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
+  const InfoBoxPanel *GetDialogContent() noexcept override;
 };
 
 class InfoBoxContentThermalBand : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data) override;
-  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
+  void Update(InfoBoxData &data) noexcept override;
+  void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
 };
 
 class InfoBoxContentTaskProgress : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data) override;
-  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
+  void Update(InfoBoxData &data) noexcept override;
+  void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
 };
 
 #endif

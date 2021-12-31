@@ -28,6 +28,7 @@ Copyright_License {
 #include "Renderer/UnitSymbolRenderer.hpp"
 #include "Math/FastRotation.hpp"
 #include "Units/Units.hpp"
+#include "Units/Descriptor.hpp"
 #include "util/Clamp.hpp"
 
 #define DELTA_V_STEP 4.
@@ -173,16 +174,102 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
   Create(parent, rc, style);
 }
 
+static constexpr int
+WidthToHeight(int width) noexcept
+{
+  return width * 112 / 100;
+}
+
+static constexpr PixelPoint
+TransformRotatedPoint(IntPoint2D pt, IntPoint2D offset) noexcept
+{
+  return { pt.x + offset.x, WidthToHeight(pt.y) + offset.y + 1 };
+}
+
+inline void
+GaugeVario::RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept
+{
+  canvas.Clear(look.background_color);
+
+  canvas.Select(look.arc_pen);
+
+  std::array<BulkPixelPoint, 21> arc;
+
+  const int arc_padding = look.arc_label_font.GetHeight();
+
+  const int x_radius = rc.GetWidth() - arc_padding;
+  const int y_radius = WidthToHeight(x_radius);
+
+  for (std::size_t i = 0; i < arc.size(); ++i) {
+    const unsigned angle = INT_ANGLE_RANGE / 2
+      + i * INT_ANGLE_RANGE / 2 / (arc.size() - 1);
+    const PixelPoint delta(ISINETABLE[NormalizeIntAngle(angle)] * x_radius / 1024,
+                           -ISINETABLE[NormalizeIntAngle(angle + INT_QUARTER_CIRCLE)] * y_radius / 1024);
+
+    arc[i] = geometry.offset + delta;
+  }
+
+  canvas.DrawPolyline(arc.data(), arc.size());
+
+  canvas.Select(look.tick_pen);
+  canvas.Select(look.arc_label_font);
+  canvas.SetTextColor(look.dimmed_text_color);
+  canvas.SetBackgroundTransparent();
+
+  int tick_value_step = 1;
+  const auto &unit_descriptor =
+    Units::unit_descriptors[(std::size_t)Units::current.vertical_speed_unit];
+  const double unit_factor = unit_descriptor.factor_to_user;
+
+  switch (Units::current.vertical_speed_unit) {
+  case Unit::FEET_PER_MINUTE:
+    tick_value_step = 200;
+    break;
+
+  default:
+    break;
+  }
+
+  const Angle tick_angle_step = Angle::QuarterCircle() * tick_value_step
+    / unit_factor / GAUGEVARIORANGE;
+
+  const int n_ticks = GAUGEVARIORANGE / (tick_value_step / unit_factor);
+
+  const int tick_length = Layout::GetTextPadding() * 4;
+
+  const IntPoint2D tick_start{1 - x_radius, 0};
+  const IntPoint2D tick_end{-tick_length - x_radius, 0};
+  const IntPoint2D label_center{-x_radius - arc_padding / 2 - tick_length, 0};
+
+  for (int i = -n_ticks; i < n_ticks; ++i) {
+    Angle angle = tick_angle_step * i;
+    const FastIntegerRotation r{angle};
+
+    canvas.DrawLine(TransformRotatedPoint(r.Rotate(tick_start),
+                                          geometry.offset),
+                    TransformRotatedPoint(r.Rotate(tick_end),
+                                          geometry.offset));
+
+    TCHAR label[16];
+    StringFormatUnsafe(label, _T("%d"), i * tick_value_step);
+
+    const auto label_size = canvas.CalcTextSize(label);
+
+    const auto label_position = TransformRotatedPoint(r.Rotate(label_center),
+                                                      geometry.offset)
+      - label_size / 2U;
+
+    canvas.DrawText(label_position, label);
+  }
+}
+
 void
-GaugeVario::OnPaintBuffer(Canvas &canvas)
+GaugeVario::OnPaintBuffer(Canvas &canvas) noexcept
 {
   const PixelRect rc = GetClientRect();
 
   if (!IsPersistent() || background_dirty) {
-    canvas.Stretch(rc.GetTopLeft(), rc.GetSize(),
-                   look.background_bitmap,
-                   {(int)look.background_x, 0}, {58, 120});
-
+    RenderBackground(canvas, rc);
     background_dirty = false;
   }
 
@@ -272,12 +359,6 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   }
 
   RenderZero(canvas);
-}
-
-static constexpr PixelPoint
-TransformRotatedPoint(IntPoint2D pt, IntPoint2D offset) noexcept
-{
-  return { pt.x + offset.x, (pt.y * 112 / 100) + offset.y + 1 };
 }
 
 void

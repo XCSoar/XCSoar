@@ -24,6 +24,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <stdexcept>
+
 #include <stdio.h>
 
 static unsigned inject_port_fault;
@@ -37,50 +39,49 @@ public:
   bool running;
   unsigned baud_rate;
 
-  FaultInjectionPort(PortListener *_listener, DataHandler &_handler)
+  FaultInjectionPort(PortListener *_listener, DataHandler &_handler) noexcept
     :Port(_listener, _handler),
      running(true),
      baud_rate(DEFAULT_BAUD_RATE) {}
 
   /* virtual methods from class Port */
-  virtual PortState GetState() const override {
+  PortState GetState() const noexcept override {
     return inject_port_fault > 0
       ? PortState::READY
       : PortState::FAILED;
   }
 
-  virtual size_t Write(const void *data, size_t length) override {
+  size_t Write(const void *data, size_t length) override {
     return length;
   }
 
-  virtual bool Drain() override {
+  bool Drain() override {
     return true;
   }
 
-  virtual void Flush() override {}
+  void Flush() override {}
 
-  virtual unsigned GetBaudrate() const override {
+  unsigned GetBaudrate() const noexcept override {
     return baud_rate;
   }
 
-  virtual bool SetBaudrate(unsigned _baud_rate) override {
+  void SetBaudrate(unsigned _baud_rate) override {
     baud_rate = _baud_rate;
-    return true;
   }
 
-  virtual bool StopRxThread() override {
+  bool StopRxThread() override {
     running = false;
     return true;
   }
 
-  virtual bool StartRxThread() override {
+  bool StartRxThread() override {
     running = true;
     return true;
   }
 
-  virtual int Read(void *Buffer, size_t Size) override {
+  std::size_t Read(void *Buffer, size_t Size) override {
     if (inject_port_fault == 0)
-      return -1;
+      return 0;
 
     if (--inject_port_fault == 0)
       StateChanged();
@@ -90,9 +91,8 @@ public:
     return Size;
   }
 
-  WaitResult WaitRead(std::chrono::steady_clock::duration timeout) override {
-    return inject_port_fault > 0
-      ? WaitResult::READY
-      : WaitResult::FAILED;
+  void WaitRead(std::chrono::steady_clock::duration timeout) override {
+    if (inject_port_fault == 0)
+      throw std::runtime_error{"Injected fault"};
   }
 };

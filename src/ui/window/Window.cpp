@@ -33,6 +33,10 @@ Copyright_License {
 
 #include <cassert>
 
+#if defined(USE_WINUSER) && !defined(NDEBUG)
+#include <processthreadsapi.h>
+#endif
+
 Window::~Window() noexcept
 {
   Destroy();

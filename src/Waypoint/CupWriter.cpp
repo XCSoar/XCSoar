@@ -30,19 +30,17 @@ static void
 WriteAngleDMM(BufferedOutputStream &writer, const Angle angle, bool is_latitude)
 {
   // Calculate degrees, minutes and decimal minutes
-  unsigned deg, min, mmm;
-  bool is_positive;
-  angle.ToDMM(deg, min, mmm, is_positive);
+  const auto dmm = angle.ToDMM();
 
   // Save them into the buffer string
   writer.Format(is_latitude ? "%02u%02u.%03u" : "%03u%02u.%03u",
-                deg, min, mmm);
+                dmm.degrees, dmm.minutes, dmm.decimal_minutes);
 
   // Attach the buffer string to the output
   if (is_latitude)
-    writer.Write(is_positive ? "N" : "S");
+    writer.Write(dmm.positive ? "N" : "S");
   else
-    writer.Write(is_positive ? "E" : "W");
+    writer.Write(dmm.positive ? "E" : "W");
 }
 
 static void
@@ -114,8 +112,10 @@ WriteCup(BufferedOutputStream &writer, const Waypoint &wp)
   writer.Write('"');
   writer.Write(',');
 
-  // Write Code
-  writer.Write(',');
+  // Write Code / Short Name
+  writer.Write('"');
+  writer.Write(wp.shortname.c_str());
+  writer.Write('"');
 
   // Write Country
   writer.Write(',');

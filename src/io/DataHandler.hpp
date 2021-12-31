@@ -24,9 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_IO_DATA_HANDLER_HPP
 #define XCSOAR_IO_DATA_HANDLER_HPP
 
-#include "util/Compiler.h"
-
 #include <cstddef>
+#include <span>
 
 /**
  * Interface with callbacks for the #Port class.
@@ -36,8 +35,7 @@ public:
   /**
    * @return false if the handler wishes to receive no more data
    */
-  gcc_nonnull_all
-  virtual bool DataReceived(const void *data, size_t length) noexcept = 0;
+  virtual bool DataReceived(std::span<const std::byte> s) noexcept = 0;
 };
 
 #endif

@@ -58,9 +58,16 @@ public:
      scan_tiles(!_scan_overview || _scan_all),
      env(_env) {}
 
-  bool LoadOverview(struct zzip_dir *dir,
+  /**
+   * Throws on error.
+   */
+  void LoadOverview(struct zzip_dir *dir,
                     const char *path, const char *world_file);
-  bool UpdateTiles(struct zzip_dir *dir, const char *path,
+
+  /**
+   * Throws on error.
+   */
+  void UpdateTiles(struct zzip_dir *dir, const char *path,
                    SignedRasterLocation p, unsigned radius);
 
   /* callback methods for libjasper (via jas_rtc.cpp) */
@@ -81,59 +88,67 @@ public:
                    const struct jas_matrix &m);
 
 private:
-  bool LoadJPG2000(struct zzip_dir *dir, const char *path);
+  /**
+   * Throws on error.
+   */
+  void LoadJPG2000(struct zzip_dir *dir, const char *path);
+
   void ParseBounds(const char *data);
 };
 
 /**
+ * Throws on error.
+ *
  * @param all load not only overview, but all tiles?  On large files,
  * this is a very expensive operation.  This option was designed for
  * small RASP files only.
  */
-bool
+void
 LoadTerrainOverview(struct zzip_dir *dir,
                     const char *path, const char *world_file,
                     RasterTileCache &raster_tile_cache,
                     bool all,
                     OperationEnvironment &env);
 
-static inline bool
+static inline void
 LoadTerrainOverview(struct zzip_dir *dir,
                     RasterTileCache &tile_cache,
                     OperationEnvironment &env)
 {
-  return LoadTerrainOverview(dir, "terrain.jp2", "terrain.j2w",
-                             tile_cache, false, env);
+  LoadTerrainOverview(dir, "terrain.jp2", "terrain.j2w",
+                      tile_cache, false, env);
 }
 
-bool
+/**
+ * Throws on error.
+ */
+void
 UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
                    RasterTileCache &raster_tile_cache, SharedMutex &mutex,
                    SignedRasterLocation p, unsigned radius);
 
-static inline bool
+static inline void
 UpdateTerrainTiles(struct zzip_dir *dir,
                    RasterTileCache &tile_cache, SharedMutex &mutex,
                    SignedRasterLocation p, unsigned radius)
 {
-  return UpdateTerrainTiles(dir, "terrain.jp2", tile_cache, mutex,
-                            p, radius);
+  UpdateTerrainTiles(dir, "terrain.jp2", tile_cache, mutex, p, radius);
 }
 
-bool
+void
 UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
                    RasterTileCache &raster_tile_cache, SharedMutex &mutex,
                    const RasterProjection &projection,
                    const GeoPoint &location, double radius);
 
-static inline bool
+static inline void
 UpdateTerrainTiles(struct zzip_dir *dir,
                    RasterTileCache &tile_cache, SharedMutex &mutex,
                    const RasterProjection &projection,
                    const GeoPoint &location, double radius)
 {
-  return UpdateTerrainTiles(dir, "terrain.jp2", tile_cache, mutex,
-                            projection, location, radius);
+  UpdateTerrainTiles(dir, "terrain.jp2", tile_cache, mutex,
+                     projection, location, radius);
 }
 
 #endif

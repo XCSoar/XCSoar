@@ -24,14 +24,13 @@ Copyright_License {
 #ifndef TOPOGRAPHY_STORE_HPP
 #define TOPOGRAPHY_STORE_HPP
 
+#include "TopographyFile.hpp"
 #include "util/NonCopyable.hpp"
-#include "util/StaticArray.hxx"
-#include "util/Compiler.h"
 
-#include <tchar.h>
+#include <forward_list>
 
+class Path;
 class WindowProjection;
-class TopographyFile;
 class NLineReader;
 class OperationEnvironment;
 struct zzip_dir;
@@ -40,43 +39,38 @@ struct zzip_dir;
  * Class used to manage and render vector topography layers
  */
 class TopographyStore : private NonCopyable {
-public:
-  /** maximum number of topography layers */
-  static constexpr unsigned MAXTOPOGRAPHY = 30;
-
-private:
-  StaticArray<TopographyFile *, MAXTOPOGRAPHY> files;
+  std::forward_list<TopographyFile> files;
 
   /**
    * This number is incremented each time this object is modified.
    */
-  unsigned serial;
+  unsigned serial = 0;
 
 public:
-  TopographyStore():serial(0) {}
-  ~TopographyStore();
+  TopographyStore() noexcept;
+  ~TopographyStore() noexcept;
 
   /**
    * Returns a serial for the current state.  The serial gets
    * incremented each time the list of warnings is modified.
    */
-  unsigned GetSerial() const {
+  unsigned GetSerial() const noexcept {
     return serial;
   }
 
-  unsigned size() const {
-    return files.size();
+  auto begin() const noexcept {
+    return files.begin();
   }
 
-  const TopographyFile &operator [](unsigned i) const {
-    return *files[i];
+  auto end() const noexcept {
+    return files.end();
   }
 
   /**
    * @see TopographyFile::GetNextScaleThreshold()
    */
-  gcc_pure
-  double GetNextScaleThreshold(double map_scale) const;
+  [[gnu::pure]]
+  double GetNextScaleThreshold(double map_scale) const noexcept;
 
   /**
    * @param max_update the maximum number of files updated in this
@@ -84,17 +78,17 @@ public:
    * @return the number of files which were updated
    */
   unsigned ScanVisibility(const WindowProjection &m_projection,
-                          unsigned max_update=1024);
+                          unsigned max_update=1024) noexcept;
 
   /**
    * Load all shapes of all files into memory.  For debugging
    * purposes.
    */
-  void LoadAll();
+  void LoadAll() noexcept;
 
   void Load(OperationEnvironment &operation, NLineReader &reader,
-            const TCHAR *directory, struct zzip_dir *zdir = nullptr);
-  void Reset();
+            Path directory, struct zzip_dir *zdir = nullptr) noexcept;
+  void Reset() noexcept;
 };
 
 #endif

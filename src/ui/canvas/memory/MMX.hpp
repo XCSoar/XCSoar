@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_MMX_HPP
 #define XCSOAR_SCREEN_MMX_HPP
 
+#include "PixelTraits.hpp"
 #include "ui/canvas/PortableColor.hpp"
 
 #ifndef __MMX__
@@ -42,6 +43,7 @@ Copyright_License {
  * instructions.
  */
 class MMXAlphaPixelOperations {
+protected:
   uint8_t alpha;
 
 public:
@@ -55,7 +57,7 @@ public:
   }
 
   gcc_hot gcc_flatten gcc_nonnull_all
-  void FillPixels(__m64 *p, unsigned n, __m64 v_color) const {
+  void _FillPixels(__m64 *p, unsigned n, __m64 v_color) const {
     const __m64 v_alpha = _mm_set1_pi16(alpha ^ 0xff);
     const __m64 zero = _mm_setzero_si64();
 
@@ -69,28 +71,6 @@ public:
     }
   }
 
-  gcc_hot gcc_flatten gcc_nonnull_all
-  void FillPixels(Luminosity8 *p, unsigned n, Luminosity8 c) const {
-    _mm_empty();
-
-    FillPixels((__m64 *)p, n / 8,
-               _mm_set1_pi16(c.GetLuminosity() * alpha));
-
-    _mm_empty();
-  }
-
-  gcc_hot
-  void FillPixels(BGRA8Color *p, unsigned n, BGRA8Color c) const {
-    _mm_empty();
-
-    __m64 v_alpha = _mm_set1_pi16(alpha);
-    __m64 v_color = _mm_setr_pi16(c.Blue(), c.Green(), c.Red(), c.Alpha());
-
-    FillPixels((__m64 *)p, n / 2, _mm_mullo_pi16(v_color, v_alpha));
-
-    _mm_empty();
-  }
-
   gcc_hot gcc_always_inline
   static __m64 AlphaBlend4(__m64 p, __m64 q,
                            __m64 alpha, __m64 inverse_alpha) {
@@ -100,8 +80,8 @@ public:
   }
 
   gcc_flatten
-  void CopyPixels(uint8_t *gcc_restrict p,
-                  const uint8_t *gcc_restrict q, unsigned n) const {
+  void _CopyPixels(uint8_t *gcc_restrict p,
+                   const uint8_t *gcc_restrict q, unsigned n) const {
     _mm_empty();
 
     const __m64 v_alpha = _mm_set1_pi16(alpha);
@@ -127,13 +107,51 @@ public:
 
     _mm_empty();
   }
+};
+
+class MMXAlpha8PixelOperations : MMXAlphaPixelOperations {
+public:
+  using PixelTraits = GreyscalePixelTraits;
+  using SourcePixelTraits = GreyscalePixelTraits;
+
+  using MMXAlphaPixelOperations::MMXAlphaPixelOperations;
+
+  gcc_hot gcc_flatten gcc_nonnull_all
+  void FillPixels(Luminosity8 *p, unsigned n, Luminosity8 c) const {
+    _mm_empty();
+
+    _FillPixels((__m64 *)p, n / 8,
+                _mm_set1_pi16(c.GetLuminosity() * alpha));
+
+    _mm_empty();
+  }
 
   void CopyPixels(Luminosity8 *p, const Luminosity8 *q, unsigned n) const {
-    CopyPixels((uint8_t *)p, (const uint8_t *)q, n);
+    _CopyPixels((uint8_t *)p, (const uint8_t *)q, n);
+  }
+};
+
+class MMXAlpha32PixelOperations : MMXAlphaPixelOperations {
+public:
+  using PixelTraits = BGRAPixelTraits;
+  using SourcePixelTraits = BGRAPixelTraits;
+
+  using MMXAlphaPixelOperations::MMXAlphaPixelOperations;
+
+  gcc_hot
+  void FillPixels(BGRA8Color *p, unsigned n, BGRA8Color c) const {
+    _mm_empty();
+
+    __m64 v_alpha = _mm_set1_pi16(alpha);
+    __m64 v_color = _mm_setr_pi16(c.Blue(), c.Green(), c.Red(), c.Alpha());
+
+    _FillPixels((__m64 *)p, n / 2, _mm_mullo_pi16(v_color, v_alpha));
+
+    _mm_empty();
   }
 
   void CopyPixels(BGRA8Color *p, const BGRA8Color *q, unsigned n) const {
-    CopyPixels((uint8_t *)p, (const uint8_t *)q, n * 4);
+    _CopyPixels((uint8_t *)p, (const uint8_t *)q, n * 4);
   }
 };
 

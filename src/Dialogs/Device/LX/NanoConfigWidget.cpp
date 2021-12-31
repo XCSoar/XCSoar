@@ -22,9 +22,11 @@ Copyright_License {
 */
 
 #include "NanoConfigWidget.hpp"
+#include "Dialogs/Error.hpp"
 #include "Device/Driver/LX/Internal.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
+#include "Operation/Cancelled.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 
 static const char *const nano_setting_names[] = {
@@ -128,7 +130,7 @@ NanoConfigWidget::SaveSetting(const char *name, unsigned idx,
 
 bool
 NanoConfigWidget::Save(bool &_changed) noexcept
-{
+try {
   PopupOperationEnvironment env;
   bool changed = false;
 
@@ -141,4 +143,9 @@ NanoConfigWidget::Save(bool &_changed) noexcept
 
   _changed |= changed;
   return true;
+} catch (OperationCancelled) {
+  return false;
+} catch (...) {
+  ShowError(std::current_exception(), _T("LXNAV Nano"));
+  return false;
 }

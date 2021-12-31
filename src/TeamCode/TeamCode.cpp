@@ -128,7 +128,7 @@ double
 TeamCode::GetRange() const
 {
   // Get last three values from teamcode (3-5)
-  unsigned value = GetValueFromTeamCode(code.begin() + 2, 3);
+  unsigned value = GetValueFromTeamCode(code.c_str() + 2, 3);
   return value * 100;
 }
 

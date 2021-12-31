@@ -35,7 +35,7 @@ Copyright_License {
  * too low quality data).
  */
 const Vector
-WindMeasurementList::getWind(unsigned now, double alt, bool &found) const
+WindMeasurementList::getWind(TimeStamp now, double alt, bool &found) const
 {
   //relative weight for each factor
   static constexpr unsigned REL_FACTOR_QUALITY = 100;
@@ -43,7 +43,7 @@ WindMeasurementList::getWind(unsigned now, double alt, bool &found) const
   static constexpr unsigned REL_FACTOR_TIME = 200;
 
   static constexpr unsigned altRange = 1000;
-  static constexpr unsigned timeRange = 3600; // one hour
+  static constexpr FloatDuration timeRange = std::chrono::hours{1};
 
   static constexpr double k = 0.0025;
 
@@ -64,7 +64,7 @@ WindMeasurementList::getWind(unsigned now, double alt, bool &found) const
          warps "should" be filtered at a higher level already */
       continue;
 
-    auto timediff = double(now - m.time) / timeRange;
+    auto timediff = (now - m.time) / timeRange;
     if (timediff >= 1)
       continue;
 
@@ -132,7 +132,7 @@ WindMeasurementList::getWind(unsigned now, double alt, bool &found) const
  * Adds the windvector vector with quality quality to the list.
  */
 void
-WindMeasurementList::addMeasurement(unsigned time, const SpeedVector &vector,
+WindMeasurementList::addMeasurement(TimeStamp time, const SpeedVector &vector,
                                     double alt, unsigned quality)
 {
   WindMeasurement &wind = measurements.full()
@@ -150,7 +150,7 @@ WindMeasurementList::addMeasurement(unsigned time, const SpeedVector &vector,
  * removed if the list is too full. Reimplemented from LimitedList.
  */
 unsigned
-WindMeasurementList::getLeastImportantItem(unsigned now)
+WindMeasurementList::getLeastImportantItem(TimeStamp now) noexcept
 {
   unsigned maxscore = 0;
   unsigned int founditem = measurements.size() - 1;

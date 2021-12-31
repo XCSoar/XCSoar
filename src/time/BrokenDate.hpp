@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_BROKEN_DATE_HPP
 #define XCSOAR_BROKEN_DATE_HPP
 
-#include "util/Compiler.h"
-
 #include <type_traits>
 
 #include <cstdint>
@@ -58,33 +56,33 @@ struct BrokenDate {
   /**
    * Non-initializing default constructor.
    */
-  BrokenDate() = default;
+  BrokenDate() noexcept = default;
 
   constexpr
-  BrokenDate(unsigned _year, unsigned _month, unsigned _day)
+  BrokenDate(unsigned _year, unsigned _month, unsigned _day) noexcept
     :year(_year), month(_month), day(_day), day_of_week(-1) {}
 
   constexpr
-  bool operator==(const BrokenDate other) const {
+  bool operator==(const BrokenDate other) const noexcept {
     return year == other.year && month == other.month && day == other.day;
   }
 
   constexpr
-  bool operator>(const BrokenDate other) const {
+  bool operator>(const BrokenDate other) const noexcept {
     return year > other.year ||
       (year == other.year && (month > other.month ||
                               (month == other.month && day > other.day)));
   }
 
   constexpr
-  bool operator<(const BrokenDate other) const {
+  bool operator<(const BrokenDate other) const noexcept {
     return other > *this;
   }
 
   /**
    * Clears the object, to make the Plausible() check returns false.
    */
-  void Clear() {
+  void Clear() noexcept {
     year = 0;
   }
 
@@ -92,7 +90,7 @@ struct BrokenDate {
    * Returns an instance that fails the Plausible() check.
    */
   constexpr
-  static BrokenDate Invalid() {
+  static BrokenDate Invalid() noexcept {
     return BrokenDate(0, 0, 0);
   }
 
@@ -100,7 +98,7 @@ struct BrokenDate {
    * Does this object contain plausible values?
    */
   constexpr
-  bool IsPlausible() const {
+  bool IsPlausible() const noexcept {
     return year >= 1800 && year <= 2500 &&
       month >= 1 && month <= 12 &&
       day >= 1 && day <= 31;
@@ -109,20 +107,20 @@ struct BrokenDate {
   /**
    * Returns the current system date in UTC.
    */
-  gcc_pure
-  static BrokenDate TodayUTC();
+  [[gnu::pure]]
+  static BrokenDate TodayUTC() noexcept;
 
-  void IncrementDay();
+  void IncrementDay() noexcept;
 
-  void DecrementDay();
+  void DecrementDay() noexcept;
 
   /**
    * Returns the number of calendar days that have passed since the
    * two #BrokenDate structs.  The result may be negative if #other is
    * bigger than #this.
    */
-  gcc_pure
-  int DaysSince(const BrokenDate &other) const;
+  [[gnu::pure]]
+  int DaysSince(const BrokenDate &other) const noexcept;
 };
 
 static_assert(std::is_trivial<BrokenDate>::value, "type is not trivial");

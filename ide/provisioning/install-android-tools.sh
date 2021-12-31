@@ -6,7 +6,7 @@ set -e
 ANDROID_SDK_TOOLS_VERSION=6858069_latest
 ANDROID_BUILD_TOOLS_VERSION=29.0.3
 ANDROID_PLATFORM_VERSION=29
-ANDROID_NDK_VERSION=r22b
+ANDROID_NDK_VERSION=r23b
 ANDROID_REPO_URL=https://dl.google.com/android/repository
 ANDROID_SDK_DIR=~/opt/android-sdk-linux
 ANDROID_NDK_DIR=~/opt/android-ndk-${ANDROID_NDK_VERSION}
@@ -48,7 +48,7 @@ else
 
   ANDROID_NDK_TMP_ZIP=$(mktemp)
   wget --progress=bar:force:noscroll \
-      ${ANDROID_REPO_URL}/android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip \
+      ${ANDROID_REPO_URL}/android-ndk-${ANDROID_NDK_VERSION}-linux.zip \
       -O "${ANDROID_NDK_TMP_ZIP}"
 
   cd ~/opt

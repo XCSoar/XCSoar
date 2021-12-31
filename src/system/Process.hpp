@@ -26,20 +26,6 @@ Copyright_License {
 
 #ifdef HAVE_POSIX
 
-static inline void
-CopyToArray(const char **dest)
-{
-  *dest = nullptr;
-}
-
-template<typename... Args>
-static inline void
-CopyToArray(const char **dest, const char *src, Args... args)
-{
-  *dest++ = src;
-  CopyToArray(dest, args...);
-}
-
 /**
  * Launch a child process but don't wait for it to exit.
  */
@@ -50,9 +36,7 @@ template<typename... Args>
 static inline bool
 Start(const char *path, Args... args)
 {
-  constexpr unsigned n = sizeof...(Args);
-  const char *argv[1 + n + 1];
-  CopyToArray(argv, path, args...);
+  const char *const argv[]{path, args..., nullptr};
   return Start(argv);
 }
 
@@ -66,9 +50,7 @@ template<typename... Args>
 static inline bool
 Run(const char *path, Args... args)
 {
-  constexpr unsigned n = sizeof...(Args);
-  const char *argv[1 + n + 1];
-  CopyToArray(argv, path, args...);
+  const char *const argv[]{path, args..., nullptr};
   return Run(argv);
 }
 

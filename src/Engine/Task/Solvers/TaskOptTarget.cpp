@@ -33,7 +33,7 @@ TaskOptTarget::f(const double p) noexcept
 
   res = tm.glide_solution(aircraft);
 
-  return res.time_elapsed;
+  return res.time_elapsed.count();
 }
 
 bool

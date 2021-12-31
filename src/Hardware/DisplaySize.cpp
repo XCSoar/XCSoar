@@ -26,7 +26,7 @@ Copyright_License {
 
 #ifdef _WIN32
 #include "ui/canvas/gdi/RootDC.hpp"
-#include <windows.h>
+#include <wingdi.h>
 #elif defined(USE_X11)
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"

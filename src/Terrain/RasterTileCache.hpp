@@ -33,6 +33,7 @@ Copyright_License {
 
 #include <cassert>
 #include <cstdint>
+#include <optional>
 
 #define RASTER_SLOPE_FACT 12
 
@@ -54,14 +55,6 @@ class RasterTileCache {
   // desktop: use a lot of memory
   static constexpr unsigned MAX_ACTIVE_TILES = 512;
 #endif
-
-  /**
-   * The width and height of the terrain bitmap is shifted by this
-   * number of bits to determine the overview size.
-   */
-  static constexpr unsigned OVERVIEW_BITS = 4;
-
-  static constexpr unsigned OVERVIEW_MASK = (~0u) << OVERVIEW_BITS;
 
   /**
    * Target number of steps in intersection searches; total distance
@@ -189,22 +182,28 @@ public:
                 TerrainHeight *buffer, unsigned size,
                 bool interpolate) const noexcept;
 
-  bool FirstIntersection(SignedRasterLocation origin,
-                         SignedRasterLocation destination,
-                         int h_origin,
-                         int h_dest,
-                         int slope_fact, int h_ceiling,
-                         int h_safety,
-                         RasterLocation &_location, int &h_int,
-                         bool can_climb) const noexcept;
+  struct Intersection {
+    RasterLocation location;
+    int height;
+  };
+
+  [[gnu::pure]]
+  std::optional<Intersection> FirstIntersection(SignedRasterLocation origin,
+                                                SignedRasterLocation destination,
+                                                int h_origin,
+                                                int h_dest,
+                                                int slope_fact, int h_ceiling,
+                                                int h_safety,
+                                                bool can_climb) const noexcept;
 
   /**
    * @return {-1,-1} if no intersection was found
    */
   gcc_pure SignedRasterLocation
-  Intersection(SignedRasterLocation origin, SignedRasterLocation destination,
-               int h_origin, const int slope_fact,
-               int height_floor) const noexcept;
+  GroundIntersection(SignedRasterLocation origin,
+                     SignedRasterLocation destination,
+                     int h_origin, const int slope_fact,
+                     int height_floor) const noexcept;
 
 private:
   /**

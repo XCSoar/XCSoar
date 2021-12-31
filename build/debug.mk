@@ -2,21 +2,24 @@ DEBUG ?= y
 DEBUG_GLIBCXX ?= n
 
 ifeq ($(DEBUG),y)
-  OPTIMIZE := -O0
+  OPTIMIZE := -Og
   OPTIMIZE += -funit-at-a-time
 else
   OPTIMIZE := -Os
   OPTIMIZE += -DNDEBUG
 endif
 
+TARGET_OPTIMIZE :=
+HOST_OPTIMIZE := -g
+
 ifeq ($(CLANG),y)
-  OPTIMIZE += -g
+  TARGET_OPTIMIZE += -g
 else
 ifeq ($(HAVE_WIN32),y)
   # WINE works best with stabs debug symbols
-  OPTIMIZE += -gstabs
+  TARGET_OPTIMIZE += -gstabs
 else
-  OPTIMIZE += -g
+  TARGET_OPTIMIZE += -g
 endif
 endif
 
@@ -37,24 +40,28 @@ endif
 
 ifeq ($(LTO),y)
   ifeq ($(CLANG),n)
-    # 8 LTO threads - that's an arbitrary value, but better than the
-    # default
-    OPTIMIZE += -flto=8
+    # Let GCC figure out the number of available CPU threads itself
+    TARGET_OPTIMIZE += -flto=auto
+    # Only compile GIMPLE bytecode into the objects, thus reduce compile time,
+    # and reveal any not LTO capable component in the tool chain
+    # Otherwise the machine code in fat ojects could be used, but you have no idea
+    # that LTO was not effective
+    TARGET_OPTIMIZE += -fno-fat-lto-objects
   else
     ifeq ($(THIN_LTO),y)
-      OPTIMIZE += -flto=thin
+      TARGET_OPTIMIZE += -flto=thin
     else
-      OPTIMIZE += -flto
+      TARGET_OPTIMIZE += -flto
     endif
   endif
 endif
 
 ifeq ($(LLVM),y)
   # generate LLVM bitcode
-  OPTIMIZE += -emit-llvm
+  TARGET_OPTIMIZE += -emit-llvm
 endif
 
-OPTIMIZE_LDFLAGS = $(filter-out -emit-llvm,$(OPTIMIZE))
+OPTIMIZE_LDFLAGS = $(filter-out -emit-llvm,$(OPTIMIZE) $(TARGET_OPTIMIZE))
 ifeq ($(CLANG)$(TARGET_IS_DARWIN)$(LTO),yny)
   # The Gold linker is known to work for LTO with LLVM Clang.  LLD
   # might be an option in the future, when it working reliably.

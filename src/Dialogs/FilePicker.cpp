@@ -53,7 +53,7 @@ FilePicker(const TCHAR *caption, FileDataField &df,
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (i == -2) {
     const auto path = DownloadFilePicker(df.GetFileType());
-    if (path.IsNull())
+    if (path == nullptr)
       return false;
 
     df.ForceModify(path);
@@ -77,6 +77,6 @@ FilePicker(const TCHAR *caption, const TCHAR *patterns)
   FileDataField df;
   df.ScanMultiplePatterns(patterns);
   return FilePicker(caption, df)
-    ? df.GetPathFile()
+    ? df.GetValue()
     : nullptr;
 }

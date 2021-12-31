@@ -86,7 +86,7 @@ LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
     TopoInput input({data, size});
     TopographyFile file(nullptr, input.name.c_str(),
                         1, 1, 1,
-                        Color{});
+                        {});
   } catch (...) {
     return EXIT_FAILURE;
   }

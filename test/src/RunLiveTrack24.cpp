@@ -21,29 +21,32 @@ Copyright_License {
 }
 */
 
-#include "Tracking/LiveTrack24.hpp"
+#include "CoInstance.hpp"
+#include "Tracking/LiveTrack24/Client.hpp"
 #include "net/http/Init.hpp"
-#include "io/async/AsioThread.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "Units/System.hpp"
 #include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "DebugReplay.hpp"
-#include "util/ScopeExit.hxx"
+#include "co/Task.hxx"
+#include "util/PrintException.hxx"
 
 #include <cstdio>
 
 using namespace LiveTrack24;
 
-static bool
-TestTracking(int argc, char *argv[], CurlGlobal &curl)
+struct Instance : CoInstance {
+  const Net::ScopeInit net_init{GetEventLoop()};
+};
+
+static Co::InvokeTask
+TestTracking(int argc, char *argv[], LiveTrack24::Client &client)
 {
   Args args(argc, argv, "[DRIVER] FILE [USERNAME [PASSWORD]]");
   DebugReplay *replay = CreateDebugReplay(args);
   if (replay == NULL)
-    return false;
-
-  ConsoleOperationEnvironment env;
+    throw std::runtime_error("CreateDebugReplay() failed");
 
   bool has_user_id;
   UserID user_id;
@@ -56,8 +59,7 @@ TestTracking(int argc, char *argv[], CurlGlobal &curl)
     username = args.ExpectNextT();
     password = args.IsEmpty() ? _T("") : args.ExpectNextT();
 
-    user_id = LiveTrack24::GetUserID(username.c_str(), password.c_str(),
-                                     curl, env);
+    user_id = co_await client.GetUserID(username.c_str(), password.c_str());
     has_user_id = (user_id != 0);
   }
 
@@ -67,12 +69,10 @@ TestTracking(int argc, char *argv[], CurlGlobal &curl)
 
 
   printf("Starting tracking ... ");
-  bool result = StartTracking(session, username.c_str(), password.c_str(), 10,
-                              VehicleType::GLIDER, _T("Hornet"),
-                              curl, env);
-  printf(result ? "done\n" : "failed\n");
-  if (!result)
-    return false;
+  co_await client.StartTracking(session, username.c_str(),
+                                password.c_str(), 10,
+                                VehicleType::GLIDER, _T("Hornet"));
+  printf("done\n");
 
   BrokenDate now = BrokenDate::TodayUTC();
 
@@ -89,36 +89,31 @@ TestTracking(int argc, char *argv[], CurlGlobal &curl)
     BrokenDateTime datetime(now.year, now.month, now.day, time.hour,
                             time.minute, time.second);
 
-    result = SendPosition(
-        session, package_id, basic.location, (unsigned)basic.nav_altitude,
-        (unsigned)Units::ToUserUnit(basic.ground_speed, Unit::KILOMETER_PER_HOUR),
-        basic.track, datetime.ToUnixTimeUTC(),
-        curl, env);
-
-    if (!result)
-      break;
+    co_await client.SendPosition(session, package_id, basic.location,
+                                 (unsigned)basic.nav_altitude,
+                                 (unsigned)Units::ToUserUnit(basic.ground_speed,
+                                                             Unit::KILOMETER_PER_HOUR),
+                                 basic.track, datetime.ToTimePoint());
 
     package_id++;
   }
-  printf(result ? "done\n" : "failed\n");
+  printf("done\n");
 
   printf("Stopping tracking ... ");
-  result = EndTracking(session, package_id, curl, env);
-  printf(result ? "done\n" : "failed\n");
-
-  return true;
+  co_await client.EndTracking(session, package_id);
+  printf("done\n");
 }
 
 int
 main(int argc, char *argv[])
-{
-  AsioThread io_thread;
-  io_thread.Start();
-  AtScopeExit(&) { io_thread.Stop(); };
-  const Net::ScopeInit net_init(io_thread.GetEventLoop());
+try {
+  Instance instance;
 
-  LiveTrack24::SetServer(_T("test.livetrack24.com"));
-  bool result = TestTracking(argc, argv, *Net::curl);
-
-  return result ? EXIT_SUCCESS : EXIT_FAILURE;
+  Client client{*Net::curl};
+  client.SetServer(_T("www.livetrack24.com"));
+  instance.Run(TestTracking(argc, argv, client));
+  return EXIT_SUCCESS;
+} catch (...) {
+  PrintException(std::current_exception());
+  return EXIT_FAILURE;
 }

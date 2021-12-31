@@ -27,7 +27,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 
 void
-UpdateInfoBoxTerrainHeight(InfoBoxData &data)
+UpdateInfoBoxTerrainHeight(InfoBoxData &data) noexcept
 {
   const TerrainInfo &calculated = CommonInterface::Calculated();
   if (!calculated.terrain_valid){
@@ -40,7 +40,7 @@ UpdateInfoBoxTerrainHeight(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxTerrainCollision(InfoBoxData &data)
+UpdateInfoBoxTerrainCollision(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TerrainInfo &calculated = CommonInterface::Calculated();

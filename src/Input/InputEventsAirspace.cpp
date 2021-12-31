@@ -115,11 +115,12 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
   polar.SetMC(std::max(polar.GetMC(), 1.));
   const AirspaceAircraftPerformance perf(polar);
 
-  const auto *as = FindSoonestAirspace(airspace_database, aircraft_state, perf,
-                                       std::move(visible), 1800);
+  const auto as = FindSoonestAirspace(airspace_database, aircraft_state, perf,
+                                      std::move(visible),
+                                      std::chrono::minutes{30});
   if (!as) {
     return;
   } 
 
-  dlgAirspaceDetails(*as, airspace_warnings);
+  dlgAirspaceDetails(std::move(as), airspace_warnings);
 }

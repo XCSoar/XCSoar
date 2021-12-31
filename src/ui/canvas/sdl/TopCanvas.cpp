@@ -70,7 +70,7 @@ TopCanvas::GetRect() const
 #endif
 
 void
-TopCanvas::Create(SDL_Window *_window, PixelSize new_size)
+TopCanvas::Create(SDL_Window *_window)
 {
   window = _window;
 
@@ -103,7 +103,7 @@ TopCanvas::Create(SDL_Window *_window, PixelSize new_size)
 #endif
 
 #ifdef GREYSCALE
-  buffer.Allocate(new_size.width, new_size.height);
+  buffer.Allocate(width, height);
 #endif
 }
 

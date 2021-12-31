@@ -39,7 +39,8 @@ public:
   explicit ATR833Device(Port &_port):port(_port) {}
 
 public:
-  bool DataReceived(const void *data, size_t length, NMEAInfo &info) override;
+  bool DataReceived(std::span<const std::byte> s,
+                    NMEAInfo &info) noexcept override;
   bool PutActiveFrequency(RadioFrequency frequency,
                           const TCHAR *name,
                           OperationEnvironment &env) override;
@@ -69,15 +70,15 @@ public:
     }
   }
 
-  bool Send(Port &port, OperationEnvironment &env) {
+  void Send(Port &port, OperationEnvironment &env) {
     data[fill++] = checksum;
-    return port.FullWrite(data, fill, env, std::chrono::seconds(2));
+    port.FullWrite(data, fill, env, std::chrono::seconds(2));
   }
 };
 
 bool
-ATR833Device::DataReceived(const void *data, size_t length,
-                           NMEAInfo &info)
+ATR833Device::DataReceived(std::span<const std::byte>,
+                           NMEAInfo &info) noexcept
 {
   // actually made no use of radio information
   // TODO: interpret data delivered by ATR833 to display Radio settings...
@@ -92,7 +93,8 @@ ATR833Device::PutActiveFrequency(RadioFrequency frequency,
   ATRBuffer buffer(SETACTIVE);
   buffer.Put(frequency.GetKiloHertz() / 1000);
   buffer.Put((frequency.GetKiloHertz() % 1000) / 5);
-  return buffer.Send(port, env);
+  buffer.Send(port, env);
+  return true;
 }
 
 
@@ -104,9 +106,9 @@ ATR833Device::PutStandbyFrequency(RadioFrequency frequency,
   ATRBuffer buffer(SETSTANDBY);
   buffer.Put(frequency.GetKiloHertz() / 1000);
   buffer.Put((frequency.GetKiloHertz() % 1000) / 5);
-  return buffer.Send(port, env);
+  buffer.Send(port, env);
+  return true;
 }
-
 
 static Device *
 ATR833CreateOnPort(const DeviceConfig &config, Port &com_port)

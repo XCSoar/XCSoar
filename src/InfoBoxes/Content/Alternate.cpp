@@ -39,7 +39,7 @@ Copyright_License {
 #include <tchar.h>
 
 static std::unique_ptr<Widget>
-LoadAlternatesPanel(unsigned id)
+LoadAlternatesPanel(unsigned id) noexcept
 {
   return std::make_unique<CallbackWidget>(dlgAlternatesListShowModal);
 }
@@ -51,7 +51,7 @@ InfoBoxPanel alternate_infobox_panels[] = {
 };
 
 void
-InfoBoxContentAlternateName::Update(InfoBoxData &data)
+InfoBoxContentAlternateName::Update(InfoBoxData &data) noexcept
 {
   if (protected_task_manager == NULL) {
     data.SetInvalid();
@@ -91,13 +91,13 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
 }
 
 const InfoBoxPanel *
-InfoBoxContentAlternateName::GetDialogContent()
+InfoBoxContentAlternateName::GetDialogContent() noexcept
 {
   return alternate_infobox_panels;
 }
 
 void
-InfoBoxContentAlternateGR::Update(InfoBoxData &data)
+InfoBoxContentAlternateGR::Update(InfoBoxData &data) noexcept
 {
   if (protected_task_manager == NULL) {
     data.SetInvalid();
@@ -145,7 +145,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data)
 }
 
 const InfoBoxPanel *
-InfoBoxContentAlternateGR::GetDialogContent()
+InfoBoxContentAlternateGR::GetDialogContent() noexcept
 {
   return alternate_infobox_panels;
 }

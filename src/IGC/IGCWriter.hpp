@@ -53,7 +53,7 @@ class IGCWriter {
 
 public:
   /**
-   * Create a new IGC file.  The caller must check IsOpen().
+   * Throws on error.
    */
   explicit IGCWriter(Path path);
 

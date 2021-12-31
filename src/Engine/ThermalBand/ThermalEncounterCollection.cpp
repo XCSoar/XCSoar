@@ -145,7 +145,7 @@ ThermalEncounterCollection::UpdateTimes()
 {
   assert(!empty());
   // update accumulated times below slice height
-  double t = slices[0].time = 0;
+  FloatDuration t = slices[0].time = {};
   for (unsigned i=1; i< size(); ++i) {
     t += slices[i-1].dt;
     slices[i].time = t;

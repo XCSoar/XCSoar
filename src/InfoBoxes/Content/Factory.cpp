@@ -55,33 +55,33 @@ Copyright_License {
  * method and need no context.
  */
 class InfoBoxContentCallback : public InfoBoxContent {
-  void (*update)(InfoBoxData &data);
+  void (*update)(InfoBoxData &data) noexcept;
   const InfoBoxPanel *panels;
 
 public:
-  InfoBoxContentCallback(void (*_update)(InfoBoxData &data),
-                         const InfoBoxPanel *_panels)
+  InfoBoxContentCallback(void (*_update)(InfoBoxData &data) noexcept,
+                         const InfoBoxPanel *_panels) noexcept
     :update(_update), panels(_panels) {}
 
-  virtual void Update(InfoBoxData &data) override {
+  void Update(InfoBoxData &data) noexcept override {
     update(data);
   }
 
-  virtual const InfoBoxPanel *GetDialogContent() override {
+  const InfoBoxPanel *GetDialogContent() noexcept override {
     return panels;
   }
 };
 
 template<class T>
 struct IBFHelper {
-  static InfoBoxContent *Create() {
+  static InfoBoxContent *Create() noexcept {
     return new T();
   }
 };
 
 template<class T, int param>
 struct IBFHelperInt {
-  static InfoBoxContent *Create() {
+  static InfoBoxContent *Create() noexcept {
     return new T(param);
   }
 };
@@ -92,8 +92,8 @@ struct MetaData {
   const TCHAR *name;
   const TCHAR *caption;
   const TCHAR *description;
-  InfoBoxContent *(*create)();
-  void (*update)(InfoBoxData &data);
+  InfoBoxContent *(*create)() noexcept;
+  void (*update)(InfoBoxData &data) noexcept;
   const InfoBoxPanel *panels;
 
   /**
@@ -106,22 +106,22 @@ struct MetaData {
   constexpr MetaData(const TCHAR *_name,
                      const TCHAR *_caption,
                      const TCHAR *_description,
-                     InfoBoxContent *(*_create)())
+                     InfoBoxContent *(*_create)() noexcept) noexcept
     :name(_name), caption(_caption), description(_description),
      create(_create), update(nullptr), panels(nullptr) {}
 
   constexpr MetaData(const TCHAR *_name,
                      const TCHAR *_caption,
                      const TCHAR *_description,
-                     void (*_update)(InfoBoxData &data))
+                     void (*_update)(InfoBoxData &data) noexcept) noexcept
     :name(_name), caption(_caption), description(_description),
      create(nullptr), update(_update), panels(nullptr) {}
 
   constexpr MetaData(const TCHAR *_name,
                      const TCHAR *_caption,
                      const TCHAR *_description,
-                     void (*_update)(InfoBoxData &data),
-                     const InfoBoxPanel _panels[])
+                     void (*_update)(InfoBoxData &data) noexcept,
+                     const InfoBoxPanel _panels[]) noexcept
     :name(_name), caption(_caption), description(_description),
      create(nullptr), update(_update), panels(_panels) {}
 };
@@ -339,7 +339,7 @@ static constexpr MetaData meta_data[] = {
   // e_WindSpeed_Est
   {
     N_("Wind speed"),
-    N_("Wind V"),
+    N_("Wind"),
     N_("Wind speed estimated by XCSoar. Manual adjustment is possible with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through settings, adjust the values with left/right cursor keys."),
     UpdateInfoBoxWindSpeed,
     wind_infobox_panels,
@@ -348,7 +348,7 @@ static constexpr MetaData meta_data[] = {
   // e_WindBearing_Est
   {
     N_("Wind bearing"),
-    N_("Wind Brng"),
+    N_("Wind"),
     N_("Wind bearing estimated by XCSoar. Manual adjustment is possible with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through settings, adjust the values with left/right cursor keys."),
     UpdateInfoBoxWindBearing,
     wind_infobox_panels,
@@ -885,7 +885,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_HeadWind
   {
-    N_("Head wind component"),
+    N_("Wind, head component"),
     N_("Head Wind"),
     N_("The current head wind component. Head wind is calculated from TAS and GPS ground speed if airspeed is available from external device. Otherwise the estimated wind is used for the calculation."),
     UpdateInfoBoxHeadWind,
@@ -918,7 +918,7 @@ static constexpr MetaData meta_data[] = {
 
   // HeadWindSimplified
   {
-    N_("Head wind component (simplified)"),
+    N_("Wind, head component (simplified)"),
     N_("Head Wind *"),
     N_("The current head wind component. The simplified head wind is calculated by subtracting GPS ground speed from the TAS if airspeed is available from external device."),
     UpdateInfoBoxHeadWindSimplified,
@@ -1011,7 +1011,7 @@ static constexpr MetaData meta_data[] = {
   // CONTEST_SPEED
   {
     N_("Contest speed"),
-    N_("Ćont Speed"),
+    N_("Cont Speed"),
     N_("Instantaneous evaluation of the flown speed according to the configured Contest rule set."),
     IBFHelper<InfoBoxContentContestSpeed>::Create,
   },
@@ -1091,13 +1091,29 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxThermalTime,
   },
 
+  // e_Alternate_2_GR
+  {
+    N_("Alternate 2 GR"),
+    N_("Altn2 GR"),
+    N_("Geometric gradient to the arrival height above the second alternate. This is not adjusted for total energy."),
+    IBFHelperInt<InfoBoxContentAlternateGR, 1>::Create,
+  },
+
+  // e_HeartRate
+  {
+    N_("Heart Rate"),
+    N_("Heart"),
+    N_("Heart rate in beats per minute."),
+    UpdateInfoBoxHeartRate,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
               "Wrong InfoBox factory size");
 
 const TCHAR *
-InfoBoxFactory::GetName(Type type)
+InfoBoxFactory::GetName(Type type) noexcept
 {
   assert(type < NUM_TYPES);
 
@@ -1105,7 +1121,7 @@ InfoBoxFactory::GetName(Type type)
 }
 
 const TCHAR *
-InfoBoxFactory::GetCaption(Type type)
+InfoBoxFactory::GetCaption(Type type) noexcept
 {
   assert(type < NUM_TYPES);
 
@@ -1116,7 +1132,7 @@ InfoBoxFactory::GetCaption(Type type)
  * Returns the long description (help text) of the info box type.
  */
 const TCHAR *
-InfoBoxFactory::GetDescription(Type type)
+InfoBoxFactory::GetDescription(Type type) noexcept
 {
   assert(type < NUM_TYPES);
 
@@ -1124,7 +1140,7 @@ InfoBoxFactory::GetDescription(Type type)
 }
 
 std::unique_ptr<InfoBoxContent>
-InfoBoxFactory::Create(Type type)
+InfoBoxFactory::Create(Type type) noexcept
 {
   assert(type < NUM_TYPES);
   const auto &m = meta_data[type];

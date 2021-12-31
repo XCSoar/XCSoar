@@ -29,7 +29,8 @@ Copyright_License {
 /** Checks whether arrival time will be less than AAT time */
 class ConditionMonitorAATTime final : public ConditionMonitor {
 public:
-  constexpr ConditionMonitorAATTime():ConditionMonitor(60 * 15, 10) {}
+  constexpr ConditionMonitorAATTime() noexcept
+    :ConditionMonitor(std::chrono::minutes{15}, std::chrono::seconds{10}) {}
 
 protected:
   bool CheckCondition(const NMEAInfo &basic,

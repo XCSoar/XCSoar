@@ -30,15 +30,17 @@ Copyright_License {
 #import <Foundation/Foundation.h>
 #endif
 
-#ifdef USE_FREETYPE
-typedef struct FT_FaceRec_ *FT_Face;
-#endif
+#include <cstddef>
 
 #ifdef _WIN32
-#include <windows.h>
+#include <windef.h>
 #endif
 
 #include <tchar.h>
+
+#ifdef USE_FREETYPE
+typedef struct FT_FaceRec_ *FT_Face;
+#endif
 
 class FontDescription;
 class TextUtil;
@@ -118,9 +120,8 @@ public:
   PixelSize TextSize(const TCHAR *text) const noexcept;
 
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
-  [[gnu::const]]
-  static size_t BufferSize(const PixelSize size) noexcept {
-    return size.width * size.height;
+  static constexpr std::size_t BufferSize(const PixelSize size) noexcept {
+    return std::size_t(size.width) * std::size_t(size.height);
   }
 
   void Render(TStringView text, const PixelSize size,

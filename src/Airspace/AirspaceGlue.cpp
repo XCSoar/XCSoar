@@ -59,7 +59,7 @@ static bool
 ParseAirspaceFile(Airspaces &airspaces,
                   struct zzip_dir *dir, const char *path,
                   OperationEnvironment &operation)
-try {
+{
   ZipLineReader reader(dir, path, Charset::AUTO);
 
   if (!ParseAirspaceFile(airspaces, reader, operation)) {
@@ -68,10 +68,6 @@ try {
   }
 
   return true;
-} catch (...) {
-  LogFormat("Failed to parse airspace file: %s", path);
-  LogError(std::current_exception());
-  return false;
 }
 
 void
@@ -86,18 +82,22 @@ ReadAirspace(Airspaces &airspaces,
   bool airspace_ok = false;
 
   // Read the airspace filenames from the registry
-  auto path = Profile::GetPath(ProfileKeys::AirspaceFile);
-  if (!path.IsNull())
+  if (const auto path = Profile::GetPath(ProfileKeys::AirspaceFile);
+      path != nullptr)
     airspace_ok |= ParseAirspaceFile(airspaces, path, operation);
 
-  path = Profile::GetPath(ProfileKeys::AdditionalAirspaceFile);
-  if (!path.IsNull())
+  if (const auto path = Profile::GetPath(ProfileKeys::AdditionalAirspaceFile);
+      path != nullptr)
     airspace_ok |= ParseAirspaceFile(airspaces, path, operation);
 
-  auto archive = OpenMapFile();
-  if (archive)
-    airspace_ok |= ParseAirspaceFile(airspaces, archive->get(), "airspace.txt",
-                                     operation);
+  try {
+    if (auto archive = OpenMapFile())
+      airspace_ok |= ParseAirspaceFile(airspaces, archive->get(),
+                                       "airspace.txt", operation);
+  } catch (...) {
+    LogError(std::current_exception(),
+             "Failed to load airspaces from map file");
+  }
 
   if (airspace_ok) {
     airspaces.Optimise();

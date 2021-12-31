@@ -78,7 +78,7 @@ DebugReplayVector::CopyFromFix(const IGCFixEnhanced &fix)
 {
   NMEAInfo &basic = raw_basic;
 
-  basic.clock = basic.time = fix.time.GetSecondOfDay();
+  basic.clock = basic.time = TimeStamp{fix.time.DurationSinceMidnight()};
   basic.time_available.Update(basic.clock);
 
   basic.date_time_utc = BrokenDateTime(fix.date, fix.time);

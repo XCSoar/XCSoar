@@ -91,7 +91,7 @@ _gen_result(int ok, const char *func, const char *file, unsigned int line,
 	if(test_name != NULL) {
 #ifdef HAVE_VASPRINTF
 		va_start(ap, test_name);
-		vasprintf(&local_test_name, test_name, ap);
+		(void) vasprintf(&local_test_name, test_name, ap); // Ignore return value
 		va_end(ap);
 #else
                 (void)ap;
@@ -162,7 +162,7 @@ _gen_result(int ok, const char *func, const char *file, unsigned int line,
 	printf("\n");
 
 	if(!ok) {
-#ifndef WIN32
+#ifndef _WIN32
 		if(getenv("HARNESS_ACTIVE") != NULL)
 			fputs("\n", stderr);
 #endif
@@ -176,7 +176,7 @@ _gen_result(int ok, const char *func, const char *file, unsigned int line,
 	}
 	free(local_test_name);
 
-#ifdef WIN32
+#ifdef _WIN32
 	// Flush the pipe content after each test
 	// to prevent a flooded pipe that freezes the application
 	fflush(stdout);
@@ -201,7 +201,7 @@ _tap_init(void)
 	if(!run_once) {
 		atexit(_cleanup);
 
-#ifndef WIN32
+#ifndef _WIN32
 		/* stdout needs to be unbuffered so that the output appears
 		   in the same place relative to stderr output as it does 
 		   with Test::Harness */
@@ -332,7 +332,7 @@ skip(unsigned int n, unsigned int ok, const char *fmt, ...)
 
 #ifdef HAVE_VASPRINTF
   va_start(ap, fmt);
-  asprintf(&skip_msg, fmt, ap);
+  (void) asprintf(&skip_msg, fmt, ap); // Ignore return value
   va_end(ap);
 #else
 #define skip_msg fmt
@@ -371,7 +371,7 @@ todo_start(char *fmt, ...)
 
 #ifdef HAVE_VASPRINTF
 	va_start(ap, fmt);
-	vasprintf(&todo_msg, fmt, ap);
+	(void) vasprintf(&todo_msg, fmt, ap); // Ignore return value
 	va_end(ap);
 #else
         (void)ap;

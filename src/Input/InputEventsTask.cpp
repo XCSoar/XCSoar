@@ -323,7 +323,7 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
               _("Speed"),
               FormatUserSpeed(start_stats.ground_speed, true).c_str(),
               _("Time"),
-              FormatLocalTimeHHMM((int)start_stats.time,
+              FormatLocalTimeHHMM(start_stats.time,
                                   CommonInterface::GetComputerSettings().utc_offset).c_str());
     Message::AddMessage(_("Task start"), TempAll);
   } else if (StringIsEqual(misc, _T("next"))) {

@@ -29,7 +29,7 @@ Copyright_License {
 #include <cassert>
 
 void
-RasterMap::UpdateProjection()
+RasterMap::UpdateProjection() noexcept
 {
   projection.Set(GetBounds(), raster_tile_cache.GetFineSize());
 }
@@ -42,14 +42,14 @@ RasterMap::LoadCache(BufferedReader &r)
 }
 
 TerrainHeight
-RasterMap::GetHeight(const GeoPoint &location) const
+RasterMap::GetHeight(const GeoPoint &location) const noexcept
 {
   const auto pt = projection.ProjectCoarse(location);
   return raster_tile_cache.GetHeight(pt);
 }
 
 TerrainHeight
-RasterMap::GetInterpolatedHeight(const GeoPoint &location) const
+RasterMap::GetInterpolatedHeight(const GeoPoint &location) const noexcept
 {
   const auto pt = projection.ProjectFine(location);
   return raster_tile_cache.GetInterpolatedHeight(pt);
@@ -58,7 +58,7 @@ RasterMap::GetInterpolatedHeight(const GeoPoint &location) const
 void
 RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
                     TerrainHeight *buffer, unsigned size,
-                    bool interpolate) const
+                    bool interpolate) const noexcept
 {
   assert(buffer != nullptr);
   assert(size > 0);
@@ -128,21 +128,19 @@ RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
                              interpolate);
 }
 
-bool
+RasterMap::Intersection
 RasterMap::FirstIntersection(const GeoPoint &origin, const int h_origin,
                              const GeoPoint &destination, const int h_destination,
                              const int h_virt, const int h_ceiling,
-                             const int h_safety,
-                             GeoPoint &intx, int &h) const
+                             const int h_safety) const noexcept
 {
   const auto c_origin = projection.ProjectCoarseRound(origin);
   const auto c_destination = projection.ProjectCoarseRound(destination);
   const int c_diff = ManhattanDistance(c_origin, c_destination);
   const bool can_climb = (h_destination< h_virt);
 
-  intx = destination; h = h_destination; // fallback, pass
   if (c_diff==0) {
-    return false; // no distance
+    return Intersection::Invalid(); // no distance
   }
 
   const int slope_fact = (((int)h_virt) << RASTER_SLOPE_FACT) / c_diff;
@@ -150,29 +148,24 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const int h_origin,
                                  h_destination
                                  - ((c_diff * slope_fact) >> RASTER_SLOPE_FACT));
 
-  RasterLocation c_int;
-  if (raster_tile_cache.FirstIntersection(c_origin, c_destination,
-                                          vh_origin, h_destination,
-                                          slope_fact, h_ceiling, h_safety,
-                                          c_int, h,
-                                          can_climb)) {
-    bool changed = c_int != c_destination ||
-      (h > h_destination && c_int == c_destination);
-    if (changed) {
-      intx = projection.UnprojectCoarse(c_int);
-      assert(h>= h_origin);
-    }
-    return changed;
-  } else {
-    return false;
-  }
+  const auto intersection =
+    raster_tile_cache.FirstIntersection(c_origin, c_destination,
+                                        vh_origin, h_destination,
+                                        slope_fact, h_ceiling, h_safety,
+                                        can_climb);
+  if (!intersection ||
+      intersection->location == c_destination ||
+      intersection->height <= h_destination)
+    return Intersection::Invalid();
+
+  return {projection.UnprojectCoarse(intersection->location), intersection->height};
 }
 
 GeoPoint
-RasterMap::Intersection(const GeoPoint& origin,
-                        const int h_origin, const int h_glide,
-                        const GeoPoint& destination,
-                        const int height_floor) const
+RasterMap::GroundIntersection(const GeoPoint &origin,
+                              const int h_origin, const int h_glide,
+                              const GeoPoint &destination,
+                              const int height_floor) const noexcept
 {
   const auto c_origin = projection.ProjectCoarseRound(origin);
   const auto c_destination = projection.ProjectCoarseRound(destination);
@@ -183,8 +176,8 @@ RasterMap::Intersection(const GeoPoint& origin,
   const int slope_fact = (((int)h_glide) << RASTER_SLOPE_FACT) / c_diff;
 
   auto c_int =
-    raster_tile_cache.Intersection(c_origin, c_destination,
-                                   h_origin, slope_fact, height_floor);
+    raster_tile_cache.GroundIntersection(c_origin, c_destination,
+                                         h_origin, slope_fact, height_floor);
   if (c_int.x < 0)
     return GeoPoint::Invalid();
 

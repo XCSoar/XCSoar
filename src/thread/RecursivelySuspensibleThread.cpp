@@ -25,15 +25,15 @@ Copyright_License {
 
 #include <cassert>
 
-bool
+void
 RecursivelySuspensibleThread::Start(bool suspended)
 {
   suspend_count = suspended ? 1 : 0;
-  return SuspensibleThread::Start(suspended);
+  SuspensibleThread::Start(suspended);
 }
 
 void
-RecursivelySuspensibleThread::BeginSuspend()
+RecursivelySuspensibleThread::BeginSuspend() noexcept
 {
   ++suspend_count;
   if (suspend_count == 1)
@@ -41,7 +41,7 @@ RecursivelySuspensibleThread::BeginSuspend()
 }
 
 void
-RecursivelySuspensibleThread::Suspend()
+RecursivelySuspensibleThread::Suspend() noexcept
 {
   ++suspend_count;
 
@@ -51,7 +51,7 @@ RecursivelySuspensibleThread::Suspend()
 }
 
 void
-RecursivelySuspensibleThread::Resume()
+RecursivelySuspensibleThread::Resume() noexcept
 {
   assert(suspend_count > 0);
 

@@ -116,6 +116,21 @@ class SpeedVectorPrinter:
 
         return 'SpeedVector(%s %s)' % (bearing, norm)
 
+class FlatGeoPointPrinter:
+    def __init__(self, value):
+        self.value = value
+
+    def to_string(self):
+        return 'FlatGeoPoint(%d %d)' % (self.value['x'], self.value['y'])
+
+class SearchPointPrinter:
+    def __init__(self, value):
+        self.gp = GeoPointPrinter(value['location'])
+        self.fp = FlatGeoPointPrinter(value['flat_location'])
+
+    def to_string(self):
+        return '{%s, %s}' % (self.gp.to_string(), self.fp.to_string())
+
 class ValidityPrinter:
     def __init__(self, value):
         self.value = value
@@ -222,6 +237,10 @@ def lookup_function(value):
         return GeoVectorPrinter(value)
     elif typename == 'SpeedVector':
         return SpeedVectorPrinter(value)
+    elif typename == 'FlatGeoPoint':
+        return FlatGeoPointPrinter(value)
+    elif typename == 'SearchPoint':
+        return SearchPointPrinter(value)
     elif typename == 'Validity':
         return ValidityPrinter(value)
     elif typename == 'BrokenDate':

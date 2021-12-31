@@ -36,7 +36,7 @@ extern bool is_nook, is_dithered;
  * Returns whether the application is running on Nook Simple Touch
  */
 #ifdef __arm__
-gcc_const
+[[gnu::const]]
 #else
 constexpr
 #endif

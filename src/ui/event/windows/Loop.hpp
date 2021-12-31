@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "util/Compiler.h"
 
-#include <windows.h>
+#include <windef.h> // for HWND (needed by winuser.h)
 
 namespace UI {
 

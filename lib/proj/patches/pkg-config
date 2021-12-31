@@ -1,0 +1,55 @@
+Index: proj-5.2.0/CMakeLists.txt
+===================================================================
+--- proj-5.2.0.orig/CMakeLists.txt
++++ proj-5.2.0/CMakeLists.txt
+@@ -166,3 +166,13 @@ add_subdirectory(man)
+ add_subdirectory(cmake)
+ add_subdirectory(test)
+ 
++################################################################################
++# pkg-config support
++################################################################################
++if(UNIX OR MINGW)
++  configure_proj_pc()
++
++  install(FILES
++    ${CMAKE_CURRENT_BINARY_DIR}/proj.pc
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
++endif()
+Index: proj-5.2.0/cmake/ProjInstallPath.cmake
+===================================================================
+--- proj-5.2.0.orig/cmake/ProjInstallPath.cmake
++++ proj-5.2.0/cmake/ProjInstallPath.cmake
+@@ -47,6 +47,8 @@ else()
+   set(DEFAULT_INCLUDE_SUBDIR include)
+   set(DEFAULT_DOC_SUBDIR share/doc/proj)
+   set(DEFAULT_CMAKE_SUBDIR lib/cmake/${PROJECT_NAME_LOWER})
++  # Used for proj.pc
++  set(CMAKE_INSTALL_DATAROOTDIR share)
+ endif()
+ 
+ # Locations are changeable by user to customize layout of PROJ installation
+Index: proj-5.2.0/cmake/ProjUtilities.cmake
+===================================================================
+--- proj-5.2.0.orig/cmake/ProjUtilities.cmake
++++ proj-5.2.0/cmake/ProjUtilities.cmake
+@@ -454,3 +454,19 @@ function(proj_append_lla_output_file LLA
+     set(${FILE_LIST} ${LIST_OUT} PARENT_SCOPE)
+ endfunction()
+ 
++#
++# Configure a pkg-config file proj.pc
++# See also ProjInstallPath.cmake
++#
++
++function(configure_proj_pc)
++  set(prefix "${CMAKE_INSTALL_PREFIX}")
++  set(exec_prefix "\${prefix}")
++  set(libdir "\${exec_prefix}/${LIBDIR}")
++  set(includedir "\${prefix}/${INCLUDEDIR}")
++
++  configure_file(
++    ${CMAKE_CURRENT_SOURCE_DIR}/proj.pc.in
++    ${CMAKE_CURRENT_BINARY_DIR}/proj.pc
++    @ONLY)
++endfunction()

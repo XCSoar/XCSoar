@@ -25,117 +25,114 @@ Copyright_License {
 #include "Protocol.hpp"
 #include "Checksum.hpp"
 #include "MessageParser.hpp"
+#include "Device/Error.hpp"
 #include "Device/Port/Port.hpp"
 #include "time/TimeoutClock.hpp"
+#include "util/ByteOrder.hxx"
+#include "util/CRC.hpp"
+
+#include <stdexcept>
 
 #include <string.h>
 
 namespace IMI
 {
   extern IMIWORD _serialNumber;
-  extern bool _connected;
 }
 
-bool
-IMI::Send(Port &port, const TMsg &msg, OperationEnvironment &env)
-{
-  return port.FullWrite(&msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2,
-                        env, std::chrono::seconds(2));
-}
-
-bool
+void
 IMI::Send(Port &port, OperationEnvironment &env,
           IMIBYTE msgID, const void *payload, IMIWORD payloadSize,
           IMIBYTE parameter1, IMIWORD parameter2, IMIWORD parameter3)
 {
-  if (payloadSize > COMM_MAX_PAYLOAD_SIZE)
-    return false;
+  Sync sync;
+  sync.syncChar1 = IMICOMM_SYNC_CHAR1;
+  sync.syncChar2 = IMICOMM_SYNC_CHAR2;
+  port.FullWrite(&sync, sizeof(sync), env, std::chrono::seconds{1});
 
-  TMsg msg;
-  memset(&msg, 0, sizeof(msg));
+  Header header;
+  header.sn = _serialNumber;
+  header.msgID = msgID;
+  header.parameter1 = parameter1;
+  header.parameter2 = parameter2;
+  header.parameter3 = parameter3;
+  header.payloadSize = payloadSize;
 
-  msg.syncChar1 = IMICOMM_SYNC_CHAR1;
-  msg.syncChar2 = IMICOMM_SYNC_CHAR2;
-  msg.sn = _serialNumber;
-  msg.msgID = msgID;
-  msg.parameter1 = parameter1;
-  msg.parameter2 = parameter2;
-  msg.parameter3 = parameter3;
-  msg.payloadSize = payloadSize;
-  memcpy(msg.payload, payload, payloadSize);
+  IMIWORD crc = 0xffff;
+  crc = UpdateCRC16CCITT(&header, sizeof(header), crc);
 
-  IMIWORD crc = CRC16Checksum(((IMIBYTE*)&msg) + 2,
-                              payloadSize + IMICOMM_MSG_HEADER_SIZE - 2);
-  msg.payload[payloadSize] = (IMIBYTE)(crc >> 8);
-  msg.payload[payloadSize + 1] = (IMIBYTE)crc;
+  port.FullWrite(&header, sizeof(header), env, std::chrono::seconds{1});
 
-  return Send(port, msg, env);
+  if (payloadSize > 0) {
+    port.FullWrite(payload, payloadSize, env, std::chrono::seconds{2});
+    crc = UpdateCRC16CCITT(payload, payloadSize, crc);
+  }
+
+  crc = ToBE16(crc);
+  port.FullWrite(&crc, sizeof(crc), env, std::chrono::seconds{1});
 }
 
-const IMI::TMsg *
+static constexpr std::chrono::steady_clock::duration
+CalcPayloadTimeout(std::size_t payload_size, unsigned baud_rate) noexcept
+{
+  if (baud_rate == 0)
+    /* fallback for timeout calculation */
+    baud_rate = 9600;
+
+  return std::chrono::milliseconds(10000 * (payload_size + sizeof(IMI::IMICOMM_MSG_HEADER_SIZE) + 10) / baud_rate);
+}
+
+IMI::TMsg
 IMI::Receive(Port &port, OperationEnvironment &env,
-             unsigned extraTimeout, unsigned expectedPayloadSize)
+             std::chrono::steady_clock::duration extra_timeout,
+             unsigned expectedPayloadSize)
 {
   if (expectedPayloadSize > COMM_MAX_PAYLOAD_SIZE)
     expectedPayloadSize = COMM_MAX_PAYLOAD_SIZE;
 
-  // set timeout
-  unsigned baudrate = port.GetBaudrate();
-  if (baudrate == 0)
-    /* fallback for timeout calculation */
-    baudrate = 9600;
+  const auto payload_timeout =
+    CalcPayloadTimeout(expectedPayloadSize, port.GetBaudrate());
 
-  const TimeoutClock timeout(std::chrono::milliseconds(extraTimeout) + 10 *
-                             std::chrono::seconds((expectedPayloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudrate));
+  const TimeoutClock timeout(extra_timeout + payload_timeout);
 
   // wait for the message
+  MessageParser mp;
   while (true) {
     // read message
     IMIBYTE buffer[64];
     size_t bytesRead = port.WaitAndRead(buffer, sizeof(buffer), env, timeout);
-    if (bytesRead == 0)
-      return nullptr;
 
     // parse message
-    const TMsg *msg = MessageParser::Parse(buffer, bytesRead);
-    if (msg != nullptr) {
+    if (auto msg = mp.Parse(buffer, bytesRead))
       // message received
-      if (msg->msgID == MSG_ACK_NOTCONFIG) {
-        Disconnect(port, env);
-        return nullptr;
-      } else if (msg->msgID == MSG_CFG_KEEPCONFIG)
-        return nullptr;
-      else
-        return msg;
-    }
+      return *msg;
   }
 }
 
-const IMI::TMsg *
+IMI::TMsg
 IMI::SendRet(Port &port, OperationEnvironment &env,
              IMIBYTE msgID, const void *payload,
              IMIWORD payloadSize, IMIBYTE reMsgID, IMIWORD retPayloadSize,
              IMIBYTE parameter1, IMIWORD parameter2, IMIWORD parameter3,
-             unsigned extraTimeout, int retry)
+             std::chrono::steady_clock::duration extra_timeout,
+             int retry)
 {
-  unsigned baudRate = port.GetBaudrate();
-  if (baudRate == 0)
-    /* fallback for timeout calculation */
-    baudRate = 9600;
+  extra_timeout += CalcPayloadTimeout(payloadSize, port.GetBaudrate());
 
-  extraTimeout += 10000 * (payloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10)
-      / baudRate;
-  while (retry--) {
-    if (Send(port, env, msgID, payload, payloadSize, parameter1, parameter2,
-             parameter3)) {
-      const TMsg *msg = Receive(port, env, extraTimeout, retPayloadSize);
-      if (msg && msg->msgID == reMsgID && (retPayloadSize == (IMIWORD)-1
-          || msg->payloadSize == retPayloadSize))
+  while (true) {
+    Send(port, env, msgID, payload, payloadSize, parameter1, parameter2,
+         parameter3);
+
+    try {
+      if (auto msg = Receive(port, env, extra_timeout, retPayloadSize);
+          msg.msgID == reMsgID &&
+          (retPayloadSize == (IMIWORD)-1 || msg.payloadSize == retPayloadSize))
         return msg;
+    } catch (const DeviceTimeout &) {
+      if (retry-- == 0)
+        throw;
     }
   }
-
-  return nullptr;
 }
 
 static bool
@@ -180,20 +177,20 @@ bool
 IMI::FlashRead(Port &port, void *buffer, unsigned address, unsigned size,
                OperationEnvironment &env)
 {
-  if (!_connected)
-    return false;
-
   if (size == 0)
     return true;
 
-  const TMsg *pMsg = SendRet(port, env,
-                             MSG_FLASH, 0, 0, MSG_FLASH, -1,
-                             IMICOMM_BIGPARAM1(address),
-                             IMICOMM_BIGPARAM2(address),
-                             size, 300, 2);
+  const auto msg = SendRet(port, env,
+                           MSG_FLASH, 0, 0, MSG_FLASH, -1,
+                           IMICOMM_BIGPARAM1(address),
+                           IMICOMM_BIGPARAM2(address),
+                           size, std::chrono::seconds{3}, 2);
 
-  if (pMsg == nullptr || size != pMsg->parameter3)
-    return false;
+  if (size != msg.parameter3)
+    throw std::runtime_error("Wrong FLASH result size");
 
-  return RLEDecompress((IMIBYTE*)buffer, pMsg->payload, pMsg->payloadSize, size);
+  if (!RLEDecompress((IMIBYTE*)buffer, msg.payload, msg.payloadSize, size))
+    throw std::runtime_error("RLE decompression error");
+
+  return true;
 }

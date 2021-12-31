@@ -53,9 +53,9 @@ public:
     :config(_config), port(_port), mode(Mode::UNKNOWN) {}
 
 private:
-  bool CommandMode(OperationEnvironment &env);
-  bool DownloadMode(OperationEnvironment &env);
-  bool UploadMode(OperationEnvironment &env);
+  void CommandMode(OperationEnvironment &env);
+  void DownloadMode(OperationEnvironment &env);
+  void UploadMode(OperationEnvironment &env);
 
   bool SetBaudRate(unsigned baud_rate, OperationEnvironment &env);
 
@@ -87,42 +87,42 @@ public:
   /**
    * Restart the CAI302 by sending the command "SIF 0 0".
    */
-  bool Reboot(OperationEnvironment &env);
+  void Reboot(OperationEnvironment &env);
 
   /**
    * Power off the CAI302 by sending the command "DIE".
    */
-  bool PowerOff(OperationEnvironment &env);
+  void PowerOff(OperationEnvironment &env);
 
   /**
    * Start logging unconditionally.
    */
-  bool StartLogging(OperationEnvironment &env);
+  void StartLogging(OperationEnvironment &env);
 
   /**
    * Stop logging unconditionally.
    */
-  bool StopLogging(OperationEnvironment &env);
+  void StopLogging(OperationEnvironment &env);
 
   /**
    * Set audio volume 0 is loudest, 170 is silent.
    */
-  bool SetVolume(unsigned volume, OperationEnvironment &env);
+  void SetVolume(unsigned volume, OperationEnvironment &env);
 
   /**
    * Erase all waypoints.
    */
-  bool ClearPoints(OperationEnvironment &env);
+  void ClearPoints(OperationEnvironment &env);
 
   /**
    * Erase the pilot name.
    */
-  bool ClearPilot(OperationEnvironment &env);
+  void ClearPilot(OperationEnvironment &env);
 
   /**
    * Erase all log memory.
    */
-  bool ClearLog(OperationEnvironment &env);
+  void ClearLog(OperationEnvironment &env);
 
   bool ReadPilotList(std::vector<CAI302::Pilot> &list,
                      unsigned &active_index,
@@ -143,7 +143,7 @@ public:
   bool WriteNavpoint(unsigned id, const Waypoint &wp,
                      OperationEnvironment &env);
 
-  bool CloseNavpoints(OperationEnvironment &env);
+  void CloseNavpoints(OperationEnvironment &env);
 };
 
 #endif

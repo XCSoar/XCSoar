@@ -26,6 +26,8 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Device/Config.hpp"
+#include "Device/Error.hpp"
+#include "Operation/Cancelled.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "io/async/GlobalAsioThread.hpp"
 #include "io/async/AsioThread.hpp"
@@ -56,27 +58,18 @@ try {
 
   char buffer[4096];
   while (true) {
-    switch (port->WaitRead(env, std::chrono::minutes(1))) {
-    case Port::WaitResult::READY:
-      break;
-
-    case Port::WaitResult::TIMEOUT:
+    try {
+      port->WaitRead(env, std::chrono::minutes(1));
+    } catch (const DeviceTimeout &) {
       continue;
-
-    case Port::WaitResult::FAILED:
-      return EXIT_FAILURE;
-
-    case Port::WaitResult::CANCELLED:
-      return EXIT_SUCCESS;
     }
 
-    int nbytes = port->Read(buffer, sizeof(buffer));
-    if (nbytes < 0)
-      break;
-
+    std::size_t nbytes = port->Read(buffer, sizeof(buffer));
     fwrite((const void *)buffer, 1, nbytes, stdout);
   }
 
+  return EXIT_SUCCESS;
+} catch (OperationCancelled) {
   return EXIT_SUCCESS;
 } catch (const std::exception &exception) {
   PrintException(exception);

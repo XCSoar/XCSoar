@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_NEON_HPP
 #define XCSOAR_SCREEN_NEON_HPP
 
+#include "PixelTraits.hpp"
 #include "ui/canvas/PortableColor.hpp"
 
 #ifndef __ARM_NEON__
@@ -37,6 +38,9 @@ Copyright_License {
  */
 class NEONBitOrPixelOperations {
 public:
+  using PixelTraits = GreyscalePixelTraits;
+  using SourcePixelTraits = GreyscalePixelTraits;
+
   gcc_always_inline
   static void Blend16(uint8_t *gcc_restrict p,
                       const uint8_t *gcc_restrict q) {
@@ -67,6 +71,9 @@ class NEONTransparentPixelOperations {
   uint8_t key;
 
 public:
+  using PixelTraits = GreyscalePixelTraits;
+  using SourcePixelTraits = GreyscalePixelTraits;
+
   constexpr NEONTransparentPixelOperations(Luminosity8 _key)
     :key(_key.GetLuminosity()) {}
 
@@ -114,6 +121,9 @@ class NEONAlphaPixelOperations {
   uint8_t alpha;
 
 public:
+  using PixelTraits = GreyscalePixelTraits;
+  using SourcePixelTraits = GreyscalePixelTraits;
+
   constexpr NEONAlphaPixelOperations(uint8_t _alpha):alpha(_alpha) {}
 
   gcc_hot gcc_flatten gcc_nonnull_all

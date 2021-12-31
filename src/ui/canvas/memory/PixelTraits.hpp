@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PIXEL_TRAITS_HPP
 #define XCSOAR_SCREEN_PIXEL_TRAITS_HPP
 
+#include "Concepts.hpp"
 #include "ui/canvas/PortableColor.hpp"
 #include "util/ByteOrder.hxx"
 #include "util/Cast.hxx"
@@ -44,19 +45,19 @@ struct GreyscalePixelTraits {
   /**
    * One color for passing as parameter or return type.
    */
-  typedef Luminosity8 color_type;
+  using color_type = Luminosity8;
 
   /**
    * An integer type that holds the value of one channel.  It is used
    * by TransformChannels().
    */
-  typedef uint8_t channel_type;
+  using channel_type = uint8_t;
 
   /**
    * An integer type that may hold more than one channel.  It is used
    * by TransformInteger().
    */
-  typedef uint8_t integer_type;
+  using integer_type = uint8_t;
 
   /**
    * A pointer/iterator to a writable image buffer.
@@ -66,24 +67,24 @@ struct GreyscalePixelTraits {
    * dereference.  This class provides functions for all of this, use
    * them.
    */
-  typedef color_type *pointer;
+  using pointer = color_type *;
 
   /**
    * Same as #pointer, but with "restrict".  This guarantees the
    * compiler that there will be no aliasing, and allows the compiler
    * to apply more optimisations, e.g. auto vectorisation.
    */
-  typedef color_type *gcc_restrict rpointer;
+  using rpointer = color_type *gcc_restrict;
 
   /**
    * A pointer/iterator to a read-only image buffer.
    */
-  typedef const color_type *const_pointer;
+  using const_pointer = const color_type *;
 
   /**
    * Like #rpointer, but read-only.
    */
-  typedef const color_type *gcc_restrict const_rpointer;
+  using const_rpointer = const color_type *gcc_restrict;
 
   /**
    * Transform a color by passing integers to the given functions.
@@ -245,7 +246,7 @@ struct GreyscalePixelTraits {
    *
    * @param SPT the source pixel format
    */
-  template<typename SPT>
+  template<AnyPixelTraits SPT>
   struct Mixed {
     template<typename F>
     gcc_hot
@@ -267,13 +268,13 @@ struct GreyscalePixelTraits {
  * See #GreyscalePixelTraits for documentation about PixelTraits.
  */
 struct BGRAPixelTraits {
-  typedef BGRA8Color color_type;
-  typedef uint8_t channel_type;
-  typedef uint32_t integer_type;
-  typedef color_type *pointer;
-  typedef color_type *gcc_restrict rpointer;
-  typedef const color_type *const_pointer;
-  typedef const color_type *gcc_restrict const_rpointer;
+  using color_type = BGRA8Color;
+  using channel_type = uint8_t;
+  using integer_type = uint32_t;
+  using pointer = color_type *;
+  using rpointer = color_type *gcc_restrict;
+  using const_pointer = const color_type *;
+  using const_rpointer = const color_type *gcc_restrict;
 
   static_assert(sizeof(color_type) == sizeof(integer_type),
                 "Wrong integer_type");

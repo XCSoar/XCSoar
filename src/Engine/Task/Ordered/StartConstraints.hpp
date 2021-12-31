@@ -52,10 +52,27 @@ struct StartConstraints {
   bool require_arm;
 
   /**
+   * If this is true, then exiting the observation zone is the goal,
+   * not entering it.
+   */
+  bool score_exit;
+
+  /**
    * This is a copy of FinishConstraints::fai_finish.  If true, then
    * the constraints defined in this class will be ignored.
    */
   bool fai_finish;
+
+  /**
+   * Wait time in minutes after Pilot Event (PEV) and start gate open time.
+   */
+  std::chrono::duration<unsigned> pev_start_wait_time;
+
+  /**
+   * Time in minutes start gate remains open after Pilot Event and PEV Wait
+   * Time.
+   */
+  std::chrono::duration<unsigned> pev_start_window;
 
   void SetDefaults();
 

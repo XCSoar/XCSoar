@@ -30,21 +30,22 @@ IncrementalSpeedComputer::IncrementalSpeedComputer(const bool _is_positive)
    is_positive(_is_positive) {}
 
 void
-IncrementalSpeedComputer::Compute(DistanceStat &data, const double time)
+IncrementalSpeedComputer::Compute(DistanceStat &data,
+                                  const TimeStamp time) noexcept
 {
-  if (!data.IsDefined() || time < 0 ||
-      (last_time >= 0 && (time < last_time || time > last_time + 60))) {
+  if (!data.IsDefined() || !time.IsDefined() ||
+      (last_time.IsDefined() && (time < last_time || time > last_time + std::chrono::minutes{1}))) {
     Reset(data);
     return;
   }
 
-  if (last_time < 0) {
+  if (!last_time.IsDefined()) {
     last_time = time;
     return;
   }
 
   const auto dt = time - last_time;
-  const unsigned seconds = uround(dt);
+  const unsigned seconds = uround(dt.count());
   if (seconds == 0)
     return;
 
@@ -60,7 +61,7 @@ IncrementalSpeedComputer::Compute(DistanceStat &data, const double time)
     v_f = v_lpf.Update(v);
   }
 
-  last_time += seconds;
+  last_time += std::chrono::seconds{seconds};
 
   data.speed_incremental = (is_positive ? -v_f : v_f);
 }
@@ -76,5 +77,5 @@ IncrementalSpeedComputer::Reset(DistanceStat &data)
   data.speed_incremental = 0; // data.speed;
   av_dist.Reset();
 
-  last_time = -1;
+  last_time = TimeStamp::Undefined();
 }

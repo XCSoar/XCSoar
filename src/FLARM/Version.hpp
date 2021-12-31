@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_FLARM_VERSION_HPP
 
 #include "NMEA/Validity.hpp"
+#include "time/Stamp.hpp"
 #include "util/StaticString.hxx"
 
 #include <type_traits>
@@ -50,7 +51,7 @@ struct FlarmVersion {
     }
   }
 
-  void Expire(gcc_unused double clock) {
+  void Expire([[maybe_unused]] TimeStamp clock) noexcept {
     /* no expiry; this object will be cleared only when the device
        connection is lost */
   }

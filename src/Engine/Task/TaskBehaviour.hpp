@@ -86,7 +86,7 @@ struct TaskBehaviour {
   /** Option to enable positioning of AAT targets at optimal point on isoline */
   bool optimise_targets_bearing;
   /** Seconds additional to min time to optimise for */
-  unsigned optimise_targets_margin;
+  std::chrono::duration<unsigned> optimise_targets_margin;
   /** Option to enable calculation and setting of auto MacCready */
   bool auto_mc;
 

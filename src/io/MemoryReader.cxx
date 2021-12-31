@@ -32,7 +32,7 @@
 #include <string.h>
 
 std::size_t
-MemoryReader::Read(void *data, size_t size)
+MemoryReader::Read(void *data, std::size_t size)
 {
 	if (size > buffer.size)
 		size = buffer.size;

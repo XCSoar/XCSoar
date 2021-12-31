@@ -40,20 +40,20 @@ class TabRenderer {
   TextRenderer text_renderer;
 
 public:
-  TabRenderer() {
+  constexpr TabRenderer() noexcept {
     text_renderer.SetCenter();
     text_renderer.SetVCenter();
     text_renderer.SetControl();
   }
 
-  void InvalidateLayout() {
+  void InvalidateLayout() noexcept {
     text_renderer.InvalidateLayout();
   }
 
   void Draw(Canvas &canvas, const PixelRect &rc,
             const DialogLook &look,
             const TCHAR *caption, const MaskedIcon *icon,
-            bool focused, bool pressed, bool selected) const;
+            bool focused, bool pressed, bool selected) const noexcept;
 };
 
 #endif

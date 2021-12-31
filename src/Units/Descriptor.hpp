@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_UNITS_DESCRIPTOR_HPP
 
 #include "Unit.hpp"
-#include "util/Compiler.h"
 
 #include <tchar.h>
 
@@ -42,14 +41,17 @@ struct UnitDescriptor
  */
 namespace Units
 {
-  extern const UnitDescriptor unit_descriptors[];
 
-  /**
-   * Returns the name of the given Unit
-   * @return The name of the given Unit (e.g. "km" or "ft")
-   */
-  gcc_const
-  const TCHAR *GetUnitName(Unit unit);
+extern const UnitDescriptor unit_descriptors[];
+
+/**
+ * Returns the name of the given Unit
+ * @return The name of the given Unit (e.g. "km" or "ft")
+ */
+[[gnu::const]]
+const TCHAR *
+GetUnitName(Unit unit) noexcept;
+
 };
 
 #endif

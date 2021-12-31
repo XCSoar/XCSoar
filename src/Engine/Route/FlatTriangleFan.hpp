@@ -40,14 +40,14 @@ protected:
 public:
   friend class PrintHelper;
 
-  void CalcBoundingBox();
+  void CalcBoundingBox() noexcept;
 
   /**
    * Add the origin to an empty
    */
-  void AddOrigin(const AFlatGeoPoint &origin, size_t reserve);
+  void AddOrigin(const AFlatGeoPoint &origin, size_t reserve) noexcept;
 
-  void AddPoint(FlatGeoPoint p);
+  void AddPoint(FlatGeoPoint p) noexcept;
 
   /**
    * Finish the point list.
@@ -56,25 +56,25 @@ public:
    * not part of the hull
    * @return true if the fan is valid
    */
-  bool CommitPoints(bool closed);
+  bool CommitPoints(bool closed) noexcept;
 
   /**
    * @param closed true if this is a closed shape and the origin is
    * not part of the hull
    */
   [[gnu::pure]]
-  bool IsInside(FlatGeoPoint p, bool closed) const;
+  bool IsInside(FlatGeoPoint p, bool closed) const noexcept;
 
-  void Clear() {
+  void Clear() noexcept {
     vs.clear();
   }
 
   [[gnu::pure]]
-  bool IsEmpty() const {
+  bool IsEmpty() const noexcept {
     return vs.empty();
   }
 
-  AFlatGeoPoint GetOrigin() const {
+  AFlatGeoPoint GetOrigin() const noexcept {
     return AFlatGeoPoint(vs.front(), height);
   }
 
@@ -85,7 +85,7 @@ public:
    * not part of the hull
    */
   [[gnu::pure]]
-  ConstBuffer<FlatGeoPoint> GetHull(bool closed) const {
+  ConstBuffer<FlatGeoPoint> GetHull(bool closed) const noexcept {
     ConstBuffer<FlatGeoPoint> hull(&vs.front(), vs.size());
     if (closed)
       /* omit the origin, because it's not part of the hull in a
@@ -94,7 +94,7 @@ public:
     return hull;
   }
 
-  int GetHeight() const {
+  int GetHeight() const noexcept {
     return height;
   }
 };

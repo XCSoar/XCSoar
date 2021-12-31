@@ -259,7 +259,7 @@ WaypointFilterWidget::Update(Angle _last_heading)
   DataFieldEnum &direction_df = *(DataFieldEnum *)
     direction_control.GetDataField();
 
-  TCHAR buffer[12];
+  TCHAR buffer[22];
   direction_df.replaceEnumText(1, GetDirectionData(buffer, ARRAY_SIZE(buffer),
                                                    1, last_heading));
   direction_control.RefreshDisplay();
@@ -348,27 +348,27 @@ CreateDistanceDataField(DataFieldListener *listener)
   DataFieldEnum *df = new DataFieldEnum(listener);
   df->addEnumText(_T("*"));
 
-  TCHAR buffer[15];
+  TCHAR buffer[22];
   for (unsigned i = 1; i < ARRAY_SIZE(distance_filter_items); i++) {
     FormatUserDistance(Units::ToSysDistance(distance_filter_items[i]),
                        buffer);
     df->addEnumText(buffer);
   }
 
-  df->Set(dialog_state.distance_index);
+  df->SetValue(dialog_state.distance_index);
   return df;
 }
 
 static DataField *
 CreateDirectionDataField(DataFieldListener *listener, Angle last_heading)
 {
-  TCHAR buffer[12];
+  TCHAR buffer[22];
   DataFieldEnum *df = new DataFieldEnum(listener);
   for (unsigned i = 0; i < ARRAY_SIZE(direction_filter_items); i++)
     df->addEnumText(GetDirectionData(buffer, ARRAY_SIZE(buffer), i,
                                      last_heading));
 
-  df->Set(dialog_state.direction_index);
+  df->SetValue(dialog_state.direction_index);
   return df;
 }
 
@@ -394,7 +394,7 @@ CreateTypeDataField(DataFieldListener *listener)
   ReplaceProfilePathBase(*df, (unsigned)TypeFilter::MAP,
                          ProfileKeys::MapFile);
 
-  df->Set((int)dialog_state.type_index);
+  df->SetValue(dialog_state.type_index);
   return df;
 }
 
@@ -484,7 +484,7 @@ WaypointListWidget::OnGPSUpdate(const MoreData &basic)
       !CommonInterface::Calculated().circling) {
     const Angle heading = basic.attitude.heading;
     Angle a = last_heading - heading;
-    if (a.AsDelta().AbsoluteDegrees() >= 60) {
+    if (a.AsDelta().Absolute() >= Angle::Degrees(60)) {
       last_heading = heading;
       filter_widget.Update(last_heading);
       UpdateList();

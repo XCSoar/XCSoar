@@ -32,7 +32,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 
 void
-InfoBoxContentSpeedGround::Update(InfoBoxData &data)
+InfoBoxContentSpeedGround::Update(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   if (!basic.ground_speed_available) {
@@ -44,7 +44,7 @@ InfoBoxContentSpeedGround::Update(InfoBoxData &data)
 }
 
 bool
-InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
+InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode) noexcept
 {
   if (!is_simulator())
     return false;
@@ -78,7 +78,7 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
 }
 
 void
-UpdateInfoBoxSpeedIndicated(InfoBoxData &data)
+UpdateInfoBoxSpeedIndicated(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   if (!basic.airspeed_available) {
@@ -90,7 +90,7 @@ UpdateInfoBoxSpeedIndicated(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxSpeed(InfoBoxData &data)
+UpdateInfoBoxSpeed(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   if (!basic.airspeed_available) {
@@ -102,14 +102,14 @@ UpdateInfoBoxSpeed(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxSpeedMacCready(InfoBoxData &data)
+UpdateInfoBoxSpeedMacCready(InfoBoxData &data) noexcept
 {
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
   data.SetValueFromSpeed(common_stats.V_block, false);
 }
 
 void
-UpdateInfoBoxSpeedDolphin(InfoBoxData &data)
+UpdateInfoBoxSpeedDolphin(InfoBoxData &data) noexcept
 {
   // Set Value
   const DerivedInfo &calculated = CommonInterface::Calculated();

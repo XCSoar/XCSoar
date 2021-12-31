@@ -303,6 +303,8 @@ bool
 SplitB2Fix(const IMI::FixB2 *fixB2, const IMI::FixB *fixFull,
            IMI::FixB *fix1, IMI::FixB *fix2)
 {
+  using namespace IMI;
+
   if (fixB2->id != IMIFIX_ID_B2_RECORD || fixFull->id != IMIFIX_ID_B_RECORD)
     return false;
 

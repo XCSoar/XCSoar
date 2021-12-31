@@ -77,46 +77,51 @@ int main(int argc, char **argv)
   // now because p1 and p2 are private
 
   // test IntersectOriginCircle()
-  FlatPoint i1, i2;
-  ok1(!l1.IntersectOriginCircle(0.9, i1, i2));
+  ok1(!l1.IntersectOriginCircle(0.9));
 
-  ok1(l1.IntersectOriginCircle(1.8027756377319946465596106337352, i1, i2));
-  ok1(equals(i1.x, 1));
-  ok1(equals(i1.y, 1.5));
-  ok1(equals(i2.x, 1));
-  ok1(equals(i2.y, -1.5));
+  const auto i1 = l1.IntersectOriginCircle(1.8027756377319946465596106337352);
+  ok1(i1);
+  ok1(equals(i1->first.x, 1));
+  ok1(equals(i1->first.y, 1.5));
+  ok1(equals(i1->second.x, 1));
+  ok1(equals(i1->second.y, -1.5));
 
-  ok1(l2.IntersectOriginCircle(5.8523499553598125545510491371143, i1, i2));
-  ok1(equals(i1.x, 2));
-  ok1(equals(i1.y, 5.5));
-  ok1(equals(i2.x, -0.517647));
-  ok1(equals(i2.y, -5.829411));
+  const auto i2 = l2.IntersectOriginCircle(5.8523499553598125545510491371143);
+  ok1(i2);
+  ok1(equals(i2->first.x, 2));
+  ok1(equals(i2->first.y, 5.5));
+  ok1(equals(i2->second.x, -0.517647));
+  ok1(equals(i2->second.y, -5.829411));
 
-  ok1(l4.IntersectOriginCircle(5.8523499553598125545510491371143, i1, i2));
-  ok1(equals(i1.x, 2));
-  ok1(equals(i1.y, 5.5));
-  ok1(equals(i2.x, -0.517647));
-  ok1(equals(i2.y, -5.829411));
+  const auto i3 = l4.IntersectOriginCircle(5.8523499553598125545510491371143);
+  ok1(i3);
+  ok1(equals(i3->first.x, 2));
+  ok1(equals(i3->first.y, 5.5));
+  ok1(equals(i3->second.x, -0.517647));
+  ok1(equals(i3->second.y, -5.829411));
 
   // test IntersectCircle()
   FlatPoint c(1, 1.5);
-  ok1(l1.IntersectCircle(0.25, c, i1, i2));
-  ok1(equals(i1.x, 1));
-  ok1(equals(i1.y, 1.75));
-  ok1(equals(i2.x, 1));
-  ok1(equals(i2.y, 1.25));
+  const auto i4 = l1.IntersectCircle(0.25, c);
+  ok1(i4);
+  ok1(equals(i4->first.x, 1));
+  ok1(equals(i4->first.y, 1.75));
+  ok1(equals(i4->second.x, 1));
+  ok1(equals(i4->second.y, 1.25));
 
-  ok1(l1.IntersectCircle(1, c, i1, i2));
-  ok1(equals(i1.x, 1));
-  ok1(equals(i1.y, 2.5));
-  ok1(equals(i2.x, 1));
-  ok1(equals(i2.y, 0.5));
+  const auto i5 = l1.IntersectCircle(1, c);
+  ok1(i5);
+  ok1(equals(i5->first.x, 1));
+  ok1(equals(i5->first.y, 2.5));
+  ok1(equals(i5->second.x, 1));
+  ok1(equals(i5->second.y, 0.5));
 
-  ok1(l5.IntersectCircle(5.8523499553598125545510491371143, c, i1, i2));
-  ok1(equals(i1.x, 3));
-  ok1(equals(i1.y, 7));
-  ok1(equals(i2.x, 0.482353));
-  ok1(equals(i2.y, -4.329411));
+  const auto i6 = l5.IntersectCircle(5.8523499553598125545510491371143, c);
+  ok1(i6);
+  ok1(equals(i6->first.x, 3));
+  ok1(equals(i6->first.y, 7));
+  ok1(equals(i6->second.x, 0.482353));
+  ok1(equals(i6->second.y, -4.329411));
 
   return exit_status();
 }

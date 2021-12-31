@@ -28,28 +28,28 @@ Copyright_License {
 #include "MapSettings.hpp"
 #include "Asset.hpp"
 #include "Math/Angle.hpp"
-
-#include <algorithm>
+#include "Screen/Layout.hpp"
+#include "util/Macros.hpp"
 
 static void
-DrawMirroredPolygon(const BulkPixelPoint *src, unsigned points,
+DrawMirroredPolygon(std::span<const BulkPixelPoint> src,
                     Canvas &canvas, const Angle angle,
                     const PixelPoint pos)
 {
-  BulkPixelPoint dst[64];
-  assert(2 * points <= ARRAY_SIZE(dst));
+  std::array<BulkPixelPoint, 64> dst;
+  assert(2 * src.size() <= dst.size());
 
-  std::copy_n(src, points, dst);
-  for (unsigned i = 0; i < points; ++i) {
-    dst[2 * points - i - 1].x = -dst[i].x;
-    dst[2 * points - i - 1].y = dst[i].y;
+  std::copy(src.begin(), src.end(), dst.begin());
+  for (std::size_t i = 0; i < src.size(); ++i) {
+    dst[2 * src.size() - i - 1].x = -dst[i].x;
+    dst[2 * src.size() - i - 1].y = dst[i].y;
   }
 #ifdef ENABLE_OPENGL
-  CanvasRotateShift rotate_shift(pos, angle, 50);
+  CanvasRotateShift rotate_shift(pos, angle, Layout::Scale(0.5f));
 #else
-  PolygonRotateShift(dst, 2 * points, pos, angle, 50);
+  PolygonRotateShift({dst.data(), 2 * src.size()}, pos, angle, Layout::Scale(50U));
 #endif
-  canvas.DrawPolygon(dst, 2 * points);
+  canvas.DrawPolygon(dst.data(), 2 * src.size());
 }
 
 static void
@@ -73,7 +73,6 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
       {-5, 18},
       {0, 18},
     };
-    static constexpr unsigned AIRCRAFT_POINTS = ARRAY_SIZE(Aircraft);
 
     if (!inverse) {
       canvas.SelectWhiteBrush();
@@ -83,8 +82,7 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
       canvas.SelectWhitePen();
     }
 
-    DrawMirroredPolygon(Aircraft, AIRCRAFT_POINTS,
-                        canvas, angle, aircraft_pos);
+    DrawMirroredPolygon(Aircraft, canvas, angle, aircraft_pos);
   }
 
   {
@@ -94,12 +92,10 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
       {-1, -2},
       {0, -1},
     };
-    const unsigned CANOPY_POINTS = ARRAY_SIZE(Canopy);
 
     canvas.Select(look.canopy_pen);
     canvas.Select(look.canopy_brush);
-    DrawMirroredPolygon(Canopy, CANOPY_POINTS,
-                        canvas, angle, aircraft_pos);
+    DrawMirroredPolygon(Canopy, canvas, angle, aircraft_pos);
   }
 }
 
@@ -151,10 +147,10 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
   static constexpr unsigned AIRCRAFT_POINTS_SMALL = ARRAY_SIZE(AircraftSmall);
 
   const auto *Aircraft = large ? AircraftLarge : AircraftSmall;
-  const unsigned AircraftPoints = large ?
+  const std::size_t AircraftPoints = large ?
                                   AIRCRAFT_POINTS_LARGE : AIRCRAFT_POINTS_SMALL;
 
-  const RotatedPolygonRenderer renderer(Aircraft, AircraftPoints,
+  const RotatedPolygonRenderer renderer({Aircraft, AircraftPoints},
                                         aircraft_pos, angle);
 
   canvas.SelectHollowBrush();
@@ -192,7 +188,7 @@ DrawHangGlider(Canvas &canvas, const AircraftLook &look,
     canvas.SelectBlackPen();
   }
 
-  const RotatedPolygonRenderer renderer(aircraft, ARRAY_SIZE(aircraft),
+  const RotatedPolygonRenderer renderer(aircraft,
                                         aircraft_pos, angle);
   renderer.Draw(canvas, 0, ARRAY_SIZE(aircraft));
 }
@@ -222,7 +218,7 @@ DrawParaGlider(Canvas &canvas, const AircraftLook &look,
     {0, -3},
    };
 
-  const RotatedPolygonRenderer renderer(aircraft, ARRAY_SIZE(aircraft),
+  const RotatedPolygonRenderer renderer(aircraft,
                                         aircraft_pos, angle);
 
   if (inverse) {

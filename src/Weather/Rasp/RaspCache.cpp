@@ -28,9 +28,15 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "system/Path.hpp"
 #include "io/ZipArchive.hpp"
+#include "LogFile.hpp"
 
 #include <cassert>
 #include <windef.h> // for MAX_PATH
+
+RaspCache::RaspCache(const RaspStore &_store, unsigned _parameter) noexcept
+  :store(_store), parameter(_parameter) {}
+
+RaspCache::~RaspCache() noexcept = default;
 
 static constexpr unsigned
 ToHalfHours(BrokenTime t)
@@ -99,7 +105,7 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
   if (effective_time == RaspStore::MAX_WEATHER_TIMES)
     return;
 
-  Close();
+  map.reset();
 
   auto archive = store.OpenArchive();
   if (!archive)
@@ -109,22 +115,17 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
   store.NarrowWeatherFilename(new_name, Path(store.GetItemInfo(parameter).name),
                               effective_time);
 
-  RasterMap *new_map = new RasterMap();
-  if (!LoadTerrainOverview(archive->get(), new_name, nullptr,
-                           new_map->GetTileCache(),
-                           true, operation)) {
-    delete new_map;
+  auto new_map = std::make_unique<RasterMap>();
+  try {
+    LoadTerrainOverview(archive->get(), new_name, nullptr,
+                        new_map->GetTileCache(),
+                        true, operation);
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to load RASP file");
     return;
   }
 
   new_map->UpdateProjection();
 
-  map = new_map;
-}
-
-void
-RaspCache::Close()
-{
-  delete map;
-  map = nullptr;
+  map = std::move(new_map);
 }

@@ -24,6 +24,7 @@
 
 #include "Geo/SpeedVector.hpp"
 #include "Geo/GeoVector.hpp"
+#include "time/FloatDuration.hxx"
 
 struct AircraftState;
 class TaskPoint;
@@ -104,7 +105,7 @@ public:
    * @return Distance (m) of drift
    */
   [[gnu::pure]]
-  double DriftedDistance(double climb_time) const;
+  double DriftedDistance(FloatDuration climb_time) const;
 };
 
 #endif

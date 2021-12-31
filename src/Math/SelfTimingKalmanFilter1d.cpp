@@ -21,45 +21,23 @@
  */
 
 #include "SelfTimingKalmanFilter1d.hpp"
-#include "system/Clock.hpp"
+#include "time/Cast.hxx"
 
 #include <algorithm>
 
-SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const double max_dt,
-                                                   const double var_x_accel)
-    : filter_(var_x_accel) {
-  SetMaxDt(max_dt);
-}
-
-SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const double max_dt) {
-  SetMaxDt(max_dt);
-}
-
 void
-SelfTimingKalmanFilter1d::SetMaxDt(const double max_dt)
+SelfTimingKalmanFilter1d::Update(const double z_abs,
+                                 const double var_z_abs) noexcept
 {
-  // It's OK, albeit silly, to have a zero max_dt value. We just always reset.
-  max_dt_us_ = max_dt < 0 ? 0u : unsigned(max_dt * 1e6);
-}
-
-double
-SelfTimingKalmanFilter1d::GetMaxDt() const
-{
-  return max_dt_us_ / 1e6;
-}
-
-void
-SelfTimingKalmanFilter1d::Update(const double z_abs, const double var_z_abs)
-{
-  const unsigned int t_us = MonotonicClockUS();
+  const auto now = Clock::now();
 
   /* if we're called too quickly (less than 1us), round dt up to 1us
      to avoid problems in KalmanFilter1d::Update() */
-  const unsigned int dt_us = std::max(t_us - t_last_update_us_, uint64_t(1));
+  const auto dt = std::max<Duration>(now - last_update_time,
+                                     std::chrono::microseconds{1});
+  last_update_time = now;
 
-  t_last_update_us_ = t_us;
-
-  if (dt_us > max_dt_us_)
+  if (dt > max_dt)
     filter_.Reset();
-  filter_.Update(z_abs, var_z_abs, dt_us / 1e6);
+  filter_.Update(z_abs, var_z_abs, ToFloatSeconds(dt));
 }

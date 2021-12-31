@@ -26,8 +26,7 @@
 #include "AirspaceIntersectSort.hpp"
 #include "AirspaceIntersectionVector.hpp"
 
-AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint> &pts,
-                                 const bool prune)
+AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint> &pts) noexcept
   :AbstractAirspace(Shape::POLYGON)
 {
   assert(pts.size() >= 3);
@@ -43,18 +42,11 @@ AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint> &pts,
   if (p_start != p_end)
     m_border.emplace_back(p_start);
 
-
-  if (prune) {
-    // only for testing
-    m_border.PruneInterior();
-    is_convex = TriState::TRUE;
-  } else {
-    is_convex = TriState::UNKNOWN;
-  }
+  is_convex = TriState::UNKNOWN;
 }
 
 const GeoPoint
-AirspacePolygon::GetReferenceLocation() const
+AirspacePolygon::GetReferenceLocation() const noexcept
 {
   assert(m_border.size() >= 3);
 
@@ -62,7 +54,7 @@ AirspacePolygon::GetReferenceLocation() const
 }
 
 const GeoPoint
-AirspacePolygon::GetCenter() const
+AirspacePolygon::GetCenter() const noexcept
 {
   assert(m_border.size() >= 3);
 
@@ -80,14 +72,14 @@ AirspacePolygon::GetCenter() const
 }
 
 bool
-AirspacePolygon::Inside(const GeoPoint &loc) const
+AirspacePolygon::Inside(const GeoPoint &loc) const noexcept
 {
   return m_border.IsInside(loc);
 }
 
 AirspaceIntersectionVector
 AirspacePolygon::Intersects(const GeoPoint &start, const GeoPoint &end,
-                            const FlatProjection &projection) const
+                            const FlatProjection &projection) const noexcept
 {
   const FlatRay ray(projection.ProjectInteger(start),
                     projection.ProjectInteger(end));
@@ -107,7 +99,7 @@ AirspacePolygon::Intersects(const GeoPoint &start, const GeoPoint &end,
 
 GeoPoint
 AirspacePolygon::ClosestPoint(const GeoPoint &loc,
-                              const FlatProjection &projection) const
+                              const FlatProjection &projection) const noexcept
 {
   const auto p = projection.ProjectInteger(loc);
   const auto pb = m_border.NearestPoint(p);

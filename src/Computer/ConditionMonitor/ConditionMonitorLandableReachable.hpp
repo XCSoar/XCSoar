@@ -27,13 +27,12 @@ Copyright_License {
 #include "ConditionMonitor.hpp"
 
 class ConditionMonitorLandableReachable final : public ConditionMonitor {
-  bool last_reachable;
-  bool now_reachable;
+  bool last_reachable = false;
+  bool now_reachable = false;
 
 public:
-  constexpr ConditionMonitorLandableReachable()
-    :ConditionMonitor(60 * 5, 1),
-    last_reachable(false), now_reachable(false) {}
+  constexpr ConditionMonitorLandableReachable() noexcept
+    :ConditionMonitor(std::chrono::minutes{5}, std::chrono::seconds{1}) {}
 
 protected:
   bool CheckCondition(const NMEAInfo &basic,

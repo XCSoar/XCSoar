@@ -30,7 +30,7 @@ Copyright_License {
 #include "Components.hpp"
 
 void
-InfoBoxContentTrack::Update(InfoBoxData &data)
+InfoBoxContentTrack::Update(InfoBoxData &data) noexcept
 {
   if (!CommonInterface::Basic().track_available) {
     data.SetInvalid();
@@ -40,7 +40,7 @@ InfoBoxContentTrack::Update(InfoBoxData &data)
 }
 
 bool
-InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode)
+InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode) noexcept
 {
   if (!is_simulator())
     return false;

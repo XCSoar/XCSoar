@@ -104,9 +104,26 @@ struct DeviceConfig {
     PTY,
 
     /**
+     * Bluetooth Low Energy sensor.
+     */
+    BLE_SENSOR,
+
+    /**
+     * Bluetooth Low Energy HM10 protocol to a paired device.  Unlike
+     * #BLE_SENSOR, this provides a bidirectional data stream and
+     * XCSoar accesses it through the #Port interface.
+     */
+    BLE_HM10,
+
+    /**
      * A GliderLink broadcast receiver. Available on Android only
      */
     GLIDER_LINK,
+
+    /**
+     * USB serial port on Android.
+     */
+    ANDROID_USB_SERIAL,
   };
 
   /**
@@ -166,8 +183,6 @@ struct DeviceConfig {
     TEK_PRESSURE,
     /** ProvideIndicatedAirspeedWithAltitude() */
     PITOT,
-    /** Determine and then save the offset between static and pitot sensor */
-    PITOT_ZERO,
   } press_use;
 
   /**
@@ -233,97 +248,129 @@ struct DeviceConfig {
   /**
    * Does this port type use a baud rate?
    */
-  static bool UsesSpeed(PortType port_type) {
+  static constexpr bool UsesSpeed(PortType port_type) noexcept {
     return port_type == PortType::SERIAL || port_type == PortType::AUTO ||
+      port_type == PortType::ANDROID_USB_SERIAL ||
       port_type == PortType::IOIOUART;
   }
 
-  bool IsDisabled() const {
+  static constexpr bool UsesBluetoothMac(PortType port_type) noexcept {
+    return port_type == PortType::RFCOMM ||
+      port_type == PortType::BLE_SENSOR ||
+      port_type == PortType::BLE_HM10;
+  }
+
+  constexpr bool IsDisabled() const noexcept {
     return !enabled || port_type == PortType::DISABLED;
   }
 
   /**
    * Checks if the specified DeviceConfig is available on this platform.
    */
-  gcc_pure
-  bool IsAvailable() const;
+  [[gnu::pure]]
+  bool IsAvailable() const noexcept;
 
   /**
    * Should this device be reopened when no data has been received for
    * a certain amount of time?  Some ports need this to recover from
    * errors.
    */
-  gcc_pure
-  bool ShouldReopenOnTimeout() const;
+  [[gnu::pure]]
+  bool ShouldReopenOnTimeout() const noexcept;
 
-  gcc_pure
-  static bool MaybeBluetooth(PortType port_type, const TCHAR *path);
+  [[gnu::pure]]
+  static bool MaybeBluetooth(PortType port_type, const TCHAR *path) noexcept;
 
-  gcc_pure
-  bool MaybeBluetooth() const;
+  [[gnu::pure]]
+  bool MaybeBluetooth() const noexcept;
 
   /**
    * Check whether the Bluetooth device name starts with the specified
    * prefix.  Returns false on mismatch or if the name could not be
    * determined or if this is not a Bluetooth device.
    */
-  gcc_pure
-  bool BluetoothNameStartsWith(const char *prefix) const;
+  [[gnu::pure]]
+  bool BluetoothNameStartsWith(const char *prefix) const noexcept;
 
-  bool UsesSpeed() const {
+  bool UsesSpeed() const noexcept {
     return UsesSpeed(port_type) ||
       (MaybeBluetooth() && k6bt);
+  }
+
+  bool UsesBluetoothMac() const noexcept {
+    return UsesBluetoothMac(port_type);
   }
 
   /**
    * Does this port type use a driver?
    */
-  static bool UsesDriver(PortType port_type) {
-    return port_type == PortType::SERIAL || port_type == PortType::RFCOMM ||
-      port_type == PortType::RFCOMM_SERVER ||
-      port_type == PortType::AUTO || port_type == PortType::TCP_LISTENER ||
-      port_type == PortType::TCP_CLIENT ||
-      port_type == PortType::IOIOUART || port_type == PortType::PTY ||
-      port_type == PortType::UDP_LISTENER;
+  static constexpr bool UsesDriver(PortType port_type) noexcept {
+    switch (port_type) {
+    case PortType::DISABLED:
+    case PortType::BLE_SENSOR:
+    case PortType::GLIDER_LINK:
+    case PortType::DROIDSOAR_V2:
+    case PortType::NUNCHUCK:
+    case PortType::I2CPRESSURESENSOR:
+    case PortType::IOIOVOLTAGE:
+    case PortType::INTERNAL:
+      return false;
+
+    case PortType::SERIAL:
+    case PortType::BLE_HM10:
+    case PortType::RFCOMM:
+    case PortType::RFCOMM_SERVER:
+    case PortType::AUTO:
+    case PortType::TCP_LISTENER:
+    case PortType::TCP_CLIENT:
+    case PortType::IOIOUART:
+    case PortType::PTY:
+    case PortType::UDP_LISTENER:
+    case PortType::ANDROID_USB_SERIAL:
+      return true;
+    }
+
+    /* unreachable */
+    return false;
   }
 
-  bool UsesDriver() const {
+  constexpr bool UsesDriver() const noexcept {
     return UsesDriver(port_type);
   }
 
   /**
    * Does this port type use a tcp host?
    */
-  static bool UsesIPAddress(PortType port_type) {
+  static constexpr bool UsesIPAddress(PortType port_type) noexcept {
     return port_type == PortType::TCP_CLIENT;
   }
 
-  bool UsesIPAddress() const {
+  constexpr bool UsesIPAddress() const noexcept {
     return UsesIPAddress(port_type);
   }
 
   /**
    * Does this port type use a tcp port?
    */
-  static bool UsesTCPPort(PortType port_type) {
+  static constexpr bool UsesTCPPort(PortType port_type) noexcept {
     return port_type == PortType::TCP_LISTENER ||
       port_type == PortType::TCP_CLIENT ||
       port_type == PortType::UDP_LISTENER;
   }
 
-  bool UsesTCPPort() const {
+  constexpr bool UsesTCPPort() const noexcept {
     return UsesTCPPort(port_type);
   }
 
-  bool IsDriver(const TCHAR *name) const {
+  constexpr bool IsDriver(const TCHAR *name) const noexcept {
     return UsesDriver() && driver_name.equals(name);
   }
 
-  bool IsVega() const {
+  bool IsVega() const noexcept {
     return IsDriver(_T("Vega"));
   }
 
-  bool IsAndroidInternalGPS() const {
+  constexpr bool IsAndroidInternalGPS() const noexcept {
 #ifdef ANDROID
     return port_type == PortType::INTERNAL;
 #else
@@ -331,47 +378,47 @@ struct DeviceConfig {
 #endif
   }
 
-  static bool UsesPort(PortType port_type) {
+  static constexpr bool UsesPort(PortType port_type) noexcept {
     return UsesDriver(port_type);
   }
 
-  bool UsesPort() const {
+  constexpr bool UsesPort() const noexcept {
     return UsesPort(port_type);
   }
 
-  static bool IsPressureSensor(PortType port_type) {
+  static constexpr bool IsPressureSensor(PortType port_type) noexcept {
     return port_type == PortType::I2CPRESSURESENSOR;
   }
 
-  bool IsPressureSensor() const {
+  constexpr bool IsPressureSensor() const noexcept {
     return IsPressureSensor(port_type);
   }
 
-  static bool UsesI2C(PortType port_type) {
+  static constexpr bool UsesI2C(PortType port_type) noexcept {
     return port_type == PortType::NUNCHUCK ||
            port_type == PortType::I2CPRESSURESENSOR;
   }
 
-  bool UsesI2C() const {
+  constexpr bool UsesI2C() const noexcept {
     return UsesI2C(port_type);
   }
 
-  static bool UsesCalibration(PortType port_type) {
+  static constexpr bool UsesCalibration(PortType port_type) noexcept {
     return port_type == PortType::I2CPRESSURESENSOR ||
            port_type == PortType::DROIDSOAR_V2;
   }
 
-  bool UsesCalibration() const {
+  constexpr bool UsesCalibration() const noexcept {
     return UsesCalibration(port_type);
   }
 
-  void Clear();
+  void Clear() noexcept;
 
   /**
    * Generates a human-readable (localised) port name.
    */
-  gcc_pure
-  const TCHAR *GetPortName(TCHAR *buffer, size_t max_size) const;
+  [[gnu::pure]]
+  const TCHAR *GetPortName(TCHAR *buffer, size_t max_size) const noexcept;
 };
 
 #endif

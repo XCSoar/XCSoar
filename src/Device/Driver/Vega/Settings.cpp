@@ -28,11 +28,7 @@ Copyright_License {
 
 #include <stdio.h>
 
-#ifdef _UNICODE
-#include <windows.h>
-#endif
-
-bool
+void
 VegaDevice::SendSetting(const char *name, int value, OperationEnvironment &env)
 {
   /* erase the old value from the settings map, because we expect to
@@ -44,38 +40,40 @@ VegaDevice::SendSetting(const char *name, int value, OperationEnvironment &env)
 
   char buffer[64];
   sprintf(buffer, "PDVSC,S,%s,%d", name, value);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
 }
 
-bool
+void
 VegaDevice::RequestSetting(const char *name, OperationEnvironment &env)
 {
   char buffer[64];
   sprintf(buffer, "PDVSC,R,%s", name);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
 }
 
-std::pair<bool, int>
-VegaDevice::GetSetting(const char *name) const
+std::optional<int>
+VegaDevice::GetSetting(const char *name) const noexcept
 {
   std::lock_guard<Mutex> lock(settings);
   auto i = settings.find(name);
   if (i == settings.end())
-    return std::make_pair(false, 0);
+    return std::nullopt;
 
-  return std::make_pair(true, *i);
+  return *i;
 }
 
 bool
 VegaDevice::PutMacCready(double _mc, OperationEnvironment &env)
 {
   volatile_data.mc = uround(_mc * 10);
-  return volatile_data.SendTo(port, env);
+  volatile_data.SendTo(port, env);
+  return true;
 }
 
 bool
 VegaDevice::PutQNH(const AtmosphericPressure& pres, OperationEnvironment &env)
 {
   volatile_data.qnh = uround(pres.GetHectoPascal() * 10);
-  return volatile_data.SendTo(port, env);
+  volatile_data.SendTo(port, env);
+  return true;
 }

@@ -35,6 +35,8 @@ enum class KoboModel {
   AURA2,
   GLO,
   GLO_HD,
+  CLARA_HD,
+  NIA,
 };
 
 gcc_const

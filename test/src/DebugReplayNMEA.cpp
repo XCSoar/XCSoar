@@ -65,7 +65,7 @@ DebugReplayNMEA::Next()
   while ((line = reader->ReadLine()) != NULL) {
     raw_basic.clock = clock.NextClock(raw_basic.time_available
                                       ? raw_basic.time
-                                      : -1.);
+                                      : TimeStamp::Undefined());
 
     if (!device || !device->ParseNMEA(line, raw_basic))
       parser.ParseLine(line, raw_basic);

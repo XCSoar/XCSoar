@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_NMEA_THERMAL_LOCATOR_HPP
 
 #include "Geo/GeoPoint.hpp"
+#include "time/Stamp.hpp"
 #include "util/TrivialArray.hxx"
 
 #include <type_traits>
@@ -37,7 +38,7 @@ struct ThermalSource
   GeoPoint location;
   double ground_height;
   double lift_rate;
-  double time;
+  TimeStamp time;
 
   GeoPoint CalculateAdjustedLocation(double altitude,
                                      const SpeedVector &wind) const;

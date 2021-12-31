@@ -23,58 +23,22 @@
 #ifndef GRAHAM_SCAN_HPP
 #define GRAHAM_SCAN_HPP
 
-#include "util/NonCopyable.hpp"
-
-#include <list>
-#include <vector>
-
 class SearchPointVector;
-class SearchPoint;
-struct GeoPoint;
 
 /**
- * Class used to build convex hulls from vector.  This ensures
- * the returned vector is closed, and may prune points.
+ * Convert the vector to a convex hull.  This may prune points.
+ *
+ * @param sps Input vector of points (may be unordered)
+ *
+ * @param sign_tolerance the tolerance for the direction sign; -1
+ * for automatic tolerance
+ *
+ * @return changed Return status as to whether input vector was
+ * altered (pruned) or not
  *
  * @author http://www.drdobbs.com/cpp/201806315?pgno=4
  */
-class GrahamScan: private NonCopyable
-{
-  std::list<SearchPoint> raw_points;
-  SearchPoint *left;
-  SearchPoint *right;
-  std::vector<SearchPoint*> upper_partition_points;
-  std::vector<SearchPoint*> lower_partition_points;
-  std::vector<SearchPoint*> lower_hull;
-  std::vector<SearchPoint*> upper_hull;
-  SearchPointVector &raw_vector;
-  const unsigned size;
-  const double tolerance;
-
-public:
-  /**
-   * Constructor.  Note that this class should be used temporarily only
-   *
-   * @param sps Input vector of points (may be unordered)
-   *
-   * @param sign_tolerance the tolerance for the direction sign; -1
-   * for automatic tolerance
-   */
-  GrahamScan(SearchPointVector& sps, const double sign_tolerance = -1);
-
-  /**
-   * Perform convex hull transformation
-   *
-   * @return changed Return status as to whether input vector was altered (pruned) or not
-   */
-  bool PruneInterior();
-
-private:
-  void PartitionPoints();
-  void BuildHull();
-  void BuildHalfHull(std::vector<SearchPoint*> input,
-                     std::vector<SearchPoint*> &output, int factor);
-};
-
+bool
+PruneInterior(SearchPointVector &v, double sign_tolerance = -1) noexcept;
 
 #endif

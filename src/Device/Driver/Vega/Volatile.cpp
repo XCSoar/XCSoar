@@ -36,11 +36,11 @@ Vega::VolatileData::CopyFrom(const DerivedInfo &calculated)
   circling = calculated.circling;
 }
 
-bool
+void
 Vega::VolatileData::SendTo(Port &port, OperationEnvironment &env) const
 {
   char buffer[100];
   sprintf(buffer, "PDVMC,%u,%u,%u,%d,%u",
           mc, stf, circling, terrain_altitude, qnh);
-  return PortWriteNMEA(port, buffer, env);
+  PortWriteNMEA(port, buffer, env);
 }

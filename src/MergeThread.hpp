@@ -66,12 +66,12 @@ public:
     Process();
   }
 
-  bool Start(bool suspended=false) {
-    if (!WorkerThread::Start(suspended))
-      return false;
-
+  /**
+   * Throws on error.
+   */
+  void Start(bool suspended=false) {
+    WorkerThread::Start(suspended);
     SetLowPriority();
-    return true;
   }
 
 private:

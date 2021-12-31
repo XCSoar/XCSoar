@@ -27,14 +27,14 @@ Copyright_License {
 struct InfoBoxData;
 
 void
-UpdateInfoBoxHomeDistance(InfoBoxData &data);
+UpdateInfoBoxHomeDistance(InfoBoxData &data) noexcept;
 
 void
-UpdateInfoBoxTakeoffDistance(InfoBoxData &data);
+UpdateInfoBoxTakeoffDistance(InfoBoxData &data) noexcept;
 
 extern const struct InfoBoxPanel atc_infobox_panels[];
 
 void
-UpdateInfoBoxATCRadial(InfoBoxData &data);
+UpdateInfoBoxATCRadial(InfoBoxData &data) noexcept;
 
 #endif

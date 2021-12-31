@@ -21,16 +21,20 @@ Copyright_License {
 }
 */
 
-#include "net/http/ToFile.hpp"
+#include "CoInstance.hpp"
+#include "net/http/CoDownloadToFile.hpp"
 #include "net/http/Init.hpp"
 #include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "io/async/AsioThread.hpp"
 #include "util/ConstBuffer.hxx"
 #include "util/PrintException.hxx"
-#include "util/ScopeExit.hxx"
 
 #include <stdio.h>
+#include <stdlib.h>
+
+struct Instance : CoInstance {
+  const Net::ScopeInit net_init{GetEventLoop()};
+};
 
 static void
 HexPrint(ConstBuffer<void> _b) noexcept
@@ -38,6 +42,19 @@ HexPrint(ConstBuffer<void> _b) noexcept
   const auto b = ConstBuffer<uint8_t>::FromVoid(_b);
   for (uint8_t i : b)
     printf("%02x", i);
+}
+
+static Co::InvokeTask
+Run(CurlGlobal &curl, const char *url, Path path,
+    ProgressListener &progress)
+{
+  std::array<std::byte, 32> hash;
+
+  const auto response =
+    co_await Net::CoDownloadToFile(curl, url, nullptr, nullptr,
+                                   path, &hash, progress);
+  HexPrint({&hash, sizeof(hash)});
+  printf("\n");
 }
 
 int
@@ -48,20 +65,11 @@ try {
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  std::array<std::byte, 32> hash;
-
-  AsioThread io_thread;
-  io_thread.Start();
-  AtScopeExit(&) { io_thread.Stop(); };
-  const Net::ScopeInit net_init(io_thread.GetEventLoop());
-
+  Instance instance;
   ConsoleOperationEnvironment env;
-  Net::DownloadToFile(*Net::curl, url, path, &hash, env);
-
-  HexPrint({&hash, sizeof(hash)});
-  printf("\n");
+  instance.Run(Run(*Net::curl, url, path, env));
   return EXIT_SUCCESS;
-} catch (const std::exception &exception) {
-  PrintException(exception);
+} catch (...) {
+  PrintException(std::current_exception());
   return EXIT_FAILURE;
 }

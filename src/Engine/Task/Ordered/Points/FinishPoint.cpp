@@ -38,7 +38,7 @@ FinishPoint::FinishPoint(std::unique_ptr<ObservationZonePoint> &&_oz, WaypointPt
 }
 
 void
-FinishPoint::SetTaskBehaviour(const TaskBehaviour &tb)
+FinishPoint::SetTaskBehaviour(const TaskBehaviour &tb) noexcept
 {
   safety_height = tb.safety_height_arrival;
 }
@@ -57,7 +57,7 @@ FinishPoint::EntryPrecondition() const
 }
 
 double
-FinishPoint::GetElevation() const
+FinishPoint::GetElevation() const noexcept
 {
   const auto nominal_elevation = GetBaseElevation() + safety_height;
 
@@ -72,14 +72,15 @@ FinishPoint::GetElevation() const
 }
 
 void
-FinishPoint::SetOrderedTaskSettings(const OrderedTaskSettings &otb)
+FinishPoint::SetOrderedTaskSettings(const OrderedTaskSettings &otb) noexcept
 {
   OrderedTaskPoint::SetOrderedTaskSettings(otb);
   constraints = otb.finish_constraints;
 }
 
 void
-FinishPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
+FinishPoint::SetNeighbours(OrderedTaskPoint *_prev,
+                           OrderedTaskPoint *_next) noexcept
 {
   assert(_next == NULL);
   // should not ever have an outbound leg
@@ -93,7 +94,7 @@ FinishPoint::SetFaiFinishHeight(const double height)
 }
 
 bool
-FinishPoint::IsInSector(const AircraftState &state) const
+FinishPoint::IsInSector(const AircraftState &state) const noexcept
 {
   if (!OrderedTaskPoint::IsInSector(state))
     return false;
@@ -115,7 +116,7 @@ FinishPoint::InInHeightLimit(const AircraftState &state) const
 
 bool
 FinishPoint::CheckEnterTransition(const AircraftState &ref_now,
-                                  const AircraftState &ref_last) const
+                                  const AircraftState &ref_last) const noexcept
 {
   const bool now_in_height = InInHeightLimit(ref_now);
   const bool last_in_height = InInHeightLimit(ref_last);

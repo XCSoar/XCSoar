@@ -109,9 +109,12 @@ struct VisibleWaypoint {
     const double elevation = waypoint->elevation +
       task_behaviour.safety_height_arrival;
     const AGeoPoint p_dest (waypoint->location, elevation);
-    if (!route_planner.FindPositiveArrival(p_dest, reach))
+
+    auto _reach = route_planner.FindPositiveArrival(p_dest);
+    if (!_reach)
       return false;
 
+    reach = *_reach;
     reach.Subtract(elevation);
     return true;
   }
@@ -209,6 +212,13 @@ protected:
       tmp = _tcsstr(buffer, _T(" "));
       if (tmp != nullptr)
         tmp[0] = '\0';
+      break;
+
+    case WaypointRendererSettings::DisplayTextType::SHORT_NAME:
+      if (!way_point.shortname.empty())
+        CopyTruncateString(buffer, buffer_size, way_point.shortname.c_str());
+      else
+        CopyTruncateString(buffer, buffer_size, way_point.name.c_str(), 5);
       break;
 
     case WaypointRendererSettings::DisplayTextType::OBSOLETE_DONT_USE_NUMBER:

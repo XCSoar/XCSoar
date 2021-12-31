@@ -96,7 +96,7 @@ gcc_pure
 static bool
 SettingExists(VegaDevice &device, const char *name)
 {
-  return device.GetSetting(name).first;
+  return (bool)device.GetSetting(name);
 }
 
 /**
@@ -138,9 +138,17 @@ VegaParametersWidget::RequestAll()
       ++start;
     }
 
-    if (!SettingExists(device, i->name) &&
-        !device.RequestSetting(i->name, env))
+    if (!SettingExists(device, i->name))
       return false;
+
+    try {
+      device.RequestSetting(i->name, env);
+    } catch (OperationCancelled) {
+      return false;
+    } catch (...) {
+      env.SetError(std::current_exception());
+      return false;
+    }
   }
 
   /* wait for the remaining responses */
@@ -162,10 +170,9 @@ VegaParametersWidget::UpdateUI()
         continue;
     }
 
-    auto x = device.GetSetting(parameter.name);
-    if (x.first) {
-      parameter.value = x.second;
-      GetDataField(i).SetAsInteger(x.second);
+    if (const auto x = device.GetSetting(parameter.name)) {
+      parameter.value = *x;
+      GetDataField(i).SetAsInteger(*x);
       GetControl(i).RefreshDisplay();
     }
   }
@@ -217,9 +224,14 @@ VegaParametersWidget::Save(bool &changed_r) noexcept
       continue;
 
     /* value has been changed by the user */
-    if (!device.SendSetting(parameter.name, ui_value, env))
-      /* error; should this be told to the user? */
+    try {
+      device.SendSetting(parameter.name, ui_value, env);
+    } catch (OperationCancelled) {
       return false;
+    } catch (...) {
+      env.SetError(std::current_exception());
+      return false;
+    }
 
     parameter.value = ui_value;
     changed = true;

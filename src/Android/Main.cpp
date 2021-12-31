@@ -30,12 +30,16 @@ Copyright_License {
 #include "Vibrator.hpp"
 #include "InternalSensors.hpp"
 #include "GliderLink.hpp"
+#include "Sensor.hpp"
 #include "PortBridge.hpp"
 #include "BluetoothHelper.hpp"
-#include "NativeLeScanCallback.hpp"
+#include "UsbSerialHelper.hpp"
+#include "NativeDetectDeviceListener.hpp"
 #include "NativePortListener.hpp"
 #include "NativeInputListener.hpp"
+#include "NativeSensorListener.hpp"
 #include "TextUtil.hpp"
+#include "TextEntryDialog.hpp"
 #include "Product.hpp"
 #include "Nook.hpp"
 #include "Language/Language.hpp"
@@ -49,7 +53,6 @@ Copyright_License {
 #include "ui/event/Queue.hpp"
 #include "ui/canvas/opengl/Init.hpp"
 #include "Dialogs/Message.hpp"
-#include "Simulator.hpp"
 #include "Profile/Profile.hpp"
 #include "MainWindow.hpp"
 #include "Startup.hpp"
@@ -58,6 +61,7 @@ Copyright_License {
 #include "java/File.hxx"
 #include "java/InputStream.hxx"
 #include "java/URL.hxx"
+#include "java/Closeable.hxx"
 #include "util/Compiler.h"
 #include "org_xcsoar_NativeView.h"
 #include "io/async/GlobalAsioThread.hpp"
@@ -67,19 +71,10 @@ Copyright_License {
 #include "util/Exception.hxx"
 
 #include "IOIOHelper.hpp"
-#include "NativeBMP085Listener.hpp"
 #include "BMP085Device.hpp"
-#include "NativeI2CbaroListener.hpp"
 #include "I2CbaroDevice.hpp"
-#include "NativeNunchuckListener.hpp"
 #include "NunchuckDevice.hpp"
-#include "NativeVoltageListener.hpp"
 #include "VoltageDevice.hpp"
-
-#ifndef NDEBUG
-#include "ui/canvas/opengl/Texture.hpp"
-#include "ui/canvas/opengl/Buffer.hpp"
-#endif
 
 #include <cassert>
 #include <stdlib.h>
@@ -95,6 +90,8 @@ NativeView *native_view;
 Vibrator *vibrator;
 bool os_haptic_feedback_enabled;
 
+BluetoothHelper *bluetooth_helper;
+UsbSerialHelper *usb_serial_helper;
 IOIOHelper *ioio_helper;
 
 gcc_visibility_default
@@ -117,28 +114,30 @@ try {
   Java::Object::Initialise(env);
   Java::File::Initialise(env);
   Java::InputStream::Initialise(env);
+  Java::InitialiseCloseable(env);
   Java::URL::Initialise(env);
   Java::URLConnection::Initialise(env);
 
   NativeView::Initialise(env);
+  Context::Initialise(env);
   Environment::Initialise(env);
   AndroidBitmap::Initialise(env);
+  NativeSensorListener::Initialise(env);
   InternalSensors::Initialise(env);
   GliderLink::Initialise(env);
   NativePortListener::Initialise(env);
   NativeInputListener::Initialise(env);
+  AndroidSensor::Initialise(env);
   PortBridge::Initialise(env);
-  BluetoothHelper::Initialise(env);
-  NativeLeScanCallback::Initialise(env);
+  const bool have_bluetooth = BluetoothHelper::Initialise(env);
+  const bool have_usb_serial = UsbSerialHelper::Initialise(env);
+  NativeDetectDeviceListener::Initialise(env);
   const bool have_ioio = IOIOHelper::Initialise(env);
-  NativeBMP085Listener::Initialise(env);
   BMP085Device::Initialise(env);
-  NativeI2CbaroListener::Initialise(env);
   I2CbaroDevice::Initialise(env);
-  NativeNunchuckListener::Initialise(env);
   NunchuckDevice::Initialise(env);
-  NativeVoltageListener::Initialise(env);
   VoltageDevice::Initialise(env);
+  AndroidTextEntryDialog::Initialise(env);
 
   context = new Context(env, _context);
 
@@ -161,6 +160,22 @@ try {
   SoundUtil::Initialise(env);
   Vibrator::Initialise(env);
   vibrator = Vibrator::Create(env, *context);
+
+  if (have_bluetooth) {
+    try {
+      bluetooth_helper = new BluetoothHelper(env, *context);
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to initialise Bluetooth");
+    }
+  }
+
+  if (have_usb_serial) {
+    try {
+      usb_serial_helper = new UsbSerialHelper(env, *context);
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to initialise USB serial support");
+    }
+  }
 
   if (have_ioio) {
     try {
@@ -227,6 +242,12 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   delete ioio_helper;
   ioio_helper = nullptr;
 
+  delete usb_serial_helper;
+  usb_serial_helper = nullptr;
+
+  delete bluetooth_helper;
+  bluetooth_helper = nullptr;
+
   delete vibrator;
   vibrator = nullptr;
 
@@ -244,23 +265,23 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   delete context;
   context = nullptr;
 
+  AndroidTextEntryDialog::Deinitialise(env);
   BMP085Device::Deinitialise(env);
-  NativeBMP085Listener::Deinitialise(env);
   I2CbaroDevice::Deinitialise(env);
-  NativeI2CbaroListener::Deinitialise(env);
   NunchuckDevice::Deinitialise(env);
-  NativeNunchuckListener::Deinitialise(env);
   VoltageDevice::Deinitialise(env);
-  NativeVoltageListener::Deinitialise(env);
   IOIOHelper::Deinitialise(env);
-  NativeLeScanCallback::Deinitialise(env);
+  NativeDetectDeviceListener::Deinitialise(env);
+  UsbSerialHelper::Deinitialise(env);
   BluetoothHelper::Deinitialise(env);
   NativeInputListener::Deinitialise(env);
   NativePortListener::Deinitialise(env);
   InternalSensors::Deinitialise(env);
+  NativeSensorListener::Deinitialise(env);
   GliderLink::Deinitialise(env);
   AndroidBitmap::Deinitialise(env);
   Environment::Deinitialise(env);
+  Context::Deinitialise(env);
   NativeView::Deinitialise(env);
   Java::URL::Deinitialise(env);
 
@@ -294,9 +315,6 @@ Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
     /* event subsystem is not initialized, there is nothing to pause */
 
   CommonInterface::main_window->Pause();
-
-  assert(num_textures == 0);
-  assert(num_buffers == 0);
 }
 
 gcc_visibility_default

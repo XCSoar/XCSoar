@@ -24,10 +24,14 @@ Copyright_License {
 #include "InputConfig.hpp"
 #include "util/Macros.hpp"
 
+#ifdef ENABLE_SDL
+#include <SDL_keycode.h>
+#endif
+
 #include <algorithm>
 
 void
-InputConfig::SetDefaults()
+InputConfig::SetDefaults() noexcept
 {
   modes.resize(4);
   modes[0] = _T("default");
@@ -45,13 +49,69 @@ InputConfig::SetDefaults()
 
   Gesture2Event.Clear();
 
-  std::fill_n(&GC2Event[0], ARRAY_SIZE(GC2Event), 0);
-  std::fill_n(&N2Event[0], ARRAY_SIZE(N2Event), 0);
+  std::fill(GC2Event.begin(), GC2Event.end(), 0);
+  std::fill(N2Event.begin(), N2Event.end(), 0);
 
   /* This is initialized with 1 because event 0 is reserved - it
      stands for "no event" */
   events.resize(1);
 
-  for (auto i = menus, end = menus + MAX_MODE; i != end; ++i)
-    i->Clear();
+  for (auto &i : menus)
+    i.Clear();
+}
+
+unsigned
+InputConfig::GetKeyEvent(unsigned mode, unsigned key_code) const noexcept
+{
+  assert(mode < MAX_MODE);
+
+  unsigned key_code_idx = key_code;
+  auto key_2_event = Key2Event;
+#ifdef ENABLE_SDL
+  if (key_code & SDLK_SCANCODE_MASK) {
+    key_code_idx = key_code & ~SDLK_SCANCODE_MASK;
+    key_2_event = Key2EventNonChar;
+  }
+#endif
+
+#ifdef USE_X11
+  if (key_code_idx >= 0xff00) {
+    key_code_idx -= 0xff00;
+    key_2_event = Key2EventFF00;
+  }
+#endif
+
+  if (key_code_idx >= MAX_KEY)
+    return 0;
+
+  if (mode > 0 && key_2_event[mode][key_code_idx] != 0)
+    return key_2_event[mode][key_code_idx];
+
+  /* fall back to the default mode */
+  return key_2_event[0][key_code_idx];
+}
+
+void
+InputConfig::SetKeyEvent(unsigned mode, unsigned key_code,
+                         unsigned event_id) noexcept
+{
+  assert(mode < MAX_MODE);
+
+  auto key_2_event = Key2Event;
+#ifdef ENABLE_SDL
+  if (key_code & SDLK_SCANCODE_MASK) {
+    key_2_event = Key2EventNonChar;
+    key_code &= ~SDLK_SCANCODE_MASK;
+  }
+#endif
+
+#ifdef USE_X11
+  if (key_code >= 0xff00) {
+    key_code -= 0xff00;
+    key_2_event = Key2EventFF00;
+  }
+#endif
+
+  if (key_code < MAX_KEY)
+    key_2_event[mode][key_code] = event_id;
 }

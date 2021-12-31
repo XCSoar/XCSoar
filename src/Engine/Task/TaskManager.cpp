@@ -151,14 +151,15 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
       ordered_task->GetOrderedTaskSettings().aat_min_time -
       task_stats.total.time_elapsed;
 
-    auto aat_time = ordered_task->GetOrderedTaskSettings().aat_min_time +
+    const FloatDuration aat_time =
+      ordered_task->GetOrderedTaskSettings().aat_min_time +
       task_behaviour.optimise_targets_margin;
 
-    if (aat_time > 0) {
-      common_stats.aat_speed_max = task_stats.distance_max / aat_time;
-      common_stats.aat_speed_min = task_stats.distance_min / aat_time;
+    if (aat_time.count() > 0) {
+      common_stats.aat_speed_max = task_stats.distance_max / aat_time.count();
+      common_stats.aat_speed_min = task_stats.distance_min / aat_time.count();
       common_stats.aat_speed_target =
-        task_stats.total.planned.GetDistance() / aat_time;
+        task_stats.total.planned.GetDistance() / aat_time.count();
     } else {
       common_stats.aat_speed_max = -1;
       common_stats.aat_speed_min = -1;
@@ -175,15 +176,15 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
        : ordered_task->GetPoint(0).GetElevation());
     if (start_max_height > 0 &&
         state.location.IsValid() && state.flying) {
-      if (common_stats.TimeUnderStartMaxHeight <= 0 &&
+      if (!common_stats.TimeUnderStartMaxHeight.IsDefined() &&
           state.altitude < start_max_height) {
         common_stats.TimeUnderStartMaxHeight = state.time;
       }
       if (state.altitude > start_max_height) {
-          common_stats.TimeUnderStartMaxHeight = -1;
+          common_stats.TimeUnderStartMaxHeight = TimeStamp::Undefined();
       }
     } else {
-      common_stats.TimeUnderStartMaxHeight = -1;
+      common_stats.TimeUnderStartMaxHeight = TimeStamp::Undefined();
     }
 
     ordered_task->UpdateSummary(common_stats.ordered_summary);
@@ -271,7 +272,7 @@ TaskManager::Update(const AircraftState &state,
 
   bool retval = false;
 
-  if (state_last.time >= 0 && state.time >= 0 &&
+  if (state_last.time.IsDefined() && state.time.IsDefined() &&
       state_last.time > state.time)
     /* time warp */
     Reset();

@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 
   for (const auto &w : result.waves) {
     TCHAR time_buffer[32];
-    if (w.time >= 0)
+    if (w.time.IsDefined())
       FormatTime(time_buffer, w.time);
     else
       _tcscpy(time_buffer, _T("?"));

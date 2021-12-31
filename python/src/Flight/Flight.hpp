@@ -155,7 +155,7 @@ public:
    */
   void SetQNH(const double _qnh) {
     qnh = AtmosphericPressure::HectoPascal(_qnh);
-    qnh_available.Update(1);
+    qnh_available.Update(TimeStamp{FloatDuration{1}});
   };
 
 private:

@@ -31,6 +31,7 @@ Copyright_License {
 #include "NMEA/Attitude.hpp"
 #include "SwitchState.hpp"
 #include "time/BrokenDateTime.hpp"
+#include "time/Stamp.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Atmosphere/Temperature.hpp"
@@ -42,6 +43,7 @@ Copyright_License {
 #include "GliderLink/GliderLinkData.hpp"
 #endif
 
+#include <optional>
 #include <type_traits>
 
 /**
@@ -54,7 +56,7 @@ struct NMEAInfo {
    * any data.  It is used to update and check the #Validity
    * attributes in this struct.
    */
-  double clock;
+  TimeStamp clock;
 
   /**
    * Is the device alive?  This attribute gets updated each time a
@@ -212,7 +214,7 @@ struct NMEAInfo {
   /**
    * Global time (seconds after UTC midnight)
    */
-  double time;
+  TimeStamp time;
 
   /**
    * GPS date and time (UTC).
@@ -324,6 +326,9 @@ struct NMEAInfo {
   //   Other
   //###########
 
+  Validity heart_rate_available;
+  unsigned heart_rate;
+
   Validity engine_noise_level_available;
   unsigned engine_noise_level;
 
@@ -347,7 +352,7 @@ struct NMEAInfo {
 
   /**
    * Information about the "secondary" device, e.g. the GPS connected
-   * "behind" the LXNAV V7.
+   * "behind" the LXNAV Vario.
    */
   DeviceInfo secondary_device;
 
@@ -366,8 +371,8 @@ struct NMEAInfo {
    *
    * @param other_time the time stamp (see attribute #time)
    */
-  gcc_pure
-  BrokenDateTime GetDateTimeAt(double other_time) const;
+  [[gnu::pure]]
+  BrokenDateTime GetDateTimeAt(TimeStamp other_time) const noexcept;
 
   bool MovementDetected() const {
     return ground_speed_available && ground_speed > 2;
@@ -385,7 +390,7 @@ struct NMEAInfo {
     gps_altitude_available.Clear();
   }
 
-  void ProvideTime(double time);
+  void ProvideTime(TimeStamp time) noexcept;
   void ProvideDate(const BrokenDate &date);
 
   /**
@@ -498,19 +503,21 @@ struct NMEAInfo {
 
   /**
    * Returns the pressure altitude, and falls back to the barometric
-   * altitude or the GPS altitude.  The "first" element is false if no
-   * altitude is available.  The "second" element contains the
-   * altitude value [m] if "first" is true.
+   * altitude or the GPS altitude.  Returns `std::nullopt` if none is
+   * available.
    */
-  gcc_pure
-  std::pair<bool, double> GetAnyAltitude() const {
-    return pressure_altitude_available
-      ? std::make_pair(true, pressure_altitude)
-      : (baro_altitude_available
-         ? std::make_pair(true, baro_altitude)
-         : (gps_altitude_available
-            ? std::make_pair(true, gps_altitude)
-            : std::make_pair(false, 0.)));
+  [[gnu::pure]]
+  std::optional<double> GetAnyAltitude() const noexcept {
+    if (pressure_altitude_available)
+      return pressure_altitude;
+
+    if (baro_altitude_available)
+      return baro_altitude;
+
+    if (gps_altitude_available)
+      return gps_altitude;
+
+    return std::nullopt;
   }
 
   /**

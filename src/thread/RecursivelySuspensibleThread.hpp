@@ -40,16 +40,16 @@ class RecursivelySuspensibleThread : public SuspensibleThread {
   unsigned suspend_count;
 
 public:
-  RecursivelySuspensibleThread(const char *_name)
+  RecursivelySuspensibleThread(const char *_name) noexcept
     :SuspensibleThread(_name) {}
 
-  bool Start(bool suspended=false);
+  void Start(bool suspended=false);
 
-  void BeginSuspend();
+  void BeginSuspend() noexcept;
 
-  void Suspend();
+  void Suspend() noexcept;
 
-  void Resume();
+  void Resume() noexcept;
 };
 
 #endif

@@ -37,7 +37,7 @@ PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile)
 {
   {
     auto plane_path = profile.GetPath("PlanePath");
-    if (!plane_path.IsNull() &&
+    if (plane_path != nullptr &&
         PlaneGlue::ReadFile(plane, plane_path))
       return;
   }
@@ -68,6 +68,9 @@ PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile)
 
   if (!profile.Get(ProfileKeys::Handicap, plane.handicap))
     plane.handicap = 100;
+
+  if (!profile.Get(ProfileKeys::WeGlideAircraftType, plane.weglide_glider_type))
+    plane.weglide_glider_type = 0;
 }
 
 void
@@ -103,4 +106,5 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
   settings.plane.competition_id = plane.competition_id;
   settings.plane.registration = plane.registration;
   settings.plane.type = plane.type;
+  settings.plane.weglide_glider_type = plane.weglide_glider_type;
 }

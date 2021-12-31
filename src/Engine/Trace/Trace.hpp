@@ -26,16 +26,19 @@ Copyright_License {
 
 #include "Point.hpp"
 #include "util/NonCopyable.hpp"
+#include "util/Sanitizer.hxx"
 #include "util/SliceAllocator.hxx"
 #include "util/Serial.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
+#include "time/Stamp.hpp"
 
 #include <boost/intrusive/list.hpp>
 #include <boost/intrusive/set.hpp>
 
 #include <algorithm>
-
 #include <cassert>
+#include <type_traits>
+
 #include <stdlib.h>
 
 class TracePointVector;
@@ -53,6 +56,8 @@ class TracePointerVector;
  */
 class Trace : private NonCopyable
 {
+  using Time = TracePoint::Time;
+
   struct TraceDelta
     : boost::intrusive::set_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>>,
       boost::intrusive::list_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> {
@@ -98,7 +103,7 @@ class Trace : private NonCopyable
 
     TracePoint point;
 
-    unsigned elim_time;
+    Time elim_time;
     unsigned elim_distance;
     unsigned delta_distance;
 
@@ -160,8 +165,8 @@ class Trace : private NonCopyable
      *
      * @return Time delta if this node is thinned
      */
-    static unsigned TimeMetric(const TracePoint &last, const TracePoint &node,
-                               const TracePoint &next) {
+    static Time TimeMetric(const TracePoint &last, const TracePoint &node,
+                           const TracePoint &next) noexcept {
       return next.DeltaTime(last)
         - std::min(next.DeltaTime(node), node.DeltaTime(last));
     }
@@ -176,7 +181,18 @@ class Trace : private NonCopyable
   typedef boost::intrusive::list<TraceDelta,
                                  boost::intrusive::constant_time_size<false>> ChronologicalList;
 
-  SliceAllocator<TraceDelta, 128u> allocator;
+  /**
+   * Use a SliceAllocator for allocating TraceDelta instances.  This
+   * reduces a lot of allocation overhead (both CPU and memory),
+   * because there will be lots of these objects.  Fall back to
+   * std::allocator when compiled with AddressSanitizer, because that
+   * avoids hiding memory errors.
+   */
+  using Allocator = std::conditional_t<HaveAddressSanitizer(),
+                                       std::allocator<TraceDelta>,
+                                       SliceAllocator<TraceDelta, 128u>>;
+
+  Allocator allocator;
 
   DeltaList delta_list;
   ChronologicalList chronological_list;
@@ -184,12 +200,12 @@ class Trace : private NonCopyable
 
   TaskProjection task_projection;
 
-  const unsigned max_time;
-  const unsigned no_thin_time;
+  const Time max_time;
+  const Time no_thin_time;
   const unsigned max_size;
   const unsigned opt_size;
 
-  unsigned average_delta_time;
+  Time average_delta_time;
   unsigned average_delta_distance;
 
   Serial append_serial, modify_serial;
@@ -198,8 +214,8 @@ class Trace : private NonCopyable
   struct Disposer {
     Alloc &alloc;
 
-    void operator()(typename Alloc::pointer td) {
-      alloc.destroy(td);
+    void operator()(typename std::allocator_traits<Alloc>::pointer td) {
+      std::allocator_traits<Alloc>::destroy(alloc, td);
       alloc.deallocate(td, 1);
     }
   };
@@ -222,8 +238,8 @@ public:
    * @param max_time Time window size (seconds), null_time for unlimited
    * @param max_size Maximum number of points that can be stored
    */
-  explicit Trace(const unsigned no_thin_time = 0,
-                 const unsigned max_time = null_time,
+  explicit Trace(const Time no_thin_time = {},
+                 const Time max_time = null_time,
                  const unsigned max_size = 1000);
 
   ~Trace() {
@@ -240,7 +256,7 @@ protected:
    * @return Recent time
    */
   [[gnu::pure]]
-  unsigned GetRecentTime(const unsigned t) const;
+  Time GetRecentTime(Time t) const noexcept;
 
   /**
    * Update delta values for specified item in the delta list and the
@@ -278,7 +294,7 @@ protected:
    * @return True if items were erased
    */
   bool EraseDelta(const unsigned target_size,
-                  const unsigned recent = 0);
+                  Time recent = {}) noexcept;
 
   /**
    * Erase elements older than specified time from delta and tree,
@@ -289,13 +305,13 @@ protected:
    *
    * @return True if items were erased
    */
-  bool EraseEarlierThan(const unsigned p_time);
+  bool EraseEarlierThan(Time p_time) noexcept;
 
   /**
    * Erase elements more recent than specified time.  This is used to
    * work around slight time warps.
    */
-  void EraseLaterThan(const unsigned min_time);
+  void EraseLaterThan(Time min_time) noexcept;
 
   /**
    * Update start node (and neighbour) after min time pruning
@@ -316,12 +332,12 @@ public:
    */
   void clear();
 
-  void EraseEarlierThan(double time) {
-    EraseEarlierThan((unsigned)time);
+  void EraseEarlierThan(TimeStamp time) noexcept {
+    EraseEarlierThan(time.Cast<Time>());
   }
 
-  void EraseLaterThan(double time) {
-    EraseLaterThan((unsigned)time);
+  void EraseLaterThan(TimeStamp time) noexcept {
+    EraseLaterThan(time.Cast<Time>());
   }
 
   unsigned GetMaxSize() const {
@@ -393,7 +409,7 @@ public:
    * Fill the vector with trace points, not before #min_time, minimum
    * resolution #min_distance.
    */
-  void GetPoints(TracePointVector &v, unsigned min_time,
+  void GetPoints(TracePointVector &v, Time min_time,
                  const GeoPoint &location, double resolution) const;
 
   const TracePoint &front() const {
@@ -419,7 +435,7 @@ private:
    * @param latest_time the latest time stamp which is/will be stored
    * in this trace
    */
-  void EnforceTimeWindow(unsigned latest_time);
+  void EnforceTimeWindow(Time latest_time) noexcept;
 
   /**
    * Helper function for Thin().
@@ -445,21 +461,21 @@ private:
   }
 
   [[gnu::pure]]
-  unsigned CalcAverageDeltaDistance(const unsigned no_thin) const;
+  unsigned CalcAverageDeltaDistance(Time no_thin) const noexcept;
 
   [[gnu::pure]]
-  unsigned CalcAverageDeltaTime(const unsigned no_thin) const;
+  Time CalcAverageDeltaTime(Time no_thin) const noexcept;
 
   static constexpr unsigned null_delta = 0 - 1;
 
 public:
-  static constexpr unsigned null_time = 0 - 1;
+  static constexpr auto null_time = TracePoint::INVALID_TIME;
 
   unsigned GetAverageDeltaDistance() const {
     return average_delta_distance;
   }
 
-  unsigned GetAverageDeltaTime() const {
+  Time GetAverageDeltaTime() const noexcept {
     return average_delta_time;
   }
 
@@ -498,7 +514,7 @@ public:
         if (*this == end)
           return *this;
 
-        const TraceDelta &td = (const TraceDelta &)**this;
+        const TraceDelta &td = ChronologicalList::const_iterator::operator*();
         if (td.point.FlatSquareDistanceTo(previous) >= sq_resolution)
           return *this;
       }

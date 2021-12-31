@@ -9,8 +9,8 @@ TARGET=${ARGS[0]}
 unset "ARGS[0]"
 
 case "${TARGET}" in
-      "ANDROID")
-        make TARGET="${TARGET}" -j "${CPUS}" ${ARGS[@]}
+      ANDROID)
+        make TARGET=ANDROIDFAT -j "${CPUS}" ${ARGS[@]}
       ;;
       "DOCS")
         make manual -j "${CPUS}" ${ARGS[@]}
@@ -31,6 +31,10 @@ case "${TARGET}" in
       ;;
       "WIN64")
         make TARGET="${TARGET}" -j"${CPUS}" ${ARGS[@]}
+      ;;
+      "UNIX-DEBIAN")
+        dpkg-buildpackage -uc -us -j"${CPUS}" ${ARGS[@]}
+        ls ../
       ;;
       *)
         echo "No target specified. Valid targets: ANDROID DOCS KOBO UNIX UNIX-SDL PC WIN64"

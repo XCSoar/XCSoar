@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2018 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2009-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,8 +30,6 @@
 #ifndef WSTRING_STRIP_HXX
 #define WSTRING_STRIP_HXX
 
-#include "Compiler.h"
-
 #include <wchar.h>
 
 /**
@@ -40,11 +38,11 @@
  * non-whitespace characters, then a pointer to the NULL terminator is
  * returned.
  */
-gcc_pure gcc_returns_nonnull gcc_nonnull_all
+[[gnu::pure]] [[gnu::returns_nonnull]] [[gnu::nonnull]]
 const wchar_t *
 StripLeft(const wchar_t *p) noexcept;
 
-gcc_pure gcc_returns_nonnull gcc_nonnull_all
+[[gnu::pure]] [[gnu::returns_nonnull]] [[gnu::nonnull]]
 static inline wchar_t *
 StripLeft(wchar_t *p) noexcept
 {
@@ -55,21 +53,21 @@ StripLeft(wchar_t *p) noexcept
  * Skips whitespace at the beginning of the string, and returns the
  * first non-whitespace character or the end pointer.
  */
-gcc_pure gcc_returns_nonnull gcc_nonnull_all
+[[gnu::pure]] [[gnu::returns_nonnull]] [[gnu::nonnull]]
 const wchar_t *
 StripLeft(const wchar_t *p, const wchar_t *end) noexcept;
 
 /**
  * Determine the string's end as if it was stripped on the right side.
  */
-gcc_pure gcc_returns_nonnull gcc_nonnull_all
+[[gnu::pure]] [[gnu::returns_nonnull]] [[gnu::nonnull]]
 const wchar_t *
 StripRight(const wchar_t *p, const wchar_t *end) noexcept;
 
 /**
  * Determine the string's end as if it was stripped on the right side.
  */
-gcc_pure gcc_returns_nonnull gcc_nonnull_all
+[[gnu::pure]] [[gnu::returns_nonnull]] [[gnu::nonnull]]
 static inline wchar_t *
 StripRight(wchar_t *p, wchar_t *end) noexcept
 {
@@ -81,14 +79,14 @@ StripRight(wchar_t *p, wchar_t *end) noexcept
  * Determine the string's length as if it was stripped on the right
  * side.
  */
-gcc_pure gcc_nonnull_all
+[[gnu::pure]] [[gnu::nonnull]]
 size_t
 StripRight(const wchar_t *p, size_t length) noexcept;
 
 /**
  * Strip trailing whitespace by null-terminating the string.
  */
-gcc_nonnull_all
+[[gnu::nonnull]]
 void
 StripRight(wchar_t *p) noexcept;
 
@@ -96,7 +94,7 @@ StripRight(wchar_t *p) noexcept;
  * Skip whitespace at the beginning and terminate the string after the
  * last non-whitespace character.
  */
-gcc_returns_nonnull gcc_nonnull_all
+[[gnu::returns_nonnull]] [[gnu::nonnull]]
 wchar_t *
 Strip(wchar_t *p) noexcept;
 

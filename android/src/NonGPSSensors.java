@@ -29,6 +29,8 @@
 
 package org.xcsoar;
 
+import java.io.Closeable;
+
 import android.content.Context;
 import android.os.Handler;
 import android.hardware.Sensor;
@@ -36,7 +38,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
-import android.os.SystemClock;
+import android.view.Surface;
+import android.view.WindowManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +47,9 @@ import java.util.Map;
 /**
  * Code to support the growing suite of non-GPS sensors on Android platforms.
  */
-public class NonGPSSensors implements SensorEventListener, Runnable {
+public class NonGPSSensors
+  implements SensorEventListener, Runnable, Closeable
+{
   private static final String TAG = "XCSoar";
 
   // Constant array saying whether we want to support certain sensors.
@@ -90,44 +95,34 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
   // i.e. that are retrieved by calling getDefaultSensor on sensor IDs present
   // in that array. This array is indexed by sensor numerical type ID---if the
   // corresponding sensor is absent or unsupported, the value will be null.
-  private Sensor[] default_sensors_;
+  private final Sensor[] default_sensors_ = new Sensor[SENSOR_TYPE_ID_UPPER_BOUND];
 
   // The set of sensors in SUPPORTED_SENSORS that are present on this device
   // that we are actively listening to and passing into XCSoar. This array is
   // indexed by sensor numerical type ID---if the corresponding sensor is
   // absent or unsupported, the value will be null.
-  private boolean[] enabled_sensors_;
+  private final boolean[] enabled_sensors_ = new boolean[SENSOR_TYPE_ID_UPPER_BOUND];
+
+  private final WindowManager windowManager;
 
   // Sensor manager.
-  private SensorManager sensor_manager_;
+  private final SensorManager sensor_manager_;
 
   // Handler for non-GPS sensor reading.
-  private static Handler handler_;
+  private final Handler handler_;
+
+  private final SensorListener listener;
 
   // Noise variance we'll use for the pressure sensor in this device.
   private float kf_sensor_noise_variance_;
 
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
-  /**
-   * Index of this device in the global list. This value is extracted directly
-   * from this object by the C++ wrapper code.
-   */
-  private final int index;
+  NonGPSSensors(Context context, SensorListener listener) {
+    handler_ = new Handler(context.getMainLooper());
+    this.listener = listener;
 
-  /**
-   * Global initialization of the class.  Must be called from the main
-   * event thread, because the Handler object must be bound to that
-   * thread.
-   */
-  public static void Initialize() {
-    handler_ = new Handler();
-  }
-
-  NonGPSSensors(Context context, int _index) {
-    index = _index;
-    default_sensors_ = new Sensor[SENSOR_TYPE_ID_UPPER_BOUND];
-    enabled_sensors_ = new boolean[SENSOR_TYPE_ID_UPPER_BOUND];
+    windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
     // Obtain sensor manager.
     sensor_manager_ = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -222,8 +217,8 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
     return enabled_sensors_[id];
   }
 
-  /** Cancel all sensor subscriptions. */
-  public void cancelAllSensorSubscriptions() {
+  @Override
+  public void close() {
     safeDestruct.beginShutdown();
     for (int id : SUPPORTED_SENSORS) enabled_sensors_[id] = false;
     updateSensorSubscriptions();
@@ -258,32 +253,53 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
 
   /** from SensorEventListener; report new sensor values to XCSoar. */
   public void onSensorChanged(SensorEvent event) {
-    if (!safeDestruct.Increment())
+    if (!safeDestruct.increment())
       return;
 
     try {
       switch (event.sensor.getType()) {
       case Sensor.TYPE_ACCELEROMETER:
-        setAcceleration(event.values[0], event.values[1], event.values[2]);
+        double acceleration;
+        acceleration = Math.sqrt((double) event.values[0]*event.values[0] +
+                                 (double) event.values[1]*event.values[1] +
+                                 (double) event.values[2]*event.values[2]) /
+          SensorManager.GRAVITY_EARTH;
+        switch (windowManager.getDefaultDisplay().getOrientation()) {
+        case Surface.ROTATION_0:   // g = -y
+          acceleration *= Math.signum(event.values[1]);
+          break;
+        case Surface.ROTATION_90:  // g = -x
+          acceleration *= Math.signum(event.values[0]);
+          break;
+        case Surface.ROTATION_180:  // g = y
+          acceleration *= Math.signum(-event.values[1]);
+          break;
+        case Surface.ROTATION_270:  // g = x
+          acceleration *= Math.signum(-event.values[0]);
+          break;
+        }
+        // TODO: do lowpass filtering to remove vibrations?!?
+
+        listener.onAccelerationSensor1(acceleration);
+
+        listener.onAccelerationSensor(event.values[0], event.values[1],
+                                      event.values[2]);
         break;
       case Sensor.TYPE_GYROSCOPE:
-        setRotation(event.values[0], event.values[1], event.values[2]);
+        listener.onRotationSensor(event.values[0], event.values[1],
+                                  event.values[2]);
         break;
       case Sensor.TYPE_MAGNETIC_FIELD:
-        setMagneticField(event.values[0], event.values[1], event.values[2]);
+        listener.onMagneticFieldSensor(event.values[0], event.values[1],
+                                       event.values[2]);
         break;
       case Sensor.TYPE_PRESSURE:
-        setBarometricPressure(event.values[0], kf_sensor_noise_variance_);
+        listener.onBarometricPressureSensor(event.values[0],
+                                            kf_sensor_noise_variance_);
         break;
       }
     } finally {
-      safeDestruct.Decrement();
+      safeDestruct.decrement();
     }
   }
-
-  // Native methods for reporting sensor values to XCSoar's native C++ code.
-  private native void setAcceleration(float ddx, float ddy, float ddz);
-  private native void setRotation(float dtheta_x, float dtheta_y, float dtheta_z);
-  private native void setMagneticField(float h_x, float h_y, float h_z);
-  private native void setBarometricPressure(float pressure, float sensor_noise_variance);
 }

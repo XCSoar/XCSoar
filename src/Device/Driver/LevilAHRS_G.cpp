@@ -100,7 +100,7 @@ ParseRPYL(NMEAInputLine &line, NMEAInfo &info)
   info.attitude.heading_available.Update(info.clock);
   info.attitude.heading = Angle::Degrees(heading / 10.);
 
-  info.acceleration.ProvideGLoad(G / 1000., true);
+  info.acceleration.ProvideGLoad(G / 1000.);
 
   return true;
 }

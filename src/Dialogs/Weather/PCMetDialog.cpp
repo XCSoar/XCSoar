@@ -30,7 +30,7 @@ Copyright_License {
 
 #include "UIGlobals.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Dialogs/JobDialog.hpp"
+#include "Dialogs/CoDialog.hpp"
 #include "Dialogs/Error.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -39,7 +39,11 @@ Copyright_License {
 #include "Widget/ViewImageWidget.hpp"
 #include "Widget/LargeTextWidget.hpp"
 #include "Weather/PCMet/Images.hpp"
+#include "Operation/PluggableOperationEnvironment.hpp"
+#include "co/InvokeTask.hxx"
+#include "co/Task.hxx"
 #include "net/http/Init.hpp"
+#include "system/Path.hpp"
 #include "Interface.hpp"
 
 static void
@@ -54,24 +58,32 @@ BitmapDialog(const Bitmap &bitmap)
   dialog.ShowModal();
 }
 
+static Co::InvokeTask
+DownloadTask(AllocatedPath &path, const char *type, const char *area,
+             const PCMetSettings &settings,
+             CurlGlobal &curl, ProgressListener &progress)
+{
+  path = co_await PCMet::DownloadLatestImage(type, area, settings,
+                                             curl, progress);
+}
+
 static void
 BitmapDialog(const PCMet::ImageType &type, const PCMet::ImageArea &area)
 {
   const auto &settings = CommonInterface::GetComputerSettings().weather.pcmet;
 
-  DialogJobRunner runner(UIGlobals::GetMainWindow(),
-                         UIGlobals::GetDialogLook(),
-                         _("Download"), true);
-
   try {
-    Bitmap bitmap = PCMet::DownloadLatestImage(type.uri, area.name,
-                                               settings, *Net::curl, runner);
-    if (!bitmap.IsDefined()) {
-      ShowMessageBox(_("Failed to download file."),
-                     _T("pc_met"), MB_OK);
+    AllocatedPath path;
+    PluggableOperationEnvironment env;
+    if (!ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                      _("Download"),
+                      DownloadTask(path, type.uri, area.name,
+                                   settings, *Net::curl, env),
+                      &env))
       return;
-    }
 
+    Bitmap bitmap;
+    bitmap.LoadFile(path);
     BitmapDialog(bitmap);
   } catch (...) {
     ShowError(std::current_exception(), _T("pc_met"));

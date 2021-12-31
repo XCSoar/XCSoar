@@ -24,7 +24,7 @@ Copyright_License {
 #include "ConvertString.hpp"
 
 #ifdef _UNICODE
-#include <windows.h>
+#include <stringapiset.h>
 
 static BasicAllocatedString<wchar_t>
 ConvertToWide(const char *p, UINT codepage) noexcept

@@ -29,17 +29,19 @@
 #include <cassert>
 #include <stdio.h>
 
+using namespace std::chrono;
+
 // Uncomment the following line to use the same trace size as LK8000.
 //#define BENCHMARK_LK8000
 
 #ifdef BENCHMARK_LK8000
-static Trace full_trace(0, Trace::null_time, 100);
-static Trace triangle_trace(0, Trace::null_time, 100);
-static Trace sprint_trace(0, 9000, 50);
+static Trace full_trace({}, Trace::null_time, 100);
+static Trace triangle_trace({}, Trace::null_time, 100);
+static Trace sprint_trace({}, minutes{150}, 50);
 #else
-static Trace full_trace(0, Trace::null_time, 512);
-static Trace triangle_trace(0, Trace::null_time, 1024);
-static Trace sprint_trace(0, 9000, 128);
+static Trace full_trace({}, Trace::null_time, 512);
+static Trace triangle_trace({}, Trace::null_time, 1024);
+static Trace sprint_trace({}, minutes{150}, 128);
 #endif
 
 static ContestManager olc_classic(Contest::OLC_CLASSIC,
@@ -79,7 +81,7 @@ TestContest(DebugReplay &replay)
         !basic.NavAltitudeAvailable())
       continue;
 
-    if (!released && replay.Calculated().flight.release_time >= 0) {
+    if (!released && replay.Calculated().flight.release_time.IsDefined()) {
       released = true;
 
       triangle_trace.EraseEarlierThan(replay.Calculated().flight.release_time);

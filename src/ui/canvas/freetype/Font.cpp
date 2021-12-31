@@ -63,11 +63,11 @@ static Mutex freetype_mutex;
 static FT_Int32 load_flags = FT_LOAD_DEFAULT;
 static FT_Render_Mode render_mode = FT_RENDER_MODE_NORMAL;
 
-static AllocatedPath font_path = nullptr;
-static AllocatedPath bold_font_path = nullptr;
-static AllocatedPath italic_font_path = nullptr;
-static AllocatedPath bold_italic_font_path = nullptr;
-static AllocatedPath monospace_font_path = nullptr;
+static AllocatedPath font_path;
+static AllocatedPath bold_font_path;
+static AllocatedPath italic_font_path;
+static AllocatedPath bold_italic_font_path;
+static AllocatedPath monospace_font_path;
 
 [[gnu::const]]
 static inline bool

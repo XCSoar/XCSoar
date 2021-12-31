@@ -52,6 +52,36 @@ Center(unsigned canvas_size, unsigned element_size)
   return int(canvas_size - element_size) / 2;
 }
 
+enum class LogoViewOrientation {
+    LANDSCAPE, PORTRAIT, SQUARE,
+};
+
+static constexpr PixelSize
+EstimateLogoViewSize(LogoViewOrientation orientation,
+                     PixelSize logo_size,
+                     PixelSize title_size,
+                     unsigned spacing) noexcept
+{
+  switch (orientation) {
+  case LogoViewOrientation::LANDSCAPE:
+    return {
+      logo_size.width + spacing + title_size.width,
+      logo_size.height,
+    };
+
+  case LogoViewOrientation::PORTRAIT:
+    return {
+      title_size.width,
+      logo_size.height + spacing + title_size.height,
+    };
+
+  case LogoViewOrientation::SQUARE:
+    return logo_size;
+  }
+
+  gcc_unreachable();
+}
+
 void
 LogoView::draw(Canvas &canvas, const PixelRect &rc) noexcept
 {
@@ -60,22 +90,19 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc) noexcept
 
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
 
-  enum {
-    LANDSCAPE, PORTRAIT, SQUARE,
-  } orientation;
-
+  LogoViewOrientation orientation;
   if (width == height)
-    orientation = SQUARE;
+    orientation = LogoViewOrientation::SQUARE;
   else if (width > height)
-    orientation = LANDSCAPE;
+    orientation = LogoViewOrientation::LANDSCAPE;
   else
-    orientation = PORTRAIT;
+    orientation = LogoViewOrientation::PORTRAIT;
 
   /* load bitmaps */
   const bool use_big =
-    (orientation == LANDSCAPE && width >= 510 && height >= 170) ||
-    (orientation == PORTRAIT && width >= 330 && height >= 250) ||
-    (orientation == SQUARE && width >= 210 && height >= 210);
+    (orientation == LogoViewOrientation::LANDSCAPE && width >= 510 && height >= 170) ||
+    (orientation == LogoViewOrientation::PORTRAIT && width >= 330 && height >= 250) ||
+    (orientation == LogoViewOrientation::SQUARE && width >= 210 && height >= 210);
   const Bitmap &bitmap_logo = use_big ? big_logo : logo;
   const Bitmap &bitmap_title = use_big ? big_title : title;
 
@@ -87,27 +114,12 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc) noexcept
 
   unsigned spacing = title_size.height / 2;
 
-  unsigned estimated_width, estimated_height;
-  switch (orientation) {
-  case LANDSCAPE:
-    estimated_width = logo_size.width + spacing + title_size.width;
-    estimated_height = logo_size.height;
-    break;
-
-  case PORTRAIT:
-    estimated_width = title_size.width;
-    estimated_height = logo_size.height + spacing + title_size.height;
-    break;
-
-  case SQUARE:
-    estimated_width = logo_size.width;
-    estimated_height = logo_size.height;
-    break;
-  }
+  const auto estimated_size = EstimateLogoViewSize(orientation, logo_size,
+                                                   title_size, spacing);
 
   const unsigned magnification =
-    std::min((width - 16u) / estimated_width,
-             (height - 16u) / estimated_height);
+    std::min((width - 16u) / estimated_size.width,
+             (height - 16u) / estimated_size.height);
 
   if (magnification > 1) {
     logo_size.width *= magnification;
@@ -121,29 +133,31 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc) noexcept
 
   // Determine logo and title positions
   switch (orientation) {
-  case LANDSCAPE:
+  case LogoViewOrientation::LANDSCAPE:
     logo_position.x = Center(width, logo_size.width + spacing + title_size.width);
     logo_position.y = Center(height, logo_size.height);
     title_position.x = logo_position.x + logo_size.width + spacing;
     title_position.y = Center(height, title_size.height);
     break;
-  case PORTRAIT:
+  case LogoViewOrientation::PORTRAIT:
     logo_position.x = Center(width, logo_size.width);
     logo_position.y = Center(height, logo_size.height + spacing + title_size.height);
     title_position.x = Center(width, title_size.width);
     title_position.y = logo_position.y + logo_size.height + spacing;
     break;
-  case SQUARE:
+  case LogoViewOrientation::SQUARE:
     logo_position.x = Center(width, logo_size.width);
     logo_position.y = Center(height, logo_size.height);
     // not needed - silence compiler "may be used uninitialized"
     title_position.x = 0;
     title_position.y = 0;
     break;
+  default:
+    gcc_unreachable();
   }
 
   // Draw 'XCSoar N.N' title
-  if (orientation != SQUARE)
+  if (orientation != LogoViewOrientation::SQUARE)
     canvas.Stretch(title_position, title_size, bitmap_title);
 
   // Draw XCSoar swift logo

@@ -27,6 +27,7 @@ Copyright_License {
 #include "Base.hpp"
 #include "util/StaticArray.hxx"
 
+#include <type_traits>
 #include <utility>
 
 /**
@@ -90,6 +91,7 @@ public:
     }
 
     void SetString(const TCHAR *_string) noexcept;
+    void SetDisplayString(const TCHAR *_string) noexcept;
     void Set(unsigned _id, const TCHAR *_string,
              const TCHAR *_display_string=nullptr,
              const TCHAR *_help=nullptr) noexcept;
@@ -97,21 +99,25 @@ public:
 
 private:
   StaticArray<Entry, 128> entries;
-  unsigned int value;
+  std::size_t value = 0;
 
 public:
   DataFieldEnum(DataFieldListener *listener=nullptr) noexcept
-    :DataField(Type::ENUM, true, listener), value(0) {}
+    :DataField(Type::ENUM, true, listener) {}
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetValue() const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool Exists(const TCHAR *text) const noexcept {
     return Find(text) >= 0;
   }
 
-  void replaceEnumText(unsigned int i, const TCHAR *Text) noexcept;
+  void replaceEnumText(std::size_t index, const TCHAR *Text) noexcept;
+
+  void SetDisplayString(std::size_t index, const TCHAR *_string) noexcept {
+    entries[index].SetDisplayString(_string);
+  }
 
   /**
    * Clear the list of choices.  This will not notify the
@@ -155,7 +161,13 @@ public:
     item_help_enabled = value;
   }
 
-  void Set(unsigned Value) noexcept;
+  void SetValue(unsigned Value) noexcept;
+
+  template<typename T>
+  requires(std::is_enum_v<T>)
+  void SetValue(T value) noexcept {
+    SetValue(unsigned(value));
+  }
 
   /**
    * Select the item with the specified text (not display string).
@@ -164,7 +176,17 @@ public:
    * @return false if an item with the specified text was not found,
    * and therefore the value was not changed
    */
-  bool Set(const TCHAR *text) noexcept;
+  bool SetValue(const TCHAR *text) noexcept;
+
+  bool ModifyValue(unsigned new_value) noexcept;
+
+  template<typename T>
+  requires(std::is_enum_v<T>)
+  bool ModifyValue(T value) noexcept {
+    return ModifyValue(unsigned(value));
+  }
+
+  bool ModifyValue(const TCHAR *text) noexcept;
 
   /**
    * Set the value to the specified string.  If there is no choice
@@ -174,14 +196,16 @@ public:
    */
   int SetStringAutoAdd(const TCHAR *text) noexcept;
 
-  void Sort(unsigned startindex = 0) noexcept;
+  void Sort(std::size_t startindex = 0) noexcept;
 
-  gcc_pure
-  unsigned Count() const noexcept {
+  [[gnu::pure]]
+  std::size_t Count() const noexcept {
     return entries.size();
   }
 
-  unsigned getItem(unsigned index) const noexcept;
+  const auto &operator[](std::size_t index) const noexcept {
+    return entries[index];
+  }
 
   /* virtual methods from class DataField */
   void Inc() noexcept override;
@@ -197,13 +221,13 @@ protected:
   /**
    * Finds an entry with the specified text.  Returns -1 if not found.
    */
-  gcc_pure
+  [[gnu::pure]]
   int Find(const TCHAR *text) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   int Find(unsigned id) const noexcept;
 
-  void SetIndex(unsigned new_value, bool invoke_callback) noexcept;
+  void SetIndex(std::size_t new_value, bool invoke_callback) noexcept;
 };
 
 #endif

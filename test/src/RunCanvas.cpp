@@ -24,6 +24,13 @@ Copyright_License {
 #define ENABLE_SCREEN
 #define ENABLE_BUTTON_LOOK
 
+#if defined(__GNUC__) && !defined(__clang__)
+/* this warning is bogus because GCC is not clever enough to
+   understand that the switch/case in paint() always initialises the
+   "label" variable */
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+
 #include "Main.hpp"
 #include "Math/Angle.hpp"
 #include "ui/window/SingleWindow.hpp"
@@ -163,6 +170,9 @@ private:
       canvas.DrawPolygon(p2, 3);
       label = _T("huge polygon");
       break;
+
+    default:
+      gcc_unreachable();
     }
 
     canvas.SetTextColor(Color(0, 0, 128));

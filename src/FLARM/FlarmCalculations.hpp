@@ -29,6 +29,8 @@ Copyright_License {
 
 #include <map>
 
+class TimeStamp;
+
 class FlarmCalculations
 {
 private:
@@ -36,9 +38,10 @@ private:
   AverageCalculatorMap averageCalculatorMap;
 
 public:
-  double Average30s(FlarmId flarmId, double curTime, double curAltitude);
+  double Average30s(FlarmId flarmId, TimeStamp curTime,
+                    double curAltitude) noexcept;
 
-  void CleanUp(double now);
+  void CleanUp(TimeStamp now) noexcept;
 };
 
 #endif

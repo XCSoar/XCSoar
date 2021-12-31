@@ -36,13 +36,13 @@ static constexpr unsigned contest_trace_size =
 static constexpr unsigned sprint_trace_size =
   IsAncientHardware() ? 96 : 128;
 
-static constexpr unsigned full_trace_no_thin_time =
-  HasLittleMemory() ? 60 : 120;
+static constexpr auto full_trace_no_thin_time =
+  HasLittleMemory() ? std::chrono::minutes{1} : std::chrono::minutes{2};
 
 TraceComputer::TraceComputer()
  :full(full_trace_no_thin_time, Trace::null_time, full_trace_size),
-  contest(0, Trace::null_time, contest_trace_size),
-  sprint(0, 9000, sprint_trace_size)
+  contest({}, Trace::null_time, contest_trace_size),
+  sprint({}, std::chrono::minutes{150}, sprint_trace_size)
 {
 }
 
@@ -66,7 +66,8 @@ TraceComputer::LockedCopyTo(TracePointVector &v) const
 }
 
 void
-TraceComputer::LockedCopyTo(TracePointVector &v, unsigned min_time,
+TraceComputer::LockedCopyTo(TracePointVector &v,
+                            std::chrono::duration<unsigned> min_time,
                             const GeoPoint &location,
                             double resolution) const
 {

@@ -26,6 +26,10 @@ Copyright_License {
 #include "util/StringCompare.hxx"
 #include "Compatibility/path.h"
 
+#ifdef _WIN32
+#include "time/FileTime.hxx"
+#endif
+
 #include <windef.h> /* for MAX_PATH */
 
 #include <cassert>
@@ -39,8 +43,6 @@ Copyright_License {
 #include <fnmatch.h>
 #include <utime.h>
 #include <time.h>
-#else
-#include <windows.h>
 #endif
 
 void
@@ -339,49 +341,22 @@ File::GetSize(Path path) noexcept
 
 }
 
-uint64_t
+std::chrono::system_clock::time_point
 File::GetLastModification(Path path) noexcept
 {
 #ifdef HAVE_POSIX
   struct stat st;
   if (stat(path.c_str(), &st) < 0 || !S_ISREG(st.st_mode))
-    return 0;
+    return {};
 
-  return st.st_mtime;
+  return std::chrono::system_clock::from_time_t(st.st_mtime);
 #else
   WIN32_FILE_ATTRIBUTE_DATA data;
   if (!GetFileAttributesEx(path.c_str(), GetFileExInfoStandard, &data) ||
       (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
-    return 0;
+    return {};
 
-  return data.ftLastWriteTime.dwLowDateTime |
-         ((uint64_t)data.ftLastWriteTime.dwHighDateTime << 32);
-#endif
-}
-
-#ifndef HAVE_POSIX
-
-static constexpr uint64_t
-FileTimeToInteger(FILETIME ft) noexcept
-{
-  return ft.dwLowDateTime | ((uint64_t)ft.dwHighDateTime << 32);
-}
-
-#endif
-
-uint64_t
-File::Now() noexcept
-{
-#ifdef HAVE_POSIX
-  return time(nullptr);
-#else
-  SYSTEMTIME system_time;
-  GetSystemTime(&system_time);
-
-  FILETIME system_time2;
-  SystemTimeToFileTime(&system_time, &system_time2);
-
-  return FileTimeToInteger(system_time2);
+  return FileTimeToChrono(data.ftLastWriteTime);
 #endif
 }
 
