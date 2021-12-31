@@ -199,8 +199,6 @@ public:
   void
   print(int version, FILE *aus)
   {
-    char is[8];
-
     if (hasdeclaration) {
       strcpy(sTDECL, "            ");
 
@@ -247,6 +245,7 @@ public:
 
       // print Turnpoints
       for (unsigned i = 0; i < NTP; i++) {
+        char is[20];
         sprintf(is, "TP%02u   ", i + 1);
         TP[i].print(version, aus, is);
       }

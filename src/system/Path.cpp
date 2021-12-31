@@ -202,15 +202,12 @@ Path::WithExtension(const_pointer new_extension) const noexcept
 }
 
 AllocatedPath
-AllocatedPath::Build(const_pointer a, const_pointer b) noexcept
+AllocatedPath::Build(string_view a, string_view b) noexcept
 {
-  size_t a_length = StringLength(a);
-  size_t b_length = StringLength(b);
-
-  auto result = new char_type[a_length + 1 + b_length + 1];
-  auto p = std::copy_n(a, a_length, result);
+  auto result = new char_type[a.size() + 1 + b.size() + 1];
+  auto p = std::copy(a.begin(), a.end(), result);
   *p++ = DIR_SEPARATOR;
-  p = std::copy_n(b, b_length, p);
+  p = std::copy(b.begin(), b.end(), p);
   *p = SENTINEL;
   return Donate(result);
 }
