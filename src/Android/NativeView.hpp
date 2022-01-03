@@ -27,13 +27,14 @@ Copyright_License {
 #include "java/Object.hxx"
 #include "java/Class.hxx"
 #include "java/String.hxx"
-#include "system/Path.hpp"
 
 #ifndef NO_SCREEN
 #include "ui/dim/Size.hpp"
 #endif
 
 #include <cassert>
+
+class Path;
 
 class NativeView {
   JNIEnv *env;

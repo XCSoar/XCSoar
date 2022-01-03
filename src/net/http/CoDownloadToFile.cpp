@@ -26,6 +26,7 @@ Copyright_License {
 #include "Progress.hpp"
 #include "CoStreamRequest.hxx"
 #include "io/FileOutputStream.hxx"
+#include "system/Path.hpp"
 #include "Crypto/SHA256.hxx"
 #include "Crypto/DigestOutputStream.hxx"
 

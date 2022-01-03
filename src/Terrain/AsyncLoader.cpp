@@ -24,6 +24,7 @@ Copyright_License {
 #include "AsyncLoader.hpp"
 #include "RasterTerrain.hpp"
 #include "Job/Job.hpp"
+#include "system/Path.hpp"
 
 class AsyncTerrainOverviewLoader::LoaderJob final : public Job {
   FileCache *const cache;

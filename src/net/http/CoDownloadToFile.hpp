@@ -25,11 +25,11 @@ Copyright_License {
 
 #include "CoRequest.hxx"
 #include "co/Task.hxx"
-#include "system/Path.hpp"
 
 #include <array>
 #include <cstddef> // for std::byte
 
+class Path;
 class ProgressListener;
 
 namespace Net {
