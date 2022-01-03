@@ -44,8 +44,7 @@ namespace XML {
 struct Parser {
   const TCHAR *lpXML;
   unsigned nIndex = 0;
-  const TCHAR *lpEndTag = nullptr;
-  size_t cbEndTag = 0;
+  std::basic_string_view<TCHAR> end_tag{};
   bool nFirst = true;
 
   explicit constexpr Parser(const TCHAR *_xml) noexcept
@@ -66,12 +65,7 @@ enum class TokenType {
 };
 
 struct NextToken {
-  const TCHAR *pStr;
-
-  /**
-   * The number of characters that have been read.
-   */
-  size_t length;
+  std::basic_string_view<TCHAR> text;
 
   TokenType type;
 };
@@ -249,12 +243,12 @@ GetNextToken(Parser *pXML)
   ch = FindNonWhiteSpace(pXML);
   if (gcc_unlikely(ch == 0)) {
     // If we failed to obtain a valid character
-    return { nullptr, 0, TokenType::ERROR };
+    return {{}, TokenType::ERROR};
   }
 
   // Cache the current string pointer
   lpXML = pXML->lpXML;
-  result.pStr = &lpXML[pXML->nIndex - 1];
+  const TCHAR *const pStr = &lpXML[pXML->nIndex - 1];
 
   switch (ch) {
     // Check for quotes
@@ -409,7 +403,7 @@ GetNextToken(Parser *pXML)
       }
     }
   }
-  result.length = size;
+  result.text = {pStr, size};
 
   return result;
 }
@@ -460,7 +454,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
       case TokenType::QUOTED_TEXT:
       case TokenType::EQUALS:
         if (text == nullptr)
-          text = token.pStr;
+          text = token.text.data();
 
         break;
 
@@ -472,7 +466,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
 
         // If we have node text then add this to the element
         if (text != nullptr) {
-          size_t length = StripRight(text, token.pStr - text);
+          size_t length = StripRight(text, token.text.data() - text);
           node.AddText({text, length});
           text = nullptr;
         }
@@ -488,8 +482,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
         // If the name of the new element differs from the name of
         // the current element we need to add the new element to
         // the current one and recurse
-        pNew = &node.AddChild({token.pStr, token.length},
-                              is_declaration);
+        pNew = &node.AddChild(token.text, is_declaration);
 
         while (true) {
           // Callself to process the new node.  If we return
@@ -504,7 +497,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
           // function until we find the appropriate node
           // (the element name and end tag name must
           // match)
-          if (pXML->cbEndTag) {
+          if (!pXML->end_tag.empty()) {
             // If we are back at the root node then we
             // have an unmatched end tag
             if (node.GetName() == nullptr)
@@ -514,8 +507,8 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
             // element then we only need to unwind
             // once more...
 
-            if (CompareTagName(node.GetName(), pXML->lpEndTag)) {
-              pXML->cbEndTag = 0;
+            if (CompareTagName(node.GetName(), pXML->end_tag.data())) {
+              pXML->end_tag = {};
             }
 
             return;
@@ -531,7 +524,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
 
         // If we have node text then add this to the element
         if (text != nullptr) {
-          size_t length = StripRight(text, token.pStr - text);
+          size_t length = StripRight(text, token.text.data() - text);
           TCHAR *text2 = FromXMLString({text, length});
           if (text2 == nullptr)
             throw std::runtime_error("Unexpected token found");
@@ -555,9 +548,8 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
         // We need to return to the previous caller.  If the name
         // of the tag cannot be found we need to keep returning to
         // caller until we find a match
-        if (!CompareTagName(node.GetName(), token.pStr)) {
-          pXML->lpEndTag = token.pStr;
-          pXML->cbEndTag = token.length;
+        if (!CompareTagName(node.GetName(), token.text.data())) {
+          pXML->end_tag = token.text;
         }
 
         // Return to the caller
@@ -586,7 +578,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
         case TokenType::TEXT:
           // Cache the token then indicate that we are next to
           // look for the equals
-          attribute_name.assign(token.pStr, token.length);
+          attribute_name = token.text;
           attrib = Attrib::EQUALS;
           break;
 
@@ -626,7 +618,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
                             std::basic_string_view<TCHAR>{});
           // Cache the token then indicate.  We are next to
           // look for the equals attribute
-          attribute_name.assign(token.pStr, token.length);
+          attribute_name = token.text;
           break;
 
           // If we found a closing tag 'Attribute >' or a short hand
@@ -684,20 +676,20 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
         case TokenType::QUOTED_TEXT:
           // If we are a declaration element '<?' then we need
           // to remove extra closing '?' if it exists
-          if (node.IsDeclaration() && (token.pStr[token.length - 1]) == _T('?')) {
-            token.length--;
+          if (node.IsDeclaration() && token.text.ends_with(_T('?'))) {
+            token.text.remove_suffix(1);
           }
 
           // Add the valued attribute to the list
           if (token.type == TokenType::QUOTED_TEXT) {
-            token.pStr++;
-            token.length -= 2;
+            token.text.remove_prefix(1);
+            token.text.remove_suffix(1);
           }
 
           assert(!attribute_name.empty());
 
           {
-            TCHAR *value = FromXMLString({token.pStr, token.length});
+            TCHAR *value = FromXMLString(token.text);
             if (value == nullptr)
               throw std::runtime_error("Unexpected token found");
 
