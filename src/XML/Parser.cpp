@@ -39,61 +39,61 @@
 #include <cassert>
 
 namespace XML {
-  /** Main structure used for parsing XML. */
-  struct Parser {
-    const TCHAR *lpXML;
-    unsigned nIndex;
-    const TCHAR *lpEndTag;
-    size_t cbEndTag;
-    bool nFirst;
-  };
 
-  /** Enumeration used to decipher what type a token is. */
-  enum TokenTypeTag {
-    eTokenText = 0,
-    eTokenQuotedText,
-    eTokenTagStart,         /* "<"            */
-    eTokenTagEnd,           /* "</"           */
-    eTokenCloseTag,         /* ">"            */
-    eTokenEquals,           /* "="            */
-    eTokenDeclaration,      /* "<?"           */
-    eTokenShortHandClose,   /* "/>"           */
-    eTokenError
-  };
+/** Main structure used for parsing XML. */
+struct Parser {
+  const TCHAR *lpXML;
+  unsigned nIndex;
+  const TCHAR *lpEndTag;
+  size_t cbEndTag;
+  bool nFirst;
+};
 
-  struct NextToken {
-    const TCHAR *pStr;
+/** Enumeration used to decipher what type a token is. */
+enum TokenTypeTag {
+  eTokenText = 0,
+  eTokenQuotedText,
+  eTokenTagStart,         /* "<"            */
+  eTokenTagEnd,           /* "</"           */
+  eTokenCloseTag,         /* ">"            */
+  eTokenEquals,           /* "="            */
+  eTokenDeclaration,      /* "<?"           */
+  eTokenShortHandClose,   /* "/>"           */
+  eTokenError
+};
 
-    /**
-     * The number of characters that have been read.
-     */
-    size_t length;
-
-    TokenTypeTag type;
-  };
-
-  /** Enumeration used when parsing attributes. */
-  enum Attrib {
-    eAttribName = 0,
-    eAttribEquals,
-    eAttribValue
-  };
+struct NextToken {
+  const TCHAR *pStr;
 
   /**
-   * Enumeration used when parsing elements to dictate whether we are
-   * currently inside a tag.
+   * The number of characters that have been read.
    */
-  enum Status {
-    eInsideTag = 0,
-    eOutsideTag
-  };
+  size_t length;
 
-  static XML::NextToken
-  GetNextToken(Parser *pXML);
+  TokenTypeTag type;
+};
 
-  static void
-  ParseXMLElement(XMLNode &node, Parser *pXML);
-}
+/** Enumeration used when parsing attributes. */
+enum Attrib {
+  eAttribName = 0,
+  eAttribEquals,
+  eAttribValue
+};
+
+/**
+ * Enumeration used when parsing elements to dictate whether we are
+ * currently inside a tag.
+ */
+enum Status {
+  eInsideTag = 0,
+  eOutsideTag
+};
+
+static NextToken
+GetNextToken(Parser *pXML);
+
+static void
+ParseXMLElement(XMLNode &node, Parser *pXML);
 
 /**
  * This function is the opposite of the function "toXMLString". It
@@ -202,7 +202,7 @@ CompareTagName(const TCHAR *cclose, const TCHAR *copen)
  * Obtain the next character from the string.
  */
 static inline TCHAR
-GetNextChar(XML::Parser *pXML)
+GetNextChar(Parser *pXML)
 {
   TCHAR ch = pXML->lpXML[pXML->nIndex];
   if (ch != 0)
@@ -214,7 +214,7 @@ GetNextChar(XML::Parser *pXML)
  * Find next non-white space character.
  */
 static TCHAR
-FindNonWhiteSpace(XML::Parser *pXML)
+FindNonWhiteSpace(Parser *pXML)
 {
   assert(pXML);
 
@@ -231,10 +231,10 @@ FindNonWhiteSpace(XML::Parser *pXML)
 /**
  * Find the next token in a string.
  */
-static XML::NextToken
-XML::GetNextToken(Parser *pXML)
+static NextToken
+GetNextToken(Parser *pXML)
 {
-  XML::NextToken result;
+  NextToken result;
   const TCHAR *lpXML;
   TCHAR ch;
   TCHAR temp_ch;
@@ -416,7 +416,7 @@ XML::GetNextToken(Parser *pXML)
  * Recursively parse an XML element.
  */
 static void
-XML::ParseXMLElement(XMLNode &node, Parser *pXML)
+ParseXMLElement(XMLNode &node, Parser *pXML)
 {
   bool is_declaration;
   const TCHAR *text = nullptr;
@@ -730,7 +730,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
  * @return The main XMLNode or empty XMLNode on error
  */
 XMLNode
-XML::ParseString(const TCHAR *xml_string)
+ParseString(const TCHAR *xml_string)
 {
   assert(xml_string != nullptr);
 
@@ -804,8 +804,10 @@ ReadTextFile(Path path)
  * @return The main XMLNode or an empty node on error
  */
 XMLNode
-XML::ParseFile(Path filename)
+ParseFile(Path filename)
 {
   const auto buffer = ReadTextFile(filename);
   return ParseString(buffer.c_str());
 }
+
+} // namespace XML

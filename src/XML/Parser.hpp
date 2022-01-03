@@ -35,15 +35,17 @@ class XMLNode;
 class Path;
 
 namespace XML {
-  /**
-   * Throws on error.
-   */
-  XMLNode ParseString(const TCHAR *xml_string);
 
-  /**
-   * Throws on error.
-   */
-  XMLNode ParseFile(Path path);
-}
+/**
+ * Throws on error.
+ */
+XMLNode ParseString(const TCHAR *xml_string);
+
+/**
+ * Throws on error.
+ */
+XMLNode ParseFile(Path path);
+
+} // namespace XML
 
 #endif
