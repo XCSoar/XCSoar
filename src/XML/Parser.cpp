@@ -470,7 +470,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
         // If we have node text then add this to the element
         if (text != nullptr) {
           size_t length = StripRight(text, token.pStr - text);
-          node.AddText(text, length);
+          node.AddText({text, length});
           text = nullptr;
         }
 
@@ -485,7 +485,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
         // If the name of the new element differs from the name of
         // the current element we need to add the new element to
         // the current one and recurse
-        pNew = &node.AddChild(token.pStr, token.length,
+        pNew = &node.AddChild({token.pStr, token.length},
                               is_declaration);
 
         while (true) {
@@ -619,7 +619,8 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
           // Eg.  'Attribute AnotherAttribute'
         case TokenType::TEXT:
           // Add the unvalued attribute to the list
-          node.AddAttribute(std::move(attribute_name), _T(""), 0);
+          node.AddAttribute(std::move(attribute_name),
+                            std::basic_string_view<TCHAR>{});
           // Cache the token then indicate.  We are next to
           // look for the equals attribute
           attribute_name.assign(token.pStr, token.length);
@@ -639,7 +640,8 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
 
           if (!attribute_name.empty())
             // Add the unvalued attribute to the list
-            node.AddAttribute(std::move(attribute_name), _T(""), 0);
+            node.AddAttribute(std::move(attribute_name),
+                              std::basic_string_view<TCHAR>{});
 
           // If this is the end of the tag then return to the caller
           if (token.type == TokenType::SHORT_HAND_CLOSE)
@@ -696,8 +698,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
             if (value == nullptr)
               throw std::runtime_error("Unexpected token found");
 
-            node.AddAttribute(std::move(attribute_name),
-                              value, _tcslen(value));
+            node.AddAttribute(std::move(attribute_name), value);
             free(value);
           }
 

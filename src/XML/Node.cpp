@@ -37,50 +37,25 @@ XMLNode::CreateRoot(const TCHAR *name)
   return XMLNode(name, false);
 }
 
-XMLNode::XMLNode(const TCHAR *name, bool is_declaration)
+XMLNode::XMLNode(std::basic_string_view<TCHAR> name,
+                 bool is_declaration) noexcept
   :d(new Data(name, is_declaration))
 {
   assert(d);
 }
 
-XMLNode::XMLNode(const TCHAR *name, size_t name_length, bool is_declaration)
-  :d(new Data(name, name_length, is_declaration))
-{
-  assert(d);
-}
-
 XMLNode &
-XMLNode::AddChild(const TCHAR *name, bool is_declaration)
+XMLNode::AddChild(const std::basic_string_view<TCHAR> name,
+                  bool is_declaration) noexcept
 {
-  assert(name != nullptr);
-
   d->children.push_back(XMLNode(name, is_declaration));
   return d->children.back();
 }
 
-XMLNode &
-XMLNode::AddChild(const TCHAR *name, size_t name_length, bool is_declaration)
-{
-  assert(name != nullptr);
-
-  d->children.push_back(XMLNode(name, name_length, is_declaration));
-  return d->children.back();
-}
-
 void
-XMLNode::AddText(const TCHAR *value)
+XMLNode::AddText(std::basic_string_view<TCHAR> value) noexcept
 {
-  assert(value != nullptr);
-
   d->text.append(value);
-}
-
-void
-XMLNode::AddText(const TCHAR *text, size_t length)
-{
-  assert(text != nullptr);
-
-  d->text.append(text, length);
 }
 
 const XMLNode *
