@@ -55,7 +55,6 @@ GenerateNMEA(TextWriter &writer,
   AppendNMEAChecksum(gprmc.buffer());
 
   writer.WriteLine(gprmc);
-  printf("%s\n", gprmc.c_str());
 
   NarrowString<256> gpgga("$GPGGA");
   gpgga.AppendFormat(",%02u%02u%02u", time.hour, time.minute, time.second);
@@ -68,14 +67,12 @@ GenerateNMEA(TextWriter &writer,
   AppendNMEAChecksum(gpgga.buffer());
 
   writer.WriteLine(gpgga);
-  printf("%s\n", gpgga.c_str());
 
   NarrowString<256> pgrmz("$PGRMZ");
   pgrmz.AppendFormat(",%.0f,m", (double)baroalt);
   AppendNMEAChecksum(pgrmz.buffer());
 
   writer.WriteLine(pgrmz);
-  printf("%s\n", pgrmz.c_str());
 }
 
 int
