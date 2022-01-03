@@ -32,7 +32,6 @@
 #include <tchar.h>
 
 class Angle;
-class TextWriter;
 class RoughTime;
 class RoughTimeSpan;
 
