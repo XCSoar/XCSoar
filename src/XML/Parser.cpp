@@ -43,10 +43,13 @@ namespace XML {
 /** Main structure used for parsing XML. */
 struct Parser {
   const TCHAR *lpXML;
-  unsigned nIndex;
-  const TCHAR *lpEndTag;
-  size_t cbEndTag;
-  bool nFirst;
+  unsigned nIndex = 0;
+  const TCHAR *lpEndTag = nullptr;
+  size_t cbEndTag = 0;
+  bool nFirst = true;
+
+  explicit constexpr Parser(const TCHAR *_xml) noexcept
+    :lpXML(_xml) {}
 };
 
 /** Enumeration used to decipher what type a token is. */
@@ -735,9 +738,7 @@ ParseString(const TCHAR *xml_string)
   assert(xml_string != nullptr);
 
   XMLNode xnode = XMLNode::Null();
-  Parser xml = { nullptr, 0, nullptr, 0, true, };
-
-  xml.lpXML = xml_string;
+  Parser xml{xml_string};
 
   // Fill the XMLNode xnode with the parsed data of xml
   // note: xnode is now the document node, not the main XMLNode
