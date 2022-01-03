@@ -3,6 +3,7 @@
 TIME_SRC_DIR = $(SRC)/time
 
 TIME_SOURCES = \
+	$(TIME_SRC_DIR)/Zone.cxx \
 	$(TIME_SRC_DIR)/Convert.cxx \
 	$(TIME_SRC_DIR)/DeltaTime.cpp \
 	$(TIME_SRC_DIR)/WrapClock.cpp \
