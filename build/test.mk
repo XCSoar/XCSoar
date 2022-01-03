@@ -724,7 +724,7 @@ DEBUG_PROGRAM_NAMES = \
 	FlightTable \
 	BenchmarkProjection \
 	BenchmarkFAITriangleSector \
-	DumpTextFile DumpTextZip DumpTextInflate WriteTextFile RunTextWriter \
+	DumpTextFile DumpTextZip DumpTextInflate \
 	DumpHexColor \
 	RunXMLParser \
 	ReadMO \
@@ -940,16 +940,6 @@ ifeq ($(USE_X11),y)
 DEBUG_DISPLAY_DEPENDS += EVENT
 endif
 $(eval $(call link-program,DebugDisplay,DEBUG_DISPLAY))
-
-WRITE_TEXT_FILE_SOURCES = \
-	$(TEST_SRC_DIR)/WriteTextFile.cpp
-WRITE_TEXT_FILE_DEPENDS = IO UTIL
-$(eval $(call link-program,WriteTextFile,WRITE_TEXT_FILE))
-
-RUN_TEXT_WRITER_SOURCES = \
-	$(TEST_SRC_DIR)/RunTextWriter.cpp
-RUN_TEXT_WRITER_DEPENDS = IO UTIL
-$(eval $(call link-program,RunTextWriter,RUN_TEXT_WRITER))
 
 DOWNLOAD_FILE_SOURCES = \
 	$(SRC)/Version.cpp \
