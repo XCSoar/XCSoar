@@ -107,6 +107,16 @@ public:
 #endif
 
 	/**
+	 * Finish the current line.
+	 */
+	void NewLine() {
+#ifdef _WIN32
+		Write('\r');
+#endif
+		Write('\n');
+	}
+
+	/**
 	 * Write buffer contents to the #OutputStream.
 	 */
 	void Flush();
