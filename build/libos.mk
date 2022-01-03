@@ -3,7 +3,6 @@
 OS_SRC_DIR = $(SRC)/system
 
 OS_SOURCES := \
-	$(OS_SRC_DIR)/Clock.cpp \
 	$(OS_SRC_DIR)/EventPipe.cxx \
 	$(OS_SRC_DIR)/FileMapping.cpp \
 	$(OS_SRC_DIR)/FileUtil.cpp \
