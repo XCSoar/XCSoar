@@ -25,22 +25,11 @@ Copyright_License {
 #include "io/TextWriter.hpp"
 #include "LocalPath.hpp"
 #include "time/BrokenDateTime.hpp"
-#include "thread/Mutex.hxx"
 #include "system/Path.hpp"
 #include "util/StaticString.hxx"
 
-namespace NMEALogger
-{
-  static Mutex mutex;
-  static TextWriter *writer;
-
-  bool enabled = false;
-
-  static bool Start();
-}
-
 bool
-NMEALogger::Start()
+NMEALogger::Start() noexcept
 {
   if (writer != nullptr)
     return true;
@@ -69,14 +58,13 @@ NMEALogger::Start()
   return true;
 }
 
-void
-NMEALogger::Shutdown()
+NMEALogger::~NMEALogger() noexcept
 {
   delete writer;
 }
 
 void
-NMEALogger::Log(const char *text)
+NMEALogger::Log(const char *text) noexcept
 {
   if (!enabled)
     return;

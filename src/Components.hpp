@@ -40,6 +40,7 @@ class ProtectedAirspaceWarningManager;
 class ProtectedTaskManager;
 class Replay;
 class Logger;
+class NMEALogger;
 class GlueFlightLogger;
 class TrackingGlue;
 
@@ -62,6 +63,7 @@ extern MergeThread *merge_thread;
 extern CalculationThread *calculation_thread;
 
 extern Logger *logger;
+extern NMEALogger *nmea_logger;
 extern GlueFlightLogger *flight_logger;
 
 extern TrackingGlue *tracking;

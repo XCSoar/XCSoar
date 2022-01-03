@@ -44,6 +44,7 @@ MergeThread *merge_thread;
 CalculationThread *calculation_thread;
 
 Logger *logger;
+NMEALogger *nmea_logger;
 GlueFlightLogger *flight_logger;
 Replay *replay;
 

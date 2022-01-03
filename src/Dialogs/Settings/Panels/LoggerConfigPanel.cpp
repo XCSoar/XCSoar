@@ -30,6 +30,7 @@ Copyright_License {
 #include "Form/DataField/Enum.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "UtilsSettings.hpp"
+#include "Components.hpp"
 
 using namespace std::chrono;
 
@@ -128,8 +129,8 @@ LoggerConfigPanel::Save(bool &changed) noexcept
   changed |= SaveValue(EnableNMEALogger, ProfileKeys::EnableNMEALogger,
                        logger.enable_nmea_logger);
 
-  if (logger.enable_nmea_logger)
-    NMEALogger::enabled = true;
+  if (logger.enable_nmea_logger && nmea_logger != nullptr)
+    nmea_logger->Enable();
 
   if (SaveValue(EnableFlightLogger, ProfileKeys::EnableFlightLogger,
                 logger.enable_flight_logger)) {

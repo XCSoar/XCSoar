@@ -1373,7 +1373,8 @@ DeviceDescriptor::DataReceived(std::span<const std::byte> s) noexcept
 bool
 DeviceDescriptor::LineReceived(const char *line) noexcept
 {
-  NMEALogger::Log(line);
+  if (nmea_logger != nullptr)
+    nmea_logger->Log(line);
 
   if (dispatcher != nullptr)
     dispatcher->LineReceived(line);

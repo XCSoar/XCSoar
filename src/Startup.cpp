@@ -352,6 +352,7 @@ Startup()
   main_window->LoadTerrain();
 
   logger = new Logger();
+  nmea_logger = new NMEALogger();
 
   glide_computer = new GlideComputer(computer_settings,
                                      way_points, airspace_database,
@@ -508,7 +509,7 @@ Startup()
   }
 
   if (computer_settings.logger.enable_nmea_logger)
-    NMEALogger::enabled = true;
+    nmea_logger->Enable();
 
   LogFormat("ProgramStarted");
 
@@ -666,7 +667,8 @@ Shutdown()
   // Close any device connections
   devShutdown();
 
-  NMEALogger::Shutdown();
+  delete nmea_logger;
+  nmea_logger = nullptr;
 
   delete replay;
   replay = nullptr;
