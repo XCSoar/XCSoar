@@ -28,11 +28,11 @@ Copyright_License {
 
 #include <memory>
 
-class TextWriter;
+class FileOutputStream;
 
 class NMEALogger {
   Mutex mutex;
-  std::unique_ptr<TextWriter> writer;
+  std::unique_ptr<FileOutputStream> file;
 
   bool enabled = false;
 
@@ -59,7 +59,7 @@ public:
   void Log(const char *line) noexcept;
 
 private:
-  bool Start() noexcept;
+  void Start();
 };
 
 #endif
