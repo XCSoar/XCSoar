@@ -28,6 +28,9 @@ Copyright_License {
 #include "system/Path.hpp"
 #include "util/StaticString.hxx"
 
+NMEALogger::NMEALogger() noexcept {}
+NMEALogger::~NMEALogger() noexcept = default;
+
 bool
 NMEALogger::Start() noexcept
 {
@@ -45,22 +48,13 @@ NMEALogger::Start() noexcept
   const auto logs_path = MakeLocalPath(_T("logs"));
 
   const auto path = AllocatedPath::Build(logs_path, name);
-  writer = new TextWriter(path, false);
-  if (writer == nullptr)
-    return false;
-
+  writer = std::make_unique<TextWriter>(path, false);
   if (!writer->IsOpen()) {
-    delete writer;
-    writer = nullptr;
+    writer.reset();
     return false;
   }
 
   return true;
-}
-
-NMEALogger::~NMEALogger() noexcept
-{
-  delete writer;
 }
 
 void

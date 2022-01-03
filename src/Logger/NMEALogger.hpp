@@ -26,15 +26,18 @@ Copyright_License {
 
 #include "thread/Mutex.hxx"
 
+#include <memory>
+
 class TextWriter;
 
 class NMEALogger {
   Mutex mutex;
-  TextWriter *writer = nullptr;
+  std::unique_ptr<TextWriter> writer;
 
   bool enabled = false;
 
 public:
+  NMEALogger() noexcept;
   ~NMEALogger() noexcept;
 
   bool IsEnabled() const noexcept {
