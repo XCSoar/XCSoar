@@ -107,16 +107,15 @@ ParseXMLElement(XMLNode &node, Parser *pXML);
  * @return new allocated string converted from xml
  */
 static TCHAR *
-FromXMLString(const TCHAR *ss, size_t lo)
+FromXMLString(std::basic_string_view<TCHAR> src) noexcept
 {
-  assert(ss != nullptr);
-
-  const TCHAR *end = ss + lo;
+  const TCHAR *ss = src.data();
+  const TCHAR *end = ss + src.size();
 
   /* allocate a buffer with the size of the input string; we know for
      sure that this is enough, because resolving entities can only
      shrink the string, but never grows */
-  TCHAR *d = (TCHAR *)malloc((lo + 1) * sizeof(*d));
+  TCHAR *d = (TCHAR *)malloc((src.size() + 1) * sizeof(*d));
   assert(d);
   TCHAR *result = d;
   while (ss < end && *ss) {
@@ -530,7 +529,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
         // If we have node text then add this to the element
         if (text != nullptr) {
           size_t length = StripRight(text, token.pStr - text);
-          TCHAR *text2 = FromXMLString(text, length);
+          TCHAR *text2 = FromXMLString({text, length});
           if (text2 == nullptr)
             throw std::runtime_error("Unexpected token found");
 
@@ -693,7 +692,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
           assert(!attribute_name.empty());
 
           {
-            TCHAR *value = FromXMLString(token.pStr, token.length);
+            TCHAR *value = FromXMLString({token.pStr, token.length});
             if (value == nullptr)
               throw std::runtime_error("Unexpected token found");
 
