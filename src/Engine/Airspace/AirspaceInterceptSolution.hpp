@@ -50,11 +50,11 @@ private:
     :distance(_distance), elapsed_time(_elapsed_time) {}
 
 public:
-  static AirspaceInterceptSolution Invalid() {
+  static AirspaceInterceptSolution Invalid() noexcept {
     return AirspaceInterceptSolution(-1, FloatDuration{-1});
   }
 
-  void SetInvalid() {
+  void SetInvalid() noexcept {
     distance = -1;
     elapsed_time = FloatDuration{-1};
   }
@@ -64,11 +64,11 @@ public:
    *
    * @return True if solution is valid
    */
-  bool IsValid() const {
+  bool IsValid() const noexcept {
     return elapsed_time.count() >= 0;
   }
 
-  bool IsEarlierThan(const AirspaceInterceptSolution &other) const {
+  bool IsEarlierThan(const AirspaceInterceptSolution &other) const noexcept {
     return IsValid() && (!other.IsValid() ||
                          elapsed_time < other.elapsed_time);
   }
