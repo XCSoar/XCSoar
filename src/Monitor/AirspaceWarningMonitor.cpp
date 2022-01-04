@@ -37,13 +37,6 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/TimeFormatter.hpp"
 
-#if defined(__GNUC__) && !defined(__clang__)
-/* this warning is bogus because GCC is not clever enough to
-   understand that the "state" variable in Check() only gets evaluated
-   if it has been initialised */
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#endif
-
 class AirspaceWarningWidget final
   : public QuestionWidget {
 
@@ -166,21 +159,9 @@ AirspaceWarningMonitor::Check()
     return;
   }
 
-  ConstAirspacePtr airspace;
-  AirspaceWarning::State state;
-  AirspaceInterceptSolution solution;
+  const auto w = airspace_warnings->GetTopWarning();
 
-  {
-    const ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
-    auto w = lease->begin();
-    if (w != lease->end() && w->IsAckExpired()) {
-      airspace = w->GetAirspacePtr();
-      state = w->GetWarningState();
-      solution = w->GetSolution();
-    }
-  }
-
-  if (airspace == nullptr) {
+  if (!w || !w->IsAckExpired()) {
     HideWidget();
     return;
   }
@@ -188,14 +169,17 @@ AirspaceWarningMonitor::Check()
   if (CommonInterface::GetUISettings().enable_airspace_warning_dialog) {
     /* show airspace warning */
     if (widget != nullptr) {
-      if (widget->Update(*airspace, state, solution))
+      if (widget->Update(w->GetAirspace(), w->GetWarningState(),
+                         w->GetSolution()))
         return;
 
       HideWidget();
     }
 
     widget = new AirspaceWarningWidget(*this, *airspace_warnings,
-                                       std::move(airspace), state, solution);
+                                       w->GetAirspacePtr(),
+                                       w->GetWarningState(),
+                                       w->GetSolution());
     PageActions::SetCustomBottom(widget);
   }
 

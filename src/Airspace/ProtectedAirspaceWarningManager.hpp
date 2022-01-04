@@ -26,6 +26,9 @@
 #include "Engine/Airspace/Ptr.hpp"
 #include "thread/Guard.hpp"
 
+#include <optional>
+
+class AirspaceWarning;
 class AirspaceWarningManager;
 class FlatProjection;
 
@@ -50,7 +53,13 @@ public:
 
   [[gnu::pure]]
   bool IsEmpty() const noexcept;
-};
 
+  /**
+   * Returns a copy of the highest priority warning, or an empty
+   * instance if there is no warning.
+   */
+  [[gnu::pure]]
+  std::optional<AirspaceWarning> GetTopWarning() const noexcept;
+};
 
 #endif

@@ -89,3 +89,13 @@ ProtectedAirspaceWarningManager::Acknowledge(ConstAirspacePtr airspace) noexcept
   ExclusiveLease lease(*this);
   lease->Acknowledge(std::move(airspace));
 }
+
+std::optional<AirspaceWarning>
+ProtectedAirspaceWarningManager::GetTopWarning() const noexcept
+{
+  const Lease lease(*this);
+  if (auto i = lease->begin(); i != lease->end())
+    return *i;
+
+  return std::nullopt;
+}
