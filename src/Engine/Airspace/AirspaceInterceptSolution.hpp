@@ -43,12 +43,12 @@ struct AirspaceInterceptSolution
   /** Estimated time (s) for observer to reach intercept point */
   FloatDuration elapsed_time;
 
-  void SetInvalid() noexcept {
+  constexpr void SetInvalid() noexcept {
     distance = -1;
     elapsed_time = FloatDuration{-1};
   }
 
-  static AirspaceInterceptSolution Invalid() noexcept {
+  static constexpr AirspaceInterceptSolution Invalid() noexcept {
     AirspaceInterceptSolution ais;
     ais.SetInvalid();
     return ais;
@@ -59,11 +59,11 @@ struct AirspaceInterceptSolution
    *
    * @return True if solution is valid
    */
-  bool IsValid() const noexcept {
+  constexpr bool IsValid() const noexcept {
     return elapsed_time.count() >= 0;
   }
 
-  bool IsEarlierThan(const AirspaceInterceptSolution &other) const noexcept {
+  constexpr bool IsEarlierThan(const AirspaceInterceptSolution &other) const noexcept {
     return IsValid() && (!other.IsValid() ||
                          elapsed_time < other.elapsed_time);
   }
