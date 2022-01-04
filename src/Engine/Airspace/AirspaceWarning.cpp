@@ -109,10 +109,14 @@ AirspaceWarning::IsAckExpired() const noexcept
 
   switch (state) {
   case WARNING_CLEAR:
+    /* no warning at all, assume it's still acked */
+    return false;
+
   case WARNING_TASK:
   case WARNING_FILTER:
   case WARNING_GLIDE:
     return acktime_warning.count() <= 0;
+
   case WARNING_INSIDE:
     return acktime_inside.count() <= 0;
   };
