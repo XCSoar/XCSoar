@@ -14,6 +14,8 @@ LIBCOMPUTER_SOURCES = \
 	$(SRC)/Computer/ConditionMonitor/ConditionMonitorSunset.cpp \
 	$(SRC)/Computer/ConditionMonitor/ConditionMonitorWind.cpp \
 	$(SRC)/Computer/ConditionMonitor/ConditionMonitors.cpp \
+	$(SRC)/Computer/ConditionMonitor/AirspaceEnterMonitor.cpp \
+	$(SRC)/Computer/ConditionMonitor/MoreConditionMonitors.cpp \
 	$(SRC)/Computer/CuComputer.cpp \
 	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \

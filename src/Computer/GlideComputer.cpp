@@ -39,6 +39,7 @@ GlideComputer::GlideComputer(const ComputerSettings &_settings,
   :air_data_computer(_way_points),
    warning_computer(_settings.airspace.warnings, _airspace_database),
    task_computer(task, _airspace_database, &warning_computer.GetManager()),
+   idle_condition_monitors(warning_computer.GetManager()),
    waypoints(_way_points),
    retrospective(_way_points),
    team_code_ref_id(-1)
@@ -173,6 +174,8 @@ GlideComputer::ProcessIdle(bool exhaustive)
 
   warning_computer.Update(GetComputerSettings(), basic,
                           calculated, calculated.airspace_warnings);
+
+  idle_condition_monitors.Update(basic, calculated, GetComputerSettings());
 
   // Calculate summary of flight
   if (basic.location_available)
