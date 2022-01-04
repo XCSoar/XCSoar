@@ -37,13 +37,13 @@ class AirspaceWarningMonitor {
   Validity last;
 
 public:
-  void Reset();
-  void Check();
+  void Reset() noexcept;
+  void Check() noexcept;
 
 private:
-  void HideWidget();
+  void HideWidget() noexcept;
 
-  void Schedule() {
+  void Schedule() noexcept {
     last.Clear();
   }
 };

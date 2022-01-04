@@ -51,7 +51,7 @@ class AirspaceWarningWidget final
   gcc_pure
   const TCHAR *MakeMessage(const AbstractAirspace &airspace,
                            AirspaceWarning::State state,
-                           const AirspaceInterceptSolution &solution) {
+                           const AirspaceInterceptSolution &solution) noexcept {
     if (state == AirspaceWarning::WARNING_INSIDE)
       buffer.Format(_T("%s: %s"), _("Inside airspace"), airspace.GetName());
     else
@@ -67,7 +67,7 @@ public:
                         ProtectedAirspaceWarningManager &_manager,
                         ConstAirspacePtr _airspace,
                         AirspaceWarning::State _state,
-                        const AirspaceInterceptSolution &solution)
+                        const AirspaceInterceptSolution &solution) noexcept
     :QuestionWidget(MakeMessage(*_airspace, _state, solution)),
      monitor(_monitor), manager(_manager),
      airspace(std::move(_airspace)), state(_state) {
@@ -91,14 +91,14 @@ public:
     });
   }
 
-  ~AirspaceWarningWidget() {
+  ~AirspaceWarningWidget() noexcept {
     assert(monitor.widget == this);
     monitor.widget = nullptr;
   }
 
   bool Update(const AbstractAirspace &_airspace,
               AirspaceWarning::State _state,
-              const AirspaceInterceptSolution &solution) {
+              const AirspaceInterceptSolution &solution) noexcept {
     if (&_airspace != airspace.get())
       return false;
 
@@ -109,7 +109,7 @@ public:
 };
 
 void
-AirspaceWarningMonitor::Reset()
+AirspaceWarningMonitor::Reset() noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
 
@@ -117,7 +117,7 @@ AirspaceWarningMonitor::Reset()
 }
 
 void
-AirspaceWarningMonitor::HideWidget()
+AirspaceWarningMonitor::HideWidget() noexcept
 {
   if (widget != nullptr)
     PageActions::RestoreBottom();
@@ -125,7 +125,7 @@ AirspaceWarningMonitor::HideWidget()
 }
 
 void
-AirspaceWarningMonitor::Check()
+AirspaceWarningMonitor::Check() noexcept
 {
   const auto &calculated = CommonInterface::Calculated();
 
