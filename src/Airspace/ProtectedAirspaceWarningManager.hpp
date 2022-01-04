@@ -31,14 +31,14 @@ class FlatProjection;
 
 class ProtectedAirspaceWarningManager : public Guard<AirspaceWarningManager> {
 public:
-  ProtectedAirspaceWarningManager(AirspaceWarningManager &awm):
-    Guard<AirspaceWarningManager>(awm) {}
+  explicit ProtectedAirspaceWarningManager(AirspaceWarningManager &awm) noexcept
+    :Guard<AirspaceWarningManager>(awm) {}
 
   [[gnu::pure]]
-  const FlatProjection &GetProjection() const;
+  const FlatProjection &GetProjection() const noexcept;
 
-  void Clear();
-  void AcknowledgeAll();
+  void Clear() noexcept;
+  void AcknowledgeAll() noexcept;
 
   [[gnu::pure]]
   bool GetAckDay(const AbstractAirspace &airspace) const noexcept;
@@ -49,7 +49,7 @@ public:
   void Acknowledge(ConstAirspacePtr airspace) noexcept;
 
   [[gnu::pure]]
-  bool IsEmpty() const;
+  bool IsEmpty() const noexcept;
 };
 
 
