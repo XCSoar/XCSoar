@@ -74,7 +74,7 @@ public:
   }
 };
 
-static_assert(std::is_trivial<AirspaceInterceptSolution>::value,
+static_assert(std::is_trivial_v<AirspaceInterceptSolution>,
               "type is not trivial");
 
 #endif
