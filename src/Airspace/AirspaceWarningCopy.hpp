@@ -44,7 +44,7 @@ public:
   }
 
   void Visit(const AirspaceWarning& as) noexcept {
-    if (as.GetWarningState() == AirspaceWarning::WARNING_INSIDE) {
+    if (as.IsInside()) {
       ids_inside.checked_append(&as.GetAirspace());
     } else if (as.GetWarningState() > AirspaceWarning::WARNING_CLEAR) {
       ids_warning.checked_append(&as.GetAirspace());

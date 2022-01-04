@@ -136,6 +136,10 @@ public:
     return state;
   }
 
+  bool IsInside() const noexcept {
+    return state == WARNING_INSIDE;
+  }
+
   /**
    * Update warnings, calculate whether this airspace still needs to
    * have warnings managed.
