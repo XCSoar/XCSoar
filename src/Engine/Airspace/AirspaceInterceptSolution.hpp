@@ -43,20 +43,15 @@ struct AirspaceInterceptSolution
   /** Estimated time (s) for observer to reach intercept point */
   FloatDuration elapsed_time;
 
-  AirspaceInterceptSolution() = default;
-
-private:
-  AirspaceInterceptSolution(double _distance, FloatDuration _elapsed_time) noexcept
-    :distance(_distance), elapsed_time(_elapsed_time) {}
-
-public:
-  static AirspaceInterceptSolution Invalid() noexcept {
-    return AirspaceInterceptSolution(-1, FloatDuration{-1});
-  }
-
   void SetInvalid() noexcept {
     distance = -1;
     elapsed_time = FloatDuration{-1};
+  }
+
+  static AirspaceInterceptSolution Invalid() noexcept {
+    AirspaceInterceptSolution ais;
+    ais.SetInvalid();
+    return ais;
   }
 
   /**
