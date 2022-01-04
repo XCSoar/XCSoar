@@ -22,6 +22,9 @@ Copyright_License {
 */
 
 #include "Kernel.hpp"
+#include "Model.hpp"
+
+#include "system/FileUtil.hpp"
 
 #include <stdexcept>
 
@@ -106,9 +109,13 @@ KoboInstallKernel(const char *uimage_path)
 #endif
 
 bool
-IsKoboOTGKernel()
+IsKoboCustomKernel()
 try {
 #ifdef KOBO
+  /* All Kobo except Clara HD have a factory kernel without OTG mode so
+     a custom kernel is installed for OTG. */
+  if (DetectKoboModel() == KoboModel::CLARA_HD) return false; 
+
   FileReader file(Path("/proc/config.gz"));
   GunzipReader gunzip(file);
   BufferedReader reader(gunzip);
@@ -121,5 +128,16 @@ try {
 
   return false;
 } catch (const std::runtime_error &e) {
+  return false;
+}
+
+bool
+IsKoboOTGHostMode()
+{
+#ifdef KOBO
+  if (DetectKoboModel() != KoboModel::CLARA_HD) return IsKoboCustomKernel();
+  /* for Clara HD, just test for existence of host mode file */
+  if (File::Exists(Path("/mnt/onboard/XCSoarData/kobo/OTG_Host_Active"))) return true;
+#endif
   return false;
 }
