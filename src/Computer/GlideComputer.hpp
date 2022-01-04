@@ -35,6 +35,7 @@ Copyright_License {
 #include "CuComputer.hpp"
 #include "util/Compiler.h"
 #include "Engine/Contest/Solvers/Retrospective.hpp"
+#include "ConditionMonitor/ConditionMonitors.hpp"
 
 class Waypoints;
 class ProtectedTaskManager;
@@ -53,6 +54,8 @@ class GlideComputer : public GlideComputerBlackboard
   StatsComputer stats_computer;
   LogComputer log_computer;
   CuComputer cu_computer;
+
+  ConditionMonitors condition_monitors;
 
   const Waypoints &waypoints;
 

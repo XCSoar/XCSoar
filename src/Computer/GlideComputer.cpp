@@ -24,7 +24,6 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "Computer/Settings.hpp"
 #include "NMEA/Derived.hpp"
-#include "ConditionMonitor/ConditionMonitors.hpp"
 #include "GlideComputerInterface.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
@@ -153,7 +152,7 @@ GlideComputer::ProcessGPS(bool force)
   CalculateVarioScale();
 
   // Update the ConditionMonitors
-  ConditionMonitorsUpdate(Basic(), Calculated(), settings);
+  condition_monitors.Update(Basic(), Calculated(), settings);
 
   return idle_clock.CheckUpdate(milliseconds(500));
 }

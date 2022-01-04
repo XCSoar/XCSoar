@@ -23,28 +23,15 @@ Copyright_License {
 */
 
 #include "ConditionMonitors.hpp"
-#include "ConditionMonitorAATTime.hpp"
-#include "ConditionMonitorFinalGlide.hpp"
-#include "ConditionMonitorGlideTerrain.hpp"
-#include "ConditionMonitorLandableReachable.hpp"
-#include "ConditionMonitorSunset.hpp"
-#include "ConditionMonitorWind.hpp"
-
-static ConditionMonitorWind cm_wind;
-static ConditionMonitorFinalGlide cm_finalglide;
-static ConditionMonitorSunset cm_sunset;
-static ConditionMonitorAATTime cm_aattime;
-static ConditionMonitorGlideTerrain cm_glideterrain;
-static ConditionMonitorLandableReachable cm_landablereachable;
 
 void
-ConditionMonitorsUpdate(const NMEAInfo &basic, const DerivedInfo &calculated,
-                        const ComputerSettings &settings)
+ConditionMonitors::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
+                          const ComputerSettings &settings) noexcept
 {
-  cm_wind.Update(basic, calculated, settings);
-  cm_finalglide.Update(basic, calculated, settings);
-  cm_sunset.Update(basic, calculated, settings);
-  cm_aattime.Update(basic, calculated, settings);
-  cm_glideterrain.Update(basic, calculated, settings);
-  cm_landablereachable.Update(basic, calculated, settings);
+  wind.Update(basic, calculated, settings);
+  finalglide.Update(basic, calculated, settings);
+  sunset.Update(basic, calculated, settings);
+  aattime.Update(basic, calculated, settings);
+  glideterrain.Update(basic, calculated, settings);
+  landablereachable.Update(basic, calculated, settings);
 }

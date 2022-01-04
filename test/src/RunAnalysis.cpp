@@ -87,8 +87,8 @@ dlgStatusShowModal(int page)
 }
 
 void
-ConditionMonitorsUpdate(const NMEAInfo &basic, const DerivedInfo &calculated,
-                        const ComputerSettings &settings)
+ConditionMonitors::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
+                          const ComputerSettings &settings) noexcept
 {
 }
 
