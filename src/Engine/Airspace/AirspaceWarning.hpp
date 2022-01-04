@@ -79,6 +79,8 @@ public:
   explicit AirspaceWarning(T &&_airspace) noexcept
     :airspace(std::forward<T>(_airspace)) {}
 
+  AirspaceWarning(const AirspaceWarning &) noexcept = default;
+
   /**
    * Save warning state prior to performing update
    */
