@@ -25,7 +25,6 @@
 
 #include "Engine/Airspace/Ptr.hpp"
 #include "thread/Guard.hpp"
-#include "util/Compiler.h"
 
 class AirspaceWarningManager;
 class FlatProjection;
@@ -35,13 +34,13 @@ public:
   ProtectedAirspaceWarningManager(AirspaceWarningManager &awm):
     Guard<AirspaceWarningManager>(awm) {}
 
-  gcc_pure
+  [[gnu::pure]]
   const FlatProjection &GetProjection() const;
 
   void Clear();
   void AcknowledgeAll();
 
-  gcc_pure
+  [[gnu::pure]]
   bool GetAckDay(const AbstractAirspace &airspace) const noexcept;
 
   void AcknowledgeDay(ConstAirspacePtr airspace, bool set=true) noexcept;
@@ -49,7 +48,7 @@ public:
   void AcknowledgeInside(ConstAirspacePtr airspace, bool set=true) noexcept;
   void Acknowledge(ConstAirspacePtr airspace) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsEmpty() const;
 };
 
