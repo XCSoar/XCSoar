@@ -94,11 +94,12 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   constexpr unsigned arrow_offset = 23;
 
   const unsigned scale = Layout::Scale(100U);
+  const Angle angle = wind.bearing - screen_angle;
 
   // Draw arrow (and tail)
 
   const unsigned length = uround(4 * wind.norm);
-  DrawArrow(canvas, pos, wind.bearing - screen_angle,
+  DrawArrow(canvas, pos, angle,
             arrow_width, length,
             arrow_style,
             arrow_offset,
@@ -116,7 +117,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   BulkPixelPoint label[] = {
     { 18, -26 - int(offset) },
   };
-  PolygonRotateShift(label, pos, wind.bearing - screen_angle, scale);
+  PolygonRotateShift(label, pos, angle, scale);
 
   TextInBoxMode style;
   style.align = TextInBoxMode::Alignment::CENTER;
