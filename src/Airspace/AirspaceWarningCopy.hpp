@@ -36,10 +36,10 @@ private:
   StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning, ids_acked;
   StaticArray<GeoPoint,32> locations;
 
-  unsigned serial;
+  Serial serial;
 
 public:
-  unsigned GetSerial() const noexcept {
+  auto GetSerial() const noexcept {
     return serial;
   }
 

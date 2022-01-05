@@ -24,6 +24,7 @@ Copyright_License {
 #pragma once
 
 #include "Engine/Airspace/Ptr.hpp"
+#include "util/Serial.hpp"
 
 #include <set>
 
@@ -39,7 +40,7 @@ class AirspaceEnterMonitor final {
 
   std::set<ConstAirspacePtr> last_near, last_inside;
 
-  unsigned last_serial = 0;
+  Serial last_serial;
 
 public:
   explicit AirspaceEnterMonitor(const ProtectedAirspaceWarningManager &_warnings) noexcept

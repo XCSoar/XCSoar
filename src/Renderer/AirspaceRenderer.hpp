@@ -30,6 +30,7 @@ Copyright_License {
 
 #ifndef ENABLE_OPENGL
 #include "TransparentRendererCache.hpp"
+#include "util/Serial.hpp"
 #endif
 
 struct AirspaceLook;
@@ -59,16 +60,12 @@ class AirspaceRenderer
    */
   TransparentRendererCache fill_cache;
 
-  unsigned last_warning_serial;
+  Serial last_warning_serial;
 #endif
 
 public:
   AirspaceRenderer(const AirspaceLook &_look)
-    :look(_look), airspaces(nullptr), warning_manager(nullptr)
-#ifndef ENABLE_OPENGL
-    , last_warning_serial(0)
-#endif
-  {}
+    :look(_look), airspaces(nullptr), warning_manager(nullptr) {}
 
   const AirspaceLook &GetLook() const {
     return look;

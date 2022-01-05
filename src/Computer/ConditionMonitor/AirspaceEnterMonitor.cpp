@@ -90,7 +90,7 @@ CollectInsideAirspaces(const AirspaceWarningManager &warnings) noexcept
 inline void
 AirspaceEnterMonitor::Update(const AirspaceWarningManager &warnings) noexcept
 {
-  const unsigned serial = warnings.GetSerial();
+  const auto serial = warnings.GetSerial();
   if (serial == last_serial)
     /* no change */
     return;
