@@ -831,7 +831,7 @@ DeviceDescriptor::WriteNMEA(const char *line,
 {
   assert(line != nullptr);
 
-  if (port != nullptr)
+  if (port == nullptr)
       return false;
 
   try {
