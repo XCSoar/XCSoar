@@ -151,13 +151,16 @@ AirspaceWarningManager::Update(const AircraftState& state,
 
       it++;
     } else {
-      ++serial;
       it = warnings.erase(it);
+      changed = true;
     }
   }
 
   // sort by importance, most severe top
   warnings.sort();
+
+  if (changed)
+    ++serial;
 
   return changed;
 }

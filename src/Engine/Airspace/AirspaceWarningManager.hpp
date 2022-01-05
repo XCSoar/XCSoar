@@ -93,7 +93,8 @@ public:
 
   /**
    * Returns a serial for the current state.  The serial gets
-   * incremented each time the list of warnings is modified.
+   * incremented each time the a warning or the list of warnings is
+   * modified.
    */
   Serial GetSerial() const noexcept {
     return serial;
