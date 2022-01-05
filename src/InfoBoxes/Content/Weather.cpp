@@ -213,6 +213,8 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas,
 
   const auto pt = rc.GetCenter();
 
+  const unsigned scale = Layout::Scale(100U);
+
   const unsigned padding = Layout::FastScale(10u);
   unsigned size = std::min(rc.GetWidth(), rc.GetHeight());
 
@@ -221,7 +223,7 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas,
 
   // Normalize the size because the Layout::Scale is applied
   // by the DrawArrow() function again
-  size = size * 100 / Layout::Scale(100);
+  size = size * 100 / scale;
 
   auto angle = info.wind.bearing - CommonInterface::Basic().attitude.heading;
 
@@ -233,5 +235,5 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas,
   auto style = CommonInterface::GetMapSettings().wind_arrow_style;
 
   WindArrowRenderer renderer(UIGlobals::GetLook().wind_arrow_info_box);
-  renderer.DrawArrow(canvas, pt, angle, 6, length, style, offset);
+  renderer.DrawArrow(canvas, pt, angle, 6, length, style, offset, scale);
 }
