@@ -39,7 +39,7 @@ class AirspaceWarningList
 
 public:
   void Add(const AirspaceWarning& as) {
-    if (as.GetWarningState() > AirspaceWarning::WARNING_CLEAR)
+    if (as.IsWarning())
       list.checked_append(&as.GetAirspace());
   }
 

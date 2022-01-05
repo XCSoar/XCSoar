@@ -138,6 +138,22 @@ public:
     return state;
   }
 
+  /**
+   * Is this a warning?
+   *
+   * Some instances are not actually warnings, but
+   * how XCSoar remembers that an airspace is "ACKed" (but not
+   * currently nearby).
+   *
+   * Note that this method returns true for "ACKed" warnings.
+   */
+  bool IsWarning() const noexcept {
+    return state > WARNING_CLEAR;
+  }
+
+  /**
+   * Note that this method returns true for "ACKed" inside warnings.
+   */
   bool IsInside() const noexcept {
     return state == WARNING_INSIDE;
   }
