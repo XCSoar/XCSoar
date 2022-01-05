@@ -43,16 +43,17 @@ Copyright_License {
 
 void
 WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
-                             unsigned length, WindArrowStyle arrow_style,
+                             unsigned width, unsigned length,
+                             WindArrowStyle arrow_style,
                              int offset) noexcept
 {
   // Draw arrow
 
   BulkPixelPoint arrow[] = {
     { 0, -offset + 3 },
-    { -6, -offset - 3 - int(length) },
+    { -int(width), -offset - 3 - int(length) },
     { 0, -offset + 3 - int(length) },
-    { 6, -offset - 3 - int(length) },
+    { int(width), -offset - 3 - int(length) },
   };
 
   // Rotate the arrow
@@ -89,12 +90,15 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const PixelRect &rc,
                         WindArrowStyle arrow_style) noexcept
 {
+  constexpr unsigned arrow_width = 6;
   constexpr unsigned arrow_offset = 23;
 
   // Draw arrow (and tail)
 
   const unsigned length = uround(4 * wind.norm);
-  DrawArrow(canvas, pos, wind.bearing - screen_angle, length, arrow_style,
+  DrawArrow(canvas, pos, wind.bearing - screen_angle,
+            arrow_width, length,
+            arrow_style,
             arrow_offset);
 
   // Draw wind speed label

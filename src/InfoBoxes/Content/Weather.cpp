@@ -233,5 +233,5 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas,
   auto style = CommonInterface::GetMapSettings().wind_arrow_style;
 
   WindArrowRenderer renderer(UIGlobals::GetLook().wind_arrow_info_box);
-  renderer.DrawArrow(canvas, pt, angle, length, style, offset);
+  renderer.DrawArrow(canvas, pt, angle, 6, length, style, offset);
 }
