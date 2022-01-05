@@ -25,17 +25,27 @@ Copyright_License {
 #include "AirspaceEnterMonitor.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/AirspaceWarning.hpp"
+#include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Input/InputQueue.hpp"
 
 [[gnu::pure]]
 static ConstAirspacePtr
-GetTopInsideAirspace(const ProtectedAirspaceWarningManager &warnings) noexcept
+GetTopInsideAirspace(const AirspaceWarningManager &warnings) noexcept
 {
-  auto w = warnings.GetTopWarning();
-  if (!w || !w->IsInside())
-    return nullptr;
+  if (auto i = warnings.begin(); i != warnings.end() && i->IsInside())
+    return i->GetAirspacePtr();
 
-  return w->GetAirspacePtr();
+  return nullptr;
+}
+
+inline void
+AirspaceEnterMonitor::Update(const AirspaceWarningManager &warnings) noexcept
+{
+  auto inside = GetTopInsideAirspace(warnings);
+  if (inside && inside != last_inside)
+    InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
+
+  last_inside = std::move(inside);
 }
 
 void
@@ -43,9 +53,6 @@ AirspaceEnterMonitor::Update(const NMEAInfo &basic,
                              const DerivedInfo &calculated,
                              const ComputerSettings &settings) noexcept
 {
-  auto inside = GetTopInsideAirspace(warnings);
-  if (inside && inside != last_inside)
-    InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
-
-  last_inside = std::move(inside);
+  const ProtectedAirspaceWarningManager::Lease lease{protected_warnings};
+  Update(lease);
 }

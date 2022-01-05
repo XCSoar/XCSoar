@@ -29,17 +29,21 @@ struct NMEAInfo;
 struct DerivedInfo;
 struct ComputerSettings;
 class ProtectedAirspaceWarningManager;
+class AirspaceWarningManager;
 
 /** #ConditionMonitor to track/warn on significant changes in wind speed */
 class AirspaceEnterMonitor final {
-  const ProtectedAirspaceWarningManager &warnings;
+  const ProtectedAirspaceWarningManager &protected_warnings;
 
   ConstAirspacePtr last_inside;
 
 public:
   explicit constexpr AirspaceEnterMonitor(const ProtectedAirspaceWarningManager &_warnings) noexcept
-    :warnings(_warnings) {}
+    :protected_warnings(_warnings) {}
 
   void Update(const NMEAInfo &basic, const DerivedInfo &calculated,
               const ComputerSettings &settings) noexcept;
+
+private:
+  void Update(const AirspaceWarningManager &warnings) noexcept;
 };
