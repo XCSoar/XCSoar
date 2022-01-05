@@ -116,6 +116,7 @@ WriteCup(BufferedOutputStream &writer, const Waypoint &wp)
   writer.Write('"');
   writer.Write(wp.shortname.c_str());
   writer.Write('"');
+  writer.Write(',');
 
   // Write Country
   writer.Write(',');
