@@ -7,6 +7,7 @@ XCSoar
 
    build
    policy
+   input_events
    lua
 
 
