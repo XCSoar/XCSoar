@@ -38,23 +38,14 @@ GetTopInsideAirspace(const ProtectedAirspaceWarningManager &warnings) noexcept
   return w->GetAirspacePtr();
 }
 
-bool
-AirspaceEnterMonitor::CheckCondition(const NMEAInfo &basic,
-                                     const DerivedInfo &calculated,
-                                     const ComputerSettings &settings) noexcept
+void
+AirspaceEnterMonitor::Update(const NMEAInfo &basic,
+                             const DerivedInfo &calculated,
+                             const ComputerSettings &settings) noexcept
 {
   auto inside = GetTopInsideAirspace(warnings);
-  return inside && inside != last_inside;
-}
+  if (inside && inside != last_inside)
+    InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
 
-void
-AirspaceEnterMonitor::Notify() noexcept
-{
-  InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
-}
-
-void
-AirspaceEnterMonitor::SaveLast() noexcept
-{
-  last_inside = GetTopInsideAirspace(warnings);
+  last_inside = std::move(inside);
 }

@@ -23,26 +23,23 @@ Copyright_License {
 
 #pragma once
 
-#include "ConditionMonitor.hpp"
 #include "Engine/Airspace/Ptr.hpp"
 
+struct NMEAInfo;
+struct DerivedInfo;
+struct ComputerSettings;
 class ProtectedAirspaceWarningManager;
 
 /** #ConditionMonitor to track/warn on significant changes in wind speed */
-class AirspaceEnterMonitor final : public ConditionMonitor {
+class AirspaceEnterMonitor final {
   const ProtectedAirspaceWarningManager &warnings;
 
   ConstAirspacePtr last_inside;
 
 public:
   explicit constexpr AirspaceEnterMonitor(const ProtectedAirspaceWarningManager &_warnings) noexcept
-    :ConditionMonitor(std::chrono::seconds{30}, std::chrono::seconds{2}),
-     warnings(_warnings) {}
+    :warnings(_warnings) {}
 
-protected:
-  bool CheckCondition(const NMEAInfo &basic,
-                      const DerivedInfo &calculated,
-                      const ComputerSettings &settings) noexcept override;
-  void Notify() noexcept override;
-  void SaveLast() noexcept override;
+  void Update(const NMEAInfo &basic, const DerivedInfo &calculated,
+              const ComputerSettings &settings) noexcept;
 };
