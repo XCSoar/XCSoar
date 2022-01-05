@@ -48,8 +48,8 @@ class AirspaceRenderer
 {
   const AirspaceLook &look;
 
-  const Airspaces *airspaces;
-  const ProtectedAirspaceWarningManager *warning_manager;
+  const Airspaces *airspaces = nullptr;
+  const ProtectedAirspaceWarningManager *warning_manager = nullptr;
 
   StaticArray<GeoPoint,32> intersections;
 
@@ -65,7 +65,7 @@ class AirspaceRenderer
 
 public:
   AirspaceRenderer(const AirspaceLook &_look)
-    :look(_look), airspaces(nullptr), warning_manager(nullptr) {}
+    :look(_look) {}
 
   const AirspaceLook &GetLook() const {
     return look;
