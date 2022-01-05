@@ -159,6 +159,14 @@ public:
   }
 
   /**
+   * Is this warning currently active, i.e. it has no valid "ACK"?
+   * This implies that IsWarning() is true.
+   */
+  bool IsActive() const noexcept {
+    return expired;
+  }
+
+  /**
    * Update warnings, calculate whether this airspace still needs to
    * have warnings managed.
    *

@@ -227,7 +227,7 @@ AirspaceWarningListWidget::HasWarning() const
 {
   ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
   return std::any_of(lease->begin(), lease->end(),
-                     [](const auto &i){ return i.IsAckExpired(); });
+                     [](const auto &i){ return i.IsActive(); });
 }
 
 static void

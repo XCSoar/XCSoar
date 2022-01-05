@@ -68,7 +68,7 @@ CollectNearAirspaces(const AirspaceWarningManager &warnings) noexcept
   std::set<ConstAirspacePtr> result;
 
   for (const auto &i : warnings)
-    if (i.IsAckExpired())
+    if (i.IsActive())
       result.emplace(i.GetAirspacePtr());
 
   return result;
@@ -81,7 +81,7 @@ CollectInsideAirspaces(const AirspaceWarningManager &warnings) noexcept
   std::set<ConstAirspacePtr> result;
 
   for (const auto &i : warnings)
-    if (i.IsInside() && i.IsAckExpired())
+    if (i.IsInside() && i.IsActive())
       result.emplace(i.GetAirspacePtr());
 
   return result;

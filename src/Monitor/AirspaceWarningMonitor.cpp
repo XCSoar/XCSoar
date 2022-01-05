@@ -161,7 +161,7 @@ AirspaceWarningMonitor::Check() noexcept
 
   const auto w = airspace_warnings->GetTopWarning();
 
-  if (!w || !w->IsAckExpired()) {
+  if (!w || !w->IsActive()) {
     HideWidget();
     return;
   }
