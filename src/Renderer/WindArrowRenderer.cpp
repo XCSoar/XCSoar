@@ -89,10 +89,13 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const PixelRect &rc,
                         WindArrowStyle arrow_style) noexcept
 {
+  constexpr unsigned arrow_offset = 23;
+
   // Draw arrow (and tail)
 
   const unsigned length = uround(4 * wind.norm);
-  DrawArrow(canvas, pos, wind.bearing - screen_angle, length, arrow_style);
+  DrawArrow(canvas, pos, wind.bearing - screen_angle, length, arrow_style,
+            arrow_offset);
 
   // Draw wind speed label
 

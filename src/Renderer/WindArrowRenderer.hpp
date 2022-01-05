@@ -52,7 +52,7 @@ public:
 
   void DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
                  unsigned length, WindArrowStyle arrow_style,
-                 int offset = 23) noexcept;
+                 int offset) noexcept;
 };
 
 #endif
