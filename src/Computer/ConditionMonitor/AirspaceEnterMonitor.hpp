@@ -37,7 +37,7 @@ class AirspaceWarningManager;
 class AirspaceEnterMonitor final {
   const ProtectedAirspaceWarningManager &protected_warnings;
 
-  std::set<ConstAirspacePtr> last_inside;
+  std::set<ConstAirspacePtr> last_near, last_inside;
 
   unsigned last_serial = 0;
 

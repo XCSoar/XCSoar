@@ -63,6 +63,19 @@ ContainsNewItem(const std::set<T> &current,
 
 [[gnu::pure]]
 static std::set<ConstAirspacePtr>
+CollectNearAirspaces(const AirspaceWarningManager &warnings) noexcept
+{
+  std::set<ConstAirspacePtr> result;
+
+  for (const auto &i : warnings)
+    if (i.IsAckExpired())
+      result.emplace(i.GetAirspacePtr());
+
+  return result;
+}
+
+[[gnu::pure]]
+static std::set<ConstAirspacePtr>
 CollectInsideAirspaces(const AirspaceWarningManager &warnings) noexcept
 {
   std::set<ConstAirspacePtr> result;
@@ -82,11 +95,16 @@ AirspaceEnterMonitor::Update(const AirspaceWarningManager &warnings) noexcept
     /* no change */
     return;
 
+  auto near_ = CollectNearAirspaces(warnings);
+  if (ContainsNewItem(near_, last_near))
+    InputEvents::processGlideComputer(GCE_AIRSPACE_NEAR);
+
   auto inside = CollectInsideAirspaces(warnings);
   if (ContainsNewItem(inside, last_inside))
     InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
 
   last_serial = serial;
+  last_near = std::move(near_);
   last_inside = std::move(inside);
 }
 

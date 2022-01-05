@@ -389,6 +389,10 @@ below.
 ``TAKEOFF``
    You have taken off.
 
+``AIRSPACE_NEAR``
+   The aircraft has approached an airspace for which warnings are
+   enabled.
+
 ``AIRSPACE_ENTER``
    The aircraft has entered an airspace for which warnings are
    enabled.

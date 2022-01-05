@@ -4,6 +4,7 @@ Version 7.22 - not yet released
   - add "Share" button to the status dialog
 * glide computer
   - implement event "AIRSPACE_ENTER"
+  - add event "AIRSPACE_NEAR"
 * Polars
   - add DG-800S
 * devices
