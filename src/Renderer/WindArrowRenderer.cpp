@@ -115,9 +115,8 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   canvas.SetTextColor(COLOR_BLACK);
   canvas.Select(*look.font);
 
-  const unsigned offset = uround(M_SQRT2 * wind.norm);
   BulkPixelPoint label[] = {
-    { 18, -26 - int(offset) },
+    { 0, -int(arrow_offset + length + arrow_tail_length) },
   };
   PolygonRotateShift(label, pos, angle, scale);
 
