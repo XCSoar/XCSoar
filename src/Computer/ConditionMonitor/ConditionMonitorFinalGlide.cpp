@@ -29,7 +29,7 @@ Copyright_License {
 bool
 ConditionMonitorFinalGlide::CheckCondition(const NMEAInfo &basic,
                                            const DerivedInfo &calculated,
-                                           const ComputerSettings &settings)
+                                           const ComputerSettings &settings) noexcept
 {
   if (!calculated.flight.flying || !calculated.task_stats.task_valid)
     return false;
@@ -66,7 +66,7 @@ ConditionMonitorFinalGlide::CheckCondition(const NMEAInfo &basic,
 }
 
 void
-ConditionMonitorFinalGlide::Notify()
+ConditionMonitorFinalGlide::Notify() noexcept
 {
   if (tad > 1)
     InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_ABOVE);
@@ -75,7 +75,7 @@ ConditionMonitorFinalGlide::Notify()
 }
 
 void
-ConditionMonitorFinalGlide::SaveLast()
+ConditionMonitorFinalGlide::SaveLast() noexcept
 {
   last_tad = tad;
 }

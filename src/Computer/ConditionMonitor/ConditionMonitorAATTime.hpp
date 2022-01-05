@@ -34,10 +34,10 @@ public:
 
 protected:
   bool CheckCondition(const NMEAInfo &basic,
-                              const DerivedInfo &calculated,
-                              const ComputerSettings &settings) override;
-  void Notify() override;
-  void SaveLast() override {}
+                      const DerivedInfo &calculated,
+                      const ComputerSettings &settings) noexcept override;
+  void Notify() noexcept override;
+  void SaveLast() noexcept override {}
 };
 
 #endif

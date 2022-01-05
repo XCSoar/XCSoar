@@ -35,7 +35,7 @@ using namespace std::chrono;
 bool
 ConditionMonitorSunset::CheckCondition(const NMEAInfo &basic,
                                        const DerivedInfo &calculated,
-                                       const ComputerSettings &settings)
+                                       const ComputerSettings &settings) noexcept
 {
   if (!basic.location_available ||
       !basic.time_available || !basic.date_time_utc.IsDatePlausible() ||
@@ -64,7 +64,7 @@ ConditionMonitorSunset::CheckCondition(const NMEAInfo &basic,
 }
 
 void
-ConditionMonitorSunset::Notify()
+ConditionMonitorSunset::Notify() noexcept
 {
   Message::AddMessage(_("Expect arrival past sunset"));
 }
