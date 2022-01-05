@@ -28,14 +28,50 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Input/InputQueue.hpp"
 
+/**
+ * Does the "current" set contain at least one item that is not
+ * present in the "previous" set?
+ */
+template<typename T>
 [[gnu::pure]]
-static ConstAirspacePtr
-GetTopInsideAirspace(const AirspaceWarningManager &warnings) noexcept
+static bool
+ContainsNewItem(const std::set<T> &current,
+                const std::set<T> &previous) noexcept
 {
-  if (auto i = warnings.begin(); i != warnings.end() && i->IsInside())
-    return i->GetAirspacePtr();
+  const auto key_comp = current.key_comp();
 
-  return nullptr;
+  for (auto c = current.begin(), p = previous.begin();
+       c != current.end(); ++c, ++p) {
+    while (true) {
+      if (p == previous.end() || key_comp(*c, *p))
+        /* this item does not exist in the "previous" set */
+        return true;
+
+      if (!key_comp(*p, *c))
+        /* both are equal: found it */
+        break;
+
+      /* this "previous" item is no longer present in "current": skip
+         it */
+      ++p;
+    }
+  }
+
+  /* found matches for all "current" items in "previous" */
+  return false;
+}
+
+[[gnu::pure]]
+static std::set<ConstAirspacePtr>
+CollectInsideAirspaces(const AirspaceWarningManager &warnings) noexcept
+{
+  std::set<ConstAirspacePtr> result;
+
+  for (const auto &i : warnings)
+    if (i.IsInside())
+      result.emplace(i.GetAirspacePtr());
+
+  return result;
 }
 
 inline void
@@ -46,8 +82,8 @@ AirspaceEnterMonitor::Update(const AirspaceWarningManager &warnings) noexcept
     /* no change */
     return;
 
-  auto inside = GetTopInsideAirspace(warnings);
-  if (inside && inside != last_inside)
+  auto inside = CollectInsideAirspaces(warnings);
+  if (ContainsNewItem(inside, last_inside))
     InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
 
   last_serial = serial;

@@ -25,6 +25,8 @@ Copyright_License {
 
 #include "Engine/Airspace/Ptr.hpp"
 
+#include <set>
+
 struct NMEAInfo;
 struct DerivedInfo;
 struct ComputerSettings;
@@ -35,12 +37,12 @@ class AirspaceWarningManager;
 class AirspaceEnterMonitor final {
   const ProtectedAirspaceWarningManager &protected_warnings;
 
-  ConstAirspacePtr last_inside;
+  std::set<ConstAirspacePtr> last_inside;
 
   unsigned last_serial = 0;
 
 public:
-  explicit constexpr AirspaceEnterMonitor(const ProtectedAirspaceWarningManager &_warnings) noexcept
+  explicit AirspaceEnterMonitor(const ProtectedAirspaceWarningManager &_warnings) noexcept
     :protected_warnings(_warnings) {}
 
   void Update(const NMEAInfo &basic, const DerivedInfo &calculated,
