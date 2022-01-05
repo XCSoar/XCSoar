@@ -37,6 +37,8 @@ class AirspaceEnterMonitor final {
 
   ConstAirspacePtr last_inside;
 
+  unsigned last_serial = 0;
+
 public:
   explicit constexpr AirspaceEnterMonitor(const ProtectedAirspaceWarningManager &_warnings) noexcept
     :protected_warnings(_warnings) {}

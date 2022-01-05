@@ -41,10 +41,16 @@ GetTopInsideAirspace(const AirspaceWarningManager &warnings) noexcept
 inline void
 AirspaceEnterMonitor::Update(const AirspaceWarningManager &warnings) noexcept
 {
+  const unsigned serial = warnings.GetSerial();
+  if (serial == last_serial)
+    /* no change */
+    return;
+
   auto inside = GetTopInsideAirspace(warnings);
   if (inside && inside != last_inside)
     InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
 
+  last_serial = serial;
   last_inside = std::move(inside);
 }
 
