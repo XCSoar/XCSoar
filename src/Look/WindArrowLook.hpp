@@ -31,7 +31,7 @@ class Font;
 
 struct WindArrowLook
 {
-  Pen arrow_pen, tail_pen;
+  Pen arrow_pen, shaft_pen;
   Brush arrow_brush;
 
   const Font *font;

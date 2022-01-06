@@ -69,18 +69,18 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
     canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
   }
 
-  // Draw arrow tail
+  // Draw arrow shaft
 
   if (arrow_style == WindArrowStyle::FULL_ARROW) {
-    BulkPixelPoint tail[] = {
+    BulkPixelPoint shaft[] = {
       { 0, -offset + 3 },
       { 0, -offset - 3 - int(std::min(20u, length) * 3u) },
     };
 
-    PolygonRotateShift(tail, pos, angle, scale);
+    PolygonRotateShift(shaft, pos, angle, scale);
 
-    canvas.Select(look.tail_pen);
-    canvas.DrawLine(tail[0], tail[1]);
+    canvas.Select(look.shaft_pen);
+    canvas.DrawLine(shaft[0], shaft[1]);
   }
 }
 
@@ -96,7 +96,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   const unsigned scale = Layout::Scale(100U);
   const Angle angle = wind.bearing - screen_angle;
 
-  // Draw arrow (and tail)
+  // Draw arrow (and shaft)
 
   const unsigned length = uround(4 * wind.norm);
   DrawArrow(canvas, pos, angle,
