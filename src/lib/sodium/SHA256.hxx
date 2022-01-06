@@ -76,3 +76,29 @@ public:
 		return out;
 	}
 };
+
+[[gnu::pure]]
+inline auto
+SHA256(std::span<const std::byte> src) noexcept
+{
+	SHA256Digest out;
+	crypto_hash_sha256(reinterpret_cast<unsigned char *>(out.data()),
+			   (const unsigned char *)src.data(),
+			   src.size());
+	return out;
+}
+
+template<typename T>
+[[gnu::pure]]
+inline auto
+SHA256(std::span<const T> src) noexcept
+{
+	return SHA256(std::as_bytes(src));
+}
+
+[[gnu::pure]]
+inline auto
+SHA256(std::string_view src) noexcept
+{
+	return SHA256(std::span<const char>{src});
+}
