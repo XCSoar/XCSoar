@@ -209,6 +209,9 @@ void
 InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas,
                                        const PixelRect &rc) noexcept
 {
+  constexpr unsigned arrow_width = 6;
+  constexpr unsigned arrow_tail_length = 3;
+
   const auto &info = CommonInterface::Calculated();
 
   const auto pt = rc.GetCenter();
@@ -235,5 +238,7 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas,
   auto style = CommonInterface::GetMapSettings().wind_arrow_style;
 
   WindArrowRenderer renderer(UIGlobals::GetLook().wind_arrow_info_box);
-  renderer.DrawArrow(canvas, pt, angle, 6, length, style, offset, scale);
+  renderer.DrawArrow(canvas, pt, angle,
+                     arrow_width, length, arrow_tail_length,
+                     style, offset, scale);
 }

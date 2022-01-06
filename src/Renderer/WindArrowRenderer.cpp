@@ -44,6 +44,7 @@ Copyright_License {
 void
 WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
                              unsigned width, unsigned length,
+                             unsigned tail_length,
                              WindArrowStyle arrow_style,
                              int offset,
                              unsigned scale) noexcept
@@ -51,10 +52,10 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
   // Draw arrow
 
   BulkPixelPoint arrow[] = {
-    { 0, -offset + 3 },
-    { -int(width), -offset - 3 - int(length) },
-    { 0, -offset + 3 - int(length) },
-    { int(width), -offset - 3 - int(length) },
+    { 0, -offset + int(tail_length) },
+    { -int(width), -offset - int(tail_length + length) },
+    { 0, -offset - int(length - tail_length) },
+    { int(width), -offset - int(tail_length + length) },
   };
 
   // Rotate the arrow
@@ -73,8 +74,8 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
 
   if (arrow_style == WindArrowStyle::FULL_ARROW) {
     BulkPixelPoint shaft[] = {
-      { 0, -offset + 3 },
-      { 0, -offset - 3 - int(std::min(20u, length) * 3u) },
+      { 0, -offset + int(tail_length) },
+      { 0, -offset - int(tail_length + std::min(20u, length) * 3u) },
     };
 
     PolygonRotateShift(shaft, pos, angle, scale);
@@ -91,6 +92,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         WindArrowStyle arrow_style) noexcept
 {
   constexpr unsigned arrow_width = 6;
+  constexpr unsigned arrow_tail_length = 3;
   constexpr unsigned arrow_offset = 23;
 
   const unsigned scale = Layout::Scale(100U);
@@ -100,7 +102,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 
   const unsigned length = uround(4 * wind.norm);
   DrawArrow(canvas, pos, angle,
-            arrow_width, length,
+            arrow_width, length, arrow_tail_length,
             arrow_style,
             arrow_offset,
             scale);
