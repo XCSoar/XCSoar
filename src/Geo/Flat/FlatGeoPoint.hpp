@@ -126,14 +126,13 @@ struct AFlatGeoPoint : public FlatGeoPoint {
   /** Nav reference altitude (m) */
   int altitude;
 
+  constexpr AFlatGeoPoint() noexcept = default;
+
   constexpr AFlatGeoPoint(const int x, const int y, const int alt) noexcept
     :FlatGeoPoint(x,y),altitude(alt) {};
 
   constexpr AFlatGeoPoint(const FlatGeoPoint p, const int alt) noexcept
     :FlatGeoPoint(p), altitude(alt) {};
-
-  constexpr AFlatGeoPoint() noexcept
-    :FlatGeoPoint(0,0),altitude(0) {};
 
   /** Rounds location to reduce state space */
   void RoundLocation() noexcept {
