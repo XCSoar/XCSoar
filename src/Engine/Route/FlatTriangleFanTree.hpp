@@ -105,6 +105,11 @@ public:
   bool CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
                 const RouteLink &e_2, ReachFanParms &parms) noexcept;
 
+  /**
+   * Attempt to find a path to the specified #FlatGeoPoint higher than
+   * the given #arrival_height.  If one is found, #arrival_height is
+   * updated and the method returns true.
+   */
   bool FindPositiveArrival(FlatGeoPoint n,
                            const ReachFanParms &parms,
                            int &arrival_height) const noexcept;
