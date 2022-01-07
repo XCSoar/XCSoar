@@ -118,7 +118,7 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
                                const ReachFanParms &parms) noexcept
 {
   const GeoPoint geo_origin = parms.projection.Unproject(origin);
-  height = origin.altitude;
+  SetHeight(origin.altitude);
 
   // fill vector
   if (!IsRoot()) {
@@ -150,12 +150,13 @@ FlatTriangleFanTree::FillGaps(const AFlatGeoPoint &origin,
                               ReachFanParms &parms) noexcept
 {
   // worth checking for gaps?
-  if (vs.size() > 2 && parms.rpolars.IsTurningReachEnabled()) {
+  if (const auto vertices = GetVertices();
+      vertices.size() > 2 && parms.rpolars.IsTurningReachEnabled()) {
 
     // now check gaps
-    RouteLink e_last(RoutePoint(vs.front(), 0),
+    RouteLink e_last(RoutePoint(vertices.front(), 0),
                      origin, parms.projection);
-    for (auto x_last = vs.cbegin(), end = vs.cend(),
+    for (auto x_last = vertices.begin(), end = vertices.end(),
          x = x_last + 1; x != end; x_last = x++) {
       if (TooClose(*x, origin) || TooClose(*x_last, origin))
         continue;
@@ -178,7 +179,7 @@ FlatTriangleFanTree::UpdateTerrainBase(const FlatGeoPoint o,
     return;
   }
 
-  for (const auto &x : vs) {
+  for (const auto &x : GetVertices()) {
     const FlatGeoPoint av = (o + x) * 0.5;
     const GeoPoint p = parms.projection.Unproject(av);
     const auto h = parms.terrain->GetHeight(p);
@@ -239,7 +240,7 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
 
     FlatTriangleFanTree child(depth + 1);
     if (child.FillReach(x, index_left, index_right, parms)) {
-      parms.vertex_counter += child.vs.size();
+      parms.vertex_counter += child.GetVertices().size();
       parms.fan_counter++;
       children.emplace_front(std::move(child));
       return true;
@@ -253,7 +254,7 @@ int
 FlatTriangleFanTree::DirectArrival(FlatGeoPoint dest,
                                    const ReachFanParms &parms) const noexcept
 {
-  assert(!vs.empty());
+  assert(!IsEmpty());
   return parms.rpolars.CalcGlideArrival(GetOrigin(), dest, parms.projection);
 }
 
@@ -262,7 +263,7 @@ FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint n,
                                          const ReachFanParms &parms,
                                          int &arrival_height) const noexcept
 {
-  if (height < arrival_height)
+  if (GetHeight() < arrival_height)
     return false; // can't possibly improve
 
   if (!bb_children.IsInside(n))

@@ -34,7 +34,6 @@ class FlatTriangleFanVisitor;
 class FlatTriangleFan {
   using VertexVector = std::vector<FlatGeoPoint>;
 
-protected:
   VertexVector vs;
   FlatBoundingBox bounding_box;
   int height;
@@ -71,9 +70,18 @@ public:
     vs.clear();
   }
 
+  std::span<const FlatGeoPoint> GetVertices() const noexcept {
+    return vs;
+  }
+
   [[gnu::pure]]
   bool IsEmpty() const noexcept {
     return vs.empty();
+  }
+
+  [[gnu::pure]]
+  bool IsOnlyOrigin() const noexcept {
+    return vs.size() == 1;
   }
 
   AFlatGeoPoint GetOrigin() const noexcept {
@@ -98,6 +106,10 @@ public:
 
   int GetHeight() const noexcept {
     return height;
+  }
+
+  void SetHeight(int _height) noexcept {
+    height = _height;
   }
 
   void AcceptInRange(const FlatBoundingBox &bb,

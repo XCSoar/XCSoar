@@ -83,7 +83,7 @@ public:
    */
   [[gnu::pure]]
   bool IsDummy() const noexcept {
-    return vs.size() == 1 && children.empty();
+    return IsOnlyOrigin() && children.empty();
   }
 
   /**
