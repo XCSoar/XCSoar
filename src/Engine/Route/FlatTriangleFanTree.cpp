@@ -242,7 +242,7 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
     if (child.FillReach(x, index_left, index_right, parms)) {
       parms.vertex_counter += child.vs.size();
       parms.fan_counter++;
-      children.emplace_back(std::move(child));
+      children.emplace_front(std::move(child));
       return true;
     }
   }
