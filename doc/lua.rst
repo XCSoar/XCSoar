@@ -179,17 +179,15 @@ The following attributes are provided by ``xcsoar.blackboard``:
  * - Name
    - Description
  * - ``clock``
-   - A monotonic wall clock time, in seconds, with an undefined
-     reference.
+   - A monotonic wall clock time [s], with an undefined reference.
  * - ``time``
-   - A wall clock time, in seconds, since midnight (UTC) of the day
-     the flight started.  Not strictly monotonic (can warp under
-     certain circumstances).  ``nil`` if unknown.
+   - A wall clock time [s], since midnight (UTC) of the day the flight
+     started.  Not strictly monotonic (can warp under certain
+     circumstances).
  * - ``date_time_utc``
    - A `date table <https://www.lua.org/pil/22.1.html>`__ describing
      the current date and time (UTC), preferably from the GPS.  Not
      strictly monotonic (can warp under certain circumstances).
-     ``nil`` if unknown.
  * - ``location``
    - The current location (table with keys ``longitude`` and
      ``latitude`` in degrees) according to GPS.
@@ -230,8 +228,8 @@ The following attributes are provided by ``xcsoar.blackboard``:
  * - ``netto_vario``
    - The netto variometer value [:math:`m/s`].
 
-Any of these may be ``nil`` if its value is not known, e.g. if there
-is no GPS fix.
+Any of these (except for ``clock``) may be ``nil`` if its value is not
+known, e.g. if there is no GPS fix.
 
 .. _lua.map:
 
