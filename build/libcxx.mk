@@ -1,8 +1,6 @@
 # libc++, the C++ standard library implementation from the LLVM
 # project.
 
-ifeq ($(LIBCXX),y)
-
 ifeq ($(TARGET),ANDROID)
   LIBCXX_CXXFLAGS = \
 	-DLIBCXX
@@ -15,6 +13,4 @@ ifeq ($(TARGET),ANDROID)
 else
 LIBCXX_CXXFLAGS += -stdlib=libc++
 LIBCXX_LDFLAGS += -stdlib=libc++
-endif
-
 endif

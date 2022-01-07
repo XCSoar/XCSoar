@@ -244,7 +244,6 @@ ifeq ($(TARGET),OSX64)
   OSX_MIN_SUPPORTED_VERSION = 10.12
   HOST_TRIPLET = x86_64-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
-  LIBCXX = y
   CLANG = y
   TARGET_ARCH += -mmacosx-version-min=$(OSX_MIN_SUPPORTED_VERSION)
 endif
@@ -259,7 +258,6 @@ ifeq ($(TARGET),IOS32)
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk
   endif
-  LIBCXX = y
   CLANG = y
   TARGET_ARCH += -miphoneos-version-min=$(IOS_MIN_SUPPORTED_VERSION)
 endif
@@ -274,7 +272,6 @@ ifeq ($(TARGET),IOS64)
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk
   endif
-  LIBCXX = y
   CLANG = y
   TARGET_ARCH += -miphoneos-version-min=$(IOS_MIN_SUPPORTED_VERSION) -arch arm64
   ASFLAGS += -arch arm64
