@@ -28,6 +28,13 @@
 
 class FlatRay;
 
+template<typename I>
+concept FlatGeoPointIterator = requires (I a, I b) {
+  a != b;
+  ++a;
+  static_cast<FlatGeoPoint>(*a);
+};
+
 /**
  * Structure defining 2-d integer projected coordinates defining
  * a lower left and upper right bounding box.
@@ -60,6 +67,18 @@ struct FlatBoundingBox
   constexpr FlatBoundingBox(FlatGeoPoint loc, unsigned range=0) noexcept
     :lower_left(loc.x - range, loc.y - range),
      upper_right(loc.x + range, loc.y + range) {}
+
+  /**
+   * Calculate the bounding box of a non-empty range of FlatGeoPoints
+   * specified by two (non-equal) iterators.
+   */
+  template<FlatGeoPointIterator I>
+  constexpr FlatBoundingBox(I begin, I end) noexcept
+    :lower_left(*begin), upper_right(*begin)
+  {
+    for (auto i = std::next(begin); i != end; ++i)
+      Expand(*i);
+  }
 
   constexpr const FlatGeoPoint &GetLowerLeft() const noexcept {
     return lower_left;
@@ -151,7 +170,7 @@ struct FlatBoundingBox
   /**
    * Expand the bounding box to include this point
    */
-  void Expand(const FlatGeoPoint &p) noexcept {
+  constexpr void Expand(const FlatGeoPoint &p) noexcept {
     lower_left.x = std::min(lower_left.x, p.x);
     upper_right.x = std::max(upper_right.x, p.x);
     lower_left.y = std::min(lower_left.y, p.y);
