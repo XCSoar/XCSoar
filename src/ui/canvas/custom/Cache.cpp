@@ -135,7 +135,6 @@ struct RenderedText {
                            GL_ALPHA, GL_UNSIGNED_BYTE,
                            buffer))
   {
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
   }
 #elif defined(ANDROID)
   RenderedText(int id, PixelSize size, PixelSize allocated_size) noexcept
@@ -261,6 +260,7 @@ TextCache::Get(const Font &font, StringView text) noexcept
 
   font.Render(text2, size, buffer.get());
 #ifdef ENABLE_OPENGL
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
   RenderedText rt(size, buffer.get());
 #else
   RenderedText rt(size, std::move(buffer));
