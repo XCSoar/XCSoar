@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-12-17 18:50+0000\n"
+"PO-Revision-Date: 2022-01-08 14:56+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -2853,7 +2853,7 @@ msgid ""
 msgstr ""
 "Zátěž kluzáku. Zvyšte toto číslo pokud je zátěž v kabině/pilot těžší než "
 "referenční hmotnost pro poláru (typicky 75kg). Stiskněte tlačítko Vypusť/"
-"Zastav pro spuštění/zastavení odpočtu vypouštění vodní zátěže rychlostí "
+"Zastav pro spuštění/zastavení odpočtu vypouštění vodní zátěže, rychlostí "
 "zadanou v nastavení letadla."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:288
@@ -4000,7 +4000,7 @@ msgstr "Zobrazí prostory pod nastavenou nadmořskou výškou."
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
 #, no-c-format
 msgid "Display airspaces within a margin of the glider."
-msgstr "Zobrazí prostory v hranicích dokluzu kluzáku."
+msgstr "Zobrazí prostory v doletu kluzáku."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:64
 #, no-c-format
@@ -4010,7 +4010,7 @@ msgstr "Vše pod"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:65
 #, no-c-format
 msgid "Display airspaces below the glider or within a margin."
-msgstr "Zobrazí prostory pod kluzákem nebo v jeho dokluzu."
+msgstr "Zobrazí prostory pod kluzákem nebo v jeho doletu."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:70
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
@@ -4970,7 +4970,7 @@ msgid ""
 "waypoint InfoBox will be blue when the glider is above final glide."
 msgstr ""
 "Pokud je zapnuto, určité InfoBoxy budou mít barevný text. Například aktivní "
-"otočný bod bude modrý, pokud je kluzák nad výškou dokluzu."
+"otočný bod bude modrý, pokud je kluzák nad dokluzovou výškou."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:234
 msgid "InfoBox border"
@@ -5070,7 +5070,8 @@ msgstr "Logger-ID"
 msgid ""
 "The moving map display will be rotated so the glider's track is oriented up."
 msgstr ""
-"Pohyblivý displej s mapou bude natočen tak, že trasa kluzáku bude nahoře."
+"Pohyblivý displej s mapou bude natočen tak, aby trasa kluzáku byla "
+"orientována nahoru."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:46
 #, no-c-format
@@ -5083,7 +5084,8 @@ msgid ""
 "The moving map display will be rotated so the glider's heading is oriented "
 "up."
 msgstr ""
-"Pohyblivý displej s mapou bude natočen tak, že směr letu kluzáku bude nahoře."
+"Pohyblivý displej s mapou bude natočen tak, aby směr letu kluzáku byl "
+"orientována nahoru."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:49
 #, no-c-format
@@ -5105,8 +5107,8 @@ msgid ""
 "The moving map display will be rotated so the navigation target is oriented "
 "up."
 msgstr ""
-"Pohyblivý displej s mapou bude natočen tak, že aktuální otočný bod bude "
-"nahoře."
+"Pohyblivý displej s mapou bude natočen tak, aby aktuální navigační bod byl "
+"orientován nahoru."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:52
 #, no-c-format
@@ -5119,8 +5121,8 @@ msgid ""
 "The moving map display will be rotated so the wind is always oriented up to "
 "down. (can be useful for wave flying)"
 msgstr ""
-"Pohyblivý displej s mapou bude natočen tak, aby byl směr větru vždy "
-"orientován shora dolů (může být užitečné ve vlně)."
+"Pohyblivý displej s mapou bude natočen tak, aby směr větru byl vždy "
+"orientován shora dolů. (může být užitečné ve vlně)"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
@@ -5176,7 +5178,7 @@ msgid ""
 "mode and zoom out automatically when leaving circling mode."
 msgstr ""
 "Pokud je zapnuto, mapa se automaticky přiblíží při zahájení kroužení a "
-"vzdálí při opuštění kroužení."
+"oddálí při opuštění kroužení."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:128
 msgid "Map shift reference"
@@ -5225,7 +5227,7 @@ msgstr "Určuje, co bude zobrazeno v hlavní oblasti."
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:206
 #, no-c-format
 msgid "Displays either the Circling, Cruise or Final glide infoxboxes"
-msgstr "Zobrazuje InfoBoxy pro kroužení, přeskok nebo dokluz"
+msgstr "Zobrazuje InfoBoxy pro kroužení, přeskok nebo dokluz."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:207
 #, no-c-format
@@ -5247,15 +5249,15 @@ msgid ""
 "For cruise mode.  Displayed when 'Auto' is selected and ship is below final "
 "glide altitude"
 msgstr ""
-"Pro režim přeskoku. Zobrazí se, pokud je nastaveno na \"Auto\" a letadlo je "
-"pod výškou dokluzu."
+"Pro režim přeskoku. Zobrazí se, pokud je nastaveno \"Auto\" a kluzák je pod "
+"dokluzovou výškou."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:217
 #, no-c-format
 msgid ""
 "For circling mode.  Displayed when 'Auto' is selected and ship is circling"
 msgstr ""
-"Pro režim kroužení. Zobrazí se pokud je nastaveno \"Auto\" a letadlo krouží"
+"Pro režim kroužení. Zobrazí se pokud je nastaveno \"Auto\" a kluzák krouží."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:218
 #, no-c-format
@@ -5263,8 +5265,8 @@ msgid ""
 "For final glide mode.  Displayed when 'Auto' is selected and ship is above "
 "final glide altitude"
 msgstr ""
-"Pro režim dokluzu. Zobrazí se, pokud je nastaveno \"Auto\" a letadlo je nad "
-"výškou dokluzu."
+"Pro režim dokluzu. Zobrazí se, pokud je nastaveno \"Auto\" a kluzák je nad "
+"dokluzovou výškou."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:220
 #, no-c-format
@@ -5375,7 +5377,9 @@ msgstr "Výpočet akčního rádiusu"
 msgid ""
 "How calculations are performed of the reach of the glider with respect to "
 "terrain."
-msgstr "Jak jsou prováděny výpočty akčního rádiusu kluzáku s ohledem na terén."
+msgstr ""
+"Určuje, jak jsou prováděny výpočty akčního rádiusu kluzáku s ohledem na "
+"terén."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:149
 #, no-c-format
@@ -5477,7 +5481,7 @@ msgstr "Výška příletu"
 msgid ""
 "The height above terrain that the glider should arrive at for a safe landing."
 msgstr ""
-"Výška nad terénem ve které by kluzák měl přilétnout pro bezpečné přistání v "
+"Výška nad terénem, ve které by kluzák měl přilétnout pro bezpečné přistání v "
 "cíli."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:72
@@ -6028,7 +6032,7 @@ msgstr "Reference použitá pro pravidlo minimální výšky."
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:128
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:280
 msgid "PEV start wait time"
-msgstr "Prodleva po ozn. události"
+msgstr "Prodleva po označení PEV"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:129
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:281
@@ -6042,7 +6046,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:135
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:284
 msgid "PEV start window"
-msgstr "Start. brána po ozn. události"
+msgstr "Start. brána po označení PEV"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:136
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:285
@@ -8524,8 +8528,8 @@ msgid ""
 "The current Team code for this aircraft. Use this to report to other team "
 "members. The last team aircraft code entered is displayed underneath."
 msgstr ""
-"Aktuální týmový kód pro toto letadlo. Použijte ho pro hlášení ostatním "
-"členům týmu. Poslední zadaný kód letadla je zobrazen dole."
+"Aktuální týmový kód pro toto letadlo. Oznamte ho ostatním členům týmu. "
+"Poslední zadaný kód je zobrazen dole."
 
 #: src/InfoBoxes/Content/Factory.cpp:595
 #, no-c-format
@@ -10474,14 +10478,14 @@ msgstr "Ulož"
 
 #: Data/Input/default.xci:430
 msgid "Pilot event announced"
-msgstr "Událost označena pilotem (Pilot Event)"
+msgstr "Událost označena pilotem (Pilot EVent)"
 
 #: Data/Input/default.xci:433
 msgid ""
 "Pilot\n"
 "Event"
 msgstr ""
-"Označ\n"
+"Označ PEV\n"
 "událost"
 
 #: Data/Input/default.xci:530 Data/Input/default.xci:1103
