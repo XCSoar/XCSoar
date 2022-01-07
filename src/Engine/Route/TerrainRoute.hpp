@@ -34,8 +34,7 @@ public:
   friend class PrintHelper;
 
 private:
-  bool CheckClearance(const RouteLink &e,
-                      RoutePoint &inp) const noexcept override;
+  std::optional<RoutePoint> CheckClearance(const RouteLink &e) const noexcept override;
   void AddNearby(const RouteLink &e) noexcept override;
 };
 

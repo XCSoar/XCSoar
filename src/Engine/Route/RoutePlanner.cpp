@@ -344,12 +344,11 @@ RoutePlanner::AddShortcut(const RoutePoint &node) noexcept
 
   assert(pre.altitude <= node.altitude);
 
-  RoutePoint inx;
   const int vh = rpolars_route.CalcVHeight(r_shortcut);
   if (!rpolars_route.CanClimb())
     r_shortcut.second.altitude = r_shortcut.first.altitude + vh;
 
-  if (CheckClearance(r_shortcut, inx))
+  if (!CheckClearance(r_shortcut))
     LinkCleared(r_shortcut);
 }
 
@@ -357,8 +356,8 @@ void
 RoutePlanner::AddEdges(const RouteLink &e) noexcept
 {
   const bool this_short = e.IsShort();
-  RoutePoint inx;
-  if (!CheckClearance(e, inx)) {
+
+  if (CheckClearance(e)) {
     if (!this_short)
       AddNearby(e);
 
@@ -402,15 +401,14 @@ RoutePlanner::UpdatePolar(const GlideSettings &settings,
   - or do shortcut checks at end of add_edges loop
 */
 
-bool
-RoutePlanner::CheckClearanceTerrain(const RouteLink &e,
-                                    RoutePoint &inp) const noexcept
+std::optional<RoutePoint>
+RoutePlanner::CheckClearanceTerrain(const RouteLink &e) const noexcept
 {
   if (!terrain || !terrain->IsDefined())
-    return true;
+    return std::nullopt;
 
   count_terrain++;
-  return rpolars_route.CheckClearance(e, terrain, projection, inp);
+  return rpolars_route.CheckClearance(e, terrain, projection);
 }
 
 void

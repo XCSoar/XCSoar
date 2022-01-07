@@ -105,13 +105,12 @@ RoutePolars::CalcVHeight(const RouteLink &link) const noexcept
   return polar_glide.GetPoint(link.polar_index).gradient * link.d;
 }
 
-bool
-RoutePolars::CheckClearance(const RouteLink &e, const RasterMap* map,
-                            const FlatProjection &proj,
-                            RoutePoint &inp) const noexcept
+std::optional<RoutePoint>
+RoutePolars::CheckClearance(const RouteLink &e, const RasterMap *map,
+                            const FlatProjection &proj) const noexcept
 {
   if (!config.IsTerrainEnabled())
-    return true;
+    return std::nullopt;
 
   GeoPoint start = proj.Unproject(e.first);
   GeoPoint dest = proj.Unproject(e.second);
@@ -123,11 +122,10 @@ RoutePolars::CheckClearance(const RouteLink &e, const RasterMap* map,
                            e.second.altitude, CalcVHeight(e),
                            climb_ceiling, GetSafetyHeight());
   if (!intersection)
-    return true;
+    return std::nullopt;
 
-  inp = RoutePoint(proj.ProjectInteger(intersection.location),
-                   intersection.height);
-  return false;
+  return RoutePoint(proj.ProjectInteger(intersection.location),
+                    intersection.height);
 }
 
 RouteLink

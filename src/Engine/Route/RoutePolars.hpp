@@ -27,6 +27,8 @@
 #include "RoutePolar.hpp"
 #include "Point.hpp"
 
+#include <optional>
+
 #include <limits.h>
 
 class GlidePolar;
@@ -105,13 +107,14 @@ public:
    * @param e Link to evaluate
    * @param map RasterMap of terrain.
    * @param proj Task projection
-   * @param inp (output) clearance after intersection point
    *
-   * @return True if intersect occurs
+   * @return std::nullopt if intersect occurs or clearance after
+   * intersection point
    */
   [[gnu::pure]]
-  bool CheckClearance(const RouteLink &e, const RasterMap* map,
-                      const FlatProjection &proj, RoutePoint &inp) const noexcept;
+  std::optional<RoutePoint> CheckClearance(const RouteLink &e,
+                                           const RasterMap *map,
+                                           const FlatProjection &proj) const noexcept;
 
   /**
    * Rotate line from start to end either left or right

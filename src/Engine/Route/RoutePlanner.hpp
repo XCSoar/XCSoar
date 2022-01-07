@@ -364,12 +364,12 @@ protected:
    * the destination.
    *
    * @param e Link to attempt
-   * @param inp Output clearance point if intersection occurs
    *
-   * @return True if path is clear
+   * @return std::nullopt if path is clear or clearance point if
+   * intersection occurs
    */
-  bool CheckClearanceTerrain(const RouteLink &e,
-                             RoutePoint& inp) const noexcept;
+  [[gnu::pure]]
+  std::optional<RoutePoint> CheckClearanceTerrain(const RouteLink &e) const noexcept;
 
 private:
   /**
@@ -391,12 +391,12 @@ private:
    * the destination.
    *
    * @param e Link to attempt
-   * @param inp Output clearance point if intersection occurs
    *
-   * @return True if path is clear
+   * @return std::nullopt if path is clear or clearance point if
+   * intersection occurs
    */
-  virtual bool CheckClearance(const RouteLink &e,
-                              RoutePoint &inx) const noexcept = 0;
+  [[gnu::pure]]
+  virtual std::optional<RoutePoint> CheckClearance(const RouteLink &e) const noexcept = 0;
 
   /**
    * Given a desired path e, and a clearance point, generate candidates directly
