@@ -178,6 +178,18 @@ The following attributes are provided by ``xcsoar.blackboard``:
 
  * - Name
    - Description
+ * - ``clock``
+   - A monotonic wall clock time, in seconds, with an undefined
+     reference.
+ * - ``time``
+   - A wall clock time, in seconds, since midnight (UTC) of the day
+     the flight started.  Not strictly monotonic (can warp under
+     certain circumstances).  ``nil`` if unknown.
+ * - ``date_time_utc``
+   - A `date table <https://www.lua.org/pil/22.1.html>`__ describing
+     the current date and time (UTC), preferably from the GPS.  Not
+     strictly monotonic (can warp under certain circumstances).
+     ``nil`` if unknown.
  * - ``location``
    - The current location (table with keys ``longitude`` and
      ``latitude`` in degrees) according to GPS.

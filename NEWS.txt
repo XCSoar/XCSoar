@@ -11,6 +11,8 @@ Version 7.22 - not yet released
   - FLARM: send turn point names in task declaration
 * user interface
   - add 3x6 InfoBoxes layout
+* Lua scripting
+  - add blackboard.{clock,time,date_time_utc}
 * Android
   - use app-specific data directory by default
   - allow using all external storages
