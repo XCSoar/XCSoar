@@ -131,6 +131,8 @@ public:
   }
 };
 
+#ifndef GREYSCALE
+
 class MMXAlpha32PixelOperations : MMXAlphaPixelOperations {
 public:
   using PixelTraits = BGRAPixelTraits;
@@ -154,6 +156,8 @@ public:
     _CopyPixels((uint8_t *)p, (const uint8_t *)q, n * 4);
   }
 };
+
+#endif /* !GREYSCALE */
 
 #if CLANG_OR_GCC_VERSION(4,8)
 #pragma GCC diagnostic pop
