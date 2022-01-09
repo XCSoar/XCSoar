@@ -33,15 +33,33 @@ struct AltitudeState;
 /** Structure to hold airspace altitude boundary data */
 struct AirspaceAltitude
 {
-  /** Altitude AMSL (m) resolved from type */
+  /**
+   * Altitude AMSL (m) resolved from type.
+   *
+   * Only valid if reference==AltitudeReference::MSL.  If
+   * reference==AltitudeReference::AGL, a fallback value will be
+   * calculated derived from terrain height, if available.  If
+   * reference==AltitudeReference::STD, a fallback value will be
+   * calculated derived from QNH, if available.
+   */
   double altitude;
-  /** Flight level (100ft) for FL-referenced boundary */
+
+  /**
+   * Flight level (100ft) for FL-referenced boundary.
+   *
+   * Only valid if reference==AltitudeReference::STD.
+   */
   double flight_level;
-  /** Height above terrain (m) for ground-referenced boundary */
+
+  /**
+   * Height above terrain (m) for ground-referenced boundary.
+   *
+   * Only valid if reference==AltitudeReference::AGL.
+   */
   double altitude_above_terrain;
 
   /** Type of airspace boundary */
-  AltitudeReference reference;
+  AltitudeReference reference = AltitudeReference::NONE;
 
   /** 
    * Constructor.  Initialises to zero.
@@ -49,10 +67,7 @@ struct AirspaceAltitude
    * @return Initialised blank object
    */
   constexpr AirspaceAltitude() noexcept
-    :altitude(0),
-     flight_level(0),
-     altitude_above_terrain(0),
-     reference(AltitudeReference::NONE) {}
+    :reference(AltitudeReference::NONE) {}
 
   /**
    * Get Altitude AMSL (m) resolved from type.
@@ -76,8 +91,8 @@ struct AirspaceAltitude
    * @return True if this altitude limit is the terrain
    */
   constexpr bool IsTerrain() const noexcept {
-    return altitude_above_terrain <= 0 &&
-      reference == AltitudeReference::AGL;
+    return reference == AltitudeReference::AGL &&
+      altitude_above_terrain <= 0;
   }
 
   /**
