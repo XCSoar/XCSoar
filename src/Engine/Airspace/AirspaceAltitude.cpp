@@ -25,7 +25,7 @@
 #include "Navigation/Aircraft.hpp"
 
 void
-AirspaceAltitude::SetFlightLevel(const AtmosphericPressure &press) noexcept
+AirspaceAltitude::SetFlightLevel(const AtmosphericPressure press) noexcept
 {
   static constexpr double fl_feet_to_m(30.48);
   if (reference == AltitudeReference::STD)

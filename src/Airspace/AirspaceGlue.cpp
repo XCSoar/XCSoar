@@ -24,6 +24,7 @@ Copyright_License {
 #include "Airspace/AirspaceGlue.hpp"
 #include "Airspace/AirspaceParser.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
+#include "Atmosphere/Pressure.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Operation/Operation.hpp"
 #include "Language/Language.hpp"
@@ -73,7 +74,7 @@ ParseAirspaceFile(Airspaces &airspaces,
 void
 ReadAirspace(Airspaces &airspaces,
              RasterTerrain *terrain,
-             const AtmosphericPressure &press,
+             AtmosphericPressure press,
              OperationEnvironment &operation)
 {
   LogFormat("ReadAirspace");

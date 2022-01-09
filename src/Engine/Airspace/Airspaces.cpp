@@ -158,7 +158,7 @@ Airspaces::IsEmpty() const noexcept
 }
 
 void
-Airspaces::SetFlightLevels(const AtmosphericPressure &press) noexcept
+Airspaces::SetFlightLevels(const AtmosphericPressure press) noexcept
 {
   if ((int)press.GetHectoPascal() != (int)qnh.GetHectoPascal()) {
     qnh = press;

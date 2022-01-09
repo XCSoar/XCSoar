@@ -1055,7 +1055,7 @@ DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
 }
 
 bool
-DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
+DeviceDescriptor::PutQNH(const AtmosphericPressure value,
                          OperationEnvironment &env) noexcept
 {
   assert(InMainThread());

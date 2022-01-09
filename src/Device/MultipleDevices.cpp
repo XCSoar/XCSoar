@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "MultipleDevices.hpp"
+#include "Atmosphere/Pressure.hpp"
 #include "Descriptor.hpp"
 #include "Dispatcher.hpp"
 
@@ -121,7 +122,7 @@ MultipleDevices::PutStandbyFrequency(RadioFrequency frequency,
 }
 
 void
-MultipleDevices::PutQNH(const AtmosphericPressure &pres,
+MultipleDevices::PutQNH(AtmosphericPressure pres,
                         OperationEnvironment &env)
 {
   for (DeviceDescriptor *i : devices)

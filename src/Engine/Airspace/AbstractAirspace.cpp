@@ -29,6 +29,7 @@
 #include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "AirspaceIntersectionVector.hpp"
+#include "Atmosphere/Pressure.hpp"
 #include "util/StringAPI.hxx"
 
 #include <cassert>
@@ -57,7 +58,7 @@ AbstractAirspace::SetGroundLevel(const double alt) noexcept
 }
 
 void
-AbstractAirspace::SetFlightLevel(const AtmosphericPressure &press) noexcept
+AbstractAirspace::SetFlightLevel(const AtmosphericPressure press) noexcept
 {
   altitude_base.SetFlightLevel(press);
   altitude_top.SetFlightLevel(press);

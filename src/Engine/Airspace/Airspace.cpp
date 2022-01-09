@@ -23,6 +23,7 @@
 #include "Airspace.hpp"
 #include "AbstractAirspace.hpp"
 #include "AirspaceIntersectionVector.hpp"
+#include "Atmosphere/Pressure.hpp"
 
 Airspace::Airspace(AirspacePtr _airspace,
                    const FlatProjection &tp) noexcept
@@ -69,7 +70,7 @@ Airspace::NeedGroundLevel() const noexcept
 }
 
 void
-Airspace::SetFlightLevel(const AtmosphericPressure &press) const noexcept
+Airspace::SetFlightLevel(const AtmosphericPressure press) const noexcept
 {
   assert(airspace != nullptr);
   airspace->SetFlightLevel(press);

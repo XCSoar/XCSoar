@@ -116,7 +116,7 @@ struct AirspaceAltitude
    *
    * @param press Atmospheric pressure model (to obtain QNH)
    */
-  void SetFlightLevel(const AtmosphericPressure &press) noexcept;
+  void SetFlightLevel(AtmosphericPressure press) noexcept;
 
   static constexpr bool SortHighest(const AirspaceAltitude &a,
                                     const AirspaceAltitude &b) noexcept {
