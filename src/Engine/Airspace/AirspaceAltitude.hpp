@@ -48,7 +48,7 @@ struct AirspaceAltitude
    * 
    * @return Initialised blank object
    */
-  AirspaceAltitude() noexcept
+  constexpr AirspaceAltitude() noexcept
     :altitude(0),
      flight_level(0),
      altitude_above_terrain(0),
@@ -75,7 +75,7 @@ struct AirspaceAltitude
    *
    * @return True if this altitude limit is the terrain
    */
-  bool IsTerrain() const noexcept {
+  constexpr bool IsTerrain() const noexcept {
     return altitude_above_terrain <= 0 &&
       reference == AltitudeReference::AGL;
   }
@@ -92,7 +92,7 @@ struct AirspaceAltitude
   /**
    * Is it necessary to call SetGroundLevel() for this AirspaceAltitude?
    */
-  bool NeedGroundLevel() const noexcept {
+  constexpr bool NeedGroundLevel() const noexcept {
     return reference == AltitudeReference::AGL;
   }
 
@@ -105,8 +105,8 @@ struct AirspaceAltitude
    */
   void SetFlightLevel(const AtmosphericPressure &press) noexcept;
 
-  static bool SortHighest(const AirspaceAltitude &a,
-                          const AirspaceAltitude &b) noexcept {
+  static constexpr bool SortHighest(const AirspaceAltitude &a,
+                                    const AirspaceAltitude &b) noexcept {
     return a.altitude > b.altitude;
   }
 };
