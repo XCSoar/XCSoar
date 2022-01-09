@@ -93,7 +93,6 @@ public:
 private:
   void DrawInternal(Canvas &canvas,
                     const WindowProjection &projection,
-                    const AirspaceRendererSettings &settings,
                     AirspacePredicate visible,
                     const AirspaceWarningConfig &config) noexcept;
 

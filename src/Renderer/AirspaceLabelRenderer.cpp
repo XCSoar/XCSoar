@@ -63,7 +63,8 @@ AirspaceLabelRenderer::Draw(Canvas &canvas,
                             const AirspaceComputerSettings &computer_settings,
                             const AirspaceRendererSettings &settings) noexcept
 {
-  if (airspaces == nullptr || airspaces->IsEmpty())
+  if (settings.label_selection != AirspaceRendererSettings::LabelSelection::ALL ||
+      airspaces == nullptr || airspaces->IsEmpty())
     return;
 
   AirspaceWarningCopy awc;
@@ -75,13 +76,12 @@ AirspaceLabelRenderer::Draw(Canvas &canvas,
                                    aircraft, awc);
 
   DrawInternal(canvas,
-               projection, settings, visible, computer_settings.warnings);
+               projection, visible, computer_settings.warnings);
 }
 
 inline void
 AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
                                     const WindowProjection &projection,
-                                    const AirspaceRendererSettings &settings,
                                     AirspacePredicate visible,
                                     const AirspaceWarningConfig &config) noexcept
 {
@@ -94,21 +94,18 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
                  airspace.GetTop());
   }
 
-  if(settings.label_selection == AirspaceRendererSettings::LabelSelection::ALL)
-  {
-    labels.Sort(config);
+  labels.Sort(config);
 
-    // default paint settings
-    canvas.SetTextColor(look.label_text_color);
-    canvas.Select(*look.name_font);
-    canvas.Select(look.label_pen);
-    canvas.Select(look.label_brush);
-    canvas.SetBackgroundTransparent();
+  // default paint settings
+  canvas.SetTextColor(look.label_text_color);
+  canvas.Select(*look.name_font);
+  canvas.Select(look.label_pen);
+  canvas.Select(look.label_brush);
+  canvas.SetBackgroundTransparent();
 
-    // draw
-    for (const auto &label : labels)
-      DrawLabel(canvas, projection, label);
-  }
+  // draw
+  for (const auto &label : labels)
+    DrawLabel(canvas, projection, label);
 }
 
 inline void
