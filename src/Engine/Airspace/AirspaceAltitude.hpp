@@ -48,7 +48,7 @@ struct AirspaceAltitude
    * 
    * @return Initialised blank object
    */
-  AirspaceAltitude()
+  AirspaceAltitude() noexcept
     :altitude(0),
      flight_level(0),
      altitude_above_terrain(0),
@@ -59,20 +59,23 @@ struct AirspaceAltitude
    * For AGL types, this assumes the terrain height
    * is the terrain height at the aircraft.
    */
-  double GetAltitude(const AltitudeState &state) const;
+  [[gnu::pure]]
+  double GetAltitude(const AltitudeState &state) const noexcept;
 
   /** Is this altitude reference at or above the aircraft state? */
-  bool IsAbove(const AltitudeState &state, const double margin = 0) const;
+  [[gnu::pure]]
+  bool IsAbove(const AltitudeState &state, double margin = 0) const noexcept;
 
   /** Is this altitude reference at or below the aircraft state? */
-  bool IsBelow(const AltitudeState &state, const double margin = 0) const;
+  [[gnu::pure]]
+  bool IsBelow(const AltitudeState &state, double margin = 0) const noexcept;
 
   /**
    * Test whether airspace boundary is the terrain
    *
    * @return True if this altitude limit is the terrain
    */
-  bool IsTerrain() const {
+  bool IsTerrain() const noexcept {
     return altitude_above_terrain <= 0 &&
       reference == AltitudeReference::AGL;
   }
@@ -84,12 +87,12 @@ struct AirspaceAltitude
    *
    * @param alt Height of terrain at airspace center
    */
-  void SetGroundLevel(double alt);
+  void SetGroundLevel(double alt) noexcept;
 
   /**
    * Is it necessary to call SetGroundLevel() for this AirspaceAltitude?
    */
-  bool NeedGroundLevel() const {
+  bool NeedGroundLevel() const noexcept {
     return reference == AltitudeReference::AGL;
   }
 
@@ -100,9 +103,10 @@ struct AirspaceAltitude
    *
    * @param press Atmospheric pressure model (to obtain QNH)
    */
-  void SetFlightLevel(const AtmosphericPressure &press);
+  void SetFlightLevel(const AtmosphericPressure &press) noexcept;
 
-  static bool SortHighest(const AirspaceAltitude &a, const AirspaceAltitude &b) {
+  static bool SortHighest(const AirspaceAltitude &a,
+                          const AirspaceAltitude &b) noexcept {
     return a.altitude > b.altitude;
   }
 };
