@@ -30,6 +30,8 @@ Copyright_License {
 #include "util/NonCopyable.hpp"
 #include "util/StaticArray.hxx"
 
+#include <type_traits>
+
 struct AirspaceWarningConfig;
 
 class AirspaceLabelList : private NonCopyable {
@@ -40,6 +42,8 @@ public:
     AirspaceAltitude base;
     AirspaceAltitude top;
   };
+
+  static_assert(std::is_trivial_v<Label>);
 
 protected:
   StaticArray<Label, 512u> labels;

@@ -57,15 +57,13 @@ struct AirspaceAltitude
   double altitude_above_terrain;
 
   /** Type of airspace boundary */
-  AltitudeReference reference = AltitudeReference::NONE;
+  AltitudeReference reference;
 
-  /** 
-   * Constructor.  Initialises to zero.
-   * 
-   * @return Initialised blank object
-   */
-  constexpr AirspaceAltitude() noexcept
-    :reference(AltitudeReference::NONE) {}
+  static constexpr AirspaceAltitude Invalid() noexcept {
+    AirspaceAltitude a;
+    a.reference = AltitudeReference::NONE;
+    return a;
+  }
 
   /**
    * Get Altitude AMSL (m) resolved from type.
