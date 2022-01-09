@@ -61,30 +61,30 @@ class AirspaceLabelRenderer
 #endif
 
 public:
-  AirspaceLabelRenderer(const AirspaceLook &_look)
+  explicit AirspaceLabelRenderer(const AirspaceLook &_look) noexcept
     :look(_look) {}
 
-  const AirspaceLook &GetLook() const {
+  const AirspaceLook &GetLook() const noexcept {
     return look;
   }
 
-  const Airspaces *GetAirspaces() const {
+  const Airspaces *GetAirspaces() const noexcept {
     return airspaces;
   }
 
-  const ProtectedAirspaceWarningManager *GetWarningManager() const {
+  const ProtectedAirspaceWarningManager *GetWarningManager() const noexcept {
     return warning_manager;
   }
 
-  void SetAirspaces(const Airspaces *_airspaces) {
+  void SetAirspaces(const Airspaces *_airspaces) noexcept {
     airspaces = _airspaces;
   }
 
-  void SetAirspaceWarnings(const ProtectedAirspaceWarningManager *_warning_manager) {
+  void SetAirspaceWarnings(const ProtectedAirspaceWarningManager *_warning_manager) noexcept {
     warning_manager = _warning_manager;
   }
 
-  void Clear() {
+  void Clear() noexcept {
     airspaces = nullptr;
     warning_manager = nullptr;
   }
@@ -98,7 +98,7 @@ private:
                     const AirspaceRendererSettings &settings,
                     const AirspaceWarningCopy &awc,
                     AirspacePredicate visible,
-                    const AirspaceWarningConfig &config);
+                    const AirspaceWarningConfig &config) noexcept;
 
 public:
    /**
@@ -111,7 +111,7 @@ public:
             const WindowProjection &projection,
             const MoreData &basic, const DerivedInfo &calculated,
             const AirspaceComputerSettings &computer_settings,
-            const AirspaceRendererSettings &settings);
+            const AirspaceRendererSettings &settings) noexcept;
 };
 
 #endif

@@ -44,13 +44,13 @@ class AirspaceMapVisible
 public:
   AirspaceMapVisible(const AirspaceComputerSettings &_computer_settings,
                      const AirspaceRendererSettings &_renderer_settings,
-                     const AircraftState& _state,
-                     const AirspaceWarningCopy& _warnings)
+                     const AircraftState &_state,
+                     const AirspaceWarningCopy &_warnings) noexcept
     :visible_predicate(_computer_settings, _renderer_settings, _state),
      warnings(_warnings) {}
 
   [[gnu::pure]]
-  bool operator()(const AbstractAirspace& airspace) const {
+  bool operator()(const AbstractAirspace& airspace) const noexcept {
     return visible_predicate(airspace) ||
       warnings.IsInside(airspace) ||
       warnings.HasWarning(airspace);
@@ -65,7 +65,7 @@ AirspaceLabelRenderer::Draw(Canvas &canvas,
                             const WindowProjection &projection,
                             const MoreData &basic, const DerivedInfo &calculated,
                             const AirspaceComputerSettings &computer_settings,
-                            const AirspaceRendererSettings &settings)
+                            const AirspaceRendererSettings &settings) noexcept
 {
   if (airspaces == nullptr || airspaces->IsEmpty())
     return;
@@ -85,7 +85,7 @@ AirspaceLabelRenderer::Draw(Canvas &canvas,
                projection, settings, awc, visible, computer_settings.warnings);
 }
 
-void
+inline void
 AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
 #ifndef ENABLE_OPENGL
                                     Canvas &stencil_canvas,
@@ -94,7 +94,7 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
                                     const AirspaceRendererSettings &settings,
                                     const AirspaceWarningCopy &awc,
                                     AirspacePredicate visible,
-                                    const AirspaceWarningConfig &config)
+                                    const AirspaceWarningConfig &config) noexcept
 {
   AirspaceLabelList labels;
   for (const auto &i : airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
