@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_AIRSPACE_LABEL_RENDERER_HPP
 #define XCSOAR_AIRSPACE_LABEL_RENDERER_HPP
 
+#include "AirspaceLabelList.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "util/StaticArray.hxx"
 #include "Geo/GeoPoint.hpp"
@@ -95,6 +96,9 @@ private:
                     const AirspaceRendererSettings &settings,
                     AirspacePredicate visible,
                     const AirspaceWarningConfig &config) noexcept;
+
+  void DrawLabel(Canvas &canvas, const WindowProjection &projection,
+                 const AirspaceLabelList::Label &label) noexcept;
 
 public:
    /**

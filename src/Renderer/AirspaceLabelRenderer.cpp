@@ -21,7 +21,6 @@ Copyright_License {
 }
 */
 
-#include "AirspaceLabelList.hpp"
 #include "AirspaceLabelRenderer.hpp"
 #include "AirspaceRendererSettings.hpp"
 #include "Projection/WindowProjection.hpp"
@@ -107,48 +106,55 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
     canvas.SetBackgroundTransparent();
 
     // draw
-    TCHAR topText[NAME_SIZE + 1];
-    TCHAR baseText[NAME_SIZE + 1];
+    for (const auto &label : labels)
+      DrawLabel(canvas, projection, label);
+  }
+}
 
-    for (const auto &label : labels) {
-      // size of text
-      AirspaceFormatter::FormatAltitudeShort(topText, label.top, false);
-      PixelSize topSize = canvas.CalcTextSize(topText);
-      AirspaceFormatter::FormatAltitudeShort(baseText, label.base, false);
-      PixelSize baseSize = canvas.CalcTextSize(baseText);
-      const unsigned labelWidth =
-        std::max(topSize.width, baseSize.width) + 2 * Layout::GetTextPadding();
-      const unsigned labelHeight = topSize.height + baseSize.height;
+inline void
+AirspaceLabelRenderer::DrawLabel(Canvas &canvas,
+                                 const WindowProjection &projection,
+                                 const AirspaceLabelList::Label &label) noexcept
+{
+  TCHAR topText[NAME_SIZE + 1];
+  AirspaceFormatter::FormatAltitudeShort(topText, label.top, false);
+  const PixelSize topSize = canvas.CalcTextSize(topText);
 
-      // box
-      const auto pos = projection.GeoToScreen(label.pos);
-      PixelRect rect;
-      rect.left = pos.x - labelWidth / 2;
-      rect.top = pos.y;
-      rect.right = rect.left + labelWidth;
-      rect.bottom = rect.top + labelHeight;
-      canvas.DrawRectangle(rect);
+  TCHAR baseText[NAME_SIZE + 1];
+  AirspaceFormatter::FormatAltitudeShort(baseText, label.base, false);
+  const PixelSize baseSize = canvas.CalcTextSize(baseText);
+
+  const unsigned labelWidth =
+    std::max(topSize.width, baseSize.width) + 2 * Layout::GetTextPadding();
+  const unsigned labelHeight = topSize.height + baseSize.height;
+
+  // box
+  const auto pos = projection.GeoToScreen(label.pos);
+  PixelRect rect;
+  rect.left = pos.x - labelWidth / 2;
+  rect.top = pos.y;
+  rect.right = rect.left + labelWidth;
+  rect.bottom = rect.top + labelHeight;
+  canvas.DrawRectangle(rect);
 
 #ifdef USE_GDI
-      canvas.DrawLine(rect.left + Layout::GetTextPadding(),
-                      rect.top + labelHeight / 2,
-                      rect.right - Layout::GetTextPadding(),
-                      rect.top + labelHeight / 2);
+  canvas.DrawLine(rect.left + Layout::GetTextPadding(),
+                  rect.top + labelHeight / 2,
+                  rect.right - Layout::GetTextPadding(),
+                  rect.top + labelHeight / 2);
 #else
-      canvas.DrawHLine(rect.left + Layout::GetTextPadding(),
-                       rect.right - Layout::GetTextPadding(),
-                       rect.top + labelHeight / 2, look.label_pen.GetColor());
+  canvas.DrawHLine(rect.left + Layout::GetTextPadding(),
+                   rect.right - Layout::GetTextPadding(),
+                   rect.top + labelHeight / 2, look.label_pen.GetColor());
 #endif
 
-      // top text
-      canvas.DrawText(rect.GetTopRight().At(-int(Layout::GetTextPadding() + topSize.width),
-                                            0),
-                      topText);
+  // top text
+  canvas.DrawText(rect.GetTopRight().At(-int(Layout::GetTextPadding() + topSize.width),
+                                        0),
+                  topText);
 
-      // base text
-      canvas.DrawText(rect.GetBottomRight().At(-int(Layout::GetTextPadding() + baseSize.width),
-                                               -(int)baseSize.height),
-                      baseText);
-    }
-  }
+  // base text
+  canvas.DrawText(rect.GetBottomRight().At(-int(Layout::GetTextPadding() + baseSize.width),
+                                           -(int)baseSize.height),
+                  baseText);
 }
