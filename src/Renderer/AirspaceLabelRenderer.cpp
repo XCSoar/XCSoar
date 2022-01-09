@@ -59,9 +59,6 @@ public:
 
 void
 AirspaceLabelRenderer::Draw(Canvas &canvas,
-#ifndef ENABLE_OPENGL
-                            Canvas &stencil_canvas,
-#endif
                             const WindowProjection &projection,
                             const MoreData &basic, const DerivedInfo &calculated,
                             const AirspaceComputerSettings &computer_settings,
@@ -79,20 +76,13 @@ AirspaceLabelRenderer::Draw(Canvas &canvas,
                                    aircraft, awc);
 
   DrawInternal(canvas,
-#ifndef ENABLE_OPENGL
-               stencil_canvas,
-#endif
-               projection, settings, awc, visible, computer_settings.warnings);
+               projection, settings, visible, computer_settings.warnings);
 }
 
 inline void
 AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
-#ifndef ENABLE_OPENGL
-                                    Canvas &stencil_canvas,
-#endif
                                     const WindowProjection &projection,
                                     const AirspaceRendererSettings &settings,
-                                    const AirspaceWarningCopy &awc,
                                     AirspacePredicate visible,
                                     const AirspaceWarningConfig &config) noexcept
 {

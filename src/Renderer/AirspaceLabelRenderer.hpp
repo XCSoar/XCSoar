@@ -91,12 +91,8 @@ public:
 
 private:
   void DrawInternal(Canvas &canvas,
-#ifndef ENABLE_OPENGL
-                    Canvas &stencil_canvas,
-#endif
                     const WindowProjection &projection,
                     const AirspaceRendererSettings &settings,
-                    const AirspaceWarningCopy &awc,
                     AirspacePredicate visible,
                     const AirspaceWarningConfig &config) noexcept;
 
@@ -105,9 +101,6 @@ public:
    * Draw labels that are visible according to standard rules.
    */
   void Draw(Canvas &canvas,
-#ifndef ENABLE_OPENGL
-            Canvas &stencil_canvas,
-#endif
             const WindowProjection &projection,
             const MoreData &basic, const DerivedInfo &calculated,
             const AirspaceComputerSettings &computer_settings,
