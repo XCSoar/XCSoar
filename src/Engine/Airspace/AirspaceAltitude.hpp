@@ -25,8 +25,6 @@
 
 #include "Geo/AltitudeReference.hpp"
 
-#include <cstdint>
-
 class AtmosphericPressure;
 struct AltitudeState;
 
