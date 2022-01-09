@@ -121,8 +121,9 @@ AirspaceLabelRenderer::DrawLabel(Canvas &canvas,
   AirspaceFormatter::FormatAltitudeShort(baseText, label.base, false);
   const PixelSize baseSize = canvas.CalcTextSize(baseText);
 
+  const unsigned padding = Layout::GetTextPadding();
   const unsigned labelWidth =
-    std::max(topSize.width, baseSize.width) + 2 * Layout::GetTextPadding();
+    std::max(topSize.width, baseSize.width) + 2 * padding;
   const unsigned labelHeight = topSize.height + baseSize.height;
 
   // box
@@ -135,23 +136,23 @@ AirspaceLabelRenderer::DrawLabel(Canvas &canvas,
   canvas.DrawRectangle(rect);
 
 #ifdef USE_GDI
-  canvas.DrawLine(rect.left + Layout::GetTextPadding(),
+  canvas.DrawLine(rect.left + padding,
                   rect.top + labelHeight / 2,
-                  rect.right - Layout::GetTextPadding(),
+                  rect.right - padding,
                   rect.top + labelHeight / 2);
 #else
-  canvas.DrawHLine(rect.left + Layout::GetTextPadding(),
-                   rect.right - Layout::GetTextPadding(),
+  canvas.DrawHLine(rect.left + padding,
+                   rect.right - padding,
                    rect.top + labelHeight / 2, look.label_pen.GetColor());
 #endif
 
   // top text
-  canvas.DrawText(rect.GetTopRight().At(-int(Layout::GetTextPadding() + topSize.width),
+  canvas.DrawText(rect.GetTopRight().At(-int(padding + topSize.width),
                                         0),
                   topText);
 
   // base text
-  canvas.DrawText(rect.GetBottomRight().At(-int(Layout::GetTextPadding() + baseSize.width),
+  canvas.DrawText(rect.GetBottomRight().At(-int(padding + baseSize.width),
                                            -(int)baseSize.height),
                   baseText);
 }
