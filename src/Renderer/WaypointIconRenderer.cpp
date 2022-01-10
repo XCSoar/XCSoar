@@ -35,7 +35,7 @@ Copyright_License {
 [[gnu::pure]]
 static const MaskedIcon &
 GetWaypointIcon(const WaypointLook &look, const Waypoint &wp,
-                bool small_icons, const bool in_task)
+                bool small_icons, const bool in_task) noexcept
 {
   if (small_icons && !in_task)
     return look.small_icon;
@@ -70,7 +70,7 @@ GetWaypointIcon(const WaypointLook &look, const Waypoint &wp,
 
 static void
 DrawLandableBase(Canvas &canvas, const PixelPoint &pt, bool airport,
-                 const double radius)
+                 const double radius) noexcept
 {
   int iradius = iround(radius);
   if (airport)
@@ -91,7 +91,7 @@ DrawLandableBase(Canvas &canvas, const PixelPoint &pt, bool airport,
 
 static void
 DrawLandableRunway(Canvas &canvas, const PixelPoint &pt,
-                   const Angle angle, double radius, double width)
+                   const Angle angle, double radius, double width) noexcept
 {
   if (radius <= 0)
     return;
@@ -119,7 +119,7 @@ DrawLandableRunway(Canvas &canvas, const PixelPoint &pt,
 void
 WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
                                    const PixelPoint &point,
-                                   Reachability reachable)
+                                   Reachability reachable) noexcept
 {
 
   if (!settings.vector_landable_rendering) {
@@ -204,7 +204,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
 
 void
 WaypointIconRenderer::Draw(const Waypoint &waypoint, const PixelPoint &point,
-                           Reachability reachable, bool in_task)
+                           Reachability reachable, bool in_task) noexcept
 {
   if (waypoint.IsLandable())
     DrawLandable(waypoint, point, reachable);

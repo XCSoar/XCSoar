@@ -52,17 +52,18 @@ public:
   WaypointIconRenderer(const WaypointRendererSettings &_settings,
                        const WaypointLook &_look,
                        Canvas &_canvas, bool _small_icons = false,
-                       Angle _screen_rotation = Angle::Zero())
+                       Angle _screen_rotation = Angle::Zero()) noexcept
     :settings(_settings), look(_look),
      canvas(_canvas), small_icons(_small_icons),
      screen_rotation(_screen_rotation) {}
 
   void Draw(const Waypoint &waypoint, const PixelPoint &point,
-            Reachability reachable = Unreachable, bool in_task = false);
+            Reachability reachable = Unreachable,
+            bool in_task = false) noexcept;
 
 private:
   void DrawLandable(const Waypoint &waypoint, const PixelPoint &point,
-                    Reachability reachable = Unreachable);
+                    Reachability reachable = Unreachable) noexcept;
 };
 
 #endif
