@@ -26,12 +26,6 @@ Copyright_License {
 
 #include "AirspaceLabelList.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
-#include "util/StaticArray.hxx"
-#include "Geo/GeoPoint.hpp"
-
-#ifndef ENABLE_OPENGL
-#include "TransparentRendererCache.hpp"
-#endif
 
 struct AirspaceLook;
 struct MoreData;
@@ -41,7 +35,6 @@ struct AirspaceRendererSettings;
 struct AirspaceWarningConfig;
 class Airspaces;
 class ProtectedAirspaceWarningManager;
-class AirspaceWarningCopy;
 class Canvas;
 class WindowProjection;
 
@@ -50,16 +43,6 @@ class AirspaceLabelRenderer
   const AirspaceLook &look;
   const Airspaces *airspaces = nullptr;
   const ProtectedAirspaceWarningManager *warning_manager = nullptr;
-
-  StaticArray<GeoPoint,32> intersections;
-
-#ifndef ENABLE_OPENGL
-  /**
-   * This object caches the airspace fill.  This avoids drawing it
-   * again and again each frame when nothing has changed.
-   */
-  TransparentRendererCache fill_cache;
-#endif
 
 public:
   explicit AirspaceLabelRenderer(const AirspaceLook &_look) noexcept
