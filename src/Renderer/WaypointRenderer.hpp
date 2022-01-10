@@ -64,11 +64,11 @@ public:
     return look;
   }
 
-  void set_way_points(const Waypoints *_way_points) noexcept {
+  void SetWaypoints(const Waypoints *_way_points) noexcept {
     way_points = _way_points;
   }
 
-  void render(Canvas &canvas, LabelBlock &label_block,
+  void Render(Canvas &canvas, LabelBlock &label_block,
               const MapWindowProjection &projection,
               const WaypointRendererSettings &settings,
               const PolarSettings &polar_settings,

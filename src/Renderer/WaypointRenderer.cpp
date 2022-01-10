@@ -476,7 +476,7 @@ MapWaypointLabelRender(Canvas &canvas, PixelSize clip_size,
 }
 
 void
-WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
+WaypointRenderer::Render(Canvas &canvas, LabelBlock &label_block,
                          const MapWindowProjection &projection,
                          const struct WaypointRendererSettings &settings,
                          const PolarSettings &polar_settings,

@@ -171,7 +171,7 @@ TargetMapWindow::DrawWaypoints(Canvas &canvas)
   WaypointRendererSettings settings = settings_map.waypoint;
   settings.display_text_type = WaypointRendererSettings::DisplayTextType::NAME;
 
-  way_point_renderer.render(canvas, label_block,
+  way_point_renderer.Render(canvas, label_block,
                             projection, settings,
                             GetComputerSettings().polar,
                             GetComputerSettings().task,

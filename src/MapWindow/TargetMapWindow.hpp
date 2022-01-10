@@ -127,7 +127,7 @@ public:
   }
 
   void SetWaypoints(const Waypoints *way_points) {
-    way_point_renderer.set_way_points(way_points);
+    way_point_renderer.SetWaypoints(way_points);
   }
 
   void SetTask(ProtectedTaskManager *_task) {
