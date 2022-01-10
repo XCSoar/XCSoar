@@ -77,8 +77,7 @@ struct VisibleWaypoint {
   }
 
   bool IsReachable() const noexcept {
-    return reachable == WaypointReachability::STRAIGHT ||
-      reachable == WaypointReachability::TERRAIN;
+    return ::IsReachable(reachable);
   }
 
   void CalculateReachabilityDirect(const MoreData &basic,

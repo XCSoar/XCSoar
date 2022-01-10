@@ -31,3 +31,19 @@ enum class WaypointReachability : uint8_t {
   STRAIGHT,
   TERRAIN,
 };
+
+static constexpr bool
+IsReachable(WaypointReachability r) noexcept
+{
+  switch (r) {
+  case WaypointReachability::INVALID:
+  case WaypointReachability::UNREACHABLE:
+    break;
+
+  case WaypointReachability::STRAIGHT:
+  case WaypointReachability::TERRAIN:
+    return true;
+  }
+
+  return false;
+}
