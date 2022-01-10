@@ -48,14 +48,6 @@ class WaypointRenderer : private NonCopyable {
   const WaypointLook &look;
 
 public:
-  enum Reachability
-  {
-    Invalid,
-    Unreachable,
-    ReachableStraight,
-    ReachableTerrain,
-  };
-
   WaypointRenderer(const Waypoints *_way_points,
                    const WaypointLook &_look) noexcept
     :way_points(_way_points), look(_look) {}

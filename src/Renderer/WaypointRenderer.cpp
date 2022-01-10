@@ -63,7 +63,7 @@ struct VisibleWaypoint {
 
   ReachResult reach;
 
-  WaypointRenderer::Reachability reachable;
+  WaypointReachability reachable;
 
   bool in_task;
 
@@ -72,13 +72,13 @@ struct VisibleWaypoint {
     waypoint = _waypoint;
     point = _point;
     reach.Clear();
-    reachable = WaypointRenderer::Invalid;
+    reachable = WaypointReachability::INVALID;
     in_task = _in_task;
   }
 
   bool IsReachable() const noexcept {
-    return reachable == WaypointRenderer::ReachableStraight ||
-      reachable == WaypointRenderer::ReachableTerrain;
+    return reachable == WaypointReachability::STRAIGHT ||
+      reachable == WaypointReachability::TERRAIN;
   }
 
   void CalculateReachabilityDirect(const MoreData &basic,
@@ -99,9 +99,9 @@ struct VisibleWaypoint {
 
     reach.direct = result.pure_glide_altitude_difference;
     if (result.pure_glide_altitude_difference > 0)
-      reachable = WaypointRenderer::ReachableTerrain;
+      reachable = WaypointReachability::TERRAIN;
     else
-      reachable = WaypointRenderer::Unreachable;
+      reachable = WaypointReachability::UNREACHABLE;
   }
 
   bool CalculateRouteArrival(const RoutePlannerGlue &route_planner,
@@ -126,12 +126,12 @@ struct VisibleWaypoint {
       return;
 
     if (!reach.IsReachableDirect())
-      reachable = WaypointRenderer::Unreachable;
+      reachable = WaypointReachability::UNREACHABLE;
     else if (task_behaviour.route_planner.IsReachEnabled() &&
              !reach.IsReachableTerrain())
-      reachable = WaypointRenderer::ReachableStraight;
+      reachable = WaypointReachability::STRAIGHT;
     else
-      reachable = WaypointRenderer::ReachableTerrain;
+      reachable = WaypointReachability::TERRAIN;
   }
 
   void DrawSymbol(const struct WaypointRendererSettings &settings,
@@ -140,7 +140,7 @@ struct VisibleWaypoint {
                   Angle screen_rotation) const noexcept {
     WaypointIconRenderer wir(settings, look,
                              canvas, small_icons, screen_rotation);
-    wir.Draw(*waypoint, point, (WaypointIconRenderer::Reachability)reachable,
+    wir.Draw(*waypoint, point, reachable,
              in_task);
   }
 };
@@ -231,7 +231,7 @@ protected:
 
   void FormatLabel(TCHAR *buffer, size_t buffer_size,
                    const Waypoint &way_point,
-                   WaypointRenderer::Reachability reachable,
+                   WaypointReachability reachable,
                    const ReachResult &reach) const noexcept {
     FormatTitle(buffer, buffer_size - 20, way_point);
 
@@ -271,7 +271,7 @@ protected:
       return;
     }
 
-    if (reachable == WaypointRenderer::Invalid)
+    if (reachable == WaypointReachability::INVALID)
       return;
 
     if (!reach.IsReachableDirect() && !way_point.flags.watched)
@@ -369,7 +369,7 @@ protected:
       sc.x += 5;
 
     labels.Add(buffer, sc, text_mode, bold,
-               vwp.reachable != WaypointRenderer::Invalid ? vwp.reach.direct : INT_MIN,
+               vwp.reachable != WaypointReachability::INVALID ? vwp.reach.direct : INT_MIN,
                vwp.in_task, way_point.IsLandable(), way_point.IsAirport(),
                watchedWaypoint);
   }
