@@ -154,6 +154,9 @@ ParseStyle(const TCHAR* src, Waypoint::Type &type)
   case 15:
     type = Waypoint::Type::POWERPLANT;
     break;
+  case 18:
+    type = Waypoint::Type::MARKER;
+    break;
   }
 
   return true;
