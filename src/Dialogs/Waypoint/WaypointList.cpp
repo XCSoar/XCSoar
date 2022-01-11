@@ -393,7 +393,7 @@ CreateTypeDataField(DataFieldListener *listener)
                          ProfileKeys::AdditionalWaypointFile);
   ReplaceProfilePathBase(*df, (unsigned)TypeFilter::MAP,
                          ProfileKeys::MapFile);
-
+  if(!dialog_state.IsDefined()) dialog_state.type_index = TypeFilter::AIRPORT; //start default 
   df->SetValue(dialog_state.type_index);
   return df;
 }
