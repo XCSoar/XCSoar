@@ -26,8 +26,12 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "util/ExtractParameters.hpp"
 #include "util/Macros.hpp"
+#include "util/IterableSplitString.hxx"
+#include "util/tstring_view.hpp"
 
 #include <stdlib.h>
+#include <string.h>
+#include <filesystem>
 
 static bool
 ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
@@ -175,6 +179,8 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
     iRWDir = 7,
     iRWLen = 8,
     iRWWidth = 9,
+    iUserData = 12,
+    iPics = 13
   };
 
   // If (end-of-file or comment)
@@ -217,6 +223,9 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
          */
         iFrequency = 10;
         iDescription = 11;
+      } else {
+        iFrequency = 9;
+        iDescription = 10;
       }
       return true;
     }
@@ -299,6 +308,19 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
     new_waypoint.comment = params[iDescription];
   }
 
+  if (iUserData < n_params) {
+    new_waypoint.details = params[iUserData];
+  }
+
+  if (iPics < n_params) {
+    for (tstring_view i : TIterableSplitString(params[iPics], _T(';'))) {
+      std::filesystem::path picpath = i;
+      tstring picname = picpath.filename().native();
+      tstring p = _T("pics/");
+      p += picname;
+      new_waypoint.files_embed.emplace_front(p);
+    }
+  }
   waypoints.Append(std::move(new_waypoint));
   return true;
 }
