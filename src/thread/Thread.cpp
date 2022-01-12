@@ -32,6 +32,10 @@ Copyright_License {
 
 #include <cassert>
 
+#ifndef HAVE_POSIX  // = _WIN32? <<<<<<< 2021-12-26
+# include "LogFile.hpp"
+#endif  // >>>>>>> 2021-12-26
+
 void
 Thread::SetIdlePriority() noexcept
 {
@@ -94,7 +98,10 @@ Thread::Join() noexcept
   pthread_join(handle, nullptr);
   defined = false;
 #else
-  ::WaitForSingleObject(handle, INFINITE);
+  DWORD result = ::WaitForSingleObject(handle, 1000);
+  if (result != WAIT_OBJECT_0) {  // TODO(August2111): Too much? INFINITE);
+      LogFormat("WaitForSingleObject with error %lu", result);
+  }
   ::CloseHandle(handle);
   handle = nullptr;
 #endif
