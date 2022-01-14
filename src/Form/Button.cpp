@@ -249,7 +249,7 @@ Button::GetState() const noexcept
     return ButtonState::PRESSED;
   else if (HasCursorKeys() && HasFocus())
     return ButtonState::FOCUSED;
-  else if (HasCursorKeys() && (selected && !HasPointer()))
+  else if (HasCursorKeys() && selected)
     return ButtonState::SELECTED;
   else
     return ButtonState::ENABLED;

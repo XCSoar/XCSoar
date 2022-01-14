@@ -353,7 +353,7 @@ ButtonPanel::KeyPress(unsigned key_code) noexcept
     }
   }
 
-  if (selected_index >= 0 && !HasPointer()) {
+  if (selected_index >= 0) {
     if (key_code == KEY_LEFT) {
       SelectPrevious();
       return true;

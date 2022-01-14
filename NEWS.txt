@@ -10,6 +10,7 @@ Version 7.22 - not yet released
 * devices
   - FLARM: send turn point names in task declaration
 * user interface
+  - allow cursor navigation in most dialogs (for OpenVario)
   - add 3x6 InfoBoxes layout
 * Lua scripting
   - add blackboard.{clock,time,date_time_utc}
