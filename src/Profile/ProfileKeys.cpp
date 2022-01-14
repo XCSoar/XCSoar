@@ -275,6 +275,8 @@ const char PCMetPassword[] = "PCMetPassword";
 const char PCMetFtpUsername[] = "PCMetFtpUsername";
 const char PCMetFtpPassword[] = "PCMetFtpPassword";
 
+const char EnableThermalInformationMap[] = "EnableThermalInformationMap";
+
 const char EnableLocationMapItem[] = "EnableLocationMapItem";
 const char EnableArrivalAltitudeMapItem[] = "EnableArrivalAltitudeMapItem";
 

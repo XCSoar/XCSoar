@@ -63,6 +63,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Audio/Features.hpp"
 #include "UtilsSettings.hpp"
+#include "net/http/Features.hpp"
 
 #ifdef HAVE_PCM_PLAYER
 #include "Panels/AudioVarioConfigPanel.hpp"
@@ -78,7 +79,7 @@ Copyright_License {
 
 #include "Panels/CloudConfigPanel.hpp"
 
-#ifdef HAVE_PCMET
+#if defined(HAVE_PCMET) || defined(HAVE_HTTP)
 #include "Panels/WeatherConfigPanel.hpp"
 #endif
 
@@ -148,7 +149,7 @@ static constexpr TabMenuPage setup_pages[] = {
   { N_("Tracking"), CreateTrackingConfigPanel },
 #endif
   { _T("XCSoar Cloud"), CreateCloudConfigPanel },
-#ifdef HAVE_PCMET
+#if defined(HAVE_PCMET) || defined(HAVE_HTTP)
   { N_("Weather"), CreateWeatherConfigPanel },
 #endif
   { _T("WeGlide"), CreateWeGlideConfigPanel },

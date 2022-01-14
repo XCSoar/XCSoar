@@ -26,7 +26,9 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Weather/Settings.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "net/http/Features.hpp"
 #include "Interface.hpp"
+#include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "util/NumberParser.hpp"
 
@@ -38,6 +40,10 @@ enum ControlIndex {
   PCMET_FTP_USER,
   PCMET_FTP_PASSWORD,
 #endif
+#endif
+
+#ifdef HAVE_HTTP
+  ENABLE_TIM,
 #endif
 };
 
@@ -75,6 +81,12 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent,
               settings.pcmet.ftp_credentials.password);
 #endif
 #endif
+
+#ifdef HAVE_HTTP
+  AddBoolean(_T("Thermal Information Map"),
+             _("Show thermal locations downloaded from Thermal Information Map (thermalmap.info)."),
+             settings.enable_tim);
+#endif
 }
 
 bool
@@ -99,6 +111,11 @@ WeatherConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValue(PCMET_FTP_PASSWORD, ProfileKeys::PCMetFtpPassword,
                        settings.pcmet.ftp_credentials.password);
 #endif
+#endif
+
+#ifdef HAVE_HTTP
+  changed |= SaveValue(ENABLE_TIM, ProfileKeys::EnableThermalInformationMap,
+                       settings.enable_tim);
 #endif
 
   _changed |= changed;

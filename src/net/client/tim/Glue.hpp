@@ -21,32 +21,49 @@ Copyright_License {
 }
 */
 
-#include "WeatherProfile.hpp"
-#include "Map.hpp"
-#include "ProfileKeys.hpp"
-#include "Weather/Settings.hpp"
+#pragma once
 
-#ifdef HAVE_PCMET
+#include "co/InjectTask.hxx"
+#include "event/DeferEvent.hxx"
+#include "time/PeriodClock.hpp"
 
-namespace Profile {
-  static void Load(const ProfileMap &map, PCMetSettings &settings) {
-    map.Get(ProfileKeys::PCMetUsername, settings.www_credentials.username);
-    map.Get(ProfileKeys::PCMetPassword, settings.www_credentials.password);
-    map.Get(ProfileKeys::PCMetFtpUsername, settings.ftp_credentials.username);
-    map.Get(ProfileKeys::PCMetFtpPassword, settings.ftp_credentials.password);
+#include <vector>
+
+struct NMEAInfo;
+struct GeoPoint;
+class CurlGlobal;
+
+/**
+ * Client for ThermalInfoMap (https://thermalmap.info/api-doc.php)
+ */
+namespace TIM {
+
+struct Thermal;
+
+class Glue {
+  CurlGlobal &curl;
+
+  PeriodClock clock;
+
+  std::vector<Thermal> thermals;
+
+  std::vector<Thermal> new_thermals;
+
+  Co::InjectTask inject_task;
+
+public:
+  explicit Glue(CurlGlobal &_curl) noexcept;
+  ~Glue() noexcept;
+
+  const auto &Get() const noexcept {
+    return thermals;
   }
-}
 
-#endif
+  void OnTimer(const NMEAInfo &basic) noexcept;
 
-void
-Profile::Load(const ProfileMap &map, WeatherSettings &settings)
-{
-#ifdef HAVE_PCMET
-  Load(map, settings.pcmet);
-#endif
+private:
+  Co::InvokeTask Start(const GeoPoint &location);
+  void OnCompletion(std::exception_ptr error) noexcept;
+};
 
-#ifdef HAVE_HTTP
-  map.Get(ProfileKeys::EnableThermalInformationMap, settings.enable_tim);
-#endif
-}
+} // namespace TIM

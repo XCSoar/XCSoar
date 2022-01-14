@@ -73,6 +73,7 @@ Copyright_License {
 #include "io/async/GlobalAsioThread.hpp"
 #include "net/http/Init.hpp"
 #include "net/http/DownloadManager.hpp"
+#include "net/client/tim/Glue.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "Hardware/DisplayGlue.hpp"
 #include "util/Compiler.h"
@@ -532,6 +533,12 @@ Startup()
 #endif
 #endif
 
+#ifdef HAVE_HTTP
+  tim_glue = new TIM::Glue(*Net::curl);
+  if (map_window != nullptr)
+    map_window->SetThermalInfoMap(tim_glue);
+#endif
+
   assert(!global_running);
   global_running = true;
 
@@ -690,6 +697,11 @@ Shutdown()
 #ifdef HAVE_NOAA
   delete noaa_store;
   noaa_store = nullptr;
+#endif
+
+#ifdef HAVE_HTTP
+  delete tim_glue;
+  tim_glue = nullptr;
 #endif
 
 #ifdef HAVE_TRACKING

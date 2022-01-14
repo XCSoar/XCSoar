@@ -12,6 +12,8 @@ Version 7.22 - not yet released
 * user interface
   - allow cursor navigation in most dialogs (for OpenVario)
   - add 3x6 InfoBoxes layout
+* weather
+  - Thermal Info Map integration
 * Lua scripting
   - add blackboard.{clock,time,date_time_utc}
 * Android

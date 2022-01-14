@@ -39,6 +39,7 @@ Copyright_License {
 #include "BallastDumpManager.hpp"
 #include "Operation/Operation.hpp"
 #include "Tracking/TrackingGlue.hpp"
+#include "net/client/tim/Glue.hpp"
 #include "ui/event/Idle.hpp"
 #include "Dialogs/Tracking/CloudEnableDialog.hpp"
 
@@ -267,5 +268,11 @@ ProcessTimer() noexcept
     tracking->SetSettings(CommonInterface::GetComputerSettings().tracking);
     tracking->OnTimer(CommonInterface::Basic(), CommonInterface::Calculated());
   }
+#endif
+
+#ifdef HAVE_HTTP
+  if (tim_glue != nullptr &&
+    CommonInterface::GetComputerSettings().weather.enable_tim)
+    tim_glue->OnTimer(CommonInterface::Basic());
 #endif
 }

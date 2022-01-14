@@ -63,6 +63,8 @@ namespace SkyLinesTracking {
   struct Data;
 }
 
+namespace TIM { class Glue; }
+
 class MapWindow :
   public DoubleBufferWindow,
   public MapWindowBlackboard
@@ -158,6 +160,10 @@ protected:
   const SkyLinesTracking::Data *skylines_data = nullptr;
 #endif
 
+#ifdef HAVE_HTTP
+  const TIM::Glue *tim_glue = nullptr;
+#endif
+
   bool compass_visible = true;
 
 #ifndef ENABLE_OPENGL
@@ -246,6 +252,12 @@ public:
 #ifdef HAVE_SKYLINES_TRACKING
   void SetSkyLinesData(const SkyLinesTracking::Data *_data) {
     skylines_data = _data;
+  }
+#endif
+
+#ifdef HAVE_HTTP
+  void SetThermalInfoMap(const TIM::Glue *_tim) {
+    tim_glue = _tim;
   }
 #endif
 
