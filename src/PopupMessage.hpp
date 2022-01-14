@@ -154,13 +154,13 @@ public:
   bool Acknowledge(Type type=MSG_UNKNOWN);
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   unsigned CalculateWidth() const;
 
-  gcc_pure
+  [[gnu::pure]]
   PixelRect GetRect(unsigned width, unsigned height) const;
 
-  gcc_pure
+  [[gnu::pure]]
   PixelRect GetRect() const;
 
   void UpdateTextAndLayout();

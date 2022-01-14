@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_WINDOW_LIST_HPP
 
 #include "../Window.hpp"
-#include "util/Compiler.h"
 
 #include <boost/intrusive/list.hpp>
 
@@ -71,13 +70,13 @@ public:
    */
   void Clear() noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool Contains(const Window &w) const noexcept;
 
   /**
    * Is this window covered by a sibling?
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsCovered(const Window &w) const noexcept;
 
   void BringToTop(Window &w) noexcept;
@@ -86,26 +85,26 @@ public:
   /**
    * Locate a window by its relative coordinates.
    */
-  gcc_pure
+  [[gnu::pure]]
   Window *FindAt(PixelPoint p) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   static Window *FindControl(List::iterator i, List::iterator end) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   static Window *FindControl(List::reverse_iterator i,
                              List::reverse_iterator end) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   Window *FindFirstControl() noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   Window *FindLastControl() noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   Window *FindNextChildControl(Window *reference) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   Window *FindPreviousChildControl(Window *reference) noexcept;
 
   void Paint(Canvas &canvas) noexcept;

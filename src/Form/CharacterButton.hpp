@@ -50,7 +50,7 @@ public:
   /**
    * Convert GetCharacter() to upper case (ASCII only).
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetUpperCharacter() const noexcept;
 
   void SetCharacter(unsigned character) noexcept;

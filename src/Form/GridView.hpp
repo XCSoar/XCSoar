@@ -78,7 +78,7 @@ public:
     return num_rows;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   signed GetIndexOfItemInFocus() const;
 
   void MoveFocus(Direction direction);
@@ -86,10 +86,10 @@ public:
   void RefreshLayout();
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   signed GetNextItemIndex(unsigned currIndex, Direction direction) const;
 
-  gcc_pure
+  [[gnu::pure]]
   signed GetNextEnabledItemIndex(signed currIndex, Direction direction) const;
 
   /* virtual methods from class Window */

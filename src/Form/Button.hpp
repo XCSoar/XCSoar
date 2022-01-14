@@ -113,7 +113,7 @@ public:
 
   void SetSelected(bool _selected);
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetMinimumWidth() const;
 
   /**

@@ -66,7 +66,7 @@ public:
     text_color = color;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetTextHeight() const noexcept;
 
 protected:

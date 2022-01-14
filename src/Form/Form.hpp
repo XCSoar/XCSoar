@@ -124,7 +124,7 @@ public:
    * Returns a reference to the main window.  This is used by dialogs
    * when they want to open another dialog.
    */
-  gcc_pure
+  [[gnu::pure]]
   UI::SingleWindow &GetMainWindow();
 
   const DialogLook &GetLook() const {

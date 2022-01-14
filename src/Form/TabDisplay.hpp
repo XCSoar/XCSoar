@@ -58,10 +58,10 @@ public:
     renderer.InvalidateLayout();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetRecommendedWidth(const DialogLook &look) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetRecommendedHeight(const DialogLook &look) const noexcept;
 
   /**
@@ -106,10 +106,10 @@ public:
     return look;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetRecommendedColumnWidth() const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetRecommendedRowHeight() const noexcept;
 
   bool IsVertical() const noexcept {
@@ -124,7 +124,7 @@ public:
 
   void Add(const TCHAR *caption, const MaskedIcon *icon=nullptr) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetCaption(unsigned i) const noexcept {
     return buttons[i]->caption.c_str();
   }
@@ -132,7 +132,7 @@ public:
   /**
    * @return -1 if there is no button at the specified position
    */
-  gcc_pure
+  [[gnu::pure]]
   int GetButtonIndexAt(PixelPoint p) const noexcept;
 
 private:

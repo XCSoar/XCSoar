@@ -85,13 +85,13 @@ public:
     return *font;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetVisibleRows() const;
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetRowCount() const;
 #else
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetRowCount() const {
 
     return ::SendMessage(hWnd, EM_GETLINECOUNT, 0, 0);

@@ -75,7 +75,7 @@ public:
    */
   void CancelDialog() noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool HasDialog() const noexcept {
     return !dialogs.empty();
   }
@@ -83,7 +83,7 @@ public:
   /**
    * Check whether the specified dialog is the top-most one.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsTopDialog(const WndForm &dialog) const noexcept {
     assert(HasDialog());
 
@@ -98,7 +98,7 @@ public:
 
 #ifndef USE_WINUSER
 protected:
-  gcc_pure
+  [[gnu::pure]]
   bool FilterMouseEvent(PixelPoint pt, Window *allowed) const noexcept;
 #endif
 
@@ -108,7 +108,7 @@ public:
    * rejected when a modal dialog is active, and the event should go
    * to a window outside of the dialog.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool FilterEvent(const Event &event, Window *allowed) const noexcept;
 
 protected:
