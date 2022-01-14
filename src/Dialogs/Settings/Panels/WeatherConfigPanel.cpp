@@ -34,8 +34,10 @@ enum ControlIndex {
 #ifdef HAVE_PCMET
   PCMET_USER,
   PCMET_PASSWORD,
+#if 0
   PCMET_FTP_USER,
   PCMET_FTP_PASSWORD,
+#endif
 #endif
 };
 
@@ -59,6 +61,7 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent,
 
   RowFormWidget::Prepare(parent, rc);
 
+#ifdef HAVE_PCMET
   AddText(_T("pc_met Username"), _T(""),
           settings.pcmet.www_credentials.username);
   AddPassword(_T("pc_met Password"), _T(""),
@@ -70,6 +73,7 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent,
           settings.pcmet.ftp_credentials.username);
   AddPassword(_T("pc_met FTP Password"), _T(""),
               settings.pcmet.ftp_credentials.password);
+#endif
 #endif
 }
 
