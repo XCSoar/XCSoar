@@ -164,5 +164,8 @@ ButtonPanelWidget::HasFocus() const noexcept
 bool
 ButtonPanelWidget::KeyPress(unsigned key_code) noexcept
 {
-  return buttons->KeyPress(key_code) || widget->KeyPress(key_code);
+  /* apply ButtonPanel hot keys and cursor navigation only any part of
+     this widget is focused */
+  return (HasFocus() && buttons->KeyPress(key_code)) ||
+    widget->KeyPress(key_code);
 }
