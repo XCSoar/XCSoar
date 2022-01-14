@@ -33,7 +33,7 @@ LargeTextWindow::Create(ContainerWindow &parent, PixelRect rc,
 {
   origin = 0;
 
-  Window::Create(&parent, rc, style);
+  NativeWindow::Create(&parent, rc, style);
 }
 
 unsigned
@@ -80,7 +80,7 @@ LargeTextWindow::ScrollVertically(int delta_lines)
 void
 LargeTextWindow::OnResize(PixelSize new_size)
 {
-  Window::OnResize(new_size);
+  NativeWindow::OnResize(new_size);
 
   if (!value.empty()) {
     /* revalidate the scroll position */
@@ -145,7 +145,7 @@ LargeTextWindow::OnKeyDown(unsigned key_code)
     return true;
   }
 
-  return Window::OnKeyDown(key_code);
+  return NativeWindow::OnKeyDown(key_code);
 }
 
 void
