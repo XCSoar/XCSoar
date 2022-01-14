@@ -112,6 +112,7 @@ protected:
   void OnPaint(Canvas &canvas) override;
   bool OnKeyCheck(unsigned key_code) const override;
   bool OnKeyDown(unsigned key_code) override;
+  bool OnMouseDown(PixelPoint p) override;
 #endif /* !USE_WINUSER */
 };
 

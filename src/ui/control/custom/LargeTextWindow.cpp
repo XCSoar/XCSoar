@@ -148,6 +148,15 @@ LargeTextWindow::OnKeyDown(unsigned key_code)
   return NativeWindow::OnKeyDown(key_code);
 }
 
+bool
+LargeTextWindow::OnMouseDown(PixelPoint p)
+{
+  if (IsTabStop())
+    SetFocus();
+
+  return true;
+}
+
 void
 LargeTextWindow::SetText(const TCHAR *text)
 {

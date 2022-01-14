@@ -46,7 +46,7 @@ public:
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
-  bool KeyPress(unsigned key_code) noexcept override;
+  bool SetFocus() noexcept override;
 };
 
 #endif
