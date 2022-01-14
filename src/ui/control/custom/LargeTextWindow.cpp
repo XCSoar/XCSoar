@@ -95,12 +95,29 @@ LargeTextWindow::OnResize(PixelSize new_size)
 }
 
 void
+LargeTextWindow::OnSetFocus()
+{
+  NativeWindow::OnSetFocus();
+  Invalidate();
+}
+
+void
+LargeTextWindow::OnKillFocus()
+{
+  NativeWindow::OnKillFocus();
+  Invalidate();
+}
+
+void
 LargeTextWindow::OnPaint(Canvas &canvas)
 {
   canvas.ClearWhite();
 
   auto rc = canvas.GetRect();
   canvas.DrawOutlineRectangle(rc, COLOR_BLACK);
+
+  if (HasFocus())
+    canvas.DrawFocusRectangle(rc.WithPadding(1));
 
   if (value.empty())
     return;

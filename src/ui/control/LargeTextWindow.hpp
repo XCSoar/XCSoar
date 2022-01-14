@@ -109,6 +109,8 @@ public:
 #ifndef USE_WINUSER
 protected:
   void OnResize(PixelSize new_size) override;
+  void OnSetFocus() override;
+  void OnKillFocus() override;
   void OnPaint(Canvas &canvas) override;
   bool OnKeyCheck(unsigned key_code) const override;
   bool OnKeyDown(unsigned key_code) override;
