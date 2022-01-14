@@ -199,6 +199,27 @@ RowFormWidget::Row::Hide() noexcept
     window->Hide();
 }
 
+bool
+RowFormWidget::Row::HasFocus() const noexcept
+{
+  switch (type) {
+  case Type::DUMMY:
+    break;
+
+  case Type::WIDGET:
+    return widget->HasFocus();
+
+  case Type::GENERIC:
+  case Type::EDIT:
+  case Type::MULTI_LINE:
+  case Type::BUTTON:
+  case Type::REMAINING:
+    return window->HasFocus();
+  }
+
+  return false;
+}
+
 RowFormWidget::RowFormWidget(const DialogLook &_look, bool _vertical) noexcept
   :look(_look), vertical(_vertical)
 {
@@ -504,4 +525,12 @@ RowFormWidget::SetFocus() noexcept
 
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
   return panel.FocusFirstControl();
+}
+
+bool
+RowFormWidget::HasFocus() const noexcept
+{
+  return std::any_of(rows.begin(), rows.end(), [](const auto &r){
+    return r.HasFocus();
+  });
 }

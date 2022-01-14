@@ -218,6 +218,15 @@ protected:
     return true;
   }
 
+  bool HasFocus() const noexcept override {
+    return info.HasFocus() ||
+      details_button.HasFocus() ||
+      previous_button.HasFocus() ||
+      next_button.HasFocus() ||
+      close_button.HasFocus() ||
+      chart.HasFocus();
+  }
+
   bool KeyPress(unsigned key_code) noexcept override;
 };
 

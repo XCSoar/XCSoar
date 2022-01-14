@@ -271,6 +271,9 @@ class RowFormWidget : public WindowWidget {
      * Hide the Window/Widget, but do not update the #visible flag.
      */
     void Hide() noexcept;
+
+    [[gnu::pure]]
+    bool HasFocus() const noexcept;
   };
 
   const DialogLook &look;
@@ -755,6 +758,7 @@ public:
   void Show(const PixelRect &rc) noexcept override;
   void Move(const PixelRect &rc) noexcept override;
   bool SetFocus() noexcept override;
+  bool HasFocus() const noexcept override;
 };
 
 #endif

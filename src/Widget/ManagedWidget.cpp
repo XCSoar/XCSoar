@@ -165,6 +165,12 @@ ManagedWidget::SetFocus() noexcept
 }
 
 bool
+ManagedWidget::HasFocus() const noexcept
+{
+  return IsVisible() && widget->HasFocus();
+}
+
+bool
 ManagedWidget::KeyPress(unsigned key_code) noexcept
 {
   return IsVisible() && widget->KeyPress(key_code);

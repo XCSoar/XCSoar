@@ -114,6 +114,9 @@ public:
   void ShowAll() noexcept;
   void HideAll() noexcept;
 
+  [[gnu::pure]]
+  bool HasFocus() const noexcept;
+
   /**
    * Handle a hot key.
    *

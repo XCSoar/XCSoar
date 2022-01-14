@@ -92,3 +92,12 @@ WindowWidget::Move(const PixelRect &rc) noexcept
 
   window->Move(rc);
 }
+
+bool
+WindowWidget::HasFocus() const noexcept
+{
+  assert(window != nullptr);
+  assert(window->IsDefined());
+
+  return window->HasFocus();
+}

@@ -215,6 +215,16 @@ ArrowPagerWidget::SetFocus() noexcept
 }
 
 bool
+ArrowPagerWidget::HasFocus() const noexcept
+{
+  return PagerWidget::HasFocus() ||
+    previous_button.HasFocus() ||
+    next_button.HasFocus() ||
+    close_button.HasFocus() ||
+    (extra != nullptr && extra->HasFocus());
+}
+
+bool
 ArrowPagerWidget::KeyPress(unsigned key_code) noexcept
 {
   if (PagerWidget::KeyPress(key_code))

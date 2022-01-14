@@ -124,3 +124,11 @@ OffsetButtonsWidget::SetFocus() noexcept
   (*buttons)[2].SetFocus();
   return true;
 }
+
+bool
+OffsetButtonsWidget::HasFocus() const noexcept
+{
+  return std::any_of(buttons->begin(), buttons->end(), [](const Button &b){
+    return b.HasFocus();
+  });
+}

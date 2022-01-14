@@ -29,6 +29,8 @@ Copyright_License {
 #include "ui/event/KeyCode.hpp"
 #include "Asset.hpp"
 
+#include <algorithm>
+
 ButtonPanel::ButtonPanel(ContainerWindow &_parent,
                          const ButtonLook &_look) noexcept
   :parent(_parent), look(_look), selected_index(-1) {
@@ -295,6 +297,14 @@ ButtonPanel::HideAll() noexcept
 {
   for (auto i : buttons)
     i->Hide();
+}
+
+bool
+ButtonPanel::HasFocus() const noexcept
+{
+  return std::any_of(buttons.begin(), buttons.end(), [](const Button *b){
+    return b->HasFocus();
+  });
 }
 
 void

@@ -254,6 +254,15 @@ public:
 
   bool KeyPress(unsigned key_code) noexcept override;
 
+  bool HasFocus() const noexcept override {
+    return map.HasFocus() || name_button.HasFocus() ||
+      previous_button.HasFocus() || next_button.HasFocus() ||
+      range.HasFocus() || radial.HasFocus() ||
+      ete.HasFocus() || delta_t.HasFocus() ||
+      speed_remaining.HasFocus() || speed_achieved.HasFocus() ||
+      optimized.HasFocus() || close_button.HasFocus();
+  }
+
 private:
   /* virtual methods from class DataFieldListener */
   void OnModified(DataField &df) noexcept override {

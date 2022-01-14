@@ -156,6 +156,12 @@ ButtonPanelWidget::SetFocus() noexcept
 }
 
 bool
+ButtonPanelWidget::HasFocus() const noexcept
+{
+  return widget->HasFocus() || buttons->HasFocus();
+}
+
+bool
 ButtonPanelWidget::KeyPress(unsigned key_code) noexcept
 {
   return buttons->KeyPress(key_code) || widget->KeyPress(key_code);
