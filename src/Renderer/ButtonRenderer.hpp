@@ -40,6 +40,11 @@ enum class ButtonState : int {
   ENABLED,
 
   /**
+   * The button is selected, but is not the currently focused control.
+   */
+  SELECTED,
+
+  /**
    * The button is the currently focused control.
    */
   FOCUSED,

@@ -41,6 +41,9 @@ GetStateLook(const ButtonLook &look, ButtonState state) noexcept
   case ButtonState::ENABLED:
     break;
 
+  case ButtonState::SELECTED:
+    return look.selected;
+
   case ButtonState::FOCUSED:
   case ButtonState::PRESSED:
     return look.focused;

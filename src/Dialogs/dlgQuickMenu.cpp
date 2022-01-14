@@ -88,6 +88,7 @@ QuickMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
     canvas.SetTextColor(look.focused.text_color);
     break;
 
+  case ButtonState::SELECTED:
   case ButtonState::ENABLED:
     if (HaveClipping())
       canvas.DrawFilledRectangle(rc, look.background_brush);

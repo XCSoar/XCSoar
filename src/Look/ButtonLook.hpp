@@ -47,7 +47,7 @@ struct ButtonLook {
       dark_border_pen.Create(1, dark);
       dark_border_brush.Create(dark);
     }
-  } standard, focused;
+  } standard, selected, focused;
 
   struct {
     Color color;
