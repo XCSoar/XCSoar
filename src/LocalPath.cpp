@@ -224,10 +224,19 @@ FindDataPaths() noexcept
     if (auto path = Environment::GetExternalStoragePublicDirectory(env,
                                                                    "XCSoarData");
         path != nullptr) {
+      const bool writable = access(path.c_str(), W_OK) == 0;
+
       __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
-                          "Environment.getExternalStoragePublicDirectory()='%s'",
-                          path.c_str());
-      result.emplace_back(std::move(path));
+                          "Environment.getExternalStoragePublicDirectory()='%s'%s",
+                          path.c_str(),
+                          writable ? "" : " (not accessible)");
+
+      if (writable)
+        /* the "legacy" external storage directory is writable (either
+           because this is Android 10 or older, or because the
+           "preserveLegacyExternalStorage" is still in effect) - we
+           can use it */
+        result.emplace_back(std::move(path));
     }
 #endif
 
