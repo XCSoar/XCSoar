@@ -1,4 +1,4 @@
-Version 7.22 - not yet released
+Version 7.22 - 2022/01/14
 * user interface
   - close the download dialog after successful download
   - add "Share" button to the status dialog
