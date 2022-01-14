@@ -148,7 +148,6 @@ TaskEditPanel::UpdateButtons()
 {
   const unsigned index = GetList().GetCursorIndex();
 
-  edit_button->SetVisible(index < ordered_task->TaskSize());
   mutate_button->SetVisible(index > 0 &&
                             (index == ordered_task->TaskSize() - 1) &&
                             !ordered_task->HasFinish());
