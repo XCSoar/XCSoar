@@ -55,8 +55,7 @@ public:
   }
 
   void DrawButton(Canvas &canvas, const PixelRect &rc,
-                  bool enabled, bool focused,
-                  bool pressed) const noexcept override;
+                  ButtonState state) const noexcept override;
 
   void InvalidateBuffer() noexcept {
     size.width = 0;

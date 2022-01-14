@@ -33,10 +33,9 @@ BitmapButtonRenderer::GetMinimumButtonWidth() const noexcept
 
 void
 BitmapButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
-                                 bool enabled, bool focused,
-                                 bool pressed) const noexcept
+                                 ButtonState state) const noexcept
 {
-  if (pressed)
+  if (state == ButtonState::PRESSED)
     canvas.StretchNot(bitmap);
   else
     canvas.Stretch(bitmap);

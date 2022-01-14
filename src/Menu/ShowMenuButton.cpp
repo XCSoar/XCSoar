@@ -40,8 +40,7 @@ public:
   }
 
   void DrawButton(Canvas &canvas, const PixelRect &rc,
-                  bool enabled, bool focused,
-                  bool pressed) const noexcept override;
+                  ButtonState state) const noexcept override;
 };
 
 void
@@ -61,8 +60,7 @@ ShowMenuButton::OnClicked() noexcept
 
 void
 ShowMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
-                                   bool enabled, bool focused,
-                                   bool pressed) const noexcept
+                                   ButtonState state) const noexcept
 {
   const unsigned pen_width = Layout::ScalePenWidth(2);
   const unsigned padding = Layout::GetTextPadding() + pen_width;
@@ -81,7 +79,7 @@ ShowMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
 
   canvas.DrawPolyline(m, ARRAY_SIZE(m));
 
-  if (pressed) {
+  if (state == ButtonState::PRESSED) {
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
     canvas.DrawFilledRectangle(rc, COLOR_YELLOW.WithAlpha(80));

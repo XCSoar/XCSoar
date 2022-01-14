@@ -1126,8 +1126,8 @@ DigitEntry::OnPaint(Canvas &canvas)
     plus_rc.left = minus_rc.left = c.left;
     plus_rc.right = minus_rc.right = c.right;
 
-    button_renderer.DrawButton(canvas, plus_rc, false, false);
-    button_renderer.DrawButton(canvas, minus_rc, false, false);
+    button_renderer.DrawButton(canvas, plus_rc, ButtonState::ENABLED);
+    button_renderer.DrawButton(canvas, minus_rc, ButtonState::ENABLED);
 
     canvas.SelectNullPen();
     canvas.Select(look.button.standard.foreground_brush);

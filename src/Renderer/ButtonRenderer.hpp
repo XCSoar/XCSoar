@@ -28,6 +28,28 @@ struct PixelRect;
 struct ButtonLook;
 class Canvas;
 
+enum class ButtonState : int {
+  /**
+   * The button is disabled, i.e. inaccessible.
+   */
+  DISABLED,
+
+  /**
+   * The button is enabled (but not focused).
+   */
+  ENABLED,
+
+  /**
+   * The button is the currently focused control.
+   */
+  FOCUSED,
+
+  /**
+   * The button is currently pressed down.
+   */
+  PRESSED,
+};
+
 class ButtonFrameRenderer {
   const ButtonLook &look;
 
@@ -42,10 +64,10 @@ public:
   static unsigned GetMargin() noexcept;
 
   void DrawButton(Canvas &canvas, PixelRect rc,
-                  bool focused, bool pressed) const noexcept;
+                  ButtonState state) const noexcept;
 
   [[gnu::pure]]
-  PixelRect GetDrawingRect(PixelRect rc, bool pressed) const noexcept;
+  PixelRect GetDrawingRect(PixelRect rc, ButtonState state) const noexcept;
 };
 
 class ButtonRenderer {
@@ -56,8 +78,7 @@ public:
   virtual unsigned GetMinimumButtonWidth() const noexcept;
 
   virtual void DrawButton(Canvas &canvas, const PixelRect &rc,
-                          bool enabled, bool focused,
-                          bool pressed) const noexcept = 0;
+                          ButtonState state) const noexcept = 0;
 };
 
 #endif

@@ -76,12 +76,11 @@ public:
   unsigned GetMinimumButtonWidth() const noexcept override;
 
   void DrawButton(Canvas &canvas, const PixelRect &rc,
-                  bool enabled, bool focused,
-                  bool pressed) const noexcept override;
+                  ButtonState state) const noexcept override;
 
 private:
   void DrawCaption(Canvas &canvas, const PixelRect &rc,
-                   bool enabled, bool focused, bool pressed) const noexcept;
+                   ButtonState state) const noexcept;
 };
 
 #endif

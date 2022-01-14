@@ -26,10 +26,9 @@ Copyright_License {
 
 void
 ColorButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
-                                bool enabled, bool focused,
-                                bool pressed) const noexcept
+                                ButtonState state) const noexcept
 {
-  frame_renderer.DrawButton(canvas, rc, focused, pressed);
+  frame_renderer.DrawButton(canvas, rc, state);
 
   PixelRect fill_rc = rc;
   fill_rc.Grow(-3);
