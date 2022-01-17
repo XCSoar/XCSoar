@@ -39,6 +39,7 @@ PolarStore::Item::ToPolarShape() const
   shape[1].w = w2;
   shape[2].v = Units::ToSysUnit(v3, Unit::KILOMETER_PER_HOUR);
   shape[2].w = w3;
+  shape.reference_mass = reference_mass;
 
   return shape;
 }
@@ -48,7 +49,6 @@ PolarStore::Item::ToPolarInfo() const
 {
   PolarInfo polar;
 
-  polar.reference_mass = reference_mass;
   polar.max_ballast = max_ballast;
   polar.shape = ToPolarShape();
   polar.wing_area = wing_area;

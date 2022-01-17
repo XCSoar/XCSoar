@@ -66,7 +66,7 @@ class GlidePolar
 
   /** Clean ratio (1=clean, 0=100% bugs) */
   double bugs;
-  /** Ballast ratio (litres) */
+  /** Ballast (litres alias kg) */
   double ballast;
   /** Cruise efficiency */
   double cruise_efficiency;
@@ -89,16 +89,18 @@ class GlidePolar
   double Smin;
 
   /** coefficients of glide polar empty/clean */
-  PolarCoefficients ideal_polar;
+  PolarCoefficients reference_polar;
   /** coefficients of glide polar at bug/ballast */
   PolarCoefficients polar;
 
   /** Ratio of mass of ballast to glider empty weight */
   double ballast_ratio;
-  /** Reference mass of polar, kg */
+  /** Reference mass of reference_polar, kg */
   double reference_mass;
-  /** Dry/unballasted mass of glider, kg */
-  double dry_mass;
+  /** Plain rigged/unballasted mass of glider, kg */
+  double empty_mass;
+  /** Crew mass addition to empty mass (anything except droppable ballast), kg */
+  double crew_mass;
   /** Reference wing area, m^2 */
   double wing_area;
 
@@ -135,7 +137,7 @@ public:
    * bugs, ballast, cruise efficiency).
    */
   void SetInvalid() {
-    ideal_polar.SetInvalid();
+    reference_polar.SetInvalid();
     polar.SetInvalid();
     Update();
   }
@@ -532,17 +534,35 @@ public:
 
   /** Returns the dry mass in kg */
   double GetDryMass() const {
-    return dry_mass;
+    return empty_mass + crew_mass;
   }
-
-  /** Sets the dry mass in kg */
-  void SetDryMass(double _dry_mass, bool update = true) {
-    dry_mass = _dry_mass;
-
+  
+  /** Returns the empty mass in kg */
+  double GetEmptyMass() const {
+    return empty_mass;
+  }
+  
+  /** Sets the empty mass in kg */
+  void SetEmptyMass(double _empty_mass, bool update = true) {
+    empty_mass = _empty_mass;
+    
     if (update)
       Update();
   }
-
+  
+  /** Sets the crew mass in kg */
+  void SetCrewMass(double _crew_mass, bool update = true) {
+    crew_mass = _crew_mass;
+    
+    if (update)
+      Update();
+  }
+  
+  /** Returns the crew mass in kg */
+  double GetCrewMass() const {
+    return crew_mass;
+  }
+  
   /** Returns the ballast ratio */
   double GetBallastRatio() const {
     return ballast_ratio;
@@ -555,7 +575,7 @@ public:
 
   /** Returns the ideal polar coefficients */
   PolarCoefficients GetCoefficients() const {
-    return ideal_polar;
+    return reference_polar;
   }
 
   /** Returns the real polar coefficients */
@@ -565,7 +585,7 @@ public:
 
   /** Sets the ideal polar coefficients */
   void SetCoefficients(PolarCoefficients coeff, bool update = true) {
-    ideal_polar = coeff;
+    reference_polar = coeff;
 
     if (update)
       Update();

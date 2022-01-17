@@ -36,6 +36,8 @@ BallastProcessTimer()
   static Validity last_fraction, last_overload;
   const ExternalSettings &settings = CommonInterface::Basic().settings;
   const Plane &plane = CommonInterface::GetComputerSettings().plane;
+  const GlidePolar &polar = CommonInterface::GetComputerSettings().polar.glide_polar_task;
+
   if (settings.ballast_fraction_available.Modified(last_fraction)) {
     ActionInterface::SetBallast(settings.ballast_fraction, false);
     modified = true;
@@ -47,7 +49,7 @@ BallastProcessTimer()
       settings.ballast_overload >= 1 &&
       plane.max_ballast > 0) {
     auto fraction = ((settings.ballast_overload - 1) *
-                     plane.dry_mass) / plane.max_ballast;
+                     (plane.empty_mass + polar.GetCrewMass())) / plane.max_ballast;
     ActionInterface::SetBallast(fraction, false);
     modified = true;
   }

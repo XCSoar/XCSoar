@@ -82,6 +82,7 @@ Profile::Load(const ProfileMap &map, LoggerSettings &settings)
   map.Get(ProfileKeys::LoggerID, settings.logger_id);
   map.Get(ProfileKeys::PilotName, settings.pilot_name);
   map.Get(ProfileKeys::CoPilotName, settings.copilot_name);
+  map.Get(ProfileKeys::CrewWeightTemplate, settings.crew_mass_template);
   map.Get(ProfileKeys::EnableFlightLogger, settings.enable_flight_logger);
   map.Get(ProfileKeys::EnableNMEALogger, settings.enable_nmea_logger);
 }

@@ -44,7 +44,7 @@ TestBasic()
   // Test ReadString()
   PolarInfo polar;
   ParsePolar(polar, "318, 100, 80, -0.606, 120, -0.99, 160, -1.918");
-  ok1(equals(polar.reference_mass, 318));
+  ok1(equals(polar.shape.reference_mass, 318));
   ok1(equals(polar.max_ballast, 100));
   ok1(equals(polar.shape[0].v, 22.2222222));
   ok1(equals(polar.shape[0].w, -0.606));
@@ -55,7 +55,7 @@ TestBasic()
   ok1(equals(polar.wing_area, 0.0));
 
   ParsePolar(polar, "318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8");
-  ok1(equals(polar.reference_mass, 318));
+  ok1(equals(polar.shape.reference_mass, 318));
   ok1(equals(polar.max_ballast, 100));
   ok1(equals(polar.shape[0].v, 22.2222222));
   ok1(equals(polar.shape[0].w, -0.606));
@@ -78,7 +78,7 @@ TestFileImport()
   // Test LoadFromFile()
   PolarInfo polar;
   PolarGlue::LoadFromFile(polar, Path(_T("test/data/test.plr")));
-  ok1(equals(polar.reference_mass, 318));
+  ok1(equals(polar.shape.reference_mass, 318));
   ok1(equals(polar.max_ballast, 100));
   ok1(equals(polar.shape[0].v, 22.2222222));
   ok1(equals(polar.shape[0].w, -0.606));
@@ -159,8 +159,8 @@ TestBuiltInPolarsPlausibility()
     gp.SetCoefficients(pc, false);
 
     // Glider empty weight
-    gp.SetReferenceMass(polar.reference_mass, false);
-    gp.SetBallastRatio(polar.max_ballast / polar.reference_mass);
+    gp.SetReferenceMass(polar.shape.reference_mass, false);
+    gp.SetBallastRatio(polar.max_ballast / polar.shape.reference_mass);
     gp.SetWingArea(polar.wing_area);
 
     gp.Update();
