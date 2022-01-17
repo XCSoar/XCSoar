@@ -24,6 +24,7 @@ Copyright_License {
 #include "OffsetButtonsWidget.hpp"
 #include "Screen/Layout.hpp"
 
+#include <algorithm>  // for std::any_of
 #include <stdio.h>
 
 PixelSize
