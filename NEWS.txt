@@ -1,3 +1,7 @@
+Version 7.23 - 
+* Kobo
+  - add OTG support (serial, sound, net) for Clara HD
+
 Version 7.22 - 2022/01/14
 * user interface
   - close the download dialog after successful download

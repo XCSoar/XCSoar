@@ -42,7 +42,6 @@ IsKoboCustomKernel();
 /**
  * Are we currently in OTG host mode?
  */
-gcc_const
 bool
 IsKoboOTGHostMode();
 
