@@ -366,7 +366,11 @@ if len(cmp) > 0:
     legend = []
     plot = []
     for x in cmp:
-        plot.append(plot_polar(ax, x, 2, legend))
+        subplot = plot_polar(ax, x, 2, legend)
+        if pnr == 1:
+            legend = []
+        else:
+            plot.append(subplot)
     plt.legend(plot, legend, loc=3)
 
 plt.show()
