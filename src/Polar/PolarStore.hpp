@@ -65,6 +65,9 @@ namespace PolarStore
     /** Contest handicap, 0 if unknown */
     unsigned contest_handicap;
 
+    /** empty rigged glider mass (kg), make the polar reference mass independent of the lift of weight sum */
+    unsigned empty_mass;
+
     PolarShape ToPolarShape() const;
     PolarInfo ToPolarInfo() const;
   };

@@ -136,7 +136,7 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
     has_empty_mass = true;
   }
   if (!has_empty_mass)
-    plane.empty_mass = plane.polar_shape.reference_mass; // todo replace with polar store attribute in next commit
+    plane.empty_mass = plane.polar_shape.reference_mass;
   if (!has_handicap)
     plane.handicap = 100;
   if (!has_max_ballast)

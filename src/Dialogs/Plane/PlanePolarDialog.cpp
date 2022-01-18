@@ -188,7 +188,7 @@ PlanePolarWidget::ListClicked()
   const PolarStore::Item &item = PolarStore::GetItem(list[result].int_value);
 
   plane.polar_shape.reference_mass = item.reference_mass;
-  plane.empty_mass = item.reference_mass - 90; // todo needs additional attribute in polar store data
+  plane.empty_mass = item.empty_mass;
   plane.max_ballast = item.max_ballast;
 
   if (item.wing_area > 0.0)
