@@ -121,7 +121,9 @@ def get_current_xc_polar(glider, weight=0.0):
             ##357, 165, 108.8, -0.64, 156.4, -1.18, 211.13, -2.5, 9.0, 0.0, 114
             ret = polar()
             ret._name = glider + "(xcs)"
-            line_l = line.strip("{},  \n").split(',')
+            line = line.split('{')[1];
+            line = line.split('}')[0];
+            line_l = line.strip(" \n").split(',')
             del line_l[0]
             a = list(map(float, line_l))
             s = 1.0
