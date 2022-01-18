@@ -313,7 +313,7 @@ if args.xyscan != None:
 
 # Read in digitized points
 ida = False
-if args.rawfile != "":
+if args.rawfile != None:
     idap = read_raw_polar(args.rawfile, refw)
     if idap:
         ida = True
