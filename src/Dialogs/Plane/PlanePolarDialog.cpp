@@ -46,7 +46,6 @@ class PlanePolarWidget final
     INVALID,
     SHAPE,
     REFERENCE_MASS,
-    EMPTY_MASS,
   };
 
   Plane plane;
@@ -117,7 +116,6 @@ PlanePolarWidget::Update()
   UpdatePolarLabel();
 
   LoadValue(REFERENCE_MASS, plane.polar_shape.reference_mass, UnitGroup::MASS);
-  LoadValue(EMPTY_MASS, plane.empty_mass, UnitGroup::MASS);
 }
 
 void
@@ -136,11 +134,6 @@ PlanePolarWidget::Prepare(ContainerWindow &parent,
            _T("%.0f %s"), _T("%.0f"),
            0, 1000, 5, false,
            UnitGroup::MASS, plane.polar_shape.reference_mass);
-
-  AddFloat(_("Empty Mass"), _("Net mass of the rigged plane."),
-           _T("%.0f %s"), _T("%.0f"),
-           0, 1000, 5, false,
-           UnitGroup::MASS, plane.empty_mass);
 }
 
 void
@@ -162,7 +155,6 @@ PlanePolarWidget::Save(bool &_changed) noexcept
   }
 
   changed |= SaveValue(REFERENCE_MASS, UnitGroup::MASS, plane.polar_shape.reference_mass);
-  changed |= SaveValue(EMPTY_MASS, UnitGroup::MASS, plane.empty_mass);
 
   _changed |= changed;
   return true;
@@ -222,7 +214,7 @@ PlanePolarWidget::ImportClicked()
   }
 
   plane.polar_shape.reference_mass = polar.shape.reference_mass;
-  plane.empty_mass = polar.shape.reference_mass;
+  // plane.empty_mass = polar;
   plane.max_ballast = polar.max_ballast;
 
   if (polar.wing_area > 0)

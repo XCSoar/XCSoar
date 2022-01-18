@@ -41,6 +41,7 @@ class PlaneEditWidget final
     TYPE,
     HANDICAP,
     WING_AREA,
+    EMPTY_MASS,
     MAX_BALLAST,
     DUMP_TIME,
     MAX_SPEED,
@@ -120,6 +121,10 @@ PlaneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
            _T("%.1f m²"), _T("%.1f"),
            0, 40, 0.1,
            false, plane.wing_area);
+  AddFloat(_("Empty Mass"), _("Net mass of the rigged plane."),
+           _T("%.0f %s"), _T("%.0f"),
+           0, 1000, 5, false,
+           UnitGroup::MASS, plane.empty_mass);
   AddFloat(_("Max. Ballast"), nullptr,
            _T("%.0f l"), _T("%.0f"),
            0, 500, 5,
@@ -154,6 +159,7 @@ PlaneEditWidget::Save(bool &_changed) noexcept
   changed |= SaveValue(TYPE, plane.type);
   changed |= SaveValue(HANDICAP, plane.handicap);
   changed |= SaveValue(WING_AREA, plane.wing_area);
+  changed |= SaveValue(EMPTY_MASS, UnitGroup::MASS, plane.empty_mass);
   changed |= SaveValue(MAX_BALLAST, plane.max_ballast);
   changed |= SaveValue(DUMP_TIME, plane.dump_time);
   changed |= SaveValue(MAX_SPEED, UnitGroup::HORIZONTAL_SPEED,
@@ -180,6 +186,7 @@ PlaneEditWidget::PolarButtonClicked() noexcept
 
   /* reload attributes that may have been modified */
   LoadValue(WING_AREA, plane.wing_area);
+  LoadValue(EMPTY_MASS, plane.empty_mass, UnitGroup::MASS);
   LoadValue(MAX_BALLAST, plane.max_ballast);
   LoadValue(MAX_SPEED, plane.max_speed, UnitGroup::HORIZONTAL_SPEED);
 }
