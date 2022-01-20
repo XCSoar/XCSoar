@@ -2,7 +2,7 @@ ifeq ($(TARGET_IS_PI),y)
 # auto-enable EGL on the Raspberry Pi.
 EGL ?= y
 ENABLE_MESA_KMS = y
-else ifeq ($(TARGET_HAS_MALI),y)
+else ifeq ($(TARGET_IS_CUBIE),y)
 # auto-enable EGL on the Cubieboard.
 EGL ?= y
 else ifeq ($(ENABLE_MESA_KMS),y)

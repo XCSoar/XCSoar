@@ -18,9 +18,10 @@ OPENGL ?= y
 GLES2 ?= y
 
 # the Cubieboard uses EGL + GL/ES
-else ifeq ($(TARGET_HAS_MALI),y)
+else ifeq ($(TARGET_IS_CUBIE),y)
 OPENGL ?= y
 GLES2 ?= y
+
 # UNIX/Linux defaults to OpenGL
 else ifeq ($(TARGET),UNIX)
 OPENGL ?= y
