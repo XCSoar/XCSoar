@@ -159,6 +159,12 @@ public:
   void Push(const Event &event) noexcept;
 
   /**
+   * Ensure that the next Wait() call finishes by injecting a NOP
+   * event.  This method is not thread-safe.
+   */
+  void Interrupt() noexcept;
+
+  /**
    * Add an event to the queue; thread-safe version which may be
    * called from any thread.
    */

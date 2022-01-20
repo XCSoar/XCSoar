@@ -50,6 +50,20 @@ EventQueue::Push(const Event &event) noexcept
 }
 
 void
+EventQueue::Interrupt() noexcept
+{
+  {
+    std::lock_guard<Mutex> lock(mutex);
+    if (!events.empty())
+      return;
+
+    events.push(Event::NOP);
+  }
+
+  event_loop.Break();
+}
+
+void
 EventQueue::Inject(const Event &event) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
