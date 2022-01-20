@@ -63,38 +63,39 @@ public:
     return steady_clock_cache.now();
   }
 
-  bool IsQuit() const {
+  bool IsQuit() const noexcept {
     return quit;
   }
 
-  void Quit() {
+  void Quit() noexcept {
     quit = true;
   }
 
-  void Push(const Event &event);
+  void Push(const Event &event) noexcept;
 
-  void Push(Event::Callback callback, void *ctx) {
+  void Push(Event::Callback callback, void *ctx) noexcept {
     Push(Event(callback, ctx));
   }
 
-  bool Pop(Event &event);
+  bool Pop(Event &event) noexcept;
 
-  bool Wait(Event &event);
+  bool Wait(Event &event) noexcept;
 
-  void Purge(bool (*match)(const Event &event, void *ctx), void *ctx);
+  void Purge(bool (*match)(const Event &event, void *ctx) noexcept,
+             void *ctx) noexcept;
 
-  void Purge(Event::Type type);
-  void Purge(Event::Callback callback, void *ctx);
+  void Purge(Event::Type type) noexcept;
+  void Purge(Event::Callback callback, void *ctx) noexcept;
 
   void AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexcept;
-  void CancelTimer(Timer &timer);
+  void CancelTimer(Timer &timer) noexcept;
 
 private:
   void FlushClockCaches() noexcept {
     steady_clock_cache.flush();
   }
 
-  bool Generate(Event &event);
+  bool Generate(Event &event) noexcept;
 };
 
 } // namespace UI

@@ -65,77 +65,77 @@ class EventQueue final {
   bool quit = false;
 
 public:
-  EventQueue();
-  ~EventQueue();
+  EventQueue() noexcept;
+  ~EventQueue() noexcept;
 
   auto &GetEventLoop() noexcept {
     return event_loop;
   }
 
 #ifdef USE_X11
-  _XDisplay *GetDisplay() const {
+  _XDisplay *GetDisplay() const noexcept {
     return input_queue.GetDisplay();
   }
 
-  bool WasCtrlClick() const {
+  bool WasCtrlClick() const noexcept {
     return input_queue.WasCtrlClick();
   }
 #endif
 
 #ifdef USE_WAYLAND
-  struct wl_display *GetDisplay() {
+  struct wl_display *GetDisplay() noexcept {
     return input_queue.GetDisplay();
   }
 
-  struct wl_compositor *GetCompositor() {
+  struct wl_compositor *GetCompositor() noexcept {
     return input_queue.GetCompositor();
   }
 
-  struct wl_shell *GetShell() {
+  struct wl_shell *GetShell() noexcept {
     return input_queue.GetShell();
   }
 #endif
 
 #if defined(USE_X11) || defined(USE_WAYLAND)
-  bool IsVisible() const {
+  bool IsVisible() const noexcept {
     return input_queue.IsVisible();
   }
 #endif
 
-  void SetScreenSize(unsigned width, unsigned height) {
+  void SetScreenSize(unsigned width, unsigned height) noexcept {
 #if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
     input_queue.SetScreenSize(width, height);
 #endif
   }
 
-  void SetDisplayOrientation(DisplayOrientation orientation) {
+  void SetDisplayOrientation(DisplayOrientation orientation) noexcept {
 #if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND) && !defined(USE_LIBINPUT)
     input_queue.SetDisplayOrientation(orientation);
 #endif
   }
 
 #if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
-  bool HasPointer() const {
+  bool HasPointer() const noexcept {
     return input_queue.HasPointer();
   }
 
 #ifdef USE_LIBINPUT
-  bool HasTouchScreen() const {
+  bool HasTouchScreen() const noexcept {
     return input_queue.HasTouchScreen();
   }
 
-  bool HasKeyboard() const {
+  bool HasKeyboard() const noexcept {
     return input_queue.HasKeyboard();
   }
 #endif
 
-  PixelPoint GetMousePosition() const {
+  PixelPoint GetMousePosition() const noexcept {
     return input_queue.GetMousePosition();
   }
 
 #endif /* !NON_INTERACTIVE */
 
-  bool IsQuit() const {
+  bool IsQuit() const noexcept {
     return quit;
   }
 
@@ -143,29 +143,30 @@ public:
     quit = true;
   }
 
-  void WakeUp() {
+  void WakeUp() noexcept {
     wake_event.Schedule();
   }
 
 private:
-  void Poll();
-  bool Generate(Event &event);
+  void Poll() noexcept;
+  bool Generate(Event &event) noexcept;
 
 public:
-  void Push(const Event &event);
+  void Push(const Event &event) noexcept;
 
-  void Push(Event::Callback callback, void *ctx) {
+  void Push(Event::Callback callback, void *ctx) noexcept {
     Push(Event(callback, ctx));
   }
 
-  bool Pop(Event &event);
+  bool Pop(Event &event) noexcept;
 
-  bool Wait(Event &event);
+  bool Wait(Event &event) noexcept;
 
-  void Purge(bool (*match)(const Event &event, void *ctx), void *ctx);
+  void Purge(bool (*match)(const Event &event, void *ctx) noexcept,
+             void *ctx) noexcept;
 
-  void Purge(enum Event::Type type);
-  void Purge(Event::Callback callback, void *ctx);
+  void Purge(enum Event::Type type) noexcept;
+  void Purge(Event::Callback callback, void *ctx) noexcept;
 
 private:
   void OnQuitSignal() noexcept {
