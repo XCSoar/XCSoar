@@ -31,6 +31,7 @@ Copyright_License {
 #include "../test/src/Fonts.hpp"
 #include "ui/window/Init.hpp"
 #include "ui/window/SingleWindow.hpp"
+#include "ui/event/Timer.hpp"
 #include "system/Process.hpp"
 
 #include <cassert>
@@ -75,11 +76,22 @@ class MainMenuWidget final
     SHELL,
     REBOOT,
     SHUTDOWN,
+    TIMER,
   };
 
   UI::Display &display;
 
   WndForm &dialog;
+
+  UI::Timer timer{[this](){
+    if (--remaining_seconds == 0) {
+      StartXCSoar();
+    } else {
+      ScheduleTimer();
+    }
+  }};
+
+  unsigned remaining_seconds = 3;
 
 public:
   explicit MainMenuWidget(UI::Display &_display, WndForm &_dialog) noexcept
@@ -88,24 +100,64 @@ public:
      dialog(_dialog) {}
 
 private:
+  void StartXCSoar() noexcept {
+    const UI::ScopeDropMaster drop_master{display};
+    Run("/usr/bin/xcsoar", "-fly");
+  }
+
+  void ScheduleTimer() noexcept {
+    assert(remaining_seconds > 0);
+
+    timer.Schedule(std::chrono::seconds{1});
+
+    char buffer[256];
+    snprintf(buffer, sizeof(buffer), "Starting XCSoar in %u seconds (press any key to cancel)",
+             remaining_seconds);
+    SetText(Controls::TIMER, buffer);
+  }
+
+  void CancelTimer() noexcept {
+    timer.Cancel();
+    remaining_seconds = 0;
+    HideRow(Controls::TIMER);
+  }
+
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent,
                const PixelRect &rc) noexcept override;
+
+  void Show(const PixelRect &rc) noexcept override {
+    RowFormWidget::Show(rc);
+
+    if (remaining_seconds > 0)
+      ScheduleTimer();
+  }
+
+  void Hide() noexcept override {
+    CancelTimer();
+    RowFormWidget::Hide();
+  }
+
+  bool KeyPress(unsigned key_code) noexcept {
+    CancelTimer();
+    return RowFormWidget::KeyPress(key_code);
+  }
 };
 
 void
 MainMenuWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   AddButton("Start XCSoar", [this](){
-    const UI::ScopeDropMaster drop_master{display};
-    Run("/usr/bin/xcsoar", "-fly");
+    StartXCSoar();
   });
 
-  AddButton("File", [](){
+  AddButton("File", [this](){
+    CancelTimer();
     ShowMessageBox("Not yet implemented", nullptr, MB_OK);
   });
 
-  AddButton("System", [](){
+  AddButton("System", [this](){
+    CancelTimer();
     ShowMessageBox("Not yet implemented", nullptr, MB_OK);
   });
 
@@ -120,6 +172,8 @@ MainMenuWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   AddButton("Power off", [](){
     Run("/sbin/poweroff");
   });
+
+  AddReadOnly("");
 }
 
 static int
