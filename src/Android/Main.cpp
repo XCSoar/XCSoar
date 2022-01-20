@@ -303,7 +303,7 @@ Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
   event_queue->Purge(UI::Event::RESIZE);
 
   UI::Event event(UI::Event::RESIZE, PixelPoint(width, height));
-  event_queue->Push(event);
+  event_queue->Inject(event);
 }
 
 gcc_visibility_default

@@ -71,10 +71,10 @@ public:
     quit = true;
   }
 
-  void Push(const Event &event) noexcept;
+  void Inject(const Event &event) noexcept;
 
-  void Push(Event::Callback callback, void *ctx) noexcept {
-    Push(Event(callback, ctx));
+  void InjectCall(Event::Callback callback, void *ctx) noexcept {
+    Inject(Event{callback, ctx});
   }
 
   bool Pop(Event &event) noexcept;

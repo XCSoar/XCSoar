@@ -32,7 +32,7 @@ EventQueue::EventQueue() noexcept
   :quit(false) {}
 
 void
-EventQueue::Push(EventLoop::Callback callback, void *ctx) noexcept
+EventQueue::InjectCall(EventLoop::Callback callback, void *ctx) noexcept
 {
   SDL_Event event;
   event.type = EVENT_CALLBACK;

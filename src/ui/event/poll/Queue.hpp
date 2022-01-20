@@ -152,10 +152,20 @@ private:
   bool Generate(Event &event) noexcept;
 
 public:
+  /**
+   * Add an event to the queue; thread-unsafe version which must be
+   * called from the UI thread.
+   */
   void Push(const Event &event) noexcept;
 
-  void Push(Event::Callback callback, void *ctx) noexcept {
-    Push(Event(callback, ctx));
+  /**
+   * Add an event to the queue; thread-safe version which may be
+   * called from any thread.
+   */
+  void Inject(const Event &event) noexcept;
+
+  void InjectCall(Event::Callback callback, void *ctx) {
+    Inject(Event{callback, ctx});
   }
 
   bool Pop(Event &event) noexcept;

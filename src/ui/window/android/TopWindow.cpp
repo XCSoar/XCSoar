@@ -150,7 +150,7 @@ void
 TopWindow::Pause() noexcept
 {
   event_queue->Purge(match_pause_and_resume, nullptr);
-  event_queue->Push(Event::PAUSE);
+  event_queue->Inject(Event::PAUSE);
 
   std::unique_lock<Mutex> lock(paused_mutex);
   paused_cond.wait(lock, [this]{ return !running || paused; });
@@ -160,7 +160,7 @@ void
 TopWindow::Resume() noexcept
 {
   event_queue->Purge(match_pause_and_resume, nullptr);
-  event_queue->Push(Event::RESUME);
+  event_queue->Inject(Event::RESUME);
 }
 
 bool

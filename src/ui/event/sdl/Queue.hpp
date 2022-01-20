@@ -65,7 +65,7 @@ public:
     quit = true;
   }
 
-  void Push(EventLoop::Callback callback, void *ctx) noexcept;
+  void InjectCall(EventLoop::Callback callback, void *ctx) noexcept;
 
 private:
   bool Generate(Event &event) noexcept;

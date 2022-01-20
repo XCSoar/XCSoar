@@ -26,7 +26,7 @@ Copyright_License {
 namespace UI {
 
 void
-EventQueue::Push(const Event &event) noexcept
+EventQueue::Inject(const Event &event) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
   if (quit)

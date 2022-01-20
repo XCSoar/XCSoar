@@ -44,7 +44,7 @@ Notify::SendNotification() noexcept
 #ifdef USE_WINUSER
   SendUser(0);
 #else
-  event_queue->Push(Callback, this);
+  event_queue->InjectCall(Callback, this);
 #endif
 }
 

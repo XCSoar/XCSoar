@@ -43,6 +43,15 @@ EventQueue::~EventQueue() noexcept
 void
 EventQueue::Push(const Event &event) noexcept
 {
+  event_loop.Break();
+
+  std::lock_guard<Mutex> lock(mutex);
+  events.push(event);
+}
+
+void
+EventQueue::Inject(const Event &event) noexcept
+{
   std::lock_guard<Mutex> lock(mutex);
   events.push(event);
   WakeUp();
