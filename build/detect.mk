@@ -37,9 +37,3 @@ HOST_IS_CUBIE := $(call string_contains,$(shell cat /sys/firmware/devicetree/bas
 else
 HOST_IS_CUBIE := n
 endif
-
-ifeq ($(HOST_IS_LINUX)$(HOST_IS_ARMV7),yy)
-HOST_HAS_MALI := $(call string_equals,$(shell test -c /dev/mali && echo y),y)
-else
-HOST_HAS_MALI := n
-endif

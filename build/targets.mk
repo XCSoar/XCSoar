@@ -159,7 +159,6 @@ ifeq ($(TARGET),UNIX)
   ARMV7 = $(HOST_IS_ARMV7)
   NEON = $(HOST_HAS_NEON)
   TARGET_IS_ARMHF := $(call bool_or,$(ARMV7),$(TARGET_IS_PI32))
-  TARGET_HAS_MALI = $(HOST_HAS_MALI)
 endif
 
 ifeq ($(TARGET),UNIX32)
@@ -200,15 +199,6 @@ ifeq ($(TARGET),CUBIE)
   override TARGET = NEON
   CUBIE ?= /opt/cubie/root
   TARGET_IS_CUBIE=y
-  # Open-source Lima driver is available and usable with XCSoar
-  # in current mainline kernels, 
-  # and in MESA included in recent distributions
-  ifeq ($(ENABLE_MESA_KMS),y)
-    OPENGL = y
-    GLES2 = y
-  else
-    TARGET_HAS_MALI = y
-  endif
 endif
 
 ifeq ($(TARGET),KOBO)

@@ -95,12 +95,7 @@ TopCanvas::Create(PixelSize new_size)
   InitialiseTTY();
 #endif
 
-#if defined(HAVE_MALI)
-  const EGLNativeDisplayType native_display = EGL_DEFAULT_DISPLAY;
-  mali_native_window.width = new_size.width;
-  mali_native_window.height = new_size.height;
-  fbdev_window *native_window = &mali_native_window;
-#elif defined(MESA_KMS)
+#if defined(MESA_KMS)
   current_bo = nullptr;
   connector = nullptr;
   encoder = nullptr;

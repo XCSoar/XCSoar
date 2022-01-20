@@ -5,6 +5,7 @@ ENABLE_MESA_KMS = y
 else ifeq ($(TARGET_IS_CUBIE),y)
 # auto-enable EGL on the Cubieboard.
 EGL ?= y
+ENABLE_MESA_KMS = y
 else ifeq ($(ENABLE_MESA_KMS),y)
 # if Mesa KMS is explicitly enabled, we also need to enable EGL
 EGL ?= y
@@ -47,14 +48,7 @@ EGL_FEATURE_CPPFLAGS = -DUSE_EGL
 
 EGL_LDLIBS = -lEGL
 
-ifeq ($(TARGET_HAS_MALI),y)
-EGL_FEATURE_CPPFLAGS += -DHAVE_MALI
-USE_CONSOLE = y
-# There are two different native window definitions in the ARM headers
-ifneq ($(shell test -f $(CUBIE)/usr/include/EGL/fbdev_window.h && echo y),y)
-EGL_FEATURE_CPPFLAGS += -DHAVE_MALI_NATIVE_WINDOW
-endif
-else ifeq ($(ENABLE_MESA_KMS),y)
+ifeq ($(ENABLE_MESA_KMS),y)
 $(eval $(call pkg-config-library,DRM,libdrm))
 $(eval $(call pkg-config-library,GBM,gbm))
 EGL_FEATURE_CPPFLAGS += -DMESA_KMS
