@@ -89,8 +89,7 @@ GetRenderableType()
 #if !defined(USE_X11) && !defined(USE_WAYLAND)
 
 void
-TopCanvas::Create(PixelSize new_size,
-                  bool full_screen, bool resizable)
+TopCanvas::Create(PixelSize new_size)
 {
 #ifdef USE_TTY
   InitialiseTTY();

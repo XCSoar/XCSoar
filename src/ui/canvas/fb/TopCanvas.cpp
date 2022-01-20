@@ -109,8 +109,7 @@ TopCanvas::GetRect() const
 }
 
 void
-TopCanvas::Create(PixelSize new_size,
-                  bool full_screen, bool resizable)
+TopCanvas::Create(PixelSize new_size)
 {
 #ifdef USE_FB
   assert(fd < 0);

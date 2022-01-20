@@ -29,7 +29,7 @@ Copyright_License {
 #include "LogFile.hpp"
 
 void
-TopCanvas::Create(PixelSize new_size, bool full_screen, bool resizable)
+TopCanvas::Create(PixelSize new_size)
 {
   display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
   surface = eglGetCurrentSurface(EGL_DRAW);

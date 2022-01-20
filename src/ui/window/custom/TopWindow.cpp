@@ -58,7 +58,7 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
 #elif defined(USE_WAYLAND)
   screen->Create(native_display, native_window);
 #else
-  screen->Create(size, style.GetFullScreen(), style.GetResizable());
+  screen->Create(size);
 #endif
 
   assert(screen->IsDefined());

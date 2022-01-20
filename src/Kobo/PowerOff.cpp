@@ -139,7 +139,7 @@ int main(int argc, char **argv)
 
   {
     TopCanvas screen;
-    screen.Create(PixelSize(100, 100), true, false);
+    screen.Create(PixelSize(100, 100));
 
     Canvas canvas = screen.Lock();
     if (canvas.IsDefined()) {

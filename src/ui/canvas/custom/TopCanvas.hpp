@@ -234,8 +234,7 @@ public:
     CreateEGL(native_display, native_window);
   }
 #else
-  void Create(PixelSize new_size,
-              bool full_screen, bool resizable);
+  void Create(PixelSize new_size);
 #endif
 
 #if defined(USE_FB) || (defined(ENABLE_OPENGL) && (defined(USE_EGL) || defined(USE_GLX) || defined(ENABLE_SDL)))
