@@ -28,18 +28,10 @@ Copyright_License {
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
 
-#ifdef USE_VIDEOCORE
-#include "bcm_host.h"
-#endif
-
 using namespace UI;
 
 ScreenGlobalInit::ScreenGlobalInit()
 {
-#ifdef USE_VIDEOCORE
-  bcm_host_init();
-#endif
-
   OpenGL::Initialise();
 
   Font::Initialise();

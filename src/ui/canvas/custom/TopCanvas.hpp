@@ -90,7 +90,7 @@ class Canvas;
 struct PixelSize;
 struct PixelRect;
 
-#if (defined(USE_FB) && !defined(KOBO)) || (defined USE_EGL && (defined(USE_VIDEOCORE) || defined(HAVE_MALI)))
+#if (defined(USE_FB) && !defined(KOBO)) || (defined USE_EGL && defined(HAVE_MALI))
 /* defined if we need to initialise /dev/tty to graphics mode, see
    TopCanvas::InitialiseTTY() */
 #define USE_TTY
@@ -103,12 +103,6 @@ class TopCanvas
 {
 #ifdef USE_EGL
 #if defined(USE_X11) || defined(USE_WAYLAND)
-#elif defined(USE_VIDEOCORE)
-  /* for Raspberry Pi */
-  DISPMANX_DISPLAY_HANDLE_T vc_display;
-  DISPMANX_UPDATE_HANDLE_T vc_update;
-  DISPMANX_ELEMENT_HANDLE_T vc_element;
-  EGL_DISPMANX_WINDOW_T vc_window;
 #elif defined(HAVE_MALI)
   fbdev_window mali_native_window;
 #elif defined(MESA_KMS)

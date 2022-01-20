@@ -95,34 +95,7 @@ TopCanvas::Create(PixelSize new_size)
   InitialiseTTY();
 #endif
 
-#ifdef USE_VIDEOCORE
-  vc_display = vc_dispmanx_display_open(0);
-  vc_update = vc_dispmanx_update_start(0);
-
-  VC_RECT_T dst_rect;
-  dst_rect.x = dst_rect.y = 0;
-  dst_rect.width = new_size.width;
-  dst_rect.height = new_size.height;
-
-  VC_RECT_T src_rect = dst_rect;
-  src_rect.x = src_rect.y = 0;
-  src_rect.width = new_size.width << 16;
-  src_rect.height = new_size.height << 16;
-
-  vc_element = vc_dispmanx_element_add(vc_update, vc_display,
-                                       0, &dst_rect, 0, &src_rect,
-                                       DISPMANX_PROTECTION_NONE,
-                                       0, 0,
-                                       DISPMANX_NO_ROTATE);
-  vc_dispmanx_update_submit_sync(vc_update);
-
-  vc_window.element = vc_element;
-  vc_window.width = new_size.width;
-  vc_window.height = new_size.height;
-
-  const EGLNativeDisplayType native_display = EGL_DEFAULT_DISPLAY;
-  const EGLNativeWindowType native_window = &vc_window;
-#elif defined(HAVE_MALI)
+#if defined(HAVE_MALI)
   const EGLNativeDisplayType native_display = EGL_DEFAULT_DISPLAY;
   mali_native_window.width = new_size.width;
   mali_native_window.height = new_size.height;

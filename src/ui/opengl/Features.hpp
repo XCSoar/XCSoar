@@ -38,7 +38,7 @@ Copyright_License {
 #define HAVE_DYNAMIC_MAPBUFFER
 #endif
 
-#if defined(USE_VIDEOCORE) || defined(HAVE_MALI) || defined(MESA_KMS)
+#if defined(HAVE_MALI) || defined(MESA_KMS)
 #define DRAW_MOUSE_CURSOR
 #endif
 
