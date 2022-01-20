@@ -34,8 +34,6 @@ Copyright_License {
 
 #include <functional>
 
-class ActionListener;
-
 /**
  * A #Widget implementation that calls a function when clicked.
  */

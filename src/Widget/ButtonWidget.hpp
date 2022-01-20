@@ -34,7 +34,6 @@ Copyright_License {
 struct ButtonLook;
 class Button;
 class ButtonRenderer;
-class ActionListener;
 
 /**
  * A #Widget that creates a #Button.

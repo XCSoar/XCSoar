@@ -36,7 +36,6 @@ class RoughTime;
 class Angle;
 struct BrokenDate;
 class ContainerWindow;
-class ActionListener;
 struct DialogLook;
 
 /**
