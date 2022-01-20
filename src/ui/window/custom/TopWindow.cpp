@@ -47,23 +47,21 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
 #endif
 
   delete screen;
-  screen = new TopCanvas();
+  screen = nullptr;
 
 #ifdef ENABLE_SDL
-  screen->Create(window);
+  screen = new TopCanvas(window);
 #elif defined(USE_GLX)
-  screen->Create(x_display, x_window, fb_cfg);
+  screen = new TopCanvas(x_display, x_window, fb_cfg);
 #elif defined(USE_X11)
-  screen->Create(x_display, x_window);
+  screen = new TopCanvas(x_display, x_window);
 #elif defined(USE_WAYLAND)
-  screen->Create(native_display, native_window);
+  screen = new TopCanvas(native_display, native_window);
 #elif defined(ANDROID) || defined(USE_VFB)
-  screen->Create(size);
+  screen = new TopCanvas(size);
 #else
-  screen->Create();
+  screen = new TopCanvas();
 #endif
-
-  assert(screen->IsDefined());
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   screen->SetDisplayOrientation(style.GetInitialOrientation());

@@ -28,8 +28,7 @@ Copyright_License {
 #include "Android/NativeView.hpp"
 #include "LogFile.hpp"
 
-void
-TopCanvas::Create(PixelSize new_size)
+TopCanvas::TopCanvas(PixelSize new_size)
 {
   display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
   surface = eglGetCurrentSurface(EGL_DRAW);
@@ -37,6 +36,8 @@ TopCanvas::Create(PixelSize new_size)
   OpenGL::SetupContext();
   SetupViewport(new_size);
 }
+
+TopCanvas::~TopCanvas() noexcept = default;
 
 void
 TopCanvas::Flip()

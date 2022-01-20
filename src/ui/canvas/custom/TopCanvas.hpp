@@ -120,13 +120,13 @@ class TopCanvas
 #endif
 
 #ifdef USE_GLX
-  _XDisplay *x_display;
+  _XDisplay *const x_display;
   GLXContext glx_context;
   GLXWindow glx_window;
 #endif
 
 #ifdef ENABLE_SDL
-  SDL_Window *window;
+  SDL_Window *const window;
 
 #ifdef USE_MEMORY_CANVAS
   SDL_Renderer *renderer;
@@ -181,46 +181,28 @@ class TopCanvas
 #endif
 
 public:
-#ifndef ANDROID
-  ~TopCanvas() {
-    Destroy();
-  }
-
-  void Destroy();
-#endif
-
-#ifdef USE_MEMORY_CANVAS
-  bool IsDefined() const {
 #ifdef ENABLE_SDL
-    return window != nullptr;
-#elif defined(USE_VFB)
-    return true;
-#else
-    return fd >= 0;
-#endif
-  }
-
-  gcc_pure
-  PixelRect GetRect() const;
-#endif
-
-#ifdef ENABLE_SDL
-  void Create(SDL_Window *_window);
+  TopCanvas(SDL_Window *_window);
 #elif defined(USE_GLX)
-  void Create(_XDisplay *x_display,
-              X11Window x_window,
-              GLXFBConfig *fb_cfg) {
-    CreateGLX(x_display, x_window, fb_cfg);
-  }
+  TopCanvas(_XDisplay *x_display,
+            X11Window x_window,
+            GLXFBConfig *fb_cfg);
 #elif defined(USE_X11) || defined(USE_WAYLAND)
-  void Create(EGLNativeDisplayType native_display,
-              EGLNativeWindowType native_window) {
+  TopCanvas(EGLNativeDisplayType native_display,
+            EGLNativeWindowType native_window) {
     CreateEGL(native_display, native_window);
   }
 #elif defined(ANDROID) || defined(USE_VFB)
-  void Create(PixelSize new_size);
+  TopCanvas(PixelSize new_size);
 #else
-  void Create();
+  TopCanvas();
+#endif
+
+  ~TopCanvas() noexcept;
+
+#ifdef USE_MEMORY_CANVAS
+  gcc_pure
+  PixelRect GetRect() const;
 #endif
 
 #if defined(USE_FB) || (defined(ENABLE_OPENGL) && (defined(USE_EGL) || defined(USE_GLX) || defined(ENABLE_SDL)))
@@ -301,12 +283,7 @@ private:
   void SetupViewport(PixelSize native_size);
 #endif
 
-#ifdef USE_GLX
-  void InitGLX(_XDisplay *x_display);
-  void CreateGLX(_XDisplay *x_display,
-                 X11Window x_window,
-                 GLXFBConfig *fb_cfg);
-#elif defined(USE_EGL)
+#ifdef USE_EGL
   void CreateEGL(EGLNativeDisplayType native_display,
                  EGLNativeWindowType native_window);
 #endif

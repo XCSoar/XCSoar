@@ -60,8 +60,6 @@ Copyright_License {
 PixelRect
 TopCanvas::GetRect() const
 {
-  assert(IsDefined());
-
   int width, height;
   ::SDL_GetWindowSize(window, &width, &height);
   return { 0, 0, width, height };
@@ -69,11 +67,9 @@ TopCanvas::GetRect() const
 
 #endif
 
-void
-TopCanvas::Create(SDL_Window *_window)
+TopCanvas::TopCanvas(SDL_Window *_window)
+  :window(_window)
 {
-  window = _window;
-
 #ifdef USE_MEMORY_CANVAS
   renderer = SDL_CreateRenderer(window, -1, 0);
   if (renderer == nullptr)
@@ -107,8 +103,7 @@ TopCanvas::Create(SDL_Window *_window)
 #endif
 }
 
-void
-TopCanvas::Destroy()
+TopCanvas::~TopCanvas() noexcept
 {
 #if !defined(ENABLE_OPENGL) && defined(GREYSCALE)
   buffer.Free();

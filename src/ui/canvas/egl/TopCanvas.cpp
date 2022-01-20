@@ -88,8 +88,7 @@ GetRenderableType()
 
 #if !defined(USE_X11) && !defined(USE_WAYLAND)
 
-void
-TopCanvas::Create()
+TopCanvas::TopCanvas()
 {
 #ifdef USE_TTY
   InitialiseTTY();
@@ -286,8 +285,7 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
   SetupViewport(effective_size);
 }
 
-void
-TopCanvas::Destroy()
+TopCanvas::~TopCanvas() noexcept
 {
   eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
   eglDestroySurface(display, surface);

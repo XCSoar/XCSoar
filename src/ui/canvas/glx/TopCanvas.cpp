@@ -28,13 +28,11 @@ Copyright_License {
 
 #include <stdexcept>
 
-void
-TopCanvas::CreateGLX(_XDisplay *_x_display,
+TopCanvas::TopCanvas(_XDisplay *_x_display,
                      X11Window x_window,
                      GLXFBConfig *fb_cfg)
+  :x_display(_x_display)
 {
-  x_display = _x_display;
-
   glx_context = glXCreateNewContext(_x_display, *fb_cfg, GLX_RGBA_TYPE,
                                     nullptr, true);
   if (glx_context == nullptr)
@@ -54,8 +52,7 @@ TopCanvas::CreateGLX(_XDisplay *_x_display,
   SetupViewport(effective_size);
 }
 
-void
-TopCanvas::Destroy()
+TopCanvas::~TopCanvas() noexcept
 {
   glXDestroyWindow(x_display, glx_window);
   glXDestroyContext(x_display, glx_context);

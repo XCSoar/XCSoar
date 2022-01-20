@@ -83,8 +83,7 @@ GetSize(const struct fb_var_screeninfo &vinfo)
 
 #endif
 
-void
-TopCanvas::Destroy()
+TopCanvas::~TopCanvas() noexcept
 {
   buffer.Free();
 
@@ -103,15 +102,12 @@ TopCanvas::Destroy()
 PixelRect
 TopCanvas::GetRect() const
 {
-  assert(IsDefined());
-
   return { 0, 0, int(buffer.width), int(buffer.height) };
 }
 
 #ifdef USE_FB
 
-void
-TopCanvas::Create()
+TopCanvas::TopCanvas()
 {
   assert(fd < 0);
 
@@ -227,8 +223,7 @@ TopCanvas::CheckResize()
 
 #elif defined(USE_VFB)
 
-void
-TopCanvas::Create(PixelSize new_size)
+TopCanvas::TopCanvas(PixelSize new_size)
 {
   buffer.Allocate(new_size.width, new_size.height);
 }
