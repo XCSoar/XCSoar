@@ -217,8 +217,10 @@ public:
               EGLNativeWindowType native_window) {
     CreateEGL(native_display, native_window);
   }
-#else
+#elif defined(ANDROID) || defined(USE_VFB)
   void Create(PixelSize new_size);
+#else
+  void Create();
 #endif
 
 #if defined(USE_FB) || (defined(ENABLE_OPENGL) && (defined(USE_EGL) || defined(USE_GLX) || defined(ENABLE_SDL)))

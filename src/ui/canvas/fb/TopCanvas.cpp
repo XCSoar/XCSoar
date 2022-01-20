@@ -108,10 +108,11 @@ TopCanvas::GetRect() const
   return { 0, 0, int(buffer.width), int(buffer.height) };
 }
 
-void
-TopCanvas::Create(PixelSize new_size)
-{
 #ifdef USE_FB
+
+void
+TopCanvas::Create()
+{
   assert(fd < 0);
 
 #ifdef USE_TTY
@@ -201,22 +202,14 @@ TopCanvas::Create(PixelSize new_size)
   };
 #endif
 
-  new_size = ::GetSize(vinfo);
+  const auto new_size = ::GetSize(vinfo);
 
   if (vinfo.width > 0 && vinfo.height > 0)
     Display::ProvideSizeMM(new_size.width, new_size.height,
                            vinfo.width, vinfo.height);
 
-#elif defined(USE_VFB)
-  /* allocate buffer as requested by caller */
-#else
-#error No implementation
-#endif
-
   buffer.Allocate(new_size.width, new_size.height);
 }
-
-#ifdef USE_FB
 
 inline PixelSize
 TopCanvas::GetNativeSize() const
@@ -232,6 +225,16 @@ TopCanvas::CheckResize()
   return CheckResize(GetNativeSize());
 }
 
+#elif defined(USE_VFB)
+
+void
+TopCanvas::Create(PixelSize new_size)
+{
+  buffer.Allocate(new_size.width, new_size.height);
+}
+
+#else
+#error No implementation
 #endif
 
 bool

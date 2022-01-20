@@ -57,8 +57,10 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
   screen->Create(x_display, x_window);
 #elif defined(USE_WAYLAND)
   screen->Create(native_display, native_window);
-#else
+#elif defined(ANDROID) || defined(USE_VFB)
   screen->Create(size);
+#else
+  screen->Create();
 #endif
 
   assert(screen->IsDefined());
