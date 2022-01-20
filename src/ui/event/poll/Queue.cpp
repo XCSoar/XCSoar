@@ -55,13 +55,6 @@ EventQueue::Poll()
   event_loop.Run();
 }
 
-void
-EventQueue::PushKeyPress(unsigned key_code)
-{
-  Push(Event(Event::KEY_DOWN, key_code));
-  Push(Event(Event::KEY_UP, key_code));
-}
-
 bool
 EventQueue::Generate(Event &event)
 {

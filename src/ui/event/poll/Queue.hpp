@@ -158,8 +158,6 @@ public:
     Push(Event(callback, ctx));
   }
 
-  void PushKeyPress(unsigned key_code);
-
   bool Pop(Event &event);
 
   bool Wait(Event &event);
