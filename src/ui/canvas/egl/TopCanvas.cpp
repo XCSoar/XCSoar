@@ -22,6 +22,8 @@ Copyright_License {
 */
 
 #include "ui/canvas/custom/TopCanvas.hpp"
+#include "ConfigChooser.hpp"
+#include "GBM.hpp"
 #include "ui/canvas/opengl/Init.hpp"
 #include "ui/canvas/opengl/Globals.hpp"
 #include "ui/opengl/Features.hpp"
@@ -49,14 +51,6 @@ static constexpr const char *DEFAULT_DRI_DEVICE = "/dev/dri/card1";
 constexpr const char * DEFAULT_DRI_DEVICE = "/dev/dri/card0";
 #endif
 
-static constexpr uint32_t XCSOAR_GBM_FORMAT = GBM_FORMAT_XRGB8888;
-
-/**
- * A fallback value for EGL_NATIVE_VISUAL_ID; this is needed for the
- * "amdgpu" driver on Linux.
- */
-static constexpr uint32_t XCSOAR_GBM_FORMAT_FALLBACK = GBM_FORMAT_ARGB8888;
-
 struct drm_fb {
   struct gbm_bo *bo;
   uint32_t fb_id;
@@ -73,17 +67,6 @@ GetBindAPI()
   return HaveGLES()
     ? EGL_OPENGL_ES_API
     : EGL_OPENGL_API;
-}
-
-/**
- * Returns the requested renderable type for EGL_RENDERABLE_TYPE.
- */
-static constexpr EGLint
-GetRenderableType()
-{
-  return HaveGLES()
-    ? (HaveGLES2() ? EGL_OPENGL_ES2_BIT : EGL_OPENGL_ES_BIT)
-    : EGL_OPENGL_BIT;
 }
 
 #if !defined(USE_X11) && !defined(USE_WAYLAND)
@@ -171,31 +154,6 @@ TopCanvas::TopCanvas()
 
 #endif
 
-#ifdef MESA_KMS
-
-/**
- * Find an EGLConfig with the specified attribute value.
- *
- * @return an index into the #configs parameter or -1 if no matching
- * EGLConfig was found
- */
-static EGLint
-FindConfigWithAttribute(EGLDisplay display,
-                        const EGLConfig *configs, EGLint num_configs,
-                        EGLint attribute, EGLint expected_value) noexcept
-{
-  for (EGLint i = 0; i < num_configs; ++i) {
-    EGLint value;
-    if (eglGetConfigAttrib(display, configs[i], attribute, &value) &&
-        value == expected_value)
-      return i;
-  }
-
-  return -1;
-}
-
-#endif /* MESA_KMS */
-
 void
 TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
                      EGLNativeWindowType native_window)
@@ -210,47 +168,7 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
   if (!eglBindAPI(GetBindAPI()))
     throw std::runtime_error("eglBindAPI() failed");
 
-  static constexpr EGLint attributes[] = {
-    EGL_STENCIL_SIZE, 1,
-#ifdef MESA_KMS
-    EGL_RED_SIZE, 1,
-    EGL_GREEN_SIZE, 1,
-    EGL_BLUE_SIZE, 1,
-#ifndef RASPBERRY_PI /* the Raspberry Pi 4 doesn't have an alpha channel */
-    EGL_ALPHA_SIZE, 1,
-#endif
-#endif
-    EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-    EGL_RENDERABLE_TYPE, GetRenderableType(),
-    EGL_NONE
-  };
-
-  static constexpr EGLint MAX_CONFIGS = 64;
-  EGLConfig configs[MAX_CONFIGS];
-  EGLint num_configs;
-  if (!eglChooseConfig(display, attributes, configs,
-                       MAX_CONFIGS, &num_configs))
-    throw FormatRuntimeError("eglChooseConfig() failed: %#x", eglGetError());
-
-  if (num_configs == 0)
-    throw std::runtime_error("eglChooseConfig() failed");
-
-#ifdef MESA_KMS
-  /* On some GBM targets, such as the Raspberry Pi 4,
-     eglChooseConfig() gives us an EGLConfig which will later fail
-     eglCreateWindowSurface() with EGL_BAD_MATCH.  Only the EGLConfig
-     which has the matching EGL_NATIVE_VISUAL_ID will work. */
-  EGLint i = FindConfigWithAttribute(display, configs, num_configs,
-                                     EGL_NATIVE_VISUAL_ID,
-                                     XCSOAR_GBM_FORMAT);
-  if (i < 0)
-    i = FindConfigWithAttribute(display, configs, num_configs,
-                                EGL_NATIVE_VISUAL_ID,
-                                XCSOAR_GBM_FORMAT_FALLBACK);
-  const EGLConfig chosen_config = i >= 0 ? configs[i] : configs[0];
-#else
-  const EGLConfig chosen_config = configs[0];
-#endif
+  const EGLConfig chosen_config = EGL::ChooseConfig(display);
 
   surface = eglCreateWindowSurface(display, chosen_config,
                                    native_window, nullptr);

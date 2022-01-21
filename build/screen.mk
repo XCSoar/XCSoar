@@ -143,6 +143,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/tty/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/egl/Init.cpp \
 	$(CANVAS_SRC_DIR)/egl/TopCanvas.cpp \
+	$(CANVAS_SRC_DIR)/egl/ConfigChooser.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
 	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
