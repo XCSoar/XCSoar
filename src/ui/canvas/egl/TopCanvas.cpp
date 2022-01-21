@@ -35,6 +35,8 @@ Copyright_License {
 #ifdef MESA_KMS
 #include "Hardware/DisplayDPI.hpp"
 
+#include <span>
+
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
@@ -86,6 +88,31 @@ OpenDriDevice()
   return dri_fd;
 }
 
+static drmModeConnector *
+ChooseConnector(int dri_fd, const std::span<const uint32_t> connectors)
+{
+  for (const auto id : connectors) {
+    auto *connector = drmModeGetConnector(dri_fd, id);
+    if (connector != nullptr && connector->connection == DRM_MODE_CONNECTED &&
+        connector->count_modes > 0)
+      return connector;
+
+    drmModeFreeConnector(connector);
+  }
+
+  throw std::runtime_error("No usable DRM connector found");
+}
+
+static drmModeConnector *
+ChooseConnector(int dri_fd, const drmModeRes &resources)
+{
+  const std::span connectors{
+    resources.connectors, std::size_t(resources.count_connectors),
+  };
+
+  return ChooseConnector(dri_fd, connectors);
+}
+
 #endif
 
 #if !defined(USE_X11) && !defined(USE_WAYLAND)
@@ -110,21 +137,7 @@ TopCanvas::TopCanvas()
   if (resources == nullptr)
     throw std::runtime_error("drmModeGetResources() failed");
 
-  for (int i = 0;
-       (i < resources->count_connectors) && (connector == nullptr);
-       ++i) {
-    connector = drmModeGetConnector(dri_fd, resources->connectors[i]);
-    if (nullptr != connector) {
-      if ((connector->connection != DRM_MODE_CONNECTED) ||
-          (connector->count_modes <= 0)) {
-        drmModeFreeConnector(connector);
-        connector = nullptr;
-      }
-    }
-  }
-
-  if (nullptr == connector)
-    throw std::runtime_error("No usable DRM connector found");
+  connector = ChooseConnector(dri_fd, *resources);
 
   for (int i = 0;
        (i < resources->count_encoders) && (encoder == nullptr);
