@@ -102,6 +102,7 @@ const char WeGlidePilotBirthDate[] = "WeGlidePilotBirthDate";
 const char WeGlideAircraftType[] = "WeGlideAircraftType";
 const char WeGlideAutomaticUpload[] = "WeGlideAutomaticUpload";
 const char CoPilotName[] = "CoPilotName";
+const char CrewWeightTemplate[] = "CrewWeightTemplate";
 const char AircraftType[] = "AircraftType";
 const char AircraftReg[] = "AircraftReg";
 const char CompetitionId[] = "AircraftRego";

@@ -41,10 +41,11 @@ GlidePolar::GlidePolar(const double _mc, const double _bugs, const double _balla
    VbestLD(0),
    Vmax(75),
    Vmin(0),
-   ideal_polar(0.00157, -0.0734, 1.48),
+   reference_polar(0.00157, -0.0734, 1.48),
    ballast_ratio(0.3),
    reference_mass(300),
-   dry_mass(reference_mass),
+   empty_mass(reference_mass),
+   crew_mass(90.),
    wing_area(0)
 {
   Update();
@@ -58,7 +59,7 @@ GlidePolar::Update()
 {
   assert(bugs > 0);
 
-  if (!ideal_polar.IsValid()) {
+  if (!reference_polar.IsValid()) {
     Vmin = Vmax = 0;
     return;
   }
@@ -66,9 +67,9 @@ GlidePolar::Update()
   const auto loading_factor = sqrt(GetTotalMass() / reference_mass);
   const auto inv_bugs = 1. / bugs;
 
-  polar.a = inv_bugs * ideal_polar.a / loading_factor;
-  polar.b = inv_bugs * ideal_polar.b;
-  polar.c = inv_bugs * ideal_polar.c * loading_factor;
+  polar.a = inv_bugs * reference_polar.a / loading_factor;
+  polar.b = inv_bugs * reference_polar.b;
+  polar.c = inv_bugs * reference_polar.c * loading_factor;
 
   assert(polar.IsValid());
 
@@ -359,7 +360,7 @@ GlidePolar::SpeedToFly(const AircraftState &state,
 double
 GlidePolar::GetTotalMass() const
 {
-  return dry_mass + GetBallastLitres();
+  return empty_mass + crew_mass + GetBallastLitres();
 }
 
 double

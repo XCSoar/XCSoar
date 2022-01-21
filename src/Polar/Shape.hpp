@@ -44,6 +44,7 @@ struct PolarPoint {
 
 struct PolarShape {
   std::array<PolarPoint, 3> points;
+  double reference_mass; /**< Reference Mass (kg) */
 
   const PolarPoint &operator[](unsigned i) const noexcept {
     return points[i];

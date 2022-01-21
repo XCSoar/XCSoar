@@ -49,7 +49,8 @@ GlidePolarTest::Init()
                                           1.47), false);
 
   polar.SetReferenceMass(318, false);
-  polar.SetDryMass(318, false);
+  polar.SetEmptyMass(228, false);
+  polar.SetCrewMass(90, false);
   polar.SetBallastRatio(100 / polar.reference_mass);
 
   polar.SetWingArea(9.8);
@@ -69,9 +70,9 @@ GlidePolarTest::TestBasic()
 {
   polar.Update();
 
-  ok1(equals(polar.polar.a, polar.ideal_polar.a));
-  ok1(equals(polar.polar.b, polar.ideal_polar.b));
-  ok1(equals(polar.polar.c, polar.ideal_polar.c));
+  ok1(equals(polar.polar.a, polar.reference_polar.a));
+  ok1(equals(polar.polar.b, polar.reference_polar.b));
+  ok1(equals(polar.polar.c, polar.reference_polar.c));
 
   ok1(equals(polar.SinkRate(Units::ToSysUnit(80, Unit::KILOMETER_PER_HOUR)), 0.606));
   ok1(equals(polar.SinkRate(Units::ToSysUnit(120, Unit::KILOMETER_PER_HOUR)), 0.99));
@@ -112,9 +113,9 @@ GlidePolarTest::TestBallast()
   ok1(polar.HasBallast());
 
   double loading_factor = sqrt(polar.GetTotalMass() / polar.reference_mass);
-  ok1(equals(polar.polar.a, polar.ideal_polar.a / loading_factor));
-  ok1(equals(polar.polar.b, polar.ideal_polar.b));
-  ok1(equals(polar.polar.c, polar.ideal_polar.c * loading_factor));
+  ok1(equals(polar.polar.a, polar.reference_polar.a / loading_factor));
+  ok1(equals(polar.polar.b, polar.reference_polar.b));
+  ok1(equals(polar.polar.c, polar.reference_polar.c * loading_factor));
 
   ok1(equals(polar.SinkRate(Units::ToSysUnit(80, Unit::KILOMETER_PER_HOUR)),
              0.640739));
@@ -136,9 +137,9 @@ GlidePolarTest::TestBugs()
   polar.SetBugs(0.75);
   ok1(equals(polar.GetBugs(), 0.75));
 
-  ok1(equals(polar.polar.a, polar.ideal_polar.a * 4 / 3));
-  ok1(equals(polar.polar.b, polar.ideal_polar.b * 4 / 3));
-  ok1(equals(polar.polar.c, polar.ideal_polar.c * 4 / 3));
+  ok1(equals(polar.polar.a, polar.reference_polar.a * 4 / 3));
+  ok1(equals(polar.polar.b, polar.reference_polar.b * 4 / 3));
+  ok1(equals(polar.polar.c, polar.reference_polar.c * 4 / 3));
 
   ok1(equals(polar.SinkRate(Units::ToSysUnit(80, Unit::KILOMETER_PER_HOUR)),
              0.808));

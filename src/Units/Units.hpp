@@ -218,7 +218,7 @@ namespace Units
   {
     return ToUserUnit(Value, current.pressure_unit);
   }
-
+  
   gcc_const
   double
   ToUserPressure(AtmosphericPressure value);
@@ -236,6 +236,19 @@ namespace Units
   gcc_const
   AtmosphericPressure
   FromUserPressure(double value);
+  
+  static inline double
+  ToUserMass(double Value)
+  {
+    return ToUserUnit(Value, current.mass_unit);
+  }
+  
+  static inline double
+  ToSysMass(double Value)
+  {
+    return ToSysUnit(Value, current.mass_unit);
+  }
+    
 };
 
 #endif

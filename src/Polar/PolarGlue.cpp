@@ -35,56 +35,11 @@ Copyright_License {
 
 #include <memory>
 
-namespace PolarGlue
-{
-  bool LoadFromOldProfile(PolarInfo &polar);
-}
-
 PolarInfo
 PolarGlue::GetDefault()
 {
   // Return LS8 polar
-  return PolarStore::GetItem(56).ToPolarInfo();
-}
-
-static bool
-ReadPolarFileFromProfile(PolarInfo &polar)
-{
-  auto reader = OpenConfiguredTextFileA(ProfileKeys::PolarFile);
-  return reader && PolarGlue::LoadFromFile(polar, *reader);
-}
-
-bool
-PolarGlue::LoadFromOldProfile(PolarInfo &polar)
-{
-  unsigned polar_id;
-  if (!Profile::Get(ProfileKeys::PolarID, polar_id))
-    return false;
-
-  if (polar_id == 6)
-    return ReadPolarFileFromProfile(polar);
-
-  if (polar_id == 0)
-    polar_id = 45;
-  else if (polar_id == 1)
-    polar_id = 16;
-  else if (polar_id == 2)
-    polar_id = 56;
-  else if (polar_id == 3)
-    polar_id = 19;
-  else if (polar_id == 4)
-    polar_id = 55;
-  else if (polar_id == 5)
-    polar_id = 118;
-  else {
-    polar_id -= 7;
-
-    if (polar_id >= PolarStore::Count())
-      return false;
-  }
-
-  polar = PolarStore::GetItem(polar_id).ToPolarInfo();
-  return true;
+  return PolarStore::GetDefault().ToPolarInfo();
 }
 
 bool
@@ -96,7 +51,7 @@ PolarGlue::LoadFromProfile(PolarInfo &polar)
     return true;
   }
 
-  return LoadFromOldProfile(polar);
+  return false;
 }
 
 PolarInfo

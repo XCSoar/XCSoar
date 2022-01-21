@@ -32,6 +32,7 @@ LoggerSettings::SetDefaults()
   logger_id.clear();
   pilot_name.clear();
   copilot_name.clear();
+  crew_mass_template = 90;
 
   /* XXX disabled by default for now, until the FlightLogger
      implementation is finished */

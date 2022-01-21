@@ -38,6 +38,7 @@ Copyright_License {
 #include "system/Path.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
+#include "util/ConvertString.hpp"
 
 class PlanePolarWidget final
   : public RowFormWidget, DataFieldListener {
@@ -46,7 +47,6 @@ class PlanePolarWidget final
     INVALID,
     SHAPE,
     REFERENCE_MASS,
-    DRY_MASS,
   };
 
   Plane plane;
@@ -116,8 +116,7 @@ PlanePolarWidget::Update()
   LoadPolarShape(plane.polar_shape);
   UpdatePolarLabel();
 
-  LoadValue(REFERENCE_MASS, plane.reference_mass, UnitGroup::MASS);
-  LoadValue(DRY_MASS, plane.dry_mass, UnitGroup::MASS);
+  LoadValue(REFERENCE_MASS, plane.polar_shape.reference_mass, UnitGroup::MASS);
 }
 
 void
@@ -132,15 +131,10 @@ PlanePolarWidget::Prepare(ContainerWindow &parent,
   DataFieldListener *listener = this;
   Add(std::make_unique<PolarShapeEditWidget>(plane.polar_shape, listener));
 
-  AddFloat(_("Reference Mass"), _("Reference mass of the polar"),
+  AddFloat(_("Reference Mass"), _("Reference mass of the polar."),
            _T("%.0f %s"), _T("%.0f"),
            0, 1000, 5, false,
-           UnitGroup::MASS, plane.reference_mass);
-
-  AddFloat(_("Dry Mass"), _("Dry all-up flying mass of your plane"),
-           _T("%.0f %s"), _T("%.0f"),
-           0, 1000, 5, false,
-           UnitGroup::MASS, plane.dry_mass);
+           UnitGroup::MASS, plane.polar_shape.reference_mass);
 }
 
 void
@@ -161,8 +155,7 @@ PlanePolarWidget::Save(bool &_changed) noexcept
       plane.polar_shape = widget.GetPolarShape();
   }
 
-  changed |= SaveValue(REFERENCE_MASS, UnitGroup::MASS, plane.reference_mass);
-  changed |= SaveValue(DRY_MASS, UnitGroup::MASS, plane.dry_mass);
+  changed |= SaveValue(REFERENCE_MASS, UnitGroup::MASS, plane.polar_shape.reference_mass);
 
   _changed |= changed;
   return true;
@@ -172,9 +165,8 @@ inline void
 PlanePolarWidget::ListClicked()
 {
   ComboList list;
-  unsigned len = PolarStore::Count();
-  for (unsigned i = 0; i < len; i++)
-    list.Append(i, PolarStore::GetItem(i).name);
+  for (auto item = PolarStore::cbegin(); item != PolarStore::cend(); item++ )
+    list.Append(item->name);
 
   list.Sort();
 
@@ -183,12 +175,13 @@ PlanePolarWidget::ListClicked()
   if (result < 0)
     return;
 
-  assert((unsigned)result < len);
+  assert((unsigned)result < PolarStore::Count());
 
-  const PolarStore::Item &item = PolarStore::GetItem(list[result].int_value);
+  WideToUTF8Converter polar_name(list[result].string_value.c_str());
+  const PolarStore::Item &item = PolarStore::GetItem(polar_name);
 
-  plane.reference_mass = item.reference_mass;
-  plane.dry_mass = item.reference_mass;
+  plane.polar_shape.reference_mass = item.reference_mass;
+  plane.empty_mass = item.empty_mass;
   plane.max_ballast = item.max_ballast;
 
   if (item.wing_area > 0.0)
@@ -221,8 +214,8 @@ PlanePolarWidget::ImportClicked()
   } catch (...) {
   }
 
-  plane.reference_mass = polar.reference_mass;
-  plane.dry_mass = polar.reference_mass;
+  plane.polar_shape.reference_mass = polar.shape.reference_mass;
+  // plane.empty_mass = polar;
   plane.max_ballast = polar.max_ballast;
 
   if (polar.wing_area > 0)

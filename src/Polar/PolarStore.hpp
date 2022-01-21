@@ -65,12 +65,23 @@ namespace PolarStore
     /** Contest handicap, 0 if unknown */
     unsigned contest_handicap;
 
+    /** empty rigged glider mass (kg), make the polar reference mass independent of the lift of weight sum */
+    unsigned empty_mass;
+
     PolarShape ToPolarShape() const;
     PolarInfo ToPolarInfo() const;
   };
 
-  const Item &GetItem(unsigned i);
+  typedef struct Item PolarList[];
+  typedef struct Item * iterator;
+  typedef const struct Item * const_iterator;
+
+  const Item &GetItem(const char *name);
+  const Item &GetDefault();
   unsigned Count();
-}
+
+  const_iterator cbegin();
+  const_iterator cend();
+};
 
 #endif
