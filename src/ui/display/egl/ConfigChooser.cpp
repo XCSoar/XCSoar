@@ -22,11 +22,15 @@ Copyright_License {
 */
 
 #include "ConfigChooser.hpp"
-#include "ui/canvas/egl/GBM.hpp"
 #include "ui/opengl/Features.hpp"
 #include "util/RuntimeError.hxx"
 
+#ifdef MESA_KMS
+#include "ui/canvas/egl/GBM.hpp"
+#endif
+
 #include <array>
+#include <span>
 
 namespace EGL {
 
@@ -40,6 +44,87 @@ GetRenderableType()
     ? (HaveGLES2() ? EGL_OPENGL_ES2_BIT : EGL_OPENGL_ES_BIT)
     : EGL_OPENGL_BIT;
 }
+
+#ifdef ANDROID
+
+[[gnu::pure]]
+static int
+GetConfigAttrib(EGLDisplay display, EGLConfig config,
+                int attribute, int default_value) noexcept
+{
+  int value;
+  return eglGetConfigAttrib(display, config, attribute, &value)
+    ? value
+    : default_value;
+}
+
+[[gnu::pure]]
+static int
+AttribDistance(EGLDisplay display, EGLConfig config,
+               int attribute, int want) noexcept
+{
+  int value = GetConfigAttrib(display, config, attribute, 0);
+  int distance = std::abs(value - want);
+  if (want > 0 && value == 0)
+    /* big penalty if this attribute if zero, but XCSoar prefers it
+       to be non-zero */
+    distance += 100;
+  else if (want == 0 && value > 0)
+    /* small penalty if this attribute is non-zero, but XCSoar
+       prefers it to be zero */
+    distance += 10;
+  return distance;
+}
+
+[[gnu::pure]]
+static int
+ConfigDistance(EGLDisplay display, EGLConfig config,
+               int want_r, int want_g, int want_b, int want_a,
+               int want_depth, int want_stencil) noexcept
+{
+  int distance = 0;
+
+  int caveat = GetConfigAttrib(display, config,
+                               EGL_CONFIG_CAVEAT, EGL_NONE);
+  if (caveat != EGL_NONE)
+    /* large penalty for unaccelerated software renderer configs */
+    distance += 1000;
+
+  int r = AttribDistance(display, config, EGL_RED_SIZE, want_r);
+  int g = AttribDistance(display, config, EGL_GREEN_SIZE, want_g);
+  int b = AttribDistance(display, config, EGL_BLUE_SIZE, want_b);
+  int a = AttribDistance(display, config, EGL_ALPHA_SIZE, want_a);
+  int d = AttribDistance(display, config, EGL_DEPTH_SIZE, want_depth);
+  int s = AttribDistance(display, config, EGL_STENCIL_SIZE, want_stencil);
+
+  return distance + r + g + b + a + d + s;
+}
+
+[[gnu::pure]]
+static EGLConfig
+FindClosestConfig(EGLDisplay display,
+                  std::span<const EGLConfig> configs,
+                  int want_r, int want_g, int want_b,
+                  int want_a,
+                  int want_depth, int want_stencil) noexcept
+{
+  EGLConfig closestConfig = nullptr;
+  int closestDistance = 1000;
+
+  for (EGLConfig config : configs) {
+    int distance = ConfigDistance(display, config,
+                                  want_r, want_g, want_b, want_a,
+                                  want_depth, want_stencil);
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      closestConfig = config;
+    }
+  }
+
+  return closestConfig;
+}
+
+#endif
 
 #ifdef MESA_KMS
 
@@ -70,6 +155,18 @@ EGLConfig
 ChooseConfig(EGLDisplay display)
 {
   static constexpr EGLint attributes[] = {
+#ifdef ANDROID
+    /* EGL_STENCIL_SIZE not listed here because we have a fallback for
+       configurations without stencil (but we prefer native stencil)
+       (maybe we can just require a stencil and get rid of the
+       complicated and slow fallback code eventually?) */
+
+    EGL_RED_SIZE, 4,
+    EGL_GREEN_SIZE, 4,
+    EGL_BLUE_SIZE, 4,
+
+#else //  !ANDROID
+
     EGL_STENCIL_SIZE, 1,
 #ifdef MESA_KMS
     EGL_RED_SIZE, 1,
@@ -78,7 +175,10 @@ ChooseConfig(EGLDisplay display)
 #ifndef RASPBERRY_PI /* the Raspberry Pi 4 doesn't have an alpha channel */
     EGL_ALPHA_SIZE, 1,
 #endif
-#endif
+#endif // MESA_KMS
+
+#endif // !ANDROID
+
     EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
     EGL_RENDERABLE_TYPE, GetRenderableType(),
     EGL_NONE
@@ -106,6 +206,14 @@ ChooseConfig(EGLDisplay display)
                                 EGL_NATIVE_VISUAL_ID,
                                 XCSOAR_GBM_FORMAT_FALLBACK);
   return i >= 0 ? configs[i] : configs[0];
+#elif defined(ANDROID)
+  const auto closest_config =
+    FindClosestConfig(display, {configs.data(), std::size_t(num_configs)},
+                      5, 6, 5, 0, 0, 1);
+  if (closest_config == nullptr)
+    throw std::runtime_error("eglChooseConfig() failed");
+
+  return closest_config;
 #else
   return configs[0];
 #endif

@@ -25,6 +25,7 @@ Copyright_License {
 #include "ConfigChooser.hpp"
 #include "ui/opengl/Features.hpp"
 #include "util/RuntimeError.hxx"
+#include "LogFile.hpp"
 
 #include <cassert>
 
@@ -41,22 +42,11 @@ GetBindAPI()
 
 namespace EGL {
 
-#ifdef ANDROID
-
-Display::Display()
-{
-  display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-}
-
-#else
-
 Display::Display(EGLNativeDisplayType native_display)
 {
   InitDisplay(native_display);
   CreateContext();
 }
-
-#endif
 
 Display::~Display() noexcept
 {
@@ -79,13 +69,20 @@ Display::InitDisplay(EGLNativeDisplayType native_display)
   if (!eglInitialize(display, nullptr, nullptr))
     throw std::runtime_error("eglInitialize() failed");
 
+  if (const char *s = eglQueryString(display, EGL_VENDOR))
+    LogFormat("EGL vendor: %s", s);
+
+  if (const char *s = eglQueryString(display, EGL_VERSION))
+    LogFormat("EGL version: %s", s);
+
+  if (const char *s = eglQueryString(display, EGL_EXTENSIONS))
+    LogFormat("EGL extensions: %s", s);
+
   if (!eglBindAPI(GetBindAPI()))
     throw std::runtime_error("eglBindAPI() failed");
 
   chosen_config = EGL::ChooseConfig(display);
 }
-
-#ifndef ANDROID
 
 inline void
 Display::CreateContext()
@@ -106,8 +103,6 @@ Display::CreateContext()
                              EGL_NO_CONTEXT, context_attributes);
 }
 
-#endif
-
 EGLSurface
 Display::CreateWindowSurface(EGLNativeWindowType native_window)
 {
@@ -120,15 +115,11 @@ Display::CreateWindowSurface(EGLNativeWindowType native_window)
   return surface;
 }
 
-#ifndef ANDROID
-
 void
 Display::MakeCurrent(EGLSurface surface)
 {
   if (!eglMakeCurrent(display, surface, surface, context))
     throw std::runtime_error("eglMakeCurrent() failed");
 }
-
-#endif
 
 } // namespace EGL

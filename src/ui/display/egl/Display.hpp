@@ -34,19 +34,13 @@ class Display {
 
   EGLConfig chosen_config;
 
-#ifndef ANDROID
   EGLContext context = EGL_NO_CONTEXT;
-#endif
 
 public:
   /**
    * Throws on error.
    */
-#ifdef ANDROID
-  Display();
-#else
   explicit Display(EGLNativeDisplayType native_display);
-#endif
 
   ~Display() noexcept;
 

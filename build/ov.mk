@@ -25,6 +25,7 @@ OV_MENU_SOURCES = \
 	$(SRC)/Dialogs/TouchTextEntry.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(SRC)/Kobo/FakeSymbols.cpp \
 	$(SRC)/OV/OpenVarioMenu.cpp
 OV_MENU_DEPENDS = WIDGET FORM DATA_FIELD SCREEN EVENT RESOURCE ASYNC LIBNET OS IO THREAD TIME MATH UTIL

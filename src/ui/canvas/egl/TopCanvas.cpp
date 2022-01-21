@@ -28,11 +28,13 @@ Copyright_License {
 #include "ui/display/Display.hpp"
 #include "system/Error.hxx"
 #include "util/RuntimeError.hxx"
+#include "LogFile.hpp"
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
-#include "LogFile.hpp"
+
+#include <android/native_window_jni.h>
 #endif
 
 #include <stdio.h>
@@ -52,10 +54,13 @@ struct drm_fb {
 TopCanvas::TopCanvas(UI::Display &_display, PixelSize new_size)
   :display(_display)
 {
-  surface = eglGetCurrentSurface(EGL_DRAW);
+  /* no surface yet; it will be created later by AcquireSurface(); but
+   * we need to make the context "current" */
+  display.MakeCurrent(EGL_NO_SURFACE);
 
   OpenGL::SetupContext();
-  SetupViewport(new_size);
+
+  Canvas::Create(new_size);
 }
 
 #elif !defined(USE_X11) && !defined(USE_WAYLAND)
@@ -85,8 +90,6 @@ TopCanvas::TopCanvas(UI::Display &_display)
 
 #endif
 
-#ifndef ANDROID
-
 void
 TopCanvas::CreateSurface(EGLNativeWindowType native_window)
 {
@@ -100,16 +103,26 @@ TopCanvas::CreateSurface(EGLNativeWindowType native_window)
 
   OpenGL::SetupContext();
   SetupViewport(effective_size);
-}
 
-#endif // !ANDROID
+  if (auto s = (const char *)glGetString(GL_VENDOR))
+    LogFormat("GL vendor: %s", s);
+
+  if (auto s = (const char *)glGetString(GL_VERSION))
+    LogFormat("GL version: %s", s);
+
+  if (auto s = (const char *)glGetString(GL_RENDERER))
+    LogFormat("GL renderer: %s", s);
+
+  if (auto s = (const char *)glGetString(GL_EXTENSIONS))
+    LogFormat("GL extensions: %s", s);
+}
 
 TopCanvas::~TopCanvas() noexcept
 {
-#ifndef ANDROID
-  display.MakeCurrent(EGL_NO_SURFACE);
-  display.DestroySurface(surface);
-#endif
+  if (surface != EGL_NO_SURFACE) {
+    display.MakeCurrent(EGL_NO_SURFACE);
+    display.DestroySurface(surface);
+  }
 
 #ifdef MESA_KMS
   if (nullptr != saved_crtc)
@@ -136,19 +149,27 @@ TopCanvas::GetNativeSize() const
 bool
 TopCanvas::AcquireSurface()
 {
-  if (!native_view->initSurface())
+  const auto env = Java::GetEnv();
+  const auto android_surface = native_view->GetSurface(env);
+  if (!android_surface)
     /* failed - retry later */
     return false;
 
-  surface = eglGetCurrentSurface(EGL_DRAW);
+  ANativeWindow *native_window =
+    ANativeWindow_fromSurface(env, android_surface.Get());
+  CreateSurface(native_window);
+
   return true;
 }
 
 void
 TopCanvas::ReleaseSurface() noexcept
 {
-  native_view->deinitSurface();
+  if (surface == EGL_NO_SURFACE)
+    return;
 
+  display.MakeCurrent(EGL_NO_SURFACE);
+  display.DestroySurface(surface);
   surface = EGL_NO_SURFACE;
 }
 

@@ -25,6 +25,7 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Dialogs/SimulatorPromptWindow.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(SRC)/Kobo/WPASupplicant.cpp \
 	$(SRC)/Kobo/Model.cpp \
 	$(SRC)/Kobo/System.cpp \
@@ -49,6 +50,7 @@ ifeq ($(TARGET_IS_KOBO),y)
 
 KOBO_POWER_OFF_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/DisplaySize.cpp \

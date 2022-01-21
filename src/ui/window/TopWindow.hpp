@@ -185,14 +185,20 @@ class TopWindow : public ContainerWindow {
    * Is the application currently paused?  While this flag is set, no
    * OpenGL operations are allowed, because the OpenGL surface does
    * not exist.
+   *
+   * This is initially true to trigger a call to
+   * TopCanvas::AcquireSurface().
    */
-  bool paused = false;
+  bool paused = true;
 
   /**
    * Has the application been resumed?  When this flag is set,
    * TopWindow::Expose() attempts to reinitialize the OpenGL surface.
+   *
+   * This is initially true to trigger a call to
+   * TopCanvas::AcquireSurface().
    */
-  bool resumed = false;
+  bool resumed = true;
 
   /**
    * Was the application view resized while paused?  If true, then

@@ -149,7 +149,7 @@ try {
 
   LogFormat(_T("Starting XCSoar %s"), XCSoar_ProductToken);
 
-  ui_display = new UI::Display();
+  ui_display = new UI::Display(EGL_DEFAULT_DISPLAY);
 
   OpenGL::Initialise();
   TextUtil::Initialise(env);

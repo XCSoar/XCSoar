@@ -45,7 +45,7 @@ class NativeView {
 
   static Java::TrivialClass cls;
   static jfieldID textureNonPowerOfTwo_field;
-  static jmethodID init_surface_method, deinit_surface_method;
+  static jmethodID getSurface_method;
   static jmethodID acquireWakeLock_method;
   static jmethodID setFullScreen_method;
   static jmethodID setRequestedOrientationID;
@@ -102,18 +102,8 @@ public:
     return product;
   }
 
-  /**
-   * Initializes the OpenGL surface.
-   *
-   * Throws on error.
-   *
-   * @return true on success, false if no surface is available
-   * currently
-   */
-  bool initSurface();
-
-  void deinitSurface() {
-    env->CallVoidMethod(obj, deinit_surface_method);
+  Java::LocalObject GetSurface(JNIEnv *_env) const noexcept {
+    return {_env, _env->CallObjectMethod(obj, getSurface_method)};
   }
 
   void AcquireWakeLock() const noexcept {

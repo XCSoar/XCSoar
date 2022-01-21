@@ -22,19 +22,13 @@
 
 package org.xcsoar;
 
-import javax.microedition.khronos.egl.EGL10;
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.egl.EGLContext;
-import javax.microedition.khronos.egl.EGLDisplay;
-import javax.microedition.khronos.egl.EGLSurface;
-import javax.microedition.khronos.opengles.GL10;
-
 import java.io.File;
 import android.util.Log;
 import android.util.DisplayMetrics;
 import android.app.Activity;
 import android.view.MotionEvent;
 import android.view.KeyEvent;
+import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -46,7 +40,6 @@ import android.content.Intent;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.Configuration;
-import android.opengl.EGL14;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.webkit.MimeTypeMap;
@@ -71,18 +64,6 @@ class NativeView extends SurfaceView
   Resources resources;
 
   final boolean hasKeyboard;
-
-  EGL10 egl;
-  EGLDisplay display = EGL10.EGL_NO_DISPLAY;
-  EGLConfig config;
-  EGLContext context = EGL10.EGL_NO_CONTEXT;
-  EGLSurface surface = EGL10.EGL_NO_SURFACE;
-
-  /**
-   * Is the EGLSurface currently valid?  This is modified by
-   * SurfaceHolder.Callback methods.
-   */
-  boolean haveSurface = false;
 
   /**
    * Is the extension ARB_texture_non_power_of_two present?  If yes,
@@ -118,150 +99,8 @@ class NativeView extends SurfaceView
     thread.start();
   }
 
-  private static EGLConfig chooseEglConfig(EGL10 egl, EGLDisplay display)
-    throws EGLException {
-    int[] num_config = new int[1];
-    int[] configSpec = new int[]{
-      /* EGL_STENCIL_SIZE not listed here because we have a fallback
-         for configurations without stencil (but we prefer native
-         stencil) (maybe we can just require a stencil and get rid of
-         the complicated and slow fallback code eventually?) */
-
-      EGL10.EGL_RED_SIZE, 4,
-      EGL10.EGL_GREEN_SIZE, 4,
-      EGL10.EGL_BLUE_SIZE, 4,
-
-      EGL10.EGL_SURFACE_TYPE, EGL10.EGL_WINDOW_BIT,
-      EGL10.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT,
-
-      EGL10.EGL_NONE
-    };
-
-    egl.eglChooseConfig(display, configSpec, null, 0, num_config);
-
-    int numConfigs = num_config[0];
-    EGLConfig[] configs = new EGLConfig[numConfigs];
-    if (!egl.eglChooseConfig(display, configSpec,
-                             configs, numConfigs, num_config))
-      throw new EGLException("eglChooseConfig() failed: " + egl.eglGetError());
-
-    EGLConfig closestConfig = EGLUtil.findClosestConfig(egl, display, configs,
-                                                        5, 6, 5, 0, 0, 1);
-    if (closestConfig == null)
-      throw new EGLException("eglChooseConfig() failed");
-
-    return closestConfig;
-  }
-
-  private void initDisplay() throws EGLException {
-    egl = (EGL10)EGLContext.getEGL();
-    display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
-    if (display == EGL10.EGL_NO_DISPLAY)
-      throw new EGLException("eglGetDisplay() failed");
-
-    int[] version = new int[2];
-    if (!egl.eglInitialize(display, version))
-      throw new EGLException("eglInitialize() failed: " + egl.eglGetError());
-
-    Log.d(TAG, "EGL vendor: " +
-          egl.eglQueryString(display, EGL10.EGL_VENDOR));
-    Log.d(TAG, "EGL version: " +
-          egl.eglQueryString(display, EGL10.EGL_VERSION));
-    Log.d(TAG, "EGL extensions: " +
-          egl.eglQueryString(display, EGL10.EGL_EXTENSIONS));
-
-    config = chooseEglConfig(egl, display);
-    Log.d(TAG, "EGLConfig = " + EGLUtil.toString(egl, display, config));
-  }
-
-  private void initContext() throws EGLException {
-    if (display == EGL10.EGL_NO_DISPLAY)
-      initDisplay();
-
-    final int contextClientVersion = 2;
-    final int[] contextAttribList = new int[]{
-      EGL14.EGL_CONTEXT_CLIENT_VERSION, contextClientVersion,
-      EGL10.EGL_NONE
-    };
-
-    context = egl.eglCreateContext(display, config,
-                                   EGL10.EGL_NO_CONTEXT, contextAttribList);
-    if (context == EGL10.EGL_NO_CONTEXT)
-      throw new EGLException("eglCreateContext() failed: " +
-                             egl.eglGetError());
-  }
-
-  private void initGL(SurfaceHolder holder) throws EGLException {
-    /* initialize context and surface */
-
-    boolean hadContext = context != EGL10.EGL_NO_CONTEXT;
-    if (!hadContext)
-      initContext();
-
-    surface = egl.eglCreateWindowSurface(display, config,
-                                         holder, null);
-    if (surface == EGL10.EGL_NO_SURFACE)
-      throw new EGLException("eglCreateWindowSurface() failed: " +
-                             egl.eglGetError());
-
-    if (!egl.eglMakeCurrent(display, surface, surface, context))
-      throw new EGLException("eglMakeCurrent() failed: " + egl.eglGetError());
-
-    if (!hadContext) {
-      GL10 gl = (GL10)context.getGL();
-      Log.d(TAG, "OpenGL vendor: " + gl.glGetString(GL10.GL_VENDOR));
-      Log.d(TAG, "OpenGL version: " + gl.glGetString(GL10.GL_VERSION));
-      Log.d(TAG, "OpenGL renderer: " + gl.glGetString(GL10.GL_RENDERER));
-      Log.d(TAG, "OpenGL extensions: " + gl.glGetString(GL10.GL_EXTENSIONS));
-    }
-  }
-
-  /**
-   * Initializes the OpenGL surface.  Called by the native code.
-   *
-   * Throws on error.
-   *
-   * @return true on success, false if no surface is available
-   * currently
-   */
-  private boolean initSurface() throws EGLException {
-    if (!haveSurface)
-      /* this is futile, and will only result in
-         "java.lang.IllegalArgumentException: Make sure the
-         SurfaceView or associated SurfaceHolder has a valid
-         Surface" */
-      return false;
-
-    initGL(getHolder());
-    return true;
-  }
-
-  /**
-   * Deinitializes the OpenGL surface.
-   */
-  private void deinitSurface() {
-    if (surface != EGL10.EGL_NO_SURFACE) {
-      egl.eglMakeCurrent(display, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE,
-                         context);
-      egl.eglDestroySurface(display, surface);
-      surface = EGL10.EGL_NO_SURFACE;
-    }
-  }
-
-  private void deinitEGL() {
-    deinitSurface();
-
-    if (context != EGL10.EGL_NO_CONTEXT) {
-      egl.eglDestroyContext(display, context);
-      context = EGL10.EGL_NO_CONTEXT;
-    }
-
-    if (display != EGL10.EGL_NO_DISPLAY) {
-      egl.eglTerminate(display);
-      display = EGL10.EGL_NO_DISPLAY;
-    }
-
-    config = null;
+  private Surface getSurface() {
+    return getHolder().getSurface();
   }
 
   /**
@@ -291,13 +130,10 @@ class NativeView extends SurfaceView
   }
 
   @Override public void surfaceCreated(SurfaceHolder holder) {
-    haveSurface = true;
   }
 
   @Override public void surfaceChanged(SurfaceHolder holder, int format,
                                        int width, int height) {
-    haveSurface = true;
-
     if (thread == null || !thread.isAlive())
       start();
     else
@@ -305,20 +141,10 @@ class NativeView extends SurfaceView
   }
 
   @Override public void surfaceDestroyed(SurfaceHolder holder) {
-    haveSurface = false;
   }
 
   @Override public void run() {
     final Context context = getContext();
-
-    try {
-      initGL(getHolder());
-    } catch (Exception e) {
-      Log.e(TAG, "initGL error", e);
-      errorHandler.sendMessage(errorHandler.obtainMessage(0, e));
-      deinitEGL();
-      return;
-    }
 
     android.graphics.Rect r = getHolder().getSurfaceFrame();
     DisplayMetrics metrics = new DisplayMetrics();
@@ -349,7 +175,6 @@ class NativeView extends SurfaceView
     } catch (Exception e) {
       Log.e(TAG, "Initialisation error", e);
       errorHandler.sendMessage(errorHandler.obtainMessage(0, e));
-      deinitEGL();
       return;
     }
 
@@ -371,12 +196,6 @@ class NativeView extends SurfaceView
   protected native void setBatteryPercent(int level, int plugged);
 
   protected native void setHapticFeedback(boolean on);
-
-  private int findConfigAttrib(EGLConfig config, int attribute,
-                               int defaultValue) {
-    return EGLUtil.getConfigAttrib(egl, display, config,
-                                   attribute, defaultValue);
-  }
 
   /**
    * Finds the next power of two.  Used to calculate texture sizes.

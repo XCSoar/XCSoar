@@ -1,6 +1,7 @@
 name-to-bin = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(1))
 
 MORE_SCREEN_SOURCES = \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(SRC)/Look/FontDescription.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Hardware/DisplaySize.cpp \
@@ -2391,6 +2392,7 @@ TEST_NOTIFY_SOURCES = \
 	$(SRC)/ui/event/Idle.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestNotify.cpp
 TEST_NOTIFY_DEPENDS = EVENT SCREEN MATH ASYNC OS IO THREAD UTIL

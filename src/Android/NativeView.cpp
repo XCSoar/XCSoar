@@ -32,7 +32,7 @@ Copyright_License {
 
 Java::TrivialClass NativeView::cls;
 jfieldID NativeView::textureNonPowerOfTwo_field;
-jmethodID NativeView::init_surface_method, NativeView::deinit_surface_method;
+jmethodID NativeView::getSurface_method;
 jmethodID NativeView::acquireWakeLock_method;
 jmethodID NativeView::setFullScreen_method;
 jmethodID NativeView::setRequestedOrientationID;
@@ -56,8 +56,7 @@ NativeView::Initialise(JNIEnv *env)
 
   textureNonPowerOfTwo_field =
     env->GetStaticFieldID(cls, "textureNonPowerOfTwo", "Z");
-  init_surface_method = env->GetMethodID(cls, "initSurface", "()Z");
-  deinit_surface_method = env->GetMethodID(cls, "deinitSurface", "()V");
+  getSurface_method = env->GetMethodID(cls, "getSurface", "()Landroid/view/Surface;");
 
   acquireWakeLock_method = env->GetMethodID(cls, "acquireWakeLock", "()V");
 
@@ -109,14 +108,6 @@ NativeView::NativeView(JNIEnv *_env, jobject _obj,
   Java::String::CopyTo(env, _product, product, sizeof(product));
 
   Display::ProvideDPI(_xdpi, _ydpi);
-}
-
-bool
-NativeView::initSurface()
-{
-  bool success = env->CallBooleanMethod(obj, init_surface_method);
-  Java::RethrowException(env);
-  return success;
 }
 
 static void
