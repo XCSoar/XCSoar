@@ -35,7 +35,6 @@ Copyright_License {
 #ifdef MESA_KMS
 #include "Hardware/DisplayDPI.hpp"
 
-#include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
@@ -69,20 +68,32 @@ GetBindAPI()
     : EGL_OPENGL_API;
 }
 
-#if !defined(USE_X11) && !defined(USE_WAYLAND)
+#ifdef MESA_KMS
 
-TopCanvas::TopCanvas()
+static int
+OpenDriDevice()
 {
-#if defined(MESA_KMS)
   const char* dri_device = getenv("DRI_DEVICE");
   if (nullptr == dri_device)
     dri_device = DEFAULT_DRI_DEVICE;
   printf("Using DRI device %s (use environment variable "
            "DRI_DEVICE to override)\n",
          dri_device);
-  dri_fd = open(dri_device, O_RDWR);
+  int dri_fd = open(dri_device, O_RDWR);
   if (dri_fd == -1)
     throw FormatErrno("Could not open DRI device %s", dri_device);
+
+  return dri_fd;
+}
+
+#endif
+
+#if !defined(USE_X11) && !defined(USE_WAYLAND)
+
+TopCanvas::TopCanvas()
+{
+#if defined(MESA_KMS)
+  dri_fd = OpenDriDevice();
 
   native_display = gbm_create_device(dri_fd);
   if (native_display == nullptr)
