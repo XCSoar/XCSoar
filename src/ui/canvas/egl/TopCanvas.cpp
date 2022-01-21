@@ -139,8 +139,10 @@ TopCanvas::TopCanvas()
 
   connector = ChooseConnector(dri_fd, *resources);
 
-  encoder = drmModeGetEncoder(dri_fd, connector->encoder_id);
-  if (encoder == nullptr)
+  if (auto *encoder = drmModeGetEncoder(dri_fd, connector->encoder_id)) {
+    crtc_id = encoder->crtc_id;
+    drmModeFreeEncoder(encoder);
+  } else
     throw std::runtime_error("No usable DRM encoder found");
 
   mode = connector->modes[0];
@@ -275,13 +277,13 @@ TopCanvas::Flip()
   });
 
   if (nullptr == current_bo) {
-    saved_crtc = drmModeGetCrtc(dri_fd, encoder->crtc_id);
-    drmModeSetCrtc(dri_fd, encoder->crtc_id, fb->fb_id, 0, 0,
+    saved_crtc = drmModeGetCrtc(dri_fd, crtc_id);
+    drmModeSetCrtc(dri_fd, crtc_id, fb->fb_id, 0, 0,
                    &connector->connector_id, 1, &mode);
   } else {
 
     bool flip_finished = false;
-    int page_flip_ret = drmModePageFlip(dri_fd, encoder->crtc_id, fb->fb_id,
+    int page_flip_ret = drmModePageFlip(dri_fd, crtc_id, fb->fb_id,
                                         DRM_MODE_PAGE_FLIP_EVENT,
                                         &flip_finished);
     if (0 != page_flip_ret) {
