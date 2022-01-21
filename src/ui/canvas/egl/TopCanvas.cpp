@@ -95,11 +95,6 @@ TopCanvas::TopCanvas()
 #endif
 
 #if defined(MESA_KMS)
-  current_bo = nullptr;
-  connector = nullptr;
-  encoder = nullptr;
-  saved_crtc = nullptr;
-
   const char* dri_device = getenv("DRI_DEVICE");
   if (nullptr == dri_device)
     dri_device = DEFAULT_DRI_DEVICE;

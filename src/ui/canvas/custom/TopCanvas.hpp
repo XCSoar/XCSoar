@@ -101,15 +101,15 @@ class TopCanvas
 
   int dri_fd;
 
-  struct gbm_bo *current_bo;
+  struct gbm_bo *current_bo = nullptr;
 
   drmEventContext evctx;
 
-  drmModeConnector *connector;
-  drmModeEncoder *encoder;
+  drmModeConnector *connector = nullptr;
+  drmModeEncoder *encoder = nullptr;
   drmModeModeInfo mode;
 
-  drmModeCrtc* saved_crtc;
+  drmModeCrtc *saved_crtc = nullptr;
 #endif
 
   EGLDisplay display;
