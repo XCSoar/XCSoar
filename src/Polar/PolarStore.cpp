@@ -25,9 +25,9 @@ Copyright_License {
 #include "Polar/Polar.hpp"
 #include "Units/System.hpp"
 #include "util/Macros.hpp"
+#include "util/StringAPI.hxx"
 
 #include <cassert>
-#include <cstring>
 
 PolarShape
 PolarStore::Item::ToPolarShape() const
@@ -275,7 +275,7 @@ PolarStore::GetItem(const char *name)
   unsigned i;
   for ( i = 0; i < Count(); i++)
   {
-    if ( strstr(internal_polars[i].name, name) != 0 )
+    if ( StringIsEqual((const char *)(internal_polars[i].name), name) )
       break;
   }
   return internal_polars[i];

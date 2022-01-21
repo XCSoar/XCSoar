@@ -148,10 +148,10 @@ TestBuiltInPolarsPlausibility()
   for(unsigned i = 0; i < ARRAY_SIZE(performanceData); i++) {
     assert(i < PolarStore::Count());
     const TCHAR *si = performanceData[i].name;
-    PolarInfo polar = PolarStore::GetItem(si).ToPolarInfo();
+    WideToUTF8Converter polarName(si);
+    PolarInfo polar = PolarStore::GetItem(polarName.c_str()).ToPolarInfo();
     PolarCoefficients pc = polar.CalculateCoefficients();
 
-    WideToUTF8Converter polarName(si);
 
     ok(pc.IsValid(), polarName);
 

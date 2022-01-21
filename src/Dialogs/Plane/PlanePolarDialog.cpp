@@ -38,6 +38,7 @@ Copyright_License {
 #include "system/Path.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
+#include "util/ConvertString.hpp"
 
 class PlanePolarWidget final
   : public RowFormWidget, DataFieldListener {
@@ -176,7 +177,8 @@ PlanePolarWidget::ListClicked()
 
   assert((unsigned)result < PolarStore::Count());
 
-  const PolarStore::Item &item = PolarStore::GetItem(list[result].string_value.c_str());
+  WideToUTF8Converter polar_name(list[result].string_value.c_str());
+  const PolarStore::Item &item = PolarStore::GetItem(polar_name);
 
   plane.polar_shape.reference_mass = item.reference_mass;
   plane.empty_mass = item.empty_mass;
