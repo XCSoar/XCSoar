@@ -26,6 +26,8 @@ Copyright_License {
 #include "ui/opengl/Features.hpp"
 #include "util/RuntimeError.hxx"
 
+#include <array>
+
 namespace EGL {
 
 /**
@@ -82,11 +84,10 @@ ChooseConfig(EGLDisplay display)
     EGL_NONE
   };
 
-  static constexpr EGLint MAX_CONFIGS = 64;
-  EGLConfig configs[MAX_CONFIGS];
+  std::array<EGLConfig, 64> configs;
   EGLint num_configs;
-  if (!eglChooseConfig(display, attributes, configs,
-                       MAX_CONFIGS, &num_configs))
+  if (!eglChooseConfig(display, attributes, configs.data(), configs.size(),
+                       &num_configs))
     throw FormatRuntimeError("eglChooseConfig() failed: %#x", eglGetError());
 
   if (num_configs == 0)
@@ -97,11 +98,11 @@ ChooseConfig(EGLDisplay display)
      eglChooseConfig() gives us an EGLConfig which will later fail
      eglCreateWindowSurface() with EGL_BAD_MATCH.  Only the EGLConfig
      which has the matching EGL_NATIVE_VISUAL_ID will work. */
-  EGLint i = FindConfigWithAttribute(display, configs, num_configs,
+  EGLint i = FindConfigWithAttribute(display, configs.data(), num_configs,
                                      EGL_NATIVE_VISUAL_ID,
                                      XCSOAR_GBM_FORMAT);
   if (i < 0)
-    i = FindConfigWithAttribute(display, configs, num_configs,
+    i = FindConfigWithAttribute(display, configs.data(), num_configs,
                                 EGL_NATIVE_VISUAL_ID,
                                 XCSOAR_GBM_FORMAT_FALLBACK);
   return i >= 0 ? configs[i] : configs[0];
