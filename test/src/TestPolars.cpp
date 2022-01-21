@@ -92,17 +92,17 @@ TestFileImport()
 static void
 TestBuiltInPolars()
 {
-  unsigned count = PolarStore::Count();
-  for(unsigned i = 0; i < count; i++) {
-    PolarInfo polar = PolarStore::GetItem(i).ToPolarInfo();
+  for (auto item = PolarStore::cbegin(); item != PolarStore::cend(); item++ )
+  {
+    PolarInfo polar = item->ToPolarInfo();
 
-    WideToUTF8Converter narrow(PolarStore::GetItem(i).name);
+    WideToUTF8Converter narrow(item->name);
     ok(polar.IsValid(), narrow);
   }
 }
 
 struct PerformanceItem {
-  unsigned storeIndex;
+  const TCHAR* name;
   bool check_best_LD;
   double best_LD;
   bool check_best_LD_speed;
@@ -115,23 +115,23 @@ struct PerformanceItem {
 
 static const PerformanceItem performanceData[] = {
   /* 206 Hornet         */
-  {   0, true, 38,   true,  103, true,  0.6,  true,   74 },
+  {  _T("206 Hornet"), true, 38,   true,  103, true,  0.6,  true,   74 },
   /* Discus             */
-  {  30, true, 43,   false,   0, true,  0.59, false,   0 },
+  {  _T("Discus"), true, 43,   false,   0, true,  0.59, false,   0 },
   /* G-103 TWIN II (PIL)*/
-  {  37, true, 38.5, true,   95, true,  0.64, true,   80 },
+  {  _T("G 103 Twin 2"), true, 38.5, true,   95, true,  0.64, true,   80 },
   /* H-201 Std. Libelle */
-  {  41, true, 38,   true,   90, true,  0.6,  true,   75 },
+  {  _T("H-201 Std Libelle"), true, 38,   true,   90, true,  0.6,  true,   75 },
   /* Ka6 CR             */
-  {  45, true, 30,   true,   85, true,  0.65, true,   72 },
+  {  _T("Ka 6CR"), true, 30,   true,   85, true,  0.65, true,   72 },
   /* K8                 */
-  {  46, true, 25,   true,   75, false, 0,    true,   62 },
+  {  _T("Ka 8"), true, 25,   true,   75, false, 0,    true,   62 },
   /* LS-4               */
-  {  52, true, 40.5, false,   0, true,  0.60, false,   0 },
+  {  _T("LS-4"), true, 40.5, false,   0, true,  0.60, false,   0 },
   /* Std. Cirrus        */
-  {  79, true, 38.5, false,   0, true,  0.6,  false,   0 },
+  {  _T("Std Cirrus"), true, 38.5, false,   0, true,  0.6,  false,   0 },
   /* LS-1f              */
-  { 157, true, 38.2, false,   0, true,  0.64, false,   0 },
+  { _T("LS-1f"), true, 38.2, false,   0, true,  0.64, false,   0 },
 };
 
 static bool
@@ -147,11 +147,11 @@ TestBuiltInPolarsPlausibility()
 {
   for(unsigned i = 0; i < ARRAY_SIZE(performanceData); i++) {
     assert(i < PolarStore::Count());
-    unsigned si = performanceData[i].storeIndex;
+    const TCHAR *si = performanceData[i].name;
     PolarInfo polar = PolarStore::GetItem(si).ToPolarInfo();
     PolarCoefficients pc = polar.CalculateCoefficients();
 
-    WideToUTF8Converter polarName(PolarStore::GetItem(i).name);
+    WideToUTF8Converter polarName(si);
 
     ok(pc.IsValid(), polarName);
 
