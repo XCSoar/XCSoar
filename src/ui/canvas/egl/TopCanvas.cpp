@@ -139,18 +139,7 @@ TopCanvas::TopCanvas()
 
   connector = ChooseConnector(dri_fd, *resources);
 
-  for (int i = 0;
-       (i < resources->count_encoders) && (encoder == nullptr);
-       i++) {
-    encoder = drmModeGetEncoder(dri_fd, resources->encoders[i]);
-    if (encoder != nullptr) {
-      if (encoder->encoder_id != connector->encoder_id) {
-        drmModeFreeEncoder(encoder);
-        encoder = nullptr;
-      }
-    }
-  }
-
+  encoder = drmModeGetEncoder(dri_fd, connector->encoder_id);
   if (encoder == nullptr)
     throw std::runtime_error("No usable DRM encoder found");
 
