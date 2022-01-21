@@ -86,6 +86,7 @@ struct PixelRect;
 /* defined if we need to initialise /dev/tty to graphics mode, see
    TopCanvas::InitialiseTTY() */
 #define USE_TTY
+#include "ui/linux/GraphicsTTY.hpp"
 #endif
 
 class TopCanvas
@@ -93,6 +94,10 @@ class TopCanvas
   : public Canvas
 #endif
 {
+#ifdef USE_TTY
+  const LinuxGraphicsTTY linux_graphics_tty;
+#endif
+
 #ifdef USE_EGL
 #if defined(USE_X11) || defined(USE_WAYLAND)
 #elif defined(MESA_KMS)
@@ -147,15 +152,6 @@ class TopCanvas
   WritableImageBuffer<ActivePixelTraits> buffer;
 #endif /* !GREYSCALE */
 #endif /* USE_MEMORY_CANVAS */
-
-#ifdef USE_TTY
-  /**
-   * A file descriptor for /dev/tty, or -1 if /dev/tty could not be
-   * opened.  This is used on Linux to switch to graphics mode
-   * (KD_GRAPHICS) or restore text mode (KD_TEXT).
-   */
-  int tty_fd = -1;
-#endif
 
 #ifdef USE_FB
   int fd = -1;
@@ -287,9 +283,6 @@ private:
   void CreateEGL(EGLNativeDisplayType native_display,
                  EGLNativeWindowType native_window);
 #endif
-
-  void InitialiseTTY();
-  void DeinitialiseTTY();
 };
 
 #endif

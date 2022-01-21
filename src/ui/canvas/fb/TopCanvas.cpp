@@ -88,10 +88,6 @@ TopCanvas::~TopCanvas() noexcept
   buffer.Free();
 
 #ifdef USE_FB
-#ifdef USE_TTY
-  DeinitialiseTTY();
-#endif
-
   if (fd >= 0) {
     close(fd);
     fd = -1;
@@ -110,10 +106,6 @@ TopCanvas::GetRect() const
 TopCanvas::TopCanvas()
 {
   assert(fd < 0);
-
-#ifdef USE_TTY
-  InitialiseTTY();
-#endif
 
   const char *path = "/dev/fb0";
   fd = open(path, O_RDWR | O_NOCTTY | O_CLOEXEC);

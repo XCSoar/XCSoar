@@ -140,7 +140,6 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/custom/Files.cpp \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
-	$(CANVAS_SRC_DIR)/tty/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/egl/Init.cpp \
 	$(CANVAS_SRC_DIR)/egl/TopCanvas.cpp \
 	$(CANVAS_SRC_DIR)/egl/ConfigChooser.cpp \
@@ -180,7 +179,6 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/memory/Export.cpp \
-	$(CANVAS_SRC_DIR)/tty/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
 	$(CANVAS_SRC_DIR)/fb/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
@@ -215,6 +213,10 @@ GDI_LDLIBS = -luser32 -lgdi32 -lmsimg32 -lgdiplus
 ifeq ($(TARGET),PC)
 GDI_LDLIBS += -Wl,-subsystem,windows
 endif
+endif
+
+ifeq ($(TARGET_IS_LINUX),y)
+SCREEN_SOURCES += $(SRC)/ui/linux/GraphicsTTY.cpp
 endif
 
 ifeq ($(USE_MEMORY_CANVAS),y)

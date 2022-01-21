@@ -73,10 +73,6 @@ GetBindAPI()
 
 TopCanvas::TopCanvas()
 {
-#ifdef USE_TTY
-  InitialiseTTY();
-#endif
-
 #if defined(MESA_KMS)
   const char* dri_device = getenv("DRI_DEVICE");
   if (nullptr == dri_device)
@@ -204,10 +200,6 @@ TopCanvas::~TopCanvas() noexcept
   eglDestroySurface(display, surface);
   eglDestroyContext(display, context);
   eglTerminate(display);
-
-#ifdef USE_TTY
-  DeinitialiseTTY();
-#endif
 
 #ifdef MESA_KMS
   if (nullptr != saved_crtc)
