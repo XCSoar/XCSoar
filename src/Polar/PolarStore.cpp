@@ -27,6 +27,7 @@ Copyright_License {
 #include "util/Macros.hpp"
 
 #include <cassert>
+#include <cstring>
 
 PolarShape
 PolarStore::Item::ToPolarShape() const
@@ -57,13 +58,17 @@ PolarStore::Item::ToPolarInfo() const
   return polar;
 }
 
+static constexpr PolarStore::Item default_polar =
+  { _T("LS-8 (15m)"), 325, 185, 70, -0.51, 115, -0.85, 173, -2.00, 10.5, 0.0, 108, 240 };
+
+
 /**
  *  Note: Please keep in alphabetic order to ease finding and updateing.
  *        Index to entries are not used as reference in profiles. Data is copied
  *        as initial values only, because the table will be target of further refinement
  *        for ever.
  */
-static constexpr PolarStore::Item internal_polars[] =
+static constexpr PolarStore::PolarList internal_polars =
 {
   { _T("206 Hornet"), 318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8, 41.666, 100, 227 },
   { _T("303 Mosquito"), 450, 0, 100.0, -0.68, 120.0, -0.92, 150.0, -1.45, 9.85, 0.0, 107, 242 },
@@ -259,9 +264,20 @@ static constexpr PolarStore::Item internal_polars[] =
 };
 
 const PolarStore::Item &
-PolarStore::GetItem(unsigned i)
+PolarStore::GetDefault()
 {
-  assert(i < Count());
+  return default_polar;
+}
+
+const PolarStore::Item &
+PolarStore::GetItem(const char *name)
+{
+  unsigned i;
+  for ( i = 0; i < Count(); i++)
+  {
+    if ( strstr(internal_polars[i].name, name) != 0 )
+      break;
+  }
   return internal_polars[i];
 }
 
@@ -270,3 +286,7 @@ PolarStore::Count()
 {
   return ARRAY_SIZE(internal_polars);
 }
+
+PolarStore::const_iterator PolarStore::cbegin() { return &internal_polars[0]; }
+PolarStore::const_iterator PolarStore::cend() { return &internal_polars[PolarStore::Count()]; }
+

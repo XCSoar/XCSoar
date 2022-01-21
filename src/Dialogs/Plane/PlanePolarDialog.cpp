@@ -164,9 +164,8 @@ inline void
 PlanePolarWidget::ListClicked()
 {
   ComboList list;
-  unsigned len = PolarStore::Count();
-  for (unsigned i = 0; i < len; i++)
-    list.Append(i, PolarStore::GetItem(i).name);
+  for (auto item = PolarStore::cbegin(); item != PolarStore::cend(); item++ )
+    list.Append(item->name);
 
   list.Sort();
 
@@ -175,9 +174,9 @@ PlanePolarWidget::ListClicked()
   if (result < 0)
     return;
 
-  assert((unsigned)result < len);
+  assert((unsigned)result < PolarStore::Count());
 
-  const PolarStore::Item &item = PolarStore::GetItem(list[result].int_value);
+  const PolarStore::Item &item = PolarStore::GetItem(list[result].string_value.c_str());
 
   plane.polar_shape.reference_mass = item.reference_mass;
   plane.empty_mass = item.empty_mass;

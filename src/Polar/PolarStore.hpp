@@ -72,8 +72,16 @@ namespace PolarStore
     PolarInfo ToPolarInfo() const;
   };
 
-  const Item &GetItem(unsigned i);
+  typedef struct Item PolarList[];
+  typedef struct Item * iterator;
+  typedef const struct Item * const_iterator;
+
+  const Item &GetItem(const char *name);
+  const Item &GetDefault();
   unsigned Count();
-}
+
+  const_iterator cbegin();
+  const_iterator cend();
+};
 
 #endif
