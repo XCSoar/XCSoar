@@ -291,7 +291,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
   
   const double db = 5;
   AddFloat(_("Ballast"),
-           _("Ballast of the glider. Press ENTER on this field to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."),
+           _("Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."),
            _T("%.0f l"), _T("%.0f"),
            0, db*ceil(plane.max_ballast/db), db, false, 0,
            this);
