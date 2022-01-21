@@ -181,7 +181,8 @@ PlaneGlue::Write(const Plane &plane, KeyValueFileWriter &writer)
 
   tmp.Format("%f", (double)plane.polar_shape.reference_mass);
   writer.Write("PolarReferenceMass", tmp);
-  tmp.Format("%f", (double)plane.dry_mass_obsolete);
+  tmp.Format("%f", (double)plane.dry_mass_obsolete);  // dry mass split into empty and crew masses
+                                                      // keep entry for temporary backward compatibility
   writer.Write("PolarDryMass", tmp);
   tmp.Format("%f", (double)plane.empty_mass);
   writer.Write("PlaneEmptyMass", tmp);
