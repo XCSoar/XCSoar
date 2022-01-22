@@ -43,6 +43,7 @@ Copyright_License {
 #include "ui/egl/System.hpp"
 
 #ifdef MESA_KMS
+#include "io/UniqueFileDescriptor.hxx"
 #include <drm.h>
 #include <xf86drm.h>
 #include <xf86drmMode.h>
@@ -104,7 +105,7 @@ class TopCanvas
   struct gbm_device *native_display;
   struct gbm_surface *native_window;
 
-  int dri_fd;
+  UniqueFileDescriptor dri_fd;
 
   struct gbm_bo *current_bo = nullptr;
 

@@ -55,7 +55,7 @@ constexpr const char * DEFAULT_DRI_DEVICE = "/dev/dri/card0";
 struct drm_fb {
   struct gbm_bo *bo;
   uint32_t fb_id;
-  int dri_fd;
+  FileDescriptor dri_fd;
 };
 #endif
 
@@ -72,7 +72,7 @@ GetBindAPI()
 
 #ifdef MESA_KMS
 
-static int
+static UniqueFileDescriptor
 OpenDriDevice()
 {
   const char* dri_device = getenv("DRI_DEVICE");
@@ -81,18 +81,20 @@ OpenDriDevice()
   printf("Using DRI device %s (use environment variable "
            "DRI_DEVICE to override)\n",
          dri_device);
-  int dri_fd = open(dri_device, O_RDWR);
-  if (dri_fd == -1)
+
+  UniqueFileDescriptor dri_fd;
+  if (!dri_fd.Open(dri_device, O_RDWR))
     throw FormatErrno("Could not open DRI device %s", dri_device);
 
   return dri_fd;
 }
 
 static drmModeConnector *
-ChooseConnector(int dri_fd, const std::span<const uint32_t> connectors)
+ChooseConnector(FileDescriptor dri_fd,
+                const std::span<const uint32_t> connectors)
 {
   for (const auto id : connectors) {
-    auto *connector = drmModeGetConnector(dri_fd, id);
+    auto *connector = drmModeGetConnector(dri_fd.Get(), id);
     if (connector != nullptr && connector->connection == DRM_MODE_CONNECTED &&
         connector->count_modes > 0)
       return connector;
@@ -104,7 +106,7 @@ ChooseConnector(int dri_fd, const std::span<const uint32_t> connectors)
 }
 
 static drmModeConnector *
-ChooseConnector(int dri_fd, const drmModeRes &resources)
+ChooseConnector(FileDescriptor dri_fd, const drmModeRes &resources)
 {
   const std::span connectors{
     resources.connectors, std::size_t(resources.count_connectors),
@@ -118,11 +120,12 @@ ChooseConnector(int dri_fd, const drmModeRes &resources)
 #if !defined(USE_X11) && !defined(USE_WAYLAND)
 
 TopCanvas::TopCanvas()
+#if defined(MESA_KMS)
+  :dri_fd(OpenDriDevice())
+#endif
 {
 #if defined(MESA_KMS)
-  dri_fd = OpenDriDevice();
-
-  native_display = gbm_create_device(dri_fd);
+  native_display = gbm_create_device(dri_fd.Get());
   if (native_display == nullptr)
     throw std::runtime_error("Could not create GBM device");
 
@@ -133,13 +136,13 @@ TopCanvas::TopCanvas()
     *reinterpret_cast<bool*>(flip_finishedPtr) = true;
   };
 
-  drmModeRes *resources = drmModeGetResources(dri_fd);
+  drmModeRes *resources = drmModeGetResources(dri_fd.Get());
   if (resources == nullptr)
     throw std::runtime_error("drmModeGetResources() failed");
 
   connector = ChooseConnector(dri_fd, *resources);
 
-  if (auto *encoder = drmModeGetEncoder(dri_fd, connector->encoder_id)) {
+  if (auto *encoder = drmModeGetEncoder(dri_fd.Get(), connector->encoder_id)) {
     crtc_id = encoder->crtc_id;
     drmModeFreeEncoder(encoder);
   } else
@@ -218,12 +221,11 @@ TopCanvas::~TopCanvas() noexcept
 
 #ifdef MESA_KMS
   if (nullptr != saved_crtc)
-    drmModeSetCrtc(dri_fd, saved_crtc->crtc_id, saved_crtc->buffer_id,
+    drmModeSetCrtc(dri_fd.Get(), saved_crtc->crtc_id, saved_crtc->buffer_id,
                    saved_crtc->x, saved_crtc->y, &connector->connector_id, 1,
                    &saved_crtc->mode);
   gbm_surface_destroy(native_window);
   gbm_device_destroy(native_display);
-  close(dri_fd);
 #endif
 }
 
@@ -256,7 +258,7 @@ TopCanvas::Flip()
     fb->bo = new_bo;
     fb->dri_fd = dri_fd;
 
-    int ret = drmModeAddFB(dri_fd, gbm_bo_get_width(new_bo),
+    int ret = drmModeAddFB(dri_fd.Get(), gbm_bo_get_width(new_bo),
                            gbm_bo_get_height(new_bo), 24, 32,
                            gbm_bo_get_stride(new_bo),
                            gbm_bo_get_handle(new_bo).u32, &fb->fb_id);
@@ -271,19 +273,19 @@ TopCanvas::Flip()
                        [](struct gbm_bo *bo, void *data) {
     struct drm_fb *fb = (struct drm_fb*) data;
     if (fb->fb_id)
-      drmModeRmFB(fb->dri_fd, fb->fb_id);
+      drmModeRmFB(fb->dri_fd.Get(), fb->fb_id);
 
     delete fb;
   });
 
   if (nullptr == current_bo) {
-    saved_crtc = drmModeGetCrtc(dri_fd, crtc_id);
-    drmModeSetCrtc(dri_fd, crtc_id, fb->fb_id, 0, 0,
+    saved_crtc = drmModeGetCrtc(dri_fd.Get(), crtc_id);
+    drmModeSetCrtc(dri_fd.Get(), crtc_id, fb->fb_id, 0, 0,
                    &connector->connector_id, 1, &mode);
   } else {
 
     bool flip_finished = false;
-    int page_flip_ret = drmModePageFlip(dri_fd, crtc_id, fb->fb_id,
+    int page_flip_ret = drmModePageFlip(dri_fd.Get(), crtc_id, fb->fb_id,
                                         DRM_MODE_PAGE_FLIP_EVENT,
                                         &flip_finished);
     if (0 != page_flip_ret) {
@@ -291,7 +293,7 @@ TopCanvas::Flip()
       exit(EXIT_FAILURE);
     }
     while (!flip_finished) {
-      int handle_event_ret = drmHandleEvent(dri_fd, &evctx);
+      int handle_event_ret = drmHandleEvent(dri_fd.Get(), &evctx);
       if (0 != handle_event_ret) {
         fprintf(stderr, "drmHandleEvent() failed: %d\n", handle_event_ret);
         exit(EXIT_FAILURE);
