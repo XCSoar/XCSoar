@@ -62,8 +62,7 @@ TopWindow::ResumeSurface() noexcept
   assert(paused);
 
   try {
-    if (!native_view->initSurface())
-      /* failed - retry later */
+    if (!screen->AcquireSurface())
       return false;
   } catch (...) {
     LogError(std::current_exception(), "Failed to initialize GL surface");
@@ -72,8 +71,6 @@ TopWindow::ResumeSurface() noexcept
 
   paused = false;
   resumed = false;
-
-  screen->Resume();
 
   surface_valid = true;
 
@@ -125,7 +122,7 @@ TopWindow::OnPause() noexcept
 
   surface_valid = false;
 
-  native_view->deinitSurface();
+  screen->ReleaseSurface();
 
   const std::lock_guard<Mutex> lock(paused_mutex);
   paused = true;

@@ -240,9 +240,16 @@ public:
 
 #ifdef ANDROID
   /**
-   * Initialise the new OpenGL context.
+   * Create an EGL surface.
+   *
+   * Throws on error.
+   *
+   * @return true on success, false if no surface is available
+   * currently
    */
-  void Resume();
+  bool AcquireSurface();
+
+  void ReleaseSurface() noexcept;
 #endif
 
 #if defined(ENABLE_SDL) && defined(USE_MEMORY_CANVAS)

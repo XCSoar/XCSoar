@@ -30,6 +30,8 @@ Copyright_License {
 #include "util/RuntimeError.hxx"
 
 #ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 #include "LogFile.hpp"
 #endif
 
@@ -271,10 +273,21 @@ TopCanvas::GetNativeSize() const
 
 #ifdef ANDROID
 
-void
-TopCanvas::Resume()
+bool
+TopCanvas::AcquireSurface()
 {
+  if (!native_view->initSurface())
+    /* failed - retry later */
+    return false;
+
   surface = eglGetCurrentSurface(EGL_DRAW);
+  return true;
+}
+
+void
+TopCanvas::ReleaseSurface() noexcept
+{
+  native_view->deinitSurface();
 }
 
 #endif // ANDROID
