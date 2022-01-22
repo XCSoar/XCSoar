@@ -119,6 +119,8 @@ class TopCanvas
 #endif // MESA_KMS
 
   EGLDisplay display = EGL_NO_DISPLAY;
+  EGLConfig chosen_config;
+
 #ifndef ANDROID
   EGLContext context = EGL_NO_CONTEXT;
 #endif // ANDROID

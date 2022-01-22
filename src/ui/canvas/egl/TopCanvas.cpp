@@ -202,6 +202,8 @@ TopCanvas::InitDisplay(EGLNativeDisplayType native_display)
 
   if (!eglBindAPI(GetBindAPI()))
     throw std::runtime_error("eglBindAPI() failed");
+
+  chosen_config = EGL::ChooseConfig(display);
 }
 
 #ifndef ANDROID
@@ -211,8 +213,6 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
                      EGLNativeWindowType native_window)
 {
   InitDisplay(native_display);
-
-  const EGLConfig chosen_config = EGL::ChooseConfig(display);
 
   surface = eglCreateWindowSurface(display, chosen_config,
                                    native_window, nullptr);
