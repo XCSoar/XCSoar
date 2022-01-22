@@ -151,6 +151,11 @@ TopCanvas::TopCanvas()
 
   mode = connector->modes[0];
 
+  if (connector->mmWidth > 0 && connector->mmHeight > 0)
+    Display::ProvideSizeMM(mode.hdisplay, mode.vdisplay,
+                           connector->mmWidth,
+                           connector->mmHeight);
+
   drmModeFreeConnector(connector);
 
   native_window = gbm_surface_create(native_display, mode.hdisplay,
@@ -159,11 +164,6 @@ TopCanvas::TopCanvas()
                                      GBM_BO_USE_SCANOUT | GBM_BO_USE_RENDERING);
   if (native_window == nullptr)
     throw std::runtime_error("Could not create GBM surface");
-
-  if (connector->mmWidth > 0 && connector->mmHeight > 0)
-    Display::ProvideSizeMM(mode.hdisplay, mode.vdisplay,
-                           connector->mmWidth,
-                           connector->mmHeight);
 #endif
 
   CreateEGL(native_display, native_window);
