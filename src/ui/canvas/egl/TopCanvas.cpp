@@ -65,8 +65,6 @@ struct drm_fb {
 };
 #endif
 
-#ifndef ANDROID
-
 /**
  * Returns the EGL API to bind to using eglBindAPI().
  */
@@ -77,8 +75,6 @@ GetBindAPI()
     ? EGL_OPENGL_ES_API
     : EGL_OPENGL_API;
 }
-
-#endif // !ANDROID
 
 #ifdef MESA_KMS
 
@@ -192,12 +188,11 @@ TopCanvas::TopCanvas()
 
 #endif
 
-#ifndef ANDROID
-
-void
-TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
-                     EGLNativeWindowType native_window)
+inline void
+TopCanvas::InitDisplay(EGLNativeDisplayType native_display)
 {
+  assert(display == EGL_NO_DISPLAY);
+
   display = eglGetDisplay(native_display);
   if (display == EGL_NO_DISPLAY)
     throw std::runtime_error("eglGetDisplay(EGL_DEFAULT_DISPLAY) failed");
@@ -207,6 +202,15 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
 
   if (!eglBindAPI(GetBindAPI()))
     throw std::runtime_error("eglBindAPI() failed");
+}
+
+#ifndef ANDROID
+
+void
+TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
+                     EGLNativeWindowType native_window)
+{
+  InitDisplay(native_display);
 
   const EGLConfig chosen_config = EGL::ChooseConfig(display);
 
