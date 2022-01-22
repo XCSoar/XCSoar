@@ -159,50 +159,50 @@ class NativeView extends SurfaceView
     return closestConfig;
   }
 
+  private void initDisplay() throws EGLException {
+    egl = (EGL10)EGLContext.getEGL();
+    display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+    if (display == EGL10.EGL_NO_DISPLAY)
+      throw new EGLException("eglGetDisplay() failed");
+
+    int[] version = new int[2];
+    if (!egl.eglInitialize(display, version))
+      throw new EGLException("eglInitialize() failed: " + egl.eglGetError());
+
+    Log.d(TAG, "EGL vendor: " +
+          egl.eglQueryString(display, EGL10.EGL_VENDOR));
+    Log.d(TAG, "EGL version: " +
+          egl.eglQueryString(display, EGL10.EGL_VERSION));
+    Log.d(TAG, "EGL extensions: " +
+          egl.eglQueryString(display, EGL10.EGL_EXTENSIONS));
+
+    config = chooseEglConfig(egl, display);
+    Log.d(TAG, "EGLConfig = " + EGLUtil.toString(egl, display, config));
+  }
+
+  private void initContext() throws EGLException {
+    if (display == EGL10.EGL_NO_DISPLAY)
+      initDisplay();
+
+    final int contextClientVersion = 2;
+    final int[] contextAttribList = new int[]{
+      EGL14.EGL_CONTEXT_CLIENT_VERSION, contextClientVersion,
+      EGL10.EGL_NONE
+    };
+
+    context = egl.eglCreateContext(display, config,
+                                   EGL10.EGL_NO_CONTEXT, contextAttribList);
+    if (context == EGL10.EGL_NO_CONTEXT)
+      throw new EGLException("eglCreateContext() failed: " +
+                             egl.eglGetError());
+  }
+
   private void initGL(SurfaceHolder holder) throws EGLException {
-    /* initialize display */
-
-    if (display == EGL10.EGL_NO_DISPLAY) {
-      egl = (EGL10)EGLContext.getEGL();
-      display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
-      if (display == EGL10.EGL_NO_DISPLAY)
-        throw new EGLException("eglGetDisplay() failed");
-
-      int[] version = new int[2];
-      if (!egl.eglInitialize(display, version))
-        throw new EGLException("eglInitialize() failed: " + egl.eglGetError());
-
-      Log.d(TAG, "EGL vendor: " +
-            egl.eglQueryString(display, EGL10.EGL_VENDOR));
-      Log.d(TAG, "EGL version: " +
-            egl.eglQueryString(display, EGL10.EGL_VERSION));
-      Log.d(TAG, "EGL extensions: " +
-            egl.eglQueryString(display, EGL10.EGL_EXTENSIONS));
-    }
-
-    /* choose a configuration */
-
-    if (config == null) {
-      config = chooseEglConfig(egl, display);
-      Log.d(TAG, "EGLConfig = " + EGLUtil.toString(egl, display, config));
-    }
-
     /* initialize context and surface */
 
     boolean hadContext = context != EGL10.EGL_NO_CONTEXT;
-    if (!hadContext) {
-      final int contextClientVersion = 2;
-      final int[] contextAttribList = new int[]{
-        EGL14.EGL_CONTEXT_CLIENT_VERSION, contextClientVersion,
-        EGL10.EGL_NONE
-      };
-
-      context = egl.eglCreateContext(display, config,
-                                     EGL10.EGL_NO_CONTEXT, contextAttribList);
-      if (context == EGL10.EGL_NO_CONTEXT)
-        throw new EGLException("eglCreateContext() failed: " +
-                               egl.eglGetError());
-    }
+    if (!hadContext)
+      initContext();
 
     surface = egl.eglCreateWindowSurface(display, config,
                                          holder, null);
