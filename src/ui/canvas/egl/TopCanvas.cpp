@@ -212,7 +212,7 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
 
   surface = eglCreateWindowSurface(display, chosen_config,
                                    native_window, nullptr);
-  if (surface == nullptr)
+  if (surface == EGL_NO_SURFACE)
     throw FormatRuntimeError("eglCreateWindowSurface() failed: %#x", eglGetError());
 
   const PixelSize effective_size = GetNativeSize();
