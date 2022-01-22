@@ -116,20 +116,20 @@ class TopCanvas
   drmModeModeInfo mode;
 
   drmModeCrtc *saved_crtc = nullptr;
-#endif
+#endif // MESA_KMS
 
   EGLDisplay display;
 #ifndef ANDROID
   EGLContext context;
-#endif
+#endif // ANDROID
   EGLSurface surface;
-#endif
+#endif // USE_EGL
 
 #ifdef USE_GLX
   _XDisplay *const x_display;
   GLXContext glx_context;
   GLXWindow glx_window;
-#endif
+#endif // USE_GLX
 
 #ifdef ENABLE_SDL
   SDL_Window *const window;
@@ -137,8 +137,8 @@ class TopCanvas
 #ifdef USE_MEMORY_CANVAS
   SDL_Renderer *renderer;
   SDL_Texture *texture;
-#endif
-#endif
+#endif // USE_MEMORY_CANVAS
+#endif // ENABLE_SDL
 
 #ifdef USE_MEMORY_CANVAS
 
@@ -161,7 +161,7 @@ class TopCanvas
   unsigned map_pitch, map_bpp;
 
   uint32_t epd_update_marker;
-#endif
+#endif // USE_FB
 
 #ifdef KOBO
   /**
@@ -175,7 +175,7 @@ class TopCanvas
    * this flag can be set true for don't wait eInk Update complete for faster responce time.
    */
   bool frame_sync = false;
-#endif
+#endif // KOBO
 
 public:
 #ifdef ENABLE_SDL
