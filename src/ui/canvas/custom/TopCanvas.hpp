@@ -197,6 +197,19 @@ public:
 
   ~TopCanvas() noexcept;
 
+  /**
+   * Is this object ready for drawing?
+   */
+  bool IsReady() const noexcept {
+#ifdef USE_EGL
+    /* can't draw if there is no EGL surface (e.g. if the Android app
+       is paused) */
+    return surface != EGL_NO_SURFACE;
+#else
+    return true;
+#endif
+  }
+
 #ifdef USE_MEMORY_CANVAS
   gcc_pure
   PixelRect GetRect() const;

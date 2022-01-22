@@ -288,6 +288,8 @@ void
 TopCanvas::ReleaseSurface() noexcept
 {
   native_view->deinitSurface();
+
+  surface = EGL_NO_SURFACE;
 }
 
 #endif // ANDROID

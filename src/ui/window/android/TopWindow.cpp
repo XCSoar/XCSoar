@@ -69,10 +69,10 @@ TopWindow::ResumeSurface() noexcept
     return false;
   }
 
+  assert(screen->IsReady());
+
   paused = false;
   resumed = false;
-
-  surface_valid = true;
 
   RefreshSize();
 
@@ -82,7 +82,7 @@ TopWindow::ResumeSurface() noexcept
 bool
 TopWindow::CheckResumeSurface() noexcept
 {
-  return (!resumed || ResumeSurface()) && !paused && surface_valid;
+  return (!resumed || ResumeSurface()) && !paused && screen->IsReady();
 }
 
 void
@@ -120,9 +120,9 @@ TopWindow::OnPause() noexcept
 
   TextCache::Flush();
 
-  surface_valid = false;
-
   screen->ReleaseSurface();
+
+  assert(!screen->IsReady());
 
   const std::lock_guard<Mutex> lock(paused_mutex);
   paused = true;
@@ -215,7 +215,7 @@ TopWindow::OnEvent(const Event &event)
     return OnMultiTouchUp();
 
   case Event::RESIZE:
-    if (!surface_valid)
+    if (!screen->IsReady())
       /* postpone the resize if we're paused; the real resize will be
          handled by TopWindow::refresh() as soon as XCSoar is
          resumed */
