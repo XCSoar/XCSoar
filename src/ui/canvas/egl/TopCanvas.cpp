@@ -269,6 +269,16 @@ TopCanvas::GetNativeSize() const
   return PixelSize(w, h);
 }
 
+#ifdef ANDROID
+
+void
+TopCanvas::Resume()
+{
+  surface = eglGetCurrentSurface(EGL_DRAW);
+}
+
+#endif // ANDROID
+
 void
 TopCanvas::Flip()
 {

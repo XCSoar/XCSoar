@@ -238,7 +238,7 @@ public:
   bool CheckResize();
 #endif
 
-#ifdef ENABLE_OPENGL
+#ifdef ANDROID
   /**
    * Initialise the new OpenGL context.
    */
