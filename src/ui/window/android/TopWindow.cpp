@@ -30,6 +30,7 @@ Copyright_License {
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
 #include "util/ScopeExit.hxx"
+#include "LogFile.hpp"
 
 #include <cassert>
 
@@ -60,9 +61,14 @@ TopWindow::ResumeSurface() noexcept
 
   assert(paused);
 
-  if (!native_view->initSurface())
-    /* failed - retry later */
+  try {
+    if (!native_view->initSurface())
+      /* failed - retry later */
+      return false;
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to initialize GL surface");
     return false;
+  }
 
   paused = false;
   resumed = false;
