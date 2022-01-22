@@ -23,16 +23,20 @@ Copyright_License {
 
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "ConfigChooser.hpp"
-#include "GBM.hpp"
 #include "ui/canvas/opengl/Init.hpp"
 #include "ui/canvas/opengl/Globals.hpp"
 #include "ui/opengl/Features.hpp"
 #include "system/Error.hxx"
 #include "util/RuntimeError.hxx"
 
+#ifdef ANDROID
+#include "LogFile.hpp"
+#endif
+
 #include <stdio.h>
 
 #ifdef MESA_KMS
+#include "GBM.hpp"
 #include "Hardware/DisplayDPI.hpp"
 
 #include <span>
@@ -59,6 +63,8 @@ struct drm_fb {
 };
 #endif
 
+#ifndef ANDROID
+
 /**
  * Returns the EGL API to bind to using eglBindAPI().
  */
@@ -69,6 +75,8 @@ GetBindAPI()
     ? EGL_OPENGL_ES_API
     : EGL_OPENGL_API;
 }
+
+#endif // !ANDROID
 
 #ifdef MESA_KMS
 
@@ -117,7 +125,18 @@ ChooseConnector(FileDescriptor dri_fd, const drmModeRes &resources)
 
 #endif
 
-#if !defined(USE_X11) && !defined(USE_WAYLAND)
+#ifdef ANDROID
+
+TopCanvas::TopCanvas(PixelSize new_size)
+{
+  display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+  surface = eglGetCurrentSurface(EGL_DRAW);
+
+  OpenGL::SetupContext();
+  SetupViewport(new_size);
+}
+
+#elif !defined(USE_X11) && !defined(USE_WAYLAND)
 
 TopCanvas::TopCanvas()
 #if defined(MESA_KMS)
@@ -171,6 +190,8 @@ TopCanvas::TopCanvas()
 
 #endif
 
+#ifndef ANDROID
+
 void
 TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
                      EGLNativeWindowType native_window)
@@ -215,12 +236,16 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
   SetupViewport(effective_size);
 }
 
+#endif // !ANDROID
+
 TopCanvas::~TopCanvas() noexcept
 {
+#ifndef ANDROID
   eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
   eglDestroySurface(display, surface);
   eglDestroyContext(display, context);
   eglTerminate(display);
+#endif
 
 #ifdef MESA_KMS
   if (nullptr != saved_crtc)
@@ -248,8 +273,12 @@ void
 TopCanvas::Flip()
 {
   if (!eglSwapBuffers(display, surface)) {
+#ifdef ANDROID
+    LogFormat("eglSwapBuffers() failed: 0x%x", eglGetError());
+#else
     fprintf(stderr, "eglSwapBuffers() failed: 0x%x\n", eglGetError());
     exit(EXIT_FAILURE);
+#endif
   }
 
 #ifdef MESA_KMS

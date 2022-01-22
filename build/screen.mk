@@ -56,10 +56,10 @@ endif
 ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
+	$(CANVAS_SRC_DIR)/egl/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/android/Window.cpp \
 	$(WINDOW_SRC_DIR)/android/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/android/SingleWindow.cpp \
-	$(CANVAS_SRC_DIR)/android/TopCanvas.cpp \
 	$(CANVAS_SRC_DIR)/android/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/android/Font.cpp
 ifeq ($(TIFF),y)
