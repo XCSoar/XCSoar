@@ -208,20 +208,11 @@ TopCanvas::InitDisplay(EGLNativeDisplayType native_display)
 
 #ifndef ANDROID
 
-void
-TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
-                     EGLNativeWindowType native_window)
+inline void
+TopCanvas::CreateContext()
 {
-  InitDisplay(native_display);
-
-  surface = eglCreateWindowSurface(display, chosen_config,
-                                   native_window, nullptr);
-  if (surface == EGL_NO_SURFACE)
-    throw FormatRuntimeError("eglCreateWindowSurface() failed: %#x", eglGetError());
-
-  const PixelSize effective_size = GetNativeSize();
-  if (effective_size.width == 0 || effective_size.height == 0)
-    throw std::runtime_error("eglQuerySurface() failed");
+  assert(display != EGL_NO_DISPLAY);
+  assert(context == EGL_NO_CONTEXT);
 
 #ifdef HAVE_GLES2
   static constexpr EGLint context_attributes[] = {
@@ -234,6 +225,23 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
 
   context = eglCreateContext(display, chosen_config,
                              EGL_NO_CONTEXT, context_attributes);
+}
+
+void
+TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
+                     EGLNativeWindowType native_window)
+{
+  InitDisplay(native_display);
+  CreateContext();
+
+  surface = eglCreateWindowSurface(display, chosen_config,
+                                   native_window, nullptr);
+  if (surface == EGL_NO_SURFACE)
+    throw FormatRuntimeError("eglCreateWindowSurface() failed: %#x", eglGetError());
+
+  const PixelSize effective_size = GetNativeSize();
+  if (effective_size.width == 0 || effective_size.height == 0)
+    throw std::runtime_error("eglQuerySurface() failed");
 
   if (!eglMakeCurrent(display, surface, surface, context))
     throw std::runtime_error("eglMakeCurrent() failed");
