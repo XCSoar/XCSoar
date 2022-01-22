@@ -111,7 +111,7 @@ class TopCanvas
 
   drmEventContext evctx;
 
-  drmModeConnector *connector = nullptr;
+  uint32_t connector_id;
   uint32_t crtc_id;
   drmModeModeInfo mode;
 

@@ -140,7 +140,8 @@ TopCanvas::TopCanvas()
   if (resources == nullptr)
     throw std::runtime_error("drmModeGetResources() failed");
 
-  connector = ChooseConnector(dri_fd, *resources);
+  auto *connector = ChooseConnector(dri_fd, *resources);
+  connector_id = connector->connector_id;
 
   if (auto *encoder = drmModeGetEncoder(dri_fd.Get(), connector->encoder_id)) {
     crtc_id = encoder->crtc_id;
@@ -149,6 +150,8 @@ TopCanvas::TopCanvas()
     throw std::runtime_error("No usable DRM encoder found");
 
   mode = connector->modes[0];
+
+  drmModeFreeConnector(connector);
 
   native_window = gbm_surface_create(native_display, mode.hdisplay,
                                      mode.vdisplay,
@@ -222,7 +225,7 @@ TopCanvas::~TopCanvas() noexcept
 #ifdef MESA_KMS
   if (nullptr != saved_crtc)
     drmModeSetCrtc(dri_fd.Get(), saved_crtc->crtc_id, saved_crtc->buffer_id,
-                   saved_crtc->x, saved_crtc->y, &connector->connector_id, 1,
+                   saved_crtc->x, saved_crtc->y, &connector_id, 1,
                    &saved_crtc->mode);
   gbm_surface_destroy(native_window);
   gbm_device_destroy(native_display);
@@ -281,7 +284,7 @@ TopCanvas::Flip()
   if (nullptr == current_bo) {
     saved_crtc = drmModeGetCrtc(dri_fd.Get(), crtc_id);
     drmModeSetCrtc(dri_fd.Get(), crtc_id, fb->fb_id, 0, 0,
-                   &connector->connector_id, 1, &mode);
+                   &connector_id, 1, &mode);
   } else {
 
     bool flip_finished = false;
