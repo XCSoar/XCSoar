@@ -305,6 +305,7 @@ private:
 #ifdef USE_EGL
   void InitDisplay(EGLNativeDisplayType native_display);
   void CreateContext();
+  void CreateSurface(EGLNativeWindowType native_window);
   void CreateEGL(EGLNativeDisplayType native_display,
                  EGLNativeWindowType native_window);
 #endif

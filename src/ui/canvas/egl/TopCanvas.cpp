@@ -227,13 +227,9 @@ TopCanvas::CreateContext()
                              EGL_NO_CONTEXT, context_attributes);
 }
 
-void
-TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
-                     EGLNativeWindowType native_window)
+inline void
+TopCanvas::CreateSurface(EGLNativeWindowType native_window)
 {
-  InitDisplay(native_display);
-  CreateContext();
-
   surface = eglCreateWindowSurface(display, chosen_config,
                                    native_window, nullptr);
   if (surface == EGL_NO_SURFACE)
@@ -248,6 +244,15 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
 
   OpenGL::SetupContext();
   SetupViewport(effective_size);
+}
+
+void
+TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
+                     EGLNativeWindowType native_window)
+{
+  InitDisplay(native_display);
+  CreateContext();
+  CreateSurface(native_window);
 }
 
 #endif // !ANDROID
