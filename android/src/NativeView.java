@@ -79,12 +79,6 @@ class NativeView extends SurfaceView
   EGLSurface surface = EGL10.EGL_NO_SURFACE;
 
   /**
-   * A 1x1 pbuffer surface that is used to activate the EGLContext
-   * while we have no real surface.
-   */
-  EGLSurface dummySurface = EGL10.EGL_NO_SURFACE;
-
-  /**
    * Is the EGLSurface currently valid?  This is modified by
    * SurfaceHolder.Callback methods.
    */
@@ -248,18 +242,8 @@ class NativeView extends SurfaceView
    */
   private void deinitSurface() {
     if (surface != EGL10.EGL_NO_SURFACE) {
-      if (dummySurface == EGL10.EGL_NO_SURFACE) {
-        int pbufferAttribs[] = {
-          EGL10.EGL_WIDTH, 1,
-          EGL10.EGL_HEIGHT, 1,
-          EGL10.EGL_NONE
-        };
-
-        dummySurface = egl.eglCreatePbufferSurface(display, config,
-                                                   pbufferAttribs);
-      }
-
-      egl.eglMakeCurrent(display, dummySurface, dummySurface, context);
+      egl.eglMakeCurrent(display, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE,
+                         context);
       egl.eglDestroySurface(display, surface);
       surface = EGL10.EGL_NO_SURFACE;
     }
