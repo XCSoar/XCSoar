@@ -21,18 +21,49 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_OS_CLOCK_HPP
-#define XCSOAR_OS_CLOCK_HPP
+#pragma once
 
-#include "util/Compiler.h"
+#include "co/InjectTask.hxx"
+#include "event/DeferEvent.hxx"
+#include "time/PeriodClock.hpp"
+
+#include <vector>
+
+struct NMEAInfo;
+struct GeoPoint;
+class CurlGlobal;
 
 /**
- * Query the UTC offset from the OS.
- *
- * @return the offset in seconds
+ * Client for ThermalInfoMap (https://thermalmap.info/api-doc.php)
  */
-gcc_pure
-int
-GetSystemUTCOffset();
+namespace TIM {
 
-#endif
+struct Thermal;
+
+class Glue {
+  CurlGlobal &curl;
+
+  PeriodClock clock;
+
+  std::vector<Thermal> thermals;
+
+  std::vector<Thermal> new_thermals;
+
+  Co::InjectTask inject_task;
+
+public:
+  explicit Glue(CurlGlobal &_curl) noexcept;
+  ~Glue() noexcept;
+
+  const auto &Get() const noexcept {
+    return thermals;
+  }
+
+  void OnTimer(const NMEAInfo &basic) noexcept;
+
+private:
+  Co::InvokeTask Start(const GeoPoint &location);
+  void OnCompletion(std::exception_ptr error) noexcept;
+};
+
+} // namespace TIM

@@ -68,7 +68,7 @@ protected:
   }
 
 private:
-  bool CheckClearance(const RouteLink &e, RoutePoint &inp) const noexcept override;
+  std::optional<RoutePoint> CheckClearance(const RouteLink &e) const noexcept override;
   void AddNearby(const RouteLink &e) noexcept override;
   bool CheckSecondary(const RouteLink &e) noexcept override;
 

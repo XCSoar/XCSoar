@@ -22,28 +22,20 @@ Copyright_License {
 */
 
 #include "Logger/NMEALogger.hpp"
-#include "io/TextWriter.hpp"
+#include "io/FileOutputStream.hxx"
 #include "LocalPath.hpp"
 #include "time/BrokenDateTime.hpp"
-#include "thread/Mutex.hxx"
 #include "system/Path.hpp"
 #include "util/StaticString.hxx"
 
-namespace NMEALogger
-{
-  static Mutex mutex;
-  static TextWriter *writer;
+NMEALogger::NMEALogger() noexcept {}
+NMEALogger::~NMEALogger() noexcept = default;
 
-  bool enabled = false;
-
-  static bool Start();
-}
-
-bool
+inline void
 NMEALogger::Start()
 {
-  if (writer != nullptr)
-    return true;
+  if (file != nullptr)
+    return;
 
   BrokenDateTime dt = BrokenDateTime::NowUTC();
   assert(dt.IsPlausible());
@@ -56,32 +48,30 @@ NMEALogger::Start()
   const auto logs_path = MakeLocalPath(_T("logs"));
 
   const auto path = AllocatedPath::Build(logs_path, name);
-  writer = new TextWriter(path, false);
-  if (writer == nullptr)
-    return false;
-
-  if (!writer->IsOpen()) {
-    delete writer;
-    writer = nullptr;
-    return false;
-  }
-
-  return true;
+  file = std::make_unique<FileOutputStream>(path,
+                                            FileOutputStream::Mode::APPEND_OR_CREATE);
 }
 
-void
-NMEALogger::Shutdown()
+static void
+WriteLine(OutputStream &os, std::string_view text)
 {
-  delete writer;
+  os.Write(text.data(), text.size());
+
+  static constexpr char newline = '\n';
+  os.Write(&newline, sizeof(newline));
 }
 
 void
-NMEALogger::Log(const char *text)
+NMEALogger::Log(const char *text) noexcept
 {
   if (!enabled)
     return;
 
   std::lock_guard<Mutex> lock(mutex);
-  if (Start())
-    writer->WriteLine(text);
+
+  try {
+    Start();
+    WriteLine(*file, text);
+  } catch (...) {
+  }
 }

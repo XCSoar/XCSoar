@@ -24,7 +24,7 @@
 #include "Airspace/AirspaceWarningManager.hpp"
 
 const FlatProjection &
-ProtectedAirspaceWarningManager::GetProjection() const
+ProtectedAirspaceWarningManager::GetProjection() const noexcept
 {
   /* access to FlatProjection does not need to be protected */
   UnprotectedLease lease(const_cast<ProtectedAirspaceWarningManager &>(*this));
@@ -32,21 +32,21 @@ ProtectedAirspaceWarningManager::GetProjection() const
 }
 
 void
-ProtectedAirspaceWarningManager::Clear()
+ProtectedAirspaceWarningManager::Clear() noexcept
 {
   ExclusiveLease lease(*this);
   lease->clear();
 }
 
 void
-ProtectedAirspaceWarningManager::AcknowledgeAll()
+ProtectedAirspaceWarningManager::AcknowledgeAll() noexcept
 {
   ExclusiveLease lease(*this);
   lease->AcknowledgeAll();
 }
 
 bool
-ProtectedAirspaceWarningManager::IsEmpty() const
+ProtectedAirspaceWarningManager::IsEmpty() const noexcept
 {
   Lease lease(*this);
   return lease->empty();
@@ -88,4 +88,14 @@ ProtectedAirspaceWarningManager::Acknowledge(ConstAirspacePtr airspace) noexcept
 {
   ExclusiveLease lease(*this);
   lease->Acknowledge(std::move(airspace));
+}
+
+std::optional<AirspaceWarning>
+ProtectedAirspaceWarningManager::GetTopWarning() const noexcept
+{
+  const Lease lease(*this);
+  if (auto i = lease->begin(); i != lease->end())
+    return *i;
+
+  return std::nullopt;
 }

@@ -26,7 +26,7 @@ Copyright_License {
 #include "Geo/GeoBounds.hpp"
 
 void
-TracePointVector::ScanBounds(GeoBounds &bounds) const
+TracePointVector::ScanBounds(GeoBounds &bounds) const noexcept
 {
   for (const auto &i : *this)
     bounds.Extend(i.GetLocation());

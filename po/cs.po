@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-12-04 22:08+0000\n"
+"PO-Revision-Date: 2021-12-17 18:50+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1101,9 +1101,7 @@ msgstr "Start úlohy"
 
 #: src/Input/InputEventsTask.cpp:330
 msgid "Next turnpoint"
-msgstr ""
-"Následující\n"
-"otočný bod"
+msgstr "Další otočný bod"
 
 #: src/Input/InputEventsTask.cpp:332
 msgid "Task finished"
@@ -3267,9 +3265,7 @@ msgstr "Rychlost úlohy"
 #: src/Dialogs/dlgAnalysis.cpp:565
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
 msgid "Warnings"
-msgstr ""
-"Prostory\n"
-"Varování"
+msgstr "Varování"
 
 #: src/Dialogs/dlgChecklist.cpp:50 src/Dialogs/dlgChecklist.cpp:142
 msgid "Checklist"
@@ -3515,7 +3511,7 @@ msgstr "Zadejte své heslo"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:88
 msgid "Wrong password."
-msgstr "Nesprávné heslo."
+msgstr "Nesprávné heslo"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:103
 msgid "Enter a new password"
@@ -3878,11 +3874,11 @@ msgstr "Posuň mapu na bod"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:262
 msgid "Set Active Frequency"
-msgstr "Nastav aktivní frekvenci"
+msgstr "Nastav na aktivní frekvenci"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:267
 msgid "Set Standby Frequency"
-msgstr "Nastav záložní frekvenci"
+msgstr "Nastav na záložní frekvenci"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:428 Data/Input/default.xci:1039
 msgid "GoTo"
@@ -5123,8 +5119,8 @@ msgid ""
 "The moving map display will be rotated so the wind is always oriented up to "
 "down. (can be useful for wave flying)"
 msgstr ""
-"Pohyblivý displej s mapou bude natočen tak, že vítr je vždy orientován shora "
-"dolů (může být užitečné ve vlně)."
+"Pohyblivý displej s mapou bude natočen tak, aby byl směr větru vždy "
+"orientován shora dolů (může být užitečné ve vlně)."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
@@ -5763,7 +5759,7 @@ msgstr "Zjednodušená grafika černých čar s bílými konturami."
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:121
 #, no-c-format
 msgid "Simple (large)"
-msgstr "Zjednodušeně (velké)"
+msgstr "Zjednodušeně (velký)"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:122
 #, no-c-format
@@ -5773,12 +5769,12 @@ msgstr "Zjednodušená velká grafika."
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:123
 #, no-c-format
 msgid "Detailed"
-msgstr "Podrobné"
+msgstr "Podrobně"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:124
 #, no-c-format
 msgid "Detailed rendered aircraft graphics."
-msgstr "Detailní vykreslení letadla."
+msgstr "Podrobně vykreslená grafika letadla."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:125
 #, no-c-format
@@ -5788,7 +5784,7 @@ msgstr "Závěsný kluzák"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:126
 #, no-c-format
 msgid "Simplified hang glider as line graphics, white with black contours."
-msgstr "Zjednodušená bílá silueta závěsného kluzáku s černým obrysem."
+msgstr "Zjednodušená silueta závěsného kluzáku, bílá s černou konturou."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:127
 #, no-c-format
@@ -5798,7 +5794,7 @@ msgstr "Padákový kluzák"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:128
 #, no-c-format
 msgid "Simplified para glider as line graphics, white with black contours."
-msgstr "Zjednodušená bílá silueta padákového kluzáku s černým obrysem."
+msgstr "Zjednodušená silueta padákového kluzáku, bílá s černou konturou."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:133
 #, no-c-format
@@ -5911,7 +5907,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:188
 msgid "Aircraft symbol"
-msgstr "Symbol letadla"
+msgstr "Symbol kluzáku"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:192
 #: src/InfoBoxes/Content/Factory.cpp:938
@@ -6032,7 +6028,7 @@ msgstr "Reference použitá pro pravidlo minimální výšky."
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:128
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:280
 msgid "PEV start wait time"
-msgstr "Prodleva po pilotní značce"
+msgstr "Prodleva po ozn. události"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:129
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:281
@@ -6040,13 +6036,13 @@ msgid ""
 "Wait time in minutes after Pilot Event and before start gate opens. 0 means "
 "start opens immediately."
 msgstr ""
-"Doba prodlevy v minutách po označení pilotní značkou a před otevřením "
+"Doba prodlevy v minutách po označení události pilotem a před otevřením "
 "startovní brány. 0 znamená, že se startovní brána otevírá okamžitě."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:135
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:284
 msgid "PEV start window"
-msgstr "Startovní brána pilot. značky"
+msgstr "Start. brána po ozn. události"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:136
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:285
@@ -6054,8 +6050,8 @@ msgid ""
 "Number of minutes start remains open after Pilot Event and PEV wait time.0 "
 "means start will never close after it opens."
 msgstr ""
-"Počet minut, kdy startovní brána zůstává otevřená, po označení pilotní "
-"značkou a uplynutí prodlevy. 0 znamená, že se startovní brána po otevření "
+"Počet minut, kdy startovní brána zůstává otevřená, po označení události "
+"pilotem a uplynutí prodlevy. 0 znamená, že se startovní brána po otevření "
 "nikdy neuzavře."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:81
@@ -6423,11 +6419,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:269
 msgid "Contours"
-msgstr "Obrysy"
+msgstr "Vrstevnice"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:270
 msgid "If enabled, draws contour lines on the terrain."
-msgstr "Pokud je zapnuto, vykreslí obrysové čáry terénu."
+msgstr "Pokud je zapnuto, vykreslí vrstevnice terénu."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:128
 msgid "Preset"
@@ -6950,7 +6946,7 @@ msgstr "Úhel"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:120
 msgid "Turn Points"
-msgstr "Body"
+msgstr "Otočné body"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:144
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:147
@@ -7053,9 +7049,9 @@ msgid ""
 "minimum height above ground for finish to be greater than 1000m below the "
 "start height."
 msgstr ""
-"Rozdíl minimální cílové výšky nad zemí a strartovní výšky musí být maximálně "
+"Rozdíl minimální cílové výšky nad zemí a strartovní výšky musí být více než "
 "1000m. Omezení maximální výšky startu nebo maximální startovní rychlosti "
-"není aplikováno"
+"není aplikováno."
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:66
 msgid "Task not saved"
@@ -10478,15 +10474,15 @@ msgstr "Ulož"
 
 #: Data/Input/default.xci:430
 msgid "Pilot event announced"
-msgstr "Pilotní značka označena"
+msgstr "Událost označena pilotem (Pilot Event)"
 
 #: Data/Input/default.xci:433
 msgid ""
 "Pilot\n"
 "Event"
 msgstr ""
-"Pilotní\n"
-"značka"
+"Označ\n"
+"událost"
 
 #: Data/Input/default.xci:530 Data/Input/default.xci:1103
 msgid "Topo."

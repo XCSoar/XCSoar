@@ -53,6 +53,8 @@ Timer::Cancel()
 void
 Timer::OnTimer() noexcept
 {
+  event_queue->Interrupt();
+
   callback();
 }
 

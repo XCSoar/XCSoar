@@ -60,6 +60,9 @@ struct LoggerSettings {
 
   StaticString<64> copilot_name;
 
+  /** Crew mass template in kg */
+  unsigned crew_mass_template;
+
   void SetDefaults();
 };
 

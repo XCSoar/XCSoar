@@ -35,7 +35,6 @@ struct PolarInfo
 {
   // Using doubles here to simplify the code in PolarStore.cpp
   //
-  double reference_mass; /**< Reference Mass (kg) */
   double max_ballast;  /**< Max water ballast (l) */
 
   PolarShape shape;

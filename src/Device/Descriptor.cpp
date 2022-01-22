@@ -831,7 +831,7 @@ DeviceDescriptor::WriteNMEA(const char *line,
 {
   assert(line != nullptr);
 
-  if (port != nullptr)
+  if (port == nullptr)
       return false;
 
   try {
@@ -1055,7 +1055,7 @@ DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
 }
 
 bool
-DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
+DeviceDescriptor::PutQNH(const AtmosphericPressure value,
                          OperationEnvironment &env) noexcept
 {
   assert(InMainThread());
@@ -1373,7 +1373,8 @@ DeviceDescriptor::DataReceived(std::span<const std::byte> s) noexcept
 bool
 DeviceDescriptor::LineReceived(const char *line) noexcept
 {
-  NMEALogger::Log(line);
+  if (nmea_logger != nullptr)
+    nmea_logger->Log(line);
 
   if (dispatcher != nullptr)
     dispatcher->LineReceived(line);

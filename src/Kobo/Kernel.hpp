@@ -33,10 +33,17 @@ bool
 KoboInstallKernel(const char *uimage_path);
 
 /**
- * Does the kernel that is currently running have USB-OTG support?
+ * Is the kernel that is currently running a custom one?
  */
 gcc_const
 bool
-IsKoboOTGKernel();
+IsKoboCustomKernel();
+
+/**
+ * Are we currently in OTG host mode?
+ */
+gcc_const
+bool
+IsKoboOTGHostMode();
 
 #endif

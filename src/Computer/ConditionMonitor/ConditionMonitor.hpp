@@ -49,14 +49,14 @@ public:
      Interval_Check(_interval_check) {}
 
   void Update(const NMEAInfo &basic, const DerivedInfo &calculated,
-              const ComputerSettings &settings);
+              const ComputerSettings &settings) noexcept;
 
 private:
   virtual bool CheckCondition(const NMEAInfo &basic,
                               const DerivedInfo &calculated,
-                              const ComputerSettings &settings) = 0;
-  virtual void Notify() = 0;
-  virtual void SaveLast() = 0;
+                              const ComputerSettings &settings) noexcept = 0;
+  virtual void Notify() noexcept = 0;
+  virtual void SaveLast() noexcept = 0;
 
   bool Ready_Time_Notification(TimeStamp t) const noexcept;
   bool Ready_Time_Check(TimeStamp t, bool *restart) noexcept;

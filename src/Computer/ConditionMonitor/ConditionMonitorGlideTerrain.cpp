@@ -29,7 +29,7 @@ Copyright_License {
 bool
 ConditionMonitorGlideTerrain::CheckCondition(const NMEAInfo &basic,
                                              const DerivedInfo &calculated,
-                                             const ComputerSettings &settings)
+                                             const ComputerSettings &settings) noexcept
 {
   if (!calculated.flight.flying ||
       !calculated.task_stats.task_valid)
@@ -44,7 +44,7 @@ ConditionMonitorGlideTerrain::CheckCondition(const NMEAInfo &basic,
 }
 
 void
-ConditionMonitorGlideTerrain::Notify()
+ConditionMonitorGlideTerrain::Notify() noexcept
 {
   InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_TERRAIN);
 }

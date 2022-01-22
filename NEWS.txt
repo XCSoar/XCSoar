@@ -1,13 +1,23 @@
-Version 7.22 - not yet released
+Version 7.23 - not yet released
+
+Version 7.22 - 2022/01/14
 * user interface
   - close the download dialog after successful download
   - add "Share" button to the status dialog
+* glide computer
+  - implement event "AIRSPACE_ENTER"
+  - add event "AIRSPACE_NEAR"
 * Polars
   - add DG-800S
 * devices
   - FLARM: send turn point names in task declaration
 * user interface
+  - allow cursor navigation in most dialogs (for OpenVario)
   - add 3x6 InfoBoxes layout
+* weather
+  - Thermal Info Map integration
+* Lua scripting
+  - add blackboard.{clock,time,date_time_utc}
 * Android
   - use app-specific data directory by default
   - allow using all external storages

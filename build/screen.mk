@@ -56,10 +56,10 @@ endif
 ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
+	$(CANVAS_SRC_DIR)/egl/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/android/Window.cpp \
 	$(WINDOW_SRC_DIR)/android/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/android/SingleWindow.cpp \
-	$(CANVAS_SRC_DIR)/android/TopCanvas.cpp \
 	$(CANVAS_SRC_DIR)/android/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/android/Font.cpp
 ifeq ($(TIFF),y)
@@ -140,9 +140,9 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/custom/Files.cpp \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
-	$(CANVAS_SRC_DIR)/tty/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/egl/Init.cpp \
 	$(CANVAS_SRC_DIR)/egl/TopCanvas.cpp \
+	$(CANVAS_SRC_DIR)/egl/ConfigChooser.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
 	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
@@ -179,7 +179,6 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/memory/Export.cpp \
-	$(CANVAS_SRC_DIR)/tty/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
 	$(CANVAS_SRC_DIR)/fb/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
@@ -214,6 +213,10 @@ GDI_LDLIBS = -luser32 -lgdi32 -lmsimg32 -lgdiplus
 ifeq ($(TARGET),PC)
 GDI_LDLIBS += -Wl,-subsystem,windows
 endif
+endif
+
+ifeq ($(TARGET_IS_LINUX),y)
+SCREEN_SOURCES += $(SRC)/ui/linux/GraphicsTTY.cpp
 endif
 
 ifeq ($(USE_MEMORY_CANVAS),y)

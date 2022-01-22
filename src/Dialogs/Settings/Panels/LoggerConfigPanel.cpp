@@ -30,12 +30,15 @@ Copyright_License {
 #include "Form/DataField/Enum.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "UtilsSettings.hpp"
+#include "Components.hpp"
+#include "Units/Group.hpp"
 
 using namespace std::chrono;
 
 enum ControlIndex {
   PilotName,
   CoPilotName,
+  CrewWeightTemplate,
   LoggerTimeStepCruise,
   LoggerTimeStepCircling,
   DisableAutoLogger,
@@ -72,6 +75,13 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent,
   AddText(_("Pilot name"), nullptr, logger.pilot_name);
 
   AddText(_("CoPilot name"), nullptr, logger.copilot_name);
+
+  AddFloat(_("Crew weight default"),
+            _("Default for all weight loaded to the glider beyond the empty weight and besides "
+                "the water ballast."),
+            _T("%.0f %s"), _T("%.0f"),
+            0, 300, 5, false, UnitGroup::MASS,
+            logger.crew_mass_template);
 
   AddDuration(_("Time step cruise"),
               _("This is the time interval between logged points when not circling."),
@@ -115,6 +125,9 @@ LoggerConfigPanel::Save(bool &changed) noexcept
   changed |= SaveValue(CoPilotName, ProfileKeys::CoPilotName,
                        logger.copilot_name);
 
+  changed |= SaveValue(CrewWeightTemplate, UnitGroup::MASS, ProfileKeys::CrewWeightTemplate,
+                       logger.crew_mass_template);
+
   changed |= SaveValue(LoggerTimeStepCruise, ProfileKeys::LoggerTimeStepCruise,
                        logger.time_step_cruise);
 
@@ -128,8 +141,8 @@ LoggerConfigPanel::Save(bool &changed) noexcept
   changed |= SaveValue(EnableNMEALogger, ProfileKeys::EnableNMEALogger,
                        logger.enable_nmea_logger);
 
-  if (logger.enable_nmea_logger)
-    NMEALogger::enabled = true;
+  if (logger.enable_nmea_logger && nmea_logger != nullptr)
+    nmea_logger->Enable();
 
   if (SaveValue(EnableFlightLogger, ProfileKeys::EnableFlightLogger,
                 logger.enable_flight_logger)) {

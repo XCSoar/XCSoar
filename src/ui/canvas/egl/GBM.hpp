@@ -21,31 +21,14 @@ Copyright_License {
 }
 */
 
-#include "system/Clock.hpp"
+#pragma once
 
-#ifdef _WIN32
-#include <profileapi.h>
-#include <sysinfoapi.h>
-#include <timezoneapi.h>
-#endif /* !HAVE_POSIX */
+#include <gbm.h>
 
-int
-GetSystemUTCOffset()
-{
-#ifdef HAVE_POSIX
-  // XXX implement
-  return 0;
-#else
-  TIME_ZONE_INFORMATION TimeZoneInformation;
-  DWORD tzi = GetTimeZoneInformation(&TimeZoneInformation);
+static constexpr uint32_t XCSOAR_GBM_FORMAT = GBM_FORMAT_XRGB8888;
 
-  int offset = -TimeZoneInformation.Bias * 60;
-  if (tzi == TIME_ZONE_ID_STANDARD)
-    offset -= TimeZoneInformation.StandardBias * 60;
-
-  if (tzi == TIME_ZONE_ID_DAYLIGHT)
-    offset -= TimeZoneInformation.DaylightBias * 60;
-
-  return offset;
-#endif
-}
+/**
+ * A fallback value for EGL_NATIVE_VISUAL_ID; this is needed for the
+ * "amdgpu" driver on Linux.
+ */
+static constexpr uint32_t XCSOAR_GBM_FORMAT_FALLBACK = GBM_FORMAT_ARGB8888;

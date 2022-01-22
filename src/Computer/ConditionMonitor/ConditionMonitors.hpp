@@ -24,12 +24,24 @@ Copyright_License {
 #ifndef XCSOAR_CONDITION_MONITORS_HPP
 #define XCSOAR_CONDITION_MONITORS_HPP
 
-struct NMEAInfo;
-struct DerivedInfo;
-struct ComputerSettings;
+#include "ConditionMonitorAATTime.hpp"
+#include "ConditionMonitorFinalGlide.hpp"
+#include "ConditionMonitorGlideTerrain.hpp"
+#include "ConditionMonitorLandableReachable.hpp"
+#include "ConditionMonitorSunset.hpp"
+#include "ConditionMonitorWind.hpp"
 
-void
-ConditionMonitorsUpdate(const NMEAInfo &basic, const DerivedInfo &calculated,
-                        const ComputerSettings &settings);
+class ConditionMonitors {
+  ConditionMonitorWind wind;
+  ConditionMonitorFinalGlide finalglide;
+  ConditionMonitorSunset sunset;
+  ConditionMonitorAATTime aattime;
+  ConditionMonitorGlideTerrain glideterrain;
+  ConditionMonitorLandableReachable landablereachable;
+
+public:
+  void Update(const NMEAInfo &basic, const DerivedInfo &calculated,
+              const ComputerSettings &settings) noexcept;
+};
 
 #endif

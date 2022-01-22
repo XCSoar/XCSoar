@@ -49,6 +49,12 @@ RasterTerrain::LoadCache(FileCache &cache, Path path)
   return true;
 }
 
+inline bool
+RasterTerrain::LoadCache(FileCache *cache, Path path)
+{
+  return cache != nullptr && LoadCache(*cache, path);
+}
+
 inline void
 RasterTerrain::SaveCache(FileCache &cache, Path path) const
 {

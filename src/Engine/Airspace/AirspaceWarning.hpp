@@ -79,10 +79,12 @@ public:
   explicit AirspaceWarning(T &&_airspace) noexcept
     :airspace(std::forward<T>(_airspace)) {}
 
+  AirspaceWarning(const AirspaceWarning &) noexcept = default;
+
   /**
    * Save warning state prior to performing update
    */
-  void SaveState();
+  void SaveState() noexcept;
 
   /**
    * Update warning state and solution vector
@@ -92,7 +94,7 @@ public:
    * otherwise to inside)
    */
   void UpdateSolution(const State state,
-                      const AirspaceInterceptSolution &_solution);
+                      const AirspaceInterceptSolution &_solution) noexcept;
 
   /**
    * Determine whether accepting a warning of the supplied state
@@ -101,7 +103,7 @@ public:
    * @param state New warning state
    */
   [[gnu::pure]]
-  bool IsStateAccepted(const State _state) const {
+  bool IsStateAccepted(const State _state) const noexcept {
     return _state >= state;
   }
 
@@ -112,14 +114,14 @@ public:
    * @return True if state upgraded/downgraded
    */
   [[gnu::pure]]
-  bool ChangedState() const;
+  bool ChangedState() const noexcept;
 
   /**
    * Access airspace managed by this object
    *
    * @return Airspace
    */
-  const AbstractAirspace &GetAirspace() const {
+  const AbstractAirspace &GetAirspace() const noexcept {
     return *airspace;
   }
 
@@ -132,8 +134,36 @@ public:
    *
    * @return Warning state
    */
-  State GetWarningState() const {
+  State GetWarningState() const noexcept {
     return state;
+  }
+
+  /**
+   * Is this a warning?
+   *
+   * Some instances are not actually warnings, but
+   * how XCSoar remembers that an airspace is "ACKed" (but not
+   * currently nearby).
+   *
+   * Note that this method returns true for "ACKed" warnings.
+   */
+  bool IsWarning() const noexcept {
+    return state > WARNING_CLEAR;
+  }
+
+  /**
+   * Note that this method returns true for "ACKed" inside warnings.
+   */
+  bool IsInside() const noexcept {
+    return state == WARNING_INSIDE;
+  }
+
+  /**
+   * Is this warning currently active, i.e. it has no valid "ACK"?
+   * This implies that IsWarning() is true.
+   */
+  bool IsActive() const noexcept {
+    return expired;
   }
 
   /**
@@ -152,7 +182,7 @@ public:
    *
    * @return Reference to solution
    */
-  const AirspaceInterceptSolution &GetSolution() const {
+  const AirspaceInterceptSolution &GetSolution() const noexcept {
     return solution;
   }
 
@@ -162,7 +192,7 @@ public:
    * @return True if acknowledgement is expired
    */
   [[gnu::pure]]
-  bool IsAckExpired() const;
+  bool IsAckExpired() const noexcept;
 
   /**
    * Determine if acknowledgement is acknowledged for whole day
@@ -170,7 +200,7 @@ public:
    * @return True if acknowledged
    */
   [[gnu::pure]]
-  bool GetAckDay() const {
+  bool GetAckDay() const noexcept {
     return ack_day;
   }
 
@@ -178,28 +208,28 @@ public:
    * Acknowledge an airspace warning or airspace inside (depending on
    * the state).
    */
-  void Acknowledge();
+  void Acknowledge() noexcept;
 
   /**
    * Acknowledge an airspace warning
    *
    * @param set Whether to set or cancel acknowledgement
    */
-  void AcknowledgeWarning(const bool set=true);
+  void AcknowledgeWarning(const bool set=true) noexcept;
 
   /**
    * Acknowledge an airspace inside
    *
    * @param set Whether to set or cancel acknowledgement
    */
-  void AcknowledgeInside(const bool set=true);
+  void AcknowledgeInside(const bool set=true) noexcept;
 
   /**
    * Acknowledge all warnings for airspace for whole day
    *
    * @param set Whether to set or cancel acknowledgement
    */
-  void AcknowledgeDay(const bool set=true) {
+  void AcknowledgeDay(const bool set=true) noexcept {
     ack_day = set;
   }
 
@@ -209,7 +239,7 @@ public:
    * @return True if this is more severe than that
    */
   [[gnu::pure]]
-  bool operator<(const AirspaceWarning &that) const;
+  bool operator<(const AirspaceWarning &that) const noexcept;
 
 #ifdef DO_PRINT
 public:

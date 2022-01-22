@@ -101,6 +101,7 @@ extern const char WeGlidePilotBirthDate[];
 extern const char WeGlideAircraftType[];
 extern const char WeGlideAutomaticUpload[];
 extern const char CoPilotName[];
+extern const char CrewWeightTemplate[];
 extern const char AircraftType[];
 extern const char AircraftReg[];
 extern const char CompetitionId[];
@@ -272,6 +273,8 @@ extern const char PCMetUsername[];
 extern const char PCMetPassword[];
 extern const char PCMetFtpUsername[];
 extern const char PCMetFtpPassword[];
+
+extern const char EnableThermalInformationMap[];
 
 extern const char EnableLocationMapItem[];
 extern const char EnableArrivalAltitudeMapItem[];

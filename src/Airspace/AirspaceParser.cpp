@@ -150,7 +150,7 @@ struct TempAirspaceType
     days_of_operation.SetAll();
     radio = _T("");
     type = OTHER;
-    base = top = AirspaceAltitude();
+    base = top = AirspaceAltitude::Invalid();
     points.clear();
     center = GeoPoint::Invalid();
     radius = -1;

@@ -27,7 +27,7 @@
 #include "util/SliceAllocator.hxx"
 #include "FlatTriangleFan.hpp"
 
-#include <list>
+#include <forward_list>
 
 class FlatProjection;
 struct GeoPoint;
@@ -48,8 +48,9 @@ public:
   static constexpr unsigned REACH_MAX_FANS = 300;
 
 private:
-  typedef std::list<FlatTriangleFanTree,
-                    GlobalSliceAllocator<FlatTriangleFanTree, 128u> > LeafVector;
+  using LeafVector =
+    std::forward_list<FlatTriangleFanTree,
+                      GlobalSliceAllocator<FlatTriangleFanTree, 128u>>;
 
   FlatBoundingBox bb_children;
   LeafVector children;
@@ -105,6 +106,11 @@ public:
   bool CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
                 const RouteLink &e_2, ReachFanParms &parms) noexcept;
 
+  /**
+   * Attempt to find a path to the specified #FlatGeoPoint higher than
+   * the given #arrival_height.  If one is found, #arrival_height is
+   * updated and the method returns true.
+   */
   bool FindPositiveArrival(FlatGeoPoint n,
                            const ReachFanParms &parms,
                            int &arrival_height) const noexcept;

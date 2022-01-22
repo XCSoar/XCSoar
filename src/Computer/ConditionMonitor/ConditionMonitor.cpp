@@ -28,7 +28,7 @@ Copyright_License {
 
 void
 ConditionMonitor::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
-                         const ComputerSettings &settings)
+                         const ComputerSettings &settings) noexcept
 {
   if (!calculated.flight.flying)
     return;

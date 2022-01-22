@@ -90,7 +90,7 @@ struct Event {
 #endif
   };
 
-  typedef void (*Callback)(void *ctx);
+  using Callback = void (*)(void *ctx) noexcept;
 
   Type type;
 

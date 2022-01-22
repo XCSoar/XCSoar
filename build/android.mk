@@ -23,19 +23,25 @@ ANDROID_ABI_DIR = $(ANDROID_BUILD)/lib/$(ANDROID_APK_LIB_ABI)
 JAVA_CLASSFILES_DIR = $(ANDROID_OUTPUT_DIR)/classes
 
 ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/29.0.3
+APKSIGNER = $(ANDROID_BUILD_TOOLS_DIR)/apksigner
 ZIPALIGN = $(ANDROID_BUILD_TOOLS_DIR)/zipalign
 AAPT = $(ANDROID_BUILD_TOOLS_DIR)/aapt
 DX = $(ANDROID_BUILD_TOOLS_DIR)/dx
 
 ANDROID_LIB_NAMES = xcsoar
 
-JARSIGNER_RELEASE := $(JARSIGNER) -digestalg SHA1 -sigalg MD5withRSA
+APKSIGN = $(APKSIGNER) sign
+ifeq ($(V),2)
+APKSIGN += --verbose
+endif
+
+APKSIGN_RELEASE = $(APKSIGN)
 
 # The environment variable ANDROID_KEYSTORE_PASS may be used to
 # specify the keystore password; if you don't set it, you will be
 # asked interactively
 ifeq ($(origin ANDROID_KEYSTORE_PASS),environment)
-JARSIGNER_RELEASE += -storepass:env ANDROID_KEYSTORE_PASS
+APKSIGN_RELEASE += --ks-pass env:ANDROID_KEYSTORE_PASS
 endif
 
 JAVA_PACKAGE = org.xcsoar
@@ -306,6 +312,11 @@ $(ANDROID_BUILD)/unsigned.apk: $(ANDROID_OUTPUT_DIR)/classes.dex $(ANDROID_OUTPU
 	$(Q)cp $(ANDROID_OUTPUT_DIR)/resources.apk $@
 	$(Q)cd $(dir $@) && zip -q -r $(notdir $@) classes.dex lib/*/*.so
 
+.DELETE_ON_ERROR: $(ANDROID_BUILD)/aligned.apk
+$(ANDROID_BUILD)/aligned.apk: $(ANDROID_BUILD)/unsigned.apk
+	@$(NQ)echo "  ALIGN   $@"
+	$(Q)$(ZIPALIGN) -f 8 $< $@
+
 # Generate ~/.android/debug.keystore, if it does not exists, as the official
 # Android build tools do it:
 $(HOME)/.android/debug.keystore:
@@ -319,16 +330,12 @@ $(HOME)/.android/debug.keystore:
 		-dname "CN=Android Debug" \
 		-keyalg RSA -keysize 2048 -validity 10000
 
-$(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BUILD)/unsigned.apk $(HOME)/.android/debug.keystore | $(ANDROID_BIN)/dirstamp
+$(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BUILD)/aligned.apk $(HOME)/.android/debug.keystore | $(ANDROID_BIN)/dirstamp
 	@$(NQ)echo "  SIGN    $@"
-	$(Q)$(JARSIGNER) -keystore $(HOME)/.android/debug.keystore -storepass android -digestalg SHA1 -sigalg MD5withRSA -signedjar $@ $< androiddebugkey
+	$(Q)$(APKSIGN) --in $< --out $@ --debuggable-apk-permitted -ks $(HOME)/.android/debug.keystore --ks-key-alias androiddebugkey --ks-pass pass:android
 
-$(ANDROID_BUILD)/XCSoar-release-unaligned.apk: $(ANDROID_BUILD)/unsigned.apk
+$(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BUILD)/aligned.apk | $(ANDROID_BIN)/dirstamp
 	@$(NQ)echo "  SIGN    $@"
-	$(Q)$(JARSIGNER_RELEASE) -keystore $(ANDROID_KEYSTORE) -signedjar $@ $< $(ANDROID_KEY_ALIAS)
-
-$(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BUILD)/XCSoar-release-unaligned.apk | $(ANDROID_BIN)/dirstamp
-	@$(NQ)echo "  ALIGN   $@"
-	$(Q)$(ZIPALIGN) -f 8 $< $@
+	$(Q)$(APKSIGN_RELEASE) --in $< --out $@ -ks $(ANDROID_KEYSTORE) --ks-key-alias $(ANDROID_KEY_ALIAS)
 
 endif

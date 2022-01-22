@@ -50,24 +50,6 @@ Copyright_License {
 
 #include <stdio.h>
 
-struct WarningItem
-{
-  ConstAirspacePtr airspace;
-  AirspaceWarning::State state;
-  AirspaceInterceptSolution solution;
-  bool ack_expired, ack_day;
-
-  WarningItem(const AirspaceWarning &warning)
-    :airspace(warning.GetAirspacePtr()),
-     state(warning.GetWarningState()),
-     solution(warning.GetSolution()),
-     ack_expired(warning.IsAckExpired()), ack_day(warning.GetAckDay()) {}
-
-  bool operator==(const AbstractAirspace &other) const {
-    return &other == airspace.get();
-  }
-};
-
 class AirspaceWarningListWidget final
   : public ListWidget {
 
@@ -79,7 +61,7 @@ class AirspaceWarningListWidget final
   Button *ack_day_button;
   Button *enable_button;
 
-  std::vector<WarningItem> warning_list;
+  std::vector<AirspaceWarning> warning_list;
 
   /**
    * Current list cursor airspace.
@@ -193,8 +175,8 @@ void
 AirspaceWarningListWidget::OnCursorMoved(unsigned i) noexcept
 {
   selected_airspace = i < warning_list.size()
-    ? warning_list[i].airspace
-    : NULL;
+    ? warning_list[i].GetAirspacePtr()
+    : nullptr;
 
   UpdateButtons();
 }
@@ -227,7 +209,7 @@ AirspaceWarningListWidget::HasWarning() const
 {
   ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
   return std::any_of(lease->begin(), lease->end(),
-                     [](const auto &i){ return i.IsAckExpired(); });
+                     [](const auto &i){ return i.IsActive(); });
 }
 
 static void
@@ -309,9 +291,8 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   assert(i < warning_list.size());
 
-  const WarningItem &warning = warning_list[i];
-  const AbstractAirspace &airspace = *warning.airspace;
-  const AirspaceInterceptSolution &solution = warning.solution;
+  const auto &warning = warning_list[i];
+  const AbstractAirspace &airspace = warning.GetAirspace();
 
   // word "inside" is used as the etalon, because it is longer than "near" and
   // currently (9.4.2011) there is no other possibility for the status text.
@@ -327,7 +308,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     text_altitude_rc.VerticalSplit(text_altitude_rc.right - (padding + altitude_width)).first;
   text_rc.right -= padding;
 
-  if (!warning.ack_expired)
+  if (!warning.IsActive())
     canvas.SetTextColor(COLOR_GRAY);
 
   { // name, altitude info
@@ -344,9 +325,8 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     row_renderer.DrawRightSecondRow(canvas, text_altitude_rc, buffer);
   }
 
-  if (warning.state != AirspaceWarning::WARNING_INSIDE &&
-      warning.state > AirspaceWarning::WARNING_CLEAR &&
-      solution.IsValid()) {
+  if (const auto &solution = warning.GetSolution();
+      warning.IsWarning() && !warning.IsInside() && solution.IsValid()) {
 
     _stprintf(buffer, _T("%d secs"),
               (int)solution.elapsed_time.count());
@@ -371,11 +351,11 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   Color state_color;
   const TCHAR *state_text;
 
-  if (warning.state == AirspaceWarning::WARNING_INSIDE) {
-    state_color = warning.ack_expired ? inside_color : inside_ack_color;
+  if (warning.IsInside()) {
+    state_color = warning.IsActive() ? inside_color : inside_ack_color;
     state_text = _T("inside");
-  } else if (warning.state > AirspaceWarning::WARNING_CLEAR) {
-    state_color = warning.ack_expired ? near_color : near_ack_color;
+  } else if (warning.IsWarning()) {
+    state_color = warning.IsActive() ? near_color : near_ack_color;
     state_text = _T("near");
   } else {
     state_color = COLOR_WHITE;
@@ -423,8 +403,10 @@ AirspaceWarningListWidget::UpdateList()
 
     int i = -1;
     if (selected_airspace != NULL) {
-      auto it = std::find(warning_list.begin(), warning_list.end(),
-                          *selected_airspace);
+      auto it = std::find_if(warning_list.begin(), warning_list.end(),
+                             [this](const auto &i){
+                               return &i.GetAirspace() == selected_airspace.get();
+                             });
       if (it != warning_list.end()) {
         i = std::distance(warning_list.begin(), it);
         GetList().SetCursorIndex(i);
@@ -444,9 +426,9 @@ AirspaceWarningListWidget::UpdateList()
         /* Find smallest time to nearest aispace (cannot always rely
            on fact that closest airspace should be in the beginning of
            the list) */
-        if (i.state < AirspaceWarning::WARNING_INSIDE)
+        if (!i.IsInside())
           tt_closest_airspace = std::min(tt_closest_airspace,
-                                         i.solution.elapsed_time);
+                                         i.GetSolution().elapsed_time);
         else
           tt_closest_airspace = {};
       }

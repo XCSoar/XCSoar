@@ -35,7 +35,7 @@ class OperationEnvironment;
 void
 ReadAirspace(Airspaces &airspaces,
              RasterTerrain *terrain,
-             const AtmosphericPressure &press,
+             AtmosphericPressure press,
              OperationEnvironment &operation);
 
 #endif

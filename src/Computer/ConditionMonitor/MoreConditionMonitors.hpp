@@ -21,35 +21,23 @@ Copyright_License {
 }
 */
 
-#include "io/TextWriter.hpp"
-#include "system/Args.hpp"
+#pragma once
 
-#include <stdio.h>
-#include <string.h>
+#include "AirspaceEnterMonitor.hpp"
 
-int main(int argc, char **argv)
-{
-  Args args(argc, argv, "FILE");
-  const auto path = args.ExpectNextPath();
-  args.ExpectEnd();
+/**
+ * A composite of "more" #ConditionMonitor implementations to be
+ * called by GlideComputer::ProcessIdle().
+ *
+ * @see ConditionMonitors
+ */
+class MoreConditionMonitors {
+  AirspaceEnterMonitor airspace_enter;
 
-  TextWriter writer(path);
-  if (!writer.IsOpen()) {
-    fprintf(stderr, "Failed to open file\n");
-    return 1;
-  }
+public:
+  explicit MoreConditionMonitors(const ProtectedAirspaceWarningManager &warnings) noexcept
+    :airspace_enter(warnings) {}
 
-  static char line[4096];
-  while (fgets(line, sizeof(line), stdin)) {
-    /* remove newline character */
-    size_t length = strlen(line);
-    while (length > 0 && (line[length - 1] == '\n' ||
-                          line[length - 1] == '\r'))
-      --length;
-    line[length] = 0;
-
-    writer.WriteLine(line);
-  }
-
-  return EXIT_SUCCESS;
-}
+  void Update(const NMEAInfo &basic, const DerivedInfo &calculated,
+              const ComputerSettings &settings) noexcept;
+};

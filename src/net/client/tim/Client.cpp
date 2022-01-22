@@ -36,8 +36,8 @@ tag_invoke(boost::json::value_to_tag<GeoPoint>,
 {
   const auto &json = jv.as_object();
   GeoPoint gp{
-              Angle::Degrees(json.at("lon").as_double()),
-              Angle::Degrees(json.at("lat").as_double()),
+    Angle::Degrees(json.at("lon").to_number<double>()),
+    Angle::Degrees(json.at("lat").to_number<double>()),
   };
   if (!gp.Check())
     throw std::runtime_error("Invalid location");
@@ -52,9 +52,9 @@ tag_invoke(boost::json::value_to_tag<Thermal>,
 {
   const auto &json = jv.as_object();
   Thermal thermal;
-  thermal.time = std::chrono::system_clock::from_time_t(json.at("time").as_int64());
+  thermal.time = std::chrono::system_clock::from_time_t(json.at("time").to_number<uint64_t>());
   thermal.location = boost::json::value_to<GeoPoint>(jv);
-  thermal.climb_rate = json.at("climbRate").as_double();
+  thermal.climb_rate = json.at("climbRate").to_number<double>();
   return thermal;
 }
 

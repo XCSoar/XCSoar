@@ -42,15 +42,8 @@ Copyright_License {
 #ifdef USE_EGL
 #include "ui/egl/System.hpp"
 
-#ifdef HAVE_MALI_NATIVE_WINDOW
-// The old LINUX-SUNXI EGL headers define struct mali_native_window.
-// The new headers for mainline kernels from Bootlin typedef fbdev_window.
-// The struct content is identical.
-// typedef fbdev_window from struct mali_native_window for the old headers.
-typedef struct mali_native_window fbdev_window;
-#endif
-
 #ifdef MESA_KMS
+#include "io/UniqueFileDescriptor.hxx"
 #include <drm.h>
 #include <xf86drm.h>
 #include <xf86drmMode.h>
@@ -90,10 +83,11 @@ class Canvas;
 struct PixelSize;
 struct PixelRect;
 
-#if (defined(USE_FB) && !defined(KOBO)) || (defined USE_EGL && (defined(USE_VIDEOCORE) || defined(HAVE_MALI)))
+#if (defined(USE_FB) && !defined(KOBO)) || defined(USE_EGL)
 /* defined if we need to initialise /dev/tty to graphics mode, see
    TopCanvas::InitialiseTTY() */
 #define USE_TTY
+#include "ui/linux/GraphicsTTY.hpp"
 #endif
 
 class TopCanvas
@@ -101,31 +95,27 @@ class TopCanvas
   : public Canvas
 #endif
 {
+#ifdef USE_TTY
+  const LinuxGraphicsTTY linux_graphics_tty;
+#endif
+
 #ifdef USE_EGL
 #if defined(USE_X11) || defined(USE_WAYLAND)
-#elif defined(USE_VIDEOCORE)
-  /* for Raspberry Pi */
-  DISPMANX_DISPLAY_HANDLE_T vc_display;
-  DISPMANX_UPDATE_HANDLE_T vc_update;
-  DISPMANX_ELEMENT_HANDLE_T vc_element;
-  EGL_DISPMANX_WINDOW_T vc_window;
-#elif defined(HAVE_MALI)
-  fbdev_window mali_native_window;
 #elif defined(MESA_KMS)
   struct gbm_device *native_display;
   struct gbm_surface *native_window;
 
-  int dri_fd;
+  UniqueFileDescriptor dri_fd;
 
-  struct gbm_bo *current_bo;
+  struct gbm_bo *current_bo = nullptr;
 
   drmEventContext evctx;
 
-  drmModeConnector *connector;
-  drmModeEncoder *encoder;
+  uint32_t connector_id;
+  uint32_t crtc_id;
   drmModeModeInfo mode;
 
-  drmModeCrtc* saved_crtc;
+  drmModeCrtc *saved_crtc = nullptr;
 #endif
 
   EGLDisplay display;
@@ -136,13 +126,13 @@ class TopCanvas
 #endif
 
 #ifdef USE_GLX
-  _XDisplay *x_display;
+  _XDisplay *const x_display;
   GLXContext glx_context;
   GLXWindow glx_window;
 #endif
 
 #ifdef ENABLE_SDL
-  SDL_Window *window;
+  SDL_Window *const window;
 
 #ifdef USE_MEMORY_CANVAS
   SDL_Renderer *renderer;
@@ -163,15 +153,6 @@ class TopCanvas
   WritableImageBuffer<ActivePixelTraits> buffer;
 #endif /* !GREYSCALE */
 #endif /* USE_MEMORY_CANVAS */
-
-#ifdef USE_TTY
-  /**
-   * A file descriptor for /dev/tty, or -1 if /dev/tty could not be
-   * opened.  This is used on Linux to switch to graphics mode
-   * (KD_GRAPHICS) or restore text mode (KD_TEXT).
-   */
-  int tty_fd = -1;
-#endif
 
 #ifdef USE_FB
   int fd = -1;
@@ -197,45 +178,28 @@ class TopCanvas
 #endif
 
 public:
-#ifndef ANDROID
-  ~TopCanvas() {
-    Destroy();
-  }
-
-  void Destroy();
-#endif
-
-#ifdef USE_MEMORY_CANVAS
-  bool IsDefined() const {
 #ifdef ENABLE_SDL
-    return window != nullptr;
-#elif defined(USE_VFB)
-    return true;
-#else
-    return fd >= 0;
-#endif
-  }
-
-  gcc_pure
-  PixelRect GetRect() const;
-#endif
-
-#ifdef ENABLE_SDL
-  void Create(SDL_Window *_window);
+  TopCanvas(SDL_Window *_window);
 #elif defined(USE_GLX)
-  void Create(_XDisplay *x_display,
-              X11Window x_window,
-              GLXFBConfig *fb_cfg) {
-    CreateGLX(x_display, x_window, fb_cfg);
-  }
+  TopCanvas(_XDisplay *x_display,
+            X11Window x_window,
+            GLXFBConfig *fb_cfg);
 #elif defined(USE_X11) || defined(USE_WAYLAND)
-  void Create(EGLNativeDisplayType native_display,
-              EGLNativeWindowType native_window) {
+  TopCanvas(EGLNativeDisplayType native_display,
+            EGLNativeWindowType native_window) {
     CreateEGL(native_display, native_window);
   }
+#elif defined(ANDROID) || defined(USE_VFB)
+  TopCanvas(PixelSize new_size);
 #else
-  void Create(PixelSize new_size,
-              bool full_screen, bool resizable);
+  TopCanvas();
+#endif
+
+  ~TopCanvas() noexcept;
+
+#ifdef USE_MEMORY_CANVAS
+  gcc_pure
+  PixelRect GetRect() const;
 #endif
 
 #if defined(USE_FB) || (defined(ENABLE_OPENGL) && (defined(USE_EGL) || defined(USE_GLX) || defined(ENABLE_SDL)))
@@ -316,18 +280,10 @@ private:
   void SetupViewport(PixelSize native_size);
 #endif
 
-#ifdef USE_GLX
-  void InitGLX(_XDisplay *x_display);
-  void CreateGLX(_XDisplay *x_display,
-                 X11Window x_window,
-                 GLXFBConfig *fb_cfg);
-#elif defined(USE_EGL)
+#ifdef USE_EGL
   void CreateEGL(EGLNativeDisplayType native_display,
                  EGLNativeWindowType native_window);
 #endif
-
-  void InitialiseTTY();
-  void DeinitialiseTTY();
 };
 
 #endif

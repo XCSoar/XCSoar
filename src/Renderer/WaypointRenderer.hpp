@@ -48,34 +48,26 @@ class WaypointRenderer : private NonCopyable {
   const WaypointLook &look;
 
 public:
-  enum Reachability
-  {
-    Invalid,
-    Unreachable,
-    ReachableStraight,
-    ReachableTerrain,
-  };
-
   WaypointRenderer(const Waypoints *_way_points,
-                   const WaypointLook &_look)
+                   const WaypointLook &_look) noexcept
     :way_points(_way_points), look(_look) {}
 
-  void set_way_points(const Waypoints *_way_points) {
+  const WaypointLook &GetLook() const noexcept {
+    return look;
+  }
+
+  void SetWaypoints(const Waypoints *_way_points) noexcept {
     way_points = _way_points;
   }
 
-  void render(Canvas &canvas, LabelBlock &label_block,
+  void Render(Canvas &canvas, LabelBlock &label_block,
               const MapWindowProjection &projection,
               const WaypointRendererSettings &settings,
               const PolarSettings &polar_settings,
               const TaskBehaviour &task_behaviour,
               const MoreData &basic, const DerivedInfo &calculated,
               const ProtectedTaskManager *task,
-              const ProtectedRoutePlanner *route_planner);
-
-  const WaypointLook &GetLook() const {
-    return look;
-  }
+              const ProtectedRoutePlanner *route_planner) noexcept;
 };
 
 #endif

@@ -27,18 +27,31 @@ Copyright_License {
 #include "Look/ButtonLook.hpp"
 
 inline void
-SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc, bool enabled,
-                                 bool focused, bool pressed) const noexcept
+SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc,
+                                 ButtonState state) const noexcept
 {
   const ButtonLook &look = GetLook();
 
   canvas.SelectNullPen();
-  if (!enabled)
+
+  switch (state) {
+  case ButtonState::DISABLED:
     canvas.Select(look.disabled.brush);
-  else if (focused)
+    break;
+
+  case ButtonState::FOCUSED:
+  case ButtonState::PRESSED:
     canvas.Select(look.focused.foreground_brush);
-  else
+    break;
+
+  case ButtonState::SELECTED:
+    canvas.Select(look.selected.foreground_brush);
+    break;
+
+  case ButtonState::ENABLED:
     canvas.Select(look.standard.foreground_brush);
+    break;
+  }
 
   const char ch = (char)caption[0u];
 
@@ -65,12 +78,11 @@ SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc, bool enabled,
 
 void
 SymbolButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
-                                 bool enabled, bool focused,
-                                 bool pressed) const noexcept
+                                 ButtonState state) const noexcept
 {
-  frame_renderer.DrawButton(canvas, rc, focused, pressed);
+  frame_renderer.DrawButton(canvas, rc, state);
 
   if (!caption.empty())
-    DrawSymbol(canvas, frame_renderer.GetDrawingRect(rc, pressed),
-               enabled, focused, pressed);
+    DrawSymbol(canvas, frame_renderer.GetDrawingRect(rc, state),
+               state);
 }

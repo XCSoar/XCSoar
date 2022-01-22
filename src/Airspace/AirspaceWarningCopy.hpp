@@ -36,17 +36,17 @@ private:
   StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning, ids_acked;
   StaticArray<GeoPoint,32> locations;
 
-  unsigned serial;
+  Serial serial;
 
 public:
-  unsigned GetSerial() const noexcept {
+  auto GetSerial() const noexcept {
     return serial;
   }
 
   void Visit(const AirspaceWarning& as) noexcept {
-    if (as.GetWarningState() == AirspaceWarning::WARNING_INSIDE) {
+    if (as.IsInside()) {
       ids_inside.checked_append(&as.GetAirspace());
-    } else if (as.GetWarningState() > AirspaceWarning::WARNING_CLEAR) {
+    } else if (as.IsWarning()) {
       ids_warning.checked_append(&as.GetAirspace());
       locations.checked_append(as.GetSolution().location);
     }

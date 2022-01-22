@@ -31,6 +31,7 @@ Copyright_License {
 
 #include <tchar.h>
 
+enum class ButtonState : int;
 struct ButtonLook;
 class ContainerWindow;
 class ButtonRenderer;
@@ -112,7 +113,7 @@ public:
 
   void SetSelected(bool _selected);
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetMinimumWidth() const;
 
   /**
@@ -142,6 +143,9 @@ protected:
 
 private:
   void SetDown(bool _down);
+
+  [[gnu::pure]]
+  ButtonState GetState() const noexcept;
 };
 
 #endif

@@ -27,13 +27,13 @@ TerrainRoute::TerrainRoute() noexcept
 {
 }
 
-bool
-TerrainRoute::CheckClearance(const RouteLink &e, RoutePoint &inp) const noexcept
+std::optional<RoutePoint>
+TerrainRoute::CheckClearance(const RouteLink &e) const noexcept
 {
-  if (CheckClearanceTerrain(e, inp))
-    return true;
-  m_inx_terrain = inp;
-  return false;
+  auto inp = CheckClearanceTerrain(e);
+  if (inp)
+    m_inx_terrain = *inp;
+  return inp;
 }
 
 void

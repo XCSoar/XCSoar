@@ -302,6 +302,21 @@ public:
       return false;
   }
 
+  bool HasFocus() const noexcept override {
+    return (task_manager != nullptr && goto_button.HasFocus()) ||
+      (!images.empty() && (magnify_button.HasFocus() ||
+                           shrink_button.HasFocus())) ||
+       previous_button.HasFocus() || next_button.HasFocus() ||
+       close_button.HasFocus() ||
+       info_widget.HasFocus() ||
+       details_panel.HasFocus() || details_text.HasFocus() ||
+#ifdef HAVE_RUN_FILE
+       (!waypoint->files_external.empty() && file_list.HasFocus()) ||
+#endif
+       commands_widget.HasFocus() ||
+       (!images.empty() && image_window.HasFocus());
+  }
+
   bool KeyPress(unsigned key_code) noexcept override;
 };
 

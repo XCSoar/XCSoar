@@ -51,7 +51,6 @@ PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile)
 
   PolarInfo polar = PolarGlue::LoadFromProfile();
   plane.polar_shape = polar.shape;
-  plane.reference_mass = polar.reference_mass;
   plane.max_ballast = polar.max_ballast;
   plane.wing_area = polar.wing_area;
 
@@ -60,8 +59,9 @@ PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile)
   else if (!profile.Get(ProfileKeys::SafteySpeed, plane.max_speed))
     plane.max_speed = 0;
 
-  if (!profile.Get(ProfileKeys::DryMass, plane.dry_mass))
-    plane.dry_mass = plane.reference_mass;
+  double crew_mass; // for compatibility reasons, to be removed later
+  if (profile.Get(ProfileKeys::CrewWeightTemplate, crew_mass))
+    plane.dry_mass_obsolete = plane.empty_mass + crew_mass;
 
   if (!profile.Get(ProfileKeys::BallastSecsToEmpty, plane.dump_time))
     plane.dump_time = 120;
@@ -86,11 +86,11 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
   gp.SetCoefficients(pc, false);
 
   // Glider empty weight
-  gp.SetReferenceMass(plane.reference_mass, false);
-  gp.SetDryMass(plane.dry_mass, false);
+  gp.SetReferenceMass(plane.polar_shape.reference_mass, false);
+  gp.SetEmptyMass(plane.empty_mass, false);
 
   // Ballast weight
-  gp.SetBallastRatio(plane.max_ballast / plane.reference_mass);
+  gp.SetBallastRatio(plane.max_ballast / plane.polar_shape.reference_mass);
 
   gp.SetWingArea(plane.wing_area);
 

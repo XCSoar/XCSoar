@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Blackboard.hpp"
+#include "Chrono.hpp"
 #include "Geo.hpp"
 #include "MetaTable.hxx"
 #include "Util.hxx"
@@ -29,6 +30,25 @@ Copyright_License {
 #include "Interface.hpp"
 
 namespace Lua {
+
+static void
+Push(lua_State *L, const BrokenDateTime &dt)
+{
+  lua_newtable(L);
+
+  if (dt.IsDatePlausible()) {
+    SetField(L, RelativeStackIndex{-1}, "year", dt.year);
+    SetField(L, RelativeStackIndex{-1}, "month", dt.month);
+    SetField(L, RelativeStackIndex{-1}, "day", dt.day);
+
+    if (dt.day_of_week >= 0)
+      SetField(L, RelativeStackIndex{-1}, "wday", dt.day_of_week + 1);
+  }
+
+  SetField(L, RelativeStackIndex{-1}, "hour", dt.hour);
+  SetField(L, RelativeStackIndex{-1}, "min", dt.minute);
+  SetField(L, RelativeStackIndex{-1}, "sec", dt.second);
+}
 
 template<typename V>
 static void PushOptional(lua_State *L, bool available, V &&value) {
@@ -48,6 +68,12 @@ l_blackboard_index(lua_State *L)
   const char *name = lua_tostring(L, 2);
   if (name == nullptr)
     return 0;
+  else if (StringIsEqual(name, "clock"))
+    Lua::Push(L, basic.clock);
+  else if (StringIsEqual(name, "time"))
+    Lua::PushOptional(L, basic.time_available, basic.time);
+  else if (StringIsEqual(name, "date_time_utc"))
+    Lua::PushOptional(L, basic.time_available, basic.date_time_utc);
   else if (StringIsEqual(name, "location"))
     Lua::PushOptional(L, basic.location_available, basic.location);
   else if (StringIsEqual(name, "altitude"))

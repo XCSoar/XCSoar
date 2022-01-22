@@ -32,7 +32,7 @@ class GeoBounds;
 
 class TracePointVector : public std::vector<TracePoint> {
 public:
-  void ScanBounds(GeoBounds &bounds) const;
+  void ScanBounds(GeoBounds &bounds) const noexcept;
 };
 
 /**

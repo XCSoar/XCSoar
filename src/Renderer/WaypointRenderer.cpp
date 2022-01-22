@@ -63,28 +63,27 @@ struct VisibleWaypoint {
 
   ReachResult reach;
 
-  WaypointRenderer::Reachability reachable;
+  WaypointReachability reachable;
 
   bool in_task;
 
   void Set(const WaypointPtr &_waypoint, PixelPoint &_point,
-           bool _in_task) {
+           bool _in_task) noexcept {
     waypoint = _waypoint;
     point = _point;
     reach.Clear();
-    reachable = WaypointRenderer::Invalid;
+    reachable = WaypointReachability::INVALID;
     in_task = _in_task;
   }
 
-  bool IsReachable() const {
-    return reachable == WaypointRenderer::ReachableStraight ||
-      reachable == WaypointRenderer::ReachableTerrain;
+  bool IsReachable() const noexcept {
+    return ::IsReachable(reachable);
   }
 
   void CalculateReachabilityDirect(const MoreData &basic,
                                    const SpeedVector &wind,
                                    const MacCready &mac_cready,
-                                   const TaskBehaviour &task_behaviour) {
+                                   const TaskBehaviour &task_behaviour) noexcept {
     assert(basic.location_available);
     assert(basic.NavAltitudeAvailable());
 
@@ -99,13 +98,13 @@ struct VisibleWaypoint {
 
     reach.direct = result.pure_glide_altitude_difference;
     if (result.pure_glide_altitude_difference > 0)
-      reachable = WaypointRenderer::ReachableTerrain;
+      reachable = WaypointReachability::TERRAIN;
     else
-      reachable = WaypointRenderer::Unreachable;
+      reachable = WaypointReachability::UNREACHABLE;
   }
 
   bool CalculateRouteArrival(const RoutePlannerGlue &route_planner,
-                             const TaskBehaviour &task_behaviour) {
+                             const TaskBehaviour &task_behaviour) noexcept {
     const double elevation = waypoint->elevation +
       task_behaviour.safety_height_arrival;
     const AGeoPoint p_dest (waypoint->location, elevation);
@@ -120,26 +119,27 @@ struct VisibleWaypoint {
   }
 
   void CalculateReachability(const RoutePlannerGlue &route_planner,
-                             const TaskBehaviour &task_behaviour)
+                             const TaskBehaviour &task_behaviour) noexcept
   {
     if (!CalculateRouteArrival(route_planner, task_behaviour))
       return;
 
     if (!reach.IsReachableDirect())
-      reachable = WaypointRenderer::Unreachable;
+      reachable = WaypointReachability::UNREACHABLE;
     else if (task_behaviour.route_planner.IsReachEnabled() &&
              !reach.IsReachableTerrain())
-      reachable = WaypointRenderer::ReachableStraight;
+      reachable = WaypointReachability::STRAIGHT;
     else
-      reachable = WaypointRenderer::ReachableTerrain;
+      reachable = WaypointReachability::TERRAIN;
   }
 
   void DrawSymbol(const struct WaypointRendererSettings &settings,
                   const WaypointLook &look,
-                  Canvas &canvas, bool small_icons, Angle screen_rotation) const {
+                  Canvas &canvas, bool small_icons,
+                  Angle screen_rotation) const noexcept {
     WaypointIconRenderer wir(settings, look,
                              canvas, small_icons, screen_rotation);
-    wir.Draw(*waypoint, point, (WaypointIconRenderer::Reachability)reachable,
+    wir.Draw(*waypoint, point, reachable,
              in_task);
   }
 };
@@ -173,7 +173,7 @@ public:
                      const WaypointRendererSettings &_settings,
                      const WaypointLook &_look,
                      const TaskBehaviour &_task_behaviour,
-                     const MoreData &_basic)
+                     const MoreData &_basic) noexcept
     :projection(_projection),
      settings(_settings), look(_look), task_behaviour(_task_behaviour),
      basic(_basic),
@@ -186,7 +186,7 @@ public:
 
 protected:
   void FormatTitle(TCHAR *buffer, size_t buffer_size,
-                   const Waypoint &way_point) const {
+                   const Waypoint &way_point) const noexcept {
     buffer[0] = _T('\0');
 
     switch (settings.display_text_type) {
@@ -230,8 +230,8 @@ protected:
 
   void FormatLabel(TCHAR *buffer, size_t buffer_size,
                    const Waypoint &way_point,
-                   WaypointRenderer::Reachability reachable,
-                   const ReachResult &reach) const {
+                   WaypointReachability reachable,
+                   const ReachResult &reach) const noexcept {
     FormatTitle(buffer, buffer_size - 20, way_point);
 
     if (!way_point.IsLandable() && !way_point.flags.watched)
@@ -270,7 +270,7 @@ protected:
       return;
     }
 
-    if (reachable == WaypointRenderer::Invalid)
+    if (reachable == WaypointReachability::INVALID)
       return;
 
     if (!reach.IsReachableDirect() && !way_point.flags.watched)
@@ -307,7 +307,7 @@ protected:
     StringFormatUnsafe(buffer + length, _T("%d%s"), uah_glide, altitude_unit);
   }
 
-  void DrawWaypoint(Canvas &canvas, const VisibleWaypoint &vwp) {
+  void DrawWaypoint(Canvas &canvas, const VisibleWaypoint &vwp) noexcept {
     const Waypoint &way_point = *vwp.waypoint;
     bool watchedWaypoint = way_point.flags.watched;
 
@@ -368,12 +368,12 @@ protected:
       sc.x += 5;
 
     labels.Add(buffer, sc, text_mode, bold,
-               vwp.reachable != WaypointRenderer::Invalid ? vwp.reach.direct : INT_MIN,
+               vwp.reachable != WaypointReachability::INVALID ? vwp.reach.direct : INT_MIN,
                vwp.in_task, way_point.IsLandable(), way_point.IsAirport(),
                watchedWaypoint);
   }
 
-  void AddWaypoint(const WaypointPtr &way_point, bool in_task) {
+  void AddWaypoint(const WaypointPtr &way_point, bool in_task) noexcept {
     if (waypoints.full())
       return;
 
@@ -407,11 +407,11 @@ public:
   }
 
 public:
-  void SetTaskValid() {
+  void SetTaskValid() noexcept {
     task_valid = true;
   }
 
-  void CalculateRoute(const ProtectedRoutePlanner &route_planner) {
+  void CalculateRoute(const ProtectedRoutePlanner &route_planner) noexcept {
     const ProtectedRoutePlanner::Lease lease(route_planner);
 
     for (VisibleWaypoint &vwp : waypoints) {
@@ -424,7 +424,7 @@ public:
 
   void CalculateDirect(const PolarSettings &polar_settings,
                        const TaskBehaviour &task_behaviour,
-                       const DerivedInfo &calculated) {
+                       const DerivedInfo &calculated) noexcept {
     if (!basic.location_available || !basic.NavAltitudeAvailable())
       return;
 
@@ -446,14 +446,14 @@ public:
   void Calculate(const ProtectedRoutePlanner *route_planner,
                  const PolarSettings &polar_settings,
                  const TaskBehaviour &task_behaviour,
-                 const DerivedInfo &calculated) {
+                 const DerivedInfo &calculated) noexcept {
     if (route_planner != nullptr && !route_planner->IsTerrainReachEmpty())
       CalculateRoute(*route_planner);
     else
       CalculateDirect(polar_settings, task_behaviour, calculated);
   }
 
-  void Draw(Canvas &canvas) {
+  void Draw(Canvas &canvas) noexcept {
     for (const VisibleWaypoint &vwp : waypoints)
       DrawWaypoint(canvas, vwp);
   }
@@ -463,7 +463,7 @@ static void
 MapWaypointLabelRender(Canvas &canvas, PixelSize clip_size,
                        LabelBlock &label_block,
                        WaypointLabelList &labels,
-                       const WaypointLook &look)
+                       const WaypointLook &look) noexcept
 {
   labels.Sort();
 
@@ -475,14 +475,14 @@ MapWaypointLabelRender(Canvas &canvas, PixelSize clip_size,
 }
 
 void
-WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
+WaypointRenderer::Render(Canvas &canvas, LabelBlock &label_block,
                          const MapWindowProjection &projection,
                          const struct WaypointRendererSettings &settings,
                          const PolarSettings &polar_settings,
                          const TaskBehaviour &task_behaviour,
                          const MoreData &basic, const DerivedInfo &calculated,
                          const ProtectedTaskManager *task,
-                         const ProtectedRoutePlanner *route_planner)
+                         const ProtectedRoutePlanner *route_planner) noexcept
 {
   if (way_points == nullptr || way_points->IsEmpty())
     return;

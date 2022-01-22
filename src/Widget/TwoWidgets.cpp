@@ -209,6 +209,12 @@ TwoWidgets::SetFocus() noexcept
 }
 
 bool
+TwoWidgets::HasFocus() const noexcept
+{
+  return first->HasFocus() || second->HasFocus();
+}
+
+bool
 TwoWidgets::KeyPress(unsigned key_code) noexcept
 {
   return first->KeyPress(key_code) || second->KeyPress(key_code);

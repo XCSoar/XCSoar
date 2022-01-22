@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_WEATHER_SETTINGS_HPP
 
 #include "Weather/Features.hpp"
+#include "net/http/Features.hpp"
 
 #ifdef HAVE_PCMET
 
@@ -37,9 +38,20 @@ struct WeatherSettings {
   PCMetSettings pcmet;
 #endif
 
+#ifdef HAVE_HTTP
+  /**
+   * Enable Thermal Information Map?
+   */
+  bool enable_tim;
+#endif
+
   void SetDefaults() {
 #ifdef HAVE_PCMET
     pcmet.SetDefaults();
+#endif
+
+#ifdef HAVE_HTTP
+    enable_tim = false;
 #endif
   }
 };

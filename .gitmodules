@@ -1,9 +1,9 @@
 [submodule "android/ioio"]
 	path = android/ioio
-	url = git://github.com/xcsoar/ioio
+	url = https://github.com/XCSoar/ioio.git
 [submodule "lib/glm"]
 	path = lib/glm
-	url = git://github.com/g-truc/glm
+	url = https://github.com/g-truc/glm.git
 [submodule "android/UsbSerial"]
 	path = android/UsbSerial
-	url = git://github.com/XCSoar/UsbSerial
+	url = https://github.com/XCSoar/UsbSerial.git

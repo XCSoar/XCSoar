@@ -134,9 +134,9 @@ WaypointListRenderer::Draw(Canvas &canvas, PixelRect rc,
   const PixelPoint pt(rc.left + line_height / 2,
                       rc.top + line_height / 2);
 
-  WaypointIconRenderer::Reachability reachable = arrival_altitude > 0
-    ? WaypointIconRenderer::ReachableTerrain
-    : WaypointIconRenderer::Unreachable;
+  const auto reachable = arrival_altitude > 0
+    ? WaypointReachability::TERRAIN
+    : WaypointReachability::UNREACHABLE;
 
   WaypointIconRenderer wir(settings, look, canvas);
   wir.Draw(waypoint, pt, reachable);

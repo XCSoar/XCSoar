@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "LargeTextWidget.hpp"
 #include "ui/control/LargeTextWindow.hpp"
-#include "ui/event/KeyCode.hpp"
 #include "Look/DialogLook.hpp"
 
 void
@@ -50,18 +49,8 @@ LargeTextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 }
 
 bool
-LargeTextWidget::KeyPress(unsigned key_code) noexcept
+LargeTextWidget::SetFocus() noexcept
 {
-  switch (key_code) {
-  case KEY_UP:
-    ((LargeTextWindow &)GetWindow()).ScrollVertically(-3);
-    return true;
-
-  case KEY_DOWN:
-    ((LargeTextWindow &)GetWindow()).ScrollVertically(3);
-    return true;
-
-  default:
-    return false;
-  }
+  GetWindow().SetFocus();
+  return true;
 }

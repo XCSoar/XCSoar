@@ -27,11 +27,11 @@ Copyright_License {
 #include "RasterMap.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "thread/Guard.hpp"
-#include "system/Path.hpp"
 #include "io/ZipArchive.hpp"
 
 #include <memory>
 
+class Path;
 class FileCache;
 class OperationEnvironment;
 
@@ -98,9 +98,7 @@ private:
   /**
    * Throws on error.
    */
-  bool LoadCache(FileCache *cache, Path path) {
-    return cache != nullptr && LoadCache(*cache, path);
-  }
+  bool LoadCache(FileCache *cache, Path path);
 
   /**
    * Throws on error.

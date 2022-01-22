@@ -46,9 +46,7 @@ DrawTask(Canvas &canvas, const PixelRect rc,
 
 void
 TaskMapButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
-                                  gcc_unused bool enabled,
-                                  gcc_unused bool focused,
-                                  bool pressed) const noexcept
+                                  ButtonState state) const noexcept
 {
   if (task == nullptr) {
     canvas.ClearWhite();
@@ -87,7 +85,7 @@ TaskMapButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
   canvas.Copy(buffer);
 #endif
 
-  if (pressed) {
+  if (state == ButtonState::PRESSED) {
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
     canvas.DrawFilledRectangle(rc, COLOR_YELLOW.WithAlpha(80));

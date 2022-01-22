@@ -133,6 +133,10 @@ public:
 
   bool Save(bool &changed);
   bool SetFocus() noexcept;
+
+  [[gnu::pure]]
+  bool HasFocus() const noexcept;
+
   bool KeyPress(unsigned key_code) noexcept;
 };
 

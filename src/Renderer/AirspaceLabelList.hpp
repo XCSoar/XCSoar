@@ -30,6 +30,8 @@ Copyright_License {
 #include "util/NonCopyable.hpp"
 #include "util/StaticArray.hxx"
 
+#include <type_traits>
+
 struct AirspaceWarningConfig;
 
 class AirspaceLabelList : private NonCopyable {
@@ -41,17 +43,17 @@ public:
     AirspaceAltitude top;
   };
 
+  static_assert(std::is_trivial_v<Label>);
+
 protected:
   StaticArray<Label, 512u> labels;
 
 public:
-  AirspaceLabelList() {}
-
   void Add(const GeoPoint &pos, AirspaceClass cls, const AirspaceAltitude &base,
-           const AirspaceAltitude &top);
-  void Sort(const AirspaceWarningConfig &config);
+           const AirspaceAltitude &top) noexcept;
+  void Sort(const AirspaceWarningConfig &config) noexcept;
 
-  void Clear() {
+  void Clear() noexcept {
     labels.clear();
   }
 
@@ -63,7 +65,7 @@ public:
     return labels.end();
   }
 
-  const Label &operator[](unsigned i) const {
+  const Label &operator[](unsigned i) const noexcept {
     return labels[i];
   }
 };

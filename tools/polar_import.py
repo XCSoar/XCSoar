@@ -121,7 +121,9 @@ def get_current_xc_polar(glider, weight=0.0):
             ##357, 165, 108.8, -0.64, 156.4, -1.18, 211.13, -2.5, 9.0, 0.0, 114
             ret = polar()
             ret._name = glider + "(xcs)"
-            line_l = line.strip("{},  \n").split(',')
+            line = line.split('{')[1];
+            line = line.split('}')[0];
+            line_l = line.strip(" \n").split(',')
             del line_l[0]
             a = list(map(float, line_l))
             s = 1.0
@@ -311,7 +313,7 @@ if args.xyscan != None:
 
 # Read in digitized points
 ida = False
-if args.rawfile != "":
+if args.rawfile != None:
     idap = read_raw_polar(args.rawfile, refw)
     if idap:
         ida = True
@@ -364,7 +366,11 @@ if len(cmp) > 0:
     legend = []
     plot = []
     for x in cmp:
-        plot.append(plot_polar(ax, x, 2, legend))
+        subplot = plot_polar(ax, x, 2, legend)
+        if pnr == 1:
+            legend = []
+        else:
+            plot.append(subplot)
     plt.legend(plot, legend, loc=3)
 
 plt.show()

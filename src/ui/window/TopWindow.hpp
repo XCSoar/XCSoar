@@ -273,7 +273,7 @@ public:
   void CancelMode() noexcept;
 
 #if defined(USE_WINUSER)
-  gcc_pure
+  [[gnu::pure]]
   const PixelRect GetClientRect() const noexcept {
     if (::IsIconic(hWnd)) {
       /* for a minimized window, GetClientRect() returns the
@@ -290,7 +290,7 @@ public:
     return ContainerWindow::GetClientRect();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const PixelSize GetSize() const noexcept {
     /* this is implemented again because Window::get_size() would call
        Window::GetClientRect() (method is not virtual) */
@@ -334,7 +334,7 @@ public:
 #endif
 
 #if defined(USE_X11) || defined(USE_WAYLAND)
-  gcc_pure
+  [[gnu::pure]]
   bool IsVisible() const noexcept;
 #endif
 

@@ -147,8 +147,8 @@ ScrollBar::Paint(Canvas &canvas) const
   canvas.DrawExactLine({down_arrow_rect.left, down_arrow_rect.top - 1},
                        {down_arrow_rect.right, down_arrow_rect.top - 1});
 
-  button_renderer.DrawButton(canvas, up_arrow_rect, false, false);
-  button_renderer.DrawButton(canvas, down_arrow_rect, false, false);
+  button_renderer.DrawButton(canvas, up_arrow_rect, ButtonState::ENABLED);
+  button_renderer.DrawButton(canvas, down_arrow_rect, ButtonState::ENABLED);
 
   canvas.SelectNullPen();
   canvas.SelectBlackBrush();
@@ -186,7 +186,8 @@ ScrollBar::Paint(Canvas &canvas) const
     PixelRect rc_slider2 = rc_slider;
     ++rc_slider2.left;
     ++rc_slider2.top;
-    button_renderer.DrawButton(canvas, rc_slider2, dragging, dragging);
+    button_renderer.DrawButton(canvas, rc_slider2,
+                               dragging ? ButtonState::PRESSED : ButtonState::ENABLED);
   }
 
   // fill the rest with darker gray

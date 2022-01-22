@@ -73,6 +73,7 @@ Copyright_License {
 #include "io/async/GlobalAsioThread.hpp"
 #include "net/http/Init.hpp"
 #include "net/http/DownloadManager.hpp"
+#include "net/client/tim/Glue.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "Hardware/DisplayGlue.hpp"
 #include "util/Compiler.h"
@@ -352,6 +353,7 @@ Startup()
   main_window->LoadTerrain();
 
   logger = new Logger();
+  nmea_logger = new NMEALogger();
 
   glide_computer = new GlideComputer(computer_settings,
                                      way_points, airspace_database,
@@ -378,6 +380,7 @@ Startup()
   gp = GlidePolar(0);
   gp.SetMC(computer_settings.task.safety_mc);
   gp.SetBugs(computer_settings.polar.degradation_factor);
+  gp.SetCrewMass(computer_settings.logger.crew_mass_template);
   PlaneGlue::FromProfile(CommonInterface::SetComputerSettings().plane,
                          Profile::map);
   PlaneGlue::Synchronize(computer_settings.plane,
@@ -508,7 +511,7 @@ Startup()
   }
 
   if (computer_settings.logger.enable_nmea_logger)
-    NMEALogger::enabled = true;
+    nmea_logger->Enable();
 
   LogFormat("ProgramStarted");
 
@@ -529,6 +532,12 @@ Startup()
   if (map_window != nullptr)
     map_window->SetSkyLinesData(&tracking->GetSkyLinesData());
 #endif
+#endif
+
+#ifdef HAVE_HTTP
+  tim_glue = new TIM::Glue(*Net::curl);
+  if (map_window != nullptr)
+    map_window->SetThermalInfoMap(tim_glue);
 #endif
 
   assert(!global_running);
@@ -666,7 +675,8 @@ Shutdown()
   // Close any device connections
   devShutdown();
 
-  NMEALogger::Shutdown();
+  delete nmea_logger;
+  nmea_logger = nullptr;
 
   delete replay;
   replay = nullptr;
@@ -688,6 +698,11 @@ Shutdown()
 #ifdef HAVE_NOAA
   delete noaa_store;
   noaa_store = nullptr;
+#endif
+
+#ifdef HAVE_HTTP
+  delete tim_glue;
+  tim_glue = nullptr;
 #endif
 
 #ifdef HAVE_TRACKING

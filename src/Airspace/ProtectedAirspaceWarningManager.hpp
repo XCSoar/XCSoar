@@ -25,23 +25,25 @@
 
 #include "Engine/Airspace/Ptr.hpp"
 #include "thread/Guard.hpp"
-#include "util/Compiler.h"
 
+#include <optional>
+
+class AirspaceWarning;
 class AirspaceWarningManager;
 class FlatProjection;
 
 class ProtectedAirspaceWarningManager : public Guard<AirspaceWarningManager> {
 public:
-  ProtectedAirspaceWarningManager(AirspaceWarningManager &awm):
-    Guard<AirspaceWarningManager>(awm) {}
+  explicit ProtectedAirspaceWarningManager(AirspaceWarningManager &awm) noexcept
+    :Guard<AirspaceWarningManager>(awm) {}
 
-  gcc_pure
-  const FlatProjection &GetProjection() const;
+  [[gnu::pure]]
+  const FlatProjection &GetProjection() const noexcept;
 
-  void Clear();
-  void AcknowledgeAll();
+  void Clear() noexcept;
+  void AcknowledgeAll() noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool GetAckDay(const AbstractAirspace &airspace) const noexcept;
 
   void AcknowledgeDay(ConstAirspacePtr airspace, bool set=true) noexcept;
@@ -49,9 +51,15 @@ public:
   void AcknowledgeInside(ConstAirspacePtr airspace, bool set=true) noexcept;
   void Acknowledge(ConstAirspacePtr airspace) noexcept;
 
-  gcc_pure
-  bool IsEmpty() const;
-};
+  [[gnu::pure]]
+  bool IsEmpty() const noexcept;
 
+  /**
+   * Returns a copy of the highest priority warning, or an empty
+   * instance if there is no warning.
+   */
+  [[gnu::pure]]
+  std::optional<AirspaceWarning> GetTopWarning() const noexcept;
+};
 
 #endif

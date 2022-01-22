@@ -61,6 +61,7 @@ public:
   void Hide() noexcept override;
   void Move(const PixelRect &rc) noexcept override;
   bool SetFocus() noexcept override;
+  bool HasFocus() const noexcept override;
 
 protected:
   virtual void OnOffset(double offset) noexcept = 0;

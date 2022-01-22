@@ -29,11 +29,12 @@ class AirspaceLabelListCompare {
   const AirspaceWarningConfig &config;
 
 public:
-  AirspaceLabelListCompare(const AirspaceWarningConfig &_config)
+  AirspaceLabelListCompare(const AirspaceWarningConfig &_config) noexcept
     :config(_config) {}
 
+  [[gnu::pure]]
   bool operator() (const AirspaceLabelList::Label &label1,
-                   const AirspaceLabelList::Label &label2) {
+                   const AirspaceLabelList::Label &label2) noexcept {
     bool en1 = config.IsClassEnabled(label1.cls);
     bool en2 = config.IsClassEnabled(label2.cls);
 
@@ -47,8 +48,9 @@ public:
 };
 
 void
-AirspaceLabelList::Add(const GeoPoint &pos, AirspaceClass cls, 
-                       const AirspaceAltitude &base, const AirspaceAltitude &top)
+AirspaceLabelList::Add(const GeoPoint &pos, AirspaceClass cls,
+                       const AirspaceAltitude &base,
+                       const AirspaceAltitude &top) noexcept
 {
   if (labels.full())
     return;
@@ -61,7 +63,7 @@ AirspaceLabelList::Add(const GeoPoint &pos, AirspaceClass cls,
 }
 
 void
-AirspaceLabelList::Sort(const AirspaceWarningConfig &config)
+AirspaceLabelList::Sort(const AirspaceWarningConfig &config) noexcept
 {
   AirspaceLabelListCompare compare(config);
   std::sort(labels.begin(), labels.end(), compare);

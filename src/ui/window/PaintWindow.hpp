@@ -97,7 +97,7 @@ public:
    * Invalidates a part of the visible area and schedules a repaint
    * (which will occur in the main thread).
    */
-  void Invalidate(gcc_unused const PixelRect &rect) noexcept {
+  void Invalidate([[maybe_unused]] const PixelRect &rect) noexcept {
 #ifndef USE_WINUSER
     Invalidate();
 #else
@@ -116,7 +116,8 @@ protected:
   /* virtual methods from class PaintWindow */
   virtual void OnPaint(Canvas &canvas) = 0;
 
-  virtual void OnPaint(Canvas &canvas, gcc_unused const PixelRect &dirty) {
+  virtual void OnPaint(Canvas &canvas,
+                       [[maybe_unused]] const PixelRect &dirty) {
     OnPaint(canvas);
   }
 };

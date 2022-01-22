@@ -131,6 +131,12 @@ SolidWidget::SetFocus() noexcept
 }
 
 bool
+SolidWidget::HasFocus() const noexcept
+{
+  return widget->HasFocus();
+}
+
+bool
 SolidWidget::KeyPress(unsigned key_code) noexcept
 {
   return widget->KeyPress(key_code);

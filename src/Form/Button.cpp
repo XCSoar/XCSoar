@@ -237,11 +237,20 @@ Button::OnPaint(Canvas &canvas)
 {
   assert(renderer != nullptr);
 
-  const bool pressed = down;
-  const bool focused = HasCursorKeys()
-    ? HasFocus() || (selected && !HasPointer())
-    : pressed;
+  renderer->DrawButton(canvas, GetClientRect(), GetState());
+}
 
-  renderer->DrawButton(canvas, GetClientRect(),
-                       IsEnabled(), focused, pressed);
+ButtonState
+Button::GetState() const noexcept
+{
+  if (!IsEnabled())
+    return ButtonState::DISABLED;
+  else if (down)
+    return ButtonState::PRESSED;
+  else if (HasCursorKeys() && HasFocus())
+    return ButtonState::FOCUSED;
+  else if (HasCursorKeys() && selected)
+    return ButtonState::SELECTED;
+  else
+    return ButtonState::ENABLED;
 }

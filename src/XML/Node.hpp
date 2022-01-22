@@ -35,6 +35,7 @@
 
 #include <list>
 #include <forward_list>
+#include <string_view>
 
 #include <cassert>
 #include <tchar.h>
@@ -51,15 +52,9 @@ class XMLNode {
     struct Attribute : private NonCopyable {
       tstring name, value;
 
-      Attribute(tstring &&_name, const TCHAR *_value, size_t value_length)
-        :name(std::move(_name)), value(_value, value_length) {}
-
-      Attribute(const TCHAR *_name, const TCHAR *_value)
-        :name(_name), value(_value) {}
-
-      Attribute(const TCHAR *_name, size_t name_length,
-                const TCHAR *_value, size_t value_length)
-        :name(_name, name_length), value(_value, value_length) {}
+      template<typename N, typename V>
+      Attribute(N &&name, V &&value) noexcept
+        :name(std::forward<N>(name)), value(std::forward<V>(value)) {}
     };
 
     /** Element name (=nullptr if root) */
@@ -77,30 +72,17 @@ class XMLNode {
     /** Array of attributes */
     std::forward_list<Attribute> attributes;
 
-    Data(const TCHAR *_name, bool _is_declaration)
+    Data(std::basic_string_view<TCHAR> _name, bool _is_declaration) noexcept
       :name(_name),
-       is_declaration(_is_declaration) {}
-
-    Data(const TCHAR *_name, size_t name_length, bool _is_declaration)
-      :name(_name, name_length),
        is_declaration(_is_declaration) {}
 
     bool HasChildren() const {
       return !children.empty() || !text.empty();
     }
 
-    void AddAttribute(tstring &&name,
-                      const TCHAR *value, size_t value_length) {
-      attributes.emplace_front(std::move(name), value, value_length);
-    }
-
-    void AddAttribute(const TCHAR *name, const TCHAR *value) {
-      attributes.emplace_front(name, value);
-    }
-
-    void AddAttribute(const TCHAR *name, size_t name_length,
-                      const TCHAR *value, size_t value_length) {
-      attributes.emplace_front(name, name_length, value, value_length);
+    template<typename N, typename V>
+    void AddAttribute(N &&name, V &&value) noexcept {
+      attributes.emplace_front(std::forward<N>(name), std::forward<V>(value));
     }
 
     typedef std::list<XMLNode>::const_iterator const_iterator;
@@ -120,9 +102,8 @@ class XMLNode {
    * Protected constructor: use "parse" functions to get your first
    * instance of XMLNode.
    */
-  XMLNode(const TCHAR *name, bool is_declaration);
-
-  XMLNode(const TCHAR *name, size_t name_length, bool is_declaration);
+  XMLNode(std::basic_string_view<TCHAR> name,
+          bool is_declaration) noexcept;
 
 public:
   static inline XMLNode Null() {
@@ -237,40 +218,21 @@ public:
   /**
    * Add a child node to the given element.
    */
-  XMLNode &AddChild(const TCHAR *name, bool is_declaration=false);
-
-  XMLNode &AddChild(const TCHAR *name, size_t name_length,
-                    bool is_declaration=false);
+  XMLNode &AddChild(const std::basic_string_view<TCHAR> name,
+                    bool is_declaration=false) noexcept;
 
   /**
    * Add an attribute to an element.
    */
-  void AddAttribute(tstring &&name,
-                    const TCHAR *value, size_t value_length) {
-    d->AddAttribute(std::move(name), value, value_length);
-  }
-
-  void AddAttribute(const TCHAR *name, const TCHAR *value) {
-    assert(name != nullptr);
-    assert(value != nullptr);
-
-    d->AddAttribute(name, value);
-  }
-
-  void AddAttribute(const TCHAR *name, size_t name_length,
-                    const TCHAR *value, size_t value_length) {
-    assert(name != nullptr);
-    assert(value != nullptr);
-
-    d->AddAttribute(name, name_length, value, value_length);
+  template<typename N, typename V>
+  void AddAttribute(N &&name, V &&value) noexcept {
+    d->AddAttribute(std::forward<N>(name), std::forward<V>(value));
   }
 
   /**
    * Add text to the element.
    */
-  void AddText(const TCHAR *value);
-
-  void AddText(const TCHAR *text, size_t length);
+  void AddText(std::basic_string_view<TCHAR> value) noexcept;
 
 private:
   /**

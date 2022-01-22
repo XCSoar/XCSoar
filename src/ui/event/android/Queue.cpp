@@ -26,7 +26,7 @@ Copyright_License {
 namespace UI {
 
 void
-EventQueue::Push(const Event &event)
+EventQueue::Inject(const Event &event) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
   if (quit)
@@ -37,7 +37,7 @@ EventQueue::Push(const Event &event)
 }
 
 bool
-EventQueue::Pop(Event &event)
+EventQueue::Pop(Event &event) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
   if (quit || events.empty())
@@ -49,7 +49,7 @@ EventQueue::Pop(Event &event)
 }
 
 bool
-EventQueue::Generate(Event &event)
+EventQueue::Generate(Event &event) noexcept
 {
   Timer *timer = timers.Pop(SteadyNow());
   if (timer != nullptr) {
@@ -62,7 +62,7 @@ EventQueue::Generate(Event &event)
 }
 
 bool
-EventQueue::Wait(Event &event)
+EventQueue::Wait(Event &event) noexcept
 {
   std::unique_lock<Mutex> lock(mutex);
   if (quit)
@@ -90,7 +90,8 @@ EventQueue::Wait(Event &event)
 }
 
 void
-EventQueue::Purge(bool (*match)(const Event &event, void *ctx), void *ctx)
+EventQueue::Purge(bool (*match)(const Event &event, void *ctx) noexcept,
+                  void *ctx) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
   size_t n = events.size();
@@ -102,20 +103,20 @@ EventQueue::Purge(bool (*match)(const Event &event, void *ctx), void *ctx)
 }
 
 static bool
-match_type(const Event &event, void *ctx)
+match_type(const Event &event, void *ctx) noexcept
 {
   const Event::Type *type_p = (const Event::Type *)ctx;
   return event.type == *type_p;
 }
 
 void
-EventQueue::Purge(Event::Type type)
+EventQueue::Purge(Event::Type type) noexcept
 {
   Purge(match_type, &type);
 }
 
 static bool
-MatchCallback(const Event &event, void *ctx)
+MatchCallback(const Event &event, void *ctx) noexcept
 {
   const Event *match = (const Event *)ctx;
   return event.type == Event::CALLBACK && event.callback == match->callback &&
@@ -123,7 +124,7 @@ MatchCallback(const Event &event, void *ctx)
 }
 
 void
-EventQueue::Purge(Event::Callback callback, void *ctx)
+EventQueue::Purge(Event::Callback callback, void *ctx) noexcept
 {
   Event match(callback, ctx);
   Purge(MatchCallback, (void *)&match);
@@ -140,7 +141,7 @@ EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexce
 }
 
 void
-EventQueue::CancelTimer(Timer &timer)
+EventQueue::CancelTimer(Timer &timer) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
 

@@ -153,7 +153,8 @@ private:
       rc.top = center.y - 20;
       rc.right = center.x + 50;
       rc.bottom = center.y + 20;
-      button_renderer.DrawButton(canvas, rc, page == 4, page == 4);
+      button_renderer.DrawButton(canvas, rc,
+                                 page == 4 ? ButtonState::PRESSED : ButtonState::ENABLED);
       label = page == 4
         ? _T("button down=true") : _T("button down=false");
     }

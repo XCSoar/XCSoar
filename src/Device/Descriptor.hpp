@@ -566,7 +566,7 @@ public:
   bool PutStandbyFrequency(RadioFrequency frequency,
                            const TCHAR *name,
                            OperationEnvironment &env) noexcept;
-  bool PutQNH(const AtmosphericPressure &pres,
+  bool PutQNH(AtmosphericPressure pres,
               OperationEnvironment &env) noexcept;
 
   /**

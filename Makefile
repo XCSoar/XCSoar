@@ -190,6 +190,7 @@ include $(topdir)/build/mapwindow.mk
 include $(topdir)/build/main.mk
 include $(topdir)/build/cloud.mk
 include $(topdir)/build/kobo.mk
+include $(topdir)/build/ov.mk
 include $(topdir)/build/test.mk
 endif
 

@@ -21,26 +21,34 @@ Copyright_License {
 }
 */
 
-#include "ui/canvas/custom/TopCanvas.hpp"
-#include "ui/canvas/opengl/Init.hpp"
-#include "ui/canvas/opengl/Globals.hpp"
-#include "Android/Main.hpp"
-#include "Android/NativeView.hpp"
-#include "LogFile.hpp"
+#include "GraphicsTTY.hpp"
 
-void
-TopCanvas::Create(PixelSize new_size, bool full_screen, bool resizable)
+#include <errno.h>
+#include <fcntl.h>
+#include <linux/kd.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+
+LinuxGraphicsTTY::LinuxGraphicsTTY() noexcept
+  :fd(open(path, O_RDWR | O_NOCTTY | O_CLOEXEC))
 {
-  display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-  surface = eglGetCurrentSurface(EGL_DRAW);
+  if (fd < 0) {
+    fprintf(stderr, "Warning: failed to open %s: %s\n",
+            path, strerror(errno));
+    return;
+  }
 
-  OpenGL::SetupContext();
-  SetupViewport(new_size);
+  if (ioctl(fd, KDSETMODE, KD_GRAPHICS) < 0)
+    fprintf(stderr, "Warning: failed to set graphics mode on %s: %s\n",
+            path, strerror(errno));
 }
 
-void
-TopCanvas::Flip()
+LinuxGraphicsTTY::~LinuxGraphicsTTY() noexcept
 {
-  if (!eglSwapBuffers(display, surface))
-    LogFormat("eglSwapBuffers() failed: 0x%x", eglGetError());
+  if (fd >= 0) {
+    ioctl(fd, KDSETMODE, KD_TEXT);
+    close(fd);
+  }
 }

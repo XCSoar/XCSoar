@@ -83,16 +83,11 @@ GetSize(const struct fb_var_screeninfo &vinfo)
 
 #endif
 
-void
-TopCanvas::Destroy()
+TopCanvas::~TopCanvas() noexcept
 {
   buffer.Free();
 
 #ifdef USE_FB
-#ifdef USE_TTY
-  DeinitialiseTTY();
-#endif
-
   if (fd >= 0) {
     close(fd);
     fd = -1;
@@ -103,21 +98,14 @@ TopCanvas::Destroy()
 PixelRect
 TopCanvas::GetRect() const
 {
-  assert(IsDefined());
-
   return { 0, 0, int(buffer.width), int(buffer.height) };
 }
 
-void
-TopCanvas::Create(PixelSize new_size,
-                  bool full_screen, bool resizable)
-{
 #ifdef USE_FB
-  assert(fd < 0);
 
-#ifdef USE_TTY
-  InitialiseTTY();
-#endif
+TopCanvas::TopCanvas()
+{
+  assert(fd < 0);
 
   const char *path = "/dev/fb0";
   fd = open(path, O_RDWR | O_NOCTTY | O_CLOEXEC);
@@ -202,22 +190,14 @@ TopCanvas::Create(PixelSize new_size,
   };
 #endif
 
-  new_size = ::GetSize(vinfo);
+  const auto new_size = ::GetSize(vinfo);
 
   if (vinfo.width > 0 && vinfo.height > 0)
     Display::ProvideSizeMM(new_size.width, new_size.height,
                            vinfo.width, vinfo.height);
 
-#elif defined(USE_VFB)
-  /* allocate buffer as requested by caller */
-#else
-#error No implementation
-#endif
-
   buffer.Allocate(new_size.width, new_size.height);
 }
-
-#ifdef USE_FB
 
 inline PixelSize
 TopCanvas::GetNativeSize() const
@@ -233,6 +213,15 @@ TopCanvas::CheckResize()
   return CheckResize(GetNativeSize());
 }
 
+#elif defined(USE_VFB)
+
+TopCanvas::TopCanvas(PixelSize new_size)
+{
+  buffer.Allocate(new_size.width, new_size.height);
+}
+
+#else
+#error No implementation
 #endif
 
 bool

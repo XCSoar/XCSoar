@@ -36,7 +36,6 @@ class RoughTime;
 class Angle;
 struct BrokenDate;
 class ContainerWindow;
-class ActionListener;
 struct DialogLook;
 
 /**
@@ -224,7 +223,7 @@ public:
 
   void CalculateLayout();
 
-  gcc_pure
+  [[gnu::pure]]
   PixelSize GetRecommendedSize() const {
     return PixelSize(columns[length - 1].right, bottom + top);
   }
@@ -248,43 +247,43 @@ public:
   void SetValue(Angle value);
   void SetValue(BrokenDate value);
 
-  gcc_pure
+  [[gnu::pure]]
   int GetIntegerValue() const;
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetUnsignedValue() const;
 
-  gcc_pure
+  [[gnu::pure]]
   double GetDoubleValue() const;
 
-  gcc_pure
+  [[gnu::pure]]
   RoughTime GetTimeValue() const;
 
-  gcc_pure
+  [[gnu::pure]]
   BrokenDate GetDateValue() const;
 
-  gcc_pure
+  [[gnu::pure]]
   Angle GetAngleValue() const;
 
   void SetLatitude(Angle value, CoordinateFormat format);
   void SetLongitude(Angle value, CoordinateFormat format);
 
-  gcc_pure
+  [[gnu::pure]]
   Angle GetGeoAngle(CoordinateFormat format) const;
 
-  gcc_pure
+  [[gnu::pure]]
   Angle GetLatitude(CoordinateFormat format) const;
 
-  gcc_pure
+  [[gnu::pure]]
   Angle GetLongitude(CoordinateFormat format) const;
 
 protected:
-  gcc_pure
+  [[gnu::pure]]
   bool IsSigned() const {
     return columns[0].IsSign();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsNegative() const {
     return columns[0].IsSign() && columns[0].IsNegative();
   }
@@ -292,37 +291,37 @@ protected:
   /**
    * Find the first column with that contains a decimal point.
    */
-  gcc_pure
+  [[gnu::pure]]
   int FindDecimalPoint() const;
 
   /**
    * Find the next column to the left (including i) that is numerical.
    */
-  gcc_pure
+  [[gnu::pure]]
   int FindNumberLeft(int i) const;
 
   /**
    * Find the next column to the left (including i) that is editable.
    */
-  gcc_pure
+  [[gnu::pure]]
   int FindEditableLeft(int i) const;
 
   /**
    * Find the next column to the right (including i) that is editable.
    */
-  gcc_pure
+  [[gnu::pure]]
   int FindEditableRight(unsigned i) const;
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetPositiveInteger() const;
 
-  gcc_pure
+  [[gnu::pure]]
   double GetPositiveFractional() const;
 
   void IncrementColumn(unsigned i);
   void DecrementColumn(unsigned i);
 
-  gcc_pure
+  [[gnu::pure]]
   int FindColumnAt(unsigned x) const;
 
 private:

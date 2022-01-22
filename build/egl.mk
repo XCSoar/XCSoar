@@ -1,15 +1,11 @@
 ifeq ($(TARGET_IS_PI),y)
 # auto-enable EGL on the Raspberry Pi.
 EGL ?= y
-
-  ifeq ($(TARGET_IS_PI4)$(EGL),yy)
-    # the Raspberry Pi 4 uses GBM/KMS
-    ENABLE_MESA_KMS = y
-  endif
-
-else ifeq ($(TARGET_HAS_MALI),y)
+ENABLE_MESA_KMS = y
+else ifeq ($(TARGET_IS_CUBIE),y)
 # auto-enable EGL on the Cubieboard.
 EGL ?= y
+ENABLE_MESA_KMS = y
 else ifeq ($(ENABLE_MESA_KMS),y)
 # if Mesa KMS is explicitly enabled, we also need to enable EGL
 EGL ?= y
@@ -50,28 +46,9 @@ ENABLE_SDL = n
 EGL_CPPFLAGS =
 EGL_FEATURE_CPPFLAGS = -DUSE_EGL
 
-ifeq ($(TARGET_IS_PI)$(TARGET_IS_PI4),yn)
-EGL_LDLIBS = -lbrcmEGL
-else
 EGL_LDLIBS = -lEGL
-endif
 
-ifeq ($(TARGET_IS_PI)$(TARGET_IS_PI4),yn)
-# Raspberry Pi < 4 detected (the 4 uses GBM instead of VideoCore)
-# Raspberry Pi detected
-EGL_FEATURE_CPPFLAGS += -DUSE_VIDEOCORE
-EGL_CPPFLAGS += -isystem $(PI)/opt/vc/include -isystem $(PI)/opt/vc/include/interface/vcos/pthreads
-EGL_CPPFLAGS += -isystem $(PI)/opt/vc/include/interface/vmcs_host/linux
-EGL_LDLIBS += -L$(PI)/opt/vc/lib -lvchostif -lvchiq_arm -lvcos -lbcm_host
-USE_CONSOLE = y
-else ifeq ($(TARGET_HAS_MALI),y)
-EGL_FEATURE_CPPFLAGS += -DHAVE_MALI
-USE_CONSOLE = y
-# There are two different native window definitions in the ARM headers
-ifneq ($(shell test -f $(CUBIE)/usr/include/EGL/fbdev_window.h && echo y),y)
-EGL_FEATURE_CPPFLAGS += -DHAVE_MALI_NATIVE_WINDOW
-endif
-else ifeq ($(ENABLE_MESA_KMS),y)
+ifeq ($(ENABLE_MESA_KMS),y)
 $(eval $(call pkg-config-library,DRM,libdrm))
 $(eval $(call pkg-config-library,GBM,gbm))
 EGL_FEATURE_CPPFLAGS += -DMESA_KMS

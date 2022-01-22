@@ -41,7 +41,7 @@ class EventLoop {
   bool bulk;
 
 public:
-  typedef void (*Callback)(void *ctx);
+  using Callback = void (*)(void *ctx) noexcept;
 
   EventLoop(EventQueue &_queue, TopWindow &_top_window)
     :queue(_queue), top_window(&_top_window), bulk(true) {}

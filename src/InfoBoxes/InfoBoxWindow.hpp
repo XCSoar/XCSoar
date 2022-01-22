@@ -149,7 +149,7 @@ protected:
   bool HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode);
 
 public:
-  gcc_pure
+  [[gnu::pure]]
   const InfoBoxPanel *GetDialogContent() const;
 
   const PixelRect GetValueRect() const {

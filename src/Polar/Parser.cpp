@@ -79,7 +79,7 @@ ParsePolar(PolarInfo &polar_r, const char *s)
     return false;
 
   char *p;
-  polar.reference_mass = ParseDouble(s, &p);
+  polar.shape.reference_mass = ParseDouble(s, &p);
   if (*p != _T(','))
     return false;
 
@@ -141,7 +141,7 @@ FormatPolar(const PolarInfo &polar, char *buffer, size_t max_size,
   if (include_v_no)
     snprintf(buffer, max_size,
              "%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f",
-             (double)polar.reference_mass, (double)polar.max_ballast,
+             (double)polar.shape.reference_mass, (double)polar.max_ballast,
              (double)v1, (double)polar.shape[0].w,
              (double)v2, (double)polar.shape[1].w,
              (double)v3, (double)polar.shape[2].w,
@@ -149,7 +149,7 @@ FormatPolar(const PolarInfo &polar, char *buffer, size_t max_size,
   else
     snprintf(buffer, max_size,
              "%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f",
-             (double)polar.reference_mass, (double)polar.max_ballast,
+             (double)polar.shape.reference_mass, (double)polar.max_ballast,
              (double)v1, (double)polar.shape[0].w,
              (double)v2, (double)polar.shape[1].w,
              (double)v3, (double)polar.shape[2].w,

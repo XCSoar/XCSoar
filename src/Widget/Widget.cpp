@@ -90,6 +90,12 @@ NullWidget::SetFocus() noexcept
 }
 
 bool
+NullWidget::HasFocus() const noexcept
+{
+  return false;
+}
+
+bool
 NullWidget::KeyPress(unsigned key_code) noexcept
 {
   return false;

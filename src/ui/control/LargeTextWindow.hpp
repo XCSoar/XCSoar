@@ -85,13 +85,13 @@ public:
     return *font;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetVisibleRows() const;
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetRowCount() const;
 #else
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetRowCount() const {
 
     return ::SendMessage(hWnd, EM_GETLINECOUNT, 0, 0);
@@ -109,9 +109,12 @@ public:
 #ifndef USE_WINUSER
 protected:
   void OnResize(PixelSize new_size) override;
+  void OnSetFocus() override;
+  void OnKillFocus() override;
   void OnPaint(Canvas &canvas) override;
   bool OnKeyCheck(unsigned key_code) const override;
   bool OnKeyDown(unsigned key_code) override;
+  bool OnMouseDown(PixelPoint p) override;
 #endif /* !USE_WINUSER */
 };
 

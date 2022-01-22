@@ -114,6 +114,9 @@ public:
   void ShowAll() noexcept;
   void HideAll() noexcept;
 
+  [[gnu::pure]]
+  bool HasFocus() const noexcept;
+
   /**
    * Handle a hot key.
    *
@@ -122,7 +125,7 @@ public:
   bool KeyPress(unsigned key_code) noexcept;
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   unsigned Width(unsigned i) const noexcept;
 
   /**
@@ -133,10 +136,10 @@ private:
    * @param total_width the total width of the panel in pixels
    * @return the first button index not in this row
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned FitButtonRow(unsigned start, unsigned total_width) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned RangeMaxWidth(unsigned start, unsigned end) const noexcept;
 
   PixelRect VerticalRange(PixelRect rc, unsigned start, unsigned end) noexcept;

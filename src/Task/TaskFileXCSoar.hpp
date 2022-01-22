@@ -24,7 +24,6 @@
 #define XCSOAR_TASK_FILE_XCSOAR_HPP
 
 #include "TaskFile.hpp"
-#include "system/Path.hpp"
 
 class TaskFileXCSoar: public TaskFile
 {

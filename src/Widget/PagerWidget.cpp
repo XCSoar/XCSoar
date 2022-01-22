@@ -373,6 +373,18 @@ PagerWidget::SetFocus() noexcept
 }
 
 bool
+PagerWidget::HasFocus() const noexcept
+{
+  assert(initialised);
+  assert(prepared);
+  assert(visible);
+  assert(!children.empty());
+  assert(children[current].prepared);
+
+  return children[current].widget->HasFocus();
+}
+
+bool
 PagerWidget::KeyPress(unsigned key_code) noexcept
 {
   assert(initialised);

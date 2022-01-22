@@ -43,20 +43,15 @@ struct AirspaceInterceptSolution
   /** Estimated time (s) for observer to reach intercept point */
   FloatDuration elapsed_time;
 
-  AirspaceInterceptSolution() = default;
-
-private:
-  AirspaceInterceptSolution(double _distance, FloatDuration _elapsed_time) noexcept
-    :distance(_distance), elapsed_time(_elapsed_time) {}
-
-public:
-  static AirspaceInterceptSolution Invalid() {
-    return AirspaceInterceptSolution(-1, FloatDuration{-1});
-  }
-
-  void SetInvalid() {
+  constexpr void SetInvalid() noexcept {
     distance = -1;
     elapsed_time = FloatDuration{-1};
+  }
+
+  static constexpr AirspaceInterceptSolution Invalid() noexcept {
+    AirspaceInterceptSolution ais;
+    ais.SetInvalid();
+    return ais;
   }
 
   /**
@@ -64,17 +59,17 @@ public:
    *
    * @return True if solution is valid
    */
-  bool IsValid() const {
+  constexpr bool IsValid() const noexcept {
     return elapsed_time.count() >= 0;
   }
 
-  bool IsEarlierThan(const AirspaceInterceptSolution &other) const {
+  constexpr bool IsEarlierThan(const AirspaceInterceptSolution &other) const noexcept {
     return IsValid() && (!other.IsValid() ||
                          elapsed_time < other.elapsed_time);
   }
 };
 
-static_assert(std::is_trivial<AirspaceInterceptSolution>::value,
+static_assert(std::is_trivial_v<AirspaceInterceptSolution>,
               "type is not trivial");
 
 #endif

@@ -141,7 +141,7 @@ TestAll()
 
 int main(int argc, char **argv)
 {
-  plan_tests(2095);
+  plan_tests(2103);
 
   glide_settings.SetDefaults();
 

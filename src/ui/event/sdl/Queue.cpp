@@ -28,11 +28,11 @@ Copyright_License {
 
 namespace UI {
 
-EventQueue::EventQueue()
+EventQueue::EventQueue() noexcept
   :quit(false) {}
 
 void
-EventQueue::Push(EventLoop::Callback callback, void *ctx)
+EventQueue::InjectCall(EventLoop::Callback callback, void *ctx) noexcept
 {
   SDL_Event event;
   event.type = EVENT_CALLBACK;
@@ -42,14 +42,14 @@ EventQueue::Push(EventLoop::Callback callback, void *ctx)
 }
 
 static void
-InvokeTimer(void *ctx)
+InvokeTimer(void *ctx) noexcept
 {
   Timer *timer = (Timer *)ctx;
   timer->Invoke();
 }
 
 bool
-EventQueue::Generate(Event &event)
+EventQueue::Generate(Event &event) noexcept
 {
   Timer *timer = timers.Pop(SteadyNow());
   if (timer != nullptr) {
@@ -63,13 +63,13 @@ EventQueue::Generate(Event &event)
 }
 
 bool
-EventQueue::Pop(Event &event)
+EventQueue::Pop(Event &event) noexcept
 {
   return !quit && (Generate(event) || ::SDL_PollEvent(&event.event));
 }
 
 bool
-EventQueue::Wait(Event &event)
+EventQueue::Wait(Event &event) noexcept
 {
   /* this busy loop is ugly, and I wish we could do better than that,
      but SDL_WaitEvent() is just as bad; however copying this busy
@@ -96,8 +96,8 @@ EventQueue::Wait(Event &event)
 
 void
 EventQueue::Purge(Uint32 event,
-                  bool (*match)(const SDL_Event &event, void *ctx),
-                  void *ctx)
+                  bool (*match)(const SDL_Event &event, void *ctx) noexcept,
+                  void *ctx) noexcept
 {
   SDL_Event events[256]; // is that enough?
   int count = SDL_PeepEvents(events, 256, SDL_GETEVENT, event, event);
@@ -116,7 +116,7 @@ struct MatchCallbackData {
 };
 
 static bool
-MatchCallback(const SDL_Event &event, void *ctx)
+MatchCallback(const SDL_Event &event, void *ctx) noexcept
 {
   const MatchCallbackData *data = (const MatchCallbackData *)ctx;
   return event.type == EVENT_CALLBACK && event.user.data1 == data->data1 &&
@@ -124,7 +124,7 @@ MatchCallback(const SDL_Event &event, void *ctx)
 }
 
 void
-EventQueue::Purge(EventLoop::Callback callback, void *ctx)
+EventQueue::Purge(EventLoop::Callback callback, void *ctx) noexcept
 {
   MatchCallbackData data { (void *)callback, ctx };
   Purge(EVENT_CALLBACK, MatchCallback, (void *)&data);
@@ -139,7 +139,7 @@ EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexce
 }
 
 void
-EventQueue::CancelTimer(Timer &timer)
+EventQueue::CancelTimer(Timer &timer) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
 

@@ -133,9 +133,6 @@ MapWindow::RenderAirspace(Canvas &canvas)
                            GetMapSettings().airspace);
 
     airspace_label_renderer.Draw(canvas,
-#ifndef ENABLE_OPENGL
-                                 buffer_canvas,
-#endif
                                  render_projection,
                                  Basic(), Calculated(),
                                  GetComputerSettings().airspace,

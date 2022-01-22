@@ -476,8 +476,8 @@ InputEvents::eventLogger(const TCHAR *misc)
     logger->GUIToggleLogger(basic, settings_computer,
                             protected_task_manager, true);
   else if (StringIsEqual(misc, _T("nmea"))) {
-    NMEALogger::enabled = !NMEALogger::enabled;
-    if (NMEALogger::enabled) {
+    nmea_logger->ToggleEnabled();
+    if (nmea_logger->IsEnabled()) {
       Message::AddMessage(_("NMEA log on"));
     } else {
       Message::AddMessage(_("NMEA log off"));

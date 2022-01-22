@@ -32,20 +32,18 @@ Copyright_License {
  */
 class AirspaceWarningMonitor {
   friend class AirspaceWarningWidget;
-  class AirspaceWarningWidget *widget;
+  class AirspaceWarningWidget *widget = nullptr;
 
   Validity last;
 
 public:
-  AirspaceWarningMonitor():widget(nullptr) {}
-
-  void Reset();
-  void Check();
+  void Reset() noexcept;
+  void Check() noexcept;
 
 private:
-  void HideWidget();
+  void HideWidget() noexcept;
 
-  void Schedule() {
+  void Schedule() noexcept {
     last.Clear();
   }
 };

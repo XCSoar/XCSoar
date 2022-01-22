@@ -46,7 +46,6 @@ TARGET_IS_DARWIN := n
 TARGET_IS_LINUX := n
 TARGET_IS_ANDROID := n
 TARGET_IS_PI := n
-TARGET_IS_PI4 := n
 TARGET_IS_PI32 := n
 TARGET_IS_PI64 := n
 TARGET_IS_KOBO := n
@@ -153,14 +152,13 @@ ifeq ($(TARGET),UNIX)
   TCSUFFIX := $(LOCAL_TCSUFFIX)
   TARGET_IS_ARM = $(HOST_IS_ARM)
   TARGET_IS_PI = $(HOST_IS_PI)
-  TARGET_IS_PI4 = $(HOST_IS_PI4)
   TARGET_IS_PI32 = $(call bool_and,$(HOST_IS_PI),$(HOST_IS_ARM))
   TARGET_IS_PI64 = $(call bool_and,$(HOST_IS_PI),$(HOST_IS_AARCH64))
+  TARGET_IS_CUBIE = $(HOST_IS_CUBIE)
   ARMV6 = $(HOST_IS_ARMV6)
   ARMV7 = $(HOST_IS_ARMV7)
   NEON = $(HOST_HAS_NEON)
   TARGET_IS_ARMHF := $(call bool_or,$(ARMV7),$(TARGET_IS_PI32))
-  TARGET_HAS_MALI = $(HOST_HAS_MALI)
 endif
 
 ifeq ($(TARGET),UNIX32)
@@ -201,15 +199,6 @@ ifeq ($(TARGET),CUBIE)
   override TARGET = NEON
   CUBIE ?= /opt/cubie/root
   TARGET_IS_CUBIE=y
-  # Open-source Lima driver is available and usable with XCSoar
-  # in current mainline kernels, 
-  # and in MESA included in recent distributions
-  ifeq ($(ENABLE_MESA_KMS),y)
-    OPENGL = y
-    GLES2 = y
-  else
-    TARGET_HAS_MALI = y
-  endif
 endif
 
 ifeq ($(TARGET),KOBO)
@@ -244,7 +233,6 @@ ifeq ($(TARGET),OSX64)
   OSX_MIN_SUPPORTED_VERSION = 10.12
   HOST_TRIPLET = x86_64-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
-  LIBCXX = y
   CLANG = y
   TARGET_ARCH += -mmacosx-version-min=$(OSX_MIN_SUPPORTED_VERSION)
 endif
@@ -259,7 +247,6 @@ ifeq ($(TARGET),IOS32)
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk
   endif
-  LIBCXX = y
   CLANG = y
   TARGET_ARCH += -miphoneos-version-min=$(IOS_MIN_SUPPORTED_VERSION)
 endif
@@ -274,7 +261,6 @@ ifeq ($(TARGET),IOS64)
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk
   endif
-  LIBCXX = y
   CLANG = y
   TARGET_ARCH += -miphoneos-version-min=$(IOS_MIN_SUPPORTED_VERSION) -arch arm64
   ASFLAGS += -arch arm64
@@ -329,7 +315,7 @@ endif
 ifeq ($(TARGET),ANDROID)
   ANDROID_NDK ?= $(HOME)/opt/android-ndk-r23b
 
-  ANDROID_SDK_PLATFORM = android-29
+  ANDROID_SDK_PLATFORM = android-30
   ANDROID_NDK_API = 21
 
   # The naming of CPU ABIs, architectures, and various NDK directory names is an unholy mess.

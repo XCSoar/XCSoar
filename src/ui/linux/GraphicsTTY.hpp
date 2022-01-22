@@ -21,45 +21,20 @@ Copyright_License {
 }
 */
 
-#include "ui/canvas/custom/TopCanvas.hpp"
+#pragma once
 
-#ifdef USE_TTY
+/**
+ * Switches the Linux TTY to graphics mode.
+ */
+class LinuxGraphicsTTY {
+  static constexpr const char *path = "/dev/tty";
 
-#include <cassert>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <linux/kd.h>
-#include <sys/ioctl.h>
+  const int fd;
 
-void
-TopCanvas::InitialiseTTY()
-{
-  assert(tty_fd < 0);
+public:
+  LinuxGraphicsTTY() noexcept;
+  ~LinuxGraphicsTTY() noexcept;
 
-  const char *path = "/dev/tty";
-  tty_fd = open(path, O_RDWR | O_NOCTTY | O_CLOEXEC);
-  if (tty_fd < 0) {
-    fprintf(stderr, "Warning: failed to open %s: %s\n",
-            path, strerror(errno));
-    return;
-  }
-
-  if (ioctl(tty_fd, KDSETMODE, KD_GRAPHICS) < 0)
-    fprintf(stderr, "Warning: failed to set graphics mode on %s: %s\n",
-            path, strerror(errno));
-}
-
-void
-TopCanvas::DeinitialiseTTY()
-{
-  if (tty_fd >= 0) {
-    ioctl(tty_fd, KDSETMODE, KD_TEXT);
-    close(tty_fd);
-    tty_fd = -1;
-  }
-}
-
-#endif
+  LinuxGraphicsTTY(const LinuxGraphicsTTY &) = delete;
+  LinuxGraphicsTTY &operator=(const LinuxGraphicsTTY &) = delete;
+};

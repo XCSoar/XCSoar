@@ -26,6 +26,7 @@
 #include "AirspaceWarningConfig.hpp"
 #include "Util/AircraftStateFilter.hpp"
 #include "time/FloatDuration.hxx"
+#include "util/Serial.hpp"
 
 #include <list>
 
@@ -64,7 +65,7 @@ class AirspaceWarningManager {
   /**
    * This number is incremented each time this object is modified.
    */
-  unsigned serial = 0;
+  Serial serial;
 
 public:
   using const_iterator = AirspaceWarningList::const_iterator;
@@ -92,9 +93,10 @@ public:
 
   /**
    * Returns a serial for the current state.  The serial gets
-   * incremented each time the list of warnings is modified.
+   * incremented each time the a warning or the list of warnings is
+   * modified.
    */
-  unsigned GetSerial() const {
+  Serial GetSerial() const noexcept {
     return serial;
   }
 

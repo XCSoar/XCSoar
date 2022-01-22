@@ -30,7 +30,7 @@ Copyright_License {
 bool
 ConditionMonitorAATTime::CheckCondition(const NMEAInfo &basic,
                                         const DerivedInfo &calculated,
-                                        const ComputerSettings &settings)
+                                        const ComputerSettings &settings) noexcept
 {
   if (!calculated.flight.flying ||
       calculated.common_stats.task_type != TaskType::ORDERED ||
@@ -46,7 +46,7 @@ ConditionMonitorAATTime::CheckCondition(const NMEAInfo &basic,
 }
 
 void
-ConditionMonitorAATTime::Notify()
+ConditionMonitorAATTime::Notify() noexcept
 {
   Message::AddMessage(_("Expect early task arrival"));
 }

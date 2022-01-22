@@ -29,7 +29,7 @@ Copyright_License {
 bool
 ConditionMonitorLandableReachable::CheckCondition(const NMEAInfo &basic,
                                                   const DerivedInfo &calculated,
-                                                  const ComputerSettings &settings)
+                                                  const ComputerSettings &settings) noexcept
 {
   if (!calculated.flight.flying)
     return false;
@@ -41,13 +41,13 @@ ConditionMonitorLandableReachable::CheckCondition(const NMEAInfo &basic,
 }
 
 void
-ConditionMonitorLandableReachable::Notify()
+ConditionMonitorLandableReachable::Notify() noexcept
 {
   InputEvents::processGlideComputer(GCE_LANDABLE_UNREACHABLE);
 }
 
 void
-ConditionMonitorLandableReachable::SaveLast()
+ConditionMonitorLandableReachable::SaveLast() noexcept
 {
   last_reachable = now_reachable;
 }

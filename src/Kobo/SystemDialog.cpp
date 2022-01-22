@@ -36,7 +36,7 @@ class SystemWidget final
 
   enum Buttons {
     REBOOT,
-    SWITCH_KERNEL,
+    SWITCH_OTG_MODE,
     USB_STORAGE,
     INCREASE_BACKLIGHT_BRIGHTNESS,
     DECREASE_BACKLIGHT_BRIGHTNESS
@@ -49,6 +49,7 @@ public:
   SystemWidget(const DialogLook &look):RowFormWidget(look) {}
 
 private:
+  void SwitchOTGMode();
   void SwitchKernel();
   void ExportUSBStorage();
   void IncreaseBacklightBrightness();
@@ -64,13 +65,13 @@ void
 SystemWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   AddButton("Reboot", [](){ KoboReboot(); });
-  AddButton(IsKoboOTGKernel() ? "Disable USB-OTG" : "Enable USB-OTG",
-            [this](){ SwitchKernel(); });
+  AddButton(IsKoboOTGHostMode() ? "Disable USB-OTG" : "Enable USB-OTG",
+            [this](){ SwitchOTGMode(); });
 #ifdef KOBO
-  SetRowEnabled(SWITCH_KERNEL, DetectKoboModel() != KoboModel::CLARA_HD);
+  SetRowEnabled(SWITCH_OTG_MODE, DetectKoboModel() != KoboModel::CLARA_HD);
 #endif
   AddButton("Export USB storage", [this](){ ExportUSBStorage(); });
-  SetRowEnabled(USB_STORAGE, !IsKoboOTGKernel());
+  SetRowEnabled(USB_STORAGE, !IsKoboOTGHostMode());
 
   if(KoboCanChangeBacklightBrightness()) {
     increase_backlight_brightness = AddButton("Increase Backlight Brightness", [this]() { IncreaseBacklightBrightness(); });
@@ -81,6 +82,14 @@ SystemWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
     AddDummy();
     AddDummy();
   }
+}
+
+inline void
+SystemWidget::SwitchOTGMode()
+{
+#ifdef KOBO
+  if (DetectKoboModel() != KoboModel::CLARA_HD) return SwitchKernel();
+#endif
 }
 
 inline void
@@ -116,7 +125,7 @@ SystemWidget::SwitchKernel()
     kobo_kernel_image = "/opt/xcsoar/lib/kernel/uImage.kobo";
   }
 
-  const char *kernel_image = IsKoboOTGKernel()
+  const char *kernel_image = IsKoboOTGHostMode()
     ? kobo_kernel_image
     : otg_kernel_image;
 

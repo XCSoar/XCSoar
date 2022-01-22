@@ -37,7 +37,7 @@ ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
   TARGET_LDFLAGS += -L$(PI)/usr/lib/gcc/arm-linux-gnueabihf/4.6
 endif
 
-ifeq ($(HOST_IS_ARM)$(ARMV7)$(TARGET_HAS_MALI),nyy)
+ifeq ($(HOST_IS_ARM)$(ARMV7)$(TARGET_IS_CUBIE),nyy)
   # cross-crompiling for Cubieboard
   TARGET_LLVM_FLAGS = -march=arm -mcpu=cortex-a8 -mattr=+neon -float-abi=hard \
 	-enable-no-infs-fp-math -enable-no-nans-fp-math -enable-unsafe-fp-math

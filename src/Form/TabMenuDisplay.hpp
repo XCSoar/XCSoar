@@ -207,7 +207,7 @@ private:
     return main_menu_buttons.size();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetPageMainIndex(unsigned page) const noexcept {
     assert(page < GetNumPages());
 
@@ -222,17 +222,17 @@ private:
    * @SubMenuIndex Index within submenu
    * returns page number of selected sub menu item base on menus indexes
    */
-  gcc_pure
+  [[gnu::pure]]
   int GetPageNum(MenuTabIndex i) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   const PixelRect &GetButtonPosition(MenuTabIndex i) const noexcept;
 
   /**
    * @param main_menu_index
    * @return pointer to button or nullptr if index is out of range
    */
-  gcc_pure
+  [[gnu::pure]]
   const MainMenuButton &GetMainMenuButton(unsigned main_menu_index) const noexcept {
     assert(main_menu_index < main_menu_buttons.size());
 
@@ -246,7 +246,7 @@ private:
    * @return Rectangle of button coordinates,
    *   or {0,0,0,0} if index out of bounds
    */
-  gcc_pure
+  [[gnu::pure]]
   const PixelRect &GetSubMenuButtonSize(unsigned i) const noexcept {
     return buttons[i].rc;
   }
@@ -258,7 +258,7 @@ private:
    * @return Rectangle of button coordinates,
    *   or {0,0,0,0} if index out of bounds
    */
-  gcc_pure
+  [[gnu::pure]]
   const PixelRect &GetMainMenuButtonSize(unsigned i) const noexcept {
     return main_menu_buttons[i].rc;
   }
@@ -267,7 +267,7 @@ private:
    * @param page
    * @return pointer to button or nullptr if index is out of range
    */
-  gcc_pure
+  [[gnu::pure]]
   const SubMenuButton &GetSubMenuButton(unsigned page) const noexcept {
     assert(page < GetNumPages() && page < buttons.size());
 
@@ -279,7 +279,7 @@ private:
    * @param mainIndex main menu whose submenu buttons are visible
    * @return MenuTabIndex w/ location of item
    */
-  gcc_pure
+  [[gnu::pure]]
   MenuTabIndex IsPointOverButton(PixelPoint Pos,
                                  unsigned mainIndex) const noexcept;
 

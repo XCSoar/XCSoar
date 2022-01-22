@@ -67,6 +67,8 @@ NOAADetailsWidget::CreateButtons(WidgetDialog &buttons)
 {
   buttons.AddButton(_("Update"), [this](){ UpdateClicked(); });
   buttons.AddButton(_("Remove"), [this](){ RemoveClicked(); });
+
+  buttons.EnableCursorSelection();
 }
 
 void

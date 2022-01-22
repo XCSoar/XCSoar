@@ -30,7 +30,7 @@ Copyright_License {
 bool
 ConditionMonitorWind::CheckCondition(const NMEAInfo &basic,
                                      const DerivedInfo &calculated,
-                                     const ComputerSettings &settings)
+                                     const ComputerSettings &settings) noexcept
 {
   wind = calculated.GetWindOrZero();
 
@@ -49,13 +49,13 @@ ConditionMonitorWind::CheckCondition(const NMEAInfo &basic,
 }
 
 void
-ConditionMonitorWind::Notify()
+ConditionMonitorWind::Notify() noexcept
 {
   Message::AddMessage(_("Significant wind change"));
 }
 
 void
-ConditionMonitorWind::SaveLast()
+ConditionMonitorWind::SaveLast() noexcept
 {
   last_wind = wind;
 }

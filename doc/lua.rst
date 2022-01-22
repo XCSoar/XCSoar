@@ -178,23 +178,33 @@ The following attributes are provided by ``xcsoar.blackboard``:
 
  * - Name
    - Description
+ * - ``clock``
+   - A monotonic wall clock time [s], with an undefined reference.
+ * - ``time``
+   - A wall clock time [s], since midnight (UTC) of the day the flight
+     started.  Not strictly monotonic (can warp under certain
+     circumstances).
+ * - ``date_time_utc``
+   - A `date table <https://www.lua.org/pil/22.1.html>`__ describing
+     the current date and time (UTC), preferably from the GPS.  Not
+     strictly monotonic (can warp under certain circumstances).
  * - ``location``
    - The current location (table with keys ``longitude`` and
-     ``latitude`` in degrees) according to GPS.
+     ``latitude`` [°]) according to GPS.
  * - ``altitude``
    - The current altitude above MSL [m].
  * - ``track``
-   - The current flying direction above ground in degrees.
+   - The current flying direction above ground [°].
  * - ``ground_speed``
    - The aircraft speed relative to the ground [:math:`m/s`].
  * - ``air_speed``
    - The true airspeed [:math:`m/s`].
  * - ``bank_angle``
-   - The bank angle [degrees].
+   - The bank angle [°].
  * - ``pitch_angle``
-   - The pitch angle [degrees].
+   - The pitch angle [°].
  * - ``heading``
-   - The current magnetic heading in [degrees].
+   - The current magnetic heading in [°].
  * - ``g_load``
    - The current g-load.
  * - ``static_pressure``
@@ -218,8 +228,8 @@ The following attributes are provided by ``xcsoar.blackboard``:
  * - ``netto_vario``
    - The netto variometer value [:math:`m/s`].
 
-Any of these may be ``nil`` if its value is not known, e.g. if there
-is no GPS fix.
+Any of these (except for ``clock``) may be ``nil`` if its value is not
+known, e.g. if there is no GPS fix.
 
 .. _lua.map:
 
@@ -303,15 +313,15 @@ The following attributes are provided by ``xcsoar.task``:
  * - Name
    - Description
  * - ``bearing``
-   - The true bearing to the next waypoint [degrees]. For AAT tasks,
+   - The true bearing to the next waypoint [°]. For AAT tasks,
      this is the true bearing to the target within the AAT sector.
  * - ``bearing_diff``
    - The difference between the glider's track bearing, to the bearing
      of the next waypoint, or for AAT tasks, to the bearing to the
-     target within the AAT sector [degrees].
+     target within the AAT sector [°].
  * - ``radial``
    - The true bearing from the next waypoint to your
-     position. [degrees].
+     position. [°].
  * - ``next_distance``
    - The distance to the currently selected waypoint [m].  For AAT
      tasks, this is the distance to the target within the AAT sector.
@@ -497,9 +507,9 @@ The following attributes are provided by ``xcsoar.wind``:
  * - ``setwindspeed(float value)``
    - Sets manual the wind speed [:math:`m/s`].
  * - ``wind_bearing``
-   - The current wind bearing [degrees].
+   - The current wind bearing [°].
  * - ``setwindbearing(float value)``
-   - Sets manual the wind bearing [degrees].
+   - Sets manual the wind bearing [°].
  * - ``clear()``
    - Clears the wind settings and calculations.
 

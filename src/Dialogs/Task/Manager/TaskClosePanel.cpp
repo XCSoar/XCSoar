@@ -153,3 +153,9 @@ TaskClosePanel::SetFocus() noexcept
   close_button.SetFocus();
   return true;
 }
+
+bool
+TaskClosePanel::HasFocus() const noexcept
+{
+  return close_button.HasFocus() || revert_button.HasFocus();
+}

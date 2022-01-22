@@ -1,6 +1,8 @@
 # This file provides "make" rules for the C++ standard library.
 
-ifneq ($(LIBCXX),)
+LIBCXX ?= $(CLANG)
+
+ifeq ($(LIBCXX),y)
   # using libc++
 
   include $(topdir)/build/libcxx.mk

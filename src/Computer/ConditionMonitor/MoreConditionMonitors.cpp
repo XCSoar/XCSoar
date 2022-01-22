@@ -19,32 +19,14 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
+
 */
 
-#include "io/TextWriter.hpp"
-#include "system/Args.hpp"
+#include "MoreConditionMonitors.hpp"
 
-#include <tchar.h>
-#include <stdio.h>
-#include <string.h>
-
-int main(int argc, char **argv)
+void
+MoreConditionMonitors::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
+                              const ComputerSettings &settings) noexcept
 {
-  Args args(argc, argv, "FILE");
-  const auto path = args.ExpectNextPath();
-  args.ExpectEnd();
-
-  TextWriter writer(path);
-  if (!writer.IsOpen()) {
-    fprintf(stderr, "Failed to open file\n");
-    return 1;
-  }
-
-  writer.WriteLine("An ASCII line: ü");
-  writer.WriteLine(_T("A UNICODE line: ü"));
-  writer.FormatLine("An ASCII line: ü%s", "ä");
-  writer.FormatLine(_T("A UNICODE line: ü%s"), _T("a"));
-  writer.FormatLine(_T("A UNICODE line: ü%s"), _T("ä"));
-
-  return EXIT_SUCCESS;
+  airspace_enter.Update(basic, calculated, settings);
 }

@@ -263,6 +263,12 @@ TabWidget::SetFocus() noexcept
 }
 
 bool
+TabWidget::HasFocus() const noexcept
+{
+  return PagerWidget::HasFocus() || tab_display->HasFocus();
+}
+
+bool
 TabWidget::KeyPress(unsigned key_code) noexcept
 {
   // TODO: implement a few hotkeys

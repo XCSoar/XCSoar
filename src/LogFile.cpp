@@ -24,7 +24,8 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "Asset.hpp"
-#include "io/TextWriter.hpp"
+#include "io/FileOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
 #include "Formatter/TimeFormatter.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "system/Path.hpp"
@@ -43,13 +44,12 @@ Copyright_License {
 #include <fcntl.h>
 #endif
 
-static TextWriter
-OpenLog() noexcept
+static FileOutputStream
+OpenLog()
 {
   static bool initialised = false;
   static AllocatedPath path = nullptr;
 
-  const bool append = initialised;
   if (!initialised) {
     initialised = true;
 
@@ -72,7 +72,7 @@ OpenLog() noexcept
 #endif
   }
 
-  return TextWriter(path, append);
+  return FileOutputStream{path, FileOutputStream::Mode::APPEND_OR_CREATE};
 }
 
 static void
@@ -84,13 +84,26 @@ LogString(const char *p) noexcept
   fprintf(stderr, "%s\n", p);
 #endif
 
-  TextWriter writer(OpenLog());
-  if (!writer.IsOpen())
-    return;
+  try {
+    auto fos = OpenLog();
+    BufferedOutputStream bos{fos};
 
-  char time_buffer[32];
-  FormatISO8601(time_buffer, BrokenDateTime::NowUTC());
-  writer.FormatLine("[%s] %s", time_buffer, p);
+    bos.Write('[');
+
+    {
+      char time_buffer[32];
+      FormatISO8601(time_buffer, BrokenDateTime::NowUTC());
+      bos.Write(time_buffer);
+    }
+
+    bos.Write("] ");
+    bos.Write(p);
+    bos.NewLine();
+
+    bos.Flush();
+    fos.Commit();
+  } catch (...) {
+  }
 }
 
 void
@@ -111,13 +124,26 @@ LogFormat(const char *fmt, ...) noexcept
 static void
 LogString(const wchar_t *p) noexcept
 {
-  TextWriter writer(OpenLog());
-  if (!writer.IsOpen())
-    return;
+  try {
+    auto fos = OpenLog();
+    BufferedOutputStream bos{fos};
 
-  wchar_t time_buffer[32];
-  FormatISO8601(time_buffer, BrokenDateTime::NowUTC());
-  writer.FormatLine(L"[%s] %s", time_buffer, p);
+    bos.Write('[');
+
+    {
+      char time_buffer[32];
+      FormatISO8601(time_buffer, BrokenDateTime::NowUTC());
+      bos.Write(time_buffer);
+    }
+
+    bos.Write("] ");
+    bos.Write(p);
+    bos.NewLine();
+
+    bos.Flush();
+    fos.Commit();
+  } catch (...) {
+  }
 }
 
 void

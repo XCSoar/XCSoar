@@ -51,8 +51,10 @@ public:
             const MapSettings &settings) noexcept;
 
   void DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
-                 unsigned length, WindArrowStyle arrow_style,
-                 int offset = 23) noexcept;
+                 unsigned width, unsigned length, unsigned tail_length,
+                 WindArrowStyle arrow_style,
+                 int offset,
+                 unsigned scale) noexcept;
 };
 
 #endif

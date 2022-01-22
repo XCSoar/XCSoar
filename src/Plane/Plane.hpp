@@ -37,8 +37,8 @@ struct Plane
 
   PolarShape polar_shape;
 
-  double reference_mass;
-  double dry_mass;
+  double empty_mass;
+  double dry_mass_obsolete; // unused entry for plane file compatibility. to be removed 2023..
   double max_ballast;
   double max_speed;
   double wing_area;

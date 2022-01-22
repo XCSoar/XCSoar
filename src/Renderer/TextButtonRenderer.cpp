@@ -36,18 +36,28 @@ TextButtonRenderer::GetMinimumButtonWidth(const ButtonLook &look,
 
 inline void
 TextButtonRenderer::DrawCaption(Canvas &canvas, const PixelRect &rc,
-                                bool enabled, bool focused,
-                                bool pressed) const noexcept
+                                ButtonState state) const noexcept
 {
   const ButtonLook &look = GetLook();
 
-  canvas.SetBackgroundTransparent();
-  if (!enabled)
+  switch (state) {
+  case ButtonState::DISABLED:
     canvas.SetTextColor(look.disabled.color);
-  else if (focused)
+    break;
+
+  case ButtonState::FOCUSED:
+  case ButtonState::PRESSED:
     canvas.SetTextColor(look.focused.foreground_color);
-  else
+    break;
+
+  case ButtonState::SELECTED:
+    canvas.SetTextColor(look.selected.foreground_color);
+    break;
+
+  case ButtonState::ENABLED:
     canvas.SetTextColor(look.standard.foreground_color);
+    break;
+  }
 
   canvas.Select(*look.font);
 
@@ -63,13 +73,12 @@ TextButtonRenderer::GetMinimumButtonWidth() const noexcept
 
 void
 TextButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
-                               bool enabled, bool focused,
-                               bool pressed) const noexcept
+                               ButtonState state) const noexcept
 {
-  frame_renderer.DrawButton(canvas, rc, focused, pressed);
+  frame_renderer.DrawButton(canvas, rc, state);
 
   if (!caption.empty())
-    DrawCaption(canvas, frame_renderer.GetDrawingRect(rc, pressed),
-                enabled, focused, pressed);
+    DrawCaption(canvas, frame_renderer.GetDrawingRect(rc, state),
+                state);
 }
 

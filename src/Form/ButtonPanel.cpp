@@ -29,6 +29,8 @@ Copyright_License {
 #include "ui/event/KeyCode.hpp"
 #include "Asset.hpp"
 
+#include <algorithm>
+
 ButtonPanel::ButtonPanel(ContainerWindow &_parent,
                          const ButtonLook &_look) noexcept
   :parent(_parent), look(_look), selected_index(-1) {
@@ -297,6 +299,14 @@ ButtonPanel::HideAll() noexcept
     i->Hide();
 }
 
+bool
+ButtonPanel::HasFocus() const noexcept
+{
+  return std::any_of(buttons.begin(), buttons.end(), [](const Button *b){
+    return b->HasFocus();
+  });
+}
+
 void
 ButtonPanel::SetSelectedIndex(unsigned _index) noexcept
 {
@@ -353,7 +363,7 @@ ButtonPanel::KeyPress(unsigned key_code) noexcept
     }
   }
 
-  if (selected_index >= 0 && !HasPointer()) {
+  if (selected_index >= 0) {
     if (key_code == KEY_LEFT) {
       SelectPrevious();
       return true;

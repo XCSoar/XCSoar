@@ -24,17 +24,42 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_LOGGER_HPP
 #define XCSOAR_NMEA_LOGGER_HPP
 
-namespace NMEALogger
-{
-  extern bool enabled;
+#include "thread/Mutex.hxx"
 
-  void Shutdown();
+#include <memory>
+
+class FileOutputStream;
+
+class NMEALogger {
+  Mutex mutex;
+  std::unique_ptr<FileOutputStream> file;
+
+  bool enabled = false;
+
+public:
+  NMEALogger() noexcept;
+  ~NMEALogger() noexcept;
+
+  bool IsEnabled() const noexcept {
+    return enabled;
+  }
+
+  void Enable() noexcept {
+    enabled = true;
+  }
+
+  void ToggleEnabled() noexcept {
+    enabled = !enabled;
+  }
 
   /**
    * Logs NMEA string to log file
    * @param text
    */
-  void Log(const char *line);
-}
+  void Log(const char *line) noexcept;
+
+private:
+  void Start();
+};
 
 #endif

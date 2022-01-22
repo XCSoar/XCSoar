@@ -149,6 +149,12 @@ public:
   virtual bool SetFocus() noexcept = 0;
 
   /**
+   * Check whether this widget has keyboard focus.
+   */
+  [[gnu::pure]]
+  virtual bool HasFocus() const noexcept = 0;
+
+  /**
    * Allow the #Widget to handle a key press.
    */
   virtual bool KeyPress(unsigned key_code) noexcept = 0;
@@ -173,6 +179,7 @@ public:
   bool Leave() noexcept override;
   void Move(const PixelRect &rc) noexcept override;
   bool SetFocus() noexcept override;
+  bool HasFocus() const noexcept override;
   bool KeyPress(unsigned key_code) noexcept override;
 };
 

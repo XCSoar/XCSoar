@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Features.hpp"
 #include "ui/dim/Rect.hpp"
-#include "util/Compiler.h"
 
 #include <cassert>
 
@@ -199,7 +198,7 @@ public:
   /**
    * Is it this window?
    */
-  gcc_pure
+  [[gnu::pure]]
   bool Identify(HWND h) const noexcept {
     assert(IsDefined());
 
@@ -209,7 +208,7 @@ public:
   /**
    * Is it this window or one of its descendants?
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IdentifyDescendant(HWND h) const noexcept {
     assert(IsDefined());
 
@@ -317,7 +316,7 @@ public:
    * Determines the root owner window of this Window.  This is
    * probably a pointer to the #MainWindow instance.
    */
-  gcc_pure
+  [[gnu::pure]]
   ContainerWindow *GetRootOwner() noexcept;
 
   /**
@@ -325,7 +324,7 @@ public:
    * window, i.e. whether its dimensions are not smaller than its
    * parent's dimensions.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsMaximised() const noexcept;
 
   void Move(int left, int top) noexcept {
@@ -477,7 +476,7 @@ public:
    * the visibility of parent windows, it just checks if the "visible"
    * flag is set for this Window.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsVisible() const noexcept {
     assert(IsDefined());
 
@@ -548,7 +547,7 @@ public:
   }
 #endif
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsTabStop() const noexcept {
     assert(IsDefined());
 
@@ -559,7 +558,7 @@ public:
 #endif
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsControlParent() const noexcept {
     assert(IsDefined());
 
@@ -573,7 +572,7 @@ public:
   /**
    * Can this window get user input?
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsEnabled() const noexcept {
     assert(IsDefined());
 
@@ -624,7 +623,7 @@ public:
 
 #endif /* USE_WINUSER */
 
-  gcc_pure
+  [[gnu::pure]]
   bool HasFocus() const noexcept {
     assert(IsDefined());
 
@@ -672,7 +671,7 @@ public:
     return (WNDPROC)::SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)wndproc);
   }
 
-  gcc_const
+  [[gnu::const]]
   static void *GetUserData(HWND hWnd) noexcept {
     return (void *)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
   }
@@ -692,7 +691,7 @@ public:
   /**
    * Returns the position on the screen.
    */
-  gcc_pure
+  [[gnu::pure]]
   const PixelRect GetScreenPosition() const noexcept
   {
     assert(IsDefined());
@@ -710,7 +709,7 @@ public:
   /**
    * Returns the position within the parent window.
    */
-  gcc_pure
+  [[gnu::pure]]
   const PixelRect GetPosition() const noexcept
   {
     assert(IsDefined());
@@ -740,7 +739,7 @@ public:
 #endif
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const PixelRect GetClientRect() const noexcept
   {
     assert(IsDefined());
@@ -754,7 +753,7 @@ public:
 #endif
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const PixelSize GetSize() const noexcept
   {
     assert(IsDefined());
@@ -771,7 +770,7 @@ public:
    * Checks whether the specified coordinates are inside the Window's
    * client area.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsInside(PixelPoint p) const noexcept {
     assert(IsDefined());
 
@@ -784,7 +783,7 @@ public:
    * Returns the parent's client area rectangle.
    */
 #ifdef USE_WINUSER
-  gcc_pure
+  [[gnu::pure]]
   PixelRect GetParentClientRect() const noexcept {
     assert(IsDefined());
 
@@ -796,7 +795,7 @@ public:
     return rc;
   }
 #else
-  gcc_pure
+  [[gnu::pure]]
   PixelRect GetParentClientRect() const noexcept;
 #endif
 
@@ -827,7 +826,7 @@ public:
    * Converts a #HWND into a #Window pointer, without checking if that
    * is legal.
    */
-  gcc_const
+  [[gnu::const]]
   static Window *GetUnchecked(HWND hWnd) noexcept {
     return (Window *)GetUserData(hWnd);
   }
@@ -837,7 +836,7 @@ public:
    * HWND is not a Window peer.  This only works for windows which
    * use our WndProc.
    */
-  gcc_const
+  [[gnu::const]]
   static Window *GetChecked(HWND hWnd) noexcept {
     WNDPROC wndproc = (WNDPROC)::GetWindowLongPtr(hWnd, GWLP_WNDPROC);
     return wndproc == WndProc
@@ -845,7 +844,7 @@ public:
       : nullptr;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   LONG GetWindowLong(int nIndex) const noexcept {
     assert(IsDefined());
 
@@ -919,7 +918,7 @@ public:
    * @return true if the window will handle they key, false if the
    * dialog manager may use it
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual bool OnKeyCheck(unsigned key_code) const;
 
   virtual bool OnKeyDown(unsigned key_code);

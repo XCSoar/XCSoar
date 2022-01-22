@@ -124,7 +124,7 @@ public:
    *
    * @param press Atmospheric pressure model and QNH
    */
-  void SetFlightLevels(const AtmosphericPressure &press) noexcept;
+  void SetFlightLevels(AtmosphericPressure press) noexcept;
 
   /**
    * Set activity based on day mask

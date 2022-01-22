@@ -30,10 +30,7 @@ FlatTriangleFan::CalcBoundingBox() noexcept
 {
   assert(!vs.empty());
 
-  auto it = vs.begin(), end = vs.end();
-  bounding_box = FlatBoundingBox(*it);
-  for (++it; it != end; ++it)
-    bounding_box.Expand(*it);
+  bounding_box = {vs.begin(), vs.end()};
 }
 
 static constexpr bool

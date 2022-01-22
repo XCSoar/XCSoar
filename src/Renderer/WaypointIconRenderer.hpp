@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WAYPOINT_ICON_RENDERER_HPP
 #define XCSOAR_WAYPOINT_ICON_RENDERER_HPP
 
+#include "WaypointReachability.hpp"
 #include "Math/Angle.hpp"
 
 struct PixelPoint;
@@ -41,28 +42,21 @@ class WaypointIconRenderer
   Angle screen_rotation;
 
 public:
-  enum Reachability
-  {
-    Invalid,
-    Unreachable,
-    ReachableStraight,
-    ReachableTerrain,
-  };
-
   WaypointIconRenderer(const WaypointRendererSettings &_settings,
                        const WaypointLook &_look,
                        Canvas &_canvas, bool _small_icons = false,
-                       Angle _screen_rotation = Angle::Zero())
+                       Angle _screen_rotation = Angle::Zero()) noexcept
     :settings(_settings), look(_look),
      canvas(_canvas), small_icons(_small_icons),
      screen_rotation(_screen_rotation) {}
 
   void Draw(const Waypoint &waypoint, const PixelPoint &point,
-            Reachability reachable = Unreachable, bool in_task = false);
+            WaypointReachability reachable=WaypointReachability::UNREACHABLE,
+            bool in_task = false) noexcept;
 
 private:
   void DrawLandable(const Waypoint &waypoint, const PixelPoint &point,
-                    Reachability reachable = Unreachable);
+                    WaypointReachability reachable=WaypointReachability::UNREACHABLE) noexcept;
 };
 
 #endif

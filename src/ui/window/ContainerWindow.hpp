@@ -80,7 +80,7 @@ protected:
 
   void OnPaint(Canvas &canvas) override;
 #else /* USE_WINUSER */
-  virtual void OnPaint(gcc_unused Canvas &canvas) {}
+  virtual void OnPaint([[maybe_unused]] Canvas &canvas) {}
 #endif
 
 public:
@@ -88,7 +88,7 @@ public:
   void AddChild(Window &child) noexcept;
   void RemoveChild(Window &child) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool HasChild(const Window &w) const noexcept {
     return children.Contains(w);
   }
@@ -112,7 +112,7 @@ public:
   /**
    * Locate a child window by its relative coordinates.
    */
-  gcc_pure
+  [[gnu::pure]]
   Window *ChildAt(PixelPoint p) noexcept {
     return children.FindAt(p);
   }
@@ -121,7 +121,7 @@ public:
    * Locates the child which should get a mouse event.  Prefers the
    * captured child.
    */
-  gcc_pure
+  [[gnu::pure]]
   Window *EventChildAt(PixelPoint p) noexcept;
 
   void SetActiveChild(Window &child) noexcept;
@@ -132,10 +132,10 @@ public:
    * Override the Window::GetFocusedWindow() method, and search in
    * the active child window.
    */
-  gcc_pure
+  [[gnu::pure]]
   Window *GetFocusedWindow() noexcept override;
 
-  gcc_pure
+  [[gnu::pure]]
   WindowReference GetFocusedWindowReference() noexcept;
 
   void SetChildCapture(Window *window) noexcept;
@@ -143,10 +143,10 @@ public:
   void ClearCapture() noexcept override;
 
 protected:
-  gcc_pure
+  [[gnu::pure]]
   Window *FindNextControl(Window *reference) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   Window *FindPreviousControl(Window *reference) noexcept;
 
 public:

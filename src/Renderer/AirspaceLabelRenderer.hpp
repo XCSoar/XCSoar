@@ -24,13 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_AIRSPACE_LABEL_RENDERER_HPP
 #define XCSOAR_AIRSPACE_LABEL_RENDERER_HPP
 
+#include "AirspaceLabelList.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
-#include "util/StaticArray.hxx"
-#include "Geo/GeoPoint.hpp"
-
-#ifndef ENABLE_OPENGL
-#include "TransparentRendererCache.hpp"
-#endif
 
 struct AirspaceLook;
 struct MoreData;
@@ -40,78 +35,62 @@ struct AirspaceRendererSettings;
 struct AirspaceWarningConfig;
 class Airspaces;
 class ProtectedAirspaceWarningManager;
-class AirspaceWarningCopy;
 class Canvas;
 class WindowProjection;
 
 class AirspaceLabelRenderer
 {
   const AirspaceLook &look;
-  const Airspaces *airspaces;
-  const ProtectedAirspaceWarningManager *warning_manager;
-
-  StaticArray<GeoPoint,32> intersections;
-
-#ifndef ENABLE_OPENGL
-  /**
-   * This object caches the airspace fill.  This avoids drawing it
-   * again and again each frame when nothing has changed.
-   */
-  TransparentRendererCache fill_cache;
-#endif
+  const Airspaces *airspaces = nullptr;
+  const ProtectedAirspaceWarningManager *warning_manager = nullptr;
 
 public:
-  AirspaceLabelRenderer(const AirspaceLook &_look)
-    :look(_look), airspaces(nullptr), warning_manager(nullptr) {}
+  explicit AirspaceLabelRenderer(const AirspaceLook &_look) noexcept
+    :look(_look) {}
 
-  const AirspaceLook &GetLook() const {
+  const AirspaceLook &GetLook() const noexcept {
     return look;
   }
 
-  const Airspaces *GetAirspaces() const {
+  const Airspaces *GetAirspaces() const noexcept {
     return airspaces;
   }
 
-  const ProtectedAirspaceWarningManager *GetWarningManager() const {
+  const ProtectedAirspaceWarningManager *GetWarningManager() const noexcept {
     return warning_manager;
   }
 
-  void SetAirspaces(const Airspaces *_airspaces) {
+  void SetAirspaces(const Airspaces *_airspaces) noexcept {
     airspaces = _airspaces;
   }
 
-  void SetAirspaceWarnings(const ProtectedAirspaceWarningManager *_warning_manager) {
+  void SetAirspaceWarnings(const ProtectedAirspaceWarningManager *_warning_manager) noexcept {
     warning_manager = _warning_manager;
   }
 
-  void Clear() {
+  void Clear() noexcept {
     airspaces = nullptr;
     warning_manager = nullptr;
   }
 
 private:
   void DrawInternal(Canvas &canvas,
-#ifndef ENABLE_OPENGL
-                    Canvas &stencil_canvas,
-#endif
                     const WindowProjection &projection,
-                    const AirspaceRendererSettings &settings,
-                    const AirspaceWarningCopy &awc,
                     AirspacePredicate visible,
-                    const AirspaceWarningConfig &config);
+                    const AirspaceWarningConfig &config) noexcept;
+
+  void DrawLabel(Canvas &canvas, const WindowProjection &projection,
+                 const AirspaceLabelList::Label &label) noexcept;
 
 public:
    /**
    * Draw labels that are visible according to standard rules.
    */
   void Draw(Canvas &canvas,
-#ifndef ENABLE_OPENGL
-            Canvas &stencil_canvas,
-#endif
             const WindowProjection &projection,
             const MoreData &basic, const DerivedInfo &calculated,
             const AirspaceComputerSettings &computer_settings,
-            const AirspaceRendererSettings &settings);
+            const AirspaceRendererSettings &settings) noexcept;
 };
 
 #endif

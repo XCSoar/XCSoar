@@ -25,56 +25,70 @@
 
 #include "Geo/AltitudeReference.hpp"
 
-#include <cstdint>
-
 class AtmosphericPressure;
 struct AltitudeState;
 
 /** Structure to hold airspace altitude boundary data */
 struct AirspaceAltitude
 {
-  /** Altitude AMSL (m) resolved from type */
+  /**
+   * Altitude AMSL (m) resolved from type.
+   *
+   * Only valid if reference==AltitudeReference::MSL.  If
+   * reference==AltitudeReference::AGL, a fallback value will be
+   * calculated derived from terrain height, if available.  If
+   * reference==AltitudeReference::STD, a fallback value will be
+   * calculated derived from QNH, if available.
+   */
   double altitude;
-  /** Flight level (100ft) for FL-referenced boundary */
+
+  /**
+   * Flight level (100ft) for FL-referenced boundary.
+   *
+   * Only valid if reference==AltitudeReference::STD.
+   */
   double flight_level;
-  /** Height above terrain (m) for ground-referenced boundary */
+
+  /**
+   * Height above terrain (m) for ground-referenced boundary.
+   *
+   * Only valid if reference==AltitudeReference::AGL.
+   */
   double altitude_above_terrain;
 
   /** Type of airspace boundary */
   AltitudeReference reference;
 
-  /** 
-   * Constructor.  Initialises to zero.
-   * 
-   * @return Initialised blank object
-   */
-  AirspaceAltitude()
-    :altitude(0),
-     flight_level(0),
-     altitude_above_terrain(0),
-     reference(AltitudeReference::NONE) {}
+  static constexpr AirspaceAltitude Invalid() noexcept {
+    AirspaceAltitude a;
+    a.reference = AltitudeReference::NONE;
+    return a;
+  }
 
   /**
    * Get Altitude AMSL (m) resolved from type.
    * For AGL types, this assumes the terrain height
    * is the terrain height at the aircraft.
    */
-  double GetAltitude(const AltitudeState &state) const;
+  [[gnu::pure]]
+  double GetAltitude(const AltitudeState &state) const noexcept;
 
   /** Is this altitude reference at or above the aircraft state? */
-  bool IsAbove(const AltitudeState &state, const double margin = 0) const;
+  [[gnu::pure]]
+  bool IsAbove(const AltitudeState &state, double margin = 0) const noexcept;
 
   /** Is this altitude reference at or below the aircraft state? */
-  bool IsBelow(const AltitudeState &state, const double margin = 0) const;
+  [[gnu::pure]]
+  bool IsBelow(const AltitudeState &state, double margin = 0) const noexcept;
 
   /**
    * Test whether airspace boundary is the terrain
    *
    * @return True if this altitude limit is the terrain
    */
-  bool IsTerrain() const {
-    return altitude_above_terrain <= 0 &&
-      reference == AltitudeReference::AGL;
+  constexpr bool IsTerrain() const noexcept {
+    return reference == AltitudeReference::AGL &&
+      altitude_above_terrain <= 0;
   }
 
   /**
@@ -84,12 +98,12 @@ struct AirspaceAltitude
    *
    * @param alt Height of terrain at airspace center
    */
-  void SetGroundLevel(double alt);
+  void SetGroundLevel(double alt) noexcept;
 
   /**
    * Is it necessary to call SetGroundLevel() for this AirspaceAltitude?
    */
-  bool NeedGroundLevel() const {
+  constexpr bool NeedGroundLevel() const noexcept {
     return reference == AltitudeReference::AGL;
   }
 
@@ -100,9 +114,10 @@ struct AirspaceAltitude
    *
    * @param press Atmospheric pressure model (to obtain QNH)
    */
-  void SetFlightLevel(const AtmosphericPressure &press);
+  void SetFlightLevel(AtmosphericPressure press) noexcept;
 
-  static bool SortHighest(const AirspaceAltitude &a, const AirspaceAltitude &b) {
+  static constexpr bool SortHighest(const AirspaceAltitude &a,
+                                    const AirspaceAltitude &b) noexcept {
     return a.altitude > b.altitude;
   }
 };

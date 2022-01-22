@@ -102,6 +102,7 @@ const char WeGlidePilotBirthDate[] = "WeGlidePilotBirthDate";
 const char WeGlideAircraftType[] = "WeGlideAircraftType";
 const char WeGlideAutomaticUpload[] = "WeGlideAutomaticUpload";
 const char CoPilotName[] = "CoPilotName";
+const char CrewWeightTemplate[] = "CrewWeightTemplate";
 const char AircraftType[] = "AircraftType";
 const char AircraftReg[] = "AircraftReg";
 const char CompetitionId[] = "AircraftRego";
@@ -274,6 +275,8 @@ const char PCMetUsername[] = "PCMetUsername";
 const char PCMetPassword[] = "PCMetPassword";
 const char PCMetFtpUsername[] = "PCMetFtpUsername";
 const char PCMetFtpPassword[] = "PCMetFtpPassword";
+
+const char EnableThermalInformationMap[] = "EnableThermalInformationMap";
 
 const char EnableLocationMapItem[] = "EnableLocationMapItem";
 const char EnableArrivalAltitudeMapItem[] = "EnableArrivalAltitudeMapItem";

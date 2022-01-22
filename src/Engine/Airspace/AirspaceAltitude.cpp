@@ -25,7 +25,7 @@
 #include "Navigation/Aircraft.hpp"
 
 void
-AirspaceAltitude::SetFlightLevel(const AtmosphericPressure &press)
+AirspaceAltitude::SetFlightLevel(const AtmosphericPressure press) noexcept
 {
   static constexpr double fl_feet_to_m(30.48);
   if (reference == AltitudeReference::STD)
@@ -33,20 +33,22 @@ AirspaceAltitude::SetFlightLevel(const AtmosphericPressure &press)
 }
 
 void
-AirspaceAltitude::SetGroundLevel(const double alt)
+AirspaceAltitude::SetGroundLevel(const double alt) noexcept
 {
   if (reference == AltitudeReference::AGL)
     altitude = altitude_above_terrain + alt;
 }
 
 bool
-AirspaceAltitude::IsAbove(const AltitudeState &state, const double margin) const
+AirspaceAltitude::IsAbove(const AltitudeState &state,
+                          const double margin) const noexcept
 {
   return GetAltitude(state) >= state.altitude - margin;
 }
 
 bool
-AirspaceAltitude::IsBelow(const AltitudeState &state, const double margin) const
+AirspaceAltitude::IsBelow(const AltitudeState &state,
+                          const double margin) const noexcept
 {
   return GetAltitude(state) <= state.altitude + margin ||
     /* special case: GND is always "below" the aircraft, even if the
@@ -56,7 +58,7 @@ AirspaceAltitude::IsBelow(const AltitudeState &state, const double margin) const
 }
 
 double
-AirspaceAltitude::GetAltitude(const AltitudeState &state) const
+AirspaceAltitude::GetAltitude(const AltitudeState &state) const noexcept
 {
   // TODO: check if state.altitude_agl is valid
   return reference == AltitudeReference::AGL

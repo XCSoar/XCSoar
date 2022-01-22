@@ -41,8 +41,7 @@ public:
     :frame_renderer(_look), color(_color) {}
 
   void DrawButton(Canvas &canvas, const PixelRect &rc,
-                  bool enabled, bool focused,
-                  bool pressed) const noexcept override;
+                  ButtonState state) const noexcept override;
 };
 
 #endif

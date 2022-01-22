@@ -45,6 +45,7 @@ Copyright_License {
 #include <math.h>
 
 enum ControlIndex {
+  Crew,
   Ballast,
   WingLoading,
   Bugs,
@@ -76,6 +77,12 @@ public:
   }
 
   void SetButtons();
+  void SetCrewMass(double _crew_mass) {
+    polar_settings.glide_polar_task.SetCrewMass(_crew_mass);
+    PublishPolarSettings();
+    SetBallast();
+  }
+  
   void SetBallast();
   void SetBallastTimer(bool active);
   void FlipBallastTimer();
@@ -148,10 +155,11 @@ FlightSetupPanel::SetBallast()
 
   if (device_blackboard != NULL) {
     const Plane &plane = CommonInterface::GetComputerSettings().plane;
-    if (plane.dry_mass > 0) {
+    if (plane.empty_mass > 0) {
+      auto dry_mass = plane.empty_mass + polar_settings.glide_polar_task.GetCrewMass();
       auto fraction = polar_settings.glide_polar_task.GetBallast();
-      auto overload = (plane.dry_mass + fraction * plane.max_ballast) /
-        plane.dry_mass;
+      auto overload = (dry_mass + fraction * plane.max_ballast) /
+        dry_mass;
 
       MessageOperationEnvironment env;
       device_blackboard->SetBallast(fraction, overload, env);
@@ -250,7 +258,10 @@ FlightSetupPanel::OnTimer()
 void
 FlightSetupPanel::OnModified(DataField &df) noexcept
 {
-  if (IsDataField(Ballast, df)) {
+  if (IsDataField(Crew, df)) {
+    const DataFieldFloat &dff = (const DataFieldFloat &)df;
+    SetCrewMass(Units::ToSysMass(dff.GetValue()));
+  } else if (IsDataField(Ballast, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
     SetBallastLitres(dff.GetValue());
   } else if (IsDataField(Bugs, df)) {
@@ -271,9 +282,16 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
   const Plane &plane = CommonInterface::GetComputerSettings().plane;
 
+  AddFloat(_("Crew"),
+           _("All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."),
+           _T("%.0f %s"), _T("%.0f"),
+           0, 300, 5, false, UnitGroup::MASS,
+           polar_settings.glide_polar_task.GetCrewMass(),
+           this);
+  
   const double db = 5;
   AddFloat(_("Ballast"),
-           _("Ballast of the glider.  Increase this value if the pilot/cockpit load is greater than the reference pilot weight of the glide polar (typically 75kg).  Press ENTER on this field to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."),
+           _("Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."),
            _T("%.0f l"), _T("%.0f"),
            0, db*ceil(plane.max_ballast/db), db, false, 0,
            this);

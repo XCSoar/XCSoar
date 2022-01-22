@@ -40,6 +40,7 @@ void DoQueuedEvents();
 
 // GCE = Glide Computer Event
 enum {
+  GCE_AIRSPACE_NEAR,
   GCE_AIRSPACE_ENTER,
   GCE_AIRSPACE_LEAVE,
   GCE_COMMPORT_RESTART,

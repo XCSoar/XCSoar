@@ -45,4 +45,8 @@ Profile::Load(const ProfileMap &map, WeatherSettings &settings)
 #ifdef HAVE_PCMET
   Load(map, settings.pcmet);
 #endif
+
+#ifdef HAVE_HTTP
+  map.Get(ProfileKeys::EnableThermalInformationMap, settings.enable_tim);
+#endif
 }

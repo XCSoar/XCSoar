@@ -26,7 +26,8 @@ Copyright_License {
 
 #include <algorithm>
 
-void AirspaceWarning::SaveState()
+void
+AirspaceWarning::SaveState() noexcept
 {
   state_last = state;
   state = WARNING_CLEAR;
@@ -35,7 +36,7 @@ void AirspaceWarning::SaveState()
 
 void
 AirspaceWarning::UpdateSolution(const State _state,
-                                const AirspaceInterceptSolution &_solution)
+                                const AirspaceInterceptSolution &_solution) noexcept
 {
   if (IsStateAccepted(_state)) {
     state = _state;
@@ -85,7 +86,7 @@ AirspaceWarning::WarningLive(const Duration ack_time,
 }
 
 bool
-AirspaceWarning::ChangedState() const
+AirspaceWarning::ChangedState() const noexcept
 {
   if (expired > expired_last)
     return true;
@@ -100,7 +101,7 @@ AirspaceWarning::ChangedState() const
 }
 
 bool
-AirspaceWarning::IsAckExpired() const
+AirspaceWarning::IsAckExpired() const noexcept
 {
   if (ack_day)
     // these ones persist
@@ -108,10 +109,14 @@ AirspaceWarning::IsAckExpired() const
 
   switch (state) {
   case WARNING_CLEAR:
+    /* no warning at all, assume it's still acked */
+    return false;
+
   case WARNING_TASK:
   case WARNING_FILTER:
   case WARNING_GLIDE:
     return acktime_warning.count() <= 0;
+
   case WARNING_INSIDE:
     return acktime_inside.count() <= 0;
   };
@@ -122,7 +127,7 @@ AirspaceWarning::IsAckExpired() const
 }
 
 void
-AirspaceWarning::Acknowledge()
+AirspaceWarning::Acknowledge() noexcept
 {
   if (state == WARNING_INSIDE)
     acktime_inside = null_acktime;
@@ -131,7 +136,7 @@ AirspaceWarning::Acknowledge()
 }
 
 void
-AirspaceWarning::AcknowledgeInside(const bool set)
+AirspaceWarning::AcknowledgeInside(const bool set) noexcept
 {
   if (set)
     acktime_inside = null_acktime;
@@ -140,7 +145,7 @@ AirspaceWarning::AcknowledgeInside(const bool set)
 }
 
 void
-AirspaceWarning::AcknowledgeWarning(const bool set)
+AirspaceWarning::AcknowledgeWarning(const bool set) noexcept
 {
   if (set)
     acktime_warning = null_acktime;
@@ -149,7 +154,7 @@ AirspaceWarning::AcknowledgeWarning(const bool set)
 }
 
 bool
-AirspaceWarning::operator<(const AirspaceWarning &other) const
+AirspaceWarning::operator<(const AirspaceWarning &other) const noexcept
 {
   // compare bother.ack
   if (IsAckExpired() != other.IsAckExpired())
