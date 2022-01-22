@@ -118,11 +118,11 @@ class TopCanvas
   drmModeCrtc *saved_crtc = nullptr;
 #endif // MESA_KMS
 
-  EGLDisplay display;
+  EGLDisplay display = EGL_NO_DISPLAY;
 #ifndef ANDROID
-  EGLContext context;
+  EGLContext context = EGL_NO_CONTEXT;
 #endif // ANDROID
-  EGLSurface surface;
+  EGLSurface surface = EGL_NO_SURFACE;
 #endif // USE_EGL
 
 #ifdef USE_GLX
