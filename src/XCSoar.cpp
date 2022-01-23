@@ -116,7 +116,7 @@ Main()
 
   // Perform application initialization and run loop
   int ret = EXIT_FAILURE;
-  if (Startup())
+  if (Startup(screen_init.GetDisplay()))
     ret = CommonInterface::main_window->RunEventLoop();
 
   Shutdown();

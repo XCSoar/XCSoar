@@ -27,6 +27,7 @@ Copyright_License {
 #include "ui/canvas/opengl/Init.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
+#include "Components.hpp"
 
 using namespace UI;
 
@@ -36,7 +37,7 @@ ScreenGlobalInit::ScreenGlobalInit()
 
   Font::Initialise();
 
-  event_queue = new EventQueue();
+  event_queue = new EventQueue(display);
 
   ScreenInitialized();
 }

@@ -31,7 +31,7 @@ Copyright_License {
 #include <stdio.h>
 
 static void
-Main()
+Main(TestMainWindow &main_window)
 {
   Angle value = Angle::Zero();
   if (!AngleEntryDialog(_T("The caption"), value))

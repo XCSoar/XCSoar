@@ -45,13 +45,15 @@ enum class DisplayOrientation : uint8_t;
 
 namespace UI {
 
+class Display;
+
 class EventQueue final {
   ::EventLoop event_loop;
 
 #ifdef USE_X11
-  X11EventQueue input_queue{*this};
+  X11EventQueue input_queue;
 #elif defined(USE_WAYLAND)
-  WaylandEventQueue input_queue{*this};
+  WaylandEventQueue input_queue;
 #elif !defined(NON_INTERACTIVE)
   InputEventQueue input_queue{*this};
 #endif
@@ -65,7 +67,7 @@ class EventQueue final {
   bool quit = false;
 
 public:
-  EventQueue() noexcept;
+  explicit EventQueue(Display &display) noexcept;
   ~EventQueue() noexcept;
 
   auto &GetEventLoop() noexcept {

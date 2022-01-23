@@ -62,6 +62,8 @@ class MainWindow final : public UI::SingleWindow
   TestWindow test_window;
 
 public:
+  using UI::SingleWindow::SingleWindow;
+
   void Create(PixelSize size) {
     SingleWindow::Create(_T("Test"), size);
 
@@ -117,9 +119,9 @@ ParseCommandLine(Args &args)
 }
 
 static void
-Main()
+Main(UI::Display &display)
 {
-  MainWindow window;
+  MainWindow window{display};
   window.Create({500, 500});
 
   window.Show();

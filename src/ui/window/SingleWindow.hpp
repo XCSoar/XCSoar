@@ -48,6 +48,8 @@ class SingleWindow : public TopWindow {
   std::forward_list<WndForm *> dialogs;
 
 public:
+  using TopWindow::TopWindow;
+
 #ifdef USE_WINUSER
   /**
    * Register the WIN32 window class.

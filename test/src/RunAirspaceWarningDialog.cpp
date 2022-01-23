@@ -72,7 +72,7 @@ LoadFiles(Airspaces &airspace_database)
 }
 
 static void
-Main()
+Main(TestMainWindow &main_window)
 {
   Airspaces airspace_database;
 

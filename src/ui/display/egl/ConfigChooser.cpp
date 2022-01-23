@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ConfigChooser.hpp"
-#include "GBM.hpp"
+#include "ui/canvas/egl/GBM.hpp"
 #include "ui/opengl/Features.hpp"
 #include "util/RuntimeError.hxx"
 

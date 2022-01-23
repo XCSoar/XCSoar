@@ -142,6 +142,7 @@ private:
   bool late_initialised = false;
 
 public:
+  using SingleWindow::SingleWindow;
   ~MainWindow() noexcept override;
 
 protected:

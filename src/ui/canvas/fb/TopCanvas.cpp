@@ -103,7 +103,8 @@ TopCanvas::GetRect() const
 
 #ifdef USE_FB
 
-TopCanvas::TopCanvas()
+TopCanvas::TopCanvas(UI::Display &_display)
+  :display(_display)
 {
   assert(fd < 0);
 
@@ -215,9 +216,13 @@ TopCanvas::CheckResize()
 
 #elif defined(USE_VFB)
 
-TopCanvas::TopCanvas(PixelSize new_size)
+TopCanvas::TopCanvas(UI::Display &_display, PixelSize new_size)
+  :display(_display)
 {
   buffer.Allocate(new_size.width, new_size.height);
+
+  // suppress -Wunused
+  (void)display;
 }
 
 #else

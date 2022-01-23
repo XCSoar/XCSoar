@@ -31,7 +31,7 @@ Copyright_License {
 #include <stdio.h>
 
 static void
-Main()
+Main(TestMainWindow &main_window)
 {
   RoughTime value = RoughTime::Invalid();
   const RoughTimeDelta time_zone = RoughTimeDelta::FromMinutes(0);

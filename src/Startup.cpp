@@ -224,12 +224,11 @@ try {
 
 /**
  * "Boots" up XCSoar
- * @param hInstance Instance handle
  * @param lpCmdLine Command line string
  * @return True if bootup successful, False otherwise
  */
 bool
-Startup()
+Startup(UI::Display &display)
 {
   VerboseOperationEnvironment operation;
   operation.SetProgressRange(1024);
@@ -251,7 +250,7 @@ Startup()
 #endif
 
   MainWindow *const main_window = CommonInterface::main_window =
-    new MainWindow();
+    new MainWindow(display);
   main_window->Create(SystemWindowSize(), style);
   if (!main_window->IsDefined())
     return false;

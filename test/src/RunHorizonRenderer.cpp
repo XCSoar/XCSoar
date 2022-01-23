@@ -54,7 +54,7 @@ protected:
 };
 
 static void
-Main()
+Main(TestMainWindow &main_window)
 {
   HorizonLook horizon_look;
   horizon_look.Initialise();

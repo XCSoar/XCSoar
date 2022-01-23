@@ -22,11 +22,15 @@ Copyright_License {
 */
 
 #include "../TopWindow.hpp"
-#include "Hardware/DisplayDPI.hpp"
+#include "ui/display/Display.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/poll/Queue.hpp"
 #include "util/Macros.hpp"
+
+#ifdef USE_EGL
+#include "ui/egl/System.hpp"
+#endif
 
 #ifdef USE_GLX
 #include "ui/glx/System.hpp"
@@ -40,44 +44,13 @@ void
 TopWindow::CreateNative(const TCHAR *text, PixelSize size,
                         TopWindowStyle style)
 {
-  x_display = UI::event_queue->GetDisplay();
-  assert(x_display != nullptr);
-
-  /* query the display dimensions from Xlib to calculate the DPI
-     value */
-  const auto x_screen = DefaultScreen(x_display);
-  const auto width_pixels = DisplayWidth(x_display, x_screen);
-  const auto height_pixels = DisplayHeight(x_display, x_screen);
-  const auto width_mm = DisplayWidthMM(x_display, x_screen);
-  const auto height_mm = DisplayHeightMM(x_display, x_screen);
-  if (width_pixels > 0 && height_pixels > 0 &&
-      width_mm > 0 && height_mm > 0)
-    Display::ProvideSizeMM(width_pixels, height_pixels,
-                           width_mm, height_mm);
-
+  const auto x_display = display.GetXDisplay();
 #ifdef USE_GLX
-  static constexpr int attributes[] = {
-    GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
-    GLX_RENDER_TYPE, GLX_RGBA_BIT,
-    GLX_X_RENDERABLE, true,
-    GLX_DOUBLEBUFFER, true,
-    GLX_RED_SIZE, 1,
-    GLX_GREEN_SIZE, 1,
-    GLX_BLUE_SIZE, 1,
-    GLX_ALPHA_SIZE, 1,
-    0
-  };
-
-  int fb_cfg_count;
-  fb_cfg = glXChooseFBConfig(x_display, x_screen,
-                             attributes, &fb_cfg_count);
-  if ((fb_cfg == nullptr) || (fb_cfg_count == 0))
-    throw std::runtime_error("Failed to retrieve framebuffer configuration for GLX");
-
-  XVisualInfo *vi = glXGetVisualFromFBConfig(x_display, *fb_cfg);
+  XVisualInfo *vi = glXGetVisualFromFBConfig(display.GetXDisplay(),
+                                             display.GetFBConfig());
 #endif
 
-  const X11Window x_root = DefaultRootWindow(x_display);
+  const auto x_root = DefaultRootWindow(x_display);
   if (x_root == 0)
     throw std::runtime_error("DefaultRootWindow() failed");
 
@@ -142,7 +115,7 @@ TopWindow::IsVisible() const noexcept
 void
 TopWindow::EnableCapture() noexcept
 {
-  XGrabPointer(x_display, x_window, true,
+  XGrabPointer(display.GetXDisplay(), x_window, true,
                ButtonPressMask |
                ButtonReleaseMask |
                PointerMotionMask,
@@ -153,7 +126,7 @@ TopWindow::EnableCapture() noexcept
 void
 TopWindow::DisableCapture() noexcept
 {
-  XUngrabPointer(x_display, CurrentTime);
+  XUngrabPointer(display.GetXDisplay(), CurrentTime);
 }
 
 } // namespace UI

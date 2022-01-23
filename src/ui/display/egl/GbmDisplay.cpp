@@ -21,21 +21,25 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_INIT_HPP
-#define XCSOAR_SCREEN_INIT_HPP
+#include "GbmDisplay.hpp"
+#include "io/FileDescriptor.hxx"
 
-#include "ui/display/Display.hpp"
+#include <gbm.h>
 
-class ScreenGlobalInit {
-  UI::Display display;
+#include <stdexcept>
 
-public:
-  ScreenGlobalInit();
-  ~ScreenGlobalInit();
+namespace EGL {
 
-  auto &GetDisplay() noexcept {
-    return display;
-  }
-};
+GbmDisplay::GbmDisplay(FileDescriptor dri_fd)
+  :device(gbm_create_device(dri_fd.Get()))
+{
+  if (device == nullptr)
+    throw std::runtime_error("Could not create GBM device");
+}
 
-#endif
+GbmDisplay::~GbmDisplay() noexcept
+{
+  gbm_device_destroy(device);
+}
+
+} // namespace EGL

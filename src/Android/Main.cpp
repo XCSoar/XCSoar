@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Main.hpp"
 #include "Environment.hpp"
+#include "Components.hpp"
 #include "Context.hpp"
 #include "NativeView.hpp"
 #include "Bitmap.hpp"
@@ -49,6 +50,7 @@ Copyright_License {
 #include "Version.hpp"
 #include "Screen/Debug.hpp"
 #include "Look/GlobalFonts.hpp"
+#include "ui/display/Display.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
 #include "ui/canvas/opengl/Init.hpp"
@@ -93,6 +95,8 @@ bool os_haptic_feedback_enabled;
 BluetoothHelper *bluetooth_helper;
 UsbSerialHelper *usb_serial_helper;
 IOIOHelper *ioio_helper;
+
+static UI::Display *ui_display;
 
 gcc_visibility_default
 JNIEXPORT jboolean JNICALL
@@ -144,6 +148,8 @@ try {
   InitialiseDataPath();
 
   LogFormat(_T("Starting XCSoar %s"), XCSoar_ProductToken);
+
+  ui_display = new UI::Display();
 
   OpenGL::Initialise();
   TextUtil::Initialise(env);
@@ -197,7 +203,7 @@ try {
   ScreenInitialized();
   AllowLanguage();
   InitLanguage();
-  return Startup();
+  return Startup(*ui_display);
 } catch (...) {
   /* if an error occurs, rethrow the C++ exception as Java exception,
      to be displayed by the Java glue code */
@@ -259,6 +265,10 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 
   TextUtil::Deinitialise(env);
   OpenGL::Deinitialise();
+
+  delete ui_display;
+  ui_display = nullptr;
+
   ScreenDeinitialized();
   DeinitialiseDataPath();
 

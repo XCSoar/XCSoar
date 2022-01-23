@@ -67,8 +67,8 @@ TopCanvas::GetRect() const
 
 #endif
 
-TopCanvas::TopCanvas(SDL_Window *_window)
-  :window(_window)
+TopCanvas::TopCanvas(UI::Display &_display, SDL_Window *_window)
+  :display(_display), window(_window)
 {
 #ifdef USE_MEMORY_CANVAS
   renderer = SDL_CreateRenderer(window, -1, 0);

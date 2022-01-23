@@ -79,6 +79,8 @@ struct wl_display;
 struct wl_egl_window;
 #endif
 
+namespace UI { class Display; }
+
 namespace UI {
 
 class TopWindowStyle : public WindowStyle {
@@ -149,14 +151,11 @@ public:
  * A top-level full-screen window.
  */
 class TopWindow : public ContainerWindow {
+  UI::Display &display;
+
 #ifdef USE_X11
-  _XDisplay *x_display;
   X11Window x_window;
-#ifdef USE_GLX
-  GLXFBConfig *fb_cfg;
-#endif
 #elif defined(USE_WAYLAND)
-  struct wl_display *native_display;
   struct wl_egl_window *native_window;
 #elif defined(ENABLE_SDL)
   SDL_Window *window;
@@ -220,6 +219,9 @@ class TopWindow : public ContainerWindow {
 #endif
 
 public:
+  explicit TopWindow(UI::Display &_display) noexcept
+    :display(_display) {}
+
 #ifndef USE_WINUSER
   ~TopWindow() noexcept override;
 #endif

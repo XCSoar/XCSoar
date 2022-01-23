@@ -27,7 +27,10 @@ Copyright_License {
 
 namespace UI {
 
-EventQueue::EventQueue() noexcept
+EventQueue::EventQueue(Display &display) noexcept
+#if defined(USE_X11) || defined(USE_WAYLAND)
+  :input_queue(display, *this)
+#endif
 {
   SignalMonitorInit(event_loop);
   SignalMonitorRegister(SIGINT, BIND_THIS_METHOD(OnQuitSignal));

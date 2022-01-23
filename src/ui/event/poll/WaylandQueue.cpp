@@ -24,6 +24,7 @@ Copyright_License {
 #include "WaylandQueue.hpp"
 #include "Queue.hpp"
 #include "../shared/Event.hpp"
+#include "ui/display/Display.hpp"
 #include "util/StringAPI.hxx"
 
 #include <wayland-client.h>
@@ -121,9 +122,9 @@ static constexpr struct wl_pointer_listener pointer_listener = {
   WaylandPointerAxis,
 };
 
-WaylandEventQueue::WaylandEventQueue(EventQueue &_queue)
+WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
   :queue(_queue),
-   display(wl_display_connect(nullptr)),
+   display(_display.GetWaylandDisplay()),
    socket_event(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady))
 {
   if (display == nullptr)
@@ -146,12 +147,6 @@ WaylandEventQueue::WaylandEventQueue(EventQueue &_queue)
 
   socket_event.Open(SocketDescriptor(wl_display_get_fd(display)));
   socket_event.ScheduleRead();
-}
-
-WaylandEventQueue::~WaylandEventQueue()
-{
-  socket_event.Cancel();
-  wl_display_disconnect(display);
 }
 
 bool

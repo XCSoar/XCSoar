@@ -34,6 +34,8 @@ class TestWindow : public UI::SingleWindow {
   Bitmap bitmap;
 
 public:
+  using UI::SingleWindow::SingleWindow;
+
   bool LoadFile(Path path) {
     Invalidate();
     return bitmap.LoadFile(path);
@@ -57,9 +59,9 @@ ParseCommandLine(Args &args)
 }
 
 static void
-Main()
+Main(UI::Display &display)
 {
-  TestWindow window;
+  TestWindow window{display};
   window.Create(_T("ViewImage"), {640, 480});
   if (!window.LoadFile(path)) {
     fprintf(stderr, "Failed to load file\n");

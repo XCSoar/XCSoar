@@ -50,17 +50,17 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
   screen = nullptr;
 
 #ifdef ENABLE_SDL
-  screen = new TopCanvas(window);
+  screen = new TopCanvas(display, window);
 #elif defined(USE_GLX)
-  screen = new TopCanvas(x_display, x_window, fb_cfg);
+  screen = new TopCanvas(display, x_window);
 #elif defined(USE_X11)
-  screen = new TopCanvas(x_display, x_window);
+  screen = new TopCanvas(display, x_window);
 #elif defined(USE_WAYLAND)
-  screen = new TopCanvas(native_display, native_window);
+  screen = new TopCanvas(display, native_window);
 #elif defined(ANDROID) || defined(USE_VFB)
-  screen = new TopCanvas(size);
+  screen = new TopCanvas(display, size);
 #else
-  screen = new TopCanvas();
+  screen = new TopCanvas(display);
 #endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY

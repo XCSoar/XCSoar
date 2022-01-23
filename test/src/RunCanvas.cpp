@@ -49,21 +49,16 @@ class TestWindow final : public UI::SingleWindow {
   Button buffer_button;
 #endif
   Button close_button;
-  unsigned page;
+  unsigned page = 0;
 #ifndef ENABLE_OPENGL
-  bool buffered;
+  bool buffered = false;
   BufferCanvas buffer;
 #endif
 
-  ButtonFrameRenderer button_renderer;
+  ButtonFrameRenderer button_renderer{*button_look};
 
 public:
-  TestWindow():page(0)
-#ifndef ENABLE_OPENGL
-              , buffered(false)
-#endif
-              , button_renderer(*button_look)
-  {}
+  using UI::SingleWindow::SingleWindow;
 
   void Create(PixelSize size) {
     SingleWindow::Create(_T("RunCanvas"), size);
@@ -225,9 +220,9 @@ protected:
 };
 
 static void
-Main()
+Main(UI::Display &display)
 {
-  TestWindow window;
+  TestWindow window{display};
   window.Create({250, 250});
   window.Show();
 

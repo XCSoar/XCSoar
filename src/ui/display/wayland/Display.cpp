@@ -21,21 +21,32 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_INIT_HPP
-#define XCSOAR_SCREEN_INIT_HPP
+#include "Display.hpp"
+#include "Hardware/DisplayDPI.hpp"
 
-#include "ui/display/Display.hpp"
-
-class ScreenGlobalInit {
-  UI::Display display;
-
-public:
-  ScreenGlobalInit();
-  ~ScreenGlobalInit();
-
-  auto &GetDisplay() noexcept {
-    return display;
-  }
-};
-
+#ifdef USE_EGL
+#include "ui/egl/System.hpp"
 #endif
+
+#ifdef USE_GLX
+#include "ui/glx/System.hpp"
+#endif
+
+#include <cassert>
+#include <stdexcept>
+
+namespace Wayland {
+
+Display::Display()
+  :display(wl_display_connect(nullptr))
+{
+  if (display == nullptr)
+    throw std::runtime_error("wl_display_connect() failed");
+}
+
+Display::~Display() noexcept
+{
+  wl_display_disconnect(display);
+}
+
+} // namespace Wayland

@@ -37,7 +37,7 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
 }
 
 static void
-Main()
+Main(TestMainWindow &main_window)
 {
   ProfileListDialog();
 }

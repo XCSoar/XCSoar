@@ -38,6 +38,7 @@ struct wl_registry;
 
 namespace UI {
 
+class Display;
 class EventQueue;
 struct Event;
 
@@ -63,9 +64,7 @@ public:
    * @param queue the #EventQueue that shall receive Wayland input
    * events
    */
-  explicit WaylandEventQueue(EventQueue &queue);
-
-  ~WaylandEventQueue();
+  WaylandEventQueue(UI::Display &display, EventQueue &queue);
 
   struct wl_display *GetDisplay() {
     return display;

@@ -172,7 +172,7 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
 }
 
 void
-Main()
+Main(TestMainWindow &main_window)
 {
   ComputerSettings settings_computer;
   settings_computer.SetDefaults();

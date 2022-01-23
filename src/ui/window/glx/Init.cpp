@@ -38,7 +38,7 @@ ScreenGlobalInit::ScreenGlobalInit()
   FreeType::Initialise();
   Font::Initialise();
 
-  event_queue = new EventQueue();
+  event_queue = new EventQueue(display);
 
   ScreenInitialized();
 }

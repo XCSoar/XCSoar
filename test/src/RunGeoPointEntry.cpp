@@ -35,7 +35,7 @@ Copyright_License {
 static constexpr CoordinateFormat format = CoordinateFormat::DDMMSS;
 
 static void
-Main()
+Main(TestMainWindow &main_window)
 {
   GeoPoint value = GeoPoint(Angle::Degrees(7.7061111111111114),
                             Angle::Degrees(51.051944444444445));

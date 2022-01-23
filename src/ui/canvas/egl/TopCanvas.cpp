@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "ui/canvas/custom/TopCanvas.hpp"
-#include "ConfigChooser.hpp"
 #include "ui/canvas/opengl/Init.hpp"
 #include "ui/canvas/opengl/Globals.hpp"
 #include "ui/opengl/Features.hpp"
+#include "ui/display/Display.hpp"
 #include "system/Error.hxx"
 #include "util/RuntimeError.hxx"
 
@@ -39,24 +39,6 @@ Copyright_License {
 
 #ifdef MESA_KMS
 #include "GBM.hpp"
-#include "Hardware/DisplayDPI.hpp"
-
-#include <span>
-
-#include <fcntl.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <unistd.h>
-
-#ifdef RASPBERRY_PI
-/* on the Raspberry Pi 4, /dev/dri/card1 is the VideoCore IV (the
-   "legacy mode") which we want to use for now), and /dev/dri/card0 is
-   V3D which I havn't figured out yet */
-static constexpr const char *DEFAULT_DRI_DEVICE = "/dev/dri/card1";
-#else
-constexpr const char * DEFAULT_DRI_DEVICE = "/dev/dri/card0";
-#endif
 
 struct drm_fb {
   struct gbm_bo *bo;
@@ -65,69 +47,11 @@ struct drm_fb {
 };
 #endif
 
-/**
- * Returns the EGL API to bind to using eglBindAPI().
- */
-static constexpr EGLenum
-GetBindAPI()
-{
-  return HaveGLES()
-    ? EGL_OPENGL_ES_API
-    : EGL_OPENGL_API;
-}
-
-#ifdef MESA_KMS
-
-static UniqueFileDescriptor
-OpenDriDevice()
-{
-  const char* dri_device = getenv("DRI_DEVICE");
-  if (nullptr == dri_device)
-    dri_device = DEFAULT_DRI_DEVICE;
-  printf("Using DRI device %s (use environment variable "
-           "DRI_DEVICE to override)\n",
-         dri_device);
-
-  UniqueFileDescriptor dri_fd;
-  if (!dri_fd.Open(dri_device, O_RDWR))
-    throw FormatErrno("Could not open DRI device %s", dri_device);
-
-  return dri_fd;
-}
-
-static drmModeConnector *
-ChooseConnector(FileDescriptor dri_fd,
-                const std::span<const uint32_t> connectors)
-{
-  for (const auto id : connectors) {
-    auto *connector = drmModeGetConnector(dri_fd.Get(), id);
-    if (connector != nullptr && connector->connection == DRM_MODE_CONNECTED &&
-        connector->count_modes > 0)
-      return connector;
-
-    drmModeFreeConnector(connector);
-  }
-
-  throw std::runtime_error("No usable DRM connector found");
-}
-
-static drmModeConnector *
-ChooseConnector(FileDescriptor dri_fd, const drmModeRes &resources)
-{
-  const std::span connectors{
-    resources.connectors, std::size_t(resources.count_connectors),
-  };
-
-  return ChooseConnector(dri_fd, connectors);
-}
-
-#endif
-
 #ifdef ANDROID
 
-TopCanvas::TopCanvas(PixelSize new_size)
+TopCanvas::TopCanvas(UI::Display &_display, PixelSize new_size)
+  :display(_display)
 {
-  display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
   surface = eglGetCurrentSurface(EGL_DRAW);
 
   OpenGL::SetupContext();
@@ -136,16 +60,10 @@ TopCanvas::TopCanvas(PixelSize new_size)
 
 #elif !defined(USE_X11) && !defined(USE_WAYLAND)
 
-TopCanvas::TopCanvas()
-#if defined(MESA_KMS)
-  :dri_fd(OpenDriDevice())
-#endif
+TopCanvas::TopCanvas(UI::Display &_display)
+  :display(_display)
 {
 #if defined(MESA_KMS)
-  native_display = gbm_create_device(dri_fd.Get());
-  if (native_display == nullptr)
-    throw std::runtime_error("Could not create GBM device");
-
   evctx = { 0 };
   evctx.version = DRM_EVENT_CONTEXT_VERSION;
   evctx.page_flip_handler = [](int fd, unsigned int frame, unsigned int sec,
@@ -153,106 +71,35 @@ TopCanvas::TopCanvas()
     *reinterpret_cast<bool*>(flip_finishedPtr) = true;
   };
 
-  drmModeRes *resources = drmModeGetResources(dri_fd.Get());
-  if (resources == nullptr)
-    throw std::runtime_error("drmModeGetResources() failed");
-
-  auto *connector = ChooseConnector(dri_fd, *resources);
-  connector_id = connector->connector_id;
-
-  if (auto *encoder = drmModeGetEncoder(dri_fd.Get(), connector->encoder_id)) {
-    crtc_id = encoder->crtc_id;
-    drmModeFreeEncoder(encoder);
-  } else
-    throw std::runtime_error("No usable DRM encoder found");
-
-  mode = connector->modes[0];
-
-  if (connector->mmWidth > 0 && connector->mmHeight > 0)
-    Display::ProvideSizeMM(mode.hdisplay, mode.vdisplay,
-                           connector->mmWidth,
-                           connector->mmHeight);
-
-  drmModeFreeConnector(connector);
-
-  native_window = gbm_surface_create(native_display, mode.hdisplay,
-                                     mode.vdisplay,
+  native_window = gbm_surface_create(display.GetGbmDevice(),
+                                     display.GetMode().hdisplay,
+                                     display.GetMode().vdisplay,
                                      XCSOAR_GBM_FORMAT,
                                      GBM_BO_USE_SCANOUT | GBM_BO_USE_RENDERING);
   if (native_window == nullptr)
     throw std::runtime_error("Could not create GBM surface");
 #endif
 
-  CreateEGL(native_display, native_window);
+  CreateSurface(native_window);
 }
 
 #endif
-
-inline void
-TopCanvas::InitDisplay(EGLNativeDisplayType native_display)
-{
-  assert(display == EGL_NO_DISPLAY);
-
-  display = eglGetDisplay(native_display);
-  if (display == EGL_NO_DISPLAY)
-    throw std::runtime_error("eglGetDisplay(EGL_DEFAULT_DISPLAY) failed");
-
-  if (!eglInitialize(display, nullptr, nullptr))
-    throw std::runtime_error("eglInitialize() failed");
-
-  if (!eglBindAPI(GetBindAPI()))
-    throw std::runtime_error("eglBindAPI() failed");
-
-  chosen_config = EGL::ChooseConfig(display);
-}
 
 #ifndef ANDROID
 
-inline void
-TopCanvas::CreateContext()
-{
-  assert(display != EGL_NO_DISPLAY);
-  assert(context == EGL_NO_CONTEXT);
-
-#ifdef HAVE_GLES2
-  static constexpr EGLint context_attributes[] = {
-    EGL_CONTEXT_CLIENT_VERSION, 2,
-    EGL_NONE
-  };
-#else
-  const EGLint *context_attributes = nullptr;
-#endif
-
-  context = eglCreateContext(display, chosen_config,
-                             EGL_NO_CONTEXT, context_attributes);
-}
-
-inline void
+void
 TopCanvas::CreateSurface(EGLNativeWindowType native_window)
 {
-  surface = eglCreateWindowSurface(display, chosen_config,
-                                   native_window, nullptr);
-  if (surface == EGL_NO_SURFACE)
-    throw FormatRuntimeError("eglCreateWindowSurface() failed: %#x", eglGetError());
+  surface = display.CreateWindowSurface(native_window);
 
   const PixelSize effective_size = GetNativeSize();
   if (effective_size.width == 0 || effective_size.height == 0)
     throw std::runtime_error("eglQuerySurface() failed");
 
-  if (!eglMakeCurrent(display, surface, surface, context))
-    throw std::runtime_error("eglMakeCurrent() failed");
+  display.MakeCurrent(surface);
 
   OpenGL::SetupContext();
   SetupViewport(effective_size);
-}
-
-void
-TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
-                     EGLNativeWindowType native_window)
-{
-  InitDisplay(native_display);
-  CreateContext();
-  CreateSurface(native_window);
 }
 
 #endif // !ANDROID
@@ -260,32 +107,28 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
 TopCanvas::~TopCanvas() noexcept
 {
 #ifndef ANDROID
-  eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-  eglDestroySurface(display, surface);
-  eglDestroyContext(display, context);
-  eglTerminate(display);
+  display.MakeCurrent(EGL_NO_SURFACE);
+  display.DestroySurface(surface);
 #endif
 
 #ifdef MESA_KMS
   if (nullptr != saved_crtc)
-    drmModeSetCrtc(dri_fd.Get(), saved_crtc->crtc_id, saved_crtc->buffer_id,
-                   saved_crtc->x, saved_crtc->y, &connector_id, 1,
-                   &saved_crtc->mode);
+    display.ModeSetCrtc(saved_crtc->crtc_id, saved_crtc->buffer_id,
+                        saved_crtc->x, saved_crtc->y,
+                        &saved_crtc->mode);
   gbm_surface_destroy(native_window);
-  gbm_device_destroy(native_display);
 #endif
 }
 
 PixelSize
 TopCanvas::GetNativeSize() const
 {
-  GLint w, h;
-  if (!eglQuerySurface(display, surface, EGL_WIDTH, &w) ||
-      !eglQuerySurface(display, surface, EGL_HEIGHT, &h) ||
-      w <= 0 || h <= 0)
-    return PixelSize(0, 0);
+  auto w = display.QuerySurface(surface, EGL_WIDTH);
+  auto h = display.QuerySurface(surface, EGL_HEIGHT);
 
-  return PixelSize(w, h);
+  return w && h && *w > 0 && *h > 0
+    ? PixelSize{*w, *h}
+    : PixelSize{};
 }
 
 #ifdef ANDROID
@@ -314,7 +157,7 @@ TopCanvas::ReleaseSurface() noexcept
 void
 TopCanvas::Flip()
 {
-  if (!eglSwapBuffers(display, surface)) {
+  if (!display.SwapBuffers(surface)) {
 #ifdef ANDROID
     LogFormat("eglSwapBuffers() failed: 0x%x", eglGetError());
 #else
@@ -324,6 +167,8 @@ TopCanvas::Flip()
   }
 
 #ifdef MESA_KMS
+  const FileDescriptor dri_fd = display.GetDriFD();
+
   gbm_bo *new_bo = gbm_surface_lock_front_buffer(native_window);
 
   drm_fb *fb = (drm_fb*) gbm_bo_get_user_data(new_bo);
@@ -353,15 +198,14 @@ TopCanvas::Flip()
   });
 
   if (nullptr == current_bo) {
-    saved_crtc = drmModeGetCrtc(dri_fd.Get(), crtc_id);
-    drmModeSetCrtc(dri_fd.Get(), crtc_id, fb->fb_id, 0, 0,
-                   &connector_id, 1, &mode);
+    saved_crtc = display.ModeGetCrtc();
+    display.ModeSetCrtc(fb->fb_id, 0, 0);
   } else {
 
     bool flip_finished = false;
-    int page_flip_ret = drmModePageFlip(dri_fd.Get(), crtc_id, fb->fb_id,
-                                        DRM_MODE_PAGE_FLIP_EVENT,
-                                        &flip_finished);
+    int page_flip_ret = display.ModePageFlip(fb->fb_id,
+                                             DRM_MODE_PAGE_FLIP_EVENT,
+                                             &flip_finished);
     if (0 != page_flip_ret) {
       fprintf(stderr, "drmModePageFlip() failed: %d\n", page_flip_ret);
       exit(EXIT_FAILURE);

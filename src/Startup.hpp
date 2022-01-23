@@ -24,8 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_STARTUP_HPP
 #define XCSOAR_STARTUP_HPP
 
+namespace UI { class Display; }
+
 bool
-Startup();
+Startup(UI::Display &display);
 
 void
 Shutdown();

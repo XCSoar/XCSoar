@@ -43,8 +43,6 @@ Copyright_License {
 #include "ui/egl/System.hpp"
 
 #ifdef MESA_KMS
-#include "io/UniqueFileDescriptor.hxx"
-#include <drm.h>
 #include <xf86drm.h>
 #include <xf86drmMode.h>
 #endif
@@ -82,6 +80,7 @@ struct SDL_Texture;
 class Canvas;
 struct PixelSize;
 struct PixelRect;
+namespace UI { class Display; }
 
 #if (defined(USE_FB) && !defined(KOBO)) || defined(USE_EGL)
 /* defined if we need to initialise /dev/tty to graphics mode, see
@@ -95,40 +94,28 @@ class TopCanvas
   : public Canvas
 #endif
 {
+  UI::Display &display;
+
 #ifdef USE_TTY
   const LinuxGraphicsTTY linux_graphics_tty;
 #endif
 
 #ifdef USE_EGL
-#if defined(USE_X11) || defined(USE_WAYLAND)
-#elif defined(MESA_KMS)
-  struct gbm_device *native_display;
-  struct gbm_surface *native_window;
 
-  UniqueFileDescriptor dri_fd;
-
-  struct gbm_bo *current_bo = nullptr;
-
+#ifdef MESA_KMS
   drmEventContext evctx;
 
-  uint32_t connector_id;
-  uint32_t crtc_id;
-  drmModeModeInfo mode;
+  struct gbm_surface *native_window;
+
+  struct gbm_bo *current_bo = nullptr;
 
   drmModeCrtc *saved_crtc = nullptr;
 #endif // MESA_KMS
 
-  EGLDisplay display = EGL_NO_DISPLAY;
-  EGLConfig chosen_config;
-
-#ifndef ANDROID
-  EGLContext context = EGL_NO_CONTEXT;
-#endif // ANDROID
   EGLSurface surface = EGL_NO_SURFACE;
 #endif // USE_EGL
 
 #ifdef USE_GLX
-  _XDisplay *const x_display;
   GLXContext glx_context;
   GLXWindow glx_window;
 #endif // USE_GLX
@@ -181,20 +168,20 @@ class TopCanvas
 
 public:
 #ifdef ENABLE_SDL
-  TopCanvas(SDL_Window *_window);
+  TopCanvas(UI::Display &_display, SDL_Window *_window);
 #elif defined(USE_GLX)
-  TopCanvas(_XDisplay *x_display,
-            X11Window x_window,
-            GLXFBConfig *fb_cfg);
+  TopCanvas(UI::Display &_display,
+            X11Window x_window);
 #elif defined(USE_X11) || defined(USE_WAYLAND)
-  TopCanvas(EGLNativeDisplayType native_display,
-            EGLNativeWindowType native_window) {
-    CreateEGL(native_display, native_window);
+  TopCanvas(UI::Display &_display, EGLNativeWindowType native_window)
+    :display(_display)
+  {
+    CreateSurface(native_window);
   }
 #elif defined(ANDROID) || defined(USE_VFB)
-  TopCanvas(PixelSize new_size);
+  TopCanvas(UI::Display &_display, PixelSize new_size);
 #else
-  TopCanvas();
+  explicit TopCanvas(UI::Display &_display);
 #endif
 
   ~TopCanvas() noexcept;
@@ -303,11 +290,7 @@ private:
 #endif
 
 #ifdef USE_EGL
-  void InitDisplay(EGLNativeDisplayType native_display);
-  void CreateContext();
   void CreateSurface(EGLNativeWindowType native_window);
-  void CreateEGL(EGLNativeDisplayType native_display,
-                 EGLNativeWindowType native_window);
 #endif
 };
 

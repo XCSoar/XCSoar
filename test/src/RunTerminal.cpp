@@ -35,8 +35,8 @@ class TestWindow : public UI::SingleWindow {
   UI::PeriodicTimer timer{[this]{ WriteRandomChar(); }};
 
 public:
-  TestWindow(const TerminalLook &look)
-    :terminal(look) {}
+  TestWindow(UI::Display &display, const TerminalLook &look)
+    :UI::SingleWindow(display), terminal(look) {}
 
   void Create(PixelSize size) {
     SingleWindow::Create(_T("RunTerminal"), size);
@@ -70,12 +70,12 @@ private:
 };
 
 static void
-Main()
+Main(UI::Display &display)
 {
   TerminalLook look;
   look.Initialise();
 
-  TestWindow window(look);
+  TestWindow window{display, look};
   window.Create({400, 400});
   window.Show();
 

@@ -138,7 +138,7 @@ int main(int argc, char **argv)
   InitialiseFonts();
 
   {
-    TopCanvas screen;
+    TopCanvas screen{screen_init.GetDisplay()};
 
     Canvas canvas = screen.Lock();
     if (canvas.IsDefined()) {

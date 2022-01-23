@@ -31,7 +31,7 @@ Copyright_License {
 #include <stdio.h>
 
 static void
-Main()
+Main(TestMainWindow &main_window)
 {
   auto value = BrokenDate::TodayUTC();
   if (!DateEntryDialog(_T("The caption"), value, true))

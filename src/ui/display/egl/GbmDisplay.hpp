@@ -21,21 +21,27 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_INIT_HPP
-#define XCSOAR_SCREEN_INIT_HPP
+#pragma once
 
-#include "ui/display/Display.hpp"
+struct gbm_device;
+class FileDescriptor;
 
-class ScreenGlobalInit {
-  UI::Display display;
+namespace EGL {
+
+class GbmDisplay {
+  struct gbm_device *const device;
 
 public:
-  ScreenGlobalInit();
-  ~ScreenGlobalInit();
+  /**
+   * Throws on error.
+   */
+  explicit GbmDisplay(FileDescriptor dri_fd);
 
-  auto &GetDisplay() noexcept {
-    return display;
+  ~GbmDisplay() noexcept;
+
+  auto *GetGbmDevice() const noexcept {
+    return device;
   }
 };
 
-#endif
+} // namespace EGL

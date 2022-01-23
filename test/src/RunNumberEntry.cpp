@@ -30,7 +30,7 @@ Copyright_License {
 #include <stdio.h>
 
 static void
-Main()
+Main(TestMainWindow &main_window)
 {
   unsigned value;
   if (NumberEntryDialog(_T("The caption"), value, 6))

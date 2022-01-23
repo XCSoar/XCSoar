@@ -46,10 +46,6 @@ Copyright_License {
 #undef Window
 #undef Display
 
-#ifdef Expose
-#undef Expose
-#endif
-
 #ifdef NoValue
 #undef NoValue
 #endif

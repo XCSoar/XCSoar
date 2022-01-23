@@ -21,21 +21,37 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_INIT_HPP
-#define XCSOAR_SCREEN_INIT_HPP
+#pragma once
 
-#include "ui/display/Display.hpp"
+struct _XDisplay;
+struct __GLXFBConfigRec;
 
-class ScreenGlobalInit {
-  UI::Display display;
+namespace X11 {
+
+class Display {
+  _XDisplay *const display;
+
+#ifdef USE_GLX
+  __GLXFBConfigRec **fb_cfg;
+#endif
 
 public:
-  ScreenGlobalInit();
-  ~ScreenGlobalInit();
+  /**
+   * Throws on error.
+   */
+  Display();
 
-  auto &GetDisplay() noexcept {
+  ~Display() noexcept;
+
+  auto GetXDisplay() noexcept {
     return display;
   }
+
+#ifdef USE_GLX
+  auto *GetFBConfig() const noexcept {
+    return *fb_cfg;
+  }
+#endif
 };
 
-#endif
+} // namespace X11

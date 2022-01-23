@@ -21,21 +21,22 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_INIT_HPP
-#define XCSOAR_SCREEN_INIT_HPP
+#pragma once
 
-#include "ui/display/Display.hpp"
+namespace EGL {
 
-class ScreenGlobalInit {
-  UI::Display display;
+/**
+ * Initialize the global EGL context.
+ *
+ * Throws on error.
+ */
+void
+Initialise();
 
-public:
-  ScreenGlobalInit();
-  ~ScreenGlobalInit();
+/**
+ * Deinitialize the global EGL context.
+ */
+void
+Deinitialise() noexcept;
 
-  auto &GetDisplay() noexcept {
-    return display;
-  }
-};
-
-#endif
+} // namespace EGL

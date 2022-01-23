@@ -145,7 +145,7 @@ Main()
   UI::TopWindowStyle main_style;
   main_style.Resizable();
 
-  UI::SingleWindow main_window;
+  UI::SingleWindow main_window{screen_init.GetDisplay()};
   main_window.Create(_T("XCSoar/KoboMenu"), {600, 800}, main_style);
   main_window.Show();
 

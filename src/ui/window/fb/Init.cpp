@@ -39,7 +39,7 @@ ScreenGlobalInit::ScreenGlobalInit()
 {
   Font::Initialise();
 
-  event_queue = new EventQueue();
+  event_queue = new EventQueue(display);
 
 #ifdef KOBO
   Display::Rotate(DisplayOrientation::DEFAULT);

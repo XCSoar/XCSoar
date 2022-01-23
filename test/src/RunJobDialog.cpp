@@ -42,7 +42,7 @@ public:
 };
 
 static void
-Main()
+Main(TestMainWindow &main_window)
 {
   TestJob job;
   JobDialog(main_window, *dialog_look, _T("RunJobDialog"), job);

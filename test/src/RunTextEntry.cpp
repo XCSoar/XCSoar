@@ -31,7 +31,7 @@ Copyright_License {
 #include "time/RoughTime.hpp"
 
 static void
-Main()
+Main(TestMainWindow &main_window)
 {
   TCHAR text[64] = _T("");
   TextEntryDialog(text, ARRAY_SIZE(text), _T("The caption"));

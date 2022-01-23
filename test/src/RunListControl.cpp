@@ -38,7 +38,7 @@ PaintItemCallback(Canvas &canvas, const PixelRect rc, unsigned idx)
 }
 
 static void
-Main()
+Main(TestMainWindow &main_window)
 {
   WndForm form(*dialog_look);
   form.Create(main_window, _T("RunListControl"));

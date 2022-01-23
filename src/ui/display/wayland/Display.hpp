@@ -21,21 +21,26 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_INIT_HPP
-#define XCSOAR_SCREEN_INIT_HPP
+#pragma once
 
-#include "ui/display/Display.hpp"
+struct wl_display;
 
-class ScreenGlobalInit {
-  UI::Display display;
+namespace Wayland {
+
+class Display {
+  struct wl_display *const display;
 
 public:
-  ScreenGlobalInit();
-  ~ScreenGlobalInit();
+  /**
+   * Throws on error.
+   */
+  Display();
 
-  auto &GetDisplay() noexcept {
+  ~Display() noexcept;
+
+  auto GetWaylandDisplay() noexcept {
     return display;
   }
 };
 
-#endif
+} // namespace Wayland
