@@ -102,9 +102,15 @@ public:
     return product;
   }
 
-  bool initSurface() {
-    return env->CallBooleanMethod(obj, init_surface_method);
-  }
+  /**
+   * Initializes the OpenGL surface.
+   *
+   * Throws on error.
+   *
+   * @return true on success, false if no surface is available
+   * currently
+   */
+  bool initSurface();
 
   void deinitSurface() {
     env->CallVoidMethod(obj, deinit_surface_method);

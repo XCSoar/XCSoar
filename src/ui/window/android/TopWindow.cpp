@@ -30,6 +30,7 @@ Copyright_License {
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
 #include "util/ScopeExit.hxx"
+#include "LogFile.hpp"
 
 #include <cassert>
 
@@ -60,16 +61,18 @@ TopWindow::ResumeSurface() noexcept
 
   assert(paused);
 
-  if (!native_view->initSurface())
-    /* failed - retry later */
+  try {
+    if (!screen->AcquireSurface())
+      return false;
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to initialize GL surface");
     return false;
+  }
+
+  assert(screen->IsReady());
 
   paused = false;
   resumed = false;
-
-  screen->Resume();
-
-  surface_valid = true;
 
   RefreshSize();
 
@@ -79,7 +82,7 @@ TopWindow::ResumeSurface() noexcept
 bool
 TopWindow::CheckResumeSurface() noexcept
 {
-  return (!resumed || ResumeSurface()) && !paused && surface_valid;
+  return (!resumed || ResumeSurface()) && !paused && screen->IsReady();
 }
 
 void
@@ -117,9 +120,9 @@ TopWindow::OnPause() noexcept
 
   TextCache::Flush();
 
-  surface_valid = false;
+  screen->ReleaseSurface();
 
-  native_view->deinitSurface();
+  assert(!screen->IsReady());
 
   const std::lock_guard<Mutex> lock(paused_mutex);
   paused = true;
@@ -212,7 +215,7 @@ TopWindow::OnEvent(const Event &event)
     return OnMultiTouchUp();
 
   case Event::RESIZE:
-    if (!surface_valid)
+    if (!screen->IsReady())
       /* postpone the resize if we're paused; the real resize will be
          handled by TopWindow::refresh() as soon as XCSoar is
          resumed */

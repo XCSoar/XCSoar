@@ -218,8 +218,13 @@ class NativeView extends SurfaceView
 
   /**
    * Initializes the OpenGL surface.  Called by the native code.
+   *
+   * Throws on error.
+   *
+   * @return true on success, false if no surface is available
+   * currently
    */
-  private boolean initSurface() {
+  private boolean initSurface() throws EGLException {
     if (!haveSurface)
       /* this is futile, and will only result in
          "java.lang.IllegalArgumentException: Make sure the
@@ -227,14 +232,8 @@ class NativeView extends SurfaceView
          Surface" */
       return false;
 
-    try {
-      initGL(getHolder());
-      return true;
-    } catch (Exception e) {
-      Log.e(TAG, "initGL error", e);
-      deinitSurface();
-      return false;
-    }
+    initGL(getHolder());
+    return true;
   }
 
   /**

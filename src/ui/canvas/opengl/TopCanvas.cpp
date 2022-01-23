@@ -34,14 +34,6 @@ TopCanvas::SetupViewport(PixelSize native_size)
   Canvas::Create(PixelSize(new_size.x, new_size.y));
 }
 
-void
-TopCanvas::Resume()
-{
-#ifdef ANDROID
-  surface = eglGetCurrentSurface(EGL_DRAW);
-#endif
-}
-
 bool
 TopCanvas::CheckResize(PixelSize new_native_size)
 {

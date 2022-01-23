@@ -111,6 +111,14 @@ NativeView::NativeView(JNIEnv *_env, jobject _obj,
   Display::ProvideDPI(_xdpi, _ydpi);
 }
 
+bool
+NativeView::initSurface()
+{
+  bool success = env->CallBooleanMethod(obj, init_surface_method);
+  Java::RethrowException(env);
+  return success;
+}
+
 static void
 ConvertABGRToARGB(UncompressedImage &image)
 {

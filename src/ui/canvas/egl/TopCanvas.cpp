@@ -30,6 +30,8 @@ Copyright_License {
 #include "util/RuntimeError.hxx"
 
 #ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 #include "LogFile.hpp"
 #endif
 
@@ -63,8 +65,6 @@ struct drm_fb {
 };
 #endif
 
-#ifndef ANDROID
-
 /**
  * Returns the EGL API to bind to using eglBindAPI().
  */
@@ -75,8 +75,6 @@ GetBindAPI()
     ? EGL_OPENGL_ES_API
     : EGL_OPENGL_API;
 }
-
-#endif // !ANDROID
 
 #ifdef MESA_KMS
 
@@ -190,12 +188,11 @@ TopCanvas::TopCanvas()
 
 #endif
 
-#ifndef ANDROID
-
-void
-TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
-                     EGLNativeWindowType native_window)
+inline void
+TopCanvas::InitDisplay(EGLNativeDisplayType native_display)
 {
+  assert(display == EGL_NO_DISPLAY);
+
   display = eglGetDisplay(native_display);
   if (display == EGL_NO_DISPLAY)
     throw std::runtime_error("eglGetDisplay(EGL_DEFAULT_DISPLAY) failed");
@@ -206,16 +203,16 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
   if (!eglBindAPI(GetBindAPI()))
     throw std::runtime_error("eglBindAPI() failed");
 
-  const EGLConfig chosen_config = EGL::ChooseConfig(display);
+  chosen_config = EGL::ChooseConfig(display);
+}
 
-  surface = eglCreateWindowSurface(display, chosen_config,
-                                   native_window, nullptr);
-  if (surface == nullptr)
-    throw FormatRuntimeError("eglCreateWindowSurface() failed: %#x", eglGetError());
+#ifndef ANDROID
 
-  const PixelSize effective_size = GetNativeSize();
-  if (effective_size.width == 0 || effective_size.height == 0)
-    throw std::runtime_error("eglQuerySurface() failed");
+inline void
+TopCanvas::CreateContext()
+{
+  assert(display != EGL_NO_DISPLAY);
+  assert(context == EGL_NO_CONTEXT);
 
 #ifdef HAVE_GLES2
   static constexpr EGLint context_attributes[] = {
@@ -228,12 +225,34 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
 
   context = eglCreateContext(display, chosen_config,
                              EGL_NO_CONTEXT, context_attributes);
+}
+
+inline void
+TopCanvas::CreateSurface(EGLNativeWindowType native_window)
+{
+  surface = eglCreateWindowSurface(display, chosen_config,
+                                   native_window, nullptr);
+  if (surface == EGL_NO_SURFACE)
+    throw FormatRuntimeError("eglCreateWindowSurface() failed: %#x", eglGetError());
+
+  const PixelSize effective_size = GetNativeSize();
+  if (effective_size.width == 0 || effective_size.height == 0)
+    throw std::runtime_error("eglQuerySurface() failed");
 
   if (!eglMakeCurrent(display, surface, surface, context))
     throw std::runtime_error("eglMakeCurrent() failed");
 
   OpenGL::SetupContext();
   SetupViewport(effective_size);
+}
+
+void
+TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
+                     EGLNativeWindowType native_window)
+{
+  InitDisplay(native_display);
+  CreateContext();
+  CreateSurface(native_window);
 }
 
 #endif // !ANDROID
@@ -268,6 +287,29 @@ TopCanvas::GetNativeSize() const
 
   return PixelSize(w, h);
 }
+
+#ifdef ANDROID
+
+bool
+TopCanvas::AcquireSurface()
+{
+  if (!native_view->initSurface())
+    /* failed - retry later */
+    return false;
+
+  surface = eglGetCurrentSurface(EGL_DRAW);
+  return true;
+}
+
+void
+TopCanvas::ReleaseSurface() noexcept
+{
+  native_view->deinitSurface();
+
+  surface = EGL_NO_SURFACE;
+}
+
+#endif // ANDROID
 
 void
 TopCanvas::Flip()

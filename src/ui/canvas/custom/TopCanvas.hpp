@@ -116,20 +116,22 @@ class TopCanvas
   drmModeModeInfo mode;
 
   drmModeCrtc *saved_crtc = nullptr;
-#endif
+#endif // MESA_KMS
 
-  EGLDisplay display;
+  EGLDisplay display = EGL_NO_DISPLAY;
+  EGLConfig chosen_config;
+
 #ifndef ANDROID
-  EGLContext context;
-#endif
-  EGLSurface surface;
-#endif
+  EGLContext context = EGL_NO_CONTEXT;
+#endif // ANDROID
+  EGLSurface surface = EGL_NO_SURFACE;
+#endif // USE_EGL
 
 #ifdef USE_GLX
   _XDisplay *const x_display;
   GLXContext glx_context;
   GLXWindow glx_window;
-#endif
+#endif // USE_GLX
 
 #ifdef ENABLE_SDL
   SDL_Window *const window;
@@ -137,8 +139,8 @@ class TopCanvas
 #ifdef USE_MEMORY_CANVAS
   SDL_Renderer *renderer;
   SDL_Texture *texture;
-#endif
-#endif
+#endif // USE_MEMORY_CANVAS
+#endif // ENABLE_SDL
 
 #ifdef USE_MEMORY_CANVAS
 
@@ -161,7 +163,7 @@ class TopCanvas
   unsigned map_pitch, map_bpp;
 
   uint32_t epd_update_marker;
-#endif
+#endif // USE_FB
 
 #ifdef KOBO
   /**
@@ -175,7 +177,7 @@ class TopCanvas
    * this flag can be set true for don't wait eInk Update complete for faster responce time.
    */
   bool frame_sync = false;
-#endif
+#endif // KOBO
 
 public:
 #ifdef ENABLE_SDL
@@ -196,6 +198,19 @@ public:
 #endif
 
   ~TopCanvas() noexcept;
+
+  /**
+   * Is this object ready for drawing?
+   */
+  bool IsReady() const noexcept {
+#ifdef USE_EGL
+    /* can't draw if there is no EGL surface (e.g. if the Android app
+       is paused) */
+    return surface != EGL_NO_SURFACE;
+#else
+    return true;
+#endif
+  }
 
 #ifdef USE_MEMORY_CANVAS
   gcc_pure
@@ -238,11 +253,18 @@ public:
   bool CheckResize();
 #endif
 
-#ifdef ENABLE_OPENGL
+#ifdef ANDROID
   /**
-   * Initialise the new OpenGL context.
+   * Create an EGL surface.
+   *
+   * Throws on error.
+   *
+   * @return true on success, false if no surface is available
+   * currently
    */
-  void Resume();
+  bool AcquireSurface();
+
+  void ReleaseSurface() noexcept;
 #endif
 
 #if defined(ENABLE_SDL) && defined(USE_MEMORY_CANVAS)
@@ -281,6 +303,9 @@ private:
 #endif
 
 #ifdef USE_EGL
+  void InitDisplay(EGLNativeDisplayType native_display);
+  void CreateContext();
+  void CreateSurface(EGLNativeWindowType native_window);
   void CreateEGL(EGLNativeDisplayType native_display,
                  EGLNativeWindowType native_window);
 #endif
