@@ -28,6 +28,7 @@
 #include "net/http/Mime.hxx"
 #include "net/http/Progress.hpp"
 #include "net/http/Setup.hxx"
+#include "net/http/Init.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "json/ParserOutputStream.hxx"
 #include "system/ConvertPathName.hpp"
@@ -39,40 +40,40 @@
 namespace WeGlide {
 
 static CurlMime
-MakeUploadFlightMime(CURL *easy, const WeGlideSettings &settings,
-                     uint_least32_t glider_type,
+MakeUploadFlightMime(CURL *easy, const User &user,
+                     uint_least32_t aircraft_id,
                      Path igc_path)
 {
   CurlMime mime{easy};
   mime.Add("file").Filename("igc_file").FileData(NarrowPathName{igc_path});
 
   char buffer[32];
-  sprintf(buffer, "%u", settings.pilot_id);
+  sprintf(buffer, "%u", user.id);
   mime.Add("user_id").Data(buffer);
-  FormatISO8601(buffer, settings.pilot_birthdate);
+  FormatISO8601(buffer, user.birthdate);
   mime.Add("date_of_birth").Data(buffer);
-  sprintf(buffer, "%" PRIuLEAST32, glider_type);
+  sprintf(buffer, "%" PRIuLEAST32, aircraft_id);
   mime.Add("aircraft_id").Data(buffer);
 
   return mime;
 }
 
 Co::Task<boost::json::value>
-UploadFlight(CurlGlobal &curl, const WeGlideSettings &settings,
-             uint_least32_t glider_type,
+UploadFlight(CurlGlobal &curl,
+             const User &user,
+             uint_least32_t aircraft_id,
              Path igc_path,
              ProgressListener &progress)
 {
-  NarrowString<0x200> url(settings.default_url);
-  url += "/igcfile";
-
+  NarrowString<0x200> url;
+  url.Format("%s/igcfile", WeGlideSettings::default_url);
   CurlEasy easy{url};
   Curl::Setup(easy);
   const Net::ProgressAdapter progress_adapter{easy, progress};
   easy.SetFailOnError();
 
-  const auto mime = MakeUploadFlightMime(easy.Get(), settings,
-                                         glider_type, igc_path);
+  const auto mime = MakeUploadFlightMime(easy.Get(), user,
+                                         aircraft_id, igc_path);
   easy.SetMimePost(mime.get());
 
   Json::ParserOutputStream parser;

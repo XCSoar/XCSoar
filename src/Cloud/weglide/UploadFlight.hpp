@@ -23,13 +23,13 @@ Copyright_License {
 
 #pragma once
 
+#include "WeGlideObjects.hpp"
 #include "co/Task.hxx"
 
 #include <boost/json/fwd.hpp>
 
 #include <cstdint>
 
-struct WeGlideSettings;
 class Path;
 class CurlGlobal;
 class ProgressListener;
@@ -37,8 +37,8 @@ class ProgressListener;
 namespace WeGlide {
 
 Co::Task<boost::json::value>
-UploadFlight(CurlGlobal &curl, const WeGlideSettings &settings,
-             uint_least32_t glider_type,
+UploadFlight(CurlGlobal &curl, const User &user,
+             uint_least32_t aircraft_id,
              Path igc_path,
              ProgressListener &progress);
 
