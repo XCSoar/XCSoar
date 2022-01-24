@@ -159,26 +159,23 @@ class NativeView extends SurfaceView
     ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
     try {
-      if (initializeNative(context, r.width(), r.height(),
-                           (int)metrics.xdpi, (int)metrics.ydpi,
-                           Build.VERSION.SDK_INT, Build.PRODUCT)) {
+      try {
+        context.startService(new Intent(context, XCSoar.serviceClass));
+      } catch (IllegalStateException e) {
+        /* we get crash reports on this all the time, but I don't
+           know why - Android docs say "the application is in a
+           state where the service can not be started (such as not
+           in the foreground in a state when services are allowed)",
+           but we're about to be resumed, which means we're in
+           foreground... */
+      }
 
-        try {
-          context.startService(new Intent(context, XCSoar.serviceClass));
-        } catch (IllegalStateException e) {
-          /* we get crash reports on this all the time, but I don't
-             know why - Android docs say "the application is in a
-             state where the service can not be started (such as not
-             in the foreground in a state when services are allowed)",
-             but we're about to be resumed, which means we're in
-             foreground... */
-        }
-
-        try {
-          runNative();
-        } finally {
-          context.stopService(new Intent(context, XCSoar.serviceClass));
-        }
+      try {
+        runNative(context, r.width(), r.height(),
+                  (int)metrics.xdpi, (int)metrics.ydpi,
+                  Build.VERSION.SDK_INT, Build.PRODUCT);
+      } finally {
+        context.stopService(new Intent(context, XCSoar.serviceClass));
       }
     } catch (Exception e) {
       Log.e(TAG, "Initialisation error", e);
@@ -186,16 +183,14 @@ class NativeView extends SurfaceView
       return;
     }
 
-    deinitializeNative();
     quitHandler.sendEmptyMessage(0);
   }
 
-  protected native boolean initializeNative(Context context,
-                                            int width, int height,
-                                            int xdpi, int ydpi,
-                                            int sdk_version, String product);
-  protected native void runNative();
-  protected native void deinitializeNative();
+  protected native void runNative(Context context,
+                                  int width, int height,
+                                  int xdpi, int ydpi,
+                                  int sdk_version, String product);
+
   protected native void resizedNative(int width, int height);
 
   protected native void pauseNative();

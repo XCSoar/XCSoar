@@ -96,15 +96,13 @@ BluetoothHelper *bluetooth_helper;
 UsbSerialHelper *usb_serial_helper;
 IOIOHelper *ioio_helper;
 
-static UI::Display *ui_display;
-
 gcc_visibility_default
-JNIEXPORT jboolean JNICALL
-Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
-                                            jobject _context,
-                                            jint width, jint height,
-                                            jint xdpi, jint ydpi,
-                                            jint sdk_version, jstring product)
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj,
+                                     jobject _context,
+                                     jint width, jint height,
+                                     jint xdpi, jint ydpi,
+                                     jint sdk_version, jstring product)
 try {
   Java::Init(env);
 
@@ -149,7 +147,7 @@ try {
 
   LogFormat(_T("Starting XCSoar %s"), XCSoar_ProductToken);
 
-  ui_display = new UI::Display(EGL_DEFAULT_DISPLAY);
+  auto *ui_display = new UI::Display(EGL_DEFAULT_DISPLAY);
 
   OpenGL::Initialise();
   TextUtil::Initialise(env);
@@ -203,38 +201,15 @@ try {
   ScreenInitialized();
   AllowLanguage();
   InitLanguage();
-  return Startup(*ui_display);
-} catch (...) {
-  /* if an error occurs, rethrow the C++ exception as Java exception,
-     to be displayed by the Java glue code */
-  const auto msg = GetFullMessage(std::current_exception());
-  jclass Exception = env->FindClass("java/lang/Exception");
-  env->ThrowNew(Exception, msg.c_str());
-  return false;
-}
 
-gcc_visibility_default
-JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj)
-{
-  InitThreadDebug();
+  if (Startup(*ui_display))
+    CommonInterface::main_window->RunEventLoop();
 
-  OpenGL::Initialise();
-
-  CommonInterface::main_window->RunEventLoop();
-}
-
-gcc_visibility_default
-JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
-{
   Shutdown();
 
   if (IsNookSimpleTouch()) {
     Nook::ExitFastMode();
   }
-
-  InitThreadDebug();
 
   if (CommonInterface::main_window != nullptr) {
     CommonInterface::main_window->Destroy();
@@ -267,7 +242,6 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   OpenGL::Deinitialise();
 
   delete ui_display;
-  ui_display = nullptr;
 
   ScreenDeinitialized();
   DeinitialiseDataPath();
@@ -297,6 +271,12 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 
   Net::Deinitialise();
   DeinitialiseAsioThread();
+} catch (...) {
+  /* if an error occurs, rethrow the C++ exception as Java exception,
+     to be displayed by the Java glue code */
+  const auto msg = GetFullMessage(std::current_exception());
+  jclass Exception = env->FindClass("java/lang/Exception");
+  env->ThrowNew(Exception, msg.c_str());
 }
 
 gcc_visibility_default
