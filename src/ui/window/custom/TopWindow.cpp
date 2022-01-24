@@ -97,8 +97,7 @@ TopWindow::Expose() noexcept
 #endif
 
 #ifdef USE_MEMORY_CANVAS
-  Canvas canvas = screen->Lock();
-  if (canvas.IsDefined()) {
+  if (auto canvas = screen->Lock(); canvas.IsDefined()) {
     OnPaint(canvas);
     screen->Unlock();
   }
