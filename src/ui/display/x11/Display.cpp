@@ -73,11 +73,21 @@ Display::Display()
                              attributes, &fb_cfg_count);
   if (fb_cfg == nullptr || fb_cfg_count == 0)
     throw std::runtime_error("Failed to retrieve framebuffer configuration for GLX");
+
+  glx_context = glXCreateNewContext(display, *fb_cfg,
+                                    GLX_RGBA_TYPE,
+                                    nullptr, true);
+  if (glx_context == nullptr)
+    throw std::runtime_error("Failed to create GLX context");
 #endif // USE_GLX
 }
 
 Display::~Display() noexcept
 {
+#ifdef USE_GLX
+  glXDestroyContext(display, glx_context);
+#endif // USE_GLX
+
   XCloseDisplay(display);
 }
 

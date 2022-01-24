@@ -109,7 +109,6 @@ class TopCanvas
 #endif // USE_EGL
 
 #ifdef USE_GLX
-  GLXContext glx_context;
   GLXWindow glx_window;
 #endif // USE_GLX
 

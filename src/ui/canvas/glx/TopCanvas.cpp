@@ -34,19 +34,12 @@ TopCanvas::TopCanvas(UI::Display &_display,
                      X11Window x_window)
   :display(_display)
 {
-  glx_context = glXCreateNewContext(display.GetXDisplay(),
-                                    display.GetFBConfig(),
-                                    GLX_RGBA_TYPE,
-                                    nullptr, true);
-  if (glx_context == nullptr)
-    throw std::runtime_error("Failed to create GLX context");
-
   glx_window = glXCreateWindow(display.GetXDisplay(), _display.GetFBConfig(),
                                x_window, nullptr);
   XSync(display.GetXDisplay(), false);
 
   if (!glXMakeContextCurrent(display.GetXDisplay(), glx_window, glx_window,
-                             glx_context))
+                             display.GetGLXContext()))
     throw std::runtime_error("Failed to attach GLX context to GLX window");
 
   const PixelSize effective_size = GetNativeSize();
@@ -60,7 +53,6 @@ TopCanvas::TopCanvas(UI::Display &_display,
 TopCanvas::~TopCanvas() noexcept
 {
   glXDestroyWindow(display.GetXDisplay(), glx_window);
-  glXDestroyContext(display.GetXDisplay(), glx_context);
 }
 
 PixelSize

@@ -25,6 +25,7 @@ Copyright_License {
 
 struct _XDisplay;
 struct __GLXFBConfigRec;
+struct __GLXcontextRec;
 
 namespace X11 {
 
@@ -33,6 +34,8 @@ class Display {
 
 #ifdef USE_GLX
   __GLXFBConfigRec **fb_cfg;
+
+  __GLXcontextRec *glx_context;
 #endif
 
 public:
@@ -50,6 +53,10 @@ public:
 #ifdef USE_GLX
   auto *GetFBConfig() const noexcept {
     return *fb_cfg;
+  }
+
+  auto *GetGLXContext() const noexcept {
+    return glx_context;
   }
 #endif
 };
