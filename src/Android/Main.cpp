@@ -111,7 +111,7 @@ try {
   InitThreadDebug();
 
   const ScopeGlobalAsioThread global_asio_thread;
-  Net::Initialise(asio_thread->GetEventLoop());
+  const Net::ScopeInit net_init(asio_thread->GetEventLoop());
 
   Java::Object::Initialise(env);
   Java::File::Initialise(env);
@@ -258,8 +258,6 @@ try {
   Context::Deinitialise(env);
   NativeView::Deinitialise(env);
   Java::URL::Deinitialise(env);
-
-  Net::Deinitialise();
 } catch (...) {
   /* if an error occurs, rethrow the C++ exception as Java exception,
      to be displayed by the Java glue code */
