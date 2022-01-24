@@ -31,30 +31,41 @@ Copyright_License {
 
 namespace EGL {
 
-#ifdef RASPBERRY_PI
-/* on the Raspberry Pi 4, /dev/dri/card1 is the VideoCore IV (the
-   "legacy mode") which we want to use for now), and /dev/dri/card0 is
-   V3D which I havn't figured out yet */
-static constexpr const char *DEFAULT_DRI_DEVICE = "/dev/dri/card1";
-#else
-constexpr const char * DEFAULT_DRI_DEVICE = "/dev/dri/card0";
-#endif
-
 static UniqueFileDescriptor
+OpenDriDevice(const char *path)
+{
+  UniqueFileDescriptor fd;
+  if (!fd.Open(path, O_RDWR))
+    throw FormatErrno("Could not open DRI device %s", path);
+
+  /* check if this card works */
+  drmModeRes *resources = drmModeGetResources(fd.Get());
+  if (resources == nullptr)
+    throw FormatErrno("drmModeGetResources() for DRI device %s failed", path);
+
+  return fd;
+}
+
+static auto
 OpenDriDevice()
 {
-  const char *dri_device = getenv("DRI_DEVICE");
-  if (nullptr == dri_device)
-    dri_device = DEFAULT_DRI_DEVICE;
-  printf("Using DRI device %s (use environment variable "
-           "DRI_DEVICE to override)\n",
-         dri_device);
+  if (const char *dri_device = getenv("DRI_DEVICE"))
+    return OpenDriDevice(dri_device);
 
-  UniqueFileDescriptor dri_fd;
-  if (!dri_fd.Open(dri_device, O_RDWR))
-    throw FormatErrno("Could not open DRI device %s", dri_device);
+  /* some computers like the Raspberry Pi and the CubieBoard have two
+     cards in /dev/dri/, of which only one works, but it's hard to
+     tell which one; probe both */
+  try {
+    return OpenDriDevice("/dev/dri/card0");
+  } catch (...) {
+    try {
+      return OpenDriDevice("/dev/dri/card1");
+    } catch (...) {
+    }
 
-  return dri_fd;
+    /* if the second one fails, report the error for the first one */
+    throw;
+  }
 }
 
 static drmModeConnector *

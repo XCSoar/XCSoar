@@ -1,4 +1,6 @@
 Version 7.23 - not yet released
+* Raspberry Pi / Cubieboard
+  - probe both /dev/dri/card0 and /dev/dri/card1
 * Android
   - add SoftRF Academy and ES into 'white list' of USB devices
 
