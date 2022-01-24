@@ -1,4 +1,6 @@
 Version 7.23 - not yet released
+* Linux
+  - fix command-line option "--datapath"
 * Raspberry Pi / Cubieboard
   - probe both /dev/dri/card0 and /dev/dri/card1
 * Android

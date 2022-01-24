@@ -79,7 +79,7 @@ CommandLine::Parse(Args &args)
     } else if (StringIsEqual(s, "-datapath=", 10)) {
       s += 10;
       PathName convert(s);
-      SetPrimaryDataPath(convert);
+      SetSingleDataPath(convert);
 #ifdef HAVE_CMDLINE_REPLAY
     } else if (StringIsEqual(s, "-replay=", 8)) {
       replay_path = s + 8;

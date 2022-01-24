@@ -54,10 +54,18 @@ void
 CreateDataPath();
 
 /**
- * Overrides the detected primary data path.
+ * Changes the primary data path.  All other data paths found by
+ * InitialiseDataPath() remain.
  */
 void
 SetPrimaryDataPath(Path path) noexcept;
+
+/**
+ * Sets the data path, replacing all data paths found by
+ * InitialiseDataPath().
+ */
+void
+SetSingleDataPath(Path path) noexcept;
 
 /**
  * Returns the absolute path of the primary data directory.

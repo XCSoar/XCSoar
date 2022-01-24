@@ -99,6 +99,20 @@ SetPrimaryDataPath(Path path) noexcept
 #endif
 }
 
+void
+SetSingleDataPath(Path path) noexcept
+{
+  assert(path != nullptr);
+  assert(!path.IsEmpty());
+
+  data_paths.clear();
+  data_paths.emplace_front(path);
+
+#ifndef ANDROID
+  cache_path = LocalPath(_T("cache"));
+#endif
+}
+
 AllocatedPath
 LocalPath(Path file) noexcept
 {
