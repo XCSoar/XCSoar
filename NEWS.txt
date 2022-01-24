@@ -7,6 +7,7 @@ Version 7.23 - not yet released
   - add SoftRF Academy and ES into 'white list' of USB devices
 * Kobo
   - fix broken button text background
+  - add OTG support (serial, sound, net) for Clara HD
 
 Version 7.22 - 2022/01/14
 * user interface
