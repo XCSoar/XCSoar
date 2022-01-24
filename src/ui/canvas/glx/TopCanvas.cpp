@@ -63,7 +63,7 @@ TopCanvas::~TopCanvas() noexcept
 }
 
 PixelSize
-TopCanvas::GetNativeSize() const
+TopCanvas::GetNativeSize() const noexcept
 {
   unsigned w = 0, h = 0;
   glXQueryDrawable(display.GetXDisplay(), glx_window, GLX_WIDTH, &w);

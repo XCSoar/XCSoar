@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_TOP_CANVAS_HPP
 #define XCSOAR_SCREEN_TOP_CANVAS_HPP
 
-#include "util/Compiler.h"
-
 #ifdef USE_MEMORY_CANVAS
 #include "ui/canvas/memory/PixelTraits.hpp"
 #include "ui/canvas/memory/ActivePixelTraits.hpp"
@@ -200,8 +198,8 @@ public:
   }
 
 #ifdef USE_MEMORY_CANVAS
-  gcc_pure
-  PixelRect GetRect() const;
+  [[gnu::pure]]
+  PixelRect GetRect() const noexcept;
 #endif
 
 #if defined(USE_FB) || (defined(ENABLE_OPENGL) && (defined(USE_EGL) || defined(USE_GLX) || defined(ENABLE_SDL)))
@@ -209,8 +207,8 @@ public:
    * Obtain the native (non-software-rotated) size of the OpenGL
    * drawable.
    */
-  gcc_pure
-  PixelSize GetNativeSize() const;
+  [[gnu::pure]]
+  PixelSize GetNativeSize() const noexcept;
 #endif
 
 #if defined(USE_MEMORY_CANVAS) || defined(ENABLE_OPENGL)
@@ -221,7 +219,7 @@ public:
    * windowing system library
    * @return true if the screen has been resized
    */
-  bool CheckResize(PixelSize new_native_size);
+  bool CheckResize(PixelSize new_native_size) noexcept;
 #endif
 
 #ifdef USE_FB
@@ -229,15 +227,15 @@ public:
    * Ask the kernel for the frame buffer's current physical size.
    * This is used by CheckResize().
    */
-  gcc_pure
-  PixelSize GetPhysicalSize() const;
+  [[gnu::pure]]
+  PixelSize GetPhysicalSize() const noexcept;
 
   /**
    * Check if the screen has been resized.
    *
    * @return true if the screen has been resized
    */
-  bool CheckResize();
+  bool CheckResize() noexcept;
 #endif
 
 #ifdef ANDROID
@@ -255,16 +253,16 @@ public:
 #endif
 
 #if defined(ENABLE_SDL) && defined(USE_MEMORY_CANVAS)
-  void OnResize(PixelSize new_size);
+  void OnResize(PixelSize new_size) noexcept;
 #endif
 
 #ifdef USE_MEMORY_CANVAS
-  PixelSize GetSize() const {
+  PixelSize GetSize() const noexcept {
     return PixelSize(buffer.width, buffer.height);
   }
 
   Canvas Lock();
-  void Unlock();
+  void Unlock() noexcept;
 #endif
 
   void Flip();
@@ -273,20 +271,20 @@ public:
   /**
    * Wait until the screen update is complete.
    */
-  void Wait();
+  void Wait() noexcept;
 
-  void SetEnableDither(bool _enable_dither) {
+  void SetEnableDither(bool _enable_dither) noexcept {
     enable_dither = _enable_dither;
   }
 #endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
-  void SetDisplayOrientation(DisplayOrientation orientation);
+  void SetDisplayOrientation(DisplayOrientation orientation) noexcept;
 #endif
 
 private:
 #ifdef ENABLE_OPENGL
-  void SetupViewport(PixelSize native_size);
+  void SetupViewport(PixelSize native_size) noexcept;
 #endif
 
 #ifdef USE_EGL

@@ -134,7 +134,7 @@ TopCanvas::~TopCanvas() noexcept
 }
 
 PixelSize
-TopCanvas::GetNativeSize() const
+TopCanvas::GetNativeSize() const noexcept
 {
   auto w = display.QuerySurface(surface, EGL_WIDTH);
   auto h = display.QuerySurface(surface, EGL_HEIGHT);

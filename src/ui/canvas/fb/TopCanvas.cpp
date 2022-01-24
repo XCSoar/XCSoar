@@ -51,7 +51,7 @@ Copyright_License {
 #include <errno.h>
 
 static unsigned
-TranslateDimension(unsigned value)
+TranslateDimension(unsigned value) noexcept
 {
 #ifdef KOBO
   if (value == 1024 && DetectKoboModel() == KoboModel::AURA)
@@ -64,19 +64,19 @@ TranslateDimension(unsigned value)
 }
 
 static unsigned
-GetWidth(const struct fb_var_screeninfo &vinfo)
+GetWidth(const struct fb_var_screeninfo &vinfo) noexcept
 {
   return TranslateDimension(vinfo.xres);
 }
 
 static unsigned
-GetHeight(const struct fb_var_screeninfo &vinfo)
+GetHeight(const struct fb_var_screeninfo &vinfo) noexcept
 {
   return TranslateDimension(vinfo.yres);
 }
 
 static PixelSize
-GetSize(const struct fb_var_screeninfo &vinfo)
+GetSize(const struct fb_var_screeninfo &vinfo) noexcept
 {
   return PixelSize(GetWidth(vinfo), GetHeight(vinfo));
 }
@@ -96,7 +96,7 @@ TopCanvas::~TopCanvas() noexcept
 }
 
 PixelRect
-TopCanvas::GetRect() const
+TopCanvas::GetRect() const noexcept
 {
   return { 0, 0, int(buffer.width), int(buffer.height) };
 }
@@ -201,7 +201,7 @@ TopCanvas::TopCanvas(UI::Display &_display)
 }
 
 inline PixelSize
-TopCanvas::GetNativeSize() const
+TopCanvas::GetNativeSize() const noexcept
 {
   struct fb_var_screeninfo vinfo;
   ioctl(fd, FBIOGET_VSCREENINFO, &vinfo);
@@ -209,7 +209,7 @@ TopCanvas::GetNativeSize() const
 }
 
 bool
-TopCanvas::CheckResize()
+TopCanvas::CheckResize() noexcept
 {
   return CheckResize(GetNativeSize());
 }
@@ -230,7 +230,7 @@ TopCanvas::TopCanvas(UI::Display &_display, PixelSize new_size)
 #endif
 
 bool
-TopCanvas::CheckResize(const PixelSize new_native_size)
+TopCanvas::CheckResize(const PixelSize new_native_size) noexcept
 {
   const PixelSize new_size = new_native_size;
   if (new_size == GetSize())
@@ -258,7 +258,7 @@ TopCanvas::Lock()
 }
 
 void
-TopCanvas::Unlock()
+TopCanvas::Unlock() noexcept
 {
 }
 
@@ -316,7 +316,7 @@ TopCanvas::Flip()
 #ifdef KOBO
 
 void
-TopCanvas::Wait()
+TopCanvas::Wait() noexcept
 {
   ioctl(fd, MXCFB_WAIT_FOR_UPDATE_COMPLETE, &epd_update_marker);
 }

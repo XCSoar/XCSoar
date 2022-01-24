@@ -58,7 +58,7 @@ Copyright_License {
 #ifndef ENABLE_OPENGL
 
 PixelRect
-TopCanvas::GetRect() const
+TopCanvas::GetRect() const noexcept
 {
   int width, height;
   ::SDL_GetWindowSize(window, &width, &height);
@@ -117,7 +117,7 @@ TopCanvas::~TopCanvas() noexcept
 #ifdef ENABLE_OPENGL
 
 PixelSize
-TopCanvas::GetNativeSize() const
+TopCanvas::GetNativeSize() const noexcept
 {
   int w, h;
   SDL_GL_GetDrawableSize(window, &w, &h);
@@ -129,7 +129,7 @@ TopCanvas::GetNativeSize() const
 #ifdef USE_MEMORY_CANVAS
 
 void
-TopCanvas::OnResize(PixelSize new_size)
+TopCanvas::OnResize(PixelSize new_size) noexcept
 {
   int texture_width, texture_height;
   Uint32 texture_format;
@@ -255,7 +255,7 @@ TopCanvas::Lock()
 }
 
 void
-TopCanvas::Unlock()
+TopCanvas::Unlock() noexcept
 {
 #ifndef GREYSCALE
   SDL_UnlockTexture(texture);

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Math/Point2D.hpp"
 
 void
-TopCanvas::SetupViewport(PixelSize native_size)
+TopCanvas::SetupViewport(PixelSize native_size) noexcept
 {
   auto new_size = OpenGL::SetupViewport(UnsignedPoint2D(native_size.width,
                                                         native_size.height));
@@ -35,7 +35,7 @@ TopCanvas::SetupViewport(PixelSize native_size)
 }
 
 bool
-TopCanvas::CheckResize(PixelSize new_native_size)
+TopCanvas::CheckResize(PixelSize new_native_size) noexcept
 {
   if (new_native_size.width == OpenGL::window_size.x &&
       new_native_size.height == OpenGL::window_size.y)
@@ -48,7 +48,7 @@ TopCanvas::CheckResize(PixelSize new_native_size)
 #ifdef SOFTWARE_ROTATE_DISPLAY
 
 void
-TopCanvas::SetDisplayOrientation(DisplayOrientation orientation)
+TopCanvas::SetDisplayOrientation(DisplayOrientation orientation) noexcept
 {
   const auto native_size = GetNativeSize();
   if (native_size.width == 0 || native_size.height == 0)
