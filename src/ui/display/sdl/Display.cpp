@@ -21,45 +21,45 @@ Copyright_License {
 }
 */
 
-#include "../Init.hpp"
-#include "Screen/Debug.hpp"
-#include "ui/canvas/Font.hpp"
-#include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
+#include "Display.hpp"
+#include "util/RuntimeError.hxx"
+#include "Asset.hpp"
 
-#ifdef ENABLE_OPENGL
-#include "ui/canvas/opengl/Init.hpp"
+#include <SDL.h>
+#include <SDL_hints.h>
+
+namespace SDL {
+
+Display::Display()
+{
+  Uint32 flags = SDL_INIT_VIDEO;
+  if (!IsKobo())
+    flags |= SDL_INIT_AUDIO;
+
+  if (::SDL_Init(flags) != 0)
+    throw FormatRuntimeError("SDL_Init() has failed: %s", ::SDL_GetError());
+
+#ifdef HAVE_GLES
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 #endif
 
-using namespace UI;
+  // Keep screen on (works on iOS, and maybe for other platforms)
+  SDL_SetHint(SDL_HINT_IDLE_TIMER_DISABLED, "1");
 
-ScreenGlobalInit::ScreenGlobalInit()
-{
+  if (HasTouchScreen())
+    SDL_ShowCursor (SDL_FALSE);
+
 #if defined(ENABLE_OPENGL)
-  OpenGL::Initialise();
+  ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+  ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
 #endif
-
-#ifdef USE_FREETYPE
-  Font::Initialise();
-#endif
-
-  event_queue = new EventQueue();
-
-  ScreenInitialized();
 }
 
-ScreenGlobalInit::~ScreenGlobalInit()
+Display::~Display() noexcept
 {
-  delete event_queue;
-  event_queue = nullptr;
-
-#ifdef ENABLE_OPENGL
-  OpenGL::Deinitialise();
-#endif
-
-#ifdef USE_FREETYPE
-  Font::Deinitialise();
-#endif
-
-  ScreenDeinitialized();
+  ::SDL_Quit();
 }
+
+} // namespace SDL

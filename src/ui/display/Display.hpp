@@ -40,6 +40,10 @@ Copyright_License {
 #include "egl/Display.hpp"
 #endif
 
+#ifdef ENABLE_SDL
+#include "sdl/Display.hpp"
+#endif
+
 namespace UI {
 
 /**
@@ -92,6 +96,15 @@ class Display
 public:
   Display()
     :EGL::Display(GetWaylandDisplay()) {}
+};
+
+#elif defined(ENABLE_SDL)
+
+class Display
+  : public SDL::Display
+{
+public:
+  using SDL::Display::Display;
 };
 
 #else

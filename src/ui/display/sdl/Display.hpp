@@ -21,45 +21,14 @@ Copyright_License {
 }
 */
 
-#include "../Init.hpp"
-#include "Screen/Debug.hpp"
-#include "ui/canvas/Font.hpp"
-#include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
+#pragma once
 
-#ifdef ENABLE_OPENGL
-#include "ui/canvas/opengl/Init.hpp"
-#endif
+namespace SDL {
 
-using namespace UI;
+class Display {
+public:
+  Display();
+  ~Display() noexcept;
+};
 
-ScreenGlobalInit::ScreenGlobalInit()
-{
-#if defined(ENABLE_OPENGL)
-  OpenGL::Initialise();
-#endif
-
-#ifdef USE_FREETYPE
-  Font::Initialise();
-#endif
-
-  event_queue = new EventQueue();
-
-  ScreenInitialized();
-}
-
-ScreenGlobalInit::~ScreenGlobalInit()
-{
-  delete event_queue;
-  event_queue = nullptr;
-
-#ifdef ENABLE_OPENGL
-  OpenGL::Deinitialise();
-#endif
-
-#ifdef USE_FREETYPE
-  Font::Deinitialise();
-#endif
-
-  ScreenDeinitialized();
-}
+} // namespace SDL
