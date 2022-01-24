@@ -100,7 +100,7 @@ WaypointExternalFileListHandler::OnActivateItem(unsigned i) noexcept
 #ifdef ANDROID
   /* on Android, the ContentProvider API needs to be used to give
      other apps access to this file */
-  native_view->OpenWaypointFile(waypoint->id, file->c_str());
+  native_view->OpenWaypointFile(Java::GetEnv(), waypoint->id, file->c_str());
 #else
   RunFile(LocalPath(file->c_str()).c_str());
 #endif

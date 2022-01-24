@@ -37,7 +37,6 @@ Copyright_License {
 class Path;
 
 class NativeView {
-  JNIEnv *env;
   Java::GlobalObject obj;
 
   unsigned width, height;
@@ -106,29 +105,29 @@ public:
     return {_env, _env->CallObjectMethod(obj, getSurface_method)};
   }
 
-  void AcquireWakeLock() const noexcept {
+  void AcquireWakeLock(JNIEnv *env) const noexcept {
     return env->CallVoidMethod(obj, acquireWakeLock_method);
   }
 
-  void SetFullScreen(bool full_screen) const noexcept {
+  void SetFullScreen(JNIEnv *env, bool full_screen) const noexcept {
     return env->CallVoidMethod(obj, setFullScreen_method, full_screen);
   }
 
-  bool setRequestedOrientation(ScreenOrientation so) {
+  bool SetRequestedOrientation(JNIEnv *env, ScreenOrientation so) {
     return env->CallBooleanMethod(obj, setRequestedOrientationID, (jint)so);
   }
 
-  Java::LocalObject loadResourceBitmap(const char *name) {
+  Java::LocalObject LoadResourceBitmap(JNIEnv *env, const char *name) {
     Java::String name2(env, name);
     return {env,
       env->CallObjectMethod(obj, loadResourceBitmap_method, name2.Get())};
   }
 
-  Java::LocalObject loadFileTiff(Path path);
+  Java::LocalObject LoadFileTiff(JNIEnv *env, Path path);
 
-  Java::LocalObject loadFileBitmap(Path path);
+  Java::LocalObject LoadFileBitmap(JNIEnv *env, Path path);
 
-  bool bitmapToTexture(jobject bmp, bool alpha, jint *result) {
+  bool BitmapToTexture(JNIEnv *env, jobject bmp, bool alpha, jint *result) {
     Java::LocalRef<jintArray> result2{env, env->NewIntArray(5)};
 
     bool success = env->CallBooleanMethod(obj, bitmapToTexture_method,
@@ -139,7 +138,7 @@ public:
     return success;
   }
 
-  void SetTexturePowerOfTwo(bool value) {
+  void SetTexturePowerOfTwo(JNIEnv *env, bool value) {
     env->SetStaticBooleanField(cls, textureNonPowerOfTwo_field, value);
   }
 
@@ -147,15 +146,15 @@ public:
    * Deliver plain text data to somebody; the user will be asked to
    * pick a recipient.
    */
-  void ShareText(const char *text) noexcept;
+  void ShareText(JNIEnv *env, const char *text) noexcept;
 
-  void OpenWaypointFile(unsigned id, const char *filename) {
+  void OpenWaypointFile(JNIEnv *env, unsigned id, const char *filename) {
     env->CallVoidMethod(obj, openWaypointFile_method, id,
                         Java::String(env, filename).Get());
   }
 
   [[gnu::pure]]
-  int getNetState() const {
+  int GetNetState(JNIEnv *env) const noexcept {
     return env->CallIntMethod(obj, getNetState_method);
   }
 };

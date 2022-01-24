@@ -319,8 +319,11 @@ Startup(UI::Display &display)
   CreateDataPath();
 
 #ifdef ANDROID
-  native_view->AcquireWakeLock();
-  native_view->SetFullScreen(ui_settings.display.full_screen);
+  {
+    const auto env = Java::GetEnv();
+    native_view->AcquireWakeLock(env);
+    native_view->SetFullScreen(env, ui_settings.display.full_screen);
+  }
 #endif
 
   Display::LoadOrientation(operation);

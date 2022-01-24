@@ -261,7 +261,7 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
 #ifdef ANDROID
   changed |= SaveValue(FullScreen, ProfileKeys::FullScreen,
                        ui_settings.display.full_screen);
-  native_view->SetFullScreen(ui_settings.display.full_screen);
+  native_view->SetFullScreen(Java::GetEnv(), ui_settings.display.full_screen);
 #endif
 
   bool orientation_changed = false;

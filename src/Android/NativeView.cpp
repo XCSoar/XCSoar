@@ -98,11 +98,11 @@ NativeView::Deinitialise(JNIEnv *env)
   cls.Clear(env);
 }
 
-NativeView::NativeView(JNIEnv *_env, jobject _obj,
+NativeView::NativeView(JNIEnv *env, jobject _obj,
                        unsigned _width, unsigned _height,
                        unsigned _xdpi, unsigned _ydpi,
                        jstring _product) noexcept
-  :env(_env), obj(env, _obj),
+  :obj(env, _obj),
    width(_width), height(_height)
 {
   Java::String::CopyTo(env, _product, product, sizeof(product));
@@ -122,7 +122,7 @@ ConvertABGRToARGB(UncompressedImage &image)
 }
 
 Java::LocalObject
-NativeView::loadFileTiff(Path path)
+NativeView::LoadFileTiff(JNIEnv *env, Path path)
 {
   UncompressedImage image = LoadTiff(path);
 
@@ -151,14 +151,14 @@ NativeView::loadFileTiff(Path path)
 }
 
 Java::LocalObject
-NativeView::loadFileBitmap(Path path)
+NativeView::LoadFileBitmap(JNIEnv *env, Path path)
 {
   Java::String path2(env, path.c_str());
   return {env, env->CallObjectMethod(obj, loadFileBitmap_method, path2.Get())};
 }
 
 void
-NativeView::ShareText(const char *text) noexcept
+NativeView::ShareText(JNIEnv *env, const char *text) noexcept
 {
   env->CallVoidMethod(obj, shareText_method,
                       Java::String{env, text}.Get());

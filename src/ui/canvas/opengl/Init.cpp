@@ -153,7 +153,7 @@ OpenGL::SetupContext()
   texture_non_power_of_two = SupportsNonPowerOfTwoTextures();
 
 #ifdef ANDROID
-  native_view->SetTexturePowerOfTwo(texture_non_power_of_two);
+  native_view->SetTexturePowerOfTwo(Java::GetEnv(), texture_non_power_of_two);
 #endif
 
 #ifdef HAVE_OES_MAPBUFFER

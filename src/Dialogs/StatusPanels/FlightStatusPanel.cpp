@@ -96,7 +96,7 @@ FlightStatusPanel::Prepare(ContainerWindow &parent,
 
 #ifdef ANDROID
   AddButton(_("Share"), [this](){
-    native_view->ShareText(GetText(Location));
+    native_view->ShareText(Java::GetEnv(), GetText(Location));
   });
 
   SetRowEnabled(ShareButton, false);
