@@ -88,7 +88,7 @@ DrmDisplay::DrmDisplay()
 {
   drmModeRes *resources = drmModeGetResources(dri_fd.Get());
   if (resources == nullptr)
-    throw std::runtime_error("drmModeGetResources() failed");
+    throw MakeErrno("drmModeGetResources() failed");
 
   auto *connector = ChooseConnector(dri_fd, *resources);
   connector_id = connector->connector_id;
