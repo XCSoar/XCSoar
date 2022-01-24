@@ -24,11 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_HARDWARE_DISPLAY_DPI_HPP
 #define XCSOAR_HARDWARE_DISPLAY_DPI_HPP
 
-#include "util/Compiler.h"
-
 #if defined(USE_FB) || defined(MESA_KMS) || defined(ANDROID) || defined(USE_X11)
 #define HAVE_DPI_DETECTION
 #endif
+
+namespace UI { class Display; }
 
 namespace Display {
   /**
@@ -61,18 +61,22 @@ ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
    * @return Number of pixels per logical inch along the screen width
    */
 #ifndef __APPLE__
-  gcc_const
+[[gnu::const]]
 #endif
-  unsigned GetXDPI(unsigned custom_dpi=0);
+unsigned
+GetXDPI(const UI::Display &display, unsigned custom_dpi=0) noexcept;
+
   /**
    * Returns the number of pixels per logical inch along the screen height
    * @param custom_dpi overide system dpi settings, but not command line dpi
    * @return Number of pixels per logical inch along the screen height
    */
 #ifndef __APPLE__
-  gcc_const
+[[gnu::const]]
 #endif
-  unsigned GetYDPI(unsigned custom_dpi=0);
+unsigned
+GetYDPI(const UI::Display &display, unsigned custom_dpi=0) noexcept;
+
 }
 
 #endif

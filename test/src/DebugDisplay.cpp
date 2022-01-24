@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Hardware/DisplayDPI.hpp"
+#include "ui/display/Display.hpp"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -40,18 +41,21 @@ PrintScreenSize()
 }
 
 static void
-PrintDPI()
+PrintDPI(const UI::Display &display) noexcept
 {
-  printf("DPI X: %u | DPI Y: %u\n", Display::GetXDPI(), Display::GetYDPI());
+  printf("DPI X: %u | DPI Y: %u\n",
+         Display::GetXDPI(display), Display::GetYDPI(display));
 }
 
 int
 main(int argc, char **argv)
 {
+  const UI::Display display;
+
   printf("Display Information\n\n");
 
   PrintScreenSize();
-  PrintDPI();
+  PrintDPI(display);
 
   return 0;
 }

@@ -47,7 +47,7 @@ public:
 
   ~Display() noexcept;
 
-  auto GetXDisplay() noexcept {
+  auto GetXDisplay() const noexcept {
     return display;
   }
 

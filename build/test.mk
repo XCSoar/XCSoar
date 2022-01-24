@@ -934,11 +934,9 @@ $(eval $(call link-program,DumpHexColor,DUMP_HEX_COLOR))
 DEBUG_DISPLAY_SOURCES = \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugDisplay.cpp
-DEBUG_DISPLAY_DEPENDS = IO
-ifeq ($(USE_X11),y)
-DEBUG_DISPLAY_DEPENDS += EVENT
-endif
+DEBUG_DISPLAY_DEPENDS = SCREEN IO OS MATH UTIL
 $(eval $(call link-program,DebugDisplay,DEBUG_DISPLAY))
 
 DOWNLOAD_FILE_SOURCES = \

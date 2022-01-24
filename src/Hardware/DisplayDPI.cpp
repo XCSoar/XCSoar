@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DisplayDPI.hpp"
+#include "ui/display/Display.hpp"
 
 #ifdef _WIN32
 #include "ui/canvas/gdi/RootDC.hpp"
@@ -30,9 +31,6 @@ Copyright_License {
 #endif
 
 #ifdef USE_X11
-#include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
-
 #define Font X11Font
 #define Window X11Window
 #define Display X11Display
@@ -79,7 +77,7 @@ MMToDPI(unsigned pixels, unsigned mm)
 
 #if !defined(_WIN32) && !defined(USE_X11)
 #ifndef __APPLE__
-gcc_const
+[[gnu::const]]
 #endif
 static unsigned
 GetDPI()
@@ -147,7 +145,7 @@ Display::ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
 #endif
 
 unsigned
-Display::GetXDPI(unsigned custom_dpi)
+Display::GetXDPI(const UI::Display &display, unsigned custom_dpi) noexcept
 {
 #ifndef ANDROID
   if (forced_x_dpi > 0)
@@ -167,19 +165,17 @@ Display::GetXDPI(unsigned custom_dpi)
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSX);
 #elif defined(USE_X11)
-  assert(UI::event_queue != nullptr);
+  auto x_display = display.GetXDisplay();
+  assert(x_display != nullptr);
 
-  auto display = UI::event_queue->GetDisplay();
-  assert(display != nullptr);
-
-  return MMToDPI(DisplayWidth(display, 0), DisplayWidthMM(display, 0));
+  return MMToDPI(DisplayWidth(x_display, 0), DisplayWidthMM(x_display, 0));
 #else
   return GetDPI();
 #endif
 }
 
 unsigned
-Display::GetYDPI(unsigned custom_dpi)
+Display::GetYDPI(const UI::Display &display, unsigned custom_dpi) noexcept
 {
 #ifndef ANDROID
   if (forced_y_dpi > 0)
@@ -198,12 +194,10 @@ Display::GetYDPI(unsigned custom_dpi)
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSY);
 #elif defined(USE_X11)
-  assert(UI::event_queue != nullptr);
+  auto x_display = display.GetXDisplay();
+  assert(x_display != nullptr);
 
-  auto display = UI::event_queue->GetDisplay();
-  assert(display != nullptr);
-
-  return MMToDPI(DisplayHeight(display, 0), DisplayHeightMM(display, 0));
+  return MMToDPI(DisplayHeight(x_display, 0), DisplayHeightMM(x_display, 0));
 #else
   return GetDPI();
 #endif

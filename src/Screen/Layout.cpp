@@ -100,8 +100,8 @@ Layout::Initialise(const UI::Display &display, PixelSize new_size,
   if (!ScaleSupported())
     return;
 
-  const unsigned x_dpi = Display::GetXDPI(custom_dpi);
-  const unsigned y_dpi = Display::GetYDPI(custom_dpi);
+  const unsigned x_dpi = Display::GetXDPI(display, custom_dpi);
+  const unsigned y_dpi = Display::GetYDPI(display, custom_dpi);
   const bool is_small_screen = IsSmallScreen(GetDisplaySize(display, new_size),
                                              x_dpi, y_dpi);
 
