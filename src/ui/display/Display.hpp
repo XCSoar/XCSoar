@@ -44,6 +44,10 @@ Copyright_License {
 #include "sdl/Display.hpp"
 #endif
 
+#ifdef ENABLE_OPENGL
+#include "opengl/Display.hpp"
+#endif
+
 namespace UI {
 
 /**
@@ -53,14 +57,16 @@ namespace UI {
 
 #ifdef ANDROID
 
-class Display : public EGL::Display {
+class Display : public EGL::Display, public OpenGL::Display {
 public:
   using EGL::Display::Display;
 };
 
 #elif defined(USE_EGL) && defined(USE_X11)
 
-class Display : public X11::Display, public EGL::Display {
+class Display
+  : public X11::Display, public EGL::Display,
+    public OpenGL::Display {
 public:
   Display()
     :EGL::Display(X11::Display::GetXDisplay()) {}
@@ -68,7 +74,7 @@ public:
 
 #elif defined(USE_GLX) && defined(USE_X11)
 
-class Display : public X11::Display {
+class Display : public X11::Display, public OpenGL::Display {
 public:
   using X11::Display::Display;
 };
@@ -76,7 +82,8 @@ public:
 #elif defined(MESA_KMS)
 
 class Display
-  : public EGL::DrmDisplay, public EGL::GbmDisplay, public EGL::Display
+  : public EGL::DrmDisplay, public EGL::GbmDisplay, public EGL::Display,
+    public OpenGL::Display
 {
   /* for DRM/GBM/KMS, we first need to open a DRM device
      (#DrmDisplay), allocate a GBM display (#GbmDisplay) and then
@@ -91,7 +98,7 @@ public:
 #elif defined(USE_WAYLAND)
 
 class Display
-  : public Wayland::Display, public EGL::Display
+  : public Wayland::Display, public EGL::Display, public OpenGL::Display
 {
 public:
   Display()
@@ -102,6 +109,9 @@ public:
 
 class Display
   : public SDL::Display
+#ifdef ENABLE_OPENGL
+  , public OpenGL::Display
+#endif
 {
 public:
   using SDL::Display::Display;

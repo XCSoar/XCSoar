@@ -93,6 +93,8 @@ TopCanvas::TopCanvas(UI::Display &_display, SDL_Window *_window)
     throw FormatRuntimeError("SDL_GL_CreateContext(%p) has failed: %s",
                              window, ::SDL_GetError());
 
+  /* this is usually done by OpenGL::Display, but libSDL doesn't allow
+     that */
   OpenGL::SetupContext();
 
   SetupViewport(GetNativeSize());

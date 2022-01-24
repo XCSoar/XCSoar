@@ -21,33 +21,14 @@ Copyright_License {
 }
 */
 
-#include "../Init.hpp"
-#include "Screen/Debug.hpp"
-#include "ui/canvas/Font.hpp"
-#include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
+#pragma once
 
-using namespace UI;
+namespace OpenGL {
 
-ScreenGlobalInit::ScreenGlobalInit()
-{
-#ifdef USE_FREETYPE
-  Font::Initialise();
-#endif
+class Display {
+public:
+  Display();
+  ~Display() noexcept;
+};
 
-  event_queue = new EventQueue();
-
-  ScreenInitialized();
-}
-
-ScreenGlobalInit::~ScreenGlobalInit()
-{
-  delete event_queue;
-  event_queue = nullptr;
-
-#ifdef USE_FREETYPE
-  Font::Deinitialise();
-#endif
-
-  ScreenDeinitialized();
-}
+} // namespace OpenGL

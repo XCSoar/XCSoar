@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "ui/canvas/custom/TopCanvas.hpp"
-#include "ui/canvas/opengl/Init.hpp"
 #include "ui/canvas/opengl/Globals.hpp"
 #include "ui/opengl/Features.hpp"
 #include "ui/display/Display.hpp"
@@ -58,8 +57,6 @@ TopCanvas::TopCanvas(UI::Display &_display, PixelSize new_size)
   /* no surface yet; it will be created later by AcquireSurface(); but
    * we need to make the context "current" */
   display.MakeCurrent(EGL_NO_SURFACE);
-
-  OpenGL::SetupContext();
 }
 
 #elif !defined(USE_X11) && !defined(USE_WAYLAND)
@@ -100,7 +97,6 @@ TopCanvas::CreateSurface(EGLNativeWindowType native_window)
 
   display.MakeCurrent(surface);
 
-  OpenGL::SetupContext();
   SetupViewport(effective_size);
 
   if (auto s = (const char *)glGetString(GL_VENDOR))

@@ -79,6 +79,9 @@ Display::Display()
                                     nullptr, true);
   if (glx_context == nullptr)
     throw std::runtime_error("Failed to create GLX context");
+
+  if (!glXMakeContextCurrent(display, 0, 0, glx_context))
+    throw std::runtime_error("Failed to enable GLX context");
 #endif // USE_GLX
 }
 

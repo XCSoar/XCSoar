@@ -101,6 +101,7 @@ Display::CreateContext()
 
   context = eglCreateContext(display, chosen_config,
                              EGL_NO_CONTEXT, context_attributes);
+  eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, context);
 }
 
 EGLSurface

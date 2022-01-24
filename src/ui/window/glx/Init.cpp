@@ -26,15 +26,12 @@ Copyright_License {
 #include "ui/event/Queue.hpp"
 #include "Screen/Debug.hpp"
 #include "ui/canvas/Font.hpp"
-#include "ui/canvas/opengl/Init.hpp"
 #include "ui/canvas/freetype/Init.hpp"
 
 using namespace UI;
 
 ScreenGlobalInit::ScreenGlobalInit()
 {
-  OpenGL::Initialise();
-
   FreeType::Initialise();
   Font::Initialise();
 
@@ -47,8 +44,6 @@ ScreenGlobalInit::~ScreenGlobalInit()
 {
   delete event_queue;
   event_queue = nullptr;
-
-  OpenGL::Deinitialise();
 
   FreeType::Deinitialise();
 

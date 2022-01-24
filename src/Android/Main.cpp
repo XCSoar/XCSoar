@@ -53,7 +53,6 @@ Copyright_License {
 #include "ui/display/Display.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
-#include "ui/canvas/opengl/Init.hpp"
 #include "Dialogs/Message.hpp"
 #include "Profile/Profile.hpp"
 #include "MainWindow.hpp"
@@ -149,7 +148,6 @@ try {
 
   auto *ui_display = new UI::Display(EGL_DEFAULT_DISPLAY);
 
-  OpenGL::Initialise();
   TextUtil::Initialise(env);
 
   assert(native_view == nullptr);
@@ -239,7 +237,6 @@ try {
   native_view = nullptr;
 
   TextUtil::Deinitialise(env);
-  OpenGL::Deinitialise();
 
   delete ui_display;
 

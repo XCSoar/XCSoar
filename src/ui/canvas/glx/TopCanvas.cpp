@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "ui/canvas/custom/TopCanvas.hpp"
-#include "ui/canvas/opengl/Init.hpp"
 #include "ui/canvas/opengl/Globals.hpp"
 #include "ui/opengl/Features.hpp"
 #include "ui/display/Display.hpp"
@@ -46,7 +45,6 @@ TopCanvas::TopCanvas(UI::Display &_display,
   if (effective_size.width == 0 || effective_size.height == 0)
     throw std::runtime_error("Failed to query GLX drawable size");
 
-  OpenGL::SetupContext();
   SetupViewport(effective_size);
 }
 

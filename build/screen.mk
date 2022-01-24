@@ -104,6 +104,7 @@ endif
 
 ifeq ($(OPENGL),y)
 SCREEN_SOURCES += \
+	$(SRC)/ui/display/opengl/Display.cpp \
 	$(CANVAS_SRC_DIR)/custom/Cache.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Init.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Dynamic.cpp \

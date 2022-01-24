@@ -21,33 +21,26 @@ Copyright_License {
 }
 */
 
-#include "../Init.hpp"
-#include "Screen/Debug.hpp"
-#include "ui/canvas/Font.hpp"
-#include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
+#include "Display.hpp"
+#include "ui/canvas/opengl/Init.hpp"
 
-using namespace UI;
+namespace OpenGL {
 
-ScreenGlobalInit::ScreenGlobalInit()
+Display::Display()
 {
-#ifdef USE_FREETYPE
-  Font::Initialise();
+  Initialise();
+
+  /* not calling SetupContext() here when using libSDL, because libSDL
+     creates the OpenGL context using SDL_GL_CreateContext(), which
+     requires already having a SDL_Window */
+#ifndef ENABLE_SDL
+  SetupContext();
 #endif
-
-  event_queue = new EventQueue();
-
-  ScreenInitialized();
 }
 
-ScreenGlobalInit::~ScreenGlobalInit()
+Display::~Display() noexcept
 {
-  delete event_queue;
-  event_queue = nullptr;
-
-#ifdef USE_FREETYPE
-  Font::Deinitialise();
-#endif
-
-  ScreenDeinitialized();
+  Deinitialise();
 }
+
+} // namespace OpenGL

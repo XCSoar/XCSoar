@@ -24,7 +24,6 @@ Copyright_License {
 #include "../Init.hpp"
 #include "Screen/Debug.hpp"
 #include "ui/canvas/Font.hpp"
-#include "ui/canvas/opengl/Init.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
 #include "Components.hpp"
@@ -33,8 +32,6 @@ using namespace UI;
 
 ScreenGlobalInit::ScreenGlobalInit()
 {
-  OpenGL::Initialise();
-
   Font::Initialise();
 
   event_queue = new EventQueue(display);
@@ -46,8 +43,6 @@ ScreenGlobalInit::~ScreenGlobalInit()
 {
   delete event_queue;
   event_queue = nullptr;
-
-  OpenGL::Deinitialise();
 
   Font::Deinitialise();
 
