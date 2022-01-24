@@ -104,6 +104,9 @@ class NativeView extends SurfaceView
     thread.start();
   }
 
+  /**
+   * Called from TopCanvas::AcquireSurface() (native code).
+   */
   private Surface getSurface() {
     return getHolder().getSurface();
   }
