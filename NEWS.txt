@@ -1,4 +1,6 @@
 Version 7.23 - not yet released
+* Android
+  - add SoftRF Academy and ES into 'white list' of USB devices
 
 Version 7.22 - 2022/01/14
 * user interface
