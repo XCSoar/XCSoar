@@ -50,6 +50,7 @@ Copyright_License {
 #include "Version.hpp"
 #include "Screen/Debug.hpp"
 #include "Look/GlobalFonts.hpp"
+#include "ui/window/Init.hpp"
 #include "ui/display/Display.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
@@ -146,8 +147,6 @@ try {
 
   LogFormat(_T("Starting XCSoar %s"), XCSoar_ProductToken);
 
-  auto *ui_display = new UI::Display(EGL_DEFAULT_DISPLAY);
-
   TextUtil::Initialise(env);
 
   assert(native_view == nullptr);
@@ -156,8 +155,6 @@ try {
 #ifdef __arm__
   is_nook = StringIsEqual(native_view->GetProduct(), "NOOK");
 #endif
-
-  event_queue = new EventQueue();
 
   SoundUtil::Initialise(env);
   Vibrator::Initialise(env);
@@ -196,11 +193,12 @@ try {
   }
 #endif
 
-  ScreenInitialized();
+  ScreenGlobalInit screen_init;
+
   AllowLanguage();
   InitLanguage();
 
-  if (Startup(*ui_display))
+  if (Startup(screen_init.GetDisplay()))
     CommonInterface::main_window->RunEventLoop();
 
   Shutdown();
@@ -231,16 +229,11 @@ try {
   vibrator = nullptr;
 
   SoundUtil::Deinitialise(env);
-  delete event_queue;
-  event_queue = nullptr;
   delete native_view;
   native_view = nullptr;
 
   TextUtil::Deinitialise(env);
 
-  delete ui_display;
-
-  ScreenDeinitialized();
   DeinitialiseDataPath();
 
   delete context;

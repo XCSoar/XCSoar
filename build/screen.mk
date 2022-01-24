@@ -9,6 +9,7 @@ WINDOW_SRC_DIR = $(SRC)/ui/window
 
 SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Debug.cpp \
+	$(WINDOW_SRC_DIR)/Init.cpp \
 	$(SRC)/Renderer/ProgressBarRenderer.cpp \
 	$(CONTROL_SRC_DIR)/ProgressBar.cpp \
 	$(CANVAS_SRC_DIR)/Ramp.cpp \
@@ -140,8 +141,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/sdl/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/sdl/Window.cpp \
 	$(WINDOW_SRC_DIR)/sdl/TopWindow.cpp \
-	$(WINDOW_SRC_DIR)/sdl/SingleWindow.cpp \
-	$(WINDOW_SRC_DIR)/Init.cpp
+	$(WINDOW_SRC_DIR)/sdl/SingleWindow.cpp
 ifeq ($(OPENGL),n)
 USE_MEMORY_CANVAS = y
 endif
@@ -152,7 +152,6 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/custom/Files.cpp \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
-	$(WINDOW_SRC_DIR)/Init.cpp \
 	$(CANVAS_SRC_DIR)/egl/TopCanvas.cpp \
 	$(SRC)/ui/display/egl/ConfigChooser.cpp \
 	$(SRC)/ui/display/egl/Display.cpp \
@@ -166,7 +165,6 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/custom/Files.cpp \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
-	$(WINDOW_SRC_DIR)/Init.cpp \
 	$(CANVAS_SRC_DIR)/glx/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
 	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
@@ -181,8 +179,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/fb/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
 	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
-	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp \
-	$(WINDOW_SRC_DIR)/Init.cpp
+	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
 FB_CPPFLAGS = -DUSE_VFB
 else ifeq ($(USE_FB),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
@@ -195,15 +192,13 @@ SCREEN_SOURCES += \
 	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
 	$(CANVAS_SRC_DIR)/fb/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
-	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp \
-	$(WINDOW_SRC_DIR)/Init.cpp
+	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
 FB_CPPFLAGS = -DUSE_FB
 else ifeq ($(HAVE_WIN32),y)
 SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/gdi/WindowCanvas.cpp \
 	$(CANVAS_SRC_DIR)/gdi/VirtualCanvas.cpp \
 	$(CANVAS_SRC_DIR)/gdi/Font.cpp \
-	$(WINDOW_SRC_DIR)/Init.cpp \
 	$(WINDOW_SRC_DIR)/gdi/Window.cpp \
 	$(WINDOW_SRC_DIR)/gdi/PaintWindow.cpp \
 	$(WINDOW_SRC_DIR)/gdi/ContainerWindow.cpp \

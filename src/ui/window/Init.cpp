@@ -49,6 +49,9 @@ Copyright_License {
 using namespace UI;
 
 ScreenGlobalInit::ScreenGlobalInit()
+#ifdef ANDROID
+  :display(EGL_DEFAULT_DISPLAY)
+#endif
 {
 #ifdef USE_FREETYPE
   Font::Initialise();
