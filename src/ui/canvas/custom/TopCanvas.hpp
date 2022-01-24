@@ -170,7 +170,7 @@ public:
   {
     CreateSurface(native_window);
   }
-#elif defined(ANDROID) || defined(USE_VFB)
+#elif defined(USE_VFB)
   TopCanvas(UI::Display &_display, PixelSize new_size);
 #else
   explicit TopCanvas(UI::Display &_display);

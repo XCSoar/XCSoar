@@ -54,7 +54,7 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
   screen = new TopCanvas(display, x_window);
 #elif defined(USE_WAYLAND)
   screen = new TopCanvas(display, native_window);
-#elif defined(ANDROID) || defined(USE_VFB)
+#elif defined(USE_VFB)
   screen = new TopCanvas(display, size);
 #else
   screen = new TopCanvas(display);

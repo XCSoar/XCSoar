@@ -51,7 +51,7 @@ struct drm_fb {
 
 #ifdef ANDROID
 
-TopCanvas::TopCanvas(UI::Display &_display, PixelSize new_size)
+TopCanvas::TopCanvas(UI::Display &_display)
   :display(_display)
 {
   /* no surface yet; it will be created later by AcquireSurface(); but
