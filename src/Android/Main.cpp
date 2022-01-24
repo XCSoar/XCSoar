@@ -110,7 +110,7 @@ try {
 
   InitThreadDebug();
 
-  InitialiseAsioThread();
+  const ScopeGlobalAsioThread global_asio_thread;
   Net::Initialise(asio_thread->GetEventLoop());
 
   Java::Object::Initialise(env);
@@ -260,7 +260,6 @@ try {
   Java::URL::Deinitialise(env);
 
   Net::Deinitialise();
-  DeinitialiseAsioThread();
 } catch (...) {
   /* if an error occurs, rethrow the C++ exception as Java exception,
      to be displayed by the Java glue code */
