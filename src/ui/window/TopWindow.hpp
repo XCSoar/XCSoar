@@ -62,26 +62,20 @@ class TopCanvas;
 #define Window X11Window
 #define Display X11Display
 #include <X11/X.h>
-#ifdef USE_GLX
-#include <GL/glx.h>
-#undef NoValue
-#endif
 #undef Font
 #undef Window
 #undef Display
 #undef Expose
 #undef KeyPress
-struct _XDisplay;
 #endif
 
 #ifdef USE_WAYLAND
-struct wl_display;
 struct wl_egl_window;
 #endif
 
-namespace UI { class Display; }
-
 namespace UI {
+
+class Display;
 
 class TopWindowStyle : public WindowStyle {
 #if defined(ENABLE_SDL) || defined(USE_X11)
