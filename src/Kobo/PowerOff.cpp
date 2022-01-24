@@ -130,7 +130,7 @@ int main(int argc, char **argv)
   FreeType::mono = false;
 
   ScreenGlobalInit screen_init;
-  Layout::Initialize({600, 800});
+  Layout::Initialise(screen_init.GetDisplay(), {600, 800});
 
   Font::Initialise();
   Display::Rotate(DisplayOrientation::PORTRAIT);

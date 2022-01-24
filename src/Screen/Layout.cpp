@@ -77,7 +77,8 @@ IsSmallScreen(PixelSize size,
 }
 
 void
-Layout::Initialize(PixelSize new_size, unsigned ui_scale, unsigned custom_dpi) noexcept
+Layout::Initialise(const UI::Display &display, PixelSize new_size,
+                   unsigned ui_scale, unsigned custom_dpi) noexcept
 {
   const unsigned width = new_size.width, height = new_size.height;
 

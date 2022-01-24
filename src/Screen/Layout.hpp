@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "ui/dim/Size.hpp"
 
+namespace UI { class Display; }
+
 namespace Layout
 {
 
@@ -84,7 +86,8 @@ extern unsigned hit_radius;
  * @param custom_dpi user defined DPI setting or 0 for system settings
  */
 void
-Initialize(PixelSize screen_size, unsigned ui_scale=100,
+Initialise(const UI::Display &display,
+           PixelSize screen_size, unsigned ui_scale=100,
            unsigned custom_dpi=0) noexcept;
 
 /**

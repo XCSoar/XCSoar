@@ -230,6 +230,10 @@ public:
   ~TopWindow() noexcept override;
 #endif
 
+  auto &GetDisplay() const noexcept {
+    return display;
+  }
+
   /**
    * Throws on error.
    */

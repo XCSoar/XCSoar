@@ -150,7 +150,7 @@ Main()
   dialog_settings.SetDefaults();
 
   ScreenGlobalInit screen_init;
-  Layout::Initialize({600, 800});
+  Layout::Initialise(screen_init.GetDisplay(), {600, 800});
   InitialiseFonts();
 
   DialogLook dialog_look;

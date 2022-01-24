@@ -208,7 +208,7 @@ NoFontsAvailable() noexcept
 void
 MainWindow::Initialise()
 {
-  Layout::Initialize(GetSize(),
+  Layout::Initialise(GetDisplay(), GetSize(),
                      CommonInterface::GetUISettings().GetPercentScale(),
                      CommonInterface::GetUISettings().custom_dpi);
 #ifdef DRAW_MOUSE_CURSOR
@@ -565,7 +565,7 @@ MainWindow::FullRedraw() noexcept
 void
 MainWindow::OnResize(PixelSize new_size)
 {
-  Layout::Initialize(new_size,
+  Layout::Initialise(GetDisplay(), new_size,
                      CommonInterface::GetUISettings().GetPercentScale(),
                      CommonInterface::GetUISettings().custom_dpi);
 

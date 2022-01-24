@@ -166,7 +166,7 @@ protected:
 
   void OnResize(PixelSize new_size) override {
     SingleWindow::OnResize(new_size);
-    Layout::Initialize(new_size);
+    Layout::Initialise(GetDisplay(), new_size);
 
     if (full_window != nullptr)
       full_window->Resize(new_size);
@@ -240,7 +240,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   ScreenGlobalInit screen_init;
-  Layout::Initialize(window_size);
+  Layout::Initialise(screen_init.GetDisplay(), window_size);
   InitialiseFonts();
 #endif
 
