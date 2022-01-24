@@ -31,6 +31,7 @@ Copyright_License {
 #include <tchar.h>
 
 Java::TrivialClass NativeView::cls;
+jfieldID NativeView::ptr_field;
 jfieldID NativeView::textureNonPowerOfTwo_field;
 jmethodID NativeView::getSurface_method;
 jmethodID NativeView::acquireWakeLock_method;
@@ -54,6 +55,7 @@ NativeView::Initialise(JNIEnv *env)
 {
   cls.Find(env, "org/xcsoar/NativeView");
 
+  ptr_field = env->GetFieldID(cls, "ptr", "J");
   textureNonPowerOfTwo_field =
     env->GetStaticFieldID(cls, "textureNonPowerOfTwo", "Z");
   getSurface_method = env->GetMethodID(cls, "getSurface", "()Landroid/view/Surface;");

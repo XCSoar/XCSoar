@@ -59,6 +59,11 @@ class NativeView extends SurfaceView
   implements SurfaceHolder.Callback, Runnable {
   private static final String TAG = "XCSoar";
 
+  /**
+   * A native pointer to a C++ #TopWindow instance.
+   */
+  private long ptr;
+
   final Handler quitHandler, wakelockhandler, fullScreenHandler, errorHandler;
 
   Resources resources;

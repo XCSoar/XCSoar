@@ -35,6 +35,7 @@ Copyright_License {
 #include <cassert>
 
 class Path;
+namespace UI { class TopWindow; }
 
 class NativeView {
   Java::GlobalObject obj;
@@ -43,6 +44,7 @@ class NativeView {
   char product[20];
 
   static Java::TrivialClass cls;
+  static jfieldID ptr_field;
   static jfieldID textureNonPowerOfTwo_field;
   static jmethodID getSurface_method;
   static jmethodID acquireWakeLock_method;
@@ -85,6 +87,15 @@ public:
   NativeView(JNIEnv *_env, jobject _obj, unsigned _width, unsigned _height,
              unsigned _xdpi, unsigned _ydpi,
              jstring _product) noexcept;
+
+  void SetPointer(JNIEnv *env, UI::TopWindow *w) noexcept {
+    env->SetLongField(obj, ptr_field, (std::size_t)w);
+  }
+
+  [[gnu::pure]]
+  static UI::TopWindow *GetPointer(JNIEnv *env, jobject obj) noexcept {
+    return (UI::TopWindow *)(void *)env->GetLongField(obj, ptr_field);
+  }
 
 #ifndef NO_SCREEN
   PixelSize GetSize() const {

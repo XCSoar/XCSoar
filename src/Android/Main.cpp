@@ -307,8 +307,8 @@ Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
   if (event_queue == nullptr)
     return;
 
-  if (CommonInterface::main_window != nullptr)
-    CommonInterface::main_window->AnnounceResize({width, height});
+  if (auto *main_window = NativeView::GetPointer(env, obj))
+    main_window->AnnounceResize({width, height});
 
   event_queue->Purge(UI::Event::RESIZE);
 
@@ -320,22 +320,24 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
-  if (event_queue == nullptr || CommonInterface::main_window == nullptr)
+  auto *main_window = NativeView::GetPointer(env, obj);
+  if (event_queue == nullptr || main_window == nullptr)
     return;
     /* event subsystem is not initialized, there is nothing to pause */
 
-  CommonInterface::main_window->Pause();
+  main_window->Pause();
 }
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
 {
-  if (event_queue == nullptr || CommonInterface::main_window == nullptr)
+  auto *main_window = NativeView::GetPointer(env, obj);
+  if (event_queue == nullptr || main_window == nullptr)
     return;
     /* event subsystem is not initialized, there is nothing to resume */
 
-  CommonInterface::main_window->Resume();
+  main_window->Resume();
 }
 
 gcc_visibility_default

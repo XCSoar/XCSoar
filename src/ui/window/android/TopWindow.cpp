@@ -34,8 +34,13 @@ Copyright_License {
 
 #include <cassert>
 
-
 namespace UI {
+
+TopWindow::TopWindow(UI::Display &_display) noexcept
+  :display(_display)
+{
+  native_view->SetPointer(Java::GetEnv(), this);
+}
 
 void
 TopWindow::Invalidate() noexcept

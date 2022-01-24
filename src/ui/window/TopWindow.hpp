@@ -225,8 +225,12 @@ class TopWindow : public ContainerWindow {
 #endif
 
 public:
+#ifdef ANDROID
+  explicit TopWindow(UI::Display &_display) noexcept;
+#else
   explicit TopWindow(UI::Display &_display) noexcept
     :display(_display) {}
+#endif
 
 #ifndef USE_WINUSER
   ~TopWindow() noexcept override;
