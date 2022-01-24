@@ -3,6 +3,8 @@ Version 7.23 - not yet released
   - probe both /dev/dri/card0 and /dev/dri/card1
 * Android
   - add SoftRF Academy and ES into 'white list' of USB devices
+* Kobo
+  - fix broken button text background
 
 Version 7.22 - 2022/01/14
 * user interface
