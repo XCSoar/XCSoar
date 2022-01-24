@@ -29,8 +29,6 @@ Copyright_License {
 #include "ui/canvas/memory/ActivePixelTraits.hpp"
 #include "ui/canvas/memory/Buffer.hpp"
 #include "ui/dim/Size.hpp"
-#else
-#include "ui/canvas/Canvas.hpp"
 #endif
 
 #ifdef ENABLE_OPENGL
@@ -88,9 +86,6 @@ namespace UI { class Display; }
 #endif
 
 class TopCanvas
-#ifndef USE_MEMORY_CANVAS
-  : public Canvas
-#endif
 {
   UI::Display &display;
 
@@ -260,10 +255,15 @@ public:
   PixelSize GetSize() const noexcept {
     return PixelSize(buffer.width, buffer.height);
   }
+#endif
+
+#ifdef ENABLE_OPENGL
+  [[gnu::pure]]
+  PixelSize GetSize() const noexcept;
+#endif
 
   Canvas Lock();
   void Unlock() noexcept;
-#endif
 
   void Flip();
 
@@ -279,12 +279,12 @@ public:
 #endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
-  void SetDisplayOrientation(DisplayOrientation orientation) noexcept;
+  PixelSize SetDisplayOrientation(DisplayOrientation orientation) noexcept;
 #endif
 
 private:
 #ifdef ENABLE_OPENGL
-  void SetupViewport(PixelSize native_size) noexcept;
+  PixelSize SetupViewport(PixelSize native_size) noexcept;
 #endif
 
 #ifdef USE_EGL

@@ -23,11 +23,8 @@ Copyright_License {
 
 #include "../TopWindow.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Hardware/CPU.hpp"
-
-#ifdef USE_MEMORY_CANVAS
-#include "ui/canvas/memory/Canvas.hpp"
-#endif
 
 namespace UI {
 
@@ -64,9 +61,9 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
 #endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
-  screen->SetDisplayOrientation(style.GetInitialOrientation());
+  size = screen->SetDisplayOrientation(style.GetInitialOrientation());
 #endif
-  ContainerWindow::Create(nullptr, screen->GetRect(), style);
+  ContainerWindow::Create(nullptr, PixelRect{size}, style);
 }
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
@@ -75,10 +72,8 @@ void
 TopWindow::SetDisplayOrientation(DisplayOrientation orientation) noexcept
 {
   assert(screen != nullptr);
-  assert(screen->IsDefined());
 
-  screen->SetDisplayOrientation(orientation);
-  Resize(screen->GetSize());
+  Resize(screen->SetDisplayOrientation(orientation));
 }
 
 #endif
@@ -96,14 +91,10 @@ TopWindow::Expose() noexcept
   const ScopeLockCPU cpu;
 #endif
 
-#ifdef USE_MEMORY_CANVAS
   if (auto canvas = screen->Lock(); canvas.IsDefined()) {
     OnPaint(canvas);
     screen->Unlock();
   }
-#else
-  OnPaint(*screen);
-#endif
 
   screen->Flip();
 }

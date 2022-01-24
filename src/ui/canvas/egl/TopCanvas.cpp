@@ -26,6 +26,7 @@ Copyright_License {
 #include "ui/canvas/opengl/Globals.hpp"
 #include "ui/opengl/Features.hpp"
 #include "ui/display/Display.hpp"
+#include "ui/dim/Size.hpp"
 #include "system/Error.hxx"
 #include "util/RuntimeError.hxx"
 #include "LogFile.hpp"
@@ -59,8 +60,6 @@ TopCanvas::TopCanvas(UI::Display &_display, PixelSize new_size)
   display.MakeCurrent(EGL_NO_SURFACE);
 
   OpenGL::SetupContext();
-
-  Canvas::Create(new_size);
 }
 
 #elif !defined(USE_X11) && !defined(USE_WAYLAND)

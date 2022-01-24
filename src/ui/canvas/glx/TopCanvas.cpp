@@ -26,6 +26,7 @@ Copyright_License {
 #include "ui/canvas/opengl/Globals.hpp"
 #include "ui/opengl/Features.hpp"
 #include "ui/display/Display.hpp"
+#include "ui/dim/Size.hpp"
 
 #include <stdexcept>
 
