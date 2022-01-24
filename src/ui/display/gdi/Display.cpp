@@ -21,41 +21,19 @@ Copyright_License {
 }
 */
 
-#include "DisplaySize.hpp"
+#include "Display.hpp"
+#include "ui/canvas/gdi/RootDC.hpp"
 #include "ui/dim/Size.hpp"
 
-#ifdef _WIN32
-#include "ui/canvas/gdi/RootDC.hpp"
 #include <wingdi.h>
-#elif defined(USE_X11)
-#include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
-#define Font X11Font
-#define Window X11Window
-#define Display X11Display
-#include <X11/Xlib.h>
-#undef Font
-#undef Window
-#undef Display
-#endif
+
+namespace GDI {
 
 PixelSize
-Display::GetSize(PixelSize fallback)
+Display::GetSize() const noexcept
 {
-#ifdef _WIN32
   RootDC dc;
-  return PixelSize(GetDeviceCaps(dc, HORZRES),
-                   GetDeviceCaps(dc, VERTRES));
-#elif defined(USE_X11)
-  assert(UI::event_queue != nullptr);
-
-  auto display = UI::event_queue->GetDisplay();
-  assert(display != nullptr);
-
-  return PixelSize(DisplayWidth(display, 0), DisplayHeight(display, 0));
-#else
-  /* not implemented: fall back to the main window size (which is
-     correct when it's a full-screen window */
-  return fallback;
-#endif
+  return {GetDeviceCaps(dc, HORZRES), GetDeviceCaps(dc, VERTRES)};
 }
+
+} // namespace GDI

@@ -5,7 +5,6 @@ OV_MENU_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Hardware/CPU.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
-	$(SRC)/Hardware/DisplaySize.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ui/control/TerminalWindow.cpp \

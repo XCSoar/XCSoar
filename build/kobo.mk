@@ -4,7 +4,6 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Hardware/CPU.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
-	$(SRC)/Hardware/DisplaySize.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ui/control/TerminalWindow.cpp \
@@ -53,7 +52,6 @@ KOBO_POWER_OFF_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
-	$(SRC)/Hardware/DisplaySize.cpp \
 	$(SRC)/Hardware/Battery.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Logger/FlightParser.cpp \

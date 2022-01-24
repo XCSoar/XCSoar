@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "Screen/Layout.hpp"
 #include "ui/dim/Size.hpp"
+#include "ui/display/Display.hpp"
 #include "Hardware/DisplayDPI.hpp"
-#include "Hardware/DisplaySize.hpp"
 #include "Asset.hpp"
 
 #include <algorithm>
@@ -76,6 +76,17 @@ IsSmallScreen(PixelSize size,
   return IsSmallScreen(size.width, size.height, x_dpi, y_dpi);
 }
 
+[[gnu::pure]]
+static PixelSize
+GetDisplaySize(const UI::Display &display, PixelSize fallback) noexcept
+{
+#if defined(USE_X11) || defined(USE_GDI)
+  return display.GetSize();
+#else
+  return fallback;
+#endif
+}
+
 void
 Layout::Initialise(const UI::Display &display, PixelSize new_size,
                    unsigned ui_scale, unsigned custom_dpi) noexcept
@@ -91,7 +102,7 @@ Layout::Initialise(const UI::Display &display, PixelSize new_size,
 
   const unsigned x_dpi = Display::GetXDPI(custom_dpi);
   const unsigned y_dpi = Display::GetYDPI(custom_dpi);
-  const bool is_small_screen = IsSmallScreen(Display::GetSize(new_size),
+  const bool is_small_screen = IsSmallScreen(GetDisplaySize(display, new_size),
                                              x_dpi, y_dpi);
 
   // always start w/ shortest dimension

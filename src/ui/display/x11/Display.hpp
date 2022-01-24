@@ -26,6 +26,7 @@ Copyright_License {
 struct _XDisplay;
 struct __GLXFBConfigRec;
 struct __GLXcontextRec;
+struct PixelSize;
 
 namespace X11 {
 
@@ -49,6 +50,9 @@ public:
   auto GetXDisplay() noexcept {
     return display;
   }
+
+  [[gnu::pure]]
+  PixelSize GetSize() const noexcept;
 
 #ifdef USE_GLX
   auto *GetFBConfig() const noexcept {

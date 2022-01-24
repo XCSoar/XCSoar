@@ -4,7 +4,6 @@ MORE_SCREEN_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(SRC)/Look/FontDescription.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Hardware/DisplaySize.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp
 ifeq ($(TARGET_IS_KOBO),y)
 MORE_SCREEN_SOURCES += \

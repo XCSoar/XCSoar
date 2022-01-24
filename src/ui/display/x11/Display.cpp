@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Display.hpp"
 #include "Hardware/DisplayDPI.hpp"
+#include "ui/dim/Size.hpp"
 
 #ifdef USE_EGL
 #include "ui/egl/System.hpp"
@@ -92,6 +93,12 @@ Display::~Display() noexcept
 #endif // USE_GLX
 
   XCloseDisplay(display);
+}
+
+PixelSize
+Display::GetSize() const noexcept
+{
+  return {DisplayWidth(display, 0), DisplayHeight(display, 0)};
 }
 
 } // namespace X11

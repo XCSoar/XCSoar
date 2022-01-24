@@ -196,6 +196,7 @@ SCREEN_SOURCES += \
 FB_CPPFLAGS = -DUSE_FB
 else ifeq ($(HAVE_WIN32),y)
 SCREEN_SOURCES += \
+	$(SRC)/ui/display/gdi/Display.cpp \
 	$(CANVAS_SRC_DIR)/gdi/WindowCanvas.cpp \
 	$(CANVAS_SRC_DIR)/gdi/VirtualCanvas.cpp \
 	$(CANVAS_SRC_DIR)/gdi/Font.cpp \
