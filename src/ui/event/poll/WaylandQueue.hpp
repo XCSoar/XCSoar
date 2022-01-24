@@ -66,10 +66,6 @@ public:
    */
   WaylandEventQueue(UI::Display &display, EventQueue &queue);
 
-  struct wl_display *GetDisplay() {
-    return display;
-  }
-
   struct wl_compositor *GetCompositor() {
     return compositor;
   }

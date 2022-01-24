@@ -70,10 +70,6 @@ public:
    */
   X11EventQueue(Display &display, EventQueue &queue);
 
-  _XDisplay *GetDisplay() const {
-    return display;
-  }
-
   bool IsVisible() const {
     return mapped && visible;
   }

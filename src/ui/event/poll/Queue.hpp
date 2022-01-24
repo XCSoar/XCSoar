@@ -75,20 +75,12 @@ public:
   }
 
 #ifdef USE_X11
-  _XDisplay *GetDisplay() const noexcept {
-    return input_queue.GetDisplay();
-  }
-
   bool WasCtrlClick() const noexcept {
     return input_queue.WasCtrlClick();
   }
 #endif
 
 #ifdef USE_WAYLAND
-  struct wl_display *GetDisplay() noexcept {
-    return input_queue.GetDisplay();
-  }
-
   struct wl_compositor *GetCompositor() noexcept {
     return input_queue.GetCompositor();
   }
