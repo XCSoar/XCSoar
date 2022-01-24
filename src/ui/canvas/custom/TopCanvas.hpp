@@ -242,7 +242,9 @@ public:
    * currently
    */
   bool AcquireSurface();
+#endif
 
+#ifdef USE_EGL
   void ReleaseSurface() noexcept;
 #endif
 

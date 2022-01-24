@@ -114,10 +114,7 @@ TopCanvas::CreateSurface(EGLNativeWindowType native_window)
 
 TopCanvas::~TopCanvas() noexcept
 {
-  if (surface != EGL_NO_SURFACE) {
-    display.MakeCurrent(EGL_NO_SURFACE);
-    display.DestroySurface(surface);
-  }
+  ReleaseSurface();
 
 #ifdef MESA_KMS
   if (nullptr != saved_crtc)
@@ -157,6 +154,8 @@ TopCanvas::AcquireSurface()
   return true;
 }
 
+#endif // ANDROID
+
 void
 TopCanvas::ReleaseSurface() noexcept
 {
@@ -167,8 +166,6 @@ TopCanvas::ReleaseSurface() noexcept
   display.DestroySurface(surface);
   surface = EGL_NO_SURFACE;
 }
-
-#endif // ANDROID
 
 void
 TopCanvas::Flip()
