@@ -23,6 +23,7 @@ Copyright_License {
 
 #pragma once
 
+struct UnsignedPoint2D;
 struct PixelSize;
 
 namespace GDI {
@@ -31,6 +32,9 @@ class Display {
 public:
   [[gnu::pure]]
   PixelSize GetSize() const noexcept;
+
+  [[gnu::pure]]
+  UnsignedPoint2D GetDPI() const noexcept;
 };
 
 } // namespace GDI

@@ -23,12 +23,7 @@ Copyright_License {
 
 #include "DisplayDPI.hpp"
 #include "ui/display/Display.hpp"
-
-#ifdef _WIN32
-#include "ui/canvas/gdi/RootDC.hpp"
-
-#include <wingdi.h>
-#endif
+#include "Math/Point2D.hpp"
 
 #ifdef USE_X11
 #define Font X11Font
@@ -162,8 +157,7 @@ Display::GetXDPI(const UI::Display &display, unsigned custom_dpi) noexcept
 
 
 #ifdef _WIN32
-  RootDC dc;
-  return GetDeviceCaps(dc, LOGPIXELSX);
+  return display.GetDPI().x;
 #elif defined(USE_X11)
   auto x_display = display.GetXDisplay();
   assert(x_display != nullptr);
@@ -191,8 +185,7 @@ Display::GetYDPI(const UI::Display &display, unsigned custom_dpi) noexcept
 #endif
 
 #ifdef _WIN32
-  RootDC dc;
-  return GetDeviceCaps(dc, LOGPIXELSY);
+  return display.GetDPI().y;
 #elif defined(USE_X11)
   auto x_display = display.GetXDisplay();
   assert(x_display != nullptr);
