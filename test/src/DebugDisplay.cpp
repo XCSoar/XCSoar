@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Hardware/DisplayDPI.hpp"
 #include "ui/display/Display.hpp"
+#include "Math/Point2D.hpp"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -43,8 +44,8 @@ PrintScreenSize()
 static void
 PrintDPI(const UI::Display &display) noexcept
 {
-  printf("DPI X: %u | DPI Y: %u\n",
-         Display::GetXDPI(display), Display::GetYDPI(display));
+  const auto dpi = Display::GetDPI(display);
+  printf("DPI X: %u | DPI Y: %u\n", dpi.x, dpi.y);
 }
 
 int

@@ -256,7 +256,7 @@ Startup(UI::Display &display)
     return false;
 
   LogFormat("Display dpi=%u,%u",
-            Display::GetXDPI(display), Display::GetYDPI(display));
+            Display::GetDPI(display).x, Display::GetDPI(display).y);
 
 #ifdef ENABLE_OPENGL
   LogFormat("OpenGL: "

@@ -42,12 +42,11 @@ Copyright_License {
 #include <cassert>
 
 #ifndef ANDROID
-  static unsigned forced_x_dpi = 0;
-  static unsigned forced_y_dpi = 0;
+static UnsignedPoint2D forced_dpi{};
 #endif
 
 #ifdef HAVE_DPI_DETECTION
-static unsigned detected_x_dpi = 0, detected_y_dpi = 0;
+static UnsignedPoint2D detected_dpi{};
 #endif
 
 #if defined(USE_X11) || defined(HAVE_DPI_DETECTION)
@@ -101,8 +100,7 @@ void
 Display::SetForcedDPI(unsigned x_dpi, unsigned y_dpi)
 {
 #ifndef ANDROID
-  forced_x_dpi = x_dpi;
-  forced_y_dpi = y_dpi;
+  forced_dpi = {x_dpi, y_dpi};
 #endif
 }
 
@@ -111,8 +109,7 @@ Display::SetForcedDPI(unsigned x_dpi, unsigned y_dpi)
 void
 Display::ProvideDPI(unsigned x_dpi, unsigned y_dpi) noexcept
 {
-  detected_x_dpi = x_dpi;
-  detected_y_dpi = y_dpi;
+  detected_dpi = {x_dpi, y_dpi};
 }
 
 void
@@ -124,59 +121,40 @@ Display::ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
   assert(width_mm > 0);
   assert(height_mm > 0);
 
-  detected_x_dpi = MMToDPI(width_pixels, width_mm);
-  detected_y_dpi = MMToDPI(height_pixels, height_mm);
+  detected_dpi = {
+    MMToDPI(width_pixels, width_mm),
+    MMToDPI(height_pixels, height_mm),
+  };
 }
 
 #endif
 
-unsigned
-Display::GetXDPI(const UI::Display &display, unsigned custom_dpi) noexcept
+UnsignedPoint2D
+Display::GetDPI(const UI::Display &display, unsigned custom_dpi) noexcept
 {
 #ifndef ANDROID
-  if (forced_x_dpi > 0)
-    return forced_x_dpi;
+  if (forced_dpi.x > 0 && forced_dpi.y > 0)
+    return forced_dpi;
 #endif
 
   if (custom_dpi)
-    return custom_dpi;
+    return {custom_dpi, custom_dpi};
 
 #ifdef HAVE_DPI_DETECTION
-  if (detected_x_dpi > 0)
-    return detected_x_dpi;
+  if (detected_dpi.x > 0 && detected_dpi.y > 0)
+    return detected_dpi;
 #endif
 
 
 #ifdef _WIN32
-  return display.GetDPI().x;
+  return display.GetDPI();
 #elif defined(USE_X11)
-  return MMToDPI(display.GetSize().width, display.GetSizeMM().width);
+  return {
+    MMToDPI(display.GetSize().width, display.GetSizeMM().width),
+    MMToDPI(display.GetSize().height, display.GetSizeMM().height),
+  };
 #else
-  return GetDPI();
-#endif
-}
-
-unsigned
-Display::GetYDPI(const UI::Display &display, unsigned custom_dpi) noexcept
-{
-#ifndef ANDROID
-  if (forced_y_dpi > 0)
-    return forced_y_dpi;
-#endif
-
-  if (custom_dpi)
-    return custom_dpi;
-
-#ifdef HAVE_DPI_DETECTION
-  if (detected_y_dpi > 0)
-    return detected_y_dpi;
-#endif
-
-#ifdef _WIN32
-  return display.GetDPI().y;
-#elif defined(USE_X11)
-  return MMToDPI(display.GetSize().height, display.GetSizeMM().height);
-#else
-  return GetDPI();
+  const auto dpi = ::GetDPI();
+  return {dpi, dpi};
 #endif
 }

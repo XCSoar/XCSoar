@@ -28,6 +28,8 @@ Copyright_License {
 #define HAVE_DPI_DETECTION
 #endif
 
+struct UnsignedPoint2D;
+
 namespace UI { class Display; }
 
 namespace Display {
@@ -55,23 +57,16 @@ ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
              unsigned width_mm, unsigned height_mm) noexcept;
 #endif
 
-  /**
-   * Returns the number of pixels per logical inch along the screen width
-   * @param custom_dpi overide system dpi settings, but not command line dpi
-   * @return Number of pixels per logical inch along the screen width
-   */
+/**
+ * Returns the number of pixels per logical inch along the screen
+ * width and height.
+ *
+ * @param custom_dpi overide system dpi settings, but not command line dpi
+ * @return Number of pixels per logical inch along the screen width/height
+ */
 [[gnu::const]]
-unsigned
-GetXDPI(const UI::Display &display, unsigned custom_dpi=0) noexcept;
-
-  /**
-   * Returns the number of pixels per logical inch along the screen height
-   * @param custom_dpi overide system dpi settings, but not command line dpi
-   * @return Number of pixels per logical inch along the screen height
-   */
-[[gnu::const]]
-unsigned
-GetYDPI(const UI::Display &display, unsigned custom_dpi=0) noexcept;
+UnsignedPoint2D
+GetDPI(const UI::Display &display, unsigned custom_dpi=0) noexcept;
 
 }
 

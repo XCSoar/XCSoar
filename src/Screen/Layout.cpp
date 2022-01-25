@@ -70,10 +70,9 @@ IsSmallScreen(unsigned width, unsigned height,
  * Is the small edge smaller than 5 inch?
  */
 static constexpr bool
-IsSmallScreen(PixelSize size,
-              unsigned x_dpi, unsigned y_dpi) noexcept
+IsSmallScreen(PixelSize size, UnsignedPoint2D dpi) noexcept
 {
-  return IsSmallScreen(size.width, size.height, x_dpi, y_dpi);
+  return IsSmallScreen(size.width, size.height, dpi.x, dpi.y);
 }
 
 [[gnu::pure]]
@@ -100,20 +99,19 @@ Layout::Initialise(const UI::Display &display, PixelSize new_size,
   if (!ScaleSupported())
     return;
 
-  const unsigned x_dpi = Display::GetXDPI(display, custom_dpi);
-  const unsigned y_dpi = Display::GetYDPI(display, custom_dpi);
+  const auto dpi = Display::GetDPI(display, custom_dpi);
   const bool is_small_screen = IsSmallScreen(GetDisplaySize(display, new_size),
-                                             x_dpi, y_dpi);
+                                             dpi);
 
   // always start w/ shortest dimension
   // square should be shrunk
   scale_1024 = std::max(1024U, min_screen_pixels * 1024 / (square ? 320 : 240));
   scale = scale_1024 / 1024;
 
-  pen_width_scale = std::max(1024u, x_dpi * 1024u / 80u);
-  fine_pen_width_scale = std::max(1024u, x_dpi * 1024u / 160u);
+  pen_width_scale = std::max(1024u, dpi.x * 1024u / 80u);
+  fine_pen_width_scale = std::max(1024u, dpi.x * 1024u / 160u);
 
-  pt_scale = 1024 * y_dpi / 72;
+  pt_scale = 1024 * dpi.y / 72;
 
   vpt_scale = pt_scale;
   if (is_small_screen)
@@ -121,7 +119,7 @@ Layout::Initialise(const UI::Display &display, PixelSize new_size,
        the viewing distance is usually smaller */
     vpt_scale = vpt_scale * 2 / 3;
 
-  font_scale = 1024 * y_dpi * ui_scale / 72 / 100;
+  font_scale = 1024 * dpi.y * ui_scale / 72 / 100;
   if (is_small_screen)
     /* small screens (on portable devices) use a smaller font because
        the viewing distance is usually smaller */
