@@ -60,9 +60,7 @@ ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
    * @param custom_dpi overide system dpi settings, but not command line dpi
    * @return Number of pixels per logical inch along the screen width
    */
-#ifndef __APPLE__
 [[gnu::const]]
-#endif
 unsigned
 GetXDPI(const UI::Display &display, unsigned custom_dpi=0) noexcept;
 
@@ -71,9 +69,7 @@ GetXDPI(const UI::Display &display, unsigned custom_dpi=0) noexcept;
    * @param custom_dpi overide system dpi settings, but not command line dpi
    * @return Number of pixels per logical inch along the screen height
    */
-#ifndef __APPLE__
 [[gnu::const]]
-#endif
 unsigned
 GetYDPI(const UI::Display &display, unsigned custom_dpi=0) noexcept;
 
