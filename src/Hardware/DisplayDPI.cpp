@@ -22,18 +22,9 @@ Copyright_License {
 */
 
 #include "DisplayDPI.hpp"
+#include "ui/dim/Size.hpp"
 #include "ui/display/Display.hpp"
 #include "Math/Point2D.hpp"
-
-#ifdef USE_X11
-#define Font X11Font
-#define Window X11Window
-#define Display X11Display
-#include <X11/Xlib.h>
-#undef Font
-#undef Window
-#undef Display
-#endif
 
 #ifdef KOBO
 #include "Kobo/Model.hpp"
@@ -159,10 +150,7 @@ Display::GetXDPI(const UI::Display &display, unsigned custom_dpi) noexcept
 #ifdef _WIN32
   return display.GetDPI().x;
 #elif defined(USE_X11)
-  auto x_display = display.GetXDisplay();
-  assert(x_display != nullptr);
-
-  return MMToDPI(DisplayWidth(x_display, 0), DisplayWidthMM(x_display, 0));
+  return MMToDPI(display.GetSize().width, display.GetSizeMM().width);
 #else
   return GetDPI();
 #endif
@@ -187,10 +175,7 @@ Display::GetYDPI(const UI::Display &display, unsigned custom_dpi) noexcept
 #ifdef _WIN32
   return display.GetDPI().y;
 #elif defined(USE_X11)
-  auto x_display = display.GetXDisplay();
-  assert(x_display != nullptr);
-
-  return MMToDPI(DisplayHeight(x_display, 0), DisplayHeightMM(x_display, 0));
+  return MMToDPI(display.GetSize().height, display.GetSizeMM().height);
 #else
   return GetDPI();
 #endif

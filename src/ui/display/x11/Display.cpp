@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Display.hpp"
-#include "Hardware/DisplayDPI.hpp"
 #include "ui/dim/Size.hpp"
 
 #ifdef USE_EGL
@@ -33,7 +32,6 @@ Copyright_License {
 #include "ui/glx/System.hpp"
 #endif
 
-#include <cassert>
 #include <stdexcept>
 
 namespace X11 {
@@ -44,19 +42,9 @@ Display::Display()
   if (display == nullptr)
     throw std::runtime_error("XOpenDisplay() failed");
 
-  /* query the display dimensions from Xlib to calculate the DPI
-     value */
-  const auto screen = DefaultScreen(display);
-  const auto width_pixels = DisplayWidth(display, screen);
-  const auto height_pixels = DisplayHeight(display, screen);
-  const auto width_mm = DisplayWidthMM(display, screen);
-  const auto height_mm = DisplayHeightMM(display, screen);
-  if (width_pixels > 0 && height_pixels > 0 &&
-      width_mm > 0 && height_mm > 0)
-    ::Display::ProvideSizeMM(width_pixels, height_pixels,
-                             width_mm, height_mm);
-
 #ifdef USE_GLX
+  const auto screen = DefaultScreen(display);
+
   static constexpr int attributes[] = {
     GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
     GLX_RENDER_TYPE, GLX_RGBA_BIT,
@@ -99,6 +87,12 @@ PixelSize
 Display::GetSize() const noexcept
 {
   return {DisplayWidth(display, 0), DisplayHeight(display, 0)};
+}
+
+PixelSize
+Display::GetSizeMM() const noexcept
+{
+  return {DisplayWidthMM(display, 0), DisplayHeightMM(display, 0)};
 }
 
 } // namespace X11

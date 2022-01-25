@@ -54,6 +54,12 @@ public:
   [[gnu::pure]]
   PixelSize GetSize() const noexcept;
 
+  /**
+   * Returns the display size in mm.
+   */
+  [[gnu::pure]]
+  PixelSize GetSizeMM() const noexcept;
+
 #ifdef USE_GLX
   auto *GetFBConfig() const noexcept {
     return *fb_cfg;
