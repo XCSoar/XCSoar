@@ -35,6 +35,11 @@ PrintScreenSize(const UI::Display &display) noexcept
   const auto size = display.GetSize();
   printf("Width: %u px | Height: %u px\n", size.width, size.height);
 #endif
+
+#if defined(USE_X11)
+  const auto size_mm = display.GetSizeMM();
+  printf("Width: %u mm | Height: %u mm\n", size_mm.width, size_mm.height);
+#endif
 }
 
 static void
