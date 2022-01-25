@@ -49,7 +49,7 @@ static UnsignedPoint2D forced_dpi{};
 static UnsignedPoint2D detected_dpi{};
 #endif
 
-#if defined(USE_X11) || defined(HAVE_DPI_DETECTION)
+#if defined(USE_X11) || defined(MESA_KMS) || defined(HAVE_DPI_DETECTION)
 
 static constexpr unsigned
 MMToDPI(unsigned pixels, unsigned mm)
@@ -60,7 +60,7 @@ MMToDPI(unsigned pixels, unsigned mm)
 
 #endif
 
-#if !defined(_WIN32) && !defined(USE_X11)
+#if !defined(_WIN32) && !defined(USE_X11) && !defined(MESA_KMS)
 #ifndef __APPLE__
 [[gnu::const]]
 #endif
@@ -148,7 +148,7 @@ Display::GetDPI(const UI::Display &display, unsigned custom_dpi) noexcept
 
 #ifdef _WIN32
   return display.GetDPI();
-#elif defined(USE_X11)
+#elif defined(USE_X11) || defined(MESA_KMS)
   return {
     MMToDPI(display.GetSize().width, display.GetSizeMM().width),
     MMToDPI(display.GetSize().height, display.GetSizeMM().height),

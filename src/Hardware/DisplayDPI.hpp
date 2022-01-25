@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_HARDWARE_DISPLAY_DPI_HPP
 #define XCSOAR_HARDWARE_DISPLAY_DPI_HPP
 
-#if defined(USE_FB) || defined(MESA_KMS) || defined(ANDROID)
+#if defined(USE_FB) || defined(ANDROID)
 #define HAVE_DPI_DETECTION
 #endif
 

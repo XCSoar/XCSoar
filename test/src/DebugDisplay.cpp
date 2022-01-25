@@ -31,12 +31,12 @@ Copyright_License {
 static void
 PrintScreenSize(const UI::Display &display) noexcept
 {
-#if defined(USE_X11) || defined(USE_GDI)
+#if defined(USE_X11) || defined(MESA_KMS) || defined(USE_GDI)
   const auto size = display.GetSize();
   printf("Width: %u px | Height: %u px\n", size.width, size.height);
 #endif
 
-#if defined(USE_X11)
+#if defined(USE_X11) || defined(MESA_KMS)
   const auto size_mm = display.GetSizeMM();
   printf("Width: %u mm | Height: %u mm\n", size_mm.width, size_mm.height);
 #endif

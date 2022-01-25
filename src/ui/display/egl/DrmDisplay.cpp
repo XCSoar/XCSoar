@@ -112,10 +112,7 @@ DrmDisplay::DrmDisplay()
 
   mode = connector->modes[0];
 
-  if (connector->mmWidth > 0 && connector->mmHeight > 0)
-    Display::ProvideSizeMM(mode.hdisplay, mode.vdisplay,
-                           connector->mmWidth,
-                           connector->mmHeight);
+  size_mm = {connector->mmWidth, connector->mmHeight};
 
   drmModeFreeConnector(connector);
 }

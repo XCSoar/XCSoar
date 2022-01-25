@@ -23,6 +23,7 @@ Copyright_License {
 
 #pragma once
 
+#include "ui/dim/Size.hpp"
 #include "io/UniqueFileDescriptor.hxx"
 
 #include <xf86drm.h>
@@ -37,6 +38,8 @@ class DrmDisplay {
 
   uint32_t connector_id;
   uint32_t crtc_id;
+
+  PixelSize size_mm;
 
 public:
   /**
@@ -74,6 +77,14 @@ public:
 
   int ModePageFlip(uint32_t fb_id, uint32_t flags, void *user_data) noexcept {
     return drmModePageFlip(dri_fd.Get(), crtc_id, fb_id, flags, user_data);
+  }
+
+  PixelSize GetSize() const noexcept {
+    return {mode.hdisplay, mode.vdisplay};
+  }
+
+  PixelSize GetSizeMM() const noexcept {
+    return size_mm;
   }
 };
 
