@@ -22,22 +22,18 @@ Copyright_License {
 */
 
 #include "Hardware/DisplayDPI.hpp"
+#include "ui/dim/Size.hpp"
 #include "ui/display/Display.hpp"
 #include "Math/Point2D.hpp"
-
-#ifdef _WIN32
-#include <windows.h>
-#endif
 
 #include <cstdio>
 
 static void
-PrintScreenSize()
+PrintScreenSize(const UI::Display &display) noexcept
 {
-#ifdef _WIN32
-  unsigned width = GetSystemMetrics(SM_CXSCREEN);
-  unsigned height = GetSystemMetrics(SM_CYSCREEN);
-  printf("Width: %u px | Height: %u px\n", width, height);
+#if defined(USE_X11) || defined(USE_GDI)
+  const auto size = display.GetSize();
+  printf("Width: %u px | Height: %u px\n", size.width, size.height);
 #endif
 }
 
@@ -55,7 +51,7 @@ main(int argc, char **argv)
 
   printf("Display Information\n\n");
 
-  PrintScreenSize();
+  PrintScreenSize(display);
   PrintDPI(display);
 
   return 0;
