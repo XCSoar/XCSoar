@@ -55,18 +55,6 @@ Copyright_License {
 
 #include <cassert>
 
-#ifndef ENABLE_OPENGL
-
-PixelRect
-TopCanvas::GetRect() const noexcept
-{
-  int width, height;
-  ::SDL_GetWindowSize(window, &width, &height);
-  return { 0, 0, width, height };
-}
-
-#endif
-
 TopCanvas::TopCanvas(UI::Display &_display, SDL_Window *_window)
   :display(_display), window(_window)
 {

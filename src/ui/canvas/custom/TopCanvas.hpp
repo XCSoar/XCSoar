@@ -191,11 +191,6 @@ public:
 #endif
   }
 
-#ifdef USE_MEMORY_CANVAS
-  [[gnu::pure]]
-  PixelRect GetRect() const noexcept;
-#endif
-
 #if defined(USE_FB) || (defined(ENABLE_OPENGL) && (defined(USE_EGL) || defined(USE_GLX) || defined(ENABLE_SDL)))
   /**
    * Obtain the native (non-software-rotated) size of the OpenGL

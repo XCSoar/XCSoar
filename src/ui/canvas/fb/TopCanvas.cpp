@@ -95,12 +95,6 @@ TopCanvas::~TopCanvas() noexcept
 #endif
 }
 
-PixelRect
-TopCanvas::GetRect() const noexcept
-{
-  return { 0, 0, int(buffer.width), int(buffer.height) };
-}
-
 #ifdef USE_FB
 
 TopCanvas::TopCanvas(UI::Display &_display)
