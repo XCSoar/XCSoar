@@ -123,7 +123,7 @@ public:
   int ListNetworks(WifiConfiguredNetworkInfo *dest, unsigned max);
 
 private:
-  ssize_t ReadTimeout(void *buffer, size_t length, int timeout_ms=1000);
+  ssize_t ReadTimeout(void *buffer, size_t length, int timeout_ms=2000);
 };
 
 #endif
