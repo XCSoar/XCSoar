@@ -137,6 +137,8 @@ public:
   std::size_t ListNetworks(WifiConfiguredNetworkInfo *dest, std::size_t max);
 
 private:
+  void ReadDiscard() noexcept;
+
   std::size_t ReadTimeout(void *buffer, size_t length, int timeout_ms=2000);
 };
 

@@ -61,6 +61,10 @@ WPASupplicant::Close() noexcept
 void
 WPASupplicant::SendCommand(const char *cmd)
 {
+  /* discard any previous responses that may be left in the socket's
+     receive queue, maybe because the last command failed */
+  ReadDiscard();
+
   const size_t length = strlen(cmd);
   const ssize_t nbytes = fd.Write(cmd, length);
   if (nbytes < 0)
@@ -407,6 +411,14 @@ WPASupplicant::ListNetworks(WifiConfiguredNetworkInfo *dest, std::size_t max)
   buffer[nbytes] = 0;
 
   return ParseListResults(dest, max, buffer);
+}
+
+void
+WPASupplicant::ReadDiscard() noexcept
+{
+  std::byte buffer[4096];
+
+  while (fd.Read(buffer, sizeof(buffer)) > 0) {}
 }
 
 std::size_t
