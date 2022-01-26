@@ -17,6 +17,7 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(SRC)/Dialogs/Message.cpp \
+	$(SRC)/Dialogs/Error.cpp \
 	$(SRC)/Dialogs/LockScreen.cpp \
 	$(SRC)/Dialogs/TextEntry.cpp \
 	$(SRC)/Dialogs/KnobTextEntry.cpp \
