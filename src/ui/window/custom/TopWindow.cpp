@@ -62,6 +62,8 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   size = screen->SetDisplayOrientation(style.GetInitialOrientation());
+#elif defined(USE_MEMORY_CANVAS)
+  size = screen->GetSize();
 #endif
   ContainerWindow::Create(nullptr, PixelRect{size}, style);
 }
