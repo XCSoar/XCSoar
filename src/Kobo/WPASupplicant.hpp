@@ -80,6 +80,11 @@ public:
    */
   void Connect(const char *path);
 
+  void EnsureConnected(const char *path) {
+    if (!IsConnected())
+      Connect(path);
+  }
+
   void Close() noexcept;
 
   void SendCommand(const char *cmd);

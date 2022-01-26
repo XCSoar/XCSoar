@@ -280,8 +280,7 @@ WifiListWidget::Connect()
 void
 WifiListWidget::EnsureConnected()
 {
-  if (!wpa_supplicant.IsConnected())
-    wpa_supplicant.Connect("/var/run/wpa_supplicant/eth0");
+  wpa_supplicant.EnsureConnected("/var/run/wpa_supplicant/eth0");
 }
 
 inline WifiListWidget::NetworkInfo *
