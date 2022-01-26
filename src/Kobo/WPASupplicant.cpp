@@ -447,5 +447,10 @@ WPASupplicant::ReadTimeout(void *buffer, size_t length, int timeout_ms)
   if (nbytes < 0)
     throw MakeErrno("Failed to receive response from wpa_supplicant");
 
+  if (nbytes == 0) {
+    fd.Close();
+    throw std::runtime_error{"Connection to wpa_supplicant closed"};
+  }
+
   return nbytes;
 }
