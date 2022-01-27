@@ -36,6 +36,13 @@ Copyright_License {
 #include "WPASupplicant.hpp"
 #include "net/IPv4Address.hxx"
 #include "ui/event/PeriodicTimer.hpp"
+#include "util/HexFormat.hxx"
+
+/* workaround because OpenSSL has a typedef called "UI", which clashes
+   with our "UI" namespace */
+#define UI OPENSSL_UI
+#include <openssl/evp.h> // for PKCS5_PBKDF2_HMAC_SHA1()
+#undef UI
 
 class WifiListWidget final
   : public ListWidget {
@@ -216,8 +223,16 @@ WifiConnect(enum WifiSecurity security, WPASupplicant &wpa_supplicant, const cha
   wpa_supplicant.SetNetworkSSID(id, ssid);
 
   if (security == WPA_SECURITY) {
+    std::array<unsigned char, 32> pmk;
+    PKCS5_PBKDF2_HMAC_SHA1(psk, strlen(psk),
+                           (const unsigned char *)ssid, strlen(ssid),
+                           4096,
+                           pmk.size(), pmk.data());
 
-    wpa_supplicant.SetNetworkPSK(id, psk);
+    std::array<char, sizeof(pmk) * 2 + 1> hex;
+    *HexFormat(hex.data(), {pmk.data(), pmk.size()}) = 0;
+
+    wpa_supplicant.SetNetworkPSK(id, hex.data());
   } else if (security == WEP_SECURITY) {
     wpa_supplicant.SetNetworkID(id, "key_mgmt", "NONE");
 

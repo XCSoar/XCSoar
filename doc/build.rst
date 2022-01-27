@@ -133,6 +133,7 @@ The following command installs these on Debian::
       libtiff5-dev libgeotiff-dev \
       libc-ares-dev \
       libcurl4-openssl-dev \
+      libssl-dev \
       libc-ares-dev \
       liblua5.4-dev \
       libxml-parser-perl \

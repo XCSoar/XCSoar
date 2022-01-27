@@ -126,7 +126,7 @@ public:
   }
 
   void SetNetworkPSK(unsigned id, const char *psk) {
-    SetNetworkString(id, "psk", psk);
+    SetNetworkID(id, "psk", psk);
   }
 
   void SelectNetwork(unsigned id);
