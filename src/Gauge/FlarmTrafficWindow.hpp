@@ -44,10 +44,10 @@ protected:
   /**
    * The distance of the biggest circle in meters.
    */
-  double distance;
+  double distance = 2000;
 
-  int selection;
-  int warning;
+  int selection = -1;
+  int warning = -1;
   PixelPoint radar_mid;
 
   /**
@@ -65,8 +65,8 @@ protected:
 
   PixelPoint sc[TrafficList::MAX_COUNT];
 
-  bool enable_north_up;
-  Angle heading;
+  bool enable_north_up = false;
+  Angle heading = Angle::Zero();
   FastRotation fr;
   FastIntegerRotation fir;
   TrafficList data;
@@ -77,7 +77,7 @@ public:
   enum SideInfoType {
     SIDE_INFO_RELATIVE_ALTITUDE,
     SIDE_INFO_VARIO,
-  } side_display_type;
+  } side_display_type = SIDE_INFO_VARIO;
 
 public:
   FlarmTrafficWindow(const FlarmTrafficLook &_look,

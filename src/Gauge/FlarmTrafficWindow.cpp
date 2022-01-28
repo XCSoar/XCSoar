@@ -48,13 +48,8 @@ FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
                                        unsigned _v_padding,
                                        bool _small)
   :look(_look),
-   distance(2000),
-   selection(-1), warning(-1),
    h_padding(_h_padding), v_padding(_v_padding),
-   small(_small),
-   enable_north_up(false),
-   heading(Angle::Zero()),
-   side_display_type(SIDE_INFO_VARIO)
+   small(_small)
 {
   data.Clear();
   data_modified.Clear();
