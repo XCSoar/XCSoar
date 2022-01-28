@@ -13,9 +13,6 @@ REM Comment out or in whatever your focus is on.
 REM  English XCSoar-manual generation
 %PDFLATEXBIN% --halt-on-error --interaction=nonstopmode --include-directory=%~dp0en --include-directory=%~dp0 --output-directory=%~dp0output  %~dp0en\XCSoar-manual.tex
 
-REM  English XCSoar-developer-manual generation
-%PDFLATEXBIN% --halt-on-error --interaction=nonstopmode --include-directory=%~dp0en  --include-directory=%~dp0 --output-directory=%~dp0output  %~dp0en\XCSoar-developer-manual.tex
-
 REM  German XCSoar-Blitzeinstieg generation
 %PDFLATEXBIN% --halt-on-error --interaction=nonstopmode --include-directory=%~dp0de\Blitz --include-directory=%~dp0de\Blitz\Bilder --include-directory=%~dp0 --output-directory=%~dp0output  %~dp0de\Blitz\XCSoar-Blitzeinstieg.tex
 
