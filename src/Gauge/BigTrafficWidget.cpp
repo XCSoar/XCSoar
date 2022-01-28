@@ -51,18 +51,15 @@
  */
 class FlarmTrafficControl : public FlarmTrafficWindow {
 protected:
-  bool enable_auto_zoom, dragging;
-  unsigned zoom;
-  Angle task_direction;
+  bool enable_auto_zoom = true, dragging = false;
+  unsigned zoom = 2;
+  Angle task_direction = Angle::Degrees(-1);
   GestureManager gestures;
 
 public:
   FlarmTrafficControl(const FlarmTrafficLook &look)
     :FlarmTrafficWindow(look, Layout::Scale(10),
-                        Layout::GetMinimumControlHeight() + Layout::Scale(2)),
-     enable_auto_zoom(true), dragging(false),
-     zoom(2),
-     task_direction(Angle::Degrees(-1)) {}
+                        Layout::GetMinimumControlHeight() + Layout::Scale(2)) {}
 
 protected:
   void CalcAutoZoom();
