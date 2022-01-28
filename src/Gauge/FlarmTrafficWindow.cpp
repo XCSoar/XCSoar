@@ -308,8 +308,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   const Color *text_color;
   const Pen *target_pen, *circle_pen;
-  const Brush *target_brush, *arrow_brush;
-  bool hollow_brush = false;
+  const Brush *target_brush = nullptr, *arrow_brush;
   unsigned circles = 0;
 
   // Set the arrow color depending on alarm level
@@ -336,7 +335,6 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       text_color = &look.passive_color;
       target_pen = &look.passive_pen;
       arrow_brush = &look.passive_brush;
-      hollow_brush = true;
     } else {
       // Search for team color
       const FlarmColor team_color = FlarmFriends::GetFriendColor(traffic.id);
@@ -355,7 +353,6 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
         target_brush = arrow_brush = &look.selection_brush;
         target_pen = &look.selection_pen;
       } else {
-        hollow_brush = true;
         if (traffic.IsPassive()) {
           text_color = &look.passive_color;
           target_pen = &look.passive_pen;
@@ -408,7 +405,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // Select pen and brush
   canvas.Select(*target_pen);
-  if (hollow_brush)
+  if (target_brush == nullptr)
     canvas.SelectHollowBrush();
   else
     canvas.Select(*target_brush);
