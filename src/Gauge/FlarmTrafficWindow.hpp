@@ -63,7 +63,7 @@ protected:
    */
   unsigned radius;
 
-  bool small;
+  const bool small;
 
   PixelPoint sc[TrafficList::MAX_COUNT];
 
