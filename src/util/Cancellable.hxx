@@ -76,12 +76,6 @@ public:
 	void Cancel() noexcept {
 		assert(cancellable != nullptr);
 
-		cancellable->Cancel();
-	}
-
-	void CancelAndClear() noexcept {
-		assert(cancellable != nullptr);
-
 		std::exchange(cancellable, nullptr)->Cancel();
 	}
 };
