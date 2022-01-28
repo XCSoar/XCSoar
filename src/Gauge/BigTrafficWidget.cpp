@@ -703,10 +703,10 @@ TrafficWidget::NextTarget() noexcept
 void
 FlarmTrafficControl::SwitchData()
 {
-  if (side_display_type == FlarmTrafficWindow::SIDE_INFO_VARIO)
-    side_display_type = FlarmTrafficWindow::SIDE_INFO_RELATIVE_ALTITUDE;
+  if (side_display_type == FlarmTrafficWindow::SideInfoType::VARIO)
+    side_display_type = FlarmTrafficWindow::SideInfoType::RELATIVE_ALTITUDE;
   else
-    side_display_type = FlarmTrafficWindow::SIDE_INFO_VARIO;
+    side_display_type = FlarmTrafficWindow::SideInfoType::VARIO;
 
   Profile::SetEnum(ProfileKeys::FlarmSideData, side_display_type);
 }

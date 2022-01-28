@@ -30,6 +30,8 @@
 #include "TeamCode/Settings.hpp"
 #include "Math/FastRotation.hpp"
 
+#include <cstdint>
+
 class Color;
 class Brush;
 struct FlarmTrafficLook;
@@ -74,10 +76,10 @@ protected:
   TeamCodeSettings settings;
 
 public:
-  enum SideInfoType {
-    SIDE_INFO_RELATIVE_ALTITUDE,
-    SIDE_INFO_VARIO,
-  } side_display_type = SIDE_INFO_VARIO;
+  enum class SideInfoType : uint8_t {
+    RELATIVE_ALTITUDE,
+    VARIO,
+  } side_display_type = SideInfoType::VARIO;
 
 public:
   FlarmTrafficWindow(const FlarmTrafficLook &_look,

@@ -427,7 +427,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     return;
 
   // if vertical speed to small or negative -> skip this one
-  if (side_display_type == SIDE_INFO_VARIO &&
+  if (side_display_type == SideInfoType::VARIO &&
       (!traffic.climb_rate_avg30s_available ||
        traffic.climb_rate_avg30s < 0.5 ||
        traffic.IsPowered()))
@@ -440,7 +440,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   // Format string
   TCHAR tmp[10];
 
-  if (side_display_type == SIDE_INFO_VARIO)
+  if (side_display_type == SideInfoType::VARIO)
     FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, false);
   else
     FormatRelativeUserAltitude(traffic.relative_altitude, tmp, true);
