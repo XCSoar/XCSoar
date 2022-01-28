@@ -188,10 +188,13 @@ include $(topdir)/build/vali.mk
 include $(topdir)/build/infobox.mk
 include $(topdir)/build/mapwindow.mk
 include $(topdir)/build/main.mk
+include $(topdir)/build/test.mk
+endif
+
+ifeq ($(TARGET_IS_LINUX),y)
 include $(topdir)/build/cloud.mk
 include $(topdir)/build/kobo.mk
 include $(topdir)/build/ov.mk
-include $(topdir)/build/test.mk
 endif
 
 include $(topdir)/build/hot.mk
