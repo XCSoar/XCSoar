@@ -46,7 +46,7 @@
 FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
                                        unsigned _h_padding,
                                        unsigned _v_padding,
-                                       bool _small)
+                                       bool _small) noexcept
   :look(_look),
    h_padding(_h_padding), v_padding(_v_padding),
    small(_small)
@@ -56,7 +56,7 @@ FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
 }
 
 bool
-FlarmTrafficWindow::WarningMode() const
+FlarmTrafficWindow::WarningMode() const noexcept
 {
   assert(warning < (int)data.list.size());
   assert(warning < 0 || data.list[warning].IsDefined());
@@ -80,7 +80,7 @@ FlarmTrafficWindow::OnResize(PixelSize new_size)
 }
 
 void
-FlarmTrafficWindow::SetTarget(int i)
+FlarmTrafficWindow::SetTarget(int i) noexcept
 {
   assert(i < (int)data.list.size());
   assert(i < 0 || data.list[i].IsDefined());
@@ -96,7 +96,7 @@ FlarmTrafficWindow::SetTarget(int i)
  * Tries to select the next target, if impossible selection = -1
  */
 void
-FlarmTrafficWindow::NextTarget()
+FlarmTrafficWindow::NextTarget() noexcept
 {
   // If warning is displayed -> prevent selector movement
   if (WarningMode())
@@ -120,7 +120,7 @@ FlarmTrafficWindow::NextTarget()
  * Tries to select the previous target, if impossible selection = -1
  */
 void
-FlarmTrafficWindow::PrevTarget()
+FlarmTrafficWindow::PrevTarget() noexcept
 {
   // If warning is displayed -> prevent selector movement
   if (WarningMode())
@@ -145,7 +145,8 @@ FlarmTrafficWindow::PrevTarget()
  * to select the next one
  */
 void
-FlarmTrafficWindow::UpdateSelector(const FlarmId id, const PixelPoint pt)
+FlarmTrafficWindow::UpdateSelector(const FlarmId id,
+                                   const PixelPoint pt) noexcept
 {
   // Update #selection
   if (!id.IsDefined())
@@ -167,7 +168,7 @@ FlarmTrafficWindow::UpdateSelector(const FlarmId id, const PixelPoint pt)
  * alarm level and saves it to "warning".
  */
 void
-FlarmTrafficWindow::UpdateWarnings()
+FlarmTrafficWindow::UpdateWarnings() noexcept
 {
   const FlarmTraffic *alert = data.FindMaximumAlert();
   warning = alert != NULL
@@ -180,7 +181,7 @@ FlarmTrafficWindow::UpdateWarnings()
  */
 void
 FlarmTrafficWindow::Update(Angle new_direction, const TrafficList &new_data,
-                           const TeamCodeSettings &new_settings)
+                           const TeamCodeSettings &new_settings) noexcept
 {
   static constexpr Angle min_heading_delta = Angle::Degrees(2);
   if (new_data.modified == data_modified &&
@@ -217,7 +218,7 @@ FlarmTrafficWindow::Update(Angle new_direction, const TrafficList &new_data,
  * @param d Distance in meters to the own plane
  */
 double
-FlarmTrafficWindow::RangeScale(double d) const
+FlarmTrafficWindow::RangeScale(double d) const noexcept
 {
   d /= distance;
   return std::min(d, 1.) * radius;
@@ -228,7 +229,7 @@ FlarmTrafficWindow::RangeScale(double d) const
  * @param canvas The canvas to paint on
  */
 void
-FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
+FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const noexcept
 {
   if (small)
     return;
@@ -240,9 +241,9 @@ FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
   canvas.DrawText(radar_mid - PixelSize{ts.width / 2, radius / 2}, str);
 }
 
-gcc_const
+[[gnu::const]]
 static const Pen *
-FlarmColorPen(const FlarmTrafficLook &look, FlarmColor color)
+FlarmColorPen(const FlarmTrafficLook &look, FlarmColor color) noexcept
 {
   switch (color) {
   case FlarmColor::NONE:
@@ -275,7 +276,7 @@ FlarmColorPen(const FlarmTrafficLook &look, FlarmColor color)
 void
 FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
                                      const FlarmTraffic &traffic,
-                                     unsigned i)
+                                     unsigned i) noexcept
 {
   // Save relative East/North
   DoublePoint2D p(traffic.relative_east, -traffic.relative_north);
@@ -464,9 +465,11 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 }
 
 void
-FlarmTrafficWindow::PaintTargetInfoSmall(
-    Canvas &canvas, const FlarmTraffic &traffic, unsigned i,
-    const Color &text_color, const Brush &arrow_brush)
+FlarmTrafficWindow::PaintTargetInfoSmall(Canvas &canvas,
+                                         const FlarmTraffic &traffic,
+                                         unsigned i,
+                                         const Color &text_color,
+                                         const Brush &arrow_brush) noexcept
 {
   const short relalt =
       iround(Units::ToUserAltitude(traffic.relative_altitude) / 100);
@@ -531,7 +534,7 @@ FlarmTrafficWindow::PaintTargetInfoSmall(
  * @param canvas The canvas to paint on
  */
 void
-FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
+FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas) noexcept
 {
   if (data.IsEmpty()) {
     PaintRadarNoTraffic(canvas);
@@ -571,7 +574,7 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
  * @param canvas The canvas to paint on
  */
 void
-FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
+FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const noexcept
 {
   canvas.Select(look.plane_pen);
 
@@ -608,7 +611,7 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
   canvas.DrawLine(radar_mid + p1, radar_mid + p2);
 }
 
-gcc_const
+[[gnu::const]]
 static PixelPoint
 iround(DoublePoint2D p) noexcept
 {
@@ -620,7 +623,7 @@ iround(DoublePoint2D p) noexcept
  * @param canvas The canvas to paint on
  */
 void
-FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
+FlarmTrafficWindow::PaintNorth(Canvas &canvas) const noexcept
 {
   DoublePoint2D p(0, -1);
   if (!enable_north_up) {
@@ -656,7 +659,7 @@ DrawCircleLabel(Canvas &canvas, PixelPoint p,
  * @param canvas The canvas to paint on
  */
 void
-FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
+FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const noexcept
 {
   canvas.SelectHollowBrush();
   canvas.Select(look.radar_pen);
@@ -696,7 +699,7 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
  * @param canvas The canvas to paint on
  */
 void
-FlarmTrafficWindow::Paint(Canvas &canvas)
+FlarmTrafficWindow::Paint(Canvas &canvas) noexcept
 {
   assert(selection < (int)data.list.size());
   assert(selection < 0 || data.list[selection].IsDefined());
@@ -731,7 +734,7 @@ FlarmTrafficWindow::OnPaint(Canvas &canvas)
 }
 
 bool
-FlarmTrafficWindow::SelectNearTarget(PixelPoint p, int max_distance)
+FlarmTrafficWindow::SelectNearTarget(PixelPoint p, int max_distance) noexcept
 {
   int min_distance = 99999;
   int min_id = -1;
