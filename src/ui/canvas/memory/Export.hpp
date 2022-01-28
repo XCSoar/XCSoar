@@ -27,6 +27,7 @@ Copyright_License {
 #include "Concepts.hpp"
 #include "PixelTraits.hpp"
 #include "ui/canvas/PortableColor.hpp"
+#include "util/Compiler.h"
 
 #ifdef DITHER
 class Dither;

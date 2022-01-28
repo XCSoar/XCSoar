@@ -21,18 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_GEO_HPP
-#define XCSOAR_SCREEN_OPENGL_GEO_HPP
+#pragma once
+
+#include <glm/fwd.hpp>
 
 struct GeoPoint;
 class WindowProjection;
 
-#include "util/Compiler.h"
-
-#include <glm/fwd.hpp>
-
-gcc_pure
+[[gnu::pure]]
 glm::mat4
 ToGLM(const WindowProjection &projection, const GeoPoint &reference) noexcept;
-
-#endif

@@ -37,6 +37,7 @@ Copyright_License {
 #include "ui/canvas/BufferCanvas.hpp"
 #include "Form/Button.hpp"
 #include "Renderer/ButtonRenderer.hpp"
+#include "util/Compiler.h"
 
 #ifndef ENABLE_OPENGL
 #include "ui/canvas/WindowCanvas.hpp"

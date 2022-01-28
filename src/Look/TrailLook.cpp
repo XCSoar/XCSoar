@@ -68,7 +68,7 @@ GetAltitudeColor(short ramp_h) {
                          ARRAY_SIZE(snail_colors_alt));
 }
 
-gcc_const
+[[gnu::const]]
 static RGB8Color
 GetPortableColor(TrailSettings::Type type, short ramp_h)
 {
@@ -84,7 +84,7 @@ GetPortableColor(TrailSettings::Type type, short ramp_h)
   }
 }
 
-gcc_const
+[[gnu::const]]
 static Color
 GetColor(TrailSettings::Type type, short ramp_h)
 {

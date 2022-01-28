@@ -407,7 +407,7 @@ Canvas::DrawArc(PixelPoint center, unsigned radius,
   ::Arc(*this, center, radius, start, end);
 }
 
-gcc_const
+[[gnu::const]]
 static unsigned
 AngleToDonutVertex(Angle angle)
 {
@@ -416,7 +416,7 @@ AngleToDonutVertex(Angle angle)
                                       ISINETABLE.size());
 }
 
-gcc_const
+[[gnu::const]]
 static std::pair<unsigned,unsigned>
 AngleToDonutVertices(Angle start, Angle end)
 {

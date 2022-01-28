@@ -70,7 +70,7 @@ OpenGL::Initialise()
  * Does the current OpenGL context support textures with dimensions
  * other than power-of-two?
  */
-gcc_pure
+[[gnu::pure]]
 static bool
 SupportsNonPowerOfTwoTextures() noexcept
 {
@@ -84,7 +84,7 @@ SupportsNonPowerOfTwoTextures() noexcept
  * Renderbuffer.  Returns GL_NONE if the Renderbuffer does not support
  * it.
  */
-gcc_pure
+[[gnu::pure]]
 static GLenum
 CheckDepthStencil() noexcept
 {
@@ -109,7 +109,7 @@ CheckDepthStencil() noexcept
  * Check which stencil internalType is available for a Renderbuffer.
  * Returns GL_NONE if the Renderbuffer does not support it.
  */
-gcc_pure
+[[gnu::pure]]
 static GLenum
 CheckStencil() noexcept
 {
@@ -207,7 +207,7 @@ OpenGL::SetupContext()
  * Determine the projection rotation angle (in degrees) of the
  * specified orientation.
  */
-gcc_const
+[[gnu::const]]
 static GLfloat
 OrientationToRotation(DisplayOrientation orientation) noexcept
 {

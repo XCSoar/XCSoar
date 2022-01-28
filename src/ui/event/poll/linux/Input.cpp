@@ -68,7 +68,7 @@ LinuxInputDevice::LinuxInputDevice(EventQueue &_queue, MergeMouse &_merge)
 /**
  * Check if the EVDEV supports EV_ABS or EV_REL..
  */
-gcc_pure
+[[gnu::pure]]
 static bool
 IsPointerDevice(int fd)
 {

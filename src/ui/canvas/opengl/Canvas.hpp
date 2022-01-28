@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_CANVAS_HPP
-#define XCSOAR_SCREEN_OPENGL_CANVAS_HPP
+#pragma once
 
 #include "Color.hpp"
 #include "ui/dim/Rect.hpp"
@@ -32,7 +31,6 @@ Copyright_License {
 #include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Font.hpp"
 #include "ui/canvas/Pen.hpp"
-#include "util/Compiler.h"
 #include "util/StringView.hxx"
 
 #include <tchar.h>
@@ -118,7 +116,7 @@ public:
     return size.height;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   PixelRect GetRect() const {
     return PixelRect(size);
   }
@@ -306,15 +304,15 @@ public:
 
   void DrawFocusRectangle(PixelRect rc);
 
-  gcc_pure
+  [[gnu::pure]]
   const PixelSize CalcTextSize(BasicStringView<TCHAR> text) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned CalcTextWidth(BasicStringView<TCHAR> text) const noexcept {
     return CalcTextSize(text).width;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetFontHeight() const {
     return font != nullptr ? font->GetHeight() : 0;
   }
@@ -410,5 +408,3 @@ public:
    */
   void CopyToTexture(GLTexture &texture, PixelRect src_rc) const;
 };
-
-#endif

@@ -21,12 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_ROTATE_POINTER_HPP
-#define XCSOAR_EVENT_ROTATE_POINTER_HPP
+#pragma once
 
 #include "DisplayOrientation.hpp"
 #include "ui/dim/Point.hpp"
-#include "util/Compiler.h"
 
 #include <algorithm>
 
@@ -98,7 +96,7 @@ public:
     }
   }
 
-  gcc_pure
+  [[gnu::pure]]
   PixelPoint DoRelative(PixelPoint p) const {
     if (swap)
       std::swap(p.x, p.y);
@@ -106,7 +104,7 @@ public:
     return p;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   PixelPoint DoAbsolute(PixelPoint p) const {
     p = DoRelative(p);
 
@@ -121,5 +119,3 @@ public:
 };
 
 } // namespace UI
-
-#endif

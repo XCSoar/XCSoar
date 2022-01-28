@@ -25,7 +25,7 @@ Copyright_License {
 
 namespace UI {
 
-gcc_pure
+[[gnu::pure]]
 static const ContainerWindow *
 IsAncestor(const Window *maybe_ancestor, const Window *w) noexcept
 {

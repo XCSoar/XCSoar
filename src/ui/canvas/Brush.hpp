@@ -21,13 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_BRUSH_HPP
-#define XCSOAR_SCREEN_BRUSH_HPP
+#pragma once
 
 #include "Color.hpp"
 #include "Features.hpp"
 #include "Screen/Debug.hpp"
-#include "util/Compiler.h"
 
 #include <cassert>
 
@@ -157,7 +155,5 @@ Brush::Destroy()
 
   color = Color::Transparent();
 }
-
-#endif
 
 #endif

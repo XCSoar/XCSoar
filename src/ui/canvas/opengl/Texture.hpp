@@ -96,12 +96,12 @@ public:
     return size.height;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const PixelSize &GetSize() const noexcept {
     return size;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   PixelRect GetRect() const noexcept {
     return PixelRect(GetSize());
   }
@@ -109,7 +109,7 @@ public:
   /**
    * Returns the physical size of the texture.
    */
-  gcc_pure
+  [[gnu::pure]]
   const PixelSize &GetAllocatedSize() const noexcept {
     return allocated_size;
   }

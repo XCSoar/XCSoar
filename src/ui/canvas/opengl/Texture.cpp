@@ -28,7 +28,6 @@ Copyright_License {
 #include "ui/dim/BulkPoint.hpp"
 #include "Asset.hpp"
 #include "Scope.hpp"
-#include "util/Compiler.h"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -47,14 +46,14 @@ NextPowerOfTwo(unsigned i) noexcept
   return p;
 }
 
-gcc_const
+[[gnu::const]]
 static inline unsigned
 ValidateTextureSize(unsigned i) noexcept
 {
   return OpenGL::texture_non_power_of_two ? i : NextPowerOfTwo(i);
 }
 
-gcc_const
+[[gnu::const]]
 static inline PixelSize
 ValidateTextureSize(PixelSize size) noexcept
 {

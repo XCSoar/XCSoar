@@ -24,7 +24,6 @@ Copyright_License {
 #include "Files.hpp"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
-#include "util/Compiler.h"
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>
@@ -273,7 +272,6 @@ static const char *const all_monospace_font_paths[] = {
   nullptr
 };
 
-gcc_nonnull_all
 static AllocatedPath
 FindInSearchPaths(Path suffix)
 {
@@ -288,7 +286,7 @@ FindInSearchPaths(Path suffix)
   return nullptr;
 }
 
-gcc_const
+[[gnu::const]]
 static AllocatedPath
 FindFile(const char *const*list)
 {

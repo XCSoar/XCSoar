@@ -85,7 +85,7 @@ struct DialogLook {
 
     const Font *font, *font_bold;
 
-    gcc_pure
+    [[gnu::pure]]
     Color GetTextColor(bool is_selected, bool is_focused,
                        bool is_pressed) const {
       return is_pressed
@@ -97,7 +97,7 @@ struct DialogLook {
            : text_color);
     }
 
-    gcc_pure
+    [[gnu::pure]]
     Color GetBackgroundColor(bool is_selected, bool is_focused,
                              bool is_pressed) const {
       return is_pressed

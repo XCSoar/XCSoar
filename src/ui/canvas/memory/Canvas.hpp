@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_MEMORY_CANVAS_HPP
-#define XCSOAR_SCREEN_MEMORY_CANVAS_HPP
+#pragma once
 
 #include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Font.hpp"
@@ -33,7 +32,6 @@ Copyright_License {
 #include "PixelTraits.hpp"
 #include "Buffer.hpp"
 #include "ActivePixelTraits.hpp"
-#include "util/Compiler.h"
 #include "util/StringView.hxx"
 
 #include <tchar.h>
@@ -107,7 +105,7 @@ public:
     return buffer.height;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   PixelRect GetRect() const {
     return PixelRect(GetSize());
   }
@@ -271,15 +269,15 @@ public:
     DrawOutlineRectangle(rc, COLOR_DARK_GRAY);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const PixelSize CalcTextSize(BasicStringView<TCHAR> text) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned CalcTextWidth(BasicStringView<TCHAR> text) const noexcept {
     return CalcTextSize(text).width;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetFontHeight() const {
     return font != nullptr ? font->GetHeight() : 0;
   }
@@ -445,5 +443,3 @@ public:
                           PixelPoint src_position, PixelSize src_size,
                           uint8_t alpha);
 };
-
-#endif

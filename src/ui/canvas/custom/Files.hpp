@@ -24,27 +24,25 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_CUSTOM_FILES_HPP
 #define XCSOAR_SCREEN_CUSTOM_FILES_HPP
 
-#include "util/Compiler.h"
-
 class AllocatedPath;
 
-gcc_const
+[[gnu::const]]
 AllocatedPath
 FindDefaultFont();
 
-gcc_const
+[[gnu::const]]
 AllocatedPath
 FindDefaultBoldFont();
 
-gcc_const
+[[gnu::const]]
 AllocatedPath
 FindDefaultItalicFont();
 
-gcc_const
+[[gnu::const]]
 AllocatedPath
 FindDefaultBoldItalicFont();
 
-gcc_const
+[[gnu::const]]
 AllocatedPath
 FindDefaultMonospaceFont();
 

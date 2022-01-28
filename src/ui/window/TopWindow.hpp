@@ -267,7 +267,7 @@ public:
 
 #if !defined(USE_WINUSER) && !defined(ENABLE_SDL)
 #if defined(ANDROID) || defined(USE_FB) || defined(USE_EGL) || defined(USE_GLX) || defined(USE_VFB)
-  void SetCaption(gcc_unused const TCHAR *caption) noexcept {}
+  void SetCaption(const TCHAR *) noexcept {}
 #else
   void SetCaption(const TCHAR *caption) noexcept;
 #endif

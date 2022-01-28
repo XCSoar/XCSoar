@@ -21,11 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_BUFFER_HPP
-#define XCSOAR_SCREEN_BUFFER_HPP
+#pragma once
 
 #include "Concepts.hpp"
-#include "util/Compiler.h"
 
 /**
  * A reference to an image buffer (or a portion of it) that we can
@@ -109,5 +107,3 @@ struct ConstImageBuffer {
     return PixelTraits::At(data, pitch, x, y);
   }
 };
-
-#endif

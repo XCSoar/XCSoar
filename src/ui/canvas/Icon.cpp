@@ -35,7 +35,7 @@ Copyright_License {
 
 #include <algorithm>
 
-gcc_const
+[[gnu::const]]
 static unsigned
 IconStretchFixed10(unsigned source_dpi) noexcept
 {
@@ -47,7 +47,7 @@ IconStretchFixed10(unsigned source_dpi) noexcept
 
 #ifndef ENABLE_OPENGL
 
-gcc_const
+[[gnu::const]]
 static unsigned
 IconStretchInteger(unsigned source_dpi) noexcept
 {
