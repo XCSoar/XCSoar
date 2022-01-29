@@ -25,6 +25,7 @@ Copyright_License {
 #include "ui/dim/Size.hpp"
 #include "ui/display/Display.hpp"
 #include "Math/Point2D.hpp"
+#include "util/PrintException.hxx"
 
 #include <cstdio>
 
@@ -51,7 +52,7 @@ PrintDPI(const UI::Display &display) noexcept
 
 int
 main(int argc, char **argv)
-{
+try {
   const UI::Display display;
 
   printf("Display Information\n\n");
@@ -60,4 +61,7 @@ main(int argc, char **argv)
   PrintDPI(display);
 
   return 0;
+} catch (...) {
+  PrintException(std::current_exception());
+  return EXIT_FAILURE;
 }
