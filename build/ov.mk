@@ -22,6 +22,7 @@ OV_MENU_SOURCES = \
 	$(SRC)/Dialogs/TextEntry.cpp \
 	$(SRC)/Dialogs/KnobTextEntry.cpp \
 	$(SRC)/Dialogs/TouchTextEntry.cpp \
+	$(SRC)/Dialogs/ProcessDialog.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \

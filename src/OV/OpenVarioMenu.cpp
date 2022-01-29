@@ -24,6 +24,7 @@ Copyright_License {
 #include "Dialogs/DialogSettings.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/ProcessDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
@@ -32,6 +33,7 @@ Copyright_License {
 #include "ui/window/Init.hpp"
 #include "ui/window/SingleWindow.hpp"
 #include "ui/event/Timer.hpp"
+#include "Language/Language.hpp"
 #include "system/Process.hpp"
 
 #include <cassert>
@@ -64,6 +66,113 @@ UIGlobals::GetMainWindow()
   assert(global_main_window != nullptr);
 
   return *global_main_window;
+}
+
+class FileMenuWidget final
+  : public RowFormWidget
+{
+  UI::Display &display;
+
+public:
+  FileMenuWidget(UI::Display &_display, const DialogLook &look) noexcept
+    :RowFormWidget(look),
+     display(_display) {}
+
+private:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+};
+
+void
+FileMenuWidget::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
+{
+  AddButton("Download XCSoar IGC files to USB", [this](){
+    const UI::ScopeDropMaster drop_master{display};
+    Run("/usr/bin/download-igc.sh");
+  });
+
+  AddButton("Download XCSoar to USB", [](){
+    static constexpr const char *argv[] = {
+      "/usr/bin/download-all.sh", nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Downloading files", argv);
+  });
+
+  AddButton("Upload files from USB to XCSoar", [](){
+    static constexpr const char *argv[] = {
+      "/usr/bin/upload-xcsoar.sh", nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Uploading files", argv);
+  });
+}
+
+class SystemMenuWidget final
+  : public RowFormWidget
+{
+  UI::Display &display;
+
+public:
+  SystemMenuWidget(UI::Display &_display, const DialogLook &look) noexcept
+    :RowFormWidget(look),
+     display(_display) {}
+
+private:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+};
+
+void
+SystemMenuWidget::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
+{
+  AddButton("Update System", [](){
+    static constexpr const char *argv[] = {
+      "/usr/lib/openvario/libexec/update_system.sh", nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Update System", argv);
+  });
+
+  AddButton("Update Maps", [](){
+    static constexpr const char *argv[] = {
+      "/usr/bin/update-maps.sh", nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Update Maps", argv);
+  });
+
+  AddButton("Calibrate Sensors", [this](){
+    const UI::ScopeDropMaster drop_master{display};
+    Run("/usr/lib/openvario/libexec/calibrate_sensors.sh");
+  });
+
+  AddButton("Calibrate Touch", [this](){
+    const UI::ScopeDropMaster drop_master{display};
+    Run("/usr/bin/ov-calibrate-ts.sh");
+  });
+
+  AddButton("System Settings", [this](){
+    const UI::ScopeDropMaster drop_master{display};
+    Run("/usr/lib/openvario/libexec/system_settings.sh");
+  });
+
+  AddButton("System Info", [this](){
+    const UI::ScopeDropMaster drop_master{display};
+    Run("/usr/lib/openvario/libexec/system_info.sh");
+  });
 }
 
 class MainMenuWidget final
@@ -154,12 +263,24 @@ MainMenuWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 
   AddButton("File", [this](){
     CancelTimer();
-    ShowMessageBox("Not yet implemented", nullptr, MB_OK);
+
+    TWidgetDialog<FileMenuWidget>
+      sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
+                 GetLook(), "OpenVario File");
+    sub_dialog.SetWidget(display, GetLook());
+    sub_dialog.AddButton(_("Close"), mrOK);
+    return sub_dialog.ShowModal();
   });
 
   AddButton("System", [this](){
     CancelTimer();
-    ShowMessageBox("Not yet implemented", nullptr, MB_OK);
+
+    TWidgetDialog<SystemMenuWidget>
+      sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
+                 GetLook(), "OpenVario System");
+    sub_dialog.SetWidget(display, GetLook());
+    sub_dialog.AddButton(_("Close"), mrOK);
+    return sub_dialog.ShowModal();
   });
 
   AddButton("Shell", [this](){
