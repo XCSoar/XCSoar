@@ -36,8 +36,7 @@ Copyright_License {
 #include <cassert>
 
 enum Buttons {
-  LAUNCH_XCSOAR = 100,
-  LAUNCH_SHELL,
+  LAUNCH_SHELL = 100,
 };
 
 static DialogSettings dialog_settings;
@@ -78,11 +77,14 @@ class MainMenuWidget final
     SHUTDOWN,
   };
 
+  UI::Display &display;
+
   WndForm &dialog;
 
 public:
-  explicit MainMenuWidget(WndForm &_dialog) noexcept
+  explicit MainMenuWidget(UI::Display &_display, WndForm &_dialog) noexcept
     :RowFormWidget(_dialog.GetLook()),
+     display(_display),
      dialog(_dialog) {}
 
 private:
@@ -95,7 +97,8 @@ void
 MainMenuWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   AddButton("Start XCSoar", [this](){
-    dialog.SetModalResult(LAUNCH_XCSOAR);
+    const UI::ScopeDropMaster drop_master{display};
+    Run("/usr/bin/xcsoar", "-fly");
   });
 
   AddButton("File", [](){
@@ -125,7 +128,7 @@ Main(UI::SingleWindow &main_window, const DialogLook &dialog_look)
   TWidgetDialog<MainMenuWidget>
     dialog(WidgetDialog::Full{}, main_window,
            dialog_look, "OpenVario");
-  dialog.SetWidget(dialog);
+  dialog.SetWidget(main_window.GetDisplay(), dialog);
 
   return dialog.ShowModal();
 }
@@ -166,11 +169,6 @@ int main(int argc, char **argv)
   int action = Main();
 
   switch (action) {
-  case LAUNCH_XCSOAR:
-    execl("/usr/bin/xcsoar", "xcsoar", "-fly", nullptr);
-    perror("Failed to launch XCSoar");
-    return EXIT_FAILURE;
-
   case LAUNCH_SHELL:
     execl("/bin/bash", "bash", "--login", nullptr);
     execl("/bin/ash", "-ash", nullptr);

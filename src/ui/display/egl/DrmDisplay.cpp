@@ -28,6 +28,7 @@ Copyright_License {
 #include <span>
 
 #include <fcntl.h>
+#include <sys/ioctl.h>
 
 namespace EGL {
 
@@ -118,5 +119,18 @@ DrmDisplay::DrmDisplay()
 }
 
 DrmDisplay::~DrmDisplay() noexcept = default;
+
+void
+DrmDisplay::SetMaster()
+{
+  if (ioctl(dri_fd.Get(), DRM_IOCTL_SET_MASTER, 0) < 0)
+    throw MakeErrno("DRM_IOCTL_SET_MASTER failed");
+}
+
+void
+DrmDisplay::DropMaster() noexcept
+{
+  ioctl(dri_fd.Get(), DRM_IOCTL_DROP_MASTER, 0);
+}
 
 } // namespace EGL

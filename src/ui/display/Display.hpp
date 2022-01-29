@@ -134,4 +134,33 @@ class Display {};
 
 #endif // !USE_EGL
 
+/**
+ * Drop the DRM master lease and automatically reacquire it at the end
+ * of the scope.  This is necessary while a subprocess runs that needs
+ * to be DRM master.
+ */
+class ScopeDropMaster {
+#ifdef MESA_KMS
+  Display &display;
+
+public:
+  explicit ScopeDropMaster(Display &_display) noexcept
+    :display(_display)
+  {
+      display.DropMaster();
+  }
+
+  ~ScopeDropMaster() noexcept {
+      display.SetMaster();
+  }
+#else
+public:
+  ScopeDropMaster(Display &) noexcept {}
+  ~ScopeDropMaster() noexcept = default;
+#endif
+
+  ScopeDropMaster(const ScopeDropMaster &) = delete;
+  ScopeDropMaster &operator=(const ScopeDropMaster &) = delete;
+};
+
 } // namespace UI

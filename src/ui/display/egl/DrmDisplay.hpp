@@ -53,6 +53,19 @@ public:
     return dri_fd;
   }
 
+  /**
+   * Acquire the DRM master lease.
+   *
+   * Throws on error.
+   */
+  void SetMaster();
+
+  /**
+   * Drop the DRM master lease.  Allows the next process to open the
+   * DRI device to become master.
+   */
+  void DropMaster() noexcept;
+
   const auto &GetMode() const noexcept {
     return mode;
   }
