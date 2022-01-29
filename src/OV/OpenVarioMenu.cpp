@@ -94,7 +94,7 @@ class MainMenuWidget final
   unsigned remaining_seconds = 3;
 
 public:
-  explicit MainMenuWidget(UI::Display &_display, WndForm &_dialog) noexcept
+  MainMenuWidget(UI::Display &_display, WndForm &_dialog) noexcept
     :RowFormWidget(_dialog.GetLook()),
      display(_display),
      dialog(_dialog) {}
@@ -138,7 +138,7 @@ private:
     RowFormWidget::Hide();
   }
 
-  bool KeyPress(unsigned key_code) noexcept {
+  bool KeyPress(unsigned key_code) noexcept override {
     CancelTimer();
     return RowFormWidget::KeyPress(key_code);
   }
