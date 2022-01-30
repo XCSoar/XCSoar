@@ -1,0 +1,243 @@
+This is step-by-step instructions on how to cross compile a Kobo kernel to modify the
+kernel, add modules or both.  This is needed for OTG support.
+
+Although most, if not all, Kobo hardware supports OTG, most models have OTG disabled
+in the kernel.  Even the one model (as of Jan 2022) that has it enabled is missing many
+modules.  By following this guide, OTG support can be added.  Note older Kobos use 
+uImage but newer ones use zImage.
+
+The following has been tested for only one model of Kobo (ClaraHD) and only one XCSoar
+development environment (Debian 11 with sudo, git and the two ide/provisioning scripts
+run).
+
+\section{Install additional tools on development machine}
+Login to the development machine and install tools as follows:
+
+\begin{verbatim}
+sudo apt-get install bc
+sudo apt-get install lzop
+\end{verbatim}
+
+\section{Get kernel information}
+On the relevant model of Kobo, make sure it is updated and loaded with XCSoar.  Boot
+the Kobo and at the splash screen choose Network then connect to WiFi and enable Telnet.
+Get the IP address from the Wifi menu then connect to the Kobo with telnet using PuTTY
+or similar terminal program.  From there get the data as follows:
+
+\begin{verbatim}
+cat /proc/version
+\end{verbatim}
+
+The text returned contains both the kernel version and the gcc version.
+For everything that follows, use only the kernel version triplet such as 4.1.15
+and ignore anything after the ``-``.  For the gcc version use the triplet such as 5.3.0.
+
+Next get the kernel config file as follows:
+
+\begin{verbatim}
+zcat /proc/config.gz >/mnt/onboard/config
+\end{verbatim}
+
+Download the /mnt/onboard/config file to your home directory.
+
+\section{Install toolchain for arm-linux-gnueabihf}
+To compile the kernel you must install a toolchain (gcc, g++ etc.) of the version with
+which the kernel was compiled (as determined above).  There are many toolchains available
+and you can either install a binary or compile one.  An example using linaro follows:
+
+\begin{verbatim}
+go to 
+  https://releases.linaro.org/components/toolchain/binaries
+select the most recently dated folder for the 
+  compiler version determined above (e.g. 5.3-2016.05)
+select the platform as arm-linux-gnueabihf
+download the tar.xz file for x86_64_arm_linux_gnueabihf to /opt
+  Note the third number of the version may differ
+  (e.g. 5.3.1 instead of 5.3.0)
+cd /opt
+sudo tar -xvf <filename>
+\end{verbatim}
+
+Do not add the toolchain to the path but note the directory that contains the binaries such as
+gcc and g++.  Also, make note of the prefix on the binaries (such as arm-linux-gnueabihf-).
+
+\section{Install kernel source}
+Slightly outdated but suitable sources for the kernels for the different models are kept
+on GitHub in the Kobolabs/Kobo-Reader repository.  Note it is filed by chipset though the
+model may also be shown.  If needed, to find the right chipset google for the Kobo wiki.
+
+Download the appropriate .bz2 file to your home directory then enter the following commands:
+
+\begin{verbatim}
+cd
+sudo tar -xvf <filename>
+cd kernel
+sudo make CROSS_COMPILE=<binary path>/<binary prefix> \
+  ARCH=arm distclean
+\end{verbatim}
+
+Add the config file to the source and update it.
+
+\begin{verbatim}
+cd
+cp config ./kernel/.config
+cd kernel
+sudo make CROSS_COMPILE=<binary path>/<binary prefix> \
+  ARCH=arm oldconfig
+\end{verbatim}
+
+\section{Build the kernel}
+It is now ready to attempt to build the original kernel.
+If there are errors, edits must be made to
+successfully compile the kernel.
+
+\begin{verbatim}
+sudo make CROSS_COMPILE=<binary path>/<binary prefix> \
+  ARCH=arm clean
+sudo make CROSS_COMPILE=<binary path>/<binary prefix> \
+  ARCH=arm vmlinux
+\end{verbatim}
+
+If you get an error "/usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x50):
+multiple definition of `yylloc'" it is because older toolchains default
+to warn on duplicate definitions and newer ones fail.  Correct it as follows:
+
+\begin{verbatim}
+sudo nano scripts/dtc/dtc-parser.tab.c
+  change
+    YYLTYPE yylloc;
+  to
+    extern YYLTYPE yylloc;
+sudo make CROSS_COMPILE=<binary path>/<binary prefix> \
+  ARCH=arm vmlinux
+\end{verbatim}
+
+If you get an error "<filename><address> error: implicit declaration of function"
+for function pinctrl\_pm\_select\_sleep\_state or
+pinctrl\_pm\_select\_default\_state or pinctrl\_pm\_lookup\_state it is because
+older toolchains default to warn on implicit declarations and newer ones fail. 
+Correct it as follows:
+
+\begin{verbatim}
+sudo nano <filename>
+  add
+    #include <linux/pinctrl/consumer.h>
+  to the bottom of the #include <linux...> list
+sudo make CROSS_COMPILE=<binary path>/<binary prefix> \
+  ARCH=arm vmlinux
+\end{verbatim}
+
+If you get an error about missing imx6sll-e80k02-base.dts the e60 file is the
+same as the e80 file for our purposes so use it as follows:
+
+\begin{verbatim}
+cd arch/arm/boot/dts
+ln -s imx6sll-e60k02-base.dts ims6sll-e80k02-base.dts
+sudo make CROSS_COMPILE=<binary path>/<binary prefix> \
+  ARCH=arm vmlinux
+sudo make CROSS_COMPILE=<binary path>/<binary prefix> \
+  ARCH=arm modules
+sudo make CROSS_COMPILE=<binary path>/<binary prefix> \
+  ARCH=arm zImage
+\end{verbatim}
+
+\section{Edit the kernel configuration and rebuild}
+At this point you should have a successful build of factory kernel.  Now it is necessary
+to edit the kernel as needed to support the desired OTG capabilities.  The main
+functions and drivers which should be supported are OTG, sound, network and  serial.
+Specifically for Clara HD, OTG was already enabled so this involved adding modules, not
+built in functionality.  The changes were made as follows:
+
+\begin{verbatim}
+sudo make CROSS_COMPILE=<binary path>/<binary prefix> \
+  ARCH=arm menuconfig
+Go to Device Drivers | USB support
+Change USB Serial Converter support to "M"
+Go to USB Serial Converter support
+Change AIRcable Bluetooth... to "M"
+Change Winchiphead CH341... to "M"
+Change CP210x family... to "M"
+Change FTDI Single... to "M"
+Change Garmin GPS Driver to "M"
+Change Moschip 7840... to "M"
+Change Navman GPS device... to "M"
+Change Prolific 2303 Single... to "M"
+Back out to Device Drivers
+Go to Sound card support
+Go to Advanced Linux Sound Architecture
+Go to USB sound devices
+Change USB Audio/MIDI driver to "M"
+Back out to Device Drivers
+Go to Network device support
+Change USB Network Adapters to "M"
+Go to USB Network Adapters
+Change Multi-purpose USB Networking... to "M"
+Change ASIX AX88xxx... to " "
+Change ASIX AX88179... to " "
+Change CDC EEM support to "M"
+Change CDC NCM support (NEW) to "M"
+Change NetChip 1080... to " "
+Change Host for RNDIS... to "M"
+Change Simple USB Network... to "M"
+Change eTEK based... to " "
+Change Embedded ARM... to " "
+Change Sharp Zaurus... to " "
+save as .config (default) then exit
+sudo make CROSS_COMPILE=<binary path>/<binary prefix> \
+  ARCH=arm vmlinux
+sudo make CROSS_COMPILE=<binary path>/<binary prefix> \
+  ARCH=arm zImage
+sudo make CROSS_COMPILE=<binary path>/<binary prefix> \
+  ARCH=arm modules
+\end{verbatim}
+
+\section{Create the file for the XCSoar build}
+
+If you are building a new kernel (i.e. original kernel doesn't support OTG), the desired
+file is created already as the zImage file and must be copied or moved to the
+/opt/kobo/kernel folder on the XCSoar build machine.  If the factory kernel already
+supports OTG, the desired file is a file of loadable modules for the factory kernel.
+To create the file of loadable modules, proceed as follows for the example of Clara HD:
+
+\begin{verbatim}
+cd ~/kernel
+sudo install -d -m 775 -g root -o root \
+  modules
+sudo install -d -m 775 -g root -o root \
+  modules/<kernel version>
+sudo install -d -m 775 -g root -o root \
+  modules/<kernel version>/drivers
+sudo install -d -m 775 -g root -o root \
+  modules/<kernel version>/drivers/usb
+sudo install -d -m 775 -g root -o root \
+  modules/<kernel version>/drivers/usb/serial
+sudo install -D -m 644 -g root -o root \
+  drivers/usb/serial/*.ko \
+  modules/<kernel version>/drivers/usb/serial
+sudo install -d -m 775 -g root -o root \
+  modules/<kernel version>/drivers/net
+sudo install -d -m 775 -g root -o root \
+  modules/<kernel version>/drivers/net/usb
+sudo install -D -m 644 -g root -o root \
+  drivers/net/*.ko \
+  modules/<kernel version>/drivers/net
+sudo install -D -m 644 -g root -o root \
+  drivers/net/usb/*.ko \
+  modules/<kernel version>/drivers/net/usb
+sudo install -d -m 775 -g root -o root \
+  modules/<kernel version>/sound
+sudo install -d -m 775 -g root -o root \
+  modules/<kernel version>/sound/usb
+sudo install -D -m 644 -g root -o root \
+  sound/usb/*.ko \
+  modules/<kernel version>/sound/usb
+sudo install -d -m 775 -g root -o root \
+  modules/<kernel version>/sound/core
+sudo install -D -m 644 -g root -o root \
+  sound/core/*.ko \
+  modules/<kernel version>/sound/core
+tar -czvf ClaraHD_OTG_Drivers.tgz modules
+sudo mkdir /opt/kobo
+sudo mkdir /opt/kobo/kernel
+sudo cp ClaraHD_OTG_Drivers.tgz /opt/kobo/kernel
+\end{verbatim}
