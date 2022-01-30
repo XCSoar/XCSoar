@@ -64,6 +64,7 @@ Copyright_License {
 #include <cassert>
 
 static const char *const Usage = "\n"
+  "  -version        prints version and exits\n"
   "  -datapath=      path to XCSoar data can be defined\n"
 #ifdef SIMULATOR_AVAILABLE
   "  -simulator      bypass startup-screen, use simulator mode directly\n"

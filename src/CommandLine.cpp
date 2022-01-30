@@ -68,6 +68,10 @@ CommandLine::Parse(Args &args)
     if (s[1] == '-')
       s++;
 
+    if (StringIsEqual(s, "-version", 8)) {
+      exit(EXIT_SUCCESS);
+    };
+
     if (StringIsEqual(s, "-profile=", 9)) {
       s += 9;
 
