@@ -259,16 +259,17 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent,
       form->SetModalResult(mrOK);
   });
 
-  AddButton(_("Set Active Frequency"), [this](){
-    ActionInterface::SetActiveFrequency(waypoint->radio_frequency,
-                                        waypoint->name.c_str());
-  });
 
-  AddButton(_("Set Standby Frequency"), [this](){
-    ActionInterface::SetStandbyFrequency(waypoint->radio_frequency,
-                                         waypoint->name.c_str());
-  });
-
+  if (waypoint->radio_frequency.IsDefined()) {
+    AddButton(_("Set Active Frequency"), [this](){
+      ActionInterface::SetActiveFrequency(waypoint->radio_frequency,
+                                          waypoint->name.c_str());
+    });
+    AddButton(_("Set Standby Frequency"), [this](){
+      ActionInterface::SetStandbyFrequency(waypoint->radio_frequency,
+                                           waypoint->name.c_str());
+    });
+  };
   if (allow_edit)
     AddButton(_("Edit"), [this](){
       Waypoint wp_copy = *waypoint;
