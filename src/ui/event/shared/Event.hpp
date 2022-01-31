@@ -82,7 +82,9 @@ struct Event {
      * The X11 window was resized.
      */
     RESIZE,
+#endif
 
+#if defined(USE_X11) || defined(MESA_KMS)
     /**
      * Redraw the screen.
      */

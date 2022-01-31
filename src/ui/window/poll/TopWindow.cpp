@@ -95,7 +95,9 @@ TopWindow::OnEvent(const Event &event)
     if (screen->CheckResize(PixelSize(event.point.x, event.point.y)))
       Resize(screen->GetSize());
     return true;
+#endif
 
+#if defined(USE_X11) || defined(MESA_KMS)
   case Event::EXPOSE:
     Invalidate();
     return true;
