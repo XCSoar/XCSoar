@@ -31,7 +31,6 @@ Copyright_License {
 #include "ui/dim/Size.hpp"
 
 #ifdef DRAW_MOUSE_CURSOR
-#include "util/Macros.hpp"
 #include "Screen/Layout.hpp"
 #endif
 
@@ -117,7 +116,7 @@ TopWindow::OnPaint(Canvas &canvas)
     canvas.SelectBlackPen(cursor_size);
     canvas.SelectWhiteBrush();
   }
-  canvas.DrawTriangleFan(p, ARRAY_SIZE(p));
+  canvas.DrawTriangleFan(p, std::size(p));
 }
 #endif
 
