@@ -65,7 +65,7 @@ TopCanvas::TopCanvas(UI::Display &_display, SDL_Window *_window)
                              window, -1, 0, ::SDL_GetError());
 
   int width, height;
-  SDL_GetWindowSize(window, &width, &height);
+  SDL_GetRendererOutputSize(renderer, &width, &height);
   texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888,
                               SDL_TEXTUREACCESS_STREAMING,
                               width, height);
