@@ -172,9 +172,9 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
       if (-1.0 == y)
         y = 0.0;
       x += libinput_event_pointer_get_dx(ptr_li_event);
-      x = Clamp<double>(x, 0, width);
+      x = Clamp<double>(x, 0, screen_size.width);
       y += libinput_event_pointer_get_dy(ptr_li_event);
-      y = Clamp<double>(y, 0, height);
+      y = Clamp<double>(y, 0, screen_size.height);
       queue.Push(Event(Event::MOUSE_MOTION,
                        PixelPoint((unsigned)x, (unsigned)y)));
     }
@@ -184,9 +184,9 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
       libinput_event_pointer *ptr_li_event =
         libinput_event_get_pointer_event(li_event);
       x = libinput_event_pointer_get_absolute_x_transformed(ptr_li_event,
-                                                            width);
+                                                            screen_size.width);
       y = libinput_event_pointer_get_absolute_y_transformed(ptr_li_event,
-                                                            height);
+                                                            screen_size.height);
       queue.Push(Event(Event::MOUSE_MOTION,
                        PixelPoint((unsigned)x, (unsigned)y)));
     }
@@ -226,8 +226,10 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
     {
       libinput_event_touch *touch_li_event =
         libinput_event_get_touch_event(li_event);
-      x = libinput_event_touch_get_x_transformed(touch_li_event, width);
-      y = libinput_event_touch_get_y_transformed(touch_li_event, height);
+      x = libinput_event_touch_get_x_transformed(touch_li_event,
+                                                 screen_size.width);
+      y = libinput_event_touch_get_y_transformed(touch_li_event,
+                                                 screen_size.height);
       queue.Push(Event(Event::MOUSE_DOWN,
                        PixelPoint((unsigned)x, (unsigned)y)));
     }
@@ -242,8 +244,10 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
     {
       libinput_event_touch *touch_li_event =
         libinput_event_get_touch_event(li_event);
-      x = libinput_event_touch_get_x_transformed(touch_li_event, width);
-      y = libinput_event_touch_get_y_transformed(touch_li_event, height);
+      x = libinput_event_touch_get_x_transformed(touch_li_event,
+                                                 screen_size.width);
+      y = libinput_event_touch_get_y_transformed(touch_li_event,
+                                                 screen_size.height);
       queue.Push(Event(Event::MOUSE_MOTION,
                        PixelPoint((unsigned)x, (unsigned)y)));
     }

@@ -64,7 +64,7 @@ public:
     assert(n_pointers == 0);
   }
 
-  void SetScreenSize(unsigned width, unsigned height);
+  void SetScreenSize(PixelSize screen_size) noexcept;
 
   void SetDisplayOrientation(DisplayOrientation orientation) {
     rotate.SetDisplayOrientation(orientation);

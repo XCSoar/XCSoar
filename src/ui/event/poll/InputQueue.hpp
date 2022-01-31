@@ -55,11 +55,11 @@ public:
   explicit InputEventQueue(EventQueue &queue);
   ~InputEventQueue();
 
-  void SetScreenSize(unsigned width, unsigned height) {
+  void SetScreenSize(PixelSize screen_size) noexcept {
   #ifdef USE_LIBINPUT
-    libinput_handler.SetScreenSize(width, height);
+    libinput_handler.SetScreenSize(screen_size);
   #else
-    merge_mouse.SetScreenSize(width, height);
+    merge_mouse.SetScreenSize(screen_size);
   #endif
   }
 

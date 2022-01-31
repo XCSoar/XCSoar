@@ -42,6 +42,7 @@ Copyright_License {
 #include <queue>
 
 enum class DisplayOrientation : uint8_t;
+struct PixelSize;
 
 namespace UI {
 
@@ -96,9 +97,9 @@ public:
   }
 #endif
 
-  void SetScreenSize(unsigned width, unsigned height) noexcept {
+  void SetScreenSize(const PixelSize &screen_size) noexcept {
 #if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
-    input_queue.SetScreenSize(width, height);
+    input_queue.SetScreenSize(screen_size);
 #endif
   }
 
