@@ -35,6 +35,7 @@ Copyright_License {
 #include "ui/event/Timer.hpp"
 #include "Language/Language.hpp"
 #include "system/Process.hpp"
+#include "util/ScopeExit.hxx"
 
 #include <cassert>
 
@@ -130,6 +131,82 @@ private:
                const PixelRect &rc) noexcept override;
 };
 
+static void
+CalibrateSensors() noexcept
+{
+  /* make sure sensord is stopped while calibrating sensors */
+  static constexpr const char *start_sensord[] = {
+    "/bin/systemctl", "start", "sensord.service", nullptr
+  };
+  static constexpr const char *stop_sensord[] = {
+    "/bin/systemctl", "stop", "sensord.service", nullptr
+  };
+
+  RunProcessDialog(UIGlobals::GetMainWindow(),
+                   UIGlobals::GetDialogLook(),
+                   "Calibrate Sensors", stop_sensord,
+                   [](int status){
+                     return status == EXIT_SUCCESS ? mrOK : 0;
+                   });
+
+  AtScopeExit(){
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Calibrate Sensors", start_sensord,
+                     [](int status){
+                       return status == EXIT_SUCCESS ? mrOK : 0;
+                     });
+  };
+
+  /* calibrate the sensors */
+  static constexpr const char *calibrate_sensors[] = {
+    "/opt/bin/sensorcal", "-c", nullptr
+  };
+
+  static constexpr int STATUS_BOARD_NOT_INITIALISED = 2;
+  static constexpr int RESULT_BOARD_NOT_INITIALISED = 100;
+  int result = RunProcessDialog(UIGlobals::GetMainWindow(),
+                                UIGlobals::GetDialogLook(),
+                                "Calibrate Sensors", calibrate_sensors,
+                                [](int status){
+                                  return status == STATUS_BOARD_NOT_INITIALISED
+                                    ? RESULT_BOARD_NOT_INITIALISED
+                                    : 0;
+                                });
+  if (result != RESULT_BOARD_NOT_INITIALISED)
+    return;
+
+  /* initialise the sensors? */
+  if (ShowMessageBox("Sensorboard is virgin. Do you want to initialise it?",
+                     "Calibrate Sensors", MB_YESNO) != IDYES)
+    return;
+
+  static constexpr const char *init_sensors[] = {
+    "/opt/bin/sensorcal", "-i", nullptr
+  };
+
+  result = RunProcessDialog(UIGlobals::GetMainWindow(),
+                            UIGlobals::GetDialogLook(),
+                            "Calibrate Sensors", init_sensors,
+                            [](int status){
+                              return status == EXIT_SUCCESS
+                                ? mrOK
+                                : 0;
+                            });
+  if (result != mrOK)
+    return;
+
+  /* calibrate again */
+  RunProcessDialog(UIGlobals::GetMainWindow(),
+                   UIGlobals::GetDialogLook(),
+                   "Calibrate Sensors", calibrate_sensors,
+                   [](int status){
+                     return status == STATUS_BOARD_NOT_INITIALISED
+                       ? RESULT_BOARD_NOT_INITIALISED
+                       : 0;
+                   });
+}
+
 void
 SystemMenuWidget::Prepare(ContainerWindow &parent,
                           const PixelRect &rc) noexcept
@@ -154,11 +231,7 @@ SystemMenuWidget::Prepare(ContainerWindow &parent,
                      "Update Maps", argv);
   });
 
-  AddButton("Calibrate Sensors", [this](){
-    const UI::ScopeDropMaster drop_master{display};
-    Run("/usr/lib/openvario/libexec/calibrate_sensors.sh");
-  });
-
+  AddButton("Calibrate Sensors", CalibrateSensors);
   AddButton("Calibrate Touch", [this](){
     const UI::ScopeDropMaster drop_master{display};
     Run("/usr/bin/ov-calibrate-ts.sh");
