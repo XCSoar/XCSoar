@@ -55,6 +55,10 @@ public:
      argv(_argv),
      fd(event_loop, BIND_THIS_METHOD(OnPipeReady)) {}
 
+  void CreateButtons(WidgetDialog &dialog) noexcept {
+    dialog.AddButton(_("Close"), mrOK);
+  }
+
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Unprepare() noexcept override;
@@ -174,8 +178,8 @@ RunProcessDialog(UI::SingleWindow &parent,
   TWidgetDialog<ProcessWidget> dialog(WidgetDialog::Full{},
                                       parent, dialog_look,
                                       caption);
-  dialog.AddButton(_("Close"), mrOK);
   dialog.SetWidget(UI::event_queue->GetEventLoop(), dialog_look,
                    argv);
+  dialog.GetWidget().CreateButtons(dialog);
   dialog.ShowModal();
 }
