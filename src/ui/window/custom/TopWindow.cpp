@@ -39,6 +39,10 @@ Copyright_License {
 #include "ui/event/shared/Event.hpp"
 #endif
 
+#ifdef DRAW_MOUSE_CURSOR
+#include "Screen/Layout.hpp"
+#endif
+
 namespace UI {
 
 TopWindow::~TopWindow() noexcept
@@ -105,6 +109,33 @@ TopWindow::Invalidate() noexcept
   invalidated = true;
 }
 
+#ifdef DRAW_MOUSE_CURSOR
+
+inline void
+TopWindow::DrawMouseCursor(Canvas &canvas) noexcept
+{
+  const auto m = event_queue->GetMousePosition();
+  const int shortDistance = Layout::Scale(cursor_size * 4);
+  const int longDistance = Layout::Scale(cursor_size * 6);
+
+  const BulkPixelPoint p[] = {
+    { m.x, m.y },
+    { m.x + shortDistance, m.y + shortDistance },
+    { m.x, m.y + longDistance },
+  };
+
+  if (invert_cursor_colors) {
+    canvas.SelectWhitePen(cursor_size);
+    canvas.SelectBlackBrush();
+  } else {
+    canvas.SelectBlackPen(cursor_size);
+    canvas.SelectWhiteBrush();
+  }
+  canvas.DrawTriangleFan(p, std::size(p));
+}
+
+#endif
+
 void
 TopWindow::Expose() noexcept
 {
@@ -114,6 +145,11 @@ TopWindow::Expose() noexcept
 
   if (auto canvas = screen->Lock(); canvas.IsDefined()) {
     OnPaint(canvas);
+
+#ifdef DRAW_MOUSE_CURSOR
+    DrawMouseCursor(canvas);
+#endif
+
     screen->Unlock();
   }
 

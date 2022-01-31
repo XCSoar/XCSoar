@@ -400,6 +400,10 @@ public:
   }
 #endif
 
+#ifdef DRAW_MOUSE_CURSOR
+private:
+  void DrawMouseCursor(Canvas &canvas) noexcept;
+#endif
 
 protected:
   PixelPoint PointToReal(PixelPoint p) const noexcept {
@@ -418,10 +422,6 @@ protected:
 
 #ifdef KOBO
   void OnDestroy() override;
-#endif
-
-#ifdef DRAW_MOUSE_CURSOR
-  void OnPaint(Canvas &canvas) override;
 #endif
 
 #ifdef USE_WINUSER

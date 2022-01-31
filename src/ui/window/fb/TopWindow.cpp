@@ -28,10 +28,6 @@ Copyright_License {
 #include "ui/event/Globals.hpp"
 #include "ui/dim/Size.hpp"
 
-#ifdef DRAW_MOUSE_CURSOR
-#include "Screen/Layout.hpp"
-#endif
-
 #ifdef KOBO
 #include "ui/canvas/Canvas.hpp"
 #endif
@@ -82,35 +78,6 @@ TopWindow::OnResize(PixelSize new_size)
 
   ContainerWindow::OnResize(new_size);
 }
-
-#ifdef DRAW_MOUSE_CURSOR
-void
-TopWindow::OnPaint(Canvas &canvas)
-{
-  ContainerWindow::OnPaint(canvas);
-
-  /* draw the mouse cursor */
-
-  const auto m = event_queue->GetMousePosition();
-  const int shortDistance = Layout::Scale(cursor_size * 4);
-  const int longDistance = Layout::Scale(cursor_size * 6);
-
-  const BulkPixelPoint p[] = {
-    { m.x, m.y },
-    { m.x + shortDistance, m.y + shortDistance },
-    { m.x, m.y + longDistance },
-  };
-
-  if (invert_cursor_colors) {
-    canvas.SelectWhitePen(cursor_size);
-    canvas.SelectBlackBrush();
-  } else {
-    canvas.SelectBlackPen(cursor_size);
-    canvas.SelectWhiteBrush();
-  }
-  canvas.DrawTriangleFan(p, std::size(p));
-}
-#endif
 
 #ifndef NON_INTERACTIVE
 
