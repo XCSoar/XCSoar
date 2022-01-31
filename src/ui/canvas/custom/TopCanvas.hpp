@@ -66,7 +66,7 @@ class Canvas;
 struct PixelSize;
 namespace UI { class Display; }
 
-#if (defined(USE_FB) && !defined(KOBO)) || defined(USE_EGL)
+#if defined(USE_FB) && !defined(KOBO)
 /* defined if we need to initialise /dev/tty to graphics mode, see
    TopCanvas::InitialiseTTY() */
 #define USE_TTY
