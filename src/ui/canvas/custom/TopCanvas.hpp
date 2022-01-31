@@ -46,17 +46,6 @@ Copyright_License {
 
 #ifdef USE_GLX
 #include "ui/glx/System.hpp"
-
-#define Font X11Font
-#define Window X11Window
-#define Display X11Display
-#include <X11/X.h>
-#undef Font
-#undef Window
-#undef Display
-#undef Expose
-#undef KeyPress
-struct _XDisplay;
 #endif
 
 #ifdef DITHER
@@ -69,13 +58,11 @@ struct _XDisplay;
 enum class DisplayOrientation : uint8_t;
 #endif
 
-struct SDL_Surface;
 struct SDL_Window;
 struct SDL_Renderer;
 struct SDL_Texture;
 class Canvas;
 struct PixelSize;
-struct PixelRect;
 namespace UI { class Display; }
 
 #if (defined(USE_FB) && !defined(KOBO)) || defined(USE_EGL)
