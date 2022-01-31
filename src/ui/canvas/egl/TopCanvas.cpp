@@ -178,34 +178,24 @@ TopCanvas::Flip()
 
   auto *fb = (EGL::DrmFrameBuffer *)gbm_bo_get_user_data(new_bo);
   if (!fb) {
-    fb = new EGL::DrmFrameBuffer;
-    fb->dri_fd = dri_fd;
-
-    int ret = drmModeAddFB(dri_fd.Get(), gbm_bo_get_width(new_bo),
-                           gbm_bo_get_height(new_bo), 24, 32,
-                           gbm_bo_get_stride(new_bo),
-                           gbm_bo_get_handle(new_bo).u32, &fb->fb_id);
-    if (ret != 0) {
-      fprintf(stderr, "drmModeAddFB() failed: %d\n", ret);
-      exit(EXIT_FAILURE);
-    }
+    fb = new EGL::DrmFrameBuffer(dri_fd, gbm_bo_get_width(new_bo),
+                                 gbm_bo_get_height(new_bo), 24, 32,
+                                 gbm_bo_get_stride(new_bo),
+                                 gbm_bo_get_handle(new_bo).u32);
 
     gbm_bo_set_user_data(new_bo, fb, [](struct gbm_bo *bo, void *data) {
       auto *fb = (EGL::DrmFrameBuffer *)data;
-      if (fb->fb_id)
-        drmModeRmFB(fb->dri_fd.Get(), fb->fb_id);
-
       delete fb;
     });
   }
 
   if (nullptr == current_bo) {
     saved_crtc = display.ModeGetCrtc();
-    display.ModeSetCrtc(fb->fb_id, 0, 0);
+    display.ModeSetCrtc(fb->GetId(), 0, 0);
   } else {
 
     bool flip_finished = false;
-    int page_flip_ret = display.ModePageFlip(fb->fb_id,
+    int page_flip_ret = display.ModePageFlip(fb->GetId(),
                                              DRM_MODE_PAGE_FLIP_EVENT,
                                              &flip_finished);
     if (0 != page_flip_ret) {

@@ -57,6 +57,7 @@ endif
 ifeq ($(ENABLE_MESA_KMS),y)
 SCREEN_SOURCES += \
 	$(SRC)/ui/canvas/egl/GbmSurface.cpp \
+	$(SRC)/ui/canvas/egl/DrmFrameBuffer.cpp \
 	$(SRC)/ui/display/egl/DrmDisplay.cpp \
 	$(SRC)/ui/display/egl/GbmDisplay.cpp
 endif
