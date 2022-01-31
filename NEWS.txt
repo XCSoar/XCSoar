@@ -1,4 +1,6 @@
 Version 7.23 - not yet released
+* user interface
+  - add "Set Frequency" buttons to alternates list
 * support uploading IGC files to WeGlide
 * Linux
   - fix command-line option "--datapath"

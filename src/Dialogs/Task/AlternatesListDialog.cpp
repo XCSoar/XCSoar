@@ -29,6 +29,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Unordered/AlternateList.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
@@ -36,6 +37,7 @@ Copyright_License {
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Language/Language.hpp"
+#include "ActionInterface.hpp"
 
 #include <cassert>
 
@@ -82,6 +84,11 @@ private:
     return item.waypoint;
   }
 
+  [[gnu::pure]]
+  const auto &GetSelectedWaypoint() const noexcept {
+    return *GetSelectedWaypointPtr();
+  }
+
 public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -118,6 +125,21 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
   });
 
   details_button = dialog.AddButton(_("Details"), mrOK);
+
+  dialog.AddButton(_("Set Active Frequency"), [this](){
+    auto const &waypoint = GetSelectedWaypoint();
+    ActionInterface::SetActiveFrequency(waypoint.radio_frequency,
+                                        waypoint.name.c_str());
+    cancel_button->Click();
+  });
+
+  dialog.AddButton(_("Set Standby Frequency"), [this](){
+    auto const &waypoint = GetSelectedWaypoint();
+    ActionInterface::SetStandbyFrequency(waypoint.radio_frequency,
+                                         waypoint.name.c_str());
+    cancel_button->Click();
+  });
+
   cancel_button = dialog.AddButton(_("Close"), mrCancel);
 }
 
