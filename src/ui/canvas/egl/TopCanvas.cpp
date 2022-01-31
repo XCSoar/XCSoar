@@ -41,12 +41,7 @@ Copyright_License {
 
 #ifdef MESA_KMS
 #include "GBM.hpp"
-
-struct drm_fb {
-  struct gbm_bo *bo;
-  uint32_t fb_id;
-  FileDescriptor dri_fd;
-};
+#include "DrmFrameBuffer.hpp"
 #endif
 
 #ifdef ANDROID
@@ -181,9 +176,9 @@ TopCanvas::Flip()
 
   gbm_bo *new_bo = gbm_surface_lock_front_buffer(gbm_surface);
 
-  drm_fb *fb = (drm_fb*) gbm_bo_get_user_data(new_bo);
+  auto *fb = (EGL::DrmFrameBuffer *)gbm_bo_get_user_data(new_bo);
   if (!fb) {
-    fb = new drm_fb;
+    fb = new EGL::DrmFrameBuffer;
     fb->bo = new_bo;
     fb->dri_fd = dri_fd;
 
@@ -197,7 +192,7 @@ TopCanvas::Flip()
     }
 
     gbm_bo_set_user_data(new_bo, fb, [](struct gbm_bo *bo, void *data) {
-      struct drm_fb *fb = (struct drm_fb*) data;
+      auto *fb = (EGL::DrmFrameBuffer *)data;
       if (fb->fb_id)
         drmModeRmFB(fb->dri_fd.Get(), fb->fb_id);
 
