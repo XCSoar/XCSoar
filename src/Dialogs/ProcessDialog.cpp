@@ -42,6 +42,8 @@ Copyright_License {
 class ProcessWidget final : public LargeTextWidget {
   const char *const*const argv;
 
+  const std::function<int(int)> on_exit;
+
   pid_t pid = 0;
 
   PipeEvent fd;
@@ -50,15 +52,21 @@ class ProcessWidget final : public LargeTextWidget {
 
   std::string text;
 
+  WndForm *dialog;
+
 public:
   ProcessWidget(EventLoop &event_loop, const DialogLook &_look,
-                const char *const*_argv) noexcept
+                const char *const*_argv,
+                std::function<int(int)> _on_exit) noexcept
     :LargeTextWidget(_look),
      argv(_argv),
+     on_exit(std::move(_on_exit)),
      fd(event_loop, BIND_THIS_METHOD(OnPipeReady)) {}
 
-  void CreateButtons(WidgetDialog &dialog) noexcept {
-    cancel_button = dialog.AddButton(_("Cancel"), mrCancel);
+  void CreateButtons(WidgetDialog &_dialog) noexcept {
+    dialog = &_dialog;
+
+    cancel_button = _dialog.AddButton(_("Cancel"), mrCancel);
   }
 
   /* virtual methods from class Widget */
@@ -68,6 +76,7 @@ public:
 private:
   void Start();
   void Cancel() noexcept;
+  bool OnExit(int code) noexcept;
   void OnPipeReady(unsigned) noexcept;
 };
 
@@ -121,14 +130,34 @@ ProcessWidget::Cancel() noexcept
   }
 }
 
+bool
+ProcessWidget::OnExit(int code) noexcept
+{
+  if (!on_exit)
+    return false;
+
+  int result = on_exit(code);
+  if (result == 0)
+    return false;
+
+  dialog->SetModalResult(result);
+  UI::event_queue->Interrupt();
+  return true;
+}
+
 inline void
 ProcessWidget::OnPipeReady(unsigned) noexcept
 {
   char buffer[4096];
   ssize_t nbytes = fd.GetFileDescriptor().Read(buffer, sizeof(buffer));
   if (nbytes < 0) {
-    text.append("\nFailed to read from pipe");
+    const int e = errno;
     fd.Close();
+
+    if (OnExit(-e))
+      return;
+
+    text.append("\nFailed to read from pipe");
     SetText(text.c_str());
 
     cancel_button->SetCaption(_("Close"));
@@ -140,6 +169,21 @@ ProcessWidget::OnPipeReady(unsigned) noexcept
 
   if (nbytes == 0) {
     fd.Close();
+
+    int status;
+    if (waitpid(pid, &status, 0) == pid) {
+      pid = 0;
+
+      if (WIFEXITED(status))
+        status = WEXITSTATUS(status);
+      else
+        status = EXIT_FAILURE;
+    } else
+      status = EXIT_FAILURE;
+
+    if (OnExit(status))
+      return;
+
     cancel_button->SetCaption(_("Close"));
 
     // make sure the EventLoop gets interrupted so the UI gets redrawn
@@ -177,17 +221,18 @@ ProcessWidget::Unprepare() noexcept
   LargeTextWidget::Unprepare();
 }
 
-void
+int
 RunProcessDialog(UI::SingleWindow &parent,
                  const DialogLook &dialog_look,
                  const TCHAR *caption,
-                 const char *const*argv) noexcept
+                 const char *const*argv,
+                 std::function<int(int)> on_exit) noexcept
 {
   TWidgetDialog<ProcessWidget> dialog(WidgetDialog::Full{},
                                       parent, dialog_look,
                                       caption);
   dialog.SetWidget(UI::event_queue->GetEventLoop(), dialog_look,
-                   argv);
+                   argv, std::move(on_exit));
   dialog.GetWidget().CreateButtons(dialog);
-  dialog.ShowModal();
+  return dialog.ShowModal();
 }

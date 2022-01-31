@@ -23,13 +23,16 @@ Copyright_License {
 
 #pragma once
 
+#include <functional>
+
 #include <tchar.h>
 
 struct DialogLook;
 namespace UI { class SingleWindow; }
 
-void
+int
 RunProcessDialog(UI::SingleWindow &parent,
                  const DialogLook &dialog_look,
                  const TCHAR *caption,
-                 const char *const*argv) noexcept;
+                 const char *const*argv,
+                 std::function<int(int)> on_exit={}) noexcept;
