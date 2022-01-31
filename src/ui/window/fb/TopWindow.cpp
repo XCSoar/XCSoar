@@ -24,8 +24,6 @@ Copyright_License {
 #include "../TopWindow.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "ui/canvas/Canvas.hpp"
-#include "ui/event/shared/Event.hpp"
-#include "ui/event/poll/Loop.hpp"
 #include "ui/event/Queue.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/dim/Size.hpp"
@@ -182,18 +180,5 @@ TopWindow::OnEvent(const Event &event)
 }
 
 #endif
-
-int
-TopWindow::RunEventLoop() noexcept
-{
-  Refresh();
-
-  EventLoop loop(*event_queue, *this);
-  Event event;
-  while (IsDefined() && loop.Get(event))
-    loop.Dispatch(event);
-
-  return 0;
-}
 
 } // namespace UI

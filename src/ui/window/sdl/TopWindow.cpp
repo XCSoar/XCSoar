@@ -23,18 +23,16 @@ Copyright_License {
 
 #include "../TopWindow.hpp"
 #include "../Features.hpp"
-#include "ui/event/sdl/Event.hpp"
-#include "ui/event/sdl/Loop.hpp"
-#include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
-#include "util/ConvertString.hpp"
 #include "util/RuntimeError.hxx"
 #include "util/UTF8.hpp"
 
 #ifdef UNICODE
 #include "util/ConvertString.hpp"
 #endif
+
+#include <SDL_video.h>
+#include <SDL_events.h>
 
 #if defined(__MACOSX__) && __MACOSX__
 #include <SDL_syswm.h>
@@ -274,19 +272,6 @@ TopWindow::OnEvent(const SDL_Event &event)
   }
 
   return false;
-}
-
-int
-TopWindow::RunEventLoop() noexcept
-{
-  Refresh();
-
-  EventLoop loop(*event_queue, *this);
-  Event event;
-  while (IsDefined() && loop.Get(event))
-    loop.Dispatch(event);
-
-  return 0;
 }
 
 void

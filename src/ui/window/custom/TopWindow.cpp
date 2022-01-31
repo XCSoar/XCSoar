@@ -28,6 +28,17 @@ Copyright_License {
 #include "ui/event/Globals.hpp"
 #include "Hardware/CPU.hpp"
 
+#ifdef ANDROID
+#include "ui/event/android/Loop.hpp"
+#include "util/ScopeExit.hxx"
+#elif defined(ENABLE_SDL)
+#include "ui/event/sdl/Event.hpp"
+#include "ui/event/sdl/Loop.hpp"
+#else
+#include "ui/event/poll/Loop.hpp"
+#include "ui/event/shared/Event.hpp"
+#endif
+
 namespace UI {
 
 TopWindow::~TopWindow() noexcept
@@ -149,6 +160,24 @@ TopWindow::OnClose() noexcept
 {
   Destroy();
   return true;
+}
+
+int
+TopWindow::RunEventLoop() noexcept
+{
+#ifdef ANDROID
+  BeginRunning();
+  AtScopeExit(this) { EndRunning(); };
+#endif
+
+  Refresh();
+
+  EventLoop loop(*event_queue, *this);
+  Event event;
+  while (IsDefined() && loop.Get(event))
+    loop.Dispatch(event);
+
+  return 0;
 }
 
 void

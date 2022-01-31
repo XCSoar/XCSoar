@@ -25,11 +25,9 @@ Copyright_License {
 #include "ui/canvas/custom/Cache.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "ui/event/Queue.hpp"
-#include "ui/event/android/Loop.hpp"
 #include "ui/event/Globals.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
-#include "util/ScopeExit.hxx"
 #include "LogFile.hpp"
 
 #include <cassert>
@@ -259,22 +257,6 @@ TopWindow::EndRunning() noexcept
   /* wake up the Android Activity thread, just in case it's waiting
      inside Pause() */
   paused_cond.notify_one();
-}
-
-int
-TopWindow::RunEventLoop() noexcept
-{
-  BeginRunning();
-  AtScopeExit(this) { EndRunning(); };
-
-  Refresh();
-
-  EventLoop loop(*event_queue, *this);
-  Event event;
-  while (IsDefined() && loop.Get(event))
-    loop.Dispatch(event);
-
-  return 0;
 }
 
 } // namespace UI
