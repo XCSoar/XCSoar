@@ -59,12 +59,16 @@ TopCanvas::TopCanvas(UI::Display &_display)
   display.MakeCurrent(EGL_NO_SURFACE);
 }
 
-#elif !defined(USE_X11) && !defined(USE_WAYLAND)
+#elif defined(MESA_KMS)
 
 TopCanvas::TopCanvas(UI::Display &_display)
-  :display(_display)
+  :display(_display),
+   gbm_surface(display.GetGbmDevice(),
+               display.GetMode().hdisplay,
+               display.GetMode().vdisplay,
+               XCSOAR_GBM_FORMAT,
+               GBM_BO_USE_SCANOUT | GBM_BO_USE_RENDERING)
 {
-#if defined(MESA_KMS)
   evctx = { 0 };
   evctx.version = DRM_EVENT_CONTEXT_VERSION;
   evctx.page_flip_handler = [](int fd, unsigned int frame, unsigned int sec,
@@ -72,19 +76,10 @@ TopCanvas::TopCanvas(UI::Display &_display)
     *reinterpret_cast<bool*>(flip_finishedPtr) = true;
   };
 
-  native_window = gbm_surface_create(display.GetGbmDevice(),
-                                     display.GetMode().hdisplay,
-                                     display.GetMode().vdisplay,
-                                     XCSOAR_GBM_FORMAT,
-                                     GBM_BO_USE_SCANOUT | GBM_BO_USE_RENDERING);
-  if (native_window == nullptr)
-    throw std::runtime_error("Could not create GBM surface");
-#endif
-
-  CreateSurface(native_window);
+  CreateSurface(gbm_surface);
 }
 
-#endif
+#endif // MESA_KMS
 
 void
 TopCanvas::CreateSurface(EGLNativeWindowType native_window)
@@ -121,7 +116,6 @@ TopCanvas::~TopCanvas() noexcept
     display.ModeSetCrtc(saved_crtc->crtc_id, saved_crtc->buffer_id,
                         saved_crtc->x, saved_crtc->y,
                         &saved_crtc->mode);
-  gbm_surface_destroy(native_window);
 #endif
 }
 
@@ -182,7 +176,7 @@ TopCanvas::Flip()
 #ifdef MESA_KMS
   const FileDescriptor dri_fd = display.GetDriFD();
 
-  gbm_bo *new_bo = gbm_surface_lock_front_buffer(native_window);
+  gbm_bo *new_bo = gbm_surface_lock_front_buffer(gbm_surface);
 
   drm_fb *fb = (drm_fb*) gbm_bo_get_user_data(new_bo);
   if (!fb) {
@@ -231,7 +225,7 @@ TopCanvas::Flip()
       }
     }
 
-    gbm_surface_release_buffer(native_window, current_bo);
+    gbm_surface_release_buffer(gbm_surface, current_bo);
   }
 
   current_bo = new_bo;

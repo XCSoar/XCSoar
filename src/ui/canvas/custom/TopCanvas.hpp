@@ -39,6 +39,7 @@ Copyright_License {
 #include "ui/egl/System.hpp"
 
 #ifdef MESA_KMS
+#include "ui/canvas/egl/GbmSurface.hpp"
 #include <xf86drm.h>
 #include <xf86drmMode.h>
 #endif
@@ -83,9 +84,9 @@ class TopCanvas
 #ifdef USE_EGL
 
 #ifdef MESA_KMS
-  drmEventContext evctx;
+  const EGL::GbmSurface gbm_surface;
 
-  struct gbm_surface *native_window;
+  drmEventContext evctx;
 
   struct gbm_bo *current_bo = nullptr;
 
