@@ -32,7 +32,6 @@ struct gbm_bo;
 namespace EGL {
 
 struct DrmFrameBuffer {
-  struct gbm_bo *bo;
   uint32_t fb_id;
   FileDescriptor dri_fd;
 };

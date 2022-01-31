@@ -179,7 +179,6 @@ TopCanvas::Flip()
   auto *fb = (EGL::DrmFrameBuffer *)gbm_bo_get_user_data(new_bo);
   if (!fb) {
     fb = new EGL::DrmFrameBuffer;
-    fb->bo = new_bo;
     fb->dri_fd = dri_fd;
 
     int ret = drmModeAddFB(dri_fd.Get(), gbm_bo_get_width(new_bo),
