@@ -136,7 +136,7 @@ SystemMenuWidget::Prepare(ContainerWindow &parent,
 {
   AddButton("Update System", [](){
     static constexpr const char *argv[] = {
-      "/usr/lib/openvario/libexec/update_system.sh", nullptr
+      "/usr/bin/update-system.sh", nullptr
     };
 
     RunProcessDialog(UIGlobals::GetMainWindow(),
