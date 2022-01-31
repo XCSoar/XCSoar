@@ -25,11 +25,15 @@ Copyright_License {
 #include "DisplayOrientation.hpp"
 #include "event/SignalMonitor.hxx"
 
+#ifdef MESA_KMS
+#include "ui/display/Display.hpp"
+#endif
+
 namespace UI {
 
-EventQueue::EventQueue(Display &display) noexcept
-#if defined(USE_X11) || defined(USE_WAYLAND)
-  :input_queue(display, *this)
+EventQueue::EventQueue(Display &_display) noexcept
+#if defined(USE_X11) || defined(USE_WAYLAND) || defined(MESA_KMS)
+  :display(_display)
 #endif
 {
   SignalMonitorInit(event_loop);
@@ -87,6 +91,13 @@ EventQueue::Generate(Event &event) noexcept
 #ifndef NON_INTERACTIVE
   if (input_queue.Generate(event))
     return true;
+#endif
+
+#ifdef MESA_KMS
+  if (display.CheckDirty()) {
+    event = Event::EXPOSE;
+    return true;
+  }
 #endif
 
   return false;

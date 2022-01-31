@@ -51,10 +51,14 @@ class Display;
 class EventQueue final {
   ::EventLoop event_loop;
 
+#if defined(USE_X11) || defined(USE_WAYLAND) || defined(MESA_KMS)
+  Display &display;
+#endif
+
 #ifdef USE_X11
-  X11EventQueue input_queue;
+  X11EventQueue input_queue{display, *this};
 #elif defined(USE_WAYLAND)
-  WaylandEventQueue input_queue;
+  WaylandEventQueue input_queue{display, *this};
 #elif !defined(NON_INTERACTIVE)
   InputEventQueue input_queue{*this};
 #endif

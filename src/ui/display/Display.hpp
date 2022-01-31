@@ -93,10 +93,26 @@ class Display
      (#DrmDisplay), allocate a GBM display (#GbmDisplay) and then
      initialise EGL (#EGL::Display) */
 
+  /**
+   * Are the screen contents "diry" and a redraw is needed?  This flag
+   * is set only when the whole display is deemed dirty (e.g. when
+   * switching back from another application); it is not meant for
+   * regular redraws.
+   */
+  bool dirty = true;
+
 public:
   Display()
     :EGL::GbmDisplay(GetDriFD()),
      EGL::Display(GetGbmDevice()) {}
+
+  void SetDirty() noexcept {
+    dirty = true;
+  }
+
+  bool CheckDirty() noexcept {
+    return std::exchange(dirty, false);
+  }
 };
 
 #elif defined(USE_WAYLAND)
@@ -152,6 +168,11 @@ public:
 
   ~ScopeDropMaster() noexcept {
       display.SetMaster();
+
+      /* if we regain the master lease, redraw as soon as possible,
+         because the display contents may still be there from the
+         previous DRM master */
+      display.SetDirty();
   }
 #else
 public:
