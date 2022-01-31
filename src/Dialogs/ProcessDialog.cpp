@@ -46,6 +46,8 @@ class ProcessWidget final : public LargeTextWidget {
 
   PipeEvent fd;
 
+  Button *cancel_button;
+
   std::string text;
 
 public:
@@ -56,7 +58,7 @@ public:
      fd(event_loop, BIND_THIS_METHOD(OnPipeReady)) {}
 
   void CreateButtons(WidgetDialog &dialog) noexcept {
-    dialog.AddButton(_("Close"), mrOK);
+    cancel_button = dialog.AddButton(_("Cancel"), mrCancel);
   }
 
   /* virtual methods from class Widget */
@@ -129,6 +131,8 @@ ProcessWidget::OnPipeReady(unsigned) noexcept
     fd.Close();
     SetText(text.c_str());
 
+    cancel_button->SetCaption(_("Close"));
+
     // make sure the EventLoop gets interrupted so the UI gets redrawn
     UI::event_queue->Interrupt();
     return;
@@ -136,6 +140,10 @@ ProcessWidget::OnPipeReady(unsigned) noexcept
 
   if (nbytes == 0) {
     fd.Close();
+    cancel_button->SetCaption(_("Close"));
+
+    // make sure the EventLoop gets interrupted so the UI gets redrawn
+    UI::event_queue->Interrupt();
     return;
   }
 
