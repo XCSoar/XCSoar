@@ -112,6 +112,9 @@ TopCanvas::~TopCanvas() noexcept
   ReleaseSurface();
 
 #ifdef MESA_KMS
+  if (current_bo != nullptr)
+    gbm_surface_release_buffer(gbm_surface, current_bo);
+
   if (nullptr != saved_crtc)
     display.ModeSetCrtc(saved_crtc->crtc_id, saved_crtc->buffer_id,
                         saved_crtc->x, saved_crtc->y,
