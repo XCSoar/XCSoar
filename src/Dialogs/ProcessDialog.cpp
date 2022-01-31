@@ -234,5 +234,6 @@ RunProcessDialog(UI::SingleWindow &parent,
   dialog.SetWidget(UI::event_queue->GetEventLoop(), dialog_look,
                    argv, std::move(on_exit));
   dialog.GetWidget().CreateButtons(dialog);
+  dialog.EnableCursorSelection();
   return dialog.ShowModal();
 }
