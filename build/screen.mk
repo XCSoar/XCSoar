@@ -155,8 +155,8 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/egl/TopCanvas.cpp \
 	$(SRC)/ui/display/egl/ConfigChooser.cpp \
 	$(SRC)/ui/display/egl/Display.cpp \
+	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
-	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
 else ifeq ($(GLX),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
@@ -166,8 +166,8 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/glx/TopCanvas.cpp \
+	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
-	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
 else ifeq ($(VFB),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
@@ -177,8 +177,8 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/fb/TopCanvas.cpp \
+	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
-	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
 FB_CPPFLAGS = -DUSE_VFB
 else ifeq ($(USE_FB),y)
@@ -189,6 +189,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/memory/Export.cpp \
+	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
 	$(CANVAS_SRC_DIR)/fb/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
