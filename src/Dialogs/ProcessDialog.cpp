@@ -124,6 +124,9 @@ ProcessWidget::OnPipeReady(unsigned) noexcept
     text.append("\nFailed to read from pipe");
     fd.Close();
     SetText(text.c_str());
+
+    // make sure the EventLoop gets interrupted so the UI gets redrawn
+    UI::event_queue->Interrupt();
     return;
   }
 
@@ -137,6 +140,8 @@ ProcessWidget::OnPipeReady(unsigned) noexcept
     text.erase(0, 4096);
 
   SetText(text.c_str());
+  // make sure the EventLoop gets interrupted so the UI gets redrawn
+  UI::event_queue->Interrupt();
 }
 
 void
