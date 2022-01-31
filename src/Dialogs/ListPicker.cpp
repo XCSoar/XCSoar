@@ -169,16 +169,16 @@ ListPicker(const TCHAR *caption,
                                 two_widgets);
   }
 
-  if (help_text != nullptr)
-    dialog.AddButton(_("Help"), [list_widget](){
-      list_widget->ShowHelp();
-    });
-
   if (num_items > 0)
     dialog.AddButton(_("Select"), mrOK);
 
   if (extra_caption != nullptr)
     dialog.AddButton(extra_caption, -2);
+
+  if (help_text != nullptr)
+    dialog.AddButton(_("Help"), [list_widget](){
+      list_widget->ShowHelp();
+    });
 
   dialog.AddButton(_("Cancel"), mrCancel);
 
