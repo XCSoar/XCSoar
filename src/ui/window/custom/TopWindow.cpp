@@ -24,6 +24,8 @@ Copyright_License {
 #include "../TopWindow.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/event/Queue.hpp"
+#include "ui/event/Globals.hpp"
 #include "Hardware/CPU.hpp"
 
 namespace UI {
@@ -87,6 +89,12 @@ TopWindow::CancelMode() noexcept
 }
 
 void
+TopWindow::Invalidate() noexcept
+{
+  invalidated = true;
+}
+
+void
 TopWindow::Expose() noexcept
 {
 #ifdef HAVE_CPU_FREQUENCY
@@ -141,6 +149,12 @@ TopWindow::OnClose() noexcept
 {
   Destroy();
   return true;
+}
+
+void
+TopWindow::PostQuit() noexcept
+{
+  event_queue->Quit();
 }
 
 } // namespace UI

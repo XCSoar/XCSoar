@@ -57,12 +57,6 @@ TopWindow::CheckResize() noexcept
 
 #endif
 
-void
-TopWindow::Invalidate() noexcept
-{
-  invalidated = true;
-}
-
 #ifdef KOBO
 void
 TopWindow::OnDestroy()
@@ -200,12 +194,6 @@ TopWindow::RunEventLoop() noexcept
     loop.Dispatch(event);
 
   return 0;
-}
-
-void
-TopWindow::PostQuit() noexcept
-{
-  event_queue->Quit();
 }
 
 } // namespace UI

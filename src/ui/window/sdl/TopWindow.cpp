@@ -117,12 +117,6 @@ TopWindow::CreateNative(const TCHAR *_text, PixelSize new_size,
 
 }
 
-void
-TopWindow::Invalidate() noexcept
-{
-  invalidated = true;
-}
-
 bool
 TopWindow::OnEvent(const SDL_Event &event)
 {
@@ -293,12 +287,6 @@ TopWindow::RunEventLoop() noexcept
     loop.Dispatch(event);
 
   return 0;
-}
-
-void
-TopWindow::PostQuit() noexcept
-{
-  event_queue->Quit();
 }
 
 void

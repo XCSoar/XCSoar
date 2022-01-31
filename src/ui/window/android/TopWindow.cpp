@@ -43,12 +43,6 @@ TopWindow::TopWindow(UI::Display &_display) noexcept
 }
 
 void
-TopWindow::Invalidate() noexcept
-{
-  invalidated = true;
-}
-
-void
 TopWindow::AnnounceResize(PixelSize _new_size) noexcept
 {
   std::lock_guard<Mutex> lock(paused_mutex);
@@ -281,12 +275,6 @@ TopWindow::RunEventLoop() noexcept
     loop.Dispatch(event);
 
   return 0;
-}
-
-void
-TopWindow::PostQuit() noexcept
-{
-  event_queue->Quit();
 }
 
 } // namespace UI
