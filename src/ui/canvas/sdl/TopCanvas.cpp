@@ -118,6 +118,20 @@ TopCanvas::GetNativeSize() const noexcept
 
 #ifdef USE_MEMORY_CANVAS
 
+#ifndef GREYSCALE
+
+PixelSize
+TopCanvas::GetSize() const noexcept
+{
+  int width, height;
+  if (SDL_QueryTexture(texture, nullptr, nullptr, &width, &height) != 0)
+    return {};
+
+  return PixelSize(width, height);
+}
+
+#endif // !GREYSCALE
+
 void
 TopCanvas::OnResize(PixelSize new_size) noexcept
 {
@@ -144,7 +158,7 @@ TopCanvas::OnResize(PixelSize new_size) noexcept
 #endif
 }
 
-#endif
+#endif // USE_MEMORY_CANVAS
 
 #ifdef GREYSCALE
 

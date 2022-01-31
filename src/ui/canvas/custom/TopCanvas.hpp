@@ -130,9 +130,9 @@ class TopCanvas
   Dither dither;
 #endif
 
-#else /* !GREYSCALE */
+#elif !defined(ENABLE_SDL)
   WritableImageBuffer<ActivePixelTraits> buffer;
-#endif /* !GREYSCALE */
+#endif
 #endif /* USE_MEMORY_CANVAS */
 
 #ifdef USE_FB
@@ -247,13 +247,11 @@ public:
   void OnResize(PixelSize new_size) noexcept;
 #endif
 
-#ifdef USE_MEMORY_CANVAS
+#if defined(USE_MEMORY_CANVAS) && (defined(GREYSCALE) || !defined(ENABLE_SDL))
   PixelSize GetSize() const noexcept {
     return PixelSize(buffer.width, buffer.height);
   }
-#endif
-
-#ifdef ENABLE_OPENGL
+#else
   [[gnu::pure]]
   PixelSize GetSize() const noexcept;
 #endif
