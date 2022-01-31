@@ -195,17 +195,15 @@ TopCanvas::Flip()
       fprintf(stderr, "drmModeAddFB() failed: %d\n", ret);
       exit(EXIT_FAILURE);
     }
+
+    gbm_bo_set_user_data(new_bo, fb, [](struct gbm_bo *bo, void *data) {
+      struct drm_fb *fb = (struct drm_fb*) data;
+      if (fb->fb_id)
+        drmModeRmFB(fb->dri_fd.Get(), fb->fb_id);
+
+      delete fb;
+    });
   }
-
-  gbm_bo_set_user_data(new_bo,
-                       fb,
-                       [](struct gbm_bo *bo, void *data) {
-    struct drm_fb *fb = (struct drm_fb*) data;
-    if (fb->fb_id)
-      drmModeRmFB(fb->dri_fd.Get(), fb->fb_id);
-
-    delete fb;
-  });
 
   if (nullptr == current_bo) {
     saved_crtc = display.ModeGetCrtc();
