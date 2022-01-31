@@ -148,6 +148,7 @@ void
 MainMenuWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   AddButton("Start XCSoar", [this](){
+    CancelTimer();
     StartXCSoar();
   });
 
