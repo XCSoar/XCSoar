@@ -339,8 +339,8 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     FormatIGCFilenameLong(name, date, header.manufacturer, header.id,
                           header.flight);
 
-    Path igc_path = AllocatedPath::Build(logs_path, name);
-    transaction.SetPath(igc_path);
+    const auto igc_path = AllocatedPath::Build(logs_path, name);
+    transaction.SetPath((Path)igc_path);
     
     try {
       transaction.Commit();
