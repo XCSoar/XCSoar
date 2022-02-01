@@ -348,15 +348,16 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
       ShowError(std::current_exception(), _("Download flight"));
     }
 
-    WeGlideSettings weglide_settings =
-      CommonInterface::GetComputerSettings().weglide;
-    if (weglide_settings.enabled && weglide_settings.automatic_upload &&
-      weglide_settings.pilot.id > 0) {
-      // ask whether this IGC should be uploaded to WeGlide
-      if (ShowMessageBox(_("Do you want to upload this flight to WeGlide?"),
-                         _("Upload flight"),
-                         MB_YESNO | MB_ICONQUESTION) == IDYES) {
-        WeGlide::UploadIGCFile(igc_path);
+    ComputerSettings settings = CommonInterface::GetComputerSettings();
+    if (settings.weglide.enabled && settings.weglide.automatic_upload) {
+      auto weglide_user = settings.weglide.pilot;
+      auto weglide_aircraft = settings.plane.weglide_glider_type;
+      if (weglide_user.id > 0 && weglide_aircraft > 0) {
+        // ask whether this IGC should be uploaded to WeGlide
+        if (ShowMessageBox(_("Do you want to upload this flight to WeGlide?"),
+                           _("Upload flight"),
+                           MB_YESNO | MB_ICONQUESTION) == IDYES)
+          WeGlide::UploadIGCFile(igc_path, weglide_user, weglide_aircraft);
       }
     }
 
