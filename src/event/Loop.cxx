@@ -340,7 +340,10 @@ EventLoop::Run() noexcept
 
 		/* wait for new event */
 
-		Wait(timeout);
+		Wait(finish ? Event::Duration{} : timeout);
+
+		if (finish && ready_sockets.empty())
+			break;
 
 		steady_clock_cache.flush();
 

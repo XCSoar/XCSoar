@@ -190,7 +190,7 @@ private:
   }
 
   void OnWakeUp() noexcept {
-    event_loop.Break();
+    event_loop.Finish();
   }
 };
 

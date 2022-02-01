@@ -50,7 +50,7 @@ EventQueue::~EventQueue() noexcept
 void
 EventQueue::Push(const Event &event) noexcept
 {
-  event_loop.Break();
+  event_loop.Finish();
 
   std::lock_guard<Mutex> lock(mutex);
   events.push(event);
@@ -67,7 +67,7 @@ EventQueue::Interrupt() noexcept
     events.push(Event::NOP);
   }
 
-  event_loop.Break();
+  event_loop.Finish();
 }
 
 void
@@ -81,7 +81,7 @@ EventQueue::Inject(const Event &event) noexcept
 void
 EventQueue::Poll() noexcept
 {
-  event_loop.ResetBreak();
+  event_loop.ResetFinish();
   event_loop.Run();
 }
 
