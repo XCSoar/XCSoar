@@ -339,8 +339,8 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     FormatIGCFilenameLong(name, date, header.manufacturer, header.id,
                           header.flight);
 
-    Path igc_path = AllocatedPath::Build(logs_path, name);
-    transaction.SetPath(igc_path);
+    auto igc_path = AllocatedPath::Build(logs_path, name);
+    transaction.SetPath((Path)igc_path);
     
     try {
       transaction.Commit();
@@ -354,8 +354,9 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
       weglide_settings.pilot_id > 0) {
       // ask whether this IGC should be uploaded to WeGlide
       if (ShowMessageBox(_("Do you want to upload this flight to WeGlide?"),
-        _("Upload flight"), MB_YESNO | MB_ICONQUESTION) == IDYES) {
-        WeGlide::UploadIGCFile(igc_path);
+                           _("Upload flight"),
+                           MB_YESNO | MB_ICONQUESTION) == IDYES) {
+          WeGlide::UploadIGCFile((Path)igc_path);
       }
     }
 
