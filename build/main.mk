@@ -666,6 +666,7 @@ endif
 XCSOAR_SOURCES += \
 	$(SRC)/net/client/tim/Client.cpp \
 	$(SRC)/net/client/tim/Glue.cpp \
+	$(SRC)/Dialogs/Contest/WeGlide/FlightUploadDialog.cpp \
 	$(SRC)/Cloud/weglide/UploadFlight.cpp \
 	$(SRC)/Tracking/SkyLines/Client.cpp \
 	$(SRC)/Tracking/SkyLines/Assemble.cpp \
