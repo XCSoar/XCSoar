@@ -86,10 +86,9 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Formatter/TimeFormatter.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/MultipleDevices.hpp"
-
 #include "Form/DataField/File.hpp"
 #include "Dialogs/FilePicker.hpp"
-#include "contest/weglide/UploadIGCFile.hpp"
+#include "Dialogs/Contest/WeGlide/FlightUploadDialog.hpp"
 
 #include <cassert>
 #include <tchar.h>
@@ -744,15 +743,9 @@ InputEvents::eventExchangeFrequencies(const TCHAR *misc)
 }
 
 void
-InputEvents::eventUploadIGCFile(const TCHAR *misc) {
-  FileDataField df;
-  df.ScanMultiplePatterns(_T("*.igc"));
-  df.SetFileType(FileType::IGC);
-  if (FilePicker(_T("IGC-FilePicker"), df)) {
-    auto path = df.GetValue();
-    if (!path.IsEmpty())
-      if (WeGlide::UploadIGCFile(path)) {
-        // success!
-      }
+InputEvents::eventUploadIGCFile(const TCHAR *misc)
+{
+  if (WeGlide::FlightUploadDialog()) {
+      // success!
   }
 }
