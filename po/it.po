@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-12-06 22:09+0000\n"
+"PO-Revision-Date: 2022-02-04 18:55+0000\n"
 "Last-Translator: ulipo <uli.peru@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/it/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.11-dev\n"
 "X-Launchpad-Export-Date: 2015-09-08 16:12+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1291,7 +1291,7 @@ msgstr "Alt. di arrivo"
 
 #: src/Renderer/WaypointListRenderer.cpp:165
 msgid " ("
-msgstr ""
+msgstr " ("
 
 #: src/Weather/Rasp/RaspStore.cpp:48 src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
@@ -1700,7 +1700,7 @@ msgstr "Server Bluetooth"
 
 #: src/Device/Config.cpp:288
 msgid "GPS Intermediate Driver"
-msgstr "Driver GPS  intermedio"
+msgstr "Driver GPS intermedio"
 
 #: src/Device/Config.cpp:291 src/Dialogs/Device/PortDataField.cpp:49
 #, no-c-format
@@ -3792,7 +3792,7 @@ msgstr "Distanza e Direzione"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:179
 msgid "Alt. diff. MC 0"
-msgstr "Alt. diff. MC 0"
+msgstr "Diff. alt. MC 0"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:183
 msgid "Alt. diff. MC safety"
@@ -5061,7 +5061,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:86
 msgid "Auto. logger"
-msgstr "Auto. logger"
+msgstr "Logger auto"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:87
 msgid ""
@@ -5568,7 +5568,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:88
 msgid "Alternates mode"
-msgstr "Modo alternative"
+msgstr "Modo alternati"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:89
 msgid ""
@@ -5786,7 +5786,7 @@ msgstr "Vario #2 (con puntini)"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:110
 #, no-c-format
 msgid "Vario-scaled dots and lines"
-msgstr "Punti in funzione del vario e linee "
+msgstr "Punti e linee in funzione del vario"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:111
 #, no-c-format
@@ -5794,8 +5794,8 @@ msgid ""
 "Vario-scaled dots with lines. Orange to red = climb. Light blue to dark blue "
 "= sink. Zero lift is presented as a yellow line."
 msgstr ""
-"La scala del Vario con linee. Rosso=salita. Dal blu chiaro al blu scuro = "
-"discendenza.  Zero ascensione si presenta come una linea gialla.\n"
+"La scala del Vario con linee. Rosso = salita. Dal blu chiaro al blu scuro = "
+"discendenza. Zero ascensione si presenta come una linea gialla.\n"
 "Puntini di dimensione relativa al valore del vario. In ascendenza il colore "
 "sarà da arancione a rosso, in discendenza da celeste a blu scuro. Il volo "
 "livellato viene mostrato come una linea gialla."
@@ -6632,7 +6632,7 @@ msgstr "Prima parola del nome"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:91
 #, no-c-format
 msgid "The first word of the waypoint name is displayed."
-msgstr "Viene visualizzata la prima parola del nome delle boe"
+msgstr "Viene visualizzata la prima parola del nome delle boe."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:93
 #, no-c-format
@@ -6670,7 +6670,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:105
 msgid "Label format"
-msgstr "Formato etichetta."
+msgstr "Formato etichetta"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:105
 msgid "Determines how labels are displayed with each waypoint"
@@ -7106,9 +7106,8 @@ msgstr ""
 "Configura se l'avvio debba essere armato manualmente o automaticamente."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:240
-#, fuzzy
 msgid "Score start exit"
-msgstr "Uscita Punteggio"
+msgstr "Uscita punteggio start"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:244
 msgid "Start open time"
@@ -7391,7 +7390,7 @@ msgstr ""
 
 #: src/Dialogs/Task/TargetDialog.cpp:431
 msgid "V rem."
-msgstr "V rim"
+msgstr "V rim."
 
 #: src/Dialogs/Task/TargetDialog.cpp:435
 msgid "V ach"
@@ -8953,9 +8952,9 @@ msgid "Contest distance"
 msgstr "Distanza competizione"
 
 #: src/InfoBoxes/Content/Factory.cpp:733
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cont Dist"
-msgstr "Fin Dist"
+msgstr "Dist Comp"
 
 #: src/InfoBoxes/Content/Factory.cpp:734
 #, no-c-format
@@ -9038,6 +9037,10 @@ msgid ""
 "set. In case the FL is calculated from the GPS altitude, the FL label is "
 "coloured red."
 msgstr ""
+"Altitudine barometrica mostrata come Flight Level. Se l'altitudine "
+"barometrica non è disponibile, il FL è calcolato con l'altitudine GPS a "
+"patto che sia impostato il corretto QNH. In questo caso, l'etichetta del FL "
+"è colorata di rosso."
 
 #: src/InfoBoxes/Content/Factory.cpp:782 src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
@@ -9232,7 +9235,7 @@ msgstr "La distanza orizzontale dallo spazio aereo più vicino."
 #: src/InfoBoxes/Content/Factory.cpp:871
 #, no-c-format
 msgid "Nearest airspace vertical"
-msgstr "Spazio aereo verticalmente più vicino."
+msgstr "Spazio aereo verticalmente più vicino"
 
 #: src/InfoBoxes/Content/Factory.cpp:872
 #, no-c-format
@@ -9271,9 +9274,9 @@ msgstr ""
 "dentro al settore AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:888
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind, head component"
-msgstr "Componente del vento frontale"
+msgstr "Componente frontale del vento"
 
 #: src/InfoBoxes/Content/Factory.cpp:889
 #, no-c-format
@@ -9354,9 +9357,9 @@ msgstr ""
 "una termica uguale all'impostazione MacCready nella tratta attuale."
 
 #: src/InfoBoxes/Content/Factory.cpp:921
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind, head component (simplified)"
-msgstr "Componente del vento frontale (semplificata)"
+msgstr "Componente frontale del vento (semplificata)"
 
 #: src/InfoBoxes/Content/Factory.cpp:922
 #, no-c-format
@@ -9546,9 +9549,9 @@ msgid "Contest speed"
 msgstr "Velocità competizione"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cont Speed"
-msgstr "Velocità"
+msgstr "Velocità Comp"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015
 #, no-c-format
@@ -9575,7 +9578,7 @@ msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
-"Altezza di arrivo al punto finale con MC0 settato secondo l'altezza di "
+"Altezza di arrivo al punto finale con MC0 impostato secondo l'altezza di "
 "sicurezza."
 
 #: src/InfoBoxes/Content/Factory.cpp:1028
@@ -9600,7 +9603,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, no-c-format
 msgid "Next waypoint arrival time (ground speed)"
-msgstr "Tempo alla prossima boa (velocità al suolo)"
+msgstr "Tempo di arrivo alla prossima boa (velocità al suolo)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
 #, no-c-format
@@ -9613,13 +9616,12 @@ msgid ""
 "Estimated arrival time at next waypoint, assuming current ground speed is "
 "maintained."
 msgstr ""
-"Tempo stimato per raggiungere la prossima boa, considerando di mantenere "
-"l'attuale velocità al suolo."
+"Tempo di arrivo alla prossima boa, mantenendo l'attuale velocità al suolo."
 
 #: src/InfoBoxes/Content/Factory.cpp:1049
 #, no-c-format
 msgid "Percentage non-circling climb"
-msgstr "Percentuale risalita senza girare"
+msgstr "Percentuale di ascendenza senza spiralare"
 
 #: src/InfoBoxes/Content/Factory.cpp:1050
 #, no-c-format
@@ -9681,42 +9683,42 @@ msgstr "Frequenza Radio Attiva"
 #: src/InfoBoxes/Content/Factory.cpp:1074
 #, no-c-format
 msgid "Act Freq"
-msgstr ""
+msgstr "Freq Att"
 
 #: src/InfoBoxes/Content/Factory.cpp:1075
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently active Radio Frequency"
-msgstr "Imposta Frequenza Attiva"
+msgstr "La frequenza radio attualmente attiva"
 
 #: src/InfoBoxes/Content/Factory.cpp:1080
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Standby Radio Frequency"
-msgstr "Imposta Frequenza di Standby"
+msgstr "Frequenza Radio di Standby"
 
 #: src/InfoBoxes/Content/Factory.cpp:1081
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Stby Freq"
-msgstr "Imposta Frequenza di Standby"
+msgstr "Freq Stby"
 
 #: src/InfoBoxes/Content/Factory.cpp:1082
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently standby Radio Frequency"
-msgstr "Imposta Frequenza di Standby"
+msgstr "La corrente frequenza radio di standby"
 
 #: src/InfoBoxes/Content/Factory.cpp:1088
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Thermal time"
 msgstr "Tempo nell'ultima termica"
 
 #: src/InfoBoxes/Content/Factory.cpp:1089
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TC Time"
-msgstr "TL tempo"
+msgstr "Tempo TC"
 
 #: src/InfoBoxes/Content/Factory.cpp:1090
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The time spend in the current thermal."
-msgstr "Quota guadagnata/persa nella termica corrente."
+msgstr "Il tempo trascorso nella termica corrente."
 
 #: src/InfoBoxes/Content/Factory.cpp:1096
 #, no-c-format
@@ -9724,33 +9726,33 @@ msgid "Alternate 2 GR"
 msgstr "GR alternativa 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:1097
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Altn2 GR"
-msgstr "Altn1 GR"
+msgstr "Altn2 GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:1098
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Geometric gradient to the arrival height above the second alternate. This is "
 "not adjusted for total energy."
 msgstr ""
-"Gradiente geometrico all'altezza di arrivo sopra la migliore alternativa. Il "
+"Gradiente geometrico all'altezza di arrivo sopra la seconda alternativa. Il "
 "valore non è corretto per l'energia totale."
 
 #: src/InfoBoxes/Content/Factory.cpp:1104
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Heart Rate"
-msgstr "Ora di inizio"
+msgstr "Frequenza Cardiaca"
 
 #: src/InfoBoxes/Content/Factory.cpp:1105
 #, no-c-format
 msgid "Heart"
-msgstr ""
+msgstr "Cuore"
 
 #: src/InfoBoxes/Content/Factory.cpp:1106
 #, no-c-format
 msgid "Heart rate in beats per minute."
-msgstr ""
+msgstr "Frequenza cardiaca in battiti al minuto."
 
 #: src/InfoBoxes/Content/Alternate.cpp:74
 #, c-format
@@ -9769,9 +9771,8 @@ msgid "no QNH"
 msgstr "nessun QNH"
 
 #: src/InfoBoxes/Content/Altitude.cpp:148
-#, fuzzy
 msgid "Not flying"
-msgstr "Non circuitando"
+msgstr "Non in volo"
 
 #: src/InfoBoxes/Content/MacCready.cpp:71
 msgid "MC AUTO"
@@ -9892,7 +9893,7 @@ msgstr "Ritardo batteria bassa"
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:48
 #, no-c-format
 msgid "Battery empty delay"
-msgstr "Ritardo batteria scarica "
+msgstr "Ritardo batteria scarica"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:51
 #, no-c-format
@@ -10623,14 +10624,15 @@ msgstr "Salva"
 
 #: Data/Input/default.xci:430
 msgid "Pilot event announced"
-msgstr ""
+msgstr "Pilot event annunciato"
 
 #: Data/Input/default.xci:433
-#, fuzzy
 msgid ""
 "Pilot\n"
 "Event"
-msgstr "Pilota"
+msgstr ""
+"Pilot\n"
+"Event"
 
 #: Data/Input/default.xci:530 Data/Input/default.xci:1103
 msgid "Topo."
@@ -10657,6 +10659,8 @@ msgid ""
 "Lock\n"
 "Screen"
 msgstr ""
+"Blocco\n"
+"Schermo"
 
 #: Data/Input/default.xci:547 Data/Input/default.xci:597
 #: Data/Input/default.xci:639 Data/Input/default.xci:908
