@@ -109,7 +109,7 @@ struct CoInstance {
 
 static Flight
 UploadFile(Path igc_path, User user, uint_least32_t aircraft_id,
-  StaticString<0x1000> &msg) noexcept
+           StaticString<0x1000> &msg) noexcept
 {
   Flight flight_data;
   try {
@@ -150,25 +150,23 @@ UploadFile(Path igc_path, User user, uint_least32_t aircraft_id,
 
 bool
 UploadIGCFile(Path igc_path, const User &user,
-  uint_least32_t aircraft_id) noexcept
-{ 
-  try {
-    StaticString<0x1000> msg;
-    auto flight_data = UploadFile(igc_path, user, aircraft_id, msg);
-    if (flight_data.flight_id > 0) {
-      // upload successful!
-      LogFormat(_("%s: %s"), _("WeGlide Upload"), msg.c_str());
-      UploadSuccessDialog(flight_data, msg.c_str());
-      return true;
-    } else {
-      // upload failed!
-      LogFormat(_T("%s: %s!"), _("WeGlide Upload Error"), msg.c_str());
-      ShowMessageBox(msg.c_str(), _("WeGlide Upload Error"),
-        MB_ICONEXCLAMATION);
-    }
-  } catch (...) {
-    LogError(std::current_exception());
+              uint_least32_t aircraft_id) noexcept
+try {
+  StaticString<0x1000> msg;
+  auto flight_data = UploadFile(igc_path, user, aircraft_id, msg);
+  if (flight_data.flight_id > 0) {
+    // upload successful!
+    LogFormat(_("%s: %s"), _("WeGlide Upload"), msg.c_str());
+    UploadSuccessDialog(flight_data, msg.c_str());
+    return true;
+  } else {
+    // upload failed!
+    LogFormat(_T("%s: %s!"), _("WeGlide Upload Error"), msg.c_str());
+    ShowMessageBox(msg.c_str(), _("WeGlide Upload Error"), MB_ICONEXCLAMATION);
   }
+  return false;
+} catch (...) {
+  LogError(std::current_exception());
   return false;
 }
 
