@@ -45,7 +45,7 @@
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "time/BrokenDate.hpp"
 #include "Interface.hpp"
-#include "contest/weglide/UploadIGCFile.hpp"
+#include "Dialogs/Contest/WeGlide/FlightUploadDialog.hpp"
 
 
 class DeclareJob {
@@ -348,17 +348,10 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
       ShowError(std::current_exception(), _("Download flight"));
     }
 
-    ComputerSettings settings = CommonInterface::GetComputerSettings();
-    if (settings.weglide.enabled && settings.weglide.automatic_upload) {
-      auto weglide_user = settings.weglide.pilot;
-      auto weglide_aircraft = settings.plane.weglide_glider_type;
-      if (weglide_user.id > 0 && weglide_aircraft > 0) {
-        // ask whether this IGC should be uploaded to WeGlide
-        if (ShowMessageBox(_("Do you want to upload this flight to WeGlide?"),
-                           _("Upload flight"),
-                           MB_YESNO | MB_ICONQUESTION) == IDYES)
-          WeGlide::UploadIGCFile(igc_path, weglide_user, weglide_aircraft);
-      }
+    auto settings = 
+      CommonInterface::GetComputerSettings().weglide;
+    if (settings.enabled && settings.automatic_upload) {
+      WeGlide::FlightUploadDialog(igc_path);
     }
 
     if (ShowMessageBox(_("Do you want to download another flight?"),
