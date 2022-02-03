@@ -351,10 +351,11 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     WeGlideSettings weglide_settings =
       CommonInterface::GetComputerSettings().weglide;
     if (weglide_settings.enabled && weglide_settings.automatic_upload &&
-      weglide_settings.pilot_id > 0) {
+      weglide_settings.pilot.id > 0) {
       // ask whether this IGC should be uploaded to WeGlide
       if (ShowMessageBox(_("Do you want to upload this flight to WeGlide?"),
-        _("Upload flight"), MB_YESNO | MB_ICONQUESTION) == IDYES) {
+                         _("Upload flight"),
+                         MB_YESNO | MB_ICONQUESTION) == IDYES) {
         WeGlide::UploadIGCFile(igc_path);
       }
     }
