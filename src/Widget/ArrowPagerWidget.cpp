@@ -235,11 +235,13 @@ ArrowPagerWidget::KeyPress(unsigned key_code) noexcept
 
   switch (key_code) {
   case KEY_LEFT:
-    Previous(true);
+    if (Previous(true))
+      SetFocus();
     return true;
 
   case KEY_RIGHT:
-    Next(true);
+    if (Next(true))
+      SetFocus();
     return true;
 
   default:
