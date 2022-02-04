@@ -160,6 +160,14 @@ LargeTextWindow::OnKeyDown(unsigned key_code)
   case KEY_DOWN:
     ScrollVertically(1);
     return true;
+
+  case KEY_PRIOR:
+    ScrollVertically(-(int)GetVisibleRows());
+    return true;
+
+  case KEY_NEXT:
+    ScrollVertically(GetVisibleRows());
+    return true;
   }
 
   return NativeWindow::OnKeyDown(key_code);
