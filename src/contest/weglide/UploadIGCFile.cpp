@@ -32,6 +32,7 @@
 #include "Dialogs/Message.hpp"
 #include "Dialogs/CoDialog.hpp"
 #include "Dialogs/Error.hpp"
+#include "Dialogs/Contest/WeGlide/FlightUploadResponse.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "json/ParserOutputStream.hxx"
 #include "Language/Language.hpp"
@@ -112,27 +113,6 @@ UploadErrorInterpreter(const HttpResponse &http)
   return error_string;
 }
 
-// UploadSuccessDialog is only a preliminary DialogBox to show the 
-// result of this upload
-static void
-UploadSuccessDialog(const Flight &flight_data, const TCHAR *msg)
-{
-  StaticString<0x1000> display_string;
-  // TODO: Create a real Dialog with fields in 'src/Dialogs/Cloud/weglide'!
-  // With this Dialog insert the possibilty to update/patch the flight
-  // f.e. copilot in double seater, scoring class, short comment and so on
-  display_string.Format(_T("%s\n\n%s: %u\n%s: %s\n%s: %s (%d)\n"
-    "%s: %s (%u)\n%s: %s, %s: %s"), msg,
-    _("Flight ID"), flight_data.flight_id,
-    _("Scoring Date"), flight_data.scoring_date.c_str(),
-    _("User"), flight_data.user.name.c_str(), flight_data.user.id,
-    _("Aircraft"), flight_data.aircraft.name.c_str(), flight_data.aircraft.id,
-    _("Reg."), flight_data.registration.c_str(),
-    _("Comp. ID"), flight_data.competition_id.c_str());
-
-  ShowMessageBox(display_string.c_str(), _("WeGlide Upload"), MB_OK);
-}
-
 struct CoInstance {
   HttpResponse http;
   Co::InvokeTask
@@ -195,8 +175,7 @@ try {
   auto flight_data = UploadFile(igc_path, user, aircraft_id, msg);
   if (flight_data.IsValid()) {
     // upload successful!
-    LogFormat(_("%s: %s"), _("WeGlide Upload"), msg.c_str());
-    UploadSuccessDialog(flight_data, msg.c_str());
+    FlightUploadResponse(flight_data, msg.c_str());
     return true;
   } else {
     // upload failed!
