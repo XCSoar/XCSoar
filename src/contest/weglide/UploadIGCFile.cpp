@@ -112,50 +112,40 @@ struct CoInstance {
 static Flight
 UploadFile(Path igc_path, User user, uint_least32_t aircraft_id,
            StaticString<0x1000> &msg) noexcept
-{
-  Flight flight_data;
-  try {
-    if (aircraft_id == 0)
-      aircraft_id = CommonInterface::GetComputerSettings().plane
-        .weglide_glider_type;
-    if (user.id == 0) {
-      user = CommonInterface::GetComputerSettings().weglide.pilot;
-    }
+try {
+  const auto settings = CommonInterface::GetComputerSettings();
+  if (aircraft_id == 0)
+    aircraft_id = settings.plane.weglide_glider_type;
+  if (user.id == 0)
+    user = settings.weglide.pilot;
 
-    if (!File::Exists(igc_path)) {
-      msg.Format(_("'%s' - %s"), igc_path.c_str(), _("File doesn't exist"));
-      return flight_data;  // with flight_id = 0!
-    }
+  PluggableOperationEnvironment env;
+  CoInstance instance;
+  if (!File::Exists(igc_path)) {
+    msg.Format(_("'%s' - %s"), igc_path.c_str(), _("File doesn't exist"));
+  } else if (ShowCoDialog(UIGlobals::GetMainWindow(),
+                          UIGlobals::GetDialogLook(), _("Upload Flight"),
+                          instance.UpdateTask(igc_path, user, aircraft_id, env),
+                          &env) == false) {
+    msg.Format(_("'%s' - %s"), igc_path.c_str(),
+               _("ShowCoDialog with failure"));
+  } else if (instance.http.code >= 200 && instance.http.code < 400 &&
+            !instance.http.json_value.is_null()) {
 
-    PluggableOperationEnvironment env;
-    CoInstance instance;
-    if (ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-      _("Upload Flight"), instance.UpdateTask(igc_path, user,
-        aircraft_id, env), &env) == false) {
-      msg.Format(_("'%s' - %s"), igc_path.c_str(),
-        _("ShowCoDialog with failure"));
-      return flight_data;  // with flight_id = 0!
-    }
+    // read the important data from json in a structure
+    auto flight_data = UploadJsonInterpreter(instance.http.json_value);
+    flight_data.igc_name = igc_path.GetBase().c_str();
 
-    if (instance.http.code >= 200 && instance.http.code < 400 &&
-      !instance.http.json_value.is_null()) {
-
-      // read the important data from json in a structure
-      flight_data = UploadJsonInterpreter(instance.http.json_value);
-      flight_data.igc_name = igc_path.GetBase().c_str();
-
-      msg.Format(_("File upload '%s' was successful"),
-                 flight_data.igc_name.c_str());
-    } else {
-      msg.Format(_T("%s: %u"), _("HTTP failure code"), instance.http.code);
-    }
-    return flight_data;  // upload successful!
+    msg.Format(_("File upload '%s' was successful"), igc_path.c_str());
+    return flight_data; // upload successful!
+  } else {  // failure case
+    msg.Format(_T("%s: %u"), _("HTTP failure code"), instance.http.code);
   }
-  catch (const std::exception &e) {
-    msg.Format(_T("'%s' - %s"), igc_path.c_str(),
-      UTF8ToWideConverter(e.what()).c_str());
-    return flight_data;  // with flight_id = 0!
-  }
+  return Flight();  // failure...
+} catch (const std::exception &e) {
+  msg.Format(_T("'%s' - %s"), igc_path.c_str(),
+    UTF8ToWideConverter(e.what()).c_str());
+  return Flight();
 }
 
 bool
