@@ -30,6 +30,7 @@
 #include "co/InvokeTask.hxx"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/CoDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "json/ParserOutputStream.hxx"
 #include "Language/Language.hpp"
@@ -166,7 +167,7 @@ try {
   }
   return false;
 } catch (...) {
-  LogError(std::current_exception());
+  ShowError(std::current_exception(), _T("WeGlide UploadIGCFile"));
   return false;
 }
 
