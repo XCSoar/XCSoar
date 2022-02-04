@@ -146,6 +146,10 @@ try {
   msg.Format(_T("'%s' - %s"), igc_path.c_str(),
     UTF8ToWideConverter(e.what()).c_str());
   return Flight();
+} catch (...) {
+  msg.Format(_T("'%s' - %s"), _("General Exception"), igc_path.c_str());
+  ShowError(std::current_exception(), _T("WeGlide UploadFile"));
+  return Flight();
 }
 
 bool
