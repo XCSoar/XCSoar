@@ -107,6 +107,8 @@ public:
   void ScrollVertically(int delta_lines);
 
 #ifndef USE_WINUSER
+  void ScrollTo(unsigned new_origin) noexcept;
+
 protected:
   void OnResize(PixelSize new_size) override;
   void OnSetFocus() override;
