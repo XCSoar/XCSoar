@@ -68,8 +68,7 @@ CoRequest::OnDeferredError() noexcept
 }
 
 void
-CoRequest::OnHeaders(unsigned status,
-		     std::multimap<std::string, std::string> &&headers)
+CoRequest::OnHeaders(unsigned status, Headers &&headers)
 {
 	response.status = status;
 	response.headers = std::move(headers);

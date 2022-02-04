@@ -43,7 +43,7 @@ class LuaHttpRequest final : CurlResponseHandler {
   CurlResponseHandlerAdapter adapter;
 
   int status;
-  std::multimap<std::string, std::string> response_headers;
+  Curl::Headers response_headers;
 
   std::string response_body;
 
@@ -65,8 +65,7 @@ public:
 
 private:
   /* virtual methods from class CurlResponseHandler */
-  void OnHeaders(unsigned _status,
-                 std::multimap<std::string, std::string> &&_headers) override {
+  void OnHeaders(unsigned _status, Curl::Headers &&_headers) override {
     status = _status;
     response_headers = std::move(_headers);
   }
