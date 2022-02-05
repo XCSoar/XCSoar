@@ -51,7 +51,7 @@ GLint combine_texture_projection, combine_texture_texture,
 } // namespace OpenGL
 
 #ifdef HAVE_GLES
-#define GLSL_VERSION
+#define GLSL_VERSION "#version 100\n"
 #define GLSL_PRECISION "precision mediump float;\n"
 #else
 #define GLSL_VERSION "#version 120\n"
