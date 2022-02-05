@@ -54,6 +54,7 @@ Display::Display()
     GLX_GREEN_SIZE, 1,
     GLX_BLUE_SIZE, 1,
     GLX_ALPHA_SIZE, 1,
+    GLX_STENCIL_SIZE, 1,
     0
   };
 
