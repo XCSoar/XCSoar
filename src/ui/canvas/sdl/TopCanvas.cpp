@@ -30,7 +30,6 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "ui/dim/Rect.hpp"
 #include "ui/canvas/opengl/Init.hpp"
-#include "ui/opengl/Features.hpp"
 #include "Math/Point2D.hpp"
 #else
 #include "ui/canvas/memory/Export.hpp"

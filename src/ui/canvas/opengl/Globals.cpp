@@ -31,9 +31,7 @@ namespace OpenGL {
 
 bool texture_non_power_of_two;
 
-#ifdef HAVE_OES_MAPBUFFER
 bool mapbuffer;
-#endif
 
 GLenum render_buffer_depth_stencil, render_buffer_stencil;
 

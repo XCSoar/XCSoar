@@ -31,15 +31,8 @@ Copyright_License {
  * Simple code to prevent text writing over map city names.
  */
 class LabelBlock {
-#if defined(HAVE_GLES)
-  /* embedded (Android or Windows CE) */
-  static constexpr unsigned SCREEN_HEIGHT = 2048;
-  static constexpr unsigned BUCKET_SIZE = 64;
-#else
-  /* desktop, screen may be huge, lots of memory */
   static constexpr unsigned SCREEN_HEIGHT = 4096;
   static constexpr unsigned BUCKET_SIZE = 64;
-#endif
   static constexpr unsigned BUCKET_SHIFT = 7;
   static constexpr unsigned BUCKET_HEIGHT = 1 << BUCKET_SHIFT;
   static constexpr unsigned BUCKET_COUNT = SCREEN_HEIGHT / BUCKET_HEIGHT;

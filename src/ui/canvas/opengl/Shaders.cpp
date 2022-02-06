@@ -54,13 +54,8 @@ GLint dashed_projection, dashed_translate,
 
 } // namespace OpenGL
 
-#ifdef HAVE_GLES
 #define GLSL_VERSION "#version 100\n"
 #define GLSL_PRECISION "precision mediump float;\n"
-#else
-#define GLSL_VERSION "#version 120\n"
-#define GLSL_PRECISION
-#endif
 
 static constexpr char solid_vertex_shader[] =
   GLSL_VERSION

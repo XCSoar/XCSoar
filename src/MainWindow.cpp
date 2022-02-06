@@ -30,6 +30,7 @@ Copyright_License {
 #include "PageActions.hpp"
 #include "Input/InputEvents.hpp"
 #include "Menu/ButtonLabel.hpp"
+#include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
 #include "Screen/Layout.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "Audio/Sound.hpp"

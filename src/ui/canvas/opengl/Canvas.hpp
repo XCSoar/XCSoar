@@ -26,7 +26,6 @@ Copyright_License {
 #include "Color.hpp"
 #include "ui/dim/Rect.hpp"
 #include "ui/dim/BulkPoint.hpp"
-#include "ui/opengl/Features.hpp"
 #include "ui/opengl/System.hpp"
 #include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Font.hpp"

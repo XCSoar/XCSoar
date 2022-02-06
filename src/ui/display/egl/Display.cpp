@@ -23,22 +23,10 @@ Copyright_License {
 
 #include "Display.hpp"
 #include "ConfigChooser.hpp"
-#include "ui/opengl/Features.hpp"
 #include "util/RuntimeError.hxx"
 #include "LogFile.hpp"
 
 #include <cassert>
-
-/**
- * Returns the EGL API to bind to using eglBindAPI().
- */
-static constexpr EGLenum
-GetBindAPI()
-{
-  return HaveGLES()
-    ? EGL_OPENGL_ES_API
-    : EGL_OPENGL_API;
-}
 
 namespace EGL {
 
@@ -80,7 +68,7 @@ Display::InitDisplay(EGLNativeDisplayType native_display)
   if (const char *s = eglQueryString(display, EGL_EXTENSIONS))
     LogFormat("EGL extensions: %s", s);
 
-  if (!eglBindAPI(GetBindAPI()))
+  if (!eglBindAPI(EGL_OPENGL_ES_API))
     throw std::runtime_error("eglBindAPI() failed");
 
   chosen_config = EGL::ChooseConfig(display);
@@ -92,14 +80,10 @@ Display::CreateContext()
   assert(display != EGL_NO_DISPLAY);
   assert(context == EGL_NO_CONTEXT);
 
-#ifdef HAVE_GLES2
   static constexpr EGLint context_attributes[] = {
     EGL_CONTEXT_CLIENT_VERSION, 2,
     EGL_NONE
   };
-#else
-  const EGLint *context_attributes = nullptr;
-#endif
 
   context = eglCreateContext(display, chosen_config,
                              EGL_NO_CONTEXT, context_attributes);

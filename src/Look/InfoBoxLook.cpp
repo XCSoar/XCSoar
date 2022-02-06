@@ -24,6 +24,7 @@ Copyright_License {
 #include "InfoBoxLook.hpp"
 #include "FontDescription.hpp"
 #include "Colors.hpp"
+#include "ui/canvas/Features.hpp" // for HAVE_TEXT_CACHE
 #include "Screen/Layout.hpp"
 #include "AutoFont.hpp"
 #include "Asset.hpp"

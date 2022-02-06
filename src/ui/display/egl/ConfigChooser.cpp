@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "ConfigChooser.hpp"
-#include "ui/opengl/Features.hpp"
 #include "util/RuntimeError.hxx"
 
 #ifdef MESA_KMS
@@ -33,17 +32,6 @@ Copyright_License {
 #include <span>
 
 namespace EGL {
-
-/**
- * Returns the requested renderable type for EGL_RENDERABLE_TYPE.
- */
-static constexpr EGLint
-GetRenderableType()
-{
-  return HaveGLES()
-    ? (HaveGLES2() ? EGL_OPENGL_ES2_BIT : EGL_OPENGL_ES_BIT)
-    : EGL_OPENGL_BIT;
-}
 
 #ifdef ANDROID
 
@@ -180,7 +168,7 @@ ChooseConfig(EGLDisplay display)
 #endif // !ANDROID
 
     EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-    EGL_RENDERABLE_TYPE, GetRenderableType(),
+    EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
     EGL_NONE
   };
 

@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Texture.hpp"
 #include "Globals.hpp"
-#include "ui/opengl/Features.hpp"
 #include "VertexPointer.hpp"
 #include "ui/dim/BulkPoint.hpp"
 #include "Asset.hpp"

@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_SCOPE_HPP
 #define XCSOAR_SCREEN_OPENGL_SCOPE_HPP
 
-#include "ui/opengl/Features.hpp"
 #include "ui/opengl/System.hpp"
 
 /**

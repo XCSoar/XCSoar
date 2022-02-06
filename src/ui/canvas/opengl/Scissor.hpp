@@ -27,6 +27,7 @@ Copyright_License {
 #include "Scope.hpp"
 #include "Globals.hpp"
 #include "Canvas.hpp"
+#include "ui/opengl/Features.hpp" // for SOFTWARE_ROTATE_DISPLAY
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include "Rotate.hpp"

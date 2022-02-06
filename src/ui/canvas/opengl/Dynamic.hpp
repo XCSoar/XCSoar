@@ -27,7 +27,7 @@ Copyright_License {
 #include "ui/opengl/SystemExt.hpp"
 #include "ui/opengl/Features.hpp"
 
-#if defined(GL_EXT_multi_draw_arrays) && defined(HAVE_GLES)
+#if defined(GL_EXT_multi_draw_arrays)
 #define HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
 #endif
 

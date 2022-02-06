@@ -75,9 +75,7 @@ OpenGL::Initialise()
 static bool
 SupportsNonPowerOfTwoTextures() noexcept
 {
-  return OpenGL::IsExtensionSupported(HaveGLES()
-                                      ? "GL_OES_texture_npot"
-                                      : "GL_ARB_texture_non_power_of_two");
+  return OpenGL::IsExtensionSupported("GL_OES_texture_npot");
 }
 
 /**
@@ -89,21 +87,11 @@ SupportsNonPowerOfTwoTextures() noexcept
 static GLenum
 CheckDepthStencil() noexcept
 {
-#ifdef HAVE_GLES
   if (OpenGL::IsExtensionSupported("GL_OES_packed_depth_stencil"))
     return GL_DEPTH24_STENCIL8_OES;
 
   /* not supported */
   return GL_NONE;
-
-#else
-
-  if (OpenGL::IsExtensionSupported("GL_EXT_packed_depth_stencil"))
-    return FBO::DEPTH_STENCIL;
-
-  /* not supported */
-  return GL_NONE;
-#endif
 }
 
 /**
@@ -114,7 +102,6 @@ CheckDepthStencil() noexcept
 static GLenum
 CheckStencil() noexcept
 {
-#ifdef HAVE_GLES
 #if !defined(__APPLE__) || !TARGET_OS_IPHONE
   if (OpenGL::IsExtensionSupported("GL_OES_stencil1"))
     return GL_STENCIL_INDEX1_OES;
@@ -129,23 +116,6 @@ CheckStencil() noexcept
 
   /* not supported */
   return GL_NONE;
-
-#else
-
-#if 0
-  /* this one works with Nvidia GF114 on Linux, but
-     https://www.opengl.org/wiki/Image_Format strongly recommends not
-     using it */
-#ifdef GL_STENCIL_INDEX8
-  return GL_STENCIL_INDEX8;
-#else
-  return GL_STENCIL_INDEX8_EXT;
-#endif
-#endif
-
-  /* not supported */
-  return GL_NONE;
-#endif
 }
 
 void
@@ -169,9 +139,7 @@ OpenGL::SetupContext()
   native_view->SetTexturePowerOfTwo(Java::GetEnv(), texture_non_power_of_two);
 #endif
 
-#ifdef HAVE_OES_MAPBUFFER
   mapbuffer = IsExtensionSupported("GL_OES_mapbuffer");
-#endif
 
 #ifdef HAVE_DYNAMIC_MAPBUFFER
   if (mapbuffer) {
@@ -205,9 +173,6 @@ OpenGL::SetupContext()
 
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_DITHER);
-#ifndef HAVE_GLES2
-  glDisable(GL_LIGHTING);
-#endif
 
   InitShapes();
 

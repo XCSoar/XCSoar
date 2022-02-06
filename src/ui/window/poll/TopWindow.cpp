@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "../TopWindow.hpp"
+#include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
 #include "ui/event/Queue.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/dim/Size.hpp"

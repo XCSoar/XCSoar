@@ -124,12 +124,7 @@ BufferCanvas::Begin(Canvas &other)
 
     /* save the old viewport */
 
-#ifdef HAVE_GLES
-    /* there's no glPushAttrib() on GL/ES; emulate it */
     glGetIntegerv(GL_VIEWPORT, old_viewport);
-#else
-    glPushAttrib(GL_VIEWPORT_BIT);
-#endif
 
     old_projection_matrix = OpenGL::projection_matrix;
     OpenGL::projection_matrix = glm::mat4(1);
@@ -174,13 +169,8 @@ BufferCanvas::Commit(Canvas &other)
 
     assert(OpenGL::translate == PixelPoint(0, 0));
 
-#ifdef HAVE_GLES
-    /* there's no glPopAttrib() on GL/ES; emulate it */
     glViewport(old_viewport[0], old_viewport[1],
                old_viewport[2], old_viewport[3]);
-#else
-    glPopAttrib();
-#endif
 
     OpenGL::projection_matrix = old_projection_matrix;
     OpenGL::UpdateShaderProjectionMatrix();

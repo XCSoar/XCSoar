@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "LayoutConfigPanel.hpp"
+#include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/DataField/Enum.hpp"

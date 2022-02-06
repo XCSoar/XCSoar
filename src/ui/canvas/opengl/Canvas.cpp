@@ -34,7 +34,6 @@ Copyright_License {
 #include "ui/canvas/custom/Cache.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Util.hpp"
-#include "ui/opengl/Features.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
 #include "util/AllocatedArray.hxx"
@@ -632,9 +631,7 @@ Canvas::DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
   assert(ValidateUTF8(text));
 #endif
 
-#ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
-#endif
 
   if (font == nullptr)
     return;
@@ -669,9 +666,7 @@ Canvas::DrawTransparentText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
   assert(ValidateUTF8(text));
 #endif
 
-#ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
-#endif
 
   if (font == nullptr)
     return;
@@ -704,9 +699,7 @@ Canvas::DrawClippedText(PixelPoint p, PixelSize size,
   assert(ValidateUTF8(text));
 #endif
 
-#ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
-#endif
 
   if (font == nullptr)
     return;
@@ -737,9 +730,7 @@ Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 const GLTexture &texture,
                 PixelPoint src_position, PixelSize src_size) noexcept
 {
-#ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
-#endif
 
   OpenGL::texture_shader->Use();
 
@@ -785,9 +776,7 @@ Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 const Bitmap &src,
                 PixelPoint src_position, PixelSize src_size) noexcept
 {
-#ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
-#endif
   assert(src.IsDefined());
 
   OpenGL::texture_shader->Use();
@@ -801,9 +790,7 @@ void
 Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 const Bitmap &src)
 {
-#ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
-#endif
   assert(src.IsDefined());
 
   OpenGL::texture_shader->Use();
@@ -838,9 +825,7 @@ Canvas::StretchMono(PixelPoint dest_position, PixelSize dest_size,
 void
 Canvas::CopyToTexture(GLTexture &texture, PixelRect src_rc) const
 {
-#ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
-#endif
 
   texture.Bind();
   glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,

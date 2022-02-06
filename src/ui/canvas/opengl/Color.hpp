@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_COLOR_HPP
 
 #include "ui/canvas/PortableColor.hpp"
-#include "ui/opengl/Features.hpp"
 #include "ui/opengl/System.hpp"
 #include "Attribute.hpp"
 
@@ -37,7 +36,6 @@ Copyright_License {
  * configuration.
  */
 class Color {
-#ifdef HAVE_GLES
   typedef GLfixed Component;
 
   static constexpr Component Import(uint8_t value) noexcept {
@@ -49,19 +47,6 @@ class Color {
   }
 
   static constexpr Component MAX = 1u << 16u;
-#else
-  typedef GLubyte Component;
-
-  static constexpr Component Import(uint8_t value) noexcept {
-    return value;
-  }
-
-  static constexpr uint8_t Export(Component value) noexcept {
-    return value;
-  }
-
-  static constexpr Component MAX = 0xff;
-#endif
 
   static constexpr GLfloat ExportFloat(Component value) noexcept {
     return GLfloat(value) / GLfloat(MAX);
@@ -92,11 +77,7 @@ public:
 
   Color() noexcept = default;
 
-#ifdef HAVE_GLES
   static constexpr GLenum TYPE = GL_FIXED;
-#else
-  static constexpr GLenum TYPE = GL_UNSIGNED_BYTE;
-#endif
 
   /**
    * Returns the red part of the color
@@ -135,11 +116,7 @@ public:
   }
 
   constexpr bool IsOpaque() const noexcept {
-#ifdef HAVE_GLES
     return a >= 0xff00;
-#else
-    return a == 0xff;
-#endif
   }
 
   constexpr bool IsTransparent() const noexcept {
@@ -157,11 +134,7 @@ public:
    * Returns the highlighted version of this color.
    */
   constexpr Color Highlight() const noexcept {
-#ifdef HAVE_GLES
     return Color((r + 3) / 4., (g + 3) / 4., (b + 3) / 4.);
-#else
-    return Color((r + 0xff * 3) / 4, (g + 0xff * 3) / 4, (b + 0xff * 3) / 4);
-#endif
   }
 
   /**

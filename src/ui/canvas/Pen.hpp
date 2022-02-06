@@ -178,32 +178,17 @@ public:
   }
 #endif
 
-#ifdef HAVE_GLES
+#ifdef ENABLE_OPENGL
   Style GetStyle() const noexcept {
     return style;
   }
-#endif
 
-#ifdef ENABLE_OPENGL
 private:
   void BindStyle() const noexcept {
     glLineWidth(width);
 
-#ifndef HAVE_GLES
-    if (style == DASH1) {
-      /* XXX implement for OpenGL/ES (using a 1D texture?) */
-      glLineStipple(2, 0x1818);
-      glEnable(GL_LINE_STIPPLE);
-    } else if (style == DASH2) {
-      /* XXX implement for OpenGL/ES (using a 1D texture?) */
-      glLineStipple(2, 0x1f1f);
-      glEnable(GL_LINE_STIPPLE);
-    } else if (style == DASH3) {
-      /* XXX implement for OpenGL/ES (using a 1D texture?) */
-      glLineStipple(2, 0x8f8f);
-      glEnable(GL_LINE_STIPPLE);
-    }
-#endif
+    /* note: this ignores the "style" field; this needs to be done
+       separately, with the "dashed_shader" */
   }
 
 public:
@@ -222,11 +207,6 @@ public:
   }
 
   void Unbind() const noexcept {
-#ifndef HAVE_GLES
-    if ((style == DASH1) || (style == DASH2) || (style == DASH3)) {
-      glDisable(GL_LINE_STIPPLE);
-    }
-#endif
   }
 #endif /* OPENGL */
 

@@ -25,6 +25,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "DataGlobals.hpp"
+#include "ui/canvas/Features.hpp" // for SOFTWARE_ROTATE_DISPLAY
 #include "Profile/Profile.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/Settings.hpp"
