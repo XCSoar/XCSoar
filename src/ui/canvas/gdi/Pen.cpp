@@ -42,7 +42,7 @@ Pen::Create(unsigned width, const Color c)
 }
 
 void
-Pen::Destroy()
+Pen::Destroy() noexcept
 {
   assert(!IsDefined() || IsScreenInitialized());
 

@@ -52,7 +52,7 @@ Brush::Create(const Bitmap &bitmap)
 #endif
 
 void
-Brush::Destroy()
+Brush::Destroy() noexcept
 {
   assert(!IsDefined() || IsScreenInitialized());
 
