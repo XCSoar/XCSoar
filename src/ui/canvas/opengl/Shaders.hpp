@@ -63,6 +63,13 @@ extern GLint combine_texture_projection, combine_texture_texture,
   combine_texture_translate;
 
 /**
+ * A shader that draws dashed lines (#Pen::Style).
+ */
+extern GLProgram *dashed_shader;
+extern GLint dashed_projection, dashed_translate,
+  dashed_resolution, dashed_start, dashed_period, dashed_ratio;
+
+/**
  * Throws on error.
  */
 void InitShaders();

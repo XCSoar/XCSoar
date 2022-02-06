@@ -35,6 +35,7 @@ Copyright_License {
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Util.hpp"
 #include "ui/opengl/Features.hpp"
+#include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
 #include "util/AllocatedArray.hxx"
 #include "util/Macros.hpp"
@@ -254,12 +255,49 @@ Canvas::DrawHLine(int x1, int x2, int y, Color color)
   glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 }
 
+[[gnu::pure]]
+static glm::vec4
+ToNormalisedDeviceCoordinates(PixelPoint p) noexcept
+{
+  p += OpenGL::translate;
+  p -= PixelPoint{OpenGL::viewport_size / 2};
+
+  return glm::vec4{p.x, p.y, 0, 1} * OpenGL::projection_matrix;
+}
+
 void
 Canvas::DrawLine(PixelPoint a, PixelPoint b) noexcept
 {
   OpenGL::solid_shader->Use();
 
   pen.Bind();
+
+  if (pen.GetStyle() != Pen::SOLID) {
+    /* this kludge implements dashed lines using a special shader that
+       calculates the distance from the start of the line to the
+       current pixel and then determines whether to draw the pixel */
+
+    OpenGL::dashed_shader->Use();
+
+    GLfloat period = 1, ratio = 1;
+    switch (pen.GetStyle()) {
+    case Pen::SOLID:
+      break;
+
+    case Pen::DASH1:
+    case Pen::DASH2:
+    case Pen::DASH3:
+      period = 32;
+      ratio = 0.6;
+      break;
+    }
+
+    glUniform1f(OpenGL::dashed_period, period);
+    glUniform1f(OpenGL::dashed_ratio, ratio);
+
+    const glm::vec4 start = ToNormalisedDeviceCoordinates(a);
+    glUniform2f(OpenGL::dashed_start, start.x, start.y);
+  }
 
   const BulkPixelPoint v[] = { a, b };
   const ScopeVertexPointer vp(v);

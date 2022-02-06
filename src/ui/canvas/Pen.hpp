@@ -71,7 +71,7 @@ protected:
 
   uint8_t width = 0;
 
-#if defined(USE_MEMORY_CANVAS) || (defined(ENABLE_OPENGL) && !defined(HAVE_GLES))
+#if defined(USE_MEMORY_CANVAS) || defined(ENABLE_OPENGL)
   Style style;
 #endif
 #endif
@@ -115,14 +115,14 @@ public:
 
   constexpr Pen(Style _style, unsigned _width, const Color _color) noexcept
     :color(_color), width(_width)
-#if defined(USE_MEMORY_CANVAS) || (defined(ENABLE_OPENGL) && !defined(HAVE_GLES))
+#if defined(USE_MEMORY_CANVAS) || defined(ENABLE_OPENGL)
     , style(_style)
 #endif
   {}
 
   constexpr Pen(unsigned _width, const Color _color) noexcept
     :color(_color), width(_width)
-#if defined(USE_MEMORY_CANVAS) || (defined(ENABLE_OPENGL) && !defined(HAVE_GLES))
+#if defined(USE_MEMORY_CANVAS) || defined(ENABLE_OPENGL)
     , style(SOLID)
 #endif
   {}
@@ -175,6 +175,12 @@ public:
 
   const Color GetColor() const noexcept {
     return color;
+  }
+#endif
+
+#ifdef HAVE_GLES
+  Style GetStyle() const noexcept {
+    return style;
   }
 #endif
 

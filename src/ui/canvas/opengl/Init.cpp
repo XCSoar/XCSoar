@@ -276,9 +276,9 @@ OpenGL::SetupViewport(UnsignedPoint2D size) noexcept
   projection_matrix = rot_matrix * projection_matrix;
 #endif
 
-  UpdateShaderProjectionMatrix();
-
   viewport_size = size;
+
+  UpdateShaderProjectionMatrix();
 
   return size;
 }
