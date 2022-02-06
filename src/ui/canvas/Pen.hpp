@@ -46,7 +46,6 @@ public:
     DASH1 = PS_DASH,
     DASH2 = PS_DASH,
     DASH3 = PS_DASH,
-    BLANK = PS_NULL
   };
 #elif defined(USE_MEMORY_CANVAS)
   typedef uint8_t Style;
@@ -54,14 +53,12 @@ public:
   static constexpr uint8_t DASH1= -1-0b1000;
   static constexpr uint8_t DASH2= -1-0b1000;
   static constexpr uint8_t DASH3= -1-0b1000;
-  static constexpr uint8_t BLANK = 0;
 #else
   enum Style : uint8_t {
     SOLID,
     DASH1,
     DASH2,
     DASH3,
-    BLANK
   };
 #endif
 
