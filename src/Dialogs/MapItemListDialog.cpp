@@ -160,9 +160,7 @@ public:
 void
 MapItemListWidget::CreateButtons(WidgetDialog &dialog)
 {
-  settings_button = dialog.AddButton(_("Settings"), [](){
-    ShowMapItemListSettingsDialog();
-  });
+  details_button = dialog.AddButton(_("Details"), mrOK);
 
   goto_button = dialog.AddButton(_("Goto"), [this](){
     OnGotoClicked();
@@ -172,7 +170,10 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog)
     OnAckClicked();
   });
 
-  details_button = dialog.AddButton(_("Details"), mrOK);
+  settings_button = dialog.AddButton(_("Settings"), [](){
+    ShowMapItemListSettingsDialog();
+  });
+
   cancel_button = dialog.AddButton(_("Close"), mrCancel);
 }
 
