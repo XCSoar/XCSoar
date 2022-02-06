@@ -193,6 +193,12 @@ event=Mode default
 
 mode=default
 type=key
+data=F9
+event=FrequencyCard
+event=Mode default
+
+mode=default
+type=key
 data=MENU
 event=Mode Menu
 
@@ -824,6 +830,14 @@ event=Status all
 event=Mode default
 label=Status
 location=5
+
+mode=Info2
+type=key
+data=7
+event=FrequencyCard
+event=Mode default
+label=Frequency Card
+location=6
 
 mode=Info2
 type=key

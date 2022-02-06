@@ -21,20 +21,25 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FILE_TYPE_HPP
-#define XCSOAR_FILE_TYPE_HPP
+#ifndef XCSOAR_FREQUENCY_LIST_RENDERER_HPP
+#define XCSOAR_FREQUENCY_LIST_RENDERER_HPP
 
-#include <cstdint>
+#include "util/tstring.hpp"
+#include "RadioFrequency.hpp"
 
-enum class FileType : uint8_t {
-  UNKNOWN,
-  AIRSPACE,
-  WAYPOINT,
-  WAYPOINTDETAILS,
-  MAP,
-  FLARMNET,
-  IGC,
-  FREQUENCIES,
-};
+class Canvas;
+class TextRowRenderer;
+struct PixelRect;
+
+namespace FrequencyListRenderer
+{
+  struct RadioChannel {
+	  tstring name;
+	  RadioFrequency radio_frequency;
+  };
+
+  void Draw(Canvas &canvas, PixelRect rc, const RadioChannel &channel,
+            const TextRowRenderer &row_renderer);
+}
 
 #endif

@@ -21,20 +21,27 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FILE_TYPE_HPP
-#define XCSOAR_FILE_TYPE_HPP
+#include "FrequencyListRenderer.hpp"
+#include "TextRowRenderer.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "util/StaticString.hxx"
+#include "util/Macros.hpp"
 
-#include <cstdint>
+typedef StaticString<256u> Buffer;
 
-enum class FileType : uint8_t {
-  UNKNOWN,
-  AIRSPACE,
-  WAYPOINT,
-  WAYPOINTDETAILS,
-  MAP,
-  FLARMNET,
-  IGC,
-  FREQUENCIES,
-};
+void
+FrequencyListRenderer::Draw(Canvas &canvas, PixelRect rc,
+                           const RadioChannel &channel,
+                           const TextRowRenderer &row_renderer)
+{
+  // Draw name and frequency
+  row_renderer.DrawTextRow(canvas, rc, channel.name.c_str());
 
-#endif
+  if (channel.radio_frequency.IsDefined()) {
+  	StaticString<30> buffer;
+  	TCHAR radio[20];
+    channel.radio_frequency.Format(radio, ARRAY_SIZE(radio));
+    buffer.Format(_T("%s MHz"), radio);
+    row_renderer.DrawRightColumn(canvas, rc, buffer);
+  }
+}

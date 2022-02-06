@@ -41,4 +41,6 @@ void dlgCreditsShowModal(UI::SingleWindow &parent);
 void
 dlgQuickMenuShowModal(UI::SingleWindow &parent) noexcept;
 
+void FrequencyDialogShowModal() noexcept;
+
 #endif
