@@ -47,24 +47,24 @@ protected:
 
 public:
 #ifndef USE_GDI
-  Brush() noexcept = default;
+  Brush() = default;
 
-  constexpr explicit Brush(const Color _color) noexcept
-    :color(_color)  {}
+  constexpr
+  explicit Brush(const Color _color):color(_color)  {}
 #else
   /** Base Constructor of the Brush class */
-  Brush() noexcept = default;
+  Brush() = default;
 
   /**
    * Constructor (creates a Brush object of the given Color
    * @param c Color of the Brush
    */
-  explicit Brush(const Color c) {
+  explicit Brush(const Color c):brush(nullptr) {
     Create(c);
   }
 
   /** Destructor */
-  ~Brush() noexcept {
+  ~Brush() {
     Destroy();
   }
 
@@ -92,13 +92,15 @@ public:
   /**
    * Resets the Brush to nullptr
    */
-  void Destroy() noexcept;
+  void Destroy();
 
   /**
    * Returns whether the Brush is defined (!= nullptr)
    * @return True if the Brush is defined, False otherwise
    */
-  bool IsDefined() const noexcept {
+  bool
+  IsDefined() const
+  {
 #ifndef USE_GDI
     return !color.IsTransparent();
 #else
@@ -107,19 +109,17 @@ public:
   }
 
 #ifndef USE_GDI
-  constexpr bool IsHollow() const noexcept {
+  constexpr bool IsHollow() const {
     return color.IsTransparent();
   }
 
-  const Color GetColor() const noexcept {
-    return color;
-  }
+  const Color GetColor() const { return color; }
 #else
   /**
    * Returns the native HBRUSH object
    * @return The native HBRUSH object
    */
-  HBRUSH Native() const noexcept {
+  HBRUSH Native() const {
     return brush;
   }
 #endif
@@ -128,11 +128,11 @@ public:
   /**
    * Configures this brush in the OpenGL context.
    */
-  void Bind() const noexcept {
+  void Bind() const {
     color.Bind();
   }
 
-  void BindUniform(GLint location) const noexcept {
+  void BindUniform(GLint location) const {
     color.Uniform(location);
   }
 #endif /* OPENGL */
@@ -149,7 +149,7 @@ Brush::Create(const Color c)
 }
 
 inline void
-Brush::Destroy() noexcept
+Brush::Destroy()
 {
   assert(!IsDefined() || IsScreenInitialized());
 

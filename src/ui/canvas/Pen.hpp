@@ -46,20 +46,22 @@ public:
     DASH1 = PS_DASH,
     DASH2 = PS_DASH,
     DASH3 = PS_DASH,
+    BLANK = PS_NULL
   };
 #elif defined(USE_MEMORY_CANVAS)
-  enum Style : uint8_t {
-    SOLID = uint8_t(~0),
-    DASH1 = uint8_t(~0 - 0b1000),
-    DASH2 = uint8_t(~0 - 0b1000),
-    DASH3 = uint8_t(~0 - 0b1000),
-  };
+  typedef uint8_t Style;
+  static constexpr uint8_t SOLID = -1;
+  static constexpr uint8_t DASH1= -1-0b1000;
+  static constexpr uint8_t DASH2= -1-0b1000;
+  static constexpr uint8_t DASH3= -1-0b1000;
+  static constexpr uint8_t BLANK = 0;
 #else
   enum Style : uint8_t {
     SOLID,
     DASH1,
     DASH2,
     DASH3,
+    BLANK
   };
 #endif
 
@@ -80,7 +82,7 @@ public:
 #ifdef USE_GDI
 
   /** Base Constructor for the Pen class */
-  Pen() noexcept = default;
+  Pen() = default;
 
   /**
    * Constructor that creates a Pen object, based on the given parameters
@@ -102,7 +104,7 @@ public:
   }
 
   /** Destructor */
-  ~Pen() noexcept {
+  ~Pen() {
     Destroy();
   }
 
@@ -111,16 +113,18 @@ public:
 
 #else /* !USE_GDI */
 
-  Pen() noexcept = default;
+  Pen() = default;
 
-  constexpr Pen(Style _style, unsigned _width, const Color _color) noexcept
+  constexpr
+  Pen(Style _style, unsigned _width, const Color _color)
     :color(_color), width(_width)
 #if defined(USE_MEMORY_CANVAS) || (defined(ENABLE_OPENGL) && !defined(HAVE_GLES))
     , style(_style)
 #endif
   {}
 
-  constexpr Pen(unsigned _width, const Color _color) noexcept
+  constexpr
+  Pen(unsigned _width, const Color _color)
     :color(_color), width(_width)
 #if defined(USE_MEMORY_CANVAS) || (defined(ENABLE_OPENGL) && !defined(HAVE_GLES))
     , style(SOLID)
@@ -148,13 +152,15 @@ public:
   /**
    * Resets the Pen to nullptr
    */
-  void Destroy() noexcept;
+  void Destroy();
 
   /**
    * Returns whether the Pen is defined (!= nullptr)
    * @return True if the Pen is defined, False otherwise
    */
-  bool IsDefined() const noexcept {
+  bool
+  IsDefined() const
+  {
 #ifdef USE_GDI
     return pen != nullptr;
 #else
@@ -167,20 +173,24 @@ public:
    * Returns the native HPEN object
    * @return The native HPEN object
    */
-  HPEN Native() const noexcept { return pen; }
+  HPEN Native() const { return pen; }
 #else
-  unsigned GetWidth() const noexcept {
+  unsigned
+  GetWidth() const
+  {
     return width;
   }
 
-  const Color GetColor() const noexcept {
+  const Color
+  GetColor() const
+  {
     return color;
   }
 #endif
 
 #ifdef ENABLE_OPENGL
 private:
-  void BindStyle() const noexcept {
+  void BindStyle() const {
     glLineWidth(width);
 
 #ifndef HAVE_GLES
@@ -205,17 +215,17 @@ public:
    * Configure the Pen in the OpenGL context.  Don't forget to call
    * Unbind() when you're done with this Pen.
    */
-  void Bind() const noexcept {
+  void Bind() const {
     color.Bind();
     BindStyle();
   }
 
-  void BindUniform(GLint location) const noexcept {
+  void BindUniform(GLint location) const {
     color.Uniform(location);
     BindStyle();
   }
 
-  void Unbind() const noexcept {
+  void Unbind() const {
 #ifndef HAVE_GLES
     if ((style == DASH1) || (style == DASH2) || (style == DASH3)) {
       glDisable(GL_LINE_STIPPLE);
@@ -225,7 +235,7 @@ public:
 #endif /* OPENGL */
 
 #ifdef USE_MEMORY_CANVAS
-  constexpr unsigned GetMask() const noexcept {
+  constexpr unsigned GetMask() const {
     return style | (-1 & ~0xff);
   }
 #endif
@@ -234,7 +244,7 @@ public:
 #ifndef USE_GDI
 
 inline void
-Pen::Destroy() noexcept
+Pen::Destroy()
 {
   assert(!IsDefined() || IsScreenInitialized());
 
