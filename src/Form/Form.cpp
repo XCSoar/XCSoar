@@ -37,6 +37,8 @@ Copyright_License {
 #endif
 
 #ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Program.hpp"
+#include "ui/canvas/opengl/Shaders.hpp"
 #include "ui/canvas/opengl/Scope.hpp"
 #include "ui/canvas/opengl/VertexPointer.hpp"
 #endif
@@ -482,6 +484,7 @@ WndForm::OnPaint(Canvas &canvas)
       3, 7, 0, 7, 4, 0,
     };
 
+    OpenGL::solid_shader->Use();
     glDrawElements(GL_TRIANGLES, ARRAY_SIZE(indices),
                    GL_UNSIGNED_BYTE, indices);
   }
