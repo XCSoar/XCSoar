@@ -118,7 +118,8 @@ void
 Display::MakeCurrent(EGLSurface surface)
 {
   if (!eglMakeCurrent(display, surface, surface, context))
-    throw std::runtime_error("eglMakeCurrent() failed");
+    throw FormatRuntimeError("eglMakeCurrent() failed: %#x",
+                             eglGetError());
 }
 
 } // namespace EGL
