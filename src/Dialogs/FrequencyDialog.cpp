@@ -26,7 +26,6 @@ Copyright_License {
 #include "Widget/ListWidget.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
-#include "Renderer/FrequencyListRenderer.hpp"
 #include "Renderer/TextRowRenderer.hpp"
 #include "Language/Language.hpp"
 #include "ActionInterface.hpp"
@@ -37,14 +36,18 @@ Copyright_License {
 #include "util/StringCompare.hxx"
 #include "util/Macros.hpp"
 
-using namespace FrequencyListRenderer;
-
 class FrequencyListWidget final
   : public ListWidget {
 
   const DialogLook &dialog_look;
   TextRowRenderer row_renderer;
   Button *active_button, *standby_button, *cancel_button;
+
+public:
+  struct RadioChannel {
+	  tstring name;
+	  RadioFrequency radio_frequency;
+  };
   std::vector<RadioChannel> *channels;
 
 public:
@@ -70,10 +73,19 @@ public:
                    unsigned index) noexcept override {
     assert(index < channels->size());
 
-    const RadioChannel &channel = channels->at(index);
+    const RadioChannel& channel = (*channels)[index];
 
-    FrequencyListRenderer::Draw(canvas, rc, channel,
-	                               row_renderer);
+    // Draw name and frequency
+    row_renderer.DrawTextRow(canvas, rc, channel.name.c_str());
+
+    if (channel.radio_frequency.IsDefined()) {
+    	StaticString<30> buffer;
+    	TCHAR radio[20];
+      channel.radio_frequency.Format(radio, ARRAY_SIZE(radio));
+      buffer.Format(_T("%s MHz"), radio);
+      row_renderer.DrawRightColumn(canvas, rc, buffer);
+      }
+
   }
 
   bool CanActivateItem(unsigned index) const noexcept override {
@@ -86,22 +98,22 @@ public:
 void
 FrequencyListWidget::CreateButtons(WidgetDialog &dialog)
 {
-	  standby_button = dialog.AddButton(_("Set Standby Frequency"), [this](){
-	    unsigned index = GetCursorIndex();
-	    assert(index < channels->size());
-	    const RadioChannel *channel = &channels->at(index);
-	    ActionInterface::SetStandbyFrequency(channel->radio_frequency,
-	            channel->name.c_str());
-	    cancel_button->Click();
+  standby_button = dialog.AddButton(_("Set Standby Frequency"), [this](){
+    unsigned index = GetCursorIndex();
+    assert(index < channels->size());
+    const RadioChannel *channel = &(*channels)[index];
+    ActionInterface::SetStandbyFrequency(channel->radio_frequency,
+            channel->name.c_str());
+    cancel_button->Click();
 });
 
-	  active_button = dialog.AddButton(_("Set Active Frequency"), [this](){
-	    unsigned index = GetCursorIndex();
-	    assert(index < channels->size());
-	    const RadioChannel *channel = &channels->at(index);
-	    ActionInterface::SetActiveFrequency(channel->radio_frequency,
-	            channel->name.c_str());
-	    cancel_button->Click();
+  active_button = dialog.AddButton(_("Set Active Frequency"), [this](){
+    unsigned index = GetCursorIndex();
+    assert(index < channels->size());
+    const RadioChannel *channel = &(*channels)[index];
+    ActionInterface::SetActiveFrequency(channel->radio_frequency,
+            channel->name.c_str());
+    cancel_button->Click();
   });
 
   cancel_button = dialog.AddButton(_("Close"), mrCancel);
@@ -147,7 +159,7 @@ FrequencyListWidget::UpdateList() noexcept
 	  /* line too long for buffer */
 	  continue;
 
-	const TCHAR *params[20];
+	const TCHAR *params[2];
     size_t n_params = ExtractParameters(line, ctemp, params,
                                       ARRAY_SIZE(params), true, _T('"'));
     if (n_params != 2)
@@ -167,24 +179,18 @@ FrequencyListWidget::UpdateList() noexcept
 void
 FrequencyDialogShowModal() noexcept
 {
-  static std::vector<FrequencyListRenderer::RadioChannel> channels;
+  static std::vector<FrequencyListWidget::RadioChannel> channels;
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   auto widget = std::make_unique<FrequencyListWidget>(look,&channels);
 
-  static bool first = true;
-  static bool haveRows = false;
-
-  if (first == true || FrequenciesFileChanged == true) {
+  if (channels.size() == 0 || FrequenciesFileChanged == true) {
     FrequenciesFileChanged = false;
-	first = false;
-	haveRows = widget->UpdateList();
-  }
-
-  if (haveRows == false) {
-    // no channels: don't show the dialog
-    return;
+	if (widget->UpdateList() == false) {
+	  // no channels: don't show the dialog
+	  return;
+	}
   }
 
   TWidgetDialog<FrequencyListWidget>
