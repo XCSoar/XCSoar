@@ -11,6 +11,7 @@ Version 7.23 - not yet released
   - reduce input lag
 * Android
   - add SoftRF Academy and ES into 'white list' of USB devices
+  - fix crash with empty SD card slot
 * Kobo
   - fix broken button text background
   - add OTG support (serial, sound, net) for Clara HD

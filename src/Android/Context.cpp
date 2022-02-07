@@ -82,7 +82,8 @@ Context::GetExternalFilesDirs(JNIEnv *env) const noexcept
 
   for (jsize i = 0; i < n; ++i) {
     Java::File dir{env, env->GetObjectArrayElement(array, i)};
-    previous = result.emplace_after(previous, ToPath(dir.GetAbsolutePath()));
+    if (dir)
+      previous = result.emplace_after(previous, ToPath(dir.GetAbsolutePath()));
   }
 
   return result;
