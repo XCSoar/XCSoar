@@ -36,6 +36,12 @@ class Display {
 
   EGLContext context = EGL_NO_CONTEXT;
 
+  /**
+   * A 1x1 pbuffer surface that is used to activate the EGLContext
+   * while we have no real surface.
+   */
+  EGLSurface dummy_surface = EGL_NO_SURFACE;
+
 public:
   /**
    * Throws on error.

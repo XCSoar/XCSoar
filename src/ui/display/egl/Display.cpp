@@ -51,6 +51,10 @@ Display::Display(EGLNativeDisplayType native_display)
 Display::~Display() noexcept
 {
   eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
+  if (dummy_surface != EGL_NO_SURFACE)
+    eglDestroySurface(display, dummy_surface);
+
   eglDestroyContext(display, context);
   eglTerminate(display);
 }
@@ -99,7 +103,25 @@ Display::CreateContext()
 
   context = eglCreateContext(display, chosen_config,
                              EGL_NO_CONTEXT, context_attributes);
-  eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, context);
+  if (!eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, context)) {
+    /* some old EGL implemenations do not support EGL_NO_SURFACE
+       (error EGL_BAD_MATCH); this kludge uses a dummy 1x1 pbuffer
+       surface to work around this */
+
+    static constexpr int pbuffer_attributes[] = {
+      EGL_WIDTH, 1,
+      EGL_HEIGHT, 1,
+      EGL_NONE
+    };
+
+    dummy_surface = eglCreatePbufferSurface(display, chosen_config,
+                                            pbuffer_attributes);
+    if (dummy_surface == EGL_NO_SURFACE)
+      throw FormatRuntimeError("eglCreatePbufferSurface() failed: %#x",
+                               eglGetError());
+
+    MakeCurrent(dummy_surface);
+  }
 }
 
 EGLSurface
@@ -117,6 +139,9 @@ Display::CreateWindowSurface(EGLNativeWindowType native_window)
 void
 Display::MakeCurrent(EGLSurface surface)
 {
+  if (surface == EGL_NO_SURFACE)
+    surface = dummy_surface;
+
   if (!eglMakeCurrent(display, surface, surface, context))
     throw FormatRuntimeError("eglMakeCurrent() failed: %#x",
                              eglGetError());
