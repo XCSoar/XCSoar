@@ -56,6 +56,11 @@ AutoSizeFont(FontDescription &d, unsigned width, const TCHAR *text)
   /* decrease font size until it fits exactly */
 
   do {
+    if (d.GetHeight() <= 6)
+      /* this is the lower bound; don't go smaller than that, or else
+         the size will underflow eventually */
+      break;
+
     d.SetHeight(d.GetHeight() - 1);
 
     Font font;
