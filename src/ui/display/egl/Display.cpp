@@ -50,11 +50,9 @@ Display::Display(EGLNativeDisplayType native_display)
 
 Display::~Display() noexcept
 {
-#ifndef ANDROID
   eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
   eglDestroyContext(display, context);
   eglTerminate(display);
-#endif
 }
 
 inline void
