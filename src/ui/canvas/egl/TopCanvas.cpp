@@ -88,18 +88,6 @@ TopCanvas::CreateSurface(EGLNativeWindowType native_window)
   display.MakeCurrent(surface);
 
   SetupViewport(effective_size);
-
-  if (auto s = (const char *)glGetString(GL_VENDOR))
-    LogFormat("GL vendor: %s", s);
-
-  if (auto s = (const char *)glGetString(GL_VERSION))
-    LogFormat("GL version: %s", s);
-
-  if (auto s = (const char *)glGetString(GL_RENDERER))
-    LogFormat("GL renderer: %s", s);
-
-  if (auto s = (const char *)glGetString(GL_EXTENSIONS))
-    LogFormat("GL extensions: %s", s);
 }
 
 TopCanvas::~TopCanvas() noexcept

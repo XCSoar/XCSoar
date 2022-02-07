@@ -34,6 +34,7 @@ Copyright_License {
 #include "Math/Point2D.hpp"
 #include "Asset.hpp"
 #include "DisplayOrientation.hpp"
+#include "LogFile.hpp"
 
 #ifdef USE_EGL
 #include "ui/egl/System.hpp"
@@ -150,6 +151,18 @@ CheckStencil() noexcept
 void
 OpenGL::SetupContext()
 {
+  if (auto s = (const char *)glGetString(GL_VENDOR))
+    LogFormat("GL vendor: %s", s);
+
+  if (auto s = (const char *)glGetString(GL_VERSION))
+    LogFormat("GL version: %s", s);
+
+  if (auto s = (const char *)glGetString(GL_RENDERER))
+    LogFormat("GL renderer: %s", s);
+
+  if (auto s = (const char *)glGetString(GL_EXTENSIONS))
+    LogFormat("GL extensions: %s", s);
+
   texture_non_power_of_two = SupportsNonPowerOfTwoTextures();
 
 #ifdef ANDROID
