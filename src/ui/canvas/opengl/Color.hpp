@@ -36,20 +36,18 @@ Copyright_License {
  * configuration.
  */
 class Color {
-  typedef GLfixed Component;
+  using Component = GLfloat;
 
   static constexpr Component Import(uint8_t value) noexcept {
-    return value << 8;
+    return value / 255.f;
   }
 
   static constexpr uint8_t Export(Component value) noexcept {
-    return value >> 8;
+    return uint8_t(value * 255);
   }
 
-  static constexpr Component MAX = 1u << 16u;
-
   static constexpr GLfloat ExportFloat(Component value) noexcept {
-    return GLfloat(value) / GLfloat(MAX);
+    return value;
   }
 
   Component r, g, b, a;
@@ -63,13 +61,13 @@ class Color {
 
 public:
   constexpr Color(uint8_t _r, uint8_t _g, uint8_t _b) noexcept
-    :r(Import(_r)), g(Import(_g)), b(Import(_b)), a(MAX) {}
+    :r(Import(_r)), g(Import(_g)), b(Import(_b)), a(1.0f) {}
   constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a) noexcept
     :r(Import(_r)), g(Import(_g)), b(Import(_b)), a(Import(_a)) {}
 
   explicit constexpr Color(RGB8Color other)
     :r(Import(other.Red())), g(Import(other.Green())), b(Import(other.Blue())),
-     a(MAX) {}
+     a(1.0f) {}
 
   explicit constexpr Color(BGRA8Color src) noexcept
     :r(Import(src.Red())), g(Import(src.Green())), b(Import(src.Blue())),
@@ -77,7 +75,7 @@ public:
 
   Color() noexcept = default;
 
-  static constexpr GLenum TYPE = GL_FIXED;
+  static constexpr GLenum TYPE = GL_FLOAT;
 
   /**
    * Returns the red part of the color
@@ -116,11 +114,11 @@ public:
   }
 
   constexpr bool IsOpaque() const noexcept {
-    return a >= 0xff00;
+    return a >= 0.99f;
   }
 
   constexpr bool IsTransparent() const noexcept {
-    return a == 0;
+    return a <= 0.f;
   }
 
   /**
@@ -134,17 +132,26 @@ public:
    * Returns the highlighted version of this color.
    */
   constexpr Color Highlight() const noexcept {
-    return Color((r + 3) / 4., (g + 3) / 4., (b + 3) / 4.);
+    return {
+      Internal{},
+      1.0f - ((1.0f - r) / 2),
+      1.0f - ((1.0f - g) / 2),
+      1.0f - ((1.0f - b) / 2),
+      a,
+    };
   }
 
   /**
    * Returns the shadowed version of this color.
    */
   constexpr Color Shadow() const noexcept {
-    return Color(Red() * 15u / 16u,
-                 Green() * 15u / 16u,
-                 Blue() * 15u / 16u,
-                 Alpha());
+    return {
+      Internal{},
+      r * (15.f / 16.f),
+      g * (15.f / 16.f),
+      b * (15.f / 16.f),
+      a,
+    };
   }
 
   void Uniform(GLint location) const noexcept {
