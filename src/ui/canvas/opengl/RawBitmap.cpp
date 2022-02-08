@@ -60,7 +60,7 @@ RawBitmap::BindAndGetTexture() const noexcept
   texture->Bind();
 
   if (dirty) {
-#ifdef HAVE_GLES
+#ifdef USE_RGB565
     /* 16 bit 5/6/5 on Android */
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
                     GL_RGB, GL_UNSIGNED_SHORT_5_6_5, GetBuffer());

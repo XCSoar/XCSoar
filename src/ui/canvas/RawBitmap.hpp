@@ -13,10 +13,6 @@
 
 #include "PortableColor.hpp"
 
-#ifdef ENABLE_OPENGL
-#include "ui/opengl/Features.hpp"
-#endif
-
 #ifdef USE_GDI
 #include <windef.h>
 #include <wingdi.h>
@@ -33,6 +29,11 @@ class Canvas;
 class GLTexture;
 #endif
 
+#if defined(ENABLE_OPENGL) && (defined(ANDROID) || defined(__arm__))
+// use 16-bit RGB565 only on mobile devices
+#define USE_RGB565
+#endif
+
 /**
  * The RawColor structure encapsulates color information about one
  * point in a #RawBitmap.
@@ -47,7 +48,8 @@ struct RawColor
   constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :value(R, G, B) {}
 
-#elif defined(HAVE_GLES)
+#elif defined(USE_RGB565)
+
   RGB565Color value;
 
   constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
