@@ -99,7 +99,7 @@ protected:
 #endif
 
 #ifdef ENABLE_OPENGL
-  GLTexture *texture;
+  const std::unique_ptr<GLTexture> texture;
 
   /**
    * Has the buffer been modified, and needs to be copied into the

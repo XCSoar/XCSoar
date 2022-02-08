@@ -54,7 +54,6 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
 
 RawBitmap::~RawBitmap()
 {
-  delete texture;
 }
 
 GLTexture &
