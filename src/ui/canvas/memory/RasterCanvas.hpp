@@ -366,8 +366,8 @@ public:
 
     pointer p = At(x1, y1);
 
-    int pixx = PixelTraits::CalcIncrement(sx) * sizeof(*p);
-    int pixy = sy * buffer.pitch;
+    std::ptrdiff_t pixx = PixelTraits::CalcIncrement(sx) * sizeof(*p);
+    std::ptrdiff_t pixy = sy * static_cast<std::ptrdiff_t>(buffer.pitch);
 
     if (dx < dy) {
       std::swap(dx, dy);

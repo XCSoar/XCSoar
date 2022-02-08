@@ -25,6 +25,8 @@ Copyright_License {
 
 #include "Concepts.hpp"
 
+#include <cstddef>
+
 /**
  * A reference to an image buffer (or a portion of it) that we can
  * write to.  This class does not allocate or free any memory, it
@@ -39,14 +41,16 @@ struct WritableImageBuffer {
 
   rpointer data;
 
-  unsigned pitch, width, height;
+  std::size_t pitch;
+
+  unsigned width, height;
 
   static constexpr WritableImageBuffer<PixelTraits> Empty() noexcept {
     return { nullptr, 0, 0, 0 };
   }
 
   void Allocate(unsigned _width, unsigned _height) noexcept {
-    unsigned i = PixelTraits::CalcIncrement(_width);
+    const std::size_t i = PixelTraits::CalcIncrement(_width);
     data = new typename PixelTraits::color_type[i * _height];
     pitch = i * sizeof(typename PixelTraits::color_type);
     width = _width;
@@ -83,11 +87,12 @@ struct ConstImageBuffer {
 
   rpointer data;
 
-  unsigned pitch, width, height;
+  std::size_t pitch;
+  unsigned width, height;
 
   ConstImageBuffer() noexcept = default;
 
-  constexpr ConstImageBuffer(rpointer _data, unsigned _pitch,
+  constexpr ConstImageBuffer(rpointer _data, std::size_t _pitch,
                              unsigned _width, unsigned _height) noexcept
     :data(_data), pitch(_pitch), width(_width), height(_height) {}
 
