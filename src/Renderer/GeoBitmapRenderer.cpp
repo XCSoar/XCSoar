@@ -76,7 +76,6 @@ DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
-  OpenGL::solid_shader->Use();
 }
 
 #endif
