@@ -28,7 +28,7 @@ Copyright_License {
 
 TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
                           const TabDisplay &td, const Widget *e)
-  :tab_display(rc), pager(rc)
+  :pager(rc)
 {
   vertical = IsVertical(orientation, rc);
 
@@ -40,7 +40,7 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
         tab_width = extra_size.width;
     }
 
-    tab_display.right = pager.left = rc.left + tab_width;
+    tab_display = pager.CutLeftSafe(tab_width);
 
     if (e != nullptr) {
       auto max_size = e->GetMaximumSize();
@@ -49,8 +49,7 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
       if (extra_height > max_height)
         extra_height = max_height;
 
-      extra = tab_display;
-      tab_display.top = extra.bottom = extra.top + extra_height;
+      extra = tab_display.CutTopSafe(extra_height);
     }
   } else {
     unsigned tab_height = td.GetRecommendedRowHeight();
@@ -60,7 +59,7 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
         tab_height = extra_size.height;
     }
 
-    tab_display.bottom = pager.top = rc.top + tab_height;
+    tab_display = pager.CutTopSafe(tab_height);
 
     if (e != nullptr) {
       auto max_size = e->GetMaximumSize();
@@ -69,8 +68,7 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
       if (extra_width > max_width)
         extra_width = max_width;
 
-      extra = tab_display;
-      tab_display.left = extra.right = extra.left + extra_width;
+      extra = tab_display.CutLeftSafe(extra_width);
     }
   }
 }

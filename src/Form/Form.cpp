@@ -125,8 +125,7 @@ WndForm::UpdateLayout()
   title_rect.bottom = rc.top +
     (caption.empty() ? 0 : look.caption.font->GetHeight());
 
-  client_rect = rc;
-  client_rect.top = title_rect.bottom;
+  client_rect = rc.RemainingBelowSafe(title_rect);
 
   if (!IsMaximised()) {
     ++client_rect.left;

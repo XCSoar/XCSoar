@@ -115,16 +115,13 @@ TwoWidgets::GetMaximumSize() const noexcept
  * TwoWidgets::Initialise() and TwoWidgets::Prepare(), we are not
  * allowed to call Widget::GetMinimumSize() yet.
  */
-[[gnu::const]]
-static std::pair<PixelRect,PixelRect>
+static constexpr std::pair<PixelRect,PixelRect>
 DummyLayout(const PixelRect rc, bool vertical) noexcept
 {
-  PixelRect a = rc, b = rc;
   if (vertical)
-    a.bottom = b.top = (rc.top + rc.bottom) / 2;
+    return rc.HorizontalSplit();
   else
-    a.right = b.left = (rc.left + rc.right) / 2;
-  return std::make_pair(a, b);
+    return rc.VerticalSplit();
 }
 
 void

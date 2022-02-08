@@ -67,6 +67,7 @@ class TopCanvas;
 #undef Display
 #undef Expose
 #undef KeyPress
+#undef Below
 #endif
 
 #ifdef USE_WAYLAND

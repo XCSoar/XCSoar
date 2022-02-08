@@ -280,37 +280,6 @@ private:
   }
 };
 
-class RowLayout {
-  PixelRect rc;
-
-public:
-  explicit constexpr RowLayout(PixelRect _rc):rc(_rc) {}
-
-  PixelRect NextRow(unsigned height) {
-    PixelRect row = rc;
-    row.bottom = rc.top += height;
-    return row;
-  }
-
-  PixelRect BottomRow(unsigned height) {
-    PixelRect row = rc;
-    row.top = rc.bottom -= height;
-    return row;
-  }
-
-  const PixelRect &GetRemaining() const {
-    return rc;
-  }
-};
-
-static PixelRect
-SplitRow(PixelRect &left)
-{
-  PixelRect right = left;
-  right.left = left.right = (right.left + left.right) / 2;
-  return right;
-}
-
 TargetWidget::Layout::Layout(PixelRect rc)
 {
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
@@ -322,7 +291,7 @@ TargetWidget::Layout::Layout(PixelRect rc)
   if (width > height) {
     /* landscape: form on the right */
 
-    map.right -= ::Layout::Scale(120);
+    auto form = map.CutRightSafe(::Layout::Scale(120));
 
     constexpr unsigned n_static = 4;
     constexpr unsigned n_elastic = 6;
@@ -333,45 +302,31 @@ TargetWidget::Layout::Layout(PixelRect rc)
       : std::min(max_control_height,
                  (height - n_static * min_control_height) / n_elastic);
 
-    RowLayout rl(PixelRect(map.right, rc.top, rc.right, rc.bottom));
-    name_button = rl.NextRow(control_height);
+    name_button = form.CutTopSafe(control_height);
 
-    previous_button = next_button = rl.NextRow(control_height);
-    previous_button.right = next_button.left =
-      (previous_button.right + next_button.left) / 2;
+    std::tie(previous_button, next_button) = form.CutTopSafe(control_height).VerticalSplit();
 
-    range = rl.NextRow(control_height);
-    radial = rl.NextRow(control_height);
-    ete = rl.NextRow(min_control_height);
-    delta_t = rl.NextRow(min_control_height);
-    speed_remaining = rl.NextRow(min_control_height);
-    speed_achieved = rl.NextRow(min_control_height);
-    optimized = rl.NextRow(control_height);
-    close_button = rl.BottomRow(control_height);
+    range = form.CutTopSafe(control_height);
+    radial = form.CutTopSafe(control_height);
+    ete = form.CutTopSafe(min_control_height);
+    delta_t = form.CutTopSafe(min_control_height);
+    speed_remaining = form.CutTopSafe(min_control_height);
+    speed_achieved = form.CutTopSafe(min_control_height);
+    optimized = form.CutTopSafe(control_height);
+    close_button = form.CutBottomSafe(control_height);
   } else {
     /* portrait: form on the top */
 
-    RowLayout rl(rc);
-
     const unsigned control_height = min_control_height;
 
-    previous_button = name_button = next_button = rl.NextRow(control_height);
-    previous_button.right = name_button.left = previous_button.left + control_height;
-    next_button.left = name_button.right = next_button.right - control_height;
+    name_button = map.CutTopSafe(control_height);
+    previous_button = name_button.CutLeftSafe(control_height);
+    next_button = name_button.CutRightSafe(control_height);
 
-    range = rl.NextRow(control_height);
-    radial = SplitRow(range);
-
-    ete = rl.NextRow(control_height);
-    delta_t = SplitRow(ete);
-
-    speed_remaining = rl.NextRow(control_height);
-    speed_achieved = SplitRow(speed_remaining);
-
-    optimized = rl.BottomRow(control_height);
-    close_button = SplitRow(optimized);
-
-    map = rl.GetRemaining();
+    std::tie(range, radial) = map.CutTopSafe(control_height).VerticalSplit();
+    std::tie(ete, delta_t) = map.CutTopSafe(control_height).VerticalSplit();
+    std::tie(speed_remaining, speed_achieved) = map.CutTopSafe(control_height).VerticalSplit();
+    std::tie(optimized, close_button) = map.CutBottomSafe(control_height).VerticalSplit();
   }
 }
 

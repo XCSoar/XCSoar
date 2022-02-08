@@ -332,34 +332,16 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
   main = rc;
 
   if (width > height) {
-    main.left += ::Layout::Scale(70);
+    auto buttons = main.CutLeftSafe(::Layout::Scale(70));
 
-    PixelRect buttons = rc;
-    buttons.right = main.left;
+    goto_button = buttons.CutTopSafe(button_height);
+    std::tie(magnify_button, shrink_button) = buttons.CutTopSafe(button_height).VerticalSplit();
 
-    goto_button = buttons;
-    goto_button.bottom = buttons.top += button_height;
+    close_button = buttons.CutBottomSafe(button_height);
 
-    magnify_button = buttons;
-    magnify_button.bottom = buttons.top += button_height;
-
-    shrink_button = magnify_button;
-    magnify_button.right = shrink_button.left =
-      (buttons.left + buttons.right) / 2;
-
-    close_button = buttons;
-    close_button.top = buttons.bottom -= button_height;
-
-    previous_button = buttons;
-    previous_button.top = buttons.bottom -= button_height;
-    next_button = previous_button;
-    previous_button.right = next_button.left =
-      (buttons.left + buttons.right) / 2;
+    std::tie(previous_button, next_button) = buttons.CutBottomSafe(button_height).VerticalSplit();
   } else {
-    main.bottom -= button_height;
-
-    PixelRect buttons = rc;
-    buttons.top = main.bottom;
+    auto buttons = main.CutBottomSafe(button_height);
 
     const unsigned one_third = (2 * buttons.left + buttons.right) / 3;
     const unsigned two_thirds = (buttons.left + 2 * buttons.right) / 3;
@@ -398,10 +380,9 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
                                            waypoint.files_external.end());
   if (num_files > 0) {
     file_list_item_height = row_renderer.CalculateLayout(*UIGlobals::GetDialogLook().list.font);
-    file_list = details_text;
 
     unsigned list_height = file_list_item_height * std::min(num_files, 5u);
-    file_list.bottom = details_text.top += list_height;
+    file_list = details_text.CutTopSafe(list_height);
   }
 #endif
 }

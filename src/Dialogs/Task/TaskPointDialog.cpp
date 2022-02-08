@@ -189,22 +189,15 @@ TaskPointWidget::Layout::Layout(PixelRect rc, const DialogLook &look)
   const unsigned font_height = look.text_font.GetHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
 
-  waypoint_panel = rc;
-  waypoint_panel.left += padding;
-  waypoint_panel.right -= padding;
-  waypoint_panel.top += padding;
-  waypoint_panel.bottom = waypoint_panel.top + 3 * padding
-    + font_height + button_height;
+  waypoint_panel = rc.CutTopSafe(font_height + button_height + 5 * padding)
+    .WithPadding(padding);
 
-  const PixelRect waypoint_rc(padding, padding,
-                              waypoint_panel.GetWidth() - padding,
-                              waypoint_panel.GetHeight() - padding);
+  auto waypoint_rc = PixelRect{waypoint_panel.GetSize()}.WithPadding(padding);
 
-  waypoint_name = waypoint_rc;
-  waypoint_name.bottom = waypoint_name.top + font_height + 2 * padding;
+  waypoint_name = waypoint_rc.CutTopSafe(font_height + 2 * padding);
 
-  PixelRect waypoint_buttons(waypoint_rc);
-  waypoint_buttons.top = waypoint_name.bottom + padding;
+  auto waypoint_buttons = waypoint_rc;
+  waypoint_buttons.top += padding;
 
   waypoint_details = waypoint_remove = waypoint_relocate = waypoint_buttons;
   waypoint_details.right = waypoint_remove.left =
@@ -212,33 +205,20 @@ TaskPointWidget::Layout::Layout(PixelRect rc, const DialogLook &look)
   waypoint_remove.right = waypoint_relocate.left =
     (waypoint_buttons.left + 2 * waypoint_buttons.right) / 3;
 
-  tp_panel = rc;
-  tp_panel.left += padding;
-  tp_panel.right -= padding;
-  tp_panel.top = waypoint_panel.bottom + padding;
-  tp_panel.bottom -= padding;
+  tp_panel = rc.WithPadding(padding);
 
-  const PixelRect tp_rc(padding, padding,
-                        tp_panel.GetWidth() - padding,
-                        tp_panel.GetHeight() - padding);
+  auto tp_rc = PixelRect{tp_panel.GetSize()}.WithPadding(padding);
 
-  PixelRect type_rc = tp_rc;
-  type_rc.bottom = type_rc.top + button_height;
-
+  auto type_rc = tp_rc.CutTopSafe(button_height);
   type_label = change_type = type_rc;
   type_label.right = change_type.left = type_rc.right
     - look.button.font->TextSize(_("Change Type")).width - 3 * padding;
 
-  PixelRect buttons_rc = tp_rc;
-  buttons_rc.top = buttons_rc.bottom - button_height;
+  PixelRect buttons_rc = tp_rc.CutBottomSafe(button_height);
   optional_starts = score_exit = buttons_rc;
 
   map = tp_rc;
-  map.top = type_rc.bottom;
-  map.bottom = buttons_rc.top - padding;
-  properties = map;
-
-  map.right = properties.left = map.left + ::Layout::Scale(90);
+  properties = map.CutRightSafe(::Layout::Scale(90));
 }
 
 void

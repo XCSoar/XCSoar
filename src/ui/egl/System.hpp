@@ -53,6 +53,11 @@ Copyright_License {
 #ifdef None
 #undef None
 #endif
+
+#ifdef Below
+#undef Below
+#endif
+
 #endif
 
 #endif
