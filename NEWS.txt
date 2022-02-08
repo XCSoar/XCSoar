@@ -3,6 +3,7 @@ Version 7.23 - not yet released
   - add "Set Frequency" buttons to alternates list
   - revamped Credits dialog
   - put "Details" button to first position in map elements dialog
+  - make "range" and "radial" in target dialog editable with keyboard
 * support uploading IGC files to WeGlide
 * Linux
   - fix command-line option "--datapath"
