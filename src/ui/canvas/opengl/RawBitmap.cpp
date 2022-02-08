@@ -30,13 +30,13 @@ Copyright_License {
 
 #include <cassert>
 
-RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight) noexcept
-  :width(nWidth), height(nHeight),
-   buffer(new RawColor[width * height]),
-   texture(new GLTexture({width, height}))
+RawBitmap::RawBitmap(PixelSize _size) noexcept
+  :size(_size),
+   buffer(new RawColor[size.width * size.height]),
+   texture(new GLTexture(size))
 {
-  assert(nWidth > 0);
-  assert(nHeight > 0);
+  assert(size.width > 0);
+  assert(size.height > 0);
 
   texture->EnableInterpolation();
 }
@@ -50,7 +50,7 @@ RawBitmap::BindAndGetTexture() const noexcept
 
   if (dirty) {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height,
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size.width, size.height,
 #ifdef USE_RGB565
                     GL_RGB, GL_UNSIGNED_SHORT_5_6_5,
 #else

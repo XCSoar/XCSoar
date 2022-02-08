@@ -26,9 +26,9 @@ Copyright_License {
 
 #include <cassert>
 
-RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight) noexcept
-  :width(nWidth), height(nHeight),
-   buffer(new RawColor[width * height])
+RawBitmap::RawBitmap(PixelSize _size) noexcept
+  :size(_size),
+   buffer(new RawColor[size.width * size.height])
 {
 }
 
@@ -37,9 +37,11 @@ RawBitmap::StretchTo(PixelSize src_size,
                      Canvas &dest_canvas, PixelSize dest_size,
                      bool transparent_white) const noexcept
 {
-  ConstImageBuffer<ActivePixelTraits> src(ActivePixelTraits::const_pointer(GetBuffer()),
-                                          width * sizeof(*GetBuffer()),
-                                          width, height);
+  ConstImageBuffer<ActivePixelTraits> src{
+    ActivePixelTraits::const_pointer(GetBuffer()),
+    size.width * sizeof(*GetBuffer()),
+    size.width, size.height,
+  };
 
   if (transparent_white)
     dest_canvas.StretchTransparentWhite({0, 0}, dest_size,

@@ -12,6 +12,7 @@
 #define XCSOAR_SCREEN_RAW_BITMAP_HPP
 
 #include "PortableColor.hpp"
+#include "ui/dim/Size.hpp"
 
 #ifdef USE_GDI
 #include <windef.h>
@@ -88,9 +89,7 @@ struct RawColor
  */
 class RawBitmap final
 {
-protected:
-  const unsigned width;
-  const unsigned height;
+  const PixelSize size;
 
 #ifdef USE_GDI
   const unsigned corrected_width;
@@ -115,13 +114,9 @@ protected:
 
 public:
   /**
-   * Creates buffer with the given size and fills it with
-   * the given color
-   * @param nWidth Width of the buffer
-   * @param nHeight Height of the buffer
-   * @param clr Fill color of the buffer
+   * Creates buffer with the given size.
    */
-  RawBitmap(unsigned width, unsigned height) noexcept;
+  explicit RawBitmap(PixelSize size) noexcept;
 
 #if defined(ENABLE_OPENGL) || defined(USE_GDI)
   ~RawBitmap() noexcept;
@@ -155,7 +150,7 @@ public:
     return GetBuffer();
 #else
   /* in WIN32 bitmaps, the bottom-most row comes first */
-    return GetBuffer() + (height - 1) * corrected_width;
+    return GetBuffer() + (size.height - 1) * corrected_width;
 #endif
   }
 
@@ -164,7 +159,7 @@ public:
    */
   RawColor *GetNextRow(RawColor *row) noexcept {
 #ifndef USE_GDI
-    return row + width;
+    return row + size.width;
 #else
     return row - corrected_width;
 #endif
@@ -176,20 +171,8 @@ public:
 #endif
   }
 
-  /**
-   * Returns the screen buffer width
-   * @return The screen buffer width
-   */
-  unsigned GetWidth() const noexcept {
-    return width;
-  }
-
-  /**
-   * Returns screen buffer height
-   * @return The screen buffer height
-   */
-  unsigned GetHeight() const noexcept {
-    return height;
+  PixelSize GetSize() const noexcept {
+    return size;
   }
 
 #ifdef ENABLE_OPENGL

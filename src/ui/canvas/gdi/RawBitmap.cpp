@@ -36,17 +36,17 @@ CorrectedWidth(unsigned nWidth) noexcept
   return ((nWidth + 3) / 4) * 4;
 }
 
-RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight) noexcept
-  :width(nWidth), height(nHeight),
-   corrected_width(CorrectedWidth(nWidth)),
-   buffer(new RawColor[corrected_width * height])
+RawBitmap::RawBitmap(PixelSize _size) noexcept
+  :size(_size),
+   corrected_width(CorrectedWidth(size.width)),
+   buffer(new RawColor[corrected_width * size.height])
 {
-  assert(nWidth > 0);
-  assert(nHeight > 0);
+  assert(size.width > 0);
+  assert(size.height > 0);
 
   bi.bmiHeader.biSize = sizeof(bi.bmiHeader);
   bi.bmiHeader.biWidth = corrected_width;
-  bi.bmiHeader.biHeight = height;
+  bi.bmiHeader.biHeight = size.height;
   bi.bmiHeader.biPlanes = 1;
   bi.bmiHeader.biBitCount = 24;
   bi.bmiHeader.biCompression = BI_RGB;
