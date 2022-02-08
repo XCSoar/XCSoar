@@ -30,21 +30,11 @@ Copyright_License {
 
 #include <cassert>
 
-/**
- * Returns minimum width that is greater then the given width and
- * that is acceptable as image width (not all numbers are acceptable)
- */
-static constexpr unsigned
-CorrectedWidth(unsigned nWidth) noexcept
-{
-  return ((nWidth + 3) / 4) * 4;
-}
-
 RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight) noexcept
   :width(nWidth), height(nHeight),
-   corrected_width(CorrectedWidth(nWidth)),
-   buffer(new RawColor[corrected_width * height]),
-   texture(new GLTexture(PixelSize(corrected_width, nHeight)))
+   corrected_width(nWidth),
+   buffer(new RawColor[width * height]),
+   texture(new GLTexture({width, height}))
 {
   assert(nWidth > 0);
   assert(nHeight > 0);
@@ -60,13 +50,14 @@ RawBitmap::BindAndGetTexture() const noexcept
   texture->Bind();
 
   if (dirty) {
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 #ifdef USE_RGB565
     /* 16 bit 5/6/5 on Android */
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height,
                     GL_RGB, GL_UNSIGNED_SHORT_5_6_5, GetBuffer());
 #else
     /* 32 bit R/G/B/A on full OpenGL */
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height,
                     GL_RGBA, GL_UNSIGNED_BYTE, GetBuffer());
 #endif
 
