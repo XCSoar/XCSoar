@@ -12,7 +12,6 @@
 #define XCSOAR_SCREEN_RAW_BITMAP_HPP
 
 #include "PortableColor.hpp"
-#include "util/ByteOrder.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "ui/opengl/Features.hpp"
@@ -56,21 +55,11 @@ struct RawColor
 
 #elif defined(USE_MEMORY_CANVAS) || defined(ENABLE_OPENGL)
 
-#if IS_BIG_ENDIAN
-  /* big-endian */
-  uint8_t dummy;
-  RGB8Color value;
-
-  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
-    :dummy(), value(R, G, B) {}
-#else
-  /* little-endian */
   BGR8Color value;
   uint8_t dummy;
 
   constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :value(R, G, B), dummy() {}
-#endif
 
 #elif defined(USE_GDI)
 

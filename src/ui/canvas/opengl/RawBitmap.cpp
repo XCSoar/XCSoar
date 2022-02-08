@@ -79,7 +79,7 @@ RawBitmap::BindAndGetTexture() const noexcept
 void
 RawBitmap::StretchTo(PixelSize src_size,
                      Canvas &dest_canvas, PixelSize dest_size,
-                     gcc_unused bool transparent_white) const noexcept
+                     [[maybe_unused]] bool transparent_white) const noexcept
 {
   GLTexture &texture = BindAndGetTexture();
 
