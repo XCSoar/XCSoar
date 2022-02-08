@@ -41,11 +41,11 @@ struct WritableImageBuffer {
 
   unsigned pitch, width, height;
 
-  static constexpr WritableImageBuffer<PixelTraits> Empty() {
+  static constexpr WritableImageBuffer<PixelTraits> Empty() noexcept {
     return { nullptr, 0, 0, 0 };
   }
 
-  void Allocate(unsigned _width, unsigned _height) {
+  void Allocate(unsigned _width, unsigned _height) noexcept {
     unsigned i = PixelTraits::CalcIncrement(_width);
     data = new typename PixelTraits::color_type[i * _height];
     pitch = i * sizeof(typename PixelTraits::color_type);
@@ -53,20 +53,20 @@ struct WritableImageBuffer {
     height = _height;
   }
 
-  void Free() {
+  void Free() noexcept {
     delete[] data;
     data = nullptr;
   }
 
-  constexpr bool Check(unsigned x, unsigned y) const {
+  constexpr bool Check(unsigned x, unsigned y) const noexcept {
     return x < width && y < height;
   }
 
-  constexpr pointer At(unsigned x, unsigned y) {
+  constexpr pointer At(unsigned x, unsigned y) noexcept {
     return PixelTraits::At(data, pitch, x, y);
   }
 
-  constexpr const_pointer At(unsigned x, unsigned y) const {
+  constexpr const_pointer At(unsigned x, unsigned y) const noexcept {
     return PixelTraits::At(data, pitch, x, y);
   }
 };
@@ -85,25 +85,25 @@ struct ConstImageBuffer {
 
   unsigned pitch, width, height;
 
-  ConstImageBuffer() = default;
+  ConstImageBuffer() noexcept = default;
 
   constexpr ConstImageBuffer(rpointer _data, unsigned _pitch,
-                             unsigned _width, unsigned _height)
+                             unsigned _width, unsigned _height) noexcept
     :data(_data), pitch(_pitch), width(_width), height(_height) {}
 
-  constexpr ConstImageBuffer(WritableImageBuffer<PixelTraits> other)
+  constexpr ConstImageBuffer(WritableImageBuffer<PixelTraits> other) noexcept
     :data(other.data), pitch(other.pitch),
      width(other.width), height(other.height) {}
 
-  static constexpr WritableImageBuffer<PixelTraits> Empty() {
+  static constexpr WritableImageBuffer<PixelTraits> Empty() noexcept {
     return { nullptr, 0, 0, 0 };
   }
 
-  constexpr bool Check(unsigned x, unsigned y) const {
+  constexpr bool Check(unsigned x, unsigned y) const noexcept {
     return x < width && y < height;
   }
 
-  constexpr pointer At(unsigned x, unsigned y) const {
+  constexpr pointer At(unsigned x, unsigned y) const noexcept {
     return PixelTraits::At(data, pitch, x, y);
   }
 };
