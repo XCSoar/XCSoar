@@ -34,13 +34,13 @@ Copyright_License {
  * Returns minimum width that is greater then the given width and
  * that is acceptable as image width (not all numbers are acceptable)
  */
-static inline unsigned
-CorrectedWidth(unsigned nWidth)
+static constexpr unsigned
+CorrectedWidth(unsigned nWidth) noexcept
 {
   return ((nWidth + 3) / 4) * 4;
 }
 
-RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
+RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight) noexcept
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth)),
    buffer(new RawColor[corrected_width * height]),
@@ -52,12 +52,10 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   texture->EnableInterpolation();
 }
 
-RawBitmap::~RawBitmap()
-{
-}
+RawBitmap::~RawBitmap() noexcept = default;
 
 GLTexture &
-RawBitmap::BindAndGetTexture() const
+RawBitmap::BindAndGetTexture() const noexcept
 {
   texture->Bind();
 
@@ -81,7 +79,7 @@ RawBitmap::BindAndGetTexture() const
 void
 RawBitmap::StretchTo(PixelSize src_size,
                      Canvas &dest_canvas, PixelSize dest_size,
-                     gcc_unused bool transparent_white) const
+                     gcc_unused bool transparent_white) const noexcept
 {
   GLTexture &texture = BindAndGetTexture();
 

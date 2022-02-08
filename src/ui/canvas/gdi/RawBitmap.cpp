@@ -30,13 +30,13 @@ Copyright_License {
  * Returns minimum width that is greater then the given width and
  * that is acceptable as image width (not all numbers are acceptable)
  */
-static inline unsigned
-CorrectedWidth(unsigned nWidth)
+static constexpr unsigned
+CorrectedWidth(unsigned nWidth) noexcept
 {
   return ((nWidth + 3) / 4) * 4;
 }
 
-RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
+RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight) noexcept
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth)),
    buffer(new RawColor[corrected_width * height])
@@ -63,7 +63,7 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   buffer = (RawColor *)pvBits;
 }
 
-RawBitmap::~RawBitmap()
+RawBitmap::~RawBitmap() noexcept
 {
   ::DeleteObject(bitmap);
 }
@@ -71,7 +71,7 @@ RawBitmap::~RawBitmap()
 void
 RawBitmap::StretchTo(PixelSize src_size,
                      Canvas &dest_canvas, PixelSize dest_size,
-                     bool transparent_white) const
+                     bool transparent_white) const noexcept
 {
   HDC source_dc = ::CreateCompatibleDC(dest_canvas);
   ::SelectObject(source_dc, bitmap);

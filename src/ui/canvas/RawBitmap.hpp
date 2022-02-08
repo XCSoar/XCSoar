@@ -40,18 +40,18 @@ class GLTexture;
  */
 struct RawColor
 {
-  RawColor() = default;
+  RawColor() noexcept = default;
 
 #ifdef GREYSCALE
   Luminosity8 value;
 
-  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :value(R, G, B) {}
 
 #elif defined(HAVE_GLES)
   RGB565Color value;
 
-  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :value(R, G, B) {}
 
 #elif defined(USE_MEMORY_CANVAS) || defined(ENABLE_SDL) || defined(USE_EGL) || defined(USE_GLX)
@@ -61,14 +61,14 @@ struct RawColor
   uint8_t dummy;
   RGB8Color value;
 
-  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :dummy(), value(R, G, B) {}
 #else
   /* little-endian */
   BGR8Color value;
   uint8_t dummy;
 
-  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :value(R, G, B), dummy() {}
 #endif
 
@@ -76,7 +76,7 @@ struct RawColor
 
   BGR8Color value;
 
-  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :value(R, G, B) {}
 
 #endif
@@ -120,17 +120,17 @@ public:
    * @param nHeight Height of the buffer
    * @param clr Fill color of the buffer
    */
-  RawBitmap(unsigned width, unsigned height);
+  RawBitmap(unsigned width, unsigned height) noexcept;
 
 #if defined(ENABLE_OPENGL) || defined(USE_GDI)
-  ~RawBitmap();
+  ~RawBitmap() noexcept;
 #endif
 
   /**
    * Returns the Buffer
    * @return The Buffer as RawColor array
    */
-  RawColor *GetBuffer() {
+  RawColor *GetBuffer() noexcept {
 #ifdef USE_GDI
     return buffer;
 #else
@@ -138,7 +138,7 @@ public:
 #endif
   }
 
-  const RawColor *GetBuffer() const {
+  const RawColor *GetBuffer() const noexcept {
 #ifdef USE_GDI
     return buffer;
 #else
@@ -149,7 +149,7 @@ public:
   /**
    * Returns a pointer to the top-most row.
    */
-  RawColor *GetTopRow() {
+  RawColor *GetTopRow() noexcept {
 #ifndef USE_GDI
     return GetBuffer();
 #else
@@ -161,7 +161,7 @@ public:
   /**
    * Returns a pointer to the row below the current one.
    */
-  RawColor *GetNextRow(RawColor *row) {
+  RawColor *GetNextRow(RawColor *row) noexcept {
 #ifndef USE_GDI
     return row + corrected_width;
 #else
@@ -169,7 +169,7 @@ public:
 #endif
   }
 
-  void SetDirty() {
+  void SetDirty() noexcept {
 #ifdef ENABLE_OPENGL
     dirty = true;
 #endif
@@ -181,7 +181,7 @@ public:
    * points array directly (using GetPointsArray function).
    * @return Real width of the screen buffer
    */
-  unsigned GetCorrectedWidth() const {
+  unsigned GetCorrectedWidth() const noexcept {
     return corrected_width;
   }
 
@@ -189,7 +189,7 @@ public:
    * Returns the screen buffer width
    * @return The screen buffer width
    */
-  unsigned GetWidth() const {
+  unsigned GetWidth() const noexcept {
     return width;
   }
 
@@ -197,7 +197,7 @@ public:
    * Returns screen buffer height
    * @return The screen buffer height
    */
-  unsigned GetHeight() const {
+  unsigned GetHeight() const noexcept {
     return height;
   }
 
@@ -207,12 +207,12 @@ public:
    * "dirty", then the RAM buffer will be copied to the texture by
    * this method.
    */
-  GLTexture &BindAndGetTexture() const;
+  GLTexture &BindAndGetTexture() const noexcept;
 #endif
 
   void StretchTo(PixelSize src_size,
                  Canvas &dest_canvas, PixelSize dest_size,
-                 bool transparent_white=false) const;
+                 bool transparent_white=false) const noexcept;
 };
 
 #endif // !defined(AFX_STSCREENBUFFER_H__22D62F5D_32E2_4785_B3D9_2341C11F84A3__INCLUDED_)
