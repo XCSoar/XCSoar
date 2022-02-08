@@ -50,15 +50,13 @@ RawBitmap::BindAndGetTexture() const noexcept
 
   if (dirty) {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height,
 #ifdef USE_RGB565
-    /* 16 bit 5/6/5 on Android */
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height,
-                    GL_RGB, GL_UNSIGNED_SHORT_5_6_5, GetBuffer());
+                    GL_RGB, GL_UNSIGNED_SHORT_5_6_5,
 #else
-    /* 32 bit R/G/B/A on full OpenGL */
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height,
-                    GL_RGBA, GL_UNSIGNED_BYTE, GetBuffer());
+                    GL_RGBA, GL_UNSIGNED_BYTE,
 #endif
+                    GetBuffer());
 
     dirty = false;
   }
