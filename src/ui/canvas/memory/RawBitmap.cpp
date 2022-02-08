@@ -26,20 +26,10 @@ Copyright_License {
 
 #include <cassert>
 
-/**
- * Returns minimum width that is greater then the given width and
- * that is acceptable as image width (not all numbers are acceptable)
- */
-static constexpr unsigned
-CorrectedWidth(unsigned nWidth) noexcept
-{
-  return ((nWidth + 3) / 4) * 4;
-}
-
 RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight) noexcept
   :width(nWidth), height(nHeight),
-   corrected_width(CorrectedWidth(nWidth)),
-   buffer(new RawColor[corrected_width * height])
+   corrected_width(nWidth),
+   buffer(new RawColor[width * height])
 {
 }
 
@@ -49,7 +39,7 @@ RawBitmap::StretchTo(PixelSize src_size,
                      bool transparent_white) const noexcept
 {
   ConstImageBuffer<ActivePixelTraits> src(ActivePixelTraits::const_pointer(GetBuffer()),
-                                          corrected_width * sizeof(*GetBuffer()),
+                                          width * sizeof(*GetBuffer()),
                                           width, height);
 
   if (transparent_white)
