@@ -28,7 +28,6 @@ Copyright_License {
 
 RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight) noexcept
   :width(nWidth), height(nHeight),
-   corrected_width(nWidth),
    buffer(new RawColor[width * height])
 {
 }

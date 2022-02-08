@@ -91,9 +91,9 @@ class RawBitmap final
 protected:
   const unsigned width;
   const unsigned height;
-  const unsigned corrected_width;
 
 #ifdef USE_GDI
+  const unsigned corrected_width;
   RawColor *buffer;
 #else
   const std::unique_ptr<RawColor[]> buffer;
@@ -164,7 +164,7 @@ public:
    */
   RawColor *GetNextRow(RawColor *row) noexcept {
 #ifndef USE_GDI
-    return row + corrected_width;
+    return row + width;
 #else
     return row - corrected_width;
 #endif
@@ -174,16 +174,6 @@ public:
 #ifdef ENABLE_OPENGL
     dirty = true;
 #endif
-  }
-
-  /**
-   * Returns real width of the screen buffer. It could be slightly more then
-   * requested width. This parameter is important only when you work with
-   * points array directly (using GetPointsArray function).
-   * @return Real width of the screen buffer
-   */
-  unsigned GetCorrectedWidth() const noexcept {
-    return corrected_width;
   }
 
   /**
