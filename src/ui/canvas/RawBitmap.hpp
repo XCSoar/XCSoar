@@ -54,7 +54,7 @@ struct RawColor
   constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :value(R, G, B) {}
 
-#elif defined(USE_MEMORY_CANVAS) || defined(ENABLE_SDL) || defined(USE_EGL) || defined(USE_GLX)
+#elif defined(USE_MEMORY_CANVAS) || defined(ENABLE_OPENGL)
 
 #if IS_BIG_ENDIAN
   /* big-endian */
@@ -72,13 +72,15 @@ struct RawColor
     :value(R, G, B), dummy() {}
 #endif
 
-#else /* !SDL */
+#elif defined(USE_GDI)
 
   BGR8Color value;
 
   constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :value(R, G, B) {}
 
+#else
+#error No implementation
 #endif
 };
 
