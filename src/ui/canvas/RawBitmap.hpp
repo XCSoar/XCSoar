@@ -53,7 +53,15 @@ struct RawColor
   constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :value(R, G, B) {}
 
-#elif defined(USE_MEMORY_CANVAS) || defined(ENABLE_OPENGL)
+#elif defined(ENABLE_OPENGL)
+
+  RGB8Color value;
+  uint8_t dummy;
+
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
+    :value(R, G, B), dummy() {}
+
+#elif defined(USE_MEMORY_CANVAS)
 
   BGR8Color value;
   uint8_t dummy;

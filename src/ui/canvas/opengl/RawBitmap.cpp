@@ -67,7 +67,7 @@ RawBitmap::BindAndGetTexture() const noexcept
 #else
     /* 32 bit R/G/B/A on full OpenGL */
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
-                    GL_BGRA, GL_UNSIGNED_BYTE, GetBuffer());
+                    GL_RGBA, GL_UNSIGNED_BYTE, GetBuffer());
 #endif
 
     dirty = false;
