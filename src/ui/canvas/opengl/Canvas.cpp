@@ -141,6 +141,23 @@ Canvas::DrawOutlineRectangleGL(PixelRect r) noexcept
 }
 
 void
+Canvas::DrawOutlineRectangle(PixelRect r) noexcept
+{
+  pen.Bind();
+  DrawOutlineRectangleGL(r);
+  pen.Unbind();
+}
+
+void
+Canvas::DrawOutlineRectangle(PixelRect r, Color color) noexcept
+{
+  color.Bind();
+  glLineWidth(1);
+
+  DrawOutlineRectangleGL(r);
+}
+
+void
 Canvas::FadeToWhite(GLubyte alpha)
 {
   const ScopeAlphaBlend alpha_blend;

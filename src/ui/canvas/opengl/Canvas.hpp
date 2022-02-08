@@ -211,18 +211,8 @@ public:
    */
   void DrawOutlineRectangleGL(PixelRect r) noexcept;
 
-  void DrawOutlineRectangle(PixelRect r) noexcept {
-    pen.Bind();
-    DrawOutlineRectangleGL(r);
-    pen.Unbind();
-  }
-
-  void DrawOutlineRectangle(PixelRect r, Color color) noexcept {
-    color.Bind();
-    glLineWidth(1);
-
-    DrawOutlineRectangleGL(r);
-  }
+  void DrawOutlineRectangle(PixelRect r) noexcept;
+  void DrawOutlineRectangle(PixelRect r, Color color) noexcept;
 
   /**
    * Fade to white.  This enables GL_BLEND and disables it before
