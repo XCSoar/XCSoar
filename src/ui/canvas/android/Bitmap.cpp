@@ -114,7 +114,7 @@ Bitmap::LoadFile(Path path)
 
   Java::LocalObject new_bmp;
   bool flipped = false;
-  if (path.MatchesExtension(_T(".tif")) || path.MatchesExtension(_T(".tiff"))) {
+  if (path.MatchesExtension(".tif") || path.MatchesExtension(".tiff")) {
     new_bmp = native_view->LoadFileTiff(Java::GetEnv(), path);
     flipped = true;
   } else {

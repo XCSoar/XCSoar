@@ -28,13 +28,8 @@ Copyright_License {
 #include "ui/opengl/System.hpp"
 #include "ui/dim/Rect.hpp"
 #include "FBO.hpp"
-#include "Asset.hpp"
 
 #include <cassert>
-
-#ifdef ENABLE_SDL
-#include <SDL_video.h>
-#endif
 
 /**
  * This class represents an OpenGL texture.

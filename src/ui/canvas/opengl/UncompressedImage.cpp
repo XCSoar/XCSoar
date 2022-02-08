@@ -24,6 +24,7 @@ Copyright_License {
 #include "UncompressedImage.hpp"
 #include "Texture.hpp"
 #include "ui/canvas/custom/UncompressedImage.hpp"
+#include "util/Compiler.h"
 
 GLTexture *
 ImportTexture(const UncompressedImage &image)
