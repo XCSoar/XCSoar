@@ -143,6 +143,8 @@ Canvas::DrawOutlineRectangleGL(PixelRect r) noexcept
 void
 Canvas::DrawOutlineRectangle(PixelRect r) noexcept
 {
+  OpenGL::solid_shader->Use();
+
   pen.Bind();
   DrawOutlineRectangleGL(r);
   pen.Unbind();
@@ -151,6 +153,8 @@ Canvas::DrawOutlineRectangle(PixelRect r) noexcept
 void
 Canvas::DrawOutlineRectangle(PixelRect r, Color color) noexcept
 {
+  OpenGL::solid_shader->Use();
+
   color.Bind();
   glLineWidth(1);
 
