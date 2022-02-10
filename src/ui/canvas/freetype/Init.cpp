@@ -32,7 +32,7 @@ Copyright_License {
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include <stdio.h>
+#include <stdexcept>
 
 namespace FreeType {
 
@@ -46,10 +46,8 @@ void
 Initialise()
 {
   FT_Error error = FT_Init_FreeType(&ft_library);
-  if (error) {
-    fprintf(stderr, "FT_Init_FreeType() failed\n");
-    abort();
-  }
+  if (error)
+    throw std::runtime_error{"FT_Init_FreeType() failed"};
 }
 
 void

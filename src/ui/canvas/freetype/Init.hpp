@@ -36,6 +36,9 @@ namespace FreeType {
 extern bool mono;
 #endif
 
+/**
+ * Throws on error.
+ */
 void
 Initialise();
 
