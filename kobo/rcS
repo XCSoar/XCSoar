@@ -98,6 +98,7 @@ if [ `expr substr $model 1 7` = SN-N249 ]; then
     insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/mos7840.ko"
     insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/navman.ko"
     insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/pl2303.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/class/cdc-acm.ko"
     insmod "/opt/xcsoar/lib/modules/4.1.15/sound/core/snd-hwdep.ko"
     insmod "/opt/xcsoar/lib/modules/4.1.15/sound/core/snd-rawmidi.ko"
     insmod "/opt/xcsoar/lib/modules/4.1.15/sound/usb/snd-usbmidi-lib.ko"
