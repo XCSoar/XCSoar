@@ -36,9 +36,9 @@ namespace File {
 /**
  * Determine the data path.
  *
- * @return true on success, false if no data path could be found
+ * Throws on error.
  */
-bool
+void
 InitialiseDataPath();
 
 /**

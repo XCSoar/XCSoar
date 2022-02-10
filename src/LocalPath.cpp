@@ -326,12 +326,12 @@ MakeCacheDirectory(const TCHAR *name) noexcept
   return path;
 }
 
-bool
+void
 InitialiseDataPath()
 {
   data_paths = FindDataPaths();
   if (data_paths.empty())
-    return false;
+    throw std::runtime_error("No data path found");
 
 #ifdef ANDROID
   cache_path = context->GetExternalCacheDir(Java::GetEnv());
@@ -342,8 +342,6 @@ InitialiseDataPath()
 #else
   cache_path = LocalPath(_T("cache"));
 #endif
-
-  return true;
 }
 
 void
