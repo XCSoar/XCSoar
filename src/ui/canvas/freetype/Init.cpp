@@ -34,14 +34,16 @@ Copyright_License {
 
 #include <stdio.h>
 
+namespace FreeType {
+
 #ifdef KOBO
-bool FreeType::mono = true;
+bool mono = true;
 #endif
 
 static FT_Library ft_library;
 
 void
-FreeType::Initialise()
+Initialise()
 {
   FT_Error error = FT_Init_FreeType(&ft_library);
   if (error) {
@@ -51,13 +53,13 @@ FreeType::Initialise()
 }
 
 void
-FreeType::Deinitialise()
+Deinitialise()
 {
   FT_Done_FreeType(ft_library);
 }
 
 FT_Face
-FreeType::Load(const char *path)
+Load(const char *path)
 {
   FT_Face face;
   FT_Error error = FT_New_Face(ft_library, path, 0, &face);
@@ -66,3 +68,5 @@ FreeType::Load(const char *path)
 
   return face;
 }
+
+} // namespace FreeType

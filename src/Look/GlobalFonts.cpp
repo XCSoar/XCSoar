@@ -25,13 +25,15 @@ Copyright_License {
 #include "FontSettings.hpp"
 #include "ui/canvas/Font.hpp"
 
+namespace Fonts {
+
 /// text names on the map
-Font Fonts::map;
+Font map;
 /// menu buttons, waypoint selection, messages, etc.
-Font Fonts::map_bold;
+Font map_bold;
 
 bool
-Fonts::Load(const FontSettings &settings)
+Load(const FontSettings &settings)
 {
   map.Load(settings.map);
   map_bold.Load(settings.map_bold);
@@ -40,8 +42,10 @@ Fonts::Load(const FontSettings &settings)
 }
 
 void
-Fonts::Deinitialize()
+Deinitialize()
 {
   map.Destroy();
   map_bold.Destroy();
 }
+
+} // namespace Fonts
