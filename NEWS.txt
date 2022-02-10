@@ -1,3 +1,5 @@
+Version 7.24 - not yet released
+
 Version 7.23 - 2022/02/10
 * user interface
   - add "Set Frequency" buttons to alternates list
