@@ -288,7 +288,7 @@ try {
   list.Invalidate();
 
   UpdateButtons();
-} catch (const std::runtime_error &e) {
+} catch (const std::runtime_error & /* e */) {
 }
 
 void

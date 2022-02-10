@@ -359,7 +359,7 @@ try {
   const auto path = LocalPath(_T("repository"));
   FileLineReaderA reader(path);
   ParseFileRepository(repository, reader);
-} catch (const std::runtime_error &e) {
+} catch (const std::runtime_error & /* e */) {
 }
 
 void
