@@ -46,12 +46,12 @@ GetDefaults() noexcept
   return settings;
 }
 
-bool
+void
 Initialize()
 {
   const auto default_settings = GetDefaults();
 
-  return Load(default_settings);
+  Load(default_settings);
 }
 
 } // namespace Fonts

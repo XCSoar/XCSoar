@@ -32,17 +32,15 @@ Font map;
 /// menu buttons, waypoint selection, messages, etc.
 Font map_bold;
 
-bool
+void
 Load(const FontSettings &settings)
 {
   map.Load(settings.map);
   map_bold.Load(settings.map_bold);
-
-  return map.IsDefined() && map_bold.IsDefined();
 }
 
 void
-Deinitialize()
+Deinitialize() noexcept
 {
   map.Destroy();
   map_bold.Destroy();

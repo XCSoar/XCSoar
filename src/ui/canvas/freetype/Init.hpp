@@ -45,6 +45,9 @@ Initialise();
 void
 Deinitialise();
 
+/**
+ * Throws on error.
+ */
 FT_Face
 Load(const char *path);
 

@@ -30,8 +30,9 @@ Copyright_License {
 #include "Asset.hpp"
 
 #include <cassert>
+#include <stdexcept>
 
-bool
+void
 Font::Load(const FontDescription &d)
 {
   assert(IsScreenInitialized());
@@ -40,16 +41,14 @@ Font::Load(const FontDescription &d)
 
   font = ::CreateFontIndirect(&(const LOGFONT &)d);
   if (font == nullptr)
-    return false;
+    throw std::runtime_error{"CreateFontIndirect() failed"};
 
   if (GetObjectType(font) != OBJ_FONT) {
     Destroy();
-    return false;
+    throw std::runtime_error{"CreateFontIndirect() did not return a font"};
   }
 
   CalculateHeights();
-
-  return true;
 }
 
 PixelSize

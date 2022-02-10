@@ -35,10 +35,13 @@ namespace Fonts {
 extern Font map;
 extern Font map_bold;
 
-bool
+/**
+ * Throws on error.
+ */
+void
 Load(const FontSettings &settings);
 
 void
-Deinitialize();
+Deinitialize() noexcept;
 
 } // namespace Fonts

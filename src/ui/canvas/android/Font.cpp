@@ -37,22 +37,19 @@ Copyright_License {
  * create a new instance of org.xcsoar.TextUtil and store it with a global
  * reference in text_util_object member.
  */
-bool
+void
 Font::Load(const FontDescription &d)
 {
   assert(IsScreenInitialized());
 
   delete text_util_object;
   text_util_object = TextUtil::create(d);
-  if (!text_util_object)
-    return false;
+  assert(text_util_object);
 
   this->height = text_util_object->get_height();
   ascent_height = text_util_object->get_ascent_height();
   capital_height = text_util_object->get_capital_height();
   line_spacing = text_util_object->GetLineSpacing();
-
-  return true;
 }
 
 void

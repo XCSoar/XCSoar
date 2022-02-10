@@ -34,9 +34,9 @@ GetDefaults() noexcept;
 /**
  * Load all fonts.
  *
- * @return true on success
+ * Throws on error.
  */
-bool
+void
 Initialize();
 
 } // namespace Fonts

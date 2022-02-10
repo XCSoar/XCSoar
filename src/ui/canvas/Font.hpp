@@ -101,11 +101,17 @@ public:
   }
 
 #ifdef USE_FREETYPE
-  bool LoadFile(const char *file, unsigned ptsize, bool bold = false,
+  /**
+   * Throws on error.
+   */
+  void LoadFile(const char *file, unsigned ptsize, bool bold = false,
                 bool italic = false);
 #endif
 
-  bool Load(const FontDescription &d);
+  /**
+   * Throws on error.
+   */
+  void Load(const FontDescription &d);
 
 #if defined(USE_APPKIT) || defined(USE_UIKIT)
   void Destroy() noexcept {}

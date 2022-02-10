@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "ui/canvas/custom/Files.hpp"
 #include "Look/FontDescription.hpp"
+#include "util/RuntimeError.hxx"
 #include "util/TStringView.hxx"
 #include "Init.hpp"
 #include "Asset.hpp"
@@ -152,7 +153,7 @@ GetCapitalHeight(FT_Face face) noexcept
   return FT_CEIL(face->glyph->metrics.height);
 }
 
-bool
+void
 Font::LoadFile(const char *file, unsigned ptsize, bool bold, bool italic)
 {
   assert(IsScreenInitialized());
@@ -160,13 +161,12 @@ Font::LoadFile(const char *file, unsigned ptsize, bool bold, bool italic)
   Destroy();
 
   FT_Face new_face = FreeType::Load(file);
-  if (new_face == nullptr)
-    return false;
 
   FT_Error error = ::FT_Set_Pixel_Sizes(new_face, 0, ptsize);
   if (error) {
     ::FT_Done_Face(new_face);
-    return false;
+    throw FormatRuntimeError("Failed to initialise font %s: %s",
+                             file, FT_Error_String(error));
   }
 
   const FT_Fixed y_scale = new_face->size->metrics.y_scale;
@@ -181,10 +181,9 @@ Font::LoadFile(const char *file, unsigned ptsize, bool bold, bool italic)
   // TODO: handle bold/italic
 
   face = new_face;
-  return true;
 }
 
-bool
+void
 Font::Load(const FontDescription &d)
 {
   assert(IsScreenInitialized());
@@ -212,10 +211,9 @@ Font::Load(const FontDescription &d)
     path = font_path;
   }
 
-  if (path == nullptr)
-    return false;
+  assert(path != nullptr);
 
-  return LoadFile(path.c_str(), d.GetHeight(), bold, italic);
+  LoadFile(path.c_str(), d.GetHeight(), bold, italic);
 }
 
 void

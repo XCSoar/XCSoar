@@ -30,6 +30,8 @@ class FontDescription;
 
 /**
  * Change the font size so that the text fits into the given width.
+ *
+ * Throws on error.
  */
 void
 AutoSizeFont(FontDescription &d, unsigned width, const TCHAR *text);

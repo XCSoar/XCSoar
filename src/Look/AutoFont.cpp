@@ -37,18 +37,14 @@ AutoSizeFont(FontDescription &d, unsigned width, const TCHAR *text)
   d.SetHeight(std::max(10u, unsigned(width) / 4u));
 
   Font font;
-  if (!font.Load(d))
-    return;
+  font.Load(d);
 
   /* double the font size until it is large enough */
 
   PixelSize tsize = font.TextSize(text);
   while (tsize.width < width) {
     d.SetHeight(d.GetHeight() * 2);
-    if (!font.Load(d)) {
-      d.SetHeight(d.GetHeight() / 2);
-      break;
-    }
+    font.Load(d);
 
     tsize = font.TextSize(text);
   }
@@ -64,8 +60,7 @@ AutoSizeFont(FontDescription &d, unsigned width, const TCHAR *text)
     d.SetHeight(d.GetHeight() - 1);
 
     Font font;
-    if (!font.Load(d))
-      break;
+    font.Load(d);
 
     tsize = font.TextSize(text);
   } while (tsize.width > width);
