@@ -460,6 +460,13 @@ public:
   }
 
   /**
+   * Add a label panel control, not editable, only for some explanations,
+   *  descriptions or messages. You can use SetText() to update its text.
+   * the parameter lines controls the height if this panel!
+   */
+  void AddLabel(const TCHAR *label, unsigned lines = 1) noexcept;
+
+  /**
    * Add a read-only multi-line control.  You can use
    * SetMultiLineText() to update its text.
    */

@@ -24,6 +24,7 @@ Copyright_License {
 #include "RowFormWidget.hpp"
 #include "Form/Panel.hpp"
 #include "Form/Button.hpp"
+#include "Form/Frame.hpp"
 #include "Form/HLine.hpp"
 #include "Look/DialogLook.hpp"
 #include "Dialogs/DialogSettings.hpp"
@@ -282,6 +283,19 @@ RowFormWidget::AddSpacer() noexcept
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
   const PixelRect rc = InitialControlRect(Layout::Scale(3));
   window->Create(panel, rc);
+  Add(std::move(window));
+}
+
+void
+RowFormWidget::AddLabel(const TCHAR *text, unsigned lines) noexcept
+{
+  ContainerWindow &panel = (ContainerWindow &)GetWindow();
+  if (lines == 0) lines = 1;
+  const PixelRect rc = InitialControlRect(
+      Layout::Scale(lines * look.text_font.GetHeight()));
+
+  auto window = std::make_unique<WndFrame>(panel, look, rc);
+  window->SetText(text);
   Add(std::move(window));
 }
 
