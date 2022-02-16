@@ -280,37 +280,6 @@ private:
   }
 };
 
-class RowLayout {
-  PixelRect rc;
-
-public:
-  explicit constexpr RowLayout(PixelRect _rc):rc(_rc) {}
-
-  PixelRect NextRow(unsigned height) {
-    PixelRect row = rc;
-    row.bottom = rc.top += height;
-    return row;
-  }
-
-  PixelRect BottomRow(unsigned height) {
-    PixelRect row = rc;
-    row.top = rc.bottom -= height;
-    return row;
-  }
-
-  const PixelRect &GetRemaining() const {
-    return rc;
-  }
-};
-
-static PixelRect
-SplitRow(PixelRect &left)
-{
-  PixelRect right = left;
-  right.left = left.right = (right.left + left.right) / 2;
-  return right;
-}
-
 TargetWidget::Layout::Layout(PixelRect rc)
 {
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
@@ -322,7 +291,7 @@ TargetWidget::Layout::Layout(PixelRect rc)
   if (width > height) {
     /* landscape: form on the right */
 
-    map.right -= ::Layout::Scale(120);
+    auto form = map.CutRightSafe(::Layout::Scale(120));
 
     constexpr unsigned n_static = 4;
     constexpr unsigned n_elastic = 6;
@@ -333,45 +302,31 @@ TargetWidget::Layout::Layout(PixelRect rc)
       : std::min(max_control_height,
                  (height - n_static * min_control_height) / n_elastic);
 
-    RowLayout rl(PixelRect(map.right, rc.top, rc.right, rc.bottom));
-    name_button = rl.NextRow(control_height);
+    name_button = form.CutTopSafe(control_height);
 
-    previous_button = next_button = rl.NextRow(control_height);
-    previous_button.right = next_button.left =
-      (previous_button.right + next_button.left) / 2;
+    std::tie(previous_button, next_button) = form.CutTopSafe(control_height).VerticalSplit();
 
-    range = rl.NextRow(control_height);
-    radial = rl.NextRow(control_height);
-    ete = rl.NextRow(min_control_height);
-    delta_t = rl.NextRow(min_control_height);
-    speed_remaining = rl.NextRow(min_control_height);
-    speed_achieved = rl.NextRow(min_control_height);
-    optimized = rl.NextRow(control_height);
-    close_button = rl.BottomRow(control_height);
+    range = form.CutTopSafe(control_height);
+    radial = form.CutTopSafe(control_height);
+    ete = form.CutTopSafe(min_control_height);
+    delta_t = form.CutTopSafe(min_control_height);
+    speed_remaining = form.CutTopSafe(min_control_height);
+    speed_achieved = form.CutTopSafe(min_control_height);
+    optimized = form.CutTopSafe(control_height);
+    close_button = form.CutBottomSafe(control_height);
   } else {
     /* portrait: form on the top */
 
-    RowLayout rl(rc);
-
     const unsigned control_height = min_control_height;
 
-    previous_button = name_button = next_button = rl.NextRow(control_height);
-    previous_button.right = name_button.left = previous_button.left + control_height;
-    next_button.left = name_button.right = next_button.right - control_height;
+    name_button = map.CutTopSafe(control_height);
+    previous_button = name_button.CutLeftSafe(control_height);
+    next_button = name_button.CutRightSafe(control_height);
 
-    range = rl.NextRow(control_height);
-    radial = SplitRow(range);
-
-    ete = rl.NextRow(control_height);
-    delta_t = SplitRow(ete);
-
-    speed_remaining = rl.NextRow(control_height);
-    speed_achieved = SplitRow(speed_remaining);
-
-    optimized = rl.BottomRow(control_height);
-    close_button = SplitRow(optimized);
-
-    map = rl.GetRemaining();
+    std::tie(range, radial) = map.CutTopSafe(control_height).VerticalSplit();
+    std::tie(ete, delta_t) = map.CutTopSafe(control_height).VerticalSplit();
+    std::tie(speed_remaining, speed_achieved) = map.CutTopSafe(control_height).VerticalSplit();
+    std::tie(optimized, close_button) = map.CutBottomSafe(control_height).VerticalSplit();
   }
 }
 
@@ -397,33 +352,35 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   WindowStyle style;
   style.Hide();
 
-  WindowStyle button_style;
-  button_style.Hide();
-  button_style.TabStop();
+  WindowStyle control_style;
+  control_style.Hide();
+  control_style.TabStop();
 
   map.Create(parent, layout.map, style);
 
   const auto &button_look = UIGlobals::GetDialogLook().button;
 
   name_button.Create(parent, button_look, _T(""), layout.name_button,
-                     button_style, [this](){ OnNameClicked(); });
+                     control_style, [this](){ OnNameClicked(); });
 
-  previous_button.Create(parent, layout.previous_button, button_style,
+  previous_button.Create(parent, layout.previous_button, control_style,
                          std::make_unique<SymbolButtonRenderer>(button_look, _T("<")),
                          [this](){ OnPrevClicked(); });
-  next_button.Create(parent, layout.next_button, button_style,
+  next_button.Create(parent, layout.next_button, control_style,
                      std::make_unique<SymbolButtonRenderer>(button_look, _T(">")),
                      [this](){ OnNextClicked(); });
 
   const unsigned caption_width = ::Layout::Scale(50);
 
-  range.Create(parent, layout.range, _("Distance"), caption_width, style);
+  range.Create(parent, layout.range, _("Distance"),
+               caption_width, control_style);
   range.SetHelpText(_("For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances."));
   range.SetDataField(new DataFieldFloat(_T("%.0f"), _T("%.0f %%"),
                                         -100, 100, 0,
                                         5, false, this));
 
-  radial.Create(parent, layout.radial, _("Radial"), caption_width, style);
+  radial.Create(parent, layout.radial, _("Radial"),
+                caption_width, control_style);
   radial.SetHelpText(_("For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise."));
   radial.SetDataField(new DataFieldFloat(_T("%.0f"), _T("%.0f" DEG),
                                          -90, 90, 0,
@@ -449,12 +406,12 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
                               speed_remaining, speed_achieved);
 
   optimized.Create(parent, UIGlobals::GetDialogLook(), _("Optimized"),
-                   layout.optimized, button_style,
+                   layout.optimized, control_style,
                    [this](bool value){ OnOptimized(value); });
 
   close_button.Create(parent, button_look, _("Close"),
                       layout.close_button,
-                      button_style, dialog.MakeModalResultCallback(mrOK));
+                      control_style, dialog.MakeModalResultCallback(mrOK));
 }
 
 void

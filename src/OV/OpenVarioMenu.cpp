@@ -24,6 +24,7 @@ Copyright_License {
 #include "Dialogs/DialogSettings.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/ProcessDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
@@ -31,13 +32,15 @@ Copyright_License {
 #include "../test/src/Fonts.hpp"
 #include "ui/window/Init.hpp"
 #include "ui/window/SingleWindow.hpp"
+#include "ui/event/Timer.hpp"
+#include "Language/Language.hpp"
 #include "system/Process.hpp"
+#include "util/ScopeExit.hxx"
 
 #include <cassert>
 
 enum Buttons {
-  LAUNCH_XCSOAR = 100,
-  LAUNCH_SHELL,
+  LAUNCH_SHELL = 100,
 };
 
 static DialogSettings dialog_settings;
@@ -66,6 +69,185 @@ UIGlobals::GetMainWindow()
   return *global_main_window;
 }
 
+class FileMenuWidget final
+  : public RowFormWidget
+{
+  UI::Display &display;
+
+public:
+  FileMenuWidget(UI::Display &_display, const DialogLook &look) noexcept
+    :RowFormWidget(look),
+     display(_display) {}
+
+private:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+};
+
+void
+FileMenuWidget::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
+{
+  AddButton("Download XCSoar IGC files to USB", [this](){
+    const UI::ScopeDropMaster drop_master{display};
+    Run("/usr/bin/download-igc.sh");
+  });
+
+  AddButton("Download XCSoar to USB", [](){
+    static constexpr const char *argv[] = {
+      "/usr/bin/download-all.sh", nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Downloading files", argv);
+  });
+
+  AddButton("Upload files from USB to XCSoar", [](){
+    static constexpr const char *argv[] = {
+      "/usr/bin/upload-xcsoar.sh", nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Uploading files", argv);
+  });
+}
+
+class SystemMenuWidget final
+  : public RowFormWidget
+{
+  UI::Display &display;
+
+public:
+  SystemMenuWidget(UI::Display &_display, const DialogLook &look) noexcept
+    :RowFormWidget(look),
+     display(_display) {}
+
+private:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+};
+
+static void
+CalibrateSensors() noexcept
+{
+  /* make sure sensord is stopped while calibrating sensors */
+  static constexpr const char *start_sensord[] = {
+    "/bin/systemctl", "start", "sensord.service", nullptr
+  };
+  static constexpr const char *stop_sensord[] = {
+    "/bin/systemctl", "stop", "sensord.service", nullptr
+  };
+
+  RunProcessDialog(UIGlobals::GetMainWindow(),
+                   UIGlobals::GetDialogLook(),
+                   "Calibrate Sensors", stop_sensord,
+                   [](int status){
+                     return status == EXIT_SUCCESS ? mrOK : 0;
+                   });
+
+  AtScopeExit(){
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Calibrate Sensors", start_sensord,
+                     [](int status){
+                       return status == EXIT_SUCCESS ? mrOK : 0;
+                     });
+  };
+
+  /* calibrate the sensors */
+  static constexpr const char *calibrate_sensors[] = {
+    "/opt/bin/sensorcal", "-c", nullptr
+  };
+
+  static constexpr int STATUS_BOARD_NOT_INITIALISED = 2;
+  static constexpr int RESULT_BOARD_NOT_INITIALISED = 100;
+  int result = RunProcessDialog(UIGlobals::GetMainWindow(),
+                                UIGlobals::GetDialogLook(),
+                                "Calibrate Sensors", calibrate_sensors,
+                                [](int status){
+                                  return status == STATUS_BOARD_NOT_INITIALISED
+                                    ? RESULT_BOARD_NOT_INITIALISED
+                                    : 0;
+                                });
+  if (result != RESULT_BOARD_NOT_INITIALISED)
+    return;
+
+  /* initialise the sensors? */
+  if (ShowMessageBox("Sensorboard is virgin. Do you want to initialise it?",
+                     "Calibrate Sensors", MB_YESNO) != IDYES)
+    return;
+
+  static constexpr const char *init_sensors[] = {
+    "/opt/bin/sensorcal", "-i", nullptr
+  };
+
+  result = RunProcessDialog(UIGlobals::GetMainWindow(),
+                            UIGlobals::GetDialogLook(),
+                            "Calibrate Sensors", init_sensors,
+                            [](int status){
+                              return status == EXIT_SUCCESS
+                                ? mrOK
+                                : 0;
+                            });
+  if (result != mrOK)
+    return;
+
+  /* calibrate again */
+  RunProcessDialog(UIGlobals::GetMainWindow(),
+                   UIGlobals::GetDialogLook(),
+                   "Calibrate Sensors", calibrate_sensors,
+                   [](int status){
+                     return status == STATUS_BOARD_NOT_INITIALISED
+                       ? RESULT_BOARD_NOT_INITIALISED
+                       : 0;
+                   });
+}
+
+void
+SystemMenuWidget::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
+{
+  AddButton("Update System", [](){
+    static constexpr const char *argv[] = {
+      "/usr/bin/update-system.sh", nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Update System", argv);
+  });
+
+  AddButton("Update Maps", [](){
+    static constexpr const char *argv[] = {
+      "/usr/bin/update-maps.sh", nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Update Maps", argv);
+  });
+
+  AddButton("Calibrate Sensors", CalibrateSensors);
+  AddButton("Calibrate Touch", [this](){
+    const UI::ScopeDropMaster drop_master{display};
+    Run("/usr/bin/ov-calibrate-ts.sh");
+  });
+
+  AddButton("System Settings", [this](){
+    const UI::ScopeDropMaster drop_master{display};
+    Run("/usr/lib/openvario/libexec/system_settings.sh");
+  });
+
+  AddButton("System Info", [this](){
+    const UI::ScopeDropMaster drop_master{display};
+    Run("/usr/lib/openvario/libexec/system_info.sh");
+  });
+}
+
 class MainMenuWidget final
   : public RowFormWidget
 {
@@ -76,34 +258,102 @@ class MainMenuWidget final
     SHELL,
     REBOOT,
     SHUTDOWN,
+    TIMER,
   };
+
+  UI::Display &display;
 
   WndForm &dialog;
 
+  UI::Timer timer{[this](){
+    if (--remaining_seconds == 0) {
+      StartXCSoar();
+    } else {
+      ScheduleTimer();
+    }
+  }};
+
+  unsigned remaining_seconds = 3;
+
 public:
-  explicit MainMenuWidget(WndForm &_dialog) noexcept
+  MainMenuWidget(UI::Display &_display, WndForm &_dialog) noexcept
     :RowFormWidget(_dialog.GetLook()),
+     display(_display),
      dialog(_dialog) {}
 
 private:
+  void StartXCSoar() noexcept {
+    const UI::ScopeDropMaster drop_master{display};
+    Run("/usr/bin/xcsoar", "-fly");
+  }
+
+  void ScheduleTimer() noexcept {
+    assert(remaining_seconds > 0);
+
+    timer.Schedule(std::chrono::seconds{1});
+
+    char buffer[256];
+    snprintf(buffer, sizeof(buffer), "Starting XCSoar in %u seconds (press any key to cancel)",
+             remaining_seconds);
+    SetText(Controls::TIMER, buffer);
+  }
+
+  void CancelTimer() noexcept {
+    timer.Cancel();
+    remaining_seconds = 0;
+    HideRow(Controls::TIMER);
+  }
+
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent,
                const PixelRect &rc) noexcept override;
+
+  void Show(const PixelRect &rc) noexcept override {
+    RowFormWidget::Show(rc);
+
+    if (remaining_seconds > 0)
+      ScheduleTimer();
+  }
+
+  void Hide() noexcept override {
+    CancelTimer();
+    RowFormWidget::Hide();
+  }
+
+  bool KeyPress(unsigned key_code) noexcept override {
+    CancelTimer();
+    return RowFormWidget::KeyPress(key_code);
+  }
 };
 
 void
 MainMenuWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   AddButton("Start XCSoar", [this](){
-    dialog.SetModalResult(LAUNCH_XCSOAR);
+    CancelTimer();
+    StartXCSoar();
   });
 
-  AddButton("File", [](){
-    ShowMessageBox("Not yet implemented", nullptr, MB_OK);
+  AddButton("File", [this](){
+    CancelTimer();
+
+    TWidgetDialog<FileMenuWidget>
+      sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
+                 GetLook(), "OpenVario File");
+    sub_dialog.SetWidget(display, GetLook());
+    sub_dialog.AddButton(_("Close"), mrOK);
+    return sub_dialog.ShowModal();
   });
 
-  AddButton("System", [](){
-    ShowMessageBox("Not yet implemented", nullptr, MB_OK);
+  AddButton("System", [this](){
+    CancelTimer();
+
+    TWidgetDialog<SystemMenuWidget>
+      sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
+                 GetLook(), "OpenVario System");
+    sub_dialog.SetWidget(display, GetLook());
+    sub_dialog.AddButton(_("Close"), mrOK);
+    return sub_dialog.ShowModal();
   });
 
   AddButton("Shell", [this](){
@@ -117,6 +367,8 @@ MainMenuWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   AddButton("Power off", [](){
     Run("/sbin/poweroff");
   });
+
+  AddReadOnly("");
 }
 
 static int
@@ -125,7 +377,7 @@ Main(UI::SingleWindow &main_window, const DialogLook &dialog_look)
   TWidgetDialog<MainMenuWidget>
     dialog(WidgetDialog::Full{}, main_window,
            dialog_look, "OpenVario");
-  dialog.SetWidget(dialog);
+  dialog.SetWidget(main_window.GetDisplay(), dialog);
 
   return dialog.ShowModal();
 }
@@ -136,7 +388,7 @@ Main()
   dialog_settings.SetDefaults();
 
   ScreenGlobalInit screen_init;
-  Layout::Initialize({600, 800});
+  Layout::Initialise(screen_init.GetDisplay(), {600, 800});
   InitialiseFonts();
 
   DialogLook dialog_look;
@@ -145,7 +397,7 @@ Main()
   UI::TopWindowStyle main_style;
   main_style.Resizable();
 
-  UI::SingleWindow main_window;
+  UI::SingleWindow main_window{screen_init.GetDisplay()};
   main_window.Create(_T("XCSoar/KoboMenu"), {600, 800}, main_style);
   main_window.Show();
 
@@ -166,11 +418,6 @@ int main(int argc, char **argv)
   int action = Main();
 
   switch (action) {
-  case LAUNCH_XCSOAR:
-    execl("/usr/bin/xcsoar", "xcsoar", "-fly", nullptr);
-    perror("Failed to launch XCSoar");
-    return EXIT_FAILURE;
-
   case LAUNCH_SHELL:
     execl("/bin/bash", "bash", "--login", nullptr);
     execl("/bin/ash", "-ash", nullptr);

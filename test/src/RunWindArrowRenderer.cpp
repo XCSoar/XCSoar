@@ -66,7 +66,7 @@ protected:
 };
 
 static void
-Main()
+Main(TestMainWindow &main_window)
 {
   WindArrowLook wind_look;
   wind_look.Initialise(bold_font);

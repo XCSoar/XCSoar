@@ -27,11 +27,7 @@ Copyright_License {
 #include "System.hpp"
 
 #ifndef ENABLE_SDL
-#ifdef HAVE_GLES2
 #include <GLES2/gl2ext.h>
-#else
-#include <GL/glext.h>
-#endif
 #endif
 
 #endif

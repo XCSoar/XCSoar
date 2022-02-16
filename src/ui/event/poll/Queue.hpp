@@ -42,16 +42,23 @@ Copyright_License {
 #include <queue>
 
 enum class DisplayOrientation : uint8_t;
+struct PixelSize;
 
 namespace UI {
+
+class Display;
 
 class EventQueue final {
   ::EventLoop event_loop;
 
+#if defined(USE_X11) || defined(USE_WAYLAND) || defined(MESA_KMS)
+  Display &display;
+#endif
+
 #ifdef USE_X11
-  X11EventQueue input_queue{*this};
+  X11EventQueue input_queue{display, *this};
 #elif defined(USE_WAYLAND)
-  WaylandEventQueue input_queue{*this};
+  WaylandEventQueue input_queue{display, *this};
 #elif !defined(NON_INTERACTIVE)
   InputEventQueue input_queue{*this};
 #endif
@@ -65,7 +72,7 @@ class EventQueue final {
   bool quit = false;
 
 public:
-  EventQueue() noexcept;
+  explicit EventQueue(Display &display) noexcept;
   ~EventQueue() noexcept;
 
   auto &GetEventLoop() noexcept {
@@ -73,20 +80,12 @@ public:
   }
 
 #ifdef USE_X11
-  _XDisplay *GetDisplay() const noexcept {
-    return input_queue.GetDisplay();
-  }
-
   bool WasCtrlClick() const noexcept {
     return input_queue.WasCtrlClick();
   }
 #endif
 
 #ifdef USE_WAYLAND
-  struct wl_display *GetDisplay() noexcept {
-    return input_queue.GetDisplay();
-  }
-
   struct wl_compositor *GetCompositor() noexcept {
     return input_queue.GetCompositor();
   }
@@ -102,9 +101,9 @@ public:
   }
 #endif
 
-  void SetScreenSize(unsigned width, unsigned height) noexcept {
+  void SetScreenSize(const PixelSize &screen_size) noexcept {
 #if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
-    input_queue.SetScreenSize(width, height);
+    input_queue.SetScreenSize(screen_size);
 #endif
   }
 
@@ -191,7 +190,7 @@ private:
   }
 
   void OnWakeUp() noexcept {
-    event_loop.Break();
+    event_loop.Finish();
   }
 };
 

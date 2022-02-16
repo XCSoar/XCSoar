@@ -30,21 +30,9 @@ Copyright_License {
 
 #ifdef ENABLE_SDL
 #include <SDL_platform.h>
-#if defined(HAVE_GLES)
-#ifdef HAVE_GLES2
 #include <SDL_opengles2.h>
 #else
-#include <SDL_opengles.h>
-#endif
-#else
-#include <SDL_opengl.h>
-#endif
-#elif defined(HAVE_GLES2)
 #include <GLES2/gl2.h>
-#elif defined(HAVE_GLES)
-#include <GLES/gl.h>
-#else
-#include <GL/gl.h>
 #endif
 
 // IWYU pragma: end_exports

@@ -1,10 +1,11 @@
+$(eval $(call pkg-config-library,LIBCRYPTO,libcrypto))
+
 KOBO_MENU_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/Asset.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Hardware/CPU.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
-	$(SRC)/Hardware/DisplaySize.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ui/control/TerminalWindow.cpp \
@@ -18,6 +19,7 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(SRC)/Dialogs/Message.cpp \
+	$(SRC)/Dialogs/Error.cpp \
 	$(SRC)/Dialogs/LockScreen.cpp \
 	$(SRC)/Dialogs/TextEntry.cpp \
 	$(SRC)/Dialogs/KnobTextEntry.cpp \
@@ -25,6 +27,7 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Dialogs/SimulatorPromptWindow.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(SRC)/Kobo/WPASupplicant.cpp \
 	$(SRC)/Kobo/Model.cpp \
 	$(SRC)/Kobo/System.cpp \
@@ -36,7 +39,7 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Kobo/WifiDialog.cpp \
 	$(SRC)/Kobo/FakeSymbols.cpp \
 	$(SRC)/Kobo/KoboMenu.cpp
-KOBO_MENU_DEPENDS = WIDGET FORM SCREEN EVENT RESOURCE ASYNC LIBNET OS IO THREAD MATH UTIL
+KOBO_MENU_DEPENDS = WIDGET FORM SCREEN EVENT RESOURCE ASYNC LIBNET OS IO THREAD MATH UTIL LIBCRYPTO
 KOBO_MENU_STRIP = y
 
 $(eval $(call link-program,KoboMenu,KOBO_MENU))
@@ -49,9 +52,9 @@ ifeq ($(TARGET_IS_KOBO),y)
 
 KOBO_POWER_OFF_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
-	$(SRC)/Hardware/DisplaySize.cpp \
 	$(SRC)/Hardware/Battery.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Logger/FlightParser.cpp \
@@ -97,6 +100,7 @@ $(TARGET_OUTPUT_DIR)/KoboRoot.tgz: $(XCSOAR_BIN) \
 	$(Q)if test -f $(KOBO_KERNEL_DIR)/uImage.glohd.otg; then install -m 0644 $(KOBO_KERNEL_DIR)/uImage.glohd.otg $(@D)/KoboRoot/opt/xcsoar/lib/kernel; fi
 	$(Q)if test -f $(KOBO_KERNEL_DIR)/uImage.aura2; then install -m 0644 $(KOBO_KERNEL_DIR)/uImage.aura2 $(@D)/KoboRoot/opt/xcsoar/lib/kernel; fi
 	$(Q)if test -f $(KOBO_KERNEL_DIR)/uImage.aura2.otg; then install -m 0644 $(KOBO_KERNEL_DIR)/uImage.aura2.otg $(@D)/KoboRoot/opt/xcsoar/lib/kernel; fi
+	$(Q)if test -f $(KOBO_KERNEL_DIR)/ClaraHD_OTG_Drivers.tgz; then tar -xzf $(KOBO_KERNEL_DIR)/ClaraHD_OTG_Drivers.tgz -C $(@D)/KoboRoot/opt/xcsoar/lib; fi
 	$(Q)install -m 0644 $(topdir)/kobo/inittab $(@D)/KoboRoot/etc
 	$(Q)install -m 0644 $(topdir)/kobo/udev.rules $(@D)/KoboRoot/etc/udev/rules.d/99-xcsoar.rules
 	$(Q)install -m 0644 $(BITSTREAM_VERA_FILES) $(@D)/KoboRoot/opt/xcsoar/share/fonts

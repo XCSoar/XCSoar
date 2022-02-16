@@ -30,48 +30,33 @@ Copyright_License {
 
 #include <cassert>
 
-/**
- * Returns minimum width that is greater then the given width and
- * that is acceptable as image width (not all numbers are acceptable)
- */
-static inline unsigned
-CorrectedWidth(unsigned nWidth)
+RawBitmap::RawBitmap(PixelSize _size) noexcept
+  :size(_size),
+   buffer(new RawColor[size.width * size.height]),
+   texture(new GLTexture(size))
 {
-  return ((nWidth + 3) / 4) * 4;
-}
-
-RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
-  :width(nWidth), height(nHeight),
-   corrected_width(CorrectedWidth(nWidth)),
-   buffer(new RawColor[corrected_width * height]),
-   texture(new GLTexture(PixelSize(corrected_width, nHeight)))
-{
-  assert(nWidth > 0);
-  assert(nHeight > 0);
+  assert(size.width > 0);
+  assert(size.height > 0);
 
   texture->EnableInterpolation();
 }
 
-RawBitmap::~RawBitmap()
-{
-  delete texture;
-}
+RawBitmap::~RawBitmap() noexcept = default;
 
 GLTexture &
-RawBitmap::BindAndGetTexture() const
+RawBitmap::BindAndGetTexture() const noexcept
 {
   texture->Bind();
 
   if (dirty) {
-#ifdef HAVE_GLES
-    /* 16 bit 5/6/5 on Android */
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
-                    GL_RGB, GL_UNSIGNED_SHORT_5_6_5, GetBuffer());
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size.width, size.height,
+#ifdef USE_RGB565
+                    GL_RGB, GL_UNSIGNED_SHORT_5_6_5,
 #else
-    /* 32 bit R/G/B/A on full OpenGL */
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
-                    GL_BGRA, GL_UNSIGNED_BYTE, GetBuffer());
+                    GL_RGBA, GL_UNSIGNED_BYTE,
 #endif
+                    GetBuffer());
 
     dirty = false;
   }
@@ -82,7 +67,7 @@ RawBitmap::BindAndGetTexture() const
 void
 RawBitmap::StretchTo(PixelSize src_size,
                      Canvas &dest_canvas, PixelSize dest_size,
-                     gcc_unused bool transparent_white) const
+                     [[maybe_unused]] bool transparent_white) const noexcept
 {
   GLTexture &texture = BindAndGetTexture();
 

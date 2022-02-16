@@ -21,12 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_VERTEX_ARRAY_HPP
-#define XCSOAR_SCREEN_OPENGL_VERTEX_ARRAY_HPP
+#pragma once
 
 #include "VertexPointer.hpp"
 #include "ui/dim/BulkPoint.hpp"
-#include "util/Compiler.h"
 
 template<unsigned n>
 struct GLVertexArray {
@@ -71,5 +69,3 @@ struct GLDonutVertices : public GLVertexArray<66> {
     vp.Update(GL_VALUE, sizeof(v[0]) * 2, v + 1);
   }
 };
-
-#endif

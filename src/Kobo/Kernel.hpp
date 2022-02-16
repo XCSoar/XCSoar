@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_KOBO_KERNEL_HPP
 #define XCSOAR_KOBO_KERNEL_HPP
 
-#include "util/Compiler.h"
-
 /**
  * Install the given kernel image on /dev/mmcblk0.
  */
@@ -35,14 +33,14 @@ KoboInstallKernel(const char *uimage_path);
 /**
  * Is the kernel that is currently running a custom one?
  */
-gcc_const
+[[gnu::const]]
 bool
 IsKoboCustomKernel();
 
 /**
  * Are we currently in OTG host mode?
  */
-gcc_const
+[[gnu::pure]]
 bool
 IsKoboOTGHostMode();
 

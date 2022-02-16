@@ -21,13 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_BRUSH_HPP
-#define XCSOAR_SCREEN_BRUSH_HPP
+#pragma once
 
 #include "Color.hpp"
 #include "Features.hpp"
 #include "Screen/Debug.hpp"
-#include "util/Compiler.h"
 
 #include <cassert>
 
@@ -49,24 +47,24 @@ protected:
 
 public:
 #ifndef USE_GDI
-  Brush() = default;
+  Brush() noexcept = default;
 
-  constexpr
-  explicit Brush(const Color _color):color(_color)  {}
+  constexpr explicit Brush(const Color _color) noexcept
+    :color(_color)  {}
 #else
   /** Base Constructor of the Brush class */
-  Brush() = default;
+  Brush() noexcept = default;
 
   /**
    * Constructor (creates a Brush object of the given Color
    * @param c Color of the Brush
    */
-  explicit Brush(const Color c):brush(nullptr) {
+  explicit Brush(const Color c) {
     Create(c);
   }
 
   /** Destructor */
-  ~Brush() {
+  ~Brush() noexcept {
     Destroy();
   }
 
@@ -94,15 +92,13 @@ public:
   /**
    * Resets the Brush to nullptr
    */
-  void Destroy();
+  void Destroy() noexcept;
 
   /**
    * Returns whether the Brush is defined (!= nullptr)
    * @return True if the Brush is defined, False otherwise
    */
-  bool
-  IsDefined() const
-  {
+  bool IsDefined() const noexcept {
 #ifndef USE_GDI
     return !color.IsTransparent();
 #else
@@ -111,17 +107,19 @@ public:
   }
 
 #ifndef USE_GDI
-  constexpr bool IsHollow() const {
+  constexpr bool IsHollow() const noexcept {
     return color.IsTransparent();
   }
 
-  const Color GetColor() const { return color; }
+  const Color GetColor() const noexcept {
+    return color;
+  }
 #else
   /**
    * Returns the native HBRUSH object
    * @return The native HBRUSH object
    */
-  HBRUSH Native() const {
+  HBRUSH Native() const noexcept {
     return brush;
   }
 #endif
@@ -130,11 +128,11 @@ public:
   /**
    * Configures this brush in the OpenGL context.
    */
-  void Bind() const {
+  void Bind() const noexcept {
     color.Bind();
   }
 
-  void BindUniform(GLint location) const {
+  void BindUniform(GLint location) const noexcept {
     color.Uniform(location);
   }
 #endif /* OPENGL */
@@ -151,13 +149,11 @@ Brush::Create(const Color c)
 }
 
 inline void
-Brush::Destroy()
+Brush::Destroy() noexcept
 {
   assert(!IsDefined() || IsScreenInitialized());
 
   color = Color::Transparent();
 }
-
-#endif
 
 #endif

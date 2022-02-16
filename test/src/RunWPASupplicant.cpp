@@ -38,19 +38,12 @@ try {
   args.ExpectEnd();
 
   WPASupplicant wpa_supplicant;
-  if (!wpa_supplicant.Connect(path)) {
-    fprintf(stderr, "Failed to connect to %s: %s\n", path, strerror(errno));
-    return EXIT_FAILURE;
-  }
+  wpa_supplicant.Connect(path);
 
   std::array<WifiConfiguredNetworkInfo, 64> networks;
-  int n = wpa_supplicant.ListNetworks(&networks.front(), networks.size());
-  if (n < 0) {
-    fprintf(stderr, "LIST_NETWORKS failed\n");
-    return EXIT_FAILURE;
-  }
+  const std::size_t n = wpa_supplicant.ListNetworks(&networks.front(), networks.size());
 
-  for (int i = 0; i < n; ++i) {
+  for (std::size_t i = 0; i < n; ++i) {
     const auto &network = networks[i];
     printf("%d\t%s\t%s\n", network.id,
            network.ssid.c_str(), network.bssid.c_str());

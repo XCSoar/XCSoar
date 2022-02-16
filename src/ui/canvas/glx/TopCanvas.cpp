@@ -22,48 +22,42 @@ Copyright_License {
 */
 
 #include "ui/canvas/custom/TopCanvas.hpp"
-#include "ui/canvas/opengl/Init.hpp"
 #include "ui/canvas/opengl/Globals.hpp"
-#include "ui/opengl/Features.hpp"
+#include "ui/display/Display.hpp"
+#include "ui/dim/Size.hpp"
 
 #include <stdexcept>
 
-TopCanvas::TopCanvas(_XDisplay *_x_display,
-                     X11Window x_window,
-                     GLXFBConfig *fb_cfg)
-  :x_display(_x_display)
+TopCanvas::TopCanvas(UI::Display &_display,
+                     X11Window x_window)
+  :display(_display)
 {
-  glx_context = glXCreateNewContext(_x_display, *fb_cfg, GLX_RGBA_TYPE,
-                                    nullptr, true);
-  if (glx_context == nullptr)
-    throw std::runtime_error("Failed to create GLX context");
+  glx_window = glXCreateWindow(display.GetXDisplay(), _display.GetFBConfig(),
+                               x_window, nullptr);
+  XSync(display.GetXDisplay(), false);
 
-  glx_window = glXCreateWindow(_x_display, *fb_cfg, x_window, nullptr);
-  XSync(x_display, false);
-
-  if (!glXMakeContextCurrent(_x_display, glx_window, glx_window, glx_context))
+  if (!glXMakeContextCurrent(display.GetXDisplay(), glx_window, glx_window,
+                             display.GetGLXContext()))
     throw std::runtime_error("Failed to attach GLX context to GLX window");
 
   const PixelSize effective_size = GetNativeSize();
   if (effective_size.width == 0 || effective_size.height == 0)
     throw std::runtime_error("Failed to query GLX drawable size");
 
-  OpenGL::SetupContext();
   SetupViewport(effective_size);
 }
 
 TopCanvas::~TopCanvas() noexcept
 {
-  glXDestroyWindow(x_display, glx_window);
-  glXDestroyContext(x_display, glx_context);
+  glXDestroyWindow(display.GetXDisplay(), glx_window);
 }
 
 PixelSize
-TopCanvas::GetNativeSize() const
+TopCanvas::GetNativeSize() const noexcept
 {
   unsigned w = 0, h = 0;
-  glXQueryDrawable(x_display, glx_window, GLX_WIDTH, &w);
-  glXQueryDrawable(x_display, glx_window, GLX_HEIGHT, &h);
+  glXQueryDrawable(display.GetXDisplay(), glx_window, GLX_WIDTH, &w);
+  glXQueryDrawable(display.GetXDisplay(), glx_window, GLX_HEIGHT, &h);
   if (w <= 0 || h <= 0)
     return PixelSize(0, 0);
 
@@ -73,5 +67,5 @@ TopCanvas::GetNativeSize() const
 void
 TopCanvas::Flip()
 {
-  glXSwapBuffers(x_display, glx_window);
+  glXSwapBuffers(display.GetXDisplay(), glx_window);
 }

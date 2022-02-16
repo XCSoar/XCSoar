@@ -34,6 +34,7 @@ Copyright_License {
 #include "Math/Point2D.hpp"
 #include "Asset.hpp"
 #include "DisplayOrientation.hpp"
+#include "LogFile.hpp"
 
 #ifdef USE_EGL
 #include "ui/egl/System.hpp"
@@ -70,13 +71,11 @@ OpenGL::Initialise()
  * Does the current OpenGL context support textures with dimensions
  * other than power-of-two?
  */
-gcc_pure
+[[gnu::pure]]
 static bool
 SupportsNonPowerOfTwoTextures() noexcept
 {
-  return OpenGL::IsExtensionSupported(HaveGLES()
-                                      ? "GL_OES_texture_npot"
-                                      : "GL_ARB_texture_non_power_of_two");
+  return OpenGL::IsExtensionSupported("GL_OES_texture_npot");
 }
 
 /**
@@ -84,36 +83,25 @@ SupportsNonPowerOfTwoTextures() noexcept
  * Renderbuffer.  Returns GL_NONE if the Renderbuffer does not support
  * it.
  */
-gcc_pure
+[[gnu::pure]]
 static GLenum
 CheckDepthStencil() noexcept
 {
-#ifdef HAVE_GLES
   if (OpenGL::IsExtensionSupported("GL_OES_packed_depth_stencil"))
     return GL_DEPTH24_STENCIL8_OES;
 
   /* not supported */
   return GL_NONE;
-
-#else
-
-  if (OpenGL::IsExtensionSupported("GL_EXT_packed_depth_stencil"))
-    return FBO::DEPTH_STENCIL;
-
-  /* not supported */
-  return GL_NONE;
-#endif
 }
 
 /**
  * Check which stencil internalType is available for a Renderbuffer.
  * Returns GL_NONE if the Renderbuffer does not support it.
  */
-gcc_pure
+[[gnu::pure]]
 static GLenum
 CheckStencil() noexcept
 {
-#ifdef HAVE_GLES
 #if !defined(__APPLE__) || !TARGET_OS_IPHONE
   if (OpenGL::IsExtensionSupported("GL_OES_stencil1"))
     return GL_STENCIL_INDEX1_OES;
@@ -128,37 +116,30 @@ CheckStencil() noexcept
 
   /* not supported */
   return GL_NONE;
-
-#else
-
-#if 0
-  /* this one works with Nvidia GF114 on Linux, but
-     https://www.opengl.org/wiki/Image_Format strongly recommends not
-     using it */
-#ifdef GL_STENCIL_INDEX8
-  return GL_STENCIL_INDEX8;
-#else
-  return GL_STENCIL_INDEX8_EXT;
-#endif
-#endif
-
-  /* not supported */
-  return GL_NONE;
-#endif
 }
 
 void
 OpenGL::SetupContext()
 {
+  if (auto s = (const char *)glGetString(GL_VENDOR))
+    LogFormat("GL vendor: %s", s);
+
+  if (auto s = (const char *)glGetString(GL_VERSION))
+    LogFormat("GL version: %s", s);
+
+  if (auto s = (const char *)glGetString(GL_RENDERER))
+    LogFormat("GL renderer: %s", s);
+
+  if (auto s = (const char *)glGetString(GL_EXTENSIONS))
+    LogFormat("GL extensions: %s", s);
+
   texture_non_power_of_two = SupportsNonPowerOfTwoTextures();
 
 #ifdef ANDROID
-  native_view->SetTexturePowerOfTwo(texture_non_power_of_two);
+  native_view->SetTexturePowerOfTwo(Java::GetEnv(), texture_non_power_of_two);
 #endif
 
-#ifdef HAVE_OES_MAPBUFFER
   mapbuffer = IsExtensionSupported("GL_OES_mapbuffer");
-#endif
 
 #ifdef HAVE_DYNAMIC_MAPBUFFER
   if (mapbuffer) {
@@ -192,9 +173,6 @@ OpenGL::SetupContext()
 
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_DITHER);
-#ifndef HAVE_GLES2
-  glDisable(GL_LIGHTING);
-#endif
 
   InitShapes();
 
@@ -207,7 +185,7 @@ OpenGL::SetupContext()
  * Determine the projection rotation angle (in degrees) of the
  * specified orientation.
  */
-gcc_const
+[[gnu::const]]
 static GLfloat
 OrientationToRotation(DisplayOrientation orientation) noexcept
 {
@@ -263,9 +241,9 @@ OpenGL::SetupViewport(UnsignedPoint2D size) noexcept
   projection_matrix = rot_matrix * projection_matrix;
 #endif
 
-  UpdateShaderProjectionMatrix();
-
   viewport_size = size;
+
+  UpdateShaderProjectionMatrix();
 
   return size;
 }

@@ -123,6 +123,12 @@ class EventLoop final
 	std::atomic_bool quit{false};
 
 	/**
+	 * If true, then Run() will return after all pending events
+	 * have been handled.
+	 */
+	bool finish = false;
+
+	/**
 	 * True when the object has been modified and another check is
 	 * necessary before going to sleep via EventPollBackend::ReadEvents().
 	 */
@@ -194,8 +200,19 @@ public:
 	 */
 	void Break() noexcept;
 
-	void ResetBreak() noexcept {
-		quit = false;
+	/**
+	 * Finish Run() after all pending events have been handled.
+	 */
+	void Finish() noexcept {
+		finish = true;
+	}
+
+	/**
+	 * Undo the effect of Finish().  Call this before invoking
+	 * Run() again.
+	 */
+	void ResetFinish() noexcept {
+		finish = false;
 	}
 
 	bool AddFD(int fd, unsigned events, SocketEvent &event) noexcept;
@@ -237,7 +254,7 @@ public:
 
 	/**
 	 * The main function of this class.  It will loop until
-	 * Break() gets called.  Can be called only once.
+	 * Break() or Finish() gets called.  Can be called only once.
 	 */
 	void Run() noexcept;
 

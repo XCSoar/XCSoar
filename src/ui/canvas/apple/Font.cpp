@@ -31,6 +31,8 @@ Copyright_License {
 #endif
 
 #include <cassert>
+#include <stdexcept>
+
 #include <math.h>
 #include <string.h>
 
@@ -60,7 +62,7 @@ using NativeFontT =
   UIFont;
 #endif
 
-bool
+void
 Font::Load(const FontDescription &d)
 {
   NativeFontT *native_font;
@@ -75,7 +77,7 @@ Font::Load(const FontDescription &d)
     native_font = [NativeFontT fontWithName: @"Helvetica" size: d.GetHeight()];
 
   if (nil == native_font)
-    return false;
+    throw std::runtime_error{"fontWithName named"};
 
   if (d.IsItalic() || d.IsBold()) {
 #ifdef USE_APPKIT
@@ -104,8 +106,6 @@ Font::Load(const FontDescription &d)
   height = ceilf([@"ÄjX€µ" sizeWithAttributes: draw_attributes].height);
   ascent_height = static_cast<unsigned>(ceilf([native_font ascender]));
   capital_height = static_cast<unsigned>(ceilf([native_font capHeight]));
-
-  return true;
 }
 
 PixelSize

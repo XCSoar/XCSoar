@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_GLOBAL_FONTS_HPP
-#define XCSOAR_GLOBAL_FONTS_HPP
+#pragma once
 
 struct FontSettings;
 class Font;
@@ -31,14 +30,18 @@ class Font;
  * Container for global font variables.  Avoid using it if you can,
  * use the "Look" objects instead.
  */
-namespace Fonts
-{
-  extern Font map;
-  extern Font map_bold;
+namespace Fonts {
 
-  bool Load(const FontSettings &settings);
+extern Font map;
+extern Font map_bold;
 
-  void Deinitialize();
-}
+/**
+ * Throws on error.
+ */
+void
+Load(const FontSettings &settings);
 
-#endif
+void
+Deinitialize() noexcept;
+
+} // namespace Fonts

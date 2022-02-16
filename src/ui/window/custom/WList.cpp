@@ -92,7 +92,7 @@ WindowList::BringToBottom(Window &w) noexcept
   list.push_back(w);
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 IsAt(Window &w, PixelPoint p) noexcept
 {
@@ -109,7 +109,7 @@ WindowList::FindAt(PixelPoint p) noexcept
   return nullptr;
 }
 
-gcc_pure
+[[gnu::pure]]
 Window *
 WindowList::FindControl(List::iterator i,
                         WindowList::List::iterator end) noexcept
@@ -133,7 +133,7 @@ WindowList::FindControl(List::iterator i,
   return nullptr;
 }
 
-gcc_pure
+[[gnu::pure]]
 Window *
 WindowList::FindControl(WindowList::List::reverse_iterator i,
                         WindowList::List::reverse_iterator end) noexcept
@@ -196,7 +196,7 @@ WindowList::FindPreviousChildControl(Window *reference) noexcept
   return FindControl(++i, list.rend());
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 IsFullWindow(const Window &w, const PixelRect &rc) noexcept
 {

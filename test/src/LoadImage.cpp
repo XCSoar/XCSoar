@@ -56,7 +56,7 @@ ParseCommandLine(Args &args)
 }
 
 static void
-Main()
+Main(UI::Display &display)
 {
   Bitmap bitmap;
   bool success =

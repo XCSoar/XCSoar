@@ -177,7 +177,7 @@ TTYPort::GetState() const noexcept
 bool
 TTYPort::Drain()
 {
-  const TTYDescriptor tty(socket.GetSocket().ToFileDescriptor());
+  const TTYDescriptor tty(socket.GetFileDescriptor());
   return tty.Drain();
 }
 
@@ -207,7 +207,7 @@ TTYPort::Open(const TCHAR *path, unsigned baud_rate)
   auto fd = OpenTTY(path, baud_rate);
   ::SetBaudrate(TTYDescriptor(fd), baud_rate);
 
-  socket.Open(SocketDescriptor::FromFileDescriptor(fd.Release()));
+  socket.Open(fd.Release());
 
   BlockingCall(GetEventLoop(), [this](){
     socket.ScheduleRead();
@@ -231,7 +231,7 @@ TTYPort::OpenPseudo()
   if (!tty.Unlock())
     throw FormatErrno("unlockpt('%s') failed", path);
 
-  socket.Open(SocketDescriptor::FromFileDescriptor(fd.Release()));
+  socket.Open(fd.Release());
 
   valid.store(true, std::memory_order_relaxed);
 
@@ -251,7 +251,7 @@ TTYPort::Flush()
   if (!valid.load(std::memory_order_relaxed))
     return;
 
-  const TTYDescriptor tty(socket.GetSocket().ToFileDescriptor());
+  const TTYDescriptor tty(socket.GetFileDescriptor());
   tty.FlushInput();
   BufferedPort::Flush();
 }
@@ -264,7 +264,7 @@ TTYPort::WaitWrite(unsigned timeout_ms)
   if (!valid.load(std::memory_order_relaxed))
     throw std::runtime_error("Port is closed");
 
-  const TTYDescriptor fd(socket.GetSocket().ToFileDescriptor());
+  const TTYDescriptor fd(socket.GetFileDescriptor());
   int ret = fd.WaitWritable(timeout_ms);
   if (ret > 0)
     return;
@@ -282,7 +282,7 @@ TTYPort::Write(const void *data, std::size_t length)
   if (!valid.load(std::memory_order_relaxed))
     throw std::runtime_error("Port is closed");
 
-  TTYDescriptor fd(socket.GetSocket().ToFileDescriptor());
+  TTYDescriptor fd(socket.GetFileDescriptor());
   auto nbytes = fd.Write(data, length);
   if (nbytes < 0) {
     if (errno != EAGAIN)
@@ -303,7 +303,7 @@ TTYPort::GetBaudrate() const noexcept
 {
   assert(socket.IsDefined());
 
-  const TTYDescriptor tty(socket.GetSocket().ToFileDescriptor());
+  const TTYDescriptor tty(socket.GetFileDescriptor());
   struct termios attr;
   if (!tty.GetAttr(attr))
     return 0;
@@ -316,14 +316,14 @@ TTYPort::SetBaudrate(unsigned baud_rate)
 {
   assert(socket.IsDefined());
 
-  const TTYDescriptor tty(socket.GetSocket().ToFileDescriptor());
+  const TTYDescriptor tty(socket.GetFileDescriptor());
   ::SetBaudrate(tty, baud_rate);
 }
 
 void
 TTYPort::OnSocketReady(unsigned) noexcept
 {
-  TTYDescriptor tty(socket.GetSocket().ToFileDescriptor());
+  TTYDescriptor tty(socket.GetFileDescriptor());
 
   std::byte input[4096];
   ssize_t nbytes = tty.Read(input, sizeof(input));

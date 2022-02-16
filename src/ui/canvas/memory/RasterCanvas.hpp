@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_RASTER_CANVAS_HPP
-#define XCSOAR_SCREEN_RASTER_CANVAS_HPP
+#pragma once
 
 #include "Concepts.hpp"
 #include "Buffer.hpp"
@@ -30,7 +29,6 @@ Copyright_License {
 #include "Murphy.hpp"
 #include "ui/dim/Point.hpp"
 #include "util/AllocatedArray.hxx"
-#include "util/Compiler.h"
 
 #include <cassert>
 
@@ -159,7 +157,7 @@ protected:
     return !(a | b);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned ClipEncodeX(int x) const noexcept {
     if (unsigned(x)< buffer.width)
       return 0;
@@ -168,7 +166,7 @@ protected:
     return CLIP_RIGHT_EDGE;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned ClipEncodeY(int y) const noexcept {
     if (unsigned(y)< buffer.height)
       return 0;
@@ -177,7 +175,7 @@ protected:
     return CLIP_BOTTOM_EDGE;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned ClipEncode(int x, int y) const noexcept {
     return ClipEncodeX(x) | ClipEncodeY(y);
   }
@@ -368,8 +366,8 @@ public:
 
     pointer p = At(x1, y1);
 
-    int pixx = PixelTraits::CalcIncrement(sx) * sizeof(*p);
-    int pixy = sy * buffer.pitch;
+    std::ptrdiff_t pixx = PixelTraits::CalcIncrement(sx) * sizeof(*p);
+    std::ptrdiff_t pixy = sy * static_cast<std::ptrdiff_t>(buffer.pitch);
 
     if (dx < dy) {
       std::swap(dx, dy);
@@ -923,5 +921,3 @@ public:
                    GetSolidPixelOperations());
   }
 };
-
-#endif

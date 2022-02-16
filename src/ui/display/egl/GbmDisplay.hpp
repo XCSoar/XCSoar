@@ -21,34 +21,27 @@ Copyright_License {
 }
 */
 
-#include "../Init.hpp"
-#include "Screen/Debug.hpp"
-#include "ui/canvas/Font.hpp"
-#include "ui/canvas/opengl/Init.hpp"
-#include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
+#pragma once
 
-using namespace UI;
+struct gbm_device;
+class FileDescriptor;
 
-ScreenGlobalInit::ScreenGlobalInit()
-{
-  OpenGL::Initialise();
+namespace EGL {
 
-  Font::Initialise();
+class GbmDisplay {
+  struct gbm_device *const device;
 
-  event_queue = new EventQueue();
+public:
+  /**
+   * Throws on error.
+   */
+  explicit GbmDisplay(FileDescriptor dri_fd);
 
-  ScreenInitialized();
-}
+  ~GbmDisplay() noexcept;
 
-ScreenGlobalInit::~ScreenGlobalInit()
-{
-  delete event_queue;
-  event_queue = nullptr;
+  auto *GetGbmDevice() const noexcept {
+    return device;
+  }
+};
 
-  OpenGL::Deinitialise();
-
-  Font::Deinitialise();
-
-  ScreenDeinitialized();
-}
+} // namespace EGL

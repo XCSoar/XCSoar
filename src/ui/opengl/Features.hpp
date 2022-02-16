@@ -30,11 +30,7 @@ Copyright_License {
 
 #define HAVE_TEXT_CACHE
 
-#ifdef HAVE_GLES
-#define HAVE_OES_MAPBUFFER
-#endif
-
-#if defined(_WIN32) || (defined(HAVE_GLES) && (defined(MESA_KMS) || defined(USE_X11)))
+#if defined(_WIN32) || defined(MESA_KMS) || defined(USE_X11) || defined(ENABLE_SDL) || defined(USE_WAYLAND)
 #define HAVE_DYNAMIC_MAPBUFFER
 #endif
 
@@ -42,39 +38,11 @@ Copyright_License {
 #define DRAW_MOUSE_CURSOR
 #endif
 
-#if defined(ENABLE_OPENGL) && !defined(ANDROID) && !defined(TARGET_OS_IPHONE)
+#if !defined(ANDROID) && !defined(TARGET_OS_IPHONE)
 /**
  * Support display rotation via glRotatef()?
  */
 #define SOFTWARE_ROTATE_DISPLAY
 #endif
-
-/**
- * Running on OpenGL/ES?
- */
-constexpr
-static inline bool
-HaveGLES()
-{
-#ifdef HAVE_GLES
-  return true;
-#else
-  return false;
-#endif
-}
-
-/**
- * Running on OpenGL/ES 2.0?
- */
-constexpr
-static inline bool
-HaveGLES2()
-{
-#ifdef HAVE_GLES2
-  return true;
-#else
-  return false;
-#endif
-}
 
 #endif

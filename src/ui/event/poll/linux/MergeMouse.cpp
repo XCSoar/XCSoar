@@ -27,15 +27,14 @@ Copyright_License {
 namespace UI {
 
 void
-MergeMouse::SetScreenSize(unsigned width, unsigned height)
+MergeMouse::SetScreenSize(PixelSize screen_size) noexcept
 {
-  if (width != rotate.GetWidth())
-    x = width / 2;
+  if (screen_size != rotate.GetScreenSize()) {
+    x = screen_size.width / 2;
+    y = screen_size.height / 2;
+  }
 
-  if (height != rotate.GetHeight())
-    y = height / 2;
-
-  rotate.SetSize(width, height);
+  rotate.SetScreenSize(screen_size);
 }
 
 void
@@ -55,12 +54,13 @@ MergeMouse::MoveAbsolute(PixelPoint p)
 {
   p = rotate.DoAbsolute(p);
 
-  const unsigned screen_width = rotate.GetWidth();
-  if (screen_width > 0) {
+  const auto screen_size = rotate.GetScreenSize();
+
+  if (screen_size.width > 0) {
     if (p.x < 0)
       p.x = 0;
-    else if (unsigned(p.x) > screen_width)
-      p.x = screen_width - 1;
+    else if (unsigned(p.x) > screen_size.width)
+      p.x = screen_size.width - 1;
 
     if (unsigned(p.x) != x) {
       x = p.x;
@@ -68,12 +68,11 @@ MergeMouse::MoveAbsolute(PixelPoint p)
     }
   }
 
-  const unsigned screen_height = rotate.GetHeight();
-  if (screen_height > 0) {
+  if (screen_size.height > 0) {
     if (p.y < 0)
       p.y = 0;
-    else if (unsigned(p.y) > screen_height)
-      p.y = screen_height - 1;
+    else if (unsigned(p.y) > screen_size.height)
+      p.y = screen_size.height - 1;
 
     if (unsigned(p.y) != y) {
       y = p.y;
@@ -91,12 +90,12 @@ MergeMouse::MoveAbsolute(int new_x, int new_y,
   if (new_x < min_x)
     new_x = 0;
   else if (max_x > min_x)
-    new_x = new_x * int(rotate.GetWidth()) / (max_x - min_x);
+    new_x = new_x * int(rotate.GetScreenSize().width) / (max_x - min_x);
 
   if (new_y < min_y)
     new_y = 0;
   else if (max_y > min_y)
-    new_y = new_y * int(rotate.GetHeight()) / (max_y - min_y);
+    new_y = new_y * int(rotate.GetScreenSize().height) / (max_y - min_y);
 
   /* now call the "real" MoveAbsolute() */
   MoveAbsolute(PixelPoint(new_x, new_y));

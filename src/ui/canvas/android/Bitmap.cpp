@@ -52,7 +52,7 @@ LoadResourceBitmap(ResourceId id)
   if (name == nullptr)
     return nullptr;
 
-  return native_view->loadResourceBitmap(name);
+  return native_view->LoadResourceBitmap(Java::GetEnv(), name);
 }
 
 bool
@@ -77,7 +77,8 @@ Bitmap::MakeTexture(jobject _bmp, Type _type, bool flipped) noexcept
   assert(_bmp != nullptr);
 
   jint result[5];
-  if (!native_view->bitmapToTexture(_bmp, _type == Bitmap::Type::MONO, result))
+  if (!native_view->BitmapToTexture(Java::GetEnv(), _bmp,
+                                    _type == Bitmap::Type::MONO, result))
     return false;
 
   texture = new GLTexture(result[0], PixelSize(result[1], result[2]),
@@ -113,11 +114,11 @@ Bitmap::LoadFile(Path path)
 
   Java::LocalObject new_bmp;
   bool flipped = false;
-  if (path.MatchesExtension(_T(".tif")) || path.MatchesExtension(_T(".tiff"))) {
-    new_bmp = native_view->loadFileTiff(path);
+  if (path.MatchesExtension(".tif") || path.MatchesExtension(".tiff")) {
+    new_bmp = native_view->LoadFileTiff(Java::GetEnv(), path);
     flipped = true;
   } else {
-    new_bmp = native_view->loadFileBitmap(path);
+    new_bmp = native_view->LoadFileBitmap(Java::GetEnv(), path);
   }
   if (new_bmp == nullptr)
     return false;

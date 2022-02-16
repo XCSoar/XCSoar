@@ -21,10 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_IDLE_HPP
-#define XCSOAR_EVENT_IDLE_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 /**
  * Check whether the user is currently inactive.
@@ -36,7 +33,7 @@ Copyright_License {
  * @return true if the user has been idle for at the specified number
  * of milliseconds or more
  */
-gcc_pure
+[[gnu::pure]]
 bool
 IsUserIdle(unsigned duration_ms) noexcept;
 
@@ -45,5 +42,3 @@ IsUserIdle(unsigned duration_ms) noexcept;
  */
 void
 ResetUserIdle() noexcept;
-
-#endif

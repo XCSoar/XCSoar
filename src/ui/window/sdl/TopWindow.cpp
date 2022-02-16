@@ -23,18 +23,16 @@ Copyright_License {
 
 #include "../TopWindow.hpp"
 #include "../Features.hpp"
-#include "ui/event/sdl/Event.hpp"
-#include "ui/event/sdl/Loop.hpp"
-#include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
-#include "util/ConvertString.hpp"
 #include "util/RuntimeError.hxx"
 #include "util/UTF8.hpp"
 
 #ifdef UNICODE
 #include "util/ConvertString.hpp"
 #endif
+
+#include <SDL_video.h>
+#include <SDL_events.h>
 
 #if defined(__MACOSX__) && __MACOSX__
 #include <SDL_syswm.h>
@@ -115,12 +113,6 @@ TopWindow::CreateNative(const TCHAR *_text, PixelSize new_size,
   }
 #endif
 
-}
-
-void
-TopWindow::Invalidate() noexcept
-{
-  invalidated = true;
 }
 
 bool
@@ -232,43 +224,40 @@ TopWindow::OnEvent(const SDL_Event &event)
     case SDL_WINDOWEVENT_MOVED:
     case SDL_WINDOWEVENT_SHOWN:
     case SDL_WINDOWEVENT_MAXIMIZED:
-      {
-        SDL_Window* event_window = SDL_GetWindowFromID(event.window.windowID);
-        if (event_window) {
-          int w, h;
-          SDL_GetWindowSize(event_window, &w, &h);
-          if ((w >= 0) && (h >= 0)) {
+      if (auto *event_window = SDL_GetWindowFromID(event.window.windowID)) {
+        int w, h;
+        SDL_GetWindowSize(event_window, &w, &h);
+        if ((w >= 0) && (h >= 0)) {
 #ifdef HAVE_HIGHDPI_SUPPORT
-            int real_w, real_h;
-            SDL_GL_GetDrawableSize(event_window, &real_w, &real_h);
-            point_to_real_x = static_cast<float>(real_w) /
-                              static_cast<float>(w);
-            point_to_real_y = static_cast<float>(real_h) /
-                              static_cast<float>(h);
-            w = real_w;
-            h = real_h;
+          int real_w, real_h;
+          SDL_GL_GetDrawableSize(event_window, &real_w, &real_h);
+          point_to_real_x = static_cast<float>(real_w) /
+            static_cast<float>(w);
+          point_to_real_y = static_cast<float>(real_h) /
+            static_cast<float>(h);
+          w = real_w;
+          h = real_h;
 #endif
 #ifdef ENABLE_OPENGL
-            if (screen->CheckResize(PixelSize(w, h)))
-              Resize(screen->GetSize());
+          if (screen->CheckResize(PixelSize(w, h)))
+            Resize(screen->GetSize());
 #else
-            Resize(w, h);
-#endif
-          }
-
-#if defined(__MACOSX__) && __MACOSX__
-          SDL_SysWMinfo *wm_info =
-              reinterpret_cast<SDL_SysWMinfo *>(alloca(sizeof(SDL_SysWMinfo)));
-          SDL_VERSION(&wm_info->version);
-          if ((SDL_GetWindowWMInfo(event_window, wm_info)) &&
-              (wm_info->subsystem == SDL_SYSWM_COCOA)) {
-            [wm_info->info.cocoa.window
-                setCollectionBehavior:
-                    NSWindowCollectionBehaviorFullScreenPrimary];
-          }
-          Invalidate();
+          Resize(w, h);
 #endif
         }
+
+#if defined(__MACOSX__) && __MACOSX__
+        SDL_SysWMinfo *wm_info =
+          reinterpret_cast<SDL_SysWMinfo *>(alloca(sizeof(SDL_SysWMinfo)));
+        SDL_VERSION(&wm_info->version);
+        if ((SDL_GetWindowWMInfo(event_window, wm_info)) &&
+            (wm_info->subsystem == SDL_SYSWM_COCOA)) {
+          [wm_info->info.cocoa.window
+           setCollectionBehavior:
+           NSWindowCollectionBehaviorFullScreenPrimary];
+        }
+        Invalidate();
+#endif
       }
       return true;
 
@@ -280,25 +269,6 @@ TopWindow::OnEvent(const SDL_Event &event)
   }
 
   return false;
-}
-
-int
-TopWindow::RunEventLoop() noexcept
-{
-  Refresh();
-
-  EventLoop loop(*event_queue, *this);
-  Event event;
-  while (IsDefined() && loop.Get(event))
-    loop.Dispatch(event);
-
-  return 0;
-}
-
-void
-TopWindow::PostQuit() noexcept
-{
-  event_queue->Quit();
 }
 
 void

@@ -100,8 +100,9 @@ TextUtil::create(const FontDescription &d) noexcept
     e.NewObject(cls, midTextUtil,
                 paramStyle, paramTextSize,
                 paint_flags, d.IsMonospace())};
-  if (!localObject)
-    return nullptr;
+  Java::RethrowException(&e);
+
+  assert(localObject);
 
   return new TextUtil(localObject);
 }

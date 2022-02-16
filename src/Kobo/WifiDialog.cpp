@@ -24,6 +24,7 @@ Copyright_License {
 #include "WifiDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/Error.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
@@ -35,6 +36,13 @@ Copyright_License {
 #include "WPASupplicant.hpp"
 #include "net/IPv4Address.hxx"
 #include "ui/event/PeriodicTimer.hpp"
+#include "util/HexFormat.hxx"
+
+/* workaround because OpenSSL has a typedef called "UI", which clashes
+   with our "UI" namespace */
+#define UI OPENSSL_UI
+#include <openssl/evp.h> // for PKCS5_PBKDF2_HMAC_SHA1()
+#undef UI
 
 class WifiListWidget final
   : public ListWidget {
@@ -64,11 +72,22 @@ class WifiListWidget final
 public:
   void CreateButtons(WidgetDialog &dialog) {
     dialog.AddButton(_("Scan"), [this](){
-      if (EnsureConnected() && wpa_supplicant.Scan())
+      try {
+        EnsureConnected();
+        wpa_supplicant.Scan();
         UpdateList();
+      } catch (...) {
+        ShowError(std::current_exception(), _("Error"));
+      }
     });
 
-    connect_button = dialog.AddButton(_("Connect"), [this](){ Connect(); });
+    connect_button = dialog.AddButton(_("Connect"), [this](){
+      try {
+        Connect();
+      } catch (...) {
+        ShowError(std::current_exception(), _("Error"));
+      }
+    });
   }
 
   void UpdateButtons();
@@ -97,20 +116,22 @@ public:
 private:
   /**
    * Ensure that we're connected to wpa_supplicant.
+   *
+   * Throws on error.
    */
-  bool EnsureConnected();
+  void EnsureConnected();
 
   gcc_pure
-  NetworkInfo *FindByID(int id);
+  NetworkInfo *FindByID(int id) noexcept;
 
   gcc_pure
-  NetworkInfo *FindByBSSID(const char *bssid);
+  NetworkInfo *FindByBSSID(const char *bssid) noexcept;
 
   gcc_pure
-  NetworkInfo *FindVisibleBySSID(const char *ssid);
+  NetworkInfo *FindVisibleBySSID(const char *ssid) noexcept;
 
   gcc_pure
-  NetworkInfo *Find(const WifiConfiguredNetworkInfo &c);
+  NetworkInfo *Find(const WifiConfiguredNetworkInfo &c) noexcept;
 
   void MergeList(const WifiVisibleNetwork *p, unsigned n);
   void UpdateScanResults();
@@ -193,32 +214,27 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
 }
 
-static bool
+static void
 WifiConnect(enum WifiSecurity security, WPASupplicant &wpa_supplicant, const char *ssid, const char *psk)
 {
-  int id = wpa_supplicant.AddNetwork();
+  const unsigned id = wpa_supplicant.AddNetwork();
   char *endPsk_ptr;
-  bool success;
 
-  if (id < 0)
-    return false;
-
-  success = wpa_supplicant.SetNetworkSSID(id, ssid);
-
-  if (!success)
-    return false;
+  wpa_supplicant.SetNetworkSSID(id, ssid);
 
   if (security == WPA_SECURITY) {
+    std::array<unsigned char, 32> pmk;
+    PKCS5_PBKDF2_HMAC_SHA1(psk, strlen(psk),
+                           (const unsigned char *)ssid, strlen(ssid),
+                           4096,
+                           pmk.size(), pmk.data());
 
-    success = wpa_supplicant.SetNetworkPSK(id, psk);
-    if (!success)
-      return false;
+    std::array<char, sizeof(pmk) * 2 + 1> hex;
+    *HexFormat(hex.data(), {pmk.data(), pmk.size()}) = 0;
 
+    wpa_supplicant.SetNetworkPSK(id, hex.data());
   } else if (security == WEP_SECURITY) {
-
-    success = wpa_supplicant.SetNetworkID(id, "key_mgmt", "NONE");
-    if (!success)
-      return false;
+    wpa_supplicant.SetNetworkID(id, "key_mgmt", "NONE");
 
     /*
      * If psk is all hexidecimal should SetNetworkID, assuming user provided key in hex.
@@ -230,34 +246,24 @@ WifiConnect(enum WifiSecurity security, WPASupplicant &wpa_supplicant, const cha
 
     if ((*endPsk_ptr == '\0') &&                                   // confirm strtoll processed all of psk
         (strlen(psk) >= 2) && (psk[0] != '0') && (psk[1] != 'x'))  // and the first two characters were no "0x"
-      success = wpa_supplicant.SetNetworkID(id, "wep_key0", psk);
+      wpa_supplicant.SetNetworkID(id, "wep_key0", psk);
     else
-      success = wpa_supplicant.SetNetworkString(id, "wep_key0", psk);
+      wpa_supplicant.SetNetworkString(id, "wep_key0", psk);
 
-    if (!success)
-      return false;
-
-    success = wpa_supplicant.SetNetworkID(id, "auth_alg", "OPEN\tSHARED");
-    if (!success)
-      return false;
+    wpa_supplicant.SetNetworkID(id, "auth_alg", "OPEN\tSHARED");
   } else if (security == OPEN_SECURITY){
-    success = wpa_supplicant.SetNetworkID(id, "key_mgmt", "NONE");
-        if (!success)
-          return false;
+    wpa_supplicant.SetNetworkID(id, "key_mgmt", "NONE");
   } else
-    return false;
+    throw std::runtime_error{"Unsupported Wifi security type"};
 
-  return wpa_supplicant.EnableNetwork(id) &&
-    wpa_supplicant.SaveConfig();
+  wpa_supplicant.EnableNetwork(id);
+  wpa_supplicant.SaveConfig();
 }
 
 inline void
 WifiListWidget::Connect()
 {
-  if (!EnsureConnected()) {
-    ShowMessageBox(_T("Network failure"), _("Connect"), MB_OK);
-    return;
-  }
+  EnsureConnected();
 
   const unsigned i = GetList().GetCursorIndex();
   if (i >= networks.size())
@@ -277,25 +283,23 @@ WifiListWidget::Connect()
     else if (!TextEntryDialog(passphrase, caption, false))
       return;
 
-    if (!WifiConnect(info.security, wpa_supplicant, info.ssid, passphrase))
-      ShowMessageBox(_T("Network failure"), _("Connect"), MB_OK);
+    WifiConnect(info.security, wpa_supplicant, info.ssid, passphrase);
   } else {
-    if (!wpa_supplicant.RemoveNetwork(info.id) || !wpa_supplicant.SaveConfig())
-      ShowMessageBox(_T("Error"), _("Remove"), MB_OK);
+    wpa_supplicant.RemoveNetwork(info.id);
+    wpa_supplicant.SaveConfig();
   }
 
   UpdateList();
 }
 
-bool
+void
 WifiListWidget::EnsureConnected()
 {
-  return wpa_supplicant.IsConnected() ||
-    wpa_supplicant.Connect("/var/run/wpa_supplicant/eth0");
+  wpa_supplicant.EnsureConnected("/var/run/wpa_supplicant/eth0");
 }
 
 inline WifiListWidget::NetworkInfo *
-WifiListWidget::FindByID(int id)
+WifiListWidget::FindByID(int id) noexcept
 {
   auto f = std::find_if(networks.begin(), networks.end(),
                         [id](const NetworkInfo &info) {
@@ -308,7 +312,7 @@ WifiListWidget::FindByID(int id)
 }
 
 WifiListWidget::NetworkInfo *
-WifiListWidget::FindByBSSID(const char *bssid)
+WifiListWidget::FindByBSSID(const char *bssid) noexcept
 {
   auto f = std::find_if(networks.begin(), networks.end(),
                         [bssid](const NetworkInfo &info) {
@@ -321,7 +325,7 @@ WifiListWidget::FindByBSSID(const char *bssid)
 }
 
 WifiListWidget::NetworkInfo *
-WifiListWidget::FindVisibleBySSID(const char *ssid)
+WifiListWidget::FindVisibleBySSID(const char *ssid) noexcept
 {
   auto f = std::find_if(networks.begin(), networks.end(),
                         [ssid](const NetworkInfo &info) {
@@ -365,7 +369,7 @@ WifiListWidget::UpdateScanResults()
 }
 
 inline WifiListWidget::NetworkInfo *
-WifiListWidget::Find(const WifiConfiguredNetworkInfo &c)
+WifiListWidget::Find(const WifiConfiguredNetworkInfo &c) noexcept
 {
   auto found = FindByID(c.id);
   if (found != nullptr)
@@ -446,7 +450,8 @@ WifiListWidget::UpdateList()
 {
   status.Clear();
 
-  if (EnsureConnected()) {
+  try {
+    EnsureConnected();
     wpa_supplicant.Status(status);
 
     for (auto &i : networks)
@@ -457,8 +462,9 @@ WifiListWidget::UpdateList()
 
     /* remove items that are still marked as "old" */
     SweepList();
-  } else
+  } catch (...) {
     networks.clear();
+  }
 
   GetList().SetLength(networks.size());
 

@@ -22,25 +22,9 @@ Copyright_License {
 */
 
 #include "DisplayDPI.hpp"
-
-#ifdef _WIN32
-#include "ui/canvas/gdi/RootDC.hpp"
-
-#include <wingdi.h>
-#endif
-
-#ifdef USE_X11
-#include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
-
-#define Font X11Font
-#define Window X11Window
-#define Display X11Display
-#include <X11/Xlib.h>
-#undef Font
-#undef Window
-#undef Display
-#endif
+#include "ui/dim/Size.hpp"
+#include "ui/display/Display.hpp"
+#include "Math/Point2D.hpp"
 
 #ifdef KOBO
 #include "Kobo/Model.hpp"
@@ -58,15 +42,14 @@ Copyright_License {
 #include <cassert>
 
 #ifndef ANDROID
-  static unsigned forced_x_dpi = 0;
-  static unsigned forced_y_dpi = 0;
+static UnsignedPoint2D forced_dpi{};
 #endif
 
 #ifdef HAVE_DPI_DETECTION
-static unsigned detected_x_dpi = 0, detected_y_dpi = 0;
+static UnsignedPoint2D detected_dpi{};
 #endif
 
-#if defined(USE_X11) || defined(HAVE_DPI_DETECTION)
+#if defined(USE_X11) || defined(MESA_KMS) || defined(HAVE_DPI_DETECTION)
 
 static constexpr unsigned
 MMToDPI(unsigned pixels, unsigned mm)
@@ -77,9 +60,9 @@ MMToDPI(unsigned pixels, unsigned mm)
 
 #endif
 
-#if !defined(_WIN32) && !defined(USE_X11)
+#if !defined(_WIN32) && !defined(USE_X11) && !defined(MESA_KMS)
 #ifndef __APPLE__
-gcc_const
+[[gnu::const]]
 #endif
 static unsigned
 GetDPI()
@@ -117,8 +100,7 @@ void
 Display::SetForcedDPI(unsigned x_dpi, unsigned y_dpi)
 {
 #ifndef ANDROID
-  forced_x_dpi = x_dpi;
-  forced_y_dpi = y_dpi;
+  forced_dpi = {x_dpi, y_dpi};
 #endif
 }
 
@@ -127,8 +109,7 @@ Display::SetForcedDPI(unsigned x_dpi, unsigned y_dpi)
 void
 Display::ProvideDPI(unsigned x_dpi, unsigned y_dpi) noexcept
 {
-  detected_x_dpi = x_dpi;
-  detected_y_dpi = y_dpi;
+  detected_dpi = {x_dpi, y_dpi};
 }
 
 void
@@ -140,71 +121,40 @@ Display::ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
   assert(width_mm > 0);
   assert(height_mm > 0);
 
-  detected_x_dpi = MMToDPI(width_pixels, width_mm);
-  detected_y_dpi = MMToDPI(height_pixels, height_mm);
+  detected_dpi = {
+    MMToDPI(width_pixels, width_mm),
+    MMToDPI(height_pixels, height_mm),
+  };
 }
 
 #endif
 
-unsigned
-Display::GetXDPI(unsigned custom_dpi)
+UnsignedPoint2D
+Display::GetDPI(const UI::Display &display, unsigned custom_dpi) noexcept
 {
 #ifndef ANDROID
-  if (forced_x_dpi > 0)
-    return forced_x_dpi;
+  if (forced_dpi.x > 0 && forced_dpi.y > 0)
+    return forced_dpi;
 #endif
 
   if (custom_dpi)
-    return custom_dpi;
+    return {custom_dpi, custom_dpi};
 
 #ifdef HAVE_DPI_DETECTION
-  if (detected_x_dpi > 0)
-    return detected_x_dpi;
+  if (detected_dpi.x > 0 && detected_dpi.y > 0)
+    return detected_dpi;
 #endif
 
 
 #ifdef _WIN32
-  RootDC dc;
-  return GetDeviceCaps(dc, LOGPIXELSX);
-#elif defined(USE_X11)
-  assert(UI::event_queue != nullptr);
-
-  auto display = UI::event_queue->GetDisplay();
-  assert(display != nullptr);
-
-  return MMToDPI(DisplayWidth(display, 0), DisplayWidthMM(display, 0));
+  return display.GetDPI();
+#elif defined(USE_X11) || defined(MESA_KMS)
+  return {
+    MMToDPI(display.GetSize().width, display.GetSizeMM().width),
+    MMToDPI(display.GetSize().height, display.GetSizeMM().height),
+  };
 #else
-  return GetDPI();
-#endif
-}
-
-unsigned
-Display::GetYDPI(unsigned custom_dpi)
-{
-#ifndef ANDROID
-  if (forced_y_dpi > 0)
-    return forced_y_dpi;
-#endif
-
-  if (custom_dpi)
-    return custom_dpi;
-
-#ifdef HAVE_DPI_DETECTION
-  if (detected_y_dpi > 0)
-    return detected_y_dpi;
-#endif
-
-#ifdef _WIN32
-  RootDC dc;
-  return GetDeviceCaps(dc, LOGPIXELSY);
-#elif defined(USE_X11)
-  assert(UI::event_queue != nullptr);
-
-  auto display = UI::event_queue->GetDisplay();
-  assert(display != nullptr);
-
-  return MMToDPI(DisplayHeight(display, 0), DisplayHeightMM(display, 0));
-#else
-  return GetDPI();
+  const auto dpi = ::GetDPI();
+  return {dpi, dpi};
 #endif
 }

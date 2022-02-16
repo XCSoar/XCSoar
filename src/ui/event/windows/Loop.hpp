@@ -21,12 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_WINDOWS_LOOP_HPP
-#define XCSOAR_EVENT_WINDOWS_LOOP_HPP
+#pragma once
 
-#include "util/Compiler.h"
-
-#include <windef.h> // for HWND (needed by winuser.h)
+#include <windef.h> // for HWND
 
 namespace UI {
 
@@ -56,5 +53,3 @@ public:
 };
 
 } // namespace UI
-
-#endif

@@ -31,6 +31,10 @@ Copyright_License {
 #include "System.hpp"
 #include "Model.hpp"
 
+#include "system/FileUtil.hpp"
+
+#include <sys/stat.h>
+
 class SystemWidget final
   : public RowFormWidget {
 
@@ -42,6 +46,8 @@ class SystemWidget final
     DECREASE_BACKLIGHT_BRIGHTNESS
   };
 
+  Button *switch_otg_mode;
+  Button *usb_storage;
   Button *increase_backlight_brightness;
   Button *decrease_backlight_brightness;
 
@@ -65,12 +71,9 @@ void
 SystemWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   AddButton("Reboot", [](){ KoboReboot(); });
-  AddButton(IsKoboOTGHostMode() ? "Disable USB-OTG" : "Enable USB-OTG",
+  switch_otg_mode = AddButton(IsKoboOTGHostMode() ? "Disable USB-OTG" : "Enable USB-OTG",
             [this](){ SwitchOTGMode(); });
-#ifdef KOBO
-  SetRowEnabled(SWITCH_OTG_MODE, DetectKoboModel() != KoboModel::CLARA_HD);
-#endif
-  AddButton("Export USB storage", [this](){ ExportUSBStorage(); });
+  usb_storage = AddButton("Export USB storage", [this](){ ExportUSBStorage(); });
   SetRowEnabled(USB_STORAGE, !IsKoboOTGHostMode());
 
   if(KoboCanChangeBacklightBrightness()) {
@@ -88,7 +91,34 @@ inline void
 SystemWidget::SwitchOTGMode()
 {
 #ifdef KOBO
-  if (DetectKoboModel() != KoboModel::CLARA_HD) return SwitchKernel();
+  if (DetectKoboModel() == KoboModel::CLARA_HD) {
+    bool success;
+    if (IsKoboOTGHostMode()) {
+      success = File::WriteExisting(Path("/sys/kernel/debug/ci_hdrc.0/role"),
+                                    "gadget");
+      if (success && !IsKoboOTGHostMode()) {
+        File::Delete(Path("/mnt/onboard/XCSoarData/kobo/OTG_Host_Active"));
+        switch_otg_mode->SetCaption("Enable USB-OTG");
+        usb_storage->SetEnabled(true);
+      } else {
+        ShowMessageBox(_T("Failed to switch OTG mode."), _("Error"), MB_OK);
+      }
+    } else {
+      success = File::WriteExisting(Path("/sys/kernel/debug/ci_hdrc.0/role"),
+                                    "host");
+      if (success && IsKoboOTGHostMode()) {
+        mkdir("/mnt/onboard/XCSoarData", 0777);
+        mkdir("/mnt/onboard/XCSoarData/kobo", 0777);
+        File::CreateExclusive(Path("/mnt/onboard/XCSoarData/kobo/OTG_Host_Active"));
+        switch_otg_mode->SetCaption("Disable USB-OTG");
+        usb_storage->SetEnabled(false);
+      } else {
+        ShowMessageBox(_T("Failed to switch OTG mode."), _("Error"), MB_OK);
+      }
+    }
+  } else {
+    SwitchKernel();
+  }
 #endif
 }
 

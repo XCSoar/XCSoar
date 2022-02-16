@@ -21,36 +21,33 @@ Copyright_License {
 }
 */
 
-#include "../Init.hpp"
-#include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
-#include "Screen/Debug.hpp"
-#include "ui/canvas/Font.hpp"
-#include "ui/canvas/opengl/Init.hpp"
-#include "ui/canvas/freetype/Init.hpp"
+#pragma once
 
-using namespace UI;
+#include <cstdint>
 
-ScreenGlobalInit::ScreenGlobalInit()
-{
-  OpenGL::Initialise();
+struct gbm_device;
+struct gbm_surface;
 
-  FreeType::Initialise();
-  Font::Initialise();
+namespace EGL {
 
-  event_queue = new EventQueue();
+class GbmSurface {
+  struct gbm_surface *const surface;
 
-  ScreenInitialized();
-}
+public:
+  /**
+   * Throws on error.
+   */
+  GbmSurface(struct gbm_device *gbm,
+             uint32_t width, uint32_t height,
+             uint32_t format, uint32_t flags);
+  ~GbmSurface() noexcept;
 
-ScreenGlobalInit::~ScreenGlobalInit()
-{
-  delete event_queue;
-  event_queue = nullptr;
+  GbmSurface(const GbmSurface &) = delete;
+  GbmSurface &operator=(const GbmSurface &) = delete;
 
-  OpenGL::Deinitialise();
+  operator struct gbm_surface *() const noexcept {
+    return surface;
+  }
+};
 
-  FreeType::Deinitialise();
-
-  ScreenDeinitialized();
-}
+} // namespace EGL

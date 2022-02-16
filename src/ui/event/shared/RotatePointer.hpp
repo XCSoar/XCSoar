@@ -21,12 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_ROTATE_POINTER_HPP
-#define XCSOAR_EVENT_ROTATE_POINTER_HPP
+#pragma once
 
 #include "DisplayOrientation.hpp"
 #include "ui/dim/Point.hpp"
-#include "util/Compiler.h"
+#include "ui/dim/Size.hpp"
 
 #include <algorithm>
 
@@ -50,20 +49,15 @@ class RotatePointer {
   /**
    * Screen dimensions in pixels.
    */
-  unsigned width = 0, height = 0;
+  PixelSize screen_size{0, 0};
 
 public:
-  constexpr unsigned GetWidth() const {
-    return width;
+  constexpr PixelSize GetScreenSize() const noexcept {
+    return screen_size;
   }
 
-  constexpr unsigned GetHeight() const {
-    return height;
-  }
-
-  void SetSize(unsigned _width, unsigned _height) {
-    width = _width;
-    height = _height;
+  void SetScreenSize(PixelSize _screen_size) noexcept {
+    screen_size = _screen_size;
   }
 
   void SetSwap(bool _swap) {
@@ -98,7 +92,7 @@ public:
     }
   }
 
-  gcc_pure
+  [[gnu::pure]]
   PixelPoint DoRelative(PixelPoint p) const {
     if (swap)
       std::swap(p.x, p.y);
@@ -106,20 +100,18 @@ public:
     return p;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   PixelPoint DoAbsolute(PixelPoint p) const {
     p = DoRelative(p);
 
     if (invert_x)
-      p.x = width - p.x;
+      p.x = screen_size.width - p.x;
 
     if (invert_y)
-      p.y = height - p.y;
+      p.y = screen_size.height - p.y;
 
     return p;
   }
 };
 
 } // namespace UI
-
-#endif

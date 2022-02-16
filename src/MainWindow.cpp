@@ -30,6 +30,7 @@ Copyright_License {
 #include "PageActions.hpp"
 #include "Input/InputEvents.hpp"
 #include "Menu/ButtonLabel.hpp"
+#include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
 #include "Screen/Layout.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "Audio/Sound.hpp"
@@ -53,18 +54,6 @@ Copyright_License {
 #include "UIReceiveBlackboard.hpp"
 #include "UISettings.hpp"
 #include "Interface.hpp"
-
-#ifdef ANDROID
-#include "Dialogs/Message.hpp"
-#endif
-
-#if !defined(_WIN32) && !defined(ANDROID)
-#include <unistd.h>
-#endif
-
-#if !defined(_WIN32) && !defined(ANDROID)
-#include <unistd.h> /* for execl() */
-#endif
 
 static constexpr unsigned separator_height = 2;
 
@@ -175,40 +164,10 @@ MainWindow::Create(PixelSize size, UI::TopWindowStyle style)
   SingleWindow::Create(title, size, style);
 }
 
-[[noreturn]]
-static void
-FatalError(const TCHAR *msg) noexcept
-{
-#if defined(HAVE_POSIX) && defined(NDEBUG)
-  /* make sure this gets written to stderr in any case; LogFormat()
-     will write to stderr only in debug builds */
-  fprintf(stderr, "%s\n", msg);
-#endif
-
-  /* log the error */
-  LogFormat(_T("%s"), msg);
-
-  /* now try to get a GUI error message out to the user */
-#ifdef _WIN32
-  MessageBox(nullptr, msg, _T("XCSoar"), MB_ICONEXCLAMATION|MB_OK);
-#elif !defined(ANDROID) && !defined(KOBO)
-  execl("/usr/bin/xmessage", "xmessage", msg, nullptr);
-  execl("/usr/X11/bin/xmessage", "xmessage", msg, nullptr);
-#endif
-  exit(EXIT_FAILURE);
-}
-
-[[noreturn]]
-static void
-NoFontsAvailable() noexcept
-{
-  FatalError(_T("Font initialisation failed"));
-}
-
 void
 MainWindow::Initialise()
 {
-  Layout::Initialize(GetSize(),
+  Layout::Initialise(GetDisplay(), GetSize(),
                      CommonInterface::GetUISettings().GetPercentScale(),
                      CommonInterface::GetUISettings().custom_dpi);
 #ifdef DRAW_MOUSE_CURSOR
@@ -216,11 +175,7 @@ MainWindow::Initialise()
   SetCursorColorsInverted(CommonInterface::GetDisplaySettings().invert_cursor_colors);
 #endif
 
-  LogFormat("Initialise fonts");
-  if (!Fonts::Initialize()) {
-    Destroy();
-    NoFontsAvailable();
-  }
+  Fonts::Initialize();
 
   if (look == nullptr)
     look = new Look();
@@ -565,7 +520,7 @@ MainWindow::FullRedraw() noexcept
 void
 MainWindow::OnResize(PixelSize new_size)
 {
-  Layout::Initialize(new_size,
+  Layout::Initialise(GetDisplay(), new_size,
                      CommonInterface::GetUISettings().GetPercentScale(),
                      CommonInterface::GetUISettings().custom_dpi);
 

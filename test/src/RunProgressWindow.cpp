@@ -28,7 +28,7 @@ Copyright_License {
 #include "ProgressWindow.hpp"
 
 static void
-Main()
+Main(TestMainWindow &main_window)
 {
   ProgressWindow progress(main_window);
   progress.SetMessage(_T("Testing..."));

@@ -56,11 +56,7 @@ extern bool texture_non_power_of_two;
  * Is glMapBuffer() available?  May be implemented by the extension
  * GL_OES_mapbuffer.
  */
-#ifdef HAVE_OES_MAPBUFFER
 extern bool mapbuffer;
-#else
-static constexpr bool mapbuffer = true;
-#endif
 
 /**
  * Which depth+stencil internalFormat is supported by the

@@ -25,23 +25,25 @@ Copyright_License {
 #include "FontSettings.hpp"
 #include "ui/canvas/Font.hpp"
 
-/// text names on the map
-Font Fonts::map;
-/// menu buttons, waypoint selection, messages, etc.
-Font Fonts::map_bold;
+namespace Fonts {
 
-bool
-Fonts::Load(const FontSettings &settings)
+/// text names on the map
+Font map;
+/// menu buttons, waypoint selection, messages, etc.
+Font map_bold;
+
+void
+Load(const FontSettings &settings)
 {
   map.Load(settings.map);
   map_bold.Load(settings.map_bold);
-
-  return map.IsDefined() && map_bold.IsDefined();
 }
 
 void
-Fonts::Deinitialize()
+Deinitialize() noexcept
 {
   map.Destroy();
   map_bold.Destroy();
 }
+
+} // namespace Fonts

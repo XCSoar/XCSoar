@@ -51,7 +51,7 @@ Copyright_License {
 #include <errno.h>
 
 static unsigned
-TranslateDimension(unsigned value)
+TranslateDimension(unsigned value) noexcept
 {
 #ifdef KOBO
   if (value == 1024 && DetectKoboModel() == KoboModel::AURA)
@@ -64,19 +64,19 @@ TranslateDimension(unsigned value)
 }
 
 static unsigned
-GetWidth(const struct fb_var_screeninfo &vinfo)
+GetWidth(const struct fb_var_screeninfo &vinfo) noexcept
 {
   return TranslateDimension(vinfo.xres);
 }
 
 static unsigned
-GetHeight(const struct fb_var_screeninfo &vinfo)
+GetHeight(const struct fb_var_screeninfo &vinfo) noexcept
 {
   return TranslateDimension(vinfo.yres);
 }
 
 static PixelSize
-GetSize(const struct fb_var_screeninfo &vinfo)
+GetSize(const struct fb_var_screeninfo &vinfo) noexcept
 {
   return PixelSize(GetWidth(vinfo), GetHeight(vinfo));
 }
@@ -95,15 +95,10 @@ TopCanvas::~TopCanvas() noexcept
 #endif
 }
 
-PixelRect
-TopCanvas::GetRect() const
-{
-  return { 0, 0, int(buffer.width), int(buffer.height) };
-}
-
 #ifdef USE_FB
 
-TopCanvas::TopCanvas()
+TopCanvas::TopCanvas(UI::Display &_display)
+  :display(_display)
 {
   assert(fd < 0);
 
@@ -200,7 +195,7 @@ TopCanvas::TopCanvas()
 }
 
 inline PixelSize
-TopCanvas::GetNativeSize() const
+TopCanvas::GetNativeSize() const noexcept
 {
   struct fb_var_screeninfo vinfo;
   ioctl(fd, FBIOGET_VSCREENINFO, &vinfo);
@@ -208,16 +203,20 @@ TopCanvas::GetNativeSize() const
 }
 
 bool
-TopCanvas::CheckResize()
+TopCanvas::CheckResize() noexcept
 {
   return CheckResize(GetNativeSize());
 }
 
 #elif defined(USE_VFB)
 
-TopCanvas::TopCanvas(PixelSize new_size)
+TopCanvas::TopCanvas(UI::Display &_display, PixelSize new_size)
+  :display(_display)
 {
   buffer.Allocate(new_size.width, new_size.height);
+
+  // suppress -Wunused
+  (void)display;
 }
 
 #else
@@ -225,7 +224,7 @@ TopCanvas::TopCanvas(PixelSize new_size)
 #endif
 
 bool
-TopCanvas::CheckResize(const PixelSize new_native_size)
+TopCanvas::CheckResize(const PixelSize new_native_size) noexcept
 {
   const PixelSize new_size = new_native_size;
   if (new_size == GetSize())
@@ -253,7 +252,7 @@ TopCanvas::Lock()
 }
 
 void
-TopCanvas::Unlock()
+TopCanvas::Unlock() noexcept
 {
 }
 
@@ -311,7 +310,7 @@ TopCanvas::Flip()
 #ifdef KOBO
 
 void
-TopCanvas::Wait()
+TopCanvas::Wait() noexcept
 {
   ioctl(fd, MXCFB_WAIT_FOR_UPDATE_COMPLETE, &epd_update_marker);
 }

@@ -40,7 +40,7 @@ l_share_text(lua_State *L)
   if (text == nullptr)
     return luaL_argerror(L, 1, "String expected");
 
-  native_view->ShareText(text);
+  native_view->ShareText(Java::GetEnv(), text);
   return 0;
 }
 

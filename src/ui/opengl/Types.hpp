@@ -24,10 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_TYPES_HPP
 #define XCSOAR_SCREEN_OPENGL_TYPES_HPP
 
-#include "Features.hpp"
 #include "System.hpp"
-
-#ifdef HAVE_GLES
 
 /**
  * A position component in the OpenGL surface.
@@ -44,25 +41,5 @@ ToGLexact(GLvalue value)
 {
   return (GLexact(value) << 16) + 0x8000;
 }
-
-#else
-
-/**
- * A position component in the OpenGL surface.
- */
-typedef GLint GLvalue;
-typedef GLuint GLuvalue;
-static constexpr GLenum GL_VALUE = GL_INT;
-
-typedef GLfloat GLexact;
-static constexpr GLenum GL_EXACT = GL_FLOAT;
-
-constexpr static inline GLexact
-ToGLexact(GLvalue value)
-{
-  return GLexact(value) + 0.5;
-}
-
-#endif
 
 #endif

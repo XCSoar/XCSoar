@@ -218,8 +218,7 @@ InfoBoxesConfigWidget::Layout::Layout(PixelRect rc,
   info_boxes = InfoBoxLayout::Calculate(rc, geometry);
 
   form = info_boxes.remaining;
-  PixelRect buttons = form;
-  buttons.top = form.bottom -= ::Layout::GetMaximumControlHeight();
+  auto buttons = form.CutTopSafe(::Layout::GetMaximumControlHeight());
 
   copy_button = paste_button = close_button = buttons;
   copy_button.right = paste_button.left =

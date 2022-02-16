@@ -28,7 +28,7 @@ Copyright_License {
 
 static constexpr unsigned CIRCLE_SEGS = 64;
 
-gcc_const
+[[gnu::const]]
 static PixelPoint
 CirclePoint(int radius, unsigned angle) noexcept
 {
@@ -38,7 +38,7 @@ CirclePoint(int radius, unsigned angle) noexcept
                     -ISINETABLE[(angle + INT_QUARTER_CIRCLE) & INT_ANGLE_MASK] * radius / 1024);
 }
 
-gcc_const
+[[gnu::const]]
 static PixelPoint
 CirclePoint(PixelPoint p, int radius, unsigned angle) noexcept
 {
@@ -83,7 +83,7 @@ segment_poly(BulkPixelPoint *pt, const PixelPoint center,
   pt[npoly++] = CirclePoint(center, radius, iend);
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 IsCircleVisible(const Canvas &canvas,
                 PixelPoint center, unsigned radius) noexcept

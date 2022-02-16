@@ -39,6 +39,7 @@ Copyright_License {
 #endif
 
 #include <algorithm>
+#include <stdexcept>
 
 #include <tchar.h>
 

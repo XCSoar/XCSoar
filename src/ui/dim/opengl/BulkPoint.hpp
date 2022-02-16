@@ -34,12 +34,8 @@ Copyright_License {
 struct BulkPixelPoint : Point2D<GLvalue, int> {
   BulkPixelPoint() = default;
 
-#ifdef HAVE_GLES
   constexpr BulkPixelPoint(int _x, int _y) noexcept
     :Point2D(_x, _y) {}
-#else
-  using Point2D::Point2D;
-#endif
 
   constexpr BulkPixelPoint(PixelPoint src)
     :Point2D(src.x, src.y) {}

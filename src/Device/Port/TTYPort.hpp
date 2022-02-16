@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_TTY_PORT_HPP
 
 #include "BufferedPort.hpp"
-#include "event/SocketEvent.hxx"
+#include "event/PipeEvent.hxx"
 
 #include <atomic>
 
@@ -36,7 +36,7 @@ Copyright_License {
  */
 class TTYPort : public BufferedPort
 {
-  SocketEvent socket;
+  PipeEvent socket;
 
   std::atomic<bool> valid;
 

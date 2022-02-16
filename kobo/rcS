@@ -85,6 +85,36 @@ ulimit -c unlimited
 # delay should not cause any problem and might help other models
 usleep 100000
 
+# load kernel modules for ClaraHD as factory kernel is OTG
+# but missing modules.  Also put ClaraHD in the right mode
+model=`dd if=/dev/mmcblk0 bs=8 count=1 skip=64`
+if [ `expr substr $model 1 7` = SN-N249 ]; then
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/usbserial.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/aircable.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/ch341.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/cp210x.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/ftdi_sio.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/garmin_gps.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/mos7840.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/navman.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/pl2303.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/class/cdc-acm.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/sound/core/snd-hwdep.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/sound/core/snd-rawmidi.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/sound/usb/snd-usbmidi-lib.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/sound/usb/snd-usb-audio.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/net/mii.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/net/usb/usbnet.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/net/usb/cdc_subset.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/net/usb/cdc_ether.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/net/usb/cdc_eem.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/net/usb/cdc_ncm.ko"
+    insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/net/usb/rndis_host.ko"
+    mount -t debugfs none /sys/kernel/debug
+    if [ -f /mnt/onboard/XCSoarData/kobo/OTG_Host_Active ]; then
+        echo host >/sys/kernel/debug/ci_hdrc.0/role
+    fi
+fi
 # launch user script
 if [ -f /mnt/onboard/XCSoarData/kobo/init.sh ]; then
     source /mnt/onboard/XCSoarData/kobo/init.sh

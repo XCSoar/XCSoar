@@ -40,6 +40,8 @@ TextButtonRenderer::DrawCaption(Canvas &canvas, const PixelRect &rc,
 {
   const ButtonLook &look = GetLook();
 
+  canvas.SetBackgroundTransparent();
+
   switch (state) {
   case ButtonState::DISABLED:
     canvas.SetTextColor(look.disabled.color);

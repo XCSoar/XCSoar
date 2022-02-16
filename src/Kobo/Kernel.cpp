@@ -136,8 +136,12 @@ IsKoboOTGHostMode()
 {
 #ifdef KOBO
   if (DetectKoboModel() != KoboModel::CLARA_HD) return IsKoboCustomKernel();
-  /* for Clara HD, just test for existence of host mode file */
-  if (File::Exists(Path("/mnt/onboard/XCSoarData/kobo/OTG_Host_Active"))) return true;
+  /* for Clara HD, read the mode from the debugfs */
+  char buffer[5];
+  bool success = File::ReadString(Path("/sys/kernel/debug/ci_hdrc.0/role"),
+                   buffer, 5);
+  if (success && (strcmp(buffer, "host") == 0))
+    return true;
 #endif
   return false;
 }

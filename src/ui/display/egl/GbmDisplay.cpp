@@ -21,41 +21,25 @@ Copyright_License {
 }
 */
 
-#include "DisplaySize.hpp"
-#include "ui/dim/Size.hpp"
+#include "GbmDisplay.hpp"
+#include "io/FileDescriptor.hxx"
 
-#ifdef _WIN32
-#include "ui/canvas/gdi/RootDC.hpp"
-#include <wingdi.h>
-#elif defined(USE_X11)
-#include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
-#define Font X11Font
-#define Window X11Window
-#define Display X11Display
-#include <X11/Xlib.h>
-#undef Font
-#undef Window
-#undef Display
-#endif
+#include <gbm.h>
 
-PixelSize
-Display::GetSize(PixelSize fallback)
+#include <stdexcept>
+
+namespace EGL {
+
+GbmDisplay::GbmDisplay(FileDescriptor dri_fd)
+  :device(gbm_create_device(dri_fd.Get()))
 {
-#ifdef _WIN32
-  RootDC dc;
-  return PixelSize(GetDeviceCaps(dc, HORZRES),
-                   GetDeviceCaps(dc, VERTRES));
-#elif defined(USE_X11)
-  assert(UI::event_queue != nullptr);
-
-  auto display = UI::event_queue->GetDisplay();
-  assert(display != nullptr);
-
-  return PixelSize(DisplayWidth(display, 0), DisplayHeight(display, 0));
-#else
-  /* not implemented: fall back to the main window size (which is
-     correct when it's a full-screen window */
-  return fallback;
-#endif
+  if (device == nullptr)
+    throw std::runtime_error("Could not create GBM device");
 }
+
+GbmDisplay::~GbmDisplay() noexcept
+{
+  gbm_device_destroy(device);
+}
+
+} // namespace EGL

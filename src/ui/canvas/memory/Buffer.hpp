@@ -21,11 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_BUFFER_HPP
-#define XCSOAR_SCREEN_BUFFER_HPP
+#pragma once
 
 #include "Concepts.hpp"
-#include "util/Compiler.h"
+
+#include <cstddef>
 
 /**
  * A reference to an image buffer (or a portion of it) that we can
@@ -41,34 +41,36 @@ struct WritableImageBuffer {
 
   rpointer data;
 
-  unsigned pitch, width, height;
+  std::size_t pitch;
 
-  static constexpr WritableImageBuffer<PixelTraits> Empty() {
+  unsigned width, height;
+
+  static constexpr WritableImageBuffer<PixelTraits> Empty() noexcept {
     return { nullptr, 0, 0, 0 };
   }
 
-  void Allocate(unsigned _width, unsigned _height) {
-    unsigned i = PixelTraits::CalcIncrement(_width);
+  void Allocate(unsigned _width, unsigned _height) noexcept {
+    const std::size_t i = PixelTraits::CalcIncrement(_width);
     data = new typename PixelTraits::color_type[i * _height];
     pitch = i * sizeof(typename PixelTraits::color_type);
     width = _width;
     height = _height;
   }
 
-  void Free() {
+  void Free() noexcept {
     delete[] data;
     data = nullptr;
   }
 
-  constexpr bool Check(unsigned x, unsigned y) const {
+  constexpr bool Check(unsigned x, unsigned y) const noexcept {
     return x < width && y < height;
   }
 
-  constexpr pointer At(unsigned x, unsigned y) {
+  constexpr pointer At(unsigned x, unsigned y) noexcept {
     return PixelTraits::At(data, pitch, x, y);
   }
 
-  constexpr const_pointer At(unsigned x, unsigned y) const {
+  constexpr const_pointer At(unsigned x, unsigned y) const noexcept {
     return PixelTraits::At(data, pitch, x, y);
   }
 };
@@ -85,29 +87,28 @@ struct ConstImageBuffer {
 
   rpointer data;
 
-  unsigned pitch, width, height;
+  std::size_t pitch;
+  unsigned width, height;
 
-  ConstImageBuffer() = default;
+  ConstImageBuffer() noexcept = default;
 
-  constexpr ConstImageBuffer(rpointer _data, unsigned _pitch,
-                             unsigned _width, unsigned _height)
+  constexpr ConstImageBuffer(rpointer _data, std::size_t _pitch,
+                             unsigned _width, unsigned _height) noexcept
     :data(_data), pitch(_pitch), width(_width), height(_height) {}
 
-  constexpr ConstImageBuffer(WritableImageBuffer<PixelTraits> other)
+  constexpr ConstImageBuffer(WritableImageBuffer<PixelTraits> other) noexcept
     :data(other.data), pitch(other.pitch),
      width(other.width), height(other.height) {}
 
-  static constexpr WritableImageBuffer<PixelTraits> Empty() {
+  static constexpr WritableImageBuffer<PixelTraits> Empty() noexcept {
     return { nullptr, 0, 0, 0 };
   }
 
-  constexpr bool Check(unsigned x, unsigned y) const {
+  constexpr bool Check(unsigned x, unsigned y) const noexcept {
     return x < width && y < height;
   }
 
-  constexpr pointer At(unsigned x, unsigned y) const {
+  constexpr pointer At(unsigned x, unsigned y) const noexcept {
     return PixelTraits::At(data, pitch, x, y);
   }
 };
-
-#endif

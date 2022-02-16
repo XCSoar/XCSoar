@@ -9,6 +9,7 @@ WINDOW_SRC_DIR = $(SRC)/ui/window
 
 SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Debug.cpp \
+	$(WINDOW_SRC_DIR)/Init.cpp \
 	$(SRC)/Renderer/ProgressBarRenderer.cpp \
 	$(CONTROL_SRC_DIR)/ProgressBar.cpp \
 	$(CANVAS_SRC_DIR)/Ramp.cpp \
@@ -53,9 +54,19 @@ ifeq ($(TIFF),y)
 SCREEN_CUSTOM_SOURCES_IMG += $(CANVAS_SRC_DIR)/custom/LibTiff.cpp
 endif
 
+ifeq ($(ENABLE_MESA_KMS),y)
+SCREEN_SOURCES += \
+	$(SRC)/ui/canvas/egl/GbmSurface.cpp \
+	$(SRC)/ui/canvas/egl/DrmFrameBuffer.cpp \
+	$(SRC)/ui/display/egl/DrmDisplay.cpp \
+	$(SRC)/ui/display/egl/GbmDisplay.cpp
+endif
+
 ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
+	$(SRC)/ui/display/egl/Display.cpp \
+	$(SRC)/ui/display/egl/ConfigChooser.cpp \
 	$(CANVAS_SRC_DIR)/egl/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/android/Window.cpp \
 	$(WINDOW_SRC_DIR)/android/TopWindow.cpp \
@@ -84,16 +95,19 @@ endif
 
 ifeq ($(USE_X11),y)
 SCREEN_SOURCES += \
+	$(SRC)/ui/display/x11/Display.cpp \
 	$(WINDOW_SRC_DIR)/x11/TopWindow.cpp
 endif
 
 ifeq ($(USE_WAYLAND),y)
 SCREEN_SOURCES += \
+	$(SRC)/ui/display/wayland/Display.cpp \
 	$(WINDOW_SRC_DIR)/wayland/TopWindow.cpp
 endif
 
 ifeq ($(OPENGL),y)
 SCREEN_SOURCES += \
+	$(SRC)/ui/display/opengl/Display.cpp \
 	$(CANVAS_SRC_DIR)/custom/Cache.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Init.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Dynamic.cpp \
@@ -122,14 +136,14 @@ ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
+	$(SRC)/ui/display/sdl/Display.cpp \
 	$(CANVAS_SRC_DIR)/custom/Files.cpp \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/sdl/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/sdl/Window.cpp \
 	$(WINDOW_SRC_DIR)/sdl/TopWindow.cpp \
-	$(WINDOW_SRC_DIR)/sdl/SingleWindow.cpp \
-	$(WINDOW_SRC_DIR)/sdl/Init.cpp
+	$(WINDOW_SRC_DIR)/sdl/SingleWindow.cpp
 ifeq ($(OPENGL),n)
 USE_MEMORY_CANVAS = y
 endif
@@ -140,11 +154,11 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/custom/Files.cpp \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
-	$(WINDOW_SRC_DIR)/egl/Init.cpp \
 	$(CANVAS_SRC_DIR)/egl/TopCanvas.cpp \
-	$(CANVAS_SRC_DIR)/egl/ConfigChooser.cpp \
+	$(SRC)/ui/display/egl/ConfigChooser.cpp \
+	$(SRC)/ui/display/egl/Display.cpp \
+	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
-	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
 else ifeq ($(GLX),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
@@ -153,10 +167,9 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/custom/Files.cpp \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
-	$(WINDOW_SRC_DIR)/glx/Init.cpp \
 	$(CANVAS_SRC_DIR)/glx/TopCanvas.cpp \
+	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
-	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
 else ifeq ($(VFB),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
@@ -166,10 +179,9 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/fb/TopCanvas.cpp \
+	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
-	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
-	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp \
-	$(WINDOW_SRC_DIR)/fb/Init.cpp
+	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
 FB_CPPFLAGS = -DUSE_VFB
 else ifeq ($(USE_FB),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
@@ -179,18 +191,18 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/memory/Export.cpp \
+	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
 	$(CANVAS_SRC_DIR)/fb/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
-	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp \
-	$(WINDOW_SRC_DIR)/fb/Init.cpp
+	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
 FB_CPPFLAGS = -DUSE_FB
 else ifeq ($(HAVE_WIN32),y)
 SCREEN_SOURCES += \
+	$(SRC)/ui/display/gdi/Display.cpp \
 	$(CANVAS_SRC_DIR)/gdi/WindowCanvas.cpp \
 	$(CANVAS_SRC_DIR)/gdi/VirtualCanvas.cpp \
 	$(CANVAS_SRC_DIR)/gdi/Font.cpp \
-	$(WINDOW_SRC_DIR)/gdi/Init.cpp \
 	$(WINDOW_SRC_DIR)/gdi/Window.cpp \
 	$(WINDOW_SRC_DIR)/gdi/PaintWindow.cpp \
 	$(WINDOW_SRC_DIR)/gdi/ContainerWindow.cpp \

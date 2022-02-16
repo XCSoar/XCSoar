@@ -151,7 +151,7 @@ protected:
 };
 
 static void
-Main()
+Main(TestMainWindow &main_window)
 {
   FAITriangleWindow triangle_window;
 

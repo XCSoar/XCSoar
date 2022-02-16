@@ -43,6 +43,7 @@ union _XEvent;
 
 namespace UI {
 
+class Display;
 class EventQueue;
 struct Event;
 
@@ -67,13 +68,7 @@ public:
   /**
    * @param queue the #EventQueue that shall receive X11 events
    */
-  explicit X11EventQueue(EventQueue &queue);
-
-  ~X11EventQueue();
-
-  _XDisplay *GetDisplay() const {
-    return display;
-  }
+  X11EventQueue(Display &display, EventQueue &queue);
 
   bool IsVisible() const {
     return mapped && visible;

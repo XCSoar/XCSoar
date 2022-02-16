@@ -99,6 +99,20 @@ SetPrimaryDataPath(Path path) noexcept
 #endif
 }
 
+void
+SetSingleDataPath(Path path) noexcept
+{
+  assert(path != nullptr);
+  assert(!path.IsEmpty());
+
+  data_paths.clear();
+  data_paths.emplace_front(path);
+
+#ifndef ANDROID
+  cache_path = LocalPath(_T("cache"));
+#endif
+}
+
 AllocatedPath
 LocalPath(Path file) noexcept
 {
@@ -312,12 +326,12 @@ MakeCacheDirectory(const TCHAR *name) noexcept
   return path;
 }
 
-bool
+void
 InitialiseDataPath()
 {
   data_paths = FindDataPaths();
   if (data_paths.empty())
-    return false;
+    throw std::runtime_error("No data path found");
 
 #ifdef ANDROID
   cache_path = context->GetExternalCacheDir(Java::GetEnv());
@@ -328,8 +342,6 @@ InitialiseDataPath()
 #else
   cache_path = LocalPath(_T("cache"));
 #endif
-
-  return true;
 }
 
 void

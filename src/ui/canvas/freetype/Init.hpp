@@ -21,25 +21,34 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_FREETYPE_INIT_HPP
-#define XCSOAR_SCREEN_FREETYPE_INIT_HPP
+#pragma once
 
 typedef struct FT_FaceRec_ *FT_Face;
 
 namespace FreeType {
+
 #ifdef KOBO
-  /**
-   * Are we using monochrome font rendering mode on the Kobo?  This
-   * can be disabled for some situations; see
-   * TopCanvas::SetEnableDither().
-   */
-  extern bool mono;
+/**
+ * Are we using monochrome font rendering mode on the Kobo?  This
+ * can be disabled for some situations; see
+ * TopCanvas::SetEnableDither().
+ */
+extern bool mono;
 #endif
 
-  void Initialise();
-  void Deinitialise();
+/**
+ * Throws on error.
+ */
+void
+Initialise();
 
-  FT_Face Load(const char *path);
-};
+void
+Deinitialise();
 
-#endif
+/**
+ * Throws on error.
+ */
+FT_Face
+Load(const char *path);
+
+} // namespace FreeType

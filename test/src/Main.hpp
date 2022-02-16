@@ -84,7 +84,19 @@ static void
 ParseCommandLine(Args &args);
 #endif
 
-static void Main();
+#ifdef ENABLE_MAIN_WINDOW
+
+class TestMainWindow;
+
+static void
+Main(TestMainWindow &main_window);
+
+#else
+
+static void
+Main(UI::Display &display);
+
+#endif
 
 #ifdef ENABLE_LOOK
 static Look *look;
@@ -117,7 +129,7 @@ UIGlobals::GetDialogLook()
 #ifdef ENABLE_MAIN_WINDOW
 
 class TestMainWindow : public UI::SingleWindow {
-  Window *full_window;
+  Window *full_window = nullptr;
 
 #ifdef ENABLE_CLOSE_BUTTON
   Button close_button;
@@ -129,7 +141,7 @@ public:
     LAST_BUTTON
   };
 
-  TestMainWindow():full_window(nullptr) {}
+  using UI::SingleWindow::SingleWindow;
 
   /**
    * Configure a #Window that will be auto-resize to the full client
@@ -154,7 +166,7 @@ protected:
 
   void OnResize(PixelSize new_size) override {
     SingleWindow::OnResize(new_size);
-    Layout::Initialize(new_size);
+    Layout::Initialise(GetDisplay(), new_size);
 
     if (full_window != nullptr)
       full_window->Resize(new_size);
@@ -173,12 +185,12 @@ protected:
 #endif
 };
 
-static TestMainWindow main_window;
+static TestMainWindow *main_window;
 
 UI::SingleWindow &
 UIGlobals::GetMainWindow()
 {
-  return main_window;
+  return *main_window;
 }
 #endif
 
@@ -228,7 +240,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   ScreenGlobalInit screen_init;
-  Layout::Initialize(window_size);
+  Layout::Initialise(screen_init.GetDisplay(), window_size);
   InitialiseFonts();
 #endif
 
@@ -269,20 +281,26 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
 #ifdef ENABLE_MAIN_WINDOW
-  main_window.Create(_T("Test"), window_size);
-  main_window.Show();
+  main_window = new TestMainWindow(screen_init.GetDisplay());
+  main_window->Create(_T("Test"), window_size);
+  main_window->Show();
 #endif
 
   int result = EXIT_SUCCESS;
   try {
-    Main();
+#ifdef ENABLE_MAIN_WINDOW
+    Main(*main_window);
+#else
+    Main(screen_init.GetDisplay());
+#endif
   } catch (...) {
     PrintException(std::current_exception());
     result = EXIT_FAILURE;
   }
 
 #ifdef ENABLE_MAIN_WINDOW
-  main_window.Destroy();
+  main_window->Destroy();
+  delete main_window;
 #endif
 
 #ifdef ENABLE_DATA_PATH

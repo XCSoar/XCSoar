@@ -80,7 +80,7 @@ static constexpr struct {
   { KEY_SPACE, ' ', true },
 };
 
-gcc_const
+[[gnu::const]]
 static unsigned
 TranslateKeyCode(unsigned key_code, bool &is_char)
 {

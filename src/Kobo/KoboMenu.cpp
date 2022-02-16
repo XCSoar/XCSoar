@@ -150,7 +150,7 @@ Main()
   dialog_settings.SetDefaults();
 
   ScreenGlobalInit screen_init;
-  Layout::Initialize({600, 800});
+  Layout::Initialise(screen_init.GetDisplay(), {600, 800});
   InitialiseFonts();
 
   DialogLook dialog_look;
@@ -159,7 +159,7 @@ Main()
   UI::TopWindowStyle main_style;
   main_style.Resizable();
 
-  UI::SingleWindow main_window;
+  UI::SingleWindow main_window{screen_init.GetDisplay()};
   main_window.Create(_T("XCSoar/KoboMenu"), {600, 800}, main_style);
   main_window.Show();
 

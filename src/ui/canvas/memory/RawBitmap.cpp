@@ -26,31 +26,22 @@ Copyright_License {
 
 #include <cassert>
 
-/**
- * Returns minimum width that is greater then the given width and
- * that is acceptable as image width (not all numbers are acceptable)
- */
-static inline unsigned
-CorrectedWidth(unsigned nWidth)
-{
-  return ((nWidth + 3) / 4) * 4;
-}
-
-RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
-  :width(nWidth), height(nHeight),
-   corrected_width(CorrectedWidth(nWidth)),
-   buffer(new RawColor[corrected_width * height])
+RawBitmap::RawBitmap(PixelSize _size) noexcept
+  :size(_size),
+   buffer(new RawColor[size.width * size.height])
 {
 }
 
 void
 RawBitmap::StretchTo(PixelSize src_size,
                      Canvas &dest_canvas, PixelSize dest_size,
-                     bool transparent_white) const
+                     bool transparent_white) const noexcept
 {
-  ConstImageBuffer<ActivePixelTraits> src(ActivePixelTraits::const_pointer(GetBuffer()),
-                                          corrected_width * sizeof(*GetBuffer()),
-                                          width, height);
+  ConstImageBuffer<ActivePixelTraits> src{
+    ActivePixelTraits::const_pointer(GetBuffer()),
+    size.width * sizeof(*GetBuffer()),
+    size.width, size.height,
+  };
 
   if (transparent_white)
     dest_canvas.StretchTransparentWhite({0, 0}, dest_size,

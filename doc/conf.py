@@ -22,7 +22,8 @@ copyright = '2000-2021 The XCSoar Project'
 author = 'Various XCSoar contributors'
 
 # The full version, including alpha/beta/rc tags
-release = '7.11'
+with open('../VERSION.txt') as f:
+    release = f.readline().strip()
 
 
 # -- General configuration ---------------------------------------------------
@@ -31,6 +32,7 @@ release = '7.11'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinxcontrib.blockdiag',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

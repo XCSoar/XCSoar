@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Canvas.hpp"
 #include "Math/Point2D.hpp"
+#include "ui/opengl/Features.hpp" // for SOFTWARE_ROTATE_DISPLAY
 
 #include <glm/mat4x4.hpp>
 
@@ -48,9 +49,7 @@ class BufferCanvas : public Canvas {
 
   GLRenderBuffer *stencil_buffer = nullptr;
 
-#ifdef HAVE_GLES
   GLint old_viewport[4];
-#endif
 
   glm::mat4 old_projection_matrix;
 

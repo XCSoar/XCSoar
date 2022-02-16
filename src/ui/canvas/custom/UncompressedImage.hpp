@@ -60,17 +60,18 @@ private:
    */
   bool flipped;
 
-  unsigned pitch, width, height;
+  std::size_t pitch;
+  unsigned width, height;
 
   std::unique_ptr<uint8_t[]> data;
 
 public:
   UncompressedImage() = default;
 
-  UncompressedImage(Format _format, unsigned _pitch,
+  UncompressedImage(Format _format, std::size_t _pitch,
                     unsigned _width, unsigned _height,
                     std::unique_ptr<uint8_t[]> &&_data,
-                    bool _flipped=false)
+                    bool _flipped=false) noexcept
     :format(_format), flipped(_flipped),
      pitch(_pitch), width(_width), height(_height),
      data(std::move(_data)) {}
@@ -93,7 +94,7 @@ public:
     return flipped;
   }
 
-  unsigned GetPitch() const {
+  std::size_t GetPitch() const noexcept {
     return pitch;
   }
 

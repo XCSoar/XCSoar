@@ -35,17 +35,18 @@ Copyright_License {
 #include <cassert>
 
 class Path;
+namespace UI { class TopWindow; }
 
 class NativeView {
-  JNIEnv *env;
   Java::GlobalObject obj;
 
   unsigned width, height;
   char product[20];
 
   static Java::TrivialClass cls;
+  static jfieldID ptr_field;
   static jfieldID textureNonPowerOfTwo_field;
-  static jmethodID init_surface_method, deinit_surface_method;
+  static jmethodID getSurface_method;
   static jmethodID acquireWakeLock_method;
   static jmethodID setFullScreen_method;
   static jmethodID setRequestedOrientationID;
@@ -87,6 +88,15 @@ public:
              unsigned _xdpi, unsigned _ydpi,
              jstring _product) noexcept;
 
+  void SetPointer(JNIEnv *env, UI::TopWindow *w) noexcept {
+    env->SetLongField(obj, ptr_field, (std::size_t)w);
+  }
+
+  [[gnu::pure]]
+  static UI::TopWindow *GetPointer(JNIEnv *env, jobject obj) noexcept {
+    return (UI::TopWindow *)(void *)env->GetLongField(obj, ptr_field);
+  }
+
 #ifndef NO_SCREEN
   PixelSize GetSize() const {
     return { width, height };
@@ -102,43 +112,33 @@ public:
     return product;
   }
 
-  /**
-   * Initializes the OpenGL surface.
-   *
-   * Throws on error.
-   *
-   * @return true on success, false if no surface is available
-   * currently
-   */
-  bool initSurface();
-
-  void deinitSurface() {
-    env->CallVoidMethod(obj, deinit_surface_method);
+  Java::LocalObject GetSurface(JNIEnv *_env) const noexcept {
+    return {_env, _env->CallObjectMethod(obj, getSurface_method)};
   }
 
-  void AcquireWakeLock() const noexcept {
+  void AcquireWakeLock(JNIEnv *env) const noexcept {
     return env->CallVoidMethod(obj, acquireWakeLock_method);
   }
 
-  void SetFullScreen(bool full_screen) const noexcept {
+  void SetFullScreen(JNIEnv *env, bool full_screen) const noexcept {
     return env->CallVoidMethod(obj, setFullScreen_method, full_screen);
   }
 
-  bool setRequestedOrientation(ScreenOrientation so) {
+  bool SetRequestedOrientation(JNIEnv *env, ScreenOrientation so) {
     return env->CallBooleanMethod(obj, setRequestedOrientationID, (jint)so);
   }
 
-  Java::LocalObject loadResourceBitmap(const char *name) {
+  Java::LocalObject LoadResourceBitmap(JNIEnv *env, const char *name) {
     Java::String name2(env, name);
     return {env,
       env->CallObjectMethod(obj, loadResourceBitmap_method, name2.Get())};
   }
 
-  Java::LocalObject loadFileTiff(Path path);
+  Java::LocalObject LoadFileTiff(JNIEnv *env, Path path);
 
-  Java::LocalObject loadFileBitmap(Path path);
+  Java::LocalObject LoadFileBitmap(JNIEnv *env, Path path);
 
-  bool bitmapToTexture(jobject bmp, bool alpha, jint *result) {
+  bool BitmapToTexture(JNIEnv *env, jobject bmp, bool alpha, jint *result) {
     Java::LocalRef<jintArray> result2{env, env->NewIntArray(5)};
 
     bool success = env->CallBooleanMethod(obj, bitmapToTexture_method,
@@ -149,7 +149,7 @@ public:
     return success;
   }
 
-  void SetTexturePowerOfTwo(bool value) {
+  void SetTexturePowerOfTwo(JNIEnv *env, bool value) {
     env->SetStaticBooleanField(cls, textureNonPowerOfTwo_field, value);
   }
 
@@ -157,15 +157,15 @@ public:
    * Deliver plain text data to somebody; the user will be asked to
    * pick a recipient.
    */
-  void ShareText(const char *text) noexcept;
+  void ShareText(JNIEnv *env, const char *text) noexcept;
 
-  void OpenWaypointFile(unsigned id, const char *filename) {
+  void OpenWaypointFile(JNIEnv *env, unsigned id, const char *filename) {
     env->CallVoidMethod(obj, openWaypointFile_method, id,
                         Java::String(env, filename).Get());
   }
 
   [[gnu::pure]]
-  int getNetState() const {
+  int GetNetState(JNIEnv *env) const noexcept {
     return env->CallIntMethod(obj, getNetState_method);
   }
 };

@@ -31,8 +31,9 @@ Copyright_License {
 #include <tchar.h>
 
 Java::TrivialClass NativeView::cls;
+jfieldID NativeView::ptr_field;
 jfieldID NativeView::textureNonPowerOfTwo_field;
-jmethodID NativeView::init_surface_method, NativeView::deinit_surface_method;
+jmethodID NativeView::getSurface_method;
 jmethodID NativeView::acquireWakeLock_method;
 jmethodID NativeView::setFullScreen_method;
 jmethodID NativeView::setRequestedOrientationID;
@@ -54,10 +55,10 @@ NativeView::Initialise(JNIEnv *env)
 {
   cls.Find(env, "org/xcsoar/NativeView");
 
+  ptr_field = env->GetFieldID(cls, "ptr", "J");
   textureNonPowerOfTwo_field =
     env->GetStaticFieldID(cls, "textureNonPowerOfTwo", "Z");
-  init_surface_method = env->GetMethodID(cls, "initSurface", "()Z");
-  deinit_surface_method = env->GetMethodID(cls, "deinitSurface", "()V");
+  getSurface_method = env->GetMethodID(cls, "getSurface", "()Landroid/view/Surface;");
 
   acquireWakeLock_method = env->GetMethodID(cls, "acquireWakeLock", "()V");
 
@@ -99,24 +100,16 @@ NativeView::Deinitialise(JNIEnv *env)
   cls.Clear(env);
 }
 
-NativeView::NativeView(JNIEnv *_env, jobject _obj,
+NativeView::NativeView(JNIEnv *env, jobject _obj,
                        unsigned _width, unsigned _height,
                        unsigned _xdpi, unsigned _ydpi,
                        jstring _product) noexcept
-  :env(_env), obj(env, _obj),
+  :obj(env, _obj),
    width(_width), height(_height)
 {
   Java::String::CopyTo(env, _product, product, sizeof(product));
 
   Display::ProvideDPI(_xdpi, _ydpi);
-}
-
-bool
-NativeView::initSurface()
-{
-  bool success = env->CallBooleanMethod(obj, init_surface_method);
-  Java::RethrowException(env);
-  return success;
 }
 
 static void
@@ -131,7 +124,7 @@ ConvertABGRToARGB(UncompressedImage &image)
 }
 
 Java::LocalObject
-NativeView::loadFileTiff(Path path)
+NativeView::LoadFileTiff(JNIEnv *env, Path path)
 {
   UncompressedImage image = LoadTiff(path);
 
@@ -160,14 +153,14 @@ NativeView::loadFileTiff(Path path)
 }
 
 Java::LocalObject
-NativeView::loadFileBitmap(Path path)
+NativeView::LoadFileBitmap(JNIEnv *env, Path path)
 {
   Java::String path2(env, path.c_str());
   return {env, env->CallObjectMethod(obj, loadFileBitmap_method, path2.Get())};
 }
 
 void
-NativeView::ShareText(const char *text) noexcept
+NativeView::ShareText(JNIEnv *env, const char *text) noexcept
 {
   env->CallVoidMethod(obj, shareText_method,
                       Java::String{env, text}.Get());

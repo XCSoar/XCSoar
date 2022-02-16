@@ -589,7 +589,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_LDLIBS += -llog
+  TARGET_LDLIBS += -llog -landroid
 endif
 
 ######## output files

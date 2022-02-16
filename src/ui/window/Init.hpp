@@ -24,10 +24,18 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_INIT_HPP
 #define XCSOAR_SCREEN_INIT_HPP
 
+#include "ui/display/Display.hpp"
+
 class ScreenGlobalInit {
+  UI::Display display;
+
 public:
   ScreenGlobalInit();
   ~ScreenGlobalInit();
+
+  auto &GetDisplay() noexcept {
+    return display;
+  }
 };
 
 #endif

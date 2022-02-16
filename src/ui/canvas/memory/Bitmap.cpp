@@ -41,7 +41,7 @@ Bitmap &Bitmap::operator=(Bitmap &&src) noexcept
 }
 
 bool
-Bitmap::Load(UncompressedImage &&uncompressed, gcc_unused Type type)
+Bitmap::Load(UncompressedImage &&uncompressed, Type)
 {
   assert(IsScreenInitialized());
   assert(uncompressed.IsDefined());

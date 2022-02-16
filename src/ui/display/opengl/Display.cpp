@@ -21,37 +21,26 @@ Copyright_License {
 }
 */
 
-#include "../Init.hpp"
-#include "../PaintWindow.hpp"
-#include "../SingleWindow.hpp"
-#include "Screen/Debug.hpp"
-#include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
-#include "ui/canvas/gdi/GdiPlusBitmap.hpp"
+#include "Display.hpp"
+#include "ui/canvas/opengl/Init.hpp"
 
-#include <libloaderapi.h>
+namespace OpenGL {
 
-using namespace UI;
-
-ScreenGlobalInit::ScreenGlobalInit()
+Display::Display()
 {
-  GdiStartup();
+  Initialise();
 
-  event_queue = new EventQueue();
-
-  HINSTANCE hInstance = ::GetModuleHandle(nullptr);
-  PaintWindow::register_class(hInstance);
-  SingleWindow::RegisterClass(hInstance);
-
-  ScreenInitialized();
+  /* not calling SetupContext() here when using libSDL, because libSDL
+     creates the OpenGL context using SDL_GL_CreateContext(), which
+     requires already having a SDL_Window */
+#ifndef ENABLE_SDL
+  SetupContext();
+#endif
 }
 
-ScreenGlobalInit::~ScreenGlobalInit()
+Display::~Display() noexcept
 {
-  delete event_queue;
-  event_queue = nullptr;
-
-  GdiShutdown();
-
-  ScreenDeinitialized();
+  Deinitialise();
 }
+
+} // namespace OpenGL

@@ -22,11 +22,26 @@ Copyright_License {
 */
 
 #include "../TopWindow.hpp"
+#include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
 #include "ui/canvas/custom/TopCanvas.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/event/Queue.hpp"
+#include "ui/event/Globals.hpp"
 #include "Hardware/CPU.hpp"
 
-#ifdef USE_MEMORY_CANVAS
-#include "ui/canvas/memory/Canvas.hpp"
+#ifdef ANDROID
+#include "ui/event/android/Loop.hpp"
+#include "util/ScopeExit.hxx"
+#elif defined(ENABLE_SDL)
+#include "ui/event/sdl/Event.hpp"
+#include "ui/event/sdl/Loop.hpp"
+#else
+#include "ui/event/poll/Loop.hpp"
+#include "ui/event/shared/Event.hpp"
+#endif
+
+#ifdef DRAW_MOUSE_CURSOR
+#include "Screen/Layout.hpp"
 #endif
 
 namespace UI {
@@ -50,23 +65,25 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
   screen = nullptr;
 
 #ifdef ENABLE_SDL
-  screen = new TopCanvas(window);
+  screen = new TopCanvas(display, window);
 #elif defined(USE_GLX)
-  screen = new TopCanvas(x_display, x_window, fb_cfg);
+  screen = new TopCanvas(display, x_window);
 #elif defined(USE_X11)
-  screen = new TopCanvas(x_display, x_window);
+  screen = new TopCanvas(display, x_window);
 #elif defined(USE_WAYLAND)
-  screen = new TopCanvas(native_display, native_window);
-#elif defined(ANDROID) || defined(USE_VFB)
-  screen = new TopCanvas(size);
+  screen = new TopCanvas(display, native_window);
+#elif defined(USE_VFB)
+  screen = new TopCanvas(display, size);
 #else
-  screen = new TopCanvas();
+  screen = new TopCanvas(display);
 #endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
-  screen->SetDisplayOrientation(style.GetInitialOrientation());
+  size = screen->SetDisplayOrientation(style.GetInitialOrientation());
+#elif defined(USE_MEMORY_CANVAS)
+  size = screen->GetSize();
 #endif
-  ContainerWindow::Create(nullptr, screen->GetRect(), style);
+  ContainerWindow::Create(nullptr, PixelRect{size}, style);
 }
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
@@ -75,10 +92,8 @@ void
 TopWindow::SetDisplayOrientation(DisplayOrientation orientation) noexcept
 {
   assert(screen != nullptr);
-  assert(screen->IsDefined());
 
-  screen->SetDisplayOrientation(orientation);
-  Resize(screen->GetSize());
+  Resize(screen->SetDisplayOrientation(orientation));
 }
 
 #endif
@@ -90,21 +105,54 @@ TopWindow::CancelMode() noexcept
 }
 
 void
+TopWindow::Invalidate() noexcept
+{
+  invalidated = true;
+}
+
+#ifdef DRAW_MOUSE_CURSOR
+
+inline void
+TopWindow::DrawMouseCursor(Canvas &canvas) noexcept
+{
+  const auto m = event_queue->GetMousePosition();
+  const int shortDistance = Layout::Scale(cursor_size * 4);
+  const int longDistance = Layout::Scale(cursor_size * 6);
+
+  const BulkPixelPoint p[] = {
+    { m.x, m.y },
+    { m.x + shortDistance, m.y + shortDistance },
+    { m.x, m.y + longDistance },
+  };
+
+  if (invert_cursor_colors) {
+    canvas.SelectWhitePen(cursor_size);
+    canvas.SelectBlackBrush();
+  } else {
+    canvas.SelectBlackPen(cursor_size);
+    canvas.SelectWhiteBrush();
+  }
+  canvas.DrawTriangleFan(p, std::size(p));
+}
+
+#endif
+
+void
 TopWindow::Expose() noexcept
 {
 #ifdef HAVE_CPU_FREQUENCY
   const ScopeLockCPU cpu;
 #endif
 
-#ifdef USE_MEMORY_CANVAS
-  Canvas canvas = screen->Lock();
-  if (canvas.IsDefined()) {
+  if (auto canvas = screen->Lock(); canvas.IsDefined()) {
     OnPaint(canvas);
+
+#ifdef DRAW_MOUSE_CURSOR
+    DrawMouseCursor(canvas);
+#endif
+
     screen->Unlock();
   }
-#else
-  OnPaint(*screen);
-#endif
 
   screen->Flip();
 }
@@ -149,6 +197,30 @@ TopWindow::OnClose() noexcept
 {
   Destroy();
   return true;
+}
+
+int
+TopWindow::RunEventLoop() noexcept
+{
+#ifdef ANDROID
+  BeginRunning();
+  AtScopeExit(this) { EndRunning(); };
+#endif
+
+  Refresh();
+
+  EventLoop loop(*event_queue, *this);
+  Event event;
+  while (IsDefined() && loop.Get(event))
+    loop.Dispatch(event);
+
+  return 0;
+}
+
+void
+TopWindow::PostQuit() noexcept
+{
+  event_queue->Quit();
 }
 
 } // namespace UI

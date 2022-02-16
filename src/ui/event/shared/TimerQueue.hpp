@@ -21,10 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_TIMER_QUEUE_HPP
-#define XCSOAR_EVENT_TIMER_QUEUE_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 #include <chrono>
 #include <set>
@@ -84,7 +81,7 @@ public:
    *
    * Caller must lock a mutex.
    */
-  gcc_pure
+  [[gnu::pure]]
   std::chrono::steady_clock::duration GetTimeout(std::chrono::steady_clock::time_point now) const noexcept;
 
   /**
@@ -107,5 +104,3 @@ public:
 };
 
 } // namespace UI
-
-#endif

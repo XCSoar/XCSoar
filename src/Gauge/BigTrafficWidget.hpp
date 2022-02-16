@@ -26,7 +26,6 @@
 
 #include "Widget/ContainerWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
-#include "util/Compiler.h"
 
 #include <memory>
 
@@ -56,12 +55,12 @@ public:
   void NextTarget() noexcept;
   void SwitchData() noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool GetAutoZoom() const noexcept;
   void SetAutoZoom(bool value) noexcept;
   void ToggleAutoZoom() noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool GetNorthUp() const noexcept;
   void SetNorthUp(bool value) noexcept;
   void ToggleNorthUp() noexcept;

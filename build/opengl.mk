@@ -31,7 +31,7 @@ else
 OPENGL ?= n
 endif
 
-GLES2 ?= n
+GLES2 ?= $(OPENGL)
 
 ifeq ($(OPENGL),y)
 OPENGL_CPPFLAGS = -DENABLE_OPENGL

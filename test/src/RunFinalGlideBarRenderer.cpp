@@ -99,7 +99,7 @@ protected:
 };
 
 static void
-Main()
+Main(TestMainWindow &main_window)
 {
   FinalGlideBarLook final_glide_look;
   final_glide_look.Initialise(normal_font);

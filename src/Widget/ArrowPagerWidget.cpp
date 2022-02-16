@@ -36,8 +36,6 @@ ArrowPagerWidget::Layout::Layout(const ButtonLook &look, PixelRect rc,
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
 
-  main = rc;
-
   if (width > height) {
     /* landscape */
 
@@ -54,60 +52,38 @@ ArrowPagerWidget::Layout::Layout(const ButtonLook &look, PixelRect rc,
         left_column_width = max_size.width;
     }
 
-    main.left += left_column_width;
+    auto left_column_rect = main.CutLeftSafe(left_column_width);
 
     /* close button on the bottom left */
 
-    close_button.left = rc.left;
-    close_button.right = main.left;
-    close_button.bottom = rc.bottom;
-    close_button.top = close_button.bottom - button_height;
+    close_button = left_column_rect.CutBottomSafe(button_height);
 
     /* previous/next buttons above the close button */
 
-    previous_button = close_button;
-    previous_button.bottom = previous_button.top;
-    previous_button.top = previous_button.bottom - button_height;
-    previous_button.right = (previous_button.left + previous_button.right) / 2;
+    auto previous_next_buttons = left_column_rect.CutBottomSafe(button_height);
 
-    next_button = previous_button;
-    next_button.left = next_button.right;
-    next_button.right = close_button.right;
+    std::tie(previous_button, next_button) = previous_next_buttons.VerticalSplit();
 
     /* the remaining area is "extra" */
 
-    extra.left = close_button.left;
-    extra.right = close_button.right;
-    extra.top = rc.top;
-    extra.bottom = previous_button.top;
+    extra = left_column_rect;
   } else {
     /* portrait */
 
-    main.bottom -= button_height;
+    auto bottom_row_rect = main.CutBottomSafe(button_height);
 
     /* buttons distributed on the bottom line */
 
-    previous_button.top = next_button.top =
-      close_button.top = main.bottom;
-    previous_button.bottom = next_button.bottom =
-      close_button.bottom = rc.bottom;
+    const auto [a, b] = bottom_row_rect.VerticalSplit();
 
-    previous_button.left = rc.left;
-    close_button.right = rc.right;
-    close_button.left = (rc.left + rc.right) / 2;
-
-    next_button.right = close_button.left;
-    previous_button.right = next_button.left =
-      (rc.left * 3 + rc.right) / 4;
-    previous_button.left = rc.left;
+    std::tie(previous_button, next_button) = a.VerticalSplit();
+    close_button = b;
 
     /* "extra" gets another row */
 
     if (extra_widget != nullptr) {
-      extra.left = main.left;
-      extra.right = main.right;
-      extra.bottom = main.bottom;
-      extra.top = main.bottom -= button_height;
+      extra = main.BottomAligned(button_height);
+      main = rc.RemainingAboveSafe(extra);
     }
   }
 }
@@ -235,11 +211,13 @@ ArrowPagerWidget::KeyPress(unsigned key_code) noexcept
 
   switch (key_code) {
   case KEY_LEFT:
-    Previous(true);
+    if (Previous(true))
+      SetFocus();
     return true;
 
   case KEY_RIGHT:
-    Next(true);
+    if (Next(true))
+      SetFocus();
     return true;
 
   default:

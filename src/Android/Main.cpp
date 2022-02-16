@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Main.hpp"
 #include "Environment.hpp"
+#include "Components.hpp"
 #include "Context.hpp"
 #include "NativeView.hpp"
 #include "Bitmap.hpp"
@@ -49,9 +50,10 @@ Copyright_License {
 #include "Version.hpp"
 #include "Screen/Debug.hpp"
 #include "Look/GlobalFonts.hpp"
+#include "ui/window/Init.hpp"
+#include "ui/display/Display.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
-#include "ui/canvas/opengl/Init.hpp"
 #include "Dialogs/Message.hpp"
 #include "Profile/Profile.hpp"
 #include "MainWindow.hpp"
@@ -95,12 +97,12 @@ UsbSerialHelper *usb_serial_helper;
 IOIOHelper *ioio_helper;
 
 gcc_visibility_default
-JNIEXPORT jboolean JNICALL
-Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
-                                            jobject _context,
-                                            jint width, jint height,
-                                            jint xdpi, jint ydpi,
-                                            jint sdk_version, jstring product)
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj,
+                                     jobject _context,
+                                     jint width, jint height,
+                                     jint xdpi, jint ydpi,
+                                     jint sdk_version, jstring product)
 try {
   Java::Init(env);
 
@@ -108,8 +110,8 @@ try {
 
   InitThreadDebug();
 
-  InitialiseAsioThread();
-  Net::Initialise(asio_thread->GetEventLoop());
+  const ScopeGlobalAsioThread global_asio_thread;
+  const Net::ScopeInit net_init(asio_thread->GetEventLoop());
 
   Java::Object::Initialise(env);
   Java::File::Initialise(env);
@@ -145,7 +147,6 @@ try {
 
   LogFormat(_T("Starting XCSoar %s"), XCSoar_ProductToken);
 
-  OpenGL::Initialise();
   TextUtil::Initialise(env);
 
   assert(native_view == nullptr);
@@ -154,8 +155,6 @@ try {
 #ifdef __arm__
   is_nook = StringIsEqual(native_view->GetProduct(), "NOOK");
 #endif
-
-  event_queue = new EventQueue();
 
   SoundUtil::Initialise(env);
   Vibrator::Initialise(env);
@@ -194,41 +193,19 @@ try {
   }
 #endif
 
-  ScreenInitialized();
+  ScreenGlobalInit screen_init;
+
   AllowLanguage();
   InitLanguage();
-  return Startup();
-} catch (...) {
-  /* if an error occurs, rethrow the C++ exception as Java exception,
-     to be displayed by the Java glue code */
-  const auto msg = GetFullMessage(std::current_exception());
-  jclass Exception = env->FindClass("java/lang/Exception");
-  env->ThrowNew(Exception, msg.c_str());
-  return false;
-}
 
-gcc_visibility_default
-JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj)
-{
-  InitThreadDebug();
+  if (Startup(screen_init.GetDisplay()))
+    CommonInterface::main_window->RunEventLoop();
 
-  OpenGL::Initialise();
-
-  CommonInterface::main_window->RunEventLoop();
-}
-
-gcc_visibility_default
-JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
-{
   Shutdown();
 
   if (IsNookSimpleTouch()) {
     Nook::ExitFastMode();
   }
-
-  InitThreadDebug();
 
   if (CommonInterface::main_window != nullptr) {
     CommonInterface::main_window->Destroy();
@@ -252,14 +229,11 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   vibrator = nullptr;
 
   SoundUtil::Deinitialise(env);
-  delete event_queue;
-  event_queue = nullptr;
   delete native_view;
   native_view = nullptr;
 
   TextUtil::Deinitialise(env);
-  OpenGL::Deinitialise();
-  ScreenDeinitialized();
+
   DeinitialiseDataPath();
 
   delete context;
@@ -284,9 +258,12 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   Context::Deinitialise(env);
   NativeView::Deinitialise(env);
   Java::URL::Deinitialise(env);
-
-  Net::Deinitialise();
-  DeinitialiseAsioThread();
+} catch (...) {
+  /* if an error occurs, rethrow the C++ exception as Java exception,
+     to be displayed by the Java glue code */
+  const auto msg = GetFullMessage(std::current_exception());
+  jclass Exception = env->FindClass("java/lang/Exception");
+  env->ThrowNew(Exception, msg.c_str());
 }
 
 gcc_visibility_default
@@ -297,8 +274,8 @@ Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
   if (event_queue == nullptr)
     return;
 
-  if (CommonInterface::main_window != nullptr)
-    CommonInterface::main_window->AnnounceResize({width, height});
+  if (auto *main_window = NativeView::GetPointer(env, obj))
+    main_window->AnnounceResize({width, height});
 
   event_queue->Purge(UI::Event::RESIZE);
 
@@ -310,22 +287,24 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
-  if (event_queue == nullptr || CommonInterface::main_window == nullptr)
+  auto *main_window = NativeView::GetPointer(env, obj);
+  if (event_queue == nullptr || main_window == nullptr)
     return;
     /* event subsystem is not initialized, there is nothing to pause */
 
-  CommonInterface::main_window->Pause();
+  main_window->Pause();
 }
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
 {
-  if (event_queue == nullptr || CommonInterface::main_window == nullptr)
+  auto *main_window = NativeView::GetPointer(env, obj);
+  if (event_queue == nullptr || main_window == nullptr)
     return;
     /* event subsystem is not initialized, there is nothing to resume */
 
-  CommonInterface::main_window->Resume();
+  main_window->Resume();
 }
 
 gcc_visibility_default

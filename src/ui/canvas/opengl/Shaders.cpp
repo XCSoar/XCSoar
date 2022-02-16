@@ -48,15 +48,14 @@ GLProgram *combine_texture_shader;
 GLint combine_texture_projection, combine_texture_texture,
   combine_texture_translate;
 
+GLProgram *dashed_shader;
+GLint dashed_projection, dashed_translate,
+  dashed_resolution, dashed_start, dashed_period, dashed_ratio;
+
 } // namespace OpenGL
 
-#ifdef HAVE_GLES
-#define GLSL_VERSION
+#define GLSL_VERSION "#version 100\n"
 #define GLSL_PRECISION "precision mediump float;\n"
-#else
-#define GLSL_VERSION "#version 120\n"
-#define GLSL_PRECISION
-#endif
 
 static constexpr char solid_vertex_shader[] =
   GLSL_VERSION
@@ -151,6 +150,48 @@ static constexpr char combine_texture_fragment_shader[] =
     varying vec2 texcoordvar;
     void main() {
       gl_FragColor = colorvar * texture2D(texture, texcoordvar);
+    }
+)glsl";
+
+static constexpr char dashed_vertex_shader[] =
+  GLSL_VERSION
+  R"glsl(
+    uniform mat4 projection;
+    uniform vec2 translate;
+    attribute vec4 position;
+    attribute vec4 color;
+    varying vec4 colorvar;
+    varying vec2 vert_pos;
+    void main() {
+      gl_Position = position;
+      gl_Position.xy += translate;
+      gl_Position = projection * gl_Position;
+      vert_pos = gl_Position.xy;
+      colorvar = color;
+    }
+)glsl";
+
+/* this fragment shader is a big kludge; with GLES 3.0, we could have
+   "flat" parameters and we wouldn't need the "start" parameter, but
+   since the Lima GPU driver (Cubieboard 2, OpenVario) doesn't
+   support GLES 3.0, we're stuck with GLES 2.0 */
+static constexpr char dashed_fragment_shader[] =
+  GLSL_VERSION
+  GLSL_PRECISION
+  R"glsl(
+    uniform vec2 start;
+    uniform vec2 resolution;
+    uniform float period;
+    uniform float ratio;
+    varying vec2 vert_pos;
+    varying vec4 colorvar;
+    void main() {
+      highp vec2 delta = vert_pos - start;
+      highp float dist = length(delta * resolution / 2.0);
+      if (fract(dist / period) > ratio)
+        discard;
+
+      gl_FragColor = colorvar;
     }
 )glsl";
 
@@ -262,11 +303,25 @@ OpenGL::InitShaders()
 
   combine_texture_shader->Use();
   glUniform1i(combine_texture_texture, 0);
+
+  dashed_shader = CompileProgram(dashed_vertex_shader, dashed_fragment_shader);
+  dashed_shader->BindAttribLocation(Attribute::POSITION, "position");
+  dashed_shader->BindAttribLocation(Attribute::COLOR, "color");
+  LinkProgram(*dashed_shader);
+
+  dashed_projection = dashed_shader->GetUniformLocation("projection");
+  dashed_translate = dashed_shader->GetUniformLocation("translate");
+  dashed_resolution = dashed_shader->GetUniformLocation("resolution");
+  dashed_start = dashed_shader->GetUniformLocation("start");
+  dashed_period = dashed_shader->GetUniformLocation("period");
+  dashed_ratio = dashed_shader->GetUniformLocation("ratio");
 }
 
 void
 OpenGL::DeinitShaders() noexcept
 {
+  delete dashed_shader;
+  dashed_shader = nullptr;
   delete combine_texture_shader;
   combine_texture_shader = nullptr;
   delete alpha_shader;
@@ -301,6 +356,11 @@ OpenGL::UpdateShaderProjectionMatrix() noexcept
   combine_texture_shader->Use();
   glUniformMatrix4fv(combine_texture_projection, 1, GL_FALSE,
                      glm::value_ptr(projection_matrix));
+
+  dashed_shader->Use();
+  glUniformMatrix4fv(dashed_projection, 1, GL_FALSE,
+                     glm::value_ptr(projection_matrix));
+  glUniform2f(dashed_resolution, viewport_size.x, viewport_size.y);
 }
 
 void
@@ -322,4 +382,7 @@ OpenGL::UpdateShaderTranslate() noexcept
 
   combine_texture_shader->Use();
   glUniform2f(combine_texture_translate, t.x, t.y);
+
+  dashed_shader->Use();
+  glUniform2f(dashed_translate, t.x, t.y);
 }

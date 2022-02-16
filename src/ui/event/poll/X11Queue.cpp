@@ -24,6 +24,7 @@ Copyright_License {
 #include "X11Queue.hpp"
 #include "Queue.hpp"
 #include "../shared/Event.hpp"
+#include "ui/display/Display.hpp"
 
 /* kludges to work around namespace collisions with X11 headers */
 
@@ -42,24 +43,15 @@ Copyright_License {
 
 namespace UI {
 
-X11EventQueue::X11EventQueue(EventQueue &_queue)
+X11EventQueue::X11EventQueue(Display &_display, EventQueue &_queue)
   :queue(_queue),
-   display(XOpenDisplay(nullptr)),
+   display(_display.GetXDisplay()),
    socket_event(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady))
 {
-  if (display == nullptr)
-    throw std::runtime_error("XOpenDisplay() failed");
-
   wm_delete_window = XInternAtom(display, "WM_DELETE_WINDOW", false);
 
   socket_event.Open(SocketDescriptor(ConnectionNumber(display)));
   socket_event.ScheduleRead();
-}
-
-X11EventQueue::~X11EventQueue()
-{
-  socket_event.Cancel();
-  XCloseDisplay(display);
 }
 
 inline void

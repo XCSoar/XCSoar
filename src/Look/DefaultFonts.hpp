@@ -21,24 +21,22 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEFAULT_FONTS_HPP
-#define XCSOAR_DEFAULT_FONTS_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 struct FontSettings;
 
-namespace Fonts
-{
-  gcc_pure
-  FontSettings GetDefaults();
+namespace Fonts {
 
-  /**
-   * Load all fonts.
-   *
-   * @return true on success
-   */
-  bool Initialize();
-}
+[[gnu::pure]]
+FontSettings
+GetDefaults() noexcept;
 
-#endif
+/**
+ * Load all fonts.
+ *
+ * Throws on error.
+ */
+void
+Initialize();
+
+} // namespace Fonts

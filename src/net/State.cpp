@@ -32,7 +32,7 @@ NetState
 GetNetState()
 {
   return native_view != nullptr
-    ? NetState(native_view->getNetState())
+    ? NetState(native_view->GetNetState(Java::GetEnv()))
     : NetState::UNKNOWN;
 }
 

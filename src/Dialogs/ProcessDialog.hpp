@@ -21,40 +21,18 @@ Copyright_License {
 }
 */
 
-#include "../Init.hpp"
-#include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
-#include "Screen/Debug.hpp"
-#include "ui/canvas/Font.hpp"
-#include "DisplayOrientation.hpp"
-#include "Asset.hpp"
+#pragma once
 
-#ifdef KOBO
-#include "Hardware/RotateDisplay.hpp"
-#endif
+#include <functional>
 
-using namespace UI;
+#include <tchar.h>
 
-ScreenGlobalInit::ScreenGlobalInit()
-{
-  Font::Initialise();
+struct DialogLook;
+namespace UI { class SingleWindow; }
 
-  event_queue = new EventQueue();
-
-#ifdef KOBO
-  Display::Rotate(DisplayOrientation::DEFAULT);
-  event_queue->SetDisplayOrientation(DisplayOrientation::DEFAULT);
-#endif
-
-  ScreenInitialized();
-}
-
-ScreenGlobalInit::~ScreenGlobalInit()
-{
-  delete event_queue;
-  event_queue = nullptr;
-
-  Font::Deinitialise();
-
-  ScreenDeinitialized();
-}
+int
+RunProcessDialog(UI::SingleWindow &parent,
+                 const DialogLook &dialog_look,
+                 const TCHAR *caption,
+                 const char *const*argv,
+                 std::function<int(int)> on_exit={}) noexcept;

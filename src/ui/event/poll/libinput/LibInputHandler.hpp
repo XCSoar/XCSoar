@@ -24,7 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_LIBINPUT_LIBINPUT_HPP
 #define XCSOAR_EVENT_LIBINPUT_LIBINPUT_HPP
 
-#include "event/SocketEvent.hxx"
+#include "event/PipeEvent.hxx"
+#include "ui/dim/Size.hpp"
 
 #include <cassert>
 
@@ -49,10 +50,11 @@ class LibInputHandler final {
   struct libinput* li = nullptr;
   struct libinput_interface* li_if = nullptr;
 
-  SocketEvent fd;
+  PipeEvent fd;
 
   double x = -1.0, y = -1.0;
-  unsigned width = 0, height = 0;
+
+  PixelSize screen_size{0, 0};
 
   /**
    * The number of pointer input devices, touch screens ans keyboards.
@@ -69,18 +71,17 @@ public:
   bool Open() noexcept;
   void Close() noexcept;
 
-  void SetScreenSize(unsigned _width, unsigned _height) noexcept {
-    width = _width;
-    height = _height;
+  void SetScreenSize(PixelSize _screen_size) noexcept {
+    screen_size = _screen_size;
 
-    assert(width > 0);
-    assert(height > 0);
+    assert(screen_size.width > 0);
+    assert(screen_size.height > 0);
 
     if (-1.0 == x)
-      x = width / 2;
+      x = screen_size.width / 2;
 
     if (-1.0 == y)
-      y = height / 2;
+      y = screen_size.height / 2;
   }
 
   unsigned GetX() const noexcept {

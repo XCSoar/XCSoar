@@ -24,15 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_TOP_CANVAS_HPP
 #define XCSOAR_SCREEN_TOP_CANVAS_HPP
 
-#include "util/Compiler.h"
-
 #ifdef USE_MEMORY_CANVAS
 #include "ui/canvas/memory/PixelTraits.hpp"
 #include "ui/canvas/memory/ActivePixelTraits.hpp"
 #include "ui/canvas/memory/Buffer.hpp"
 #include "ui/dim/Size.hpp"
-#else
-#include "ui/canvas/Canvas.hpp"
 #endif
 
 #ifdef ENABLE_OPENGL
@@ -43,8 +39,7 @@ Copyright_License {
 #include "ui/egl/System.hpp"
 
 #ifdef MESA_KMS
-#include "io/UniqueFileDescriptor.hxx"
-#include <drm.h>
+#include "ui/canvas/egl/GbmSurface.hpp"
 #include <xf86drm.h>
 #include <xf86drmMode.h>
 #endif
@@ -52,17 +47,6 @@ Copyright_License {
 
 #ifdef USE_GLX
 #include "ui/glx/System.hpp"
-
-#define Font X11Font
-#define Window X11Window
-#define Display X11Display
-#include <X11/X.h>
-#undef Font
-#undef Window
-#undef Display
-#undef Expose
-#undef KeyPress
-struct _XDisplay;
 #endif
 
 #ifdef DITHER
@@ -75,15 +59,14 @@ struct _XDisplay;
 enum class DisplayOrientation : uint8_t;
 #endif
 
-struct SDL_Surface;
 struct SDL_Window;
 struct SDL_Renderer;
 struct SDL_Texture;
 class Canvas;
 struct PixelSize;
-struct PixelRect;
+namespace UI { class Display; }
 
-#if (defined(USE_FB) && !defined(KOBO)) || defined(USE_EGL)
+#if defined(USE_FB) && !defined(KOBO)
 /* defined if we need to initialise /dev/tty to graphics mode, see
    TopCanvas::InitialiseTTY() */
 #define USE_TTY
@@ -91,45 +74,29 @@ struct PixelRect;
 #endif
 
 class TopCanvas
-#ifndef USE_MEMORY_CANVAS
-  : public Canvas
-#endif
 {
+  UI::Display &display;
+
 #ifdef USE_TTY
   const LinuxGraphicsTTY linux_graphics_tty;
 #endif
 
 #ifdef USE_EGL
-#if defined(USE_X11) || defined(USE_WAYLAND)
-#elif defined(MESA_KMS)
-  struct gbm_device *native_display;
-  struct gbm_surface *native_window;
 
-  UniqueFileDescriptor dri_fd;
-
-  struct gbm_bo *current_bo = nullptr;
+#ifdef MESA_KMS
+  const EGL::GbmSurface gbm_surface;
 
   drmEventContext evctx;
 
-  uint32_t connector_id;
-  uint32_t crtc_id;
-  drmModeModeInfo mode;
+  struct gbm_bo *current_bo = nullptr;
 
   drmModeCrtc *saved_crtc = nullptr;
 #endif // MESA_KMS
 
-  EGLDisplay display = EGL_NO_DISPLAY;
-  EGLConfig chosen_config;
-
-#ifndef ANDROID
-  EGLContext context = EGL_NO_CONTEXT;
-#endif // ANDROID
   EGLSurface surface = EGL_NO_SURFACE;
 #endif // USE_EGL
 
 #ifdef USE_GLX
-  _XDisplay *const x_display;
-  GLXContext glx_context;
   GLXWindow glx_window;
 #endif // USE_GLX
 
@@ -151,9 +118,9 @@ class TopCanvas
   Dither dither;
 #endif
 
-#else /* !GREYSCALE */
+#elif !defined(ENABLE_SDL)
   WritableImageBuffer<ActivePixelTraits> buffer;
-#endif /* !GREYSCALE */
+#endif
 #endif /* USE_MEMORY_CANVAS */
 
 #ifdef USE_FB
@@ -181,20 +148,20 @@ class TopCanvas
 
 public:
 #ifdef ENABLE_SDL
-  TopCanvas(SDL_Window *_window);
+  TopCanvas(UI::Display &_display, SDL_Window *_window);
 #elif defined(USE_GLX)
-  TopCanvas(_XDisplay *x_display,
-            X11Window x_window,
-            GLXFBConfig *fb_cfg);
+  TopCanvas(UI::Display &_display,
+            X11Window x_window);
 #elif defined(USE_X11) || defined(USE_WAYLAND)
-  TopCanvas(EGLNativeDisplayType native_display,
-            EGLNativeWindowType native_window) {
-    CreateEGL(native_display, native_window);
+  TopCanvas(UI::Display &_display, EGLNativeWindowType native_window)
+    :display(_display)
+  {
+    CreateSurface(native_window);
   }
-#elif defined(ANDROID) || defined(USE_VFB)
-  TopCanvas(PixelSize new_size);
+#elif defined(USE_VFB)
+  TopCanvas(UI::Display &_display, PixelSize new_size);
 #else
-  TopCanvas();
+  explicit TopCanvas(UI::Display &_display);
 #endif
 
   ~TopCanvas() noexcept;
@@ -212,18 +179,13 @@ public:
 #endif
   }
 
-#ifdef USE_MEMORY_CANVAS
-  gcc_pure
-  PixelRect GetRect() const;
-#endif
-
 #if defined(USE_FB) || (defined(ENABLE_OPENGL) && (defined(USE_EGL) || defined(USE_GLX) || defined(ENABLE_SDL)))
   /**
    * Obtain the native (non-software-rotated) size of the OpenGL
    * drawable.
    */
-  gcc_pure
-  PixelSize GetNativeSize() const;
+  [[gnu::pure]]
+  PixelSize GetNativeSize() const noexcept;
 #endif
 
 #if defined(USE_MEMORY_CANVAS) || defined(ENABLE_OPENGL)
@@ -234,7 +196,7 @@ public:
    * windowing system library
    * @return true if the screen has been resized
    */
-  bool CheckResize(PixelSize new_native_size);
+  bool CheckResize(PixelSize new_native_size) noexcept;
 #endif
 
 #ifdef USE_FB
@@ -242,15 +204,15 @@ public:
    * Ask the kernel for the frame buffer's current physical size.
    * This is used by CheckResize().
    */
-  gcc_pure
-  PixelSize GetPhysicalSize() const;
+  [[gnu::pure]]
+  PixelSize GetPhysicalSize() const noexcept;
 
   /**
    * Check if the screen has been resized.
    *
    * @return true if the screen has been resized
    */
-  bool CheckResize();
+  bool CheckResize() noexcept;
 #endif
 
 #ifdef ANDROID
@@ -263,22 +225,27 @@ public:
    * currently
    */
   bool AcquireSurface();
+#endif
 
+#ifdef USE_EGL
   void ReleaseSurface() noexcept;
 #endif
 
 #if defined(ENABLE_SDL) && defined(USE_MEMORY_CANVAS)
-  void OnResize(PixelSize new_size);
+  void OnResize(PixelSize new_size) noexcept;
 #endif
 
-#ifdef USE_MEMORY_CANVAS
-  PixelSize GetSize() const {
+#if defined(USE_MEMORY_CANVAS) && (defined(GREYSCALE) || !defined(ENABLE_SDL))
+  PixelSize GetSize() const noexcept {
     return PixelSize(buffer.width, buffer.height);
   }
+#else
+  [[gnu::pure]]
+  PixelSize GetSize() const noexcept;
+#endif
 
   Canvas Lock();
-  void Unlock();
-#endif
+  void Unlock() noexcept;
 
   void Flip();
 
@@ -286,28 +253,24 @@ public:
   /**
    * Wait until the screen update is complete.
    */
-  void Wait();
+  void Wait() noexcept;
 
-  void SetEnableDither(bool _enable_dither) {
+  void SetEnableDither(bool _enable_dither) noexcept {
     enable_dither = _enable_dither;
   }
 #endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
-  void SetDisplayOrientation(DisplayOrientation orientation);
+  PixelSize SetDisplayOrientation(DisplayOrientation orientation) noexcept;
 #endif
 
 private:
 #ifdef ENABLE_OPENGL
-  void SetupViewport(PixelSize native_size);
+  PixelSize SetupViewport(PixelSize native_size) noexcept;
 #endif
 
 #ifdef USE_EGL
-  void InitDisplay(EGLNativeDisplayType native_display);
-  void CreateContext();
   void CreateSurface(EGLNativeWindowType native_window);
-  void CreateEGL(EGLNativeDisplayType native_display,
-                 EGLNativeWindowType native_window);
 #endif
 };
 

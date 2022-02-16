@@ -12,11 +12,7 @@
 #define XCSOAR_SCREEN_RAW_BITMAP_HPP
 
 #include "PortableColor.hpp"
-#include "util/ByteOrder.hxx"
-
-#ifdef ENABLE_OPENGL
-#include "ui/opengl/Features.hpp"
-#endif
+#include "ui/dim/Size.hpp"
 
 #ifdef USE_GDI
 #include <windef.h>
@@ -34,51 +30,57 @@ class Canvas;
 class GLTexture;
 #endif
 
+#if defined(ENABLE_OPENGL) && (defined(ANDROID) || defined(__arm__))
+// use 16-bit RGB565 only on mobile devices
+#define USE_RGB565
+#endif
+
 /**
  * The RawColor structure encapsulates color information about one
  * point in a #RawBitmap.
  */
 struct RawColor
 {
-  RawColor() = default;
+  RawColor() noexcept = default;
 
 #ifdef GREYSCALE
   Luminosity8 value;
 
-  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :value(R, G, B) {}
 
-#elif defined(HAVE_GLES)
+#elif defined(USE_RGB565)
+
   RGB565Color value;
 
-  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :value(R, G, B) {}
 
-#elif defined(USE_MEMORY_CANVAS) || defined(ENABLE_SDL) || defined(USE_EGL) || defined(USE_GLX)
+#elif defined(ENABLE_OPENGL)
 
-#if IS_BIG_ENDIAN
-  /* big-endian */
-  uint8_t dummy;
   RGB8Color value;
+  uint8_t dummy;
 
-  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
-    :dummy(), value(R, G, B) {}
-#else
-  /* little-endian */
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
+    :value(R, G, B), dummy() {}
+
+#elif defined(USE_MEMORY_CANVAS)
+
   BGR8Color value;
   uint8_t dummy;
 
-  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :value(R, G, B), dummy() {}
-#endif
 
-#else /* !SDL */
+#elif defined(USE_GDI)
 
   BGR8Color value;
 
-  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :value(R, G, B) {}
 
+#else
+#error No implementation
 #endif
 };
 
@@ -87,19 +89,17 @@ struct RawColor
  */
 class RawBitmap final
 {
-protected:
-  const unsigned width;
-  const unsigned height;
-  const unsigned corrected_width;
+  const PixelSize size;
 
 #ifdef USE_GDI
+  const unsigned corrected_width;
   RawColor *buffer;
 #else
   const std::unique_ptr<RawColor[]> buffer;
 #endif
 
 #ifdef ENABLE_OPENGL
-  GLTexture *texture;
+  const std::unique_ptr<GLTexture> texture;
 
   /**
    * Has the buffer been modified, and needs to be copied into the
@@ -114,23 +114,19 @@ protected:
 
 public:
   /**
-   * Creates buffer with the given size and fills it with
-   * the given color
-   * @param nWidth Width of the buffer
-   * @param nHeight Height of the buffer
-   * @param clr Fill color of the buffer
+   * Creates buffer with the given size.
    */
-  RawBitmap(unsigned width, unsigned height);
+  explicit RawBitmap(PixelSize size) noexcept;
 
 #if defined(ENABLE_OPENGL) || defined(USE_GDI)
-  ~RawBitmap();
+  ~RawBitmap() noexcept;
 #endif
 
   /**
    * Returns the Buffer
    * @return The Buffer as RawColor array
    */
-  RawColor *GetBuffer() {
+  RawColor *GetBuffer() noexcept {
 #ifdef USE_GDI
     return buffer;
 #else
@@ -138,7 +134,7 @@ public:
 #endif
   }
 
-  const RawColor *GetBuffer() const {
+  const RawColor *GetBuffer() const noexcept {
 #ifdef USE_GDI
     return buffer;
 #else
@@ -149,56 +145,34 @@ public:
   /**
    * Returns a pointer to the top-most row.
    */
-  RawColor *GetTopRow() {
+  RawColor *GetTopRow() noexcept {
 #ifndef USE_GDI
     return GetBuffer();
 #else
   /* in WIN32 bitmaps, the bottom-most row comes first */
-    return GetBuffer() + (height - 1) * corrected_width;
+    return GetBuffer() + (size.height - 1) * corrected_width;
 #endif
   }
 
   /**
    * Returns a pointer to the row below the current one.
    */
-  RawColor *GetNextRow(RawColor *row) {
+  RawColor *GetNextRow(RawColor *row) noexcept {
 #ifndef USE_GDI
-    return row + corrected_width;
+    return row + size.width;
 #else
     return row - corrected_width;
 #endif
   }
 
-  void SetDirty() {
+  void SetDirty() noexcept {
 #ifdef ENABLE_OPENGL
     dirty = true;
 #endif
   }
 
-  /**
-   * Returns real width of the screen buffer. It could be slightly more then
-   * requested width. This parameter is important only when you work with
-   * points array directly (using GetPointsArray function).
-   * @return Real width of the screen buffer
-   */
-  unsigned GetCorrectedWidth() const {
-    return corrected_width;
-  }
-
-  /**
-   * Returns the screen buffer width
-   * @return The screen buffer width
-   */
-  unsigned GetWidth() const {
-    return width;
-  }
-
-  /**
-   * Returns screen buffer height
-   * @return The screen buffer height
-   */
-  unsigned GetHeight() const {
-    return height;
+  PixelSize GetSize() const noexcept {
+    return size;
   }
 
 #ifdef ENABLE_OPENGL
@@ -207,12 +181,12 @@ public:
    * "dirty", then the RAM buffer will be copied to the texture by
    * this method.
    */
-  GLTexture &BindAndGetTexture() const;
+  GLTexture &BindAndGetTexture() const noexcept;
 #endif
 
   void StretchTo(PixelSize src_size,
                  Canvas &dest_canvas, PixelSize dest_size,
-                 bool transparent_white=false) const;
+                 bool transparent_white=false) const noexcept;
 };
 
 #endif // !defined(AFX_STSCREENBUFFER_H__22D62F5D_32E2_4785_B3D9_2341C11F84A3__INCLUDED_)

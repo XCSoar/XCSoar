@@ -113,12 +113,12 @@ ChartWindow::DrawChart(ChartRenderer &renderer)
 class TestWindow : public UI::SingleWindow,
                    ListItemRenderer, ListCursorHandler {
   Button close_button;
-  ListControl *type_list;
+  ListControl *type_list = nullptr;
   ChartWindow chart;
 
 public:
-  TestWindow(const ChartLook &chart_look)
-    :type_list(NULL), chart(chart_look) {}
+  TestWindow(UI::Display &display, const ChartLook &chart_look)
+    :UI::SingleWindow(display), chart(chart_look) {}
   ~TestWindow() {
     delete type_list;
   }
@@ -172,12 +172,12 @@ protected:
 };
 
 static void
-Main()
+Main(UI::Display &display)
 {
   ChartLook chart_look;
   chart_look.Initialise();
 
-  TestWindow window(chart_look);
+  TestWindow window{display, chart_look};
   window.Create(*dialog_look, {640, 480});
 
   window.Show();

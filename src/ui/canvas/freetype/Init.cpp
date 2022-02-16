@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Init.hpp"
+#include "util/RuntimeError.hxx"
 
 #if defined(__clang__) && defined(__arm__)
 /* work around warning: 'register' storage class specifier is
@@ -32,37 +33,40 @@ Copyright_License {
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include <stdio.h>
+#include <stdexcept>
+
+namespace FreeType {
 
 #ifdef KOBO
-bool FreeType::mono = true;
+bool mono = true;
 #endif
 
 static FT_Library ft_library;
 
 void
-FreeType::Initialise()
+Initialise()
 {
   FT_Error error = FT_Init_FreeType(&ft_library);
-  if (error) {
-    fprintf(stderr, "FT_Init_FreeType() failed\n");
-    abort();
-  }
+  if (error)
+    throw std::runtime_error{"FT_Init_FreeType() failed"};
 }
 
 void
-FreeType::Deinitialise()
+Deinitialise()
 {
   FT_Done_FreeType(ft_library);
 }
 
 FT_Face
-FreeType::Load(const char *path)
+Load(const char *path)
 {
   FT_Face face;
   FT_Error error = FT_New_Face(ft_library, path, 0, &face);
   if (error)
-    return nullptr;
+    throw FormatRuntimeError("Failed to load font %s: %s",
+                             path, FT_Error_String(error));
 
   return face;
 }
+
+} // namespace FreeType

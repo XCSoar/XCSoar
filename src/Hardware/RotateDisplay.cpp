@@ -97,7 +97,8 @@ Display::Rotate(DisplayOrientation orientation)
     android_orientation = NativeView::ScreenOrientation::SENSOR;
   };
 
-  return native_view->setRequestedOrientation(android_orientation);
+  return native_view->SetRequestedOrientation(Java::GetEnv(),
+                                              android_orientation);
 #elif defined(KOBO)
   const char *rotate = "3";
 
@@ -135,7 +136,8 @@ bool
 Display::RotateRestore()
 {
 #if defined(ANDROID)
-  return native_view->setRequestedOrientation(NativeView::ScreenOrientation::SENSOR);
+  return native_view->SetRequestedOrientation(Java::GetEnv(),
+                                              NativeView::ScreenOrientation::SENSOR);
 #elif defined(KOBO)
   return Rotate(DisplayOrientation::DEFAULT);
 #else

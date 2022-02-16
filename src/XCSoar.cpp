@@ -116,7 +116,7 @@ Main()
 
   // Perform application initialization and run loop
   int ret = EXIT_FAILURE;
-  if (Startup())
+  if (Startup(screen_init.GetDisplay()))
     ret = CommonInterface::main_window->RunEventLoop();
 
   Shutdown();
@@ -141,7 +141,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         gcc_unused LPSTR lpCmdLine2,
         int nCmdShow)
 #endif
-{
+try {
 #ifdef USE_WIN32_RESOURCES
   ResourceLoader::Init(hInstance);
 #endif
@@ -161,14 +161,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     CommandLine::Parse(args);
   }
 
-  int ret;
-
-  try {
-    ret = Main();
-  } catch (...) {
-    PrintException(std::current_exception());
-    ret = EXIT_FAILURE;
-  }
+  int ret = Main();
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
   /* For some reason, the app process does not exit on iOS, but a black
@@ -177,4 +170,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   return ret;
+} catch (...) {
+  PrintException(std::current_exception());
+  return EXIT_FAILURE;
 }

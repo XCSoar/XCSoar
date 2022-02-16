@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_OPENGL_FBO_HPP
 #define XCSOAR_OPENGL_FBO_HPP
 
-#include "ui/opengl/Features.hpp"
 #include "ui/opengl/SystemExt.hpp"
 
 /**
@@ -32,19 +31,11 @@ Copyright_License {
  */
 namespace FBO {
 
-#ifdef HAVE_GLES2
 static constexpr GLenum RENDERBUFFER = GL_RENDERBUFFER;
 static constexpr GLenum FRAMEBUFFER = GL_FRAMEBUFFER;
 static constexpr GLenum COLOR_ATTACHMENT0 = GL_COLOR_ATTACHMENT0;
 static constexpr GLenum DEPTH_ATTACHMENT = GL_DEPTH_ATTACHMENT;
 static constexpr GLenum STENCIL_ATTACHMENT = GL_STENCIL_ATTACHMENT;
-#else
-static constexpr GLenum RENDERBUFFER = GL_RENDERBUFFER_EXT;
-static constexpr GLenum FRAMEBUFFER = GL_FRAMEBUFFER_EXT;
-static constexpr GLenum COLOR_ATTACHMENT0 = GL_COLOR_ATTACHMENT0_EXT;
-static constexpr GLenum DEPTH_ATTACHMENT = GL_DEPTH_ATTACHMENT_EXT;
-static constexpr GLenum STENCIL_ATTACHMENT = GL_STENCIL_ATTACHMENT_EXT;
-#endif
 
 #ifdef GL_DEPTH_STENCIL
 static constexpr GLenum DEPTH_STENCIL = GL_DEPTH_STENCIL;
@@ -61,72 +52,44 @@ static constexpr GLenum DEPTH_STENCIL = GL_DEPTH_STENCIL_OES;
 static inline void
 BindRenderbuffer(GLenum target, GLuint renderbuffer) noexcept
 {
-#ifdef HAVE_GLES2
   glBindRenderbuffer(target, renderbuffer);
-#else
-  glBindRenderbufferEXT(target, renderbuffer);
-#endif
 }
 
 static inline void
 DeleteRenderbuffers(GLsizei n, const GLuint *renderbuffers) noexcept
 {
-#ifdef HAVE_GLES2
   glDeleteRenderbuffers(n, renderbuffers);
-#else
-  glDeleteRenderbuffersEXT(n, renderbuffers);
-#endif
 }
 
 static inline void
 GenRenderbuffers(GLsizei n, GLuint *renderbuffers) noexcept
 {
-#ifdef HAVE_GLES2
   glGenRenderbuffers(n, renderbuffers);
-#else
-  glGenRenderbuffersEXT(n, renderbuffers);
-#endif
 }
 
 static inline void
 RenderbufferStorage(GLenum target, GLenum internalformat,
                     GLsizei width, GLsizei height) noexcept
 {
-#ifdef HAVE_GLES2
   glRenderbufferStorage(target, internalformat, width, height);
-#else
-  glRenderbufferStorageEXT(target, internalformat, width, height);
-#endif
 }
 
 static inline void
 BindFramebuffer(GLenum target, GLuint framebuffer) noexcept
 {
-#ifdef HAVE_GLES2
   glBindFramebuffer(target, framebuffer);
-#else
-  glBindFramebufferEXT(target, framebuffer);
-#endif
 }
 
 static inline void
 DeleteFramebuffers(GLsizei n, const GLuint *framebuffers) noexcept
 {
-#ifdef HAVE_GLES2
   glDeleteFramebuffers(n, framebuffers);
-#else
-  glDeleteFramebuffersEXT(n, framebuffers);
-#endif
 }
 
 static inline void
 GenFramebuffers(GLsizei n, GLuint *framebuffers) noexcept
 {
-#ifdef HAVE_GLES2
   glGenFramebuffers(n, framebuffers);
-#else
-  glGenFramebuffersEXT(n, framebuffers);
-#endif
 }
 
 static inline void
@@ -134,24 +97,15 @@ FramebufferRenderbuffer(GLenum target, GLenum attachment,
                         GLenum renderbuffertarget,
                         GLuint renderbuffer) noexcept
 {
-#ifdef HAVE_GLES2
   glFramebufferRenderbuffer(target, attachment,
                             renderbuffertarget, renderbuffer);
-#else
-  glFramebufferRenderbufferEXT(target, attachment,
-                               renderbuffertarget, renderbuffer);
-#endif
 }
 
 static inline void
 FramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget,
                      GLuint texture, GLint level) noexcept
 {
-#ifdef HAVE_GLES2
   glFramebufferTexture2D(target, attachment, textarget, texture, level);
-#else
-  glFramebufferTexture2DEXT(target, attachment, textarget, texture, level);
-#endif
 }
 
 } // namespace OpenGL

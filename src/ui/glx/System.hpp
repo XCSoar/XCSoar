@@ -47,4 +47,8 @@ Copyright_License {
 #undef None
 #endif
 
+#ifdef Below
+#undef Below
+#endif
+
 #endif

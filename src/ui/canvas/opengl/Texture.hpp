@@ -24,17 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_TEXTURE_HPP
 #define XCSOAR_SCREEN_OPENGL_TEXTURE_HPP
 
-#include "ui/opengl/Features.hpp"
 #include "ui/opengl/System.hpp"
 #include "ui/dim/Rect.hpp"
 #include "FBO.hpp"
-#include "Asset.hpp"
 
 #include <cassert>
-
-#ifdef ENABLE_SDL
-#include <SDL_video.h>
-#endif
 
 /**
  * This class represents an OpenGL texture.
@@ -83,9 +77,7 @@ public:
    * Returns the standard pixel format of the platform.
    */
   static constexpr GLenum GetType() noexcept {
-    return HaveGLES()
-      ? GL_UNSIGNED_SHORT_5_6_5
-      : GL_UNSIGNED_BYTE;
+    return GL_UNSIGNED_SHORT_5_6_5;
   }
 
   unsigned GetWidth() const noexcept {
@@ -96,12 +88,12 @@ public:
     return size.height;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const PixelSize &GetSize() const noexcept {
     return size;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   PixelRect GetRect() const noexcept {
     return PixelRect(GetSize());
   }
@@ -109,7 +101,7 @@ public:
   /**
    * Returns the physical size of the texture.
    */
-  gcc_pure
+  [[gnu::pure]]
   const PixelSize &GetAllocatedSize() const noexcept {
     return allocated_size;
   }

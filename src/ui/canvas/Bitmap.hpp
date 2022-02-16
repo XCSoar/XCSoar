@@ -21,12 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_BITMAP_HPP
-#define XCSOAR_SCREEN_BITMAP_HPP
+#pragma once
 
 #include "ui/dim/Point.hpp"
 #include "ui/dim/Size.hpp"
-#include "util/Compiler.h"
 
 #ifdef USE_MEMORY_CANVAS
 #include "ui/canvas/memory/Buffer.hpp"
@@ -152,7 +150,7 @@ public:
     return buffer.height;
   }
 #else
-  gcc_pure
+  [[gnu::pure]]
   PixelSize GetSize() const noexcept;
 
   unsigned GetWidth() const noexcept {
@@ -224,5 +222,3 @@ private:
 #endif
 #endif
 };
-
-#endif

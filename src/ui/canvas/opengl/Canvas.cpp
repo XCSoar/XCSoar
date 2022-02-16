@@ -34,7 +34,7 @@ Copyright_License {
 #include "ui/canvas/custom/Cache.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Util.hpp"
-#include "ui/opengl/Features.hpp"
+#include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
 #include "util/AllocatedArray.hxx"
 #include "util/Macros.hpp"
@@ -137,6 +137,27 @@ Canvas::DrawOutlineRectangleGL(PixelRect r) noexcept
 
   const ScopeVertexPointer vp(vertices);
   glDrawArrays(GL_LINE_LOOP, 0, 4);
+}
+
+void
+Canvas::DrawOutlineRectangle(PixelRect r) noexcept
+{
+  OpenGL::solid_shader->Use();
+
+  pen.Bind();
+  DrawOutlineRectangleGL(r);
+  pen.Unbind();
+}
+
+void
+Canvas::DrawOutlineRectangle(PixelRect r, Color color) noexcept
+{
+  OpenGL::solid_shader->Use();
+
+  color.Bind();
+  glLineWidth(1);
+
+  DrawOutlineRectangleGL(r);
 }
 
 void
@@ -254,12 +275,49 @@ Canvas::DrawHLine(int x1, int x2, int y, Color color)
   glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 }
 
+[[gnu::pure]]
+static glm::vec4
+ToNormalisedDeviceCoordinates(PixelPoint p) noexcept
+{
+  p += OpenGL::translate;
+  p -= PixelPoint{OpenGL::viewport_size / 2};
+
+  return glm::vec4{p.x, p.y, 0, 1} * OpenGL::projection_matrix;
+}
+
 void
 Canvas::DrawLine(PixelPoint a, PixelPoint b) noexcept
 {
   OpenGL::solid_shader->Use();
 
   pen.Bind();
+
+  if (pen.GetStyle() != Pen::SOLID) {
+    /* this kludge implements dashed lines using a special shader that
+       calculates the distance from the start of the line to the
+       current pixel and then determines whether to draw the pixel */
+
+    OpenGL::dashed_shader->Use();
+
+    GLfloat period = 1, ratio = 1;
+    switch (pen.GetStyle()) {
+    case Pen::SOLID:
+      break;
+
+    case Pen::DASH1:
+    case Pen::DASH2:
+    case Pen::DASH3:
+      period = 32;
+      ratio = 0.6;
+      break;
+    }
+
+    glUniform1f(OpenGL::dashed_period, period);
+    glUniform1f(OpenGL::dashed_ratio, ratio);
+
+    const glm::vec4 start = ToNormalisedDeviceCoordinates(a);
+    glUniform2f(OpenGL::dashed_start, start.x, start.y);
+  }
 
   const BulkPixelPoint v[] = { a, b };
   const ScopeVertexPointer vp(v);
@@ -407,7 +465,7 @@ Canvas::DrawArc(PixelPoint center, unsigned radius,
   ::Arc(*this, center, radius, start, end);
 }
 
-gcc_const
+[[gnu::const]]
 static unsigned
 AngleToDonutVertex(Angle angle)
 {
@@ -416,7 +474,7 @@ AngleToDonutVertex(Angle angle)
                                       ISINETABLE.size());
 }
 
-gcc_const
+[[gnu::const]]
 static std::pair<unsigned,unsigned>
 AngleToDonutVertices(Angle start, Angle end)
 {
@@ -573,9 +631,7 @@ Canvas::DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
   assert(ValidateUTF8(text));
 #endif
 
-#ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
-#endif
 
   if (font == nullptr)
     return;
@@ -610,9 +666,7 @@ Canvas::DrawTransparentText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
   assert(ValidateUTF8(text));
 #endif
 
-#ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
-#endif
 
   if (font == nullptr)
     return;
@@ -645,9 +699,7 @@ Canvas::DrawClippedText(PixelPoint p, PixelSize size,
   assert(ValidateUTF8(text));
 #endif
 
-#ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
-#endif
 
   if (font == nullptr)
     return;
@@ -678,9 +730,7 @@ Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 const GLTexture &texture,
                 PixelPoint src_position, PixelSize src_size) noexcept
 {
-#ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
-#endif
 
   OpenGL::texture_shader->Use();
 
@@ -726,9 +776,7 @@ Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 const Bitmap &src,
                 PixelPoint src_position, PixelSize src_size) noexcept
 {
-#ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
-#endif
   assert(src.IsDefined());
 
   OpenGL::texture_shader->Use();
@@ -742,9 +790,7 @@ void
 Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 const Bitmap &src)
 {
-#ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
-#endif
   assert(src.IsDefined());
 
   OpenGL::texture_shader->Use();
@@ -779,9 +825,7 @@ Canvas::StretchMono(PixelPoint dest_position, PixelSize dest_size,
 void
 Canvas::CopyToTexture(GLTexture &texture, PixelRect src_rc) const
 {
-#ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
-#endif
 
   texture.Bind();
   glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,

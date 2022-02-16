@@ -25,6 +25,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "DataGlobals.hpp"
+#include "ui/canvas/Features.hpp" // for SOFTWARE_ROTATE_DISPLAY
 #include "Profile/Profile.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/Settings.hpp"
@@ -224,12 +225,11 @@ try {
 
 /**
  * "Boots" up XCSoar
- * @param hInstance Instance handle
  * @param lpCmdLine Command line string
  * @return True if bootup successful, False otherwise
  */
 bool
-Startup()
+Startup(UI::Display &display)
 {
   VerboseOperationEnvironment operation;
   operation.SetProgressRange(1024);
@@ -251,12 +251,13 @@ Startup()
 #endif
 
   MainWindow *const main_window = CommonInterface::main_window =
-    new MainWindow();
+    new MainWindow(display);
   main_window->Create(SystemWindowSize(), style);
   if (!main_window->IsDefined())
     return false;
 
-  LogFormat("Display dpi=%u,%u", Display::GetXDPI(), Display::GetYDPI());
+  LogFormat("Display dpi=%u,%u",
+            Display::GetDPI(display).x, Display::GetDPI(display).y);
 
 #ifdef ENABLE_OPENGL
   LogFormat("OpenGL: "
@@ -320,8 +321,11 @@ Startup()
   CreateDataPath();
 
 #ifdef ANDROID
-  native_view->AcquireWakeLock();
-  native_view->SetFullScreen(ui_settings.display.full_screen);
+  {
+    const auto env = Java::GetEnv();
+    native_view->AcquireWakeLock(env);
+    native_view->SetFullScreen(env, ui_settings.display.full_screen);
+  }
 #endif
 
   Display::LoadOrientation(operation);

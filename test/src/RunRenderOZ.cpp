@@ -195,12 +195,14 @@ OZWindow::OnPaint(Canvas &canvas)
 class TestWindow : public UI::SingleWindow,
                    ListItemRenderer, ListCursorHandler {
   Button close_button;
-  ListControl *type_list;
+  ListControl *type_list = nullptr;
   OZWindow oz;
 
 public:
-  TestWindow(const TaskLook &task_look, const AirspaceLook &airspace_look)
-    :type_list(NULL), oz(task_look, airspace_look) {}
+  TestWindow(UI::Display &display,
+             const TaskLook &task_look, const AirspaceLook &airspace_look)
+    :UI::SingleWindow(display), oz(task_look, airspace_look) {}
+
   ~TestWindow() {
     delete type_list;
   }
@@ -254,7 +256,7 @@ protected:
 };
 
 static void
-Main()
+Main(UI::Display &display)
 {
   airspace_renderer_settings.SetDefaults();
 
@@ -264,7 +266,7 @@ Main()
   AirspaceLook *airspace_look = new AirspaceLook();
   airspace_look->Initialise(airspace_renderer_settings, normal_font);
 
-  TestWindow window(*task_look, *airspace_look);
+  TestWindow window(display, *task_look, *airspace_look);
   window.Create(*dialog_look, {480, 480});
 
   window.Show();

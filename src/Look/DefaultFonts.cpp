@@ -26,8 +26,10 @@ Copyright_License {
 #include "FontSettings.hpp"
 #include "Screen/Layout.hpp"
 
+namespace Fonts {
+
 static void
-InitialiseLogFonts(FontSettings &settings)
+InitialiseLogFonts(FontSettings &settings) noexcept
 {
   // new font for map labels
   settings.map = FontDescription(Layout::FontScale(10));
@@ -37,17 +39,19 @@ InitialiseLogFonts(FontSettings &settings)
 }
 
 FontSettings
-Fonts::GetDefaults()
+GetDefaults() noexcept
 {
   FontSettings settings;
   InitialiseLogFonts(settings);
   return settings;
 }
 
-bool
-Fonts::Initialize()
+void
+Initialize()
 {
   const auto default_settings = GetDefaults();
 
-  return Load(default_settings);
+  Load(default_settings);
 }
+
+} // namespace Fonts

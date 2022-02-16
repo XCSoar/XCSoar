@@ -26,9 +26,10 @@
 
 #include "ui/window/PaintWindow.hpp"
 #include "FLARM/List.hpp"
-#include "FLARM/Color.hpp"
 #include "TeamCode/Settings.hpp"
 #include "Math/FastRotation.hpp"
+
+#include <cstdint>
 
 class Color;
 class Brush;
@@ -44,10 +45,10 @@ protected:
   /**
    * The distance of the biggest circle in meters.
    */
-  double distance;
+  double distance = 2000;
 
-  int selection;
-  int warning;
+  int selection = -1;
+  int warning = -1;
   PixelPoint radar_mid;
 
   /**
@@ -61,12 +62,12 @@ protected:
    */
   unsigned radius;
 
-  bool small;
+  const bool small;
 
   PixelPoint sc[TrafficList::MAX_COUNT];
 
-  bool enable_north_up;
-  Angle heading;
+  bool enable_north_up = false;
+  Angle heading = Angle::Zero();
   FastRotation fr;
   FastIntegerRotation fir;
   TrafficList data;
@@ -74,65 +75,68 @@ protected:
   TeamCodeSettings settings;
 
 public:
-  enum SideInfoType {
-    SIDE_INFO_RELATIVE_ALTITUDE,
-    SIDE_INFO_VARIO,
-  } side_display_type;
+  enum class SideInfoType : uint8_t {
+    RELATIVE_ALTITUDE,
+    VARIO,
+  } side_display_type = SideInfoType::VARIO;
 
 public:
   FlarmTrafficWindow(const FlarmTrafficLook &_look,
                      unsigned _h_padding, unsigned _v_padding,
-                     bool _small = false);
+                     bool _small = false) noexcept;
 
 public:
-  bool WarningMode() const;
+  [[gnu::pure]]
+  bool WarningMode() const noexcept;
 
-  const FlarmTraffic *GetTarget() const {
+  const FlarmTraffic *GetTarget() const noexcept {
     return selection >= 0
       ? &data.list[selection]
       : NULL;
   }
 
-  void SetTarget(int i);
+  void SetTarget(int i) noexcept;
 
-  void SetTarget(const FlarmTraffic *traffic) {
+  void SetTarget(const FlarmTraffic *traffic) noexcept {
     SetTarget(traffic != NULL ? (int)data.TrafficIndex(traffic) : -1);
   }
 
-  void SetTarget(const FlarmId &id) {
+  void SetTarget(const FlarmId &id) noexcept {
     SetTarget(data.FindTraffic(id));
   }
 
-  void NextTarget();
-  void PrevTarget();
-  bool SelectNearTarget(PixelPoint p, int max_distance);
+  void NextTarget() noexcept;
+  void PrevTarget() noexcept;
+  bool SelectNearTarget(PixelPoint p, int max_distance) noexcept;
 
-  void SetDistance(double _distance) {
+  void SetDistance(double _distance) noexcept {
     distance = _distance;
     Invalidate();
   }
 
-  void Paint(Canvas &canvas);
+  void Paint(Canvas &canvas) noexcept;
 
 protected:
-  double RangeScale(double d) const;
+  [[gnu::pure]]
+  double RangeScale(double d) const noexcept;
 
-  void UpdateSelector(FlarmId id, PixelPoint pt);
-  void UpdateWarnings();
+  void UpdateSelector(FlarmId id, PixelPoint pt) noexcept;
+  void UpdateWarnings() noexcept;
   void Update(Angle new_direction, const TrafficList &new_data,
-              const TeamCodeSettings &new_settings);
-  void PaintRadarNoTraffic(Canvas &canvas) const;
+              const TeamCodeSettings &new_settings) noexcept;
+  void PaintRadarNoTraffic(Canvas &canvas) const noexcept;
   void PaintRadarTarget(Canvas &canvas, const FlarmTraffic &traffic,
-                        unsigned i);
-  void PaintRadarTraffic(Canvas &canvas);
+                        unsigned i) noexcept;
+  void PaintRadarTraffic(Canvas &canvas) noexcept;
 
-  void PaintTargetInfoSmall(
-      Canvas &canvas, const FlarmTraffic &traffic, unsigned i,
-      const Color &text_color, const Brush &arrow_brush);
+  void PaintTargetInfoSmall(Canvas &canvas, const FlarmTraffic &traffic,
+                            unsigned i,
+                            const Color &text_color,
+                            const Brush &arrow_brush) noexcept;
 
-  void PaintRadarPlane(Canvas &canvas) const;
-  void PaintRadarBackground(Canvas &canvas) const;
-  void PaintNorth(Canvas &canvas) const;
+  void PaintRadarPlane(Canvas &canvas) const noexcept;
+  void PaintRadarBackground(Canvas &canvas) const noexcept;
+  void PaintNorth(Canvas &canvas) const noexcept;
 
 protected:
   /* virtual methods from class Window */

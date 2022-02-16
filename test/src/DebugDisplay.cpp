@@ -22,36 +22,46 @@ Copyright_License {
 */
 
 #include "Hardware/DisplayDPI.hpp"
-
-#ifdef _WIN32
-#include <windows.h>
-#endif
+#include "ui/dim/Size.hpp"
+#include "ui/display/Display.hpp"
+#include "Math/Point2D.hpp"
+#include "util/PrintException.hxx"
 
 #include <cstdio>
 
 static void
-PrintScreenSize()
+PrintScreenSize(const UI::Display &display) noexcept
 {
-#ifdef _WIN32
-  unsigned width = GetSystemMetrics(SM_CXSCREEN);
-  unsigned height = GetSystemMetrics(SM_CYSCREEN);
-  printf("Width: %u px | Height: %u px\n", width, height);
+#if defined(USE_X11) || defined(MESA_KMS) || defined(USE_GDI)
+  const auto size = display.GetSize();
+  printf("Width: %u px | Height: %u px\n", size.width, size.height);
+#endif
+
+#if defined(USE_X11) || defined(MESA_KMS)
+  const auto size_mm = display.GetSizeMM();
+  printf("Width: %u mm | Height: %u mm\n", size_mm.width, size_mm.height);
 #endif
 }
 
 static void
-PrintDPI()
+PrintDPI(const UI::Display &display) noexcept
 {
-  printf("DPI X: %u | DPI Y: %u\n", Display::GetXDPI(), Display::GetYDPI());
+  const auto dpi = Display::GetDPI(display);
+  printf("DPI X: %u | DPI Y: %u\n", dpi.x, dpi.y);
 }
 
 int
 main(int argc, char **argv)
-{
+try {
+  const UI::Display display;
+
   printf("Display Information\n\n");
 
-  PrintScreenSize();
-  PrintDPI();
+  PrintScreenSize(display);
+  PrintDPI(display);
 
   return 0;
+} catch (...) {
+  PrintException(std::current_exception());
+  return EXIT_FAILURE;
 }

@@ -1,4 +1,24 @@
-Version 7.23 - not yet released
+Version 7.24 - not yet released
+
+Version 7.23 - 2022/02/10
+* user interface
+  - add "Set Frequency" buttons to alternates list
+  - revamped Credits dialog
+  - put "Details" button to first position in map elements dialog
+  - make "range" and "radial" in target dialog editable with keyboard
+* support uploading IGC files to WeGlide
+* Linux
+  - fix command-line option "--datapath"
+* Raspberry Pi / Cubieboard
+  - probe both /dev/dri/card0 and /dev/dri/card1
+  - reduce input lag
+* Android
+  - add SoftRF Academy and ES into 'white list' of USB devices
+  - fix crash with empty SD card slot
+* Kobo
+  - fix broken button text background
+  - add OTG support (serial, sound, net) for Clara HD
+  - fix "Network failure" in Wifi dialog
 
 Version 7.22 - 2022/01/14
 * user interface
@@ -869,7 +889,7 @@ Version 6.7 - 2013/09/30
   - show Bluetooth name instead of MAC address in device list
   - enable fast refresh mode on Nook Simple Touch
 * Analysis
-  - a retrospective task is compiled that summarises waypoints the aircraft has 
+  - a retrospective task is compiled that summarises waypoints the aircraft has
     visited (within 15km radius).  These waypoints are drawn on OLC page of analysis dialog.
 * data files
   - default profile is called "default.prf" instead of "xcsoar-registry.prf"
@@ -1768,10 +1788,10 @@ Version 6.1 - 2011/05/19
   - configurable aircraft symbol
   - new translations: Danish, Norwegian Bokmal, Romanian
 * route planning
-  - new optional minimum-time route planning around airspace and terrain.  
+  - new optional minimum-time route planning around airspace and terrain.
     - allows avoidance or terrain, airspace or both
     - takes final glide and cruise-climb portions of flight into account
-  - Configuration in Route Planner page of settings.  
+  - Configuration in Route Planner page of settings.
     - Feature is by default disabled.
     - See settings help text for configuration options
   - Limitations of current version:
@@ -1825,7 +1845,7 @@ Version 6.1 - 2011/05/19
   - FAI Triangle filter when adding turnpoints
   - added BGA start point sector
   - added AAT inner radius sector
-  - configurable alternate sorting 
+  - configurable alternate sorting
     - by arrival altitude
     - along task direction
     - along home direction
@@ -1857,7 +1877,7 @@ Version 6.1 - 2011/05/19
   - Analysis dialog shows multiple contest (OLC etc) results
   - Analysis dialog includes a thermal band graph
   - Waypoint select dialog allows filtering by start/finish
-  - Airspace warning dialog only shows buttons suitable for the respective airspace item, 
+  - Airspace warning dialog only shows buttons suitable for the respective airspace item,
 
 Version 6.0.10 - 2011-04-29
 * fix crash in flarm teammate setting

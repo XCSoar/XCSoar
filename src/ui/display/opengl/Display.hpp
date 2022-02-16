@@ -21,23 +21,14 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_HARDWARE_DISPLAY_SIZE_HPP
-#define XCSOAR_HARDWARE_DISPLAY_SIZE_HPP
+#pragma once
 
-#include "util/Compiler.h"
+namespace OpenGL {
 
-struct PixelSize;
+class Display {
+public:
+  Display();
+  ~Display() noexcept;
+};
 
-namespace Display {
-  /**
-   * Returns the pixel size of the whole display.
-   *
-   * @param fallback return this value on platforms that are
-   * fullscreen-only and where this function is not implemented; pass
-   * the main window size (which is usually full-screen)
-   */
-  gcc_const
-  PixelSize GetSize(PixelSize fallback);
-}
-
-#endif
+} // namespace OpenGL

@@ -24,11 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_HARDWARE_DISPLAY_DPI_HPP
 #define XCSOAR_HARDWARE_DISPLAY_DPI_HPP
 
-#include "util/Compiler.h"
-
-#if defined(USE_FB) || defined(MESA_KMS) || defined(ANDROID) || defined(USE_X11)
+#if defined(USE_FB) || defined(ANDROID)
 #define HAVE_DPI_DETECTION
 #endif
+
+struct UnsignedPoint2D;
+
+namespace UI { class Display; }
 
 namespace Display {
   /**
@@ -55,24 +57,17 @@ ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
              unsigned width_mm, unsigned height_mm) noexcept;
 #endif
 
-  /**
-   * Returns the number of pixels per logical inch along the screen width
-   * @param custom_dpi overide system dpi settings, but not command line dpi
-   * @return Number of pixels per logical inch along the screen width
-   */
-#ifndef __APPLE__
-  gcc_const
-#endif
-  unsigned GetXDPI(unsigned custom_dpi=0);
-  /**
-   * Returns the number of pixels per logical inch along the screen height
-   * @param custom_dpi overide system dpi settings, but not command line dpi
-   * @return Number of pixels per logical inch along the screen height
-   */
-#ifndef __APPLE__
-  gcc_const
-#endif
-  unsigned GetYDPI(unsigned custom_dpi=0);
+/**
+ * Returns the number of pixels per logical inch along the screen
+ * width and height.
+ *
+ * @param custom_dpi overide system dpi settings, but not command line dpi
+ * @return Number of pixels per logical inch along the screen width/height
+ */
+[[gnu::const]]
+UnsignedPoint2D
+GetDPI(const UI::Display &display, unsigned custom_dpi=0) noexcept;
+
 }
 
 #endif

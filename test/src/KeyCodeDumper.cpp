@@ -119,6 +119,8 @@ class TestWindow final : public UI::SingleWindow {
   Button close_button;
 
 public:
+  using UI::SingleWindow::SingleWindow;
+
   void Create(PixelSize size) {
     SingleWindow::Create(_T("KeyCodeDumper"), size);
 
@@ -152,9 +154,9 @@ protected:
 };
 
 static void
-Main()
+Main(UI::Display &display)
 {
-  TestWindow window;
+  TestWindow window{display};
   window.Create({240, 100});
   window.Show();
 
