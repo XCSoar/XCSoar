@@ -43,7 +43,7 @@ BufferCanvas::Create(PixelSize new_size)
   assert(!active);
 
   Destroy();
-  texture = new GLTexture(new_size, true);
+  texture = new GLTexture(INTERNAL_FORMAT, new_size, FORMAT, TYPE, true);
 
   if (OpenGL::render_buffer_stencil) {
     frame_buffer = new GLFrameBuffer();
@@ -83,7 +83,7 @@ BufferCanvas::Resize(PixelSize new_size)
   if (new_size == GetSize())
     return;
 
-  texture->ResizeDiscard(new_size);
+  texture->ResizeDiscard(INTERNAL_FORMAT, new_size, FORMAT, TYPE);
 
   if (stencil_buffer != nullptr) {
     /* the stencil buffer must be detached before we resize it */

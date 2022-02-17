@@ -63,7 +63,9 @@ public:
   /**
    * Create a texture with undefined content.
    */
-  explicit GLTexture(PixelSize _size, bool _flipped = false) noexcept;
+  explicit GLTexture(GLint internal_format, PixelSize _size,
+                     GLenum format, GLenum type,
+                     bool _flipped = false) noexcept;
 
   GLTexture(GLint internal_format, PixelSize _size,
             GLenum format, GLenum type, const GLvoid *data,
@@ -71,13 +73,6 @@ public:
 
   ~GLTexture() noexcept {
     glDeleteTextures(1, &id);
-  }
-
-  /**
-   * Returns the standard pixel format of the platform.
-   */
-  static constexpr GLenum GetType() noexcept {
-    return GL_UNSIGNED_SHORT_5_6_5;
   }
 
   unsigned GetWidth() const noexcept {
@@ -119,7 +114,8 @@ public:
   /**
    * Change the size of the texture, discarding any previous contents.
    */
-  void ResizeDiscard(PixelSize new_size) noexcept;
+  void ResizeDiscard(GLint internal_format, PixelSize new_size,
+                     GLenum format, GLenum type) noexcept;
 
 protected:
   void Initialise() noexcept;

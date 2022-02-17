@@ -41,7 +41,7 @@ static constexpr GLint TYPE = GL_UNSIGNED_BYTE;
 RawBitmap::RawBitmap(PixelSize _size) noexcept
   :size(_size),
    buffer(new RawColor[size.width * size.height]),
-   texture(new GLTexture(size))
+   texture(new GLTexture(GL_RGB, size, FORMAT, TYPE))
 {
   assert(size.width > 0);
   assert(size.height > 0);
