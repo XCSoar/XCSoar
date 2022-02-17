@@ -47,6 +47,17 @@ Display::~Display() noexcept
   eglTerminate(display);
 }
 
+[[gnu::pure]]
+static int
+GetConfigAttrib(EGLDisplay display, EGLConfig config,
+                int attribute, int default_value) noexcept
+{
+  int value;
+  return eglGetConfigAttrib(display, config, attribute, &value)
+    ? value
+    : default_value;
+}
+
 inline void
 Display::InitDisplay(EGLNativeDisplayType native_display)
 {
@@ -72,6 +83,14 @@ Display::InitDisplay(EGLNativeDisplayType native_display)
     throw std::runtime_error("eglBindAPI() failed");
 
   chosen_config = EGL::ChooseConfig(display);
+
+  LogFormat("EGL config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d",
+            GetConfigAttrib(display, chosen_config, EGL_RED_SIZE, 0),
+            GetConfigAttrib(display, chosen_config, EGL_GREEN_SIZE, 0),
+            GetConfigAttrib(display, chosen_config, EGL_BLUE_SIZE, 0),
+            GetConfigAttrib(display, chosen_config, EGL_ALPHA_SIZE, 0),
+            GetConfigAttrib(display, chosen_config, EGL_DEPTH_SIZE, 0),
+            GetConfigAttrib(display, chosen_config, EGL_STENCIL_SIZE, 0));
 }
 
 inline void
