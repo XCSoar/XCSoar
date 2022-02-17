@@ -40,14 +40,14 @@ Copyright_License {
 struct Instance : CoInstance {
   const Net::ScopeInit net_init{GetEventLoop()};
 
-  boost::json::value value;
+  boost::json::value json;
 
-  Co::InvokeTask DoRun(const WeGlideSettings &settings,
-                       uint_least32_t glider_type,
+  Co::InvokeTask DoRun(const WeGlide::User &user,
+                       uint_least32_t aircraft_id,
                        Path igc_path,
                        ProgressListener &progress)
   {
-    value = co_await WeGlide::UploadFlight(*Net::curl, settings, glider_type,
+    json = co_await WeGlide::UploadFlight(*Net::curl, user, aircraft_id,
                                            igc_path, progress);
   }
 };
@@ -56,28 +56,28 @@ int
 main(int argc, char *argv[])
 try {
   Args args(argc, argv, "PILOT BIRTHDAY GLIDER IGCFILE");
-  const unsigned pilot = atoi(args.ExpectNext());
+  WeGlide::User pilot({ (uint32_t) atoi(args.ExpectNext()) });
   const char *birthday_s = args.ExpectNext();
   const unsigned glider = atoi(args.ExpectNext());
   const auto igc_path = args.ExpectNextPath();
+
   args.ExpectEnd();
 
   unsigned year, month, day;
   if (sscanf(birthday_s, "%04u-%02u-%02u", &year, &month, &day) != 3)
     throw "Failed to parse date";
 
-  WeGlideSettings settings;
-  settings.pilot_id = pilot;
-  settings.pilot_birthdate = {year, month, day};
+  pilot.birthdate = {year, month, day};
+
 
   Instance instance;
   ConsoleOperationEnvironment env;
 
-  instance.Run(instance.DoRun(settings, glider,
+  instance.Run(instance.DoRun(pilot, glider,
                               igc_path, env));
 
   StdioOutputStream _stdout(stdout);
-  Json::Serialize(_stdout, instance.value);
+  Json::Serialize(_stdout, instance.json);
   return EXIT_SUCCESS;
 } catch (...) {
   PrintException(std::current_exception());
