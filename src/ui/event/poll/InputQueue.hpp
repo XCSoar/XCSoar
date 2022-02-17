@@ -95,6 +95,18 @@ public:
 #endif
   }
 
+  void Suspend() noexcept {
+#ifdef USE_LIBINPUT
+    libinput_handler.Suspend();
+#endif
+  }
+
+  void Resume() noexcept {
+#ifdef USE_LIBINPUT
+    libinput_handler.Resume();
+#endif
+  }
+
   bool Generate(Event &event) noexcept;
 };
 

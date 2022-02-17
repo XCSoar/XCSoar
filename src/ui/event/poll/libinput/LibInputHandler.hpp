@@ -71,6 +71,9 @@ public:
   bool Open() noexcept;
   void Close() noexcept;
 
+  void Suspend() noexcept;
+  void Resume() noexcept;
+
   void SetScreenSize(PixelSize _screen_size) noexcept {
     screen_size = _screen_size;
 

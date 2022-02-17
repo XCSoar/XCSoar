@@ -51,6 +51,9 @@ public:
     ::CloseHandle(trigger);
   }
 
+  void Suspend() noexcept {}
+  void Resume() noexcept {}
+
   /**
    * Caching wrapper for std::chrono::steady_clock::now().  The
    * real clock is queried at most once per event loop

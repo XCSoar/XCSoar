@@ -32,6 +32,7 @@ Copyright_License {
 #include "../test/src/Fonts.hpp"
 #include "ui/window/Init.hpp"
 #include "ui/window/SingleWindow.hpp"
+#include "ui/event/Queue.hpp"
 #include "ui/event/Timer.hpp"
 #include "Language/Language.hpp"
 #include "system/Process.hpp"
@@ -73,11 +74,13 @@ class FileMenuWidget final
   : public RowFormWidget
 {
   UI::Display &display;
+  UI::EventQueue &event_queue;
 
 public:
-  FileMenuWidget(UI::Display &_display, const DialogLook &look) noexcept
+  FileMenuWidget(UI::Display &_display, UI::EventQueue &_event_queue,
+                 const DialogLook &look) noexcept
     :RowFormWidget(look),
-     display(_display) {}
+     display(_display), event_queue(_event_queue) {}
 
 private:
   /* virtual methods from class Widget */
@@ -91,6 +94,7 @@ FileMenuWidget::Prepare(ContainerWindow &parent,
 {
   AddButton("Download XCSoar IGC files to USB", [this](){
     const UI::ScopeDropMaster drop_master{display};
+    const UI::ScopeSuspendEventQueue suspend_event_queue{event_queue};
     Run("/usr/bin/download-igc.sh");
   });
 
@@ -119,11 +123,13 @@ class SystemMenuWidget final
   : public RowFormWidget
 {
   UI::Display &display;
+  UI::EventQueue &event_queue;
 
 public:
-  SystemMenuWidget(UI::Display &_display, const DialogLook &look) noexcept
+  SystemMenuWidget(UI::Display &_display, UI::EventQueue &_event_queue,
+                   const DialogLook &look) noexcept
     :RowFormWidget(look),
-     display(_display) {}
+     display(_display), event_queue(_event_queue) {}
 
 private:
   /* virtual methods from class Widget */
@@ -234,16 +240,19 @@ SystemMenuWidget::Prepare(ContainerWindow &parent,
   AddButton("Calibrate Sensors", CalibrateSensors);
   AddButton("Calibrate Touch", [this](){
     const UI::ScopeDropMaster drop_master{display};
+    const UI::ScopeSuspendEventQueue suspend_event_queue{event_queue};
     Run("/usr/bin/ov-calibrate-ts.sh");
   });
 
   AddButton("System Settings", [this](){
     const UI::ScopeDropMaster drop_master{display};
+    const UI::ScopeSuspendEventQueue suspend_event_queue{event_queue};
     Run("/usr/lib/openvario/libexec/system_settings.sh");
   });
 
   AddButton("System Info", [this](){
     const UI::ScopeDropMaster drop_master{display};
+    const UI::ScopeSuspendEventQueue suspend_event_queue{event_queue};
     Run("/usr/lib/openvario/libexec/system_info.sh");
   });
 }
@@ -262,6 +271,7 @@ class MainMenuWidget final
   };
 
   UI::Display &display;
+  UI::EventQueue &event_queue;
 
   WndForm &dialog;
 
@@ -276,14 +286,16 @@ class MainMenuWidget final
   unsigned remaining_seconds = 3;
 
 public:
-  MainMenuWidget(UI::Display &_display, WndForm &_dialog) noexcept
+  MainMenuWidget(UI::Display &_display, UI::EventQueue &_event_queue,
+                 WndForm &_dialog) noexcept
     :RowFormWidget(_dialog.GetLook()),
-     display(_display),
+     display(_display), event_queue(_event_queue),
      dialog(_dialog) {}
 
 private:
   void StartXCSoar() noexcept {
     const UI::ScopeDropMaster drop_master{display};
+    const UI::ScopeSuspendEventQueue suspend_event_queue{event_queue};
     Run("/usr/bin/xcsoar", "-fly");
   }
 
@@ -340,7 +352,7 @@ MainMenuWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
     TWidgetDialog<FileMenuWidget>
       sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
                  GetLook(), "OpenVario File");
-    sub_dialog.SetWidget(display, GetLook());
+    sub_dialog.SetWidget(display, event_queue, GetLook());
     sub_dialog.AddButton(_("Close"), mrOK);
     return sub_dialog.ShowModal();
   });
@@ -351,7 +363,7 @@ MainMenuWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
     TWidgetDialog<SystemMenuWidget>
       sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
                  GetLook(), "OpenVario System");
-    sub_dialog.SetWidget(display, GetLook());
+    sub_dialog.SetWidget(display, event_queue, GetLook());
     sub_dialog.AddButton(_("Close"), mrOK);
     return sub_dialog.ShowModal();
   });
@@ -372,12 +384,13 @@ MainMenuWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 }
 
 static int
-Main(UI::SingleWindow &main_window, const DialogLook &dialog_look)
+Main(UI::EventQueue &event_queue, UI::SingleWindow &main_window,
+     const DialogLook &dialog_look)
 {
   TWidgetDialog<MainMenuWidget>
     dialog(WidgetDialog::Full{}, main_window,
            dialog_look, "OpenVario");
-  dialog.SetWidget(main_window.GetDisplay(), dialog);
+  dialog.SetWidget(main_window.GetDisplay(), event_queue, dialog);
 
   return dialog.ShowModal();
 }
@@ -404,7 +417,7 @@ Main()
   global_dialog_look = &dialog_look;
   global_main_window = &main_window;
 
-  int action = Main(main_window, dialog_look);
+  int action = Main(screen_init.GetEventQueue(), main_window, dialog_look);
 
   main_window.Destroy();
 
