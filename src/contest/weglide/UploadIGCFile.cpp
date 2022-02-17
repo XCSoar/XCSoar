@@ -45,10 +45,17 @@
 #include <cinttypes>
 
 // Wrapper for getting converted string values of a json string
-static const UTF8ToWideConverter 
-GetJsonString(boost::json::standalone::value json_value, std::string_view key)
-{
-  return UTF8ToWideConverter(json_value.at(key).get_string().c_str());
+static const StaticString<0x40>
+GetJsonString(boost::json::standalone::value json_value,
+              std::string_view key) noexcept {
+  StaticString<0x40> str;
+  auto value = json_value.as_object().if_contains(key);
+  if (value != nullptr)
+    str = UTF8ToWideConverter(value->get_string().c_str());
+  else
+    str.Format(_T("'%s' %s"), UTF8ToWideConverter(key.data()).c_str(),
+               _("not found"));
+  return str;
 }
 
 namespace WeGlide {
@@ -158,7 +165,7 @@ UploadIGCFile(Path igc_path, const User &user,
 try {
   StaticString<0x1000> msg;
   auto flight_data = UploadFile(igc_path, user, aircraft_id, msg);
-  if (flight_data.flight_id > 0) {
+  if (flight_data.IsValid()) {
     // upload successful!
     LogFormat(_("%s: %s"), _("WeGlide Upload"), msg.c_str());
     UploadSuccessDialog(flight_data, msg.c_str());
