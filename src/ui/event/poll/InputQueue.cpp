@@ -27,7 +27,7 @@ Copyright_License {
 
 namespace UI {
 
-InputEventQueue::InputEventQueue(EventQueue &queue)
+InputEventQueue::InputEventQueue(EventQueue &queue) noexcept
   :
 #ifdef KOBO
    keyboard(queue, merge_mouse),
@@ -47,12 +47,10 @@ InputEventQueue::InputEventQueue(EventQueue &queue)
 #endif
 }
 
-InputEventQueue::~InputEventQueue()
-{
-}
+InputEventQueue::~InputEventQueue() noexcept = default;
 
 bool
-InputEventQueue::Generate(Event &event)
+InputEventQueue::Generate(Event &event) noexcept
 {
 #ifdef KOBO
   event = merge_mouse.Generate();

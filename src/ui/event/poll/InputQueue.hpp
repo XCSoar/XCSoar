@@ -52,8 +52,8 @@ class InputEventQueue final {
 #endif /* !USE_LIBINPUT */
 
 public:
-  explicit InputEventQueue(EventQueue &queue);
-  ~InputEventQueue();
+  explicit InputEventQueue(EventQueue &queue) noexcept;
+  ~InputEventQueue() noexcept;
 
   void SetScreenSize(PixelSize screen_size) noexcept {
   #ifdef USE_LIBINPUT
@@ -69,7 +69,7 @@ public:
   }
 #endif
 
-  bool HasPointer() const {
+  bool HasPointer() const noexcept {
 #ifdef USE_LIBINPUT
     return libinput_handler.HasPointer();
 #else
@@ -78,16 +78,16 @@ public:
   }
 
 #ifdef USE_LIBINPUT
-  bool HasTouchScreen() const {
+  bool HasTouchScreen() const noexcept {
     return libinput_handler.HasTouchScreen();
   }
 
-  bool HasKeyboard() const {
+  bool HasKeyboard() const noexcept {
     return libinput_handler.HasKeyboard();
   }
 #endif
 
-  PixelPoint GetMousePosition() const {
+  PixelPoint GetMousePosition() const noexcept {
 #ifdef USE_LIBINPUT
     return PixelPoint(libinput_handler.GetX(), libinput_handler.GetY());
 #else
@@ -95,7 +95,7 @@ public:
 #endif
   }
 
-  bool Generate(Event &event);
+  bool Generate(Event &event) noexcept;
 };
 
 } // namespace UI

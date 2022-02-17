@@ -37,28 +37,29 @@ Copyright_License {
 
 template<typename T>
 static constexpr unsigned
-BitSize()
+BitSize() noexcept
 {
   return 8 * sizeof(T);
 }
 
 template<typename T>
 static constexpr size_t
-BitsToInts(unsigned n_bits)
+BitsToInts(unsigned n_bits) noexcept
 {
   return (n_bits + BitSize<T>() - 1) / BitSize<T>();
 }
 
 template<typename T>
 static constexpr bool
-CheckBit(const T bits[], unsigned i)
+CheckBit(const T bits[], unsigned i) noexcept
 {
   return bits[i / BitSize<T>()] & (T(1) << (i % BitSize<T>()));
 }
 
 namespace UI {
 
-LinuxInputDevice::LinuxInputDevice(EventQueue &_queue, MergeMouse &_merge)
+LinuxInputDevice::LinuxInputDevice(EventQueue &_queue,
+                                   MergeMouse &_merge) noexcept
   :queue(_queue), merge(_merge),
    edit_position(0, 0), public_position(0, 0),
    event(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady))
@@ -70,7 +71,7 @@ LinuxInputDevice::LinuxInputDevice(EventQueue &_queue, MergeMouse &_merge)
  */
 [[gnu::pure]]
 static bool
-IsPointerDevice(int fd)
+IsPointerDevice(int fd) noexcept
 {
   assert(fd >= 0);
 
@@ -82,7 +83,7 @@ IsPointerDevice(int fd)
 }
 
 bool
-LinuxInputDevice::Open(const char *path)
+LinuxInputDevice::Open(const char *path) noexcept
 {
   FileDescriptor _fd;
   if (!_fd.OpenReadOnly(path))
@@ -125,7 +126,7 @@ LinuxInputDevice::Open(const char *path)
 }
 
 void
-LinuxInputDevice::Close()
+LinuxInputDevice::Close() noexcept
 {
   if (!IsOpen())
     return;
@@ -137,7 +138,7 @@ LinuxInputDevice::Close()
 }
 
 inline void
-LinuxInputDevice::Read()
+LinuxInputDevice::Read() noexcept
 {
   FileDescriptor fd = event.GetFileDescriptor();
 
