@@ -21,11 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_LIST_WIDGET_HPP
-#define XCSOAR_LIST_WIDGET_HPP
+#pragma once
 
 #include "WindowWidget.hpp"
-#include "Form/List.hpp"
+#include "ui/control/List.hpp"
 
 class Window;
 
@@ -59,5 +58,3 @@ public:
     return true;
   }
 };
-
-#endif

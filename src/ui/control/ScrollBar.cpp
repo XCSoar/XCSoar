@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Form/ScrollBar.hpp"
+#include "ScrollBar.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/window/PaintWindow.hpp"

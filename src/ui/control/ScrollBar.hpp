@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FORM_SCROLL_BAR_HPP
-#define XCSOAR_FORM_SCROLL_BAR_HPP
+#pragma once
 
 #include "ui/dim/Rect.hpp"
 #include "Renderer/ButtonRenderer.hpp"
@@ -206,5 +205,3 @@ public:
    */
   unsigned DragMove(unsigned  size, unsigned view_size, int y) const;
 };
-
-#endif

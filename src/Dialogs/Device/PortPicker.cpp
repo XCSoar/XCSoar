@@ -25,7 +25,6 @@
 #include "PortDataField.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
-#include "Form/List.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Renderer/TextRowRenderer.hpp"

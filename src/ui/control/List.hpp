@@ -21,12 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FORM_LIST_HPP
-#define XCSOAR_FORM_LIST_HPP
+#pragma once
 
+#include "ScrollBar.hpp"
 #include "ui/window/PaintWindow.hpp"
 #include "ui/event/PeriodicTimer.hpp"
-#include "Form/ScrollBar.hpp"
 #include "UIUtil/KineticManager.hpp"
 #include "util/Compiler.h"
 
@@ -332,5 +331,3 @@ protected:
   void OnPaint(Canvas &canvas) override;
   void OnPaint(Canvas &canvas, const PixelRect &dirty) override;
 };
-
-#endif

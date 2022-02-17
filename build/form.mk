@@ -20,8 +20,8 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/CheckBox.cpp \
 	$(FORM_SRC_DIR)/Frame.cpp \
 	$(FORM_SRC_DIR)/Draw.cpp \
-	$(FORM_SRC_DIR)/List.cpp \
-	$(FORM_SRC_DIR)/ScrollBar.cpp \
+	$(SRC)/ui/control/List.cpp \
+	$(SRC)/ui/control/ScrollBar.cpp \
 	$(FORM_SRC_DIR)/Edit.cpp \
 	$(FORM_SRC_DIR)/DigitEntry.cpp \
 	$(FORM_SRC_DIR)/TabDisplay.cpp \

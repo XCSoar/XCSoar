@@ -28,7 +28,6 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Renderer/TextRowRenderer.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
-#include "Form/List.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"

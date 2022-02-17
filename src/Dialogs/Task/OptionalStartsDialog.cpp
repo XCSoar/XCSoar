@@ -24,7 +24,6 @@ Copyright_License {
 #include "TaskDialogs.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
-#include "Form/List.hpp"
 #include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
 #include "ui/canvas/Canvas.hpp"

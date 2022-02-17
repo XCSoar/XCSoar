@@ -25,9 +25,9 @@ Copyright_License {
 #define ENABLE_MAIN_WINDOW
 
 #include "Main.hpp"
-#include "Form/List.hpp"
 #include "Form/Form.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/control/List.hpp"
 
 static void
 PaintItemCallback(Canvas &canvas, const PixelRect rc, unsigned idx)
