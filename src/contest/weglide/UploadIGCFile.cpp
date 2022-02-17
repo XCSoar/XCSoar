@@ -84,6 +84,34 @@ UploadJsonInterpreter(const boost::json::value &json)
   return flight_data;
 }
 
+static const StaticString<0x100>
+UploadErrorInterpreter(const HttpResponse &http)
+{
+  auto error = http.json_value;
+  StaticString<0x100> error_string;
+  error_string.Format(_T("%s: %u"), _("HTTP failure code"), http.code);
+  if (!error.is_null()) {
+    StaticString<0x40> error_code;
+    try {
+      if (error.at("error_description").is_string())
+        error_code = GetJsonString(error, "error_description").c_str();
+    } catch ([[maybe_unused]] std::exception &e) {
+    }
+    if (error_code.empty()) {
+      try {
+        if (error.at("error").is_string())
+          error_code = GetJsonString(error, "error_description").c_str();
+      } catch ([[maybe_unused]] std::exception &e) {
+      }
+    }
+    if (!error_code.empty()) {
+      error_string.AppendFormat(_("\n%s: "), _("Error Description"));
+      error_string += error_code;
+    }
+  }
+  return error_string;
+}
+
 // UploadSuccessDialog is only a preliminary DialogBox to show the 
 // result of this upload
 static void
@@ -145,8 +173,8 @@ try {
 
     msg.Format(_("File upload '%s' was successful"), igc_path.c_str());
     return flight_data; // upload successful!
-  } else {  // failure case
-    msg.Format(_T("%s: %u"), _("HTTP failure code"), instance.http.code);
+  } else {
+      msg = UploadErrorInterpreter(instance.http);
   }
   return Flight();  // failure...
 } catch (const std::exception &e) {
