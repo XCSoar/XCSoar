@@ -46,8 +46,6 @@ Copyright_License {
 #include <libloaderapi.h>
 #endif
 
-using namespace UI;
-
 ScreenGlobalInit::ScreenGlobalInit()
 #ifdef ANDROID
   :display(EGL_DEFAULT_DISPLAY)
@@ -62,20 +60,20 @@ ScreenGlobalInit::ScreenGlobalInit()
 #endif
 
 #ifdef USE_POLL_EVENT
-  event_queue = new EventQueue(display);
+  UI::event_queue = new UI::EventQueue(display);
 #else
-  event_queue = new EventQueue();
+  UI::event_queue = new UI::EventQueue();
 #endif
 
 #ifdef KOBO
   Display::Rotate(DisplayOrientation::DEFAULT);
-  event_queue->SetDisplayOrientation(DisplayOrientation::DEFAULT);
+  UI::event_queue->SetDisplayOrientation(DisplayOrientation::DEFAULT);
 #endif
 
 #ifdef USE_WINUSER
   HINSTANCE hInstance = ::GetModuleHandle(nullptr);
   PaintWindow::register_class(hInstance);
-  SingleWindow::RegisterClass(hInstance);
+  UI::SingleWindow::RegisterClass(hInstance);
 #endif
 
   ScreenInitialized();
@@ -83,8 +81,8 @@ ScreenGlobalInit::ScreenGlobalInit()
 
 ScreenGlobalInit::~ScreenGlobalInit()
 {
-  delete event_queue;
-  event_queue = nullptr;
+  delete UI::event_queue;
+  UI::event_queue = nullptr;
 
 #ifdef USE_GDI
   GdiShutdown();
