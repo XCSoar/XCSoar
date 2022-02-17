@@ -51,32 +51,10 @@ GetJsonString(boost::json::standalone::value json_value, std::string_view key)
 
 namespace WeGlide {
 
-struct User {
-  uint32_t id;
-  BrokenDate birthdate;
-  StaticString<0x80> name;
-};
-
-struct Aircraft {
-  uint32_t id;
-  StaticString<0x40> name;
-  StaticString<4> kind;  // 'MG' - motor aircraft,...
-  StaticString<10> sc_class;
-};
-
-struct FlightData {
-  uint64_t flight_id = 0;
-  User user;
-  Aircraft aircraft;
-  StaticString<0x40> scoring_date;
-  StaticString<0x40> registration;
-  StaticString<0x40> competition_id;
-};
-
-static FlightData
+static Flight
 UploadJsonInterpreter(const boost::json::value &json)
 {
-  FlightData flight_data;
+  Flight flight_data;
   // flight is the 1st flight object in this array ('at(0)')
   auto flight = json.as_array().at(0);
   flight_data.scoring_date = GetJsonString(flight, "scoring_date").c_str();
@@ -100,7 +78,7 @@ UploadJsonInterpreter(const boost::json::value &json)
 // UploadSuccessDialog is only a preliminary DialogBox to show the 
 // result of this upload
 static void
-UploadSuccessDialog(const FlightData &flight_data, const TCHAR *msg)
+UploadSuccessDialog(const Flight &flight_data, const TCHAR *msg)
 {
   StaticString<0x1000> display_string;
   // TODO: Create a real Dialog with fields in 'src/Dialogs/Cloud/weglide'!
@@ -121,22 +99,26 @@ UploadSuccessDialog(const FlightData &flight_data, const TCHAR *msg)
 struct CoInstance {
   boost::json::value value;
   Co::InvokeTask
-  UpdateTask(Path igc_path, const WeGlideSettings &settings,
-    uint_least32_t glider_id, ProgressListener &progress)
+  UpdateTask(Path igc_path, const User &user,
+    uint_least32_t aircraft_id, ProgressListener &progress)
   {
-    value = co_await UploadFlight(*Net::curl, settings, glider_id,
+    value = co_await UploadFlight(*Net::curl, user, aircraft_id,
       igc_path, progress);
   }
 };
 
-static FlightData
-UploadFile(Path igc_path, StaticString<0x1000> &msg) noexcept
+static Flight
+UploadFile(Path igc_path, User user, uint_least32_t aircraft_id,
+  StaticString<0x1000> &msg) noexcept
 {
-  FlightData flight_data({ 0 });
+  Flight flight_data;
   try {
-    WeGlideSettings settings = CommonInterface::GetComputerSettings().weglide;
-    uint32_t glider_id = CommonInterface::GetComputerSettings().plane
-      .weglide_glider_type;
+    if (aircraft_id == 0)
+      aircraft_id = CommonInterface::GetComputerSettings().plane
+        .weglide_glider_type;
+    if (user.id == 0) {
+      user = CommonInterface::GetComputerSettings().weglide.pilot;
+    }
 
     if (!File::Exists(igc_path)) {
       msg.Format(_("'%s' - %s"), igc_path.c_str(), _("File doesn't exist"));
@@ -146,8 +128,8 @@ UploadFile(Path igc_path, StaticString<0x1000> &msg) noexcept
     PluggableOperationEnvironment env;
     CoInstance instance;
     if (ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-      _("Upload Flight"), instance.UpdateTask(igc_path, settings,
-        glider_id, env), &env) == false) {
+      _("Upload Flight"), instance.UpdateTask(igc_path, user,
+        aircraft_id, env), &env) == false) {
       msg.Format(_("'%s' - %s"), igc_path.c_str(),
         _("ShowCoDialog with failure"));
       return flight_data;  // with flight_id = 0!
@@ -167,11 +149,12 @@ UploadFile(Path igc_path, StaticString<0x1000> &msg) noexcept
 }
 
 bool
-UploadIGCFile(Path igc_path) noexcept
+UploadIGCFile(Path igc_path, const User &user,
+  uint_least32_t aircraft_id) noexcept
 { 
   try {
     StaticString<0x1000> msg;
-    auto flight_data = UploadFile(igc_path, msg);
+    auto flight_data = UploadFile(igc_path, user, aircraft_id, msg);
     if (flight_data.flight_id > 0) {
       // upload successful!
       LogFormat(_("%s: %s"), _("WeGlide Upload"), msg.c_str());
