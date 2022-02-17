@@ -277,6 +277,7 @@ class MainMenuWidget final
 
   UI::Timer timer{[this](){
     if (--remaining_seconds == 0) {
+      HideRow(Controls::TIMER);
       StartXCSoar();
     } else {
       ScheduleTimer();
