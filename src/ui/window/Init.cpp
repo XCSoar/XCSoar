@@ -24,7 +24,6 @@ Copyright_License {
 #include "Init.hpp"
 #include "Screen/Debug.hpp"
 #include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
 
 #ifdef USE_FREETYPE
 #include "ui/canvas/Font.hpp"
@@ -59,11 +58,7 @@ ScreenGlobalInit::ScreenGlobalInit()
   GdiStartup();
 #endif
 
-#ifdef USE_POLL_EVENT
-  UI::event_queue = new UI::EventQueue(display);
-#else
-  UI::event_queue = new UI::EventQueue();
-#endif
+  UI::event_queue = &event_queue;
 
 #ifdef KOBO
   Display::Rotate(DisplayOrientation::DEFAULT);
@@ -81,7 +76,6 @@ ScreenGlobalInit::ScreenGlobalInit()
 
 ScreenGlobalInit::~ScreenGlobalInit()
 {
-  delete UI::event_queue;
   UI::event_queue = nullptr;
 
 #ifdef USE_GDI
