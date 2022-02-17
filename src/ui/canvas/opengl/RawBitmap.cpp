@@ -30,6 +30,14 @@ Copyright_License {
 
 #include <cassert>
 
+#ifdef USE_RGB565
+static constexpr GLint FORMAT = GL_RGB;
+static constexpr GLint TYPE = GL_UNSIGNED_SHORT_5_6_5;
+#else
+static constexpr GLint FORMAT = GL_RGBA;
+static constexpr GLint TYPE = GL_UNSIGNED_BYTE;
+#endif
+
 RawBitmap::RawBitmap(PixelSize _size) noexcept
   :size(_size),
    buffer(new RawColor[size.width * size.height]),
@@ -51,12 +59,7 @@ RawBitmap::BindAndGetTexture() const noexcept
   if (dirty) {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size.width, size.height,
-#ifdef USE_RGB565
-                    GL_RGB, GL_UNSIGNED_SHORT_5_6_5,
-#else
-                    GL_RGBA, GL_UNSIGNED_BYTE,
-#endif
-                    GetBuffer());
+                    FORMAT, TYPE, GetBuffer());
 
     dirty = false;
   }
