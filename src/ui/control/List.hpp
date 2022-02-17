@@ -27,7 +27,6 @@ Copyright_License {
 #include "ui/window/PaintWindow.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "UIUtil/KineticManager.hpp"
-#include "util/Compiler.h"
 
 struct DialogLook;
 class ContainerWindow;
@@ -77,14 +76,14 @@ public:
 
 class ListCursorHandler {
 public:
-  virtual void OnCursorMoved(gcc_unused unsigned index) noexcept {}
+  virtual void OnCursorMoved([[maybe_unused]] unsigned index) noexcept {}
 
-  gcc_pure
-  virtual bool CanActivateItem(gcc_unused unsigned index) const noexcept {
+  [[gnu::pure]]
+  virtual bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept {
     return false;
   }
 
-  virtual void OnActivateItem(gcc_unused unsigned index) noexcept {}
+  virtual void OnActivateItem([[maybe_unused]] unsigned index) noexcept {}
 };
 
 /**
@@ -265,7 +264,7 @@ public:
   void MoveOrigin(int delta) noexcept;
 
 protected:
-  gcc_pure
+  [[gnu::pure]]
   bool CanActivateItem() const noexcept;
   void ActivateItem() noexcept;
 
@@ -282,13 +281,13 @@ protected:
    * Determine which list item resides at the specified pixel row.
    * Returns -1 if there is no such list item.
    */
-  gcc_pure
+  [[gnu::pure]]
   int ItemIndexAt(int y) const noexcept {
     int i = (y + pixel_pan) / item_height + origin;
     return i >= 0 && (unsigned)i < length ? i : -1;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   PixelRect item_rect(unsigned i) const noexcept {
     PixelRect rc;
     rc.left = 0;
