@@ -42,8 +42,8 @@
 
 /**
  * An array with a maximum size known at compile time.  It keeps track
- * of the actual length at runtime. The clear() function needs to be called
- * to initialize the class properly.
+ * of the actual length at runtime. The clear() function needs to be
+ * called to initialize the class properly.
  */
 template<class T, std::size_t max>
 class TrivialArray {
@@ -101,8 +101,8 @@ public:
 	}
 
 	/**
-	 * Forcibly set the specified size, without initialising or freeing
-	 * new/excess elements.
+	 * Forcibly set the specified size, without initialising or
+	 * freeing new/excess elements.
 	 */
 	void resize(size_type new_size) noexcept {
 		assert(new_size <= max_size());
@@ -203,8 +203,8 @@ public:
 	}
 
 	/**
-	 * Append an element at the end of the array, increasing the length
-	 * by one.  No bounds checking.
+	 * Append an element at the end of the array, increasing the
+	 * length by one.  No bounds checking.
 	 */
 	void append(const_reference value) {
 		assert(!full());
@@ -223,8 +223,8 @@ public:
 	}
 
 	/**
-	 * Like append(), but checks if the array is already full (returns
-	 * false in this case).
+	 * Like append(), but checks if the array is already full
+	 * (returns false in this case).
 	 */
 	bool checked_append(const_reference value) {
 		if (full())
