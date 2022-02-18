@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "TCPClientPort.hpp"
 #include "event/Call.hxx"
+#include "net/UniqueSocketDescriptor.hxx"
 
 TCPClientPort::TCPClientPort(EventLoop &event_loop, Cares::Channel &cares,
                              const char *host, unsigned port,
