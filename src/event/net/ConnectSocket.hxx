@@ -44,7 +44,7 @@ class AddressInfo;
 
 class ConnectSocketHandler {
 public:
-	virtual void OnSocketConnectSuccess(UniqueSocketDescriptor &&fd) noexcept = 0;
+	virtual void OnSocketConnectSuccess(UniqueSocketDescriptor fd) noexcept = 0;
 	virtual void OnSocketConnectTimeout() noexcept;
 	virtual void OnSocketConnectError(std::exception_ptr ep) noexcept = 0;
 };

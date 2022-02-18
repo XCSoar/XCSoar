@@ -75,7 +75,7 @@ TCPClientPort::OnResolverError(std::exception_ptr error) noexcept
 }
 
 void
-TCPClientPort::OnSocketConnectSuccess(UniqueSocketDescriptor &&fd) noexcept
+TCPClientPort::OnSocketConnectSuccess(UniqueSocketDescriptor fd) noexcept
 {
   assert(connect);
 
