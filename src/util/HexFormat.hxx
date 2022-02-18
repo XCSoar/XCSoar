@@ -92,8 +92,16 @@ HexFormatUint64Fixed(char dest[16], uint64_t number) noexcept
  * all hex digits plus the null terminator
  * @return a pointer to the generated null terminator
  */
-char *
-HexFormat(char *dest, ConstBuffer<uint8_t> src) noexcept;
+constexpr char *
+HexFormat(char *dest, ConstBuffer<uint8_t> src) noexcept
+{
+	for (auto i : src) {
+		dest = HexFormatUint8Fixed(dest, i);
+		dest += 2;
+	}
+
+	return dest;
+}
 
 /**
  * Like HexFormat(), but return a #StringBuffer with exactly the
