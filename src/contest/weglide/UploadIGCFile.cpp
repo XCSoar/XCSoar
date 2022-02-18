@@ -142,7 +142,7 @@ UploadFile(Path igc_path, User user, uint_least32_t aircraft_id,
     return flight_data;  // upload successful!
   }
   catch (const std::exception &e) {
-    msg.Format(_("'%s' - %s"), igc_path.c_str(),
+    msg.Format(_T("'%s' - %s"), igc_path.c_str(),
       UTF8ToWideConverter(e.what()).c_str());
     return flight_data;  // with flight_id = 0!
   }
