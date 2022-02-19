@@ -53,6 +53,8 @@ Copyright_License {
 
 #include <windef.h> /* for MAX_PATH */
 
+#ifdef HAVE_NLS
+
 #ifndef HAVE_NATIVE_GETTEXT
 
 #include "MOLoader.hpp"
@@ -134,49 +136,55 @@ extern "C"
 }
 
 #ifdef _WIN32
-#define L(number, code_name, display_name) { number, code_name ## _mo, code_name ## _mo_size, _T( #code_name ".mo"), _T(display_name) }
+#define L(number, locale, code_name, display_name) { number, code_name ## _mo, code_name ## _mo_size, _T( #code_name ".mo"), _T(display_name) }
 #else
-#define L(number, code_name, display_name) { code_name ## _mo, code_name ## _mo_size, _T( #code_name ".mo"), _T(display_name) }
+#define L(number, locale, code_name, display_name) { code_name ## _mo, code_name ## _mo_size, _T( #code_name ".mo"), _T(display_name) }
 #endif
 
+#endif // HAVE_BUILTIN_LANGUAGES
+
+#ifdef HAVE_NATIVE_GETTEXT
+#define L(number, locale, code_name, display_name) { #locale ".UTF-8", _T( #code_name ".mo"), _T(display_name) }
+#endif // HAVE_NATIVE_GETTEXT
+
 const BuiltinLanguage language_table[] = {
-  L(LANG_BULGARIAN, bg, "Bulgarian"),
-  L(LANG_CATALAN, ca, "Catalan"),
-  L(LANG_CHINESE, zh_CN, "Simplified Chinese"),
-  L(LANG_CHINESE_TRADITIONAL, zh_Hant, "Traditional Chinese"),
-  L(LANG_CZECH, cs, "Czech"),
-  L(LANG_DANISH, da, "Danish"),
-  L(LANG_GERMAN, de, "German"),
-  L(LANG_GREEK, el, "Greek"),
-  L(LANG_SPANISH, es, "Spanish"),
-  L(LANG_FINNISH, fi, "Finnish"),
-  L(LANG_FRENCH, fr, "French"),
-  L(LANG_HEBREW, he, "Hebrew"),
-  L(LANG_CROATIAN, hr, "Croatian"),
-  L(LANG_HUNGARIAN, hu, "Hungarian"),
-  L(LANG_ITALIAN, it, "Italian"),
-  L(LANG_JAPANESE, ja, "Japanese"),
-  L(LANG_KOREAN, ko, "Korean"),
-  L(LANG_LITHUANIAN, lt, "Lithuanian"),
-  L(LANG_NORWEGIAN, nb, "Norwegian"),
-  L(LANG_DUTCH, nl, "Dutch"),
-  L(LANG_POLISH, pl, "Polish"),
-  L(LANG_PORTUGUESE, pt_BR, "Brazilian Portuguese"),
+  L(LANG_BULGARIAN, bg_BG, bg, "Bulgarian"),
+  L(LANG_CATALAN, ca_ES, ca, "Catalan"),
+  L(LANG_CHINESE, zh_CN, zh_CN, "Simplified Chinese"),
+  L(LANG_CHINESE_TRADITIONAL, zh_HK, zh_Hant, "Traditional Chinese"),
+  L(LANG_CZECH, cs_CZ, cs, "Czech"),
+  L(LANG_DANISH, da_DK, da, "Danish"),
+  L(LANG_GERMAN, de_DE, de, "German"),
+  L(LANG_GREEK, el_GR, el, "Greek"),
+  L(LANG_SPANISH, es_ES, es, "Spanish"),
+  L(LANG_FINNISH, fi_FI, fi, "Finnish"),
+  L(LANG_FRENCH, fr_FR, fr, "French"),
+  L(LANG_HEBREW, he_IL, he, "Hebrew"),
+  L(LANG_CROATIAN, hr_HR, hr, "Croatian"),
+  L(LANG_HUNGARIAN, hu_HU, hu, "Hungarian"),
+  L(LANG_ITALIAN, it_IT, it, "Italian"),
+  L(LANG_JAPANESE, ja_HP, ja, "Japanese"),
+  L(LANG_KOREAN, ko_KR, ko, "Korean"),
+  L(LANG_LITHUANIAN, lt_LT, lt, "Lithuanian"),
+  L(LANG_NORWEGIAN, nb_NO, nb, "Norwegian"),
+  L(LANG_DUTCH, nl_NL, nl, "Dutch"),
+  L(LANG_POLISH, pl_PL, pl, "Polish"),
+  L(LANG_PORTUGUESE, pt_BR, pt_BR, "Brazilian Portuguese"),
 
   /* our Portuguese translation is less advanced than Brazilian
      Portuguese */
-  L(LANG_PORTUGUESE, pt, "Portuguese"),
+  L(LANG_PORTUGUESE, pt_PT, pt, "Portuguese"),
 
-  L(LANG_ROMANIAN, ro, "Romanian"),
-  L(LANG_RUSSIAN, ru, "Russian"),
-  L(LANG_SLOVAK, sk, "Slovak"),
-  L(LANG_SLOVENIAN, sl, "Slovenian"),
-  L(LANG_SERBIAN, sr, "Serbian"),
-  L(LANG_SWEDISH, sv, "Swedish"),
-  L(LANG_TELUGU, te, "Telugu"),
-  L(LANG_TURKISH, tr, "Turkish"),
-  L(LANG_UKRAINIAN, uk, "Ukranian"),
-  L(LANG_VIETNAMESE, vi, "Vietnamese"),
+  L(LANG_ROMANIAN, ro_RO, ro, "Romanian"),
+  L(LANG_RUSSIAN, ru_RU, ru, "Russian"),
+  L(LANG_SLOVAK, sk_SK, sk, "Slovak"),
+  L(LANG_SLOVENIAN, sl_SI, sl, "Slovenian"),
+  L(LANG_SERBIAN, sr_RS, sr, "Serbian"),
+  L(LANG_SWEDISH, sv_SE, sv, "Swedish"),
+  L(LANG_TELUGU, te_IN, te, "Telugu"),
+  L(LANG_TURKISH, tr_TR, tr, "Turkish"),
+  L(LANG_UKRAINIAN, uk_UA, uk, "Ukranian"),
+  L(LANG_VIETNAMESE, vi_VN, vi, "Vietnamese"),
 
   {},
 };
@@ -212,6 +220,8 @@ FindLanguage(const TCHAR *resource) noexcept
 
   return nullptr;
 }
+
+#ifdef HAVE_BUILTIN_LANGUAGES
 
 static const BuiltinLanguage *
 DetectLanguage() noexcept
@@ -323,13 +333,12 @@ InitNativeGettext(const char *locale) noexcept
 
 #endif // HAVE_NATIVE_GETTEXT
 
-#ifdef HAVE_BUILTIN_LANGUAGES
-
 static bool
 ReadBuiltinLanguage(const BuiltinLanguage &language) noexcept
 {
   LogFormat(_T("Language: loading resource '%s'"), language.resource);
 
+#ifdef HAVE_BUILTIN_LANGUAGES
   // Load MO file from resource
   delete mo_loader;
   mo_loader = new MOLoader(language.begin, (size_t)language.size);
@@ -343,6 +352,10 @@ ReadBuiltinLanguage(const BuiltinLanguage &language) noexcept
   LogFormat(_T("Loaded translations from resource '%s'"), language.resource);
 
   mo_file = &mo_loader->get();
+#else
+  InitNativeGettext(language.locale);
+#endif
+
   return true;
 }
 
@@ -353,47 +366,25 @@ ReadResourceLanguageFile(const TCHAR *resource) noexcept
   return language != nullptr && ReadBuiltinLanguage(*language);
 }
 
-#else /* !HAVE_BUILTIN_LANGUAGES */
-
-#ifndef HAVE_NATIVE_GETTEXT
-
-static inline const char *
-DetectLanguage() noexcept
-{
-  return nullptr;
-}
-
-static inline bool
-ReadBuiltinLanguage(char dummy) noexcept
-{
-  return false;
-}
-
-static bool
-ReadResourceLanguageFile(const TCHAR *resource) noexcept
-{
-  return false;
-}
-
-#endif /* HAVE_NATIVE_GETTEXT */
-
-#endif /* !HAVE_BUILTIN_LANGUAGES */
-
-#ifndef HAVE_NATIVE_GETTEXT
-
 static void
 AutoDetectLanguage() noexcept
 {
+#ifdef HAVE_NATIVE_GETTEXT
+  // Set the current locale to the environment's default
+  InitNativeGettext("");
+#else
   // Try to detect the language by calling the OS's corresponding functions
   const auto l = DetectLanguage();
   if (l != nullptr)
     // If a language was detected -> try to load the MO file
     ReadBuiltinLanguage(*l);
+#endif
 }
 
 static bool
 LoadLanguageFile(Path path) noexcept
 {
+#ifdef HAVE_BUILTIN_LANGUAGES
   LogFormat(_T("Language: loading file '%s'"), path.c_str());
 
   delete mo_loader;
@@ -416,9 +407,12 @@ LoadLanguageFile(Path path) noexcept
 
   mo_file = &mo_loader->get();
   return true;
+#else
+  return false;
+#endif
 }
 
-#endif /* !HAVE_NATIVE_GETTEXT */
+#endif // HAVE_NLS
 
 void
 InitLanguage() noexcept
@@ -435,7 +429,7 @@ InitLanguage() noexcept
 void
 ReadLanguageFile() noexcept
 {
-#ifndef HAVE_NATIVE_GETTEXT
+#ifdef HAVE_NLS
   CloseLanguageFile();
 
   LogFormat("Loading language file");
@@ -465,7 +459,8 @@ ReadLanguageFile() noexcept
 
   if (!LoadLanguageFile(value) && !ReadResourceLanguageFile(base.c_str()))
     AutoDetectLanguage();
-#endif
+
+#endif // HAVE_NLS
 }
 
 void

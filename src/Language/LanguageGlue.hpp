@@ -39,10 +39,16 @@ CloseLanguageFile() noexcept;
  * own.
  */
 #define HAVE_NATIVE_GETTEXT
+#define HAVE_NLS
 
 #else
 
 #define HAVE_BUILTIN_LANGUAGES
+#define HAVE_NLS
+
+#endif
+
+#ifdef HAVE_NLS
 
 #include <cstddef>
 #include <tchar.h>
@@ -51,12 +57,20 @@ struct BuiltinLanguage {
 #ifdef _WIN32
   unsigned language;
 #endif
+#ifdef HAVE_NATIVE_GETTEXT
+  /**
+   * The (POSIX) locale name (only language and territory, without
+   * codeset and modifier), e.g. "de_DE".
+   */
+  const char *locale;
+#else
   const void *begin;
   size_t size;
+#endif
   const TCHAR *resource;
   const TCHAR *name;
 };
 
 extern const BuiltinLanguage language_table[];
 
-#endif
+#endif // HAVE_NLS
