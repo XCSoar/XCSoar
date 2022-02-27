@@ -28,7 +28,6 @@ Copyright_License {
 #include "Dialogs/TextEntry.hpp"
 #include "Form/Button.hpp"
 #include "Form/ButtonPanel.hpp"
-#include "Form/List.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Widget/TextWidget.hpp"
 #include "Widget/ButtonPanelWidget.hpp"

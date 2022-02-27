@@ -43,6 +43,10 @@ class GLRenderBuffer;
  * An off-screen #Canvas implementation.
  */
 class BufferCanvas : public Canvas {
+  static constexpr GLint INTERNAL_FORMAT = GL_RGB;
+  static constexpr GLint FORMAT = GL_RGB;
+  static constexpr GLint TYPE = GL_UNSIGNED_BYTE;
+
   GLTexture *texture = nullptr;
 
   GLFrameBuffer *frame_buffer = nullptr;

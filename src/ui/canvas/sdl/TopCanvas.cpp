@@ -31,6 +31,7 @@ Copyright_License {
 #include "ui/dim/Rect.hpp"
 #include "ui/canvas/opengl/Init.hpp"
 #include "Math/Point2D.hpp"
+#include "LogFile.hpp"
 #else
 #include "ui/canvas/memory/Export.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -53,6 +54,20 @@ Copyright_License {
 #endif
 
 #include <cassert>
+
+#ifdef ENABLE_OPENGL
+
+[[gnu::pure]]
+static int
+GetConfigAttrib(SDL_GLattr attribute, int default_value) noexcept
+{
+  int value;
+  return SDL_GL_GetAttribute(attribute, &value) == 0
+    ? value
+    : default_value;
+}
+
+#endif
 
 TopCanvas::TopCanvas(UI::Display &_display, SDL_Window *_window)
   :display(_display), window(_window)
@@ -79,6 +94,14 @@ TopCanvas::TopCanvas(UI::Display &_display, SDL_Window *_window)
   if (::SDL_GL_CreateContext(window) == nullptr)
     throw FormatRuntimeError("SDL_GL_CreateContext(%p) has failed: %s",
                              window, ::SDL_GetError());
+
+  LogFormat("GLX config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d",
+            GetConfigAttrib(SDL_GL_RED_SIZE, 0),
+            GetConfigAttrib(SDL_GL_GREEN_SIZE, 0),
+            GetConfigAttrib(SDL_GL_BLUE_SIZE, 0),
+            GetConfigAttrib(SDL_GL_ALPHA_SIZE, 0),
+            GetConfigAttrib(SDL_GL_DEPTH_SIZE, 0),
+            GetConfigAttrib(SDL_GL_STENCIL_SIZE, 0));
 
   /* this is usually done by OpenGL::Display, but libSDL doesn't allow
      that */

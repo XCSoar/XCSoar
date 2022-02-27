@@ -32,19 +32,19 @@
 
 #pragma once
 
-#include "net/UniqueSocketDescriptor.hxx"
 #include "event/SocketEvent.hxx"
 #include "event/CoarseTimerEvent.hxx"
 #include "util/Cancellable.hxx"
 
 #include <exception>
 
+class UniqueSocketDescriptor;
 class SocketAddress;
 class AddressInfo;
 
 class ConnectSocketHandler {
 public:
-	virtual void OnSocketConnectSuccess(UniqueSocketDescriptor &&fd) noexcept = 0;
+	virtual void OnSocketConnectSuccess(UniqueSocketDescriptor fd) noexcept = 0;
 	virtual void OnSocketConnectTimeout() noexcept;
 	virtual void OnSocketConnectError(std::exception_ptr ep) noexcept = 0;
 };

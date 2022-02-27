@@ -79,6 +79,18 @@ public:
     return event_loop;
   }
 
+  void Suspend() noexcept {
+#if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
+    input_queue.Suspend();
+#endif
+  }
+
+  void Resume() noexcept {
+#if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
+    input_queue.Resume();
+#endif
+  }
+
 #ifdef USE_X11
   bool WasCtrlClick() const noexcept {
     return input_queue.WasCtrlClick();

@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Form/ScrollBar.hpp"
+#include "ScrollBar.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/window/PaintWindow.hpp"
@@ -30,7 +30,7 @@ Copyright_License {
 
 #include <cassert>
 
-ScrollBar::ScrollBar(const ButtonLook &_button_look)
+ScrollBar::ScrollBar(const ButtonLook &_button_look) noexcept
   :button_renderer(_button_look), dragging(false)
 {
   // Reset the ScrollBar on creation
@@ -38,7 +38,7 @@ ScrollBar::ScrollBar(const ButtonLook &_button_look)
 }
 
 void
-ScrollBar::SetSize(const PixelSize size)
+ScrollBar::SetSize(const PixelSize size) noexcept
 {
   unsigned width;
 
@@ -58,7 +58,7 @@ ScrollBar::SetSize(const PixelSize size)
 }
 
 void
-ScrollBar::Reset()
+ScrollBar::Reset() noexcept
 {
   rc.SetEmpty();
   rc_slider.SetEmpty();
@@ -66,7 +66,7 @@ ScrollBar::Reset()
 
 void
 ScrollBar::SetSlider(unsigned size, unsigned view_size,
-                     unsigned origin)
+                     unsigned origin) noexcept
 {
   const int netto_height = GetNettoHeight();
 
@@ -101,7 +101,7 @@ ScrollBar::SetSlider(unsigned size, unsigned view_size,
 }
 
 unsigned
-ScrollBar::ToOrigin(unsigned size, unsigned view_size, int y) const
+ScrollBar::ToOrigin(unsigned size, unsigned view_size, int y) const noexcept
 {
   // Calculate highest origin (counted in ListItems)
   unsigned max_origin = size - view_size;
@@ -117,7 +117,7 @@ ScrollBar::ToOrigin(unsigned size, unsigned view_size, int y) const
 }
 
 void
-ScrollBar::Paint(Canvas &canvas) const
+ScrollBar::Paint(Canvas &canvas) const noexcept
 {
   // ###################
   // #### ScrollBar ####
@@ -203,7 +203,7 @@ ScrollBar::Paint(Canvas &canvas) const
 }
 
 void
-ScrollBar::DragBegin(PaintWindow *w, unsigned y)
+ScrollBar::DragBegin(PaintWindow *w, unsigned y) noexcept
 {
   // Make sure that we are not dragging already
   assert(!dragging);
@@ -217,7 +217,7 @@ ScrollBar::DragBegin(PaintWindow *w, unsigned y)
 }
 
 void
-ScrollBar::DragEnd(PaintWindow *w)
+ScrollBar::DragEnd(PaintWindow *w) noexcept
 {
   // If we are not dragging right now -> nothing to end
   if (!dragging)
@@ -230,7 +230,7 @@ ScrollBar::DragEnd(PaintWindow *w)
 }
 
 unsigned
-ScrollBar::DragMove(unsigned size, unsigned view_size, int y) const
+ScrollBar::DragMove(unsigned size, unsigned view_size, int y) const noexcept
 {
   assert(dragging);
 

@@ -25,8 +25,8 @@ Copyright_License {
 #include "Dialogs/ListPicker.hpp"
 #include "Language/Language.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/control/List.hpp"
 #include "Screen/Layout.hpp"
-#include "Form/List.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "util/Macros.hpp"
 

@@ -40,7 +40,7 @@ public:
   UdevContext() noexcept:ud(nullptr) {}
   UdevContext(const UdevContext &) noexcept;
 
-  UdevContext(UdevContext &&other)
+  UdevContext(UdevContext &&other) noexcept
     :ud(other.ud) {
     other.ud = nullptr;
   }

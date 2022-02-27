@@ -30,11 +30,27 @@ Copyright_License {
 
 #ifdef USE_GLX
 #include "ui/glx/System.hpp"
+#include "LogFile.hpp"
 #endif
 
 #include <stdexcept>
 
 namespace X11 {
+
+#ifdef USE_GLX
+
+[[gnu::pure]]
+static int
+GetConfigAttrib(_XDisplay *display, GLXFBConfig config,
+                int attribute, int default_value) noexcept
+{
+  int value;
+  return glXGetFBConfigAttrib(display, config, attribute, &value) == Success
+    ? value
+    : default_value;
+}
+
+#endif
 
 Display::Display()
   :display(XOpenDisplay(nullptr))
@@ -63,6 +79,14 @@ Display::Display()
                              attributes, &fb_cfg_count);
   if (fb_cfg == nullptr || fb_cfg_count == 0)
     throw std::runtime_error("Failed to retrieve framebuffer configuration for GLX");
+
+  LogFormat("GLX config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d",
+            GetConfigAttrib(display, *fb_cfg, GLX_RED_SIZE, 0),
+            GetConfigAttrib(display, *fb_cfg, GLX_GREEN_SIZE, 0),
+            GetConfigAttrib(display, *fb_cfg, GLX_BLUE_SIZE, 0),
+            GetConfigAttrib(display, *fb_cfg, GLX_ALPHA_SIZE, 0),
+            GetConfigAttrib(display, *fb_cfg, GLX_DEPTH_SIZE, 0),
+            GetConfigAttrib(display, *fb_cfg, GLX_STENCIL_SIZE, 0));
 
   glx_context = glXCreateNewContext(display, *fb_cfg,
                                     GLX_RGBA_TYPE,

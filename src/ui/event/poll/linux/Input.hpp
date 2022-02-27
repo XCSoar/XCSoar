@@ -76,21 +76,21 @@ class LinuxInputDevice final {
   PipeEvent event;
 
 public:
-  LinuxInputDevice(EventQueue &_queue, MergeMouse &_merge);
+  LinuxInputDevice(EventQueue &_queue, MergeMouse &_merge) noexcept;
 
-  ~LinuxInputDevice() {
+  ~LinuxInputDevice() noexcept {
     Close();
   }
 
-  bool Open(const char *path);
-  void Close();
+  bool Open(const char *path) noexcept;
+  void Close() noexcept;
 
-  bool IsOpen() const {
+  bool IsOpen() const noexcept {
     return event.IsDefined();
   }
 
 private:
-  void Read();
+  void Read() noexcept;
 
   void OnSocketReady(unsigned events) noexcept;
 };

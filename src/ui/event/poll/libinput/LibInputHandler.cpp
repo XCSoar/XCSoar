@@ -119,6 +119,18 @@ LibInputHandler::CloseDevice(int fd) noexcept
   close(fd);
 }
 
+void
+LibInputHandler::Suspend() noexcept
+{
+  libinput_suspend(li);
+}
+
+void
+LibInputHandler::Resume() noexcept
+{
+  libinput_resume(li);
+}
+
 inline void
 LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
 {

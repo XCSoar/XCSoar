@@ -1,4 +1,8 @@
 Version 7.24 - not yet released
+* Linux
+  - fix terrain renderer bug
+* OpenVario
+  - menu: fix bogus clicks after returning from XCSoar
 
 Version 7.23 - 2022/02/10
 * user interface

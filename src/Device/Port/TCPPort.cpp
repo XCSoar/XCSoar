@@ -91,6 +91,7 @@ try {
 
   SocketPort::Close();
   SocketPort::Open(s);
+  StateChanged();
 } catch (...) {
   listener.Close();
   StateChanged();

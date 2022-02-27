@@ -60,7 +60,7 @@ public:
   MergeMouse() = default;
   MergeMouse(const MergeMouse &) = delete;
 
-  ~MergeMouse() {
+  ~MergeMouse() noexcept {
     assert(n_pointers == 0);
   }
 
@@ -70,35 +70,35 @@ public:
     rotate.SetDisplayOrientation(orientation);
   }
 
-  void AddPointer() {
+  void AddPointer() noexcept {
     ++n_pointers;
   }
 
-  void RemovePointer() {
+  void RemovePointer() noexcept {
     assert(n_pointers > 0);
 
     --n_pointers;
   }
 
-  bool HasPointer() const {
+  bool HasPointer() const noexcept {
     return n_pointers > 0;
   }
 
-  void SetDown(bool new_down);
-  void MoveAbsolute(PixelPoint p);
+  void SetDown(bool new_down) noexcept;
+  void MoveAbsolute(PixelPoint p) noexcept;
   void MoveAbsolute(int new_x, int new_y,
-                    int min_x, int max_x, int min_y, int max_y);
-  void MoveRelative(PixelPoint d);
+                    int min_x, int max_x, int min_y, int max_y) noexcept;
+  void MoveRelative(PixelPoint d) noexcept;
 
-  void MoveWheel(int d) {
+  void MoveWheel(int d) noexcept {
     wheel += d;
   }
 
-  PixelPoint GetPosition() const {
+  PixelPoint GetPosition() const noexcept {
     return PixelPoint(x, y);
   }
 
-  Event Generate();
+  Event Generate() noexcept;
 };
 
 } // namespace UI

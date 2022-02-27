@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "TCPClientPort.hpp"
 #include "event/Call.hxx"
+#include "net/UniqueSocketDescriptor.hxx"
 
 TCPClientPort::TCPClientPort(EventLoop &event_loop, Cares::Channel &cares,
                              const char *host, unsigned port,
@@ -74,7 +75,7 @@ TCPClientPort::OnResolverError(std::exception_ptr error) noexcept
 }
 
 void
-TCPClientPort::OnSocketConnectSuccess(UniqueSocketDescriptor &&fd) noexcept
+TCPClientPort::OnSocketConnectSuccess(UniqueSocketDescriptor fd) noexcept
 {
   assert(connect);
 

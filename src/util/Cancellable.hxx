@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2019 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2016-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,9 +27,9 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CANCELLABLE_HXX
-#define CANCELLABLE_HXX
+#pragma once
 
+#include <cassert>
 #include <utility>
 
 /**
@@ -74,14 +74,8 @@ public:
 	}
 
 	void Cancel() noexcept {
-		cancellable->Cancel();
-	}
+		assert(cancellable != nullptr);
 
-	void CancelAndClear() noexcept {
-		auto *c = cancellable;
-		cancellable = nullptr;
-		c->Cancel();
+		std::exchange(cancellable, nullptr)->Cancel();
 	}
 };
-
-#endif

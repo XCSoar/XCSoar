@@ -42,8 +42,8 @@
 
 /**
  * An array with a maximum size known at compile time.  It keeps track
- * of the actual length at runtime. The clear() function needs to be called
- * to initialize the class properly.
+ * of the actual length at runtime. The clear() function needs to be
+ * called to initialize the class properly.
  */
 template<class T, std::size_t max>
 class TrivialArray {
@@ -101,8 +101,8 @@ public:
 	}
 
 	/**
-	 * Forcibly set the specified size, without initialising or freeing
-	 * new/excess elements.
+	 * Forcibly set the specified size, without initialising or
+	 * freeing new/excess elements.
 	 */
 	void resize(size_type new_size) noexcept {
 		assert(new_size <= max_size());
@@ -144,7 +144,7 @@ public:
 	/**
 	 * Returns one element.  No bounds checking.
 	 */
-	reference operator[](size_type i) noexcept {
+	constexpr reference operator[](size_type i) noexcept {
 		assert(i < size());
 
 		return array[i];
@@ -153,7 +153,7 @@ public:
 	/**
 	 * Returns one constant element.  No bounds checking.
 	 */
-	const_reference operator[](size_type i) const noexcept {
+	constexpr const_reference operator[](size_type i) const noexcept {
 		assert(i < size());
 
 		return array[i];
@@ -175,13 +175,13 @@ public:
 		return std::next(array.begin(), the_size);
 	}
 
-	reference back() noexcept {
+	constexpr reference back() noexcept {
 		assert(the_size > 0);
 
 		return array[the_size - 1];
 	}
 
-	const_reference back() const noexcept {
+	constexpr const_reference back() const noexcept {
 		assert(the_size > 0);
 
 		return array[the_size - 1];
@@ -203,8 +203,8 @@ public:
 	}
 
 	/**
-	 * Append an element at the end of the array, increasing the length
-	 * by one.  No bounds checking.
+	 * Append an element at the end of the array, increasing the
+	 * length by one.  No bounds checking.
 	 */
 	void append(const_reference value) {
 		assert(!full());
@@ -223,8 +223,8 @@ public:
 	}
 
 	/**
-	 * Like append(), but checks if the array is already full (returns
-	 * false in this case).
+	 * Like append(), but checks if the array is already full
+	 * (returns false in this case).
 	 */
 	bool checked_append(const_reference value) {
 		if (full())
@@ -283,13 +283,13 @@ public:
 		append() = T(std::forward<Args>(args)...);
 	}
 
-	reference front() noexcept {
+	constexpr reference front() noexcept {
 		assert(the_size > 0);
 
 		return array.front();
 	}
 
-	const_reference front() const noexcept {
+	constexpr const_reference front() const noexcept {
 		assert(the_size > 0);
 
 		return array.front();

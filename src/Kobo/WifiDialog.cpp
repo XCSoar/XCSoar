@@ -223,14 +223,14 @@ WifiConnect(enum WifiSecurity security, WPASupplicant &wpa_supplicant, const cha
   wpa_supplicant.SetNetworkSSID(id, ssid);
 
   if (security == WPA_SECURITY) {
-    std::array<unsigned char, 32> pmk;
+    std::array<std::byte, 32> pmk;
     PKCS5_PBKDF2_HMAC_SHA1(psk, strlen(psk),
                            (const unsigned char *)ssid, strlen(ssid),
                            4096,
-                           pmk.size(), pmk.data());
+                           pmk.size(), (unsigned char *)pmk.data());
 
     std::array<char, sizeof(pmk) * 2 + 1> hex;
-    *HexFormat(hex.data(), {pmk.data(), pmk.size()}) = 0;
+    *HexFormat(hex.data(), pmk) = 0;
 
     wpa_supplicant.SetNetworkPSK(id, hex.data());
   } else if (security == WEP_SECURITY) {

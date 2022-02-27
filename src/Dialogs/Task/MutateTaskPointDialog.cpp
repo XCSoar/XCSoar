@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "TaskDialogs.hpp"
 #include "Dialogs/ListPicker.hpp"
-#include "Form/List.hpp"
+#include "ui/control/List.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 #include "Renderer/TextRowRenderer.hpp"

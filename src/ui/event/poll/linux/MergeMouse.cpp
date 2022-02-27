@@ -38,7 +38,7 @@ MergeMouse::SetScreenSize(PixelSize screen_size) noexcept
 }
 
 void
-MergeMouse::SetDown(bool new_down)
+MergeMouse::SetDown(bool new_down) noexcept
 {
   if (new_down != down) {
     down = new_down;
@@ -50,7 +50,7 @@ MergeMouse::SetDown(bool new_down)
 }
 
 void
-MergeMouse::MoveAbsolute(PixelPoint p)
+MergeMouse::MoveAbsolute(PixelPoint p) noexcept
 {
   p = rotate.DoAbsolute(p);
 
@@ -83,7 +83,7 @@ MergeMouse::MoveAbsolute(PixelPoint p)
 
 void
 MergeMouse::MoveAbsolute(int new_x, int new_y,
-                         int min_x, int max_x, int min_y, int max_y)
+                         int min_x, int max_x, int min_y, int max_y) noexcept
 {
   /* scale touschreen coordinates to screen size */
 
@@ -102,13 +102,13 @@ MergeMouse::MoveAbsolute(int new_x, int new_y,
 }
 
 void
-MergeMouse::MoveRelative(PixelPoint d)
+MergeMouse::MoveRelative(PixelPoint d) noexcept
 {
   MoveAbsolute(GetPosition() + rotate.DoRelative(d));
 }
 
 Event
-MergeMouse::Generate()
+MergeMouse::Generate() noexcept
 {
   if (moved) {
     moved = false;

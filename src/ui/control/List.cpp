@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Form/List.hpp"
+#include "List.hpp"
 #include "Look/DialogLook.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
@@ -43,7 +43,7 @@ Copyright_License {
  * displays to give more instant feedback, which feels more slick.  On
  * slow e-paper screens, this is not a good idea.
  */
-gcc_const
+[[gnu::const]]
 static bool
 UsePixelPan() noexcept
 {

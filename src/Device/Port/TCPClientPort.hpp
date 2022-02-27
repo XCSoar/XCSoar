@@ -60,7 +60,7 @@ private:
   void OnResolverError(std::exception_ptr error) noexcept override;
 
   /* virtual methods from ConnectSocketHandler */
-  void OnSocketConnectSuccess(UniqueSocketDescriptor &&fd) noexcept override;
+  void OnSocketConnectSuccess(UniqueSocketDescriptor fd) noexcept override;
   void OnSocketConnectError(std::exception_ptr ep) noexcept override;
 
 protected:
