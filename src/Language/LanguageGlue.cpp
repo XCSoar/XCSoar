@@ -176,45 +176,48 @@ extern "C"
   extern const size_t zh_Hant_mo_size;
 }
 
+#define L(number, code_name, display_name) { number, code_name ## _mo, code_name ## _mo_size, _T( #code_name ".mo"), _T(display_name) }
+
 const BuiltinLanguage language_table[] = {
-  { LANG_BULGARIAN, bg_mo, bg_mo_size, _T("bg.mo"), _T("Bulgarian") },
-  { LANG_CATALAN, ca_mo, ca_mo_size, _T("ca.mo"), _T("Catalan") },
-  { LANG_CHINESE, zh_CN_mo, zh_CN_mo_size, _T("zh_CN.mo"), _T("Simplified Chinese") },
-  { LANG_CHINESE_TRADITIONAL, zh_Hant_mo, zh_Hant_mo_size, _T("zh_Hant.mo"), _T("Traditional Chinese") },
-  { LANG_CZECH, cs_mo, cs_mo_size, _T("cs.mo"), _T("Czech") },
-  { LANG_DANISH, da_mo, da_mo_size, _T("da.mo"), _T("Danish") },
-  { LANG_GERMAN, de_mo, de_mo_size, _T("de.mo"), _T("German") },
-  { LANG_GREEK, el_mo, el_mo_size, _T("el.mo"), _T("Greek") },
-  { LANG_SPANISH, es_mo, es_mo_size, _T("es.mo"), _T("Spanish") },
-  { LANG_FINNISH, fi_mo, fi_mo_size, _T("fi.mo"), _T("Finnish") },
-  { LANG_FRENCH, fr_mo, fr_mo_size, _T("fr.mo"), _T("French") },
-  { LANG_HEBREW, he_mo, he_mo_size, _T("he.mo"), _T("Hebrew") },
-  { LANG_CROATIAN, hr_mo, hr_mo_size, _T("hr.mo"), _T("Croatian") },
-  { LANG_HUNGARIAN, hu_mo, hu_mo_size, _T("hu.mo"), _T("Hungarian") },
-  { LANG_ITALIAN, it_mo, it_mo_size, _T("it.mo"), _T("Italian") },
-  { LANG_JAPANESE, ja_mo, ja_mo_size, _T("ja.mo"), _T("Japanese") },
-  { LANG_KOREAN, ko_mo, ko_mo_size, _T("ko.mo"), _T("Korean") },
-  { LANG_LITHUANIAN, lt_mo, lt_mo_size, _T("lt.mo"), _T("Lithuanian") },
-  { LANG_NORWEGIAN, nb_mo, nb_mo_size, _T("nb.mo"), _T("Norwegian") },
-  { LANG_DUTCH, nl_mo, nl_mo_size, _T("nl.mo"), _T("Dutch") },
-  { LANG_POLISH, pl_mo, pl_mo_size, _T("pl.mo"), _T("Polish") },
-  { LANG_PORTUGUESE, pt_BR_mo, pt_BR_mo_size, _T("pt_BR.mo"), _T("Brazilian Portuguese") },
+  L(LANG_BULGARIAN, bg, "Bulgarian"),
+  L(LANG_CATALAN, ca, "Catalan"),
+  L(LANG_CHINESE, zh_CN, "Simplified Chinese"),
+  L(LANG_CHINESE_TRADITIONAL, zh_Hant, "Traditional Chinese"),
+  L(LANG_CZECH, cs, "Czech"),
+  L(LANG_DANISH, da, "Danish"),
+  L(LANG_GERMAN, de, "German"),
+  L(LANG_GREEK, el, "Greek"),
+  L(LANG_SPANISH, es, "Spanish"),
+  L(LANG_FINNISH, fi, "Finnish"),
+  L(LANG_FRENCH, fr, "French"),
+  L(LANG_HEBREW, he, "Hebrew"),
+  L(LANG_CROATIAN, hr, "Croatian"),
+  L(LANG_HUNGARIAN, hu, "Hungarian"),
+  L(LANG_ITALIAN, it, "Italian"),
+  L(LANG_JAPANESE, ja, "Japanese"),
+  L(LANG_KOREAN, ko, "Korean"),
+  L(LANG_LITHUANIAN, lt, "Lithuanian"),
+  L(LANG_NORWEGIAN, nb, "Norwegian"),
+  L(LANG_DUTCH, nl, "Dutch"),
+  L(LANG_POLISH, pl, "Polish"),
+  L(LANG_PORTUGUESE, pt_BR, "Brazilian Portuguese"),
 
   /* our Portuguese translation is less advanced than Brazilian
      Portuguese */
-  { LANG_PORTUGUESE, pt_mo, pt_mo_size, _T("pt.mo"), _T("Portuguese") },
+  L(LANG_PORTUGUESE, pt, "Portuguese"),
 
-  { LANG_ROMANIAN, ro_mo, ro_mo_size, _T("ro.mo"), _T("Romanian") },
-  { LANG_RUSSIAN, ru_mo, ru_mo_size, _T("ru.mo"), _T("Russian") },
-  { LANG_SLOVAK, sk_mo, sk_mo_size, _T("sk.mo"), _T("Slovak") },
-  { LANG_SLOVENIAN, sl_mo, sl_mo_size, _T("sl.mo"), _T("Slovenian") },
-  { LANG_SERBIAN, sr_mo, sr_mo_size, _T("sr.mo"), _T("Serbian") },
-  { LANG_SWEDISH, sv_mo, sv_mo_size, _T("sv.mo"), _T("Swedish") },
-  { LANG_TELUGU, te_mo, te_mo_size, _T("te.mo"), _T("Telugu") },
-  { LANG_TURKISH, tr_mo, tr_mo_size, _T("tr.mo"), _T("Turkish") },
-  { LANG_UKRAINIAN, uk_mo, uk_mo_size, _T("uk.mo"), _T("Ukranian") },
-  { LANG_VIETNAMESE, vi_mo, vi_mo_size, _T("vi.mo"), _T("Vietnamese") },
-  { 0, nullptr, 0, nullptr, nullptr }
+  L(LANG_ROMANIAN, ro, "Romanian"),
+  L(LANG_RUSSIAN, ru, "Russian"),
+  L(LANG_SLOVAK, sk, "Slovak"),
+  L(LANG_SLOVENIAN, sl, "Slovenian"),
+  L(LANG_SERBIAN, sr, "Serbian"),
+  L(LANG_SWEDISH, sv, "Swedish"),
+  L(LANG_TELUGU, te, "Telugu"),
+  L(LANG_TURKISH, tr, "Turkish"),
+  L(LANG_UKRAINIAN, uk, "Ukranian"),
+  L(LANG_VIETNAMESE, vi, "Vietnamese"),
+
+  {},
 };
 
 #ifdef _WIN32
