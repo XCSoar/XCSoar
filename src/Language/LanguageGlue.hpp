@@ -40,7 +40,7 @@ CloseLanguageFile() noexcept;
  */
 #define HAVE_NATIVE_GETTEXT
 
-#elif defined(_WIN32) || defined(ANDROID) || defined(KOBO) || defined(__APPLE__)
+#else
 
 #define HAVE_BUILTIN_LANGUAGES
 
