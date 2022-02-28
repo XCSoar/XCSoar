@@ -21,16 +21,16 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_LANGUAGE_GLUE_HPP
-#define XCSOAR_LANGUAGE_GLUE_HPP
+#pragma once
 
 void
-InitLanguage();
-
-void ReadLanguageFile();
+InitLanguage() noexcept;
 
 void
-CloseLanguageFile();
+ReadLanguageFile() noexcept;
+
+void
+CloseLanguageFile() noexcept;
 
 #if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(KOBO) && !defined(__APPLE__)
 
@@ -56,7 +56,5 @@ struct BuiltinLanguage {
 };
 
 extern const BuiltinLanguage language_table[];
-
-#endif
 
 #endif

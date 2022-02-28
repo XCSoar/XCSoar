@@ -219,29 +219,29 @@ const BuiltinLanguage language_table[] = {
 
 #ifdef _WIN32
 
-gcc_pure
+[[gnu::pure]]
 static const BuiltinLanguage *
-FindLanguage(WORD language)
+FindLanguage(WORD language) noexcept
 {
   // Search for supported languages matching the language code
-  for (unsigned i = 0; language_table[i].resource != NULL; ++i)
+  for (unsigned i = 0; language_table[i].resource != nullptr; ++i)
     if (language_table[i].language == language)
       // .. and return the MO file name if found
       return &language_table[i];
 
-  return NULL;
+  return nullptr;
 }
 
 #endif
 
-gcc_pure
+[[gnu::pure]]
 static const BuiltinLanguage *
-FindLanguage(const TCHAR *resource)
+FindLanguage(const TCHAR *resource) noexcept
 {
-  assert(resource != NULL);
+  assert(resource != nullptr);
 
   // Search for supported languages matching the MO file name
-  for (unsigned i = 0; language_table[i].resource != NULL; ++i)
+  for (unsigned i = 0; language_table[i].resource != nullptr; ++i)
     if (StringIsEqual(language_table[i].resource, resource))
       // .. and return the language code
       return &language_table[i];
@@ -250,7 +250,7 @@ FindLanguage(const TCHAR *resource)
 }
 
 static const BuiltinLanguage *
-DetectLanguage()
+DetectLanguage() noexcept
 {
 #ifdef ANDROID
 
@@ -263,21 +263,21 @@ DetectLanguage()
 
   jmethodID cid = env->GetStaticMethodID(cls, "getDefault",
                                          "()Ljava/util/Locale;");
-  assert(cid != NULL);
+  assert(cid != nullptr);
 
   Java::LocalObject obj(env, env->CallStaticObjectMethod(cls, cid));
   if (!obj)
-    return NULL;
+    return nullptr;
 
   // Call function Locale.getLanguage() that
   // returns a two-letter language string
 
   cid = env->GetMethodID(cls, "getLanguage", "()Ljava/lang/String;");
-  assert(cid != NULL);
+  assert(cid != nullptr);
 
   Java::String language{env, (jstring)env->CallObjectMethod(obj, cid)};
   if (language == nullptr)
-    return NULL;
+    return nullptr;
 
   // Convert the jstring to a char string
   const auto language2 = language.GetUTFChars();
@@ -302,7 +302,7 @@ DetectLanguage()
   LANGID lang_id = GetUserDefaultUILanguage();
   LogFormat("Language: GetUserDefaultUILanguage()=0x%x", (int)lang_id);
   if (lang_id == 0)
-    return NULL;
+    return nullptr;
 
   // Try to convert the primary language part of the language identifier
   // to a MO file name in the language table
@@ -338,7 +338,7 @@ DetectLanguage()
 }
 
 static bool
-ReadBuiltinLanguage(const BuiltinLanguage &language)
+ReadBuiltinLanguage(const BuiltinLanguage &language) noexcept
 {
   LogFormat(_T("Language: loading resource '%s'"), language.resource);
 
@@ -348,7 +348,7 @@ ReadBuiltinLanguage(const BuiltinLanguage &language)
   if (mo_loader->error()) {
     LogFormat(_T("Language: could not load resource '%s'"), language.resource);
     delete mo_loader;
-    mo_loader = NULL;
+    mo_loader = nullptr;
     return false;
   }
 
@@ -359,7 +359,7 @@ ReadBuiltinLanguage(const BuiltinLanguage &language)
 }
 
 static bool
-ReadResourceLanguageFile(const TCHAR *resource)
+ReadResourceLanguageFile(const TCHAR *resource) noexcept
 {
   auto language = FindLanguage(resource);
   return language != nullptr && ReadBuiltinLanguage(*language);
@@ -370,19 +370,19 @@ ReadResourceLanguageFile(const TCHAR *resource)
 #ifndef HAVE_NATIVE_GETTEXT
 
 static inline const char *
-DetectLanguage()
+DetectLanguage() noexcept
 {
-  return NULL;
+  return nullptr;
 }
 
 static inline bool
-ReadBuiltinLanguage(char dummy)
+ReadBuiltinLanguage(char dummy) noexcept
 {
   return false;
 }
 
 static bool
-ReadResourceLanguageFile(const TCHAR *resource)
+ReadResourceLanguageFile(const TCHAR *resource) noexcept
 {
   return false;
 }
@@ -394,7 +394,7 @@ ReadResourceLanguageFile(const TCHAR *resource)
 #ifndef HAVE_NATIVE_GETTEXT
 
 static void
-AutoDetectLanguage()
+AutoDetectLanguage() noexcept
 {
   // Try to detect the language by calling the OS's corresponding functions
   const auto l = DetectLanguage();
@@ -404,7 +404,7 @@ AutoDetectLanguage()
 }
 
 static bool
-LoadLanguageFile(Path path)
+LoadLanguageFile(Path path) noexcept
 {
   LogFormat(_T("Language: loading file '%s'"), path.c_str());
 
@@ -416,7 +416,7 @@ LoadLanguageFile(Path path)
     if (mo_loader->error()) {
       LogFormat(_T("Language: could not load file '%s'"), path.c_str());
       delete mo_loader;
-      mo_loader = NULL;
+      mo_loader = nullptr;
       return false;
     }
   } catch (...) {
@@ -433,7 +433,7 @@ LoadLanguageFile(Path path)
 #endif /* !HAVE_NATIVE_GETTEXT */
 
 void
-InitLanguage()
+InitLanguage() noexcept
 {
 #ifdef HAVE_NATIVE_GETTEXT
 
@@ -456,7 +456,7 @@ InitLanguage()
  * Reads the selected LanguageFile into the cache
  */
 void
-ReadLanguageFile()
+ReadLanguageFile() noexcept
 {
 #ifndef HAVE_NATIVE_GETTEXT
   CloseLanguageFile();
@@ -492,12 +492,12 @@ ReadLanguageFile()
 }
 
 void
-CloseLanguageFile()
+CloseLanguageFile() noexcept
 {
 #ifndef HAVE_NATIVE_GETTEXT
-  mo_file = NULL;
+  mo_file = nullptr;
   reset_gettext_cache();
   delete mo_loader;
-  mo_loader = NULL;
+  mo_loader = nullptr;
 #endif
 }
