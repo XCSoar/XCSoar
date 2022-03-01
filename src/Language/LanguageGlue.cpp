@@ -337,6 +337,26 @@ DetectLanguage() noexcept
 #endif
 }
 
+#ifdef HAVE_NATIVE_GETTEXT
+
+static void
+InitNativeGettext(const char *locale) noexcept
+{
+  const char *const domain = "xcsoar";
+
+  /* we want to get UTF-8 strings from gettext() */
+  bind_textdomain_codeset(domain, "utf8");
+
+  setlocale(LC_ALL, locale);
+  // always use a dot as decimal point in printf/scanf()
+  setlocale(LC_NUMERIC, "C");
+  bindtextdomain(domain, "/usr/share/locale");
+  textdomain(domain);
+
+}
+
+#endif // HAVE_NATIVE_GETTEXT
+
 static bool
 ReadBuiltinLanguage(const BuiltinLanguage &language) noexcept
 {
@@ -436,19 +456,8 @@ void
 InitLanguage() noexcept
 {
 #ifdef HAVE_NATIVE_GETTEXT
-
-  const char *const domain = "xcsoar";
-
-  /* we want to get UTF-8 strings from gettext() */
-  bind_textdomain_codeset(domain, "utf8");
-
   // Set the current locale to the environment's default
-  setlocale(LC_ALL, "");
-  // always use a dot as decimal point in printf/scanf()
-  setlocale(LC_NUMERIC, "C");
-  bindtextdomain(domain, "/usr/share/locale");
-  textdomain(domain);
-
+  InitNativeGettext("");
 #endif
 }
 
