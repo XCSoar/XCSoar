@@ -28,7 +28,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "util/StringCompare.hxx"
 #include "Interface.hpp"
-#include "Language/LanguageGlue.hpp"
+#include "Language/Table.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"

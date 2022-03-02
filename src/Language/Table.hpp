@@ -23,11 +23,31 @@ Copyright_License {
 
 #pragma once
 
-void
-InitLanguage() noexcept;
+#include "Features.hpp"
 
-void
-ReadLanguageFile() noexcept;
+#ifdef HAVE_NLS
 
-void
-CloseLanguageFile() noexcept;
+#include <cstddef>
+#include <tchar.h>
+
+struct BuiltinLanguage {
+#ifdef _WIN32
+  unsigned language;
+#endif
+#ifdef USE_LIBINTL
+  /**
+   * The (POSIX) locale name (only language and territory, without
+   * codeset and modifier), e.g. "de_DE".
+   */
+  const char *locale;
+#else
+  const void *begin;
+  size_t size;
+#endif
+  const TCHAR *resource;
+  const TCHAR *name;
+};
+
+extern const BuiltinLanguage language_table[];
+
+#endif // HAVE_NLS
