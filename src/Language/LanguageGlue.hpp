@@ -51,8 +51,8 @@ struct BuiltinLanguage {
 #ifdef _WIN32
   unsigned language;
 #endif
-  const void * const begin;
-  const size_t size;
+  const void *begin;
+  size_t size;
   const TCHAR *resource;
   const TCHAR *name;
 };
