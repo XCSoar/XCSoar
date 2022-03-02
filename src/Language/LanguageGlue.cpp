@@ -32,7 +32,7 @@ Copyright_License {
 #include "util/StringCompare.hxx"
 #include "util/StringAPI.hxx"
 
-#ifdef HAVE_NATIVE_GETTEXT
+#ifdef USE_LIBINTL
 #include <locale.h>
 #endif
 
@@ -55,7 +55,7 @@ Copyright_License {
 
 #ifdef HAVE_NLS
 
-#ifndef HAVE_NATIVE_GETTEXT
+#ifndef USE_LIBINTL
 
 #include "MOLoader.hpp"
 
@@ -143,9 +143,9 @@ extern "C"
 
 #endif // HAVE_BUILTIN_LANGUAGES
 
-#ifdef HAVE_NATIVE_GETTEXT
+#ifdef USE_LIBINTL
 #define L(number, locale, code_name, display_name) { #locale ".UTF-8", _T( #code_name ".mo"), _T(display_name) }
-#endif // HAVE_NATIVE_GETTEXT
+#endif // USE_LIBINTL
 
 const BuiltinLanguage language_table[] = {
   L(LANG_BULGARIAN, bg_BG, bg, "Bulgarian"),
@@ -313,7 +313,7 @@ DetectLanguage() noexcept
 
 #endif // HAVE_BUILTIN_LANGUAGES
 
-#ifdef HAVE_NATIVE_GETTEXT
+#ifdef USE_LIBINTL
 
 static void
 InitNativeGettext(const char *locale) noexcept
@@ -331,7 +331,7 @@ InitNativeGettext(const char *locale) noexcept
 
 }
 
-#endif // HAVE_NATIVE_GETTEXT
+#endif // USE_LIBINTL
 
 static bool
 ReadBuiltinLanguage(const BuiltinLanguage &language) noexcept
@@ -369,7 +369,7 @@ ReadResourceLanguageFile(const TCHAR *resource) noexcept
 static void
 AutoDetectLanguage() noexcept
 {
-#ifdef HAVE_NATIVE_GETTEXT
+#ifdef USE_LIBINTL
   // Set the current locale to the environment's default
   InitNativeGettext("");
 #else
@@ -417,7 +417,7 @@ LoadLanguageFile(Path path) noexcept
 void
 InitLanguage() noexcept
 {
-#ifdef HAVE_NATIVE_GETTEXT
+#ifdef USE_LIBINTL
   // Set the current locale to the environment's default
   InitNativeGettext("");
 #endif
@@ -466,7 +466,7 @@ ReadLanguageFile() noexcept
 void
 CloseLanguageFile() noexcept
 {
-#ifndef HAVE_NATIVE_GETTEXT
+#ifndef USE_LIBINTL
   mo_file = nullptr;
   reset_gettext_cache();
   delete mo_loader;

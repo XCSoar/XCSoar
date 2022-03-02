@@ -23,49 +23,19 @@ Copyright_License {
 
 #pragma once
 
-#include "Features.hpp"
-
-#ifdef USE_LIBINTL
-
-#include <libintl.h> // IWYU pragma: export
-
-#define _(x) gettext(x)
-
-#ifdef gettext_noop
-#define N_(x) gettext_noop(x)
-#else
-#define N_(x) (x)
-#endif
-
-static inline void AllowLanguage() {}
-static inline void DisallowLanguage() {}
-
-#else // !USE_LIBINTL
-
-#include "util/Compiler.h"
-
-#include <tchar.h>
-
-class MOFile;
-extern const MOFile *mo_file;
-
-#ifdef NDEBUG
-static inline void AllowLanguage() {}
-static inline void DisallowLanguage() {}
-#else
-void AllowLanguage();
-void DisallowLanguage();
-#endif
-
-gcc_const
-const TCHAR* gettext(const TCHAR* text);
+#if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(KOBO) && !defined(__APPLE__)
 
 /**
- * For source compatibility with GNU gettext.
+ * Using the C library's gettext implementation instead of rolling our
+ * own.
  */
-#define _(x) gettext(_T(x))
-#define N_(x) _T(x)
+#define USE_LIBINTL
 
-void reset_gettext_cache();
+#define HAVE_NLS
 
-#endif // !HAVE_POSIX
+#else
+
+#define HAVE_BUILTIN_LANGUAGES
+#define HAVE_NLS
+
+#endif

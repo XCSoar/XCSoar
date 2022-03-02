@@ -23,6 +23,8 @@ Copyright_License {
 
 #pragma once
 
+#include "Features.hpp"
+
 void
 InitLanguage() noexcept;
 
@@ -31,22 +33,6 @@ ReadLanguageFile() noexcept;
 
 void
 CloseLanguageFile() noexcept;
-
-#if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(KOBO) && !defined(__APPLE__)
-
-/**
- * Using the C library's gettext implementation instead of rolling our
- * own.
- */
-#define HAVE_NATIVE_GETTEXT
-#define HAVE_NLS
-
-#else
-
-#define HAVE_BUILTIN_LANGUAGES
-#define HAVE_NLS
-
-#endif
 
 #ifdef HAVE_NLS
 
@@ -57,7 +43,7 @@ struct BuiltinLanguage {
 #ifdef _WIN32
   unsigned language;
 #endif
-#ifdef HAVE_NATIVE_GETTEXT
+#ifdef USE_LIBINTL
   /**
    * The (POSIX) locale name (only language and territory, without
    * codeset and modifier), e.g. "de_DE".
