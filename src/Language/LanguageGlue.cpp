@@ -63,49 +63,6 @@ static MOLoader *mo_loader;
 
 #ifdef HAVE_BUILTIN_LANGUAGES
 
-#ifndef _WIN32
-/**
- * Several fake WIN32 constants.  These are not used on Android, but
- * we need them or we have to have a separate version of
- * #language_table on Android.
- */
-enum {
-  LANG_NULL,
-  LANG_BULGARIAN,
-  LANG_CATALAN,
-  LANG_CHINESE,
-  LANG_CHINESE_TRADITIONAL,
-  LANG_CZECH,
-  LANG_DANISH,
-  LANG_GERMAN,
-  LANG_GREEK,
-  LANG_SPANISH,
-  LANG_FINNISH,
-  LANG_FRENCH,
-  LANG_HEBREW,
-  LANG_CROATIAN,
-  LANG_HUNGARIAN,
-  LANG_ITALIAN,
-  LANG_JAPANESE,
-  LANG_KOREAN,
-  LANG_LITHUANIAN,
-  LANG_NORWEGIAN,
-  LANG_DUTCH,
-  LANG_POLISH,
-  LANG_PORTUGUESE,
-  LANG_ROMANIAN,
-  LANG_RUSSIAN,
-  LANG_SLOVAK,
-  LANG_SLOVENIAN,
-  LANG_SERBIAN,
-  LANG_SWEDISH,
-  LANG_TELUGU,
-  LANG_TURKISH,
-  LANG_UKRAINIAN,
-  LANG_VIETNAMESE,
-};
-#endif
-
 extern "C"
 {
   extern const uint8_t bg_mo[];
@@ -176,7 +133,11 @@ extern "C"
   extern const size_t zh_Hant_mo_size;
 }
 
+#ifdef _WIN32
 #define L(number, code_name, display_name) { number, code_name ## _mo, code_name ## _mo_size, _T( #code_name ".mo"), _T(display_name) }
+#else
+#define L(number, code_name, display_name) { code_name ## _mo, code_name ## _mo_size, _T( #code_name ".mo"), _T(display_name) }
+#endif
 
 const BuiltinLanguage language_table[] = {
   L(LANG_BULGARIAN, bg, "Bulgarian"),
