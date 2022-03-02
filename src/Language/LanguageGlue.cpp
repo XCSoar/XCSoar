@@ -337,6 +337,8 @@ DetectLanguage() noexcept
 #endif
 }
 
+#endif // HAVE_BUILTIN_LANGUAGES
+
 #ifdef HAVE_NATIVE_GETTEXT
 
 static void
@@ -356,6 +358,8 @@ InitNativeGettext(const char *locale) noexcept
 }
 
 #endif // HAVE_NATIVE_GETTEXT
+
+#ifdef HAVE_BUILTIN_LANGUAGES
 
 static bool
 ReadBuiltinLanguage(const BuiltinLanguage &language) noexcept
