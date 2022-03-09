@@ -32,6 +32,7 @@ Copyright_License {
 #include "Input/InputKeys.hpp"
 #include "util/Compiler.h"
 #include "util/StringAPI.hxx"
+#include "util/CharUtil.hxx"
 #include "util/ConvertString.hpp"
 #include "Util.hxx"
 #include "Interface.hpp"
@@ -375,5 +376,6 @@ bool Lua::IsGesture(const TCHAR* gesture) {
 }
 
 bool Lua::FireKey(unsigned key) {
+  key = ToUpperASCII(key);
   return event_store_key.Fire(key);
 }

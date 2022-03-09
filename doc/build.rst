@@ -96,6 +96,8 @@ Target-specific Build Instructions
 Compiling for Linux/UNIX
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+Typical environments for development must be based on debian 11 or ubuntu 21.xx.
+
 The following additional packages are needed to build for Linux and
 similar operating systems:
 
