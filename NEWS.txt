@@ -6,6 +6,10 @@ Version 7.24 - not yet released
   - menu: fix bogus clicks after returning from XCSoar
 * Android
   - add SoftRF Lego into 'white list' of USB devices
+* Lua
+  - input_event: fix not recognized lowercase key strokes
+  - input_event: When a lua function is configured, 
+    it will be executed rather than depreceated event handling
 
 Version 7.23 - 2022/02/10
 * user interface
