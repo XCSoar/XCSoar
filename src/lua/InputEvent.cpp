@@ -376,6 +376,8 @@ bool Lua::IsGesture(const TCHAR* gesture) {
 }
 
 bool Lua::FireKey(unsigned key) {
-  key = ToUpperASCII(key);
+  if( key >= 'a' && key <= 'z'){
+    key = ToUpperASCII((char)key);
+  }
   return event_store_key.Fire(key);
 }
