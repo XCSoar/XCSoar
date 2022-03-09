@@ -32,6 +32,11 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Util/Gradient.hpp"
+#include "Dialogs/Task/TaskDialogs.hpp"
+extern "C" {
+#include <lauxlib.h>
+}
+
 
 using namespace std::chrono;
 
@@ -384,6 +389,21 @@ l_task_index(lua_State *L)
   return 1;
 }
 
+static int
+l_task_alternates(lua_State *L)
+{
+  if (lua_gettop(L) != 0)
+    return luaL_error(L, "Invalid parameters");
+
+  dlgAlternatesListShowModal();
+  return 0;
+}
+
+static constexpr struct luaL_Reg task_funcs[] = {
+  {"alternates", l_task_alternates},
+  {nullptr, nullptr}
+};
+
 void
 Lua::InitTask(lua_State *L)
 {
@@ -392,6 +412,8 @@ Lua::InitTask(lua_State *L)
   lua_newtable(L);
 
   MakeIndexMetaTableFor(L, RelativeStackIndex{-1}, l_task_index);
+
+  luaL_setfuncs(L, task_funcs, 0);
 
   lua_setfield(L, -2, "task");
 
