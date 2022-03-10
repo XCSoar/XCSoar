@@ -27,6 +27,7 @@
 #include "LogFile.hpp"
 #include "Cloud/weglide/UploadFlight.hpp"
 #include "Cloud/weglide/WeGlideSettings.hpp"
+#include "Cloud/weglide/HttpResponse.hpp"
 #include "co/InvokeTask.hxx"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/CoDialog.hpp"
@@ -98,12 +99,12 @@ UploadSuccessDialog(const Flight &flight_data, const TCHAR *msg)
 }
 
 struct CoInstance {
-  boost::json::value value;
+  HttpResponse http;
   Co::InvokeTask
   UpdateTask(Path igc_path, const User &user,
     uint_least32_t aircraft_id, ProgressListener &progress)
   {
-    value = co_await UploadFlight(*Net::curl, user, aircraft_id,
+    http = co_await UploadFlight(*Net::curl, user, aircraft_id,
       igc_path, progress);
   }
 };
@@ -136,10 +137,18 @@ UploadFile(Path igc_path, User user, uint_least32_t aircraft_id,
       return flight_data;  // with flight_id = 0!
     }
 
-    // read the important data from json in a structure
-    flight_data = UploadJsonInterpreter(instance.value);
+    if (instance.http.code >= 200 && instance.http.code < 400 &&
+      !instance.http.json_value.is_null()) {
 
-    msg.Format(_("File upload '%s' was successful"), igc_path.c_str());
+      // read the important data from json in a structure
+      flight_data = UploadJsonInterpreter(instance.http.json_value);
+      flight_data.igc_name = igc_path.GetBase().c_str();
+
+      msg.Format(_("File upload '%s' was successful"),
+                 flight_data.igc_name.c_str());
+    } else {
+      msg.Format(_T("%s: %u"), _("HTTP failure code"), instance.http.code);
+    }
     return flight_data;  // upload successful!
   }
   catch (const std::exception &e) {

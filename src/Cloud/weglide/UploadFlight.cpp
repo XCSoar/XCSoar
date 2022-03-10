@@ -23,6 +23,7 @@
 
 #include "UploadFlight.hpp"
 #include "WeGlideSettings.hpp"
+#include "HttpResponse.hpp"
 #include "net/http/CoStreamRequest.hxx"
 #include "net/http/Easy.hxx"
 #include "net/http/Mime.hxx"
@@ -58,7 +59,7 @@ MakeUploadFlightMime(CURL *easy, const User &user,
   return mime;
 }
 
-Co::Task<boost::json::value>
+Co::Task<HttpResponse>
 UploadFlight(CurlGlobal &curl,
              const User &user,
              uint_least32_t aircraft_id,
@@ -70,7 +71,7 @@ UploadFlight(CurlGlobal &curl,
   CurlEasy easy{url};
   Curl::Setup(easy);
   const Net::ProgressAdapter progress_adapter{easy, progress};
-  easy.SetFailOnError();
+  // easy.SetFailOnError disabled: HTTP errors are dealt with here at the end
 
   const auto mime = MakeUploadFlightMime(easy.Get(), user,
                                          aircraft_id, igc_path);
@@ -79,7 +80,7 @@ UploadFlight(CurlGlobal &curl,
   Json::ParserOutputStream parser;
   const auto response =
     co_await Curl::CoStreamRequest(curl, std::move(easy), parser);
-  co_return parser.Finish();
+  co_return HttpResponse({response.status, parser.Finish()});
 }
 
 } // namespace WeGlide

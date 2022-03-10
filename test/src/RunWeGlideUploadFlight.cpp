@@ -24,6 +24,7 @@ Copyright_License {
 #include "CoInstance.hpp"
 #include "Cloud/weglide/UploadFlight.hpp"
 #include "Cloud/weglide/WeGlideSettings.hpp"
+#include "Cloud/weglide/HttpResponse.hpp"
 #include "net/http/Init.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "json/Serialize.hxx"
@@ -40,14 +41,14 @@ Copyright_License {
 struct Instance : CoInstance {
   const Net::ScopeInit net_init{GetEventLoop()};
 
-  boost::json::value json;
+  HttpResponse http;
 
   Co::InvokeTask DoRun(const WeGlide::User &user,
                        uint_least32_t aircraft_id,
                        Path igc_path,
                        ProgressListener &progress)
   {
-    json = co_await WeGlide::UploadFlight(*Net::curl, user, aircraft_id,
+    http = co_await WeGlide::UploadFlight(*Net::curl, user, aircraft_id,
                                            igc_path, progress);
   }
 };
@@ -77,8 +78,12 @@ try {
                               igc_path, env));
 
   StdioOutputStream _stdout(stdout);
-  Json::Serialize(_stdout, instance.json);
-  return EXIT_SUCCESS;
+  Json::Serialize(_stdout, instance.http.json_value);
+  if (instance.http.code >= 200 && instance.http.code < 400) {
+    return (pilot.id != 0) ? EXIT_SUCCESS : EXIT_FAILURE;
+  } else {
+    return EXIT_FAILURE;
+  }
 } catch (...) {
   PrintException(std::current_exception());
   return EXIT_FAILURE;

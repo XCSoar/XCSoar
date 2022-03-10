@@ -26,17 +26,16 @@ Copyright_License {
 #include "WeGlideObjects.hpp"
 #include "co/Task.hxx"
 
-#include <boost/json/fwd.hpp>
-
 #include <cstdint>
 
 class Path;
 class CurlGlobal;
 class ProgressListener;
+struct HttpResponse;
 
 namespace WeGlide {
 
-Co::Task<boost::json::value>
+Co::Task<HttpResponse>
 UploadFlight(CurlGlobal &curl, const User &user,
              uint_least32_t aircraft_id,
              Path igc_path,
