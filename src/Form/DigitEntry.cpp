@@ -37,6 +37,8 @@ Copyright_License {
 #include "Geo/CoordinateFormat.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Asset.hpp"
+#include "ui/event/shared/Event.hpp"
+
 
 #include <algorithm>
 
@@ -940,6 +942,7 @@ bool
 DigitEntry::OnKeyDown(unsigned key_code)
 {
   assert(cursor < length);
+  key_code = UI::convertNumPadKeyToCursorKey( key_code);
 
   switch (key_code) {
     int i;
