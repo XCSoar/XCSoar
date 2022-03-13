@@ -1,56 +1,88 @@
 /*
-Copyright_License {
+ Copyright_License {
 
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
+ XCSoar Glide Computer - http://www.xcsoar.org/
+ Copyright (C) 2000-2021 The XCSoar Project
+ A detailed list of copyright holders can be found in the file "AUTHORS".
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ }
+ */
 
 #include "InputKeys.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "util/CharUtil.hxx"
 #include "util/StringAPI.hxx"
 
-struct string_to_key {
+struct string_to_key
+{
   const TCHAR *name;
   unsigned key;
 };
 
 static constexpr struct string_to_key string_to_key[] = {
-  { _T("APP1"), KEY_APP1 },
-  { _T("APP2"), KEY_APP2 },
-  { _T("APP3"), KEY_APP3 },
-  { _T("APP4"), KEY_APP4 },
-  { _T("APP5"), KEY_APP5 },
-  { _T("APP6"), KEY_APP6 },
-  { _T("F1"), KEY_F1 },
-  { _T("F2"), KEY_F2 },
-  { _T("F3"), KEY_F3 },
-  { _T("F4"), KEY_F4 },
-  { _T("F5"), KEY_F5 },
-  { _T("F6"), KEY_F6 },
-  { _T("F7"), KEY_F7 },
-  { _T("F8"), KEY_F8 },
-  { _T("F9"), KEY_F9 },
-  { _T("F10"), KEY_F10 },
-  { _T("F11"), KEY_F11 },
-  { _T("F12"), KEY_F12 },
-
+  { _T("APP1"), KEY_APP1},
+  { _T("APP2"), KEY_APP2},
+  { _T("APP3"), KEY_APP3},
+  { _T("APP4"), KEY_APP4},
+  { _T("APP5"), KEY_APP5},
+  { _T("APP6"), KEY_APP6},
+  { _T("F1"), KEY_F1},
+  { _T("F2"), KEY_F2},
+  { _T("F3"), KEY_F3},
+  { _T("F4"), KEY_F4},
+  { _T("F5"), KEY_F5},
+  { _T("F6"), KEY_F6},
+  { _T("F7"), KEY_F7},
+  { _T("F8"), KEY_F8},
+  { _T("F9"), KEY_F9},
+  { _T("F10"), KEY_F10},
+  { _T("F11"), KEY_F11},
+  { _T("F12"), KEY_F12},
+#if defined(USE_POLL_EVENT)||defined(USE_ANDROID)
+  { _T("BACKSPACE"),KEY_BACKSPACE},
+  { _T("NUMLOCK"),KEY_NUMLOCK},
+  { _T("KPASTERISK"), KEY_KPASTERISK},
+  { _T("KP7"), KEY_KP7},
+  { _T("KP8"), KEY_KP8},
+  { _T("KP9"), KEY_KP9},
+  { _T("KPMINUS"), KEY_KPMINUS},
+  { _T("KP4"), KEY_KP4},
+  { _T("KP5"), KEY_KP5},
+  { _T("KP6"), KEY_KP6},
+  { _T("KPPLUS"), KEY_KPPLUS},
+  { _T("KP1"), KEY_KP1},
+  { _T("KP2"), KEY_KP2},
+  { _T("KP3"), KEY_KP3},
+  { _T("KP0"), KEY_KP0},
+  { _T("KPENTER"), KEY_KPENTER},
+  { _T("KPEQUAL"), KEY_KPEQUAL},
+  { _T("KPSLASH"), KEY_KPSLASH},
+  { _T("KPENTER"), KEY_KPENTER},
+  { _T("KPCOMMA"), KEY_KPCOMMA},
+  { _T("KEY_KP_INSERT"), KEY_KP_INSERT},
+  { _T("KEY_KP_END"), KEY_KP_END},
+  { _T("KEY_KP_DOWN"), KEY_KP_DOWN},
+  { _T("KEY_KP_PAGE_DOWN"), KEY_KP_PAGE_DOWN},
+  { _T("KEY_KP_LEFT"), KEY_KP_LEFT},
+  { _T("KEY_KP_BEGIN"), KEY_KP_BEGIN},
+  { _T("KEY_KP_RIGHT"), KEY_KP_RIGHT},
+  { _T("KEY_KP_HOME"), KEY_KP_HOME},
+  { _T("KEY_KP_UP"), KEY_KP_UP},
+  { _T("KEY_KP_PAGE_UP"), KEY_KP_PAGE_UP},
+#endif
 #ifdef ANDROID
   /* These keys are used by BlueTooth keypads and available in Android*/
   { _T("BUTTON_R1"), KEYCODE_BUTTON_R1},
@@ -70,25 +102,25 @@ static constexpr struct string_to_key string_to_key[] = {
 
 #ifdef USE_WINUSER
   /* These Keys are used for the Triadis-RemoteStick, as well as for
-     expanded Keyboard-Events */
-  { _T("F13"), KEY_F13 },
-  { _T("F14"), KEY_F14 },
-  { _T("F15"), KEY_F15 },
-  { _T("F16"), KEY_F16 },
-  { _T("F17"), KEY_F17 },
-  { _T("F18"), KEY_F18 },
-  { _T("F19"), KEY_F19 },
-  { _T("F20"), KEY_F20 },
+   expanded Keyboard-Events */
+  { _T("F13"), KEY_F13},
+  { _T("F14"), KEY_F14},
+  { _T("F15"), KEY_F15},
+  { _T("F16"), KEY_F16},
+  { _T("F17"), KEY_F17},
+  { _T("F18"), KEY_F18},
+  { _T("F19"), KEY_F19},
+  { _T("F20"), KEY_F20},
 #endif
-  { _T("LEFT"), KEY_LEFT },
-  { _T("RIGHT"), KEY_RIGHT },
-  { _T("UP"), KEY_UP },
-  { _T("DOWN"), KEY_DOWN },
-  { _T("RETURN"), KEY_RETURN },
-  { _T("ESCAPE"), KEY_ESCAPE },
-  { _T("MENU"), KEY_MENU },
-  { _T("TAB"), KEY_TAB },
-  { NULL }
+  { _T("LEFT"), KEY_LEFT},
+  { _T("RIGHT"), KEY_RIGHT},
+  { _T("UP"), KEY_UP},
+  { _T("DOWN"), KEY_DOWN},
+  { _T("RETURN"), KEY_RETURN},
+  { _T("ESCAPE"), KEY_ESCAPE},
+  { _T("MENU"), KEY_MENU},
+  { _T("TAB"), KEY_TAB},
+  { NULL}
 };
 
 unsigned
@@ -105,3 +137,5 @@ ParseKeyCode(const TCHAR *data)
     return 0;
 
 }
+
+

@@ -1,0 +1,55 @@
+/*
+ Copyright_License {
+
+ XCSoar Glide Computer - http://www.xcsoar.org/
+ Copyright (C) 2000-2021 The XCSoar Project
+ A detailed list of copyright holders can be found in the file "AUTHORS".
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ }
+ */
+
+#include "../KeyCode.hpp"
+#include "Event.hpp"
+namespace UI
+{
+ unsigned
+convertNumPadKeyToCursorKey(unsigned key_code) noexcept
+{
+#if defined(USE_POLL_EVENT)||defined(USE_ANDROID)
+  switch (key_code) {
+  case KEY_KP2:
+  case KEY_KP_DOWN:
+    return KEY_DOWN;
+  case KEY_KP4:
+  case KEY_KP_LEFT:
+    return KEY_LEFT;
+  case KEY_KP6:
+  case KEY_KP_RIGHT:
+    return KEY_RIGHT;
+  case KEY_KP8:
+  case KEY_KP_UP:
+    return KEY_UP;
+  case KEY_KPENTER:
+    return KEY_RETURN;
+  default:
+    return key_code; // leave key_code unchanged
+  }
+#else
+  return key_code;
+#endif
+}
+}
+
