@@ -21,42 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_LANGUAGE_GLUE_HPP
-#define XCSOAR_LANGUAGE_GLUE_HPP
+#pragma once
 
 void
-InitLanguage();
-
-void ReadLanguageFile();
+InitLanguage() noexcept;
 
 void
-CloseLanguageFile();
+ReadLanguageFile() noexcept;
 
-#if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(KOBO) && !defined(__APPLE__)
-
-/**
- * Using the C library's gettext implementation instead of rolling our
- * own.
- */
-#define HAVE_NATIVE_GETTEXT
-
-#elif defined(_WIN32) || defined(ANDROID) || defined(KOBO) || defined(__APPLE__)
-
-#define HAVE_BUILTIN_LANGUAGES
-
-#include <cstddef>
-#include <tchar.h>
-
-struct BuiltinLanguage {
-  unsigned language;
-  const void * const begin;
-  const size_t size;
-  const TCHAR *resource;
-  const TCHAR *name;
-};
-
-extern const BuiltinLanguage language_table[];
-
-#endif
-
-#endif
+void
+CloseLanguageFile() noexcept;

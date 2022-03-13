@@ -1,6 +1,7 @@
 Version 7.24 - not yet released
 * Linux
   - fix terrain renderer bug
+  - allow changing the language at runtime
 * OpenVario
   - menu: fix bogus clicks after returning from XCSoar
 

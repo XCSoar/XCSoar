@@ -25,47 +25,29 @@ Copyright_License {
 
 #include "Features.hpp"
 
-#ifdef USE_LIBINTL
+#ifdef HAVE_NLS
 
-#include <libintl.h> // IWYU pragma: export
-
-#define _(x) gettext(x)
-
-#ifdef gettext_noop
-#define N_(x) gettext_noop(x)
-#else
-#define N_(x) (x)
-#endif
-
-static inline void AllowLanguage() {}
-static inline void DisallowLanguage() {}
-
-#else // !USE_LIBINTL
-
-#include "util/Compiler.h"
-
+#include <cstddef>
 #include <tchar.h>
 
-class MOFile;
-extern const MOFile *mo_file;
-
-#ifdef NDEBUG
-static inline void AllowLanguage() {}
-static inline void DisallowLanguage() {}
-#else
-void AllowLanguage();
-void DisallowLanguage();
+struct BuiltinLanguage {
+#ifdef _WIN32
+  unsigned language;
 #endif
+#ifdef USE_LIBINTL
+  /**
+   * The (POSIX) locale name (only language and territory, without
+   * codeset and modifier), e.g. "de_DE".
+   */
+  const char *locale;
+#else
+  const void *begin;
+  size_t size;
+#endif
+  const TCHAR *resource;
+  const TCHAR *name;
+};
 
-gcc_const
-const TCHAR* gettext(const TCHAR* text);
+extern const BuiltinLanguage language_table[];
 
-/**
- * For source compatibility with GNU gettext.
- */
-#define _(x) gettext(_T(x))
-#define N_(x) _T(x)
-
-void reset_gettext_cache();
-
-#endif // !HAVE_POSIX
+#endif // HAVE_NLS
