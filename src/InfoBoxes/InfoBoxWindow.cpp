@@ -31,6 +31,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "ui/event/shared/Event.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Asset.hpp"
 
@@ -340,6 +341,7 @@ bool
 InfoBoxWindow::OnKeyDown(unsigned key_code)
 {
   /* handle local hot key */
+  key_code = UI::convertNumPadKeyToCursorKey( key_code);
 
   switch (key_code) {
   case KEY_UP:

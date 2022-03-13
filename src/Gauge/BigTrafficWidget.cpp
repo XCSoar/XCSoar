@@ -45,6 +45,8 @@
 #include "Input/InputEvents.hpp"
 #include "Interface.hpp"
 #include "Asset.hpp"
+#include "ui/event/shared/Event.hpp"
+
 
 /**
  * A Window which renders FLARM traffic, with user interaction.
@@ -863,6 +865,7 @@ FlarmTrafficControl::OnCancelMode()
 bool
 FlarmTrafficControl::OnKeyDown(unsigned key_code)
 {
+  key_code = UI::convertNumPadKeyToCursorKey( key_code);
   switch (key_code) {
   case KEY_UP:
     if (!HasPointer())

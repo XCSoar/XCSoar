@@ -169,12 +169,14 @@ For Android, you need:
 - `Android NDK r23b <http://developer.android.com/sdk/ndk/>`__
 
 - `Ogg Vorbis <http://www.vorbis.com/>`__
-
+- Cmake package
+- Ninja-build package
+- aapt
 - Java JDK
 
 On Debian::
   
-  sudo apt install default-jdk-headless vorbis-tools adb
+  sudo apt install default-jdk-headless vorbis-tools adb cmake cmake-qt-gui ninja-build aapt
 
 The required Android SDK components are:
 
