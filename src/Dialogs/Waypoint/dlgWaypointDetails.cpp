@@ -40,6 +40,7 @@ Copyright_License {
 #include "ui/canvas/Bitmap.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "ui/event/shared/Event.hpp"
 #include "ui/control/LargeTextWindow.hpp"
 #include "ui/control/List.hpp"
 #include "MainWindow.hpp"
@@ -556,6 +557,7 @@ WaypointDetailsWidget::OnShrinkClicked()
 bool
 WaypointDetailsWidget::KeyPress(unsigned key_code) noexcept
 {
+  key_code=UI::convertNumPadKeyToCursorKey(key_code);
   switch (key_code) {
   case KEY_LEFT:
     previous_button.SetFocus();

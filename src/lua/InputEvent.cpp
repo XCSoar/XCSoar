@@ -36,6 +36,7 @@ Copyright_License {
 #include "util/ConvertString.hpp"
 #include "Util.hxx"
 #include "Interface.hpp"
+#include "LogFile.hpp"
 
 #include <map>
 #include "util/tstring.hpp"
@@ -218,6 +219,7 @@ public:
         return 1;
       }
     }
+    LogFormat("invalid event: %s", name );
     return luaL_argerror(L, 1, "invalid event");
   }
 

@@ -71,17 +71,19 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("KPEQUAL"), KEY_KPEQUAL},
   { _T("KPSLASH"), KEY_KPSLASH},
   { _T("KPENTER"), KEY_KPENTER},
+#ifdef USE_X11
   { _T("KPCOMMA"), KEY_KPCOMMA},
-  { _T("KEY_KP_INSERT"), KEY_KP_INSERT},
-  { _T("KEY_KP_END"), KEY_KP_END},
-  { _T("KEY_KP_DOWN"), KEY_KP_DOWN},
-  { _T("KEY_KP_PAGE_DOWN"), KEY_KP_PAGE_DOWN},
-  { _T("KEY_KP_LEFT"), KEY_KP_LEFT},
-  { _T("KEY_KP_BEGIN"), KEY_KP_BEGIN},
-  { _T("KEY_KP_RIGHT"), KEY_KP_RIGHT},
-  { _T("KEY_KP_HOME"), KEY_KP_HOME},
-  { _T("KEY_KP_UP"), KEY_KP_UP},
-  { _T("KEY_KP_PAGE_UP"), KEY_KP_PAGE_UP},
+  { _T("KP_INSERT"), KEY_KP_INSERT},
+  { _T("KP_END"), KEY_KP_END},
+  { _T("KP_DOWN"), KEY_KP_DOWN},
+  { _T("KP_PAGE_DOWN"), KEY_KP_PAGE_DOWN},
+  { _T("KP_LEFT"), KEY_KP_LEFT},
+  { _T("KP_BEGIN"), KEY_KP_BEGIN},
+  { _T("KP_RIGHT"), KEY_KP_RIGHT},
+  { _T("KP_HOME"), KEY_KP_HOME},
+  { _T("KP_UP"), KEY_KP_UP},
+  { _T("KP_PAGE_UP"), KEY_KP_PAGE_UP},
+#endif
 #endif
 #ifdef ANDROID
   /* These keys are used by BlueTooth keypads and available in Android*/

@@ -390,17 +390,46 @@ l_task_index(lua_State *L)
 }
 
 static int
-l_task_alternates(lua_State *L)
+l_task_dlgAlternates(lua_State *L)
 {
-  if (lua_gettop(L) != 0)
-    return luaL_error(L, "Invalid parameters");
-
+  // No parameter check is neccessary no paramter expected
   dlgAlternatesListShowModal();
   return 0;
 }
 
+static int
+l_task_dlgTaskManager(lua_State *L)
+{
+  // No parameter check is neccessary no paramter expected
+  dlgTaskManagerShowModal();
+  return 0;
+}
+
+static int
+l_task_selectNextWaypoint(lua_State *L)
+{
+  if (protected_task_manager == NULL)
+     return 0;
+  protected_task_manager->IncrementActiveTaskPoint(1);
+  return 0;
+}
+
+static int
+l_task_selectPreviousWaypoint(lua_State *L)
+{
+  if (protected_task_manager == NULL)
+     return 0;
+  protected_task_manager->IncrementActiveTaskPoint(-1);
+  return 0;
+}
+
+
 static constexpr struct luaL_Reg task_funcs[] = {
-  {"alternates", l_task_alternates},
+  {"alternates", l_task_dlgAlternates},
+  {"taskManager", l_task_dlgTaskManager},
+  {"nextWaypoint",l_task_selectNextWaypoint},
+  {"previousWaypoint",l_task_selectPreviousWaypoint},
+
   {nullptr, nullptr}
 };
 

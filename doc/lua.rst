@@ -678,7 +678,7 @@ The following methods are available in ``xcsoar.timer``:
    - Reschedule the timer.
    
 .. _lua.input_event:
-xcsoar.input_event
+Input Event
 ------------------
 
 The class ``xcsoar.input_event`` implements a event handler
@@ -716,6 +716,48 @@ The following methods are available in ``xcsoar.input_event``:
      	"ne_down_in_gear_retracted"
  * - ``cancel()``
    - Cancel the input event.
+
+.. _lua.misc:
+Miscelleanious
+------------------
+
+The class ``xcsoar.misc`` implements some functions to open xcsoar dialogs which don't fit into the existing classes.
+
+.. code-block:: lua
+
+ xcsoar.input_event.new("key_0", function()
+ xcsoar.task.alternates()
+ end)
+
+The following methods are available in ``xcsoar.misc``:
+
+.. list-table::
+ :widths: 40 60
+ :header-rows: 1
+
+ * - Name
+   - Description
+ * - ``analysis``
+   - Opens the Analysis dialog
+
+.. _lua.misc:
+Waypoint
+------------------
+
+The class ``xcsoar.waypoint`` implements functions to open xcsoar dialogs for waypoints.
+
+The following methods are available in ``xcsoar.waypoint``:
+
+.. list-table::
+ :widths: 40 60
+ :header-rows: 1
+
+ * - Name
+   - Description
+ * - ``showCurrent``
+   - Shows the active waypooint of the task in a dialog
+ * - ``showSelected``
+   - Shows the dialog to select a waypooint
  
 .. _lua.http:
 

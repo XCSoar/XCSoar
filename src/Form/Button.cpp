@@ -23,6 +23,7 @@
 
 #include "Form/Button.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "ui/event/shared/Event.hpp"
 #include "Asset.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Hardware/Vibrator.hpp"
@@ -148,6 +149,7 @@ Button::Click()
 bool
 Button::OnKeyCheck(unsigned key_code) const
 {
+  key_code = UI::convertNumPadKeyToCursorKey( key_code);
   switch (key_code) {
   case KEY_RETURN:
     return true;
@@ -160,6 +162,7 @@ Button::OnKeyCheck(unsigned key_code) const
 bool
 Button::OnKeyDown(unsigned key_code)
 {
+  key_code = UI::convertNumPadKeyToCursorKey( key_code);
   switch (key_code) {
   case KEY_RETURN:
   case KEY_SPACE:
