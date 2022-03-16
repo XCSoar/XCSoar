@@ -30,6 +30,7 @@ Copyright_License {
 #include "Timer.hpp"
 #include "Geo.hpp"
 #include "Map.hpp"
+#include "Misc.hpp"
 #include "Blackboard.hpp"
 #include "Dialogs.hpp"
 #include "Legacy.hpp"
@@ -44,6 +45,7 @@ Copyright_License {
 #include "Logger.hpp"
 #include "Tracking.hpp"
 #include "Replay.hpp"
+#include "Waypoint.hpp"
 #include "InputEvent.hpp"
 
 lua_State *
@@ -57,6 +59,7 @@ Lua::NewFullState()
   InitTimer(L);
   InitGeo(L);
   InitMap(L);
+  InitMisc(L);
   InitBlackboard(L);
   InitDialogs(L);
   InitLegacy(L);
@@ -67,6 +70,7 @@ Lua::NewFullState()
   InitLogger(L);
   InitTracking(L);
   InitReplay(L);
+  InitWaypoint(L);
   InitInputEvent(L);
 
   {

@@ -397,6 +397,7 @@ ListControl::MoveOrigin(int delta) noexcept
 bool
 ListControl::OnKeyCheck(unsigned key_code) const
 {
+  key_code = UI::convertNumPadKeyToCursorKey( key_code);
   switch (key_code) {
   case KEY_RETURN:
     return CanActivateItem();

@@ -8,7 +8,12 @@ Version 7.24 - not yet released
   - input_event: fix not recognized lowercase key strokes
   - input_event: When a lua function is configured, 
     it will be executed rather than depreceated event handling
-  - Lua Task: Added function to open alternates Dialog to Task 
+  - Lua Task: Added function to open alternates Dialog to Task
+  - Lua Misc: Added new class misc with method analysis. 
+    It opens the analysis dialog
+  - Lua Waypoint: Added new class waypoint with methods showCurrent, showSelected. 
+    Both methods open waypoint dialogs
+  - Added numpad.lua to test directory. It is an example file for configuration of a BT numpad.
 
 Version 7.23 - 2022/02/10
 * user interface

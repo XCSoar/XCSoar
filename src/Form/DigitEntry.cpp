@@ -1,25 +1,25 @@
 /*
-Copyright_License {
+ Copyright_License {
 
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
+ XCSoar Glide Computer - http://www.xcsoar.org/
+ Copyright (C) 2000-2021 The XCSoar Project
+ A detailed list of copyright holders can be found in the file "AUTHORS".
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ }
+ */
 
 #include "DigitEntry.hpp"
 #include "ui/canvas/Font.hpp"
@@ -39,14 +39,12 @@ Copyright_License {
 #include "Asset.hpp"
 #include "ui/event/shared/Event.hpp"
 
-
 #include <algorithm>
 
 #include <stdio.h>
 
-DigitEntry::DigitEntry(const DialogLook &_look)
-  :look(_look),
-   button_renderer(look.button)
+DigitEntry::DigitEntry(const DialogLook &_look) :
+    look(_look), button_renderer(look.button)
 {
 }
 
@@ -56,8 +54,7 @@ DigitEntry::~DigitEntry()
 
 void
 DigitEntry::Create(ContainerWindow &parent, const PixelRect &rc,
-                   const WindowStyle style,
-                   unsigned _length)
+                   const WindowStyle style, unsigned _length)
 {
   assert(_length > 0);
   assert(_length <= MAX_LENGTH);
@@ -81,8 +78,8 @@ DigitEntry::Create(ContainerWindow &parent, const PixelRect &rc,
 
 void
 DigitEntry::CreateSigned(ContainerWindow &parent, const PixelRect &rc,
-                         const WindowStyle style,
-                         unsigned ndigits, unsigned precision)
+                         const WindowStyle style, unsigned ndigits,
+                         unsigned precision)
 {
   Create(parent, rc, style, 1 + ndigits + (precision > 0));
 
@@ -98,8 +95,8 @@ DigitEntry::CreateSigned(ContainerWindow &parent, const PixelRect &rc,
 
 void
 DigitEntry::CreateUnsigned(ContainerWindow &parent, const PixelRect &rc,
-                           const WindowStyle style,
-                           unsigned ndigits, unsigned precision)
+                           const WindowStyle style, unsigned ndigits,
+                           unsigned precision)
 {
   Create(parent, rc, style, ndigits + (precision > 0));
 
@@ -126,8 +123,7 @@ DigitEntry::CreateAngle(ContainerWindow &parent, const PixelRect &rc,
 
 void
 DigitEntry::CreateLatitude(ContainerWindow &parent, const PixelRect &rc,
-                           const WindowStyle style,
-                           CoordinateFormat format)
+                           const WindowStyle style, CoordinateFormat format)
 {
   switch (format) {
   case CoordinateFormat::DD_DDDDD:
@@ -176,8 +172,7 @@ DigitEntry::CreateLatitude(ContainerWindow &parent, const PixelRect &rc,
 
 void
 DigitEntry::CreateLongitude(ContainerWindow &parent, const PixelRect &rc,
-                            const WindowStyle style,
-                            CoordinateFormat format)
+                            const WindowStyle style, CoordinateFormat format)
 {
   switch (format) {
   case CoordinateFormat::DD_DDDDD:
@@ -288,7 +283,7 @@ DigitEntry::CalculateLayout()
   }
 
   /* check if width of entry form exceeds available width and adjust
-     column widths appropiately */
+   column widths appropiately */
   if (last_right > max_width) {
     unsigned width_adjust = (last_right - max_width) / length + 1;
     last_right = 0;
@@ -355,7 +350,6 @@ DigitEntry::FindNumberLeft(int i) const
 
   return i;
 }
-
 
 void
 DigitEntry::SetInvalid()
@@ -522,8 +516,7 @@ DigitEntry::GetTimeValue() const
   if (!valid)
     return RoughTime::Invalid();
 
-  return RoughTime(columns[0].value,
-                   columns[2].value * 10 + columns[3].value);
+  return RoughTime(columns[0].value, columns[2].value * 10 + columns[3].value);
 }
 
 BrokenDate
@@ -539,8 +532,7 @@ DigitEntry::GetDateValue() const
   if (!valid)
     return BrokenDate::Invalid();
 
-  return BrokenDate(columns[0].value + 1900,
-                    columns[2].value + 1,
+  return BrokenDate(columns[0].value + 1900, columns[2].value + 1,
                     columns[4].value + 1);
 }
 
@@ -555,15 +547,15 @@ DigitEntry::SetDigits(double degrees, CoordinateFormat format, bool isLatitude)
     break;
 
   case CoordinateFormat::DDMM_MMM:
-    roundingAdjustment = 0.5 * ( (1.0/60) / 1000);
+    roundingAdjustment = 0.5 * ((1.0 / 60) / 1000);
     break;
 
   case CoordinateFormat::DDMMSS_S:
-    roundingAdjustment = 0.5 * ( (1.0/3600) / 10);
+    roundingAdjustment = 0.5 * ((1.0 / 3600) / 10);
     break;
 
   case CoordinateFormat::DDMMSS:
-    roundingAdjustment = 0.5 * ( (1.0/3600) / 1);
+    roundingAdjustment = 0.5 * ((1.0 / 3600) / 1);
     break;
 
   default:
@@ -576,7 +568,8 @@ DigitEntry::SetDigits(double degrees, CoordinateFormat format, bool isLatitude)
   degrees += roundingAdjustment;
 
   // Handle whole degrees
-  const unsigned i_degrees = std::min(unsigned(degrees), isLatitude ? 90u : 180u);
+  const unsigned i_degrees = std::min(unsigned(degrees),
+                                      isLatitude ? 90u : 180u);
   columns[1].value = i_degrees / 10;
   columns[2].value = i_degrees % 10;
 
@@ -594,10 +587,14 @@ DigitEntry::SetDigits(double degrees, CoordinateFormat format, bool isLatitude)
     assert(columns[8].type == Column::Type::DIGIT);
     // Set fractional degree columns
     unsigned remainder = unsigned(degrees * 1000000u) % 1000000u;
-    columns[4].value = remainder / 100000u;  remainder %= 100000u;
-    columns[5].value = remainder / 10000u;   remainder %= 10000u;
-    columns[6].value = remainder / 1000u;    remainder %= 1000u;
-    columns[7].value = remainder / 100u;     remainder %= 100u;
+    columns[4].value = remainder / 100000u;
+    remainder %= 100000u;
+    columns[5].value = remainder / 10000u;
+    remainder %= 10000u;
+    columns[6].value = remainder / 1000u;
+    remainder %= 1000u;
+    columns[7].value = remainder / 100u;
+    remainder %= 100u;
     columns[8].value = remainder / 10u;
     break;
   }
@@ -612,10 +609,14 @@ DigitEntry::SetDigits(double degrees, CoordinateFormat format, bool isLatitude)
     assert(columns[9].type == Column::Type::DIGIT);
     // Set minute columns
     unsigned remainder = unsigned(degrees * 600000u) % 600000u;
-    columns[4].value = remainder / 100000u; remainder %= 100000u;
-    columns[5].value = remainder / 10000u;  remainder %= 10000u;
-    columns[7].value = remainder / 1000u;   remainder %= 1000u;
-    columns[8].value = remainder / 100u;    remainder %= 100u;
+    columns[4].value = remainder / 100000u;
+    remainder %= 100000u;
+    columns[5].value = remainder / 10000u;
+    remainder %= 10000u;
+    columns[7].value = remainder / 1000u;
+    remainder %= 1000u;
+    columns[8].value = remainder / 100u;
+    remainder %= 100u;
     columns[9].value = remainder / 10u;
     break;
   }
@@ -634,9 +635,12 @@ DigitEntry::SetDigits(double degrees, CoordinateFormat format, bool isLatitude)
     columns[4].value = minutes / 10;
     columns[5].value = minutes % 10;
     unsigned remainder = full_hunseconds % 6000u;
-    columns[7].value = remainder / 1000;  remainder %= 1000;
-    columns[8].value = remainder / 100;   remainder %= 100;
-    columns[10].value = remainder / 10;   remainder %= 10;
+    columns[7].value = remainder / 1000;
+    remainder %= 1000;
+    columns[8].value = remainder / 100;
+    remainder %= 100;
+    columns[10].value = remainder / 10;
+    remainder %= 10;
     break;
   }
 
@@ -654,8 +658,10 @@ DigitEntry::SetDigits(double degrees, CoordinateFormat format, bool isLatitude)
     columns[4].value = minutes / 10;
     columns[5].value = minutes % 10;
     unsigned remainder = full_hunseconds % 6000u;
-    columns[7].value = remainder / 1000;  remainder %= 1000;
-    columns[8].value = remainder / 100;   remainder %= 100;
+    columns[7].value = remainder / 1000;
+    remainder %= 1000;
+    columns[8].value = remainder / 100;
+    remainder %= 100;
     break;
   }
   }
@@ -708,10 +714,12 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
 
   // The first three columns are common to all formats
   // N99... and E*9...
-  assert(columns[0].type == Column::Type::NORTH_SOUTH ||
-         columns[0].type == Column::Type::EAST_WEST);
-  assert(columns[1].type == Column::Type::DIGIT ||
-         columns[1].type == Column::Type::DIGIT19);
+  assert(
+      columns[0].type == Column::Type::NORTH_SOUTH
+          || columns[0].type == Column::Type::EAST_WEST);
+  assert(
+      columns[1].type == Column::Type::DIGIT
+          || columns[1].type == Column::Type::DIGIT19);
   assert(columns[2].type == Column::Type::DIGIT);
   double degrees = columns[1].value * 10 + columns[2].value;
 
@@ -727,11 +735,9 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
     assert(columns[7].type == Column::Type::DIGIT);
     assert(columns[8].type == Column::Type::DIGIT);
     // Read fractional degree columns
-    degrees += (columns[4].value * 10000 +
-                columns[5].value * 1000 +
-                columns[6].value * 100 +
-                columns[7].value * 10  +
-                columns[8].value        ) / 100000.;
+    degrees += (columns[4].value * 10000 + columns[5].value * 1000
+        + columns[6].value * 100 + columns[7].value * 10 + columns[8].value)
+        / 100000.;
     break;
 
   case CoordinateFormat::DDMM_MMM:
@@ -744,9 +750,8 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
     assert(columns[9].type == Column::Type::DIGIT);
     // Read minute columns
     degrees += (columns[4].value * 10 + columns[5].value) / 60.
-      +  (columns[7].value * 100 +
-          columns[8].value * 10  +
-          columns[9].value        ) / 60000.;
+        + (columns[7].value * 100 + columns[8].value * 10 + columns[9].value)
+            / 60000.;
     break;
 
   case CoordinateFormat::DDMMSS_S:
@@ -759,8 +764,8 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
     assert(columns[10].type == Column::Type::DIGIT);
     // Read minute and decimal second columns
     degrees += (columns[4].value * 10 + columns[5].value) / 60.
-      +  (columns[7].value * 10 + columns[8].value) / 3600.
-      +  (columns[10].value                       ) / 36000.;
+        + (columns[7].value * 10 + columns[8].value) / 3600.
+        + (columns[10].value) / 36000.;
     break;
 
   case CoordinateFormat::UTM: /// \todo support UTM format
@@ -773,7 +778,7 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
     assert(columns[8].type == Column::Type::DIGIT);
     // Read minute and second columns
     degrees += (columns[4].value * 10 + columns[5].value) / 60.
-      +  (columns[7].value * 10 + columns[8].value) / 3600.;
+        + (columns[7].value * 10 + columns[8].value) / 3600.;
     break;
   }
 
@@ -922,6 +927,7 @@ DigitEntry::OnMouseDown(PixelPoint p)
 bool
 DigitEntry::OnKeyCheck(unsigned key_code) const
 {
+  key_code = UI::convertNumPadKeyToCursorKey(key_code);
   switch (key_code) {
   case KEY_UP:
   case KEY_DOWN:
@@ -942,38 +948,38 @@ bool
 DigitEntry::OnKeyDown(unsigned key_code)
 {
   assert(cursor < length);
-  key_code = UI::convertNumPadKeyToCursorKey( key_code);
+  key_code = UI::convertNumPadKeyToCursorKey(key_code);
 
   switch (key_code) {
-    int i;
+  int i;
 
-  case KEY_UP:
-    IncrementColumn(cursor);
+case KEY_UP:
+  IncrementColumn(cursor);
+  return true;
+
+case KEY_DOWN:
+  DecrementColumn(cursor);
+  return true;
+
+case KEY_LEFT:
+  i = FindEditableLeft(cursor - 1);
+  if (i >= 0)
+    SetCursor(i);
+  return true;
+
+case KEY_RIGHT:
+  i = FindEditableRight(cursor + 1);
+  if (i >= 0)
+    SetCursor(i);
+  return true;
+
+case KEY_RETURN:
+  if (callback) {
+    callback();
     return true;
+  }
 
-  case KEY_DOWN:
-    DecrementColumn(cursor);
-    return true;
-
-  case KEY_LEFT:
-    i = FindEditableLeft(cursor - 1);
-    if (i >= 0)
-      SetCursor(i);
-    return true;
-
-  case KEY_RIGHT:
-    i = FindEditableRight(cursor + 1);
-    if (i >= 0)
-      SetCursor(i);
-    return true;
-
-  case KEY_RETURN:
-    if (callback) {
-      callback();
-      return true;
-    }
-
-    break;
+  break;
   }
 
   return PaintWindow::OnKeyDown(key_code);
@@ -1110,7 +1116,7 @@ DigitEntry::OnPaint(Canvas &canvas)
 
     const int x = (c.left + c.right - canvas.CalcTextWidth(text)) / 2;
 
-    canvas.DrawOpaqueText({x, y}, rc, text);
+    canvas.DrawOpaqueText( { x, y }, rc, text);
   }
 
   canvas.SetBackgroundTransparent();

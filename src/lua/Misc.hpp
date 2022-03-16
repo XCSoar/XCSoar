@@ -21,33 +21,25 @@ Copyright_License {
 }
 */
 
-#include "TextEntry.hpp"
-#include "DialogSettings.hpp"
-#include "UIGlobals.hpp"
-#include "Asset.hpp"
+#ifndef SRC_LUA_MISC_HPP_
+#define SRC_LUA_MISC_HPP_
 
-bool
-TextEntryDialog(TCHAR *text, size_t width,
-                const TCHAR *caption, AllowedCharacters accb,
-                bool default_shift_state)
-{
-  switch (UIGlobals::GetDialogSettings().text_input_style) {
-  case DialogSettings::TextInputStyle::Default:
-  case DialogSettings::TextInputStyle::Keyboard:
-    if (HasPointer())
-      return TouchTextEntry(text, width, caption, accb, default_shift_state);
-    else {
-      KnobTextEntry(text, width, caption);
-      return true;
-    }
+struct lua_State;
 
-  case DialogSettings::TextInputStyle::HighScore:
-    KnobTextEntry(text, width, caption);
-    return true;
-  case DialogSettings::TextInputStyle::NumPad:
-    NumPadTextEntry(text, width, caption);
-    return true;
-  }
+namespace Lua {
 
-  return false;
+/**
+ * Provide the Lua table "xcsoar.misc".
+ */
+void
+InitMisc(lua_State *L);
+
 }
+
+
+
+
+
+
+
+#endif /* SRC_LUA_MISC_HPP_ */

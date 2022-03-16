@@ -1,5 +1,6 @@
 EVENT_SOURCES = \
 	$(SRC)/ui/event/Globals.cpp \
+	$(SRC)/ui/event/shared/Event.cpp \
 	$(SRC)/ui/event/Idle.cpp \
 	$(SRC)/ui/event/DelayedNotify.cpp \
 	$(SRC)/ui/event/Notify.cpp
@@ -22,7 +23,7 @@ EVENT_SOURCES += \
 	$(SRC)/ui/event/android/Queue.cpp
 else ifeq ($(VFB),y)
 VFB_CPPFLAGS = -DNON_INTERACTIVE
-else ifeq ($(USE_X11),y)
+else ifeq ($(Y),y)
 EVENT_SOURCES += $(SRC)/ui/event/poll/X11Queue.cpp
 else ifeq ($(USE_WAYLAND),y)
 EVENT_SOURCES += $(SRC)/ui/event/poll/WaylandQueue.cpp

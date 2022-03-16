@@ -21,6 +21,7 @@ OV_MENU_SOURCES = \
 	$(SRC)/Dialogs/LockScreen.cpp \
 	$(SRC)/Dialogs/TextEntry.cpp \
 	$(SRC)/Dialogs/KnobTextEntry.cpp \
+	$(SRC)/Dialogs/NumPadTextEntry.cpp \
 	$(SRC)/Dialogs/TouchTextEntry.cpp \
 	$(SRC)/Dialogs/ProcessDialog.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \

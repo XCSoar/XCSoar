@@ -1845,6 +1845,7 @@ $(eval $(call link-program,RunListControl,RUN_LIST_CONTROL))
 RUN_TEXT_ENTRY_SOURCES = \
 	$(SRC)/Dialogs/TextEntry.cpp \
 	$(SRC)/Dialogs/KnobTextEntry.cpp \
+	$(SRC)/Dialogs/NumPadTextEntry.cpp \
 	$(SRC)/Dialogs/TouchTextEntry.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
