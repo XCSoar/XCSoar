@@ -14,7 +14,8 @@ Version 7.24 - not yet released
   - Lua Waypoint: Added new class waypoint with methods showCurrent, showSelected. 
     Both methods open waypoint dialogs
   - Added numpad.lua to test directory. It is an example file for configuration of a BT numpad.
-
+* Text input
+  - Added a new Dialog to enter text via numpads.
 Version 7.23 - 2022/02/10
 * user interface
   - add "Set Frequency" buttons to alternates list
