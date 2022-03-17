@@ -191,7 +191,7 @@ class NumPadTextEntryWidget final : public WindowWidget
   setCharFromKeyPress(unsigned key_code, const TCHAR *keys) noexcept;
 
 public:
-  NumPadTextEntryWidget(const TCHAR *_text, size_t _width) noexcept :
+  NumPadTextEntryWidget(TCHAR *_text, size_t _width) noexcept :
       text(_text), width(_width)
   {
   }
@@ -258,6 +258,8 @@ NumPadTextEntryWidget::setCharFromKeyPress(unsigned key_code,
     GetWindow().Invalidate();
 }
 
+
+
 inline bool
 NumPadTextEntryWidget::KeyPress(unsigned key_code) noexcept
 {
@@ -308,20 +310,44 @@ NumPadTextEntryWidget::SetDialog(WidgetDialog &dialog)
   this->dialog = &dialog;
 }
 
+class NumPadDialog : public WidgetDialog{
+//  NumPadTextEntryWidget widget;
+public:
+  using WidgetDialog::WidgetDialog;
+
+  void SetWidget(TCHAR *text, size_t width) {
+
+    FinishPreliminary(std::make_unique<NumPadTextEntryWidget>(text, width) );
+  }
+
+  auto &GetWidget() noexcept {
+    return static_cast<NumPadTextEntryWidget &>(WidgetDialog::GetWidget());
+  }
+
+
+  bool OnMouseDown(PixelPoint p) override{
+      // This is the only exit for the dialog, if you don't have a keyboard attached.
+      SetModalResult(mrOK);
+      return true;
+  }
+  NumPadDialog(const TCHAR *caption, TCHAR *text, size_t width ):
+    WidgetDialog(WidgetDialog::Full { },
+                                                UIGlobals::GetMainWindow(),
+                                                UIGlobals::GetDialogLook(),
+                                                caption){};
+
+};
+
+
 void
 NumPadTextEntry(TCHAR *text, size_t width, const TCHAR *caption)
 {
   if (width == 0)
     width = MAX_TEXTENTRY;
-
-  TWidgetDialog<NumPadTextEntryWidget> dialog(WidgetDialog::Full { },
-                                              UIGlobals::GetMainWindow(),
-                                              UIGlobals::GetDialogLook(),
-                                              caption);
-  dialog.SetWidget(text, width);
+  NumPadDialog dialog( caption, text, width);
 //  dialog.AddButton(_("Close"), mrOK);
+  dialog.SetWidget(text, width);
   dialog.GetWidget().SetDialog(dialog);
-
   if (dialog.ShowModal() == mrOK) {
     StripRight(dialog.GetWidget().GetValue());
     CopyTruncateString(text, width, dialog.GetWidget().GetValue());
