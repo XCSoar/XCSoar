@@ -45,7 +45,7 @@ TextEntryDialog(TCHAR *text, size_t width,
     KnobTextEntry(text, width, caption);
     return true;
   case DialogSettings::TextInputStyle::NumPad:
-    NumPadTextEntry(text, width, caption);
+    NumPadTextEntry(text, width, caption,accb);
     return true;
   }
 

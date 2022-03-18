@@ -55,13 +55,14 @@ enum Buttons
 
 static constexpr long waitForSameKeyTime = 1000000; // one second = 1000.000 microseconds
 static constexpr size_t MAX_TEXTENTRY = 40;
-static const TCHAR *charsForKey[] = { " -0", "ABC1", "DEF2", "GHI3", "JKL4",
+static const TCHAR charsForKey[10][5] = { " -0", "ABC1", "DEF2", "GHI3", "JKL4",
                                       "MNO5", "PQR6", "STU7", "VWX8", "YZ9" };
 static const TCHAR *helpMsg[] = {"Use the number pad to select a character.",
     "For selection click the same key several times.",
     "Wait for one second to start a new character.",
     "Use the escape key to abort and the return key to return."
 };
+TCHAR allowedCharsForKey[10][5];
 
 
 class NumPadTextEntryWindow final : public PaintWindow
@@ -153,7 +154,7 @@ NumPadTextEntryWindow::OnPaint(Canvas &canvas)
       canvas.DrawText(ptNumber, buf);
 
       canvas.Select(look.text_font);
-      canvas.DrawText(pt, charsForKey[keyText++]);
+      canvas.DrawText(pt, allowedCharsForKey[keyText++]);
       keyIdx++;
     }
     }
@@ -165,7 +166,7 @@ NumPadTextEntryWindow::OnPaint(Canvas &canvas)
   canvas.Select(look.bold_font);
   canvas.DrawText(ptNumber, "0");
   canvas.Select(look.text_font);
-  canvas.DrawText(pt, charsForKey[0]);
+  canvas.DrawText(pt, allowedCharsForKey[0]);
   PixelRect rTextField(10 ,origY - btnHeight, 400, origY - 3*btnHeight/2);
   canvas.DrawRoundRectangle(rTextField, ps);
 
@@ -187,12 +188,12 @@ class NumPadTextEntryWidget final : public WindowWidget
   const TCHAR *const text;
   const size_t width;
   WidgetDialog *dialog;
-  void
-  setCharFromKeyPress(unsigned key_code, const TCHAR *keys) noexcept;
+  AllowedCharacters accb;
+  void setCharFromKeyPress(unsigned key_code, const TCHAR *keys) noexcept;
 
 public:
-  NumPadTextEntryWidget(TCHAR *_text, size_t _width) noexcept :
-      text(_text), width(_width)
+  NumPadTextEntryWidget(TCHAR *_text, size_t _width, AllowedCharacters _accb) noexcept :
+      text(_text), width(_width), accb(_accb)
   {
   }
 
@@ -210,7 +211,6 @@ public:
 
   void
   SetDialog(WidgetDialog &dialog);
-
   /* virtual methods from class Widget */
 
   void
@@ -225,7 +225,38 @@ public:
   }
   bool
   KeyPress(unsigned key_code) noexcept override;
+  TCHAR UpdateAllowedCharacters();
+private:
+  void CheckKey(TCHAR *output, const TCHAR* allowedCharacters, const TCHAR key);
 };
+
+void NumPadTextEntryWidget::CheckKey(TCHAR *output, const TCHAR* allowedCharacters, const TCHAR key)
+{
+  char cbuf[]={key, '\0'};
+  if( strchr(allowedCharacters, key) != nullptr)
+      strcat(output, cbuf);
+}
+
+TCHAR NumPadTextEntryWidget::UpdateAllowedCharacters()
+{
+  TCHAR *buffer = GetValue();
+  const TCHAR *allowedCharacters = accb(buffer);
+  // Fill allowedChar=0sForKey
+  allowedCharsForKey[0][0]='\0';
+  CheckKey(allowedCharsForKey[0], allowedCharacters,' ');
+  CheckKey(allowedCharsForKey[0], allowedCharacters,'-');
+  CheckKey(allowedCharsForKey[0], allowedCharacters,'0');
+  for(int row=1; row < 10;row++)
+  {
+    allowedCharsForKey[row][0] = '\0';
+    for(int col=0; col < 3;col++)
+      CheckKey(allowedCharsForKey[row], allowedCharacters,'A' + (row-1) * 3 + col);
+    CheckKey(allowedCharsForKey[row], allowedCharacters,'0' + (row));
+  }
+  if(1 == strlen(allowedCharacters))
+    return allowedCharacters[0];
+  return '\0';
+}
 
 inline void
 NumPadTextEntryWidget::setCharFromKeyPress(unsigned key_code,
@@ -244,7 +275,12 @@ NumPadTextEntryWidget::setCharFromKeyPress(unsigned key_code,
   } else if (last_key_code != key_code
       || ((microsNow - microsTimeOfLastKeyCode) >= waitForSameKeyTime)) {
     keyIdx = 0;
-    strncat(buffer, keys, 1);
+    if(strlen(keys)>0)
+      strncat(buffer, keys, 1);
+    // If there is only one allowed character, it can be taken without key pressing
+    TCHAR theOnlyAllowedChar;
+    while( 0 != (theOnlyAllowedChar = UpdateAllowedCharacters()))
+      strncat(buffer, &theOnlyAllowedChar, 1);
   } else {
     keyIdx++;
     if (keyIdx >= strlen(keys))
@@ -288,7 +324,7 @@ NumPadTextEntryWidget::KeyPress(unsigned key_code) noexcept
   };
   for (unsigned i = 0; i < sizeof(keyIdxMap) / sizeof(keyIdxMap[0]); i++)
     if (keyIdxMap[i][0] == key_code) {
-      setCharFromKeyPress(key_code, charsForKey[keyIdxMap[i][1]]);
+      setCharFromKeyPress(key_code, allowedCharsForKey[keyIdxMap[i][1]]);
       return true;
     }
   switch (key_code) {
@@ -315,9 +351,9 @@ class NumPadDialog : public WidgetDialog{
 public:
   using WidgetDialog::WidgetDialog;
 
-  void SetWidget(TCHAR *text, size_t width) {
+  void SetWidget(TCHAR *text, size_t width,AllowedCharacters accb) {
 
-    FinishPreliminary(std::make_unique<NumPadTextEntryWidget>(text, width) );
+    FinishPreliminary(std::make_unique<NumPadTextEntryWidget>(text, width, accb) );
   }
 
   auto &GetWidget() noexcept {
@@ -330,7 +366,7 @@ public:
       SetModalResult(mrOK);
       return true;
   }
-  NumPadDialog(const TCHAR *caption, TCHAR *text, size_t width ):
+  NumPadDialog(const TCHAR *caption, TCHAR *text, size_t width, AllowedCharacters accb ):
     WidgetDialog(WidgetDialog::Full { },
                                                 UIGlobals::GetMainWindow(),
                                                 UIGlobals::GetDialogLook(),
@@ -340,13 +376,13 @@ public:
 
 
 void
-NumPadTextEntry(TCHAR *text, size_t width, const TCHAR *caption)
+NumPadTextEntry(TCHAR *text, size_t width, const TCHAR *caption, AllowedCharacters accb)
 {
   if (width == 0)
     width = MAX_TEXTENTRY;
-  NumPadDialog dialog( caption, text, width);
+  NumPadDialog dialog( caption, text, width,accb);
 //  dialog.AddButton(_("Close"), mrOK);
-  dialog.SetWidget(text, width);
+  dialog.SetWidget(text, width, accb);
   dialog.GetWidget().SetDialog(dialog);
   if (dialog.ShowModal() == mrOK) {
     StripRight(dialog.GetWidget().GetValue());
