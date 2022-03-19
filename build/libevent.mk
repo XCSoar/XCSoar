@@ -23,7 +23,7 @@ EVENT_SOURCES += \
 	$(SRC)/ui/event/android/Queue.cpp
 else ifeq ($(VFB),y)
 VFB_CPPFLAGS = -DNON_INTERACTIVE
-else ifeq ($(Y),y)
+else ifeq ($(USE_X11),y)
 EVENT_SOURCES += $(SRC)/ui/event/poll/X11Queue.cpp
 else ifeq ($(USE_WAYLAND),y)
 EVENT_SOURCES += $(SRC)/ui/event/poll/WaylandQueue.cpp
