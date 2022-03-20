@@ -30,6 +30,7 @@ Copyright_License {
 #include <winuser.h>
 
 namespace UI {
+unsigned ConvertNumPadKeyToCursorKey( unsigned key_code) noexcept;
 
 struct Event {
   MSG msg;
@@ -47,7 +48,10 @@ struct Event {
 
     return msg.wParam;
   }
-
+  void SetKeyCode(unsigned key_code)
+  {
+    msg.wParam = key_code;
+  }
   size_t GetCharacterCount() const {
     return msg.message == WM_CHAR ? 1 : 0;
   }

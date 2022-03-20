@@ -70,6 +70,17 @@ enum {
   KEY_APP4 = '4',
   KEY_APP5 = '5',
   KEY_APP6 = '6',
+  KEY_KP0 = VK_NUMPAD0,  //Numlock is off by default for X11.   XK_KP_0,
+  KEY_KP1 = VK_NUMPAD1,
+  KEY_KP2 = VK_NUMPAD2,
+  KEY_KP3 = VK_NUMPAD3,
+  KEY_KP4 = VK_NUMPAD4,
+  KEY_KP5 = VK_NUMPAD5,
+  KEY_KP6 = VK_NUMPAD6,
+  KEY_KP7 = VK_NUMPAD7,
+  KEY_KP8 = VK_NUMPAD8,
+  KEY_KP9 = VK_NUMPAD9,
+  KEY_KPENTER = VK_RETURN
 };
 
 #endif

@@ -40,10 +40,11 @@
 #include <sys/time.h>
 
 #include <stdio.h>
-
+#include <stdlib.h>
 #include <algorithm>
 
 #include <string.h>
+#include <tchar.h>
 
 enum Buttons
 {
@@ -53,15 +54,20 @@ enum Buttons
   RIGHT,
 };
 
-static constexpr long waitForSameKeyTime = 1000000; // one second = 1000.000 microseconds
+static constexpr long waitForSameKeyTime = 1000000;// one second = 1000.000 microseconds
 static constexpr size_t MAX_TEXTENTRY = 40;
-static const TCHAR charsForKey[10][5] = { " -0", "ABC1", "DEF2", "GHI3", "JKL4",
-                                          "MNO5", "PQR6", "STU7", "VWX8", "YZ9" };
+
+static constexpr TCHAR charsForKey[10][5] = { _T(" -0"), _T("ABC1"), _T("DEF2"),
+                                              _T("GHI3"), _T("JKL4"),
+                                              _T("MNO5"),
+                                              _T("PQR6"), _T("STU7"),
+                                              _T("VWX8"),
+                                              _T("YZ9") };
 static const TCHAR *helpMsg[] = {
-    "Use the number pad to select a character.",
-    "For selection click the same key several times.",
-    "Wait for one second to start a new character.",
-    "Use the escape key to abort and the return key to return." };
+    _T("Use the number pad to select a character."),
+    _T("For selection click the same key several times."),
+    _T("Wait for one second to start a new character."),
+    _T("Use the escape key to abort and the return key to return.") };
 TCHAR allowedCharsForKey[10][5];
 
 class NumPadTextEntryWindow final : public PaintWindow
@@ -107,8 +113,8 @@ NumPadTextEntryWindow::OnPaint(Canvas &canvas)
   canvas.Select(look.text_font);
 
   PixelSize tsize = canvas.CalcTextSize(buffer);
-  PixelSize tsizec = canvas.CalcTextSize("W");
-  PixelSize tsizea = canvas.CalcTextSize("W");
+  PixelSize tsizec = canvas.CalcTextSize(_T("W"));
+  PixelSize tsizea = canvas.CalcTextSize(_T("W"));
 
   BulkPixelPoint p[5];
   p[0].x = 10;
@@ -150,8 +156,9 @@ NumPadTextEntryWindow::OnPaint(Canvas &canvas)
       BulkPixelPoint ptNumber(origX + horiz + btnWidth / 2,
                               origY + vert + btnHeight / 4);
       canvas.Select(look.bold_font);
-      char buf[10];
-      sprintf(buf, "%d", 1 + keyIdy * 3 + keyIdx); // keyIdx start with 1
+      TCHAR buf[10];
+      buf[0] = '0' + 1 + keyIdy * 3 + keyIdx;
+      buf[1]='\0';
       canvas.DrawText(ptNumber, buf);
 
       canvas.Select(look.text_font);
@@ -166,7 +173,7 @@ NumPadTextEntryWindow::OnPaint(Canvas &canvas)
   BulkPixelPoint ptNumber(origX + btnWidth / 2,
                           origY + 3 * btnHeight + btnHeight / 4);
   canvas.Select(look.bold_font);
-  canvas.DrawText(ptNumber, "0");
+  canvas.DrawText(ptNumber, _T("0"));
   canvas.Select(look.text_font);
   canvas.DrawText(pt, allowedCharsForKey[0]);
   PixelRect rTextField(10, origY - btnHeight, 400, origY - 3 * btnHeight / 2);
@@ -239,9 +246,9 @@ void
 NumPadTextEntryWidget::CheckKey(TCHAR *output, const TCHAR *allowedCharacters,
                                 const TCHAR key)
 {
-  char cbuf[] = { key, '\0' };
-  if (strchr(allowedCharacters, key) != nullptr)
-    strcat(output, cbuf);
+  TCHAR cbuf[] = { key, '\0' };
+  if (StringFind(allowedCharacters, key,StringLength(allowedCharacters)) != nullptr)
+    UnsafeCopyString(output + StringLength(output), cbuf);
 }
 
 TCHAR
@@ -270,7 +277,7 @@ NumPadTextEntryWidget::UpdateAllowedCharacters()
         CheckKey(allowedCharsForKey[row], allowedCharacters, '0' + (row));
       }
 
-      if (allowedCharacters != nullptr && 1 == strlen(allowedCharacters))
+      if (allowedCharacters != nullptr && 1 == StringLength(allowedCharacters))
         return allowedCharacters[0];
     }
   }
@@ -289,23 +296,26 @@ NumPadTextEntryWidget::setCharFromKeyPress(unsigned key_code,
   long microsNow = now.tv_sec * 1000000 + now.tv_usec;
   long microsTimeOfLastKeyCode = timeOfLastKeyCode.tv_sec * 1000000
       + timeOfLastKeyCode.tv_usec;
-  char *buffer = GetValue();
-  if (KEY_BACKSPACE == key_code) {
-    buffer[strlen(buffer) - 1] = '\0';
+  TCHAR *buffer = GetValue();
+  if (KEY_BACK == key_code) {
+    buffer[StringLength(buffer) - 1] = '\0';
   } else if (last_key_code != key_code
       || ((microsNow - microsTimeOfLastKeyCode) >= waitForSameKeyTime)) {
     keyIdx = 0;
-    if (strlen(keys) > 0)
-      strncat(buffer, keys, 1);
+    if (StringLength(keys) > 0)
+    {
+      TCHAR keyBuf[2]={keys[0],'\0'};
+      UnsafeCopyString(buffer+StringLength(buffer), keyBuf);
+    }
     // If there is only one allowed character, it can be taken without key pressing
-    TCHAR theOnlyAllowedChar;
-    while (0 != (theOnlyAllowedChar = UpdateAllowedCharacters()))
-      strncat(buffer, &theOnlyAllowedChar, 1);
+    TCHAR theOnlyAllowedChar[2] = {'\0','\0'};
+    while (0 != (theOnlyAllowedChar[0] = UpdateAllowedCharacters()))
+      UnsafeCopyString(buffer + StringLength(buffer), theOnlyAllowedChar);
   } else {
     keyIdx++;
-    if (keyIdx >= strlen(keys))
+    if (keyIdx >= StringLength(keys))
       keyIdx = 0;
-    buffer[strlen(buffer) - 1] = keys[keyIdx];
+    buffer[StringLength(buffer) - 1] = keys[keyIdx];
   }
 
   gettimeofday(&timeOfLastKeyCode, NULL);
@@ -323,7 +333,9 @@ NumPadTextEntryWidget::KeyPress(unsigned key_code) noexcept
                                              KEY_KP5, 4 },
                                          { KEY_KP6, 3 }, { KEY_KP7, 2 }, {
                                              KEY_KP8, 1 },
-                                         { KEY_KP9, 0 }, { KEY_KP_HOME, 1 }, {
+                                         { KEY_KP9, 0 },
+#if defined(USE_POLL_EVENT)
+                                         { KEY_KP_HOME, 1 }, {
                                              KEY_KP_UP, 2 },
                                          { KEY_KP_PAGE_UP, 3 },
                                          { KEY_KP_LEFT, 4 },
@@ -331,8 +343,9 @@ NumPadTextEntryWidget::KeyPress(unsigned key_code) noexcept
                                          { KEY_KP_RIGHT, 6 }, { KEY_KP_END, 7 },
                                          { KEY_KP_DOWN, 8 }, { KEY_KP_PAGE_DOWN,
                                                                9 },
-                                         { KEY_KP_INSERT, 0 }, { KEY_BACKSPACE,
-                                                                 0 } // Dummy entry for backspace
+                                         { KEY_KP_INSERT, 0 },
+#endif
+                                         { KEY_BACK, 0 } // Dummy entry for backspace
   };
   for (unsigned i = 0; i < sizeof(keyIdxMap) / sizeof(keyIdxMap[0]); i++)
     if (keyIdxMap[i][0] == key_code) {
@@ -391,8 +404,6 @@ public:
                    UIGlobals::GetDialogLook(), caption)
   {
   }
-  ;
-
 };
 
 void
@@ -402,9 +413,8 @@ NumPadTextEntry(TCHAR *text, size_t width, const TCHAR *caption,
   if (width == 0)
     width = MAX_TEXTENTRY;
   TCHAR buffer[MAX_TEXTENTRY];
-  strncpy(buffer, gettext("Number Pad Text Entry: "),
-          (unsigned long)MAX_TEXTENTRY);
-  strncat(buffer, caption, (unsigned long)MAX_TEXTENTRY - strlen(buffer));
+  UnsafeCopyString(buffer, _("Number Pad Text Entry: "));
+  UnsafeCopyString(buffer + StringLength(buffer), caption);
   NumPadDialog dialog(buffer, text, width, accb);
 //  dialog.AddButton(_("Close"), mrOK);
   dialog.SetWidget(text, width, accb);

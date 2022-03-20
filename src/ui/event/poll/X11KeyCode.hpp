@@ -29,7 +29,7 @@
 enum {
   KEY_RETURN = XK_Return,
   KEY_ESCAPE = XK_Escape,
-  KEY_BACKSPACE = XK_BackSpace,
+  KEY_BACK = XK_BackSpace,
   KEY_PRIOR = XK_Page_Up,
   KEY_NEXT = XK_Page_Down,
   KEY_UP = XK_Up,
@@ -39,7 +39,6 @@ enum {
   KEY_HOME = XK_Home,
   KEY_END = XK_End,
   KEY_TAB = XK_Tab,
-  KEY_BACK = XK_BackSpace,
   KEY_SPACE = XK_space,
   KEY_F1 = XK_F1,
   KEY_F2 = XK_F2,

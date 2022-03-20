@@ -149,7 +149,7 @@ Button::Click()
 bool
 Button::OnKeyCheck(unsigned key_code) const
 {
-  key_code = UI::convertNumPadKeyToCursorKey( key_code);
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
   switch (key_code) {
   case KEY_RETURN:
     return true;
@@ -162,7 +162,7 @@ Button::OnKeyCheck(unsigned key_code) const
 bool
 Button::OnKeyDown(unsigned key_code)
 {
-  key_code = UI::convertNumPadKeyToCursorKey( key_code);
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
   switch (key_code) {
   case KEY_RETURN:
   case KEY_SPACE:

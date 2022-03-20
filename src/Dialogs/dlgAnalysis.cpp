@@ -648,7 +648,7 @@ bool
 AnalysisWidget::KeyPress(unsigned key_code) noexcept
 {
 
-  key_code = UI::convertNumPadKeyToCursorKey( key_code);
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
   switch (key_code) {
   case KEY_LEFT:
     previous_button.SetFocus();

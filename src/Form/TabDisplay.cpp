@@ -240,7 +240,7 @@ TabDisplay::OnCancelMode()
 bool
 TabDisplay::OnKeyCheck(unsigned key_code) const
 {
-  key_code = UI::convertNumPadKeyToCursorKey( key_code);
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
 
   switch (key_code) {
 
@@ -273,7 +273,7 @@ TabDisplay::OnKeyCheck(unsigned key_code) const
 bool
 TabDisplay::OnKeyDown(unsigned key_code)
 {
-  key_code = UI::convertNumPadKeyToCursorKey( key_code);
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
 
   switch (key_code) {
 
