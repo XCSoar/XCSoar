@@ -397,7 +397,7 @@ ListControl::MoveOrigin(int delta) noexcept
 bool
 ListControl::OnKeyCheck(unsigned key_code) const
 {
-  key_code = UI::convertNumPadKeyToCursorKey( key_code);
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
   switch (key_code) {
   case KEY_RETURN:
     return CanActivateItem();
@@ -418,7 +418,7 @@ ListControl::OnKeyDown(unsigned key_code)
 {
   scroll_bar.DragEnd(this);
   kinetic_timer.Cancel();
-  key_code = UI::convertNumPadKeyToCursorKey( key_code);
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
   switch (key_code) {
   case KEY_RETURN:
     if (CanActivateItem())

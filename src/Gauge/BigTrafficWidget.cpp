@@ -865,7 +865,7 @@ FlarmTrafficControl::OnCancelMode()
 bool
 FlarmTrafficControl::OnKeyDown(unsigned key_code)
 {
-  key_code = UI::convertNumPadKeyToCursorKey( key_code);
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
   switch (key_code) {
   case KEY_UP:
     if (!HasPointer())

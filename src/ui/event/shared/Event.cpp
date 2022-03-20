@@ -25,8 +25,7 @@
 #include "Event.hpp"
 namespace UI
 {
- unsigned
-convertNumPadKeyToCursorKey(unsigned key_code) noexcept
+ unsigned ConvertNumPadKeyToCursorKey(unsigned key_code) noexcept
 {
 #if defined(USE_POLL_EVENT)||defined(USE_ANDROID)
   switch (key_code) {

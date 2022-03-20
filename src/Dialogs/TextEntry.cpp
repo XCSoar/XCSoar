@@ -45,7 +45,7 @@ TextEntryDialog(TCHAR *text, size_t width,
     KnobTextEntry(text, width, caption);
     return true;
   case DialogSettings::TextInputStyle::NumPad:
-    /* Numpad works only if allowed characters are set.
+    /* Numpad works only if allowed characters function is available.
        it supports only upper case */
     if(accb)
       NumPadTextEntry(text, width, caption,accb);

@@ -52,7 +52,7 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("F11"), KEY_F11},
   { _T("F12"), KEY_F12},
 #if defined(USE_POLL_EVENT)||defined(USE_ANDROID)
-  { _T("BACKSPACE"),KEY_BACKSPACE},
+  { _T("BACK"),KEY_BACK},
   { _T("NUMLOCK"),KEY_NUMLOCK},
   { _T("KPASTERISK"), KEY_KPASTERISK},
   { _T("KP7"), KEY_KP7},
