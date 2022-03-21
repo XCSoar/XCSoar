@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "ui/event/Idle.hpp"
 #include "Asset.hpp"
-
+#include "LogFile.hpp"
 #include <cassert>
 #include <windowsx.h>
 
@@ -191,6 +191,8 @@ Window::OnMessage(HWND _hWnd, UINT message,
 #endif
 
   case WM_KEYDOWN:
+    LogFormat("keyDown wParam: %x, lParam :%lx" , wParam, lParam );
+
     if (OnKeyDown(wParam)) {
       /* true returned: message was handled */
       ResetUserIdle();
@@ -199,6 +201,7 @@ Window::OnMessage(HWND _hWnd, UINT message,
     break;
 
   case WM_KEYUP:
+    LogFormat("keyUp wParam: %x, lParam :%lx" , wParam, lParam );
     if (OnKeyUp(wParam)) {
       /* true returned: message was handled */
       ResetUserIdle();

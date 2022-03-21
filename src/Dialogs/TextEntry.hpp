@@ -64,6 +64,10 @@ void
 KnobTextEntry(TCHAR *text, size_t width,
               const TCHAR *caption);
 
+void
+NumPadTextEntry(TCHAR *text, size_t width,
+              const TCHAR *caption, AllowedCharacters accb);
+
 bool
 TouchTextEntry(TCHAR *text, size_t size,
                const TCHAR *caption=nullptr,

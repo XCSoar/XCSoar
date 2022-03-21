@@ -35,6 +35,7 @@ struct DialogSettings {
     Default,
     Keyboard,
     HighScore,
+    NumPad,
   };
 
   enum class TabStyle : uint8_t {

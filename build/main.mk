@@ -142,6 +142,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/TextEntry.cpp \
 	$(SRC)/Dialogs/KnobTextEntry.cpp \
 	$(SRC)/Dialogs/TouchTextEntry.cpp \
+	$(SRC)/Dialogs/NumPadTextEntry.cpp \
 	$(SRC)/Dialogs/TimeEntry.cpp \
 	$(SRC)/Dialogs/DateEntry.cpp \
 	$(SRC)/Dialogs/GeoPointEntry.cpp \

@@ -21,48 +21,20 @@ Copyright_License {
 }
 */
 
-#include "Loop.hpp"
-#include "Queue.hpp"
-#include "../shared/Event.hpp"
-#include "ui/window/TopWindow.hpp"
+#ifndef SRC_LUA_WAYPOINT_HPP_
+#define SRC_LUA_WAYPOINT_HPP_
 
-namespace UI {
+struct lua_State;
 
-bool
-EventLoop::Get(Event &event)
-{
-  if (queue.IsQuit())
-    return false;
+namespace Lua {
 
-  if (bulk) {
-    if (queue.Pop(event))
-      return true;
-
-    /* that was the last event for now, refresh the screen now */
-    if (top_window != nullptr)
-      top_window->Refresh();
-
-    bulk = false;
-  }
-
-  if (queue.Wait(event)) {
-    bulk = true;
-    return true;
-  }
-
-  return false;
-}
-
+/**
+ * Provide the Lua table "xcsoar.waypoint".
+ */
 void
-EventLoop::Dispatch(const Event &event)
-{
-  if (event.type == Event::_CALLBACK) {
-    event.callback(event.ptr);
-  } else if (top_window != nullptr && event.type != Event::NOP) {
-#ifndef NON_INTERACTIVE
-    top_window->OnEvent(event);
-#endif
-  }
+InitWaypoint(lua_State *L);
+
 }
 
-} // namespace UI
+
+#endif /* SRC_LUA_WAYPOINT_HPP_ */
