@@ -40,7 +40,7 @@ struct Event {
     TIMER,
 #endif
 
-    _CALLBACK, // CALLBACK is used by windows compiler
+    _CALLBACK, //CALLBACK is used by windows compiler
 
     KEY_DOWN,
     KEY_UP,

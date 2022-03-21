@@ -323,7 +323,6 @@ NumPadTextEntryWidget::setCharFromKeyPress(unsigned key_code,
   if (IsDefined())
     GetWindow().Invalidate();
 }
-
 inline bool
 NumPadTextEntryWidget::KeyPress(unsigned key_code) noexcept
 {
@@ -334,12 +333,12 @@ NumPadTextEntryWidget::KeyPress(unsigned key_code) noexcept
                                          { KEY_KP6, 3 }, { KEY_KP7, 2 }, {
                                              KEY_KP8, 1 },
                                          { KEY_KP9, 0 },
-#if defined(USE_POLL_EVENT)
+#if defined(USE_X11)
                                          { KEY_KP_HOME, 1 }, {
                                              KEY_KP_UP, 2 },
                                          { KEY_KP_PAGE_UP, 3 },
                                          { KEY_KP_LEFT, 4 },
-                                         { KEY_KP_BEGIN, 5 },
+                                         { KEY_BEGIN, 5 },
                                          { KEY_KP_RIGHT, 6 }, { KEY_KP_END, 7 },
                                          { KEY_KP_DOWN, 8 }, { KEY_KP_PAGE_DOWN,
                                                                9 },

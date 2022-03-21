@@ -51,8 +51,8 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("F10"), KEY_F10},
   { _T("F11"), KEY_F11},
   { _T("F12"), KEY_F12},
-#if defined(USE_POLL_EVENT)||defined(USE_ANDROID)
   { _T("BACK"),KEY_BACK},
+#if defined(USE_POLL_EVENT)||defined(USE_ANDROID)||defined(USE_WINUSER)
   { _T("NUMLOCK"),KEY_NUMLOCK},
   { _T("KPASTERISK"), KEY_KPASTERISK},
   { _T("KP7"), KEY_KP7},
@@ -70,7 +70,7 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("KPENTER"), KEY_KPENTER},
   { _T("KPEQUAL"), KEY_KPEQUAL},
   { _T("KPSLASH"), KEY_KPSLASH},
-  { _T("KPENTER"), KEY_KPENTER},
+  { _T("BEGIN"), KEY_BEGIN},
 #ifdef USE_X11
   { _T("KPCOMMA"), KEY_KPCOMMA},
   { _T("KP_INSERT"), KEY_KP_INSERT},
@@ -78,7 +78,6 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("KP_DOWN"), KEY_KP_DOWN},
   { _T("KP_PAGE_DOWN"), KEY_KP_PAGE_DOWN},
   { _T("KP_LEFT"), KEY_KP_LEFT},
-  { _T("KP_BEGIN"), KEY_KP_BEGIN},
   { _T("KP_RIGHT"), KEY_KP_RIGHT},
   { _T("KP_HOME"), KEY_KP_HOME},
   { _T("KP_UP"), KEY_KP_UP},
