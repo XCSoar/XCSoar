@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <windef.h> // for HWND (needed by winuser.h)
 #include <winuser.h>
-
+#include "LogFile.hpp"
 namespace UI {
 unsigned ConvertNumPadKeyToCursorKey( unsigned key_code) noexcept;
 
@@ -45,6 +45,7 @@ struct Event {
 
   unsigned GetKeyCode() const {
     assert(IsKey());
+    LogFormat("GetKeyCode wParam: %x, lParam :%lx" , msg.wParam,msg.lParam );
 
     return msg.wParam;
   }

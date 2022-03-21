@@ -56,6 +56,7 @@ Copyright_License {
 #include "ui/event/windows/Event.hpp"
 #include "ui/event/windows/Loop.hpp"
 #endif
+#include "LogFile.hpp"
 
 using namespace UI;
 
@@ -342,6 +343,13 @@ WndForm::ShowModal()
   Event event;
 
   while ((modal_result == 0 || force) && loop.Get(event)) {
+    //TODO: Remove logging
+#ifdef USE_WINUSER
+    if (event.IsKey())
+      LogFormat("keyUp wParam: %x, lParam :%lx" , event.msg.wParam,event.msg.lParam );
+    if (event.IsKeyDown())
+      LogFormat("keyDown wParam: %x, lParam :%lx" , event.msg.wParam,event.msg.lParam );
+#endif
     if (!main_window.FilterEvent(event, this)) {
       if (modeless && event.IsMouseDown())
         break;
@@ -372,7 +380,6 @@ WndForm::ShowModal()
           ? SDLK_UP : SDLK_DOWN;
       }
 #endif
-
       event.SetKeyCode( UI::ConvertNumPadKeyToCursorKey( event.GetKeyCode()));
       /* if key code was converted, the event needs to be updated, because
          it will be used  later when forwarding the event to the other windows. */

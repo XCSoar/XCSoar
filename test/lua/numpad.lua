@@ -79,6 +79,6 @@ xcsoar.input_event.new("key_KPSLASH", xcsoar.task.alternates )
 xcsoar.input_event.new("key_KPMINUS", xcsoar.misc.analysis )
 xcsoar.input_event.new("key_KPPLUS", xcsoar.waypoint.showCurrent )
 xcsoar.input_event.new("key_KP5", xcsoar.waypoint.showSelected )
-xcsoar.input_event.new("key_KP_BEGIN", xcsoar.waypoint.showSelected )
+xcsoar.input_event.new("key_BEGIN", xcsoar.waypoint.showSelected )
 
 
