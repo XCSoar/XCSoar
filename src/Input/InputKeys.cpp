@@ -1,25 +1,25 @@
 /*
  Copyright_License {
 
- XCSoar Glide Computer - http://www.xcsoar.org/
- Copyright (C) 2000-2021 The XCSoar Project
- A detailed list of copyright holders can be found in the file "AUTHORS".
+  XCSoar Glide Computer - http://www.xcsoar.org/
+  Copyright (C) 2000-2021 The XCSoar Project
+  A detailed list of copyright holders can be found in the file "AUTHORS".
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- as published by the Free Software Foundation; either version 2
- of the License, or (at your option) any later version.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- }
- */
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
+*/
 
 #include "InputKeys.hpp"
 #include "ui/event/KeyCode.hpp"
@@ -70,14 +70,9 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("KPENTER"), KEY_KPENTER},
   { _T("KPEQUAL"), KEY_KPEQUAL},
   { _T("KPSLASH"), KEY_KPSLASH},
-<<<<<<< NumKeyPad
   { _T("BEGIN"), KEY_BEGIN},
 #ifdef USE_X11
-=======
-  { _T("KPENTER"), KEY_KPENTER},
->>>>>>> 4e5a8c2 Added new text input dialog for num pads. It works like old mobile phones.
   { _T("KPCOMMA"), KEY_KPCOMMA},
-<<<<<<< NumKeyPad
   { _T("KP_INSERT"), KEY_KP_INSERT},
   { _T("KP_END"), KEY_KP_END},
   { _T("KP_DOWN"), KEY_KP_DOWN},
@@ -87,19 +82,6 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("KP_HOME"), KEY_KP_HOME},
   { _T("KP_UP"), KEY_KP_UP},
   { _T("KP_PAGE_UP"), KEY_KP_PAGE_UP},
-#endif
-=======
-  { _T("KEY_KP_INSERT"), KEY_KP_INSERT},
-  { _T("KEY_KP_END"), KEY_KP_END},
-  { _T("KEY_KP_DOWN"), KEY_KP_DOWN},
-  { _T("KEY_KP_PAGE_DOWN"), KEY_KP_PAGE_DOWN},
-  { _T("KEY_KP_LEFT"), KEY_KP_LEFT},
-  { _T("KEY_KP_BEGIN"), KEY_KP_BEGIN},
-  { _T("KEY_KP_RIGHT"), KEY_KP_RIGHT},
-  { _T("KEY_KP_HOME"), KEY_KP_HOME},
-  { _T("KEY_KP_UP"), KEY_KP_UP},
-  { _T("KEY_KP_PAGE_UP"), KEY_KP_PAGE_UP},
->>>>>>> 4e5a8c2 Added new text input dialog for num pads. It works like old mobile phones.
 #endif
 #ifdef ANDROID
   /* These keys are used by BlueTooth keypads and available in Android*/

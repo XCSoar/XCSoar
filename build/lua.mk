@@ -23,6 +23,7 @@ LUA_SOURCES = \
 	$(SRC)/lua/Timer.cpp \
 	$(SRC)/lua/Geo.cpp \
 	$(SRC)/lua/Map.cpp \
+	$(SRC)/lua/Misc.cpp \
 	$(SRC)/lua/Blackboard.cpp \
 	$(SRC)/lua/Airspace.cpp \
 	$(SRC)/lua/Dialogs.cpp \
@@ -32,6 +33,7 @@ LUA_SOURCES = \
 	$(SRC)/lua/Task.cpp \
 	$(SRC)/lua/Settings.cpp \
 	$(SRC)/lua/Wind.cpp \
+	$(SRC)/lua/Waypoint.cpp \
 	$(SRC)/lua/Logger.cpp \
 	$(SRC)/lua/Tracking.cpp \
 	$(SRC)/lua/Replay.cpp \
