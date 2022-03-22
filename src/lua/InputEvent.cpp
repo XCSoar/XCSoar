@@ -378,8 +378,17 @@ bool Lua::IsGesture(const TCHAR* gesture) {
 }
 
 bool Lua::FireKey(unsigned key) {
+  /* if the key is in range 'a'-'z', it can either be a lower case letter
+   * or a virtual key. First, we try the virtual key
+   * If the event was not handled, we try upper case character
+   * E.g. KEY_KBSLASH on windows platform
+   */
+  LogFormat(_T("Firekey got key code x%x %u"),key, key);
+  if(event_store_key.Fire(key))
+    return true;
   if( key >= 'a' && key <= 'z'){
-    key = ToUpperASCII((char)key);
+    return event_store_key.Fire(ToUpperASCII((char)key));
   }
-  return event_store_key.Fire(key);
+  // No event for either lower or upper key
+  return false;
 }

@@ -313,9 +313,9 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/Android/Sdk/ndk/23.1.7779620/
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r23b
 
-  ANDROID_SDK_PLATFORM = android-32
+  ANDROID_SDK_PLATFORM = android-30
   ANDROID_NDK_API = 21
 
   # The naming of CPU ABIs, architectures, and various NDK directory names is an unholy mess.
