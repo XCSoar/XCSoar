@@ -36,6 +36,17 @@ docker build \
     --file ide/docker/Dockerfile \
     -t xcsoar/xcsoar-build:latest ./ide/
 ```
+### Running Docker as Non Root User
+If there is a user group named docker, all users of this group can execute docker images.
+This is how to configure it:
+
+[Docker post install] (https://docs.docker.com/engine/install/linux-postinstall/)
+```
+sudo groupadd docker
+sudo usermod -aG docker $USERNAME # replace $USERNAME with your user id
+newgrp docker
+```
+
 
 ### Running XCSoar as a GUI application from the container
 
