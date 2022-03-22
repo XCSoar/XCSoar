@@ -27,8 +27,8 @@ namespace UI
 {
  unsigned ConvertNumPadKeyToCursorKey(unsigned key_code) noexcept
 {
-#if defined(USE_POLL_EVENT)||defined(USE_ANDROID)||defined(USE_WINUSER)
   switch (key_code) {
+#if defined(USE_POLL_EVENT)||defined(USE_ANDROID)||defined(USE_WINUSER)
   case KEY_KP2:
 #if defined(USE_X11)
   case KEY_KP_DOWN:
@@ -51,14 +51,16 @@ namespace UI
     return KEY_UP;
 #if defined(USE_X11)
   case KEY_KPENTER:
-#endif
     return KEY_RETURN;
+#endif
+#endif
+#if defined(ANDROID)
+  case KEY_KPENTER:
+    return KEY_RETURN;
+#endif
   default:
     return key_code; // leave key_code unchanged
   }
-#else
-  return key_code;
-#endif
 }
 }
 

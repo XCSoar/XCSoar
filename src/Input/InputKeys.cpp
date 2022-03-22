@@ -25,6 +25,7 @@
 #include "ui/event/KeyCode.hpp"
 #include "util/CharUtil.hxx"
 #include "util/StringAPI.hxx"
+#include "LogFile.hpp"
 
 struct string_to_key
 {
@@ -52,7 +53,7 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("F11"), KEY_F11},
   { _T("F12"), KEY_F12},
   { _T("BACK"),KEY_BACK},
-#if defined(USE_POLL_EVENT)||defined(USE_ANDROID)||defined(USE_WINUSER)
+#if defined(USE_POLL_EVENT)||defined(ANDROID)||defined(USE_WINUSER)
   { _T("NUMLOCK"),KEY_NUMLOCK},
   { _T("KPASTERISK"), KEY_KPASTERISK},
   { _T("KP7"), KEY_KP7},
@@ -71,17 +72,16 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("KPEQUAL"), KEY_KPEQUAL},
   { _T("KPSLASH"), KEY_KPSLASH},
   { _T("BEGIN"), KEY_BEGIN},
-#ifdef USE_X11
+  { _T("KP_PAGE_DOWN"), KEY_KP_PAGE_DOWN},
+  { _T("KP_PAGE_UP"), KEY_KP_PAGE_UP},
+  { _T("KP_END"), KEY_KP_END},
+  { _T("KP_HOME"), KEY_KP_HOME},
   { _T("KPCOMMA"), KEY_KPCOMMA},
   { _T("KP_INSERT"), KEY_KP_INSERT},
-  { _T("KP_END"), KEY_KP_END},
   { _T("KP_DOWN"), KEY_KP_DOWN},
-  { _T("KP_PAGE_DOWN"), KEY_KP_PAGE_DOWN},
   { _T("KP_LEFT"), KEY_KP_LEFT},
   { _T("KP_RIGHT"), KEY_KP_RIGHT},
-  { _T("KP_HOME"), KEY_KP_HOME},
   { _T("KP_UP"), KEY_KP_UP},
-  { _T("KP_PAGE_UP"), KEY_KP_PAGE_UP},
 #endif
 #endif
 #ifdef ANDROID
@@ -133,9 +133,26 @@ ParseKeyCode(const TCHAR *data)
 
   if (StringLength(data) == 1)
     return ToUpperASCII(data[0]);
-
   else
-    return 0;
+  {
+    LogFormat(_T("LUA: Error parsing input event key code"));
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-security"
+    LogFormat(data);
+    LogFormat(_T("LUA: Key Table:"));
+    static bool printed= false;
+    if(!printed)
+    {
+      printed = true;
+      for (const struct string_to_key *p = &string_to_key[0]; p->name != NULL; ++p)
+      {
+        LogFormat("Key code: %u", p->key);
+        LogFormat(p->name);
+      }
+    }
+#pragma GCC diagnostic pop
+        return 0;
+  }
 
 }
 
