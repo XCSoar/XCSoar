@@ -31,7 +31,7 @@ namespace UI
 #if defined(USE_POLL_EVENT)||defined(USE_ANDROID)||defined(USE_WINUSER)
   case KEY_KP2:
 #if defined(USE_X11)
-  case KEY_KP_DOWN:
+  case KEY_KPDOWN:
 #endif
     return KEY_DOWN;
   case KEY_KP4:

@@ -29,6 +29,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Language/Language.hpp"
 #include "Message.hpp"
 #include "Interface.hpp"
@@ -73,10 +74,18 @@ l_misc_analysis(lua_State *L)
                        terrain);
   return 0;
 }
+static int
+l_misc_checklist(lua_State *L)
+{
+  dlgChecklistShowModal();
+
+  return 0;
+}
 
 
 static constexpr struct luaL_Reg misc_funcs[] = {
   {"analysis", l_misc_analysis},
+  {"checklist", l_misc_checklist},
   {nullptr, nullptr}
 };
 
