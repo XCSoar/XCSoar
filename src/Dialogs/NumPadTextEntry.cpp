@@ -340,9 +340,9 @@ NumPadTextEntryWidget::KeyPress(unsigned key_code) noexcept
                                          { KEY_KP_LEFT, 4 },
                                          { KEY_BEGIN, 5 },
                                          { KEY_KP_RIGHT, 6 }, { KEY_KP_END, 7 },
-                                         { KEY_KP_DOWN, 8 }, { KEY_KP_PAGE_DOWN,
+                                         { KEY_KPDOWN, 8 }, { KEY_KP_PAGE_DOWN,
                                                                9 },
-                                         { KEY_KP_INSERT, 0 },
+                                         { KEY_KPINSERT, 0 },
 #endif
                                          { KEY_BACK, 0 } // Dummy entry for backspace
   };
