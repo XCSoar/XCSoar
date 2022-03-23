@@ -334,15 +334,15 @@ NumPadTextEntryWidget::KeyPress(unsigned key_code) noexcept
                                              KEY_KP8, 1 },
                                          { KEY_KP9, 0 },
 #if defined(USE_X11)
-                                         { KEY_KP_HOME, 1 }, {
-                                             KEY_KP_UP, 2 },
-                                         { KEY_KP_PAGE_UP, 3 },
-                                         { KEY_KP_LEFT, 4 },
+                                         { KEY_HOME, 1 }, {
+                                             KEY_UP, 2 },
+                                         { KEY_PAGEUP, 3 },
+                                         { KEY_LEFT, 4 },
                                          { KEY_BEGIN, 5 },
-                                         { KEY_KP_RIGHT, 6 }, { KEY_KP_END, 7 },
-                                         { KEY_KPDOWN, 8 }, { KEY_KP_PAGE_DOWN,
+                                         { KEY_RIGHT, 6 }, { KEY_END, 7 },
+                                         { KEY_DOWN, 8 }, { KEY_PAGEDOWN,
                                                                9 },
-                                         { KEY_KPINSERT, 0 },
+                                         { KEY_INSERT, 0 },
 #endif
                                          { KEY_BACK, 0 } // Dummy entry for backspace
   };

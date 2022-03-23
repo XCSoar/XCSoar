@@ -31,22 +31,22 @@ namespace UI
 #if defined(USE_POLL_EVENT)||defined(USE_ANDROID)||defined(USE_WINUSER)
   case KEY_KP2:
 #if defined(USE_X11)
-  case KEY_KPDOWN:
+  case KEY_DOWN:
 #endif
     return KEY_DOWN;
   case KEY_KP4:
 #if defined(USE_X11)
-  case KEY_KP_LEFT:
+  case KEY_LEFT:
 #endif
     return KEY_LEFT;
   case KEY_KP6:
 #if defined(USE_X11)
-  case KEY_KP_RIGHT:
+  case KEY_RIGHT:
 #endif
     return KEY_RIGHT;
   case KEY_KP8:
 #if defined(USE_X11)
-  case KEY_KP_UP:
+  case KEY_UP:
 #endif
     return KEY_UP;
 #if defined(USE_X11)
