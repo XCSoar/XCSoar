@@ -8,7 +8,6 @@ Version 7.24 - not yet released
   - input_event: fix not recognized lowercase key strokes
   - input_event: When a lua function is configured, 
     it will be executed rather than depreceated event handling
-<<<<<<< NumKeyPad
   - Lua Task: Added function to open alternates Dialog to Task
   - Lua Misc: Added new class misc with method analysis. 
     It opens the analysis dialog
@@ -17,10 +16,9 @@ Version 7.24 - not yet released
   - Added numpad.lua to test directory. It is an example file for configuration of a BT numpad.
 * Text input
   - Added a new Dialog to enter text via numpads.
-=======
-  - Lua Task: Added function to open alternates Dialog to Task 
+* Android
+  - add SoftRF Lego into 'white list' of USB devices
 
->>>>>>> 4e5a8c2 Added new text input dialog for num pads. It works like old mobile phones.
 Version 7.23 - 2022/02/10
 * user interface
   - add "Set Frequency" buttons to alternates list
