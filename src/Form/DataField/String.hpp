@@ -34,14 +34,16 @@ class DataFieldString: public DataField
   StaticString<EDITSTRINGSIZE> mValue;
 
 protected:
-  DataFieldString(Type _type, const TCHAR *_value,
-                  DataFieldListener *listener=nullptr) noexcept
-    :DataField(_type, false, listener), mValue(_value) {}
+  DataFieldString(Type _type, const TCHAR *_value,std::unique_ptr<NumPadAdapter> &&_numPadAdapter,
+                  DataFieldListener *listener=nullptr ) noexcept
+    :DataField(_type, false,std::move(_numPadAdapter), listener), mValue(_value) {
+    numPadAdapter.get()->SetDataField(this);
+  }
 
 public:
   DataFieldString(const TCHAR *_value,
                   DataFieldListener *listener=nullptr) noexcept
-    :DataField(Type::STRING, false, listener), mValue(_value) {}
+    :DataField(Type::STRING, false, std::move(std::unique_ptr<NumPadAdapter>()), listener), mValue(_value) {}
 
   const TCHAR *GetValue() const noexcept {
     return mValue.c_str();

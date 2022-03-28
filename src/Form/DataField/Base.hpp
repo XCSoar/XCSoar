@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_BASE_HPP
 #define XCSOAR_DATA_FIELD_BASE_HPP
 
+#include <Form/DataField/NumPadAdapter.hpp>
 #include <cassert>
 #include <tchar.h>
 #include <cstdint>
+#include <memory>
 
 #define OUTBUFFERSIZE 128
 
@@ -69,6 +71,10 @@ protected:
   bool item_help_enabled;
 
 protected:
+  const std::shared_ptr<NumPadAdapter> numPadAdapter;
+
+  DataField(Type type, bool supports_combolist,std::unique_ptr<NumPadAdapter> &&_numPadAdapter,
+            DataFieldListener *listener) noexcept;
   DataField(Type type, bool supports_combolist,
             DataFieldListener *listener) noexcept;
 
@@ -106,6 +112,9 @@ public:
   virtual void SetAsString(const TCHAR *value) noexcept;
 
   virtual void EnableItemHelp([[maybe_unused]] bool value) noexcept {};
+  NumPadAdapter *GetNumPadAdapter() {
+    return numPadAdapter.get();
+  }
 
   /**
    * Create a #ComboList that allows the user to choose a value.

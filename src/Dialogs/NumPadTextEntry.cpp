@@ -68,7 +68,7 @@ static const TCHAR *helpMsg[] = {
     _T("For selection click the same key several times."),
     _T("Wait for one second to start a new character."),
     _T("Use the escape key to abort and the return key to return.") };
-TCHAR allowedCharsForKey[10][5];
+extern TCHAR allowedCharsForKey[10][5];
 
 class NumPadTextEntryWindow final : public PaintWindow
 {
@@ -334,13 +334,13 @@ NumPadTextEntryWidget::KeyPress(unsigned key_code) noexcept
                                              KEY_KP8, 1 },
                                          { KEY_KP9, 0 },
 #if defined(USE_X11)
-                                         { KEY_HOME, 1 }, {
-                                             KEY_UP, 2 },
+                                         { KEY_KPHOME, 1 }, {
+                                             KEY_KPUP, 2 },
                                          { KEY_PAGEUP, 3 },
-                                         { KEY_LEFT, 4 },
+                                         { KEY_KPLEFT, 4 },
                                          { KEY_BEGIN, 5 },
-                                         { KEY_RIGHT, 6 }, { KEY_END, 7 },
-                                         { KEY_DOWN, 8 }, { KEY_PAGEDOWN,
+                                         { KEY_KPRIGHT, 6 }, { KEY_KPEND, 7 },
+                                         { KEY_KPDOWN, 8 }, { KEY_PAGEDOWN,
                                                                9 },
                                          { KEY_INSERT, 0 },
 #endif
