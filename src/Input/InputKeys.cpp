@@ -82,14 +82,14 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("KPHOME"), KEY_KPHOME},
   { _T("KPLEFT"), KEY_KPLEFT},
   { _T("KPRIGHT"), KEY_KPRIGHT},
-  { _T("KPKPUP"), KEY_KPUP},
+  { _T("KPUP"), KEY_KPUP},
   { _T("KPDOWN"), KEY_KPDOWN},
 #else
   { _T("KPEND"), KEY_END},
   { _T("KPHOME"), KEY_HOME},
   { _T("KPLEFT"), KEY_LEFT},
   { _T("KPRIGHT"), KEY_RIGHT},
-  { _T("KPKPUP"), KEY_UP},
+  { _T("KPUP"), KEY_UP},
   { _T("KPDOWN"), KEY_DOWN},
 #endif
 #endif

@@ -341,7 +341,7 @@ public:
 
   void Prepare(ContainerWindow &parent,
                const PixelRect &rc) noexcept override {
-    PrefixDataField *callsign_df = new PrefixDataField(_T(""), listener);
+    PrefixDataField *callsign_df = new PrefixDataField(_T(""), nullptr, listener);
     Add(_("Competition ID"), nullptr, callsign_df);
   }
 };

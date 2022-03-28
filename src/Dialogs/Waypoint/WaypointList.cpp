@@ -54,7 +54,8 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "Language/Language.hpp"
-
+#include "Widget/NumPadWidget.hpp"
+#include "Form/DataField/TextNumPadAdapter.hpp"
 #include <algorithm>
 #include <list>
 
@@ -195,8 +196,8 @@ class WaypointFilterWidget : public RowFormWidget {
   Angle last_heading;
 
   DataFieldListener *listener;
-
 public:
+  NumPadWidgetInterface *numPad;
   WaypointFilterWidget(const DialogLook &look, Angle _heading)
     :RowFormWidget(look, true), last_heading(_heading) {}
 
@@ -214,7 +215,6 @@ public:
 class WaypointListButtons : public RowFormWidget {
   WndForm &dialog;
   WaypointListWidget *list;
-
 public:
   WaypointListButtons(const DialogLook &look, WndForm &_dialog)
     :RowFormWidget(look), dialog(_dialog) {}
@@ -228,7 +228,6 @@ public:
     AddButton(_("Select"), [this](){
       list->OnWaypointListEnter();
     });
-
     AddButton(_("Cancel"), dialog.MakeModalResultCallback(mrCancel));
   }
 };
@@ -337,9 +336,9 @@ WaypointNameAllowedCharacters(const TCHAR *prefix)
 }
 
 static DataField *
-CreateNameDataField(DataFieldListener *listener)
+CreateNameDataField(NumPadWidgetInterface *numPad, DataFieldListener *listener)
 {
-  return new PrefixDataField(_T(""), WaypointNameAllowedCharacters, listener);
+  return new PrefixDataField(_T(""), WaypointNameAllowedCharacters,numPad, listener);
 }
 
 static DataField *
@@ -397,15 +396,19 @@ CreateTypeDataField(DataFieldListener *listener)
   df->SetValue(dialog_state.type_index);
   return df;
 }
-
+static DataField *df=nullptr;
 void
 WaypointFilterWidget::Prepare(ContainerWindow &parent,
                               const PixelRect &rc) noexcept
 {
-  Add(_("Name"), nullptr, CreateNameDataField(listener));
+  Add(_("Name"), nullptr, df = CreateNameDataField(numPad,listener));
   Add(_("Distance"), nullptr, CreateDistanceDataField(listener));
   Add(_("Direction"), nullptr, CreateDirectionDataField(listener, last_heading));
   Add(_("Type"), nullptr, CreateTypeDataField(listener));
+  NumPadAdapter *ad = df->GetNumPadAdapter();
+  NumPadWidgetInterface *i= ad->GetNumPadWidgetInterface();
+  i->SetNumPadAdapter(ad);
+  i->SetNumPadAdapter(ad);
 }
 
 void
@@ -505,8 +508,13 @@ ShowWaypointListDialog(const GeoPoint &_location,
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Select Waypoint"));
 
+  auto allButtons =
+      std::make_unique<TwoWidgets>(    std::make_unique<WaypointFilterWidget>(look, heading),
+                                       std::make_unique<NumPadWidget>(look.button, false, false),
+                                       true);
+  WaypointFilterWidget &waypointFilter_widget = (WaypointFilterWidget &)allButtons->GetFirst();
   auto left_widget =
-    std::make_unique<TwoWidgets>(std::make_unique<WaypointFilterWidget>(look, heading),
+    std::make_unique<TwoWidgets>(std::move(allButtons),
                                  std::make_unique<WaypointListButtons>(look, dialog),
                                  true);
 
@@ -517,7 +525,12 @@ ShowWaypointListDialog(const GeoPoint &_location,
     std::make_unique<WaypointListWidget>(dialog, filter_widget,
                                          _location, heading,
                                          _ordered_task, _ordered_task_index);
-  const auto &list_widget_ = *list_widget;
+  auto &list_widget_ = *list_widget;
+#pragma GCC diagnostic ignored "-Wunused-variable"
+   TwoWidgets *f  =  left_widget.get();
+   TwoWidgets &g  =  ( TwoWidgets &)f->GetFirst();
+  NumPadWidgetInterface &numpad_widget = ((NumPadWidget *)&g.GetSecond())->GetNumPadWidgetInterface();
+  waypointFilter_widget.numPad = &numpad_widget;
 
   filter_widget.SetListener(list_widget.get());
   buttons_widget.SetList(list_widget.get());

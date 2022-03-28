@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Form/DataField/NumPadAdapter.hpp"
 #include "DataField.hpp"
 #include "FilePicker.hpp"
 #include "Form/DataField/GeoPoint.hpp"
@@ -126,6 +127,10 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
       return true;
     }
 #endif
+//    if( df.GetNumPadAdapter() != nullptr)
+//    {
+//      df.GetNumPadAdapter()->BeginEditing();
+//    }
 
     if (!TextEntryDialog(buffer, caption, acf))
       return false;
