@@ -199,7 +199,7 @@ class WaypointFilterWidget : public RowFormWidget {
 public:
   NumPadWidgetInterface *numPad;
   WaypointFilterWidget(const DialogLook &look, Angle _heading)
-    :RowFormWidget(look, true), last_heading(_heading) {}
+    :RowFormWidget(look, true), last_heading(_heading),listener(nullptr) {}
 
   void SetListener(DataFieldListener *_listener) {
     listener = _listener;
@@ -508,31 +508,29 @@ ShowWaypointListDialog(const GeoPoint &_location,
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Select Waypoint"));
 
-  auto allButtons =
+  auto allButtons  =
       std::make_unique<TwoWidgets>(    std::make_unique<WaypointFilterWidget>(look, heading),
                                        std::make_unique<NumPadWidget>(look.button, false, false),
                                        true);
-  WaypointFilterWidget &waypointFilter_widget = (WaypointFilterWidget &)allButtons->GetFirst();
   auto left_widget =
     std::make_unique<TwoWidgets>(std::move(allButtons),
                                  std::make_unique<WaypointListButtons>(look, dialog),
                                  true);
 
-  auto &filter_widget = (WaypointFilterWidget &)left_widget->GetFirst();
-  auto &buttons_widget = (WaypointListButtons &)left_widget->GetSecond();
+  TwoWidgets *leftTwoWidgets  =  left_widget.get();
+  TwoWidgets &twoWidgetButtons  =  ( TwoWidgets &)leftTwoWidgets->GetFirst();
+  NumPadWidgetInterface &numpad_widget = ((NumPadWidget *)&twoWidgetButtons.GetSecond())->GetNumPadWidgetInterface();
+  WaypointFilterWidget &waypointFilter_widget = (WaypointFilterWidget &)twoWidgetButtons.GetFirst();
+  waypointFilter_widget.numPad = &numpad_widget;
+  WaypointListButtons &buttons_widget = (WaypointListButtons &)leftTwoWidgets->GetSecond();
 
   auto list_widget =
-    std::make_unique<WaypointListWidget>(dialog, filter_widget,
+    std::make_unique<WaypointListWidget>(dialog, waypointFilter_widget,
                                          _location, heading,
                                          _ordered_task, _ordered_task_index);
-  auto &list_widget_ = *list_widget;
-#pragma GCC diagnostic ignored "-Wunused-variable"
-   TwoWidgets *f  =  left_widget.get();
-   TwoWidgets &g  =  ( TwoWidgets &)f->GetFirst();
-  NumPadWidgetInterface &numpad_widget = ((NumPadWidget *)&g.GetSecond())->GetNumPadWidgetInterface();
-  waypointFilter_widget.numPad = &numpad_widget;
+  const auto &list_widget_ = *list_widget;
 
-  filter_widget.SetListener(list_widget.get());
+  waypointFilter_widget.SetListener(list_widget.get());
   buttons_widget.SetList(list_widget.get());
 
   TwoWidgets *widget = new TwoWidgets(std::move(left_widget),
