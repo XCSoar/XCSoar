@@ -34,7 +34,7 @@
 
 #include <utility>
 
-#if defined(_LIBCPP_VERSION) && defined(__clang__) && (__clang_major__ < 14 || defined(ANDROID))
+#if defined(_LIBCPP_VERSION) && defined(__clang__) && !__has_include(<coroutine>)
 /* libc++ until 14 has the coroutine definitions in the
    std::experimental namespace */
 
