@@ -80,7 +80,16 @@ LoadPath(const ProfileMap &map, DeviceConfig &config, unsigned n)
 {
   char buffer[64];
   MakeDeviceSettingName(buffer, "Port", n, "Path");
-  return map.Get(buffer, config.path);
+  bool retvalue = map.Get(buffer, config.path);
+#ifdef _WIN32
+  // the usual windows port names have no colon at the end
+  if (retvalue && (config.path.back() == TCHAR(':')) &&
+      config.path.StartsWith(_T("COM"))) {
+    // replace colon with '\0', so the path name has the correct length
+    config.path[config.path.length() - 1] = TCHAR('\0');
+  }
+#endif
+  return retvalue;
 }
 
 static bool

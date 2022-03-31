@@ -15,7 +15,7 @@
 #include <string_view>
 
 #ifdef _UNICODE
-#include <wchar.h>
+#include "util/WStringCompare.hxx"
 #endif
 
 bool

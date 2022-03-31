@@ -78,8 +78,16 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
   case DeviceConfig::PortType::SERIAL:
     if (config.path.empty())
       throw std::runtime_error("No port path configured");
-
+#ifdef _WIN32 
+    {
+      // the usual windows style of device names:
+      auto *endp = CopyString(buffer, MAX_PATH, _T("\\\\.\\"));
+      CopyString(endp, MAX_PATH - (endp-buffer), config.path.c_str());
+      path = buffer;  // set path to the begin of the buffer
+    }
+#else
     path = config.path.c_str();
+#endif
     break;
 
   case DeviceConfig::PortType::BLE_HM10:
