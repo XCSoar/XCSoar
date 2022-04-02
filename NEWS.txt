@@ -9,7 +9,8 @@ Version 7.24 - not yet released
   - input_event: When a lua function is configured, 
     it will be executed rather than depreceated event handling
   - Lua Task: Added function to open alternates Dialog to Task 
-
+* Android
+  - add SoftRF Lego into 'white list' of USB devices
 Version 7.23 - 2022/02/10
 * user interface
   - add "Set Frequency" buttons to alternates list
