@@ -44,7 +44,7 @@ Getting the Source Code
 The XCSoar source code is managed with `git <http://git-scm.com/>`__. It
 can be downloaded with the following command::
 
-  git clone git://github.com/XCSoar/XCSoar
+  git clone https://github.com/XCSoar/XCSoar
 
 To update your repository, type::
 
