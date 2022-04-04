@@ -31,6 +31,10 @@
 #include "Device/Port/TTYEnumerator.hpp"
 #endif
 
+#ifdef _WIN32
+# include <fileapi.h>
+#endif
+
 #ifdef ANDROID
 #include "java/Global.hxx"
 #include "java/String.hxx"
@@ -117,13 +121,22 @@ DetectSerialPorts(DataFieldEnum &df) noexcept
 
 #if defined(_WIN32) && !defined(HAVE_POSIX)
 
+[[gnu::pure]]
+static bool
+DosDeviceExists(const TCHAR *path) noexcept
+{
+  TCHAR dummy[MAX_PATH];
+  return QueryDosDevice(path, dummy, std::size(dummy)) > 0;
+}
+
 static void
 FillDefaultSerialPorts(DataFieldEnum &df) noexcept
 {
   for (unsigned i = 1; i <= 10; ++i) {
     TCHAR buffer[64];
     _stprintf(buffer, _T("COM%u:"), i);
-    AddPort(df, DeviceConfig::PortType::SERIAL, buffer);
+    if (DosDeviceExists(buffer))
+       AddPort(df, DeviceConfig::PortType::SERIAL, buffer);
   }
 }
 
