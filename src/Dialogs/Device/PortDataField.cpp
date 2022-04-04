@@ -114,9 +114,11 @@ FillDefaultSerialPorts(DataFieldEnum &df) noexcept
 {
   for (unsigned i = 1; i <= 10; ++i) {
     TCHAR buffer[64];
-    _stprintf(buffer, _T("COM%u:"), i);
-    if (DosDeviceExists(buffer))
-       AddPort(df, DeviceConfig::PortType::SERIAL, buffer);
+    _stprintf(buffer, _T("COM%u"), i);
+    if (DosDeviceExists(buffer)) {
+      _tcscat(buffer, _T(":"));  // add the colon to the path string
+      AddPort(df, DeviceConfig::PortType::SERIAL, buffer);
+    }
   }
 }
 
