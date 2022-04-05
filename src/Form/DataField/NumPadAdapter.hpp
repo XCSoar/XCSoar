@@ -55,7 +55,7 @@ class NumPadAdapter {
 	OnKeyDown(unsigned key_code) noexcept{
 		return false;
 	}
-  virtual void BeginEditing(const TCHAR * caption) noexcept;
+  virtual void BeginEditing() noexcept;
   virtual bool OnKeyCheck(unsigned key_code) const noexcept
   {
     return false;
@@ -64,11 +64,16 @@ class NumPadAdapter {
   {
     return Caption;
   }
+  void SetCaption(const TCHAR * _Caption) noexcept
+  {
+     Caption = _Caption;
+  }
   virtual void EndEditing() noexcept;
   void SetNumPadWidgetInterface(NumPadWidgetInterface * _numPad)
   {
     numPad = _numPad;
-    numPad->SetNumPadAdapter( this );
+    if(numPad != nullptr)
+      numPad->SetNumPadAdapter( this );
   }
   NumPadWidgetInterface *GetNumPadWidgetInterface()
   {
@@ -81,13 +86,18 @@ class NumPadAdapter {
   virtual void OnButton(unsigned buttonIndex ) noexcept= 0;
   virtual void SetComboList(ComboList * _list) noexcept {};
   virtual void OnDataFieldSetFocus() noexcept{
-    numPad->SetNumPadAdapter( this );
-    numPad->OnDataFieldSetFocus();
+    if( numPad != nullptr)
+    {
+      numPad->SetNumPadAdapter( this );
+      numPad->GetNumPadAdapter().SetCaption(GetCaption());
+      numPad->OnDataFieldSetFocus();
+    }
     // directs keyboard input to the matching datafield
   };
   virtual ComboList *GetComboList() noexcept{ return nullptr; };
   virtual void OnCursorMoved([[maybe_unused]] unsigned index) noexcept {
-    numPad->GetNumPadAdapter().OnCursorMoved(index);
+    if( numPad != nullptr)
+      numPad->GetNumPadAdapter().OnCursorMoved(index);
   };
   void SetRefreshEditFieldFunction(std::function< void()> _refreshFunction){
     refreshEditFieldFunction = _refreshFunction;

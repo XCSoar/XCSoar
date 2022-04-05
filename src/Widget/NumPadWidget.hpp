@@ -35,50 +35,60 @@ Copyright_License {
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "ui/window/ContainerWindow.hpp"
+#include "ui/canvas/Bitmap.hpp"
 #include "Form/DataField/ComboList.hpp"
 #include <tchar.h>
 
 struct ButtonLook;
 class WndSymbolButton;
 
-class NumPadWidget: public NullWidget,  ListItemRenderer, ListCursorHandler
+class NumPadWidget: public NullWidget, ListItemRenderer, ListCursorHandler
 {
+  const TCHAR *NUMPAD_CAPTION =  _T(",\nNum Pad");
+  const TCHAR *END_CAPTION =  _T(",\nPad End");
 
   class MyTextListWidget: public WindowWidget
   {
   public:
-  // virtual from TextListWidget
-    void SetItemRenderer (ListItemRenderer *_itemRenderer)
+// virtual from TextListWidget
+    void
+    SetItemRenderer(ListItemRenderer *_itemRenderer)
     {
-        ((ListControl &)GetWindow()).SetItemRenderer(_itemRenderer);
+      ((ListControl&)GetWindow()).SetItemRenderer(_itemRenderer);
     }
-    void SetCursorHandler (ListCursorHandler *cursorHandler)
+    void
+    SetCursorHandler(ListCursorHandler *cursorHandler)
     {
-        ((ListControl &)GetWindow()).SetCursorHandler(cursorHandler);
+      ((ListControl&)GetWindow()).SetCursorHandler(cursorHandler);
     }
-    void SetCursorIndex( unsigned index)
+    void
+    SetCursorIndex(unsigned index)
     {
-      ((ListControl &)GetWindow()).SetCursorIndex(index);
+      ((ListControl&)GetWindow()).SetCursorIndex(index);
     }
-    void SetLength (unsigned length)
+    void
+    SetLength(unsigned length)
     {
-      ((ListControl &)GetWindow()).SetLength(length);
+      ((ListControl&)GetWindow()).SetLength(length);
     }
-    void Invalidate() {
-      ((ListControl &)GetWindow()).Invalidate();
+    void
+    Invalidate()
+    {
+      ((ListControl&)GetWindow()).Invalidate();
     }
   public:
-    void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept;
+    void
+    Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept;
   public:
     bool
     IsVisible() noexcept
     {
-      return ((ListControl &)GetWindow()).IsVisible();
+      return ((ListControl&)GetWindow()).IsVisible();
     }
     void
     Show() noexcept
     {
-      ((ListControl &)GetWindow()).Show();
+      ((ListControl&)GetWindow()).Show();
     }
   };
 
@@ -103,12 +113,13 @@ protected:
 
   unsigned num_buttons;
   Button buttons[MAX_BUTTONS];
+  Bitmap calc;
   NumPad numPadWindow;
   MyTextListWidget textList;
   TextRowRenderer row_renderer;
   Button shiftButton;
   Button backspaceButton;
-  Button finishButton;
+  Button editButton;
   bool shift_state;
 
   const bool show_shift_button;
@@ -116,10 +127,10 @@ protected:
   Window *previousFocusWindow;
 public:
   NumPadWidget(const ButtonLook &_look, bool _show_shift_button,
-               bool _default_shift_state = true) : look(
-      _look), on_character(nullptr), num_buttons(0), numPadWindow(
-      numPadWidgetInterface), shift_state(_default_shift_state), show_shift_button(
-      _show_shift_button), editMode(false)
+               bool _default_shift_state = true) : look(_look), on_character(
+      nullptr), num_buttons(0), numPadWindow(numPadWidgetInterface), shift_state(
+      _default_shift_state), show_shift_button(_show_shift_button), editMode(
+      false)
   {
   }
   /**
@@ -132,7 +143,7 @@ private:
   CheckKey(TCHAR *output, const TCHAR *allowedCharacters,
            const TCHAR key) noexcept;
   void
-  PrepareSize(const PixelRect &rc, unsigned border );
+  PrepareSize(const PixelRect &rc, unsigned border);
   void
   OnResize(const PixelRect &rc);
 
@@ -146,7 +157,7 @@ private:
   MoveButtonsToRow(const PixelRect &rc, unsigned from, unsigned to,
                    unsigned row, int offset);
   void
-  MoveButtons(const PixelRect &rc, unsigned border );
+  MoveButtons(const PixelRect &rc, unsigned border);
   void
   SetListMode(Modes newMode) noexcept;
   PixelRect
@@ -218,16 +229,21 @@ public:
   void
   BeginEditing() noexcept
   {
+    if (editButton.IsVisible())
+      editButton.SetCaption(END_CAPTION);
   }
-  void OnDataFieldSetFocus(){
+  void
+  OnDataFieldSetFocus()
+  {
     SetListMode(getMode());
-    ComboList *c= GetNumPadWidgetInterface().GetNumPadAdapter().GetComboList();
+    ComboList *c = GetNumPadWidgetInterface().GetNumPadAdapter().GetComboList();
 
-    unsigned s = (c != nullptr ? c->size(): 0 );
+    unsigned s = (c != nullptr ? c->size() : 0);
     textList.SetLength(s);
     textList.Invalidate();
   }
-  void SetCursorIndex(unsigned index)
+  void
+  SetCursorIndex(unsigned index)
   {
     textList.SetCursorIndex(index);
   }
@@ -237,21 +253,24 @@ public:
   void
   EndEditing()
   {
-    Hide();
+    if (editButton.IsVisible())
+      editButton.SetCaption(NUMPAD_CAPTION);
   }
   /* updates UI based on value of shift_state property */
 private:
   void
   OnShiftClicked();
 
-  void OnPaintItem(Canvas &canvas, PixelRect rc,
-                    unsigned i) noexcept override
+  void
+  OnPaintItem(Canvas &canvas, PixelRect rc, unsigned i) noexcept override
   {
-    ComboList *cbl=GetNumPadWidgetInterface().GetNumPadAdapter().GetComboList();
-    if(cbl != nullptr)
+    ComboList *cbl = GetNumPadWidgetInterface().GetNumPadAdapter().GetComboList();
+    if (cbl != nullptr)
       row_renderer.DrawTextRow(canvas, rc, (*cbl)[i].display_string.c_str());
   }
-  void OnCursorMoved([[maybe_unused]] unsigned index) noexcept{
+  void
+  OnCursorMoved([[maybe_unused]] unsigned index) noexcept
+  {
     GetNumPadWidgetInterface().GetNumPadAdapter().OnCursorMoved(index);
   }
 };

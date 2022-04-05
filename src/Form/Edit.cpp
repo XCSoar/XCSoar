@@ -97,6 +97,7 @@ WndProperty::OnSetFocus()
         ComboList  *list = new ComboList;
         *list = data_field->CreateComboList(nullptr);
         data_field->GetNumPadAdapter()->SetComboList(list);
+        data_field->GetNumPadAdapter()->SetCaption(caption);
         data_field->GetNumPadAdapter()->OnDataFieldSetFocus();
         data_field->GetNumPadAdapter()->SetRefreshEditFieldFunction(std::bind(&WndProperty::RefreshDisplay,this));
         data_field->GetNumPadAdapter()->SetSetFocusEditFieldFunction(std::bind(&WndProperty::SetFocus,this));
@@ -172,7 +173,8 @@ WndProperty::BeginEditing() noexcept
     LogFormat("NumPadAdapter");
     NumPadAdapter *numPadAdapter = data_field->GetNumPadAdapter();
     if (numPadAdapter != nullptr) {
-        numPadAdapter->BeginEditing(GetCaption());
+        numPadAdapter->SetCaption(GetCaption());
+        numPadAdapter->BeginEditing();
 
     } else if (!edit_callback(GetCaption(), *data_field, GetHelpText()))
       return false;

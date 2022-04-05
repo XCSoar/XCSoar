@@ -113,7 +113,7 @@ TextNumPadAdapter::UpdateAllowedCharacters(
 // If there is one empty button before or after a button with
 // two keys, distribute the characters to this button
 // A button with one character needs no wait time for double clicks
-  for (unsigned i = 0; i < numPad->GetNumButtons() - 1; ++i) {
+  for (unsigned i = 0; i < numPad->GetNumButtons() - 1 ; ++i) {
     if (StringLength(allowedCharsForKey[i]) == 2) {
       if (i > 0 && StringLength(allowedCharsForKey[i - 1]) == 0) {
         allowedCharsForKey[i - 1][0] = allowedCharsForKey[i][1];
@@ -133,10 +133,9 @@ void
 TextNumPadAdapter::UpdateButtons() noexcept
 {
   UpdateAllowedCharacters(dataField->GetAsString());
-  if (UIGlobals::GetDialogSettings().text_input_style
-      != DialogSettings::TextInputStyle::NumPad)
+  if (!numPadEditingActive && selectedButtonIndex < numPad->GetNumButtons())
     numPad->GetButtons()[selectedButtonIndex].SetSelected(true);
-  if(refreshEditFieldFunction)
+  if (refreshEditFieldFunction)
     this->refreshEditFieldFunction();
 }
 void
@@ -194,11 +193,11 @@ TextNumPadAdapter::SetCharFromKeyPress(
     UnsafeCopyString(buffer + StringLength(buffer), newAllowedCharacters);
     newAllowedCharacters = GetAllowedCharacters(buffer);
   }
-  // No Characters left
-  if(StringLength(newAllowedCharacters) == 0)
+// No Characters left
+  if (StringLength(newAllowedCharacters) == 0)
     OnNewKey();
   ((DataFieldString*)dataField)->ModifyValue(buffer);
-  if(refreshEditFieldFunction)
+  if (refreshEditFieldFunction)
     this->refreshEditFieldFunction();
 }
 
@@ -217,26 +216,29 @@ static const unsigned keyIdxMap[][2] {
                                          { KEY_KPDOWN, 7 }, { KEY_PAGEDOWN,
                                                                8 },
                                          { KEY_INSERT, 9 },
+                                         { KEY_DELETE, NumPadWidgetInterface::EDIT_INDEX },
+
 #endif
     { KEY_LEFT, 3 },
     { KEY_RIGHT, 5 }, { KEY_UP, 1 }, { KEY_DOWN, 7 }, { KEY_RETURN, 7 }, {
         KEY_BACK, NumPadWidgetInterface::BACKSPACE_INDEX },
-    { KEY_RETURN, NumPadWidgetInterface::FINISH_INDEX }, {
-        KEY_KPCOMMA, NumPadWidgetInterface::SHIFT_INDEX }, };
+    { KEY_RETURN, NumPadWidgetInterface::EDIT_INDEX }, {
+        KEY_KPCOMMA, NumPadWidgetInterface::EDIT_INDEX }, };
 
 bool
 TextNumPadAdapter::OnKeyCheck(unsigned key_code) const noexcept
 {
-  if (UIGlobals::GetDialogSettings().text_input_style
-      == DialogSettings::TextInputStyle::NumPad) {
-    if (numPadEditingActive)
-      for (unsigned i = 0; i < sizeof(keyIdxMap) / sizeof(keyIdxMap[0]); i++)
-        if (keyIdxMap[i][0] == key_code)
-          return true;
+
+  if (numPadEditingActive) {
+    for (unsigned i = 0; i < sizeof(keyIdxMap) / sizeof(keyIdxMap[0]); i++)
+      if (keyIdxMap[i][0] == key_code)
+        return true;
   } else
     switch (key_code) {
     case KEY_RIGHT:
     case KEY_LEFT:
+    case KEY_KPCOMMA:
+    case KEY_DELETE:
     case KEY_RETURN:
       return true;
     }
@@ -251,30 +253,26 @@ TextNumPadAdapter::OnKeyDown(unsigned key_code) noexcept
   if (key_code == KEY_BACK)
     OnKeyBack();
 
-  if (UIGlobals::GetDialogSettings().text_input_style
-      == DialogSettings::TextInputStyle::NumPad) {
-    if (numPadEditingActive) {
-      switch (key_code) {
-      case KEY_RETURN:
-        OnKeyFinish();
-        return true;
+  if (numPadEditingActive) {
+    switch (key_code) {
+    case KEY_RETURN:
+      OnKeyEdit();
+      return true;
 
 //  case KEY_SHIFT:
 //    OnKeyFinish();
 //    return true;
-      }
-      unsigned i = 0;
-      for (; i < sizeof(keyIdxMap) / sizeof(keyIdxMap[0]); i++)
-        if (keyIdxMap[i][0] == key_code) {
-          OnButton(keyIdxMap[i][1]);
-          return true;
-        }
-
-      if (i == sizeof(keyIdxMap) / sizeof(keyIdxMap[0])) {
-        LogFormat("Key not found %x %u %c", key_code, key_code, key_code);
-      }
     }
-    return false;
+    unsigned i = 0;
+    for (; i < sizeof(keyIdxMap) / sizeof(keyIdxMap[0]); i++)
+      if (keyIdxMap[i][0] == key_code) {
+        OnButton(keyIdxMap[i][1]);
+        return true;
+      }
+
+    if (i == sizeof(keyIdxMap) / sizeof(keyIdxMap[0])) {
+      LogFormat("Key not found %x %u %c", key_code, key_code, key_code);
+    }
   } else {
     switch (key_code) {
     case KEY_RIGHT:
@@ -282,6 +280,10 @@ TextNumPadAdapter::OnKeyDown(unsigned key_code) noexcept
       return true;
     case KEY_LEFT:
       SelectPreviousButton();
+      return true;
+    case KEY_KPCOMMA:// Only a NumPad can press this key
+    case KEY_DELETE:
+      BeginEditing();
       return true;
     case KEY_RETURN:
 // Execute OnButton on the selected key
@@ -299,15 +301,14 @@ TextNumPadAdapter::OnDataFieldSetFocus() noexcept
   NumPadAdapter::OnDataFieldSetFocus();
   if (UIGlobals::GetDialogSettings().text_input_style
       != DialogSettings::TextInputStyle::NumPad)
-    BeginEditing("");
+    BeginEditing();
 
 }
 
 void
 TextNumPadAdapter::SelectNextButton() noexcept
 {
-  if (UIGlobals::GetDialogSettings().text_input_style
-      == DialogSettings::TextInputStyle::NumPad)
+  if (numPadEditingActive)
     return;// No selection required
   unsigned previousSelectedButtonIndex = selectedButtonIndex;
   if (selectedButtonIndex < numPad->GetNumButtons())
@@ -332,8 +333,7 @@ void
 TextNumPadAdapter::SelectPreviousButton() noexcept
 {
   unsigned previousSelectedButtonIndex = selectedButtonIndex;
-  if (UIGlobals::GetDialogSettings().text_input_style
-      == DialogSettings::TextInputStyle::NumPad)
+  if (numPadEditingActive)
     return;// No selection required
   if (selectedButtonIndex < numPad->GetNumButtons())
     numPad->GetButtons()[selectedButtonIndex].SetSelected(false);
@@ -363,10 +363,15 @@ TextNumPadAdapter::OnSelectedButton() noexcept
 }
 
 void
-TextNumPadAdapter::BeginEditing(const TCHAR *caption) noexcept
+TextNumPadAdapter::BeginEditing() noexcept
 {
   numPadEditingActive = true;
-  NumPadAdapter::BeginEditing(caption);
+  if (selectedButtonIndex < numPad->GetNumButtons()) {
+    numPad->GetButtons()[selectedButtonIndex].SetSelected(false);
+    selectedButtonIndex = numPad->GetNumButtons();
+  }
+
+  NumPadAdapter::BeginEditing();
   UpdateButtons();
   previousButtonIndex = NO_PREVIOUSBUTTON;
 }
@@ -375,6 +380,16 @@ TextNumPadAdapter::EndEditing() noexcept
 {
   numPadEditingActive = false;
   NumPadAdapter::EndEditing();
+  selectedButtonIndex = 0;
+  for (;
+      selectedButtonIndex < numPad->GetNumButtons()
+          && !numPad->GetButtons()[selectedButtonIndex].IsVisible();
+      selectedButtonIndex++);
+
+  if(selectedButtonIndex < numPad->GetNumButtons())
+    numPad->GetButtons()[selectedButtonIndex].SetSelected(true);
+
+  UpdateButtons();
 }
 /*
  *  User pressed a different key
@@ -430,9 +445,9 @@ TextNumPadAdapter::GetAllowedCharacters(const TCHAR *prefix) noexcept
 }
 
 void
-TextNumPadAdapter::OnKeyFinish() noexcept
+TextNumPadAdapter::OnKeyEdit() noexcept
 {
-  numPadEditingActive = false;
+  EndEditing();
 }
 
 void
@@ -444,10 +459,8 @@ TextNumPadAdapter::OnButton(unsigned buttonIndex) noexcept
   case NumPadWidgetInterface::BACKSPACE_INDEX:
     OnKeyBack();
     break;
-  case NumPadWidgetInterface::FINISH_INDEX:
-    if (GetNumPadWidgetInterface() != nullptr)
-      GetNumPadWidgetInterface()->EndEditing();
-    OnKeyFinish();
+  case NumPadWidgetInterface::EDIT_INDEX:
+    OnKeyEdit();
     break;
   default:
     assert(buttonIndex <= GetNumPadWidgetInterface()->GetNumButtons());
@@ -480,7 +493,7 @@ TextNumPadAdapter::GetButtonIndex(unsigned row, unsigned column) const noexcept
   case 1:
     return NumPadWidgetInterface::BACKSPACE_INDEX;
   case 2:
-    return NumPadWidgetInterface::FINISH_INDEX;
+    return NumPadWidgetInterface::EDIT_INDEX;
   }
   return 0;
 }
@@ -502,7 +515,7 @@ TextNumPadAdapter::GetColumnFromButtonIndex(unsigned buttonIndex) const noexcept
     return 0;
   case NumPadWidgetInterface::BACKSPACE_INDEX:
     return 1;
-  case NumPadWidgetInterface::FINISH_INDEX:
+  case NumPadWidgetInterface::EDIT_INDEX:
     return 2;
   }
   return 0;

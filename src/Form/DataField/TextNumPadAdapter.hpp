@@ -73,12 +73,12 @@ private:
   unsigned previousButtonIndex;
   unsigned previousKeyIndex;
   void OnKeyBack()noexcept;
-  void OnKeyFinish() noexcept;
+  void OnKeyEdit() noexcept;
 
 	void OnNewKey()noexcept; // User pressed a different key
 	void OnButton(unsigned ButtonIndex)noexcept;
   void KeyFinished()noexcept; // User stopped pressing the same key
-	void BeginEditing(const TCHAR * caption) noexcept;
+	void BeginEditing() noexcept override;
 	void EndEditing() noexcept;
   const TCHAR *GetAllowedCharacters(const TCHAR *prefix)noexcept;
 };
