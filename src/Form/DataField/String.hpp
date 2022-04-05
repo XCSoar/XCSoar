@@ -37,7 +37,6 @@ protected:
   DataFieldString(Type _type, const TCHAR *_value,std::unique_ptr<NumPadAdapter> &&_numPadAdapter,
                   DataFieldListener *listener=nullptr ) noexcept
     :DataField(_type, false,std::move(_numPadAdapter), listener), mValue(_value) {
-    numPadAdapter.get()->SetDataField(this);
   }
 
 public:

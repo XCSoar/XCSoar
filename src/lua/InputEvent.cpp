@@ -383,7 +383,6 @@ bool Lua::FireKey(unsigned key) {
    * If the event was not handled, we try upper case character
    * E.g. KEY_KBSLASH on windows platform
    */
-  LogFormat(_T("Firekey got key code x%x %u"),key, key);
   if(event_store_key.Fire(key))
     return true;
   if( key >= 'a' && key <= 'z'){

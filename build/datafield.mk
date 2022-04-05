@@ -19,6 +19,7 @@ DATA_FIELD_SOURCES = \
 	$(DATA_FIELD_SRC_DIR)/Prefix.cpp \
 	$(DATA_FIELD_SRC_DIR)/Date.cpp \
 	$(DATA_FIELD_SRC_DIR)/TextNumPadAdapter.cpp \
+	$(DATA_FIELD_SRC_DIR)/EnumListNumPadAdapter.cpp \
 	$(DATA_FIELD_SRC_DIR)/NumPadWidgetInterface.cpp \
 	$(DATA_FIELD_SRC_DIR)/NumPadAdapter.cpp \
 	$(DATA_FIELD_SRC_DIR)/Password.cpp

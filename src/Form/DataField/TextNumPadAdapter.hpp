@@ -25,33 +25,62 @@ Copyright_License {
 #define SRC_FORM_DATAFIELD_TEXTNUMPADADAPTER_HPP_
 
 #include "Form/DataField/Base.hpp"
+#include "ui/event/Timer.hpp"
+
+static const unsigned MAX_CHARS_PER_KEY = 5;
+static const unsigned MAX_BUTTONS = 10;
+static const unsigned NO_PREVIOUSBUTTON = 1000;
+static constexpr size_t MAX_TEXTENTRY = 40;
+static const std::chrono::steady_clock::duration TIMEOUT_FOR_KEYPRESSED= std::chrono::seconds(1);
 
 class TextNumPadAdapter : public NumPadAdapter{
   typedef bool (*OnCharacterCallback_t)(unsigned ch);
-  typedef std::function<const TCHAR *(const TCHAR *)> AllowedCharacters;
 
+  typedef std::function<const TCHAR *(const TCHAR *)> AllowedCharacters;
 protected:
-  static constexpr unsigned MAX_BUTTONS = 10;
   AllowedCharacters NumPadAllowedCharactersCallback;
   OnCharacterCallback_t on_character;
   bool shift_state;
   const bool show_shift_button;
   void CheckKey(TCHAR *output, const TCHAR *allowedCharacters,
                                 const TCHAR key) const noexcept;
-	TCHAR UpdateAllowedCharacters()  noexcept;
+	void UpdateAllowedCharacters( const TCHAR  *dataFieldContent)  noexcept;
+	unsigned GetButtonIndex(unsigned row, unsigned column) const noexcept;
+	unsigned GetRowFromButtonIndex(unsigned buttonIndex) const noexcept;
 
+	unsigned GetColumnFromButtonIndex(unsigned buttonIndex) const noexcept;
+	void OnDataFieldSetFocus() noexcept;
 	public:
 	TextNumPadAdapter( NumPadWidgetInterface * _numPadWidgetInterface, AllowedCharacters acb,
                  bool _show_shift_button,
                  bool _default_shift_state = true);
 	void UpdateButtons() noexcept override;
+	bool CharacterFunction(unsigned ch) noexcept;
 	bool
-	KeyPress(unsigned key_code) noexcept;
-private:	
+	OnKeyDown(unsigned key_code) noexcept override;
+	bool OnKeyCheck(unsigned key_code) const noexcept override;
+private:
+	UI::Timer keyPressedTimer;
+	unsigned selectedButtonIndex;
+	bool numPadEditingActive;
+	void SelectNextButton() noexcept;
+	void SelectPreviousButton() noexcept;
+	void OnSelectedButton() noexcept;
 	void
-	setCharFromKeyPress(unsigned key_code,
-                                           const TCHAR *keys) noexcept;
+	SetCharFromKeyPress(const TCHAR * allowedCharactersForCurrentKey) noexcept;
+	void SetCaption(unsigned buttonIndex, const TCHAR *allowedChars) const noexcept;
+  TCHAR previousDataFieldValue[MAX_TEXTENTRY];
+  unsigned previousButtonIndex;
+  unsigned previousKeyIndex;
+  void OnKeyBack()noexcept;
+  void OnKeyFinish() noexcept;
 
+	void OnNewKey()noexcept; // User pressed a different key
+	void OnButton(unsigned ButtonIndex)noexcept;
+  void KeyFinished()noexcept; // User stopped pressing the same key
+	void BeginEditing(const TCHAR * caption) noexcept;
+	void EndEditing() noexcept;
+  const TCHAR *GetAllowedCharacters(const TCHAR *prefix)noexcept;
 };
 
 

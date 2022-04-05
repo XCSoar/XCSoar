@@ -20,36 +20,33 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
+#ifndef SRC_FORM_DATAFIELD_ENUMLISTNUMPADADAPTER_HPP_
+#define SRC_FORM_DATAFIELD_ENUMLISTNUMPADADAPTER_HPP_
+
 #include "Form/DataField/NumPadAdapter.hpp"
-#include "Renderer/SymbolButtonRenderer.hpp"
-#include "util/StringAPI.hxx"
-#include "util/StringCompare.hxx"
-#include "util/CharUtil.hxx"
-#include "Screen/Layout.hpp"
-#include "Renderer/TextButtonRenderer.hpp"
-#include "ui/window/ContainerWindow.hpp"
-#include "ui/event/KeyCode.hpp"
-#include "Dialogs/DialogSettings.hpp"
-#include "UIGlobals.hpp"
+#include "Form/DataField/ComboList.hpp"
 
+class EnumListNumPadAdapter: public NumPadAdapter
+{
+public:
+  std::unique_ptr<ComboList> comboList;
+  EnumListNumPadAdapter(NumPadWidgetInterface *_numPadWidget);
+  void UpdateButtons() noexcept;
+  void OnButton(unsigned buttonIndex ) noexcept;
+  void SetComboList(ComboList * _list) noexcept
+  {
+  	comboList.reset(_list);
+  }
+  ComboList *GetComboList() noexcept 
+  {
+  	return comboList.get();
+  }
+  void OnCursorMoved([[maybe_unused]] unsigned index) noexcept override;
+  void OnModified() noexcept;
+  bool OnKeyDown(unsigned key_code) noexcept override;
+  bool OnKeyCheck(unsigned key_code) const noexcept override;
 
-#include <time.h>
-#include <sys/time.h>
-#include <cassert>
-#include <string.h>
+};
 
-
-
-
-void NumPadAdapter::BeginEditing(const TCHAR * _caption) noexcept{
-  Caption = _caption;
-  if(nullptr != numPad )
-    numPad->BeginEditing();
-}
-void NumPadAdapter::EndEditing() noexcept{
-  if(nullptr != numPad )
-    numPad->EndEditing();
-
-}
-
-
+#endif /* SRC_FORM_DATAFIELD_ENUMLISTNUMPADADAPTER_HPP_ */
