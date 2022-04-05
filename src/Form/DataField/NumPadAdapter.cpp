@@ -41,8 +41,7 @@ Copyright_License {
 
 
 
-void NumPadAdapter::BeginEditing(const TCHAR * _caption) noexcept{
-  Caption = _caption;
+void NumPadAdapter::BeginEditing() noexcept{
   if(nullptr != numPad )
     numPad->BeginEditing();
 }

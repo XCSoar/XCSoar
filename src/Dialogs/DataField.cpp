@@ -134,7 +134,8 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
 #endif
     if( df.GetNumPadAdapter() != nullptr && UIGlobals::GetDialogSettings().text_input_style == DialogSettings::TextInputStyle::NumPad)
     {
-      df.GetNumPadAdapter()->BeginEditing(caption);
+      df.GetNumPadAdapter()->SetCaption(caption);
+      df.GetNumPadAdapter()->BeginEditing();
     }
     else
       if (!TextEntryDialog(buffer, caption, acf))

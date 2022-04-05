@@ -36,7 +36,7 @@ class NumPadWidgetInterface
 public:
   NumPadAdapter *numPadAdapter;
   static const int SHIFT_INDEX = 100;
-  static const int FINISH_INDEX = 101;
+  static const int EDIT_INDEX = 101;
   static const int BACKSPACE_INDEX = 102;
 
   virtual void BeginEditing() noexcept;

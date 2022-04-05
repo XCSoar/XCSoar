@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "NumPadWidget.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
+#include "Renderer/BitmapButtonRenderer.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 #include "util/CharUtil.hxx"
@@ -33,6 +34,9 @@ Copyright_License {
 #include "Form/DataField/EnumListNumPadAdapter.hpp"
 #include "Form/DataField/TextNumPadAdapter.hpp"
 #include "Look/DialogLook.hpp"
+#include "Resources.hpp"
+#include "ui/canvas/Icon.hpp"
+#include "Look/IconLook.hpp"
 
 #include "UIGlobals.hpp"
 #include "LogFile.hpp"
@@ -44,18 +48,38 @@ static constexpr long waitForSameKeyTime = 1000000;// one second = 1000.000 micr
 static constexpr size_t MAX_COLS = 3;
 static constexpr size_t MAX_ROWS = 4;
 
-
-void NumPadWidget::MyTextListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+class MaskedIconButtonRenderer: public ButtonRenderer
+{
+  ButtonFrameRenderer frame_renderer;
+public:
+  MaskedIconButtonRenderer(const ButtonLook &_look) : frame_renderer(
+      _look)
+  {
+  };
+  void
+  DrawButton(Canvas &canvas, const PixelRect &rc,
+             ButtonState state) const noexcept
+  {
+    frame_renderer.DrawButton(canvas, rc, state);
+    PixelRect rc1 = rc;
+    rc1.Grow(-10,-10);
+    const MaskedIcon &ic= UIGlobals::GetIconLook().hBmpTabCalculator;
+    ic.Draw(canvas, rc1, false);
+  }
+};
+void
+NumPadWidget::MyTextListWidget::Prepare(ContainerWindow &parent,
+                                        const PixelRect &rc) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-    WindowStyle list_style;
-    list_style.Hide();
-    list_style.Border();
-    unsigned row_height =20;
-    auto list = std::make_unique<ListControl>(parent, look, rc,
-                                              list_style, row_height);
-    //    list->SetCursorHandler(this);
-    SetWindow(std::move(list));
+  WindowStyle list_style;
+  list_style.Hide();
+  list_style.Border();
+  unsigned row_height = 20;
+  auto list = std::make_unique<ListControl>(parent, look, rc, list_style,
+                                            row_height);
+//    list->SetCursorHandler(this);
+  SetWindow(std::move(list));
 
 //  const DialogLook &look = UIGlobals::GetDialogLook();
 //  CreateList(parent, look, rc,
@@ -66,9 +90,9 @@ void NumPadWidget::MyTextListWidget::Prepare(ContainerWindow &parent, const Pixe
 NumPadWidget::Modes
 NumPadWidget::getMode()
 {
-  if( dynamic_cast<const EnumListNumPadAdapter*>(&numPadWidgetInterface.GetNumPadAdapter()))
+  if (dynamic_cast<const EnumListNumPadAdapter*>(&numPadWidgetInterface.GetNumPadAdapter()))
     return ListMode;
-  if( dynamic_cast<const TextNumPadAdapter*>(&numPadWidgetInterface.GetNumPadAdapter()))
+  if (dynamic_cast<const TextNumPadAdapter*>(&numPadWidgetInterface.GetNumPadAdapter()))
     return ButtonMode;
   return Nothing;
 }
@@ -83,16 +107,8 @@ NumPadWidget::Prepare(ContainerWindow &_parent, const PixelRect &rc) noexcept
     AddButton(*parent, num_buttons);
   AddButton(*parent, NumPadWidgetInterface::SHIFT_INDEX);
   AddButton(*parent, NumPadWidgetInterface::BACKSPACE_INDEX);
-  AddButton(*parent, NumPadWidgetInterface::FINISH_INDEX);
+  AddButton(*parent, NumPadWidgetInterface::EDIT_INDEX);
 
-  if (show_shift_button) {
-    WindowStyle style;
-    style.Hide();
-    shiftButton.Create(*parent, { 0, 0, 16, 16 }, style,
-                       std::make_unique<SymbolButtonRenderer>(look, _T("v")),
-                       [this]
-                       () {OnShiftClicked();});
-  }
   UpdateShiftState();
   AddNumPadWindow(_parent);
   const DialogLook &look = UIGlobals::GetDialogLook();
@@ -101,7 +117,6 @@ NumPadWidget::Prepare(ContainerWindow &_parent, const PixelRect &rc) noexcept
   textList.Show();
   textList.SetItemRenderer(this);
   textList.SetCursorHandler(this);
-
 
   numPadWidgetInterface.GetNumPadAdapter().UpdateButtons();
 
@@ -113,18 +128,16 @@ NumPadWidget::SetListMode(Modes newMode) noexcept
 {
   Hide();
   bool buttonsVisible = (newMode == ButtonMode);
-  if (buttonsVisible)
-  {
-    for (unsigned i = 0; i < num_buttons; ++i)
-      buttons[i].Show();
-  }else
+  if (buttonsVisible) {
+    GetNumPadWidgetInterface().GetNumPadAdapter().UpdateButtons();
+  } else
     textList.Show();
-
-  if (buttonsVisible && UIGlobals::GetDialogSettings().text_input_style
-      == DialogSettings::TextInputStyle::NumPad) {
+  if (buttonsVisible) {
     backspaceButton.Show();
-    finishButton.Show();
-    shiftButton.Show();
+    editButton.Show();
+
+    if (show_shift_button)
+      shiftButton.Show();
   }
   if (newMode != Nothing && !numPadWindow.IsVisible())
     numPadWindow.Show();
@@ -143,7 +156,7 @@ NumPadWidget::Show(const PixelRect &rc) noexcept
   Modes newMode = getMode();
   bool buttonsVisible = (newMode == ButtonMode);
 
-  if(buttonsVisible)
+  if (buttonsVisible)
     for (unsigned i = 0; i < num_buttons; ++i)
       buttons[i].Show();
 
@@ -151,10 +164,10 @@ NumPadWidget::Show(const PixelRect &rc) noexcept
     shiftButton.Show();
   if (buttonsVisible && !backspaceButton.IsVisible())
     backspaceButton.Show();
-  if (buttonsVisible && !finishButton.IsVisible())
-    finishButton.Show();
+  if (buttonsVisible && !editButton.IsVisible())
+    editButton.Show();
 
-  if (newMode != Nothing  && !numPadWindow.IsVisible())
+  if (newMode != Nothing && !numPadWindow.IsVisible())
     numPadWindow.Show();
   if (newMode == ListMode && !textList.IsVisible())
     textList.Show();
@@ -167,14 +180,12 @@ NumPadWidget::Hide() noexcept
     if (buttons[i].IsVisible())
       buttons[i].Hide();
 
-  if (show_shift_button)
+  if (show_shift_button && shiftButton.IsVisible())
     shiftButton.Hide();
   if (backspaceButton.IsVisible())
     backspaceButton.Hide();
-  if (finishButton.IsVisible())
-    finishButton.Hide();
-  if (shiftButton.IsVisible())
-    shiftButton.Hide();
+  if (editButton.IsVisible())
+    editButton.Hide();
   if (numPadWindow.IsVisible())
     numPadWindow.Hide();
   if (numPadWindow.IsVisible())
@@ -208,12 +219,13 @@ NumPadWidget::MoveButton(unsigned idx, int left, int top)
 void
 NumPadWidget::ResizeButtons()
 {
-  for (unsigned i = 0; i < num_buttons; ++i)
+  for (unsigned i = 0; i < num_buttons - 1; ++i)
     buttons[i].Resize(button_width, button_height);
-
-  shiftButton.Resize(button_width, button_height);
+  buttons[9].Resize(2 * button_width, button_height);
+  if (show_shift_button)
+    shiftButton.Resize(button_width, button_height);
   backspaceButton.Resize(button_width, button_height);
-  finishButton.Resize(button_width, button_height);
+  editButton.Resize(button_width, button_height);
 }
 
 void
@@ -221,12 +233,17 @@ NumPadWidget::MoveButtonsToRow(const PixelRect &rc, unsigned from, unsigned to,
                                unsigned row, int offset)
 {
   unsigned rowPos = rc.top + caption_height + row * button_height;
-  for (unsigned i = from; row < 4 && i < to; ++i)
+  for (unsigned i = from; row < 3 && i < to; ++i) {
     MoveButton(i, rc.left + (i - from) * button_width + offset, rowPos);
+  }
+  if (row == 3) {
+    MoveButton(9, rc.left + offset, rowPos);
+    editButton.Move(rc.left + 2 * button_width + offset, rowPos);
+  }
   if (row == 4) {
-    shiftButton.Move(rc.left + offset, rowPos);
+    if (show_shift_button)
+      shiftButton.Move(rc.left + offset, rowPos);
     backspaceButton.Move(rc.left + button_width + offset, rowPos);
-    finishButton.Move(rc.left + 2 * button_width + offset, rowPos);
   }
 }
 
@@ -279,19 +296,19 @@ NumPadWidget::PrepareSize(const PixelRect &rc, unsigned border)
 {
   const PixelSize new_size = rc.GetSize();
 
-  button_width = (new_size.width -2* border)/ 3;
+  button_width = (new_size.width - 2 * border) / 3;
   caption_height = new_size.height / 22;// 5 Rows (4 * caption) + 2 caption
   button_height = caption_height * 4;
-  caption_height  *= 2;
+  caption_height *= 2;
 }
 
 void
 NumPadWidget::OnResize(const PixelRect &rc)
 {
   unsigned border = 3;
-  PrepareSize(rc, border );
+  PrepareSize(rc, border);
   ResizeButtons();
-  MoveButtons(rc,3);
+  MoveButtons(rc, 3);
 }
 PixelRect
 NumPadWidget::UpdateLayout() noexcept
@@ -317,10 +334,16 @@ NumPadWidget::AddButton(ContainerWindow &parent, unsigned buttonIndex)
   rc.bottom = button_height;
   switch (buttonIndex) {
   case NumPadWidgetInterface::SHIFT_INDEX:
-    shiftButton.SetCallback(
-        std::bind(&NumPadWidgetInterface::OnButton, GetNumPadWidgetInterface(),
-                  buttonIndex));
-    shiftButton.Create(parent, look, _T("Shift"), rc, style);
+    if (show_shift_button) {
+      WindowStyle style;
+      shiftButton.Create(
+          parent,
+          { 0, 0, 16, 16 },
+          style,
+          std::make_unique<SymbolButtonRenderer>(look, _T("v")),
+          std::bind(&NumPadWidgetInterface::OnButton,
+                    GetNumPadWidgetInterface(), buttonIndex));
+    }
 
     break;
   case NumPadWidgetInterface::BACKSPACE_INDEX:
@@ -329,11 +352,21 @@ NumPadWidget::AddButton(ContainerWindow &parent, unsigned buttonIndex)
                   buttonIndex));
     backspaceButton.Create(parent, look, _T("<-"), rc, style);
     break;
-  case NumPadWidgetInterface::FINISH_INDEX:
-    finishButton.SetCallback(
+  case NumPadWidgetInterface::EDIT_INDEX: {
+    WindowStyle style;
+//    editButton.Create(
+//        parent,
+//        { 0, 0, 16, 16 },
+//        style,
+//        std::make_unique<MaskedIconButtonRenderer>(look),
+//        std::bind(&NumPadWidgetInterface::OnButton, GetNumPadWidgetInterface(),
+//                  buttonIndex));
+
+    editButton.SetCallback(
         std::bind(&NumPadWidgetInterface::OnButton, GetNumPadWidgetInterface(),
-                  buttonIndex));
-    finishButton.Create(parent, look, _T("Finish"), rc, style);
+                    buttonIndex));
+    editButton.Create(parent, look, NUMPAD_CAPTION, rc, style);
+  }
     break;
   default:
     assert(num_buttons < MAX_BUTTONS);
