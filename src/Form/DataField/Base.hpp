@@ -71,7 +71,7 @@ protected:
   bool item_help_enabled;
 
 protected:
-  const std::shared_ptr<NumPadAdapter> numPadAdapter;
+  const std::unique_ptr<NumPadAdapter> numPadAdapter;
 
   DataField(Type type, bool supports_combolist,std::unique_ptr<NumPadAdapter> &&_numPadAdapter,
             DataFieldListener *listener) noexcept;

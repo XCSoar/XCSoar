@@ -33,6 +33,8 @@ DataField::DataField(Type _type, bool _supports_combolist, std::unique_ptr<NumPa
    supports_combolist(_supports_combolist), type(_type),
    item_help_enabled(false), numPadAdapter(std::move(_numPadAdapter))
 {
+  if( numPadAdapter)
+    numPadAdapter.get()->SetDataField(this);
 }
 DataField::DataField(Type _type, bool _supports_combolist,
                      DataFieldListener *_listener) noexcept
@@ -47,6 +49,8 @@ DataField::Modified() noexcept
 {
   if (listener != nullptr)
     listener->OnModified(*this);
+  if(numPadAdapter)
+    numPadAdapter.get()->OnModified();
 }
 
 void

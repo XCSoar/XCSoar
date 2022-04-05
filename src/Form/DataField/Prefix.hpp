@@ -35,7 +35,6 @@ public:
 
 private:
   AllowedCharactersFunction allowed_characters;
-
 public:
   PrefixDataField(const TCHAR *value,
                   AllowedCharactersFunction _allowed_characters,

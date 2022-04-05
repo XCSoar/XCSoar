@@ -35,6 +35,10 @@ Copyright_License {
 #include "Dialogs/GeoPointEntry.hpp"
 #include "Dialogs/DateEntry.hpp"
 #include "Dialogs/NumberEntry.hpp"
+#include "Dialogs/DialogSettings.hpp"
+#include "Look/DialogLook.hpp"
+#include "UIGlobals.hpp"
+#include "LogFile.hpp"
 
 #ifdef ANDROID
 #include "java/Global.hxx"
@@ -46,6 +50,7 @@ bool
 EditDataFieldDialog(const TCHAR *caption, DataField &df,
                     const TCHAR *help_text)
 {
+  LogFormat("EditDataFieldDialog");
   if (df.GetType() == DataField::Type::FILE) {
     return FilePicker(caption, (FileDataField &)df, help_text);
   } else if (df.SupportsCombolist()) {
@@ -127,13 +132,13 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
       return true;
     }
 #endif
-//    if( df.GetNumPadAdapter() != nullptr)
-//    {
-//      df.GetNumPadAdapter()->BeginEditing();
-//    }
-
-    if (!TextEntryDialog(buffer, caption, acf))
-      return false;
+    if( df.GetNumPadAdapter() != nullptr && UIGlobals::GetDialogSettings().text_input_style == DialogSettings::TextInputStyle::NumPad)
+    {
+      df.GetNumPadAdapter()->BeginEditing(caption);
+    }
+    else
+      if (!TextEntryDialog(buffer, caption, acf))
+        return false;
 
     df.SetAsString(buffer);
     return true;

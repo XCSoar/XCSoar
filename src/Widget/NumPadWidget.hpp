@@ -27,21 +27,70 @@ Copyright_License {
 #include "Form/DataField/NumPadAdapter.hpp"
 #include "Form/DataField/NumPadWidgetInterface.hpp"
 #include "Widget.hpp"
+#include "Widget/TextListWidget.hpp"
 #include "Form/CharacterButton.hpp"
 #include "Form/Button.hpp"
+#include "Form/NumPad.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "ui/window/ContainerWindow.hpp"
+#include "Form/DataField/ComboList.hpp"
 #include <tchar.h>
 
 struct ButtonLook;
 class WndSymbolButton;
 
-class NumPadWidget : public NullWidget {
-public:
-  typedef bool (*OnCharacterCallback_t)(unsigned ch);
+class NumPadWidget: public NullWidget,  ListItemRenderer, ListCursorHandler
+{
 
+  class MyTextListWidget: public WindowWidget
+  {
+  public:
+  // virtual from TextListWidget
+    void SetItemRenderer (ListItemRenderer *_itemRenderer)
+    {
+        ((ListControl &)GetWindow()).SetItemRenderer(_itemRenderer);
+    }
+    void SetCursorHandler (ListCursorHandler *cursorHandler)
+    {
+        ((ListControl &)GetWindow()).SetCursorHandler(cursorHandler);
+    }
+    void SetCursorIndex( unsigned index)
+    {
+      ((ListControl &)GetWindow()).SetCursorIndex(index);
+    }
+    void SetLength (unsigned length)
+    {
+      ((ListControl &)GetWindow()).SetLength(length);
+    }
+    void Invalidate() {
+      ((ListControl &)GetWindow()).Invalidate();
+    }
+  public:
+    void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept;
+  public:
+    bool
+    IsVisible() noexcept
+    {
+      return ((ListControl &)GetWindow()).IsVisible();
+    }
+    void
+    Show() noexcept
+    {
+      ((ListControl &)GetWindow()).Show();
+    }
+  };
+
+  enum Modes
+  {
+    Nothing,
+    ListMode,
+    ButtonMode
+  };
+public:
+  typedef bool
+  (*OnCharacterCallback_t)(unsigned ch);
 protected:
   static constexpr unsigned MAX_BUTTONS = 10;
 
@@ -50,96 +99,161 @@ protected:
   OnCharacterCallback_t on_character;
   unsigned button_width;
   unsigned button_height;
+  unsigned caption_height;
 
   unsigned num_buttons;
   Button buttons[MAX_BUTTONS];
-
-  Button shift_button;
+  NumPad numPadWindow;
+  MyTextListWidget textList;
+  TextRowRenderer row_renderer;
+  Button shiftButton;
+  Button backspaceButton;
+  Button finishButton;
   bool shift_state;
 
   const bool show_shift_button;
   bool editMode;
   Window *previousFocusWindow;
 public:
-  NumPadWidget(const ButtonLook &_look,
-                 bool _show_shift_button,
-                 bool _default_shift_state = true)
-    :look(_look), on_character(nullptr), num_buttons(0),
-     shift_state(_default_shift_state),
-     show_shift_button(_show_shift_button),editMode(false) {
-   }
+  NumPadWidget(const ButtonLook &_look, bool _show_shift_button,
+               bool _default_shift_state = true) : look(
+      _look), on_character(nullptr), num_buttons(0), numPadWindow(
+      numPadWidgetInterface), shift_state(_default_shift_state), show_shift_button(
+      _show_shift_button), editMode(false)
+  {
+  }
   /**
    * Show only the buttons representing the specified character list.
    */
-
 private:
-  TCHAR UpdateAllowedCharacters() noexcept;
-  AllowedCharacters NumPadAllowedCharactersCallback;
   NumPadWidgetInterface numPadWidgetInterface;
   ContainerWindow *parent;
-  void CheckKey(TCHAR *output, const TCHAR *allowedCharacters,
-                                  const TCHAR key) noexcept;
-  void PrepareSize(const PixelRect &rc);
-  void OnResize(const PixelRect &rc);
+  void
+  CheckKey(TCHAR *output, const TCHAR *allowedCharacters,
+           const TCHAR key) noexcept;
+  void
+  PrepareSize(const PixelRect &rc, unsigned border );
+  void
+  OnResize(const PixelRect &rc);
 
-
-  void MoveButton(unsigned ch, int left, int top);
-  void ResizeButtons();
-  void SetButtonsSize();
-  void MoveButtonsToRow(const PixelRect &rc,
-                        unsigned from, unsigned to, unsigned row,
-                        int offset_left = 0);
-  void MoveButtons(const PixelRect &rc);
-  PixelRect UpdateLayout(PixelRect rc) noexcept;
-  PixelRect UpdateLayout() noexcept;
+  void
+  MoveButton(unsigned ch, int left, int top);
+  void
+  ResizeButtons();
+  void
+  SetButtonsSize();
+  void
+  MoveButtonsToRow(const PixelRect &rc, unsigned from, unsigned to,
+                   unsigned row, int offset);
+  void
+  MoveButtons(const PixelRect &rc, unsigned border );
+  void
+  SetListMode(Modes newMode) noexcept;
+  PixelRect
+  UpdateLayout(PixelRect rc) noexcept;
   [[gnu::pure]]
-  static bool IsLandscape(const PixelRect &rc) {
+  static bool
+  IsLandscape(const PixelRect &rc)
+  {
     return rc.GetWidth() >= rc.GetHeight();
   }
-  void UpdateShiftState();
-
-  void AddButton(ContainerWindow &parent, const TCHAR *caption);
-
+  void
+  UpdateShiftState();
+  void
+  AddButton(ContainerWindow &parent, unsigned buttonIndex);
+  void
+  AddNumPadWindow(ContainerWindow &parent);
+  void
+  AddTextListWindow(ContainerWindow &parent);
+  Modes
+  getMode();
 public:
-  unsigned GetNumButtons() noexcept {
+  void
+  FocusParent() noexcept
+  {
+    if (parent != nullptr)
+      parent->SetFocus();
+  }
+  PixelRect
+  UpdateLayout() noexcept;
+  unsigned
+  GetNumButtons() noexcept
+  {
     return num_buttons;
   }
-  Button *GetButtons() noexcept  {
+  Button*
+  GetButtons() noexcept
+  {
     return buttons;
   }
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
-  void Show(const PixelRect &rc) noexcept override;
-  void Hide() noexcept override;
-  void Move(const PixelRect &rc) noexcept override;
-  bool KeyPress(unsigned key_code) noexcept;
-  bool HasFocus() noexcept{
+  void
+  Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void
+  Show(const PixelRect &rc) noexcept override;
+  void
+  Hide() noexcept override;
+  void
+  Move(const PixelRect &rc) noexcept override;
+  bool
+  HasFocus() noexcept
+  {
     return NullWidget::HasFocus();
   }
 
-  NumPadWidgetInterface &GetNumPadWidgetInterface()
+  void
+  OnButton()
   {
-    numPadWidgetInterface.SetNumPadWidget( this );
+
+  }
+  NumPadWidgetInterface&
+  GetNumPadWidgetInterface()
+  {
+    numPadWidgetInterface.SetNumPadWidget(this);
     return numPadWidgetInterface;
   }
   /*
    * Stores old Focus and sets Focus to the this Widget
    */
-  void BeginEditing() noexcept{
-    assert(parent != nullptr);
-    previousFocusWindow = parent->GetFocusedWindow();
-    SetFocus();
+  void
+  BeginEditing() noexcept
+  {
+  }
+  void OnDataFieldSetFocus(){
+    SetListMode(getMode());
+    ComboList *c= GetNumPadWidgetInterface().GetNumPadAdapter().GetComboList();
+
+    unsigned s = (c != nullptr ? c->size(): 0 );
+    textList.SetLength(s);
+    textList.Invalidate();
+  }
+  void SetCursorIndex(unsigned index)
+  {
+    textList.SetCursorIndex(index);
   }
   /*
    * Stores old Focus and sets Focus to the this Widget
    */
-  void EndEditing(){
-     assert(previousFocusWindow != nullptr);
-     previousFocusWindow->SetFocus();
+  void
+  EndEditing()
+  {
+    Hide();
   }
   /* updates UI based on value of shift_state property */
 private:
-  void OnShiftClicked();
+  void
+  OnShiftClicked();
+
+  void OnPaintItem(Canvas &canvas, PixelRect rc,
+                    unsigned i) noexcept override
+  {
+    ComboList *cbl=GetNumPadWidgetInterface().GetNumPadAdapter().GetComboList();
+    if(cbl != nullptr)
+      row_renderer.DrawTextRow(canvas, rc, (*cbl)[i].display_string.c_str());
+  }
+  void OnCursorMoved([[maybe_unused]] unsigned index) noexcept{
+    GetNumPadWidgetInterface().GetNumPadAdapter().OnCursorMoved(index);
+  }
 };
 
 #endif
