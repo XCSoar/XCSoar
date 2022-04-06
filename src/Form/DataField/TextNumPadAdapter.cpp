@@ -53,10 +53,7 @@ TextNumPadAdapter::TextNumPadAdapter(NumPadWidgetInterface *_numPadWidget,
     _numPadWidget), NumPadAllowedCharactersCallback(acb), on_character(nullptr), shift_state(
     _default_shift_state), show_shift_button(_show_shift_button), keyPressedTimer(
     std::bind(&TextNumPadAdapter::KeyFinished, this)), selectedButtonIndex(0), numPadEditingActive(
-    false)
-{
-}
-;
+    false){};
 
 void
 TextNumPadAdapter::CheckKey(TCHAR *output, const TCHAR *allowedCharacters,
@@ -194,7 +191,7 @@ TextNumPadAdapter::SetCharFromKeyPress(
     newAllowedCharacters = GetAllowedCharacters(buffer);
   }
 // No Characters left
-  if (StringLength(newAllowedCharacters) == 0)
+  if (newAllowedCharacters == nullptr || StringLength(newAllowedCharacters) == 0)
     OnNewKey();
   ((DataFieldString*)dataField)->ModifyValue(buffer);
   if (refreshEditFieldFunction)
@@ -237,7 +234,9 @@ TextNumPadAdapter::OnKeyCheck(unsigned key_code) const noexcept
     switch (key_code) {
     case KEY_RIGHT:
     case KEY_LEFT:
+#ifdef USE_X11
     case KEY_KPCOMMA:
+#endif
     case KEY_DELETE:
     case KEY_RETURN:
       return true;
@@ -281,7 +280,9 @@ TextNumPadAdapter::OnKeyDown(unsigned key_code) noexcept
     case KEY_LEFT:
       SelectPreviousButton();
       return true;
+#ifdef USE_X11
     case KEY_KPCOMMA:// Only a NumPad can press this key
+#endif
     case KEY_DELETE:
       BeginEditing();
       return true;
@@ -299,10 +300,6 @@ void
 TextNumPadAdapter::OnDataFieldSetFocus() noexcept
 {
   NumPadAdapter::OnDataFieldSetFocus();
-  if (UIGlobals::GetDialogSettings().text_input_style
-      != DialogSettings::TextInputStyle::NumPad)
-    BeginEditing();
-
 }
 
 void
@@ -418,20 +415,36 @@ TextNumPadAdapter::KeyFinished() noexcept
 bool
 TextNumPadAdapter::CharacterFunction(unsigned ch) noexcept
 {
-  LogFormat("%u %c", ch, ch);
   if (ch == 8)// Handle backspace, because we might not have the focus
       {
     OnKeyBack();
     return true;
   }
-  if (ch < 32)// ignore special characters
+  if (ch < 32 && ch > 255)// ignore special characters
     return false;
-  OnNewKey();
+  const TCHAR *newAllowedCharacters;
+  const TCHAR *dataFieldValue = dataField->GetAsString();
+  if (StringLength(dataFieldValue) >= MAX_TEXTENTRY) {
+    LogFormat(_T("String too long for TextNumPadAdapter \"%s\""),
+              dataFieldValue);
+    return false;
+  }
   if (shift_state)
     ch = ToUpperASCII((TCHAR)ch);
-  TCHAR theCharacter[] = { (TCHAR)ch, '0' };
-  this->SetCharFromKeyPress(theCharacter);
-// No need to wait for more key pressing
+  TCHAR buffer[MAX_TEXTENTRY];
+  UnsafeCopyString(buffer, dataFieldValue);
+  unsigned oldLength = StringLength(buffer);
+  buffer[oldLength] = ch;
+  buffer[oldLength+1] = '\0';
+  newAllowedCharacters = GetAllowedCharacters(buffer);
+  if(newAllowedCharacters == nullptr || *newAllowedCharacters== '\0' )
+  {
+    UpdateButtons();
+    return false;
+  }
+  ((DataFieldString*)dataField)->ModifyValue(buffer);
+  if (refreshEditFieldFunction)
+    this->refreshEditFieldFunction();
   OnNewKey();
   return true;
 }
@@ -472,7 +485,6 @@ TextNumPadAdapter::OnButton(unsigned buttonIndex) noexcept
 // If the button has only one valid character, we don't need to wait
 // for double clicks
     if (StringLength(allowedCharsForKey[buttonIndex]) > 1) {
-      LogFormat(_T("Starting timer"));
       keyPressedTimer.Schedule(TIMEOUT_FOR_KEYPRESSED);
       previousButtonIndex = buttonIndex;
     } else

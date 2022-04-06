@@ -50,14 +50,9 @@ public:
   /* virtual methods from class Window */
   bool OnKeyCheck(unsigned key_code) const override;
   bool OnKeyDown(unsigned key_code) override;
-  void OnSetFocus() override;
   void OnKillFocus() override{
     PaintWindow::OnKillFocus();
   }
-
-  void OnCancelMode() override;
-  void ClearFocus() noexcept override;
-
   void OnPaint(Canvas &canvas) override;
 
 

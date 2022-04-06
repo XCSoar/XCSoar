@@ -37,16 +37,14 @@ Copyright_License {
 #include "Resources.hpp"
 #include "ui/canvas/Icon.hpp"
 #include "Look/IconLook.hpp"
+#include "MainWindow.hpp"
+#include "Form/Form.hpp"
 
 #include "UIGlobals.hpp"
 #include "LogFile.hpp"
 
 #include <cassert>
 #include <string.h>
-
-static constexpr long waitForSameKeyTime = 1000000;// one second = 1000.000 microseconds
-static constexpr size_t MAX_COLS = 3;
-static constexpr size_t MAX_ROWS = 4;
 
 class MaskedIconButtonRenderer: public ButtonRenderer
 {
@@ -114,13 +112,11 @@ NumPadWidget::Prepare(ContainerWindow &_parent, const PixelRect &rc) noexcept
   const DialogLook &look = UIGlobals::GetDialogLook();
   row_renderer.CalculateLayout(*look.list.font);
   textList.Prepare(_parent, rc);
-  textList.Show();
+  textList.ShowWindow();
   textList.SetItemRenderer(this);
   textList.SetCursorHandler(this);
 
   numPadWidgetInterface.GetNumPadAdapter().UpdateButtons();
-
-  parent->GetFocusedWindow();
 }
 
 void
@@ -131,7 +127,7 @@ NumPadWidget::SetListMode(Modes newMode) noexcept
   if (buttonsVisible) {
     GetNumPadWidgetInterface().GetNumPadAdapter().UpdateButtons();
   } else
-    textList.Show();
+    textList.ShowWindow();
   if (buttonsVisible) {
     backspaceButton.Show();
     editButton.Show();
@@ -147,6 +143,19 @@ void
 NumPadWidget::AddTextListWindow(ContainerWindow &parent)
 {
 }
+
+void NumPadWidget::OnDataFieldSetFocus() noexcept
+{
+  SetListMode(getMode());
+  ComboList *c = GetNumPadWidgetInterface().GetNumPadAdapter().GetComboList();
+
+  unsigned s = (c != nullptr ? c->size() : 0);
+  textList.SetLength(s);
+  textList.Invalidate();
+}
+
+
+
 
 void
 NumPadWidget::Show(const PixelRect &rc) noexcept
@@ -170,7 +179,7 @@ NumPadWidget::Show(const PixelRect &rc) noexcept
   if (newMode != Nothing && !numPadWindow.IsVisible())
     numPadWindow.Show();
   if (newMode == ListMode && !textList.IsVisible())
-    textList.Show();
+    textList.ShowWindow();
 }
 
 void
@@ -309,17 +318,6 @@ NumPadWidget::OnResize(const PixelRect &rc)
   PrepareSize(rc, border);
   ResizeButtons();
   MoveButtons(rc, 3);
-}
-PixelRect
-NumPadWidget::UpdateLayout() noexcept
-{
-  assert(parent != nullptr);
-  return UpdateLayout(parent->GetClientRect());
-}
-PixelRect
-NumPadWidget::UpdateLayout(PixelRect rc) noexcept
-{
-  return UpdateLayout(rc);
 }
 
 void

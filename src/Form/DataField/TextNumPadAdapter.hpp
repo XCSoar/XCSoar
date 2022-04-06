@@ -30,7 +30,7 @@ Copyright_License {
 static const unsigned MAX_CHARS_PER_KEY = 5;
 static const unsigned MAX_BUTTONS = 10;
 static const unsigned NO_PREVIOUSBUTTON = 1000;
-static constexpr size_t MAX_TEXTENTRY = 40;
+static constexpr size_t MAX_TEXTENTRY = 100;
 static const std::chrono::steady_clock::duration TIMEOUT_FOR_KEYPRESSED= std::chrono::seconds(1);
 
 class TextNumPadAdapter : public NumPadAdapter{
@@ -49,13 +49,14 @@ protected:
 	unsigned GetRowFromButtonIndex(unsigned buttonIndex) const noexcept;
 
 	unsigned GetColumnFromButtonIndex(unsigned buttonIndex) const noexcept;
-	void OnDataFieldSetFocus() noexcept;
+	void OnDataFieldSetFocus() noexcept override;
 	public:
 	TextNumPadAdapter( NumPadWidgetInterface * _numPadWidgetInterface, AllowedCharacters acb,
                  bool _show_shift_button,
                  bool _default_shift_state = true);
+	~TextNumPadAdapter()noexcept{};
 	void UpdateButtons() noexcept override;
-	bool CharacterFunction(unsigned ch) noexcept;
+	bool CharacterFunction(unsigned ch) noexcept override;
 	bool
 	OnKeyDown(unsigned key_code) noexcept override;
 	bool OnKeyCheck(unsigned key_code) const noexcept override;
@@ -69,17 +70,16 @@ private:
 	void
 	SetCharFromKeyPress(const TCHAR * allowedCharactersForCurrentKey) noexcept;
 	void SetCaption(unsigned buttonIndex, const TCHAR *allowedChars) const noexcept;
-  TCHAR previousDataFieldValue[MAX_TEXTENTRY];
   unsigned previousButtonIndex;
   unsigned previousKeyIndex;
   void OnKeyBack()noexcept;
   void OnKeyEdit() noexcept;
 
 	void OnNewKey()noexcept; // User pressed a different key
-	void OnButton(unsigned ButtonIndex)noexcept;
+	void OnButton(unsigned ButtonIndex)noexcept override;
   void KeyFinished()noexcept; // User stopped pressing the same key
 	void BeginEditing() noexcept override;
-	void EndEditing() noexcept;
+	void EndEditing() noexcept  override;
   const TCHAR *GetAllowedCharacters(const TCHAR *prefix)noexcept;
 };
 
