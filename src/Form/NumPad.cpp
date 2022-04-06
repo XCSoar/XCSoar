@@ -29,8 +29,6 @@ Copyright_License {
 #include "ui/window/ContainerWindow.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-#include "util/UTF8.hpp"
-#include "LogFile.hpp"
 
 NumPad::NumPad(NumPadWidgetInterface &_numPadWidgetInterface) : numPadWidgetInterface(
     _numPadWidgetInterface)
@@ -44,26 +42,6 @@ NumPad::Create(ContainerWindow &parent, const TCHAR *Caption,
                const PixelRect &rc, const WindowStyle style) noexcept
 {
   PaintWindow::Create(parent, rc, style);
-  const WndForm *form = dynamic_cast<const WndForm*>(&parent);
-  /* Hack: This window has no direct access to the surrounding WndForm,
-   * but the WndForm is in the parent-> parent hirarchy
-   * WndForm:: CharacterFunction.
-   */
-  Window *wnd = dynamic_cast<Window*>(&parent);
-  while (form == nullptr && wnd != nullptr)
-    form = dynamic_cast<const WndForm*>(wnd->GetParent());
-  if (form != nullptr) {
-    WndForm::CharacterFunction f = std::bind(
-        &NumPadWidgetInterface::CharacterFunction,
-        &numPadWidgetInterface, std::placeholders::_1);
-    /* GetParent returns a const WndForm * we need a non const to set the function
-    * This is the dirty part of the hack
-    * If the CharacterFunction had already been set, it will be overwritten.
-    * Solution: WndForm should get a RegisterCharacterFunction supporting more than
-    * one CharacterFunction
-    */
-    const_cast<WndForm*>(form)->SetCharacterFunction(f);
-  }
 }
 
 /** Destructor */
@@ -89,8 +67,6 @@ NumPad::OnPaint(Canvas &canvas)
   BulkPixelPoint ptNumber(rc.left, rc.top);
   const TCHAR *caption = numPadWidgetInterface.numPadAdapter->GetCaption();
   if (caption != nullptr) {
-    if( !ValidateUTF8(caption))
-      LogFormat("Assertion will fail: Caption %s %d %d", caption, rc.left, rc.top + 10);
     canvas.DrawText(ptNumber, caption);
   }
 
@@ -104,21 +80,5 @@ bool
 NumPad::OnKeyDown(unsigned key_code)
 {
   return numPadWidgetInterface.numPadAdapter->OnKeyDown(key_code);
-}
-void
-NumPad::OnSetFocus()
-{
-  PaintWindow::OnSetFocus();
-}
-void
-NumPad::OnCancelMode()
-{
-
-}
-
-void
-NumPad::ClearFocus() noexcept
-{
-  numPadWidgetInterface.GetNumPadAdapter().EndEditing();
 }
 

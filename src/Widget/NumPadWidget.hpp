@@ -31,6 +31,7 @@ Copyright_License {
 #include "Form/CharacterButton.hpp"
 #include "Form/Button.hpp"
 #include "Form/NumPad.hpp"
+#include "Form/Form.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/TextEntry.hpp"
@@ -78,7 +79,7 @@ class NumPadWidget: public NullWidget, ListItemRenderer, ListCursorHandler
     }
   public:
     void
-    Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept;
+    Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   public:
     bool
     IsVisible() noexcept
@@ -86,7 +87,7 @@ class NumPadWidget: public NullWidget, ListItemRenderer, ListCursorHandler
       return ((ListControl&)GetWindow()).IsVisible();
     }
     void
-    Show() noexcept
+    ShowWindow() noexcept
     {
       ((ListControl&)GetWindow()).Show();
     }
@@ -126,12 +127,17 @@ protected:
   bool editMode;
   Window *previousFocusWindow;
 public:
-  NumPadWidget(const ButtonLook &_look, bool _show_shift_button,
+  NumPadWidget(WndForm &dialog,const ButtonLook &_look, bool _show_shift_button,
                bool _default_shift_state = true) : look(_look), on_character(
       nullptr), num_buttons(0), numPadWindow(numPadWidgetInterface), shift_state(
       _default_shift_state), show_shift_button(_show_shift_button), editMode(
       false)
   {
+    WndForm::CharacterFunction f = std::bind(
+        &NumPadWidgetInterface::CharacterFunction, &numPadWidgetInterface,
+        std::placeholders::_1);
+
+    dialog.SetCharacterFunction(f);
   }
   /**
    * Show only the buttons representing the specified character list.
@@ -160,8 +166,6 @@ private:
   MoveButtons(const PixelRect &rc, unsigned border);
   void
   SetListMode(Modes newMode) noexcept;
-  PixelRect
-  UpdateLayout(PixelRect rc) noexcept;
   [[gnu::pure]]
   static bool
   IsLandscape(const PixelRect &rc)
@@ -185,8 +189,6 @@ public:
     if (parent != nullptr)
       parent->SetFocus();
   }
-  PixelRect
-  UpdateLayout() noexcept;
   unsigned
   GetNumButtons() noexcept
   {
@@ -206,8 +208,8 @@ public:
   Hide() noexcept override;
   void
   Move(const PixelRect &rc) noexcept override;
-  bool
-  HasFocus() noexcept
+  virtual bool
+  HasFocus() const noexcept override
   {
     return NullWidget::HasFocus();
   }
@@ -232,16 +234,7 @@ public:
     if (editButton.IsVisible())
       editButton.SetCaption(END_CAPTION);
   }
-  void
-  OnDataFieldSetFocus()
-  {
-    SetListMode(getMode());
-    ComboList *c = GetNumPadWidgetInterface().GetNumPadAdapter().GetComboList();
-
-    unsigned s = (c != nullptr ? c->size() : 0);
-    textList.SetLength(s);
-    textList.Invalidate();
-  }
+  void OnDataFieldSetFocus() noexcept;
   void
   SetCursorIndex(unsigned index)
   {
@@ -269,7 +262,7 @@ private:
       row_renderer.DrawTextRow(canvas, rc, (*cbl)[i].display_string.c_str());
   }
   void
-  OnCursorMoved([[maybe_unused]] unsigned index) noexcept
+  OnCursorMoved([[maybe_unused]] unsigned index) noexcept override
   {
     GetNumPadWidgetInterface().GetNumPadAdapter().OnCursorMoved(index);
   }

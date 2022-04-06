@@ -56,7 +56,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Widget/NumPadWidget.hpp"
 #include "Form/DataField/TextNumPadAdapter.hpp"
-#include "LogFile.hpp"
+#include "util/StringAPI.hxx"
 #include <algorithm>
 #include <list>
 #include "util/CharUtil.hxx"
@@ -383,13 +383,12 @@ WaypointListWidget::WaypointNameAllowedCharacters(const TCHAR *prefix)
    * If we remove one character from prefix, the set of allowed chars
    * is a superset of the set in the current list.
    */
+  *buffer = '\0';
   if (prefix != nullptr && *prefix != '\0' && dialog_state.IsDefined()) {
     startPrefixCharIdx = StringLength(prefix);
     dialog_state.name = prefix;
     UpdateList();
-    LogFormat("Items: \"%s\" %ld", prefix, items.size());
-    if (items.size() > 0) {
-      *buffer = '\0';
+    if (*prefix != '\0' ) {
       unsigned idx = 0;
       for (std::vector<WaypointListItem>::iterator it = items.begin();
           it != items.end() && idx < 256; ++it) {
@@ -587,7 +586,7 @@ ShowWaypointListDialog(const GeoPoint &_location, OrderedTask *_ordered_task,
 
   auto allButtons = std::make_unique<TwoWidgets>(
       std::make_unique<WaypointFilterWidget>(look, heading),
-      std::make_unique<NumPadWidget>(look.button, false, false), true);
+      std::make_unique<NumPadWidget>(dialog, look.button, false, false), true);
   auto left_widget = std::make_unique<TwoWidgets>(
       std::move(allButtons),
       std::make_unique<WaypointListButtons>(look, dialog), true);

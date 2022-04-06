@@ -174,8 +174,6 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
     { (unsigned)DialogSettings::TextInputStyle::Keyboard, N_("Keyboard") },
     { (unsigned)DialogSettings::TextInputStyle::HighScore,
       N_("HighScore Style") },
-    { (unsigned)DialogSettings::TextInputStyle::NumPad,
-        N_("Number Pad Style") },
     { 0 }
   };
 

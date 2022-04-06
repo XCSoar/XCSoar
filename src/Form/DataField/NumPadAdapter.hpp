@@ -108,6 +108,9 @@ class NumPadAdapter {
     setFocusEditFieldFunction = _setFocusEditFieldFunction;
   }
   virtual void OnModified() noexcept {};
+  virtual ~NumPadAdapter() noexcept{};
+  NumPadAdapter(NumPadAdapter &&rhs){};
+
 };
 
 

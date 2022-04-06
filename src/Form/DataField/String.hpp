@@ -42,7 +42,7 @@ protected:
 public:
   DataFieldString(const TCHAR *_value,
                   DataFieldListener *listener=nullptr) noexcept
-    :DataField(Type::STRING, false, std::move(std::unique_ptr<NumPadAdapter>()), listener), mValue(_value) {}
+    :DataField(Type::STRING, false, nullptr, listener), mValue(_value) {}
 
   const TCHAR *GetValue() const noexcept {
     return mValue.c_str();

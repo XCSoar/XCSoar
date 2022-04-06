@@ -32,18 +32,19 @@ class EnumListNumPadAdapter: public NumPadAdapter
 public:
   std::unique_ptr<ComboList> comboList;
   EnumListNumPadAdapter(NumPadWidgetInterface *_numPadWidget);
-  void UpdateButtons() noexcept;
-  void OnButton(unsigned buttonIndex ) noexcept;
-  void SetComboList(ComboList * _list) noexcept
+  ~EnumListNumPadAdapter()noexcept{};
+  void UpdateButtons() noexcept override;
+  void OnButton(unsigned buttonIndex ) noexcept override;
+  void SetComboList(ComboList * _list) noexcept override
   {
   	comboList.reset(_list);
   }
-  ComboList *GetComboList() noexcept 
+  ComboList *GetComboList() noexcept override
   {
   	return comboList.get();
   }
   void OnCursorMoved([[maybe_unused]] unsigned index) noexcept override;
-  void OnModified() noexcept;
+  void OnModified() noexcept override;
   bool OnKeyDown(unsigned key_code) noexcept override;
   bool OnKeyCheck(unsigned key_code) const noexcept override;
 
