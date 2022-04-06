@@ -104,9 +104,12 @@ TextNumPadAdapter::UpdateAllowedCharacters(
   for (unsigned i = 0; i < numPad->GetNumButtons(); ++i) {
     allowedCharsForKey[i][0] = '\0';
     for (unsigned c = 0; c < StringLength(charsForKey[i]); c++) {
-      CheckKey(allowedCharsForKey[i], allowed, charsForKey[i][c]);
+      {
+        CheckKey(allowedCharsForKey[i], allowed, charsForKey[i][c]);
+      }
     }
   }
+
 // If there is one empty button before or after a button with
 // two keys, distribute the characters to this button
 // A button with one character needs no wait time for double clicks
@@ -114,6 +117,7 @@ TextNumPadAdapter::UpdateAllowedCharacters(
     if (StringLength(allowedCharsForKey[i]) == 2) {
       if (i > 0 && StringLength(allowedCharsForKey[i - 1]) == 0) {
         allowedCharsForKey[i - 1][0] = allowedCharsForKey[i][1];
+        allowedCharsForKey[i - 1][1] = '\0';
         allowedCharsForKey[i][1] = '\0';
       } else if (i < numPad->GetNumButtons() - 2
           && StringLength(allowedCharsForKey[i + 1]) == 0) {
@@ -124,14 +128,27 @@ TextNumPadAdapter::UpdateAllowedCharacters(
     }
   }
   for (unsigned i = 0; i < numPad->GetNumButtons(); ++i)
+  {
     SetCaption(i, allowedCharsForKey[i]);
+  }
 }
 void
 TextNumPadAdapter::UpdateButtons() noexcept
 {
-  UpdateAllowedCharacters(dataField->GetAsString());
+  const TCHAR *dataFieldContent = dataField->GetAsString();
+  static TCHAR lastAllowedCharacters[256] = _T("");
+  if( 0 == StringCompare(lastAllowedCharacters, dataFieldContent) && *dataFieldContent != '\0' )
+  {
+    return; // nothing to do
+  }
+  UnsafeCopyString(lastAllowedCharacters, dataFieldContent);
+  UpdateAllowedCharacters(dataFieldContent);
   if (!numPadEditingActive && selectedButtonIndex < numPad->GetNumButtons())
+  {
+    if(!numPad->GetButtons()[selectedButtonIndex].IsVisible())
+     SelectNextButton();
     numPad->GetButtons()[selectedButtonIndex].SetSelected(true);
+  }
   if (refreshEditFieldFunction)
     this->refreshEditFieldFunction();
 }
@@ -180,19 +197,20 @@ TextNumPadAdapter::SetCharFromKeyPress(
     TCHAR theOnlyAllowedChar[2] = {
         allowedCharactersForCurrentKey[previousKeyIndex++], '\0' };
     UnsafeCopyString(buffer + StringLength(buffer), theOnlyAllowedChar);
+    // If there is only one allowed character, it can be taken without key pressing
+      const TCHAR *newAllowedCharacters = GetAllowedCharacters(buffer);
+      while (newAllowedCharacters != nullptr
+          && StringLength(newAllowedCharacters) == 1
+          && StringLength(buffer) < MAX_TEXTENTRY - 1) {
+        UnsafeCopyString(buffer + StringLength(buffer), newAllowedCharacters);
+        newAllowedCharacters = GetAllowedCharacters(buffer);
+      }
+    // No Characters left
+      if (newAllowedCharacters == nullptr || StringLength(newAllowedCharacters) == 0)
+        OnNewKey();
   }
+  // Make sure a button is selected
 
-// If there is only one allowed character, it can be taken without key pressing
-  const TCHAR *newAllowedCharacters = GetAllowedCharacters(buffer);
-  while (newAllowedCharacters != nullptr
-      && StringLength(newAllowedCharacters) == 1
-      && StringLength(buffer) < MAX_TEXTENTRY - 1) {
-    UnsafeCopyString(buffer + StringLength(buffer), newAllowedCharacters);
-    newAllowedCharacters = GetAllowedCharacters(buffer);
-  }
-// No Characters left
-  if (newAllowedCharacters == nullptr || StringLength(newAllowedCharacters) == 0)
-    OnNewKey();
   ((DataFieldString*)dataField)->ModifyValue(buffer);
   if (refreshEditFieldFunction)
     this->refreshEditFieldFunction();
@@ -300,6 +318,8 @@ void
 TextNumPadAdapter::OnDataFieldSetFocus() noexcept
 {
   NumPadAdapter::OnDataFieldSetFocus();
+  previousButtonIndex = NO_PREVIOUSBUTTON;
+  UpdateButtons();
 }
 
 void
@@ -394,7 +414,6 @@ TextNumPadAdapter::EndEditing() noexcept
 void
 TextNumPadAdapter::OnNewKey() noexcept
 {
-
   previousButtonIndex = NO_PREVIOUSBUTTON;
   previousKeyIndex = 0;
   UpdateButtons();
@@ -420,7 +439,7 @@ TextNumPadAdapter::CharacterFunction(unsigned ch) noexcept
     OnKeyBack();
     return true;
   }
-  if (ch < 32 && ch > 255)// ignore special characters
+  if (ch < 32 || ch > 255)// ignore special characters
     return false;
   const TCHAR *newAllowedCharacters;
   const TCHAR *dataFieldValue = dataField->GetAsString();
@@ -478,7 +497,7 @@ TextNumPadAdapter::OnButton(unsigned buttonIndex) noexcept
   default:
     assert(buttonIndex <= GetNumPadWidgetInterface()->GetNumButtons());
 // if the buttons differs from the previous one, the previous one is valid
-    if (previousButtonIndex != buttonIndex)
+    if (previousButtonIndex != NO_PREVIOUSBUTTON && previousButtonIndex != buttonIndex)
       OnNewKey();
     SetCharFromKeyPress(allowedCharsForKey[buttonIndex]);
 

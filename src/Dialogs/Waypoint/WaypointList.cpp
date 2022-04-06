@@ -385,16 +385,22 @@ WaypointListWidget::WaypointNameAllowedCharacters(const TCHAR *prefix)
    */
   *buffer = '\0';
   if (prefix != nullptr && *prefix != '\0' && dialog_state.IsDefined()) {
-    startPrefixCharIdx = StringLength(prefix);
     dialog_state.name = prefix;
     UpdateList();
     if (*prefix != '\0' ) {
       unsigned idx = 0;
       for (std::vector<WaypointListItem>::iterator it = items.begin();
           it != items.end() && idx < 256; ++it) {
+        startPrefixCharIdx = StringLength(prefix);
+        const TCHAR *p = it->waypoint->name.c_str();
+        // Count spaces before startPrefixCharIdx and inc startPrefixCharIdx
+        for( unsigned i=0; i < StringLength(p) && i <= startPrefixCharIdx; i++)
+          if( p[i] == ' ')
+          {
+            startPrefixCharIdx++;
+          }
         TCHAR c = ToUpperASCII(it->waypoint->name[startPrefixCharIdx]);
-        if (c != ' '
-            && nullptr == StringFind(buffer, c, StringLength(buffer))) {
+        if( nullptr == StringFind(buffer, c, StringLength(buffer))) {
           buffer[idx++] = c;
           buffer[idx] = '\0';
         }

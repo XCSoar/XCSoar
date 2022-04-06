@@ -44,7 +44,8 @@ TextEntryDialog(TCHAR *text, size_t width,
   case DialogSettings::TextInputStyle::HighScore:
     KnobTextEntry(text, width, caption);
     return true;
-   }
+    return true;
+  }
 
   return false;
 }
