@@ -2,9 +2,6 @@
 Best Practises
 ##############
 
-#Introduction
-=============
-
 This chapter describes how to set up a development environment as simple as possible.
 It is just one option to get a running XCSoar development environment.
 
@@ -65,21 +62,28 @@ Use Docker_ for other platform builds.
        net use X: \\ubuntuhost\XCSoar -P
 
    - On the windows machine run ``output/PC/bin/XCSoar.exe`` from the shared folder
-   
+
+
  * Debug on Windows
  
-   - Install Microsoft Visual Code
-   - Install the C++_ Addon
-   - Install MingW_ 
-   - Configure a launch.json in XCSoars .vscode directory::
+   The easiest approach ist to use the docker image on the linux host to build the app.
+ 
+ 
+     - Install Microsoft Visual Code
+     - Install the C_ ++ Addon
+
+.. _C: https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools
    
-       {
-         // Verwendet IntelliSense zum Ermitteln möglicher Attribute.
-         // Zeigen Sie auf vorhandene Attribute, um die zugehörigen Beschreibungen anzuzeigen.
-         // Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
-         "version": "0.2.0",
-         "configurations": [
-          {
+     - Install MingW_ 
+     - Configure a launch.json in XCSoars .vscode directory::
+   
+         {
+           // Verwendet IntelliSense zum Ermitteln möglicher Attribute.
+           // Zeigen Sie auf vorhandene Attribute, um die zugehörigen Beschreibungen anzuzeigen.
+           // Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
+           "version": "0.2.0",
+           "configurations": [
+            {
               "name": "gcc.exe build and debug active file",
               "type": "cppdbg",
               "request": "launch",
@@ -100,19 +104,18 @@ Use Docker_ for other platform builds.
                 }
               ],
               "preLaunchTask": "build"
-          }
-         ]
-       }
+            }
+           ]
+         }
 
 
-   - Configure a tasks.json::
+     - Configure a tasks.json::
 
-
-       {
+         {
          // See https://go.microsoft.com/fwlink/?LinkId=733558
          // for the documentation about the tasks.json format
-         "version": "2.0.0",
-         "tasks": [
+          "version": "2.0.0",
+          "tasks": [
                 {
                     "label": "build",
                     "type": "process",
@@ -124,7 +127,7 @@ Use Docker_ for other platform builds.
                     "args": ["PC"],
                     "problemMatcher": []
                 }]
-       }
+         }
 
        
    - Create make.bat::
@@ -136,7 +139,6 @@ Use Docker_ for other platform builds.
 
 
 .. _MingW: https://sourceforge.net/projects/mingw/
-.. _C++: https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools
 .. _ssh: https://howchoo.com/linux/ssh-login-without-password
 
 
