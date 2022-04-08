@@ -222,18 +222,18 @@ static const unsigned keyIdxMap[][2] {
     { KEY_KP8, 1 }, { KEY_KP9, 0 },
 
 #if defined(USE_X11)
-                                         { KEY_KPHOME, 0 }, {
-                                             KEY_KPUP, 1 },
-                                         { KEY_PAGEUP, 2 },
+                                         { KEY_KPHOME, 0 }, 
+                                         { KEY_KPUP, 1 },
                                          { KEY_KPLEFT, 3 },
                                          { KEY_BEGIN, 4 },
-                                         { KEY_KPRIGHT, 5 }, { KEY_KPEND, 6 },
-                                         { KEY_KPDOWN, 7 }, { KEY_PAGEDOWN,
-                                                               8 },
+                                         { KEY_KPRIGHT, 5 }, 
+                                         { KEY_KPEND, 6 },
+                                         { KEY_KPDOWN, 7 },
+#endif
+                                         { KEY_PAGEDOWN, 8 },
+                                         { KEY_PAGEUP, 2 },
                                          { KEY_INSERT, 9 },
                                          { KEY_DELETE, NumPadWidgetInterface::EDIT_INDEX },
-
-#endif
     { KEY_LEFT, 3 },
     { KEY_RIGHT, 5 }, { KEY_UP, 1 }, { KEY_DOWN, 7 }, { KEY_RETURN, 7 }, {
         KEY_BACK, NumPadWidgetInterface::BACKSPACE_INDEX },
