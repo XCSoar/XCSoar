@@ -678,6 +678,7 @@ The following methods are available in ``xcsoar.timer``:
    - Reschedule the timer.
    
 .. _lua.input_event:
+
 Input Event
 ------------------
 
@@ -703,21 +704,22 @@ The following methods are available in ``xcsoar.input_event``:
  * - ``new(event id, function)``
    - Create a new eventh handler and registers it.
      The event id is a string value of the following format:
-     "gesture_" + gesture_id or "key_" + key_id
+     "gesture\_" + gesture_id or "key\_" + key_id
      Additionally, it can be a glide computer event or an NMEA event
      Examples for key_id:
-     	key_F1, key_A, key_ESC ...
+     - key_F1, key_A, key_ESC ...
      Examples for gesture id:
-     	"U", "D", "UD", "URD", "DL"
+     - "U", "D", "UD", "URD", "DL"
      Example for glidec computer event
-     	"gce_airspace_near"
+     - "gce_airspace_near"
      	
      Example for NMEA event
-     	"ne_down_in_gear_retracted"
+     - "ne_down_in_gear_retracted"
  * - ``cancel()``
    - Cancel the input event.
 
 .. _lua.misc:
+
 Miscelleanious
 ------------------
 
@@ -725,9 +727,7 @@ The class ``xcsoar.misc`` implements some functions to open xcsoar dialogs which
 
 .. code-block:: lua
 
- xcsoar.input_event.new("key_0", function()
- xcsoar.task.alternates()
- end)
+ xcsoar.task.analysis()
 
 The following methods are available in ``xcsoar.misc``:
 
@@ -740,7 +740,8 @@ The following methods are available in ``xcsoar.misc``:
  * - ``analysis``
    - Opens the Analysis dialog
 
-.. _lua.misc:
+.. _lua.waypoint:
+
 Waypoint
 ------------------
 

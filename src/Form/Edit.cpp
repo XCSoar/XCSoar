@@ -31,7 +31,6 @@ Copyright_License {
 #include "ui/event/KeyCode.hpp"
 #include "Dialogs/DataField.hpp"
 #include "Asset.hpp"
-#include "LogFile.hpp"
 
 #include <cassert>
 
@@ -170,7 +169,6 @@ WndProperty::BeginEditing() noexcept
     OnHelp();
     return false;
   } else {
-    LogFormat("NumPadAdapter");
     NumPadAdapter *numPadAdapter = data_field->GetNumPadAdapter();
     if (numPadAdapter != nullptr) {
         numPadAdapter->SetCaption(GetCaption());

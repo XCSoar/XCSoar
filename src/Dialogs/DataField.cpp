@@ -38,7 +38,6 @@ Copyright_License {
 #include "Dialogs/DialogSettings.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
-#include "LogFile.hpp"
 
 #ifdef ANDROID
 #include "java/Global.hxx"
@@ -50,7 +49,6 @@ bool
 EditDataFieldDialog(const TCHAR *caption, DataField &df,
                     const TCHAR *help_text)
 {
-  LogFormat("EditDataFieldDialog");
   if (df.GetType() == DataField::Type::FILE) {
     return FilePicker(caption, (FileDataField &)df, help_text);
   } else if (df.SupportsCombolist()) {
