@@ -2,6 +2,9 @@
 Best Practises
 ##############
 
+#Introduction
+=============
+
 This chapter describes how to set up a development environment as simple as possible.
 It is just one option to get a running XCSoar development environment.
 
