@@ -53,7 +53,7 @@ enum {
   KEYCODE_MEDIA_PLAY_PAUSE = 0x55,
 
   KEY_DUMMY = 0x80,
-  KEY_BACK,
+  KEY_BACK = 67,
   KEY_PRIOR,
   KEY_NEXT,
   KEY_F1 = 0x83,
