@@ -36,7 +36,7 @@ TextRowRenderer::CalculateLayout(const Font &font) noexcept
   const unsigned padded_height = font_height + 2 * text_padding;
   const unsigned row_height = std::max(padded_height, max_height);
 
-  left_padding = text_padding;
+  left_padding = text_padding * 2;
   top_padding = (row_height - font_height) / 2;
 
   return row_height;

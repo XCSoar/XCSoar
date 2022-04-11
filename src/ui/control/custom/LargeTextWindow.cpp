@@ -128,7 +128,7 @@ LargeTextWindow::OnPaint(Canvas &canvas)
   if (value.empty())
     return;
 
-  const int padding = Layout::GetTextPadding();
+  const int padding = Layout::GetTextPadding() * 2;
   rc.Grow(-padding);
 
   canvas.SetBackgroundTransparent();
