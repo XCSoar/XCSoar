@@ -72,10 +72,7 @@ l_waypoint_showCurrentWaypoint(lua_State *L)
    Waypoint instances taken from the task, because it would
    require updating lots of internal task state, and the waypoint
    editor doesn't know how to do that */
-  bool allow_navigation = false;
-  bool allow_edit = false;
-  if (wp)
-    dlgWaypointDetailsShowModal(std::move(wp), allow_navigation, allow_edit);
+  dlgWaypointDetailsShowModal(std::move(wp), false, false);
 
   return 0;
 }
@@ -83,15 +80,13 @@ l_waypoint_showCurrentWaypoint(lua_State *L)
 static int
 l_waypoint_showSelectedWaypoint(lua_State *L)
 {
-  bool allow_navigation = true;
-  bool allow_edit = true;
   if (protected_task_manager == NULL)
     return 0;
   WaypointPtr wp;
   const NMEAInfo &basic = CommonInterface::Basic();
   wp = ShowWaypointListDialog(basic.location);
   if (wp)
-    dlgWaypointDetailsShowModal(std::move(wp), allow_navigation, allow_edit);
+    dlgWaypointDetailsShowModal(std::move(wp), true, true);
   return 0;
 }
 

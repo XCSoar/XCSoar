@@ -105,7 +105,7 @@ public:
   DataFieldEnum(NumPadWidgetInterface * _numPadWidget,DataFieldListener *listener=nullptr) noexcept
   :DataField(Type::ENUM, true, std::make_unique<EnumListNumPadAdapter>( _numPadWidget), listener) {}
 
-  DataFieldEnum(DataFieldListener *listener=nullptr) noexcept
+  explicit DataFieldEnum(DataFieldListener *listener=nullptr) noexcept
   :DataField(Type::ENUM, true, listener) {}
 
   [[gnu::pure]]

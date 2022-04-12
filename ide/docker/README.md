@@ -43,15 +43,15 @@ readonly for other users.. So, it's  a good idea to use another user for this.
 If there is a user group named docker, all users of this group can execute docker images.
 In 
 
-[Docker post install] (https://docs.docker.com/engine/install/linux-postinstall/)
+(https://docs.docker.com/engine/install/linux-postinstall/)
 is described how to configure it.
-```
+```bash
 sudo groupadd docker
 sudo usermod -aG docker $USERNAME # replace $USERNAME with your user id
 newgrp docker
 ```
 or 
-```
+```bash
 sudo setfacl --modify user:$USERNAME:rw /var/run/docker.sock  $USERNAME # replace $USERNAME with your user id
 ```
 

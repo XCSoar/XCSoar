@@ -50,7 +50,7 @@ class MaskedIconButtonRenderer: public ButtonRenderer
 {
   ButtonFrameRenderer frame_renderer;
 public:
-  MaskedIconButtonRenderer(const ButtonLook &_look) : frame_renderer(
+  explicit MaskedIconButtonRenderer(const ButtonLook &_look) : frame_renderer(
       _look)
   {
   };

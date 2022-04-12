@@ -374,7 +374,6 @@ const TCHAR*
 WaypointListWidget::WaypointNameAllowedCharacters(const TCHAR *prefix)
 {
   static TCHAR buffer[256];
-  unsigned startPrefixCharIdx = 0;
   /*
    * Assumption: if a filter is defined with at least one character,
    * the list should not be too huge to slow down everything
@@ -389,6 +388,7 @@ WaypointListWidget::WaypointNameAllowedCharacters(const TCHAR *prefix)
     UpdateList();
     if (*prefix != '\0' ) {
       unsigned idx = 0;
+      unsigned startPrefixCharIdx;
       for (std::vector<WaypointListItem>::iterator it = items.begin();
           it != items.end() && idx < 256; ++it) {
         startPrefixCharIdx = StringLength(prefix);

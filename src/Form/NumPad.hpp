@@ -34,7 +34,7 @@ Copyright_License {
  */
 class NumPad:  public PaintWindow {
 public:
-	NumPad(NumPadWidgetInterface &_numPadWidgetInterface);
+	explicit NumPad(NumPadWidgetInterface &_numPadWidgetInterface);
   void Create(ContainerWindow &parent,
               const TCHAR *Caption,
               const PixelRect &rc, 

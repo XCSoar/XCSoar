@@ -35,6 +35,7 @@ class NumPadWidgetInterface
   NumPadWidget *numPadWidget;
 public:
   NumPadAdapter *numPadAdapter;
+  NumPadWidgetInterface(){};
   static const int SHIFT_INDEX = 100;
   static const int EDIT_INDEX = 101;
   static const int BACKSPACE_INDEX = 102;
