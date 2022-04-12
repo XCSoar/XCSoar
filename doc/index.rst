@@ -6,12 +6,14 @@ XCSoar
    :caption: Contents:
 
    build
+   bestpractises
    devsetup
    policy
    architecture
    input_events
    lua
    mapfile
+   docker
 
 
 Indices and tables

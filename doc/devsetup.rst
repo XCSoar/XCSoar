@@ -23,7 +23,7 @@ To download the XCSoar source code, make sure you have git installed::
 Download the source code of XCSoar by executing ``git`` in the
 following way in your project directory::
 
- git clone --recursive https://github.com/XCSoar/XCSoar
+ git clone --recurse-submodules git://github.com/XCSoar/XCSoar
 
 Use provisioning scripts
 ========================
@@ -83,6 +83,17 @@ the file tree on the left side, select “Properties”, then
 dialog, choose “exclude all”, “files and folders”, “all children
 (recursive)” and set the Filter details to “Name matches \*”. This will
 exclude the output tree from the indexer, leading to a minimal index.
+
+Optional: Sphinx for editing the Developer Manual
+====================================================
+
+To install, get the relevant packages::
+
+   sudo apt-get install python3-sphinx
+   pip install sphinxcontrib-blockdiag
+   
+Generate the developper manual in the ``output/html`` directory using make:
+Execute ``make sphinx``. It will create ``output/sphinx/index.html``
 
 Optional: modern LaTeX editor for editing the Manual
 ====================================================

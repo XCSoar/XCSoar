@@ -372,20 +372,19 @@ WndForm::ShowModal()
           ? SDLK_UP : SDLK_DOWN;
       }
 #endif
-
-      if (
+		event.SetKeyCode(UI::ConvertNumPadKeyToCursorKey( event.GetKeyCode()));
+    if (
 #ifdef USE_WINUSER
           IdentifyDescendant(event.msg.hwnd) &&
 #endif
-            unsigned  key_code = = UI::convertNumPadKeyToCursorKey( event.GetKeyCode() );
-          if( key_code == KEY_UP || key_code == KEY_DOWN ) {
+        (event.GetKeyCode() == KEY_UP || event.GetKeyCode() == KEY_DOWN)) {
         /* KEY_UP and KEY_DOWN move the focus only within the current
            control group - but we want it to behave like Shift-Tab and
            Tab */
 
         if (!CheckKey(this, event)) {
           /* this window doesn't handle KEY_UP/KEY_DOWN */
-          if (key_code == KEY_DOWN || key_code == KEY_KP2 )
+          if (event.GetKeyCode()  == KEY_DOWN )
             FocusNextControl();
           else
             FocusPreviousControl();
@@ -407,7 +406,7 @@ WndForm::ShowModal()
         continue;
       }
 #endif
-    }
+    } // IsKeyDown
 
     if (character_function && (event.GetCharacterCount() > 0)) {
       bool handled = false;

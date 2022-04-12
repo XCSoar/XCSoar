@@ -352,7 +352,7 @@ bool
 ButtonPanel::KeyPress(unsigned key_code) noexcept
 {
   assert(key_code != 0);
-  key_code = UI::convertNumPadKeyToCursorKey( key_code);
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
   const unsigned n = buttons.size();
   for (unsigned i = 0; i < n; ++i) {
     if (keys[i] == key_code) {

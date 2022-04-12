@@ -29,24 +29,34 @@ Copyright_License {
 class NumPadAdapter;
 class NumPadWidget;
 
+
 class NumPadWidgetInterface
 {
   NumPadWidget *numPadWidget;
 public:
   NumPadAdapter *numPadAdapter;
-public:
+  static const int SHIFT_INDEX = 100;
+  static const int EDIT_INDEX = 101;
+  static const int BACKSPACE_INDEX = 102;
+
   virtual void BeginEditing() noexcept;
+  virtual void EndEditing() noexcept;
   virtual unsigned GetNumButtons() noexcept;
   virtual Button *GetButtons() noexcept;
+  bool CharacterFunction( unsigned ch) noexcept;
   virtual bool HasFocus() noexcept;
   virtual void SetNumPadAdapter( NumPadAdapter *_numPadAdapter) noexcept;
   virtual void SetNumPadWidget( NumPadWidget *_numPadWidget) noexcept{
     numPadWidget= _numPadWidget;
   }
+  void OnDataFieldSetFocus();
+  void OnButton( unsigned buttonIdx);
   virtual NumPadAdapter &GetNumPadAdapter( ) noexcept{
     assert(numPadAdapter != nullptr);
     return *numPadAdapter;
   }
+  void SetCursorIndex(unsigned index) noexcept;
+
 };
 
 #endif /* SRC_FORM_DATAFIELD_NUMPADWIDGETINTERFACE_HPP_ */

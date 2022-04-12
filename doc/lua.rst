@@ -678,7 +678,8 @@ The following methods are available in ``xcsoar.timer``:
    - Reschedule the timer.
    
 .. _lua.input_event:
-xcsoar.input_event
+
+Input Event
 ------------------
 
 The class ``xcsoar.input_event`` implements a event handler
@@ -703,19 +704,61 @@ The following methods are available in ``xcsoar.input_event``:
  * - ``new(event id, function)``
    - Create a new eventh handler and registers it.
      The event id is a string value of the following format:
-     "gesture_" + gesture_id or "key_" + key_id
+     "gesture\_" + gesture_id or "key\_" + key_id
      Additionally, it can be a glide computer event or an NMEA event
      Examples for key_id:
-     	key_F1, key_A, key_ESC ...
+     - key_F1, key_A, key_ESC ...
      Examples for gesture id:
-     	"U", "D", "UD", "URD", "DL"
+     - "U", "D", "UD", "URD", "DL"
      Example for glidec computer event
-     	"gce_airspace_near"
+     - "gce_airspace_near"
      	
      Example for NMEA event
-     	"ne_down_in_gear_retracted"
+     - "ne_down_in_gear_retracted"
  * - ``cancel()``
    - Cancel the input event.
+
+.. _lua.misc:
+
+Miscelleanious
+------------------
+
+The class ``xcsoar.misc`` implements some functions to open xcsoar dialogs which don't fit into the existing classes.
+
+.. code-block:: lua
+
+ xcsoar.task.analysis()
+
+The following methods are available in ``xcsoar.misc``:
+
+.. list-table::
+ :widths: 40 60
+ :header-rows: 1
+
+ * - Name
+   - Description
+ * - ``analysis``
+   - Opens the Analysis dialog
+
+.. _lua.waypoint:
+
+Waypoint
+------------------
+
+The class ``xcsoar.waypoint`` implements functions to open xcsoar dialogs for waypoints.
+
+The following methods are available in ``xcsoar.waypoint``:
+
+.. list-table::
+ :widths: 40 60
+ :header-rows: 1
+
+ * - Name
+   - Description
+ * - ``showCurrent``
+   - Shows the active waypooint of the task in a dialog
+ * - ``showSelected``
+   - Shows the dialog to select a waypooint
  
 .. _lua.http:
 

@@ -31,6 +31,7 @@ Copyright_License {
 #include <cassert>
 
 namespace UI {
+unsigned ConvertNumPadKeyToCursorKey( unsigned key_code) noexcept;
 
 enum {
   /**
@@ -54,6 +55,11 @@ struct Event {
     assert(IsKey());
 
     return event.key.keysym.sym;
+  }
+  void SetKeyCode(unsigned key_code)
+  {
+
+    return event.key.keysym.sym = key_code;;
   }
 
   size_t GetCharacterCount() const {

@@ -27,11 +27,19 @@ Copyright_License {
  void NumPadWidgetInterface::SetNumPadAdapter( NumPadAdapter *_numPad) noexcept{
      numPadAdapter = _numPad;
   };
-
+ void NumPadWidgetInterface::OnDataFieldSetFocus()
+ {
+   numPadWidget->OnDataFieldSetFocus();
+ }
  void NumPadWidgetInterface::BeginEditing() noexcept
  {
    assert( numPadWidget != nullptr);
-   numPadWidget->BeginEditing();
+     numPadWidget->BeginEditing();
+ }
+ void NumPadWidgetInterface::EndEditing() noexcept
+ {
+   assert( numPadWidget != nullptr);
+     numPadWidget->EndEditing();
  }
  unsigned NumPadWidgetInterface::GetNumButtons() noexcept{
    assert( numPadWidget != nullptr);
@@ -44,4 +52,22 @@ Copyright_License {
  bool NumPadWidgetInterface::HasFocus() noexcept{
    assert( numPadWidget != nullptr);
    return numPadWidget->HasFocus();
- };
+  }
+
+
+
+ bool NumPadWidgetInterface::CharacterFunction( unsigned ch) noexcept
+ {
+   assert( numPadAdapter != nullptr);
+   return numPadAdapter->CharacterFunction(ch);
+ }
+
+ void NumPadWidgetInterface::OnButton( unsigned buttonIndex)
+ {
+   assert( numPadAdapter != nullptr);
+   numPadAdapter->OnButton(buttonIndex);
+ }
+ void NumPadWidgetInterface::SetCursorIndex(unsigned index) noexcept{
+   numPadWidget->SetCursorIndex(index);
+ }
+

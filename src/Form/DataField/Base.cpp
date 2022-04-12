@@ -21,17 +21,26 @@ Copyright_License {
 }
 */
 
+#include <Form/DataField/NumPadAdapter.hpp>
 #include "Base.hpp"
 #include "Listener.hpp"
 #include "ComboList.hpp"
-
 #include <math.h>
 
+DataField::DataField(Type _type, bool _supports_combolist, std::unique_ptr<NumPadAdapter> &&_numPadAdapter,
+                     DataFieldListener *_listener) noexcept
+  :listener(_listener),
+   supports_combolist(_supports_combolist), type(_type),
+   item_help_enabled(false), numPadAdapter(std::move(_numPadAdapter))
+{
+  if( numPadAdapter)
+    numPadAdapter.get()->SetDataField(this);
+}
 DataField::DataField(Type _type, bool _supports_combolist,
                      DataFieldListener *_listener) noexcept
   :listener(_listener),
    supports_combolist(_supports_combolist), type(_type),
-   item_help_enabled(false)
+   item_help_enabled(false), numPadAdapter(std::unique_ptr<NumPadAdapter>())
 {
 }
 
@@ -40,6 +49,8 @@ DataField::Modified() noexcept
 {
   if (listener != nullptr)
     listener->OnModified(*this);
+  if(numPadAdapter)
+    numPadAdapter.get()->OnModified();
 }
 
 void
