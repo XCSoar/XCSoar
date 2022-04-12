@@ -93,7 +93,6 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("KPDOWN"), KEY_DOWN},
 #endif
 #endif
-#endif
 #ifdef ANDROID
   /* These keys are used by BlueTooth keypads and available in Android*/
   { _T("BUTTON_R1"), KEYCODE_BUTTON_R1},

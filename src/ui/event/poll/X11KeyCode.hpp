@@ -83,13 +83,7 @@ enum {
   KEY_KPEND = XK_KP_End,
   KEY_KPUP = XK_KP_Up,
   KEY_KPDOWN = XK_KP_Down,
-  KEY_KP_PAGE_DOWN = XK_KP_Page_Down,
-  KEY_KP_LEFT = XK_KP_Left,
-  KEY_KP_RIGHT = XK_KP_Right,
-  KEY_KP_UP = XK_KP_Up,
-  KEY_KP_PAGE_UP = XK_KP_Page_Up,
 
-  KEY_KP_HOME = XK_KP_Home,
   KEY_APP1,
   KEY_APP2,
   KEY_APP3,

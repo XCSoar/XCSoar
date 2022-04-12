@@ -56,7 +56,6 @@ Copyright_License {
 #include "ui/event/windows/Event.hpp"
 #include "ui/event/windows/Loop.hpp"
 #endif
-#include "LogFile.hpp"
 
 using namespace UI;
 
