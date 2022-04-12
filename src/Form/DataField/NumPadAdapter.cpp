@@ -39,16 +39,11 @@ Copyright_License {
 #include <string.h>
 
 
-
-
 void NumPadAdapter::BeginEditing() noexcept{
   if(nullptr != numPad )
     numPad->BeginEditing();
 }
 void NumPadAdapter::EndEditing() noexcept{
-  if(nullptr != numPad )
-    numPad->EndEditing();
-
 }
 
 

@@ -119,7 +119,7 @@ static bool
 MatchCallback(const Event &event, void *ctx) noexcept
 {
   const Event *match = (const Event *)ctx;
-  return event.type == Event::_CALLBACK && event.callback == match->callback &&
+  return event.type == Event::CALLBACK && event.callback == match->callback &&
     event.ptr == match->ptr;
 }
 

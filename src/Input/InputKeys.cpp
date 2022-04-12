@@ -1,31 +1,30 @@
 /*
  Copyright_License {
 
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
+ XCSoar Glide Computer - http://www.xcsoar.org/
+ Copyright (C) 2000-2021 The XCSoar Project
+ A detailed list of copyright holders can be found in the file "AUTHORS".
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ }
+ */
 
 #include "InputKeys.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "util/CharUtil.hxx"
 #include "util/StringAPI.hxx"
-#include "LogFile.hpp"
 
 struct string_to_key
 {
@@ -52,8 +51,8 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("F10"), KEY_F10},
   { _T("F11"), KEY_F11},
   { _T("F12"), KEY_F12},
-  { _T("BACK"),KEY_BACK},
-#if defined(USE_POLL_EVENT)||defined(ANDROID)||defined(USE_WINUSER)
+#if defined(USE_POLL_EVENT)||defined(USE_ANDROID)
+  { _T("BACKSPACE"),KEY_BACKSPACE},
   { _T("NUMLOCK"),KEY_NUMLOCK},
   { _T("KPASTERISK"), KEY_KPASTERISK},
   { _T("KP7"), KEY_KP7},
@@ -71,27 +70,18 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("KPENTER"), KEY_KPENTER},
   { _T("KPEQUAL"), KEY_KPEQUAL},
   { _T("KPSLASH"), KEY_KPSLASH},
-  { _T("DELETE"), KEY_DELETE},
+  { _T("KPENTER"), KEY_KPENTER},
   { _T("KPCOMMA"), KEY_KPCOMMA},
-  { _T("INSERT"), KEY_INSERT},
-  { _T("BEGIN"), KEY_BEGIN},
-  { _T("PAGEDOWN"), KEY_PAGEDOWN},
-  { _T("PAGEUP"), KEY_PAGEUP},
-#ifdef USE_X11
-  { _T("KPEND"), KEY_KPEND},
-  { _T("KPHOME"), KEY_KPHOME},
-  { _T("KPLEFT"), KEY_KPLEFT},
-  { _T("KPRIGHT"), KEY_KPRIGHT},
-  { _T("KPUP"), KEY_KPUP},
-  { _T("KPDOWN"), KEY_KPDOWN},
-#else
-  { _T("KPEND"), KEY_END},
-  { _T("KPHOME"), KEY_HOME},
-  { _T("KPLEFT"), KEY_LEFT},
-  { _T("KPRIGHT"), KEY_RIGHT},
-  { _T("KPUP"), KEY_UP},
-  { _T("KPDOWN"), KEY_DOWN},
-#endif
+  { _T("KEY_KP_INSERT"), KEY_KP_INSERT},
+  { _T("KEY_KP_END"), KEY_KP_END},
+  { _T("KEY_KP_DOWN"), KEY_KP_DOWN},
+  { _T("KEY_KP_PAGE_DOWN"), KEY_KP_PAGE_DOWN},
+  { _T("KEY_KP_LEFT"), KEY_KP_LEFT},
+  { _T("KEY_KP_BEGIN"), KEY_KP_BEGIN},
+  { _T("KEY_KP_RIGHT"), KEY_KP_RIGHT},
+  { _T("KEY_KP_HOME"), KEY_KP_HOME},
+  { _T("KEY_KP_UP"), KEY_KP_UP},
+  { _T("KEY_KP_PAGE_UP"), KEY_KP_PAGE_UP},
 #endif
 #ifdef ANDROID
   /* These keys are used by BlueTooth keypads and available in Android*/
@@ -142,26 +132,9 @@ ParseKeyCode(const TCHAR *data)
 
   if (StringLength(data) == 1)
     return ToUpperASCII(data[0]);
+
   else
-  {
-    LogFormat(_T("LUA: Error parsing input event key code"));
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wformat-security"
-    LogFormat(data);
-    LogFormat(_T("LUA: Key Table:"));
-    static bool printed= false;
-    if(!printed)
-    {
-      printed = true;
-      for (const struct string_to_key *p = &string_to_key[0]; p->name != NULL; ++p)
-      {
-        LogFormat("Key code: %u", p->key);
-        LogFormat(p->name);
-      }
-    }
-#pragma GCC diagnostic pop
-        return 0;
-  }
+    return 0;
 
 }
 

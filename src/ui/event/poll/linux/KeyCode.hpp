@@ -43,12 +43,9 @@ enum {
   KEY_PRIOR = KEY_PAGEUP,
   KEY_NEXT = KEY_PAGEDOWN,
   KEY_BACK = KEY_BACKSPACE,
-  KEY_BEGIN = KEY_KP5,
   KEY_UP = 103,
   KEY_DOWN = 108,
-
 #else
-  // from ncurses.h
   KEY_SPACE = ' ',
   KEY_UP = 0403,
   KEY_DOWN = 0402,
@@ -75,31 +72,6 @@ enum {
   KEY_TAB = '\t',
   KEY_BACK = 0407,
   KEY_MENU,
-  KEY_KP0 = '0', // TODO: verify
-  KEY_KP1 = '1',
-  KEY_KP2 = '2',
-  KEY_KP3 = '3',
-  KEY_KP4 = '4',
-  KEY_KP5 = '5',
-  KEY_KP6 = '6',
-  KEY_KP7 = '7',
-  KEY_KP8 = '8',
-  KEY_KP9 = '9',
-  KEY_NUMLOCK,
-  KEY_KPENTER =0527,
-  KEY_KPCOMMA = '.', // TODO verify
-  KEY_KPASTERISK ='*',// TODO verify
-  KEY_KPSLASH ='/', // TODO verify
-  KEY_KPEQUAL = '=', // TODO verify
-  KEY_KPPLUS = '+', // TODO verify
-  KEY_KPMINUS = '-', // TODO verify
-  KEY_KPHOME = 0534, // KEY_A1
-  KEY_KPEND = 0535, // KEY_A3
-  KEY_INSERT = 0514, // TODO: verify KEY_IC Insert Character
-  KEY_DELETE = 0512, // TODO: verify KEY_DC Delete Character
-  KEY_BEGIN = 0536, // KEY_B2
-  KEY_PAGEUP = 0535, // KEY_A3
-  KEY_PAGEDOWN = 0540,// KEY_C3
 #endif
   KEY_APP1,
   KEY_APP2,

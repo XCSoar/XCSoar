@@ -21,7 +21,6 @@ Copyright_License {
 }
 */
 
-#include "Form/DataField/NumPadAdapter.hpp"
 #include "DataField.hpp"
 #include "FilePicker.hpp"
 #include "Form/DataField/GeoPoint.hpp"
@@ -35,9 +34,6 @@ Copyright_License {
 #include "Dialogs/GeoPointEntry.hpp"
 #include "Dialogs/DateEntry.hpp"
 #include "Dialogs/NumberEntry.hpp"
-#include "Dialogs/DialogSettings.hpp"
-#include "Look/DialogLook.hpp"
-#include "UIGlobals.hpp"
 
 #ifdef ANDROID
 #include "java/Global.hxx"
@@ -130,14 +126,9 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
       return true;
     }
 #endif
-    if( df.GetNumPadAdapter() != nullptr)
-    {
-      df.GetNumPadAdapter()->SetCaption(caption);
-      df.GetNumPadAdapter()->BeginEditing();
-    }
-    else
-      if (!TextEntryDialog(buffer, caption, acf))
-        return false;
+
+    if (!TextEntryDialog(buffer, caption, acf))
+      return false;
 
     df.SetAsString(buffer);
     return true;

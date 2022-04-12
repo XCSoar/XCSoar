@@ -37,7 +37,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Math/Constants.hpp"
 #include "util/Clamp.hpp"
-#include "LogFile.hpp"
+
 extern "C" {
 #include <lauxlib.h>
 }
@@ -63,23 +63,12 @@ l_map_index(lua_State *L)
   return 1;
 }
 
-static void checkForNoParameter (lua_State *L)
-{
-  // The called method is expected to have no parameters.
-  // However, if it is directly used in xcsoar.input_event.new,
-  // the LuaInputEvent will be passed as an argument.
-  // E.g. xcsoar.input_event.new("key_KP_HOME", xcsoar.map.show )
-  // This is OK, because no parameter are needed they don't harm either
-  if (lua_gettop(L) == 1)
-    luaL_checktype(L, 1,LUA_TUSERDATA);
-  else if (lua_gettop(L) != 0)
-     luaL_error(L, "Invalid parameters");
-}
-
 static int
 l_map_show(lua_State *L)
 {
-  checkForNoParameter(L);
+  if (lua_gettop(L) != 0)
+    return luaL_error(L, "Invalid parameters");
+
   PageActions::ShowMap();
   return 0;
 }
@@ -87,7 +76,9 @@ l_map_show(lua_State *L)
 static int
 l_map_enterpan(lua_State *L)
 {
-  checkForNoParameter(L);
+  if (lua_gettop(L) != 0)
+    return luaL_error(L, "Invalid parameters");
+
   EnterPan();
   return 0;
 }
@@ -95,7 +86,8 @@ l_map_enterpan(lua_State *L)
 static int
 l_map_leavepan(lua_State *L)
 {
-  checkForNoParameter(L);
+  if (lua_gettop(L) != 0)
+    return luaL_error(L, "Invalid parameters");
 
   LeavePan();
   return 0;
@@ -104,8 +96,9 @@ l_map_leavepan(lua_State *L)
 static int
 l_map_disablepan(lua_State *L)
 {
-  checkForNoParameter(L);
-      /**
+  if (lua_gettop(L) != 0)
+    return luaL_error(L, "Invalid parameters");
+  /**
    * Low-level version of LeavePan().  It disables panning in the map
    * and updates the input mode, but does not restore the page layout.
    * Only to be used by the pages library.
@@ -217,7 +210,8 @@ l_map_zoom(lua_State *L)
 static int
 l_map_next(lua_State *L)
 {
-  checkForNoParameter(L);
+  if (lua_gettop(L) != 0)
+    return luaL_error(L, "Invalid parameters");
 
   PageActions::Next();
   return 0;
@@ -226,7 +220,8 @@ l_map_next(lua_State *L)
 static int
 l_map_prev(lua_State *L)
 {
-  checkForNoParameter(L);
+  if (lua_gettop(L) != 0)
+    return luaL_error(L, "Invalid parameters");
 
   PageActions::Prev();
   return 0;

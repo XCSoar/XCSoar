@@ -243,7 +243,7 @@ bool
 QuickMenu::KeyPress(unsigned key_code) noexcept
 {
   auto &grid_view = GetWindow();
-  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
+  key_code = UI::convertNumPadKeyToCursorKey( key_code);
   switch (key_code) {
   case KEY_LEFT:
     grid_view.MoveFocus(GridView::Direction::LEFT);

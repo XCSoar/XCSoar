@@ -25,42 +25,31 @@
 #include "Event.hpp"
 namespace UI
 {
- unsigned ConvertNumPadKeyToCursorKey(unsigned key_code) noexcept
+ unsigned
+convertNumPadKeyToCursorKey(unsigned key_code) noexcept
 {
+#if defined(USE_POLL_EVENT)||defined(USE_ANDROID)
   switch (key_code) {
-#if defined(USE_POLL_EVENT)||defined(USE_ANDROID)||defined(USE_WINUSER)
   case KEY_KP2:
-#if defined(USE_X11)
-  case KEY_KPDOWN:
-#endif
+  case KEY_KP_DOWN:
     return KEY_DOWN;
   case KEY_KP4:
-#if defined(USE_X11)
-  case KEY_KPLEFT:
-#endif
+  case KEY_KP_LEFT:
     return KEY_LEFT;
   case KEY_KP6:
-#if defined(USE_X11)
-  case KEY_KPRIGHT:
-#endif
+  case KEY_KP_RIGHT:
     return KEY_RIGHT;
   case KEY_KP8:
-#if defined(USE_X11)
-  case KEY_KPUP:
-#endif
+  case KEY_KP_UP:
     return KEY_UP;
-#if defined(USE_X11)
   case KEY_KPENTER:
     return KEY_RETURN;
-#endif
-#endif
-#if defined(ANDROID)
-  case KEY_KPENTER:
-    return KEY_RETURN;
-#endif
   default:
     return key_code; // leave key_code unchanged
   }
+#else
+  return key_code;
+#endif
 }
 }
 

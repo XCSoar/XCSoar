@@ -204,7 +204,6 @@ Window::OnKeyCheck(unsigned key_code) const
 bool
 Window::OnKeyDown(unsigned key_code)
 {
-
   return false;
 }
 

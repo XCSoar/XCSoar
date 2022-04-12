@@ -395,7 +395,7 @@ FillDirectionEnum(DataFieldEnum &df)
 static DataField *
 CreateNameDataField(DataFieldListener *listener)
 {
-  return new PrefixDataField(_T(""), nullptr, listener);
+  return new PrefixDataField(_T(""), listener);
 }
 
 static DataField *

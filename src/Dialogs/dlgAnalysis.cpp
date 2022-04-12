@@ -53,7 +53,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Engine/Contest/Solvers/Contests.hpp"
 #include "ui/event/PeriodicTimer.hpp"
-#include "ui/event/shared/Event.hpp"
 #include "util/StringCompare.hxx"
 
 #ifdef ENABLE_OPENGL
@@ -647,9 +646,6 @@ ChartControl::OnMouseUp(PixelPoint p)
 bool
 AnalysisWidget::KeyPress(unsigned key_code) noexcept
 {
-
-  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
-  // Added new text input dialog for num pads. It works like old mobile phones.
   switch (key_code) {
   case KEY_LEFT:
     previous_button.SetFocus();

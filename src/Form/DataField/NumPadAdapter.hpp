@@ -25,55 +25,33 @@ Copyright_License {
 #define SRC_FORM_DATAFIELD_NUMPADADAPTER_HPP_
 
 #include "Form/DataField/NumPadWidgetInterface.hpp"
-#include "ui/control/List.hpp"
 #include <memory>
 #include <utility>
 #include <functional>
 
 class NumPadWidget;
 class DataField;
-class ComboList;
-
 class NumPadAdapter {
   protected:
-  std::function< void()> refreshEditFieldFunction;
-  std::function< void()> setFocusEditFieldFunction;
   NumPadWidgetInterface * numPad;
   DataField *dataField;
-  const TCHAR *Caption;
   void returnFocus()
   {
  //  	dataField.SetFocus();
   }
-  NumPadAdapter(NumPadWidgetInterface * _numPad): numPad(_numPad), dataField(nullptr), Caption(nullptr) { };
+  NumPadAdapter(NumPadWidgetInterface * _numPad): numPad(_numPad) { };
   public:
   virtual void UpdateButtons() noexcept =0;
-  virtual bool CharacterFunction(unsigned ch){
-    return false;
-  };
   virtual bool
-	OnKeyDown(unsigned key_code) noexcept{
+	KeyPress(unsigned key_code) noexcept{
 		return false;
 	}
-  virtual void BeginEditing() noexcept;
-  virtual bool OnKeyCheck(unsigned key_code) const noexcept
-  {
-    return false;
-  }
-  const TCHAR *GetCaption() noexcept
-  {
-    return Caption;
-  }
-  void SetCaption(const TCHAR * _Caption) noexcept
-  {
-     Caption = _Caption;
-  }
-  virtual void EndEditing() noexcept;
+  void BeginEditing() noexcept;
+  void EndEditing() noexcept;
   void SetNumPadWidgetInterface(NumPadWidgetInterface * _numPad)
   {
     numPad = _numPad;
-    if(numPad != nullptr)
-      numPad->SetNumPadAdapter( this );
+    numPad->SetNumPadAdapter( this );
   }
   NumPadWidgetInterface *GetNumPadWidgetInterface()
   {
@@ -83,34 +61,6 @@ class NumPadAdapter {
   {
     dataField = df;
   }
-  virtual void OnButton(unsigned buttonIndex ) noexcept= 0;
-  virtual void SetComboList(ComboList * _list) noexcept {};
-  virtual void OnDataFieldSetFocus() noexcept{
-    if( numPad != nullptr)
-    {
-      numPad->SetNumPadAdapter( this );
-      numPad->GetNumPadAdapter().SetCaption(GetCaption());
-      numPad->OnDataFieldSetFocus();
-    }
-    // directs keyboard input to the matching datafield
-  };
-  virtual ComboList *GetComboList() noexcept{ return nullptr; };
-  virtual void OnCursorMoved([[maybe_unused]] unsigned index) noexcept {
-    if( numPad != nullptr)
-      numPad->GetNumPadAdapter().OnCursorMoved(index);
-  };
-  void SetRefreshEditFieldFunction(std::function< void()> _refreshFunction){
-    refreshEditFieldFunction = _refreshFunction;
-  }
-  // Even if the ListBox Control has no Tab, it aquires focus, when clicked.
-  // Use this method to bring focus back to edit field
-  void SetSetFocusEditFieldFunction(std::function< void()> _setFocusEditFieldFunction){
-    setFocusEditFieldFunction = _setFocusEditFieldFunction;
-  }
-  virtual void OnModified() noexcept {};
-  virtual ~NumPadAdapter() noexcept{};
-  NumPadAdapter(NumPadAdapter &&rhs){};
-
 };
 
 

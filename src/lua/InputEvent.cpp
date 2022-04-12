@@ -36,7 +36,6 @@ Copyright_License {
 #include "util/ConvertString.hpp"
 #include "Util.hxx"
 #include "Interface.hpp"
-#include "LogFile.hpp"
 
 #include <map>
 #include "util/tstring.hpp"
@@ -219,7 +218,6 @@ public:
         return 1;
       }
     }
-    LogFormat("invalid event: %s", name );
     return luaL_argerror(L, 1, "invalid event");
   }
 
@@ -378,16 +376,8 @@ bool Lua::IsGesture(const TCHAR* gesture) {
 }
 
 bool Lua::FireKey(unsigned key) {
-  /* if the key is in range 'a'-'z', it can either be a lower case letter
-   * or a virtual key. First, we try the virtual key
-   * If the event was not handled, we try upper case character
-   * E.g. KEY_KBSLASH on windows platform
-   */
-  if(event_store_key.Fire(key))
-    return true;
   if( key >= 'a' && key <= 'z'){
-    return event_store_key.Fire(ToUpperASCII((char)key));
+    key = ToUpperASCII((char)key);
   }
-  // No event for either lower or upper key
-  return false;
+  return event_store_key.Fire(key);
 }

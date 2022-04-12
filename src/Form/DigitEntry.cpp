@@ -922,7 +922,6 @@ DigitEntry::OnMouseDown(PixelPoint p)
 bool
 DigitEntry::OnKeyCheck(unsigned key_code) const
 {
-  key_code = UI::ConvertNumPadKeyToCursorKey(key_code);
   switch (key_code) {
   case KEY_UP:
   case KEY_DOWN:
@@ -943,7 +942,8 @@ bool
 DigitEntry::OnKeyDown(unsigned key_code)
 {
   assert(cursor < length);
-  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
+  key_code = UI::convertNumPadKeyToCursorKey( key_code);
+
   switch (key_code) {
     int i;
 

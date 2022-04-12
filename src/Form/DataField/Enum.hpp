@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Base.hpp"
 #include "util/StaticArray.hxx"
-#include "Form/DataField/EnumListNumPadAdapter.hpp"
+
 #include <type_traits>
 #include <utility>
 
@@ -102,11 +102,8 @@ private:
   std::size_t value = 0;
 
 public:
-  DataFieldEnum(NumPadWidgetInterface * _numPadWidget,DataFieldListener *listener=nullptr) noexcept
-  :DataField(Type::ENUM, true, std::make_unique<EnumListNumPadAdapter>( _numPadWidget), listener) {}
-
   DataFieldEnum(DataFieldListener *listener=nullptr) noexcept
-  :DataField(Type::ENUM, true, listener) {}
+    :DataField(Type::ENUM, true, listener) {}
 
   [[gnu::pure]]
   unsigned GetValue() const noexcept;

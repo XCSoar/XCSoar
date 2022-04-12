@@ -22,8 +22,6 @@ Copyright_License {
 */
 
 #include "Dialogs.hpp"
-#include "Interface.hpp"
-#include "Dialogs/Dialogs.h"
 #include "Catch.hpp"
 #include "Error.hxx"
 #include "util/ConvertString.hpp"
@@ -47,13 +45,6 @@ l_alert(lua_State *L)
   return 0;
 }
 
-static int
-l_checklist(lua_State *L)
-{
-      dlgChecklistShowModal();
-  return 0;
-}
-
 static void
 DialogCatchCallback(Lua::Error &&error)
 {
@@ -64,7 +55,6 @@ void
 Lua::InitDialogs(lua_State *L)
 {
   lua_register(L, "alert", l_alert);
-  lua_register(L, "checklist", l_checklist);
 
   SetCatchCallback(L, DialogCatchCallback);
 }

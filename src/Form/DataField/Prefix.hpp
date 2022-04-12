@@ -25,8 +25,7 @@ Copyright_License {
 #define XCSOAR_DATA_FIELD_PREFIX_HPP
 
 #include "String.hpp"
-#include "Form/DataField/TextNumPadAdapter.hpp"
-#include "Form/DataField/NumPadWidgetInterface.hpp"
+
 #include <functional>
 
 class PrefixDataField final : public DataFieldString {
@@ -35,17 +34,17 @@ public:
 
 private:
   AllowedCharactersFunction allowed_characters;
+
 public:
   PrefixDataField(const TCHAR *value,
                   AllowedCharactersFunction _allowed_characters,
-                  NumPadWidgetInterface * _numPadWidget, DataFieldListener *listener=nullptr) noexcept
-    :DataFieldString(Type::PREFIX, value, std::make_unique<TextNumPadAdapter>( _numPadWidget,_allowed_characters, false, true), listener),
-     allowed_characters(_allowed_characters) {
-  }
-
-  PrefixDataField(const TCHAR *value=_T(""),NumPadWidgetInterface *_numPadWidget = nullptr,
                   DataFieldListener *listener=nullptr) noexcept
-    :DataFieldString(Type::PREFIX, value,std::make_unique<TextNumPadAdapter>(_numPadWidget, nullptr, false, true), listener) {}
+    :DataFieldString(Type::PREFIX, value, listener),
+     allowed_characters(_allowed_characters) {}
+
+  PrefixDataField(const TCHAR *value=_T(""),
+                  DataFieldListener *listener=nullptr) noexcept
+    :DataFieldString(Type::PREFIX, value, listener) {}
 
   const AllowedCharactersFunction &GetAllowedCharactersFunction() const noexcept {
     return allowed_characters;

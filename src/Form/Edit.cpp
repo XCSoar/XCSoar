@@ -24,7 +24,6 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Look/DialogLook.hpp"
 #include "DataField/Base.hpp"
-#include "DataField/EnumListNumPadAdapter.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Features.hpp"
 #include "Screen/Layout.hpp"
@@ -37,9 +36,6 @@ Copyright_License {
 bool
 WndProperty::OnKeyCheck(unsigned key_code) const
 {
-  if (data_field->GetNumPadAdapter() != nullptr
-      && data_field->GetNumPadAdapter()->OnKeyCheck(key_code))
-    return true;
   switch (key_code) {
   case KEY_RETURN:
     return true;
@@ -48,21 +44,15 @@ WndProperty::OnKeyCheck(unsigned key_code) const
   case KEY_RIGHT:
     return !IsReadOnly();
 
+  default:
+    return WindowControl::OnKeyCheck(key_code);
   }
-  return WindowControl::OnKeyCheck(key_code);
 }
 
 bool
 WndProperty::OnKeyDown(unsigned key_code)
 {
-  if (data_field->GetNumPadAdapter() != nullptr
-      && data_field->GetNumPadAdapter()->OnKeyDown(key_code))
-  {
-    RefreshDisplay();
-    return true;
-  }
-
-// If return key pressed (Compaq uses VKF23)
+  // If return key pressed (Compaq uses VKF23)
   if (key_code == KEY_RETURN) {
     BeginEditing();
     return true;
@@ -90,17 +80,6 @@ void
 WndProperty::OnSetFocus()
 {
   WindowControl::OnSetFocus();
-  if (data_field->GetNumPadAdapter() != nullptr
-      && data_field->GetNumPadAdapter() != nullptr)
-      {
-        ComboList  *list = new ComboList;
-        *list = data_field->CreateComboList(nullptr);
-        data_field->GetNumPadAdapter()->SetComboList(list);
-        data_field->GetNumPadAdapter()->SetCaption(caption);
-        data_field->GetNumPadAdapter()->OnDataFieldSetFocus();
-        data_field->GetNumPadAdapter()->SetRefreshEditFieldFunction(std::bind(&WndProperty::RefreshDisplay,this));
-        data_field->GetNumPadAdapter()->SetSetFocusEditFieldFunction(std::bind(&WndProperty::SetFocus,this));
-      }
 
   Invalidate();
 }
@@ -114,9 +93,12 @@ WndProperty::OnKillFocus()
 }
 
 WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
-                         const TCHAR *Caption, const PixelRect &rc,
-                         int CaptionWidth, const WindowStyle style) noexcept : look(
-    _look), edit_callback(EditDataFieldDialog)
+                         const TCHAR *Caption,
+                         const PixelRect &rc,
+                         int CaptionWidth,
+                         const WindowStyle style) noexcept
+  :look(_look),
+   edit_callback(EditDataFieldDialog)
 {
   Create(parent, rc, Caption, CaptionWidth, style);
 
@@ -125,15 +107,17 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
 #endif
 }
 
-WndProperty::WndProperty(const DialogLook &_look) noexcept : look(_look), edit_callback(
-    EditDataFieldDialog)
+WndProperty::WndProperty(const DialogLook &_look) noexcept
+  :look(_look),
+   edit_callback(EditDataFieldDialog)
 {
 }
 
 void
 WndProperty::Create(ContainerWindow &parent, const PixelRect &rc,
-                    const TCHAR *_caption, unsigned _caption_width,
-                    const WindowStyle style = WindowStyle()) noexcept
+                    const TCHAR *_caption,
+                    unsigned _caption_width,
+                    const WindowStyle style=WindowStyle()) noexcept
 {
   caption = _caption;
   caption_width = _caption_width;
@@ -169,13 +153,9 @@ WndProperty::BeginEditing() noexcept
     OnHelp();
     return false;
   } else {
-    NumPadAdapter *numPadAdapter = data_field->GetNumPadAdapter();
-    if (numPadAdapter != nullptr) {
-        numPadAdapter->SetCaption(GetCaption());
-        numPadAdapter->BeginEditing();
-
-    } else if (!edit_callback(GetCaption(), *data_field, GetHelpText()))
+    if (!edit_callback(GetCaption(), *data_field, GetHelpText()))
       return false;
+
     RefreshDisplay();
     return true;
   }
@@ -235,7 +215,6 @@ WndProperty::OnMouseUp(PixelPoint p)
 
     if (pressed) {
       pressed = false;
-      SetFocus();
       Invalidate();
       BeginEditing();
     }
@@ -307,13 +286,15 @@ WndProperty::OnPaint(Canvas &canvas)
     canvas.Clear(look.focused.background_color);
   } else {
     /* don't need to erase the background when it has been done by the
-     parent window already */
+       parent window already */
     if (HaveClipping())
       canvas.Clear(look.background_color);
   }
 
   if (!caption.empty()) {
-    canvas.SetTextColor(focused ? look.focused.text_color : look.text_color);
+    canvas.SetTextColor(focused
+                          ? look.focused.text_color
+                          : look.text_color);
     canvas.SetBackgroundTransparent();
     canvas.Select(look.text_font);
 
@@ -337,7 +318,8 @@ WndProperty::OnPaint(Canvas &canvas)
     if (HaveClipping())
       canvas.DrawText(org, caption.c_str());
     else
-      canvas.DrawClippedText(org, clip_width - org.x, caption.c_str());
+      canvas.DrawClippedText(org, clip_width - org.x,
+                             caption.c_str());
   }
 
   Color background_color, text_color;
@@ -371,7 +353,7 @@ WndProperty::OnPaint(Canvas &canvas)
     const int text_height = canvas.GetFontHeight();
     const int y = edit_rc.top + (canvas_height - text_height) / 2;
 
-    canvas.TextAutoClipped( { x, y }, value.c_str());
+    canvas.TextAutoClipped({x, y}, value.c_str());
   }
 }
 
