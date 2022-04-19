@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2020-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,12 +29,11 @@
 
 #pragma once
 
-#include "util/ConstBuffer.hxx"
-
 #include <sodium/crypto_hash_sha256.h>
 
 #include <array>
-#include <cstddef> // for std::byte
+#include <span>
+#include <string_view>
 
 using SHA256Digest = std::array<std::byte, crypto_hash_sha256_BYTES>;
 
@@ -46,15 +45,25 @@ public:
 		crypto_hash_sha256_init(&state);
 	}
 
-	void Update(ConstBuffer<void> p) noexcept {
+	void Update(std::span<const std::byte> p) noexcept {
 		crypto_hash_sha256_update(&state,
-					  (const unsigned char *)p.data,
-					  p.size);
+					  (const unsigned char *)p.data(),
+					  p.size());
+	}
+
+	template<typename T>
+	void Update(std::span<const T> src) noexcept {
+		Update(std::as_bytes(src));
+	}
+
+	void Update(std::string_view src) noexcept {
+		Update(std::span<const char>{src});
 	}
 
 	template<typename T>
 	void UpdateT(const T &p) noexcept {
-		Update({&p, sizeof(p)});
+		const std::span<const T> span{&p, 1};
+		Update(span);
 	}
 
 	void Final(void *out) noexcept {

@@ -32,12 +32,12 @@ static void
 Feed(Reader &r, SHA256State &state)
 {
   while (true) {
-    char buffer[65536];
+    std::byte buffer[65536];
     size_t nbytes = r.Read(buffer, sizeof(buffer));
     if (nbytes == 0)
       break;
 
-    state.Update({buffer, nbytes});
+    state.Update(std::span<const std::byte>{buffer, nbytes});
   }
 }
 
@@ -49,11 +49,10 @@ Feed(Path path, SHA256State &state)
 }
 
 static void
-HexPrint(ConstBuffer<void> _b) noexcept
+HexPrint(std::span<const std::byte> b) noexcept
 {
-  const auto b = ConstBuffer<uint8_t>::FromVoid(_b);
-  for (uint8_t i : b)
-    printf("%02x", i);
+  for (const std::byte i : b)
+    printf("%02x", (unsigned)i);
 }
 
 int
@@ -66,8 +65,7 @@ try {
   SHA256State state;
   Feed(path, state);
 
-  const auto hash = state.Final();
-  HexPrint({&hash, sizeof(hash)});
+  HexPrint(state.Final());
   printf("\n");
 
   return EXIT_SUCCESS;
