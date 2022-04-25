@@ -128,7 +128,7 @@ FLARMConfigWidget::Prepare(ContainerWindow &parent,
   AddInteger(_("Range"), NULL, _T("%d m"), _T("%d"), 2000, 25500, 250, range);
 
   static constexpr StaticEnumChoice acft_list[] = {
-    { (unsigned)FlarmTraffic::AircraftType::UNKNOWN, N_("Unkown") },
+    { (unsigned)FlarmTraffic::AircraftType::UNKNOWN, N_("Unknown") },
     { (unsigned)FlarmTraffic::AircraftType::GLIDER, N_("Glider") },
     { (unsigned)FlarmTraffic::AircraftType::TOW_PLANE, N_("Tow plane") },
     { (unsigned)FlarmTraffic::AircraftType::HELICOPTER, N_("Helicopter") },
