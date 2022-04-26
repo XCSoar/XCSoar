@@ -41,6 +41,8 @@ Copyright_License {
 #include "Android/TextEntryDialog.hpp"
 #endif
 
+#include <algorithm>
+
 bool
 EditDataFieldDialog(const TCHAR *caption, DataField &df,
                     const TCHAR *help_text)
