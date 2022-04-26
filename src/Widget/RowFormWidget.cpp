@@ -33,6 +33,7 @@ Copyright_License {
 #include "ui/canvas/Font.hpp"
 #include "Asset.hpp"
 
+#include <algorithm>
 #include <cassert>
 
 [[gnu::pure]]
