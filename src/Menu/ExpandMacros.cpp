@@ -359,11 +359,11 @@ LookupMacro(const TCHAR *name, bool &invalid)
     return GetMapSettings().auto_zoom_enabled ? _("Manual") : _("Auto");
   } else if (StringIsEqual(name, _T("TopologyToggleActionName")) ||
              StringIsEqual(name, _T("TopographyToggleActionName"))) {
-    return GetMapSettings().topography_enabled ? _("Off") : _("On");
+    return GetMapSettings().topography_enabled ? _("Hide") : _("Show");
   } else if (StringIsEqual(name, _T("TerrainToggleActionName"))) {
-    return GetMapSettings().terrain.enable ? _("Off") : _("On");
+    return GetMapSettings().terrain.enable ? _("Hide") : _("Show");
   } else if (StringIsEqual(name, _T("AirspaceToggleActionName"))) {
-    return GetMapSettings().airspace.enable ? _("Off") : _("On");
+    return GetMapSettings().airspace.enable ? _("Hide") : _("Show");
   } else if (StringIsEqual(name, _T("MapLabelsToggleActionName"))) {
     static const TCHAR *const labels[] = {
       N_("All"),
