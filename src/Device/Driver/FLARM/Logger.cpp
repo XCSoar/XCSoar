@@ -22,6 +22,7 @@
 */
 
 #include "Device.hpp"
+#include "Device/Error.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "io/FileOutputStream.hxx"
 #include "io/BufferedOutputStream.hxx"
@@ -280,22 +281,24 @@ FlarmDevice::ReadFlightList(RecordedFlightList &flight_list,
 
   // Try to receive flight information until the list is full
   for (uint8_t i = 0; !flight_list.full(); ++i) {
-    FLARM::MessageType ack_result = SelectFlight(i, env);
+    try {
+      FLARM::MessageType ack_result = SelectFlight(i, env);
 
-    // Last record reached -> bail out and return list
-    if (ack_result == FLARM::MT_NACK)
-      break;
+      // Last record reached -> bail out and return list
+      if (ack_result == FLARM::MT_NACK)
+        break;
 
-    // If neither ACK nor NACK was received
-    if (ack_result != FLARM::MT_ACK) {
-      mode = Mode::UNKNOWN;
-      return false;
-    }
+      // If neither ACK nor NACK was received
+      if (ack_result != FLARM::MT_ACK) {
+        mode = Mode::UNKNOWN;
+        return false;
+      }
 
-    RecordedFlightInfo flight_info;
-    flight_info.internal.flarm = i;
-    if (ReadFlightInfo(flight_info, env))
-      flight_list.append(flight_info);
+      RecordedFlightInfo flight_info;
+      flight_info.internal.flarm = i;
+      if (ReadFlightInfo(flight_info, env))
+        flight_list.append(flight_info);
+    } catch (const DeviceTimeout &) {  }
   }
 
   return true;
