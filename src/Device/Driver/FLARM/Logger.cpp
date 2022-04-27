@@ -244,7 +244,7 @@ FlarmDevice::ReadFlightInfo(RecordedFlightInfo &flight,
   uint16_t length;
   uint8_t ack_result =
     WaitForACKOrNACK(header.sequence_number, data, length,
-                     env, std::chrono::seconds(1));
+                     env, std::chrono::seconds(5));
 
   // If neither ACK nor NACK was received
   if (ack_result != FLARM::MT_ACK || length <= 2)
