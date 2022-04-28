@@ -430,7 +430,7 @@ event=Mode default
 event=StatusMessage Pilot event announced
 event=Logger note PEV
 event=PilotEvent
-label=Pilot\nEvent
+label=Pilot Event\nAnnounce
 location=7
 
 mode=Nav2
