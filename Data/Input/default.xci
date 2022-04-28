@@ -438,7 +438,7 @@ type=key
 data=9
 event=Setup Target
 event=Mode default
-label=Target$(CheckTask)$(CheckTaskResumed)
+label=Target\nShow$(CheckTask)$(CheckTaskResumed)
 location=8
 
 # -------------
@@ -1043,7 +1043,7 @@ type=key
 data=0
 event=Setup Target
 event=Mode default
-label=Target Show$(CheckTask)$(CheckTaskResumed)
+label=Target\nShow$(CheckTask)$(CheckTaskResumed)
 location=7
 
 
