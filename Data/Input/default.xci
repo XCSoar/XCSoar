@@ -118,7 +118,7 @@ mode=pan
 type=key
 data=APP1
 event=Pan off
-label=Pan\nOff
+label=Cancel
 location=1
 
 mode=pan
@@ -486,7 +486,7 @@ mode=Display1
 type=key
 data=0
 event=Pan on
-label=Pan\nOn
+label=Pan\nMode
 location=9
 
 # -------------
@@ -1069,7 +1069,7 @@ mode=RemoteStick
 type=key
 data=0
 event=Pan on
-label=Pan\nOn
+label=Pan\nMode
 location=11
 
 mode=RemoteStick
