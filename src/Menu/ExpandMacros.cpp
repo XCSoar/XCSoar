@@ -80,26 +80,26 @@ ExpandTaskMacros(const TCHAR *name,
     if (StringIsEqual(name, _T("WaypointNext")) ||
         StringIsEqual(name, _T("WaypointNextArm"))) {
       invalid = true;
-      return _("Next Turnpoint");
+      return _("Turnpoint Next");
     } else if (StringIsEqual(name, _T("WaypointPrevious")) ||
                StringIsEqual(name, _T("WaypointPreviousArm"))) {
       invalid = true;
-      return _("Previous Turnpoint");
+      return _("Turnpoint Previous");
     }
   } else if (common_stats.task_type == TaskType::ABORT) {
     if (StringIsEqual(name, _T("WaypointNext")) ||
         StringIsEqual(name, _T("WaypointNextArm"))) {
       invalid |= !common_stats.active_has_next;
       return common_stats.next_is_last
-        ? _("Furthest Landpoint")
-        : _("Next Landpoint");
+        ? _("Landpoint Furthest ")
+        : _("Landpoint Next");
     } else if (StringIsEqual(name, _T("WaypointPrevious")) ||
                StringIsEqual(name, _T("WaypointPreviousArm"))) {
       invalid |= !common_stats.active_has_previous;
 
       return common_stats.previous_is_first
-        ? _("Closest Landpoint")
-        : _("Previous Landpoint");
+        ? _("Landpoint Closest")
+        : _("Landpoint Previous");
     }
 
   } else { // ordered task mode
@@ -112,16 +112,16 @@ ExpandTaskMacros(const TCHAR *name,
       // Waypoint\nNext
       invalid |= !common_stats.active_has_next;
       return next_is_final
-        ? _("Finish Turnpoint")
-        : _("Next Turnpoint");
+        ? _("Turnpoint Finish")
+        : _("Turnpoint Next");
     } else if (StringIsEqual(name, _T("WaypointPrevious"))) {
       if (has_optional_starts && !common_stats.active_has_previous) {
-        return _("Next Startpoint");
+        return _("Startpoint Next");
       } else {
         invalid |= !common_stats.active_has_previous;
         return previous_is_start
-          ? _("Start Turnpoint")
-          : _("Previous Turnpoint");
+          ? _("Turnpoint Start")
+          : _("Turnpoint Previous");
       }
 
     } else if (StringIsEqual(name, _T("WaypointNextArm"))) {
@@ -134,8 +134,8 @@ ExpandTaskMacros(const TCHAR *name,
       case TaskAdvance::TURN_ARMED:
         invalid |= !common_stats.active_has_next;
         return next_is_final
-          ? _("Finish Turnpoint")
-          : _("Next Turnpoint");
+          ? _("Turnpoint Finish")
+          : _("Turnpoint Next");
 
       case TaskAdvance::START_DISARMED:
         return _("Arm start");
@@ -153,12 +153,12 @@ ExpandTaskMacros(const TCHAR *name,
       case TaskAdvance::TURN_DISARMED:
 
         if (has_optional_starts && !common_stats.active_has_previous) {
-          return _("Next Startpoint");
+          return _("Startpoint Next");
         } else {
           invalid |= !common_stats.active_has_previous;
           return previous_is_start
-            ? _("Start Turnpoint")
-            : _("Previous Turnpoint");
+            ? _("Turnpoint Start")
+            : _("Turnpoint Previous");
         }
 
       case TaskAdvance::START_ARMED:

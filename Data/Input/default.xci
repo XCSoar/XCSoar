@@ -368,14 +368,14 @@ mode=Nav1
 type=key
 data=7
 event=AdjustWaypoint previousarm
-label=$(WaypointPreviousArm)
+label=$(WaypointPreviousArm)\nSelect
 location=6
 
 mode=Nav1
 type=key
 data=8
 event=AdjustWaypoint nextarm
-label=$(WaypointNextArm)
+label=$(WaypointNextArm)\nSelect
 location=7
 
 mode=Nav1
@@ -391,7 +391,7 @@ type=key
 data=0
 event=Setup Alternates
 event=Mode default
-label=Alternates$(CheckWaypointFile)
+label=Alternates\nList$(CheckWaypointFile)
 location=9
 
 # -------------
@@ -1019,7 +1019,7 @@ type=key
 data=0
 event=Setup Alternates
 event=Mode default
-label=Alternates$(CheckWaypointFile)
+label=Alternates\nList$(CheckWaypointFile)
 location=4
 
 mode=RemoteStick
@@ -1043,7 +1043,7 @@ type=key
 data=0
 event=Setup Target
 event=Mode default
-label=Target$(CheckTask)$(CheckTaskResumed)
+label=Target Show$(CheckTask)$(CheckTaskResumed)
 location=7
 
 
