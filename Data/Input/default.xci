@@ -479,7 +479,7 @@ mode=Display1
 type=key
 data=9
 event=ScreenModes cycle
-label=$(NextPageName)
+label=Page Show\n$(NextPageName)
 location=8
 
 mode=Display1
