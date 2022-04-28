@@ -125,14 +125,14 @@ mode=pan
 type=key
 data=APP2
 event=Zoom in
-label=Zoom\nIn
+label=Zoom\n+
 location=2
 
 mode=pan
 type=key
 data=APP3
 event=Zoom out
-label=Zoom\nOut
+label=Zoom\n-
 location=3
 
 mode=pan
@@ -457,14 +457,14 @@ mode=Display1
 type=key
 data=6
 event=Zoom in
-label=Zoom\nIn
+label=Zoom\n+
 location=5
 
 mode=Display1
 type=key
 data=7
 event=Zoom out
-label=Zoom\nOut
+label=Zoom\n-
 location=6
 
 mode=Display1
@@ -950,14 +950,14 @@ mode=Display1.Traffic
 type=key
 data=6
 event=Traffic zoom in
-label=Zoom\nIn
+label=Zoom\n+
 location=5
 
 mode=Display1.Traffic
 type=key
 data=7
 event=Traffic zoom out
-label=Zoom\nOut
+label=Zoom\n-
 location=6
 
 mode=Display1.Traffic
