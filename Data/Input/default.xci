@@ -361,7 +361,7 @@ type=key
 data=6
 event=Calculator
 event=Mode default
-label=Task
+label=Task Manager
 location=5
 
 mode=Nav1
@@ -420,7 +420,7 @@ event=Mode default
 event=StatusMessage Dropped marker
 event=Logger note Mark
 event=MarkLocation
-label=Mark\nDrop
+label=Marker Drop
 location=6
 
 mode=Nav2
@@ -610,7 +610,7 @@ type=key
 data=8
 event=WaypointEditor
 event=Mode default
-label=Waypoints Editor
+label=Waypoint Editor
 location=7
 
 mode=Config2
@@ -796,7 +796,7 @@ type=key
 data=9
 event=Checklist
 event=Mode default
-label=Check\nlist
+label=Checklist
 location=8
 
 mode=Info1
@@ -822,7 +822,7 @@ type=key
 data=6
 event=Status all
 event=Mode default
-label=Status
+label=Flight Status
 location=5
 
 mode=Info2
@@ -1062,7 +1062,7 @@ event=Mode default
 event=StatusMessage Dropped marker
 event=Logger note Mark
 event=MarkLocation
-label=Mark\nDrop
+label=Marker Drop
 location=10
 
 mode=RemoteStick
@@ -1202,7 +1202,7 @@ type=key
 data=0
 event=Checklist
 event=Mode default
-label=Check\nlist
+label=Checklist
 location=28
 
 mode=RemoteStick
@@ -1218,7 +1218,7 @@ type=key
 data=0
 event=Status all
 event=Mode default
-label=Status
+label=Flight Status
 location=30
 
 mode=RemoteStick
