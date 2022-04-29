@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Crypto/SHA256.hxx"
+#include "lib/sodium/SHA256.hxx"
 #include "system/Args.hpp"
 #include "io/FileReader.hxx"
 #include "util/PrintException.hxx"
