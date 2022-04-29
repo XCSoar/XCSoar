@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2020 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,12 +27,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef IPV4_ADDRESS_HXX
-#define IPV4_ADDRESS_HXX
+#pragma once
 
 #include "SocketAddress.hxx"
 #include "util/ByteOrder.hxx"
-#include "util/Compiler.h"
 
 #include <cstdint>
 
@@ -244,7 +242,7 @@ public:
 	 * @param device is the device name f.i. "eth0"
 	 * @return StaticSocketAddress, use IsDefined() to check valid result
 	 */
-	gcc_pure
+	[[gnu::pure]]
 	static IPv4Address GetDeviceAddress(const char *device) noexcept;
 
 	/**
@@ -254,9 +252,7 @@ public:
 	 * @param buffer_size is the buffer size
 	 * @return IP address on success, else nullptr
 	 */
-	gcc_pure
+	[[gnu::pure]]
 	const char *ToString(char *buffer, size_t buffer_size) const noexcept;
 #endif
 };
-
-#endif
