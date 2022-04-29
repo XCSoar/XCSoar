@@ -100,7 +100,7 @@ public class MyService extends Service {
        remind the user that we're sucking his battery empty */
     Intent intent2 = new Intent(this, mainActivityClass);
     PendingIntent contentIntent =
-      PendingIntent.getActivity(this, 0, intent2, 0);
+      PendingIntent.getActivity(this, 0, intent2, PendingIntent.FLAG_IMMUTABLE);
     Notification notification = createNotification(this, contentIntent);
 
     notificationManager.notify(1, notification);

@@ -15,20 +15,33 @@ ANDROID_BIN = $(TARGET_BIN_DIR)
 ifeq ($(HOST_IS_DARWIN),y)
   ANDROID_SDK ?= $(HOME)/opt/android-sdk-macosx
 else
-  ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux
+  ANDROID_SDK ?= $(HOME)/Android/Sdk
 endif
 ANDROID_SDK_PLATFORM_DIR = $(ANDROID_SDK)/platforms/$(ANDROID_SDK_PLATFORM)
 ANDROID_ABI_DIR = $(ANDROID_BUILD)/lib/$(ANDROID_APK_LIB_ABI)
 
 JAVA_CLASSFILES_DIR = $(ANDROID_OUTPUT_DIR)/classes
 
-ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/29.0.3
+ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/30.0.3
 APKSIGNER = $(ANDROID_BUILD_TOOLS_DIR)/apksigner
 ZIPALIGN = $(ANDROID_BUILD_TOOLS_DIR)/zipalign
 AAPT = $(ANDROID_BUILD_TOOLS_DIR)/aapt
 DX = $(ANDROID_BUILD_TOOLS_DIR)/dx
 
-ANDROID_LIB_NAMES = xcsoar
+ifeq ($(TESTING),y)
+	# Use symbol libraries for debugging
+	ANDROID_LIB_NAMES = xcsoar-ns
+	LIB_EXTENSION = -ns.so
+	# other package name, android:debugging="true" in Manifest
+	MANIFEST = android/testing/AndroidManifest.xml
+	#red logo
+	ICON_SVG = $(topdir)/Data/graphics/logo_red.svg
+else
+	ANDROID_LIB_NAMES = xcsoar
+	LIB_EXTENSION = .so
+	MANIFEST = android/AndroidManifest.xml
+	ICON_SVG = $(topdir)/Data/graphics/logo.svg
+endif
 
 APKSIGN = $(APKSIGNER) sign
 ifeq ($(V),2)
@@ -109,11 +122,6 @@ RAW_DIR = $(RES_DIR)/raw
 ANDROID_XML_RES := $(wildcard android/res/*/*.xml)
 ANDROID_XML_RES_COPIES := $(patsubst android/res/%,$(RES_DIR)/%,$(ANDROID_XML_RES))
 
-ifeq ($(TESTING),y)
-ICON_SVG = $(topdir)/Data/graphics/logo_red.svg
-else
-ICON_SVG = $(topdir)/Data/graphics/logo.svg
-endif
 
 ICON_WHITE_SVG = $(topdir)/Data/graphics/logo_white.svg
 
@@ -193,11 +201,6 @@ PNG_FILES = $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5) \
 	$(RES_DIR)/drawable-xxhdpi/notification_icon.png \
 	$(RES_DIR)/drawable-xxxhdpi/notification_icon.png
 
-ifeq ($(TESTING),y)
-MANIFEST = android/testing/AndroidManifest.xml
-else
-MANIFEST = android/AndroidManifest.xml
-endif
 
 $(ANDROID_XML_RES_COPIES): $(RES_DIR)/%: android/res/%
 	$(Q)-$(MKDIR) -p $(dir $@)
@@ -297,7 +300,7 @@ $(call SRC_TO_OBJ,$(SRC)/Android/TextEntryDialog.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/FileProvider.cpp): $(NATIVE_HEADERS)
 
 ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES))
-$(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(ABI_BIN_DIR)/lib%.so | $(ANDROID_ABI_DIR)/dirstamp
+$(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%$(LIB_EXTENSION): $(ABI_BIN_DIR)/lib%$(LIB_EXTENSION) | $(ANDROID_ABI_DIR)/dirstamp
 	$(Q)cp $< $@
 
 endif # !FAT_BINARY

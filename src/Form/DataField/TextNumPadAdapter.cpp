@@ -217,9 +217,9 @@ TextNumPadAdapter::SetCharFromKeyPress(
 }
 
 static const unsigned keyIdxMap[][2] {
-    { KEY_KP0, 9 }, { KEY_KP1, 8 }, { KEY_KP2, 7 }, { KEY_KP3, 6 },
-    { KEY_KP4, 5 }, { KEY_KP5, 4 }, { KEY_KP6, 3 }, { KEY_KP7, 2 },
-    { KEY_KP8, 1 }, { KEY_KP9, 0 },
+    { KEY_KP0, 9 }, { KEY_KP1, 6 }, { KEY_KP2, 7 }, { KEY_KP3, 8 },
+    { KEY_KP4, 3 }, { KEY_KP5, 4 }, { KEY_KP6, 5 }, { KEY_KP7, 0 },
+    { KEY_KP8, 1 }, { KEY_KP9, 2 },
 
 #if defined(USE_X11)
                                          { KEY_KPHOME, 0 }, 

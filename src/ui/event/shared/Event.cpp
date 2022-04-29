@@ -28,7 +28,7 @@ namespace UI
  unsigned ConvertNumPadKeyToCursorKey(unsigned key_code) noexcept
 {
   switch (key_code) {
-#if defined(USE_POLL_EVENT)||defined(USE_ANDROID)||defined(USE_WINUSER)
+#if defined(USE_POLL_EVENT)||defined(ANDROID)||defined(USE_WINUSER)
   case KEY_KP2:
 #if defined(USE_X11)
   case KEY_KPDOWN:

@@ -298,7 +298,9 @@ WndProperty::DecValue() noexcept
 void
 WndProperty::OnPaint(Canvas &canvas)
 {
-  const bool focused = HasCursorKeys() && HasFocus();
+  // Even if there are no cursor keys, the focus must be visible, because it shows where the
+  // the in dialog keyboard input goes.
+  const bool focused =  (data_field->GetNumPadAdapter() != nullptr || HasCursorKeys()) && HasFocus();
 
   /* background and selector */
   if (pressed) {

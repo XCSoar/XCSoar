@@ -73,7 +73,6 @@ NumPadWidget::MyTextListWidget::Prepare(ContainerWindow &parent,
   WindowStyle list_style;
   list_style.Hide();
   list_style.Border();
-  unsigned row_height = 20;
   auto list = std::make_unique<ListControl>(parent, look, rc, list_style,
                                             row_height);
 //    list->SetCursorHandler(this);
@@ -110,7 +109,7 @@ NumPadWidget::Prepare(ContainerWindow &_parent, const PixelRect &rc) noexcept
   UpdateShiftState();
   AddNumPadWindow(_parent);
   const DialogLook &look = UIGlobals::GetDialogLook();
-  row_renderer.CalculateLayout(*look.list.font);
+  textList.SetRowHeigth(row_renderer.CalculateLayout(*look.list.font));
   textList.Prepare(_parent, rc);
   textList.ShowWindow();
   textList.SetItemRenderer(this);

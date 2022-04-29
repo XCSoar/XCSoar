@@ -56,6 +56,7 @@ Copyright_License {
 #include "ui/event/windows/Event.hpp"
 #include "ui/event/windows/Loop.hpp"
 #endif
+#include "LogFile.hpp"
 
 using namespace UI;
 
@@ -342,13 +343,6 @@ WndForm::ShowModal()
   Event event;
 
   while ((modal_result == 0 || force) && loop.Get(event)) {
-    //TODO: Remove logging
-#ifdef USE_WINUSER
-    if (event.IsKey())
-      LogFormat("keyUp wParam: %x, lParam :%lx" , event.msg.wParam,event.msg.lParam );
-    if (event.IsKeyDown())
-      LogFormat("keyDown wParam: %x, lParam :%lx" , event.msg.wParam,event.msg.lParam );
-#endif
     if (!main_window.FilterEvent(event, this)) {
       if (modeless && event.IsMouseDown())
         break;
@@ -393,6 +387,7 @@ WndForm::ShowModal()
 
         if (!CheckKey(this, event)) {
           /* this window doesn't handle KEY_UP/KEY_DOWN */
+          LogFormat("Forward Focus: %u", event.GetKeyCode());
           if (event.GetKeyCode() == KEY_DOWN)
             FocusNextControl();
           else

@@ -82,8 +82,11 @@ Java_org_xcsoar_EventBridge_onKeyDown(JNIEnv *env, jclass cls, jint key_code)
     /* enable this flag as soon as we see the first cursor event; used
        by HasCursorKeys() */
     has_cursor_keys = true;
+  Event myEvent(Event::KEY_DOWN, TranslateKeyCode(key_code));
+  myEvent.is_char =( ('0' <= myEvent.param  &&  myEvent.param <= '9')||
+      ('A' <= myEvent.param  &&  myEvent.param <= 'Z'));
 
-  event_queue->Inject(Event(Event::KEY_DOWN, TranslateKeyCode(key_code)));
+  event_queue->Inject(myEvent);
   ResetUserIdle();
 }
 

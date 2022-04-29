@@ -50,7 +50,12 @@ class NumPadWidget: public NullWidget, ListItemRenderer, ListCursorHandler
 
   class MyTextListWidget: public WindowWidget
   {
+    unsigned row_height=0;
   public:
+    void SetRowHeigth(unsigned _row_height)
+    {
+      row_height =_row_height;
+    }
 // virtual from TextListWidget
     void
     SetItemRenderer(ListItemRenderer *_itemRenderer)
