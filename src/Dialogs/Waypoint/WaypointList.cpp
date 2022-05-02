@@ -153,6 +153,8 @@ public:
   }
 
   void
+  UpdateItemList();
+  void
   UpdateList();
   const TCHAR*
   WaypointNameAllowedCharacters(const TCHAR *prefix);
@@ -340,9 +342,8 @@ FillLastUsedList(WaypointList &list, const WaypointIDList &last_used_ids,
     list.emplace_back(std::move(waypoint));
   }
 }
-
 void
-WaypointListWidget::UpdateList()
+WaypointListWidget::UpdateItemList()
 {
   items.clear();
 
@@ -352,6 +353,12 @@ WaypointListWidget::UpdateList()
     FillList(items, way_points, location, last_heading, dialog_state,
              ordered_task, ordered_task_index);
 
+}
+
+void
+WaypointListWidget::UpdateList()
+{
+  UpdateItemList();
   auto &list = GetList();
   list.SetLength(std::max(1u, (unsigned)items.size()));
   list.SetOrigin(0);
@@ -383,10 +390,10 @@ WaypointListWidget::WaypointNameAllowedCharacters(const TCHAR *prefix)
    * is a superset of the set in the current list.
    */
   *buffer = '\0';
-  if (prefix != nullptr && *prefix != '\0' && dialog_state.IsDefined()) {
+  if (prefix != nullptr && dialog_state.IsDefined()) {
     dialog_state.name = prefix;
-    UpdateList();
-    if (*prefix != '\0' ) {
+    UpdateItemList();
+    if (items.size() < 256) {
       unsigned idx = 0;
       unsigned startPrefixCharIdx;
       for (std::vector<WaypointListItem>::iterator it = items.begin();

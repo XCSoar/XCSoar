@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include <chrono>
 #include "InputEvent.hpp"
 #include "Value.hxx"
 #include "Util.hxx"
@@ -37,6 +38,11 @@ Copyright_License {
 #include "Util.hxx"
 #include "Interface.hpp"
 #include "LogFile.hpp"
+#include "Message.hpp"
+#include "Language/Language.hpp"
+#include "ui/event/Timer.hpp"
+#include "time/FloatDuration.hxx"
+
 
 #include <map>
 #include "util/tstring.hpp"
@@ -46,6 +52,17 @@ extern "C" {
 }
 
 using namespace Lua;
+using namespace std::chrono;
+
+static const unsigned MAX_LOCK_KEYS=5;
+static unsigned lockKeys[MAX_LOCK_KEYS];
+static unsigned lockKeyCount =0;
+static unsigned unlockKeyIndex =0;
+const int MAX_UNLOCK_TEXTLENGTH=256;
+static char unlockText[MAX_UNLOCK_TEXTLENGTH];
+static steady_clock::duration  lockWaitTimeInSeconds;
+static steady_clock::time_point unlockTime;
+
 
 class LuaInputEvent;
 
@@ -222,6 +239,30 @@ public:
     LogFormat("invalid event: %s", name );
     return luaL_argerror(L, 1, "invalid event");
   }
+  static int l_keylock(lua_State *L) {
+    if (lua_gettop(L) < 3)
+      return luaL_error(L, "Invalid parameters");
+    UnsafeCopyString(unlockText,lua_tostring(L,2));
+    lockWaitTimeInSeconds=seconds{lua_tointeger(L,1)};
+    for(int param = 2; param <= lua_gettop(L); param++ )
+    {
+      const char *name = lua_tostring(L, param);
+      if (name == nullptr)
+        return luaL_error(L, "Invalid parameters");
+
+      if (StringIsEqual(name, "key_", 4)) {
+        // scan for key code
+          const UTF8ToWideConverter keycode(name+4);
+          if (keycode.IsValid()) {
+            const unsigned code = ParseKeyCode(keycode);
+            Lua::AddLockkey(code);
+          }
+      }
+      else
+        LogFormat("invalid lockkey: %s", name );
+    }
+    return lockKeyCount;
+  }
 
   static int l_gc(lua_State *L) {
     auto &input_event = Check(L, 1);
@@ -275,6 +316,7 @@ public:
 static constexpr struct luaL_Reg input_event_funcs[] = {
   {"new", LuaInputEvent::l_new},
   {"clear", LuaInputEvent::l_clear},
+  {"keylock", LuaInputEvent::l_keylock},
   {nullptr, nullptr}
 };
 
@@ -378,11 +420,46 @@ bool Lua::IsGesture(const TCHAR* gesture) {
 }
 
 bool Lua::FireKey(unsigned key) {
+
+  if(unlockKeyIndex < lockKeyCount)
+  {
+    // keyboard is locked
+    // try to unlock it
+    if(lockKeys[unlockKeyIndex] == key)
+      unlockKeyIndex++;
+    else
+      unlockKeyIndex=0;
+    if(unlockKeyIndex < lockKeyCount)
+      Message::AddMessage(unlockText);
+    else
+    {
+      Message::AddMessage(_("Keyboard is unlocked"));
+      unlockTime = steady_clock::now();
+    }
+    return false;
+  }
+  else
+  {
+    // keyboard is unlocked for lockWaitTimeInSeconds
+    steady_clock::time_point nowTime = steady_clock::now();
+    steady_clock::duration diffTime = nowTime - unlockTime ;
+    steady_clock::duration waitDuration = lockWaitTimeInSeconds;
+    unlockTime = steady_clock::now();
+    if( diffTime > waitDuration)
+    {
+      LogFormat("Lock again");
+      unlockKeyIndex=0; // lock keyboard
+      Message::AddMessage(unlockText);
+      return false;
+    }
+  }
+
   /* if the key is in range 'a'-'z', it can either be a lower case letter
    * or a virtual key. First, we try the virtual key
    * If the event was not handled, we try upper case character
    * E.g. KEY_KBSLASH on windows platform
    */
+
   if(event_store_key.Fire(key))
     return true;
   if( key >= 'a' && key <= 'z'){
@@ -390,4 +467,10 @@ bool Lua::FireKey(unsigned key) {
   }
   // No event for either lower or upper key
   return false;
+}
+void
+Lua::AddLockkey(unsigned key_code)
+{
+  if(lockKeyCount < MAX_LOCK_KEYS)
+    lockKeys[lockKeyCount++]=key_code;
 }

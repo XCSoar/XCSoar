@@ -30,6 +30,7 @@ Copyright_License {
 struct lua_State;
 
 namespace Lua {
+void OnTimer();
 
 /**
  * Provide the Lua class "xcsoar.input_event".
@@ -51,7 +52,8 @@ FireKey(unsigned key);
 
 bool
 IsGesture(const TCHAR *gesture);
-
+void
+AddLockkey(unsigned key_code);
 }
 
 #endif

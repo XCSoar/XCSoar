@@ -690,7 +690,7 @@ It assigns the '0' key to a function which opens the alternates dialog.
 .. code-block:: lua
 
  xcsoar.input_event.new("key_0", function()
- xcsoar.task.alternates()
+ xcsoar.input_event.keylock(30,"Press Numlock 2 times to unlock keyboard","key_NUMLOCK","key_NUMLOCK" )
  end)
 
 The following methods are available in ``xcsoar.input_event``:
@@ -717,6 +717,21 @@ The following methods are available in ``xcsoar.input_event``:
      - "ne_down_in_gear_retracted"
  * - ``cancel()``
    - Cancel the input event.
+ * - ``keylock(UnlockedTimeInSeconds, LockedMessage, key id ...)``
+   - Locks the keyboard until the specified keys have been pressed.
+   
+     **UnlockedTimeInSeconds**
+     max time the keyboard is unlocked without pressing another key
+      
+     **LockedMessage** 
+     This message will be shown when a key is pressed and the keyboard is locked
+       
+     **key id** is a string value of the following format:
+     "key\_" + key_id
+     Examples :
+     - key_NUMLOCK
+     
+
 
 .. _lua.misc:
 
