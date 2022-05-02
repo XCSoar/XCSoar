@@ -51,6 +51,9 @@ enum class Contest : uint8_t {
   WEGLIDE_DISTANCE,
   WEGLIDE_FAI,
   WEGLIDE_OR,
+
+  CHARRON,
+
   NONE,
 };
 

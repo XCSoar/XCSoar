@@ -41,7 +41,9 @@ ContestManager::ContestManager(const Contest _contest,
    net_coupe(trace_full),
    weglide_distance(trace_full),
    weglide_fai(trace_triangle, predict_triangle),
-   weglide_or(trace_full)
+   weglide_or(trace_full),
+   charron_small(trace_triangle, false),
+   charron_large(trace_triangle, true)
 {
   Reset();
 }
@@ -62,6 +64,8 @@ ContestManager::SetIncremental(bool incremental) noexcept
   weglide_distance.SetIncremental(incremental);
   weglide_fai.SetIncremental(incremental);
   weglide_or.SetIncremental(incremental);
+  charron_small.SetIncremental(incremental);
+  charron_large.SetIncremental(incremental);
 }
 
 void
@@ -100,6 +104,8 @@ ContestManager::SetHandicap(unsigned handicap) noexcept
   weglide_distance.SetHandicap(handicap);
   weglide_fai.SetHandicap(handicap);
   weglide_or.SetHandicap(handicap);
+  charron_small.SetHandicap(handicap);
+  charron_large.SetHandicap(handicap);
 }
 
 static bool
@@ -240,6 +246,16 @@ ContestManager::UpdateIdle(bool exhaustive) noexcept
                         stats.solution[0], exhaustive);
     break;
 
+  case Contest::CHARRON:
+    retval = RunContest(charron_large, stats.result[0],
+                        stats.solution[0], exhaustive);
+
+    if (!retval) {
+      retval = RunContest(charron_small, stats.result[0],
+                          stats.solution[0], exhaustive);
+    }
+    break;
+
   };
 
   return retval;
@@ -265,6 +281,8 @@ ContestManager::Reset() noexcept
   weglide_distance.Reset();
   weglide_fai.Reset();
   weglide_or.Reset();
+  charron_small.Reset();
+  charron_large.Reset();
 }
 
 /*

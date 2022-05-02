@@ -25,5 +25,6 @@ CONTEST_SOURCES = \
 	$(CONTEST_SRC_DIR)/Solvers/WeglideDistance.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/WeglideFAI.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/WeglideOR.cpp \
+	$(CONTEST_SRC_DIR)/Solvers/Charron.cpp \
 
 $(eval $(call link-library,libcontest,CONTEST))

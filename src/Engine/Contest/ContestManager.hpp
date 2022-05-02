@@ -38,6 +38,7 @@
 #include "Solvers/WeglideDistance.hpp"
 #include "Solvers/WeglideFAI.hpp"
 #include "Solvers/WeglideOR.hpp"
+#include "Solvers/Charron.hpp"
 #include "ContestStatistics.hpp"
 
 class Trace;
@@ -69,6 +70,8 @@ class ContestManager
   WeglideDistance weglide_distance;
   WeglideFAI weglide_fai;
   WeglideOR weglide_or;
+  Charron charron_small;
+  Charron charron_large;
 
 public:
   /**
