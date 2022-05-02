@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef FILE_DESCRIPTOR_HXX
-#define FILE_DESCRIPTOR_HXX
+#pragma once
 
 #include <cstddef>
 #include <utility>
@@ -132,6 +131,11 @@ public:
 #endif
 
 	bool OpenReadOnly(const char *pathname) noexcept;
+
+#ifdef __linux__
+	bool OpenReadOnly(FileDescriptor dir,
+			  const char *pathname) noexcept;
+#endif
 
 #ifndef _WIN32
 	bool OpenNonBlocking(const char *pathname) noexcept;
@@ -261,5 +265,3 @@ public:
 	bool IsReadyForWriting() const noexcept;
 #endif
 };
-
-#endif

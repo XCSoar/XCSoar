@@ -37,6 +37,8 @@ Copyright_License {
 #include "util/ConvertString.hpp"
 #include "util/ScopeExit.hxx"
 
+#include <algorithm>
+
 #include <tchar.h>
 #include <stdio.h>
 #include "Waypoint/Waypoint.hpp"

@@ -24,6 +24,8 @@
 #include "Boundary.hpp"
 #include "Geo/GeoVector.hpp"
 
+#include <algorithm>
+
 #include <stdlib.h>
 
 double
