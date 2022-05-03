@@ -27,6 +27,7 @@ Copyright_License {
 #include "ui/window/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "ui/event/shared/Event.hpp"
 #include "Asset.hpp"
 
 #include <algorithm>
@@ -351,7 +352,7 @@ bool
 ButtonPanel::KeyPress(unsigned key_code) noexcept
 {
   assert(key_code != 0);
-
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
   const unsigned n = buttons.size();
   for (unsigned i = 0; i < n; ++i) {
     if (keys[i] == key_code) {
