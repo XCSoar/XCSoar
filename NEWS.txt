@@ -6,6 +6,8 @@ Version 7.24 - not yet released
   - menu: fix bogus clicks after returning from XCSoar
 * Android
   - add SoftRF Lego into 'white list' of USB devices
+* calculations
+  - support for LVZC Charron contest
 
 Version 7.23 - 2022/02/10
 * user interface
