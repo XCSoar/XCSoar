@@ -676,7 +676,105 @@ The following methods are available in ``xcsoar.timer``:
    - Cancel the timer.
  * - ``schedule(period)``
    - Reschedule the timer.
+   
+.. _lua.input_event:
 
+Input Event
+------------------
+
+The class ``xcsoar.input_event`` implements a event handler
+for input events that calls a given Lua function.
+The following code shows an extract from init.lua file.
+It assigns the '0' key to a function which opens the alternates dialog.
+
+.. code-block:: lua
+
+ xcsoar.input_event.new("key_0", function()
+ xcsoar.input_event.keylock(30,"Press Numlock 2 times to unlock keyboard","key_NUMLOCK","key_NUMLOCK" )
+ end)
+
+The following methods are available in ``xcsoar.input_event``:
+
+.. list-table::
+ :widths: 40 60
+ :header-rows: 1
+
+ * - Name
+   - Description
+ * - ``new(event id, function)``
+   - Create a new eventh handler and registers it.
+     The event id is a string value of the following format:
+     "gesture\_" + gesture_id or "key\_" + key_id
+     Additionally, it can be a glide computer event or an NMEA event
+     Examples for key_id:
+     - key_F1, key_A, key_ESC ...
+     Examples for gesture id:
+     - "U", "D", "UD", "URD", "DL"
+     Example for glidec computer event
+     - "gce_airspace_near"
+     	
+     Example for NMEA event
+     - "ne_down_in_gear_retracted"
+ * - ``cancel()``
+   - Cancel the input event.
+ * - ``keylock(UnlockedTimeInSeconds, LockedMessage, key id ...)``
+   - Locks the keyboard until the specified keys have been pressed.
+   
+     **UnlockedTimeInSeconds**
+     max time the keyboard is unlocked without pressing another key
+      
+     **LockedMessage** 
+     This message will be shown when a key is pressed and the keyboard is locked
+       
+     **key id** is a string value of the following format:
+     "key\_" + key_id
+     Examples :
+     - key_NUMLOCK
+     
+
+
+.. _lua.misc:
+
+Miscelleanious
+------------------
+
+The class ``xcsoar.misc`` implements some functions to open xcsoar dialogs which don't fit into the existing classes.
+
+.. code-block:: lua
+
+ xcsoar.misc.analysis()
+
+The following methods are available in ``xcsoar.misc``:
+
+.. list-table::
+ :widths: 40 60
+ :header-rows: 1
+
+ * - Name
+   - Description
+ * - ``analysis``
+   - Opens the Analysis dialog
+
+.. _lua.waypoint:
+
+Waypoint
+------------------
+
+The class ``xcsoar.waypoint`` implements functions to open xcsoar dialogs for waypoints.
+
+The following methods are available in ``xcsoar.waypoint``:
+
+.. list-table::
+ :widths: 40 60
+ :header-rows: 1
+
+ * - Name
+   - Description
+ * - ``showCurrent``
+   - Shows the active waypooint of the task in a dialog
+ * - ``showSelected``
+   - Shows the dialog to select a waypooint
+ 
 .. _lua.http:
 
 HTTP Client

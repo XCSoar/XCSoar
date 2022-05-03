@@ -21,39 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_LUA_INPUT_EVENT_HPP
-#define XCSOAR_LUA_INPUT_EVENT_HPP
-
-#include "util/Compiler.h"
-#include <tchar.h>
+#ifndef SRC_LUA_WAYPOINT_HPP_
+#define SRC_LUA_WAYPOINT_HPP_
 
 struct lua_State;
 
 namespace Lua {
-void OnTimer();
 
 /**
- * Provide the Lua class "xcsoar.input_event".
+ * Provide the Lua table "xcsoar.waypoint".
  */
 void
-InitInputEvent(lua_State *L);
+InitWaypoint(lua_State *L);
 
-bool
-FireGlideComputerEvent(unsigned event);
-
-bool
-FireNMEAEvent(unsigned event);
-
-bool
-FireGesture(const TCHAR *gesture);
-
-bool
-FireKey(unsigned key);
-
-bool
-IsGesture(const TCHAR *gesture);
-void
-AddLockkey(unsigned key_code);
 }
 
-#endif
+
+#endif /* SRC_LUA_WAYPOINT_HPP_ */

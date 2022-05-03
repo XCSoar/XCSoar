@@ -351,7 +351,7 @@ InputEvents::ProcessKey(Mode mode, unsigned key_code) noexcept
 #endif
 
   if (Lua::FireKey(key_code)) {
-    //    return true;
+        return true;
   }
 
   // Which key - can be defined locally or at default (fall back to default)

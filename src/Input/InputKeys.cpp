@@ -25,6 +25,7 @@ Copyright_License {
 #include "ui/event/KeyCode.hpp"
 #include "util/CharUtil.hxx"
 #include "util/StringAPI.hxx"
+#include "LogFile.hpp"
 
 struct string_to_key {
   const TCHAR *name;
@@ -32,25 +33,65 @@ struct string_to_key {
 };
 
 static constexpr struct string_to_key string_to_key[] = {
-  { _T("APP1"), KEY_APP1 },
-  { _T("APP2"), KEY_APP2 },
-  { _T("APP3"), KEY_APP3 },
-  { _T("APP4"), KEY_APP4 },
-  { _T("APP5"), KEY_APP5 },
-  { _T("APP6"), KEY_APP6 },
-  { _T("F1"), KEY_F1 },
-  { _T("F2"), KEY_F2 },
-  { _T("F3"), KEY_F3 },
-  { _T("F4"), KEY_F4 },
-  { _T("F5"), KEY_F5 },
-  { _T("F6"), KEY_F6 },
-  { _T("F7"), KEY_F7 },
-  { _T("F8"), KEY_F8 },
-  { _T("F9"), KEY_F9 },
-  { _T("F10"), KEY_F10 },
-  { _T("F11"), KEY_F11 },
-  { _T("F12"), KEY_F12 },
-
+  { _T("APP1"), KEY_APP1},
+  { _T("APP2"), KEY_APP2},
+  { _T("APP3"), KEY_APP3},
+  { _T("APP4"), KEY_APP4},
+  { _T("APP5"), KEY_APP5},
+  { _T("APP6"), KEY_APP6},
+  { _T("F1"), KEY_F1},
+  { _T("F2"), KEY_F2},
+  { _T("F3"), KEY_F3},
+  { _T("F4"), KEY_F4},
+  { _T("F5"), KEY_F5},
+  { _T("F6"), KEY_F6},
+  { _T("F7"), KEY_F7},
+  { _T("F8"), KEY_F8},
+  { _T("F9"), KEY_F9},
+  { _T("F10"), KEY_F10},
+  { _T("F11"), KEY_F11},
+  { _T("F12"), KEY_F12},
+  { _T("BACK"),KEY_BACK},
+#if defined(USE_POLL_EVENT)||defined(ANDROID)||defined(USE_WINUSER)
+  { _T("NUMLOCK"),KEY_NUMLOCK},
+  { _T("KPASTERISK"), KEY_KPASTERISK},
+  { _T("KP7"), KEY_KP7},
+  { _T("KP8"), KEY_KP8},
+  { _T("KP9"), KEY_KP9},
+  { _T("KPMINUS"), KEY_KPMINUS},
+  { _T("KP4"), KEY_KP4},
+  { _T("KP5"), KEY_KP5},
+  { _T("KP6"), KEY_KP6},
+  { _T("KPPLUS"), KEY_KPPLUS},
+  { _T("KP1"), KEY_KP1},
+  { _T("KP2"), KEY_KP2},
+  { _T("KP3"), KEY_KP3},
+  { _T("KP0"), KEY_KP0},
+  { _T("KPENTER"), KEY_KPENTER},
+  { _T("KPEQUAL"), KEY_KPEQUAL},
+  { _T("KPSLASH"), KEY_KPSLASH},
+  { _T("DELETE"), KEY_DELETE},
+  { _T("KPCOMMA"), KEY_KPCOMMA},
+  { _T("INSERT"), KEY_INSERT},
+  { _T("BEGIN"), KEY_BEGIN},
+  { _T("PAGEDOWN"), KEY_PAGEDOWN},
+  { _T("PAGEUP"), KEY_PAGEUP},
+#ifdef USE_X11
+  { _T("KPEND"), KEY_KPEND},
+  { _T("KPHOME"), KEY_KPHOME},
+  { _T("KPLEFT"), KEY_KPLEFT},
+  { _T("KPRIGHT"), KEY_KPRIGHT},
+  { _T("KPUP"), KEY_KPUP},
+  { _T("KPDOWN"), KEY_KPDOWN},
+#else
+  { _T("KPEND"), KEY_END},
+  { _T("KPHOME"), KEY_HOME},
+  { _T("KPLEFT"), KEY_LEFT},
+  { _T("KPRIGHT"), KEY_RIGHT},
+  { _T("KPUP"), KEY_UP},
+  { _T("KPDOWN"), KEY_DOWN},
+#endif
+#endif
 #ifdef ANDROID
   /* These keys are used by BlueTooth keypads and available in Android*/
   { _T("BUTTON_R1"), KEYCODE_BUTTON_R1},
@@ -100,8 +141,25 @@ ParseKeyCode(const TCHAR *data)
 
   if (StringLength(data) == 1)
     return ToUpperASCII(data[0]);
-
   else
-    return 0;
+  {
+    LogFormat(_T("LUA: Error parsing input event key code"));
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-security"
+    LogFormat(data);
+    LogFormat(_T("LUA: Key Table:"));
+    static bool printed= false;
+    if(!printed)
+    {
+      printed = true;
+      for (const struct string_to_key *p = &string_to_key[0]; p->name != NULL; ++p)
+      {
+        LogFormat("Key code: %u", p->key);
+        LogFormat(p->name);
+      }
+    }
+#pragma GCC diagnostic pop
+        return 0;
+  }
 
 }
