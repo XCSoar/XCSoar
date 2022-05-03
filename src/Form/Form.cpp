@@ -372,7 +372,9 @@ WndForm::ShowModal()
           ? SDLK_UP : SDLK_DOWN;
       }
 #endif
-
+      event.SetKeyCode( UI::ConvertNumPadKeyToCursorKey( event.GetKeyCode()));
+      /* if key code was converted, the event needs to be updated, because
+         it will be used  later when forwarding the event to the other windows. */
       if (
 #ifdef USE_WINUSER
           IdentifyDescendant(event.msg.hwnd) &&

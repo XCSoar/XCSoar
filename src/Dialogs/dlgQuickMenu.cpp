@@ -30,6 +30,8 @@ Copyright_License {
 #include "Form/GridView.hpp"
 #include "Form/Button.hpp"
 #include "Input/InputEvents.hpp"
+#include "ui/event/shared/Event.hpp"
+
 #include "Screen/Layout.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
@@ -241,7 +243,7 @@ bool
 QuickMenu::KeyPress(unsigned key_code) noexcept
 {
   auto &grid_view = GetWindow();
-
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
   switch (key_code) {
   case KEY_LEFT:
     grid_view.MoveFocus(GridView::Direction::LEFT);

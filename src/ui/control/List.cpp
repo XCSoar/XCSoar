@@ -26,6 +26,7 @@ Copyright_License {
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "ui/dim/Rect.hpp"
+#include "../event/shared/Event.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -396,6 +397,7 @@ ListControl::MoveOrigin(int delta) noexcept
 bool
 ListControl::OnKeyCheck(unsigned key_code) const
 {
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
   switch (key_code) {
   case KEY_RETURN:
     return CanActivateItem();
@@ -416,7 +418,7 @@ ListControl::OnKeyDown(unsigned key_code)
 {
   scroll_bar.DragEnd(this);
   kinetic_timer.Cancel();
-
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
   switch (key_code) {
   case KEY_RETURN:
     if (CanActivateItem())

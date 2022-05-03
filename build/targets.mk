@@ -315,8 +315,8 @@ endif
 ifeq ($(TARGET),ANDROID)
   ANDROID_NDK ?= $(HOME)/opt/android-ndk-r24
 
-  ANDROID_SDK_PLATFORM = android-30
-  ANDROID_NDK_API = 21
+  ANDROID_SDK_PLATFORM ?= android-30
+  ANDROID_NDK_API ?= 21
 
   # The naming of CPU ABIs, architectures, and various NDK directory names is an unholy mess.
   # Therefore a number of variables exist for each supported ABI.

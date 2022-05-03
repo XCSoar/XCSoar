@@ -27,6 +27,7 @@ Copyright_License {
 #include "ui/event/KeyCode.hpp"
 #include "ui/canvas/Icon.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/event/shared/Event.hpp"
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
 
@@ -239,6 +240,8 @@ TabDisplay::OnCancelMode()
 bool
 TabDisplay::OnKeyCheck(unsigned key_code) const
 {
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
+
   switch (key_code) {
 
   case KEY_APP1:
@@ -270,6 +273,8 @@ TabDisplay::OnKeyCheck(unsigned key_code) const
 bool
 TabDisplay::OnKeyDown(unsigned key_code)
 {
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
+
   switch (key_code) {
 
   case KEY_APP1:

@@ -1,5 +1,5 @@
 /*
-Copyright_License {
+ Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2021 The XCSoar Project
@@ -29,6 +29,7 @@ Copyright_License {
 enum {
   KEY_RETURN = XK_Return,
   KEY_ESCAPE = XK_Escape,
+  KEY_BACK = XK_BackSpace,
   KEY_PRIOR = XK_Page_Up,
   KEY_NEXT = XK_Page_Down,
   KEY_UP = XK_Up,
@@ -38,7 +39,6 @@ enum {
   KEY_HOME = XK_Home,
   KEY_END = XK_End,
   KEY_TAB = XK_Tab,
-  KEY_BACK = XK_BackSpace,
   KEY_SPACE = XK_space,
   KEY_F1 = XK_F1,
   KEY_F2 = XK_F2,
@@ -53,6 +53,37 @@ enum {
   KEY_F11 = XK_F11,
   KEY_F12 = XK_F12,
   KEY_MENU = XK_Menu,
+  KEY_NUMLOCK = XK_Num_Lock,
+  KEY_KPENTER = XK_KP_Enter,
+  KEY_KPASTERISK = XK_KP_Multiply,
+  KEY_KPPLUS = XK_KP_Add,
+  KEY_KPCOMMA = XK_KP_Separator,
+  KEY_KPMINUS = XK_KP_Subtract,
+  KEY_KPSLASH = XK_KP_Divide,
+  KEY_BEGIN = XK_KP_Begin,
+  KEY_KP0 = XK_KP_0,  //Numlock is off by default for X11.   XK_KP_0,
+  KEY_KP1 = XK_KP_1,
+  KEY_KP2 = XK_KP_2,
+  KEY_KP3 = XK_KP_3,
+  KEY_KP4 = XK_KP_4,
+  KEY_KP5 = XK_KP_5,
+  KEY_KP6 = XK_KP_6,
+  KEY_KP7 = XK_KP_7,
+  KEY_KP8 = XK_KP_8,
+  KEY_KP9 = XK_KP_9,
+  KEY_KPEQUAL= XK_KP_Equal,
+  KEY_DELETE= XK_KP_Delete,
+  KEY_INSERT = XK_KP_Insert,  //Numlock is off by default for X11.   XK_KP_0,
+  KEY_PAGEDOWN = XK_KP_Page_Down,
+  KEY_PAGEUP = XK_KP_Page_Up,
+
+  KEY_KPLEFT = XK_KP_Left,
+  KEY_KPRIGHT = XK_KP_Right,
+  KEY_KPHOME = XK_KP_Home,
+  KEY_KPEND = XK_KP_End,
+  KEY_KPUP = XK_KP_Up,
+  KEY_KPDOWN = XK_KP_Down,
+
   KEY_APP1,
   KEY_APP2,
   KEY_APP3,

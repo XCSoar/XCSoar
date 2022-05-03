@@ -35,6 +35,7 @@ Copyright_License {
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "ui/event/shared/Event.hpp"
 #include "Look/Look.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
@@ -646,6 +647,8 @@ ChartControl::OnMouseUp(PixelPoint p)
 bool
 AnalysisWidget::KeyPress(unsigned key_code) noexcept
 {
+
+  key_code = UI::ConvertNumPadKeyToCursorKey( key_code);
   switch (key_code) {
   case KEY_LEFT:
     previous_button.SetFocus();
@@ -656,7 +659,6 @@ AnalysisWidget::KeyPress(unsigned key_code) noexcept
     next_button.SetFocus();
     NextPage(+1);
     return true;
-
   default:
     return false;
   }

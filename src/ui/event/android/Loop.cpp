@@ -58,7 +58,7 @@ EventLoop::Dispatch(const Event &event)
   if (event.type == Event::TIMER) {
     Timer *timer = (Timer *)event.ptr;
     timer->Invoke();
-  } else if (event.type == Event::CALLBACK) {
+  } else if (event.type == Event::_CALLBACK) {
     event.callback(event.ptr);
   } else if (event.type != Event::NOP)
     top_window.OnEvent(event);

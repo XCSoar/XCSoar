@@ -1,5 +1,6 @@
 EVENT_SOURCES = \
 	$(SRC)/ui/event/Globals.cpp \
+	$(SRC)/ui/event/shared/Event.cpp \
 	$(SRC)/ui/event/Idle.cpp \
 	$(SRC)/ui/event/DelayedNotify.cpp \
 	$(SRC)/ui/event/Notify.cpp

@@ -29,7 +29,7 @@ Copyright_License {
 #include <cassert>
 
 namespace UI {
-
+unsigned ConvertNumPadKeyToCursorKey( unsigned key_code) noexcept;
 struct Event {
   enum Type {
     NOP,
@@ -40,7 +40,7 @@ struct Event {
     TIMER,
 #endif
 
-    CALLBACK,
+    _CALLBACK, //CALLBACK is used by windows compiler
 
     KEY_DOWN,
     KEY_UP,
@@ -117,7 +117,7 @@ struct Event {
     :type(_type), param(_param), ptr(_ptr) {}
   Event(Type _type, void *_ptr):type(_type), ptr(_ptr) {}
   Event(Callback _callback, void *_ptr)
-    :type(CALLBACK), ptr(_ptr), callback(_callback) {}
+    :type(_CALLBACK), ptr(_ptr), callback(_callback) {}
   Event(Type _type, PixelPoint _point)
     :type(_type), point(_point) {}
 
@@ -133,6 +133,10 @@ struct Event {
     assert(IsKey());
 
     return param;
+  }
+  void SetKeyCode(unsigned key_code)
+  {
+    param = key_code;
   }
 
   size_t GetCharacterCount() const {

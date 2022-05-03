@@ -37,6 +37,7 @@ Copyright_License {
 #include "Geo/CoordinateFormat.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Asset.hpp"
+#include "ui/event/shared/Event.hpp"
 
 #include <algorithm>
 
@@ -920,6 +921,7 @@ DigitEntry::OnMouseDown(PixelPoint p)
 bool
 DigitEntry::OnKeyCheck(unsigned key_code) const
 {
+  key_code = UI::ConvertNumPadKeyToCursorKey(key_code);
   switch (key_code) {
   case KEY_UP:
   case KEY_DOWN:
