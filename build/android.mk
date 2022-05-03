@@ -28,7 +28,35 @@ ZIPALIGN = $(ANDROID_BUILD_TOOLS_DIR)/zipalign
 AAPT = $(ANDROID_BUILD_TOOLS_DIR)/aapt
 DX = $(ANDROID_BUILD_TOOLS_DIR)/dx
 
-ANDROID_LIB_NAMES = xcsoar
+ifeq ($(TESTING),y)
+	# other package name, android:debugging="true" in Manifest
+	MANIFEST = android/testing/AndroidManifest.xml
+	#red logo
+	ICON_SVG = $(topdir)/Data/graphics/logo_red.svg
+else
+	MANIFEST = android/AndroidManifest.xml
+	ICON_SVG = $(topdir)/Data/graphics/logo.svg
+endif
+
+OUTMANIFEST=output/ANDROID/AndroidManifest.xml
+
+ifeq ($(DEBUG),y)
+	# Use symbol libraries for debugging
+	ANDROID_LIB_NAMES = xcsoar-ns
+	LIB_EXTENSION = -ns.so
+	BOOLDEBUG = true
+else
+	BOOLDEBUG = false
+	ANDROID_LIB_NAMES = xcsoar
+	LIB_EXTENSION = .so
+endif
+
+#if DEBUG flag changed, update AndroidManifest, because android:debuggable="true" will always wait for debugger
+ifeq (,$(shell if test -r  $(OUTMANIFEST); then grep android:debuggable=.$(BOOLDEBUG).  <$(OUTMANIFEST); fi ))
+$(OUTMANIFEST): FORCE
+	@$(NQ)echo "  Generate Manifest $(MANIFESTDEBUGGABLESTATE)"
+	$(Q)sed -e 's/android:debuggable=\"[^\"]*\"/android:debuggable="$(BOOLDEBUG)"/g' <$(MANIFEST) >$(OUTMANIFEST)
+endif
 
 APKSIGN = $(APKSIGNER) sign
 ifeq ($(V),2)
@@ -109,11 +137,6 @@ RAW_DIR = $(RES_DIR)/raw
 ANDROID_XML_RES := $(wildcard android/res/*/*.xml)
 ANDROID_XML_RES_COPIES := $(patsubst android/res/%,$(RES_DIR)/%,$(ANDROID_XML_RES))
 
-ifeq ($(TESTING),y)
-ICON_SVG = $(topdir)/Data/graphics/logo_red.svg
-else
-ICON_SVG = $(topdir)/Data/graphics/logo.svg
-endif
 
 ICON_WHITE_SVG = $(topdir)/Data/graphics/logo_white.svg
 
@@ -193,21 +216,16 @@ PNG_FILES = $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5) \
 	$(RES_DIR)/drawable-xxhdpi/notification_icon.png \
 	$(RES_DIR)/drawable-xxxhdpi/notification_icon.png
 
-ifeq ($(TESTING),y)
-MANIFEST = android/testing/AndroidManifest.xml
-else
-MANIFEST = android/AndroidManifest.xml
-endif
 
 $(ANDROID_XML_RES_COPIES): $(RES_DIR)/%: android/res/%
 	$(Q)-$(MKDIR) -p $(dir $@)
 	$(Q)cp $< $@
 
-$(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) $(MANIFEST) | $(GEN_DIR)/dirstamp
+$(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) $(OUTMANIFEST) | $(GEN_DIR)/dirstamp
 	@$(NQ)echo "  AAPT"
 	$(Q)$(AAPT) package -f -m --auto-add-overlay \
 		--custom-package $(JAVA_PACKAGE) \
-		-M $(MANIFEST) \
+		-M $(OUTMANIFEST) \
 		-S $(RES_DIR) \
 		-J $(GEN_DIR) \
 		-I $(ANDROID_SDK_PLATFORM_DIR)/android.jar \
@@ -297,7 +315,7 @@ $(call SRC_TO_OBJ,$(SRC)/Android/TextEntryDialog.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/FileProvider.cpp): $(NATIVE_HEADERS)
 
 ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES))
-$(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(ABI_BIN_DIR)/lib%.so | $(ANDROID_ABI_DIR)/dirstamp
+$(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%$(LIB_EXTENSION): $(ABI_BIN_DIR)/lib%$(LIB_EXTENSION) | $(ANDROID_ABI_DIR)/dirstamp
 	$(Q)cp $< $@
 
 endif # !FAT_BINARY
