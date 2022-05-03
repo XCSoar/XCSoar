@@ -339,7 +339,7 @@ WaypointNameAllowedCharacters(const TCHAR *prefix)
 static DataField *
 CreateNameDataField(DataFieldListener *listener)
 {
-  return new PrefixDataField(_T(""), WaypointNameAllowedCharacters, listener);
+  return new PrefixDataField(_T(""), WaypointNameAllowedCharacters,nullptr,  listener);
 }
 
 static DataField *
