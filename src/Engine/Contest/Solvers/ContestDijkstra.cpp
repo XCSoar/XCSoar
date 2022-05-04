@@ -240,16 +240,17 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin,
     destination.SetPointIndex(first_finish_candidate);
 
   const bool usesMinDistance = min_distance > 0.0;
-  const GeoPoint &originGeo = GetPoint(origin).GetLocation();
+  const auto &origin_tp = GetPoint(origin);
   const unsigned weight = GetStageWeight(origin.GetStageNumber());
 
   bool previous_above = false;
   for (const ScanTaskPoint end(destination.GetStageNumber(), n_points);
        destination != end; destination.IncrementPointIndex()) {
-    bool above = GetPoint(destination).GetIntegerAltitude() >= min_altitude;
+    const auto destination_tp = GetPoint(destination);
+    const bool above = destination_tp.GetIntegerAltitude() >= min_altitude;
 
     const double distance = usesMinDistance
-      ? GetPoint(destination).DistanceTo(originGeo)
+      ? destination_tp.DistanceTo(origin_tp.GetLocation())
       : 0;
 
     /* Check if the distance is withing the minimum distance.
@@ -276,7 +277,7 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin,
   }
 
   if (IsFinal(destination) && predicted.IsDefined()) {
-    const unsigned d = weight * GetPoint(origin).FlatDistanceTo(predicted);
+    const unsigned d = weight * origin_tp.FlatDistanceTo(predicted);
     destination.SetPointIndex(predicted_index);
     Link(destination, origin, d);
   }
