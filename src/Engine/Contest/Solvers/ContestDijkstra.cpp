@@ -255,7 +255,7 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin,
     /* Check if the distance is withing the minimum distance.
        Also allows zero distance legs, because if a minimum distance is set not
        all solutions will use all legs. */
-    if (distance == 0 || distance > min_distance) {
+    if (distance <= 0 || distance >= min_distance) {
       if (above) {
         const unsigned d = weight * CalcEdgeDistance(origin, destination);
         Link(destination, origin, d);
