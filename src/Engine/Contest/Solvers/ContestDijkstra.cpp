@@ -240,7 +240,7 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin,
     destination.SetPointIndex(first_finish_candidate);
 
   const bool usesMinDistance = min_distance > 0.0;
-  const GeoPoint originGeo = GetPoint(origin).GetLocation();
+  const GeoPoint &originGeo = GetPoint(origin).GetLocation();
   const unsigned weight = GetStageWeight(origin.GetStageNumber());
 
   bool previous_above = false;
