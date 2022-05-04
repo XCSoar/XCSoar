@@ -239,7 +239,6 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin,
        search */
     destination.SetPointIndex(first_finish_candidate);
 
-  const bool usesMinDistance = min_distance > 0.0;
   const auto &origin_tp = GetPoint(origin);
   const unsigned weight = GetStageWeight(origin.GetStageNumber());
 
@@ -249,14 +248,12 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin,
     const auto destination_tp = GetPoint(destination);
     const bool above = destination_tp.GetIntegerAltitude() >= min_altitude;
 
-    const double distance = usesMinDistance
-      ? destination_tp.DistanceTo(origin_tp.GetLocation())
-      : 0;
-
     /* Check if the distance is withing the minimum distance.
        Also allows zero distance legs, because if a minimum distance is set not
        all solutions will use all legs. */
-    if (distance <= 0 || distance >= min_distance) {
+    if (origin_tp.GetFlatLocation() == destination_tp.GetFlatLocation() ||
+        CheckMinDistance(origin_tp.GetLocation(),
+                         destination_tp.GetLocation())) {
       if (above) {
         const unsigned d = weight * CalcEdgeDistance(origin, destination);
         Link(destination, origin, d);

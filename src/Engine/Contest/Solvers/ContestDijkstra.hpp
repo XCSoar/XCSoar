@@ -153,6 +153,18 @@ protected:
   }
 
 private:
+  [[gnu::pure]]
+  bool CheckMinDistance(const GeoPoint &origin,
+                        const GeoPoint &destination) const noexcept {
+    if (min_distance <= 0)
+      /* no minimum distance, don't bother calculating the actual
+         distance */
+      return true;
+
+    return origin.Distance(destination) >= min_distance;
+  }
+
+
   bool SaveSolution() noexcept;
 
 protected:
