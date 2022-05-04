@@ -41,7 +41,6 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
    NavDijkstra(n_legs + 1),
    TraceManager(_trace),
    continuous(_continuous),
-   incremental(false),
    min_distance(_min_distance)
 {
   assert(num_stages <= MAX_STAGES);

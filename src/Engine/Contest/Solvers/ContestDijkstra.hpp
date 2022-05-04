@@ -51,7 +51,7 @@ class ContestDijkstra : public AbstractContest, protected NavDijkstra, public Tr
    * each iteration?  If set, then only the last point is considered
    * as finish point, and start points are selected according to this.
    */
-  bool incremental;
+  bool incremental = false;
 
   /**
    * Did the last Dijkstra search finish (even if without a valid
