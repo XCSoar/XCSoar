@@ -25,7 +25,7 @@
 #include <cassert>
 
 void
-ThermalEncounterCollection::Merge(const ThermalBand& tb)
+ThermalEncounterCollection::Merge(const ThermalBand &tb) noexcept
 {
   if (!tb.Valid()) {
     // nothing to do
@@ -53,7 +53,7 @@ ThermalEncounterCollection::Merge(const ThermalBand& tb)
 }
 
 inline void
-ThermalEncounterCollection::LowerFloor(const double new_floor)
+ThermalEncounterCollection::LowerFloor(const double new_floor) noexcept
 {
   // floor is already low enough, no action required
   if (h_min <= new_floor) {
@@ -84,7 +84,7 @@ ThermalEncounterCollection::LowerFloor(const double new_floor)
 }
 
 inline void
-ThermalEncounterCollection::MergeUnsafe(const ThermalBand& o)
+ThermalEncounterCollection::MergeUnsafe(const ThermalBand &o) noexcept
 {
   // Progressively merge in new data, iterating over new data band.
   //
@@ -141,7 +141,7 @@ ThermalEncounterCollection::MergeUnsafe(const ThermalBand& o)
 }
 
 inline void
-ThermalEncounterCollection::UpdateTimes()
+ThermalEncounterCollection::UpdateTimes() noexcept
 {
   assert(!empty());
   // update accumulated times below slice height

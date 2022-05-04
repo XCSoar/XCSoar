@@ -56,12 +56,12 @@ struct ThermalSlice {
   }
 
   // combine this slice with the other
-  void Merge(const ThermalSlice& o);
+  void Merge(const ThermalSlice &o) noexcept;
 
   // update climb statistics other slice's time and height difference
-  void Update(const ThermalSlice& o, const double dh);
+  void Update(const ThermalSlice &o, double dh) noexcept;
 
-  void Reset() {
+  void Reset() noexcept {
     w_n = 0;
     w_t = 0;
     n = 0;

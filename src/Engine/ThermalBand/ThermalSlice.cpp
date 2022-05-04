@@ -25,7 +25,7 @@
 #include <cmath>
 
 void
-ThermalSlice::Merge(const ThermalSlice& o)
+ThermalSlice::Merge(const ThermalSlice& o) noexcept
 {
   const double n_new = n + o.n;
   if (n_new>0) {
@@ -45,7 +45,7 @@ ThermalSlice::Merge(const ThermalSlice& o)
 }
 
 void
-ThermalSlice::Update(const ThermalSlice &o, const double dh)
+ThermalSlice::Update(const ThermalSlice &o, const double dh) noexcept
 {
   dt = (o.time - time) * n;
   w_t = w_n = (dt.count() != 0) ? dh * n / dt.count() : o.w_n;

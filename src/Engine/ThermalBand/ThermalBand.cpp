@@ -26,7 +26,7 @@
 #include <cassert>
 
 void
-ThermalBand::Reset()
+ThermalBand::Reset() noexcept
 {
   dh = 10;
   h_min = 0;
@@ -34,7 +34,7 @@ ThermalBand::Reset()
 }
 
 double
-ThermalBand::GetSliceCenter(const unsigned index) const
+ThermalBand::GetSliceCenter(const unsigned index) const noexcept
 {
   assert(index < size());
   if (index+1 == size()) {
@@ -44,7 +44,7 @@ ThermalBand::GetSliceCenter(const unsigned index) const
 }
 
 void
-ThermalBand::Update(const unsigned index)
+ThermalBand::Update(const unsigned index) noexcept
 {
   assert(index < size());
   if (index + 1 < size()) {
@@ -55,7 +55,7 @@ ThermalBand::Update(const unsigned index)
 }
 
 void
-ThermalBand::CheckExpand(const ThermalBand& tb, bool update)
+ThermalBand::CheckExpand(const ThermalBand &tb, bool update) noexcept
 {
   assert(!empty());
 
@@ -66,7 +66,7 @@ ThermalBand::CheckExpand(const ThermalBand& tb, bool update)
 }
 
 void
-ThermalBand::Decimate(bool update)
+ThermalBand::Decimate(bool update) noexcept
 {
   assert(!empty());
 
@@ -91,7 +91,7 @@ ThermalBand::Decimate(bool update)
 ////////////////// supplemental information ///////////////////////
 
 double
-ThermalBand::GetMaxN() const
+ThermalBand::GetMaxN() const noexcept
 {
   double n = 0;
   for (const auto &i : slices)
@@ -111,7 +111,7 @@ ThermalBand::GetTimeElapsed() const noexcept
 }
 
 double
-ThermalBand::GetMaxW() const
+ThermalBand::GetMaxW() const noexcept
 {
   double w = 0;
   for (unsigned i = 0; i + 1 < size(); ++i) {

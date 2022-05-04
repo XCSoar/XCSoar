@@ -42,7 +42,7 @@ public:
                  const double height) noexcept;
 
 private:
-  unsigned ResizeToHeight(const double height);
+  unsigned ResizeToHeight(const double height) noexcept;
 
   unsigned FindPenultimateFinished(const unsigned index,
                                    const FloatDuration time) noexcept;
@@ -51,8 +51,7 @@ private:
                                  const double height,
                                  const unsigned index) noexcept;
 
-  void Start(const TimeStamp time,
-             const double height);
+  void Start(TimeStamp time, double height) noexcept;
 
 };
 
