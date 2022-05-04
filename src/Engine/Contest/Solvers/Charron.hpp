@@ -36,7 +36,7 @@
  */
 class Charron : public ContestDijkstra {
 
-  bool plus_200km;
+  const bool plus_200km;
 
 public:
   /**
