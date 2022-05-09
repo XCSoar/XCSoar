@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2010-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,15 +27,15 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef TRIVIAL_ARRAY_HXX
-#define TRIVIAL_ARRAY_HXX
+#pragma once
 
 #include "ConstBuffer.hxx"
 #include "WritableBuffer.hxx"
 
+#include <algorithm>
 #include <array>
 #include <initializer_list>
-#include <algorithm>
+#include <span>
 
 #include <cassert>
 #include <cstddef>
@@ -91,6 +91,14 @@ public:
 		assert(init.size() <= max);
 
 		std::move(init.begin(), init.end(), array.begin());
+	}
+
+	constexpr operator std::span<const T>() const noexcept {
+		return {data(), size()};
+	}
+
+	constexpr operator std::span<T>() noexcept {
+		return {data(), size()};
 	}
 
 	static constexpr size_type capacity() noexcept { return max; }
@@ -303,5 +311,3 @@ public:
 		return {data(), size()};
 	}
 };
-
-#endif
