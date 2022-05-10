@@ -352,8 +352,8 @@ RasterTileCache::LoadCache(BufferedReader &r)
 
   /* load overview */
   size_t overview_size = overview.GetSize().Area();
-  r.ReadFull({
-      overview.GetData(),
-      sizeof(*overview.GetData()) * overview_size,
-    });
+  r.ReadFull(std::as_writable_bytes(std::span{
+        overview.GetData(),
+        overview_size,
+      }));
 }
