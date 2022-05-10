@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device.hpp"
 #include "CRC16.hpp"
+#include "Device/Error.hpp"
 #include "Device/Port/Port.hpp"
 #include "time/TimeoutClock.hpp"
 
@@ -268,7 +269,7 @@ FlarmDevice::WaitForACK(uint16_t sequence_number,
 bool
 FlarmDevice::BinaryPing(OperationEnvironment &env,
                         std::chrono::steady_clock::duration _timeout)
-{
+try {
   const TimeoutClock timeout(_timeout);
 
   // Create header for sending a binary ping request
@@ -279,6 +280,8 @@ FlarmDevice::BinaryPing(OperationEnvironment &env,
   SendStartByte();
   SendFrameHeader(header, env, timeout.GetRemainingOrZero());
   return WaitForACK(header.sequence_number, env, timeout.GetRemainingOrZero());
+} catch (const DeviceTimeout &) {
+  return false;
 }
 
 void
