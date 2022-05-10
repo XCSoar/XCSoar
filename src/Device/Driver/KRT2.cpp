@@ -228,8 +228,8 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
       expected_msg_length = 0;
       continue;
     }
-    size_t nbytes = std::min(range.size, size_t(end - data));
-    memcpy(range.data, data, nbytes);
+    size_t nbytes = std::min(range.size(), size_t(end - data));
+    std::copy_n(data, nbytes, range.begin());
     data += nbytes;
     rx_buf.Append(nbytes);
 
@@ -239,13 +239,13 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
       if (range.empty())
         break;
 
-      if (range.size < expected_msg_length)
+      if (range.size() < expected_msg_length)
         break;
 
-      expected_msg_length = ExpectedMsgLength(range.data, range.size);
+      expected_msg_length = ExpectedMsgLength(range.data(), range.size());
 
-      if (range.size >= expected_msg_length) {
-        switch (*(const std::byte *) range.data) {
+      if (range.size() >= expected_msg_length) {
+        switch (*(const std::byte *) range.data()) {
           case std::byte{'S'}:
             // Respond to connection query.
             port.Write(0x01);
@@ -255,7 +255,7 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
             // Received a response to a normal command (STX)
             {
               const std::lock_guard<Mutex> lock(response_mutex);
-              response = *(const std::byte *) range.data;
+              response = *(const std::byte *) range.data();
               // Signal the response to the TX thread
               rx_cond.notify_one();
             }
@@ -264,7 +264,7 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
             // Received a command from the radio (STX). Handle what we know.
             {
               const std::lock_guard<Mutex> lock(response_mutex);
-              const struct stx_msg * msg = (const struct stx_msg *) range.data;
+              const struct stx_msg * msg = (const struct stx_msg *) range.data();
               HandleSTXCommand(msg, info);
             }
           default:

@@ -40,7 +40,7 @@ PortNMEAReader::Fill(TimeoutClock timeout)
     /* already full */
     return false;
 
-  size_t nbytes = port.WaitAndRead(dest.data, dest.size, env, timeout);
+  size_t nbytes = port.WaitAndRead(dest.data(), dest.size(), env, timeout);
 
   buffer.Append(nbytes);
   return true;
@@ -50,10 +50,10 @@ inline char *
 PortNMEAReader::GetLine()
 {
   const auto src = buffer.Read();
-  char *const end = src.data + src.size;
+  char *const end = src.data() + src.size();
 
   /* a NMEA line starts with a dollar symbol ... */
-  char *dollar = std::find(src.data, end, '$');
+  char *dollar = std::find(src.data(), end, '$');
   if (dollar == end) {
     buffer.Clear();
     return nullptr;
@@ -80,7 +80,7 @@ PortNMEAReader::GetLine()
     return nullptr;
   }
 
-  buffer.Consume(asterisk + 3 - src.data);
+  buffer.Consume(asterisk + 3 - src.data());
 
   *asterisk = 0;
   return start;

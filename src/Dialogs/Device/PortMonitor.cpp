@@ -60,8 +60,8 @@ public:
       const std::lock_guard<Mutex> lock(mutex);
       buffer.Shift();
       auto range = buffer.Write();
-      const std::size_t nbytes = std::min(s.size(), range.size);
-      std::copy_n(s.data(), nbytes, range.data);
+      const std::size_t nbytes = std::min(s.size(), range.size());
+      std::copy_n(s.begin(), nbytes, range.begin());
       buffer.Append(nbytes);
     }
 
@@ -72,7 +72,7 @@ public:
 private:
   void OnNotification() noexcept {
     while (true) {
-      char data[64];
+      std::byte data[64];
       size_t length;
 
       {
@@ -81,12 +81,12 @@ private:
         if (range.empty())
           break;
 
-        length = std::min(ARRAY_SIZE(data), size_t(range.size));
-        memcpy(data, range.data, length);
+        length = std::min(ARRAY_SIZE(data), range.size());
+        std::copy_n(range.begin(), length, data);
         buffer.Consume(length);
       }
 
-      terminal.Write(data, length);
+      terminal.Write((const char *)data, length);
     }
   }
 };
