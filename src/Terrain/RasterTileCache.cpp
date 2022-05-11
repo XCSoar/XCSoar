@@ -313,8 +313,7 @@ RasterTileCache::LoadCache(BufferedReader &r)
   Reset();
 
   /* load metadata */
-  CacheHeader header;
-  r.ReadFull({&header, sizeof(header)});
+  const auto header = r.ReadFullT<CacheHeader>();
 
   if (header.version != CacheHeader::VERSION ||
       header.size.x < 1024 || header.size.x > 1024 * 1024 ||
@@ -335,14 +334,12 @@ RasterTileCache::LoadCache(BufferedReader &r)
 
   /* load segments */
   for (unsigned i = 0; i < header.num_marker_segments; ++i) {
-    MarkerSegmentInfo &segment = segments.append();
-    r.ReadFull({&segment, sizeof(segment)});
+    segments.append() = r.ReadFullT<MarkerSegmentInfo>();
   }
 
   /* load tiles */
   while (true) {
-    unsigned i;
-    r.ReadFull({&i, sizeof(i)});
+    const auto i = r.ReadFullT<unsigned>();
 
     if (i == (unsigned)-1)
       break;

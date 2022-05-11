@@ -120,7 +120,7 @@ public:
 
   template<typename T>
   void ReadT(T &value) {
-    ReadFull({&value, sizeof(value)});
+    ReadFullT(value);
   }
 
   uint8_t Read8() {
