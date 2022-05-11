@@ -307,8 +307,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
           for (unsigned i = 0; i < msize; ++i)
             geo_points[i] = src[i * iskip];
 
-          msize = clip.ClipPolygon(geo_points.begin(),
-                                   geo_points.begin(), msize);
+          msize = clip.ClipPolygon(geo_points.data(),
+                                   geo_points.data(), msize);
           if (msize < 3)
             continue;
 

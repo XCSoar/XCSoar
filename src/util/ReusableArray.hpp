@@ -59,7 +59,7 @@ public:
    */
   T *get(size_type _length) {
     array.GrowDiscard(_length);
-    return array.begin();
+    return array.data();
   }
 
   /**
@@ -67,7 +67,7 @@ public:
    */
   T *grow(size_type old_length, size_type new_length) {
     array.grow_preserve(new_length, old_length);
-    return array.begin();
+    return array.data();
   }
 };
 

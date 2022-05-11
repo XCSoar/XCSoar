@@ -222,12 +222,12 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
 
     // Read payload and check length
     data.GrowDiscard(length);
-    if (!ReceiveEscaped(data.begin(), length,
+    if (!ReceiveEscaped(data.data(), length,
                         env, timeout.GetRemainingOrZero()))
       continue;
 
     // Verify CRC
-    if (header.crc != FLARM::CalculateCRC(header, data.begin(), length))
+    if (header.crc != FLARM::CalculateCRC(header, data.data(), length))
       continue;
 
     // Check message type
@@ -239,7 +239,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
       continue;
 
     // Check whether the received ACK is for the right sequence number
-    if (FromLE16(*((const uint16_t *)(const void *)data.begin())) ==
+    if (FromLE16(*((const uint16_t *)(const void *)data.data())) ==
         sequence_number)
       return (FLARM::MessageType)header.type;
   }

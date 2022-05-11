@@ -84,7 +84,7 @@ public:
       mode = OUTLINE;
     }
 
-    canvas.DrawPolyline(points.begin(), num_points);
+    canvas.DrawPolyline(points.data(), num_points);
 
     num_points = 0;
   }
@@ -96,7 +96,7 @@ public:
       mode = SOLID;
     }
 
-    canvas.DrawPolygon(points.begin(), num_points);
+    canvas.DrawPolygon(points.data(), num_points);
 
     num_points = 0;
   }

@@ -65,7 +65,7 @@ struct ProjectedFan {
       triangle_buffer[i] += start;
 
     glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT,
-                   triangle_buffer.begin());
+                   triangle_buffer.data());
   }
 
   void DrawOutline(unsigned start) const {

@@ -250,7 +250,7 @@ FlarmDevice::ReadFlightInfo(RecordedFlightInfo &flight,
   if (ack_result != FLARM::MT_ACK || length <= 2)
     return false;
 
-  char *record_info = (char *)data.begin() + 2;
+  char *record_info = (char *)data.data() + 2;
   return ParseRecordInfo(record_info, flight);
 }
 
@@ -335,13 +335,13 @@ FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
     uint8_t progress = *(data.begin() + 2);
     env.SetProgressPosition(std::min((unsigned)progress, 100u));
 
-    const char *last_char = (const char *)data.end() - 1;
-    bool is_last_packet = (*last_char == 0x1A);
+    const char last_char = (char)data.back();
+    bool is_last_packet = (last_char == 0x1A);
     if (is_last_packet)
       length--;
 
     // Read IGC data
-    const char *igc_data = (const char *)data.begin() + 3;
+    const char *igc_data = (const char *)data.data() + 3;
     os.Write(igc_data, length);
 
     if (is_last_packet)
