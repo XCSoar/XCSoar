@@ -28,7 +28,6 @@ Copyright_License {
 #include "Widget/WindowWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Device/Descriptor.hpp"
-#include "util/Macros.hpp"
 #include "util/StaticFifoBuffer.hxx"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
@@ -72,7 +71,7 @@ public:
 private:
   void OnNotification() noexcept {
     while (true) {
-      std::byte data[64];
+      std::array<std::byte, 64> data;
       size_t length;
 
       {
@@ -81,12 +80,12 @@ private:
         if (range.empty())
           break;
 
-        length = std::min(ARRAY_SIZE(data), range.size());
-        std::copy_n(range.begin(), length, data);
+        length = std::min(data.size(), range.size());
+        std::copy_n(range.begin(), length, data.begin());
         buffer.Consume(length);
       }
 
-      terminal.Write((const char *)data, length);
+      terminal.Write((const char *)data.data(), length);
     }
   }
 };
@@ -176,10 +175,10 @@ ShowPortMonitor(DeviceDescriptor &device)
 {
   const Look &look = UIGlobals::GetLook();
 
-  TCHAR buffer[64];
+  std::array<TCHAR, 64> buffer;
   StaticString<128> caption;
   caption.Format(_T("%s: %s"), _("Port monitor"),
-                 device.GetConfig().GetPortName(buffer, ARRAY_SIZE(buffer)));
+                 device.GetConfig().GetPortName(buffer.data(), buffer.size()));
 
   TWidgetDialog<PortMonitorWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
