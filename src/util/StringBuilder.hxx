@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2015-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,14 +27,11 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_BUILDER_HXX
-#define STRING_BUILDER_HXX
-
-#include "ConstBuffer.hxx"
-#include "WritableBuffer.hxx"
+#pragma once
 
 #include <algorithm>
 #include <cstddef>
+#include <span>
 
 /**
  * Fills a string buffer incrementally by appending more data to the
@@ -53,8 +50,8 @@ class BasicStringBuilder {
 	static constexpr value_type SENTINEL = '\0';
 
 public:
-	constexpr explicit BasicStringBuilder(WritableBuffer<value_type> b) noexcept
-		:p(b.begin()), end(b.end()) {}
+	constexpr explicit BasicStringBuilder(std::span<value_type> b) noexcept
+		:p(b.data()), end(p + b.size()) {}
 
 	constexpr BasicStringBuilder(pointer _p, pointer _end) noexcept
 		:p(_p), end(_end) {}
@@ -74,7 +71,7 @@ public:
 		return p >= end - 1;
 	}
 
-	WritableBuffer<value_type> Write() const noexcept {
+	std::span<value_type> Write() const noexcept {
 		return {p, end};
 	}
 
@@ -107,8 +104,8 @@ public:
 	void Append(const_pointer src);
 	void Append(const_pointer src, size_t length);
 
-	void Append(ConstBuffer<T> src) {
-		Append(src.data, src.size);
+	void Append(std::span<const T> src) {
+		Append(src.data(), src.size());
 	}
 
 	void Format(const_pointer fmt, ...);
@@ -210,5 +207,3 @@ UnsafeBuildString(T *buffer, Args&&... args)
 	_UnsafeAppendAll(buffer, std::forward<Args>(args)...);
 	return buffer;
 }
-
-#endif
