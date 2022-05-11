@@ -39,6 +39,7 @@
 #endif
 
 #include <cstddef>
+#include <span>
 
 #if __cplusplus >= 202002 || (defined(__GNUC__) && __GNUC__ >= 10)
 #include <version>
@@ -78,6 +79,10 @@ public:
 	constexpr SocketAddress(const struct sockaddr *_address,
 				size_type _size) noexcept
 		:address(_address), size(_size) {}
+
+	explicit SocketAddress(std::span<const std::byte> src) noexcept
+		:address((const struct sockaddr *)(const void *)src.data()),
+		 size(src.size()) {}
 
 	static constexpr SocketAddress Null() noexcept {
 		return nullptr;
@@ -156,6 +161,14 @@ public:
 	 */
 	[[gnu::pure]]
 	IPv4Address UnmapV4() const noexcept;
+
+	operator std::span<const std::byte>() const noexcept {
+		const void *q = reinterpret_cast<const void *>(address);
+		return {
+			(const std::byte *)q,
+			(std::size_t)size,
+		};
+	}
 
 	/**
 	 * Extract the port number.  Returns 0 if not applicable.
