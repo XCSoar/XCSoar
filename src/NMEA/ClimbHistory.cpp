@@ -22,21 +22,20 @@ Copyright_License {
 */
 
 #include "ClimbHistory.hpp"
-#include "util/Macros.hpp"
 
 #include <algorithm>
 
 void
 ClimbHistory::Clear()
 {
-  std::fill_n(vario, ARRAY_SIZE(vario), 0);
-  std::fill_n(count, ARRAY_SIZE(count), 0);
+  std::fill(vario.begin(), vario.end(), 0);
+  std::fill(count.begin(), count.end(), 0);
 }
 
 void
 ClimbHistory::Add(unsigned speed, double _vario)
 {
-  if (speed >= SIZE)
+  if (speed >= count.size())
     return;
 
   if (count[speed] >= 0x8000) {
