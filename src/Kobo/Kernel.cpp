@@ -31,8 +31,8 @@ Copyright_License {
 #ifdef KOBO
 
 #include "io/FileReader.hxx"
-#include "io/GunzipReader.hxx"
 #include "io/BufferedReader.hxx"
+#include "lib/zlib/GunzipReader.hxx"
 
 #include <fcntl.h>
 #include <string.h>

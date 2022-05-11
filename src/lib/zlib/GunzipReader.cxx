@@ -28,7 +28,7 @@
  */
 
 #include "GunzipReader.hxx"
-#include "ZlibError.hxx"
+#include "Error.hxx"
 
 GunzipReader::GunzipReader(Reader &_next)
 	:next(_next)

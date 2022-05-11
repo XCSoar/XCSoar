@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "io/FileReader.hxx"
-#include "io/GunzipReader.hxx"
 #include "io/BufferedReader.hxx"
+#include "lib/zlib/GunzipReader.hxx"
 #include "system/Args.hpp"
 #include "util/PrintException.hxx"
 
