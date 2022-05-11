@@ -72,6 +72,10 @@ public:
 				size_type _size) noexcept
 		:address(_address), size(_size) {}
 
+	explicit SocketAddress(std::span<const std::byte> src) noexcept
+		:address((const struct sockaddr *)(const void *)src.data()),
+		 size(src.size()) {}
+
 	static constexpr SocketAddress Null() noexcept {
 		return nullptr;
 	}
@@ -156,6 +160,14 @@ public:
 	[[gnu::pure]]
 	unsigned GetPort() const noexcept;
 #endif
+
+	operator std::span<const std::byte>() const noexcept {
+		const void *q = reinterpret_cast<const void *>(address);
+		return {
+			(const std::byte *)q,
+			(std::size_t)size,
+		};
+	}
 
 	/**
 	 * Return a buffer pointing to the "steady" portion of the
