@@ -205,6 +205,8 @@ private:
 		return fd.IsDefined();
 #endif
 	}
+
+	void Delete(Path path) const noexcept;
 };
 
 #endif
