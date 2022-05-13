@@ -69,7 +69,7 @@ Replay::Start(Path _path)
 
   path = _path;
 
-  if (path == nullptr || path.IsEmpty()) {
+  if (path == nullptr || path.empty()) {
     replay = new DemoReplayGlue(task_manager);
   } else if (path.MatchesExtension(_T(".igc"))) {
     replay = new IgcReplay(std::make_unique<FileLineReaderA>(path));

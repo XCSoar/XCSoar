@@ -69,7 +69,7 @@ public:
   [[gnu::pure]]
   AllocatedPath operator+(const_pointer other) const noexcept;
 
-  bool IsEmpty() const noexcept {
+  bool empty() const noexcept {
     return value.empty();
   }
 
@@ -226,7 +226,7 @@ public:
     return Path(*this) + other;
   }
 
-  bool IsEmpty() const noexcept {
+  bool empty() const noexcept {
     return value.empty();
   }
 

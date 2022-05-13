@@ -750,7 +750,7 @@ InputEvents::eventUploadIGCFile(const TCHAR *misc) {
   df.SetFileType(FileType::IGC);
   if (FilePicker(_T("IGC-FilePicker"), df)) {
     auto path = df.GetValue();
-    if (!path.IsEmpty())
+    if (!path.empty())
       if (WeGlide::UploadIGCFile(path)) {
         // success!
       }
