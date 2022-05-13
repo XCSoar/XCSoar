@@ -45,7 +45,6 @@ Copyright_License {
 #include "co/InvokeTask.hxx"
 #include "net/http/Init.hpp"
 #include "net/http/CoDownloadToFile.hpp"
-#include "io/FileTransaction.hpp"
 
 #include <stdio.h>
 
@@ -186,16 +185,13 @@ RASPSettingsPanel::Download() noexcept
   auto path = LocalPath(_T(RASP_FILENAME));
 
   try {
-    FileTransaction transaction(path);
     PluggableOperationEnvironment env;
 
     if (!ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
                       _("Download"),
-                      DownloadRASP(url, transaction.GetTemporaryPath(), env),
+                      DownloadRASP(url, path, env),
                       &env))
       return;
-
-    transaction.Commit();
   } catch (...) {
     ShowError(std::current_exception(), _("Download"));
     return;
