@@ -193,22 +193,22 @@ FileOutputStream::OpenCreate(bool visible)
 {
 #ifdef HAVE_O_TMPFILE
 	/* try Linux's O_TMPFILE first */
-	is_tmpfile = !visible && OpenTempFile(directory_fd, fd, GetPath());
-	if (!is_tmpfile) {
-#endif
-		/* fall back to plain POSIX */
-		if (!fd.Open(
-#ifdef __linux__
-			     directory_fd,
-#endif
-			     GetPath().c_str(),
-			     O_WRONLY|O_CREAT|O_TRUNC,
-			     0666))
-			throw FormatErrno("Failed to create %s",
-					  GetPath().c_str());
-#ifdef HAVE_O_TMPFILE
+	if (!visible && OpenTempFile(directory_fd, fd, GetPath())) {
+		is_tmpfile = true;
+		return;
 	}
 #endif
+
+	/* fall back to plain POSIX */
+	if (!fd.Open(
+#ifdef __linux__
+		    directory_fd,
+#endif
+		    GetPath().c_str(),
+		    O_WRONLY|O_CREAT|O_TRUNC,
+		    0666))
+		throw FormatErrno("Failed to create %s",
+				  GetPath().c_str());
 }
 
 inline void
