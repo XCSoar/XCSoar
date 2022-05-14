@@ -367,7 +367,7 @@ Die Filterfunktion ist beschrieben in Kap.~\ref{sec:airspace-filter}.
 
 %%%%%%%%%%%%%%%%%%
 \section{Endanflugrechner/Sicherheitsfaktoren}
-Hier werden Einstellungen für die Sicherheitshöhen und deren Verhalten in den Berechnungsalgorythmen vorgenommen.
+Hier werden Einstellungen für die Sicherheitshöhen und deren Verhalten in den Berechnungsalgorithmen vorgenommen.
 
 \begin{description}
 \item[\textit{Ankunftshöhe}] Sicherheitshöhe. \index{Sicherheitshöhe!Einstellung} Diese  gibt die Höhe über Grund am Zielpunkt an, in der das
@@ -402,7 +402,7 @@ Ein Wert von ca. $0.3$ ist empfohlen.  Mehr dazu auch in Kap.~\ref{sec:safety-fa
 Über diese Seite können die Routinen des Endanflugrechners von \xc  beinflußt werden.
 
 \begin{description}
-\item[\textit{MC Optimierung}]  Diese Option setzt fest, welcher MC-Algorythmus verwendet wrd.
+\item[\textit{MC Optimierung}]  Diese Option setzt fest, welcher MC-Algorithmus verwendet wrd.
 Mehr dazu in Kap.~\ref{sec:auto-maccready}. \\
    {\bf Endanflug}: Stellt den MC Wert auf die schnellstmögliche Ankunft ein.
    Bei OLC - Aufgaben werden die Einstellungen  so gewählt, daß \sketch{figures/config-glidecomputer.png} eine möglichst große Strecke innerhalb der verbleibenden Zeit zurückgelegt wird.\\
@@ -429,7 +429,7 @@ aktuellen Wert herankommen, größere Werte immer weiter an den Wert gemittell �
 \item[\textit{Geschätzte Winddrift$^{\textcolor{blue}{\star}}$}]  {\bf Ein / Aus}: Berücksichtigt die Abdrift durch den Wind während des Kurbelns. Dies wird die Ankunftshöhe auf Gegenwindschenkeln reduzieren
 und kann mitunter zu interpretationswürdigen Ergebnissen führen,
 wenn man sich im Endanflug unterhalb des Gleitpfades befindet, MC auf Null gestellt hat, und so also noch kurbeln \textsl{muß}.
-Nach der MC-Theorie heißt MC=0, daß kein Kurbeln mehr stattfindet. Der Algorythmus befindet sich so in einer Zwickmühle, denn einerseits wird mitgeteilt, daß nicht
+Nach der MC-Theorie heißt MC=0, daß kein Kurbeln mehr stattfindet. Der Algorithmus befindet sich so in einer Zwickmühle, denn einerseits wird mitgeteilt, daß nicht
 mehr gekurbelt wird, andererseits tut man es doch\dots
 \achtung Für das ''normale, althergebrachte Verhalten'' anderer Systeme sollte man sich überlegen, dies auf ''Aus'' stehen zu lassen.
 \end{description}
@@ -440,7 +440,7 @@ mehr gekurbelt wird, andererseits tut man es doch\dots
 Auf dieser Seite werden die Windeinstellungen vorgenommen. Details zu den verschiedenen Berechnungen in Kap.~\ref{sec:wind-estimation}
 \begin{description}
 \item[\textit{Windberech}]  \label{conf:autowind}  Auswahl des entsprechenden modus für Ermittlung des Windes in \xc \\
-  {\bf Manuell}: Wenn der Algorythmus ausgeschaltet ist, wird allein die Eingabe des Piloten benutzt. \\
+  {\bf Manuell}: Wenn der Algorithmus ausgeschaltet ist, wird allein die Eingabe des Piloten benutzt. \\
   {\bf beim Kreisen}: Benutzt das GPS zur Ermittlung des Windes durch Berechnung der Abdrift beim Kurbeln.\\
   \sketch{figures/config-wind.png}{\bf ZickZack}: ZickZack-Modus benötigt ein intelligentes Vario  mit einem Ausgang für die TAS.\\
   {\bf Beides}:  Benutzt den ZickZack und GPS-Modus zur Ermittlung des Windes.
@@ -568,7 +568,7 @@ rules. \label{conf:taskrules}\index{Aufgabe!Regeln Voreinstellung}
 \item[\textit{Zielhöhenref.$^{\textcolor{blue}{\star}}$}] Bezugshöhe der Ankunftshöhe:\\
     {\bf MSL}: Ankunftshöhe ist bezogen auf Meereshöhe.\\
     {\bf AGL}: Ankunftshöhe ist bezogen auf Höhe über Grund.
-\item[\textit{Contest}]  Einstellungen zu den Optimierungsalgorythmen des ausgewählten Wettbewerbs. \\
+\item[\textit{Contest}]  Einstellungen zu den Optimierungsalgorithmen des ausgewählten Wettbewerbs. \\
    {\bf OLC FAI}: Gleichlautend zu den FAI-Dreiecksregeln. Zwei Wenden, wobei Star-und Zielpunkt identisch sind.
    Kein Schenkel darf kürzer sein als 28\% der Gesamtstrecke. Bei Dreiecken größer als 500Km
    darf kein Schenkel größer sein als 25\% der Gesamtstrecke und länger als 45\% andernfalls kein
@@ -629,7 +629,7 @@ Gewertet wird das Zentrum des Zylinders.(britisch)\\
 {\bf  FAI Abzeichen / Rekorde}: FAI-Regeln. Erlaubt nur FAI Start-, Ziel- und Wendepunkttypen. Für Abzeichen und Rekorde. Aktiviert die FAI Höhe für die Endanflugbnerechnung.
 \item[\textit{AAT min. Zeit}] Die bei AAT-Aufgaben mindestens zu fliegende Zeit. Vorgabe durch WB-Leitung.
 \item[\textit{Optimierungs-Spielraum$^{\textcolor{blue}{\star}}$}] Sicherheitszeitraum für AAT-Optimierung.
-Als Schutz gegen ''zu früh ankommen''. Der Optimierungsalgorythmus versucht, die Aufgabe innerhalb der vorgegebenen Mindestflugzeit plus dieser Zusatzzeit zu bneenden.
+Als Schutz gegen ''zu früh ankommen''. Der Optimierungsalgorithmus versucht, die Aufgabe innerhalb der vorgegebenen Mindestflugzeit plus dieser Zusatzzeit zu bneenden.
 Im ''Optimiert''-Modus  werden dabei die AAT-Punkte automatisch verschoben, um diese Zeit einhalten zu können..
 \end{description}
 
