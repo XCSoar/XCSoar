@@ -419,7 +419,7 @@ event=Mode default
 event=StatusMessage Dropped marker
 event=Logger note Mark
 event=MarkLocation
-label=Mark\nDrop
+label=Marker\nDrop
 location=6
 
 mode=Nav2
@@ -1062,7 +1062,7 @@ event=Mode default
 event=StatusMessage Dropped marker
 event=Logger note Mark
 event=MarkLocation
-label=Mark\nDrop
+label=Marker\nDrop
 location=10
 
 mode=RemoteStick
