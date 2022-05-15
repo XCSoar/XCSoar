@@ -610,7 +610,7 @@ type=key
 data=8
 event=WaypointEditor
 event=Mode default
-label=Waypoints Editor
+label=Waypoint Editor
 location=7
 
 mode=Config2
