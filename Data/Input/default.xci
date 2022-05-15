@@ -303,7 +303,6 @@ type=gesture
 data=LDR
 event=Checklist
 
-
 mode=default
 type=gesture
 data=URDL
@@ -796,7 +795,7 @@ type=key
 data=9
 event=Checklist
 event=Mode default
-label=Check\nlist
+label=Checklist
 location=8
 
 mode=Info1
@@ -1203,7 +1202,7 @@ type=key
 data=0
 event=Checklist
 event=Mode default
-label=Check\nlist
+label=Checklist
 location=28
 
 mode=RemoteStick
