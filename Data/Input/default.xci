@@ -361,7 +361,7 @@ type=key
 data=6
 event=Calculator
 event=Mode default
-label=Task
+label=Task Manager
 location=5
 
 mode=Nav1
