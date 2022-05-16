@@ -390,7 +390,7 @@ type=key
 data=0
 event=Setup Alternates
 event=Mode default
-label=Alternates$(CheckWaypointFile)
+label=Alternates\nList$(CheckWaypointFile)
 location=9
 
 # -------------
@@ -1019,7 +1019,7 @@ type=key
 data=0
 event=Setup Alternates
 event=Mode default
-label=Alternates$(CheckWaypointFile)
+label=Alternates\nList$(CheckWaypointFile)
 location=4
 
 mode=RemoteStick
