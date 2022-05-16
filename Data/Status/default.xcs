@@ -78,6 +78,10 @@ key=Auto MacCready OFF
 sound=IDR_REMOVE
 delay=2500
 
+key=Task start
+sound=IDR_INSERT
+delay=5000
+
 key=Task aborted
 sound=IDR_REMOVE
 delay=2500
