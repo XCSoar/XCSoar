@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_BINARY_PROTOCOL_HPP
-#define XCSOAR_FLARM_BINARY_PROTOCOL_HPP
+#pragma once
 
 #include "util/ByteOrder.hxx"
 #include "util/Compiler.h"
@@ -136,5 +135,3 @@ namespace FLARM {
                       OperationEnvironment &env,
                       std::chrono::steady_clock::duration timeout);
 };
-
-#endif
