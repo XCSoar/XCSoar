@@ -21,6 +21,8 @@ Version 7.24 - not yet released
   - new default fonts
 * XCVario/Borgelt
   - revert cruise/circling mode change 
+* Kobo
+  - add ca certificates for https downloads
 
 Version 7.23 - 2022/02/10
 * user interface
