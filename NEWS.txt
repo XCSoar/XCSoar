@@ -20,6 +20,7 @@ Version 7.24 - not yet released
   - new asw27 polar from idaflieg
 * Windows
   - new default fonts
+  - use 6 devices in serial port list (like all other targets)
 * XCVario/Borgelt
   - revert cruise/circling mode change 
 * Kobo
