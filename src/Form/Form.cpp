@@ -392,12 +392,10 @@ WndForm::ShowModal()
         }
       }
 
-#ifndef USE_WINUSER
       if (event.GetKeyCode() == KEY_ESCAPE) {
         modal_result = mrCancel;
         continue;
       }
-#endif
 
 #ifdef KOBO
       if (event.GetKeyCode() == KEY_POWER) {
