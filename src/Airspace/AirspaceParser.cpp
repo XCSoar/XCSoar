@@ -217,7 +217,7 @@ struct TempAirspaceType
   }
 
   void
-  AppendArc(const GeoPoint start, const GeoPoint end) noexcept
+  AppendArc(const GeoPoint start, const GeoPoint end)
   {
     const auto center = RequireCenter();
 
