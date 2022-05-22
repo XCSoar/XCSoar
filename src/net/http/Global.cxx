@@ -160,7 +160,7 @@ CurlGlobal::Add(CurlRequest &r)
 }
 
 void
-CurlGlobal::Remove(CurlRequest &r) noexcept
+CurlGlobal::Remove(CurlRequest &r)
 {
 	assert(GetEventLoop().IsInside());
 

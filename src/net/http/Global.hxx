@@ -55,7 +55,7 @@ public:
 	}
 
 	void Add(CurlRequest &r);
-	void Remove(CurlRequest &r) noexcept;
+	void Remove(CurlRequest &r);
 
 	void Assign(curl_socket_t fd, CurlSocket &cs) noexcept {
 		curl_multi_assign(multi.Get(), fd, &cs);
