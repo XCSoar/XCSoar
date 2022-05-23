@@ -35,7 +35,7 @@ BMP_ICONS_160 = $(PNG_ICONS_160:.png=.bmp)
 # modify working copy of SVG to improve rendering
 $(SVG_NOALIAS_ICONS): $(DATA)/icons/%.svg: build/svg_preprocess.xsl Data/icons/%.svg | $(DATA)/icons/dirstamp
 	@$(NQ)echo "  XSLT    $@"
-	$(Q)xsltproc --stringparam DisableAA_Select "MASK_NOAA_" --output $@ $^
+	$(Q)xsltproc --nonet --stringparam DisableAA_Select "MASK_NOAA_" --output $@ $^
 
 # render from SVG to PNG
 # Default 100PPI (eg 320x240 4" display)
