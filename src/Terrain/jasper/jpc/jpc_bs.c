@@ -146,7 +146,7 @@ int jpc_bitstream_close(jpc_bitstream_t *bitstream)
 
 /* Allocate a new bit stream. */
 gcc_malloc
-static jpc_bitstream_t *jpc_bitstream_alloc()
+static jpc_bitstream_t *jpc_bitstream_alloc(void)
 {
 	jpc_bitstream_t *bitstream;
 

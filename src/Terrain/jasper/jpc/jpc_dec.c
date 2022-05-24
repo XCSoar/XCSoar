@@ -2310,7 +2310,7 @@ void jpc_seglist_remove(jpc_dec_seglist_t *list, jpc_dec_seg_t *seg)
 	seg->next = 0;
 }
 
-jpc_dec_seg_t *jpc_seg_alloc()
+jpc_dec_seg_t *jpc_seg_alloc(void)
 {
 	jpc_dec_seg_t *seg;
 
