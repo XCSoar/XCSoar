@@ -1034,10 +1034,7 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
   uint8_t Haupttyp, Untertyp;
   uint8_t l; // length of DS
   const uint8_t *p2; // Pointer to the beginning of the content of a vrb or vrt
-  BrokenDateTime olddate;
 
-  int olddate_flg = 0;
-  int flight_of_day = 0;
   std::chrono::seconds temptime;
   BrokenDateTime datetime1;
 
@@ -1197,20 +1194,6 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
       de.recordingtime = 65536L * p[1] + 256L * p[2] + p[3]; // Aufzeichnungsdauer
       de.lasttime = de.firsttime + std::chrono::seconds(temptime);
 
-      if (!olddate_flg) {
-        olddate = de.firsttime;
-        flight_of_day = 0;
-        olddate_flg = 1;
-      }
-      if ((olddate.day == de.firsttime.day) && (olddate.month
-          == de.firsttime.month)
-          && (olddate.year == de.firsttime.year))
-        flight_of_day++;
-      else {
-        olddate = de.firsttime;
-        flight_of_day = 1;
-        olddate_flg = 1;
-      }
       strcat(de.pilot, pilot1);
       strcat(de.pilot, pilot2);
       strcat(de.pilot, pilot3);
