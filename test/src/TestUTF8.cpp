@@ -96,7 +96,7 @@ MyLengthUTF8(const char *p)
 static bool
 MyValidateUTF8(const char *p)
 {
-  for (size_t length = 0;; ++length) {
+  while (true) {
     if (*p == 0)
       return true;
 
