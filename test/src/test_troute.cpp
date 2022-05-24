@@ -82,7 +82,6 @@ test_troute(const RasterMap &map, double mwind, double mc, int ceiling)
     fout << "\n";
   }
 
-  unsigned i=0;
   for (double ang = 0; ang < M_2PI; ang += M_PI / 8) {
     GeoPoint dest = GeoVector(40000.0, Angle::Radians(ang)).EndPoint(origin);
 
@@ -100,7 +99,6 @@ test_troute(const RasterMap &map, double mwind, double mc, int ceiling)
             (double)ang, (double)mwind, (double)mc, (int)ceiling);
     ok(retval, buffer, 0);
     PrintHelper::print_route(route);
-    i++;
   }
 
   // polar.SetMC(0);
