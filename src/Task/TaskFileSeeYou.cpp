@@ -441,7 +441,7 @@ AdvanceReaderToTask(TLineReader &reader, const unsigned index)
   unsigned count = 0;
   bool in_task_section = false;
   TCHAR *line;
-  for (unsigned i = 0; (line = reader.ReadLine()) != nullptr; i++) {
+  while ((line = reader.ReadLine()) != nullptr) {
     if (in_task_section) {
       if (line[0] == _T('\"') || line[0] == _T(',')) {
         if (count == index)
