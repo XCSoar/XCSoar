@@ -5,7 +5,6 @@ UTIL_SRC_DIR = $(SRC)/util
 UTIL_SOURCES = \
 	$(UTIL_SRC_DIR)/Exception.cxx \
 	$(UTIL_SRC_DIR)/PrintException.cxx \
-	$(UTIL_SRC_DIR)/Base64.cxx \
 	$(UTIL_SRC_DIR)/CRC.cpp \
 	$(UTIL_SRC_DIR)/tstring.cpp \
 	$(UTIL_SRC_DIR)/UTF8.cpp \
