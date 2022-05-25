@@ -75,6 +75,10 @@ SkyLinesTracking::Client::Open(SocketAddress _address)
     handler->OnSkyLinesReady();
   }
 
+#ifdef _WIN32
+  GetSocket().SetNonBlocking();
+#endif
+
   return true;
 }
 
