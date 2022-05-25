@@ -36,6 +36,10 @@ Copyright_License {
 #include "util/UTF8.hpp"
 #include "util/ConvertString.hpp"
 
+#ifdef _WIN32
+# include "Protection.hpp"
+#endif
+
 #include <span>
 #include <string>
 
@@ -74,6 +78,10 @@ SkyLinesTracking::Client::Open(SocketAddress _address)
 
     handler->OnSkyLinesReady();
   }
+
+#ifdef _WIN32
+  GetSocket().SetNonBlocking();
+#endif
 
   return true;
 }
