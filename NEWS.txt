@@ -6,6 +6,9 @@ Version 7.25 - not yet released
   - fix crash when GPS access was rejected by user
   - fix deadlock while quitting XCSoar
   - add U-BLOX 7 USB GPS into 'white list' of USB devices
+* Windows serial ports
+  - allow connection to COM port 10 to 254 (f.e. for BlueTooth user)
+  - remove index based COM port setting (obsolete since XCSoar 5)
 
 Version 7.24 - 2022/07/22
 * user interface
