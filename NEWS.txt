@@ -21,6 +21,8 @@ Version 7.24 - not yet released
 * Windows
   - new default fonts
   - use 6 devices in serial port list (like all other targets)
+  - allow connection to COM port 10 to 254 (f.e. for BlueTooth user)
+  - remove index based COM port setting (obsolete since XCSoar 5)
 * XCVario/Borgelt
   - revert cruise/circling mode change 
 * Kobo
