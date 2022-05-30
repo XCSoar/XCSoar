@@ -33,6 +33,10 @@ Version 7.29 - not yet released
   - extend QuickMenu to maximum of 64 entries
   - add PEV,FlarmTraffic,FileManager to joystick QuickMenu
   - add transponder code infobox
+* Serial ports on Windows
+  - bug fix in port search to find all installed ports
+  - allow connection to COM port COM10 to COM255 (f.e. for BlueTooth
+    and VSPE user)
 
 Version 7.28 - 2022/10/29
 * data files
