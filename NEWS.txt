@@ -29,6 +29,10 @@ Version 7.28 - 2022/10/29
 * Kobo
   - Add support for Libra 2
 
+* Windows serial ports
+  - allow connection to COM port 10 to 254 (f.e. for BlueTooth user)
+  - remove index based COM port setting (obsolete since XCSoar 5)
+
 Version 7.27 - 2022/09/23
 * user interface
   - vertical scroll bar in some modal dialogs
