@@ -142,9 +142,17 @@ ParseStyle(const TCHAR* src, Waypoint::Type &type)
   case 8:
     type = Waypoint::Type::OBSTACLE;
     break;
+  case 9:
+    type = Waypoint::Type::VOR;
+    break;
+  case 10:
+    type = Waypoint::Type::NDB;
+   break;
   case 11:
-  case 16:
     type = Waypoint::Type::TOWER;
+    break;
+  case 12:
+    type = Waypoint::Type::DAM;
     break;
   case 13:
     type = Waypoint::Type::TUNNEL;
@@ -155,11 +163,25 @@ ParseStyle(const TCHAR* src, Waypoint::Type &type)
   case 15:
     type = Waypoint::Type::POWERPLANT;
     break;
+  case 16:
+    type = Waypoint::Type::CASTLE;
+    break;
+  case 17:
+    type = Waypoint::Type::INTERSECTION;
+    break;
   case 18:
     type = Waypoint::Type::MARKER;
     break;
+  case 19:
+    type = Waypoint::Type::REPORTING_POINT;
+    break;
+  case 20:
+    type = Waypoint::Type::PGTAKEOFF;
+    break;
+  case 22:
+    type = Waypoint::Type::PGLANDING;
+    break;
   }
-
   return true;
 }
 

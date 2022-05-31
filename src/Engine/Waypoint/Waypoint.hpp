@@ -58,6 +58,14 @@ struct Waypoint {
     OBSTACLE,
     THERMAL_HOTSPOT,
     MARKER,
+    VOR,
+    NDB,
+    DAM,
+    CASTLE,
+    INTERSECTION,
+    REPORTING_POINT,
+    PGTAKEOFF,
+    PGLANDING
   };
 
   /**
