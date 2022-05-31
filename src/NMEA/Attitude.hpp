@@ -31,17 +31,19 @@ struct AttitudeState
 {
   /** Estimated bank angle */
   Angle bank_angle;
-  Validity bank_angle_available;
-  bool bank_angle_computed;
 
   /** Estimated pitch angle */
   Angle pitch_angle;
-  Validity pitch_angle_available;
-  bool pitch_angle_computed;
 
   /** Estimated heading */
   Angle heading;
+
+  Validity bank_angle_available;
+  Validity pitch_angle_available;
   Validity heading_available;
+
+  bool bank_angle_computed;
+  bool pitch_angle_computed;
   bool heading_computed;
 
   void Reset() {
