@@ -44,6 +44,8 @@ Copyright_License {
 #include "java/String.hxx"
 #endif
 
+#include <cassert>
+
 #ifdef _WIN32
 #include <winnls.h>
 #endif

@@ -109,7 +109,7 @@ PortNMEAReader::ReadLine(TimeoutClock timeout)
 char *
 PortNMEAReader::ExpectLine(const char *_prefix, TimeoutClock timeout)
 {
-  const StringView prefix(_prefix);
+  const std::string_view prefix{_prefix};
 
   while (true) {
     char *line = ReadLine(timeout);
@@ -117,6 +117,6 @@ PortNMEAReader::ExpectLine(const char *_prefix, TimeoutClock timeout)
       return nullptr;
 
     if (StringStartsWith(line, prefix))
-      return line + prefix.size;
+      return line + prefix.size();
   }
 }
