@@ -132,7 +132,7 @@ DosDeviceExists(const TCHAR *path) noexcept
 static void
 FillDefaultSerialPorts(DataFieldEnum &df) noexcept
 {
-  for (unsigned i = 1; i <= 10; ++i) {
+  for (unsigned i = 1; i <= 255; ++i) {
     TCHAR buffer[64];
     _stprintf(buffer, _T("COM%u"), i);
     if (DosDeviceExists(buffer))
