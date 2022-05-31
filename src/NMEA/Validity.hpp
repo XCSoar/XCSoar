@@ -164,6 +164,10 @@ public:
     return last != other.last;
   }
 
+  constexpr bool operator<(const Validity &other) const noexcept {
+    return last < other.last;
+  }
+
   constexpr bool Complement(const Validity &other) noexcept {
     if (!IsValid() && other.IsValid()) {
       *this = other;
