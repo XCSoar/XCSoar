@@ -138,7 +138,6 @@ ComputeHeading(AttitudeState &attitude, const NMEAInfo &basic,
 {
   if (attitude.heading_available) {
     /* compass connected, don't need to calculate it */
-    attitude.heading_computed = false;
     return;
   }
 
@@ -146,7 +145,6 @@ ComputeHeading(AttitudeState &attitude, const NMEAInfo &basic,
     /* calculation not possible; set a dummy value (heading north) to
        avoid accessing uninitialised memory */
     attitude.heading = Angle::Zero();
-    attitude.heading_computed = false;
     return;
   }
 
@@ -162,7 +160,7 @@ ComputeHeading(AttitudeState &attitude, const NMEAInfo &basic,
   } else {
     attitude.heading = basic.track;
   }
-  attitude.heading_computed = true;
+  attitude.heading_available = basic.track_available;
 }
 
 /**

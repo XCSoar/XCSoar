@@ -195,8 +195,7 @@ InfoBoxContentWindArrow::Update(InfoBoxData &data) noexcept
   }
 
   data.SetCustom(info.wind_available.ToInteger() +
-                 basic.attitude.heading_available.ToInteger() +
-                 basic.track_available.ToInteger());
+                 basic.attitude.heading_available.ToInteger());
 
   TCHAR speed_buffer[16];
   FormatUserWindSpeed(info.wind.norm, speed_buffer, true, false);

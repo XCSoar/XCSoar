@@ -44,7 +44,6 @@ struct AttitudeState
 
   bool bank_angle_computed;
   bool pitch_angle_computed;
-  bool heading_computed;
 
   constexpr void Reset() noexcept {
     bank_angle_available.Clear();
@@ -52,7 +51,6 @@ struct AttitudeState
     pitch_angle_available.Clear();
     pitch_angle_computed = false;
     heading_available.Clear();
-    heading_computed = false;
   }
 
   constexpr bool IsBankAngleUseable() const noexcept {
@@ -61,10 +59,6 @@ struct AttitudeState
 
   constexpr bool IsPitchAngleUseable() const noexcept {
     return pitch_angle_available || pitch_angle_computed;
-  }
-
-  constexpr bool IsHeadingUseable() const noexcept {
-    return heading_available || heading_computed;
   }
 
   /**

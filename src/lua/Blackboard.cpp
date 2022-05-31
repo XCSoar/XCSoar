@@ -89,7 +89,7 @@ l_blackboard_index(lua_State *L)
   else if (StringIsEqual(name, "pitch_angle"))
     Lua::PushOptional(L, basic.attitude.IsPitchAngleUseable(), basic.attitude.pitch_angle); 
   else if (StringIsEqual(name, "heading"))
-    Lua::PushOptional(L, basic.attitude.IsHeadingUseable(), basic.attitude.heading);
+    Lua::PushOptional(L, basic.attitude.heading_available, basic.attitude.heading);
   else if (StringIsEqual(name, "g_load"))
     Lua::PushOptional(L, basic.acceleration.available, basic.acceleration.g_load);
   else if (StringIsEqual(name, "static_pressure"))
