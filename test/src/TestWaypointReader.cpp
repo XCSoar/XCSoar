@@ -297,6 +297,19 @@ TestSeeYou(wp_vector org_wp)
     const auto wp2 = GetWaypoint(*it2, way_points2);
     TestSeeYouWaypoint(*it2, wp2.get());
   }
+  // Test a SeeYou waypoint file with useradata and pics fields:
+  Waypoints way_points3;
+  if (!TestWaypointFile(Path(_T("test/data/waypoints3.cup")), way_points3,
+                        org_wp.size())) {
+    skip(9 * org_wp.size(), 0, "opening waypoints3.cup failed");
+    return;
+  }
+
+  wp_vector::iterator it3;
+  for (it3 = org_wp.begin(); it3 < org_wp.end(); it3++) {
+    const auto wp3 = GetWaypoint(*it3, way_points3);
+    TestSeeYouWaypoint(*it3, wp3.get());
+  }
 }
 
 static void
@@ -537,7 +550,7 @@ int main(int argc, char **argv)
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(360);
+  plan_tests(413);
 
   TestExtractParameters();
 
