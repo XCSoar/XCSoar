@@ -24,7 +24,7 @@ Copyright_License {
 #include "NMEA/Attitude.hpp"
 
 void
-AttitudeState::Complement(const AttitudeState &add)
+AttitudeState::Complement(const AttitudeState &add) noexcept
 {
   if (bank_angle_available.Complement(add.bank_angle_available))
     bank_angle = add.bank_angle;

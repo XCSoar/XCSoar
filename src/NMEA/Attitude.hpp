@@ -46,7 +46,7 @@ struct AttitudeState
   bool pitch_angle_computed;
   bool heading_computed;
 
-  void Reset() {
+  constexpr void Reset() noexcept {
     bank_angle_available.Clear();
     bank_angle_computed = false;
     pitch_angle_available.Clear();
@@ -55,15 +55,15 @@ struct AttitudeState
     heading_computed = false;
   }
 
-  bool IsBankAngleUseable() const {
+  constexpr bool IsBankAngleUseable() const noexcept {
     return bank_angle_available || bank_angle_computed;
   }
 
-  bool IsPitchAngleUseable() const {
+  constexpr bool IsPitchAngleUseable() const noexcept {
     return pitch_angle_available || pitch_angle_computed;
   }
 
-  bool IsHeadingUseable() const {
+  constexpr bool IsHeadingUseable() const noexcept {
     return heading_available || heading_computed;
   }
 
@@ -71,7 +71,7 @@ struct AttitudeState
    * Adds data from the specified object, unless already present in
    * this one.
    */
-  void Complement(const AttitudeState &add);
+  void Complement(const AttitudeState &add) noexcept;
 
   void Expire(TimeStamp now) noexcept;
 };
