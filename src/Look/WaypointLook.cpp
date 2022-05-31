@@ -42,6 +42,14 @@ WaypointLook::Initialise(const WaypointRendererSettings &settings,
   obstacle_icon.LoadResource(IDB_OBSTACLE, IDB_OBSTACLE_HD);
   thermal_hotspot_icon.LoadResource(IDB_THERMAL_HOTSPOT, IDB_THERMAL_HOTSPOT_HD);
   marker_icon.LoadResource(IDB_MARK, IDB_MARK_HD);
+  vor_icon.LoadResource(IDB_VOR, IDB_VOR_HD);
+  ndb_icon.LoadResource(IDB_NDB, IDB_NDB_HD);
+  dam_icon.LoadResource(IDB_DAM, IDB_DAM_HD);
+  castle_icon.LoadResource(IDB_CASTLE, IDB_CASTLE_HD);
+  intersection_icon.LoadResource(IDB_INTERSECTION, IDB_INTERSECTION_HD);
+  reporting_point_icon.LoadResource(IDB_REPORTING_POINT, IDB_REPORTING_POINT_HD);
+  pgtakeoff_icon.LoadResource(IDB_PGTAKEOFF, IDB_PGTAKEOFF_HD);
+  pglanding_icon.LoadResource(IDB_PGLANDING, IDB_PGLANDING_HD);
 
   reachable_brush.Create(COLOR_GREEN);
   terrain_unreachable_brush.Create(LightColor(COLOR_RED));
