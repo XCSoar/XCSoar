@@ -188,12 +188,15 @@ void
 InfoBoxContentWindArrow::Update(InfoBoxData &data) noexcept
 {
   const DerivedInfo &info = CommonInterface::Calculated();
+  const NMEAInfo &basic = CommonInterface::Basic();
   if (!info.wind_available || info.wind.IsZero()) {
     data.SetInvalid();
     return;
   }
 
-  data.SetCustom(info.wind_available.ToInteger());
+  data.SetCustom(info.wind_available.ToInteger() +
+                 basic.attitude.heading_available.ToInteger() +
+                 basic.track_available.ToInteger());
 
   TCHAR speed_buffer[16];
   FormatUserWindSpeed(info.wind.norm, speed_buffer, true, false);

@@ -3,6 +3,7 @@ Version 7.24 - not yet released
   - padding in fields
   - rework menu labels
   - increase popup message timeouts
+  - fix missing wind arrow InfoBox updates
 * file handling 
   - guard against file corruption in poweroff situations
 * FLARM
