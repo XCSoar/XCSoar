@@ -39,7 +39,7 @@ static constexpr double INVERSE_2G = INVERSE_G / 2.;
  * time) is connected.
  */
 static void
-FillVario(MoreData &data)
+FillVario(MoreData &data) noexcept
 {
   if (data.total_energy_vario_available) {
     data.brutto_vario = data.total_energy_vario;
@@ -54,7 +54,7 @@ FillVario(MoreData &data)
 }
 
 static void
-ComputePressure(NMEAInfo &basic, const AtmosphericPressure qnh)
+ComputePressure(NMEAInfo &basic, const AtmosphericPressure qnh) noexcept
 {
   const bool qnh_available = qnh.IsPlausible();
   const bool static_pressure_available = basic.static_pressure_available;
@@ -105,7 +105,7 @@ ComputePressure(NMEAInfo &basic, const AtmosphericPressure qnh)
 }
 
 static void
-ComputeNavAltitude(MoreData &basic, const FeaturesSettings &features)
+ComputeNavAltitude(MoreData &basic, const FeaturesSettings &features) noexcept
 {
   basic.nav_altitude = features.nav_baro_altitude_enabled &&
     basic.baro_altitude_available
@@ -114,7 +114,7 @@ ComputeNavAltitude(MoreData &basic, const FeaturesSettings &features)
 }
 
 static void
-ComputeTrack(NMEAInfo &basic, const NMEAInfo &last)
+ComputeTrack(NMEAInfo &basic, const NMEAInfo &last) noexcept
 {
   if (basic.track_available ||
       !basic.location_available ||
@@ -134,7 +134,7 @@ ComputeTrack(NMEAInfo &basic, const NMEAInfo &last)
  */
 static void
 ComputeHeading(AttitudeState &attitude, const NMEAInfo &basic,
-               const DerivedInfo &calculated)
+               const DerivedInfo &calculated) noexcept
 {
   if (attitude.heading_available) {
     /* compass connected, don't need to calculate it */
@@ -170,7 +170,7 @@ ComputeHeading(AttitudeState &attitude, const NMEAInfo &basic,
  * 3) ground speed and wind.
  */
 static void
-ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
+ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated) noexcept
 {
   if (basic.airspeed_available && basic.airspeed_real)
     /* got it already */
@@ -234,7 +234,7 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
  * \f${m/2} \times v^2 = m \times g \times h\f$ therefore \f$h = {v^2}/{2 \times g}\f$
  */
 static void
-ComputeEnergyHeight(MoreData &basic)
+ComputeEnergyHeight(MoreData &basic) noexcept
 {
   if (basic.airspeed_available)
     basic.energy_height = Square(basic.true_airspeed) * INVERSE_2G;
@@ -252,7 +252,7 @@ ComputeEnergyHeight(MoreData &basic)
  */
 static void
 ComputeGPSVario(MoreData &basic,
-                const MoreData &last, const MoreData &last_gps)
+                const MoreData &last, const MoreData &last_gps) noexcept
 {
   if (basic.noncomp_vario_available && last.noncomp_vario_available) {
     /* If we have a noncompensated vario signal, we use that to compute
@@ -333,7 +333,7 @@ ComputeGPSVario(MoreData &basic,
 }
 
 static void
-ComputeBruttoVario(MoreData &basic)
+ComputeBruttoVario(MoreData &basic) noexcept
 {
   if (basic.total_energy_vario_available) {
     basic.brutto_vario = basic.total_energy_vario;
@@ -348,7 +348,7 @@ ComputeBruttoVario(MoreData &basic)
  * Compute the NettoVario value if it's unavailable.
  */
 static void
-ComputeNettoVario(MoreData &basic, const VarioInfo &vario)
+ComputeNettoVario(MoreData &basic, const VarioInfo &vario) noexcept
 {
   if (basic.netto_vario_available)
     /* got it already */
@@ -361,7 +361,7 @@ ComputeNettoVario(MoreData &basic, const VarioInfo &vario)
  * Calculates the estimated bank and pitch angles
  */
 static void
-ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
+ComputeDynamics(MoreData &basic, const DerivedInfo &calculated) noexcept
 {
   if (!calculated.flight.flying)
     return;
@@ -395,7 +395,7 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
 
 void
 BasicComputer::Fill(MoreData &data, const AtmosphericPressure qnh,
-                    const FeaturesSettings &features)
+                    const FeaturesSettings &features) noexcept
 {
   FillVario(data);
   ComputePressure(data, qnh);
@@ -403,7 +403,8 @@ BasicComputer::Fill(MoreData &data, const AtmosphericPressure qnh,
 }
 
 void
-BasicComputer::Fill(MoreData &data, const ComputerSettings &settings_computer)
+BasicComputer::Fill(MoreData &data,
+                    const ComputerSettings &settings_computer) noexcept
 {
   const AtmosphericPressure qnh = settings_computer.pressure_available
     ? settings_computer.pressure
@@ -414,7 +415,7 @@ BasicComputer::Fill(MoreData &data, const ComputerSettings &settings_computer)
 void
 BasicComputer::Compute(MoreData &data,
                        const MoreData &last, const MoreData &last_gps,
-                       const DerivedInfo &calculated)
+                       const DerivedInfo &calculated) noexcept
 {
   ComputeTrack(data, last_gps);
 
