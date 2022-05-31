@@ -170,17 +170,13 @@ InfoBoxContentHorizon::Update(InfoBoxData &data) noexcept
 {
   const auto &basic = CommonInterface::Basic();
 
-  if (!basic.attitude.IsBankAngleUseable() &&
-      !basic.attitude.IsPitchAngleUseable()) {
+  if (!basic.attitude.bank_angle_available &&
+      !basic.attitude.pitch_angle_available) {
     data.SetInvalid();
     return;
   }
 
-  /* mix all Validity fields which may have been used to calculate the
-     attitude, see ComputeDynamics() */
-  data.SetCustom(basic.location_available.ToInteger() +
-                 basic.airspeed_available.ToInteger() +
-                 basic.attitude.bank_angle_available.ToInteger() +
+  data.SetCustom(basic.attitude.bank_angle_available.ToInteger() +
                  basic.attitude.pitch_angle_available.ToInteger());
 }
 

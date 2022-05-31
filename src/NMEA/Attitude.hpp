@@ -42,23 +42,10 @@ struct AttitudeState
   Validity pitch_angle_available;
   Validity heading_available;
 
-  bool bank_angle_computed;
-  bool pitch_angle_computed;
-
   constexpr void Reset() noexcept {
     bank_angle_available.Clear();
-    bank_angle_computed = false;
     pitch_angle_available.Clear();
-    pitch_angle_computed = false;
     heading_available.Clear();
-  }
-
-  constexpr bool IsBankAngleUseable() const noexcept {
-    return bank_angle_available || bank_angle_computed;
-  }
-
-  constexpr bool IsPitchAngleUseable() const noexcept {
-    return pitch_angle_available || pitch_angle_computed;
   }
 
   /**

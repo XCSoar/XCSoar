@@ -379,14 +379,19 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated) noexcept
 
   if (!basic.attitude.bank_angle_available) {
     basic.attitude.bank_angle = Angle::Radians(angle);
-    basic.attitude.bank_angle_computed = true;
+    basic.attitude.bank_angle_available = std::max(basic.attitude.heading_available,
+                                                   basic.airspeed_available);
   }
 
   if (!basic.attitude.pitch_angle_available && basic.total_energy_vario_available) {
     // estimate pitch angle (assuming balanced turn)
     basic.attitude.pitch_angle = Angle::FromXY(basic.true_airspeed,
                                                basic.gps_vario - basic.total_energy_vario);
-    basic.attitude.pitch_angle_computed = true;
+    basic.attitude.pitch_angle_available = std::max({
+        basic.airspeed_available,
+        basic.gps_vario_available,
+        basic.total_energy_vario_available,
+      });
   }
 
   if (!basic.acceleration.available)

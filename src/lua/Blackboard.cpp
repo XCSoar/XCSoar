@@ -85,9 +85,11 @@ l_blackboard_index(lua_State *L)
   else if (StringIsEqual(name, "air_speed"))
     Lua::PushOptional(L, basic.airspeed_available, basic.true_airspeed);
   else if (StringIsEqual(name, "bank_angle"))
-    Lua::PushOptional(L, basic.attitude.IsBankAngleUseable(), basic.attitude.bank_angle);
+    Lua::PushOptional(L, basic.attitude.bank_angle_available,
+                      basic.attitude.bank_angle);
   else if (StringIsEqual(name, "pitch_angle"))
-    Lua::PushOptional(L, basic.attitude.IsPitchAngleUseable(), basic.attitude.pitch_angle); 
+    Lua::PushOptional(L, basic.attitude.pitch_angle_available,
+                      basic.attitude.pitch_angle);
   else if (StringIsEqual(name, "heading"))
     Lua::PushOptional(L, basic.attitude.heading_available, basic.attitude.heading);
   else if (StringIsEqual(name, "g_load"))
