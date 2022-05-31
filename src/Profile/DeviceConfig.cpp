@@ -103,28 +103,6 @@ LoadPath(const ProfileMap &map, DeviceConfig &config, unsigned n)
   return map.Get(buffer, config.path);
 }
 
-static bool
-LoadPortIndex(const ProfileMap &map, DeviceConfig &config, unsigned n)
-{
-  char buffer[64];
-  MakeDeviceSettingName(buffer, "Port", n, "Index");
-
-  unsigned index;
-  if (!map.Get(buffer, index))
-    return false;
-
-  /* adjust the number, compatibility quirk for XCSoar 5 */
-  if (index < 10)
-    ++index;
-  else if (index == 10)
-    index = 0;
-
-  TCHAR path[64];
-  _stprintf(path, _T("COM%u:"), index);
-  config.path = path;
-  return true;
-}
-
 void
 Profile::GetDeviceConfig(const ProfileMap &map, unsigned n,
                          DeviceConfig &config)
@@ -151,30 +129,12 @@ Profile::GetDeviceConfig(const ProfileMap &map, unsigned n,
   if ((!have_port_type ||
        config.port_type == DeviceConfig::PortType::ANDROID_USB_SERIAL ||
        config.port_type == DeviceConfig::PortType::SERIAL) &&
-      !LoadPath(map, config, n) && LoadPortIndex(map, config, n))
+       !LoadPath(map, config, n))
     config.port_type = DeviceConfig::PortType::SERIAL;
 
   MakeDeviceSettingName(buffer, "Port", n, "BaudRate");
   if (!map.Get(buffer, config.baud_rate)) {
-    /* XCSoar before 6.2 used to store a "speed index", not the real
-       baud rate - try to import the old settings */
-
-    static constexpr unsigned speed_index_table[] = {
-      1200,
-      2400,
-      4800,
-      9600,
-      19200,
-      38400,
-      57600,
-      115200
-    };
-
-    MakeDeviceSettingName(buffer, "Speed", n, "Index");
-    unsigned speed_index;
-    if (map.Get(buffer, speed_index) &&
-        speed_index < ARRAY_SIZE(speed_index_table))
-      config.baud_rate = speed_index_table[speed_index];
+    config.baud_rate = 0;
   }
 
   MakeDeviceSettingName(buffer, "Port", n, "BulkBaudRate");
