@@ -246,7 +246,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
             offset += n;
           }
         } else {
-          for (unsigned n : ConstBuffer<GLushort>(indices.count, lines.size())) {
+          for (unsigned n : std::span<const GLushort>{indices.count, lines.size()}) {
             glDrawElements(GL_LINE_STRIP, n, GL_UNSIGNED_SHORT,
                            indices.indices);
             indices.indices += n;
