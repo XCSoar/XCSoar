@@ -25,12 +25,11 @@ Copyright_License {
 #define XCSOAR_AUDIO_PCM_BUFFER_DATA_SOURCE_HPP
 
 #include "PCMDataSource.hpp"
-
 #include "thread/Mutex.hxx"
-#include "util/ConstBuffer.hxx"
 
 #include <cstdint>
 #include <list>
+#include <span>
 
 /**
  * A #PCMDataSource for playback of memory buffers with raw PCM data.
@@ -40,7 +39,7 @@ Copyright_License {
  */
 class PCMBufferDataSource : public PCMDataSource {
 public:
-  typedef ConstBuffer<int16_t> PCMData;
+  using PCMData = std::span<const int16_t>;
 
 private:
   Mutex lock;

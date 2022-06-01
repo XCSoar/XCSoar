@@ -54,17 +54,17 @@ PCMBufferDataSource::GetData(int16_t *buffer, size_t n)
 
   while ((copied < n) && !queued_data.empty()) {
     PCMData &current_pcm_data = queued_data.front();
-    size_t current_available = current_pcm_data.size - offset;
+    size_t current_available = current_pcm_data.size() - offset;
     size_t max = n - copied;
     if (current_available > max) {
-      std::copy(current_pcm_data.data + offset,
-                current_pcm_data.data + offset + max,
+      std::copy(current_pcm_data.data() + offset,
+                current_pcm_data.data() + offset + max,
                 buffer + copied);
       offset += max;
       return n;
     } else {
-      std::copy(current_pcm_data.data + offset,
-                current_pcm_data.data + offset + current_available,
+      std::copy(current_pcm_data.data() + offset,
+                current_pcm_data.data() + offset + current_available,
                 buffer + copied);
       copied += current_available;
       queued_data.pop_front();

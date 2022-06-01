@@ -27,6 +27,7 @@ Copyright_License {
 
 #include "LogFile.hpp"
 #include "ResourceLoader.hpp"
+#include "util/SpanCast.hxx"
 
 #include <utility>
 
@@ -39,9 +40,9 @@ bool
 PCMResourcePlayer::PlayResource(const TCHAR *resource_name)
 {
   PCMBufferDataSource::PCMData pcm_data =
-      PCMBufferDataSource::PCMData::FromVoid(
+    FromBytesStrict<const PCMBufferDataSource::PCMData::value_type>(
           ResourceLoader::Load(resource_name, _T("WAVE")));
-  if (pcm_data.IsNull()) {
+  if (pcm_data.data() == nullptr) {
     LogFormat(_T("PCM resource \"%s\" not found!"), resource_name);
     return false;
   }
