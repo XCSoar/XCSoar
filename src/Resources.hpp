@@ -9,8 +9,6 @@
 
 #include <cstddef>
 
-#include "util/ConstBuffer.hxx"
-
 #define MAKE_RESOURCE(name, id) \
   extern "C" std::byte resource_ ## id[]; \
   extern "C" const size_t resource_ ## id ## _size; \

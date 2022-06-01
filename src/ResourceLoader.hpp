@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_RESOURCE_LOADER_HPP
 #define XCSOAR_RESOURCE_LOADER_HPP
 
-#include "util/ConstBuffer.hxx"
+#include <span>
 
 #ifdef _WIN32
 #include <windef.h>
@@ -41,7 +41,7 @@ void
 Init(HINSTANCE hInstance);
 #endif
 
-typedef ConstBuffer<void> Data;
+using Data = std::span<const std::byte>;
 
 Data
 Load(const TCHAR *name, const TCHAR *type);

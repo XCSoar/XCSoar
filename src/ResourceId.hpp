@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_RESOURCE_ID_HPP
 #define XCSOAR_RESOURCE_ID_HPP
 
-#include "util/ConstBuffer.hxx"
+#include <span>
 
 /**
  * The identifier for a resource to be passed to
@@ -34,7 +34,7 @@ class ResourceId {
 #if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
   unsigned id;
 #else
-  const void *begin;
+  const std::byte *begin;
   const size_t *size_ptr;
 #endif
 
@@ -45,7 +45,7 @@ public:
   constexpr explicit ResourceId(unsigned _id) noexcept
     :id(_id) {}
 #else
-  constexpr explicit ResourceId(const void *_begin,
+  constexpr explicit ResourceId(const std::byte *_begin,
                                 const size_t *_size_ptr) noexcept
     :begin(_begin), size_ptr(_size_ptr) {}
 #endif
@@ -72,8 +72,8 @@ public:
   }
 #else
   [[gnu::pure]]
-  operator ConstBuffer<void>() const noexcept {
-    return ConstBuffer<void>(begin, *size_ptr);
+  operator std::span<const std::byte>() const noexcept {
+    return {begin, *size_ptr};
   }
 #endif
 

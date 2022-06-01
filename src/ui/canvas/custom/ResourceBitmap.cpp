@@ -50,7 +50,7 @@ Bitmap::Load(ResourceId id, Type type)
   assert(IsScreenInitialized());
 
   ResourceLoader::Data data = ResourceLoader::Load(id);
-  if (data.IsNull())
+  if (data.data() == nullptr)
     return false;
 
   return Load(data, type);
