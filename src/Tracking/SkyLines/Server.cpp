@@ -59,10 +59,11 @@ Server::~Server()
 }
 
 void
-Server::SendBuffer(SocketAddress address, ConstBuffer<void> buffer) noexcept
+Server::SendBuffer(SocketAddress address,
+                   std::span<const std::byte> buffer) noexcept
 {
   try {
-    ssize_t nbytes = socket.GetSocket().Write(buffer.data, buffer.size);
+    ssize_t nbytes = socket.GetSocket().Write(buffer.data(), buffer.size());
     if (nbytes < 0)
       throw MakeSocketError("Failed to send");
   } catch (...) {

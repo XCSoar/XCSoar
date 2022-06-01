@@ -30,12 +30,12 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "util/CRC.hpp"
-#include "util/ConstBuffer.hxx"
 #include "event/Call.hxx"
 #include "net/StaticSocketAddress.hxx"
 #include "util/UTF8.hpp"
 #include "util/ConvertString.hpp"
 
+#include <span>
 #include <string>
 
 void
@@ -160,7 +160,7 @@ SkyLinesTracking::Client::OnTrafficReceived(const TrafficResponsePacket &packet,
     return;
 
   const unsigned n = packet.traffic_count;
-  const ConstBuffer<TrafficResponsePacket::Traffic>
+  const std::span<const TrafficResponsePacket::Traffic>
     list((const TrafficResponsePacket::Traffic *)(&packet + 1), n);
 
   if (length != sizeof(packet) + n * sizeof(list.front()))
@@ -198,8 +198,8 @@ SkyLinesTracking::Client::OnWaveReceived(const WaveResponsePacket &packet,
     return;
 
   const unsigned n = packet.wave_count;
-  ConstBuffer<Wave> waves((const Wave *)(&packet + 1), n);
-  if (length != sizeof(packet) + waves.size * sizeof(waves.front()))
+  std::span<const Wave> waves((const Wave *)(&packet + 1), n);
+  if (length != sizeof(packet) + waves.size() * sizeof(waves.front()))
     return;
 
   for (const auto &wave : waves)
@@ -215,8 +215,8 @@ SkyLinesTracking::Client::OnThermalReceived(const ThermalResponsePacket &packet,
     return;
 
   const unsigned n = packet.thermal_count;
-  ConstBuffer<Thermal> thermals((const Thermal *)(&packet + 1), n);
-  if (length != sizeof(packet) + thermals.size * sizeof(thermals.front()))
+  std::span<const Thermal> thermals((const Thermal *)(&packet + 1), n);
+  if (length != sizeof(packet) + thermals.size() * sizeof(thermals.front()))
     return;
 
   for (const auto &thermal : thermals)

@@ -26,12 +26,11 @@ Copyright_License {
 
 #include "event/SocketEvent.hxx"
 #include "net/StaticSocketAddress.hxx"
-#include "util/ConstBuffer.hxx"
 
 #include <chrono>
-#include <exception>
-
 #include <cstdint>
+#include <exception>
+#include <span>
 
 struct GeoPoint;
 
@@ -71,11 +70,12 @@ public:
     return socket.GetEventLoop();
   }
 
-  void SendBuffer(SocketAddress address, ConstBuffer<void> buffer) noexcept;
+  void SendBuffer(SocketAddress address,
+                  std::span<const std::byte> buffer) noexcept;
 
   template<typename P>
   void SendPacket(SocketAddress address, const P &packet) noexcept {
-    SendBuffer(address, ConstBuffer<void>{&packet, sizeof(packet)});
+    SendBuffer(address, std::as_bytes(std::span{&packet, 1}));
   }
 
 private:

@@ -57,7 +57,7 @@ TrafficResponseSender::Flush()
 
   data.header.header.crc = 0;
   data.header.header.crc = ToBE16(UpdateCRC16CCITT(&data, size, 0));
-  server.SendBuffer(address, {&data, size});
+  server.SendBuffer(address, {(const std::byte *)&data, size});
 }
 
 void
@@ -84,5 +84,5 @@ ThermalResponseSender::Flush()
 
   data.header.header.crc = 0;
   data.header.header.crc = ToBE16(UpdateCRC16CCITT(&data, size, 0));
-  server.SendBuffer(address, {&data, size});
+  server.SendBuffer(address, {(const std::byte *)&data, size});
 }
