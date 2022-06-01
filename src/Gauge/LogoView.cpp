@@ -25,6 +25,7 @@ Copyright_License {
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/FontDescription.hpp"
+#include "util/Compiler.h"
 #include "Resources.hpp"
 #include "Version.hpp"
 

@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_RESOURCE_ID_HPP
 #define XCSOAR_RESOURCE_ID_HPP
 
-#include "util/Compiler.h"
 #include "util/ConstBuffer.hxx"
 
 /**
@@ -71,7 +70,7 @@ public:
     return id;
   }
 #else
-  gcc_pure
+  [[gnu::pure]]
   operator ConstBuffer<void>() const {
     return ConstBuffer<void>(begin, *size_ptr);
   }
