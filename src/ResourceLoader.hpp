@@ -35,25 +35,27 @@ Copyright_License {
 class ResourceId;
 
 namespace ResourceLoader {
+
 #ifdef _WIN32
-  void
-  Init(HINSTANCE hInstance);
+void
+Init(HINSTANCE hInstance);
 #endif
 
-  typedef ConstBuffer<void> Data;
+typedef ConstBuffer<void> Data;
 
-  Data
-  Load(const TCHAR *name, const TCHAR *type);
+Data
+Load(const TCHAR *name, const TCHAR *type);
 
 #ifndef ANDROID
-  Data
-  Load(ResourceId id);
+Data
+Load(ResourceId id);
 #endif
 
 #ifdef _WIN32
-  HBITMAP
-  LoadBitmap2(ResourceId id);
+HBITMAP
+LoadBitmap2(ResourceId id);
 #endif
-}
+
+} // namespace ResourceLoader
 
 #endif
