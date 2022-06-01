@@ -42,14 +42,15 @@ public:
   ResourceId() = default;
 
 #if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
-  constexpr explicit ResourceId(unsigned _id)
+  constexpr explicit ResourceId(unsigned _id) noexcept
     :id(_id) {}
 #else
-  constexpr explicit ResourceId(const void *_begin, const size_t *_size_ptr)
+  constexpr explicit ResourceId(const void *_begin,
+                                const size_t *_size_ptr) noexcept
     :begin(_begin), size_ptr(_size_ptr) {}
 #endif
 
-  static constexpr ResourceId Null() {
+  static constexpr ResourceId Null() noexcept {
 #if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
     return ResourceId(0);
 #else
@@ -57,7 +58,7 @@ public:
 #endif
   }
 
-  constexpr bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
 #if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
     return id != 0;
 #else
@@ -66,17 +67,17 @@ public:
   }
 
 #if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
-  constexpr explicit operator unsigned() const {
+  constexpr explicit operator unsigned() const noexcept {
     return id;
   }
 #else
   [[gnu::pure]]
-  operator ConstBuffer<void>() const {
+  operator ConstBuffer<void>() const noexcept {
     return ConstBuffer<void>(begin, *size_ptr);
   }
 #endif
 
-  constexpr bool operator==(ResourceId other) const {
+  constexpr bool operator==(ResourceId other) const noexcept {
 #if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
     return id == other.id;
 #else
@@ -84,7 +85,7 @@ public:
 #endif
   }
 
-  constexpr bool operator!=(ResourceId other) const {
+  constexpr bool operator!=(ResourceId other) const noexcept {
 #if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
     return id != other.id;
 #else
