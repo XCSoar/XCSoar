@@ -34,10 +34,10 @@
 std::size_t
 MemoryReader::Read(void *data, std::size_t size)
 {
-	if (size > buffer.size)
-		size = buffer.size;
+	if (size > buffer.size())
+		size = buffer.size();
 
-	memcpy(data, buffer.data, size);
-	buffer.skip_front(size);
+	memcpy(data, buffer.data(), size);
+	buffer = buffer.subspan(size);
 	return size;
 }
