@@ -25,9 +25,9 @@ Copyright_License {
 #define _HISTOGRAM_H
 
 #include "Math/Point2D.hpp"
-#include "util/ConstBuffer.hxx"
 
 #include <array>
+#include <span>
 #include <type_traits>
 
 class Histogram
@@ -85,8 +85,8 @@ public:
    */
   double GetPercentile(double p) const noexcept;
 
-  constexpr ConstBuffer<DoublePoint2D> GetSlots() const noexcept {
-    return {slots.data(), slots.size()};
+  constexpr std::span<const DoublePoint2D> GetSlots() const noexcept {
+    return slots;
   }
 
 private:
