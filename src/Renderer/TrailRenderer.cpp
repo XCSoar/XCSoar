@@ -223,7 +223,7 @@ BulkPixelPoint *
 TrailRenderer::Prepare(unsigned n)
 {
   points.GrowDiscard(n);
-  return points.begin();
+  return points.data();
 }
 
 void
@@ -231,7 +231,7 @@ TrailRenderer::DrawPreparedPolyline(Canvas &canvas, unsigned n)
 {
   assert(points.size() >= n);
 
-  canvas.DrawPolyline(points.begin(), n);
+  canvas.DrawPolyline(points.data(), n);
 }
 
 void
@@ -239,7 +239,7 @@ TrailRenderer::DrawPreparedPolygon(Canvas &canvas, unsigned n)
 {
   assert(points.size() >= n);
 
-  canvas.DrawPolygon(points.begin(), n);
+  canvas.DrawPolygon(points.data(), n);
 }
 
 void

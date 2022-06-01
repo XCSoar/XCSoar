@@ -68,8 +68,8 @@ Main(TestMainWindow &main_window)
 
   UI::PeriodicTimer timer([&horizon](){
     AttitudeState attitude;
-    attitude.bank_angle_computed = true;
-    attitude.pitch_angle_computed = true;
+    attitude.bank_angle_available = attitude.pitch_angle_available =
+      Validity{TimeStamp{std::chrono::steady_clock::now().time_since_epoch()}};
     attitude.bank_angle = Angle::Zero();
     attitude.pitch_angle = Angle::Zero();
 

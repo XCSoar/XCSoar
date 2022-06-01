@@ -58,7 +58,7 @@ TrackLineRenderer::Draw(Canvas &canvas,
                         const MapSettings &settings,
                         bool wind_relative)
 {
-  if (!basic.track_available || !basic.attitude.IsHeadingUseable())
+  if (!basic.track_available || !basic.attitude.heading_available)
     return;
 
   if (basic.airspeed_available.IsValid() &&

@@ -267,7 +267,7 @@ PolygonToTriangles(const BulkPixelPoint *points, unsigned num_points,
                    unsigned min_distance) noexcept
 {
   triangles.GrowDiscard(3 * (num_points - 2));
-  return _PolygonToTriangles(points, num_points, triangles.begin(),
+  return _PolygonToTriangles(points, num_points, triangles.data(),
                              min_distance);
 }
 
@@ -486,7 +486,7 @@ LineToTriangles(const BulkPixelPoint *points, unsigned num_points,
 
   // strip will point to the start of the output array
   // s is the working pointer
-  auto *s = strip.begin();
+  auto *s = strip.data();
 
   // a, b and c point to three consecutive points which are used to iterate
   // through the line given in 'points'. Where b is the current position,
@@ -614,5 +614,5 @@ LineToTriangles(const BulkPixelPoint *points, unsigned num_points,
       AppendPoint(s, b->x + ab.x, b->y + ab.y);
   }
 
-  return s - strip.begin();
+  return s - strip.data();
 }

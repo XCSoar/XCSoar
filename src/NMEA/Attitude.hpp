@@ -31,45 +31,28 @@ struct AttitudeState
 {
   /** Estimated bank angle */
   Angle bank_angle;
-  Validity bank_angle_available;
-  bool bank_angle_computed;
 
   /** Estimated pitch angle */
   Angle pitch_angle;
-  Validity pitch_angle_available;
-  bool pitch_angle_computed;
 
   /** Estimated heading */
   Angle heading;
+
+  Validity bank_angle_available;
+  Validity pitch_angle_available;
   Validity heading_available;
-  bool heading_computed;
 
-  void Reset() {
+  constexpr void Reset() noexcept {
     bank_angle_available.Clear();
-    bank_angle_computed = false;
     pitch_angle_available.Clear();
-    pitch_angle_computed = false;
     heading_available.Clear();
-    heading_computed = false;
-  }
-
-  bool IsBankAngleUseable() const {
-    return bank_angle_available || bank_angle_computed;
-  }
-
-  bool IsPitchAngleUseable() const {
-    return pitch_angle_available || pitch_angle_computed;
-  }
-
-  bool IsHeadingUseable() const {
-    return heading_available || heading_computed;
   }
 
   /**
    * Adds data from the specified object, unless already present in
    * this one.
    */
-  void Complement(const AttitudeState &add);
+  void Complement(const AttitudeState &add) noexcept;
 
   void Expire(TimeStamp now) noexcept;
 };

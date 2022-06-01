@@ -61,8 +61,8 @@ PortLineSplitter::DataReceived(std::span<const std::byte> s) noexcept
       continue;
     }
 
-    size_t nbytes = std::min(size_t(range.size), size_t(end - data));
-    memcpy(range.data, data, nbytes);
+    size_t nbytes = std::min(range.size(), size_t(end - data));
+    memcpy(range.data(), data, nbytes);
     data += nbytes;
     buffer.Append(nbytes);
 

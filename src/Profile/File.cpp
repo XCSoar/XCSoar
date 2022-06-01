@@ -56,5 +56,11 @@ Profile::SaveFile(const ProfileMap &map, Path path)
     kvwriter.Write(i.first.c_str(), i.second.c_str());
 
   buffered.Flush();
+
+  /* profiles contain important data, so let's make sure everything
+     has been written to permanent storage before we replace the old
+     file */
+  file.Sync();
+
   file.Commit();
 }

@@ -43,8 +43,7 @@ RasterTile::SaveCache(BufferedOutputStream &os) const
 void
 RasterTile::LoadCache(BufferedReader &r)
 {
-  MetaData data;
-  r.ReadFull({&data, sizeof(data)});
+  const auto data = r.ReadFullT<MetaData>();
   Set(data.start, data.end);
 }
 

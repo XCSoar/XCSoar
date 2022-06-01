@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2010-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,15 +27,12 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef TRIVIAL_ARRAY_HXX
-#define TRIVIAL_ARRAY_HXX
+#pragma once
 
-#include "ConstBuffer.hxx"
-#include "WritableBuffer.hxx"
-
+#include <algorithm>
 #include <array>
 #include <initializer_list>
-#include <algorithm>
+#include <span>
 
 #include <cassert>
 #include <cstddef>
@@ -72,7 +69,9 @@ public:
 	 */
 	TrivialArray() = default;
 
-	TrivialArray(size_type _size, const_reference value):the_size(_size) {
+	constexpr TrivialArray(size_type _size, const_reference value)
+		:the_size(_size)
+	{
 		std::fill(begin(), end(), value);
 	}
 
@@ -80,17 +79,28 @@ public:
 	 * Initialise the array with values from the iterator range.
 	 */
 	template<typename I>
-	TrivialArray(I _begin, I _end):the_size(0) {
+	constexpr TrivialArray(I _begin, I _end)
+		:the_size(0)
+	{
 		for (I i = _begin; i != _end; ++i)
 			push_back(*i);
 	}
 
 	template<typename U>
-	TrivialArray(std::initializer_list<U> init)
-		:the_size(init.size()) {
+	constexpr TrivialArray(std::initializer_list<U> init) noexcept
+		:the_size(init.size())
+	{
 		assert(init.size() <= max);
 
 		std::move(init.begin(), init.end(), array.begin());
+	}
+
+	constexpr operator std::span<const T>() const noexcept {
+		return {data(), size()};
+	}
+
+	constexpr operator std::span<T>() noexcept {
+		return {data(), size()};
 	}
 
 	static constexpr size_type capacity() noexcept { return max; }
@@ -104,7 +114,7 @@ public:
 	 * Forcibly set the specified size, without initialising or
 	 * freeing new/excess elements.
 	 */
-	void resize(size_type new_size) noexcept {
+	constexpr void resize(size_type new_size) noexcept {
 		assert(new_size <= max_size());
 
 		the_size = new_size;
@@ -118,7 +128,7 @@ public:
 		return the_size;
 	}
 
-	void shrink(size_type _size) noexcept {
+	constexpr void shrink(size_type _size) noexcept {
 		assert(_size <= the_size);
 
 		the_size = _size;
@@ -137,7 +147,7 @@ public:
 	/**
 	 * Empties this array, but does not destruct its elements.
 	 */
-	void clear() noexcept {
+	constexpr void clear() noexcept {
 		the_size = 0;
 	}
 
@@ -187,7 +197,7 @@ public:
 		return array[the_size - 1];
 	}
 
-	bool contains(const_reference value) const noexcept {
+	constexpr bool contains(const_reference value) const noexcept {
 		return std::find(begin(), end(), value) != end();
 	}
 
@@ -206,7 +216,7 @@ public:
 	 * Append an element at the end of the array, increasing the
 	 * length by one.  No bounds checking.
 	 */
-	void append(const_reference value) {
+	constexpr void append(const_reference value) {
 		assert(!full());
 
 		array[the_size++] = value;
@@ -216,7 +226,7 @@ public:
 	 * Increase the length by one and return a pointer to the new
 	 * element, to be modified by the caller.  No bounds checking.
 	 */
-	reference append() noexcept {
+	constexpr reference append() noexcept {
 		assert(!full());
 
 		return array[the_size++];
@@ -226,7 +236,7 @@ public:
 	 * Like append(), but checks if the array is already full
 	 * (returns false in this case).
 	 */
-	bool checked_append(const_reference value) {
+	constexpr bool checked_append(const_reference value) {
 		if (full())
 			return false;
 
@@ -237,7 +247,7 @@ public:
 	/**
 	 * Remove the item at the given index.
 	 */
-	void remove(size_type i) noexcept {
+	constexpr void remove(size_type i) noexcept {
 		assert(i < size());
 
 		std::move(std::next(array.begin(), i + 1),
@@ -250,7 +260,7 @@ public:
 	/**
 	 * Remove an item by copying the last item over it.
 	 */
-	void quick_remove(size_type i) noexcept {
+	constexpr void quick_remove(size_type i) noexcept {
 		assert(i < size());
 
 		if (i < size() - 1)
@@ -260,7 +270,7 @@ public:
 	}
 
 	template<typename I>
-	void insert(size_type i, I _begin, I _end) {
+	constexpr void insert(size_type i, I _begin, I _end) {
 		size_type n = std::distance(_begin, _end);
 		assert(the_size + n < capacity());
 
@@ -274,12 +284,12 @@ public:
 
 	/* STL API emulation */
 
-	void push_back(const_reference value) {
+	constexpr void push_back(const_reference value) {
 		append(value);
 	}
 
 	template<typename... Args>
-	void emplace_back(Args&&... args) {
+	constexpr void emplace_back(Args&&... args) {
 		append() = T(std::forward<Args>(args)...);
 	}
 
@@ -295,13 +305,4 @@ public:
 		return array.front();
 	}
 
-	constexpr operator WritableBuffer<T>() noexcept {
-		return {data(), size()};
-	}
-
-	constexpr operator ConstBuffer<T>() const noexcept {
-		return {data(), size()};
-	}
 };
-
-#endif

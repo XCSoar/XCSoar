@@ -131,15 +131,15 @@ eingestellt werden, welcher der Routinen benutzt werden soll
 \end{itemize}
 
 Wenn sich Windrichtung und/oder -stärke ändern, erscheint eine Meldung  auf dem Bildschirm begleitet von einem Ton.
-\subsection*{Kurbel--Algorythmus der Windermittlung}
-\xc ermittelt Windstärke und -richtung während des Kurbelns. Dies geschieht über einen ausgefeilten Algorythmus, welcher den Versatz über Grund während eines ganzen kreises im Bart ermittelt. Ovales Kurbeln mit ständig ändernder Querneigung vermindern die Qualität der Berechnung ganz beträchtlich, da dann der Flugweg extrapoliert werden muß. Die besten ergebnisse gibt es, wenn wirklich kreisrund mit konstanter Querneigung geflogen wird.\index{Wind!Ermittlung}
+\subsection*{Kurbel--Algorithmus der Windermittlung}
+\xc ermittelt Windstärke und -richtung während des Kurbelns. Dies geschieht über einen ausgefeilten Algorithmus, welcher den Versatz über Grund während eines ganzen kreises im Bart ermittelt. Ovales Kurbeln mit ständig ändernder Querneigung vermindern die Qualität der Berechnung ganz beträchtlich, da dann der Flugweg extrapoliert werden muß. Die besten ergebnisse gibt es, wenn wirklich kreisrund mit konstanter Querneigung geflogen wird.\index{Wind!Ermittlung}
 
 Die Berechnung kann nur erfolgen wenn die GPS-Quelle mehr als einen Fix pro zwei Sekunden ausgibt. 
 Da --aus Erfahrung-- immer mit GPS-Ausfällen gerechnte werden muß, wurde dies als Mindestanforderung zur halbwegs glaubwürdigen Windermittluing vorausgesetzt.  
  
-\subsection*{ZickZack--Algorythmus}
+\subsection*{ZickZack--Algorithmus}
 Für Flugzeuge, welche mit einem intelligenten Variometer ausgestattet sind, welches
-an \xc angeschlossen ist, bietet \xc die Möglichkeit, des ZickZack Algorythmus
+an \xc angeschlossen ist, bietet \xc die Möglichkeit, des ZickZack Algorithmus
 zur Ermittlung der Windkomponente.
 
 Mit dieser Methode ist es möglich, den Wind in Stärke und Richtung zu ermitteln, ohne Kurbeln zu müssen.
@@ -150,14 +150,14 @@ Es ist nicht unbedingt ein spezielles Manöver zu fliegen, denn normalerweise  f
 der Suche nach Thermik immer etwas nach links und nach rechts. Normalerweise benötigt diese
 Methode ein Abweichen vom Kurs von ca. 40$^\circ$.
 
-Wenn sich der Wind im Geradeausflug erheblich ändert wird der ZickZack-Algorythmus dazu benutzt
+Wenn sich der Wind im Geradeausflug erheblich ändert wird der ZickZack-Algorithmus dazu benutzt
 um den Wind zu aktualisieren - auch dann wenn sich der Kurs des Flugzeuges kaum oder nur wenig ändert.
 Höhere genauigkeiten sind damit erzielbar.
 
 Die Windermittlungen werden grundsätzlich aktualisiert, wenn sich größere Änderungen zwischen  der
 ermittelten Grundgeschwindigkeit und der wahren Grundgeschwindigkeit (z.B. GPS)
 im Geradeausflug entdeckt wurden.
-\subsection*{Kompaß - Algorythmus}
+\subsection*{Kompaß - Algorithmus}
 Für Flugzeuge, die mit einem intelligenten Variometer und einem Kompaßabgriff der
 Windrichtung ausgestattet sind, ermöglicht  \xc die Benutzung dieser Werte direkt.
 Hierdurch ist es überflüssig, für die Windermittlung zu kurbeln oder zickZack zu fliegen.
@@ -168,9 +168,9 @@ anschließende Aktualisierung bei Bedarf in der Luft.
 Wenn der Dialog geschlossen wird, werden die ermittelten Werte solange benutzt,
  bis neue Werte aus der ZickZack- oder Kurbelmessung vorliegen.
 
-Der automatische Windalgorythmus kann auch abgeschaltet oder aber es können
+Der automatische Windalgorithmus kann auch abgeschaltet oder aber es können
 beide Methoden verwandt werden (s.o. Bild) Siehe Kap.~\ref{sec:wind-estimation}
-\sketch{figures/dialog-wind2.png}zu den Details dieser Algorythmen.
+\sketch{figures/dialog-wind2.png}zu den Details dieser Algorithmen.
 
 Die Windabdrift in der Darstellung des geflogenen Pfades  auf der Karte kann ebenso an-
 oder ausgeschaltet werden. Nähere Details hierzu in Kap.~\ref{sec:trail}.
@@ -191,7 +191,7 @@ wie wichtig es ist, wieder Thermik zu finden\dots
 Wenn der Pfeil sich auf den unteren Rand des Bandes zubewegt, befindet sich das Flugzeug nahe der Aufbruchshöhe und der Pilot sollte sich allmählig damit abfinden, nun auch in schwächerer Thermik kurbeln zu müssen.
 
 \section{Thermikfinder}
-Durch einen Algorythmus wird der Kern der Thermik errechnet und dargestellt.
+Durch einen Algorithmus wird der Kern der Thermik errechnet und dargestellt.
 Das Symbol für das Zentrum ist eine kleine grüne Spirale auf der Karte der moving map.
 \sketch{figures/shot-tlocator-circling.png}
 Der Thermikfinder markiert \textit{fortlaufend  die letzten 20 Bärte} während des Fluges auf der Karte.

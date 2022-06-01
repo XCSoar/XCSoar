@@ -44,7 +44,7 @@ Getting the Source Code
 The XCSoar source code is managed with `git <http://git-scm.com/>`__. It
 can be downloaded with the following command::
 
-  git clone git://github.com/XCSoar/XCSoar
+  git clone https://github.com/XCSoar/XCSoar
 
 To update your repository, type::
 
@@ -164,7 +164,7 @@ For Android, you need:
 
 - `Android SDK level 26 <http://developer.android.com/sdk/>`__
 
-- `Android NDK r23b <http://developer.android.com/sdk/ndk/>`__
+- `Android NDK r24 <http://developer.android.com/sdk/ndk/>`__
 
 - `Ogg Vorbis <http://www.vorbis.com/>`__
 
@@ -187,7 +187,7 @@ tools/bin/sdkmanager  "build-tools;28.0.3"  "platforms;android-26"
 
 The ``Makefile`` assumes that the Android SDK is installed in
 ``~/opt/android-sdk-linux`` and the NDK is installed in
-``~/opt/android-ndk-r23b``. You can use the options ``ANDROID_SDK`` and
+``~/opt/android-ndk-r24``. You can use the options ``ANDROID_SDK`` and
 ``ANDROID_NDK`` to override these paths.
 
 Load/update the IOIO source code::

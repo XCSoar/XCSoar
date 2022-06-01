@@ -30,7 +30,6 @@ Copyright_License {
 #include "util/StaticString.hxx"
 #include "util/StringFormat.hpp"
 #include "util/TruncateString.hpp"
-#include "util/ConstBuffer.hxx"
 
 #include <cassert>
 
@@ -358,7 +357,7 @@ ChartRenderer::DrawBarChart(const XYDataStore &lsdata) noexcept
 
 template<typename T>
 static BulkPixelPoint *
-PrepareLineGraph(BulkPixelPoint *p, ConstBuffer<T> src,
+PrepareLineGraph(BulkPixelPoint *p, std::span<const T> src,
                  const ChartRenderer &chart, bool swap) noexcept
 {
   if (swap) {
@@ -374,7 +373,7 @@ PrepareLineGraph(BulkPixelPoint *p, ConstBuffer<T> src,
 
 template<typename T>
 static BulkPixelPoint *
-PrepareFilledLineGraph(BulkPixelPoint *p, ConstBuffer<T> src,
+PrepareFilledLineGraph(BulkPixelPoint *p, std::span<const T> src,
                        const ChartRenderer &chart, bool swap) noexcept
 {
   const auto &p0 = *p;
@@ -395,10 +394,10 @@ PrepareFilledLineGraph(BulkPixelPoint *p, ConstBuffer<T> src,
 }
 
 void
-ChartRenderer::DrawFilledLineGraph(ConstBuffer<DoublePoint2D> src,
+ChartRenderer::DrawFilledLineGraph(std::span<const DoublePoint2D> src,
                                    bool swap) noexcept
 {
-  const unsigned n = src.size + 2;
+  const std::size_t n = src.size() + 2;
   auto *points = point_buffer.get(n);
 
   [[maybe_unused]] auto *p =
@@ -409,12 +408,12 @@ ChartRenderer::DrawFilledLineGraph(ConstBuffer<DoublePoint2D> src,
 }
 
 void
-ChartRenderer::DrawLineGraph(ConstBuffer<DoublePoint2D> src,
+ChartRenderer::DrawLineGraph(std::span<const DoublePoint2D> src,
                              const Pen &pen, bool swap) noexcept
 {
-  assert(src.size >= 2);
+  assert(src.size() >= 2);
 
-  const unsigned n = src.size;
+  const std::size_t n = src.size();
   auto *points = point_buffer.get(n);
 
   [[maybe_unused]] auto *p =
@@ -426,7 +425,7 @@ ChartRenderer::DrawLineGraph(ConstBuffer<DoublePoint2D> src,
 }
 
 void
-ChartRenderer::DrawLineGraph(ConstBuffer<DoublePoint2D> src,
+ChartRenderer::DrawLineGraph(std::span<const DoublePoint2D> src,
                              ChartLook::Style style, bool swap) noexcept
 {
   DrawLineGraph(src, look.GetPen(style), swap);
@@ -437,9 +436,9 @@ ChartRenderer::DrawFilledLineGraph(const XYDataStore &lsdata,
                                    bool swap) noexcept
 {
   const auto slots = lsdata.GetSlots();
-  assert(slots.size >= 2);
+  assert(slots.size() >= 2);
 
-  const unsigned n = slots.size + 2;
+  const std::size_t n = slots.size() + 2;
   auto *points = point_buffer.get(n);
 
   [[maybe_unused]] auto *p =
@@ -454,9 +453,9 @@ ChartRenderer::DrawLineGraph(const XYDataStore &lsdata, const Pen &pen,
                              bool swap) noexcept
 {
   const auto slots = lsdata.GetSlots();
-  assert(slots.size >= 2);
+  assert(slots.size() >= 2);
 
-  const unsigned n = slots.size;
+  const std::size_t n = slots.size();
   auto *points = point_buffer.get(n);
 
   [[maybe_unused]] auto *p =
@@ -640,12 +639,12 @@ ChartRenderer::ScreenY(double _y) const noexcept
 }
 
 void
-ChartRenderer::DrawFilledY(ConstBuffer<DoublePoint2D> vals,
+ChartRenderer::DrawFilledY(std::span<const DoublePoint2D> vals,
                            const Brush &brush, const Pen *pen) noexcept
 {
-  if (vals.size < 2)
+  if (vals.size() < 2)
     return;
-  const unsigned fsize = vals.size + 2;
+  const std::size_t fsize = vals.size() + 2;
   auto *line = point_buffer.get(fsize);
 
   PrepareLineGraph(line + 2, vals, *this, false);
@@ -696,7 +695,7 @@ ChartRenderer::DrawImpulseGraph(const XYDataStore &lsdata,
                                 const Pen &pen) noexcept
 {
   const auto slots = lsdata.GetSlots();
-  assert(slots.size >= 1);
+  assert(slots.size() >= 1);
 
   canvas.Select(pen);
   for (const auto &i : slots) {

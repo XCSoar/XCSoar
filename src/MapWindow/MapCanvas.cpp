@@ -79,8 +79,8 @@ MapCanvas::PreparePolygon(const SearchPointVector &points) noexcept
     geo_points[i] = points[i].GetLocation();
 
   /* clip them */
-  num_raster_points = clip.ClipPolygon(geo_points.begin(),
-                                       geo_points.begin(), num_points);
+  num_raster_points = clip.ClipPolygon(geo_points.data(),
+                                       geo_points.data(), num_points);
   if (num_raster_points < 3)
     /* it's completely outside the screen */
     return false;
@@ -97,5 +97,5 @@ void
 MapCanvas::DrawPrepared() noexcept
 {
   /* draw it all */
-  canvas.DrawPolygon(raster_points.begin(), num_raster_points);
+  canvas.DrawPolygon(raster_points.data(), num_raster_points);
 }

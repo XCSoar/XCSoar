@@ -583,7 +583,7 @@ public:
 
     // Allocate temp array, only grow array
     polygon_buffer.GrowDiscard(n);
-    int *const ints = polygon_buffer.begin();
+    int *const ints = polygon_buffer.data();
 
     // Determine Y maxima
     int miny = points[0].y;

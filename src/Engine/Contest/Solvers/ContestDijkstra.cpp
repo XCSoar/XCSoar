@@ -35,14 +35,16 @@ static constexpr unsigned CONTEST_QUEUE_SIZE = 5000;
 ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  bool _continuous,
                                  const unsigned n_legs,
-                                 const unsigned finish_alt_diff) noexcept
+                                 const unsigned finish_alt_diff,
+                                 const double _min_distance) noexcept
   :AbstractContest(finish_alt_diff),
    NavDijkstra(n_legs + 1),
    TraceManager(_trace),
    continuous(_continuous),
-   incremental(false)
+   min_distance(_min_distance)
 {
   assert(num_stages <= MAX_STAGES);
+  assert(min_distance >= 0.0);
 
   std::fill_n(stage_weights, num_stages - 1, 5);
 }
@@ -237,33 +239,42 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin,
        search */
     destination.SetPointIndex(first_finish_candidate);
 
+  const auto &origin_tp = GetPoint(origin);
   const unsigned weight = GetStageWeight(origin.GetStageNumber());
 
   bool previous_above = false;
   for (const ScanTaskPoint end(destination.GetStageNumber(), n_points);
        destination != end; destination.IncrementPointIndex()) {
-    bool above = GetPoint(destination).GetIntegerAltitude() >= min_altitude;
+    const auto destination_tp = GetPoint(destination);
+    const bool above = destination_tp.GetIntegerAltitude() >= min_altitude;
 
-    if (above) {
-      const unsigned d = weight * CalcEdgeDistance(origin, destination);
-      Link(destination, origin, d);
-    } else if (previous_above) {
-      /* After excessive thinning, the exact TracePoint that matches
-         the required altitude difference may be gone, and the
-         calculated result becomes overly pessimistic.  This code path
-         makes it optimistic, by checking if the previous point
-         matches. */
+    /* Check if the distance is withing the minimum distance.
+       Also allows zero distance legs, because if a minimum distance is set not
+       all solutions will use all legs. */
+    if (origin_tp.GetFlatLocation() == destination_tp.GetFlatLocation() ||
+        CheckMinDistance(origin_tp.GetLocation(),
+                         destination_tp.GetLocation())) {
+      if (above) {
+        const unsigned d = weight * CalcEdgeDistance(origin, destination);
+        Link(destination, origin, d);
+      } else if (previous_above) {
+        /* After excessive thinning, the exact TracePoint that matches
+           the required altitude difference may be gone, and the
+           calculated result becomes overly pessimistic.  This code path
+           makes it optimistic, by checking if the previous point
+           matches. */
 
-      /* TODO: interpolate the distance */
-      const unsigned d = weight * CalcEdgeDistance(origin, destination);
-      Link(destination, origin, d);
+        /* TODO: interpolate the distance */
+        const unsigned d = weight * CalcEdgeDistance(origin, destination);
+        Link(destination, origin, d);
+      }
     }
 
     previous_above = above;
   }
 
   if (IsFinal(destination) && predicted.IsDefined()) {
-    const unsigned d = weight * GetPoint(origin).FlatDistanceTo(predicted);
+    const unsigned d = weight * origin_tp.FlatDistanceTo(predicted);
     destination.SetPointIndex(predicted_index);
     Link(destination, origin, d);
   }

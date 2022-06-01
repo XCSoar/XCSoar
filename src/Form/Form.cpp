@@ -392,12 +392,10 @@ WndForm::ShowModal()
         }
       }
 
-#ifndef USE_WINUSER
       if (event.GetKeyCode() == KEY_ESCAPE) {
         modal_result = mrCancel;
         continue;
       }
-#endif
 
 #ifdef KOBO
       if (event.GetKeyCode() == KEY_POWER) {
@@ -449,14 +447,14 @@ WndForm::OnPaint(Canvas &canvas)
     const int size = Layout::VptScale(4);
 
     const BulkPixelPoint vertices[8] = {
-      { rc.left, rc.top },
-      { rc.right, rc.top },
+      { rc.left + size, rc.top + size },
+      { rc.right, rc.top + size },
       { rc.right, rc.bottom },
-      { rc.left, rc.bottom },
-      { rc.left - size, rc.top - size },
-      { rc.right + size, rc.top - size },
+      { rc.left + size, rc.bottom },
+      { rc.left, rc.top + size },
+      { rc.right + size, rc.top + size },
       { rc.right + size, rc.bottom + size },
-      { rc.left - size, rc.bottom + size },
+      { rc.left + size, rc.bottom + size },
     };
 
     const ScopeVertexPointer vp(vertices);

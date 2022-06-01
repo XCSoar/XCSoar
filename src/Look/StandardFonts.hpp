@@ -30,14 +30,14 @@ gcc_const
 static inline const TCHAR *
 GetStandardMonospaceFontFace()
 {
-  return _T("Courier");
+  return _T("Consolas");
 }
 
 gcc_const
 static inline const TCHAR *
 GetStandardFontFace()
 {
-  return _T("Tahoma");
+  return _T("Segeo UI");
 }
 
 #endif

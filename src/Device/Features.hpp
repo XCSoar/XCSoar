@@ -24,11 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_FEATURES_HPP
 #define XCSOAR_DEVICE_FEATURES_HPP
 
-#ifdef _WIN32
-static constexpr unsigned NUMDEV = 4;
-#else
 static constexpr unsigned NUMDEV = 6;
-#endif
 
 #if defined(ANDROID) || defined(__APPLE__)
 #define HAVE_INTERNAL_GPS

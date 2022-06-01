@@ -86,7 +86,7 @@ void
 SetPrimaryDataPath(Path path) noexcept
 {
   assert(path != nullptr);
-  assert(!path.IsEmpty());
+  assert(!path.empty());
 
   if (auto i = std::find(data_paths.begin(), data_paths.end(), path);
       i != data_paths.end())
@@ -103,7 +103,7 @@ void
 SetSingleDataPath(Path path) noexcept
 {
   assert(path != nullptr);
-  assert(!path.IsEmpty());
+  assert(!path.empty());
 
   data_paths.clear();
   data_paths.emplace_front(path);

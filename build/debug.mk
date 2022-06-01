@@ -3,7 +3,9 @@ DEBUG_GLIBCXX ?= n
 
 ifeq ($(DEBUG),y)
   OPTIMIZE := -Og
-  OPTIMIZE += -funit-at-a-time
+  ifeq ($(CLANG),n)
+    OPTIMIZE += -funit-at-a-time
+  endif
 else
   OPTIMIZE := -Os
   OPTIMIZE += -DNDEBUG

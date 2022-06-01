@@ -122,6 +122,8 @@ ScoringConfigPanel::Prepare(ContainerWindow &parent,
     { (unsigned)Contest::WEGLIDE_OR, ContestToString(Contest::WEGLIDE_OR),
       N_("A start point, one turn point and a finish point are chosen from the flight path such that "
           "the distance between the start point and the turn point is maximized") },
+    { (unsigned)Contest::CHARRON, ContestToString(Contest::CHARRON),
+      N_("LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance is 20km, 5 points per km.") },
     { 0 }
   };
   AddEnum(_("Contest"),

@@ -153,7 +153,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
 
     if (value == Path(_T("none")))
       df.SetValue(1);
-    else if (!value.IsEmpty() && value != Path(_T("auto"))) {
+    else if (!value.empty() && value != Path(_T("auto"))) {
       const Path base = value.GetBase();
       if (base != nullptr)
         df.SetValue(base.c_str());

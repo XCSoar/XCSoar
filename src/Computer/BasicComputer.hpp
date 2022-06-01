@@ -45,9 +45,10 @@ public:
    * Fill the missing attributes with a fallback.
    */
   void Fill(MoreData &data, const AtmosphericPressure qnh,
-            const FeaturesSettings &features);
+            const FeaturesSettings &features) noexcept;
 
-  void Fill(MoreData &data, const ComputerSettings &settings_computer);
+  void Fill(MoreData &data,
+            const ComputerSettings &settings_computer) noexcept;
 
   /**
    * Runs all calculations.
@@ -58,7 +59,7 @@ public:
    * @param calculations the most up-to-date version of calculated values
    */
   void Compute(MoreData &data, const MoreData &last, const MoreData &last_gps,
-               const DerivedInfo &calculated);
+               const DerivedInfo &calculated) noexcept;
 };
 
 #endif

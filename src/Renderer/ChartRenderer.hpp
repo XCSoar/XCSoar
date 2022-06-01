@@ -30,9 +30,10 @@ Copyright_License {
 #include "Look/ChartLook.hpp"
 #include "util/StringBuffer.hxx"
 
+#include <span>
+
 #include <tchar.h>
 
-template<typename T> struct ConstBuffer;
 struct DoublePoint2D;
 class XYDataStore;
 class LeastSquares;
@@ -106,10 +107,10 @@ public:
 
   void DrawBarChart(const XYDataStore &lsdata) noexcept;
 
-  void DrawFilledLineGraph(ConstBuffer<DoublePoint2D> src, bool swap=false) noexcept;
-  void DrawLineGraph(ConstBuffer<DoublePoint2D> src,
+  void DrawFilledLineGraph(std::span<const DoublePoint2D> src, bool swap=false) noexcept;
+  void DrawLineGraph(std::span<const DoublePoint2D> src,
                      const Pen &pen, bool swap=false) noexcept;
-  void DrawLineGraph(ConstBuffer<DoublePoint2D> src,
+  void DrawLineGraph(std::span<const DoublePoint2D> src,
                      ChartLook::Style style, bool swap=false) noexcept;
 
   void DrawFilledLineGraph(const XYDataStore &lsdata, bool swap=false) noexcept;
@@ -124,7 +125,7 @@ public:
   void DrawFilledLine(double xmin, double ymin,
                       double xmax, double ymax,
                       const Brush &brush) noexcept;
-  void DrawFilledY(ConstBuffer<DoublePoint2D> vals,
+  void DrawFilledY(std::span<const DoublePoint2D> vals,
                    const Brush &brush,
                    const Pen *pen=nullptr) noexcept;
   void DrawDot(double x, double y, const unsigned width) noexcept;

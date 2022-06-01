@@ -207,7 +207,7 @@ Canvas::DrawPolygon(const BulkPixelPoint *points, unsigned num_points)
                                             triangle_buffer);
     if (idx_count > 0)
       glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT,
-                     triangle_buffer.begin());
+                     triangle_buffer.data());
   }
 
   if (IsPenOverBrush()) {
@@ -219,7 +219,7 @@ Canvas::DrawPolygon(const BulkPixelPoint *points, unsigned num_points)
       unsigned vertices = LineToTriangles(points, num_points, vertex_buffer,
                                           pen.GetWidth(), true);
       if (vertices > 0) {
-        vp.Update(vertex_buffer.begin());
+        vp.Update(vertex_buffer.data());
         glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
       }
     }
@@ -252,7 +252,7 @@ Canvas::DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points)
       unsigned vertices = LineToTriangles(points, num_points, vertex_buffer,
                                           pen.GetWidth(), true);
       if (vertices > 0) {
-        vp.Update(vertex_buffer.begin());
+        vp.Update(vertex_buffer.data());
         glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
       }
     }
@@ -356,7 +356,7 @@ Canvas::DrawLinePiece(const PixelPoint a, const PixelPoint b)
     unsigned strip_len = LineToTriangles(v, 2, vertex_buffer, pen.GetWidth(),
                                          false, true);
     if (strip_len > 0) {
-      const ScopeVertexPointer vp(vertex_buffer.begin());
+      const ScopeVertexPointer vp{vertex_buffer.data()};
       glDrawArrays(GL_TRIANGLE_STRIP, 0, strip_len);
     }
   } else {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2014-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,6 +29,10 @@
 
 #include "FileOutputStream.hxx"
 #include "system/Error.hxx"
+
+#ifdef _WIN32
+#include <tchar.h>
+#endif
 
 #ifdef __linux__
 #include <fcntl.h>
@@ -80,8 +84,22 @@ FileOutputStream::Open()
 #ifdef _WIN32
 
 inline void
-FileOutputStream::OpenCreate([[maybe_unused]] bool visible)
+FileOutputStream::OpenCreate(bool visible)
 {
+	if (!visible) {
+		/* attempt to create a temporary file */
+		tmp_path = path.WithExtension(_T(".tmp"));
+		Delete(tmp_path);
+
+		handle = CreateFile(tmp_path.c_str(), GENERIC_WRITE, 0, nullptr,
+				    CREATE_NEW,
+				    FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH,
+				    nullptr);
+		if (handle != INVALID_HANDLE_VALUE)
+			return;
+
+	}
+
 	handle = CreateFile(path.c_str(), GENERIC_WRITE, 0, nullptr,
 			    CREATE_ALWAYS,
 			    FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH,
@@ -138,11 +156,27 @@ FileOutputStream::Write(const void *data, size_t size)
 }
 
 void
-FileOutputStream::Commit()
+FileOutputStream::Sync()
 {
 	assert(IsDefined());
 
+	if (!FlushFileBuffers(handle))
+		throw FormatLastError("Failed to sync %s", GetPath().c_str());
+}
+
+void
+FileOutputStream::Commit()
+try {
+	assert(IsDefined());
+
 	Close();
+
+	if (tmp_path != nullptr)
+		RenameOrThrow(tmp_path, path);
+} catch (...) {
+	if (tmp_path != nullptr)
+		Delete(tmp_path);
+	throw;
 }
 
 #else
@@ -184,22 +218,38 @@ FileOutputStream::OpenCreate(bool visible)
 {
 #ifdef HAVE_O_TMPFILE
 	/* try Linux's O_TMPFILE first */
-	is_tmpfile = !visible && OpenTempFile(directory_fd, fd, GetPath());
-	if (!is_tmpfile) {
-#endif
-		/* fall back to plain POSIX */
-		if (!fd.Open(
-#ifdef __linux__
-			     directory_fd,
-#endif
-			     GetPath().c_str(),
-			     O_WRONLY|O_CREAT|O_TRUNC,
-			     0666))
-			throw FormatErrno("Failed to create %s",
-					  GetPath().c_str());
-#ifdef HAVE_O_TMPFILE
+	if (!visible && OpenTempFile(directory_fd, fd, GetPath())) {
+		is_tmpfile = true;
+		return;
 	}
 #endif
+
+	if (!visible) {
+		/* attempt to create a temporary file */
+		tmp_path = path + ".tmp";
+		Delete(tmp_path);
+
+		if (fd.Open(
+#ifdef __linux__
+			    directory_fd,
+#endif
+			    tmp_path.c_str(),
+			    O_WRONLY|O_CREAT|O_EXCL,
+			    0666))
+			return;
+
+	}
+
+	/* fall back to plain POSIX */
+	if (!fd.Open(
+#ifdef __linux__
+		    directory_fd,
+#endif
+		    GetPath().c_str(),
+		    O_WRONLY|O_CREAT|O_TRUNC,
+		    0666))
+		throw FormatErrno("Failed to create %s",
+				  GetPath().c_str());
 }
 
 inline void
@@ -238,8 +288,17 @@ FileOutputStream::Write(const void *data, size_t size)
 }
 
 void
-FileOutputStream::Commit()
+FileOutputStream::Sync()
 {
+	assert(IsDefined());
+
+	if (fdatasync(fd.Get()) < 0)
+		throw FormatErrno("Failed to sync %s", GetPath().c_str());
+}
+
+void
+FileOutputStream::Commit()
+try {
 	assert(IsDefined());
 
 #ifdef HAVE_O_TMPFILE
@@ -262,6 +321,13 @@ FileOutputStream::Commit()
 	if (!Close()) {
 		throw FormatErrno("Failed to commit %s", path.c_str());
 	}
+
+	if (tmp_path != nullptr)
+		RenameOrThrow(tmp_path, path);
+} catch (...) {
+	if (tmp_path != nullptr)
+		Delete(tmp_path);
+	throw;
 }
 
 #endif
@@ -273,18 +339,17 @@ FileOutputStream::Cancel() noexcept
 
 	Close();
 
+	if (tmp_path != nullptr) {
+		Delete(tmp_path);
+		return;
+	}
+
 	switch (mode) {
 	case Mode::CREATE:
 #ifdef HAVE_O_TMPFILE
 		if (!is_tmpfile)
 #endif
-#ifdef __linux__
-			unlinkat(directory_fd.Get(), GetPath().c_str(), 0);
-#elif _WIN32
-		DeleteFile(GetPath().c_str());
-#else
-		unlink(GetPath().c_str());
-#endif
+			Delete(GetPath());
 		break;
 
 	case Mode::CREATE_VISIBLE:
@@ -295,3 +360,36 @@ FileOutputStream::Cancel() noexcept
 	}
 }
 
+inline void
+FileOutputStream::RenameOrThrow(Path old_path, Path new_path) const
+{
+	assert(old_path != nullptr);
+	assert(new_path != nullptr);
+
+#ifdef _WIN32
+	if (!MoveFileEx(old_path.c_str(), new_path.c_str(),
+			MOVEFILE_REPLACE_EXISTING))
+		throw MakeLastError("Failed to rename file");
+#elif defined(__linux__)
+	if (renameat(directory_fd.Get(), tmp_path.c_str(),
+		     directory_fd.Get(), path.c_str()) < 0)
+		throw MakeErrno("Failed to rename file");
+#else
+	if (rename(tmp_path.c_str(), path.c_str()))
+		throw MakeErrno("Failed to rename file");
+#endif
+}
+
+inline void
+FileOutputStream::Delete(Path path) const noexcept
+{
+	assert(path != nullptr);
+
+#ifdef _WIN32
+	DeleteFile(path.c_str());
+#elif defined(__linux__)
+	unlinkat(directory_fd.Get(), path.c_str(), 0);
+#else
+	unlink(path.c_str());
+#endif
+}

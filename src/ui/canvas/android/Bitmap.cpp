@@ -108,7 +108,7 @@ Bitmap::Load(ResourceId id, Type _type)
 bool
 Bitmap::LoadFile(Path path)
 {
-  assert(path != nullptr && !path.IsEmpty());
+  assert(path != nullptr && !path.empty());
 
   Reset();
 

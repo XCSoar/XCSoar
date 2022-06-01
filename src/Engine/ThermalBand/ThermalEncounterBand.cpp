@@ -58,7 +58,7 @@ ThermalEncounterBand::AddSample(const TimeStamp time,
 }
 
 inline unsigned
-ThermalEncounterBand::ResizeToHeight(const double height)
+ThermalEncounterBand::ResizeToHeight(const double height) noexcept
 {
   unsigned index = GetSliceIndex(height) + 1;
   // check to see if we need to resample
@@ -112,7 +112,7 @@ ThermalEncounterBand::EstimateTimeStep(const FloatDuration time,
 
 inline void
 ThermalEncounterBand::Start(const TimeStamp time,
-                            const double height)
+                            const double height) noexcept
 {
   Reset();
   time_start = time;

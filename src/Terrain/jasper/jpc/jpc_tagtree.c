@@ -173,7 +173,7 @@ void jpc_tagtree_destroy(jpc_tagtree_t *tree)
 	jas_free(tree);
 }
 
-static jpc_tagtree_t *jpc_tagtree_alloc()
+static jpc_tagtree_t *jpc_tagtree_alloc(void)
 {
 	jpc_tagtree_t *tree;
 

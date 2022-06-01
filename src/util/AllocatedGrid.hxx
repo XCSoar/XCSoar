@@ -48,8 +48,8 @@ public:
 	using size_type = typename AllocatedArray<T>::size_type;
 	using reference = typename AllocatedArray<T>::reference;
 	using const_reference = typename AllocatedArray<T>::const_reference;
-	using iterator = typename AllocatedArray<T>::iterator;
-	using const_iterator = typename AllocatedArray<T>::const_iterator;
+	using iterator = typename AllocatedArray<T>::pointer;
+	using const_iterator = typename AllocatedArray<T>::const_pointer;
 
 	constexpr AllocatedGrid() noexcept = default;
 	AllocatedGrid(unsigned _width, unsigned _height) noexcept
@@ -98,11 +98,11 @@ public:
 	}
 
 	iterator begin() noexcept {
-		return array.begin();
+		return array.data();
 	}
 
 	constexpr const_iterator begin() const noexcept {
-		return array.begin();
+		return array.data();
 	}
 
 	iterator end() noexcept {

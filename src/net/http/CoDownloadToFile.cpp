@@ -25,10 +25,10 @@ Copyright_License {
 #include "Setup.hxx"
 #include "Progress.hpp"
 #include "CoStreamRequest.hxx"
+#include "io/DigestOutputStream.hxx"
 #include "io/FileOutputStream.hxx"
 #include "system/Path.hpp"
-#include "Crypto/SHA256.hxx"
-#include "Crypto/DigestOutputStream.hxx"
+#include "lib/sodium/SHA256.hxx"
 
 #include <cassert>
 #include <optional>

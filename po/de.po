@@ -4480,7 +4480,7 @@ msgstr "MC Optimierung"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:78
 msgid "This option defines which auto MacCready algorithm is used."
-msgstr "Diese Option legt fest, welcher MacCready Algorythmus benutzt wird."
+msgstr "Diese Option legt fest, welcher MacCready Algorithmus benutzt wird."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:81
 msgid "Block speed to fly"

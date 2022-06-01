@@ -184,8 +184,8 @@ private:
         continue;
       }
 
-      size_t nbytes = std::min(size_t(range.size), size_t(end - data));
-      memcpy(range.data, data, nbytes);
+      size_t nbytes = std::min(range.size(), size_t(end - data));
+      std::copy_n(data, nbytes, range.begin());
       data += nbytes;
       binary_buffer.Append(nbytes);
 
@@ -194,7 +194,7 @@ private:
         if (range.empty())
           break;
 
-        size_t nbytes = HandleBinary(range.data, range.size);
+        size_t nbytes = HandleBinary(range.data(), range.size());
         if (nbytes == 0) {
           if (binary_buffer.IsFull())
             binary_buffer.Clear();

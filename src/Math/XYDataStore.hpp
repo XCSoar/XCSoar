@@ -104,7 +104,7 @@ public:
     return y_max;
   }
 
-  constexpr ConstBuffer<Slot> GetSlots() const noexcept {
+  constexpr std::span<const Slot> GetSlots() const noexcept {
     return slots;
   }
 

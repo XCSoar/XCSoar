@@ -74,11 +74,11 @@ public:
   }
 
   const TerrainHeight *GetData() const {
-    return data.begin();
+    return data.data();
   }
 
   const TerrainHeight *GetRow(unsigned y) const {
-    return data.begin() + y * width;
+    return GetData() + y * width;
   }
 
   const TerrainHeight *GetDataEnd() const {

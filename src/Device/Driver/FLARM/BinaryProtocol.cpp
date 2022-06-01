@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device.hpp"
 #include "CRC16.hpp"
+#include "Device/Error.hpp"
 #include "Device/Port/Port.hpp"
 #include "time/TimeoutClock.hpp"
 
@@ -222,12 +223,12 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
 
     // Read payload and check length
     data.GrowDiscard(length);
-    if (!ReceiveEscaped(data.begin(), length,
+    if (!ReceiveEscaped(data.data(), length,
                         env, timeout.GetRemainingOrZero()))
       continue;
 
     // Verify CRC
-    if (header.crc != FLARM::CalculateCRC(header, data.begin(), length))
+    if (header.crc != FLARM::CalculateCRC(header, data.data(), length))
       continue;
 
     // Check message type
@@ -239,7 +240,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
       continue;
 
     // Check whether the received ACK is for the right sequence number
-    if (FromLE16(*((const uint16_t *)(const void *)data.begin())) ==
+    if (FromLE16(*((const uint16_t *)(const void *)data.data())) ==
         sequence_number)
       return (FLARM::MessageType)header.type;
   }
@@ -268,7 +269,7 @@ FlarmDevice::WaitForACK(uint16_t sequence_number,
 bool
 FlarmDevice::BinaryPing(OperationEnvironment &env,
                         std::chrono::steady_clock::duration _timeout)
-{
+try {
   const TimeoutClock timeout(_timeout);
 
   // Create header for sending a binary ping request
@@ -279,6 +280,8 @@ FlarmDevice::BinaryPing(OperationEnvironment &env,
   SendStartByte();
   SendFrameHeader(header, env, timeout.GetRemainingOrZero());
   return WaitForACK(header.sequence_number, env, timeout.GetRemainingOrZero());
+} catch (const DeviceTimeout &) {
+  return false;
 }
 
 void

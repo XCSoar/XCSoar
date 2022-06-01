@@ -44,7 +44,7 @@
 
 // Wrapper for getting converted string values of a json string
 static const UTF8ToWideConverter 
-GetJsonString(boost::json::standalone::value json_value, std::string_view key)
+GetJsonString(boost::json::value json_value, std::string_view key)
 {
   return UTF8ToWideConverter(json_value.at(key).get_string().c_str());
 }

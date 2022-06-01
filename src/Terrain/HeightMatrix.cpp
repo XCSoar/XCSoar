@@ -67,7 +67,7 @@ HeightMatrix::Fill(const RasterMap &map, const GeoBounds &bounds,
 
   const Angle delta_y = bounds.GetHeight() / height;
   Angle latitude = bounds.GetNorth();
-  for (auto p = data.begin(), end = p + width * height;
+  for (auto p = data.data(), end = p + width * height;
        p != end; p += width, latitude -= delta_y) {
     map.ScanLine(GeoPoint(bounds.GetWest(), latitude),
                  GeoPoint(bounds.GetEast(), latitude),
@@ -86,7 +86,7 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
   SetSize((screen_size.width + quantisation_pixels - 1) / quantisation_pixels,
           (screen_size.height + quantisation_pixels - 1) / quantisation_pixels);
 
-  auto p = data.begin();
+  auto p = data.data();
   for (unsigned y = 0; y < screen_size.height;
        y += quantisation_pixels, p += width) {
     map.ScanLine(projection.ScreenToGeo({0, (int)y}),

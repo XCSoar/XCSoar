@@ -1,9 +1,30 @@
 Version 7.24 - not yet released
+* user interface
+  - padding in fields
+  - rework menu labels
+  - increase popup message timeouts
+  - fix missing wind arrow InfoBox updates
+* file handling 
+  - guard against file corruption in poweroff situations
+* FLARM
+  - timeouts in flight downloads  
 * Linux
   - fix terrain renderer bug
   - allow changing the language at runtime
 * OpenVario
   - menu: fix bogus clicks after returning from XCSoar
+* Android
+  - add SoftRF Lego into 'white list' of USB devices
+* calculations
+  - support for LVZC Charron contest
+  - new asw27 polar from idaflieg
+* Windows
+  - new default fonts
+  - use 6 devices in serial port list (like all other targets)
+* XCVario/Borgelt
+  - revert cruise/circling mode change 
+* Kobo
+  - add ca certificates for https downloads
 
 Version 7.23 - 2022/02/10
 * user interface

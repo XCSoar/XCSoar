@@ -118,7 +118,6 @@ Net::DownloadManager::Cancel(Path relative_path) noexcept
 #include "LocalPath.hpp"
 #include "thread/Mutex.hxx"
 #include "co/InjectTask.hxx"
-#include "io/FileTransaction.hpp"
 
 #include <string>
 #include <list>
@@ -243,17 +242,14 @@ private:
 };
 
 static Co::InvokeTask
-DownloadToFileTransaction(CurlGlobal &curl,
-                          const char *url, AllocatedPath path,
-                          std::array<std::byte, 32> *sha256,
-                          ProgressListener &progress)
+DownloadToFile(CurlGlobal &curl,
+               const char *url, const Path path,
+               std::array<std::byte, 32> *sha256,
+               ProgressListener &progress)
 {
-  FileTransaction transaction(path);
   const auto ignored_response = co_await
     Net::CoDownloadToFile(curl, url, nullptr, nullptr,
-                          transaction.GetTemporaryPath(),
-                          sha256, progress);
-  transaction.Commit();
+                          path, sha256, progress);
 }
 
 void
@@ -267,9 +263,9 @@ DownloadManagerThread::Start() noexcept
   const Item &item = queue.front();
   current_position = 0;
 
-  task.Start(DownloadToFileTransaction(*Net::curl, item.uri.c_str(),
-                                       LocalPath(item.path_relative.c_str()),
-                                       nullptr, *this),
+  task.Start(DownloadToFile(*Net::curl, item.uri.c_str(),
+                            LocalPath(item.path_relative.c_str()),
+                            nullptr, *this),
              BIND_THIS_METHOD(OnCompletion));
 }
 

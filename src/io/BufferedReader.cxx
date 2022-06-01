@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2014-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,11 +31,10 @@
 #include "Reader.hxx"
 #include "util/TextFile.hxx"
 
+#include <algorithm> // for std::copy_n()
 #include <cassert>
 #include <cstdint>
 #include <stdexcept>
-
-#include <string.h>
 
 bool
 BufferedReader::Fill(bool need_more)
@@ -53,7 +52,7 @@ BufferedReader::Fill(bool need_more)
 		assert(!w.empty());
 	}
 
-	std::size_t nbytes = reader.Read(w.data, w.size);
+	std::size_t nbytes = reader.Read(w.data(), w.size());
 	if (nbytes == 0) {
 		eof = true;
 		return !need_more;
@@ -68,8 +67,8 @@ BufferedReader::ReadFull(std::size_t size)
 {
 	while (true) {
 		auto r = Read();
-		if (r.size >= size)
-			return r.data;
+		if (r.size() >= size)
+			return r.data();
 
 		if (!Fill(true))
 			throw std::runtime_error("Premature end of file");
@@ -77,25 +76,22 @@ BufferedReader::ReadFull(std::size_t size)
 }
 
 std::size_t
-BufferedReader::ReadFromBuffer(WritableBuffer<void> dest) noexcept
+BufferedReader::ReadFromBuffer(std::span<std::byte> dest) noexcept
 {
-	auto src = Read();
-	std::size_t nbytes = std::min(src.size, dest.size);
-	memcpy(dest.data, src.data, nbytes);
+	const auto src = Read();
+	std::size_t nbytes = std::min(src.size(), dest.size());
+	std::copy_n(src.data(), nbytes, dest.data());
 	Consume(nbytes);
 	return nbytes;
 }
 
 void
-BufferedReader::ReadFull(WritableBuffer<void> _dest)
+BufferedReader::ReadFull(std::span<std::byte> dest)
 {
-	auto dest = WritableBuffer<uint8_t>::FromVoid(_dest);
-	assert(dest.size == _dest.size);
-
 	while (true) {
-		std::size_t nbytes = ReadFromBuffer(dest.ToVoid());
-		dest.skip_front(nbytes);
-		if (dest.size == 0)
+		std::size_t nbytes = ReadFromBuffer(dest);
+		dest = dest.subspan(nbytes);
+		if (dest.empty())
 			break;
 
 		if (!Fill(true))
@@ -127,7 +123,7 @@ BufferedReader::ReadLine()
 	/* terminate the last line */
 	w[0] = 0;
 
-	char *line = buffer.Read().data;
+	char *line = buffer.Read().data();
 	buffer.Clear();
 	++line_number;
 	return line;

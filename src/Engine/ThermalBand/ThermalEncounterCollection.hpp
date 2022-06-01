@@ -26,12 +26,12 @@
 
 class ThermalEncounterCollection : public ThermalBand {
 public:
-  void Merge(const ThermalBand& tb);
+  void Merge(const ThermalBand &tb) noexcept;
 
 private:
-  void MergeUnsafe(const ThermalBand& o);
-  void LowerFloor(const double new_floor);
-  void UpdateTimes();
+  void MergeUnsafe(const ThermalBand &o) noexcept;
+  void LowerFloor(double new_floor) noexcept;
+  void UpdateTimes() noexcept;
 };
 
 static_assert(std::is_trivial<ThermalEncounterCollection>::value, "type is not trivial");

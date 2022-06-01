@@ -259,7 +259,6 @@ InfoBoxContentThermalAssistant::Update(InfoBoxData &data) noexcept
   }
 
   data.SetCustom(basic.location_available.ToInteger() +
-                 basic.track_available.ToInteger() +
                  basic.attitude.heading_available.ToInteger());
 
   renderer.Update(basic.attitude, calculated);

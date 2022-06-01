@@ -23,6 +23,8 @@
 #include "DiffFilter.hpp"
 #include "Constants.hpp"
 
+#include <algorithm>
+
 void
 DiffFilter::Reset(const double x0, const double y0) noexcept
 {

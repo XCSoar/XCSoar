@@ -49,15 +49,15 @@ class KRT2Device final : public AbstractDevice {
   static constexpr auto CMD_TIMEOUT = std::chrono::milliseconds(250); //!< Command timeout
   static constexpr unsigned NR_RETRIES = 3; //!< Number of tries to send a command.
 
-  static constexpr char STX = 0x02; //!< Command start character.
-  static constexpr char ACK = 0x06; //!< Command acknowledged character.
-  static constexpr char NAK = 0x15; //!< Command not acknowledged character.
-  static constexpr char NO_RSP = 0; //!< No response received yet.
+  static constexpr std::byte STX{0x02}; //!< Command start character.
+  static constexpr std::byte ACK{0x06}; //!< Command acknowledged character.
+  static constexpr std::byte NAK{0x15}; //!< Command not acknowledged character.
+  static constexpr std::byte NO_RSP{0}; //!< No response received yet.
 
   static constexpr size_t MAX_NAME_LENGTH = 8; //!< Max. radio station name length.
 
   struct stx_msg {
-    uint8_t start = STX;
+    std::byte start = STX;
     uint8_t command;
     uint8_t mhz;
     uint8_t khz;
@@ -70,9 +70,9 @@ class KRT2Device final : public AbstractDevice {
   //! Expected length of the message just receiving.
   size_t expected_msg_length{};
   //! Buffer which receives the messages send from the radio.
-  StaticFifoBuffer<uint8_t, 256u> rx_buf;
+  StaticFifoBuffer<std::byte, 256u> rx_buf;
   //! Last response received from the radio.
-  uint8_t response;
+  std::byte response;
   //! Condition to signal that a response was received from the radio.
   Cond rx_cond;
   //! Mutex to be locked to access response.
@@ -100,14 +100,14 @@ private:
    * @param length Number of characters received.
    * @return Expected message length.
    */
-  static size_t ExpectedMsgLength(const uint8_t *data, size_t length);
+  static size_t ExpectedMsgLength(const std::byte *data, size_t length);
   /**
    * Calculates the length of the command message just receiving.
    *
    * @param code Command code received after the STX character.
    * @return Expected message length after the code character.
    */
-  static size_t ExpectedMsgLengthSTX(uint8_t code);
+  static size_t ExpectedMsgLengthSTX(std::byte code);
   /**
    * Gets the displayable station name.
    *
@@ -192,7 +192,7 @@ KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
     port.FullWrite(msg, msg_size, env, CMD_TIMEOUT);
 
     // Wait for the response
-    uint8_t _response;
+    std::byte _response;
     {
       std::unique_lock<Mutex> lock(response_mutex);
       rx_cond.wait_for(lock, std::chrono::milliseconds(CMD_TIMEOUT));
@@ -228,8 +228,8 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
       expected_msg_length = 0;
       continue;
     }
-    size_t nbytes = std::min(range.size, size_t(end - data));
-    memcpy(range.data, data, nbytes);
+    size_t nbytes = std::min(range.size(), size_t(end - data));
+    std::copy_n(data, nbytes, range.begin());
     data += nbytes;
     rx_buf.Append(nbytes);
 
@@ -239,14 +239,14 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
       if (range.empty())
         break;
 
-      if (range.size < expected_msg_length)
+      if (range.size() < expected_msg_length)
         break;
 
-      expected_msg_length = ExpectedMsgLength(range.data, range.size);
+      expected_msg_length = ExpectedMsgLength(range.data(), range.size());
 
-      if (range.size >= expected_msg_length) {
-        switch (*(const uint8_t *) range.data) {
-          case 'S':
+      if (range.size() >= expected_msg_length) {
+        switch (*(const std::byte *) range.data()) {
+          case std::byte{'S'}:
             // Respond to connection query.
             port.Write(0x01);
             break;
@@ -255,7 +255,7 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
             // Received a response to a normal command (STX)
             {
               const std::lock_guard<Mutex> lock(response_mutex);
-              response = *(const uint8_t *) range.data;
+              response = *(const std::byte *) range.data();
               // Signal the response to the TX thread
               rx_cond.notify_one();
             }
@@ -264,7 +264,7 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
             // Received a command from the radio (STX). Handle what we know.
             {
               const std::lock_guard<Mutex> lock(response_mutex);
-              const struct stx_msg * msg = (const struct stx_msg *) range.data;
+              const struct stx_msg * msg = (const struct stx_msg *) range.data();
               HandleSTXCommand(msg, info);
             }
           default:
@@ -288,7 +288,7 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
   is not received yet.
 */
 size_t
-KRT2Device::ExpectedMsgLength(const uint8_t *data, size_t length)
+KRT2Device::ExpectedMsgLength(const std::byte *data, size_t length)
 {
   size_t expected_length;
 
@@ -309,11 +309,11 @@ KRT2Device::ExpectedMsgLength(const uint8_t *data, size_t length)
 }
 
 size_t
-KRT2Device::ExpectedMsgLengthSTX(uint8_t code)
+KRT2Device::ExpectedMsgLengthSTX(std::byte code)
 {
   size_t expected_length;
 
-  switch (code) {
+  switch ((char)code) {
   case 'U':
     // Active frequency
   case 'R':

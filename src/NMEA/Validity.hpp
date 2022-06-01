@@ -68,7 +68,7 @@ public:
   /**
    * Clears the time stamp, marking the referenced value "invalid".
    */
-  void Clear() {
+  constexpr void Clear() noexcept {
     last = Duration::zero();
   }
 
@@ -78,7 +78,7 @@ public:
    *
    * @param now the current time stamp in seconds
    */
-  void Update(TimeStamp now) noexcept {
+  constexpr void Update(TimeStamp now) noexcept {
     last = Import(now);
   }
 
@@ -87,7 +87,7 @@ public:
    * for equality comparisons with other integers from this method,
    * e.g. to check if a redraw is needed.
    */
-  auto ToInteger() const noexcept {
+  constexpr auto ToInteger() const noexcept {
     return last.count();
   }
 
@@ -98,8 +98,8 @@ public:
    * @param max_age the maximum age in seconds
    * @return true if the value is expired
    */
-  bool Expire(TimeStamp _now,
-              std::chrono::steady_clock::duration _max_age) noexcept {
+  constexpr bool Expire(TimeStamp _now,
+                        std::chrono::steady_clock::duration _max_age) noexcept {
     const auto now = Import(_now);
     const auto max_age = std::chrono::duration_cast<Duration>(_max_age);
 
@@ -120,8 +120,8 @@ public:
    * @param max_age the maximum age in seconds
    * @return true if the value is expired
    */
-  bool IsOlderThan(TimeStamp _now,
-                   std::chrono::steady_clock::duration _max_age) const noexcept {
+  constexpr bool IsOlderThan(TimeStamp _now,
+                             std::chrono::steady_clock::duration _max_age) const noexcept {
     if (!IsValid())
       return true;
 
@@ -141,7 +141,7 @@ public:
    * @param other The second Validity object
    * @return The time difference in seconds
    */
-  FloatDuration GetTimeDifference(const Validity &other) const noexcept {
+  constexpr FloatDuration GetTimeDifference(const Validity &other) const noexcept {
     assert(IsValid());
     assert(other.IsValid());
 
@@ -152,19 +152,23 @@ public:
    * Was the value modified since the time the "other" object was
    * taken?
    */
-  constexpr bool Modified(const Validity &other) const {
+  constexpr bool Modified(const Validity &other) const noexcept {
     return last > other.last;
   }
 
-  constexpr bool operator==(const Validity &other) const {
+  constexpr bool operator==(const Validity &other) const noexcept {
     return last == other.last;
   }
 
-  constexpr bool operator!=(const Validity &other) const {
+  constexpr bool operator!=(const Validity &other) const noexcept {
     return last != other.last;
   }
 
-  bool Complement(const Validity &other) {
+  constexpr bool operator<(const Validity &other) const noexcept {
+    return last < other.last;
+  }
+
+  constexpr bool Complement(const Validity &other) noexcept {
     if (!IsValid() && other.IsValid()) {
       *this = other;
       return true;
@@ -183,8 +187,8 @@ public:
    * @return true if a time warp has occurred and this object has been
    * cleared, false if this object is within range
    */
-  bool FixTimeWarp(const Validity &current,
-                   std::chrono::steady_clock::duration _max_period=std::chrono::minutes(5)) noexcept {
+  constexpr bool FixTimeWarp(const Validity &current,
+                             std::chrono::steady_clock::duration _max_period=std::chrono::minutes(5)) noexcept {
     if (!IsValid())
       return false;
 
@@ -199,7 +203,7 @@ public:
     return false;
   }
 
-  constexpr operator bool() const {
+  constexpr operator bool() const noexcept {
     return IsValid();
   }
 };

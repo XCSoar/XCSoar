@@ -42,15 +42,15 @@ class AirspaceActivity {
   } mask;
 
 public:
-  AirspaceActivity() {
+  constexpr AirspaceActivity() noexcept {
     SetAll();
   };
 
-  bool equals(const AirspaceActivity _mask) const {
+  constexpr bool equals(const AirspaceActivity _mask) const noexcept {
     return mask.value == _mask.mask.value;
   }
 
-  AirspaceActivity(int8_t day_of_week) {
+  constexpr AirspaceActivity(int8_t day_of_week) noexcept {
     // setter from BrokenDate format day
     mask.value = 0;
     switch(day_of_week) {
@@ -81,11 +81,11 @@ public:
     }
   }
 
-  void SetAll() {
+  constexpr void SetAll() noexcept {
     mask.value = 0xFF;
   }
 
-  void SetWeekdays() {
+  constexpr void SetWeekdays() noexcept {
     mask.value = 0;
     mask.days.monday = true;
     mask.days.tuesday = true;
@@ -94,13 +94,13 @@ public:
     mask.days.friday = true;
   }
 
-  void SetWeekend() {
+  constexpr void SetWeekend() noexcept {
     mask.value = 0;
     mask.days.saturday = true;
     mask.days.sunday = true;
   }
 
-  bool Matches(AirspaceActivity _mask) const {
+  constexpr bool Matches(AirspaceActivity _mask) const noexcept {
     return mask.value & _mask.mask.value;
   }
 };

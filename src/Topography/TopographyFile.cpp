@@ -164,7 +164,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
       // If the shape is outside the bounds
       // delete the shape from the cache
       if (it->shape != nullptr) {
-        assert(&*std::next(prev) == it);
+        assert(&*std::next(prev) == &*it);
 
         /* remove from linked list (protected) */
         {
@@ -180,7 +180,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
     } else {
       // is inside the bounds
       if (it->shape == nullptr) {
-        assert(&*std::next(prev) != it);
+        assert(&*std::next(prev) != &*it);
 
         // shape isn't cached yet -> cache the shape
         it->shape = LoadShape(file, center, i, label_field);
@@ -193,7 +193,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
         }
       } else {
         ++prev;
-        assert(&*prev == it);
+        assert(&*prev == &*it);
       }
     }
   }
@@ -211,14 +211,14 @@ TopographyFile::LoadAll()
   auto it = shapes.begin();
   for (std::size_t i = 0; i < file.size(); ++i, ++it) {
     if (it->shape == nullptr) {
-      assert(&*std::next(prev) != it);
+      assert(&*std::next(prev) != &*it);
       // shape isn't cached yet -> cache the shape
       it->shape = LoadShape(file, center, i, label_field);
       // update list pointer
       prev = list.insert_after(prev, *it);
     } else {
       ++prev;
-      assert(&*prev == it);
+      assert(&*prev == &*it);
     }
   }
 

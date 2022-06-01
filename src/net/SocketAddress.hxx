@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,16 +32,19 @@
 
 #include "Features.hxx"
 
-#include <cstddef>
-
 #ifdef _WIN32
 #include <winsock2.h> // IWYU pragma: export
 #else
 #include <sys/socket.h> // IWYU pragma: export
 #endif
 
-template<typename T> struct ConstBuffer;
-struct StringView;
+#include <cstddef>
+#include <span>
+
+#ifdef HAVE_UN
+#include <string_view>
+#endif
+
 class IPv4Address;
 
 /**
@@ -68,6 +71,10 @@ public:
 	constexpr SocketAddress(const struct sockaddr *_address,
 				size_type _size) noexcept
 		:address(_address), size(_size) {}
+
+	explicit SocketAddress(std::span<const std::byte> src) noexcept
+		:address((const struct sockaddr *)(const void *)src.data()),
+		 size(src.size()) {}
 
 	static constexpr SocketAddress Null() noexcept {
 		return nullptr;
@@ -118,7 +125,7 @@ public:
 	 * nullptr if not applicable.
 	 */
 	[[gnu::pure]]
-	StringView GetLocalRaw() const noexcept;
+	std::string_view GetLocalRaw() const noexcept;
 
 	/**
 	 * Returns the local socket path or nullptr if not applicable
@@ -154,6 +161,14 @@ public:
 	unsigned GetPort() const noexcept;
 #endif
 
+	operator std::span<const std::byte>() const noexcept {
+		const void *q = reinterpret_cast<const void *>(address);
+		return {
+			(const std::byte *)q,
+			(std::size_t)size,
+		};
+	}
+
 	/**
 	 * Return a buffer pointing to the "steady" portion of the
 	 * address, i.e. without volatile parts like the port number.
@@ -162,7 +177,7 @@ public:
 	 * not supported.
 	 */
 	[[gnu::pure]]
-	ConstBuffer<void> GetSteadyPart() const noexcept;
+	std::span<const std::byte> GetSteadyPart() const noexcept;
 
 	[[gnu::pure]]
 	bool operator==(const SocketAddress other) const noexcept;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2014-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,37 +27,12 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Base64.hxx"
-#include "util/ConstBuffer.hxx"
+#include "Error.hxx"
 
-static char *
-Base64(char *dest, uint8_t a, uint8_t b, uint8_t c)
+#include <zlib.h>
+
+const char *
+ZlibError::what() const noexcept
 {
-  static constexpr char base64[] =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-  *dest++ = base64[a >> 2];
-  *dest++ = base64[((a & 0x03) << 4) | (b >> 4)];
-  *dest++ = base64[((b & 0x0f) << 2) | (c >> 6)];
-  *dest++ = base64[c & 0x3f];
-  return dest;
-}
-
-char *
-Base64(char *dest, ConstBuffer<uint8_t> src)
-{
-  while (src.size >= 3) {
-    dest = Base64(dest, src[0], src[1], src[2]);
-    src.skip_front(3);
-  }
-
-  if (src.size == 2) {
-    dest = Base64(dest, src[0], src[1], 0);
-    dest[-1] = '=';
-  } else if (src.size == 1) {
-    dest = Base64(dest, src[0], 0, 0);
-    dest[-2] = '=';
-    dest[-1] = '=';
-  }
-
-  return dest;
+	return zError(code);
 }

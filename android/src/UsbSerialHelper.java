@@ -64,6 +64,8 @@ public class UsbSerialHelper extends BroadcastReceiver {
     createDevice(0x239A, 0x8029), // SoftRF Badge
     createDevice(0x2341, 0x804d), // SoftRF Academy
     createDevice(0x1d50, 0x6089), // SoftRF ES
+    createDevice(0x2e8a, 0x000a), // SoftRF Lego
+    createDevice(0x2e8a, 0xf00a), // SoftRF Lego
 
     createDevice(0x0403, 0x6001), // FT232AM, FT232BM, FT232R FT245R,
     createDevice(0x0403, 0x6010), // FT2232D, FT2232H

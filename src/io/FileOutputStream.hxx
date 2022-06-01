@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2014-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -58,8 +58,22 @@
 
 class Path;
 
+/**
+ * An #OutputStream implementation which writes to a file.
+ *
+ * The destructor will attempt to roll back the changes by calling
+ * Cancel().  To confirm that data shall be written and the existing
+ * file shall be replaced, call Commit().
+ */
 class FileOutputStream final : public OutputStream {
 	const AllocatedPath path;
+
+	/**
+	 * If a temporary file is being written to, then this is its
+	 * path.  Commit() will rename it to the path specified in the
+	 * constructor.
+	 */
+	AllocatedPath tmp_path;
 
 #ifdef __linux__
 	const FileDescriptor directory_fd;
@@ -132,13 +146,39 @@ public:
 		return path;
 	}
 
+	/**
+	 * Returns the current offset.
+	 */
 	[[gnu::pure]]
 	uint64_t Tell() const noexcept;
 
 	/* virtual methods from class OutputStream */
 	void Write(const void *data, size_t size) override;
 
+	/**
+	 * Flush all data written to this object to disk (but does not
+	 * commit to the final path).  This method blocks until this
+	 * flush is complete.  It can be called repeatedly.
+	 *
+	 * Throws on error.
+	 */
+	void Sync();
+
+	/**
+	 * Commit all data written to the file and make the file
+	 * visible on the specified path.
+	 *
+	 * After returning, this object must not be used again.
+	 *
+	 * Throws on error.
+	 */
 	void Commit();
+
+	/**
+	 * Attempt to roll back all changes.
+	 *
+	 * After returning, this object must not be used again.
+	 */
 	void Cancel() noexcept;
 
 private:
@@ -172,6 +212,9 @@ private:
 		return fd.IsDefined();
 #endif
 	}
+
+	void RenameOrThrow(Path old_path, Path new_path) const;
+	void Delete(Path path) const noexcept;
 };
 
 #endif

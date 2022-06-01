@@ -175,6 +175,10 @@ FlightStatisticsRenderer::RenderContest(Canvas &canvas, const PixelRect rc,
     DrawContestSolution(canvas, proj, contest, 0);
     break;
 
+  case Contest::CHARRON:
+    DrawContestSolution(canvas, proj, contest, 0);
+    break;
+
   }
 
   RenderMapScale(canvas, proj, rc_chart, map_look.overlay);

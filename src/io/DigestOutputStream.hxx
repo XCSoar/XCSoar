@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2021-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,41 +29,34 @@
 
 #pragma once
 
-#include "util/ConstBuffer.hxx"
+#include "io/OutputStream.hxx"
 
-#include <sodium/crypto_hash_sha256.h>
+#include <span>
 
-#include <array>
-#include <cstddef> // for std::byte
+/**
+ * An #OutputStream wrapper which calculates a digest.
+ */
+template<typename T>
+class DigestOutputStream final : public OutputStream {
+	OutputStream &next;
 
-using SHA256Digest = std::array<std::byte, crypto_hash_sha256_BYTES>;
-
-class SHA256State {
-	crypto_hash_sha256_state state;
+	T state;
 
 public:
-	SHA256State() noexcept {
-		crypto_hash_sha256_init(&state);
-	}
+	explicit DigestOutputStream(OutputStream &_next) noexcept
+		:next(_next) {}
 
-	void Update(ConstBuffer<void> p) noexcept {
-		crypto_hash_sha256_update(&state,
-					  (const unsigned char *)p.data,
-					  p.size);
-	}
-
-	template<typename T>
-	void UpdateT(const T &p) noexcept {
-		Update({&p, sizeof(p)});
-	}
-
-	void Final(void *out) noexcept {
-		crypto_hash_sha256_final(&state, (unsigned char *)out);
+	void Final(void *dest) noexcept {
+		state.Final(dest);
 	}
 
 	auto Final() noexcept {
-		SHA256Digest out;
-		Final(&out);
-		return out;
+		return state.Final();
+	}
+
+	/* virtual methods from class OutputStream */
+	void Write(const void *data, size_t size) override {
+		next.Write(data, size);
+		state.Update(std::span<const std::byte>{(const std::byte *)data, size});
 	}
 };

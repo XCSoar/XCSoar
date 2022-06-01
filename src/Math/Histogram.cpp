@@ -24,6 +24,7 @@
 #include "Histogram.hpp"
 #include "Util.hpp"
 
+#include <algorithm>
 #include <cassert>
 
 inline Histogram::size_type

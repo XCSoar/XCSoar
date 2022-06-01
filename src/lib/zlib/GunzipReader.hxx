@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2014-2019 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,22 +27,43 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef BASE64_HXX
-#define BASE64_HXX
+#ifndef GUNZIP_READER_HXX
+#define GUNZIP_READER_HXX
 
-#include <cstdint>
+#include "io/Reader.hxx"
+#include "util/StaticFifoBuffer.hxx"
 
-template<typename T>
-struct ConstBuffer;
+#include <zlib.h>
 
 /**
- * Encode the source buffer to base64.
- *
- * @param dest the destination buffer where this function will write
- * the base64 encoded text; no null terminator will be generated
- * @return a pointer to the end of the destination buffer
+ * A filter that decompresses data using zlib.
  */
-char *
-Base64(char *dest, ConstBuffer<uint8_t> src);
+class GunzipReader final : public Reader {
+	Reader &next;
+
+	bool eof = false;
+
+	z_stream z;
+
+	StaticFifoBuffer<Bytef, 65536> buffer;
+
+public:
+	/**
+	 * Construct the filter.
+	 *
+	 * Throws on error.
+	 */
+	explicit GunzipReader(Reader &_next);
+
+	~GunzipReader() noexcept {
+		inflateEnd(&z);
+	}
+
+	/* virtual methods from class Reader */
+	std::size_t Read(void *data, std::size_t size) override;
+
+private:
+	bool FillBuffer();
+};
 
 #endif

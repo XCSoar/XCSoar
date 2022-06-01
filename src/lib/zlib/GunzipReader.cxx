@@ -27,43 +27,70 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GUNZIP_READER_HXX
-#define GUNZIP_READER_HXX
+#include "GunzipReader.hxx"
+#include "Error.hxx"
 
-#include "Reader.hxx"
-#include "util/StaticFifoBuffer.hxx"
+GunzipReader::GunzipReader(Reader &_next)
+	:next(_next)
+{
+	z.next_in = nullptr;
+	z.avail_in = 0;
+	z.zalloc = Z_NULL;
+	z.zfree = Z_NULL;
+	z.opaque = Z_NULL;
 
-#include <zlib.h>
+	int result = inflateInit2(&z, 16 + MAX_WBITS);
+	if (result != Z_OK)
+		throw ZlibError(result);
+}
 
-/**
- * A filter that decompresses data using zlib.
- */
-class GunzipReader final : public Reader {
-	Reader &next;
+inline bool
+GunzipReader::FillBuffer()
+{
+	auto w = buffer.Write();
+	assert(!w.empty());
 
-	bool eof = false;
+	std::size_t nbytes = next.Read(w.data(), w.size());
+	if (nbytes == 0)
+		return false;
 
-	z_stream z;
+	buffer.Append(nbytes);
+	return true;
+}
 
-	StaticFifoBuffer<Bytef, 65536> buffer;
+std::size_t
+GunzipReader::Read(void *data, std::size_t size)
+{
+	if (eof)
+		return 0;
 
-public:
-	/**
-	 * Construct the filter.
-	 *
-	 * Throws on error.
-	 */
-	explicit GunzipReader(Reader &_next);
+	z.next_out = (Bytef *)data;
+	z.avail_out = size;
 
-	~GunzipReader() noexcept {
-		inflateEnd(&z);
+	while (true) {
+		int flush = Z_NO_FLUSH;
+
+		auto r = buffer.Read();
+		if (r.empty()) {
+			if (FillBuffer())
+				r = buffer.Read();
+			else
+				flush = Z_FINISH;
+		}
+
+		z.next_in = r.data();
+		z.avail_in = r.size();
+
+		int result = inflate(&z, flush);
+		if (result == Z_STREAM_END) {
+			eof = true;
+			return size - z.avail_out;
+		} else if (result != Z_OK)
+			throw ZlibError(result);
+
+		buffer.Consume(r.size() - z.avail_in);
+
+		if (z.avail_out < size)
+			return size - z.avail_out;
 	}
-
-	/* virtual methods from class Reader */
-	std::size_t Read(void *data, std::size_t size) override;
-
-private:
-	bool FillBuffer();
-};
-
-#endif
+}

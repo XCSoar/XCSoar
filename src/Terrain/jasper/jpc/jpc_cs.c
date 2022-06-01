@@ -368,7 +368,7 @@ static const jpc_mstabent_t jpc_mstab[] = {
 \******************************************************************************/
 
 /* Create a code stream state object. */
-jpc_cstate_t *jpc_cstate_create()
+jpc_cstate_t *jpc_cstate_create(void)
 {
 	jpc_cstate_t *cstate;
 	if (!(cstate = jas_malloc(sizeof(jpc_cstate_t)))) {

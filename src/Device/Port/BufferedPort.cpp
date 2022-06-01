@@ -68,8 +68,8 @@ BufferedPort::Read(void *dest, std::size_t length)
   std::lock_guard<Mutex> lock(mutex);
 
   auto r = buffer.Read();
-  std::size_t nbytes = std::min(length, r.size);
-  std::copy_n(r.data, nbytes, (std::byte *)dest);
+  std::size_t nbytes = std::min(length, r.size());
+  std::copy_n(r.begin(), nbytes, (std::byte *)dest);
   buffer.Consume(nbytes);
   return nbytes;
 }
@@ -102,14 +102,14 @@ BufferedPort::DataReceived(std::span<const std::byte> s) noexcept
 
     buffer.Shift();
     auto r = buffer.Write();
-    if (r.size == 0)
+    if (r.empty())
       /* the buffer is already full, discard excess data */
       return true;
 
     /* discard excess data */
-    const std::size_t nbytes = std::min(s.size(), r.size);
+    const std::size_t nbytes = std::min(s.size(), r.size());
 
-    std::copy_n(s.data(), nbytes, r.data);
+    std::copy_n(s.begin(), nbytes, r.begin());
     buffer.Append(nbytes);
 
     cond.notify_all();
