@@ -36,8 +36,7 @@
 
 #include <cstddef>
 #include <string>
-
-struct StringView;
+#include <string_view>
 
 namespace Java {
 
@@ -91,7 +90,7 @@ public:
 	String(JNIEnv *_env, const char *_value) noexcept
 		:LocalRef<jstring>(_env, _env->NewStringUTF(_value)) {}
 
-	String(JNIEnv *_env, StringView _value) noexcept;
+	String(JNIEnv *_env, std::string_view _value) noexcept;
 
 	static StringUTFChars GetUTFChars(JNIEnv *env, jstring s) noexcept {
 		return {env, s, env->GetStringUTFChars(s, nullptr)};
