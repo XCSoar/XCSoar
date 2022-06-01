@@ -25,7 +25,6 @@ Copyright_License {
 #ifndef TOPOGRAPHY_XSHAPE_HPP
 #define TOPOGRAPHY_XSHAPE_HPP
 
-#include "util/ConstBuffer.hxx"
 #include "util/AllocatedString.hxx"
 #include "Geo/GeoBounds.hpp"
 #include "shapelib/mapserver.h"
@@ -38,8 +37,7 @@ Copyright_License {
 #include <cstddef>
 #include <cstdint>
 #include <memory>
-
-#include <tchar.h>
+#include <span>
 
 #include <tchar.h>
 
@@ -141,7 +139,7 @@ public:
     return (MS_SHAPE_TYPE)type;
   }
 
-  ConstBuffer<uint16_t> GetLines() const noexcept {
+  std::span<const uint16_t> GetLines() const noexcept {
     return { lines.data(), num_lines };
   }
 
