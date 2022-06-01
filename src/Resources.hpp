@@ -8,12 +8,11 @@
 #else
 
 #include <cstddef>
-#include <cstdint>
 
 #include "util/ConstBuffer.hxx"
 
 #define MAKE_RESOURCE(name, id) \
-  extern "C" uint8_t resource_ ## id[]; \
+  extern "C" std::byte resource_ ## id[]; \
   extern "C" const size_t resource_ ## id ## _size; \
   static constexpr ResourceId name(resource_ ##id, &resource_ ## id ## _size);
 
