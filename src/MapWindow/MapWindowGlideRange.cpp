@@ -204,18 +204,18 @@ public:
 
   /* virtual methods from class FlatTriangleFanVisitor */
 
-  void VisitFan(FlatGeoPoint origin, ConstBuffer<FlatGeoPoint> fan) override {
+  void VisitFan(FlatGeoPoint origin, std::span<const FlatGeoPoint> fan) override {
 
-    if (fan.size < 3 || fans.full())
+    if (fan.size() < 3 || fans.full())
       return;
 
     GeoPoint g[ROUTEPOLAR_POINTS + 2];
-    for (size_t i = 0; i < fan.size; ++i)
+    for (size_t i = 0; i < fan.size(); ++i)
       g[i] = flat_projection.Unproject(fan[i]);
 
     // Perform clipping on the GeoPointVector
     GeoPoint clipped[(ROUTEPOLAR_POINTS + 2) * 3];
-    unsigned size = clip.ClipPolygon(clipped, g, fan.size);
+    unsigned size = clip.ClipPolygon(clipped, g, fan.size());
     // With less than three points we can't draw a polygon
     if (size < 3)
       return;

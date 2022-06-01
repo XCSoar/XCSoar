@@ -25,9 +25,9 @@
 
 #include "Geo/Flat/FlatGeoPoint.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
-#include "util/ConstBuffer.hxx"
 
 #include <vector>
+#include <span>
 
 class FlatTriangleFan {
   typedef std::vector<FlatGeoPoint> VertexVector;
@@ -85,12 +85,12 @@ public:
    * not part of the hull
    */
   [[gnu::pure]]
-  ConstBuffer<FlatGeoPoint> GetHull(bool closed) const noexcept {
-    ConstBuffer<FlatGeoPoint> hull(&vs.front(), vs.size());
+  std::span<const FlatGeoPoint> GetHull(bool closed) const noexcept {
+    std::span<const FlatGeoPoint> hull{vs};
     if (closed)
       /* omit the origin, because it's not part of the hull in a
          closed shape */
-      hull.pop_front();
+      hull = hull.subspan(1);
     return hull;
   }
 

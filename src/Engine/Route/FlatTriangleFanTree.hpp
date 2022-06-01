@@ -28,18 +28,18 @@
 #include "FlatTriangleFan.hpp"
 
 #include <forward_list>
+#include <span>
 
 class FlatProjection;
 struct GeoPoint;
 struct RouteLink;
 struct AFlatGeoPoint;
 struct ReachFanParms;
-template<typename T> struct ConstBuffer;
 
 class FlatTriangleFanVisitor {
 public:
   virtual void VisitFan(FlatGeoPoint origin,
-                        ConstBuffer<FlatGeoPoint> fan) = 0;
+                        std::span<const FlatGeoPoint> fan) = 0;
 };
 
 class FlatTriangleFanTree: public FlatTriangleFan
