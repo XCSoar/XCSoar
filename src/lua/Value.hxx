@@ -93,7 +93,7 @@ public:
 		Push(L);
 	}
 
-	lua_State *GetState() const {
+	lua_State *GetState() const noexcept {
 		return L;
 	}
 };
