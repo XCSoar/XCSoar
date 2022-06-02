@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Device/Util/NMEAWriter.hpp"
-#include "util/StringView.hxx"
 
 #include <stdio.h>
+#include <string.h>
 #include <limits.h>
 
 const char BlueFlyDevice::BlueFlySettings::VOLUME_NAME[] = "BVL";
@@ -35,13 +35,13 @@ const char BlueFlyDevice::BlueFlySettings::OUTPUT_MODE_NAME[] = "BOM";
  * Parse the given BlueFly Vario setting identified by its name.
  */
 void
-BlueFlyDevice::BlueFlySettings::Parse(StringView name, unsigned long value)
+BlueFlyDevice::BlueFlySettings::Parse(std::string_view name, unsigned long value)
 {
   assert(value <= UINT_MAX);
 
-  if (name.Equals(VOLUME_NAME))
+  if (name == VOLUME_NAME)
     volume = double(value) / VOLUME_MULTIPLIER;
-  else if (name.Equals(OUTPUT_MODE_NAME))
+  else if (name == OUTPUT_MODE_NAME)
     output_mode = value;
 }
 

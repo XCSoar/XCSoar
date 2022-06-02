@@ -31,9 +31,9 @@ Copyright_License {
 #include "util/Compiler.h"
 
 #include <cassert>
+#include <string_view>
 
 struct NMEAInfo;
-struct StringView;
 
 class BlueFlyDevice : public AbstractDevice {
 public:
@@ -72,7 +72,7 @@ public:
       return ExportOutputMode(output_mode);
     }
 
-    void Parse(StringView name, unsigned long value);
+    void Parse(std::string_view name, unsigned long value);
 };
 
 private:
