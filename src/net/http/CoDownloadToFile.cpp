@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "CoDownloadToFile.hpp"
-#include "Setup.hxx"
 #include "Progress.hpp"
-#include "CoStreamRequest.hxx"
+#include "lib/curl/Setup.hxx"
+#include "lib/curl/CoStreamRequest.hxx"
 #include "io/DigestOutputStream.hxx"
 #include "io/FileOutputStream.hxx"
 #include "system/Path.hpp"

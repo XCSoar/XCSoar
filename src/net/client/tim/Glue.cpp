@@ -25,7 +25,7 @@
 #include "Client.hpp"
 #include "Thermal.hpp"
 #include "NMEA/Info.hpp"
-#include "net/http/Global.hxx"
+#include "lib/curl/Global.hxx"
 #include "LogFile.hpp"
 
 namespace TIM {

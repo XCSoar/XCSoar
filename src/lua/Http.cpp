@@ -26,9 +26,9 @@ Copyright_License {
 #include "Util.hxx"
 #include "Class.hxx"
 #include "Error.hxx"
-#include "net/http/Easy.hxx"
-#include "net/http/Adapter.hxx"
-#include "net/http/Handler.hxx"
+#include "lib/curl/Easy.hxx"
+#include "lib/curl/Adapter.hxx"
+#include "lib/curl/Handler.hxx"
 
 extern "C" {
 #include <lauxlib.h>

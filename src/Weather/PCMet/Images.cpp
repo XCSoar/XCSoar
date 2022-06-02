@@ -23,10 +23,10 @@ Copyright_License {
 
 #include "Images.hpp"
 #include "Settings.hpp"
-#include "net/http/CoRequest.hxx"
 #include "net/http/CoDownloadToFile.hpp"
 #include "net/http/Progress.hpp"
-#include "net/http/Setup.hxx"
+#include "lib/curl/CoRequest.hxx"
+#include "lib/curl/Setup.hxx"
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"
 #include "util/ConvertString.hpp"

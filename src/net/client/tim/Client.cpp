@@ -23,9 +23,9 @@
 
 #include "Client.hpp"
 #include "Thermal.hpp"
-#include "net/http/CoStreamRequest.hxx"
-#include "net/http/Easy.hxx"
-#include "net/http/Setup.hxx"
+#include "lib/curl/CoStreamRequest.hxx"
+#include "lib/curl/Easy.hxx"
+#include "lib/curl/Setup.hxx"
 #include "json/ParserOutputStream.hxx"
 
 #include <stdexcept>

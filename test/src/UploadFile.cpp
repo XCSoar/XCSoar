@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "CoInstance.hpp"
-#include "net/http/Mime.hxx"
-#include "net/http/CoStreamRequest.hxx"
-#include "net/http/Easy.hxx"
 #include "net/http/Init.hpp"
-#include "net/http/Setup.hxx"
+#include "lib/curl/Mime.hxx"
+#include "lib/curl/CoStreamRequest.hxx"
+#include "lib/curl/Easy.hxx"
+#include "lib/curl/Setup.hxx"
 #include "system/Args.hpp"
 #include "io/StdioOutputStream.hxx"
 #include "util/PrintException.hxx"

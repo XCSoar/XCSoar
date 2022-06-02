@@ -23,7 +23,7 @@ Copyright_License {
 
 #pragma once
 
-#include "CoRequest.hxx"
+#include "lib/curl/CoRequest.hxx"
 #include "co/Task.hxx"
 
 #include <array>

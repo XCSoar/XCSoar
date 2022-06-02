@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Init.hpp"
-#include "Global.hxx"
+#include "lib/curl/Global.hxx"
 
 #include <curl/curl.h>
 

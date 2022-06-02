@@ -24,10 +24,10 @@ Copyright_License {
 #include "NOAADownloader.hpp"
 #include "METAR.hpp"
 #include "TAF.hpp"
-#include "net/http/Easy.hxx"
-#include "net/http/CoRequest.hxx"
 #include "net/http/Progress.hpp"
-#include "net/http/Setup.hxx"
+#include "lib/curl/Easy.hxx"
+#include "lib/curl/CoRequest.hxx"
+#include "lib/curl/Setup.hxx"
 #include "co/Task.hxx"
 #include "util/StringStrip.hxx"
 

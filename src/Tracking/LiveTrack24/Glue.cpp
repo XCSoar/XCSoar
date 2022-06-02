@@ -28,7 +28,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "LogFile.hpp"
 #include "co/Task.hxx"
-#include "net/http/Global.hxx"
+#include "lib/curl/Global.hxx"
 #include "util/Macros.hpp"
 
 namespace LiveTrack24 {

@@ -22,9 +22,8 @@ Copyright_License {
 */
 
 #include "net/http/Init.hpp"
-#include "net/http/Request.hxx"
-#include "net/http/Handler.hxx"
-#include "net/http/Init.hpp"
+#include "lib/curl/Request.hxx"
+#include "lib/curl/Handler.hxx"
 #include "io/async/AsioThread.hpp"
 #include "system/ConvertPathName.hpp"
 #include "thread/AsyncWaiter.hxx"
