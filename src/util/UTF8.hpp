@@ -25,9 +25,8 @@ Copyright_License {
 #define XCSOAR_UTIL_UTF8_HPP
 
 #include <cstddef>
+#include <string_view>
 #include <utility>
-
-struct StringView;
 
 /**
  * Is this a valid UTF-8 string?
@@ -41,7 +40,7 @@ ValidateUTF8(const char *p) noexcept;
  */
 [[gnu::pure]]
 bool
-ValidateUTF8(StringView p) noexcept;
+ValidateUTF8(std::string_view p) noexcept;
 
 /**
  * @return the number of the sequence beginning with the given
@@ -122,7 +121,7 @@ CropIncompleteUTF8(char *p) noexcept;
  */
 [[gnu::pure]]
 std::size_t
-TruncateStringUTF8(StringView s, std::size_t max_chars) noexcept;
+TruncateStringUTF8(std::string_view s, std::size_t max_chars) noexcept;
 
 /**
  * Return the number of bytes representing the first #max_chars
