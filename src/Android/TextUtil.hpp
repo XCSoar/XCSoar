@@ -26,9 +26,9 @@ Copyright_License {
 
 #include "java/Object.hxx"
 
+#include <string_view>
 #include <utility>
 
-struct StringView;
 struct PixelSize;
 class FontDescription;
 
@@ -49,7 +49,7 @@ public:
   static TextUtil *create(const FontDescription &d) noexcept;
 
   [[gnu::pure]]
-  PixelSize getTextBounds(StringView text) const noexcept;
+  PixelSize getTextBounds(std::string_view text) const noexcept;
 
   struct Texture {
     unsigned id;
@@ -63,7 +63,7 @@ public:
        allocated_height(_allocated_height) {}
   };
 
-  Texture getTextTextureGL(StringView text) const noexcept;
+  Texture getTextTextureGL(std::string_view text) const noexcept;
 
   unsigned get_height() const noexcept {
     return height;
