@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2022-06-03 20:14+0000\n"
+"PO-Revision-Date: 2022-06-04 21:19+0000\n"
 "Last-Translator: Artem <artem@molotov.work>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/uk/>\n"
@@ -58,7 +58,7 @@ msgstr "Ціль ФАІ"
 #: src/Task/TypeStrings.cpp:35
 #, no-c-format
 msgid "Racing"
-msgstr "Гонка"
+msgstr "Перегони"
 
 #: src/Task/TypeStrings.cpp:36
 #, no-c-format
@@ -7705,7 +7705,7 @@ msgid "TL duration"
 msgstr "Значення осі часу"
 
 #: src/InfoBoxes/Content/Factory.cpp:212
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Time spent circling in the last thermal."
 msgstr "Час, витрачений на обробку потоків в останньому терміку."
 
