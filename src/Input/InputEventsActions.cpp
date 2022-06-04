@@ -746,7 +746,7 @@ InputEvents::eventExchangeFrequencies(const TCHAR *misc)
 void
 InputEvents::eventUploadIGCFile(const TCHAR *misc) {
   FileDataField df;
-  df.ScanMultiplePatterns(_T("*.igc"));
+  df.ScanMultiplePatterns(_T("*.igc\0"));
   df.SetFileType(FileType::IGC);
   if (FilePicker(_T("IGC-FilePicker"), df)) {
     auto path = df.GetValue();
