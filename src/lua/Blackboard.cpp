@@ -37,17 +37,18 @@ Push(lua_State *L, const BrokenDateTime &dt)
   lua_newtable(L);
 
   if (dt.IsDatePlausible()) {
-    SetField(L, RelativeStackIndex{-1}, "year", dt.year);
-    SetField(L, RelativeStackIndex{-1}, "month", dt.month);
-    SetField(L, RelativeStackIndex{-1}, "day", dt.day);
+    SetField(L, RelativeStackIndex{-1}, "year", (lua_Integer)dt.year);
+    SetField(L, RelativeStackIndex{-1}, "month", (lua_Integer)dt.month);
+    SetField(L, RelativeStackIndex{-1}, "day", (lua_Integer)dt.day);
 
     if (dt.day_of_week >= 0)
-      SetField(L, RelativeStackIndex{-1}, "wday", dt.day_of_week + 1);
+      SetField(L, RelativeStackIndex{-1}, "wday",
+               (lua_Integer)(dt.day_of_week + 1));
   }
 
-  SetField(L, RelativeStackIndex{-1}, "hour", dt.hour);
-  SetField(L, RelativeStackIndex{-1}, "min", dt.minute);
-  SetField(L, RelativeStackIndex{-1}, "sec", dt.second);
+  SetField(L, RelativeStackIndex{-1}, "hour", (lua_Integer)dt.hour);
+  SetField(L, RelativeStackIndex{-1}, "min", (lua_Integer)dt.minute);
+  SetField(L, RelativeStackIndex{-1}, "sec", (lua_Integer)dt.second);
 }
 
 template<typename V>

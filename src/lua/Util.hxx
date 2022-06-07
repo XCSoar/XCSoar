@@ -84,7 +84,7 @@ Push(lua_State *L, std::string_view value) noexcept
 
 gcc_nonnull_all
 static inline void
-Push(lua_State *L, int value) noexcept
+Push(lua_State *L, lua_Integer value) noexcept
 {
 	lua_pushinteger(L, value);
 }

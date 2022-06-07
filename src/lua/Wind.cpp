@@ -47,7 +47,7 @@ l_wind_index(lua_State *L)
        2: ZigZag, Requires GPS and an intelligent vario with airspeed output.
        3: Both, Uses ZigZag and circling. */
     const WindSettings &settings = CommonInterface::GetComputerSettings().wind;
-    Lua::Push(L, (int)settings.GetLegacyAutoWindMode());
+    Lua::Push(L, (lua_Integer)settings.GetLegacyAutoWindMode());
   } else if (StringIsEqual(name, "manual_wind_bearing")) {
       SpeedVector manual_wind = CommonInterface::Calculated().GetWindOrZero();
       Lua::Push(L, manual_wind.bearing);
@@ -59,8 +59,8 @@ l_wind_index(lua_State *L)
          when displayed in circling mode. Switched Off, "
          the snail trail stays uncompensated for wind drift. */
       MapSettings &map_settings = CommonInterface::SetMapSettings();
-      if (map_settings.trail.wind_drift_enabled) Lua::Push(L, 1);
-      else Lua::Push(L, 0);
+      if (map_settings.trail.wind_drift_enabled) Lua::Push(L, (lua_Integer)1);
+      else Lua::Push(L, lua_Integer{0});
   } else if (StringIsEqual(name, "wind_source")) {
       /* The Source of the current wind
          0: None
@@ -69,7 +69,7 @@ l_wind_index(lua_State *L)
          3: ZigZag
          4: External */
       const DerivedInfo &calculated = CommonInterface::Calculated();
-      Lua::Push(L, (int)calculated.wind_source);
+      Lua::Push(L, (lua_Integer)calculated.wind_source);
   } else if (StringIsEqual(name, "wind_speed")) {
       // The current wind speed [m/s] 
       const DerivedInfo &info = CommonInterface::Calculated();

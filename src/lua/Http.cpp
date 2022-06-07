@@ -123,7 +123,7 @@ LuaHttpRequest::Perform(lua_State *L)
     Lua::Raise(L, std::move(error));
 
   lua_newtable(L);
-  SetTable(L, RelativeStackIndex{-1}, "status", status);
+  SetTable(L, RelativeStackIndex{-1}, "status", (lua_Integer)status);
 
   lua_pushstring(L, "headers");
   lua_newtable(L);

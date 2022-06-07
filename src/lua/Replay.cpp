@@ -41,7 +41,7 @@ l_replay_index(lua_State *L)
   if (name == nullptr) {
     return 0;
   } else if (StringIsEqual(name, "time_scale")) {
-    Lua::Push(L, (int)replay->GetTimeScale());
+    Lua::Push(L, (lua_Integer)replay->GetTimeScale());
   } else if (StringIsEqual(name, "virtual_time")) {
     Lua::Push(L, replay->GetVirtualTime());
   } else

@@ -44,7 +44,7 @@ l_tracking_index(lua_State *L)
   } else if (StringIsEqual(name, "skylines_roaming")) {
     Lua::Push(L, settings.skylines.roaming);
   } else if (StringIsEqual(name, "skylines_interval")) {
-    Lua::Push(L, (int)settings.skylines.interval);
+    Lua::Push(L, (lua_Integer)settings.skylines.interval);
   } else if (StringIsEqual(name, "skylines_traffic_enabled")) {
     /* Track friends, downloads the position of your
        friends live from the SkyLines server. */
@@ -56,7 +56,7 @@ l_tracking_index(lua_State *L)
   } else if (StringIsEqual(name, "livetrack24_enabled")) {
     Lua::Push(L, settings.livetrack24.enabled);
   } else if (StringIsEqual(name, "livetrack24_interval")) {
-    Lua::Push(L, (int)settings.livetrack24.interval);
+    Lua::Push(L, (lua_Integer)settings.livetrack24.interval);
   } else if (StringIsEqual(name, "livetrack24_vehicle_name")) {
     Lua::Push(L, settings.livetrack24.vehicle_name.c_str());
   } else

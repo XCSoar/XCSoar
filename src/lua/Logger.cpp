@@ -51,7 +51,7 @@ l_logger_index(lua_State *L)
       // The time interval between logged points when circling.
       Lua::Push(L, logger.time_step_circling);
   } else if (StringIsEqual(name, "auto_logger")) {
-      Lua::Push(L, (int)logger.auto_logger);
+      Lua::Push(L, (lua_Integer)logger.auto_logger);
   } else if (StringIsEqual(name, "nmea_logger")) {
       Lua::Push(L, logger.enable_nmea_logger);
   } else if (StringIsEqual(name, "log_book")) {
