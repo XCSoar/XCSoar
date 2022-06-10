@@ -30,6 +30,8 @@
 #ifndef WSTRING_COMPARE_HXX
 #define WSTRING_COMPARE_HXX
 
+/** \file */
+
 #include "WStringAPI.hxx"
 
 #include <string_view>

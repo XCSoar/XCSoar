@@ -30,6 +30,8 @@
 #ifndef WASCII_HXX
 #define WASCII_HXX
 
+/** \file */
+
 #include <cstddef>
 
 #include <wchar.h>

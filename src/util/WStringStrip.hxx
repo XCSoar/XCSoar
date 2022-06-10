@@ -30,6 +30,8 @@
 #ifndef WSTRING_STRIP_HXX
 #define WSTRING_STRIP_HXX
 
+/** \file */
+
 #include <wchar.h>
 
 /**

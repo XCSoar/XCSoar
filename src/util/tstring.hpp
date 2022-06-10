@@ -1,6 +1,8 @@
 #ifndef TSTRING_HPP
 #define TSTRING_HPP
 
+/** \file */
+
 #include <string>
 
 #ifdef _UNICODE

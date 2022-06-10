@@ -32,6 +32,8 @@
 
 #pragma once
 
+/** \file */
+
 #include <array>
 #include <cstdint>
 

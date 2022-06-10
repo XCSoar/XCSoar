@@ -30,6 +30,8 @@
 #ifndef STRING_FORMAT_HPP
 #define STRING_FORMAT_HPP
 
+/** \file */
+
 #ifdef _UNICODE
 #include "WStringFormat.hpp"
 #endif

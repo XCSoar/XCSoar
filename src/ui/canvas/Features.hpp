@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_UI_CANVAS_FEATURES_HPP
 #define XCSOAR_UI_CANVAS_FEATURES_HPP
 
+/** \file */
+
 #ifdef USE_MEMORY_CANVAS
 #include "memory/Features.hpp"
 #endif

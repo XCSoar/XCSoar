@@ -30,6 +30,8 @@
 #ifndef TEXT_FILE_HXX
 #define TEXT_FILE_HXX
 
+/** \file */
+
 #include <cstring>
 
 template<typename B>

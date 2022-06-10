@@ -31,6 +31,8 @@
 #ifndef BYTE_ORDER_HXX
 #define BYTE_ORDER_HXX
 
+/** \file */
+
 #include "Compiler.h"
 
 #include <cstdint>

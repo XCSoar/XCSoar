@@ -30,6 +30,8 @@
 #ifndef TYPE_TRAITS_HPP
 #define TYPE_TRAITS_HPP
 
+/** \file */
+
 #include <type_traits>
 
 /**

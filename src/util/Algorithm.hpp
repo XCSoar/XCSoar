@@ -30,6 +30,8 @@
 #ifndef ALGORITHM_HPP
 #define ALGORITHM_HPP
 
+/** \file */
+
 /**
  * @return true if predicate() returns true for at least one item in
  * the range
