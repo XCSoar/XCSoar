@@ -35,6 +35,7 @@
 #include "net/SocketAddress.hxx"
 #include "net/AddressInfo.hxx"
 #include "net/SocketError.hxx"
+#include "net/TimeoutError.hxx"
 
 #include <cassert>
 #include <stdexcept>
@@ -43,7 +44,7 @@ void
 ConnectSocketHandler::OnSocketConnectTimeout() noexcept
 {
 	/* default implementation falls back to OnSocketConnectError() */
-	OnSocketConnectError(std::make_exception_ptr(std::runtime_error("Connect timeout")));
+	OnSocketConnectError(std::make_exception_ptr(TimeoutError{"Connect timeout"}));
 }
 
 ConnectSocket::ConnectSocket(EventLoop &_event_loop,
