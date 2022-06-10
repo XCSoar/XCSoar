@@ -30,6 +30,8 @@
 #ifndef CLAMP_HPP
 #define CLAMP_HPP
 
+/** \file */
+
 #include "Compiler.h"
 
 /**

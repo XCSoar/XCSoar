@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_OPENGL_UNCOMPRESSED_IMAGE_HPP
 #define XCSOAR_OPENGL_UNCOMPRESSED_IMAGE_HPP
 
+/** \file */
+
 class GLTexture;
 class UncompressedImage;
 

@@ -30,6 +30,8 @@
 #ifndef STRING_COMPARE_HXX
 #define STRING_COMPARE_HXX
 
+/** \file */
+
 #include "StringAPI.hxx"
 
 #ifdef _UNICODE

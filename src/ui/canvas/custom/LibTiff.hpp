@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_LIBTIFF_HPP
 #define XCSOAR_LIBTIFF_HPP
 
+/** \file */
+
 #include <utility>
 
 class Path;

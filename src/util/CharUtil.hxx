@@ -30,6 +30,8 @@
 #ifndef CHAR_UTIL_HXX
 #define CHAR_UTIL_HXX
 
+/** \file */
+
 #ifdef _UNICODE
 #include "WCharUtil.hxx"
 #endif

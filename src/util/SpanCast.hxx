@@ -29,6 +29,8 @@
 
 #pragma once
 
+/** \file */
+
 #include <cassert>
 #include <cstddef>
 #include <span>
