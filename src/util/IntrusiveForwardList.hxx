@@ -60,24 +60,24 @@ class IntrusiveForwardList {
 	IntrusiveForwardListNode head;
 
 	static constexpr T *Cast(IntrusiveForwardListNode *node) noexcept {
-		static_assert(std::is_base_of<IntrusiveForwardListHook, T>::value);
+		static_assert(std::is_base_of_v<IntrusiveForwardListHook, T>);
 		auto *hook = &IntrusiveForwardListHook::Cast(*node);
 		return static_cast<T *>(hook);
 	}
 
 	static constexpr const T *Cast(const IntrusiveForwardListNode *node) noexcept {
-		static_assert(std::is_base_of<IntrusiveForwardListHook, T>::value);
+		static_assert(std::is_base_of_v<IntrusiveForwardListHook, T>);
 		const auto *hook = &IntrusiveForwardListHook::Cast(*node);
 		return static_cast<const T *>(hook);
 	}
 
 	static constexpr IntrusiveForwardListHook &ToHook(T &t) noexcept {
-		static_assert(std::is_base_of<IntrusiveForwardListHook, T>::value);
+		static_assert(std::is_base_of_v<IntrusiveForwardListHook, T>);
 		return t;
 	}
 
 	static constexpr const IntrusiveForwardListHook &ToHook(const T &t) noexcept {
-		static_assert(std::is_base_of<IntrusiveForwardListHook, T>::value);
+		static_assert(std::is_base_of_v<IntrusiveForwardListHook, T>);
 		return t;
 	}
 
