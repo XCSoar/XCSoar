@@ -143,6 +143,8 @@ class IntrusiveForwardList {
 	}
 
 public:
+	using size_type = std::size_t;
+
 	IntrusiveForwardList() = default;
 
 	IntrusiveForwardList(IntrusiveForwardList &&src) noexcept
@@ -159,6 +161,10 @@ public:
 
 	constexpr bool empty() const noexcept {
 		return head.next == nullptr;
+	}
+
+	constexpr size_type size() const noexcept {
+		return std::distance(begin(), end());
 	}
 
 	void clear() noexcept {
