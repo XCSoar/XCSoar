@@ -3478,7 +3478,7 @@ msgstr "Konec"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:112
 msgid "What do you want to do?"
-msgstr "Co chcete udělat?"
+msgstr "Dneska by to šlo..."
 
 #: src/Dialogs/StartupDialog.cpp:158
 msgid "Profile"
