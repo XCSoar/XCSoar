@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2015-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,15 +27,14 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SOCKET_ERROR_HXX
-#define SOCKET_ERROR_HXX
+#pragma once
+
+#include "system/Error.hxx"
 
 #ifdef _WIN32
-#include "util/RuntimeError.hxx"
 #include <winsock2.h>
 typedef DWORD socket_error_t;
 #else
-#include "system/Error.hxx"
 #include <cerrno>
 typedef int socket_error_t;
 #endif
@@ -168,15 +167,26 @@ public:
 	}
 };
 
+/**
+ * Returns the error_category to be used to wrap socket errors.
+ */
+[[gnu::const]]
+static inline const std::error_category &
+SocketErrorCategory() noexcept
+{
+#ifdef _WIN32
+	return LastErrorCategory();
+#else
+	return ErrnoCategory();
+#endif
+}
+
 [[gnu::pure]]
 static inline auto
 MakeSocketError(socket_error_t code, const char *msg) noexcept
 {
 #ifdef _WIN32
-	// TODO: use a new std::error_category for WinSock error codes?
-	SocketErrorMessage buffer(code);
-	const char *msg2 = buffer;
-	return FormatRuntimeError("%s: %s", msg, msg2);
+	return MakeLastError(code, msg);
 #else
 	return MakeErrno(code, msg);
 #endif
@@ -188,5 +198,3 @@ MakeSocketError(const char *msg) noexcept
 {
 	return MakeSocketError(GetSocketError(), msg);
 }
-
-#endif
