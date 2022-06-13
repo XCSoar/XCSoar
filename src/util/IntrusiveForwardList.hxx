@@ -33,6 +33,7 @@
 #pragma once
 
 #include "Cast.hxx"
+#include "MemberPointer.hxx"
 #include "ShallowCopy.hxx"
 
 #include <iterator>
@@ -80,6 +81,35 @@ struct IntrusiveForwardListBaseHookTraits {
 	static constexpr const IntrusiveForwardListHook &ToHook(const T &t) noexcept {
 		static_assert(std::is_base_of_v<IntrusiveForwardListHook, T>);
 		return t;
+	}
+};
+
+/**
+ * For classes which embed #IntrusiveForwardListHook as member.
+ */
+template<auto member>
+struct IntrusiveForwardListMemberHookTraits {
+	using T = MemberPointerContainerType<decltype(member)>;
+	using Hook = IntrusiveForwardListHook;
+
+	static_assert(std::is_same_v<MemberPointerType<decltype(member)>, Hook>);
+
+	static constexpr T *Cast(IntrusiveForwardListNode *node) noexcept {
+		auto &hook = Hook::Cast(*node);
+		return &ContainerCast(hook, member);
+	}
+
+	static constexpr const T *Cast(const IntrusiveForwardListNode *node) noexcept {
+		const auto &hook = Hook::Cast(*node);
+		return &ContainerCast(hook, member);
+	}
+
+	static constexpr auto &ToHook(T &t) noexcept {
+		return t.*member;
+	}
+
+	static constexpr const auto &ToHook(const T &t) noexcept {
+		return t.*member;
 	}
 };
 
