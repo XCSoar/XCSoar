@@ -55,10 +55,11 @@ struct IntrusiveForwardListHook {
 	}
 };
 
+/**
+ * For classes which embed #IntrusiveForwardListHook as base class.
+ */
 template<typename T>
-class IntrusiveForwardList {
-	IntrusiveForwardListNode head;
-
+struct IntrusiveForwardListBaseHookTraits {
 	static constexpr T *Cast(IntrusiveForwardListNode *node) noexcept {
 		static_assert(std::is_base_of_v<IntrusiveForwardListHook, T>);
 		auto *hook = &IntrusiveForwardListHook::Cast(*node);
@@ -79,6 +80,28 @@ class IntrusiveForwardList {
 	static constexpr const IntrusiveForwardListHook &ToHook(const T &t) noexcept {
 		static_assert(std::is_base_of_v<IntrusiveForwardListHook, T>);
 		return t;
+	}
+};
+
+template<typename T,
+	 typename HookTraits=IntrusiveForwardListBaseHookTraits<T>>
+class IntrusiveForwardList {
+	IntrusiveForwardListNode head;
+
+	static constexpr T *Cast(IntrusiveForwardListNode *node) noexcept {
+		return HookTraits::Cast(node);
+	}
+
+	static constexpr const T *Cast(const IntrusiveForwardListNode *node) noexcept {
+		return HookTraits::Cast(node);
+	}
+
+	static constexpr IntrusiveForwardListHook &ToHook(T &t) noexcept {
+		return HookTraits::ToHook(t);
+	}
+
+	static constexpr const IntrusiveForwardListHook &ToHook(const T &t) noexcept {
+		return HookTraits::ToHook(t);
 	}
 
 	static constexpr IntrusiveForwardListNode &ToNode(T &t) noexcept {
