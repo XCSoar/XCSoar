@@ -34,6 +34,7 @@
 
 #include "Cast.hxx"
 #include "MemberPointer.hxx"
+#include "OptionalCounter.hxx"
 #include "ShallowCopy.hxx"
 
 #include <iterator>
@@ -113,10 +114,18 @@ struct IntrusiveForwardListMemberHookTraits {
 	}
 };
 
+/**
+ * @param constant_time_size make size() constant-time by caching the
+ * number of items in a field?
+ */
 template<typename T,
-	 typename HookTraits=IntrusiveForwardListBaseHookTraits<T>>
+	 typename HookTraits=IntrusiveForwardListBaseHookTraits<T>,
+	 bool constant_time_size=false>
 class IntrusiveForwardList {
 	IntrusiveForwardListNode head;
+
+	[[no_unique_address]]
+	OptionalCounter<constant_time_size> counter;
 
 	static constexpr T *Cast(IntrusiveForwardListNode *node) noexcept {
 		return HookTraits::Cast(node);
@@ -148,14 +157,23 @@ public:
 	IntrusiveForwardList() = default;
 
 	IntrusiveForwardList(IntrusiveForwardList &&src) noexcept
-		:head{std::exchange(src.head.next, nullptr)} {}
+		:head{std::exchange(src.head.next, nullptr)}
+	{
+		using std::swap;
+		swap(counter, src.counter);
+	}
 
 	constexpr IntrusiveForwardList(ShallowCopy, const IntrusiveForwardList &src) noexcept
-		:head(src.head) {}
+		:head(src.head)
+	{
+		// shallow copies mess with the counter
+		static_assert(!constant_time_size);
+	}
 
 	IntrusiveForwardList &operator=(IntrusiveForwardList &&src) noexcept {
 		using std::swap;
 		swap(head, src.head);
+		swap(counter, counter);
 		return *this;
 	}
 
@@ -164,11 +182,15 @@ public:
 	}
 
 	constexpr size_type size() const noexcept {
-		return std::distance(begin(), end());
+		if constexpr (constant_time_size)
+			return counter;
+		else
+			return std::distance(begin(), end());
 	}
 
 	void clear() noexcept {
 		head = {};
+		counter.reset();
 	}
 
 	template<typename D>
@@ -190,6 +212,7 @@ public:
 
 	void pop_front() noexcept {
 		head.next = head.next->next;
+		--counter;
 	}
 
 	class const_iterator;
@@ -296,9 +319,13 @@ public:
 		auto &new_node = ToNode(t);
 		new_node.next = head.next;
 		head.next = &new_node;
+		++counter;
 	}
 
 	static iterator insert_after(iterator pos, T &t) noexcept {
+		// no counter update in this static method
+		static_assert(!constant_time_size);
+
 		auto &pos_node = *pos.cursor;
 		auto &new_node = ToNode(t);
 		new_node.next = pos_node.next;
@@ -308,6 +335,7 @@ public:
 
 	void erase_after(iterator pos) noexcept {
 		pos.cursor->next = pos.cursor->next->next;
+		--counter;
 	}
 
 	void reverse() noexcept {
