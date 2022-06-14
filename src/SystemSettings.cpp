@@ -31,7 +31,10 @@ SystemSettings::SetDefaults()
     devices[i].Clear();
 
   if (IsAndroid() || IsApple()) {
-    devices[0].port_type = DeviceConfig::PortType::INTERNAL;
+    devices[0].port_type = DeviceConfig::PortType::IOIOUART;
+    devices[0].baud_rate = 115200;
+    devices[0].ioio_uart_id = 0;
+    devices[0].driver_name = _T("IMI ERIXX");
   } else {
     devices[0].port_type = DeviceConfig::PortType::SERIAL;
 #ifdef _WIN32
