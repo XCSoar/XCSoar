@@ -55,6 +55,17 @@ GetVario2Color(short ramp_h) {
 }
 
 static RGB8Color
+GetVarioEinkColor(short ramp_h) {
+  static constexpr ColorRamp snail_colors_vario_eink[] = {
+    {  0, {0x00, 0x00, 0x00}},
+    {200, {0x80, 0x80, 0x80}}
+  };
+
+  return ColorRampLookup(ramp_h, snail_colors_vario_eink,
+                         ARRAY_SIZE(snail_colors_vario_eink));
+}
+
+static RGB8Color
 GetAltitudeColor(short ramp_h) {
   static constexpr ColorRamp snail_colors_alt[] = {
     {  0, { 0xff, 0x00, 0x00 }},
@@ -79,6 +90,8 @@ GetPortableColor(TrailSettings::Type type, short ramp_h)
   case TrailSettings::Type::VARIO_2_DOTS:
   case TrailSettings::Type::VARIO_DOTS_AND_LINES:
     return GetVario2Color(ramp_h);
+  case TrailSettings::Type::VARIO_EINK:
+    return GetVarioEinkColor(ramp_h);
   default:
     return GetVario1Color(ramp_h);
   }
