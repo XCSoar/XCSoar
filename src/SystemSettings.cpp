@@ -35,6 +35,10 @@ SystemSettings::SetDefaults()
     devices[0].baud_rate = 115200;
     devices[0].ioio_uart_id = 0;
     devices[0].driver_name = _T("IMI ERIXX");
+    devices[1].port_type = DeviceConfig::PortType::IOIOUART;
+    devices[1].baud_rate = 57600;
+    devices[1].ioio_uart_id = 0;
+    devices[1].driver_name = _T("FLARM");    
   } else {
     devices[0].port_type = DeviceConfig::PortType::SERIAL;
 #ifdef _WIN32
