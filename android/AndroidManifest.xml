@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.xcsoar"
+          package="org.xcsoar-lkbu"
           android:installLocation="auto"
           android:versionCode="139"
           android:versionName="7.18">
@@ -8,7 +8,7 @@
       android:requestLegacyExternalStorage="true"
       android:icon="@drawable/icon"
       android:label="@string/app_name">
-    <activity android:name=".XCSoar.LKBU"
+    <activity android:name=".XCSoar"
               android:label="@string/app_name"
               android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale"
               android:launchMode="singleInstance">
