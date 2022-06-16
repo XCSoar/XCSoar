@@ -106,7 +106,7 @@ ANDROID_XML_RES_COPIES := $(patsubst android/res/%,$(RES_DIR)/%,$(ANDROID_XML_RE
 ifeq ($(TESTING),y)
 ICON_SVG = $(topdir)/Data/graphics/logo_red.svg
 else
-ICON_SVG = $(topdir)/Data/graphics/logo_orig.svg
+ICON_SVG = $(topdir)/Data/graphics/logo_green.svg
 endif
 
 ICON_WHITE_SVG = $(topdir)/Data/graphics/logo_white.svg
