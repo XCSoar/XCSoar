@@ -51,7 +51,7 @@ endif
 # and "testing".
 # In the stable branch, this should default to "n".
 TESTING = n
-# TESTING = y
+TESTING = y
 
 ifeq ($(TESTING),y)
   TARGET_CPPFLAGS += -DXCSOAR_TESTING
