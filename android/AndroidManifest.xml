@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.xcsoar"
+          package="org.xcsoar.lkbu"
           android:installLocation="auto"
           android:versionCode="139"
           android:versionName="7.18">
@@ -42,7 +42,7 @@
     <service android:name=".MyService" android:foregroundServiceType="location"/>
 
     <provider android:name="org.xcsoar.FileProvider"
-              android:authorities="org.xcsoar"
+              android:authorities="org.xcsoar.lkbu"
               android:exported="false"
               android:grantUriPermissions="true"/>
   </application>
