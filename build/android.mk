@@ -89,7 +89,8 @@ JAVA_SOURCES := \
 	android/ioio/software/IOIOLib/target/android/src/ioio/lib/util/android/ContextWrapperDependent.java \
 	$(wildcard android/ioio/software/IOIOLibAccessory/src/ioio/lib/android/accessory/*.java) \
 	$(wildcard android/ioio/software/IOIOLibBT/src/ioio/lib/android/bluetooth/*.java) \
-	$(wildcard android/ioio/software/IOIOLibAndroidDevice/src/ioio/lib/android/device/*.java)
+	$(wildcard android/ioio/software/IOIOLibAndroidDevice/src/ioio/lib/android/device/*.java) \
+	$(wildcard android/src/lkbu/*.java)
 ifeq ($(TESTING),y)
 	JAVA_SOURCES += $(wildcard android/src/testing/*.java)
 endif
