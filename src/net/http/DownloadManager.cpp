@@ -243,7 +243,7 @@ private:
 
 static Co::InvokeTask
 DownloadToFile(CurlGlobal &curl,
-               const char *url, const Path path,
+               const char *url, AllocatedPath path,
                std::array<std::byte, 32> *sha256,
                ProgressListener &progress)
 {
