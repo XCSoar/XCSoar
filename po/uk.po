@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2022-06-19 21:14+0000\n"
+"PO-Revision-Date: 2022-06-24 07:20+0000\n"
 "Last-Translator: Artem <artem@molotov.work>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/uk/>\n"
@@ -4184,9 +4184,9 @@ msgid "Show final glide bar if approaching final glide range."
 msgstr "Зображує шкалу дольоту, якщо знаходимося в межах дольоту."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:57
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable thermal assistant."
-msgstr "Термік-асистент"
+msgstr "Вимкнути помічник терміка."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:59
 #, fuzzy, no-c-format
@@ -8256,7 +8256,7 @@ msgid "Speed dolphin"
 msgstr "Швидкість при польоті \"дельфіном\""
 
 #: src/InfoBoxes/Content/Factory.cpp:492
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "The instantaneous MacCready speed-to-fly, making use of netto vario "
 "calculations to determine dolphin cruise speed in the glider's current "
@@ -8272,7 +8272,7 @@ msgstr ""
 "висоти. Для дольоту - з урахуванням зниження. При наборі висоти цей параметр "
 "переключається на швидкість при мінімальному зниженні при поточному "
 "коефіцієнті навантаження на крило (якщо підключено акселерометр). При виборі "
-"режиму блокування в цьому інфобоксі відображається швидкість  MacCready."
+"режиму блокування в цьому інфобоксі відображається швидкість MacCready."
 
 #: src/InfoBoxes/Content/Factory.cpp:498
 #, no-c-format
