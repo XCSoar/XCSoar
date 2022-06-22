@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2022-04-25 22:15+0000\n"
+"PO-Revision-Date: 2022-06-24 07:20+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.1-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 "X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -266,7 +266,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:98
 #, no-c-format
 msgid "A symmetric quadrant with a custom radius."
-msgstr "En symmetrisk kvadrant med godtycklig radie."
+msgstr "En symmetrisk kvadrant med anpassad radie."
 
 #: src/Task/TypeStrings.cpp:99
 #, no-c-format
@@ -3568,7 +3568,7 @@ msgstr "GPS-låsning"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:137
 msgid "Satellites in view"
-msgstr "Satelliter i sikte"
+msgstr "Använda satelliter"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:138
 msgid "Variometer"
@@ -4862,7 +4862,7 @@ msgstr "Ritar en flik vid titeln överst i Info-rutan."
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:169
 #, no-c-format
 msgid "Shaded"
-msgstr "Skyggad"
+msgstr "Skuggad"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:171
 #, no-c-format
@@ -5225,7 +5225,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:220
 #, no-c-format
 msgid "A custom InfoBox set"
-msgstr "En egen uppsättning Info-rutor"
+msgstr "Anpassad uppsättning Info-rutor"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:238
 #, no-c-format
@@ -6362,7 +6362,7 @@ msgstr "Ladda en uppsättning av enheter."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:131
 msgid "Custom"
-msgstr ""
+msgstr "Anpassad"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:131
 msgid "My individual set of units."
@@ -7687,7 +7687,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:235
 #, no-c-format
 msgid "Next altitude difference"
-msgstr "Nästa höjdskillnad"
+msgstr "Nästa WP - höjdskillnad"
 
 #: src/InfoBoxes/Content/Factory.cpp:236
 #, no-c-format
@@ -7706,12 +7706,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
 msgid "Next altitude required"
-msgstr "Höjd för nästa WP"
+msgstr "Nästa WP - nödvändig höjd"
 
 #: src/InfoBoxes/Content/Factory.cpp:245
 #, no-c-format
 msgid "WP AltR"
-msgstr "WP höjdb"
+msgstr "WP AltR"
 
 #: src/InfoBoxes/Content/Factory.cpp:246
 #, no-c-format
