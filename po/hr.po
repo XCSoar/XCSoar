@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-07-20 10:35+0000\n"
-"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
+"PO-Revision-Date: 2022-06-24 07:20+0000\n"
+"Last-Translator: Igor Ilic <igor.igor.ilic@gmail.com>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/hr/>\n"
 "Language: hr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 "X-Launchpad-Export-Date: 2015-12-29 19:04+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -38,7 +38,7 @@ msgstr "Zadatak"
 #: src/Task/TypeStrings.cpp:31
 #, no-c-format
 msgid "FAI badges/records"
-msgstr ""
+msgstr "FAI značke/evidencije (zapisi)"
 
 #: src/Task/TypeStrings.cpp:32 src/Dialogs/Task/dlgTaskHelpers.cpp:82
 #, no-c-format
@@ -154,7 +154,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:78
 #, no-c-format
 msgid "A cylinder.  Exit area to start."
-msgstr ""
+msgstr "Cilindar.  Izađite iz područja za start."
 
 #: src/Task/TypeStrings.cpp:79
 #, no-c-format
@@ -210,22 +210,26 @@ msgstr ""
 #, no-c-format
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
 msgstr ""
+"Sektor od 90 stupnjeva s radijusom od 1 km.  . Presijecite rubove za "
+"završetak."
 
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
 msgid "Cross finish gate line into area to finish."
-msgstr ""
+msgstr "Prijeđite ciljnu liniju vrata u područje da biste završili."
 
 #: src/Task/TypeStrings.cpp:94
 #, no-c-format
 msgid "Enter cylinder to finish."
-msgstr ""
+msgstr "Uđite u cilindar da biste završili."
 
 #: src/Task/TypeStrings.cpp:95
 #, no-c-format
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start."
 msgstr ""
+"Sektor od 180 stupnjeva s 5 km radijusom.  Izađite iz područja u bilo kojem "
+"smjeru za početak."
 
 #: src/Task/TypeStrings.cpp:96
 #, no-c-format
@@ -252,17 +256,17 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:113
 #, no-c-format
 msgid "Start line"
-msgstr ""
+msgstr "Startna linija"
 
 #: src/Task/TypeStrings.cpp:114
 #, no-c-format
 msgid "Start cylinder"
-msgstr ""
+msgstr "Startni cilindar"
 
 #: src/Task/TypeStrings.cpp:115 src/Dialogs/Task/dlgTaskHelpers.cpp:180
 #, no-c-format
 msgid "FAI quadrant"
-msgstr ""
+msgstr "FAI kvadrant"
 
 #: src/Task/TypeStrings.cpp:116
 #, no-c-format
@@ -282,22 +286,22 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:119
 #, no-c-format
 msgid "Turn point cylinder"
-msgstr ""
+msgstr "Cilindar okretne točke"
 
 #: src/Task/TypeStrings.cpp:120
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "Cilindar s radijusom od 1 milje."
 
 #: src/Task/TypeStrings.cpp:121
 #, no-c-format
 msgid "Area cylinder"
-msgstr ""
+msgstr "Cilindar područja"
 
 #: src/Task/TypeStrings.cpp:122
 #, no-c-format
 msgid "Area sector"
-msgstr ""
+msgstr "Sektor područja"
 
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
@@ -337,47 +341,47 @@ msgstr ""
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
 msgid "No valid start"
-msgstr ""
+msgstr "Nema valjanog početka"
 
 #: src/Task/ValidationErrorStrings.cpp:33
 #, no-c-format
 msgid "No valid finish"
-msgstr ""
+msgstr "Nema valjanog završetka"
 
 #: src/Task/ValidationErrorStrings.cpp:34
 #, no-c-format
 msgid "Task not closed"
-msgstr ""
+msgstr "Zadatak nije zatvoren"
 
 #: src/Task/ValidationErrorStrings.cpp:35
 #, no-c-format
 msgid "All turnpoints not the same type"
-msgstr ""
+msgstr "Sve okretne točke nisu istog tipa"
 
 #: src/Task/ValidationErrorStrings.cpp:36
 #, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr ""
+msgstr "Neispravan broj okretnih točaka"
 
 #: src/Task/ValidationErrorStrings.cpp:37
 #, no-c-format
 msgid "Too many turnpoints"
-msgstr ""
+msgstr "Previše okretnih točaka"
 
 #: src/Task/ValidationErrorStrings.cpp:38
 #, no-c-format
 msgid "Not enough turnpoints"
-msgstr ""
+msgstr "Nema dovoljno okretnih točaka"
 
 #: src/Task/ValidationErrorStrings.cpp:39
 #, no-c-format
 msgid "Turnpoints not unique"
-msgstr ""
+msgstr "Okretne točake nisu jedinstvene"
 
 #: src/Task/ValidationErrorStrings.cpp:40
 #, no-c-format
 msgid "Empty task"
-msgstr ""
+msgstr "Prazan zadatak"
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
@@ -392,7 +396,7 @@ msgstr ""
 #: src/Task/ValidationErrorStrings.cpp:43
 #, no-c-format
 msgid "Wrong shape"
-msgstr ""
+msgstr "Nepravilan/neispravan oblik"
 
 #: src/Airspace/AirspaceGlue.cpp:80
 msgid "Loading Airspace File..."
@@ -400,12 +404,12 @@ msgstr "Učitavanje dat. zračnog prostora..."
 
 #: src/Airspace/AirspaceParser.cpp:916
 msgid "Unknown airspace filetype"
-msgstr ""
+msgstr "Nepoznat tip datoteke zračnog prostora"
 
 #: src/FLARM/Error.cpp:29
 #, no-c-format
 msgid "No error"
-msgstr ""
+msgstr "Nema grešaka"
 
 #: src/FLARM/Error.cpp:30
 #, no-c-format
@@ -415,12 +419,12 @@ msgstr "Informacije"
 #: src/FLARM/Error.cpp:31
 #, no-c-format
 msgid "Reduced functionality"
-msgstr ""
+msgstr "Smanjena funkcionalnost"
 
 #: src/FLARM/Error.cpp:32
 #, no-c-format
 msgid "Fatal problem"
-msgstr ""
+msgstr "Fatalan problem"
 
 #. valid but unknown number of sats
 #: src/FLARM/Error.cpp:41 src/FLARM/Error.cpp:71
@@ -448,22 +452,22 @@ msgstr ""
 #: src/FLARM/Error.cpp:50
 #, no-c-format
 msgid "GPS communication"
-msgstr ""
+msgstr "GPS komunikacija"
 
 #: src/FLARM/Error.cpp:51
 #, no-c-format
 msgid "GPS configuration"
-msgstr ""
+msgstr "GPS konfiguracija"
 
 #: src/FLARM/Error.cpp:52
 #, no-c-format
 msgid "RF communication"
-msgstr ""
+msgstr "RF komunikacija"
 
 #: src/FLARM/Error.cpp:53
 #, no-c-format
 msgid "Communication"
-msgstr ""
+msgstr "Komunikacija"
 
 #: src/FLARM/Error.cpp:54
 #, no-c-format
@@ -473,22 +477,22 @@ msgstr ""
 #: src/FLARM/Error.cpp:55
 #, no-c-format
 msgid "Pressure sensor"
-msgstr ""
+msgstr "Senzor tlaka"
 
 #: src/FLARM/Error.cpp:56 src/Dialogs/Device/ManageFlarmDialog.cpp:75
 #, no-c-format
 msgid "Obstacle database"
-msgstr ""
+msgstr "Baza podataka o preprekama"
 
 #: src/FLARM/Error.cpp:57
 #, no-c-format
 msgid "Flight recorder"
-msgstr ""
+msgstr "Snimač leta"
 
 #: src/FLARM/Error.cpp:59
 #, no-c-format
 msgid "Transponder receiver"
-msgstr ""
+msgstr "Transponder prijemnik"
 
 #: src/FLARM/Error.cpp:60
 #, no-c-format
@@ -505,12 +509,12 @@ msgstr "Stop logera"
 
 #: src/Logger/ExternalLogger.cpp:82
 msgid "Declare task?"
-msgstr "Prijavi zadatak?"
+msgstr "Objavi zadatak?"
 
 #: src/Logger/ExternalLogger.cpp:94 src/Logger/ExternalLogger.cpp:139
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:95
 msgid "Declare task"
-msgstr ""
+msgstr "Objavi zadatak"
 
 #: src/Logger/ExternalLogger.cpp:100
 msgid "Task declared!"
@@ -521,6 +525,8 @@ msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
+"Došlo je do greške,\n"
+"Zadatak NIJE objavljen!"
 
 #: src/Logger/ExternalLogger.cpp:138
 msgid "No logger connected"
@@ -654,12 +660,12 @@ msgstr ""
 #: src/Menu/ExpandMacros.cpp:83 src/Menu/ExpandMacros.cpp:116
 #: src/Menu/ExpandMacros.cpp:138
 msgid "Next Turnpoint"
-msgstr "Sljedeća točka"
+msgstr "Sljedeća okretna točka"
 
 #: src/Menu/ExpandMacros.cpp:87 src/Menu/ExpandMacros.cpp:124
 #: src/Menu/ExpandMacros.cpp:161
 msgid "Previous Turnpoint"
-msgstr ""
+msgstr "Prethodna okretna točka"
 
 #: src/Menu/ExpandMacros.cpp:94
 msgid "Furthest Landpoint"
@@ -1053,7 +1059,7 @@ msgstr "Početak zadatka"
 
 #: src/Input/InputEventsTask.cpp:330
 msgid "Next turnpoint"
-msgstr "Sljedeća točka"
+msgstr "Sljedeća okretna točka"
 
 #: src/Input/InputEventsTask.cpp:332
 msgid "Task finished"
@@ -1431,7 +1437,7 @@ msgstr "Trend max visine"
 #: src/Renderer/ClimbChartRenderer.cpp:47
 #: src/Renderer/ClimbChartRenderer.cpp:52
 msgid "Avg. climb"
-msgstr ""
+msgstr "Prosječno penjanje"
 
 #: src/Renderer/ClimbChartRenderer.cpp:55
 msgid "Climb trend"
@@ -1479,33 +1485,35 @@ msgstr ""
 
 #: src/UIActions.cpp:52
 msgid "Quit program?"
-msgstr ""
+msgstr "Izlaz iz programa?"
 
 #: src/Units/UnitsStore.cpp:39
 #, no-c-format
 msgid "European"
-msgstr ""
+msgstr "Europski"
 
 #: src/Units/UnitsStore.cpp:51
 #, no-c-format
 msgid "British"
-msgstr ""
+msgstr "Britanski"
 
 #: src/Units/UnitsStore.cpp:63
 #, no-c-format
 msgid "American"
-msgstr ""
+msgstr "Američki"
 
 #: src/Units/UnitsStore.cpp:75
 #, no-c-format
 msgid "Australian"
-msgstr ""
+msgstr "Australijski"
 
 #: src/Polar/PolarGlue.cpp:108
 msgid ""
 "Polar has invalid coefficients.\n"
 "Using LS8 polar instead!"
 msgstr ""
+"Polara ima neispravne koeficijente.\n"
+"Umjesto ove koristit ću LS8 polaru!"
 
 #: src/Polar/PolarGlue.cpp:109
 msgid "Warning"
@@ -1514,7 +1522,7 @@ msgstr "Upozorenje"
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:69
 msgid "Battery low"
-msgstr ""
+msgstr "Niska razina baterije"
 
 #: src/Startup.cpp:195
 msgid "Loading Terrain File..."
@@ -1522,7 +1530,7 @@ msgstr "Učitavam datoteku terena..."
 
 #: src/Startup.cpp:316
 msgid "Initialising"
-msgstr ""
+msgstr "Inicijalizacija"
 
 #. Start the device thread(s)
 #: src/Startup.cpp:449
@@ -1569,11 +1577,11 @@ msgstr "Šaljem deklaraciju zadatka"
 
 #: src/Device/Descriptor.cpp:1169 src/Device/Descriptor.cpp:1176
 msgid "Reading flight list"
-msgstr ""
+msgstr "Čitanje popisa letova"
 
 #: src/Device/Descriptor.cpp:1200 src/Device/Descriptor.cpp:1207
 msgid "Downloading flight log"
-msgstr ""
+msgstr "Preuzimanje dnevnika/zapisa leta"
 
 #: src/Device/Config.cpp:216 src/Dialogs/Device/PortDataField.cpp:47
 #: src/Dialogs/Device/DeviceListDialog.cpp:442
@@ -1584,7 +1592,7 @@ msgstr "ONEMOGUĆEN"
 
 #: src/Device/Config.cpp:233 src/Dialogs/Device/PortPicker.cpp:77
 msgid "BLE sensor"
-msgstr ""
+msgstr "BLE senzor"
 
 #: src/Device/Config.cpp:249 src/Dialogs/Device/PortPicker.cpp:74
 msgid "BLE port"
@@ -1625,7 +1633,7 @@ msgstr ""
 #: src/Dialogs/TouchTextEntry.cpp:203 src/Dialogs/TimeEntry.cpp:65
 #: src/Dialogs/DateEntry.cpp:61 src/Dialogs/GeoPointEntry.cpp:76
 msgid "OK"
-msgstr ""
+msgstr "U redu"
 
 #: src/Dialogs/Message.cpp:100 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:59
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:62
@@ -1666,7 +1674,7 @@ msgstr "zanemari"
 
 #: src/Dialogs/ListPicker.cpp:173 src/Dialogs/HelpDialog.cpp:38
 msgid "Help"
-msgstr ""
+msgstr "Pomoć"
 
 #: src/Dialogs/ListPicker.cpp:178 src/Dialogs/Device/PortPicker.cpp:314
 #: src/Dialogs/Traffic/TrafficList.cpp:795
@@ -1731,7 +1739,7 @@ msgstr "Greška"
 
 #: src/Dialogs/FileManager.cpp:476
 msgid "Update available"
-msgstr ""
+msgstr "Dostupna nadogradnja"
 
 #: src/Dialogs/FileManager.cpp:744 src/Dialogs/DownloadFilePicker.cpp:386
 #: src/Dialogs/DownloadFilePicker.cpp:388
@@ -1760,7 +1768,7 @@ msgstr ""
 #: src/Dialogs/Device/PortDataField.cpp:59
 #, no-c-format
 msgid "IOIO voltage sensor"
-msgstr ""
+msgstr "IOIO senzor napona/voltaže"
 
 #: src/Dialogs/Device/PortDataField.cpp:62
 #, no-c-format
@@ -1802,7 +1810,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:265
 msgid "IP address"
-msgstr ""
+msgstr "IP adresa"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:275
 msgid "I²C bus"
@@ -1833,6 +1841,8 @@ msgid ""
 "pressure. Here you tell the system what pressure this is and what it should "
 "be used for."
 msgstr ""
+"Odaberite svrhu ovog senzora tlaka. Ovaj senzor mjeri određeni pritisak. "
+"Ovdje kažete sustavu koji je to tlak i za što bi se trebao koristiti."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:303
 msgid "Driver"
@@ -1853,23 +1863,27 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:320
 msgid "Sync. from device"
-msgstr ""
+msgstr "Sinkronizacija s uređaja"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:321
 msgid ""
 "Tells XCSoar to use settings like the MacCready value, bugs and ballast from "
 "the device."
 msgstr ""
+"Neka XCSoar koristi postavke kao što su MacCready vrijednost, bugovi i "
+"balast na uređaj."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:326
 msgid "Sync. to device"
-msgstr ""
+msgstr "Sinkronizacija na uređaj"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:327
 msgid ""
 "Tells XCSoar to send settings like the MacCready value, bugs and ballast to "
 "the device."
 msgstr ""
+"Neka XCSoar pošalje postavke kao što su MacCready vrijednost, bugovi i "
+"balast na uređaj."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:333
 msgid "Whether you use a K6Bt to connect the device."
@@ -1908,13 +1922,13 @@ msgstr ""
 #: src/Dialogs/Device/PortMonitor.cpp:141
 #: src/Dialogs/Device/PortMonitor.cpp:149
 msgid "Reconnect"
-msgstr ""
+msgstr "Ponovno povežite"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:307
 #: src/Dialogs/Device/DeviceListDialog.cpp:326
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:231
 msgid "Disable"
-msgstr ""
+msgstr "Onemogućen"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:311
 #: src/Dialogs/Device/DeviceListDialog.cpp:431
@@ -1970,7 +1984,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:668
 #, no-c-format
 msgid "Battery"
-msgstr ""
+msgstr "Baterija"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:444
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:61
@@ -1983,7 +1997,7 @@ msgstr ""
 #: src/Dialogs/Device/DeviceListDialog.cpp:460
 #: src/Dialogs/Device/DeviceListDialog.cpp:530
 msgid "Bluetooth is disabled"
-msgstr ""
+msgstr "Bluetooth je onemogućen"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:463
 msgid "Duplicate"
@@ -2013,6 +2027,7 @@ msgstr ""
 #, c-format
 msgid "Communication with this device will be logged for the next %u minutes."
 msgstr ""
+"Komunikacija s ovim uređajem bit će zabilježena/zapisana sljedećih %u minuta."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:733 Data/Input/default.xci:571
 #: Data/Input/default.xci:1167
@@ -2032,7 +2047,7 @@ msgstr "Briši.sve"
 #: src/Dialogs/Device/PortMonitor.cpp:142
 #: src/Dialogs/Device/PortMonitor.cpp:169
 msgid "Pause"
-msgstr ""
+msgstr "Pauza"
 
 #: src/Dialogs/Device/PortMonitor.cpp:181
 msgid "Port monitor"
@@ -2058,16 +2073,16 @@ msgstr ""
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:126
 msgid "Delete all flights"
-msgstr ""
+msgstr "Obriši sve letove"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:127
 msgid "Do you really want to delete all flights from the device?"
-msgstr ""
+msgstr "Da li zaista želite obrisati sve letove s ovog uređaja?"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:140
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:85
 msgid "Reboot"
-msgstr ""
+msgstr "Ponovo pokreni sustav"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:54
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:195
@@ -2075,7 +2090,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:68
 #, no-c-format
 msgid "Temperature"
-msgstr ""
+msgstr "Temperatura"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:62
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:129
@@ -2091,7 +2106,7 @@ msgstr ""
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:41
 #: src/Dialogs/ProfileListDialog.cpp:221 src/Dialogs/ProfileListDialog.cpp:250
 msgid "Failed to load file."
-msgstr ""
+msgstr "Greška učitavanja datoteke."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:46
 msgid "Too many waypoints."
@@ -2114,14 +2129,14 @@ msgstr ""
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:71
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:64
 msgid "Hardware version"
-msgstr ""
+msgstr "Inačica hardvera"
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:69
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:78
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:77
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:69
 msgid "Firmware version"
-msgstr ""
+msgstr "Verzija firmwarea"
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:79
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:81
@@ -2152,7 +2167,7 @@ msgstr "Spremi"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:58
 msgid "Calibrate"
-msgstr ""
+msgstr "Kalibracija"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:130
 #, fuzzy
@@ -2209,7 +2224,7 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:152
 msgid "Set new audio scheme?  Old values will be lost."
-msgstr ""
+msgstr "Postaviti novu audio shemu?   Stare vrijednosti biti će izgubljene."
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:273
 msgid "Vario Configuration"
@@ -2242,7 +2257,7 @@ msgstr "Kruženje"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:112
 msgid "This forces the variometer into circling or cruise mode"
-msgstr ""
+msgstr "To tjera/prisiljava variometar u kruženje ili krstarenje"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:126
 msgid "Vario Demo"
@@ -2437,7 +2452,7 @@ msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:156
 msgid "No tracking mode"
-msgstr ""
+msgstr "Nema načina praćenja"
 
 #: src/Dialogs/MapItemListDialog.cpp:163 src/Dialogs/dlgAnalysis.cpp:466
 #: src/Dialogs/dlgAnalysis.cpp:510 src/Dialogs/dlgAnalysis.cpp:519
@@ -2800,27 +2815,27 @@ msgstr "Računalo leta"
 #: src/InfoBoxes/Content/Factory.cpp:939 Data/Input/default.xci:587
 #, no-c-format
 msgid "Wind"
-msgstr ""
+msgstr "Vjetar"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:112
 #, no-c-format
 msgid "Route"
-msgstr ""
+msgstr "Ruta"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:113
 #, no-c-format
 msgid "Scoring"
-msgstr ""
+msgstr "Bodovanje"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118
 #, no-c-format
 msgid "FLARM, Other"
-msgstr ""
+msgstr "FLARM, ostalo"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:121
 #, no-c-format
 msgid "Audio Vario"
-msgstr ""
+msgstr "Vario zvuk"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:127
 #, no-c-format
@@ -2830,22 +2845,22 @@ msgstr "Pravila"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:128
 #, no-c-format
 msgid "Turnpoint Types"
-msgstr ""
+msgstr "Tipovi okretnih točaka"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:133
 #, no-c-format
 msgid "Language, Input"
-msgstr ""
+msgstr "Jezik, unos"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:134
 #, no-c-format
 msgid "Screen Layout"
-msgstr ""
+msgstr "Raspored ekrana"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:135
 #, no-c-format
 msgid "Pages"
-msgstr ""
+msgstr "Stranice"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:136
 #, no-c-format
@@ -2862,7 +2877,7 @@ msgstr "Loger"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:148
 #, no-c-format
 msgid "Tracking"
-msgstr ""
+msgstr "Praćenje"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:152
 #: src/Dialogs/Weather/WeatherDialog.cpp:46
@@ -2876,7 +2891,7 @@ msgstr "Vrijeme"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:156
 #, no-c-format
 msgid "Audio"
-msgstr ""
+msgstr "Zvuk"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:163
 #, no-c-format
@@ -2891,7 +2906,7 @@ msgstr "Mjerne jedinice"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:166
 #, no-c-format
 msgid "Task Defaults"
-msgstr ""
+msgstr "Zadane postavke zadatka"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:167
 #, no-c-format
@@ -2911,6 +2926,8 @@ msgstr "Podešavanje"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:374
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
+"Promjene u konfiguraciji su spremljene.  Ponovno pokrenite XCSoar da biste "
+"primijenili promjene."
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:248
 #: src/InfoBoxes/InfoBoxManager.cpp:212
@@ -2919,7 +2936,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:261
 msgid "Content"
-msgstr ""
+msgstr "Sadržaj"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:271
 #: src/Dialogs/ProfileListDialog.cpp:175
@@ -2941,7 +2958,7 @@ msgstr "InfoBox nalepiti"
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:407
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:108
 msgid "Invalid"
-msgstr ""
+msgstr "Neispravan"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:345
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:321
@@ -2953,23 +2970,23 @@ msgstr "Natjecateljski ID"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:368
 #, no-c-format
 msgid "Map"
-msgstr ""
+msgstr "Karta"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:756
 msgid "Traffic"
-msgstr "promet"
+msgstr "Promet"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:125
 msgid "Team"
-msgstr ""
+msgstr "Ekipa/tim"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:132
 msgid "Callsign"
-msgstr ""
+msgstr "Pozivni znak"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:133
 msgid "Change callsign"
-msgstr ""
+msgstr "Promijeni pozivni znak"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:139
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:95
@@ -2985,29 +3002,29 @@ msgstr "Aerodrom"
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:141
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:115
 msgid "Radio frequency"
-msgstr ""
+msgstr "Radio frekvencija"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:142 Data/Input/default.xci:563
 msgid "Plane"
-msgstr ""
+msgstr "Zrakoplov"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:230
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:344
 msgid "FLARM Traffic Details"
-msgstr ""
+msgstr "FLARM - Podaci o prometu"
 
 #. Ask for confirmation
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:303
 msgid "Do you want to set this FLARM contact as your new teammate?"
-msgstr ""
+msgstr "Želite li ovaj FLARM kontakt postaviti kao svog novog suigrača?"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:304
 msgid "New Teammate"
-msgstr ""
+msgstr "Novi suigrač"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:84
 msgid "Set code"
-msgstr ""
+msgstr "Postavite kod"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:85
 msgid "Set WP"
@@ -3019,11 +3036,11 @@ msgstr ""
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:93
 msgid "Own code"
-msgstr ""
+msgstr "Vlastiti kod"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:94
 msgid "Mate code"
-msgstr ""
+msgstr "Kod suigrača"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:96
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:83
@@ -3042,15 +3059,15 @@ msgstr ""
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:206
 msgid "Unknown Competition Number"
-msgstr ""
+msgstr "Nepoznati broj natjecanja"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:207
 msgid "Not Found"
-msgstr ""
+msgstr "Nije pronađeno"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:211
 msgid "Set new teammate"
-msgstr ""
+msgstr "Postavite novog suigrača"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:224
 #: src/InfoBoxes/Content/Factory.cpp:588 src/InfoBoxes/Content/Team.cpp:50
@@ -3086,7 +3103,7 @@ msgstr "penjanje"
 
 #: src/Dialogs/dlgAnalysis.cpp:480
 msgid "Thermal Band"
-msgstr ""
+msgstr "Termalni pojas"
 
 #: src/Dialogs/dlgAnalysis.cpp:489
 msgid "Vario Histogram"
@@ -3105,9 +3122,8 @@ msgid "Glide Polar"
 msgstr "polara"
 
 #: src/Dialogs/dlgAnalysis.cpp:515
-#, fuzzy
 msgid "MacCready Speeds"
-msgstr "Set MacCready"
+msgstr "MacCready brzine"
 
 #: src/Dialogs/dlgAnalysis.cpp:524
 msgid "Temperature Trace"
@@ -3124,15 +3140,15 @@ msgstr "Upozorenja"
 
 #: src/Dialogs/dlgChecklist.cpp:50 src/Dialogs/dlgChecklist.cpp:142
 msgid "Checklist"
-msgstr ""
+msgstr "Popis za provjeru"
 
 #: src/Dialogs/dlgChecklist.cpp:135
 msgid "No checklist loaded"
-msgstr ""
+msgstr "Nema učitanog popisa za provjeru"
 
 #: src/Dialogs/dlgChecklist.cpp:135
 msgid "Create xcsoar-checklist.txt"
-msgstr ""
+msgstr "Kreiraj xcsoar-checklist.txt"
 
 #: src/Dialogs/ProfileListDialog.cpp:173
 #: src/Dialogs/Plane/PlaneListDialog.cpp:146
@@ -3144,7 +3160,7 @@ msgstr "Nova"
 #: src/Dialogs/StartupDialog.cpp:171 src/Dialogs/ProfilePasswordDialog.cpp:88
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:251
 msgid "Password"
-msgstr ""
+msgstr "Lozinka"
 
 #: src/Dialogs/ProfileListDialog.cpp:176 src/Dialogs/ProfileListDialog.cpp:295
 #: src/Dialogs/Plane/PlaneListDialog.cpp:148
@@ -3157,85 +3173,85 @@ msgstr "Briši"
 
 #: src/Dialogs/ProfileListDialog.cpp:192 src/Dialogs/ProfileListDialog.cpp:259
 msgid "Profile name"
-msgstr ""
+msgstr "Naziv profila"
 
 #: src/Dialogs/ProfileListDialog.cpp:201 src/Dialogs/ProfileListDialog.cpp:269
 msgid "File exists already."
-msgstr ""
+msgstr "Datoteka već postoji."
 
 #: src/Dialogs/ProfileListDialog.cpp:293
 #, c-format
 msgid "Delete \"%s\"?"
-msgstr ""
+msgstr "Obriši \"%s\"?"
 
 #: src/Dialogs/ProfileListDialog.cpp:336 Data/Input/default.xci:605
 msgid "Profiles"
-msgstr ""
+msgstr "Profili"
 
 #: src/Dialogs/ProfileListDialog.cpp:350
 msgid "Select profile"
-msgstr ""
+msgstr "Odaberi profil"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:149
 msgid "Activate"
-msgstr ""
+msgstr "Aktiviraj"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:170
 msgid "Active"
-msgstr ""
+msgstr "Aktivan"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:210
 #, c-format
 msgid "Activating plane \"%s\" failed."
-msgstr ""
+msgstr "Aktiviranje zrakoplova \"%s\" nije uspjelo."
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:232
 #: src/Dialogs/Plane/PlaneListDialog.cpp:277
 msgid "Please enter the registration of the plane!"
-msgstr ""
+msgstr "Molim unesite registraciju zrakoplova!"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:244
 #: src/Dialogs/Plane/PlaneListDialog.cpp:291
 #, c-format
 msgid "Plane \"%s\" already exists. Overwrite it?"
-msgstr ""
+msgstr "Zrakoplov \"%s\" već postoji. Želite li ga prepisati?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:247
 #: src/Dialogs/Plane/PlaneListDialog.cpp:294
 msgid "Overwrite"
-msgstr ""
+msgstr "Prepiši"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:339
 #, c-format
 msgid "Delete plane \"%s\"?"
-msgstr ""
+msgstr "Obriši zrakoplov \"%s\"?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:354
 #, c-format
 msgid "Activate plane \"%s\"?"
-msgstr ""
+msgstr "Aktiviraj zrakoplov \"%s\"?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:367
 msgid "Planes"
-msgstr ""
+msgstr "Zrakoplovi"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:83
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:193
 msgid "Plane Details"
-msgstr ""
+msgstr "Detalji o zrakoplovu"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:90
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:113
 msgid "Polar"
-msgstr ""
+msgstr "Polara"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:111
 msgid "Registration"
-msgstr ""
+msgstr "Registracija"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:112
 msgid "Comp. ID"
-msgstr ""
+msgstr "Natjecateljski ID"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:115
 msgid "Handicap"
@@ -3258,18 +3274,17 @@ msgid "Max. Cruise Speed"
 msgstr ""
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:138
-#, fuzzy
 msgid "WeGlide Type"
-msgstr "Računalo leta"
+msgstr "WeGlide tip"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:63
 msgid "List"
-msgstr ""
+msgstr "Popis"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:64
 #: src/Dialogs/Waypoint/Manager.cpp:115
 msgid "Import"
-msgstr ""
+msgstr "Uvezi"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:135
 msgid "Reference Mass"
@@ -3345,7 +3360,7 @@ msgstr ""
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:112
 msgid "What do you want to do?"
-msgstr ""
+msgstr "Što želite učiniti?"
 
 #: src/Dialogs/StartupDialog.cpp:158
 msgid "Profile"
@@ -3353,19 +3368,19 @@ msgstr "Profil"
 
 #: src/Dialogs/StartupDialog.cpp:161
 msgid "Continue"
-msgstr ""
+msgstr "Nastavi"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:63
 msgid "Enter your password"
-msgstr ""
+msgstr "Unesite vašu lozinku"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:88
 msgid "Wrong password."
-msgstr ""
+msgstr "Neispravna lozinka."
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:103
 msgid "Enter a new password"
-msgstr ""
+msgstr "Unesite novu lozinku"
 
 #: src/Dialogs/dlgStatus.cpp:47 src/Dialogs/dlgStatus.cpp:58
 #: src/Dialogs/Weather/WeatherDialog.cpp:58 Data/Input/default.xci:825
@@ -3375,7 +3390,7 @@ msgstr "Status"
 
 #: src/Dialogs/dlgStatus.cpp:90 Data/Input/default.xci:579
 msgid "Flight"
-msgstr ""
+msgstr "Letenje"
 
 #: src/Dialogs/dlgStatus.cpp:93 Data/Input/default.xci:555
 msgid "System"
@@ -3384,7 +3399,7 @@ msgstr "Sustav"
 #: src/Dialogs/dlgStatus.cpp:99
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:124
 msgid "Rules"
-msgstr ""
+msgstr "Pravila"
 
 #: src/Dialogs/dlgStatus.cpp:102
 msgid "Times"
@@ -3447,7 +3462,7 @@ msgstr "Broj satelita"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:138
 msgid "Variometer"
-msgstr ""
+msgstr "Variometar"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:141
 msgid "Supply voltage"
@@ -3455,7 +3470,7 @@ msgstr "Napon baterije"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:142
 msgid "Network"
-msgstr ""
+msgstr "Mreža"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:140
 msgid "Assigned task time"
@@ -6428,7 +6443,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:212
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:238
 msgid "Tracking Interval"
-msgstr ""
+msgstr "Interval praćenja"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:215
 msgid "Track friends"
@@ -6844,7 +6859,7 @@ msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:241
 msgid "Enter a task name"
-msgstr ""
+msgstr "Unesite naziv zadatka"
 
 #: src/Dialogs/Task/TargetDialog.cpp:412
 msgid ""
@@ -6902,7 +6917,7 @@ msgstr ""
 
 #: src/Dialogs/Task/TargetDialog.cpp:442
 msgid "Optimized"
-msgstr ""
+msgstr "Optimizirano"
 
 #: src/Dialogs/Task/AlternatesListDialog.cpp:150
 #: src/InfoBoxes/Content/Alternate.cpp:49 Data/Input/default.xci:394
@@ -6920,20 +6935,28 @@ msgid ""
 "test server. You can disable it at any time in the \"Tracking\" settings.\n"
 "Please help us improve XCSoar!"
 msgstr ""
+"Projekt XCSoar trenutno razvija revolucionarnu uslugu koja omogućuje "
+"dijeljenje toplinskih/valnih lokacija i više drugih stvari s drugim pilotima."
+"\n"
+"Želite li sudjelovati u terenskom testiranju? To znači da će se vaš položaj, "
+"toplinska/valna lokacija i drugi vremenski podaci prenijeti na naš testni "
+"poslužitelj. Možete ga onemogućiti u bilo kojem trenutku u postavkama "
+"\"Praćenje\".\n"
+"Pomozite nam da poboljšamo XCSoar!"
 
 #: src/Dialogs/TimeEntry.cpp:68 src/Dialogs/Weather/RASPDialog.cpp:124
 msgid "Now"
-msgstr ""
+msgstr "Sada"
 
 #: src/Dialogs/DateEntry.cpp:64
 msgid "Reset"
-msgstr ""
+msgstr "Resetiraj"
 
 #: src/Dialogs/Weather/WeatherDialog.cpp:79
 #: src/Dialogs/Weather/NOAADetails.cpp:82
 #: src/Dialogs/Weather/NOAADetails.cpp:140
 msgid "METAR and TAF"
-msgstr ""
+msgstr "METAR i TAF"
 
 #: src/Dialogs/Weather/RASPDialog.cpp:220
 msgid "Field"
