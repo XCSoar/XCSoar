@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 CM4all GmbH
+ * Copyright 2020-2022 CM4all GmbH
  * All rights reserved.
  *
  * author: Max Kellermann <mk@cm4all.com>
@@ -98,7 +98,7 @@ private:
 
 	/* virtual methods from CurlResponseHandler */
 	void OnHeaders(unsigned status, Headers &&headers) override;
-	void OnData(ConstBuffer<void> data) override;
+	void OnData(std::span<const std::byte> data) override;
 	void OnEnd() override;
 	void OnError(std::exception_ptr e) noexcept override;
 };

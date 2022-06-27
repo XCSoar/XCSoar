@@ -60,11 +60,11 @@ public:
     printf("\n");
   }
 
-  void OnData(ConstBuffer<void> data) override {
+  void OnData(std::span<const std::byte> data) override {
     if (file != nullptr)
-      fwrite(data.data, 1, data.size, file);
+      fwrite(data.data(), 1, data.size(), file);
     else
-      fwrite(data.data, 1, data.size, stdout);
+      fwrite(data.data(), 1, data.size(), stdout);
   }
 
   void OnEnd() override {

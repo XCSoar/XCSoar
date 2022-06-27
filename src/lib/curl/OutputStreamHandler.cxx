@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,10 +31,10 @@
 #include "io/OutputStream.hxx"
 
 void
-OutputStreamCurlResponseHandler::OnData(ConstBuffer<void> data)
+OutputStreamCurlResponseHandler::OnData(std::span<const std::byte> data)
 {
 	try {
-		os.Write(data.data, data.size);
+		os.Write(data.data(), data.size());
 	} catch (...) {
 		waiter.SetError(std::current_exception());
 		throw Pause{};

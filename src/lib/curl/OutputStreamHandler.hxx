@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -56,7 +56,7 @@ public:
 	}
 
 	/* virtual methods from class CurlResponseHandler */
-	void OnData(ConstBuffer<void> data) override;
+	void OnData(std::span<const std::byte> data) override;
 
 	void OnEnd() final {
 		waiter.SetDone();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2021-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -49,7 +49,7 @@ public:
 
 private:
 	/* virtual methods from CurlResponseHandler */
-	void OnData(ConstBuffer<void> data) override;
+	void OnData(std::span<const std::byte> data) override;
 };
 
 } // namespace Curl

@@ -29,6 +29,7 @@ Copyright_License {
 #include "lib/curl/Easy.hxx"
 #include "lib/curl/Adapter.hxx"
 #include "lib/curl/Handler.hxx"
+#include "util/SpanCast.hxx"
 
 extern "C" {
 #include <lauxlib.h>
@@ -70,9 +71,9 @@ private:
     response_headers = std::move(_headers);
   }
 
-  void OnData(ConstBuffer<void> data) override {
+  void OnData(std::span<const std::byte> data) override {
     // TODO size check
-    response_body.append((const char *)data.data, data.size);
+    response_body.append(ToStringView(data));
   }
 
   void OnEnd() override {

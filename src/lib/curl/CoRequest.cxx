@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 CM4all GmbH
+ * Copyright 2020-2022 CM4all GmbH
  * All rights reserved.
  *
  * author: Max Kellermann <mk@cm4all.com>
@@ -32,6 +32,7 @@
 
 #include "CoRequest.hxx"
 #include "Global.hxx"
+#include "util/SpanCast.hxx"
 
 namespace Curl {
 
@@ -75,12 +76,11 @@ CoRequest::OnHeaders(unsigned status, Headers &&headers)
 }
 
 void
-CoRequest::OnData(ConstBuffer<void> data)
+CoRequest::OnData(std::span<const std::byte> data)
 {
 	assert(!defer_error.IsPending());
 
-	response.body.append((const char *)data.data,
-			     data.size);
+	response.body.append(ToStringView(data));
 }
 
 void
