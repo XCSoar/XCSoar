@@ -109,8 +109,10 @@ IsResponseBoundaryHeader(StringView s) noexcept
 }
 
 inline void
-CurlResponseHandlerAdapter::HeaderFunction(StringView s) noexcept
+CurlResponseHandlerAdapter::HeaderFunction(std::string_view _s) noexcept
 {
+	const StringView s{_s};
+
 	if (state > State::HEADERS)
 		return;
 
