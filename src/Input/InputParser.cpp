@@ -87,7 +87,8 @@ struct EventBuilder {
       // All modes are valid at this point
       int mode_id = config.MakeMode(token);
       if (mode_id < 0) {
-        LogFormat(_T("Too many modes: %.*s at %u"), int(token.size), token.data, line);
+        LogFormat(_T("Too many modes: %.*s at %u"),
+                  int(token.size()), token.data(), line);
         continue;
       }
 
