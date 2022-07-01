@@ -80,17 +80,77 @@ BITSTREAM_VERA_FILES = $(patsubst %,$(BITSTREAM_VERA_DIR)/%.ttf,$(BITSTREAM_VERA
 THIRDPARTY_TOOL_NAMES = simple_usbmodeswitch
 THIRDPARTY_TOOL_FILES = $(addprefix $(THIRDPARTY_LIBS_ROOT)/bin/,$(THIRDPARTY_TOOL_NAMES))
 
-KOBO_KERNEL_DIR = /opt/kobo/kernel
-
 CA_URL = https://curl.se/ca/cacert-2022-04-26.pem
 CA_ALTERNATIVE_URL = $(CA_URL)
 CA_MD5 = aa5ac583708ca35225ac2d230f4acb62
-
 CA_DOWNLOAD = $(DOWNLOAD_DIR)/$(notdir $(CA_URL))
 
 $(CA_DOWNLOAD): | $(DOWNLOAD_DIR)/dirstamp
 	@$(NQ)echo "  GET     $@"
 	$(Q)./build/download.py $(CA_URL) $(CA_ALTERNATIVE_URL) $(CA_MD5) $(DOWNLOAD_DIR)
+
+KOBO_KERNEL_URL = https://download.xcsoar.org/contrib/kobo/kernel/kobo-1.0.uImage
+KOBO_KERNEL_ALTERNATIVE_URL = $(KOBO_KERNEL_URL)
+KOBO_KERNEL_MD5 = 207f1b732330ac0bdc9c1fa1d16dd402
+KOBO_KERNEL_DOWNLOAD = $(DOWNLOAD_DIR)/$(notdir $(KOBO_KERNEL_URL))
+
+$(KOBO_KERNEL_DOWNLOAD): | $(DOWNLOAD_DIR)/dirstamp
+	@$(NQ)echo "  GET     $@"
+	$(Q)./build/download.py $(KOBO_KERNEL_URL) $(KOBO_KERNEL_ALTERNATIVE_URL) $(KOBO_KERNEL_MD5) $(DOWNLOAD_DIR)
+
+KOBOOTG_KERNEL_URL = https://download.xcsoar.org/contrib/kobo/kernel/kobootg-1.0.uImage
+KOBOOTG_KERNEL_ALTERNATIVE_URL = $(KOBOOTG_KERNEL_URL)
+KOBOOTG_KERNEL_MD5 = 7415607d93edb1426a10e278abc6919c
+KOBOOTG_KERNEL_DOWNLOAD = $(DOWNLOAD_DIR)/$(notdir $(KOBOOTG_KERNEL_URL))
+
+$(KOBOOTG_KERNEL_DOWNLOAD): | $(DOWNLOAD_DIR)/dirstamp
+	@$(NQ)echo "  GET     $@"
+	$(Q)./build/download.py $(KOBOOTG_KERNEL_URL) $(KOBOOTG_KERNEL_ALTERNATIVE_URL) $(KOBOOTG_KERNEL_MD5) $(DOWNLOAD_DIR)
+
+GLOHD_KERNEL_URL = https://download.xcsoar.org/contrib/kobo/kernel/glohd-1.0.uImage
+GLOHD_KERNEL_ALTERNATIVE_URL = $(GLOHD_KERNEL_URL)
+GLOHD_KERNEL_MD5 = a5492fc68304ee6c35d7069854d60454
+GLOHD_KERNEL_DOWNLOAD = $(DOWNLOAD_DIR)/$(notdir $(GLOHD_KERNEL_URL))
+
+$(GLOHD_KERNEL_DOWNLOAD): | $(DOWNLOAD_DIR)/dirstamp
+	@$(NQ)echo "  GET     $@"
+	$(Q)./build/download.py $(GLOHD_KERNEL_URL) $(GLOHD_KERNEL_ALTERNATIVE_URL) $(GLOHD_KERNEL_MD5) $(DOWNLOAD_DIR)
+
+GLOHDOTG_KERNEL_URL = https://download.xcsoar.org/contrib/kobo/kernel/glohdotg-1.0.uImage
+GLOHDOTG_KERNEL_ALTERNATIVE_URL = $(GLOHDOTG_KERNEL_URL)
+GLOHDOTG_KERNEL_MD5 = 8b2b90ab79db2493e6ec8871cd22d333
+GLOHDOTG_KERNEL_DOWNLOAD = $(DOWNLOAD_DIR)/$(notdir $(GLOHDOTG_KERNEL_URL))
+
+$(GLOHDOTG_KERNEL_DOWNLOAD): | $(DOWNLOAD_DIR)/dirstamp
+	@$(NQ)echo "  GET     $@"
+	$(Q)./build/download.py $(GLOHDOTG_KERNEL_URL) $(GLOHDOTG_KERNEL_ALTERNATIVE_URL) $(GLOHDOTG_KERNEL_MD5) $(DOWNLOAD_DIR)
+
+AURA2_KERNEL_URL = https://download.xcsoar.org/contrib/kobo/kernel/aura2-1.0.uImage
+AURA2_KERNEL_ALTERNATIVE_URL = $(AURA2_KERNEL_URL)
+AURA2_KERNEL_MD5 = c2d203577e27c6d3778d99bcf5143a7e
+AURA2_KERNEL_DOWNLOAD = $(DOWNLOAD_DIR)/$(notdir $(AURA2_KERNEL_URL))
+
+$(AURA2_KERNEL_DOWNLOAD): | $(DOWNLOAD_DIR)/dirstamp
+	@$(NQ)echo "  GET     $@"
+	$(Q)./build/download.py $(AURA2_KERNEL_URL) $(AURA2_KERNEL_ALTERNATIVE_URL) $(AURA2_KERNEL_MD5) $(DOWNLOAD_DIR)
+
+AURA2OTG_KERNEL_URL = https://download.xcsoar.org/contrib/kobo/kernel/aura2otg-1.0.uImage
+AURA2OTG_KERNEL_ALTERNATIVE_URL = $(AURA2OTG_KERNEL_URL)
+AURA2OTG_KERNEL_MD5 = 32f060b5cb37da6a47aea70005cfe5c1
+AURA2OTG_KERNEL_DOWNLOAD = $(DOWNLOAD_DIR)/$(notdir $(AURA2OTG_KERNEL_URL))
+
+$(AURA2OTG_KERNEL_DOWNLOAD): | $(DOWNLOAD_DIR)/dirstamp
+	@$(NQ)echo "  GET     $@"
+	$(Q)./build/download.py $(AURA2OTG_KERNEL_URL) $(AURA2OTG_KERNEL_ALTERNATIVE_URL) $(AURA2OTG_KERNEL_MD5) $(DOWNLOAD_DIR)
+
+CLARAHD_DRIVERS_URL = https://download.xcsoar.org/contrib/kobo/kernel/clarahd_drivers-1.0.tgz
+CLARAHD_DRIVERS_ALTERNATIVE_URL = $(CLARAHD_DRIVERS_URL)
+CLARAHD_DRIVERS_MD5 = 203e7ff4f850105a05fa10edde0b5c40
+CLARAHD_DRIVERS_DOWNLOAD = $(DOWNLOAD_DIR)/$(notdir $(CLARAHD_DRIVERS_URL))
+
+$(CLARAHD_DRIVERS_DOWNLOAD): | $(DOWNLOAD_DIR)/dirstamp
+	@$(NQ)echo "  GET     $@"
+	$(Q)./build/download.py $(CLARAHD_DRIVERS_URL) $(CLARAHD_DRIVERS_ALTERNATIVE_URL) $(CLARAHD_DRIVERS_MD5) $(DOWNLOAD_DIR)
 
 # /mnt/onboard/.kobo/KoboRoot.tgz is a file that is picked up by
 # /etc/init.d/rcS, extracted to / on each boot; we can use it to
@@ -99,19 +159,23 @@ $(TARGET_OUTPUT_DIR)/KoboRoot.tgz: $(XCSOAR_BIN) \
 	$(KOBO_MENU_BIN) $(KOBO_POWER_OFF_BIN) \
 	$(BITSTREAM_VERA_FILES) \
 	$(topdir)/kobo/inittab $(topdir)/kobo/rcS $(topdir)/kobo/udev.rules \
-	$(CA_DOWNLOAD)
+	$(CA_DOWNLOAD) \
+	$(KOBO_KERNEL_DOWNLOAD) $(KOBOOTG_KERNEL_DOWNLOAD) \
+	$(GLOHD_KERNEL_DOWNLOAD) $(GLOHDOTG_KERNEL_DOWNLOAD) \
+	$(AURA2_KERNEL_DOWNLOAD) $(AURA2OTG_KERNEL_DOWNLOAD) \
+	$(CLARAHD_DRIVERS_DOWNLOAD)
 	@$(NQ)echo "  TAR     $@"
 	$(Q)rm -rf $(@D)/KoboRoot
 	$(Q)install -m 0755 -d $(@D)/KoboRoot/etc/udev/rules.d $(@D)/KoboRoot/opt/xcsoar/bin $(@D)/KoboRoot/opt/xcsoar/lib/kernel $(@D)/KoboRoot/opt/xcsoar/share/fonts $(@D)/KoboRoot/etc/ssl/certs
 	$(Q)install -m 0755 $(XCSOAR_BIN) $(KOBO_MENU_BIN) $(KOBO_POWER_OFF_BIN) $(topdir)/kobo/rcS $(@D)/KoboRoot/opt/xcsoar/bin
 	$(Q)install -m 0755 --strip --strip-program=$(STRIP) $(THIRDPARTY_TOOL_FILES) $(@D)/KoboRoot/opt/xcsoar/bin
-	$(Q)if test -f $(KOBO_KERNEL_DIR)/uImage.kobo; then install -m 0644 $(KOBO_KERNEL_DIR)/uImage.kobo $(@D)/KoboRoot/opt/xcsoar/lib/kernel; fi
-	$(Q)if test -f $(KOBO_KERNEL_DIR)/uImage.otg; then install -m 0644 $(KOBO_KERNEL_DIR)/uImage.otg $(@D)/KoboRoot/opt/xcsoar/lib/kernel; fi
-	$(Q)if test -f $(KOBO_KERNEL_DIR)/uImage.glohd; then install -m 0644 $(KOBO_KERNEL_DIR)/uImage.glohd $(@D)/KoboRoot/opt/xcsoar/lib/kernel; fi
-	$(Q)if test -f $(KOBO_KERNEL_DIR)/uImage.glohd.otg; then install -m 0644 $(KOBO_KERNEL_DIR)/uImage.glohd.otg $(@D)/KoboRoot/opt/xcsoar/lib/kernel; fi
-	$(Q)if test -f $(KOBO_KERNEL_DIR)/uImage.aura2; then install -m 0644 $(KOBO_KERNEL_DIR)/uImage.aura2 $(@D)/KoboRoot/opt/xcsoar/lib/kernel; fi
-	$(Q)if test -f $(KOBO_KERNEL_DIR)/uImage.aura2.otg; then install -m 0644 $(KOBO_KERNEL_DIR)/uImage.aura2.otg $(@D)/KoboRoot/opt/xcsoar/lib/kernel; fi
-	$(Q)if test -f $(KOBO_KERNEL_DIR)/ClaraHD_OTG_Drivers.tgz; then tar -xzf $(KOBO_KERNEL_DIR)/ClaraHD_OTG_Drivers.tgz -C $(@D)/KoboRoot/opt/xcsoar/lib; fi
+	$(Q)if test -f $(KOBO_KERNEL_DOWNLOAD); then install -T -m 0644 $(KOBO_KERNEL_DOWNLOAD) $(@D)/KoboRoot/opt/xcsoar/lib/kernel/uImage.kobo; fi
+	$(Q)if test -f $(KOBOOTG_KERNEL_DOWNLOAD); then install -T -m 0644 $(KOBOOTG_KERNEL_DOWNLOAD) $(@D)/KoboRoot/opt/xcsoar/lib/kernel/uImage.otg; fi
+	$(Q)if test -f $(GLOHD_KERNEL_DOWNLOAD); then install -T -m 0644 $(GLOHD_KERNEL_DOWNLOAD) $(@D)/KoboRoot/opt/xcsoar/lib/kernel/uImage.glohd; fi
+	$(Q)if test -f $(GLOHDOTG_KERNEL_DOWNLOAD); then install -T -m 0644 $(GLOHDOTG_KERNEL_DOWNLOAD) $(@D)/KoboRoot/opt/xcsoar/lib/kernel/uImage.glohd.otg; fi
+	$(Q)if test -f $(AURA2_KERNEL_DOWNLOAD); then install -T -m 0644 $(AURA2_KERNEL_DOWNLOAD) $(@D)/KoboRoot/opt/xcsoar/lib/kernel/uImage.aura2; fi
+	$(Q)if test -f $(AURA2OTG_KERNEL_DOWNLOAD); then install -T -m 0644 $(AURA2OTG_KERNEL_DOWNLOAD) $(@D)/KoboRoot/opt/xcsoar/lib/kernel/uImage.aura2.otg; fi
+	$(Q)if test -f $(CLARAHD_DRIVERS_DOWNLOAD); then tar -xzf $(CLARAHD_DRIVERS_DOWNLOAD) -C $(@D)/KoboRoot/opt/xcsoar/lib; fi
 	$(Q)install -m 0644 $(topdir)/kobo/inittab $(@D)/KoboRoot/etc
 	$(Q)install -m 0644 $(topdir)/kobo/udev.rules $(@D)/KoboRoot/etc/udev/rules.d/99-xcsoar.rules
 	$(Q)install -m 0644 $(BITSTREAM_VERA_FILES) $(@D)/KoboRoot/opt/xcsoar/share/fonts
