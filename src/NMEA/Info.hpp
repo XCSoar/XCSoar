@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,18 +24,18 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_INFO_H
 #define XCSOAR_NMEA_INFO_H
 
-#include "GPSState.hpp"
+#include "NMEA/GPSState.hpp"
 #include "NMEA/Validity.hpp"
 #include "NMEA/ExternalSettings.hpp"
 #include "NMEA/Acceleration.hpp"
 #include "NMEA/Attitude.hpp"
-#include "SwitchState.hpp"
+#include "NMEA/SwitchState.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "time/Stamp.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Atmosphere/Temperature.hpp"
-#include "DeviceInfo.hpp"
+#include "NMEA/DeviceInfo.hpp"
 #include "FLARM/Data.hpp"
 #include "Geo/SpeedVector.hpp"
 
@@ -47,6 +47,7 @@ Copyright_License {
 #include <type_traits>
 
 /**
+ * @file
  * A struct that holds all the parsed data read from the connected devices
  */
 struct NMEAInfo {
