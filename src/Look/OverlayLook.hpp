@@ -36,6 +36,7 @@ struct OverlayLook {
   const Font *overlay_font;
 
   Pen crosshair_pen;
+  Pen crosshair_pen_alias;
 
   void Initialise(const Font &font, const Font &bold_font);
 };
