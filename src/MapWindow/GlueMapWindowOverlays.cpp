@@ -76,8 +76,31 @@ GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
 
   const auto center = render_projection.GetScreenOrigin();
 
-  canvas.DrawLine(center.At(20, 0), center.At(-20, 0));
-  canvas.DrawLine(center.At(0, 20), center.At(0, -20));
+  auto FullLength = Layout::FastScale(20);
+  auto HalfLength = Layout::FastScale(10);
+  auto EdgeLength = Layout::FastScale(30);
+
+  // Edges
+  canvas.DrawLine(center.At(FullLength, FullLength), center.At(HalfLength, FullLength));
+  canvas.DrawLine(center.At(FullLength, FullLength), center.At(FullLength, HalfLength));
+
+  canvas.DrawLine(center.At(-FullLength, FullLength), center.At(-HalfLength, FullLength));
+  canvas.DrawLine(center.At(-FullLength, FullLength), center.At(-FullLength, HalfLength));
+
+  canvas.DrawLine(center.At(-FullLength, -FullLength), center.At(-HalfLength, -FullLength));
+  canvas.DrawLine(center.At(-FullLength, -FullLength), center.At(-FullLength, -HalfLength));
+
+  canvas.DrawLine(center.At(FullLength, -FullLength), center.At(FullLength, -HalfLength));
+  canvas.DrawLine(center.At(FullLength, -FullLength), center.At(HalfLength, -FullLength));
+
+  // Crosshair
+  canvas.Select(look.overlay.crosshair_pen_alias);
+  canvas.DrawLine(center.At(0, -EdgeLength), center.At(0, -HalfLength));
+  canvas.DrawLine(center.At(0, EdgeLength), center.At(0, HalfLength));
+
+  canvas.DrawLine(center.At(-EdgeLength, 0), center.At(-HalfLength, 0));
+  canvas.DrawLine(center.At(EdgeLength, 0), center.At(HalfLength, 0));
+
 }
 
 void
