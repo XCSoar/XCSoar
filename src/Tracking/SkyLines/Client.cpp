@@ -82,7 +82,8 @@ SkyLinesTracking::Client::Open(SocketAddress _address)
 void
 SkyLinesTracking::Client::InternalClose() noexcept
 {
-  socket.Close();
+  if (socket.IsDefined())
+    socket.Close();
   socket_event.Abandon();
 
   const std::lock_guard<Mutex> lock(mutex);
