@@ -4,6 +4,8 @@
 #include "BufferedOutputStream.hxx"
 #include "OutputStream.hxx"
 
+#include <fmt/format.h>
+
 #include <cstdarg>
 
 #include <string.h>
@@ -90,6 +92,20 @@ BufferedOutputStream::Format(const char *fmt, ...)
 	}
 
 	buffer.Append(size);
+}
+
+void
+BufferedOutputStream::VFmt(fmt::string_view format_str, fmt::format_args args)
+{
+	/* TODO format into this object's buffer instead of allocating
+	   a new one */
+	fmt::memory_buffer b;
+#if FMT_VERSION >= 80000
+	fmt::vformat_to(std::back_inserter(b), format_str, args);
+#else
+	fmt::vformat_to(b, format_str, args);
+#endif
+	return Write(b.data(), b.size());
 }
 
 #ifdef _UNICODE

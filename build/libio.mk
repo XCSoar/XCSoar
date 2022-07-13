@@ -26,7 +26,7 @@ IO_SOURCES = \
 	$(IO_SRC_DIR)/ZipLineReader.cpp \
 	$(IO_SRC_DIR)/CSVLine.cpp
 
-IO_CPPFLAGS_INTERNAL = $(ZLIB_CPPFLAGS)
+IO_CPPFLAGS_INTERNAL = $(ZLIB_CPPFLAGS) $(FMT_CPPFLAGS)
 
 $(eval $(call link-library,io,IO))
 
