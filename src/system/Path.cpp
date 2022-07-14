@@ -169,12 +169,7 @@ Path::RelativeTo(Path parent) const noexcept
 bool
 Path::MatchesExtension(const_pointer extension) const noexcept
 {
-  size_t filename_length = StringLength(c_str());
-  size_t extension_length = StringLength(extension);
-
-  return filename_length > extension_length &&
-    StringIsEqualIgnoreCase(c_str() + filename_length - extension_length,
-                            extension);
+  return StringEndsWithIgnoreCase(c_str(), extension);
 }
 
 Path::const_pointer
