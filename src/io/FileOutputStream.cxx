@@ -381,15 +381,15 @@ FileOutputStream::RenameOrThrow(Path old_path, Path new_path) const
 }
 
 inline void
-FileOutputStream::Delete(Path path) const noexcept
+FileOutputStream::Delete(Path delete_path) const noexcept
 {
-	assert(path != nullptr);
+	assert(delete_path != nullptr);
 
 #ifdef _WIN32
-	DeleteFile(path.c_str());
+	DeleteFile(delete_path.c_str());
 #elif defined(__linux__)
-	unlinkat(directory_fd.Get(), path.c_str(), 0);
+	unlinkat(directory_fd.Get(), delete_path.c_str(), 0);
 #else
-	unlink(path.c_str());
+	unlink(delete_path.c_str());
 #endif
 }

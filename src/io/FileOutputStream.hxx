@@ -214,7 +214,7 @@ private:
 	}
 
 	void RenameOrThrow(Path old_path, Path new_path) const;
-	void Delete(Path path) const noexcept;
+	void Delete(Path delete_path) const noexcept;
 };
 
 #endif
