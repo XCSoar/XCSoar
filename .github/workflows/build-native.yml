@@ -1,0 +1,97 @@
+---
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - 'android/**'
+      - 'cloud/**'
+      - 'doc/**'
+      - 'fuzzer/**'
+      - 'ide/**'
+      - 'kobo/**'
+      - 'python/**'
+      - '.github/workflows/build-container.yml'
+      - '.github/workflows/build-android.yml'
+      - '.github/workflows/build-unix.yml'
+    branches:
+      - master
+
+  pull_request:
+    paths-ignore:
+      - 'android/**'
+      - 'cloud/**'
+      - 'doc/**'
+      - 'fuzzer/**'
+      - 'ide/**'
+      - 'kobo/**'
+      - 'python/**'
+      - '.github/workflows/build-container.yml'
+      - '.github/workflows/build-android.yml'
+      - '.github/workflows/build-unix.yml'
+    branches:
+      - master
+
+env:
+  TARGET: UNIX
+  TARGET_EXT: ''
+
+jobs:
+  build-ubuntu:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: set vars for pull request
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "DEBUG=y" >> $GITHUB_ENV
+          echo "TARGET_BIN=xcsoar" >> $GITHUB_ENV
+          echo "TARGET_FINAL=xcsoar-debug" >> $GITHUB_ENV
+      - name: set vars for push
+        if: github.event_name == 'push'
+        run: |
+          echo "DEBUG=n" >> $GITHUB_ENV
+          echo "TARGET_BIN=xcsoar" >> $GITHUB_ENV
+          echo "TARGET_FINAL=xcsoar" >> $GITHUB_ENV
+      - id: checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - id: cache-ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}
+      - name: find githash
+        run: |
+          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            make \
+            quilt \
+            g++ \
+            python3 \
+            librsvg2-bin xsltproc \
+            imagemagick gettext ffmpeg \
+            zlib1g-dev \
+            libsodium-dev \
+            libfreetype6-dev \
+            libpng-dev libjpeg-dev \
+            libtiff5-dev libgeotiff-dev \
+            libc-ares-dev \
+            libcurl4-gnutls-dev \
+            libc-ares-dev \
+            liblua5.4-dev \
+            libxml-parser-perl \
+            libasound2-dev \
+            libgles2-mesa-dev libegl1-mesa-dev
+
+      - name: Compile XCSoar
+        run: |
+          make TARGET=${{env.TARGET }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything check
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}${{ env.TARGET_EXT }}
+          path: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}${{ env.TARGET_EXT }}
