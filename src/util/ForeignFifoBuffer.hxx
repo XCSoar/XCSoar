@@ -210,9 +210,9 @@ public:
 
 	constexpr size_type Read(pointer p, size_type n) noexcept {
 		auto range = Read();
-		if (n > range.size)
-			n = range.size;
-		std::copy_n(range.data, n, p);
+		if (n > range.size())
+			n = range.size();
+		std::copy_n(range.data(), n, p);
 		Consume(n);
 		return n;
 	}
