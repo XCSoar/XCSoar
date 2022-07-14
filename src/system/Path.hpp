@@ -135,20 +135,20 @@ public:
   bool EndsWithIgnoreCase(const_pointer needle) const noexcept;
 
   /**
-   * Returns the filename extension (starting with a dot) or nullptr
-   * if the base name doesn't have one.
+   * Returns the filename suffix (starting with a dot) or nullptr if
+   * the base name doesn't have one.
    */
   [[gnu::pure]]
-  const_pointer GetExtension() const noexcept;
+  const_pointer GetSuffix() const noexcept;
 
   /**
-   * Return the path with its filename extension replaced with the given one.
+   * Return the path with its filename suffix replaced with the given one.
    *
-   * @param new_extension the new filename extension (must start with
+   * @param new_suffix the new filename suffix (must start with
    * a dot)
    */
   [[gnu::pure]]
-  AllocatedPath WithExtension(const_pointer new_extension) const noexcept;
+  AllocatedPath WithSuffix(const_pointer new_suffix) const noexcept;
 };
 
 /**
@@ -304,13 +304,13 @@ public:
   }
 
   [[gnu::pure]]
-  const_pointer GetExtension() const noexcept {
-    return Path(*this).GetExtension();
+  const_pointer GetSuffix() const noexcept {
+    return Path{*this}.GetSuffix();
   }
 
   [[gnu::pure]]
-  AllocatedPath WithExtension(const_pointer new_extension) const noexcept {
-    return Path(*this).WithExtension(new_extension);
+  AllocatedPath WithSuffix(const_pointer new_suffix) const noexcept {
+    return Path{*this}.WithSuffix(new_suffix);
   }
 };
 

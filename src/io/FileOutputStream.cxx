@@ -88,7 +88,7 @@ FileOutputStream::OpenCreate(bool visible)
 {
 	if (!visible) {
 		/* attempt to create a temporary file */
-		tmp_path = path.WithExtension(_T(".tmp"));
+		tmp_path = path.WithSuffix(_T(".tmp"));
 		Delete(tmp_path);
 
 		handle = CreateFile(tmp_path.c_str(), GENERIC_WRITE, 0, nullptr,
