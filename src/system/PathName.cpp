@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "system/PathName.hpp"
-#include "util/StringCompare.hxx"
 #include "util/StringAPI.hxx"
 
 gcc_pure
@@ -55,29 +54,3 @@ ReplaceBaseName(TCHAR *path, const TCHAR *new_base)
     q = path;
   _tcscpy(q, new_base);
 }
-
-bool
-MatchesExtension(const TCHAR *filename, const TCHAR *extension)
-{
-  size_t filename_length = _tcslen(filename);
-  size_t extension_length = _tcslen(extension);
-
-  return filename_length > extension_length &&
-    StringIsEqualIgnoreCase(filename + filename_length - extension_length,
-                            extension);
-}
-
-#ifdef _UNICODE
-
-bool
-MatchesExtension(const char *filename, const char *extension)
-{
-  size_t filename_length = strlen(filename);
-  size_t extension_length = strlen(extension);
-
-  return filename_length > extension_length &&
-    StringIsEqualIgnoreCase(filename + filename_length - extension_length,
-                            extension);
-}
-
-#endif

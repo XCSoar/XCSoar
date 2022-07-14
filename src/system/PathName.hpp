@@ -39,26 +39,4 @@ Copyright_License {
 void
 ReplaceBaseName(TCHAR *path, const TCHAR *new_base);
 
-/**
- * Checks whether the given filename matches the given extension
- * @param filename Filename to check
- * @param extension Extension to check against (e.g. .xcm)
- * @return True if filename matches the given extension, False otherwise
- */
-gcc_pure
-bool MatchesExtension(const TCHAR *filename, const TCHAR *extension);
-
-#ifdef _UNICODE
-
-/**
- * Checks whether the given filename matches the given extension
- * @param filename Filename to check
- * @param extension Extension to check against (e.g. .xcm)
- * @return True if filename matches the given extension, False otherwise
- */
-gcc_pure
-bool MatchesExtension(const char *filename, const char *extension);
-
-#endif
-
 #endif

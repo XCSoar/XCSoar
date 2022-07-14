@@ -27,6 +27,7 @@ Copyright_License {
 #include "system/Args.hpp"
 #include "system/PathName.hpp"
 #include "Computer/Settings.hpp"
+#include "util/StringCompare.hxx"
 
 DebugReplay::DebugReplay()
   :glide_polar(1)
@@ -68,7 +69,7 @@ CreateDebugReplay(Args &args)
 {
   DebugReplay *replay;
 
-  if (!args.IsEmpty() && MatchesExtension(args.PeekNext(), ".igc")) {
+  if (!args.IsEmpty() && StringEndsWithIgnoreCase(args.PeekNext(), ".igc")) {
     replay = DebugReplayIGC::Create(args.ExpectNextPath());
   } else {
     const auto driver_name = args.ExpectNextT();
