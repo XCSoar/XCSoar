@@ -56,11 +56,11 @@ static UncompressedImage
 DecompressImageFile(Path path)
 {
 #ifdef USE_LIBTIFF
-  if (path.MatchesExtension(_T(".tif")) || path.MatchesExtension(_T(".tiff")))
+  if (path.EndsWithIgnoreCase(_T(".tif")) || path.EndsWithIgnoreCase(_T(".tiff")))
     return LoadTiff(path);
 #endif
 
-  if (path.MatchesExtension(_T(".png")))
+  if (path.EndsWithIgnoreCase(_T(".png")))
     return LoadPNG(path);
 
   return LoadJPEGFile(path);

@@ -33,15 +33,15 @@ std::unique_ptr<TaskFile>
 TaskFile::Create(Path path)
 {
   // If XCSoar task file -> return new TaskFileXCSoar
-  if (path.MatchesExtension(_T(".tsk")))
+  if (path.EndsWithIgnoreCase(_T(".tsk")))
     return std::make_unique<TaskFileXCSoar>(path);
 
   // If SeeYou task file -> return new TaskFileSeeYou
-  if (path.MatchesExtension(_T(".cup")))
+  if (path.EndsWithIgnoreCase(_T(".cup")))
     return std::make_unique<TaskFileSeeYou>(path);
 
   // If IGC file -> return new TaskFileIGC
-  if (path.MatchesExtension(_T(".igc")))
+  if (path.EndsWithIgnoreCase(_T(".igc")))
     return std::make_unique<TaskFileIGC>(path);
 
   // unknown task file type

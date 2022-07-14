@@ -132,7 +132,7 @@ public:
   Path RelativeTo(Path parent) const noexcept;
 
   [[gnu::pure]]
-  bool MatchesExtension(const_pointer extension) const noexcept;
+  bool EndsWithIgnoreCase(const_pointer needle) const noexcept;
 
   /**
    * Returns the filename extension (starting with a dot) or nullptr
@@ -299,8 +299,8 @@ public:
   }
 
   [[gnu::pure]]
-  bool MatchesExtension(const_pointer extension) const noexcept {
-    return Path(*this).MatchesExtension(extension);
+  bool EndsWithIgnoreCase(const_pointer needle) const noexcept {
+    return Path{*this}.EndsWithIgnoreCase(needle);
   }
 
   [[gnu::pure]]

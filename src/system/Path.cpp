@@ -167,9 +167,9 @@ Path::RelativeTo(Path parent) const noexcept
 }
 
 bool
-Path::MatchesExtension(const_pointer extension) const noexcept
+Path::EndsWithIgnoreCase(const_pointer needle) const noexcept
 {
-  return StringEndsWithIgnoreCase(c_str(), extension);
+  return StringEndsWithIgnoreCase(c_str(), needle);
 }
 
 Path::const_pointer
