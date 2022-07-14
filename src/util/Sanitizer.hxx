@@ -32,8 +32,6 @@
 
 #pragma once
 
-/** \file */
-
 constexpr bool
 HaveAddressSanitizer() noexcept
 {

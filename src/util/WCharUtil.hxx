@@ -30,8 +30,6 @@
 #ifndef WCHAR_UTIL_HXX
 #define WCHAR_UTIL_HXX
 
-/** \file */
-
 #include <wchar.h>
 
 constexpr bool

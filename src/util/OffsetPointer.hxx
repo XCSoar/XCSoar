@@ -29,8 +29,6 @@
 
 #pragma once
 
-/** \file */
-
 #include <cstddef>
 
 /**

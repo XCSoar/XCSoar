@@ -30,8 +30,6 @@
 #ifndef STRING_STRIP_HXX
 #define STRING_STRIP_HXX
 
-/** \file */
-
 #include <cstddef>
 
 #ifdef _UNICODE

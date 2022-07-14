@@ -30,8 +30,6 @@
 #ifndef STRING_API_HXX
 #define STRING_API_HXX
 
-/** \file */
-
 #include <cstring>
 
 #ifdef _UNICODE

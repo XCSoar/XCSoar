@@ -30,8 +30,6 @@
 #ifndef ASCII_HXX
 #define ASCII_HXX
 
-/** \file */
-
 #include <cstddef>
 
 #ifdef _UNICODE

@@ -28,7 +28,6 @@ Copyright_License {
 #include "Validity.hpp"
 
 /**
- * @file
  * A container holding the aircraft current attitude state.
  */
 struct AttitudeState

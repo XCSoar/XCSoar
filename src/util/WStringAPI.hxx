@@ -30,8 +30,6 @@
 #ifndef WSTRING_API_HXX
 #define WSTRING_API_HXX
 
-/** \file */
-
 #include <cwchar>
 
 [[gnu::pure]] [[gnu::nonnull]]

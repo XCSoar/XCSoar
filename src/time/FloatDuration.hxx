@@ -33,7 +33,6 @@
 #include <cmath>
 
 /**
- * @file
  * A specialization of std::chrono::duration which stores the duration
  * in seconds in a double-precision floating point variable.
  */

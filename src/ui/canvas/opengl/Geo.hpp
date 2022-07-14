@@ -23,8 +23,6 @@ Copyright_License {
 
 #pragma once
 
-/** \file */
-
 #include <glm/fwd.hpp>
 
 struct GeoPoint;

@@ -30,8 +30,6 @@
 #ifndef STATIC_STRING_HPP
 #define STATIC_STRING_HPP
 
-/** \file */
-
 #include "StringBuffer.hxx"
 #include "StringAPI.hxx"
 #include "StringUtil.hpp"

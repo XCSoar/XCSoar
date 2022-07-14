@@ -37,7 +37,6 @@ Copyright_License {
 #include <compare>
 
 /**
- * @file
  * Container class for angular variables.
  */
 class Angle

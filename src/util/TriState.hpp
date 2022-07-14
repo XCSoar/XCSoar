@@ -30,8 +30,6 @@
 #ifndef TRI_STATE_HPP
 #define TRI_STATE_HPP
 
-/** \file */
-
 #include <cstdint>
 
 #ifdef _WIN32

@@ -30,8 +30,6 @@
 #ifndef EXCEPTION_HXX
 #define EXCEPTION_HXX
 
-/** \file */
-
 #include <exception>
 #include <string>
 #include <utility>
