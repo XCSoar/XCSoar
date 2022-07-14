@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "event/SocketEvent.hxx"
 #include "net/AllocatedSocketAddress.hxx"
-#include "net/UniqueSocketDescriptor.hxx"
 #include "event/net/cares/SimpleResolver.hxx"
 #include "thread/Mutex.hxx"
 #include "util/Cancellable.hxx"
@@ -61,7 +60,6 @@ class Client final : Cares::SimpleHandler {
   std::optional<Cares::SimpleResolver> resolver;
 
   AllocatedSocketAddress address;
-  UniqueSocketDescriptor socket;
   SocketEvent socket_event;
 
 public:
@@ -89,13 +87,13 @@ public:
 
   bool IsDefined() const {
     const std::lock_guard<Mutex> lock(mutex);
-    return resolver || socket.IsDefined();
+    return resolver || socket_event.IsDefined();
   }
 
   gcc_pure
   bool IsConnected() const {
     const std::lock_guard<Mutex> lock(mutex);
-    return socket.IsDefined();
+    return socket_event.IsDefined();
   }
 
   uint64_t GetKey() const {
@@ -113,7 +111,7 @@ public:
   template<typename P>
   bool SendPacket(const P &packet) {
     const std::lock_guard<Mutex> lock(mutex);
-    return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
+    return GetSocket().Write(&packet, sizeof(packet), address) == sizeof(packet);
   }
 
   void SendFix(const NMEAInfo &basic);
@@ -129,6 +127,10 @@ public:
   void SendUserNameRequest(uint32_t user_id);
 
 private:
+  SocketDescriptor GetSocket() noexcept {
+    return socket_event.GetSocket();
+  }
+
   void InternalClose() noexcept;
 
   void OnTrafficReceived(const TrafficResponsePacket &packet, size_t length);

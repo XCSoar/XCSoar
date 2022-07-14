@@ -32,6 +32,7 @@ Copyright_License {
 #include "util/CRC.hpp"
 #include "event/Call.hxx"
 #include "net/StaticSocketAddress.hxx"
+#include "net/UniqueSocketDescriptor.hxx"
 #include "util/UTF8.hpp"
 #include "util/ConvertString.hpp"
 
@@ -59,17 +60,15 @@ SkyLinesTracking::Client::Open(SocketAddress _address)
 
   address = _address;
 
-  {
-    const std::lock_guard<Mutex> lock(mutex);
-    if (!socket.Create(address.GetFamily(), SOCK_DGRAM, 0))
-      return false;
+  UniqueSocketDescriptor socket;
+  if (!socket.Create(address.GetFamily(), SOCK_DGRAM, 0))
+    return false;
 
-    // TODO: bind?
-  }
+  // TODO: bind?
 
   if (handler != nullptr) {
-    BlockingCall(GetEventLoop(), [this](){
-      socket_event.Open(socket);
+    BlockingCall(GetEventLoop(), [&socket, this](){
+      socket_event.Open(socket.Release());
       socket_event.ScheduleRead();
     });
 
@@ -82,11 +81,8 @@ SkyLinesTracking::Client::Open(SocketAddress _address)
 void
 SkyLinesTracking::Client::InternalClose() noexcept
 {
-  if (socket.IsDefined())
-    socket.Close();
-  socket_event.Abandon();
-
   const std::lock_guard<Mutex> lock(mutex);
+  socket_event.Close();
   resolver.reset();
 }
 
@@ -291,7 +287,7 @@ SkyLinesTracking::Client::OnSocketReady(unsigned) noexcept
   ssize_t nbytes;
   StaticSocketAddress source_address;
 
-  while ((nbytes = socket.Read(buffer, sizeof(buffer), source_address)) > 0)
+  while ((nbytes = GetSocket().Read(buffer, sizeof(buffer), source_address)) > 0)
     if (source_address == address)
       OnDatagramReceived(buffer, nbytes);
 
