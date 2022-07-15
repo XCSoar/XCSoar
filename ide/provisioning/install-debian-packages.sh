@@ -53,11 +53,11 @@ apt-get install ${APTOPTS[*]} make g++ \
 echo
 
 echo Installing dependencies for creating Debian package
-  apt-get install ${APTOPTS[*]} dpkg-dev \
-    debhelper \
-    texlive-lang-english \
-    libio-captureoutput-perl \
-    build-essential 
+apt-get install ${APTOPTS[*]} dpkg-dev \
+  debhelper \
+  texlive-lang-english \
+  libio-captureoutput-perl \
+  build-essential
 echo
 
 echo Installing dependencies for compiling with LLVM / Clang...
