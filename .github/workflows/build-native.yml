@@ -130,4 +130,7 @@ jobs:
 
       - name: Compile XCSoar
         run: |
-          make TARGET=${{env.TARGET }} USE_CCACHE=y V=2 everything check
+          make TARGET=${{env.TARGET }} USE_CCACHE=y \
+            USE_THIRDPARTY_LIBS=n \
+            V=2 \
+            everything check
