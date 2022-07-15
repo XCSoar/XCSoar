@@ -152,8 +152,8 @@ WAV_SOUNDS = $(wildcard Data/sound/*.wav)
 RAW_SOUNDS = $(patsubst Data/sound/%.wav,$(DATA)/sound/%.raw,$(WAV_SOUNDS))
 
 $(RAW_SOUNDS): $(DATA)/sound/%.raw: Data/sound/%.wav | $(DATA)/sound/dirstamp
-	@$(NQ)echo "  FFMPEG    $@"
-	$(Q)ffmpeg -y -v 0  -i $< -f s16le -ar 44100 -ac 1 -acodec pcm_s16le $@
+	@$(NQ)echo "  SOX     $@"
+	$(Q)sox -V1 $< --bits 16 --rate 44100 --channels 1 $@
 
 endif
 endif

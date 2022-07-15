@@ -79,13 +79,13 @@ The following is needed for all targets:
 
 -  Perl
 
--  FFmpeg
+-  `SoX <http://sox.sourceforge.net/>`__
 
 The following command installs these on Debian::
 
   sudo apt-get install make \
       librsvg2-bin xsltproc \
-      imagemagick gettext ffmpeg \
+      imagemagick gettext sox \
       git quilt zip \
       m4 automake
 
@@ -270,7 +270,7 @@ Compiling for macOS (with Homebrew)
 
 Install the required Homebrew packages::
 
-  brew install automake autoconf libtool imagemagick ffmpeg \
+  brew install automake autoconf libtool imagemagick sox \
       librsvg quilt pkg-config
 
 Then compile::

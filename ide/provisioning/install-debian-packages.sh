@@ -13,7 +13,7 @@ apt-get update
 echo Installing base dependencies...
 apt-get install ${APTOPTS[*]} make \
   librsvg2-bin xsltproc \
-  imagemagick gettext ffmpeg \
+  imagemagick gettext sox \
   git quilt zip \
   m4 automake wget \
   pkg-config cmake ninja-build ccache

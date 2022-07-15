@@ -16,7 +16,7 @@ Build-Depends: debhelper (>= 12~),
  libc-ares-dev,
  liblua5.4-dev,
  librsvg2-bin, imagemagick (>= 7:6.4), xsltproc,
- ffmpeg,
+ sox,
  gettext
 Standards-Version: 3.9.1.0
 Homepage: https://xcsoar.org/

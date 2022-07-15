@@ -72,7 +72,7 @@ jobs:
             g++ \
             python3 \
             librsvg2-bin xsltproc \
-            imagemagick gettext ffmpeg \
+            imagemagick gettext sox \
             zlib1g-dev \
             libsodium-dev \
             libfreetype6-dev \
@@ -119,7 +119,7 @@ jobs:
             make \
             quilt \
             librsvg \
-            imagemagick gettext ffmpeg \
+            imagemagick gettext sox \
             sdl2 \
             libsodium \
             freetype \
