@@ -14,6 +14,10 @@ OPENGL ?= y
 else ifeq ($(TARGET_IS_IOS),y)
 OPENGL ?= y
 
+# macOS has deprecated OpenGL, so let's use software rendering
+else ifeq ($(TARGET_IS_DARWIN),y)
+OPENGL ?= n
+
 # the Cubieboard uses EGL + GL/ES
 else ifeq ($(TARGET_IS_CUBIE),y)
 OPENGL ?= y
