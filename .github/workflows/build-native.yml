@@ -88,7 +88,7 @@ jobs:
 
       - name: Compile XCSoar
         run: |
-          make TARGET=${{env.TARGET }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything check
+          make -j$(nproc) TARGET=${{env.TARGET }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything check
 
       - name: upload artifact
         uses: actions/upload-artifact@v2
@@ -131,7 +131,7 @@ jobs:
 
       - name: Compile XCSoar
         run: |
-          make TARGET=${{env.TARGET }} USE_CCACHE=y \
+          make -j$(sysctl -n hw.logicalcpu) TARGET=${{env.TARGET }} USE_CCACHE=y \
             USE_THIRDPARTY_LIBS=n \
             V=2 \
             everything check
