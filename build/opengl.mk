@@ -1,7 +1,6 @@
 ifeq ($(TARGET),ANDROID)
 # Android uses OpenGL/ES 2.0
 OPENGL = y
-GLES2 = y
 
 # the Kobo doesn't have OpenGL support
 else ifeq ($(TARGET_IS_KOBO),y)
@@ -10,17 +9,14 @@ OPENGL = n
 # the Raspberry Pi uses EGL + GL/ES
 else ifeq ($(TARGET_IS_PI),y)
 OPENGL ?= y
-GLES2 ?= y
 
 # iOS uses GL/ES 2.0
 else ifeq ($(TARGET_IS_IOS),y)
 OPENGL ?= y
-GLES2 ?= y
 
 # the Cubieboard uses EGL + GL/ES
 else ifeq ($(TARGET_IS_CUBIE),y)
 OPENGL ?= y
-GLES2 ?= y
 
 # UNIX/Linux defaults to OpenGL
 else ifeq ($(TARGET),UNIX)
