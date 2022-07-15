@@ -87,8 +87,7 @@ The following command installs these on Debian::
       librsvg2-bin xsltproc \
       imagemagick gettext ffmpeg \
       git quilt zip \
-      m4 automake \
-      ttf-bitstream-vera fakeroot
+      m4 automake
 
 Target-specific Build Instructions
 ----------------------------------
@@ -331,7 +330,10 @@ To compile XCSoar, run::
 To build the kobo install file ``KoboRoot.tgz``, you need the following
 Debian packages::
 
-  sudo apt-get install fakeroot ttf-bitstream-vera python3-setuptools
+  sudo apt-get install \
+      fakeroot \
+      python3-setuptools \
+      ttf-bitstream-vera
 
 Then compile using this command::
 
