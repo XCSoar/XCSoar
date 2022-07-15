@@ -95,3 +95,35 @@ jobs:
         with:
           name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}${{ env.TARGET_EXT }}
           path: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}${{ env.TARGET_EXT }}
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - id: checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - id: cache-ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: macos
+
+      - name: Install dependencies
+        run: |
+          brew install \
+            make \
+            quilt \
+            librsvg \
+            imagemagick gettext ffmpeg \
+            libsodium \
+            freetype \
+            libpng libjpeg-turbo \
+            libtiff libgeotiff \
+            c-ares \
+            curl \
+            lua
+
+      - name: Compile XCSoar
+        run: |
+          make TARGET=${{env.TARGET }} USE_CCACHE=y V=2 everything check
