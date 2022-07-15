@@ -120,10 +120,11 @@ jobs:
             quilt \
             librsvg \
             imagemagick gettext ffmpeg \
+            sdl2 \
             libsodium \
             freetype \
             libpng libjpeg-turbo \
-            libtiff libgeotiff \
+            libtiff libgeotiff proj \
             c-ares \
             curl \
             lua
