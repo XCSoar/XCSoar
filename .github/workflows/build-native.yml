@@ -131,7 +131,7 @@ jobs:
 
       - name: Compile XCSoar
         run: |
-          make -j$(sysctl -n hw.logicalcpu) TARGET=${{env.TARGET }} USE_CCACHE=y \
+          gmake -j$(sysctl -n hw.logicalcpu) TARGET=${{env.TARGET }} USE_CCACHE=y \
             USE_THIRDPARTY_LIBS=n \
             V=2 \
             everything check
