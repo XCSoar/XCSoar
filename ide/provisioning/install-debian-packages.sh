@@ -16,7 +16,6 @@ apt-get install ${APTOPTS[*]} make \
   imagemagick gettext ffmpeg \
   git quilt zip \
   m4 automake wget \
-  ttf-bitstream-vera fakeroot \
   pkg-config cmake ninja-build ccache
 echo
 
@@ -77,6 +76,13 @@ echo
 
 echo Installing PC/WIN64 dependencies...
 apt-get install ${APTOPTS[*]} g++-mingw-w64
+echo
+
+echo Installing Kobo dependencies...
+apt-get install ${APTOPTS[*]} \
+    fakeroot \
+    python3-setuptools \
+    ttf-bitstream-vera
 echo
 
 echo Installing dependencies for the Android target, not including SDK / NDK...
