@@ -83,7 +83,7 @@ The following is needed for all targets:
 
 The following command installs these on Debian::
 
-  sudo apt install make \
+  sudo apt-get install make \
       librsvg2-bin xsltproc \
       imagemagick gettext ffmpeg \
       git quilt zip \
@@ -126,7 +126,7 @@ similar operating systems:
 
 The following command installs these on Debian::
 
-  sudo apt install make g++  zlib1g-dev \
+  sudo apt-get install make g++  zlib1g-dev \
       libsodium-dev \
       libfreetype6-dev \
       libpng-dev libjpeg-dev \
@@ -172,7 +172,7 @@ For Android, you need:
 
 On Debian::
   
-  sudo apt install default-jdk-headless vorbis-tools adb
+  sudo apt-get install default-jdk-headless vorbis-tools adb
 
 The required Android SDK components are:
 
@@ -227,7 +227,7 @@ To cross-compile to (desktop) Windows, you need
 
 The following command installs it on Debian::
 
-  sudo apt install g++-mingw-w64
+  sudo apt-get install g++-mingw-w64
 
 To compile for 32 bit Windows, run::
 
@@ -283,7 +283,7 @@ Compiling on the Raspberry Pi 4
 
 Install additional dependencies::
 
-  sudo apt install libdrm-dev libgbm-dev \
+  sudo apt-get install libdrm-dev libgbm-dev \
       libgles2-mesa-dev \
       libinput-dev
 
@@ -331,7 +331,7 @@ To compile XCSoar, run::
 To build the kobo install file ``KoboRoot.tgz``, you need the following
 Debian packages::
 
-  sudo apt install fakeroot ttf-bitstream-vera python3-setuptools
+  sudo apt-get install fakeroot ttf-bitstream-vera python3-setuptools
 
 Then compile using this command::
 
@@ -403,7 +403,7 @@ European languages.
 
 The following command installs these on Debian::
 
-  sudo apt install texlive \
+  sudo apt-get install texlive \
       texlive-latex-extra \
       texlive-luatex \
       texlive-lang-french \
@@ -466,7 +466,7 @@ To speed up the compilation of XCSoar we can use ``ccache`` to cache the
 object files for us. All we have to do is install ccache and add
 ``USE_CCACHE=y`` to the make command line::
 
-  sudo apt install ccache
+  sudo apt-get install ccache
   make TARGET=UNIX USE_CCACHE=y
 
 Using a build VM with Vagrant
