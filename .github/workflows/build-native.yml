@@ -98,6 +98,10 @@ jobs:
 
   build-macos:
     runs-on: macos-latest
+
+    env:
+      TARGET: OSX64
+
     steps:
       - id: checkout
         uses: actions/checkout@v3
