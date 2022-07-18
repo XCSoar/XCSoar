@@ -35,6 +35,10 @@
 
 #include <cstdint>
 
+/**
+ * \file
+ */
+
 #if defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
 /* well-known little-endian */
 #  define IS_LITTLE_ENDIAN true

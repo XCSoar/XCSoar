@@ -40,6 +40,10 @@
 #include <type_traits>
 #include <utility>
 
+/**
+ * \file
+ */
+
 struct IntrusiveListNode {
 	IntrusiveListNode *next, *prev;
 };

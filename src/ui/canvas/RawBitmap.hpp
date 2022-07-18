@@ -1,5 +1,5 @@
 /**
- * @file STScreenBuffer.h
+ * @file 
  * @details Class for pixel working with images. One could get access
  * to image bits using this library or create custom image.
  * @author Vassili Philippov (vasja@spbteam.com)

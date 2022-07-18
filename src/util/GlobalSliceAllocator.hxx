@@ -32,6 +32,10 @@
 
 #include "SliceAllocator.hxx"
 
+/**
+ * \file
+ */
+
 template<typename T, unsigned size>
 SliceAllocator<T, size> GlobalSliceAllocator<T, size>::allocator;
 

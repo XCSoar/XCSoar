@@ -41,6 +41,7 @@
 #include <cassert>
 
 /**
+ * @file
  * A simple LRU cache.  Item lookup is done with a hash table.  No
  * dynamic allocation; all items are allocated statically inside this
  * class.

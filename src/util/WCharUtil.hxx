@@ -32,6 +32,10 @@
 
 #include <wchar.h>
 
+/**
+ * \file
+ */
+
 constexpr bool
 IsASCII(const wchar_t ch) noexcept
 {

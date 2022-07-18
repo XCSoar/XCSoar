@@ -33,6 +33,7 @@
 #include <cstddef>
 
 /**
+ * @file
  * Offset the given pointer by the specified number of bytes.
  */
 constexpr void *

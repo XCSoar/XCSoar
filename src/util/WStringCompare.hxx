@@ -36,6 +36,10 @@
 
 #include <wchar.h>
 
+/**
+ * \file
+ */
+
 [[gnu::pure]] [[gnu::nonnull]]
 static inline bool
 StringIsEmpty(const wchar_t *string) noexcept

@@ -33,6 +33,7 @@
 #include <utility>
 
 /**
+ * @file
  * This object stores a function pointer wrapping a method, and a
  * reference to an instance of the method's class.  It can be used to
  * wrap instance methods as callback functions.

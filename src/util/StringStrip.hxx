@@ -37,6 +37,10 @@
 #endif
 
 /**
+ * \file
+ */
+
+/**
  * Skips whitespace at the beginning of the string, and returns the
  * first non-whitespace character.  If the string has no
  * non-whitespace characters, then a pointer to the NULL terminator is

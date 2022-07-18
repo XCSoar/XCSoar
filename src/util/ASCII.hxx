@@ -37,6 +37,7 @@
 #endif
 
 /**
+ * @file
  * Copy all ASCII characters to the destination string
  * (i.e. 0x01..0x7f), ignoring the others.  In the worst case, the
  * destination buffer must be as large as the source buffer.  Can be

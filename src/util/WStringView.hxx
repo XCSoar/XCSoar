@@ -34,6 +34,10 @@
 
 #include <wchar.h>
 
+/**
+ * \file
+ */
+
 struct WStringView : BasicStringView<wchar_t> {
 	using BasicStringView::BasicStringView;
 

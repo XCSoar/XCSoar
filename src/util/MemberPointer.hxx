@@ -32,6 +32,10 @@
 
 #pragma once
 
+/**
+ * \file
+ */
+
 template<typename T>
 struct MemberPointerHelper;
 

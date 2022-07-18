@@ -39,6 +39,10 @@
 #include <type_traits>
 #include <utility>
 
+/**
+ * \file
+ */
+
 struct IntrusiveForwardListNode {
 	IntrusiveForwardListNode *next = nullptr;
 };

@@ -35,6 +35,10 @@
 #include <cassert>
 #include <cstddef>
 
+/**
+ * \file
+ */
+
 template<bool enable> class OptionalCounter;
 
 template<>

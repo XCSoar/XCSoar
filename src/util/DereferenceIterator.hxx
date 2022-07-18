@@ -34,6 +34,7 @@
 #include <type_traits>
 
 /**
+ * @file
  * An iterator wrapper that dereferences the values returned by the
  * original iterator.
  */

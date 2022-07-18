@@ -33,6 +33,10 @@
 #ifdef _UNICODE
 #include "WStringView.hxx"
 
+/**
+ * \file
+ */
+
 struct TStringView : WStringView {
 	using WStringView::WStringView;
 

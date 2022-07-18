@@ -35,6 +35,10 @@
 
 #include <stdio.h>
 
+/**
+ * \file
+ */
+
 template<typename... Args>
 static inline std::runtime_error
 FormatRuntimeError(const char *fmt, Args&&... args) noexcept

@@ -34,6 +34,10 @@
 
 #include <wchar.h>
 
+/**
+ * \file
+ */
+
 [[gnu::nonnull]]
 void
 CopyASCII(wchar_t *dest, const wchar_t *src) noexcept;

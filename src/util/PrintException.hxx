@@ -36,6 +36,10 @@
 #include <exception>
 
 /**
+ * \file
+ */
+
+/**
  * Print this exception (and its nested exceptions, if any) to stderr.
  */
 void

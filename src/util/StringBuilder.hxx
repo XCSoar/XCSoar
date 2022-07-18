@@ -34,6 +34,7 @@
 #include <span>
 
 /**
+ * @file
  * Fills a string buffer incrementally by appending more data to the
  * end, truncating the string if the buffer is full.
  */

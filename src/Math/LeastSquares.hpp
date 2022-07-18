@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -41,12 +41,12 @@ Copyright_License {
 // Boston, MA  02111-1307, USA.
 
 /**
+ * @file
  * Implements a simple linear least squares best fit routine.
- * @file leastsqs.h
  */
 
-#ifndef _LEASTSQS_H
-#define _LEASTSQS_H
+#ifndef _LEASTSQUARES_HPP
+#define _LEASTSQUARES_HPP
 
 #include "XYDataStore.hpp"
 #include "Angle.hpp"
@@ -225,4 +225,4 @@ protected:
 
 static_assert(std::is_trivial<LeastSquares>::value, "type is not trivial");
 
-#endif // _LEASTSQS_H
+#endif // LEASTSQUARES_HPP

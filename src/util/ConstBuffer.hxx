@@ -33,6 +33,10 @@
 #include <cstddef>
 #include <span>
 
+/**
+ * \file
+ */
+
 template<typename T>
 struct ConstBuffer;
 

@@ -37,6 +37,10 @@
 #include <optional>
 
 /**
+ * \file
+ */
+
+/**
  * Parse a string incrementally.
  */
 template<typename T=char>

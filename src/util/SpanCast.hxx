@@ -37,6 +37,7 @@
 #include <string_view>
 
 /**
+ * @file
  * Cast a std::span<std::byte> to a std::span<T>, rounding down to the
  * next multiple of T's size.
  */

@@ -32,6 +32,10 @@
 
 #include <cwchar>
 
+/**
+ * \file
+ */
+
 [[gnu::pure]] [[gnu::nonnull]]
 static inline size_t
 StringLength(const wchar_t *p) noexcept

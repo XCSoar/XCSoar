@@ -33,6 +33,7 @@
 #include "TrivialArray.hxx"
 
 /**
+ * @file
  * An array with a maximum size known at compile time.  It keeps track
  * of the actual length at runtime.
  */

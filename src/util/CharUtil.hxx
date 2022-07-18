@@ -34,6 +34,10 @@
 #include "WCharUtil.hxx"
 #endif
 
+/**
+ * \file
+ */
+
 constexpr bool
 IsASCII(const unsigned char ch) noexcept
 {

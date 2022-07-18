@@ -31,6 +31,10 @@
 
 #include <string_view>
 
+/**
+ * \file
+ */
+
 template<typename T>
 [[gnu::pure]]
 std::pair<std::basic_string_view<T>, std::basic_string_view<T>>

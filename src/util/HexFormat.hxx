@@ -36,8 +36,18 @@
 #include <cstdint>
 #include <span>
 
+/**
+ * \file
+ */
+
 constexpr char hex_digits[] = "0123456789abcdef";
 
+/**
+ * Convert a binary byte to its 2 printable hex digits.
+ * @param dest Pointer to 2 byte output.
+ * @param number The binary byte to convert.
+ * @return a pointer to one after the last written character.
+ */
 [[gnu::always_inline]]
 static constexpr char *
 HexFormatUint8Fixed(char dest[2], uint8_t number) noexcept
@@ -47,6 +57,12 @@ HexFormatUint8Fixed(char dest[2], uint8_t number) noexcept
 	return dest + 2;
 }
 
+/**
+ * Convert a binary 16 bit unsigned to its 4 printable hex digits.
+ * @param dest Pointer to 4 byte output.
+ * @param number The binary 2 bytes to convert.
+ * @return a pointer to one after the last written character.
+ */
 [[gnu::always_inline]]
 static constexpr char *
 HexFormatUint16Fixed(char dest[4], uint16_t number) noexcept
@@ -58,6 +74,12 @@ HexFormatUint16Fixed(char dest[4], uint16_t number) noexcept
 	return dest + 4;
 }
 
+/**
+ * Convert a binary 32 bit unsigned to its 8 printable hex digits.
+ * @param dest Pointer to 8 byte output.
+ * @param number The binary 4 bytes to convert.
+ * @return a pointer to one after the last written character.
+ */
 [[gnu::always_inline]]
 static constexpr char *
 HexFormatUint32Fixed(char dest[8], uint32_t number) noexcept
@@ -73,6 +95,12 @@ HexFormatUint32Fixed(char dest[8], uint32_t number) noexcept
 	return dest + 8;
 }
 
+/**
+ * Convert a binary 64 bit unsigned to its 16 printable hex digits.
+ * @param dest Pointer to 16 byte output.
+ * @param number The binary 8 bytes to convert.
+ * @return a pointer to one after the last written character.
+ */
 [[gnu::always_inline]]
 static constexpr char *
 HexFormatUint64Fixed(char dest[16], uint64_t number) noexcept
@@ -86,8 +114,9 @@ HexFormatUint64Fixed(char dest[16], uint64_t number) noexcept
  * Format the given input buffer of bytes to hex.  The caller ensures
  * that the output buffer is at least twice as large as the input.
  * Does not null-terminate the output buffer.
- *
- * @return a pointer to one after the last written character
+ * @output The destination of the printable hex digits.
+ * @input The input bytes.
+ * @return a pointer to one after the last written character.
  */
 constexpr char *
 HexFormat(char *output, std::span<const std::byte> input) noexcept

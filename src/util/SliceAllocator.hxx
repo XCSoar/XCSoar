@@ -37,6 +37,7 @@
 #include <cassert>
 
 /**
+ * @file
  * An optimized allocator for many objects of the same size.  It is
  * extremely efficient at allocating single objects, but never frees
  * up memory to the system heap until it is destructed completely.

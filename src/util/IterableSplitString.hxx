@@ -35,6 +35,7 @@
 #include <string_view>
 
 /**
+ * @file
  * Split a string at a certain separator character into sub strings
  * and allow iterating over the segments.
  *

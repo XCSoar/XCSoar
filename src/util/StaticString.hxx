@@ -45,6 +45,10 @@
 #include <wchar.h>
 #endif
 
+/**
+ * \file
+ */
+
 bool
 CopyUTF8(char *dest, size_t dest_size, const char *src);
 

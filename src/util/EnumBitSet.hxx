@@ -34,6 +34,7 @@
 #include <type_traits>
 
 /**
+ * @file
  * A container that stores each enum value as a bit.
  *
  * @param E an enum type that has one element called "COUNT"

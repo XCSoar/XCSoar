@@ -36,6 +36,7 @@
 #include <utility>
 
 /**
+ * @file
  * A first-in-first-out buffer: you can append data at the end, and
  * read data from the beginning.  This class automatically shifts the
  * buffer as needed.  It is not thread safe.

@@ -34,6 +34,10 @@
 
 #include <cstddef>
 
+/**
+ * \file
+ */
+
 template<typename T, typename U>
 constexpr T *
 OffsetCast(U *p, std::ptrdiff_t offset)

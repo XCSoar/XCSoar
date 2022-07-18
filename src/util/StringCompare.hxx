@@ -38,6 +38,10 @@
 
 #include <string_view>
 
+/**
+ * \file
+ */
+
 [[gnu::pure]] [[gnu::nonnull]]
 static inline bool
 StringIsEmpty(const char *string) noexcept

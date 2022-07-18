@@ -32,7 +32,8 @@
 #include <type_traits>
 
 /**
- * Generate a type based on #To with the same const-ness as #From.
+ * @file
+ * Generate a type based on To with the same const-ness as From.
  */
 template<typename To, typename From>
 using CopyConst = std::conditional_t<std::is_const_v<From>,

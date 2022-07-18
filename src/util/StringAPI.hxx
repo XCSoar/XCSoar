@@ -36,6 +36,10 @@
 #include "WStringAPI.hxx"
 #endif
 
+/**
+ * \file
+ */
+
 [[gnu::pure]] [[gnu::nonnull]]
 static inline size_t
 StringLength(const char *p) noexcept

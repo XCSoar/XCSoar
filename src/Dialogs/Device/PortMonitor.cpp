@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -50,10 +50,19 @@ class PortTerminalBridge final : public DataHandler {
   };
 
 public:
+  /**
+   * Ctor.
+   * @param terminal The widget connected to this bridge.
+   */
   PortTerminalBridge(TerminalWindow &_terminal)
     :terminal(_terminal) {}
   virtual ~PortTerminalBridge() {}
 
+  /**
+   * Called when data is available from the DataHandler.
+   * @param s The data.
+   * @param If more data required then true.
+   */
   bool DataReceived(std::span<const std::byte> s) noexcept {
     {
       const std::lock_guard<Mutex> lock(mutex);
@@ -90,6 +99,11 @@ private:
   }
 };
 
+/**
+ * The purpose of this widget is to display the data received from a
+ * DataHandler. A typical application for this widget is to implement a
+ * monitor on a certain input device.
+ */
 class PortMonitorWidget final : public WindowWidget {
   DeviceDescriptor &device;
   const TerminalLook &look;
@@ -99,18 +113,36 @@ class PortMonitorWidget final : public WindowWidget {
   bool paused;
 
 public:
+  /**
+   * Ctor.
+   * @param device The input device to monitor.
+   * @param look Font and color.
+   */
   PortMonitorWidget(DeviceDescriptor &_device,
                     const TerminalLook &_look) noexcept
     :device(_device), look(_look), paused(false) {}
 
+  /**
+   *
+   */
   void CreateButtons(WidgetDialog &dialog);
 
+  /**
+   *
+   */
   void Clear() {
     auto &terminal = (TerminalWindow &)GetWindow();
     terminal.Clear();
   }
 
+  /**
+   *
+   */
   void Reconnect();
+
+  /**
+   *
+   */
   void TogglePause();
 
   /* virtual methods from class Widget */

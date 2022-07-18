@@ -32,6 +32,10 @@
 
 #include <cstring>
 
+/**
+ * \file
+ */
+
 template<typename B>
 char *
 ReadBufferedLine(B &buffer)

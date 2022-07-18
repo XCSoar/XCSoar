@@ -59,8 +59,15 @@ struct MoreData : public NMEAInfo {
 
   Validity brutto_vario_available;
 
+  /**
+   * Clears all information, start with tabula rasa.
+   */
   void Reset();
 
+  /**
+   * Is any altitude available.
+   * @return If either a barometric or GPS altitude is available then true.
+   */
   bool NavAltitudeAvailable() const {
     return baro_altitude_available || gps_altitude_available;
   }
