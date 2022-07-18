@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2022-06-24 07:20+0000\n"
+"PO-Revision-Date: 2022-07-18 21:34+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -228,7 +228,7 @@ msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area."
 msgstr ""
-"En sektor som kan variera i vinkel och radie. Poäng räknas från den mest "
+"En sektor som kan variera i vinkel och radie. Poängsatt från den mest "
 "avlägsna punkten inom sektorn."
 
 #: src/Task/TypeStrings.cpp:92
@@ -260,8 +260,8 @@ msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area."
 msgstr ""
-"En sektor som kan variera i vinkel, inre och yttre radie. Poäng räknas från "
-"den mest avlägsna punkten inom sektorn."
+"En sektor som kan variera i vinkel, inre och yttre radie. Poängsatt från den "
+"mest avlägsna punkten inom sektorn."
 
 #: src/Task/TypeStrings.cpp:98
 #, no-c-format
@@ -896,7 +896,7 @@ msgstr "På"
 
 #: src/Menu/ExpandMacros.cpp:343
 msgid "Topography On"
-msgstr "Topografi på"
+msgstr "Topografi På"
 
 #: src/Menu/ExpandMacros.cpp:346
 msgid "Terrain On"
@@ -920,7 +920,7 @@ msgstr "Allt"
 #: src/Menu/ExpandMacros.cpp:370 src/Input/InputEventsSettings.cpp:314
 #, no-c-format
 msgid "Task & Landables"
-msgstr "Uppgifter & landningsplatser"
+msgstr "Uppgift & Landningar"
 
 #: src/Menu/ExpandMacros.cpp:372 src/Input/InputEventsSettings.cpp:316
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:198
@@ -939,7 +939,7 @@ msgstr "Inget"
 #: src/Menu/ExpandMacros.cpp:373 src/Input/InputEventsSettings.cpp:317
 #, no-c-format
 msgid "Task & Airfields"
-msgstr "Banor & Flygplatser"
+msgstr "Uppgift & Flygfält"
 
 #: src/Input/InputEventsActions.cpp:154
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:292
@@ -949,7 +949,7 @@ msgstr "Misslyckades att spara vägpunkter"
 
 #: src/Input/InputEventsActions.cpp:265
 msgid "Screen Mode Full"
-msgstr "Skärmläget fullt"
+msgstr "Helskärm"
 
 #: src/Input/InputEventsActions.cpp:267
 msgid "Auxiliary InfoBoxes"
@@ -1001,7 +1001,7 @@ msgstr "Visa luftrum Av"
 
 #: src/Input/InputEventsAirspace.cpp:65
 msgid "Show airspace on"
-msgstr "Visa Luftrum På"
+msgstr "Visa luftrum På"
 
 #: src/Input/InputEventsTask.cpp:80
 msgid "Advance manually"
@@ -1017,7 +1017,7 @@ msgstr "Klar för start"
 
 #: src/Input/InputEventsTask.cpp:89
 msgid "Hold start"
-msgstr "Håll starten"
+msgstr "Håll start"
 
 #: src/Input/InputEventsTask.cpp:92
 msgid "Ready to turn"
@@ -1025,7 +1025,7 @@ msgstr "Klar för sväng"
 
 #: src/Input/InputEventsTask.cpp:95
 msgid "Hold turn"
-msgstr "Håll upp svängen"
+msgstr "Håll sväng"
 
 #: src/Input/InputEventsTask.cpp:161
 msgid "Auto. MacCready on"
@@ -1041,11 +1041,11 @@ msgstr "MacCready "
 
 #: src/Input/InputEventsTask.cpp:229
 msgid "Task aborted"
-msgstr "Bana avbruten"
+msgstr "Uppgift avbruten"
 
 #: src/Input/InputEventsTask.cpp:232
 msgid "Go to target"
-msgstr "Gå till destinationen"
+msgstr "Kör mot destination"
 
 #: src/Input/InputEventsTask.cpp:235
 msgid "Ordered task"
@@ -1054,7 +1054,7 @@ msgstr "Beordrad bana"
 #: src/Input/InputEventsTask.cpp:238
 #: src/Renderer/FlightStatisticsRenderer.cpp:318
 msgid "No task"
-msgstr "Ingen Bana"
+msgstr "Ingen uppgift"
 
 #: src/Input/InputEventsTask.cpp:321 src/Renderer/MapItemListRenderer.cpp:372
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:46
@@ -1092,7 +1092,7 @@ msgstr "Tid"
 
 #: src/Input/InputEventsTask.cpp:328
 msgid "Task start"
-msgstr "Startpunkt"
+msgstr "Uppgift start"
 
 #: src/Input/InputEventsTask.cpp:330
 msgid "Next turnpoint"
@@ -1100,15 +1100,15 @@ msgstr "Nästa vägpunkt"
 
 #: src/Input/InputEventsTask.cpp:332
 msgid "Task finished"
-msgstr "Bana slutförd"
+msgstr "Uppgift slutförd"
 
 #: src/Input/InputEventsSettings.cpp:59
 msgid "Vario sounds on"
-msgstr "Vario ljud på"
+msgstr "Varioljud På"
 
 #: src/Input/InputEventsSettings.cpp:61
 msgid "Vario sounds off"
-msgstr "Vario ljud Av"
+msgstr "Varioljud Av"
 
 #: src/Input/InputEventsSettings.cpp:89
 msgid "Snail trail off"
@@ -1116,15 +1116,15 @@ msgstr "Snigelspår Av"
 
 #: src/Input/InputEventsSettings.cpp:93
 msgid "Long snail trail"
-msgstr "Spår På Långt"
+msgstr "Snigelspår Långt"
 
 #: src/Input/InputEventsSettings.cpp:97
 msgid "Short snail trail"
-msgstr "Kort snigelspår"
+msgstr "Snigelspår Kort"
 
 #: src/Input/InputEventsSettings.cpp:101
 msgid "Full snail trail"
-msgstr "Spår På Full"
+msgstr "Snigelspår Allt"
 
 #: src/Input/InputEventsSettings.cpp:203
 msgid "Bugs performance"
@@ -1155,7 +1155,7 @@ msgstr "Temperatur prognos"
 
 #: src/Input/InputEventsSettings.cpp:336
 msgid "Waypoint labels"
-msgstr "Vägpunkt etiketter"
+msgstr "Vägpunktsnamn"
 
 #: src/Input/InputEventsSettings.cpp:463
 msgid "Topography/Terrain"
@@ -1167,7 +1167,7 @@ msgstr "Hittades ej"
 
 #: src/Input/InputEventsLua.cpp:65 src/Dialogs/FileManager.cpp:571
 msgid "Select a file"
-msgstr "Välj en fil"
+msgstr "Välj fil"
 
 #: src/PageSettings.cpp:44
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:106
@@ -1557,7 +1557,7 @@ msgstr "Vopt"
 
 #: src/Renderer/MacCreadyRenderer.cpp:51 src/Renderer/TaskSpeedRenderer.cpp:49
 msgid "Vave"
-msgstr ""
+msgstr "Vavg"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:52
 msgid "Vest"
@@ -4207,7 +4207,7 @@ msgstr "Nere vänster (undvik Info-rutor)"
 msgid ""
 "Show thermal assistant in bottom left, above/to right of infoboxes (if "
 "there)."
-msgstr "Visa blåsassistenten nere vänster, över/högre om eventuella info-rutor."
+msgstr "Visa blåsassistent nere vänster, över/högre om eventuella info-rutor."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
 #, no-c-format
@@ -4283,8 +4283,8 @@ msgid ""
 "If set to \"On\" the final glide will always be shown, if set to \"Auto\" it "
 "will be shown when approaching the final glide possibility."
 msgstr ""
-"Om På visas finalglid alltid. Om Auto visas den automatiskt när inflygning "
-"är möjlig."
+"Om \"På\" visas finalglid alltid. Om \"Auto\" visas den automatiskt när "
+"inflygning är möjlig."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:132
 msgid "Final glide bar MC0"
@@ -5509,6 +5509,8 @@ msgid ""
 "calculations, in task abort mode and for determining arrival altitude at "
 "airfields."
 msgstr ""
+"Inställning för MacCready som används för, när säker MC är aktiverad för "
+"räckviddsberäkning, att bestämma ankomsthöjd vid läge för avbruten uppgift."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:115
 msgid "STF risk factor"
@@ -5521,6 +5523,10 @@ msgid ""
 "no compensation, 1.0 scales MC linearly with current height (with reference "
 "to height of the maximum climb). If considered, 0.3 is recommended."
 msgstr ""
+"STF riskfaktorn reducerar MacCready-inställningen för beräkning av "
+"flyghastighet när farkosten är lågt för att kompensera risken. Använd 0.0 "
+"ger ingen kompensation, 1.0 skalar MC linjärt med aktuell höjd (med höjden "
+"vid bästa blåsa som referens). 0.3 rekommenderas om funktionen används."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:68
 msgid "Map database"
@@ -6010,7 +6016,7 @@ msgstr "Standard starttyp för nya uppgifter du skapar."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:152
 msgid "Default radius or gate width of the start zone for new tasks."
-msgstr "Standard radie eller grindbredd för startområdet för nya uppgifter."
+msgstr "Standardradie eller grindbredd för startområdet för nya uppgifter."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:158
 #: src/Dialogs/Task/TaskPointDialog.cpp:388
@@ -6023,7 +6029,7 @@ msgstr "Standard måltyp för nya uppgifter som du skapar."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:164
 msgid "Default radius or gate width of the finish zone in new tasks."
-msgstr "Standard radie eller grindbredd för målområdet för nya uppgifter."
+msgstr "Standardradie eller grindbredd för målområdet för nya uppgifter."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:170
 msgid "Turn point"
@@ -6035,8 +6041,7 @@ msgstr "Standard vägpunktstyp för nya uppgifter som du skapar."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:174
 msgid "Default radius of turnpoint cylinders and sectors in new tasks."
-msgstr ""
-"Standard radie på cylindrar för vägpunkter och sektorer i nya uppgifter."
+msgstr "Standardradie på cylindrar för vägpunkter och sektorer i nya uppgifter."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:180
 msgid "Default task type for new tasks you create."
@@ -6571,7 +6576,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:120
 #, no-c-format
 msgid "Straight & terrain glide"
-msgstr ""
+msgstr "Rakt- & terrängglid"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:121
 #, no-c-format
@@ -6585,16 +6590,16 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:126
 #, no-c-format
 msgid "Required GR & terrain glide"
-msgstr ""
+msgstr "Nödvändig GR & terrängglid"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:127
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Both Required glide ratio and terrain avoidance height are displayed. "
 "Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings."
 msgstr ""
-"Båda ankomsthöjder visas. Kräver \"Ankomstläge: Runda\" under inställningar "
-"för \"Flygdator > Rutt\"."
+"Både nödvändigt glidtal och höjd för fri terräng visas. Kräver \"Ankomstläge:"
+" Runda\" under inställningar för \"Flygdator > Rutt\"."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:132
 msgid "Determines how arrival height is displayed in waypoint labels"
@@ -6951,9 +6956,8 @@ msgid "Configure whether the start must be armed manually or automatically."
 msgstr "Konfigurera huruvida start måste sättas manuellt eller automatiskt."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:240
-#, fuzzy
 msgid "Score start exit"
-msgstr "Starthöjd"
+msgstr "Poäng utträde"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:244
 msgid "Start open time"
@@ -7075,11 +7079,11 @@ msgstr "Aktivera alternativa starter"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:284
 msgid "Score exit"
-msgstr ""
+msgstr "Poäng utträde"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:357
 msgid "Edit Alternates"
-msgstr ""
+msgstr "Ändra Alternativ"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:378
 #: src/Dialogs/Task/TaskPointDialog.cpp:449
@@ -8747,9 +8751,9 @@ msgid "Contest distance"
 msgstr "Tävling distans"
 
 #: src/InfoBoxes/Content/Factory.cpp:733
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cont Dist"
-msgstr "Mål dist"
+msgstr "Tävl. dist"
 
 #: src/InfoBoxes/Content/Factory.cpp:734
 #, no-c-format
@@ -9327,9 +9331,9 @@ msgid "Contest speed"
 msgstr "Tävling hastighet"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cont Speed"
-msgstr "Hast"
+msgstr "Tävl. Hast"
 
 #: src/InfoBoxes/Content/Factory.cpp:1015
 #, no-c-format
@@ -9469,19 +9473,19 @@ msgid "The currently active Radio Frequency"
 msgstr "För närvarande aktiv radiofrekvens"
 
 #: src/InfoBoxes/Content/Factory.cpp:1080
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Standby Radio Frequency"
-msgstr "Ange vänte-frekvens"
+msgstr "Standby radiofrekvens"
 
 #: src/InfoBoxes/Content/Factory.cpp:1081
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Stby Freq"
-msgstr "Ange vänte-frekvens"
+msgstr "Stby Frek"
 
 #: src/InfoBoxes/Content/Factory.cpp:1082
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently standby Radio Frequency"
-msgstr "Ange vänte-frekvens"
+msgstr "Aktuell standby radiofrekvens"
 
 #: src/InfoBoxes/Content/Factory.cpp:1088
 #, no-c-format
@@ -9489,9 +9493,9 @@ msgid "Thermal time"
 msgstr "Termik tid"
 
 #: src/InfoBoxes/Content/Factory.cpp:1089
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TC Time"
-msgstr "TL tid"
+msgstr "TC tid"
 
 #: src/InfoBoxes/Content/Factory.cpp:1090
 #, no-c-format
@@ -9701,22 +9705,22 @@ msgstr "Typ av dödband som används i kurvläge."
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:45
 #, no-c-format
 msgid "Circling hi cutoff"
-msgstr ""
+msgstr "Kurvning övre gräns"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:46
 #, no-c-format
 msgid "High limit of circling dead band"
-msgstr ""
+msgstr "Övre gräns dödband vid kurvning"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:50
 #, no-c-format
 msgid "Circling low cutoff"
-msgstr ""
+msgstr "Nedre gräns kurvning"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:51
 #, no-c-format
 msgid "Low limit of circling dead band"
-msgstr ""
+msgstr "Nedre gräns dödband vid kurvning"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:56
 #, no-c-format
@@ -9731,7 +9735,7 @@ msgstr "Typ av dödband som används i glidläge."
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:61
 #, no-c-format
 msgid "Cruise hi cutoff"
-msgstr ""
+msgstr "Övre gräns dödband vid planflykt"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:62
 #, no-c-format
@@ -9741,7 +9745,7 @@ msgstr "Övre gräns för dödband vid planflykt"
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:66
 #, no-c-format
 msgid "Cruise low cutoff"
-msgstr ""
+msgstr "Nedre gräns dödband vid planflykt"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:67
 #, no-c-format
@@ -9793,7 +9797,7 @@ msgstr "Tidsskala för varions medelvärde."
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:86
 #, no-c-format
 msgid "Cruise averager scale"
-msgstr ""
+msgstr "Tidsskala för medelhastighet vid planflykt"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:87
 #, no-c-format
@@ -9979,7 +9983,7 @@ msgstr "Ingen farkosttyp"
 #: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:52
 #, no-c-format
 msgid "Privacy"
-msgstr ""
+msgstr "Sekretess"
 
 #: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:54
 #, no-c-format
