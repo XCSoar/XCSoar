@@ -251,12 +251,10 @@ RenderText(const Font *font, BasicStringView<TCHAR> text) noexcept
 
   assert(font->IsDefined());
 
-#ifdef USE_FREETYPE
 #ifdef UNICODE
   return TextCache::Get(*font, WideToUTF8Converter(text));
 #else
   return TextCache::Get(*font, text);
-#endif
 #endif
 }
 
