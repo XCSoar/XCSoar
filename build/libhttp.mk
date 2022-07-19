@@ -16,7 +16,7 @@ LIBHTTP_SOURCES = \
 	$(SRC)/lib/curl/Global.cxx \
 	$(SRC)/net/http/Init.cpp
 
-ifeq ($(TARGET_IS_OSX),y)
+ifeq ($(TARGET_IS_OSX)$(USE_HOMEBREW),yn)
 # We use the libcurl which is included in Mac OS X.
 # Mac OS X SDKs contain the required headers / library stubs,
 # but no pkg-config file.

@@ -143,6 +143,7 @@ jobs:
           gmake -j$(sysctl -n hw.logicalcpu) TARGET=${{env.TARGET }} USE_CCACHE=y \
             OPTIMIZE="-O0" \
             USE_THIRDPARTY_LIBS=n \
+            USE_HOMEBREW=y \
             OSX_MIN_SUPPORTED_VERSION=12.0 \
             V=2 \
             everything check

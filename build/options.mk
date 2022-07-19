@@ -5,6 +5,9 @@ LTO ?= $(THIN_LTO)
 IWYU ?= n
 FUZZER ?= n
 
+# Prefer packages from Homebrew?
+USE_HOMEBREW ?= n
+
 # shall we paint with some eye candy?
 EYE_CANDY ?= $(call bool_not,$(TARGET_IS_KOBO))
 ifeq ($(EYE_CANDY),y)
