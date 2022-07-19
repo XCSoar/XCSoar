@@ -51,8 +51,8 @@ protected:
     };
 
     struct Equal {
-      constexpr std::size_t operator()(ScanTaskPoint a,
-                                       ScanTaskPoint b) const noexcept {
+      constexpr bool operator()(ScanTaskPoint a,
+                                ScanTaskPoint b) const noexcept {
         return a.Key() == b.Key();
       }
     };
