@@ -334,17 +334,17 @@ public:
     return Angle(-value);
   }
 
-  const Angle &operator*=(const double x) noexcept {
+  constexpr const Angle &operator*=(const double x) noexcept {
     value *= x;
     return *this;
   }
 
-  const Angle &operator+=(Angle x) noexcept {
+  constexpr const Angle &operator+=(Angle x) noexcept {
     value += x.value;
     return *this;
   }
 
-  const Angle &operator-=(Angle x) noexcept {
+  constexpr const Angle &operator-=(Angle x) noexcept {
     value -= x.value;
     return *this;
   }
