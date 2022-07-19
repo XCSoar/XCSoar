@@ -11,8 +11,6 @@ on:
     paths:
       - 'kobo/kernel/**'
       - '.github/workflows/build-kernel.yml'
-    branches:
-      - master
 
 jobs:
   build-kobo-kernel:
