@@ -130,8 +130,13 @@ jobs:
             lua
 
       - name: Compile XCSoar
+        # This build uses third-party libraries installed via
+        # Homebrew, not built using build/thirdparty.py; to be
+        # compatible with Homebrew's builds, we need
+        # to build with "-mmacosx-version-min=12.0".
         run: |
           gmake -j$(sysctl -n hw.logicalcpu) TARGET=${{env.TARGET }} USE_CCACHE=y \
             USE_THIRDPARTY_LIBS=n \
+            OSX_MIN_SUPPORTED_VERSION=12.0 \
             V=2 \
             everything check
