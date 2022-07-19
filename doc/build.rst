@@ -357,7 +357,7 @@ Check out the correct branch. For the Kobo Mini, this is the branch
 Configure the kernel using the configuration files from the
 ``kobo/kernel`` directory in XCSoar’s ``git`` repository. For the Kobo
 Mini, install a `gcc 4.4 cross
-compiler <http://openlinux.amlogic.com:8000/download/ARM/gnutools/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2>`__,
+compiler <https://master.dl.sourceforge.net/project/iadfilehost/devtools/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2>`__,
 for example in ``/opt``. For the Kobo Glo HD and Aura 2, install a `gcc
 4.6 cross
 compiler <https://launchpad.net/gcc-arm-embedded/4.6/4.6-2012-q4-update/+download/gcc-arm-none-eabi-4_6-2012q4-20121016.tar.bz2>`__
