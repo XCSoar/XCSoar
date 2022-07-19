@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_ATMOSPHERE_PRESSURE_H
 #define XCSOAR_ATMOSPHERE_PRESSURE_H
 
+#include <compare> // for the defaulted spaceship operator
+
 /**
  * ICAO Standard Atmosphere calculations (valid in Troposphere, alt<11000m)
  *
@@ -100,21 +102,8 @@ public:
     return value;
   }
 
-  constexpr bool operator<(AtmosphericPressure other) const noexcept {
-    return value < other.value;
-  }
-
-  constexpr bool operator<=(AtmosphericPressure other) const noexcept {
-    return value <= other.value;
-  }
-
-  constexpr bool operator>(AtmosphericPressure other) const noexcept {
-    return value > other.value;
-  }
-
-  constexpr bool operator>=(AtmosphericPressure other) const noexcept {
-    return value >= other.value;
-  }
+  friend constexpr auto operator<=>(const AtmosphericPressure &,
+                                    const AtmosphericPressure &) noexcept = default;
 
   constexpr auto operator+(AtmosphericPressure other) const noexcept {
     return AtmosphericPressure{value + other.value};

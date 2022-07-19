@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_ATMOSPHERE_TEMPERATURE_HPP
 
 #include <cmath>
+#include <compare> // for the defaulted spaceship operator
 
 /**
  * The offset between 0 Kelvin and 0 degrees Celsius [K].
@@ -87,29 +88,8 @@ public:
     return KelvinToCelsius(ToKelvin());
   }
 
-  constexpr bool operator==(Temperature other) const {
-    return value == other.value;
-  }
-
-  constexpr bool operator!=(Temperature other) const {
-    return value != other.value;
-  }
-
-  constexpr bool operator<(Temperature other) const {
-    return value < other.value;
-  }
-
-  constexpr bool operator<=(Temperature other) const {
-    return value <= other.value;
-  }
-
-  constexpr bool operator>(Temperature other) const {
-    return value > other.value;
-  }
-
-  constexpr bool operator>=(Temperature other) const {
-    return value >= other.value;
-  }
+  friend constexpr auto operator<=>(const Temperature &,
+                                    const Temperature &) noexcept = default;
 
   constexpr Temperature operator-() const {
     return Temperature(-value);
