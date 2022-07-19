@@ -81,5 +81,5 @@ jobs:
           SOURCE: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
           REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
-          TARGET: testing/android/ 
+          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/android/ 
 
