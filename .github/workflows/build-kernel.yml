@@ -111,6 +111,7 @@ jobs:
           cp ${{github.workspace}}/kobo/kernel/${{matrix.otg_config}} .config
           make \
             -j$(nproc) \
+            V=1 \
             KBUILD_BUILD_TIMESTAMP="" \
             CROSS_COMPILE="/usr/bin/ccache $TOOLCHAIN_PREFIX" \
             ARCH=arm uImage
