@@ -33,17 +33,19 @@ Copyright_License {
  * Modifications by John Wharington to track optimal solution
  * @see http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
  */
-template<typename Node, typename MapTemplate>
+template<typename Node, typename MapTemplate, typename ValueType=unsigned>
 class Dijkstra
 {
 public:
+  using value_type = ValueType;
+
   struct Edge
   {
     Node parent;
 
-    unsigned value;
+    value_type value;
 
-    constexpr Edge(Node _parent, unsigned _value) noexcept
+    constexpr Edge(Node _parent, value_type _value) noexcept
       :parent(_parent), value(_value) {}
   };
 
@@ -54,11 +56,11 @@ public:
 private:
   struct Value
   {
-    unsigned edge_value;
+    value_type edge_value;
 
     edge_iterator iterator;
 
-    constexpr Value(unsigned _edge_value, edge_iterator _iterator) noexcept
+    constexpr Value(value_type _edge_value, edge_iterator _iterator) noexcept
       :edge_value(_edge_value), iterator(_iterator) {}
   };
 
@@ -84,7 +86,7 @@ private:
    * The value of the current edge, i.e. the one that was consumed by
    * pop().
    */
-  unsigned current_value;
+  value_type current_value;
 
 public:
   /**
@@ -140,7 +142,7 @@ public:
    * Hack to allow incremental / continuous runs, see
    * ContestDijkstra::AddIncrementalEdges().
    */
-  void SetCurrentValue(unsigned value) noexcept {
+  void SetCurrentValue(value_type value) noexcept {
     current_value = value;
   }
 
@@ -168,7 +170,7 @@ public:
    * @param e Edge distance
    * @return false if this link was worse than an existing one
    */
-  bool Link(const Node node, const Node parent, unsigned edge_value) noexcept {
+  bool Link(const Node node, const Node parent, value_type edge_value) noexcept {
     return Push(node, parent, current_value + edge_value);
   }
 
@@ -222,7 +224,7 @@ private:
    * @return false if this link was worse than an existing one
    */
   bool Push(const Node node, const Node parent,
-            unsigned edge_value = 0) noexcept {
+            value_type edge_value = {}) noexcept {
     // Try to find the given node n in the EdgeMap
     edge_iterator it = edges.find(node);
     if (it == edges.end())
