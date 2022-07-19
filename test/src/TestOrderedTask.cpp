@@ -63,6 +63,22 @@ MakeWaypointPtr(Args&&... args) noexcept
   return WaypointPtr(new Waypoint(MakeWaypoint(std::forward<Args>(args)...)));
 }
 
+static constexpr AircraftState
+MakeAircraft(GeoPoint location, double altitude) noexcept
+{
+  AircraftState aircraft;
+  aircraft.Reset();
+  aircraft.location = location;
+  aircraft.altitude = altitude;
+  return aircraft;
+}
+
+static constexpr AircraftState
+MakeAircraft(double longitude, double latitude, double altitude) noexcept
+{
+  return MakeAircraft(MakeGeoPoint(longitude, latitude), altitude);
+}
+
 static const auto wp1 = MakeWaypointPtr(0, 45, 50);
 static const auto wp2 = MakeWaypointPtr(0, 45.3, 50);
 static const auto wp3 = MakeWaypointPtr(0, 46, 50);
@@ -191,10 +207,7 @@ TestFlightToFinish(double aircraft_altitude)
 
   ok1(!IsError(task.CheckTask()));
 
-  AircraftState aircraft;
-  aircraft.Reset();
-  aircraft.location = wp1->location;
-  aircraft.altitude = aircraft_altitude;
+  const auto aircraft = MakeAircraft(wp1->location, aircraft_altitude);
   task.Update(aircraft, aircraft, glide_polar);
 
   const GeoVector vector = wp1->location.DistanceBearing(wp2->location);
@@ -231,10 +244,7 @@ TestSimpleTask()
 
   ok1(!IsError(task.CheckTask()));
 
-  AircraftState aircraft;
-  aircraft.Reset();
-  aircraft.location = MakeGeoPoint(0, 44.5);
-  aircraft.altitude = 1700;
+  const auto aircraft = MakeAircraft(0, 44.5, 1700);
   task.Update(aircraft, aircraft, glide_polar);
 
   const GeoVector tp1_to_tp2 = wp1->location.DistanceBearing(wp3->location);
@@ -271,10 +281,7 @@ TestHighFinish()
 
   ok1(!IsError(task.CheckTask()));
 
-  AircraftState aircraft;
-  aircraft.Reset();
-  aircraft.location = wp1->location;
-  aircraft.altitude = 1000;
+  const auto aircraft = MakeAircraft(wp1->location, 1000);
   task.Update(aircraft, aircraft, glide_polar);
 
   const GeoVector vector = wp1->location.DistanceBearing(wp2->location);
@@ -316,10 +323,7 @@ TestHighTP()
 
   ok1(!IsError(task.CheckTask()));
 
-  AircraftState aircraft;
-  aircraft.Reset();
-  aircraft.location = wp1->location;
-  aircraft.altitude = 2000;
+  const auto aircraft = MakeAircraft(wp1->location, 2000);
   task.Update(aircraft, aircraft, glide_polar);
 
   const TaskStats &stats = task.GetStats();
@@ -353,10 +357,7 @@ TestHighTPFinal()
 
   ok1(!IsError(task.CheckTask()));
 
-  AircraftState aircraft;
-  aircraft.Reset();
-  aircraft.location = wp1->location;
-  aircraft.altitude = 1200;
+  const auto aircraft = MakeAircraft(wp1->location, 1200);
   task.Update(aircraft, aircraft, glide_polar);
 
   const TaskStats &stats = task.GetStats();
@@ -390,10 +391,7 @@ TestLowTPFinal()
 
   ok1(!IsError(task.CheckTask()));
 
-  AircraftState aircraft;
-  aircraft.Reset();
-  aircraft.location = wp1->location;
-  aircraft.altitude = 2500;
+  const auto aircraft = MakeAircraft(wp1->location, 2500);
   task.Update(aircraft, aircraft, glide_polar);
 
   const TaskStats &stats = task.GetStats();
