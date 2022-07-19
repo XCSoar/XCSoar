@@ -53,8 +53,8 @@ CuSonde::Reset()
   ground_height = 0;
   max_ground_temperature = Temperature::FromCelsius(25);
 
-  for (unsigned i = 0; i < NUM_LEVELS; ++i)
-    cslevels[i].Reset();
+  for (auto &i : cslevels)
+    i.Reset();
 }
 
 // TODO accuracy: recalculate thermal index etc if maxGroundTemp changes
