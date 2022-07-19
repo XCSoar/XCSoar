@@ -51,7 +51,7 @@ class SearchPointVector;
  *
  * This uses a Dijkstra search and so is O(N log(N)).
  */
-class TaskDijkstra : protected NavDijkstra
+class TaskDijkstra : protected NavDijkstra<>
 {
   const SearchPointVector *boundaries[MAX_STAGES];
 
@@ -92,7 +92,7 @@ protected:
   bool Run() noexcept;
 
   bool Link(const ScanTaskPoint node, const ScanTaskPoint parent,
-            unsigned value) noexcept {
+            value_type value) noexcept {
     if (!is_min)
       value = DIJKSTRA_MINMAX_OFFSET - value;
 
@@ -119,15 +119,15 @@ protected:
    * @return Distance (flat) from origin to destination
    */
   [[gnu::pure]]
-  unsigned CalcDistance(const ScanTaskPoint curNode,
-                        const SearchPoint &currentLocation) const noexcept {
+  value_type CalcDistance(const ScanTaskPoint curNode,
+                          const SearchPoint &currentLocation) const noexcept {
     /* using expensive floating point formulas here to avoid integer
        rounding errors */
 
     const GeoPoint &a = GetPoint(curNode).GetLocation();
     const GeoPoint &b = currentLocation.GetLocation();
 
-    return (unsigned)a.Distance(b);
+    return static_cast<value_type>(a.Distance(b));
   }
 
   /** 
@@ -139,8 +139,8 @@ protected:
    * @return Distance (flat) from origin to destination
    */
   [[gnu::pure]]
-  unsigned CalcDistance(const ScanTaskPoint s1,
-                        const ScanTaskPoint s2) const noexcept {
+  value_type CalcDistance(const ScanTaskPoint s1,
+                          const ScanTaskPoint s2) const noexcept {
     return CalcDistance(s1, GetPoint(s2));
   }
 

@@ -40,7 +40,7 @@ class Trace;
  *
  *
  */
-class ContestDijkstra : public AbstractContest, protected NavDijkstra, public TraceManager {
+class ContestDijkstra : public AbstractContest, protected NavDijkstra<>, public TraceManager {
   /**
    * Is this a contest that allows continuous analysis?
    */
@@ -142,14 +142,14 @@ protected:
    * @return Distance (flat) from origin to destination
    */
   [[gnu::pure]]
-  unsigned CalcEdgeDistance(const ScanTaskPoint s1,
-                            const ScanTaskPoint s2) const noexcept {
+  value_type CalcEdgeDistance(const ScanTaskPoint s1,
+                              const ScanTaskPoint s2) const noexcept {
     return GetPoint(s1).FlatDistanceTo(GetPoint(s2));
   }
 
   bool Link(const ScanTaskPoint node, const ScanTaskPoint parent,
-            unsigned value) noexcept {
-    return NavDijkstra::Link(node, parent, DIJKSTRA_MINMAX_OFFSET - value);
+            value_type value) noexcept {
+    return NavDijkstra<>::Link(node, parent, DIJKSTRA_MINMAX_OFFSET - value);
   }
 
 private:

@@ -39,6 +39,7 @@ Copyright_License {
  *
  * NavDijkstra<SearchPoint>
  */
+template<typename ValueType=unsigned>
 class NavDijkstra {
 protected:
   static constexpr unsigned MAX_STAGES = 32;
@@ -63,7 +64,8 @@ protected:
     };
   };
 
-  using Dijkstra = ::Dijkstra<ScanTaskPoint, DijkstraMap>;
+  using Dijkstra = ::Dijkstra<ScanTaskPoint, DijkstraMap, ValueType>;
+  using value_type = typename Dijkstra::value_type;
 
   Dijkstra dijkstra;
 
@@ -140,11 +142,11 @@ protected:
   }
 
   bool Link(const ScanTaskPoint node, const ScanTaskPoint parent,
-            unsigned value) noexcept {
+            value_type value) noexcept {
     return dijkstra.Link(node, parent, value);
   }
 
-  void LinkStart(const ScanTaskPoint node, unsigned value=0) noexcept {
+  void LinkStart(const ScanTaskPoint node, value_type value={}) noexcept {
     Link(node, node, value);
   }
 

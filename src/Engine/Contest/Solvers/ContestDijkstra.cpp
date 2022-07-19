@@ -255,7 +255,7 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin,
         CheckMinDistance(origin_tp.GetLocation(),
                          destination_tp.GetLocation())) {
       if (above) {
-        const unsigned d = weight * CalcEdgeDistance(origin, destination);
+        const value_type d = weight * CalcEdgeDistance(origin, destination);
         Link(destination, origin, d);
       } else if (previous_above) {
         /* After excessive thinning, the exact TracePoint that matches
@@ -265,7 +265,7 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin,
            matches. */
 
         /* TODO: interpolate the distance */
-        const unsigned d = weight * CalcEdgeDistance(origin, destination);
+        const value_type d = weight * CalcEdgeDistance(origin, destination);
         Link(destination, origin, d);
       }
     }
@@ -274,7 +274,7 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin,
   }
 
   if (IsFinal(destination) && predicted.IsDefined()) {
-    const unsigned d = weight * origin_tp.FlatDistanceTo(predicted);
+    const value_type d = weight * origin_tp.FlatDistanceTo(predicted);
     destination.SetPointIndex(predicted_index);
     Link(destination, origin, d);
   }
