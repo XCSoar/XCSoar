@@ -50,7 +50,7 @@ CGImageToUncompressedImage(CGImageRef image) noexcept
   size_t row_size;
   UncompressedImage::Format format;
   CGColorSpaceRef bitmap_colorspace;
-  CGBitmapInfo bitmap_info;
+  uint32_t bitmap_info;
 
   if ((8 == bits_per_pixel) &&
       (8 == bits_per_component) &&
@@ -70,8 +70,8 @@ CGImageToUncompressedImage(CGImageRef image) noexcept
     } else {
       row_size = width * 4;
       format = UncompressedImage::Format::RGBA;
-      bitmap_info = kCGImageAlphaPremultipliedLast |
-                    kCGBitmapByteOrder32Big;
+      bitmap_info = static_cast<uint32_t>(kCGImageAlphaPremultipliedLast) |
+        static_cast<uint32_t>(kCGBitmapByteOrder32Big);
     }
   }
 
