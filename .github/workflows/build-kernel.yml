@@ -59,7 +59,7 @@ jobs:
       - name: "Build kernel"
         working-directory: output/src/linux
         run: |
-          ${{github.workspace}}/kobo/kernel/${{matrix.model}}.config .config
+          cp ${{github.workspace}}/kobo/kernel/${{matrix.model}}.config .config
           make \
             CROSS_COMPILE=${{github.workspace}}/output/gcc-arm-none-eabi-4_6-2012q4/bin/arm-none-eabi- \
             ARCH=arm uImage
