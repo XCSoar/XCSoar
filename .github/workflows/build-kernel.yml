@@ -19,7 +19,11 @@ jobs:
         model: [glohd, aura2]
         include:
           - model: glohd
+            toolchain: arm-2012-q4
+            config: glohd.config
           - model: aura2
+            toolchain: arm-2012-q4
+            config: aura2.config
 
     runs-on: ubuntu-latest
 
@@ -37,7 +41,7 @@ jobs:
       - id: cache-ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
-          key: kobo-${{matrix.model}}-kernel
+          key: kobo-${{matrix.toolchain}}-kernel
 
       - name: "Cache downloads"
         uses: actions/cache@v2
@@ -51,7 +55,8 @@ jobs:
           sudo apt-get install -y --no-install-recommends \
             u-boot-tools
 
-      - name: "Install old ARM toolchain"
+      - name: "Install old ARM toolchain (2012-q4)"
+        if: matrix.toolchain == 'arm-2012-q4'
         run: |
           ./build/download.py \
             https://launchpad.net/gcc-arm-embedded/4.6/4.6-2012-q4-update/+download/gcc-arm-none-eabi-4_6-2012q4-20121016.tar.bz2 \
@@ -59,15 +64,16 @@ jobs:
             01ed7460c1b671545d8c7c68af3a6b3b489f229481d99dc5815df93a59144d6d \
             output/download
           cd output && tar xf download/gcc-arm-none-eabi-4_6-2012q4-20121016.tar.bz2
+          echo "TOOLCHAIN_PREFIX=${{github.workspace}}/output/gcc-arm-none-eabi-4_6-2012q4/bin/arm-none-eabi-" >> $GITHUB_ENV
 
       - name: "Build kernel"
         working-directory: output/src/linux
         run: |
-          cp ${{github.workspace}}/kobo/kernel/${{matrix.model}}.config .config
+          cp ${{github.workspace}}/kobo/kernel/${{matrix.config}} .config
           make \
             -j$(nproc) \
             KBUILD_BUILD_TIMESTAMP="" \
-            CROSS_COMPILE="/usr/bin/ccache ${{github.workspace}}/output/gcc-arm-none-eabi-4_6-2012q4/bin/arm-none-eabi-" \
+            CROSS_COMPILE="/usr/bin/ccache $TOOLCHAIN_PREFIX" \
             ARCH=arm uImage
 
       - name: "upload uImage"
