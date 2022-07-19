@@ -37,29 +37,28 @@ static TaskBehaviour task_behaviour;
 static OrderedTaskSettings ordered_task_settings;
 static GlidePolar glide_polar(0);
 
-static GeoPoint
-MakeGeoPoint(double longitude, double latitude)
+static constexpr GeoPoint
+MakeGeoPoint(double longitude, double latitude) noexcept
 {
-  return GeoPoint(Angle::Degrees(longitude),
-                  Angle::Degrees(latitude));
+  return {Angle::Degrees(longitude), Angle::Degrees(latitude)};
 }
 
 static Waypoint
-MakeWaypoint(Waypoint wp, double altitude)
+MakeWaypoint(Waypoint wp, double altitude) noexcept
 {
   wp.elevation = altitude;
   return wp;
 }
 
 static Waypoint
-MakeWaypoint(double longitude, double latitude, double altitude)
+MakeWaypoint(double longitude, double latitude, double altitude) noexcept
 {
   return MakeWaypoint(Waypoint(MakeGeoPoint(longitude, latitude)), altitude);
 }
 
 template<typename... Args>
 static WaypointPtr
-MakeWaypointPtr(Args&&... args)
+MakeWaypointPtr(Args&&... args) noexcept
 {
   return WaypointPtr(new Waypoint(MakeWaypoint(std::forward<Args>(args)...)));
 }
@@ -71,7 +70,7 @@ static const auto wp4 = MakeWaypointPtr(1, 46, 50);
 static const auto wp5 = MakeWaypointPtr(0.3, 46, 50);
 
 static double
-GetSafetyHeight(const TaskPoint &tp)
+GetSafetyHeight(const TaskPoint &tp) noexcept
 {
   return task_behaviour.safety_height_arrival;
 }
