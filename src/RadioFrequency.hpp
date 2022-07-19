@@ -65,17 +65,12 @@ public:
   /**
    * Set this object to "undefined".
    */
-  void Clear() noexcept {
+  constexpr void Clear() noexcept {
     value = 0;
   }
 
-#ifdef NDEBUG
-  constexpr
-#endif
-  unsigned GetKiloHertz() const noexcept {
-#ifndef NDEBUG
+  constexpr unsigned GetKiloHertz() const noexcept {
     assert(IsDefined());
-#endif
 
     return BASE_KHZ + value;
   }
@@ -86,7 +81,7 @@ public:
    * Due to rounding from 8.33 kHz to multiples of 5 (for displaying), some
    * channels are invalid. These are matched by (value % 25) == 20.
    */
-  void SetKiloHertz(unsigned khz) noexcept {
+  constexpr void SetKiloHertz(unsigned khz) noexcept {
     value = (khz >= MIN_KHZ && khz < MAX_KHZ) &&
             (khz % 5 == 0) &&
             (khz % 25 != 20)
@@ -94,7 +89,7 @@ public:
       : 0;
   }
 
-  void OffsetKiloHertz(int khz_offset) noexcept {
+  constexpr void OffsetKiloHertz(int khz_offset) noexcept {
     auto new_khz = GetKiloHertz() + khz_offset;
     if ((new_khz % 25) == 20) {
       new_khz += khz_offset > 0 ? 5 : -5;
