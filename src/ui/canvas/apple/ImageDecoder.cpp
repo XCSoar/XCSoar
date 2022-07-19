@@ -57,11 +57,11 @@ CGImageToUncompressedImage(CGImageRef image) noexcept
       (CGColorSpaceGetModel(colorspace) == kCGColorSpaceModelMonochrome)) {
     row_size = width;
     format = UncompressedImage::Format::GRAY;
-    static CGColorSpaceRef grey_colorspace = CGColorSpaceCreateDeviceGray();
+    static const CGColorSpaceRef grey_colorspace = CGColorSpaceCreateDeviceGray();
     bitmap_colorspace = grey_colorspace;
     bitmap_info = 0;
   } else {
-    static CGColorSpaceRef rgb_colorspace = CGColorSpaceCreateDeviceRGB();
+    static const CGColorSpaceRef rgb_colorspace = CGColorSpaceCreateDeviceRGB();
     bitmap_colorspace = rgb_colorspace;
     if ((24 == bits_per_pixel) && (8 == bits_per_component)) {
       row_size = width * 3;
