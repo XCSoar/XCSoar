@@ -32,7 +32,7 @@ Copyright_License {
 #import <CoreGraphics/CoreGraphics.h>
 
 static UncompressedImage
-CGImageToUncompressedImage(CGImageRef image)
+CGImageToUncompressedImage(CGImageRef image) noexcept
 {
   if (image == nullptr)
     return UncompressedImage();
@@ -93,7 +93,7 @@ CGImageToUncompressedImage(CGImageRef image)
 }
 
 UncompressedImage
-LoadJPEGFile(Path path)
+LoadJPEGFile(Path path) noexcept
 {
   CGDataProviderRef data_provider = CGDataProviderCreateWithFilename(path.c_str());
   if (nullptr == data_provider)
@@ -112,7 +112,7 @@ LoadJPEGFile(Path path)
 }
 
 UncompressedImage
-LoadPNG(const void *data, size_t size)
+LoadPNG(const void *data, size_t size) noexcept
 {
   CGDataProviderRef data_provider = CGDataProviderCreateWithData(
       nullptr, data, size, nullptr);
@@ -132,7 +132,7 @@ LoadPNG(const void *data, size_t size)
 }
 
 UncompressedImage
-LoadPNG(Path path)
+LoadPNG(Path path) noexcept
 {
   CGDataProviderRef data_provider = CGDataProviderCreateWithFilename(path.c_str());
   if (nullptr == data_provider)

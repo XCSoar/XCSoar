@@ -30,12 +30,12 @@ class Path;
 class UncompressedImage;
 
 UncompressedImage
-LoadJPEGFile(Path path);
+LoadJPEGFile(Path path) noexcept;
 
 UncompressedImage
-LoadPNG(const void *data, size_t size);
+LoadPNG(const void *data, size_t size) noexcept;
 
 UncompressedImage
-LoadPNG(Path path);
+LoadPNG(Path path) noexcept;
 
 #endif
