@@ -109,12 +109,12 @@ Font::Load(const FontDescription &d)
 }
 
 PixelSize
-Font::TextSize(const TCHAR *text) const noexcept
+Font::TextSize(const TStringView text) const noexcept
 {
   assert(nil != draw_attributes);
 
   NSString *ns_str =
-      [NSString stringWithCString: text encoding: NSUTF8StringEncoding];
+      [[NSString alloc] initWithBytes: text.data length: text.size encoding: NSUTF8StringEncoding];
   assert(nil != ns_str);
 
 #ifndef ENABLE_OPENGL
