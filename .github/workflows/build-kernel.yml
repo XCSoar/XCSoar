@@ -54,7 +54,7 @@ jobs:
             https://launchpad.net/gcc-arm-embedded/4.6/4.6-2012-q4-update/+download/gcc-arm-none-eabi-4_6-2012q4-20121016.tar.bz2 \
             01ed7460c1b671545d8c7c68af3a6b3b489f229481d99dc5815df93a59144d6d \
             output/download
-          cd output && tar xgsf download/gcc-arm-none-eabi-4_6-2012q4-20121016.tar.bz2
+          cd output && tar xf download/gcc-arm-none-eabi-4_6-2012q4-20121016.tar.bz2
 
       - name: "Build kernel"
         working-directory: output/src/linux
