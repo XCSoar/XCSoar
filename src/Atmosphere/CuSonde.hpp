@@ -50,8 +50,10 @@ public:
     /** ThermalIndex in K */
     Temperature thermal_index;
 
-    void UpdateTemps(bool humidity_valid, double humidity, Temperature temperature);
-    void UpdateThermalIndex(double h_agl, Temperature max_ground_temperature);
+    void UpdateTemps(bool humidity_valid, double humidity,
+                     Temperature temperature) noexcept;
+    void UpdateThermalIndex(double h_agl,
+                            Temperature max_ground_temperature) noexcept;
 
     /** Has any data */
     bool has_data;
@@ -63,15 +65,15 @@ public:
     /** Estimated CloudBase with data of this level */
     double cloud_base;
 
-    bool empty() const {
+    constexpr bool empty() const noexcept {
       return !has_data;
     }
 
-    bool dewpoint_empty() const {
+    constexpr bool dewpoint_empty() const noexcept {
       return !has_dewpoint;
     }
 
-    void Reset() {
+    constexpr void Reset() noexcept {
       has_data = false;
       has_dewpoint = false;
     }
@@ -89,12 +91,13 @@ public:
   /** Estimated CloudBase */
   double cloud_base;
 
-  void Reset();
+  void Reset() noexcept;
 
-  void UpdateMeasurements(const NMEAInfo &basic, const DerivedInfo &calculated);
-  void FindCloudBase(unsigned short level);
-  void FindThermalHeight(unsigned short level);
-  void SetForecastTemperature(Temperature temperature);
+  void UpdateMeasurements(const NMEAInfo &basic,
+                          const DerivedInfo &calculated) noexcept;
+  void FindCloudBase(unsigned short level) noexcept;
+  void FindThermalHeight(unsigned short level) noexcept;
+  void SetForecastTemperature(Temperature temperature) noexcept;
 };
 
 #endif

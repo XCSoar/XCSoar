@@ -45,7 +45,7 @@ Copyright_License {
 using std::max;
 
 void
-CuSonde::Reset()
+CuSonde::Reset() noexcept
 {
   last_level = 0;
   thermal_height = 0;
@@ -64,7 +64,7 @@ CuSonde::Reset()
  * @param val New predicted maximum ground temperature in K
  */
 void
-CuSonde::SetForecastTemperature(Temperature val)
+CuSonde::SetForecastTemperature(Temperature val) noexcept
 {
   if (max_ground_temperature == val)
     return;
@@ -107,7 +107,7 @@ CuSonde::SetForecastTemperature(Temperature val)
  */
 void
 CuSonde::UpdateMeasurements(const NMEAInfo &basic,
-                            const DerivedInfo &calculated)
+                            const DerivedInfo &calculated) noexcept
 {
   // if (not flying) nothing to update...
   if (!calculated.flight.flying)
@@ -185,7 +185,7 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
  * @param level Level used for calculation
  */
 void
-CuSonde::FindThermalHeight(unsigned short level)
+CuSonde::FindThermalHeight(unsigned short level) noexcept
 {
   if (cslevels[level + 1].empty())
     return;
@@ -228,7 +228,7 @@ CuSonde::FindThermalHeight(unsigned short level)
  * @param level Level used for calculation
  */
 void
-CuSonde::FindCloudBase(unsigned short level)
+CuSonde::FindCloudBase(unsigned short level) noexcept
 {
   if (cslevels[level + 1].dewpoint_empty())
     return;
@@ -271,7 +271,8 @@ CuSonde::FindCloudBase(unsigned short level)
  * @param t Temperature in K
  */
 void
-CuSonde::Level::UpdateTemps(bool humidity_valid, double humidity, Temperature temperature)
+CuSonde::Level::UpdateTemps(bool humidity_valid, double humidity,
+                            Temperature temperature) noexcept
 {
   if (humidity_valid)
   {
@@ -306,7 +307,7 @@ CuSonde::Level::UpdateTemps(bool humidity_valid, double humidity, Temperature te
  */
 void
 CuSonde::Level::UpdateThermalIndex(double h_agl,
-                                   Temperature max_ground_temperature)
+                                   Temperature max_ground_temperature) noexcept
 {
   // Calculate the dry temperature at altitude = hlevel
   dry_temperature = max_ground_temperature + Temperature::FromKelvin(DALR * h_agl);
