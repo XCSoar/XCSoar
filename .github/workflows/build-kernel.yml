@@ -16,8 +16,12 @@ jobs:
   build-kobo-kernel:
     strategy:
       matrix:
-        model: [glohd, aura2]
+        model: [mini, glohd, aura2]
         include:
+          - model: mini
+            toolchain: arm-2010q1
+            config: kobo.config
+            uimage: uImage.kobo
           - model: glohd
             toolchain: arm-2012-q4
             config: glohd.config
@@ -56,6 +60,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             u-boot-tools
+
+      - name: "Install old ARM toolchain (2010q1)"
+        if: matrix.toolchain == 'arm-2010q1'
+        run: |
+          ./build/download.py \
+            https://master.dl.sourceforge.net/project/iadfilehost/devtools/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2 \
+            https://sourcery.sw.siemens.com/public/gnu_toolchain/arm-none-linux-gnueabi/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2 \
+            60791a1fea52f6cf229fd71147abf44fe9f8d776edabb1095883a6577842a1d8 \
+            output/download
+          cd output && tar xf download/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+          echo "TOOLCHAIN_PREFIX=${{github.workspace}}/output/arm-2010q1/bin/arm-none-linux-gnueabi-" >> $GITHUB_ENV
 
       - name: "Install old ARM toolchain (2012-q4)"
         if: matrix.toolchain == 'arm-2012-q4'
