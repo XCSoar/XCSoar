@@ -74,4 +74,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: uImage-kobo-${{matrix.model}}
-          path: output/src/linux/uImage
+          path: output/src/linux/arch/arm/boot/uImage
