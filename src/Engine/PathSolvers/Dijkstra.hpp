@@ -47,9 +47,9 @@ public:
       :parent(_parent), value(_value) {}
   };
 
-  typedef typename MapTemplate::template Bind<Edge> EdgeMap;
-  typedef typename EdgeMap::iterator edge_iterator;
-  typedef typename EdgeMap::const_iterator edge_const_iterator;
+  using EdgeMap = typename MapTemplate::template Bind<Edge>;
+  using edge_iterator = typename EdgeMap::iterator;
+  using edge_const_iterator = typename EdgeMap::const_iterator;
 
 private:
   struct Value
