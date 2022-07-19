@@ -132,7 +132,7 @@ public:
    * @return Queue size in elements
    */
   [[gnu::pure]]
-  unsigned GetQueueSize() const noexcept {
+  auto GetQueueSize() const noexcept {
     return q.size();
   }
 
@@ -197,7 +197,7 @@ public:
   /**
    * Reserve queue size (if available)
    */
-  void Reserve(unsigned size) noexcept {
+  void Reserve(std::size_t size) noexcept {
     q.reserve(size);
   }
 
