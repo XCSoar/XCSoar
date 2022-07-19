@@ -21,9 +21,11 @@ jobs:
           - model: glohd
             toolchain: arm-2012-q4
             config: glohd.config
+            uimage: uImage.glohd
           - model: aura2
             toolchain: arm-2012-q4
             config: aura2.config
+            uimage: uImage.aura2
 
     runs-on: ubuntu-latest
 
@@ -79,5 +81,5 @@ jobs:
       - name: "upload uImage"
         uses: actions/upload-artifact@v2
         with:
-          name: uImage-kobo-${{matrix.model}}
+          name: ${{matrix.uimage}}
           path: output/src/linux/arch/arm/boot/uImage
