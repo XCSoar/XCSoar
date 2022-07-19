@@ -50,7 +50,7 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
   auto tmax = cu_sonde.max_ground_temperature;
 
   // find range for scaling of graph
-  for (unsigned i = 0; i < cu_sonde.NUM_LEVELS - 1u; i++) {
+  for (unsigned i = 0; i < cu_sonde.cslevels.size() - 1u; i++) {
     if (cu_sonde.cslevels[i].empty())
       continue;
 
@@ -90,7 +90,7 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
 
   int ipos = 0;
 
-  for (unsigned i = 0; i < cu_sonde.NUM_LEVELS - 1u; i++) {
+  for (unsigned i = 0; i < cu_sonde.cslevels.size() - 1u; i++) {
     bool has_dewpoint = false;
 
     if (cu_sonde.cslevels[i].empty() ||

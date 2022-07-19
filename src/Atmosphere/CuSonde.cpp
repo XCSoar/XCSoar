@@ -79,7 +79,7 @@ CuSonde::SetForecastTemperature(Temperature val) noexcept
 
   // iterate through all levels
   auto h_agl = -CuSonde::ground_height;
-  for (unsigned level = 0; level < NUM_LEVELS; level++, h_agl += HEIGHT_STEP) {
+  for (unsigned level = 0; level < cslevels.size(); level++, h_agl += HEIGHT_STEP) {
     // update the ThermalIndex for each level with
     // the new max_ground_temperature
     cslevels[level].UpdateThermalIndex(h_agl, max_ground_temperature);
@@ -129,7 +129,7 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
                                           / HEIGHT_STEP);
 
   // if (level out of range) cancel update
-  if (level >= NUM_LEVELS)
+  if (level >= cslevels.size())
     return;
 
   // if (level skipped) cancel update
@@ -170,7 +170,7 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
     auto h_agl = (level + 1) * HEIGHT_STEP - ground_height;
     cslevels[level + 1].UpdateThermalIndex(h_agl, max_ground_temperature);
 
-    if (level < NUM_LEVELS - 1) {
+    if (level < cslevels.size() - 1) {
       FindThermalHeight(level);
       FindCloudBase(level);
     }
@@ -208,7 +208,7 @@ CuSonde::FindThermalHeight(unsigned short level) noexcept
   auto dthermalheight = (level + dlevel) * HEIGHT_STEP;
 
   if (dlevel > 1
-      && (level + 2u < NUM_LEVELS)
+      && level + 2u < cslevels.size()
       && !cslevels[level + 2].empty())
       // estimated point should be in next level.
       return;
@@ -251,7 +251,7 @@ CuSonde::FindCloudBase(unsigned short level) noexcept
   auto dcloudbase = (level + dlevel) * HEIGHT_STEP;
 
   if (dlevel > 1
-      && (level + 2u < NUM_LEVELS)
+      && level + 2u < cslevels.size()
       && !cslevels[level + 2].empty())
     // estimated point should be in next level.
     return;

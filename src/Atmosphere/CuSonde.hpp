@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Atmosphere/Temperature.hpp"
 
+#include <array>
+
 struct NMEAInfo;
 struct DerivedInfo;
 
@@ -37,8 +39,6 @@ class CuSonde {
 public:
   /** Meters between levels */
   static constexpr unsigned HEIGHT_STEP = 100;
-  /** Number of levels */
-  static constexpr unsigned NUM_LEVELS = 100;
 
   struct Level {
     /** Environmental temperature in K */
@@ -84,7 +84,7 @@ public:
   /** Height of ground above MSL */
   double ground_height;
   unsigned short last_level;
-  Level cslevels[NUM_LEVELS];
+  std::array<Level, 100> cslevels;
 
   /** Estimated ThermailHeight */
   double thermal_height;
