@@ -42,7 +42,7 @@ class RadioFrequency {
    */
   uint16_t value;
 
-  constexpr RadioFrequency(unsigned _value):value(_value) {}
+  constexpr RadioFrequency(unsigned _value) noexcept:value(_value) {}
 
 public:
   /**
@@ -54,25 +54,25 @@ public:
    * Construct an empty instance.  Its IsDefined() method will return
    * false.
    */
-  static constexpr RadioFrequency Null() {
+  static constexpr RadioFrequency Null() noexcept {
     return { 0 };
   }
 
-  constexpr bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
     return value != 0;
   }
 
   /**
    * Set this object to "undefined".
    */
-  void Clear() {
+  void Clear() noexcept {
     value = 0;
   }
 
 #ifdef NDEBUG
   constexpr
 #endif
-  unsigned GetKiloHertz() const {
+  unsigned GetKiloHertz() const noexcept {
 #ifndef NDEBUG
     assert(IsDefined());
 #endif
@@ -86,7 +86,7 @@ public:
    * Due to rounding from 8.33 kHz to multiples of 5 (for displaying), some
    * channels are invalid. These are matched by (value % 25) == 20.
    */
-  void SetKiloHertz(unsigned khz) {
+  void SetKiloHertz(unsigned khz) noexcept {
     value = (khz >= MIN_KHZ && khz < MAX_KHZ) &&
             (khz % 5 == 0) &&
             (khz % 25 != 20)
@@ -94,7 +94,7 @@ public:
       : 0;
   }
 
-  void OffsetKiloHertz(int khz_offset) {
+  void OffsetKiloHertz(int khz_offset) noexcept {
     auto new_khz = GetKiloHertz() + khz_offset;
     if ((new_khz % 25) == 20) {
       new_khz += khz_offset > 0 ? 5 : -5;
@@ -102,10 +102,10 @@ public:
     SetKiloHertz(new_khz);
   }
 
-  TCHAR *Format(TCHAR *buffer, size_t max_size) const;
+  TCHAR *Format(TCHAR *buffer, size_t max_size) const noexcept;
 
   [[gnu::pure]]
-  static RadioFrequency Parse(const TCHAR *p);
+  static RadioFrequency Parse(const TCHAR *p) noexcept;
 };
 
 #endif

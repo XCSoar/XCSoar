@@ -26,7 +26,7 @@ Copyright_License {
 #include "util/NumberParser.hpp"
 
 TCHAR *
-RadioFrequency::Format(TCHAR *buffer, size_t max_size) const
+RadioFrequency::Format(TCHAR *buffer, size_t max_size) const noexcept
 {
   if (!IsDefined())
     return nullptr;
@@ -40,7 +40,7 @@ RadioFrequency::Format(TCHAR *buffer, size_t max_size) const
 }
 
 RadioFrequency
-RadioFrequency::Parse(const TCHAR *p)
+RadioFrequency::Parse(const TCHAR *p) noexcept
 {
   TCHAR *endptr;
   double mhz = ParseDouble(p, &endptr);
