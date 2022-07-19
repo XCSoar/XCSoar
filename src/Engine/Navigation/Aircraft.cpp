@@ -32,26 +32,3 @@ AircraftState::GetPredictedState(FloatDuration in_time) const noexcept
   state_next.altitude += vario * in_time.count();
   return state_next;
 }
-
-void
-AircraftState::Reset() noexcept
-{
-  AltitudeState::Reset();
-  SpeedState::Reset();
-  VarioState::Reset();
-
-  ResetTime();
-  location.SetInvalid();
-  track = Angle::Zero();
-  g_load = 1;
-  wind = SpeedVector::Zero();
-  flying = false;
-}
-
-void
-AltitudeState::Reset() noexcept
-{
-  altitude = 0;
-  working_band_fraction = 0;
-  altitude_agl = 0;
-}
