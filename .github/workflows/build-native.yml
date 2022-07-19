@@ -97,7 +97,7 @@ jobs:
           path: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}${{ env.TARGET_EXT }}
 
   build-macos:
-    runs-on: macos-latest
+    runs-on: macos-12
 
     env:
       TARGET: OSX64
