@@ -82,7 +82,7 @@ struct GeoPoint {
    * calculation.  This method may be used to explicitly declare a
    * GeoPoint attribute as "invalid".
    */
-  void SetInvalid() noexcept {
+  constexpr void SetInvalid() noexcept {
     longitude = Angle::Zero();
     latitude = Angle::FullCircle();
   }
@@ -155,7 +155,7 @@ struct GeoPoint {
    * @return Modified point
    */
   [[gnu::pure]]
-  GeoPoint operator* (const double x) const noexcept {
+  constexpr GeoPoint operator*(const double x) const noexcept {
     GeoPoint res = *this;
     res.longitude *= x;
     res.latitude *= x;
@@ -170,7 +170,7 @@ struct GeoPoint {
    * @return Modified point
    */
   [[gnu::pure]]
-  GeoPoint operator+ (const GeoPoint &delta) const noexcept {
+  constexpr GeoPoint operator+(const GeoPoint &delta) const noexcept {
     GeoPoint res = *this;
     res.longitude += delta.longitude;
     res.latitude += delta.latitude;
@@ -184,7 +184,7 @@ struct GeoPoint {
    *
    * @return Modified point
    */
-  const GeoPoint &operator+= (const GeoPoint &delta) noexcept {
+  constexpr const GeoPoint &operator+=(const GeoPoint &delta) noexcept {
     longitude += delta.longitude;
     latitude += delta.latitude;
     return *this;
