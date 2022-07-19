@@ -53,12 +53,12 @@ jobs:
       - id: cache-ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
-          key: kobo-${{matrix.toolchain}}-kernel
+          key: kobo-${{matrix.model}}-kernel
 
       - name: "Cache downloads"
         uses: actions/cache@v2
         with:
-          key: kobo-kernel-downloads
+          key: kobo-kernel-${{matrix.toolchain}}-downloads
           path: ${{github.workspace}}/output/download
 
       - name: Install dependencies
