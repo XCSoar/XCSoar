@@ -35,13 +35,13 @@ static UncompressedImage
 CGImageToUncompressedImage(CGImageRef image) noexcept
 {
   if (image == nullptr)
-    return UncompressedImage();
+    return {};
 
   size_t width = CGImageGetWidth(image);
   size_t height = CGImageGetHeight(image);
 
   if ((0 == width) || (0 == height))
-    return UncompressedImage();
+    return {};
 
   size_t bits_per_pixel = CGImageGetBitsPerPixel(image);
   size_t bits_per_component = CGImageGetBitsPerComponent(image);
@@ -81,7 +81,7 @@ CGImageToUncompressedImage(CGImageRef image) noexcept
                                               8, row_size, bitmap_colorspace,
                                               bitmap_info);
   if (nullptr == bitmap) {
-    return UncompressedImage();
+    return {};
   }
 
   AtScopeExit(bitmap) { CFRelease(bitmap); };
@@ -97,7 +97,7 @@ LoadJPEGFile(Path path) noexcept
 {
   CGDataProviderRef data_provider = CGDataProviderCreateWithFilename(path.c_str());
   if (nullptr == data_provider)
-    return UncompressedImage();
+    return {};
 
   CGImageRef image =  CGImageCreateWithJPEGDataProvider(
       data_provider, nullptr, false, kCGRenderingIntentDefault);
@@ -117,7 +117,7 @@ LoadPNG(const void *data, size_t size) noexcept
   CGDataProviderRef data_provider = CGDataProviderCreateWithData(
       nullptr, data, size, nullptr);
   if (nullptr == data_provider)
-    return UncompressedImage();
+    return {};
 
   CGImageRef image = CGImageCreateWithPNGDataProvider(
       data_provider, nullptr, false, kCGRenderingIntentDefault);
@@ -136,7 +136,7 @@ LoadPNG(Path path) noexcept
 {
   CGDataProviderRef data_provider = CGDataProviderCreateWithFilename(path.c_str());
   if (nullptr == data_provider)
-    return UncompressedImage();
+    return {};
 
   CGImageRef image =  CGImageCreateWithPNGDataProvider(
       data_provider, nullptr, false, kCGRenderingIntentDefault);
