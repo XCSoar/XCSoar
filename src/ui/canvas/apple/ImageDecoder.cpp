@@ -36,22 +36,22 @@ CGImageToUncompressedImage(CGImageRef image)
 {
   if (image == nullptr)
     return UncompressedImage();
-  
+
   size_t width = CGImageGetWidth(image);
   size_t height = CGImageGetHeight(image);
-  
+
   if ((0 == width) || (0 == height))
     return UncompressedImage();
-  
+
   size_t bits_per_pixel = CGImageGetBitsPerPixel(image);
   size_t bits_per_component = CGImageGetBitsPerComponent(image);
   CGColorSpaceRef colorspace = CGImageGetColorSpace(image);
-  
+
   size_t row_size;
   UncompressedImage::Format format;
   CGColorSpaceRef bitmap_colorspace;
   CGBitmapInfo bitmap_info;
-  
+
   if ((8 == bits_per_pixel) &&
       (8 == bits_per_component) &&
       (CGColorSpaceGetModel(colorspace) == kCGColorSpaceModelMonochrome)) {
@@ -74,9 +74,9 @@ CGImageToUncompressedImage(CGImageRef image)
                     kCGBitmapByteOrder32Big;
     }
   }
-  
+
   std::unique_ptr<uint8_t[]> uncompressed(new uint8_t[height * row_size]);
-  
+
   CGContextRef bitmap = CGBitmapContextCreate(uncompressed.get(), width, height,
                                               8, row_size, bitmap_colorspace,
                                               bitmap_info);
@@ -87,7 +87,7 @@ CGImageToUncompressedImage(CGImageRef image)
   AtScopeExit(bitmap) { CFRelease(bitmap); };
 
   CGContextDrawImage(bitmap, CGRectMake(0, 0, width, height), image);
-  
+
   return UncompressedImage(format, row_size, width, height,
                            std::move(uncompressed));
 }
@@ -98,16 +98,16 @@ LoadJPEGFile(Path path)
   CGDataProviderRef data_provider = CGDataProviderCreateWithFilename(path.c_str());
   if (nullptr == data_provider)
     return UncompressedImage();
-  
+
   CGImageRef image =  CGImageCreateWithJPEGDataProvider(
       data_provider, nullptr, false, kCGRenderingIntentDefault);
-  
+
   UncompressedImage result = CGImageToUncompressedImage(image);
-  
+
   if (nullptr != image)
     CFRelease(image);
   CFRelease(data_provider);
-  
+
   return result;
 }
 
@@ -118,16 +118,16 @@ LoadPNG(const void *data, size_t size)
       nullptr, data, size, nullptr);
   if (nullptr == data_provider)
     return UncompressedImage();
-  
+
   CGImageRef image = CGImageCreateWithPNGDataProvider(
       data_provider, nullptr, false, kCGRenderingIntentDefault);
-  
+
   UncompressedImage result = CGImageToUncompressedImage(image);
-  
+
   if (nullptr != image)
     CFRelease(image);
   CFRelease(data_provider);
-  
+
   return result;
 }
 
