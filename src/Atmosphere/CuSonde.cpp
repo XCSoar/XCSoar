@@ -24,6 +24,7 @@ Copyright_License {
 #include "Atmosphere/CuSonde.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
+#include "DewPoint.hpp"
 #include "Temperature.hpp"
 
 #include <math.h>
@@ -276,9 +277,7 @@ CuSonde::Level::UpdateTemps(bool humidity_valid, double humidity,
 {
   if (humidity_valid)
   {
-    auto log_ex = 7.5 * temperature.ToCelsius() / (237.3 + temperature.ToCelsius()) +
-              (log10(humidity) - 2);
-    auto _dewpoint = Temperature::FromCelsius(log_ex * 237.3 / (7.5 - log_ex));
+    auto _dewpoint = CalculateDewPoint(temperature, humidity);
 
     if (dewpoint_empty())
       dewpoint = _dewpoint;
