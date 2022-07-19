@@ -187,8 +187,7 @@ TextCache::GetSize(const Font &font, StringView text) noexcept
 #endif
 
   TextCacheKey key(font, text);
-  const PixelSize *cached = size_cache.Get(key);
-  if (cached != nullptr)
+  if (const PixelSize *cached = size_cache.Get(key))
     return *cached;
 
 #ifdef UNICODE
@@ -239,8 +238,7 @@ TextCache::Get(const Font &font, StringView text) noexcept
   const std::lock_guard<Mutex> lock(text_cache_mutex);
 #endif
 
-  const RenderedText *cached = text_cache.Get(key);
-  if (cached != nullptr)
+  if (const RenderedText *cached = text_cache.Get(key))
     return *cached;
 
   /* render the text into a OpenGL texture */
