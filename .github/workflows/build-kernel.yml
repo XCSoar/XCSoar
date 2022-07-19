@@ -22,14 +22,20 @@ jobs:
             toolchain: arm-2010q1
             config: kobo.config
             uimage: uImage.kobo
+            otg_config: otg.config
+            otg_uimage: uImage.otg
           - model: glohd
             toolchain: arm-2012-q4
             config: glohd.config
             uimage: uImage.glohd
+            otg_config: glohd.otg.config
+            otg_uimage: uImage.glohd.otg
           - model: aura2
             toolchain: arm-2012-q4
             config: aura2.config
             uimage: uImage.aura2
+            otg_config: aura2.otg.config
+            otg_uimage: uImage.aura2.otg
 
     runs-on: ubuntu-latest
 
@@ -97,4 +103,20 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{matrix.uimage}}
+          path: output/src/linux/arch/arm/boot/uImage
+
+      - name: "Build OTG kernel"
+        working-directory: output/src/linux
+        run: |
+          cp ${{github.workspace}}/kobo/kernel/${{matrix.otg_config}} .config
+          make \
+            -j$(nproc) \
+            KBUILD_BUILD_TIMESTAMP="" \
+            CROSS_COMPILE="/usr/bin/ccache $TOOLCHAIN_PREFIX" \
+            ARCH=arm uImage
+
+      - name: "upload OTG uImage"
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{matrix.otg_uimage}}
           path: output/src/linux/arch/arm/boot/uImage
