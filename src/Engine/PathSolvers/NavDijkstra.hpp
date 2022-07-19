@@ -63,7 +63,7 @@ protected:
     };
   };
 
-  typedef ::Dijkstra<ScanTaskPoint, DijkstraMap> Dijkstra;
+  using Dijkstra = ::Dijkstra<ScanTaskPoint, DijkstraMap>;
 
   Dijkstra dijkstra;
 
