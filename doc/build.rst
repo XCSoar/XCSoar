@@ -345,13 +345,14 @@ Building USB-OTG Kobo Kernel
 To build a USB-OTG capable kernel for the Kobo, clone the git
 repository::
 
-  git clone git://git.xcsoar.org/xcsoar/max/linux.git
+  git clone https://github.com/XCSoar/linux.git
 
-Check out the correct branch. For the Kobo Mini, this is the “kobo”
-branch, for the Kobo Glo HD, the branch is called “kobo-glohd”, and for
-the Kobo Aura 2, use the branch “kobo-aura2”::
+Check out the correct branch. For the Kobo Mini, this is the branch
+``kobo-mini``, for the Kobo Glo HD, the branch is called
+``kobo-glohd``, and for the Kobo Aura 2, use the branch
+``kobo-aura2``::
 
-  git checkout kobo
+  git checkout kobo-mini
 
 Configure the kernel using the configuration files from the
 ``kobo/kernel`` directory in XCSoar’s ``git`` repository. For the Kobo
