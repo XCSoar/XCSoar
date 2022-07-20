@@ -30,7 +30,7 @@
 #include <span>
 
 class FlatTriangleFan {
-  typedef std::vector<FlatGeoPoint> VertexVector;
+  using VertexVector = std::vector<FlatGeoPoint>;
 
 protected:
   VertexVector vs;
