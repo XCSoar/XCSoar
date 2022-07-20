@@ -68,8 +68,6 @@ public:
     children.clear();
   }
 
-  void CalcBB() noexcept;
-
   [[gnu::pure]]
   bool IsEmpty() const noexcept {
     return fan.IsEmpty();
@@ -106,12 +104,6 @@ public:
                  const int index_low, const int index_high,
                  const ReachFanParms &parms) noexcept;
 
-  bool FillDepth(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
-  void FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
-
-  bool CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
-                const RouteLink &e_2, ReachFanParms &parms) noexcept;
-
   /**
    * Attempt to find a path to the specified #FlatGeoPoint higher than
    * the given #arrival_height.  If one is found, #arrival_height is
@@ -129,6 +121,15 @@ public:
   [[gnu::pure]]
   int DirectArrival(FlatGeoPoint dest,
                     const ReachFanParms &parms) const noexcept;
+
+private:
+  void CalcBB() noexcept;
+
+  bool FillDepth(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
+  void FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
+
+  bool CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
+                const RouteLink &e_2, ReachFanParms &parms) noexcept;
 };
 
 #endif
