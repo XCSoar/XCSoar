@@ -123,7 +123,7 @@ public:
                     const ReachFanParms &parms) const noexcept;
 
 private:
-  void CalcBB() noexcept;
+  const FlatBoundingBox &CalcBoundingBox() noexcept;
 
   bool FillDepth(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
   void FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;

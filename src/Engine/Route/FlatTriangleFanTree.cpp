@@ -51,15 +51,15 @@ TooClose(const FlatGeoPoint p1, const FlatGeoPoint p2) noexcept
   return dmax < REACH_MIN_STEP;
 }
 
-void
-FlatTriangleFanTree::CalcBB() noexcept
+const FlatBoundingBox &
+FlatTriangleFanTree::CalcBoundingBox() noexcept
 {
   bb_children = fan.CalcBoundingBox();
 
-  for (auto &child : children) {
-    child.CalcBB();
-    bb_children.Merge(child.bb_children);
-  }
+  for (auto &child : children)
+    bb_children.Merge(child.CalcBoundingBox());
+
+  return bb_children;
 }
 
 void
@@ -77,7 +77,7 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin,
       break;
 
   // this boundingbox update visits the tree recursively
-  CalcBB();
+  CalcBoundingBox();
 }
 
 void
@@ -86,7 +86,7 @@ FlatTriangleFanTree::DummyReach(const AFlatGeoPoint &ao) noexcept
   assert(children.empty());
 
   fan.AddOrigin(ao, 0);
-  CalcBB();
+  CalcBoundingBox();
 }
 
 bool
