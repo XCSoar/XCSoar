@@ -92,6 +92,94 @@ jobs:
           name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}${{ env.TARGET_EXT }}
           path: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}${{ env.TARGET_EXT }}
 
+  build-windows:
+    runs-on: ubuntu-22.04
+
+    env:
+      TARGET: WIN64
+      TARGET_BIN: XCSoar
+      TARGET_FINAL: XCSoar-debug
+      TARGET_EXT: .exe
+
+    steps:
+      - name: set vars for push
+        if: github.event_name == 'push'
+        run: |
+          echo "DEBUG=n" >> $GITHUB_ENV
+          echo "TARGET_FINAL=XCSoar" >> $GITHUB_ENV
+      - id: checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - id: cache-ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}
+
+      - name: "Cache third-party libraries"
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
+          path: |
+            ${{ github.workspace }}/output/${{ env.TARGET }}/lib/lib
+            !${{ github.workspace }}/output/${{ env.TARGET }}/lib/lib/build
+
+      - name: find githash
+        run: |
+          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            make \
+            quilt \
+            g++ \
+            g++-mingw-w64 \
+            python3 \
+            librsvg2-bin xsltproc \
+            imagemagick gettext sox \
+            cmake ninja-build
+
+      - name: Compile XCSoar
+        run: |
+          make -j$(nproc) TARGET=${{env.TARGET }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}${{ env.TARGET_EXT }}
+          path: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}${{ env.TARGET_EXT }}
+
+      - name: store checks and compile artefacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: xcsoar-${{ env.TARGET }}-artifact
+          path: |
+            ${{ github.workspace }}/output/${{ env.TARGET }}
+            !${{ github.workspace }}/output/${{ env.TARGET }}/lib/build
+            !**.d
+          retention-days: 1
+
+  test-windows:
+    runs-on: windows-latest
+
+    env:
+      TARGET: WIN64
+
+    needs: build-windows
+    steps:
+    - id: checkout
+      uses: actions/checkout@v2
+    - name: fetch artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: xcsoar-${{ env.TARGET }}-artifact
+        path: ${{ github.workspace }}/output/${{ env.TARGET }}
+    - name: XCSoar run checks on ${{ env.TARGET }}
+      run: make check-no-build
+      working-directory: ${{ github.workspace }}
+
   build-macos:
     runs-on: macos-12
 
