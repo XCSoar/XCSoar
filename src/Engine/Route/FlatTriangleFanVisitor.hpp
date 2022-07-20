@@ -29,5 +29,5 @@ struct FlatGeoPoint;
 class FlatTriangleFanVisitor {
 public:
   virtual void VisitFan(FlatGeoPoint origin,
-                        std::span<const FlatGeoPoint> fan) = 0;
+                        std::span<const FlatGeoPoint> fan) noexcept = 0;
 };

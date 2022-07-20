@@ -205,7 +205,7 @@ public:
 
   /* virtual methods from class FlatTriangleFanVisitor */
 
-  void VisitFan(FlatGeoPoint origin, std::span<const FlatGeoPoint> fan) override {
+  void VisitFan(FlatGeoPoint origin, std::span<const FlatGeoPoint> fan) noexcept override {
 
     if (fan.size() < 3 || fans.full())
       return;
