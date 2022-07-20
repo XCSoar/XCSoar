@@ -36,12 +36,14 @@ struct AFlatGeoPoint;
 struct ReachFanParms;
 class FlatTriangleFanVisitor;
 
-class FlatTriangleFanTree: public FlatTriangleFan
+class FlatTriangleFanTree
 {
 public:
   static constexpr unsigned REACH_MAX_FANS = 300;
 
 private:
+  FlatTriangleFan fan;
+
   using LeafVector =
     std::forward_list<FlatTriangleFanTree,
                       GlobalSliceAllocator<FlatTriangleFanTree, 128u>>;
@@ -62,15 +64,25 @@ public:
   }
 
   void Clear() noexcept {
-    FlatTriangleFan::Clear();
+    fan.Clear();
     children.clear();
   }
 
   void CalcBB() noexcept;
 
   [[gnu::pure]]
+  bool IsEmpty() const noexcept {
+    return fan.IsEmpty();
+  }
+
+  [[gnu::pure]]
   bool IsInside(FlatGeoPoint p) const noexcept {
-    return FlatTriangleFan::IsInside(p, IsRoot());
+    return fan.IsInside(p, IsRoot());
+  }
+
+  [[gnu::pure]]
+  auto GetHeight() const noexcept {
+    return fan.GetHeight();
   }
 
   void FillReach(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
@@ -83,7 +95,7 @@ public:
    */
   [[gnu::pure]]
   bool IsDummy() const noexcept {
-    return IsOnlyOrigin() && children.empty();
+    return fan.IsOnlyOrigin() && children.empty();
   }
 
   /**
