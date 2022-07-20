@@ -25,6 +25,7 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 #include "Geo/GeoClip.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
+#include "Route/FlatTriangleFanVisitor.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
