@@ -15,24 +15,22 @@ on:
       - '.github/workflows/build-container.yml'
     branches:
       - master
+
 env:
   TARGET: ANDROID
+  TARGET_BIN: XCSoar-debug
+  TARGET_FINAL: XCSoar-debug
   TARGET_EXT: apk
+  DEBUG: y
+
 jobs:
   xcsoar-compile:
     runs-on: ubuntu-latest
     steps:
-      - name: set vars for pull request
-        if: github.event_name == 'pull_request'
-        run: |
-          echo "DEBUG=y" >> $GITHUB_ENV
-          echo "TARGET_BIN=XCSoar-debug" >> $GITHUB_ENV
-          echo "TARGET_FINAL=XCSoar-debug" >> $GITHUB_ENV
       - name: set vars for push
         if: github.event_name == 'push'
         run: |
           echo "DEBUG=n" >> $GITHUB_ENV
-          echo "TARGET_BIN=XCSoar-debug" >> $GITHUB_ENV
           echo "TARGET_FINAL=XCSoar" >> $GITHUB_ENV
       - id: checkout
         uses: actions/checkout@v2

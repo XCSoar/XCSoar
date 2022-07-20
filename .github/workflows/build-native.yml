@@ -33,23 +33,19 @@ on:
 
 env:
   TARGET: UNIX
+  TARGET_BIN: xcsoar
+  TARGET_FINAL: xcsoar-debug
   TARGET_EXT: ''
+  DEBUG: y
 
 jobs:
   build-ubuntu:
     runs-on: ubuntu-22.04
     steps:
-      - name: set vars for pull request
-        if: github.event_name == 'pull_request'
-        run: |
-          echo "DEBUG=y" >> $GITHUB_ENV
-          echo "TARGET_BIN=xcsoar" >> $GITHUB_ENV
-          echo "TARGET_FINAL=xcsoar-debug" >> $GITHUB_ENV
       - name: set vars for push
         if: github.event_name == 'push'
         run: |
           echo "DEBUG=n" >> $GITHUB_ENV
-          echo "TARGET_BIN=xcsoar" >> $GITHUB_ENV
           echo "TARGET_FINAL=xcsoar" >> $GITHUB_ENV
       - id: checkout
         uses: actions/checkout@v2
