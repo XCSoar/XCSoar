@@ -28,12 +28,7 @@
 #include "util/GlobalSliceAllocator.hxx"
 #include "Geo/Flat/FlatProjection.hpp"
 
-#define REACH_BUFFER 1
-#define REACH_SWEEP (ROUTEPOLAR_Q1-REACH_BUFFER)
-
-#define REACH_MAX_DEPTH 4
-#define REACH_MIN_STEP 25
-#define REACH_MAX_VERTICES 2000
+#define REACH_SWEEP (ROUTEPOLAR_Q1-BUFFER)
 
 static bool
 AlmostTheSame(const FlatGeoPoint p1, const FlatGeoPoint p2) noexcept
@@ -47,8 +42,8 @@ static bool
 TooClose(const FlatGeoPoint p1, const FlatGeoPoint p2) noexcept
 {
   const FlatGeoPoint k = p1 - p2;
-  const int dmax = std::max(abs(k.x), abs(k.y));
-  return dmax < REACH_MIN_STEP;
+  const unsigned dmax = std::max<unsigned>(abs(k.x), abs(k.y));
+  return dmax < FlatTriangleFanTree::MIN_STEP;
 }
 
 const FlatBoundingBox &
@@ -70,7 +65,7 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin,
 
   FillReach(origin, 0, ROUTEPOLAR_POINTS, parms);
 
-  for (parms.set_depth = 0; parms.set_depth < REACH_MAX_DEPTH;
+  for (parms.set_depth = 0; parms.set_depth < MAX_DEPTH;
       ++parms.set_depth)
     if (!FillDepth(origin, parms))
       // stop searching
@@ -98,9 +93,9 @@ FlatTriangleFanTree::FillDepth(const AFlatGeoPoint &origin,
       return true;
     gaps_filled = true;
 
-    if (parms.vertex_counter > REACH_MAX_VERTICES)
+    if (parms.vertex_counter > MAX_VERTICES)
       return false;
-    if (parms.fan_counter > REACH_MAX_FANS)
+    if (parms.fan_counter > MAX_FANS)
       return false;
 
     FillGaps(origin, parms);
@@ -223,9 +218,9 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
   int index_left, index_right;
   if (!side) {
     index_left = e_long.polar_index - REACH_SWEEP;
-    index_right = e_long.polar_index - REACH_BUFFER;
+    index_right = e_long.polar_index - BUFFER;
   } else {
-    index_left = e_long.polar_index + REACH_BUFFER;
+    index_left = e_long.polar_index + BUFFER;
     index_right = e_long.polar_index + REACH_SWEEP;
   }
 

@@ -84,7 +84,7 @@ struct ProjectedFan {
 };
 
 struct ProjectedFans {
-  typedef StaticArray<ProjectedFan, FlatTriangleFanTree::REACH_MAX_FANS> ProjectedFanVector;
+  typedef StaticArray<ProjectedFan, FlatTriangleFanTree::MAX_FANS> ProjectedFanVector;
 
   ProjectedFanVector fans;
 
@@ -105,7 +105,7 @@ struct ProjectedFans {
 #endif
   {
     /* try to guess the total number of vertices */
-    points.reserve(FlatTriangleFanTree::REACH_MAX_FANS * ROUTEPOLAR_POINTS / 10);
+    points.reserve(FlatTriangleFanTree::MAX_FANS * ROUTEPOLAR_POINTS / 10);
   }
 
   bool empty() const {
@@ -179,7 +179,7 @@ struct ProjectedFans {
   }
 };
 
-typedef StaticArray<ProjectedFan, FlatTriangleFanTree::REACH_MAX_FANS> ProjectedFanVector;
+typedef StaticArray<ProjectedFan, FlatTriangleFanTree::MAX_FANS> ProjectedFanVector;
 
 class TriangleCompound final : public FlatTriangleFanVisitor {
   /**

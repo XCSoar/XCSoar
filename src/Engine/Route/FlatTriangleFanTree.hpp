@@ -39,8 +39,14 @@ class FlatTriangleFanVisitor;
 
 class FlatTriangleFanTree
 {
+  static constexpr unsigned BUFFER = 1;
+
+  static constexpr unsigned MAX_DEPTH = 4;
+  static constexpr unsigned MAX_VERTICES = 2000;
+
 public:
-  static constexpr unsigned REACH_MAX_FANS = 300;
+  static constexpr unsigned MIN_STEP = 25;
+  static constexpr unsigned MAX_FANS = 300;
 
 private:
   FlatTriangleFan fan;
