@@ -60,10 +60,6 @@ public:
   explicit FlatTriangleFanTree(const uint_least8_t _depth = 0) noexcept
     :depth(_depth) {}
 
-  bool IsRoot() const noexcept {
-    return depth == 0;
-  }
-
   void Clear() noexcept {
     fan.Clear();
     children.clear();
@@ -93,14 +89,6 @@ public:
   }
 
   /**
-   * @return true if a valid fan has been filled, false to discard
-   * this object
-   */
-  bool FillReach(const AFlatGeoPoint &origin,
-                 const int index_low, const int index_high,
-                 const ReachFanParms &parms) noexcept;
-
-  /**
    * Attempt to find a path to the specified #FlatGeoPoint higher than
    * the given #arrival_height.  If one is found, #arrival_height is
    * updated and the method returns true.
@@ -119,7 +107,19 @@ public:
                     const ReachFanParms &parms) const noexcept;
 
 private:
+  bool IsRoot() const noexcept {
+    return depth == 0;
+  }
+
   const FlatBoundingBox &CalcBoundingBox() noexcept;
+
+  /**
+   * @return true if a valid fan has been filled, false to discard
+   * this object
+   */
+  bool FillReach(const AFlatGeoPoint &origin,
+                 const int index_low, const int index_high,
+                 const ReachFanParms &parms) noexcept;
 
   bool FillDepth(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
   void FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
