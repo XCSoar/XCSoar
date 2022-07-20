@@ -21,6 +21,7 @@
  */
 
 #include "FlatTriangleFan.hpp"
+#include "FlatTriangleFanVisitor.hpp"
 #include "Math/Line2D.hpp"
 
 #include <cassert>
@@ -123,4 +124,13 @@ FlatTriangleFan::IsInside(FlatGeoPoint p, bool closed) const noexcept
   }
 
   return inside;
+}
+
+void
+FlatTriangleFan::AcceptInRange(const FlatBoundingBox &bb,
+                               FlatTriangleFanVisitor &visitor,
+                               const bool closed) const noexcept
+{
+  if (bb.Overlaps(bounding_box))
+    visitor.VisitFan(GetOrigin(), GetHull(closed));
 }

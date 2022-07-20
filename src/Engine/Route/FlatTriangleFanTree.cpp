@@ -296,8 +296,7 @@ FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox &bb,
   if (!bb.Overlaps(bb_children))
     return;
 
-  if (bb.Overlaps(bounding_box))
-    visitor.VisitFan(GetOrigin(), GetHull(IsRoot()));
+  FlatTriangleFan::AcceptInRange(bb, visitor, IsRoot());
 
   for (const auto &child : children)
     child.AcceptInRange(bb, visitor);

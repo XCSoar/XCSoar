@@ -29,6 +29,8 @@
 #include <vector>
 #include <span>
 
+class FlatTriangleFanVisitor;
+
 class FlatTriangleFan {
   using VertexVector = std::vector<FlatGeoPoint>;
 
@@ -97,6 +99,10 @@ public:
   int GetHeight() const noexcept {
     return height;
   }
+
+  void AcceptInRange(const FlatBoundingBox &bb,
+                     FlatTriangleFanVisitor &visitor,
+                     bool closed) const noexcept;
 };
 
 #endif
