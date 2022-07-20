@@ -27,6 +27,7 @@
 #include "util/SliceAllocator.hxx"
 #include "FlatTriangleFan.hpp"
 
+#include <cstdint>
 #include <forward_list>
 
 class FlatProjection;
@@ -50,13 +51,13 @@ private:
 
   FlatBoundingBox bb_children;
   LeafVector children;
-  const unsigned char depth;
+  const uint_least8_t depth;
   bool gaps_filled = false;
 
 public:
   friend class PrintHelper;
 
-  FlatTriangleFanTree(const unsigned char _depth = 0) noexcept
+  explicit FlatTriangleFanTree(const uint_least8_t _depth = 0) noexcept
     :depth(_depth) {}
 
   bool IsRoot() const noexcept {
