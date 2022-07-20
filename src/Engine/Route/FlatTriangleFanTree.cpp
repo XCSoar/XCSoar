@@ -269,7 +269,7 @@ FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint n,
   if (!bb_children.IsInside(n))
     return false; // not in scope
 
-  if (IsInside(n)) { // found in this segment
+  if (fan.IsInside(n, IsRoot())) { // found in this segment
     const int h =
       parms.rpolars.CalcGlideArrival(fan.GetOrigin(), n, parms.projection);
     if (h > arrival_height) {

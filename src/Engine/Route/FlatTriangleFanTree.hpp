@@ -74,11 +74,6 @@ public:
   }
 
   [[gnu::pure]]
-  bool IsInside(FlatGeoPoint p) const noexcept {
-    return fan.IsInside(p, IsRoot());
-  }
-
-  [[gnu::pure]]
   auto GetHeight() const noexcept {
     return fan.GetHeight();
   }
