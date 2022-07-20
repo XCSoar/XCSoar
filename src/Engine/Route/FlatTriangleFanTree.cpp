@@ -285,6 +285,8 @@ FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint n,
   bool retval = false;
   for (const auto &child : children)
     if (child.FindPositiveArrival(n, parms, arrival_height))
+      /* no short-circuit here because another child may improve the
+         arrival height */
       retval = true;
 
   return retval;
