@@ -25,12 +25,12 @@
 
 #include <cassert>
 
-void
+const FlatBoundingBox &
 FlatTriangleFan::CalcBoundingBox() noexcept
 {
   assert(!vs.empty());
 
-  bounding_box = {vs.begin(), vs.end()};
+  return bounding_box = {vs.begin(), vs.end()};
 }
 
 static constexpr bool

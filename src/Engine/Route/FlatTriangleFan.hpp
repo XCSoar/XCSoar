@@ -40,7 +40,7 @@ protected:
 public:
   friend class PrintHelper;
 
-  void CalcBoundingBox() noexcept;
+  const FlatBoundingBox &CalcBoundingBox() noexcept;
 
   /**
    * Add the origin to an empty

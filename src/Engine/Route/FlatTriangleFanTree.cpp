@@ -53,9 +53,7 @@ TooClose(const FlatGeoPoint p1, const FlatGeoPoint p2) noexcept
 void
 FlatTriangleFanTree::CalcBB() noexcept
 {
-  FlatTriangleFan::CalcBoundingBox();
-
-  bb_children = bounding_box;
+  bb_children = FlatTriangleFan::CalcBoundingBox();
 
   for (auto &child : children) {
     child.CalcBB();
