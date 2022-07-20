@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2022-07-18 21:34+0000\n"
+"PO-Revision-Date: 2022-07-21 13:50+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -3596,7 +3596,7 @@ msgstr "Återstående tid"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:143
 msgid "Task distance"
-msgstr "Total Sträcka"
+msgstr "Total sträcka"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:144
 msgid "Remaining distance"
@@ -3604,11 +3604,11 @@ msgstr "Återstående distans"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:145
 msgid "Speed estimated"
-msgstr "Uppskattad Hast"
+msgstr "Estimerad hastighet"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:146
 msgid "Speed average"
-msgstr "SnittHast"
+msgstr "Medelhastighet"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:148
 msgid "Set MacCready"
@@ -3645,15 +3645,15 @@ msgstr ""
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:164
 #: src/Dialogs/Task/TargetDialog.cpp:433
 msgid "Speed remaining"
-msgstr "Återstående Hast"
+msgstr "Återstående hast."
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:167
 msgid "Achieved MacCready"
-msgstr "Uppnått MCready"
+msgstr "Uppnådd MCready"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:172
 msgid "Achieved speed"
-msgstr "Uppnådd Hast"
+msgstr "Uppnådd hastighet"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:175
 msgid "Cruise efficiency"
@@ -3684,7 +3684,7 @@ msgstr "Starttid"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:104
 msgid "Start alt."
-msgstr "Starthöjd."
+msgstr "Starthöjd"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:105
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:146
@@ -3694,7 +3694,7 @@ msgstr "Startpunkt"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:106
 msgid "Start speed"
-msgstr "StartHast"
+msgstr "Starthastighet"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:107
 msgid "Finish min. alt."
@@ -3702,7 +3702,7 @@ msgstr "Min målgångshöjd"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:108
 msgid "Valid finish"
-msgstr "Giltig Målgång"
+msgstr "Giltig målgång"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:109
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:92
@@ -3732,7 +3732,7 @@ msgstr "Landningstid"
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:115
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:155
 msgid "Daylight time"
-msgstr "Tid på dagen"
+msgstr "Dagtid"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:55
 msgid "Too much wind"
@@ -6881,7 +6881,7 @@ msgstr "Vägpunkter"
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:223
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:254
 msgid "Task Manager"
-msgstr "Uppgiftshanterare"
+msgstr "Hantera uppgift"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:220
 msgid "Validation Errors"
@@ -10240,7 +10240,7 @@ msgid ""
 "Drop"
 msgstr ""
 "Sätt\n"
-"markering"
+"markör"
 
 #: Data/Input/default.xci:981
 msgid "AVG/ALT"
@@ -10393,7 +10393,7 @@ msgid ""
 "Pan\n"
 "On"
 msgstr ""
-"Panorering\n"
+"Panorera\n"
 "På"
 
 #: Data/Input/default.xci:883
@@ -10430,10 +10430,12 @@ msgid ""
 "Accel\n"
 "Zero"
 msgstr ""
+"Accel.\n"
+"Noll"
 
 #: Data/Input/default.xci:59
 msgid "Above final glide"
-msgstr "Över finalglidbanan"
+msgstr "Över finalglidbana"
 
 #: Data/Input/default.xci:508 Data/Input/default.xci:1081
 msgid "Labels"
