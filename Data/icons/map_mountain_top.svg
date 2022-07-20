@@ -1,7 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Svg Vector Icons : http://www.onlinewebfonts.com/icon -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
-<metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata>
-<g><path d="M500.9,99.1L256.2,583l-81.6-80.6c0,0-185.4,398.5-162.8,398.5l978.1-0.1l-205.3-440l-60.4,38L500.9,99.1L500.9,99.1z M353.1,499.4L503.9,205l140.5,252.9l-60.6,41.5l-82.4-79.8L353.1,499.4L353.1,499.4z"/></g>
-</svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 1000 1000"
+   enable-background="new 0 0 1000 1000"
+   xml:space="preserve"
+   id="svg1126"
+   sodipodi:docname="map_mountain_top.svg"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"><defs
+   id="defs1130" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1364"
+   inkscape:window-height="725"
+   id="namedview1128"
+   showgrid="false"
+   inkscape:pagecheckerboard="true"
+   inkscape:zoom="0.5"
+   inkscape:cx="359.12843"
+   inkscape:cy="500"
+   inkscape:window-x="0"
+   inkscape:window-y="42"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="svg1126" />
+<metadata
+   id="metadata1120"> Svg Vector Icons : http://www.onlinewebfonts.com/icon <rdf:RDF><cc:Work
+     rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+       rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata>
+<g
+   id="g1124"><path
+     d="M 500.9,99.1 256.2,583 174.6,502.4 c 0,0 -185.4,398.5 -162.8,398.5 l 978.1,-0.1 -205.3,-440 -60.4,38 L 595.61812,268.64247 Z M 297.08254,612.81101 503.9,205 644.4,457.9 c 40.48321,115.00022 38.78451,110.74151 -60.6,41.5 L 479.16257,465.71377 Z"
+     id="path1122"
+     style="fill:#000000;stroke:#ffffff;stroke-width:6.66667;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     sodipodi:nodetypes="ccccccccccccccc" /></g>
+<path
+   style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:13.3333;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+   d="m 296.61083,611.63634 c -0.78568,-1.39408 203.72082,-406.50623 206.72864,-409.51406 0.58688,-0.58686 33.18434,56.76841 72.4388,127.45617 69.9808,126.01845 71.58854,129.16533 82.4956,161.47237 12.07208,35.7579 15.09784,51.83634 10.74254,57.08416 -5.53852,6.6735 31.31871,29.30004 -15.81718,3.42369 l -120.0708,-65.91565 v 0 c 0,0 -51.7383,-16.64274 -52.64067,-16.64284 -0.90237,-10e-5 -41.26726,32.01256 -89.69974,71.13924 -48.43249,39.12668 -89.22815,71.58804 -90.65702,72.13634 -1.42888,0.54832 -3.01296,0.26058 -3.52017,-0.63942 z"
+   id="path1970"
+   sodipodi:nodetypes="sssssscsssss" /></svg>
