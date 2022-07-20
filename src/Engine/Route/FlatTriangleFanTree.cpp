@@ -34,7 +34,7 @@ static bool
 AlmostTheSame(const FlatGeoPoint p1, const FlatGeoPoint p2) noexcept
 {
   const FlatGeoPoint k = p1 - p2;
-  const int dmax = std::max(abs(k.x), abs(k.y));
+  const unsigned dmax = std::max<unsigned>(std::abs(k.x), std::abs(k.y));
   return dmax <= 1;
 }
 
@@ -42,7 +42,7 @@ static bool
 TooClose(const FlatGeoPoint p1, const FlatGeoPoint p2) noexcept
 {
   const FlatGeoPoint k = p1 - p2;
-  const unsigned dmax = std::max<unsigned>(abs(k.x), abs(k.y));
+  const unsigned dmax = std::max<unsigned>(std::abs(k.x), std::abs(k.y));
   return dmax < FlatTriangleFanTree::MIN_STEP;
 }
 
