@@ -48,11 +48,13 @@ using std::experimental::noop_coroutine;
 }
 
 #ifdef ANDROID
+#if __clang_patchlevel__ >= 6
 /* Android NDK r25 emits the warning "support for
    std::experimental::coroutine_traits will be removed in LLVM 15; use
    std::coroutine_traits instead" but std::coroutine_traits is
    missing; disable the warning until we have a proper solution */
 #pragma GCC diagnostic ignored "-Wdeprecated-experimental-coroutine"
+#endif
 #endif
 
 #else /* not clang */
