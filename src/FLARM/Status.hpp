@@ -53,16 +53,16 @@ struct FlarmStatus {
   /** Is FLARM information available? */
   Validity available;
 
-  void Clear() {
+  constexpr void Clear() noexcept {
     available.Clear();
   }
 
-  void Complement(const FlarmStatus &add) {
+  constexpr void Complement(const FlarmStatus &add) noexcept {
     if (!available && add.available)
       *this = add;
   }
 
-  void Expire(TimeStamp clock) noexcept {
+  constexpr void Expire(TimeStamp clock) noexcept {
     available.Expire(clock, std::chrono::seconds(10));
   }
 };
