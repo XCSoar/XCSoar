@@ -6,7 +6,7 @@ on:
       - 'doc/**'
       - 'ide/**'
       - '.github/workflows/build-container.yml'
-      - '.github/workflows/build-android.yml'
+      - '.github/workflows/build-native.yml'
       - '.github/workflows/build-unix.yml'
     branches:
       - master
@@ -15,7 +15,7 @@ on:
       - 'doc/**'
       - 'ide/**'
       - '.github/workflows/build-container.yml'
-      - '.github/workflows/build-android.yml'
+      - '.github/workflows/build-native.yml'
       - '.github/workflows/build-unix.yml'
     branches:
       - master

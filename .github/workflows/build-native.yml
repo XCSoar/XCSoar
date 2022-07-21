@@ -3,7 +3,6 @@ on:
   workflow_dispatch:
   push:
     paths-ignore:
-      - 'android/**'
       - 'cloud/**'
       - 'doc/**'
       - 'fuzzer/**'
@@ -11,14 +10,12 @@ on:
       - 'kobo/**'
       - 'python/**'
       - '.github/workflows/build-container.yml'
-      - '.github/workflows/build-android.yml'
       - '.github/workflows/build-unix.yml'
     branches:
       - master
 
   pull_request:
     paths-ignore:
-      - 'android/**'
       - 'cloud/**'
       - 'doc/**'
       - 'fuzzer/**'
@@ -26,7 +23,6 @@ on:
       - 'kobo/**'
       - 'python/**'
       - '.github/workflows/build-container.yml'
-      - '.github/workflows/build-android.yml'
       - '.github/workflows/build-unix.yml'
     branches:
       - master
@@ -91,6 +87,82 @@ jobs:
         with:
           name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}${{ env.TARGET_EXT }}
           path: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}${{ env.TARGET_EXT }}
+
+  build-android:
+    runs-on: ubuntu-22.04
+
+    env:
+      TARGET: ANDROIDFAT
+      TARGET_BIN: XCSoar-debug
+      TARGET_FINAL: XCSoar-debug
+      TARGET_EXT: apk
+
+    steps:
+      - name: set vars for push
+        if: github.event_name == 'push'
+        run: |
+          echo "DEBUG=n" >> $GITHUB_ENV
+          echo "TARGET_FINAL=XCSoar" >> $GITHUB_ENV
+
+      - id: checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - id: cache-ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}
+
+      - name: "Cache third-party libraries"
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
+          path: |
+            ${{ github.workspace }}/output/ANDROID/*/lib
+            !${{ github.workspace }}/output/ANDROID/*/lib/build
+
+      - name: find githash
+        run: |
+          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            make \
+            quilt \
+            g++ \
+            librsvg2-bin xsltproc \
+            imagemagick gettext sox \
+            vorbis-tools \
+            cmake ninja-build
+
+      - name: Compile XCSoar
+        run: |
+          make -j$(nproc) \
+            TARGET=${{env.TARGET}} \
+            ANDROID_NDK=${ANDROID_NDK_LATEST_HOME} \
+            ANDROID_SDK=${ANDROID_HOME} \
+            DEBUG=${{env.DEBUG}} \
+            USE_CCACHE=y \
+            V=2
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}.${{ env.TARGET_EXT }}
+          path: output/ANDROID/bin/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
+
+      - name: Deploy to Staging server
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
+          ARGS: "-rltgoDzvO"
+          SOURCE: output/ANDROID/bin/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
+          REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
+          REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
+          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/android/
 
   build-windows:
     runs-on: ubuntu-22.04
