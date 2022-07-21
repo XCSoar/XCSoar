@@ -8,7 +8,6 @@ on:
       - '.github/workflows/build-container.yml'
       - '.github/workflows/build-android.yml'
       - '.github/workflows/build-unix.yml'
-      - '.github/workflows/build-win64.yml'
     branches:
       - master
   pull_request:
