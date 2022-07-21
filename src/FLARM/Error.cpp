@@ -33,7 +33,7 @@ static const TCHAR *const severity_strings[] = {
 };
 
 const TCHAR *
-FlarmError::ToString(Severity severity)
+FlarmError::ToString(Severity severity) noexcept
 {
   unsigned i = (unsigned)severity;
   return i < ARRAY_SIZE(severity_strings)
@@ -62,7 +62,7 @@ static constexpr struct {
 };
 
 const TCHAR *
-FlarmError::ToString(Code code)
+FlarmError::ToString(Code code) noexcept
 {
   for (auto i = error_strings; i->string != nullptr; ++i)
     if (i->code == code)

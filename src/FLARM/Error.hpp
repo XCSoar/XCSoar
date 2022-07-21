@@ -66,26 +66,26 @@ struct FlarmError {
   Severity severity;
   Code code;
 
-  bool IsWarning() const {
+  constexpr bool IsWarning() const noexcept {
     return severity >= REDUCED_FUNCTIONALITY;
   }
 
-  bool IsError() const {
+  constexpr bool IsError() const noexcept {
     return severity >= FATAL_PROBLEM;
   }
 
-  void Clear() {
+  constexpr void Clear() noexcept {
     available.Clear();
   }
 
-  void Complement(const FlarmError &add) {
+  constexpr void Complement(const FlarmError &add) noexcept {
     if (available.Complement(add.available)) {
       severity = add.severity;
       code = add.code;
     }
   }
 
-  void Expire([[maybe_unused]] TimeStamp clock) noexcept {
+  constexpr void Expire([[maybe_unused]] TimeStamp clock) noexcept {
     /* no expiry; this object will be cleared only when the device
        connection is lost */
   }
@@ -96,7 +96,7 @@ struct FlarmError {
    * value.
    */
   [[gnu::const]]
-  static const TCHAR *ToString(Severity severity);
+  static const TCHAR *ToString(Severity severity) noexcept;
 
   /**
    * Returns a human-readable translatable string for the given value.
@@ -104,15 +104,15 @@ struct FlarmError {
    * value.
    */
   [[gnu::const]]
-  static const TCHAR *ToString(Code code);
+  static const TCHAR *ToString(Code code) noexcept;
 
   [[gnu::pure]]
-  const TCHAR *GetSeverityString() const {
+  const TCHAR *GetSeverityString() const noexcept {
     return ToString(severity);
   }
 
   [[gnu::pure]]
-  const TCHAR *GetCodeString() const {
+  const TCHAR *GetCodeString() const noexcept {
     return ToString(code);
   }
 };
