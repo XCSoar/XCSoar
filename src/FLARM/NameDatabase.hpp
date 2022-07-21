@@ -39,7 +39,7 @@ public:
     StaticString<21> name;
 
     Record() = default;
-    Record(FlarmId _id, const TCHAR *_name)
+    Record(FlarmId _id, const TCHAR *_name) noexcept
       :id(_id), name(_name) {}
   };
 
@@ -53,20 +53,20 @@ public:
   typedef Array::const_iterator const_iterator;
 
   gcc_pure
-  const_iterator begin() const {
+  const_iterator begin() const noexcept {
     return data.begin();
   }
 
   gcc_pure
-  const_iterator end() const {
+  const_iterator end() const noexcept {
     return data.end();
   }
 
   gcc_pure
-  const TCHAR *Get(FlarmId id) const;
+  const TCHAR *Get(FlarmId id) const noexcept;
 
   gcc_pure
-  FlarmId Get(const TCHAR *name) const;
+  FlarmId Get(const TCHAR *name) const noexcept;
 
   /**
    * Look up all records with the specified name.
@@ -74,16 +74,17 @@ public:
    * @param max the maximum size of the given buffer
    * @return the number of items copied to the given buffer
    */
-  unsigned Get(const TCHAR *name, FlarmId *buffer, unsigned max) const;
+  unsigned Get(const TCHAR *name,
+               FlarmId *buffer, unsigned max) const noexcept;
 
-  bool Set(FlarmId id, const TCHAR *name);
+  bool Set(FlarmId id, const TCHAR *name) noexcept;
 
 protected:
   gcc_pure
-  int Find(FlarmId id) const;
+  int Find(FlarmId id) const noexcept;
 
   gcc_pure
-  int Find(const TCHAR *name) const;
+  int Find(const TCHAR *name) const noexcept;
 };
 
 #endif
