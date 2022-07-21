@@ -43,25 +43,25 @@ struct FlarmData {
 
   TrafficList traffic;
 
-  bool IsDetected() const {
+  constexpr bool IsDetected() const noexcept {
     return status.available || !traffic.IsEmpty();
   }
 
-  void Clear() {
+  constexpr void Clear() noexcept {
     error.Clear();
     version.Clear();
     status.Clear();
     traffic.Clear();
   }
 
-  void Complement(const FlarmData &add) {
+  constexpr void Complement(const FlarmData &add) noexcept {
     error.Complement(add.error);
     version.Complement(add.version);
     status.Complement(add.status);
     traffic.Complement(add.traffic);
   }
 
-  void Expire(TimeStamp clock) noexcept {
+  constexpr void Expire(TimeStamp clock) noexcept {
     error.Expire(clock);
     version.Expire(clock);
     status.Expire(clock);
