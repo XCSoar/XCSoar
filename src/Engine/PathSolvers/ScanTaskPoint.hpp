@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef SCANTASKPOINT_HPP
 #define SCANTASKPOINT_HPP
 
+#include <compare> // for the defaulted spaceship operator
 #include <cstdint>
 
 /**
@@ -48,20 +49,8 @@ public:
     return value;
   }
 
-  constexpr
-  bool operator==(const ScanTaskPoint other) const noexcept {
-    return Key() == other.Key();
-  }
-
-  constexpr
-  bool operator!=(const ScanTaskPoint other) const noexcept {
-    return Key() != other.Key();
-  }
-
-  constexpr
-  bool operator<(const ScanTaskPoint other) const noexcept {
-    return Key() < other.Key();
-  }
+  friend constexpr auto operator<=>(const ScanTaskPoint &,
+                                    const ScanTaskPoint &) noexcept = default;
 
   constexpr
   unsigned GetStageNumber() const noexcept {
