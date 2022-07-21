@@ -44,13 +44,13 @@ public:
   };
 
 private:
-  typedef StaticArray<Record, 200> Array;
-  typedef Array::iterator iterator;
+  using Array = StaticArray<Record, 200>;
+  using iterator = Array::iterator;
 
   Array data;
 
 public:
-  typedef Array::const_iterator const_iterator;
+  using const_iterator = Array::const_iterator;
 
   gcc_pure
   const_iterator begin() const noexcept {
