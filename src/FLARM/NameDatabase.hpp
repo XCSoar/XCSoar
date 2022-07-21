@@ -27,7 +27,6 @@ Copyright_License {
 #include "util/StaticString.hxx"
 #include "util/StaticArray.hxx"
 #include "FlarmId.hpp"
-#include "util/Compiler.h"
 
 #include <cassert>
 #include <tchar.h>
@@ -52,20 +51,20 @@ private:
 public:
   using const_iterator = Array::const_iterator;
 
-  gcc_pure
+  [[gnu::pure]]
   const_iterator begin() const noexcept {
     return data.begin();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const_iterator end() const noexcept {
     return data.end();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *Get(FlarmId id) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   FlarmId Get(const TCHAR *name) const noexcept;
 
   /**
@@ -80,10 +79,10 @@ public:
   bool Set(FlarmId id, const TCHAR *name) noexcept;
 
 protected:
-  gcc_pure
+  [[gnu::pure]]
   int Find(FlarmId id) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   int Find(const TCHAR *name) const noexcept;
 };
 
