@@ -45,30 +45,29 @@ class FlarmId {
 public:
   FlarmId() = default;
 
-  constexpr
-  static FlarmId Undefined() {
+  static constexpr FlarmId Undefined() noexcept {
     return FlarmId(UNDEFINED_VALUE);
   }
 
-  bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
     return value != UNDEFINED_VALUE;
   }
 
-  void Clear() {
+  constexpr void Clear() noexcept {
     value = UNDEFINED_VALUE;
   }
 
   friend constexpr auto operator<=>(const FlarmId &,
                                     const FlarmId &) noexcept = default;
 
-  static FlarmId Parse(const char *input, char **endptr_r);
+  static FlarmId Parse(const char *input, char **endptr_r) noexcept;
 #ifdef _UNICODE
-  static FlarmId Parse(const TCHAR *input, TCHAR **endptr_r);
+  static FlarmId Parse(const TCHAR *input, TCHAR **endptr_r) noexcept;
 #endif
 
-  const char *Format(char *buffer) const;
+  const char *Format(char *buffer) const noexcept;
 #ifdef _UNICODE
-  const TCHAR *Format(TCHAR *buffer) const;
+  const TCHAR *Format(TCHAR *buffer) const noexcept;
 #endif
 };
 
