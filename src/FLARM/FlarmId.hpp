@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_FLARM_ID_HPP
 
 #include <cstdint>
+#include <compare> // for the defaulted spaceship operator
 
 #ifdef _UNICODE
 #include <tchar.h>
@@ -57,13 +58,8 @@ public:
     value = UNDEFINED_VALUE;
   }
 
-  bool operator==(FlarmId other) const {
-    return value == other.value;
-  }
-
-  bool operator<(FlarmId other) const {
-    return value < other.value;
-  }
+  friend constexpr auto operator<=>(const FlarmId &,
+                                    const FlarmId &) noexcept = default;
 
   static FlarmId Parse(const char *input, char **endptr_r);
 #ifdef _UNICODE
