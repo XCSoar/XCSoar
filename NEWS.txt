@@ -15,6 +15,7 @@ Version 7.24 - not yet released
   - menu: fix bogus clicks after returning from XCSoar
 * Android
   - add SoftRF Lego into 'white list' of USB devices
+  - disable background location again to go back to Google Play
 * calculations
   - support for LVZC Charron contest
   - new asw27 polar from idaflieg
