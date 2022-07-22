@@ -70,7 +70,6 @@ echo
 echo Installing dependencies for ARM Linux targets...
 apt-get install ${APTOPTS[*]} g++-arm-linux-gnueabihf \
   libmpc-dev \
-  gmpc-dev \
   meson
 echo
 
