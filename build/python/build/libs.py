@@ -34,9 +34,9 @@ linux_headers = SabotageLinuxHeadersProject(
 )
 
 gcc = GccProject(
-    'https://ftp.gnu.org/gnu/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz',
-    'http://mirrors.ibiblio.org/gnu/ftp/gnu/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz',
-    'd08edc536b54c372a1010ff6619dd274c0f1603aa49212ba20f7aa2cda36fa8b',
+    'https://ftp.gnu.org/gnu/gcc/gcc-12.1.0/gcc-12.1.0.tar.xz',
+    'http://mirrors.ibiblio.org/gnu/ftp/gnu/gcc/gcc-12.1.0/gcc-12.1.0.tar.xz',
+    '62fd634889f31c02b64af2c468f064b47ad1ca78411c45abe6ac4b5f8dd19c7b',
     'lib/libstdc++.a',
     [
         # GCC fails to build if we disable the shared libstdc++
