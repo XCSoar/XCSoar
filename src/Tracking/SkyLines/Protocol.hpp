@@ -34,7 +34,8 @@
 
 #include <cstdint>
 
-/*
+/**
+ * @file
  * This file defines the SkyLines live tracking protocol.  It is a
  * one-way datagram protocol: the client (i.e. the on-board navigation
  * device) sends datagrams to the server without expecting a response.
@@ -49,7 +50,8 @@
  *
  */
 
-/*
+/**
+ * @file
  * The struct definitions below imply a specific memory layout.  They
  * have been designed in a way that all compilers we know will not
  * implicitly insert padding, because all attributes are aligned
@@ -59,6 +61,9 @@
  *
  */
 
+/**
+ * SkyLinesTracking group
+ */
 namespace SkyLinesTracking {
 
 static const uint32_t MAGIC = 0x5df4b67b;
@@ -73,32 +78,32 @@ enum Type {
   USER_NAME_RESPONSE = 7,
 
   /**
-   * @see #WaveSubmitPacket
+   * @see \ref WaveSubmitPacket
    */
   WAVE_SUBMIT = 8,
 
   /**
-   * @see #WaveRequestPacket
+   * @see \ref WaveRequestPacket
    */
   WAVE_REQUEST = 9,
 
   /**
-   * @see #WaveResponsePacket
+   * @see \ref WaveResponsePacket
    */
   WAVE_RESPONSE = 10,
 
   /**
-   * @see #ThermalSubmitPacket
+   * @see \ref ThermalSubmitPacket
    */
   THERMAL_SUBMIT = 11,
 
   /**
-   * @see #ThermalRequestPacket
+   * @see \ref ThermalRequestPacket
    */
   THERMAL_REQUEST = 12,
 
   /**
-   * @see #ThermalResponsePacket
+   * @see \ref ThermalResponsePacket
    */
   THERMAL_RESPONSE = 13,
 };
@@ -122,7 +127,7 @@ struct Header {
   uint16_t crc;
 
   /**
-   * An "enum Type" value.
+   * An SkyLinesTracking::Type value.
    */
   uint16_t type;
 
@@ -137,8 +142,8 @@ static_assert(sizeof(Header) == 16, "Wrong struct size");
 #endif
 
 /**
- * Check the network connection and verify the key (#PING).  The
- * server responds with #ACK.
+ * Check the network connection and verify the key (SkyLinesTracking::PING).
+ * The server responds with SkyLinesTracking::ACK.
  */
 struct PingPacket {
   Header header;
@@ -172,7 +177,7 @@ struct ACKPacket {
   /**
    * The key was not valid.  Usually, requests with bad keys are
    * silently discarded, but the server may use this flag to respond
-   * to a bad key in a PING packet.
+   * to a bad key in a SkyLinesTracking::PING packet.
    */
   static const uint32_t FLAG_BAD_KEY = 0x1;
 
@@ -289,8 +294,8 @@ struct TrafficRequestPacket {
 
   /**
    * The client wants to receive information about all traffic near
-   * the location he submitted recently in a #FixPacket.  The server
-   * chooses a reasonable range.
+   * the location he submitted recently in a SkyLinesTracking::FixPacket.
+   * The server chooses a reasonable range.
    */
   static const uint32_t FLAG_NEAR = 0x4;
 
@@ -306,12 +311,15 @@ static_assert(sizeof(TrafficRequestPacket) == 24, "Wrong struct size");
 #endif
 
 /**
- * The responds to #TrafficRequestPacket.  This packet has a dynamic
- * length.  If there are many records being sent, the packet should
+ * The response to SkyLinesTracking::TrafficRequestPacket.  This packet has
+ * a dynamic length.  If there are many records being sent, the packet should
  * be split at a reasonable size, to avoid implicit UDP datagram
  * fragmentation.
  */
 struct TrafficResponsePacket {
+  /**
+   * Padding.
+   */
   struct Traffic {
     uint32_t pilot_id;
 
@@ -354,7 +362,7 @@ struct TrafficResponsePacket {
   uint8_t reserved2;
 
   /**
-   * The number of #Traffic instances following this struct.
+   * The number of SkyLinesTracking::Traffic instances following this struct.
    */
   uint8_t traffic_count;
 
@@ -363,7 +371,7 @@ struct TrafficResponsePacket {
    */
   uint32_t reserved3;
 
-  /* followed by a number of #Traffic instances */
+  /* followed by a number of SkyLinesTracking::Traffic instances */
 };
 
 #ifdef __cplusplus
@@ -378,7 +386,7 @@ struct UserNameRequestPacket {
 
   /**
    * The id of the user, as obtained by
-   * #TrafficResponsePacket::Packet::pilot_id.
+   * Traffic::pilot_id.
    */
   uint32_t user_id;
 
@@ -406,7 +414,7 @@ struct UserNameResponsePacket {
 
   /**
    * The id of the user, as obtained by
-   * #TrafficResponsePacket::Packet::pilot_id.
+   * Traffic::pilot_id.
    */
   uint32_t user_id;
 
@@ -495,7 +503,8 @@ struct WaveSubmitPacket {
 
 /**
  * The client wishes to receive wave information.  The server will
- * send #WAVE_RESPONSE / #WaveResponsePacket.
+ * send SkyLinesTracking::WAVE_RESPONSE /
+ * SkyLinesTracking::WaveResponsePacket.
  */
 struct WaveRequestPacket {
   Header header;
@@ -509,7 +518,8 @@ struct WaveRequestPacket {
 };
 
 /**
- * Reply to #WAVE_REQUEST / #WaveRequestPacket.
+ * Reply to SkyLinesTracking::WAVE_REQUEST /
+ * SkyLinesTracking::WaveRequestPacket.
  */
 struct WaveResponsePacket {
   Header header;
@@ -518,13 +528,13 @@ struct WaveResponsePacket {
   uint8_t reserved2;
 
   /**
-   * The number of #Wave instances following this struct.
+   * The number of SkyLinesTracking::Wave instances following this struct.
    */
   uint8_t wave_count;
 
   uint32_t reserved3;
 
-  /* followed by a number of #Wave instances */
+  /* followed by a number of SkyLinesTracking::Wave instances */
 };
 
 /**
@@ -583,7 +593,8 @@ struct ThermalSubmitPacket {
 
 /**
  * The client wishes to receive thermal information.  The server will
- * send #THERMAL_RESPONSE / #ThermalResponsePacket.
+ * send SkyLinesTracking::THERMAL_RESPONSE /
+ * SkyLinesTracking::ThermalResponsePacket.
  */
 struct ThermalRequestPacket {
   Header header;
@@ -597,7 +608,8 @@ struct ThermalRequestPacket {
 };
 
 /**
- * Reply to #THERMAL_REQUEST / #ThermalRequestPacket.
+ * Reply to SkyLinesTracking::THERMAL_REQUEST /
+ * SkyLinesTracking::ThermalRequestPacket.
  */
 struct ThermalResponsePacket {
   Header header;
@@ -606,13 +618,13 @@ struct ThermalResponsePacket {
   uint8_t reserved2;
 
   /**
-   * The number of #Thermal instances following this struct.
+   * The number of SkyLinesTracking::Thermal instances following this struct.
    */
   uint8_t thermal_count;
 
   uint32_t reserved3;
 
-  /* followed by a number of #Thermal instances */
+  /* followed by a number of SkyLinesTracking::Thermal instances */
 };
 
 } /* namespace SkyLinesTracking */

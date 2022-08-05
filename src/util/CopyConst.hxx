@@ -32,7 +32,10 @@
 #include <type_traits>
 
 /**
- * @file
+ * \file
+ */
+
+/**
  * Generate a type based on To with the same const-ness as From.
  */
 template<typename To, typename From>

@@ -33,7 +33,11 @@
 #include <utility>
 
 /**
- * @file
+ * \file
+ * Internal class.  Do not use directly.
+ */
+
+/**
  * Internal class.  Do not use directly.
  */
 template<typename F>

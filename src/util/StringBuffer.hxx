@@ -33,7 +33,10 @@
 #include <array>
 
 /**
- * @file
+ * \file
+ */
+
+/**
  * A statically allocated string buffer.
  */
 template<typename T, std::size_t CAPACITY>

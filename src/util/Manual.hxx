@@ -35,7 +35,10 @@
 #include <utility>
 
 /**
- * @file
+ * \file
+ */
+
+/**
  * Container for an object that gets constructed and destructed
  * manually.  The object is constructed in-place, and therefore
  * without allocation overhead.  It can be constructed and destructed

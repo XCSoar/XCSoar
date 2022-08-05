@@ -33,7 +33,10 @@
 #include <utility>
 
 /**
- * @file
+ * \file
+ */
+
+/**
  * An asynchronous operation that can be cancelled.  Upon
  * cancellation, the operation's handler must not be invoked.
  */

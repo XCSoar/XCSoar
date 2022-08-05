@@ -35,7 +35,10 @@
 #include <cassert>
 
 /**
- * @file
+ * \file
+ */
+
+/**
  * A two dimensional array allocated on the heap with a length
  * determined at runtime.
  */

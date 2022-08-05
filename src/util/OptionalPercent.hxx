@@ -34,7 +34,10 @@
 #include <optional>
 
 /**
- * @file
+ * \file
+ */
+
+/**
  * An optional value in the range 0..100.  This is similar to
  * std::optional, but packs everything in one byte.
  */

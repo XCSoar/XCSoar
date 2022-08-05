@@ -31,7 +31,10 @@
 #define DELETE_DISPOSER_HXX
 
 /**
- * @file
+ * \file
+ */
+
+/**
  * A disposer for boost::intrusive that invokes the "delete" operator
  * on the given pointer.
  */

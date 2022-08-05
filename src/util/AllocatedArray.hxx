@@ -35,7 +35,10 @@
 #include <utility>
 
 /**
- * @file
+ * \file
+ */
+
+/**
  * An array allocated on the heap with a length determined at runtime.
  */
 template<class T>

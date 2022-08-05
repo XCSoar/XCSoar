@@ -37,7 +37,10 @@
 #include <cassert>
 
 /**
- * @file
+ * \file
+ */
+
+/**
  * A quad tree implementation.  It provides quick searches on a two
  * dimensional space.  It is used to store objects on earth's surface.
  *

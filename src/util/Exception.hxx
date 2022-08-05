@@ -35,7 +35,10 @@
 #include <utility>
 
 /**
- * @file
+ * \file
+ */
+
+/**
  * Throws the specified exception.  There is an overload for
  * std::exception_ptr which throws the contained exception instead of
  * the std::exception_ptr itself.

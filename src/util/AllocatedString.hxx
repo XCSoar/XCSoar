@@ -38,7 +38,10 @@
 #include <utility>
 
 /**
- * @file
+ * \file
+ */
+
+/**
  * A string pointer whose memory is managed by this class.
  *
  * Unlike std::string, this object can hold a "nullptr" special value.

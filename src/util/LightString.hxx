@@ -36,7 +36,10 @@
 #include <utility>
 
 /**
- * @file
+ * \file
+ */
+
+/**
  * A string pointer whose memory may or may not be managed by this
  * class.
  */
