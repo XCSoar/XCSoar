@@ -371,3 +371,46 @@ jobs:
             OSX_MIN_SUPPORTED_VERSION=12.0 \
             V=2 \
             everything check
+
+  build-ios:
+    runs-on: macos-12
+
+    env:
+      TARGET: IOS64
+
+    steps:
+      - id: checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: "Cache third-party libraries"
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
+          path: |
+            ${{ github.workspace }}/output/${{ env.TARGET }}/lib
+            !${{ github.workspace }}/output/${{ env.TARGET }}/lib/build
+
+      - id: cache-ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ios
+
+      - name: Install dependencies
+        run: |
+          brew install \
+            make \
+            quilt \
+            librsvg \
+            imagemagick gettext sox \
+            cmake ninja
+
+      - name: Compile XCSoar
+        # TODO: remove the "||true" as soon as the remaining SDL2
+        # linker failure ("Undefined symbols: _SDL_IsIPad, _main") is
+        # fixed.
+        run: |
+          gmake -j$(sysctl -n hw.logicalcpu) TARGET=${{env.TARGET }} USE_CCACHE=y \
+            OPTIMIZE="-O0" \
+            V=2 ||true
