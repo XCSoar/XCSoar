@@ -67,7 +67,7 @@ class AutotoolsProject(MakeProject):
             'RANLIB=' + toolchain.ranlib,
             'STRIP=' + toolchain.strip,
             '--prefix=' + install_prefix,
-            '--enable-silent-rules',
+            '--disable-silent-rules',
         ]
 
         arch = toolchain.actual_arch if self.use_actual_arch else toolchain.toolchain_arch
@@ -82,6 +82,7 @@ class AutotoolsProject(MakeProject):
         configure += self.configure_args
 
         try:
+            print(configure)
             subprocess.check_call(configure, cwd=build, env=toolchain.env)
         except subprocess.CalledProcessError:
             # dump config.log after a failed configure run

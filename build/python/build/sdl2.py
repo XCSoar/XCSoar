@@ -26,8 +26,10 @@ class SDL2Project(AutotoolsProject):
                 'STRIP=' + toolchain.strip,
                 '--host=' + host,
                 '--prefix=' + toolchain.install_prefix,
+                '--disable-silent-rules',
             ] + self.configure_args
 
+            print(configure)
             subprocess.check_call(configure, cwd=src, env=toolchain.env)
 
             return src
