@@ -1,8 +1,8 @@
-Index: libgeotiff-1.4.2/CMakeLists.txt
+Index: libgeotiff-1.4.3/CMakeLists.txt
 ===================================================================
---- libgeotiff-1.4.2.orig/CMakeLists.txt
-+++ libgeotiff-1.4.2/CMakeLists.txt
-@@ -192,7 +192,7 @@ IF(WITH_TIFF)
+--- libgeotiff-1.4.3.orig/CMakeLists.txt
++++ libgeotiff-1.4.3/CMakeLists.txt
+@@ -191,7 +191,7 @@ IF(WITH_TIFF)
      IF(TIFF_FOUND)
          # Confirm required API is available
          INCLUDE(CheckFunctionExists)
