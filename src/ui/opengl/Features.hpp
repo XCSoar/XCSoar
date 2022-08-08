@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_FEATURES_HPP
 #define XCSOAR_SCREEN_OPENGL_FEATURES_HPP
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 #ifndef ENABLE_OPENGL
 #error No OpenGL
 #endif
@@ -31,7 +35,9 @@ Copyright_License {
 #define HAVE_TEXT_CACHE
 
 #if defined(_WIN32) || defined(MESA_KMS) || defined(USE_X11) || defined(ENABLE_SDL) || defined(USE_WAYLAND)
+#if !defined(__APPLE__) || !TARGET_OS_IPHONE
 #define HAVE_DYNAMIC_MAPBUFFER
+#endif // !iPhone
 #endif
 
 #if defined(MESA_KMS)
