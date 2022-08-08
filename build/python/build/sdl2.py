@@ -9,8 +9,6 @@ class SDL2Project(AutotoolsProject):
             # required:
             # * out-of-tree build is not supported
             # * needs CFLAGS adjustment to enable Objective-C and ARC
-            # * SDL_config.h needs to be replaced with SDL_config_iphoneos.h
-            #   after running "configure"
 
             src = self.unpack(toolchain, out_of_tree=False)
 
@@ -28,9 +26,6 @@ class SDL2Project(AutotoolsProject):
             ] + self.configure_args
 
             subprocess.check_call(configure, cwd=src, env=toolchain.env)
-
-            shutil.copyfile(os.path.join(src, 'include/SDL_config_iphoneos.h'),
-                            os.path.join(src, 'include/SDL_config.h'))
 
             return src
 

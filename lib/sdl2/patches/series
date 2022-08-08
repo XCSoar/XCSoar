@@ -1,2 +1,2 @@
-fix_aarch64_ios_detect.diff
 disable_metal_ios.diff
+no_ios_joystick_sensor

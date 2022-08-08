@@ -317,9 +317,9 @@ libgeotiff = CmakeProject(
 )
 
 sdl2 = SDL2Project(
-    'http://www.libsdl.org/release/SDL2-2.0.12.tar.gz',
-    'https://fossies.org/linux/misc/SDL2-2.0.12.tar.gz',
-    '349268f695c02efbc9b9148a70b85e58cefbbf704abd3e91be654db7f1e2c863',
+    'http://www.libsdl.org/release/SDL2-2.0.22.tar.gz',
+    'https://fossies.org/linux/misc/SDL2-2.0.22.tar.gz',
+    'fe7cbf3127882e3fc7259a75a0cb585620272c51745d3852ab9dd87960697f2e',
     'lib/libSDL2.a',
     [
         '--disable-shared', '--enable-static',
@@ -330,6 +330,8 @@ sdl2 = SDL2Project(
         '--disable-filesystem',
         '--disable-timers',
         '--disable-file',
+        '--disable-misc',
+        '--disable-locale',
         '--disable-loadso',
         '--disable-diskaudio',
         '--disable-dummyaudio',
