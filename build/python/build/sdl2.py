@@ -12,6 +12,9 @@ class SDL2Project(AutotoolsProject):
 
             src = self.unpack(toolchain, out_of_tree=False)
 
+            # the SDL2 configure script expects "*-ios-*" and not "*-apple-*"
+            host = toolchain.toolchain_arch.replace('-apple-', '-ios-')
+
             configure = [
                 os.path.join(src, 'configure'),
                 'CC=' + toolchain.cc,
@@ -21,7 +24,7 @@ class SDL2Project(AutotoolsProject):
                 'LIBS=' + toolchain.libs,
                 'AR=' + toolchain.ar,
                 'STRIP=' + toolchain.strip,
-                '--host=' + toolchain.toolchain_arch,
+                '--host=' + host,
                 '--prefix=' + toolchain.install_prefix,
             ] + self.configure_args
 
