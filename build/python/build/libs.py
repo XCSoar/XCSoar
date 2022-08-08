@@ -323,6 +323,17 @@ sdl2 = SDL2Project(
     'lib/libSDL2.a',
     [
         '--disable-shared', '--enable-static',
+        '--disable-joystick',
+        '--disable-haptic',
+        '--disable-sensor',
+        '--disable-power',
+        '--disable-filesystem',
+        '--disable-timers',
+        '--disable-file',
+        '--disable-loadso',
+        '--disable-diskaudio',
+        '--disable-dummyaudio',
+        '--disable-video-dummy',
     ],
     patches=abspath('lib/sdl2/patches'),
 )
