@@ -118,8 +118,8 @@ jobs:
         with:
           key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
           path: |
-            ${{ github.workspace }}/output/${{ env.TARGET }}/lib/lib
-            !${{ github.workspace }}/output/${{ env.TARGET }}/lib/lib/build
+            ${{ github.workspace }}/output/${{ env.TARGET }}/lib
+            !${{ github.workspace }}/output/${{ env.TARGET }}/lib/build
 
       - name: find githash
         run: |
@@ -261,8 +261,8 @@ jobs:
         with:
           key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
           path: |
-            ${{ github.workspace }}/output/${{ env.TARGET }}/lib/lib
-            !${{ github.workspace }}/output/${{ env.TARGET }}/lib/lib/build
+            ${{ github.workspace }}/output/${{ env.TARGET }}/lib
+            !${{ github.workspace }}/output/${{ env.TARGET }}/lib/build
 
       - name: find githash
         run: |
