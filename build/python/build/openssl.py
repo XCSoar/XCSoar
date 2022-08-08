@@ -48,6 +48,7 @@ class OpenSSLProject(MakeProject):
 
             # Apple
             'x86_64-apple-darwin': 'darwin64-x86_64-cc',
+            'aarch64-apple-darwin': 'darwin64-arm64-cc',
         }
 
         openssl_arch = openssl_archs[toolchain.toolchain_arch]
