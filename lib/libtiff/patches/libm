@@ -1,12 +1,13 @@
-Index: tiff-4.0.10/libtiff-4.pc.in
+Index: tiff-4.4.0/libtiff-4.pc.in
 ===================================================================
---- tiff-4.0.10.orig/libtiff-4.pc.in
-+++ tiff-4.0.10/libtiff-4.pc.in
-@@ -6,6 +6,6 @@ includedir=@includedir@
+--- tiff-4.4.0.orig/libtiff-4.pc.in
++++ tiff-4.4.0/libtiff-4.pc.in
+@@ -6,7 +6,7 @@ includedir=@includedir@
  Name: libtiff
  Description:  Tag Image File Format (TIFF) library.
- Version: @VERSION@
+ Version: @LIBTIFF_MAJOR_VERSION@.@LIBTIFF_MINOR_VERSION@.@LIBTIFF_MICRO_VERSION@
 -Libs: -L${libdir} -ltiff
 +Libs: -L${libdir} -ltiff -lm
  Libs.private: @tiff_libs_private@
  Cflags: -I${includedir}
+ Requires.private: @tiff_requires_private@
