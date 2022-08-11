@@ -1,33 +1,34 @@
-diff -Nuar lua-5.3.4.orig/src/loslib.c lua-5.3.4/src/loslib.c
---- lua-5.3.4.orig/src/loslib.c	2018-03-14 23:11:03.000000000 +0100
-+++ lua-5.3.4/src/loslib.c	2018-03-14 23:12:42.000000000 +0100
+Index: lua-5.4.4/src/loslib.c
+===================================================================
+--- lua-5.4.4.orig/src/loslib.c
++++ lua-5.4.4/src/loslib.c
 @@ -21,6 +21,9 @@
  #include "lauxlib.h"
  #include "lualib.h"
-
+ 
 +#ifdef __APPLE__
 +#include <TargetConditionals.h>
 +#endif
-
+ 
  /*
  ** {==================================================================
-@@ -138,6 +141,7 @@
-
-
-
+@@ -139,6 +142,7 @@
+ 
+ 
+ 
 +#if !defined(__APPLE__) || !TARGET_OS_IPHONE
  static int os_execute (lua_State *L) {
    const char *cmd = luaL_optstring(L, 1, NULL);
-   int stat = system(cmd);
-@@ -148,6 +152,7 @@
+   int stat;
+@@ -151,6 +155,7 @@ static int os_execute (lua_State *L) {
      return 1;
    }
  }
 +#endif
-
-
+ 
+ 
  static int os_remove (lua_State *L) {
-@@ -385,7 +390,9 @@
+@@ -408,7 +413,9 @@ static const luaL_Reg syslib[] = {
    {"clock",     os_clock},
    {"date",      os_date},
    {"difftime",  os_difftime},
@@ -37,7 +38,7 @@ diff -Nuar lua-5.3.4.orig/src/loslib.c lua-5.3.4/src/loslib.c
    {"exit",      os_exit},
    {"getenv",    os_getenv},
    {"remove",    os_remove},
-@@ -404,4 +411,3 @@
+@@ -427,4 +434,3 @@ LUAMOD_API int luaopen_os (lua_State *L)
    luaL_newlib(L, syslib);
    return 1;
  }
