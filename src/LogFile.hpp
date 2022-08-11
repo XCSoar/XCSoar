@@ -55,7 +55,7 @@ LogFormat(const wchar_t *fmt, ...) noexcept;
 
 /* not using an empty inline function here because we don't want to
    evaluate the parameters */
-#define LogDebug(...)
+#define LogDebug(...) do {} while (false)
 
 #endif /* NDEBUG */
 
