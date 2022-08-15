@@ -62,3 +62,18 @@ WaypointList::SortByDistance(const GeoPoint &location) noexcept
 {
   std::sort(begin(), end(), WaypointDistanceCompare(location));
 }
+
+void
+WaypointList::SortByName() noexcept
+{
+  std::sort(begin(), end(), [](WaypointListItem &a, WaypointListItem &b)
+                            {return a.waypoint->name < b.waypoint->name;});
+}
+
+void
+WaypointList::MakeUnique() noexcept
+{
+  auto new_end = std::unique(begin(), end(), [](WaypointListItem &a, WaypointListItem &b)
+                                        {return a.waypoint->id == b.waypoint->id;});
+  erase(new_end, end());
+}

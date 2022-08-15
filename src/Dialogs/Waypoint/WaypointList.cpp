@@ -282,6 +282,10 @@ FillList(WaypointList &list, const Waypoints &src,
 
   if (filter.distance > 0 || !filter.direction.IsNegative())
     list.SortByDistance(location);
+  else
+    list.SortByName();
+
+  list.MakeUnique();
 }
 
 static void

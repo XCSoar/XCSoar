@@ -54,7 +54,9 @@ public:
 class WaypointList: public std::vector<WaypointListItem>
 {
 public:
+  void SortByName() noexcept;
   void SortByDistance(const GeoPoint &location) noexcept;
+  void MakeUnique() noexcept;
 };
 
 #endif
