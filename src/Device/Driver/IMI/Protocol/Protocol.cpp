@@ -166,7 +166,7 @@ IMI::DeclarationWrite(Port &port, const Declaration &decl,
 
   // send declaration for current task
   SendRet(port, env, MSG_DECLARATION, &imiDecl, sizeof(imiDecl),
-          MSG_ACK_SUCCESS, 2000, -1);
+          MSG_ACK_SUCCESS, 0, -1);
 }
 
 bool
