@@ -17,5 +17,7 @@ struct HorizonLook {
   Brush terrain_brush;
   Pen terrain_pen;
 
+  Pen nodata_pen;
+
   void Initialise();
 };

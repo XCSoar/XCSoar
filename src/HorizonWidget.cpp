@@ -42,10 +42,9 @@ protected:
       canvas.ClearWhite();
 
     if (!attitude.bank_angle_available && !attitude.pitch_angle_available)
-      // TODO: paint "no data" hint
-      return;
-
-    HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude);
+      HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude, false);
+    else
+      HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude, true);
   }
 };
 

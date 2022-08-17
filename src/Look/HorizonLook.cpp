@@ -14,4 +14,6 @@ HorizonLook::Initialise()
 
   terrain_brush.Create(terrain_color);
   terrain_pen.Create(Layout::Scale(1), DarkColor(terrain_color));
+
+  nodata_pen.Create(Layout::Scale(10), COLOR_RED);
 }

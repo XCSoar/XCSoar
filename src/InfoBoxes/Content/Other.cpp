@@ -141,7 +141,7 @@ InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas,
   if (CommonInterface::Basic().acceleration.available) {
     const Look &look = UIGlobals::GetLook();
     HorizonRenderer::Draw(canvas, rc,
-                          look.horizon, CommonInterface::Basic().attitude);
+                          look.horizon, CommonInterface::Basic().attitude, true);
   }
 }
 

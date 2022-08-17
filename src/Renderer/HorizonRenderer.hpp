@@ -12,5 +12,6 @@ namespace HorizonRenderer
 {
   void Draw(Canvas &canvas, const PixelRect &rc,
             const HorizonLook &look,
-            const AttitudeState &attitude);
+            const AttitudeState &attitude,
+            bool AHRSDataAvailable);
 }

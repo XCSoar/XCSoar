@@ -29,7 +29,7 @@ public:
 protected:
   void OnPaint(Canvas &canvas) noexcept override {
     canvas.ClearWhite();
-    HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude);
+    HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude, true);
   }
 };
 

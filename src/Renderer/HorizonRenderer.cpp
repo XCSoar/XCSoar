@@ -15,7 +15,8 @@
 void
 HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                       const HorizonLook &look,
-                      const AttitudeState &attitude)
+                      const AttitudeState &attitude,
+                      bool AHRSDataAvailable)
 {
   /*
   This feature of having a backup artificial horizon based on inferred
@@ -71,4 +72,12 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                   {center.x + rr2n, center.y - rr2n});
   canvas.DrawLine({center.x - rr2p, center.y - rr2p},
                   {center.x - rr2n, center.y - rr2n});
+
+  if (!AHRSDataAvailable) {
+    canvas.Select(look.nodata_pen);
+    canvas.DrawLine({rc.left, rc.top},
+                    {rc.right, rc.bottom});
+    canvas.DrawLine({rc.right, rc.top},
+                    {rc.left, rc.bottom});
+  }
 }
