@@ -43,6 +43,7 @@ InfoBoxData::SetInvalid() noexcept
 void
 InfoBoxData::SetValueInvalid() noexcept
 {
+  SetValueColor(0);
   SetValue(_T("---"));
   SetValueUnit(Unit::UNDEFINED);
 }
