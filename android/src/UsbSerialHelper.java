@@ -53,7 +53,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
   private final UsbManager usbmanager;
 
   private HashMap<String, UsbDeviceInterface> _AvailableInterfaces = new HashMap<>();
-  private HashMap<UsbDevice, UsbSerialPort> _PendingConnection = new HashMap<>();
+  private HashMap<UsbDeviceInterface, UsbSerialPort> _PendingConnection = new HashMap<>();
 
   private final Collection<DetectDeviceListener> detectListeners =
     new LinkedList<DetectDeviceListener>();
@@ -128,10 +128,17 @@ public class UsbSerialHelper extends BroadcastReceiver {
         if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
           Log.d(TAG, "permission granted for device " + device);
 
-          UsbSerialPort port = _PendingConnection.get(device);
-          _PendingConnection.remove(device);
-          if (port != null) {
-            port.open(usbmanager);
+          //Iterate through list of Pending connections. For each entry matching with granted device, open port and remove from list
+          Iterator<Map.Entry<UsbDeviceInterface,UsbSerialPort>> iter = _PendingConnection.entrySet().iterator();
+          while (iter.hasNext()) {
+            Map.Entry<UsbDeviceInterface,UsbSerialPort> entry = iter.next();
+            if(device.getDeviceName().equals(entry.getKey().device.getDeviceName())) {
+              UsbSerialPort port = entry.getValue();
+              if (port != null) {
+                port.open(usbmanager);
+              }
+              iter.remove();
+            }
           }
         }
       }
@@ -223,7 +230,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
     if (usbmanager.hasPermission(deviface.device)) {
       port.open(usbmanager);
     } else {
-      _PendingConnection.put(deviface.device, port);
+      _PendingConnection.put(deviface, port);
       PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(UsbSerialHelper.ACTION_USB_PERMISSION), 0);
       usbmanager.requestPermission(deviface.device, pi);
     }
