@@ -28,15 +28,18 @@ on:
       - master
 
 env:
-  TARGET: UNIX
-  TARGET_BIN: xcsoar
-  TARGET_FINAL: xcsoar-debug
-  TARGET_EXT: ''
   DEBUG: y
 
 jobs:
   build-ubuntu:
     runs-on: ubuntu-22.04
+
+    env:
+      TARGET: UNIX
+      TARGET_BIN: xcsoar
+      TARGET_FINAL: xcsoar-debug
+      TARGET_EXT: ''
+
     steps:
       - name: set vars for push
         if: github.event_name == 'push'
@@ -355,16 +358,16 @@ jobs:
 
     needs: build-windows
     steps:
-    - id: checkout
-      uses: actions/checkout@v2
-    - name: fetch artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: xcsoar-${{ env.TARGET }}-artifact
-        path: ${{ github.workspace }}/output/${{ env.TARGET }}
-    - name: XCSoar run checks on ${{ env.TARGET }}
-      run: make check-no-build
-      working-directory: ${{ github.workspace }}
+      - id: checkout
+        uses: actions/checkout@v2
+      - name: fetch artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: xcsoar-${{ env.TARGET }}-artifact
+          path: ${{ github.workspace }}/output/${{ env.TARGET }}
+      - name: XCSoar run checks on ${{ env.TARGET }}
+        run: make check-no-build
+        working-directory: ${{ github.workspace }}
 
   build-macos:
     runs-on: macos-12
