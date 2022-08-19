@@ -3,6 +3,7 @@ Version 7.25 - not yet released
   - IMI: fix task declaration bug
 * Android
   - support USB serial adapters with more than one port
+  - fix crash when GPS access was rejected by user
 
 Version 7.24 - 2022/07/22
 * user interface
