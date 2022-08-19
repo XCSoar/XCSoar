@@ -287,10 +287,13 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
-  auto *main_window = NativeView::GetPointer(env, obj);
-  if (event_queue == nullptr || main_window == nullptr)
-    return;
+  if (event_queue == nullptr)
     /* event subsystem is not initialized, there is nothing to pause */
+    return;
+
+  auto *main_window = NativeView::GetPointer(env, obj);
+  if (main_window == nullptr)
+    return;
 
   main_window->Pause();
 }
@@ -299,10 +302,13 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
 {
-  auto *main_window = NativeView::GetPointer(env, obj);
-  if (event_queue == nullptr || main_window == nullptr)
+  if (event_queue == nullptr)
+    /* event subsystem is not initialized, there is nothing to pause */
     return;
-    /* event subsystem is not initialized, there is nothing to resume */
+
+  auto *main_window = NativeView::GetPointer(env, obj);
+  if (main_window == nullptr)
+    return;
 
   main_window->Resume();
 }
