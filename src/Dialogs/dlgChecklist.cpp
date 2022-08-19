@@ -50,8 +50,6 @@ struct Checklist {
   bool Load() noexcept;
 };
 
-static Checklist global_checklist;
-
 static void
 UpdateCaption(WndForm &form, const Checklist &checklist, std::size_t page)
 {
@@ -140,15 +138,11 @@ void
 dlgChecklistShowModal()
 {
   static std::size_t current_page = 0;
-  static bool first = true;
-  if (first) {
-    if (!global_checklist.Load())
-      global_checklist.addChecklist(_("No checklist loaded"),
-                                    _("Create xcsoar-checklist.txt"));
-    first = false;
-  }
 
-  const auto &checklist = global_checklist;
+  Checklist checklist{};
+  if (!checklist.Load())
+    checklist.addChecklist(_("No checklist loaded"),
+                           _("Create xcsoar-checklist.txt"));
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -159,7 +153,10 @@ dlgChecklistShowModal()
                                                    dialog.MakeModalResultCallback(mrOK));
   for (std::size_t i = 0; i < checklist.nLists; ++i)
     pager->Add(std::make_unique<LargeTextWidget>(look, checklist.ChecklistText[i]));
-  pager->SetCurrent(current_page);
+
+  if (current_page < checklist.nLists)
+    pager->SetCurrent(current_page);
+
   pager->SetPageFlippedCallback([&checklist, &dialog, &pager=*pager](){
     UpdateCaption(dialog, checklist, pager.GetCurrentIndex());
   });
