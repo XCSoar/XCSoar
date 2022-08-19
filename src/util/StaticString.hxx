@@ -47,11 +47,11 @@
 #endif
 
 bool
-CopyUTF8(char *dest, size_t dest_size, const char *src);
+CopyUTF8(char *dest, size_t dest_size, const char *src) noexcept;
 
 #ifdef _UNICODE
 bool
-CopyUTF8(wchar_t *dest, size_t dest_size, const char *src);
+CopyUTF8(wchar_t *dest, size_t dest_size, const char *src) noexcept;
 #endif
 
 /**
@@ -72,19 +72,19 @@ public:
 	static constexpr value_type SENTINEL = Base::SENTINEL;
 
 	StaticStringBase() = default;
-	explicit StaticStringBase(const_pointer value) {
+	explicit StaticStringBase(const_pointer value) noexcept {
 		assign(value);
 	}
 
 	using Base::capacity;
 
-	size_type length() const {
+	size_type length() const noexcept {
 		return StringLength(c_str());
 	}
 
 	using Base::empty;
 
-	bool full() const {
+	bool full() const noexcept {
 		return length() >= capacity() - 1;
 	}
 
@@ -94,28 +94,28 @@ public:
 	 * @param new_length the new length; must be equal or smaller
 	 * than the current length
 	 */
-	void Truncate(size_type new_length) {
+	constexpr void Truncate(size_type new_length) noexcept {
 		assert(new_length <= length());
 
 		data()[new_length] = SENTINEL;
 	}
 
-	void SetASCII(const char *src, const char *src_end) {
+	void SetASCII(const char *src, const char *src_end) noexcept {
 		pointer end = ::CopyASCII(data(), capacity() - 1, src, src_end);
 		*end = SENTINEL;
 	}
 
-	void SetASCII(const char *src) {
+	void SetASCII(const char *src) noexcept {
 		SetASCII(src, src + StringLength(src));
 	}
 
 #ifdef _UNICODE
-	void SetASCII(const wchar_t *src, const wchar_t *src_end) {
+	void SetASCII(const wchar_t *src, const wchar_t *src_end) noexcept {
 		pointer end = ::CopyASCII(data(), capacity() - 1, src, src_end);
 		*end = SENTINEL;
 	}
 
-	void SetASCII(const wchar_t *src) {
+	void SetASCII(const wchar_t *src) noexcept {
 		SetASCII(src, src + StringLength(src));
 	}
 #endif
@@ -123,7 +123,7 @@ public:
 	/**
 	 * Eliminate all non-ASCII characters.
 	 */
-	void CleanASCII() {
+	void CleanASCII() noexcept {
 		CopyASCII(data(), c_str());
 	}
 
@@ -132,23 +132,23 @@ public:
 	 *
 	 * @return false if #src was invalid UTF-8
 	 */
-	bool SetUTF8(const char *src) {
+	bool SetUTF8(const char *src) noexcept {
 		return ::CopyUTF8(data(), capacity(), src);
 	}
 
-	bool equals(const_pointer other) const {
+	bool equals(const_pointer other) const noexcept {
 		assert(other != nullptr);
 
 		return StringIsEqual(c_str(), other);
 	}
 
 	[[gnu::pure]]
-	bool StartsWith(const_pointer prefix) const {
+	bool StartsWith(const_pointer prefix) const noexcept {
 		return StringStartsWith(c_str(), prefix);
 	}
 
 	[[gnu::pure]]
-	bool Contains(const_pointer needle) const {
+	bool Contains(const_pointer needle) const noexcept {
 		return StringFind(c_str(), needle) != nullptr;
 	}
 
@@ -157,14 +157,14 @@ public:
 	/**
 	 * Returns a writable buffer.
 	 */
-	pointer buffer() {
+	pointer buffer() noexcept {
 		return data();
 	}
 
 	/**
 	 * Returns one character.  No bounds checking.
 	 */
-	value_type operator[](size_type i) const {
+	value_type operator[](size_type i) const noexcept {
 		assert(i <= length());
 
 		return Base::operator[](i);
@@ -173,7 +173,7 @@ public:
 	/**
 	 * Returns one writable character.  No bounds checking.
 	 */
-	reference operator[](size_type i) {
+	reference operator[](size_type i) noexcept {
 		assert(i <= length());
 
 		return Base::operator[](i);
@@ -181,36 +181,36 @@ public:
 
 	using Base::begin;
 
-	const_iterator end() const {
+	const_iterator end() const noexcept {
 		return begin() + length();
 	}
 
 	using Base::front;
 
-	value_type back() const {
+	value_type back() const noexcept {
 		return end()[-1];
 	}
 
-	void assign(const_pointer new_value) {
+	void assign(const_pointer new_value) noexcept {
 		assert(new_value != nullptr);
 
 		CopyString(data(), capacity(), new_value);
 	}
 
-	void assign(const_pointer new_value, size_type length) {
+	void assign(const_pointer new_value, size_type length) noexcept {
 		assert(new_value != nullptr);
 
 		CopyString(data(), capacity(), {new_value, length});
 	}
 
-	void append(const_pointer new_value) {
+	void append(const_pointer new_value) noexcept {
 		assert(new_value != nullptr);
 
 		size_type len = length();
 		CopyString(data() + len, capacity() - len, new_value);
 	}
 
-	void append(const_pointer new_value, size_type _length) {
+	void append(const_pointer new_value, size_type _length) noexcept {
 		assert(new_value != nullptr);
 
 		size_type len = length();
@@ -218,7 +218,7 @@ public:
 			   {new_value, _length});
 	}
 
-	bool push_back(value_type ch) {
+	bool push_back(value_type ch) noexcept {
 		size_t l = length();
 		if (l >= capacity() - 1)
 			return false;
@@ -233,13 +233,13 @@ public:
 	 * Append ASCII characters from the specified string without
 	 * buffer boundary checks.
 	 */
-	void UnsafeAppendASCII(const char *p) {
+	void UnsafeAppendASCII(const char *p) noexcept {
 		CopyASCII(data() + length(), p);
 	}
 
 	using Base::c_str;
 
-	operator const_pointer() const {
+	operator const_pointer() const noexcept {
 		return c_str();
 	}
 
@@ -252,11 +252,11 @@ public:
 		return c_str();
 	}
 
-	bool operator ==(const_pointer value) const {
+	bool operator ==(const_pointer value) const noexcept {
 		return equals(value);
 	}
 
-	bool operator !=(const_pointer value) const {
+	bool operator !=(const_pointer value) const noexcept {
 		return !equals(value);
 	}
 
@@ -272,17 +272,17 @@ public:
 		return *this != other.c_str();
 	}
 
-	StaticStringBase<T, max> &operator =(const_pointer new_value) {
+	StaticStringBase<T, max> &operator=(const_pointer new_value) noexcept {
 		assign(new_value);
 		return *this;
 	}
 
-	StaticStringBase<T, max> &operator +=(const_pointer new_value) {
+	StaticStringBase<T, max> &operator+=(const_pointer new_value) noexcept {
 		append(new_value);
 		return *this;
 	}
 
-	StaticStringBase<T, max> &operator +=(value_type ch) {
+	StaticStringBase<T, max> &operator+=(value_type ch) noexcept {
 		push_back(ch);
 		return *this;
 	}
@@ -311,7 +311,7 @@ public:
 	 * truncated if it would become too long for the buffer.
 	 */
 	template<typename... Args>
-	void AppendFormat(const_pointer fmt, Args&&... args) {
+	void AppendFormat(const_pointer fmt, Args&&... args) noexcept {
 		size_t l = length();
 		StringFormat(data() + l, capacity() - l, fmt, args...);
 	}
@@ -352,21 +352,21 @@ public:
 	using typename Base::size_type;
 
 	NarrowString() = default;
-	explicit NarrowString(const_pointer value):Base(value) {}
+	explicit NarrowString(const_pointer value) noexcept:Base(value) {}
 
-	NarrowString<max> &operator =(const_pointer new_value) {
+	NarrowString<max> &operator =(const_pointer new_value) noexcept {
 		return (NarrowString<max> &)Base::operator =(new_value);
 	}
 
-	NarrowString<max> &operator +=(const_pointer new_value) {
+	NarrowString<max> &operator +=(const_pointer new_value) noexcept {
 		return (NarrowString<max> &)Base::operator +=(new_value);
 	}
 
-	NarrowString<max> &operator +=(value_type ch) {
+	NarrowString<max> &operator +=(value_type ch) noexcept {
 		return (NarrowString<max> &)Base::operator +=(ch);
 	}
 
-	void CropIncompleteUTF8() {
+	void CropIncompleteUTF8() noexcept {
 		::CropIncompleteUTF8(this->data());
 	}
 };
@@ -391,21 +391,21 @@ public:
 	using typename Base::size_type;
 
 	StaticString() = default;
-	explicit StaticString(const_pointer value):Base(value) {}
+	explicit StaticString(const_pointer value) noexcept:Base(value) {}
 
-	StaticString<max> &operator =(const_pointer new_value) {
+	StaticString<max> &operator =(const_pointer new_value) noexcept {
 		return (StaticString<max> &)Base::operator =(new_value);
 	}
 
-	StaticString<max> &operator +=(const_pointer new_value) {
+	StaticString<max> &operator +=(const_pointer new_value) noexcept {
 		return (StaticString<max> &)Base::operator +=(new_value);
 	}
 
-	StaticString<max> &operator +=(value_type ch) {
+	StaticString<max> &operator +=(value_type ch) noexcept {
 		return (StaticString<max> &)Base::operator +=(ch);
 	}
 
-	void CropIncompleteUTF8() {
+	void CropIncompleteUTF8() noexcept {
 		/* this is a wchar_t string, it's not multi-byte,
 		   therefore we have no incomplete sequences */
 	}
