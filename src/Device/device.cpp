@@ -171,8 +171,7 @@ devShutdown()
   // Stop COM devices
   LogFormat("Stop COM devices");
 
-  for (DeviceDescriptor *i : *devices)
-    i->Close();
+  devices->Close();
 }
 
 void

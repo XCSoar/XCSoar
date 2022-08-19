@@ -61,6 +61,13 @@ MultipleDevices::Open(OperationEnvironment &env) noexcept
 }
 
 void
+MultipleDevices::Close() noexcept
+{
+  for (DeviceDescriptor *i : devices)
+    i->Close();
+}
+
+void
 MultipleDevices::AutoReopen(OperationEnvironment &env)
 {
   for (DeviceDescriptor *i : devices)

@@ -82,6 +82,7 @@ public:
   void Tick();
 
   void Open(OperationEnvironment &env) noexcept;
+  void Close() noexcept;
   void AutoReopen(OperationEnvironment &env);
   void PutMacCready(double mac_cready, OperationEnvironment &env);
   void PutBugs(double bugs, OperationEnvironment &env);
