@@ -30,7 +30,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"
 #include "util/ConvertString.hpp"
-#include "util/StringView.hxx"
+#include "util/StringSplit.hxx"
 
 #include <stdexcept>
 
@@ -153,8 +153,8 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
   if (end == nullptr)
     throw std::runtime_error("Malformed IMG tag in pc_met HTML");
 
-  const StringView src{_src, end};
-  std::string_view _name = src.SplitLast('/').second;
+  const std::string_view src{_src, std::size_t(end - _src)};
+  const std::string_view _name = SplitLast(src, '/').second;
   if (_name.empty())
     throw std::runtime_error("Malformed IMG tag in pc_met HTML");
 
@@ -170,7 +170,7 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
   if (!File::Exists(path)) {
     // URI for a single page of a selected 'Satellitenbilder"-page with link
     // to the latest image and the namelist array of all stored images
-    snprintf(url, sizeof(url), PCMET_URI "%.*s", int(src.size), src.data);
+    snprintf(url, sizeof(url), PCMET_URI "%.*s", int(src.size()), src.data());
 
     const auto ignored_response = co_await
       Net::CoDownloadToFile(curl, url, username, password,

@@ -33,7 +33,6 @@ Copyright_License {
 #include "util/Macros.hpp"
 #include "util/StringStrip.hxx"
 #include "util/TruncateString.hpp"
-#include "util/TStringView.hxx"
 
 #include <algorithm>
 
