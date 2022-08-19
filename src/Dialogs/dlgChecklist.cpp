@@ -41,7 +41,7 @@ Copyright_License {
 #define MAXLISTS 20
 
 struct Checklist {
-  int nLists = 0;
+  std::size_t nLists = 0;
   TCHAR *ChecklistText[MAXTITLE];
   TCHAR *ChecklistTitle[MAXTITLE];
 
@@ -53,7 +53,7 @@ struct Checklist {
 static Checklist global_checklist;
 
 static void
-UpdateCaption(WndForm &form, const Checklist &checklist, unsigned page)
+UpdateCaption(WndForm &form, const Checklist &checklist, std::size_t page)
 {
   TCHAR buffer[80];
   _tcscpy(buffer, _("Checklist"));
@@ -95,7 +95,6 @@ try {
   StaticString<MAXDETAILS> Details;
   TCHAR Name[MAXTITLE];
   bool inDetails = false;
-  int i;
 
   Details.clear();
   Name[0] = 0;
@@ -111,6 +110,7 @@ try {
       }
 
       // extract name
+      std::size_t i;
       for (i = 1; i < MAXTITLE; i++) {
         if (TempString[i] == ']')
           break;
@@ -139,7 +139,7 @@ try {
 void
 dlgChecklistShowModal()
 {
-  static unsigned int current_page = 0;
+  static std::size_t current_page = 0;
   static bool first = true;
   if (first) {
     if (!global_checklist.Load())
@@ -157,7 +157,7 @@ dlgChecklistShowModal()
 
   auto pager = std::make_unique<ArrowPagerWidget>(look.button,
                                                    dialog.MakeModalResultCallback(mrOK));
-  for (int i = 0; i < checklist.nLists; ++i)
+  for (std::size_t i = 0; i < checklist.nLists; ++i)
     pager->Add(std::make_unique<LargeTextWidget>(look, checklist.ChecklistText[i]));
   pager->SetCurrent(current_page);
   pager->SetPageFlippedCallback([&checklist, &dialog, &pager=*pager](){
