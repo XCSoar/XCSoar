@@ -43,7 +43,7 @@ l_logger_index(lua_State *L)
   if (name == nullptr)
     return 0;
   else if (StringIsEqual(name, "pilot_name")) { 
-    Lua::Push(L, logger.pilot_name);
+    Lua::Push(L, logger.pilot_name.c_str());
   } else if (StringIsEqual(name, "time_step_cruise")) {
       // The time interval between logged points when not circling.
       Lua::Push(L, logger.time_step_cruise);
@@ -57,7 +57,7 @@ l_logger_index(lua_State *L)
   } else if (StringIsEqual(name, "log_book")) {
       Lua::Push(L, logger.enable_flight_logger);
   } else if (StringIsEqual(name, "logger_id")) {
-      Lua::Push(L, logger.logger_id);
+      Lua::Push(L, logger.logger_id.c_str());
   } else
     return 0;
 
