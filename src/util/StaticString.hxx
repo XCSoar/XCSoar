@@ -40,6 +40,7 @@
 
 #include <cassert>
 #include <cstddef>
+#include <string_view>
 
 #ifdef _UNICODE
 #include <wchar.h>
@@ -243,6 +244,11 @@ public:
 	using Base::c_str;
 
 	operator const_pointer() const {
+		return c_str();
+	}
+
+	[[gnu::pure]]
+	operator std::basic_string_view<T>() const noexcept {
 		return c_str();
 	}
 
