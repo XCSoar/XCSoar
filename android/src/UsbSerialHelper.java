@@ -52,8 +52,8 @@ public class UsbSerialHelper extends BroadcastReceiver {
   private final Context context;
   private final UsbManager usbmanager;
 
-  private HashMap<String, UsbDeviceInterface> _AvailableInterfaces = new HashMap<>();
-  private HashMap<UsbDeviceInterface, UsbSerialPort> _PendingConnection = new HashMap<>();
+  private final HashMap<String, UsbDeviceInterface> _AvailableInterfaces = new HashMap<>();
+  private final HashMap<UsbDeviceInterface, UsbSerialPort> _PendingConnection = new HashMap<>();
 
   private final Collection<DetectDeviceListener> detectListeners =
     new LinkedList<DetectDeviceListener>();
