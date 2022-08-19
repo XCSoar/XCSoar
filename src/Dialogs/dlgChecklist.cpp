@@ -39,28 +39,37 @@ Copyright_License {
 #define MAXDETAILS 5000
 
 #define MAXLISTS 20
-static int nLists = 0;
-static TCHAR *ChecklistText[MAXTITLE];
-static TCHAR *ChecklistTitle[MAXTITLE];
+
+struct Checklist {
+  int nLists = 0;
+  TCHAR *ChecklistText[MAXTITLE];
+  TCHAR *ChecklistTitle[MAXTITLE];
+
+  void addChecklist(const TCHAR *name, const TCHAR *details) noexcept;
+
+  bool Load() noexcept;
+};
+
+static Checklist global_checklist;
 
 static void
-UpdateCaption(WndForm &form, unsigned page)
+UpdateCaption(WndForm &form, const Checklist &checklist, unsigned page)
 {
   TCHAR buffer[80];
   _tcscpy(buffer, _("Checklist"));
 
-  if (ChecklistTitle[page] &&
-      !StringIsEmpty(ChecklistTitle[page]) &&
-      _tcslen(ChecklistTitle[page]) < 60) {
+  if (checklist.ChecklistTitle[page] &&
+      !StringIsEmpty(checklist.ChecklistTitle[page]) &&
+      _tcslen(checklist.ChecklistTitle[page]) < 60) {
     _tcscat(buffer, _T(": "));
-    _tcscat(buffer, ChecklistTitle[page]);
+    _tcscat(buffer, checklist.ChecklistTitle[page]);
   }
 
   form.SetCaption(buffer);
 }
 
-static void
-addChecklist(const TCHAR *name, const TCHAR *details)
+inline void
+Checklist::addChecklist(const TCHAR *name, const TCHAR *details) noexcept
 {
   if (nLists >= MAXLISTS)
     return;
@@ -70,8 +79,8 @@ addChecklist(const TCHAR *name, const TCHAR *details)
   nLists++;
 }
 
-static void
-LoadChecklist()
+inline bool
+Checklist::Load() noexcept
 try {
   nLists = 0;
 
@@ -121,7 +130,10 @@ try {
   if (inDetails) {
     addChecklist(Name, Details);
   }
+
+  return nLists > 0;
 } catch (...) {
+  return false;
 }
 
 void
@@ -130,11 +142,13 @@ dlgChecklistShowModal()
   static unsigned int current_page = 0;
   static bool first = true;
   if (first) {
-    LoadChecklist();
-    if (nLists == 0)
-      addChecklist(_("No checklist loaded"), _("Create xcsoar-checklist.txt"));
+    if (!global_checklist.Load())
+      global_checklist.addChecklist(_("No checklist loaded"),
+                                    _("Create xcsoar-checklist.txt"));
     first = false;
   }
+
+  const auto &checklist = global_checklist;
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -143,14 +157,14 @@ dlgChecklistShowModal()
 
   auto pager = std::make_unique<ArrowPagerWidget>(look.button,
                                                    dialog.MakeModalResultCallback(mrOK));
-  for (int i = 0; i < nLists; ++i)
-    pager->Add(std::make_unique<LargeTextWidget>(look, ChecklistText[i]));
+  for (int i = 0; i < checklist.nLists; ++i)
+    pager->Add(std::make_unique<LargeTextWidget>(look, checklist.ChecklistText[i]));
   pager->SetCurrent(current_page);
-  pager->SetPageFlippedCallback([&dialog, &pager=*pager](){
-    UpdateCaption(dialog, pager.GetCurrentIndex());
+  pager->SetPageFlippedCallback([&checklist, &dialog, &pager=*pager](){
+    UpdateCaption(dialog, checklist, pager.GetCurrentIndex());
   });
 
-  UpdateCaption(dialog, pager->GetCurrentIndex());
+  UpdateCaption(dialog, checklist, pager->GetCurrentIndex());
 
   dialog.FinishPreliminary(std::move(pager));
   dialog.ShowModal();
