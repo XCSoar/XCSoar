@@ -701,7 +701,7 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
 
     if (!tmp.empty())
       tmp.append(_T("; "));
-    tmp.append(FormatUserAltitude(item.altitude));
+    tmp.append(FormatUserAltitude(item.altitude).c_str());
 
     if (!tmp.empty())
       row_renderer.DrawSecondRow(canvas, rc, tmp);

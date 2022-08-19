@@ -132,7 +132,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
     if (!elevation.IsSpecial()) {
       StaticString<64> elevation_long;
       elevation_long = _("Elevation: ");
-      elevation_long += FormatUserAltitude(elevation.GetValue());
+      elevation_long += FormatUserAltitude(elevation.GetValue()).c_str();
 
       TextInBox(canvas, elevation_long, p, mode,
                 render_projection.GetScreenSize());

@@ -29,7 +29,7 @@ Copyright_License {
 #include "util/RadixTree.hpp"
 #include "util/StaticString.hxx"
 #include "util/TrivialArray.hxx"
-#include "util/TStringView.hxx"
+#include "util/tstring_view.hxx"
 
 #include <array>
 #include <cassert>
@@ -99,24 +99,24 @@ struct InputConfig {
   void SetDefaults() noexcept;
 
   [[gnu::pure]]
-  int LookupMode(TStringView name) const noexcept {
+  int LookupMode(tstring_view name) const noexcept {
     for (std::size_t i = 0, size = modes.size(); i < size; ++i)
-      if (name.Equals(modes[i].c_str()))
+      if (name == modes[i].c_str())
         return i;
 
     return -1;
   }
 
-  int AppendMode(TStringView name) noexcept {
+  int AppendMode(tstring_view name) noexcept {
     if (modes.full())
       return -1;
 
-    modes.append().assign(name.data, name.size);
+    modes.append() = name;
     return modes.size() - 1;
   }
 
   [[gnu::pure]]
-  int MakeMode(TStringView name) noexcept {
+  int MakeMode(tstring_view name) noexcept {
     int mode = LookupMode(name);
     if (mode < 0)
       mode = AppendMode(name);

@@ -68,10 +68,12 @@ public:
 	using typename Base::const_iterator;
 	using typename Base::size_type;
 
+	using string_view = std::basic_string_view<value_type>;
+
 	static constexpr value_type SENTINEL = Base::SENTINEL;
 
 	StaticStringBase() = default;
-	explicit StaticStringBase(const_pointer value) noexcept {
+	explicit StaticStringBase(string_view value) noexcept {
 		assign(value);
 	}
 
@@ -190,31 +192,13 @@ public:
 		return end()[-1];
 	}
 
-	void assign(const_pointer new_value) noexcept {
-		assert(new_value != nullptr);
-
+	void assign(string_view new_value) noexcept {
 		CopyString(data(), capacity(), new_value);
 	}
 
-	void assign(const_pointer new_value, size_type length) noexcept {
-		assert(new_value != nullptr);
-
-		CopyString(data(), capacity(), {new_value, length});
-	}
-
-	void append(const_pointer new_value) noexcept {
-		assert(new_value != nullptr);
-
+	void append(string_view new_value) noexcept {
 		size_type len = length();
 		CopyString(data() + len, capacity() - len, new_value);
-	}
-
-	void append(const_pointer new_value, size_type _length) noexcept {
-		assert(new_value != nullptr);
-
-		size_type len = length();
-		CopyString(data() + len, capacity() - len,
-			   {new_value, _length});
 	}
 
 	bool push_back(value_type ch) noexcept {
@@ -243,7 +227,7 @@ public:
 	}
 
 	[[gnu::pure]]
-	operator std::basic_string_view<T>() const noexcept {
+	operator string_view() const noexcept {
 		return c_str();
 	}
 
@@ -267,12 +251,12 @@ public:
 		return *this != other.c_str();
 	}
 
-	StaticStringBase<T, max> &operator=(const_pointer new_value) noexcept {
+	StaticStringBase<T, max> &operator=(string_view new_value) noexcept {
 		assign(new_value);
 		return *this;
 	}
 
-	StaticStringBase<T, max> &operator+=(const_pointer new_value) noexcept {
+	StaticStringBase<T, max> &operator+=(string_view new_value) noexcept {
 		append(new_value);
 		return *this;
 	}
