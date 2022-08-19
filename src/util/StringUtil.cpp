@@ -31,14 +31,13 @@ Copyright_License {
 #include <string.h>
 
 char *
-CopyString(char *gcc_restrict dest,
-           const char *gcc_restrict src, size_t size) noexcept
+CopyString(char *gcc_restrict dest, size_t dest_size,
+           std::string_view src) noexcept
 {
-  size_t length = strlen(src);
-  if (length >= size)
-    length = size - 1;
+  if (src.size() >= dest_size)
+    src = src.substr(0, dest_size -1);
 
-  char *p = std::copy_n(src, length, dest);
+  char *p = std::copy(src.begin(), src.end(), dest);
   *p = '\0';
   return p;
 }

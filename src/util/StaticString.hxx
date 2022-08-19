@@ -194,32 +194,28 @@ public:
 	void assign(const_pointer new_value) {
 		assert(new_value != nullptr);
 
-		CopyString(data(), new_value, capacity());
+		CopyString(data(), capacity(), new_value);
 	}
 
 	void assign(const_pointer new_value, size_type length) {
 		assert(new_value != nullptr);
 
-		size_type max_length = length + 1 > capacity()
-			? capacity()
-			: length + 1;
-		CopyString(data(), new_value, max_length);
+		CopyString(data(), capacity(), {new_value, length});
 	}
 
 	void append(const_pointer new_value) {
 		assert(new_value != nullptr);
 
 		size_type len = length();
-		CopyString(data() + len, new_value, capacity() - len);
+		CopyString(data() + len, capacity() - len, new_value);
 	}
 
 	void append(const_pointer new_value, size_type _length) {
 		assert(new_value != nullptr);
 
 		size_type len = length();
-		size_type max_length = (capacity() - len < _length + 1) ?
-			capacity() - len : _length + 1;
-		CopyString(data() + len, new_value, max_length);
+		CopyString(data() + len, capacity() - len,
+			   {new_value, _length});
 	}
 
 	bool push_back(value_type ch) {

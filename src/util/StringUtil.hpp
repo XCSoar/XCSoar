@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_STRING_UTIL_HPP
 
 #include <cstddef>
+#include <string_view>
 
 #ifdef _UNICODE
 #include "WStringUtil.hpp"
@@ -34,13 +35,13 @@ Copyright_License {
  * Copy a string.  If the buffer is too small, then the string is
  * truncated.  This is a safer version of strncpy().
  *
- * @param size the size of the destination buffer (including the null
- * terminator)
+ * @param dest_size the size of the destination buffer (including the
+ * null terminator)
  * @return a pointer to the null terminator
  */
 [[gnu::nonnull]]
 char *
-CopyString(char *dest, const char *src, size_t size) noexcept;
+CopyString(char *dest, size_t dest_size, std::string_view src) noexcept;
 
 /**
  * Normalize a string for searching.  This strips all characters

@@ -39,7 +39,7 @@ CopyUTF8(char *dest, size_t dest_size, const char *src)
 	if (!::ValidateUTF8(src))
 		return false;
 
-	CopyString(dest, src, dest_size);
+	CopyString(dest, dest_size, src);
 	CropIncompleteUTF8(dest);
 	return true;
 }
