@@ -26,7 +26,6 @@ Copyright_License {
 #include "ui/canvas/custom/Files.hpp"
 #include "Look/FontDescription.hpp"
 #include "util/RuntimeError.hxx"
-#include "util/TStringView.hxx"
 #include "Init.hpp"
 #include "Asset.hpp"
 #include "system/Path.hpp"
@@ -97,15 +96,17 @@ FT_CEIL(FT_Long x) noexcept
 
 [[gnu::pure]]
 static unsigned
-NextChar(TStringView &s) noexcept
+NextChar(tstring_view &s) noexcept
 {
   assert(!s.empty());
 
 #ifdef _UNICODE
-  return unsigned(s.shift());
+  const unsigned ch = s.front();
+  s.remove_prefix(1);
+  return ch;
 #else
-  auto n = NextUTF8(s.data);
-  s.MoveFront(n.second);
+  auto n = NextUTF8(s.data());
+  s.remove_prefix(n.second - s.data());
   return n.first;
 #endif
 }
@@ -230,9 +231,8 @@ Font::Destroy() noexcept
 
 template<typename F>
 static void
-ForEachChar(TStringView text, F &&f)
+ForEachChar(tstring_view text, F &&f)
 {
-  assert(text != nullptr);
 #ifndef _UNICODE
   assert(ValidateUTF8(text));
 #endif
@@ -291,7 +291,7 @@ ForEachGlyph(const FT_Face face, unsigned ascent_height, T &&text,
 }
 
 PixelSize
-Font::TextSize(TStringView text) const noexcept
+Font::TextSize(tstring_view text) const noexcept
 {
   int maxx = 0;
 
@@ -400,7 +400,7 @@ RenderGlyph(uint8_t *buffer, size_t width, size_t height,
 }
 
 void
-Font::Render(TStringView text, const PixelSize size,
+Font::Render(tstring_view text, const PixelSize size,
              void *_buffer) const noexcept
 {
   uint8_t *buffer = (uint8_t *)_buffer;

@@ -107,12 +107,12 @@ Canvas::DrawArc(PixelPoint center, unsigned radius,
 }
 
 const PixelSize
-Canvas::CalcTextSize(BasicStringView<TCHAR> text) const noexcept
+Canvas::CalcTextSize(tstring_view text) const noexcept
 {
   assert(IsDefined());
 
   SIZE size;
-  ::GetTextExtentPoint(dc, text.data, text.size, &size);
+  ::GetTextExtentPoint(dc, text.data(), text.size(), &size);
   return PixelSize(size.cx, size.cy);
 }
 
@@ -127,43 +127,46 @@ Canvas::GetFontHeight() const
 }
 
 void
-Canvas::DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
+Canvas::DrawText(PixelPoint p, tstring_view text) noexcept
 {
   assert(IsDefined());
 
-  ::ExtTextOut(dc, p.x, p.y, 0, nullptr, text.data, text.size, nullptr);
+  ::ExtTextOut(dc, p.x, p.y, 0, nullptr, text.data(), text.size(), nullptr);
 }
 
 void
 Canvas::DrawOpaqueText(PixelPoint p, const PixelRect &_rc,
-                       BasicStringView<TCHAR> text) noexcept
+                       tstring_view text) noexcept
 {
   assert(IsDefined());
 
   RECT rc = _rc;
-  ::ExtTextOut(dc, p.x, p.y, ETO_OPAQUE, &rc, text.data, text.size, nullptr);
+  ::ExtTextOut(dc, p.x, p.y, ETO_OPAQUE, &rc,
+               text.data(), text.size(), nullptr);
 }
 
 void
 Canvas::DrawClippedText(PixelPoint p, const PixelRect &_rc,
-                        BasicStringView<TCHAR> text) noexcept
+                        tstring_view text) noexcept
 {
   assert(IsDefined());
 
   RECT rc = _rc;
-  ::ExtTextOut(dc, p.x, p.y, ETO_CLIPPED, &rc, text.data, text.size, nullptr);
+  ::ExtTextOut(dc, p.x, p.y, ETO_CLIPPED, &rc,
+               text.data(), text.size(), nullptr);
 }
 
 void
 Canvas::DrawClippedText(PixelPoint p, unsigned width,
-                        BasicStringView<TCHAR> text) noexcept
+                        tstring_view text) noexcept
 {
   const PixelSize size = CalcTextSize(text);
 
   RECT rc;
   ::SetRect(&rc, p.x, p.y,
             p.x + std::min(width, size.width), p.y + size.height);
-  ::ExtTextOut(dc, p.x, p.y, ETO_CLIPPED, &rc, text.data, text.size, nullptr);
+  ::ExtTextOut(dc, p.x, p.y, ETO_CLIPPED, &rc,
+               text.data(), text.size(), nullptr);
 }
 
 void

@@ -30,10 +30,10 @@ Copyright_License {
 #include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Font.hpp"
 #include "ui/canvas/Pen.hpp"
-#include "util/StringView.hxx"
+
+#include <string_view>
 
 #include <tchar.h>
-
 
 /* Workaround: Some Win32 headers define OPAQUE and TRANSPARENT as preprocessor
  * defines. Undefine them to avoid name conflict. */
@@ -294,10 +294,10 @@ public:
   void DrawFocusRectangle(PixelRect rc);
 
   [[gnu::pure]]
-  const PixelSize CalcTextSize(BasicStringView<TCHAR> text) const noexcept;
+  const PixelSize CalcTextSize(tstring_view text) const noexcept;
 
   [[gnu::pure]]
-  unsigned CalcTextWidth(BasicStringView<TCHAR> text) const noexcept {
+  unsigned CalcTextWidth(tstring_view text) const noexcept {
     return CalcTextSize(text).width;
   }
 
@@ -306,15 +306,15 @@ public:
     return font != nullptr ? font->GetHeight() : 0;
   }
 
-  void DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept;
+  void DrawText(PixelPoint p, tstring_view text) noexcept;
 
-  void DrawTransparentText(PixelPoint p, BasicStringView<TCHAR> text) noexcept;
+  void DrawTransparentText(PixelPoint p, tstring_view text) noexcept;
 
   void DrawOpaqueText(PixelPoint p, const PixelRect &rc,
-                      BasicStringView<TCHAR> text) noexcept;
+                      tstring_view text) noexcept;
 
   void DrawClippedText(PixelPoint p, const PixelRect &rc,
-                       BasicStringView<TCHAR> text) noexcept {
+                       tstring_view text) noexcept {
     // XXX
 
     if (p.x < rc.right)
@@ -322,17 +322,17 @@ public:
   }
 
   void DrawClippedText(PixelPoint p, PixelSize size,
-                       BasicStringView<TCHAR> text) noexcept;
+                       tstring_view text) noexcept;
 
   void DrawClippedText(PixelPoint p, unsigned width,
-                       BasicStringView<TCHAR> text) noexcept {
+                       tstring_view text) noexcept {
     DrawClippedText(p, {width, 16384u}, text);
   }
 
   /**
    * Render text, clip it within the bounds of this Canvas.
    */
-  void TextAutoClipped(PixelPoint p, BasicStringView<TCHAR> t) noexcept {
+  void TextAutoClipped(PixelPoint p, tstring_view t) noexcept {
     if (p.x < (int)GetWidth() && p.y < (int)GetHeight())
       DrawClippedText(p, {GetWidth() - p.x, GetHeight() - p.y}, t);
   }
@@ -342,7 +342,7 @@ public:
    *
    * @return the resulting text height
    */
-  unsigned DrawFormattedText(PixelRect r, BasicStringView<TCHAR> text,
+  unsigned DrawFormattedText(PixelRect r, tstring_view text,
                              unsigned format) noexcept;
 
   /**

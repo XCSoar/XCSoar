@@ -38,7 +38,6 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "util/AllocatedArray.hxx"
 #include "util/Macros.hpp"
-#include "util/TStringView.hxx"
 #include "util/UTF8.hpp"
 
 #include "Shaders.hpp"
@@ -82,12 +81,12 @@ Canvas::InvertRectangle(PixelRect r)
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 }
 
-static TStringView
-ClipText(const Font &font, TStringView text,
+static tstring_view
+ClipText(const Font &font, tstring_view text,
          int x, unsigned canvas_width) noexcept
 {
   if (text.empty() || x >= int(canvas_width))
-    return nullptr;
+    return {};
 
   /* this is an approximation, just good enough for clipping */
   unsigned font_width = std::max(font.GetHeight() / 4U, 1U);
@@ -95,8 +94,7 @@ ClipText(const Font &font, TStringView text,
   unsigned max_width = canvas_width - x;
   unsigned max_chars = max_width / font_width;
 
-  text.size = TruncateStringUTF8(text, max_chars);
-  return text;
+  return text.substr(0, TruncateStringUTF8(text, max_chars));
 }
 
 void
@@ -587,13 +585,12 @@ Canvas::DrawFocusRectangle(PixelRect rc)
 }
 
 const PixelSize
-Canvas::CalcTextSize(BasicStringView<TCHAR> text) const noexcept
+Canvas::CalcTextSize(tstring_view text) const noexcept
 {
-  assert(text != nullptr);
 #ifdef UNICODE
   const WideToUTF8Converter text2(text);
 #else
-  const StringView text2 = text;
+  const std::string_view text2 = text;
   assert(ValidateUTF8(text));
 #endif
 
@@ -621,13 +618,12 @@ PrepareColoredAlphaTexture(Color color)
 }
 
 void
-Canvas::DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
+Canvas::DrawText(PixelPoint p, tstring_view text) noexcept
 {
-  assert(text != nullptr);
 #ifdef UNICODE
   const WideToUTF8Converter text2(text);
 #else
-  const StringView text2 = text;
+  const std::string_view text2 = text;
   assert(ValidateUTF8(text));
 #endif
 
@@ -636,7 +632,7 @@ Canvas::DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
   if (font == nullptr)
     return;
 
-  const StringView text3 = ClipText(*font, text2, p.x, size.width);
+  const std::string_view text3 = ClipText(*font, text2, p.x, size.width);
   if (text3.empty())
     return;
 
@@ -656,13 +652,12 @@ Canvas::DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
 }
 
 void
-Canvas::DrawTransparentText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
+Canvas::DrawTransparentText(PixelPoint p, tstring_view text) noexcept
 {
-  assert(text != nullptr);
 #ifdef UNICODE
   const WideToUTF8Converter text2(text);
 #else
-  const StringView text2 = text;
+  const std::string_view text2 = text;
   assert(ValidateUTF8(text));
 #endif
 
@@ -671,7 +666,7 @@ Canvas::DrawTransparentText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
   if (font == nullptr)
     return;
 
-  const StringView text3 = ClipText(*font, text2, p.x, size.width);
+  const std::string_view text3 = ClipText(*font, text2, p.x, size.width);
   if (text3.empty())
     return;
 
@@ -689,13 +684,12 @@ Canvas::DrawTransparentText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
 
 void
 Canvas::DrawClippedText(PixelPoint p, PixelSize size,
-                        BasicStringView<TCHAR> text) noexcept
+                        tstring_view text) noexcept
 {
-  assert(text != nullptr);
 #ifdef UNICODE
   const WideToUTF8Converter text2(text);
 #else
-  const StringView text2 = text;
+  const std::string_view text2 = text;
   assert(ValidateUTF8(text));
 #endif
 
@@ -704,7 +698,7 @@ Canvas::DrawClippedText(PixelPoint p, PixelSize size,
   if (font == nullptr)
     return;
 
-  const StringView text3 = ClipText(*font, text2, 0, size.width);
+  const std::string_view text3 = ClipText(*font, text2, 0, size.width);
   if (text3.empty())
     return;
 

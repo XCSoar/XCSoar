@@ -26,7 +26,8 @@ Copyright_License {
 
 #include "ui/dim/Size.hpp"
 
-struct StringView;
+#include <string_view>
+
 class Font;
 
 #ifdef ENABLE_OPENGL
@@ -57,15 +58,15 @@ struct Result {
 
 [[gnu::pure]]
 PixelSize
-GetSize(const Font &font, StringView text) noexcept;
+GetSize(const Font &font, std::string_view text) noexcept;
 
 [[gnu::pure]]
 PixelSize
-LookupSize(const Font &font, StringView text) noexcept;
+LookupSize(const Font &font, std::string_view text) noexcept;
 
 [[gnu::pure]]
 Result
-Get(const Font &font, StringView text) noexcept;
+Get(const Font &font, std::string_view text) noexcept;
 
 void
 Flush() noexcept;

@@ -24,7 +24,6 @@ Copyright_License {
 #include "Canvas.hpp"
 #include "Bitmap.hpp"
 #include "Screen/Layout.hpp"
-#include "util/TStringView.hxx"
 
 void
 Canvas::ScaleCopy(PixelPoint dest_position,

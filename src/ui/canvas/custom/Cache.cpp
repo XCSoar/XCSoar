@@ -26,8 +26,7 @@ Copyright_License {
 #include "util/Cache.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringAPI.hxx"
-#include "util/StringView.hxx"
-#include "util/TStringView.hxx"
+#include "util/tstring_view.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Texture.hpp"
@@ -53,7 +52,7 @@ Copyright_License {
  */
 struct TextCacheKey {
   const Font *font;
-  StringView text;
+  std::string_view text;
   char *allocated;
 
   TextCacheKey(const TextCacheKey &other) = delete;
@@ -64,7 +63,7 @@ struct TextCacheKey {
     other.allocated = nullptr;
   }
 
-  TextCacheKey(const Font &_font, StringView _text) noexcept
+  TextCacheKey(const Font &_font, std::string_view _text) noexcept
     :font(&_font), text(_text), allocated(nullptr) {}
 
   ~TextCacheKey() noexcept {
@@ -78,7 +77,8 @@ struct TextCacheKey {
   void Allocate() noexcept {
     assert(allocated == nullptr);
 
-    text.data = allocated = strndup(text.data, text.size);
+    allocated = strndup(text.data(), text.size());
+    text = {allocated, text.size()};
   }
 
   TextCacheKey &operator=(const TextCacheKey &other) = delete;
@@ -92,13 +92,12 @@ struct TextCacheKey {
 
   [[gnu::pure]]
   bool operator==(const TextCacheKey &other) const noexcept {
-    return font == other.font &&
-      text.Equals(other.text);
+    return font == other.font && text == other.text;
   }
 
   struct StringHash {
     [[gnu::pure]]
-    size_t operator()(StringView s) const noexcept {
+    size_t operator()(std::string_view s) const noexcept {
       /* code copied from libstdc++ backward/hash_fun.h */
       unsigned long __h = 0;
       for (const auto ch : s)
@@ -180,7 +179,7 @@ static Cache<TextCacheKey, PixelSize, 1024u, 701u, TextCacheKey::Hash> size_cach
 static Cache<TextCacheKey, RenderedText, 256u, 211u, TextCacheKey::Hash> text_cache;
 
 PixelSize
-TextCache::GetSize(const Font &font, StringView text) noexcept
+TextCache::GetSize(const Font &font, std::string_view text) noexcept
 {
 #ifndef ENABLE_OPENGL
   const std::lock_guard<Mutex> lock(text_cache_mutex);
@@ -202,7 +201,7 @@ TextCache::GetSize(const Font &font, StringView text) noexcept
 }
 
 PixelSize
-TextCache::LookupSize(const Font &font, StringView text) noexcept
+TextCache::LookupSize(const Font &font, std::string_view text) noexcept
 {
 #ifndef ENABLE_OPENGL
   const std::lock_guard<Mutex> lock(text_cache_mutex);
@@ -220,7 +219,7 @@ TextCache::LookupSize(const Font &font, StringView text) noexcept
 }
 
 TextCache::Result
-TextCache::Get(const Font &font, StringView text) noexcept
+TextCache::Get(const Font &font, std::string_view text) noexcept
 {
 #ifdef ENABLE_OPENGL
   assert(pthread_equal(pthread_self(), OpenGL::thread));
@@ -247,7 +246,7 @@ TextCache::Get(const Font &font, StringView text) noexcept
 #ifdef UNICODE
   UTF8ToWideConverter text2(text);
 #else
-  TStringView text2 = text;
+  std::string_view text2 = text;
 #endif
   PixelSize size = font.TextSize(text2);
   size_t buffer_size = font.BufferSize(size);

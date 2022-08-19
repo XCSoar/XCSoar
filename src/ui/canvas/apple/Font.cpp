@@ -24,7 +24,6 @@ Copyright_License {
 #include "Look/FontDescription.hpp"
 #include "ui/canvas/Font.hpp"
 #include "util/ScopeExit.hxx"
-#include "util/TStringView.hxx"
 
 #ifndef ENABLE_OPENGL
 #include "thread/Mutex.hxx"
@@ -109,12 +108,12 @@ Font::Load(const FontDescription &d)
 }
 
 PixelSize
-Font::TextSize(const TStringView text) const noexcept
+Font::TextSize(const tstring_view text) const noexcept
 {
   assert(nil != draw_attributes);
 
   NSString *ns_str =
-      [[NSString alloc] initWithBytes: text.data length: text.size encoding: NSUTF8StringEncoding];
+    [[NSString alloc] initWithBytes: text.data() length: text.size() encoding: NSUTF8StringEncoding];
   assert(nil != ns_str);
 
 #ifndef ENABLE_OPENGL
@@ -127,13 +126,13 @@ Font::TextSize(const TStringView text) const noexcept
 }
 
 void
-Font::Render(TStringView text, const PixelSize size,
+Font::Render(tstring_view text, const PixelSize size,
              void *buffer) const noexcept
 {
   assert(nil != draw_attributes);
 
   NSString *ns_str =
-      [[NSString alloc] initWithBytes: text.data length: text.size encoding: NSUTF8StringEncoding];
+    [[NSString alloc] initWithBytes: text.data() length: text.size() encoding: NSUTF8StringEncoding];
   assert(nil != ns_str);
 
   memset(buffer, 0, size.width * size.height);
