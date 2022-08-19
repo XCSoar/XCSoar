@@ -351,20 +351,9 @@ public:
 	using typename Base::const_iterator;
 	using typename Base::size_type;
 
-	NarrowString() = default;
-	explicit NarrowString(const_pointer value) noexcept:Base(value) {}
-
-	NarrowString<max> &operator =(const_pointer new_value) noexcept {
-		return (NarrowString<max> &)Base::operator =(new_value);
-	}
-
-	NarrowString<max> &operator +=(const_pointer new_value) noexcept {
-		return (NarrowString<max> &)Base::operator +=(new_value);
-	}
-
-	NarrowString<max> &operator +=(value_type ch) noexcept {
-		return (NarrowString<max> &)Base::operator +=(ch);
-	}
+	using Base::Base;
+	using Base::operator=;
+	using Base::operator+=;
 
 	void CropIncompleteUTF8() noexcept {
 		::CropIncompleteUTF8(this->data());
@@ -390,20 +379,9 @@ public:
 	using typename Base::const_iterator;
 	using typename Base::size_type;
 
-	StaticString() = default;
-	explicit StaticString(const_pointer value) noexcept:Base(value) {}
-
-	StaticString<max> &operator =(const_pointer new_value) noexcept {
-		return (StaticString<max> &)Base::operator =(new_value);
-	}
-
-	StaticString<max> &operator +=(const_pointer new_value) noexcept {
-		return (StaticString<max> &)Base::operator +=(new_value);
-	}
-
-	StaticString<max> &operator +=(value_type ch) noexcept {
-		return (StaticString<max> &)Base::operator +=(ch);
-	}
+	using Base::Base;
+	using Base::operator=;
+	using Base::operator+=;
 
 	void CropIncompleteUTF8() noexcept {
 		/* this is a wchar_t string, it's not multi-byte,
