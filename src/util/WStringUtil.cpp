@@ -31,7 +31,7 @@ Copyright_License {
 
 wchar_t *
 CopyString(wchar_t *gcc_restrict dest, const wchar_t *gcc_restrict src,
-           size_t size)
+           size_t size) noexcept
 {
   size_t length = StringLength(src);
   if (length >= size)
@@ -44,7 +44,7 @@ CopyString(wchar_t *gcc_restrict dest, const wchar_t *gcc_restrict src,
 
 wchar_t *
 NormalizeSearchString(wchar_t *gcc_restrict dest,
-                      const wchar_t *gcc_restrict src)
+                      const wchar_t *gcc_restrict src) noexcept
 {
   wchar_t *retval = dest;
 

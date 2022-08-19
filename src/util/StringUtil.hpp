@@ -40,7 +40,7 @@ Copyright_License {
  */
 [[gnu::nonnull]]
 char *
-CopyString(char *dest, const char *src, size_t size);
+CopyString(char *dest, const char *src, size_t size) noexcept;
 
 /**
  * Normalize a string for searching.  This strips all characters
@@ -54,6 +54,6 @@ CopyString(char *dest, const char *src, size_t size);
  */
 [[gnu::nonnull]]
 char *
-NormalizeSearchString(char *dest, const char *src);
+NormalizeSearchString(char *dest, const char *src) noexcept;
 
 #endif

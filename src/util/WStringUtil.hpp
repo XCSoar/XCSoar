@@ -36,10 +36,10 @@ Copyright_License {
  */
 [[gnu::nonnull]]
 wchar_t *
-CopyString(wchar_t *dest, const wchar_t *src, size_t size);
+CopyString(wchar_t *dest, const wchar_t *src, size_t size) noexcept;
 
 [[gnu::nonnull]]
 wchar_t *
-NormalizeSearchString(wchar_t *dest, const wchar_t *src);
+NormalizeSearchString(wchar_t *dest, const wchar_t *src) noexcept;
 
 #endif
