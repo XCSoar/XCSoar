@@ -121,9 +121,9 @@ public class UsbSerialHelper extends BroadcastReceiver {
         return;
       }
       if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
-        AddAvailable(device);
+        addAvailable(device);
       } else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
-        RemoveAvailable(device);
+        removeAvailable(device);
       } else if (ACTION_USB_PERMISSION.equals(action)) {
         if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
           Log.d(TAG, "permission granted for device " + device);
@@ -145,7 +145,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
     }
   }
 
-  private synchronized void AddAvailable(UsbDevice device) {
+  private synchronized void addAvailable(UsbDevice device) {
     if (UsbSerialDevice.isSupported(device)) {
       int vid = device.getVendorId();
       int pid = device.getProductId();
@@ -164,7 +164,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
   }
 
 
-  private synchronized UsbDeviceInterface GetAvailable(String id) {
+  private synchronized UsbDeviceInterface getAvailable(String id) {
     for (Map.Entry<String, UsbDeviceInterface> entry : _AvailableInterfaces.entrySet()) {
       if(id.contentEquals(entry.getValue().id)) {
         return entry.getValue();
@@ -173,7 +173,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
     return null;
   }
 
-  private synchronized void RemoveAvailable(UsbDevice removeddevice) {
+  private synchronized void removeAvailable(UsbDevice removeddevice) {
     Log.v(TAG,"UsbDevice disconnected : " + removeddevice);
     // Below line not possible with the current java version
     //_AvailableInterfaces.entrySet().removeIf(entry -> removeddevice.getDeviceName().equals(entry.getValue().device.getDeviceName()));
@@ -197,7 +197,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
 
     HashMap<String, UsbDevice> devices = usbmanager.getDeviceList();
     for (Map.Entry<String, UsbDevice> entry : devices.entrySet()) {
-      AddAvailable(entry.getValue());
+      addAvailable(entry.getValue());
     }
 
     registerReceiver();
@@ -222,7 +222,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
     throws IOException
   {
     Log.v(TAG,"Incoming Port connection request:"+id+"@"+baud);
-    UsbDeviceInterface deviface = GetAvailable(id);
+    UsbDeviceInterface deviface = getAvailable(id);
     if (deviface == null)
       throw new IOException("USB serial device not found");
 
