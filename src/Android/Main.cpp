@@ -96,6 +96,13 @@ BluetoothHelper *bluetooth_helper;
 UsbSerialHelper *usb_serial_helper;
 IOIOHelper *ioio_helper;
 
+/**
+ * This mutex protects shutdown against other JNI calls, to avoid
+ * races between shutdown (destruction of MainWindow and NativeView)
+ * and new events being received on the Android main thread.
+ */
+static Mutex shutdown_mutex;
+
 gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj,
@@ -104,6 +111,8 @@ Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj,
                                      jint xdpi, jint ydpi,
                                      jint sdk_version, jstring product)
 try {
+  const std::scoped_lock shutdown_lock{shutdown_mutex};
+
   Java::Init(env);
 
   android_api_level = sdk_version;
@@ -198,8 +207,12 @@ try {
   AllowLanguage();
   InitLanguage();
 
-  if (Startup(screen_init.GetDisplay()))
-    CommonInterface::main_window->RunEventLoop();
+  {
+    const ScopeUnlock shutdown_unlock{shutdown_mutex};
+
+    if (Startup(screen_init.GetDisplay()))
+      CommonInterface::main_window->RunEventLoop();
+  }
 
   Shutdown();
 
@@ -271,6 +284,8 @@ JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
                                          jint width, jint height)
 {
+  const std::scoped_lock shutdown_lock{shutdown_mutex};
+
   if (event_queue == nullptr)
     return;
 
@@ -287,6 +302,8 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
+  const std::scoped_lock shutdown_lock{shutdown_mutex};
+
   if (event_queue == nullptr)
     /* event subsystem is not initialized, there is nothing to pause */
     return;
@@ -302,6 +319,8 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
 {
+  const std::scoped_lock shutdown_lock{shutdown_mutex};
+
   if (event_queue == nullptr)
     /* event subsystem is not initialized, there is nothing to pause */
     return;
