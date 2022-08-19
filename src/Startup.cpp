@@ -602,6 +602,9 @@ Shutdown()
 
   operation.SetText(_("Shutdown, please wait..."));
 
+  // Close any device connections
+  devShutdown();
+
   // Stop threads
   LogFormat("Stop threads");
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -675,9 +678,6 @@ Shutdown()
   terrain = nullptr;
   delete topography;
   topography = nullptr;
-
-  // Close any device connections
-  devShutdown();
 
   delete nmea_logger;
   nmea_logger = nullptr;
