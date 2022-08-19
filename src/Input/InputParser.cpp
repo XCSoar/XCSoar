@@ -28,6 +28,7 @@ Copyright_License {
 #include "io/LineReader.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StaticString.hxx"
+#include "util/StringSplit.hxx"
 #include "util/StringStrip.hxx"
 #include "util/EscapeBackslash.hpp"
 #include "util/NumberParser.hpp"
@@ -206,8 +207,8 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
       } else if (StringIsEqual(key, _T("data"))) {
         current.data = value;
       } else if (StringIsEqual(key, _T("event"))) {
-        const TStringView v{value};
-        const auto [d_event, d_misc] = v.Split(' ');
+        const tstring_view v{value};
+        const auto [d_event, d_misc] = Split(v, _T(' '));
 
         if (d_event.empty()) {
           LogFormat("Invalid event type at %i", line);
@@ -219,7 +220,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
         pt2Event event = InputEvents::findEvent(d_event);
         if (!event) {
           LogFormat(_T("Invalid event type: %.*s at %i"),
-                    int(d_event.size), d_event.data, line);
+                    int(d_event.size()), d_event.data(), line);
           continue;
         }
 
