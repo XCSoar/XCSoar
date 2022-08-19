@@ -28,110 +28,78 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 #include "util/StaticString.hxx"
+#include "util/StringSplit.hxx"
 #include "util/StringCompare.hxx"
+#include "util/tstring.hpp"
 #include "io/DataFile.hpp"
 #include "io/LineReader.hpp"
 #include "Language/Language.hpp"
 
+#include <string>
+#include <vector>
+
 #define XCSCHKLIST  "xcsoar-checklist.txt"
 
-#define MAXTITLE 200
-#define MAXDETAILS 5000
+struct ChecklistPage {
+  tstring title, text;
 
-#define MAXLISTS 20
-
-struct Checklist {
-  std::size_t nLists = 0;
-  TCHAR *ChecklistText[MAXTITLE];
-  TCHAR *ChecklistTitle[MAXTITLE];
-
-  void addChecklist(const TCHAR *name, const TCHAR *details) noexcept;
-
-  bool Load() noexcept;
+  bool empty() const noexcept {
+    return title.empty() && text.empty();
+  }
 };
+
+using Checklist = std::vector<ChecklistPage>;
 
 static void
 UpdateCaption(WndForm &form, const Checklist &checklist, std::size_t page)
 {
-  TCHAR buffer[80];
-  _tcscpy(buffer, _("Checklist"));
+  StaticString<80> buffer{_("Checklist")};
 
-  if (checklist.ChecklistTitle[page] &&
-      !StringIsEmpty(checklist.ChecklistTitle[page]) &&
-      _tcslen(checklist.ChecklistTitle[page]) < 60) {
-    _tcscat(buffer, _T(": "));
-    _tcscat(buffer, checklist.ChecklistTitle[page]);
+  const auto &p = checklist[page];
+
+  if (!p.title.empty()) {
+    buffer.append(_T(": "));
+    buffer.append(p.title);
   }
 
   form.SetCaption(buffer);
 }
 
-inline void
-Checklist::addChecklist(const TCHAR *name, const TCHAR *details) noexcept
-{
-  if (nLists >= MAXLISTS)
-    return;
-
-  ChecklistTitle[nLists] = _tcsdup(name);
-  ChecklistText[nLists] = _tcsdup(details);
-  nLists++;
-}
-
-inline bool
-Checklist::Load() noexcept
+static Checklist
+LoadChecklist() noexcept
 try {
-  nLists = 0;
-
-  free(ChecklistText[0]);
-  ChecklistText[0] = NULL;
-
-  free(ChecklistTitle[0]);
-  ChecklistTitle[0] = NULL;
+  Checklist c;
 
   auto reader = OpenDataTextFile(_T(XCSCHKLIST));
 
-  StaticString<MAXDETAILS> Details;
-  TCHAR Name[MAXTITLE];
-  bool inDetails = false;
-
-  Details.clear();
-  Name[0] = 0;
+  ChecklistPage page;
 
   TCHAR *TempString;
   while ((TempString = reader->ReadLine()) != NULL) {
+    const tstring_view line{TempString};
+
     // Look for start
     if (TempString[0] == '[') {
-      if (inDetails) {
-        addChecklist(Name, Details);
-        Details.clear();
-        Name[0] = 0;
+      if (!page.empty()) {
+        c.emplace_back(std::move(page));
+        page = {};
       }
 
       // extract name
-      std::size_t i;
-      for (i = 1; i < MAXTITLE; i++) {
-        if (TempString[i] == ']')
-          break;
-
-        Name[i - 1] = TempString[i];
-      }
-      Name[i - 1] = 0;
-
-      inDetails = true;
-    } else {
+      page.title = tstring{Split(line.substr(1), _T(']')).first};
+    } else if (!line.empty() || !page.text.empty()) {
       // append text to details string
-      Details.append(TempString);
-      Details.push_back(_T('\n'));
+      page.text.append(line);
+      page.text.push_back(_T('\n'));
     }
   }
 
-  if (inDetails) {
-    addChecklist(Name, Details);
-  }
+  if (!page.empty())
+    c.emplace_back(std::move(page));
 
-  return nLists > 0;
+  return c;
 } catch (...) {
-  return false;
+  return {};
 }
 
 void
@@ -139,10 +107,12 @@ dlgChecklistShowModal()
 {
   static std::size_t current_page = 0;
 
-  Checklist checklist{};
-  if (!checklist.Load())
-    checklist.addChecklist(_("No checklist loaded"),
-                           _("Create xcsoar-checklist.txt"));
+  auto checklist = LoadChecklist();
+  if (checklist.empty())
+    checklist.emplace_back(ChecklistPage{
+        _("No checklist loaded"),
+        _("Create xcsoar-checklist.txt"),
+      });
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -151,10 +121,10 @@ dlgChecklistShowModal()
 
   auto pager = std::make_unique<ArrowPagerWidget>(look.button,
                                                    dialog.MakeModalResultCallback(mrOK));
-  for (std::size_t i = 0; i < checklist.nLists; ++i)
-    pager->Add(std::make_unique<LargeTextWidget>(look, checklist.ChecklistText[i]));
+  for (const auto &i : checklist)
+    pager->Add(std::make_unique<LargeTextWidget>(look, i.text.c_str()));
 
-  if (current_page < checklist.nLists)
+  if (current_page < checklist.size())
     pager->SetCurrent(current_page);
 
   pager->SetPageFlippedCallback([&checklist, &dialog, &pager=*pager](){
