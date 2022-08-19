@@ -73,7 +73,7 @@ ResourceLoader::Load(const TCHAR *name, const TCHAR *type)
   return {(const std::byte *)data, (std::size_t)size};
 #else
 
-  for (unsigned i = 0; !named_resources[i].data.IsNull(); ++i)
+  for (unsigned i = 0; named_resources[i].data.data() != nullptr; ++i)
     if (StringIsEqual(named_resources[i].name, name))
       return named_resources[i].data;
 
