@@ -33,14 +33,14 @@ Copyright_License {
 #include <tchar.h>
 
 pt2Event
-InputEvents::findEvent(TStringView name) noexcept
+InputEvents::findEvent(tstring_view name) noexcept
 {
   union {
     const TCHAR *in;
     pt2Event out;
   } u;
 
-  u.in = name.data;
+  u.in = name.data();
   return u.out;
 }
 
