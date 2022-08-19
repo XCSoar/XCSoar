@@ -30,12 +30,14 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "co/Task.hxx"
 #include "util/RuntimeError.hxx"
-#include "util/StringView.hxx"
+#include "util/StringCompare.hxx"
 #include "Version.hpp"
 
 #include <cassert>
 #include <cstdlib>
 #include <stdexcept>
+
+using std::string_view_literals::operator""sv;
 
 namespace LiveTrack24 {
 
@@ -169,13 +171,13 @@ Client::SendRequest(CurlEasy easy)
   easy.SetFailOnError();
 
   const auto _response = co_await Curl::CoRequest(curl, std::move(easy));
-  StringView response{std::string_view{_response.body}};
-  if (response.StartsWith("OK"))
+  std::string_view response{_response.body};
+  if (response.starts_with("OK"sv))
     co_return;
 
-  if (response.SkipPrefix("NOK : ") && !response.empty())
+  if (SkipPrefix(response, "NOK : "sv) && !response.empty())
     throw FormatRuntimeError("Error from server: %.*s",
-                             int(response.size), response.data);
+                             int(response.size()), response.data());
 
   throw std::runtime_error("Error from server");
 }
