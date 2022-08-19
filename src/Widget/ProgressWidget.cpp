@@ -28,6 +28,7 @@ Copyright_License {
 #include "Renderer/ProgressBarRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/DialogLook.hpp"
+#include "util/tstring_view.hxx"
 #include "UIGlobals.hpp"
 
 class ProgressWidget::ProgressBar final : public PaintWindow {
@@ -71,7 +72,7 @@ protected:
       canvas.SetTextColor(COLOR_BLACK);
       canvas.SetBackgroundTransparent();
 
-      const std::basic_string_view<TCHAR> _text{text};
+      const tstring_view _text{text};
       canvas.DrawText({padding, padding}, _text);
     }
   }

@@ -37,7 +37,7 @@ XMLNode::CreateRoot(const TCHAR *name)
   return XMLNode(name, false);
 }
 
-XMLNode::XMLNode(std::basic_string_view<TCHAR> name,
+XMLNode::XMLNode(tstring_view name,
                  bool is_declaration) noexcept
   :d(new Data(name, is_declaration))
 {
@@ -45,7 +45,7 @@ XMLNode::XMLNode(std::basic_string_view<TCHAR> name,
 }
 
 XMLNode &
-XMLNode::AddChild(const std::basic_string_view<TCHAR> name,
+XMLNode::AddChild(const tstring_view name,
                   bool is_declaration) noexcept
 {
   d->children.push_back(XMLNode(name, is_declaration));
@@ -53,7 +53,7 @@ XMLNode::AddChild(const std::basic_string_view<TCHAR> name,
 }
 
 void
-XMLNode::AddText(std::basic_string_view<TCHAR> value) noexcept
+XMLNode::AddText(tstring_view value) noexcept
 {
   d->text.append(value);
 }

@@ -31,6 +31,7 @@
 
 #include "util/NonCopyable.hpp"
 #include "util/tstring.hpp"
+#include "util/tstring_view.hxx"
 #include "util/Compiler.h"
 
 #include <list>
@@ -72,7 +73,7 @@ class XMLNode {
     /** Array of attributes */
     std::forward_list<Attribute> attributes;
 
-    Data(std::basic_string_view<TCHAR> _name, bool _is_declaration) noexcept
+    Data(tstring_view _name, bool _is_declaration) noexcept
       :name(_name),
        is_declaration(_is_declaration) {}
 
@@ -102,7 +103,7 @@ class XMLNode {
    * Protected constructor: use "parse" functions to get your first
    * instance of XMLNode.
    */
-  XMLNode(std::basic_string_view<TCHAR> name,
+  XMLNode(tstring_view name,
           bool is_declaration) noexcept;
 
 public:
@@ -218,7 +219,7 @@ public:
   /**
    * Add a child node to the given element.
    */
-  XMLNode &AddChild(const std::basic_string_view<TCHAR> name,
+  XMLNode &AddChild(const tstring_view name,
                     bool is_declaration=false) noexcept;
 
   /**
@@ -232,7 +233,7 @@ public:
   /**
    * Add text to the element.
    */
-  void AddText(std::basic_string_view<TCHAR> value) noexcept;
+  void AddText(tstring_view value) noexcept;
 
 private:
   /**
