@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Iterator;
 import java.io.IOException;
 
 import android.annotation.TargetApi;
@@ -51,8 +52,8 @@ public class UsbSerialHelper extends BroadcastReceiver {
   private final Context context;
   private final UsbManager usbmanager;
 
-  private HashMap<String, UsbDevice> _AvailableDevices = new HashMap<>();
-  private HashMap<UsbDevice, UsbSerialPort> _PendingConnection = new HashMap<>();
+  private HashMap<String, UsbDeviceInterface> _AvailableInterfaces = new HashMap<>();
+  private HashMap<UsbDeviceInterface, UsbSerialPort> _PendingConnection = new HashMap<>();
 
   private final Collection<DetectDeviceListener> detectListeners =
     new LinkedList<DetectDeviceListener>();
@@ -77,6 +78,22 @@ public class UsbSerialHelper extends BroadcastReceiver {
 
     createDevice(0x067B, 0x2303) // PL2303
   );
+
+  static class UsbDeviceInterface {
+    public final UsbDevice device;
+    public final int iface;
+    public final String id;
+    public UsbDeviceInterface(UsbDevice dev_,int iface_) {
+      device=dev_;
+      iface=iface_;
+
+      if (device.getInterfaceCount() > 1) {
+        id=String.format("%04X:%04X:%02d", device.getVendorId(), device.getProductId(),iface);
+      } else {
+        id=String.format("%04X:%04X", device.getVendorId(), device.getProductId());
+      }
+    }
+  }
 
   static long createDevice(int vendorId, int productId) {
     return ((long) vendorId) << 32 | (productId & 0xFFFF_FFFFL);
@@ -104,51 +121,72 @@ public class UsbSerialHelper extends BroadcastReceiver {
         return;
       }
       if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
-        AddAvailable(device);
+        addAvailable(device);
       } else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
-        RemoveAvailable(device);
+        removeAvailable(device);
       } else if (ACTION_USB_PERMISSION.equals(action)) {
         if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
           Log.d(TAG, "permission granted for device " + device);
 
-          UsbSerialPort port = _PendingConnection.get(device);
-          _PendingConnection.remove(device);
-          if (port != null) {
-            port.open(usbmanager);
+          //Iterate through list of Pending connections. For each entry matching with granted device, open port and remove from list
+          Iterator<Map.Entry<UsbDeviceInterface,UsbSerialPort>> iter = _PendingConnection.entrySet().iterator();
+          while (iter.hasNext()) {
+            Map.Entry<UsbDeviceInterface,UsbSerialPort> entry = iter.next();
+            if(device.getDeviceName().equals(entry.getKey().device.getDeviceName())) {
+              UsbSerialPort port = entry.getValue();
+              if (port != null) {
+                port.open(usbmanager);
+              }
+              iter.remove();
+            }
           }
         }
       }
     }
   }
 
-  private synchronized void AddAvailable(UsbDevice device) {
+  private synchronized void addAvailable(UsbDevice device) {
     if (UsbSerialDevice.isSupported(device)) {
       int vid = device.getVendorId();
       int pid = device.getProductId();
 
       if (exists(supported_ids, vid, pid)) {
         Log.v(TAG, "UsbDevice Found : " + device);
-        _AvailableDevices.put(device.getDeviceName(), device);
-        broadcastDetectedDevice(device);
+        for (int iface=0; iface < device.getInterfaceCount(); iface++) {
+          UsbDeviceInterface deviface = new UsbDeviceInterface(device, iface);
+          _AvailableInterfaces.put(deviface.id, deviface);
+          broadcastDetectedDeviceInterface(deviface);
+        }
       } else {
         Log.v(TAG, "Unsupported UsbDevice : " + device);
       }
     }
   }
 
-  private synchronized UsbDevice GetAvailable(String name) {
-    for (Map.Entry<String, UsbDevice> entry : _AvailableDevices.entrySet()) {
-      if(name.contentEquals(getDeviceId(entry.getValue()))) {
+
+  private synchronized UsbDeviceInterface getAvailable(String id) {
+    for (Map.Entry<String, UsbDeviceInterface> entry : _AvailableInterfaces.entrySet()) {
+      if(id.contentEquals(entry.getValue().id)) {
         return entry.getValue();
       }
     }
     return null;
   }
 
-  private synchronized void RemoveAvailable(UsbDevice device) {
-    Log.v(TAG,"UsbDevice disconnected : " + device);
-    _AvailableDevices.remove(device.getDeviceName());
-  }
+  private synchronized void removeAvailable(UsbDevice removeddevice) {
+    Log.v(TAG,"UsbDevice disconnected : " + removeddevice);
+    // Below line not possible with the current java version
+    //_AvailableInterfaces.entrySet().removeIf(entry -> removeddevice.getDeviceName().equals(entry.getValue().device.getDeviceName()));
+    // Therefore this longer alternative:
+    Iterator<Map.Entry<String,UsbDeviceInterface>> iter = _AvailableInterfaces.entrySet().iterator();
+    while (iter.hasNext()) {
+      Map.Entry<String,UsbDeviceInterface> entry = iter.next();
+      if (removeddevice.getDeviceName().equals(entry.getValue().device.getDeviceName())) {
+        iter.remove();
+      }
+    }
+}
+
 
   private UsbSerialHelper(Context context) throws IOException {
     this.context = context;
@@ -159,7 +197,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
 
     HashMap<String, UsbDevice> devices = usbmanager.getDeviceList();
     for (Map.Entry<String, UsbDevice> entry : devices.entrySet()) {
-      AddAvailable(entry.getValue());
+      addAvailable(entry.getValue());
     }
 
     registerReceiver();
@@ -180,59 +218,60 @@ public class UsbSerialHelper extends BroadcastReceiver {
     context.unregisterReceiver(this);
   }
 
-  private synchronized AndroidPort connect(String name, int baud)
+  private synchronized AndroidPort connect(String id, int baud)
     throws IOException
   {
-    UsbDevice device = GetAvailable(name);
-    if (device == null)
+    Log.v(TAG,"Incoming Port connection request:"+id+"@"+baud);
+    UsbDeviceInterface deviface = getAvailable(id);
+    if (deviface == null)
       throw new IOException("USB serial device not found");
 
-    UsbSerialPort port = new UsbSerialPort(device,baud);
-    if (usbmanager.hasPermission(device)) {
+    UsbSerialPort port = new UsbSerialPort(deviface.device,baud,deviface.iface);
+    if (usbmanager.hasPermission(deviface.device)) {
       port.open(usbmanager);
     } else {
-      _PendingConnection.put(device, port);
+      _PendingConnection.put(deviface, port);
       PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(UsbSerialHelper.ACTION_USB_PERMISSION), 0);
-      usbmanager.requestPermission(device, pi);
+      usbmanager.requestPermission(deviface.device, pi);
     }
 
     return port;
   }
 
-  private synchronized void broadcastDetectedDevice(UsbDevice device) {
+  private synchronized void broadcastDetectedDeviceInterface(UsbDeviceInterface deviface) {
     if (detectListeners.isEmpty())
       return;
 
-    final String id = getDeviceId(device);
-    final String name = getDeviceDisplayName(device);
+    final String name = getDeviceInterfaceDisplayName(deviface);
 
     for (DetectDeviceListener l : detectListeners)
-      l.onDeviceDetected(DetectDeviceListener.TYPE_USB_SERIAL, id, name, 0);
+      l.onDeviceDetected(DetectDeviceListener.TYPE_USB_SERIAL, deviface.id, name, 0);
   }
 
   public synchronized void addDetectDeviceListener(DetectDeviceListener l) {
     detectListeners.add(l);
-
-    for (Map.Entry<String, UsbDevice> entry : _AvailableDevices.entrySet())
-      broadcastDetectedDevice(entry.getValue());
+    for (Map.Entry<String, UsbDeviceInterface> entry : _AvailableInterfaces.entrySet()) {
+      broadcastDetectedDeviceInterface(entry.getValue());
+    }
   }
 
   public synchronized void removeDetectDeviceListener(DetectDeviceListener l) {
     detectListeners.remove(l);
   }
 
-  static String getDeviceId(UsbDevice device) {
-    return String.format("%04X:%04X", device.getVendorId(), device.getProductId());
-  }
 
-  static String getDeviceDisplayName(UsbDevice device) {
-    String name = device.getProductName();
+  static String getDeviceInterfaceDisplayName(UsbDeviceInterface deviface) {
+    String name = deviface.device.getProductName();
     if (name == null)
-      name = getDeviceId(device);
+      name = deviface.id;
 
-    String manufacturer = device.getManufacturerName();
+    String manufacturer = deviface.device.getManufacturerName();
     if (manufacturer != null)
       name += " (" + manufacturer + ")";
+
+    //add interface number to name only when more than one interface
+    if (deviface.device.getInterfaceCount() > 1)
+      name += "#"+deviface.iface;
 
     return name;
   }
