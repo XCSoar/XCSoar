@@ -34,7 +34,6 @@
 #include "StringAPI.hxx"
 #include "StringUtil.hpp"
 #include "StringFormat.hpp"
-#include "StringView.hxx"
 #include "UTF8.hpp"
 #include "ASCII.hxx"
 
@@ -248,10 +247,6 @@ public:
 		return c_str();
 	}
 
-	operator BasicStringView<T>() const noexcept {
-		return c_str();
-	}
-
 	bool operator ==(const_pointer value) const noexcept {
 		return equals(value);
 	}
@@ -292,11 +287,11 @@ public:
 	 * is truncated if it is too long for the buffer.
 	 */
 	template<typename... Args>
-	BasicStringView<T> Format(const_pointer fmt, Args&&... args) noexcept {
+	std::basic_string_view<T> Format(const_pointer fmt, Args&&... args) noexcept {
 		int s_length = StringFormat(data(), capacity(), fmt, args...);
 		if (s_length < 0)
 			/* error */
-			return nullptr;
+			return {};
 
 		size_type length = (size_type)s_length;
 		if (length >= capacity())
@@ -323,11 +318,11 @@ public:
 	 * buffer is big enough!
 	 */
 	template<typename... Args>
-	BasicStringView<T> UnsafeFormat(const T *fmt, Args&&... args) noexcept {
+	std::basic_string_view<T> UnsafeFormat(const T *fmt, Args&&... args) noexcept {
 		int s_length = StringFormatUnsafe(data(), fmt, args...);
 		if (s_length < 0)
 			/* error */
-			return nullptr;
+			return {};
 
 		size_type length = (size_type)s_length;
 		return {data(), length};
