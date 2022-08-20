@@ -213,7 +213,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
 #ifdef GL_EXT_multi_draw_arrays
   std::vector<GLsizei> polygon_counts;
-  std::vector<GLshort> polygon_indices;
+  std::vector<GLushort> polygon_indices;
 #endif
 #endif
 
@@ -334,7 +334,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   if (!polygon_indices.empty()) {
     assert(GLExt::HaveMultiDrawElements());
 
-    std::vector<const GLshort *> polygon_pointers;
+    std::vector<const GLushort *> polygon_pointers;
     unsigned i = 0;
     for (auto count : polygon_counts) {
       polygon_pointers.push_back(polygon_indices.data() + i);
