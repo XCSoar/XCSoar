@@ -341,7 +341,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
       i += count;
     }
 
-    vp.Update(GL_FLOAT, nullptr);
+    vp.Update(GL_FLOAT, buffer);
 
     GLExt::MultiDrawElements(GL_TRIANGLE_STRIP, polygon_counts.data(),
                              GL_UNSIGNED_SHORT,
