@@ -5,6 +5,7 @@ Version 7.25 - not yet released
   - support USB serial adapters with more than one port
   - fix crash when GPS access was rejected by user
   - fix deadlock while quitting XCSoar
+  - add U-BLOX 7 USB GPS into 'white list' of USB devices
 
 Version 7.24 - 2022/07/22
 * user interface
