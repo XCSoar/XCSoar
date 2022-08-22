@@ -158,9 +158,10 @@ XShape::XShape(const shapeObj &shape, const GeoPoint &file_center,
   auto *p = points.get();
   for (std::size_t l = 0; l < num_lines; ++l) {
     const pointObj *src = shape.line[l].point;
-    num_points = lines[l];
-    for (std::size_t j = 0; j < num_points; ++j, ++src)
-      *p++ = ImportShapePoint(*src, file_center);
+    p = std::transform(src, src + lines[l], p,
+                       [&](const auto &src){
+                         return ImportShapePoint(src, file_center);
+                       });
   }
 }
 
