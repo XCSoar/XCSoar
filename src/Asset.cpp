@@ -28,17 +28,6 @@ Copyright_License {
 #include "ui/event/Queue.hpp"
 #endif
 
-#include <string.h>
-
-// Registration Data
-TCHAR asset_number[100] = _T(""); //4G17DW31L0HY");
-
-void
-ReadAssetNumber() noexcept
-{
-  _tcscpy(asset_number, _T("AAA"));
-}
-
 #if defined(USE_CONSOLE) && !defined(KOBO)
 
 bool

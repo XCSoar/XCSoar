@@ -31,17 +31,6 @@ Copyright_License {
 #include <TargetConditionals.h>
 #endif
 
-#include <tchar.h>
-
-// asset/registration data
-extern TCHAR asset_number[];
-
-/**
- * Finds the unique ID of this PDA
- */
-void
-ReadAssetNumber() noexcept;
-
 /**
  * Returns whether this is a debug build.
  */

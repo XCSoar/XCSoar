@@ -500,9 +500,6 @@ Startup(UI::Display &display)
   // Create the calculation thread
   CreateCalculationThread();
 
-  // Find unique ID of this PDA
-  ReadAssetNumber();
-
   glide_computer_events = new GlideComputerEvents();
   glide_computer_events->Reset();
   live_blackboard.AddListener(*glide_computer_events);

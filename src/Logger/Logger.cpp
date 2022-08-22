@@ -29,7 +29,6 @@
 #include "LogFile.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Asset.hpp"
 #include "Computer/Settings.hpp"
 
 void
@@ -113,7 +112,7 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
   }
 
   const std::lock_guard<SharedMutex> protect(lock);
-  logger.StartLogger(gps_info, settings.logger, asset_number, decl);
+  logger.StartLogger(gps_info, settings.logger, _T(""), decl);
 }
 
 void
