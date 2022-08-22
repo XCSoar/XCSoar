@@ -252,14 +252,14 @@ libpng = CmakeProject(
     ]
 )
 
-libjpeg = AutotoolsProject(
-    'http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.3/libjpeg-turbo-1.5.3.tar.gz',
-    'http://sourceforge.mirrorservice.org/l/li/libjpeg-turbo/1.5.3/libjpeg-turbo-1.5.3.tar.gz',
-    'b24890e2bb46e12e72a79f7e965f409f4e16466d00e1dd15d93d73ee6b592523',
+libjpeg = CmakeProject(
+    'http://downloads.sourceforge.net/project/libjpeg-turbo/2.1.4/libjpeg-turbo-2.1.4.tar.gz',
+    'http://sourceforge.mirrorservice.org/l/li/libjpeg-turbo/2.1.4/libjpeg-turbo-2.1.4.tar.gz',
+    'd3ed26a1131a13686dfca4935e520eb7c90ae76fbc45d98bb50a8dc86230342b',
     'lib/libjpeg.a',
     [
-        '--disable-shared', '--enable-static',
-        '--without-turbojpeg',
+        '-DENABLE_STATIC=ON',
+        '-DENABLE_SHARED=OFF',
     ]
 )
 
