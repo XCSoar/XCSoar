@@ -21,23 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_STANDARD_FONTS_HPP
-#define XCSOAR_STANDARD_FONTS_HPP
+#pragma once
 
-#include "Asset.hpp"
+#include <tchar.h>
 
-gcc_const
+[[gnu::const]]
 static inline const TCHAR *
-GetStandardMonospaceFontFace()
+GetStandardMonospaceFontFace() noexcept
 {
   return _T("Consolas");
 }
 
-gcc_const
+[[gnu::const]]
 static inline const TCHAR *
-GetStandardFontFace()
+GetStandardFontFace() noexcept
 {
   return _T("Segeo UI");
 }
-
-#endif
