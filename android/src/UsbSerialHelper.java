@@ -47,7 +47,7 @@ import com.felhr.usbserial.UsbSerialDevice;
 public class UsbSerialHelper extends BroadcastReceiver {
 
   private static final String TAG = "UsbSerialHelper";
-  public static final String ACTION_USB_PERMISSION = "org.xcsoar.otg.action.USB_PERMISSION";
+  private static final String ACTION_USB_PERMISSION = "org.xcsoar.otg.action.USB_PERMISSION";
 
   private final Context context;
   private final UsbManager usbmanager;
