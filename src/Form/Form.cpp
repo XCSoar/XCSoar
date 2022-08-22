@@ -282,7 +282,7 @@ WndForm::OnCommand(unsigned id, unsigned code)
  * Is this key handled by the focused control? (bypassing the dialog
  * manager)
  */
-gcc_pure
+[[gnu::pure]]
 static bool
 CheckKey(ContainerWindow *container, const Event &event)
 {
@@ -436,7 +436,7 @@ void
 WndForm::OnPaint(Canvas &canvas)
 {
   const SingleWindow &main_window = GetMainWindow();
-  gcc_unused const bool is_active = main_window.IsTopDialog(*this);
+  [[maybe_unused]] const bool is_active = main_window.IsTopDialog(*this);
 
 #ifdef ENABLE_OPENGL
   if (!IsDithered() && !IsMaximised() && is_active) {

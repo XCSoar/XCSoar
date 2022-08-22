@@ -32,9 +32,9 @@ Copyright_License {
 
 using namespace UI;
 
-gcc_const
+[[gnu::const]]
 static WindowStyle
-GetDialogStyle()
+GetDialogStyle() noexcept
 {
   WindowStyle style;
   style.Hide();
