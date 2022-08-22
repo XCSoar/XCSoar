@@ -205,7 +205,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   const GeoClip clip(projection.GetScreenBounds().Scale(1.1));
   AllocatedArray<GeoPoint> geo_points;
 
-  int iskip = file.GetSkipSteps(map_scale);
+  const unsigned iskip = file.GetSkipSteps(map_scale);
 #endif
 
 #ifdef ENABLE_OPENGL
