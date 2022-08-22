@@ -44,7 +44,7 @@ import android.util.Log;
 import com.felhr.usbserial.UsbSerialDevice;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
-public class UsbSerialHelper extends BroadcastReceiver {
+public final class UsbSerialHelper extends BroadcastReceiver {
 
   private static final String TAG = "UsbSerialHelper";
   private static final String ACTION_USB_PERMISSION = "org.xcsoar.otg.action.USB_PERMISSION";
@@ -80,7 +80,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
     createDevice(0x1546, 0x01A7)  // U-BLOX 7 USB GPS
   );
 
-  static class UsbDeviceInterface {
+  static final class UsbDeviceInterface {
     public final UsbDevice device;
     public final int iface;
     public final String id;
