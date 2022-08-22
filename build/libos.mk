@@ -24,6 +24,11 @@ OS_SOURCES += \
 	$(OS_SRC_DIR)/SignalFD.cxx
 endif
 
+ifeq ($(TARGET_IS_KOBO),y)
+OS_SOURCES += \
+	$(SRC)/Kobo/Model.cpp
+endif
+
 $(eval $(call link-library,libos,OS))
 
 ifeq ($(HAVE_POSIX),n)

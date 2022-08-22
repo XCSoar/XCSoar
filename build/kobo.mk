@@ -29,7 +29,6 @@ KOBO_MENU_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(SRC)/Kobo/WPASupplicant.cpp \
-	$(SRC)/Kobo/Model.cpp \
 	$(SRC)/Kobo/System.cpp \
 	$(SRC)/Kobo/Kernel.cpp \
 	$(SRC)/Kobo/NetworkDialog.cpp \
@@ -60,7 +59,6 @@ KOBO_POWER_OFF_SOURCES = \
 	$(SRC)/Logger/FlightParser.cpp \
 	$(SRC)/Renderer/FlightListRenderer.cpp \
 	$(SRC)/FlightInfo.cpp \
-	$(SRC)/Kobo/Model.cpp \
 	$(SRC)/Kobo/PowerOff.cpp
 KOBO_POWER_OFF_LDADD = $(FAKE_LIBS)
 KOBO_POWER_OFF_DEPENDS = SCREEN EVENT RESOURCE IO ASYNC OS MATH UTIL TIME
