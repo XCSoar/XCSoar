@@ -84,15 +84,15 @@ public class UsbSerialHelper extends BroadcastReceiver {
     public final UsbDevice device;
     public final int iface;
     public final String id;
-    public UsbDeviceInterface(UsbDevice dev_,int iface_) {
-      device=dev_;
-      iface=iface_;
 
-      if (device.getInterfaceCount() > 1) {
-        id=String.format("%04X:%04X:%02d", device.getVendorId(), device.getProductId(),iface);
-      } else {
-        id=String.format("%04X:%04X", device.getVendorId(), device.getProductId());
-      }
+    public UsbDeviceInterface(UsbDevice dev_,int iface_) {
+      device = dev_;
+      iface = iface_;
+      id = device.getInterfaceCount() > 1
+        ? String.format("%04X:%04X:%02d",
+                        device.getVendorId(), device.getProductId(), iface)
+        : String.format("%04X:%04X",
+                        device.getVendorId(), device.getProductId());
     }
   }
 
@@ -113,14 +113,13 @@ public class UsbSerialHelper extends BroadcastReceiver {
   public synchronized void onReceive(Context context, Intent intent) {
     synchronized (this) {
       String action = intent.getAction();
-      if (!intent.hasExtra(UsbManager.EXTRA_DEVICE)) {
+      if (!intent.hasExtra(UsbManager.EXTRA_DEVICE))
         return;
-      }
 
       UsbDevice device = (UsbDevice) intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
-      if (device == null) {
+      if (device == null)
         return;
-      }
+
       if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
         addAvailable(device);
       } else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
@@ -167,7 +166,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
 
   private synchronized UsbDeviceInterface getAvailable(String id) {
     for (Map.Entry<String, UsbDeviceInterface> entry : _AvailableInterfaces.entrySet()) {
-      if(id.contentEquals(entry.getValue().id)) {
+      if (id.contentEquals(entry.getValue().id)) {
         return entry.getValue();
       }
     }
@@ -186,8 +185,7 @@ public class UsbSerialHelper extends BroadcastReceiver {
         iter.remove();
       }
     }
-}
-
+  }
 
   private UsbSerialHelper(Context context) throws IOException {
     this.context = context;
@@ -270,9 +268,9 @@ public class UsbSerialHelper extends BroadcastReceiver {
     if (manufacturer != null)
       name += " (" + manufacturer + ")";
 
-    //add interface number to name only when more than one interface
+    // add interface number to name only when more than one interface
     if (deviface.device.getInterfaceCount() > 1)
-      name += "#"+deviface.iface;
+      name += "#" + deviface.iface;
 
     return name;
   }
