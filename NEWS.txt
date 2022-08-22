@@ -6,6 +6,8 @@ Version 7.25 - not yet released
   - fix crash when GPS access was rejected by user
   - fix deadlock while quitting XCSoar
   - add U-BLOX 7 USB GPS into 'white list' of USB devices
+* Kobo
+  - fix crash in waypoint dialog
 
 Version 7.24 - 2022/07/22
 * user interface
