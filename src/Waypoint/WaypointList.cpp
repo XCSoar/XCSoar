@@ -74,6 +74,6 @@ void
 WaypointList::MakeUnique() noexcept
 {
   auto new_end = std::unique(begin(), end(), [](WaypointListItem &a, WaypointListItem &b)
-                                        {return a.waypoint->id == b.waypoint->id;});
+                                        {return a.waypoint == b.waypoint;});
   erase(new_end, end());
 }
