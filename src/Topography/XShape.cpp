@@ -88,6 +88,32 @@ GetMinPointsForShapeType(int shapelib_type) noexcept
   }
 }
 
+static constexpr GeoPoint
+ToGeoPoint(const pointObj &src) noexcept
+{
+  return {
+    Angle::Degrees(src.x),
+    Angle::Degrees(src.y),
+  };
+}
+
+[[gnu::pure]]
+static auto
+ImportShapePoint(const pointObj &src, const GeoPoint &file_center) noexcept
+{
+#ifdef ENABLE_OPENGL
+  const GeoPoint vertex = ToGeoPoint(src);
+  const GeoPoint relative = vertex - file_center;
+
+  return ShapePoint{
+    ShapeScalar(relative.longitude.Native()),
+    ShapeScalar(relative.latitude.Native()),
+  };
+#else
+  return ToGeoPoint(src);
+#endif
+}
+
 XShape::XShape(const shapeObj &shape, const GeoPoint &file_center,
                const char *_label)
   :label(ImportLabel(_label))
@@ -133,18 +159,8 @@ XShape::XShape(const shapeObj &shape, const GeoPoint &file_center,
   for (std::size_t l = 0; l < num_lines; ++l) {
     const pointObj *src = shape.line[l].point;
     num_points = lines[l];
-    for (std::size_t j = 0; j < num_points; ++j, ++src) {
-#ifdef ENABLE_OPENGL
-      const GeoPoint vertex(Angle::Degrees(src->x), Angle::Degrees(src->y));
-      const GeoPoint relative = vertex - file_center;
-
-      *p++ = ShapePoint(ShapeScalar(relative.longitude.Native()),
-                        ShapeScalar(relative.latitude.Native()));
-#else
-      *p++ = GeoPoint(Angle::Degrees(src->x),
-                      Angle::Degrees(src->y));
-#endif
-    }
+    for (std::size_t j = 0; j < num_points; ++j, ++src)
+      *p++ = ImportShapePoint(*src, file_center);
   }
 }
 
