@@ -164,7 +164,7 @@ XShape::~XShape() noexcept = default;
 
 #ifdef ENABLE_OPENGL
 
-bool
+inline bool
 XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance) noexcept
 {
   assert(indices[thinning_level] == nullptr);
