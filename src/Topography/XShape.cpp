@@ -102,6 +102,9 @@ static auto
 ImportShapePoint(const pointObj &src, const GeoPoint &file_center) noexcept
 {
 #ifdef ENABLE_OPENGL
+  /* OpenGL: convert GeoPoints to ShapePoints, make them relative to
+     the map's boundary center */
+
   const GeoPoint vertex = ToGeoPoint(src);
   const GeoPoint relative = vertex - file_center;
 
@@ -110,6 +113,7 @@ ImportShapePoint(const pointObj &src, const GeoPoint &file_center) noexcept
     ShapeScalar(relative.latitude.Native()),
   };
 #else
+  /* convert all points of all lines to GeoPoints */
   return ToGeoPoint(src);
 #endif
 }
@@ -145,16 +149,7 @@ XShape::XShape(const shapeObj &shape, const GeoPoint &file_center,
     ++num_lines;
   }
 
-#ifdef ENABLE_OPENGL
-  /* OpenGL: convert GeoPoints to ShapePoints, make them relative to
-     the map's boundary center */
-
-  points = std::make_unique<ShapePoint[]>(num_points);
-#else // !ENABLE_OPENGL
-  /* convert all points of all lines to GeoPoints */
-
-  points = std::make_unique<GeoPoint[]>(num_points);
-#endif
+  points = std::make_unique<Point[]>(num_points);
   auto *p = points.get();
   for (std::size_t l = 0; l < num_lines; ++l) {
     const pointObj *src = shape.line[l].point;
