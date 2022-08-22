@@ -21,10 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_KOBO_MODEL_HPP
-#define XCSOAR_KOBO_MODEL_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 enum class KoboModel {
   UNKNOWN,
@@ -39,8 +36,6 @@ enum class KoboModel {
   NIA,
 };
 
-gcc_const
+[[gnu::const]]
 KoboModel
 DetectKoboModel();
-
-#endif

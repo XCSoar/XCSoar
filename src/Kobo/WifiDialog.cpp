@@ -121,16 +121,16 @@ private:
    */
   void EnsureConnected();
 
-  gcc_pure
+  [[gnu::pure]]
   NetworkInfo *FindByID(int id) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   NetworkInfo *FindByBSSID(const char *bssid) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   NetworkInfo *FindVisibleBySSID(const char *ssid) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   NetworkInfo *Find(const WifiConfiguredNetworkInfo &c) noexcept;
 
   void MergeList(const WifiVisibleNetwork *p, unsigned n);
