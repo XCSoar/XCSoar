@@ -249,7 +249,12 @@ libpng = CmakeProject(
     [
         '-DPNG_SHARED=OFF',
         '-DPNG_TESTS=OFF',
-    ]
+    ],
+    env={
+        # unwind tables are needed for throwing C++ exceptions from C
+        # error callbacks
+        'CFLAGS': '-funwind-tables',
+    },
 )
 
 libjpeg = CmakeProject(
@@ -260,7 +265,12 @@ libjpeg = CmakeProject(
     [
         '-DENABLE_STATIC=ON',
         '-DENABLE_SHARED=OFF',
-    ]
+    ],
+    env={
+        # unwind tables are needed for throwing C++ exceptions from C
+        # error callbacks
+        'CFLAGS': '-funwind-tables',
+    },
 )
 
 libusb = AutotoolsProject(
