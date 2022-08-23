@@ -94,6 +94,22 @@ public final class UsbSerialHelper extends BroadcastReceiver {
         : String.format("%04X:%04X",
                         device.getVendorId(), device.getProductId());
     }
+
+    public String getDisplayName() {
+      String name = device.getProductName();
+      if (name == null)
+        name = id;
+
+      String manufacturer = device.getManufacturerName();
+      if (manufacturer != null)
+        name += " (" + manufacturer + ")";
+
+      // add interface number to name only when more than one interface
+      if (device.getInterfaceCount() > 1)
+        name += "#" + (iface + 1);
+
+      return name;
+    }
   }
 
   static long createDevice(int vendorId, int productId) {
@@ -253,7 +269,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     if (detectListeners.isEmpty())
       return;
 
-    final String name = getDeviceInterfaceDisplayName(deviface);
+    final String name = deviface.getDisplayName();
 
     for (DetectDeviceListener l : detectListeners)
       l.onDeviceDetected(DetectDeviceListener.TYPE_USB_SERIAL, deviface.id, name, 0);
@@ -268,22 +284,5 @@ public final class UsbSerialHelper extends BroadcastReceiver {
 
   public synchronized void removeDetectDeviceListener(DetectDeviceListener l) {
     detectListeners.remove(l);
-  }
-
-
-  static String getDeviceInterfaceDisplayName(UsbDeviceInterface deviface) {
-    String name = deviface.device.getProductName();
-    if (name == null)
-      name = deviface.id;
-
-    String manufacturer = deviface.device.getManufacturerName();
-    if (manufacturer != null)
-      name += " (" + manufacturer + ")";
-
-    // add interface number to name only when more than one interface
-    if (deviface.device.getInterfaceCount() > 1)
-      name += "#" + (deviface.iface + 1);
-
-    return name;
   }
 }
