@@ -148,7 +148,7 @@ struct TempAirspaceType
   Reset() noexcept
   {
     days_of_operation.SetAll();
-    radio = _T("");
+    radio.clear();
     type = OTHER;
     base = top = AirspaceAltitude::Invalid();
     points.clear();
