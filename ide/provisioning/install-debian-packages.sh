@@ -79,6 +79,7 @@ echo
 
 echo Installing Kobo dependencies...
 apt-get install ${APTOPTS[*]} \
+    texinfo \
     fakeroot \
     python3-setuptools \
     ttf-bitstream-vera
