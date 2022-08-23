@@ -31,7 +31,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "util/Compiler.h"
+#include "util/StaticString.hxx"
 
 #include <cassert>
 
@@ -62,7 +62,8 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent,
                                const PixelRect &rc) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  TCHAR buffer[64];
+
+  StaticString<64> buffer;
 
   AddMultiLine(airspace->GetName());
 
@@ -71,10 +72,10 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent,
 
   AddReadOnly(_("Type"), nullptr, AirspaceFormatter::GetClass(*airspace));
 
-  AirspaceFormatter::FormatAltitude(buffer, airspace->GetTop());
+  AirspaceFormatter::FormatAltitude(buffer.data(), airspace->GetTop());
   AddReadOnly(_("Top"), nullptr, buffer);
 
-  AirspaceFormatter::FormatAltitude(buffer, airspace->GetBase());
+  AirspaceFormatter::FormatAltitude(buffer.data(), airspace->GetBase());
   AddReadOnly(_("Base"), nullptr, buffer);
 
   if (warnings != nullptr) {
@@ -82,7 +83,7 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent,
       airspace->ClosestPoint(basic.location, warnings->GetProjection());
     const auto distance = closest.Distance(basic.location);
 
-    FormatUserDistance(distance, buffer);
+    FormatUserDistance(distance, buffer.data());
     AddReadOnly(_("Distance"), nullptr, buffer);
   }
 }
