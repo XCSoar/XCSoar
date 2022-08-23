@@ -26,7 +26,9 @@ Copyright_License {
 
 #include <cassert>
 #include <cstdint>
+#include <compare>
 #include <cstddef>
+
 #include <tchar.h>
 
 /**
@@ -70,6 +72,9 @@ public:
     f.SetKiloHertz(mhz * 1000 + khz);
     return f;
   }
+
+  friend constexpr auto operator<=>(RadioFrequency,
+                                    RadioFrequency) noexcept = default;
 
   constexpr bool IsDefined() const noexcept {
     return value != 0;
