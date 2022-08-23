@@ -178,8 +178,6 @@ public final class UsbSerialHelper extends BroadcastReceiver {
           _AvailableInterfaces.put(deviface.id, deviface);
           broadcastDetectedDeviceInterface(deviface);
         }
-      } else {
-        Log.v(TAG, "Unsupported UsbDevice : " + device);
       }
     }
   }
@@ -250,7 +248,6 @@ public final class UsbSerialHelper extends BroadcastReceiver {
   private synchronized AndroidPort connect(String id, int baud)
     throws IOException
   {
-    Log.v(TAG,"Incoming Port connection request:"+id+"@"+baud);
     UsbDeviceInterface deviface = getAvailable(id);
     if (deviface == null)
       throw new IOException("USB serial device not found");
