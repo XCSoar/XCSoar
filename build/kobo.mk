@@ -58,6 +58,7 @@ KOBO_POWER_OFF_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Logger/FlightParser.cpp \
 	$(SRC)/Renderer/FlightListRenderer.cpp \
+	$(SRC)/Renderer/TextRenderer.cpp \
 	$(SRC)/FlightInfo.cpp \
 	$(SRC)/Kobo/PowerOff.cpp
 KOBO_POWER_OFF_LDADD = $(FAKE_LIBS)
