@@ -170,6 +170,7 @@ struct TempAirspaceType
   /**
    * If there is an airspace, add it to the #Airspaces and return
    * true.  Returns false if no airspace was being constructed.
+   * Throws if the airspace is bad.
    */
   bool Commit(Airspaces &airspace_database) {
     if (!points.empty()) {
@@ -180,10 +181,10 @@ struct TempAirspaceType
   }
 
   void
-  AddPolygon(Airspaces &airspace_database) noexcept
+  AddPolygon(Airspaces &airspace_database)
   {
     if (points.size() < 3)
-      return;
+      throw std::runtime_error{"Not enough polygon points"};
 
     auto as = std::make_shared<AirspacePolygon>(points);
     as->SetProperties(std::move(name), type, base, top);
@@ -930,7 +931,13 @@ ParseAirspaceFile(Airspaces &airspaces,
   }
 
   // Process final area (if any)
-  temp_area.Commit(airspaces);
+  try {
+    temp_area.Commit(airspaces);
+  } catch (...) {
+    const auto msg = GetFullMessage(std::current_exception());
+    operation.SetErrorMessage(UTF8ToWideConverter(msg.c_str()));
+    return false;
+  }
 
   return true;
 }
