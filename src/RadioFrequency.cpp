@@ -46,9 +46,9 @@ RadioFrequency::Parse(const TCHAR *p) noexcept
   double mhz = ParseDouble(p, &endptr);
 
   RadioFrequency frequency;
-  if (mhz < 100 || *endptr != _T('\0'))
-    frequency.Clear();
-  else
+  if (mhz >= 100 && *endptr == _T('\0'))
     frequency.SetKiloHertz((unsigned)(mhz * 1000 + 0.5));
+  else
+    frequency.Clear();
   return frequency;
 }
