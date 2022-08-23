@@ -58,6 +58,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
   private final Collection<DetectDeviceListener> detectListeners =
     new LinkedList<DetectDeviceListener>();
 
+  // keep this list in sync with res/xml/usb_device_filter.xml
   private static final long[] supported_ids = createTable(
     createDevice(0x16D0, 0x0BA9), // GPSBip
     createDevice(0x0403, 0x6015), // Digifly AIR (FT X-Series)

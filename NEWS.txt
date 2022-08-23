@@ -5,6 +5,7 @@ Version 7.25 - not yet released
   - IMI: fix task declaration bug
 * Android
   - support USB serial adapters with more than one port
+  - auto-start XCSoar when USB serial adapter gets connected
   - fix crash when GPS access was rejected by user
   - fix deadlock while quitting XCSoar
   - add U-BLOX 7 USB GPS into 'white list' of USB devices
