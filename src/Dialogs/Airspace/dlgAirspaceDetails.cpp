@@ -30,6 +30,7 @@ Copyright_License {
 #include "Formatter/AirspaceFormatter.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Language/Language.hpp"
 #include "util/StaticString.hxx"
 
@@ -71,6 +72,16 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent,
                                            buffer.capacity()) != nullptr) {
     buffer += _T(" MHz");
     AddReadOnly(_("Radio"), nullptr, buffer);
+
+    AddButton(_("Set Active Frequency"), [this](){
+      ActionInterface::SetActiveFrequency(airspace->GetRadioFrequency(),
+                                          airspace->GetName());
+    });
+
+    AddButton(_("Set Standby Frequency"), [this](){
+      ActionInterface::SetStandbyFrequency(airspace->GetRadioFrequency(),
+                                           airspace->GetName());
+    });
   }
 
   AddReadOnly(_("Type"), nullptr, AirspaceFormatter::GetClass(*airspace));

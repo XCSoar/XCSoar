@@ -38,6 +38,7 @@ Copyright_License {
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "util/Macros.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Language/Language.hpp"
 #include "Widget/ListWidget.hpp"
 #include "UIGlobals.hpp"
@@ -60,6 +61,7 @@ class AirspaceWarningListWidget final
   Button *ack_button;
   Button *ack_day_button;
   Button *enable_button;
+  Button *radio_button;
 
   std::vector<AirspaceWarning> warning_list;
 
@@ -85,6 +87,7 @@ public:
     ack_button = buttons.AddButton(_("ACK"), [this](){ Ack(); });
     ack_day_button = buttons.AddButton(_("ACK Day"), [this](){ AckDay(); });
     enable_button = buttons.AddButton(_("Enable"), [this](){ Enable(); });
+    radio_button = buttons.AddButton(_("Radio"), [this](){ Radio(); });
   }
 
   void CopyList();
@@ -100,6 +103,7 @@ public:
   void Ack();
   void AckDay();
   void Enable();
+  void Radio() noexcept;
 
   /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -144,6 +148,7 @@ AirspaceWarningListWidget::UpdateButtons()
     ack_button->SetVisible(false);
     ack_day_button->SetVisible(false);
     enable_button->SetVisible(false);
+    radio_button->SetVisible(false);
     return;
   }
 
@@ -159,6 +164,7 @@ AirspaceWarningListWidget::UpdateButtons()
   ack_button->SetVisible(ack_expired);
   ack_day_button->SetVisible(!ack_day);
   enable_button->SetVisible(!ack_expired);
+  radio_button->SetVisible(airspace->GetRadioFrequency().IsDefined());
 }
 
 void
@@ -268,6 +274,15 @@ AirspaceWarningListWidget::Enable()
   }
 
   UpdateList();
+}
+
+inline void
+AirspaceWarningListWidget::Radio() noexcept
+{
+  if (selected_airspace != nullptr &&
+      selected_airspace->GetRadioFrequency().IsDefined())
+    ActionInterface::SetActiveFrequency(selected_airspace->GetRadioFrequency(),
+                                        selected_airspace->GetName());
 }
 
 void

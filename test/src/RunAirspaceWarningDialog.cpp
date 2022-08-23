@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Main.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "Dialogs/DialogSettings.hpp"
@@ -55,6 +56,11 @@ ProtectedAirspaceWarningManager *airspace_warnings;
 void
 dlgAirspaceDetails(ConstAirspacePtr the_airspace,
                    ProtectedAirspaceWarningManager *airspace_warnings)
+{
+}
+
+void
+ActionInterface::SetActiveFrequency(const RadioFrequency & freq, const TCHAR * freq_name, bool to_devices)
 {
 }
 
