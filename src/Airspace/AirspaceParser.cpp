@@ -182,9 +182,20 @@ struct TempAirspaceType
       return false;
   }
 
+  /**
+   * Perform common checks before an airspace is committed to
+   * #Airspaces.  Throws on error.
+   */
+  void Check() {
+    if (type == OTHER && name.empty())
+      throw std::runtime_error{"Airspace has no name"};
+  }
+
   void
   AddPolygon(Airspaces &airspace_database)
   {
+    Check();
+
     if (points.size() < 3)
       throw std::runtime_error{"Not enough polygon points"};
 
@@ -210,6 +221,8 @@ struct TempAirspaceType
   void
   AddCircle(Airspaces &airspace_database)
   {
+    Check();
+
     if (!points.empty())
       throw std::runtime_error{"Airspace is a mix of polygon and circle"};
 
