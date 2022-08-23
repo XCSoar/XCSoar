@@ -147,7 +147,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
         removeAvailable(device);
       } else if (ACTION_USB_PERMISSION.equals(action)) {
         if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
-          Log.d(TAG, "permission granted for device " + device);
+          Log.d(TAG, "permission granted for device " + device.getDeviceName());
 
           //Iterate through list of Pending connections. For each entry matching with granted device, open port and remove from list
           Iterator<Map.Entry<UsbDeviceInterface,UsbSerialPort>> iter = _PendingConnection.entrySet().iterator();
@@ -176,7 +176,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     if (!exists(supported_ids, vid, pid))
       return;
 
-    Log.v(TAG, "UsbDevice Found : " + device);
+    Log.v(TAG, "UsbDevice Found : " + device.getDeviceName());
     for (int iface=0; iface < device.getInterfaceCount(); iface++) {
       UsbDeviceInterface deviface = new UsbDeviceInterface(device, iface);
       _AvailableInterfaces.put(deviface.id, deviface);
@@ -194,7 +194,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
   }
 
   private synchronized void removeAvailable(UsbDevice removeddevice) {
-    Log.v(TAG,"UsbDevice disconnected : " + removeddevice);
+    Log.v(TAG,"UsbDevice disconnected : " + removeddevice.getDeviceName());
     // Below line not possible with the current java version
     //_AvailableInterfaces.entrySet().removeIf(entry -> isSameDevice(removeddevice, entry.getValue().device));
     // Therefore this longer alternative:
