@@ -29,6 +29,7 @@
 #include "AirspaceActivity.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SearchPointVector.hpp"
+#include "RadioFrequency.hpp"
 
 #ifdef DO_PRINT
 #include <iosfwd>
@@ -73,7 +74,7 @@ protected:
   tstring name;
 
   /** Radio frequency (optional) */
-  tstring radio;
+  RadioFrequency radio_frequency = RadioFrequency::Null();
 
   /** Actual border */
   SearchPointVector m_border;
@@ -225,8 +226,8 @@ public:
    *
    * @param _Radio Radio frequency of airspace
    */
-  void SetRadio(const tstring &_Radio) noexcept {
-    radio = _Radio;
+  void SetRadioFrequency(RadioFrequency _radio) noexcept {
+    radio_frequency = _radio;
   }
 
   /**
@@ -332,14 +333,9 @@ public:
   [[gnu::pure]]
   bool MatchNamePrefix(const TCHAR *prefix) const noexcept;
 
-  /**
-   * Produce text version of radio frequency.
-   *
-   * @return Text version of radio frequency
-   */
   [[gnu::pure]]
-  const tstring &GetRadioText() const noexcept {
-    return radio;
+  RadioFrequency GetRadioFrequency() const noexcept {
+    return radio_frequency;
   }
 
   /**

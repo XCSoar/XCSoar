@@ -67,8 +67,11 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent,
 
   AddMultiLine(airspace->GetName());
 
-  if (!airspace->GetRadioText().empty())
-    AddReadOnly(_("Radio"), nullptr, airspace->GetRadioText().c_str());
+  if (airspace->GetRadioFrequency().Format(buffer.data(),
+                                           buffer.capacity()) != nullptr) {
+    buffer += _T(" MHz");
+    AddReadOnly(_("Radio"), nullptr, buffer);
+  }
 
   AddReadOnly(_("Type"), nullptr, AirspaceFormatter::GetClass(*airspace));
 

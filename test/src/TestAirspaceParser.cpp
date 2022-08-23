@@ -129,9 +129,9 @@ TestOpenAir()
                  Angle::DMS(1, 30, 30),
                  Angle::DMS(1, 30, 30, true)));
     } else if (StringIsEqual(_T("Radio-Test 1 (AR with MHz)"), airspace.GetName())) {
-      ok1(StringIsEqual(_T("130.125 MHz"), airspace.GetRadioText().c_str()));
+      ok1(airspace.GetRadioFrequency() == RadioFrequency::FromMegaKiloHertz(130, 125));
     } else if (StringIsEqual(_T("Radio-Test 2 (AF without MHz)"), airspace.GetName())) {
-      ok1(StringIsEqual(_T("130.125"), airspace.GetRadioText().c_str()));
+      ok1(airspace.GetRadioFrequency() == RadioFrequency::FromMegaKiloHertz(130, 125));
     } else if (StringIsEqual(_T("Height-Test-1"), airspace.GetName())) {
       ok1(airspace.GetBase().IsTerrain());
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
@@ -237,7 +237,7 @@ TestTNP()
                  Angle::DMS(1, 30, 30),
                  Angle::DMS(1, 30, 30, true)));
     } else if (StringIsEqual(_T("Radio-Test"), airspace.GetName())) {
-      ok1(StringIsEqual(_T("130.125 MHz"), airspace.GetRadioText().c_str()));
+      ok1(airspace.GetRadioFrequency() == RadioFrequency::FromMegaKiloHertz(130, 125));
     } else if (StringIsEqual(_T("Height-Test-1"), airspace.GetName())) {
       ok1(airspace.GetBase().IsTerrain());
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);

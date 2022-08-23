@@ -128,7 +128,7 @@ struct TempAirspaceType
 
   // General
   tstring name;
-  tstring radio;
+  RadioFrequency radio_frequency;
   AirspaceClass type;
   AirspaceAltitude base;
   AirspaceAltitude top;
@@ -149,7 +149,7 @@ struct TempAirspaceType
   {
     days_of_operation.SetAll();
     name.clear();
-    radio.clear();
+    radio_frequency = RadioFrequency::Null();
     type = OTHER;
     base = top = AirspaceAltitude::Invalid();
     points.clear();
@@ -201,7 +201,7 @@ struct TempAirspaceType
 
     auto as = std::make_shared<AirspacePolygon>(points);
     as->SetProperties(std::move(name), type, base, top);
-    as->SetRadio(radio);
+    as->SetRadioFrequency(radio_frequency);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
   }
@@ -229,7 +229,7 @@ struct TempAirspaceType
     auto as = std::make_shared<AirspaceCircle>(RequireCenter(),
                                                RequireRadius());
     as->SetProperties(std::move(name), type, base, top);
-    as->SetRadio(radio);
+    as->SetRadioFrequency(radio_frequency);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
   }
@@ -649,7 +649,7 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
     case _T('F'):
     case _T('f'):
       if (input.SkipWhitespace())
-        temp_area.radio = input.c_str();
+        temp_area.radio_frequency = RadioFrequency::Parse(input.c_str());
       break;
     }
 
@@ -866,7 +866,7 @@ ParseLineTNP(Airspaces &airspace_database, StringParser<TCHAR> &input,
   } else if (input.SkipMatchIgnoreCase(_T("BASE="), 5)) {
     ReadAltitude(input, temp_area.base);
   } else if (input.SkipMatchIgnoreCase(_T("RADIO="), 6)) {
-    temp_area.radio = input.c_str();
+    temp_area.radio_frequency = RadioFrequency::Parse(input.c_str());
   } else if (input.SkipMatchIgnoreCase(_T("ACTIVE="), 7)) {
     if (input.MatchAllIgnoreCase(_T("WEEKEND")))
       temp_area.days_of_operation.SetWeekend();

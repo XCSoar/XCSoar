@@ -194,6 +194,7 @@ TEST_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -1220,6 +1221,7 @@ RUN_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -2257,6 +2259,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(IO_SRC_DIR)/MapFile.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
