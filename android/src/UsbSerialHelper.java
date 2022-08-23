@@ -90,7 +90,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
       iface = iface_;
       id = device.getInterfaceCount() > 1
         ? String.format("%04X:%04X:%02d",
-                        device.getVendorId(), device.getProductId(), iface)
+                        device.getVendorId(), device.getProductId(), iface + 1)
         : String.format("%04X:%04X",
                         device.getVendorId(), device.getProductId());
     }
@@ -270,7 +270,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
 
     // add interface number to name only when more than one interface
     if (deviface.device.getInterfaceCount() > 1)
-      name += "#" + deviface.iface;
+      name += "#" + (deviface.iface + 1);
 
     return name;
   }
