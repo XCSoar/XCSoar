@@ -167,6 +167,18 @@ struct TempAirspaceType
     rotation = 1;
   }
 
+  /**
+   * If there is an airspace, add it to the #Airspaces and return
+   * true.  Returns false if no airspace was being constructed.
+   */
+  bool Commit(Airspaces &airspace_database) {
+    if (!points.empty()) {
+      AddPolygon(airspace_database);
+      return true;
+    } else
+      return false;
+  }
+
   void
   AddPolygon(Airspaces &airspace_database) noexcept
   {
@@ -588,8 +600,8 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
       if (!input.SkipWhitespace())
         break;
 
-      temp_area.AddPolygon(airspace_database);
-      temp_area.Reset();
+      if (temp_area.Commit(airspace_database))
+        temp_area.Reset();
 
       temp_area.type = ParseType(input.c_str());
       break;
@@ -819,13 +831,13 @@ ParseLineTNP(Airspaces &airspace_database, StringParser<TCHAR> &input,
     temp_area.rotation = -1;
     ParseArcTNP(input, temp_area);
   } else if (input.SkipMatchIgnoreCase(_T("TITLE="), 6)) {
-    temp_area.AddPolygon(airspace_database);
-    temp_area.ResetTNP();
+    if (temp_area.Commit(airspace_database))
+      temp_area.ResetTNP();
 
     temp_area.name = input.c_str();
   } else if (input.SkipMatchIgnoreCase(_T("TYPE="), 5)) {
-    temp_area.AddPolygon(airspace_database);
-    temp_area.ResetTNP();
+    if (temp_area.Commit(airspace_database))
+      temp_area.ResetTNP();
 
     temp_area.type = ParseTypeTNP(input.c_str());
   } else if (input.SkipMatchIgnoreCase(_T("CLASS="), 6)) {
@@ -918,7 +930,7 @@ ParseAirspaceFile(Airspaces &airspaces,
   }
 
   // Process final area (if any)
-  temp_area.AddPolygon(airspaces);
+  temp_area.Commit(airspaces);
 
   return true;
 }
