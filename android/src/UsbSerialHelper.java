@@ -221,6 +221,15 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     context.unregisterReceiver(this);
   }
 
+  private void requestPermission(UsbDevice device) {
+    PendingIntent pi =
+      PendingIntent.getBroadcast(context, 0,
+                                 new Intent(UsbSerialHelper.ACTION_USB_PERMISSION),
+                                 0);
+
+    usbmanager.requestPermission(device, pi);
+  }
+
   private synchronized AndroidPort connect(String id, int baud)
     throws IOException
   {
@@ -234,8 +243,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
       port.open(usbmanager);
     } else {
       _PendingConnection.put(deviface, port);
-      PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(UsbSerialHelper.ACTION_USB_PERMISSION), 0);
-      usbmanager.requestPermission(deviface.device, pi);
+      requestPermission(deviface.device);
     }
 
     return port;
