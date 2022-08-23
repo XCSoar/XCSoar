@@ -167,21 +167,22 @@ public final class UsbSerialHelper extends BroadcastReceiver {
   }
 
   private synchronized void addAvailable(UsbDevice device) {
-    if (UsbSerialDevice.isSupported(device)) {
-      int vid = device.getVendorId();
-      int pid = device.getProductId();
+    if (!UsbSerialDevice.isSupported(device))
+      return;
 
-      if (exists(supported_ids, vid, pid)) {
-        Log.v(TAG, "UsbDevice Found : " + device);
-        for (int iface=0; iface < device.getInterfaceCount(); iface++) {
-          UsbDeviceInterface deviface = new UsbDeviceInterface(device, iface);
-          _AvailableInterfaces.put(deviface.id, deviface);
-          broadcastDetectedDeviceInterface(deviface);
-        }
-      }
+    final int vid = device.getVendorId();
+    final int pid = device.getProductId();
+
+    if (!exists(supported_ids, vid, pid))
+      return;
+
+    Log.v(TAG, "UsbDevice Found : " + device);
+    for (int iface=0; iface < device.getInterfaceCount(); iface++) {
+      UsbDeviceInterface deviface = new UsbDeviceInterface(device, iface);
+      _AvailableInterfaces.put(deviface.id, deviface);
+      broadcastDetectedDeviceInterface(deviface);
     }
   }
-
 
   private synchronized UsbDeviceInterface getAvailable(String id) {
     for (Map.Entry<String, UsbDeviceInterface> entry : _AvailableInterfaces.entrySet()) {
