@@ -109,6 +109,10 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     return Arrays.binarySearch(devices, createDevice(vendorId, productId)) >= 0;
   }
 
+  private static boolean isSameDevice(UsbDevice a, UsbDevice b) {
+    return a.getDeviceName().equals(b.getDeviceName());
+  }
+
   @Override
   public synchronized void onReceive(Context context, Intent intent) {
     synchronized (this) {
@@ -132,7 +136,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
           Iterator<Map.Entry<UsbDeviceInterface,UsbSerialPort>> iter = _PendingConnection.entrySet().iterator();
           while (iter.hasNext()) {
             Map.Entry<UsbDeviceInterface,UsbSerialPort> entry = iter.next();
-            if(device.getDeviceName().equals(entry.getKey().device.getDeviceName())) {
+            if (isSameDevice(device, entry.getKey().device)) {
               UsbSerialPort port = entry.getValue();
               if (port != null) {
                 port.open(usbmanager);
@@ -176,12 +180,12 @@ public final class UsbSerialHelper extends BroadcastReceiver {
   private synchronized void removeAvailable(UsbDevice removeddevice) {
     Log.v(TAG,"UsbDevice disconnected : " + removeddevice);
     // Below line not possible with the current java version
-    //_AvailableInterfaces.entrySet().removeIf(entry -> removeddevice.getDeviceName().equals(entry.getValue().device.getDeviceName()));
+    //_AvailableInterfaces.entrySet().removeIf(entry -> isSameDevice(removeddevice, entry.getValue().device));
     // Therefore this longer alternative:
     Iterator<Map.Entry<String,UsbDeviceInterface>> iter = _AvailableInterfaces.entrySet().iterator();
     while (iter.hasNext()) {
       Map.Entry<String,UsbDeviceInterface> entry = iter.next();
-      if (removeddevice.getDeviceName().equals(entry.getValue().device.getDeviceName())) {
+      if (isSameDevice(removeddevice, entry.getValue().device)) {
         iter.remove();
       }
     }
