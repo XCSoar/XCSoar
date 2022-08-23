@@ -73,18 +73,15 @@ ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
      <RX2> Secondary channel rx state (0 = no signal rec; 1 = signal rec)
      <TX1> Transmit active (0 = no transmission; 1 = transmitting signal)
      */
-    RadioFrequency freq;
 
     if (line.ReadChecked(value)) {
-      freq.SetKiloHertz(value);
       info.settings.has_active_frequency.Update(info.clock);
-      info.settings.active_frequency = freq;
+      info.settings.active_frequency = RadioFrequency::FromKiloHertz(value);
     }
 
     if (line.ReadChecked(value)) {
-      freq.SetKiloHertz(value);
       info.settings.has_standby_frequency.Update(info.clock);
-      info.settings.standby_frequency = freq;
+      info.settings.standby_frequency = RadioFrequency::FromKiloHertz(value);
     }
 
     unsigned volume;

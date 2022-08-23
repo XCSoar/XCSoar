@@ -58,6 +58,19 @@ public:
     return { 0 };
   }
 
+  static constexpr RadioFrequency FromKiloHertz(unsigned khz) noexcept {
+    RadioFrequency f;
+    f.SetKiloHertz(khz);
+    return f;
+  }
+
+  static constexpr RadioFrequency FromMegaKiloHertz(unsigned mhz,
+                                                    unsigned khz) noexcept {
+    RadioFrequency f;
+    f.SetKiloHertz(mhz * 1000 + khz);
+    return f;
+  }
+
   constexpr bool IsDefined() const noexcept {
     return value != 0;
   }

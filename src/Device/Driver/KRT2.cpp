@@ -411,8 +411,8 @@ KRT2Device::HandleSTXCommand(const struct stx_msg * msg, struct NMEAInfo & info)
     return;
   }
 
-  RadioFrequency freq;
-  freq.SetKiloHertz((msg->mhz * 1000) + (msg->khz * 5));
+  const auto freq = RadioFrequency::FromMegaKiloHertz(msg->mhz, msg->khz * 5);
+
   StaticString<MAX_NAME_LENGTH> freq_name;
   freq_name.SetASCII(&(msg->station[0]), &(msg->station[MAX_NAME_LENGTH - 1]));
 
