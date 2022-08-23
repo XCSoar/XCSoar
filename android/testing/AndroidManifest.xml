@@ -76,6 +76,9 @@
   <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
   <uses-feature android:name="android.hardware.usb.accessory" android:required="false"/>
 
+  <!-- enable USB host mode -->
+  <uses-feature android:name="android.hardware.usb.host" android:required="false" />
+
   <!-- Allow installation on faked touchscreen -->
   <uses-feature android:name="android.hardware.faketouch" android:required="false"/>
 </manifest>
