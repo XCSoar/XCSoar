@@ -57,7 +57,7 @@ public:
 
   [[gnu::pure]]
   static unsigned GetMinimumButtonWidth(const ButtonLook &look,
-                                        const TCHAR *caption) noexcept;
+                                        tstring_view caption) noexcept;
 
   const ButtonLook &GetLook() const noexcept {
     return frame_renderer.GetLook();

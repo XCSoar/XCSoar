@@ -21,10 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TEXT_RENDERER_HPP
-#define XCSOAR_TEXT_RENDERER_HPP
+#pragma once
 
-#include <tchar.h>
+#include "util/tstring_view.hxx"
 
 struct PixelRect;
 class Canvas;
@@ -59,17 +58,15 @@ public:
 
   [[gnu::pure]]
   unsigned GetHeight(Canvas &canvas, PixelRect rc,
-                     const TCHAR *text) const noexcept;
+                     tstring_view text) const noexcept;
 
   [[gnu::pure]]
   unsigned GetHeight(Canvas &canvas, unsigned width,
-                     const TCHAR *text) const noexcept;
+                     tstring_view text) const noexcept;
 
   [[gnu::pure]]
   unsigned GetHeight(const Font &font, unsigned width,
-                     const TCHAR *text) const noexcept;
+                     tstring_view text) const noexcept;
 
-  void Draw(Canvas &canvas, PixelRect rc, const TCHAR *text) const noexcept;
+  void Draw(Canvas &canvas, PixelRect rc, tstring_view text) const noexcept;
 };
-
-#endif
