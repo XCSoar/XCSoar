@@ -1,4 +1,5 @@
 Version 7.25 - not yet released
+* stricter airspace parser
 * fix the airspace warning "Enable" button
 * devices
   - IMI: fix task declaration bug

@@ -210,6 +210,9 @@ struct TempAirspaceType
   void
   AddCircle(Airspaces &airspace_database)
   {
+    if (!points.empty())
+      throw std::runtime_error{"Airspace is a mix of polygon and circle"};
+
     auto as = std::make_shared<AirspaceCircle>(RequireCenter(),
                                                RequireRadius());
     as->SetProperties(std::move(name), type, base, top);
