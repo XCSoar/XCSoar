@@ -32,27 +32,6 @@ Copyright_License {
 #include <algorithm>
 #include <stdexcept>
 
-inline
-ShapeFile::ShapeFile(zzip_dir *dir, const char *filename)
-{
-  if (msShapefileOpen(&obj, "rb", dir, filename, 0) == -1)
-    throw std::runtime_error{"Failed to open shapefile"};
-}
-
-inline void
-ShapeFile::ReadShape(shapeObj &shape, std::size_t i)
-{
-  msSHPReadShape(obj.hSHP, i, &shape);
-  if (shape.type == MS_SHAPE_NULL)
-    throw std::runtime_error{"Failed to read shape"};
-}
-
-inline const char *
-ShapeFile::ReadLabel(std::size_t i, unsigned field) noexcept
-{
-  return msDBFReadStringAttribute(obj.hDBF, i, field);
-}
-
 TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
                                double _threshold,
                                double _label_threshold,

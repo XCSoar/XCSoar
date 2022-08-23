@@ -1,4 +1,5 @@
 TOPO_SOURCES = \
+	$(SRC)/Topography/ShapeFile.cpp \
 	$(SRC)/Topography/TopographyFile.cpp \
 	$(SRC)/Topography/TopographyStore.cpp \
 	$(SRC)/Topography/TopographyFileRenderer.cpp \
