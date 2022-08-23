@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "RadioFrequency.hpp"
+#include "Math/Util.hpp"
 #include "util/StringFormat.hpp"
 #include "util/NumberParser.hpp"
 
@@ -47,7 +48,7 @@ RadioFrequency::Parse(const TCHAR *p) noexcept
 
   RadioFrequency frequency;
   if (mhz >= 100 && *endptr == _T('\0'))
-    frequency.SetKiloHertz((unsigned)(mhz * 1000 + 0.5));
+    frequency.SetKiloHertz(uround(mhz * 1000));
   else
     frequency.Clear();
   return frequency;
