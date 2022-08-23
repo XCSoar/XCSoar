@@ -148,6 +148,7 @@ struct TempAirspaceType
   Reset() noexcept
   {
     days_of_operation.SetAll();
+    name.clear();
     radio.clear();
     type = OTHER;
     base = top = AirspaceAltitude::Invalid();
@@ -161,6 +162,7 @@ struct TempAirspaceType
   ResetTNP() noexcept
   {
     // Preserve type, radio and days_of_operation for next airspace blocks
+    name.clear();
     points.clear();
     center = GeoPoint::Invalid();
     radius = -1;
