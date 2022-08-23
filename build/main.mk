@@ -414,15 +414,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/CalculationThread.cpp \
 	$(SRC)/DisplayMode.cpp \
 	\
-	$(SRC)/Topography/TopographyFile.cpp \
-	$(SRC)/Topography/TopographyStore.cpp \
-	$(SRC)/Topography/TopographyFileRenderer.cpp \
-	$(SRC)/Topography/TopographyRenderer.cpp \
-	$(SRC)/Topography/Thread.cpp \
-	$(SRC)/Topography/TopographyGlue.cpp \
-	$(SRC)/Topography/XShape.cpp \
-	$(SRC)/Topography/Index.cpp \
-	$(SRC)/Topography/CachedTopographyRenderer.cpp \
 	$(SRC)/Markers/Markers.cpp \
 	\
 	$(SRC)/FlightStatistics.cpp \
@@ -678,6 +669,7 @@ XCSOAR_DEPENDS = \
 	LIBINFOBOX \
 	GETTEXT PROFILE \
 	TERRAIN \
+	TOPO \
 	WIDGET FORM DATA_FIELD \
 	LOOK \
 	AUDIO SCREEN EVENT \
@@ -687,7 +679,7 @@ XCSOAR_DEPENDS = \
 	LIBNMEA \
 	LIBHTTP CO IO ASYNC TASK CONTEST ROUTE GLIDE WAYPOINT AIRSPACE \
 	LUA \
-	SHAPELIB ZZIP \
+	ZZIP \
 	OPERATION \
 	JSON \
 	LIBNET TIME OS THREAD \

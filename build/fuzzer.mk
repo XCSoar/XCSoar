@@ -39,16 +39,13 @@ FUZZ_AIRSPACE_PARSER_DEPENDS = IO OS AIRSPACE ZZIP GEO MATH UTIL
 $(eval $(call link-program,FuzzAirspaceParser,FUZZ_AIRSPACE_PARSER))
 
 FUZZ_TOPOGRAPHY_FILE_SOURCES = \
-	$(SRC)/Topography/TopographyFile.cpp \
-	$(SRC)/Topography/XShape.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(FUZZER_SRC_DIR)/FuzzTopographyFile.cpp
-FUZZ_TOPOGRAPHY_FILE_DEPENDS = SCREEN SHAPELIB ZZIP GEO MATH IO UTIL
+FUZZ_TOPOGRAPHY_FILE_DEPENDS = SCREEN TOPO ZZIP GEO MATH IO UTIL
 $(eval $(call link-program,FuzzTopographyFile,FUZZ_TOPOGRAPHY_FILE))
 
 FUZZ_TOPOGRAPHY_INDEX_SOURCES = \
-	$(SRC)/Topography/Index.cpp \
 	$(FUZZER_SRC_DIR)/FuzzTopographyIndex.cpp
 FUZZ_TOPOGRAPHY_INDEX_DEPENDS = RESOURCE
 $(eval $(call link-program,FuzzTopographyIndex,FUZZ_TOPOGRAPHY_INDEX))

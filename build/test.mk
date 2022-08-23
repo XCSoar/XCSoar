@@ -1123,10 +1123,6 @@ KEY_CODE_DUMPER_DEPENDS = FORM SCREEN EVENT ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,KeyCodeDumper,KEY_CODE_DUMPER))
 
 LOAD_TOPOGRAPHY_SOURCES = \
-	$(SRC)/Topography/TopographyStore.cpp \
-	$(SRC)/Topography/TopographyFile.cpp \
-	$(SRC)/Topography/Index.cpp \
-	$(SRC)/Topography/XShape.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
@@ -1137,7 +1133,7 @@ ifeq ($(OPENGL),y)
 LOAD_TOPOGRAPHY_SOURCES += \
 	$(CANVAS_SRC_DIR)/opengl/Triangulate.cpp
 endif
-LOAD_TOPOGRAPHY_DEPENDS = OPERATION RESOURCE GEO MATH THREAD IO SYSTEM UTIL SHAPELIB ZZIP
+LOAD_TOPOGRAPHY_DEPENDS = OPERATION TOPO RESOURCE GEO MATH THREAD IO SYSTEM UTIL ZZIP
 LOAD_TOPOGRAPHY_CPPFLAGS = $(SCREEN_CPPFLAGS)
 $(eval $(call link-program,LoadTopography,LOAD_TOPOGRAPHY))
 
@@ -1750,15 +1746,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Task/ProtectedRoutePlanner.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
-	$(SRC)/Topography/TopographyFile.cpp \
-	$(SRC)/Topography/TopographyStore.cpp \
-	$(SRC)/Topography/Thread.cpp \
-	$(SRC)/Topography/TopographyFileRenderer.cpp \
-	$(SRC)/Topography/TopographyRenderer.cpp \
-	$(SRC)/Topography/TopographyGlue.cpp \
-	$(SRC)/Topography/Index.cpp \
-	$(SRC)/Topography/XShape.cpp \
-	$(SRC)/Topography/CachedTopographyRenderer.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -1817,12 +1804,11 @@ endif
 
 RUN_MAP_WINDOW_DEPENDS = \
 	LIBMAPWINDOW \
-	PROFILE TERRAIN \
+	PROFILE TERRAIN TOPO \
 	FORM \
 	LOOK \
 	SCREEN EVENT \
 	RESOURCE \
-	SHAPELIB \
 	OPERATION \
 	ASYNC OS IO THREAD \
 	TASK ROUTE GLIDE WAYPOINT AIRSPACE \
