@@ -23,7 +23,9 @@ Copyright_License {
 
 #include "ui/canvas/Color.hpp"
 
-Color Desaturate(Color c) {
+Color
+Desaturate(Color c) noexcept
+{
 #ifdef GREYSCALE
   return c;
 #else

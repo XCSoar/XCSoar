@@ -53,7 +53,7 @@ static constexpr Color COLOR_ORANGE = Color(0xff, 0xa2, 0x00);
 static constexpr Color COLOR_BROWN = Color(0xb7, 0x64, 0x1e);
 
 constexpr uint8_t
-LightColor(uint8_t c)
+LightColor(uint8_t c) noexcept
 {
   return ((c ^ 0xff) >> 1) ^ 0xff;
 }
@@ -63,7 +63,7 @@ LightColor(uint8_t c)
  * SRCAND filtering.
  */
 constexpr Color
-LightColor(Color c)
+LightColor(Color c) noexcept
 {
 #ifdef GREYSCALE
   return Color(LightColor(c.GetLuminosity()));
@@ -74,7 +74,7 @@ LightColor(Color c)
 }
 
 constexpr uint8_t
-DarkColor(uint8_t c)
+DarkColor(uint8_t c) noexcept
 {
   return (c >> 1);
 }
@@ -83,7 +83,7 @@ DarkColor(uint8_t c)
  * Returns a darker version of the specified color.
  */
 constexpr Color
-DarkColor(Color c)
+DarkColor(Color c) noexcept
 {
 #ifdef GREYSCALE
   return Color(DarkColor(c.GetLuminosity()));
@@ -93,10 +93,12 @@ DarkColor(Color c)
 #endif
 }
 
-Color Desaturate(Color c);
+[[gnu::const]]
+Color
+Desaturate(Color c) noexcept;
 
 constexpr Color
-ColorWithAlpha(const Color &c, uint8_t a)
+ColorWithAlpha(const Color &c, uint8_t a) noexcept
 {
 #ifdef ENABLE_OPENGL
   return c.WithAlpha(a);
