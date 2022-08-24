@@ -81,6 +81,14 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     createDevice(0x1546, 0x01A7)  // U-BLOX 7 USB GPS
   );
 
+  private static String makePortId(UsbDevice device, int iface) {
+    return device.getInterfaceCount() > 1
+      ? String.format("%04X:%04X:%02d",
+                      device.getVendorId(), device.getProductId(), iface + 1)
+      : String.format("%04X:%04X",
+                      device.getVendorId(), device.getProductId());
+  }
+
   static final class UsbDeviceInterface {
     public final UsbDevice device;
     public final int iface;
@@ -89,11 +97,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     public UsbDeviceInterface(UsbDevice dev_,int iface_) {
       device = dev_;
       iface = iface_;
-      id = device.getInterfaceCount() > 1
-        ? String.format("%04X:%04X:%02d",
-                        device.getVendorId(), device.getProductId(), iface + 1)
-        : String.format("%04X:%04X",
-                        device.getVendorId(), device.getProductId());
+      id = makePortId(device, iface);
     }
 
     public String getDisplayName() {
