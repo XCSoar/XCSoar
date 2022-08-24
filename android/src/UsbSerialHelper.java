@@ -110,6 +110,10 @@ public final class UsbSerialHelper extends BroadcastReceiver {
       id = makePortId(device, iface);
     }
 
+    public boolean isId(String otherId) {
+      return otherId.contentEquals(id);
+    }
+
     public String getDisplayName() {
       String name = device.getProductName();
       if (name == null)
@@ -230,7 +234,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
 
   private synchronized UsbDeviceInterface getAvailable(String id) {
     for (UsbDeviceInterface i : interfaces)
-      if (id.contentEquals(i.id))
+      if (i.isId(id))
         return i;
 
     return null;
