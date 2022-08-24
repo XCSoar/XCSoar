@@ -80,8 +80,8 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     createDevice(0x1546, 0x01A7)  // U-BLOX 7 USB GPS
   );
 
-  private static String makePortId(UsbDevice device, int iface,
-                                   boolean withSerialNumber) {
+  private static String makeDeviceId(UsbDevice device,
+                                     boolean withSerialNumber) {
     String id = String.format("%04X:%04X",
                               device.getVendorId(), device.getProductId());
 
@@ -90,6 +90,13 @@ public final class UsbSerialHelper extends BroadcastReceiver {
       if (serialNumber != null)
         id += "[" + serialNumber + "]";
     }
+
+    return id;
+  }
+
+  private static String makePortId(UsbDevice device, int iface,
+                                   boolean withSerialNumber) {
+    String id = makeDeviceId(device, withSerialNumber);
 
     if (iface > 0)
       /* a secondary interface on the same device: append the
