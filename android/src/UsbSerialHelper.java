@@ -88,7 +88,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     if (iface > 0)
       /* a secondary interface on the same device: append the
          interface index */
-      id += ":" + String.format("%02d", iface);
+      id += "#" + iface;
 
     return id;
   }
