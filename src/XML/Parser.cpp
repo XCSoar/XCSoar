@@ -172,7 +172,7 @@ FromXMLString(tstring_view src) noexcept
   return result;
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 CompareTagName(const TCHAR *cclose, const TCHAR *copen)
 {
