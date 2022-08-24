@@ -32,7 +32,7 @@ Copyright_License {
 #include <stdexcept>
 
 template<class R>
-gcc_pure
+[[gnu::pure]]
 static bool
 VerifyFormat(Path path)
 try {
