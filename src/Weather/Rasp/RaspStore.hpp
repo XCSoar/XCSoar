@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,14 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_WEATHER_RASP_STORE_HPP
-#define XCSOAR_WEATHER_RASP_STORE_HPP
+#pragma once
 
 #include "util/StaticArray.hxx"
 #include "util/StaticString.hxx"
 #include "system/Path.hpp"
 #include "time/BrokenTime.hpp"
-#include "util/Compiler.h"
 
 #include <memory>
 
@@ -101,12 +99,12 @@ public:
   explicit RaspStore(AllocatedPath &&_path)
     :path(std::move(_path)) {}
 
-  gcc_const
+  [[gnu::const]]
   unsigned GetItemCount() const {
     return maps.size();
   }
 
-  gcc_const
+  [[gnu::const]]
   const MapItem &GetItemInfo(unsigned i) const {
     return maps[i];
   }
@@ -138,13 +136,13 @@ public:
    * Find the nearest time index which is available.  If no time index
    * is available, this method returns #MAX_WEATHER_TIMES.
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetNearestTime(unsigned item_index, unsigned time_index) const;
 
   /**
    * Converts a time index to a #BrokenTime.
    */
-  gcc_const
+  [[gnu::pure]]
   static BrokenTime IndexToTime(unsigned index);
 
   std::unique_ptr<ZipArchive> OpenArchive() const;
@@ -153,11 +151,9 @@ public:
                                     unsigned time_index);
 
 private:
-  gcc_pure
+  [[gnu::pure]]
   static bool ExistsItem(const ZipArchive &archive, Path name,
                          unsigned time_index);
 
   static bool ScanMapItem(const ZipArchive &archive, MapItem &item);
 };
-
-#endif
