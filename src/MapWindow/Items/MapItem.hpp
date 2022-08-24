@@ -76,7 +76,7 @@ public:
   /* we need this virtual dummy destructor, because there is code that
      "deletes" MapItem objects without knowing that it's really a
      TaskOZMapItem */
-  virtual ~MapItem() {}
+  virtual ~MapItem() noexcept = default;
 };
 
 struct LocationMapItem: public MapItem
