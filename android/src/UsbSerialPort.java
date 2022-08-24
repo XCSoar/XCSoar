@@ -38,6 +38,7 @@ import java.util.Arrays;
 public final class UsbSerialPort
   implements AndroidPort, UsbSerialInterface.UsbReadCallback
 {
+  private final UsbSerialHelper.UsbDeviceInterface parent;
   private UsbDeviceConnection connection;
   private UsbSerialDevice serialDevice;
   private PortListener portListener;
@@ -46,7 +47,8 @@ public final class UsbSerialPort
   private int state = STATE_LIMBO;
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
-  public UsbSerialPort(int baud) {
+  public UsbSerialPort(UsbSerialHelper.UsbDeviceInterface parent, int baud) {
+    this.parent = parent;
     this.baudRate = baud;
   }
 
@@ -79,6 +81,8 @@ public final class UsbSerialPort
   }
 
   public synchronized void close() {
+    parent.portClosed(this);
+
     safeDestruct.beginShutdown();
 
     if( serialDevice != null) {
@@ -92,6 +96,13 @@ public final class UsbSerialPort
     }
 
     safeDestruct.finishShutdown();
+  }
+
+  /**
+   * Called by UsbSerialHelper after the device got disconnected.
+   */
+  public void onDisconnect() {
+    error("Disconnected");
   }
 
   @Override

@@ -104,6 +104,11 @@ public final class UsbSerialHelper extends BroadcastReceiver {
      */
     public UsbSerialPort pendingPort;
 
+    /**
+     * If not null, then this port is currently open.
+     */
+    public UsbSerialPort openPort;
+
     public UsbDeviceInterface(UsbDevice dev_,int iface_) {
       device = dev_;
       iface = iface_;
@@ -130,8 +135,9 @@ public final class UsbSerialHelper extends BroadcastReceiver {
       if (pendingPort != null)
         throw new IOException("Port already occupied");
 
-      UsbSerialPort port = new UsbSerialPort(baud);
+      UsbSerialPort port = new UsbSerialPort(this, baud);
       if (usbmanager.hasPermission(device)) {
+        openPort = port;
         port.open(usbmanager, device, iface);
       } else {
         pendingPort = port;
@@ -147,6 +153,26 @@ public final class UsbSerialHelper extends BroadcastReceiver {
 
       if (port != null)
         port.open(usbmanager, device, iface);
+    }
+
+    /**
+     * Called by UsbSerialPort::close().
+     */
+    public synchronized void portClosed(UsbSerialPort port) {
+      if (port == openPort)
+        openPort = null;
+    }
+
+    public synchronized void onDisconnect() {
+      if (pendingPort != null) {
+        pendingPort.onDisconnect();
+        pendingPort = null;
+      }
+
+      if (openPort != null) {
+        openPort.onDisconnect();
+        openPort = null;
+      }
     }
   }
 
@@ -223,13 +249,11 @@ public final class UsbSerialHelper extends BroadcastReceiver {
 
   private synchronized void removeAvailable(UsbDevice removeddevice) {
     Log.v(TAG,"UsbDevice disconnected : " + removeddevice.getDeviceName());
-    // Below line not possible with the current java version
-    //_AvailableInterfaces.entrySet().removeIf(entry -> isSameDevice(removeddevice, entry.getValue().device));
-    // Therefore this longer alternative:
     Iterator<Map.Entry<String,UsbDeviceInterface>> iter = _AvailableInterfaces.entrySet().iterator();
     while (iter.hasNext()) {
       Map.Entry<String,UsbDeviceInterface> entry = iter.next();
       if (isSameDevice(removeddevice, entry.getValue().device)) {
+        entry.getValue().onDisconnect();
         iter.remove();
       }
     }
