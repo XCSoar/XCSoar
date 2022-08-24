@@ -21,11 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ROUGH_ALTITUDE_HPP
-#define XCSOAR_ROUGH_ALTITUDE_HPP
+#pragma once
 
 #include "Math/Util.hpp"
-#include "util/Compiler.h"
 
 #include <type_traits>
 
@@ -140,17 +138,17 @@ public:
     return RoughAltitude(value - other.value);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   double operator*(const double other) const {
     return value * other;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   double operator/(const double other) const {
     return double(value) / other;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   double operator/(const RoughAltitude other) const {
     return double(value) / other.value;
   }
@@ -166,12 +164,10 @@ public:
   }
 };
 
-gcc_pure
+[[gnu::pure]]
 static inline
 double operator*(const double a, const RoughAltitude b) {
   return b * a;
 }
 
 static_assert(std::is_trivial<RoughAltitude>::value, "type is not trivial");
-
-#endif
