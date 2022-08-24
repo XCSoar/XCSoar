@@ -21,17 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_UNITS_GLUE_HPP
-#define XCSOAR_UNITS_GLUE_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 struct UnitSetting;
 
 namespace Units
 {
-  gcc_const
+  [[gnu::const]]
   const UnitSetting &LoadFromOSLanguage();
 }
-
-#endif
