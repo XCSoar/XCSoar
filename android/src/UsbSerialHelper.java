@@ -199,7 +199,12 @@ public final class UsbSerialHelper extends BroadcastReceiver {
         return;
 
       if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
-        addAvailable(device);
+        if (usbmanager.hasPermission(device))
+          addAvailable(device);
+        else
+          /* always request permission which is needed to read the
+             serial number */
+          requestPermission(device);
       } else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
         removeAvailable(device);
       } else if (ACTION_USB_PERMISSION.equals(action)) {
@@ -207,11 +212,16 @@ public final class UsbSerialHelper extends BroadcastReceiver {
           Log.d(TAG, "permission granted for device " + device.getDeviceName());
 
           //Iterate through list of Pending connections. For each entry matching with granted device, open port and remove from list
+          boolean found = false;
           for (UsbDeviceInterface i : interfaces) {
             if (isSameDevice(device, i.device)) {
+              found = true;
               i.permissionGranted();
             }
           }
+
+          if (!found)
+            addAvailable(device);
         }
       }
     }
