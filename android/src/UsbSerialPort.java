@@ -52,6 +52,10 @@ public final class UsbSerialPort
     this.baudRate = baud;
   }
 
+  public synchronized boolean isOpen() {
+    return serialDevice != null;
+  }
+
   public synchronized void open(UsbManager manager, UsbDevice device, int iface) {
     connection = manager.openDevice(device);
     if (connection == null) {
@@ -66,6 +70,7 @@ public final class UsbSerialPort
     }
 
     if (!serialDevice.open()) {
+      serialDevice = null;
       setState(STATE_FAILED);
       return;
     }

@@ -98,16 +98,11 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     public final String id;
 
     /**
-     * If not null, then this port instance is currently waiting for
-     * USB permission; as soon as that is granted, it may finally be
-     * opened.
+     * If not null, then this port instance is currently being used by
+     * native code.  It may be waiting for permission from the
+     * UsbManager, or it may already be open.
      */
-    public UsbSerialPort pendingPort;
-
-    /**
-     * If not null, then this port is currently open.
-     */
-    public UsbSerialPort openPort;
+    public UsbSerialPort port;
 
     public UsbDeviceInterface(UsbDevice dev_,int iface_) {
       device = dev_;
@@ -132,15 +127,13 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     }
 
     public synchronized AndroidPort open(int baud) throws IOException {
-      if (pendingPort != null)
+      if (port != null)
         throw new IOException("Port already occupied");
 
-      UsbSerialPort port = new UsbSerialPort(this, baud);
+      port = new UsbSerialPort(this, baud);
       if (usbmanager.hasPermission(device)) {
-        openPort = port;
         port.open(usbmanager, device, iface);
       } else {
-        pendingPort = port;
         requestPermission(device);
       }
 
@@ -148,32 +141,22 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     }
 
     public synchronized void permissionGranted() {
-      UsbSerialPort port = pendingPort;
-      pendingPort = null;
-
-      if (port != null)
+      if (!port.isOpen())
         port.open(usbmanager, device, iface);
     }
 
     /**
      * Called by UsbSerialPort::close().
      */
-    public synchronized void portClosed(UsbSerialPort port) {
-      if (port == openPort)
-        openPort = null;
-      if (port == pendingPort)
-        pendingPort = null;
+    public synchronized void portClosed(UsbSerialPort _port) {
+      if (_port == port)
+        port = null;
     }
 
     public synchronized void onDisconnect() {
-      if (pendingPort != null) {
-        pendingPort.onDisconnect();
-        pendingPort = null;
-      }
-
-      if (openPort != null) {
-        openPort.onDisconnect();
-        openPort = null;
+      if (port != null) {
+        port.onDisconnect();
+        port = null;
       }
     }
   }
