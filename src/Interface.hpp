@@ -21,12 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_INTERFACE_HPP
-#define XCSOAR_INTERFACE_HPP
+#pragma once
 
 #include "Blackboard/InterfaceBlackboard.hpp"
 #include "thread/Debug.hpp"
-#include "util/Compiler.h"
 
 struct UIState;
 class MainWindow;
@@ -57,7 +55,7 @@ namespace CommonInterface {
    * Returns InterfaceBlackboard.Basic (NMEA_INFO) (read-only)
    * @return InterfaceBlackboard.Basic
    */
-  gcc_const
+  [[gnu::const]]
   static inline const MoreData &Basic() {
     assert(InMainThread());
 
@@ -68,21 +66,21 @@ namespace CommonInterface {
    * Returns InterfaceBlackboard.Calculated (DERIVED_INFO) (read-only)
    * @return InterfaceBlackboard.Calculated
    */
-  gcc_const
+  [[gnu::const]]
   static inline const DerivedInfo &Calculated() {
     assert(InMainThread());
 
     return Private::blackboard.Calculated();
   }
 
-  gcc_const
+  [[gnu::const]]
   static inline const SystemSettings &GetSystemSettings() {
     assert(InMainThread());
 
     return Private::blackboard.GetSystemSettings();
   }
 
-  gcc_const
+  [[gnu::const]]
   static inline SystemSettings &SetSystemSettings() {
     assert(InMainThread());
 
@@ -93,7 +91,7 @@ namespace CommonInterface {
    * Returns the InterfaceBlackboard.ComputerSettings (read-only)
    * @return The InterfaceBlackboard.ComputerSettings
    */
-  gcc_const
+  [[gnu::const]]
   static inline const ComputerSettings& GetComputerSettings() {
     assert(InMainThread());
 
@@ -104,14 +102,14 @@ namespace CommonInterface {
    * Returns the InterfaceBlackboard.ComputerSettings (read-write)
    * @return The InterfaceBlackboard.ComputerSettings
    */
-  gcc_const
+  [[gnu::const]]
   static inline ComputerSettings &SetComputerSettings() {
     assert(InMainThread());
 
     return Private::blackboard.SetComputerSettings();
   }
 
-  gcc_const
+  [[gnu::const]]
   static inline const UISettings &GetUISettings() {
     assert(InMainThread());
 
@@ -122,35 +120,35 @@ namespace CommonInterface {
    * Returns the InterfaceBlackboard.MapSettings (read-only)
    * @return The InterfaceBlackboard.MapSettings
    */
-  gcc_const
+  [[gnu::const]]
   static inline const MapSettings& GetMapSettings() {
     assert(InMainThread());
 
     return GetUISettings().map;
   }
 
-  gcc_const
+  [[gnu::const]]
   static inline const FullBlackboard &Full() {
     assert(InMainThread());
 
     return Private::blackboard;
   }
 
-  gcc_const
+  [[gnu::const]]
   static inline LiveBlackboard &GetLiveBlackboard() {
     assert(InMainThread());
 
     return Private::blackboard;
   }
 
-  gcc_const
+  [[gnu::const]]
   static inline UISettings &SetUISettings() {
     assert(InMainThread());
 
     return Private::blackboard.SetUISettings();
   }
 
-  gcc_const
+  [[gnu::const]]
   static inline const DisplaySettings& GetDisplaySettings() {
     assert(InMainThread());
 
@@ -161,7 +159,7 @@ namespace CommonInterface {
    * Returns the InterfaceBlackboard.MapSettings (read-write)
    * @return The InterfaceBlackboard.MapSettings
    */
-  gcc_const
+  [[gnu::const]]
   static inline MapSettings &SetMapSettings() {
     assert(InMainThread());
 
@@ -234,5 +232,3 @@ namespace CommonInterface {
     Private::blackboard.BroadcastUISettingsUpdate();
   }
 };
-
-#endif
