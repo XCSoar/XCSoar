@@ -21,14 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_PAN_HPP
-#define XCSOAR_PAN_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 struct GeoPoint;
 
-gcc_pure
+[[gnu::pure]]
 bool
 IsPanning();
 
@@ -51,5 +48,3 @@ LeavePan();
 
 void
 TogglePan();
-
-#endif
