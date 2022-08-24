@@ -53,7 +53,6 @@ public final class UsbSerialHelper extends BroadcastReceiver {
   private final UsbManager usbmanager;
 
   private final HashMap<String, UsbDeviceInterface> _AvailableInterfaces = new HashMap<>();
-  private final HashMap<UsbDeviceInterface, UsbSerialPort> _PendingConnection = new HashMap<>();
 
   private final Collection<DetectDeviceListener> detectListeners =
     new LinkedList<DetectDeviceListener>();
@@ -93,10 +92,17 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     return id;
   }
 
-  static final class UsbDeviceInterface {
+  final class UsbDeviceInterface {
     public final UsbDevice device;
     public final int iface;
     public final String id;
+
+    /**
+     * If not null, then this port instance is currently waiting for
+     * USB permission; as soon as that is granted, it may finally be
+     * opened.
+     */
+    public UsbSerialPort pendingPort;
 
     public UsbDeviceInterface(UsbDevice dev_,int iface_) {
       device = dev_;
@@ -118,6 +124,29 @@ public final class UsbSerialHelper extends BroadcastReceiver {
         name += "#" + (iface + 1);
 
       return name;
+    }
+
+    public synchronized AndroidPort open(int baud) throws IOException {
+      if (pendingPort != null)
+        throw new IOException("Port already occupied");
+
+      UsbSerialPort port = new UsbSerialPort(device, baud, iface);
+      if (usbmanager.hasPermission(device)) {
+        port.open(usbmanager);
+      } else {
+        pendingPort = port;
+        requestPermission(device);
+      }
+
+      return port;
+    }
+
+    public synchronized void permissionGranted() {
+      UsbSerialPort port = pendingPort;
+      pendingPort = null;
+
+      if (port != null)
+        port.open(usbmanager);
     }
   }
 
@@ -158,17 +187,9 @@ public final class UsbSerialHelper extends BroadcastReceiver {
           Log.d(TAG, "permission granted for device " + device.getDeviceName());
 
           //Iterate through list of Pending connections. For each entry matching with granted device, open port and remove from list
-          Iterator<Map.Entry<UsbDeviceInterface,UsbSerialPort>> iter = _PendingConnection.entrySet().iterator();
-          while (iter.hasNext()) {
-            Map.Entry<UsbDeviceInterface,UsbSerialPort> entry = iter.next();
-            if (isSameDevice(device, entry.getKey().device)) {
-              UsbSerialPort port = entry.getValue();
-              if (port != null) {
-                port.open(usbmanager);
-              }
-              iter.remove();
-            }
-          }
+          for (UsbDeviceInterface i : _AvailableInterfaces.values())
+            if (isSameDevice(device, i.device))
+              i.permissionGranted();
         }
       }
     }
@@ -261,15 +282,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     if (deviface == null)
       throw new IOException("USB serial device not found");
 
-    UsbSerialPort port = new UsbSerialPort(deviface.device,baud,deviface.iface);
-    if (usbmanager.hasPermission(deviface.device)) {
-      port.open(usbmanager);
-    } else {
-      _PendingConnection.put(deviface, port);
-      requestPermission(deviface.device);
-    }
-
-    return port;
+    return deviface.open(baud);
   }
 
   private synchronized void broadcastDetectedDeviceInterface(UsbDeviceInterface deviface) {
