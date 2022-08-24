@@ -53,9 +53,6 @@ public final class UsbSerialPort
     _baudRate = baud;
     _UsbInterface = iface;
   }
-  public UsbSerialPort(UsbDevice device,int baud) {
-    this(device, baud, -1);
-  }
 
   public synchronized void open(UsbManager manager) {
     _UsbConnection = manager.openDevice(_UsbDevice);
