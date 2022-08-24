@@ -40,11 +40,9 @@ template<typename T> class StringPointer;
 template<typename T> class BasicAllocatedString;
 
 class ProfileMap : public std::map<std::string, std::string> {
-  bool modified;
+  bool modified = false;
 
 public:
-  ProfileMap():modified(false) {}
-
   /**
    * Has the profile been modified since the last SetModified(false)
    * call?
