@@ -1,6 +1,6 @@
 /*
  * XCSoar Glide Computer - http://www.xcsoar.org/
- * Copyright (C) 2000-2021 The XCSoar Project
+ * Copyright (C) 2000-2022 The XCSoar Project
  * A detailed list of copyright holders can be found in the file "AUTHORS".
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,8 +29,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_TRACKING_SKYLINES_PROTOCOL_HPP
-#define XCSOAR_TRACKING_SKYLINES_PROTOCOL_HPP
+#pragma once
 
 #include <cstdint>
 
@@ -616,5 +615,3 @@ struct ThermalResponsePacket {
 };
 
 } /* namespace SkyLinesTracking */
-
-#endif
