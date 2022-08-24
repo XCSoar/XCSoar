@@ -38,46 +38,46 @@ import java.util.Arrays;
 public final class UsbSerialPort
   implements AndroidPort, UsbSerialInterface.UsbReadCallback
 {
-  private final UsbDevice _UsbDevice;
-  private UsbDeviceConnection _UsbConnection;
-  private final int _UsbInterface;
-  private UsbSerialDevice _SerialPort;
+  private final UsbDevice device;
+  private UsbDeviceConnection connection;
+  private final int iface;
+  private UsbSerialDevice serialDevice;
   private PortListener portListener;
   private InputListener inputListener;
-  private int _baudRate;
+  private int baudRate;
   private int state = STATE_LIMBO;
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
   public UsbSerialPort(UsbDevice device,int baud,int iface) {
-    _UsbDevice = device;
-    _baudRate = baud;
-    _UsbInterface = iface;
+    this.device = device;
+    this.baudRate = baud;
+    this.iface = iface;
   }
 
   public synchronized void open(UsbManager manager) {
-    _UsbConnection = manager.openDevice(_UsbDevice);
-    if (_UsbConnection == null) {
+    connection = manager.openDevice(device);
+    if (connection == null) {
       setState(STATE_FAILED);
       return;
     }
 
-    _SerialPort = UsbSerialDevice.createUsbSerialDevice(_UsbDevice, _UsbConnection, _UsbInterface);
-    if (_SerialPort == null) {
+    serialDevice = UsbSerialDevice.createUsbSerialDevice(device, connection, iface);
+    if (serialDevice == null) {
       setState(STATE_FAILED);
       return;
     }
 
-    if (!_SerialPort.open()) {
+    if (!serialDevice.open()) {
       setState(STATE_FAILED);
       return;
     }
 
-    _SerialPort.setBaudRate(getBaudRate());
-    _SerialPort.setDataBits(UsbSerialInterface.DATA_BITS_8);
-    _SerialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
-    _SerialPort.setParity(UsbSerialInterface.PARITY_NONE);
-    _SerialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);
-    _SerialPort.read(this);
+    serialDevice.setBaudRate(getBaudRate());
+    serialDevice.setDataBits(UsbSerialInterface.DATA_BITS_8);
+    serialDevice.setStopBits(UsbSerialInterface.STOP_BITS_1);
+    serialDevice.setParity(UsbSerialInterface.PARITY_NONE);
+    serialDevice.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);
+    serialDevice.read(this);
 
     setState(STATE_READY);
   }
@@ -85,14 +85,14 @@ public final class UsbSerialPort
   public synchronized void close() {
     safeDestruct.beginShutdown();
 
-    if( _SerialPort != null) {
-      _SerialPort.close();
-      _SerialPort = null;
+    if( serialDevice != null) {
+      serialDevice.close();
+      serialDevice = null;
     }
 
-    if (_UsbConnection != null) {
-      _UsbConnection.close();
-      _UsbConnection = null;
+    if (connection != null) {
+      connection.close();
+      connection = null;
     }
 
     safeDestruct.finishShutdown();
@@ -120,19 +120,19 @@ public final class UsbSerialPort
 
   @Override
   public int getBaudRate() {
-    return _baudRate;
+    return baudRate;
   }
 
   @Override
   public boolean setBaudRate(int baud) {
-    _SerialPort.setBaudRate(baud);
-    _baudRate =  baud;
+    serialDevice.setBaudRate(baud);
+    baudRate = baud;
     return true;
   }
 
   @Override
   public synchronized int write(byte[] data, int length) {
-    _SerialPort.write(Arrays.copyOf(data, length));
+    serialDevice.write(Arrays.copyOf(data, length));
     return length;
   }
 
