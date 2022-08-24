@@ -190,7 +190,7 @@ EyeDevice::ReadAcceleration(NMEAInputLine &line, AccelerationState &value_r)
 }
 
 static Device *
-EyeCreateOnPort(gcc_unused const DeviceConfig &config, gcc_unused Port &com_port)
+EyeCreateOnPort(const DeviceConfig &, Port &)
 {
   return new EyeDevice();
 }
