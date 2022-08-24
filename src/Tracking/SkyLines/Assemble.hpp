@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,11 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TRACKING_SKYLINES_ASSEMBLE_HPP
-#define XCSOAR_TRACKING_SKYLINES_ASSEMBLE_HPP
+#pragma once
 
 #include "Features.hpp"
-#include "util/Compiler.h"
 
 #include <cstdint>
 
@@ -44,51 +42,49 @@ struct ThermalRequestPacket;
 struct TrafficRequestPacket;
 struct UserNameRequestPacket;
 
-gcc_const
+[[gnu::const]]
 PingPacket
 MakePing(uint64_t key, uint16_t id);
 
-gcc_const
+[[gnu::const]]
 ACKPacket
 MakeAck(uint64_t key, uint16_t id, uint32_t flags);
 
-gcc_const
+[[gnu::const]]
 FixPacket
 MakeFix(uint64_t key, uint32_t flags, uint32_t time,
         ::GeoPoint location, Angle track,
         double ground_speed, double airspeed,
         int altitude, double vario, unsigned enl);
 
-gcc_pure
+[[gnu::pure]]
 FixPacket
 ToFix(uint64_t key, const NMEAInfo &basic);
 
-gcc_const
+[[gnu::const]]
 Thermal
 MakeThermal(uint32_t time,
             ::GeoPoint bottom_location, int bottom_altitude,
             ::GeoPoint top_location, int top_altitude,
             double lift);
 
-gcc_const
+[[gnu::const]]
 ThermalSubmitPacket
 MakeThermalSubmit(uint64_t key, uint32_t time,
                   ::GeoPoint bottom_location, int bottom_altitude,
                   ::GeoPoint top_location, int top_altitude,
                   double lift);
 
-gcc_const
+[[gnu::const]]
 ThermalRequestPacket
 MakeThermalRequest(uint64_t key);
 
-gcc_const
+[[gnu::const]]
 TrafficRequestPacket
 MakeTrafficRequest(uint64_t key, bool followees, bool club, bool near);
 
-gcc_const
+[[gnu::const]]
 UserNameRequestPacket
 MakeUserNameRequest(uint64_t key, uint32_t user_id);
 
 } /* namespace SkyLinesTracking */
-
-#endif
