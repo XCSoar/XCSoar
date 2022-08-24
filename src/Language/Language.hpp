@@ -42,8 +42,6 @@ static inline void DisallowLanguage() {}
 
 #else // !USE_LIBINTL
 
-#include "util/Compiler.h"
-
 #include <tchar.h>
 
 class MOFile;
@@ -57,7 +55,7 @@ void AllowLanguage();
 void DisallowLanguage();
 #endif
 
-gcc_const
+[[gnu::const]]
 const TCHAR* gettext(const TCHAR* text);
 
 /**
