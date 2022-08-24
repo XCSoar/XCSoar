@@ -38,9 +38,9 @@ import java.util.Arrays;
 public final class UsbSerialPort
   implements AndroidPort, UsbSerialInterface.UsbReadCallback
 {
-  private UsbDevice _UsbDevice;
+  private final UsbDevice _UsbDevice;
   private UsbDeviceConnection _UsbConnection;
-  private int _UsbInterface;
+  private final int _UsbInterface;
   private UsbSerialDevice _SerialPort;
   private PortListener portListener;
   private InputListener inputListener;
