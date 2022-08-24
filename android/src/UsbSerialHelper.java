@@ -306,7 +306,9 @@ public final class UsbSerialHelper extends BroadcastReceiver {
   public synchronized void addDetectDeviceListener(DetectDeviceListener l) {
     detectListeners.add(l);
     for (Map.Entry<String, UsbDeviceInterface> entry : _AvailableInterfaces.entrySet()) {
-      broadcastDetectedDeviceInterface(entry.getValue());
+      UsbDeviceInterface iface = entry.getValue();
+      l.onDeviceDetected(DetectDeviceListener.TYPE_USB_SERIAL, iface.id,
+                         iface.getDisplayName(), 0);
     }
   }
 
