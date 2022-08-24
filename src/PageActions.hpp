@@ -21,10 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_PAGES_HPP
-#define XCSOAR_PAGES_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 struct PageLayout;
 class GlueMapWindow;
@@ -36,13 +33,13 @@ namespace PageActions
    * Returns the configured #PageLayout that was most recently
    * visible.
    */
-  gcc_pure
+  [[gnu::pure]]
   const PageLayout &GetConfiguredLayout();
 
   /**
    * Returns the #PageLayout that is currently visible.
    */
-  gcc_pure
+  [[gnu::pure]]
   const PageLayout &GetCurrentLayout();
 
   /**
@@ -64,13 +61,13 @@ namespace PageActions
   /**
    * Determine the index of the next configured page.
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned NextIndex();
 
   /**
    * Determine the index of the next configured page.
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned PrevIndex();
 
   /**
@@ -126,5 +123,3 @@ namespace PageActions
    */
   void SetCustomBottom(Widget *widget);
 };
-
-#endif
