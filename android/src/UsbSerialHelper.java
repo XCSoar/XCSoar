@@ -161,6 +161,8 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     public synchronized void portClosed(UsbSerialPort port) {
       if (port == openPort)
         openPort = null;
+      if (port == pendingPort)
+        pendingPort = null;
     }
 
     public synchronized void onDisconnect() {
