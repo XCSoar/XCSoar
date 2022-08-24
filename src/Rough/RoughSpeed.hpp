@@ -58,6 +58,6 @@ public:
   }
 };
 
-static_assert(std::is_trivial<RoughSpeed>::value, "type is not trivial");
+static_assert(std::is_trivial_v<RoughSpeed>, "type is not trivial");
 
 #endif

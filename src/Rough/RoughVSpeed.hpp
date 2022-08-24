@@ -64,6 +64,6 @@ public:
   }
 };
 
-static_assert(std::is_trivial<RoughVSpeed>::value, "type is not trivial");
+static_assert(std::is_trivial_v<RoughVSpeed>, "type is not trivial");
 
 #endif

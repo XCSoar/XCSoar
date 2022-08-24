@@ -132,4 +132,4 @@ double operator*(const double a, const RoughAltitude b) noexcept
   return b * a;
 }
 
-static_assert(std::is_trivial<RoughAltitude>::value, "type is not trivial");
+static_assert(std::is_trivial_v<RoughAltitude>, "type is not trivial");

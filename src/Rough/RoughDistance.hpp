@@ -68,6 +68,6 @@ public:
   }
 };
 
-static_assert(std::is_trivial<RoughDistance>::value, "type is not trivial");
+static_assert(std::is_trivial_v<RoughDistance>, "type is not trivial");
 
 #endif
