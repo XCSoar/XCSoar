@@ -59,7 +59,7 @@ Copyright_License {
 AllocatedArray<BulkPixelPoint> Canvas::vertex_buffer;
 
 void
-Canvas::InvertRectangle(PixelRect r)
+Canvas::InvertRectangle(PixelRect r) noexcept
 {
   /** Inverts rectangle using GL blending effects (hardware accelerated):
    *
@@ -159,7 +159,7 @@ Canvas::DrawOutlineRectangle(PixelRect r, Color color) noexcept
 }
 
 void
-Canvas::FadeToWhite(GLubyte alpha)
+Canvas::FadeToWhite(GLubyte alpha) noexcept
 {
   const ScopeAlphaBlend alpha_blend;
   const Color color(0xff, 0xff, 0xff, alpha);
@@ -167,7 +167,7 @@ Canvas::FadeToWhite(GLubyte alpha)
 }
 
 void
-Canvas::FadeToWhite(PixelRect rc, GLubyte alpha)
+Canvas::FadeToWhite(PixelRect rc, GLubyte alpha) noexcept
 {
   const ScopeAlphaBlend alpha_blend;
   const Color color(0xff, 0xff, 0xff, alpha);
@@ -175,7 +175,7 @@ Canvas::FadeToWhite(PixelRect rc, GLubyte alpha)
 }
 
 void
-Canvas::DrawPolyline(const BulkPixelPoint *points, unsigned num_points)
+Canvas::DrawPolyline(const BulkPixelPoint *points, unsigned num_points) noexcept
 {
   OpenGL::solid_shader->Use();
 
@@ -188,7 +188,7 @@ Canvas::DrawPolyline(const BulkPixelPoint *points, unsigned num_points)
 }
 
 void
-Canvas::DrawPolygon(const BulkPixelPoint *points, unsigned num_points)
+Canvas::DrawPolygon(const BulkPixelPoint *points, unsigned num_points) noexcept
 {
   if (brush.IsHollow() && !pen.IsDefined())
     return;
@@ -227,7 +227,7 @@ Canvas::DrawPolygon(const BulkPixelPoint *points, unsigned num_points)
 }
 
 void
-Canvas::DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points)
+Canvas::DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points) noexcept
 {
   if (brush.IsHollow() && !pen.IsDefined())
     return;
@@ -260,7 +260,7 @@ Canvas::DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points)
 }
 
 void
-Canvas::DrawHLine(int x1, int x2, int y, Color color)
+Canvas::DrawHLine(int x1, int x2, int y, Color color) noexcept
 {
   color.Bind();
 
@@ -343,7 +343,7 @@ Canvas::DrawExactLine(PixelPoint a, PixelPoint b) noexcept
  * gaps between consecutive lines.
  */
 void
-Canvas::DrawLinePiece(const PixelPoint a, const PixelPoint b)
+Canvas::DrawLinePiece(const PixelPoint a, const PixelPoint b) noexcept
 {
   OpenGL::solid_shader->Use();
 
@@ -451,21 +451,21 @@ Canvas::DrawCircle(PixelPoint center, unsigned radius) noexcept
 
 void
 Canvas::DrawSegment(PixelPoint center, unsigned radius,
-                    Angle start, Angle end, bool horizon)
+                    Angle start, Angle end, bool horizon) noexcept
 {
   ::Segment(*this, center, radius, start, end, horizon);
 }
 
 void
 Canvas::DrawArc(PixelPoint center, unsigned radius,
-                Angle start, Angle end)
+                Angle start, Angle end) noexcept
 {
   ::Arc(*this, center, radius, start, end);
 }
 
 [[gnu::const]]
 static unsigned
-AngleToDonutVertex(Angle angle)
+AngleToDonutVertex(Angle angle) noexcept
 {
   return GLDonutVertices::ImportAngle(NATIVE_TO_INT(angle.Native())
                                       + ISINETABLE.size() * 3u / 4u,
@@ -474,7 +474,7 @@ AngleToDonutVertex(Angle angle)
 
 [[gnu::const]]
 static std::pair<unsigned,unsigned>
-AngleToDonutVertices(Angle start, Angle end)
+AngleToDonutVertices(Angle start, Angle end) noexcept
 {
   static constexpr Angle epsilon = Angle::FullCircle()
     / int(GLDonutVertices::CIRCLE_SIZE * 4u);
@@ -503,7 +503,7 @@ AngleToDonutVertices(Angle start, Angle end)
 void
 Canvas::DrawAnnulus(PixelPoint center,
                     unsigned small_radius, unsigned big_radius,
-                    Angle start, Angle end)
+                    Angle start, Angle end) noexcept
 {
   if (1 == 1) {
     /* TODO: switched to the unoptimised generic implementation due to
@@ -573,13 +573,13 @@ Canvas::DrawAnnulus(PixelPoint center,
 void
 Canvas::DrawKeyhole(PixelPoint center,
                     unsigned small_radius, unsigned big_radius,
-                    Angle start, Angle end)
+                    Angle start, Angle end) noexcept
 {
   ::KeyHole(*this, center, big_radius, start, end, small_radius);
 }
 
 void
-Canvas::DrawFocusRectangle(PixelRect rc)
+Canvas::DrawFocusRectangle(PixelRect rc) noexcept
 {
   DrawOutlineRectangle(rc, COLOR_DARK_GRAY);
 }
@@ -611,7 +611,7 @@ Canvas::CalcTextSize(tstring_view text) const noexcept
  * Prepare drawing a GL_ALPHA texture with the specified color.
  */
 static void
-PrepareColoredAlphaTexture(Color color)
+PrepareColoredAlphaTexture(Color color) noexcept
 {
   OpenGL::alpha_shader->Use();
   color.Bind();
@@ -733,7 +733,7 @@ Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
 
 void
 Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
-                const GLTexture &texture)
+                const GLTexture &texture) noexcept
 {
   Stretch(dest_position, dest_size,
           texture, {0, 0}, texture.GetSize());
@@ -748,13 +748,13 @@ Canvas::Copy(PixelPoint dest_position, PixelSize dest_size,
 }
 
 void
-Canvas::Copy(const Bitmap &src)
+Canvas::Copy(const Bitmap &src) noexcept
 {
   Copy({0, 0}, src.GetSize(), src, {0, 0});
 }
 
 void
-Canvas::StretchNot(const Bitmap &src)
+Canvas::StretchNot(const Bitmap &src) noexcept
 {
   assert(src.IsDefined());
 
@@ -782,7 +782,7 @@ Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
 
 void
 Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
-                const Bitmap &src)
+                const Bitmap &src) noexcept
 {
   assert(offset == OpenGL::translate);
   assert(src.IsDefined());
@@ -799,7 +799,7 @@ void
 Canvas::StretchMono(PixelPoint dest_position, PixelSize dest_size,
                     const Bitmap &src,
                     PixelPoint src_position, PixelSize src_size,
-                    Color fg_color, Color bg_color)
+                    Color fg_color, Color bg_color) noexcept
 {
   /* note that this implementation ignores the background color; it is
      not mandatory, and we can assume that the background is already
@@ -817,7 +817,7 @@ Canvas::StretchMono(PixelPoint dest_position, PixelSize dest_size,
 }
 
 void
-Canvas::CopyToTexture(GLTexture &texture, PixelRect src_rc) const
+Canvas::CopyToTexture(GLTexture &texture, PixelRect src_rc) const noexcept
 {
   assert(offset == OpenGL::translate);
 
