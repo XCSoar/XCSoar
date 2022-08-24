@@ -61,7 +61,7 @@ private:
   bool Save(bool &changed) noexcept override;
 
   /* virtual methods from DataFieldListener */
-  void OnModified(gcc_unused DataField &df) noexcept override {
+  void OnModified(DataField &) noexcept override {
     modified = true;
   }
 };
@@ -81,8 +81,7 @@ static constexpr StaticEnumChoice waypoint_types[] = {
 };
 
 void
-WaypointEditWidget::Prepare(gcc_unused ContainerWindow &parent,
-                            gcc_unused const PixelRect &rc) noexcept
+WaypointEditWidget::Prepare(ContainerWindow &, const PixelRect &) noexcept
 {
   AddText(_("Name"), nullptr, value.name.c_str(), this);
   AddText(_("Short Name"), nullptr, value.shortname.c_str(), this);
