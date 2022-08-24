@@ -163,6 +163,11 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     return Arrays.binarySearch(devices, createDevice(vendorId, productId)) >= 0;
   }
 
+  private static boolean isSupported(UsbDevice device) {
+    return UsbSerialDevice.isSupported(device) &&
+      exists(supported_ids, device.getVendorId(), device.getProductId());
+  }
+
   private static boolean isSameDevice(UsbDevice a, UsbDevice b) {
     return a.getDeviceName().equals(b.getDeviceName());
   }
@@ -196,13 +201,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
   }
 
   private synchronized void addAvailable(UsbDevice device) {
-    if (!UsbSerialDevice.isSupported(device))
-      return;
-
-    final int vid = device.getVendorId();
-    final int pid = device.getProductId();
-
-    if (!exists(supported_ids, vid, pid))
+    if (!isSupported(device))
       return;
 
     Log.v(TAG, "UsbDevice Found : " + device.getDeviceName());
