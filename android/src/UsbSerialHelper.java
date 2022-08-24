@@ -52,7 +52,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
   private final Context context;
   private final UsbManager usbmanager;
 
-  private final HashMap<String, UsbDeviceInterface> _AvailableInterfaces = new HashMap<>();
+  private final Collection<UsbDeviceInterface> interfaces = new LinkedList<>();
 
   private final Collection<DetectDeviceListener> detectListeners =
     new LinkedList<DetectDeviceListener>();
@@ -203,9 +203,11 @@ public final class UsbSerialHelper extends BroadcastReceiver {
           Log.d(TAG, "permission granted for device " + device.getDeviceName());
 
           //Iterate through list of Pending connections. For each entry matching with granted device, open port and remove from list
-          for (UsbDeviceInterface i : _AvailableInterfaces.values())
-            if (isSameDevice(device, i.device))
+          for (UsbDeviceInterface i : interfaces) {
+            if (isSameDevice(device, i.device)) {
               i.permissionGranted();
+            }
+          }
         }
       }
     }
@@ -215,30 +217,31 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     if (!isSupported(device))
       return;
 
-    Log.v(TAG, "UsbDevice Found : " + device.getDeviceName());
+    /* remove old versions of this device from the list; this
+       shouldn't happen, but who knows */
+    removeAvailable(device);
+
     for (int iface=0; iface < device.getInterfaceCount(); iface++) {
       UsbDeviceInterface deviface = new UsbDeviceInterface(device, iface);
-      _AvailableInterfaces.put(deviface.id, deviface);
+      interfaces.add(deviface);
       broadcastDetectedDeviceInterface(deviface);
     }
   }
 
   private synchronized UsbDeviceInterface getAvailable(String id) {
-    for (Map.Entry<String, UsbDeviceInterface> entry : _AvailableInterfaces.entrySet()) {
-      if (id.contentEquals(entry.getValue().id)) {
-        return entry.getValue();
-      }
-    }
+    for (UsbDeviceInterface i : interfaces)
+      if (id.contentEquals(i.id))
+        return i;
+
     return null;
   }
 
   private synchronized void removeAvailable(UsbDevice removeddevice) {
-    Log.v(TAG,"UsbDevice disconnected : " + removeddevice.getDeviceName());
-    Iterator<Map.Entry<String,UsbDeviceInterface>> iter = _AvailableInterfaces.entrySet().iterator();
+    Iterator<UsbDeviceInterface> iter = interfaces.iterator();
     while (iter.hasNext()) {
-      Map.Entry<String,UsbDeviceInterface> entry = iter.next();
-      if (isSameDevice(removeddevice, entry.getValue().device)) {
-        entry.getValue().onDisconnect();
+      UsbDeviceInterface iface = iter.next();
+      if (isSameDevice(removeddevice, iface.device)) {
+        iface.onDisconnect();
         iter.remove();
       }
     }
@@ -305,11 +308,10 @@ public final class UsbSerialHelper extends BroadcastReceiver {
 
   public synchronized void addDetectDeviceListener(DetectDeviceListener l) {
     detectListeners.add(l);
-    for (Map.Entry<String, UsbDeviceInterface> entry : _AvailableInterfaces.entrySet()) {
-      UsbDeviceInterface iface = entry.getValue();
+
+    for (UsbDeviceInterface iface : interfaces)
       l.onDeviceDetected(DetectDeviceListener.TYPE_USB_SERIAL, iface.id,
                          iface.getDisplayName(), 0);
-    }
   }
 
   public synchronized void removeDetectDeviceListener(DetectDeviceListener l) {
