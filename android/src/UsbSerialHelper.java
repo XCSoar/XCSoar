@@ -80,9 +80,16 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     createDevice(0x1546, 0x01A7)  // U-BLOX 7 USB GPS
   );
 
-  private static String makePortId(UsbDevice device, int iface) {
+  private static String makePortId(UsbDevice device, int iface,
+                                   boolean withSerialNumber) {
     String id = String.format("%04X:%04X",
                               device.getVendorId(), device.getProductId());
+
+    if (withSerialNumber) {
+      String serialNumber = getSerialNumber(device);
+      if (serialNumber != null)
+        id += "[" + serialNumber + "]";
+    }
 
     if (iface > 0)
       /* a secondary interface on the same device: append the
@@ -98,6 +105,12 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     public final String id;
 
     /**
+     * The id without the serial number.  This is used to match
+     * old-style device ids from old XCSoar profiles.
+     */
+    public final String oldId;
+
+    /**
      * If not null, then this port instance is currently being used by
      * native code.  It may be waiting for permission from the
      * UsbManager, or it may already be open.
@@ -107,11 +120,15 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     public UsbDeviceInterface(UsbDevice dev_,int iface_) {
       device = dev_;
       iface = iface_;
-      id = makePortId(device, iface);
+      id = makePortId(device, iface, true);
+      oldId = makePortId(device, iface, false);
     }
 
     public boolean isId(String otherId) {
-      return otherId.contentEquals(id);
+      /* compare both id and oldId, because the XCSoar profile setting
+         may be older than XCSoar 7.25 and thus may not have the
+         serial number */
+      return otherId.contentEquals(id) || otherId.contentEquals(oldId);
     }
 
     public String getDisplayName() {
@@ -122,6 +139,11 @@ public final class UsbSerialHelper extends BroadcastReceiver {
       String manufacturer = device.getManufacturerName();
       if (manufacturer != null)
         name += " (" + manufacturer + ")";
+
+      String serialNumber = getSerialNumber(device);
+      if (serialNumber != null) {
+        name += " [" + serialNumber + "]";
+      }
 
       // add interface number to name only when more than one interface
       if (device.getInterfaceCount() > 1)
@@ -183,8 +205,29 @@ public final class UsbSerialHelper extends BroadcastReceiver {
       exists(supported_ids, device.getVendorId(), device.getProductId());
   }
 
-  private static boolean isSameDevice(UsbDevice a, UsbDevice b) {
+  private static boolean isSameDeviceName(UsbDevice a, UsbDevice b) {
     return a.getDeviceName().equals(b.getDeviceName());
+  }
+
+  private static String getSerialNumber(UsbDevice device) {
+    try {
+      return device.getSerialNumber();
+    } catch (SecurityException e) {
+      /* should not happen, because we already requested permission,
+         but better be safe than sorry */
+      return null;
+    }
+  }
+
+  private static boolean isSameSerialNumber(UsbDevice a, UsbDevice b) {
+    String as = getSerialNumber(a);
+    String bs = getSerialNumber(b);
+
+    return as == null || bs == null || as.contentEquals(bs);
+  }
+
+  private static boolean isSameDevice(UsbDevice a, UsbDevice b) {
+    return isSameDeviceName(a, b) && isSameSerialNumber(a, b);
   }
 
   @Override

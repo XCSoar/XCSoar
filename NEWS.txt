@@ -8,6 +8,7 @@ Version 7.25 - not yet released
 * Android
   - prompt before deleting data when uninstalling XCSoar
   - support USB serial adapters with more than one port
+  - support multiple USB serial adapters of the same kind
   - auto-start XCSoar when USB serial adapter gets connected
   - fix crash when GPS access was rejected by user
   - fix deadlock while quitting XCSoar
