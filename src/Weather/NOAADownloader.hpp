@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef NOAA_DOWNLOADER_HPP
-#define NOAA_DOWNLOADER_HPP
+#pragma once
 
 struct METAR;
 struct TAF;
@@ -54,5 +53,3 @@ DownloadTAF(const char *code, CurlGlobal &curl,
             ProgressListener &progress);
 
 } // namespace NOAADownloader
-
-#endif
