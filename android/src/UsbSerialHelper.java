@@ -190,6 +190,10 @@ public final class UsbSerialHelper extends BroadcastReceiver {
         port = null;
     }
 
+    public synchronized void onConnect(UsbDevice newDevice) {
+      // TODO implement
+    }
+
     public synchronized void onDisconnect() {
       if (port != null) {
         port.onDisconnect();
@@ -285,11 +289,33 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     if (!isSupported(device))
       return;
 
-    /* remove old versions of this device from the list; this
-       shouldn't happen, but who knows */
-    removeAvailable(device);
+    final int n = device.getInterfaceCount();
+    final UsbDeviceInterface[] existing = new UsbDeviceInterface[n];
 
-    for (int iface=0; iface < device.getInterfaceCount(); iface++) {
+    /* just in case there are old versions of this device in the list
+       (shouldn't happen, but who knows), update them */
+    for (Iterator<UsbDeviceInterface> iter = interfaces.iterator();
+         iter.hasNext();) {
+      UsbDeviceInterface iface = iter.next();
+      if (!iface.isDevice(device))
+        continue;
+
+      if (iface.iface < n) {
+        /* update the existing instance */
+        existing[iface.iface] = iface;
+        iface.onConnect(device);
+      } else {
+        /* this interface index doesn't exist anymore, remove it */
+        iface.onDisconnect();
+        iter.remove();
+      }
+    }
+
+    for (int iface=0; iface < n; iface++) {
+      if (existing[iface] != null)
+        /* still exists */
+        continue;
+
       UsbDeviceInterface deviface = new UsbDeviceInterface(device, iface);
       interfaces.add(deviface);
       broadcastDetectedDeviceInterface(deviface);
