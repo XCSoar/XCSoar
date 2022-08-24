@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_OFFSET_BUTTONS_WIDGET_HPP
-#define XCSOAR_OFFSET_BUTTONS_WIDGET_HPP
+#pragma once
 
 #include "Widget.hpp"
 #include "Form/Button.hpp"
@@ -72,5 +71,3 @@ private:
   std::array<Button, 4> MakeButtons(ContainerWindow &parent,
                                     const PixelRect &r) noexcept;
 };
-
-#endif
