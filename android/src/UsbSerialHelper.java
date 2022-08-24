@@ -82,9 +82,9 @@ public final class UsbSerialHelper extends BroadcastReceiver {
   );
 
   private static String makePortId(UsbDevice device, int iface) {
-    return device.getInterfaceCount() > 1
+    return iface > 0
       ? String.format("%04X:%04X:%02d",
-                      device.getVendorId(), device.getProductId(), iface + 1)
+                        device.getVendorId(), device.getProductId(), iface + 1)
       : String.format("%04X:%04X",
                       device.getVendorId(), device.getProductId());
   }
