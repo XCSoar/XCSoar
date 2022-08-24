@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Geo/GeoPoint.hpp"
 
+#include <span>
+
 class MapItemList;
 class Angle;
 class Airspaces;
@@ -42,6 +44,7 @@ struct NMEAInfo;
 class RasterTerrain;
 class ProtectedRoutePlanner;
 class NOAAStore;
+namespace TIM { struct Thermal; }
 
 class MapItemListBuilder
 {
@@ -68,6 +71,8 @@ public:
   void AddSkyLinesTraffic();
   void AddThermals(const ThermalLocatorInfo &thermals,
                    const MoreData &basic, const DerivedInfo &calculated);
+
+  void AddThermals(std::span<const TIM::Thermal> thermals) noexcept;
 
   void AddWeatherStations(NOAAStore &store);
 };

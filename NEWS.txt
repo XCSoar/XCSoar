@@ -4,6 +4,7 @@ Version 7.25 - not yet released
   - add radio frequency buttons to airspace dialogs
   - fix the airspace warning "Enable" button
   - fix thermalmap.info icon display
+  - show thermalmap.info thermals in the map item list dialog
 * devices
   - IMI: fix task declaration bug
 * Android
