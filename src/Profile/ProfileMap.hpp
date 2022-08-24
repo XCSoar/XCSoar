@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_PROFILE_MAP_HPP
 
 #include "util/StringBuffer.hxx"
-#include "util/Compiler.h"
 
 #include <chrono>
 #include <cstdint>
@@ -39,7 +38,7 @@ namespace Profile {
    * Has the in-memory profile been modified since the last
    * SetModified(false) call?
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsModified();
 
   /**
@@ -55,7 +54,7 @@ namespace Profile {
    * @return the value (gets Invalidated by any write access to the
    * profile), or default_value if the key does not exist
    */
-  gcc_pure
+  [[gnu::pure]]
   const char *Get(const char *key, const char *default_value=nullptr);
 
   /**

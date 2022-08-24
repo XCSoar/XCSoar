@@ -21,15 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_PROFILE_HPP
-#define XCSOAR_PROFILE_HPP
+#pragma once
 
 // IWYU pragma: begin_exports
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/ProfileMap.hpp"
 // IWYU pragma: end_exports
-
-#include "util/Compiler.h"
 
 class Path;
 class AllocatedPath;
@@ -39,7 +36,7 @@ namespace Profile
   /**
    * Returns the absolute path of the current profile file.
    */
-  gcc_pure
+  [[gnu::pure]]
   Path GetPath();
 
   /**
@@ -75,13 +72,11 @@ namespace Profile
    * @param value a buffer which can store at least MAX_PATH
    * characters
    */
-  gcc_pure
+  [[gnu::pure]]
   AllocatedPath GetPath(const char *key);
 
   void SetPath(const char *key, Path value);
 
-  gcc_pure
+  [[gnu::pure]]
   bool GetPathIsEqual(const char *key, Path value);
 };
-
-#endif

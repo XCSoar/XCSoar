@@ -21,12 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_PROFILE_MAP2_HPP
-#define XCSOAR_PROFILE_MAP2_HPP
+#pragma once
 
 #include "time/FloatDuration.hxx"
 #include "util/StringBuffer.hxx"
-#include "util/Compiler.h"
 
 #include <map>
 #include <string>
@@ -62,7 +60,7 @@ public:
     modified = _modified;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool Exists(const char *key) const {
     return find(key) != end();
   }
@@ -77,7 +75,7 @@ public:
    * @return the value (gets Invalidated by any write access to the
    * profile), or default_value if the key does not exist
    */
-  gcc_pure
+  [[gnu::pure]]
   const char *Get(const char *key, const char *default_value=nullptr) const {
     const auto i = find(key);
     if (i == end())
@@ -171,7 +169,7 @@ public:
 
   AllocatedPath GetPath(const char *key) const;
 
-  gcc_pure
+  [[gnu::pure]]
   bool GetPathIsEqual(const char *key, Path value) const;
 
   /**
@@ -180,7 +178,7 @@ public:
 #ifdef _UNICODE
   BasicAllocatedString<TCHAR> GetPathBase(const char *key) const;
 #else
-  gcc_pure
+  [[gnu::pure]]
   StringPointer<TCHAR> GetPathBase(const char *key) const;
 #endif
 
@@ -213,5 +211,3 @@ public:
    */
   void SetColor(const char *key, const RGB8Color value);
 };
-
-#endif

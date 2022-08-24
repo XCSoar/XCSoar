@@ -59,7 +59,7 @@ ProfileMap::GetPathIsEqual(const char *key, Path value) const
   return saved_value == value;
 }
 
-gcc_pure
+[[gnu::pure]]
 static Path
 BackslashBaseName(const TCHAR *p)
 {
