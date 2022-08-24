@@ -124,6 +124,10 @@ public final class UsbSerialHelper extends BroadcastReceiver {
       oldId = makePortId(device, iface, false);
     }
 
+    public boolean isDevice(UsbDevice otherDevice) {
+      return isSameDevice(device, otherDevice);
+    }
+
     public boolean isId(String otherId) {
       /* compare both id and oldId, because the XCSoar profile setting
          may be older than XCSoar 7.25 and thus may not have the
@@ -257,7 +261,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
           //Iterate through list of Pending connections. For each entry matching with granted device, open port and remove from list
           boolean found = false;
           for (UsbDeviceInterface i : interfaces) {
-            if (isSameDevice(device, i.device)) {
+            if (i.isDevice(device)) {
               found = true;
               i.permissionGranted();
             }
@@ -297,7 +301,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     Iterator<UsbDeviceInterface> iter = interfaces.iterator();
     while (iter.hasNext()) {
       UsbDeviceInterface iface = iter.next();
-      if (isSameDevice(removeddevice, iface.device)) {
+      if (iface.isDevice(removeddevice)) {
         iface.onDisconnect();
         iter.remove();
       }
