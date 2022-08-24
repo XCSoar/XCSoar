@@ -1,4 +1,4 @@
-Version 7.25 - not yet released
+Version 7.25 - 2022/08/24
 * stricter airspace parser
 * user interface
   - add radio frequency buttons to airspace dialogs
