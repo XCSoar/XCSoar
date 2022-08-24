@@ -31,7 +31,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "System.hpp"
 
-gcc_pure
+[[gnu::pure]]
 static const TCHAR *
 GetWifiToggleCaption()
 {

@@ -26,6 +26,7 @@ Copyright_License {
 #include "Form/ButtonPanel.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
+#include "util/Compiler.h"
 
 #include <cassert>
 

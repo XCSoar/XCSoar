@@ -57,7 +57,7 @@ static constexpr unsigned MAXENTRYLETTERS = ARRAY_SIZE(EntryLetters) - 1;
  * (i.e. the index of the space character) if the given letter is
  * unknown.
  */
-gcc_const
+[[gnu::const]]
 static unsigned
 FindEntryLetter(TCHAR ch)
 {
