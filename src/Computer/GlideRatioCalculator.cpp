@@ -137,9 +137,9 @@ GlideRatioCalculator::Calculate() const
 // existing methods (moving average via low pass filter)
 
 // limit to reasonable values
-gcc_const
+[[gnu::const]]
 static double
-LimitGR(double gr)
+LimitGR(double gr) noexcept
 {
   if (fabs(gr) > INVALID_GR)
     return INVALID_GR;

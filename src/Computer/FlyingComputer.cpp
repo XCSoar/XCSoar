@@ -170,7 +170,7 @@ FlyingComputer::Stationary(FlyingState &state,
   Check(state, time);
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 CheckTakeOffSpeed(double takeoff_speed, const NMEAInfo &basic)
 {
@@ -194,14 +194,14 @@ CheckTakeOffSpeed(double takeoff_speed, const NMEAInfo &basic)
  * flying.  To avoid false positives while wave/ridge soaring, this
  * threshold is half of the given take-off speed.
  */
-gcc_pure
+[[gnu::pure]]
 static bool
 CheckLandingSpeed(double takeoff_speed, const NMEAInfo &basic)
 {
   return !CheckTakeOffSpeed(takeoff_speed / 2, basic);
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 CheckAltitudeAGL(const DerivedInfo &calculated)
 {

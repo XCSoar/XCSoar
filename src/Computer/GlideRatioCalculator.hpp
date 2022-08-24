@@ -21,10 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_GLIDE_RATIO_HPP
-#define XCSOAR_GLIDE_RATIO_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 static constexpr double INVALID_GR = 999;
 
@@ -63,8 +60,6 @@ public:
 
 // methods using low-pass filter
 
-gcc_const
+[[gnu::const]]
 double
 UpdateGR(double GR, double d, double h, double filter_factor);
-
-#endif

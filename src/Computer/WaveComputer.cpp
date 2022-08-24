@@ -54,7 +54,7 @@ WaveComputer::ResetCurrent() noexcept
  * We should have new attributes in #NMEAInfo to get that piece of
  * information right away without this ugly code duplication.
  */
-gcc_pure
+[[gnu::pure]]
 static Validity
 GetNettoVarioAvailable(const NMEAInfo &basic) noexcept
 {
@@ -81,7 +81,7 @@ GetNettoVarioAvailable(const NMEAInfo &basic) noexcept
  * WaveInfo::Undefined() if there is no valid result in the
  * #LeastSquares instance.
  */
-gcc_pure
+[[gnu::pure]]
 static WaveInfo
 GetWaveInfo(const LeastSquares &ls, const FlatProjection &projection,
             TimeStamp time) noexcept
@@ -138,7 +138,7 @@ struct RatioAndDistance {
   double ratio, squared_distance;
 };
 
-gcc_pure
+[[gnu::pure]]
 static RatioAndDistance
 CalcRatioAndDistance(const FlatLine line, const FlatPoint point) noexcept
 {

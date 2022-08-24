@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_GLIDECOMPUTER_HPP)
-#define XCSOAR_GLIDECOMPUTER_HPP
+#pragma once
 
 #include "GlideComputerBlackboard.hpp"
 #include "time/PeriodClock.hpp"
@@ -33,7 +32,6 @@ Copyright_License {
 #include "LogComputer.hpp"
 #include "WarningComputer.hpp"
 #include "CuComputer.hpp"
-#include "util/Compiler.h"
 #include "Engine/Contest/Solvers/Retrospective.hpp"
 #include "ConditionMonitor/ConditionMonitors.hpp"
 #include "ConditionMonitor/MoreConditionMonitors.hpp"
@@ -184,7 +182,7 @@ private:
    * @return true if the location was found, false if the
    * TeamCodeRefLocation variable is undefined
    */
-  gcc_pure
+  [[gnu::pure]]
   bool DetermineTeamCodeRefLocation();
 
   void CalculateTeammateBearingRange();
@@ -197,5 +195,3 @@ private:
   void CalculateWorkingBand();
   void CalculateVarioScale();
 };
-
-#endif

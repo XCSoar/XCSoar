@@ -35,7 +35,7 @@ WindComputer::Reset()
   ekf_active = false;
 }
 
-gcc_pure
+[[gnu::pure]]
 static double
 GetVTakeoffFallback(const GlidePolar &glide_polar)
 {

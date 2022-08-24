@@ -126,7 +126,7 @@ TaskComputer::ProcessMoreTask(const MoreData &basic,
   }
 }
 
-gcc_pure
+[[gnu::pure]]
 static TracePoint
 Predicted(const ContestSettings &settings,
           const MoreData &basic,
