@@ -21,10 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_UI_GLOBALS_HPP
-#define XCSOAR_UI_GLOBALS_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 namespace UI { class SingleWindow; }
 class GlueMapWindow;
@@ -47,32 +44,30 @@ struct FormatSettings;
  * easily be replaced in another program.
  */
 namespace UIGlobals {
-  gcc_const
+  [[gnu::const]]
   UI::SingleWindow &GetMainWindow();
 
-  gcc_const
+  [[gnu::const]]
   GlueMapWindow *GetMap();
 
-  gcc_pure
+  [[gnu::pure]]
   GlueMapWindow *GetMapIfActive();
 
-  gcc_const
+  [[gnu::const]]
   const DialogSettings &GetDialogSettings();
 
-  gcc_const
+  [[gnu::const]]
   const Look &GetLook();
 
-  gcc_const
+  [[gnu::const]]
   const DialogLook &GetDialogLook();
 
-  gcc_const
+  [[gnu::const]]
   const FormatSettings &GetFormatSettings();
 
-  gcc_const
+  [[gnu::const]]
   const IconLook &GetIconLook();
 
-  gcc_const
+  [[gnu::const]]
   const MapLook &GetMapLook();
 };
-
-#endif
