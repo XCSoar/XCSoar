@@ -98,35 +98,8 @@ public:
     return value < 0;
   }
 
-  constexpr
-  bool operator ==(const RoughAltitude other) const {
-    return value == other.value;
-  }
-
-  constexpr
-  bool operator !=(const RoughAltitude other) const {
-    return value != other.value;
-  }
-
-  constexpr
-  bool operator <(const RoughAltitude other) const {
-    return value < other.value;
-  }
-
-  constexpr
-  bool operator <=(const RoughAltitude other) const {
-    return value <= other.value;
-  }
-
-  constexpr
-  bool operator >(const RoughAltitude other) const {
-    return value > other.value;
-  }
-
-  constexpr
-  bool operator >=(const RoughAltitude other) const {
-    return value >= other.value;
-  }
+  friend constexpr auto operator<=>(RoughAltitude,
+                                    RoughAltitude) noexcept = default;
 
   constexpr
   RoughAltitude operator+(const RoughAltitude other) const {
