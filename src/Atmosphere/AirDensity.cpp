@@ -31,13 +31,13 @@ Copyright_License {
 #define k7 1.0 / 0.234969
 
 double
-AirDensity(const double altitude)
+AirDensity(const double altitude) noexcept
 {
   return pow((k4 - altitude) * k6, k7);
 }
 
 double
-AirDensityRatio(const double altitude)
+AirDensityRatio(const double altitude) noexcept
 {
   return sqrt(isa_sea_level_density / AirDensity(altitude));
 }
