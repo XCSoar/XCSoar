@@ -38,9 +38,7 @@ import java.util.Arrays;
 public final class UsbSerialPort
   implements AndroidPort, UsbSerialInterface.UsbReadCallback
 {
-  private final UsbDevice device;
   private UsbDeviceConnection connection;
-  private final int iface;
   private UsbSerialDevice serialDevice;
   private PortListener portListener;
   private InputListener inputListener;
@@ -48,13 +46,11 @@ public final class UsbSerialPort
   private int state = STATE_LIMBO;
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
-  public UsbSerialPort(UsbDevice device,int baud,int iface) {
-    this.device = device;
+  public UsbSerialPort(int baud) {
     this.baudRate = baud;
-    this.iface = iface;
   }
 
-  public synchronized void open(UsbManager manager) {
+  public synchronized void open(UsbManager manager, UsbDevice device, int iface) {
     connection = manager.openDevice(device);
     if (connection == null) {
       setState(STATE_FAILED);

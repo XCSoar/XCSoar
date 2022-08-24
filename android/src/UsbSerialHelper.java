@@ -130,9 +130,9 @@ public final class UsbSerialHelper extends BroadcastReceiver {
       if (pendingPort != null)
         throw new IOException("Port already occupied");
 
-      UsbSerialPort port = new UsbSerialPort(device, baud, iface);
+      UsbSerialPort port = new UsbSerialPort(baud);
       if (usbmanager.hasPermission(device)) {
-        port.open(usbmanager);
+        port.open(usbmanager, device, iface);
       } else {
         pendingPort = port;
         requestPermission(device);
@@ -146,7 +146,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
       pendingPort = null;
 
       if (port != null)
-        port.open(usbmanager);
+        port.open(usbmanager, device, iface);
     }
   }
 
