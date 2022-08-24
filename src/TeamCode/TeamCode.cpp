@@ -63,7 +63,7 @@ GetValueFromTeamCode(const TCHAR *code, unsigned length)
   return val;
 }
 
-gcc_const
+[[gnu::const]]
 static unsigned
 CountDigits(unsigned value)
 {
