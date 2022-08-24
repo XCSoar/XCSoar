@@ -453,61 +453,61 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const TrafficList *traffic_list)
 {
   switch (item.type) {
-  case MapItem::LOCATION:
+  case MapItem::Type::LOCATION:
     ::Draw(canvas, rc, (const LocationMapItem &)item, row_renderer);
     break;
-  case MapItem::ARRIVAL_ALTITUDE:
+  case MapItem::Type::ARRIVAL_ALTITUDE:
     ::Draw(canvas, rc, (const ArrivalAltitudeMapItem &)item,
            row_renderer, final_glide_look);
     break;
-  case MapItem::SELF:
+  case MapItem::Type::SELF:
     ::Draw(canvas, rc, (const SelfMapItem &)item,
            row_renderer, look.aircraft, settings);
     break;
-  case MapItem::AIRSPACE:
+  case MapItem::Type::AIRSPACE:
     ::Draw(canvas, rc, (const AirspaceMapItem &)item,
            row_renderer, look.airspace,
            settings.airspace);
     break;
-  case MapItem::WAYPOINT:
+  case MapItem::Type::WAYPOINT:
     ::Draw(canvas, rc, (const WaypointMapItem &)item,
            row_renderer, look.waypoint,
            settings.waypoint);
     break;
-  case MapItem::TASK_OZ:
+  case MapItem::Type::TASK_OZ:
     ::Draw(canvas, rc, (const TaskOZMapItem &)item,
            row_renderer, look.task, look.airspace,
            settings.airspace);
     break;
 
 #ifdef HAVE_NOAA
-  case MapItem::WEATHER:
+  case MapItem::Type::WEATHER:
     ::Draw(canvas, rc, (const WeatherStationMapItem &)item,
            row_renderer, look.noaa);
     break;
 #endif
 
-  case MapItem::TRAFFIC:
+  case MapItem::Type::TRAFFIC:
     ::Draw(canvas, rc, (const TrafficMapItem &)item,
            row_renderer, traffic_look, traffic_list);
     break;
 
 #ifdef HAVE_SKYLINES_TRACKING
-  case MapItem::SKYLINES_TRAFFIC:
+  case MapItem::Type::SKYLINES_TRAFFIC:
     ::Draw(canvas, rc, (const SkyLinesTrafficMapItem &)item, row_renderer);
     break;
 #endif
 
-  case MapItem::THERMAL:
+  case MapItem::Type::THERMAL:
     ::Draw(canvas, rc, (const ThermalMapItem &)item, utc_offset,
            row_renderer, look);
     break;
 
-  case MapItem::OVERLAY:
+  case MapItem::Type::OVERLAY:
     ::Draw(canvas, rc, (const OverlayMapItem &)item, row_renderer);
     break;
 
-  case MapItem::RASP:
+  case MapItem::Type::RASP:
     ::Draw(canvas, rc, (const RaspMapItem &)item, row_renderer);
     break;
   }

@@ -36,7 +36,7 @@ struct RaspMapItem : public MapItem
   const StaticString<64> label;
 
   explicit RaspMapItem(const TCHAR *_label)
-    :MapItem(RASP), label(_label) {}
+    :MapItem(Type::RASP), label(_label) {}
 };
 
 #endif

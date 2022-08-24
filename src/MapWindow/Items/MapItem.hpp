@@ -50,7 +50,7 @@ class ObservationZonePoint;
 
 struct MapItem
 {
-  enum Type {
+  enum class Type {
     LOCATION,
     ARRIVAL_ALTITUDE,
     SELF,
@@ -99,7 +99,7 @@ struct LocationMapItem: public MapItem
   double elevation;
 
   LocationMapItem(const GeoVector &_vector, double _elevation)
-    :MapItem(LOCATION), vector(_vector), elevation(_elevation) {}
+    :MapItem(Type::LOCATION), vector(_vector), elevation(_elevation) {}
 
   bool HasElevation() const {
     return elevation > UNKNOWN_ELEVATION_THRESHOLD;
@@ -138,7 +138,7 @@ struct ArrivalAltitudeMapItem: public MapItem
   ArrivalAltitudeMapItem(double _elevation,
                          ReachResult _reach,
                          double _safety_height)
-    :MapItem(ARRIVAL_ALTITUDE),
+    :MapItem(Type::ARRIVAL_ALTITUDE),
      elevation(_elevation), reach(_reach), safety_height(_safety_height) {}
 
   bool HasElevation() const {
@@ -152,7 +152,7 @@ struct SelfMapItem: public MapItem
   Angle bearing;
 
   SelfMapItem(const GeoPoint &_location, const Angle _bearing)
-    :MapItem(SELF), location(_location), bearing(_bearing) {}
+    :MapItem(Type::SELF), location(_location), bearing(_bearing) {}
 };
 
 struct TaskOZMapItem: public MapItem
@@ -173,7 +173,7 @@ struct AirspaceMapItem: public MapItem
 
   template<typename T>
   explicit AirspaceMapItem(T &&_airspace) noexcept
-    :MapItem(AIRSPACE), airspace(std::forward<T>(_airspace)) {}
+    :MapItem(Type::AIRSPACE), airspace(std::forward<T>(_airspace)) {}
 };
 
 struct WaypointMapItem: public MapItem
@@ -181,7 +181,7 @@ struct WaypointMapItem: public MapItem
   WaypointPtr waypoint;
 
   WaypointMapItem(const WaypointPtr &_waypoint)
-    :MapItem(WAYPOINT), waypoint(_waypoint) {}
+    :MapItem(Type::WAYPOINT), waypoint(_waypoint) {}
 };
 
 #ifdef HAVE_NOAA
@@ -190,7 +190,7 @@ struct WeatherStationMapItem: public MapItem
   NOAAStore::iterator station;
 
   WeatherStationMapItem(const NOAAStore::iterator &_station)
-    :MapItem(WEATHER), station(_station) {}
+    :MapItem(Type::WEATHER), station(_station) {}
 };
 #endif
 
@@ -200,7 +200,7 @@ struct TrafficMapItem: public MapItem
   FlarmColor color;
 
   TrafficMapItem(FlarmId _id, FlarmColor _color)
-    :MapItem(TRAFFIC), id(_id), color(_color) {}
+    :MapItem(Type::TRAFFIC), id(_id), color(_color) {}
 };
 
 #ifdef HAVE_SKYLINES_TRACKING
@@ -220,7 +220,7 @@ struct SkyLinesTrafficMapItem : public MapItem
   SkyLinesTrafficMapItem(uint32_t _id, Time _time_of_day_ms,
                          int _altitude,
                          const TCHAR *_name)
-    :MapItem(SKYLINES_TRAFFIC), id(_id), time_of_day(_time_of_day_ms),
+    :MapItem(Type::SKYLINES_TRAFFIC), id(_id), time_of_day(_time_of_day_ms),
      altitude(_altitude),
      name(_name) {}
 };
@@ -232,7 +232,7 @@ struct ThermalMapItem: public MapItem
   ThermalSource thermal;
 
   ThermalMapItem(const ThermalSource &_thermal)
-    :MapItem(THERMAL), thermal(_thermal) {}
+    :MapItem(Type::THERMAL), thermal(_thermal) {}
 };
 
 #endif
