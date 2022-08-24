@@ -42,7 +42,7 @@ struct PolarInfo
   double wing_area;    /**< Reference wing area (m^2) */
   double v_no;         /**< Maximum speed for normal operations (m/s) */
 
-  gcc_pure
+  [[gnu::pure]]
   PolarCoefficients CalculateCoefficients() const;
 
   bool IsValid() const {

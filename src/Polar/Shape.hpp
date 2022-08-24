@@ -21,10 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_POLAR_SHAPE_HPP
-#define XCSOAR_POLAR_SHAPE_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 #include <array>
 
@@ -54,11 +51,9 @@ struct PolarShape {
     return points[i];
   }
 
-  gcc_pure
+  [[gnu::pure]]
   PolarCoefficients CalculateCoefficients() const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsValid() const noexcept;
 };
-
-#endif
