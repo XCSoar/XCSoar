@@ -26,8 +26,7 @@
  ****************************************************************************
  */
 
-#ifndef XCSOAR_XML_NODE_HPP
-#define XCSOAR_XML_NODE_HPP
+#pragma once
 
 #include "util/NonCopyable.hpp"
 #include "util/tstring.hpp"
@@ -135,7 +134,7 @@ public:
   /**
    * @return the first child node, or nullptr if there is none
    */
-  gcc_pure
+  [[gnu::pure]]
   const XMLNode *GetFirstChild() const {
     return d != nullptr && !d->children.empty()
       ? &d->children.front()
@@ -145,7 +144,7 @@ public:
   /**
    * @return the first child node, or nullptr if there is none
    */
-  gcc_pure
+  [[gnu::pure]]
   XMLNode *GetFirstChild() {
     return d != nullptr && !d->children.empty()
       ? &d->children.front()
@@ -157,14 +156,14 @@ public:
    * @return ith child node with specific name (return an empty node
    * if failing)
    */
-  gcc_pure
+  [[gnu::pure]]
   const XMLNode *GetChildNode(const TCHAR *name) const;
 
   /**
    * @return ith attribute content with specific name (return a nullptr
    * if failing)
    */
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetAttribute(const TCHAR *name) const;
 
   /**
@@ -177,7 +176,7 @@ public:
    */
   void Serialise(BufferedOutputStream &os, bool format) const;
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsDeclaration() const {
     assert(d != nullptr);
 
@@ -246,5 +245,3 @@ private:
   static void Serialise(const Data &data, BufferedOutputStream &os,
                         int format);
 };
-
-#endif
