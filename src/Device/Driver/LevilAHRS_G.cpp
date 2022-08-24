@@ -37,7 +37,7 @@ public:
 };
 
 static void
-ErrorMessage(gcc_unused unsigned code)
+ErrorMessage([[maybe_unused]] unsigned code)
 {
   Message::AddMessage(_T("Levil AHRS: hardware error !"));
 }
