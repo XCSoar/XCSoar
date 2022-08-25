@@ -27,8 +27,7 @@
  * DEALINGS IN THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef MAPERROR_H
-#define MAPERROR_H
+#pragma once
 
 #ifdef SHAPELIB_DISABLED
 #include "mapthread.h"
@@ -227,5 +226,3 @@ msDebug(const char *fmt, ...)
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* MAPERROR_H */

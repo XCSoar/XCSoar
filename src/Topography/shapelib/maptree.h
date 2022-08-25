@@ -27,8 +27,7 @@
  * DEALINGS IN THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef MAPTREE_H
-#define MAPTREE_H
+#pragma once
 
 #include "mapprimitive.h"
 #include "mapshape.h"
@@ -100,5 +99,3 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* MAPTREE_H */

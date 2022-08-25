@@ -27,8 +27,7 @@
  * DEALINGS IN THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef MAPSHAPE_H
-#define MAPSHAPE_H
+#pragma once
 
 #ifdef SHAPELIB_DISABLED
 #include <stdio.h>
@@ -265,5 +264,3 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* MAPSHAPE_H */

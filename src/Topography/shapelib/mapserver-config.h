@@ -1,5 +1,4 @@
-#ifndef _MAPSERVER_CONFIG_H
-#define _MAPSERVER_CONFIG_H
+#pragma once
 
 #if !defined(_WIN32) && !defined(__APPLE__)
 #include <features.h>
@@ -22,5 +21,3 @@
 #define HAVE_LRINTF 1
 #define HAVE_LRINT
 #define HAVE_SYNC_FETCH_AND_ADD 1
-
-#endif
