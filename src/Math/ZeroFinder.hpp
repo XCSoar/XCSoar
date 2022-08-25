@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
 */
 
-#ifndef ZERO_FINDER_HPP
-#define ZERO_FINDER_HPP
+#pragma once
 
 #include <cassert>
 
@@ -118,5 +117,3 @@ private:
   bool solution_within_tolerance(double xstart, double tol_act) noexcept;
 
 };
-
-#endif

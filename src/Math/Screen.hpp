@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,8 +23,7 @@ Copyright_License {
 
 /** Library for calculating on-screen coordinates */
 
-#ifndef XCSOAR_MATH_SCREEN_HPP
-#define XCSOAR_MATH_SCREEN_HPP
+#pragma once
 
 #include <span>
 
@@ -52,5 +51,3 @@ ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
 void
 PolygonRotateShift(std::span<BulkPixelPoint> poly, PixelPoint shift,
                    Angle angle, int scale = 100) noexcept;
-
-#endif

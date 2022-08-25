@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef _HISTOGRAM_H
-#define _HISTOGRAM_H
+#pragma once
 
 #include "Math/Point2D.hpp"
 
@@ -97,5 +96,3 @@ private:
 };
 
 static_assert(std::is_trivial<Histogram>::value, "type is not trivial");
-
-#endif // _HISTOGRAM_H

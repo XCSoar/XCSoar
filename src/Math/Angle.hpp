@@ -20,8 +20,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef ANGLE_HPP
-#define ANGLE_HPP
+#pragma once
 
 #include "Trig.hpp"
 #include "FastTrig.hpp"
@@ -402,5 +401,3 @@ public:
 };
 
 static_assert(std::is_trivial<Angle>::value, "type is not trivial");
-
-#endif
