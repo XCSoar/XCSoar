@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef TTY_DESCRIPTOR_HXX
-#define TTY_DESCRIPTOR_HXX
+#pragma once
 
 #include "io/FileDescriptor.hxx"
 
@@ -97,5 +96,3 @@ public:
 		return tcsetattr(Get(), optional_actions, &attr) >= 0;
 	}
 };
-
-#endif

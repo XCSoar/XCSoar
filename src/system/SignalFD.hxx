@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SIGNAL_FD_HXX
-#define SIGNAL_FD_HXX
+#pragma once
 
 #include "io/UniqueFileDescriptor.hxx"
 
@@ -63,5 +62,3 @@ public:
 	 */
 	int Read() noexcept;
 };
-
-#endif

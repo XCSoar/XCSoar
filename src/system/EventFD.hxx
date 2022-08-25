@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef EVENT_FD_HXX
-#define EVENT_FD_HXX
+#pragma once
 
 #include "io/UniqueFileDescriptor.hxx"
 
@@ -60,5 +59,3 @@ public:
 	 */
 	void Write() noexcept;
 };
-
-#endif

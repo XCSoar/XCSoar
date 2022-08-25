@@ -17,8 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef MPD_EVENT_PIPE_HXX
-#define MPD_EVENT_PIPE_HXX
+#pragma once
 
 #ifdef _WIN32
 #include "net/UniqueSocketDescriptor.hxx"
@@ -71,5 +70,3 @@ public:
 	 */
 	void Write() noexcept;
 };
-
-#endif /* MAIN_NOTIFY_H */

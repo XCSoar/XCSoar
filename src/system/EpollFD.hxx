@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef EPOLL_FD_HXX
-#define EPOLL_FD_HXX
+#pragma once
 
 #include "io/UniqueFileDescriptor.hxx"
 
@@ -79,5 +78,3 @@ public:
 		return Control(EPOLL_CTL_DEL, _fd, nullptr);
 	}
 };
-
-#endif
