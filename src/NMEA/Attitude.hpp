@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ATTITUDE_HPP
-#define XCSOAR_ATTITUDE_HPP
+#pragma once
 
 #include "Math/Angle.hpp"
 #include "Validity.hpp"
@@ -62,5 +61,3 @@ struct AttitudeState
 
   void Expire(TimeStamp now) noexcept;
 };
-
-#endif
