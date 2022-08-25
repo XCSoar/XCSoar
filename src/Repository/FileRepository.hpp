@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,11 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FILE_REPOSITORY_HPP
-#define XCSOAR_FILE_REPOSITORY_HPP
+#pragma once
 
 #include "AvailableFile.hpp"
-#include "util/Compiler.h"
 
 #include <list>
 
@@ -43,18 +41,16 @@ struct FileRepository {
     files.clear();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const_iterator begin() const {
     return files.begin();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const_iterator end() const {
     return files.end();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const AvailableFile *FindByName(const char *name) const;
 };
-
-#endif
