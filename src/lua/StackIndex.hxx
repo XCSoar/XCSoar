@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LUA_STACK_INDEX_HXX
-#define LUA_STACK_INDEX_HXX
+#pragma once
 
 namespace Lua {
 
@@ -68,5 +67,3 @@ StackPushed(RelativeStackIndex &idx, int n=1) noexcept
 }
 
 } // namespace Lua
-
-#endif

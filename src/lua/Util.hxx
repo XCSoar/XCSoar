@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LUA_UTIL_HXX
-#define LUA_UTIL_HXX
+#pragma once
 
 #include "Assert.hxx"
 #include "StackIndex.hxx"
@@ -205,5 +204,3 @@ SetPackagePath(lua_State *L, const char *path) noexcept
 }
 
 }
-
-#endif
