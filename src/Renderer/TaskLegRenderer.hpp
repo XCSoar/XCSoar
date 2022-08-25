@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef TASKLEG_RENDERER_HPP
-#define TASKLEG_RENDERER_HPP
+#pragma once
 
 class ChartRenderer;
 struct NMEAInfo;
@@ -36,5 +35,3 @@ RenderTaskLegs(ChartRenderer &chart,
                const NMEAInfo& basic,
                const DerivedInfo& calculated,
                double y=0.5);
-
-#endif
