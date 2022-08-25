@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ASYNC_WAITER_HXX
-#define ASYNC_WAITER_HXX
+#pragma once
 
 #include "Mutex.hxx"
 #include "Cond.hxx"
@@ -75,5 +74,3 @@ public:
 		cond.notify_one();
 	}
 };
-
-#endif

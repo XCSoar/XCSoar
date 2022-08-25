@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THREAD_COND_HXX
-#define THREAD_COND_HXX
+#pragma once
 
 #ifdef _WIN32
 
@@ -39,7 +38,5 @@ class Cond : public WindowsCond {};
 
 #include <condition_variable>
 using Cond = std::condition_variable;
-
-#endif
 
 #endif

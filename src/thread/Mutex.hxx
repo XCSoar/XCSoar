@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THREAD_MUTEX_HXX
-#define THREAD_MUTEX_HXX
+#pragma once
 
 #include <mutex>
 
@@ -62,5 +61,3 @@ public:
 	ScopeUnlock(const ScopeUnlock &other) = delete;
 	ScopeUnlock &operator=(const ScopeUnlock &other) = delete;
 };
-
-#endif
