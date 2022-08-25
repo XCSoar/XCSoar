@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_RASTER_BUFFER_HPP
-#define XCSOAR_RASTER_BUFFER_HPP
+#pragma once
 
 #include "RasterTraits.hpp"
 #include "RasterLocation.hpp"
@@ -71,14 +70,14 @@ public:
 
   void Resize(RasterLocation _size) noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   TerrainHeight GetInterpolated(unsigned lx, unsigned ly,
                                 unsigned ix, unsigned iy) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   TerrainHeight GetInterpolated(RasterLocation p) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   TerrainHeight Get(RasterLocation p) const noexcept {
     return *GetDataAt(p);
   }
@@ -103,8 +102,6 @@ public:
                        TerrainHeight *buffer, unsigned size,
                        bool interpolate) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   TerrainHeight GetMaximum() const noexcept;
 };
-
-#endif
