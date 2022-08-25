@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SOCKET_ADDRESS_HXX
-#define SOCKET_ADDRESS_HXX
+#pragma once
 
 #include "Features.hxx"
 
@@ -196,5 +195,3 @@ public:
 		return !(*this == other);
 	}
 };
-
-#endif

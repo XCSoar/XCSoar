@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ALLOCATED_SOCKET_ADDRESS_HXX
-#define ALLOCATED_SOCKET_ADDRESS_HXX
+#pragma once
 
 #include "SocketAddress.hxx" // IWYU pragma: export
 #include "Features.hxx"
@@ -204,5 +203,3 @@ public:
 private:
 	void SetSize(size_type new_size) noexcept;
 };
-
-#endif

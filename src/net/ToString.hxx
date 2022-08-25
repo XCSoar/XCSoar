@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef NET_TO_STRING_HXX
-#define NET_TO_STRING_HXX
+#pragma once
 
 #include <string>
 
@@ -49,5 +48,3 @@ ToString(SocketAddress address) noexcept;
 [[gnu::pure]]
 std::string
 HostToString(SocketAddress address) noexcept;
-
-#endif

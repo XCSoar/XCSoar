@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STATIC_SOCKET_ADDRESS_HXX
-#define STATIC_SOCKET_ADDRESS_HXX
+#pragma once
 
 #include "SocketAddress.hxx" // IWYU pragma: export
 #include "Features.hxx"
@@ -147,5 +146,3 @@ public:
 		return !(*this == other);
 	}
 };
-
-#endif

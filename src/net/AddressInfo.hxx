@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef NET_ADDRESS_INFO_HXX
-#define NET_ADDRESS_INFO_HXX
+#pragma once
 
 #include "SocketAddress.hxx"
 
@@ -156,5 +155,3 @@ public:
 		return const_iterator(nullptr);
 	}
 };
-
-#endif

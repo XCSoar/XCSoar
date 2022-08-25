@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SOCKET_DESCRIPTOR_HXX
-#define SOCKET_DESCRIPTOR_HXX
+#pragma once
 
 #include "Features.hxx"
 #include "io/FileDescriptor.hxx"
@@ -267,5 +266,3 @@ public:
 };
 
 static_assert(std::is_trivial<SocketDescriptor>::value, "type is not trivial");
-
-#endif
