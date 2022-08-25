@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_CONSOLE_OPERATION_ENVIRONMENT_HPP
-#define XCSOAR_CONSOLE_OPERATION_ENVIRONMENT_HPP
+#pragma once
 
 #include "Operation/Operation.hpp"
 
@@ -36,5 +35,3 @@ public:
   void SetProgressRange(unsigned range) noexcept override;
   void SetProgressPosition(unsigned position) noexcept override;
 };
-
-#endif
