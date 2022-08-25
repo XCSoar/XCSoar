@@ -67,8 +67,7 @@
  * @brief JasPer Memory Allocator
  */
 
-#ifndef JAS_MALLOC_H
-#define JAS_MALLOC_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -127,6 +126,4 @@ JAS_DLLEXPORT size_t jas_get_mem_usage();
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

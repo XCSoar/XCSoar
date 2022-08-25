@@ -67,8 +67,7 @@
  * $Id$
  */
 
-#ifndef JPC_CS_H
-#define JPC_CS_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -803,5 +802,3 @@ int jpc_putuint16(jas_stream_t *out, uint_fast16_t val);
 
 /* Write a 32-bit unsigned integer to a stream. */
 int jpc_putuint32(jas_stream_t *out, uint_fast32_t val);
-
-#endif

@@ -66,8 +66,7 @@
  * @brief Math-Related Code
  */
 
-#ifndef	JAS_MATH_H
-#define	JAS_MATH_H
+#pragma once
 
 /******************************************************************************\
 * Includes
@@ -388,6 +387,4 @@ inline static bool jas_safe_uint_mul(unsigned x, unsigned y, unsigned *result)
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

@@ -1,5 +1,4 @@
-#ifndef JAS_CONFIG_H
-#define JAS_CONFIG_H
+#pragma once
 
 #include <jasper/jas_compiler.h>
 
@@ -30,5 +29,3 @@
 #define EXCLUDE_JPG_SUPPORT
 #define EXCLUDE_PGX_SUPPORT
 #define EXCLUDE_TIFF_SUPPORT
-
-#endif

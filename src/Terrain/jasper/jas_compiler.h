@@ -59,8 +59,7 @@
  * @brief Compiler-related macros.
  */
 
-#ifndef JAS_COMPILER_H
-#define JAS_COMPILER_H
+#pragma once
 
 #ifdef _MSC_VER
 #ifndef __cplusplus
@@ -95,6 +94,4 @@
   __attribute__((no_sanitize_undefined))
 #else
 #define JAS_ATTRIBUTE_DISABLE_USAN
-#endif
-
 #endif

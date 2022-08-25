@@ -67,8 +67,7 @@
  * $Id$
  */
 
-#ifndef JPC_FIX_H
-#define JPC_FIX_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -226,5 +225,3 @@ static inline jpc_fix_t jpc_fix_add3(jpc_fix_t x, jpc_fix_t y, jpc_fix_t z)
 {
 	return jpc_fix_add(jpc_fix_add(x, y), z);
 }
-
-#endif

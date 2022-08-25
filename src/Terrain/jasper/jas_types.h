@@ -66,8 +66,7 @@
  * @brief Primitive Types
  */
 
-#ifndef JAS_TYPES_H
-#define JAS_TYPES_H
+#pragma once
 
 /* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
@@ -131,6 +130,4 @@ extern "C" {
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

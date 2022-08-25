@@ -67,8 +67,7 @@
  * $Id$
  */
 
-#ifndef JPC_QMFB_H
-#define JPC_QMFB_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -111,5 +110,3 @@ typedef struct {
 
 extern const jpc_qmfb2d_t jpc_ft_qmfb2d;
 extern const jpc_qmfb2d_t jpc_ns_qmfb2d;
-
-#endif

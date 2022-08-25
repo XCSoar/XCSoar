@@ -64,8 +64,7 @@
  * @brief JasPer Debugging-Related Functionality
  */
 
-#ifndef JAS_DEBUG_H
-#define JAS_DEBUG_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -124,6 +123,4 @@ JAS_DLLEXPORT void jas_deprecated(const char *s);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

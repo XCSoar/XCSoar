@@ -67,8 +67,7 @@
  * $Id$
  */
 
-#ifndef JPC_MCT_H
-#define JPC_MCT_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -115,5 +114,3 @@ void jpc_ict(jas_matrix_t *c0, jas_matrix_t *c1, jas_matrix_t *c2);
 void jpc_iict(jas_matrix_t *c0, jas_matrix_t *c1, jas_matrix_t *c2);
 
 #endif /* ENABLE_JASPER_MULTICOMPONENT */
-
-#endif

@@ -66,8 +66,7 @@
  * @brief JasPer Fixed-Point Number Class
  */
 
-#ifndef JAS_FIX_H
-#define JAS_FIX_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -344,6 +343,4 @@ extern "C" {
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

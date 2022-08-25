@@ -59,8 +59,7 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-#ifndef	JPC_MATH_H
-#define	JPC_MATH_H
+#pragma once
 
 /******************************************************************************\
 * Includes
@@ -102,5 +101,3 @@ int jpc_fix_firstone(jpc_fix_t x);
   integer. */
 JAS_ATTRIBUTE_CONST
 unsigned jpc_floorlog2(uint_fast32_t x);
-
-#endif
