@@ -132,10 +132,9 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
                         calculated);
   AverageClimbRate(basic, calculated);
 
-  if (calculated.circling)
+  if (calculated.circling) {
     CurrentThermal(basic, calculated, calculated.current_thermal);
-  else
-    calculated.current_thermal = calculated.last_thermal;
+  }
 
   lift_database_computer.Compute(calculated.lift_database,
                                  calculated.trace_history.CirclingAverage,
@@ -190,13 +189,15 @@ GlideComputerAirData::CurrentThermal(const MoreData &basic,
                                      OneClimbInfo &current_thermal)
 {
   if (circling.climb_start_time.IsDefined()) {
-    current_thermal.start_time = circling.climb_start_time;
+    if (current_thermal.start_time != circling.climb_start_time) {
+      current_thermal.start_time = circling.climb_start_time;
+      current_thermal.Clear();
+    }
     current_thermal.end_time = basic.time;
     current_thermal.gain =
       basic.TE_altitude - circling.climb_start_altitude_te;
     current_thermal.CalculateAll();
-  } else
-    current_thermal.Clear();
+  }
 }
 
 
@@ -360,39 +361,36 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
                                        DerivedInfo &calculated,
                                        bool last_circling)
 {
-  if (calculated.circling || !last_circling ||
-      !calculated.climb_start_time.IsDefined())
+  if (calculated.circling || !last_circling)
     return;
 
-  auto duration = calculated.cruise_start_time - calculated.climb_start_time;
-  if (duration < THERMAL_TIME_MIN)
-    return;
+  // event condition: enter cruise mode, alias leaving climbe mode
 
-  auto gain = calculated.cruise_start_altitude_te
-    - calculated.climb_start_altitude_te;
+  if (calculated.climb_start_time.IsDefined())
+  {
+    // there has been a climb phase
+    if (calculated.current_thermal.duration > THERMAL_TIME_MIN
+        && calculated.current_thermal.gain > 0)
+    {
+      // current thermal data is of value to shift into last thermal data
+      bool was_defined = calculated.last_thermal.IsDefined();
 
-  if (gain <= 0)
-    return;
+      calculated.last_thermal = calculated.current_thermal;
+      calculated.last_thermal.CalculateLiftRate();
+      assert(calculated.last_thermal.lift_rate > 0);
 
-  bool was_defined = calculated.last_thermal.IsDefined();
+      if (!was_defined)
+        calculated.last_thermal_average_smooth =
+            calculated.last_thermal.lift_rate;
+      else
+        calculated.last_thermal_average_smooth =
+            LowPassFilter(calculated.last_thermal_average_smooth,
+                          calculated.last_thermal.lift_rate, LOW_PASS_FILTER_THERMAL_AVERAGE_ALPHA);
 
-  calculated.last_thermal.start_time = calculated.climb_start_time;
-  calculated.last_thermal.end_time = calculated.cruise_start_time;
-  calculated.last_thermal.gain = gain;
-  calculated.last_thermal.duration = duration;
-  calculated.last_thermal.start_altitude = calculated.climb_start_altitude_te + (basic.nav_altitude-basic.TE_altitude);
-  calculated.last_thermal.CalculateLiftRate();
-  assert(calculated.last_thermal.lift_rate > 0);
-
-  if (!was_defined)
-    calculated.last_thermal_average_smooth =
-        calculated.last_thermal.lift_rate;
-  else
-    calculated.last_thermal_average_smooth =
-        LowPassFilter(calculated.last_thermal_average_smooth,
-                      calculated.last_thermal.lift_rate, LOW_PASS_FILTER_THERMAL_AVERAGE_ALPHA);
-
-  ThermalSources(basic, calculated, calculated.thermal_locator);
+      ThermalSources(basic, calculated, calculated.thermal_locator);
+    }
+    calculated.current_thermal.Clear();
+  }
 }
 
 inline void
