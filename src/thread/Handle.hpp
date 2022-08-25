@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,10 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_THREAD_HANDLE_HPP
-#define XCSOAR_THREAD_HANDLE_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 #ifdef HAVE_POSIX
 #include <pthread.h>
@@ -59,7 +56,7 @@ public:
   /**
    * Return a handle referring to the current thread.
    */
-  gcc_pure
+  [[gnu::pure]]
   static ThreadHandle GetCurrent() noexcept {
 #ifdef HAVE_POSIX
     return pthread_self();
@@ -68,7 +65,7 @@ public:
 #endif
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool operator==(const ThreadHandle &other) const noexcept {
 #ifdef HAVE_POSIX
     return pthread_equal(handle, other.handle);
@@ -84,5 +81,3 @@ public:
     return *this == GetCurrent();
   }
 };
-
-#endif
