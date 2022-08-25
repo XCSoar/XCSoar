@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ROUGH_ANGLE_HPP
-#define XCSOAR_ROUGH_ANGLE_HPP
+#pragma once
 
 #include <type_traits>
 
@@ -67,5 +66,3 @@ public:
 };
 
 static_assert(std::is_trivial<RoughAngle>::value, "type is not trivial");
-
-#endif
