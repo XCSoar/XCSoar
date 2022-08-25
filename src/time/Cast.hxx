@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef TIME_CAST_HXX
-#define TIME_CAST_HXX
+#pragma once
 
 #include "FloatDuration.hxx"
 
@@ -38,5 +37,3 @@ ToFloatSeconds(const std::chrono::duration<Rep,Period> &d) noexcept
 {
 	return std::chrono::duration_cast<FloatDuration>(d).count();
 }
-
-#endif

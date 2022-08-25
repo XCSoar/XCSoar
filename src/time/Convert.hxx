@@ -30,8 +30,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef TIME_CONVERT_HXX
-#define TIME_CONVERT_HXX
+#pragma once
 
 #include <chrono>
 
@@ -68,5 +67,3 @@ MakeTime(struct tm &tm) noexcept;
 [[gnu::pure]]
 std::chrono::steady_clock::duration
 ToSteadyClockDuration(const struct timeval &tv) noexcept;
-
-#endif
