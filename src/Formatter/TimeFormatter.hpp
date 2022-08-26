@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TIME_FORMATTER_HPP
-#define XCSOAR_TIME_FORMATTER_HPP
+#pragma once
 
 #include "time/Stamp.hpp"
 #include "util/StringBuffer.hxx"
@@ -143,5 +142,3 @@ FormatTimespanSmart(FloatDuration timespan, unsigned max_tokens = 1,
   return FormatTimespanSmart(std::chrono::duration_cast<std::chrono::seconds>(timespan),
                              max_tokens, separator);
 }
-
-#endif

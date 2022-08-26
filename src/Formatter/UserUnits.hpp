@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_USER_UNITS_FORMATTER_HPP
-#define XCSOAR_USER_UNITS_FORMATTER_HPP
+#pragma once
 
 #include "Units/Unit.hpp"
 #include "util/StringBuffer.hxx"
@@ -62,7 +61,7 @@ void
 FormatUserAltitude(double value, TCHAR *buffer,
                    bool include_unit = true);
 
-gcc_const
+[[gnu::const]]
 static inline BasicStringBuffer<TCHAR, 32>
 FormatUserAltitude(double value)
 {
@@ -129,7 +128,7 @@ FormatUserDistanceSmart(double value, TCHAR *buffer,
                         double small_unit_threshold = 0,
                         double precision_threshold = 100);
 
-gcc_const
+[[gnu::const]]
 static inline BasicStringBuffer<TCHAR, 32>
 FormatUserDistanceSmart(double value)
 {
@@ -153,7 +152,7 @@ void
 FormatUserSpeed(double value, TCHAR *buffer,
                 bool include_unit = true, bool Precision = true);
 
-gcc_const
+[[gnu::const]]
 static inline BasicStringBuffer<TCHAR, 32>
 FormatUserSpeed(double value, bool precision=true)
 {
@@ -183,7 +182,7 @@ void
 FormatUserTaskSpeed(double value, TCHAR *buffer,
                     bool include_unit=true, bool precision=true);
 
-gcc_const
+[[gnu::const]]
 static inline BasicStringBuffer<TCHAR, 32>
 FormatUserTaskSpeed(double value, bool precision=true)
 {
@@ -253,5 +252,3 @@ const TCHAR* GetUserPressureFormat(bool include_unit = false);
  */
 double
 GetUserPressureStep();
-
-#endif
