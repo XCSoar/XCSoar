@@ -27,13 +27,11 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef JAVA_STRING_HXX
-#define JAVA_STRING_HXX
+#pragma once
 
 #include "Ref.hxx"
 
 #include <jni.h>
-
 #include <cstddef>
 #include <string>
 #include <string_view>
@@ -129,5 +127,3 @@ public:
 };
 
 } // namespace Java
-
-#endif

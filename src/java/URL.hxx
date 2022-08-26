@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef JAVA_URL_HXX
-#define JAVA_URL_HXX
+#pragma once
 
 #include "Class.hxx"
 
@@ -133,5 +132,3 @@ public:
 };
 
 } // namespace Java
-
-#endif

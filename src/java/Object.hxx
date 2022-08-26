@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef JAVA_OBJECT_HXX
-#define JAVA_OBJECT_HXX
+#pragma once
 
 #include "Ref.hxx"
 
@@ -64,5 +63,3 @@ public:
 };
 
 } // namespace Java
-
-#endif

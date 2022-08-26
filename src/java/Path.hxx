@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef JAVA_PATH_HXX
-#define JAVA_PATH_HXX
+#pragma once
 
 #include "String.hxx"
 #include "system/Path.hpp"
@@ -53,5 +52,3 @@ ToPathChecked(const Java::String &o) noexcept
 }
 
 } // namespace Java
-
-#endif

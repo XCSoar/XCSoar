@@ -27,11 +27,9 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef JAVA_EXCEPTION_HXX
-#define JAVA_EXCEPTION_HXX
+#pragma once
 
 #include <stdexcept>
-
 #include <jni.h>
 
 namespace Java {
@@ -60,5 +58,3 @@ static inline bool DiscardException(JNIEnv *env) noexcept {
 }
 
 } // namespace Java
-
-#endif
