@@ -66,7 +66,7 @@ TTYEnumerator::Next() noexcept
       /* truncated - ignore */
       continue;
 
-    if (access(path, R_OK|W_OK) == 0 && access(path, X_OK) < 0)
+    if (access(path, R_OK|W_OK) == 0 )
       return path;
   }
 
