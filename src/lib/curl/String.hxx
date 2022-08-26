@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CURL_STRING_HXX
-#define CURL_STRING_HXX
+#pragma once
 
 #include <curl/curl.h>
 
@@ -73,5 +72,3 @@ public:
 		return p;
 	}
 };
-
-#endif

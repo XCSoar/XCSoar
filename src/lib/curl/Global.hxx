@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CURL_GLOBAL_HXX
-#define CURL_GLOBAL_HXX
+#pragma once
 
 #include "Multi.hxx"
 #include "event/CoarseTimerEvent.hxx"
@@ -82,5 +81,3 @@ private:
 	/* callback for #timeout_event */
 	void OnTimeout() noexcept;
 };
-
-#endif

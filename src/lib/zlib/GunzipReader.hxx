@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GUNZIP_READER_HXX
-#define GUNZIP_READER_HXX
+#pragma once
 
 #include "io/Reader.hxx"
 #include "util/StaticFifoBuffer.hxx"
@@ -65,5 +64,3 @@ public:
 private:
 	bool FillBuffer();
 };
-
-#endif

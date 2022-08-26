@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CURL_EASY_HXX
-#define CURL_EASY_HXX
+#pragma once
 
 #include "String.hxx"
 #include "util/Compiler.h"
@@ -232,5 +231,3 @@ public:
 		return CurlString(curl_easy_escape(handle, string, length));
 	}
 };
-
-#endif

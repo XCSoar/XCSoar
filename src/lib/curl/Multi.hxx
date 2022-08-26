@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CURL_MULTI_HXX
-#define CURL_MULTI_HXX
+#pragma once
 
 #include <curl/curl.h>
 
@@ -128,5 +127,3 @@ public:
 		return running_handles;
 	}
 };
-
-#endif

@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CURL_SLIST_HXX
-#define CURL_SLIST_HXX
+#pragma once
 
 #include <curl/curl.h>
 
@@ -73,5 +72,3 @@ public:
 		head = new_head;
 	}
 };
-
-#endif

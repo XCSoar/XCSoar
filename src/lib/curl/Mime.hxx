@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CURL_MIME_HXX
-#define CURL_MIME_HXX
+#pragma once
 
 #include <curl/curl.h>
 
@@ -108,5 +107,3 @@ public:
 		return Add().Name(name);
 	}
 };
-
-#endif

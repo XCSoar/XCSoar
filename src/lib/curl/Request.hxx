@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CURL_REQUEST_HXX
-#define CURL_REQUEST_HXX
+#pragma once
 
 #include "Easy.hxx"
 #include "Adapter.hxx"
@@ -166,5 +165,3 @@ private:
 	void FinishHeaders();
 	void FinishBody();
 };
-
-#endif
