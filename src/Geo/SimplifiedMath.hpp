@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,8 +30,7 @@ Copyright_License {
  * be.  Instead of using the WGS84 model, they assume the FAI sphere.
  */
 
-#ifndef XCSOAR_GEO_SIMPLIFIED_MATH_HPP
-#define XCSOAR_GEO_SIMPLIFIED_MATH_HPP
+#pragma once
 
 struct GeoPoint;
 class Angle;
@@ -66,5 +65,3 @@ FindLatitudeLongitudeS(const GeoPoint &loc,
 double
 ProjectedDistanceS(const GeoPoint &loc1, const GeoPoint &loc2,
                    const GeoPoint &loc3) noexcept;
-
-#endif

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
  */
 
-#ifndef GEOVECTOR_MEMENTO_HPP
-#define GEOVECTOR_MEMENTO_HPP
+#pragma once
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
@@ -50,5 +49,3 @@ public:
   [[gnu::pure]]
   GeoVector calc(const GeoPoint& _origin, const GeoPoint& _destination) const;
 };
-
-#endif
