@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@
 }
 */
 
-#ifndef XCSOAR_TRAFFIC_WIDGET_HPP
-#define XCSOAR_TRAFFIC_WIDGET_HPP
+#pragma once
 
 #include "Widget/ContainerWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
@@ -77,5 +76,3 @@ private:
   /* virtual methods from class BlackboardListener */
   virtual void OnGPSUpdate(const MoreData &basic) override;
 };
-
-#endif
