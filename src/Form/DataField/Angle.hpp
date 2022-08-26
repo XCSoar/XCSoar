@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_FIELD_ANGLE_HPP
-#define XCSOAR_DATA_FIELD_ANGLE_HPP
+#pragma once
 
 #include "Base.hpp"
 #include "Math/Angle.hpp"
@@ -112,5 +111,3 @@ public:
   ComboList CreateComboList(const TCHAR *reference) const noexcept override;
   void SetFromCombo(int i, const TCHAR *s) noexcept override;
 };
-
-#endif
