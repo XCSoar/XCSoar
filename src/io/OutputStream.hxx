@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef OUTPUT_STREAM_HXX
-#define OUTPUT_STREAM_HXX
+#pragma once
 
 #include <cstddef>
 
@@ -42,5 +41,3 @@ public:
 	 */
 	virtual void Write(const void *data, std::size_t size) = 0;
 };
-
-#endif

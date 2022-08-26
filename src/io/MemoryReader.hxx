@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef MEMORY_READER_HXX
-#define MEMORY_READER_HXX
+#pragma once
 
 #include "Reader.hxx"
 
@@ -47,5 +46,3 @@ public:
 	/* virtual methods from class Reader */
 	std::size_t Read(void *data, std::size_t size) override;
 };
-
-#endif

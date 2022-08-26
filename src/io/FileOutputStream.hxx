@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef FILE_OUTPUT_STREAM_HXX
-#define FILE_OUTPUT_STREAM_HXX
+#pragma once
 
 #include "OutputStream.hxx"
 #include "system/Path.hpp"
@@ -216,5 +215,3 @@ private:
 	void RenameOrThrow(Path old_path, Path new_path) const;
 	void Delete(Path delete_path) const noexcept;
 };
-
-#endif

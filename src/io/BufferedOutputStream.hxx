@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef BUFFERED_OUTPUT_STREAM_HXX
-#define BUFFERED_OUTPUT_STREAM_HXX
+#pragma once
 
 #include "util/Compiler.h"
 #include "util/DynamicFifoBuffer.hxx"
@@ -148,5 +147,3 @@ WithBufferedOutputStream(OutputStream &os, F &&f)
 	f(bos);
 	bos.Flush();
 }
-
-#endif
