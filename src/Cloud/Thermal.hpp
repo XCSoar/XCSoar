@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,15 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_CLOUD_THERMAL_HPP
-#define XCSOAR_CLOUD_THERMAL_HPP
+#pragma once
 
 #include "Geo/Boost/GeoPoint.hpp"
 
 #include <boost/intrusive/list.hpp>
 #include <boost/geometry/index/rtree.hpp>
 #include <boost/range/iterator_range_core.hpp>
-
 #include <memory>
 #include <chrono>
 
@@ -154,5 +152,3 @@ public:
   void Save(Serialiser &s) const;
   void Load(Deserialiser &s);
 };
-
-#endif
