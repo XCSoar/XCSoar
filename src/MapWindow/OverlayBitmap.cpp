@@ -78,7 +78,7 @@ GeoFrom2D(DoublePoint2D p) noexcept
 /**
  * Convert a #GeoBounds instance to a boost::geometry box.
  */
-gcc_const
+[[gnu::const]]
 static boost::geometry::model::box<DoublePoint2D>
 ToBox(const GeoBounds b) noexcept
 {
@@ -88,7 +88,7 @@ ToBox(const GeoBounds b) noexcept
 /**
  * Convert a #GeoQuadrilateral instance to a boost::geometry ring.
  */
-gcc_const
+[[gnu::const]]
 static ArrayQuadrilateral
 ToArrayQuadrilateral(const GeoQuadrilateral q) noexcept
 {
