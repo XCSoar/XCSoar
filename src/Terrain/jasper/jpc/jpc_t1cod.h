@@ -65,8 +65,7 @@
  * $Id$
  */
 
-#ifndef JPC_T1COD_H
-#define JPC_T1COD_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -317,5 +316,3 @@ unsigned JPC_SEGPASSCNT(unsigned passno, unsigned firstpassno, unsigned numpasse
 JAS_ATTRIBUTE_CONST
 bool JPC_ISTERMINATED(unsigned passno, unsigned firstpassno, unsigned numpasses, bool termall,
   bool lazy);
-
-#endif

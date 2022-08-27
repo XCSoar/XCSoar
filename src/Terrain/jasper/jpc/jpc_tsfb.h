@@ -67,8 +67,7 @@
  * $Id$
  */
 
-#ifndef JPC_TSFB_H
-#define JPC_TSFB_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -143,4 +142,3 @@ int jpc_tsfb_getbands(jpc_tsfb_t *tsfb, uint_fast32_t xstart,
   uint_fast32_t ystart, uint_fast32_t xend, uint_fast32_t yend,
   jpc_tsfb_band_t *bands);
 
-#endif

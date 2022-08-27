@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TERRAIN_THREAD_HPP
-#define XCSOAR_TERRAIN_THREAD_HPP
+#pragma once
 
 #include "thread/StandbyThread.hpp"
 #include "Geo/GeoPoint.hpp"
@@ -57,5 +56,3 @@ private:
   /* virtual methods from class StandbyThread*/
   void Tick() noexcept override;
 };
-
-#endif

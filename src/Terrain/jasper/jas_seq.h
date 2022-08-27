@@ -66,8 +66,7 @@
  * @brief Sequence/Matrix Library
  */
 
-#ifndef JAS_SEQ_H
-#define JAS_SEQ_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -468,6 +467,4 @@ static inline jas_matind_t jas_seq_end(const jas_seq_t *seq)
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

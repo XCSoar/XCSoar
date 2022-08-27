@@ -67,8 +67,7 @@
  * $Id$
  */
 
-#ifndef JPC_BS_H
-#define JPC_BS_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -233,5 +232,3 @@ int jpc_bitstream_fillbuf(jpc_bitstream_t *bitstream);
 	  ? (EOF) : ((bit) & 1)) : \
 	  ((bitstream)->buf_ |= ((bit) & 1) << (bitstream)->cnt_, \
 	  (bit) & 1))
-
-#endif

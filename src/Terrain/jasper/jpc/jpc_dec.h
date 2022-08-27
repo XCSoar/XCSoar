@@ -67,8 +67,7 @@
  * $Id$
  */
 
-#ifndef JPC_DEC_H
-#define JPC_DEC_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -706,5 +705,3 @@ void jpc_seglist_remove(jpc_dec_seglist_t *list, jpc_dec_seg_t *node);
 /* Insert a segment into a segment list. */
 void jpc_seglist_insert(jpc_dec_seglist_t *list, jpc_dec_seg_t *ins,
   jpc_dec_seg_t *node);
-
-#endif
