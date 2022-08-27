@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,12 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_DECLARATION_HPP
-#define XCSOAR_DEVICE_DECLARATION_HPP
+#pragma once
 
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "util/StaticString.hxx"
-#include "util/Compiler.h"
 
 #include <vector>
 #include <tchar.h>
@@ -80,12 +78,12 @@ struct Declaration {
     return turnpoints.back().waypoint;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetName(const unsigned i) const {
     return turnpoints[i].waypoint.name.c_str();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetShortName(const unsigned i) const {
     return turnpoints[i].waypoint.shortname.c_str();
   }
@@ -94,10 +92,8 @@ struct Declaration {
     return turnpoints[i].waypoint.location;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned Size() const {
     return turnpoints.size();
   }
 };
-
-#endif
