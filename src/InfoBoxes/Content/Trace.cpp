@@ -41,7 +41,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"
 
-gcc_const
+[[gnu::const]]
 static PixelRect
 GetSparkRect(PixelRect rc)
 {
