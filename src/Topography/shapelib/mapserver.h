@@ -26,8 +26,7 @@
  * DEALINGS IN THE SOFTWARE.
  *****************************************************************************/
 
-#ifndef MAP_H
-#define MAP_H
+#pragma once
 
 #include "mapserver-config.h"
 #include "util/Compiler.h"
@@ -3340,5 +3339,3 @@ static inline void IGNORE_RET_VAL(int x) { (void)x; }
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* MAP_H */

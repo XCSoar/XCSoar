@@ -3,7 +3,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,8 +22,7 @@ Copyright_License {
 }
 */
 
-#ifndef TOPOGRAPHY_XSHAPE_HPP
-#define TOPOGRAPHY_XSHAPE_HPP
+#pragma once
 
 #include "util/AllocatedString.hxx"
 #include "Geo/GeoBounds.hpp"
@@ -155,5 +154,3 @@ public:
     return label.c_str();
   }
 };
-
-#endif
