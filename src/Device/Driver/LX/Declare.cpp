@@ -62,7 +62,7 @@ LoadPilotInfo(LX::Pilot &lx_driver_Pilot, const Declaration &declaration)
   memset((void*)lx_driver_Pilot.unknown2, 0, sizeof(lx_driver_Pilot.unknown2));
 }
 
-gcc_const
+[[gnu::const]]
 static int32_t
 AngleToLX(Angle value)
 {
