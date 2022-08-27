@@ -62,7 +62,7 @@ BlueFlyDevice::ParseBAT(const char *content, NMEAInfo &info)
   return true;
 }
 
-gcc_pure
+[[gnu::pure]]
 static inline double
 ComputeNoncompVario(const double pressure, const double d_pressure)
 {
