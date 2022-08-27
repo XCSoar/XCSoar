@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SLES_PLAY_HPP
-#define SLES_PLAY_HPP
+#pragma once
 
 #include <SLES/OpenSLES.h>
 
@@ -48,5 +47,3 @@ namespace SLES {
     }
   };
 }
-
-#endif

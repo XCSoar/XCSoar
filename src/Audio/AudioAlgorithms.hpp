@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_AUDIO_ALGORITHMS_HPP
-#define XCSOAR_AUDIO_ALGORITHMS_HPP
+#pragma once
 
 #include "util/Compiler.h"
 #include "util/ByteOrder.hxx"
@@ -30,7 +29,6 @@ Copyright_License {
 #include <algorithm>
 #include <limits>
 #include <type_traits>
-
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -155,5 +153,3 @@ inline void ByteSwapAndLowerVolume(int16_t *buffer, size_t num_frames,
                 100);
   }
 }
-
-#endif
