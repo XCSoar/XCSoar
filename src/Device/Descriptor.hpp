@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_DESCRIPTOR_HPP
-#define XCSOAR_DEVICE_DESCRIPTOR_HPP
+#pragma once
 
 #include "Features.hpp"
 #include "Config.hpp"
@@ -309,7 +308,7 @@ public:
     return config.port_type != DeviceConfig::PortType::DISABLED;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   PortState GetState() const noexcept;
 
   tstring GetErrorMessage() const noexcept {
@@ -327,7 +326,7 @@ public:
   /**
    * @see DumpPort::IsEnabled()
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsDumpEnabled() const noexcept;
 
   /**
@@ -448,10 +447,10 @@ public:
    */
   bool IsDriver(const TCHAR *name) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool CanDeclare() const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsLogger() const noexcept;
 
   bool IsCondor() const noexcept {
@@ -518,7 +517,7 @@ public:
    * Query the device's "alive" flag from the DeviceBlackboard.
    * This method locks the DeviceBlackboard.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsAlive() const noexcept;
 
   [[gnu::pure]]
@@ -677,5 +676,3 @@ public:
     device.Return();
   }
 };
-
-#endif
