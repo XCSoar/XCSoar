@@ -57,7 +57,7 @@ MIX(unsigned x, unsigned y, unsigned i)
  * illum > 0:  Highlight, mixed with up to 25% yellow
  * illum = 0:  No shading
  */
-gcc_const
+[[gnu::const]]
 inline RawColor
 TerrainShading(const int illum, RGB8Color color)
 {
