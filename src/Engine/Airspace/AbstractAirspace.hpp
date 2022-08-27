@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -19,8 +19,8 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef ABSTRACTAIRSPACE_HPP
-#define ABSTRACTAIRSPACE_HPP
+ 
+#pragma once
 
 #include "util/TriState.hpp"
 #include "util/tstring.hpp"
@@ -406,5 +406,3 @@ private:
                                                 double distance_end,
                                                 bool lower = true) const noexcept;
 };
-
-#endif

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
 */
 
-#ifndef AIRSPACE_AIRCRAFT_PERFORMANCE_HPP
-#define AIRSPACE_AIRCRAFT_PERFORMANCE_HPP
+#pragma once
 
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideResult.hpp"
@@ -224,5 +223,3 @@ private:
   bool SolutionExists(double distance_min, double distance_max,
                       double h_min, double h_max) const;
 };
-
-#endif

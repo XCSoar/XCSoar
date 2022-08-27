@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
  */
 
-#ifndef ABSTRACTTASK_H
-#define ABSTRACTTASK_H
+#pragma once
 
 #include "TaskInterface.hpp"
 #include "Factory/ValidationError.hpp"
@@ -429,5 +428,3 @@ public:
   bool UpdateIdle(const AircraftState &state_now,
                   const GlidePolar &glide_polar) noexcept override;
 };
-
-#endif //ABSTRACTTASK_H
