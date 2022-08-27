@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_NATIVE_VIEW_HPP
-#define XCSOAR_ANDROID_NATIVE_VIEW_HPP
+#pragma once
 
 #include "java/Object.hxx"
 #include "java/Class.hxx"
@@ -169,5 +168,3 @@ public:
     return env->CallIntMethod(obj, getNetState_method);
   }
 };
-
-#endif
