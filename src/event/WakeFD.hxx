@@ -17,8 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef MPD_WAKE_FD_HXX
-#define MPD_WAKE_FD_HXX
+#pragma once
 
 #include "net/SocketDescriptor.hxx"
 #include "event/Features.h"
@@ -53,5 +52,3 @@ public:
 		fd.Write();
 	}
 };
-
-#endif

@@ -17,15 +17,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef EVENT_POLL_BACKEND_HXX
-#define EVENT_POLL_BACKEND_HXX
+#pragma once
 
 #include "PollResultGeneric.hxx"
 
 #include <cstddef>
 #include <vector>
 #include <unordered_map>
-
 #include <sys/poll.h>
 
 class PollBackend
@@ -59,5 +57,3 @@ public:
 		return Remove(fd);
 	}
 };
-
-#endif

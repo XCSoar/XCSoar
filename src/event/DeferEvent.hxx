@@ -17,8 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef MPD_DEFER_EVENT_HXX
-#define MPD_DEFER_EVENT_HXX
+#pragma once
 
 #include "util/BindMethod.hxx"
 #include "util/IntrusiveList.hxx"
@@ -76,5 +75,3 @@ private:
 		callback();
 	}
 };
-
-#endif

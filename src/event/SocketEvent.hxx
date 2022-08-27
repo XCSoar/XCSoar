@@ -17,8 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef MPD_SOCKET_EVENT_HXX
-#define MPD_SOCKET_EVENT_HXX
+#pragma once
 
 #include "BackendEvents.hxx"
 #include "net/SocketDescriptor.hxx"
@@ -176,5 +175,3 @@ private:
 	 */
 	void Dispatch() noexcept;
 };
-
-#endif

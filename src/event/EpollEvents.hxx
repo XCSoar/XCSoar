@@ -17,8 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef EVENT_EPOLL_EVENTS_HXX
-#define EVENT_EPOLL_EVENTS_HXX
+#pragma once
 
 #include <sys/epoll.h>
 
@@ -28,5 +27,3 @@ struct EpollEvents {
 	static constexpr unsigned ERROR = EPOLLERR;
 	static constexpr unsigned HANGUP = EPOLLHUP;
 };
-
-#endif

@@ -17,8 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef MPD_SOCKET_SIGNAL_MONITOR_HXX
-#define MPD_SOCKET_SIGNAL_MONITOR_HXX
+#pragma once
 
 class EventLoop;
 
@@ -62,5 +61,3 @@ SignalMonitorFinish() noexcept
 }
 
 #endif
-
-#endif /* MAIN_NOTIFY_H */

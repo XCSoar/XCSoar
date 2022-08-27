@@ -17,8 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef MPD_EVENT_CALL_HXX
-#define MPD_EVENT_CALL_HXX
+#pragma once
 
 #include <functional>
 
@@ -32,5 +31,3 @@ class EventLoop;
  */
 void
 BlockingCall(EventLoop &loop, std::function<void()> &&f);
-
-#endif /* MAIN_NOTIFY_H */
