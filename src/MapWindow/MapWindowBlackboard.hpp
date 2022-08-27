@@ -42,35 +42,35 @@ class MapWindowBlackboard:
   UIState ui_state;
 
 protected:
-  gcc_const
+  [[gnu::const]]
   const MoreData &Basic() const {
     assert(InDrawThread());
 
     return BaseBlackboard::Basic();
   }
 
-  gcc_const
+  [[gnu::const]]
   const DerivedInfo &Calculated() const {
     assert(InDrawThread());
 
     return BaseBlackboard::Calculated();
   }
 
-  gcc_const
+  [[gnu::const]]
   const ComputerSettings &GetComputerSettings() const {
     assert(InDrawThread());
 
     return ComputerSettingsBlackboard::GetComputerSettings();
   }
 
-  gcc_const
+  [[gnu::const]]
   const MapSettings &GetMapSettings() const {
     assert(InDrawThread());
 
     return settings_map;
   }
 
-  gcc_const
+  [[gnu::const]]
   const UIState &GetUIState() const {
     assert(InDrawThread());
 
