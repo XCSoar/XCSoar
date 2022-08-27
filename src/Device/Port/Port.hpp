@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_PORT_HPP
-#define XCSOAR_DEVICE_PORT_HPP
+#pragma once
 
 #include "State.hpp"
 #include "util/Compiler.h"
@@ -53,7 +52,7 @@ public:
   /**
    * Returns the current state of this object.
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual PortState GetState() const noexcept = 0;
 
   /**
@@ -298,5 +297,3 @@ protected:
    */
   void Error(std::exception_ptr e) noexcept;
 };
-
-#endif

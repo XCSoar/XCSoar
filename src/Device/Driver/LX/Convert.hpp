@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_DRIVER_LX_CONVERT_HPP
-#define XCSOAR_DEVICE_DRIVER_LX_CONVERT_HPP
+#pragma once
 
 #include <cstddef>
 
@@ -36,5 +35,3 @@ namespace LX {
   ConvertLXNToIGC(const void *data, size_t length,
                   BufferedOutputStream &os);
 }
-
-#endif

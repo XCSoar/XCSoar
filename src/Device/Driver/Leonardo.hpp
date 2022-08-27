@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,13 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_DRIVER_LEONARDO_HPP
-#define XCSOAR_DEVICE_DRIVER_LEONARDO_HPP
+#pragma once
 
 /**
  * A driver for Leonardo PRO BT.  It provides vario, airspeed,
  * temperature, wind (plus GPS in standard NMEA records).
  */
 extern const struct DeviceRegister leonardo_driver;
-
-#endif

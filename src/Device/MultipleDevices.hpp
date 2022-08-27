@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,8 +26,7 @@ Copyright_License {
  * This library manages the list of configured devices.
  */
 
-#ifndef XCSOAR_DEVICE_LIST_HPP
-#define XCSOAR_DEVICE_LIST_HPP
+#pragma once
 
 #include "Features.hpp"
 #include "Device/Port/Listener.hpp"
@@ -35,7 +34,6 @@ Copyright_License {
 
 #include <array>
 #include <list>
-
 #include <tchar.h>
 
 namespace Cares { class Channel; }
@@ -106,5 +104,3 @@ private:
   void PortStateChanged() noexcept override;
   void PortError(const char *msg) noexcept override;
 };
-
-#endif

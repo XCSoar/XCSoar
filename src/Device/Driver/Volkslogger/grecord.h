@@ -15,8 +15,7 @@
 **
 ***********************************************************************/
 
-#ifndef GRECORD_H
-#define GRECORD_H
+#pragma once
 
 #include <stdint.h>
 #include <stdio.h>
@@ -76,5 +75,3 @@ x  x - Binärblock in GR64 konvertieren und anhängen
 
 void
 print_g_record(FILE *datei, const uint8_t *puffer, size_t puflen);
-
-#endif

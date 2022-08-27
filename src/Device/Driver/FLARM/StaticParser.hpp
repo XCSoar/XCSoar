@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_STATIC_PARSER_HPP
-#define XCSOAR_FLARM_STATIC_PARSER_HPP
+#pragma once
 
 /** \file 
  * Specific parsers for Flarm NMEA records.
@@ -81,5 +80,3 @@ ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, TimeStamp clock) noexcept;
  */
 void
 ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock) noexcept;
-
-#endif

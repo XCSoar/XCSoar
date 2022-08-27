@@ -15,8 +15,7 @@
 **
 ***********************************************************************/
 
-#ifndef DBBCONV_H
-#define DBBCONV_H
+#pragma once
 
 #include "Database.hpp"
 
@@ -113,5 +112,3 @@ public:
    */
   int fdf_findfield(uint8_t id) const;
 };
-
-#endif

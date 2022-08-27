@@ -15,13 +15,11 @@
 **
 ***********************************************************************/
 
-#ifndef VLCONV_H
-#define VLCONV_H
+#pragma once
 
 #include "time/BrokenDateTime.hpp"
 
 #include <vector>
-
 #include <stdio.h>
 #include <stdint.h>
 
@@ -112,5 +110,3 @@ struct DIRENTRY {
 bool
 conv_dir(std::vector<DIRENTRY> &flights,
          const uint8_t *src, size_t length);
-
-#endif
