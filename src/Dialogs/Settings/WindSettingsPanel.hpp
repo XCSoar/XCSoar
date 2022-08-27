@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_WIND_SETTINGS_PANEL_HPP
-#define XCSOAR_WIND_SETTINGS_PANEL_HPP
+#pragma once
 
 #include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Listener.hpp"
@@ -89,5 +88,3 @@ private:
   virtual void OnCalculatedUpdate(const MoreData &basic,
                                   const DerivedInfo &calculated) override;
 };
-
-#endif

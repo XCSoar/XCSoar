@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_VEGA_AUDIO_PARAMETERS
-#define XCSOAR_VEGA_AUDIO_PARAMETERS
+#pragma once
 
 #include "VegaParametersWidget.hpp"
 #include "Schemes.hpp"
@@ -118,5 +117,3 @@ public:
     AddEnum(names[4], _("Period scale"), NULL, pitch_and_period_scales);
   }
 };
-
-#endif

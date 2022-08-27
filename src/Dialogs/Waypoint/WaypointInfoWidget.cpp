@@ -73,7 +73,7 @@ WaypointInfoWidget::AddGlideResult(const TCHAR *label,
                                 result, settings.task.glide));
 }
 
-gcc_const
+[[gnu::const]]
 static BrokenTime
 BreakHourOfDay(double t) noexcept
 {
