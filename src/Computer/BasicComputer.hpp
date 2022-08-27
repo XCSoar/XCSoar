@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef BASIC_COMPUTER_HPP
-#define BASIC_COMPUTER_HPP
+#pragma once
 
 #include "GroundSpeedComputer.hpp"
 
@@ -61,5 +60,3 @@ public:
   void Compute(MoreData &data, const MoreData &last, const MoreData &last_gps,
                const DerivedInfo &calculated) noexcept;
 };
-
-#endif
