@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
 */
 
-#ifndef XCSOAR_PROTECTED_AIRSPACE_WARNING_MANAGER_HPP
-#define XCSOAR_PROTECTED_AIRSPACE_WARNING_MANAGER_HPP
+#pragma once
 
 #include "Engine/Airspace/Ptr.hpp"
 #include "thread/Guard.hpp"
@@ -61,5 +60,3 @@ public:
   [[gnu::pure]]
   std::optional<AirspaceWarning> GetTopWarning() const noexcept;
 };
-
-#endif
