@@ -33,7 +33,7 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
-gcc_pure
+[[gnu::pure]]
 __attribute__((always_inline))
 static inline NearestAirspace
 CalculateNearestAirspaceHorizontal(const GeoPoint &location,
@@ -47,14 +47,14 @@ CalculateNearestAirspaceHorizontal(const GeoPoint &location,
 }
 
 struct CompareNearestAirspace {
-  gcc_pure
+  [[gnu::pure]]
   bool operator()(const NearestAirspace &a, const NearestAirspace &b) const {
     return !b.IsDefined() || a.distance < b.distance;
   }
 };
 
 template<typename Predicate>
-gcc_pure
+[[gnu::pure]]
 static NearestAirspace
 FindHorizontal(const GeoPoint &location,
                const Airspaces &airspace_database,
@@ -69,7 +69,7 @@ FindHorizontal(const GeoPoint &location,
                      CompareNearestAirspace());
 }
 
-gcc_pure
+[[gnu::pure]]
 NearestAirspace
 NearestAirspace::FindHorizontal(const MoreData &basic,
                                 const ProtectedAirspaceWarningManager &airspace_warnings,
@@ -101,7 +101,7 @@ NearestAirspace::FindHorizontal(const MoreData &basic,
   }
 }
 
-gcc_pure
+[[gnu::pure]]
 NearestAirspace
 NearestAirspace::FindVertical(const MoreData &basic,
                       const DerivedInfo &calculated,
