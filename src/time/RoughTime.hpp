@@ -64,6 +64,12 @@ public:
   { 
   }
 
+  static constexpr TimeSinceMidnight
+  FromSinceMidnight(TimeStamp since_midnight) noexcept
+  {
+    return TimeSinceMidnight(std::chrono::floor<Duration>(since_midnight.ToDuration()));
+  }
+
   static constexpr TimeSinceMidnight Invalid() noexcept {
     return TimeSinceMidnight(INVALID);
   }
@@ -127,6 +133,10 @@ public:
 
     value = (value + MAX - Duration{1}) % MAX;
     return *this;
+  }
+
+  constexpr Duration operator-(TimeSinceMidnight other) const noexcept {
+    return value - other.value;
   }
 
   constexpr operator TimeStamp() const noexcept {
