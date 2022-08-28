@@ -77,7 +77,14 @@ TimesStatusPanel::Refresh() noexcept
   }
 
   if (flight.flight_time.count() > 0) {
-    SetText(FlightTime, FormatSignedTimeHHMM(flight.flight_time));
+    if (flight.takeoff_time.IsDefined() && flight.landing_time.IsDefined()) {
+      RoughTime rough_takeoff_time = RoughTime::FromSinceMidnight(flight.takeoff_time);
+      RoughTime rough_landing_time = RoughTime::FromSinceMidnight(flight.landing_time);
+      SetText(FlightTime, FormatSignedTimeHHMM(FloatDuration(rough_landing_time-rough_takeoff_time)));
+    }
+    else {
+      SetText(FlightTime, FormatSignedTimeHHMM(flight.flight_time));
+    }
   } else {
     ClearText(FlightTime);
   }
