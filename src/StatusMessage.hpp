@@ -23,10 +23,7 @@ Copyright_License {
 
 #pragma once
 
-#include "util/Compiler.h"
-
 #include <chrono>
-
 #include <tchar.h>
 
 /**
@@ -45,6 +42,6 @@ struct StatusMessage {
   std::chrono::steady_clock::duration delay;
 };
 
-gcc_pure
+[[gnu::pure]]
 const StatusMessage &
 FindStatusMessage(const TCHAR *key);
