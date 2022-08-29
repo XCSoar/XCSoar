@@ -59,7 +59,7 @@ struct TrafficDatabases {
   [[gnu::pure]]
   const TCHAR *FindNameById(FlarmId id) const;
 
-  gcc_pure gcc_nonnull_all
+  [[gnu::pure]] gcc_nonnull_all
   FlarmId FindIdByName(const TCHAR *name) const;
 
   /**
