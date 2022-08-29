@@ -52,7 +52,7 @@ public:
    * @param id FLARM id
    * @return FLARMNetRecord object
    */
-  gcc_pure
+  [[gnu::pure]]
   const FlarmNetRecord *FindRecordById(FlarmId id) const {
     auto i = map.find(id);
     return i != map.end()
