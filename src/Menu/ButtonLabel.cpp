@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -51,7 +51,7 @@ ButtonLabel::Destroy()
 /**
  * @return false if there is at least one ASCII letter in the string
  */
-gcc_pure
+[[gnu::pure]]
 static bool
 LacksAlphaASCII(const TCHAR *s)
 {
@@ -67,7 +67,7 @@ LacksAlphaASCII(const TCHAR *s)
  *
  * @return the translated string or nullptr if the buffer is too small
  */
-gcc_pure
+[[gnu::pure]]
 static const TCHAR *
 GetTextN(const TCHAR *src, const TCHAR *src_end,
          TCHAR *buffer, size_t buffer_size)
