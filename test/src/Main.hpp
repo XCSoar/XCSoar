@@ -174,7 +174,7 @@ protected:
 
 protected:
 #ifdef ENABLE_CLOSE_BUTTON
-  gcc_pure
+  [[gnu::pure]]
   PixelRect GetCloseButtonRect(PixelRect rc) const {
     rc.right -= 5;
     rc.left = rc.right - 120;
