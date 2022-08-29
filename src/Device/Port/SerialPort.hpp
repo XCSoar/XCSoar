@@ -76,7 +76,7 @@ protected:
    *
    * @return the number of bytes, or -1 on error
    */
-  gcc_pure
+  [[gnu::pure]]
   int GetDataQueued() const noexcept;
 
   /**
