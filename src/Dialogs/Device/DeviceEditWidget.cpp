@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -139,7 +139,7 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
   UpdateVisibilities();
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 SupportsBulkBaudRate(const DataField &df) noexcept
 {
@@ -154,7 +154,7 @@ SupportsBulkBaudRate(const DataField &df) noexcept
   return driver->SupportsBulkBaudRate();
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 CanReceiveSettings(const DataField &df) noexcept
 {
@@ -169,7 +169,7 @@ CanReceiveSettings(const DataField &df) noexcept
   return driver->CanReceiveSettings();
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 CanSendSettings(const DataField &df) noexcept
 {
@@ -184,7 +184,7 @@ CanSendSettings(const DataField &df) noexcept
   return driver->CanSendSettings();
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 CanPassThrough(const DataField &df) noexcept
 {
