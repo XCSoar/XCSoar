@@ -207,7 +207,7 @@ public:
    * values.  If the value does not exist, an empty string is
    * returned.
    */
-  gcc_pure
+  [[gnu::pure]]
   std::string GetLXNAVVarioSetting(const char *name) const noexcept;
 
   /**
@@ -240,7 +240,7 @@ public:
    * values.  If the value does not exist, an empty string is
    * returned.
    */
-  gcc_pure
+  [[gnu::pure]]
   std::string GetNanoSetting(const char *name) const noexcept;
 
 protected:
