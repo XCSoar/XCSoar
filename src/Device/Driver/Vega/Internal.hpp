@@ -63,7 +63,7 @@ public:
    * first element is a "found" flag, and if that is true, the second
    * element is the value.
    */
-  gcc_pure
+  [[gnu::pure]]
   std::optional<int> GetSetting(const char *name) const noexcept;
 
 protected:
