@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -45,7 +45,7 @@ class MatTaskAddWidget final
 
   StaticString<256> buffer;
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *MakeMessage(const Waypoint &wp) {
     buffer.Format(_T("%s\n%s"), wp.name.c_str(), _("Add this turn point?"));
     return buffer;
@@ -94,7 +94,7 @@ MatTaskAddWidget::OnAdd()
  * Does this waypoint exist already in the task?  A waypoint must not
  * be added twice to the task.
  */
-gcc_pure
+[[gnu::pure]]
 static bool
 IsInTask(const OrderedTask &task, const Waypoint &wp)
 {
@@ -105,7 +105,7 @@ IsInTask(const OrderedTask &task, const Waypoint &wp)
   return false;
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 IsInOrderedTask(const ProtectedTaskManager &task_manager, const Waypoint &wp)
 {
@@ -116,14 +116,14 @@ IsInOrderedTask(const ProtectedTaskManager &task_manager, const Waypoint &wp)
 /**
  * Is the current task point the finish point?
  */
-gcc_pure
+[[gnu::pure]]
 static bool
 FinishIsCurrent(const OrderedTask &task)
 {
   return task.GetActiveTaskPointIndex() + 1 == task.TaskSize();
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 FinishIsCurrent(const ProtectedTaskManager &task_manager)
 {
@@ -131,7 +131,7 @@ FinishIsCurrent(const ProtectedTaskManager &task_manager)
   return FinishIsCurrent(lease->GetOrderedTask());
 }
 
-gcc_pure
+[[gnu::pure]]
 static WaypointPtr
 FindMatTurnpoint()
 {
