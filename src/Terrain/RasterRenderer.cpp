@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -82,14 +82,14 @@ TerrainShading(const int illum, RGB8Color color)
     return RawColor(color.Red(), color.Green(), color.Blue());
 }
 
-gcc_const
+[[gnu::const]]
 static unsigned
 ContourInterval(const unsigned h, const unsigned contour_height_scale)
 {
   return std::min(254u, h >> contour_height_scale);
 }
 
-gcc_const
+[[gnu::const]]
 static unsigned
 ContourInterval(const TerrainHeight h, const unsigned contour_height_scale)
 {
@@ -117,7 +117,7 @@ RasterRenderer::~RasterRenderer()
 
 #ifdef ENABLE_OPENGL
 
-gcc_pure
+[[gnu::pure]]
 static unsigned
 GetQuantisation()
 {
@@ -284,14 +284,14 @@ RasterRenderer::GenerateUnshadedImage(unsigned height_scale,
  * GenerateSlopeImage() formula when the map file is broken, avoiding
  * the sqrt() call with a negative argument.
  */
-gcc_const
+[[gnu::const]]
 static int
 ClipHeightDelta(int d)
 {
   return Clamp(d, -512, 512);
 }
 
-gcc_const
+[[gnu::const]]
 static int
 ClipHeightDelta(TerrainHeight a, TerrainHeight b)
 {
