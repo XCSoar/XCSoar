@@ -61,7 +61,7 @@ public:
 	/**
 	 * Returns the name of the slave pseudo-terminal.  Not thread-safe!
 	 */
-	gcc_pure
+	[[gnu::pure]]
 	const char *GetSlaveName() const noexcept {
 		return ptsname(Get());
 	}
