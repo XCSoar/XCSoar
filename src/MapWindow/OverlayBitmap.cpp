@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -101,7 +101,7 @@ ToArrayQuadrilateral(const GeoQuadrilateral q) noexcept
 /**
  * Clip the quadrilateral inside the screen bounds.
  */
-gcc_pure
+[[gnu::pure]]
 static ClippedMultiPolygon
 Clip(const GeoQuadrilateral &_geo, const GeoBounds &_bounds) noexcept
 {
@@ -120,7 +120,7 @@ Clip(const GeoQuadrilateral &_geo, const GeoBounds &_bounds) noexcept
   return clipped;
 }
 
-gcc_pure
+[[gnu::pure]]
 static DoublePoint2D
 MapInQuadrilateral(const GeoQuadrilateral &q, const GeoPoint p) noexcept
 {
