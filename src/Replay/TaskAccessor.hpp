@@ -56,7 +56,7 @@ public:
     return task_manager.GetOrderedTask().GetStats().start.task_started;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint GetRandomOZPoint(unsigned index, const double noise) const {
     return task_manager.RandomPointInTask(index, noise);
   }
@@ -87,7 +87,7 @@ public:
     return task_manager.GetStats().current_leg;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   double GetTargetHeight() const {
     if (task_manager.GetActiveTaskPoint())
       return std::max(floor_alt,
