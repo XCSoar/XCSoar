@@ -648,7 +648,7 @@ location=5
 
 mode=Config3
 type=key
-data=7
+data=8
 event=Logger nmea
 label=Raw Logger$(CheckLogger)
 location=6
@@ -659,7 +659,7 @@ data=7
 event=RunLuaFile
 event=Mode default
 label=Lua
-location=6
+location=7
 
 mode=Config3
 type=key
