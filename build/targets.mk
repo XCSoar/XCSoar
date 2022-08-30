@@ -144,6 +144,9 @@ ifeq ($(TARGET),FUZZER)
   FUZZER = y
   CLANG = y
   VFB = y
+
+  # Debian builds libfuzzer with GCC's libstdc++ instead of LLVM's libc++
+  LIBCXX = n
 endif
 
 ifeq ($(TARGET),UNIX)
