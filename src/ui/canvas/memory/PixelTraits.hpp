@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_PIXEL_TRAITS_HPP
-#define XCSOAR_SCREEN_PIXEL_TRAITS_HPP
+#pragma once
 
 #include "Concepts.hpp"
 #include "ui/canvas/PortableColor.hpp"
@@ -32,7 +31,6 @@ Copyright_License {
 #include "util/OffsetPointer.hxx"
 
 #include <algorithm>
-
 #include <string.h>
 
 /**
@@ -390,7 +388,7 @@ struct BGRAPixelTraits {
 #if defined(__GNUC__) && defined(__x86_64__)
     const uint64_t cl = (uint64_t(ci) << 32) | uint64_t(ci);
 
-    gcc_unused size_t dummy0, dummy1;
+    [[maybe_unused]] size_t dummy0, dummy1;
     asm volatile("cld\n"
 
                  /* n /= 2 (remainder is moved to the "Carry Flag") */
@@ -438,7 +436,5 @@ struct BGRAPixelTraits {
       f(p);
   }
 };
-
-#endif
 
 #endif
