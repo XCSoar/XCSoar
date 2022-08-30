@@ -1,4 +1,6 @@
 Version 7.26 - not yet released
+* Kobo
+  - fix crash bug
 
 Version 7.25 - 2022/08/24
 * stricter airspace parser
