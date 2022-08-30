@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,9 +31,9 @@ Copyright_License {
 #include <stringapiset.h>
 #endif
 
-#define IMI_SECONDS_IN_MINUTE       (60)
-#define IMI_SECONDS_IN_HOUR      (60*60)
-#define IMI_SECONDS_IN_DAY    (24*60*60)
+static constexpr unsigned IMI_SECONDS_IN_MINUTE = 60;
+static constexpr unsigned IMI_SECONDS_IN_HOUR = 60*60;
+static constexpr unsigned IMI_SECONDS_IN_DAY = 24*60*60;
 
 void
 IMI::ConvertToChar(const TCHAR* unicode, char* ascii, int outSize)
