@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -75,7 +75,7 @@ InputEvents::eventAirSpace(const TCHAR *misc)
 // ClearAirspaceWarnings
 // Clears airspace warnings for the selected airspace
 void
-InputEvents::eventClearAirspaceWarnings(gcc_unused const TCHAR *misc)
+InputEvents::eventClearAirspaceWarnings([[maybe_unused]] const TCHAR *misc)
 {
   ProtectedAirspaceWarningManager *airspace_warnings = GetAirspaceWarnings();
   if (airspace_warnings != NULL)
@@ -90,7 +90,7 @@ InputEvents::eventClearAirspaceWarnings(gcc_unused const TCHAR *misc)
 // to the nearest exit to the airspace.
 
 void 
-InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
+InputEvents::eventNearestAirspaceDetails([[maybe_unused]] const TCHAR *misc)
 {
   const MoreData &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
