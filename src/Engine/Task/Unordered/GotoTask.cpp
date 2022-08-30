@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -67,9 +67,9 @@ GotoTask::SetActiveTaskPoint(unsigned index) noexcept
 
 
 bool
-GotoTask::UpdateSample(gcc_unused const AircraftState &state,
-                       gcc_unused const GlidePolar &glide_polar,
-                       gcc_unused bool full_update) noexcept
+GotoTask::UpdateSample([[maybe_unused]] const AircraftState &state,
+                       [[maybe_unused]] const GlidePolar &glide_polar,
+                       [[maybe_unused]] bool full_update) noexcept
 {
   return false; // nothing to do
 }
