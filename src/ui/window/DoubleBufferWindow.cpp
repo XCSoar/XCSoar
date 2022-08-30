@@ -47,8 +47,10 @@ DoubleBufferWindow::OnDestroy()
 }
 
 void
-DoubleBufferWindow::Flip() noexcept
+DoubleBufferWindow::Repaint() noexcept
 {
+  OnPaintBuffer(GetPaintCanvas());
+
   /* enable the drawing buffer */
   {
     const std::lock_guard<Mutex> lock(mutex);

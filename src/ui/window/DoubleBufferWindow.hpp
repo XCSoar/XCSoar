@@ -71,12 +71,6 @@ private:
     return buffers[current];
   }
 
-  /**
-   * Marks the hidden Canvas as "done" and schedules it for painting
-   * to the Window.
-   */
-  void Flip() noexcept;
-
 protected:
   /**
    * Returns the Canvas which is currently visible.  A call to this
@@ -93,10 +87,13 @@ protected:
   virtual void OnPaintBuffer(Canvas &canvas) noexcept = 0;
 
 public:
-  void Repaint() noexcept {
-    OnPaintBuffer(GetPaintCanvas());
-    Flip();
-  }
+  /**
+   * Repaint via virtual method OnPaintBuffer() into the current
+   * buffer and flip it.
+   *
+   * This method is thread-safe.
+   */
+  void Repaint() noexcept;
 };
 
 #endif
