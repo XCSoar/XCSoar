@@ -42,7 +42,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Widget/ListWidget.hpp"
 #include "UIGlobals.hpp"
-#include "util/Compiler.h"
 #include "Audio/Sound.hpp"
 
 #include <algorithm>
@@ -204,7 +203,7 @@ AirspaceWarningListWidget::Hide() noexcept
 }
 
 void
-AirspaceWarningListWidget::OnActivateItem(gcc_unused unsigned i) noexcept
+AirspaceWarningListWidget::OnActivateItem([[maybe_unused]] unsigned i) noexcept
 {
   if (selected_airspace != nullptr)
     dlgAirspaceDetails(selected_airspace, &airspace_warnings);
