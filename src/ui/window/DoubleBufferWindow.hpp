@@ -84,6 +84,13 @@ protected:
   virtual void OnCreate() override;
   virtual void OnDestroy() override;
   virtual void OnPaint(Canvas &canvas) override;
+
+  /**
+   * Paint into the given #Canvas.  This is called from the thread
+   * that called Repaint().  The caller holds the mutex lock, and this
+   * method may (temporarily) unlock it for expensive drawing
+   * operations.
+   */
   virtual void OnPaintBuffer(Canvas &canvas) noexcept = 0;
 
 public:
