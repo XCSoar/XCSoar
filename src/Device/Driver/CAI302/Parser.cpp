@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ $PCAIB,<1>,<2>,<CR><LF>
 <2> Destination Navpoint attribute word, format XXXXX (leading zeros will be transmitted)
 */
 static bool
-cai_PCAIB(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
+cai_PCAIB([[maybe_unused]] NMEAInputLine &line, [[maybe_unused]] NMEAInfo &info)
 {
   return true;
 }

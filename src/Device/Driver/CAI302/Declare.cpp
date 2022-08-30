@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -66,7 +66,7 @@ cai302DeclAddWaypoint(Port &port, int DeclIndex, const Waypoint &way_point,
 
 static bool
 DeclareInner(Port &port, const Declaration &declaration,
-             gcc_unused OperationEnvironment &env)
+             [[maybe_unused]] OperationEnvironment &env)
 {
   using CAI302::UploadShort;
   unsigned size = declaration.Size();
@@ -124,7 +124,7 @@ DeclareInner(Port &port, const Declaration &declaration,
 
 bool
 CAI302Device::Declare(const Declaration &declaration,
-                      gcc_unused const Waypoint *home,
+                      [[maybe_unused]] const Waypoint *home,
                       OperationEnvironment &env)
 {
   UploadMode(env);
