@@ -80,13 +80,11 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Task/ProtectedTaskManager.hpp"
 #include "UtilsSettings.hpp"
 #include "PageActions.hpp"
-#include "util/Compiler.h"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Simulator.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/MultipleDevices.hpp"
-
 #include "Form/DataField/File.hpp"
 #include "Dialogs/FilePicker.hpp"
 #include "contest/weglide/UploadIGCFile.hpp"
@@ -283,7 +281,7 @@ InputEvents::eventScreenModes(const TCHAR *misc)
 // ClearStatusMessages
 // Do Clear Event Warnings
 void
-InputEvents::eventClearStatusMessages(gcc_unused const TCHAR *misc)
+InputEvents::eventClearStatusMessages([[maybe_unused]] const TCHAR *misc)
 {
   // TODO enhancement: allow selection of specific messages (here we are acknowledging all)
   if (CommonInterface::main_window->popup != nullptr)
@@ -306,7 +304,7 @@ InputEvents::eventMode(const TCHAR *misc)
 
 // Don't think we need this.
 void
-InputEvents::eventMainMenu(gcc_unused const TCHAR *misc)
+InputEvents::eventMainMenu([[maybe_unused]] const TCHAR *misc)
 {
   // todo: popup main menu
 }
@@ -315,7 +313,7 @@ InputEvents::eventMainMenu(gcc_unused const TCHAR *misc)
 // Displays the checklist dialog
 //  See the checklist dialog section of the reference manual for more info.
 void
-InputEvents::eventChecklist(gcc_unused const TCHAR *misc)
+InputEvents::eventChecklist([[maybe_unused]] const TCHAR *misc)
 {
   dlgChecklistShowModal();
 }
@@ -346,7 +344,7 @@ InputEvents::eventStatus(const TCHAR *misc)
 //  See the analysis dialog section of the reference manual
 // for more info.
 void
-InputEvents::eventAnalysis(gcc_unused const TCHAR *misc)
+InputEvents::eventAnalysis([[maybe_unused]] const TCHAR *misc)
 {
   dlgAnalysisShowModal(*CommonInterface::main_window,
                        CommonInterface::main_window->GetLook(),
@@ -501,7 +499,7 @@ InputEvents::eventLogger(const TCHAR *misc)
 // Repeats the last status message.  If pressed repeatedly, will
 // repeat previous status messages
 void
-InputEvents::eventRepeatStatusMessage(gcc_unused const TCHAR *misc)
+InputEvents::eventRepeatStatusMessage([[maybe_unused]] const TCHAR *misc)
 {
   // new interface
   // TODO enhancement: display only by type specified in misc field
@@ -512,7 +510,7 @@ InputEvents::eventRepeatStatusMessage(gcc_unused const TCHAR *misc)
 // NearestWaypointDetails
 // Displays the waypoint details dialog
 void
-InputEvents::eventNearestWaypointDetails(gcc_unused const TCHAR *misc)
+InputEvents::eventNearestWaypointDetails([[maybe_unused]] const TCHAR *misc)
 {
   const auto location = GetVisibleLocation();
   if (!location.IsValid())
@@ -525,7 +523,7 @@ InputEvents::eventNearestWaypointDetails(gcc_unused const TCHAR *misc)
 // NearestMapItems
 // Displays the map item list dialog
 void
-InputEvents::eventNearestMapItems(gcc_unused const TCHAR *misc)
+InputEvents::eventNearestMapItems([[maybe_unused]] const TCHAR *misc)
 {
   const auto location = GetVisibleLocation();
   if (!location.IsValid())
@@ -538,13 +536,13 @@ InputEvents::eventNearestMapItems(gcc_unused const TCHAR *misc)
 // The null event does nothing.  This can be used to override
 // default functionality
 void
-InputEvents::eventNull(gcc_unused const TCHAR *misc)
+InputEvents::eventNull([[maybe_unused]] const TCHAR *misc)
 {
   // do nothing
 }
 
 void
-InputEvents::eventBeep(gcc_unused const TCHAR *misc)
+InputEvents::eventBeep([[maybe_unused]] const TCHAR *misc)
 {
 #ifdef _WIN32
   MessageBeep(MB_ICONEXCLAMATION);
@@ -595,7 +593,7 @@ InputEvents::eventSetup(const TCHAR *misc)
 }
 
 void
-InputEvents::eventCredits(gcc_unused const TCHAR *misc)
+InputEvents::eventCredits([[maybe_unused]] const TCHAR *misc)
 {
   dlgCreditsShowModal(*CommonInterface::main_window);
 }
@@ -622,13 +620,13 @@ InputEvents::eventRun(const TCHAR *misc)
 }
 
 void
-InputEvents::eventBrightness(gcc_unused const TCHAR *misc)
+InputEvents::eventBrightness([[maybe_unused]] const TCHAR *misc)
 {
   // not implemented (was only implemented on Altair)
 }
 
 void
-InputEvents::eventExit(gcc_unused const TCHAR *misc)
+InputEvents::eventExit([[maybe_unused]] const TCHAR *misc)
 {
   UIActions::SignalShutdown(false);
 }
@@ -726,7 +724,7 @@ InputEvents::eventWeather(const TCHAR *misc)
 }
 
 void
-InputEvents::eventQuickMenu(gcc_unused const TCHAR *misc)
+InputEvents::eventQuickMenu([[maybe_unused]] const TCHAR *misc)
 {
  dlgQuickMenuShowModal(*CommonInterface::main_window);
 }
