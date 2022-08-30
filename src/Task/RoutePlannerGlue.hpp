@@ -29,12 +29,10 @@ class RasterTerrain;
 class ProtectedAirspaceWarningManager;
 
 class RoutePlannerGlue {
-  const RasterTerrain *terrain;
+  const RasterTerrain *terrain = nullptr;
   AirspaceRoute planner;
 
 public:
-  RoutePlannerGlue():terrain(nullptr) {}
-
   void SetTerrain(const RasterTerrain *terrain);
 
   void UpdatePolar(const GlideSettings &settings,
