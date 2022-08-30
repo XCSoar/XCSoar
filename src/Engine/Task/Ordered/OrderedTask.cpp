@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -35,11 +35,9 @@
 #include "Task/Solvers/TaskGlideRequired.hpp"
 #include "Task/Solvers/TaskOptTarget.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
-
 #include "Task/Factory/Create.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/Factory/Constraints.hpp"
-
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
 #include "Geo/GeoBounds.hpp"
@@ -636,8 +634,8 @@ OrderedTask::UpdateIdle(const AircraftState &state,
 
 bool
 OrderedTask::UpdateSample(const AircraftState &state,
-                          gcc_unused const GlidePolar &glide_polar,
-                          gcc_unused const bool full_update) noexcept
+                          [[maybe_unused]] const GlidePolar &glide_polar,
+                          [[maybe_unused]] const bool full_update) noexcept
 {
   assert(state.location.IsValid());
 
@@ -1404,7 +1402,7 @@ OrderedTask::IsScored() const noexcept
 }
 
 std::vector<TaskFactoryType>
-OrderedTask::GetFactoryTypes(gcc_unused bool all) const
+OrderedTask::GetFactoryTypes([[maybe_unused]] bool all) const
 {
   /// @todo: check transform types if all=false
   std::vector<TaskFactoryType> f_list;
