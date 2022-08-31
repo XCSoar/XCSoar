@@ -309,6 +309,19 @@ File::Exists(Path path) noexcept
 #endif
 }
 
+bool
+File::IsCharDev(const char *path) noexcept
+{
+#ifdef HAVE_POSIX
+  struct stat st;
+  return stat(path, &st) == 0 && S_ISCHR(st.st_mode);
+#else
+  DWORD attributes = GetFileAttributes(path.c_str());
+  return attributes != INVALID_FILE_ATTRIBUTES &&
+     (attributes & FILE_ATTRIBUTE_DEVICE) != 0;
+#endif
+}
+
 #if defined(_WIN32) && defined(UNICODE)
 
 bool

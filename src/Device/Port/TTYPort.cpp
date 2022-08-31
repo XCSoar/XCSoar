@@ -27,13 +27,12 @@ Copyright_License {
 #include "io/UniqueFileDescriptor.hxx"
 #include "system/Error.hxx"
 #include "system/TTYDescriptor.hxx"
+#include "system/FileUtil.hpp"
 #include "event/Call.hxx"
 #include "util/StringFormat.hpp"
 
 #include <system_error>
 #include <boost/system/system_error.hpp>
-
-#include <sys/stat.h>
 #include <termios.h>
 
 #include <cassert>
@@ -42,6 +41,8 @@ Copyright_License {
 #include <stdlib.h>
 #include <errno.h>
 #include <windef.h> // for MAX_PATH
+
+using namespace File;
 
 static constexpr unsigned
 speed_t_to_baud_rate(speed_t speed) noexcept
@@ -180,16 +181,6 @@ TTYPort::Drain()
   const TTYDescriptor tty(socket.GetFileDescriptor());
   return tty.Drain();
 }
-
-#ifndef __APPLE__
-[[gnu::pure]]
-static bool
-IsCharDev(const char *path) noexcept
-{
-  struct stat st;
-  return stat(path, &st) == 0 && S_ISCHR(st.st_mode);
-}
-#endif
 
 void
 TTYPort::Open(const TCHAR *path, unsigned baud_rate)
