@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -204,8 +204,8 @@ FillAndroidBluetoothPorts(DataFieldEnum &df,
 }
 
 static void
-FillAndroidUsbSerialPorts(DataFieldEnum &df,
-                          const DeviceConfig &config) noexcept
+FillAndroidUsbSerialPorts([[maybe_unused]] DataFieldEnum &df,
+                          [[maybe_unused]] const DeviceConfig &config) noexcept
 {
 #ifdef ANDROID
   if (config.port_type == DeviceConfig::PortType::ANDROID_USB_SERIAL &&
@@ -215,7 +215,7 @@ FillAndroidUsbSerialPorts(DataFieldEnum &df,
 }
 
 static void
-FillAndroidIOIOPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
+FillAndroidIOIOPorts([[maybe_unused]] DataFieldEnum &df, [[maybe_unused]] const DeviceConfig &config) noexcept
 {
 #if defined(ANDROID)
   df.EnableItemHelp(true);

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -121,7 +121,7 @@ bool
 AbortTask::FillReachable(const AircraftState &state,
                          AlternateList &approx_waypoints,
                          const GlidePolar &polar, bool only_airfield,
-                         bool final_glide, bool safety) noexcept
+                         bool final_glide, [[maybe_unused]] bool safety) noexcept
 {
   if (IsTaskFull() || approx_waypoints.empty())
     return false;
@@ -187,8 +187,8 @@ AbortTask::FillReachable(const AircraftState &state,
 }
 
 void
-AbortTask::ClientUpdate(const AircraftState &state_now,
-                        bool reachable) noexcept
+AbortTask::ClientUpdate([[maybe_unused]] const AircraftState &state_now,
+                        [[maybe_unused]] bool reachable) noexcept
 {
   // nothing to do here, it's specialisations that may use this
 }
@@ -196,7 +196,7 @@ AbortTask::ClientUpdate(const AircraftState &state_now,
 bool
 AbortTask::UpdateSample(const AircraftState &state,
                         const GlidePolar &glide_polar,
-                        bool full_update) noexcept
+                        [[maybe_unused]] bool full_update) noexcept
 {
   assert(state.location.IsValid());
 
@@ -280,7 +280,7 @@ AbortTask::GetHome() const noexcept
 }
 
 GeoVector
-AbortTask::GetHomeVector(const AircraftState &state) const noexcept
+AbortTask::GetHomeVector([[maybe_unused]] const AircraftState &state) const noexcept
 {
   const auto home_waypoint = GetHome();
   if (home_waypoint)

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -78,7 +78,7 @@ public:
 
 bool
 ATR833Device::DataReceived(std::span<const std::byte>,
-                           NMEAInfo &info) noexcept
+                           [[maybe_unused]] NMEAInfo &info) noexcept
 {
   // actually made no use of radio information
   // TODO: interpret data delivered by ATR833 to display Radio settings...
@@ -87,7 +87,7 @@ ATR833Device::DataReceived(std::span<const std::byte>,
 
 bool
 ATR833Device::PutActiveFrequency(RadioFrequency frequency,
-                                 const TCHAR *name,
+                                 [[maybe_unused]] const TCHAR *name,
                                  OperationEnvironment &env)
 {
   ATRBuffer buffer(SETACTIVE);
@@ -100,7 +100,7 @@ ATR833Device::PutActiveFrequency(RadioFrequency frequency,
 
 bool
 ATR833Device::PutStandbyFrequency(RadioFrequency frequency,
-                                  const TCHAR *name,
+                                  [[maybe_unused]] const TCHAR *name,
                                   OperationEnvironment &env)
 {
   ATRBuffer buffer(SETSTANDBY);
@@ -111,7 +111,7 @@ ATR833Device::PutStandbyFrequency(RadioFrequency frequency,
 }
 
 static Device *
-ATR833CreateOnPort(const DeviceConfig &config, Port &com_port)
+ATR833CreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 {
   return new ATR833Device(com_port);
 }

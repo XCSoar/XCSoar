@@ -203,7 +203,7 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
 }
 
 void
-InputEvents::eventPilotEvent(const TCHAR *misc)
+InputEvents::eventPilotEvent([[maybe_unused]] const TCHAR *misc)
 {
   // Configure start window
   const OrderedTaskSettings &ots =
@@ -395,7 +395,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
 }
 
 void
-InputEvents::eventWaypointEditor(const TCHAR *misc)
+InputEvents::eventWaypointEditor([[maybe_unused]] const TCHAR *misc)
 {
   dlgConfigWaypointsShowModal();
 }
@@ -730,19 +730,19 @@ InputEvents::eventQuickMenu([[maybe_unused]] const TCHAR *misc)
 }
 
 void
-InputEvents::eventFileManager(const TCHAR *misc)
+InputEvents::eventFileManager([[maybe_unused]] const TCHAR *misc)
 {
   ShowFileManager();
 }
 
 void
-InputEvents::eventExchangeFrequencies(const TCHAR *misc)
+InputEvents::eventExchangeFrequencies([[maybe_unused]] const TCHAR *misc)
 {
   XCSoarInterface::ExchangeRadioFrequencies(true);
 }
 
 void
-InputEvents::eventUploadIGCFile(const TCHAR *misc) {
+InputEvents::eventUploadIGCFile([[maybe_unused]] const TCHAR *misc) {
   FileDataField df;
   df.ScanMultiplePatterns(_T("*.igc\0"));
   df.SetFileType(FileType::IGC);

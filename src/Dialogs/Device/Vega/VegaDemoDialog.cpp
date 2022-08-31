@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -94,7 +94,7 @@ VegaDemoWidget::OnModified(DataField &df) noexcept
 }
 
 void
-VegaDemoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+VegaDemoWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
 {
   AddFloat(_("TE vario"),
            _("This produces a fake TE vario gross vertical velocity.  It can be used when in circling mode to demonstrate the lift tones.  When not in circling mode, set this to a realistic negative value so speed command tones are produced."),

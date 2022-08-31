@@ -323,7 +323,7 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
 #ifdef HAVE_RUN_FILE
                                       TextRowRenderer &row_renderer,
 #endif
-                                      const Waypoint &waypoint) noexcept
+                                      [[maybe_unused]] const Waypoint &waypoint) noexcept
 {
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();

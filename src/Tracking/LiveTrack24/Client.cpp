@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -84,7 +84,7 @@ Client::GetUserID(const TCHAR *username, const TCHAR *password)
 
 Co::Task<void>
 Client::StartTracking(SessionID session, const TCHAR *username,
-                      const TCHAR *password, unsigned tracking_interval,
+                      const TCHAR *password, [[maybe_unused]] unsigned tracking_interval,
                       VehicleType vtype, const TCHAR *vname)
 {
   // http://www.livetrack24.com/track.php?leolive=2&sid=42664778&pid=1&

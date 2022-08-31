@@ -334,7 +334,7 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
 }
 
 void
-InputEvents::eventResetTask(const TCHAR *misc)
+InputEvents::eventResetTask([[maybe_unused]] const TCHAR *misc)
 {
   if (protected_task_manager == nullptr)
     return;

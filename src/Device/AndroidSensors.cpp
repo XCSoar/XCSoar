@@ -129,22 +129,22 @@ DeviceDescriptor::OnAccelerationSensor(double acceleration) noexcept
 }
 
 void
-DeviceDescriptor::OnAccelerationSensor(float ddx, float ddy,
-                                       float ddz) noexcept
+DeviceDescriptor::OnAccelerationSensor([[maybe_unused]] float ddx, [[maybe_unused]] float ddy,
+                                       [[maybe_unused]] float ddz) noexcept
 {
   // TODO
 }
 
 void
-DeviceDescriptor::OnRotationSensor(float dtheta_x, float dtheta_y,
-                                   float dtheta_z) noexcept
+DeviceDescriptor::OnRotationSensor([[maybe_unused]] float dtheta_x, [[maybe_unused]] float dtheta_y,
+                                   [[maybe_unused]] float dtheta_z) noexcept
 {
   // TODO
 }
 
 void
-DeviceDescriptor::OnMagneticFieldSensor(float h_x, float h_y,
-                                        float h_z) noexcept
+DeviceDescriptor::OnMagneticFieldSensor([[maybe_unused]] float h_x, [[maybe_unused]] float h_y,
+                                        [[maybe_unused]] float h_z) noexcept
 {
   // TODO
 }
@@ -348,7 +348,7 @@ DeviceDescriptor::OnVoltageValues(int temp_adc, unsigned voltage_index,
 
 void
 DeviceDescriptor::OnNunchukValues(int joy_x, int joy_y,
-                                  int acc_x, int acc_y, int acc_z,
+                                  [[maybe_unused]] int acc_x, [[maybe_unused]] int acc_y, int acc_z,
                                   int switches) noexcept
 {
   // Nunchuk really connected  ?

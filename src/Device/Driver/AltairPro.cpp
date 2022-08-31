@@ -321,7 +321,7 @@ AltairProDevice::PutTurnPoint(const char *propertyName,
 }
 
 static Device *
-AltairProCreateOnPort(const DeviceConfig &config, Port &com_port)
+AltairProCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 {
   return new AltairProDevice(com_port);
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@ jas_zzip_read(jas_stream_obj_t *obj, char *buf, unsigned cnt)
 }
 
 static int
-jas_zzip_write(jas_stream_obj_t *obj, const char *buf, unsigned cnt)
+jas_zzip_write([[maybe_unused]] jas_stream_obj_t *obj, [[maybe_unused]] const char *buf, [[maybe_unused]] unsigned cnt)
 {
   return -1;
 }

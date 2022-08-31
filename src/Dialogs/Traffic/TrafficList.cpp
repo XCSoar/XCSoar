@@ -306,24 +306,24 @@ public:
                            unsigned idx) noexcept override;
 
   /* virtual methods from ListCursorHandler */
-  virtual void OnCursorMoved(unsigned index) noexcept override {
+  virtual void OnCursorMoved([[maybe_unused]] unsigned index) noexcept override {
     UpdateButtons();
   }
 
-  virtual bool CanActivateItem(unsigned index) const noexcept override {
+  virtual bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
     return true;
   }
 
   virtual void OnActivateItem(unsigned index) noexcept override;
 
   /* virtual methods from DataFieldListener */
-  void OnModified(DataField &df) noexcept override {
+  void OnModified([[maybe_unused]] DataField &df) noexcept override {
     UpdateList();
   }
 
 private:
   /* virtual methods from BlackboardListener */
-  virtual void OnGPSUpdate(const MoreData &basic) override {
+  virtual void OnGPSUpdate([[maybe_unused]] const MoreData &basic) override {
     UpdateVolatile();
   }
 };
@@ -339,8 +339,8 @@ public:
     listener = _listener;
   }
 
-  void Prepare(ContainerWindow &parent,
-               const PixelRect &rc) noexcept override {
+  void Prepare([[maybe_unused]] ContainerWindow &parent,
+               [[maybe_unused]] const PixelRect &rc) noexcept override {
     PrefixDataField *callsign_df = new PrefixDataField(_T(""), listener);
     Add(_("Competition ID"), nullptr, callsign_df);
   }
@@ -358,8 +358,8 @@ public:
     list = _list;
   }
 
-  void Prepare(ContainerWindow &parent,
-               const PixelRect &rc) noexcept override {
+  void Prepare([[maybe_unused]] ContainerWindow &parent,
+               [[maybe_unused]] const PixelRect &rc) noexcept override {
     AddButton(_("Details"), [this](){ list->OpenDetails(); });
     AddButton(_("Map"), [this](){ list->OpenMap(); });
     AddButton(_("Close"), dialog.MakeModalResultCallback(mrCancel));

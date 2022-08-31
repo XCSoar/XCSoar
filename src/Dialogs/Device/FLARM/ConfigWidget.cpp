@@ -100,8 +100,8 @@ GetUnsignedValue(const FlarmDevice &device, const char *name,
 }
 
 void
-FLARMConfigWidget::Prepare(ContainerWindow &parent,
-                           const PixelRect &rc) noexcept
+FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                           [[maybe_unused]] const PixelRect &rc) noexcept
 {
   RequestAllSettings(device);
 

@@ -60,7 +60,7 @@ GotoTask::IsValidTaskPoint(const int index_offset) const noexcept
 
 
 void 
-GotoTask::SetActiveTaskPoint(unsigned index) noexcept
+GotoTask::SetActiveTaskPoint([[maybe_unused]] unsigned index) noexcept
 {
   // nothing to do
 }

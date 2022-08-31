@@ -282,10 +282,10 @@ public:
   bool DataReceived(std::span<const std::byte> s,
                     struct NMEAInfo &info) noexcept override;
 
-  void OnSensorUpdate(const MoreData &basic) override {}
+  void OnSensorUpdate([[maybe_unused]] const MoreData &basic) override {}
 
-  void OnCalculatedUpdate(const MoreData &basic,
-                          const DerivedInfo &calculated) override {}
+  void OnCalculatedUpdate([[maybe_unused]] const MoreData &basic,
+                          [[maybe_unused]] const DerivedInfo &calculated) override {}
 };
 
 /**

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -476,7 +476,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 }
 
 void
-DeviceListWidget::OnCursorMoved(unsigned index) noexcept
+DeviceListWidget::OnCursorMoved([[maybe_unused]] unsigned index) noexcept
 {
   UpdateButtons();
 }
@@ -719,7 +719,7 @@ DeviceListWidget::DebugCurrent()
 }
 
 void
-DeviceListWidget::OnGPSUpdate(const MoreData &basic)
+DeviceListWidget::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
 {
   if (RefreshList())
     UpdateButtons();

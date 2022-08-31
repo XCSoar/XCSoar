@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -89,7 +89,7 @@ Canvas::InvertRectangle(PixelRect r)
 
 template<typename Canvas, typename PixelOperations>
 static void
-DrawPolyline(Canvas &canvas, PixelOperations operations, const Pen &pen,
+DrawPolyline(Canvas &canvas, [[maybe_unused]] PixelOperations operations, const Pen &pen,
              const BulkPixelPoint *lppt, unsigned n_points,
              bool loop)
 {
@@ -646,7 +646,7 @@ Canvas::DrawRoundRectangle(PixelRect r, PixelSize ellipse_size) noexcept
 void
 Canvas::AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
                    ConstImageBuffer src,
-                   PixelPoint src_position, PixelSize src_size,
+                   PixelPoint src_position, [[maybe_unused]] PixelSize src_size,
                    uint8_t alpha)
 {
   // TODO: support scaling
@@ -675,7 +675,7 @@ Canvas::AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
 void
 Canvas::AlphaBlendNotWhite(PixelPoint dest_position, PixelSize dest_size,
                            ConstImageBuffer src,
-                           PixelPoint src_position, PixelSize src_size,
+                           PixelPoint src_position, [[maybe_unused]] PixelSize src_size,
                            uint8_t alpha)
 {
   // TODO: support scaling

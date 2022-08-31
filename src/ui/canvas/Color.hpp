@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_COLOR_HPP
-#define XCSOAR_SCREEN_COLOR_HPP
+#pragma once
 
 // IWYU pragma: begin_exports
 #ifdef ENABLE_OPENGL
@@ -98,7 +97,7 @@ Color
 Desaturate(Color c) noexcept;
 
 constexpr Color
-ColorWithAlpha(const Color &c, uint8_t a) noexcept
+ColorWithAlpha(const Color &c, [[maybe_unused]] uint8_t a) noexcept
 {
 #ifdef ENABLE_OPENGL
   return c.WithAlpha(a);
@@ -106,5 +105,3 @@ ColorWithAlpha(const Color &c, uint8_t a) noexcept
   return c;
 #endif
 }
-
-#endif

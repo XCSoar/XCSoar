@@ -116,7 +116,7 @@ public:
   /* virtual methods from ListCursorHandler */
   void OnCursorMoved(unsigned index) noexcept override;
 
-  bool CanActivateItem(unsigned index) const noexcept override {
+  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
     return true;
   }
 

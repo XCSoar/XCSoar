@@ -173,7 +173,7 @@ ShowAnalysisBarograph() noexcept
 }
 
 static std::unique_ptr<Widget>
-LoadAnalysisBarographPanel(unsigned id) noexcept
+LoadAnalysisBarographPanel([[maybe_unused]] unsigned id) noexcept
 {
   return std::make_unique<CallbackWidget>(ShowAnalysisBarograph);
 }

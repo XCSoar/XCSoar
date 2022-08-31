@@ -520,7 +520,7 @@ InputEvents::ProcessTimer() noexcept
 }
 
 void
-InputEvents::eventLockScreen(const TCHAR *mode)
+InputEvents::eventLockScreen([[maybe_unused]] const TCHAR *mode)
 {
   ShowLockBox();
 }

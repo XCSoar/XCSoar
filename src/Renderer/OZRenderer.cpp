@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -81,7 +81,7 @@ OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const noexcept
 }
 
 void
-OZRenderer::Finish(Canvas &canvas, Layer layer) const noexcept
+OZRenderer::Finish([[maybe_unused]] Canvas &canvas, Layer layer) const noexcept
 {
   if (layer == LAYER_SHADE) {
 #ifdef ENABLE_OPENGL

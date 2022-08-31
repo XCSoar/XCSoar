@@ -496,9 +496,9 @@ RasterRenderer::ContourStart(const unsigned contour_height_scale)
 }
 
 void
-RasterRenderer::Draw(Canvas &canvas,
+RasterRenderer::Draw([[maybe_unused]] Canvas &canvas,
                      const WindowProjection &projection,
-                     bool transparent_white) const
+                     [[maybe_unused]] bool transparent_white) const
 {
 #ifdef ENABLE_OPENGL
   if (bounds.IsValid() && bounds.Overlaps(projection.GetScreenBounds()))

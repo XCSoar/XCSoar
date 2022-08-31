@@ -101,7 +101,7 @@ public:
                    unsigned idx) noexcept override;
 
   /* virtual methods from ListCursorHandler */
-  bool CanActivateItem(unsigned index) const noexcept override {
+  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
     return true;
   }
 
@@ -145,8 +145,8 @@ public:
     list = _list;
   }
 
-  void Prepare(ContainerWindow &parent,
-               const PixelRect &rc) noexcept override {
+  void Prepare([[maybe_unused]] ContainerWindow &parent,
+               [[maybe_unused]] const PixelRect &rc) noexcept override {
     AddButton(_("Details"), [this](){
       list->ShowDetails();
     });
@@ -415,8 +415,8 @@ CreateDirectionDataField(DataFieldListener *listener)
 }
 
 void
-AirspaceFilterWidget::Prepare(ContainerWindow &parent,
-                              const PixelRect &rc) noexcept
+AirspaceFilterWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                              [[maybe_unused]] const PixelRect &rc) noexcept
 {
   Add(_("Name"), nullptr, CreateNameDataField(listener));
   Add(_("Distance"), nullptr, CreateDistanceDataField(listener));

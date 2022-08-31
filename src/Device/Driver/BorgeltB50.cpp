@@ -164,7 +164,7 @@ B50Device::PutBallast(double fraction, [[maybe_unused]] double overload,
 }
 
 static Device *
-B50CreateOnPort(const DeviceConfig &config, Port &com_port)
+B50CreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 {
   return new B50Device(com_port);
 }

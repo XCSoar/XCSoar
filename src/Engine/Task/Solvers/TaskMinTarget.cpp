@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@ TaskMinTarget::f(const double p) noexcept
 
 
 bool
-TaskMinTarget::valid(const double tp)
+TaskMinTarget::valid([[maybe_unused]] const double tp)
 {
   //  const double ff = f(tp);
   return res.IsOk(); // && (ff>= -tolerance*2);

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -121,7 +121,7 @@ CheckBoxControl::OnMouseMove(PixelPoint p, unsigned keys)
 }
 
 bool
-CheckBoxControl::OnMouseDown(PixelPoint p)
+CheckBoxControl::OnMouseDown([[maybe_unused]] PixelPoint p)
 {
   if (IsTabStop())
     SetFocus();
@@ -133,7 +133,7 @@ CheckBoxControl::OnMouseDown(PixelPoint p)
 }
 
 bool
-CheckBoxControl::OnMouseUp(PixelPoint p)
+CheckBoxControl::OnMouseUp([[maybe_unused]] PixelPoint p)
 {
   if (!dragging)
     return true;

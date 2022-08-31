@@ -69,8 +69,8 @@ namespace AudioVarioGlue {
 #else
   static inline void Initialise() {}
   static inline void Deinitialise() {}
-  static inline void Configure(const VarioSoundSettings &settings) {}
-  static inline void SetValue(double vario) {}
+  static inline void Configure([[maybe_unused]] const VarioSoundSettings &settings) {}
+  static inline void SetValue([[maybe_unused]] double vario) {}
   static inline void NoValue() {}
   static inline bool HaveAudioVario() { return false; }
 #endif

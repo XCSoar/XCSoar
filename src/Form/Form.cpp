@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -284,7 +284,7 @@ WndForm::OnCommand(unsigned id, unsigned code)
  */
 [[gnu::pure]]
 static bool
-CheckKey(ContainerWindow *container, const Event &event)
+CheckKey([[maybe_unused]] ContainerWindow *container, const Event &event)
 {
 #ifdef USE_WINUSER
   const MSG &msg = event.msg;

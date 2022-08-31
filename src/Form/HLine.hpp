@@ -37,9 +37,9 @@ class HLine : public PaintWindow {
 
 public:
 #ifdef ENABLE_OPENGL
-  HLine(const DialogLook &_look) {}
+  HLine([[maybe_unused]] const DialogLook &_look) {}
 #else
-  HLine(const DialogLook &_look):look(_look) {}
+  HLine([[maybe_unused]] const DialogLook &_look):look(_look) {}
 #endif
 
 protected:

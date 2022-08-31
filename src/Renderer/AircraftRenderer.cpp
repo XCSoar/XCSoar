@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -162,7 +162,7 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
 }
 
 static void
-DrawHangGlider(Canvas &canvas, const AircraftLook &look,
+DrawHangGlider(Canvas &canvas, [[maybe_unused]] const AircraftLook &look,
                const Angle angle, const PixelPoint aircraft_pos, bool inverse)
 {
   static constexpr BulkPixelPoint aircraft[] = {
@@ -194,7 +194,7 @@ DrawHangGlider(Canvas &canvas, const AircraftLook &look,
 }
 
 static void
-DrawParaGlider(Canvas &canvas, const AircraftLook &look,
+DrawParaGlider(Canvas &canvas, [[maybe_unused]] const AircraftLook &look,
                const Angle angle, const PixelPoint aircraft_pos, bool inverse)
 {
   static constexpr BulkPixelPoint aircraft[] = {

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ VirtualCanvas::VirtualCanvas(PixelSize new_size)
   Create(new_size);
 }
 
-VirtualCanvas::VirtualCanvas(const Canvas &canvas, PixelSize new_size)
+VirtualCanvas::VirtualCanvas([[maybe_unused]] const Canvas &canvas, PixelSize new_size)
 {
   Create(new_size);
 }
@@ -44,7 +44,7 @@ VirtualCanvas::Create(PixelSize new_size)
 }
 
 void
-VirtualCanvas::Create(const Canvas &canvas, PixelSize new_size)
+VirtualCanvas::Create([[maybe_unused]] const Canvas &canvas, PixelSize new_size)
 {
 #if defined(ENABLE_OPENGL)
   assert(canvas.IsDefined());

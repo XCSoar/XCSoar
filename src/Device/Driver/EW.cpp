@@ -295,7 +295,7 @@ EWDevice::LinkTimeout()
 }
 
 static Device *
-EWCreateOnPort(const DeviceConfig &config, Port &com_port)
+EWCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 {
   return new EWDevice(com_port);
 }

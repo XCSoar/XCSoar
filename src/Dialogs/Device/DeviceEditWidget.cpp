@@ -100,7 +100,7 @@ FillPress(DataFieldEnum &dfe) noexcept
 
 static bool
 EditPortCallback(const TCHAR *caption, DataField &df,
-                 const TCHAR *help_text) noexcept
+                 [[maybe_unused]] const TCHAR *help_text) noexcept
 {
   return PortPicker((DataFieldEnum &)df, caption);
 }

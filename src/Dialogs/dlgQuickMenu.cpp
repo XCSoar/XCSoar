@@ -273,7 +273,7 @@ QuickMenu::KeyPress(unsigned key_code) noexcept
 }
 
 static int
-ShowQuickMenu(UI::SingleWindow &parent, const Menu &menu) noexcept
+ShowQuickMenu([[maybe_unused]] UI::SingleWindow &parent, const Menu &menu) noexcept
 {
   const auto &dialog_look = UIGlobals::GetDialogLook();
 

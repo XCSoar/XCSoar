@@ -155,7 +155,7 @@ public:
 
 #else /* !STOP_WATCH */
 public:
-  void Mark(const char *text) {}
+  void Mark([[maybe_unused]] const char *text) {}
   void Finish() {}
 #endif /* !STOP_WATCH */
 };

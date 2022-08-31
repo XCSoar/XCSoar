@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -132,7 +132,7 @@ ACDDevice::PutVolume(unsigned volume, OperationEnvironment &env)
 
 bool
 ACDDevice::PutStandbyFrequency(RadioFrequency frequency,
-                                   const TCHAR *name,
+                                   [[maybe_unused]] const TCHAR *name,
                                    OperationEnvironment &env)
 {
   char buffer[100];
@@ -157,7 +157,7 @@ ACDDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 }
 
 static Device *
-AirControlDisplayCreateOnPort(const DeviceConfig &config, Port &com_port)
+AirControlDisplayCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 {
   return new ACDDevice(com_port);
 }

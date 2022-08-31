@@ -120,18 +120,18 @@ protected:
 
 private:
   /* virtual methods from class ListControl::Handler */
-  void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                   unsigned idx) noexcept override;
+  void OnPaintItem([[maybe_unused]] Canvas &canvas, [[maybe_unused]] const PixelRect rc,
+                   [[maybe_unused]] unsigned idx) noexcept override;
 
-  void OnCursorMoved(unsigned index) noexcept override {
+  void OnCursorMoved([[maybe_unused]] unsigned index) noexcept override {
     RefreshView();
   }
 
-  bool CanActivateItem(unsigned index) const noexcept override {
+  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
       return true;
   }
 
-  void OnActivateItem(unsigned index) noexcept override {
+  void OnActivateItem([[maybe_unused]] unsigned index) noexcept override {
     LoadTask();
   }
 };

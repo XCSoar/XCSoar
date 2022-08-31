@@ -137,8 +137,8 @@ MapOverlayBitmap::IsInside(GeoPoint p) const noexcept
 }
 
 void
-MapOverlayBitmap::Draw(Canvas &canvas,
-                       const WindowProjection &projection) noexcept
+MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
+                       [[maybe_unused]] const WindowProjection &projection) noexcept
 {
   if (!simple_bounds.Overlaps(projection.GetScreenBounds()))
     /* not visible, outside of screen area */

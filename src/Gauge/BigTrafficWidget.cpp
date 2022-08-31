@@ -818,7 +818,7 @@ FlarmTrafficControl::OnMouseUp(PixelPoint p)
 }
 
 bool
-FlarmTrafficControl::OnMouseDouble(PixelPoint p)
+FlarmTrafficControl::OnMouseDouble([[maybe_unused]] PixelPoint p)
 {
   StopDragging();
   InputEvents::ShowMenu();
@@ -955,7 +955,7 @@ TrafficWidget::SetFocus() noexcept
 }
 
 void
-TrafficWidget::OnGPSUpdate(const MoreData &basic)
+TrafficWidget::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
 {
   Update();
 }

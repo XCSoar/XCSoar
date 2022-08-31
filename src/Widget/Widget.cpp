@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -39,12 +39,12 @@ NullWidget::GetMaximumSize() const noexcept
 }
 
 void
-NullWidget::Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept
+NullWidget::Initialise([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
 {
 }
 
 void
-NullWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+NullWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
 {
 }
 
@@ -54,7 +54,7 @@ NullWidget::Unprepare() noexcept
 }
 
 bool
-NullWidget::Save(bool &changed) noexcept
+NullWidget::Save([[maybe_unused]] bool &changed) noexcept
 {
   return true;
 }
@@ -96,7 +96,7 @@ NullWidget::HasFocus() const noexcept
 }
 
 bool
-NullWidget::KeyPress(unsigned key_code) noexcept
+NullWidget::KeyPress([[maybe_unused]] unsigned key_code) noexcept
 {
   return false;
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -145,7 +145,7 @@ VaulterDevice::PutMacCready(double mc, OperationEnvironment &env)
 }
 
 bool
-VaulterDevice::PutBallast(double fraction, double overload, OperationEnvironment &env)
+VaulterDevice::PutBallast([[maybe_unused]] double fraction, double overload, OperationEnvironment &env)
 {
   if (!EnableNMEA(env))
     return false;
@@ -176,7 +176,7 @@ VaulterDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 }
 
 static Device *
-VaulterCreateOnPort(const DeviceConfig &config, Port &com_port)
+VaulterCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 {
   return new VaulterDevice(com_port);
 }

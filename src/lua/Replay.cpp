@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -94,7 +94,7 @@ l_replay_start(lua_State *L)
 }
 
 static int
-l_replay_stop(lua_State *L)
+l_replay_stop([[maybe_unused]] lua_State *L)
 {
   replay->Stop();
   return 0;

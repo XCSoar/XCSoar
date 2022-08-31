@@ -130,8 +130,8 @@ SystemStatusPanel::Refresh() noexcept
 }
 
 void
-SystemStatusPanel::Prepare(ContainerWindow &parent,
-                           const PixelRect &rc) noexcept
+SystemStatusPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
+                           [[maybe_unused]] const PixelRect &rc) noexcept
 {
   AddReadOnly(_("GPS lock"));
   AddReadOnly(_("Satellites in view"));
@@ -159,7 +159,7 @@ SystemStatusPanel::Hide() noexcept
 }
 
 void
-SystemStatusPanel::OnGPSUpdate(const MoreData &basic)
+SystemStatusPanel::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
 {
   Refresh();
 }

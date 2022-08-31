@@ -137,9 +137,9 @@ Main()
 int main(int argc, char **argv)
 #else
 int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+WinMain(HINSTANCE hInstance, [[maybe_unused]] HINSTANCE hPrevInstance,
         [[maybe_unused]] LPSTR lpCmdLine2,
-        int nCmdShow)
+        [[maybe_unused]] int nCmdShow)
 #endif
 try {
 #ifdef USE_WIN32_RESOURCES

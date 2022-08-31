@@ -366,7 +366,7 @@ FileOutputStream::Cancel() noexcept
 }
 
 inline void
-FileOutputStream::RenameOrThrow(Path old_path, Path new_path) const
+FileOutputStream::RenameOrThrow([[maybe_unused]] Path old_path, [[maybe_unused]] Path new_path) const
 {
 	assert(old_path != nullptr);
 	assert(new_path != nullptr);

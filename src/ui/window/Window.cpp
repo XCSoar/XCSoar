@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -142,25 +142,25 @@ Window::OnDestroy()
 }
 
 void
-Window::OnResize(PixelSize new_size)
+Window::OnResize([[maybe_unused]] PixelSize new_size)
 {
 }
 
 bool
-Window::OnMouseMove(PixelPoint p, unsigned keys)
+Window::OnMouseMove([[maybe_unused]] PixelPoint p, [[maybe_unused]] unsigned keys)
 {
   /* not handled here */
   return false;
 }
 
 bool
-Window::OnMouseDown(PixelPoint p)
+Window::OnMouseDown([[maybe_unused]] PixelPoint p)
 {
   return false;
 }
 
 bool
-Window::OnMouseUp(PixelPoint p)
+Window::OnMouseUp([[maybe_unused]] PixelPoint p)
 {
   return false;
 }
@@ -174,7 +174,7 @@ Window::OnMouseDouble(PixelPoint p)
 }
 
 bool
-Window::OnMouseWheel(PixelPoint p, int delta)
+Window::OnMouseWheel([[maybe_unused]] PixelPoint p, [[maybe_unused]] int delta)
 {
   return false;
 }
@@ -196,25 +196,25 @@ Window::OnMultiTouchUp()
 #endif /* HAVE_MULTI_TOUCH */
 
 bool
-Window::OnKeyCheck(unsigned key_code) const
+Window::OnKeyCheck([[maybe_unused]] unsigned key_code) const
 {
   return false;
 }
 
 bool
-Window::OnKeyDown(unsigned key_code)
+Window::OnKeyDown([[maybe_unused]] unsigned key_code)
 {
   return false;
 }
 
 bool
-Window::OnKeyUp(unsigned key_code)
+Window::OnKeyUp([[maybe_unused]] unsigned key_code)
 {
   return false;
 }
 
 bool
-Window::OnCharacter(unsigned ch)
+Window::OnCharacter([[maybe_unused]] unsigned ch)
 {
   return false;
 }

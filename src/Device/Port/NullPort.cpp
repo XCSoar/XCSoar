@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -55,7 +55,7 @@ NullPort::Flush()
 }
 
 std::size_t
-NullPort::Write(const void *data, std::size_t length)
+NullPort::Write([[maybe_unused]] const void *data, std::size_t length)
 {
   return length;
 }
@@ -84,13 +84,13 @@ NullPort::SetBaudrate(unsigned)
 }
 
 std::size_t
-NullPort::Read(void *Buffer, std::size_t Size)
+NullPort::Read([[maybe_unused]] void *Buffer, [[maybe_unused]] std::size_t Size)
 {
   return 0;
 }
 
 void
-NullPort::WaitRead(std::chrono::steady_clock::duration timeout)
+NullPort::WaitRead([[maybe_unused]] std::chrono::steady_clock::duration timeout)
 {
   throw std::runtime_error{"Cannot read from NullPort"};
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -799,7 +799,7 @@ void
 Canvas::StretchMono(PixelPoint dest_position, PixelSize dest_size,
                     const Bitmap &src,
                     PixelPoint src_position, PixelSize src_size,
-                    Color fg_color, Color bg_color) noexcept
+                    Color fg_color, [[maybe_unused]] Color bg_color) noexcept
 {
   /* note that this implementation ignores the background color; it is
      not mandatory, and we can assume that the background is already

@@ -69,7 +69,7 @@ GlueMapWindow::OnDestroy()
 }
 
 bool
-GlueMapWindow::OnMouseDouble(PixelPoint p)
+GlueMapWindow::OnMouseDouble([[maybe_unused]] PixelPoint p)
 {
   map_item_timer.Cancel();
 
@@ -297,7 +297,7 @@ GlueMapWindow::OnMouseUp(PixelPoint p)
 }
 
 bool
-GlueMapWindow::OnMouseWheel(PixelPoint p, int delta)
+GlueMapWindow::OnMouseWheel([[maybe_unused]] PixelPoint p, [[maybe_unused]] int delta)
 {
   map_item_timer.Cancel();
 

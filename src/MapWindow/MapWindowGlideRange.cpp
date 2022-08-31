@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -141,7 +141,7 @@ struct ProjectedFans {
     points.push_back(pt);
   }
 
-  void DrawFill(Canvas &canvas) const {
+  void DrawFill([[maybe_unused]] Canvas &canvas) const {
     assert(remaining == 0);
 
 #ifdef ENABLE_OPENGL
@@ -160,7 +160,7 @@ struct ProjectedFans {
 #endif
   }
 
-  void DrawOutline(Canvas &canvas) const {
+  void DrawOutline([[maybe_unused]] Canvas &canvas) const {
     assert(remaining == 0);
 
 #ifdef ENABLE_OPENGL
@@ -205,7 +205,7 @@ public:
 
   /* virtual methods from class FlatTriangleFanVisitor */
 
-  void VisitFan(FlatGeoPoint origin, std::span<const FlatGeoPoint> fan) noexcept override {
+  void VisitFan([[maybe_unused]] FlatGeoPoint origin, std::span<const FlatGeoPoint> fan) noexcept override {
 
     if (fan.size() < 3 || fans.full())
       return;

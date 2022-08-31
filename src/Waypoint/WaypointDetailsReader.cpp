@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -42,7 +42,7 @@ FindWaypoint(Waypoints &way_points, const TCHAR *name)
 static void
 SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
                    const tstring &Details,
-                   const std::vector<tstring> &files_external,
+                   [[maybe_unused]] const std::vector<tstring> &files_external,
                    const std::vector<tstring> &files_embed)
 {
   auto wp = FindWaypoint(way_points, name);

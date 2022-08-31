@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -122,8 +122,8 @@ ManageI2CPitotWidget::Calibrate() noexcept
 }
 
 void
-ManageI2CPitotWidget::Prepare(ContainerWindow &parent,
-                              const PixelRect &rc) noexcept
+ManageI2CPitotWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                              [[maybe_unused]] const PixelRect &rc) noexcept
 {
   AddReadOnly(_("Pitot"), nullptr, _T("%.2f"), UnitGroup::PRESSURE, 0);
   AddReadOnly(_("Pressure"), nullptr, _T("%.2f"), UnitGroup::PRESSURE, 0);

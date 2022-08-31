@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -291,7 +291,7 @@ DataFieldEnum::Sort(std::size_t startindex) noexcept
 }
 
 ComboList
-DataFieldEnum::CreateComboList(const TCHAR *reference_string) const noexcept
+DataFieldEnum::CreateComboList([[maybe_unused]] const TCHAR *reference_string) const noexcept
 {
   ComboList combo_list;
 

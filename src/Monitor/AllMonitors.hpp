@@ -62,8 +62,8 @@ public:
   }
 
 private:
-  void OnCalculatedUpdate(const MoreData &basic,
-                          const DerivedInfo &calculated) override {
+  void OnCalculatedUpdate([[maybe_unused]] const MoreData &basic,
+                          [[maybe_unused]] const DerivedInfo &calculated) override {
     RateLimiter::Trigger();
   }
 

@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 bool
-BigThermalAssistantWindow::OnMouseDouble(PixelPoint p)
+BigThermalAssistantWindow::OnMouseDouble([[maybe_unused]] PixelPoint p)
 {
   StopDragging();
   InputEvents::ShowMenu();
@@ -46,7 +46,7 @@ BigThermalAssistantWindow::OnMouseDown(PixelPoint p)
 }
 
 bool
-BigThermalAssistantWindow::OnMouseUp(PixelPoint p)
+BigThermalAssistantWindow::OnMouseUp([[maybe_unused]] PixelPoint p)
 {
   if (dragging) {
     StopDragging();

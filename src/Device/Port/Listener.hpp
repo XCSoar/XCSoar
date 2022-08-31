@@ -41,5 +41,5 @@ public:
    * @param msg a human-readable error message (probably not
    * localised)
    */
-  virtual void PortError(const char *msg) noexcept {}
+  virtual void PortError([[maybe_unused]] const char *msg) noexcept {}
 };

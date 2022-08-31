@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -282,7 +282,7 @@ PolygonToTriangles(const FloatPoint2D *points, unsigned num_points,
  * Count the occurrences of each value.
  */
 static void
-AddValueCounts(unsigned *counts, unsigned max_value,
+AddValueCounts(unsigned *counts, [[maybe_unused]] unsigned max_value,
                const GLushort *values, const GLushort *values_end) noexcept
 {
   for (auto i = values; i != values_end; ++i) {
@@ -294,7 +294,7 @@ AddValueCounts(unsigned *counts, unsigned max_value,
 
 [[gnu::pure]]
 static GLushort *
-FindOne(const unsigned *counts, unsigned max_value,
+FindOne(const unsigned *counts, [[maybe_unused]] unsigned max_value,
         GLushort *values, const GLushort *values_end) noexcept
 {
   for (auto i = values; i != values_end; ++i) {

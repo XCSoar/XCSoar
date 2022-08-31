@@ -207,7 +207,7 @@ XVCDevice::PutBallast(double fraction, [[maybe_unused]] double overload,
 }
 
 static Device *
-XVCCreateOnPort(const DeviceConfig &config, Port &com_port)
+XVCCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 {
   return new XVCDevice(com_port);
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -82,8 +82,8 @@ UploadWaypoints(const DialogLook &look, CAI302Device &device)
 }
 
 void
-ManageCAI302Widget::Prepare(ContainerWindow &parent,
-                            const PixelRect &rc) noexcept
+ManageCAI302Widget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                            [[maybe_unused]] const PixelRect &rc) noexcept
 {
   AddButton(_("Units"), [this](){
     try {
@@ -149,7 +149,7 @@ ManageCAI302Widget::Prepare(ContainerWindow &parent,
 }
 
 void
-ManageCAI302Dialog(SingleWindow &parent, const DialogLook &look,
+ManageCAI302Dialog([[maybe_unused]] SingleWindow &parent, const DialogLook &look,
                    Device &device)
 {
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),

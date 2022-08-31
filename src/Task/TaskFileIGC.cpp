@@ -83,7 +83,7 @@ MakeWaypoint(GeoPoint location, const TCHAR *name)
 
 std::unique_ptr<OrderedTask>
 TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
-                     const Waypoints *waypoints, unsigned index) const
+                     [[maybe_unused]] const Waypoints *waypoints, [[maybe_unused]] unsigned index) const
 {
   assert(index == 0);
 

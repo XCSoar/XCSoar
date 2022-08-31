@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -54,7 +54,7 @@ FlarmNetDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const
 unsigned
 FlarmNetDatabase::FindRecordsByCallSign(const TCHAR *cn,
                                         const FlarmNetRecord *array[],
-                                        unsigned size) const
+                                        [[maybe_unused]] unsigned size) const
 {
   unsigned count = 0;
 
@@ -71,7 +71,7 @@ FlarmNetDatabase::FindRecordsByCallSign(const TCHAR *cn,
 
 unsigned
 FlarmNetDatabase::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
-                                    unsigned size) const
+                                    [[maybe_unused]] unsigned size) const
 {
   unsigned count = 0;
 

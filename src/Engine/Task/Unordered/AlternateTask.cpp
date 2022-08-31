@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -48,7 +48,7 @@ AlternateTask::Clear() noexcept
 
 void 
 AlternateTask::ClientUpdate(const AircraftState &state_now,
-                            const bool reachable) noexcept
+                            [[maybe_unused]] const bool reachable) noexcept
 {
   // build a list of alternates, sorted by distance.
   // this is done in separate stages so we can add the reachable ones

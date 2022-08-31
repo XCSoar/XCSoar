@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -222,7 +222,7 @@ FlyingComputer::CheckClimbing(FloatDuration dt, double altitude) noexcept
 }
 
 inline void
-FlyingComputer::CheckPowered(FloatDuration dt, const NMEAInfo &basic,
+FlyingComputer::CheckPowered([[maybe_unused]] FloatDuration dt, const NMEAInfo &basic,
                              FlyingState &flying) noexcept
 {
   if (basic.engine_noise_level > 500 &&

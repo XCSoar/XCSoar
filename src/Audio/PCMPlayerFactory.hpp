@@ -62,7 +62,7 @@ inline PCMPlayer *CreateInstance()
  * @return Pointer to the created PCMPlayer instance
  */
 inline PCMPlayer *
-CreateInstanceForDirectAccess(EventLoop &event_loop)
+CreateInstanceForDirectAccess([[maybe_unused]] EventLoop &event_loop)
 {
 #if defined(ENABLE_SDL)
   return new SDLPCMPlayer();

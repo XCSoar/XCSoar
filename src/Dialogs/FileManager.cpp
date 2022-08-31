@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -479,7 +479,7 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 }
 
 void
-ManagedFileListWidget::OnCursorMoved(unsigned index) noexcept
+ManagedFileListWidget::OnCursorMoved([[maybe_unused]] unsigned index) noexcept
 {
   UpdateButtons();
 }
@@ -695,7 +695,7 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative) noexcept
 
 void
 ManagedFileListWidget::OnDownloadError(Path path_relative,
-                                       std::exception_ptr error) noexcept
+                                       [[maybe_unused]] std::exception_ptr error) noexcept
 {
   const auto name = path_relative.GetBase();
   if (name == nullptr)

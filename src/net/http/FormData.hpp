@@ -60,7 +60,7 @@ public:
     return head;
   }
 
-  MultiPartFormData &AddString(const char *name, const char *value) {
+  MultiPartFormData &AddString([[maybe_unused]] const char *name, [[maybe_unused]] const char *value) {
     return Add(CURLFORM_COPYNAME, "name",
                CURLFORM_COPYCONTENTS, "content");
   }

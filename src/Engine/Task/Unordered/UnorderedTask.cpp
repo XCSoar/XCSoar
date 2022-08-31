@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -61,7 +61,7 @@ UnorderedTask::CheckTask() const noexcept
 
 bool
 UnorderedTask::CheckTransitions(const AircraftState &state_now,
-                                const AircraftState &state_last) noexcept
+                                [[maybe_unused]] const AircraftState &state_last) noexcept
 {
   if (!stats.task_valid || !state_now.flying)
     return false;
@@ -107,8 +107,8 @@ UnorderedTask::GlideSolutionRemaining(const AircraftState &state,
 }
 
 void
-UnorderedTask::GlideSolutionTravelled(const AircraftState &state,
-                                      const GlidePolar &glide_polar,
+UnorderedTask::GlideSolutionTravelled([[maybe_unused]] const AircraftState &state,
+                                      [[maybe_unused]] const GlidePolar &glide_polar,
                                       GlideResult &total,
                                       GlideResult &leg) noexcept
 {
@@ -119,8 +119,8 @@ UnorderedTask::GlideSolutionTravelled(const AircraftState &state,
 }
 
 void
-UnorderedTask::GlideSolutionPlanned(const AircraftState &state,
-                                    const GlidePolar &glide_polar,
+UnorderedTask::GlideSolutionPlanned([[maybe_unused]] const AircraftState &state,
+                                    [[maybe_unused]] const GlidePolar &glide_polar,
                                     GlideResult &total,
                                     GlideResult &leg,
                                     DistanceStat &total_remaining_effective,
@@ -155,7 +155,7 @@ UnorderedTask::ScanLegStartTime() noexcept
 }
 
 void
-UnorderedTask::ScanDistanceMinMax(const GeoPoint &location, bool full,
+UnorderedTask::ScanDistanceMinMax([[maybe_unused]] const GeoPoint &location, [[maybe_unused]] bool full,
                                   double *dmin, double *dmax) noexcept
 {
   *dmin = *dmax = stats.total.remaining.IsDefined()
@@ -180,13 +180,13 @@ UnorderedTask::ScanDistancePlanned() noexcept
 }
 
 double
-UnorderedTask::ScanDistanceScored(const GeoPoint &location) noexcept
+UnorderedTask::ScanDistanceScored([[maybe_unused]] const GeoPoint &location) noexcept
 {
   return 0;
 }
 
 double
-UnorderedTask::ScanDistanceTravelled(const GeoPoint &location) noexcept
+UnorderedTask::ScanDistanceTravelled([[maybe_unused]] const GeoPoint &location) noexcept
 {
   return 0;
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -334,7 +334,7 @@ Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeView_setHapticFeedback(JNIEnv *env, jobject obj,
+Java_org_xcsoar_NativeView_setHapticFeedback([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jobject obj,
                                              jboolean on)
 {
   os_haptic_feedback_enabled = on;

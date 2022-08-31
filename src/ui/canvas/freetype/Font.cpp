@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -155,7 +155,7 @@ GetCapitalHeight(FT_Face face) noexcept
 }
 
 void
-Font::LoadFile(const char *file, unsigned ptsize, bool bold, bool italic)
+Font::LoadFile(const char *file, unsigned ptsize, [[maybe_unused]] bool bold, [[maybe_unused]] bool italic)
 {
   assert(IsScreenInitialized());
 
@@ -296,7 +296,7 @@ Font::TextSize(tstring_view text) const noexcept
   int maxx = 0;
 
   ForEachGlyph(face, ascent_height, text,
-               [&maxx](int x, int y, const FT_GlyphSlot glyph){
+               [&maxx](int x, [[maybe_unused]] int y, const FT_GlyphSlot glyph){
       const FT_Glyph_Metrics &metrics = glyph->metrics;
       const int glyph_minx = FT_FLOOR(metrics.horiBearingX);
       const int glyph_maxx = glyph_minx + FT_CEIL(metrics.width);

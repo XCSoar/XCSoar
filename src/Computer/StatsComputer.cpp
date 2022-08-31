@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -39,7 +39,7 @@ StatsComputer::ResetFlight(const bool full)
 }
 
 void
-StatsComputer::StartTask(const NMEAInfo &basic)
+StatsComputer::StartTask([[maybe_unused]] const NMEAInfo &basic)
 {
   flightstats.StartTask();
 }
@@ -89,13 +89,13 @@ StatsComputer::DoLogging(const MoreData &basic,
 }
 
 void
-StatsComputer::OnClimbBase(const DerivedInfo &calculated)
+StatsComputer::OnClimbBase([[maybe_unused]] const DerivedInfo &calculated)
 {
   // nothing to do here now
 }
 
 void
-StatsComputer::OnClimbCeiling(const DerivedInfo &calculated)
+StatsComputer::OnClimbCeiling([[maybe_unused]] const DerivedInfo &calculated)
 {
   // nothing to do here now
 }

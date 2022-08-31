@@ -156,7 +156,7 @@ public:
 		}
 	}
 
-	T *allocate(const size_type n) {
+	T *allocate([[maybe_unused]] const size_type n) {
 		assert(n == 1);
 
 		/* try to allocate in one of the existing areas */
@@ -184,7 +184,7 @@ public:
 		return static_cast<T *>(static_cast<void *>(i));
 	}
 
-	void deallocate(T *t, const size_type n) {
+	void deallocate(T *t, [[maybe_unused]] const size_type n) {
 		assert(n == 1);
 
 		Item *i = static_cast<Item *>(static_cast<void *>(t));
