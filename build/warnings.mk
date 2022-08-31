@@ -14,7 +14,6 @@ CXX_WARNINGS += -Wno-format-truncation
 endif
 
 # disable some warnings, we're not ready for them yet
-CXX_WARNINGS += -Wno-unused-parameter
 CXX_WARNINGS += -Wno-missing-field-initializers
 CXX_WARNINGS += -Wcast-align
 
