@@ -24,6 +24,7 @@ Copyright_License {
 #include "TTYEnumerator.hpp"
 #include "util/CharUtil.hxx"
 #include "util/StringCompare.hxx"
+#include "system/FileUtil.hpp"
 
 #include <stdio.h>
 #include <unistd.h>
@@ -66,7 +67,7 @@ TTYEnumerator::Next() noexcept
       /* truncated - ignore */
       continue;
 
-    if (access(path, R_OK|W_OK) == 0 && access(path, X_OK) < 0)
+    if (File::IsCharDev(Path{path}) && access(path, R_OK|W_OK) == 0)
       return path;
   }
 

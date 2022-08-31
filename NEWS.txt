@@ -1,4 +1,6 @@
 Version 7.26 - not yet released
+* Android
+  - improve native serial port enumeration
 * Kobo
   - fix crash bug
 

@@ -937,7 +937,7 @@ DEBUG_DISPLAY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugDisplay.cpp
-DEBUG_DISPLAY_DEPENDS = SCREEN IO OS MATH UTIL
+DEBUG_DISPLAY_DEPENDS = SCREEN IO OS MATH UTIL OS
 $(eval $(call link-program,DebugDisplay,DEBUG_DISPLAY))
 
 DOWNLOAD_FILE_SOURCES = \
@@ -1232,7 +1232,7 @@ $(eval $(call link-program,RunAirspaceParser,RUN_AIRSPACE_PARSER))
 
 ENUMERATE_PORTS_SOURCES = \
 	$(TEST_SRC_DIR)/EnumeratePorts.cpp
-ENUMERATE_PORTS_DEPENDS = PORT
+ENUMERATE_PORTS_DEPENDS = PORT OS
 $(eval $(call link-program,EnumeratePorts,ENUMERATE_PORTS))
 
 READ_PORT_SOURCES = \
@@ -1456,7 +1456,7 @@ LXN2IGC_SOURCES = \
 	$(SRC)/Device/Driver/LX/Convert.cpp \
 	$(SRC)/Device/Driver/LX/LXN.cpp \
 	$(TEST_SRC_DIR)/lxn2igc.cpp
-LXN2IGC_DEPENDS = IO UTIL
+LXN2IGC_DEPENDS = IO OS UTIL
 $(eval $(call link-program,lxn2igc,LXN2IGC))
 
 RUN_IGC_WRITER_SOURCES = \
