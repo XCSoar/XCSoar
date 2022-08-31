@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -46,23 +46,23 @@ class AnnularSectorZone;
 class ObservationZoneVisitorPrint
 {
 public:
-  void Visit(const KeyholeZone& oz) {
+  void Visit([[maybe_unused]] const KeyholeZone& oz) {
     printf("# kehole zone\n");
   }
-  void Visit(const SectorZone& oz) {
+  void Visit([[maybe_unused]] const SectorZone& oz) {
     printf("# sector zone\n");
   }
-  void Visit(const AnnularSectorZone& oz) {
+  void Visit([[maybe_unused]] const AnnularSectorZone& oz) {
     printf("# annular sector zone\n");
   }
-  void Visit(const LineSectorZone& oz) {
+  void Visit([[maybe_unused]] const LineSectorZone& oz) {
     printf("# line zone\n");
   }
-  void Visit(const CylinderZone& oz) {
+  void Visit([[maybe_unused]] const CylinderZone& oz) {
     printf("# cylinder zone\n");
   }
 
-  void Visit(const SymmetricSectorZone &oz) {
+  void Visit([[maybe_unused]] const SymmetricSectorZone &oz) {
     printf("# symmetric quadrant\n");
   }
 

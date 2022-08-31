@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -76,27 +76,28 @@ void dlgBasicSettingsShowModal() {}
 void ShowWindSettingsDialog() {}
 
 void
-dlgAirspaceWarningsShowModal(ProtectedAirspaceWarningManager &warnings,
-                             bool auto_close)
+dlgAirspaceWarningsShowModal([[maybe_unused]] ProtectedAirspaceWarningManager &warnings,
+                             [[maybe_unused]] bool auto_close)
 {
 }
 
 void
-dlgStatusShowModal(int page)
+dlgStatusShowModal([[maybe_unused]] int page)
 {
 }
 
 void
-ConditionMonitors::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
-                          const ComputerSettings &settings) noexcept
+ConditionMonitors::Update([[maybe_unused]] const NMEAInfo &basic,
+                          [[maybe_unused]] const DerivedInfo &calculated,
+                          [[maybe_unused]] const ComputerSettings &settings) noexcept
 {
 }
 
 bool InputEvents::processGlideComputer(unsigned) { return false; }
 
-void Logger::LogStartEvent(const NMEAInfo &gps_info) {}
-void Logger::LogFinishEvent(const NMEAInfo &gps_info) {}
-void Logger::LogPoint(const NMEAInfo &gps_info) {}
+void Logger::LogStartEvent([[maybe_unused]] const NMEAInfo &gps_info) {}
+void Logger::LogFinishEvent([[maybe_unused]] const NMEAInfo &gps_info) {}
+void Logger::LogPoint([[maybe_unused]] const NMEAInfo &gps_info) {}
 
 /* done with fake symbols. */
 

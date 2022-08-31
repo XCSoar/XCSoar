@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -89,8 +89,8 @@ private:
 };
 
 void
-FileMenuWidget::Prepare(ContainerWindow &parent,
-                          const PixelRect &rc) noexcept
+FileMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                        [[maybe_unused]] const PixelRect &rc) noexcept
 {
   AddButton("Download XCSoar IGC files to USB", [this](){
     const UI::ScopeDropMaster drop_master{display};
@@ -214,8 +214,8 @@ CalibrateSensors() noexcept
 }
 
 void
-SystemMenuWidget::Prepare(ContainerWindow &parent,
-                          const PixelRect &rc) noexcept
+SystemMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                          [[maybe_unused]] const PixelRect &rc) noexcept
 {
   AddButton("Update System", [](){
     static constexpr const char *argv[] = {
@@ -340,7 +340,8 @@ private:
 };
 
 void
-MainMenuWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+MainMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+			[[maybe_unused]] const PixelRect &rc) noexcept
 {
   AddButton("Start XCSoar", [this](){
     CancelTimer();
@@ -427,7 +428,7 @@ Main()
   return action;
 }
 
-int main(int argc, char **argv)
+int main()
 {
   int action = Main();
 

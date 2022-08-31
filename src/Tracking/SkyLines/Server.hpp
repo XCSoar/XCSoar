@@ -84,39 +84,41 @@ private:
 protected:
   virtual void OnPing(const Client &client, unsigned id);
 
-  virtual void OnFix(const Client &client,
-                     std::chrono::milliseconds time_of_day,
-                     const ::GeoPoint &location, int altitude) {}
+  virtual void OnFix([[maybe_unused]] const Client &client,
+                     [[maybe_unused]] std::chrono::milliseconds time_of_day,
+                     [[maybe_unused]] const ::GeoPoint &location, 
+                     [[maybe_unused]] int altitude) {}
 
-  virtual void OnTrafficRequest(const Client &client, bool near) {}
+  virtual void OnTrafficRequest([[maybe_unused]] const Client &client, [[maybe_unused]] bool near) {}
 
-  virtual void OnUserNameRequest(const Client &client, uint32_t user_id) {}
+  virtual void OnUserNameRequest([[maybe_unused]] const Client &client, [[maybe_unused]] uint32_t user_id) {}
 
-  virtual void OnWaveSubmit(const Client &client,
-                            std::chrono::milliseconds time_of_day,
-                            const ::GeoPoint &a, const ::GeoPoint &b,
-                            int bottom_altitude,
-                            int top_altitude,
-                            double lift) {}
+  virtual void OnWaveSubmit([[maybe_unused]] const Client &client,
+                            [[maybe_unused]] std::chrono::milliseconds time_of_day,
+                            [[maybe_unused]] const ::GeoPoint &a,
+                            [[maybe_unused]] const ::GeoPoint &b,
+                            [[maybe_unused]] int bottom_altitude,
+                            [[maybe_unused]] int top_altitude,
+                            [[maybe_unused]] double lift) {}
 
-  virtual void OnWaveRequest(const Client &client) {}
+  virtual void OnWaveRequest([[maybe_unused]] const Client &client) {}
 
-  virtual void OnThermalSubmit(const Client &client,
-                               std::chrono::milliseconds time_of_day,
-                               const ::GeoPoint &bottom_location,
-                               int bottom_altitude,
-                               const ::GeoPoint &top_location,
-                               int top_altitude,
-                               double lift) {}
+  virtual void OnThermalSubmit([[maybe_unused]] const Client &client,
+                               [[maybe_unused]] std::chrono::milliseconds time_of_day,
+                               [[maybe_unused]] const ::GeoPoint &bottom_location,
+                               [[maybe_unused]] int bottom_altitude,
+                               [[maybe_unused]] const ::GeoPoint &top_location,
+                               [[maybe_unused]] int top_altitude,
+                               [[maybe_unused]] double lift) {}
 
-  virtual void OnThermalRequest(const Client &client) {}
+  virtual void OnThermalRequest([[maybe_unused]] const Client &client) {}
 
   /**
    * An error has occurred while sending a response to a client.  This
    * error is non-fatal.
    */
-  virtual void OnSendError(SocketAddress address,
-                           std::exception_ptr e) noexcept {}
+  virtual void OnSendError([[maybe_unused]] SocketAddress address,
+                           [[maybe_unused]] std::exception_ptr e) noexcept {}
 
   /**
    * An error has occurred, and the SkyLines tracking server is

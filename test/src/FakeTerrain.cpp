@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,26 +24,29 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 
 TerrainHeight
-RasterMap::GetHeight(const GeoPoint &location) const noexcept
+RasterMap::GetHeight([[maybe_unused]] const GeoPoint &location) const noexcept
 {
   return TerrainHeight::Invalid();
 }
 
 GeoPoint
-RasterMap::GroundIntersection(const GeoPoint &origin,
-                              const int h_origin,
-                              const int h_glide,
-                              const GeoPoint &destination,
-                              const int height_floor) const noexcept
+RasterMap::GroundIntersection([[maybe_unused]] const GeoPoint &origin,
+                              [[maybe_unused]] const int h_origin,
+                              [[maybe_unused]] const int h_glide,
+                              [[maybe_unused]] const GeoPoint &destination,
+                              [[maybe_unused]] const int height_floor) const noexcept
 {
   return GeoPoint::Invalid();
 }
 
 RasterMap::Intersection
-RasterMap::FirstIntersection(const GeoPoint &origin, const int h_origin,
-                             const GeoPoint &destination, const int h_destination,
-                             const int h_virt, const int h_ceiling,
-                             const int h_safety) const noexcept
+RasterMap::FirstIntersection([[maybe_unused]] const GeoPoint &origin,
+                             [[maybe_unused]] const int h_origin,
+                             [[maybe_unused]] const GeoPoint &destination,
+                             [[maybe_unused]] const int h_destination,
+                             [[maybe_unused]] const int h_virt,
+                             [[maybe_unused]] const int h_ceiling,
+                             [[maybe_unused]] const int h_safety) const noexcept
 {
   return Intersection::Invalid();
 }

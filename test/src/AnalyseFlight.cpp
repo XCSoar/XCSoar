@@ -100,7 +100,7 @@ ComputeCircling(DebugReplay &replay, const CirclingSettings &circling_settings)
 }
 
 static void
-Finish(const MoreData &basic, const DerivedInfo &calculated,
+Finish(const MoreData &basic, [[maybe_unused]] const DerivedInfo &calculated,
        Result &result)
 {
   if (!basic.time_available || !basic.date_time_utc.IsDatePlausible())

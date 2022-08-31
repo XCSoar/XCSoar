@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,30 +31,33 @@ Profile::Save() noexcept
 }
 
 void
-Profile::SetFiles(Path override_path)
+Profile::SetFiles([[maybe_unused]] Path override_path)
 {
 }
 
 const char *
-Profile::Get(const char *key, const char *default_value)
+Profile::Get([[maybe_unused]] const char *key,
+             [[maybe_unused]] const char *default_value)
 {
   return NULL;
 }
 
 bool
-Profile::Get(const char *key, TCHAR *pPos, size_t dwSize)
+Profile::Get([[maybe_unused]] const char *key, TCHAR *pPos,
+             [[maybe_unused]] size_t dwSize)
 {
   pPos[0] = _T('\0');
   return false;
 }
 
 void
-Profile::Set(const char *key, const char *value)
+Profile::Set([[maybe_unused]] const char *key,
+             [[maybe_unused]] const char *value)
 {
 }
 
 AllocatedPath
-Profile::GetPath(const char *key)
+Profile::GetPath([[maybe_unused]] const char *key)
 {
   return nullptr;
 }
