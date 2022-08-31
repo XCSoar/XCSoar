@@ -31,8 +31,6 @@ Copyright_License {
 #include <TargetConditionals.h>
 #endif
 
-#include <sys/stat.h>
-
 /**
  * Returns whether this is a debug build.
  */
@@ -299,16 +297,3 @@ HasEPaper() noexcept
   return IsKobo();
 #endif
 }
-
-/*
- * Is this device descriptor, true e.g. for tty devices, a character device ?
- */
-#ifndef __APPLE__
-[[gnu::pure]]
-static inline bool
-IsCharDev(const char *path) noexcept
-{
-  struct stat st;
-  return stat(path, &st) == 0 && S_ISCHR(st.st_mode);
-}
-#endif

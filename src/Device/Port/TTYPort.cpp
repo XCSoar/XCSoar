@@ -33,6 +33,8 @@ Copyright_License {
 
 #include <system_error>
 #include <boost/system/system_error.hpp>
+
+#include <sys/stat.h>
 #include <termios.h>
 
 #include <cassert>
@@ -181,6 +183,16 @@ TTYPort::Drain()
   const TTYDescriptor tty(socket.GetFileDescriptor());
   return tty.Drain();
 }
+
+#ifndef __APPLE__
+[[gnu::pure]]
+static bool
+IsCharDev(const char *path) noexcept
+{
+  struct stat st;
+  return stat(path, &st) == 0 && S_ISCHR(st.st_mode);
+}
+#endif
 
 void
 TTYPort::Open(const TCHAR *path, unsigned baud_rate)
