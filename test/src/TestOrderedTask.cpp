@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -86,7 +86,7 @@ static const auto wp4 = MakeWaypointPtr(1, 46, 50);
 static const auto wp5 = MakeWaypointPtr(0.3, 46, 50);
 
 static double
-GetSafetyHeight(const TaskPoint &tp) noexcept
+GetSafetyHeight([[maybe_unused]] const TaskPoint &tp) noexcept
 {
   return task_behaviour.safety_height_arrival;
 }
@@ -416,7 +416,7 @@ TestAll()
   TestLowTPFinal();
 }
 
-int main(int argc, char **argv)
+int main()
 {
   plan_tests(728);
 

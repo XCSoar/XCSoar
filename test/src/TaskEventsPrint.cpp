@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,21 +25,21 @@
 #include <stdio.h>
 
 void
-TaskEventsPrint::EnterTransition(const TaskWaypoint &tp) noexcept
+TaskEventsPrint::EnterTransition([[maybe_unused]] const TaskWaypoint &tp) noexcept
 {
   if (verbose)
     printf("#- entered sector\n");
 }
 
 void
-TaskEventsPrint::ExitTransition(const TaskWaypoint &tp) noexcept
+TaskEventsPrint::ExitTransition([[maybe_unused]] const TaskWaypoint &tp) noexcept
 {
   if (verbose)
     printf("#- exited sector\n");
 }
 
 void
-TaskEventsPrint::RequestArm(const TaskWaypoint &tp) noexcept
+TaskEventsPrint::RequestArm([[maybe_unused]] const TaskWaypoint &tp) noexcept
 {
   if (verbose)
     printf("#- ready to advance\n");
@@ -60,7 +60,7 @@ TaskEventsPrint::TaskFinish() noexcept
 }
 
 void
-TaskEventsPrint::ActiveAdvanced(const TaskWaypoint &tp, const int i) noexcept
+TaskEventsPrint::ActiveAdvanced([[maybe_unused]] const TaskWaypoint &tp, const int i) noexcept
 {
   if (verbose)
     printf("#- advance to sector %d\n", i);

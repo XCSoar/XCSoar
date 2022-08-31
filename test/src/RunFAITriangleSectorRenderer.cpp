@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -103,7 +103,7 @@ protected:
     return false;
   }
 
-  bool OnMouseUp(PixelPoint p) override {
+  bool OnMouseUp([[maybe_unused]] PixelPoint p) override {
     if (drag_mode != DragMode::NONE) {
       drag_mode = DragMode::NONE;
       ReleaseCapture();
@@ -113,7 +113,7 @@ protected:
     return false;
   }
 
-  bool OnMouseMove(PixelPoint p, unsigned keys) override {
+  bool OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys) override {
     const GeoPoint gp = projection.ScreenToGeo(p);
     switch (drag_mode) {
     case DragMode::NONE:

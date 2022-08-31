@@ -195,12 +195,12 @@ UIGlobals::GetMainWindow()
 #endif
 
 #ifndef _WIN32
-int main(int argc, char **argv)
+int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 #else
 int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-        LPSTR lpCmdLine2,
-        int nCmdShow)
+WinMain([[maybe_unused]] HINSTANCE hInstance, [[maybe_unused]] HINSTANCE hPrevInstance,
+        [[maybe_unused]] LPSTR lpCmdLine2,
+        [[maybe_unused]] int nCmdShow)
 #endif
 {
 #if defined(ENABLE_CMDLINE) || defined(ENABLE_MAIN_WINDOW)

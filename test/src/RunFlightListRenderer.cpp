@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -96,12 +96,12 @@ protected:
       close_button.Move(GetButtonRect(rc));
   }
 
-  bool OnKeyUp(unsigned key_code) override {
+  bool OnKeyUp([[maybe_unused]] unsigned key_code) override {
     Close();
     return true;
   }
 
-  bool OnMouseUp(PixelPoint p) override {
+  bool OnMouseUp([[maybe_unused]] PixelPoint p) override {
     Close();
     return true;
   }

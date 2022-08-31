@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -97,7 +97,8 @@ PrintTracePoint(const TracePoint &point, std::ofstream& fs)
 }
 
 void
-PrintHelper::trace_print(const Trace& trace, const GeoPoint &loc)
+PrintHelper::trace_print([[maybe_unused]] const Trace& trace,
+			 [[maybe_unused]] const GeoPoint &loc)
 {
   Directory::Create(Path(_T("output/results")));
   std::ofstream fs("output/results/res-trace.txt");

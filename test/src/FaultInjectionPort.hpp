@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -51,7 +51,7 @@ public:
       : PortState::FAILED;
   }
 
-  size_t Write(const void *data, size_t length) override {
+  size_t Write([[maybe_unused]] const void *data, size_t length) override {
     return length;
   }
 
@@ -91,7 +91,7 @@ public:
     return Size;
   }
 
-  void WaitRead(std::chrono::steady_clock::duration timeout) override {
+  void WaitRead([[maybe_unused]] std::chrono::steady_clock::duration timeout) override {
     if (inject_port_fault == 0)
       throw std::runtime_error{"Injected fault"};
   }

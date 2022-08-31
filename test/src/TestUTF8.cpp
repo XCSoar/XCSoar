@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -146,7 +146,7 @@ TestTruncateString()
 
 #endif
 
-int main(int argc, char **argv)
+int main()
 {
   plan_tests(2 * ARRAY_SIZE(valid) +
              2 * ARRAY_SIZE(invalid) +
