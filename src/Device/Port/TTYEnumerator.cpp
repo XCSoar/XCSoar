@@ -24,15 +24,19 @@ Copyright_License {
 #include "TTYEnumerator.hpp"
 #include "util/CharUtil.hxx"
 #include "util/StringCompare.hxx"
+#include "system/FileUtil.hpp"
 
 #include <stdio.h>
 #include <unistd.h>
+
+using namespace File;
 
 [[gnu::pure]]
 static bool
 CheckTTYName(const char *name) noexcept
 {
   /* filter "/dev/tty*" */
+
   if (const char *t = StringAfterPrefix(name, "tty"); t != nullptr) {
     if (*t == 0)
       /* ignore /dev/tty */
@@ -66,7 +70,7 @@ TTYEnumerator::Next() noexcept
       /* truncated - ignore */
       continue;
 
-    if (access(path, R_OK|W_OK) == 0 && access(path, X_OK) < 0)
+    if (access(path, R_OK|W_OK) == 0 && IsCharDev(path) )
       return path;
   }
 
