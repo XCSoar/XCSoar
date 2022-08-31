@@ -309,6 +309,15 @@ File::Exists(Path path) noexcept
 #endif
 }
 
+#if !defined(_WIN32)
+bool
+File::IsCharDev(Path path) noexcept
+{
+  struct stat st;
+  return stat(path.c_str(), &st) == 0 && S_ISCHR(st.st_mode);
+}
+#endif
+
 #if defined(_WIN32) && defined(UNICODE)
 
 bool

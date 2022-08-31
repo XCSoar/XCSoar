@@ -117,6 +117,15 @@ ExistsAny(Path path) noexcept;
 bool
 Exists(Path path) noexcept;
 
+/**
+ * Returns whether the given file descriptor is a character device e.g. /dev/ttyS<n>
+ * @param path File system path to check
+ * @return True if the character device exists
+ */
+[[gnu::pure]]
+bool
+IsCharDev(Path path) noexcept;
+
 #if defined(_WIN32) && defined(UNICODE)
 [[gnu::pure]]
 bool
