@@ -52,12 +52,22 @@ class DoubleBufferWindow : public PaintWindow {
    * The buffer currently drawn into.  This buffer may only be
    * accessed by the drawing thread.  The other buffer (current^1) may
    * only be accessed by the main thread.
+   *
+   * Protected by #mutex.
    */
   unsigned current = 0;
 
+  /**
+   * The window size for the next OnPaintBuffer() call.  This field is
+   * thread-safe, unlike Window::GetSize().
+   *
+   * Protected by #mutex.
+   */
+  PixelSize next_size;
+
 protected:
   /**
-   * This mutex protects the variable "current".
+   * This mutex protects the fields #current and #next_size.
    */
   mutable Mutex mutex;
 
@@ -80,8 +90,10 @@ protected:
   }
 
 protected:
+  /* virtual methods from class Window */
   void OnCreate() override;
   void OnDestroy() noexcept override;
+  void OnResize(PixelSize new_size) noexcept override;
   void OnPaint(Canvas &canvas) noexcept override;
 
   /**

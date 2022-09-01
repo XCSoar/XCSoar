@@ -32,6 +32,8 @@ DoubleBufferWindow::OnCreate()
 {
   PaintWindow::OnCreate();
 
+  next_size = GetSize();
+
   WindowCanvas a_canvas(*this);
   buffers[0].Create(a_canvas);
   buffers[1].Create(a_canvas);
@@ -44,6 +46,17 @@ DoubleBufferWindow::OnDestroy() noexcept
 
   buffers[0].Destroy();
   buffers[1].Destroy();
+}
+
+void
+DoubleBufferWindow::OnResize(PixelSize new_size) noexcept
+{
+  PaintWindow::OnResize(new_size);
+
+  /* store the new size for the next Repaint() call in a thread-safe
+     field */
+  const std::lock_guard lock{mutex};
+  next_size = new_size;
 }
 
 void
@@ -60,7 +73,7 @@ DoubleBufferWindow::Repaint() noexcept
 
   /* grow the current buffer, just in case the window has been
      resized */
-  buffers[current].Grow(GetSize());
+  buffers[current].Grow(next_size);
 }
 
 void
