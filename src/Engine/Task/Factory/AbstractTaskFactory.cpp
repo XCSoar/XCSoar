@@ -222,8 +222,10 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const noexcept
     case ObservationZone::Shape::FAI_SECTOR:
       return TaskPointFactoryType::FAI_SECTOR;
 
-    case ObservationZone::Shape::DAEC_KEYHOLE:
     case ObservationZone::Shape::CUSTOM_KEYHOLE:
+      return TaskPointFactoryType::CUSTOM_KEYHOLE;
+
+    case ObservationZone::Shape::DAEC_KEYHOLE:
       return TaskPointFactoryType::DAEC_KEYHOLE;
 
     case ObservationZone::Shape::BGAFIXEDCOURSE:
@@ -336,6 +338,11 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
   case TaskPointFactoryType::SYMMETRIC_QUADRANT:
     return CreateASTPoint(std::make_unique<SymmetricSectorZone>(location,
                                                                 turnpoint_radius),
+                          std::move(wp));
+  case TaskPointFactoryType::CUSTOM_KEYHOLE:
+    return CreateASTPoint(KeyholeZone::CreateCustomKeyholeZone(location,
+                                                               turnpoint_radius,
+                                                               Angle::QuarterCircle()),
                           std::move(wp));
   case TaskPointFactoryType::DAEC_KEYHOLE:
     return CreateASTPoint(KeyholeZone::CreateDAeCKeyholeZone(location),
@@ -654,6 +661,7 @@ AbstractTaskFactory::ValidAbstractType(LegalAbstractPointType type,
     return is_intermediate &&
       (IsValidIntermediateType(TaskPointFactoryType::FAI_SECTOR) 
        || IsValidIntermediateType(TaskPointFactoryType::AST_CYLINDER)
+       || IsValidIntermediateType(TaskPointFactoryType::CUSTOM_KEYHOLE)
        || IsValidIntermediateType(TaskPointFactoryType::DAEC_KEYHOLE)
        || IsValidIntermediateType(TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR)
        || IsValidIntermediateType(TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR));
@@ -794,6 +802,7 @@ AbstractTaskFactory::ValidateFAIOZs() const noexcept
 
       break;
 
+    case TaskPointFactoryType::CUSTOM_KEYHOLE:
     case TaskPointFactoryType::DAEC_KEYHOLE:
     case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
     case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
@@ -855,6 +864,7 @@ AbstractTaskFactory::ValidateMATOZs() const noexcept
     case TaskPointFactoryType::AAT_CYLINDER:
     case TaskPointFactoryType::FAI_SECTOR:
     case TaskPointFactoryType::AST_CYLINDER:
+    case TaskPointFactoryType::CUSTOM_KEYHOLE:
     case TaskPointFactoryType::DAEC_KEYHOLE:
     case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
     case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:

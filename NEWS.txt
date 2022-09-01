@@ -1,4 +1,6 @@
 Version 7.26 - not yet released
+* task
+  - add custom keyhole support
 * Android
   - improve native serial port enumeration
 * Kobo

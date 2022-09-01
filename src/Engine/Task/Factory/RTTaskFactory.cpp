@@ -42,6 +42,7 @@ static constexpr LegalPointSet rt_start_types{
 
 static constexpr LegalPointSet rt_im_types{
   TaskPointFactoryType::AST_CYLINDER,
+  TaskPointFactoryType::CUSTOM_KEYHOLE,
   TaskPointFactoryType::DAEC_KEYHOLE,
   TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR,
   TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR,
@@ -75,6 +76,7 @@ RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept
   case TaskPointFactoryType::START_BGA:
     break;
 
+  case TaskPointFactoryType::CUSTOM_KEYHOLE:
   case TaskPointFactoryType::DAEC_KEYHOLE:
   case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
   case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
@@ -89,7 +91,7 @@ RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept
     break;
 
   case TaskPointFactoryType::AAT_KEYHOLE:
-    newtype = TaskPointFactoryType::DAEC_KEYHOLE;
+    newtype = TaskPointFactoryType::CUSTOM_KEYHOLE;
     break;
 
   case TaskPointFactoryType::AAT_SEGMENT:

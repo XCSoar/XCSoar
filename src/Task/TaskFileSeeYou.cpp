@@ -334,8 +334,13 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
     return nullptr;
 
   if (factType == TaskFactoryType::RACING &&
-      is_intermediate && isKeyhole(turnpoint_infos))
-    return KeyholeZone::CreateDAeCKeyholeZone(wp->location);
+      is_intermediate && isKeyhole(turnpoint_infos)) {
+    auto oz = KeyholeZone::CreateCustomKeyholeZone(wp->location,
+                                                   turnpoint_infos.radius1,
+                                                   turnpoint_infos.angle1);
+    oz->SetInnerRadius(turnpoint_infos.radius2);
+    return oz;
+  }
 
   else if (factType == TaskFactoryType::RACING &&
       is_intermediate && isBGAEnhancedOptionZone(turnpoint_infos))

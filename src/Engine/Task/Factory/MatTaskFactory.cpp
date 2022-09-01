@@ -78,6 +78,7 @@ MatTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept
     newtype = TaskPointFactoryType::FINISH_CYLINDER;
     break;
 
+  case TaskPointFactoryType::CUSTOM_KEYHOLE:
   case TaskPointFactoryType::DAEC_KEYHOLE:
   case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
   case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:

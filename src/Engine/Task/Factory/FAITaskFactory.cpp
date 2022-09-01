@@ -104,6 +104,7 @@ FAITaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept
     break;
 
   case TaskPointFactoryType::AAT_KEYHOLE:
+  case TaskPointFactoryType::CUSTOM_KEYHOLE:
   case TaskPointFactoryType::DAEC_KEYHOLE:
   case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
   case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
