@@ -43,6 +43,8 @@
 
 #include <stdlib.h>
 
+static constexpr std::size_t CUP_MAX_TPS = 30;
+
 struct SeeYouTaskInformation {
   /** True = RT, False = AAT */
   bool wp_dis = true;
@@ -175,7 +177,7 @@ ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
   // Read OZ index
   TCHAR* end;
   const std::size_t oz_index = _tcstol(params[0] + 8, &end, 10);
-  if (params[0] + 8 == end || oz_index >= 30)
+  if (params[0] + 8 == end || oz_index >= CUP_MAX_TPS)
     return -1;
 
   turnpoint_infos[oz_index].valid = true;
@@ -488,8 +490,8 @@ try {
   // e.g. "Club day 4 Racing task","085PRI","083BOJ","170D_K","065SKY","0844YY", "0844YY"
   //       TASK NAME              , TAKEOFF, START  , TP1    , TP2    , FINISH ,  LANDING
   TCHAR waypoints_buffer[1024];
-  const TCHAR *wps[30];
-  size_t n_waypoints = ExtractParameters(line, waypoints_buffer, wps, 30,
+  const TCHAR *wps[CUP_MAX_TPS];
+  size_t n_waypoints = ExtractParameters(line, waypoints_buffer, wps, CUP_MAX_TPS,
                                          true, _T('"'));
 
   // Some versions of StrePla append a trailing ',' without a following
@@ -505,8 +507,8 @@ try {
   n_waypoints -= 3;
 
   SeeYouTaskInformation task_info;
-  SeeYouTurnpointInformation turnpoint_infos[30];
-  WaypointPtr waypoints_in_task[30];
+  SeeYouTurnpointInformation turnpoint_infos[CUP_MAX_TPS];
+  WaypointPtr waypoints_in_task[CUP_MAX_TPS];
 
   ParseCUTaskDetails(reader, &task_info, turnpoint_infos);
 
