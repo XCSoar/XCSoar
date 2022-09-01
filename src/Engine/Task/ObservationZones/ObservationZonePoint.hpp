@@ -36,8 +36,8 @@ class ObservationZonePoint : public ObservationZone {
   GeoPoint reference;
 
 protected:
-  ObservationZonePoint(const ObservationZonePoint &other,
-                       const GeoPoint &_reference)
+  constexpr ObservationZonePoint(const ObservationZonePoint &other,
+                                 const GeoPoint &_reference) noexcept
     :ObservationZone(other.GetShape(), other.CanStartThroughTop()),
      reference(_reference) {}
 
@@ -49,8 +49,8 @@ public:
    *
    * @return Initialised object
    */
-  ObservationZonePoint(Shape _shape, bool _can_start_through_top,
-                       const GeoPoint & _location)
+  constexpr ObservationZonePoint(Shape _shape, bool _can_start_through_top,
+                                 const GeoPoint & _location) noexcept
     :ObservationZone(_shape, _can_start_through_top),
      reference(_location) {}
 
@@ -61,7 +61,7 @@ public:
    * @param next Following task point (destination of outbound leg)
    */
   virtual void SetLegs([[maybe_unused]] const GeoPoint *previous,
-                       [[maybe_unused]] const GeoPoint *next) {}
+                       [[maybe_unused]] const GeoPoint *next) noexcept {}
 
   /**
    * Test whether an OZ is equivalent to this one
@@ -70,7 +70,8 @@ public:
    *
    * @return True if same location and OZ
    */
-  virtual bool Equals(const ObservationZonePoint &other) const;
+  [[gnu::pure]]
+  virtual bool Equals(const ObservationZonePoint &other) const noexcept;
 
   /**
    * Generate a random location inside the OZ (to be used for testing)
@@ -79,7 +80,7 @@ public:
    *
    * @return Location of point
    */
-  virtual GeoPoint GetRandomPointInSector(double mag) const = 0;
+  virtual GeoPoint GetRandomPointInSector(double mag) const noexcept = 0;
 
   /**
    * Clone this object with optional shift
@@ -96,7 +97,7 @@ public:
   /**
    * The actual location
    */
-  const GeoPoint &GetReference() const {
+  constexpr const GeoPoint &GetReference() const noexcept {
     return reference;
   }
 
@@ -104,7 +105,8 @@ protected:
   /**
    * distance from this to the reference
    */
-  double DistanceTo(const GeoPoint &ref) const {
+  [[gnu::pure]]
+  double DistanceTo(const GeoPoint &ref) const noexcept {
     return reference.Distance(ref);
   }
 };

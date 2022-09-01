@@ -21,10 +21,9 @@
  */
 
 #include "LineSectorZone.hpp"
-#include "Boundary.hpp"
 
 double
-LineSectorZone::ScoreAdjustment() const
+LineSectorZone::ScoreAdjustment() const noexcept
 {
   return 0;
 }

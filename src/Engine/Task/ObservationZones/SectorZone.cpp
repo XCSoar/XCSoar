@@ -25,7 +25,7 @@
 #include "Geo/GeoVector.hpp"
 
 OZBoundary
-SectorZone::GetBoundary() const
+SectorZone::GetBoundary() const noexcept
 {
   OZBoundary boundary;
 
@@ -41,20 +41,20 @@ SectorZone::GetBoundary() const
 }
 
 double
-SectorZone::ScoreAdjustment() const
+SectorZone::ScoreAdjustment() const noexcept
 {
   return 0;
 }
 
-void 
-SectorZone::UpdateSector() 
+void
+SectorZone::UpdateSector() noexcept
 {
   sector_start = GeoVector(GetRadius(), start_radial).EndPoint(GetReference());
   sector_end = GeoVector(GetRadius(), end_radial).EndPoint(GetReference());
 }
 
-bool 
-SectorZone::IsInSector(const GeoPoint &location) const
+bool
+SectorZone::IsInSector(const GeoPoint &location) const noexcept
 {
   GeoVector f(GetReference(), location);
 
@@ -62,21 +62,21 @@ SectorZone::IsInSector(const GeoPoint &location) const
 }
 
 void
-SectorZone::SetStartRadial(const Angle x)
+SectorZone::SetStartRadial(const Angle x) noexcept
 {
   start_radial = x;
   UpdateSector();
 }
 
 void
-SectorZone::SetEndRadial(const Angle x)
+SectorZone::SetEndRadial(const Angle x) noexcept
 {
   end_radial = x;
   UpdateSector();
 }
 
 bool
-SectorZone::IsAngleInSector(const Angle b) const
+SectorZone::IsAngleInSector(const Angle b) const noexcept
 {
   // Quit early if we have a full circle
   if ((end_radial - start_radial).AsBearing() <= Angle::FullCircle() / 512)
@@ -86,7 +86,7 @@ SectorZone::IsAngleInSector(const Angle b) const
 }
 
 bool
-SectorZone::Equals(const ObservationZonePoint &other) const
+SectorZone::Equals(const ObservationZonePoint &other) const noexcept
 {
   const SectorZone &z = (const SectorZone &)other;
 

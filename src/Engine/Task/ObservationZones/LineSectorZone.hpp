@@ -34,7 +34,8 @@
  */
 class LineSectorZone: public SymmetricSectorZone
 {
-  LineSectorZone(const LineSectorZone &other, const GeoPoint &reference)
+  constexpr LineSectorZone(const LineSectorZone &other,
+                           const GeoPoint &reference) noexcept
     :SymmetricSectorZone((const SymmetricSectorZone &)other, reference) {}
 
 public:
@@ -46,7 +47,7 @@ public:
    *
    * @return Initialised object
    */
-  LineSectorZone(const GeoPoint loc, const double length = 1000.0)
+  LineSectorZone(const GeoPoint loc, const double length = 1000.0) noexcept
     :SymmetricSectorZone(Shape::LINE, false, false, loc,
                          length / 2, Angle::HalfCircle())
   {
@@ -58,7 +59,7 @@ public:
    *
    * @param new_length Length (m) of line
    */
-  void SetLength(const double new_length) {
+  void SetLength(const double new_length) noexcept {
     SetRadius(new_length / 2);
   }
   
@@ -67,18 +68,18 @@ public:
    *
    * @return Length (m) of line
    */
-  double GetLength() const {
+  double GetLength() const noexcept {
     return 2 * GetRadius();
   }
 
   /* virtual methods from class ObservationZone */
   bool TransitionConstraint(const GeoPoint &location,
-                            const GeoPoint &last_location) const override {
+                            const GeoPoint &last_location) const noexcept override {
     return CylinderZone::IsInSector(location) &&
       CylinderZone::IsInSector(last_location);
   }
 
-  double ScoreAdjustment() const override;
+  double ScoreAdjustment() const noexcept override;
 
   /* virtual methods from class ObservationZonePoint */
   std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {

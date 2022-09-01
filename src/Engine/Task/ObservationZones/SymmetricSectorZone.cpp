@@ -24,7 +24,8 @@
 #include "Geo/GeoPoint.hpp"
 
 void
-SymmetricSectorZone::SetLegs(const GeoPoint *previous, const GeoPoint *next)
+SymmetricSectorZone::SetLegs(const GeoPoint *previous,
+                             const GeoPoint *next) noexcept
 {
   /* Important: all bearings must be calculated from "current" as the
      primary reference, because this is the turn point we're currently
@@ -53,7 +54,7 @@ SymmetricSectorZone::SetLegs(const GeoPoint *previous, const GeoPoint *next)
 }
 
 bool
-SymmetricSectorZone::Equals(const ObservationZonePoint &other) const
+SymmetricSectorZone::Equals(const ObservationZonePoint &other) const noexcept
 {
   const SymmetricSectorZone &z = (const SymmetricSectorZone &)other;
 

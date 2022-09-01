@@ -25,7 +25,7 @@
 #include "Geo/GeoVector.hpp"
 
 OZBoundary
-AnnularSectorZone::GetBoundary() const
+AnnularSectorZone::GetBoundary() const noexcept
 {
   OZBoundary boundary;
 
@@ -59,7 +59,7 @@ AnnularSectorZone::GetBoundary() const
 }
 
 bool
-AnnularSectorZone::IsInSector(const GeoPoint &location) const
+AnnularSectorZone::IsInSector(const GeoPoint &location) const noexcept
 {
   GeoVector f(GetReference(), location);
 
@@ -69,7 +69,7 @@ AnnularSectorZone::IsInSector(const GeoPoint &location) const
 }
 
 bool
-AnnularSectorZone::Equals(const ObservationZonePoint &other) const
+AnnularSectorZone::Equals(const ObservationZonePoint &other) const noexcept
 {
   const AnnularSectorZone &z = (const AnnularSectorZone &)other;
 

@@ -42,16 +42,16 @@ protected:
    *
    * @return Initialised object
    */
-  KeyholeZone(Shape _shape, bool _can_start_through_top,
-              bool _arc_boundary,
-              const GeoPoint &loc,
-              const double radius = 10000.0,
-              const Angle angle = Angle::QuarterCircle())
+  constexpr KeyholeZone(Shape _shape, bool _can_start_through_top,
+                        bool _arc_boundary,
+                        const GeoPoint &loc,
+                        const double radius = 10000.0,
+                        const Angle angle = Angle::QuarterCircle()) noexcept
     :SymmetricSectorZone(_shape, _can_start_through_top, _arc_boundary,
                          loc, radius, angle),
      inner_radius(500) {}
 
-  KeyholeZone(const KeyholeZone &other, const GeoPoint &reference)
+  constexpr KeyholeZone(const KeyholeZone &other, const GeoPoint &reference) noexcept
     :SymmetricSectorZone((const SymmetricSectorZone &)other, reference),
      inner_radius(other.inner_radius) {}
 
@@ -107,18 +107,18 @@ public:
   /**
    * Returns the radius of the small cylinder [m].
    */
-  double GetInnerRadius() const {
+  constexpr double GetInnerRadius() const noexcept {
     return inner_radius;
   }
 
-  void SetInnerRadius(double _radius) {
+  constexpr void SetInnerRadius(double _radius) noexcept {
     inner_radius = _radius;
   }
 
   /* virtual methods from class ObservationZone */
-  bool IsInSector(const GeoPoint &location) const override;
-  OZBoundary GetBoundary() const override;
-  double ScoreAdjustment() const override;
+  bool IsInSector(const GeoPoint &location) const noexcept override;
+  OZBoundary GetBoundary() const noexcept override;
+  double ScoreAdjustment() const noexcept override;
 
   /* virtual methods from class ObservationZonePoint */
   std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {

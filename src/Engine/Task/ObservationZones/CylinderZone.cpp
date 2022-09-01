@@ -29,13 +29,13 @@
 #include <stdlib.h>
 
 double
-CylinderZone::ScoreAdjustment() const
+CylinderZone::ScoreAdjustment() const noexcept
 {
   return radius;
 }
 
 OZBoundary
-CylinderZone::GetBoundary() const
+CylinderZone::GetBoundary() const noexcept
 {
   OZBoundary boundary;
 
@@ -50,7 +50,7 @@ CylinderZone::GetBoundary() const
 }
 
 bool
-CylinderZone::Equals(const ObservationZonePoint &other) const
+CylinderZone::Equals(const ObservationZonePoint &other) const noexcept
 {
   const CylinderZone &z = (const CylinderZone &)other;
 
@@ -58,7 +58,7 @@ CylinderZone::Equals(const ObservationZonePoint &other) const
 }
 
 GeoPoint
-CylinderZone::GetRandomPointInSector(const double mag) const
+CylinderZone::GetRandomPointInSector(const double mag) const noexcept
 {
   GeoPoint location;
 
