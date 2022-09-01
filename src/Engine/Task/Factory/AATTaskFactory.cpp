@@ -74,7 +74,7 @@ AATTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept
   case TaskPointFactoryType::START_BGA:
     break;
 
-  case TaskPointFactoryType::KEYHOLE_SECTOR:
+  case TaskPointFactoryType::DAEC_KEYHOLE:
   case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
   case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
     newtype = AbstractTaskFactory::GetMutatedPointType(tp);

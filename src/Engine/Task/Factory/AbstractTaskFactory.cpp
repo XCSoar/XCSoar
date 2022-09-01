@@ -224,7 +224,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const noexcept
 
     case ObservationZone::Shape::DAEC_KEYHOLE:
     case ObservationZone::Shape::CUSTOM_KEYHOLE:
-      return TaskPointFactoryType::KEYHOLE_SECTOR;
+      return TaskPointFactoryType::DAEC_KEYHOLE;
 
     case ObservationZone::Shape::BGAFIXEDCOURSE:
       return TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR;
@@ -337,7 +337,7 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
     return CreateASTPoint(std::make_unique<SymmetricSectorZone>(location,
                                                                 turnpoint_radius),
                           std::move(wp));
-  case TaskPointFactoryType::KEYHOLE_SECTOR:
+  case TaskPointFactoryType::DAEC_KEYHOLE:
     return CreateASTPoint(KeyholeZone::CreateDAeCKeyholeZone(location),
                           std::move(wp));
   case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
@@ -654,7 +654,7 @@ AbstractTaskFactory::ValidAbstractType(LegalAbstractPointType type,
     return is_intermediate &&
       (IsValidIntermediateType(TaskPointFactoryType::FAI_SECTOR) 
        || IsValidIntermediateType(TaskPointFactoryType::AST_CYLINDER)
-       || IsValidIntermediateType(TaskPointFactoryType::KEYHOLE_SECTOR)
+       || IsValidIntermediateType(TaskPointFactoryType::DAEC_KEYHOLE)
        || IsValidIntermediateType(TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR)
        || IsValidIntermediateType(TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR));
   case POINT_AAT:
@@ -794,7 +794,7 @@ AbstractTaskFactory::ValidateFAIOZs() const noexcept
 
       break;
 
-    case TaskPointFactoryType::KEYHOLE_SECTOR:
+    case TaskPointFactoryType::DAEC_KEYHOLE:
     case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
     case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
     case TaskPointFactoryType::MAT_CYLINDER:
@@ -855,7 +855,7 @@ AbstractTaskFactory::ValidateMATOZs() const noexcept
     case TaskPointFactoryType::AAT_CYLINDER:
     case TaskPointFactoryType::FAI_SECTOR:
     case TaskPointFactoryType::AST_CYLINDER:
-    case TaskPointFactoryType::KEYHOLE_SECTOR:
+    case TaskPointFactoryType::DAEC_KEYHOLE:
     case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
     case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
     case TaskPointFactoryType::AAT_SEGMENT:
