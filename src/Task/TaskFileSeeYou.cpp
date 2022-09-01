@@ -174,7 +174,7 @@ ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
 {
   // Read OZ index
   TCHAR* end;
-  const int oz_index = _tcstol(params[0] + 8, &end, 10);
+  const std::size_t oz_index = _tcstol(params[0] + 8, &end, 10);
   if (params[0] + 8 == end || oz_index >= 30)
     return -1;
 
