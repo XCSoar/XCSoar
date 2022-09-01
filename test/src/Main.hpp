@@ -188,7 +188,7 @@ protected:
 #endif
   }
 
-  void OnResize(PixelSize new_size) override {
+  void OnResize(PixelSize new_size) noexcept override {
     SingleWindow::OnResize(new_size);
     Layout::Initialise(GetDisplay(), new_size);
 

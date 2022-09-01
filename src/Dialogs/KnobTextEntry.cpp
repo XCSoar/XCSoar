@@ -142,11 +142,11 @@ public:
 
 protected:
   /* virtual methods from class Window */
-  void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
 
 void
-KnobTextEntryWindow::OnPaint(Canvas &canvas)
+KnobTextEntryWindow::OnPaint(Canvas &canvas) noexcept
 {
   const PixelRect rc = GetClientRect();
 

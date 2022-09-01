@@ -122,7 +122,7 @@ Window::OnCreate()
 }
 
 void
-Window::OnDestroy()
+Window::OnDestroy() noexcept
 {
 #ifndef USE_WINUSER
   visible = false;
@@ -142,31 +142,32 @@ Window::OnDestroy()
 }
 
 void
-Window::OnResize([[maybe_unused]] PixelSize new_size)
+Window::OnResize([[maybe_unused]] PixelSize new_size) noexcept
 {
 }
 
 bool
-Window::OnMouseMove([[maybe_unused]] PixelPoint p, [[maybe_unused]] unsigned keys)
+Window::OnMouseMove([[maybe_unused]] PixelPoint p,
+                    [[maybe_unused]] unsigned keys) noexcept
 {
   /* not handled here */
   return false;
 }
 
 bool
-Window::OnMouseDown([[maybe_unused]] PixelPoint p)
+Window::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 {
   return false;
 }
 
 bool
-Window::OnMouseUp([[maybe_unused]] PixelPoint p)
+Window::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 {
   return false;
 }
 
 bool
-Window::OnMouseDouble(PixelPoint p)
+Window::OnMouseDouble(PixelPoint p) noexcept
 {
   /* fall back to OnMouseDown() if the class didn't override
      OnMouseDouble() */
@@ -174,7 +175,8 @@ Window::OnMouseDouble(PixelPoint p)
 }
 
 bool
-Window::OnMouseWheel([[maybe_unused]] PixelPoint p, [[maybe_unused]] int delta)
+Window::OnMouseWheel([[maybe_unused]] PixelPoint p,
+                     [[maybe_unused]] int delta) noexcept
 {
   return false;
 }
@@ -182,13 +184,13 @@ Window::OnMouseWheel([[maybe_unused]] PixelPoint p, [[maybe_unused]] int delta)
 #ifdef HAVE_MULTI_TOUCH
 
 bool
-Window::OnMultiTouchDown()
+Window::OnMultiTouchDown() noexcept
 {
   return false;
 }
 
 bool
-Window::OnMultiTouchUp()
+Window::OnMultiTouchUp() noexcept
 {
   return false;
 }
@@ -196,31 +198,31 @@ Window::OnMultiTouchUp()
 #endif /* HAVE_MULTI_TOUCH */
 
 bool
-Window::OnKeyCheck([[maybe_unused]] unsigned key_code) const
+Window::OnKeyCheck([[maybe_unused]] unsigned key_code) const noexcept
 {
   return false;
 }
 
 bool
-Window::OnKeyDown([[maybe_unused]] unsigned key_code)
+Window::OnKeyDown([[maybe_unused]] unsigned key_code) noexcept
 {
   return false;
 }
 
 bool
-Window::OnKeyUp([[maybe_unused]] unsigned key_code)
+Window::OnKeyUp([[maybe_unused]] unsigned key_code) noexcept
 {
   return false;
 }
 
 bool
-Window::OnCharacter([[maybe_unused]] unsigned ch)
+Window::OnCharacter([[maybe_unused]] unsigned ch) noexcept
 {
   return false;
 }
 
 void
-Window::OnCancelMode()
+Window::OnCancelMode() noexcept
 {
 #ifndef USE_WINUSER
   ReleaseCapture();
@@ -228,7 +230,7 @@ Window::OnCancelMode()
 }
 
 void
-Window::OnSetFocus()
+Window::OnSetFocus() noexcept
 {
 #ifndef USE_WINUSER
   assert(!focused);
@@ -238,7 +240,7 @@ Window::OnSetFocus()
 }
 
 void
-Window::OnKillFocus()
+Window::OnKillFocus() noexcept
 {
 #ifndef USE_WINUSER
   assert(focused);

@@ -167,8 +167,8 @@ private:
 
 protected:
   /* virtual methods from class Window */
-  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
 
   /* virtual methods from class PaintWindow */
-  void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };

@@ -235,14 +235,14 @@ TabMenuDisplay::HighlightPrevious() noexcept
 }
 
 void
-TabMenuDisplay::OnResize(PixelSize new_size)
+TabMenuDisplay::OnResize(PixelSize new_size) noexcept
 {
   PaintWindow::OnResize(new_size);
   UpdateLayout();
 }
 
 bool
-TabMenuDisplay::OnKeyCheck(unsigned key_code) const
+TabMenuDisplay::OnKeyCheck(unsigned key_code) const noexcept
 {
  switch (key_code) {
 
@@ -257,7 +257,7 @@ TabMenuDisplay::OnKeyCheck(unsigned key_code) const
 }
 
 bool
-TabMenuDisplay::OnKeyDown(unsigned key_code)
+TabMenuDisplay::OnKeyDown(unsigned key_code) noexcept
 {
   switch (key_code) {
   case KEY_RETURN:
@@ -278,7 +278,7 @@ TabMenuDisplay::OnKeyDown(unsigned key_code)
 }
 
 bool
-TabMenuDisplay::OnMouseDown(PixelPoint Pos)
+TabMenuDisplay::OnMouseDown(PixelPoint Pos) noexcept
 {
   DragEnd();
 
@@ -298,7 +298,7 @@ TabMenuDisplay::OnMouseDown(PixelPoint Pos)
 }
 
 bool
-TabMenuDisplay::OnMouseUp(PixelPoint Pos)
+TabMenuDisplay::OnMouseUp(PixelPoint Pos) noexcept
 {
   if (dragging) {
     DragEnd();
@@ -330,7 +330,8 @@ TabMenuDisplay::OnMouseUp(PixelPoint Pos)
 }
 
 bool
-TabMenuDisplay::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys)
+TabMenuDisplay::OnMouseMove(PixelPoint p,
+                            [[maybe_unused]] unsigned keys) noexcept
 {
   if (down_index.IsNone())
     return false;
@@ -418,7 +419,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas) const noexcept
 }
 
 void
-TabMenuDisplay::OnPaint(Canvas &canvas)
+TabMenuDisplay::OnPaint(Canvas &canvas) noexcept
 {
   canvas.Clear(look.background_color);
 
@@ -427,14 +428,14 @@ TabMenuDisplay::OnPaint(Canvas &canvas)
 }
 
 void
-TabMenuDisplay::OnKillFocus()
+TabMenuDisplay::OnKillFocus() noexcept
 {
   Invalidate();
   PaintWindow::OnKillFocus();
 }
 
 void
-TabMenuDisplay::OnSetFocus()
+TabMenuDisplay::OnSetFocus() noexcept
 {
   Invalidate();
   PaintWindow::OnSetFocus();

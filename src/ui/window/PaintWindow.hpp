@@ -113,10 +113,10 @@ protected:
 #endif
 
   /* virtual methods from class PaintWindow */
-  virtual void OnPaint(Canvas &canvas) = 0;
+  virtual void OnPaint(Canvas &canvas) noexcept = 0;
 
   virtual void OnPaint(Canvas &canvas,
-                       [[maybe_unused]] const PixelRect &dirty) {
+                       [[maybe_unused]] const PixelRect &dirty) noexcept {
     OnPaint(canvas);
   }
 };

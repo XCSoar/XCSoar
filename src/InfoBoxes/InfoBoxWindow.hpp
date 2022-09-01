@@ -162,19 +162,19 @@ private:
   void OnDialogTimer() noexcept;
 
 protected:
-  virtual void OnDestroy() override;
-  virtual void OnResize(PixelSize new_size) override;
-  virtual void OnSetFocus() override;
-  virtual void OnKillFocus() override;
-  virtual void OnCancelMode() override;
+  void OnDestroy() noexcept override;
+  void OnResize(PixelSize new_size) noexcept override;
+  void OnSetFocus() noexcept override;
+  void OnKillFocus() noexcept override;
+  void OnCancelMode() noexcept override;
 
-  virtual bool OnKeyDown(unsigned key_code) override;
+  bool OnKeyDown(unsigned key_code) noexcept override;
 
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  bool OnMouseDouble(PixelPoint p) override;
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseDouble(PixelPoint p) noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
 
-  /* virtual methods from class LazyPaintWindow */
+  /* methods from class LazyPaintWindow */
   void OnPaintBuffer(Canvas &canvas) noexcept override;
 };

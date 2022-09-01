@@ -120,13 +120,14 @@ Window::SetFont(const Font &_font) noexcept
 }
 
 bool
-Window::OnCommand([[maybe_unused]] unsigned id, [[maybe_unused]] unsigned code)
+Window::OnCommand([[maybe_unused]] unsigned id,
+                  [[maybe_unused]] unsigned code) noexcept
 {
   return false;
 }
 
 bool
-Window::OnUser([[maybe_unused]] unsigned id)
+Window::OnUser([[maybe_unused]] unsigned id) noexcept
 {
   return false;
 }

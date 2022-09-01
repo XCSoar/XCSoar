@@ -114,17 +114,17 @@ public:
 
 protected:
   /* virtual methods from class Window */
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
 
-  void OnCancelMode() override {
+  void OnCancelMode() noexcept override {
     PaintWindow::OnCancelMode();
     dragging = false;
   }
 
   /* virtual methods from class PaintWindow */
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
 
 class AnalysisWidget final : public NullWidget {
@@ -328,7 +328,7 @@ AnalysisWidget::SetCalcCaption(const TCHAR *caption)
 }
 
 void
-ChartControl::OnPaint(Canvas &canvas)
+ChartControl::OnPaint(Canvas &canvas) noexcept
 {
   const ComputerSettings &settings_computer = blackboard.GetComputerSettings();
   const MapSettings &settings_map = blackboard.GetMapSettings();
@@ -612,7 +612,7 @@ AnalysisWidget::OnGesture(const TCHAR *gesture)
 }
 
 bool
-ChartControl::OnMouseDown(PixelPoint p)
+ChartControl::OnMouseDown(PixelPoint p) noexcept
 {
   dragging = true;
   SetCapture();
@@ -621,7 +621,8 @@ ChartControl::OnMouseDown(PixelPoint p)
 }
 
 bool
-ChartControl::OnMouseMove([[maybe_unused]] PixelPoint p, [[maybe_unused]] unsigned keys)
+ChartControl::OnMouseMove([[maybe_unused]] PixelPoint p,
+                          [[maybe_unused]] unsigned keys) noexcept
 {
   if (dragging)
     gestures.Update(p);
@@ -629,7 +630,7 @@ ChartControl::OnMouseMove([[maybe_unused]] PixelPoint p, [[maybe_unused]] unsign
 }
 
 bool
-ChartControl::OnMouseUp([[maybe_unused]] PixelPoint p)
+ChartControl::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 {
   if (dragging) {
     dragging = false;

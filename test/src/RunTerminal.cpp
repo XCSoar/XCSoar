@@ -47,12 +47,12 @@ public:
   }
 
 protected:
-  virtual void OnCreate() override {
+  void OnCreate() noexcept override {
     SingleWindow::OnCreate();
     timer.Schedule(std::chrono::milliseconds(10));
   }
 
-  virtual void OnDestroy() override {
+  void OnDestroy() noexcept override {
     timer.Cancel();
     SingleWindow::OnDestroy();
   }

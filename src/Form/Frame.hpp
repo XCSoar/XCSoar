@@ -70,5 +70,5 @@ public:
 
 protected:
   /** from class PaintWindow */
-  void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };

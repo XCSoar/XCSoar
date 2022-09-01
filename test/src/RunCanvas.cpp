@@ -195,7 +195,7 @@ private:
   }
 
 protected:
-  bool OnMouseDown(PixelPoint p) override {
+  bool OnMouseDown(PixelPoint p) noexcept override {
     if (SingleWindow::OnMouseDown(p))
       return true;
 
@@ -204,7 +204,7 @@ protected:
     return true;
   }
 
-  virtual void OnPaint(Canvas &canvas) override {
+  void OnPaint(Canvas &canvas) noexcept override {
 #ifndef ENABLE_OPENGL
     if (!buffered) {
 #endif

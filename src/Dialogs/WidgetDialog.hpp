@@ -153,13 +153,13 @@ private:
 
 protected:
   /* virtual methods from class Window */
-  virtual void OnDestroy() override;
-  virtual void OnResize(PixelSize new_size) override;
+  void OnDestroy() noexcept override;
+  void OnResize(PixelSize new_size) noexcept override;
 
   /* virtual methods from class WndForm */
-  virtual void ReinitialiseLayout(const PixelRect &parent_rc) override;
-  virtual void SetDefaultFocus() override;
-  virtual bool OnAnyKeyDown(unsigned key_code) override;
+  void ReinitialiseLayout(const PixelRect &parent_rc) noexcept override;
+  void SetDefaultFocus() noexcept override;
+  bool OnAnyKeyDown(unsigned key_code) noexcept override;
 };
 
 /**

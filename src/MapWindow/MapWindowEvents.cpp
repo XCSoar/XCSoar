@@ -30,7 +30,7 @@ Copyright_License {
 #include "Weather/Features.hpp"
 
 void
-MapWindow::OnResize(PixelSize new_size)
+MapWindow::OnResize(PixelSize new_size) noexcept
 {
   DoubleBufferWindow::OnResize(new_size);
 
@@ -69,7 +69,7 @@ MapWindow::OnCreate()
 }
 
 void
-MapWindow::OnDestroy()
+MapWindow::OnDestroy() noexcept
 {
 #ifdef HAVE_NOAA
   SetNOAAStore(nullptr);
@@ -90,7 +90,7 @@ MapWindow::OnDestroy()
 #ifndef ENABLE_OPENGL
 
 void
-MapWindow::OnPaint(Canvas &canvas)
+MapWindow::OnPaint(Canvas &canvas) noexcept
 {
   if (buffer_generation == ui_generation) {
     DoubleBufferWindow::OnPaint(canvas);

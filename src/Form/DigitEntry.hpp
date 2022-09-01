@@ -327,10 +327,10 @@ private:
   void SetDigits(double degrees, CoordinateFormat format, bool isLatitude);
 
 protected:
-  void OnSetFocus() override;
-  void OnKillFocus() override;
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnKeyCheck(unsigned key_code) const override;
-  bool OnKeyDown(unsigned key_code) override;
-  void OnPaint(Canvas &canvas) override;
+  void OnSetFocus() noexcept override;
+  void OnKillFocus() noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnKeyCheck(unsigned key_code) const noexcept override;
+  bool OnKeyDown(unsigned key_code) noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };

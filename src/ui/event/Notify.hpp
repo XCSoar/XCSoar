@@ -80,7 +80,7 @@ private:
 
 #ifdef USE_WINUSER
 private:
-  virtual bool OnUser(unsigned id) override;
+  bool OnUser(unsigned id) noexcept override;
 #endif
 };
 

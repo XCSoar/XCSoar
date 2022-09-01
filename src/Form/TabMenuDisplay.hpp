@@ -285,23 +285,23 @@ private:
   void DragEnd() noexcept;
 
 protected:
-  void OnResize(PixelSize new_size) override;
+  void OnResize(PixelSize new_size) noexcept override;
 
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
-  bool OnMouseUp(PixelPoint p) override;
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnKeyCheck(unsigned key_code) const override;
-  bool OnKeyDown(unsigned key_code) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnKeyCheck(unsigned key_code) const noexcept override;
+  bool OnKeyDown(unsigned key_code) noexcept override;
 
   /**
    * canvas is the tabmenu which is the full content window, no content
    * @param canvas
    * Todo: support icons and "ButtonOnly" style
    */
-  void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 
-  void OnKillFocus() override;
-  void OnSetFocus() override;
+  void OnKillFocus() noexcept override;
+  void OnSetFocus() noexcept override;
 
 private:
   void InvalidateButton(MenuTabIndex i) noexcept {

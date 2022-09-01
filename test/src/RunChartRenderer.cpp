@@ -54,13 +54,13 @@ public:
   }
 
 protected:
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 
   void DrawChart(ChartRenderer &renderer);
 };
 
 void
-ChartWindow::OnPaint(Canvas &canvas)
+ChartWindow::OnPaint(Canvas &canvas) noexcept
 {
   canvas.ClearWhite();
   ChartRenderer renderer(look, canvas, canvas.GetRect());

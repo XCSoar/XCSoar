@@ -46,7 +46,7 @@ class LogoWindow final : public PaintWindow {
   LogoView logo;
 
 protected:
-  virtual void OnPaint(Canvas &canvas) override {
+  void OnPaint(Canvas &canvas) noexcept override {
     canvas.ClearWhite();
     logo.draw(canvas, GetClientRect());
   }

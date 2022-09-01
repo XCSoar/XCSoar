@@ -80,9 +80,9 @@ protected:
   }
 
 protected:
-  virtual void OnCreate() override;
-  virtual void OnDestroy() override;
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnCreate() override;
+  void OnDestroy() noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
 
   /**
    * Paint into the given #Canvas.  This is called from the thread

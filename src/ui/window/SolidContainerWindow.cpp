@@ -25,7 +25,7 @@ Copyright_License {
 #include "ui/canvas/Canvas.hpp"
 
 void
-SolidContainerWindow::OnPaint(Canvas &canvas)
+SolidContainerWindow::OnPaint(Canvas &canvas) noexcept
 {
   canvas.Clear(background_color);
 

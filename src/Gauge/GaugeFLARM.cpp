@@ -54,11 +54,11 @@ private:
   }
 
 protected:
-  virtual void OnCancelMode() override;
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnCancelMode() noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
 
 SmallTrafficWindow::SmallTrafficWindow(ContainerWindow &parent,
@@ -79,7 +79,7 @@ SmallTrafficWindow::Update(const NMEAInfo &gps_info,
 }
 
 void
-SmallTrafficWindow::OnCancelMode()
+SmallTrafficWindow::OnCancelMode() noexcept
 {
   if (dragging) {
     dragging = false;
@@ -92,7 +92,7 @@ SmallTrafficWindow::OnCancelMode()
 }
 
 bool
-SmallTrafficWindow::OnMouseDown([[maybe_unused]] PixelPoint p)
+SmallTrafficWindow::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 {
   if (!dragging) {
     dragging = true;
@@ -106,7 +106,7 @@ SmallTrafficWindow::OnMouseDown([[maybe_unused]] PixelPoint p)
 }
 
 bool
-SmallTrafficWindow::OnMouseUp([[maybe_unused]] PixelPoint p)
+SmallTrafficWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 {
   if (dragging) {
     const bool was_pressed = pressed;
@@ -127,7 +127,8 @@ SmallTrafficWindow::OnMouseUp([[maybe_unused]] PixelPoint p)
 }
 
 bool
-SmallTrafficWindow::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys)
+SmallTrafficWindow::OnMouseMove(PixelPoint p,
+                                [[maybe_unused]] unsigned keys) noexcept
 {
   if (dragging) {
     SetPressed(IsInside(p));
@@ -138,7 +139,7 @@ SmallTrafficWindow::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys)
 }
 
 void
-SmallTrafficWindow::OnPaint(Canvas &canvas)
+SmallTrafficWindow::OnPaint(Canvas &canvas) noexcept
 {
   FlarmTrafficWindow::OnPaint(canvas);
 

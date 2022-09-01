@@ -51,5 +51,5 @@ protected:
   std::function<void(Canvas &canvas, const PixelRect &rc)> mOnPaintCallback;
 
   /** from class PaintWindow */
-  void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };

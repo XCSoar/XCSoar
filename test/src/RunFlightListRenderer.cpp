@@ -50,7 +50,7 @@ public:
   }
 
 protected:
-  virtual void OnPaint(Canvas &canvas) override {
+  void OnPaint(Canvas &canvas) noexcept override {
     canvas.ClearWhite();
     renderer.Draw(canvas, GetClientRect());
   }
@@ -85,7 +85,7 @@ private:
   }
 
 protected:
-  void OnResize(PixelSize size) override {
+  void OnResize(PixelSize size) noexcept override {
     SingleWindow::OnResize(size);
 
     const PixelRect rc = GetClientRect();
@@ -96,12 +96,12 @@ protected:
       close_button.Move(GetButtonRect(rc));
   }
 
-  bool OnKeyUp([[maybe_unused]] unsigned key_code) override {
+  bool OnKeyUp([[maybe_unused]] unsigned key_code) noexcept override {
     Close();
     return true;
   }
 
-  bool OnMouseUp([[maybe_unused]] PixelPoint p) override {
+  bool OnMouseUp([[maybe_unused]] PixelPoint p) noexcept override {
     Close();
     return true;
   }

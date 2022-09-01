@@ -518,7 +518,7 @@ MainWindow::FullRedraw() noexcept
 // Windows event handlers
 
 void
-MainWindow::OnResize(PixelSize new_size)
+MainWindow::OnResize(PixelSize new_size) noexcept
 {
   Layout::Initialise(GetDisplay(), new_size,
                      CommonInterface::GetUISettings().GetPercentScale(),
@@ -534,7 +534,7 @@ MainWindow::OnResize(PixelSize new_size)
 }
 
 void
-MainWindow::OnSetFocus()
+MainWindow::OnSetFocus() noexcept
 {
   SingleWindow::OnSetFocus();
 
@@ -562,14 +562,14 @@ MainWindow::StopDragging() noexcept
 }
 
 void
-MainWindow::OnCancelMode()
+MainWindow::OnCancelMode() noexcept
 {
   SingleWindow::OnCancelMode();
   StopDragging();
 }
 
 bool
-MainWindow::OnMouseDown(PixelPoint p)
+MainWindow::OnMouseDown(PixelPoint p) noexcept
 {
   if (SingleWindow::OnMouseDown(p))
     return true;
@@ -584,7 +584,7 @@ MainWindow::OnMouseDown(PixelPoint p)
 }
 
 bool
-MainWindow::OnMouseUp(PixelPoint p)
+MainWindow::OnMouseUp(PixelPoint p) noexcept
 {
   if (SingleWindow::OnMouseUp(p))
     return true;
@@ -601,7 +601,7 @@ MainWindow::OnMouseUp(PixelPoint p)
 }
 
 bool
-MainWindow::OnMouseDouble(PixelPoint p)
+MainWindow::OnMouseDouble(PixelPoint p) noexcept
 {
   if (SingleWindow::OnMouseDouble(p))
     return true;
@@ -614,7 +614,7 @@ MainWindow::OnMouseDouble(PixelPoint p)
 }
 
 bool
-MainWindow::OnMouseMove(PixelPoint p, unsigned keys)
+MainWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
   if (SingleWindow::OnMouseMove(p, keys))
     return true;
@@ -626,7 +626,7 @@ MainWindow::OnMouseMove(PixelPoint p, unsigned keys)
 }
 
 bool
-MainWindow::OnKeyDown(unsigned key_code)
+MainWindow::OnKeyDown(unsigned key_code) noexcept
 {
   return (widget != nullptr && widget->KeyPress(key_code)) ||
     (HaveTopWidget() && top_widget->KeyPress(key_code)) ||
@@ -708,7 +708,7 @@ MainWindow::OnRestorePageNotify() noexcept
 }
 
 void
-MainWindow::OnDestroy()
+MainWindow::OnDestroy() noexcept
 {
   timer.Cancel();
 
@@ -734,7 +734,7 @@ MainWindow::OnClose() noexcept
 }
 
 void
-MainWindow::OnPaint(Canvas &canvas)
+MainWindow::OnPaint(Canvas &canvas) noexcept
 {
   if (HaveBottomWidget() && map != nullptr) {
     /* draw a separator between main area and bottom area */

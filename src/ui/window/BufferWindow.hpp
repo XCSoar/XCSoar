@@ -64,10 +64,10 @@ protected:
 
 protected:
   /* virtual methods from class Window */
-  void OnResize(PixelSize new_size) override;
+  void OnResize(PixelSize new_size) noexcept override;
 
   /* virtual methods from class PaintWindow */
-  void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 
   /* our virtual methods */
   virtual void OnPaintBuffer(Canvas &canvas) noexcept = 0;

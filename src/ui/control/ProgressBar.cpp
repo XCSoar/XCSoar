@@ -76,7 +76,7 @@ ProgressBar::Step()
 #endif
 
 void
-ProgressBar::OnPaint(Canvas &canvas)
+ProgressBar::OnPaint(Canvas &canvas) noexcept
 {
 #ifdef ROUND_PROGRESS_BAR
   DrawRoundProgressBar(canvas, canvas.GetRect(), value, min_value, max_value);

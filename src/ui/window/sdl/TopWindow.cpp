@@ -272,7 +272,7 @@ TopWindow::OnEvent(const SDL_Event &event)
 }
 
 void
-TopWindow::OnResize(PixelSize new_size)
+TopWindow::OnResize(PixelSize new_size) noexcept
 {
   ContainerWindow::OnResize(new_size);
 

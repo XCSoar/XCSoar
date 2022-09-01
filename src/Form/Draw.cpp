@@ -24,7 +24,7 @@ Copyright_License {
 #include "Form/Draw.hpp"
 
 void
-WndOwnerDrawFrame::OnPaint(Canvas &canvas)
+WndOwnerDrawFrame::OnPaint(Canvas &canvas) noexcept
 {
   if (mOnPaintCallback == nullptr)
     return;

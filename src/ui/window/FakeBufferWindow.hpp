@@ -41,7 +41,7 @@ protected:
   virtual void OnPaintBuffer(Canvas &canvas) noexcept = 0;
 
   /* virtual methods from class Window */
-  void OnPaint(Canvas &canvas) override {
+  void OnPaint(Canvas &canvas) noexcept override {
     OnPaintBuffer(canvas);
   }
 };

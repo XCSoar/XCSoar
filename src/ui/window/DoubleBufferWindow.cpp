@@ -38,7 +38,7 @@ DoubleBufferWindow::OnCreate()
 }
 
 void
-DoubleBufferWindow::OnDestroy()
+DoubleBufferWindow::OnDestroy() noexcept
 {
   PaintWindow::OnDestroy();
 
@@ -64,7 +64,7 @@ DoubleBufferWindow::Repaint() noexcept
 }
 
 void
-DoubleBufferWindow::OnPaint(Canvas &canvas)
+DoubleBufferWindow::OnPaint(Canvas &canvas) noexcept
 {
   std::lock_guard<Mutex> lock(mutex);
   canvas.Copy(GetVisibleCanvas());

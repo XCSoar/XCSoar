@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 bool
-BigThermalAssistantWindow::OnMouseDouble([[maybe_unused]] PixelPoint p)
+BigThermalAssistantWindow::OnMouseDouble([[maybe_unused]] PixelPoint p) noexcept
 {
   StopDragging();
   InputEvents::ShowMenu();
@@ -34,7 +34,7 @@ BigThermalAssistantWindow::OnMouseDouble([[maybe_unused]] PixelPoint p)
 }
 
 bool
-BigThermalAssistantWindow::OnMouseDown(PixelPoint p)
+BigThermalAssistantWindow::OnMouseDown(PixelPoint p) noexcept
 {
   if (!dragging) {
     dragging = true;
@@ -46,7 +46,7 @@ BigThermalAssistantWindow::OnMouseDown(PixelPoint p)
 }
 
 bool
-BigThermalAssistantWindow::OnMouseUp([[maybe_unused]] PixelPoint p)
+BigThermalAssistantWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 {
   if (dragging) {
     StopDragging();
@@ -60,7 +60,8 @@ BigThermalAssistantWindow::OnMouseUp([[maybe_unused]] PixelPoint p)
 }
 
 bool
-BigThermalAssistantWindow::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys)
+BigThermalAssistantWindow::OnMouseMove(PixelPoint p,
+                                       [[maybe_unused]] unsigned keys) noexcept
 {
   if (dragging)
     gestures.Update(p);
@@ -69,14 +70,14 @@ BigThermalAssistantWindow::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned k
 }
 
 void
-BigThermalAssistantWindow::OnCancelMode()
+BigThermalAssistantWindow::OnCancelMode() noexcept
 {
   ThermalAssistantWindow::OnCancelMode();
   StopDragging();
 }
 
 bool
-BigThermalAssistantWindow::OnKeyDown(unsigned key_code)
+BigThermalAssistantWindow::OnKeyDown(unsigned key_code) noexcept
 {
   return InputEvents::processKey(key_code);
 }

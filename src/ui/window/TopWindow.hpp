@@ -421,7 +421,7 @@ protected:
   virtual bool OnClose() noexcept;
 
 #ifdef KOBO
-  void OnDestroy() override;
+  void OnDestroy() noexcept override;
 #endif
 
 #ifdef USE_WINUSER
@@ -430,7 +430,7 @@ protected:
 #endif
 
 #ifndef USE_WINUSER
-  void OnResize(PixelSize new_size) override;
+  void OnResize(PixelSize new_size) noexcept override;
 #endif
 
 #ifdef ANDROID

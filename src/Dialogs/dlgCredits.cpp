@@ -44,11 +44,11 @@ Copyright_License {
 class LogoPageWindow final : public PaintWindow {
 protected:
   /** from class PaintWindow */
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
 
 void
-LogoPageWindow::OnPaint(Canvas &canvas)
+LogoPageWindow::OnPaint(Canvas &canvas) noexcept
 {
   const PixelRect rc = GetClientRect();
 

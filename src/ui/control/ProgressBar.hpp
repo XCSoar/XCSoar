@@ -40,5 +40,5 @@ public:
   void Step();
 
 protected:
-  void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };

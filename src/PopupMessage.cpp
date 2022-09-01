@@ -119,7 +119,7 @@ PopupMessage::Create(const PixelRect _rc)
 }
 
 bool
-PopupMessage::OnMouseDown([[maybe_unused]] PixelPoint p)
+PopupMessage::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 {
   // acknowledge with click/touch
   Acknowledge(MSG_UNKNOWN);
@@ -128,7 +128,7 @@ PopupMessage::OnMouseDown([[maybe_unused]] PixelPoint p)
 }
 
 void
-PopupMessage::OnPaint(Canvas &canvas)
+PopupMessage::OnPaint(Canvas &canvas) noexcept
 {
   canvas.ClearWhite();
 

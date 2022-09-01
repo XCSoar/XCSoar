@@ -66,32 +66,32 @@ protected:
   }
 
 protected:
-  bool OnMouseDown([[maybe_unused]] PixelPoint p) override {
+  bool OnMouseDown([[maybe_unused]] PixelPoint p) noexcept override {
     SetFocus();
     return true;
   }
 
-  virtual bool OnKeyDown(unsigned key_code) override {
+  bool OnKeyDown(unsigned key_code) noexcept override {
     add_event(key_code, true);
     return true;
   }
 
-  virtual bool OnKeyUp(unsigned key_code) override {
+  bool OnKeyUp(unsigned key_code) noexcept override {
     add_event(key_code, false);
     return true;
   }
 
-  virtual void OnSetFocus() override {
+  void OnSetFocus() noexcept override {
     PaintWindow::OnSetFocus();
     Invalidate();
   }
 
-  virtual void OnKillFocus() override {
+  void OnKillFocus() noexcept override {
     PaintWindow::OnKillFocus();
     Invalidate();
   }
 
-  virtual void OnPaint(Canvas &canvas) override {
+  void OnPaint(Canvas &canvas) noexcept override {
     canvas.SelectWhiteBrush();
     if (HasFocus())
       canvas.SelectBlackPen();
@@ -142,7 +142,7 @@ public:
   }
 
 protected:
-  virtual void OnResize(PixelSize new_size) override {
+  void OnResize(PixelSize new_size) noexcept override {
     SingleWindow::OnResize(new_size);
 
     if (key_code_dumper.IsDefined())

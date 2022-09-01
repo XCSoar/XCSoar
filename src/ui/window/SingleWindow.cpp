@@ -61,14 +61,14 @@ SingleWindow::OnClose() noexcept
 }
 
 void
-SingleWindow::OnDestroy()
+SingleWindow::OnDestroy() noexcept
 {
   TopWindow::OnDestroy();
   PostQuit();
 }
 
 void
-SingleWindow::OnResize(PixelSize new_size)
+SingleWindow::OnResize(PixelSize new_size) noexcept
 {
   TopWindow::OnResize(new_size);
 

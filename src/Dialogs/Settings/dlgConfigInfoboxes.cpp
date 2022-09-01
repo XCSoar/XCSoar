@@ -61,11 +61,11 @@ public:
 
 protected:
   /* virtual methods from class Window */
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseDouble(PixelPoint p) override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseDouble(PixelPoint p) noexcept override;
 
   /* virtual methods from class PaintWindow */
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
 
 class InfoBoxesConfigWidget final
@@ -371,21 +371,21 @@ InfoBoxesConfigWidget::SetCurrentInfoBox(unsigned _current_preview)
 }
 
 bool
-InfoBoxPreview::OnMouseDown([[maybe_unused]] PixelPoint p)
+InfoBoxPreview::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 {
   parent->SetCurrentInfoBox(i);
   return true;
 }
 
 bool
-InfoBoxPreview::OnMouseDouble([[maybe_unused]] PixelPoint p)
+InfoBoxPreview::OnMouseDouble([[maybe_unused]] PixelPoint p) noexcept
 {
   parent->BeginEditing();
   return true;
 }
 
 void
-InfoBoxPreview::OnPaint(Canvas &canvas)
+InfoBoxPreview::OnPaint(Canvas &canvas) noexcept
 {
   const bool is_current = i == parent->GetCurrentInfoBox();
 

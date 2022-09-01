@@ -51,8 +51,8 @@ private:
   void Advance();
 
 protected:
-  virtual void OnCreate() override;
-  virtual void OnResize(PixelSize new_size) override;
-  virtual void OnPaint(Canvas &canvas) override;
-  virtual void OnPaint(Canvas &canvas, const PixelRect &dirty) override;
+  void OnCreate() override;
+  void OnResize(PixelSize new_size) noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
+  void OnPaint(Canvas &canvas, const PixelRect &dirty) noexcept override;
 };

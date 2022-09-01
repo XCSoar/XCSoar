@@ -38,7 +38,7 @@ public:
   }
 
   /* virtual methods from class PaintWindow */
-  void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
 
 void
@@ -62,7 +62,7 @@ ViewImageWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 }
 
 void
-ViewImageWindow::OnPaint(Canvas &canvas)
+ViewImageWindow::OnPaint(Canvas &canvas) noexcept
 {
   canvas.ClearWhite();
 

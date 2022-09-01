@@ -56,15 +56,15 @@ private:
   }
 
 protected:
-  virtual void OnCancelMode() override;
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnCancelMode() noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
 
 void
-GaugeThermalAssistantWindow::OnCancelMode()
+GaugeThermalAssistantWindow::OnCancelMode() noexcept
 {
   if (dragging) {
     dragging = false;
@@ -77,7 +77,7 @@ GaugeThermalAssistantWindow::OnCancelMode()
 }
 
 bool
-GaugeThermalAssistantWindow::OnMouseDown([[maybe_unused]] PixelPoint p)
+GaugeThermalAssistantWindow::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 {
   if (!dragging) {
     dragging = true;
@@ -91,7 +91,7 @@ GaugeThermalAssistantWindow::OnMouseDown([[maybe_unused]] PixelPoint p)
 }
 
 bool
-GaugeThermalAssistantWindow::OnMouseUp([[maybe_unused]] PixelPoint p)
+GaugeThermalAssistantWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 {
   if (dragging) {
     const bool was_pressed = pressed;
@@ -112,7 +112,8 @@ GaugeThermalAssistantWindow::OnMouseUp([[maybe_unused]] PixelPoint p)
 }
 
 bool
-GaugeThermalAssistantWindow::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys)
+GaugeThermalAssistantWindow::OnMouseMove(PixelPoint p,
+                                         [[maybe_unused]] unsigned keys) noexcept
 {
   if (dragging) {
     SetPressed(IsInside(p));
@@ -123,7 +124,7 @@ GaugeThermalAssistantWindow::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned
 }
 
 void
-GaugeThermalAssistantWindow::OnPaint(Canvas &canvas)
+GaugeThermalAssistantWindow::OnPaint(Canvas &canvas) noexcept
 {
   ThermalAssistantWindow::OnPaint(canvas);
 

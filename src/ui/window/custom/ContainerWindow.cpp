@@ -123,7 +123,7 @@ ContainerWindow::FocusPreviousControl() noexcept
 }
 
 void
-ContainerWindow::OnDestroy()
+ContainerWindow::OnDestroy() noexcept
 {
   children.Clear();
 
@@ -131,7 +131,7 @@ ContainerWindow::OnDestroy()
 }
 
 void
-ContainerWindow::OnCancelMode()
+ContainerWindow::OnCancelMode() noexcept
 {
   Window::OnCancelMode();
 
@@ -143,7 +143,7 @@ ContainerWindow::OnCancelMode()
 }
 
 bool
-ContainerWindow::OnMouseMove(PixelPoint p, unsigned keys)
+ContainerWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
   Window *child = EventChildAt(p);
   if (child != nullptr)
@@ -153,7 +153,7 @@ ContainerWindow::OnMouseMove(PixelPoint p, unsigned keys)
 }
 
 bool
-ContainerWindow::OnMouseDown(PixelPoint p)
+ContainerWindow::OnMouseDown(PixelPoint p) noexcept
 {
   Window *child = EventChildAt(p);
   if (child != nullptr)
@@ -163,7 +163,7 @@ ContainerWindow::OnMouseDown(PixelPoint p)
 }
 
 bool
-ContainerWindow::OnMouseUp(PixelPoint p)
+ContainerWindow::OnMouseUp(PixelPoint p) noexcept
 {
   Window *child = EventChildAt(p);
   if (child != nullptr)
@@ -173,7 +173,7 @@ ContainerWindow::OnMouseUp(PixelPoint p)
 }
 
 bool
-ContainerWindow::OnMouseDouble(PixelPoint p)
+ContainerWindow::OnMouseDouble(PixelPoint p) noexcept
 {
   Window *child = EventChildAt(p);
   if (child != nullptr)
@@ -183,7 +183,7 @@ ContainerWindow::OnMouseDouble(PixelPoint p)
 }
 
 bool
-ContainerWindow::OnMouseWheel(PixelPoint p, int delta)
+ContainerWindow::OnMouseWheel(PixelPoint p, int delta) noexcept
 {
   Window *child = EventChildAt(p);
   if (child != nullptr)
@@ -195,7 +195,7 @@ ContainerWindow::OnMouseWheel(PixelPoint p, int delta)
 #ifdef HAVE_MULTI_TOUCH
 
 bool
-ContainerWindow::OnMultiTouchDown()
+ContainerWindow::OnMultiTouchDown() noexcept
 {
   if (!capture && capture_child != nullptr)
     return capture_child->OnMultiTouchDown();
@@ -204,7 +204,7 @@ ContainerWindow::OnMultiTouchDown()
 }
 
 bool
-ContainerWindow::OnMultiTouchUp()
+ContainerWindow::OnMultiTouchUp() noexcept
 {
   if (!capture && capture_child != nullptr)
     return capture_child->OnMultiTouchUp();
@@ -215,7 +215,7 @@ ContainerWindow::OnMultiTouchUp()
 #endif /* HAVE_MULTI_TOUCH */
 
 void
-ContainerWindow::OnPaint(Canvas &canvas)
+ContainerWindow::OnPaint(Canvas &canvas) noexcept
 {
   children.Paint(canvas);
 

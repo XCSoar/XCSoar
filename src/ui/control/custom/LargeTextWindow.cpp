@@ -84,7 +84,7 @@ LargeTextWindow::ScrollTo(unsigned new_origin) noexcept
 }
 
 void
-LargeTextWindow::OnResize(PixelSize new_size)
+LargeTextWindow::OnResize(PixelSize new_size) noexcept
 {
   NativeWindow::OnResize(new_size);
 
@@ -101,21 +101,21 @@ LargeTextWindow::OnResize(PixelSize new_size)
 }
 
 void
-LargeTextWindow::OnSetFocus()
+LargeTextWindow::OnSetFocus() noexcept
 {
   NativeWindow::OnSetFocus();
   Invalidate();
 }
 
 void
-LargeTextWindow::OnKillFocus()
+LargeTextWindow::OnKillFocus() noexcept
 {
   NativeWindow::OnKillFocus();
   Invalidate();
 }
 
 void
-LargeTextWindow::OnPaint(Canvas &canvas)
+LargeTextWindow::OnPaint(Canvas &canvas) noexcept
 {
   canvas.ClearWhite();
 
@@ -141,7 +141,7 @@ LargeTextWindow::OnPaint(Canvas &canvas)
 }
 
 bool
-LargeTextWindow::OnKeyCheck(unsigned key_code) const
+LargeTextWindow::OnKeyCheck(unsigned key_code) const noexcept
 {
   switch (key_code) {
   case KEY_UP:
@@ -156,7 +156,7 @@ LargeTextWindow::OnKeyCheck(unsigned key_code) const
 }
 
 bool
-LargeTextWindow::OnKeyDown(unsigned key_code)
+LargeTextWindow::OnKeyDown(unsigned key_code) noexcept
 {
   switch (key_code) {
   case KEY_UP:
@@ -190,7 +190,7 @@ LargeTextWindow::OnKeyDown(unsigned key_code)
 }
 
 bool
-LargeTextWindow::OnMouseDown([[maybe_unused]] PixelPoint p)
+LargeTextWindow::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 {
   if (IsTabStop())
     SetFocus();

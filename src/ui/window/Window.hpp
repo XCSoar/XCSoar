@@ -890,24 +890,24 @@ public:
    * created
    */
   virtual void OnCreate();
-  virtual void OnDestroy();
-  virtual void OnResize(PixelSize new_size);
-  virtual bool OnMouseMove(PixelPoint p, unsigned keys);
-  virtual bool OnMouseDown(PixelPoint p);
-  virtual bool OnMouseUp(PixelPoint p);
-  virtual bool OnMouseDouble(PixelPoint p);
-  virtual bool OnMouseWheel(PixelPoint p, int delta);
+  virtual void OnDestroy() noexcept;
+  virtual void OnResize(PixelSize new_size) noexcept;
+  virtual bool OnMouseMove(PixelPoint p, unsigned keys) noexcept;
+  virtual bool OnMouseDown(PixelPoint p) noexcept;
+  virtual bool OnMouseUp(PixelPoint p) noexcept;
+  virtual bool OnMouseDouble(PixelPoint p) noexcept;
+  virtual bool OnMouseWheel(PixelPoint p, int delta) noexcept;
 
 #ifdef HAVE_MULTI_TOUCH
   /**
    * A secondary pointer is being pressed.
    */
-  virtual bool OnMultiTouchDown();
+  virtual bool OnMultiTouchDown() noexcept;
 
   /**
    * A secondary pointer is being released.
    */
-  virtual bool OnMultiTouchUp();
+  virtual bool OnMultiTouchUp() noexcept;
 #endif
 
   /**
@@ -918,10 +918,10 @@ public:
    * dialog manager may use it
    */
   [[gnu::pure]]
-  virtual bool OnKeyCheck(unsigned key_code) const;
+  virtual bool OnKeyCheck(unsigned key_code) const noexcept;
 
-  virtual bool OnKeyDown(unsigned key_code);
-  virtual bool OnKeyUp(unsigned key_code);
+  virtual bool OnKeyDown(unsigned key_code) noexcept;
+  virtual bool OnKeyUp(unsigned key_code) noexcept;
 
   /**
    * A character was entered with the (virtual) keyboard.  This will
@@ -930,18 +930,18 @@ public:
    * @param ch the unicode character
    * @return true if the event was handled
    */
-  virtual bool OnCharacter(unsigned ch);
+  virtual bool OnCharacter(unsigned ch) noexcept;
 
 #ifdef USE_WINUSER
-  virtual bool OnCommand(unsigned id, unsigned code);
+  virtual bool OnCommand(unsigned id, unsigned code) noexcept;
 #endif
 
-  virtual void OnCancelMode();
-  virtual void OnSetFocus();
-  virtual void OnKillFocus();
+  virtual void OnCancelMode() noexcept;
+  virtual void OnSetFocus() noexcept;
+  virtual void OnKillFocus() noexcept;
 
 #ifdef USE_WINUSER
-  virtual bool OnUser(unsigned id);
+  virtual bool OnUser(unsigned id) noexcept;
 
   virtual LRESULT OnMessage(HWND hWnd, UINT message,
                             WPARAM wParam, LPARAM lParam) noexcept;

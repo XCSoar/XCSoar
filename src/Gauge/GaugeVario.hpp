@@ -162,7 +162,7 @@ protected:
 
 protected:
   /* virtual methods from class Window */
-  virtual void OnResize(PixelSize new_size) override;
+  virtual void OnResize(PixelSize new_size) noexcept override;
 
   /* virtual methods from class AntiFlickerWindow */
   virtual void OnPaintBuffer(Canvas &canvas) noexcept override;

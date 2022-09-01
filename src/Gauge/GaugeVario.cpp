@@ -778,7 +778,7 @@ GaugeVario::RenderBugs(Canvas &canvas) noexcept
 }
 
 void
-GaugeVario::OnResize(PixelSize new_size)
+GaugeVario::OnResize(PixelSize new_size) noexcept
 {
   AntiFlickerWindow::OnResize(new_size);
 

@@ -101,7 +101,7 @@ TopWindow::RefreshSize() noexcept
 }
 
 void
-TopWindow::OnResize(PixelSize new_size)
+TopWindow::OnResize(PixelSize new_size) noexcept
 {
   if (native_view != nullptr)
     native_view->SetSize(new_size.width, new_size.height);

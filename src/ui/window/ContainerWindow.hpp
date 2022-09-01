@@ -64,22 +64,22 @@ public:
 
 protected:
 #ifndef USE_WINUSER
-  void OnDestroy() override;
-  void OnCancelMode() override;
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  bool OnMouseDouble(PixelPoint p) override;
-  bool OnMouseWheel(PixelPoint p, int delta) override;
+  void OnDestroy() noexcept override;
+  void OnCancelMode() noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseDouble(PixelPoint p) noexcept override;
+  bool OnMouseWheel(PixelPoint p, int delta) noexcept override;
 
 #ifdef HAVE_MULTI_TOUCH
-  bool OnMultiTouchDown() override;
-  bool OnMultiTouchUp() override;
+  bool OnMultiTouchDown() noexcept override;
+  bool OnMultiTouchUp() noexcept override;
 #endif
 
-  void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 #else /* USE_WINUSER */
-  virtual void OnPaint([[maybe_unused]] Canvas &canvas) {}
+  virtual void OnPaint([[maybe_unused]] Canvas &canvas) noexcept {}
 #endif
 
 public:

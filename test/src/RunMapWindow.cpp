@@ -100,7 +100,7 @@ public:
   }
 
   /* virtual methods from class Window */
-  void OnResize(PixelSize new_size) override {
+  void OnResize(PixelSize new_size) noexcept override {
     MapWindow::OnResize(new_size);
 
 #ifndef ENABLE_OPENGL

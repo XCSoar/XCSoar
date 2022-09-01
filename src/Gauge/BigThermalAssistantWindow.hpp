@@ -46,10 +46,10 @@ private:
   }
 
 protected:
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
-  bool OnMouseDouble(PixelPoint p) override;
-  virtual bool OnKeyDown(unsigned key_code) override;
-  virtual void OnCancelMode() override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  bool OnMouseDouble(PixelPoint p) noexcept override;
+  bool OnKeyDown(unsigned key_code) noexcept override;
+  void OnCancelMode() noexcept override;
 };

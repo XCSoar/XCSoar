@@ -205,22 +205,22 @@ protected:
                                   const PixelPoint aircraft_pos) override;
 
   /* virtual methods from class Window */
-  virtual void OnCreate() override;
-  virtual void OnDestroy() override;
-  bool OnMouseDouble(PixelPoint p) override;
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  bool OnMouseWheel(PixelPoint p, int delta) override;
+  void OnCreate() override;
+  void OnDestroy() noexcept override;
+  bool OnMouseDouble(PixelPoint p) noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseWheel(PixelPoint p, int delta) noexcept override;
 
 #ifdef HAVE_MULTI_TOUCH
-  virtual bool OnMultiTouchDown() override;
+  bool OnMultiTouchDown() noexcept override;
 #endif
 
-  virtual bool OnKeyDown(unsigned key_code) override;
-  virtual void OnCancelMode() override;
-  virtual void OnPaint(Canvas &canvas) override;
-  virtual void OnPaintBuffer(Canvas& canvas) noexcept override;
+  bool OnKeyDown(unsigned key_code) noexcept override;
+  void OnCancelMode() noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
+  void OnPaintBuffer(Canvas& canvas) noexcept override;
 
   /**
    * This event handler gets called when a gesture has

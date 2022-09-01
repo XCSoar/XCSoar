@@ -130,20 +130,20 @@ protected:
   bool OnMouseGesture(const TCHAR* gesture);
 
   /* virtual methods from class Window */
-  virtual void OnCreate() override;
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  bool OnMouseDouble(PixelPoint p) override;
-  virtual bool OnKeyDown(unsigned key_code) override;
-  virtual void OnCancelMode() override;
+  void OnCreate() noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseDouble(PixelPoint p) noexcept override;
+  bool OnKeyDown(unsigned key_code) noexcept override;
+  void OnCancelMode() noexcept override;
 
   /* virtual methods from class PaintWindow */
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
 
 void
-FlarmTrafficControl::OnCreate()
+FlarmTrafficControl::OnCreate() noexcept
 {
   FlarmTrafficWindow::OnCreate();
 
@@ -537,7 +537,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 }
 
 void
-FlarmTrafficControl::OnPaint(Canvas &canvas)
+FlarmTrafficControl::OnPaint(Canvas &canvas) noexcept
 {
   canvas.ClearWhite();
 
@@ -780,7 +780,8 @@ TrafficWidget::Update() noexcept
 }
 
 bool
-FlarmTrafficControl::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys)
+FlarmTrafficControl::OnMouseMove(PixelPoint p,
+                                 [[maybe_unused]] unsigned keys) noexcept
 {
   if (dragging)
     gestures.Update(p);
@@ -789,7 +790,7 @@ FlarmTrafficControl::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys)
 }
 
 bool
-FlarmTrafficControl::OnMouseDown(PixelPoint p)
+FlarmTrafficControl::OnMouseDown(PixelPoint p) noexcept
 {
   if (!dragging) {
     dragging = true;
@@ -801,7 +802,7 @@ FlarmTrafficControl::OnMouseDown(PixelPoint p)
 }
 
 bool
-FlarmTrafficControl::OnMouseUp(PixelPoint p)
+FlarmTrafficControl::OnMouseUp(PixelPoint p) noexcept
 {
   if (dragging) {
     StopDragging();
@@ -818,7 +819,7 @@ FlarmTrafficControl::OnMouseUp(PixelPoint p)
 }
 
 bool
-FlarmTrafficControl::OnMouseDouble([[maybe_unused]] PixelPoint p)
+FlarmTrafficControl::OnMouseDouble([[maybe_unused]] PixelPoint p) noexcept
 {
   StopDragging();
   InputEvents::ShowMenu();
@@ -853,14 +854,14 @@ FlarmTrafficControl::OnMouseGesture(const TCHAR* gesture)
 }
 
 void
-FlarmTrafficControl::OnCancelMode()
+FlarmTrafficControl::OnCancelMode() noexcept
 {
   FlarmTrafficWindow::OnCancelMode();
   StopDragging();
 }
 
 bool
-FlarmTrafficControl::OnKeyDown(unsigned key_code)
+FlarmTrafficControl::OnKeyDown(unsigned key_code) noexcept
 {
   switch (key_code) {
   case KEY_UP:

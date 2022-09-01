@@ -65,7 +65,7 @@ public:
     Invalidate();
   }
 
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
 
 class TerrainDisplayConfigPanel final
@@ -153,7 +153,7 @@ TerrainDisplayConfigPanel::OnModified(DataField &df) noexcept
 }
 
 void
-TerrainPreviewWindow::OnPaint(Canvas &canvas)
+TerrainPreviewWindow::OnPaint(Canvas &canvas) noexcept
 {
   const GlueMapWindow *map = UIGlobals::GetMap();
   if (map == nullptr)

@@ -62,7 +62,7 @@ SimulatorPromptWindow::OnCreate()
 }
 
 void
-SimulatorPromptWindow::OnResize(PixelSize new_size)
+SimulatorPromptWindow::OnResize(PixelSize new_size) noexcept
 {
   ContainerWindow::OnResize(new_size);
 
@@ -101,7 +101,7 @@ SimulatorPromptWindow::OnResize(PixelSize new_size)
 }
 
 void
-SimulatorPromptWindow::OnPaint(Canvas &canvas)
+SimulatorPromptWindow::OnPaint(Canvas &canvas) noexcept
 {
   canvas.ClearWhite();
   logo_view.draw(canvas, logo_rect);

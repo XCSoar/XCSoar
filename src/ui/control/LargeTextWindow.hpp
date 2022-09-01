@@ -109,12 +109,12 @@ public:
   void ScrollTo(unsigned new_origin) noexcept;
 
 protected:
-  void OnResize(PixelSize new_size) override;
-  void OnSetFocus() override;
-  void OnKillFocus() override;
-  void OnPaint(Canvas &canvas) override;
-  bool OnKeyCheck(unsigned key_code) const override;
-  bool OnKeyDown(unsigned key_code) override;
-  bool OnMouseDown(PixelPoint p) override;
+  void OnResize(PixelSize new_size) noexcept override;
+  void OnSetFocus() noexcept override;
+  void OnKillFocus() noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
+  bool OnKeyCheck(unsigned key_code) const noexcept override;
+  bool OnKeyDown(unsigned key_code) noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
 #endif /* !USE_WINUSER */
 };

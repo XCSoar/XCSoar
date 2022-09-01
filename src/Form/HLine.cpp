@@ -26,7 +26,7 @@ Copyright_License {
 #include "ui/canvas/Canvas.hpp"
 
 void
-HLine::OnPaint(Canvas &canvas)
+HLine::OnPaint(Canvas &canvas) noexcept
 {
 #ifndef ENABLE_OPENGL
   canvas.Clear(look.background_color);

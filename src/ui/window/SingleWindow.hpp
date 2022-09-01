@@ -113,8 +113,8 @@ public:
 
 protected:
   bool OnClose() noexcept override;
-  void OnDestroy() override;
-  void OnResize(PixelSize new_size) override;
+  void OnDestroy() noexcept override;
+  void OnResize(PixelSize new_size) noexcept override;
 };
 
 } // namespace UI

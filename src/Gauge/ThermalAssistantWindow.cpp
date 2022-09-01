@@ -47,7 +47,7 @@ ThermalAssistantWindow::Update(const AttitudeState &attitude,
 }
 
 void
-ThermalAssistantWindow::OnResize(PixelSize new_size)
+ThermalAssistantWindow::OnResize(PixelSize new_size) noexcept
 {
   AntiFlickerWindow::OnResize(new_size);
 

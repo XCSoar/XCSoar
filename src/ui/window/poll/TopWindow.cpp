@@ -34,7 +34,7 @@ Copyright_License {
 namespace UI {
 
 void
-TopWindow::OnResize(PixelSize new_size)
+TopWindow::OnResize(PixelSize new_size) noexcept
 {
   event_queue->SetScreenSize(new_size);
 

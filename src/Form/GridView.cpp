@@ -256,7 +256,7 @@ GridView::MoveFocus(Direction direction)
 }
 
 void
-GridView::OnResize(PixelSize new_size)
+GridView::OnResize(PixelSize new_size) noexcept
 {
   PanelControl::OnResize(new_size);
   RefreshLayout();

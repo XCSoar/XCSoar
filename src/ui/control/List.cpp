@@ -109,7 +109,7 @@ ListControl::show_or_hide_scroll_bar() noexcept
 }
 
 void
-ListControl::OnResize(PixelSize new_size)
+ListControl::OnResize(PixelSize new_size) noexcept
 {
   PaintWindow::OnResize(new_size);
 
@@ -129,14 +129,14 @@ ListControl::OnResize(PixelSize new_size)
 }
 
 void
-ListControl::OnSetFocus()
+ListControl::OnSetFocus() noexcept
 {
   PaintWindow::OnSetFocus();
   Invalidate_item(cursor);
 }
 
 void
-ListControl::OnKillFocus()
+ListControl::OnKillFocus() noexcept
 {
   PaintWindow::OnKillFocus();
   Invalidate_item(cursor);
@@ -190,7 +190,7 @@ ListControl::DrawItems(Canvas &canvas,
 }
 
 void
-ListControl::OnPaint(Canvas &canvas)
+ListControl::OnPaint(Canvas &canvas) noexcept
 {
   if (item_renderer != nullptr)
     DrawItems(canvas, origin, origin + items_visible + 2);
@@ -199,7 +199,7 @@ ListControl::OnPaint(Canvas &canvas)
 }
 
 void
-ListControl::OnPaint(Canvas &canvas, const PixelRect &dirty)
+ListControl::OnPaint(Canvas &canvas, const PixelRect &dirty) noexcept
 {
   if (item_renderer != nullptr)
     DrawItems(canvas, origin + (dirty.top + pixel_pan) / item_height,
@@ -394,7 +394,7 @@ ListControl::MoveOrigin(int delta) noexcept
 }
 
 bool
-ListControl::OnKeyCheck(unsigned key_code) const
+ListControl::OnKeyCheck(unsigned key_code) const noexcept
 {
   switch (key_code) {
   case KEY_RETURN:
@@ -412,7 +412,7 @@ ListControl::OnKeyCheck(unsigned key_code) const
 }
 
 bool
-ListControl::OnKeyDown(unsigned key_code)
+ListControl::OnKeyDown(unsigned key_code) noexcept
 {
   scroll_bar.DragEnd(this);
   kinetic_timer.Cancel();
@@ -471,7 +471,7 @@ ListControl::OnKeyDown(unsigned key_code)
 }
 
 bool
-ListControl::OnMouseUp(PixelPoint p)
+ListControl::OnMouseUp(PixelPoint p) noexcept
 {
   if (scroll_bar.IsDragging()) {
     scroll_bar.DragEnd(this);
@@ -513,7 +513,7 @@ ListControl::drag_end() noexcept
 }
 
 bool
-ListControl::OnMouseMove(PixelPoint p, unsigned keys)
+ListControl::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
   // If we are currently dragging the ScrollBar slider
   if (scroll_bar.IsDragging()) {
@@ -545,7 +545,7 @@ ListControl::OnMouseMove(PixelPoint p, unsigned keys)
 }
 
 bool
-ListControl::OnMouseDown(PixelPoint Pos)
+ListControl::OnMouseDown(PixelPoint Pos) noexcept
 {
   // End any previous drag
   scroll_bar.DragEnd(this);
@@ -607,7 +607,7 @@ ListControl::OnMouseDown(PixelPoint Pos)
 }
 
 bool
-ListControl::OnMouseWheel([[maybe_unused]] PixelPoint p, int delta)
+ListControl::OnMouseWheel([[maybe_unused]] PixelPoint p, int delta) noexcept
 {
   scroll_bar.DragEnd(this);
   drag_end();
@@ -626,7 +626,7 @@ ListControl::OnMouseWheel([[maybe_unused]] PixelPoint p, int delta)
 }
 
 void
-ListControl::OnCancelMode()
+ListControl::OnCancelMode() noexcept
 {
   PaintWindow::OnCancelMode();
 
@@ -648,7 +648,7 @@ ListControl::OnKineticTimer() noexcept
 }
 
 void
-ListControl::OnDestroy()
+ListControl::OnDestroy() noexcept
 {
   kinetic_timer.Cancel();
 

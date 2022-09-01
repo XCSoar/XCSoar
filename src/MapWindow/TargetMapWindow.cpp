@@ -237,7 +237,7 @@ TargetMapWindow::OnPaintBuffer(Canvas &canvas) noexcept
 }
 
 void
-TargetMapWindow::OnPaint(Canvas &canvas)
+TargetMapWindow::OnPaint(Canvas &canvas) noexcept
 {
   BufferWindow::OnPaint(canvas);
 
@@ -327,7 +327,7 @@ TargetMapWindow::SetTarget(unsigned index)
 }
 
 void
-TargetMapWindow::OnResize(PixelSize new_size)
+TargetMapWindow::OnResize(PixelSize new_size) noexcept
 {
   BufferWindow::OnResize(new_size);
 
@@ -354,7 +354,7 @@ TargetMapWindow::OnCreate()
 }
 
 void
-TargetMapWindow::OnDestroy()
+TargetMapWindow::OnDestroy() noexcept
 {
   SetTerrain(nullptr);
   SetTopograpgy(nullptr);

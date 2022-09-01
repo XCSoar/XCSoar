@@ -69,7 +69,7 @@ Notify::RunNotification() noexcept
 #ifdef USE_WINUSER
 
 bool
-Notify::OnUser([[maybe_unused]] unsigned id)
+Notify::OnUser([[maybe_unused]] unsigned id) noexcept
 {
   RunNotification();
   return true;

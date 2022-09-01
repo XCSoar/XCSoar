@@ -310,23 +310,23 @@ protected:
 
   void OnKineticTimer() noexcept;
 
-  void OnDestroy() override;
+  void OnDestroy() noexcept override;
 
-  void OnResize(PixelSize new_size) override;
+  void OnResize(PixelSize new_size) noexcept override;
 
-  void OnSetFocus() override;
-  void OnKillFocus() override;
+  void OnSetFocus() noexcept override;
+  void OnKillFocus() noexcept override;
 
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
-  bool OnMouseWheel(PixelPoint p, int delta) override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  bool OnMouseWheel(PixelPoint p, int delta) noexcept override;
 
-  bool OnKeyCheck(unsigned key_code) const override;
-  bool OnKeyDown(unsigned key_code) override;
+  bool OnKeyCheck(unsigned key_code) const noexcept override;
+  bool OnKeyDown(unsigned key_code) noexcept override;
 
-  void OnCancelMode() override;
+  void OnCancelMode() noexcept override;
 
-  void OnPaint(Canvas &canvas) override;
-  void OnPaint(Canvas &canvas, const PixelRect &dirty) override;
+  void OnPaint(Canvas &canvas) noexcept override;
+  void OnPaint(Canvas &canvas, const PixelRect &dirty) noexcept override;
 };

@@ -340,16 +340,16 @@ protected:
 
 protected:
   /* virtual methods from class Window */
-  virtual void OnCreate() override;
-  virtual void OnDestroy() override;
-  virtual void OnResize(PixelSize new_size) override;
+  void OnCreate() override;
+  void OnDestroy() noexcept override;
+  void OnResize(PixelSize new_size) noexcept override;
 
 #ifndef ENABLE_OPENGL
-  virtual void OnPaint(Canvas& canvas) override;
+  void OnPaint(Canvas& canvas) noexcept override;
 #endif
 
-  /* virtual methods from class DoubleBufferWindow */
-  virtual void OnPaintBuffer(Canvas& canvas) noexcept override;
+  /* methods from class DoubleBufferWindow */
+  void OnPaintBuffer(Canvas& canvas) noexcept override;
 
 private:
   /**
