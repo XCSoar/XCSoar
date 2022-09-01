@@ -45,8 +45,8 @@ static constexpr LegalPointSet touring_finish_types{
   TaskPointFactoryType::FINISH_CYLINDER,
 };
 
-TouringTaskFactory::TouringTaskFactory(OrderedTask& _task,
-                               const TaskBehaviour &tb)
+TouringTaskFactory::TouringTaskFactory(OrderedTask &_task,
+                                       const TaskBehaviour &tb) noexcept
   :AbstractTaskFactory(touring_constraints, _task, tb,
                        touring_start_types, touring_im_types,
                        touring_finish_types)
@@ -54,7 +54,7 @@ TouringTaskFactory::TouringTaskFactory(OrderedTask& _task,
 }
 
 void 
-TouringTaskFactory::UpdateOrderedTaskSettings(OrderedTaskSettings& to)
+TouringTaskFactory::UpdateOrderedTaskSettings(OrderedTaskSettings &to) noexcept
 {
   AbstractTaskFactory::UpdateOrderedTaskSettings(to);
 

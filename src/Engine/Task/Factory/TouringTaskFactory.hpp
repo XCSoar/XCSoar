@@ -37,10 +37,8 @@ public:
  * @param _task Ordered task to be managed by this factory
  * @param tb Behaviour (options)
  */  
-  TouringTaskFactory(OrderedTask& _task,
-                 const TaskBehaviour &tb);
+  TouringTaskFactory(OrderedTask &_task,
+                     const TaskBehaviour &tb) noexcept;
 
-  ~TouringTaskFactory() {};
-
-  void UpdateOrderedTaskSettings(OrderedTaskSettings &to) override;
+  void UpdateOrderedTaskSettings(OrderedTaskSettings &to) noexcept override;
 };

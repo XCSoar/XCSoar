@@ -34,8 +34,8 @@ class FAITaskFactory:
 {
 protected:
   FAITaskFactory(const TaskFactoryConstraints &_constraints,
-                 OrderedTask& _task,
-                 const TaskBehaviour &tb);
+                 OrderedTask &_task,
+                 const TaskBehaviour &tb) noexcept;
 
 public:
 /** 
@@ -44,12 +44,10 @@ public:
  * @param _task Ordered task to be managed by this factory
  * @param tb Behaviour (options)
  */  
-  FAITaskFactory(OrderedTask& _task,
-                 const TaskBehaviour &tb);
+  FAITaskFactory(OrderedTask &_task,
+                 const TaskBehaviour &tb) noexcept;
 
-  virtual ~FAITaskFactory() {};
-
-  void UpdateOrderedTaskSettings(OrderedTaskSettings& to) override;
+  void UpdateOrderedTaskSettings(OrderedTaskSettings &to) noexcept override;
 
   TaskValidationErrorSet Validate() const noexcept override;
 
@@ -60,7 +58,7 @@ public:
    * @return: point type compatible with current factory, most
    * similar to type of tp
    */
-  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const override;
+  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept override;
 
   /**
    * @param start_radius: either -1 or a valid value
@@ -76,5 +74,5 @@ public:
   void GetPointDefaultSizes(const TaskPointFactoryType type,
                             double &start_radius,
                             double &turnpoint_radius,
-                            double &finish_radius) const override;
+                            double &finish_radius) const noexcept override;
 };

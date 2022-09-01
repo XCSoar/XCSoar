@@ -50,15 +50,15 @@ static constexpr LegalPointSet fai_finish_types{
 };
 
 FAITaskFactory::FAITaskFactory(const TaskFactoryConstraints &_constraints,
-                               OrderedTask& _task,
-                               const TaskBehaviour &tb)
+                               OrderedTask &_task,
+                               const TaskBehaviour &tb) noexcept
   :AbstractTaskFactory(_constraints, _task, tb,
                        fai_start_types, fai_im_types, fai_finish_types)
 {
 }
 
-FAITaskFactory::FAITaskFactory(OrderedTask& _task,
-                               const TaskBehaviour &tb)
+FAITaskFactory::FAITaskFactory(OrderedTask &_task,
+                               const TaskBehaviour &tb) noexcept
   :AbstractTaskFactory(fai_constraints, _task, tb,
                        fai_start_types, fai_im_types, fai_finish_types)
 {
@@ -77,7 +77,7 @@ FAITaskFactory::Validate() const noexcept
 }
 
 void 
-FAITaskFactory::UpdateOrderedTaskSettings(OrderedTaskSettings& to)
+FAITaskFactory::UpdateOrderedTaskSettings(OrderedTaskSettings &to) noexcept
 {
   AbstractTaskFactory::UpdateOrderedTaskSettings(to);
 
@@ -88,7 +88,7 @@ FAITaskFactory::UpdateOrderedTaskSettings(OrderedTaskSettings& to)
 }
 
 TaskPointFactoryType
-FAITaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
+FAITaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept
 {
   const TaskPointFactoryType oldtype = GetType(tp);
   TaskPointFactoryType newtype = oldtype;
@@ -141,7 +141,7 @@ void
 FAITaskFactory::GetPointDefaultSizes([[maybe_unused]] const TaskPointFactoryType type,
                                      double &start_radius,
                                      double &turnpoint_radius,
-                                     double &finish_radius) const
+                                     double &finish_radius) const noexcept
 {
   turnpoint_radius = 500;
   start_radius = finish_radius = 1000;

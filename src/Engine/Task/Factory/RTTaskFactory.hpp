@@ -37,10 +37,7 @@ public:
  * @param _task Ordered task to be managed by this factory
  * @param tb Behaviour (options)
  */  
-  RTTaskFactory(OrderedTask& _task,
-                 const TaskBehaviour &tb);
-
-  ~RTTaskFactory() {};
+  RTTaskFactory(OrderedTask &_task, const TaskBehaviour &tb) noexcept;
 
   /**
    * swaps AAT OZs for AST_CYLINDERs
@@ -48,5 +45,5 @@ public:
    * @return: point type compatible with current factory, most
    * similar to type of tp
    */
-  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const;
+  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept override;
 };

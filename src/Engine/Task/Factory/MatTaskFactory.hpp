@@ -36,7 +36,7 @@ public:
    * @param _task Ordered task to be managed by this factory
    * @param tb Behaviour (options)
    */
-  MatTaskFactory(OrderedTask &_task, const TaskBehaviour &tb);
+  MatTaskFactory(OrderedTask &_task, const TaskBehaviour &tb) noexcept;
 
   /**
    * converts all intermediate points to AAT Cylinders
@@ -45,5 +45,5 @@ public:
    * @return: point type compatible with current factory, most
    * similar to type of tp
    */
-  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const override;
+  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept override;
 };

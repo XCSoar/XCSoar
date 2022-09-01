@@ -54,14 +54,15 @@ static constexpr LegalPointSet aat_finish_types{
   TaskPointFactoryType::FINISH_SECTOR,
 };
 
-AATTaskFactory::AATTaskFactory(OrderedTask& _task, const TaskBehaviour &tb)
+AATTaskFactory::AATTaskFactory(OrderedTask &_task,
+                               const TaskBehaviour &tb) noexcept
   :AbstractTaskFactory(aat_constraints, _task, tb,
                        aat_start_types, aat_im_types, aat_finish_types)
 {
 }
 
 TaskPointFactoryType
-AATTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
+AATTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept
 {
   const TaskPointFactoryType oldtype = GetType(tp);
   TaskPointFactoryType newtype = oldtype;

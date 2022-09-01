@@ -55,15 +55,15 @@ static constexpr LegalPointSet rt_finish_types{
   TaskPointFactoryType::FINISH_SECTOR,
 };
 
-RTTaskFactory::RTTaskFactory(OrderedTask& _task,
-                               const TaskBehaviour &tb)
+RTTaskFactory::RTTaskFactory(OrderedTask &_task,
+                             const TaskBehaviour &tb) noexcept
   :AbstractTaskFactory(rt_constraints, _task, tb,
                        rt_start_types, rt_im_types, rt_finish_types)
 {
 }
 
 TaskPointFactoryType
-RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
+RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept
 {
   const TaskPointFactoryType oldtype = GetType(tp);
   TaskPointFactoryType newtype = oldtype;
