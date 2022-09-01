@@ -33,7 +33,7 @@ class KeyholeZone final : public SymmetricSectorZone
 {
   double inner_radius;
 
-protected:
+public:
   /**
    * Constructor.
    *
@@ -55,14 +55,11 @@ protected:
     :SymmetricSectorZone((const SymmetricSectorZone &)other, reference),
      inner_radius(other.inner_radius) {}
 
-public:
   static auto CreateCustomKeyholeZone(const GeoPoint &reference,
                                       double radius,
                                       Angle angle) noexcept {
-    return std::unique_ptr<KeyholeZone>{
-      new KeyholeZone(Shape::CUSTOM_KEYHOLE, true, true, reference,
-                      radius, angle)
-    };
+    return std::make_unique<KeyholeZone>(Shape::CUSTOM_KEYHOLE, true, true,
+                                         reference, radius, angle);
   }
 
   /**
@@ -71,12 +68,10 @@ public:
    * rules.
    */
   static auto CreateDAeCKeyholeZone(const GeoPoint &reference) noexcept {
-    return std::unique_ptr<KeyholeZone>{
-      new KeyholeZone(Shape::DAEC_KEYHOLE,
-                      true, true, reference,
-                      10000,
-                      Angle::QuarterCircle())
-    };
+    return std::make_unique<KeyholeZone>(Shape::DAEC_KEYHOLE,
+                                         true, true, reference,
+                                         10000,
+                                         Angle::QuarterCircle());
   }
 
   /**
@@ -84,12 +79,10 @@ public:
    * incoming/outgoing legs, with 500m cylinder.
    */
   static auto CreateBGAFixedCourseZone(const GeoPoint &reference) noexcept {
-    return std::unique_ptr<KeyholeZone>{
-      new KeyholeZone(Shape::BGAFIXEDCOURSE,
-                      true, true, reference,
-                      20000,
-                      Angle::QuarterCircle())
-    };
+    return std::make_unique<KeyholeZone>(Shape::BGAFIXEDCOURSE,
+                                         true, true, reference,
+                                         20000,
+                                         Angle::QuarterCircle());
   }
 
   /**
@@ -97,11 +90,9 @@ public:
    * incoming/outgoing legs, with 500m cylinder
    */
   static auto CreateBGAEnhancedOptionZone(const GeoPoint &reference) noexcept {
-    return std::unique_ptr<KeyholeZone>{
-      new KeyholeZone(Shape::BGAENHANCEDOPTION, true, true, reference,
-                      10000,
-                      Angle::HalfCircle())
-    };
+    return std::make_unique<KeyholeZone>(Shape::BGAENHANCEDOPTION, true, true, reference,
+                                         10000,
+                                         Angle::HalfCircle());
   }
 
   /**
@@ -122,6 +113,6 @@ public:
 
   /* virtual methods from class ObservationZonePoint */
   std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {
-    return std::unique_ptr<ObservationZonePoint>{new KeyholeZone(*this, _reference)};
+    return std::make_unique<KeyholeZone>(*this, _reference);
   }
 };

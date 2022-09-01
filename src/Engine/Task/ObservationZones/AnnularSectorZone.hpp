@@ -41,12 +41,12 @@ protected:
                 _startRadial, _endRadial),
      inner_radius(_inner_radius) {}
 
+public:
   constexpr AnnularSectorZone(const AnnularSectorZone &other,
                               const GeoPoint &reference) noexcept
     :SectorZone((const SectorZone &)other, reference),
      inner_radius(other.inner_radius) {}
 
-public:
   /**
    * Constructor
    *
@@ -98,7 +98,7 @@ public:
   bool Equals(const ObservationZonePoint &other) const noexcept override;
 
   std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {
-    return std::unique_ptr<ObservationZonePoint>{new AnnularSectorZone(*this, _reference)};
+    return std::make_unique<AnnularSectorZone>(*this, _reference);
   }
 
   /* virtual methods from class CylinderZone */

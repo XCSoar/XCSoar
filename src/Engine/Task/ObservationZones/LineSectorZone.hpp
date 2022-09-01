@@ -34,11 +34,11 @@
  */
 class LineSectorZone: public SymmetricSectorZone
 {
+public:
   constexpr LineSectorZone(const LineSectorZone &other,
                            const GeoPoint &reference) noexcept
     :SymmetricSectorZone((const SymmetricSectorZone &)other, reference) {}
 
-public:
   /**
    * Constructor
    *
@@ -83,6 +83,6 @@ public:
 
   /* virtual methods from class ObservationZonePoint */
   std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {
-    return std::unique_ptr<ObservationZonePoint>{new LineSectorZone(*this, _reference)};
+    return std::make_unique<LineSectorZone>(*this, _reference);
   }
 };

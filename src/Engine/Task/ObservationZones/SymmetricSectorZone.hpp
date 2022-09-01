@@ -49,12 +49,12 @@ protected:
                 loc, radius),
      sector_angle(angle) {}
 
+public:
   constexpr SymmetricSectorZone(const SymmetricSectorZone &other,
                                 const GeoPoint &reference) noexcept
     :SectorZone((const SectorZone &)other, reference),
      sector_angle(other.sector_angle) {}
 
-public:
   SymmetricSectorZone(const GeoPoint &loc,
                       const double radius=10000.0) noexcept
     :SectorZone(Shape::SYMMETRIC_QUADRANT, true, true, loc, radius),
@@ -111,6 +111,6 @@ public:
 
   /* virtual methods from class ObservationZonePoint */
   std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {
-    return std::unique_ptr<ObservationZonePoint>{new SymmetricSectorZone(*this, _reference)};
+    return std::make_unique<SymmetricSectorZone>(*this, _reference);
   }
 };

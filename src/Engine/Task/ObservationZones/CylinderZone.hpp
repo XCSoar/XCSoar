@@ -39,7 +39,6 @@ class CylinderZone : public ObservationZonePoint
 public:
   static constexpr double MAT_RADIUS = 1609.344;
 
-protected:
   constexpr CylinderZone(Shape _shape, bool _can_start_through_top,
                          const GeoPoint &loc,
                          const double _radius = 10000.0) noexcept
@@ -55,7 +54,6 @@ protected:
     assert(radius > 0);
   }
 
-public:
   /**
    * Constructor.
    *
@@ -70,9 +68,9 @@ public:
   }
 
   static auto CreateMatCylinderZone(const GeoPoint &loc) noexcept {
-    return std::unique_ptr<CylinderZone>{new CylinderZone(Shape::MAT_CYLINDER,
-                                                          true, loc,
-                                                          MAT_RADIUS)};
+    return std::make_unique<CylinderZone>(Shape::MAT_CYLINDER,
+                                          true, loc,
+                                          MAT_RADIUS);
   }
 
   /**
@@ -112,6 +110,6 @@ public:
   GeoPoint GetRandomPointInSector(const double mag) const noexcept override;
 
   std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {
-    return std::unique_ptr<ObservationZonePoint>{new CylinderZone(*this, _reference)};
+    return std::make_unique<CylinderZone>(*this, _reference);
   }
 };

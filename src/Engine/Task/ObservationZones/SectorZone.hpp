@@ -56,6 +56,7 @@ protected:
      arc_boundary(_arc_boundary),
      start_radial(_start_radial), end_radial(_end_radial) {}
 
+public:
   constexpr SectorZone(const SectorZone &other,
                        const GeoPoint &reference) noexcept
     :CylinderZone((const CylinderZone &)other, reference),
@@ -63,7 +64,6 @@ protected:
      sector_start(other.sector_start), sector_end(other.sector_end),
      start_radial(other.start_radial), end_radial(other.end_radial) {}
 
-public:
   /**
    * Constructor
    *
@@ -161,7 +161,7 @@ public:
   /* virtual methods from class ObservationZonePoint */
   bool Equals(const ObservationZonePoint &other) const noexcept override;
   std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {
-    return std::unique_ptr<ObservationZonePoint>{new SectorZone(*this, _reference)};
+    return std::make_unique<SectorZone>(*this, _reference);
   }
 
   /* virtual methods from class CylinderZone */
