@@ -343,7 +343,10 @@ protected:
   virtual void OnCreate() override;
   virtual void OnDestroy() override;
   virtual void OnResize(PixelSize new_size) override;
+
+#ifndef ENABLE_OPENGL
   virtual void OnPaint(Canvas& canvas) override;
+#endif
 
   /* virtual methods from class DoubleBufferWindow */
   virtual void OnPaintBuffer(Canvas& canvas) noexcept override;

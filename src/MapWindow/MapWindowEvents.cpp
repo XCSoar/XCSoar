@@ -87,12 +87,11 @@ MapWindow::OnDestroy()
   DoubleBufferWindow::OnDestroy();
 }
 
+#ifndef ENABLE_OPENGL
+
 void
 MapWindow::OnPaint(Canvas &canvas)
 {
-#ifdef ENABLE_OPENGL
-  DoubleBufferWindow::OnPaint(canvas);
-#else /* !ENABLE_OPENGL */
   if (buffer_generation == ui_generation) {
     DoubleBufferWindow::OnPaint(canvas);
     return;
@@ -162,5 +161,6 @@ MapWindow::OnPaint(Canvas &canvas)
        started: the buffer has invalid data, paint a white window
        instead */
     canvas.ClearWhite();
-#endif /* !ENABLE_OPENGL */
 }
+
+#endif /* !ENABLE_OPENGL */
