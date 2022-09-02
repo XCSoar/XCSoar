@@ -6,6 +6,7 @@ Version 7.26 - not yet released
 * Android
   - improve native serial port enumeration
   - fix UsbSerial/FTDI crash bug
+  - fix UsbSerial/FT4232 data corruption
 * Kobo
   - fix crash bug
 
