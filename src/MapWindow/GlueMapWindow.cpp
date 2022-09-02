@@ -59,10 +59,7 @@ GlueMapWindow::SetTopography(TopographyStore *_topography)
 
   if (_topography != nullptr)
     topography_thread =
-      new TopographyThread(*_topography,
-                           [this](){
-                             redraw_notify.SendNotification();
-                           });
+      new TopographyThread(*_topography, [this](){ InjectRedraw(); });
 }
 
 void
@@ -78,10 +75,7 @@ GlueMapWindow::SetTerrain(RasterTerrain *_terrain)
 
   if (_terrain != nullptr)
     terrain_thread =
-      new TerrainThread(*_terrain,
-                        [this](){
-                          redraw_notify.SendNotification();
-                        });
+      new TerrainThread(*_terrain, [this](){ InjectRedraw(); });
 }
 
 void

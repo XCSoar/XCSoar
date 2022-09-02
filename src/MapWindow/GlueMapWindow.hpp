@@ -188,6 +188,16 @@ public:
 
   void QuickRedraw();
 
+  /**
+   * Trigger a deferred redraw.  It will occur in the main thread
+   * after all other events have been handled.
+   *
+   * This method is thread-safe.
+   */
+  void InjectRedraw() noexcept {
+    redraw_notify.SendNotification();
+  }
+
   void SetPan(bool enable);
   void TogglePan();
   void PanTo(const GeoPoint &location);
