@@ -315,8 +315,7 @@ GlideComputerAirData::Turning(const MoreData &basic,
 
   thermal_band_computer.Compute(basic, calculated,
                                 calculated.thermal_encounter_band,
-                                calculated.thermal_encounter_collection,
-                                settings);
+                                calculated.thermal_encounter_collection);
 }
 
 inline void
