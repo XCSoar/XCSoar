@@ -28,9 +28,10 @@ Copyright_License {
  * #DeviceBlackboard.
  */
 void
-TriggerMergeThread();
+TriggerMergeThread() noexcept;
 
-void TriggerGPSUpdate();
+void
+TriggerGPSUpdate() noexcept;
 
 /**
  * Force a #CalculationThread run.  This should be called when
@@ -39,24 +40,26 @@ void TriggerGPSUpdate();
  * recalculated.
  */
 void
-ForceCalculation();
+ForceCalculation() noexcept;
 
-void TriggerVarioUpdate();
+void
+TriggerVarioUpdate() noexcept;
 
 /**
  * Trigger a redraw of the map window.
  */
 void
-TriggerMapUpdate();
+TriggerMapUpdate() noexcept;
 
 /**
  * Called by the calculation thread when new calculation results are
  * available.  This updates the map and the info boxes.
  */
 void
-TriggerCalculatedUpdate();
+TriggerCalculatedUpdate() noexcept;
 
-void CreateCalculationThread();
+void
+CreateCalculationThread() noexcept;
 
 extern bool global_running;
 
@@ -65,17 +68,17 @@ extern bool global_running;
  * Call this before doing write operations on shared data.
  */
 void
-SuspendAllThreads();
+SuspendAllThreads() noexcept;
 
 /**
  * Resume all threads suspended by SuspendAllThreads().
  */
 void
-ResumeAllThreads();
+ResumeAllThreads() noexcept;
 
 class ScopeSuspendAllThreads {
 public:
-  ScopeSuspendAllThreads() { SuspendAllThreads(); }
-  ~ScopeSuspendAllThreads() { ResumeAllThreads(); }
+  ScopeSuspendAllThreads() noexcept { SuspendAllThreads(); }
+  ~ScopeSuspendAllThreads() noexcept { ResumeAllThreads(); }
 };
 

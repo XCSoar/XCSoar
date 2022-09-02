@@ -35,7 +35,7 @@ Copyright_License {
 bool global_running;
 
 void
-TriggerMergeThread()
+TriggerMergeThread() noexcept
 {
   if (merge_thread != nullptr)
     merge_thread->Trigger();
@@ -45,7 +45,7 @@ TriggerMergeThread()
  * Triggers a GPS update resulting in a run of the calculation thread
  */
 void
-TriggerGPSUpdate()
+TriggerGPSUpdate() noexcept
 {
   if (calculation_thread == nullptr)
     return;
@@ -54,14 +54,14 @@ TriggerGPSUpdate()
 }
 
 void
-ForceCalculation()
+ForceCalculation() noexcept
 {
   if (calculation_thread != nullptr)
     calculation_thread->ForceTrigger();
 }
 
 void
-TriggerVarioUpdate()
+TriggerVarioUpdate() noexcept
 {
   assert(CommonInterface::main_window != nullptr);
 
@@ -69,7 +69,7 @@ TriggerVarioUpdate()
 }
 
 void
-TriggerMapUpdate()
+TriggerMapUpdate() noexcept
 {
   assert(CommonInterface::main_window != nullptr);
 
@@ -77,7 +77,7 @@ TriggerMapUpdate()
 }
 
 void
-TriggerCalculatedUpdate()
+TriggerCalculatedUpdate() noexcept
 {
   assert(CommonInterface::main_window != nullptr);
 
@@ -85,7 +85,7 @@ TriggerCalculatedUpdate()
 }
 
 void
-CreateCalculationThread()
+CreateCalculationThread() noexcept
 {
   assert(glide_computer != nullptr);
 
@@ -116,7 +116,7 @@ CreateCalculationThread()
 }
 
 void
-SuspendAllThreads()
+SuspendAllThreads() noexcept
 {
   assert(CommonInterface::main_window != nullptr);
 
@@ -130,7 +130,7 @@ SuspendAllThreads()
 }
 
 void
-ResumeAllThreads()
+ResumeAllThreads() noexcept
 {
   assert(CommonInterface::main_window != nullptr);
 
