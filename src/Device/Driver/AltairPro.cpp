@@ -41,8 +41,8 @@ Copyright_License {
 #include <cassert>
 #include <tchar.h>
 
-#define DECELWPNAMESIZE   24                        // max size of taskpoint name
-#define DECELWPSIZE       DECELWPNAMESIZE + 25      // max size of WP declaration
+static constexpr unsigned DECELWPNAMESIZE = 24;                // max size of taskpoint name
+static constexpr unsigned DECELWPSIZE = DECELWPNAMESIZE + 25;  // max size of WP declaration
 
 class AltairProDevice : public AbstractDevice {
 private:
