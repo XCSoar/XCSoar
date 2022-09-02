@@ -46,7 +46,7 @@ TopWindow::CheckResize() noexcept
 
 #ifdef KOBO
 void
-TopWindow::OnDestroy()
+TopWindow::OnDestroy() noexcept
 {
   /* clear the screen before exiting XCSoar */
   Canvas canvas = screen->Lock();
