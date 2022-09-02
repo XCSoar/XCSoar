@@ -274,8 +274,7 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   else
     PageActions::Next();
 
-
-  trigger_redraw();
+  TriggerMapUpdate();
 }
 
 // ClearStatusMessages
