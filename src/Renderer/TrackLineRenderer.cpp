@@ -31,7 +31,7 @@ Copyright_License {
 #include "Projection/WindowProjection.hpp"
 #include "Geo/Math.hpp"
 
-#define ARC_STEPS 10
+static constexpr unsigned ARC_STEPS = 10;
 static constexpr Angle ARC_SWEEP = Angle::Degrees(135.0);
 static constexpr Angle MIN_RATE = Angle::Degrees(1.0); // degrees/s
 
@@ -107,7 +107,7 @@ TrackLineRenderer::DrawProjected(Canvas &canvas,
 
   BulkPixelPoint pts[ARC_STEPS+1];
   pts[0] = projection.GeoToScreen(loc);
-  int i = 1;
+  unsigned i = 1;
 
   while (i <= ARC_STEPS) {
     GeoVector v(basic.true_airspeed*dt, heading);
