@@ -86,7 +86,7 @@ EventQueue::Poll() noexcept
 }
 
 bool
-EventQueue::Generate(Event &event) noexcept
+EventQueue::Generate([[maybe_unused]] Event &event) noexcept
 {
 #ifndef NON_INTERACTIVE
   if (input_queue.Generate(event))
