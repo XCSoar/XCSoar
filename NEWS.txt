@@ -5,6 +5,7 @@ Version 7.26 - not yet released
   - add custom keyhole support
 * Android
   - improve native serial port enumeration
+  - fix UsbSerial/FTDI crash bug
 * Kobo
   - fix crash bug
 
