@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -38,11 +38,11 @@ main(int argc, char** argv)
     return 0;
   }
 
-#define NUM_TERRAIN 5
+static constexpr unsigned NUM_TERRAIN = 5;
 
   plan_tests(NUM_TERRAIN);
 
-  for (int j=0; j<NUM_TERRAIN; j++) {
+  for (unsigned j=0; j<NUM_TERRAIN; j++) {
     terrain_height = (int)((800)*(j+1)/(NUM_TERRAIN*1.0));
 
     unsigned i = rand()%NUM_WIND;

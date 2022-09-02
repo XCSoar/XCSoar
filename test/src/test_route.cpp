@@ -48,7 +48,7 @@ extern "C" {
 #include "tap.h"
 }
 
-#define NUM_SOL 15
+static constexpr unsigned NUM_SOL = 15;
 
 static bool
 test_route(const unsigned n_airspaces, const RasterMap& map)
@@ -158,7 +158,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     auto predicate = AirspacePredicateTrue;
 
     bool sol = false;
-    for (int i = 0; i < NUM_SOL; i++) {
+    for (unsigned i = 0; i < NUM_SOL; i++) {
       loc_end.latitude += Angle::Degrees(0.1);
       loc_end.altitude = map.GetHeight(loc_end).GetValueOr0() + 100;
       route.Synchronise(airspaces, predicate, loc_start, loc_end);
