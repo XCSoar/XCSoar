@@ -295,7 +295,7 @@ ActionInterface::SendUIState() noexcept
 }
 
 void
-ActionInterface::SetActiveFrequency(const RadioFrequency &freq,
+ActionInterface::SetActiveFrequency(const RadioFrequency freq,
                                     const TCHAR *freq_name,
                                     bool to_devices) noexcept
 {
@@ -322,7 +322,7 @@ ActionInterface::SetActiveFrequency(const RadioFrequency &freq,
 }
 
 void
-ActionInterface::SetStandbyFrequency(const RadioFrequency &freq,
+ActionInterface::SetStandbyFrequency(const RadioFrequency freq,
                                      const TCHAR *freq_name,
                                      bool to_devices) noexcept
 {
