@@ -50,7 +50,7 @@ InputEventQueue::InputEventQueue(EventQueue &queue) noexcept
 InputEventQueue::~InputEventQueue() noexcept = default;
 
 bool
-InputEventQueue::Generate(Event &event) noexcept
+InputEventQueue::Generate([[maybe_unused]] Event &event) noexcept
 {
 #ifdef KOBO
   event = merge_mouse.Generate();

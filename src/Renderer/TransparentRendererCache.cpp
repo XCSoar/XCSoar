@@ -55,8 +55,8 @@ TransparentRendererCache::Begin(Canvas &canvas,
 }
 
 void
-TransparentRendererCache::Commit(Canvas &canvas,
-                                 const WindowProjection &projection)
+TransparentRendererCache::Commit([[maybe_unused]] Canvas &canvas,
+                                 [[maybe_unused]] const WindowProjection &projection)
 {
   assert(canvas.IsDefined());
   assert(projection.IsValid());

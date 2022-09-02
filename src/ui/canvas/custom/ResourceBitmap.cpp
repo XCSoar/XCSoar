@@ -59,7 +59,7 @@ Bitmap::Load(ResourceId id, Type type)
 #ifdef USE_MEMORY_CANVAS
 
 bool
-Bitmap::LoadStretch(ResourceId id, unsigned zoom)
+Bitmap::LoadStretch(ResourceId id, [[maybe_unused]] unsigned zoom)
 {
   assert(zoom > 0);
 
