@@ -63,7 +63,7 @@ dlgAirspaceDetails([[maybe_unused]] ConstAirspacePtr the_airspace,
 void
 ActionInterface::SetActiveFrequency([[maybe_unused]] const RadioFrequency & freq,
                                     [[maybe_unused]] const TCHAR * freq_name,
-                                    [[maybe_unused]] bool to_devices)
+                                    [[maybe_unused]] bool to_devices) noexcept
 {
 }
 

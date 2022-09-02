@@ -39,7 +39,8 @@ using namespace CommonInterface;
  *
  * @param to_devices send the new settings to all devices?
  */
-void SetBallast(double ballast, bool to_devices=true);
+void
+SetBallast(double ballast, bool to_devices=true) noexcept;
 
 /**
  * Configure a new Bugs setting in #ComputerSettings, and
@@ -47,7 +48,8 @@ void SetBallast(double ballast, bool to_devices=true);
  *
  * @param to_devices send the new settings to all devices?
  */
-void SetBugs(double mc, bool to_devices=true);
+void
+SetBugs(double mc, bool to_devices=true) noexcept;
 
 /**
  * Configure a new MacCready setting in #ComputerSettings, and
@@ -55,7 +57,8 @@ void SetBugs(double mc, bool to_devices=true);
  *
  * @param to_devices send the new settings to all devices?
  */
-void SetMacCready(double mc, bool to_devices=true);
+void
+SetMacCready(double mc, bool to_devices=true) noexcept;
 
 /**
  * Configure a new MacCready setting in #ComputerSettings, and
@@ -64,13 +67,15 @@ void SetMacCready(double mc, bool to_devices=true);
  *
  * @param to_devices send the new settings to all devices?
  */
-void SetManualMacCready(double mc, bool to_devices=true);
+void
+SetManualMacCready(double mc, bool to_devices=true) noexcept;
 
 /**
  * Same as SetManualMacCready(), but adds the given value to the
  * current MacCready setting.  It performs bounds checking.
  */
-void OffsetManualMacCready(double offset, bool to_devices=true);
+void
+OffsetManualMacCready(double offset, bool to_devices=true) noexcept;
 
 /**
  * Call this after MapSettings has been modified with
@@ -80,7 +85,8 @@ void OffsetManualMacCready(double offset, bool to_devices=true);
  * @param trigger_draw triggers a map redraw immediately if true,
  * rather than waiting for eventual redraw
  */
-void SendMapSettings(const bool trigger_draw = false);
+void
+SendMapSettings(const bool trigger_draw = false) noexcept;
 
 /**
  * Call this after #UIState has been modified with SetUIState().  It
@@ -90,20 +96,23 @@ void SendMapSettings(const bool trigger_draw = false);
  * @param trigger_draw triggers a map redraw immediately if true,
  * rather than waiting for eventual redraw
  */
-void SendUIState(const bool trigger_draw);
+void
+SendUIState(const bool trigger_draw) noexcept;
 
 /**
  * Update UIState::display_mode and other attributes related to it.
  * You may have to call SendUIState() after this.
  */
-void UpdateDisplayMode();
+void
+UpdateDisplayMode() noexcept;
 
 /**
  * Call this after UIState has been modified (via SetUIState() or
  * UpdateDisplayMode()).  It sends the new values to all subsystems,
  * and redraws relevant parts of the screen.
  */
-void SendUIState();
+void
+SendUIState() noexcept;
 
 /**
  * Update the Active Radio Frequency in #ComputerSettings, and
@@ -111,7 +120,9 @@ void SendUIState();
  *
  * @param to_devices send the new setting to all devices?
  */
-void SetActiveFrequency(const RadioFrequency & freq, const TCHAR * freq_name, bool to_devices=true);
+void
+SetActiveFrequency(const RadioFrequency &freq, const TCHAR *freq_name,
+                   bool to_devices=true) noexcept;
 
 /**
  * Update the Standby Radio Frequency in #ComputerSettings, and
@@ -119,25 +130,30 @@ void SetActiveFrequency(const RadioFrequency & freq, const TCHAR * freq_name, bo
  *
  * @param to_devices send the new setting to all devices?
  */
-void SetStandbyFrequency(const RadioFrequency & freq, const TCHAR * freq_name, bool to_devices=true);
+void
+SetStandbyFrequency(const RadioFrequency &freq, const TCHAR *freq_name,
+                    bool to_devices=true) noexcept;
 
 /**
  * Offset the Active Radio Frequency in #ComputerSettings, and
  * forward it to all XCSoar modules that want it.
  */
-void OffsetActiveFrequency(double offset_khz, bool to_devices=true);
+void
+OffsetActiveFrequency(double offset_khz, bool to_devices=true) noexcept;
 
 /**
  * Offset the Active Radio Frequency in #ComputerSettings, and
  * forward it to all XCSoar modules that want it.
  */
-void OffsetStandbyFrequency(double offset_khz, bool to_devices=true);
+void
+OffsetStandbyFrequency(double offset_khz, bool to_devices=true) noexcept;
 
 /**
  * Exchange the Active and Standby Radio Frequencies in #ComputerSettings, and
  * forward them to all XCSoar modules that want it.
  */
-void ExchangeRadioFrequencies(bool to_devices=true);
+void
+ExchangeRadioFrequencies(bool to_devices=true) noexcept;
 
 } // namespace ActionInterface
 
@@ -151,18 +167,22 @@ using namespace ActionInterface;
 /**
  * Receive GPS data (#MoreData) from the DeviceBlackboard.
  */
-void ReceiveGPS();
+void
+ReceiveGPS() noexcept;
 
 /**
  * Receive calculated data (#DerivedInfo) from the DeviceBlackboard.
  */
-void ReceiveCalculated();
+void
+ReceiveCalculated() noexcept;
 
-void ExchangeBlackboard();
+void
+ExchangeBlackboard() noexcept;
 
 /**
  * Copy data from and to the DeviceBlackboard.
  */
-void ExchangeDeviceBlackboard();
+void
+ExchangeDeviceBlackboard() noexcept;
 
 } // namespace XCSoarInterface

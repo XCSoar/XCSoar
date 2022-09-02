@@ -49,7 +49,9 @@ extern bool movement_detected;
 // window.. make this protected TODO so have to subclass to get access
 extern MainWindow *main_window;
 
-static inline bool MovementDetected() {
+static inline bool
+MovementDetected() noexcept
+{
   return Private::movement_detected;
 }
 
@@ -59,7 +61,9 @@ static inline bool MovementDetected() {
  * @return InterfaceBlackboard.Basic
  */
 [[gnu::const]]
-static inline const MoreData &Basic() {
+static inline const MoreData &
+Basic() noexcept
+{
   assert(InMainThread());
 
   return Private::blackboard.Basic();
@@ -70,21 +74,27 @@ static inline const MoreData &Basic() {
  * @return InterfaceBlackboard.Calculated
  */
 [[gnu::const]]
-static inline const DerivedInfo &Calculated() {
+static inline const DerivedInfo &
+Calculated() noexcept
+{
   assert(InMainThread());
 
   return Private::blackboard.Calculated();
 }
 
 [[gnu::const]]
-static inline const SystemSettings &GetSystemSettings() {
+static inline const SystemSettings &
+GetSystemSettings() noexcept
+{
   assert(InMainThread());
 
   return Private::blackboard.GetSystemSettings();
 }
 
 [[gnu::const]]
-static inline SystemSettings &SetSystemSettings() {
+static inline SystemSettings &
+SetSystemSettings() noexcept
+{
   assert(InMainThread());
 
   return Private::blackboard.SetSystemSettings();
@@ -95,7 +105,9 @@ static inline SystemSettings &SetSystemSettings() {
  * @return The InterfaceBlackboard.ComputerSettings
  */
 [[gnu::const]]
-static inline const ComputerSettings& GetComputerSettings() {
+static inline const ComputerSettings &
+GetComputerSettings() noexcept
+{
   assert(InMainThread());
 
   return Private::blackboard.GetComputerSettings();
@@ -106,14 +118,18 @@ static inline const ComputerSettings& GetComputerSettings() {
  * @return The InterfaceBlackboard.ComputerSettings
  */
 [[gnu::const]]
-static inline ComputerSettings &SetComputerSettings() {
+static inline ComputerSettings &
+SetComputerSettings() noexcept
+{
   assert(InMainThread());
 
   return Private::blackboard.SetComputerSettings();
 }
 
 [[gnu::const]]
-static inline const UISettings &GetUISettings() {
+static inline const UISettings &
+GetUISettings() noexcept
+{
   assert(InMainThread());
 
   return Private::blackboard.GetUISettings();
@@ -124,35 +140,45 @@ static inline const UISettings &GetUISettings() {
  * @return The InterfaceBlackboard.MapSettings
  */
 [[gnu::const]]
-static inline const MapSettings& GetMapSettings() {
+static inline const MapSettings &
+GetMapSettings() noexcept
+{
   assert(InMainThread());
 
   return GetUISettings().map;
 }
 
 [[gnu::const]]
-static inline const FullBlackboard &Full() {
+static inline const FullBlackboard &
+Full() noexcept
+{
   assert(InMainThread());
 
   return Private::blackboard;
 }
 
 [[gnu::const]]
-static inline LiveBlackboard &GetLiveBlackboard() {
+static inline LiveBlackboard &
+GetLiveBlackboard() noexcept
+{
   assert(InMainThread());
 
   return Private::blackboard;
 }
 
 [[gnu::const]]
-static inline UISettings &SetUISettings() {
+static inline UISettings &
+SetUISettings() noexcept
+{
   assert(InMainThread());
 
   return Private::blackboard.SetUISettings();
 }
 
 [[gnu::const]]
-static inline const DisplaySettings& GetDisplaySettings() {
+static inline const DisplaySettings &
+GetDisplaySettings() noexcept
+{
   assert(InMainThread());
 
   return GetUISettings().display;
@@ -163,73 +189,97 @@ static inline const DisplaySettings& GetDisplaySettings() {
  * @return The InterfaceBlackboard.MapSettings
  */
 [[gnu::const]]
-static inline MapSettings &SetMapSettings() {
+static inline MapSettings &
+SetMapSettings() noexcept
+{
   assert(InMainThread());
 
   return SetUISettings().map;
 }
 
-static inline const UIState &GetUIState() {
+static inline const UIState &
+GetUIState() noexcept
+{
   assert(InMainThread());
 
   return Private::ui_state;
 }
 
-static inline UIState &SetUIState() {
+static inline UIState &
+SetUIState() noexcept
+{
   assert(InMainThread());
 
   return Private::ui_state;
 }
 
-static inline void ReadBlackboardBasic(const MoreData &nmea_info) {
+static inline void
+ReadBlackboardBasic(const MoreData &nmea_info) noexcept
+{
   assert(InMainThread());
 
   Private::blackboard.ReadBlackboardBasic(nmea_info);
 }
 
-static inline void ReadBlackboardCalculated(const DerivedInfo &derived_info) {
+static inline void
+ReadBlackboardCalculated(const DerivedInfo &derived_info) noexcept
+{
   assert(InMainThread());
 
   Private::blackboard.ReadBlackboardCalculated(derived_info);
 }
 
-static inline void ReadCommonStats(const CommonStats &common_stats) {
+static inline void
+ReadCommonStats(const CommonStats &common_stats) noexcept
+{
   assert(InMainThread());
 
   Private::blackboard.ReadCommonStats(common_stats);
 }
 
-static inline void AddListener(BlackboardListener &listener) {
+static inline void
+AddListener(BlackboardListener &listener) noexcept
+{
   assert(InMainThread());
 
   Private::blackboard.AddListener(listener);
 }
 
-static inline void RemoveListener(BlackboardListener &listener) {
+static inline void
+RemoveListener(BlackboardListener &listener) noexcept
+{
   assert(InMainThread());
 
   Private::blackboard.RemoveListener(listener);
 }
 
-static inline void BroadcastGPSUpdate() {
+static inline void
+BroadcastGPSUpdate() noexcept
+{
   assert(InMainThread());
 
   Private::blackboard.BroadcastGPSUpdate();
 }
 
-static inline void BroadcastCalculatedUpdate() {
+static inline void
+BroadcastCalculatedUpdate() noexcept
+{
   assert(InMainThread());
 
   Private::blackboard.BroadcastCalculatedUpdate();
 }
 
-static inline void BroadcastComputerSettingsUpdate() {
+static inline void
+BroadcastComputerSettingsUpdate() noexcept
+{
   assert(InMainThread());
 
   Private::blackboard.BroadcastComputerSettingsUpdate();
 }
 
-static inline void BroadcastUISettingsUpdate() {
+static inline void
+BroadcastUISettingsUpdate() noexcept
+{
   assert(InMainThread());
 
   Private::blackboard.BroadcastUISettingsUpdate();
