@@ -1,4 +1,6 @@
 Version 7.26 - not yet released
+* user interface
+  - fix pressed InfoBox colors in inverted mode
 * task
   - add custom keyhole support
 * Android
