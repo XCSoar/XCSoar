@@ -34,7 +34,7 @@ Copyright_License {
 #include <cstdint>
 #include <optional>
 
-#define RASTER_SLOPE_FACT 12
+static constexpr unsigned  RASTER_SLOPE_FACT = 12;
 
 struct jas_matrix;
 struct GridLocation;
