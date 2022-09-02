@@ -29,7 +29,7 @@ Copyright_License {
 #include "Geo/GeoBounds.hpp"
 #endif
 
-#define NUM_COLOR_RAMP_LEVELS 13
+static constexpr unsigned NUM_COLOR_RAMP_LEVELS = 13;
 
 class Angle;
 class Canvas;
