@@ -165,7 +165,7 @@ GlueMapWindow::FullRedraw()
   UpdateMapScale();
   UpdateScreenBounds();
 
-  PartialRedraw();
+  DeferRedraw();
 }
 
 void
@@ -203,7 +203,6 @@ GlueMapWindow::QuickRedraw()
 #ifndef ENABLE_OPENGL
   /* we suppose that the operation will need a full redraw later, so
      trigger that now */
-  if (draw_thread != nullptr)
-    draw_thread->TriggerRedraw();
+  DeferRedraw();
 #endif
 }

@@ -198,6 +198,23 @@ public:
     redraw_notify.SendNotification();
   }
 
+  /**
+   * Trigger a deferred redraw.  It will occur in the main thread
+   * after all other events have been handled.
+   */
+  void DeferRedraw() noexcept {
+#ifdef ENABLE_OPENGL
+    /* with OpenGL, redraws are synchronous (no DrawThread), but
+       Invalidate() defers this until the whole screen is redrawn */
+    Invalidate();
+#else
+    /* without OpenGL, we have a DrawThread, and the redraw_notify
+       will defer the DrawThread wakeup to merge adjacent calls to
+       this method */
+    InjectRedraw();
+#endif
+  }
+
   void SetPan(bool enable);
   void TogglePan();
   void PanTo(const GeoPoint &location);
