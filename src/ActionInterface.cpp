@@ -40,7 +40,7 @@ Copyright_License {
 using namespace CommonInterface;
 
 namespace ActionInterface {
-  static void SendGetComputerSettings();
+static void SendGetComputerSettings();
 }
 
 void
