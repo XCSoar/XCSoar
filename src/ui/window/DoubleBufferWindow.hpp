@@ -76,7 +76,7 @@ private:
    * Returns the Canvas which is currently used for rendering.  This
    * method may only be called within the drawing thread.
    */
-  Canvas &GetPaintCanvas() noexcept {
+  auto &GetPaintCanvas() noexcept {
     return buffers[current];
   }
 

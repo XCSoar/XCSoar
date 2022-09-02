@@ -64,16 +64,19 @@ DoubleBufferWindow::Repaint() noexcept
 {
   {
     const std::lock_guard<Mutex> lock(mutex);
-    OnPaintBuffer(GetPaintCanvas());
+    auto &canvas = GetPaintCanvas();
+
+    /* grow the current buffer, just in case the window has been
+       resized */
+    canvas.Grow(next_size);
+
+    OnPaintBuffer(canvas);
+
     current ^= 1;
   }
 
   /* commit the finished buffer to the screen (asynchronously) */
   invalidate_notify.SendNotification();
-
-  /* grow the current buffer, just in case the window has been
-     resized */
-  buffers[current].Grow(next_size);
 }
 
 void
