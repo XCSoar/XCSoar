@@ -27,7 +27,7 @@ Copyright_License {
 #include <tchar.h>
 #include <cstdint>
 
-#define OUTBUFFERSIZE 128
+static constexpr unsigned OUTBUFFERSIZE = 128;
 
 class DataFieldListener;
 class ComboList;
