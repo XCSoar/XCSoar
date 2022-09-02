@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
 */
 
-#ifndef TEST_TASK_HPP
-#define TEST_TASK_HPP
+#pragma once
 
 #include "Task/TaskManager.hpp"
 
@@ -85,5 +84,3 @@ task_report(const TaskManager &task_manager, const char *text);
 const char* task_name(int test_num);
 
 WaypointPtr random_waypoint(const Waypoints &waypoints);
-
-#endif

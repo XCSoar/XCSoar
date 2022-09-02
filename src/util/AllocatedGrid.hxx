@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ALLOCATED_GRID_HXX
-#define ALLOCATED_GRID_HXX
+#pragma once
 
 #include "AllocatedArray.hxx"
 
@@ -184,5 +183,3 @@ public:
 			std::fill(begin() + fill_start, begin() + new_size, fill);
 	}
 };
-
-#endif

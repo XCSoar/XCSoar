@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef TEXT_FILE_HXX
-#define TEXT_FILE_HXX
+#pragma once
 
 #include <cstring>
 
@@ -48,5 +47,3 @@ ReadBufferedLine(B &buffer)
 	*newline = 0;
 	return r.data();
 }
-
-#endif

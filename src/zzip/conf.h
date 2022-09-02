@@ -13,8 +13,7 @@
  * Copyright: (c) Guido Draheim, use under copyleft (LGPL,MPL)
  */
 
-#ifndef _ZZIP_CONF_H
-#define _ZZIP_CONF_H 1
+#pragma once
 
 #if !defined ZZIP_OMIT_CONFIG_H
 # if defined _MSC_VER || defined __BORLANDC__ || defined __WATCOMC__
@@ -257,7 +256,3 @@
 #  define _zzip_export extern
 #  endif
 #endif
-
-#endif
-
-

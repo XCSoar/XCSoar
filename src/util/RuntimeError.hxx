@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef RUNTIME_ERROR_HXX
-#define RUNTIME_ERROR_HXX
+#pragma once
 
 #include <stdexcept> // IWYU pragma: export
 #include <utility>
@@ -52,5 +51,3 @@ FormatInvalidArgument(const char *fmt, Args&&... args) noexcept
 	snprintf(buffer, sizeof(buffer), fmt, std::forward<Args>(args)...);
 	return std::invalid_argument(buffer);
 }
-
-#endif

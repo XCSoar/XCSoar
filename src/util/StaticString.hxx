@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STATIC_STRING_HPP
-#define STATIC_STRING_HPP
+#pragma once
 
 #include "StringBuffer.hxx"
 #include "StringAPI.hxx"
@@ -370,6 +369,4 @@ public:
 
 #else
 #define StaticString NarrowString
-#endif
-
 #endif

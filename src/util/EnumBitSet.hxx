@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ENUM_BIT_SET_HXX
-#define ENUM_BIT_SET_HXX
+#pragma once
 
 #include <cstdint>
 #include <type_traits>
@@ -123,5 +122,3 @@ public:
 		}
 	}
 };
-
-#endif

@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SLES_ANDROID_SIMPLE_BUFFER_QUEUE_HPP
-#define SLES_ANDROID_SIMPLE_BUFFER_QUEUE_HPP
+#pragma once
 
 #include <SLES/OpenSLES_Android.h>
 
@@ -63,5 +62,3 @@ namespace SLES {
     }
   };
 }
-
-#endif

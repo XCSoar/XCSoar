@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DELETE_DISPOSER_HXX
-#define DELETE_DISPOSER_HXX
+#pragma once
 
 /**
  * A disposer for boost::intrusive that invokes the "delete" operator
@@ -41,5 +40,3 @@ public:
 		delete t;
 	}
 };
-
-#endif

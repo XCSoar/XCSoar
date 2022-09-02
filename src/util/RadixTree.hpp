@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef RADIX_TREE_HPP
-#define RADIX_TREE_HPP
+#pragma once
 
 #include "StaticString.hxx"
 #include "StringCompare.hxx"
@@ -903,5 +902,3 @@ public:
 	}
 #endif /* PRINT_RADIX_TREE */
 };
-
-#endif

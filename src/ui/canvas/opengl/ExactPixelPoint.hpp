@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_EXACT_PIXEL_POINT_HPP
-#define XCSOAR_SCREEN_OPENGL_EXACT_PIXEL_POINT_HPP
+#pragma once
 
 #include "ui/opengl/Types.hpp"
 #include "Math/Point2D.hpp"
@@ -36,5 +35,3 @@ struct ExactPixelPoint : Point2D<GLexact> {
   constexpr ExactPixelPoint(PixelPoint p)
     :Point2D<GLexact>(ToGLexact(p.x), ToGLexact(p.y)) {}
 };
-
-#endif

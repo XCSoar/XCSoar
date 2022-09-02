@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef TYPE_TRAITS_HPP
-#define TYPE_TRAITS_HPP
+#pragma once
 
 #include <type_traits>
 
@@ -54,6 +53,4 @@ using is_trivial_ndebug = std::is_trivial<T>;
 #else
 template<typename T>
 using is_trivial_ndebug = has_trivial_copy_and_destructor<T>;
-#endif
-
 #endif

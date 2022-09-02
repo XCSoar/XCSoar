@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DYNAMIC_FIFO_BUFFER_HXX
-#define DYNAMIC_FIFO_BUFFER_HXX
+#pragma once
 
 #include "ForeignFifoBuffer.hxx"
 
@@ -117,5 +116,3 @@ public:
 protected:
 	using ForeignFifoBuffer<T>::GetBuffer;
 };
-
-#endif

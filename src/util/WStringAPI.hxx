@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef WSTRING_API_HXX
-#define WSTRING_API_HXX
+#pragma once
 
 #include <cwchar>
 
@@ -209,5 +208,3 @@ DuplicateString(const wchar_t *p) noexcept
 	return wcsdup(p);
 #endif
 }
-
-#endif

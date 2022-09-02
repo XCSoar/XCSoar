@@ -28,8 +28,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef BYTE_ORDER_HXX
-#define BYTE_ORDER_HXX
+#pragma once
 
 #include "Compiler.h"
 
@@ -498,5 +497,3 @@ public:
 
 static_assert(sizeof(PackedLE32) == sizeof(uint32_t), "Wrong size");
 static_assert(alignof(PackedLE32) == 1, "Wrong alignment");
-
-#endif

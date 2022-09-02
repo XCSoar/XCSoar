@@ -17,8 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef EVENT_WINSELECT_EVENTS_HXX
-#define EVENT_WINSELECT_EVENTS_HXX
+#pragma once
 
 #include <windows.h>
 
@@ -34,5 +33,3 @@ struct WinSelectEvents {
 	static constexpr unsigned ERROR = 0;
 	static constexpr unsigned HANGUP = 0;
 };
-
-#endif

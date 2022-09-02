@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DEREFERENCE_ITERATOR_HXX
-#define DEREFERENCE_ITERATOR_HXX
+#pragma once
 
 #include <iterator>
 #include <type_traits>
@@ -156,5 +155,3 @@ public:
 		return original.cend();
 	}
 };
-
-#endif

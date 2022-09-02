@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_PARSER_HXX
-#define STRING_PARSER_HXX
+#pragma once
 
 #include "CharUtil.hxx"
 #include "NumberParser.hpp"
@@ -171,5 +170,3 @@ public:
 		return false;
 	}
 };
-
-#endif

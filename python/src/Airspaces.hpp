@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
 */
 
-#ifndef PYTHON_AIRSPACES_HPP
-#define PYTHON_AIRSPACES_HPP
+#pragma once
 
 #include <Python.h>
 
@@ -47,5 +46,3 @@ PyObject* xcsoar_Airspaces_optimise(Pyxcsoar_Airspaces *self);
 PyObject* xcsoar_Airspaces_findIntrusions(Pyxcsoar_Airspaces *self, PyObject *args);
 
 bool Airspaces_init(PyObject* m);
-
-#endif /* PYTHON_AIRSPACES_HPP */

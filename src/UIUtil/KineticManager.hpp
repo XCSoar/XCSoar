@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef KINETIC_MANAGER_HPP
-#define KINETIC_MANAGER_HPP
+#pragma once
 
 #include "time/PeriodClock.hpp"
 #include "time/FloatDuration.hxx"
@@ -80,5 +79,3 @@ public:
   /** Returns whether the kinetic movement is still active */
   bool IsSteady();
 };
-
-#endif

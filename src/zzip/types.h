@@ -19,8 +19,7 @@
  *     be sure to look for them and add the respective header as an #include.
  */
 
-#ifndef _ZZIP_TYPES_H_
-#define _ZZIP_TYPES_H_
+#pragma once
 
 #include <zzip/conf.h>
 #include <fcntl.h>
@@ -45,8 +44,3 @@ typedef struct zzip_root_dirent  ZZIP_ROOT_DIRENT;
 typedef struct zzip_file_header ZZIP_FILE_HEADER;
 typedef struct zzip_disk_entry  ZZIP_DISK_ENTRY;
 typedef struct zzip_extra_block ZZIP_EXTRA_BLOCK;
-
-
-
-#endif
-

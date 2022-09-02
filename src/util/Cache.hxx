@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CACHE_HXX
-#define CACHE_HXX
+#pragma once
 
 #include "Manual.hxx"
 #include "Cast.hxx"
@@ -379,5 +378,3 @@ public:
 			f(i.GetKey(), i.GetData());
 	}
 };
-
-#endif

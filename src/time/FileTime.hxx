@@ -27,13 +27,11 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef FILE_TIME_HXX
-#define FILE_TIME_HXX
+#pragma once
 
 #include "SystemClock.hxx"
 
 #include <fileapi.h>
-
 #include <chrono>
 #include <cstdint>
 
@@ -150,5 +148,3 @@ DeltaFileTimeS(FILETIME a, FILETIME b) noexcept
 	return std::chrono::duration_cast<std::chrono::seconds>
 		(FileTimeToChronoDuration(a) - FileTimeToChronoDuration(b));
 }
-
-#endif

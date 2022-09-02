@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef EXCEPTION_HXX
-#define EXCEPTION_HXX
+#pragma once
 
 #include <exception>
 #include <string>
@@ -139,5 +138,3 @@ std::string
 GetFullMessage(std::exception_ptr ep,
 	       const char *fallback="Unknown exception",
 	       const char *separator="; ") noexcept;
-
-#endif

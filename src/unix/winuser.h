@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef WINUSER_H
-#define WINUSER_H
+#pragma once
 
 enum {
   DT_LEFT = 0x2,
@@ -32,5 +31,3 @@ enum {
   DT_CALCRECT = 0x400,
   DT_UNDERLINE = 0x800,
 };
-
-#endif

@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_COMPARE_HXX
-#define STRING_COMPARE_HXX
+#pragma once
 
 #include "StringAPI.hxx"
 
@@ -160,5 +159,3 @@ RemoveSuffix(std::basic_string_view<T> &haystack,
 		haystack.remove_suffix(needle.size());
 	return match;
 }
-
-#endif

@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CHAR_UTIL_HXX
-#define CHAR_UTIL_HXX
+#pragma once
 
 #ifdef _UNICODE
 #include "WCharUtil.hxx"
@@ -154,5 +153,3 @@ IsHexDigit(char ch) noexcept
 		(ch >= 'a' && ch <= 'f') ||
 		(ch >= 'A' && ch <= 'F');
 }
-
-#endif

@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_API_HXX
-#define STRING_API_HXX
+#pragma once
 
 #include <cstring>
 
@@ -219,5 +218,3 @@ DuplicateString(const char *p) noexcept
 {
 	return strdup(p);
 }
-
-#endif

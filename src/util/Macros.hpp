@@ -27,9 +27,6 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef MACROS_HPP
-#define MACROS_HPP
+#pragma once
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
-
-#endif

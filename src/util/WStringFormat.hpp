@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef WSTRING_FORMAT_HPP
-#define WSTRING_FORMAT_HPP
+#pragma once
 
 #include <stdio.h>
 
@@ -74,5 +73,3 @@ StringFormatUnsafe(wchar_t *buffer, const wchar_t *fmt,
      Microsoft-compatible implementation */
   return _swprintf(buffer, fmt, args...);
 }
-
-#endif

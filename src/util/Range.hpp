@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef RANGE_HPP
-#define RANGE_HPP
+#pragma once
 
 /**
  * This class describes a range with two iterators: one pointing to
@@ -56,5 +55,3 @@ public:
     return begin() == end();
   }
 };
-
-#endif

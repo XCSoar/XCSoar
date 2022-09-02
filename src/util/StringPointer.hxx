@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_POINTER_HXX
-#define STRING_POINTER_HXX
+#pragma once
 
 #include <cstddef>
 
@@ -78,5 +77,3 @@ public:
 		return *value == SENTINEL;
 	}
 };
-
-#endif

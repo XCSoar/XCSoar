@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CLAMP_HPP
-#define CLAMP_HPP
+#pragma once
 
 #include "Compiler.h"
 
@@ -45,5 +44,3 @@ Clamp(const T &value, const T &min, const T &max)
     : (gcc_unlikely(value > max)
        ? max : value);
 }
-
-#endif

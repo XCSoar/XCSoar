@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SLICE_ALLOCATOR_HXX
-#define SLICE_ALLOCATOR_HXX
+#pragma once
 
 #include "Compiler.h"
 
@@ -269,6 +268,4 @@ public:
 
 #if CLANG_CHECK_VERSION(3,9)
 #pragma GCC diagnostic pop
-#endif
-
 #endif

@@ -11,8 +11,7 @@
  * you need to add an include path to the dir containing (!!) the ./zzip/ dir
  */
 
-#ifndef _ZZIP_ZZIP_H /* zziplib.h */
-#define _ZZIP_ZZIP_H
+#pragma once
 
 #include <zzip/types.h>
 
@@ -261,8 +260,6 @@ ZZIP_DIR *  zzip_dir_open_ext_io(zzip_char_t* filename,
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* _ZZIPLIB_H */
 
 /* 
  * Local variables:

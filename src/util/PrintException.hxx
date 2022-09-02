@@ -30,8 +30,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PRINT_EXCEPTION_HXX
-#define PRINT_EXCEPTION_HXX
+#pragma once
 
 #include <exception>
 
@@ -43,5 +42,3 @@ PrintException(const std::exception &e) noexcept;
 
 void
 PrintException(const std::exception_ptr &ep) noexcept;
-
-#endif

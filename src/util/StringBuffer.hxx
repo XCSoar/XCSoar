@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_BUFFER_HXX
-#define STRING_BUFFER_HXX
+#pragma once
 
 #include <array>
 
@@ -106,5 +105,3 @@ public:
 
 template<std::size_t CAPACITY>
 class StringBuffer : public BasicStringBuffer<char, CAPACITY> {};
-
-#endif

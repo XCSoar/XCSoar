@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CAST_ITERATOR_HPP
-#define CAST_ITERATOR_HPP
+#pragma once
 
 template<typename VT, typename IT>
 class CastIterator {
@@ -84,5 +83,3 @@ public:
     return iterator != other.iterator;
   }
 };
-
-#endif

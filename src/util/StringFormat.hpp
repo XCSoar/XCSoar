@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_FORMAT_HPP
-#define STRING_FORMAT_HPP
+#pragma once
 
 #ifdef _UNICODE
 #include "WStringFormat.hpp"
@@ -50,5 +49,3 @@ StringFormatUnsafe(char *buffer, const char *fmt, Args&&... args) noexcept
 {
   return sprintf(buffer, fmt, args...);
 }
-
-#endif

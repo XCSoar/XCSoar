@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef WCHAR_UTIL_HXX
-#define WCHAR_UTIL_HXX
+#pragma once
 
 #include <wchar.h>
 
@@ -139,5 +138,3 @@ ToLowerASCII(wchar_t ch) noexcept
 		? (ch + ('a' - 'A'))
 		: ch;
 }
-
-#endif

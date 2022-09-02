@@ -27,13 +27,11 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef WSTRING_COMPARE_HXX
-#define WSTRING_COMPARE_HXX
+#pragma once
 
 #include "WStringAPI.hxx"
 
 #include <string_view>
-
 #include <wchar.h>
 
 [[gnu::pure]] [[gnu::nonnull]]
@@ -120,5 +118,3 @@ StringAfterPrefixIgnoreCase(const wchar_t *haystack,
 [[gnu::pure]] [[gnu::nonnull]]
 const wchar_t *
 FindStringSuffix(const wchar_t *p, const wchar_t *suffix) noexcept;
-
-#endif
