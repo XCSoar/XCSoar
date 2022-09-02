@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -38,10 +38,10 @@ Copyright_License {
  * @see http://en.wikipedia.org/wiki/Lapse_rate#Dry_adiabatic_lapse_rate
  * @see http://pds-atmospheres.nmsu.edu/education_and_outreach/encyclopedia/adiabatic_lapse_rate.htm
  */
-#define DALR -0.00974
+static constexpr double DALR = -0.00974;
 
 /** ThermalIndex threshold in degrees C */
-#define TITHRESHOLD -1.6
+static constexpr double TITHRESHOLD = -1.6;
 
 using std::max;
 
