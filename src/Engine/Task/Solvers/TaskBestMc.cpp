@@ -36,7 +36,7 @@ TaskBestMc::TaskBestMc(TaskPoint &tp,
 {
 }
 
-#define TINY 0.001
+static constexpr double TINY = 0.001;
 
 double
 TaskBestMc::f(const double mc) noexcept
