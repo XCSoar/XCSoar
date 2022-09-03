@@ -1,3 +1,5 @@
+Version 7.27 - not yet released
+
 Version 7.26 - 2022/09/03
 * user interface
   - fix pressed InfoBox colors in inverted mode
