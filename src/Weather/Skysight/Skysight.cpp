@@ -319,6 +319,7 @@ Skysight::APIInited(__attribute__((unused)) const tstring details, __attribute__
 
   if (self->api->metrics.size()) {
     self->LoadActiveMetrics();
+    self->Render(true);
   }
 }
 
@@ -402,6 +403,27 @@ BrokenDateTime
 Skysight::FromUnixTime(uint64_t t)
 {
   return api->FromUnixTime(t);
+}
+
+void
+Skysight::Render(bool force_update)
+{
+  if (displayed_metric.metric) {
+    //set by dl callback
+    if (update_flag) {
+      //TODO: use const char in metric rather than string/cstr
+      DisplayActiveMetric(displayed_metric.metric->id.c_str());
+    }
+
+    //Request next images
+    BrokenDateTime now = Skysight::GetNow(force_update);
+    if (force_update ||
+	(!update_flag && displayed_metric < GetForecastTime(now))) {
+      //TODO: use const char in metric rather than string/cstr
+      api->GetImageAt(displayed_metric.metric->id.c_str(), now, now + std::chrono::seconds(60*60),
+		     DownloadComplete);
+    }
+  }
 }
 
 BrokenDateTime
@@ -492,6 +514,11 @@ Skysight::DisplayActiveMetric(const TCHAR *const id)
 
   if (!id) {
     displayed_metric.clear();
+    auto *map = UIGlobals::GetMap();
+    if (map == nullptr)
+      return false;
+
+    map->SetOverlay(nullptr);
     Profile::Set(ProfileKeys::SkysightDisplayedMetric, "");
     return true;
   }
@@ -554,5 +581,21 @@ Skysight::DisplayActiveMetric(const TCHAR *const id)
 	      bdt.day, bdt.hour, bdt.minute);
   tstring label = desc.c_str();
 
+  auto *map = UIGlobals::GetMap();
+  if (map == nullptr)
+    return false;
+
+  LogFormat("Skysight::DisplayActiveMetric %s", path.c_str());
+  std::unique_ptr<MapOverlayBitmap> bmp;
+  try {
+    bmp.reset(new MapOverlayBitmap(path));
+  } catch (...) {
+    LogError(std::current_exception(), "MapOverlayBitmap load error");
+    return false;
+  }
+
+  bmp->SetAlpha(0.6);
+  bmp->SetLabel(label);
+  map->SetOverlay(std::move(bmp));
   return true;
 }
