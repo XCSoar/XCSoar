@@ -104,6 +104,8 @@ ParseFileRepository(FileRepository &repository, NLineReader &reader)
         file.type = FileType::MAP;
       else if (StringIsEqual(value, "flarmnet"))
         file.type = FileType::FLARMNET;
+      else if (StringIsEqual(value, "rasp"))
+        file.type = FileType::RASP;
     } else if (StringIsEqual(name, "update")) {
       int year, month, day;
       if (sscanf(value, "%04u-%02u-%02u", &year, &month, &day) == 3)

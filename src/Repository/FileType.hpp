@@ -33,4 +33,5 @@ enum class FileType : uint8_t {
   MAP,
   FLARMNET,
   IGC,
+  RASP,
 };
