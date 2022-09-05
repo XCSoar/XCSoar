@@ -25,7 +25,6 @@ Copyright_License {
 #include "Dialogs/DownloadFilePicker.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
-#include "Weather/Rasp/Providers.hpp"
 #include "ui/control/List.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Enum.hpp"
