@@ -1,4 +1,6 @@
 Version 7.27 - not yet released
+* user interface
+  - rasp sources from repository
 
 Version 7.26 - 2022/09/03
 * user interface
