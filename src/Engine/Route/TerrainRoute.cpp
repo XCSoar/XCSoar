@@ -119,7 +119,7 @@ TerrainRoute::AddNearby(const RouteLink &e) noexcept
   - or do shortcut checks at end of add_edges loop
 */
 
-std::optional<RoutePoint>
+inline std::optional<RoutePoint>
 TerrainRoute::CheckClearanceTerrain(const RouteLink &e) const noexcept
 {
   if (!terrain || !terrain->IsDefined())
@@ -157,7 +157,7 @@ TerrainRoute::AddNearbyTerrainSweep(const RoutePoint &p,
   AddCandidate(link_divert);
 }
 
-void
+inline void
 TerrainRoute::AddNearbyTerrain(const RoutePoint &p,
                                const RouteLink &e) noexcept
 {
