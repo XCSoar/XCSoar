@@ -59,7 +59,6 @@ RoutePlanner::SolveReachTerrain(const AGeoPoint &origin,
                                 const bool do_solve) noexcept
 {
   rpolars_reach.SetConfig(config, origin.altitude, h_ceiling);
-  reach_polar_mode = config.reach_polar_mode;
 
   return reach_terrain.Solve(origin, rpolars_reach, terrain, do_solve);
 }
@@ -71,7 +70,6 @@ RoutePlanner::SolveReachWorking(const AGeoPoint &origin,
                                 const bool do_solve) noexcept
 {
   rpolars_reach_working.SetConfig(config, origin.altitude, h_ceiling);
-  // reach_polar_mode previously set by SolveReachTerrain
 
   return reach_working.Solve(origin, rpolars_reach_working, terrain, do_solve);
 }
@@ -383,7 +381,7 @@ RoutePlanner::UpdatePolar(const GlideSettings &settings,
 {
   rpolars_route.SetConfig(config);
   rpolars_route.Initialise(settings, task_polar, wind);
-  switch (reach_polar_mode) {
+  switch (config.reach_polar_mode) {
   case RoutePlannerConfig::Polar::TASK:
     rpolars_reach = rpolars_route;
     // make copy to avoid waste

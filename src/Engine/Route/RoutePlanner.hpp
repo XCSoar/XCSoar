@@ -145,8 +145,6 @@ private:
   ReachFan reach_terrain;
   ReachFan reach_working;
 
-  RoutePlannerConfig::Polar reach_polar_mode = RoutePlannerConfig::Polar::TASK;
-
   mutable unsigned long count_dij;
   mutable unsigned long count_unique;
   mutable unsigned long count_supressed;
