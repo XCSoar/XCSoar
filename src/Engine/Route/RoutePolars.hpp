@@ -111,7 +111,7 @@ public:
    */
   [[gnu::pure]]
   std::optional<RoutePoint> CheckClearance(const RouteLink &e,
-                                           const RasterMap *map,
+                                           const RasterMap &map,
                                            const FlatProjection &proj) const noexcept;
 
   /**

@@ -106,7 +106,7 @@ RoutePolars::CalcVHeight(const RouteLink &link) const noexcept
 }
 
 std::optional<RoutePoint>
-RoutePolars::CheckClearance(const RouteLink &e, const RasterMap *map,
+RoutePolars::CheckClearance(const RouteLink &e, const RasterMap &map,
                             const FlatProjection &proj) const noexcept
 {
   if (!config.IsTerrainEnabled())
@@ -115,12 +115,10 @@ RoutePolars::CheckClearance(const RouteLink &e, const RasterMap *map,
   GeoPoint start = proj.Unproject(e.first);
   GeoPoint dest = proj.Unproject(e.second);
 
-  assert(map);
-
   const auto intersection =
-    map->FirstIntersection(start, e.first.altitude, dest,
-                           e.second.altitude, CalcVHeight(e),
-                           climb_ceiling, GetSafetyHeight());
+    map.FirstIntersection(start, e.first.altitude, dest,
+                          e.second.altitude, CalcVHeight(e),
+                          climb_ceiling, GetSafetyHeight());
   if (!intersection)
     return std::nullopt;
 

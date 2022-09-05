@@ -126,7 +126,7 @@ TerrainRoute::CheckClearanceTerrain(const RouteLink &e) const noexcept
     return std::nullopt;
 
   count_terrain++;
-  return rpolars_route.CheckClearance(e, terrain, projection);
+  return rpolars_route.CheckClearance(e, *terrain, projection);
 }
 
 void
