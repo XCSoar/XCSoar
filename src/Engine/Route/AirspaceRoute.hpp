@@ -66,11 +66,11 @@ protected:
     return m_airspaces.IsEmpty() && RoutePlanner::IsTrivial();
   }
 
-private:
   std::optional<RoutePoint> CheckClearance(const RouteLink &e) const noexcept override;
   void AddNearby(const RouteLink &e) noexcept override;
   bool CheckSecondary(const RouteLink &e) noexcept override;
 
+private:
   void AddNearbyAirspace(const RouteAirspaceIntersection &inx,
                          const RouteLink &e) noexcept;
 

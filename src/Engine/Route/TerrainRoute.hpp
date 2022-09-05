@@ -33,7 +33,7 @@ public:
 
   friend class PrintHelper;
 
-private:
+protected:
   std::optional<RoutePoint> CheckClearance(const RouteLink &e) const noexcept override;
   void AddNearby(const RouteLink &e) noexcept override;
 };

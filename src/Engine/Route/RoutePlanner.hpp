@@ -368,7 +368,7 @@ protected:
   [[gnu::pure]]
   std::optional<RoutePoint> CheckClearanceTerrain(const RouteLink &e) const noexcept;
 
-private:
+protected:
   /**
    * Check a second category of obstacle clearance.  This allows compound
    * obstacle categories by subclasses.
@@ -413,6 +413,7 @@ private:
   virtual void OnSolve(const AGeoPoint &origin,
                        const AGeoPoint &destination) noexcept;
 
+private:
   /**
    * Generate a candidate to left or right of the clearance point, unless:
    * - it is too short
