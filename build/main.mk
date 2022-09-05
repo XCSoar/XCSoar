@@ -161,6 +161,7 @@ endif
 ifeq ($(HAVE_HTTP),y)
 DIALOG_SOURCES += \
 	$(SRC)/Dialogs/Weather/PCMetDialog.cpp \
+	$(SRC)/Dialogs/Weather/SkysightDialog.cpp \
 	$(SRC)/Dialogs/Weather/NOAAList.cpp \
 	$(SRC)/Dialogs/Weather/NOAADetails.cpp
 endif
@@ -629,7 +630,9 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/NOAAStore.cpp \
 	$(SRC)/Weather/NOAAUpdater.cpp \
 	$(SRC)/Weather/Skysight/Skysight.cpp \
+	$(SRC)/Weather/Skysight/APIQueue.cpp \
 	$(SRC)/Weather/Skysight/SkysightAPI.cpp \
+	$(SRC)/Weather/Skysight/Request.cpp \
 	$(SRC)/Weather/Skysight/SkysightRegions.cpp
 
 XCSOAR_SOURCES += \
