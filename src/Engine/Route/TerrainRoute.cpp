@@ -22,11 +22,6 @@
 
 #include "TerrainRoute.hpp"
 
-TerrainRoute::TerrainRoute() noexcept
-  :m_inx_terrain(0, 0, 0)
-{
-}
-
 std::optional<RoutePoint>
 TerrainRoute::CheckClearance(const RouteLink &e) const noexcept
 {

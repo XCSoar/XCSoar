@@ -29,8 +29,6 @@ class TerrainRoute: public RoutePlanner
   mutable RoutePoint m_inx_terrain;
 
 public:
-  TerrainRoute() noexcept;
-
   friend class PrintHelper;
 
 protected:
