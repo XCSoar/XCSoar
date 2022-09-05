@@ -22,10 +22,10 @@
 
 #pragma once
 
-#include "RoutePlanner.hpp"
+#include "TerrainRoute.hpp"
 #include "Airspace/Airspaces.hpp"
 
-class AirspaceRoute : public RoutePlanner {
+class AirspaceRoute : public TerrainRoute {
   Airspaces m_airspaces;
 
   struct RouteAirspaceIntersection {

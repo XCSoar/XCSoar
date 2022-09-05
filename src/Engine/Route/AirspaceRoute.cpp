@@ -248,10 +248,7 @@ void
 AirspaceRoute::AddNearby(const RouteLink &e) noexcept
 {
   if (m_inx.airspace == nullptr) {
-    // NOTE: m_inx is "mutable" so that const in AddNearbyTerrain is ignored!!
-    // The copy is really needed!
-    RoutePoint ptmp = m_inx.point;
-    AddNearbyTerrain(ptmp, e);
+    TerrainRoute::AddNearby(e);
   } else
     AddNearbyAirspace(m_inx, e);
 }
@@ -273,13 +270,12 @@ AirspaceRoute::CheckSecondary(const RouteLink &e) noexcept
 std::optional<RoutePoint>
 AirspaceRoute::CheckClearance(const RouteLink &e) const noexcept
 {
+  m_inx.airspace = nullptr;
+
   // attempt terrain clearance first
 
-  if (auto inp = CheckClearanceTerrain(e)) {
-    m_inx.airspace = nullptr;
-    m_inx.point = *inp;
+  if (auto inp = TerrainRoute::CheckClearance(e))
     return inp;
-  }
 
   if (!rpolars_route.IsAirspaceEnabled())
     return std::nullopt; // trivial
