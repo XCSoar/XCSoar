@@ -210,7 +210,7 @@ public:
     q.clear();
 
     for (const auto &i : edges)
-      q.push(Value(i.second.value, i));
+      q.emplace(i.second.value, i);
   }
 
 private:
@@ -240,7 +240,7 @@ private:
       // -> Don't use this new leg
       return false;
 
-    q.push(Value(edge_value, it));
+    q.emplace(edge_value, it);
     return true;
   }
 };
