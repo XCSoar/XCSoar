@@ -62,6 +62,7 @@ void TopWindow::Refresh() noexcept {}
 #endif
 
 #ifdef USE_POLL_EVENT
+void TopWindow::OnResize(PixelSize) noexcept {}
 bool TopWindow::OnEvent([[maybe_unused]] const UI::Event &event) { return false; }
 #endif
 
