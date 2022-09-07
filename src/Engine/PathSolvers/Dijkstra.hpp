@@ -234,12 +234,9 @@ private:
   bool Push(const Node node, const Node parent,
             value_type edge_value = {}) noexcept {
     // Try to find the given node n in the EdgeMap
-    edge_iterator it = edges.find(node);
-    if (it == edges.end()) {
+    const auto [it, inserted] = edges.try_emplace(node, parent, edge_value);
+    if (inserted) {
       // first entry
-      // If the node wasn't found
-      // -> Insert a new node
-      it = edges.try_emplace(node, parent, edge_value).first;
     } else if (it->second.value > edge_value)
       // If the node was found and the new value is smaller
       // -> Replace the value with the new one
