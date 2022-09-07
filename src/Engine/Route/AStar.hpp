@@ -275,7 +275,7 @@ private:
       // first entry
       // If the node wasn't found
       // -> Insert a new node into the node_value_map
-      it = node_values.insert(std::make_pair(node, edge_value)).first;
+      it = node_values.try_emplace(node, edge_value).first;
 
       // Remember the parent node
       SetPredecessor(node, parent);
@@ -297,7 +297,7 @@ private:
 
   void SetPredecessor(const Node &node, const Node &parent) noexcept {
     // Try to find the given node in the node_parent_map
-    auto result = node_parents.insert(std::make_pair(node, parent));
+    auto result = node_parents.try_emplace(node, parent);
     if (!result.second)
       // If the node was found
       // -> Replace the according parent node with the new one
