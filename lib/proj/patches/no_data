@@ -4,11 +4,11 @@ Date:   Thu Aug 11 09:10:26 2022 +0200
 
     CMakeLists.txt: don't generate and install data
 
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 4c9744e6..6c3d6eef 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -315,7 +315,6 @@ endif()
+Index: proj-9.1.0/CMakeLists.txt
+===================================================================
+--- proj-9.1.0.orig/CMakeLists.txt
++++ proj-9.1.0/CMakeLists.txt
+@@ -323,7 +323,6 @@ endif()
  ################################################################################
  include_directories(${PROJ_SOURCE_DIR}/src)
  
