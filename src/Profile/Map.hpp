@@ -39,7 +39,7 @@ class AllocatedPath;
 template<typename T> class StringPointer;
 template<typename T> class BasicAllocatedString;
 
-class ProfileMap : public std::map<std::string, std::string> {
+class ProfileMap : public std::map<std::string, std::string, std::less<>> {
   bool modified = false;
 
 public:
