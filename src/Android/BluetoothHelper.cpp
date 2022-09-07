@@ -45,7 +45,7 @@ static jmethodID connectSensor_method;
 static jmethodID addDetectDeviceListener_method;
 static jmethodID removeDetectDeviceListener_method;
 
-static std::map<std::string, std::string> address_to_name;
+static std::map<std::string, std::string, std::less<>> address_to_name;
 
 bool
 BluetoothHelper::Initialise(JNIEnv *env) noexcept
@@ -117,7 +117,7 @@ BluetoothHelper::GetNameFromAddress(JNIEnv *env,
   assert(env != nullptr);
   assert(address != nullptr);
 
-  std::string x_address(address);
+  const std::string_view x_address{address};
   if (auto i = address_to_name.find(x_address); i != address_to_name.end())
     return i->second.c_str();
 
@@ -130,7 +130,7 @@ BluetoothHelper::GetNameFromAddress(JNIEnv *env,
 
   std::string name = Java::String(env, j_name).ToString();
 
-  auto j = address_to_name.insert(std::make_pair(std::move(x_address),
+  auto j = address_to_name.insert(std::make_pair(x_address,
                                                  std::move(name)));
   return j.first->second.c_str();
 }
