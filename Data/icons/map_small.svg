@@ -2,19 +2,16 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="3"
-   height="3"
+   width="13pt"
+   height="13pt"
    id="svg2816"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="map_small.svg">
+   viewBox="-5 -5 13 13"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <metadata
      id="metadata9">
     <rdf:RDF>
@@ -23,57 +20,22 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview
-     pagecolor="#ff00ff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="774"
-     id="namedview7"
-     showgrid="true"
-     inkscape:zoom="27.842105"
-     inkscape:cx="9.5"
-     inkscape:cy="9.5"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer4">
-    <inkscape:grid
-       type="xygrid"
-       id="grid2819"
-       empspacing="5"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true" />
-  </sodipodi:namedview>
   <defs
      id="defs2818" />
   <g
-     transform="translate(0,-13)"
-     id="layer1" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer4"
-     inkscape:label="NOAA_Image"
-     transform="translate(0,-16)">
-    <path
-       sodipodi:type="arc"
-       style="fill:#624e90;fill-opacity:1;stroke:none"
-       id="path3922"
-       sodipodi:cx="-9.5338984"
-       sodipodi:cy="10.398305"
-       sodipodi:rx="1.5677966"
-       sodipodi:ry="1.4830508"
-       d="m -7.9661018,10.398305 c 0,0.819066 -0.7019264,1.483051 -1.5677966,1.483051 -0.8658696,0 -1.5677966,-0.663985 -1.5677966,-1.483051 0,-0.8190664 0.701927,-1.4830509 1.5677966,-1.4830509 0.8658702,0 1.5677966,0.6639845 1.5677966,1.4830509 z"
-       transform="matrix(0.79729731,0,0,0.84285716,9.1013515,8.7357142)" />
+     id="layer1"
+     transform="translate(0,-16)"
+     style="display:inline">
+    <ellipse
+       style="display:inline;fill:#624e90;fill-opacity:1;stroke:none"
+       id="path1"
+       transform="matrix(0.79729731,0,0,0.84285716,9.1013515,8.7357142)"
+       cx="-9.5338984"
+       cy="10.398305"
+       rx="1.5677966"
+       ry="1.4830508" />
   </g>
 </svg>
