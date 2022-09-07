@@ -118,8 +118,7 @@ BluetoothHelper::GetNameFromAddress(JNIEnv *env,
   assert(address != nullptr);
 
   std::string x_address(address);
-  auto i = address_to_name.find(x_address);
-  if (i != address_to_name.end())
+  if (auto i = address_to_name.find(x_address); i != address_to_name.end())
     return i->second.c_str();
 
   const Java::String j_address(env, address);
