@@ -235,12 +235,12 @@ private:
             value_type edge_value = {}) noexcept {
     // Try to find the given node n in the EdgeMap
     edge_iterator it = edges.find(node);
-    if (it == edges.end())
+    if (it == edges.end()) {
       // first entry
       // If the node wasn't found
       // -> Insert a new node
-      it = edges.insert(std::make_pair(node, Edge(parent, edge_value))).first;
-    else if (it->second.value > edge_value)
+      it = edges.try_emplace(node, parent, edge_value).first;
+    } else if (it->second.value > edge_value)
       // If the node was found and the new value is smaller
       // -> Replace the value with the new one
       it->second = Edge(parent, edge_value);
