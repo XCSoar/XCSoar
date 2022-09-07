@@ -210,9 +210,9 @@ curl = CmakeProject(
 
 # Needed by proj
 sqlite3 = AutotoolsProject(
-    'https://sqlite.org/2022/sqlite-autoconf-3390200.tar.gz',
-    'https://fossies.org/linux/misc/sqlite-autoconf-3390200.tar.gz',
-    'f00711818d0afc18f4b1b3b7207176f4',
+    'https://sqlite.org/2022/sqlite-autoconf-3390300.tar.gz',
+    'https://fossies.org/linux/misc/sqlite-autoconf-3390300.tar.gz',
+    '7868fb3082be3f2cf4491c6fba6de2bddcbc293a35fefb0624ee3c13f01422b9',
     'lib/libsqlite3.a',
     [
         '--disable-shared', '--enable-static',
