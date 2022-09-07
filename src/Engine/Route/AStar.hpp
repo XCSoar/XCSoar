@@ -270,12 +270,11 @@ private:
   void Push(const Node &node, const Node &parent,
             const AStarPriorityValue &edge_value) noexcept {
     // Try to find the given node n in the node_value_map
-    node_value_iterator it = node_values.find(node);
-    if (it == node_values.end()) {
+    const auto [it, inserted] = node_values.try_emplace(node, edge_value);
+    if (inserted) {
       // first entry
       // If the node wasn't found
       // -> Insert a new node into the node_value_map
-      it = node_values.try_emplace(node, edge_value).first;
 
       // Remember the parent node
       SetPredecessor(node, parent);
