@@ -91,7 +91,15 @@ public:
   /**
    * Default constructor
    */
-  Dijkstra() = default;
+  Dijkstra() noexcept {
+    /* this is a kludge to prevent rehashing, because rehashing would
+       invalidate all iterators stored inside the priority queue
+       "q", and would thus lead to use-after-free crashes */
+    // TODO this hard-codes the use of std::unordered_map
+    // TODO come up with a better solution
+    edges.reserve(4093);
+    edges.max_load_factor(1e10);
+  }
 
   Dijkstra(const Dijkstra &) = delete;
   Dijkstra &operator=(const Dijkstra &) = delete;
