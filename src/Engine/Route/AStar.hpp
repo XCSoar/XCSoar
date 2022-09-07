@@ -249,10 +249,10 @@ public:
    */
   [[gnu::pure]]
   AStarPriorityValue GetNodeValue(const Node &node) const noexcept {
-    node_value_const_iterator it = node_values.find(node);
     if (cur->first == node)
       return cur->second;
 
+    node_value_const_iterator it = node_values.find(node);
     if (it == node_values.end())
       return AStarPriorityValue(0);
 
