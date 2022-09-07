@@ -94,6 +94,7 @@ public:
   Dijkstra() = default;
 
   Dijkstra(const Dijkstra &) = delete;
+  Dijkstra &operator=(const Dijkstra &) = delete;
 
   /** 
    * Clears the queues
