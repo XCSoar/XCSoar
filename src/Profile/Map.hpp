@@ -47,19 +47,19 @@ public:
    * Has the profile been modified since the last SetModified(false)
    * call?
    */
-  bool IsModified() const {
+  bool IsModified() const noexcept {
     return modified;
   }
 
   /**
    * Set the "modified" flag.
    */
-  void SetModified(bool _modified=true) {
+  void SetModified(bool _modified=true) noexcept {
     modified = _modified;
   }
 
   [[gnu::pure]]
-  bool Exists(const char *key) const {
+  bool Exists(const char *key) const noexcept {
     return find(key) != end();
   }
 
@@ -74,7 +74,8 @@ public:
    * profile), or default_value if the key does not exist
    */
   [[gnu::pure]]
-  const char *Get(const char *key, const char *default_value=nullptr) const {
+  const char *Get(const char *key,
+                  const char *default_value=nullptr) const noexcept {
     const auto i = find(key);
     if (i == end())
       return default_value;
@@ -82,7 +83,7 @@ public:
     return i->second.c_str();
   }
 
-  void Set(const char *key, const char *value);
+  void Set(const char *key, const char *value) noexcept;
 
   // TCHAR string values
 
@@ -93,26 +94,27 @@ public:
    * @param value Pointer to the output buffer
    * @param max_size maximum size of the output buffer
    */
-  bool Get(const char *key, TCHAR *value, size_t max_size) const;
+  bool Get(const char *key, TCHAR *value, size_t max_size) const noexcept;
 
   template<size_t max>
-  bool Get(const char *key, BasicStringBuffer<TCHAR, max> &value) const {
+  bool Get(const char *key,
+           BasicStringBuffer<TCHAR, max> &value) const noexcept {
     return Get(key, value.data(), value.capacity());
   }
 
 #ifdef _UNICODE
-  void Set(const char *key, const TCHAR *value);
+  void Set(const char *key, const TCHAR *value) noexcept;
 #endif
 
   // numeric values
 
-  bool Get(const char *key, int &value) const;
-  bool Get(const char *key, short &value) const;
-  bool Get(const char *key, bool &value) const;
-  bool Get(const char *key, unsigned &value) const;
-  bool Get(const char *key, uint16_t &value) const;
-  bool Get(const char *key, uint8_t &value) const;
-  bool Get(const char *key, double &value) const;
+  bool Get(const char *key, int &value) const noexcept;
+  bool Get(const char *key, short &value) const noexcept;
+  bool Get(const char *key, bool &value) const noexcept;
+  bool Get(const char *key, unsigned &value) const noexcept;
+  bool Get(const char *key, uint16_t &value) const noexcept;
+  bool Get(const char *key, uint8_t &value) const noexcept;
+  bool Get(const char *key, double &value) const noexcept;
 
   bool Get(const char *key, FloatDuration &value) const noexcept {
     double _value;
@@ -122,7 +124,8 @@ public:
     return result;
   }
 
-  bool Get(const char *key, std::chrono::duration<unsigned> &value) const noexcept {
+  bool Get(const char *key,
+           std::chrono::duration<unsigned> &value) const noexcept {
     unsigned _value;
     bool result = Get(key, _value);
     if (result)
@@ -130,14 +133,14 @@ public:
     return result;
   }
 
-  void Set(const char *key, bool value) {
+  void Set(const char *key, bool value) noexcept {
     Set(key, value ? "1" : "0");
   }
 
-  void Set(const char *key, int value);
-  void Set(const char *key, long value);
-  void Set(const char *key, unsigned value);
-  void Set(const char *key, double value);
+  void Set(const char *key, int value) noexcept;
+  void Set(const char *key, long value) noexcept;
+  void Set(const char *key, unsigned value) noexcept;
+  void Set(const char *key, double value) noexcept;
 
   void Set(const char *key, FloatDuration value) noexcept {
     Set(key, value.count());
@@ -150,7 +153,7 @@ public:
   // enum values
 
   template<typename T>
-  bool GetEnum(const char *key, T &value) const {
+  bool GetEnum(const char *key, T &value) const noexcept {
     int i;
     bool success = Get(key, i);
     if (success)
@@ -159,53 +162,53 @@ public:
   }
 
   template<typename T>
-  void SetEnum(const char *key, T value) {
+  void SetEnum(const char *key, T value) noexcept {
     Set(key, (int)value);
   }
 
   // path values
 
-  AllocatedPath GetPath(const char *key) const;
+  AllocatedPath GetPath(const char *key) const noexcept;
 
   [[gnu::pure]]
-  bool GetPathIsEqual(const char *key, Path value) const;
+  bool GetPathIsEqual(const char *key, Path value) const noexcept;
 
   /**
    * Gets a path from the profile and return its base name only.
    */
 #ifdef _UNICODE
-  BasicAllocatedString<TCHAR> GetPathBase(const char *key) const;
+  BasicAllocatedString<TCHAR> GetPathBase(const char *key) const noexcept;
 #else
   [[gnu::pure]]
-  StringPointer<TCHAR> GetPathBase(const char *key) const;
+  StringPointer<TCHAR> GetPathBase(const char *key) const noexcept;
 #endif
 
-  void SetPath(const char *key, Path value);
+  void SetPath(const char *key, Path value) noexcept;
 
   // geo value
 
   /**
    * Load a GeoPoint from the profile.
    */
-  bool GetGeoPoint(const char *key, GeoPoint &value) const;
+  bool GetGeoPoint(const char *key, GeoPoint &value) const noexcept;
 
   /**
    * Save a GeoPoint to the profile.  It is stored as a string,
    * longitude and latitude formatted in degrees separated by a space
    * character.
    */
-  void SetGeoPoint(const char *key, const GeoPoint &value);
+  void SetGeoPoint(const char *key, const GeoPoint &value) noexcept;
 
   // screen values
 
   /**
    * Load a Color from the profile.
    */
-  bool GetColor(const char *key, RGB8Color &value) const;
+  bool GetColor(const char *key, RGB8Color &value) const noexcept;
 
   /**
    * Save a Color to the profile.  It is stored as a RGB hex string
    * e.g. #123456
    */
-  void SetColor(const char *key, const RGB8Color value);
+  void SetColor(const char *key, const RGB8Color value) noexcept;
 };

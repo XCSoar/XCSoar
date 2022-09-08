@@ -24,7 +24,7 @@ Copyright_License {
 #include "Map.hpp"
 
 void
-ProfileMap::Set(const char *key, const char *value)
+ProfileMap::Set(const char *key, const char *value) noexcept
 {
   auto i = insert(std::make_pair(key, value));
   if (!i.second) {

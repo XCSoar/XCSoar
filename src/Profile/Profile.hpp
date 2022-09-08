@@ -37,33 +37,41 @@ namespace Profile {
  * Returns the absolute path of the current profile file.
  */
 [[gnu::pure]]
-Path GetPath();
+Path
+GetPath() noexcept;
 
 /**
  * Loads the profile files
  */
-void Load();
+void
+Load() noexcept;
+
 /**
  * Loads the given profile file
  */
-void LoadFile(Path path);
+void
+LoadFile(Path path) noexcept;
 
 /**
  * Saves the profile into the profile files
  *
  * Errors will be caught and logged.
  */
-void Save() noexcept;
+void
+Save() noexcept;
+
 /**
  * Saves the profile into the given profile file
  */
-void SaveFile(Path path);
+void
+SaveFile(Path path) noexcept;
 
 /**
  * Sets the profile files to load when calling Load()
  * @param override nullptr or file to load when calling Load()
  */
-void SetFiles(Path override_path);
+void
+SetFiles(Path override_path) noexcept;
 
 /**
  * Reads a configured path from the profile, and expands it with
@@ -73,11 +81,14 @@ void SetFiles(Path override_path);
  * characters
  */
 [[gnu::pure]]
-AllocatedPath GetPath(const char *key);
+AllocatedPath
+GetPath(const char *key) noexcept;
 
-void SetPath(const char *key, Path value);
+void
+SetPath(const char *key, Path value) noexcept;
 
 [[gnu::pure]]
-bool GetPathIsEqual(const char *key, Path value);
+bool
+GetPathIsEqual(const char *key, Path value) noexcept;
 
 } // namespace Profile

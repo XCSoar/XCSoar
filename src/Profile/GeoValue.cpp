@@ -27,7 +27,7 @@ Copyright_License {
 #include "util/StaticString.hxx"
 
 bool
-ProfileMap::GetGeoPoint(const char *key, GeoPoint &value) const
+ProfileMap::GetGeoPoint(const char *key, GeoPoint &value) const noexcept
 {
   const char *p = Get(key);
   if (p == nullptr)
@@ -51,7 +51,7 @@ ProfileMap::GetGeoPoint(const char *key, GeoPoint &value) const
 }
 
 void
-ProfileMap::SetGeoPoint(const char *key, const GeoPoint &value)
+ProfileMap::SetGeoPoint(const char *key, const GeoPoint &value) noexcept
 {
   NarrowString<128> buffer;
   buffer.UnsafeFormat("%f %f",
