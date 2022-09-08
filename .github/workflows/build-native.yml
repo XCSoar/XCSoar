@@ -105,6 +105,54 @@ jobs:
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ env.TARGET }}/
 
+  build-sanitizer:
+    # Build with AddressSanitizer and all libstdc++ debugging features
+    # enabled.
+
+    runs-on: ubuntu-22.04
+
+    env:
+      TARGET: UNIX
+
+    steps:
+      - id: checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - id: cache-ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}-sanitizer
+      - name: find githash
+        run: |
+          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            make \
+            quilt \
+            g++ \
+            python3 \
+            librsvg2-bin xsltproc \
+            imagemagick gettext sox \
+            zlib1g-dev \
+            libsodium-dev \
+            libfreetype6-dev \
+            libpng-dev libjpeg-dev \
+            libtiff5-dev libgeotiff-dev \
+            libc-ares-dev \
+            libcurl4-gnutls-dev \
+            libc-ares-dev \
+            liblua5.4-dev \
+            libxml-parser-perl \
+            libasound2-dev
+
+      - name: Compile XCSoar
+        run: |
+          make -j$(nproc) TARGET=${{env.TARGET }} DEBUG=${{ env.DEBUG }} VFB=y SANITIZE=y DEBUG_GLIBCXX=y USE_CCACHE=y V=2 everything check
+
   build-kobo:
     runs-on: ubuntu-22.04
 

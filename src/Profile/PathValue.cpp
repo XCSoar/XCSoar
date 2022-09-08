@@ -37,7 +37,7 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 AllocatedPath
-ProfileMap::GetPath(const char *key) const
+ProfileMap::GetPath(const char *key) const noexcept
 {
   TCHAR buffer[MAX_PATH];
   if (!Get(key, buffer, ARRAY_SIZE(buffer)))
@@ -50,7 +50,7 @@ ProfileMap::GetPath(const char *key) const
 }
 
 bool
-ProfileMap::GetPathIsEqual(const char *key, Path value) const
+ProfileMap::GetPathIsEqual(const char *key, Path value) const noexcept
 {
   const auto saved_value = GetPath(key);
   if (saved_value == nullptr)
@@ -61,7 +61,7 @@ ProfileMap::GetPathIsEqual(const char *key, Path value) const
 
 [[gnu::pure]]
 static Path
-BackslashBaseName(const TCHAR *p)
+BackslashBaseName(const TCHAR *p) noexcept
 {
   if (DIR_SEPARATOR != '\\') {
     const auto *backslash = StringFindLast(p, _T('\\'));
@@ -75,7 +75,7 @@ BackslashBaseName(const TCHAR *p)
 #ifdef _UNICODE
 
 BasicAllocatedString<TCHAR>
-ProfileMap::GetPathBase(const char *key) const
+ProfileMap::GetPathBase(const char *key) const noexcept
 {
   TCHAR buffer[MAX_PATH];
   if (!Get(key, buffer, ARRAY_SIZE(buffer)))
@@ -91,7 +91,7 @@ ProfileMap::GetPathBase(const char *key) const
 #else
 
 StringPointer<TCHAR>
-ProfileMap::GetPathBase(const char *key) const
+ProfileMap::GetPathBase(const char *key) const noexcept
 {
   const auto *path = Get(key);
   if (path != nullptr)
@@ -103,7 +103,7 @@ ProfileMap::GetPathBase(const char *key) const
 #endif
 
 void
-ProfileMap::SetPath(const char *key, Path value)
+ProfileMap::SetPath(const char *key, Path value) noexcept
 {
   if (value == nullptr || StringIsEmpty(value.c_str()))
     Set(key, _T(""));

@@ -185,7 +185,7 @@ class ManagedFileListWidget
    * The list of file names (base names) that are currently being
    * downloaded.
    */
-  std::map<std::string, DownloadStatus> downloads;
+  std::map<std::string, DownloadStatus, std::less<>> downloads;
 
   /**
    * Each item in this set is a failed download.

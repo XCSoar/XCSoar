@@ -91,9 +91,18 @@ public:
   /**
    * Default constructor
    */
-  Dijkstra() = default;
+  Dijkstra() noexcept {
+    /* this is a kludge to prevent rehashing, because rehashing would
+       invalidate all iterators stored inside the priority queue
+       "q", and would thus lead to use-after-free crashes */
+    // TODO this hard-codes the use of std::unordered_map
+    // TODO come up with a better solution
+    edges.reserve(4093);
+    edges.max_load_factor(1e10);
+  }
 
   Dijkstra(const Dijkstra &) = delete;
+  Dijkstra &operator=(const Dijkstra &) = delete;
 
   /** 
    * Clears the queues
@@ -210,7 +219,7 @@ public:
     q.clear();
 
     for (const auto &i : edges)
-      q.push(Value(i.second.value, i));
+      q.emplace(i.second.value, i);
   }
 
 private:
@@ -225,13 +234,10 @@ private:
   bool Push(const Node node, const Node parent,
             value_type edge_value = {}) noexcept {
     // Try to find the given node n in the EdgeMap
-    edge_iterator it = edges.find(node);
-    if (it == edges.end())
+    const auto [it, inserted] = edges.try_emplace(node, parent, edge_value);
+    if (inserted) {
       // first entry
-      // If the node wasn't found
-      // -> Insert a new node
-      it = edges.insert(std::make_pair(node, Edge(parent, edge_value))).first;
-    else if (it->second.value > edge_value)
+    } else if (it->second.value > edge_value)
       // If the node was found and the new value is smaller
       // -> Replace the value with the new one
       it->second = Edge(parent, edge_value);
@@ -240,7 +246,7 @@ private:
       // -> Don't use this new leg
       return false;
 
-    q.push(Value(edge_value, it));
+    q.emplace(edge_value, it);
     return true;
   }
 };

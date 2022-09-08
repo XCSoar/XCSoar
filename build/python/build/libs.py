@@ -176,9 +176,9 @@ cares = CmakeProject(
 )
 
 curl = CmakeProject(
-    'https://curl.se/download/curl-7.84.0.tar.xz',
-    'https://github.com/curl/curl/releases/download/curl-7_84_0/curl-7.84.0.tar.xz',
-    '2d118b43f547bfe5bae806d8d47b4e596ea5b25a6c1f080aef49fbcd817c5db8',
+    'https://curl.se/download/curl-7.85.0.tar.xz',
+    'https://github.com/curl/curl/releases/download/curl-7_85_0/curl-7.85.0.tar.xz',
+    '88b54a6d4b9a48cb4d873c7056dcba997ddd5b7be5a2d537a4acb55c20b04be6',
     'lib/libcurl.a',
     [
         '-DBUILD_CURL_EXE=OFF',
@@ -210,9 +210,9 @@ curl = CmakeProject(
 
 # Needed by proj
 sqlite3 = AutotoolsProject(
-    'https://sqlite.org/2022/sqlite-autoconf-3390200.tar.gz',
-    'https://fossies.org/linux/misc/sqlite-autoconf-3390200.tar.gz',
-    'f00711818d0afc18f4b1b3b7207176f4',
+    'https://sqlite.org/2022/sqlite-autoconf-3390300.tar.gz',
+    'https://fossies.org/linux/misc/sqlite-autoconf-3390300.tar.gz',
+    '7868fb3082be3f2cf4491c6fba6de2bddcbc293a35fefb0624ee3c13f01422b9',
     'lib/libsqlite3.a',
     [
         '--disable-shared', '--enable-static',
@@ -220,9 +220,9 @@ sqlite3 = AutotoolsProject(
 )
 
 proj = CmakeProject(
-    'http://download.osgeo.org/proj/proj-9.0.1.tar.gz',
-    'https://fossies.org/linux/privat/proj-9.0.1.tar.gz',
-    '737eaacbe7906d0d6ff43f0d9ebedc5c734cccc9e6b8d7beefdec3ab22d9a6a3',
+    'http://download.osgeo.org/proj/proj-9.1.0.tar.gz',
+    'https://fossies.org/linux/privat/proj-9.1.0.tar.gz',
+    '81b2239b94cad0886222cde4f53cb49d34905aad2a1317244a0c30a553db2315',
     'lib/libproj.a',
     [
         '-DBUILD_TESTING=OFF',

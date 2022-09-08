@@ -1,8 +1,8 @@
-Index: proj-9.0.1/cmake/ProjUtilities.cmake
+Index: proj-9.1.0/cmake/ProjUtilities.cmake
 ===================================================================
---- proj-9.0.1.orig/cmake/ProjUtilities.cmake
-+++ proj-9.0.1/cmake/ProjUtilities.cmake
-@@ -96,12 +96,6 @@ function(configure_proj_pc)
+--- proj-9.1.0.orig/cmake/ProjUtilities.cmake
++++ proj-9.1.0/cmake/ProjUtilities.cmake
+@@ -103,12 +103,6 @@ function(configure_proj_pc)
    endif()
    if(WIN32 AND NOT MINGW)
      list(APPEND EXTRA_LIBS -lole32 -lshell32)

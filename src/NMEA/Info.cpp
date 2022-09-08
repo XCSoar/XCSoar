@@ -98,7 +98,7 @@ NMEAInfo::ProvideIndicatedAirspeed(double ias)
 {
   auto any_altitude = GetAnyAltitude();
 
-  if (*any_altitude)
+  if (any_altitude)
     ProvideIndicatedAirspeedWithAltitude(ias, *any_altitude);
   else
     /* no altitude; dirty fallback */

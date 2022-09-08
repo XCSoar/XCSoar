@@ -341,9 +341,7 @@ TriangleContest::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
 
     // initialize bound-and-branch tree with root node (note: Candidate set interval is [min, max))
     CandidateSet root_candidates(*this, from, to + 1);
-    if (root_candidates.IsFeasible(validator) &&
-        root_candidates.df_max >= worst_d)
-      branch_and_bound.emplace(root_candidates.df_max, root_candidates);
+    CheckAddCandidate(worst_d, validator, root_candidates);
   }
 
   // set max_iterations only if non-exhaustive and predictive solving is enabled.

@@ -56,7 +56,7 @@ class DeviceSettingsMap {
     explicit constexpr Item(const V &_value) noexcept:value(_value) {}
   };
 
-  typedef std::map<std::string, Item> Map;
+  using Map = std::map<std::string, Item, std::less<>>;
 
   Map map;
 
