@@ -33,76 +33,77 @@ Copyright_License {
 class KeyValueFileWriter;
 
 namespace Profile {
-  /**
-   * Has the in-memory profile been modified since the last
-   * SetModified(false) call?
-   */
-  [[gnu::pure]]
-  bool IsModified();
 
-  /**
-   * Set the "modified" flag.
-   */
-  void SetModified(bool modified);
+/**
+ * Has the in-memory profile been modified since the last
+ * SetModified(false) call?
+ */
+[[gnu::pure]]
+bool IsModified();
 
-  /**
-   * Look up a string value in the profile.
-   *
-   * @param key name of the value
-   * @param default_value a value to be returned when the key does not exist
-   * @return the value (gets Invalidated by any write access to the
-   * profile), or default_value if the key does not exist
-   */
-  [[gnu::pure]]
-  const char *Get(const char *key, const char *default_value=nullptr);
+/**
+ * Set the "modified" flag.
+ */
+void SetModified(bool modified);
 
-  /**
-   * Reads a value from the profile map
-   * @param key Name of the value that should be read
-   * @param value Pointer to the output buffer
-   * @param max_size Maximum size of the output buffer
-   */
-  bool Get(const char *key, TCHAR *value, std::size_t max_size);
+/**
+ * Look up a string value in the profile.
+ *
+ * @param key name of the value
+ * @param default_value a value to be returned when the key does not exist
+ * @return the value (gets Invalidated by any write access to the
+ * profile), or default_value if the key does not exist
+ */
+[[gnu::pure]]
+const char *Get(const char *key, const char *default_value=nullptr);
 
-  /**
-   * Writes a value to the profile map
-   * @param key Name of the value that should be written
-   * @param value Value that should be written
-   */
-  void Set(const char *key, const char *value);
+/**
+ * Reads a value from the profile map
+ * @param key Name of the value that should be read
+ * @param value Pointer to the output buffer
+ * @param max_size Maximum size of the output buffer
+ */
+bool Get(const char *key, TCHAR *value, std::size_t max_size);
+
+/**
+ * Writes a value to the profile map
+ * @param key Name of the value that should be written
+ * @param value Value that should be written
+ */
+void Set(const char *key, const char *value);
 
 #ifdef _UNICODE
-  void Set(const char *key, const TCHAR *value);
+void Set(const char *key, const TCHAR *value);
 #endif
 
-  bool Get(const char *key, int &value);
-  bool Get(const char *key, short &value);
-  bool Get(const char *key, bool &value);
-  bool Get(const char *key, unsigned &value);
-  bool Get(const char *key, uint16_t &value);
-  bool Get(const char *key, uint8_t &value);
-  bool Get(const char *key, double &value);
+bool Get(const char *key, int &value);
+bool Get(const char *key, short &value);
+bool Get(const char *key, bool &value);
+bool Get(const char *key, unsigned &value);
+bool Get(const char *key, uint16_t &value);
+bool Get(const char *key, uint8_t &value);
+bool Get(const char *key, double &value);
 
-  template<typename T>
-  static inline bool GetEnum(const char *key, T &value)
-  {
-    int i;
-    if (Get(key, i)) {
-      value = (T)i;
-      return true;
-    } else
-      return false;
-  }
+template<typename T>
+static inline bool GetEnum(const char *key, T &value)
+{
+  int i;
+  if (Get(key, i)) {
+    value = (T)i;
+    return true;
+  } else
+    return false;
+}
 
-  static inline void Set(const char *key, bool value)
-  {
-    Set(key, value ? _T("1") : _T("0"));
-  }
+static inline void Set(const char *key, bool value)
+{
+  Set(key, value ? _T("1") : _T("0"));
+}
 
-  void Set(const char *key, int value);
-  void Set(const char *key, long value);
-  void Set(const char *key, unsigned value);
-  void Set(const char *key, double value);
+void Set(const char *key, int value);
+void Set(const char *key, long value);
+void Set(const char *key, unsigned value);
+void Set(const char *key, double value);
 
 static inline void
 Set(const char *key, std::chrono::duration<unsigned> value) noexcept
@@ -110,19 +111,20 @@ Set(const char *key, std::chrono::duration<unsigned> value) noexcept
   Set(key, value.count());
 }
 
-  template<typename T>
-  static inline void SetEnum(const char *key, T value)
-  {
-    Set(key, (int)value);
-  }
-
-  template<std::size_t max>
-  static inline bool
-  Get(const char *key, BasicStringBuffer<TCHAR, max> &value)
-  {
-    return Get(key, value.data(), value.capacity());
-  }
-
-  bool Exists(const char *key);
-  void Clear();
+template<typename T>
+static inline void SetEnum(const char *key, T value)
+{
+  Set(key, (int)value);
 }
+
+template<std::size_t max>
+static inline bool
+Get(const char *key, BasicStringBuffer<TCHAR, max> &value)
+{
+  return Get(key, value.data(), value.capacity());
+}
+
+bool Exists(const char *key);
+void Clear();
+
+} // namespace Profile
