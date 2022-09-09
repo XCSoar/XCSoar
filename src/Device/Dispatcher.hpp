@@ -40,7 +40,7 @@ class DeviceDispatcher final : public PortLineHandler {
   unsigned exclude;
 
 public:
-  DeviceDispatcher(MultipleDevices &_devices, unsigned _exclude)
+  DeviceDispatcher(MultipleDevices &_devices, unsigned _exclude) noexcept
     :devices(_devices), exclude(_exclude) {}
 
   /* virtual methods from DataHandler */

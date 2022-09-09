@@ -77,7 +77,7 @@ BugsProcessTimer() noexcept
 }
 
 static bool
-QNHProcessTimer(OperationEnvironment &env)
+QNHProcessTimer(OperationEnvironment &env) noexcept
 {
   bool modified = false;
 
@@ -168,7 +168,7 @@ RadioProcess() noexcept
 }
 
 bool
-ApplyExternalSettings(OperationEnvironment &env)
+ApplyExternalSettings(OperationEnvironment &env) noexcept
 {
   bool modified = false;
   modified |= BallastProcessTimer();

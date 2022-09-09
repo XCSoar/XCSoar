@@ -31,4 +31,4 @@ class OperationEnvironment;
  * @return true if a setting was changed
  */
 bool
-ApplyExternalSettings(OperationEnvironment &env);
+ApplyExternalSettings(OperationEnvironment &env) noexcept;
