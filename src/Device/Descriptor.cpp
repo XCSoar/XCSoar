@@ -248,7 +248,7 @@ try {
   throw;
 }
 
-bool
+inline bool
 DeviceDescriptor::OpenInternalSensors()
 {
 #ifdef HAVE_INTERNAL_GPS
@@ -272,7 +272,7 @@ DeviceDescriptor::OpenInternalSensors()
   return false;
 }
 
-bool
+inline bool
 DeviceDescriptor::OpenDroidSoarV2()
 {
 #ifdef ANDROID
@@ -309,7 +309,7 @@ DeviceDescriptor::OpenDroidSoarV2()
 #endif
 }
 
-bool
+inline bool
 DeviceDescriptor::OpenI2Cbaro()
 {
 #ifdef ANDROID
@@ -337,7 +337,7 @@ DeviceDescriptor::OpenI2Cbaro()
 #endif
 }
 
-bool
+inline bool
 DeviceDescriptor::OpenNunchuck()
 {
 #ifdef ANDROID
@@ -360,7 +360,7 @@ DeviceDescriptor::OpenNunchuck()
 #endif
 }
 
-bool
+inline bool
 DeviceDescriptor::OpenVoltage()
 {
 #ifdef ANDROID
@@ -388,7 +388,7 @@ DeviceDescriptor::OpenVoltage()
 #endif
 }
 
-bool
+inline bool
 DeviceDescriptor::OpenGliderLink()
 {
 #ifdef ANDROID
