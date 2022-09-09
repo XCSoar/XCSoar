@@ -675,4 +675,7 @@ public:
     device.EnableNMEA(env);
     device.Return();
   }
+
+  ScopeReturnDevice(const ScopeReturnDevice &) = delete;
+  ScopeReturnDevice &operator=(const ScopeReturnDevice &) = delete;
 };
