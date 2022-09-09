@@ -39,7 +39,9 @@ class AllocatedPath;
 template<typename T> class StringPointer;
 template<typename T> class BasicAllocatedString;
 
-class ProfileMap : public std::map<std::string, std::string, std::less<>> {
+class ProfileMap {
+  std::map<std::string, std::string, std::less<>> map;
+
   bool modified = false;
 
 public:
@@ -58,9 +60,28 @@ public:
     modified = _modified;
   }
 
+  void Clear() noexcept {
+    map.clear();
+  }
+
   [[gnu::pure]]
   bool Exists(const char *key) const noexcept {
-    return find(key) != end();
+    return map.find(key) != map.end();
+  }
+
+  void Remove(const char *key) noexcept {
+    if (auto i = map.find(key); i != map.end())
+      map.erase(i);
+  }
+
+  [[gnu::pure]]
+  auto begin() const noexcept {
+    return map.begin();
+  }
+
+  [[gnu::pure]]
+  auto end() const noexcept {
+    return map.end();
   }
 
   // basic string values
@@ -76,8 +97,8 @@ public:
   [[gnu::pure]]
   const char *Get(const char *key,
                   const char *default_value=nullptr) const noexcept {
-    const auto i = find(key);
-    if (i == end())
+    const auto i = map.find(key);
+    if (i == map.end())
       return default_value;
 
     return i->second.c_str();

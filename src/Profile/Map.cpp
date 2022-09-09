@@ -26,7 +26,7 @@ Copyright_License {
 void
 ProfileMap::Set(const char *key, const char *value) noexcept
 {
-  auto i = insert(std::make_pair(key, value));
+  auto i = map.insert(std::make_pair(key, value));
   if (!i.second) {
     /* exists already */
 

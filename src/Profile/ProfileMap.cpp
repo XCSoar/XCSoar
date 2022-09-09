@@ -140,5 +140,5 @@ Profile::Exists(const char *key) noexcept
 void
 Profile::Clear() noexcept
 {
-  map.clear();
+  map.Clear();
 }
