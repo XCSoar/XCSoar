@@ -32,7 +32,7 @@ Copyright_License {
 /**
  * Initializes the DeviceBlackboard
  */
-DeviceBlackboard::DeviceBlackboard()
+DeviceBlackboard::DeviceBlackboard() noexcept
 {
   // Clear the gps_info and calculated_info
   gps_info.Reset();
@@ -61,7 +61,8 @@ DeviceBlackboard::DeviceBlackboard()
  * @param alt New altitude
  */
 void
-DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const double alt)
+DeviceBlackboard::SetStartupLocation(const GeoPoint &loc,
+                                     const double alt) noexcept
 {
   const std::lock_guard lock{mutex};
 
@@ -86,7 +87,9 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const double alt)
 /**
  * Stops the replay
  */
-void DeviceBlackboard::StopReplay() {
+void
+DeviceBlackboard::StopReplay() noexcept
+{
   const std::lock_guard lock{mutex};
 
   replay_data.Reset();
@@ -95,7 +98,7 @@ void DeviceBlackboard::StopReplay() {
 }
 
 void
-DeviceBlackboard::ProcessSimulation()
+DeviceBlackboard::ProcessSimulation() noexcept
 {
   if (!is_simulator())
     return;
@@ -107,7 +110,7 @@ DeviceBlackboard::ProcessSimulation()
 }
 
 void
-DeviceBlackboard::SetSimulatorLocation(const GeoPoint &location)
+DeviceBlackboard::SetSimulatorLocation(const GeoPoint &location) noexcept
 {
   const std::lock_guard lock{mutex};
   NMEAInfo &basic = simulator_data;
@@ -126,7 +129,7 @@ DeviceBlackboard::SetSimulatorLocation(const GeoPoint &location)
  * @param val New speed
  */
 void
-DeviceBlackboard::SetSpeed(double val)
+DeviceBlackboard::SetSpeed(double val) noexcept
 {
   const std::lock_guard lock{mutex};
   NMEAInfo &basic = simulator_data;
@@ -144,7 +147,7 @@ DeviceBlackboard::SetSpeed(double val)
  * @param val New TrackBearing
  */
 void
-DeviceBlackboard::SetTrack(Angle val)
+DeviceBlackboard::SetTrack(Angle val) noexcept
 {
   const std::lock_guard lock{mutex};
   simulator.Touch(simulator_data);
@@ -160,7 +163,7 @@ DeviceBlackboard::SetTrack(Angle val)
  * @param val New altitude
  */
 void
-DeviceBlackboard::SetAltitude(double val)
+DeviceBlackboard::SetAltitude(double val) noexcept
 {
   const std::lock_guard lock{mutex};
   NMEAInfo &basic = simulator_data;
@@ -178,7 +181,7 @@ DeviceBlackboard::SetAltitude(double val)
  * by the GlideComputerBlackboard
  */
 void
-DeviceBlackboard::ReadBlackboard(const DerivedInfo &derived_info)
+DeviceBlackboard::ReadBlackboard(const DerivedInfo &derived_info) noexcept
 {
   calculated_info = derived_info;
 }
@@ -190,13 +193,13 @@ DeviceBlackboard::ReadBlackboard(const DerivedInfo &derived_info)
  * InterfaceBlackboard
  */
 void
-DeviceBlackboard::ReadComputerSettings(const ComputerSettings &settings)
+DeviceBlackboard::ReadComputerSettings(const ComputerSettings &settings) noexcept
 {
   computer_settings = settings;
 }
 
 void
-DeviceBlackboard::ExpireWallClock()
+DeviceBlackboard::ExpireWallClock() noexcept
 {
   const std::lock_guard lock{mutex};
   if (!Basic().alive)
@@ -218,13 +221,13 @@ DeviceBlackboard::ExpireWallClock()
 }
 
 void
-DeviceBlackboard::ScheduleMerge()
+DeviceBlackboard::ScheduleMerge() noexcept
 {
   TriggerMergeThread();
 }
 
 void
-DeviceBlackboard::Merge()
+DeviceBlackboard::Merge() noexcept
 {
   NMEAInfo &basic = SetBasic();
 
@@ -259,28 +262,29 @@ DeviceBlackboard::Merge()
 
 void
 DeviceBlackboard::SetBallast(double fraction, double overload,
-                             OperationEnvironment &env)
+                             OperationEnvironment &env) noexcept
 {
   if (devices != nullptr)
     devices->PutBallast(fraction, overload, env);
 }
 
 void
-DeviceBlackboard::SetBugs(double bugs, OperationEnvironment &env)
+DeviceBlackboard::SetBugs(double bugs, OperationEnvironment &env) noexcept
 {
   if (devices != nullptr)
     devices->PutBugs(bugs, env);
 }
 
 void
-DeviceBlackboard::SetQNH(AtmosphericPressure qnh, OperationEnvironment &env)
+DeviceBlackboard::SetQNH(AtmosphericPressure qnh,
+                         OperationEnvironment &env) noexcept
 {
   if (devices != nullptr)
     devices->PutQNH(qnh, env);
 }
 
 void
-DeviceBlackboard::SetMC(double mc, OperationEnvironment &env)
+DeviceBlackboard::SetMC(double mc, OperationEnvironment &env) noexcept
 {
   if (devices != nullptr)
     devices->PutMacCready(mc, env);
@@ -289,7 +293,7 @@ DeviceBlackboard::SetMC(double mc, OperationEnvironment &env)
 void
 DeviceBlackboard::SetActiveFrequency(RadioFrequency frequency,
                                      const TCHAR *name,
-                                     OperationEnvironment &env)
+                                     OperationEnvironment &env) noexcept
 {
   if (devices != nullptr)
     devices->PutActiveFrequency(frequency, name, env);
@@ -298,7 +302,7 @@ DeviceBlackboard::SetActiveFrequency(RadioFrequency frequency,
 void
 DeviceBlackboard::SetStandbyFrequency(RadioFrequency frequency,
                                       const TCHAR *name,
-                                      OperationEnvironment &env)
+                                      OperationEnvironment &env) noexcept
 {
   if (devices != nullptr)
     devices->PutStandbyFrequency(frequency, name, env);

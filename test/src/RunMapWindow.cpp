@@ -50,7 +50,9 @@ Copyright_License {
 
 void
 DeviceBlackboard::SetStartupLocation([[maybe_unused]] const GeoPoint &loc,
-                                     [[maybe_unused]] const double alt) {}
+                                     [[maybe_unused]] const double alt) noexcept
+{
+}
 
 #ifndef NDEBUG
 
