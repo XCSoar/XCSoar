@@ -26,7 +26,6 @@ Copyright_License {
 #include "Components.hpp"
 #include "ActionInterface.hpp"
 #include "Device/MultipleDevices.hpp"
-#include "Operation/MessageOperationEnvironment.hpp"
 
 static bool
 BallastProcessTimer()
@@ -78,7 +77,7 @@ BugsProcessTimer()
 }
 
 static bool
-QNHProcessTimer()
+QNHProcessTimer(OperationEnvironment &env)
 {
   bool modified = false;
 
@@ -97,7 +96,6 @@ QNHProcessTimer()
     settings_computer.pressure = calculated.pressure;
     settings_computer.pressure_available = calculated.pressure_available;
 
-    MessageOperationEnvironment env;
     if (devices != nullptr)
       devices->PutQNH(settings_computer.pressure, env);
 
@@ -170,12 +168,12 @@ RadioProcess()
 }
 
 bool
-ApplyExternalSettings()
+ApplyExternalSettings(OperationEnvironment &env)
 {
   bool modified = false;
   modified |= BallastProcessTimer();
   modified |= BugsProcessTimer();
-  modified |= QNHProcessTimer();
+  modified |= QNHProcessTimer(env);
   modified |= MacCreadyProcessTimer();
   modified |= RadioProcess();
   return modified;

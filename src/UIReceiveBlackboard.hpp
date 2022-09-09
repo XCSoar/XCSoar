@@ -23,12 +23,14 @@ Copyright_License {
 
 #pragma once
 
+class OperationEnvironment;
+
 /**
  * Receive new data from DeviceBlackboard::Basic() into the
  * InterfaceBlackboard and propagate it.
  */
 void
-UIReceiveSensorData();
+UIReceiveSensorData(OperationEnvironment &env);
 
 /**
  * Receive new data from DeviceBlackboard::Calculated() into the

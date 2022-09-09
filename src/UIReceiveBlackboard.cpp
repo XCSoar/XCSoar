@@ -35,13 +35,13 @@ Copyright_License {
 static TaskEventObserver task_event_observer;
 
 void
-UIReceiveSensorData()
+UIReceiveSensorData(OperationEnvironment &env)
 {
   XCSoarInterface::ReceiveGPS();
 
   ApplyVegaSwitches();
 
-  bool modified = ApplyExternalSettings();
+  bool modified = ApplyExternalSettings(env);
 
   /*
    * Update the infoboxes if no location is available

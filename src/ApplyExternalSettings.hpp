@@ -23,10 +23,12 @@ Copyright_License {
 
 #pragma once
 
+class OperationEnvironment;
+
 /**
  * Apply and propagate settings received from external devices.
  *
  * @return true if a setting was changed
  */
 bool
-ApplyExternalSettings();
+ApplyExternalSettings(OperationEnvironment &env);

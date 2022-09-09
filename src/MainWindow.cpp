@@ -691,7 +691,8 @@ MainWindow::RunTimer() noexcept
 void
 MainWindow::OnGpsNotify() noexcept
 {
-  UIReceiveSensorData();
+  PopupOperationEnvironment env;
+  UIReceiveSensorData(env);
 }
 
 void
